@@ -399,7 +399,7 @@ skills/                                  # 仓库根（GitHub 上的 modelstudio
 
 1. Fork 本仓库
 2. 在仓库根目录新建你的 Skill 目录，附 `SKILL.md`、`UPSTREAM.md`、`VERIFICATION.md` 三件套
-3. 在 [百炼控制台](https://bailian.console.aliyun.com) 跑通至少 3 个真实场景，把日志归档到 `assets/`
+3. 在 [百炼控制台](https://bailian.console.aliyun.com/cli?source_channel=cli_github&) 跑通至少 3 个真实场景，把日志归档到 `assets/`
 4. 提交 PR，并在 PR 描述中粘贴验证截图
 5. 阿里云百炼运营团队将在 5 个工作日内 Review 并合入
 
