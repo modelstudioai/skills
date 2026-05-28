@@ -1,0 +1,261 @@
+{
+  "name": "通义多模态向量",
+  "description": "基于LLM底座的通用多模态表征模型，支持文本、图像、视频3种模态，具有以视觉为中心、全场景性能优异、高性价比的特点，适用于以图搜图、以文搜图、以文搜视频、以视频搜视频、以文搜文等下游多样化任务场景。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [],
+        "request_modality": ["Text", "Image", "Video"]
+      },
+      "openSource": false,
+      "description": "Embedding-Vision是基于LLM底座的视觉多模态表征模型，具有以视觉为中心、领域性能优异（电商、 安防、相册/图库、自驾等）、高性价比的特点。兼容文本、图像、视频3种模态，可应用于以图搜图、以文搜图、以文搜视频，以视频搜视频等下游任务场景。本模型（tongyi-embedding-vision-flash）是轻量化版本，在视觉向量化上具备极高性价比。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "tongyi-embedding-vision-flash",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_embeddingrerank_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.15",
+          "type": "embedding_image_token",
+          "priceName": "图片输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.15",
+          "type": "embedding_token",
+          "priceName": "文本输入"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 10,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 10,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["ME"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-09-23T09:09:49.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "视觉向量-flash",
+      "docUrl": "https://help.aliyun.com/document_detail/2712517.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --silent --location --request POST 'dashscope.aliyuncs.com' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"tongyi-embedding-vision-flash\",\n    \"input\": {\n        \"contents\": [ \n            {\"text\": \"多模态向量模型\"}\n                ]\n              }\n        ]\n    }\n}'",
+            "python": "import dashscope\n\ntext = \"通用多模态表征模型示例\"\ninput = [{'text': text}]\nresp = dashscope.MultiModalEmbedding.call(\n    model=\"tongyi-embedding-vision-flash\",\n    input=input\n)\n\nprint(resp)\n",
+            "java": "import com.alibaba.dashscope.embeddings.*;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\n\nimport java.util.Arrays;\nimport java.util.List;\n\npublic class Main {\n    public static void main(String[] args) {\n        try {\n            String text = \"通用多模态表征模型示例\";\n\n            MultiModalEmbeddingItemText textContent = new MultiModalEmbeddingItemText(text);\n            List<MultiModalEmbeddingItemBase> contents = Arrays.asList(textContent);\n            MultiModalEmbeddingParam param = MultiModalEmbeddingParam.builder()\n                .model(\"tongyi-embedding-vision-flash\")\n                .contents(contents)\n                .build();\n            MultiModalEmbedding multiModalEmbedding = new MultiModalEmbedding();\n            MultiModalEmbeddingResult result = multiModalEmbedding.call(param);\n\n            System.out.println(result);\n        } catch (UploadFileException | NoApiKeyException e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [],
+        "request_modality": ["Text", "Image", "Video"]
+      },
+      "openSource": false,
+      "description": "Embedding-Vision是基于LLM底座的视觉多模态表征模型，具有以视觉为中心、领域性能优异（电商、 安防、相册/图库、自驾等）、高性价比的特点。兼容文本、图像、视频3种模态，可应用于以图搜图、以文搜图、以文搜视频，以视频搜视频等下游任务场景。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "tongyi-embedding-vision-plus",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_embeddingrerank_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.5",
+          "type": "embedding_image_token",
+          "priceName": "图片输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.5",
+          "type": "embedding_token",
+          "priceName": "文本输入"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 10,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 10,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["ME"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-09-23T09:09:31.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "视觉向量-plus",
+      "docUrl": "https://help.aliyun.com/document_detail/2712517.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --silent --location --request POST 'dashscope.aliyuncs.com' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"tongyi-embedding-vision-plus\",\n    \"input\": {\n        \"contents\": [ \n            {\"text\": \"多模态向量模型\"}\n                ]\n              }\n        ]\n    }\n}'",
+            "python": "import dashscope\n\ntext = \"通用多模态表征模型示例\"\ninput = [{'text': text}]\nresp = dashscope.MultiModalEmbedding.call(\n    model=\"tongyi-embedding-vision-plus\",\n    input=input\n)\n\nprint(resp)\n",
+            "java": "import com.alibaba.dashscope.embeddings.*;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\n\nimport java.util.Arrays;\nimport java.util.List;\n\npublic class Main {\n    public static void main(String[] args) {\n        try {\n            String text = \"通用多模态表征模型示例\";\n\n            MultiModalEmbeddingItemText textContent = new MultiModalEmbeddingItemText(text);\n            List<MultiModalEmbeddingItemBase> contents = Arrays.asList(textContent);\n            MultiModalEmbeddingParam param = MultiModalEmbeddingParam.builder()\n                .model(\"tongyi-embedding-vision-plus\")\n                .contents(contents)\n                .build();\n            MultiModalEmbedding multiModalEmbedding = new MultiModalEmbedding();\n            MultiModalEmbeddingResult result = multiModalEmbedding.call(param);\n\n            System.out.println(result);\n        } catch (UploadFileException | NoApiKeyException e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [],
+        "request_modality": ["Text", "Image", "Video"]
+      },
+      "openSource": false,
+      "description": "通义实验室基于预训练多模态大模型构建的多模态向量模型。该模型根据用户的输入生成高维连续向量，这些输入可以是文本、图片或视频。多模态向量在可应用于图片搜索、文搜图、视频搜索、图片分类和视频内容审核等下游任务中。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "multimodal-embedding-v1",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_embeddingrerank_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "",
+          "type": "embedding_image_token",
+          "priceName": "图片输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "",
+          "type": "embedding_token",
+          "priceName": "文本输入"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 120,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 120,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["ME"],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 0,
+      "latestOnlineAt": "2024-12-23T11:55:31.000+00:00",
+      "contextWindow": 0,
+      "maxInputTokens": 512,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "通用多模态向量",
+      "docUrl": "https://help.aliyun.com/document_detail/2712517.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"multimodal-embedding-v1\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
+            "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"multimodal-embedding-v1\",\ninput=input_texts\n)\nprint(resp)",
+            "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"multimodal-embedding-v1\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}"
+          }
+        }
+      }
+    }
+  ]
+}

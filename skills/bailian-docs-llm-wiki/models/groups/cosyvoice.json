@@ -1,0 +1,409 @@
+{
+  "name": "CosyVoice大模型",
+  "description": "基于新一代生成式语音大模型，CosyVoice将文本理解和语音生成技术深度融合，能够精准解析并诠释各种文本内容，将其转化为如同真人发声般的自然语音，带来高度拟人化的自然语音合成体验。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "CosyVoice-v3.5-Flash是通义实验室CosyVoice系列的高性能语音合成大模型。对声音克隆和声音设计的语音合成效果进行全面升级，确保说话人高相似度的前提下，支持free-style指令控制，合成风格丰富多样。较之前版本大幅减少首包延迟，同时提高发音准确率，改善韵律和音质。支持跨多语种（中、英、德、法、俄、日、韩、葡、泰、印尼、越南）超自然听感实时语音合成。",
+      "collectionTag": "",
+      "features": [],
+      "provider": "qwen",
+      "model": "cosyvoice-v3.5-flash",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "0.8",
+          "type": "cosy_tts_number",
+          "priceName": "语音合成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TTS"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-02-27T09:13:23.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "语音生成CosyVoice-v3.5-flash大模型",
+      "docUrl": "https://help.aliyun.com/document_detail/2842586.html",
+      "predictConfig": [
+        {
+          "name": "音量",
+          "key": "volume",
+          "default": 50,
+          "tip": "数值越大，合成音频声音越大",
+          "range": [0, 100]
+        },
+        {
+          "name": "语速",
+          "key": "speechRate",
+          "default": 1,
+          "tip": "数值越大，合成音频语速越快",
+          "range": [0.5, 2]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "import os\nimport time\nimport dashscope\nfrom dashscope.audio.tts_v2 import VoiceEnrollmentService, SpeechSynthesizer\n\ndashscope.base_websocket_api_url='wss://dashscope.aliyuncs.com/api-ws/v1/inference'\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\ndashscope.api_key = os.getenv(\"\"DASHSCOPE_API_KEY\"\")\nif not dashscope.api_key:\n    raise ValueError(\"\"DASHSCOPE_API_KEY environment variable not set.\"\")\n\nTARGET_MODEL = \"\"cosyvoice-v3.5-flash\"\" \nVOICE_PREFIX = \"\"myvoice\"\"\n# Public network accessible audio URL. Please replace it with your own.\nAUDIO_URL = \"\"https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/cosyvoice/cosyvoice-zeroshot-sample.wav\"\"\n\nprint(\"\"--- Step 1: Creating voice enrollment ---\"\")\nservice = VoiceEnrollmentService()\ntry:\n    voice_id = service.create_voice(\n        target_model=TARGET_MODEL,\n        prefix=VOICE_PREFIX,\n        url=AUDIO_URL\n    )\n    print(f\"\"Voice enrollment submitted successfully. Request ID: {service.get_last_request_id()}\"\")\n    print(f\"\"Generated Voice ID: {voice_id}\"\")\nexcept Exception as e:\n    print(f\"\"Error during voice creation: {e}\"\")\n    raise e\n\nprint(\"\"\\n--- Step 2: Polling for voice status ---\"\")\nmax_attempts = 30\npoll_interval = 10\nfor attempt in range(max_attempts):\n    try:\n        voice_info = service.query_voice(voice_id=voice_id)\n        status = voice_info.get(\"\"status\"\")\n        print(f\"\"Attempt {attempt + 1}/{max_attempts}: Voice status is '{status}'\"\")\n        \n        if status == \"\"OK\"\":\n            print(\"\"Voice is ready for synthesis.\"\")\n            break\n        elif status == \"\"UNDEPLOYED\"\":\n            print(f\"\"Voice processing failed with status: {status}. Please check audio quality or contact support.\"\")\n            raise RuntimeError(f\"\"Voice processing failed with status: {status}\"\")\n        time.sleep(poll_interval)\n    except Exception as e:\n        print(f\"\"Error during status polling: {e}\"\")\n        time.sleep(poll_interval)\nelse:\n    print(\"\"Polling timed out. The voice is not ready after several attempts.\"\")\n    raise RuntimeError(\"\"Polling timed out. The voice is not ready after several attempts.\"\")\n\n\nprint(\"\"\\n--- Step 3: Synthesizing speech with the new voice ---\"\")\ntry:\n    synthesizer = SpeechSynthesizer(model=TARGET_MODEL, voice=voice_id)\n    text_to_synthesize = \"\"How is the weather today?\"\"\n    \n    audio_data = synthesizer.call(text_to_synthesize)\n    print(f\"\"Speech synthesis successful. Request ID: {synthesizer.get_last_request_id()}\"\")\n\n    output_file = \"\"my_custom_voice_output.mp3\"\"\n    with open(output_file, \"\"wb\"\") as f:\n        f.write(audio_data)\n    print(f\"\"Audio saved to {output_file}\"\")\n\nexcept Exception as e:\n    print(f\"\"Error during speech synthesis: {e}\"\")",
+            "java": "import com.alibaba.dashscope.audio.ttsv2.enrollment.Voice;\nimport com.alibaba.dashscope.audio.ttsv2.enrollment.VoiceEnrollmentParam;\nimport com.alibaba.dashscope.audio.ttsv2.enrollment.VoiceEnrollmentService;\nimport com.alibaba.dashscope.audio.ttsv2.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.ttsv2.SpeechSynthesizer;\nimport com.alibaba.dashscope.utils.Constants;\n\nimport java.io.File;\nimport java.io.FileOutputStream;\nimport java.io.IOException;\nimport java.nio.ByteBuffer;\nimport java.util.Collections;\n\npublic class Main {\n    public static void main(String[] args) {\n        Constants.baseWebsocketApiUrl = \"\"wss://dashscope.aliyuncs.com/api-ws/v1/inference\"\";\n        Constants.baseHttpApiUrl = \"\"https://dashscope.aliyuncs.com/api/v1\"\";\n\n        String apiKey = System.getenv(\"\"DASHSCOPE_API_KEY\"\");\n        String targetModel = \"\"cosyvoice-v3.5-flash\"\";\n        String prefix = \"\"myvoice\"\";\n        // Public network accessible audio URL. Please replace it with your own.\n        String fileUrl = \"\"https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/cosyvoice/cosyvoice-zeroshot-sample.wav\"\";\n        String cloneModelName = \"\"voice-enrollment\"\";\n\n        Voice myVoice = null;\n        try {\n            VoiceEnrollmentService service = new VoiceEnrollmentService(apiKey);\n            myVoice = service.createVoice(\n                    targetModel,\n                    prefix,\n                    fileUrl,\n                    VoiceEnrollmentParam.builder()\n                            .model(cloneModelName)\n                            .languageHints(Collections.singletonList(\"\"zh\"\")).build());\n\n            System.out.println(\"\"Voice creation submitted. Request ID: \"\" + service.getLastRequestId());\n            System.out.println(\"\"Generated Voice ID: \"\" + myVoice.getVoiceId());\n        } catch (Exception e) {\n            System.out.println(\"\"Failed to create voice: \"\" + e.getMessage());\n        }\n\n        streamAudioDataToSpeaker(targetModel, myVoice.getVoiceId());\n        System.exit(0);\n    }\n\n    public static void streamAudioDataToSpeaker(String targetModel, String voice) {\n        SpeechSynthesisParam param =\n                SpeechSynthesisParam.builder()\n                        .apiKey(System.getenv(\"\"DASHSCOPE_API_KEY\"\"))\n                        .model(targetModel)\n                        .voice(voice)\n                        .build();\n\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer(param, null);\n        ByteBuffer audio = null;\n        try {\n            audio = synthesizer.call(\"\"How is the weather today?\"\");\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        } finally {\n            synthesizer.getDuplexApi().close(1000, \"\"bye\"\");\n        }\n        if (audio != null) {\n            File file = new File(\"\"output.mp3\"\");\n            try (FileOutputStream fos = new FileOutputStream(file)) {\n                fos.write(audio.array());\n            } catch (IOException e) {\n                throw new RuntimeException(e);\n            }\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3016809.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "CosyVoice-v3.5-Plus是通义实验室CosyVoice系列的超高表现力语音合成大模型。对声音克隆和声音设计的语音合成效果进行全面升级，确保说话人高相似度的前提下，支持free-style指令控制，合成风格丰富多样。较之前版本大幅减少首包延迟，同时提高发音准确率，改善韵律和音质。支持跨多语种（中、英、德、法、俄、日、韩、葡、泰、印尼、越南）超自然听感实时语音合成。",
+      "features": [],
+      "provider": "qwen",
+      "model": "cosyvoice-v3.5-plus",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1.5",
+          "type": "cosy_tts_number",
+          "priceName": "语音合成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TTS"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-02-27T09:13:30.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "语音生成CosyVoice-v3.5-plus大模型",
+      "docUrl": "https://help.aliyun.com/document_detail/2842586.html",
+      "predictConfig": [],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "import os\nimport time\nimport dashscope\nfrom dashscope.audio.tts_v2 import VoiceEnrollmentService, SpeechSynthesizer\n\ndashscope.base_websocket_api_url='wss://dashscope.aliyuncs.com/api-ws/v1/inference'\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\ndashscope.api_key = os.getenv(\"\"DASHSCOPE_API_KEY\"\")\nif not dashscope.api_key:\n    raise ValueError(\"\"DASHSCOPE_API_KEY environment variable not set.\"\")\n\nTARGET_MODEL = \"\"cosyvoice-v3.5-plus\"\" \nVOICE_PREFIX = \"\"myvoice\"\"\n# Public network accessible audio URL. Please replace it with your own.\nAUDIO_URL = \"\"https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/cosyvoice/cosyvoice-zeroshot-sample.wav\"\"\n\nprint(\"\"--- Step 1: Creating voice enrollment ---\"\")\nservice = VoiceEnrollmentService()\ntry:\n    voice_id = service.create_voice(\n        target_model=TARGET_MODEL,\n        prefix=VOICE_PREFIX,\n        url=AUDIO_URL\n    )\n    print(f\"\"Voice enrollment submitted successfully. Request ID: {service.get_last_request_id()}\"\")\n    print(f\"\"Generated Voice ID: {voice_id}\"\")\nexcept Exception as e:\n    print(f\"\"Error during voice creation: {e}\"\")\n    raise e\n\nprint(\"\"\\n--- Step 2: Polling for voice status ---\"\")\nmax_attempts = 30\npoll_interval = 10\nfor attempt in range(max_attempts):\n    try:\n        voice_info = service.query_voice(voice_id=voice_id)\n        status = voice_info.get(\"\"status\"\")\n        print(f\"\"Attempt {attempt + 1}/{max_attempts}: Voice status is '{status}'\"\")\n        \n        if status == \"\"OK\"\":\n            print(\"\"Voice is ready for synthesis.\"\")\n            break\n        elif status == \"\"UNDEPLOYED\"\":\n            print(f\"\"Voice processing failed with status: {status}. Please check audio quality or contact support.\"\")\n            raise RuntimeError(f\"\"Voice processing failed with status: {status}\"\")\n        time.sleep(poll_interval)\n    except Exception as e:\n        print(f\"\"Error during status polling: {e}\"\")\n        time.sleep(poll_interval)\nelse:\n    print(\"\"Polling timed out. The voice is not ready after several attempts.\"\")\n    raise RuntimeError(\"\"Polling timed out. The voice is not ready after several attempts.\"\")\n\n\nprint(\"\"\\n--- Step 3: Synthesizing speech with the new voice ---\"\")\ntry:\n    synthesizer = SpeechSynthesizer(model=TARGET_MODEL, voice=voice_id)\n    text_to_synthesize = \"\"How is the weather today?\"\"\n    \n    audio_data = synthesizer.call(text_to_synthesize)\n    print(f\"\"Speech synthesis successful. Request ID: {synthesizer.get_last_request_id()}\"\")\n\n    output_file = \"\"my_custom_voice_output.mp3\"\"\n    with open(output_file, \"\"wb\"\") as f:\n        f.write(audio_data)\n    print(f\"\"Audio saved to {output_file}\"\")\n\nexcept Exception as e:\n    print(f\"\"Error during speech synthesis: {e}\"\")",
+            "java": "import com.alibaba.dashscope.audio.ttsv2.enrollment.Voice;\nimport com.alibaba.dashscope.audio.ttsv2.enrollment.VoiceEnrollmentParam;\nimport com.alibaba.dashscope.audio.ttsv2.enrollment.VoiceEnrollmentService;\nimport com.alibaba.dashscope.audio.ttsv2.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.ttsv2.SpeechSynthesizer;\nimport com.alibaba.dashscope.utils.Constants;\n\nimport java.io.File;\nimport java.io.FileOutputStream;\nimport java.io.IOException;\nimport java.nio.ByteBuffer;\nimport java.util.Collections;\n\npublic class Main {\n    public static void main(String[] args) {\n        Constants.baseWebsocketApiUrl = \"\"wss://dashscope.aliyuncs.com/api-ws/v1/inference\"\";\n        Constants.baseHttpApiUrl = \"\"https://dashscope.aliyuncs.com/api/v1\"\";\n\n        String apiKey = System.getenv(\"\"DASHSCOPE_API_KEY\"\");\n        String targetModel = \"\"cosyvoice-v3.5-plus\"\";\n        String prefix = \"\"myvoice\"\";\n        // Public network accessible audio URL. Please replace it with your own.\n        String fileUrl = \"\"https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/cosyvoice/cosyvoice-zeroshot-sample.wav\"\";\n        String cloneModelName = \"\"voice-enrollment\"\";\n\n        Voice myVoice = null;\n        try {\n            VoiceEnrollmentService service = new VoiceEnrollmentService(apiKey);\n            myVoice = service.createVoice(\n                    targetModel,\n                    prefix,\n                    fileUrl,\n                    VoiceEnrollmentParam.builder()\n                            .model(cloneModelName)\n                            .languageHints(Collections.singletonList(\"\"zh\"\")).build());\n\n            System.out.println(\"\"Voice creation submitted. Request ID: \"\" + service.getLastRequestId());\n            System.out.println(\"\"Generated Voice ID: \"\" + myVoice.getVoiceId());\n        } catch (Exception e) {\n            System.out.println(\"\"Failed to create voice: \"\" + e.getMessage());\n        }\n\n        streamAudioDataToSpeaker(targetModel, myVoice.getVoiceId());\n        System.exit(0);\n    }\n\n    public static void streamAudioDataToSpeaker(String targetModel, String voice) {\n        SpeechSynthesisParam param =\n                SpeechSynthesisParam.builder()\n                        .apiKey(System.getenv(\"\"DASHSCOPE_API_KEY\"\"))\n                        .model(targetModel)\n                        .voice(voice)\n                        .build();\n\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer(param, null);\n        ByteBuffer audio = null;\n        try {\n            audio = synthesizer.call(\"\"How is the weather today?\"\");\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        } finally {\n            synthesizer.getDuplexApi().close(1000, \"\"bye\"\");\n        }\n        if (audio != null) {\n            File file = new File(\"\"output.mp3\"\");\n            try (FileOutputStream fos = new FileOutputStream(file)) {\n                fos.write(audio.array());\n            } catch (IOException e) {\n                throw new RuntimeException(e);\n            }\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3016809.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "合成能力：CosyVoice-v3-Flash是通义实验室CosyVoice系列最新版高性能的语音合成大模型，较之前版本在自然度、音质、韵律、情感表现力上有更好的表现。该模型支持文本至语音的实时流式合成。克隆能力：CosyVoice-v3-Flash也是通义实验室CosyVoice系列最新版的语音克隆大模型，较之前版本提升了发音准确性、音色相似度，并且增加了更多小语种支持（德、西、法、意、俄）。仅需提供5-20s的参考音频，即可迅速生成高度相似且听感自然的定制声音。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "cosyvoice-v3-flash",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "cosy_tts_number",
+          "priceName": "语音合成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-11-17T06:35:36.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "语音生成CosyVoice-v3-flash大模型",
+      "predictConfig": [
+        {
+          "name": "音量",
+          "key": "volume",
+          "default": 50,
+          "tip": "数值越大，合成音频声音越大",
+          "range": [0, 100]
+        },
+        {
+          "name": "语速",
+          "key": "speechRate",
+          "default": 1,
+          "tip": "数值越大，合成音频语速越快",
+          "range": [0.5, 2]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\n\nimport dashscope\nfrom dashscope.audio.tts_v2 import *\n\n# 若没有将API Key配置到环境变量中，需将your-api-key替换为自己的API Key\n# dashscope.api_key = \"your-api-key\"\n\nmodel = \"cosyvoice-v3-flash\"\nvoice = \"longanyang\"\n\nsynthesizer = SpeechSynthesizer(model=model, voice=voice)\naudio = synthesizer.call(\"今天天气怎么样？\")\n\nwith open('output.mp3', 'wb') as f:\n    f.write(audio)",
+            "java": "import com.alibaba.dashscope.audio.ttsv2.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.ttsv2.SpeechSynthesizer;\n\nimport java.io.File;\nimport java.io.FileOutputStream;\nimport java.io.IOException;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    private static String model = \"cosyvoice-v3-flash\";\n    private static String voice = \"longanyang\";\n\n    public static void streamAudioDataToSpeaker() {\n        SpeechSynthesisParam param =\n                SpeechSynthesisParam.builder()\n                        // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将your-api-key替换为自己的API Key\n                        // .apiKey(\"your-api-key\")\n                        .model(model)\n                        .voice(voice)\n                        .build();\n\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer(param, null);\n        ByteBuffer audio = null;\n        try {\n            audio = synthesizer.call(\"今天天气怎么样？\");\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        } finally {\n            synthesizer.getDuplexApi().close(1000, \"bye\");\n        }\n        if (audio != null) {\n            File file = new File(\"output.mp3\");\n            try (FileOutputStream fos = new FileOutputStream(file)) {\n                fos.write(audio.array());\n            } catch (IOException e) {\n                throw new RuntimeException(e);\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        streamAudioDataToSpeaker();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "克隆能力：CosyVoice-v3-plus是通义实验室CosyVoice系列最新版的语音克隆大模型，具有更好的音质和复刻相似度，适用于更专业的场景。仅需提供5-20s的参考音频，即可迅速生成高度相似且听感自然的定制声音。合成能力：CosyVoice-v3-plus是通义实验室CosyVoice系列最新版的语音合成大模型，具有更好的音质和表现力，适用于更专业的场景。该模型支持文本至语音的实时流式合成。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "cosyvoice-v3-plus",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VoiceModel_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "2",
+          "type": "cosy_tts_number",
+          "priceName": "语音合成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-09-03T01:45:34.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "语音生成CosyVoice-v3-plus大模型",
+      "docUrl": "https://help.aliyun.com/document_detail/2817551.html",
+      "predictConfig": [
+        {
+          "name": "情感",
+          "key": "emotion",
+          "default": "neutral",
+          "tip": "合成音频说话的情感"
+        },
+        {
+          "name": "音量",
+          "key": "volume",
+          "default": 50,
+          "tip": "数值越大，合成音频声音越大",
+          "range": [0, 100]
+        },
+        {
+          "name": "语速",
+          "key": "speechRate",
+          "default": 1,
+          "tip": "数值越大，合成音频语速越快",
+          "range": [0.5, 2]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\n\nimport dashscope\nfrom dashscope.audio.tts_v2 import *\n\n# 若没有将API Key配置到环境变量中，需将your-api-key替换为自己的API Key\n# dashscope.api_key = \"your-api-key\"\n\nmodel = \"cosyvoice-v3-plus\"\nvoice = \"longanyang\"\n\nsynthesizer = SpeechSynthesizer(model=model, voice=voice)\naudio = synthesizer.call(\"今天天气怎么样？\")\n\nwith open('output.mp3', 'wb') as f:\n    f.write(audio)",
+            "java": "import com.alibaba.dashscope.audio.ttsv2.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.ttsv2.SpeechSynthesizer;\n\nimport java.io.File;\nimport java.io.FileOutputStream;\nimport java.io.IOException;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    private static String model = \"cosyvoice-v3-plus\";\n    private static String voice = \"longanyang\";\n\n    public static void streamAudioDataToSpeaker() {\n        SpeechSynthesisParam param =\n                SpeechSynthesisParam.builder()\n                        // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将your-api-key替换为自己的API Key\n                        // .apiKey(\"your-api-key\")\n                        .model(model)\n                        .voice(voice)\n                        .build();\n\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer(param, null);\n        ByteBuffer audio = null;\n        try {\n            audio = synthesizer.call(\"今天天气怎么样？\");\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        } finally {\n            synthesizer.getDuplexApi().close(1000, \"bye\");\n        }\n        if (audio != null) {\n            File file = new File(\"output.mp3\");\n            try (FileOutputStream fos = new FileOutputStream(file)) {\n                fos.write(audio.array());\n            } catch (IOException e) {\n                throw new RuntimeException(e);\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        streamAudioDataToSpeaker();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "声音复刻Cosyvoice大模型，依托先进的大模型技术进行特征提取，从而完成声音的复刻，且无需训练过程。仅需提供时长较短的音频，即可迅速生成高度相似且听感自然的定制声音。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "cosyvoice-clone-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "2",
+          "type": "cosy_tts_number",
+          "priceName": "语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-09-12T16:00:00.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "声音复刻CosyVoice大模型",
+      "docUrl": "https://help.aliyun.com/document_detail/2861519.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ]
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "cosyvoice-V2是通义实验室依托大规模预训练语言模型，在深度融合文本理解和语音生成的新一代生成式语音合成大模型，支持文本至语音的实时流式合成。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "cosyvoice-v2",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VoiceModel_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "2",
+          "type": "cosy_tts_number",
+          "priceName": "语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "SNAPSHOT",
+      "latestOnlineAt": "2025-05-27T10:10:42.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "语音生成cosyvoice-v2大模型",
+      "docUrl": "https://help.aliyun.com/document_detail/2817551.html",
+      "predictConfig": [
+        {
+          "name": "音量",
+          "key": "volume",
+          "default": 50,
+          "tip": "数值越大，合成音频声音越大",
+          "range": [0, 100]
+        },
+        {
+          "name": "语速",
+          "key": "speechRate",
+          "default": 1,
+          "tip": "数值越大，合成音频语速越快",
+          "range": [0.5, 2]
+        },
+        {
+          "name": "字级别时间戳",
+          "key": "enableWordTimestamp",
+          "default": false
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\n\nimport dashscope\nfrom dashscope.audio.tts_v2 import *\n\n# 若没有将API Key配置到环境变量中，需将your-api-key替换为自己的API Key\n# dashscope.api_key = \"your-api-key\"\n\nmodel = \"cosyvoice-v2\"\nvoice = \"longxiaochun_v2\"\n\nsynthesizer = SpeechSynthesizer(model=model, voice=voice)\naudio = synthesizer.call(\"今天天气怎么样？\")\n\nwith open('output.mp3', 'wb') as f:\n    f.write(audio)",
+            "java": "import com.alibaba.dashscope.audio.ttsv2.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.ttsv2.SpeechSynthesizer;\n\nimport java.io.File;\nimport java.io.FileOutputStream;\nimport java.io.IOException;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    private static String model = \"cosyvoice-v2\";\n    private static String voice = \"longxiaochun_v2\";\n\n    public static void streamAudioDataToSpeaker() {\n        SpeechSynthesisParam param =\n                SpeechSynthesisParam.builder()\n                        // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将your-api-key替换为自己的API Key\n                        // .apiKey(\"your-api-key\")\n                        .model(model)\n                        .voice(voice)\n                        .build();\n\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer(param, null);\n        ByteBuffer audio = null;\n        try {\n            audio = synthesizer.call(\"今天天气怎么样？\");\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        } finally {\n            synthesizer.getDuplexApi().close(1000, \"bye\");\n        }\n        if (audio != null) {\n            File file = new File(\"output.mp3\");\n            try (FileOutputStream fos = new FileOutputStream(file)) {\n                fos.write(audio.array());\n            } catch (IOException e) {\n                throw new RuntimeException(e);\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        streamAudioDataToSpeaker();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "CosyVoice 是通义实验室依托大规模预训练语言模型，深度融合文本理解和语音生成的新一代生成式语音合成大模型，支持文本至语音的实时流式合成。",
+      "features": ["model-experience"],
+      "provider": "qwen-domain-model",
+      "model": "cosyvoice-v1",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VoiceModel_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "2",
+          "type": "cosy_tts_number",
+          "priceName": "语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:20:34.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "语音合成CosyVoice大模型",
+      "docUrl": "https://help.aliyun.com/document_detail/2817551.html",
+      "predictConfig": [
+        {
+          "name": "音量",
+          "key": "volume",
+          "default": 50,
+          "tip": "数值越大，合成音频声音越大",
+          "range": [0, 100]
+        },
+        {
+          "name": "语速",
+          "key": "speechRate",
+          "default": 1,
+          "tip": "数值越大，合成音频语速越快",
+          "range": [0.5, 2]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\n\nimport dashscope\nfrom dashscope.audio.tts_v2 import *\n\n# 若没有将API Key配置到环境变量中，需将your-api-key替换为自己的API Key\n# dashscope.api_key = \"your-api-key\"\n\nmodel = \"cosyvoice-v1\"\nvoice = \"longxiaochun\"\n\nsynthesizer = SpeechSynthesizer(model=model, voice=voice)\naudio = synthesizer.call(\"今天天气怎么样？\")\n\nwith open('output.mp3', 'wb') as f:\n    f.write(audio)",
+            "java": "import com.alibaba.dashscope.audio.ttsv2.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.ttsv2.SpeechSynthesizer;\n\nimport java.io.File;\nimport java.io.FileOutputStream;\nimport java.io.IOException;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    private static String model = \"cosyvoice-v1\";\n    private static String voice = \"longxiaochun\";\n\n    public static void streamAudioDataToSpeaker() {\n        SpeechSynthesisParam param =\n                SpeechSynthesisParam.builder()\n                        // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将your-api-key替换为自己的API Key\n                        // .apiKey(\"your-api-key\")\n                        .model(model)\n                        .voice(voice)\n                        .build();\n\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer(param, null);\n        ByteBuffer audio = null;\n        try {\n            audio = synthesizer.call(\"今天天气怎么样？\");\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        } finally {\n            synthesizer.getDuplexApi().close(1000, \"bye\");\n        }\n        if (audio != null) {\n            File file = new File(\"output.mp3\");\n            try (FileOutputStream fos = new FileOutputStream(file)) {\n                fos.write(audio.array());\n            } catch (IOException e) {\n                throw new RuntimeException(e);\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        streamAudioDataToSpeaker();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

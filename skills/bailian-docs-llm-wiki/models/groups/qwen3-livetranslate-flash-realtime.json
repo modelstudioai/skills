@@ -1,0 +1,100 @@
+{
+  "name": "Qwen3-LiveTranslate-Flash-Realtime",
+  "description": "Qwen3-LiveTranslate-Flash-Realtime的实时版本，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen3-Omni强大的基座能力、海量多模态数据、跨语言跨模态对齐和视觉增强等技术，Qwen3-LiveTranslate-Flash 实现了离线和实时两种音视频翻译能力，能听懂19种语言，会说10种语言以及8种中文方言。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text", "Audio"],
+        "request_modality": ["Image", "Audio"]
+      },
+      "openSource": false,
+      "description": "Qwen3-LiveTranslate-Flash的实时版本，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen3-Omni强大的基座能力、海量多模态数据、跨语言跨模态对齐和视觉增强等技术，通义千问3-LiveTranslate-Flash 实现了离线和实时两种音视频翻译能力，能听懂19种语言，会说10种语言以及8种中文方言。",
+      "collectionTag": "qwen3",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "qwen3-livetranslate-flash-realtime",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "64",
+          "type": "translate_audio_input_token",
+          "priceName": "输入：音频"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "8",
+          "type": "translate_vision_input_token",
+          "priceName": "输入：图片"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "64",
+          "type": "translate_multi_text_output_token",
+          "priceName": "输出：文本"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "240",
+          "type": "translate_multi_output_token",
+          "priceName": "输出：音频"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 10,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 10,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["Realtime-Audio-Translate"],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 4096,
+      "latestOnlineAt": "2025-09-23T11:11:30.000+00:00",
+      "contextWindow": 53248,
+      "maxInputTokens": 49152,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3-LiveTranslate-Flash-Realtime",
+      "docUrl": "https://www.alibabacloud.com/help/en/document_detail/2983281.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# pip install websocket-client\nimport json\nimport websocket\nimport os\n\nAPI_KEY=os.getenv(\"DASHSCOPE_API_KEY\")\nAPI_URL = \"wss://dashscope.aliyuncs.com/api-ws/v1/realtime?model=qwen3-livetranslate-flash-realtime\"\n\nheaders = [\n\"Authorization: Bearer \" + API_KEY\n]\n\ndef on_open(ws):\nprint(f\"Connected to server: {API_URL}\")\ndef on_message(ws, message):\ndata = json.loads(message)\nprint(\"Received event:\", json.dumps(data, indent=2))\ndef on_error(ws, error):\nprint(\"Error:\", error)\n\nws = websocket.WebSocketApp(\nAPI_URL,\nheader=headers,\non_open=on_open,\non_message=on_message,\non_error=on_error\n)\n\nws.run_forever()",
+            "docUrl": "https://help.aliyun.com/document_detail/2983281.html"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "name": "Qwen-VL-Embedding",
+  "description": "基于Qwen-VL底座训练的统一多模态向量模型，支持文本、图片、视频单模态/混合模态输入，输出统一表征向量，适用于跨模态检索、图搜、视频检索、图像聚类、复杂多模态信息检索、打标等场景。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [],
+        "request_modality": ["Text", "Image"]
+      },
+      "openSource": false,
+      "description": "基于Qwen3-VL底座训练的统一多模态向量模型，支持文本、图片、视频单模态/混合模态输入，输出统一表征向量，适用于跨模态检索、图搜、视频检索、图像聚类、复杂多模态信息检索、打标等场景",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen3-vl-embedding",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.8",
+          "type": "embedding_image_token",
+          "priceName": "图片输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.7",
+          "type": "embedding_token",
+          "priceName": "文本输入"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 120000,
+          "usage_limit_field": "total_usage",
+          "count_limit": 40,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 120000,
+          "usage_limit_field": "total_usage",
+          "count_limit": 40,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["ME"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-01-21T03:39:38.000+00:00",
+      "maxInputTokens": 32000,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3-VL-Embedding",
+      "docUrl": "https://help.aliyun.com/document_detail/2842587.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --silent --location --request POST 'dashscope.aliyuncs.com' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"qwen3-vl-embedding\",\n    \"input\": {\n        \"contents\": [ \n            {\"text\": \"多模态向量模型\"}\n                ]\n              }\n        ]\n    }\n}'",
+            "python": "import dashscope\n\ntext = \"通用多模态表征模型示例\"\ninput = [{'text': text}]\nresp = dashscope.MultiModalEmbedding.call(\n    model=\"qwen3-vl-embedding\",\n    input=input\n)\n\nprint(resp)\n",
+            "java": "import com.alibaba.dashscope.embeddings.*;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\n\nimport java.util.Arrays;\nimport java.util.List;\n\npublic class Main {\n    public static void main(String[] args) {\n        try {\n            String text = \"通用多模态表征模型示例\";\n\n            MultiModalEmbeddingItemText textContent = new MultiModalEmbeddingItemText(text);\n            List<MultiModalEmbeddingItemBase> contents = Arrays.asList(textContent);\n            MultiModalEmbeddingParam param = MultiModalEmbeddingParam.builder()\n                .model(\"qwen3-vl-embedding\")\n                .contents(contents)\n                .build();\n            MultiModalEmbedding multiModalEmbedding = new MultiModalEmbedding();\n            MultiModalEmbeddingResult result = multiModalEmbedding.call(param);\n\n            System.out.println(result);\n        } catch (UploadFileException | NoApiKeyException e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [],
+        "request_modality": ["Text", "Image"]
+      },
+      "openSource": false,
+      "description": "基于Qwen2.5-VL底座训练的统一多模态向量模型，支持文本、图片、视频单模态/混合模态输入，输出统一表征向量，适用于跨模态检索、图搜、视频检索、图像聚类、复杂多模态信息检索、打标等场景",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen2.5-vl-embedding",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_embeddingrerank_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.8",
+          "type": "embedding_image_token",
+          "priceName": "图片输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.7",
+          "type": "embedding_token",
+          "priceName": "文本输入"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 60000,
+          "usage_limit_field": "total_usage",
+          "count_limit": 20,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 60000,
+          "usage_limit_field": "total_usage",
+          "count_limit": 20,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["ME"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-10-21T08:21:32.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen2.5-VL-Embedding",
+      "docUrl": "https://help.aliyun.com/document_detail/2842587.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --silent --location --request POST 'dashscope.aliyuncs.com' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"qwen2.5-vl-embedding\",\n    \"input\": {\n        \"contents\": [ \n            {\"text\": \"多模态向量模型\"}\n                ]\n              }\n        ]\n    }\n}'",
+            "python": "import dashscope\n\ntext = \"通用多模态表征模型示例\"\ninput = [{'text': text}]\nresp = dashscope.MultiModalEmbedding.call(\n    model=\"qwen2.5-vl-embedding\",\n    input=input\n)\n\nprint(resp)\n",
+            "java": "import com.alibaba.dashscope.embeddings.*;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\n\nimport java.util.Arrays;\nimport java.util.List;\n\npublic class Main {\n    public static void main(String[] args) {\n        try {\n            String text = \"通用多模态表征模型示例\";\n\n            MultiModalEmbeddingItemText textContent = new MultiModalEmbeddingItemText(text);\n            List<MultiModalEmbeddingItemBase> contents = Arrays.asList(textContent);\n            MultiModalEmbeddingParam param = MultiModalEmbeddingParam.builder()\n                .model(\"qwen2.5-vl-embedding\")\n                .contents(contents)\n                .build();\n            MultiModalEmbedding multiModalEmbedding = new MultiModalEmbedding();\n            MultiModalEmbeddingResult result = multiModalEmbedding.call(param);\n\n            System.out.println(result);\n        } catch (UploadFileException | NoApiKeyException e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
+          }
+        }
+      }
+    }
+  ]
+}

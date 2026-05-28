@@ -1,0 +1,457 @@
+{
+  "name": "Qwen-Embedding",
+  "description": "基于Qwen模型基座训练的多语言文本统一向量模型，文本检索、聚类、分类性能大幅提升，多语言支持，适用于向量检索、向量化等等场景，可搭配检索增强、文档处理场景使用，支持64~2048维用户自定义向量维度。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "是通义实验室基于Qwen3训练的多语言文本统一向量模型，相较V3版本在文本检索、聚类、分类性能大幅提升；在MTEB多语言、中英、Code检索等评测任务上效果提升15%~40%；支持64~2048维用户自定义向量维度。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "text-embedding-v4",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.25",
+          "type": "embedding_token_batch",
+          "priceName": "向量输入（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.5",
+          "type": "embedding_token",
+          "priceName": "文本输入"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 1200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 30,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 1200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 30,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TR"],
+      "versionTag": "SNAPSHOT",
+      "latestOnlineAt": "2025-06-05T03:07:20.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "通用文本向量-v4",
+      "docUrl": "https://help.aliyun.com/document_detail/2842587.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-v4\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
+            "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-v4\",\ninput=input_texts\n)\nprint(resp)",
+            "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-v4\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "通用文本向量，是通义实验室基于LLM底座的多语言文本统一向量模型，面向全球多个主流语种，提供高水准的向量服务，帮助开发者将文本数据快速转换为高质量的向量数据。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "text-embedding-v3",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_embeddingrerank_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.25",
+          "type": "embedding_token_batch",
+          "priceName": "向量输入（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.5",
+          "type": "embedding_token",
+          "priceName": "文本输入"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 120000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 30,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 120000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 30,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TR"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-07-12T09:44:51.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "通用文本向量-v3",
+      "docUrl": "https://help.aliyun.com/document_detail/2712515.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-v3\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
+            "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-v3\",\ninput=input_texts\n)\nprint(resp)",
+            "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-v3\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "通用文本向量的批处理接口，通过这个接口客户可以以文本方式一次性的提交大批量的向量计算请求，在系统完成所有的计算之后，大模型服务平台会将结果信息存储在结果文件中供客户下载解析。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "text-embedding-async-v1",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_embeddingrerank_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.7",
+          "type": "embedding_token",
+          "priceName": "文本输入"
+        }
+      ],
+      "capabilities": ["TR"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-04-09T09:04:41.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "通用文本向量-async-v1",
+      "docUrl": "https://help.aliyun.com/document_detail/2712516.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-async-v1\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
+            "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-async-v1\",\ninput=input_texts\n)\nprint(resp)",
+            "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-async-v1\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "通用文本向量的批处理接口，通过这个接口客户可以以文本方式一次性的提交大批量的向量计算请求，在系统完成所有的计算之后，大模型服务平台会将结果信息存储在结果文件中供客户下载解析。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "text-embedding-async-v2",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_embeddingrerank_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.7",
+          "type": "embedding_token",
+          "priceName": "文本输入"
+        }
+      ],
+      "capabilities": ["TR"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-04-09T09:05:28.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "通用文本向量-async-v2",
+      "docUrl": "https://help.aliyun.com/document_detail/2712516.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-async-v2\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
+            "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-async-v2\",\ninput=input_texts\n)\nprint(resp)",
+            "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-async-v2\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "通用文本向量，是通义实验室基于LLM底座的多语言文本统一向量模型，面向全球多个主流语种，提供高水准的向量服务，帮助开发者将文本数据快速转换为高质量的向量数据。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "text-embedding-v1",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_embeddingrerank_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.35",
+          "type": "embedding_token_batch",
+          "priceName": "向量输入（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.7",
+          "type": "embedding_token",
+          "priceName": "文本输入"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 120000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 30,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 120000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 30,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TR"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-04-09T09:02:12.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "通用文本向量-v1",
+      "docUrl": "https://help.aliyun.com/document_detail/2712515.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-v1\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
+            "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-v1\",\ninput=input_texts\n)\nprint(resp)",
+            "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-v1\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "通用文本向量，是通义实验室基于LLM底座的多语言文本统一向量模型，面向全球多个主流语种，提供高水准的向量服务，帮助开发者将文本数据快速转换为高质量的向量数据。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "text-embedding-v2",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_embeddingrerank_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.35",
+          "type": "embedding_token_batch",
+          "priceName": "向量输入（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.7",
+          "type": "embedding_token",
+          "priceName": "文本输入"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 120000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 30,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 120000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 30,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TR"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-04-09T09:03:19.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "通用文本向量-v2",
+      "docUrl": "https://help.aliyun.com/document_detail/2712515.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-v2\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
+            "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-v2\",\ninput=input_texts\n)\nprint(resp)",
+            "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-v2\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}"
+          }
+        }
+      }
+    }
+  ]
+}

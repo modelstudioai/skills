@@ -1,0 +1,66 @@
+{
+  "name": "Qwen3-TTS-Flash-Realtime",
+  "description": "Qwen3-TTS-Flash-Realtime模型是通义实验室最新的实时语音合成大模型，不仅拥有17种高表现力的拟人音色，且能低延迟高稳定地实时合成音频；同时支持多种语言，方言，支持同一音色多语言输出。该模型经过海量数据训练，合成音频可以根据文本自适应调节语气，对复杂文本合成也有较好的处理能力。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "千问3-TTS-Flash-Realtime模型是通义实验室最新的实时语音合成大模型，不仅拥有17种高表现力的拟人音色，且能低延迟高稳定地实时合成音频；同时支持多种语言，方言，支持同一音色多语言输出。该模型经过海量数据训练，合成音频可以根据文本自适应调节语气，对复杂文本合成也有较好的处理能力。",
+      "collectionTag": "qwen3",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen3-tts-flash-realtime",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VoiceModel_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "cosy_tts_number",
+          "priceName": "语音合成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TTS"],
+      "modelAlias": "qwen3-tts-flash-realtime",
+      "versionTag": "MAJOR",
+      "equivalentSnapshot": "qwen3-tts-flash-realtime-2025-11-27",
+      "latestOnlineAt": "2025-11-26T16:00:00.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3-TTS-Flash-Realtime",
+      "docUrl": "https://help.aliyun.com/document_detail/2938790.html",
+      "predictConfig": [
+        {
+          "name": "语言",
+          "key": "languageType",
+          "default": "Chinese"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "import os\nimport base64\nimport threading\nimport time\nimport dashscope\nfrom dashscope.audio.qwen_tts_realtime import *\n\nqwen_tts_realtime: QwenTtsRealtime = None\ntext_to_synthesize = [\n    '对吧~我就特别喜欢这种超市，',\n    '尤其是过年的时候',\n    '去逛超市',\n    '就会觉得',\n    '超级超级开心！',\n    '想买好多好多的东西呢！'\n]\n\nDO_VIDEO_TEST = False\n\ndef init_dashscope_api_key():\n    \"\"\"\n        Set your DashScope API-key. More information:\n        https://github.com/aliyun/alibabacloud-bailian-speech-demo/blob/master/PREREQUISITES.md\n    \"\"\"\n\n    if 'DASHSCOPE_API_KEY' in os.environ:\n        dashscope.api_key = os.environ[\n            'DASHSCOPE_API_KEY']  # load API-key from environment variable DASHSCOPE_API_KEY\n    else:\n        dashscope.api_key = 'your-dashscope-api-key'  # set API-key manually\n\n\n\nclass MyCallback(QwenTtsRealtimeCallback):\n    def __init__(self):\n        self.complete_event = threading.Event()\n        self.file = open('result_24k.pcm', 'wb')\n\n    def on_open(self) -> None:\n        print('connection opened, init player')\n\n    def on_close(self, close_status_code, close_msg) -> None:\n        self.file.close()\n        print('connection closed with code: {}, msg: {}, destroy player'.format(close_status_code, close_msg))\n\n    def on_event(self, response: str) -> None:\n        try:\n            global qwen_tts_realtime\n            type = response['type']\n            if 'session.created' == type:\n                print('start session: {}'.format(response['session']['id']))\n            if 'response.audio.delta' == type:\n                recv_audio_b64 = response['delta']\n                self.file.write(base64.b64decode(recv_audio_b64))\n            if 'response.done' == type:\n                print(f'response {qwen_tts_realtime.get_last_response_id()} done')\n            if 'session.finished' == type:\n                print('session finished')\n                self.complete_event.set()\n        except Exception as e:\n            print('[Error] {}'.format(e))\n            return\n\n    def wait_for_finished(self):\n        self.complete_event.wait()\n\n\nif __name__  == '__main__':\n    init_dashscope_api_key()\n\n    print('Initializing ...')\n\n    callback = MyCallback()\n\n    qwen_tts_realtime = QwenTtsRealtime(\n        model='qwen3-tts-flash-realtime',\n        callback=callback, \n        )\n\n    qwen_tts_realtime.connect()\n    qwen_tts_realtime.update_session(\n        voice = 'Cherry',\n        response_format = AudioFormat.PCM_24000HZ_MONO_16BIT,\n        mode = 'server_commit'        \n    )\n    for text_chunk in text_to_synthesize:\n        print(f'send texd: {text_chunk}')\n        qwen_tts_realtime.append_text(text_chunk)\n        time.sleep(0.1)\n    qwen_tts_realtime.finish()\n    callback.wait_for_finished()\n    print('[Metric] session: {}, first audio delay: {}'.format(\n                    qwen_tts_realtime.get_session_id(), \n                    qwen_tts_realtime.get_first_audio_delay(),\n                    ))",
+            "java": "// Java SDK 版本需要不低于2.20.9\nimport com.alibaba.dashscope.audio.qwen_tts_realtime.*;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.google.gson.JsonObject;\nimport javax.sound.sampled.LineUnavailableException;\nimport javax.sound.sampled.SourceDataLine;\nimport javax.sound.sampled.AudioFormat;\nimport javax.sound.sampled.DataLine;\nimport javax.sound.sampled.AudioSystem;\nimport java.io.FileNotFoundException;\nimport java.io.IOException;\nimport java.util.Base64;\nimport java.util.Queue;\nimport java.util.concurrent.CountDownLatch;\nimport java.util.concurrent.atomic.AtomicReference;\nimport java.util.concurrent.ConcurrentLinkedQueue;\nimport java.util.concurrent.atomic.AtomicBoolean;\n\npublic class Main {\n    static String[] textToSynthesize = {\n        \"对吧~我就特别喜欢这种超市\",\n        \"尤其是过年的时候\",\n        \"去逛超市\",\n        \"就会觉得\",\n        \"超级超级开心！\",\n        \"想买好多好多的东西呢！\"\n    };\n\n    // 实时PCM音频播放器类\n    public static class RealtimePcmPlayer {\n        private int sampleRate;\n        private SourceDataLine line;\n        private AudioFormat audioFormat;\n        private Thread decoderThread;\n        private Thread playerThread;\n        private AtomicBoolean stopped = new AtomicBoolean(false);\n        private Queue<String> b64AudioBuffer = new ConcurrentLinkedQueue<>();\n        private Queue<byte[]> RawAudioBuffer = new ConcurrentLinkedQueue<>();\n\n        // 构造函数初始化音频格式和音频线路\n        public RealtimePcmPlayer(int sampleRate) throws LineUnavailableException {\n            this.sampleRate = sampleRate;\n            this.audioFormat = new AudioFormat(this.sampleRate, 16, 1, true, false);\n            DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);\n            line = (SourceDataLine) AudioSystem.getLine(info);\n            line.open(audioFormat);\n            line.start();\n            decoderThread = new Thread(new Runnable() {\n                @Override\n                public void run() {\n                    while (!stopped.get()) {\n                        String b64Audio = b64AudioBuffer.poll();\n                        if (b64Audio != null) {\n                            byte[] rawAudio = Base64.getDecoder().decode(b64Audio);\n                            RawAudioBuffer.add(rawAudio);\n                        } else {\n                            try {\n                                Thread.sleep(100);\n                            } catch (InterruptedException e) {\n                                throw new RuntimeException(e);\n                            }\n                        }\n                    }\n                }\n            });\n            playerThread = new Thread(new Runnable() {\n                @Override\n                public void run() {\n                    while (!stopped.get()) {\n                        byte[] rawAudio = RawAudioBuffer.poll();\n                        if (rawAudio != null) {\n                            try {\n                                playChunk(rawAudio);\n                            } catch (IOException e) {\n                                throw new RuntimeException(e);\n                            } catch (InterruptedException e) {\n                                throw new RuntimeException(e);\n                            }\n                        } else {\n                            try {\n                                Thread.sleep(100);\n                            } catch (InterruptedException e) {\n                                throw new RuntimeException(e);\n                            }\n                        }\n                    }\n                }\n            });\n            decoderThread.start();\n            playerThread.start();\n        }\n\n        // 播放一个音频块并阻塞直到播放完成\n        private void playChunk(byte[] chunk) throws IOException, InterruptedException {\n            if (chunk == null || chunk.length == 0) return;\n\n            int bytesWritten = 0;\n            while (bytesWritten < chunk.length) {\n                bytesWritten += line.write(chunk, bytesWritten, chunk.length - bytesWritten);\n            }\n            int audioLength = chunk.length / (this.sampleRate*2/1000);\n            // 等待缓冲区中的音频播放完成\n            Thread.sleep(audioLength - 10);\n        }\n\n        public void write(String b64Audio) {\n            b64AudioBuffer.add(b64Audio);\n        }\n\n        public void cancel() {\n            b64AudioBuffer.clear();\n            RawAudioBuffer.clear();\n        }\n\n        public void waitForComplete() throws InterruptedException {\n            while (!b64AudioBuffer.isEmpty() || !RawAudioBuffer.isEmpty()) {\n                Thread.sleep(100);\n            }\n            line.drain();\n        }\n\n        public void shutdown() throws InterruptedException {\n            stopped.set(true);\n            decoderThread.join();\n            playerThread.join();\n            if (line != null && line.isRunning()) {\n                line.drain();\n                line.close();\n            }\n        }\n    }\n\n    public static void main(String[] args) throws InterruptedException, LineUnavailableException, FileNotFoundException {\n        QwenTtsRealtimeParam param = QwenTtsRealtimeParam.builder()\n                .model(\"qwen3-tts-flash-realtime\")\n                .apikey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .build();\n        AtomicReference<CountDownLatch> completeLatch = new AtomicReference<>(new CountDownLatch(1));\n        final AtomicReference<QwenTtsRealtime> qwenTtsRef = new AtomicReference<>(null);\n        \n        // 创建实时音频播放器实例\n        RealtimePcmPlayer audioPlayer = new RealtimePcmPlayer(24000);\n        \n        QwenTtsRealtime qwenTtsRealtime = new QwenTtsRealtime(param, new QwenTtsRealtimeCallback() {\n            @Override\n            public void onOpen() {\n                // 连接建立时的处理\n            }\n            @Override\n            public void onEvent(JsonObject message) {\n                String type = message.get(\"type\").getAsString();\n                switch(type) {\n                    case \"session.created\":\n                        // 会话创建时的处理\n                        break;\n                    case \"response.audio.delta\":\n                        String recvAudioB64 = message.get(\"delta\").getAsString();\n                        // 实时播放音频\n                        audioPlayer.write(recvAudioB64);\n                        break;\n                    case \"response.done\":\n                        // 响应完成时的处理\n                        break;\n                    case \"session.finished\":\n                        // 会话结束时的处理\n                        completeLatch.get().countDown();\n                    default:\n                        break;\n                }\n            }\n            @Override\n            public void onClose(int code, String reason) {\n                // 连接关闭时的处理\n            }\n        });\n        qwenTtsRef.set(qwenTtsRealtime);\n        try {\n            qwenTtsRealtime.connect();\n        } catch (NoApiKeyException e) {\n            throw new RuntimeException(e);\n        }\n        QwenTtsRealtimeConfig config = QwenTtsRealtimeConfig.builder()\n                .voice(\"Chelsie\")\n                .responseFormat(QwenTtsRealtimeAudioFormat.PCM_24000HZ_MONO_16BIT)\n                .mode(\"server_commit\")\n                .build();\n        qwenTtsRealtime.updateSession(config);\n        for (String text:textToSynthesize) {\n            qwenTtsRealtime.appendText(text);\n            Thread.sleep(100);\n        }\n        qwenTtsRealtime.finish();\n        completeLatch.get().await();\n        \n        // 等待音频播放完成并关闭播放器\n        audioPlayer.waitForComplete();\n        audioPlayer.shutdown();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

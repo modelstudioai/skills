@@ -1,0 +1,51 @@
+{
+  "name": "图像擦除补全",
+  "description": "图像擦除补全通过指定图像mask中要删除的人体、宠物、物品、文字、水印等图像区域，在保留背景的同时移除图像中的一个或多个人物、物体、文字等元素，此功能不支持输入prompt的消除。擦除补全技术结合了计算机视觉、AIGC inpainting等先进技术，可以在多种场景下应用，从而满足用户对隐私保护、内容创作和图像编辑等方面需求。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Image"]
+      },
+      "openSource": false,
+      "description": "图像擦除补全通过指定图像mask中要删除的人体、宠物、物品、文字、水印等图像区域，在保留背景的同时移除图像中的一个或多个人物、物体、文字等元素，此功能不支持输入prompt的消除。擦除补全技术结合了计算机视觉、AIGC inpainting等先进技术，可以在多种场景下应用，从而满足用户对隐私保护、内容创作和图像编辑等方面需求。",
+      "features": [],
+      "provider": "qwen",
+      "model": "image-erase-completion",
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-08-19T01:17:02.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "图像擦除补全",
+      "docUrl": "https://help.aliyun.com/document_detail/2840907.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--header 'X-DashScope-DataInspection: enable' \\\n--data-raw '{\n    \"model\": \"image-erase-completion\",\n    \"input\": {\n            \"image_url\": \"https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/%E5%9B%BE%E7%89%87%E6%93%A6%E9%99%A42-%E5%8E%9F%E5%9B%BE.png\",\n            \"mask_url\": \"https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/%E5%9B%BE%E7%89%87%E6%93%A6%E9%99%A42-%E6%93%A6%E9%99%A4.png\",\n            \"foreground_url\": \"https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/%E5%9B%BE%E7%89%87%E6%93%A6%E9%99%A42-%E4%BF%9D%E7%95%99.png\"\n        },\n    \"parameters\":{\n        \"dilate_flag\":true\n    }\n}' \n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/13b1848b-5493-4c0e-8c44-xxxxxxxxxxxx \\\n     -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\"
+          }
+        }
+      }
+    }
+  ]
+}

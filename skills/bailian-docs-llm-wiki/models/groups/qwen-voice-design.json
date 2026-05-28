@@ -1,0 +1,61 @@
+{
+  "name": "Qwen-声音设计",
+  "description": "Qwen-Voice-Design模型是千问语音模型的声音设计系列模型，仅需输入简单的文字描述，即可迅速设计出符合要求的相关声音。结合qwen3-tts-vd-realtime模型使用，可设计输出11个语种的语音。且合成音频可以根据文本自适应调节语气，对复杂文本合成也有较好的处理能力。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "千问voice-design模型是千问语音模型的声音设计系列模型，仅需输入简单的文字描述，即可迅速设计出符合要求的相关声音。结合qwen3-tts-vd-realtime模型使用，可设计输出11个语种的语音。且合成音频可以根据文本自适应调节语气，对复杂文本合成也有较好的处理能力。",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen-voice-design",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每次",
+          "price": "0.2",
+          "type": "tts_vc_model",
+          "priceName": "声音复刻及声音设计"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TTS"],
+      "modelAlias": "qwen-voice-design",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-12-12T07:41:45.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Voice-Design",
+      "docUrl": "https://help.aliyun.com/document_detail/3000986.html",
+      "predictConfig": [
+        {
+          "name": "语言",
+          "key": "languageType",
+          "default": "Chinese"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"qwen-voice-design\",\n    \"input\": {\n        \"action\": \"create\",\n        \"target_model\": \"qwen3-tts-vd-realtime-2025-12-16\",\n        \"voice_prompt\": \"沉稳的中年男性播音员，音色低沉浑厚，富有磁性，语速平稳，吐字清晰，适合用于新闻播报或纪录片解说。\",\n        \"preview_text\": \"各位听众朋友，大家好，欢迎收听晚间新闻。\",\n        \"preferred_name\": \"announcer\",\n        \"language\": \"zh\"\n    },\n    \"parameters\": {\n        \"sample_rate\": 24000,\n        \"response_format\": \"wav\"\n    }\n}'",
+            "python": "import requests\nimport base64\nimport os\n\ndef create_voice_and_play():\n    api_key = os.getenv(\"DASHSCOPE_API_KEY\")\n    \n    if not api_key:\n        print(\"错误: 未找到DASHSCOPE_API_KEY环境变量，请先设置API Key\")\n        return None, None, None\n    \n    headers = {\n        \"Authorization\": f\"Bearer {api_key}\",\n        \"Content-Type\": \"application/json\"\n    }\n    \n    data = {\n        \"model\": \"qwen-voice-design\",\n        \"input\": {\n            \"action\": \"create\",\n            \"target_model\": \"qwen3-tts-vd-realtime-2025-12-16\",\n            \"voice_prompt\": \"沉稳的中年男性播音员，音色低沉浑厚，富有磁性，语速平稳，吐字清晰，适合用于新闻播报或纪录片解说。\",\n            \"preview_text\": \"各位听众朋友，大家好，欢迎收听晚间新闻。\",\n            \"preferred_name\": \"announcer\",\n            \"language\": \"zh\"\n        },\n        \"parameters\": {\n            \"sample_rate\": 24000,\n            \"response_format\": \"wav\"\n        }\n    }\n    \n    url = \"https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization\"\n    \n    try:\n        response = requests.post(\n            url,\n            headers=headers,\n            json=data,\n            timeout=60\n        )\n        \n        if response.status_code == 200:\n            result = response.json()\n            \n            voice_name = result[\"output\"][\"voice\"]\n            print(f\"音色名称: {voice_name}\")\n            \n            base64_audio = result[\"output\"][\"preview_audio\"][\"data\"]\n            \n            audio_bytes = base64.b64decode(base64_audio)\n            \n            filename = f\"{voice_name}_preview.wav\"\n            \n            with open(filename, 'wb') as f:\n                f.write(audio_bytes)\n            \n            print(f\"音频已保存到本地文件: {filename}\")\n            print(f\"文件路径: {os.path.abspath(filename)}\")\n            \n            return voice_name, audio_bytes, filename\n        else:\n            print(f\"请求失败，状态码: {response.status_code}\")\n            print(f\"响应内容: {response.text}\")\n            return None, None, None\n            \n    except requests.exceptions.RequestException as e:\n        print(f\"网络请求发生错误: {e}\")\n        return None, None, None\n    except KeyError as e:\n        print(f\"响应数据格式错误，缺少必要的字段: {e}\")\n        print(f\"响应内容: {response.text if 'response' in locals() else 'No response'}\")\n        return None, None, None\n    except Exception as e:\n        print(f\"发生未知错误: {e}\")\n        return None, None, None\n\nif __name__ == \"__main__\":\n    voice_name, audio_data, saved_filename = create_voice_and_play()\n    \n    if voice_name:\n        print(f\"\\n成功创建音色 '{voice_name}'\")\n        print(f\"音频文件已保存: '{saved_filename}'\")\n        print(f\"文件大小: {os.path.getsize(saved_filename)} 字节\")\n    else:\n        print(\"\\n音色创建失败\")",
+            "java": "import com.google.gson.JsonObject;\nimport com.google.gson.JsonParser;\nimport java.io.*;\nimport java.net.HttpURLConnection;\nimport java.net.URL;\nimport java.util.Base64;\n\npublic class Main {\n    public static void main(String[] args) {\n        Main example = new Main();\n        example.createVoice();\n    }\n\n    public void createVoice() {\n        String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n        String jsonBody = \"{\\n\" +\n                \"    \\\"model\\\": \\\"qwen-voice-design\\\",\\n\" +\n                \"    \\\"input\\\": {\\n\" +\n                \"        \\\"action\\\": \\\"create\\\",\\n\" +\n                \"        \\\"target_model\\\": \\\"qwen3-tts-vd-realtime-2025-12-16\\\",\\n\" +\n                \"        \\\"voice_prompt\\\": \\\"沉稳的中年男性播音员，音色低沉浑厚，富有磁性，语速平稳，吐字清晰，适合用于新闻播报或纪录片解说。\\\",\\n\" +\n                \"        \\\"preview_text\\\": \\\"各位听众朋友，大家好，欢迎收听晚间新闻。\\\",\\n\" +\n                \"        \\\"preferred_name\\\": \\\"announcer\\\",\\n\" +\n                \"        \\\"language\\\": \\\"zh\\\"\\n\" +\n                \"    },\\n\" +\n                \"    \\\"parameters\\\": {\\n\" +\n                \"        \\\"sample_rate\\\": 24000,\\n\" +\n                \"        \\\"response_format\\\": \\\"wav\\\"\\n\" +\n                \"    }\\n\" +\n                \"}\";\n\n        HttpURLConnection connection = null;\n        try {\n            URL url = new URL(\"https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization\");\n            connection = (HttpURLConnection) url.openConnection();\n\n            connection.setRequestMethod(\"POST\");\n            connection.setRequestProperty(\"Authorization\", \"Bearer \" + apiKey);\n            connection.setRequestProperty(\"Content-Type\", \"application/json\");\n            connection.setDoOutput(true);\n            connection.setDoInput(true);\n\n            \n            try (OutputStream os = connection.getOutputStream()) {\n                byte[] input = jsonBody.getBytes(\"UTF-8\");\n                os.write(input, 0, input.length);\n                os.flush();\n            }\n\n            \n            int responseCode = connection.getResponseCode();\n            if (responseCode == HttpURLConnection.HTTP_OK) {\n                StringBuilder response = new StringBuilder();\n                try (BufferedReader br = new BufferedReader(\n                        new InputStreamReader(connection.getInputStream(), \"UTF-8\"))) {\n                    String responseLine;\n                    while ((responseLine = br.readLine()) != null) {\n                        response.append(responseLine.trim());\n                    }\n                }\n\n                \n                JsonObject jsonResponse = JsonParser.parseString(response.toString()).getAsJsonObject();\n                JsonObject outputObj = jsonResponse.getAsJsonObject(\"output\");\n                JsonObject previewAudioObj = outputObj.getAsJsonObject(\"preview_audio\");\n\n                \n                String voiceName = outputObj.get(\"voice\").getAsString();\n                System.out.println(\"音色名称: \" + voiceName);\n\n                \n                String base64Audio = previewAudioObj.get(\"data\").getAsString();\n\n                \n                byte[] audioBytes = Base64.getDecoder().decode(base64Audio);\n\n                \n                String filename = voiceName + \"_preview.wav\";\n                saveAudioToFile(audioBytes, filename);\n\n                System.out.println(\"音频已保存到本地文件: \" + filename);\n\n            } else {\n                StringBuilder errorResponse = new StringBuilder();\n                try (BufferedReader br = new BufferedReader(\n                        new InputStreamReader(connection.getErrorStream(), \"UTF-8\"))) {\n                    String responseLine;\n                    while ((responseLine = br.readLine()) != null) {\n                        errorResponse.append(responseLine.trim());\n                    }\n                }\n\n                System.out.println(\"请求失败，状态码: \" + responseCode);\n                System.out.println(\"错误响应: \" + errorResponse.toString());\n            }\n\n        } catch (Exception e) {\n            System.err.println(\"请求发生错误: \" + e.getMessage());\n            e.printStackTrace();\n        } finally {\n            if (connection != null) {\n                connection.disconnect();\n            }\n        }\n    }\n\n    private void saveAudioToFile(byte[] audioBytes, String filename) {\n        try {\n            File file = new File(filename);\n            try (FileOutputStream fos = new FileOutputStream(file)) {\n                fos.write(audioBytes);\n            }\n            System.out.println(\"音频已保存到: \" + file.getAbsolutePath());\n        } catch (IOException e) {\n            System.err.println(\"保存音频文件时发生错误: \" + e.getMessage());\n            e.printStackTrace();\n        }\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

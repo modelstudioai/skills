@@ -1,0 +1,122 @@
+{
+  "name": "Qwen-Image-Edit-Plus",
+  "description": "千问系列图像编辑Plus模型，在首版Edit模型基础上进一步优化了推理性能与系统稳定性，大幅缩短图像生成与编辑的响应时间；支持单次请求返回多张图片，显著提升用户体验。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Image"]
+      },
+      "openSource": true,
+      "description": "千问系列图像编辑Plus模型，在首版Edit模型基础上进一步优化了推理性能与系统稳定性，大幅缩短图像生成与编辑的响应时间；支持单次请求返回多张图片，显著提升用户体验。",
+      "features": ["model-experience"],
+      "provider": "qwen",
+      "model": "qwen-image-edit-plus",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_qwenimageplus_dp_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.2",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 2,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 2,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["IG"],
+      "versionTag": "SNAPSHOT",
+      "latestOnlineAt": "2025-10-30T09:10:49.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Image-Edit-Plus",
+      "docUrl": "https://help.aliyun.com/document_detail/2976416.html",
+      "predictConfig": [
+        {
+          "name": "negative_prompt",
+          "key": "negativePrompt",
+          "tip": "通过指定用户不想看到的内容来优化模型输出，使模型产生更有针对性和理想的结果。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \\\n--header 'Content-Type: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--data '{\n    \"model\": \"qwen-image-edit-plus\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/thtclx/input1.png\"\n                    },\n                    {\n                        \"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/iclsnx/input2.png\"\n                    },\n                    {\n                        \"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/gborgw/input3.png\"\n                    },\n                    {\n                        \"text\": \"图1中的女生穿着图2中的黑色裙子按图3的姿势坐下\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"n\": 2,\n        \"negative_prompt\": \"\",\n        \"watermark\": false\n    }\n}'",
+            "python": "import json\nimport os\nfrom dashscope import MultiModalConversation\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\n        \"role\": \"user\",\n        \"content\": [\n            {\"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/thtclx/input1.png\"},\n            {\"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/iclsnx/input2.png\"},\n            {\"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/gborgw/input3.png\"},\n            {\"text\": \"图1中的女生穿着图2中的黑色裙子按图3的姿势坐下\"}\n        ]\n    }\n]\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\nresponse = MultiModalConversation.call(\n    api_key=api_key,\n    model=\"qwen-image-edit-plus\",\n    messages=messages,\n    result_format='message',\n    stream=False,\n    n=2,\n    watermark=True,\n    negative_prompt=\"\"\n)\n\nprint(json.dumps(response, ensure_ascii=False))",
+            "java": "import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;\nimport com.alibaba.dashscope.common.MultiModalMessage;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\nimport com.alibaba.dashscope.utils.Constants;\nimport com.alibaba.dashscope.utils.JsonUtils;\n\nimport java.io.IOException;\nimport java.util.Arrays;\nimport java.util.Collections;\nimport java.util.HashMap;\nimport java.util.Map;\n\npublic class QwenImageEdit {\n    static {\n        Constants.baseHttpApiUrl = \"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey=\"sk-xxx\"\n    static String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n    public static void call() throws ApiException, NoApiKeyException, UploadFileException, IOException {\n\n        MultiModalConversation conv = new MultiModalConversation();\n\n        MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())\n                .content(Arrays.asList(\n                        Collections.singletonMap(\"image\", \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/thtclx/input1.png\"),\n                        Collections.singletonMap(\"image\", \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/iclsnx/input2.png\"),\n                        Collections.singletonMap(\"image\", \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/gborgw/input3.png\"),\n                        Collections.singletonMap(\"text\", \"图1中的女生穿着图2中的黑色裙子按图3的姿势坐下\")\n                )).build();\n\n        Map<String, Object> parameters = new HashMap<>();\n        parameters.put(\"watermark\", true);\n        parameters.put(\"negative_prompt\", \"\");\n        parameters.put(\"n\", 2);\n\n        MultiModalConversationParam param = MultiModalConversationParam.builder()\n                .apiKey(apiKey)\n                .model(\"qwen-image-edit-plus\")\n                .messages(Collections.singletonList(userMessage))\n                .parameters(parameters)\n                .build();\n\n        MultiModalConversationResult result = conv.call(param);\n        System.out.println(JsonUtils.toJson(result));\n    }\n\n    public static void main(String[] args) {\n        try {\n            call();\n        } catch (ApiException | NoApiKeyException | UploadFileException | IOException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Text", "Image"]
+      },
+      "openSource": true,
+      "description": "千问系列首个图像编辑模型，成功将Qwen-Image的文本渲染能力拓展到编辑任务上。支持精准的中英双语文字编辑、视觉外观与语义双重编辑、具备强大的跨基准性能表现。",
+      "features": ["model-experience"],
+      "provider": "qwen",
+      "model": "qwen-image-edit",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_qwenimage_dp_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.3",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 2,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 2,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["IG"],
+      "versionTag": "SNAPSHOT",
+      "latestOnlineAt": "2025-09-21T16:00:00.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Image-Edit",
+      "docUrl": "https://help.aliyun.com/document_detail/2976416.html",
+      "predictConfig": [
+        {
+          "name": "negative_prompt",
+          "key": "negativePrompt",
+          "tip": "通过指定用户不想看到的内容来优化模型输出，使模型产生更有针对性和理想的结果。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://{Domain}/api/v1/services/aigc/multimodal-generation/generation' \\\n--header 'Content-Type: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--data '{\n    \"model\": \"qwen-image-edit\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/thtclx/input1.png\"\n                    },\n                    {\n                        \"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/iclsnx/input2.png\"\n                    },\n                    {\n                        \"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/gborgw/input3.png\"\n                    },\n                    {\n                        \"text\": \"图1中的女生穿着图2中的黑色裙子按图3的姿势坐下\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"negative_prompt\": \"\",\n        \"watermark\": false\n    }\n}'",
+            "python": "import json\nimport os\nfrom dashscope import MultiModalConversation\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\n        \"role\": \"user\",\n        \"content\": [\n            {\"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/thtclx/input1.png\"},\n            {\"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/iclsnx/input2.png\"},\n            {\"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/gborgw/input3.png\"},\n            {\"text\": \"图1中的女生穿着图2中的黑色裙子按图3的姿势坐下\"}\n        ]\n    }\n]\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\nresponse = MultiModalConversation.call(\n    api_key=api_key,\n    model=\"qwen-image-edit\",\n    messages=messages,\n    result_format='message',\n    stream=False,\n    watermark=True,\n    negative_prompt=\"\"\n)\n\nprint(json.dumps(response, ensure_ascii=False))",
+            "java": "import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;\nimport com.alibaba.dashscope.common.MultiModalMessage;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\nimport com.alibaba.dashscope.utils.Constants;\nimport com.alibaba.dashscope.utils.JsonUtils;\n\nimport java.io.IOException;\nimport java.util.Arrays;\nimport java.util.Collections;\nimport java.util.HashMap;\nimport java.util.Map;\n\npublic class QwenImageEdit {\n    static {\n        Constants.baseHttpApiUrl = \"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey=\"sk-xxx\"\n    static String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n    public static void call() throws ApiException, NoApiKeyException, UploadFileException, IOException {\n\n        MultiModalConversation conv = new MultiModalConversation();\n\n        MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())\n                .content(Arrays.asList(\n                        Collections.singletonMap(\"image\", \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/thtclx/input1.png\"),\n                        Collections.singletonMap(\"image\", \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/iclsnx/input2.png\"),\n                        Collections.singletonMap(\"image\", \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/gborgw/input3.png\"),\n                        Collections.singletonMap(\"text\", \"图1中的女生穿着图2中的黑色裙子按图3的姿势坐下\")\n                )).build();\n\n        Map<String, Object> parameters = new HashMap<>();\n        parameters.put(\"watermark\", true);\n        parameters.put(\"negative_prompt\", \"\");\n\n        MultiModalConversationParam param = MultiModalConversationParam.builder()\n                .apiKey(apiKey)\n                .model(\"qwen-image-edit\")\n                .messages(Collections.singletonList(userMessage))\n                .parameters(parameters)\n                .build();\n\n        MultiModalConversationResult result = conv.call(param);\n        System.out.println(JsonUtils.toJson(result));\n    }\n\n    public static void main(String[] args) {\n        try {\n            call();\n        } catch (ApiException | NoApiKeyException | UploadFileException | IOException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

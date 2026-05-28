@@ -1,0 +1,80 @@
+{
+  "name": "Qwen-Image-2.0-Pro",
+  "description": "Qwen-Image-2.0系列满血版模型，实现了图片生成和图片编辑的融合；具备更专业的文字渲染1k token指令支持能力、更细腻的真实质感，细腻刻画写实场景、更强的语义遵循能力。满血版具备2.0系列最强的文字渲染能力和真实质感。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Text", "Image"]
+      },
+      "openSource": false,
+      "description": "Qwen-Image-2.0系列满血版模型，实现了图片生成和图片编辑的融合；具备更专业的文字渲染1k token指令支持能力、更细腻的真实质感，细腻刻画写实场景、更强的语义遵循能力。满血版具备2.0系列最强的文字渲染能力和真实质感。",
+      "features": ["model-experience"],
+      "provider": "qwen",
+      "model": "qwen-image-2.0-pro",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.5",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "count_limit": 2,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "count_limit": 2,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["IG"],
+      "modelAlias": "qwen-image-2.0-pro",
+      "versionTag": "MAJOR",
+      "equivalentSnapshot": "qwen-image-2.0-pro-2026-04-22",
+      "latestOnlineAt": "2026-04-22T16:00:00.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Image-2.0-Pro",
+      "docUrl": "https://help.aliyun.com/document_detail/2976416.html",
+      "predictConfig": [
+        {
+          "name": "negative_prompt",
+          "key": "negativePrompt",
+          "tip": "通过指定用户不想看到的内容来优化模型输出，使模型产生更有针对性和理想的结果。"
+        },
+        {
+          "name": "size",
+          "key": "size",
+          "default": "2048*2048",
+          "tip": "输出分辨率"
+        },
+        {
+          "name": "n",
+          "key": "n",
+          "default": 1,
+          "tip": "本次请求生成的图片数量"
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": false,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \\\n--header 'Content-Type: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--data '{\n    \"model\": \"qwen-image-2.0-pro\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/thtclx/input1.png\"\n                    },\n                    {\n                        \"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/iclsnx/input2.png\"\n                    },\n                    {\n                        \"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/gborgw/input3.png\"\n                    },\n                    {\n                        \"text\": \"图1中的女生穿着图2中的黑色裙子按图3的姿势坐下\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"n\": 2,\n        \"negative_prompt\": \"\",\n        \"watermark\": false\n    }\n}'",
+            "python": "import json\nimport os\nfrom dashscope import MultiModalConversation\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\n        \"role\": \"user\",\n        \"content\": [\n            {\"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/thtclx/input1.png\"},\n            {\"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/iclsnx/input2.png\"},\n            {\"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/gborgw/input3.png\"},\n            {\"text\": \"图1中的女生穿着图2中的黑色裙子按图3的姿势坐下\"}\n        ]\n    }\n]\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\nresponse = MultiModalConversation.call(\n    api_key=api_key,\n    model=\"qwen-image-2.0-pro\",\n    messages=messages,\n    result_format='message',\n    stream=False,\n    n=2,\n    watermark=True,\n    negative_prompt=\"\"\n)\n\nprint(json.dumps(response, ensure_ascii=False))",
+            "java": "import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;\nimport com.alibaba.dashscope.common.MultiModalMessage;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\nimport com.alibaba.dashscope.utils.Constants;\nimport com.alibaba.dashscope.utils.JsonUtils;\n\nimport java.io.IOException;\nimport java.util.Arrays;\nimport java.util.Collections;\nimport java.util.HashMap;\nimport java.util.Map;\n\npublic class QwenImageEdit {\n    static {\n        Constants.baseHttpApiUrl = \"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey=\"sk-xxx\"\n    static String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n    public static void call() throws ApiException, NoApiKeyException, UploadFileException, IOException {\n\n        MultiModalConversation conv = new MultiModalConversation();\n\n        MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())\n                .content(Arrays.asList(\n                        Collections.singletonMap(\"image\", \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/thtclx/input1.png\"),\n                        Collections.singletonMap(\"image\", \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/iclsnx/input2.png\"),\n                        Collections.singletonMap(\"image\", \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250925/gborgw/input3.png\"),\n                        Collections.singletonMap(\"text\", \"图1中的女生穿着图2中的黑色裙子按图3的姿势坐下\")\n                )).build();\n\n        Map<String, Object> parameters = new HashMap<>();\n        parameters.put(\"watermark\", true);\n        parameters.put(\"negative_prompt\", \"\");\n        parameters.put(\"n\", 2);\n\n        MultiModalConversationParam param = MultiModalConversationParam.builder()\n                .apiKey(apiKey)\n                .model(\"qwen-image-2.0-pro\")\n                .messages(Collections.singletonList(userMessage))\n                .parameters(parameters)\n                .build();\n\n        MultiModalConversationResult result = conv.call(param);\n        System.out.println(JsonUtils.toJson(result));\n    }\n\n    public static void main(String[] args) {\n        try {\n            call();\n        } catch (ApiException | NoApiKeyException | UploadFileException | IOException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

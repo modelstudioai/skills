@@ -1,0 +1,294 @@
+{
+  "name": "Tripo",
+  "description": "AI驱动的3D通用大模型Tripo，支持文本或图片输入，数秒内一键生成高质量3D模型。",
+  "items": [
+    {
+      "openSource": false,
+      "description": "Tripo H3.1 是 Tripo 推出的高精度 3D 生成模型，专为需要极致视觉质量与细节表现的创作者设计。模型通过核心算法升级与模块优化，参数规模达 200 亿级，支持十亿体素级三维分辨率与最高 200 万面多边形生成。在保持高精度几何与真实纹理的同时，Tripo H3.1 对输入参考图的还原度与对齐度进一步提升，在角色形体、面部细节与几何文字等复杂结构上实现更稳定、细致的表达，适用于高质量视觉制作与 3D 打印等高精度资产生产场景。",
+      "features": ["function-calling", "batch", "structured-outputs"],
+      "provider": "tripo",
+      "model": "Tripo/Tripo-H3.1",
+      "prices": [
+        {
+          "priceUnit": "每次",
+          "price": "0.7",
+          "type": "generation_3d_text_to_3d_standard_no_texture",
+          "priceName": "文生3D（标准版+无贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "1.4",
+          "type": "generation_3d_image_to_3d_standard_no_texture",
+          "priceName": "单图生3D（标准版+无贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "1.4",
+          "type": "generation_3d_multiview_to_3d_standard_no_texture",
+          "priceName": "多图生3D（标准版+无贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "1.4",
+          "type": "generation_3d_text_to_3d_standard_sd_texture",
+          "priceName": "文生3D（标准版+带标清贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "2.1",
+          "type": "generation_3d_image_to_3d_standard_sd_texture",
+          "priceName": "单图生3D（标准版+带标清贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "2.1",
+          "type": "generation_3d_multiview_to_3d_standard_sd_texture",
+          "priceName": "多图生3D（标准版+带标清贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "2.1",
+          "type": "generation_3d_text_to_3d_standard_hd_texture",
+          "priceName": "文生3D（标准版+带高清贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "2.8",
+          "type": "generation_3d_image_to_3d_standard_hd_texture",
+          "priceName": "单图生3D（标准版+带高清贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "2.8",
+          "type": "generation_3d_multiview_to_3d_standard_hd_texture",
+          "priceName": "多图生3D（标准版+带高清贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "2.1",
+          "type": "generation_3d_text_to_3d_ultra_no_texture",
+          "priceName": "文生3D（超清版+无贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "2.8",
+          "type": "generation_3d_image_to_3d_ultra_no_texture",
+          "priceName": "单图生3D（超清版+无贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "2.8",
+          "type": "generation_3d_multiview_to_3d_ultra_no_texture",
+          "priceName": "多图生3D（超清版+无贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "2.8",
+          "type": "generation_3d_text_to_3d_ultra_sd_texture",
+          "priceName": "文生3D（超清版+带标清贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "3.5",
+          "type": "generation_3d_image_to_3d_ultra_sd_texture",
+          "priceName": "单图生3D（超清版+带标清贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "3.5",
+          "type": "generation_3d_multiview_to_3d_ultra_sd_texture",
+          "priceName": "多图生3D（超清版+带标清贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "3.5",
+          "type": "generation_3d_text_to_3d_ultra_hd_texture",
+          "priceName": "文生3D（超清版+带高清贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "4.2",
+          "type": "generation_3d_image_to_3d_ultra_hd_texture",
+          "priceName": "单图生3D（超清版+带高清贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "4.2",
+          "type": "generation_3d_multiview_to_3d_ultra_hd_texture",
+          "priceName": "多图生3D（超清版+带高清贴图）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "capabilities": ["3D-generation"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-04-27T04:08:07.000+00:00",
+      "inferenceProvider": "tripo",
+      "name": "Tripo-H3.1",
+      "docUrl": "https://help.aliyun.com/document_detail/3030679.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"Tripo/Tripo-H3.1\",\n    \"input\": {\n        \"prompt\": \"一只可爱的猫\"\n    },\n    \"parameters\": {\n        \"texture_quality\": \"standard\"\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3030679.html"
+          }
+        }
+      }
+    },
+    {
+      "openSource": false,
+      "description": "Tripo P1.0 是面向实时应用与生产管线的 3D 生成模型，专为需要干净拓扑和引擎可用网格的开发者与创作者设计。模型可在约 2 秒内生成具备专业级拓扑结构的 3D 资产，适用于游戏、Web3D 与各类实时交互场景。针对 UGC 内容生产中对“速度”和“开箱即用”的需求，Tripo P1.0 在保证质量的同时大幅提升生成效率，使资产能够快速接入实时引擎与开发流程。",
+      "features": ["function-calling", "structured-outputs", "batch"],
+      "provider": "tripo",
+      "model": "Tripo/Tripo-P1.0",
+      "prices": [
+        {
+          "priceUnit": "每次",
+          "price": "2.1",
+          "type": "generation_3d_text_to_3d_no_texture",
+          "priceName": "文生3D（无贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "2.8",
+          "type": "generation_3d_image_to_3d_no_texture",
+          "priceName": "单图生3D（无贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "2.8",
+          "type": "generation_3d_multiview_to_3d_no_texture",
+          "priceName": "多图生3D（无贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "2.8",
+          "type": "generation_3d_text_to_3d_sd_texture",
+          "priceName": "文生3D（带标清贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "3.5",
+          "type": "generation_3d_image_to_3d_sd_texture",
+          "priceName": "单图生3D（带标清贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "3.5",
+          "type": "generation_3d_multiview_to_3d_sd_texture",
+          "priceName": "多图生3D（带标清贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "3.5",
+          "type": "generation_3d_text_to_3d_hd_texture",
+          "priceName": "文生3D（带高清贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "4.2",
+          "type": "generation_3d_image_to_3d_hd_texture",
+          "priceName": "单图生3D（带高清贴图）"
+        },
+        {
+          "priceUnit": "每次",
+          "price": "4.2",
+          "type": "generation_3d_multiview_to_3d_hd_texture",
+          "priceName": "多图生3D（带高清贴图）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "capabilities": ["3D-generation"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-04-27T04:07:42.000+00:00",
+      "inferenceProvider": "tripo",
+      "name": "Tripo-P1.0",
+      "docUrl": "https://help.aliyun.com/document_detail/3030679.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"Tripo/Tripo-P1.0\",\n    \"input\": {\n        \"prompt\": \"一只可爱的猫\"\n    },\n    \"parameters\": {\n        \"texture_quality\": \"standard\"\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3030679.html"
+          }
+        }
+      }
+    }
+  ]
+}

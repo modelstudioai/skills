@@ -1,0 +1,136 @@
+{
+  "name": "AI试衣OutfitAnyone-图片精修",
+  "description": "图片精修是对AI试衣生成的效果图进行二次生成，输出还原度更高的精修试衣效果图。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Image"]
+      },
+      "openSource": false,
+      "description": "图片精修是对AI试衣生成的效果图进行二次生成，输出还原度更高的精修试衣效果图。",
+      "features": [],
+      "provider": "qwen",
+      "model": "aitryon-refiner",
+      "multiPrices": [
+        {
+          "rangeStart": 0,
+          "rangeName": "图片生成数量<=25",
+          "prices": [
+            {
+              "priceUnit": "每张",
+              "price": "0.3",
+              "type": "image_number",
+              "priceName": "图片生成"
+            }
+          ],
+          "rangeEnd": 25
+        },
+        {
+          "rangeStart": 25,
+          "rangeName": "25<图片生成数量<=125",
+          "prices": [
+            {
+              "priceUnit": "每张",
+              "price": "0.275",
+              "type": "image_number",
+              "priceName": "图片生成"
+            }
+          ],
+          "rangeEnd": 125
+        },
+        {
+          "rangeStart": 125,
+          "rangeName": "125<图片生成数量<=250",
+          "prices": [
+            {
+              "priceUnit": "每张",
+              "price": "0.25",
+              "type": "image_number",
+              "priceName": "图片生成"
+            }
+          ],
+          "rangeEnd": 250
+        },
+        {
+          "rangeStart": 250,
+          "rangeName": "250<图片生成数量<=1250",
+          "prices": [
+            {
+              "priceUnit": "每张",
+              "price": "0.225",
+              "type": "image_number",
+              "priceName": "图片生成"
+            }
+          ],
+          "rangeEnd": 1250
+        },
+        {
+          "rangeStart": 1250,
+          "rangeName": "1250<图片生成数量<=2500",
+          "prices": [
+            {
+              "priceUnit": "每张",
+              "price": "0.2",
+              "type": "image_number",
+              "priceName": "图片生成"
+            }
+          ],
+          "rangeEnd": 2500
+        },
+        {
+          "rangeStart": 2500,
+          "rangeName": "2500<图片生成数量<=25000",
+          "prices": [
+            {
+              "priceUnit": "每张",
+              "price": "0.175",
+              "type": "image_number",
+              "priceName": "图片生成"
+            }
+          ],
+          "rangeEnd": 25000
+        },
+        {
+          "rangeStart": 25000,
+          "rangeName": "25000<图片生成数量",
+          "prices": [
+            {
+              "priceUnit": "每张",
+              "price": "0.15",
+              "type": "image_number",
+              "priceName": "图片生成"
+            }
+          ]
+        }
+      ],
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-06-28T11:03:13.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "AI试衣OutfitAnyone-图片精修",
+      "docUrl": "https://help.aliyun.com/document_detail/2796663.html",
+      "predictConfig": [
+        {
+          "name": "sample_models"
+        },
+        {
+          "name": "sample_suits"
+        },
+        {
+          "name": "sample_tops"
+        },
+        {
+          "name": "sample_bottoms"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis/' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"aitryon-refiner\",\n    \"input\": {\n        \"top_garment_url\": \"https://dashscope-swap.oss-cn-beijing.aliyuncs.com/aa-test/sample-top.jpg\",\n        \"bottom_garment_url\": \"https://dashscope-swap.oss-cn-beijing.aliyuncs.com/aa-test/sample-bottom.jpg\",\n        \"person_image_url\": \"https://dashscope-swap.oss-cn-beijing.aliyuncs.com/aa-test/sample-person.png\",\n        \"coarse_image_url\": \"https://dashscope-swap.oss-cn-beijing.aliyuncs.com/aa-test/result.png\"\n    },\n    \"parameters\": {\n        \"gender\": \"woman\"\n    }\n }'\n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\""
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,274 @@
+{
+  "name": "Qwen-Omni-Turbo",
+  "description": "千问全新多模态理解生成大模型，支持文本, 图像，语音，视频输入理解和混合输入理解，具备文本和语音同时流式生成能力，多模态内容理解速度显著提升，提供了4种自然对话音色。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text", "Audio"],
+        "request_modality": ["Text", "Image", "Video", "Audio"]
+      },
+      "openSource": false,
+      "description": "千问全新多模态理解生成大模型，支持文本, 图像，语音，视频输入理解和混合输入理解，具备文本和语音同时流式生成能力，多模态内容理解速度显著提升，提供了4种自然对话音色。",
+      "features": ["model-experience", "batch"],
+      "provider": "qwen",
+      "model": "qwen-omni-turbo",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.4",
+          "type": "text_input_token",
+          "priceName": "输入：文本"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "25",
+          "type": "audio_input_token",
+          "priceName": "输入：音频"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.5",
+          "type": "vision_input_token",
+          "priceName": "输入：图片/视频"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.6",
+          "type": "purein_text_output_token",
+          "priceName": "输出：文本（输入仅包含文本时）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "4.5",
+          "type": "multiin_text_output_token",
+          "priceName": "输出：文本（输入包含图片/音频/视频时）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "50",
+          "type": "multi_output_token",
+          "priceName": "输出：文本+音频（输出的文本不计费）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.3",
+          "type": "vision_input_token_cache",
+          "priceName": "输入：图片/视频（缓存命中）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.08",
+          "type": "text_input_token_cache",
+          "priceName": "输入：文本（缓存命中）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "5",
+          "type": "audio_input_token_cache",
+          "priceName": "输入：音频（缓存命中）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.2",
+          "type": "text_input_token_batch",
+          "priceName": "输入：文本（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "12.5",
+          "type": "audio_input_token_batch",
+          "priceName": "输入：音频（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.75",
+          "type": "vision_input_token_batch",
+          "priceName": "输入：图片/视频（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "25",
+          "type": "multi_output_token_batch",
+          "priceName": "输出：文本+音频（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2.25",
+          "type": "multiin_text_output_token_batch",
+          "priceName": "输出：文本（Batch File，输入包含图片/音频/视频时）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.8",
+          "type": "purein_text_output_token_batch",
+          "priceName": "输出：文本（Batch File，输入仅包含文本时）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["Multimodal-Omni"],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 2048,
+      "latestOnlineAt": "2025-02-14T14:56:44.000+00:00",
+      "contextWindow": 32768,
+      "maxInputTokens": 30720,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Omni-Turbo",
+      "docUrl": "https://help.aliyun.com/document_detail/2867839.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"qwen-omni-turbo\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁？\"\n        }\n    ],\n    \"stream\":true,\n    \"stream_options\":{\n        \"include_usage\":true\n    },\n    \"modalities\":[\"text\",\"audio\"],\n    \"audio\":{\"voice\":\"Ethan\",\"format\":\"wav\"}\n}'",
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    # 新加坡和北京地域的API Key不同。获取API Key：https://www.alibabacloud.com/help/zh/model-studio/get-api-key\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"qwen-omni-turbo\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    # 设置输出数据的模态，当前支持两种：[\"text\",\"audio\"]、[\"text\"]\n    modalities=[\"text\", \"audio\"],\n    audio={\"voice\": \"Ethan\", \"format\": \"wav\"},\n    # stream 必须设置为 True，否则会报错\n    stream=True,\n    stream_options={\"include_usage\": True},\n)\n\nfor chunk in completion:\n    if chunk.choices:\n        print(chunk.choices[0].delta)\n    else:\n        print(chunk.usage)",
+            "nodejs": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI(\n    {\n        // 新加坡和北京地域的API Key不同。获取API Key：https://www.alibabacloud.com/help/zh/model-studio/get-api-key\n        apiKey: process.env.DASHSCOPE_API_KEY,\n        baseURL: \"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n    }\n);\nconst completion = await openai.chat.completions.create({\n    model: \"qwen-omni-turbo\",\n    messages: [\n        { role: \"user\", content: \"你是谁？\" }\n    ],\n    stream: true,\n    stream_options: {\n        include_usage: true\n    },\n    modalities: [\"text\", \"audio\"],\n    audio: { voice: \"Ethan\", format: \"wav\" }\n});\n\nfor await (const chunk of completion) {\n    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {\n        console.log(chunk.choices[0].delta);\n    } else {\n        console.log(chunk.usage);\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/2867839.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text", "Audio"],
+        "request_modality": ["Text", "Image", "Video", "Audio"]
+      },
+      "openSource": false,
+      "description": "千问全新多模态理解生成大模型，支持文本, 图像，语音，视频输入理解和混合输入理解，具备文本和语音同时流式生成能力，多模态内容理解速度显著提升，提供了4种自然对话音色，此版本为动态更新版本。",
+      "features": ["model-experience"],
+      "provider": "qwen",
+      "model": "qwen-omni-turbo-latest",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.4",
+          "type": "text_input_token",
+          "priceName": "输入：文本"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "25",
+          "type": "audio_input_token",
+          "priceName": "输入：音频"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.5",
+          "type": "vision_input_token",
+          "priceName": "输入：图片/视频"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.6",
+          "type": "purein_text_output_token",
+          "priceName": "输出：文本（输入仅包含文本时）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "4.5",
+          "type": "multiin_text_output_token",
+          "priceName": "输出：文本（输入包含图片/音频/视频时）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "50",
+          "type": "multi_output_token",
+          "priceName": "输出：文本+音频（输出的文本不计费）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["Multimodal-Omni"],
+      "versionTag": "LATEST",
+      "maxOutputTokens": 2048,
+      "latestOnlineAt": "2025-02-14T14:55:08.000+00:00",
+      "contextWindow": 32768,
+      "maxInputTokens": 30720,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Omni-Turbo-Latest",
+      "docUrl": "https://help.aliyun.com/document_detail/2867839.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"qwen-omni-turbo-latest\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁？\"\n        }\n    ],\n    \"stream\":true,\n    \"stream_options\":{\n        \"include_usage\":true\n    },\n    \"modalities\":[\"text\",\"audio\"],\n    \"audio\":{\"voice\":\"Ethan\",\"format\":\"wav\"}\n}'",
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    # 新加坡和北京地域的API Key不同。获取API Key：https://www.alibabacloud.com/help/zh/model-studio/get-api-key\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"qwen-omni-turbo-latest\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    # 设置输出数据的模态，当前支持两种：[\"text\",\"audio\"]、[\"text\"]\n    modalities=[\"text\", \"audio\"],\n    audio={\"voice\": \"Ethan\", \"format\": \"wav\"},\n    # stream 必须设置为 True，否则会报错\n    stream=True,\n    stream_options={\"include_usage\": True},\n)\n\nfor chunk in completion:\n    if chunk.choices:\n        print(chunk.choices[0].delta)\n    else:\n        print(chunk.usage)",
+            "nodejs": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI(\n    {\n        // 新加坡和北京地域的API Key不同。获取API Key：https://www.alibabacloud.com/help/zh/model-studio/get-api-key\n        apiKey: process.env.DASHSCOPE_API_KEY,\n        baseURL: \"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n    }\n);\nconst completion = await openai.chat.completions.create({\n    model: \"qwen-omni-turbo-latest\",\n    messages: [\n        { role: \"user\", content: \"你是谁？\" }\n    ],\n    stream: true,\n    stream_options: {\n        include_usage: true\n    },\n    modalities: [\"text\", \"audio\"],\n    audio: { voice: \"Ethan\", format: \"wav\" }\n});\n\nfor await (const chunk of completion) {\n    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {\n        console.log(chunk.choices[0].delta);\n    } else {\n        console.log(chunk.usage);\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/2867839.html"
+          }
+        }
+      }
+    }
+  ]
+}

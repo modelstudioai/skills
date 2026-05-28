@@ -1,0 +1,371 @@
+{
+  "name": "Wan-Image",
+  "description": "指令编辑图片内容，轻松实现局部修改、风格变化、一致性保持等",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Image", "Text"]
+      },
+      "openSource": false,
+      "description": "万相2.7-图像生成与编辑，支持文生图、文生组图、图生组图、图像编辑、多图参考生成、交互式编辑，在文字渲染、主体一致性、复杂指令遵循上都有更强表现",
+      "collectionTag": "wan2.7",
+      "features": ["model-experience"],
+      "provider": "wan",
+      "model": "wan2.7-image",
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.2",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["IG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-04-01T03:48:10.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.7-Image",
+      "docUrl": "https://help.aliyun.com/document_detail/3026980.html",
+      "predictConfig": [
+        {
+          "name": "分辨率",
+          "key": "size",
+          "default": "2048*2048"
+        },
+        {
+          "name": "n",
+          "key": "n",
+          "default": 1,
+          "tip": "生成数量",
+          "range": [1, 4]
+        },
+        {
+          "name": "组图生成",
+          "key": "enable_sequential",
+          "default": false
+        },
+        {
+          "name": "智能改写",
+          "key": "thinking_mode",
+          "default": false,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "import os\nimport dashscope\nfrom dashscope.aigc.image_generation import ImageGeneration\nfrom dashscope.api_entities.dashscope_response import Message\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\nmessage = Message(\n    role=\"user\",\n    content=[\n        {\n            \"text\": \"电影感组图，记录同一只流浪橘猫，特征必须前后一致。第一张：春天，橘猫穿梭在盛开的樱花树下；第二张：夏天，橘猫在老街的树荫下乘凉避暑；第三张：秋天，橘猫踩在满地的金色落叶上；第四张：冬天，橘猫在雪地上走留下足迹。\"\n        }\n    ]\n)\n\nprint(\"----sync call, please wait a moment----\")\nrsp = ImageGeneration.call(\n        model='wan2.7-image',\n        api_key=api_key,\n        messages=[message],\n        enable_sequential=True,\n        n=4,\n        size=\"2K\"\n    )\n\nprint(rsp)",
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \\\n--header 'Content-Type: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--data '{\n    \"model\": \"wan2.7-image\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\"text\": \"电影感组图，记录同一只流浪橘猫，特征必须前后一致。第一张：春天，橘猫穿梭在盛开的樱花树下；第二张：夏天，橘猫在老街的树荫下乘凉避暑；第三张：秋天，橘猫踩在满地的金色落叶上；第四张：冬天，橘猫在雪地上走留下足迹。\"}\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"enable_sequential\": true,\n        \"n\": 4,\n        \"size\": \"2K\"\n    }\n}'\n",
+            "java": "import com.alibaba.dashscope.aigc.imagegeneration.*;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\nimport com.alibaba.dashscope.utils.Constants;\nimport com.alibaba.dashscope.utils.JsonUtils;\n\nimport java.util.Collections;\n\n\npublic class Main {\n\n    static {\n        Constants.baseHttpApiUrl = \"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    \n    static String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n    public static void basicCall() throws ApiException, NoApiKeyException, UploadFileException {\n        // 构建文本输入消息（支持文生组图以及图生组图，此处以文生组图为例）\n        ImageGenerationMessage message = ImageGenerationMessage.builder()\n                .role(\"user\")\n                .content(Collections.singletonList(\n                        Collections.singletonMap(\"text\", \"电影感组图，记录同一只流浪橘猫，特征必须前后一致。第一张：春天，橘猫穿梭在盛开的樱花树下；第二张：夏天，橘猫在老街的树荫下乘凉避暑；第三张：秋天，橘猫踩在满地的金色落叶上；第四张：冬天，橘猫在雪地上走留下足迹。\")\n                )).build();\n\n        ImageGenerationParam param = ImageGenerationParam.builder()\n                .apiKey(apiKey)\n                .model(\"wan2.7-image\")\n                .messages(Collections.singletonList(message))\n                .enableSequential(true)\n                .n(4)\n                .size(\"2K\")\n                .build();\n\n        ImageGeneration imageGeneration = new ImageGeneration();\n        ImageGenerationResult result = null;\n        try {\n            System.out.println(\"----sync call, please wait a moment----\");\n            result = imageGeneration.call(param);\n        } catch (ApiException | NoApiKeyException | UploadFileException e) {\n            throw new RuntimeException(e.getMessage());\n        }\n        System.out.println(JsonUtils.toJson(result));\n    }\n\n    public static void main(String[] args) {\n        try {\n            basicCall();\n        } catch (ApiException | NoApiKeyException | UploadFileException e) {\n            System.out.println(e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3026980.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Image", "Text"]
+      },
+      "openSource": false,
+      "description": "万相2.7-图像生成与编辑旗舰版模型，支持文生图、文生组图、图生组图、图像编辑、多图参考生成、交互式编辑，在文字渲染、主体一致性、复杂指令遵循上都有更强表现。",
+      "collectionTag": "wan2.7",
+      "features": ["model-experience"],
+      "provider": "wan",
+      "model": "wan2.7-image-pro",
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.5",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["IG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-04-01T05:32:16.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.7-Image-Pro",
+      "docUrl": "https://help.aliyun.com/document_detail/3026980.html",
+      "predictConfig": [
+        {
+          "name": "分辨率",
+          "key": "size",
+          "default": "2048*2048"
+        },
+        {
+          "name": "n",
+          "key": "n",
+          "default": 1,
+          "tip": "生成数量",
+          "range": [1, 4]
+        },
+        {
+          "name": "组图生成",
+          "key": "enable_sequential",
+          "default": false
+        },
+        {
+          "name": "智能改写",
+          "key": "thinking_mode",
+          "default": false,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "import os\nimport dashscope\nfrom dashscope.aigc.image_generation import ImageGeneration\nfrom dashscope.api_entities.dashscope_response import Message\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\nmessage = Message(\n    role=\"user\",\n    content=[\n        {\n            \"text\": \"电影感组图，记录同一只流浪橘猫，特征必须前后一致。第一张：春天，橘猫穿梭在盛开的樱花树下；第二张：夏天，橘猫在老街的树荫下乘凉避暑；第三张：秋天，橘猫踩在满地的金色落叶上；第四张：冬天，橘猫在雪地上走留下足迹。\"\n        }\n    ]\n)\n\nprint(\"----sync call, please wait a moment----\")\nrsp = ImageGeneration.call(\n        model='wan2.7-image-pro',\n        api_key=api_key,\n        messages=[message],\n        enable_sequential=True,\n        n=4,\n        size=\"2K\"\n    )\n\nprint(rsp)",
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \\\n--header 'Content-Type: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--data '{\n    \"model\": \"wan2.7-image-pro\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\"text\": \"电影感组图，记录同一只流浪橘猫，特征必须前后一致。第一张：春天，橘猫穿梭在盛开的樱花树下；第二张：夏天，橘猫在老街的树荫下乘凉避暑；第三张：秋天，橘猫踩在满地的金色落叶上；第四张：冬天，橘猫在雪地上走留下足迹。\"}\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"enable_sequential\": true,\n        \"n\": 4,\n        \"size\": \"2K\"\n    }\n}'\n",
+            "java": "import com.alibaba.dashscope.aigc.imagegeneration.*;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\nimport com.alibaba.dashscope.utils.Constants;\nimport com.alibaba.dashscope.utils.JsonUtils;\n\nimport java.util.Collections;\n\n\npublic class Main {\n\n    static {\n        Constants.baseHttpApiUrl = \"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    \n    static String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n    public static void basicCall() throws ApiException, NoApiKeyException, UploadFileException {\n        // 构建文本输入消息（支持文生组图以及图生组图，此处以文生组图为例）\n        ImageGenerationMessage message = ImageGenerationMessage.builder()\n                .role(\"user\")\n                .content(Collections.singletonList(\n                        Collections.singletonMap(\"text\", \"电影感组图，记录同一只流浪橘猫，特征必须前后一致。第一张：春天，橘猫穿梭在盛开的樱花树下；第二张：夏天，橘猫在老街的树荫下乘凉避暑；第三张：秋天，橘猫踩在满地的金色落叶上；第四张：冬天，橘猫在雪地上走留下足迹。\")\n                )).build();\n\n        ImageGenerationParam param = ImageGenerationParam.builder()\n                .apiKey(apiKey)\n                .model(\"wan2.7-image-pro\")\n                .messages(Collections.singletonList(message))\n                .enableSequential(true)\n                .n(4)\n                .size(\"2K\")\n                .build();\n\n        ImageGeneration imageGeneration = new ImageGeneration();\n        ImageGenerationResult result = null;\n        try {\n            System.out.println(\"----sync call, please wait a moment----\");\n            result = imageGeneration.call(param);\n        } catch (ApiException | NoApiKeyException | UploadFileException e) {\n            throw new RuntimeException(e.getMessage());\n        }\n        System.out.println(JsonUtils.toJson(result));\n    }\n\n    public static void main(String[] args) {\n        try {\n            basicCall();\n        } catch (ApiException | NoApiKeyException | UploadFileException e) {\n            System.out.println(e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3026980.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image", "Text"],
+        "request_modality": ["Text", "Image"]
+      },
+      "openSource": false,
+      "description": "万相2.6-图像生成，全能图像生成模型，支持图文一体化推理生成，具备多图创意融合、商用级一致性、美学要素迁移与镜头光影精确控制，全面提升图像生成的一致性、可控性和表现力。",
+      "collectionTag": "wan2.6",
+      "features": [],
+      "provider": "wan",
+      "model": "wan2.6-image",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.2",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-12-15T11:55:32.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.6-Image",
+      "docUrl": "https://help.aliyun.com/document_detail/3001143.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \\\n--header 'Content-Type: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'X-DashScope-Async: enable' \\\n--data '{\n    \"model\": \"wan2.6-image\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"给我一个3张图辣椒炒肉教程\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"n\": 1,\n        \"size\": \"1280*1280\",\n        \"enable_interleave\":true\n    }\n}'\ncurl --location --request GET 'https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\""
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Text", "Image"]
+      },
+      "openSource": false,
+      "description": "万相2.5-图像编辑-Preview，全新升级模型架构。支持指令控制实现丰富的图像编辑能力，指令遵循能力进一步提升，支持高一致性保持的多图参考生成，文字生成表现优异。",
+      "collectionTag": "wan2.5",
+      "features": ["model-experience"],
+      "provider": "wan",
+      "model": "wan2.5-i2i-preview",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.2",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-09-23T13:38:14.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.5-I2I-Preview",
+      "docUrl": "https://help.aliyun.com/document_detail/2982258.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \\\n-H 'X-DashScope-Async: enable' \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H 'Content-Type: application/json' \\\n-d '{\n\"model\": \"wan2.5-i2i-preview\",\n\"input\": {\n\"prompt\": \"将花卉连衣裙换成一件复古风格的蕾丝长裙，领口和袖口有精致的刺绣细节。\",\n\"images\": [\n\"https://img.alicdn.com/imgextra/i3/O1CN01Z1BLz61dMGqxmijRd_!!6000000003721-2-tps-1080-1620.png\"\n]\n},\n\"parameters\": {\n\"size\": \"1280*1280\",\n\"n\": 1\n}\n}'\n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/13b1848b-5493-4c0e-8c44-xxxxxxxxxxxx \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\""
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Image"]
+      },
+      "openSource": false,
+      "description": "万相-通义图像编辑，支持预设编辑任务与指令式编辑，包含多种局部/全图编辑能力，如图像风格化、线稿生图、局部重绘、参考图生成、图像外扩、图像超分等。",
+      "features": [],
+      "provider": "wan",
+      "model": "wanx2.1-imageedit",
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.14",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-25T07:22:03.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.1-ImageEdit",
+      "docUrl": "https://help.aliyun.com/document_detail/2868981.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "import os\nfrom http import HTTPStatus\nfrom dashscope import ImageSynthesis\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\n# --- 准备工作：确保 API Key 已设置 ---\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\n\nmask_image_url = \"http://wanx.alicdn.com/material/20250318/description_edit_with_mask_3_mask.png\"\nbase_image_url = \"http://wanx.alicdn.com/material/20250318/description_edit_with_mask_3.jpeg\"\n\n\ndef sample_sync_call_imageedit():\n    print('please wait...')\n    rsp = ImageSynthesis.call(api_key=api_key,\n                              model=\"wanx2.1-imageedit\",\n                              function=\"description_edit_with_mask\",\n                              prompt=\"陶瓷兔子拿着陶瓷小花\",\n                              mask_image_url=mask_image_url,\n                              base_image_url=base_image_url,\n                              n=1)\n    assert rsp.status_code == HTTPStatus.OK\n\n    print('response: %s' % rsp)\n    if rsp.status_code == HTTPStatus.OK:\n        for result in rsp.output.results:\n            print(\"---------------------------\")\n            print(result.url)\n    else:\n        print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n              (rsp.status_code, rsp.code, rsp.message))\n\n\nif __name__ == '__main__':\n    sample_sync_call_imageedit()",
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n  \"model\": \"wanx2.1-imageedit\",\n  \"input\": {\n    \"function\": \"stylization_all\",\n    \"prompt\": \"转换成法国绘本风格\",\n    \"base_image_url\": \"http://wanx.alicdn.com/material/20250318/stylization_all_1.jpeg\"\n  },\n  \"parameters\": {\n    \"n\": 1\n  }\n}'\n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\"",
+            "java": "// Copyright (c) Alibaba, Inc. and its affiliates.\n\nimport com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesis;\nimport com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesisParam;\nimport com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesisResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.JsonUtils;\nimport com.alibaba.dashscope.utils.Constants;\n\nimport java.util.HashMap;\nimport java.util.Map;\n\n\npublic class ImageEditSync {\n\n    static {\n        Constants.baseHttpApiUrl = \"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    // 从环境变量中获取 DashScope API Key（即阿里云百炼平台 API 密钥）\n    static String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n    static String maskImageUrl = \"http://wanx.alicdn.com/material/20250318/description_edit_with_mask_3_mask.png\";\n    static String baseImageUrl = \"http://wanx.alicdn.com/material/20250318/description_edit_with_mask_3.jpeg\";\n    public static void syncCall() {\n        // 设置parameters参数\n        Map<String, Object> parameters = new HashMap<>();\n        parameters.put(\"prompt_extend\", true);\n\n        ImageSynthesisParam param =\n                ImageSynthesisParam.builder()\n                        .apiKey(apiKey)\n                        .model(\"wanx2.1-imageedit\")\n                        .function(ImageSynthesis.ImageEditFunction.DESCRIPTION_EDIT_WITH_MASK)\n                        .prompt(\"陶瓷兔子拿着陶瓷小花\")\n                        .maskImageUrl(maskImageUrl)\n                        .baseImageUrl(baseImageUrl)\n                        .n(1)\n                        .size(\"1024*1024\")\n                        .parameters(parameters)\n                        .build();\n\n        ImageSynthesis imageSynthesis = new ImageSynthesis();\n        ImageSynthesisResult result = null;\n        try {\n            System.out.println(\"---sync call, please wait a moment----\");\n            result = imageSynthesis.call(param);\n        } catch (ApiException | NoApiKeyException e){\n            throw new RuntimeException(e.getMessage());\n        }\n        System.out.println(JsonUtils.toJson(result));\n    }\n    public static void main(String[] args) {\n        syncCall();\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

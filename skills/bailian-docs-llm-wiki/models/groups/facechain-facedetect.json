@@ -1,0 +1,44 @@
+{
+  "name": "FaceChain人物图像检测",
+  "description": "对用户上传的人物图像进行检测，判断其中所包含的人脸是否符合facechain微调所需的标准，检测维度包括人脸数量、大小、角度、光照、清晰度等多维度，支持图像组输入，并返回每张图像对应的检测结果。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [],
+        "request_modality": ["Image"]
+      },
+      "openSource": true,
+      "description": "对用户上传的人物图像进行检测，判断其中所包含的人脸是否符合facechain微调所需的标准，检测维度包括人脸数量、大小、角度、光照、清晰度等多维度，支持图像组输入，并返回每张图像对应的检测结果。",
+      "features": [],
+      "provider": "qwen",
+      "model": "facechain-facedetect",
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-04-09T08:10:47.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "FaceChain人物图像检测",
+      "docUrl": "https://help.aliyun.com/document_detail/2712507.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ]
+    }
+  ]
+}

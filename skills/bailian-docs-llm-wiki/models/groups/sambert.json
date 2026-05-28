@@ -1,0 +1,2328 @@
+{
+  "name": "Sambert语音合成",
+  "description": "提供高效的文字转语音服务。该技术具备推理速度快、合成效果卓越、读音精准、韵律自然、声音还原度高以及表现力强等优点。此外，用户可以选择开启字级别和音素级别的时间戳，用于生成字幕或驱动数字人的嘴型。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhinan-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T08:10:47.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知楠",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhinan-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhinan-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-betty-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:16:48.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-Betty",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-betty-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-betty-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhiyue-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:17:01.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知悦",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhiyue-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhiyue-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhiyuan-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-20T09:14:08.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知媛",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhiyuan-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhiyuan-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhiying-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:17:43.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知颖",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhiying-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhiying-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhiye-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:17:07.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知晔",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhiye-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhiye-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhiya-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:17:55.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知雅",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhiya-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhiya-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhixiao-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:18:00.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知笑",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhixiao-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhixiao-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhixiang-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:18:13.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知祥",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhixiang-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhixiang-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhiwei-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:18:04.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知薇",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhiwei-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhiwei-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhiting-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:18:16.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知婷",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhiting-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhiting-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhistella-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:19:54.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知莎",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhistella-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhistella-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhishuo-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:18:18.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知硕",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhishuo-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhishuo-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhishu-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:20:05.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知树",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhishu-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhishu-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhiru-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:18:22.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知茹",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhiru-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhiru-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhiqian-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:20:08.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知倩",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhiqian-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhiqian-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhiqi-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:18:25.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知琪",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhiqi-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhiqi-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhina-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:20:46.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知娜",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhina-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhina-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhimo-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:18:28.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知墨",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhimo-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhimo-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhiming-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:20:49.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知茗",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhiming-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhiming-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhimiao-emo-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:18:38.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知妙（多情感）",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhimiao-emo-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhimiao-emo-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhimao-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:18:34.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知猫",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhimao-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhimao-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhilun-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:20:12.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知伦",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhilun-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhilun-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhijing-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:18:41.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知婧",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhijing-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhijing-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhijia-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:20:14.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知佳",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhijia-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhijia-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhihao-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:18:45.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知浩",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhihao-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhihao-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhigui-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:21:15.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知柜",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhigui-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhigui-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhifei-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:18:49.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知飞",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhifei-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhifei-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhide-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:20:17.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知德",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhide-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhide-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhida-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:18:52.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知达",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhida-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhida-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhichu-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:21:12.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知厨",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhichu-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhichu-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-waan-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:18:56.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-Waan",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-waan-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-waan-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-perla-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:20:20.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-Perla",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-perla-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-perla-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-indah-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:18:59.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-Indah",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-indah-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-indah-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-hanna-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:21:09.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-Hanna",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-hanna-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-hanna-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-eva-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:21:02.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-Eva",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-eva-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-eva-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-donna-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:20:23.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-Donna",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-donna-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-donna-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-clara-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:21:06.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-Clara",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-clara-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-clara-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-cindy-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:20:26.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-Cindy",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-cindy-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-cindy-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-camila-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:20:27.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-Camila",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-camila-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-camila-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-cally-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:20:58.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-Cally",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-cally-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-cally-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-brian-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:20:54.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-Brian",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-brian-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-brian-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-beth-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:20:30.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-Beth",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-beth-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-beth-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

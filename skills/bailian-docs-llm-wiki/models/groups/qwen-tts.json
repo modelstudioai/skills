@@ -1,0 +1,128 @@
+{
+  "name": "Qwen-TTS",
+  "description": "千问系列首个语音合成模型，支持中文、英文、中英混合输入。自适应根据输入文本调整输出语气，音色真实自然，支持输入输出全流式。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "千问系列首个语音合成模型，支持中文、英文、中英混合输入。自适应根据输入文本调整输出语气，音色真实自然，支持流式输出。",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen-tts",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.6",
+          "type": "text_input_token",
+          "priceName": "输入：文本"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "10",
+          "type": "qwen_tts_multi_output_token",
+          "priceName": "输出：音频"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 10,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 10,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 7680,
+      "latestOnlineAt": "2025-04-20T08:27:59.000+00:00",
+      "contextWindow": 8192,
+      "maxInputTokens": 512,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-TTS",
+      "docUrl": "https://help.aliyun.com/document_detail/2881635.html#dc02de8e5earc",
+      "predictConfig": [],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# DashScope SDK 版本不低于 1.23.1\nimport os\nimport dashscope\n\ntext = \"那我来给大家推荐一款T恤，这款呢真的是超级好看，这个颜色呢很显气质，而且呢也是搭配的绝佳单品，大家可以闭眼入，真的是非常好看，对身材的包容性也很好，不管啥身材的宝宝呢，穿上去都是很好看的。推荐宝宝们下单哦。\"\nresponse = dashscope.audio.qwen_tts.SpeechSynthesizer.call(\n    # 仅支持qwen-tts系列模型，请勿使用除此之外的其他模型\n    model=\"qwen-tts\",\n    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    text=text,\n    voice=\"Cherry\",\n)\nprint(response)",
+            "java": "// DashScope SDK 版本需要不低于 2.19.0\nimport com.alibaba.dashscope.aigc.multimodalconversation.AudioParameters;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\nimport com.alibaba.dashscope.utils.JsonUtils;\n\npublic class Main {\n    private static final String MODEL = \"qwen-tts\";\n    public static void call() throws ApiException, NoApiKeyException, UploadFileException {\n        MultiModalConversation conv = new MultiModalConversation();\n        MultiModalConversationParam param = MultiModalConversationParam.builder()\n                // 仅支持qwen-tts系列模型，请勿使用除此之外的其他模型\n                .model(MODEL)\n                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .text(\"Today is a wonderful day to build something people love!\")\n                .voice(AudioParameters.Voice.CHERRY)\n                .build();\n        MultiModalConversationResult result = conv.call(param);\n        System.out.println(JsonUtils.toJson(result));\n    }\n    public static void main(String[] args) {\n        try {\n            call();\n        } catch (ApiException | NoApiKeyException | UploadFileException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "模型是动态更新版本，等同于最新版本快照模型，模型更新时不会提前通知。",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen-tts-latest",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.6",
+          "type": "text_input_token",
+          "priceName": "输入：文本"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "10",
+          "type": "qwen_tts_multi_output_token",
+          "priceName": "输出：音频"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 10,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 10,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TTS"],
+      "versionTag": "LATEST",
+      "maxOutputTokens": 7680,
+      "latestOnlineAt": "2025-06-25T16:00:00.000+00:00",
+      "contextWindow": 8192,
+      "maxInputTokens": 512,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-TTS-Latest",
+      "docUrl": "https://help.aliyun.com/document_detail/2881635.html#dc02de8e5earc",
+      "predictConfig": [],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# DashScope SDK 版本不低于 1.23.1\nimport os\nimport dashscope\n\ntext = \"那我来给大家推荐一款T恤，这款呢真的是超级好看，这个颜色呢很显气质，而且呢也是搭配的绝佳单品，大家可以闭眼入，真的是非常好看，对身材的包容性也很好，不管啥身材的宝宝呢，穿上去都是很好看的。推荐宝宝们下单哦。\"\nresponse = dashscope.audio.qwen_tts.SpeechSynthesizer.call(\n    # 仅支持qwen-tts系列模型，请勿使用除此之外的其他模型\n    model=\"qwen-tts-latest\",\n    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    text=text,\n    voice=\"Cherry\",\n)\nprint(response)",
+            "java": "// DashScope SDK 版本需要不低于 2.19.0\nimport com.alibaba.dashscope.aigc.multimodalconversation.AudioParameters;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\nimport com.alibaba.dashscope.utils.JsonUtils;\n\npublic class Main {\n    private static final String MODEL = \"qwen-tts-latest\";\n    public static void call() throws ApiException, NoApiKeyException, UploadFileException {\n        MultiModalConversation conv = new MultiModalConversation();\n        MultiModalConversationParam param = MultiModalConversationParam.builder()\n                // 仅支持qwen-tts系列模型，请勿使用除此之外的其他模型\n                .model(MODEL)\n                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .text(\"Today is a wonderful day to build something people love!\")\n                .voice(AudioParameters.Voice.CHERRY)\n                .build();\n        MultiModalConversationResult result = conv.call(param);\n        System.out.println(JsonUtils.toJson(result));\n    }\n    public static void main(String[] args) {\n        try {\n            call();\n        } catch (ApiException | NoApiKeyException | UploadFileException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

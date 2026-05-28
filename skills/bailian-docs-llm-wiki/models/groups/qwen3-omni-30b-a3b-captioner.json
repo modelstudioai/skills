@@ -1,0 +1,80 @@
+{
+  "name": "Qwen3-Omni-30b-a3b-Captioner",
+  "description": "千问3-Omni-30b-a3b-Captioner是一款强大的音频细粒度分析模型，专为在复杂多变的音频场景中生成精准、全面的内容描述而设计，可自动解析并描述从复杂语音、环境声到音乐、影视声效等各类音频内容，能够在多声源、混合化的环境中亦保持稳定而可信的输出。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Audio"]
+      },
+      "openSource": true,
+      "description": "千问3-Omni-30b-a3b-Captioner是一款强大的音频细粒度分析模型，专为在复杂多变的音频场景中生成精准、全面的内容描述而设计，可自动解析并描述从复杂语音、环境声到音乐、影视声效等各类音频内容，能够在多声源、混合化的环境中亦保持稳定而可信的输出。",
+      "collectionTag": "qwen3",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen3-omni-30b-a3b-captioner",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "15.8",
+          "type": "audio_input_token",
+          "priceName": "输入：音频"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "12.7",
+          "type": "multiin_text_output_token",
+          "priceName": "输出：文本（输入包含图片/音频/视频时）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["ASR"],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 32768,
+      "latestOnlineAt": "2025-09-16T16:38:17.000+00:00",
+      "contextWindow": 65536,
+      "maxInputTokens": 32768,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3-Omni-30b-a3b-Captioner",
+      "docUrl": "https://help.aliyun.com/document_detail/2980468.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ]
+    }
+  ]
+}

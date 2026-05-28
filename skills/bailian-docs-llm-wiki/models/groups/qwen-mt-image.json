@@ -1,0 +1,75 @@
+{
+  "name": "Qwen-MT-Image",
+  "description": "专注做图片翻译的模型服务，能将中、英、日等11个语言的图片翻译到指定的语言，精准还原图片排版和内容信息，支持术语定义、敏感词过滤、商品主体检测等自定义功能，提供灵活、准确、高效的图像本地化服务。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Image"]
+      },
+      "openSource": false,
+      "description": "专注做图片翻译的模型服务，能将中、英、日等11个语言的图片翻译到指定的语言，精准还原图片排版和内容信息，支持术语定义、敏感词过滤、商品主体检测等自定义功能，提供灵活、准确、高效的图像本地化服务。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "qwen-mt-image",
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.003",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 1,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 1,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        }
+      },
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-08-22T09:53:46.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-MT-Image",
+      "docUrl": "https://help.aliyun.com/document_detail/2977163.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"qwen-mt-image\",\n    \"input\": {\n        \"image_url\": \"https://img.alicdn.com/imgextra/i2/O1CN01XsvEqj1fNlMqLNBHR_!!6000000003995-0-tps-5933-2930.jpg\",\n        \"source_lang\": \"en\",\n        \"target_lang\": \"ja\"\n    }\n}'"
+          }
+        }
+      }
+    }
+  ]
+}

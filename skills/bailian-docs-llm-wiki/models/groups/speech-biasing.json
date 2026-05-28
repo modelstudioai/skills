@@ -1,0 +1,56 @@
+{
+  "name": "语音识别热词",
+  "description": "热词是指用户可以预先定义的一组特定词汇或短语，这些词汇或短语在识别、翻译过程中会被赋予更高的优先级。针对您的特定业务领域，如果有部分词汇的语音识别、翻译效果不够好，可以将这些关键词或短语添加为热词进行优先识别或翻译，从而提升识别、翻译效果。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Audio"]
+      },
+      "openSource": false,
+      "description": "热词是指用户可以预先定义的一组特定词汇或短语，这些词汇或短语在识别、翻译过程中会被赋予更高的优先级。针对您的特定业务领域，如果有部分词汇的语音识别、翻译效果不够好，可以将这些关键词或短语添加为热词进行优先识别或翻译，从而提升识别、翻译效果。",
+      "features": [],
+      "provider": "qwen",
+      "model": "speech-biasing",
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["ASR"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-09-12T16:00:00.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "语音识别热词",
+      "docUrl": "https://help.aliyun.com/document_detail/2712535.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ]
+    }
+  ]
+}

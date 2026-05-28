@@ -1,0 +1,124 @@
+{
+  "name": "Qwen3.5-Omni-Flash",
+  "description": "Qwen3.5-Omni是Qwen最新一代全模态大模型，支持文本，图片，音频，音视频理解与交互。作为 Qwen3-Omni 的全面进化版本， 支持超过 10 小时的音频理解及超过 400 秒的 720P（1 FPS）音视频理解与对话，并进一步拓展语言范围，支持60+种语言音频输入，30+语言语音输出，并且具备强大的结构化音视频理解能力，广泛应用于文本创作、语音助手、多媒体分析等场景，提供自然流畅的多模态理解与交互体验。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text", "Audio"],
+        "request_modality": ["Text", "Image", "Video", "Audio"]
+      },
+      "builtInToolMultiPrices": [
+        {
+          "supportedApi": "Completions API",
+          "name": "search_strategy:agent",
+          "docUrl": "https://help.aliyun.com/document_detail/2867560.html",
+          "type": "search_strategy:agent",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY"
+            }
+          ]
+        }
+      ],
+      "openSource": false,
+      "description": "Qwen3.5-Omni是Qwen最新一代全模态大模型，支持文本，图片，音频，音视频理解与交互。作为 Qwen3-Omni 的全面进化版本， 支持超过 10 小时的音频理解及超过 400 秒的 720P（1 FPS）音视频理解与对话，并进一步拓展语言范围，支持60+种语言音频输入，30+语言语音输出，并且具备强大的结构化音视频理解能力，广泛应用于文本创作、语音助手、多媒体分析等场景，提供自然流畅的多模态理解与交互体验。",
+      "collectionTag": "Qwen3.5",
+      "features": ["web-search"],
+      "provider": "qwen",
+      "model": "qwen3.5-omni-flash",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "18",
+          "type": "omni_audio_input_token",
+          "priceName": "输入：音频"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "72",
+          "type": "omni_audio_output_token",
+          "priceName": "输出：文本+音频（输出的文本不计费）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2.2",
+          "type": "omni_no_audio_input_token",
+          "priceName": "输入：文本/图片/视频"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "13.3",
+          "type": "omni_no_audio_output_token",
+          "priceName": "输出：文本"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["Multimodal-Omni"],
+      "modelAlias": "qwen3.5-omni-flash",
+      "versionTag": "MAJOR",
+      "equivalentSnapshot": "qwen3.5-omni-flash-2026-03-15",
+      "maxOutputTokens": 65536,
+      "latestOnlineAt": "2026-03-30T03:58:51.000+00:00",
+      "contextWindow": 262144,
+      "maxInputTokens": 196608,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3.5-Omni-Flash",
+      "docUrl": "https://help.aliyun.com/document_detail/2867839.html",
+      "category": "Multimodal",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "音色选择",
+          "key": "voice"
+        },
+        {
+          "name": "内容输出",
+          "key": "modalities",
+          "default": ["text"],
+          "tip": "设置模型返回的模态"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 1,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"qwen3.5-omni-flash\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁？\"\n        }\n    ],\n    \"stream\":true,\n    \"stream_options\":{\n        \"include_usage\":true\n    },\n    \"modalities\":[\"text\",\"audio\"],\n    \"audio\":{\"voice\":\"Ethan\",\"format\":\"wav\"}\n}'",
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    # 新加坡和北京地域的API Key不同。获取API Key：https://www.alibabacloud.com/help/zh/model-studio/get-api-key\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"qwen3.5-omni-flash\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    # 设置输出数据的模态，当前支持两种：[\"text\",\"audio\"]、[\"text\"]\n    modalities=[\"text\", \"audio\"],\n    audio={\"voice\": \"Ethan\", \"format\": \"wav\"},\n    # stream 必须设置为 True，否则会报错\n    stream=True,\n    stream_options={\"include_usage\": True},\n)\n\nfor chunk in completion:\n    if chunk.choices:\n        print(chunk.choices[0].delta)\n    else:\n        print(chunk.usage)",
+            "nodejs": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI(\n    {\n        // 新加坡和北京地域的API Key不同。获取API Key：https://www.alibabacloud.com/help/zh/model-studio/get-api-key\n        apiKey: process.env.DASHSCOPE_API_KEY,\n        baseURL: \"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n    }\n);\nconst completion = await openai.chat.completions.create({\n    model: \"qwen3.5-omni-flash\",\n    messages: [\n        { role: \"user\", content: \"你是谁？\" }\n    ],\n    stream: true,\n    stream_options: {\n        include_usage: true\n    },\n    modalities: [\"text\", \"audio\"],\n    audio: { voice: \"Ethan\", format: \"wav\" }\n});\n\nfor await (const chunk of completion) {\n    if (Array.isArray(chunk.choices) && chunk.choices.length > 0) {\n        console.log(chunk.choices[0].delta);\n    } else {\n        console.log(chunk.usage);\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/2867839.html"
+          }
+        }
+      }
+    }
+  ]
+}

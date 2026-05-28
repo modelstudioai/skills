@@ -1,0 +1,496 @@
+{
+  "name": "PixVerse V5.6",
+  "description": "由爱诗科技提供的PixVerse V系列视频大模型API服务。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "输入文字描述，秒级生成与语义精准匹配的高质量视频，支持多种风格。PixVerse V5.6 是爱诗科技自研的视频生成大模型，在文生视频与图生视频能力上实现全面升级。模型在画面清晰度、复杂运动稳定性与音画协同方面显著提升，多角色对话场景下嘴型与台词同步更准确，情绪表达更自然。同时优化构图、光影与质感一致性，整体生成质量进一步提升。PixVerse V5.6 在 Artificial Analysis 文生视频与图生视频榜单中位列全球第一梯队。",
+      "features": ["model-experience"],
+      "provider": "pixverse",
+      "model": "pixverse/pixverse-v5.6-t2v",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.47",
+          "discount": 0.8,
+          "type": "video_ratio_360p",
+          "priceName": "视频生成（360P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.47",
+          "discount": 0.8,
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.53",
+          "discount": 0.8,
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.7",
+          "discount": 0.8,
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.21",
+          "discount": 0.8,
+          "type": "360P_no_audio",
+          "priceName": "视频生成（360P 无声）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.21",
+          "discount": 0.8,
+          "type": "540P_no_audio",
+          "priceName": "视频生成（540P 无声）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.27",
+          "discount": 0.8,
+          "type": "720P_no_audio",
+          "priceName": "视频生成（720P 无声）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.44",
+          "discount": 0.8,
+          "type": "1080P_no_audio",
+          "priceName": "视频生成（1080P 无声）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["VG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-19T06:58:48.000+00:00",
+      "inferenceProvider": "pixverse",
+      "name": "PixVerse-V5.6-t2v",
+      "predictConfig": [
+        {
+          "name": "分辨率",
+          "key": "size",
+          "default": "1920*1080"
+        },
+        {
+          "name": "视频时长",
+          "key": "duration",
+          "default": 5
+        },
+        {
+          "name": "随机种子",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "生成音频",
+          "key": "audio",
+          "default": true
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v5.6-t2v\",\n    \"input\": {\n        \"prompt\": \"一只小猫在月光下奔跑\"\n    },\n    \"parameters\": {\n        \"size\": \"1280*720\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3025608.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Image", "Text"]
+      },
+      "openSource": false,
+      "description": "输入2–7张图像，智能融合不同主体，保持风格统一与动作协调，轻松构建丰富叙事场景，提升内容可控性与创意自由度。PixVerse V5.6 是爱诗科技自研的视频生成大模型，在文生视频与图生视频能力上实现全面升级。模型在画面清晰度、复杂运动稳定性与音画协同方面显著提升，多角色对话场景下嘴型与台词同步更准确，情绪表达更自然。同时优化构图、光影与质感一致性，整体生成质量进一步提升。PixVerse V5.6 在 Artificial Analysis 文生视频与图生视频榜单中位列全球第一梯队。",
+      "features": [],
+      "provider": "pixverse",
+      "model": "pixverse/pixverse-v5.6-r2v",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.47",
+          "discount": 0.8,
+          "type": "video_ratio_360p",
+          "priceName": "视频生成（360P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.47",
+          "discount": 0.8,
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.53",
+          "discount": 0.8,
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.7",
+          "discount": 0.8,
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.21",
+          "discount": 0.8,
+          "type": "360P_no_audio",
+          "priceName": "视频生成（360P 无声）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.21",
+          "discount": 0.8,
+          "type": "540P_no_audio",
+          "priceName": "视频生成（540P 无声）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.27",
+          "discount": 0.8,
+          "type": "720P_no_audio",
+          "priceName": "视频生成（720P 无声）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.44",
+          "discount": 0.8,
+          "type": "1080P_no_audio",
+          "priceName": "视频生成（1080P 无声）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["VG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-19T06:43:04.000+00:00",
+      "inferenceProvider": "pixverse",
+      "name": "PixVerse-V5.6-r2v",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v5.6-r2v\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"size\": \"1280*720\",\n        \"duration\": 5,\n        \"audio\": false,\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3025612.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Image", "Text"]
+      },
+      "openSource": false,
+      "description": "在任意两张图片之间实现无缝转换，实现更流畅自然的场景过渡，打造视觉冲击力强的画面效果。PixVerse V5.6 是爱诗科技自研的视频生成大模型，在文生视频与图生视频能力上实现全面升级。模型在画面清晰度、复杂运动稳定性与音画协同方面显著提升，多角色对话场景下嘴型与台词同步更准确，情绪表达更自然。同时优化构图、光影与质感一致性，整体生成质量进一步提升。PixVerse V5.6 在 Artificial Analysis 文生视频与图生视频榜单中位列全球第一梯队。",
+      "features": [],
+      "provider": "pixverse",
+      "model": "pixverse/pixverse-v5.6-kf2v",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.47",
+          "discount": 0.8,
+          "type": "video_ratio_360p",
+          "priceName": "视频生成（360P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.47",
+          "discount": 0.8,
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.53",
+          "discount": 0.8,
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.7",
+          "discount": 0.8,
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.21",
+          "discount": 0.8,
+          "type": "360P_no_audio",
+          "priceName": "视频生成（360P 无声）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.21",
+          "discount": 0.8,
+          "type": "540P_no_audio",
+          "priceName": "视频生成（540P 无声）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.27",
+          "discount": 0.8,
+          "type": "720P_no_audio",
+          "priceName": "视频生成（720P 无声）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.44",
+          "discount": 0.8,
+          "type": "1080P_no_audio",
+          "priceName": "视频生成（1080P 无声）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["VG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-19T06:56:40.000+00:00",
+      "inferenceProvider": "pixverse",
+      "name": "PixVerse-V5.6-kf2v",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v5.6-kf2v\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"first_frame\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/first_frame.png\"\n            },\n            {\n                \"type\": \"last_frame\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/last_frame.png\"\n            }\n        ],\n        \"prompt\": \"一只小猫从窗台向下跳跃，轻盈地落在沙发上，然后好奇地环顾四周。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"duration\": 5,\n        \"watermark\": false\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3025611.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Image", "Text"]
+      },
+      "openSource": false,
+      "description": "上传任意图片，自由定制剧情、节奏与风格，生成生动连贯的视频。PixVerse V5.6 是爱诗科技自研的视频生成大模型，在文生视频与图生视频能力上实现全面升级。模型在画面清晰度、复杂运动稳定性与音画协同方面显著提升，多角色对话场景下嘴型与台词同步更准确，情绪表达更自然。同时优化构图、光影与质感一致性，整体生成质量进一步提升。PixVerse V5.6 在 Artificial Analysis 文生视频与图生视频榜单中位列全球第一梯队。",
+      "features": ["model-experience"],
+      "provider": "pixverse",
+      "model": "pixverse/pixverse-v5.6-it2v",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.47",
+          "discount": 0.8,
+          "type": "video_ratio_360p",
+          "priceName": "视频生成（360P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.47",
+          "discount": 0.8,
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.53",
+          "discount": 0.8,
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.7",
+          "discount": 0.8,
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.21",
+          "discount": 0.8,
+          "type": "360P_no_audio",
+          "priceName": "视频生成（360P 无声）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.21",
+          "discount": 0.8,
+          "type": "540P_no_audio",
+          "priceName": "视频生成（540P 无声）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.27",
+          "discount": 0.8,
+          "type": "720P_no_audio",
+          "priceName": "视频生成（720P 无声）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.44",
+          "discount": 0.8,
+          "type": "1080P_no_audio",
+          "priceName": "视频生成（1080P 无声）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["VG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-19T06:59:33.000+00:00",
+      "inferenceProvider": "pixverse",
+      "name": "PixVerse-V5.6-it2v",
+      "predictConfig": [
+        {
+          "name": "清晰度",
+          "key": "resolution",
+          "default": "540P"
+        },
+        {
+          "name": "视频时长",
+          "key": "duration",
+          "default": 5
+        },
+        {
+          "name": "随机种子",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "生成音频",
+          "key": "audio",
+          "default": true
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.comm/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v5.6-it2v\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp\"\n            }\n        ],\n        \"prompt\": \"镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"duration\": 5,\n        \"audio\": false,\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3025609.html"
+          }
+        }
+      }
+    }
+  ]
+}

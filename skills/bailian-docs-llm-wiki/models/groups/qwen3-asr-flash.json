@@ -1,0 +1,59 @@
+{
+  "name": "Qwen3-ASR-Flash",
+  "description": "Qwen3-ASR-Flash是一款基于大语言模型的高精度、高智能、高鲁棒性的多语种语音识别模型。依托强大的基座模型、海量的文本与多模态数据、千万小时音频数据，Qwen3-ASR-Flash实现了高精度的语音识别功能，能够自动判断语种并准确识别多个语种的语音，在复杂的音频环境下能够保证精确转录。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Audio"]
+      },
+      "openSource": false,
+      "description": "千问3-ASR-Flash是一款基于大语言模型的高精度、高智能、高鲁棒性的多语种语音识别模型。依托强大的基座模型、海量的文本与多模态数据、千万小时音频数据，千问3-ASR-Flash实现了高精度的语音识别功能，能够自动判断语种并准确识别多个语种的语音，在复杂的音频环境下能够保证精确转录。",
+      "collectionTag": "qwen3",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "qwen3-asr-flash",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VoiceModel_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.00022",
+          "type": "content_duration",
+          "priceName": "音频时长"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "count_limit": 100,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "count_limit": 100,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["ASR"],
+      "modelAlias": "qwen3-asr-flash",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-09-08T05:39:02.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3-ASR-Flash",
+      "docUrl": "https://help.aliyun.com/document_detail/2979031.html",
+      "predictConfig": [],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "import os\nimport dashscope\n\nmessages = [\n    {\n        \"role\": \"system\",\n        \"content\": [\n            # 此处用于配置定制化识别的Context\n            {\"text\": \"\"},\n        ]\n    },\n    {\n        \"role\": \"user\",\n        \"content\": [\n            {\"audio\": \"https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3\"},\n        ]\n    }\n]\nresponse = dashscope.MultiModalConversation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = \"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"qwen3-asr-flash\",\n    messages=messages,\n    result_format=\"message\",\n    asr_options={\n        # \"language\": \"zh\", # 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率\n        \"enable_lid\":True,\n        \"enable_itn\":False\n    }\n)\nprint(response)",
+            "java": "import java.util.Arrays;\nimport java.util.Collections;\nimport java.util.HashMap;\nimport java.util.Map;\n\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;\nimport com.alibaba.dashscope.common.MultiModalMessage;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\nimport com.alibaba.dashscope.utils.JsonUtils;\n\npublic class Main {\n    public static void simpleMultiModalConversationCall()\n            throws ApiException, NoApiKeyException, UploadFileException {\n        MultiModalConversation conv = new MultiModalConversation();\n        MultiModalMessage userMessage = MultiModalMessage.builder()\n                .role(Role.USER.getValue())\n                .content(Arrays.asList(\n                        Collections.singletonMap(\"audio\", \"https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3\")))\n                .build();\n\n        MultiModalMessage sysMessage = MultiModalMessage.builder().role(Role.SYSTEM.getValue())\n                // 此处用于配置定制化识别的Context\n                .content(Arrays.asList(Collections.singletonMap(\"text\", \"\")))\n                .build();\n\n        Map<String, Object> asrOptions = new HashMap<>();\n        asrOptions.put(\"enable_lid\", true);\n        asrOptions.put(\"enable_itn\", false);\n        // asrOptions.put(\"language\", \"zh\"); // 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率\n        MultiModalConversationParam param = MultiModalConversationParam.builder()\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"qwen3-asr-flash\")\n                .message(userMessage)\n                .message(sysMessage)\n                .parameter(\"asr_options\", asrOptions)\n                .build();\n        MultiModalConversationResult result = conv.call(param);\n        System.out.println(JsonUtils.toJson(result));\n    }\n    public static void main(String[] args) {\n        try {\n            simpleMultiModalConversationCall();\n        } catch (ApiException | NoApiKeyException | UploadFileException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

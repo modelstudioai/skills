@@ -1,0 +1,897 @@
+{
+  "name": "GLM",
+  "description": "GLM是由智谱提供的开源模型。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "GLM-5.1是智谱AI推出的面向长程任务（Long Horizon Task）设计的模型，总参数744B，支持200K超长上下文，最大输出 128K tokens。拥有强大逻辑推理、长文本理解与代码生成能力、兼顾性能与推理效率；在多任务基准中表现优异，适用于智能交互、企业应用、开发辅助等场景。",
+      "collectionTag": "",
+      "features": ["cache", "function-calling", "model-experience", "structured-outputs"],
+      "provider": "zhipu-ai",
+      "model": "glm-5.1",
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "multiPrices": [
+        {
+          "rangeStart": 0,
+          "rangeName": "输入<=32k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "6",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "24",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "1.2",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "7.5",
+              "type": "input_token_cache_creation_5m",
+              "priceName": "显式缓存创建"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.6",
+              "type": "input_token_cache_read",
+              "priceName": "显式缓存命中"
+            }
+          ],
+          "rangeEnd": 32768
+        },
+        {
+          "rangeStart": 32768,
+          "rangeName": "32k<输入<=200k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "8",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "28",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "1.6",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "10",
+              "type": "input_token_cache_creation_5m",
+              "priceName": "显式缓存创建"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.8",
+              "type": "input_token_cache_read",
+              "priceName": "显式缓存命中"
+            }
+          ],
+          "rangeEnd": 204800
+        }
+      ],
+      "capabilities": ["TG"],
+      "modelAlias": "",
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 131072,
+      "latestOnlineAt": "2026-04-14T11:34:59.000+00:00",
+      "contextWindow": 202745,
+      "maxInputTokens": 202745,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "GLM-5.1",
+      "docUrl": "https://www.alibabacloud.com/help/zh/document_detail/2974045.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "stop",
+          "key": "stop",
+          "tip": "用于控制生成时遇到某些内容则停止。您可传入多个字符串。"
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": true,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [1, 32768]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"glm-5.1\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true,\n    \"enable_thinking\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"glm-5.1\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化 openai 客户端\nconst openai = new OpenAI({\n    apiKey: process.env.DASHSCOPE_API_KEY, // 从环境变量读取\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\nlet isAnswering = false;\nasync function main() {\n    try {\n        const messages = [{ role: 'user', content: '你是谁' }];\n        const stream = await openai.chat.completions.create({\n            model: 'glm-5.1',\n            messages,\n            stream: true,\n            enable_thinking: true\n        });\n        console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20));\n        for await (const chunk of stream) {\n            if (!chunk.choices.length) continue;\n            const delta = chunk.choices[0].delta;\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n            }\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20));\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n            }\n        }\n    } catch (error) {\n        console.error('Error:', error);\n    }\n}\nmain();",
+            "docUrl": "https://help.aliyun.com/document_detail/3016807.html"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"glm-5.1\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"enable_thinking\": true,\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n    {\"role\": \"user\", \"content\": \"你是谁？\"},\n]\nresponse = Generation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = \"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"glm-5.1\",\n    messages=messages,\n    result_format=\"message\",\n    # 开启深度思考\n    enable_thinking=True,\n)\n\nif response.status_code == 200:\n    # 打印思考过程\n    print(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n    print(response.output.choices[0].message.reasoning_content)\n    \n    # 打印回复\n    print(\"=\" * 20 + \"完整回复\" + \"=\" * 20)\n    print(response.output.choices[0].message.content)\nelse:\n    print(f\"HTTP返回码：{response.status_code}\")\n    print(f\"错误码：{response.code}\")\n    print(f\"错误信息：{response.message}\")",
+            "java": "import java.util.Arrays;\nimport java.lang.System;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {\n        Generation gen = new Generation();\n        Message systemMsg = Message.builder()\n                .role(Role.SYSTEM.getValue())\n                .content(\"You are a helpful assistant.\")\n                .build();\n        Message userMsg = Message.builder()\n                .role(Role.USER.getValue())\n                .content(\"你是谁？\")\n                .build();\n        GenerationParam param = GenerationParam.builder()\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"glm-5.1\")\n                .messages(Arrays.asList(systemMsg, userMsg))\n                .resultFormat(GenerationParam.ResultFormat.MESSAGE)\n                .enableThinking(true)\n                .build();\n        return gen.call(param);\n    }\n    public static void main(String[] args) {\n        try {\n            GenerationResult result = callWithMessage();\n            System.out.println(\"====================思考过程====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getReasoningContent());\n            System.out.println(\"\\n====================完整回复====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.err.println(\"错误信息：\"+e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3016809.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "GLM-5是面向Coding与Agent场景的新一代大模型，在复杂系统工程与长程任务中达到开源 SOTA，真实编程体验逼近 Claude Opus 级别；基于 744B 新基座、异步强化学习与稀疏注意力，实现从“写代码”到“写工程”的全面升级。",
+      "maxOutputTokensThinking": 16384,
+      "features": ["model-experience", "function-calling", "cache"],
+      "provider": "zhipu-ai",
+      "model": "glm-5",
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "multiPrices": [
+        {
+          "rangeStart": 0,
+          "rangeName": "输入<=32k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "4",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "18",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.8",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            }
+          ],
+          "rangeEnd": 32768
+        },
+        {
+          "rangeStart": 32768,
+          "rangeName": "32k<输入<=200k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "6",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "22",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "1.2",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            }
+          ],
+          "rangeEnd": 204800
+        }
+      ],
+      "capabilities": ["TG"],
+      "modelAlias": "",
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 16384,
+      "latestOnlineAt": "2026-02-18T04:44:16.000+00:00",
+      "contextWindow": 202752,
+      "maxInputTokens": 169984,
+      "maxInputTokensThinking": 169984,
+      "contextWindowThinking": 202752,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "GLM-5",
+      "docUrl": "https://www.alibabacloud.com/help/zh/document_detail/2974045.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "stop",
+          "key": "stop",
+          "tip": "用于控制生成时遇到某些内容则停止。您可传入多个字符串。"
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": true,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [1, 32768]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"glm-5\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true,\n    \"enable_thinking\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"glm-5\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "nodejs": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"glm-5\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "docUrl": "https://help.aliyun.com/document_detail/2974045.html"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"glm-5\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"enable_thinking\": true,\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n    {\"role\": \"user\", \"content\": \"你是谁？\"},\n]\nresponse = Generation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = \"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"glm-5\",\n    messages=messages,\n    result_format=\"message\",\n    # 开启深度思考\n    enable_thinking=True,\n)\n\nif response.status_code == 200:\n    # 打印思考过程\n    print(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n    print(response.output.choices[0].message.reasoning_content)\n    \n    # 打印回复\n    print(\"=\" * 20 + \"完整回复\" + \"=\" * 20)\n    print(response.output.choices[0].message.content)\nelse:\n    print(f\"HTTP返回码：{response.status_code}\")\n    print(f\"错误码：{response.code}\")\n    print(f\"错误信息：{response.message}\")",
+            "java": "import java.util.Arrays;\nimport java.lang.System;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {\n        Generation gen = new Generation();\n        Message systemMsg = Message.builder()\n                .role(Role.SYSTEM.getValue())\n                .content(\"You are a helpful assistant.\")\n                .build();\n        Message userMsg = Message.builder()\n                .role(Role.USER.getValue())\n                .content(\"你是谁？\")\n                .build();\n        GenerationParam param = GenerationParam.builder()\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"glm-5\")\n                .messages(Arrays.asList(systemMsg, userMsg))\n                .resultFormat(GenerationParam.ResultFormat.MESSAGE)\n                .enableThinking(true)\n                .build();\n        return gen.call(param);\n    }\n    public static void main(String[] args) {\n        try {\n            GenerationResult result = callWithMessage();\n            System.out.println(\"====================思考过程====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getReasoningContent());\n            System.out.println(\"\\n====================完整回复====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.err.println(\"错误信息：\"+e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/2974045.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "智谱最新旗舰，具备更强的编程能力与更稳定的多步骤推理/执行能力。总参数355B，支持长程任务规划、编码、工具协同，问答自然、写作沉浸、创意角色扮演能力强。",
+      "features": ["model-experience", "function-calling", "cache"],
+      "provider": "zhipu-ai",
+      "model": "glm-4.7",
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "multiPrices": [
+        {
+          "rangeStart": 0,
+          "rangeName": "输入<=32k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "3",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "14",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.6",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            }
+          ],
+          "rangeEnd": 32768
+        },
+        {
+          "rangeStart": 32768,
+          "rangeName": "32k<输入<=200k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "4",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "16",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.8",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            }
+          ],
+          "rangeEnd": 204800
+        }
+      ],
+      "capabilities": ["TG", "Reasoning"],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 16384,
+      "latestOnlineAt": "2025-12-25T06:06:48.000+00:00",
+      "contextWindow": 202752,
+      "maxInputTokens": 169984,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "GLM-4.7",
+      "docUrl": "https://help.aliyun.com/document_detail/2974045.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "stop",
+          "key": "stop",
+          "tip": "用于控制生成时遇到某些内容则停止。您可传入多个字符串。"
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": true,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [1, 32768]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"glm-4.7\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true,\n    \"enable_thinking\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"glm-4.7\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "nodejs": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"glm-4.7\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "docUrl": "https://help.aliyun.com/document_detail/2974045.html"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"glm-4.7\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"enable_thinking\": true,\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n    {\"role\": \"user\", \"content\": \"你是谁？\"},\n]\nresponse = Generation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = \"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"glm-4.7\",\n    messages=messages,\n    result_format=\"message\",\n    # 开启深度思考\n    enable_thinking=True,\n)\n\nif response.status_code == 200:\n    # 打印思考过程\n    print(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n    print(response.output.choices[0].message.reasoning_content)\n    \n    # 打印回复\n    print(\"=\" * 20 + \"完整回复\" + \"=\" * 20)\n    print(response.output.choices[0].message.content)\nelse:\n    print(f\"HTTP返回码：{response.status_code}\")\n    print(f\"错误码：{response.code}\")\n    print(f\"错误信息：{response.message}\")",
+            "java": "import java.util.Arrays;\nimport java.lang.System;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {\n        Generation gen = new Generation();\n        Message systemMsg = Message.builder()\n                .role(Role.SYSTEM.getValue())\n                .content(\"You are a helpful assistant.\")\n                .build();\n        Message userMsg = Message.builder()\n                .role(Role.USER.getValue())\n                .content(\"你是谁？\")\n                .build();\n        GenerationParam param = GenerationParam.builder()\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"glm-4.7\")\n                .messages(Arrays.asList(systemMsg, userMsg))\n                .resultFormat(GenerationParam.ResultFormat.MESSAGE)\n                .enableThinking(true)\n                .build();\n        return gen.call(param);\n    }\n    public static void main(String[] args) {\n        try {\n            GenerationResult result = callWithMessage();\n            System.out.println(\"====================思考过程====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getReasoningContent());\n            System.out.println(\"\\n====================完整回复====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.err.println(\"错误信息：\"+e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/2974045.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "GLM新一代旗舰模型，核心能力较4.5全面提升。总参数量为3550 亿，激活参数320亿，上下文窗口扩展至200K。",
+      "maxOutputTokensThinking": 16384,
+      "features": ["model-experience", "cache"],
+      "provider": "zhipu-ai",
+      "model": "glm-4.6",
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 6,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 6,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "multiPrices": [
+        {
+          "rangeStart": 0,
+          "rangeName": "输入<=32k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "3",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "14",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.6",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            }
+          ],
+          "rangeEnd": 32768
+        },
+        {
+          "rangeStart": 32768,
+          "rangeName": "32k<输入<=200k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "4",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "16",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.8",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            }
+          ],
+          "rangeEnd": 204800
+        }
+      ],
+      "capabilities": ["Reasoning", "TG"],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 16384,
+      "latestOnlineAt": "2025-10-21T06:26:06.000+00:00",
+      "contextWindow": 202752,
+      "maxInputTokens": 169984,
+      "maxInputTokensThinking": 169984,
+      "contextWindowThinking": 202752,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "GLM-4.6",
+      "docUrl": "https://help.aliyun.com/document_detail/2974045.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "stop",
+          "key": "stop",
+          "tip": "用于控制生成时遇到某些内容则停止。您可传入多个字符串。"
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": true,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [1, 32768]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"glm-4.6\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true,\n    \"enable_thinking\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"glm-4.6\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "nodejs": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"glm-4.6\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "docUrl": "https://help.aliyun.com/document_detail/2974045.html"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"glm-4.6\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"enable_thinking\": true,\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n    {\"role\": \"user\", \"content\": \"你是谁？\"},\n]\nresponse = Generation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = \"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"glm-4.6\",\n    messages=messages,\n    result_format=\"message\",\n    # 开启深度思考\n    enable_thinking=True,\n)\n\nif response.status_code == 200:\n    # 打印思考过程\n    print(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n    print(response.output.choices[0].message.reasoning_content)\n    \n    # 打印回复\n    print(\"=\" * 20 + \"完整回复\" + \"=\" * 20)\n    print(response.output.choices[0].message.content)\nelse:\n    print(f\"HTTP返回码：{response.status_code}\")\n    print(f\"错误码：{response.code}\")\n    print(f\"错误信息：{response.message}\")",
+            "java": "import java.util.Arrays;\nimport java.lang.System;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {\n        Generation gen = new Generation();\n        Message systemMsg = Message.builder()\n                .role(Role.SYSTEM.getValue())\n                .content(\"You are a helpful assistant.\")\n                .build();\n        Message userMsg = Message.builder()\n                .role(Role.USER.getValue())\n                .content(\"你是谁？\")\n                .build();\n        GenerationParam param = GenerationParam.builder()\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"glm-4.6\")\n                .messages(Arrays.asList(systemMsg, userMsg))\n                .resultFormat(GenerationParam.ResultFormat.MESSAGE)\n                .enableThinking(true)\n                .build();\n        return gen.call(param);\n    }\n    public static void main(String[] args) {\n        try {\n            GenerationResult result = callWithMessage();\n            System.out.println(\"====================思考过程====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getReasoningContent());\n            System.out.println(\"\\n====================完整回复====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.err.println(\"错误信息：\"+e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/2974045.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "GLM-4.5采用混合专家（MoE）架构，总参数量为3550 亿，激活参数320亿，在复杂推理、代码生成及智能体交互等通用能力上实现了能力融合与技术突破。",
+      "features": ["model-experience"],
+      "provider": "zhipu-ai",
+      "model": "glm-4.5",
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 6,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 6,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "multiPrices": [
+        {
+          "rangeStart": 0,
+          "rangeName": "输入<=32k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "3",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "14",
+              "type": "output_token",
+              "priceName": "输出"
+            }
+          ],
+          "rangeEnd": 32768
+        },
+        {
+          "rangeStart": 32768,
+          "rangeName": "32k<输入<=128k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "4",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "16",
+              "type": "output_token",
+              "priceName": "输出"
+            }
+          ],
+          "rangeEnd": 131072
+        }
+      ],
+      "capabilities": ["TG"],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 16384,
+      "latestOnlineAt": "2025-08-06T11:38:01.000+00:00",
+      "contextWindow": 131072,
+      "maxInputTokens": 98304,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "GLM-4.5",
+      "docUrl": "https://help.aliyun.com/document_detail/2974045.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "stop",
+          "key": "stop",
+          "tip": "用于控制生成时遇到某些内容则停止。您可传入多个字符串。"
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": true,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [1, 32768]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"glm-4.5\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true,\n    \"enable_thinking\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"glm-4.5\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "nodejs": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"glm-4.5\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "docUrl": "https://help.aliyun.com/document_detail/2974045.html"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"glm-4.5\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"enable_thinking\": true,\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n    {\"role\": \"user\", \"content\": \"你是谁？\"},\n]\nresponse = Generation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = \"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"glm-4.5\",\n    messages=messages,\n    result_format=\"message\",\n    # 开启深度思考\n    enable_thinking=True,\n)\n\nif response.status_code == 200:\n    # 打印思考过程\n    print(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n    print(response.output.choices[0].message.reasoning_content)\n    \n    # 打印回复\n    print(\"=\" * 20 + \"完整回复\" + \"=\" * 20)\n    print(response.output.choices[0].message.content)\nelse:\n    print(f\"HTTP返回码：{response.status_code}\")\n    print(f\"错误码：{response.code}\")\n    print(f\"错误信息：{response.message}\")",
+            "java": "import java.util.Arrays;\nimport java.lang.System;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {\n        Generation gen = new Generation();\n        Message systemMsg = Message.builder()\n                .role(Role.SYSTEM.getValue())\n                .content(\"You are a helpful assistant.\")\n                .build();\n        Message userMsg = Message.builder()\n                .role(Role.USER.getValue())\n                .content(\"你是谁？\")\n                .build();\n        GenerationParam param = GenerationParam.builder()\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"glm-4.5\")\n                .messages(Arrays.asList(systemMsg, userMsg))\n                .resultFormat(GenerationParam.ResultFormat.MESSAGE)\n                .enableThinking(true)\n                .build();\n        return gen.call(param);\n    }\n    public static void main(String[] args) {\n        try {\n            GenerationResult result = callWithMessage();\n            System.out.println(\"====================思考过程====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getReasoningContent());\n            System.out.println(\"\\n====================完整回复====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.err.println(\"错误信息：\"+e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/2974045.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "GLM-4.5-Air采用混合专家（MoE）架构，总参数量为1060亿，激活参数120亿，相较GLM-4.5更紧凑、轻量，适用于对模型规模和资源消耗有一定限制的场景。",
+      "features": ["model-experience"],
+      "provider": "zhipu-ai",
+      "model": "glm-4.5-air",
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 6,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 6,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "multiPrices": [
+        {
+          "rangeStart": 0,
+          "rangeName": "输入<=32k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.8",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "6",
+              "type": "output_token",
+              "priceName": "输出"
+            }
+          ],
+          "rangeEnd": 32768
+        },
+        {
+          "rangeStart": 32768,
+          "rangeName": "32k<输入<=128k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "1.2",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "8",
+              "type": "output_token",
+              "priceName": "输出"
+            }
+          ],
+          "rangeEnd": 131072
+        }
+      ],
+      "capabilities": ["TG"],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 16384,
+      "latestOnlineAt": "2025-08-06T12:02:34.000+00:00",
+      "contextWindow": 131072,
+      "maxInputTokens": 98304,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "GLM-4.5-Air",
+      "docUrl": "https://help.aliyun.com/document_detail/2974045.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "stop",
+          "key": "stop",
+          "tip": "用于控制生成时遇到某些内容则停止。您可传入多个字符串。"
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": true,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [1, 32768]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"glm-4.5-air\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true,\n    \"enable_thinking\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"glm-4.5-air\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "nodejs": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"glm-4.5-air\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "docUrl": "https://help.aliyun.com/document_detail/2974045.html"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"glm-4.5-air\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"enable_thinking\": true,\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n    {\"role\": \"user\", \"content\": \"你是谁？\"},\n]\nresponse = Generation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = \"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"glm-4.5-air\",\n    messages=messages,\n    result_format=\"message\",\n    # 开启深度思考\n    enable_thinking=True,\n)\n\nif response.status_code == 200:\n    # 打印思考过程\n    print(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n    print(response.output.choices[0].message.reasoning_content)\n    \n    # 打印回复\n    print(\"=\" * 20 + \"完整回复\" + \"=\" * 20)\n    print(response.output.choices[0].message.content)\nelse:\n    print(f\"HTTP返回码：{response.status_code}\")\n    print(f\"错误码：{response.code}\")\n    print(f\"错误信息：{response.message}\")",
+            "java": "import java.util.Arrays;\nimport java.lang.System;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {\n        Generation gen = new Generation();\n        Message systemMsg = Message.builder()\n                .role(Role.SYSTEM.getValue())\n                .content(\"You are a helpful assistant.\")\n                .build();\n        Message userMsg = Message.builder()\n                .role(Role.USER.getValue())\n                .content(\"你是谁？\")\n                .build();\n        GenerationParam param = GenerationParam.builder()\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"glm-4.5-air\")\n                .messages(Arrays.asList(systemMsg, userMsg))\n                .resultFormat(GenerationParam.ResultFormat.MESSAGE)\n                .enableThinking(true)\n                .build();\n        return gen.call(param);\n    }\n    public static void main(String[] args) {\n        try {\n            GenerationResult result = callWithMessage();\n            System.out.println(\"====================思考过程====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getReasoningContent());\n            System.out.println(\"\\n====================完整回复====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.err.println(\"错误信息：\"+e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/2974045.html"
+          }
+        }
+      }
+    }
+  ]
+}

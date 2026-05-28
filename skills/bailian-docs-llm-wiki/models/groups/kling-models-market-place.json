@@ -1,0 +1,352 @@
+{
+  "name": "可灵AI",
+  "description": "由可灵AI提供的高质量视频与图像生成及编辑模型。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Image", "Text"]
+      },
+      "openSource": false,
+      "description": "智能分镜可读懂剧本场景流转，自动调度机位和景别。原生多模态框架支持音画一致性。打破时长限制，多镜头故事创作更自由。",
+      "features": ["model-experience"],
+      "provider": "kling",
+      "model": "kling/kling-v3-video-generation",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.9",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1.2",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.6",
+          "type": "720P_no_audio",
+          "priceName": "视频生成（720P 无声）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.8",
+          "type": "1080P_no_audio",
+          "priceName": "视频生成（1080P 无声）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "capabilities": ["VG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:45:28.000+00:00",
+      "inferenceProvider": "kling",
+      "name": "Kling Video 3.0",
+      "predictConfig": [
+        {
+          "name": "mode",
+          "key": "mode",
+          "default": "pro"
+        },
+        {
+          "name": "audio",
+          "key": "audio",
+          "default": false
+        },
+        {
+          "name": "duration",
+          "key": "duration",
+          "default": 5,
+          "range": [3, 15]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"kling/kling-v3-video-generation\",\n    \"input\": {\n        \"prompt\": \"一只小猫在月光下奔跑\"\n    },\n    \"parameters\": {\n        \"mode\": \"std\",\n        \"aspect_ratio\": \"16:9\",\n        \"duration\": 5,\n        \"audio\": false,\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3026701.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Image", "Text", "Video"]
+      },
+      "openSource": false,
+      "description": "新增“全能参考”，支持3-8秒视频或多图锚定角色元素。可匹配原声及口型驱动，实现角色本色呈现。视频一致性更强，表现更灵动。支持音画同步、智能分镜。",
+      "features": ["model-experience"],
+      "provider": "kling",
+      "model": "kling/kling-v3-omni-video-generation",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.9",
+          "type": "720P_no_reference_video",
+          "priceName": "视频生成（720P 无参考视频）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1.2",
+          "type": "1080P_no_reference_video",
+          "priceName": "视频生成（1080P 无参考视频）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.6",
+          "type": "720P_no_audio_no_reference_video",
+          "priceName": "视频生成（720P 无声 无参考视频）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.8",
+          "type": "1080P_no_audio_no_reference_video",
+          "priceName": "视频生成（1080P 无声 无参考视频）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.9",
+          "type": "720P_no_audio_reference_video",
+          "priceName": "视频生成（720P 无声 有参考视频）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1.2",
+          "type": "1080P_no_audio_reference_video",
+          "priceName": "视频生成（1080P 无声 有参考视频）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "capabilities": ["VG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:45:46.000+00:00",
+      "inferenceProvider": "kling",
+      "name": "Kling Video 3.0 Omni",
+      "predictConfig": [
+        {
+          "name": "mode",
+          "key": "mode",
+          "default": "pro"
+        },
+        {
+          "name": "audio",
+          "key": "audio",
+          "default": false
+        },
+        {
+          "name": "duration",
+          "key": "duration",
+          "default": 5,
+          "range": [3, 15]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"kling/kling-v3-omni-video-generation\",\n    \"input\": {\n        \"prompt\": \"一只小猫在月光下奔跑\"\n    },\n    \"parameters\": {\n        \"mode\": \"std\",\n        \"aspect_ratio\": \"16:9\",\n        \"duration\": 5,\n        \"audio\": false,\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3026701.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Image", "Text"]
+      },
+      "openSource": false,
+      "description": "支持最多10张参考图，可锁定主体、元素和色调，保证风格一致。融合风格转绘、人像/角色参考、多图融合及局部重绘，操作灵活。人像细节真实，整体画面细腻丰富，色彩氛围兼具影视感。",
+      "features": ["model-experience"],
+      "provider": "kling",
+      "model": "kling/kling-v3-image-generation",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.2",
+          "type": "image_type_1k",
+          "priceName": "图片生成（1K）"
+        },
+        {
+          "priceUnit": "每张",
+          "price": "0.2",
+          "type": "image_type_2k",
+          "priceName": "图片生成（2K）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "capabilities": ["IG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:45:34.000+00:00",
+      "inferenceProvider": "kling",
+      "name": "Kling Image 3.0",
+      "predictConfig": [
+        {
+          "name": "aspect_ratio",
+          "key": "aspect_ratio",
+          "default": "16:9"
+        },
+        {
+          "name": "resolution",
+          "key": "resolution",
+          "default": "1k"
+        },
+        {
+          "name": "n",
+          "key": "n",
+          "default": 1,
+          "tip": "本次请求生成的图片数量"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"kling/kling-v3-image-generation\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"一间有着精致窗户的花店,漂亮的木质门,摆放着花朵\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"n\": 1,\n        \"aspect_ratio\": \"1:1\",\n        \"resolution\": \"1k\"\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3026706.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Image", "Text"]
+      },
+      "openSource": false,
+      "description": "解锁影视级叙事画面，新增系列组图及2K/4K直出。深度解析提示词视听元素，精确响应创作指令。支持自由多参考图及全面效果升级，适合分镜、剧情概念图及场景设定。",
+      "features": ["model-experience"],
+      "provider": "kling",
+      "model": "kling/kling-v3-omni-image-generation",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.2",
+          "type": "image_type_1k",
+          "priceName": "图片生成（1K）"
+        },
+        {
+          "priceUnit": "每张",
+          "price": "0.2",
+          "type": "image_type_2k",
+          "priceName": "图片生成（2K）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.4",
+          "type": "image_type_4k",
+          "priceName": "图片生成（4K）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "capabilities": ["IG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-26T13:45:39.000+00:00",
+      "inferenceProvider": "kling",
+      "name": "Kling Image 3.0 Omni",
+      "predictConfig": [
+        {
+          "name": "aspect_ratio",
+          "key": "aspect_ratio",
+          "default": "16:9"
+        },
+        {
+          "name": "resolution",
+          "key": "resolution",
+          "default": "1k"
+        },
+        {
+          "name": "n",
+          "key": "n",
+          "default": 1,
+          "tip": "本次请求生成的图片数量"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"kling/kling-v3-omni-image-generation\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"一间有着精致窗户的花店,漂亮的木质门,摆放着花朵\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"n\": 1,\n        \"aspect_ratio\": \"1:1\",\n        \"resolution\": \"1k\"\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3026706.html"
+          }
+        }
+      }
+    }
+  ]
+}

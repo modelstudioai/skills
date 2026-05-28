@@ -1,0 +1,59 @@
+{
+  "name": "AI试衣OutfitAnyone-图片分割",
+  "description": "图片分割模型是AI试衣OutfitAnyone的辅助模型，可对模特图、服饰图进行分割，用于试衣图片的前后处理。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Image"]
+      },
+      "openSource": false,
+      "description": "图片分割模型是AI试衣OutfitAnyone的辅助模型，可对模特图、服饰图进行分割，用于试衣图片的前后处理。",
+      "features": [],
+      "provider": "qwen",
+      "model": "aitryon-parsing-v1",
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.004",
+          "type": "image_detect_number",
+          "priceName": "图片检测"
+        }
+      ],
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-01-15T13:13:06.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "AI试衣OutfitAnyone-图片分割",
+      "docUrl": "https://help.aliyun.com/document_detail/2865249.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/vision/image-process/process' \\\n--header 'Content-Type: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--data '{\n  \"model\": \"aitryon-parsing-v1\",\n  \"input\": {\n      \"image_url\":\"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250630/bakbqz/aitryon_parse_model.png\"\n  },\n  \"parameters\": {\n      \"clothes_type\": [\"upper\"]\n  }\n}'"
+          }
+        }
+      }
+    }
+  ]
+}

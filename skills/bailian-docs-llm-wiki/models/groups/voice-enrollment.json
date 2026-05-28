@@ -1,0 +1,36 @@
+{
+  "name": "大模型声音复刻及声音设计",
+  "description": "大模型声音复刻服务依托先进的大模型技术进行特征提取，无需训练过程就可以完成声音的复刻。仅需提供极短的音频，即可迅速生成高度相似且听感自然的定制声音。\n大模型声音设计使用FunAudioGen-VD模型，支持通过文本Prompt描述，创造声音。无需受限任何音频质量，根据目标场景对音色、语气、语调、语速、情绪等各方面表现力的需求描述，即可生成高质量语音。高度还原专业配音演员的演出水准。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Audio"]
+      },
+      "openSource": false,
+      "description": "大模型声音复刻服务依托先进的大模型技术进行特征提取，无需训练过程就可以完成声音的复刻。仅需提供极短的音频，即可迅速生成高度相似且听感自然的定制声音。\n大模型声音设计使用FunAudioGen-VD模型，支持通过文本Prompt描述，创造声音。无需受限任何音频质量，根据目标场景对音色、语气、语调、语速、情绪等各方面表现力的需求描述，即可生成高质量语音。高度还原专业配音演员的演出水准。",
+      "features": [],
+      "provider": "qwen",
+      "model": "voice-enrollment",
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TTS"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-09-12T16:00:00.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "大模型声音复刻及声音设计",
+      "docUrl": "https://help.aliyun.com/document_detail/2861519.html",
+      "predictConfig": []
+    }
+  ]
+}

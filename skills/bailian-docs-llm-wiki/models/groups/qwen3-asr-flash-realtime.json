@@ -1,0 +1,72 @@
+{
+  "name": "Qwen3-ASR-Flash-Realtime",
+  "description": "Qwen3-ASR-Flash的实时版，一款基于大语言模型的高精度、高智能、高鲁棒性的多语种语音识别模型。依托强大的基座模型、海量的文本与多模态数据、千万小时音频数据，Qwen3-ASR-Flash实现了高精度的语音识别功能，能够自动判断语种并准确识别多个语种的语音，在复杂的音频环境下能够保证精确转录。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Audio"]
+      },
+      "openSource": false,
+      "description": "千问3-ASR-Flash的实时版，一款基于大语言模型的高精度、高智能、高鲁棒性的多语种语音识别模型。依托强大的基座模型、海量的文本与多模态数据、千万小时音频数据，通义千问3-ASR-Flash实现了高精度的语音识别功能，能够自动判断语种并准确识别多个语种的语音，在复杂的音频环境下能够保证精确转录。",
+      "collectionTag": "qwen3",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen3-asr-flash-realtime",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.00033",
+          "type": "content_duration",
+          "priceName": "音频时长"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 20,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 20,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["Realtime-ASR"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-10-27T10:00:46.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3-ASR-Flash-Realtime",
+      "docUrl": "https://help.aliyun.com/document_detail/2989727.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# example requires websocket-client library:\n# pip install websocket-client\n\nimport os\nimport time\nimport json\nimport threading\nimport base64\nimport websocket\nimport logging\nimport logging.handlers\nfrom datetime import datetime\n\nlogger = logging.getLogger(__name__)\nlogger.setLevel(logging.DEBUG)\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：API_KEY=\"sk-xxx\"\nAPI_KEY = os.environ.get(\"DASHSCOPE_API_KEY\")\nQWEN_MODEL = \"qwen3-asr-flash-realtime\"\n\nbaseUrl = \"wss://dashscope.aliyuncs.com/api-ws/v1/realtime\"\nurl = f\"{baseUrl}?model={QWEN_MODEL}\"\nprint(f\"Connecting to server: {url}\")\n\n# 注意： 如果是非vad模式，建议持续发送的音频时长累加不超过60s\nenableServerVad = True\n\nheaders = [\n    \"Authorization: Bearer \" + API_KEY,\n    \"OpenAI-Beta: realtime=v1\"\n]\n\ndef send_event(ws, event):\n    logger.info(f\" Send event: {event['event_id']}, type={event['type']}\")\n    ws.send(json.dumps(event))\n\ndef init_logger():\n    formatter = logging.Formatter('%(asctime)s|%(levelname)s|%(message)s')\n\n    filter = logging.handlers.RotatingFileHandler(\"omni_tester.log\", maxBytes = 100 * 1024 *1024, backupCount = 3)\n    filter.setLevel(logging.DEBUG)\n    filter.setFormatter(formatter)\n\n    console = logging.StreamHandler()\n    console.setLevel(logging.DEBUG)\n    console.setFormatter(formatter)\n\n    logger.addHandler(filter)\n    logger.addHandler(console)\n\ndef on_open(ws):\n    logger.info(\"Connected to server.\")\n\n    # 会话更新事件\n    event0 = {\n        \"event_id\": \"event_123\",\n        \"type\": \"session.update\",\n        \"session\": {\n            \"modalities\": [\"text\"],\n            \"input_audio_format\": \"pcm\",\n            \"sample_rate\": 16000,\n            \"input_audio_transcription\": {\n                # 语种标识，可选，如果有明确的语种信息，建议设置\n                \"language\": \"zh\",\n                # 语料，可选，如果有语料，建议设置以增强识别效果\n                # \"corpus\": {\n                #     \"text\": \"\"\n                # }\n            },\n            \"turn_detection\": None\n        }\n    }\n    event1 = {\n        \"event_id\": \"event_123\",\n        \"type\": \"session.update\",\n        \"session\": {\n            \"modalities\": [\"text\"],\n            \"input_audio_format\": \"pcm\",\n            \"sample_rate\": 16000,\n            \"input_audio_transcription\": {\n                # 语种标识，可选，如果有明确的语种信息，建议设置\n                \"language\": \"zh\",\n                # 语料，可选，如果有语料，建议设置以增强识别效果\n                # \"corpus\": {\n                #     \"text\": \"\"\n                # }\n            },\n            \"turn_detection\": {\n                \"type\": \"server_vad\",\n                \"threshold\": 0.2,\n                \"silence_duration_ms\": 800\n            }\n        }\n    }\n\n    global enableServerVad\n    if enableServerVad:\n        logger.info(f\"Sending event: {json.dumps(event1, indent=2)}\")\n        ws.send(json.dumps(event1))\n    else:\n        logger.info(f\"Sending event: {json.dumps(event0, indent=2)}\")\n        ws.send(json.dumps(event0))\n\ndef on_message(ws, message):\n    try:\n        data = json.loads(message)\n        logger.info(f\"Received event: {json.dumps(data, ensure_ascii=False, indent=2)}\")\n    except json.JSONDecodeError:\n        logger.error(f\"Failed to parse message: {message}\")\n\ndef on_error(ws, error):\n    logger.error(f\"Error: {error}\")\n\ndef on_close(ws, close_status_code, close_msg):\n    logger.info(f\"Connection closed: {close_status_code} - {close_msg}\")\n\ndef send_audio(ws, local_audio_path):\n    time.sleep(5)\n\n    with open(local_audio_path, 'rb') as audio_file:\n        logger.info(f\"文件读取开始: {datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}\")\n        while True:\n            # 读取指定大小的二进制数据\n            audio_data = audio_file.read(3200)\n            if not audio_data:\n                logger.info(f\"文件读取完毕: {datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]}\")\n                global enableServerVad\n                if enableServerVad is False:\n                    event = {\n                        \"event_id\": \"event_789\",\n                        \"type\": \"input_audio_buffer.commit\"\n                    }\n                    ws.send(json.dumps(event))\n                break  # 如果已达到文件结尾，则退出循环\n\n            # 对读取的二进制数据进行 Base64 编码\n            encoded_data = base64.b64encode(audio_data).decode('utf-8')\n            #print(f\"读取数据：{len(audio_data)} 字节, 编码后: {len(encoded_data)} 字节\")\n\n            eventd = {\n                \"event_id\": \"event_\" + str(int(time.time() * 1000)),\n                \"type\": \"input_audio_buffer.append\",\n                \"audio\": encoded_data\n            }\n            ws.send(json.dumps(eventd))\n            logger.info(f\"Sending audio event: {eventd['event_id']}\")\n\n            # 模拟实时音频采集\n            time.sleep(0.1)\n\n# 添加连接关闭处理函数\nws = websocket.WebSocketApp(\n    url,\n    header=headers,\n    on_open=on_open,\n    on_message=on_message,\n    on_error=on_error,\n    on_close=on_close\n)\n\ninit_logger()\nlogger.info(f\"Connecting to local WebSocket server at {url}...\")\n\n# 替换为待识别的音频文件路径\nlocal_audio_path = \"your_audio_file\"\nthread = threading.Thread(target=send_audio, args=(ws, local_audio_path))\nthread.start()\n\nws.run_forever()"
+          }
+        }
+      }
+    }
+  ]
+}

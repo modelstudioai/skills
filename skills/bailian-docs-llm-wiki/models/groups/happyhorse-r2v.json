@@ -1,0 +1,91 @@
+{
+  "name": "HappyHorse-R2V",
+  "description": "HappyHorse-R2V支持参考生视频，更加稳定的主体与场景参考，支持最多9张图片参考，能够精准保持创作意图，实现更强表现能力。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Image", "Text"]
+      },
+      "openSource": false,
+      "description": "HappyHorse-1.0-R2V支持参考生视频，更加稳定的主体与场景参考，支持最多9张图片参考，能够精准保持创作意图，实现更强表现能力。",
+      "features": ["model-experience"],
+      "provider": "happyhorse",
+      "model": "happyhorse-1.0-r2v",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.9",
+          "discount": 0.8,
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1.6",
+          "discount": 0.8,
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 10,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 10,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["VG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-04-26T12:42:22.406+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "HappyHorse-1.0-R2V",
+      "docUrl": "https://help.aliyun.com/document_detail/3030778.html",
+      "predictConfig": [
+        {
+          "name": "清晰度",
+          "key": "resolution",
+          "default": "1080P"
+        },
+        {
+          "name": "宽高比",
+          "key": "ratio",
+          "default": "16:9"
+        },
+        {
+          "name": "视频时长(秒)",
+          "key": "duration",
+          "default": 5,
+          "range": [3, 15]
+        },
+        {
+          "name": "随机种子",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "\ncurl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"happyhorse-1.0-r2v\",\n    \"input\": {\n        \"prompt\": \"身着红色旗袍的女性⁣⁢ 图1，镜头先以侧面中景勾勒旗袍修身剪裁与S型曲线，随即切换至低角度仰拍，捕捉她轻抬玉手展开折扇 图2 时流苏耳坠⁣⁢⁢⁢ ⁠图3 随头部转动轻盈摆动的细节，最后推近至面部特写，定格在她指尖轻点扇骨、眼波流转间的含蓄风情，多视角全方位展现东方韵味。\",\n        \"media\": [\n            {\n                \"type\": \"reference_image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260424/mvzfud/hh-v2v-girl.jpg\"\n            },\n            {\n                \"type\": \"reference_image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260424/fvuihk/hh-v2v2-folding-fan.jpg\"\n            },\n            {\n                \"type\": \"reference_image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260424/imerii/hh-v2v-earrings.jpg\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"ratio\": \"16:9\",\n        \"duration\": 5\n    }\n}'\n\n",
+            "docUrl": "https://help.aliyun.com/document_detail/3030778.html"
+          }
+        }
+      }
+    }
+  ]
+}

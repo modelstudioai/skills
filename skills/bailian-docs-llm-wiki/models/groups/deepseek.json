@@ -1,0 +1,1222 @@
+{
+  "name": "DeepSeek",
+  "description": "DeepSeek是由深度求索提供的开源模型，包含 V3.1、V3、R1以及基于Qwen2.5系列蒸馏的大语言模型。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "旗舰级 MoE 大模型，总参1.6T、激活 49B，原生支持百万级超长上下文。依托海量高质量训练数据，具备顶尖数学逻辑、复杂推理、专业代码与长文本深度解析能力，适配高阶科研、复杂办公、深度智能代理等高难度场景。",
+      "features": ["cache", "function-calling", "model-experience", "web-search"],
+      "provider": "deepseek",
+      "model": "deepseek-v4-pro",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "12",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "24",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 3,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 750,
+          "usage_limit_period": 10,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 3,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 750,
+          "usage_limit_period": 10,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["Reasoning", "TG"],
+      "modelAlias": "",
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 393216,
+      "latestOnlineAt": "2026-04-24T07:51:09.000+00:00",
+      "contextWindow": 1000000,
+      "maxInputTokens": 1000000,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "DeepSeek-V4-Pro",
+      "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "stop",
+          "key": "stop",
+          "tip": "用于控制生成时遇到某些内容则停止。您可传入多个字符串。"
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_search",
+          "key": "enable_search",
+          "tip": "联网搜索补充互联网知识，当前暂时免费提供服务，即将于2025年8月25日0时起转计费模式，按量后付费"
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": false,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [4000, 32768]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-v4-pro\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true,\n    \"enable_thinking\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"deepseek-v4-pro\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化 openai 客户端\nconst openai = new OpenAI({\n    apiKey: process.env.DASHSCOPE_API_KEY, // 从环境变量读取\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\nlet isAnswering = false;\nasync function main() {\n    try {\n        const messages = [{ role: 'user', content: '你是谁' }];\n        const stream = await openai.chat.completions.create({\n            model: 'deepseek-v4-pro',\n            messages,\n            stream: true,\n            enable_thinking: true\n        });\n        console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20));\n        for await (const chunk of stream) {\n            if (!chunk.choices.length) continue;\n            const delta = chunk.choices[0].delta;\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n            }\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20));\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n            }\n        }\n    } catch (error) {\n        console.error('Error:', error);\n    }\n}\nmain();",
+            "docUrl": "https://help.aliyun.com/document_detail/3016807.html"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-v4-pro\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"enable_thinking\": true,\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n    {\"role\": \"user\", \"content\": \"你是谁？\"},\n]\nresponse = Generation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = \"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"deepseek-v4-pro\",\n    messages=messages,\n    result_format=\"message\",\n    # 开启深度思考\n    enable_thinking=True,\n)\n\nif response.status_code == 200:\n    # 打印思考过程\n    print(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n    print(response.output.choices[0].message.reasoning_content)\n    \n    # 打印回复\n    print(\"=\" * 20 + \"完整回复\" + \"=\" * 20)\n    print(response.output.choices[0].message.content)\nelse:\n    print(f\"HTTP返回码：{response.status_code}\")\n    print(f\"错误码：{response.code}\")\n    print(f\"错误信息：{response.message}\")",
+            "java": "import java.util.Arrays;\nimport java.lang.System;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {\n        Generation gen = new Generation();\n        Message systemMsg = Message.builder()\n                .role(Role.SYSTEM.getValue())\n                .content(\"You are a helpful assistant.\")\n                .build();\n        Message userMsg = Message.builder()\n                .role(Role.USER.getValue())\n                .content(\"你是谁？\")\n                .build();\n        GenerationParam param = GenerationParam.builder()\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"deepseek-v4-pro\")\n                .messages(Arrays.asList(systemMsg, userMsg))\n                .resultFormat(GenerationParam.ResultFormat.MESSAGE)\n                .enableThinking(true)\n                .build();\n        return gen.call(param);\n    }\n    public static void main(String[] args) {\n        try {\n            GenerationResult result = callWithMessage();\n            System.out.println(\"====================思考过程====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getReasoningContent());\n            System.out.println(\"\\n====================完整回复====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.err.println(\"错误信息：\"+e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3016809.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "高效轻量化MoE模型，总参284B，激活13B，原生支持百万超长上下文能力。推理速度快、延迟低、调用成本低廉，综合能力均衡，主打高并发、轻量化任务，适合日常对话、内容创作、基础 RAG、批量文案处理等普惠刚需场景。",
+      "features": ["cache", "function-calling", "model-experience", "web-search"],
+      "provider": "deepseek",
+      "model": "deepseek-v4-flash",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.2",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 3,
+          "usage_limit": 600000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 750,
+          "usage_limit_period": 30,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 3,
+          "usage_limit": 600000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 750,
+          "usage_limit_period": 30,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG", "Reasoning"],
+      "modelAlias": "",
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 393216,
+      "latestOnlineAt": "2026-04-24T07:51:16.000+00:00",
+      "contextWindow": 1000000,
+      "maxInputTokens": 1000000,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "DeepSeek-V4-Flash",
+      "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "stop",
+          "key": "stop",
+          "tip": "用于控制生成时遇到某些内容则停止。您可传入多个字符串。"
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_search",
+          "key": "enable_search",
+          "tip": "联网搜索补充互联网知识，当前暂时免费提供服务，即将于2025年8月25日0时起转计费模式，按量后付费"
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": false,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [4000, 32768]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-v4-flash\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true,\n    \"enable_thinking\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"deepseek-v4-flash\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化 openai 客户端\nconst openai = new OpenAI({\n    apiKey: process.env.DASHSCOPE_API_KEY, // 从环境变量读取\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\nlet isAnswering = false;\nasync function main() {\n    try {\n        const messages = [{ role: 'user', content: '你是谁' }];\n        const stream = await openai.chat.completions.create({\n            model: 'deepseek-v4-flash',\n            messages,\n            stream: true,\n            enable_thinking: true\n        });\n        console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20));\n        for await (const chunk of stream) {\n            if (!chunk.choices.length) continue;\n            const delta = chunk.choices[0].delta;\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n            }\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20));\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n            }\n        }\n    } catch (error) {\n        console.error('Error:', error);\n    }\n}\nmain();",
+            "docUrl": "https://help.aliyun.com/document_detail/3016807.html"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-v4-flash\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"enable_thinking\": true,\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n    {\"role\": \"user\", \"content\": \"你是谁？\"},\n]\nresponse = Generation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = \"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"deepseek-v4-flash\",\n    messages=messages,\n    result_format=\"message\",\n    # 开启深度思考\n    enable_thinking=True,\n)\n\nif response.status_code == 200:\n    # 打印思考过程\n    print(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n    print(response.output.choices[0].message.reasoning_content)\n    \n    # 打印回复\n    print(\"=\" * 20 + \"完整回复\" + \"=\" * 20)\n    print(response.output.choices[0].message.content)\nelse:\n    print(f\"HTTP返回码：{response.status_code}\")\n    print(f\"错误码：{response.code}\")\n    print(f\"错误信息：{response.message}\")",
+            "java": "import java.util.Arrays;\nimport java.lang.System;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {\n        Generation gen = new Generation();\n        Message systemMsg = Message.builder()\n                .role(Role.SYSTEM.getValue())\n                .content(\"You are a helpful assistant.\")\n                .build();\n        Message userMsg = Message.builder()\n                .role(Role.USER.getValue())\n                .content(\"你是谁？\")\n                .build();\n        GenerationParam param = GenerationParam.builder()\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"deepseek-v4-flash\")\n                .messages(Arrays.asList(systemMsg, userMsg))\n                .resultFormat(GenerationParam.ResultFormat.MESSAGE)\n                .enableThinking(true)\n                .build();\n        return gen.call(param);\n    }\n    public static void main(String[] args) {\n        try {\n            GenerationResult result = callWithMessage();\n            System.out.println(\"====================思考过程====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getReasoningContent());\n            System.out.println(\"\\n====================完整回复====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.err.println(\"错误信息：\"+e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3016809.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "DeepSeek-V3.2是引入DeepSeek Sparse Attention（一种稀疏注意力机制）的正式版模型，也是DeepSeek推出的首个将思考融入工具使用的模型，同时支持思考模式与非思考模式的工具调用。",
+      "features": ["model-experience", "function-calling", "web-search", "cache", "batch"],
+      "provider": "deepseek",
+      "model": "deepseek-v3.2",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "3",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.4",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1",
+          "type": "input_token_batch",
+          "priceName": "输入（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.5",
+          "type": "output_token_batch",
+          "priceName": "输出（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2.5",
+          "type": "input_token_cache_creation_5m",
+          "priceName": "显式缓存创建"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.2",
+          "type": "input_token_cache_read",
+          "priceName": "显式缓存命中"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2",
+          "discount": 0.5,
+          "type": "input_token_batch_chat",
+          "priceName": "输入（Batch Chat)"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "3",
+          "discount": 0.5,
+          "type": "output_token_batch_chat",
+          "priceName": "输出（Batch Chat)"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 15,
+          "usage_limit": 1200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 3750,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 15,
+          "usage_limit": 1200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 3750,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["Reasoning", "TG"],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 65536,
+      "latestOnlineAt": "2025-12-02T06:56:41.000+00:00",
+      "contextWindow": 131072,
+      "maxInputTokens": 98304,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "DeepSeek-V3.2",
+      "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.95,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.6,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": false,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [1, 32768]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-v3.2\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true,\n    \"enable_thinking\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"deepseek-v3.2\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化 openai 客户端\nconst openai = new OpenAI({\n    apiKey: process.env.DASHSCOPE_API_KEY, // 从环境变量读取\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\nlet isAnswering = false;\nasync function main() {\n    try {\n        const messages = [{ role: 'user', content: '你是谁' }];\n        const stream = await openai.chat.completions.create({\n            model: 'deepseek-v3.2',\n            messages,\n            stream: true,\n            enable_thinking: true\n        });\n        console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20));\n        for await (const chunk of stream) {\n            if (!chunk.choices.length) continue;\n            const delta = chunk.choices[0].delta;\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n            }\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20));\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n            }\n        }\n    } catch (error) {\n        console.error('Error:', error);\n    }\n}\nmain();",
+            "docUrl": "https://help.aliyun.com/document_detail/3016807.html"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-v3.2\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"enable_thinking\": true,\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n    {\"role\": \"user\", \"content\": \"你是谁？\"},\n]\nresponse = Generation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = \"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"deepseek-v3.2\",\n    messages=messages,\n    result_format=\"message\",\n    # 开启深度思考\n    enable_thinking=True,\n)\n\nif response.status_code == 200:\n    # 打印思考过程\n    print(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n    print(response.output.choices[0].message.reasoning_content)\n    \n    # 打印回复\n    print(\"=\" * 20 + \"完整回复\" + \"=\" * 20)\n    print(response.output.choices[0].message.content)\nelse:\n    print(f\"HTTP返回码：{response.status_code}\")\n    print(f\"错误码：{response.code}\")\n    print(f\"错误信息：{response.message}\")",
+            "java": "import java.util.Arrays;\nimport java.lang.System;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {\n        Generation gen = new Generation();\n        Message systemMsg = Message.builder()\n                .role(Role.SYSTEM.getValue())\n                .content(\"You are a helpful assistant.\")\n                .build();\n        Message userMsg = Message.builder()\n                .role(Role.USER.getValue())\n                .content(\"你是谁？\")\n                .build();\n        GenerationParam param = GenerationParam.builder()\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"deepseek-v3.2\")\n                .messages(Arrays.asList(systemMsg, userMsg))\n                .resultFormat(GenerationParam.ResultFormat.MESSAGE)\n                .enableThinking(true)\n                .build();\n        return gen.call(param);\n    }\n    public static void main(String[] args) {\n        try {\n            GenerationResult result = callWithMessage();\n            System.out.println(\"====================思考过程====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getReasoningContent());\n            System.out.println(\"\\n====================完整回复====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.err.println(\"错误信息：\"+e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3016809.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "引入了DeepSeek Sparse Attention（一种稀疏注意力机制）的实验性质版本，针对长文本的训练和推理效率进行了探索性的优化和验证。",
+      "features": ["model-experience", "function-calling", "web-search"],
+      "provider": "deepseek",
+      "model": "deepseek-v3.2-exp",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "3",
+          "type": "output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 120000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 250,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 120000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 250,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG", "Reasoning"],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 65536,
+      "latestOnlineAt": "2025-09-30T14:44:03.000+00:00",
+      "contextWindow": 131072,
+      "maxInputTokens": 98304,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Deepseek-V3.2-Exp",
+      "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.95,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.6,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": false,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [1, 32768]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-v3.2-exp\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true,\n    \"enable_thinking\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"deepseek-v3.2-exp\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化 openai 客户端\nconst openai = new OpenAI({\n    apiKey: process.env.DASHSCOPE_API_KEY, // 从环境变量读取\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\nlet isAnswering = false;\nasync function main() {\n    try {\n        const messages = [{ role: 'user', content: '你是谁' }];\n        const stream = await openai.chat.completions.create({\n            model: 'deepseek-v3.2-exp',\n            messages,\n            stream: true,\n            enable_thinking: true\n        });\n        console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20));\n        for await (const chunk of stream) {\n            if (!chunk.choices.length) continue;\n            const delta = chunk.choices[0].delta;\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n            }\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20));\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n            }\n        }\n    } catch (error) {\n        console.error('Error:', error);\n    }\n}\nmain();",
+            "docUrl": "https://help.aliyun.com/document_detail/3016807.html"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-v3.2-exp\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"enable_thinking\": true,\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n    {\"role\": \"user\", \"content\": \"你是谁？\"},\n]\nresponse = Generation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = \"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"deepseek-v3.2-exp\",\n    messages=messages,\n    result_format=\"message\",\n    # 开启深度思考\n    enable_thinking=True,\n)\n\nif response.status_code == 200:\n    # 打印思考过程\n    print(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n    print(response.output.choices[0].message.reasoning_content)\n    \n    # 打印回复\n    print(\"=\" * 20 + \"完整回复\" + \"=\" * 20)\n    print(response.output.choices[0].message.content)\nelse:\n    print(f\"HTTP返回码：{response.status_code}\")\n    print(f\"错误码：{response.code}\")\n    print(f\"错误信息：{response.message}\")",
+            "java": "import java.util.Arrays;\nimport java.lang.System;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {\n        Generation gen = new Generation();\n        Message systemMsg = Message.builder()\n                .role(Role.SYSTEM.getValue())\n                .content(\"You are a helpful assistant.\")\n                .build();\n        Message userMsg = Message.builder()\n                .role(Role.USER.getValue())\n                .content(\"你是谁？\")\n                .build();\n        GenerationParam param = GenerationParam.builder()\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"deepseek-v3.2-exp\")\n                .messages(Arrays.asList(systemMsg, userMsg))\n                .resultFormat(GenerationParam.ResultFormat.MESSAGE)\n                .enableThinking(true)\n                .build();\n        return gen.call(param);\n    }\n    public static void main(String[] args) {\n        try {\n            GenerationResult result = callWithMessage();\n            System.out.println(\"====================思考过程====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getReasoningContent());\n            System.out.println(\"\\n====================完整回复====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.err.println(\"错误信息：\"+e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3016809.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "DeepSeek-V3.1为混合推理架构模型，同时支持思考模式与非思考模式，具备更高的推理效率和更强的Agent能力。",
+      "features": ["model-experience", "function-calling", "web-search", "cache"],
+      "provider": "deepseek",
+      "model": "deepseek-v3.1",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "4",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "12",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.8",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 1200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 250,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 1200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 250,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG", "Reasoning"],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 65536,
+      "latestOnlineAt": "2025-08-22T16:31:50.000+00:00",
+      "contextWindow": 131072,
+      "maxInputTokens": 98304,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "DeepSeek-V3.1",
+      "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.95,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.6,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": false,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [1, 32768]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-v3.1\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true,\n    \"enable_thinking\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"deepseek-v3.1\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化 openai 客户端\nconst openai = new OpenAI({\n    apiKey: process.env.DASHSCOPE_API_KEY, // 从环境变量读取\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\nlet isAnswering = false;\nasync function main() {\n    try {\n        const messages = [{ role: 'user', content: '你是谁' }];\n        const stream = await openai.chat.completions.create({\n            model: 'deepseek-v3.1',\n            messages,\n            stream: true,\n            enable_thinking: true\n        });\n        console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20));\n        for await (const chunk of stream) {\n            if (!chunk.choices.length) continue;\n            const delta = chunk.choices[0].delta;\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n            }\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20));\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n            }\n        }\n    } catch (error) {\n        console.error('Error:', error);\n    }\n}\nmain();",
+            "docUrl": "https://help.aliyun.com/document_detail/3016807.html"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-v3.1\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"enable_thinking\": true,\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n    {\"role\": \"user\", \"content\": \"你是谁？\"},\n]\nresponse = Generation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = \"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"deepseek-v3.1\",\n    messages=messages,\n    result_format=\"message\",\n    # 开启深度思考\n    enable_thinking=True,\n)\n\nif response.status_code == 200:\n    # 打印思考过程\n    print(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n    print(response.output.choices[0].message.reasoning_content)\n    \n    # 打印回复\n    print(\"=\" * 20 + \"完整回复\" + \"=\" * 20)\n    print(response.output.choices[0].message.content)\nelse:\n    print(f\"HTTP返回码：{response.status_code}\")\n    print(f\"错误码：{response.code}\")\n    print(f\"错误信息：{response.message}\")",
+            "java": "import java.util.Arrays;\nimport java.lang.System;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {\n        Generation gen = new Generation();\n        Message systemMsg = Message.builder()\n                .role(Role.SYSTEM.getValue())\n                .content(\"You are a helpful assistant.\")\n                .build();\n        Message userMsg = Message.builder()\n                .role(Role.USER.getValue())\n                .content(\"你是谁？\")\n                .build();\n        GenerationParam param = GenerationParam.builder()\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"deepseek-v3.1\")\n                .messages(Arrays.asList(systemMsg, userMsg))\n                .resultFormat(GenerationParam.ResultFormat.MESSAGE)\n                .enableThinking(true)\n                .build();\n        return gen.call(param);\n    }\n    public static void main(String[] args) {\n        try {\n            GenerationResult result = callWithMessage();\n            System.out.println(\"====================思考过程====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getReasoningContent());\n            System.out.println(\"\\n====================完整回复====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.err.println(\"错误信息：\"+e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3016809.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "0528为R1模型的小版本升级，相较于旧版 R1，新版在复杂推理任务中的表现有了显著提升。在数学、编程与通用逻辑等多个基准测评中取得了优异成绩。",
+      "features": ["model-experience", "function-calling", "web-search"],
+      "provider": "deepseek",
+      "model": "deepseek-r1-0528",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "4",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "16",
+          "type": "output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 5,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 5,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 5,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 5,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["Reasoning"],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 16384,
+      "latestOnlineAt": "2025-06-04T15:30:34.000+00:00",
+      "contextWindow": 131072,
+      "maxInputTokens": 98304,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "DeepSeek-R1-0528",
+      "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "max_tokens",
+          "key": "max_tokens",
+          "default": 4000,
+          "tip": "最终回答的最大长度（不含思维链输出）",
+          "range": [1, 8192]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "python": "from openai import OpenAI\nimport os\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"deepseek-r1-0528\",\n    messages=messages,\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if chunk.choices:\n        delta = chunk.choices[0].delta\n        # 只收集思考内容\n        if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n            if not is_answering:\n                print(delta.reasoning_content, end=\"\", flush=True)\n        # 收到content，开始进行回复\n        if hasattr(delta, \"content\") and delta.content:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(delta.content, end=\"\", flush=True)",
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-r1-0528\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化OpenAI客户端\nconst openai = new OpenAI({\n    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: \"sk-xxx\"\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = ''; // 完整思考过程\nlet answerContent = ''; // 完整回复\nlet isAnswering = false; // 是否进入回复阶段\n\nasync function main() {\n    const messages = [{ role: 'user', content: '你是谁' }];\n\n    const stream = await openai.chat.completions.create({\n        model: 'deepseek-r1-0528',\n        messages,\n        stream: true,\n    });\n\n    console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');\n\n    for await (const chunk of stream) {\n        if (chunk.choices?.length) {\n            const delta = chunk.choices[0].delta;\n            // 只收集思考内容\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n                reasoningContent += delta.reasoning_content;\n            }\n\n            // 收到content，开始进行回复\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    }\n}\n\nmain();"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-r1-0528\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = \"https://dashscope.aliyuncs.com/api/v1/\"\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁？\"}]\n\ncompletion = Generation.call(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"deepseek-r1-0528\",\n    messages=messages,\n    result_format=\"message\", \n    stream=True,\n    incremental_output=True, \n)\n\nis_answering = False\n\nprint(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n\nfor chunk in completion:\n    if (\n        chunk.output.choices[0].message.content == \"\"\n        and chunk.output.choices[0].message.reasoning_content == \"\"\n    ):\n        pass\n    else:\n        if (\n            chunk.output.choices[0].message.reasoning_content != \"\"\n            and chunk.output.choices[0].message.content == \"\"\n        ):\n            print(chunk.output.choices[0].message.reasoning_content, end=\"\", flush=True)\n        elif chunk.output.choices[0].message.content != \"\":\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(chunk.output.choices[0].message.content, end=\"\", flush=True)",
+            "java": "import java.util.Arrays;\nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport io.reactivex.Flowable;\nimport java.lang.System;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    private static final Logger logger = LoggerFactory.getLogger(Main.class);\n    private static StringBuilder reasoningContent = new StringBuilder();\n    private static StringBuilder finalContent = new StringBuilder();\n    private static boolean isFirstPrint = true;\n\n    private static void handleGenerationResult(GenerationResult message) {\n        String reasoning = message.getOutput().getChoices().get(0).getMessage().getReasoningContent();\n        String content = message.getOutput().getChoices().get(0).getMessage().getContent();\n\n        if (!reasoning.isEmpty()) {\n            reasoningContent.append(reasoning);\n            if (isFirstPrint) {\n                System.out.println(\"====================思考过程====================\");\n                isFirstPrint = false;\n            }\n            System.out.print(reasoning);\n        }\n\n        if (!content.isEmpty()) {\n            finalContent.append(content);\n            if (!isFirstPrint) {\n                System.out.println(\"\\n====================完整回复====================\");\n                isFirstPrint = true;\n            }\n            System.out.print(content);\n        }\n    }\n    private static GenerationParam buildGenerationParam(Message userMsg) {\n        return GenerationParam.builder()\n                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"deepseek-r1-0528\")\n                .incrementalOutput(true)\n                .resultFormat(\"message\")\n                .messages(Arrays.asList(userMsg))\n                .build();\n    }\n    public static void streamCallWithMessage(Generation gen, Message userMsg)\n            throws NoApiKeyException, ApiException, InputRequiredException {\n        GenerationParam param = buildGenerationParam(userMsg);\n        Flowable<GenerationResult> result = gen.streamCall(param);\n        result.blockingForEach(message -> handleGenerationResult(message));\n    }\n\n    public static void main(String[] args) {\n        try {\n            Generation gen = new Generation();\n            Message userMsg = Message.builder().role(Role.USER.getValue()).content(\"你是谁？\").build();\n            streamCallWithMessage(gen, userMsg);\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            logger.error(\"An exception occurred: {}\", e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "DeepSeek-V3 为自研 MoE 模型，671B 参数，激活 37B，在 14.8T token 上进行了预训练，在长文本、代码、数学、百科、中文 能力上表现优秀。",
+      "features": ["model-experience", "function-calling", "web-search", "cache"],
+      "provider": "deepseek",
+      "model": "deepseek-v3",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "8",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.4",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1",
+          "type": "input_token_batch",
+          "priceName": "输入（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "4",
+          "type": "output_token_batch",
+          "priceName": "输出（Batch File）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 250,
+          "usage_limit_period": 10,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 250,
+          "usage_limit_period": 10,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG", "Reasoning"],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 8192,
+      "latestOnlineAt": "2025-01-27T12:45:18.000+00:00",
+      "contextWindow": 65536,
+      "maxInputTokens": 57344,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "DeepSeek-V3",
+      "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.6,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "presence_penalty",
+          "key": "presence_penalty",
+          "default": 0.95,
+          "tip": "用户控制模型生成时整个序列中的重复度。提高该参数时可以降低模型生成的重复度。",
+          "range": [-2, 2]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\ncompletion = client.chat.completions.create(\n    model=\"deepseek-v3\",\n    messages=[\n        {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n        {\"role\": \"user\", \"content\": \"你是谁？\"},\n    ],\n    stream=True\n)\nfor chunk in completion:\n    print(chunk.choices[0].delta.content, end=\"\", flush=True)",
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-v3\",\n    \"messages\": [\n        {\n            \"role\": \"system\",\n            \"content\": \"You are a helpful assistant.\"\n        },\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁？\"\n        }\n    ],\n    \"stream\":true\n}'",
+            "nodejs": "import OpenAI from \"openai\";\nconst openai = new OpenAI(\n    {\n        // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: \"sk-xxx\",\n        apiKey: process.env.DASHSCOPE_API_KEY,\n        baseURL: \"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n    }\n);\nconst completion = await openai.chat.completions.create({\n    model: \"deepseek-v3\",\n    messages: [\n        { role: \"system\", content: \"You are a helpful assistant.\" },\n        { role: \"user\", content: \"你是谁？\" }\n    ],\n    stream: true\n});\nfor await (const chunk of completion) {\n    process.stdout.write(chunk.choices[0].delta.content);\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3016807.html"
+          }
+        },
+        "dashscope": {
+          "completionsAPI": {
+            "curl": "curl --location \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header \"Content-Type: application/json\" \\\n--data '{\n    \"model\": \"deepseek-v3\",\n    \"input\":{\n        \"messages\":[      \n            {\n                \"role\": \"system\",\n                \"content\": \"You are a helpful assistant.\"\n            },\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n    {\"role\": \"user\", \"content\": \"你是谁？\"},\n]\nresponse = Generation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = \"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"deepseek-v3\",\n    messages=messages,\n    result_format=\"message\",\n)\n\nprint(response.output.choices[0].message.content)",
+            "java": "import java.util.Arrays;\nimport java.lang.System;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.protocol.Protocol;\n\npublic class Main {\n    public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {\n        Generation gen = new Generation(Protocol.HTTP.getValue(), \"https://dashscope.aliyuncs.com/api/v1\");\n        Message systemMsg = Message.builder()\n                .role(Role.SYSTEM.getValue())\n                .content(\"You are a helpful assistant.\")\n                .build();\n        Message userMsg = Message.builder()\n                .role(Role.USER.getValue())\n                .content(\"你是谁？\")\n                .build();\n        GenerationParam param = GenerationParam.builder()\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"deepseek-v3\")\n                .messages(Arrays.asList(systemMsg, userMsg))\n                .resultFormat(GenerationParam.ResultFormat.MESSAGE)\n                .build();\n        return gen.call(param);\n    }\n    public static void main(String[] args) {\n        try {\n            GenerationResult result = callWithMessage();\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.err.println(\"错误信息：\"+e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3016809.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "DeepSeek-R1 在后训练阶段大规模使用了强化学习技术，在仅有极少标注数据的情况下，极大提升了模型推理能力。在数学、代码、自然语言推理等任务上，性能较高，能力较强。",
+      "features": ["model-experience", "function-calling", "web-search", "cache"],
+      "provider": "deepseek",
+      "model": "deepseek-r1",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "4",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "16",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.8",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2",
+          "type": "input_token_batch",
+          "priceName": "输入（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "8",
+          "type": "output_token_batch",
+          "priceName": "输出（Batch File）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 250,
+          "usage_limit_period": 10,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 250,
+          "usage_limit_period": 10,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["Reasoning"],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 16384,
+      "latestOnlineAt": "2025-06-17T16:00:00.000+00:00",
+      "contextWindow": 131072,
+      "maxInputTokens": 98304,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "DeepSeek-R1",
+      "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "max_tokens",
+          "key": "max_tokens",
+          "default": 4000,
+          "tip": "最终回答的最大长度（不含思维链输出）",
+          "range": [1, 8192]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "python": "from openai import OpenAI\nimport os\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"deepseek-r1\",\n    messages=messages,\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if chunk.choices:\n        delta = chunk.choices[0].delta\n        # 只收集思考内容\n        if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n            if not is_answering:\n                print(delta.reasoning_content, end=\"\", flush=True)\n        # 收到content，开始进行回复\n        if hasattr(delta, \"content\") and delta.content:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(delta.content, end=\"\", flush=True)",
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-r1\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化OpenAI客户端\nconst openai = new OpenAI({\n    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: \"sk-xxx\"\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = ''; // 完整思考过程\nlet answerContent = ''; // 完整回复\nlet isAnswering = false; // 是否进入回复阶段\n\nasync function main() {\n    const messages = [{ role: 'user', content: '你是谁' }];\n\n    const stream = await openai.chat.completions.create({\n        model: 'deepseek-r1',\n        messages,\n        stream: true,\n    });\n\n    console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');\n\n    for await (const chunk of stream) {\n        if (chunk.choices?.length) {\n            const delta = chunk.choices[0].delta;\n            // 只收集思考内容\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n                reasoningContent += delta.reasoning_content;\n            }\n\n            // 收到content，开始进行回复\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    }\n}\n\nmain();"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-r1\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = \"https://dashscope.aliyuncs.com/api/v1/\"\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁？\"}]\n\ncompletion = Generation.call(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"deepseek-r1\",\n    messages=messages,\n    result_format=\"message\", \n    stream=True,\n    incremental_output=True, \n)\n\nis_answering = False\n\nprint(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n\nfor chunk in completion:\n    if (\n        chunk.output.choices[0].message.content == \"\"\n        and chunk.output.choices[0].message.reasoning_content == \"\"\n    ):\n        pass\n    else:\n        if (\n            chunk.output.choices[0].message.reasoning_content != \"\"\n            and chunk.output.choices[0].message.content == \"\"\n        ):\n            print(chunk.output.choices[0].message.reasoning_content, end=\"\", flush=True)\n        elif chunk.output.choices[0].message.content != \"\":\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(chunk.output.choices[0].message.content, end=\"\", flush=True)",
+            "java": "import java.util.Arrays;\nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport io.reactivex.Flowable;\nimport java.lang.System;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    private static final Logger logger = LoggerFactory.getLogger(Main.class);\n    private static StringBuilder reasoningContent = new StringBuilder();\n    private static StringBuilder finalContent = new StringBuilder();\n    private static boolean isFirstPrint = true;\n\n    private static void handleGenerationResult(GenerationResult message) {\n        String reasoning = message.getOutput().getChoices().get(0).getMessage().getReasoningContent();\n        String content = message.getOutput().getChoices().get(0).getMessage().getContent();\n\n        if (!reasoning.isEmpty()) {\n            reasoningContent.append(reasoning);\n            if (isFirstPrint) {\n                System.out.println(\"====================思考过程====================\");\n                isFirstPrint = false;\n            }\n            System.out.print(reasoning);\n        }\n\n        if (!content.isEmpty()) {\n            finalContent.append(content);\n            if (!isFirstPrint) {\n                System.out.println(\"\\n====================完整回复====================\");\n                isFirstPrint = true;\n            }\n            System.out.print(content);\n        }\n    }\n    private static GenerationParam buildGenerationParam(Message userMsg) {\n        return GenerationParam.builder()\n                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"deepseek-r1\")\n                .incrementalOutput(true)\n                .resultFormat(\"message\")\n                .messages(Arrays.asList(userMsg))\n                .build();\n    }\n    public static void streamCallWithMessage(Generation gen, Message userMsg)\n            throws NoApiKeyException, ApiException, InputRequiredException {\n        GenerationParam param = buildGenerationParam(userMsg);\n        Flowable<GenerationResult> result = gen.streamCall(param);\n        result.blockingForEach(message -> handleGenerationResult(message));\n    }\n\n    public static void main(String[] args) {\n        try {\n            Generation gen = new Generation();\n            Message userMsg = Message.builder().role(Role.USER.getValue()).content(\"你是谁？\").build();\n            streamCallWithMessage(gen, userMsg);\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            logger.error(\"An exception occurred: {}\", e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "DeepSeek-R1-Distill-Qwen-32B是一个基于Qwen2.5-32B的蒸馏大型语言模型，使用了 DeepSeek R1 的输出。",
+      "features": ["model-experience"],
+      "provider": "deepseek",
+      "model": "deepseek-r1-distill-qwen-32b",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "6",
+          "type": "output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 250,
+          "usage_limit_period": 10,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 250,
+          "usage_limit_period": 10,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG"],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 16384,
+      "latestOnlineAt": "2025-02-05T11:57:01.000+00:00",
+      "contextWindow": 32768,
+      "maxInputTokens": 32768,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "DeepSeek-R1-Distill-Qwen-32B",
+      "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "max_tokens",
+          "key": "max_tokens",
+          "default": 4000,
+          "tip": "最终回答的最大长度（不含思维链输出）",
+          "range": [1, 8192]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "python": "from openai import OpenAI\nimport os\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"deepseek-r1-distill-qwen-32b\",\n    messages=messages,\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if chunk.choices:\n        delta = chunk.choices[0].delta\n        # 只收集思考内容\n        if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n            if not is_answering:\n                print(delta.reasoning_content, end=\"\", flush=True)\n        # 收到content，开始进行回复\n        if hasattr(delta, \"content\") and delta.content:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(delta.content, end=\"\", flush=True)",
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-r1-distill-qwen-32b\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化OpenAI客户端\nconst openai = new OpenAI({\n    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: \"sk-xxx\"\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = ''; // 完整思考过程\nlet answerContent = ''; // 完整回复\nlet isAnswering = false; // 是否进入回复阶段\n\nasync function main() {\n    const messages = [{ role: 'user', content: '你是谁' }];\n\n    const stream = await openai.chat.completions.create({\n        model: 'deepseek-r1-distill-qwen-32b',\n        messages,\n        stream: true,\n    });\n\n    console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');\n\n    for await (const chunk of stream) {\n        if (chunk.choices?.length) {\n            const delta = chunk.choices[0].delta;\n            // 只收集思考内容\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n                reasoningContent += delta.reasoning_content;\n            }\n\n            // 收到content，开始进行回复\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    }\n}\n\nmain();"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-r1-distill-qwen-32b\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = \"https://dashscope.aliyuncs.com/api/v1/\"\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁？\"}]\n\ncompletion = Generation.call(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"deepseek-r1-distill-qwen-32b\",\n    messages=messages,\n    result_format=\"message\", \n    stream=True,\n    incremental_output=True, \n)\n\nis_answering = False\n\nprint(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n\nfor chunk in completion:\n    if (\n        chunk.output.choices[0].message.content == \"\"\n        and chunk.output.choices[0].message.reasoning_content == \"\"\n    ):\n        pass\n    else:\n        if (\n            chunk.output.choices[0].message.reasoning_content != \"\"\n            and chunk.output.choices[0].message.content == \"\"\n        ):\n            print(chunk.output.choices[0].message.reasoning_content, end=\"\", flush=True)\n        elif chunk.output.choices[0].message.content != \"\":\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(chunk.output.choices[0].message.content, end=\"\", flush=True)",
+            "java": "import java.util.Arrays;\nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport io.reactivex.Flowable;\nimport java.lang.System;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    private static final Logger logger = LoggerFactory.getLogger(Main.class);\n    private static StringBuilder reasoningContent = new StringBuilder();\n    private static StringBuilder finalContent = new StringBuilder();\n    private static boolean isFirstPrint = true;\n\n    private static void handleGenerationResult(GenerationResult message) {\n        String reasoning = message.getOutput().getChoices().get(0).getMessage().getReasoningContent();\n        String content = message.getOutput().getChoices().get(0).getMessage().getContent();\n\n        if (!reasoning.isEmpty()) {\n            reasoningContent.append(reasoning);\n            if (isFirstPrint) {\n                System.out.println(\"====================思考过程====================\");\n                isFirstPrint = false;\n            }\n            System.out.print(reasoning);\n        }\n\n        if (!content.isEmpty()) {\n            finalContent.append(content);\n            if (!isFirstPrint) {\n                System.out.println(\"\\n====================完整回复====================\");\n                isFirstPrint = true;\n            }\n            System.out.print(content);\n        }\n    }\n    private static GenerationParam buildGenerationParam(Message userMsg) {\n        return GenerationParam.builder()\n                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"deepseek-r1-distill-qwen-32b\")\n                .incrementalOutput(true)\n                .resultFormat(\"message\")\n                .messages(Arrays.asList(userMsg))\n                .build();\n    }\n    public static void streamCallWithMessage(Generation gen, Message userMsg)\n            throws NoApiKeyException, ApiException, InputRequiredException {\n        GenerationParam param = buildGenerationParam(userMsg);\n        Flowable<GenerationResult> result = gen.streamCall(param);\n        result.blockingForEach(message -> handleGenerationResult(message));\n    }\n\n    public static void main(String[] args) {\n        try {\n            Generation gen = new Generation();\n            Message userMsg = Message.builder().role(Role.USER.getValue()).content(\"你是谁？\").build();\n            streamCallWithMessage(gen, userMsg);\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            logger.error(\"An exception occurred: {}\", e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "DeepSeek-R1-Distill-Qwen-14B是一个基于Qwen2.5-14B的蒸馏大型语言模型，使用了 DeepSeek R1 的输出。",
+      "features": ["model-experience"],
+      "provider": "deepseek",
+      "model": "deepseek-r1-distill-qwen-14b",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "3",
+          "type": "output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 250,
+          "usage_limit_period": 10,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 250,
+          "usage_limit_period": 10,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG"],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 16384,
+      "latestOnlineAt": "2025-02-05T11:57:01.000+00:00",
+      "contextWindow": 32768,
+      "maxInputTokens": 32768,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "DeepSeek-R1-Distill-Qwen-14B",
+      "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "max_tokens",
+          "key": "max_tokens",
+          "default": 4000,
+          "tip": "最终回答的最大长度（不含思维链输出）",
+          "range": [1, 8192]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "python": "from openai import OpenAI\nimport os\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"deepseek-r1-distill-qwen-14b\",\n    messages=messages,\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if chunk.choices:\n        delta = chunk.choices[0].delta\n        # 只收集思考内容\n        if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n            if not is_answering:\n                print(delta.reasoning_content, end=\"\", flush=True)\n        # 收到content，开始进行回复\n        if hasattr(delta, \"content\") and delta.content:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(delta.content, end=\"\", flush=True)",
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-r1-distill-qwen-14b\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化OpenAI客户端\nconst openai = new OpenAI({\n    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: \"sk-xxx\"\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = ''; // 完整思考过程\nlet answerContent = ''; // 完整回复\nlet isAnswering = false; // 是否进入回复阶段\n\nasync function main() {\n    const messages = [{ role: 'user', content: '你是谁' }];\n\n    const stream = await openai.chat.completions.create({\n        model: 'deepseek-r1-distill-qwen-14b',\n        messages,\n        stream: true,\n    });\n\n    console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');\n\n    for await (const chunk of stream) {\n        if (chunk.choices?.length) {\n            const delta = chunk.choices[0].delta;\n            // 只收集思考内容\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n                reasoningContent += delta.reasoning_content;\n            }\n\n            // 收到content，开始进行回复\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    }\n}\n\nmain();"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-r1-distill-qwen-14b\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = \"https://dashscope.aliyuncs.com/api/v1/\"\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁？\"}]\n\ncompletion = Generation.call(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"deepseek-r1-distill-qwen-14b\",\n    messages=messages,\n    result_format=\"message\", \n    stream=True,\n    incremental_output=True, \n)\n\nis_answering = False\n\nprint(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n\nfor chunk in completion:\n    if (\n        chunk.output.choices[0].message.content == \"\"\n        and chunk.output.choices[0].message.reasoning_content == \"\"\n    ):\n        pass\n    else:\n        if (\n            chunk.output.choices[0].message.reasoning_content != \"\"\n            and chunk.output.choices[0].message.content == \"\"\n        ):\n            print(chunk.output.choices[0].message.reasoning_content, end=\"\", flush=True)\n        elif chunk.output.choices[0].message.content != \"\":\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(chunk.output.choices[0].message.content, end=\"\", flush=True)",
+            "java": "import java.util.Arrays;\nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport io.reactivex.Flowable;\nimport java.lang.System;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    private static final Logger logger = LoggerFactory.getLogger(Main.class);\n    private static StringBuilder reasoningContent = new StringBuilder();\n    private static StringBuilder finalContent = new StringBuilder();\n    private static boolean isFirstPrint = true;\n\n    private static void handleGenerationResult(GenerationResult message) {\n        String reasoning = message.getOutput().getChoices().get(0).getMessage().getReasoningContent();\n        String content = message.getOutput().getChoices().get(0).getMessage().getContent();\n\n        if (!reasoning.isEmpty()) {\n            reasoningContent.append(reasoning);\n            if (isFirstPrint) {\n                System.out.println(\"====================思考过程====================\");\n                isFirstPrint = false;\n            }\n            System.out.print(reasoning);\n        }\n\n        if (!content.isEmpty()) {\n            finalContent.append(content);\n            if (!isFirstPrint) {\n                System.out.println(\"\\n====================完整回复====================\");\n                isFirstPrint = true;\n            }\n            System.out.print(content);\n        }\n    }\n    private static GenerationParam buildGenerationParam(Message userMsg) {\n        return GenerationParam.builder()\n                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"deepseek-r1-distill-qwen-14b\")\n                .incrementalOutput(true)\n                .resultFormat(\"message\")\n                .messages(Arrays.asList(userMsg))\n                .build();\n    }\n    public static void streamCallWithMessage(Generation gen, Message userMsg)\n            throws NoApiKeyException, ApiException, InputRequiredException {\n        GenerationParam param = buildGenerationParam(userMsg);\n        Flowable<GenerationResult> result = gen.streamCall(param);\n        result.blockingForEach(message -> handleGenerationResult(message));\n    }\n\n    public static void main(String[] args) {\n        try {\n            Generation gen = new Generation();\n            Message userMsg = Message.builder().role(Role.USER.getValue()).content(\"你是谁？\").build();\n            streamCallWithMessage(gen, userMsg);\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            logger.error(\"An exception occurred: {}\", e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "DeepSeek-R1-Distill-Qwen-7B是一个基于Qwen2.5-Math-7B的蒸馏大型语言模型，使用了 DeepSeek R1 的输出。",
+      "features": ["model-experience"],
+      "provider": "deepseek",
+      "model": "deepseek-r1-distill-qwen-7b",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.5",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1",
+          "type": "output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 250,
+          "usage_limit_period": 10,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 250,
+          "usage_limit_period": 10,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG"],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 16384,
+      "latestOnlineAt": "2025-02-05T11:57:01.000+00:00",
+      "contextWindow": 32768,
+      "maxInputTokens": 32768,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "DeepSeek-R1-Distill-Qwen-7B",
+      "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "max_tokens",
+          "key": "max_tokens",
+          "default": 4000,
+          "tip": "最终回答的最大长度（不含思维链输出）",
+          "range": [1, 8192]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "python": "from openai import OpenAI\nimport os\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"deepseek-r1-distill-qwen-7b\",\n    messages=messages,\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if chunk.choices:\n        delta = chunk.choices[0].delta\n        # 只收集思考内容\n        if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n            if not is_answering:\n                print(delta.reasoning_content, end=\"\", flush=True)\n        # 收到content，开始进行回复\n        if hasattr(delta, \"content\") and delta.content:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(delta.content, end=\"\", flush=True)",
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-r1-distill-qwen-7b\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化OpenAI客户端\nconst openai = new OpenAI({\n    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: \"sk-xxx\"\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = ''; // 完整思考过程\nlet answerContent = ''; // 完整回复\nlet isAnswering = false; // 是否进入回复阶段\n\nasync function main() {\n    const messages = [{ role: 'user', content: '你是谁' }];\n\n    const stream = await openai.chat.completions.create({\n        model: 'deepseek-r1-distill-qwen-7b',\n        messages,\n        stream: true,\n    });\n\n    console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');\n\n    for await (const chunk of stream) {\n        if (chunk.choices?.length) {\n            const delta = chunk.choices[0].delta;\n            // 只收集思考内容\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n                reasoningContent += delta.reasoning_content;\n            }\n\n            // 收到content，开始进行回复\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    }\n}\n\nmain();"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-r1-distill-qwen-7b\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = \"https://dashscope.aliyuncs.com/api/v1/\"\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁？\"}]\n\ncompletion = Generation.call(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"deepseek-r1-distill-qwen-7b\",\n    messages=messages,\n    result_format=\"message\", \n    stream=True,\n    incremental_output=True, \n)\n\nis_answering = False\n\nprint(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n\nfor chunk in completion:\n    if (\n        chunk.output.choices[0].message.content == \"\"\n        and chunk.output.choices[0].message.reasoning_content == \"\"\n    ):\n        pass\n    else:\n        if (\n            chunk.output.choices[0].message.reasoning_content != \"\"\n            and chunk.output.choices[0].message.content == \"\"\n        ):\n            print(chunk.output.choices[0].message.reasoning_content, end=\"\", flush=True)\n        elif chunk.output.choices[0].message.content != \"\":\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(chunk.output.choices[0].message.content, end=\"\", flush=True)",
+            "java": "import java.util.Arrays;\nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport io.reactivex.Flowable;\nimport java.lang.System;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    private static final Logger logger = LoggerFactory.getLogger(Main.class);\n    private static StringBuilder reasoningContent = new StringBuilder();\n    private static StringBuilder finalContent = new StringBuilder();\n    private static boolean isFirstPrint = true;\n\n    private static void handleGenerationResult(GenerationResult message) {\n        String reasoning = message.getOutput().getChoices().get(0).getMessage().getReasoningContent();\n        String content = message.getOutput().getChoices().get(0).getMessage().getContent();\n\n        if (!reasoning.isEmpty()) {\n            reasoningContent.append(reasoning);\n            if (isFirstPrint) {\n                System.out.println(\"====================思考过程====================\");\n                isFirstPrint = false;\n            }\n            System.out.print(reasoning);\n        }\n\n        if (!content.isEmpty()) {\n            finalContent.append(content);\n            if (!isFirstPrint) {\n                System.out.println(\"\\n====================完整回复====================\");\n                isFirstPrint = true;\n            }\n            System.out.print(content);\n        }\n    }\n    private static GenerationParam buildGenerationParam(Message userMsg) {\n        return GenerationParam.builder()\n                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"deepseek-r1-distill-qwen-7b\")\n                .incrementalOutput(true)\n                .resultFormat(\"message\")\n                .messages(Arrays.asList(userMsg))\n                .build();\n    }\n    public static void streamCallWithMessage(Generation gen, Message userMsg)\n            throws NoApiKeyException, ApiException, InputRequiredException {\n        GenerationParam param = buildGenerationParam(userMsg);\n        Flowable<GenerationResult> result = gen.streamCall(param);\n        result.blockingForEach(message -> handleGenerationResult(message));\n    }\n\n    public static void main(String[] args) {\n        try {\n            Generation gen = new Generation();\n            Message userMsg = Message.builder().role(Role.USER.getValue()).content(\"你是谁？\").build();\n            streamCallWithMessage(gen, userMsg);\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            logger.error(\"An exception occurred: {}\", e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "DeepSeek-R1-Distill-Qwen-1.5B是一个基于Qwen2.5-Math-1.5B的蒸馏大型语言模型，使用了 DeepSeek R1 的输出。",
+      "features": ["model-experience"],
+      "provider": "deepseek",
+      "model": "deepseek-r1-distill-qwen-1.5b",
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG"],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 16384,
+      "latestOnlineAt": "2025-02-05T11:57:01.000+00:00",
+      "contextWindow": 32768,
+      "maxInputTokens": 32768,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "DeepSeek-R1-Distill-Qwen-1.5B",
+      "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "max_tokens",
+          "key": "max_tokens",
+          "default": 4000,
+          "tip": "最终回答的最大长度（不含思维链输出）",
+          "range": [1, 8192]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "python": "from openai import OpenAI\nimport os\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"deepseek-r1-distill-qwen-1.5b\",\n    messages=messages,\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if chunk.choices:\n        delta = chunk.choices[0].delta\n        # 只收集思考内容\n        if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n            if not is_answering:\n                print(delta.reasoning_content, end=\"\", flush=True)\n        # 收到content，开始进行回复\n        if hasattr(delta, \"content\") and delta.content:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(delta.content, end=\"\", flush=True)",
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-r1-distill-qwen-1.5b\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化OpenAI客户端\nconst openai = new OpenAI({\n    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: \"sk-xxx\"\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = ''; // 完整思考过程\nlet answerContent = ''; // 完整回复\nlet isAnswering = false; // 是否进入回复阶段\n\nasync function main() {\n    const messages = [{ role: 'user', content: '你是谁' }];\n\n    const stream = await openai.chat.completions.create({\n        model: 'deepseek-r1-distill-qwen-1.5b',\n        messages,\n        stream: true,\n    });\n\n    console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');\n\n    for await (const chunk of stream) {\n        if (chunk.choices?.length) {\n            const delta = chunk.choices[0].delta;\n            // 只收集思考内容\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n                reasoningContent += delta.reasoning_content;\n            }\n\n            // 收到content，开始进行回复\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    }\n}\n\nmain();"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"deepseek-r1-distill-qwen-1.5b\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = \"https://dashscope.aliyuncs.com/api/v1/\"\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁？\"}]\n\ncompletion = Generation.call(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"deepseek-r1-distill-qwen-1.5b\",\n    messages=messages,\n    result_format=\"message\", \n    stream=True,\n    incremental_output=True, \n)\n\nis_answering = False\n\nprint(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n\nfor chunk in completion:\n    if (\n        chunk.output.choices[0].message.content == \"\"\n        and chunk.output.choices[0].message.reasoning_content == \"\"\n    ):\n        pass\n    else:\n        if (\n            chunk.output.choices[0].message.reasoning_content != \"\"\n            and chunk.output.choices[0].message.content == \"\"\n        ):\n            print(chunk.output.choices[0].message.reasoning_content, end=\"\", flush=True)\n        elif chunk.output.choices[0].message.content != \"\":\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(chunk.output.choices[0].message.content, end=\"\", flush=True)",
+            "java": "import java.util.Arrays;\nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport io.reactivex.Flowable;\nimport java.lang.System;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    private static final Logger logger = LoggerFactory.getLogger(Main.class);\n    private static StringBuilder reasoningContent = new StringBuilder();\n    private static StringBuilder finalContent = new StringBuilder();\n    private static boolean isFirstPrint = true;\n\n    private static void handleGenerationResult(GenerationResult message) {\n        String reasoning = message.getOutput().getChoices().get(0).getMessage().getReasoningContent();\n        String content = message.getOutput().getChoices().get(0).getMessage().getContent();\n\n        if (!reasoning.isEmpty()) {\n            reasoningContent.append(reasoning);\n            if (isFirstPrint) {\n                System.out.println(\"====================思考过程====================\");\n                isFirstPrint = false;\n            }\n            System.out.print(reasoning);\n        }\n\n        if (!content.isEmpty()) {\n            finalContent.append(content);\n            if (!isFirstPrint) {\n                System.out.println(\"\\n====================完整回复====================\");\n                isFirstPrint = true;\n            }\n            System.out.print(content);\n        }\n    }\n    private static GenerationParam buildGenerationParam(Message userMsg) {\n        return GenerationParam.builder()\n                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"deepseek-r1-distill-qwen-1.5b\")\n                .incrementalOutput(true)\n                .resultFormat(\"message\")\n                .messages(Arrays.asList(userMsg))\n                .build();\n    }\n    public static void streamCallWithMessage(Generation gen, Message userMsg)\n            throws NoApiKeyException, ApiException, InputRequiredException {\n        GenerationParam param = buildGenerationParam(userMsg);\n        Flowable<GenerationResult> result = gen.streamCall(param);\n        result.blockingForEach(message -> handleGenerationResult(message));\n    }\n\n    public static void main(String[] args) {\n        try {\n            Generation gen = new Generation();\n            Message userMsg = Message.builder().role(Role.USER.getValue()).content(\"你是谁？\").build();\n            streamCallWithMessage(gen, userMsg);\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            logger.error(\"An exception occurred: {}\", e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

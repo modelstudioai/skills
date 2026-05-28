@@ -1,0 +1,180 @@
+{
+  "name": "MiniMax",
+  "description": "MiniMax推出的旗舰级开源大模型，聚焦真实世界复杂任务，包含MiniMax-M2.1、MiniMax-M2.5等开源模型。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "MiniMax-M2.5是MiniMax推出的旗舰级开源大模型，经过数十万个真实复杂环境中的大规模强化学习训练，M2.5 在编程、工具调用和搜索、办公等生产力场景都达到或者刷新了行业的 SOTA。",
+      "features": ["model-experience", "function-calling", "cache"],
+      "provider": "mini-max",
+      "model": "MiniMax-M2.5",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2.1",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "8.4",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.42",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["Reasoning", "TG"],
+      "modelAlias": "",
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 131072,
+      "latestOnlineAt": "2026-02-24T15:07:02.000+00:00",
+      "contextWindow": 204800,
+      "maxInputTokens": 196608,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "MiniMax-M2.5",
+      "docUrl": "https://help.aliyun.com/document_detail/3017140.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "python": "from openai import OpenAI\nimport os\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"MiniMax-M2.5\",\n    messages=messages,\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if chunk.choices:\n        delta = chunk.choices[0].delta\n        # 只收集思考内容\n        if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n            if not is_answering:\n                print(delta.reasoning_content, end=\"\", flush=True)\n        # 收到content，开始进行回复\n        if hasattr(delta, \"content\") and delta.content:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(delta.content, end=\"\", flush=True)",
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"MiniMax-M2.5\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化OpenAI客户端\nconst openai = new OpenAI({\n    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: \"sk-xxx\"\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = ''; // 完整思考过程\nlet answerContent = ''; // 完整回复\nlet isAnswering = false; // 是否进入回复阶段\n\nasync function main() {\n    const messages = [{ role: 'user', content: '你是谁' }];\n\n    const stream = await openai.chat.completions.create({\n        model: 'MiniMax-M2.5',\n        messages,\n        stream: true,\n    });\n\n    console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');\n\n    for await (const chunk of stream) {\n        if (chunk.choices?.length) {\n            const delta = chunk.choices[0].delta;\n            // 只收集思考内容\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n                reasoningContent += delta.reasoning_content;\n            }\n\n            // 收到content，开始进行回复\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    }\n}\n\nmain();"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"MiniMax-M2.5\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = \"https://dashscope.aliyuncs.com/api/v1/\"\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁？\"}]\n\ncompletion = Generation.call(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"MiniMax-M2.5\",\n    messages=messages,\n    result_format=\"message\", \n    stream=True,\n    incremental_output=True, \n)\n\nis_answering = False\n\nprint(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n\nfor chunk in completion:\n    if (\n        chunk.output.choices[0].message.content == \"\"\n        and chunk.output.choices[0].message.reasoning_content == \"\"\n    ):\n        pass\n    else:\n        if (\n            chunk.output.choices[0].message.reasoning_content != \"\"\n            and chunk.output.choices[0].message.content == \"\"\n        ):\n            print(chunk.output.choices[0].message.reasoning_content, end=\"\", flush=True)\n        elif chunk.output.choices[0].message.content != \"\":\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(chunk.output.choices[0].message.content, end=\"\", flush=True)",
+            "java": "import java.util.Arrays;\nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport io.reactivex.Flowable;\nimport java.lang.System;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    private static final Logger logger = LoggerFactory.getLogger(Main.class);\n    private static StringBuilder reasoningContent = new StringBuilder();\n    private static StringBuilder finalContent = new StringBuilder();\n    private static boolean isFirstPrint = true;\n\n    private static void handleGenerationResult(GenerationResult message) {\n        String reasoning = message.getOutput().getChoices().get(0).getMessage().getReasoningContent();\n        String content = message.getOutput().getChoices().get(0).getMessage().getContent();\n\n        if (!reasoning.isEmpty()) {\n            reasoningContent.append(reasoning);\n            if (isFirstPrint) {\n                System.out.println(\"====================思考过程====================\");\n                isFirstPrint = false;\n            }\n            System.out.print(reasoning);\n        }\n\n        if (!content.isEmpty()) {\n            finalContent.append(content);\n            if (!isFirstPrint) {\n                System.out.println(\"\\n====================完整回复====================\");\n                isFirstPrint = true;\n            }\n            System.out.print(content);\n        }\n    }\n    private static GenerationParam buildGenerationParam(Message userMsg) {\n        return GenerationParam.builder()\n                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"MiniMax-M2.5\")\n                .incrementalOutput(true)\n                .resultFormat(\"message\")\n                .messages(Arrays.asList(userMsg))\n                .build();\n    }\n    public static void streamCallWithMessage(Generation gen, Message userMsg)\n            throws NoApiKeyException, ApiException, InputRequiredException {\n        GenerationParam param = buildGenerationParam(userMsg);\n        Flowable<GenerationResult> result = gen.streamCall(param);\n        result.blockingForEach(message -> handleGenerationResult(message));\n    }\n\n    public static void main(String[] args) {\n        try {\n            Generation gen = new Generation();\n            Message userMsg = Message.builder().role(Role.USER.getValue()).content(\"你是谁？\").build();\n            streamCallWithMessage(gen, userMsg);\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            logger.error(\"An exception occurred: {}\", e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "MiniMax-M2.1是MiniMax推出的旗舰级开源大模型，聚焦真实世界复杂任务，以多语言编程与长链 Agent 能力为核心优势。",
+      "features": ["model-experience", "function-calling", "cache"],
+      "provider": "mini-max",
+      "model": "MiniMax-M2.1",
+      "iconUrl": "https://img.alicdn.com/imgextra/i1/O1CN01EFGi131NqT95FPDqc_!!6000000001621-2-tps-56-56.png",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2.1",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "8.4",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.42",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "capabilities": ["Reasoning", "TG"],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 32768,
+      "latestOnlineAt": "2026-01-23T07:47:49.000+00:00",
+      "contextWindow": 204800,
+      "maxInputTokens": 172032,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "MiniMax-M2.1",
+      "docUrl": "https://help.aliyun.com/document_detail/3017140.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "python": "from openai import OpenAI\nimport os\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"MiniMax-M2.1\",\n    messages=messages,\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if chunk.choices:\n        delta = chunk.choices[0].delta\n        # 只收集思考内容\n        if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n            if not is_answering:\n                print(delta.reasoning_content, end=\"\", flush=True)\n        # 收到content，开始进行回复\n        if hasattr(delta, \"content\") and delta.content:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(delta.content, end=\"\", flush=True)",
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"MiniMax-M2.1\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化OpenAI客户端\nconst openai = new OpenAI({\n    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: \"sk-xxx\"\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = ''; // 完整思考过程\nlet answerContent = ''; // 完整回复\nlet isAnswering = false; // 是否进入回复阶段\n\nasync function main() {\n    const messages = [{ role: 'user', content: '你是谁' }];\n\n    const stream = await openai.chat.completions.create({\n        model: 'MiniMax-M2.1',\n        messages,\n        stream: true,\n    });\n\n    console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');\n\n    for await (const chunk of stream) {\n        if (chunk.choices?.length) {\n            const delta = chunk.choices[0].delta;\n            // 只收集思考内容\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n                reasoningContent += delta.reasoning_content;\n            }\n\n            // 收到content，开始进行回复\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    }\n}\n\nmain();"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"MiniMax-M2.1\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = \"https://dashscope.aliyuncs.com/api/v1/\"\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁？\"}]\n\ncompletion = Generation.call(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"MiniMax-M2.1\",\n    messages=messages,\n    result_format=\"message\", \n    stream=True,\n    incremental_output=True, \n)\n\nis_answering = False\n\nprint(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n\nfor chunk in completion:\n    if (\n        chunk.output.choices[0].message.content == \"\"\n        and chunk.output.choices[0].message.reasoning_content == \"\"\n    ):\n        pass\n    else:\n        if (\n            chunk.output.choices[0].message.reasoning_content != \"\"\n            and chunk.output.choices[0].message.content == \"\"\n        ):\n            print(chunk.output.choices[0].message.reasoning_content, end=\"\", flush=True)\n        elif chunk.output.choices[0].message.content != \"\":\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(chunk.output.choices[0].message.content, end=\"\", flush=True)",
+            "java": "import java.util.Arrays;\nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport io.reactivex.Flowable;\nimport java.lang.System;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    private static final Logger logger = LoggerFactory.getLogger(Main.class);\n    private static StringBuilder reasoningContent = new StringBuilder();\n    private static StringBuilder finalContent = new StringBuilder();\n    private static boolean isFirstPrint = true;\n\n    private static void handleGenerationResult(GenerationResult message) {\n        String reasoning = message.getOutput().getChoices().get(0).getMessage().getReasoningContent();\n        String content = message.getOutput().getChoices().get(0).getMessage().getContent();\n\n        if (!reasoning.isEmpty()) {\n            reasoningContent.append(reasoning);\n            if (isFirstPrint) {\n                System.out.println(\"====================思考过程====================\");\n                isFirstPrint = false;\n            }\n            System.out.print(reasoning);\n        }\n\n        if (!content.isEmpty()) {\n            finalContent.append(content);\n            if (!isFirstPrint) {\n                System.out.println(\"\\n====================完整回复====================\");\n                isFirstPrint = true;\n            }\n            System.out.print(content);\n        }\n    }\n    private static GenerationParam buildGenerationParam(Message userMsg) {\n        return GenerationParam.builder()\n                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"MiniMax-M2.1\")\n                .incrementalOutput(true)\n                .resultFormat(\"message\")\n                .messages(Arrays.asList(userMsg))\n                .build();\n    }\n    public static void streamCallWithMessage(Generation gen, Message userMsg)\n            throws NoApiKeyException, ApiException, InputRequiredException {\n        GenerationParam param = buildGenerationParam(userMsg);\n        Flowable<GenerationResult> result = gen.streamCall(param);\n        result.blockingForEach(message -> handleGenerationResult(message));\n    }\n\n    public static void main(String[] args) {\n        try {\n            Generation gen = new Generation();\n            Message userMsg = Message.builder().role(Role.USER.getValue()).content(\"你是谁？\").build();\n            streamCallWithMessage(gen, userMsg);\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            logger.error(\"An exception occurred: {}\", e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

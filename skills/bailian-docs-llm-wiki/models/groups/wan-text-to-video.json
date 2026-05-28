@@ -1,0 +1,549 @@
+{
+  "name": "Wan-T2V",
+  "description": "文字生成视频内容，丝滑动态能力，电影美学控制，精准指令遵循",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Audio", "Text"]
+      },
+      "openSource": false,
+      "description": "Wan2.7-T2V，演绎能力全面升级，文戏情感细腻自然，动作戏激烈拳拳到肉，搭配更富有戏剧性和节奏感的镜头切换，实现更强表演能力。",
+      "collectionTag": "wan2.7",
+      "features": ["model-experience"],
+      "provider": "wan",
+      "model": "wan2.7-t2v",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.6",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["VG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-04-03T03:21:57.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.7-T2V",
+      "docUrl": "https://help.aliyun.com/document_detail/2865250.html",
+      "predictConfig": [
+        {
+          "name": "清晰度",
+          "key": "resolution",
+          "default": "1080P"
+        },
+        {
+          "name": "宽高比",
+          "key": "ratio",
+          "default": "16:9"
+        },
+        {
+          "name": "视频时长(秒)",
+          "key": "duration",
+          "default": 5,
+          "range": [2, 15]
+        },
+        {
+          "name": "随机种子",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": true,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"wan2.7-t2v\",\n    \"input\": {\n        \"prompt\": \"一段紧张刺激的侦探追查故事，展现电影级叙事能力。第1个镜头[0-3秒] 全景：雨夜的纽约街头，霓虹灯闪烁，一位身穿黑色风衣的侦探快步行走。 第2个镜头[3-6秒] 中景：侦探进入一栋老旧建筑，雨水打湿了他的外套，门在他身后缓缓关闭。 第3个镜头[6-9秒] 特写：侦探的眼神坚毅专注，远处传来警笛声，他微微皱眉思考。 第4个镜头[9-12秒] 中景：侦探在昏暗走廊中小心前行，手电筒照亮前方。 第5个镜头[12-15秒] 特写：侦探发现关键线索，脸上露出恍然大悟的表情。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"ratio\": \"16:9\",\n        \"prompt_extend\": true,\n        \"watermark\": true,\n        \"duration\": 15\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/2865250.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video", "Audio"],
+        "request_modality": ["Text", "Audio"]
+      },
+      "openSource": false,
+      "description": "万相2.6-文生视频，智能分镜调度支持多镜头叙事，能够生成主体、场景和氛围一致的多镜头叙事视频，最高支持15秒时长，更高品质的声音生成，更好的指令遵循和视觉质量",
+      "collectionTag": "wan2.6",
+      "features": ["model-experience"],
+      "provider": "wan",
+      "model": "wan2.6-t2v",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.6",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.6",
+          "discount": 0.5,
+          "type": "720P_batch",
+          "priceName": "视频生成（720P Batch Chat）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1",
+          "discount": 0.5,
+          "type": "1080P_batch",
+          "priceName": "视频生成（1080P Batch Chat）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["VG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-12-03T13:03:19.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.6-T2V",
+      "docUrl": "https://help.aliyun.com/document_detail/2865250.html",
+      "predictConfig": [
+        {
+          "name": "分辨率",
+          "key": "size",
+          "default": "1920*1080"
+        },
+        {
+          "name": "视频时长",
+          "key": "duration",
+          "default": 5
+        },
+        {
+          "name": "随机种子",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": true,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        },
+        {
+          "name": "智能多镜",
+          "key": "shot_type",
+          "default": "single",
+          "tip": "开启后输出视频采用多分镜形式呈现"
+        },
+        {
+          "name": "生成音频",
+          "key": "audio",
+          "default": true
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"wan2.6-t2v\",\n    \"input\": {\n        \"prompt\": \"一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说：”青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。“。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是“可爱”与“霸气”的搞笑和史诗般的融合。\"\n    },\n    \"parameters\": {\n        \"size\": \"1280*720\",\n        \"prompt_extend\": true,\n        \"duration\": 10,\n        \"audio\": true,\n        \"shot_type\":\"multi\"\n    }\n}'\n\ncurl --location --request GET 'https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\"\n"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video", "Audio"],
+        "request_modality": ["Text", "Audio"]
+      },
+      "openSource": false,
+      "description": "万相2.5-文生视频-Preview，全新升级模型架构，支持与画面同步的声音生成，支持10秒长视频生成，更强的指令遵循能力，运动能力、画面质感进一步提升。",
+      "collectionTag": "wan2.5",
+      "features": ["model-experience"],
+      "provider": "wan",
+      "model": "wan2.5-t2v-preview",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.3",
+          "type": "video_ratio_480p",
+          "priceName": "视频生成（480P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.6",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["VG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-09-19T06:10:15.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.5-T2V-Preview",
+      "docUrl": "https://help.aliyun.com/document_detail/2865250.html",
+      "predictConfig": [
+        {
+          "name": "分辨率",
+          "key": "size",
+          "default": "1920*1080"
+        },
+        {
+          "name": "视频时长",
+          "key": "duration",
+          "default": 5
+        },
+        {
+          "name": "随机种子",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": true,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        },
+        {
+          "name": "生成音频",
+          "key": "audio",
+          "default": true
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom dashscope import VideoSynthesis\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\ndef sample_sync_call_t2v():\n    # call sync api, will return the result\n    print('please wait...')\n    rsp = VideoSynthesis.call(model='wan2.5-t2v-preview',\n                              prompt='一只小猫在月光下奔跑',\n                              size='1280*720')\n    print(rsp)\n    if rsp.status_code == HTTPStatus.OK:\n        print(rsp.output.video_url)\n    else:\n        print('Failed, status_code: %s, code: %s, message: %s' %\n              (rsp.status_code, rsp.code, rsp.message))\n\n\nif __name__ == '__main__':\n    sample_sync_call_t2v()"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "全新升级的万相2.2文生视频，视频品质更高。可稳定生成大幅度复杂运动，支持影视级画面表现与控制，更强大的指令遵循能力，实现物理世界还原。",
+      "collectionTag": "wan2.2",
+      "features": [],
+      "provider": "wan",
+      "model": "wan2.2-t2v-plus",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.14",
+          "type": "video_ratio_480p",
+          "priceName": "视频生成（480P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.7",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        }
+      },
+      "capabilities": ["VG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-07-27T16:00:00.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.2-T2V-Plus",
+      "docUrl": "https://help.aliyun.com/document_detail/2865250.html",
+      "predictConfig": [
+        {
+          "name": "分辨率",
+          "key": "size",
+          "default": "1920*1080"
+        },
+        {
+          "name": "视频时长",
+          "key": "duration",
+          "default": 5
+        },
+        {
+          "name": "随机种子",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": true,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom dashscope import VideoSynthesis\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\ndef sample_sync_call_t2v():\n    # call sync api, will return the result\n    print('please wait...')\n    rsp = VideoSynthesis.call(model='wan2.2-t2v-plus',\n                              prompt='一只小猫在月光下奔跑',\n                              size='1280*720')\n    print(rsp)\n    if rsp.status_code == HTTPStatus.OK:\n        print(rsp.output.video_url)\n    else:\n        print('Failed, status_code: %s, code: %s, message: %s' %\n              (rsp.status_code, rsp.code, rsp.message))\n\n\nif __name__ == '__main__':\n    sample_sync_call_t2v()"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "万相2.1-文生视频-Plus，一句话生成视频。视频品质更高，支持大幅度复杂运动、现实物理规律还原、丰富艺术风格和影视级画面质感，指令遵循能力进一步提升。",
+      "features": [],
+      "provider": "wan",
+      "model": "wanx2.1-t2v-plus",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.7",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        }
+      },
+      "capabilities": ["VG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-01-08T16:13:12.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.1-T2V-Plus",
+      "docUrl": "https://help.aliyun.com/document_detail/2865250.html",
+      "predictConfig": [
+        {
+          "name": "分辨率",
+          "key": "size",
+          "default": "1280*720"
+        },
+        {
+          "name": "视频时长",
+          "key": "duration",
+          "default": 5
+        },
+        {
+          "name": "随机种子",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": true,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom dashscope import VideoSynthesis\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\ndef sample_sync_call_t2v():\n    # call sync api, will return the result\n    print('please wait...')\n    rsp = VideoSynthesis.call(model='wanx2.1-t2v-plus',\n                              prompt='一只小猫在月光下奔跑',\n                              size='1280*720')\n    print(rsp)\n    if rsp.status_code == HTTPStatus.OK:\n        print(rsp.output.video_url)\n    else:\n        print('Failed, status_code: %s, code: %s, message: %s' %\n              (rsp.status_code, rsp.code, rsp.message))\n\n\nif __name__ == '__main__':\n    sample_sync_call_t2v()"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "万相2.1-文生视频-Turbo，一句话生成视频。生成速度更快，支持大幅度复杂运动、现实物理规律还原、丰富的艺术风格和影视级画面质感，指令遵循能力进一步提升。",
+      "features": [],
+      "provider": "wan",
+      "model": "wanx2.1-t2v-turbo",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.24",
+          "type": "video_ratio_480p",
+          "priceName": "视频生成（480P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.24",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        }
+      },
+      "capabilities": ["VG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-01-08T16:12:34.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.1-T2V-Turbo",
+      "docUrl": "https://help.aliyun.com/document_detail/2865250.html",
+      "predictConfig": [
+        {
+          "name": "分辨率",
+          "key": "size",
+          "default": "1280*720"
+        },
+        {
+          "name": "视频时长",
+          "key": "duration",
+          "default": 5
+        },
+        {
+          "name": "随机种子",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": true,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom dashscope import VideoSynthesis\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\ndef sample_sync_call_t2v():\n    # call sync api, will return the result\n    print('please wait...')\n    rsp = VideoSynthesis.call(model='wanx2.1-t2v-turbo',\n                              prompt='一只小猫在月光下奔跑',\n                              size='1280*720')\n    print(rsp)\n    if rsp.status_code == HTTPStatus.OK:\n        print(rsp.output.video_url)\n    else:\n        print('Failed, status_code: %s, code: %s, message: %s' %\n              (rsp.status_code, rsp.code, rsp.message))\n\n\nif __name__ == '__main__':\n    sample_sync_call_t2v()"
+          }
+        }
+      }
+    }
+  ]
+}

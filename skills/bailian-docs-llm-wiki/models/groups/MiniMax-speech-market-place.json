@@ -1,0 +1,246 @@
+{
+  "name": "MiniMax-Speech系列语音模型",
+  "description": "由MiniMax提供的MiniMax-Speech系列语音模型API服务。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "MiniMax 语音大模型能够根据上下文，智能预测文本的情绪、语调等信息，并生成超自然、高保真、个性化的语音。在社交、播客、有声书、新闻资讯、教育、数字人等多种场景中展现出强大的实力。",
+      "features": ["model-experience"],
+      "provider": "mini-max",
+      "model": "MiniMax/speech-2.8-turbo",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每次",
+          "price": "9.9",
+          "type": "tts_vc_model",
+          "priceName": "声音复刻及声音设计"
+        },
+        {
+          "priceUnit": "每万字符",
+          "price": "2",
+          "type": "cosy_tts_number",
+          "priceName": "语音合成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 20000,
+          "usage_limit_field": "characters",
+          "count_limit": 20,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 20000,
+          "usage_limit_field": "characters",
+          "count_limit": 20,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TTS"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-19T08:44:53.000+00:00",
+      "maxInputTokens": 10000,
+      "inferenceProvider": "minimax",
+      "name": "speech-2.8-turbo",
+      "predictConfig": [],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \\\n  -H \"Authorization: Bearer ${DASHSCOPE_API_KEY}\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"input\": {\n      \"action\": \"tts\",\n      \"text\": \"今天是不是很开心呀，当然了！\",\n      \"stream\": false,\n      \"voice_setting\": {\n        \"voice_id\": \"male-qn-qingse\",\n        \"speed\": 1,\n        \"vol\": 1,\n        \"pitch\": 0\n      },\n      \"audio_setting\": {\n        \"sample_rate\": 16000,\n        \"format\": \"mp3\",\n        \"channel\": 1\n      }\n    },\n    \"model\": \"MiniMax/speech-2.8-turbo\"\n  }'",
+            "docUrl": "https://help.aliyun.com/document_detail/3021951.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "MiniMax 语音大模型能够根据上下文，智能预测文本的情绪、语调等信息，并生成超自然、高保真、个性化的语音。在社交、播客、有声书、新闻资讯、教育、数字人等多种场景中展现出强大的实力。",
+      "features": ["model-experience"],
+      "provider": "mini-max",
+      "model": "MiniMax/speech-2.8-hd",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每次",
+          "price": "9.9",
+          "type": "tts_vc_model",
+          "priceName": "声音复刻及声音设计"
+        },
+        {
+          "priceUnit": "每万字符",
+          "price": "3.5",
+          "type": "cosy_tts_number",
+          "priceName": "语音合成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 20000,
+          "usage_limit_field": "characters",
+          "count_limit": 20,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 20000,
+          "usage_limit_field": "characters",
+          "count_limit": 20,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TTS"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-19T08:46:11.000+00:00",
+      "maxInputTokens": 10000,
+      "inferenceProvider": "minimax",
+      "name": "speech-2.8-hd",
+      "predictConfig": [],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \\\n  -H \"Authorization: Bearer ${DASHSCOPE_API_KEY}\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"input\": {\n      \"action\": \"tts\",\n      \"text\": \"今天是不是很开心呀，当然了！\",\n      \"stream\": false,\n      \"voice_setting\": {\n        \"voice_id\": \"male-qn-qingse\",\n        \"speed\": 1,\n        \"vol\": 1,\n        \"pitch\": 0\n      },\n      \"audio_setting\": {\n        \"sample_rate\": 16000,\n        \"format\": \"mp3\",\n        \"channel\": 1\n      }\n    },\n    \"model\": \"MiniMax/speech-2.8-hd\"\n  }'",
+            "docUrl": "https://help.aliyun.com/document_detail/3021951.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "MiniMax 语音大模型能够根据上下文，智能预测文本的情绪、语调等信息，并生成超自然、高保真、个性化的语音。在社交、播客、有声书、新闻资讯、教育、数字人等多种场景中展现出强大的实力。",
+      "features": ["model-experience"],
+      "provider": "mini-max",
+      "model": "MiniMax/speech-02-turbo",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每次",
+          "price": "9.9",
+          "type": "tts_vc_model",
+          "priceName": "声音复刻及声音设计"
+        },
+        {
+          "priceUnit": "每万字符",
+          "price": "2",
+          "type": "cosy_tts_number",
+          "priceName": "语音合成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 20000,
+          "usage_limit_field": "characters",
+          "count_limit": 20,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 20000,
+          "usage_limit_field": "characters",
+          "count_limit": 20,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TTS"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-19T08:44:37.000+00:00",
+      "maxInputTokens": 10000,
+      "inferenceProvider": "minimax",
+      "name": "speech-02-turbo",
+      "predictConfig": [],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \\\n  -H \"Authorization: Bearer ${DASHSCOPE_API_KEY}\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"input\": {\n      \"action\": \"tts\",\n      \"text\": \"今天是不是很开心呀，当然了！\",\n      \"stream\": false,\n      \"voice_setting\": {\n        \"voice_id\": \"male-qn-qingse\",\n        \"speed\": 1,\n        \"vol\": 1,\n        \"pitch\": 0\n      },\n      \"audio_setting\": {\n        \"sample_rate\": 16000,\n        \"format\": \"mp3\",\n        \"channel\": 1\n      }\n    },\n    \"model\": \"MiniMax/speech-02-turbo\"\n  }'",
+            "docUrl": "https://help.aliyun.com/document_detail/3021951.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "MiniMax 语音大模型能够根据上下文，智能预测文本的情绪、语调等信息，并生成超自然、高保真、个性化的语音。在社交、播客、有声书、新闻资讯、教育、数字人等多种场景中展现出强大的实力。",
+      "features": ["model-experience"],
+      "provider": "mini-max",
+      "model": "MiniMax/speech-02-hd",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每次",
+          "price": "9.9",
+          "type": "tts_vc_model",
+          "priceName": "声音复刻及声音设计"
+        },
+        {
+          "priceUnit": "每万字符",
+          "price": "3.5",
+          "type": "cosy_tts_number",
+          "priceName": "语音合成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 20000,
+          "usage_limit_field": "characters",
+          "count_limit": 20,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 20000,
+          "usage_limit_field": "characters",
+          "count_limit": 20,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TTS"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-03-19T08:45:04.000+00:00",
+      "maxInputTokens": 10000,
+      "inferenceProvider": "minimax",
+      "name": "speech-02-hd",
+      "predictConfig": [],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \\\n  -H \"Authorization: Bearer ${DASHSCOPE_API_KEY}\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"input\": {\n      \"action\": \"tts\",\n      \"text\": \"今天是不是很开心呀，当然了！\",\n      \"stream\": false,\n      \"voice_setting\": {\n        \"voice_id\": \"male-qn-qingse\",\n        \"speed\": 1,\n        \"vol\": 1,\n        \"pitch\": 0\n      },\n      \"audio_setting\": {\n        \"sample_rate\": 16000,\n        \"format\": \"mp3\",\n        \"channel\": 1\n      }\n    },\n    \"model\": \"MiniMax/speech-02-hd\"\n  }'",
+            "docUrl": "https://help.aliyun.com/document_detail/3021951.html"
+          }
+        }
+      }
+    }
+  ]
+}

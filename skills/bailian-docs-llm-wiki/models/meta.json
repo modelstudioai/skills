@@ -1,0 +1,965 @@
+{
+  "groups": {
+    "qwen3.6-max": {
+      "fingerprint": "c31aaa8428119a0a",
+      "model": "group-qwen3.6-max",
+      "name": "Qwen3.6-Max",
+      "lastFetched": "2026-05-27T06:44:34.405Z"
+    },
+    "qwen3.7-max": {
+      "fingerprint": "894480a4db59f397",
+      "model": "group-qwen3.7-max",
+      "name": "Qwen3.7-Max",
+      "lastFetched": "2026-05-27T06:44:34.477Z"
+    },
+    "qwen3.6-plus": {
+      "fingerprint": "ad15c47bdd6b8711",
+      "model": "group-qwen3.6-plus",
+      "name": "Qwen3.6-Plus",
+      "lastFetched": "2026-05-27T06:44:34.478Z"
+    },
+    "qwen3.6-flash": {
+      "fingerprint": "fa21be9b7fc87578",
+      "model": "group-qwen3.6-flash",
+      "name": "Qwen3.6-Flash",
+      "lastFetched": "2026-05-27T06:44:34.479Z"
+    },
+    "qwen3.6": {
+      "fingerprint": "7671bb09b42e139d",
+      "model": "group-qwen3.6",
+      "name": "Qwen3.6开源模型",
+      "lastFetched": "2026-05-27T06:44:34.480Z"
+    },
+    "happyhorse-i2v": {
+      "fingerprint": "43ca5cf9998266d9",
+      "model": "group-happyhorse-i2v",
+      "name": "HappyHorse-I2V",
+      "lastFetched": "2026-05-27T06:44:37.424Z"
+    },
+    "qwen3.5-plus": {
+      "fingerprint": "cf7fb58416366153",
+      "model": "group-qwen3.5-plus",
+      "name": "Qwen3.5-Plus",
+      "lastFetched": "2026-05-27T06:44:37.458Z"
+    },
+    "happyhorse-t2v": {
+      "fingerprint": "08edff67e73350f0",
+      "model": "group-happyhorse-t2v",
+      "name": "HappyHorse-T2V",
+      "lastFetched": "2026-05-27T06:44:37.458Z"
+    },
+    "qwen3.5-flash": {
+      "fingerprint": "bfe27d144b8898d3",
+      "model": "group-qwen3.5-flash",
+      "name": "Qwen3.5-Flash",
+      "lastFetched": "2026-05-27T06:44:37.622Z"
+    },
+    "deepseek": {
+      "fingerprint": "68de007f0be1ab54",
+      "model": "group-deepseek",
+      "name": "DeepSeek",
+      "lastFetched": "2026-05-27T06:44:37.642Z"
+    },
+    "happyhorse-r2v": {
+      "fingerprint": "43aef6e0dd4fa7fc",
+      "model": "group-happyhorse-r2v",
+      "name": "HappyHorse-R2V",
+      "lastFetched": "2026-05-27T06:44:40.096Z"
+    },
+    "qwen3-max": {
+      "fingerprint": "5a24305e6321be59",
+      "model": "group-qwen3-max",
+      "name": "Qwen3-Max",
+      "lastFetched": "2026-05-27T06:44:40.205Z"
+    },
+    "qwen3.5": {
+      "fingerprint": "03da92a7e574cc8f",
+      "model": "group-qwen3.5",
+      "name": "Qwen3.5开源模型",
+      "lastFetched": "2026-05-27T06:44:40.206Z"
+    },
+    "qwen-image-2.0": {
+      "fingerprint": "5fb63c09b4e55253",
+      "model": "group-qwen-image-2.0",
+      "name": "Qwen-Image-2.0",
+      "lastFetched": "2026-05-27T06:44:40.206Z"
+    },
+    "happyhorse-video-edit": {
+      "fingerprint": "7b3ef16c22b4ff09",
+      "model": "group-happyhorse-video-edit",
+      "name": "HappyHorse-Video-Edit",
+      "lastFetched": "2026-05-27T06:44:40.206Z"
+    },
+    "qwen3.5-omni-plus-realtime": {
+      "fingerprint": "4890f914e7ff57e1",
+      "model": "group-qwen3.5-omni-plus-realtime",
+      "name": "Qwen3.5-Omni-Plus-Realtime",
+      "lastFetched": "2026-05-27T06:44:42.499Z"
+    },
+    "qwen3.5-omni-plus": {
+      "fingerprint": "3109b8eb1514abe4",
+      "model": "group-qwen3.5-omni-plus",
+      "name": "Qwen3.5-Omni-Plus",
+      "lastFetched": "2026-05-27T06:44:42.499Z"
+    },
+    "qwen3.5-omni-flash-realtime": {
+      "fingerprint": "ae9d61248660c596",
+      "model": "group-qwen3.5-omni-flash-realtime",
+      "name": "Qwen3.5-Omni-Flash-Realtime",
+      "lastFetched": "2026-05-27T06:44:42.532Z"
+    },
+    "qwen3.5-omni-flash": {
+      "fingerprint": "8ff8b80068e2ff9c",
+      "model": "group-qwen3.5-omni-flash",
+      "name": "Qwen3.5-Omni-Flash",
+      "lastFetched": "2026-05-27T06:44:42.532Z"
+    },
+    "qwen-image-2.0-pro": {
+      "fingerprint": "eb26812b85a0ad46",
+      "model": "group-qwen-image-2.0-pro",
+      "name": "Qwen-Image-2.0-Pro",
+      "lastFetched": "2026-05-27T06:44:42.553Z"
+    },
+    "qwen-image-edit-max": {
+      "fingerprint": "09fb0a47278764dd",
+      "model": "group-qwen-image-edit-max",
+      "name": "Qwen-Image-Edit-Max",
+      "lastFetched": "2026-05-27T06:44:44.892Z"
+    },
+    "z-image-turbo": {
+      "fingerprint": "67e7a5bdb073a046",
+      "model": "z-image-turbo",
+      "name": "Z-Image-Turbo",
+      "lastFetched": "2026-05-27T06:44:44.892Z"
+    },
+    "qwen-image-max": {
+      "fingerprint": "9550ef3bf0e6d18e",
+      "model": "group-qwen-image-max",
+      "name": "Qwen-Image-Max",
+      "lastFetched": "2026-05-27T06:44:44.914Z"
+    },
+    "qwen-image-edit": {
+      "fingerprint": "efd8f10e1566ffa3",
+      "model": "group-qwen-image-edit",
+      "name": "Qwen-Image-Edit-Plus",
+      "lastFetched": "2026-05-27T06:44:44.921Z"
+    },
+    "qwen-image-plus": {
+      "fingerprint": "9d0358a723018547",
+      "model": "group-qwen-image-plus",
+      "name": "Qwen-Image-Plus",
+      "lastFetched": "2026-05-27T06:44:44.937Z"
+    },
+    "qwen3-vl-flash": {
+      "fingerprint": "98f44c3595d6f9b6",
+      "model": "group-qwen3-vl-flash",
+      "name": "Qwen3-VL-Flash",
+      "lastFetched": "2026-05-27T06:44:47.784Z"
+    },
+    "qwen3-vl-plus": {
+      "fingerprint": "989573fa12dd2014",
+      "model": "group-qwen3-vl-plus",
+      "name": "Qwen3-VL-Plus",
+      "lastFetched": "2026-05-27T06:44:47.815Z"
+    },
+    "wan-reference-to-video": {
+      "fingerprint": "2a1f9c0611b182ae",
+      "model": "group-wan-reference-to-video",
+      "name": "Wan-R2V",
+      "lastFetched": "2026-05-27T06:44:48.224Z"
+    },
+    "wan-text-to-video": {
+      "fingerprint": "63d29ab7fdbe7a4f",
+      "model": "group-wan-text-to-video",
+      "name": "Wan-T2V",
+      "lastFetched": "2026-05-27T06:44:48.285Z"
+    },
+    "wan-image-to-video": {
+      "fingerprint": "55b1b3f094361cc9",
+      "model": "group-wan-image-to-video",
+      "name": "Wan-I2V",
+      "lastFetched": "2026-05-27T06:44:48.317Z"
+    },
+    "wan-video-edit": {
+      "fingerprint": "3262b73897821ff5",
+      "model": "group-wan-video-edit",
+      "name": "Wan-VideoEdit",
+      "lastFetched": "2026-05-27T06:44:51.003Z"
+    },
+    "wan-text-to-image": {
+      "fingerprint": "a204dc7633999d18",
+      "model": "group-wan-text-to-image",
+      "name": "Wan-T2I",
+      "lastFetched": "2026-05-27T06:44:51.019Z"
+    },
+    "qwen3-omni-flash-realtime": {
+      "fingerprint": "a57cf984142994d2",
+      "model": "group-qwen3-omni-flash-realtime",
+      "name": "Qwen3-Omni-Flash-Realtime",
+      "lastFetched": "2026-05-27T06:44:51.019Z"
+    },
+    "qwen3-tts-instruct-flash-realtime": {
+      "fingerprint": "3455e64398f98814",
+      "model": "group-qwen3-tts-instruct-flash-realtime",
+      "name": "qwen3-tts-instruct-flash-realtime",
+      "lastFetched": "2026-05-27T06:44:51.019Z"
+    },
+    "wan-image-edit": {
+      "fingerprint": "5fd0ba23ce235bc4",
+      "model": "group-wan-image-edit",
+      "name": "Wan-Image",
+      "lastFetched": "2026-05-27T06:44:51.025Z"
+    },
+    "qwen3-omni-flash": {
+      "fingerprint": "8f37c2708d111c4e",
+      "model": "group-qwen3-omni-flash",
+      "name": "Qwen3-Omni-Flash",
+      "lastFetched": "2026-05-27T06:44:53.587Z"
+    },
+    "qwen3-tts-flash-realtime": {
+      "fingerprint": "dc65060933ababd3",
+      "model": "group-qwen3-tts-flash-realtime",
+      "name": "Qwen3-TTS-Flash-Realtime",
+      "lastFetched": "2026-05-27T06:44:53.653Z"
+    },
+    "qwen3-tts-flash": {
+      "fingerprint": "18f077010269fdb7",
+      "model": "group-qwen3-tts-flash",
+      "name": "Qwen3-TTS-Flash",
+      "lastFetched": "2026-05-27T06:44:53.685Z"
+    },
+    "qwen3-omni-30b-a3b-captioner": {
+      "fingerprint": "3609029f13000e47",
+      "model": "qwen3-omni-30b-a3b-captioner",
+      "name": "Qwen3-Omni-30b-a3b-Captioner",
+      "lastFetched": "2026-05-27T06:44:53.699Z"
+    },
+    "qwen3": {
+      "fingerprint": "7625bfe77fae1298",
+      "model": "qwen3",
+      "name": "Qwen3开源模型",
+      "lastFetched": "2026-05-27T06:44:54.568Z"
+    },
+    "qwen3-livetranslate-flash-realtime": {
+      "fingerprint": "d8f9d0e2f8b45a1d",
+      "model": "group-qwen3-livetranslate-flash-realtime",
+      "name": "Qwen3-LiveTranslate-Flash-Realtime",
+      "lastFetched": "2026-05-27T06:44:57.054Z"
+    },
+    "qwen-max": {
+      "fingerprint": "c75a598eff7655cd",
+      "model": "qwen-max",
+      "name": "Qwen-Max",
+      "lastFetched": "2026-05-27T06:44:57.071Z"
+    },
+    "qwen3-livetranslate-flash": {
+      "fingerprint": "c7354d4ded0716dd",
+      "model": "group-qwen3-livetranslate-flash",
+      "name": "Qwen3-LiveTranslate-Flash",
+      "lastFetched": "2026-05-27T06:44:57.118Z"
+    },
+    "qwen-flash": {
+      "fingerprint": "dc89499aec780394",
+      "model": "group-qwen-flash",
+      "name": "Qwen-Flash",
+      "lastFetched": "2026-05-27T06:44:57.118Z"
+    },
+    "qwen-plus": {
+      "fingerprint": "e25931dd37e40203",
+      "model": "qwen-plus",
+      "name": "Qwen-Plus",
+      "lastFetched": "2026-05-27T06:44:57.146Z"
+    },
+    "qwen3-asr-flash-filetrans": {
+      "fingerprint": "71532f7116a29e6f",
+      "model": "group-qwen3-asr-flash-filetrans",
+      "name": "Qwen3-ASR-Flash-Filetrans",
+      "lastFetched": "2026-05-27T06:44:59.527Z"
+    },
+    "qwen3-coder-plus": {
+      "fingerprint": "9fae856078ad54e1",
+      "model": "group-qwen3-coder-plus",
+      "name": "Qwen3-Coder-Plus",
+      "lastFetched": "2026-05-27T06:44:59.542Z"
+    },
+    "qwen-vl-max": {
+      "fingerprint": "ea002defd34a6918",
+      "model": "qwen-vl-max",
+      "name": "Qwen-VL-Max",
+      "lastFetched": "2026-05-27T06:44:59.542Z"
+    },
+    "qwen3-coder-flash": {
+      "fingerprint": "46761a3e5e8452b0",
+      "model": "group-qwen3-coder-flash",
+      "name": "Qwen3-Coder-Flash",
+      "lastFetched": "2026-05-27T06:44:59.547Z"
+    },
+    "qwen-vl-plus": {
+      "fingerprint": "97fd61ca7e4c2915",
+      "model": "qwen-vl-plus",
+      "name": "Qwen-VL-Plus",
+      "lastFetched": "2026-05-27T06:44:59.573Z"
+    },
+    "qwen3-asr-flash-realtime": {
+      "fingerprint": "8ffc33a46f9530d1",
+      "model": "group-qwen3-asr-flash-realtime",
+      "name": "Qwen3-ASR-Flash-Realtime",
+      "lastFetched": "2026-05-27T06:45:01.798Z"
+    },
+    "qwen-voice-enrollment": {
+      "fingerprint": "e12ad37e22c41a58",
+      "model": "group-qwen-voice-enrollment",
+      "name": "Qwen-声音复刻",
+      "lastFetched": "2026-05-27T06:45:01.866Z"
+    },
+    "qwen3-asr-flash": {
+      "fingerprint": "9c2de9d7173970ab",
+      "model": "group-qwen3-asr-flash",
+      "name": "Qwen3-ASR-Flash",
+      "lastFetched": "2026-05-27T06:45:01.907Z"
+    },
+    "qwen-tts": {
+      "fingerprint": "bea75f61d6d22abb",
+      "model": "qwen-tts",
+      "name": "Qwen-TTS",
+      "lastFetched": "2026-05-27T06:45:01.937Z"
+    },
+    "qwen-deep-research": {
+      "fingerprint": "0588f92f3114b2f1",
+      "model": "qwen-deep-research",
+      "name": "qwen-deep-research",
+      "lastFetched": "2026-05-27T06:45:01.937Z"
+    },
+    "qwen-voice-design": {
+      "fingerprint": "f59969f09f2cd0fd",
+      "model": "group-qwen-voice-design",
+      "name": "Qwen-声音设计",
+      "lastFetched": "2026-05-27T06:45:04.359Z"
+    },
+    "qwen-tts-realtime": {
+      "fingerprint": "4f0d41f5d6f5964e",
+      "model": "group-qwen-tts-realtime",
+      "name": "Qwen-TTS-Realtime",
+      "lastFetched": "2026-05-27T06:45:04.374Z"
+    },
+    "qwen3-tts-vc-realtime": {
+      "fingerprint": "a8a23b3c9dc42536",
+      "model": "group-qwen3-tts-vc-realtime",
+      "name": "Qwen3-TTS-VC-Realtime",
+      "lastFetched": "2026-05-27T06:45:04.374Z"
+    },
+    "qwen-omni-turbo": {
+      "fingerprint": "cae6ca7485cfcfc1",
+      "model": "qwen-omni-turbo",
+      "name": "Qwen-Omni-Turbo",
+      "lastFetched": "2026-05-27T06:45:04.379Z"
+    },
+    "qwen3-tts-vd-realtime": {
+      "fingerprint": "ce9f7fa99582b07c",
+      "model": "group-qwen3-tts-vd-realtime",
+      "name": "Qwen3-TTS-VD-Realtime",
+      "lastFetched": "2026-05-27T06:45:04.383Z"
+    },
+    "qwen-mt-plus": {
+      "fingerprint": "2294e228279daa76",
+      "model": "qwen-mt-plus",
+      "name": "Qwen-MT-Plus",
+      "lastFetched": "2026-05-27T06:45:06.827Z"
+    },
+    "qwen-omni-turbo-realtime": {
+      "fingerprint": "65ad69ba202d97a5",
+      "model": "qwen-omni-turbo-realtime",
+      "name": "Qwen-Omni-Turbo-Realtime",
+      "lastFetched": "2026-05-27T06:45:06.829Z"
+    },
+    "qwen-mt-image": {
+      "fingerprint": "43e9a32e7eb77d53",
+      "model": "qwen-mt-image",
+      "name": "Qwen-MT-Image",
+      "lastFetched": "2026-05-27T06:45:06.829Z"
+    },
+    "qwen-mt-flash": {
+      "fingerprint": "cd189644f4b0ec8d",
+      "model": "qwen-mt-flash",
+      "name": "Qwen-MT-Flash",
+      "lastFetched": "2026-05-27T06:45:06.829Z"
+    },
+    "qwen-mt-turbo": {
+      "fingerprint": "b18d87046fdc901d",
+      "model": "qwen-mt-turbo",
+      "name": "Qwen-MT-Turbo",
+      "lastFetched": "2026-05-27T06:45:06.854Z"
+    },
+    "qvq-plus": {
+      "fingerprint": "9a18325e5eb02038",
+      "model": "qvq-plus",
+      "name": "Qwen-QVQ-Plus",
+      "lastFetched": "2026-05-27T06:45:09.132Z"
+    },
+    "qwen3-coder-480b-a35b-instruct": {
+      "fingerprint": "d95953c5d9a75d7e",
+      "model": "qwen3-coder-480b-a35b-instruct",
+      "name": "Qwen3-Coder-480B-A35B-Instruct",
+      "lastFetched": "2026-05-27T06:45:09.163Z"
+    },
+    "qvq-max": {
+      "fingerprint": "659a2b0fdff4b28b",
+      "model": "qvq-max",
+      "name": "QVQ-Max",
+      "lastFetched": "2026-05-27T06:45:09.163Z"
+    },
+    "qwq-plus": {
+      "fingerprint": "93b39f3ffc2feb0b",
+      "model": "qwq-plus",
+      "name": "Qwen-QwQ-Plus",
+      "lastFetched": "2026-05-27T06:45:09.243Z"
+    },
+    "qwen3-coder-30b-a3b-instruct": {
+      "fingerprint": "f8ce156dc0b9f982",
+      "model": "qwen3-coder-30b-a3b-instruct",
+      "name": "Qwen3-Coder-30B-A3B-Instruct",
+      "lastFetched": "2026-05-27T06:45:09.265Z"
+    },
+    "qwen2.5": {
+      "fingerprint": "3c8e2dde80e25bdb",
+      "model": "group-qwen2.5",
+      "name": "Qwen2.5-开源模型",
+      "lastFetched": "2026-05-27T06:45:11.795Z"
+    },
+    "qwen-turbo": {
+      "fingerprint": "93d9abd9b0460c6c",
+      "model": "qwen-turbo",
+      "name": "Qwen-Turbo",
+      "lastFetched": "2026-05-27T06:45:11.969Z"
+    },
+    "qwen3.5-livetranslate-flash-realtime": {
+      "fingerprint": "549c5260c16b786d",
+      "model": "group-qwen3.5-livetranslate-flash-realtime",
+      "name": "Qwen3.5-LiveTranslate-Flash-Realtime",
+      "lastFetched": "2026-05-27T06:45:11.969Z"
+    },
+    "Kimi-K2": {
+      "fingerprint": "409237cb3ce34baf",
+      "model": "group-Kimi-K2",
+      "name": "Kimi",
+      "lastFetched": "2026-05-27T06:45:11.987Z"
+    },
+    "glm-4.5": {
+      "fingerprint": "611b1d256a894f0c",
+      "model": "group-glm-4.5",
+      "name": "GLM",
+      "lastFetched": "2026-05-27T06:45:12.094Z"
+    },
+    "fun-asr-realtime": {
+      "fingerprint": "f69cd9d45503a804",
+      "model": "group-fun-asr-realtime",
+      "name": "Fun-ASR实时语音识别",
+      "lastFetched": "2026-05-27T06:45:15.033Z"
+    },
+    "cosyvoice": {
+      "fingerprint": "9a7787fb98d15998",
+      "model": "group-cosyvoice",
+      "name": "CosyVoice大模型",
+      "lastFetched": "2026-05-27T06:45:15.078Z"
+    },
+    "tripo-models-market-place": {
+      "fingerprint": "4d09a2fadb6cbf2c",
+      "model": "group-tripo-models-market-place",
+      "name": "Tripo",
+      "lastFetched": "2026-05-27T06:45:15.078Z"
+    },
+    "fun-asr": {
+      "fingerprint": "75323ba5233cd001",
+      "model": "group-fun-asr",
+      "name": "Fun-ASR语音识别",
+      "lastFetched": "2026-05-27T06:45:15.078Z"
+    },
+    "embedding": {
+      "fingerprint": "50f4b8f84c58dc7a",
+      "model": "group-embedding",
+      "name": "通义多模态向量",
+      "lastFetched": "2026-05-27T06:45:15.078Z"
+    },
+    "pixverse-v6-market-place": {
+      "fingerprint": "818ae63b74722001",
+      "model": "group-pixverse-v6-market-place",
+      "name": "PixVerse V6",
+      "lastFetched": "2026-05-27T06:45:17.921Z"
+    },
+    "minimax-models-market-place": {
+      "fingerprint": "38fb1117dcca076c",
+      "model": "group-minimax-models-market-place",
+      "name": "MiniMax文本模型",
+      "lastFetched": "2026-05-27T06:45:17.921Z"
+    },
+    "pixverse-market-place": {
+      "fingerprint": "4b3e27eddc80b22c",
+      "model": "group-pixverse-market-place",
+      "name": "PixVerse V5.6",
+      "lastFetched": "2026-05-27T06:45:17.937Z"
+    },
+    "MiniMax-speech-market-place": {
+      "fingerprint": "cb137e611dd1916b",
+      "model": "group-MiniMax-speech-market-place",
+      "name": "MiniMax-Speech系列语音模型",
+      "lastFetched": "2026-05-27T06:45:17.973Z"
+    },
+    "pixverse-c1-market-place": {
+      "fingerprint": "63fd1d071acb4cbd",
+      "model": "group-pixverse-c1-market-place",
+      "name": "PixVerse C1",
+      "lastFetched": "2026-05-27T06:45:18.019Z"
+    },
+    "qwen3-tts-vd": {
+      "fingerprint": "d27fb46e3b85176b",
+      "model": "group-qwen3-tts-vd",
+      "name": "Qwen3-TTS-VD",
+      "lastFetched": "2026-05-27T06:45:20.348Z"
+    },
+    "qwen3-tts-vc": {
+      "fingerprint": "05bbc3a7fcc01c06",
+      "model": "group-qwen3-tts-vc",
+      "name": "Qwen3-TTS-VC",
+      "lastFetched": "2026-05-27T06:45:20.348Z"
+    },
+    "qwen3-tts-instruct-flash": {
+      "fingerprint": "93b7339ddca47ca8",
+      "model": "group-qwen3-tts-instruct-flash",
+      "name": "Qwen3-TTS-Instruct-Flash",
+      "lastFetched": "2026-05-27T06:45:20.351Z"
+    },
+    "kimi-models-market-place": {
+      "fingerprint": "6e146306af98e7a7",
+      "model": "group-kimi-models-market-place",
+      "name": "Kimi",
+      "lastFetched": "2026-05-27T06:45:20.396Z"
+    },
+    "qwen-mt-lite": {
+      "fingerprint": "e42b2370c384127a",
+      "model": "qwen-mt-lite",
+      "name": "Qwen-MT-Lite",
+      "lastFetched": "2026-05-27T06:45:20.416Z"
+    },
+    "tongyi-xiaomi-analysis-pro": {
+      "fingerprint": "aaac84b217633d74",
+      "model": "tongyi-xiaomi-analysis-pro",
+      "name": "通义晓蜜-对话分析-pro",
+      "lastFetched": "2026-05-27T06:45:22.853Z"
+    },
+    "aitryon": {
+      "fingerprint": "832c36f9d77bd794",
+      "model": "aitryon",
+      "name": "AI试衣-基础版",
+      "lastFetched": "2026-05-27T06:45:22.865Z"
+    },
+    "tongyi-xiaomi-analysis-flash": {
+      "fingerprint": "66ed6fe5cb8647c8",
+      "model": "tongyi-xiaomi-analysis-flash",
+      "name": "通义晓蜜-对话分析-flash",
+      "lastFetched": "2026-05-27T06:45:22.865Z"
+    },
+    "aitryon-plus": {
+      "fingerprint": "0f12f06e2a10b08c",
+      "model": "aitryon-plus",
+      "name": "AI试衣-Plus版",
+      "lastFetched": "2026-05-27T06:45:22.909Z"
+    },
+    "gui-plus": {
+      "fingerprint": "79c40ce01530a76a",
+      "model": "gui-plus",
+      "name": "GUI-Plus",
+      "lastFetched": "2026-05-27T06:45:22.909Z"
+    },
+    "qwen-math-plus": {
+      "fingerprint": "0396cd35822a9f63",
+      "model": "qwen-math-plus",
+      "name": "Qwen-Math-Plus",
+      "lastFetched": "2026-05-27T06:45:25.613Z"
+    },
+    "qwen-vl-ocr": {
+      "fingerprint": "350dfe3cfa295612",
+      "model": "qwen-vl-ocr",
+      "name": "Qwen-VL-OCR",
+      "lastFetched": "2026-05-27T06:45:25.613Z"
+    },
+    "qwen-rerank": {
+      "fingerprint": "37c8f67086682f19",
+      "model": "group-qwen-rerank",
+      "name": "Qwen-Rerank",
+      "lastFetched": "2026-05-27T06:45:25.613Z"
+    },
+    "qwen-math-turbo": {
+      "fingerprint": "571dbfca7135b4a5",
+      "model": "qwen-math-turbo",
+      "name": "Qwen-Math-Turbo",
+      "lastFetched": "2026-05-27T06:45:25.634Z"
+    },
+    "qwen-coder-turbo": {
+      "fingerprint": "0ddc5b67d76eec12",
+      "model": "qwen-coder-turbo",
+      "name": "Qwen-Coder-Turbo",
+      "lastFetched": "2026-05-27T06:45:25.634Z"
+    },
+    "emoji-v1": {
+      "fingerprint": "82a445651b3672e2",
+      "model": "emoji-v1",
+      "name": "表情包Emoji",
+      "lastFetched": "2026-05-27T06:45:27.948Z"
+    },
+    "aitryon-parsing-v1": {
+      "fingerprint": "31e419c571c0809f",
+      "model": "aitryon-parsing-v1",
+      "name": "AI试衣OutfitAnyone-图片分割",
+      "lastFetched": "2026-05-27T06:45:27.962Z"
+    },
+    "tongyi-intent-detect-v3": {
+      "fingerprint": "dc8ac9836cba60df",
+      "model": "tongyi-intent-detect-v3",
+      "name": "意图分类模型",
+      "lastFetched": "2026-05-27T06:45:28.028Z"
+    },
+    "qwen-long": {
+      "fingerprint": "1a168f29aea528be",
+      "model": "qwen-long",
+      "name": "Qwen-Long",
+      "lastFetched": "2026-05-27T06:45:28.040Z"
+    },
+    "qwen-doc-turbo": {
+      "fingerprint": "f618a166cd21e1db",
+      "model": "qwen-doc-turbo",
+      "name": "Qwen-Doc-Turbo",
+      "lastFetched": "2026-05-27T06:45:28.046Z"
+    },
+    "animate-anyone-gen2": {
+      "fingerprint": "73baad189b309711",
+      "model": "animate-anyone-gen2",
+      "name": "舞动人像AnimateAnyone",
+      "lastFetched": "2026-05-27T06:45:30.258Z"
+    },
+    "emoji-detect-v1": {
+      "fingerprint": "3caf43294554ab5b",
+      "model": "emoji-detect-v1",
+      "name": "表情包Emoji-detect",
+      "lastFetched": "2026-05-27T06:45:30.324Z"
+    },
+    "paraformer-8k-v1": {
+      "fingerprint": "95e9c5cd6d433636",
+      "model": "paraformer-8k-v1",
+      "name": "Paraformer语音识别-8k-v1",
+      "lastFetched": "2026-05-27T06:45:30.373Z"
+    },
+    "gummy-chat-v1": {
+      "fingerprint": "505e98c415200588",
+      "model": "gummy-chat-v1",
+      "name": "一句话识别及翻译V1.0",
+      "lastFetched": "2026-05-27T06:45:30.373Z"
+    },
+    "paraformer-realtime-8k-v2": {
+      "fingerprint": "44ed1095d57db3ba",
+      "model": "paraformer-realtime-8k-v2",
+      "name": "Paraformer实时语音识别-8k-v2",
+      "lastFetched": "2026-05-27T06:45:30.394Z"
+    },
+    "animate-anyone-template-gen2": {
+      "fingerprint": "7c5c480f211478bf",
+      "model": "animate-anyone-template-gen2",
+      "name": "舞动人像AnimateAnyone-template",
+      "lastFetched": "2026-05-27T06:45:32.736Z"
+    },
+    "qwen-flash-character": {
+      "fingerprint": "f3767b48f210189f",
+      "model": "group-qwen-flash-character",
+      "name": "Qwen-Flash-Character",
+      "lastFetched": "2026-05-27T06:45:32.761Z"
+    },
+    "speech-biasing": {
+      "fingerprint": "795c3bbe6e40c82c",
+      "model": "speech-biasing",
+      "name": "语音识别热词",
+      "lastFetched": "2026-05-27T06:45:32.794Z"
+    },
+    "qwen-plus-character": {
+      "fingerprint": "d4d0ce3b46412595",
+      "model": "qwen-plus-character",
+      "name": "Qwen-Plus-Character",
+      "lastFetched": "2026-05-27T06:45:32.794Z"
+    },
+    "voice-enrollment": {
+      "fingerprint": "3925e2c15cd5c65b",
+      "model": "voice-enrollment",
+      "name": "大模型声音复刻及声音设计",
+      "lastFetched": "2026-05-27T06:45:32.842Z"
+    },
+    "video-style-transform": {
+      "fingerprint": "e6dc14bebdc28071",
+      "model": "video-style-transform",
+      "name": "视频风格重绘",
+      "lastFetched": "2026-05-27T06:45:35.236Z"
+    },
+    "emo-v1": {
+      "fingerprint": "a4331626de10f0e5",
+      "model": "emo-v1",
+      "name": "悦动人像EMO",
+      "lastFetched": "2026-05-27T06:45:35.236Z"
+    },
+    "animate-anyone-detect-gen2": {
+      "fingerprint": "f94c17d925058bf7",
+      "model": "animate-anyone-detect-gen2",
+      "name": "舞动人像AnimateAnyone-detect",
+      "lastFetched": "2026-05-27T06:45:35.236Z"
+    },
+    "videoretalk": {
+      "fingerprint": "e44724d36cb87555",
+      "model": "videoretalk",
+      "name": "声动人像VideoRetalk",
+      "lastFetched": "2026-05-27T06:45:35.236Z"
+    },
+    "emo-detect-v1": {
+      "fingerprint": "de30012820492778",
+      "model": "emo-detect-v1",
+      "name": "悦动人像EMO-detect",
+      "lastFetched": "2026-05-27T06:45:35.278Z"
+    },
+    "fun-music": {
+      "fingerprint": "66e386775f22c7fa",
+      "model": "group-fun-music",
+      "name": "音乐生成",
+      "lastFetched": "2026-05-27T06:45:37.692Z"
+    },
+    "liveportrait-detect": {
+      "fingerprint": "0f95c05a311d23fa",
+      "model": "liveportrait-detect",
+      "name": "灵动人像LivePortrait-detect",
+      "lastFetched": "2026-05-27T06:45:37.692Z"
+    },
+    "xiaomi-models-market-place": {
+      "fingerprint": "60600f2087cbc7e7",
+      "model": "group-xiaomi-models-market-place",
+      "name": "MiMo文本模型",
+      "lastFetched": "2026-05-27T06:45:37.692Z"
+    },
+    "liveportrait": {
+      "fingerprint": "914ea8fe8324ae23",
+      "model": "liveportrait",
+      "name": "灵动人像LivePortrait",
+      "lastFetched": "2026-05-27T06:45:37.704Z"
+    },
+    "wanx2.1-vace-plus": {
+      "fingerprint": "4d4892204af7121e",
+      "model": "wanx2.1-vace-plus",
+      "name": "Wan2.1-VACE-Plus",
+      "lastFetched": "2026-05-27T06:45:37.754Z"
+    },
+    "vanchin-models-market-place": {
+      "fingerprint": "d10e5fba2603693b",
+      "model": "group-vanchin-models-market-place",
+      "name": "Vanchin DeepSeek",
+      "lastFetched": "2026-05-27T06:45:40.985Z"
+    },
+    "MiniMax-M2.1": {
+      "fingerprint": "0971ec33d20fbf88",
+      "model": "group-MiniMax-M2.1",
+      "name": "MiniMax",
+      "lastFetched": "2026-05-27T06:45:40.989Z"
+    },
+    "zhipu-models-market-place": {
+      "fingerprint": "8933bbae9c1d5760",
+      "model": "group-zhipu-models-market-place",
+      "name": "智谱GLM系列文本模型",
+      "lastFetched": "2026-05-27T06:45:41.301Z"
+    },
+    "kling-models-market-place": {
+      "fingerprint": "cb167c29107d3ad7",
+      "model": "group-kling-models-market-place",
+      "name": "可灵AI",
+      "lastFetched": "2026-05-27T06:45:41.301Z"
+    },
+    "vidu-models-market-place": {
+      "fingerprint": "c45590c019a4cc8d",
+      "model": "group-vidu-models-market-place",
+      "name": "Vidu",
+      "lastFetched": "2026-05-27T06:45:41.318Z"
+    },
+    "gummy-realtime-v1": {
+      "fingerprint": "9bbce7c8ccf6632a",
+      "model": "gummy-realtime-v1",
+      "name": "实时语音识别及翻译V1.0",
+      "lastFetched": "2026-05-27T06:45:44.949Z"
+    },
+    "qwen-embedding": {
+      "fingerprint": "b83604614b506116",
+      "model": "group-qwen-embedding",
+      "name": "Qwen-Embedding",
+      "lastFetched": "2026-05-27T06:45:44.949Z"
+    },
+    "siliconflow-models": {
+      "fingerprint": "da9a4f2eb4a44af5",
+      "model": "group-siliconflow-models",
+      "name": "SiliconFlow DeepSeek",
+      "lastFetched": "2026-05-27T06:45:45.331Z"
+    },
+    "qwen-vl-embedding": {
+      "fingerprint": "1a6d12931ee1b30a",
+      "model": "group-qwen-vl-embedding",
+      "name": "Qwen-VL-Embedding",
+      "lastFetched": "2026-05-27T06:45:45.598Z"
+    },
+    "sambert": {
+      "fingerprint": "c74611bbf06c18b3",
+      "model": "group-sambert",
+      "name": "Sambert语音合成",
+      "lastFetched": "2026-05-27T06:45:46.609Z"
+    },
+    "image-erase-completion": {
+      "fingerprint": "c14fffd2c53fadb6",
+      "model": "image-erase-completion",
+      "name": "图像擦除补全",
+      "lastFetched": "2026-05-27T06:45:49.106Z"
+    },
+    "paraformer-realtime-v2": {
+      "fingerprint": "f84faa7ab5d3be8e",
+      "model": "paraformer-realtime-v2",
+      "name": "Paraformer实时语音识别-v2",
+      "lastFetched": "2026-05-27T06:45:49.106Z"
+    },
+    "paraformer-v2": {
+      "fingerprint": "8aae2450db6aed63",
+      "model": "paraformer-v2",
+      "name": "Paraformer语音识别-v2",
+      "lastFetched": "2026-05-27T06:45:49.125Z"
+    },
+    "qwen-coder-plus": {
+      "fingerprint": "c72c102e805a03cc",
+      "model": "qwen-coder-plus",
+      "name": "Qwen-Coder-Plus",
+      "lastFetched": "2026-05-27T06:45:49.138Z"
+    },
+    "paraformer-8k-v2": {
+      "fingerprint": "a1c39cfd3036e870",
+      "model": "paraformer-8k-v2",
+      "name": "Paraformer语音识别-8k-v2",
+      "lastFetched": "2026-05-27T06:45:49.186Z"
+    },
+    "wanx-virtualmodel": {
+      "fingerprint": "86d37b6a13c05c89",
+      "model": "wanx-virtualmodel",
+      "name": "虚拟模特",
+      "lastFetched": "2026-05-27T06:45:51.406Z"
+    },
+    "virtualmodel-v2": {
+      "fingerprint": "67e7ce3d9b50214d",
+      "model": "virtualmodel-v2",
+      "name": "虚拟模特V2",
+      "lastFetched": "2026-05-27T06:45:51.406Z"
+    },
+    "wanx-poster-generation-v1": {
+      "fingerprint": "2551004c01754a6f",
+      "model": "wanx-poster-generation-v1",
+      "name": "创意海报生成",
+      "lastFetched": "2026-05-27T06:45:51.440Z"
+    },
+    "aitryon-refiner": {
+      "fingerprint": "a0a8984ef8656fa5",
+      "model": "aitryon-refiner",
+      "name": "AI试衣OutfitAnyone-图片精修",
+      "lastFetched": "2026-05-27T06:45:51.440Z"
+    },
+    "image-instance-segmentation": {
+      "fingerprint": "273b29d105dc5778",
+      "model": "image-instance-segmentation",
+      "name": "人物实例分割",
+      "lastFetched": "2026-05-27T06:45:51.503Z"
+    },
+    "wanx-x-painting": {
+      "fingerprint": "f34f59d5bcae6bf1",
+      "model": "wanx-x-painting",
+      "name": "万相-图像局部重绘",
+      "lastFetched": "2026-05-27T06:45:53.794Z"
+    },
+    "paraformer-realtime-8k-v1": {
+      "fingerprint": "6b9f5b98dd168db2",
+      "model": "paraformer-realtime-8k-v1",
+      "name": "Paraformer实时语音识别-8k-v1",
+      "lastFetched": "2026-05-27T06:45:53.825Z"
+    },
+    "paraformer-realtime-v1": {
+      "fingerprint": "706cf5492acd0ebc",
+      "model": "paraformer-realtime-v1",
+      "name": "Paraformer实时语音识别-v1",
+      "lastFetched": "2026-05-27T06:45:53.825Z"
+    },
+    "wanx-sketch-to-image-lite": {
+      "fingerprint": "cc61937b072b5a93",
+      "model": "wanx-sketch-to-image-lite",
+      "name": "万相-涂鸦作画",
+      "lastFetched": "2026-05-27T06:45:53.893Z"
+    },
+    "shoemodel-v1": {
+      "fingerprint": "430a1255fb40b62e",
+      "model": "shoemodel-v1",
+      "name": "鞋靴模特",
+      "lastFetched": "2026-05-27T06:45:53.899Z"
+    },
+    "paraformer-mtl-v1": {
+      "fingerprint": "3f7b25e0a07f9980",
+      "model": "paraformer-mtl-v1",
+      "name": "Paraformer语音识别-mtl-v1",
+      "lastFetched": "2026-05-27T06:45:56.199Z"
+    },
+    "image-out-painting": {
+      "fingerprint": "3756280bcd4faf21",
+      "model": "image-out-painting",
+      "name": "图像画面扩展",
+      "lastFetched": "2026-05-27T06:45:56.199Z"
+    },
+    "wordart-semantic": {
+      "fingerprint": "a0d2e09431a67c94",
+      "model": "wordart-semantic",
+      "name": "WordArt锦书-文字变形",
+      "lastFetched": "2026-05-27T06:45:56.215Z"
+    },
+    "farui-plus": {
+      "fingerprint": "d3b24671bd0c65c0",
+      "model": "farui-plus",
+      "name": "通义法睿-Plus-32K",
+      "lastFetched": "2026-05-27T06:45:56.215Z"
+    },
+    "paraformer-v1": {
+      "fingerprint": "f67bdfcbe7f067f3",
+      "model": "paraformer-v1",
+      "name": "Paraformer语音识别-v1",
+      "lastFetched": "2026-05-27T06:45:56.215Z"
+    },
+    "facechain-facedetect": {
+      "fingerprint": "c27371720dd56a2f",
+      "model": "facechain-facedetect",
+      "name": "FaceChain人物图像检测",
+      "lastFetched": "2026-05-27T06:45:58.443Z"
+    },
+    "wanx-background-generation-v2": {
+      "fingerprint": "bc68481a5b7204c8",
+      "model": "wanx-background-generation-v2",
+      "name": "图像背景生成",
+      "lastFetched": "2026-05-27T06:45:58.467Z"
+    },
+    "facechain-generation": {
+      "fingerprint": "576a03418af0349c",
+      "model": "facechain-generation",
+      "name": "FaceChain人物写真生成",
+      "lastFetched": "2026-05-27T06:45:58.478Z"
+    },
+    "wanx-style-repaint-v1": {
+      "fingerprint": "874ee8a52a564121",
+      "model": "wanx-style-repaint-v1",
+      "name": "人像风格重绘",
+      "lastFetched": "2026-05-27T06:45:58.478Z"
+    },
+    "wordart-texture": {
+      "fingerprint": "bf944c36f82617b0",
+      "model": "wordart-texture",
+      "name": "WordArt锦书-文字纹理生成",
+      "lastFetched": "2026-05-27T06:45:58.478Z"
+    }
+  },
+  "lastCrawl": "2026-05-27T06:45:58.519Z"
+}

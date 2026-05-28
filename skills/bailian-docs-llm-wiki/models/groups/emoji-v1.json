@@ -1,0 +1,59 @@
+{
+  "name": "表情包Emoji",
+  "description": "表情包emoji是一款人脸动效视频生成模型，可基于人脸图片和预设的人脸动态模板，生成人脸动效视频。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Image"]
+      },
+      "openSource": false,
+      "description": "表情包emoji是一款人脸动效视频生成模型，可基于人脸图片和预设的人脸动态模板，生成人脸动效视频。",
+      "features": [],
+      "provider": "qwen",
+      "model": "emoji-v1",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.08",
+          "type": "video_ratio",
+          "priceName": "视频生成（std）"
+        }
+      ],
+      "capabilities": ["VG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-01-16T09:46:00.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "表情包Emoji",
+      "docUrl": "https://help.aliyun.com/document_detail/2865374.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'X-DashScope-Async: enable' \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"emoji-v1\",\n    \"input\": {\n        \"image_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250912/uopnly/emoji-%E5%9B%BE%E5%83%8F%E6%A3%80%E6%B5%8B.png\",\n        \"driven_id\": \"mengwa_kaixin\",\n        \"face_bbox\": [212,194,460,441],\n        \"ext_bbox\": [63,30,609,575]\n    }\n}'\n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/<YOUR_TASK_ID> \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" "
+          }
+        }
+      }
+    }
+  ]
+}

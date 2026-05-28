@@ -1,0 +1,65 @@
+{
+  "name": "视频风格重绘",
+  "description": "视频风格重绘可以将输入的视频帧序列进行多种风格化的重绘/生成，使新视频画面在兼顾原始人物和物体相貌的同时，带来不同风格的绘画效果。当前支持预置重绘风格包括日式漫画、美式漫画、清新漫画、3D卡通、国风卡通。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Video"]
+      },
+      "openSource": false,
+      "description": "视频风格重绘可以将输入的视频帧序列进行多种风格化的重绘/生成，使新视频画面在兼顾原始人物和物体相貌的同时，带来不同风格的绘画效果。当前支持预置重绘风格包括日式漫画、美式漫画、清新漫画、3D卡通、国风卡通。",
+      "features": [],
+      "provider": "qwen",
+      "model": "video-style-transform",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.2",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.5",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        }
+      ],
+      "capabilities": ["VG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-09-12T16:00:06.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "视频风格重绘",
+      "docUrl": "https://help.aliyun.com/document_detail/2846319.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"video-style-transform\",\n    \"input\": {\n        \"video_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250704/viwndw/%E5%8E%9F%E8%A7%86%E9%A2%91.mp4\"\n    },\n    \"parameters\": {\n        \"style\": 0,\n        \"video_fps\": 15,\n        \"min_len\": 540\n    }\n}'\n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/<YOUR_TASK_ID> \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" "
+          }
+        }
+      }
+    }
+  ]
+}

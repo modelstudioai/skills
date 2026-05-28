@@ -1,0 +1,103 @@
+{
+  "name": "Qwen-Plus-Character",
+  "description": "千问系列角色扮演模型，本模型是动态更新版本，模型更新会提前通知，适合拟人化的角色扮演，同时优化了限定人设指令遵循、话题推进、倾听共情等能力，支持个性化角色的深度还原。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "千问系列角色扮演模型，本模型是动态更新版本，模型更新会提前通知，适合拟人化的角色扮演，同时优化了限定人设指令遵循、话题推进、倾听共情等能力，支持个性化角色的深度还原。",
+      "features": ["model-experience", "web-search", "cache", "structured-outputs"],
+      "provider": "qwen-domain-model",
+      "model": "qwen-plus-character",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.8",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.16",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 500000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 120,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 500000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 120,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG"],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 4096,
+      "latestOnlineAt": "2025-03-20T09:16:40.000+00:00",
+      "contextWindow": 32768,
+      "maxInputTokens": 32768,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Plus-Character",
+      "docUrl": "https://help.aliyun.com/document_detail/2874763.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"qwen-plus-character\",\n    \"messages\": [\n        {\n            \"role\": \"system\",\n            \"content\": \"You are a helpful assistant.\"\n        },\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁？\"\n        }\n    ],\n    \"stream\":true\n}'",
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\ncompletion = client.chat.completions.create(\n    model=\"qwen-plus-character\",\n    messages=[\n        {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n        {\"role\": \"user\", \"content\": \"你是谁？\"},\n    ],\n    stream=True\n)\nfor chunk in completion:\n    print(chunk.choices[0].delta.content, end=\"\", flush=True)",
+            "nodejs": "import OpenAI from \"openai\";\nconst openai = new OpenAI(\n    {\n        // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: \"sk-xxx\",\n        apiKey: process.env.DASHSCOPE_API_KEY,\n        baseURL: \"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n    }\n);\nconst completion = await openai.chat.completions.create({\n    model: \"qwen-plus-character\",\n    messages: [\n        { role: \"system\", content: \"You are a helpful assistant.\" },\n        { role: \"user\", content: \"你是谁？\" }\n    ],\n    stream: true\n});\nfor await (const chunk of completion) {\n    process.stdout.write(chunk.choices[0].delta.content);\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3016807.html"
+          }
+        },
+        "dashscope": {
+          "completionsAPI": {
+            "curl": "curl --location \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header \"Content-Type: application/json\" \\\n--data '{\n    \"model\": \"qwen-plus-character\",\n    \"input\":{\n        \"messages\":[      \n            {\n                \"role\": \"system\",\n                \"content\": \"You are a helpful assistant.\"\n            },\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n    {\"role\": \"user\", \"content\": \"你是谁？\"},\n]\nresponse = Generation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = \"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"qwen-plus-character\",\n    messages=messages,\n    result_format=\"message\",\n)\n\nprint(response.output.choices[0].message.content)",
+            "java": "import java.util.Arrays;\nimport java.lang.System;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.protocol.Protocol;\n\npublic class Main {\n    public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {\n        Generation gen = new Generation(Protocol.HTTP.getValue(), \"https://dashscope.aliyuncs.com/api/v1\");\n        Message systemMsg = Message.builder()\n                .role(Role.SYSTEM.getValue())\n                .content(\"You are a helpful assistant.\")\n                .build();\n        Message userMsg = Message.builder()\n                .role(Role.USER.getValue())\n                .content(\"你是谁？\")\n                .build();\n        GenerationParam param = GenerationParam.builder()\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"qwen-plus-character\")\n                .messages(Arrays.asList(systemMsg, userMsg))\n                .resultFormat(GenerationParam.ResultFormat.MESSAGE)\n                .build();\n        return gen.call(param);\n    }\n    public static void main(String[] args) {\n        try {\n            GenerationResult result = callWithMessage();\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.err.println(\"错误信息：\"+e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3016809.html"
+          }
+        }
+      }
+    }
+  ]
+}

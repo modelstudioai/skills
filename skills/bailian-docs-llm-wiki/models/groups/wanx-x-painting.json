@@ -1,0 +1,53 @@
+{
+  "name": "万相-图像局部重绘",
+  "description": "万相-图像局部重绘是基于自研的Composer组合生成框架的AI绘画创作大模型后置处理链路，能够根据用户输入的原始图片和意涂抹图中局部区域和prompt提示词文字内容，生成符合语义描述的多样化风格的局部重绘图像。通过知识重组与可变维度扩散模型，加速收敛并提升最终生成图片的效果, 布局自然、细节丰富、画面细腻、结果逼真。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Image"]
+      },
+      "openSource": false,
+      "description": "万相-图像局部重绘是基于自研的Composer组合生成框架的AI绘画创作大模型后置处理链路，能够根据用户输入的原始图片和意涂抹图中局部区域和prompt提示词文字内容，生成符合语义描述的多样化风格的局部重绘图像。通过知识重组与可变维度扩散模型，加速收敛并提升最终生成图片的效果, 布局自然、细节丰富、画面细腻、结果逼真。",
+      "features": [],
+      "provider": "wan",
+      "model": "wanx-x-painting",
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-05-28T10:45:39.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "万相-图像局部重绘",
+      "docUrl": "https://help.aliyun.com/document_detail/2797051.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n  \"model\": \"wanx-x-painting\",\n  \"input\": {\n    \"prompt\": \"一只狗戴着红色眼镜\",\n    \"base_image_url\": \"http://synthesis-source.oss-accelerate.aliyuncs.com/lingji/validation/mask2img/demo/source3.jpg\",\n    \"mask_image_url\": \"http://synthesis-source.oss-accelerate.aliyuncs.com/lingji/validation/mask2img/demo/glasses.png\"\n  },\n  \"parameters\": {\n    \"size\": \"1024*1024\",\n    \"n\": 1\n  }\n}'\n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\"",
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nprompt = \"一只狗戴着红色眼镜\"\nmodel = \"wanx-x-painting\"\ntask = \"image2image\"\nextra_input = {\n    \"base_image_url\": \"http://synthesis-source.oss-accelerate.aliyuncs.com/lingji/validation/mask2img/demo/source3.jpg\",\n    \"mask_image_url\": \"http://synthesis-source.oss-accelerate.aliyuncs.com/lingji/validation/mask2img/demo/glasses.png\"\n}\n\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(model=model,\n                          prompt=prompt,\n                          n=1,\n                          size='1024*1024',\n                          task=task,\n                          extra_input=extra_input)\nif rsp.status_code == HTTPStatus.OK:\n    print(rsp)\n    # save file to current directory\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))",
+            "java": "// Copyright (c) Alibaba, Inc. and its affiliates.\n\nimport com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesis;\nimport com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesisParam;\nimport com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesisResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.JsonUtils;\nimport com.alibaba.dashscope.utils.Constants;\nimport java.util.HashMap;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    public void syncCall() {\n        String task = \"image2image\";\n        ImageSynthesis imageSynthesis = new ImageSynthesis(task);\n        ImageSynthesisParam param = genImageSynthesis();\n        ImageSynthesisResult result = null;\n        try {\n            System.out.println(\"---sync call, please wait a moment----\");\n            result = imageSynthesis.call(param);\n        } catch (ApiException | NoApiKeyException e){\n            throw new RuntimeException(e.getMessage());\n        }\n        System.out.println(JsonUtils.toJson(result));\n    }\n\n    private ImageSynthesisParam genImageSynthesis(){\n        HashMap<String,Object> extraInputMap = new HashMap<>();\n        extraInputMap.put(\"base_image_url\", \"http://synthesis-source.oss-accelerate.aliyuncs.com/lingji/validation/mask2img/demo/source3.jpg\");\n        extraInputMap.put(\"mask_image_url\", \"http://synthesis-source.oss-accelerate.aliyuncs.com/lingji/validation/mask2img/demo/glasses.png\");\n        String prompt = \"一只狗戴着红色眼镜\";\n        String model = \"wanx-x-painting\";\n        return ImageSynthesisParam.builder()\n                .model(model)\n                .prompt(prompt)\n                .n(1)\n                .size(\"1024*1024\")\n                .extraInputs(extraInputMap)\n                .build();\n    }\n\n\n    public static void main(String[] args){\n        Main text2Image = new Main();\n        text2Image.syncCall();\n    }\n\n}"
+          }
+        }
+      }
+    }
+  ]
+}

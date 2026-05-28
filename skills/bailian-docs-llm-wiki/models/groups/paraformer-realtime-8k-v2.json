@@ -1,0 +1,40 @@
+{
+  "name": "Paraformer实时语音识别-8k-v2",
+  "description": "推荐使用 Paraformer最新实时语音识别模型，支持多个语种自由切换的视频直播、会议等实时场景的语音识别。可以通过language_hints参数选择语种获得更准确的识别效果。支持8kHz电话客服等场景下的实时语音识别。\n支持的语言包括：中文（含粤语等各种方言）、英文、日语、韩语。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Audio"]
+      },
+      "openSource": false,
+      "description": "推荐使用 Paraformer最新实时语音识别模型，支持多个语种自由切换的视频直播、会议等实时场景的语音识别。可以通过language_hints参数选择语种获得更准确的识别效果。支持8kHz电话客服等场景下的实时语音识别。\n支持的语言包括：中文（含粤语等各种方言）、英文、日语、韩语。",
+      "features": ["model-experience"],
+      "provider": "qwen",
+      "model": "paraformer-realtime-8k-v2",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.00024",
+          "type": "content_duration",
+          "priceName": "音频时长"
+        }
+      ],
+      "capabilities": ["Realtime-ASR"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-12-31T08:01:43.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Paraformer实时语音识别-8k-v2",
+      "docUrl": "https://help.aliyun.com/document_detail/2712536.html",
+      "predictConfig": [],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom dashscope.audio.asr import Recognition\n\n# 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\n\nrecognition = Recognition(model='paraformer-realtime-8k-v2',\n                          format='wav',\n                          sample_rate=16000,\n                          # “language_hints”只支持paraformer-realtime-v2模型\n                          language_hints=['zh', 'en'],\n                          callback=None)\nresult = recognition.call('asr_example.wav')\nif result.status_code == HTTPStatus.OK:\n    print('识别结果：')\n    print(result.get_sentence())\nelse:\n    print('Error: ', result.message)\n    \nprint(\n    '[Metric] requestId: {}, first package delay ms: {}, last package delay ms: {}'\n    .format(\n        recognition.get_last_request_id(),\n        recognition.get_first_package_delay(),\n        recognition.get_last_package_delay(),\n    ))",
+            "java": "import com.alibaba.dashscope.audio.asr.recognition.Recognition;\nimport com.alibaba.dashscope.audio.asr.recognition.RecognitionParam;\nimport java.io.File;\n\npublic class Main {\n    public static void main(String[] args) {\n        // 创建Recognition实例\n        Recognition recognizer = new Recognition();\n        // 创建RecognitionParam\n        RecognitionParam param =\n                RecognitionParam.builder()\n                        // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                        // .apiKey(\"yourApikey\")\n                        .model(\"paraformer-realtime-8k-v2\")\n                        .format(\"wav\")\n                        .sampleRate(16000)\n                        // “language_hints”只支持paraformer-realtime-v2模型\n                        .parameter(\"language_hints\", new String[]{\"zh\", \"en\"})\n                        .build();\n\n        try {\n            System.out.println(\"识别结果：\" + recognizer.call(param, new File(\"asr_example.wav\")));\n        } catch (Exception e) {\n            e.printStackTrace();\n        }\n        System.out.println(\n                \"[Metric] requestId: \"\n                        + recognizer.getLastRequestId()\n                        + \", first package delay ms: \"\n                        + recognizer.getFirstPackageDelay()\n                        + \", last package delay ms: \"\n                        + recognizer.getLastPackageDelay());\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

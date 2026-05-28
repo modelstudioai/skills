@@ -1,0 +1,162 @@
+{
+  "name": "Qwen-Image-Plus",
+  "description": "千问系列图像生成模型，参数规模200亿。具备卓越的文本渲染能力，在复杂文本渲染、各类生成与编辑任务重表现出色，在多个公开基准测试中获得SOTA，模型性能大幅提升。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "千问系列图像生成模型，参数规模200亿。具备卓越的文本渲染能力，在复杂文本渲染、各类生成与编辑任务重表现出色，在多个公开基准测试中获得SOTA，模型性能大幅提升。",
+      "features": ["model-experience"],
+      "provider": "qwen",
+      "model": "qwen-image-plus",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_qwenimageplus_dp_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.2",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 2,
+          "usage_limit_period": 60,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 2,
+          "usage_limit_period": 60,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        }
+      },
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-09-23T10:49:31.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Image-Plus",
+      "docUrl": "https://help.aliyun.com/document_detail/2975126.html",
+      "predictConfig": [
+        {
+          "name": "negative_prompt",
+          "key": "negativePrompt",
+          "tip": "通过指定用户不想看到的内容来优化模型输出，使模型产生更有针对性和理想的结果。"
+        },
+        {
+          "name": "size",
+          "key": "size",
+          "default": "1328*1328",
+          "tip": "输出分辨率"
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": false,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "import json\nimport os\nimport dashscope\nfrom dashscope import MultiModalConversation\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\n        \"role\": \"user\",\n        \"content\": [\n            {\"text\": \"一副典雅庄重的对联悬挂于厅堂之中，房间是个安静古典的中式布置，桌子上放着一些青花瓷，对联上左书“义本生知人机同道善思新”，右书“通云赋智乾坤启数高志远”， 横批“智启通义”，字体飘逸，中间挂在一着一副中国风的画作，内容是岳阳楼。\"}\n        ]\n    }\n]\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\nresponse = MultiModalConversation.call(\n    api_key=api_key,\n    model=\"qwen-image-plus\",\n    messages=messages,\n    result_format='message',\n    stream=False,\n    watermark=False,\n    prompt_extend=True,\n    negative_prompt='',\n    size='1328*1328'\n)\n\nif response.status_code == 200:\n    print(json.dumps(response, ensure_ascii=False))\nelse:\n    print(f\"HTTP返回码：{response.status_code}\")\n    print(f\"错误码：{response.code}\")\n    print(f\"错误信息：{response.message}\")\n    print(\"请参考文档：https://www.alibabacloud.com/help/zh/model-studio/error-code\")"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "千问系列首个图像生成模型，参数规模200亿。具备卓越的文本渲染能力，在复杂文本渲染、各类生成与编辑任务重表现出色，在多个公开基准测试中获得SOTA。",
+      "features": ["model-experience"],
+      "provider": "qwen",
+      "model": "qwen-image",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_qwenimage_dp_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.25",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "usage_limit": 1000000,
+          "usage_limit_field": "tokens",
+          "count_limit": 2,
+          "usage_limit_period": 60,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "usage_limit": 1000000,
+          "usage_limit_field": "tokens",
+          "count_limit": 2,
+          "usage_limit_period": 60,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        }
+      },
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-08-13T12:58:52.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Image",
+      "docUrl": "https://help.aliyun.com/document_detail/2975126.html",
+      "predictConfig": [
+        {
+          "name": "negative_prompt",
+          "key": "negativePrompt",
+          "tip": "通过指定用户不想看到的内容来优化模型输出，使模型产生更有针对性和理想的结果。"
+        },
+        {
+          "name": "size",
+          "key": "size",
+          "default": "1328*1328",
+          "tip": "输出分辨率"
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": false,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "import json\nimport os\nimport dashscope\nfrom dashscope import MultiModalConversation\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\n        \"role\": \"user\",\n        \"content\": [\n            {\"text\": \"一副典雅庄重的对联悬挂于厅堂之中，房间是个安静古典的中式布置，桌子上放着一些青花瓷，对联上左书“义本生知人机同道善思新”，右书“通云赋智乾坤启数高志远”， 横批“智启通义”，字体飘逸，中间挂在一着一副中国风的画作，内容是岳阳楼。\"}\n        ]\n    }\n]\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\nresponse = MultiModalConversation.call(\n    api_key=api_key,\n    model=\"qwen-image\",\n    messages=messages,\n    result_format='message',\n    stream=False,\n    watermark=False,\n    prompt_extend=True,\n    negative_prompt='',\n    size='1328*1328'\n)\n\nif response.status_code == 200:\n    print(json.dumps(response, ensure_ascii=False))\nelse:\n    print(f\"HTTP返回码：{response.status_code}\")\n    print(f\"错误码：{response.code}\")\n    print(f\"错误信息：{response.message}\")\n    print(\"请参考文档：https://www.alibabacloud.com/help/zh/model-studio/error-code\")"
+          }
+        }
+      }
+    }
+  ]
+}

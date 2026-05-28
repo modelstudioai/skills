@@ -1,0 +1,89 @@
+{
+  "name": "HappyHorse-T2V",
+  "description": "HappyHorse系列最新文生视频模型，具备高度还原的动态画面生成能力，能够精准理解文本语义，输出流畅自然、细节丰富的高质量视频。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "HappyHorse-1.0-T2V支持文生视频，具备高度还原的动态画面生成能力，能够精准理解文本语义，输出流畅自然、细节丰富的高质量视频。",
+      "features": ["model-experience"],
+      "provider": "happyhorse",
+      "model": "happyhorse-1.0-t2v",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.9",
+          "discount": 0.8,
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1.6",
+          "discount": 0.8,
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 10,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 10,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["VG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-04-21T09:03:16.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "HappyHorse-1.0-T2V",
+      "docUrl": "https://help.aliyun.com/document_detail/3029820.html",
+      "predictConfig": [
+        {
+          "name": "清晰度",
+          "key": "resolution",
+          "default": "1080P"
+        },
+        {
+          "name": "宽高比",
+          "key": "ratio",
+          "default": "16:9"
+        },
+        {
+          "name": "视频时长(秒)",
+          "key": "duration",
+          "default": 5,
+          "range": [3, 15]
+        },
+        {
+          "name": "随机种子",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"happyhorse-1.0-t2v\",\n    \"input\": {\n        \"prompt\": \"一座由硬纸板和瓶盖搭建的微型城市，在夜晚焕发出生机。一列硬纸板火车缓缓驶过，小灯点缀其间，照亮前路。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"ratio\": \"16:9\",\n        \"duration\": 5\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3029820.html"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "name": "Paraformer语音识别-v2",
+  "description": "推荐使用 Paraformer最新语音识别模型，支持多个语种的语音识别。可以通过language_hints参数选择语种获得更准确的识别效果，支持任意采样率。 支持的语言包括：中文（含粤语等各种方言）、英文、日语、韩语。可支持热词。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Audio"]
+      },
+      "openSource": false,
+      "description": "推荐使用 Paraformer最新语音识别模型，支持多个语种的语音识别。可以通过language_hints参数选择语种获得更准确的识别效果，支持任意采样率。 支持的语言包括：中文（含粤语等各种方言）、英文、日语、韩语。可支持热词。",
+      "features": ["model-experience"],
+      "provider": "qwen",
+      "model": "paraformer-v2",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VoiceModel_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.00008",
+          "type": "content_duration",
+          "priceName": "音频时长"
+        }
+      ],
+      "capabilities": ["ASR"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-09-05T16:00:06.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Paraformer语音识别-v2",
+      "docUrl": "https://help.aliyun.com/document_detail/2712535.html",
+      "predictConfig": [
+        {
+          "name": "过滤语气词",
+          "key": "disfluency_removal_enabled",
+          "tip": "过滤语气词，默认为关闭false。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom dashscope.audio.asr import Transcription\nimport json\n\n# 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\n\ntask_response = Transcription.async_call(\n    model='paraformer-v2',\n    file_urls=['https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav',\n               'https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav']\n    # language_hints=['zh', 'en']  # “language_hints”只支持paraformer-v2模型\n)\n\ntranscribe_response = Transcription.wait(task=task_response.output.task_id)\nif transcribe_response.status_code == HTTPStatus.OK:\n    print(json.dumps(transcribe_response.output, indent=4, ensure_ascii=False))\n    print('transcription done!')",
+            "java": "import com.alibaba.dashscope.audio.asr.transcription.*;\nimport com.google.gson.*;\n\nimport java.util.Arrays;\n\npublic class Main {\n    public static void main(String[] args) {\n        // 创建转写请求参数\n        TranscriptionParam param =\n                TranscriptionParam.builder()\n                        // 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n                        //.apiKey(\"apikey\")\n                        .model(\"paraformer-v2\")\n                        // “language_hints”只支持paraformer-v2模型\n                        // .parameter(\"language_hints\", new String[]{\"zh\", \"en\"})\n                        .fileUrls(\n                                Arrays.asList(\n                                        \"https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav\",\n                                        \"https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav\"))\n                        .build();\n        try {\n            Transcription transcription = new Transcription();\n            // 提交转写请求\n            TranscriptionResult result = transcription.asyncCall(param);\n            System.out.println(\"RequestId: \" + result.getRequestId());\n            // 阻塞等待任务完成并获取结果\n            result = transcription.wait(\n                    TranscriptionQueryParam.FromTranscriptionParam(param, result.getTaskId()));\n            // 打印结果\n            System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(result.getOutput()));\n        } catch (Exception e) {\n            System.out.println(\"error: \" + e);\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

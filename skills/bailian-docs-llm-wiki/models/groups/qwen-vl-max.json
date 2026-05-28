@@ -1,0 +1,135 @@
+{
+  "name": "Qwen-VL-Max",
+  "description": "Qwen-VL-Max，即千问超大规模视觉语言模型。相比增强版，再次提升视觉推理能力和指令遵循能力，提供更高的视觉感知和认知水平。在更多复杂任务上提供最佳的性能。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text", "Image", "Video"]
+      },
+      "openSource": false,
+      "description": "千问VL-Max（qwen-vl-max），即千问超大规模视觉语言模型。相比增强版，再次提升视觉推理能力和指令遵循能力，提供更高的视觉感知和认知水平。在更多复杂任务上提供最佳的性能。",
+      "offlineExtendInfo": {
+        "announceUrl": "https://www.aliyun.com/notice/118177"
+      },
+      "offlineAt": "2026-07-13T15:59:59.000+00:00",
+      "features": ["model-experience", "structured-outputs", "prefix-completion", "cache", "batch"],
+      "provider": "qwen",
+      "model": "qwen-vl-max",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.6",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "4",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.32",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.8",
+          "type": "input_token_batch",
+          "priceName": "输入（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2",
+          "type": "output_token_batch",
+          "priceName": "输出（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "150",
+          "type": "ft",
+          "priceName": "调优"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 5,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 100,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 5,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 100,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["VU"],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 8192,
+      "latestOnlineAt": "2025-05-25T16:00:00.000+00:00",
+      "contextWindow": 131072,
+      "maxInputTokens": 129024,
+      "offlineInfo": {
+        "inference": {
+          "announceUrl": "https://www.aliyun.com/notice/118177",
+          "offlineTime": "2026-07-13 23:59:59"
+        }
+      },
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-VL-Max",
+      "docUrl": "https://help.aliyun.com/document_detail/2845871.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "result_format",
+          "key": "result_format",
+          "default": "message",
+          "tip": "返回结果格式"
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n  \"model\": \"qwen-vl-max\",\n  \"messages\": [\n  {\n    \"role\": \"user\",\n    \"content\": [\n      {\"type\": \"image_url\", \"image_url\": {\"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"}},\n      {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"}\n    ]\n  }]\n}'",
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"qwen-vl-max\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\n                    \"type\": \"image_url\",\n                    \"image_url\": {\n                        \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n                    },\n                },\n                {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"},\n            ],\n        },\n    ],\n)\nprint(completion.choices[0].message.content)",
+            "nodejs": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI({\n  // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: \"sk-xxx\"\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: \"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n});\n\nasync function main() {\n  const response = await openai.chat.completions.create({\n    model: \"qwen-vl-max\",\n    messages: [\n      {\n        role: \"user\",\n        content: [{\n            type: \"image_url\",\n            image_url: {\n              \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n            }\n          },\n          {\n            type: \"text\",\n            text: \"请仅输出图像中的文本内容。\"\n          }\n        ]\n      }\n    ]\n  });\n  console.log(response.choices[0].message.content);\n}\nmain()"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H 'Content-Type: application/json' \\\n-d '{\n    \"model\": \"qwen-vl-max\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\"image\": \"https://dashscope.oss-cn-beijing.aliyuncs.com/images/dog_and_girl.jpeg\"},\n                    {\"text\": \"图中描绘的是什么景象？\"}\n                ]\n            },\n            {\n                \"role\": \"assistant\",\n                \"content\": [\n                    {\"text\": \"图中是一名女子和一只拉布拉多犬在沙滩上玩耍。\"}\n                ]\n            },\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\"text\": \"写一首七言绝句描述这个场景\"}\n                ]\n            }\n        ]\n    }\n}'",
+            "python": "import os\nimport dashscope\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\nmessages = [\n{\n    \"role\": \"user\",\n    \"content\": [\n    {\"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"},\n    {\"text\": \"请仅输出图像中的文本内容。\"}]\n}]\nresponse = dashscope.MultiModalConversation.call(\n    #若没有配置环境变量， 请用百炼API Key将下行替换为： api_key =\"sk-xxx\"\n    api_key = os.getenv('DASHSCOPE_API_KEY'),\n    model = 'qwen-vl-max',\n    messages = messages\n)\nprint(response.output.choices[0].message.content[0][\"text\"])",
+            "java": "import java.util.ArrayList;\nimport java.util.Arrays;\nimport java.util.Collections;\nimport java.util.List;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;\nimport com.alibaba.dashscope.common.MultiModalMessage;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\nimport com.alibaba.dashscope.utils.Constants;\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    private static final String modelName = \"qwen-vl-max\";  \n    public static void MultiRoundConversationCall() throws ApiException, NoApiKeyException, UploadFileException {\n        MultiModalConversation conv = new MultiModalConversation();\n        MultiModalMessage systemMessage = MultiModalMessage.builder().role(Role.SYSTEM.getValue())\n                .content(Arrays.asList(Collections.singletonMap(\"text\", \"You are a helpful assistant.\"))).build();\n        MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())\n                .content(Arrays.asList(Collections.singletonMap(\"image\", \"https://dashscope.oss-cn-beijing.aliyuncs.com/images/dog_and_girl.jpeg\"),\n                        Collections.singletonMap(\"text\", \"图中描绘的是什么景象？\"))).build();\n        List<MultiModalMessage> messages = new ArrayList<>();\n        messages.add(systemMessage);\n        messages.add(userMessage);\n        MultiModalConversationParam param = MultiModalConversationParam.builder()\n                // 新加坡和北京地域的API Key不同。获取API Key：https://www.alibabacloud.com/help/zh/model-studio/get-api-key\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))                \n                .model(modelName)\n                .messages(messages)\n                .build();\n        MultiModalConversationResult result = conv.call(param);\n        System.out.println(\"第一轮输出： \"+result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get(\"text\"));        // add the result to conversation\n        messages.add(result.getOutput().getChoices().get(0).getMessage());\n        MultiModalMessage msg = MultiModalMessage.builder().role(Role.USER.getValue())\n                .content(Arrays.asList(Collections.singletonMap(\"text\", \"做一首诗描述这个场景\"))).build();\n        messages.add(msg);\n        param.setMessages((List)messages);\n        result = conv.call(param);\n        System.out.println(\"第二轮输出： \"+result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get(\"text\"));    }\n\n    public static void main(String[] args) {\n        try {\n            MultiRoundConversationCall();\n        } catch (ApiException | NoApiKeyException | UploadFileException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

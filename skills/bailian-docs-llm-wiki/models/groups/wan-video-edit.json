@@ -1,0 +1,95 @@
+{
+  "name": "Wan-VideoEdit",
+  "description": "通过指令对视频进行编辑，支持局部/整体编辑、视频重塑、视频复刻等",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Image", "Text", "Video"]
+      },
+      "openSource": false,
+      "description": "Wan2.7-VideoEdit，自然语言指令编辑视频，支持局部或全局编辑，可参考图像替换视频元素，支持复刻视频动作、特效、运镜等动态过程。",
+      "collectionTag": "wan2.7",
+      "features": ["model-experience"],
+      "provider": "wan",
+      "model": "wan2.7-videoedit",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.6",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["VG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-04-03T03:19:53.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.7-VideoEdit",
+      "docUrl": "https://help.aliyun.com/document_detail/3021842.html",
+      "predictConfig": [
+        {
+          "name": "清晰度",
+          "key": "resolution",
+          "default": "1080P"
+        },
+        {
+          "name": "宽高比",
+          "key": "ratio",
+          "default": "16:9"
+        },
+        {
+          "name": "视频时长",
+          "key": "duration",
+          "tip": "可以选择与输入视频时长相同，或者指定不大于输入视频的时长"
+        },
+        {
+          "name": "声音设置",
+          "key": "audio_setting",
+          "tip": [
+            "auto （默认）：模型根据 prompt 内容智能判断。若提示词涉及声音描述，可能重新生成音频；否则可能保留输入素材的原声。",
+            "origin：强制保留输入视频的原声，不重新生成。"
+          ]
+        },
+        {
+          "name": "随机种子",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"wan2.7-videoedit\",\n    \"input\": {\n        \"prompt\": \"将视频中女孩的衣服替换为图片中的衣服\",\n        \"media\": [\n            {\n                \"type\": \"video\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260403/nlspwm/T2VA_22.mp4\"\n            },\n            {\n                \"type\": \"reference_image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260402/fwjpqf/wan2.7-videoedit-change-clothes.png\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"prompt_extend\": true,\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3021842.html"
+          }
+        }
+      }
+    }
+  ]
+}

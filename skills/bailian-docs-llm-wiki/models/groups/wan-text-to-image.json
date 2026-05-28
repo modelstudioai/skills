@@ -1,0 +1,683 @@
+{
+  "name": "Wan-T2I",
+  "description": "文字生成图片，写实质感细腻画面，文字内容生成，艺术风格表现",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "万相2.6-文生图，画面质感、美学表现、指令遵循升级，在艺术风格精准控制、真实感人像、长文本生图及广泛历史文化IP覆盖上均表现出卓越能力，可生成高质量且富有表现力的视觉内容。",
+      "collectionTag": "wan2.6",
+      "features": ["model-experience"],
+      "provider": "wan",
+      "model": "wan2.6-t2i",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.2",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 1,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 1,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-12-15T08:05:15.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.6-T2I",
+      "docUrl": "https://help.aliyun.com/document_detail/2862677.html",
+      "predictConfig": [
+        {
+          "name": "size",
+          "key": "size",
+          "default": "1280*1280",
+          "tip": "输出分辨率"
+        },
+        {
+          "name": "n",
+          "key": "n",
+          "default": 1,
+          "tip": "本次请求生成的图片数量"
+        },
+        {
+          "name": "seed",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": false,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \\\n--header 'Content-Type: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--data '{\n    \"model\": \"wan2.6-t2i\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"negative_prompt\": \"\",\n        \"prompt_extend\": true,\n        \"watermark\": false,\n        \"n\": 2,\n        \"size\": \"1280*1280\"\n    }\n}'"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "万相2.5-文生图-Preview，全新升级模型架构。画面美学、设计感、真实质感显著提升，精准指令遵循，擅长中英文和小语种文字生成，支持复杂结构化长文本和图表、架构图等内容生成。",
+      "collectionTag": "wan2.5",
+      "features": ["model-experience"],
+      "provider": "wan",
+      "model": "wan2.5-t2i-preview",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.2",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-09-19T08:44:37.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.5-T2I-Preview",
+      "docUrl": "https://help.aliyun.com/document_detail/2862677.html",
+      "predictConfig": [
+        {
+          "name": "size",
+          "key": "size",
+          "default": "1280*1280",
+          "tip": "输出分辨率"
+        },
+        {
+          "name": "n",
+          "key": "n",
+          "default": 1,
+          "tip": "本次请求生成的图片数量"
+        },
+        {
+          "name": "seed",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": false,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wan2.5-t2i-preview\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "全新升级的万相2.2文生图，更丰富的画面细节。在生成图像创意性、稳定性、写实质感方面全面升级，指令遵循更强，原生支持多种风格。支持最大200万像素生成，支持智能提示词改写等。",
+      "collectionTag": "wan2.2",
+      "features": ["model-experience"],
+      "provider": "wan",
+      "model": "wan2.2-t2i-plus",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.2",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        }
+      },
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-07-27T16:00:00.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.2-T2I-Plus",
+      "docUrl": "https://help.aliyun.com/document_detail/2862677.html",
+      "predictConfig": [
+        {
+          "name": "size",
+          "key": "size",
+          "default": "1280*720",
+          "tip": "输出分辨率"
+        },
+        {
+          "name": "n",
+          "key": "n",
+          "default": 1,
+          "tip": "本次请求生成的图片数量"
+        },
+        {
+          "name": "seed",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": false,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wan2.2-t2i-plus\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "全新升级的万相2.2文生图，更快的生成速度。在生成图像创意性、稳定性、写实质感方面全面升级，指令遵循更强，原生支持多种风格。支持最大200万像素生成，支持智能提示词改写等。",
+      "collectionTag": "wan2.2",
+      "features": ["model-experience"],
+      "provider": "wan",
+      "model": "wan2.2-t2i-flash",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.14",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        }
+      },
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-07-27T16:00:00.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.2-T2I-Flash",
+      "docUrl": "https://help.aliyun.com/document_detail/2862677.html",
+      "predictConfig": [
+        {
+          "name": "size",
+          "key": "size",
+          "default": "1280*720",
+          "tip": "输出分辨率"
+        },
+        {
+          "name": "n",
+          "key": "n",
+          "default": 1,
+          "tip": "本次请求生成的图片数量"
+        },
+        {
+          "name": "seed",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": false,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wan2.2-t2i-flash\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "万相2.1-文生图-Plus，更丰富的画面细节，在图像美观度、真实感、艺术性上全面升级，更强的语义理解能力、丰富的风格泛化性、支持最大200万像素生成，支持智能提示词改写等。",
+      "features": ["model-experience"],
+      "provider": "wan",
+      "model": "wanx2.1-t2i-plus",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.2",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        }
+      },
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-01-08T16:09:10.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.1-T2I-Plus",
+      "docUrl": "https://help.aliyun.com/document_detail/2862677.html",
+      "predictConfig": [
+        {
+          "name": "size",
+          "key": "size",
+          "default": "1280*720",
+          "tip": "输出分辨率"
+        },
+        {
+          "name": "n",
+          "key": "n",
+          "default": 1,
+          "tip": "本次请求生成的图片数量"
+        },
+        {
+          "name": "seed",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": false,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wanx2.1-t2i-plus\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "万相2.1-文生图-Turbo，更快的生成速度，在图像美观度、真实感、艺术性上全面升级，更强的语义理解能力、丰富的风格泛化性、支持最大200万像素生成，支持智能提示词改写等。",
+      "features": ["model-experience"],
+      "provider": "wan",
+      "model": "wanx2.1-t2i-turbo",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.14",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        }
+      },
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-01-08T16:12:34.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.1-T2I-Turbo",
+      "docUrl": "https://help.aliyun.com/document_detail/2862677.html",
+      "predictConfig": [
+        {
+          "name": "size",
+          "key": "size",
+          "default": "1280*720",
+          "tip": "输出分辨率"
+        },
+        {
+          "name": "n",
+          "key": "n",
+          "default": 1,
+          "tip": "本次请求生成的图片数量"
+        },
+        {
+          "name": "seed",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": false,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wanx2.1-t2i-turbo\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "万相-文本生成图像大模型，支持中英文双语输入，重点风格包括但不限于水彩、油画、中国画、素描、扁平插画、二次元、3D卡通",
+      "features": ["model-experience"],
+      "provider": "wan",
+      "model": "wanx-v1",
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.16",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-01-05T08:26:20.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "wanx-t2i",
+      "docUrl": "https://help.aliyun.com/document_detail/2712483.html",
+      "predictConfig": [
+        {
+          "name": "negative_prompt",
+          "key": "negativePrompt",
+          "tip": "通过指定用户不想看到的内容来优化模型输出，使模型产生更有针对性和理想的结果。"
+        },
+        {
+          "name": "style",
+          "key": "style",
+          "default": "<auto>",
+          "tip": "输出风格"
+        },
+        {
+          "name": "size",
+          "key": "size",
+          "default": "1024*1024",
+          "tip": "输出分辨率"
+        },
+        {
+          "name": "n",
+          "key": "n",
+          "default": 1,
+          "tip": "本次请求生成的图片数量"
+        },
+        {
+          "name": "seed",
+          "key": "seed",
+          "default": 1234,
+          "tip": "种子值",
+          "range": [1, 4294967289]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wanx-v1\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "Wan2.0-T2I-Turbo，更擅长质感人像和创意设计画作生成，在图像美观度、真实感、艺术性上全面升级，支持最大200万像素生成，支持智能提示词改写等。",
+      "features": ["model-experience"],
+      "provider": "wan",
+      "model": "wanx2.0-t2i-turbo",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.04",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        }
+      },
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-01-20T03:29:28.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.0-T2I-Turbo",
+      "docUrl": "https://help.aliyun.com/document_detail/2862677.html",
+      "predictConfig": [
+        {
+          "name": "size",
+          "key": "size",
+          "default": "1024*1024",
+          "tip": "输出分辨率"
+        },
+        {
+          "name": "n",
+          "key": "n",
+          "default": 1,
+          "tip": "本次请求生成的图片数量"
+        },
+        {
+          "name": "seed",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": false,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wanx2.0-t2i-turbo\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "万相-文本生成图像大模型，支持中英文双语输入，重点风格包括但不限于水彩、油画、中国画、素描、扁平插画、二次元、3D卡通，本模型为通义万相的2024年5月21号的历史快照。",
+      "features": [],
+      "provider": "wan",
+      "model": "wanx-v1-0521",
+      "capabilities": ["IG"],
+      "versionTag": "SNAPSHOT",
+      "latestOnlineAt": "2024-05-22T13:57:26.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "万相-文本生成图像-2024-05-21",
+      "docUrl": "https://help.aliyun.com/document_detail/2712483.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wanx-v1-0521\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
+          }
+        }
+      }
+    }
+  ]
+}

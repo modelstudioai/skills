@@ -1,0 +1,65 @@
+{
+  "name": "悦动人像EMO",
+  "description": "EMO是一款视频生成模型，可基于人物图片生成高质量的人物肖像动态视频。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Image"]
+      },
+      "openSource": false,
+      "description": "EMO是一款视频生成模型，可基于人物图片生成高质量的人物肖像动态视频。",
+      "features": [],
+      "provider": "qwen",
+      "model": "emo-v1",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.08",
+          "type": "video_duration_1-1",
+          "priceName": "视频生成（1:1画幅视频）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.16",
+          "type": "video_duration_3-4",
+          "priceName": "视频生成（3:4画幅视频）"
+        }
+      ],
+      "capabilities": ["VG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-11-07T14:16:42.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "悦动人像EMO",
+      "docUrl": "https://help.aliyun.com/document_detail/2786461.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2video/face-detect' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data-raw '{\n  \"model\": \"emo-detect-v1\",\n  \"input\": {\n      \"image_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250911/yhdvfg/emo-%E5%9B%BE%E7%89%87.png\"\n  },\n  \"parameters\": {\n      \"ratio\": \"1:1\"\n  }\n}'"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "name": "Fun-ASR实时语音识别",
+  "description": "通义实验室新一代端到端语音识别大模型的实时版，基于领先的自研语音技术，具备卓越的上下文感知和高精度语音转写能力。基于端到端架构，Fun-ASR 集成了创新的 RAG 技术，支持大规模热词自定义、敏感/语气词自动过滤、ITN 规范化、标点预测等多维功能，显著提升了整体识别准确率和语境贴合度。同时，Fun-ASR 支持中英文自由切换，多地区方言覆盖，具备更强的噪声鲁棒性，适应多样复杂环境。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Audio"]
+      },
+      "openSource": false,
+      "description": "通义百聆推出的新一代轻量级实时语音识别模型，依托自研的先进语音技术架构，具备强大的上下文理解能力。专为中文电话客服场景设计：覆盖多地区方言口音，在低采样率、低信噪比环境下实现低延迟、高准确率的流式转写，满足高效部署需求。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "fun-asr-flash-8k-realtime",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.00022",
+          "type": "content_duration",
+          "priceName": "音频时长"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 20,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 20,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["Realtime-ASR"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "equivalentSnapshot": "fun-asr-flash-8k-realtime-2026-01-28",
+      "latestOnlineAt": "2026-02-12T11:34:14.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Fun-ASR-Flash-8k实时语音识别",
+      "docUrl": "https://help.aliyun.com/document_detail/2842554.html",
+      "category": "Audio",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom dashscope.audio.asr import Recognition\n\n# 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\n\nrecognition = Recognition(model='fun-asr-flash-8k-realtime',\n                          format='wav',\n                          sample_rate=16000,\n                          # “language_hints”只支持paraformer-realtime-v2模型\n                          language_hints=['zh', 'en'],\n                          callback=None)\nresult = recognition.call('asr_example.wav')\nif result.status_code == HTTPStatus.OK:\n    print('识别结果：')\n    print(result.get_sentence())\nelse:\n    print('Error: ', result.message)\n    \nprint(\n    '[Metric] requestId: {}, first package delay ms: {}, last package delay ms: {}'\n    .format(\n        recognition.get_last_request_id(),\n        recognition.get_first_package_delay(),\n        recognition.get_last_package_delay(),\n    ))",
+            "java": "import com.alibaba.dashscope.audio.asr.recognition.Recognition;\nimport com.alibaba.dashscope.audio.asr.recognition.RecognitionParam;\nimport java.io.File;\n\npublic class Main {\n    public static void main(String[] args) {\n        // 创建Recognition实例\n        Recognition recognizer = new Recognition();\n        // 创建RecognitionParam\n        RecognitionParam param =\n                RecognitionParam.builder()\n                        // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                        // .apiKey(\"yourApikey\")\n                        .model(\"fun-asr-flash-8k-realtime\")\n                        .format(\"wav\")\n                        .sampleRate(16000)\n                        // “language_hints”只支持paraformer-realtime-v2模型\n                        .parameter(\"language_hints\", new String[]{\"zh\", \"en\"})\n                        .build();\n\n        try {\n            System.out.println(\"识别结果：\" + recognizer.call(param, new File(\"asr_example.wav\")));\n        } catch (Exception e) {\n            e.printStackTrace();\n        }\n        System.out.println(\n                \"[Metric] requestId: \"\n                        + recognizer.getLastRequestId()\n                        + \", first package delay ms: \"\n                        + recognizer.getFirstPackageDelay()\n                        + \", last package delay ms: \"\n                        + recognizer.getLastPackageDelay());\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Audio"]
+      },
+      "openSource": false,
+      "description": "通义实验室新一代端到端语音识别大模型的实时版，基于领先的自研语音技术，具备卓越的上下文感知和高精度语音转写能力。基于端到端架构，Fun-ASR 集成了创新的 RAG 技术，支持大规模热词自定义、敏感/语气词自动过滤、ITN 规范化、标点预测等多维功能，显著提升了整体识别准确率和语境贴合度。同时，Fun-ASR 支持中英文自由切换，多地区方言覆盖，具备更强的噪声鲁棒性，适应多样复杂环境。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "fun-asr-realtime",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VoiceModel_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.00033",
+          "type": "content_duration",
+          "priceName": "音频时长"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 20,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 20,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["Realtime-ASR"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-09-23T11:05:02.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Fun-ASR实时语音识别",
+      "docUrl": "https://help.aliyun.com/document_detail/2842554.html",
+      "predictConfig": [
+        {
+          "name": "开启语义断句",
+          "key": "semantic_punctuation_enabled",
+          "default": false,
+          "tip": "开启语义断句后则将关闭VAD(语音活动检测)断句，具体见说明文档"
+        },
+        {
+          "name": "VAD静音阈值",
+          "key": "max_sentence_silence",
+          "default": 1300,
+          "tip": "VAD(语音活动检测)断句的静音时长阈值(单位为ms)",
+          "range": [200, 6000]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom dashscope.audio.asr import Recognition\n\n# 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\n\nrecognition = Recognition(model='fun-asr-realtime',\n                          format='wav',\n                          sample_rate=16000,\n                          # “language_hints”只支持paraformer-realtime-v2模型\n                          language_hints=['zh', 'en'],\n                          callback=None)\nresult = recognition.call('asr_example.wav')\nif result.status_code == HTTPStatus.OK:\n    print('识别结果：')\n    print(result.get_sentence())\nelse:\n    print('Error: ', result.message)\n    \nprint(\n    '[Metric] requestId: {}, first package delay ms: {}, last package delay ms: {}'\n    .format(\n        recognition.get_last_request_id(),\n        recognition.get_first_package_delay(),\n        recognition.get_last_package_delay(),\n    ))",
+            "java": "import com.alibaba.dashscope.audio.asr.recognition.Recognition;\nimport com.alibaba.dashscope.audio.asr.recognition.RecognitionParam;\nimport java.io.File;\n\npublic class Main {\n    public static void main(String[] args) {\n        // 创建Recognition实例\n        Recognition recognizer = new Recognition();\n        // 创建RecognitionParam\n        RecognitionParam param =\n                RecognitionParam.builder()\n                        // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                        // .apiKey(\"yourApikey\")\n                        .model(\"fun-asr-realtime\")\n                        .format(\"wav\")\n                        .sampleRate(16000)\n                        // “language_hints”只支持paraformer-realtime-v2模型\n                        .parameter(\"language_hints\", new String[]{\"zh\", \"en\"})\n                        .build();\n\n        try {\n            System.out.println(\"识别结果：\" + recognizer.call(param, new File(\"asr_example.wav\")));\n        } catch (Exception e) {\n            e.printStackTrace();\n        }\n        System.out.println(\n                \"[Metric] requestId: \"\n                        + recognizer.getLastRequestId()\n                        + \", first package delay ms: \"\n                        + recognizer.getFirstPackageDelay()\n                        + \", last package delay ms: \"\n                        + recognizer.getLastPackageDelay());\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

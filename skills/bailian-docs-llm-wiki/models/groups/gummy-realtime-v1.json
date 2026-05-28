@@ -1,0 +1,57 @@
+{
+  "name": "实时语音识别及翻译V1.0",
+  "description": "多语言语音转写及翻译的多模态大模型。本模型提供长时间、高准确率、实时转写中/英/日/韩等10个混合语种的服务。同时支持中英日韩互译，以其他6个语种翻译成中文或英文。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Audio"]
+      },
+      "openSource": false,
+      "description": "多语言语音转写及翻译的多模态大模型。本模型提供长时间、高准确率、实时转写中/英/日/韩等10个混合语种的服务。同时支持中英日韩互译，以其他6个语种翻译成中文或英文。",
+      "features": ["model-experience"],
+      "provider": "qwen",
+      "model": "gummy-realtime-v1",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VoiceModel_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.00015",
+          "type": "content_duration",
+          "priceName": "音频时长"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["Realtime-Audio-Translate"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-04T04:07:10.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "实时语音识别及翻译V1.0",
+      "docUrl": "https://help.aliyun.com/document_detail/2865393.html",
+      "predictConfig": [],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "import requests\nfrom http import HTTPStatus\n\nimport dashscope\nfrom dashscope.audio.asr import *\n\n# 若没有将API Key配置到环境变量中，需将your-api-key替换为自己的API Key\n# dashscope.api_key = \"your-api-key\"\n\nr = requests.get(\n    \"https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav\"\n)\nwith open(\"asr_example.wav\", \"wb\") as f:\n    f.write(r.content)\n\ntranslator = TranslationRecognizerRealtime(\n    model=\"gummy-realtime-v1\",\n    format=\"wav\",\n    sample_rate=16000,\n    translation_target_languages=[\"en\"],\n    translation_enabled=True,\n    callback=None,\n)\nresult = translator.call(\"asr_example.wav\")\nif not result.error_message:\n    print(\"request id: \", result.request_id)\n    print(\"transcription: \")\n    for transcription_result in result.transcription_result_list:\n        print(transcription_result.text)\n    print(\"translation[en]: \")\n\n    for translation_result in result.translation_result_list:\n        print(translation_result.get_translation('en').text)\nelse:\n    print(\"Error: \", result.error_message)",
+            "java": "import com.alibaba.dashscope.audio.asr.translation.TranslationRecognizerParam;\nimport com.alibaba.dashscope.audio.asr.translation.TranslationRecognizerRealtime;\nimport com.alibaba.dashscope.audio.asr.translation.results.TranscriptionResult;\nimport com.alibaba.dashscope.audio.asr.translation.results.TranslationRecognizerResultPack;\nimport com.alibaba.dashscope.audio.asr.translation.results.TranslationResult;\n\nimport java.io.File;\nimport java.util.ArrayList;\n\npublic class Main {\n\n    public static void main(String[] args) {\n        String targetLanguage = \"en\";\n        // 创建Recognition实例\n        TranslationRecognizerRealtime translator = new TranslationRecognizerRealtime();\n        // 创建RecognitionParam，请在实际使用中替换真实apiKey\n        TranslationRecognizerParam param =\n                TranslationRecognizerParam.builder()\n                        // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将your-api-key替换为自己的API Key\n                        // .apiKey(\"your-api-key\")\n                        .model(\"gummy-realtime-v1\")\n                        .format(\"wav\") // 'pcm'、'wav'、'mp3'、'opus'、'speex'、'aac'、'amr', you\n                        // can check the supported formats in the document\n                        .sampleRate(16000)\n                        .transcriptionEnabled(true)\n                        .sourceLanguage(\"auto\")\n                        .translationEnabled(true)\n                        .translationLanguages(new String[] {targetLanguage})\n                        .build();\n        // 直接将结果保存到script.txt中\n        TranslationRecognizerResultPack result = translator.call(param, new File(\"hello_world.wav\"));\n        // 任务结束后关闭 websocket 连接\n        translator.getDuplexApi().close(1000, \"bye\");\n        if (result.getError() != null) {\n            System.out.println(\"error: \" + result.getError());\n            throw new RuntimeException(result.getError());\n        } else {\n            System.out.println(\"RequestId: \" + result.getRequestId());\n            System.out.println(\"Transcription Results:\");\n            ArrayList<TranscriptionResult> transcriptionResults = result.getTranscriptionResultList();\n            for (int i = 0; i < transcriptionResults.size(); i++) {\n                System.out.println(transcriptionResults.get(i).getText());\n            }\n\n            System.out.println(\"English Translation Results:\");\n            ArrayList<TranslationResult> translationResultList = result.getTranslationResultList();\n            for (int i = 0; i < translationResultList.size(); i++) {\n                System.out.println(translationResultList.get(i).getTranslation(targetLanguage).getText());\n            }\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

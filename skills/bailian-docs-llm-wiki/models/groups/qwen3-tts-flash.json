@@ -1,0 +1,67 @@
+{
+  "name": "Qwen3-TTS-Flash",
+  "description": "Qwen3-TTS-Flash模型是通义实验室最新推出的离线语音合成大模型，不仅拥有17种高表现力的拟人音色，且能低延迟高稳定地合成音频；同时支持多种语言，方言，支持同一音色多语言输出。该模型经过海量数据训练，合成音频可以根据文本自适应调节语气，对复杂文本合成也有较好的处理能力。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "Qwen3-TTS-Flash模型是通义实验室最新推出的离线语音合成大模型，不仅拥有17种高表现力的拟人音色，且能低延迟高稳定地合成音频；同时支持多种语言，方言，支持同一音色多语言输出。该模型经过海量数据训练，合成音频可以根据文本自适应调节语气，对复杂文本合成也有较好的处理能力。",
+      "collectionTag": "qwen3",
+      "features": ["model-experience"],
+      "provider": "qwen",
+      "model": "qwen3-tts-flash",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VoiceModel_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "0.8",
+          "type": "cosy_tts_number",
+          "priceName": "语音合成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TTS"],
+      "modelAlias": "qwen3-tts-flash",
+      "versionTag": "MAJOR",
+      "shortDescription": "韵律拟人，低延迟，支持十种语言和国内多种方言输出",
+      "equivalentSnapshot": "qwen3-tts-flash-2025-11-27",
+      "latestOnlineAt": "2025-11-26T16:00:00.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3-TTS-Flash",
+      "docUrl": "https://help.aliyun.com/document_detail/2879134.html",
+      "predictConfig": [
+        {
+          "name": "语言",
+          "key": "languageType",
+          "default": "Chinese"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# DashScope SDK 版本不低于 1.23.1\nimport os\nimport dashscope\n\ntext = \"那我来给大家推荐一款T恤，这款呢真的是超级好看，这个颜色呢很显气质，而且呢也是搭配的绝佳单品，大家可以闭眼入，真的是非常好看，对身材的包容性也很好，不管啥身材的宝宝呢，穿上去都是很好看的。推荐宝宝们下单哦。\"\nresponse = dashscope.audio.qwen_tts.SpeechSynthesizer.call(\n    # 仅支持qwen-tts系列模型，请勿使用除此之外的其他模型\n    model=\"qwen3-tts-flash\",\n    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    text=text,\n    voice=\"Cherry\",\n)\nprint(response)",
+            "java": "// DashScope SDK 版本需要不低于 2.19.0\nimport com.alibaba.dashscope.aigc.multimodalconversation.AudioParameters;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\nimport com.alibaba.dashscope.utils.JsonUtils;\n\npublic class Main {\n    private static final String MODEL = \"qwen3-tts-flash\";\n    public static void call() throws ApiException, NoApiKeyException, UploadFileException {\n        MultiModalConversation conv = new MultiModalConversation();\n        MultiModalConversationParam param = MultiModalConversationParam.builder()\n                // 仅支持qwen-tts系列模型，请勿使用除此之外的其他模型\n                .model(MODEL)\n                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .text(\"Today is a wonderful day to build something people love!\")\n                .voice(AudioParameters.Voice.CHERRY)\n                .build();\n        MultiModalConversationResult result = conv.call(param);\n        System.out.println(JsonUtils.toJson(result));\n    }\n    public static void main(String[] args) {\n        try {\n            call();\n        } catch (ApiException | NoApiKeyException | UploadFileException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

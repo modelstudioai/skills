@@ -1,0 +1,59 @@
+{
+  "name": "图像背景生成",
+  "description": "图像背景生成可以基于输入的前景图像素材拓展生成背景信息，实现自然的光影融合效果，与细腻的写实画面生成。支持文本描述、图像引导等多种方式，同时支持对生成的图像智能添加文字内容。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Image"]
+      },
+      "openSource": false,
+      "description": "图像背景生成可以基于输入的前景图像素材拓展生成背景信息，实现自然的光影融合效果，与细腻的写实画面生成。支持文本描述、图像引导等多种方式，同时支持对生成的图像智能添加文字内容。",
+      "features": [],
+      "provider": "wan",
+      "model": "wanx-background-generation-v2",
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.08",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-03-22T03:33:37.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "图像背景生成",
+      "docUrl": "https://help.aliyun.com/document_detail/2712497.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/background-generation/generation/' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"wanx-background-generation-v2\",\n    \"input\": {\n        \"base_image_url\": \"https://vision-poster.oss-cn-shanghai.aliyuncs.com/lllcho.lc/data/test_data/images/main_images/new_main_img/a.png\",\n        \"ref_image_url\": \"http://vision-poster.oss-cn-shanghai.aliyuncs.com/lllcho.lc/data/test_data/images/ref_images/c5e50d27be534709817b2ab080b0162f_0.jpg\",\n        \"ref_prompt\": \"山脉和晚霞\",\n        \"reference_edge\": {\n            \"foreground_edge\": [\n                \"https://vision-poster.oss-cn-shanghai.aliyuncs.com/lllcho.lc/data/test_data/images/huaban_soft_edge/6cdd13941cef1b11d885aea1717b983ae566b8efc9094-vcsvxa_fw658webp.png\",\n                \"http://vision-poster.oss-cn-shanghai.aliyuncs.com/lllcho.lc/data/test_data/images/ref_edge/2c36cc4b7da027279e87311dac48fc2d5d784b1e72c0e-x4f1wC_fw658webp.png\"\n            ],\n            \"background_edge\": [\n                \"http://vision-poster.oss-cn-shanghai.aliyuncs.com/lllcho.lc/data/test_data/images/ref_edge/0718a9741e07c52ca5506e75c4f2b99e22fff68a4c7d3-P9WGLr_fw658webp.png\"\n            ],\n            \"foreground_edge_prompt\": [\n                \"粉色桃花\",\n                \"可爱小狗\"\n            ],\n            \"background_edge_prompt\": [\n                \"树叶\"\n            ]\n        }\n    },\n    \"parameters\": {\n        \"n\": 4,\n        \"ref_prompt_weight\": 0.5,\n        \"model_version\": \"v3\"\n    }\n}'\n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\""
+          }
+        }
+      }
+    }
+  ]
+}

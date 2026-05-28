@@ -1,0 +1,96 @@
+{
+  "name": "Fun-ASR语音识别",
+  "description": "通义百聆新一代语音识别大模型，主打中文、英文、日文语音识别，多地区方言覆盖，具备更强的噪声鲁棒性，适应多样复杂环境，国内用户首推。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Audio"]
+      },
+      "openSource": false,
+      "description": "百聆2026年4月更新的大模型ASR版本，全面支持汉语传统七大方言体系（官话/吴/湘/赣/客/闽/粤），并适配 20+ 地区口音官话。针对中文古诗词的韵律、节奏与文言表达特点进行专项优化，提升对古诗词内容的识别准确率，适用于文化传承、教育讲解、有声读物等场景。优化标点预测与文本归一化能力，使输出文本更符合书面表达习惯，数字、日期、金额等信息自动转换为标准格式，增强内容的可读性与专业性。同时语种扩展至英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚、保加利亚语、克罗地亚语、斯洛伐克语等，共计30个语种。此版本等同于2025年11月7日的快照版本。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "fun-asr",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.00022",
+          "type": "content_duration",
+          "priceName": "音频时长"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["ASR"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-11-20T16:00:00.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Fun-ASR语音识别",
+      "docUrl": "https://help.aliyun.com/document_detail/2880903.html",
+      "predictConfig": [],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom dashscope.audio.asr import Transcription\nimport dashscope\nimport os\nimport json\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = \"sk-xxx\"\ndashscope.api_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\ntask_response = Transcription.async_call(\n    model='fun-asr',\n    file_urls=['https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav',\n               'https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav']\n)\n\ntranscribe_response = Transcription.wait(task=task_response.output.task_id)\nif transcribe_response.status_code == HTTPStatus.OK:\n    print(json.dumps(transcribe_response.output, indent=4, ensure_ascii=False))\n    print('transcription done!')"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Audio"]
+      },
+      "openSource": false,
+      "description": "百聆多语言语音识别大模型，支持超过31种语言，支持语种自由切换，出海用户首推，尤其东南亚出海。fun-asr为该模型的升级版本，建议切换使用fun-asr。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "fun-asr-mtl",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.00022",
+          "type": "content_duration",
+          "priceName": "音频时长"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["ASR"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-09-25T06:03:29.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Fun-ASR-MTL",
+      "docUrl": "https://help.aliyun.com/document_detail/2978300.html",
+      "predictConfig": [],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom dashscope.audio.asr import Transcription\nimport dashscope\nimport os\nimport json\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = \"sk-xxx\"\ndashscope.api_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\ntask_response = Transcription.async_call(\n    model='fun-asr-mtl',\n    file_urls=['https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav',\n               'https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav']\n)\n\ntranscribe_response = Transcription.wait(task=task_response.output.task_id)\nif transcribe_response.status_code == HTTPStatus.OK:\n    print(json.dumps(transcribe_response.output, indent=4, ensure_ascii=False))\n    print('transcription done!')"
+          }
+        }
+      }
+    }
+  ]
+}

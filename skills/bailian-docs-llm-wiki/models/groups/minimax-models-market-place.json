@@ -1,0 +1,273 @@
+{
+  "name": "MiniMax文本模型",
+  "description": "由MiniMax提供的MiniMax-M系列文本模型API服务。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "M2.7 能够自行构建复杂 Agent Harness，并基于 Agent Teams、复杂 Skills、Tool Search tool 等能力，完成高度复杂的生产力任务。",
+      "features": ["model-experience", "function-calling", "cache"],
+      "provider": "mini-max",
+      "model": "MiniMax/MiniMax-M2.7",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2.1",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "8.4",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.42",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 20000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 500,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 20000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 500,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG", "Reasoning"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 131072,
+      "latestOnlineAt": "2026-03-20T13:04:46.000+00:00",
+      "contextWindow": 204800,
+      "maxInputTokens": 204800,
+      "inferenceProvider": "minimax",
+      "name": "MiniMax/MiniMax-M2.7",
+      "docUrl": "https://help.aliyun.com/document_detail/3021647.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"MiniMax/MiniMax-M2.7\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"MiniMax/MiniMax-M2.7\",\n    messages=messages,\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if chunk.choices:\n        delta = chunk.choices[0].delta\n        # 只收集思考内容\n        if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n            if not is_answering:\n                print(delta.reasoning_content, end=\"\", flush=True)\n        # 收到content，开始进行回复\n        if hasattr(delta, \"content\") and delta.content:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(delta.content, end=\"\", flush=True)",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化OpenAI客户端\nconst openai = new OpenAI({\n    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: \"sk-xxx\"\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = ''; // 完整思考过程\nlet answerContent = ''; // 完整回复\nlet isAnswering = false; // 是否进入回复阶段\n\nasync function main() {\n    const messages = [{ role: 'user', content: '你是谁' }];\n\n    const stream = await openai.chat.completions.create({\n        model: 'MiniMax/MiniMax-M2.7',\n        messages,\n        stream: true,\n    });\n\n    console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');\n\n    for await (const chunk of stream) {\n        if (chunk.choices?.length) {\n            const delta = chunk.choices[0].delta;\n            // 只收集思考内容\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n                reasoningContent += delta.reasoning_content;\n            }\n\n            // 收到content，开始进行回复\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    }\n}\n\nmain();"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "智能体世界的SOTA，专为智能体2.0设计，将编码扩展到现实世界包括工作空间、娱乐和个人助理。模型亮点：全球SOTA开源编码与智能体模型；SWE-bench Pro和SWE-bench Verified得分高于Opus 4.6；在Excel、搜索与研究以及文档摘要方面的全球SOTA；未来工作空间的完美主力模型；闪电般快速：优化思维效率，100+ TPS，实现比 Opus 快 3 倍的速度；极致性价比，以支持始终在线的智能体。",
+      "features": ["model-experience", "function-calling", "cache"],
+      "provider": "mini-max",
+      "model": "MiniMax/MiniMax-M2.5",
+      "iconUrl": "https://img.alicdn.com/imgextra/i1/O1CN01EFGi131NqT95FPDqc_!!6000000001621-2-tps-56-56.png",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2.1",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "8.4",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.21",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 3,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 3,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG", "Reasoning"],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 131072,
+      "latestOnlineAt": "2026-02-12T16:00:00.000+00:00",
+      "contextWindow": 204800,
+      "maxInputTokens": 204800,
+      "inferenceProvider": "minimax",
+      "name": "MiniMax/MiniMax-M2.5",
+      "docUrl": "https://help.aliyun.com/document_detail/3021647.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"MiniMax/MiniMax-M2.5\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"MiniMax/MiniMax-M2.5\",\n    messages=messages,\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if chunk.choices:\n        delta = chunk.choices[0].delta\n        # 只收集思考内容\n        if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n            if not is_answering:\n                print(delta.reasoning_content, end=\"\", flush=True)\n        # 收到content，开始进行回复\n        if hasattr(delta, \"content\") and delta.content:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(delta.content, end=\"\", flush=True)",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化OpenAI客户端\nconst openai = new OpenAI({\n    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: \"sk-xxx\"\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = ''; // 完整思考过程\nlet answerContent = ''; // 完整回复\nlet isAnswering = false; // 是否进入回复阶段\n\nasync function main() {\n    const messages = [{ role: 'user', content: '你是谁' }];\n\n    const stream = await openai.chat.completions.create({\n        model: 'MiniMax/MiniMax-M2.5',\n        messages,\n        stream: true,\n    });\n\n    console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');\n\n    for await (const chunk of stream) {\n        if (chunk.choices?.length) {\n            const delta = chunk.choices[0].delta;\n            // 只收集思考内容\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n                reasoningContent += delta.reasoning_content;\n            }\n\n            // 收到content，开始进行回复\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    }\n}\n\nmain();"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "M2.1 的设计初衷在于打破“最顶级的 Agent 能力仅存在于闭源模型”的壁垒。我们在模型层面进行了针对性优化，显著提升了模型在代码生成、工具调用、复杂指令遵循及长程规划任务中的性能。从自动化进行多语言的软件开发，到执行多步骤的复杂办公工作流，MiniMax-M2.1 均表现出卓越的稳定性。我们致力于为开发者提供一个完全透明、可控且高可用的基础模型，以构建下一代自主智能体应用。",
+      "features": ["model-experience", "function-calling", "cache"],
+      "provider": "mini-max",
+      "model": "MiniMax/MiniMax-M2.1",
+      "iconUrl": "https://img.alicdn.com/imgextra/i1/O1CN01EFGi131NqT95FPDqc_!!6000000001621-2-tps-56-56.png",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2.1",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "8.4",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.21",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 3,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 3,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG", "Reasoning"],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 131072,
+      "latestOnlineAt": "2026-02-12T16:00:00.000+00:00",
+      "contextWindow": 204800,
+      "maxInputTokens": 204800,
+      "inferenceProvider": "minimax",
+      "name": "MiniMax/MiniMax-M2.1",
+      "docUrl": "https://help.aliyun.com/document_detail/3021647.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"MiniMax/MiniMax-M2.1\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"MiniMax/MiniMax-M2.1\",\n    messages=messages,\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if chunk.choices:\n        delta = chunk.choices[0].delta\n        # 只收集思考内容\n        if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n            if not is_answering:\n                print(delta.reasoning_content, end=\"\", flush=True)\n        # 收到content，开始进行回复\n        if hasattr(delta, \"content\") and delta.content:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(delta.content, end=\"\", flush=True)",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化OpenAI客户端\nconst openai = new OpenAI({\n    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: \"sk-xxx\"\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = ''; // 完整思考过程\nlet answerContent = ''; // 完整回复\nlet isAnswering = false; // 是否进入回复阶段\n\nasync function main() {\n    const messages = [{ role: 'user', content: '你是谁' }];\n\n    const stream = await openai.chat.completions.create({\n        model: 'MiniMax/MiniMax-M2.1',\n        messages,\n        stream: true,\n    });\n\n    console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');\n\n    for await (const chunk of stream) {\n        if (chunk.choices?.length) {\n            const delta = chunk.choices[0].delta;\n            // 只收集思考内容\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n                reasoningContent += delta.reasoning_content;\n            }\n\n            // 收到content，开始进行回复\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    }\n}\n\nmain();"
+          }
+        }
+      }
+    }
+  ]
+}

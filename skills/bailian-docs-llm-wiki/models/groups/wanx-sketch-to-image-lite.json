@@ -1,0 +1,66 @@
+{
+  "name": "万相-涂鸦作画",
+  "description": "万相-涂鸦作画通过手绘任意内容加文字描述，即可生成精美的涂鸦绘画作品，作品中的内容在参考手绘线条的同时，兼顾创意性和趣味性。涂鸦作画支持扁平插画、油画、二次元、3D卡通和水彩5种风格，可用于创意娱乐、辅助设计、儿童教学等场景。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Image"]
+      },
+      "openSource": false,
+      "description": "万相-涂鸦作画通过手绘任意内容加文字描述，即可生成精美的涂鸦绘画作品，作品中的内容在参考手绘线条的同时，兼顾创意性和趣味性。涂鸦作画支持扁平插画、油画、二次元、3D卡通和水彩5种风格，可用于创意娱乐、辅助设计、儿童教学等场景。",
+      "features": [],
+      "provider": "wan",
+      "model": "wanx-sketch-to-image-lite",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.06",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-06-11T11:21:09.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "万相-涂鸦作画",
+      "docUrl": "https://help.aliyun.com/document_detail/2712498.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"wanx-sketch-to-image-lite\",\n    \"input\": {\n        \"sketch_image_url\": \"https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6609471071/p743851.jpg\",\n        \"prompt\": \"一棵参天大树\"\n    },\n    \"parameters\": {\n        \"size\": \"768*768\",\n        \"n\": 2,\n        \"sketch_weight\": 3,\n        \"style\": \"<watercolor>\"\n    }\n}'\n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\"",
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\nprompt = \"一棵参天大树\"\nsketch_image_url = \"https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6609471071/p743851.jpg\"\nmodel = \"wanx-sketch-to-image-lite\"\ntask = \"image2image\"\n\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=model,\n                          prompt=prompt,\n                          n=1,\n                          style='<watercolor>',\n                          size='768*768',\n                          sketch_image_url=sketch_image_url,\n                          task=task)\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    print(rsp.output)\n    # save file to current directory\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))",
+            "java": "// Copyright (c) Alibaba, Inc. and its affiliates.\n\nimport com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesis;\nimport com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesisParam;\nimport com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesisResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.JsonUtils;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl = \"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    public void syncCall() {\n        String prompt = \"一棵参天大树\";\n        String sketchImageUrl = \"https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6609471071/p743851.jpg\";\n        String model = \"wanx-sketch-to-image-lite\";\n        ImageSynthesisParam param = ImageSynthesisParam.builder()\n                .model(model)\n                .prompt(prompt)\n                .n(1)\n                .size(\"768*768\")\n                .sketchImageUrl(sketchImageUrl)\n                .style(\"<watercolor>\")\n                .build();\n\n        String task = \"image2image\";\n        ImageSynthesis imageSynthesis = new ImageSynthesis(task);\n        ImageSynthesisResult result = null;\n        try {\n            System.out.println(\"---sync call, please wait a moment----\");\n            result = imageSynthesis.call(param);\n        } catch (ApiException | NoApiKeyException e){\n            throw new RuntimeException(e.getMessage());\n        }\n        System.out.println(JsonUtils.toJson(result));\n    }\n\n\n    public static void main(String[] args){\n        Main text2Image = new Main();\n        text2Image.syncCall();\n    }\n\n}"
+          }
+        }
+      }
+    }
+  ]
+}

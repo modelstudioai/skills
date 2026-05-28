@@ -1,0 +1,313 @@
+{
+  "name": "Qwen3-VL-Flash",
+  "description": "Qwen3系列小尺寸视觉理解模型，实现思考模式和非思考模式的有效融合，效果优于开源版Qwen3-VL-30B-A3B，响应速度快。全面升级图像/视频理解，支持长视频长文档等超长上下文、空间感知与万物识别；具备视觉2D/3D定位能力，胜任复杂现实任务。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text", "Image", "Video"]
+      },
+      "openSource": false,
+      "description": "Qwen3系列小尺寸视觉理解模型，实现思考模式和非思考模式的有效融合，效果优于开源版Qwen3-VL-30B-A3B，响应速度快。全面升级图像/视频理解，支持长视频长文档等超长上下文、空间感知与万物识别；具备视觉2D/3D定位能力，胜任复杂现实任务。",
+      "maxOutputTokensThinking": 32768,
+      "collectionTag": "qwen3",
+      "features": [
+        "model-experience",
+        "function-calling",
+        "structured-outputs",
+        "prefix-completion",
+        "cache"
+      ],
+      "provider": "qwen",
+      "model": "qwen3-vl-flash",
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 5,
+          "usage_limit": 2500000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 250,
+          "usage_limit_period": 30,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 5,
+          "usage_limit": 2500000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 250,
+          "usage_limit_period": 30,
+          "type": "model-default"
+        }
+      },
+      "multiPrices": [
+        {
+          "rangeStart": 0,
+          "rangeName": "输入<=32k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.15",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "1.5",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.03",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.075",
+              "type": "input_token_batch",
+              "priceName": "输入（Batch File）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.75",
+              "type": "output_token_batch",
+              "priceName": "输出（Batch File）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.1875",
+              "type": "input_token_cache_creation_5m",
+              "priceName": "显式缓存创建"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.015",
+              "type": "input_token_cache_read",
+              "priceName": "显式缓存命中"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.15",
+              "discount": 0.5,
+              "type": "input_token_batch_chat",
+              "priceName": "输入（Batch Chat)"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "1.5",
+              "discount": 0.5,
+              "type": "output_token_batch_chat",
+              "priceName": "输出（Batch Chat)"
+            }
+          ],
+          "rangeEnd": 32768
+        },
+        {
+          "rangeStart": 32768,
+          "rangeName": "32k<输入<=128k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.3",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "3",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.06",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.15",
+              "type": "input_token_batch",
+              "priceName": "输入（Batch File）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "1.5",
+              "type": "output_token_batch",
+              "priceName": "输出（Batch File）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.375",
+              "type": "input_token_cache_creation_5m",
+              "priceName": "显式缓存创建"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.03",
+              "type": "input_token_cache_read",
+              "priceName": "显式缓存命中"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.3",
+              "discount": 0.5,
+              "type": "input_token_batch_chat",
+              "priceName": "输入（Batch Chat)"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "3",
+              "discount": 0.5,
+              "type": "output_token_batch_chat",
+              "priceName": "输出（Batch Chat)"
+            }
+          ],
+          "rangeEnd": 131072
+        },
+        {
+          "rangeStart": 131072,
+          "rangeName": "128k<输入<=256k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.6",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "6",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.12",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.3",
+              "type": "input_token_batch",
+              "priceName": "输入（Batch File）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "3",
+              "type": "output_token_batch",
+              "priceName": "输出（Batch File）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.75",
+              "type": "input_token_cache_creation_5m",
+              "priceName": "显式缓存创建"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.06",
+              "type": "input_token_cache_read",
+              "priceName": "显式缓存命中"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.6",
+              "discount": 0.5,
+              "type": "input_token_batch_chat",
+              "priceName": "输入（Batch Chat)"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "6",
+              "discount": 0.5,
+              "type": "output_token_batch_chat",
+              "priceName": "输出（Batch Chat)"
+            }
+          ],
+          "rangeEnd": 262144
+        }
+      ],
+      "capabilities": ["VU", "Reasoning"],
+      "modelAlias": "qwen3-vl-plus",
+      "versionTag": "MAJOR",
+      "equivalentSnapshot": "qwen3-vl-flash-2026-01-22",
+      "maxOutputTokens": 32768,
+      "latestOnlineAt": "2025-10-14T06:52:12.000+00:00",
+      "contextWindow": 262144,
+      "maxInputTokens": 260096,
+      "maxInputTokensThinking": 258048,
+      "contextWindowThinking": 262144,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3-VL-Flash",
+      "docUrl": "https://help.aliyun.com/document_detail/2845871.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "stop",
+          "key": "stop",
+          "tip": "用于控制生成时遇到某些内容则停止。您可传入多个字符串。"
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_search",
+          "key": "enable_search",
+          "tip": "联网搜索补充互联网知识"
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": true,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [1, 32768]
+        },
+        {
+          "name": "result_format",
+          "key": "result_format",
+          "default": "message",
+          "tip": "返回结果格式"
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"qwen3-vl-flash\",\n    \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": [\n        {\n          \"type\": \"image_url\",\n          \"image_url\": {\n            \"url\": \"https://img.alicdn.com/imgextra/i1/O1CN01gDEY8M1W114Hi3XcN_!!6000000002727-0-tps-1024-406.jpg\"\n          }\n        },\n        {\n          \"type\": \"text\",\n          \"text\": \"请解答这道题\"\n        }\n      ]\n    }\n  ],\n    \"stream\":true,\n    \"stream_options\":{\"include_usage\":true},\n    \"enable_thinking\": true,\n    \"thinking_budget\": 81920\n}'",
+            "python": "from openai import OpenAI\nimport os\n\n# 初始化OpenAI客户端\nclient = OpenAI(\n    api_key = os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n)\n\nreasoning_content = \"\"  # 定义完整思考过程\nanswer_content = \"\"     # 定义完整回复\nis_answering = False   # 判断是否结束思考过程并开始回复\nenable_thinking = False\n# 创建聊天完成请求\ncompletion = client.chat.completions.create(\n    model=\"qwen3-vl-flash\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\n                    \"type\": \"image_url\",\n                    \"image_url\": {\n                        \"url\": \"https://img.alicdn.com/imgextra/i1/O1CN01gDEY8M1W114Hi3XcN_!!6000000002727-0-tps-1024-406.jpg\"\n                    },\n                },\n                {\"type\": \"text\", \"text\": \"这道题怎么解答？\"},\n            ],\n        },\n    ],\n    stream=True,\n    # enable_thinking 参数开启思考过程，thinking_budget 参数设置最大推理过程 Token 数\n    extra_body={\n        'enable_thinking': True,\n        \"thinking_budget\": 81920},\n\n    # 解除以下注释会在最后一个chunk返回Token使用量\n    # stream_options={\n    #     \"include_usage\": True\n    # }\n)\n\nif enable_thinking:\n    print(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20 + \"\\n\")\n\nfor chunk in completion:\n    # 如果chunk.choices为空，则打印usage\n    if not chunk.choices:\n        print(\"\\nUsage:\")\n        print(chunk.usage)\n    else:\n        delta = chunk.choices[0].delta\n        # 打印思考过程\n        if hasattr(delta, 'reasoning_content') and delta.reasoning_content != None:\n            print(delta.reasoning_content, end='', flush=True)\n            reasoning_content += delta.reasoning_content\n        else:\n            # 开始回复\n            if delta.content != \"\" and is_answering is False:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20 + \"\\n\")\n                is_answering = True\n            # 打印回复过程\n            print(delta.content, end='', flush=True)\n            answer_content += delta.content\n\n# print(\"=\" * 20 + \"完整思考过程\" + \"=\" * 20 + \"\\n\")\n# print(reasoning_content)\n# print(\"=\" * 20 + \"完整回复\" + \"=\" * 20 + \"\\n\")\n# print(answer_content)",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化 openai 客户端\nconst openai = new OpenAI({\n    apiKey: process.env.DASHSCOPE_API_KEY, // 从环境变量读取\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = '';\nlet answerContent = '';\nlet isAnswering = false;\nlet enable_thinking = true;\n\nlet messages = [\n    {\n        role: \"user\",\n        content: [\n        { type: \"image_url\", image_url: { \"url\": \"https://img.alicdn.com/imgextra/i1/O1CN01gDEY8M1W114Hi3XcN_!!6000000002727-0-tps-1024-406.jpg\" } },\n        { type: \"text\", text: \"解答这道题\" },\n    ]\n}]\n\nasync function main() {\n    try {\n        const stream = await openai.chat.completions.create({\n            model: 'qwen3-vl-flash',\n            messages: messages,\n            stream: true,\n          // 注意：在 Node.js SDK，enable_thinking 这样的非标准参数作为顶层属性传递的，无需放在 extra_body 中\n          enable_thinking: enable_thinking,\n          thinking_budget: 81920\n\n        });\n\n        if (enable_thinking){console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');}\n\n        for await (const chunk of stream) {\n            if (!chunk.choices?.length) {\n                console.log('\\nUsage:');\n                console.log(chunk.usage);\n                continue;\n            }\n\n            const delta = chunk.choices[0].delta;\n\n            // 处理思考过程\n            if (delta.reasoning_content) {\n                process.stdout.write(delta.reasoning_content);\n                reasoningContent += delta.reasoning_content;\n            }\n            // 处理正式回复\n            else if (delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    } catch (error) {\n        console.error('Error:', error);\n    }\n}\n\nmain();"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H 'Content-Type: application/json' \\\n-H 'X-DashScope-SSE: enable' \\\n-d '{\n    \"model\": \"qwen3-vl-flash\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\"image\": \"https://img.alicdn.com/imgextra/i1/O1CN01gDEY8M1W114Hi3XcN_!!6000000002727-0-tps-1024-406.jpg\"},\n                    {\"text\": \"请解答这道题\"}\n                ]\n            }\n        ]\n    },\n    \"parameters\":{\n        \"enable_thinking\": true,\n        \"incremental_output\": true,\n        \"thinking_budget\": 50\n    }\n}'",
+            "python": "import os\nimport dashscope\nfrom dashscope import MultiModalConversation\n# dashscope.base_http_api_url = \"https://dashscope.aliyuncs.com/api/v1\"\n\nmessages = [\n    {\n        \"role\": \"user\",\n        \"content\": [\n            {\"image\": \"https://img.alicdn.com/imgextra/i1/O1CN01gDEY8M1W114Hi3XcN_!!6000000002727-0-tps-1024-406.jpg\"},\n            {\"text\": \"解答这道题？\"}\n        ]\n    }\n]\n\nresponse = MultiModalConversation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\",\n    api_key=os.getenv('DASHSCOPE_API_KEY'),\n    model=\"qwen3-vl-flash\",\n    messages=messages,\n    stream=True,\n    # enable_thinking 参数开启思考过程\n    enable_thinking=True,\n    # thinking_budget 参数设置最大推理过程 Token 数\n    thinking_budget=81920,\n\n)\n\n# 定义完整思考过程\nreasoning_content = \"\"\n# 定义完整回复\nanswer_content = \"\"\n# 判断是否结束思考过程并开始回复\nis_answering = False\n\nprint(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n\nfor chunk in response:\n    # 如果思考过程与回复皆为空，则忽略\n    message = chunk.output.choices[0].message\n    reasoning_content_chunk = message.get(\"reasoning_content\", None)\n    if (chunk.output.choices[0].message.content == [] and\n        reasoning_content_chunk == \"\"):\n        pass\n    else:\n        # 如果当前为思考过程\n        if reasoning_content_chunk != None and chunk.output.choices[0].message.content == []:\n            print(chunk.output.choices[0].message.reasoning_content, end=\"\")\n            reasoning_content += chunk.output.choices[0].message.reasoning_content\n        # 如果当前为回复\n        elif chunk.output.choices[0].message.content != []:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(chunk.output.choices[0].message.content[0][\"text\"], end=\"\")\n            answer_content += chunk.output.choices[0].message.content[0][\"text\"]\n\n# 如果您需要打印完整思考过程与完整回复，请将以下代码解除注释后运行\n# print(\"=\" * 20 + \"完整思考过程\" + \"=\" * 20 + \"\\n\")\n# print(f\"{reasoning_content}\")\n# print(\"=\" * 20 + \"完整回复\" + \"=\" * 20 + \"\\n\")\n# print(f\"{answer_content}\")",
+            "java": "// dashscope SDK的版本 >= 2.21.10\nimport java.util.*;\n\nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;\n\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport io.reactivex.Flowable;\n\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;\nimport com.alibaba.dashscope.common.MultiModalMessage;\nimport com.alibaba.dashscope.exception.UploadFileException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport java.lang.System;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n\n// 若使用新加坡地域的模型，请取消下列注释\n// static {Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";}\n\nprivate static final Logger logger = LoggerFactory.getLogger(Main.class);\nprivate static StringBuilder reasoningContent = new StringBuilder();\nprivate static StringBuilder finalContent = new StringBuilder();\nprivate static boolean isFirstPrint = true;\n\nprivate static void handleGenerationResult(MultiModalConversationResult message) {\nString re = message.getOutput().getChoices().get(0).getMessage().getReasoningContent();\nString reasoning = Objects.isNull(re)?\"\":re; // 默认值\n\nList<Map<String, Object>> content = message.getOutput().getChoices().get(0).getMessage().getContent();\nif (!reasoning.isEmpty()) {\nreasoningContent.append(reasoning);\nif (isFirstPrint) {\nSystem.out.println(\"====================思考过程====================\");\nisFirstPrint = false;\n}\nSystem.out.print(reasoning);\n}\n\nif (Objects.nonNull(content) && !content.isEmpty()) {\nObject text = content.get(0).get(\"text\");\nfinalContent.append(content.get(0).get(\"text\"));\nif (!isFirstPrint) {\nSystem.out.println(\"\\n====================完整回复====================\");\nisFirstPrint = true;\n}\nSystem.out.print(text);\n}\n}\npublic static MultiModalConversationParam buildMultiModalConversationParam(MultiModalMessage Msg) {\nreturn MultiModalConversationParam.builder()\n// 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n.apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n.model(\"qwen3-vl-flash\")\n.messages(Arrays.asList(Msg))\n.enableThinking(true)\n.thinkingBudget(500)\n.incrementalOutput(true)\n.build();\n}\n\npublic static void streamCallWithMessage(MultiModalConversation conv, MultiModalMessage Msg)\nthrows NoApiKeyException, ApiException, InputRequiredException, UploadFileException {\nMultiModalConversationParam param = buildMultiModalConversationParam(Msg);\nFlowable<MultiModalConversationResult> result = conv.streamCall(param);\nresult.blockingForEach(message -> {\nhandleGenerationResult(message);\n});\n}\npublic static void main(String[] args) {\ntry {\nMultiModalConversation conv = new MultiModalConversation();\nMultiModalMessage userMsg = MultiModalMessage.builder()\n.role(Role.USER.getValue())\n.content(Arrays.asList(Collections.singletonMap(\"image\", \"https://img.alicdn.com/imgextra/i1/O1CN01gDEY8M1W114Hi3XcN_!!6000000002727-0-tps-1024-406.jpg\"),\nCollections.singletonMap(\"text\", \"请解答这道题\")))\n.build();\nstreamCallWithMessage(conv, userMsg);\n// 打印最终结果\n// if (reasoningContent.length() > 0) {\n// System.out.println(\"\\n====================完整回复====================\");\n// System.out.println(finalContent.toString());\n// }\n} catch (ApiException | NoApiKeyException | UploadFileException | InputRequiredException e) {\nlogger.error(\"An exception occurred: {}\", e.getMessage());\n}\nSystem.exit(0);\n}\n}"
+          }
+        }
+      }
+    }
+  ]
+}

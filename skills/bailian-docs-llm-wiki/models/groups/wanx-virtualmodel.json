@@ -1,0 +1,51 @@
+{
+  "name": "虚拟模特",
+  "description": "虚拟模特可以对上传的真人或者人台实拍商品展示图进行智能生成，将其中的模特和背景替换为心仪的内容，在保持人物姿态不变的情况下，使用虚拟模特对商品进行更加精美、多样的展示。支持各种与模特产生互动的商品，如手持小商品、服装、鞋靴、配饰等。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Image"]
+      },
+      "openSource": false,
+      "description": "虚拟模特可以对上传的真人或者人台实拍商品展示图进行智能生成，将其中的模特和背景替换为心仪的内容，在保持人物姿态不变的情况下，使用虚拟模特对商品进行更加精美、多样的展示。支持各种与模特产生互动的商品，如手持小商品、服装、鞋靴、配饰等。",
+      "features": [],
+      "provider": "wan",
+      "model": "wanx-virtualmodel",
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-06-25T15:19:20.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "虚拟模特",
+      "docUrl": "https://help.aliyun.com/document_detail/2796985.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/virtualmodel/generation' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n  \"model\": \"wanx-virtualmodel\",\n  \"input\": {\n    \"base_image_url\": \"https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/%E7%9C%9F%E4%BA%BA%E6%A8%A1%E7%89%B9%E5%AE%9E%E6%8B%8D-%E5%A5%B3%20%281%29.jpeg\",\n    \"mask_image_url\": \"https://huarong123.oss-cn-hangzhou.aliyuncs.com/image/image.jpg\",\n    \"prompt\": \"一名年轻女子，身穿白色短裤，极简风格调色板，长镜头，双色效果（暗银色和浅粉色）\",\n    \"face_prompt\": \"年轻女子，面容姣好，最高品质\"\n  },\n  \"parameters\": {\n    \"short_side_size\": \"512\",\n    \"n\": 1\n  }\n}'\n\ncurl --location --request GET 'https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\""
+          }
+        }
+      }
+    }
+  ]
+}

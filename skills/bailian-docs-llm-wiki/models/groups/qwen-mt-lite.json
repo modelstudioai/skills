@@ -1,0 +1,82 @@
+{
+  "name": "Qwen-MT-Lite",
+  "description": "基于Qwen3全面升级的基础级文本翻译大模型，支持32个语种互译，模型性能和翻译效果全面升级，并提供更稳定的术语定制、格式还原度、领域提示能力，让译文更精准、自然。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "基于Qwen3全面升级的基础级文本翻译大模型，支持32个语种互译，模型性能和翻译效果全面升级，并提供更稳定的术语定制、格式还原度、领域提示能力，让译文更精准、自然。",
+      "features": ["model-experience"],
+      "provider": "qwen-domain-model",
+      "model": "qwen-mt-lite",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.6",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.6",
+          "type": "output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG"],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 8192,
+      "latestOnlineAt": "2025-11-19T11:49:54.000+00:00",
+      "contextWindow": 16384,
+      "maxInputTokens": 8192,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-MT-Lite",
+      "docUrl": "https://help.aliyun.com/document_detail/2860790.html",
+      "predictConfig": [
+        {
+          "name": "translation_options",
+          "key": "translation_options",
+          "default": "{\"source_lang\": \"Chinese\", \"target_lang\": \"English\"}",
+          "tip": "支持的语言详见https://bailian.console.aliyun.com/#/model-market/detail/qwen-mt-turbo?tabKey=sdk”。"
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n  \"model\": \"qwen-mt-lite\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"看完这个视频我没有笑\"\n    }\n  ],\n  \"translation_options\": {\n    \"source_lang\": \"auto\",\n    \"target_lang\": \"English\"\n  }\n}'",
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key=\"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [\n    {\n        \"role\": \"user\",\n        \"content\": \"我看到这个视频后没有笑\"\n    }\n]\ntranslation_options = {\n    \"source_lang\": \"auto\",\n    \"target_lang\": \"English\"\n}\ncompletion = client.chat.completions.create(\n    model=\"qwen-mt-lite\",\n    messages=messages,\n    extra_body={\n        \"translation_options\": translation_options\n    }\n)\nprint(completion.choices[0].message.content)",
+            "nodejs": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI(\n    {\n        // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: \"sk-xxx\",\n        apiKey: process.env.DASHSCOPE_API_KEY,\n        baseURL: \"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n    }\n);\nconst completion = await openai.chat.completions.create({\n    model: \"qwen-mt-lite\", \n    messages: [\n        { role: \"user\", content: \"我看到这个视频后没有笑\" }\n    ],\n    translation_options: {\n        source_lang: \"auto\",\n        target_lang: \"English\"\n    }\n});\nconsole.log(completion.choices[0].message.content)"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation \\\n-H \"Authorization: $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n  \"model\": \"qwen-mt-lite\",\n  \"input\": {\n    \"messages\": [\n      {\n        \"content\": \"我看到这个视频后没有笑\",\n        \"role\": \"user\"\n      }\n    ]\n  },\n  \"parameters\": {\n    \"translation_options\": {\n      \"source_lang\": \"auto\",\n      \"target_lang\": \"English\"\n    }\n  }\n}'",
+            "python": "import os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\nmessages = [\n    {\n        \"role\": \"user\",\n        \"content\": \"我看到这个视频后没有笑\"\n    }\n]\ntranslation_options = {\n    \"source_lang\": \"auto\",\n    \"target_lang\": \"English\",\n}\nresponse = dashscope.Generation.call(\n    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key=\"sk-xxx\",\n    api_key=os.getenv('DASHSCOPE_API_KEY'),\n    model=\"qwen-mt-lite\",  # 此处以qwen-mt-turbo为例，可按需更换模型名称\n    messages=messages,\n    result_format='message',\n    translation_options=translation_options\n)\nprint(response.output.choices[0].message.content)",
+            "java": "// DashScope SDK 版本需要不低于 2.20.6\nimport java.lang.System;\nimport java.util.Collections;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.aigc.generation.TranslationOptions;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.protocol.Protocol;\n\npublic class Main {\n    public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {\n        Generation gen = new Generation(Protocol.HTTP.getValue(), \"https://dashscope.aliyuncs.com/api/v1\");\n        Message userMsg = Message.builder()\n                .role(Role.USER.getValue())\n                .content(\"我看到这个视频后没有笑\")\n                .build();\n        TranslationOptions options = TranslationOptions.builder()\n                .sourceLang(\"auto\")\n                .targetLang(\"English\")\n                .build();\n        GenerationParam param = GenerationParam.builder()\n                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"qwen-mt-lite\")\n                .messages(Collections.singletonList(userMsg))\n                .resultFormat(GenerationParam.ResultFormat.MESSAGE)\n                .translationOptions(options)\n                .build();\n        return gen.call(param);\n    }\n    public static void main(String[] args) {\n        try {\n            GenerationResult result = callWithMessage();\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.err.println(\"错误信息：\"+e.getMessage());\n            e.printStackTrace();\n        } finally {\n            System.exit(0);\n        }\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

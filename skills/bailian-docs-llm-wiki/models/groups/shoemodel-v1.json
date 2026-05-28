@@ -1,0 +1,51 @@
+{
+  "name": "鞋靴模特",
+  "description": "鞋靴模特支持输入多视角鞋靴系列图片，同时对输入模特模板图的鞋子区域进行鞋靴AI试穿，实现模特鞋靴布局重绘生成，最终生成图片的效果, 布局自然、细节丰富、画面细腻、试穿结果逼真。可用于模特商品图设计、新鞋AI试穿、模特穿戴布局重绘等场景。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Image"],
+        "request_modality": ["Image"]
+      },
+      "openSource": false,
+      "description": "鞋靴模特支持输入多视角鞋靴系列图片，同时对输入模特模板图的鞋子区域进行鞋靴AI试穿，实现模特鞋靴布局重绘生成，最终生成图片的效果, 布局自然、细节丰富、画面细腻、试穿结果逼真。可用于模特商品图设计、新鞋AI试穿、模特穿戴布局重绘等场景。",
+      "features": [],
+      "provider": "qwen",
+      "model": "shoemodel-v1",
+      "capabilities": ["IG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2024-06-21T02:47:24.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "鞋靴模特",
+      "docUrl": "https://help.aliyun.com/document_detail/2804662.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/virtualmodel/generation/' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"shoemodel-v1\",\n    \"input\": {\n        \"template_image_url\": \"https://img.alicdn.com/imgextra/i1/O1CN01EyPuz31d79mKv75CI_!!6000000003688-49-tps-1120-1680.webp\",\n        \"shoe_image_url\": [\"https://img.alicdn.com/imgextra/i2/O1CN01zTIls120gdcrI7dX2_!!6000000006879-49-tps-1120-1493.webp\"]\n    },\n    \"parameters\": \n    {\n        \"n\": 1\n    }\n}'\n\ncurl --location --request GET 'https:/dashscope.aliyuncs.com/api/v1/tasks/{task_id}' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\""
+          }
+        }
+      }
+    }
+  ]
+}

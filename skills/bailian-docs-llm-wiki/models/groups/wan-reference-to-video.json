@@ -1,0 +1,275 @@
+{
+  "name": "Wan-R2V",
+  "description": "参考视频中的人或物，精准保持形象和声音，支持多参考合拍",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Audio", "Image", "Text", "Video"]
+      },
+      "openSource": false,
+      "description": "Wan2.7-R2V，更加稳定的角色、道具与场景参考，支持最大5个图/视频混合参考，支持音频音色参考，搭配基础能力升级实现更强表演能力。",
+      "collectionTag": "wan2.7",
+      "features": [],
+      "provider": "wan",
+      "model": "wan2.7-r2v",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.6",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["VG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-04-03T03:21:08.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.7-R2V",
+      "docUrl": "https://help.aliyun.com/document_detail/3001146.html",
+      "predictConfig": [
+        {
+          "name": "清晰度",
+          "key": "resolution",
+          "default": "1080P"
+        },
+        {
+          "name": "宽高比",
+          "key": "ratio",
+          "default": "16:9"
+        },
+        {
+          "name": "视频时长(秒)",
+          "key": "duration",
+          "default": 5,
+          "range": [2, 10]
+        },
+        {
+          "name": "随机种子",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": true,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"wan2.7-r2v\",\n    \"input\": {\n        \"prompt\": \"视频2抱着图片3在咖啡厅里弹奏一支舒缓的美式乡村民谣，视频1笑着看着视频2\",\n        \"media\": [\n            {\n                \"type\": \"reference_video\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/hfugmr/wan-r2v-role1.mp4\"\n            },\n            {\n                \"type\": \"reference_video\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qigswt/wan-r2v-role2.mp4\"\n            },\n            {\n                \"type\": \"reference_image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"duration\": 10,\n        \"prompt_extend\": false,\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3001146.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video", "Audio"],
+        "request_modality": ["Image", "Video", "Text"]
+      },
+      "openSource": false,
+      "description": "万相2.6-参考生视频-Flash，生成更快性价比更高。支持指定人物或任意物品进行参考，精准保持形象和声音的一致性，支持多角色参考合拍",
+      "features": [],
+      "provider": "wan",
+      "model": "wan2.6-r2v-flash",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.3",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.5",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.15",
+          "type": "720P_no_audio",
+          "priceName": "视频生成（720P 无声）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.25",
+          "type": "1080P_no_audio",
+          "priceName": "视频生成（1080P 无声）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["VG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-01-29T10:15:01.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.6-R2V-Flash",
+      "docUrl": "https://help.aliyun.com/document_detail/3001146.html",
+      "predictConfig": [
+        {
+          "name": "分辨率",
+          "key": "size",
+          "default": "1920*1080"
+        },
+        {
+          "name": "视频时长",
+          "key": "duration",
+          "default": 5
+        },
+        {
+          "name": "随机种子",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能多镜",
+          "key": "shot_type",
+          "default": "single",
+          "tip": "开启后输出视频采用多分镜形式呈现"
+        },
+        {
+          "name": "生成音频",
+          "key": "audio",
+          "default": true
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"wan2.6-r2v-flash\",\n    \"input\": {\n        \"prompt\": \"character1在沙发上开心地看电影\",\n        \"reference_urls\":[\"https://cdn.wanx.aliyuncs.com/static/demo-wan26/vace.mp4\"]\n    },\n    \"parameters\": {\n        \"size\": \"1280*720\",\n        \"duration\": 5,\n        \"shot_type\":\"multi\"\n    }\n}'\ncurl --location --request GET 'https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\""
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video", "Audio"],
+        "request_modality": ["Image", "Video", "Text"]
+      },
+      "openSource": false,
+      "description": "万相2.6-参考生视频，支持指定人物或任意物品进行参考，精准保持形象和声音的一致性，支持多角色参考合拍。提醒：当使用视频进行参考时，输入视频也会计入费用，详见模型计费文档。",
+      "collectionTag": "wan2.6",
+      "features": [],
+      "provider": "wan",
+      "model": "wan2.6-r2v",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.6",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": ["VG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-12-15T16:08:49.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.6-R2V",
+      "docUrl": "https://help.aliyun.com/document_detail/3001146.html",
+      "predictConfig": [
+        {
+          "name": "分辨率",
+          "key": "size",
+          "default": "1920*1080"
+        },
+        {
+          "name": "视频时长",
+          "key": "duration",
+          "default": 5
+        },
+        {
+          "name": "随机种子",
+          "key": "seed",
+          "default": 1234,
+          "tip": "随机数种子，用于控制模型生成内容的随机性",
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能多镜",
+          "key": "shot_type",
+          "default": "single",
+          "tip": "开启后输出视频采用多分镜形式呈现"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"wan2.6-r2v\",\n    \"input\": {\n        \"prompt\": \"character1在沙发上开心地看电影\",\n        \"reference_urls\":[\"https://cdn.wanx.aliyuncs.com/static/demo-wan26/vace.mp4\"]\n    },\n    \"parameters\": {\n        \"size\": \"1280*720\",\n        \"duration\": 5,\n        \"shot_type\":\"multi\"\n    }\n}'\ncurl --location --request GET 'https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\""
+          }
+        }
+      }
+    }
+  ]
+}

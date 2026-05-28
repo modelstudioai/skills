@@ -1,0 +1,307 @@
+{
+  "name": "Qwen3.6-Flash",
+  "description": "Qwen3.6原生视觉语言系列Flash模型，模型效果相较3.5-Flash显著提升。本模型重点提升agentic coding能力（在多项代码智能体基准上大幅超越前代）、数学推理和代码推理能力；视觉方面在空间智能能力上显著增强，物体定位与目标检测提升尤为突出。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Image", "Text", "Video"]
+      },
+      "builtInToolMultiPrices": [
+        {
+          "supportedApi": "Responses API",
+          "name": "web_search",
+          "docUrl": "https://help.aliyun.com/document_detail/2867560.html",
+          "type": "web_search",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Responses API",
+          "name": "code_interpreter",
+          "docUrl": "https://help.aliyun.com/document_detail/2990719.html",
+          "type": "code_interpreter",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Responses API",
+          "name": "web_extractor",
+          "docUrl": "https://help.aliyun.com/document_detail/3016816.html",
+          "type": "web_extractor",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Responses API",
+          "name": "i2i_search",
+          "docUrl": "https://help.aliyun.com/document_detail/3022096.html",
+          "type": "i2i_search",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "48",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Responses API",
+          "name": "t2i_search",
+          "docUrl": "https://help.aliyun.com/document_detail/3022091.html",
+          "type": "t2i_search",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "24",
+              "currency": "CNY"
+            }
+          ]
+        }
+      ],
+      "openSource": false,
+      "description": "Qwen3.6原生视觉语言系列Flash模型，模型效果相较3.5-Flash显著提升。本模型重点提升agentic coding能力（在多项代码智能体基准上大幅超越前代）、数学推理和代码推理能力；视觉方面在空间智能能力上显著增强，物体定位与目标检测提升尤为突出。",
+      "collectionTag": "qwen3.6",
+      "features": [
+        "batch",
+        "cache",
+        "function-calling",
+        "model-experience",
+        "prefix-completion",
+        "structured-outputs",
+        "web-search"
+      ],
+      "provider": "qwen",
+      "model": "qwen3.6-flash",
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 10000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 3000,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 10000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 3000,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "multiPrices": [
+        {
+          "rangeStart": 0,
+          "rangeName": "输入<=256k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "1.2",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "7.2",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.6",
+              "type": "input_token_batch",
+              "priceName": "输入（Batch File）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "3.6",
+              "type": "output_token_batch",
+              "priceName": "输出（Batch File）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "1.5",
+              "type": "input_token_cache_creation_5m",
+              "priceName": "显式缓存创建"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.12",
+              "type": "input_token_cache_read",
+              "priceName": "显式缓存命中"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "1.2",
+              "type": "input_token_batch_chat",
+              "priceName": "输入（Batch Chat)"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "7.2",
+              "type": "output_token_batch_chat",
+              "priceName": "输出（Batch Chat)"
+            }
+          ],
+          "rangeEnd": 262144
+        },
+        {
+          "rangeStart": 262144,
+          "rangeName": "256k<输入<=1m",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "4.8",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "28.8",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "2.4",
+              "type": "input_token_batch",
+              "priceName": "输入（Batch File）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "14.4",
+              "type": "output_token_batch",
+              "priceName": "输出（Batch File）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "6",
+              "type": "input_token_cache_creation_5m",
+              "priceName": "显式缓存创建"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.48",
+              "type": "input_token_cache_read",
+              "priceName": "显式缓存命中"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "4.8",
+              "type": "input_token_batch_chat",
+              "priceName": "输入（Batch Chat)"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "28.8",
+              "type": "output_token_batch_chat",
+              "priceName": "输出（Batch Chat)"
+            }
+          ],
+          "rangeEnd": 1000000
+        }
+      ],
+      "capabilities": ["Reasoning", "VU", "TG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 65536,
+      "latestOnlineAt": "2026-04-16T14:02:00.000+00:00",
+      "contextWindow": 1000000,
+      "maxInputTokens": 991808,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3.6-Flash",
+      "docUrl": "https://help.aliyun.com/document_detail/2712576.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "stop",
+          "key": "stop",
+          "tip": "用于控制生成时遇到某些内容则停止。您可传入多个字符串。"
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_search",
+          "key": "enable_search",
+          "tip": "联网搜索补充互联网知识"
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": true,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [1, 32768]
+        },
+        {
+          "name": "result_format",
+          "key": "result_format",
+          "default": "message",
+          "tip": "返回结果格式"
+        }
+      ],
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "node": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化 openai 客户端\nconst openai = new OpenAI({\n    apiKey: process.env.DASHSCOPE_API_KEY, // 从环境变量读取\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\nlet isAnswering = false;\nasync function main() {\n    try {\n        const messages = [{ role: 'user', content: '你是谁' }];\n        const stream = await openai.chat.completions.create({\n            model: 'qwen3.6-flash',\n            messages,\n            stream: true,\n            enable_thinking: true\n        });\n        console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20));\n        for await (const chunk of stream) {\n            const delta = chunk.choices[0].delta;\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n            }\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20));\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n            }\n        }\n    } catch (error) {\n        console.error('Error:', error);\n    }\n}\nmain();",
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"qwen3.6-flash\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true,\n    \"enable_thinking\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"qwen3.6-flash\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "docUrl": "https://help.aliyun.com/document_detail/3016807.html"
+          },
+          "responsesAPI": {
+            "node": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI({\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: \"https://dashscope.aliyuncs.com/api/v2/apps/protocols/compatible-mode/v1\"\n});\n\nasync function main() {\n    const response = await openai.responses.create({\n        model: \"qwen3.6-flash\",\n        input: \"9.9和9.11哪个大？\",\n        enable_thinking: true  // 启用思考模式\n    });\n\n    // 遍历输出项\n    for (const item of response.output) {\n        if (item.type === \"reasoning\") {\n            console.log(\"【推理过程】\");\n            for (const summary of item.summary) {\n                console.log(summary.text.substring(0, 500));\n            }\n            console.log();\n        } else if (item.type === \"message\") {\n            console.log(\"【最终答案】\");\n            console.log(item.content[0].text);\n        }\n    }\n}\n\nmain();",
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/protocols/compatible-mode/v1/responses \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"qwen3.6-flash\",\n    \"input\": \"9.9和9.11哪个大？\",\n    \"enable_thinking\": true\n}'",
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/api/v2/apps/protocols/compatible-mode/v1\",\n)\n\nresponse = client.responses.create(\n    model=\"qwen3.6-flash\",\n    input=\"9.9和9.11哪个大？\",\n    extra_body={\n        \"enable_thinking\": True  # 启用思考模式\n    }\n)\n\n# 遍历输出项\nfor item in response.output:\n    if item.type == \"reasoning\":\n        # 打印推理过程摘要\n        print(\"【推理过程】\")\n        for summary in item.summary:\n            print(summary.text[:500])  # 截取前500字符\n        print()\n    elif item.type == \"message\":\n        # 打印最终答案\n        print(\"【最终答案】\")\n        print(item.content[0].text)",
+            "docUrl": "https://help.aliyun.com/document_detail/3016808.html"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "python": "import os\nimport dashscope\ndashscope.base_http_api_url = \"https://dashscope.aliyuncs.com/api/v1\"\n\nmessages = [\n    {\n        \"role\": \"user\",\n        \"content\": [\n            {\"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg\"},\n            {\"text\": \"图中描绘的是什么景象?\"}]\n    }]\nresponse = dashscope.MultiModalConversation.call(\n    api_key=os.getenv('DASHSCOPE_API_KEY'),\n    model='qwen3.6-flash',\n    messages=messages\n)\nprint(response.output.choices[0].message.content[0][\"text\"])\n",
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H 'Content-Type: application/json' \\\n-d '{\n    \"model\": \"qwen3.6-flash\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg\"},\n                    {\"text\": \"图中描绘的是什么景象?\"}\n                ]\n            }\n        ]\n    }\n}'",
+            "java": "import java.util.Arrays;\nimport java.util.Collections;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;\nimport com.alibaba.dashscope.common.MultiModalMessage;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    \n    static {Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";}\n\n    public static void simpleMultiModalConversationCall()\n            throws ApiException, NoApiKeyException, UploadFileException {\n        MultiModalConversation conv = new MultiModalConversation();\n        MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())\n                .content(Arrays.asList(\n                        Collections.singletonMap(\"image\", \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg\"),\n                        Collections.singletonMap(\"text\", \"图中描绘的是什么景象?\"))).build();\n        MultiModalConversationParam param = MultiModalConversationParam.builder()\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"qwen3.6-flash\")\n                .messages(Arrays.asList(userMessage))\n                .build();\n        MultiModalConversationResult result = conv.call(param);\n        System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get(\"text\"));\n    }\n    public static void main(String[] args) {\n        try {\n            simpleMultiModalConversationCall();\n        } catch (ApiException | NoApiKeyException | UploadFileException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3016807.html"
+          }
+        }
+      }
+    }
+  ]
+}

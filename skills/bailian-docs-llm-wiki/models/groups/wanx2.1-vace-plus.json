@@ -1,0 +1,82 @@
+{
+  "name": "Wan2.1-VACE-Plus",
+  "description": "万相2.1-VACE-Plus，视频编辑统一模型。支持局部编辑、视频重绘、背景扩展、时长延展、图片参考等多种视频编辑与生成任务，支持文本、图像、视频等多模态条件控制。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Video"],
+        "request_modality": ["Text", "Image", "Video"]
+      },
+      "openSource": true,
+      "description": "万相2.1-VACE-Plus，视频编辑统一模型。支持局部编辑、视频重绘、背景扩展、时长延展、图片参考等多种视频编辑与生成任务，支持文本、图像、视频等多模态条件控制。",
+      "features": [],
+      "provider": "wan",
+      "model": "wanx2.1-vace-plus",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.7",
+          "type": "video_ratio",
+          "priceName": "视频生成（std）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 2,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        }
+      },
+      "capabilities": ["VG"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-05-13T16:00:00.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan2.1-VACE-Plus",
+      "docUrl": "https://help.aliyun.com/document_detail/2922183.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n  \"model\": \"wanx2.1-vace-plus\",\n  \"input\": {\n    \"function\": \"stylization_all\",\n    \"prompt\": \"转换成法国绘本风格\",\n    \"base_image_url\": \"http://wanx.alicdn.com/material/20250318/stylization_all_1.jpeg\"\n  },\n  \"parameters\": {\n    \"n\": 1\n  }\n}'\n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\"",
+            "python": "import os\nfrom http import HTTPStatus\nfrom dashscope import ImageSynthesis\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\n# --- 准备工作：确保 API Key 已设置 ---\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\n\nmask_image_url = \"http://wanx.alicdn.com/material/20250318/description_edit_with_mask_3_mask.png\"\nbase_image_url = \"http://wanx.alicdn.com/material/20250318/description_edit_with_mask_3.jpeg\"\n\n\ndef sample_sync_call_imageedit():\n    print('please wait...')\n    rsp = ImageSynthesis.call(api_key=api_key,\n                              model=\"wanx2.1-vace-plus\",\n                              function=\"description_edit_with_mask\",\n                              prompt=\"陶瓷兔子拿着陶瓷小花\",\n                              mask_image_url=mask_image_url,\n                              base_image_url=base_image_url,\n                              n=1)\n    assert rsp.status_code == HTTPStatus.OK\n\n    print('response: %s' % rsp)\n    if rsp.status_code == HTTPStatus.OK:\n        for result in rsp.output.results:\n            print(\"---------------------------\")\n            print(result.url)\n    else:\n        print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n              (rsp.status_code, rsp.code, rsp.message))\n\n\nif __name__ == '__main__':\n    sample_sync_call_imageedit()",
+            "java": "// Copyright (c) Alibaba, Inc. and its affiliates.\n\nimport com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesis;\nimport com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesisParam;\nimport com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesisResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.JsonUtils;\nimport com.alibaba.dashscope.utils.Constants;\nimport java.util.HashMap;\nimport java.util.Map;\n\n\npublic class ImageEditSync {\n    static {\n        Constants.baseHttpApiUrl = \"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    // 从环境变量中获取 DashScope API Key（即阿里云百炼平台 API 密钥）\n    static String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n\n    static String maskImageUrl = \"http://wanx.alicdn.com/material/20250318/description_edit_with_mask_3_mask.png\";\n    static String baseImageUrl = \"http://wanx.alicdn.com/material/20250318/description_edit_with_mask_3.jpeg\";\n\n\n\n    public static void syncCall() {\n        // 设置parameters参数\n        Map<String, Object> parameters = new HashMap<>();\n        parameters.put(\"prompt_extend\", true);\n\n        ImageSynthesisParam param =\n                ImageSynthesisParam.builder()\n                        .apiKey(apiKey)\n                        .model(\"wanx2.1-vace-plus\")\n                        .function(ImageSynthesis.ImageEditFunction.DESCRIPTION_EDIT_WITH_MASK)\n                        .prompt(\"陶瓷兔子拿着陶瓷小花\")\n                        .maskImageUrl(maskImageUrl)\n                        .baseImageUrl(baseImageUrl)\n                        .n(1)\n                        .size(\"1024*1024\")\n                        .parameters(parameters)\n                        .build();\n\n        ImageSynthesis imageSynthesis = new ImageSynthesis();\n        ImageSynthesisResult result = null;\n        try {\n            System.out.println(\"---sync call, please wait a moment----\");\n            result = imageSynthesis.call(param);\n        } catch (ApiException | NoApiKeyException e){\n            throw new RuntimeException(e.getMessage());\n        }\n        System.out.println(JsonUtils.toJson(result));\n    }\n    \n\n    public static void main(String[] args) {\n        syncCall();\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

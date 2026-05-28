@@ -1,0 +1,182 @@
+{
+  "name": "Kimi",
+  "description": "由月之暗面提供的Kimi系列模型的API服务。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text", "Image", "Video"]
+      },
+      "openSource": true,
+      "description": "Kimi K2.6 是 Kimi 最新最智能的模型，Kimi K2.6 的通用 Agent、代码、视觉理解等综合能力得到全面提升，其中在博士级难度的完整版人类最后的考试（Humanity’s Last Exam）、在考察模型真实软件工程能力的 SWE-Bench Pro、评估 Agent 深度检索能力的 DeepSearchQA 等基准测试中均取得行业领先的成绩，同时支持文本、图片与视频输入，思考与非思考模式，对话与 Agent 任务。",
+      "maxOutputTokensThinking": 262144,
+      "features": [
+        "model-experience",
+        "function-calling",
+        "structured-outputs",
+        "prefix-completion",
+        "cache"
+      ],
+      "provider": "moonshot-ai",
+      "model": "kimi/kimi-k2.6",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "6.5",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "27",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.1",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 300000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 300000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG", "Reasoning", "VU"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 262144,
+      "latestOnlineAt": "2026-04-26T08:54:45.684+00:00",
+      "contextWindow": 262144,
+      "maxInputTokens": 262144,
+      "maxInputTokensThinking": 262144,
+      "inferenceProvider": "moonshot",
+      "name": "Kimi/Kimi K2.6",
+      "docUrl": "https://help.aliyun.com/document_detail/3021620.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": false,
+          "tip": "推理模式"
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"kimi/kimi-k2.6\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\n                    \"type\": \"image_url\",\n                    \"image_url\": {\n                        \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n                    },\n                },\n                {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"},\n            ],\n        },\n    ],\n)\nprint(completion.choices[0].message.content)",
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n  \"model\": \"kimi/kimi-k2.6\",\n  \"messages\": [\n  {\n    \"role\": \"user\",\n    \"content\": [\n      {\"type\": \"image_url\", \"image_url\": {\"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"}},\n      {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"}\n    ]\n  }]\n}'",
+            "nodejs": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI({\n  // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: \"sk-xxx\"\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: \"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n});\n\nasync function main() {\n  const response = await openai.chat.completions.create({\n    model: \"kimi/kimi-k2.6\",\n    messages: [\n      {\n        role: \"user\",\n        content: [{\n            type: \"image_url\",\n            image_url: {\n              \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n            }\n          },\n          {\n            type: \"text\",\n            text: \"请仅输出图像中的文本内容。\"\n          }\n        ]\n      }\n    ]\n  });\n  console.log(response.choices[0].message.content);\n}\nmain()"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text", "Image", "Video"]
+      },
+      "openSource": false,
+      "description": "Kimi K2.5 是 Kimi 在2026年最新推出的智能模型，在 Agent、代码、视觉理解及一系列通用智能任务上取得开源 SoTA 表现。同时 Kimi K2.5 也是 Kimi 迄今最全能的模型，原生的多模态架构设计，同时支持视觉与文本输入、思考与非思考模式、对话与 Agent 任务。",
+      "features": [
+        "model-experience",
+        "function-calling",
+        "structured-outputs",
+        "prefix-completion",
+        "cache"
+      ],
+      "provider": "moonshot-ai",
+      "model": "kimi/kimi-k2.5",
+      "iconUrl": "https://img.alicdn.com/imgextra/i4/O1CN01KzHLBW1LISVEUaotl_!!6000000001276-2-tps-56-56.png",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "4",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "21",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.7",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 300000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 300000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG", "Reasoning", "VU"],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 262144,
+      "latestOnlineAt": "2026-02-12T16:00:00.000+00:00",
+      "contextWindow": 262144,
+      "maxInputTokens": 262144,
+      "inferenceProvider": "moonshot",
+      "name": "Kimi/Kimi K2.5",
+      "docUrl": "https://help.aliyun.com/document_detail/3021620.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": false,
+          "tip": "推理模式"
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"kimi/kimi-k2.5\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\n                    \"type\": \"image_url\",\n                    \"image_url\": {\n                        \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n                    },\n                },\n                {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"},\n            ],\n        },\n    ],\n)\nprint(completion.choices[0].message.content)",
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n  \"model\": \"kimi/kimi-k2.5\",\n  \"messages\": [\n  {\n    \"role\": \"user\",\n    \"content\": [\n      {\"type\": \"image_url\", \"image_url\": {\"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"}},\n      {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"}\n    ]\n  }]\n}'",
+            "nodejs": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI({\n  // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: \"sk-xxx\"\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: \"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n});\n\nasync function main() {\n  const response = await openai.chat.completions.create({\n    model: \"kimi/kimi-k2.5\",\n    messages: [\n      {\n        role: \"user\",\n        content: [{\n            type: \"image_url\",\n            image_url: {\n              \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n            }\n          },\n          {\n            type: \"text\",\n            text: \"请仅输出图像中的文本内容。\"\n          }\n        ]\n      }\n    ]\n  });\n  console.log(response.choices[0].message.content);\n}\nmain()"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,594 @@
+{
+  "name": "Qwen3-Max",
+  "description": "千问3系列Max模型，相较preview版本在智能体编程与工具调用方向进行了专项升级。本次发布的正式版模型达到领域SOTA水平，适配场景更加复杂的智能体需求。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "builtInToolMultiPrices": [
+        {
+          "supportedApi": "Completions API",
+          "name": "search_strategy:agent",
+          "docUrl": "https://help.aliyun.com/document_detail/2867560.html",
+          "type": "search_strategy:agent",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Completions API",
+          "name": "search_strategy:agent_max",
+          "docUrl": "https://help.aliyun.com/document_detail/2867560.html",
+          "type": "search_strategy:agent_max",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY",
+              "tag": "限时优惠"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Responses API",
+          "name": "web_search",
+          "docUrl": "https://help.aliyun.com/document_detail/2867560.html",
+          "type": "web_search",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Responses API",
+          "name": "code_interpreter",
+          "docUrl": "https://help.aliyun.com/document_detail/2990719.html",
+          "type": "code_interpreter",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Responses API",
+          "name": "web_extractor",
+          "docUrl": "https://help.aliyun.com/document_detail/3016816.html",
+          "type": "web_extractor",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
+              "currency": "CNY"
+            }
+          ]
+        }
+      ],
+      "openSource": false,
+      "description": "千问3系列Max模型，相较preview版本在智能体编程与工具调用方向进行了专项升级。本次发布的正式版模型达到领域SOTA水平，适配场景更加复杂的智能体需求。",
+      "collectionTag": "qwen3",
+      "features": [
+        "model-experience",
+        "function-calling",
+        "structured-outputs",
+        "web-search",
+        "prefix-completion",
+        "cache",
+        "batch"
+      ],
+      "provider": "qwen",
+      "model": "qwen3-max",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_llminference_spn_public_cn"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 500000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 500,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 500000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 500,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "multiPrices": [
+        {
+          "rangeStart": 0,
+          "rangeName": "输入<=32k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "2.5",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "10",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.5",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "1.25",
+              "type": "input_token_batch",
+              "priceName": "输入（Batch File）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "5",
+              "type": "output_token_batch",
+              "priceName": "输出（Batch File）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "3.125",
+              "type": "input_token_cache_creation_5m",
+              "priceName": "显式缓存创建"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.25",
+              "type": "input_token_cache_read",
+              "priceName": "显式缓存命中"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "2.5",
+              "discount": 0.5,
+              "type": "input_token_batch_chat",
+              "priceName": "输入（Batch Chat)"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "10",
+              "discount": 0.5,
+              "type": "output_token_batch_chat",
+              "priceName": "输出（Batch Chat)"
+            }
+          ],
+          "rangeEnd": 32768
+        },
+        {
+          "rangeStart": 32768,
+          "rangeName": "32k<输入<=128k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "4",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "16",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.8",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "2",
+              "type": "input_token_batch",
+              "priceName": "输入（Batch File）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "8",
+              "type": "output_token_batch",
+              "priceName": "输出（Batch File）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "5",
+              "type": "input_token_cache_creation_5m",
+              "priceName": "显式缓存创建"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.4",
+              "type": "input_token_cache_read",
+              "priceName": "显式缓存命中"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "4",
+              "discount": 0.5,
+              "type": "input_token_batch_chat",
+              "priceName": "输入（Batch Chat)"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "16",
+              "discount": 0.5,
+              "type": "output_token_batch_chat",
+              "priceName": "输出（Batch Chat)"
+            }
+          ],
+          "rangeEnd": 131072
+        },
+        {
+          "rangeStart": 131072,
+          "rangeName": "128k<输入<=256k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "7",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "28",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "1.4",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "3.5",
+              "type": "input_token_batch",
+              "priceName": "输入（Batch File）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "14",
+              "type": "output_token_batch",
+              "priceName": "输出（Batch File）"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "8.75",
+              "type": "input_token_cache_creation_5m",
+              "priceName": "显式缓存创建"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "0.7",
+              "type": "input_token_cache_read",
+              "priceName": "显式缓存命中"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "7",
+              "discount": 0.5,
+              "type": "input_token_batch_chat",
+              "priceName": "输入（Batch Chat)"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "28",
+              "discount": 0.5,
+              "type": "output_token_batch_chat",
+              "priceName": "输出（Batch Chat)"
+            }
+          ],
+          "rangeEnd": 262144
+        }
+      ],
+      "capabilities": ["TG", "Reasoning"],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 65536,
+      "latestOnlineAt": "2025-09-23T11:23:19.000+00:00",
+      "contextWindow": 262144,
+      "maxInputTokens": 258048,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3-Max",
+      "docUrl": "https://help.aliyun.com/document_detail/2712576.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "stop",
+          "key": "stop",
+          "tip": "用于控制生成时遇到某些内容则停止。您可传入多个字符串。"
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_search",
+          "key": "enable_search",
+          "tip": "联网搜索补充互联网知识，当前暂时免费提供服务，即将于2025年8月25日0时起转计费模式，按量后付费"
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": true,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [1, 32768]
+        },
+        {
+          "name": "result_format",
+          "key": "result_format",
+          "default": "message",
+          "tip": "返回结果格式"
+        }
+      ],
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"qwen3-max\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true,\n    \"enable_thinking\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"qwen3-max\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化 openai 客户端\nconst openai = new OpenAI({\n    apiKey: process.env.DASHSCOPE_API_KEY, // 从环境变量读取\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\nlet isAnswering = false;\nasync function main() {\n    try {\n        const messages = [{ role: 'user', content: '你是谁' }];\n        const stream = await openai.chat.completions.create({\n            model: 'qwen3-max',\n            messages,\n            stream: true,\n            enable_thinking: true\n        });\n        console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20));\n        for await (const chunk of stream) {\n            if (!chunk.choices.length) continue;\n            const delta = chunk.choices[0].delta;\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n            }\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20));\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n            }\n        }\n    } catch (error) {\n        console.error('Error:', error);\n    }\n}\nmain();",
+            "docUrl": "https://help.aliyun.com/document_detail/3016807.html"
+          },
+          "responsesAPI": {
+            "node": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI({\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: \"https://dashscope.aliyuncs.com/api/v2/apps/protocols/compatible-mode/v1\"\n});\n\nasync function main() {\n    const response = await openai.responses.create({\n        model: \"qwen3-max\",\n        input: \"9.9和9.11哪个大？\",\n        enable_thinking: true  // 启用思考模式\n    });\n\n    // 遍历输出项\n    for (const item of response.output) {\n        if (item.type === \"reasoning\") {\n            console.log(\"【推理过程】\");\n            for (const summary of item.summary) {\n                console.log(summary.text.substring(0, 500));\n            }\n            console.log();\n        } else if (item.type === \"message\") {\n            console.log(\"【最终答案】\");\n            console.log(item.content[0].text);\n        }\n    }\n}\n\nmain();",
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/protocols/compatible-mode/v1/responses \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"qwen3-max\",\n    \"input\": \"9.9和9.11哪个大？\",\n    \"enable_thinking\": true\n}'",
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/api/v2/apps/protocols/compatible-mode/v1\",\n)\n\nresponse = client.responses.create(\n    model=\"qwen3-max\",\n    input=\"9.9和9.11哪个大？\",\n    extra_body={\n        \"enable_thinking\": True  # 启用思考模式\n    }\n)\n\n# 遍历输出项\nfor item in response.output:\n    if item.type == \"reasoning\":\n        # 打印推理过程摘要\n        print(\"【推理过程】\")\n        for summary in item.summary:\n            print(summary.text[:500])  # 截取前500字符\n        print()\n    elif item.type == \"message\":\n        # 打印最终答案\n        print(\"【最终答案】\")\n        print(item.content[0].text)",
+            "docUrl": "https://help.aliyun.com/document_detail/3016808.html"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"qwen3-max\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\":{\n        \"enable_thinking\": true,\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n    {\"role\": \"user\", \"content\": \"你是谁？\"},\n]\nresponse = Generation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = \"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"qwen3-max\",\n    messages=messages,\n    result_format=\"message\",\n    # 开启深度思考\n    enable_thinking=True,\n)\n\nif response.status_code == 200:\n    # 打印思考过程\n    print(\"=\" * 20 + \"思考过程\" + \"=\" * 20)\n    print(response.output.choices[0].message.reasoning_content)\n    \n    # 打印回复\n    print(\"=\" * 20 + \"完整回复\" + \"=\" * 20)\n    print(response.output.choices[0].message.content)\nelse:\n    print(f\"HTTP返回码：{response.status_code}\")\n    print(f\"错误码：{response.code}\")\n    print(f\"错误信息：{response.message}\")",
+            "java": "import java.util.Arrays;\nimport java.lang.System;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    static {\n        Constants.baseHttpApiUrl=\"https://dashscope.aliyuncs.com/api/v1\";\n    }\n    public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {\n        Generation gen = new Generation();\n        Message systemMsg = Message.builder()\n                .role(Role.SYSTEM.getValue())\n                .content(\"You are a helpful assistant.\")\n                .build();\n        Message userMsg = Message.builder()\n                .role(Role.USER.getValue())\n                .content(\"你是谁？\")\n                .build();\n        GenerationParam param = GenerationParam.builder()\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"qwen3-max\")\n                .messages(Arrays.asList(systemMsg, userMsg))\n                .resultFormat(GenerationParam.ResultFormat.MESSAGE)\n                .enableThinking(true)\n                .build();\n        return gen.call(param);\n    }\n    public static void main(String[] args) {\n        try {\n            GenerationResult result = callWithMessage();\n            System.out.println(\"====================思考过程====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getReasoningContent());\n            System.out.println(\"\\n====================完整回复====================\");\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.err.println(\"错误信息：\"+e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3016809.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "builtInToolMultiPrices": [
+        {
+          "supportedApi": "Responses API",
+          "name": "code_interpreter",
+          "docUrl": "https://help.aliyun.com/document_detail/2990719.html",
+          "type": "code_interpreter",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
+              "currency": "CNY"
+            }
+          ]
+        }
+      ],
+      "openSource": false,
+      "description": "Qwen3系列Max模型Preview版本，实现思考模式和非思考模式的有效融合。思考模式下在智能体编程能力、常识知识推理能力、数学/科学/通用类推理等能力上均有显著增强。",
+      "maxOutputTokensThinking": 32768,
+      "collectionTag": "qwen3",
+      "features": ["model-experience", "cache"],
+      "provider": "qwen",
+      "model": "qwen3-max-preview",
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 10,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 10,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "multiPrices": [
+        {
+          "rangeStart": 0,
+          "rangeName": "输入<=32k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "6",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "24",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "1.2",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            }
+          ],
+          "rangeEnd": 32768
+        },
+        {
+          "rangeStart": 32768,
+          "rangeName": "32k<输入<=128k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "10",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "40",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "2",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            }
+          ],
+          "rangeEnd": 131072
+        },
+        {
+          "rangeStart": 131072,
+          "rangeName": "128k<输入<=256k",
+          "prices": [
+            {
+              "priceUnit": "每百万tokens",
+              "price": "15",
+              "type": "input_token",
+              "priceName": "输入"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "60",
+              "type": "output_token",
+              "priceName": "输出"
+            },
+            {
+              "priceUnit": "每百万tokens",
+              "price": "3",
+              "type": "input_token_cache",
+              "priceName": "输入（缓存命中）"
+            }
+          ],
+          "rangeEnd": 262144
+        }
+      ],
+      "capabilities": ["TG", "Reasoning"],
+      "modelAlias": "qwen3-max-preview",
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 65536,
+      "latestOnlineAt": "2025-09-05T12:43:22.000+00:00",
+      "contextWindow": 262144,
+      "maxInputTokens": 258048,
+      "maxInputTokensThinking": 258048,
+      "contextWindowThinking": 262144,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3-Max-Preview",
+      "docUrl": "https://help.aliyun.com/document_detail/2712576.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "stop",
+          "key": "stop",
+          "tip": "用于控制生成时遇到某些内容则停止。您可传入多个字符串。"
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_search",
+          "key": "enable_search",
+          "tip": "联网搜索补充互联网知识，当前暂时免费提供服务，即将于2025年8月25日0时起转计费模式，按量后付费"
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": true,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [1, 32768]
+        },
+        {
+          "name": "result_format",
+          "key": "result_format",
+          "default": "message",
+          "tip": "返回结果格式"
+        }
+      ],
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\ncompletion = client.chat.completions.create(\n    model=\"qwen3-max-preview\",\n    messages=[\n        {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n        {\"role\": \"user\", \"content\": \"你是谁？\"},\n    ],\n    stream=True\n)\nfor chunk in completion:\n    print(chunk.choices[0].delta.content, end=\"\", flush=True)",
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"qwen3-max-preview\",\n    \"messages\": [\n        {\n            \"role\": \"system\",\n            \"content\": \"You are a helpful assistant.\"\n        },\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁？\"\n        }\n    ],\n    \"stream\":true\n}'",
+            "nodejs": "import OpenAI from \"openai\";\nconst openai = new OpenAI(\n    {\n        // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: \"sk-xxx\",\n        apiKey: process.env.DASHSCOPE_API_KEY,\n        baseURL: \"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n    }\n);\nconst completion = await openai.chat.completions.create({\n    model: \"qwen3-max-preview\",\n    messages: [\n        { role: \"system\", content: \"You are a helpful assistant.\" },\n        { role: \"user\", content: \"你是谁？\" }\n    ],\n    stream: true\n});\nfor await (const chunk of completion) {\n    process.stdout.write(chunk.choices[0].delta.content);\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3016807.html"
+          }
+        },
+        "dashscope": {
+          "completionsAPI": {
+            "curl": "curl --location \"https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation\" \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header \"Content-Type: application/json\" \\\n--data '{\n    \"model\": \"qwen3-max-preview\",\n    \"input\":{\n        \"messages\":[      \n            {\n                \"role\": \"system\",\n                \"content\": \"You are a helpful assistant.\"\n            },\n            {\n                \"role\": \"user\",\n                \"content\": \"你是谁？\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"result_format\": \"message\"\n    }\n}'",
+            "python": "import os\nfrom dashscope import Generation\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\nmessages = [\n    {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n    {\"role\": \"user\", \"content\": \"你是谁？\"},\n]\nresponse = Generation.call(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = \"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"qwen3-max-preview\",\n    messages=messages,\n    result_format=\"message\",\n)\n\nprint(response.output.choices[0].message.content)",
+            "java": "import java.util.Arrays;\nimport java.lang.System;\nimport com.alibaba.dashscope.aigc.generation.Generation;\nimport com.alibaba.dashscope.aigc.generation.GenerationParam;\nimport com.alibaba.dashscope.aigc.generation.GenerationResult;\nimport com.alibaba.dashscope.common.Message;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.protocol.Protocol;\n\npublic class Main {\n    public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {\n        Generation gen = new Generation(Protocol.HTTP.getValue(), \"https://dashscope.aliyuncs.com/api/v1\");\n        Message systemMsg = Message.builder()\n                .role(Role.SYSTEM.getValue())\n                .content(\"You are a helpful assistant.\")\n                .build();\n        Message userMsg = Message.builder()\n                .role(Role.USER.getValue())\n                .content(\"你是谁？\")\n                .build();\n        GenerationParam param = GenerationParam.builder()\n                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey(\"sk-xxx\")\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"qwen3-max-preview\")\n                .messages(Arrays.asList(systemMsg, userMsg))\n                .resultFormat(GenerationParam.ResultFormat.MESSAGE)\n                .build();\n        return gen.call(param);\n    }\n    public static void main(String[] args) {\n        try {\n            GenerationResult result = callWithMessage();\n            System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.err.println(\"错误信息：\"+e.getMessage());\n        }\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3016809.html"
+          }
+        }
+      }
+    }
+  ]
+}

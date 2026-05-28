@@ -1,0 +1,76 @@
+{
+  "name": "Z-Image-Turbo",
+  "description": "Z-Image-Turbo是在Artificial Analysis评测中荣登文生图开源模型世界第一的高效图像生成模型,仅用60亿参数和8步推理就能生成媲美大规模商业模型的照片级真实感图像,并在中英双语文本渲染、复杂语义理解和多样化主题生成上表现卓越。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text", "Image"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "Z-Image-Turbo是在Artificial Analysis评测中荣登文生图开源模型世界第一的高效图像生成模型,仅用60亿参数和8步推理就能生成媲美大规模商业模型的照片级真实感图像,并在中英双语文本渲染、复杂语义理解和多样化主题生成上表现卓越。",
+      "features": ["model-experience"],
+      "provider": "qwen-domain-model",
+      "model": "z-image-turbo",
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.1",
+          "type": "image_standard",
+          "priceName": "图片生成（标准）"
+        },
+        {
+          "priceUnit": "每张",
+          "price": "0.2",
+          "type": "image_thinking",
+          "priceName": "图片生成（思考）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 2,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 2,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["IG"],
+      "versionTag": "SNAPSHOT",
+      "latestOnlineAt": "2025-12-18T06:43:39.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Z-Image-Turbo",
+      "docUrl": "https://help.aliyun.com/document_detail/3002354.html",
+      "predictConfig": [
+        {
+          "name": "分辨率",
+          "key": "size",
+          "default": "1024*1024",
+          "tip": "请先选择输出分辨率，再选择输出宽高比"
+        },
+        {
+          "name": "随机种子",
+          "key": "seed",
+          "default": 1234,
+          "range": [1, 2147483647]
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": false,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \\\n--header 'Content-Type: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--data '{\n    \"model\": \"z-image-turbo\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"film grain, analog film texture, soft film lighting, Kodak Portra 400 style, cinematic grainy texture, photorealistic details, subtle noise, (film grain:1.2)。采用近景特写镜头拍摄的东亚年轻女性，呈现户外雪地场景。她体型纤瘦，呈站立姿势，身体微微向右侧倾斜，头部抬起看向画面上方，姿态自然放松。她的面部是典型东亚长相，肤色白皙，脸颊带有自然的红润感，五官清秀：眼睛是深棕色，眼型偏圆，眼神略带惊讶地望向上方，眼白部分可见；眉毛是深黑色，形状自然弯长；鼻子小巧挺直，嘴唇涂有红色口红，唇瓣微张，表情带着轻微的惊讶或好奇。她的头发是深黑色长直发，发丝被风吹得略显凌乱，部分垂在脸颊两侧，头顶佩戴一顶深灰色的头盔，头盔边缘露出少量发丝。服装是蓝白拼接的厚重外套，外套材质看起来是毛绒与布料结合，显得温暖厚实，适合雪地环境。背景是被白雪覆盖的户外场景，远处可见模糊的树木轮廓，天空是明亮的浅蓝色，带有少量白云，光线是强烈的自然日光，照亮人物面部与头发，形成清晰的光影，色调以蓝、白、黑为主，整体风格清新自然。画面顶部有黑色提示框，内有“Press esc to exit full screen”的白色文字。镜头的近景视角放大了人物的表情与细节，营造出户外雪地的真实氛围。\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"prompt_extend\": false,\n        \"size\": \"1120*1440\"\n    }\n}'"
+          }
+        }
+      }
+    }
+  ]
+}

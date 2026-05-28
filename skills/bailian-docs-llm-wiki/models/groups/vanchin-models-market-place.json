@@ -1,0 +1,491 @@
+{
+  "name": "Vanchin DeepSeek",
+  "description": "由快手万擎提供的DeepSeek系列模型API服务。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "DeepSeek-V3.2 是一款实现了高计算效率与卓越推理及代理（Agent）性能完美协调的模型。该模型建立在 DeepSeek-V3 的基础之上，通过引入 DeepSeek 稀疏注意力（DSA）、可扩展的强化学习框架以及大规模代理任务合成流水线等关键技术突破，推动了开源大语言模型的前沿发展。",
+      "features": [
+        "model-experience",
+        "function-calling",
+        "structured-outputs",
+        "prefix-completion",
+        "cache"
+      ],
+      "provider": "deepseek",
+      "model": "vanchin/deepseek-v3.2-think",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "3",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.2",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 600000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 30,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 600000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 30,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["Reasoning", "TG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 65536,
+      "latestOnlineAt": "2026-04-07T09:00:00.000+00:00",
+      "contextWindow": 131072,
+      "maxInputTokens": 98304,
+      "inferenceProvider": "vanchin",
+      "name": "Vanchin/DeepSeek-V3.2-think",
+      "docUrl": "https://help.aliyun.com/document_detail/3027089.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.95,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.6,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": false,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [1, 32768]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"vanchin/deepseek-v3.2-think\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true,\n    \"enable_thinking\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"vanchin/deepseek-v3.2-think\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\nconst openai = new OpenAI({\n    apiKey: process.env.DASHSCOPE_API_KEY, // Read from the environment variable\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\nlet isAnswering = false;\nasync function main() {\n    try {\n        const messages = [{ role: 'user', content: '你是谁' }];\n        const stream = await openai.chat.completions.create({\n            model: 'vanchin/deepseek-v3.2-think',\n            messages,\n            stream: true,\n            enable_thinking: true\n        });\n        console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20));\n        for await (const chunk of stream) {\n            const delta = chunk.choices[0].delta;\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n            }\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + 'Full response' + '='.repeat(20));\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n            }\n        }\n    } catch (error) {\n        console.error('Error:', error);\n    }\n}\nmain();",
+            "docUrl": "https://help.aliyun.com/document_detail/3027089.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "DeepSeek-V3.1-Terminus 是 DeepSeek-V3.1 的更新版本，旨在保持模型原有核心能力的同时，针对用户反馈的问题进行了修复和优化。该版本的模型结构与 DeepSeek-V3 保持一致，并在特定领域进行了显著增强。",
+      "features": ["model-experience", "function-calling", "cache"],
+      "provider": "deepseek",
+      "model": "vanchin/deepseek-v3.1-terminus",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "4",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "12",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.6",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG", "Reasoning"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 65536,
+      "latestOnlineAt": "2026-04-07T08:57:08.000+00:00",
+      "contextWindow": 131072,
+      "maxInputTokens": 32768,
+      "inferenceProvider": "vanchin",
+      "name": "Vanchin/DeepSeek-V3.1-Terminus",
+      "docUrl": "https://help.aliyun.com/document_detail/3027089.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.95,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.6,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": false,
+          "tip": "推理模式"
+        },
+        {
+          "name": "thinking_budget",
+          "key": "thinking_budget",
+          "default": 4000,
+          "tip": "思维链的最大输出tokens数量",
+          "range": [1, 32768]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"vanchin/deepseek-v3.1-terminus\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true,\n    \"enable_thinking\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"vanchin/deepseek-v3.1-terminus\",  # 您可以按需更换为其它深度思考模型\n    messages=messages,\n    extra_body={\"enable_thinking\": True},\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n        if not is_answering:\n            print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        if not is_answering:\n            print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n            is_answering = True\n        print(delta.content, end=\"\", flush=True)",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\nconst openai = new OpenAI({\n    apiKey: process.env.DASHSCOPE_API_KEY, // Read from the environment variable\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\nlet isAnswering = false;\nasync function main() {\n    try {\n        const messages = [{ role: 'user', content: '你是谁' }];\n        const stream = await openai.chat.completions.create({\n            model: 'vanchin/deepseek-v3.1-terminus',\n            messages,\n            stream: true,\n            enable_thinking: true\n        });\n        console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20));\n        for await (const chunk of stream) {\n            const delta = chunk.choices[0].delta;\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n            }\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + 'Full response' + '='.repeat(20));\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n            }\n        }\n    } catch (error) {\n        console.error('Error:', error);\n    }\n}\nmain();",
+            "docUrl": "https://help.aliyun.com/document_detail/3027089.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "DeepSeek-V3 由深度求索（DeepSeek）于 2024 年 12 月发布，是目前开源社区领先的混合专家（MoE）语言模型：总参数 671B，每个 token 仅激活 37B 参数。模型在 14.8 万亿高质量 tokens 上完成预训练，原生支持 128k 上下文。通过创新的无辅助损失负载均衡策略、多头潜在注意力（MLA）架构和 FP8 混合精度训练。",
+      "features": [
+        "model-experience",
+        "structured-outputs",
+        "prefix-completion",
+        "function-calling",
+        "cache"
+      ],
+      "provider": "deepseek",
+      "model": "vanchin/deepseek-v3",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "8",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.8",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 16384,
+      "latestOnlineAt": "2026-04-07T08:56:49.000+00:00",
+      "contextWindow": 131072,
+      "maxInputTokens": 131072,
+      "inferenceProvider": "vanchin",
+      "name": "Vanchin/DeepSeek-V3",
+      "docUrl": "https://help.aliyun.com/document_detail/3027089.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"vanchin/deepseek-v3\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\ncompletion = client.chat.completions.create(\n    model=\"vanchin/deepseek-v3\",\n    messages=[\n        {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n        {\"role\": \"user\", \"content\": \"你是谁？\"},\n    ],\n    stream=True\n)\nfor chunk in completion:\n    print(chunk.choices[0].delta.content, end=\"\", flush=True)",
+            "nodejs": "import OpenAI from \"openai\";\nconst openai = new OpenAI(\n    {\n        // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: \"sk-xxx\",\n        apiKey: process.env.DASHSCOPE_API_KEY,\n        baseURL: \"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n    }\n);\nconst completion = await openai.chat.completions.create({\n    model: \"vanchin/deepseek-v3\",\n    messages: [\n        { role: \"system\", content: \"You are a helpful assistant.\" },\n        { role: \"user\", content: \"你是谁？\" }\n    ],\n    stream: true\n});\nfor await (const chunk of completion) {\n    process.stdout.write(chunk.choices[0].delta.content);\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/3027089.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text"]
+      },
+      "openSource": true,
+      "description": "DeepSeek-R1 是深度求索于 2025 年 1 月开源的 6710 亿参数混合专家（MoE）推理模型，推理时仅激活 370 亿参数。作为首个通过纯强化学习（无监督微调）训练的千亿级模型，实现了链式思维（CoT）的自然涌现。模型在 RL 前加入冷启动数据解决了 R1-Zero 的重复和混语问题，在数学、代码、推理任务上达到 OpenAI o1 水平。",
+      "features": ["model-experience", "function-calling", "prefix-completion", "cache"],
+      "provider": "deepseek",
+      "model": "vanchin/deepseek-r1",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "4",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "16",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.6",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["Reasoning", "TG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 32768,
+      "latestOnlineAt": "2026-04-07T08:56:31.000+00:00",
+      "contextWindow": 131072,
+      "maxInputTokens": 98304,
+      "inferenceProvider": "vanchin",
+      "name": "Vanchin/DeepSeek-R1",
+      "docUrl": "https://help.aliyun.com/document_detail/3027089.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"vanchin/deepseek-r1\",\n    \"messages\": [\n        {\n            \"role\": \"user\", \n            \"content\": \"你是谁\"\n        }\n    ],\n    \"stream\": true\n}'",
+            "python": "from openai import OpenAI\nimport os\nclient = OpenAI(\n    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key=\"sk-xxx\"\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\nmessages = [{\"role\": \"user\", \"content\": \"你是谁\"}]\ncompletion = client.chat.completions.create(\n    model=\"vanchin/deepseek-r1\",\n    messages=messages,\n    stream=True\n)\nis_answering = False  # 是否进入回复阶段\nprint(\"\\n\" + \"=\" * 20 + \"思考过程\" + \"=\" * 20)\nfor chunk in completion:\n    if chunk.choices:\n        delta = chunk.choices[0].delta\n        # 只收集思考内容\n        if hasattr(delta, \"reasoning_content\") and delta.reasoning_content is not None:\n            if not is_answering:\n                print(delta.reasoning_content, end=\"\", flush=True)\n        # 收到content，开始进行回复\n        if hasattr(delta, \"content\") and delta.content:\n            if not is_answering:\n                print(\"\\n\" + \"=\" * 20 + \"完整回复\" + \"=\" * 20)\n                is_answering = True\n            print(delta.content, end=\"\", flush=True)",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\n// 初始化OpenAI客户端\nconst openai = new OpenAI({\n    // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: \"sk-xxx\"\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\n\nlet reasoningContent = ''; // 完整思考过程\nlet answerContent = ''; // 完整回复\nlet isAnswering = false; // 是否进入回复阶段\n\nasync function main() {\n    const messages = [{ role: 'user', content: '你是谁' }];\n\n    const stream = await openai.chat.completions.create({\n        model: 'vanchin/deepseek-r1',\n        messages,\n        stream: true,\n    });\n\n    console.log('\\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\\n');\n\n    for await (const chunk of stream) {\n        if (chunk.choices?.length) {\n            const delta = chunk.choices[0].delta;\n            // 只收集思考内容\n            if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {\n                if (!isAnswering) {\n                    process.stdout.write(delta.reasoning_content);\n                }\n                reasoningContent += delta.reasoning_content;\n            }\n\n            // 收到content，开始进行回复\n            if (delta.content !== undefined && delta.content) {\n                if (!isAnswering) {\n                    console.log('\\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\\n');\n                    isAnswering = true;\n                }\n                process.stdout.write(delta.content);\n                answerContent += delta.content;\n            }\n        }\n    }\n}\n\nmain();"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Text", "Image"]
+      },
+      "openSource": true,
+      "description": "DeepSeek-OCR以 “探索视觉 - 文本压缩边界” 为核心目标，从大语言模型（LLM）视角重新定义视觉编码器的功能定位，为文档识别、图像转文本等高频场景提供了兼顾精度与效率的全新解决方案。",
+      "features": ["structured-outputs"],
+      "provider": "deepseek",
+      "model": "vanchin/deepseek-ocr",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.216",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.216",
+          "type": "output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 1000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 50,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["VU", "TG"],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 8192,
+      "latestOnlineAt": "2026-04-07T08:56:06.000+00:00",
+      "contextWindow": 8192,
+      "maxInputTokens": 8192,
+      "inferenceProvider": "vanchin",
+      "name": "Vanchin/DeepSeek-OCR",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "curl": "curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"vanchin/deepseek-ocr\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\n                    \"type\": \"image_url\",\n                    \"image_url\": {\n                        \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\",\n                        \"detail\": \"high\"\n                    }\n                },\n                {\n                    \"type\": \"text\",\n                    \"text\": \"Read all the text in the image.\"\n                }\n            ]\n        }\n    ]\n}'",
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"vanchin/deepseek-ocr\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\n                    \"type\": \"image_url\",\n                    \"image_url\": {\n                        \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\",\n                        \"detail\": \"high\",\n                    },\n                },\n                {\n                    \"type\": \"text\",\n                    \"text\": \"Read all the text in the image.\",\n                },\n            ],\n        }\n    ],\n)\n\nprint(completion.choices[0].message.content)",
+            "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\nconst openai = new OpenAI({\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'\n});\n\nasync function main() {\n    const completion = await openai.chat.completions.create({\n        model: 'vanchin/deepseek-ocr',\n        messages: [\n            {\n                role: 'user',\n                content: [\n                    {\n                        type: 'image_url',\n                        image_url: {\n                            url: 'https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg',\n                            detail: 'high',\n                        },\n                    },\n                    {\n                        type: 'text',\n                        text: 'Read all the text in the image.',\n                    },\n                ],\n            },\n        ],\n    });\n\n    console.log(completion.choices[0].message.content);\n}\n\nmain();",
+            "docUrl": "https://help.aliyun.com/document_detail/3027089.html"
+          }
+        }
+      }
+    }
+  ]
+}

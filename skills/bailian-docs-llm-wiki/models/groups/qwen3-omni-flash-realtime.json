@@ -1,0 +1,123 @@
+{
+  "name": "Qwen3-Omni-Flash-Realtime",
+  "description": "Qwen3-Omni-Flash-Realtime多模态大模型的实时版，基于Thinker–Talker混合专家（MoE）架构，支持文本、图像、音频、视频的高效理解与语音生成能力，可进行119种语言文本交互和20种语言语音交互，生成类人语音实现跨语言精准沟通。模型具备强大指令跟随与系统提示定制功能，灵活适配对话风格与角色设定，广泛应用于文本创作、语音助手、多媒体分析等场景，提供自然流畅的多模态交互体验。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text", "Audio"],
+        "request_modality": ["Text", "Image", "Video", "Audio"]
+      },
+      "openSource": false,
+      "description": "千问3-Omni-Flash多模态大模型的实时版，基于Thinker–Talker混合专家（MoE）架构，支持文本、图像、音频、视频的高效理解与语音生成能力，可进行119种语言文本交互和20种语言语音交互，生成类人语音实现跨语言精准沟通。模型具备强大指令跟随与系统提示定制功能，灵活适配对话风格与角色设定，广泛应用于文本创作、语音助手、多媒体分析等场景，提供自然流畅的多模态交互体验。",
+      "collectionTag": "qwen3",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen3-omni-flash-realtime",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2.2",
+          "type": "text_input_token",
+          "priceName": "输入：文本"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "18.9",
+          "type": "audio_input_token",
+          "priceName": "输入：音频"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "3.9",
+          "type": "vision_input_token",
+          "priceName": "输入：图片/视频"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "8.3",
+          "type": "purein_text_output_token",
+          "priceName": "输出：文本（输入仅包含文本时）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "15.2",
+          "type": "multiin_text_output_token",
+          "priceName": "输出：文本（输入包含图片/音频/视频时）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "75.1",
+          "type": "multi_output_token",
+          "priceName": "输出：文本+音频（输出的文本不计费）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["Realtime-Omni"],
+      "versionTag": "MAJOR",
+      "equivalentSnapshot": "qwen3-omni-flash-realtime-2025-12-01",
+      "maxOutputTokens": 16384,
+      "latestOnlineAt": "2025-12-03T16:00:00.000+00:00",
+      "contextWindow": 65536,
+      "maxInputTokens": 49152,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3-Omni-Flash-Realtime",
+      "docUrl": "https://help.aliyun.com/document_detail/2880812.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "音色选择",
+          "key": "voice"
+        },
+        {
+          "name": "内容输出",
+          "key": "modalities",
+          "default": ["text"],
+          "tip": "设置模型返回的模态"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 1,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "enable_thinking",
+          "key": "enable_thinking",
+          "default": false,
+          "tip": "开启深度思考，开启后将不支持音频输出"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# 依赖：dashscope >= 1.23.9，pyaudio\nimport os\nimport base64\nimport time\n\nimport pyaudio\nfrom dashscope.audio.qwen_omni import MultiModality, AudioFormat,OmniRealtimeCallback,OmniRealtimeConversation\nimport dashscope\n\n\nurl = f'wss://dashscope.aliyuncs.com/api-ws/v1/realtime'\n# 配置 API Key，若没有设置环境变量，请用 API Key 将下行替换为 dashscope.api_key = \"sk-xxx\"\ndashscope.api_key = os.getenv('DASHSCOPE_API_KEY')\n# 指定音色\nvoice = 'Ethan'\n# 指定模型\nmodel = 'qwen3-omni-flash-realtime'\n# 指定模型角色\ninstructions = \"你是个人助理小云，请用幽默风趣的方式回答用户的问题\"\nclass SimpleCallback(OmniRealtimeCallback):\n    def __init__(self, pya):\n        self.pya = pya\n        self.out = None\n    def on_open(self):\n        # 初始化音频输出流\n        self.out = self.pya.open(\n            format=pyaudio.paInt16,\n            channels=1,\n            rate=24000,\n            output=True\n        )\n    def on_event(self, response):\n        if response['type'] == 'response.audio.delta':\n            # 播放音频\n            self.out.write(base64.b64decode(response['delta']))\n        elif response['type'] == 'conversation.item.input_audio_transcription.completed':\n            # 打印转录文本\n            print(f\"[User] {response['transcript']}\")\n        elif response['type'] == 'response.audio_transcript.done':\n            # 打印助手回复文本\n            print(f\"[LLM] {response['transcript']}\")\n\n# 1. 初始化音频设备\npya = pyaudio.PyAudio()\n# 2. 创建回调函数和会话\ncallback = SimpleCallback(pya)\nconv = OmniRealtimeConversation(model=model, callback=callback, url=url)\n# 3. 建立连接并配置会话\nconv.connect()\nconv.update_session(output_modalities=[MultiModality.AUDIO, MultiModality.TEXT], voice=voice, instructions=instructions)\n# 4. 初始化音频输入流\nmic = pya.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True)\n# 5. 主循环处理音频输入\nprint(\"对话已开始，对着麦克风说话 (Ctrl+C 退出)...\")\ntry:\n    while True:\n        audio_data = mic.read(3200, exception_on_overflow=False)\n        conv.append_audio(base64.b64encode(audio_data).decode())\n        time.sleep(0.01)\nexcept KeyboardInterrupt:\n    # 清理资源\n    conv.close()\n    mic.close()\n    callback.out.close()\n    pya.terminate()\n    print(\"\\n对话结束\")",
+            "java": "// DashScope Java SDK 版本不低于2.20.9\n\nimport com.alibaba.dashscope.audio.omni.*;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.google.gson.JsonObject;\nimport javax.sound.sampled.*;\nimport java.io.IOException;\nimport java.nio.ByteBuffer;\nimport java.util.Arrays;\nimport java.util.Base64;\nimport java.util.Queue;\nimport java.util.concurrent.ConcurrentLinkedQueue;\nimport java.util.concurrent.atomic.AtomicBoolean;\nimport java.util.concurrent.atomic.AtomicReference;\n\npublic class OmniServerVad {\n    // RealtimePcmPlayer 类定义开始\n    public static class RealtimePcmPlayer {\n        private int sampleRate;\n        private SourceDataLine line;\n        private AudioFormat audioFormat;\n        private Thread decoderThread;\n        private Thread playerThread;\n        private AtomicBoolean stopped = new AtomicBoolean(false);\n        private Queue<String> b64AudioBuffer = new ConcurrentLinkedQueue<>();\n        private Queue<byte[]> RawAudioBuffer = new ConcurrentLinkedQueue<>();\n    \n        // 构造函数初始化音频格式和音频线路\n        public RealtimePcmPlayer(int sampleRate) throws LineUnavailableException {\n            this.sampleRate = sampleRate;\n            this.audioFormat = new AudioFormat(this.sampleRate, 16, 1, true, false);\n            DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);\n            line = (SourceDataLine) AudioSystem.getLine(info);\n            line.open(audioFormat);\n            line.start();\n            decoderThread = new Thread(new Runnable() {\n                @Override\n                public void run() {\n                    while (!stopped.get()) {\n                        String b64Audio = b64AudioBuffer.poll();\n                        if (b64Audio != null) {\n                            byte[] rawAudio = Base64.getDecoder().decode(b64Audio);\n                            RawAudioBuffer.add(rawAudio);\n                        } else {\n                            try {\n                                Thread.sleep(100);\n                            } catch (InterruptedException e) {\n                                throw new RuntimeException(e);\n                            }\n                        }\n                    }\n                }\n            });\n            playerThread = new Thread(new Runnable() {\n                @Override\n                public void run() {\n                    while (!stopped.get()) {\n                        byte[] rawAudio = RawAudioBuffer.poll();\n                        if (rawAudio != null) {\n                            try {\n                                playChunk(rawAudio);\n                            } catch (IOException e) {\n                                throw new RuntimeException(e);\n                            } catch (InterruptedException e) {\n                                throw new RuntimeException(e);\n                            }\n                        } else {\n                            try {\n                                Thread.sleep(100);\n                            } catch (InterruptedException e) {\n                                throw new RuntimeException(e);\n                            }\n                        }\n                    }\n                }\n            });\n            decoderThread.start();\n            playerThread.start();\n        }\n    \n        // 播放一个音频块并阻塞直到播放完成\n        private void playChunk(byte[] chunk) throws IOException, InterruptedException {\n            if (chunk == null || chunk.length == 0) return;\n    \n            int bytesWritten = 0;\n            while (bytesWritten < chunk.length) {\n                bytesWritten += line.write(chunk, bytesWritten, chunk.length - bytesWritten);\n            }\n            int audioLength = chunk.length / (this.sampleRate*2/1000);\n            // 等待缓冲区中的音频播放完成\n            Thread.sleep(audioLength - 10);\n        }\n    \n        public void write(String b64Audio) {\n            b64AudioBuffer.add(b64Audio);\n        }\n    \n        public void cancel() {\n            b64AudioBuffer.clear();\n            RawAudioBuffer.clear();\n        }\n    \n        public void waitForComplete() throws InterruptedException {\n            while (!b64AudioBuffer.isEmpty() || !RawAudioBuffer.isEmpty()) {\n                Thread.sleep(100);\n            }\n            line.drain();\n        }\n    \n        public void shutdown() throws InterruptedException {\n            stopped.set(true);\n            decoderThread.join();\n            playerThread.join();\n            if (line != null && line.isRunning()) {\n                line.drain();\n                line.close();\n            }\n        }\n    } // RealtimePcmPlayer 类定义结束\n    \n    public static void main(String[] args) throws InterruptedException, LineUnavailableException {\n        String imageB64 = null;\n\n        OmniRealtimeParam param = OmniRealtimeParam.builder()\n                .model(\"qwen3-omni-flash-realtime\")\n                // 新加坡和北京地域的API Key不同。获取API Key：https://www.alibabacloud.com/help/zh/model-studio/get-api-key\n                // 如果没有配置环境变量，请用您的 API Key 将下行修改为.apikey(\"sk-xxx\")\n                .apikey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .url(\"wss://dashscope.aliyuncs.com/api-ws/v1/realtime\")\n                .build();\n\n        RealtimePcmPlayer audioPlayer = new RealtimePcmPlayer(24000);\n        OmniRealtimeConversation conversation = null;\n        final AtomicReference<OmniRealtimeConversation> conversationRef = new AtomicReference<>(null);\n        conversation = new OmniRealtimeConversation(param, new OmniRealtimeCallback() {\n            @Override\n            public void onOpen() {\n                System.out.println(\"connection opened\");\n            }\n            @Override\n            public void onEvent(JsonObject message) {\n                String type = message.get(\"type\").getAsString();\n                switch(type) {\n                    case \"session.created\":\n                        System.out.println(\"start session: \" + message.get(\"session\").getAsJsonObject().get(\"id\").getAsString());\n                        break;\n                    case \"conversation.item.input_audio_transcription.completed\":\n                        System.out.println(\"question: \" + message.get(\"transcript\").getAsString());\n                        break;\n                    case \"response.audio_transcript.delta\":\n                        System.out.println(\"got llm response delta: \" + message.get(\"delta\").getAsString());\n                        break;\n                    case \"response.audio.delta\":\n                        String recvAudioB64 = message.get(\"delta\").getAsString();\n                        audioPlayer.write(recvAudioB64);\n                        break;\n                    case \"input_audio_buffer.speech_started\":\n                        System.out.println(\"======VAD Speech Start======\");\n                        audioPlayer.cancel();\n                        break;\n                    case \"response.done\":\n                        System.out.println(\"======RESPONSE DONE======\");\n                        if (conversationRef.get() != null) {\n                            System.out.println(\"[Metric] response: \" + conversationRef.get().getResponseId() +\n                                    \", first text delay: \" + conversationRef.get().getFirstTextDelay() +\n                                    \" ms, first audio delay: \" + conversationRef.get().getFirstAudioDelay() + \" ms\");\n                        }\n                        break;\n                    default:\n                        break;\n                }\n            }\n            @Override\n            public void onClose(int code, String reason) {\n                System.out.println(\"connection closed code: \" + code + \", reason: \" + reason);\n            }\n        });\n        conversationRef.set(conversation);\n        try {\n            conversation.connect();\n        } catch (NoApiKeyException e) {\n            throw new RuntimeException(e);\n        }\n        OmniRealtimeConfig config = OmniRealtimeConfig.builder()\n                .modalities(Arrays.asList(OmniRealtimeModality.AUDIO, OmniRealtimeModality.TEXT))\n                .voice(\"Ethan\")\n                .enableTurnDetection(true)\n                .enableInputAudioTranscription(true)\n                .InputAudioTranscription(\"gummy-realtime-v1\")\n                .build();\n        conversation.updateSession(config);\n        long last_photo_time = System.currentTimeMillis();\n        try {\n            // 创建音频格式\n            AudioFormat audioFormat = new AudioFormat(16000, 16, 1, true, false);\n            // 根据格式匹配默认录音设备\n            TargetDataLine targetDataLine =\n                    AudioSystem.getTargetDataLine(audioFormat);\n            targetDataLine.open(audioFormat);\n            // 开始录音\n            targetDataLine.start();\n            ByteBuffer buffer = ByteBuffer.allocate(1024);\n            long start = System.currentTimeMillis();\n            // 录音50s并进行实时转写\n            while (System.currentTimeMillis() - start < 50000) {\n                int read = targetDataLine.read(buffer.array(), 0, buffer.capacity());\n                if (read > 0) {\n                    buffer.limit(read);\n                    String audioB64 = Base64.getEncoder().encodeToString(buffer.array());\n                    // 将录音音频数据发送给流式识别服务\n                    conversation.appendAudio(audioB64);\n                    buffer = ByteBuffer.allocate(1024);\n                    // 录音速率有限，防止cpu占用过高，休眠一小会儿\n                    Thread.sleep(20);\n                }\n            }\n        } catch (Exception e) {\n            e.printStackTrace();\n        }\n        conversation.commit();\n        conversation.createResponse(null, null);\n        conversation.close(1000, \"bye\");\n        audioPlayer.waitForComplete();\n        audioPlayer.shutdown();\n        System.exit(0);\n    }\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/2880812.html"
+          }
+        }
+      }
+    }
+  ]
+}

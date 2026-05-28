@@ -1,0 +1,79 @@
+{
+  "name": "Qwen3-ASR-Flash-Filetrans",
+  "description": "Qwen3-ASR-Flash的大文件转录版本，Qwen3-ASR-Flash是一款基于大语言模型的高精度、高智能、高鲁棒性的多语种语音识别模型。依托强大的基座模型、海量的文本与多模态数据、千万小时音频数据，Qwen3-ASR-Flash实现了高精度的语音识别功能，能够自动判断语种并准确识别多个语种的语音，在复杂的音频环境下能够保证精确转录。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Text"],
+        "request_modality": ["Audio"]
+      },
+      "openSource": false,
+      "description": "千问3-ASR-Flash的大文件转录版本，千问3-ASR-Flash是一款基于大语言模型的高精度、高智能、高鲁棒性的多语种语音识别模型。依托强大的基座模型、海量的文本与多模态数据、千万小时音频数据，千问3-ASR-Flash实现了高精度的语音识别功能，能够自动判断语种并准确识别多个语种的语音，在复杂的音频环境下能够保证精确转录。",
+      "collectionTag": "qwen3",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen3-asr-flash-filetrans",
+      "resourcePackages": [
+        {
+          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VoiceModel_spn_cn"
+        }
+      ],
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.00022",
+          "type": "content_duration",
+          "priceName": "音频时长"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "count_limit": 100,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "count_limit": 100,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["ASR"],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-11-17T13:12:02.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3-ASR-Flash-Filetrans",
+      "docUrl": "https://help.aliyun.com/document_detail/2979031.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [0.0001, 1]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [0, 1.9999]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "import os\nimport time\nimport requests\nimport json\n\n\nAPI_URL_SUBMIT = \"https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription\"\nAPI_URL_QUERY_BASE = \"https://dashscope.aliyuncs.com/api/v1/tasks/\"\n\n\ndef main():\n    # If no environment variable is configured, please replace the downlink with the Bailian API Key: api_key = \"sk-xxx\"\n    api_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\n    headers = {\n        \"Authorization\": f\"Bearer {api_key}\",\n        \"Content-Type\": \"application/json\",\n        \"X-DashScope-Async\": \"enable\"\n    }\n\n\n    payload = {\n        \"model\": \"qwen3-asr-flash-filetrans\",\n        \"input\": {\n            \"file_url\": \"https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3\"\n        },\n        \"parameters\": {\n            \"channel_id\": [0],\n            # \"language\": \"zh\",\n            \"enable_itn\": False\n            # \"corpus\": {\n            #     \"text\": \"\"\n            # }\n        }\n    }\n\n\n    try:\n        submit_resp = requests.post(API_URL_SUBMIT, headers=headers, data=json.dumps(payload))\n    except requests.RequestException as e:\n        print(f\"Failed: {e}\")\n        return\n\n    if submit_resp.status_code != 200:\n        print(f\"Failed! HTTP code: {submit_resp.status_code}\")\n        print(submit_resp.text)\n        return\n\n    resp_data = submit_resp.json()\n    output = resp_data.get(\"output\")\n    if not output or \"task_id\" not in output:\n        print(\"resp_data:\", resp_data)\n        return\n\n    task_id = output[\"task_id\"]\n    print(f\"任务已提交，task_id: {task_id}\")\n\n\n    finished = False\n    while not finished:\n        time.sleep(2)\n\n        query_url = API_URL_QUERY_BASE + task_id\n        try:\n            query_resp = requests.get(query_url, headers=headers)\n        except requests.RequestException as e:\n            print(f\"Failed: {e}\")\n            return\n\n        if query_resp.status_code != 200:\n            print(f\"Failed! HTTP code: {query_resp.status_code}\")\n            print(query_resp.text)\n            return\n\n        query_data = query_resp.json()\n        output = query_data.get(\"output\")\n        if output and \"task_status\" in output:\n            status = output[\"task_status\"]\n            print(f\"status: {status}\")\n\n            if status.upper() in (\"SUCCEEDED\", \"FAILED\", \"UNKNOWN\"):\n                finished = True\n                print(\"task finished：\")\n                print(json.dumps(query_data, indent=2, ensure_ascii=False))\n        else:\n            print(\"query data:\", query_data)\n\n\nif __name__ == \"__main__\":\n    main()",
+            "curl": "curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription' \\\n--header 'Authorization: Bearer $DASHSCOPE_API_KEY' \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"qwen3-asr-flash-filetrans\",\n    \"input\": {\n        \"file_url\": \"https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3\"\n    },\n    \"parameters\": {\n        \"channel_id\":[\n            0\n        ],\n        \"language\": \"zh\", \n        \"enable_itn\": false, \n        \"corpus\": {\n           \"text\": \"张三，李四，王五\"\n        }\n    }\n}'\n\n\ncurl --location --request GET 'https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}' \\\n--header 'Authorization: Bearer $DASHSCOPE_API_KEY' \\\n--header 'X-DashScope-Async: enable' \\\n--header 'Content-Type: application/json'",
+            "java": "import com.google.gson.Gson;\nimport com.google.gson.annotations.SerializedName;\nimport okhttp3.*;\n\nimport java.io.IOException;\nimport java.util.concurrent.TimeUnit;\n\npublic class Main {\n    private static final String API_URL_SUBMIT = \"https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription\";\n    private static final String API_URL_QUERY = \"https://dashscope.aliyuncs.com/api/v1/tasks/\";\n    private static final Gson gson = new Gson();\n\n    public static void main(String[] args) {\n        // If no environment variable is configured, please replace the downlink with the Bailian API Key: String apiKey = \"sk-xxx\"\n        String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n        OkHttpClient client = new OkHttpClient();\n\n        String payloadJson = \"\"\"\n                {\n                    \"model\": \"qwen3-asr-flash-filetrans\",\n                    \"input\": {\n                        \"file_url\": \"https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3\"\n                    },\n                    \"parameters\": {\n                        \"channel_id\": [0],\n                        \"enable_itn\": false\n                    }\n                }\n                \"\"\";\n\n        RequestBody body = RequestBody.create(payloadJson, MediaType.get(\"application/json; charset=utf-8\"));\n        Request submitRequest = new Request.Builder()\n                .url(API_URL_SUBMIT)\n                .addHeader(\"Authorization\", \"Bearer \" + apiKey)\n                .addHeader(\"Content-Type\", \"application/json\")\n                .addHeader(\"X-DashScope-Async\", \"enable\")\n                .post(body)\n                .build();\n\n        String taskId = null;\n\n        try (Response response = client.newCall(submitRequest).execute()) {\n            if (response.isSuccessful() && response.body() != null) {\n                String respBody = response.body().string();\n                ApiResponse apiResp = gson.fromJson(respBody, ApiResponse.class);\n                if (apiResp.output != null) {\n                    taskId = apiResp.output.taskId;\n                    System.out.println(\"task_id: \" + taskId);\n                } else {\n                    System.out.println(\"respBody: \" + respBody);\n                    return;\n                }\n            } else {\n                System.out.println(\"Failed! HTTP code: \" + response.code());\n                if (response.body() != null) {\n                    System.out.println(response.body().string());\n                }\n                return;\n            }\n        } catch (IOException e) {\n            e.printStackTrace();\n            return;\n        }\n\n        boolean finished = false;\n        while (!finished) {\n            try {\n                TimeUnit.SECONDS.sleep(2);\n            } catch (InterruptedException e) {\n                Thread.currentThread().interrupt();\n                return;\n            }\n\n            String queryUrl = API_URL_QUERY + taskId;\n            Request queryRequest = new Request.Builder()\n                    .url(queryUrl)\n                    .addHeader(\"Authorization\", \"Bearer \" + apiKey)\n                    .addHeader(\"X-DashScope-Async\", \"enable\")\n                    .addHeader(\"Content-Type\", \"application/json\")\n                    .get()\n                    .build();\n\n            try (Response response = client.newCall(queryRequest).execute()) {\n                if (response.body() != null) {\n                    String queryResponse = response.body().string();\n                    ApiResponse apiResp = gson.fromJson(queryResponse, ApiResponse.class);\n\n                    if (apiResp.output != null && apiResp.output.taskStatus != null) {\n                        String status = apiResp.output.taskStatus;\n                        System.out.println(\"task status: \" + status);\n                        if (\"SUCCEEDED\".equalsIgnoreCase(status)\n                                || \"FAILED\".equalsIgnoreCase(status)\n                                || \"UNKNOWN\".equalsIgnoreCase(status)) {\n                            finished = true;\n                            System.out.println(\"task finished: \");\n                            System.out.println(queryResponse);\n                        }\n                    } else {\n                        System.out.println(\"query response: \" + queryResponse);\n                    }\n                }\n            } catch (IOException e) {\n                e.printStackTrace();\n                return;\n            }\n        }\n    }\n\n    static class ApiResponse {\n        @SerializedName(\"request_id\")\n        String requestId;\n        Output output;\n    }\n\n    static class Output {\n        @SerializedName(\"task_id\")\n        String taskId;\n        @SerializedName(\"task_status\")\n        String taskStatus;\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}

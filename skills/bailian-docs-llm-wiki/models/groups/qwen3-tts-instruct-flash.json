@@ -1,0 +1,81 @@
+{
+  "name": "Qwen3-TTS-Instruct-Flash",
+  "description": "Qwen3-TTS-Flash模型是通义实验室最新推出的实时语音合成大模型，Instruct模型可通过自然语言进行合成效果的处理，确保在不同语境下，合成情感、表达高度贴合的语音。目前支持25个音色的中英文Instruct调节。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": ["Audio"],
+        "request_modality": ["Text"]
+      },
+      "openSource": false,
+      "description": "Qwen3-TTS-Flash模型是通义实验室最新推出的实时语音合成大模型，Instruct模型可通过自然语言进行合成效果的处理，确保在不同语境下，合成情感、表达高度贴合的语音。目前支持25个音色的中英文Instruct调节。",
+      "collectionTag": "qwen3",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen3-tts-instruct-flash",
+      "iconUrl": "",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "0.8",
+          "type": "cosy_tts_number",
+          "priceName": "语音合成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        }
+      },
+      "capabilities": ["TTS"],
+      "modelAlias": "qwen3-tts-instruct-flash",
+      "versionTag": "MAJOR",
+      "equivalentSnapshot": "qwen3-tts-instruct-flash-2026-01-26",
+      "latestOnlineAt": "2026-02-10T02:56:41.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3-TTS-Instruct-Flash",
+      "docUrl": "https://help.aliyun.com/document_detail/2879134.html",
+      "predictConfig": [
+        {
+          "name": "语言",
+          "key": "languageHint",
+          "default": ""
+        },
+        {
+          "name": "音量",
+          "key": "volume",
+          "default": 50,
+          "tip": "数值越大，合成音频声音越大",
+          "range": [0, 100]
+        },
+        {
+          "name": "语速",
+          "key": "speechRate",
+          "default": 1,
+          "tip": "数值越大，合成音频语速越快",
+          "range": [0.5, 2]
+        },
+        {
+          "name": "指令控制",
+          "key": "instructions",
+          "tip": "仅支持中英文，通过自然语言合成语音的语气、语速、情感及人物性格，需要具体客观的描述文字，如：\n· 请用非常激昂且高亢的语气说话，表现出获得重大成功后的狂喜与激动。\n· 语速请保持中等偏慢，语气要显得优雅、知性，给人以从容不迫的安心感。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "import os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\ntext = \"Dear listeners, hello everyone. Welcome to the evening news.\"\n\nresponse = dashscope.MultiModalConversation.call(\n    model=\"qwen3-tts-instruct-flash\",\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    text=text,\n    voice=\"Cherry\",\n    instructions='The speaking speed is fast and there is a distinct upward inflection, which is suitable for introducing fashionable products.',\n    optimize_instructions=True,\n    stream=False\n)\nprint(response)",
+            "java": "import com.alibaba.dashscope.aigc.multimodalconversation.AudioParameters;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\nimport com.alibaba.dashscope.utils.Constants;\nimport java.io.FileOutputStream;\nimport java.io.InputStream;\nimport java.net.URL;\n\npublic class Main {\n    private static final String MODEL = \"qwen3-tts-instruct-flash\";\n    public static void call() throws ApiException, NoApiKeyException, UploadFileException {\n        MultiModalConversation conv = new MultiModalConversation();\n        MultiModalConversationParam param = MultiModalConversationParam.builder()\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(MODEL)\n                .text(\"Today is a wonderful day to build something people love!\")\n                .voice(AudioParameters.Voice.CHERRY)\n                .parameter(\"instructions\",\"The speaking speed is fast and there is a distinct upward inflection, which is suitable for introducing fashionable products.\")\n                .parameter(\"optimize_instructions\",true)\n                .build();\n        MultiModalConversationResult result = conv.call(param);\n        String audioUrl = result.getOutput().getAudio().getUrl();\n        System.out.print(audioUrl);\n\n        // 下载音频文件到本地\n        try (InputStream in = new URL(audioUrl).openStream();\n             FileOutputStream out = new FileOutputStream(\"downloaded_audio.wav\")) {\n            byte[] buffer = new byte[1024];\n            int bytesRead;\n            while ((bytesRead = in.read(buffer)) != -1) {\n                out.write(buffer, 0, bytesRead);\n            }\n        } catch (Exception e) {\n            System.out.println(\"\\nError message: \" + e.getMessage());\n        }\n    }\n    public static void main(String[] args) {\n        try {\n            Constants.baseHttpApiUrl = \"https://dashscope.aliyuncs.com/api/v1\";\n            call();\n        } catch (ApiException | NoApiKeyException | UploadFileException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    }
+  ]
+}
