@@ -2,8 +2,6 @@
 
 <img src="https://img.alicdn.com/imgextra/i4/O1CN01VWH9Nq1SfXnTTVTCw_!!6000000002274-2-tps-1915-821.png" alt="Aliyun Model Studio AI Skills"  />
 
-# >\_ Aliyun Model Studio AI Skills
-
 **The official Agent Skills collection for Aliyun Model Studio (DashScope) AI Platform**
 
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-brightgreen.svg)](https://agentskills.io)
