@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://img.alicdn.com/imgextra/i1/O1CN01RSQFUD1jN5IBzHORt_!!6000000004535-2-tps-2440-521.png" alt="Aliyun Model Studio AI Skills" width="420" />
+<img src="https://img.alicdn.com/imgextra/i4/O1CN01VWH9Nq1SfXnTTVTCw_!!6000000002274-2-tps-1915-821.png" alt="Aliyun Model Studio AI Skills" width="420" />
 
 # >\_ Aliyun Model Studio AI Skills
 
