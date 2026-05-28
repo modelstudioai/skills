@@ -23,7 +23,7 @@ _Empowering AI Agents with a Skills collection curated and verified by the Aliyu
 
 ModelStudio Skills is the official AI Agent Skills repository from Aliyun Model Studio, containing two categories:
 
-- **1st-party skills** — Developed by the Bailian team and paired with [`bailian-cli`](https://www.npmjs.com/package/bailian-cli) (`bl`, install via [CLI_INSTALL.md](./CLI_INSTALL.md)), covering chat, multimodal, image/video, speech, vision, apps, memory, RAG, and web search on the Bailian platform.
+- **1st-party skills** — Developed by the Bailian team and paired with [`bailian-cli`](https://www.npmjs.com/package/bailian-cli) (`bl`, install via [bailian.aliyun.com/cli/install.md](https://bailian.aliyun.com/cli/install.md)), covering chat, multimodal, image/video, speech, vision, apps, memory, RAG, and web search on the Bailian platform.
 - **Curated 3rd-party skills** — Continuously tracked from GitHub, Anthropic, Vercel, Google Labs, and other communities. Each Claude Code / Agent Skill is verified in real-world scenarios by the Bailian team; only those marked "usable" are included, grouped by use case for direct integration.
 
 Each skill is an independent, composable workflow unit. The 3rd-party set spans **skill management, code development, design & creativity, documentation, video production, and testing** — six major scenarios.
@@ -57,7 +57,7 @@ Please install Bailian AI Skills for me:
 
 | Skill | Description |
 |-------|-------------|
-| [`bailian-cli`](./skills/bailian-cli/) | Guides the Agent to use `bl` commands for chat, multimodal, image/video, speech, vision, apps, memory, RAG, and web search; detailed command reference under `reference/`. Install the CLI first → [CLI_INSTALL.md](./CLI_INSTALL.md). |
+| [`bailian-cli`](./skills/bailian-cli/) | Guides the Agent to use `bl` commands for chat, multimodal, image/video, speech, vision, apps, memory, RAG, and web search; detailed command reference under `reference/`. Install the CLI first → [bailian.aliyun.com/cli/install.md](https://bailian.aliyun.com/cli/install.md). |
 | [`bailian-docs-llm-wiki`](./skills/bailian-docs-llm-wiki/) | **Bailian Docs Library**: enable when answering Bailian questions about model specs, APIs/error codes, agents/RAG/knowledge base, SDK compatibility, multimodal, billing, etc.; check `models/` for specs and pricing, `wiki/` for concepts and guides. |
 
 ---
