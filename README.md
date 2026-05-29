@@ -21,8 +21,8 @@ _Empowering AI Agents with a Skills collection curated and verified by the Aliyu
 
 ModelStudio Skills is the official AI Agent Skills repository from Aliyun Model Studio, containing two categories:
 
-- **1st-party skills** — Developed by the Bailian team and paired with [`bailian-cli`](https://www.npmjs.com/package/bailian-cli) (`bl`, install via [bailian.aliyun.com/cli/install.md](https://bailian.aliyun.com/cli/install.md)), covering chat, multimodal, image/video, speech, vision, apps, memory, RAG, and web search on the Bailian platform.
-- **Curated 3rd-party skills** — Continuously tracked from GitHub, Anthropic, Vercel, Google Labs, and other communities. Each Claude Code / Agent Skill is verified in real-world scenarios by the Bailian team; only those marked "usable" are included, grouped by use case for direct integration.
+- **1st-party skills** — Developed by the ModelStudio team and paired with [`bailian-cli`](https://www.npmjs.com/package/bailian-cli) (`bl`, install via [bailian.aliyun.com/cli/install.md](https://bailian.aliyun.com/cli/install.md)), covering chat, multimodal, image/video, speech, vision, apps, memory, RAG, and web search on the Bailian platform.
+- **Curated 3rd-party skills** — Continuously tracked from GitHub, Anthropic, Vercel, Google Labs, and other communities. Each Claude Code / Agent Skill is verified in real-world scenarios by the ModelStudio team; only those marked "usable" are included, grouped by use case for direct integration.
 
 Each skill is an independent, composable workflow unit. The 3rd-party set spans **skill management, code development, design & creativity, documentation, video production, and testing** — six major scenarios.
 
