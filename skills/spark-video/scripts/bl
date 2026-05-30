@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+# scripts/bl — transparent wrapper around the real `bl` CLI that records
+# every invocation to projects/<p>/<ep>/logs/model_calls.jsonl so agents
+# (and users) can audit every prompt sent to every model.
+#
+# Usage: identical to `bl`. Just prefix with `./scripts/bl` instead.
+#
+# Required env vars (any missing → log goes to logs/_unattributed.jsonl):
+#   SPARK_VIDEO_PROJECT, SPARK_VIDEO_EPISODE
+# Optional env vars (used as call context):
+#   SPARK_VIDEO_SHOT, SPARK_VIDEO_PHASE, SPARK_VIDEO_ATTEMPT
+#
+# Exit code is passed through transparently from the real bl.
+
+set -o pipefail
+
+# Locate the real bl binary, skipping our own wrapper if it's earlier in PATH.
+self_path="$(python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "$0")"
+real_bl=""
+# Split PATH and look for each `bl` candidate; pick the first one that isn't us.
+IFS=':' read -r -a _path_arr <<< "$PATH"
+for _dir in "${_path_arr[@]}"; do
+  candidate="$_dir/bl"
+  [ -x "$candidate" ] || continue
+  resolved="$(python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "$candidate")"
+  if [ "$resolved" != "$self_path" ]; then
+    real_bl="$candidate"
+    break
+  fi
+done
+if [ -z "$real_bl" ]; then
+  echo "scripts/bl: real 'bl' CLI not found in PATH. Install via:" >&2
+  echo "  # Follow https://bailian.aliyun.com/cli/install.md, or:" >&2
+  echo "  npm install -g bailian-cli && npx skills add modelstudioai/skills --all -g" >&2
+  exit 127
+fi
+
+# Determine log directory. Project root honors VIDEOGEN_PROJECTS_DIR
+# (matches lib/config.py); defaults to ./projects relative to cwd.
+projects_root="${VIDEOGEN_PROJECTS_DIR:-./projects}"
+if [ -n "$SPARK_VIDEO_PROJECT" ] && [ -n "$SPARK_VIDEO_EPISODE" ]; then
+  ep_dir="${projects_root}/${SPARK_VIDEO_PROJECT}/episode-$(printf %s "$SPARK_VIDEO_EPISODE" | sed 's/^episode-//')"
+  log_dir="${SPARK_VIDEO_LOG_DIR:-${ep_dir}/logs}"
+else
+  log_dir="${SPARK_VIDEO_LOG_DIR:-logs}"
+fi
+mkdir -p "$log_dir/raw"
+
+ts_iso="$(python3 -c 'import datetime; print(datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.")+f"{datetime.datetime.now(datetime.timezone.utc).microsecond//1000:03d}Z")')"
+ts_stamp="$(date -u +%Y%m%dT%H%M%S)"
+shot_label="${SPARK_VIDEO_SHOT:-noshot}"
+
+raw_stdout="$log_dir/raw/${ts_stamp}-${shot_label}.stdout"
+raw_stderr="$log_dir/raw/${ts_stamp}-${shot_label}.stderr"
+
+# Try to capture stdin (if piped)
+stdin_payload=""
+if [ ! -t 0 ]; then
+  stdin_payload="$(cat)"
+fi
+
+# Run the real bl, tee outputs, capture timing + exit code
+start_ms="$(python3 -c 'import time; print(int(time.time()*1000))')"
+if [ -n "$stdin_payload" ]; then
+  printf '%s' "$stdin_payload" | "$real_bl" "$@" > >(tee "$raw_stdout") 2> >(tee "$raw_stderr" >&2)
+else
+  "$real_bl" "$@" > >(tee "$raw_stdout") 2> >(tee "$raw_stderr" >&2)
+fi
+exit_code=$?
+end_ms="$(python3 -c 'import time; print(int(time.time()*1000))')"
+duration_ms=$((end_ms - start_ms))
+
+# Excerpt the outputs (first 4 KB / 2 KB)
+stdout_excerpt="$(head -c 4096 "$raw_stdout" 2>/dev/null || true)"
+stderr_excerpt="$(head -c 2048 "$raw_stderr" 2>/dev/null || true)"
+
+# Detect log target
+log_target="$log_dir/model_calls.jsonl"
+if [ -z "$SPARK_VIDEO_PROJECT" ] || [ -z "$SPARK_VIDEO_EPISODE" ]; then
+  log_target="$log_dir/_unattributed.jsonl"
+fi
+
+# Build args JSON array via python
+args_json="$(python3 - "$@" <<'PY'
+import json, sys
+print(json.dumps(sys.argv[1:], ensure_ascii=False))
+PY
+)"
+
+# Append jsonl record
+python3 - "$log_target" "$ts_iso" "$args_json" "$stdin_payload" "$stdout_excerpt" "$stderr_excerpt" "$raw_stdout" "$raw_stderr" "$exit_code" "$duration_ms" <<'PY'
+import json, os, sys
+(log_target, ts, args_json, stdin_payload, stdout_excerpt, stderr_excerpt,
+ raw_stdout, raw_stderr, exit_code, duration_ms) = sys.argv[1:]
+cmd = ["bl"] + json.loads(args_json)
+# Best-effort model detection from args
+model = None
+args = cmd[1:]
+for i, a in enumerate(args):
+    if a == "--model" and i + 1 < len(args):
+        model = args[i + 1]; break
+record = {
+    "ts": ts,
+    "project": os.environ.get("SPARK_VIDEO_PROJECT"),
+    "episode": os.environ.get("SPARK_VIDEO_EPISODE"),
+    "shot": os.environ.get("SPARK_VIDEO_SHOT"),
+    "phase": os.environ.get("SPARK_VIDEO_PHASE"),
+    "attempt": int(os.environ["SPARK_VIDEO_ATTEMPT"]) if os.environ.get("SPARK_VIDEO_ATTEMPT","").isdigit() else None,
+    "cmd": cmd,
+    "stdin": stdin_payload or None,
+    "model": model,
+    "duration_ms": int(duration_ms),
+    "exit_code": int(exit_code),
+    "stdout_excerpt": stdout_excerpt,
+    "stderr_excerpt": stderr_excerpt,
+    "stdout_full_path": raw_stdout,
+    "stderr_full_path": raw_stderr,
+}
+with open(log_target, "a", encoding="utf-8") as f:
+    f.write(json.dumps(record, ensure_ascii=False) + "\n")
+PY
+
+exit $exit_code

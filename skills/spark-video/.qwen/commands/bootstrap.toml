@@ -1,0 +1,43 @@
+description = "Self-check and auto-install the videogen workspace (ffmpeg / python / pip install -e / .env / Shanyin skills / git hooks)."
+
+prompt = """
+Args: {{args}}   (no args expected)
+
+Bootstrap the videogen workspace. Detect what's missing and fix it, asking the
+user only when a step truly needs human input (e.g. API key). Idempotent.
+
+Work through the list in order; print PASS / FIXED / SKIPPED after each step.
+
+1. System binaries
+   • `ffmpeg -version` — missing on macOS → `brew install ffmpeg`. On Linux,
+     tell the user the apt/yum command and stop (no silent sudo).
+   • `python3 --version` ≥ 3.11. If missing/old, surface the version and stop
+     (don't auto-install Python).
+
+2. Python package
+   • `./bin/videogen --version`. If it fails:
+     - prefer existing `.venv/`: `source .venv/bin/activate && pip install -e .`
+     - else: `python3 -m venv .venv && source .venv/bin/activate && pip install -e .`
+
+3. `.env`
+   • Missing → `cp .env.example .env`, ask user to fill `DASHSCOPE_API_KEY`.
+   • Present but key is still the `sk-xxxxxxxx...` placeholder → prompt user.
+
+4. Wrapped Shanyin skills
+   • Require both:
+       .claude/skills/screenwriter/references/shanyin-screenwriting/SKILL.md
+       .claude/skills/video-director/references/shanyin-director/SKILL.md
+   • Either missing → `bash scripts/install-shanyin-skills.sh`. On network /
+     auth failure, surface the error and stop.
+
+5. Git hooks (recommended)
+   • If `.git/hooks/pre-commit` is missing or doesn't reference
+     `scripts/pre-commit`, run `bash scripts/install-hooks.sh`.
+
+6. Final verification
+   • `./bin/videogen doctor` and surface output verbatim. If red, don't claim
+     success — list each red item and the next step.
+
+End with a short status table. Anything in NEEDS USER / FAIL means the user
+must act before running /cast-init or /episode.
+"""

@@ -1,0 +1,31 @@
+description = "VFX review: quality-gate storyboard before render."
+
+prompt = """
+Args: {{args}}   (expected: <project_id> <episode_id>)
+
+You are the VFX REVIEWER. Read the vfx-reviewer skill at
+.claude/skills/vfx-reviewer/SKILL.md and follow it precisely.
+
+Steps:
+1. Read projects/<p>/<e>/storyboard.json, projects/<p>/<e>/script.md,
+   projects/<p>/lore.md, projects/<p>/<e>/cast.json.
+2. Run `./bin/videogen cast soul show --project <p> --episode <e>`.
+3. Run `./bin/videogen storyboard show --project <p> --episode <e>`.
+4. Apply the FULL checklist (A through L) on EVERY shot:
+   A. mood_anchor coverage (Critical)
+   B. Scene consistency (Critical)
+   C. Character appearance consistency (Critical)
+   D. Dialog coverage (Critical)
+   E. Protagonist stays in frame (Critical)
+   F. Model selection (Warning)
+   G. Frame chaining logic (Warning)
+   H. Prompt quality (Warning)
+   I. Seed consistency (Warning)
+   J. Forbidden terms (Critical)
+   K. Duration reasonableness (Suggestion)
+   L. Cross-shot recall (Warning)
+5. Print structured review report with verdict:
+   ✅ PASS / ⚠️ PASS WITH WARNINGS / ❌ BLOCK
+
+You do NOT modify the storyboard. Report problems for the director.
+"""

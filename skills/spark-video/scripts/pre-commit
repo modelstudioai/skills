@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# Pre-commit guard — prevents accidentally committing generated/asset files.
+#
+# Install once:
+#   ln -sf ../../scripts/pre-commit .git/hooks/pre-commit
+# (See scripts/install-hooks.sh)
+set -euo pipefail
+
+# Files staged for commit.
+STAGED=$(git diff --cached --name-only --diff-filter=ACM)
+[[ -z "$STAGED" ]] && exit 0
+
+block=0
+
+while IFS= read -r f; do
+  case "$f" in
+    cast/*|projects/*)
+      # Only allow .gitkeep / README.md inside cast/ or projects/.
+      # Everything else under these paths (portraits, voices, rendered
+      # clips, frames, cast.json, lore.md, etc.) is local-only.
+      case "$f" in
+        cast/.gitkeep|cast/README.md) ;;
+        projects/.gitkeep|projects/README.md) ;;
+        *)
+          echo "✗ refusing to commit asset/output file: $f"
+          block=1
+          ;;
+      esac
+      ;;
+  esac
+
+  # Block any blob > 5 MB regardless of location.
+  if [[ -f "$f" ]]; then
+    size=$(stat -f%z "$f" 2>/dev/null || stat -c%s "$f" 2>/dev/null || echo 0)
+    if (( size > 5 * 1024 * 1024 )); then
+      echo "✗ refusing to commit large blob (>5MB): $f ($size bytes)"
+      block=1
+    fi
+  fi
+done <<< "$STAGED"
+
+if (( block )); then
+  cat <<'EOF'
+
+These files look like local cast assets or render outputs. They should
+stay on your machine. If you really meant to commit one of them, bypass
+this hook with:  git commit --no-verify
+
+EOF
+  exit 1
+fi
+exit 0

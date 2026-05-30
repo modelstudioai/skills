@@ -1,0 +1,46 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.DS_Store
+.idea/
+.vscode/
+
+# === Per-user settings (NOT committed) =========================================
+.claude/settings.local.json
+.qwen/settings.local.json
+
+# === Generated artefacts =======================================================
+# Whole projects/ tree (state, clips, frames, project-level cast assets, logs)
+projects/
+
+# === Legacy global cast pool ===================================================
+# Local-only — users drop portraits here for ad-hoc experiments.
+cast/
+
+# === Generic media safety net for projects/ ====================================
+projects/**/*.mp4
+projects/**/*.mov
+projects/**/*.png
+projects/**/*.jpg
+projects/**/*.jpeg
+projects/**/*.webp
+projects/**/*.bmp
+projects/**/*.gif
+projects/**/*.mp3
+projects/**/*.wav
+projects/**/*.aac
+projects/**/*.flac
+projects/**/*.m4a
+
+# === Vendored upstream skills (山音) — fetched by scripts/install-deps.sh ======
+references/shanyin/
+
+# === Log directories ===========================================================
+# (covered by projects/ above for the normal pipeline; this catches stragglers)
+logs/
+**/logs/_unattributed.jsonl

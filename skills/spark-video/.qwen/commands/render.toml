@@ -1,0 +1,16 @@
+description = "Render storyboard shot-by-shot, then stitch."
+
+prompt = """
+Args: {{args}}   (expected: <project_id> <episode_id>)
+
+Follow the video-director skill:
+1. Validate storyboard:
+   `./bin/videogen storyboard validate --project <p> --episode <e>`
+2. Run `./bin/videogen storyboard estimate --project <p> --episode <e>`.
+   Print the numbers to the user. If exit code 2 (over budget), STOP and
+   require explicit user approval.
+3. Only after approval:
+   `./bin/videogen render --project <p> --episode <e> --yes` (resumable).
+4. Recover failed shots per the skill's failure-recovery rules.
+5. `./bin/videogen stitch --project <p> --episode <e>` once all shots succeed.
+"""

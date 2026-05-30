@@ -1,0 +1,18 @@
+description = "Scan project + episode cast folders, upload portraits + voices, write cast.json."
+
+prompt = """
+Args: {{args}}   (expected: <project_id> <episode_id>)
+
+1. `./bin/videogen doctor`.
+2. `./bin/videogen episode init --project <p> --episode <e>` (idempotent).
+3. `./bin/videogen cast init    --project <p> --episode <e>`.
+   This scans:
+     • projects/<p>/cast/<name>/         (project mains, shared)
+     • projects/<p>/<e>/cast/<name>/     (episode-only NPCs)
+   Composites are built per-character (never blending different characters).
+4. Read `projects/<p>/<e>/cast.json` and present the cast as a table.
+5. Confirm with the user before continuing.
+
+Follow the directing rules in CLAUDE.md / QWEN.md /
+.claude/skills/video-director/SKILL.md.
+"""

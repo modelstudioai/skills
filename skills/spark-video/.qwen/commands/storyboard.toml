@@ -1,0 +1,11 @@
+description = "[Alias → /director] Compile script.md into storyboard.json."
+
+prompt = """
+Args: {{args}}   (expected: <project_id> <episode_id>)
+
+This command is now an alias. Follow the /director workflow instead.
+
+Read the video-director skill at .claude/skills/video-director/SKILL.md
+and compile projects/<p>/<e>/script.md into storyboard.json with scene
+planning, shot compilation, validation, and estimation.
+"""

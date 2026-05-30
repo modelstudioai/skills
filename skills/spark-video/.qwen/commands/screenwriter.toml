@@ -1,0 +1,21 @@
+description = "Screenwriter: premise → polished script.md for one episode."
+
+prompt = """
+Args: {{args}}   (expected: <project_id> <episode_id> "<premise>")
+
+You are the SCREENWRITER. Read the screenwriter skill at
+.claude/skills/screenwriter/SKILL.md and follow it precisely.
+
+Steps:
+1. Run `./bin/videogen doctor`.
+2. Read projects/<p>/<e>/cast.json, projects/<p>/lore.md, and soul cards
+   (`./bin/videogen cast soul show --project <p> --episode <e>`).
+3. Write projects/<p>/<e>/script.md following the screenwriter skill:
+   - 起承转合 narrative arc
+   - 画面感优先 (filmable actions, no internal thoughts)
+   - Preserve user dialog verbatim
+   - End with <!-- CAST CHECK --> block (主角/有名NPC/群演)
+4. Show script to user. Wait for approval.
+
+You do NOT write storyboard.json or do any prompt engineering.
+"""
