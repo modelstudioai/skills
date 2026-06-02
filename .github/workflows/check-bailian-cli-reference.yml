@@ -1,0 +1,92 @@
+# committed skills/bailian-cli/reference/ must match generate:reference
+# output from modelstudioai/cli at the ref in .reference-cli-ref.
+
+name: Check bailian-cli reference
+
+on:
+  pull_request:
+    paths:
+      - "skills/bailian-cli/reference/**"
+      - "skills/bailian-cli/.reference-cli-ref"
+      - ".github/workflows/check-bailian-cli-reference.yml"
+      - ".github/workflows/sync-bailian-cli-reference.yml"
+  push:
+    branches: [main, master]
+    paths:
+      - "skills/bailian-cli/reference/**"
+      - "skills/bailian-cli/.reference-cli-ref"
+      - ".github/workflows/check-bailian-cli-reference.yml"
+      - ".github/workflows/sync-bailian-cli-reference.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: check-bailian-cli-reference-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      CLI_REPOSITORY: modelstudioai/cli
+    steps:
+      - name: Checkout skills
+        uses: actions/checkout@v4
+
+      - name: Read pinned CLI ref
+        id: pin
+        run: |
+          set -euo pipefail
+          PIN_FILE="skills/bailian-cli/.reference-cli-ref"
+          if [[ ! -f "$PIN_FILE" ]]; then
+            echo "Missing $PIN_FILE"
+            exit 1
+          fi
+          CLI_REF="$(tr -d ' \t\r\n' < "$PIN_FILE")"
+          if [[ -z "$CLI_REF" ]]; then
+            echo "Empty CLI ref in $PIN_FILE"
+            exit 1
+          fi
+          echo "ref=${CLI_REF}" >> "$GITHUB_OUTPUT"
+          echo "Using CLI ref: ${CLI_REF}"
+
+      - name: Checkout bailian-cli
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.CLI_REPOSITORY }}
+          ref: ${{ steps.pin.outputs.ref }}
+          path: cli
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: cli/pnpm-lock.yaml
+
+      - name: Install & generate reference (cli)
+        working-directory: cli
+        run: |
+          set -euo pipefail
+          pnpm install --frozen-lockfile
+          pnpm --filter bailian-cli-core run build
+          pnpm --filter bailian-cli run generate:reference
+
+      - name: Diff skills reference vs generated
+        env:
+          CLI_REF: ${{ steps.pin.outputs.ref }}
+        run: |
+          set -euo pipefail
+          GEN="cli/tools/generated/reference"
+          COM="skills/bailian-cli/reference"
+          if ! diff -rq "$COM" "$GEN"; then
+            echo "::error::reference/*.md is out of sync with ${CLI_REPOSITORY}@${CLI_REF}"
+            echo "Regenerate: run workflow \"Sync bailian-cli reference\" or build cli locally and copy $GEN → $COM"
+            diff -ru "$COM" "$GEN" | head -n 200 || true
+            exit 1
+          fi
+          echo "OK: $COM matches $GEN from ${CLI_REF}"

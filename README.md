@@ -55,7 +55,7 @@ Please install Bailian AI Skills for me:
 
 | Skill | Description |
 |-------|-------------|
-| [`bailian-cli`](./skills/bailian-cli/) | Guides the Agent to use `bl` commands for chat, multimodal, image/video, speech, vision, apps, memory, RAG, and web search; detailed command reference under `reference/`. Install the CLI first → [bailian.aliyun.com/cli/install.md](https://bailian.aliyun.com/cli/install.md). |
+| [`bailian-cli`](./skills/bailian-cli/) | Guides the Agent to use `bl` commands for chat, multimodal, image/video, speech, vision, apps, memory, RAG, and web search; detailed command reference under `reference/`. Install the CLI first → [bailian.aliyun.com/cli/install.md](https://bailian.aliyun.com/cli/install.md). `reference/*.md` is synced from [`modelstudioai/cli`](https://github.com/modelstudioai/cli) — see [`skills/bailian-cli/REFERENCE.md`](./skills/bailian-cli/REFERENCE.md). |
 | [`bailian-docs-llm-wiki`](./skills/bailian-docs-llm-wiki/) | **Bailian Docs Library**: enable when answering Bailian questions about model specs, APIs/error codes, agents/RAG/knowledge base, SDK compatibility, multimodal, billing, etc.; check `models/` for specs and pricing, `wiki/` for concepts and guides. |
 
 ---
