@@ -1,7 +1,7 @@
 # `bl text` commands
 
 > Auto-generated from `packages/cli/src/commands/catalog.ts`. Do not edit by hand.
-> Regenerate: `pnpm --filter bailian-cli run generate:reference` (runs automatically on `build`).
+> Regenerate: `pnpm --filter bailian-cli run generate:reference`.
 
 Index: [index.md](index.md)
 
@@ -26,7 +26,7 @@ Index: [index.md](index.md)
 
 | Flag | Type | Required | Description |
 | --- | --- | --- | --- |
-| `--model <model>` | string | no | Model ID (default: qwen3.6-plus) |
+| `--model <model>` | string | no | Model ID (default: qwen3.7-max) |
 | `--message <text>` | array | yes | Message text (repeatable, prefix role: to set role) |
 | `--messages-file <path>` | string | no | JSON file with messages array (use - for stdin) |
 | `--system <text>` | string | no | System prompt |

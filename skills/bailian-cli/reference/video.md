@@ -1,7 +1,7 @@
 # `bl video` commands
 
 > Auto-generated from `packages/cli/src/commands/catalog.ts`. Do not edit by hand.
-> Regenerate: `pnpm --filter bailian-cli run generate:reference` (runs automatically on `build`).
+> Regenerate: `pnpm --filter bailian-cli run generate:reference`.
 
 Index: [index.md](index.md)
 
@@ -66,7 +66,7 @@ bl video download --task-id 3b256896-xxxx --out video.mp4 --quiet
 | `--audio-setting <mode>` | string | no | Audio: auto (default) or origin (keep original) |
 | `--prompt-extend` | boolean | no | Enable prompt intelligent rewriting (default: true) |
 | `--no-prompt-extend` | boolean | no | Disable prompt intelligent rewriting |
-| `--watermark` | boolean | no | Add "AI生成" watermark |
+| `--watermark <bool>` | string | no | Enable watermark (true/false). Overrides config watermark. |
 | `--seed <n>` | number | no | Random seed for reproducible generation |
 | `--download <path>` | string | no | Save video to file on completion |
 | `--no-wait` | boolean | no | Return task ID immediately without waiting |
@@ -85,6 +85,10 @@ bl video edit --video https://example.com/input.mp4 --prompt "替换衣服为图
 
 ```bash
 bl video edit --video https://example.com/input.mp4 --prompt "Convert to anime style" --resolution 720P --download output.mp4
+```
+
+```bash
+bl video edit --video https://example.com/input.mp4 --prompt "给视频里的小猫穿上衣服" --watermark false
 ```
 
 ### `bl video generate`
@@ -108,7 +112,7 @@ bl video edit --video https://example.com/input.mp4 --prompt "Convert to anime s
 | `--ratio <ratio>` | string | no | Aspect ratio (e.g. 16:9, 1:1) |
 | `--duration <seconds>` | number | no | Video duration in seconds (default: 5) |
 | `--prompt-extend` | boolean | no | Automatically extend prompt for better results |
-| `--watermark` | boolean | no | Add watermark to generated video |
+| `--watermark <bool>` | string | no | Enable watermark (true/false). Overrides config watermark. |
 | `--seed <n>` | number | no | Random seed for reproducible generation |
 | `--download <path>` | string | no | Save video to file on completion |
 | `--no-wait` | boolean | no | Return task ID immediately without waiting |
@@ -131,6 +135,10 @@ bl video generate --image https://example.com/cat.png --prompt "让画面中的�
 
 ```bash
 bl video generate --prompt "Mountain landscape" --resolution 1280*720 --duration 5
+```
+
+```bash
+bl video generate --prompt "A cat playing with a ball" --watermark false
 ```
 
 ### `bl video ref`
@@ -157,7 +165,7 @@ bl video generate --prompt "Mountain landscape" --resolution 1280*720 --duration
 | `--duration <seconds>` | number | no | Video duration in seconds (2-10, default: 5) |
 | `--prompt-extend` | boolean | no | Enable prompt intelligent rewriting |
 | `--no-prompt-extend` | boolean | no | Disable prompt intelligent rewriting |
-| `--watermark` | boolean | no | Add watermark to generated video |
+| `--watermark <bool>` | string | no | Enable watermark (true/false). Overrides config watermark. |
 | `--seed <n>` | number | no | Random seed for reproducible generation |
 | `--download <path>` | string | no | Save video to file on completion |
 | `--no-wait` | boolean | no | Return task ID immediately without waiting |
@@ -180,6 +188,10 @@ bl video ref --prompt "图1说话" --image person.jpg --image-voice voice.mp3 --
 
 ```bash
 bl video ref --prompt "图1和图2在对话" --image a.jpg --image b.jpg --image-voice va.mp3 --image-voice vb.mp3
+```
+
+```bash
+bl video ref --prompt "图1在喝水" --image person.jpg --watermark false
 ```
 
 ### `bl video task get`

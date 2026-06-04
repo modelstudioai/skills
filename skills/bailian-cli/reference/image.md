@@ -1,7 +1,7 @@
 # `bl image` commands
 
 > Auto-generated from `packages/cli/src/commands/catalog.ts`. Do not edit by hand.
-> Regenerate: `pnpm --filter bailian-cli run generate:reference` (runs automatically on `build`).
+> Regenerate: `pnpm --filter bailian-cli run generate:reference`.
 
 Index: [index.md](index.md)
 
@@ -36,7 +36,7 @@ Index: [index.md](index.md)
 | `--negative-prompt <text>` | string | no | Negative prompt to exclude unwanted content |
 | `--prompt-extend` | boolean | no | Enable prompt smart rewrite (default: true) |
 | `--no-prompt-extend` | boolean | no | Disable prompt extend |
-| `--watermark` | boolean | no | Add watermark to output images |
+| `--watermark <bool>` | string | no | Enable watermark (true/false). Overrides config watermark. |
 | `--out-dir <dir>` | string | no | Download images to directory |
 | `--out-prefix <prefix>` | string | no | Filename prefix (default: edited) |
 
@@ -56,6 +56,10 @@ bl image edit --image ./a.png --image ./b.png --prompt "把两张图合并成一
 
 ```bash
 bl image edit --image https://example.com/photo.png --prompt "Remove the person" --model qwen-image-2.0-pro
+```
+
+```bash
+bl image edit --image ./photo.png --prompt "把背景换成海滩" --watermark false
 ```
 
 ### `bl image generate`
@@ -79,7 +83,7 @@ bl image edit --image https://example.com/photo.png --prompt "Remove the person"
 | `--negative-prompt <text>` | string | no | Negative prompt to exclude unwanted content |
 | `--prompt-extend` | boolean | no | Automatically extend prompt for better results (default: true for qwen-image) |
 | `--no-prompt-extend` | boolean | no | Disable prompt extend |
-| `--watermark` | boolean | no | Add watermark to generated images |
+| `--watermark <bool>` | string | no | Enable watermark (true/false). Overrides config watermark. |
 | `--no-wait` | boolean | no | Return task ID immediately without waiting (async models only) |
 | `--out-dir <dir>` | string | no | Download images to directory |
 | `--out-prefix <prefix>` | string | no | Filename prefix (default: image) |
@@ -101,6 +105,14 @@ bl image generate --prompt "Mountain landscape" --size 2688*1536
 
 ```bash
 bl image generate --prompt "A castle" --seed 42 --no-prompt-extend
+```
+
+```bash
+bl image generate --prompt "Logo" --watermark false
+```
+
+```bash
+bl image generate --prompt "An alien in the space" --watermark false
 ```
 
 ```bash

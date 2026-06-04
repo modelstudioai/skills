@@ -1,7 +1,7 @@
 # `bl config` commands
 
 > Auto-generated from `packages/cli/src/commands/catalog.ts`. Do not edit by hand.
-> Regenerate: `pnpm --filter bailian-cli run generate:reference` (runs automatically on `build`).
+> Regenerate: `pnpm --filter bailian-cli run generate:reference`.
 
 Index: [index.md](index.md)
 
@@ -51,7 +51,7 @@ bl config export-schema --command "video generate"
 
 | Flag | Type | Required | Description |
 | --- | --- | --- | --- |
-| `--key <key>` | string | no | Config key (region, base_url, output, output_dir, timeout, api_key, access_token, default_*_model, access_key_id, access_key_secret, workspace_id) |
+| `--key <key>` | string | no | Config key (region, base_url, output, output_dir, timeout, api_key, access_token, default_*_model, access_key_id, access_key_secret, workspace_id, watermark) |
 | `--value <value>` | string | no | Value to set |
 
 #### Examples
@@ -62,6 +62,14 @@ bl config set --key output --value json
 
 ```bash
 bl config set --key timeout --value 600
+```
+
+```bash
+bl config set --key watermark --value true
+```
+
+```bash
+bl config set --key watermark --value false
 ```
 
 ```bash

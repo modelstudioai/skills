@@ -37,11 +37,11 @@ Do not guess flags — use the reference files or `--help`.
 | Text, chat, code, translation                | `bl text chat`                     | `qwen3.6-plus`                               |
 | Multimodal input + text/audio out            | `bl omni`                          | `qwen3.5-omni-plus`                          |
 | Video/audio understanding (with audio reply) | `bl omni --video` / `--audio`      | Prefer over generic VL for A/V Q&A           |
-| Image from text                              | `bl image generate`                | `qwen-image-2.0`                             |
-| Image edit / multi-image merge               | `bl image edit` (repeat `--image`) | `qwen-image-2.0`                             |
-| Video from text or image                     | `bl video generate`                | `happyhorse-1.0-t2v` / `-i2v` with `--image` |
-| Video edit / style transfer                  | `bl video edit`                    | `happyhorse-1.0-video-edit`                  |
-| Reference-to-video + voice                   | `bl video ref`                     | `happyhorse-1.0-r2v`                         |
+| Image from text                              | `bl image generate`                | `qwen-image-2.0`; watermark **on** by default |
+| Image edit / multi-image merge               | `bl image edit` (repeat `--image`) | `qwen-image-2.0`; watermark **on** by default |
+| Video from text or image                     | `bl video generate`                | `happyhorse-1.0-t2v` / `-i2v`; watermark **on** by default |
+| Video edit / style transfer                  | `bl video edit`                    | `happyhorse-1.0-video-edit`; watermark **on** by default |
+| Reference-to-video + voice                   | `bl video ref`                     | `happyhorse-1.0-r2v`; watermark **on** by default |
 | Image / video describe (text only)           | `bl vision describe`               | `qwen-vl-max`                                |
 | TTS                                          | `bl speech synthesize`             | `cosyvoice-v3-flash`                         |
 | ASR                                          | `bl speech recognize`              | `fun-asr`                                    |
@@ -68,6 +68,21 @@ bl vision describe --image ./screenshot.png
 ```
 
 **Rule:** If the user gives a local file, pass the path directly. Do not ask them to upload or host a URL.
+
+---
+
+## Image / video watermark
+
+Image and video generation commands add an API watermark **by default** (`bl image generate`, `bl image edit`, `bl video generate`, `bl video edit`, `bl video ref`).
+
+| Override | How |
+| -------- | --- |
+| Single run | `--watermark false` or `--watermark true` on the command (takes precedence) |
+| Global default | `bl config set --key watermark --value false` (or `true`); check with `bl config show` |
+
+If the user wants **no watermark**, pass `--watermark false`. Do not omit the flag and assume the API default — CLI defaults to watermark **on**.
+
+Full flag tables and examples: [`reference/image.md`](reference/image.md), [`reference/video.md`](reference/video.md).
 
 ---
 
@@ -118,9 +133,11 @@ bl text chat --message "用中文写一首关于春天的诗"
 
 # Image
 bl image generate --prompt "A cat in space" --out-dir ./out/
+bl image generate --prompt "A cat in space" --watermark false   # no watermark
 
 # Video (wait for task, save file)
 bl video generate --prompt "Sunset on the beach" --download sunset.mp4
+bl video generate --prompt "Sunset on the beach" --watermark false --download sunset.mp4
 
 # Omni (local files OK)
 bl omni --message "描述视频内容" --video ./demo.mp4 --text-only
@@ -155,6 +172,7 @@ ffmpeg -f concat -safe 0 -i list.txt -c copy output.mp4
 bl config show
 bl config set --key default-text-model --value qwen3.6-plus
 bl config set --key output_dir --value ~/bailian-output
+bl config set --key watermark --value false   # global off for image/video watermark default
 ```
 
 Valid config keys and export-schema: see [`reference/config.md`](reference/config.md).
@@ -192,3 +210,4 @@ bl config export-schema --command "image generate"
 - Video understanding with audio context → `bl omni`, not only `bl vision describe`.
 - Search → `bl search web`.
 - Local paths → pass directly to `bl`; never require the user to obtain URLs first.
+- Image / video → watermark **on** by default; use `--watermark false` when the user wants no watermark.
