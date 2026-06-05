@@ -25,8 +25,6 @@ MSE（Microservices Engine）云原生网关使各服务能够互相通信。配
     
 4.  在**服务**页签下单击**创建服务**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1149440471/p907136.png)
-    
 5.  配置以下参数。
     
     **配置项**
@@ -113,11 +111,7 @@ MSE（Microservices Engine）云原生网关使各服务能够互相通信。配
     
 4.  确认ElasticSearch、ADB、OSS都配置无误后，单击页面下方的**激活**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1149440471/p914713.png)
-    
 5.  等待界面上提示**激活成功**。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1149440471/p920426.png)
     
 
 ## 验证结果
@@ -126,8 +120,4 @@ MSE（Microservices Engine）云原生网关使各服务能够互相通信。配
 
 -   激活前，阿里云百炼安全存储空间不可用。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1149440471/p914726.png)
-    
 -   激活成功后，阿里云百炼安全存储空间可用。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1149440471/p920430.png)

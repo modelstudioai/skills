@@ -27,6 +27,10 @@
 
 本文的示例代码适用于**北京地域**。
 
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
 ## HTTP调用
 
 **重要**
@@ -43,7 +47,9 @@
 
 ## **新加坡**
 
-`POST https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -522,7 +528,9 @@ duration直接影响费用，按秒计费，请在调用前确认[模型价格](
 
 ## **新加坡**
 
-`GET https://dashscope-intl.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -748,7 +756,9 @@ SDK 的参数命名与[HTTP接口](#9c71bffa84zm6)基本一致，参数结构根
 
 ## **新加坡**
 
-`dashscope.base_http_api_url = 'https://dashscope-intl.aliyuncs.com/api/v1'`
+`dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 同步调用
 
@@ -965,7 +975,9 @@ if __name__ == '__main__':
 
 ## **新加坡**
 
-`Constants.baseHttpApiUrl = "https://dashscope-intl.aliyuncs.com/api/v1"`
+`Constants.baseHttpApiUrl = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1"`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 同步调用
 
@@ -991,12 +1003,29 @@ import java.util.List;
 public class Image2Video {
 
     static {
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
+
+import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
+import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;
+import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.InputRequiredException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.utils.Constants;
+import com.alibaba.dashscope.utils.JsonUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Image2Video {
+
+    static {
+        // 以下为新加坡地域URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
     }
 
     // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey="sk-xxx"
-    // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    // 各地域的API Key不同。获取API Key：https://www.alibabacloud.com/help/en/model-studio/get-api-key
     static String apiKey = System.getenv("DASHSCOPE_API_KEY");
 
     public static void syncCall() {
@@ -1040,35 +1069,6 @@ public class Image2Video {
 }
 ```
 
-##### 响应示例
-
-> video\_url 有效期24小时，请及时下载视频。
-
-```
-{
-    "request_id": "78178b55-8399-9823-8173-xxxxxx",
-    "output": {
-        "task_id": "be457e1b-8a79-47ed-aeff-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "video_url": "https://dashscope-a717.oss-accelerate.aliyuncs.com/xxx.mp4?Expires=xxx",
-        "orig_prompt": "一幅都市奇幻艺术的场景。一个充满动感的涂鸦艺术角色。一个由喷漆所画成的少年，正从一面混凝土墙上活过来。他一边用极快的语速演唱一首英文rap，一边摆着一个经典的、充满活力的说唱歌手姿势。场景设定在夜晚一个充满都市感的铁路桥下。灯光来自一盏孤零零的街灯，营造出电影般的氛围，充满高能量和惊人的细节。视频的音频部分完全由他的rap构成，没有其他对话或杂音。",
-        "submit_time": "2026-04-13 10:57:36.795",
-        "scheduled_time": "2026-04-13 10:57:46.280",
-        "end_time": "2026-04-13 10:59:16.338"
-    },
-    "usage": {
-        "video_count": 1,
-        "duration": 10.0,
-        "input_video_duration": 0.0,
-        "output_video_duration": 10.0,
-        "SR": "720"
-    },
-    "status_code": 200,
-    "code": "",
-    "message": ""
-}
-```
-
 ## 异步调用
 
 ##### 请求示例
@@ -1091,12 +1091,29 @@ import java.util.List;
 public class Image2Video {
 
     static {
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
+
+import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
+import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;
+import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.InputRequiredException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.utils.Constants;
+import com.alibaba.dashscope.utils.JsonUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Image2Video {
+
+    static {
+        // 以下为新加坡地域URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
     }
 
     // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey="sk-xxx"
-    // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    // 各地域的API Key不同。获取API Key：https://www.alibabacloud.com/help/en/model-studio/get-api-key
     static String apiKey = System.getenv("DASHSCOPE_API_KEY");
 
     public static void asyncCall() {
@@ -1148,49 +1165,6 @@ public class Image2Video {
     public static void main(String[] args) {
         asyncCall();
     }
-}
-```
-
-##### 响应示例
-
-1、创建任务的响应示例
-
-```
-{
-    "request_id": "5dbf9dc5-4f4c-9605-85ea-xxxxxxxx",
-    "output": {
-        "task_id": "7277e20e-aa01-4709-xxxxxxxx",
-        "task_status": "PENDING"
-    }
-}
-```
-
-2、查询任务结果的响应示例
-
-> video\_url 有效期24小时，请及时下载视频。
-
-```
-{
-    "request_id": "78178b55-8399-9823-8173-xxxxxx",
-    "output": {
-        "task_id": "be457e1b-8a79-47ed-aeff-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "video_url": "https://dashscope-a717.oss-accelerate.aliyuncs.com/xxx.mp4?Expires=xxx",
-        "orig_prompt": "一幅都市奇幻艺术的场景。一个充满动感的涂鸦艺术角色。一个由喷漆所画成的少年，正从一面混凝土墙上活过来。他一边用极快的语速演唱一首英文rap，一边摆着一个经典的、充满活力的说唱歌手姿势。场景设定在夜晚一个充满都市感的铁路桥下。灯光来自一盏孤零零的街灯，营造出电影般的氛围，充满高能量和惊人的细节。视频的音频部分完全由他的rap构成，没有其他对话或杂音。",
-        "submit_time": "2026-04-13 10:57:36.795",
-        "scheduled_time": "2026-04-13 10:57:46.280",
-        "end_time": "2026-04-13 10:59:16.338"
-    },
-    "usage": {
-        "video_count": 1,
-        "duration": 10.0,
-        "input_video_duration": 0.0,
-        "output_video_duration": 10.0,
-        "SR": "720"
-    },
-    "status_code": 200,
-    "code": "",
-    "message": ""
 }
 ```
 

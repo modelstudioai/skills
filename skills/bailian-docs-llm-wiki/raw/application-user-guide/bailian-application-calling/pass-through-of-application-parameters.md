@@ -26,7 +26,7 @@
     
     > 示例插件 URL：https://domitorgreement-plugin-example-icohrkdjxy.cn-beijing.fcapp.run
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3400819371/p911623.png)
+    示例鉴权配置：鉴权类型选择**用户级鉴权**，位置选择**Header**，Type 选择 **basic**。
     
     **请注意：****插件描述**是对插件用途的简要说明，能帮助大模型判断当前任务是否需要调用当前插件，请使用自然语言进行描述。
     
@@ -43,7 +43,7 @@
     
     此处示例将**寝室公约内容索引**`article_index`设置为业务透传参数。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3400819371/p911624.png)
+    填写工具名称为 `寝室公约查询工具`，请求方法选择 **POST**，提交方式选择 **application/json**。输入参数 `article_index` 的类型设为 **Number**，传入方法选择 **Body**，设置为必填。输出参数名称填写 `article`，参数描述填写"寝室公约内容"，类型设为 **String**。
     
 3.  单击**测试工具**，运行通过后，**发布**插件。
     
@@ -87,7 +87,6 @@
             app_id='YOUR_APP_ID',
             prompt='寝室公约内容',
             biz_params=biz_params)
-    
     if response.status_code != HTTPStatus.OK:
         print(f'request_id={response.request_id}')
         print(f'code={response.status_code}')
@@ -102,9 +101,7 @@
     
     ```
     寝室公约的第二条规定如下：
-    
     "寝室成员应当互帮互助、互相关心、互相学习、共同提高；宽容谦让、相互尊重、以诚相待。"
-    
     这表明在寝室内，成员之间应该培养一种积极正面的生活和学习氛围，彼此帮助和支持，同时也要学会理解和尊重他人。如果您需要了解公约的其他条款，请告诉我！
     ```
     
@@ -118,7 +115,6 @@
     import com.alibaba.dashscope.exception.InputRequiredException;
     import com.alibaba.dashscope.exception.NoApiKeyException;
     import com.alibaba.dashscope.utils.JsonUtils;
-    
     public class Main {
         public static void appCall() throws NoApiKeyException, InputRequiredException {
             String bizParams =
@@ -131,13 +127,11 @@
                     .prompt("寝室公约内容")
                     .bizParams(JsonUtils.parse(bizParams))
                     .build();
-    
             Application application = new Application();
             ApplicationResult result = application.call(param);
             System.out.printf("%s\n",
                     result.getOutput().getText());
         }
-    
         public static void main(String[] args) {
             try {
                 appCall();
@@ -154,9 +148,7 @@
     
     ```
     寝室公约的第二条规定如下：
-    
     第二条 寝室成员应当互帮互助、互相关心、互相学习、共同提高；宽容谦让、相互尊重、以诚相待。
-    
     这强调了在共同生活环境中，室友之间应该保持积极正面的关系，通过相互帮助和支持来营造一个和谐的生活和学习氛围。如果有更多具体的条款需要了解，请告知我。
     ```
     
@@ -208,7 +200,6 @@
     
     ```
     <?php
-    
     # 若没有配置环境变量，可用百炼API Key将下行替换为：$api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     $api_key = getenv("DASHSCOPE_API_KEY");
     $application_id = 'YOUR_APP_ID'; // 替换为实际的应用 ID
@@ -229,15 +220,12 @@
     ];
     // 将数据编码为 JSON
     $dataString = json_encode($data);
-    
     // 检查 json_encode 是否成功
     if (json_last_error() !== JSON_ERROR_NONE) {
         die("JSON encoding failed with error: " . json_last_error_msg());
     }
-    
     // 初始化 cURL 对话
     $ch = curl_init($url);
-    
     // 设置 cURL 选项
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
@@ -246,15 +234,12 @@
         'Content-Type: application/json',
         'Authorization: Bearer ' . $api_key
     ]);
-    
     // 执行请求
     $response = curl_exec($ch);
-    
     // 检查 cURL 执行是否成功
     if ($response === false) {
         die("cURL Error: " . curl_error($ch));
     }
-    
     // 获取 HTTP 状态码
     $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     // 关闭 cURL 对话
@@ -298,14 +283,12 @@
     
     ```
     const axios = require('axios');
-    
     async function callDashScope() {
         // 若没有配置环境变量，可用百炼API Key将下行替换为：apiKey='sk-xxx'。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
         const apiKey = process.env.DASHSCOPE_API_KEY;
         const appId = 'YOUR_APP_ID';// 替换为实际的应用 ID
         const pluginCode = 'YOUR_PLUGIN_CODE';// 替换为实际的插件ID
         const url = `https://dashscope.aliyuncs.com/api/v1/apps/${appId}/completion`;
-    
         const data = {
             input: {
                 prompt: "寝室公约内容",
@@ -321,17 +304,14 @@
             parameters: {},
             debug: {}
         };
-    
         try {
             console.log("Sending request to DashScope API...");
-    
             const response = await axios.post(url, data, {
                 headers: {
                     'Authorization': `Bearer ${apiKey}`,
                     'Content-Type': 'application/json'
                 }
             });
-    
             if (response.status === 200) {
                 if (response.data.output && response.data.output.text) {
                     console.log(`${response.data.output.text}`);
@@ -363,9 +343,7 @@
     
     ```
     寝室公约的第三条规定如下：
-    
     注意安全用电，杜绝火灾隐患。寝室内严禁使用明火、违规电器、各种灶具以及其他违规物品，不得存放易爆、易燃物品，私接电源。
-    
     如果您需要了解更多的规定，请告诉我。
     ```
     
@@ -375,7 +353,6 @@
     
     ```
     using System.Text;
-    
     class Program
     {
         static async Task Main(string[] args)
@@ -383,15 +360,12 @@
             // 若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
             string apiKey = Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY")?? throw new InvalidOperationException("DASHSCOPE_API_KEY environment variable is not set.");;
             string appId = "YOUR_APP_ID";// 替换为实际的应用ID
-    
             if (string.IsNullOrEmpty(apiKey))
             {
                 Console.WriteLine("请确保设置了 DASHSCOPE_API_KEY。");
                 return;
             }
-    
             string url = $"https://dashscope.aliyuncs.com/api/v1/apps/{appId}/completion";
-    
             using (HttpClient client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
@@ -410,13 +384,10 @@
                     ""parameters"": {{}},
                     ""debug"": {{}}
                 }}";
-    
                 HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-    
                 try
                 {
                     HttpResponseMessage response = await client.PostAsync(url, content);
-    
                     if (response.IsSuccessStatusCode)
                     {
                         string responseBody = await response.Content.ReadAsStringAsync();
@@ -447,9 +418,7 @@
             "finish_reason": "stop",
             "session_id": "237ca6187c814f3b9e7461090a5f8b74",
             "text": "寝室公约的第二条规定如下：
-    
     "寝室成员应当互帮互助、互相关心、互相学习、共同提高；宽容谦让、相互尊重、以诚相待。"
-    
     这表示在寝室内，成员之间需要建立起一种积极正面的关系，通过帮助、关心和支持彼此来营造一个和谐的生活和学习环境。同时也要学会理解和接受室友之间的差异，以真诚的态度去交流沟通。如果还有其他条款或具体内容想要了解，请告诉我！"
         },
         "usage": {
@@ -471,7 +440,6 @@
     
     ```
     package main
-    
     import (
     	"bytes"
     	"encoding/json"
@@ -480,20 +448,16 @@
     	"net/http"
     	"os"
     )
-    
     func main() {
     	// 若没有配置环境变量，可用百炼API Key将下行替换为：apiKey := "sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     	apiKey := os.Getenv("DASHSCOPE_API_KEY")
     	appId := "YOUR_APP_ID"           // 替换为实际的应用 ID
     	pluginCode := "YOUR_PLUGIN_CODE" // 替换为实际的插件 ID
-    
     	if apiKey == "" {
     		fmt.Println("请确保设置了DASHSCOPE_API_KEY。")
     		return
     	}
-    
     	url := fmt.Sprintf("https://dashscope.aliyuncs.com/api/v1/apps/%s/completion", appId)
-    
     	// 创建请求体
     	requestBody := map[string]interface{}{
     		"input": map[string]interface{}{
@@ -509,24 +473,20 @@
     		"parameters": map[string]interface{}{},
     		"debug":      map[string]interface{}{},
     	}
-    
     	jsonData, err := json.Marshal(requestBody)
     	if err != nil {
     		fmt.Printf("Failed to marshal JSON: %v\n", err)
     		return
     	}
-    
     	// 创建 HTTP POST 请求
     	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
     	if err != nil {
     		fmt.Printf("Failed to create request: %v\n", err)
     		return
     	}
-    
     	// 设置请求头
     	req.Header.Set("Authorization", "Bearer "+apiKey)
     	req.Header.Set("Content-Type", "application/json")
-    
     	// 发送请求
     	client := &http.Client{}
     	resp, err := client.Do(req)
@@ -535,14 +495,12 @@
     		return
     	}
     	defer resp.Body.Close()
-    
     	// 读取响应
     	body, err := io.ReadAll(resp.Body)
     	if err != nil {
     		fmt.Printf("Failed to read response: %v\n", err)
     		return
     	}
-    
     	// 处理响应
     	if resp.StatusCode == http.StatusOK {
     		fmt.Println("Request successful:")
@@ -562,9 +520,7 @@
             "finish_reason": "stop",
             "session_id": "860d2a4c1f3649ac880298537993cb51",
             "text": "寝室公约的第二条规定如下：
-    
     寝室成员应当互帮互助、互相关心、互相学习、共同提高；宽容谦让、相互尊重、以诚相待。
-    
     这强调了在宿舍生活中，室友之间应该保持良好的互助关系，同时也要互相尊重对方。您想要了解其他条款的内容吗？"
         },
         "usage": {
@@ -616,7 +572,6 @@
                 app_id='YOUR_APP_ID',
                 prompt='寝室公约内容',
                 biz_params=biz_params)
-    
     if response.status_code != HTTPStatus.OK:
         print(f'request_id={response.request_id}')
         print(f'code={response.status_code}')
@@ -631,9 +586,7 @@
     
     ```
     寝室公约的第二条规定如下：
-    
     寝室成员应当互帮互助、互相关心、互相学习、共同提高；宽容谦让、相互尊重、以诚相待。
-    
     如果您需要了解更多的规定内容，请告诉我。
     ```
     
@@ -647,7 +600,6 @@
     import com.alibaba.dashscope.exception.InputRequiredException;
     import com.alibaba.dashscope.exception.NoApiKeyException;
     import com.alibaba.dashscope.utils.JsonUtils;
-    
     public class Main {
         public static void appCall() throws NoApiKeyException, InputRequiredException {
             String bizParams =
@@ -661,7 +613,6 @@
                     .prompt("寝室公约内容")
                     .bizParams(JsonUtils.parse(bizParams))
                     .build();
-    
             Application application = new Application();
             ApplicationResult result = application.call(param);
             System.out.printf("%s\n",
@@ -683,9 +634,7 @@
     
     ```
     寝室公约的第二条规定如下：
-    
     寝室成员应当互帮互助、互相关心、互相学习、共同提高；宽容谦让、相互尊重、以诚相待。
-    
     如果您需要查询更多的规定内容，请告诉我。
     ```
     
@@ -745,12 +694,10 @@
     
     ```
     <?php
-    
     # 若没有配置环境变量，可用百炼API Key将下行替换为：$api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     $api_key = getenv("DASHSCOPE_API_KEY");
     $application_id = 'YOUR_APP_ID'; // 替换为实际的应用 ID
     $url = "https://dashscope.aliyuncs.com/api/v1/apps/$application_id/completion";
-    
     // 构造请求数据
     $data = [
         "input" => [
@@ -771,15 +718,12 @@
     ];
     // 将数据编码为 JSON
     $dataString = json_encode($data);
-    
     // 检查 json_encode 是否成功
     if (json_last_error() !== JSON_ERROR_NONE) {
         die("JSON encoding failed with error: " . json_last_error_msg());
     }
-    
     // 初始化 cURL 对话
     $ch = curl_init($url);
-    
     // 设置 cURL 选项
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
@@ -788,15 +732,12 @@
         'Content-Type: application/json',
         'Authorization: Bearer ' . $api_key
     ]);
-    
     // 执行请求
     $response = curl_exec($ch);
-    
     // 检查 cURL 执行是否成功
     if ($response === false) {
         die("cURL Error: " . curl_error($ch));
     }
-    
     // 获取 HTTP 状态码
     $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     // 关闭 cURL 对话
@@ -826,9 +767,7 @@
     
     ```
     寝室公约的第二条规定如下：
-    
     > 寝室成员应当互帮互助、互相关心、互相学习、共同提高；宽容谦让、相互尊重、以诚相待。
-    
     如果需要了解更多的公约内容或其他信息，请随时告诉我！
     ```
     
@@ -850,7 +789,6 @@
         const appId = 'YOUR_APP_ID';// 替换为实际的应用 ID
         const pluginCode = 'YOUR_PLUGIN_CODE';// 替换为实际的插件ID
         const url = `https://dashscope.aliyuncs.com/api/v1/apps/${appId}/completion`;
-    
         const data = {
             input: {
                 prompt: "寝室公约内容",
@@ -872,17 +810,14 @@
             parameters: {},
             debug: {}
         };
-    
         try {
             console.log("Sending request to DashScope API...");
-    
             const response = await axios.post(url, data, {
                 headers: {
                     'Authorization': `Bearer ${apiKey}`,
                     'Content-Type': 'application/json'
                 }
             });
-    
             if (response.status === 200) {
                 if (response.data.output && response.data.output.text) {
                     console.log(`${response.data.output.text}`);
@@ -922,7 +857,6 @@
     
     ```
     using System.Text;
-    
     class Program
     {
         static async Task Main(string[] args)
@@ -930,15 +864,12 @@
             // 若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
             string apiKey = Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY")?? throw new InvalidOperationException("DASHSCOPE_API_KEY environment variable is not set.");;
             string appId = "YOUR_APP_ID";// 替换为实际的应用ID
-    
             if (string.IsNullOrEmpty(apiKey))
             {
                 Console.WriteLine("请确保设置了 DASHSCOPE_API_KEY。");
                 return;
             }
-    
             string url = $"https://dashscope.aliyuncs.com/api/v1/apps/{appId}/completion";
-    
             using (HttpClient client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
@@ -963,13 +894,10 @@
                     ""parameters"": {{}},
                     ""debug"": {{}}
                 }}";
-    
                 HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-    
                 try
                 {
                     HttpResponseMessage response = await client.PostAsync(url, content);
-    
                     if (response.IsSuccessStatusCode)
                     {
                         string responseBody = await response.Content.ReadAsStringAsync();
@@ -1000,9 +928,7 @@
             "finish_reason": "stop",
             "session_id": "1a1913a9922a401f8eba36df8ea1a062",
             "text": "寝室公约的第二条规定如下：
-    
     寝室成员应当互帮互助、互相关心、互相学习、共同提高；宽容谦让、相互尊重、以诚相待。
-    
     如需了解更详细的公约内容，请进一步指明。"
         },
         "usage": {
@@ -1024,7 +950,6 @@
     
     ```
     package main
-    
     import (
     	"bytes"
     	"encoding/json"
@@ -1033,20 +958,16 @@
     	"net/http"
     	"os"
     )
-    
     func main() {
     	// 若没有配置环境变量，可用百炼API Key将下行替换为：apiKey := "sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     	apiKey := os.Getenv("DASHSCOPE_API_KEY")
     	appId := "YOUR_APP_ID"           // 替换为实际的应用 ID
     	pluginCode := "YOUR_PLUGIN_CODE" // 替换为实际的插件 ID
-    
     	if apiKey == "" {
     		fmt.Println("请确保设置了DASHSCOPE_API_KEY。")
     		return
     	}
-    
     	url := fmt.Sprintf("https://dashscope.aliyuncs.com/api/v1/apps/%s/completion", appId)
-    
     	// 创建请求体
     	requestBody := map[string]interface{}{
     		"input": map[string]interface{}{
@@ -1067,24 +988,20 @@
     		"parameters": map[string]interface{}{},
     		"debug":      map[string]interface{}{},
     	}
-    
     	jsonData, err := json.Marshal(requestBody)
     	if err != nil {
     		fmt.Printf("Failed to marshal JSON: %v\n", err)
     		return
     	}
-    
     	// 创建 HTTP POST 请求
     	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
     	if err != nil {
     		fmt.Printf("Failed to create request: %v\n", err)
     		return
     	}
-    
     	// 设置请求头
     	req.Header.Set("Authorization", "Bearer "+apiKey)
     	req.Header.Set("Content-Type", "application/json")
-    
     	// 发送请求
     	client := &http.Client{}
     	resp, err := client.Do(req)
@@ -1093,14 +1010,12 @@
     		return
     	}
     	defer resp.Body.Close()
-    
     	// 读取响应
     	body, err := io.ReadAll(resp.Body)
     	if err != nil {
     		fmt.Printf("Failed to read response: %v\n", err)
     		return
     	}
-    
     	// 处理响应
     	if resp.StatusCode == http.StatusOK {
     		fmt.Println("Request successful:")
@@ -1172,7 +1087,6 @@ response = Application.call(
     prompt='查询这个城市的行政区域划分',
     biz_params=biz_params  # 传递业务参数
 )
-
 if response.status_code != HTTPStatus.OK:
     print(f'request_id={response.request_id}')
     print(f'code={response.status_code}')
@@ -1186,7 +1100,6 @@ else:
 
 ```
 杭州市，作为浙江省的省会城市，其行政区域划分包括10个市辖区：上城区、拱墅区、西湖区、滨江区、萧山区、余杭区、临平区、钱塘区、富阳区、临安区。每个区都有其独特的特色和发展重点。
-
 - 上城区：位于杭州市中心地带，是杭州的政治、经济、文化中心之一。
 - 拱墅区：以运河文化为特色，拥有众多历史文化遗产。
 - 西湖区：著名的西湖风景区就位于此区，是旅游观光的重要目的地。
@@ -1197,7 +1110,6 @@ else:
 - 钱塘区：同样是一个较新的行政区划调整结果，强调创新发展和生态保护相结合。
 - 富阳区：位于杭州西南方向，以其丰富的自然景观和悠久的历史文化著称。
 - 临安区：地处杭州西部，以生态优美闻名，并且有着深厚的文化底蕴。
-
 请注意，随着时间推移，具体的城市规划可能会有所变化，请参考最新的官方信息。
 ```
 
@@ -1212,10 +1124,8 @@ import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.utils.JsonUtils;
 import io.reactivex.Flowable;
-
 public class Main {
     public static void appCall() throws NoApiKeyException, InputRequiredException {
-
         String bizParams =
                 "{\"city\":\"杭州\"}";
         ApplicationParam param = ApplicationParam.builder()
@@ -1225,13 +1135,11 @@ public class Main {
                 .prompt("查询这个城市的行政区域划分")
                 .bizParams(JsonUtils.parse(bizParams))
                 .build();
-
         Application application = new Application();
         ApplicationResult result = application.call(param);
         System.out.printf("%s\n",
                 result.getOutput().getText());
     }
-
     public static void main(String[] args) {
         try {
             appCall();
@@ -1248,7 +1156,6 @@ public class Main {
 
 ```
 杭州市是浙江省的省会城市，其行政区域划分主要包括10个市辖区：上城区、拱墅区、西湖区、滨江区、萧山区、余杭区、临平区、钱塘区、富阳区、临安区。每个区都有自己的特色和发展重点。
-
 - 上城区：位于杭州市中心，拥有许多历史文化遗产。
 - 拱墅区：以大运河文化而闻名，同时也是一个重要的商业和居住区。
 - 西湖区：以其美丽的自然风光著称，包括著名的西湖风景区。
@@ -1259,7 +1166,6 @@ public class Main {
 - 钱塘区：同样是在2021年成立的新区，定位为杭州东部交通枢纽及产业发展新高地。
 - 富阳区：历史悠久的文化名城，也是造纸业的重要基地之一。
 - 临安区：位于杭州西部，森林覆盖率高，生态环境良好。
-
 这些区域共同构成了杭州市独特的地理格局和社会经济结构。如果你对某个特定区域感兴趣或需要更详细的信息，请告诉我！
 ```
 
@@ -1301,12 +1207,10 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/YOUR_APP_ID/completion \
 
 ```
 <?php
-
 # 若没有配置环境变量，可用百炼API Key将下行替换为：$api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
 $api_key = getenv("DASHSCOPE_API_KEY");
 $application_id = 'YOUR_APP_ID'; // 替换为实际的应用 ID
 $url = "https://dashscope.aliyuncs.com/api/v1/apps/$application_id/completion";
-
 // 构造请求数据
 $data = [
     "input" => [
@@ -1318,15 +1222,12 @@ $data = [
 ];
 // 将数据编码为 JSON
 $dataString = json_encode($data);
-
 // 检查 json_encode 是否成功
 if (json_last_error() !== JSON_ERROR_NONE) {
     die("JSON encoding failed with error: " . json_last_error_msg());
 }
-
 // 初始化 cURL 对话
 $ch = curl_init($url);
-
 // 设置 cURL 选项
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
@@ -1335,15 +1236,12 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Content-Type: application/json',
     'Authorization: Bearer ' . $api_key
 ]);
-
 // 执行请求
 $response = curl_exec($ch);
-
 // 检查 cURL 执行是否成功
 if ($response === false) {
     die("cURL Error: " . curl_error($ch));
 }
-
 // 获取 HTTP 状态码
 $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 // 关闭 cURL 对话
@@ -1374,14 +1272,12 @@ if ($status_code == 200) {
 
 ```
 杭州市是浙江省的省会城市，其行政区域划分主要包括10个市辖区：上城区、拱墅区、西湖区、滨江区、萧山区、余杭区、临平区、钱塘区、富阳区、临安区。
-
 每个区都有自己的特色和发展重点，比如：
 - **上城区**和**拱墅区**位于杭州市中心，商业繁华，历史悠久。
 - **西湖区**以美丽的西湖而闻名，同时也是一个重要的科教文化区。
 - **滨江区**则以其高新技术产业发展著称。
 - **萧山区**、**余杭区**等则是近年来随着城市发展迅速崛起的新城区或经济开发区。
 - **临安区**、**富阳区**等地则更多保留了自然风光与乡村风貌。
-
 请注意，中国的行政区划可能会根据国家政策调整有所变化，请通过官方渠道获取最新信息。
 ```
 
@@ -1397,14 +1293,11 @@ npm install axios
 
 ```
 const axios = require('axios');
-
 async function callDashScope() {
     // 若没有配置环境变量，可用百炼API Key将下行替换为：apiKey='sk-xxx'。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     const apiKey = process.env.DASHSCOPE_API_KEY;
     const appId = 'YOUR_APP_ID'; // 替换为实际的应用 ID
-
     const url = `https://dashscope.aliyuncs.com/api/v1/apps/${appId}/completion`;
-
     const data = {
         input: {
             prompt: "查询这个城市的行政区域划分",
@@ -1415,17 +1308,14 @@ async function callDashScope() {
         parameters: {},
         debug: {},
     };
-
     try {
         console.log("Sending request to DashScope API...");
-
         const response = await axios.post(url, data, {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
                 'Content-Type': 'application/json'
             }
         });
-
         if (response.status === 200) {
             if (response.data.output && response.data.output.text) {
                 console.log(`${response.data.output.text}`);
@@ -1450,7 +1340,6 @@ async function callDashScope() {
         }
     }
 }
-
 callDashScope();
 ```
 
@@ -1458,7 +1347,6 @@ callDashScope();
 
 ```
 杭州市是浙江省的省会，其行政区域划分包括10个市辖区。具体如下：
-
 1. 上城区（Shàngchéng Qū）：位于杭州市中心偏南，是杭州历史最悠久、文化底蕴最深厚的区域之一。
 2. 拱墅区（Gǒngshù Qū）：原为下城区和拱墅区合并而成的新区，位于杭州市北部。
 3. 西湖区（Xīhú Qū）：以世界文化遗产西湖而闻名，拥有丰富的自然与人文景观。
@@ -1469,7 +1357,6 @@ callDashScope();
 8. 临安区（Lín'ān Qū）：位于杭州市西部山区，以其美丽的自然风光著称。
 9. 钱塘区（Qiántáng Qū）：成立于2021年，由原大江东产业集聚区及部分萧山区组成，旨在促进杭州东部地区的发展。
 10. 临平区（Lín Píng Qū）：从余杭区分设出来的一个新行政区划，主要涵盖原余杭区内的临平街道等地。
-
 以上信息反映了截至我最后更新时的情况，请注意行政区划可能会有所调整，请以官方发布的最新消息为准。
 ```
 
@@ -1479,7 +1366,6 @@ callDashScope();
 
 ```
 using System.Text;
-
 class Program
 {
     static async Task Main(string[] args)
@@ -1488,7 +1374,6 @@ class Program
         string apiKey = Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY") ?? throw new InvalidOperationException("DASHSCOPE_API_KEY environment variable is not set.");
         string appId = "YOUR_APP_ID"; // 替换为实际的应用ID
         string url = $"https://dashscope.aliyuncs.com/api/v1/apps/{appId}/completion";
-
         using (HttpClient client = new HttpClient())
         {
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
@@ -1502,13 +1387,10 @@ class Program
                 ""parameters"": {},
                 ""debug"": {}
             }";
-
             HttpContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
             try
             {
                 HttpResponseMessage response = await client.PostAsync(url, content);
-
                 if (response.IsSuccessStatusCode)
                 {
                     string responseBody = await response.Content.ReadAsStringAsync();
@@ -1541,7 +1423,6 @@ class Program
         "text": "杭州市是浙江省的省会，它下辖有10个市辖区：上城区、拱墅区、西湖区、滨江区、萧山区、余杭区、临平区、钱塘区、富阳区和临安区。每个区都有其独特的地理位置和发展特色。例如，西湖区以美丽的自然风光著称，尤其是著名的杭州西湖就位于此；而滨江区则更多地以其高新技术产业发展闻名。此外，随着城市的发展，行政区划也可能会有所调整，请关注官方发布的最新信息。"
     },
     "usage": {
-
     },
     "request_id": "d2c2fcc9-f821-98c9-9430-8704a2a41225"
 }
@@ -1553,7 +1434,6 @@ class Program
 
 ```
 package main
-
 import (
 	"bytes"
 	"encoding/json"
@@ -1562,19 +1442,15 @@ import (
 	"net/http"
 	"os"
 )
-
 func main() {
 	// 若没有配置环境变量，可用百炼API Key将下行替换为：apiKey := "sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
 	apiKey := os.Getenv("DASHSCOPE_API_KEY")
 	appId := "YOUR_APP_ID" // 替换为实际的应用 ID
-
 	if apiKey == "" {
 		fmt.Println("请确保设置了DASHSCOPE_API_KEY。")
 		return
 	}
-
 	url := fmt.Sprintf("https://dashscope.aliyuncs.com/api/v1/apps/%s/completion", appId)
-
 	// 创建请求体
 	requestBody := map[string]interface{}{
 		"input": map[string]interface{}{
@@ -1586,24 +1462,20 @@ func main() {
 		"parameters": map[string]interface{}{},
 		"debug":      map[string]interface{}{},
 	}
-
 	jsonData, err := json.Marshal(requestBody)
 	if err != nil {
 		fmt.Printf("Failed to marshal JSON: %v\n", err)
 		return
 	}
-
 	// 创建 HTTP POST 请求
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
 	if err != nil {
 		fmt.Printf("Failed to create request: %v\n", err)
 		return
 	}
-
 	// 设置请求头
 	req.Header.Set("Authorization", "Bearer "+apiKey)
 	req.Header.Set("Content-Type", "application/json")
-
 	// 发送请求
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -1612,14 +1484,12 @@ func main() {
 		return
 	}
 	defer resp.Body.Close()
-
 	// 读取响应
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Printf("Failed to read response: %v\n", err)
 		return
 	}
-
 	// 处理响应
 	if resp.StatusCode == http.StatusOK {
 		fmt.Println("Request successful:")
@@ -1639,15 +1509,12 @@ func main() {
         "finish_reason": "stop",
         "session_id": "2dc3e1a9dcd248c6bb9ca92bffc3e745",
         "text": "杭州市，简称“杭”，是浙江省的省会城市。根据最新的行政区划调整，杭州市现辖10个市辖区、2个县级市和1个县，具体如下：
-
 - 市辖区（10个）：上城区、拱墅区、西湖区、滨江区、萧山区、余杭区、临平区、钱塘区、富阳区、临安区。
 - 县级市（2个）：建德市、桐庐县（注意这里的桐庐实际上被列为县级市处理，但准确地说它是一个县）。
 - 县（1个）：淳安县。
-
 请注意，随着时间的变化，行政区域可能会有所调整，请以官方最新发布的消息为准。上述信息基于较新的资料整理而来，对于最新的变动情况，建议访问政府官方网站获取最准确的信息。"
     },
     "usage": {
-
     },
     "request_id": "d3c8f368-b645-9446-bfe4-20ca51821a02"
 }

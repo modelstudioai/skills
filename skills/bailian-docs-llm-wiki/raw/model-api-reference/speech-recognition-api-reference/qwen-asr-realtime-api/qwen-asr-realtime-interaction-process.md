@@ -8,13 +8,19 @@
 
 WebSocket URL 固定如下，通过查询参数 `model` 指定要调用的模型名称（将 `<model_name>` 替换为实际的模型）：
 
-## 中国内地
+## 华北2（北京）
 
 `wss://dashscope.aliyuncs.com/api-ws/v1/realtime?model=<model_name>`
 
-## 国际
+## 新加坡
 
-`wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime?model=<model_name>`
+`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime?model=<model_name>`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+**重要**
+
+新加坡地域的旧版域名 `wss://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 **重要**
 
@@ -85,7 +91,7 @@ Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或�
 
 **启用方式：**配置客户端`[session.update](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#af43722339yva)`事件的`session.turn_detection`参数。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4587119771/CAEQaxiBgICW9b6H3RkiIGM5MDgwMTNkMjBjMDRlNTNiOGZlODNjZGJhNDQ3NGJm5812623_20251022102739.334.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7835640871/CAEQaxiBgICW9b6H3RkiIGM5MDgwMTNkMjBjMDRlNTNiOGZlODNjZGJhNDQ3NGJm5812623_20251022102739.334.svg)
 
 -   客户端通过发送`[input_audio_buffer.append](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#a42f8e9111n72)`事件将音频追加到缓冲区。
     
@@ -116,7 +122,7 @@ Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或�
 
 **启用方式：**将客户端`[session.update](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#af43722339yva)`事件的`session.turn_detection`设为null。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4587119771/CAEQaxiBgMDUp8qH3RkiIGEyYTc0NTI1ZmQ1OTQ5NjliNWE0OTYwYTAwMDBlMjBm5812623_20251022102739.334.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7835640871/CAEQaxiBgMDUp8qH3RkiIGEyYTc0NTI1ZmQ1OTQ5NjliNWE0OTYwYTAwMDBlMjBm5812623_20251022102739.334.svg)
 
 -   客户端通过发送`[input_audio_buffer.append](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#a42f8e9111n72)`事件将音频追加到缓冲区。
     

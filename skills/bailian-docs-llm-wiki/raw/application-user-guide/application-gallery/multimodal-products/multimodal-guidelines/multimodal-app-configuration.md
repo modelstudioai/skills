@@ -341,17 +341,107 @@
 
 #### **接入预置Agent**
 
-多模态交互应用提供一系列适用于不同场景的Agent，API参考[调用官方Agent](https://help.aliyun.com/zh/model-studio/official-agent)。
+多模态交互应用提供一系列适用于不同场景的Agent，其中视觉理解Agent支持开启高分辨率模式，API参考[调用官方Agent](https://help.aliyun.com/zh/model-studio/official-agent)。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7463950671/p1003700.png)
 
 语音交互应用目前支持语音翻译Agent、极速语音通话Agent、地图出行Agent、新闻电台Agent、儿童故事Agent以及录音纪要Agent，敬请期待。
 
--   实时视频通话：实时视觉理解，适用于带有摄像头的设备。点开右侧设置，可配置功能名称、视觉理解模型、欢迎语、退出语、启动指令、退出指令以及提示词。
+-   视频通话：实时视觉理解，适用于带有摄像头的设备。点开右侧设置，可配置功能名称、视觉理解模型、欢迎语、退出语、启动指令、退出指令以及提示词。
     
     -   视觉理解模型：包含「推荐模型」及「更多模型」，其中「推荐模型」支持视觉理解高级版以及均衡版，「更多模型」支持Qwen3.6系列、Qwen3.5系列等多模态模型。
         
-    -   ![截屏2026-04-27 14](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0615827771/p1071073.png)
+        -   ![截屏2026-04-27 14](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0615827771/p1071073.png)
+            
+    -   视频通话、拍照问答、拍照翻译Agent支持开启高分辨率模式，在配置应用页面开启后即可传入该模型可支持的最大分辨率。
+        
+        -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7147350871/p1076073.png)
+            
+-   拍照问答：当识别到用户有画面理解的需求时，自动调用摄像头拍照并回复。适用于带有摄像头的设备。点开右侧设置，可配置启动指令、提示词，还能选择视觉理解模型。
+    
+    -   视觉理解模型：包含「推荐模型」及「更多模型」，其中「推荐模型」支持视觉理解高级版以及均衡版，「更多模型」支持Qwen3.6系列、Qwen3.5系列等多模态模型。
+        
+        -   ![截屏2026-04-27 15](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0615827771/p1071120.png)
+            
+    -   支持IPC模式：将图片直接送入Agent进行识别，适用于带摄像头产品的图片理解、拍学机或学习机内的拍照识图等功能。详情可查看：[通过HTTP协议接入拍照问答Agent](https://help.aliyun.com/zh/model-studio/vqa-agent-through-the-http-protocol)。
+        
+        -   **说明**
+            
+            直通链路：是指不通过语音识别（ASR）、意图识别、语音合成（TTS）等节点，直接将请求送入Agent，并将Agent的回答直接返回的链路。
+            
+-   新闻电台：每日更新热门新闻资讯，两位AI主播互动解说，用户可以随时打断并加入对话。点开右侧设置，可配置功能名称、启动指令、退出指令、续播指令以及角色音色。
+    
+    -   ![截屏2025-06-03 18](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8207470571/p963587.png)
+        
+-   语音翻译：多语种实时语音识别，并输出语音翻译、文本翻译结果。点开右侧设置，可配置功能名称、启动指令、退出指令，选择输出结果。
+    
+    -   ![截屏2025-06-20 15](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9207470571/p975960.png)
+        
+-   极速视频通话：基于qwen3.5-omni 系列 realtime 模型的视频对话，支持语音和图片输入，可选语音输出或文本输出。点开右侧设置，可配置功能名称、启动指令以及退出指令。
+    
+    -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7147350871/p1076055.png)
+        
+-   拍照翻译：多模态应用专属，支持多语言、自动拍照的翻译能力，能够精准翻译眼前的文字。点开右侧设置，可配置触发指令、提示词以及对话变量，支持一键导入主对话链路中的提示词和变量配置。
+    
+    -   ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5359526571/p997695.png)
+        
+-   儿童故事：陪伴式讲故事功能，拥有自有故事库，支持讲故事过程中的对话交互、故事创作和续写改写。点开右侧设置，可配置功能名称、启动指令、退出指令、语音合成模型以及对应音色。
+    
+    -   ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5359526571/p997699.png)
+        
+-   多模态备忘录：用户可以通过语音输入的方式，让模型创建备忘、记录关键信息，支持自动拍照并结合视觉信息提取备忘。备忘信息支持通过语音指令查询、修改、删除。
+    
+    -   典型场景：设定日程提醒如“明天下午两点提醒我开会”，设定闹钟如“五分钟后提醒我”，记忆视觉信息如“记一下我的停车位号码”、“记一下这本书的名字”。
+        
+    -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9715860671/p1016801.png)
+        
+-   地图出行：提供复杂路线规划、周边地点查询和推荐能力。例如，“怎么去首都机场最快？”、“推荐附近评分最高的咖啡厅”。（本Agent仅支持上述场景的多轮对话，不支持实时语音导航。）
+    
+    -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9715860671/p1016802.png)
+        
+-   录音纪要：提供实时录音字幕和总结，提炼核心信息、生成会议纪要。例如，“开始实时转写”、“开始录制并总结”。支持对录音总结的内容进行多轮对话问答，例如询问上次会议的讨论内容、昨天课程的课程要点等。还支持对历史内容进行问答，可提问的内容范围包括录音原文，以及大模型总结的纪要文本。
+    
+    **说明**
+    
+    对历史内容进行问答的功能对上线后创建的录音任务可用，对之前的历史任务不支持问答。
+    
+    -   ![截屏2025-11-26 16](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3052464671/p1029738.png)
+        
+    -   接入方式：
+        
+        -   在[听悟-智能纪要Agent](https://bailian.console.aliyun.com/?spm=a2ty02.31808181.d_app-market.1.27b274a1lPyXvF&tab=app#/app/app-market/tingwu/tingwu-meeting-summary)中创建应用并发布，按需配置总结能力
+            
+        -   在多模态应用中勾选录音纪要Agent，并选择配置好的通义听悟应用
+            
+        -   支持设置语音指令，退出、暂停需要配置唤醒词，避免在会议中误打断录音
+            
+        -   开发接入，请查看文档：[接入听悟智能纪要Agent](https://help.aliyun.com/zh/model-studio/fast-integrate-tingwu-meeting-agent/)
+            
+    -   ![image (32)](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9780406671/p1035517.png)
+        
+-   音乐电台：推荐和随机播放舒缓的轻音乐（无人声）。
+    
+    -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3150877671/p1041259.png)
+        
+-   图像生成：适用于壁纸生成、涂鸦作画、照片美化、图像风格化等各类图像生成场景。目前仅支持直通链路。接入方式请参考：[通过HTTP协议接入图像生成Agent](https://help.aliyun.com/zh/model-studio/image-agent)。
+    
+    -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4557144771/p1061710.png)
+        
+    -   ![截屏2026-03-23 15](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4557144771/p1061712.png)
+        
+-   主动导览：摄像头常开，会持续分析眼前景象，遇到需要讲解的展品，会主动进行介绍。也可以主动要求AI对眼前的展品做介绍或进行问答。
+    
+    -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6104800771/p1051074.png)
+        
+-   主动陪伴：摄像头常开，会持续分析眼前景象（也会产生费用），支持功能如下：
+    
+    -   手势互动：对着摄像头比动作，AI可快速进行动作、表情、语音回复的反馈。如果同时比动作和说话，优先响应说话内容。
+        
+    -   打招呼：结合视觉信息，与用户互动（类似进入语），如对用户的着装进行点评、针对表情回复相应的夸赞或安抚、对用户手持物品表达兴趣、随机唠嗑等。
+        
+    -   主动发起话题：结合用户情境（比如绘画/玩魔方、家中打扫卫生等）主动参与活动，发起话题。
+        
+    -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1885880771/p1054350.png)
         
 -   拍照问答：当识别到用户有画面理解的需求时，自动调用摄像头拍照并回复。适用于带有摄像头的设备。点开右侧设置，可配置启动指令、提示词，还能选择视觉理解模型。
     
@@ -373,9 +463,9 @@
     
     -   ![截屏2025-06-20 15](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9207470571/p975960.png)
         
--   极速视频通话：基于Qwen-Omni模型的视频对话，支持响应速度更快的闲聊。点开右侧设置，可配置功能名称、启动指令以及退出指令。
+-   极速视频通话：基于qwen3.5-omni 系列 realtime 模型的视频对话，支持语音和图片输入，可选语音输出或文本输出。点开右侧设置，可配置功能名称、启动指令以及退出指令。
     
-    -   ![4ED65AB6-0EC1-48c7-B18A-66AAD087C09B](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5359526571/p997666.png)
+    -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7147350871/p1076055.png)
         
 -   拍照翻译：多模态应用专属，支持多语言、自动拍照的翻译能力，能够精准翻译眼前的文字。点开右侧设置，可配置触发指令、提示词以及对话变量，支持一键导入主对话链路中的提示词和变量配置。
     
@@ -450,6 +540,10 @@
     
     -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1885880771/p1054351.png)
         
+-   接入百炼Agent时，您可以在配置页面开启「视觉理解」开关，当识别到对应意图，客户端可以上传图片给agent，实现多模态理解能力。
+    
+    -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7147350871/p1076072.png)
+        
 
 #### 接入**三方Agent**
 
@@ -462,3 +556,7 @@
 -   Agent内部可以配置和语音助手不同的音色，但需要保持使用同一个模型。例如，语音助手选择通用的温柔女声，接入的童话故事Agent选择一个童声。当启动童话故事Agent时，系统自动切换为童声。
     
     -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3150877671/p1041270.png)
+        
+-   接入三方Agent时，您可以在配置页面开启「视觉理解」开关，当识别到对应意图，客户端可以上传图片给agent，实现多模态理解能力。
+    
+    -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7147350871/p1076085.png)

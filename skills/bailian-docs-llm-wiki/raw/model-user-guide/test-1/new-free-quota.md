@@ -22,8 +22,6 @@
 
 -   [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)
     
--   [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)
-    
 -   [模型调优](https://help.aliyun.com/zh/model-studio/model-training-overview)
     
 -   [模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)
@@ -153,7 +151,7 @@
 
 常见原因：
 
--   使用了没有免费额度的模型（例如：qwen-max 和 qwen-max-latest 的免费额度不共享）。
+-   使用了没有免费额度的模型（例如：qwen3.7-max 和 qwen3.7-max-2026-05-20 的免费额度不共享）。
     
 -   免费额度不支持抵扣[OpenAI兼容-Batch（文件输入）](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)产生的费用。
     

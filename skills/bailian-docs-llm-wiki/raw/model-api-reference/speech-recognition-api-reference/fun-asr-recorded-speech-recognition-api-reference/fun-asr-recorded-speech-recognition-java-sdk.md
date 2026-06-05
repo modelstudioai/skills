@@ -2,7 +2,11 @@
 
 本文介绍Fun-ASR录音文件识别Java SDK的参数和接口细节。
 
-**用户指南：**关于模型介绍和选型建议请参见[录音文件识别-Fun-ASR/Paraformer](https://help.aliyun.com/zh/model-studio/recording-file-recognition)。
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
+**用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)
 
 ## **前提条件**
 
@@ -19,52 +23,6 @@
 -   [安装最新版DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
     
 
-## **模型列表**
-
-参见[支持的模型](https://help.aliyun.com/zh/model-studio/recording-file-recognition#a6ddaaf4b308q)。
-
-## **约束**
-
-服务**不支持本地音视频文件直传（也不支持base64格式音频）**，输入源需为**可通过公网访问的文件URL**（支持HTTP/HTTPS协议，示例：`https://your-domain.com/file.mp3`）。
-
-使用SDK时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，不支持使用以 `oss://`为前缀的临时 URL。
-
-使用RESTful API时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，支持使用以 `oss://`为前缀的临时 URL：
-
-**重要**
-
--   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
-    
--   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
-    
--   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
-    
-
-URL通过`fileUrls`参数指定，单次请求最多支持100个URL。
-
--   **音频格式**
-    
-    `aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
-    
-    **重要**
-    
-    由于音视频格式及其变种众多，技术上无法穷尽测试，API不能保证所有格式均能够被正确识别。请通过测试验证您所提供的文件能够获得正常的语音识别结果。
-    
--   **音频采样率：**任意
-    
--   **音频文件大小和时长**
-    
-    音频文件不超过2GB；时长在12小时以内。如果启用说话人分离功能，建议音频时长不超过2小时。
-    
-    如果希望处理的文件超过了上述限制，可尝试对文件进行预处理以降低文件尺寸。有关文件预处理的最佳实践可以查阅[预处理视频文件以提高文件转写效率（针对录音文件识别场景）](https://help.aliyun.com/zh/model-studio/paraformer-best-practices#c5dda0a0cf2x9)。
-    
--   **批处理音频数目**
-    
-    单次请求最多支持100个文件URL。
-    
--   **可识别语言：**fun-asr 支持中文、英文；fun-asr-mtl-2025-08-25 支持中文， 粤语、英文、日语、 泰语、 越南语、印尼语。
-    
-
 ## **快速开始**
 
 [核心类（Transcription）](#adcb5e9bddbyq)提供了异步提交任务、同步等待任务结束和异步查询任务执行结果的接口。可通过如下两种调用方式进行录音文件识别：
@@ -76,7 +34,7 @@ URL通过`fileUrls`参数指定，单次请求最多支持100个URL。
 
 ### **异步提交任务+同步等待任务结束**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8169758771/CAEQURiBgMCO2_fRpxkiIDBlNzI4YmMyNTU3ODRlM2Y4NjUxZWU4YmUxNjliMmFl4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4009540871/CAEQURiBgMCO2_fRpxkiIDBlNzI4YmMyNTU3ODRlM2Y4NjUxZWU4YmUxNjliMmFl4709861_20241015153444.149.svg)
 
 1.  配置[请求参数](#48ea212b1d08r)。
     
@@ -109,7 +67,7 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
         Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
         // 创建转写请求参数
         TranscriptionParam param =
@@ -120,8 +78,7 @@ public class Main {
                         .model("fun-asr") // 此处以fun-asr为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
                         .fileUrls(
                                 Arrays.asList(
-                                        "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
-                                        "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav"))
+                                        "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav"))
                         .build();
         try {
             Transcription transcription = new Transcription();
@@ -143,7 +100,7 @@ public class Main {
 
 ### **异步提交任务+异步查询任务执行结果**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8169758771/CAEQURiBgIDnxvjRpxkiIGI1NjJjOTgyNTVhMTRiMjM4OWVjYzFmZTExNGZjYzE14709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5009540871/CAEQURiBgIDnxvjRpxkiIGI1NjJjOTgyNTVhMTRiMjM4OWVjYzFmZTExNGZjYzE14709861_20241015153444.149.svg)
 
 1.  配置[请求参数](#48ea212b1d08r)。
     
@@ -177,7 +134,7 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
         Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
         // 创建转写请求参数
         TranscriptionParam param =
@@ -188,8 +145,7 @@ public class Main {
                         .model("fun-asr") // 此处以fun-asr为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
                         .fileUrls(
                                 Arrays.asList(
-                                        "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
-                                        "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav"))
+                                        "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav"))
                         .build();
         try {
             Transcription transcription = new Transcription();
@@ -225,8 +181,7 @@ TranscriptionParam param = TranscriptionParam.builder()
   .model("fun-asr")
   .fileUrls(
           Arrays.asList(
-                  "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
-                  "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav"))
+                  "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav"))
   .build();
 ```
 
@@ -248,7 +203,20 @@ String
 
 是
 
-指定用于音视频文件转写的模型名。参见[模型列表](#47e6ae42d1u1b)。
+指定用于音视频文件转写的模型名。
+
+取值范围：
+
+-   fun-asr
+    
+-   fun-asr-2025-11-07
+    
+-   fun-asr-2025-08-25
+    
+-   fun-asr-mtl
+    
+-   fun-asr-mtl-2025-08-25
+    
 
 fileUrls
 
@@ -258,7 +226,7 @@ List<String>
 
 是
 
-音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求最多支持100个URL。
+音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。
 
 若录音文件存储在阿里云OSS，使用SDK方式不支持使用以 oss://为前缀的临时 URL。
 
@@ -294,71 +262,7 @@ String
 
 否
 
-指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。
-
-若未传入该参数，系统将启用系统内置的敏感词过滤逻辑，识别结果中与[阿里云百炼敏感词表](https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/%E7%99%BE%E7%82%BC%E6%95%8F%E6%84%9F%E8%AF%8D%E5%88%97%E8%A1%A8_20230716.words.txt)匹配的词语将被替换为等长的`*`。
-
-若传入该参数，则可实现以下敏感词处理策略：
-
--   替换为 `*`：将匹配的敏感词替换为等长的 `*`；
-    
--   直接过滤：将匹配的敏感词从识别结果中完全移除。
-    
-
-该参数的值应为一个 JSON 字符串，其结构如下所示：
-
-```
-{
-  "filter_with_signed": {
-    "word_list": ["测试"]
-  },
-  "filter_with_empty": {
-    "word_list": ["开始", "发生"]
-  },
-  "system_reserved_filter": true
-}
-```
-
-JSON字段说明：
-
--   `filter_with_signed`
-    
-    -   类型：对象。
-        
-    -   是否必填：否。
-        
-    -   描述：配置需替换为`*`的敏感词列表。识别结果中匹配的词语将被等长的 `*` 替代。
-        
-    -   示例：以上述JSON为例，“帮我测试一下这段代码”的语音识别结果将会是“帮我\*\*一下这段代码”。
-        
-    -   内部字段：
-        
-        -   `word_list`: 字符串数组，列出需被替换的敏感词。
-            
--   `filter_with_empty`
-    
-    -   类型：对象。
-        
-    -   是否必填：否。
-        
-    -   描述：配置需从识别结果中移除（过滤）的敏感词列表。识别结果中匹配的词语将被完全删除。
-        
-    -   示例：以上述JSON为例，“比赛这就要开始了吗？”的语音识别结果将会是“比赛这就要了吗”。
-        
-    -   内部字段：
-        
-        -   `word_list`: 字符串数组，列出需被完全移除（过滤）的敏感词。
-            
--   `system_reserved_filter`
-    
-    -   类型：布尔值。
-        
-    -   是否必填：否。
-        
-    -   默认值：true。
-        
-    -   描述：是否启用系统预置的敏感词规则。设为`true`时，将同时启用系统内置的敏感词过滤逻辑，识别结果中与[阿里云百炼敏感词表](https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/%E7%99%BE%E7%82%BC%E6%95%8F%E6%84%9F%E8%AF%8D%E5%88%97%E8%A1%A8_20230716.words.txt)匹配的词语将被替换为等长的`*`。
-        
+指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03-sensitive-h3)。
 
 diarizationEnabled
 
@@ -406,7 +310,7 @@ String\[\]
 
 系统仅读取数组中的首个值。多余值将被忽略。
 
-不同模型支持的语言代码如下：
+点击查看支持的语言代码
 
 -   fun-asr、fun-asr-2025-11-07、fun-asr-mtl、fun-asr-mtl-2025-08-25：
     
@@ -596,19 +500,14 @@ public JsonObject getOutput()
     "end_time":"2025-02-13 16:12:10.189",
     "results":[
         {
-            "file_url":"https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav",
-            "transcription_url":"https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20250213/16%3A12/34604a7b-579a-4223-8797-5116a49b07ec-1.json?Expires=1739520730&OSSAccessKeyId=yourOSSAccessKeyId&Signature=tMqyH56oB5rDW9%2FFqD8Yo%2F3WaPk%3D",
-            "subtask_status":"SUCCEEDED"
-        },
-        {
             "file_url":"https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
             "transcription_url":"https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20250213/16%3A12/3baafe5f-d09d-46c6-8b01-724927670edb-1.json?Expires=1739520730&OSSAccessKeyId=yourOSSAccessKeyId&Signature=BF7vPxlsJN9hkJlY%2BLReezxOwK8%3D",
             "subtask_status":"SUCCEEDED"
         }
     ],
     "task_metrics":{
-        "TOTAL":2,
-        "SUCCEEDED":2,
+        "TOTAL":1,
+        "SUCCEEDED":1,
         "FAILED":0
     }
 }
@@ -627,11 +526,6 @@ public JsonObject getOutput()
     "end_time": "2024-12-16 16:31:02.375",
     "results": [
         {
-            "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/long_audio_demo_cn.mp3",
-            "transcription_url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20241216/xxxx",
-            "subtask_status": "SUCCEEDED"
-        },
-        {
             "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/rich_text_exaple_1.wav",
             "code": "InvalidFile.DownloadFailed",
             "message": "The audio file cannot be downloaded.",
@@ -639,8 +533,8 @@ public JsonObject getOutput()
         }
     ],
     "task_metrics": {
-        "TOTAL": 2,
-        "SUCCEEDED": 1,
+        "TOTAL": 1,
+        "SUCCEEDED": 0,
         "FAILED": 1
     }
 }
@@ -874,8 +768,7 @@ TranscriptionParam param =
                 .model("fun-asr")
                 .fileUrls(
                         Arrays.asList(
-                                "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
-                                "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav"))
+                                "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav"))
                 .build();
 try {
     Transcription transcription = new Transcription();
@@ -958,7 +851,7 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
 
 ## **错误码**
 
-如遇报错问题，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行排查。
+如遇报错问题，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行排查。
 
 当任务包含多个子任务时，只要存在任一子任务成功，整个任务状态将标记为`SUCCEEDED`，需通过`subtask_status`字段判断具体子任务结果。
 
@@ -973,11 +866,6 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
     "end_time": "2024-12-16 16:31:02.375",
     "results": [
         {
-            "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/long_audio_demo_cn.mp3",
-            "transcription_url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20241216/xxxx",
-            "subtask_status": "SUCCEEDED"
-        },
-        {
             "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/rich_text_exaple_1.wav",
             "code": "InvalidFile.DownloadFailed",
             "message": "The audio file cannot be downloaded.",
@@ -985,8 +873,8 @@ public TranscriptionResult fetch(TranscriptionQueryParam queryParam)
         }
     ],
     "task_metrics": {
-        "TOTAL": 2,
-        "SUCCEEDED": 1,
+        "TOTAL": 1,
+        "SUCCEEDED": 0,
         "FAILED": 1
     }
 }

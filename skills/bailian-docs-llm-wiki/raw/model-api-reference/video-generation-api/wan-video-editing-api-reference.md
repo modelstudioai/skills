@@ -1,27 +1,31 @@
 # 万相2.7-视频编辑API参考
 
-万相2.7-视频编辑模型，支持多模态输入（文本/图像/视频），可完成**指令编辑和视频迁移**任务。
+万相2.7-视频编辑模型，支持输入多模态（文本/图像/视频），可完成**指令编辑和视频迁移**任务。
 
 **相关文档**：[指南文档](https://help.aliyun.com/zh/model-studio/wan-video-editing-guide)
 
 ## 适用范围
 
-调用API时，模型、Endpoint URL和API Key 必须属于**同一地域**，跨地域调用将失败。
+为确保调用成功，请务必保证模型、endpoint URL 和 API Key 均属于**同一地域**。跨地域调用将会失败。
 
--   [选择模型](https://help.aliyun.com/zh/model-studio/use-video-generation#d18108de05ayp)：确认模型所属的地域。
+-   [**选择模型**](https://help.aliyun.com/zh/model-studio/use-video-generation#d18108de05ayp)：确认模型所属的地域。
     
 -   **选择 URL**：选择对应的地域 Endpoint URL，支持HTTP URL或 DashScope SDK URL。
     
--   **配置API Key**：获取该地域的[API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+-   **配置 API Key**：获取该地域的[API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
     
 
 **说明**
 
 本文的示例代码适用于**北京地域**。
 
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
 ## HTTP调用
 
-视频编辑任务通常耗时1-5分钟，API采用异步调用方式，包含 **“创建任务 -> 轮询获取”** 两个核心步骤：
+视频编辑任务耗时较长（通常为1-5分钟），API采用异步调用的方式。整个流程包含 **“创建任务 -> 轮询获取”** 两个核心步骤，具体如下：
 
 ### **步骤1：创建任务获取任务ID**
 
@@ -31,7 +35,9 @@
 
 ## **新加坡**
 
-`POST https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -196,7 +202,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 1.  公网URL：
     
-    -   支持HTTP和HTTPS协议。
+    -   支持 HTTP 和 HTTPS 协议。
         
     -   示例值：https://xxx/xxx.mp4。
         
@@ -226,7 +232,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 1.  公网URL:
     
-    -   支持HTTP或HTTPS协议。
+    -   支持 HTTP 或 HTTPS 协议。
         
     -   示例值：https://xxx/xxx.png。
         
@@ -495,7 +501,9 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 ## **新加坡**
 
-`GET https://dashscope-intl.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -703,19 +711,19 @@ task\_id查询有效期为 24 小时，超时后将无法查询，返回以下�
 
 SDK 的参数命名与[HTTP接口](#e9e21dd3a6945)基本一致，参数结构根据语言特性进行封装。
 
-视频编辑通常耗时1-5分钟。SDK 封装了HTTP异步调用流程，支持同步和异步两种调用方式。
+由于视频编辑任务耗时较长（通常为1-5分钟），SDK 在底层封装了 HTTP 异步调用流程，支持同步、异步两种调用方式。
 
-> 实际耗时取决于排队任务数和服务运行状态，请耐心等待结果。
+> 具体耗时受限于排队任务数和服务执行情况，请在获取结果时耐心等待。
 
 ### Python SDK调用
 
 **重要**
 
-请确保 DashScope Python SDK版本**不低于** **1.25.16**，再运行以下代码。
+请确保 DashScope Python SDK 版本**不低于** `**1.25.16**`，再运行以下代码。
 
 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)进行更新。
 
-根据模型所在地域设置 **base\_http\_api\_url**:
+根据模型所在地域设置 `**base_http_api_url**`:
 
 ## **北京**
 
@@ -723,9 +731,11 @@ SDK 的参数命名与[HTTP接口](#e9e21dd3a6945)基本一致，参数结构根
 
 ## **新加坡**
 
-`dashscope.base_http_api_url = 'https://dashscope-intl.aliyuncs.com/api/v1'`
+`dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'`
 
-## **同步调用**
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+## 同步调用
 
 ##### 请求示例
 
@@ -831,7 +841,7 @@ if __name__ == '__main__':
 }
 ```
 
-## **异步调用**
+## 异步调用
 
 ##### 请求示例
 
@@ -977,11 +987,11 @@ if __name__ == '__main__':
 
 **重要**
 
-请确保 DashScope Java SDK版本**不低于** **2.22.14**，再运行以下代码。
+请确保 DashScope Java SDK 版本**不低于** `**2.22.14**`，再运行以下代码。
 
 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)进行更新。
 
-根据模型所在地域设置 **Constants.baseHttpApiUrl**:
+根据模型所在地域设置 `**Constants.baseHttpApiUrl**`:
 
 ## **北京**
 
@@ -989,9 +999,11 @@ if __name__ == '__main__':
 
 ## **新加坡**
 
-`Constants.baseHttpApiUrl = "https://dashscope-intl.aliyuncs.com/api/v1";`
+`Constants.baseHttpApiUrl = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";`
 
-## **同步调用**
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+## 同步调用
 
 ##### 请求示例
 
@@ -1139,7 +1151,7 @@ public class VideoEdit {
 }
 ```
 
-## **异步调用**
+## 异步调用
 
 ##### 请求示例
 
@@ -1334,4 +1346,4 @@ public class VideoEdit {
 
 ## **错误码**
 
-如果模型调用失败并返回报错信息，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。

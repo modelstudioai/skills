@@ -4,7 +4,7 @@
 
 **说明**
 
--   若您熟悉大模型调用，可直接查看API参考文档[千问](https://help.aliyun.com/zh/model-studio/qwen-api-reference/)。
+-   若您熟悉大模型调用，可直接查看API参考文档[文本生成](https://help.aliyun.com/zh/model-studio/qwen-api-reference/)。
     
 -   若您不熟悉编程，可参考[Chatbox](https://help.aliyun.com/zh/model-studio/chatbox)，通过图形化界面与千问模型对话。
     
@@ -29,6 +29,8 @@
     > 如果开通服务时提示“您尚未进行实名认证”，请先进行[实名认证](https://help.aliyun.com/zh/account/verify-your-identity-individual-account)。
     
 3.  **获取API Key：**前往[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)页面，单击**创建API Key****，**即可通过API KEY调用大模型。
+    
+4.  **获取业务空间ID：**使用**新加坡**或**德国（法兰克福）**地域的模型时，需在Base URL中填入业务空间ID（WorkspaceId），可在[业务空间管理](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=globalset#/efm/business_management)页面中查看。
     
 
 ## **配置API Key到环境变量**
@@ -490,6 +492,7 @@ pip install -U dashscope
         client = OpenAI(
             # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为: api_key="sk-xxx",
             api_key=os.getenv("DASHSCOPE_API_KEY"),
+            # 以下为华北2（北京）地域的URL，各地域的URL不同。
             base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
         )
     
@@ -530,8 +533,10 @@ pip install -U dashscope
     ```
     import os
     from dashscope import Generation
-    import dashscope 
+    import dashscope
     
+    # 以下为华北2（北京）地域的URL，各地域的URL不同。
+    dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
     messages = [
         {'role': 'system', 'content': 'You are a helpful assistant.'},
         {'role': 'user', 'content': '你是谁？'}
@@ -624,9 +629,8 @@ npm config set registry https://registry.npmmirror.com/
         const openai = new OpenAI(
             {
                 // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为: apiKey: "sk-xxx",
-                // 新加坡和北京地域的API Key不同。获取API Key: https://help.aliyun.com/model-studio/get-api-key
                 apiKey: process.env.DASHSCOPE_API_KEY,
-                // 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为: https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+                // 以下为华北2（北京）地域的URL，各地域的URL不同。
                 baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1"
             }
         );
@@ -755,13 +759,12 @@ import com.alibaba.dashscope.common.Role;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
-import com.alibaba.dashscope.utils.Constants;
+import com.alibaba.dashscope.protocol.Protocol;
 
 public class Main {
-    //  若使用新加坡地域的模型，请释放下列注释
-    //  static {Constants.baseHttpApiUrl="https://dashscope-intl.aliyuncs.com/api/v1";}
     public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {
-        Generation gen = new Generation();
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
+        Generation gen = new Generation(Protocol.HTTP.getValue(), "https://dashscope.aliyuncs.com/api/v1");
         Message systemMsg = Message.builder()
                 .role(Role.SYSTEM.getValue())
                 .content("You are a helpful assistant.")
@@ -813,13 +816,7 @@ public class Main {
 
 **Windows**
 
-在CMD（命令提示符）中执行如下命令：
-
 ```
-# ======= 重要提示 =======
-# 新加坡和北京地域的API Key不同。获取API Key: https://help.aliyun.com/model-studio/get-api-key
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为: https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
-# === 执行时请删除该注释 ===
 curl -X POST "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions" ^
 -H "Authorization: Bearer %DASHSCOPE_API_KEY%" ^
 -H "Content-Type: application/json" ^
@@ -840,13 +837,7 @@ curl -X POST "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
 
 **Linux/macOS**
 
-在Terminal（终端）中执行如下命令：
-
 ```
-# ======= 重要提示 =======
-# 新加坡和北京地域的API Key不同。获取API Key: https://help.aliyun.com/model-studio/get-api-key
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为: https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
-# === 执行时请删除该注释 ===
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -858,7 +849,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
             "content": "You are a helpful assistant."
         },
         {
-            "role": "user", 
+            "role": "user",
             "content": "你是谁？"
         }
     ]
@@ -899,13 +890,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 
 **Windows**
 
-在CMD（命令提示符）中执行如下命令：
-
 ```
-# ======= 重要提示 =======
-# 新加坡和北京地域的API Key不同。获取API Key: https://help.aliyun.com/model-studio/get-api-key
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/text-generation/generation
-# === 执行时请删除该注释 ===
 curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation" ^
 -H "Authorization: Bearer %DASHSCOPE_API_KEY%" ^
 -H "Content-Type: application/json" ^
@@ -931,20 +916,14 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generatio
 
 **Linux/macOS**
 
-在Terminal（终端）中执行如下命令：
-
 ```
-# ======= 重要提示 =======
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/model-studio/get-api-key
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/text-generation/generation
-# === 执行时请删除该注释 ===
 curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
     "model": "qwen-plus",
     "input":{
-        "messages":[      
+        "messages":[
             {
                 "role": "system",
                 "content": "You are a helpful assistant."
@@ -1036,14 +1015,13 @@ func main() {
 		log.Fatal(err)
 	}
 	// 创建 POST 请求
-	// 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
+	// 以下为华北2（北京）地域的URL，各地域的URL不同。
 	req, err := http.NewRequest("POST", "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions", bytes.NewBuffer(jsonData))
 	if err != nil {
 		log.Fatal(err)
 	}
 	// 设置请求头
 	// 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey := "sk-xxx"
-	// 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/model-studio/get-api-key
 	apiKey := os.Getenv("DASHSCOPE_API_KEY")
 	req.Header.Set("Authorization", "Bearer "+apiKey)
 	req.Header.Set("Content-Type", "application/json")
@@ -1068,10 +1046,9 @@ PHP
 ```
 <?php
 // 设置请求的URL
-// 以下是北京地域url，如果使用新加坡地域的模型，需要将url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
+// 以下为华北2（北京）地域的URL，各地域的URL不同。
 $url = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
 // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：$apiKey = "sk-xxx";
-// 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/model-studio/get-api-key
 $apiKey = getenv('DASHSCOPE_API_KEY');
 // 设置请求头
 $headers = [
@@ -1127,7 +1104,6 @@ class Program
     static async Task Main(string[] args)
     {
         // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：string? apiKey = "sk-xxx";
-        // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/model-studio/get-api-key
         string? apiKey = Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY");
 
         if (string.IsNullOrEmpty(apiKey))
@@ -1135,7 +1111,7 @@ class Program
             Console.WriteLine("API Key 未设置。请确保环境变量 'DASHSCOPE_API_KEY' 已设置。");
             return;
         }
-        // 以下是北京地域url，如果使用新加坡地域的模型，需要将url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
         string url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions";
         // 模型列表：https://help.aliyun.com/model-studio/getting-started/models
         string jsonContent = @"{
@@ -1186,18 +1162,18 @@ class Program
 
 ## **API参考**
 
--   关于千问API的输入输出参数，请参见[千问](https://help.aliyun.com/zh/model-studio/qwen-api-reference/)。
+-   关于千问API的输入输出参数，请参见[文本生成](https://help.aliyun.com/zh/model-studio/qwen-api-reference/)。
     
 -   关于其他模型，请参见[选择模型](https://help.aliyun.com/zh/model-studio/models)。
     
 
 ## **常见问题**
 
-### [**免费额度**](https://bailian.console.aliyun.com/#/model-market/detail/qwen-max-latest)**用完后如何购买 Token？**
+### **免费额度用完后如何购买 Token？**
 
 A：您可以访问[费用与成本](https://usercenter2.aliyun.com/home)中心，确保您的账户没有欠费即可调用千问模型。
 
-> 调用千问模型会自动扣费，出账周期为分钟级（即一条账单代表一分钟内的费用）。消费明细请前往**[账单详情](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail-by-instance)**进行查看。
+> 调用千问模型会自动扣费，出账周期为分钟级（即一条账单代表一分钟内的费用）。消费明细请前往[**账单详情**](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail-by-instance)进行查看。
 
 ### **调用大模型API后报错**`**Model.AccessDenied**`**，如何处理？**
 

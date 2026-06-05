@@ -4,6 +4,10 @@
 
 > 模型的使用方法请参见 [非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide) 。
 
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
 ## **请求体**
 
 ## 非流式输出
@@ -14,27 +18,27 @@
 
 ```
 # 请安装 DashScope SDK 的最新版本
-    import os
-    import dashscope
+import os
+import dashscope
 
-    # 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
-    dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
+dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
-    text = "那我来给大家推荐一款T恤，这款呢真的是超级好看，这个颜色呢很显气质，而且呢也是搭配的绝佳单品，大家可以闭眼入，真的是非常好看，对身材的包容性也很好，不管啥身材的宝宝呢，穿上去都是很好看的。推荐宝宝们下单哦。"
-    # SpeechSynthesizer接口使用方法：dashscope.audio.qwen_tts.SpeechSynthesizer.call(...)
-    response = dashscope.MultiModalConversation.call(
-        # 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash
-        model="qwen3-tts-flash",
-        # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
-        api_key=os.getenv("DASHSCOPE_API_KEY"),
-        text=text,
-        voice="Cherry"
-        # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash
-        # instructions='语速较快，带有明显的上扬语调，适合介绍时尚产品。',
-        # optimize_instructions=True
-    )
-    print(response)
+text = "那我来给大家推荐一款T恤，这款呢真的是超级好看，这个颜色呢很显气质，而且呢也是搭配的绝佳单品，大家可以闭眼入，真的是非常好看，对身材的包容性也很好，不管啥身材的宝宝呢，穿上去都是很好看的。推荐宝宝们下单哦。"
+# SpeechSynthesizer接口使用方法：dashscope.audio.qwen_tts.SpeechSynthesizer.call(...)
+response = dashscope.MultiModalConversation.call(
+    # 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash
+    model="qwen3-tts-flash",
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    text=text,
+    voice="Cherry"
+    # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash
+    # instructions='语速较快，带有明显的上扬语调，适合介绍时尚产品。',
+    # optimize_instructions=True
+)
+print(response)
 ```
 
 ## Java
@@ -72,7 +76,7 @@ public class Main {
         System.out.println(JsonUtils.toJson(result));
     }
     public static void main(String[] args) {
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
         Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
         try {
             call();
@@ -88,7 +92,7 @@ public class Main {
 
 ```
 # ======= 重要提示 =======
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
 # 新加坡地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 若没有配置环境变量，请用阿里云百炼API Key将$DASHSCOPE_API_KEY替换为：sk-xxx。
 # === 执行时请删除该注释 ===
@@ -117,7 +121,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
     import os
     import dashscope
 
-    # 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+    # 以下为华北2（北京）地域的URL，各地域的URL不同。
     dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
     text = "那我来给大家推荐一款T恤，这款呢真的是超级好看，这个颜色呢很显气质，而且呢也是搭配的绝佳单品，大家可以闭眼入，真的是非常好看，对身材的包容性也很好，不管啥身材的宝宝呢，穿上去都是很好看的。推荐宝宝们下单哦。"
@@ -176,7 +180,7 @@ public class Main {
         });
     }
     public static void main(String[] args) {
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
         Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
         try {
             streamCall();
@@ -192,7 +196,7 @@ public class Main {
 
 ```
 # ======= 重要提示 =======
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
 # 新加坡地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 若没有配置环境变量，请用阿里云百炼API Key将$DASHSCOPE_API_KEY替换为：sk-xxx。
 # === 执行时请删除该注释 ===
@@ -357,7 +361,11 @@ HTTP状态码。遵循 [RFC 9110](https://www.rfc-editor.org/rfc/rfc9110.html#n
 • `400`：客户端请求参数错误  
 • `401`：未授权访问  
 • `404`：资源未找到  
-• `500`：服务器内部错误。
+• `500`：服务器内部错误。  
+  
+  
+  
+  
 
 **request\_id** `_string_`
 

@@ -2,7 +2,7 @@
 
 本文介绍语音合成Sambert Python SDK的参数和接口细节。
 
-**用户指南：**关于模型介绍和选型建议请参见[实时语音合成-CosyVoice/Sambert](https://help.aliyun.com/zh/model-studio/text-to-speech)。
+**用户指南：**关于模型介绍和选型建议请参见[实时语音合成-CosyVoice /Sambert](https://help.aliyun.com/zh/model-studio/text-to-speech)。
 
 **在线体验：**暂不支持。
 
@@ -26,7 +26,7 @@
 
 提交单个语音合成任务，无需调用回调接口，进行语音合成（无流式输出中间结果），最终一次性获取完整结果。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4084970771/CAEQURiBgIDHpsn4phkiIDQ0ZGE2OTk3NmY5NTRhNDVhZDQwNWE3ZGZiMzk4Yjk54709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3013540871/CAEQURiBgIDHpsn4phkiIDQ0ZGE2OTk3NmY5NTRhNDVhZDQwNWE3ZGZiMzk4Yjk54709861_20241015153444.149.svg)
 
 直接调用[SpeechSynthesizer类](#adcb5e9bddbyq)的`call`方法进行语音合成。`call`方法可对[请求参数](#fdafc9b5535f3)进行设置，注意此时不要设置`callback`参数。
 
@@ -60,7 +60,7 @@ else:
 
 提交单个语音合成任务，通过回调的方式流式输出中间结果，合成结果通过`ResultCallback`中的回调方法流式获取。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5084970771/CAEQVRiBgMDd6_yhrBkiIDUyZGFlNTkwOGRlYTQwZjQ4ODI4ZGY2ZTQxYmNiMTVm4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3013540871/CAEQVRiBgMDd6_yhrBkiIDUyZGFlNTkwOGRlYTQwZjQ4ODI4ZGY2ZTQxYmNiMTVm4709861_20241015153444.149.svg)
 
 1.  实例化[回调接口（ResultCallback）](#3639e1cb40mxi)。
     
@@ -523,7 +523,7 @@ str
 
 ## **错误码**
 
-在使用API过程中，如果调用失败并返回错误信息，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+在使用API过程中，如果调用失败并返回错误信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ## **更多示例**
 

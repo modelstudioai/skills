@@ -25,15 +25,9 @@
     
 2.  单击**新增业务空间**，自定义业务空间名称，选择**空间类型**为**安全存储空间**，单击**确定**进入**终端节点配置**页面。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0002853471/p935707.png)
-    
     此时，安全存储空间状态为“不可用”。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6549440471/p914619.png)
-    
 3.  单击**立即添加**创建反向终端节点。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6549440471/p914616.png)
     
 
 ## 步骤2：创建反向终端节点（以公共云为例）
@@ -48,11 +42,7 @@
     
 5.  如果首次使用反向终端节点服务，需要单击**开通私网连接服务**，并在弹窗中单击**开通私网连接服务**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0027950671/p1015999.png)
-    
 6.  单击**创建终端节点**，并配置以下各项参数，其他参数保持默认即可。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6549440471/p914631.png)
     
     **参数名称**
     
@@ -79,7 +69,7 @@
     -   其他场景：单击**选择可用服务**，选择该账号下可用的终端节点服务。
         
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1161260471/p920518.png)
+    选中描述为**百炼公共云生产环境-北京站点-安全存储空间专网通道接入点**的终端节点服务，其服务资源类型为**VPC NAT网关**，服务类型为**反向**，IP版本为**IPv4**。
     
     **专有网络**
     
@@ -102,11 +92,7 @@
     
 3.  选择已创建的终端节点，点击**连接**，开始建立私网连接。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6549440471/p920054.png)
-    
 4.  建立连接需要等待一定时间。当**状态**显示**已连接**时，表示成功建立私网连接。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6549440471/p920055.png)
     
 
 ## 下一步

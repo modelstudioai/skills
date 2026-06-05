@@ -2,7 +2,7 @@
 
 本文介绍 Qwen-TTS-Realtime API 的服务端事件。
 
-> 相关文档：[实时语音合成-千问](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)。
+> 相关文档：[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)。
 
 ## **error**
 

@@ -2,7 +2,7 @@
 
 本文介绍Fun-ASR录音文件识别HTTP API的参数和接口细节。
 
-**用户指南：**关于模型介绍和选型建议请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model/)。
+**用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)
 
 ## **DashScope异步调用**
 
@@ -25,21 +25,23 @@
 
 ### **服务端点**
 
-## 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+## 华北2（北京）
 
 提交任务接口：`POST https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription`
 
 查询任务接口：`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
 
-## 国际
+## 新加坡
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+提交任务接口：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/asr/transcription`
 
-提交任务接口：`POST https://dashscope-intl.aliyuncs.com/api/v1/services/audio/asr/transcription`
+查询任务接口：`GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-查询任务接口：`GET https://dashscope-intl.aliyuncs.com/api/v1/tasks/{task_id}`
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 ### **请求头**
 
@@ -81,7 +83,7 @@ string
 
 #### **请求体**
 
-以下为北京地域URL，若使用新加坡地域的模型，需将URL替换为：`https://dashscope-intl.aliyuncs.com/api/v1/services/audio/asr/transcription`。
+以下为华北2（北京）地域的URL，各地域的URL不同。
 
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription' \
@@ -92,8 +94,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transc
     "model": "fun-asr",
     "input": {
         "file_urls": [
-            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
-            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav"
+            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav"
         ]
     },
     "parameters": {
@@ -127,7 +128,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transc
 
 **file\_urls** `_array[string]_` **（必选）**
 
-音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求最多支持100个URL。
+音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。
 
 若录音文件存储在阿里云OSS，使用RESTful API方式支持使用以`oss://`为前缀的临时 URL。
 
@@ -166,75 +167,11 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transc
 
 **special\_word\_filter** `_string_` （可选）
 
-指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。
-
-若未传入该参数，系统将启用系统内置的敏感词过滤逻辑，识别结果中与[阿里云百炼敏感词表](https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/%E7%99%BE%E7%82%BC%E6%95%8F%E6%84%9F%E8%AF%8D%E5%88%97%E8%A1%A8_20230716.words.txt)匹配的词语将被替换为等长的`*`。
-
-若传入该参数，则可实现以下敏感词处理策略：
-
--   替换为 `*`：将匹配的敏感词替换为等长的 `*`；
-    
--   直接过滤：将匹配的敏感词从识别结果中完全移除。
-    
-
-该参数的值应为一个 JSON 字符串，其结构如下所示：
-
-```
-{
-  "filter_with_signed": {
-    "word_list": ["测试"]
-  },
-  "filter_with_empty": {
-    "word_list": ["开始", "发生"]
-  },
-  "system_reserved_filter": true
-}
-```
-
-JSON字段说明：
-
--   `filter_with_signed`
-    
-    -   类型：对象。
-        
-    -   是否必填：否。
-        
-    -   描述：配置需替换为`*`的敏感词列表。识别结果中匹配的词语将被等长的 `*` 替代。
-        
-    -   示例：以上述JSON为例，“帮我测试一下这段代码”的语音识别结果将会是“帮我\*\*一下这段代码”。
-        
-    -   内部字段：
-        
-        -   `word_list`: 字符串数组，列出需被替换的敏感词。
-            
--   `filter_with_empty`
-    
-    -   类型：对象。
-        
-    -   是否必填：否。
-        
-    -   描述：配置需从识别结果中移除（过滤）的敏感词列表。识别结果中匹配的词语将被完全删除。
-        
-    -   示例：以上述JSON为例，“比赛这就要开始了吗？”的语音识别结果将会是“比赛这就要了吗”。
-        
-    -   内部字段：
-        
-        -   `word_list`: 字符串数组，列出需被完全移除（过滤）的敏感词。
-            
--   `system_reserved_filter`
-    
-    -   类型：布尔值。
-        
-    -   是否必填：否。
-        
-    -   默认值：true。
-        
-    -   描述：是否启用系统预置的敏感词规则。设为`true`时，将同时启用系统内置的敏感词过滤逻辑，识别结果中与[阿里云百炼敏感词表](https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/%E7%99%BE%E7%82%BC%E6%95%8F%E6%84%9F%E8%AF%8D%E5%88%97%E8%A1%A8_20230716.words.txt)匹配的词语将被替换为等长的`*`。
-        
+指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03-sensitive-h3)。
 
 **diarization\_enabled** `_boolean_` （可选）
 
-自动说话人分离，默认关闭。
+是否启用说话人分离，默认关闭。
 
 仅适用于单声道音频，多声道音频不支持说话人分离。
 
@@ -264,7 +201,7 @@ JSON字段说明：
 
 系统仅读取数组中的首个值。多余值将被忽略。
 
-不同模型支持的语言代码如下：
+点击查看支持的语言代码
 
 -   fun-asr、fun-asr-2025-11-07、fun-asr-mtl、fun-asr-mtl-2025-08-25：
     
@@ -371,7 +308,7 @@ JSON字段说明：
 
 #### **请求体**
 
-以下为北京地域URL，若使用新加坡地域的模型，需将URL替换为：`https://dashscope-intl.aliyuncs.com/api/v1/tasks/{task_id}`。
+以下为华北2（北京）地域的URL，各地域的URL不同。
 
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}' \
@@ -401,19 +338,14 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}' \
     "end_time": "2024-09-12 15:11:40.903",
     "results": [
       {
-        "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav",
-        "transcription_url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/pre/filetrans-16k/20240912/15%3A11/3bdf7689-b598-409d-806a-121cff5e4a31-1.json?Expires=1726211500&OSSAccessKeyId=yourOSSAccessKeyId&Signature=Fj%2BaF%2FH0Kayj3w3My2ECBeP****%3D",
-        "subtask_status": "SUCCEEDED"
-      },
-      {
         "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
         "transcription_url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/pre/filetrans-16k/20240912/15%3A11/409a4b92-445b-4dd8-8c1d-f110954d82d8-1.json?Expires=1726211500&OSSAccessKeyId=yourOSSAccessKeyId&Signature=v5Owy5qoAfT7mzGmQgH0g8C****%3D",
         "subtask_status": "SUCCEEDED"
       }
     ],
     "task_metrics": {
-      "TOTAL": 2,
-      "SUCCEEDED": 2,
+      "TOTAL": 1,
+      "SUCCEEDED": 1,
       "FAILED": 0
     }
   },
@@ -434,11 +366,6 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}' \
     "end_time": "2024-12-16 16:31:02.375",
     "results": [
         {
-            "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/long_audio_demo_cn.mp3",
-            "transcription_url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20241216/xxxx",
-            "subtask_status": "SUCCEEDED"
-        },
-        {
             "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/rich_text_exaple_1.wav",
             "code": "InvalidFile.DownloadFailed",
             "message": "The audio file cannot be downloaded.",
@@ -446,8 +373,8 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}' \
         }
     ],
     "task_metrics": {
-        "TOTAL": 2,
-        "SUCCEEDED": 1,
+        "TOTAL": 1,
+        "SUCCEEDED": 0,
         "FAILED": 1
     }
 }
@@ -917,6 +844,10 @@ event:result
 :HTTP_STATUS/200
 data:{"output":{"sentence":{"sentence_id":1,"sentence_end":true,"end_time":1680,"words":[{"end_time":520,"punctuation":"","begin_time":160,"fixed":true,"text":"欢迎"},{"end_time":880,"punctuation":"","begin_time":520,"fixed":true,"text":"使用"},{"end_time":1280,"punctuation":"","begin_time":880,"fixed":true,"text":"阿里"},{"end_time":1680,"punctuation":"。","begin_time":1280,"fixed":true,"text":"云"}],"begin_time":160,"text":"欢迎使用阿里云。","channel_id":0},"text":"欢迎使用阿里云。"},"usage":{"duration":2},"request_id":"372d19b3-993f-9288-adf0-a99f7606bd30"}
 ```
+
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 **request\_id** `_string_`
 

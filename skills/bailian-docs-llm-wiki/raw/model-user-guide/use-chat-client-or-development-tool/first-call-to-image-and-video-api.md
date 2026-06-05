@@ -22,7 +22,7 @@ Postman 和 cURL仅适用于快速测试与功能验证。对于生产环境�
 
 **HTTP调用示例（文生图）**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6446508771/CAEQZRiBgICJ0seH1xkiIDgzYWE2MTBkZjkzODRkNDA5NzczNTE0NjBiMGE1Y2Nm5274221_20250627113930.173.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9815260871/CAEQZRiBgICJ0seH1xkiIDgzYWE2MTBkZjkzODRkNDA5NzczNTE0NjBiMGE1Y2Nm5274221_20250627113930.173.svg)
 
 ## **方式一：使用Postman发送请求（推荐）**
 
@@ -91,11 +91,11 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
     
 2.  在请求方法下拉菜单中选择**POST**，并根据您的模型所在地域填入对应的 URL：
     
-    -   **北京地域**：`https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
+    -   华北2（北京）：`https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
         
-    -   **新加坡地域**：`https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
+    -   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`，请将`WorkspaceId`替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)
         
-    -   **弗吉尼亚地域**：`https://dashscope-us.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
+    -   美国（弗吉尼亚）：`https://dashscope-us.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
         
     
     > 各模式支持的模型请参见百炼控制台，当前地域与服务部署范围为[系统预设绑定关系](https://help.aliyun.com/zh/model-studio/regions/#6e9530261dv6q)，不支持自由组合。
@@ -147,7 +147,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
         }
         ```
         
-    -   （可选）点击页面右侧的 **`Beautify`**，可以格式化JSON格式，使其更易阅读。
+    -   （可选）点击页面右侧的 `**Beautify**`，可以格式化JSON格式，使其更易阅读。
         
     
     ![3-zh](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8873184671/p1031786.jpg)
@@ -161,11 +161,11 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
 
 获取到 task\_id 后，需要通过查询接口来获取最终结果。
 
--   **北京地域**：`https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+-   华北2（北京）：`https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
     
--   **新加坡地域**：`https://dashscope-intl.aliyuncs.com/api/v1/tasks/{task_id}`
+-   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`，请将`WorkspaceId`替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)
     
--   **弗吉尼亚地域**：`https://dashscope-us.aliyuncs.com/api/v1/tasks/{task_id}`
+-   美国（弗吉尼亚）：`https://dashscope-us.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
     
 
 ```

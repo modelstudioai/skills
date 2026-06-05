@@ -8,26 +8,28 @@
 
 SDK默认使用**北京地域**的服务端点。如需切换到其他地域，需在初始化前修改 `dashscope.base_websocket_api_url`。
 
-### 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+### 华北2（北京）
 
 `wss://dashscope.aliyuncs.com/api-ws/v1/inference`
 
-### 国际
+### 新加坡
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
 
-`wss://dashscope-intl.aliyuncs.com/api-ws/v1/inference`
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **切换到新加坡地域**：
 
 ```
 import dashscope
 
-# 在代码开头设置
-dashscope.base_websocket_api_url = 'wss://dashscope-intl.aliyuncs.com/api-ws/v1/inference'
+# 调用时请将WorkspaceId替换为真实的业务空间ID
+dashscope.base_websocket_api_url = 'wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference'
 ```
+
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 ## **SpeechSynthesizer**
 
@@ -174,7 +176,7 @@ str
 
 语音合成所使用的音色。
 
--   **系统音色**：参见[音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
+-   **系统音色**：参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
     
 -   **复刻音色**：通过声音复刻功能定制
     
@@ -267,7 +269,7 @@ bool
 
 默认值：false。
 
-仅适用于cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。
+仅适用于cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。
 
 **说明**
 
@@ -678,7 +680,7 @@ SDK提供了语音合成的关键接口，支持以下几种调用方式：
 
 ### **非流式调用**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8043679771/CAEQURiBgMDRr9T4phkiIGNmYzBiZjFkZjQ4MDQzZGU4NDIyZDU2NWJjYjkyZTQ04709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0914740871/CAEQURiBgMDRr9T4phkiIGNmYzBiZjFkZjQ4MDQzZGU4NDIyZDU2NWJjYjkyZTQ04709861_20241015153444.149.svg)
 
 单次调用发送的文本长度不得超过20000字符，超出限制将返回错误。
 
@@ -697,7 +699,7 @@ import os
 # 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
 dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
 
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：wss://dashscope-intl.aliyuncs.com/api-ws/v1/inference
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
 dashscope.base_websocket_api_url='wss://dashscope.aliyuncs.com/api-ws/v1/inference'
 
 # 模型
@@ -721,7 +723,7 @@ with open('output.mp3', 'wb') as f:
 
 ### **单向流式调用**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8043679771/CAEQVRiBgIDv9fShrBkiIDhmNTk5YmQ1ZDgwNzRjZjRiN2VlMTU5YzI1ZGMwMTlm4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0914740871/CAEQVRiBgIDv9fShrBkiIDhmNTk5YmQ1ZDgwNzRjZjRiN2VlMTU5YzI1ZGMwMTlm4709861_20241015153444.149.svg)
 
 单次调用发送的文本长度不得超过20000字符，超出限制将返回错误。
 
@@ -748,7 +750,7 @@ def get_timestamp():
 # 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
 dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
 
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：wss://dashscope-intl.aliyuncs.com/api-ws/v1/inference
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
 dashscope.base_websocket_api_url='wss://dashscope.aliyuncs.com/api-ws/v1/inference'
 
 # 模型
@@ -808,7 +810,7 @@ synthesizer.call("今天天气怎么样？")
 
 ### **双向流式调用**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8043679771/CAEQVRiBgMDb7PahrBkiIDVkNjEwOTMxYjEwOTRmOWFhMmI1OTRiY2Q3ZDgzZmE54709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1914740871/CAEQVRiBgMDb7PahrBkiIDVkNjEwOTMxYjEwOTRmOWFhMmI1OTRiY2Q3ZDgzZmE54709861_20241015153444.149.svg)
 
 单次发送文本长度不得超过 20000 字符，且累计发送文本总长度不得超过 20 万字符。
 
@@ -867,7 +869,7 @@ def get_timestamp():
 # 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
 dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
 
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：wss://dashscope-intl.aliyuncs.com/api-ws/v1/inference
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
 dashscope.base_websocket_api_url='wss://dashscope.aliyuncs.com/api-ws/v1/inference'
 
 # 模型

@@ -10,21 +10,23 @@ DashScope SDK目前仅支持Java和Python。使用其他编程语言时，可通
 
 WebSocket URL固定如下：
 
-## 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+## 华北2（北京）
 
 `wss://dashscope.aliyuncs.com/api-ws/v1/inference`
 
-## 国际
+## 新加坡
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
 
-`wss://dashscope-intl.aliyuncs.com/api-ws/v1/inference`
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **重要**
 
 URL 必须使用 `wss://` 协议，且固定不变。Authorization 在请求头中设置（参见[请求头](#b02603aacf7e9)）。
+
+**重要**
+
+新加坡地域的旧版域名 `wss://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 ## **请求头**
 
@@ -76,7 +78,7 @@ Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或�
 
 ## 交互流程
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2865858771/CAEQaxiBgID50pCW3hkiIDVlOWNkODdhOGYyYjQ2ZDFiMzgyYjNmMmUzOGZkNGVh4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7124740871/CAEQaxiBgID50pCW3hkiIDVlOWNkODdhOGYyYjQ2ZDFiMzgyYjNmMmUzOGZkNGVh4709861_20241015153444.149.svg)
 
 客户端事件和服务端事件的详细说明，请参见[客户端事件](https://help.aliyun.com/zh/model-studio/cosyvoice-client-events)和[服务端事件](https://help.aliyun.com/zh/model-studio/cosyvoice-server-events)。
 

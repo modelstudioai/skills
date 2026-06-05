@@ -14,9 +14,9 @@ HTTP 调用配置的`endpoint`：`POST https://dashscope.aliyuncs.com/compatible
 
 ## 新加坡地域
 
-SDK 调用配置的`base_url`为：`https://dashscope-intl.aliyuncs.com/compatible-mode/v1`
+SDK 调用配置的`base_url`为：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
-HTTP 调用配置的`endpoint`：`POST https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions`
+HTTP 调用配置的`endpoint`：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
 ## 美国（弗吉尼亚）地域
 
@@ -48,7 +48,7 @@ try:
         # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
         api_key=os.getenv("DASHSCOPE_API_KEY"),
         # 以下为北京地域的 base_url，若使用弗吉尼亚地域模型，需要将base_url换成https://dashscope-us.aliyuncs.com/compatible-mode/v1
-        # 若使用新加坡地域的模型，需将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+        # 若使用新加坡地域的模型，需将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
         base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
     )
     completion = client.chat.completions.create(
@@ -94,7 +94,7 @@ const client = new OpenAI({
    // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     apiKey: process.env.DASHSCOPE_API_KEY,
    // 以下为北京地域的 base_url，若使用弗吉尼亚地域模型，需要将base_url换成https://dashscope-us.aliyuncs.com/compatible-mode/v1
-   // 若使用新加坡地域的模型，需将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+   // 若使用新加坡地域的模型，需将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
     baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
 });
 
@@ -141,7 +141,7 @@ main();
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下是北京地域base_url，若使用弗吉尼亚地域模型，需要将base_url换成https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions
-# 如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
+# 如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 # === 执行时请删除该注释 ===
 
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
@@ -184,7 +184,7 @@ client = OpenAI(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx" 
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base-url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base-url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
@@ -228,9 +228,9 @@ const PROMPT_TICKET_EXTRACTION = `
 
 const openai = new OpenAI({
   // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: "sk-xxx",
-  // 以下是北京地域base-url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+  // 以下是北京地域base-url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
   apiKey: process.env.DASHSCOPE_API_KEY,
-   // 以下是北京地域base-url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+   // 以下是北京地域base-url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
   baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
 });
 
@@ -279,7 +279,7 @@ main();
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下是北京地域base_url，若使用弗吉尼亚地域模型，需要将base_url换成https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions
-# 如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
+# 如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 # === 执行时请删除该注释 ===
 
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
@@ -893,14 +893,14 @@ SDK 调用无需配置 `base_url`。
 
 ## 新加坡地域
 
-HTTP 调用配置的`endpoint`：`POST https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+HTTP 调用配置的`endpoint`：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的`base_url`：
 
 ## **Python代码**
 
 ```
-dashscope.base_http_api_url = 'https://dashscope-intl.aliyuncs.com/api/v1'
+dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
 ```
 
 ## **Java代码**
@@ -909,14 +909,14 @@ dashscope.base_http_api_url = 'https://dashscope-intl.aliyuncs.com/api/v1'
     
     ```
     import com.alibaba.dashscope.protocol.Protocol;
-    MultiModalConversation conv = new MultiModalConversation(Protocol.HTTP.getValue(), "https://dashscope-intl.aliyuncs.com/api/v1");
+    MultiModalConversation conv = new MultiModalConversation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1");
     ```
     
 -   **方式二：**
     
     ```
     import com.alibaba.dashscope.utils.Constants;
-    Constants.baseHttpApiUrl="https://dashscope-intl.aliyuncs.com/api/v1";
+    Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
     ```
     
 
@@ -2001,7 +2001,7 @@ import os
 import dashscope
 
 # 以下为北京地域base_url，若使用弗吉尼亚地域模型，需要将base_url换成 https://dashscope-us.aliyuncs.com/api/v1
-# 若使用新加坡地域的模型，需将base_url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+# 若使用新加坡地域的模型，需将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1
 dashscope.base_http_api_url = "https://dashscope.aliyuncs.com/api/v1"
 
 PROMPT_TICKET_EXTRACTION = """
@@ -2071,7 +2071,7 @@ import com.alibaba.dashscope.utils.Constants;
 public class Main {
     
     // 以下为北京地域 base_url，若使用弗吉尼亚地域模型，需要将base_url换成 https://dashscope-us.aliyuncs.com/api/v1
-    // 若使用新加坡地域的模型，需将base_url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+    // 若使用新加坡地域的模型，需将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1
     static {Constants.baseHttpApiUrl="https://dashscope.aliyuncs.com/api/v1";}
     
     public static void simpleMultiModalConversationCall()
@@ -2128,7 +2128,7 @@ public class Main {
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下为北京地域base_url，若使用弗吉尼亚地域模型，需要将base_url换成：https://dashscope-us.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
-# 若使用新加坡地域的模型，需要将base_url换成：https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
+# 若使用新加坡地域的模型，需要将base_url换成：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
 # === 执行时请删除该注释 ===
 
 curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \

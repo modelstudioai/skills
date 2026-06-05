@@ -1,23 +1,27 @@
 # 万相2.7-参考生视频API参考
 
-万相-参考生视频模型支持**多模态输入**，可将人或物体作为主角，生成单角色表演或多角色互动视频。
+万相-参考生视频模型支持**多模态输入**（图片、视频、音频），生成保持角色形象和音色一致性的视频，适用于单角色表演或多角色互动场景。
 
 **相关文档**：[使用指南](https://help.aliyun.com/zh/model-studio/video-to-video-guide)
 
 ## 适用范围
 
-为确保调用成功，请务必保证模型、Endpoint URL 和 API Key 均属于**同一地域**。跨地域调用将会失败。
+为确保调用成功，请务必保证模型、Endpoint URL和API Key 均属于**同一地域**。跨地域调用将会失败。
 
--   [**选择模型**](https://help.aliyun.com/zh/model-studio/video-to-video-guide#06f39eafa2dwt)：确认模型所属的地域。
+-   [选择模型](https://help.aliyun.com/zh/model-studio/video-to-video-guide#06f39eafa2dwt)：确认模型所属的地域。
     
 -   **选择 URL**：选择对应的地域 Endpoint URL，支持HTTP URL。
     
--   **配置 API Key**：选择地域并[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+-   **配置API Key**：选择地域并[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
     
 
 **说明**
 
 本文的示例代码适用于**北京地域**。
+
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 ## HTTP调用
 
@@ -35,7 +39,9 @@
 
 ## **新加坡**
 
-`POST https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -131,7 +137,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 **Authorization** `_string_`**（必选）**
 
-请求身份认证。接口使用阿里云百炼API-Key进行身份认证。示例值：Bearer sk-xxxx。
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
 
 **X-DashScope-Async** `_string_` **（必选）**
 
@@ -242,7 +248,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 1.  公网URL:
     
-    -   支持 HTTP 或 HTTPS 协议。
+    -   支持HTTP或HTTPS协议。
         
     -   示例值：https://xxx/xxx.png。
         
@@ -282,7 +288,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 1.  公网URL：
     
-    -   支持 HTTP 和 HTTPS 协议。
+    -   支持HTTP和HTTPS协议。
         
     -   示例值：https://xxx/xxx.mp4。
         
@@ -317,7 +323,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 1.  公网URL：
     
-    -   支持 HTTP 和 HTTPS 协议。
+    -   支持HTTP和HTTPS协议。
         
     -   示例值：https://xxx/xxx.mp3。
         
@@ -430,7 +436,7 @@ duration直接影响费用，请在调用前确认[模型价格](https://help.al
 
 ### 异常响应
 
-创建任务失败，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+创建任务失败，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ```
 {
@@ -475,11 +481,11 @@ duration直接影响费用，请在调用前确认[模型价格](https://help.al
 
 **code** `_string_`
 
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)。
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
 
 **message** `_string_`
 
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)。
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
 
 ### **步骤2：根据任务ID查询结果**
 
@@ -489,7 +495,9 @@ duration直接影响费用，请在调用前确认[模型价格](https://help.al
 
 ## **新加坡**
 
-`GET https://dashscope-intl.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -521,7 +529,7 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id} \
 
 **Authorization** `_string_`**（必选）**
 
-请求身份认证。接口使用阿里云百炼API-Key进行身份认证。示例值：Bearer sk-xxxx。
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
 
 ##### **URL路径参数（Path parameters）**
 
@@ -560,7 +568,7 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id} \
 
 ## 任务执行失败
 
-若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ```
 {
@@ -641,11 +649,11 @@ task\_id查询有效期为 24 小时，超时后将无法查询，返回以下�
 
 **code** `_string_`
 
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)。
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
 
 **message** `_string_`
 
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)。
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
 
 **usage** `_object_`
 
@@ -687,19 +695,19 @@ task\_id查询有效期为 24 小时，超时后将无法查询，返回以下�
 
 SDK 的参数命名与[HTTP接口](#7f493e3256ajz)基本一致，参数结构根据语言特性进行封装。
 
-由于参考生视频任务耗时较长（通常为1-5分钟），SDK 在底层封装了 HTTP 异步调用流程，支持同步、异步两种调用方式。
+参考生视频任务通常需要1–5分钟。SDK 封装了HTTP异步调用流程，支持同步和异步两种调用方式。
 
-> 具体耗时受限于排队任务数和服务执行情况，请在获取结果时耐心等待。
+> 实际耗时取决于排队任务数和服务运行状态。
 
 ### **Python SDK调用**
 
 **重要**
 
-请确保 DashScope Python SDK 版本**不低于** `**1.25.16**`，再运行以下代码。
+运行以下代码前，请确保 DashScope Python SDK版本 **≥1.25.16**。
 
-若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)进行更新。
+版本过低可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)进行更新。
 
-根据模型所在地域设置 `**base_http_api_url**`:
+根据模型所在地域设置 **base\_http\_api\_url**:
 
 ## **北京**
 
@@ -707,11 +715,13 @@ SDK 的参数命名与[HTTP接口](#7f493e3256ajz)基本一致，参数结构根
 
 ## **新加坡**
 
-`dashscope.base_http_api_url = 'https://dashscope-intl.aliyuncs.com/api/v1'`
+`dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'`
 
-## 同步调用
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-同步调用会阻塞等待，直到视频生成完成并返回结果。
+## **同步调用**
+
+同步调用会阻塞直到视频生成完成，直接返回结果。
 
 ##### 请求示例
 
@@ -807,9 +817,9 @@ if __name__ == '__main__':
 }
 ```
 
-## 异步调用
+## **异步调用**
 
-异步调用会立即返回任务ID，需要自行轮询或等待任务完成。
+异步调用立即返回任务ID，需自行轮询或等待任务完成。
 
 ##### 请求示例
 
@@ -944,11 +954,11 @@ if __name__ == '__main__':
 
 **重要**
 
-请确保 DashScope Java SDK 版本**不低于** `**2.22.14**`，再运行以下代码。
+运行以下代码前，请确保 DashScope Java SDK版本 **≥2.22.14**。
 
-若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)进行更新。
+版本过低可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)进行更新。
 
-根据模型所在地域设置 `**baseHttpApiUrl**`:
+根据模型所在地域设置 **baseHttpApiUrl**:
 
 ## **北京**
 
@@ -956,11 +966,13 @@ if __name__ == '__main__':
 
 ## **新加坡**
 
-`Constants.baseHttpApiUrl = "https://dashscope-intl.aliyuncs.com/api/v1";`
+`Constants.baseHttpApiUrl = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";`
 
-## 同步调用
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-同步调用会阻塞等待，直到视频生成完成并返回结果。
+## **同步调用**
+
+同步调用会阻塞直到视频生成完成，直接返回结果。
 
 ##### 请求示例
 
@@ -1078,9 +1090,9 @@ public class Ref2Video {
 }
 ```
 
-## 异步调用
+## **异步调用**
 
-异步调用会立即返回任务ID，需要自行轮询或等待任务完成。
+异步调用立即返回任务ID，需自行轮询或等待任务完成。
 
 ##### 请求示例
 
@@ -1221,7 +1233,7 @@ public class Ref2VideoAsync {
 
 ## **错误码**
 
-如果模型调用失败并返回报错信息，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ## 常见问题
 
@@ -1231,13 +1243,13 @@ public class Ref2VideoAsync {
 
 1.  **提示词的参考引用写法不同**
     
-    wan2.7 不再使用 `character1`、`character2` 这类标识，需要改为按类型分别指代：图像用“图n”（如图1、图2），视频用“视频n”（如视频1、视频2）。英文提示词则写为“Image 1”、"Video 1”这类标识。提示词说明详见[prompt参数](#4cae9e90793fq)。
+    wan2.7 不再使用 character1、character2 这类标识，需要改为按类型分别指代：图像用“图n”（如图1、图2），视频用“视频n”（如视频1、视频2）。英文提示词则写为“Image 1”、"Video 1”这类标识。提示词说明详见[prompt参数](#4cae9e90793fq)。
     
 2.  **多镜头控制方式不同**
     
-    -   wan2.7：不支持 `shot_type` 参数，通过在 `prompt` 中描述分镜脚本来实现多镜头效果。
+    -   wan2.7：不支持 shot\_type 参数，通过在 prompt 中描述分镜脚本来实现多镜头效果。
         
-    -   wan2.6：通过设置 `shot_type` 为 `multi` 来生成多镜头视频。
+    -   wan2.6：通过设置 shot\_type 为 multi 来生成多镜头视频。
         
 3.  **请求参数结构不同**
     

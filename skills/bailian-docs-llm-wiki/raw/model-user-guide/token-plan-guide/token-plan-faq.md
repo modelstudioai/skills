@@ -34,7 +34,7 @@ Token Plan 团队版常见问题汇总，涵盖购买、使用、计量和性能
 
 API Key 和 Base URL
 
-管理员为成员生成专属 API Key，Base URL 详见[快速开始](https://help.aliyun.com/zh/model-studio/token-plan-quickstart)
+在[管理后台](https://tokenplan-enterprise.bailian.console.aliyun.com)生成专属 API Key，Base URL 详见[快速开始](https://help.aliyun.com/zh/model-studio/token-plan-quickstart)
 
 在[Coding Plan 页面](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/coding-plan)获取专属 API Key 和专属 Base URL
 
@@ -64,19 +64,13 @@ API Key 和 Base URL
 
 **解决方案**
 
-**InvalidApiKey: No API-key provided.**
+**401 InvalidApiKey: No API-key provided.**
 
-1.  未配置 API Key
-    
-2.  工具使用了`x-api-key` header 而非 `Authorization: Bearer`
-    
+请求头中未携带 API Key（`Authorization: Bearer` 或 `x-api-key` 均未传）。
 
-1.  联系管理员生成 API Key，在工具中完成配置。
-    
-2.  将认证方式改为 `Authorization: Bearer`。具体配置方法请参见[接入客户端/开发工具](https://help.aliyun.com/zh/model-studio/use-chat-client-or-development-tool/)。
-    
+在管理后台生成 API Key，并在工具中完成配置。
 
-**InvalidApiKey: Invalid API-key provided.**
+**401 InvalidApiKey: Invalid API-key provided.**
 
 1.  误用了百炼通用 API Key（sk-xxx 格式）或 Coding Plan 的 API Key
     
@@ -85,26 +79,28 @@ API Key 和 Base URL
 3.  API Key 复制不完整或包含空格
     
 
-1.  确认使用的是管理员生成的专属 API Key，确保完整且无空格。
+1.  确认使用的是 Token Plan 专属 API Key，确保完整且无空格。
     
 2.  确认订阅是否过期。
     
-3.  如仍报错，联系管理员在管理后台重置 API Key，重置后使用新 Key 配置。
+3.  如仍报错，重置 API Key，重置后使用新 Key 配置。
     
 
-**model 'xxx' not found or not supported**
+**404 model 'xxx' not found or not supported**
+
+**400 Model not exist.**
 
 1.  模型名称拼写错误或大小写错误
     
 2.  模型 ID 不在套餐支持列表中
     
 
-1.  确认模型名称区分大小写，与[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview#tp01-supported-models)中列出的模型 ID 一致。
+1.  确认模型名称区分大小写，与套餐支持的模型 ID 一致。
     
-2.  检查所选套餐是否包含该模型，详见[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview#tp01-supported-models)。
+2.  检查所选套餐是否包含该模型。
     
 
-**invalid access token or token expired**
+**401 invalid access token or token expired**
 
 误用了 Coding Plan 或其他套餐的 Base URL
 
@@ -112,7 +108,7 @@ Anthropic 兼容端点：`https://token-plan.cn-beijing.maas.aliyuncs.com/apps/a
 
 OpenAI 兼容端点：`https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
-**Incorrect API key provided**
+**401 Incorrect API key provided**
 
 误用了百炼通用 Base URL（dashscope.aliyuncs.com）
 
@@ -120,11 +116,54 @@ Anthropic 兼容端点：`https://token-plan.cn-beijing.maas.aliyuncs.com/apps/a
 
 OpenAI 兼容端点：`https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
-**Range of input length should be \[1, xxx\]**
+**400 InvalidParameter: Range of input length should be \[1, xxx\]**
 
 输入内容（含对话历史、代码上下文等）超出模型的最大上下文长度
 
 新建会话清空历史，或使用工具自带的上下文压缩命令（如 Claude Code 的 `/compact`、Qwen Code 的 `/clear`）。也可切换上下文窗口更大的模型。
+
+**400 InvalidParameter: url error, please check url！**
+
+Base URL 路径与协议不匹配。例如把 OpenAI 兼容路径配在 Anthropic 端点上，或反之。
+
+按工具实际使用的协议选择对应的端点：
+
+-   Anthropic 兼容协议（Claude Code 等）：以 `/apps/anthropic` 结尾。
+    
+-   OpenAI 兼容协议（Cursor、Qwen Code 等）：以 `/compatible-mode/v1` 结尾。
+    
+
+**400 InvalidParameter: Range of max\_tokens should be \[1, xxxx\]**
+
+请求中的 `max_tokens`（或工具配置中的最大输出长度）超出当前模型支持的最大输出 Token 数。
+
+将 `max_tokens` 调整为不超过报错信息中提示的上限值。
+
+**400 invalid\_parameter\_error: The thinking\_budget parameter must be a positive integer and not greater than xxxxx**
+
+工具配置中的思维链长度（如 `thinking_budget`、`budgetTokens`）超过当前模型支持的上限。各模型上限不同，以报错中的数值为准。
+
+将思维链长度调整为不超过报错提示的上限值，或在不支持思考模式的模型上移除该配置项。
+
+**400 data\_inspection\_failed: Input text data may contain inappropriate content.**
+
+输入或输出命中平台内容安全策略。
+
+修改输入内容后重新提交。如多次触发，调整提示词避免敏感话题。
+
+**429 API-Key Requests rate limit exceeded, please try again later.**
+
+短时间内请求过于密集，触发模型调用限流。
+
+等待一分钟后重试；如频繁触发请降低请求频率，并确认 API Key 未被他人共享使用。
+
+**429 Throttling.AllocationQuota: Allocated quota exceeded, please increase your quota limit.**
+
+**insufficient\_quota: You exceeded your current quota, please check your plan and billing details.**
+
+套餐 Token 已用完，坐席额度和共享用量包均已耗尽。
+
+可加购坐席（加购后需将新坐席分配给成员后再使用）、加购共享用量包，或等待下一计费周期额度自动重置。
 
 **Connection error**
 
@@ -148,7 +187,7 @@ Base URL 域名拼写错误或网络连接异常
 
 ### **团队管理入口在哪里？**
 
-阿里云主账号或 RAM 用户登录[Token Plan 控制台](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/token-plan)后，在**我的订阅**页面的**团队版**卡片点击**设置**修改组织信息，在**订阅明细**区域点击**分配座席**管理成员。通过 SSO 或钉钉加入的成员，通过管理员分发的**管理平台地址**登录管理平台。详见[访问入口](https://help.aliyun.com/zh/model-studio/token-plan-team#tp05-enter)。
+阿里云主账号或 RAM 用户登录[Token Plan 控制台](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/token-plan)后，在左侧菜单使用**我的订阅**、**成员**、**设置**等功能；也可点击**进入管理平台**跳转独立管理平台。通过 SSO 或钉钉加入的成员，通过管理员分发的**管理平台地址**登录管理平台。详见[访问入口](https://help.aliyun.com/zh/model-studio/token-plan-team#tp05-enter)。
 
 ### **成员如何获取 API Key？**
 
@@ -180,7 +219,7 @@ Token Plan 团队版实际消耗取决于每次请求中输入 Token、缓存 To
 
 ### **如何查看用量？**
 
-在[Token Plan 团队版页面](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)可查看套餐和共享用量包的用量详情。管理员还可在管理平台的用量分析页面查看全部成员的消耗明细，详见[团队管理](https://help.aliyun.com/zh/model-studio/token-plan-team)。
+在[Token Plan 团队版页面](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)可查看套餐和共享用量包的用量详情。管理员还可在[管理后台](https://tokenplan-enterprise.bailian.console.aliyun.com)的用量分析页面查看全部成员的消耗明细。
 
 ### **用量如何重置？**
 

@@ -26,11 +26,7 @@
 
 1.  进入阿里云百炼控制台[自动评测](https://bailian.console.aliyun.com/?&tab=app&scm=20140722.S_%E7%99%BE%E7%82%BCprompt._.RL_%E7%99%BE%E7%82%BCprompt-LOC_aillm-OR_chat-V_3-RC_llm#/efm/app_evaluate/tabs)界面，单击**创建评测任务**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8300775671/p1034022.png)
-    
     若尚未开通应用观测，请在弹出窗口单击**立即前往**完成开通。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8300775671/p1034024.png)
     
 
 2.  选择需要评测的智能体应用。可以选择 1 个应用进行评测，或选择**最多 8 个**应用进行横向评测。
@@ -44,15 +40,13 @@
     -   进行多应用横向评测时，所有被选应用必须都已关联了至少一个相同的知识库。
         
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8300775671/p1034025.png)
+    在**选择智能体**页面，左栏显示智能体列表，勾选目标智能体后，右栏自动展示该智能体的可用版本列表，勾选需要评测的版本，然后单击**下一步**进入设置评测集步骤。
     
 3.  选择用于评测的知识库。单应用评测时，可从该应用关联的所有知识库中选择一个或多个用于生成评测集；多应用横向评测时，系统会列出所有被选应用的公共知识库，选择一个或多个用于生成评测集。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8300775671/p1034035.png)
+    在**创建评测任务**页面的第一步**选择评测应用**中，先在**已选智能体**区域选择需要评测的应用，再在下方**选择知识库范围**区域勾选目标知识库，完成后单击**下一步**。
     
 4.  确认选择无误后，单击**下一步**。若所选应用没有开通应用观测，请在弹出窗口单机**一键开通并进入下一步**。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8300775671/p1034038.png)
     
 
 ### **设置评测集**
@@ -70,7 +64,7 @@
     
 2.  选择任务类型。生成评测集时，需选择 2 至 8 种任务类型。系统默认提供“事实型”、“分析型”、“比较型”、“教程型”四种任务类型。此外也支持自定义新类型，单击**增加任务类型**，输入任务类型、描述和示例即可。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8300775671/p1034046.png)
+    页面提供**生成评测集**和**选择已有评测集**两种方式。选择生成评测集后，需填写**评测集名称**并确认**已选知识库**，完成任务类型配置后单击**生成评测集**按钮提交。
     
 3.  选择用于生成评测任务的模型。为确保生成质量，目前仅支持使用`qwen-max`和`qwen-plus`模型。各模型能力请参考[选择模型](https://help.aliyun.com/zh/model-studio/models)，计费规则请参考[模型调用计费](https://help.aliyun.com/zh/model-studio/model-pricing)。
     
@@ -85,18 +79,18 @@
     
 5.  单击**生成评测集**，在弹出页面确认配置信息，然后单击**继续生成**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8300775671/p1034054.png)
+    弹出的确认对话框中显示 **已选知识库**、**任务类型**（事实型、教程型、比较型、分析型）和 **评测模型选择** 三项配置，并提示评测集生成发起后不支持修改且会消耗较多tokens。
     
 6.  等待评测集生成，生成状态可在[评测集](https://bailian.console.aliyun.com/?&tab=app&scm=20140722.S_%E7%99%BE%E7%82%BCprompt._.RL_%E7%99%BE%E7%82%BCprompt-LOC_aillm-OR_chat-V_3-RC_llm#/efm/app_evaluate/tabs?tab=group)管理页面查看。评测集生成的时间开销，主要取决于所选知识库的数量与文档总量。生成完毕后，单击**下一步**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8300775671/p1034070.png)
+    进入**查看评测集**页面，页面显示评测集名称及版本信息，可单击**编辑评测集**进行修改。评测集以表格形式展示，包含**任务类型**、**用户query**、**参考答案**、**粗粒度关键词**和**细粒度关键词**列。确认评测集内容无误后，单击**下一步**进入评测规则设置。
     
 
 ### **配置评测规则**
 
 1.  选择分类采样数。用于设置每个任务类型需要采样的问题数量。系统将从每个类型下随机抽取指定数量的问题用于最终评测。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8300775671/p1034086.png)
+    分类采样数包含**事实型(Factual)**、**教程型(Tutorial)**、**比较型(Comparative)**和**分析型(Analytical)**四个类型，可通过滑块分别设置采样数量。本示例中将**事实型**和**分析型**各设为1，其余设为0，**评测总数**为2。
     
 2.  选择评测模型。为确保结果准确，目前仅支持使用`qwen-max`和`qwen-plus`模型，模型能力和计费规则请参考[选择模型](https://help.aliyun.com/zh/model-studio/models)和[模型调用计费](https://help.aliyun.com/zh/model-studio/model-pricing)。
     
@@ -109,34 +103,28 @@
     -   **预估最大消耗**是为防止意外的超长输出而设置的成本硬性上限，实际消耗通常远低于此值。
         
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8300775671/p1034090.png)
+    完成配置后，单击**试运行**可先验证评测流程，确认无误后单击**发起评测任务**开始正式评测。
     
 4.  在正式评测之前，可以选择试运行以预览评测效果，**试运行仅支持单个应用的评测结果预览**。试运行将随机抽取一道题执行完整评测，此过程会消耗少量 Token。单击**试运行**，在弹窗中选择需要试运行评测的应用，再次单击**试运行**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8300775671/p1034097.png)
-    
     查看试运行结果。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8300775671/p1034100.png)
+    试运行结果弹窗中展示每条评测用例的**用户query**、**参考答案**、**实际运行结果**、**任务类型**（如教程型、分析型、事实型）以及**大模型打分**（星级评分）。
     
 
 ### **执行评测**
 
 1.  确认评测集与评测规则配置无误后，单击**发起评测任务**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8300775671/p1034104.png)
+    在**设置评测规则**页面，通过滑块调整各评测维度的权重值（范围0~1），在**评测模型**下拉框中选择模型（如 `qwen-max`），页面将展示预估平均和最大token消耗。可单击**试运行**预览评测效果。
     
 2.  在弹出窗口确认评测配置和预计消耗后，单击**开始评测**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8300775671/p1034250.png)
-    
     等待评测完成。自动评测的时间开销，主要取决于评测样本的总规模。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8300775671/p1034253.png)
+    评测任务开始后，任务列表中该任务的评测状态显示为**评测中(X%)**，如需中途停止，可在操作列单击**终止**。
     
 3.  评测完成后，可在任务列表中单击**追加评测**，为本次任务加入新的应用进行对比。此操作适用于单应用评测和多应用评测。追加后的应用总数不能超过 8 个。
-    
-    ![20251211114058](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8300775671/p1034255.jpg)
     
 
 ## 评测报告分析
@@ -168,15 +156,15 @@
     
     > 若无 BadCase，BadCase 分析列表将为空。如需查看全部结果，可单击页面右上角**下载评测结果**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3639694571/p994664.png)
+    BadCase分析页面左侧为汇总区域，包含**大模型打分**和**问题分类**两个Tab页签，通过环形图展示不同分数段（2-4分、低于2分）的BadCase数量分布。右侧BadCase列表包含**任务类型**、**用户输入**、**应用输出**、**打分/问题分类**等列。
     
 3.  **调优建议**：系统会根据归因分析结果，提供针对Prompt、检索配置或知识库切片的具体优化建议。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3639694571/p994666.png)
+    例如，针对**切片不完整**问题（通常由于创建知识库时选择的切分策略不合适，导致关键信息被切分到多个切片），系统建议：1. 根据参考答案长度调整最大分段长度和分段重叠长度；2. 选择自定义切分方式，自由调整切分策略（如按页码切分、按标题切分、按正则切分等）；3. 找到被错误切分的切片，手动调整切片信息，使得相关性强的内容在同一个切片内。
     
 4.  **RAG 智能体评价**：展示各问题类型（如事实型、分析型）的单项得分。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3639694571/p994670.png)
+    评分标准分为表现优秀（>=4）、表现良好（2-4）和待提升（<2）三档。事实型（Factual）和比较型（Comparative）表现优秀占比均为100.0%；分析型（Analytical）表现优秀占比80.0%，表现良好占比20.0%；教程型（Tutorial）各项占比均为0.0%。
     
 
 ### 归因分析

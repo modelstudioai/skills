@@ -29,6 +29,10 @@
 
 北京和新加坡地域拥有独立的 **API Key** 与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错。
 
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
 由于视频生成耗时较长，HTTP API采用异步模式，调用流程分两步：
 
 1.  **创建任务获取任务ID**：发送一个请求创建任务，该请求会返回**任务ID（task\_id）**。
@@ -40,7 +44,7 @@
 
 **北京地域**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis`
 
-**新加坡地域**：`POST https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis`
+**新加坡地域**：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis`
 
 **说明**
 
@@ -53,7 +57,7 @@
 
 ## 视频换人
 
-以下为北京地域 base\_url ，若使用新加坡地域的模型，需将base\_url替换为：`https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis`
+以下为华北2（北京）地域的URL，各地域的URL不同。
 
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis' \
@@ -247,7 +251,9 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2video
 
 #### 新加坡
 
-`GET https://dashscope-intl.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -270,7 +276,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2video
 
 请将`0385dc79-5ff8-4d82-bcb6-xxxxxx`替换为真实的task\_id。
 
-> 以下为北京地域base\_url ，若使用新加坡地域的模型，需将base\_url替换为：`https://dashscope-intl.aliyuncs.com/api/v1/tasks/0385dc79-5ff8-4d82-bcb6-xxxxxx`
+> 以下为华北2（北京）地域的URL，各地域的URL不同。
 
 ```
 curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/0385dc79-5ff8-4d82-bcb6-xxxxxx \

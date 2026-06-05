@@ -1590,8 +1590,20 @@ AI生成视频剪辑脚本
 
 生成选题视角。
 
-GetPptInfo
+[FetchParseDocumentLayoutTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-fetchparsedocumentlayouttask)
+
+获取排版任务结果
+
+获取排版任务结果
+
+[GetPptInfo](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getpptinfo)
 
 查询PPT任务信息
 
 查询PPT任务信息
+
+SubmitParseDocumentLayoutTask
+
+提交排版任务
+
+提交版本任务

@@ -22,8 +22,6 @@
 2.  在应用列表中找到目标应用，复制应用的`APP ID`。
     
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0837573671/p944393.png)
-
 ## **获取Workspace ID**
 
 `Workspace ID`是业务空间的唯一标识。在调用**子业务空间**下的应用或德国（法兰克福）地域下的模型时，API 请求中才必须包含`Workspace ID`。

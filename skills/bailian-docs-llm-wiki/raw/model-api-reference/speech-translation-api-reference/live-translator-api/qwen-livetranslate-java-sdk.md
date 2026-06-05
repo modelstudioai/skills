@@ -11,6 +11,10 @@
 3.  了解[实时语音/音视频翻译-千问](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime)。
     
 
+**重要**
+
+新加坡地域的旧版域名 `wss://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
 ## **请求参数**
 
 -   以下参数通过`OmniRealtimeParam`的链式方法设置。
@@ -20,9 +24,9 @@
     ```
     OmniRealtimeParam param = OmniRealtimeParam.builder()
             .model("qwen3.5-livetranslate-flash-realtime")
-            // 以下为中国内地地域url，若使用国际版，需将url替换为：wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime
+            // 以下为华北2（北京）地域的URL，各地域的URL不同。
             .url("wss://dashscope.aliyuncs.com/api-ws/v1/realtime")
-            // 国际版和中国内地的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+            // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
             // 若没有配置环境变量，请用百炼API Key将下行替换为：.apikey("sk-xxx")
             .apikey(System.getenv("DASHSCOPE_API_KEY"))
             .build();
@@ -56,7 +60,7 @@
     
     -   中国内地：`wss://dashscope.aliyuncs.com/api-ws/v1/realtime`
         
-    -   国际：`wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime`
+    -   新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`
         
     
     `apikey`
@@ -511,6 +515,11 @@ public class Main {
                 microphone.close();
                 speaker.stop();
                 speaker.close();
+                try {
+                    conversation.endSession();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
                 conversation.close(1000, "用户停止");
             }));
 

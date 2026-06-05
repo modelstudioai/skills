@@ -49,6 +49,21 @@ callback
 
 用于处理服务端事件的回调对象实例。
 
+url
+
+str
+
+调用地址：
+
+-   新加坡地域：wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime，请将{WorkspaceId}替换为您的业务空间ID。
+    
+-   北京地域：wss://dashscope.aliyuncs.com/api-ws/v1/realtime
+    
+
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
 下述请求参数可以通过update\_session接口配置。
 
 **参数**

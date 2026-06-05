@@ -16,7 +16,7 @@
 3.  推理结果回到接入地域存储，再响应给应用（用户静态数据始终存于所选地域）。
     
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8470279771/CAEQbxiBgICHvaa58hkiIDlkZWFlMzZlYTEyOTQ3MmM5YzQ5ZTkyYTRkNGVkNzU47466796_20260515102254.505.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8233230871/CAEQbxiBgICHvaa58hkiIDlkZWFlMzZlYTEyOTQ3MmM5YzQ5ZTkyYTRkNGVkNzU47466796_20260515102254.505.svg)
 
 ## 选择地域和服务部署范围
 
@@ -83,16 +83,20 @@
 
 ### 新加坡
 
--   Base URL（OpenAI 兼容）：`https://dashscope-intl.aliyuncs.com/compatible-mode/v1`
+-   Base URL（OpenAI 兼容）：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`，调用时请将`WorkspaceId`替换为真实的[业务空间 ID](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=globalset#/efm/business_management)。
     
--   Base URL（Anthropic 兼容）：`https://dashscope-intl.aliyuncs.com/apps/anthropic`
+-   Base URL（Anthropic 兼容）：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic`
     
--   Base URL（DashScope）：`https://dashscope-intl.aliyuncs.com/api/v1`
+-   Base URL（DashScope）：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
     
 -   API Key：[密钥管理（新加坡）](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=doc#/doc/?type=model&url=2840914)
     
 -   模型列表：[可用模型（新加坡）](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=doc#/doc/?type=model&url=2840914)
     
+
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 ### 美国（弗吉尼亚）
 

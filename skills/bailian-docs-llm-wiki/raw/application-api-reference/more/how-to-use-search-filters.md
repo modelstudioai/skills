@@ -35,13 +35,35 @@ Retrieve请求体：
 
 Retrieve请求返回：
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8891260471/p920375.png)
+```
+object {1}
+  nodes [3]
+    0 {3}
+      metadata {13}
+      score: 0.509829580783844
+      text: 姓名:张三 年龄:25 岗位:技术员 性别:男
+    1 {3}
+      metadata {12}
+      score: 0.24424360692501068
+      text: 姓名:李四 年龄:31 岗位:销售 性别:女
+    2 {3}
+      metadata {12}
+      score: 0.21872329711914062
+      text: 姓名:王五 年龄:36 岗位:经理 性别:男
+```
 
 传统语义检索返回了一些与查询Query（张三）不太相关的文本切片。
 
 Retrieve接口返回：
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8891260471/p920378.png)
+```
+▼ object {1}
+  ▼ nodes [1]
+    ▼ 0 {3}
+      ► metadata {13}
+      score : 0.509623825550793
+      text : 姓名:张三 年龄:25 岗位:技术员 性别:男
+```
 
 通过设置检索条件（SearchFilters），过滤语义检索结果中与查询Query（张三）无关的文本切片。
 
@@ -105,7 +127,7 @@ SearchFilters可以包含一个或多个子分组（如下方示例包含了两�
         -   **索引设置：**所有字段均参与检索与模型回复
             
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8891260471/p919990.png)
+        完成配置后，**员工信息知识库**中的**员工表**显示**导入成功**状态，表中包含张三、李四、王五三条示例员工数据。
         
 
 ## **完整代码示例**
@@ -124,36 +146,29 @@ import json
 import os
 import sys
 from typing import List
-
 from alibabacloud_bailian20231229 import models as bailian_20231229_models
 from alibabacloud_bailian20231229.client import Client as bailian20231229Client
 from alibabacloud_tea_openapi import models as open_api_models
 from alibabacloud_tea_util.client import Client as UtilClient
-
 class SearchFiltersFullExample:
     class QueryObject:
         def __init__(self, prefix):
             self.like = prefix
-
         def to_dict(self):
             return {
                 "like": self.like
             }
-
     class Range:
         def __init__(self, gte, lte):
             self.gte = gte
             self.lte = lte
-
         def to_dict(self):
             return {
                 "gte": self.gte,
                 "lte": self.lte
             }
-
     def __init__(self):
         pass
-
     @staticmethod
     def create_client() -> bailian20231229Client:
         """
@@ -172,7 +187,6 @@ class SearchFiltersFullExample:
         # Endpoint 请参考 https://api.aliyun.com/product/bailian
         config.endpoint = f'bailian.cn-beijing.aliyuncs.com'
         return bailian20231229Client(config)
-
     @staticmethod
     def sub_group_query() -> None:
         try:
@@ -195,7 +209,6 @@ class SearchFiltersFullExample:
             # 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
             # 错误 message
             print(error.message)
-
     @staticmethod
     def single_query() -> None:
         try:
@@ -217,7 +230,6 @@ class SearchFiltersFullExample:
             # 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
             # 错误 message
             print(error.message)
-
     @staticmethod
     def multi_query() -> None:
         try:
@@ -239,7 +251,6 @@ class SearchFiltersFullExample:
             # 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
             # 错误 message
             print(error.message)
-
     @staticmethod
     def range_query() -> None:
         try:
@@ -263,7 +274,6 @@ class SearchFiltersFullExample:
             # 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
             # 错误 message
             print(error.message)
-
     @staticmethod
     def wildcard_query() -> None:
         try:
@@ -287,7 +297,6 @@ class SearchFiltersFullExample:
             # 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
             # 错误 message
             print(error.message)
-    
     @staticmethod
     def tag_query() -> None:
         try:
@@ -310,7 +319,6 @@ class SearchFiltersFullExample:
             # 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
             # 错误 message
             print(error.message)
-
     @staticmethod
     def tag_query2() -> None:
         try:
@@ -335,7 +343,6 @@ class SearchFiltersFullExample:
             # 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
             # 错误 message
             print(error.message)
-
     @staticmethod
     def main(args: List[str]) -> None:
         SearchFiltersFullExample.sub_group_query()
@@ -345,7 +352,6 @@ class SearchFiltersFullExample:
         SearchFiltersFullExample.wildcard_query()
         SearchFiltersFullExample.tag_query()
         SearchFiltersFullExample.tag_query2()
-
 if __name__ == '__main__':
     SearchFiltersFullExample.main(sys.argv[1:])
 ```
@@ -360,12 +366,10 @@ import com.aliyun.bailian20231229.models.RetrieveRequest;
 import com.aliyun.bailian20231229.models.RetrieveResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 public class SearchFiltersFullExample {    
     /**
      * <b>description</b> :
@@ -386,7 +390,6 @@ public class SearchFiltersFullExample {
         config.endpoint = "bailian.cn-beijing.aliyuncs.com";
         return new com.aliyun.bailian20231229.Client(config);
     }
-
     public static void subgroupQuery() {
         try {
             com.aliyun.bailian20231229.Client client = createClient();
@@ -415,7 +418,6 @@ public class SearchFiltersFullExample {
             System.out.println(e.getMessage());
         }
     }
-
     public static void singleQuery() {
         try {
             com.aliyun.bailian20231229.Client client = createClient();
@@ -440,7 +442,6 @@ public class SearchFiltersFullExample {
             System.out.println(e.getMessage());
         }
     }
-
     public static void multiQuery() {
         try {
             com.aliyun.bailian20231229.Client client = createClient();
@@ -469,7 +470,6 @@ public class SearchFiltersFullExample {
             System.out.println(e.getMessage());
         }
     }
-    
     public static void rangeQuery() {
         try {
             com.aliyun.bailian20231229.Client client = createClient();
@@ -499,7 +499,6 @@ public class SearchFiltersFullExample {
             System.out.println(e.getMessage());
         }
     }
-
     public static void wildcardQuery() {
         try {
             com.aliyun.bailian20231229.Client client = createClient();
@@ -529,7 +528,6 @@ public class SearchFiltersFullExample {
             System.out.println(e.getMessage());
         }
     }
-    
     public static void tagQuery() {
         try {
             com.aliyun.bailian20231229.Client client = createClient();
@@ -557,7 +555,6 @@ public class SearchFiltersFullExample {
             System.out.println(e.getMessage());
         }
     }
-    
     public static void tagQuery2() {
         try {
             com.aliyun.bailian20231229.Client client = createClient();
@@ -589,7 +586,6 @@ public class SearchFiltersFullExample {
             System.out.println(e.getMessage());
         }
     }
-
     public static void main(String[] args) {
         subgroupQuery();
         singleQuery();
@@ -599,28 +595,22 @@ public class SearchFiltersFullExample {
         tagQuery();
         tagQuery2();
     }
-    
     static class Range {
         double gte;
         double lte;
-
         public Range(double gte, double lte) {
             this.gte = gte;
             this.lte = lte;
         }
     }
-
     static class QueryObject {
         String like;
-
         public QueryObject(String prefix) {
             this.like = prefix;
         }
-
         public String getLike() {
             return like;
         }
-
         public void setLike(String like) {
             this.like = like;
         }
@@ -662,16 +652,13 @@ public class SearchFiltersFullExample {
 import os
 import sys
 from typing import List
-
 from alibabacloud_bailian20231229 import models as bailian_20231229_models
 from alibabacloud_bailian20231229.client import Client as bailian20231229Client
 from alibabacloud_tea_openapi import models as open_api_models
 from alibabacloud_tea_util.client import Client as UtilClient
-
 class SubGroupQueryExample:
     def __init__(self):
         pass
-
     @staticmethod
     def create_client() -> bailian20231229Client:
         """
@@ -690,7 +677,6 @@ class SubGroupQueryExample:
         # Endpoint 请参考 https://api.aliyun.com/product/bailian
         config.endpoint = f'bailian.cn-beijing.aliyuncs.com'
         return bailian20231229Client(config)
-
     @staticmethod
     def main(
             args: List[str],
@@ -715,7 +701,6 @@ class SubGroupQueryExample:
             # 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
             # 错误 message
             print(error.message)
-
 if __name__ == '__main__':
     SubGroupQueryExample.main(sys.argv[1:])
 ```
@@ -766,12 +751,10 @@ if __name__ == '__main__':
 import com.aliyun.bailian20231229.models.RetrieveRequest;
 import com.aliyun.bailian20231229.models.RetrieveResponse;
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 public class SubGroupQueryExample {
     /**
      * <b>description</b> :
@@ -792,7 +775,6 @@ public class SubGroupQueryExample {
         config.endpoint = "bailian.cn-beijing.aliyuncs.com";
         return new com.aliyun.bailian20231229.Client(config);
     }
-
     public static void main(String[] args) {
         try {
             com.aliyun.bailian20231229.Client client = createClient();
@@ -888,16 +870,13 @@ public class SubGroupQueryExample {
 import os
 import sys
 from typing import List
-
 from alibabacloud_bailian20231229 import models as bailian_20231229_models
 from alibabacloud_bailian20231229.client import Client as bailian20231229Client
 from alibabacloud_tea_openapi import models as open_api_models
 from alibabacloud_tea_util.client import Client as UtilClient
-
 class SingleQueryExample:
     def __init__(self):
         pass
-
     @staticmethod
     def create_client() -> bailian20231229Client:
         """
@@ -916,7 +895,6 @@ class SingleQueryExample:
         # Endpoint 请参考 https://api.aliyun.com/product/bailian
         config.endpoint = f'bailian.cn-beijing.aliyuncs.com'
         return bailian20231229Client(config)
-
     @staticmethod
     def main(
             args: List[str],
@@ -940,7 +918,6 @@ class SingleQueryExample:
             # 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
             # 错误 message
             print(error.message)
-
 if __name__ == '__main__':
     SingleQueryExample.main(sys.argv[1:])
 ```
@@ -1007,12 +984,10 @@ if __name__ == '__main__':
 import com.aliyun.bailian20231229.models.RetrieveRequest;
 import com.aliyun.bailian20231229.models.RetrieveResponse;
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 public class SingleQueryExample {
     /**
      * <b>description</b> :
@@ -1033,7 +1008,6 @@ public class SingleQueryExample {
         config.endpoint = "bailian.cn-beijing.aliyuncs.com";
         return new com.aliyun.bailian20231229.Client(config);
     }
-
     public static void main(String[] args) {
         try {
             com.aliyun.bailian20231229.Client client = createClient();
@@ -1142,16 +1116,13 @@ import json
 import os
 import sys
 from typing import List
-
 from alibabacloud_bailian20231229 import models as bailian_20231229_models
 from alibabacloud_bailian20231229.client import Client as bailian20231229Client
 from alibabacloud_tea_openapi import models as open_api_models
 from alibabacloud_tea_util.client import Client as UtilClient
-
 class MultiQueryExample:
     def __init__(self):
         pass
-
     @staticmethod
     def create_client() -> bailian20231229Client:
         """
@@ -1170,7 +1141,6 @@ class MultiQueryExample:
         # Endpoint 请参考 https://api.aliyun.com/product/bailian
         config.endpoint = f'bailian.cn-beijing.aliyuncs.com'
         return bailian20231229Client(config)
-
     @staticmethod
     def main(
             args: List[str],
@@ -1194,7 +1164,6 @@ class MultiQueryExample:
             # 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
             # 错误 message
             print(error.message)
-
 if __name__ == '__main__':
     MultiQueryExample.main(sys.argv[1:])
 ```
@@ -1280,12 +1249,10 @@ import com.aliyun.bailian20231229.models.RetrieveRequest;
 import com.aliyun.bailian20231229.models.RetrieveResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 public class MultiQueryExample {
     /**
      * <b>description</b> :
@@ -1306,7 +1273,6 @@ public class MultiQueryExample {
         config.endpoint = "bailian.cn-beijing.aliyuncs.com";
         return new com.aliyun.bailian20231229.Client(config);
     }
-
     public static void main(String[] args) {
         try {
             com.aliyun.bailian20231229.Client client = createClient();
@@ -1443,27 +1409,22 @@ import json
 import os
 import sys
 from typing import List
-
 from alibabacloud_bailian20231229 import models as bailian_20231229_models
 from alibabacloud_bailian20231229.client import Client as bailian20231229Client
 from alibabacloud_tea_openapi import models as open_api_models
 from alibabacloud_tea_util.client import Client as UtilClient
-
 class RangeQueryExample:
     class Range:
         def __init__(self, gte, lte):
             self.gte = gte
             self.lte = lte
-
         def to_dict(self):
             return {
                 "gte": self.gte,
                 "lte": self.lte
             }
-
     def __init__(self):
         pass
-
     @staticmethod
     def create_client() -> bailian20231229Client:
         """
@@ -1482,7 +1443,6 @@ class RangeQueryExample:
         # Endpoint 请参考 https://api.aliyun.com/product/bailian
         config.endpoint = f'bailian.cn-beijing.aliyuncs.com'
         return bailian20231229Client(config)
-
     @staticmethod
     def main(
             args: List[str],
@@ -1508,7 +1468,6 @@ class RangeQueryExample:
             # 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
             # 错误 message
             print(error.message)
-
 if __name__ == '__main__':
     RangeQueryExample.main(sys.argv[1:])
 ```
@@ -1578,12 +1537,10 @@ if __name__ == '__main__':
 import com.aliyun.bailian20231229.models.RetrieveRequest;
 import com.aliyun.bailian20231229.models.RetrieveResponse;
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 public class RangeQueryExample {
     /**
      * <b>description</b> :
@@ -1604,7 +1561,6 @@ public class RangeQueryExample {
         config.endpoint = "bailian.cn-beijing.aliyuncs.com";
         return new com.aliyun.bailian20231229.Client(config);
     }
-
     public static void main(String[] args) {
         try {
             com.aliyun.bailian20231229.Client client = createClient();
@@ -1634,11 +1590,9 @@ public class RangeQueryExample {
             System.out.println(e.getMessage());
         }
     }
-    
     static class Range {
         double gte;
         double lte;
-
         public Range(double gte, double lte) {
             this.gte = gte;
             this.lte = lte;
@@ -1750,25 +1704,20 @@ import json
 import os
 import sys
 from typing import List
-
 from alibabacloud_bailian20231229 import models as bailian_20231229_models
 from alibabacloud_bailian20231229.client import Client as bailian20231229Client
 from alibabacloud_tea_openapi import models as open_api_models
 from alibabacloud_tea_util.client import Client as UtilClient
-
 class WildcardQueryExample:
     class QueryObject:
         def __init__(self, prefix):
             self.like = prefix
-
         def to_dict(self):
             return {
                 "like": self.like
             }
-
     def __init__(self):
         pass
-
     @staticmethod
     def create_client() -> bailian20231229Client:
         """
@@ -1787,7 +1736,6 @@ class WildcardQueryExample:
         # Endpoint 请参考 https://api.aliyun.com/product/bailian
         config.endpoint = f'bailian.cn-beijing.aliyuncs.com'
         return bailian20231229Client(config)
-
     @staticmethod
     def main(
             args: List[str],
@@ -1813,7 +1761,6 @@ class WildcardQueryExample:
             # 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
             # 错误 message
             print(error.message)
-
 if __name__ == '__main__':
     WildcardQueryExample.main(sys.argv[1:])
 ```
@@ -1883,12 +1830,10 @@ if __name__ == '__main__':
 import com.aliyun.bailian20231229.models.RetrieveRequest;
 import com.aliyun.bailian20231229.models.RetrieveResponse;
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 public class WildcardQueryExample {
     /**
      * <b>description</b> :
@@ -1909,7 +1854,6 @@ public class WildcardQueryExample {
         config.endpoint = "bailian.cn-beijing.aliyuncs.com";
         return new com.aliyun.bailian20231229.Client(config);
     }
-
     public static void main(String[] args_) {
         try {
             com.aliyun.bailian20231229.Client client = createClient();
@@ -1939,18 +1883,14 @@ public class WildcardQueryExample {
             System.out.println(e.getMessage());
         }
     }
-
     static class QueryObject {
         String like;
-
         public QueryObject(String prefix) {
             this.like = prefix;
         }
-
         public String getLike() {
             return like;
         }
-
         public void setLike(String like) {
             this.like = like;
         }
@@ -2020,8 +1960,6 @@ public class WildcardQueryExample {
 
 **示例：**创建一个文档搜索类知识库，其中包含张三、李四和王五三人的信息。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8207307471/p953161.png)
-
 以上文件分别添加了以下标签：
 
 **文件**
@@ -2066,16 +2004,13 @@ import json
 import os
 import sys
 from typing import List
-
 from alibabacloud_bailian20231229 import models as bailian_20231229_models
 from alibabacloud_bailian20231229.client import Client as bailian20231229Client
 from alibabacloud_tea_openapi import models as open_api_models
 from alibabacloud_tea_util.client import Client as UtilClient
-
 class TagQueryExample:
     def __init__(self):
         pass
-
     @staticmethod
     def create_client() -> bailian20231229Client:
         """
@@ -2094,7 +2029,6 @@ class TagQueryExample:
         # Endpoint 请参考 https://api.aliyun.com/product/bailian
         config.endpoint = f'bailian.cn-beijing.aliyuncs.com'
         return bailian20231229Client(config)
-
     @staticmethod
     def main(
             args: List[str],
@@ -2119,7 +2053,6 @@ class TagQueryExample:
             # 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
             # 错误 message
             print(error.message)
-
 if __name__ == '__main__':
     TagQueryExample.main(sys.argv[1:])
 ```
@@ -2217,12 +2150,10 @@ import com.aliyun.bailian20231229.models.RetrieveRequest;
 import com.aliyun.bailian20231229.models.RetrieveResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 public class TagQueryExample {
     /**
      * <b>description</b> :
@@ -2243,7 +2174,6 @@ public class TagQueryExample {
         config.endpoint = "bailian.cn-beijing.aliyuncs.com";
         return new com.aliyun.bailian20231229.Client(config);
     }
-
     public static void main(String[] args) {
         try {
             com.aliyun.bailian20231229.Client client = createClient();
@@ -2383,16 +2313,13 @@ import json
 import os
 import sys
 from typing import List
-
 from alibabacloud_bailian20231229 import models as bailian_20231229_models
 from alibabacloud_bailian20231229.client import Client as bailian20231229Client
 from alibabacloud_tea_openapi import models as open_api_models
 from alibabacloud_tea_util.client import Client as UtilClient
-
 class TagQueryExample2:
     def __init__(self):
         pass
-
     @staticmethod
     def create_client() -> bailian20231229Client:
         """
@@ -2411,7 +2338,6 @@ class TagQueryExample2:
         # Endpoint 请参考 https://api.aliyun.com/product/bailian
         config.endpoint = f'bailian.cn-beijing.aliyuncs.com'
         return bailian20231229Client(config)
-
     @staticmethod
     def main(
             args: List[str],
@@ -2438,7 +2364,6 @@ class TagQueryExample2:
             # 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
             # 错误 message
             print(error.message)
-
 if __name__ == '__main__':
     TagQueryExample2.main(sys.argv[1:])
 ```
@@ -2509,12 +2434,10 @@ import com.aliyun.bailian20231229.models.RetrieveRequest;
 import com.aliyun.bailian20231229.models.RetrieveResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 public class TagQueryExample2 {
     /**
      * <b>description</b> :
@@ -2535,7 +2458,6 @@ public class TagQueryExample2 {
         config.endpoint = "bailian.cn-beijing.aliyuncs.com";
         return new com.aliyun.bailian20231229.Client(config);
     }
-
     public static void main(String[] args) {
         try {
             com.aliyun.bailian20231229.Client client = createClient();

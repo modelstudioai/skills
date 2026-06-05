@@ -13,7 +13,7 @@ BASE\_URL表示模型服务的网络访问点或地址。通过该地址，您�
     ```
     北京：https://dashscope.aliyuncs.com/compatible-mode/v1
     弗吉尼亚：https://dashscope-us.aliyuncs.com/compatible-mode/v1
-    新加坡：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    新加坡：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
     ```
     
 -   当您通过HTTP请求调用时，需要配置的完整访问endpoint如下：
@@ -21,13 +21,13 @@ BASE\_URL表示模型服务的网络访问点或地址。通过该地址，您�
     ```
     北京：POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
     弗吉尼亚：POST https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions
-    新加坡：POST https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
+    新加坡：POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
     ```
     
 
 **重要**
 
-中国香港地域的旧版URL `https://cn-hongkong.dashscope.aliyuncs.com/compatible-mode/v1` 即将下线，请及时迁移到新版路径 `https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1`。
+新加坡地域旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 ### **支持的模型列表**
 
@@ -37,29 +37,27 @@ BASE\_URL表示模型服务的网络访问点或地址。通过该地址，您�
 
 -   **商业版**
     
-    -   **千问Max系列**：qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.6-max-preview、qwen3-max、qwen3-max-preview、qwen3-max-2025-09-23及之后的快照版模型、qwen-max、qwen-max-latest、qwen-max-2024-04-28及之后的快照版模型
+    -   **千问Max系列**：qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.6-max-preview、qwen3-max、qwen3-max-preview、qwen3-max-2025-09-23及之后的快照版模型、qwen-max
         
     -   **千问Plus系列**：qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.5-plus、qwen3.5-plus-2026-02-15、qwen-plus、qwen-plus-latest、qwen-plus-2024-12-20及之后的快照版模型
         
     -   **千问Flash系列**：qwen3.6-flash、qwen3.6-flash-2026-04-16、qwen3.5-flash、qwen3.5-flash-2026-02-23及之后的快照版模型；qwen-flash、qwen-flash-2025-07-28
         
-    -   **千问Turbo系列**：qwen-turbo、qwen-turbo-latest、qwen-turbo-2024-11-01及之后的快照版模型
+    -   **千问Turbo系列**：qwen-turbo
         
-    -   **千问Coder系列**：qwen3-coder-plus、qwen3-coder-plus-2025-07-22及之后的快照模型、qwen3-coder-flash、qwen3-coder-flash-2025-07-28及之后的快照模型、qwen-coder-plus、qwen-coder-plus-latest、qwen-coder-plus-2024-11-06、qwen-coder-turbo、qwen-coder-turbo-latest、qwen-coder-turbo-2024-09-19
+    -   **千问Coder系列**：qwen3-coder-plus、qwen3-coder-plus-2025-07-22及之后的快照模型、qwen3-coder-flash、qwen3-coder-flash-2025-07-28及之后的快照模型、qwen-coder-plus、qwen-coder-turbo
         
     -   **千问Long系列**：qwen-long、qwen-long-latest、qwen-long-2025-01-25
         
-    -   **QwQ系列**：qwq-plus、qwq-plus-latest、qwq-plus-2025-03-05
+    -   **QwQ系列**：qwq-plus
         
-    -   **千问数学模型**：qwen-math-plus、qwen-math-plus-latest、qwen-math-plus-2024-08-16及之后的快照版模型、qwen-math-turbo、qwen-math-turbo-latest、qwen-math-turbo-2024-09-19
+    -   **千问数学模型**：qwen-math-plus、qwen-math-plus-latest、qwen-math-plus-2024-08-16及之后的快照版模型、qwen-math-turbo
         
 -   **开源版**
     
     -   qwen3.6-35b-a3b、qwen3.5-397b-a17b、qwen3.5-122b-a10b、qwen3.5-27b、qwen3.5-35b-a3b
         
-    -   qwen3-next-80b-a3b-thinking、qwen3-next-80b-a3b-instruct、qwen3-235b-a22b-thinking-2507、qwen3-235b-a22b-instruct-2507、qwen3-30b-a3b-thinking-2507、qwen3-30b-a3b-instruct-2507、qwen3-235b-a22b、qwen3-32b、qwen3-30b-a3b、qwen3-14b、qwen3-8b、qwen3-4b、qwen3-1.7b、qwen3-0.6b
-        
-    -   qwq-32b、qwq-32b-preview、qwen2.5-14b-instruct-1m、qwen2.5-7b-instruct-1m、qwen2.5-72b-instruct、qwen2.5-32b-instruct、qwen2.5-14b-instruct、qwen2.5-7b-instruct、qwen2.5-math-72b-instruct、qwen2.5-math-7b-instruct、qwen2.5-coder-32b-instruct、qwen2.5-coder-14b-instruct、qwen2.5-coder-7b-instruct
+    -   qwen3-next-80b-a3b-thinking、qwen3-next-80b-a3b-instruct、qwen3-235b-a22b-thinking-2507、qwen3-235b-a22b-instruct-2507、qwen3-30b-a3b-thinking-2507、qwen3-30b-a3b-instruct-2507、qwen3-235b-a22b、qwen3-32b、qwen3-30b-a3b、qwen3-14b、qwen3-8b
         
     -   codeqwen1.5-7b-chat
         
@@ -77,13 +75,13 @@ BASE\_URL表示模型服务的网络访问点或地址。通过该地址，您�
 
 -   **商业版**
     
-    -   **千问Max系列**：qwen3.7-max、qwen3.7-max-2026-05-20、qwen3-max、qwen3-max-preview、qwen3-max-2025-09-23及之后的快照版模型、qwen-max、qwen-max-latest、qwen-max-2025-01-25
+    -   **千问Max系列**：qwen3.7-max、qwen3.7-max-2026-05-20、qwen3-max、qwen3-max-preview、qwen3-max-2025-09-23及之后的快照版模型、qwen-max
         
     -   **千问Plus系列**：qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.5-plus、qwen3.5-plus-2026-02-15、qwen3.5-flash、qwen3.5-flash-2026-02-23及之后的快照版模型、qwen-plus、qwen-plus-latest、qwen-plus-2025-01-25及之后的快照版模型
         
     -   **千问Flash系列**：qwen3.6-flash、qwen3.6-flash-2026-04-16、qwen3.5-flash、qwen3.5-flash-2026-02-23及之后的快照版模型；qwen-flash、qwen-flash-2025-07-28
         
-    -   **千问Turbo系列**：qwen-turbo、qwen-turbo-latest、qwen-turbo-2024-11-01及之后的快照版模型
+    -   **千问Turbo系列**：qwen-turbo
         
     -   **千问Coder系列**：qwen3-coder-plus、qwen3-coder-plus-2025-07-22及之后的快照模型、qwen3-coder-flash、qwen3-coder-flash-2025-07-28及之后的快照模型
         
@@ -93,9 +91,7 @@ BASE\_URL表示模型服务的网络访问点或地址。通过该地址，您�
     
     -   qwen3.6-35b-a3b、qwen3.5-397b-a17b、qwen3.5-122b-a10b、qwen3.5-27b、qwen3.5-35b-a3b
         
-    -   qwen3-next-80b-a3b-thinking、qwen3-next-80b-a3b-instruct、qwen3-235b-a22b-thinking-2507、qwen3-235b-a22b-instruct-2507、qwen3-30b-a3b-thinking-2507、qwen3-30b-a3b-instruct-2507、qwen3-235b-a22b、qwen3-32b、qwen3-30b-a3b、qwen3-14b、qwen3-8b、qwen3-4b、qwen3-1.7b、qwen3-0.6b
-        
-    -   qwen2.5-14b-instruct-1m、qwen2.5-7b-instruct-1m、qwen2.5-72b-instruct、qwen2.5-32b-instruct、qwen2.5-14b-instruct、qwen2.5-7b-instruct
+    -   qwen3-next-80b-a3b-thinking、qwen3-next-80b-a3b-instruct、qwen3-235b-a22b-thinking-2507、qwen3-235b-a22b-instruct-2507、qwen3-30b-a3b-thinking-2507、qwen3-30b-a3b-instruct-2507、qwen3-235b-a22b、qwen3-32b、qwen3-30b-a3b、qwen3-14b、qwen3-8b
         
 
 ## 全球
@@ -826,7 +822,7 @@ if __name__ == "__main__":
 ```
 北京：POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
 美国（弗吉尼亚）：POST https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions
-新加坡：POST https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
+新加坡：POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 ```
 
 ### **请求示例**

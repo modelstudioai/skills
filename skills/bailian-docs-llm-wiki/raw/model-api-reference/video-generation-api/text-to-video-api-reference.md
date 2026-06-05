@@ -21,6 +21,10 @@
 
 本文的示例代码适用于**北京地域**。
 
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
 ## HTTP调用
 
 **重要**
@@ -37,7 +41,9 @@
 
 ## **新加坡**
 
-`POST https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -65,7 +71,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
     -d '{
-    "model": "wan2.7-t2v-2026-04-25",
+    "model": "wan2.7-t2v",
     "input": {
         "prompt": "一段紧张刺激的侦探追查故事，展现电影级叙事能力。第1个镜头[0-3秒] 全景：雨夜的纽约街头，霓虹灯闪烁，一位身穿黑色风衣的侦探快步行走。 第2个镜头[3-6秒] 中景：侦探进入一栋老旧建筑，雨水打湿了他的外套，门在他身后缓缓关闭。 第3个镜头[6-9秒] 特写：侦探的眼神坚毅专注，远处传来警笛声，他微微皱眉思考。 第4个镜头[9-12秒] 中景：侦探在昏暗走廊中小心前行，手电筒照亮前方。 第5个镜头[12-15秒] 特写：侦探发现关键线索，脸上露出恍然大悟的表情。"
     },
@@ -89,7 +95,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
     -d '{
-    "model": "wan2.7-t2v-2026-04-25",
+    "model": "wan2.7-t2v",
     "input": {
         "prompt": "一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说：”青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。“。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是“可爱”与“霸气”的搞笑和史诗般的融合。",
         "audio_url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250923/hbiayh/%E4%BB%8E%E5%86%9B%E8%A1%8C.mp3"
@@ -113,7 +119,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
     -d '{
-    "model": "wan2.7-t2v-2026-04-25",
+    "model": "wan2.7-t2v",
     "input": {
         "prompt": "一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说：”青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。“。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是“可爱”与“霸气”的搞笑和史诗般的融合。"
     },
@@ -136,7 +142,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
     -d '{
-    "model": "wan2.7-t2v-2026-04-25",
+    "model": "wan2.7-t2v",
     "input": {
         "prompt": "一只小猫在月光下奔跑",
         "negative_prompt": "花朵"
@@ -156,7 +162,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 **Authorization** `_string_`**（必选）**
 
-请求身份认证。接口使用阿里云百炼API-Key进行身份认证。示例值：Bearer sk-xxxx。
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
 
 **X-DashScope-Async** `_string_` **（必选）**
 
@@ -172,7 +178,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 模型名称。可选模型请参见[模型列表](https://help.aliyun.com/zh/model-studio/model-pricing#8e284e51d1nil)。
 
-示例值：wan2.7-t2v-2026-04-25。
+示例值：wan2.7-t2v。
 
 **input** `_object_` **（必选）**
 
@@ -184,7 +190,10 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 文本提示词。用来描述生成视频中期望包含的元素和视觉特点。
 
-支持中英文，长度不超过5000个字符。每个汉字/字母占一个字符，超过部分会自动截断。长度限制因模型版本而异：
+支持中英文，每个汉字/字母占一个字符，超过部分会自动截断。长度限制因模型版本而异：
+
+-   wan2.7-t2v：不超过5000个字符。
+    
 
 示例值：一只小猫在月光下奔跑。
 
@@ -242,11 +251,7 @@ resolution直接影响费用，请在调用前确认[模型价格](https://help.
 
 生成视频的分辨率档位，用于控制视频的清晰度（总像素）。
 
-可选值：
-
--   720P
-    
--   1080P（默认值）
+-   wan2.7-t2v：可选值：720P、1080P。默认值为`1080P`。
     
 
 **ratio** `_string_` （可选）
@@ -324,7 +329,8 @@ duration直接影响费用，按秒计费，请在调用前确认[模型价格](
 
 生成视频的时长，单位为秒。
 
-取值为\[2, 15\]之间的整数。默认值为5。
+-   wan2.7-t2v：取值为\[2, 15\]之间的整数。默认值为5。
+    
 
 **prompt\_extend** `_boolean_` （可选）
 
@@ -370,7 +376,7 @@ duration直接影响费用，按秒计费，请在调用前确认[模型价格](
 
 ### 异常响应
 
-创建任务失败，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+创建任务失败，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ```
 {
@@ -415,11 +421,11 @@ duration直接影响费用，按秒计费，请在调用前确认[模型价格](
 
 **code** `_string_`
 
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)。
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
 
 **message** `_string_`
 
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)。
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
 
 ### **步骤2：根据任务ID查询结果**
 
@@ -429,7 +435,9 @@ duration直接影响费用，按秒计费，请在调用前确认[模型价格](
 
 ## **新加坡**
 
-`GET https://dashscope-intl.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -461,7 +469,7 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id} \
 
 **Authorization** `_string_`**（必选）**
 
-请求身份认证。接口使用阿里云百炼API-Key进行身份认证。示例值：Bearer sk-xxxx。
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
 
 ##### **URL路径参数（Path parameters）**
 
@@ -500,7 +508,7 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id} \
 
 ## 任务执行失败
 
-若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ```
 {
@@ -563,9 +571,13 @@ task\_id查询有效期为 24 小时，超时后将无法查询，返回以下�
     
 -   初次查询状态通常为 PENDING（排队中）或 RUNNING（处理中）。
     
--   当状态变为 SUCCEEDED 时，响应中将包含生成的视频url。
+-   当状态变为 SUCCEEDED 时，响应中将包含生成的视频URL。
     
 -   若状态为 FAILED，请检查错误信息并重试。
+    
+-   若状态为 CANCELED，表示任务已取消，如需继续请重新提交任务。
+    
+-   若状态为 UNKNOWN，表示任务不存在或状态未知，可能在 task\_id 不存在或超过 24 小时有效期后出现。
     
 
 **submit\_time** `_string_`
@@ -592,11 +604,11 @@ task\_id查询有效期为 24 小时，超时后将无法查询，返回以下�
 
 **code** `_string_`
 
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)。
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
 
 **message** `_string_`
 
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)。
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
 
 **usage** `_object_`
 
@@ -658,7 +670,9 @@ SDK 的参数命名与HTTP接口基本一致，参数结构根据语言特性进
 
 ## **新加坡**
 
-`dashscope.base_http_api_url = 'https://dashscope-intl.aliyuncs.com/api/v1'`
+`dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 同步调用
 
@@ -681,7 +695,7 @@ def sample_sync_call_t2v():
     # call sync api, will return the result
     print('please wait...')
     rsp = VideoSynthesis.call(api_key=api_key,
-                              model='wan2.7-t2v-2026-04-25',
+                              model='wan2.7-t2v',
                               prompt='一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说："青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。"。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是"可爱"与"霸气"的搞笑和史诗般的融合。',
                               audio_url='https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250923/hbiayh/%E4%BB%8E%E5%86%9B%E8%A1%8C.mp3',
                               resolution='720P',
@@ -755,7 +769,7 @@ def sample_async_call_t2v():
     # call async api, will return the task information
     # you can get task status with the returned task id.
     rsp = VideoSynthesis.async_call(api_key=api_key,
-                                    model='wan2.7-t2v-2026-04-25',
+                                    model='wan2.7-t2v',
                                     prompt='一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说："青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。"。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是"可爱"与"霸气"的搞笑和史诗般的融合。',
                                     audio_url='https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250923/hbiayh/%E4%BB%8E%E5%86%9B%E8%A1%8C.mp3',
                                     resolution='720P',
@@ -860,7 +874,9 @@ if __name__ == '__main__':
 
 ## **新加坡**
 
-`Constants.baseHttpApiUrl = "https://dashscope-intl.aliyuncs.com/api/v1";`
+`Constants.baseHttpApiUrl = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 同步调用
 
@@ -900,7 +916,7 @@ public class Text2Video {
         VideoSynthesisParam param =
                 VideoSynthesisParam.builder()
                         .apiKey(apiKey)
-                        .model("wan2.7-t2v-2026-04-25")
+                        .model("wan2.7-t2v")
                         .prompt("一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说：”青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。“。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是可爱与霸气的搞笑和史诗般的融合。")
                         .audioUrl("https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250923/hbiayh/%E4%BB%8E%E5%86%9B%E8%A1%8C.mp3")
                         .negativePrompt("")
@@ -995,7 +1011,7 @@ public class Text2Video {
         VideoSynthesisParam param =
                 VideoSynthesisParam.builder()
                         .apiKey(apiKey)
-                        .model("wan2.7-t2v-2026-04-25")
+                        .model("wan2.7-t2v")
                         .prompt("一幅史诗级可爱的场景。一只小巧可爱的卡通小猫将军，身穿细节精致的金色盔甲，头戴一个稍大的头盔，勇敢地站在悬崖上。他骑着一匹虽小但英勇的战马，说：”青海长云暗雪山，孤城遥望玉门关。黄沙百战穿金甲，不破楼兰终不还。“。悬崖下方，一支由老鼠组成的、数量庞大、无穷无尽的军队正带着临时制作的武器向前冲锋。这是一个戏剧性的、大规模的战斗场景，灵感来自中国古代的战争史诗。远处的雪山上空，天空乌云密布。整体氛围是可爱与霸气的搞笑和史诗般的融合。")
                         .audioUrl("https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250923/hbiayh/%E4%BB%8E%E5%86%9B%E8%A1%8C.mp3")
                         .negativePrompt("")
@@ -1090,7 +1106,7 @@ public class Text2Video {
 
 ## **错误码**
 
-如果模型调用失败并返回报错信息，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ## **常见问题**
 

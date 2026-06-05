@@ -776,7 +776,7 @@ HTTP
 
 **Fun-ASR**（`fun-asr`、`fun-asr-mtl` 系列）
 
-公网可访问的文件 URL，单次最多 100 个
+公网可访问的文件 URL，单次 1 个
 
 `aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
 

@@ -1,6 +1,6 @@
-# 视频生成模型微调API参考
+# 视频/图像生成模型微调 API 参考
 
-本文档提供万相 **图生视频模型** 微调的完整 API 参考。
+本文档提供万相**图生视频模型**和**图像生成模型**微调的完整 API 参考。
 
 ## **适用范围**
 
@@ -12,13 +12,17 @@
     
 -   **准备工作**：
     
-    -   已阅读[模型微调指南](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-guide)，了解**支持微调的模型、微调步骤、数据格式以及计费说明**。
+    -   已阅读[视频生成模型调优](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-guide)或[图像生成模型调优](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide)，了解**支持微调的模型、微调步骤、数据格式以及计费说明**。
         
     -   下载数据集样例：
         
         -   图生视频-基于首帧**：**[训练集](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20251107/ujfrui/wan-i2v-training-dataset.zip)、[验证集](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20251113/iumzue/wan-i2v-valid-dataset.zip)。
             
         -   图生视频-基于首尾帧：[训练集](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260119/wapfil/wan-kf2v-training-dataset.zip)、[验证集](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260119/gjlxnm/wan-kf2v-valid-dataset.zip)。
+            
+        -   图像生成-文生图：[wan-image-t2i-training-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260601/iszvtr/wan-image-t2i-training.zip)、[wan-image-t2i-valid-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260601/ulrlhp/wan-image-t2i-valid-dataset.zip)
+            
+        -   图像生成-图生图：[wan-image-i2i-training-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260601/rtexkn/wan-image-i2i-training.zip)、[wan-image-i2i-valid-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260601/ktseto/wan-image-i2i-valid-dataset.zip)
             
 
 ## **上传数据集**
@@ -75,7 +79,7 @@ string
 
 是
 
-微调任务固定为 fine-tune。
+微调任务推荐为 fine-tune。
 
 fine-tune
 
@@ -213,12 +217,22 @@ string
 
 指定微调所用的基准模型。
 
--   图生视频-基于首帧：wan2.5-i2v-preview、wan2.2-i2v-flash
+-   图生视频-基于首帧：
     
--   图生视频-基于首尾帧：wan2.2-kf2v-flash
+    -   wan2.5-i2v-preview
+        
+    -   wan2.2-i2v-flash
+        
+-   图生视频-基于首尾帧：
     
+    -   wan2.2-kf2v-flash
+        
+-   图像生成（文生图/图生图）：
+    
+    -   wan2.7-image-pro
+        
 
-wan2.5-i2v-preview
+wan2.7-i2v
 
 training\_file\_ids
 
@@ -272,7 +286,11 @@ object
 
 #### **超参数（hyper\_parameters）**
 
-初次训练时，推荐使用默认的超参数。若模型效果不佳或训练不收敛，可以尝试调整 n\_epochs或learning\_rate等参数。
+初次训练时，推荐使用默认的超参数。不同模型的超参数有所差异，请根据您使用的模型选择对应的参数配置。
+
+## 视频生成模型
+
+若模型效果不佳或训练不收敛，可以尝试调整 n\_epochs 或 learning\_rate 等参数。
 
 **字段**
 
@@ -282,7 +300,7 @@ object
 
 **描述**
 
-**默认值**
+**推荐值**
 
 batch\_size
 
@@ -294,16 +312,14 @@ int
 
 一次性送入模型进行训练的数据条数。
 
--   wan2.5-i2v-preview：推荐使用默认值，固定为2。
+-   wan2.5-i2v-preview：推荐为2。
     
--   wan2.2-i2v-flash：推荐使用默认值，固定为4。
+-   wan2.2-i2v-flash：推荐为4。
     
--   wan2.2-kf2v-flash：推荐使用默认值，固定为4。
+-   wan2.2-kf2v-flash：推荐为4。
     
 
-wan2.5: 2
-
-wan2.2: 4
+以模型为准
 
 n\_epochs
 
@@ -329,7 +345,7 @@ float
 
 **学习率。**控制模型权重更新的幅度。
 
-过高可能导致模型变差，过低则变化不明显。推荐使用默认值。
+过高可能导致模型变差，过低则变化不明显。
 
 2e-5
 
@@ -355,16 +371,14 @@ int
 
 设置训练集中输入视频分辨率的像素总数（宽×高）限制。系统仅对**超过该值**的视频进行缩放处理，未超限的视频将保持原样。
 
--   wan2.5-i2v-preview：默认 36864。取值范围：16384 (128×128) ～ 36864 (192×192)。
+-   wan2.5-i2v-preview：推荐 36864。取值范围：16384 (128×128) ～ 36864 (192×192)。
     
--   wan2.2-i2v-flash：默认 262144。取值范围：65536 (256×256) ～ 262144 (512×512)。
+-   wan2.2-i2v-flash：推荐 262144。取值范围：65536 (256×256) ～ 262144 (512×512)。
     
--   wan2.2-kf2v-flash：默认 262144。取值范围：65536 (256×256) ～ 262144 (512×512)。
+-   wan2.2-kf2v-flash：推荐 262144。取值范围：65536 (256×256) ～ 262144 (512×512)。
     
 
-wan2.5：36864
-
-wan2.2：262144
+以模型为准
 
 split
 
@@ -408,7 +422,7 @@ int
 
 限制最多保存的模型数量。系统将始终只保存训练生成的最后 N 个 Checkpoint（N 为该参数值）。
 
-20
+10
 
 lora\_rank
 
@@ -416,7 +430,7 @@ int
 
 否
 
-**LoRA 低秩矩阵的维数**。推荐使用默认值。
+**LoRA 低秩矩阵的维数**。
 
 该值决定了微调参数量的大小。数值越大，模型拟合能力越强，但训练速度会变慢。
 
@@ -430,13 +444,160 @@ int
 
 否
 
-**LoRA 权重的缩放系数**。推荐使用默认值。
+**LoRA 权重的缩放系数**。
 
 用于调节微调后的参数对原模型权重的影响程度（通常与 lora\_rank 配合使用）。
 
 取值必须为2n（如 16、32、64）。
 
 32
+
+## 图像生成模型
+
+图像生成模型使用 max\_steps 和 eval\_steps 控制训练步数和评估间隔（而非视频模型的 n\_epochs/eval\_epochs）。若模型效果不佳或训练不收敛，可以尝试调整 max\_steps 或 learning\_rate。
+
+**字段**
+
+**类型**
+
+**必选**
+
+**描述**
+
+**推荐值**
+
+max\_steps
+
+int
+
+是
+
+**训练总步数**。控制训练时长的核心参数。max\_steps 决定训练迭代次数，max\_token\_length 决定每步处理的数据量。建议不少于 500 步以确保模型充分收敛；大数据集可适当增加步数。
+
+800
+
+eval\_steps
+
+int
+
+是
+
+**验证间隔**。取值需≥0。训练期间每隔多少个 steps 进行一次验证评估，用于阶段性评估模型训练效果。同时保存当前 step 的模型文件。
+
+200
+
+learning\_rate
+
+float
+
+是
+
+**学习率**。控制模型权重更新的幅度。过高可能导致模型变差，过低则变化不明显。推荐使用默认值。
+
+3e-5
+
+generation\_type
+
+string
+
+是
+
+**生成模式**。`"t2i"`：文生图模式；`"i2i"`：图生图模式。决定训练数据格式和推理方式。
+
+t2i
+
+max\_pixels
+
+string
+
+是
+
+**训练图片的最大分辨率**。例如 "1k"、"2k"。设置训练集中图片分辨率的像素总数（宽×高）上限，系统仅对超过该值的图片进行缩放处理，未超限的图片保持原样。建议三个分辨率参数（max\_pixels、max\_token\_length、val\_img\_size）保持一致。
+
+文生图："2k"  
+图生图："1k"
+
+val\_img\_size
+
+string
+
+是
+
+**验证图生成分辨率**。例如 "1k"、"2k"。训练过程中验证评估时生成图片的目标分辨率。
+
+文生图："2k"  
+图生图："1k"
+
+max\_token\_length
+
+string
+
+是
+
+**每步训练的最大 Token 长度**。例如 "1k"、"2k"。与 max\_steps 共同控制训练过程：max\_steps 决定迭代次数，max\_token\_length 决定每步处理的数据量。
+
+文生图："2k"  
+图生图："1k"
+
+gradient\_clip
+
+float
+
+是
+
+**梯度裁剪**。对所有可训练参数做全局梯度范数裁剪的阈值，防止梯度爆炸。设为 -1 表示不裁剪。
+
+0.5
+
+weight\_decay
+
+float
+
+是
+
+**权重衰减**。AdamW 解耦式权重衰减系数，对所有可训练参数生效，用于正则化防止过拟合。
+
+0.02
+
+lora\_rank
+
+int
+
+是
+
+**LoRA 低秩矩阵的维数**。该值决定了微调参数量的大小。数值越大，模型拟合能力越强，但训练速度会变慢。取值必须为 2n（如 16、32、64）。
+
+32
+
+lora\_alpha
+
+int
+
+是
+
+**LoRA 权重的缩放系数**。用于调节微调后的参数对原模型权重的影响程度（通常与 lora\_rank 配合使用）。取值必须为 2n（如 16、32、64）。
+
+32
+
+save\_total\_limit
+
+int
+
+否
+
+**Checkpoint 保存数量上限**。限制最多保存的模型数量。系统将始终只保存训练生成的最后 N 个 Checkpoint（N 为该参数值）。
+
+10
+
+split
+
+float
+
+否
+
+**训练集划分比例**。取值范围为 (0, 1)。仅在未指定 `validation_file_ids` 时生效。此参数用于从训练集中自动按比例拆分出验证集。例如，0.9 表示 90% 训练集，10% 验证集。
+
+0.9
 
 ### **出参描述**
 
@@ -555,7 +716,7 @@ output.training\_type
 
 string
 
-模型微调的训练方式。固定为efficient\_sft。
+模型微调的训练方式。推荐为efficient\_sft。
 
 efficient\_sft
 
@@ -632,18 +793,22 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-    "model":"wan2.5-i2v-preview",
-    "training_file_ids":[
+    "model": "wan2.5-i2v-preview",
+    "training_file_ids": [
         "<替换为训练数据集的文件id>"
     ],
-    "training_type":"efficient_sft",
-    "hyper_parameters":{
-        "n_epochs":400,
-        "batch_size":2,
-        "learning_rate":2e-5,
-        "split":0.9,
+    "training_type": "efficient_sft",
+    "hyper_parameters": {
+        "n_epochs": 400,
+        "batch_size": 2,
+        "learning_rate": 2e-5,
+        "split": 0.9,
+        "max_split_val_dataset_sample": 5,
         "eval_epochs": 50,
-        "max_pixels": 36864
+        "max_pixels": 36864,
+        "save_total_limit": 10,
+        "lora_rank": 32,
+        "lora_alpha": 32
     }
 }'
 ```
@@ -655,18 +820,22 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-    "model":"wan2.2-i2v-flash",
-    "training_file_ids":[
+    "model": "wan2.2-i2v-flash",
+    "training_file_ids": [
         "<替换为训练数据集的文件id>"
     ],
-    "training_type":"efficient_sft",
-    "hyper_parameters":{
-        "n_epochs":400,
-        "batch_size":4,
-        "learning_rate":2e-5,
-        "split":0.9,
+    "training_type": "efficient_sft",
+    "hyper_parameters": {
+        "n_epochs": 400,
+        "batch_size": 4,
+        "learning_rate": 2e-5,
+        "split": 0.9,
+        "max_split_val_dataset_sample": 5,
         "eval_epochs": 50,
-        "max_pixels": 262144
+        "max_pixels": 262144,
+        "save_total_limit": 10,
+        "lora_rank": 32,
+        "lora_alpha": 32
     }
 }'
 ```
@@ -678,18 +847,22 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-    "model":"wan2.2-kf2v-flash",
-    "training_file_ids":[
+    "model": "wan2.2-kf2v-flash",
+    "training_file_ids": [
         "<替换为训练数据集的文件id>"
     ],
-    "training_type":"efficient_sft",
-    "hyper_parameters":{
-        "n_epochs":400,
-        "batch_size":4,
-        "learning_rate":2e-5,
-        "split":0.9,
+    "training_type": "efficient_sft",
+    "hyper_parameters": {
+        "n_epochs": 400,
+        "batch_size": 4,
+        "learning_rate": 2e-5,
+        "split": 0.9,
+        "max_split_val_dataset_sample": 5,
         "eval_epochs": 50,
-        "max_pixels": 262144
+        "max_pixels": 262144,
+        "save_total_limit": 10,
+        "lora_rank": 32,
+        "lora_alpha": 32
     }
 }'
 ```
@@ -701,23 +874,85 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-    "model":"wan2.5-i2v-preview",
-    "training_file_ids":[
+    "model": "wan2.5-i2v-preview",
+    "training_file_ids": [
         "<替换为训练集的文件id_1>",
         "<替换为训练集的文件id_2>"
     ],
-    "validation_file_ids":[
+    "validation_file_ids": [
          "<替换为验证集的文件id_1>",
          "<替换为验证集的文件id_2>"
     ],
-    "training_type":"efficient_sft",
-    "hyper_parameters":{
-        "n_epochs":400,
-        "batch_size":2,
-        "learning_rate":2e-5,
-        "split":0.9,
+    "training_type": "efficient_sft",
+    "hyper_parameters": {
+        "n_epochs": 400,
+        "batch_size": 2,
+        "learning_rate": 2e-5,
+        "split": 0.9,
+        "max_split_val_dataset_sample": 5,
         "eval_epochs": 50,
-        "max_pixels": 36864
+        "max_pixels": 36864,
+        "save_total_limit": 10,
+        "lora_rank": 32,
+        "lora_alpha": 32
+    }
+}'
+```
+
+## 图像生成
+
+## 文生图（t2i）
+
+```
+curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
+--header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header 'Content-Type: application/json' \
+--data '{
+    "model": "wan2.7-image-pro",
+    "training_file_ids": ["<替换为训练数据集的文件id>"],
+    "validation_file_ids": ["<替换为验证数据集的文件id>"],
+    "training_type": "efficient_sft",
+    "hyper_parameters": {
+        "learning_rate": 3e-5,
+        "max_steps": 800,
+        "eval_steps": 200,
+        "max_token_length": "2k",
+        "gradient_clip": 0.5,
+        "weight_decay": 0.02,
+        "max_pixels": "2k",
+        "val_img_size": "2k",
+        "generation_type": "t2i",
+        "lora_rank": 32,
+        "lora_alpha": 32,
+        "save_total_limit": 10
+    }
+}'
+```
+
+## 图生图（i2i）
+
+```
+curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
+--header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header 'Content-Type: application/json' \
+--data '{
+    "model": "wan2.7-image-pro",
+    "training_file_ids": ["<替换为训练数据集的文件id>"],
+    "validation_file_ids": ["<替换为验证数据集的文件id>"],
+    "training_type": "efficient_sft",
+    "hyper_parameters": {
+        "learning_rate": 3e-5,
+        "max_steps": 800,
+        "eval_steps": 200,
+        "max_token_length": "1k",
+        "gradient_clip": 0.5,
+        "weight_decay": 0.02,
+        "max_pixels": "1k",
+        "val_img_size": "1k",
+        "generation_type": "i2i",
+        "lora_rank": 32,
+        "lora_alpha": 32,
+        "save_total_limit": 10
     }
 }'
 ```
@@ -725,6 +960,8 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 ### **响应示例**
 
 重点关注这两个参数：`**output.job_id**`（任务ID）**、**`**output.finetuned_output**`（微调后产出的新模型名称）。
+
+##### 视频生成模型
 
 ```
 {
@@ -748,13 +985,40 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
             "eval_epochs": 50
         },
         "training_type": "efficient_sft",
-        "create_time": "2025-11-11 11:22:22",
-        "workspace_id": "llm-xxxxxxxxx",
-        "user_identity": "12xxxxxxx",
-        "modifier": "12xxxxxxx",
-        "creator": "12xxxxxxx",
-        "group": "llm",
-        "max_output_cnt": 20
+        "create_time": "2025-11-11 11:22:22"
+    }
+}
+```
+
+##### 图像生成模型
+
+```
+{
+    "request_id": "0eb05b0c-02ba-414a-9d0c-xxxxxxxxx",
+    "output": {
+        "job_id": "ft-202606030110-xxxx",
+        "job_name": "ft-202606030110-xxxx",
+        "status": "PENDING",
+        "finetuned_output": "wan2.7-image-pro-ft-202606030110-xxxx",
+        "model": "wan2.7-image-pro",
+        "base_model": "wan2.7-image-pro",
+        "training_file_ids": [
+            "xxxxxxxxxxxx"
+        ],
+        "validation_file_ids": [],
+        "hyper_parameters": {
+            "max_steps": 800,
+            "learning_rate": 3.0E-5,
+            "eval_steps": 200,
+            "max_token_length": "2k",
+            "max_pixels": "2k",
+            "val_img_size": "2k",
+            "generation_type": "t2i",
+            "lora_rank": 32,
+            "lora_alpha": 32
+        },
+        "training_type": "efficient_sft",
+        "create_time": "2026-06-03 01:10:47"
     }
 }
 ```
@@ -916,7 +1180,7 @@ output.training\_type
 
 string
 
-模型微调的训练方式。固定为efficient\_sft。
+模型微调的训练方式。推荐为efficient\_sft。
 
 efficient\_sft
 
@@ -1020,38 +1284,63 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
 
 关注两个参数：`**output.status**`（状态为SUCCEEDED，表示训练完成）**、**`**output.usage**`（训练消耗的总Token数量）**。**
 
+##### 视频生成模型
+
 ```
 {
     "request_id": "9bbb953c-bef2-4b59-9fc5-xxxxxxxxx",
     "output": {
         "job_id": "ft-202511111122-xxxx",
-        "job_name": "ft-202511111122-xxxx",
         "status": "SUCCEEDED",
         "finetuned_output": "wan2.5-i2v-preview-ft-202511111122-xxxx",
         "model": "wan2.5-i2v-preview",
         "base_model": "wan2.5-i2v-preview",
-        "training_file_ids": [
-            "xxxxxxxxxxxx"
-        ],
+        "training_file_ids": ["xxxxxxxxxxxx"],
         "validation_file_ids": [],
         "hyper_parameters": {
             "n_epochs": 400,
-            "batch_size": 2,
             "learning_rate": 2.0E-5,
             "split": 0.9,
             "eval_epochs": 50
         },
         "training_type": "efficient_sft",
         "create_time": "2025-11-11 11:22:22",
-        "workspace_id": "llm-xxxxxxxxx",
-        "user_identity": "xxxxxxxxx",
-        "modifier": "xxxxxxxxx",
-        "creator": "xxxxxxxxx",
         "end_time": "2025-11-11 16:49:01",
-        "group": "llm",
         "usage": 432000,
-        "max_output_cnt": 8,
         "output_cnt": 8
+    }
+}
+```
+
+##### 图像生成模型
+
+```
+{
+    "request_id": "03d738f5-3720-90b0-9c7b-xxxxxxxxx",
+    "output": {
+        "job_id": "ft-202606030110-xxxx",
+        "status": "SUCCEEDED",
+        "finetuned_output": "wan2.7-image-pro-ft-202606030110-xxxx",
+        "model": "wan2.7-image-pro",
+        "base_model": "wan2.7-image-pro",
+        "training_file_ids": ["xxxxxxxxxxxx"],
+        "validation_file_ids": [],
+        "hyper_parameters": {
+            "max_steps": 800,
+            "learning_rate": 3.0E-5,
+            "eval_steps": 200,
+            "max_token_length": "2k",
+            "max_pixels": "2k",
+            "val_img_size": "2k",
+            "generation_type": "t2i",
+            "lora_rank": 32,
+            "lora_alpha": 32
+        },
+        "training_type": "efficient_sft",
+        "create_time": "2026-06-03 01:10:47",
+        "end_time": "2026-06-03 01:38:53",
+        "usage": 10273216,
+        "output_cnt": 1
     }
 }
 ```
@@ -1118,7 +1407,7 @@ string
 
 是
 
-部署方式。LoRA高效微调固定为`lora`。
+部署方式。LoRA高效微调推荐为`lora`。
 
 lora
 
@@ -1130,7 +1419,7 @@ object
 
 是
 
-提示词配置。
+提示词配置。wan2.7-image-pro不支持此参数。
 
 \-
 
@@ -1375,6 +1664,21 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/deployments' \
 }'
 ```
 
+## 图像生成
+
+wan2.7-image-pro 部署时不支持 `aigc_config` 参数。
+
+```
+curl --location 'https://dashscope.aliyuncs.com/api/v1/deployments' \
+--header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header 'Content-Type: application/json' \
+--data '{
+    "model_name": "<替换为模型名称model_name>",
+    "capacity": 1,
+    "plan": "lora"
+}'
+```
+
 ### **响应示例**
 
 关注两个参数：`output.deployed_model`（部署模型的唯一标识）、`output.status`（状态为PENDING，表示部署中）。
@@ -1606,15 +1910,15 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/deployments/<替换为dep
 }
 ```
 
-## **调用模型生成视频**
+## **调用模型生成视频****/图像**
 
-调用微调后的LoRA模型，请参见[调用模型生成视频](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-guide#543cc07530gl2)。
+调用微调后的LoRA模型，请参见[调用模型生成视频](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-guide#543cc07530gl2)（视频模型）或[调用模型生成图像](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide)（图像模型）。
 
 ## **Checkpoint 管理**
 
 ### **1\. 查询Checkpoint列表**
 
-**API描述**：获取通过验证集成功生成预览视频的 Checkpoint列表，验证失败的不会列出。
+**API描述**：获取通过验证集成功生成预览视频或图像的 Checkpoint列表，验证失败的不会列出。
 
 **使用限制**：该接口需在模型微调训练完成后调用，否则将返回空列表。
 
@@ -1718,7 +2022,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
 
 ### **2\. 查询Checkpoint验证结果**
 
-**API描述**： 根据`checkpoint`（例如“checkpoint-160”），查看其生成的视频效果。
+**API描述**： 根据`checkpoint`（例如”checkpoint-160”），查看其生成的视频或图像效果。
 
 #### **请求接口**
 
@@ -1790,6 +2094,8 @@ integer
 
 #### **出参描述**
 
+##### 视频生成模型
+
 **字段**
 
 **类型**
@@ -1850,11 +2156,9 @@ output.list\[\].video\_path
 
 string
 
-通过Checkpoint生成的视频。
+通过Checkpoint生成的视频预览URL，有效期为24小时，请及时下载。
 
-video\_path有效期为24小时，请及时下载视频。
-
-https://finetune-swap-wulanchabu.oss-cn-wulanchabu.aliyuncs.com/xxx.mp4?Expires=xxxx
+https://finetune-result.oss-cn-wulanchabu.aliyuncs.com/xxx.mp4?Expires=xxxx
 
 output.list\[\].prompt
 
@@ -1862,15 +2166,97 @@ string
 
 验证数据的prompt。从数据集的标注文件data.jsonl获得。
 
-视频开头展示了一位年轻男性坐在咖啡馆的场景...
+\-
 
 output.list\[\].first\_frame\_path
 
 string
 
-验证的图像地址。系统会读取数据集中的图像，并生成一个公网URL地址。
+验证的首帧图像URL。系统会读取数据集中的图像，并生成一个公网URL地址。
 
-https://finetune-swap-wulanchabu.oss-cn-wulanchabu.aliyuncs.com/xxx.jpeg
+https://finetune-result.oss-cn-wulanchabu.aliyuncs.com/xxx.jpeg
+
+##### 图像生成模型
+
+**字段**
+
+**类型**
+
+**描述**
+
+**示例值**
+
+request\_id
+
+string
+
+请求的唯一标识符。
+
+375b3ad0-d3fa-451f-b629-xxxxxxx
+
+output
+
+object
+
+输出结果。
+
+\-
+
+output.page\_no
+
+integer
+
+页码。
+
+1
+
+output.page\_size
+
+integer
+
+每页数量。
+
+10
+
+output.total
+
+integer
+
+验证集列表总数量。
+
+1
+
+output.list
+
+array\[object\]
+
+验证集列表。
+
+\-
+
+output.list\[\].img\_path
+
+string
+
+通过Checkpoint生成的图像预览URL，有效期为24小时，请及时下载。
+
+https://finetune-result.oss-cn-wulanchabu.aliyuncs.com/xxx.png?Expires=xxxx
+
+output.list\[\].prompt
+
+string
+
+验证数据的prompt。从数据集的标注文件data.jsonl获得。
+
+\-
+
+output.list\[\].input\_img
+
+string
+
+仅i2i模式返回。验证的输入图像URL。系统会读取数据集中的输入图像，并生成一个公网URL地址。
+
+https://finetune-result.oss-cn-wulanchabu.aliyuncs.com/val\_dataset/input\_001.png?Expires=xxxx
 
 #### **请求示例**
 
@@ -1886,7 +2272,9 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
 
 #### **响应示例**
 
-> video\_path有效期为24小时，请及时下载视频。
+> 预览URL有效期为24小时，请及时下载。
+
+##### 视频生成模型
 
 ```
 {
@@ -1897,9 +2285,29 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
         "total": 1,
         "list": [
             {
-                "video_path": "https://finetune-swap-wulanchabu.oss-cn-wulanchabu.aliyuncs.com/xxx.mp4?Expires=xxxx",
-                "prompt": "视频开头展示了一位年轻男性坐在咖啡馆的场景。他穿着一件米色的Polo衫，神情专注且略显沉思，手指轻轻托着下巴。他的面前摆放着一杯热气腾腾的咖啡，背景是木质条纹的墙壁和一个装饰牌。然后开始展示s86b5p金钱雨特效，无数巨大尺寸的美元钞票（米黄底/深绿图案）如暴雨般倾泻而下，密集地砸向并环绕他。钞票持续落下，他双臂舒展上扬，脖颈微仰，表情惊喜，完全沉浸在这场狂野的金钱雨中。",
-                "first_frame_path": "https://finetune-swap-wulanchabu.oss-cn-wulanchabu.aliyuncs.com/xxx.jpeg"
+                "video_path": "https://finetune-result.oss-cn-wulanchabu.aliyuncs.com/xxx.mp4?Expires=xxxx",
+                "prompt": "视频开头展示了一位年轻男性坐在咖啡馆的场景...",
+                "first_frame_path": "https://finetune-result.oss-cn-wulanchabu.aliyuncs.com/xxx.jpeg"
+            }
+        ]
+    }
+}
+```
+
+##### 图像生成模型
+
+```
+{
+    "request_id": "375b3ad0-d3fa-451f-b629-xxxxxxx",
+    "output": {
+        "page_no": 1,
+        "page_size": 10,
+        "total": 1,
+        "list": [
+            {
+                "img_path": "https://finetune-result.oss-cn-wulanchabu.aliyuncs.com/xxx.png?Expires=xxxx",
+                "prompt": "s86b5p, Change the background to an elevator equipped with a white ceiling lighting...",
+                "input_img": "https://finetune-result.oss-cn-wulanchabu.aliyuncs.com/val_dataset/input_001.png?Expires=xxxx"
             }
         ]
     }
@@ -2203,7 +2611,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
     
 -   [查询模型部署状态](#04b2baf08b1e9)
     
--   [调用模型生成视频](#848bf20229erb)
+-   [调用模型生成视频/图像](#848bf20229erb)
     
 
 ## **微调任务管理**

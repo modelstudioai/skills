@@ -144,7 +144,7 @@ Body
 
 #### `hyper_parameters`内**支持的设置**
 
-> 不同模型支持的参数及其默认值不同，**请前往[控制台](https://bailian.console.aliyun.com/?tab=model#/efm/model_manager)选择相同的模型和训练方式查看实际默认值**。
+> 不同模型支持的参数及其默认值不同，**请前往**[**控制台**](https://bailian.console.aliyun.com/?tab=model#/efm/model_manager)**选择相同的模型和训练方式查看实际默认值**。
 
 **参数名称**
 
@@ -193,7 +193,7 @@ Boolean
 
 用于冻结视觉主干网络的参数，使其在训练过程中不更新权重。仅适用于 千问-VL（视觉理解）模型。
 
-**说明**
+**警告**
 
 只有 freeze\_vit 设置为“true”时，模型才能进行按 [Token 用量](https://help.aliyun.com/zh/model-studio/model-deployment-introduction#9ea9924cd8138)计费。
 
@@ -441,7 +441,7 @@ NLP 理解
 
 String
 
--   格式要求：与`augmentation_types`一一对应
+-   格式要求：与`augmentation_types`完全对应
     
 -   示例：`"0.1,0.05,0.15"`（分别对应`augmentation_types`列出的三种数据集）
     

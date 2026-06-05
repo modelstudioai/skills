@@ -21,6 +21,10 @@
 
 本文的示例代码适用于**北京地域**。
 
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
 ## HTTP调用
 
 由于图生视频任务耗时较长（通常为1-5分钟），API采用异步调用。整个流程包含 **“创建任务 -> 轮询获取”** 两个核心步骤，具体如下：
@@ -33,7 +37,9 @@
 
 ## **新加坡**
 
-`POST https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis`
+`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -408,7 +414,9 @@ duration直接影响费用，按秒计费，调用前请确认百炼控制台。
 
 ## **新加坡**
 
-`GET https://dashscope-intl.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -431,7 +439,7 @@ duration直接影响费用，按秒计费，调用前请确认百炼控制台。
 
 请将`86ecf553-d340-4e21-xxxxxxxxx`替换为真实的task\_id。
 
-> 若使用新加坡地域的模型，需将base\_url替换为https://dashscope-intl.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx
+> 若使用新加坡地域的模型，需将base\_url替换为https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx，其中WorkspaceId需替换为真实的业务空间ID。
 
 ```
 curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \
@@ -635,7 +643,9 @@ SDK 的参数命名与[HTTP接口](https://help.aliyun.com/zh/model-studio/text-
 
 ## **新加坡**
 
-`dashscope.base_http_api_url = 'https://dashscope-intl.aliyuncs.com/api/v1'`
+`dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 #### **示例代码**
 
@@ -756,106 +766,7 @@ from http import HTTPStatus
 from dashscope import VideoSynthesis
 import dashscope
 
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
-dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
-
-"""
-环境要求：
-    dashscope python SDK >= 1.23.8
-安装/升级SDK:
-    pip install -U dashscope
-"""
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
-
-# 使用公网可访问的图片URL
-first_frame_url = "https://wanx.alicdn.com/material/20250318/first_frame.png"
-last_frame_url = "https://wanx.alicdn.com/material/20250318/last_frame.png"
-
-def sample_async_call_kf2v():
-    # 异步调用，返回一个task_id
-    rsp = VideoSynthesis.async_call(api_key=api_key,
-                                    model="wan2.2-kf2v-flash",
-                                    prompt="写实风格，一只黑色小猫好奇地看向天空，镜头从平视逐渐上升，最后俯拍它的好奇的眼神。",
-                                    first_frame_url=first_frame_url,
-                                    last_frame_url=last_frame_url,
-                                    resolution="720P",
-                                    prompt_extend=True)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
-
-    # 获取异步任务信息
-    status = VideoSynthesis.fetch(task=rsp, api_key=api_key)
-    if status.status_code == HTTPStatus.OK:
-        print(status.output.task_status)  # check the task status
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (status.status_code, status.code, status.message))
-
-    # 等待异步任务结束
-    rsp = VideoSynthesis.wait(task=rsp, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
-
-if __name__ == '__main__':
-    sample_async_call_kf2v()
-```
-
-##### 响应示例
-
-1、创建任务的响应示例
-
-```
-{
-    "status_code": 200,
-    "request_id": "c86ff7ba-8377-917a-90ed-xxxxxx",
-    "code": "",
-    "message": "",
-    "output": {
-        "task_id": "721164c6-8619-4a35-a6d9-xxxxxx",
-        "task_status": "PENDING",
-        "video_url": ""
-    },
-    "usage": null
-}
-```
-
-2、查询任务结果的响应示例
-
-> video\_url 有效期24小时，请及时下载视频。
-
-```
-{
-    "status_code": 200,
-    "request_id": "efa545b3-f95c-9e3a-a3b6-xxxxxx",
-    "code": null,
-    "message": "",
-    "output": {
-        "task_id": "721164c6-8619-4a35-a6d9-xxxxxx",
-        "task_status": "SUCCEEDED",
-        "video_url": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.mp4?xxxxx",
-        "submit_time": "2025-02-12 11:03:30.701",
-        "scheduled_time": "2025-02-12 11:06:05.378",
-        "end_time": "2025-02-12 11:12:18.853",
-        "orig_prompt": "写实风格，一只黑色小猫好奇地看向天空，镜头从平视逐渐上升，最后俯拍它的好奇的眼神。",
-        "actual_prompt": "写实风格，一只黑色小猫好奇地看向天空，镜头从平视逐渐上升，最后俯拍它的好奇的眼神。小猫毛发乌黑光亮，眼睛大而明亮，瞳孔呈金黄色。它抬头仰望，耳朵竖立，显得格外专注。镜头上移后，小猫转头直视镜头，眼神中充满好奇与警觉。背景简洁，突出小猫的细节特征。近景特写，自然光线柔和。"
-    },
-    "usage": {
-        "video_count": 1,
-        "video_duration": 5,
-        "video_ratio": "standard"
-    }
-}
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
 ```
 
 ### Java SDK调用
@@ -903,118 +814,7 @@ import java.util.Map;
 public class Kf2vSync {
 
     static {
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
-    }
-
-    // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey="sk-xxx"
-    // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    static String apiKey = System.getenv("DASHSCOPE_API_KEY");
-
-    /**
-     * 图像输入方式说明：三选一即可
-     *
-     * 1. 使用公网URL - 适合已有公开可访问的图片
-     * 2. 使用本地文件 - 适合本地开发测试
-     * 3. 使用Base64编码 - 适合私有图片或需要加密传输的场景
-     */
-
-    //【方式一】公网URL
-    static String firstFrameUrl = "https://wanx.alicdn.com/material/20250318/first_frame.png";
-    static String lastFrameUrl = "https://wanx.alicdn.com/material/20250318/last_frame.png";
-
-    //【方式二】本地文件路径（file://+绝对路径 or file:///+绝对路径）
-    // static String firstFrameUrl = "file://" + "/your/path/to/first_frame.png";   // Linux/macOS
-    // static String lastFrameUrl = "file:///" + "C:/path/to/your/img.png";        // Windows
-
-    //【方式三】Base64编码
-    // static String firstFrameUrl = Kf2vSync.encodeFile("/your/path/to/first_frame.png");
-    // static String lastFrameUrl = Kf2vSync.encodeFile("/your/path/to/last_frame.png");
-
-    public static void syncCall() {
-
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("prompt_extend", true);
-        parameters.put("resolution", "720P");
-
-        VideoSynthesis videoSynthesis = new VideoSynthesis();
-        VideoSynthesisParam param =
-                VideoSynthesisParam.builder()
-                        .apiKey(apiKey)
-                        .model("wan2.2-kf2v-flash")
-                        .prompt("写实风格，一只黑色小猫好奇地看向天空，镜头从平视逐渐上升，最后俯拍它的好奇的眼神。")
-                        .firstFrameUrl(firstFrameUrl)
-                        .lastFrameUrl(lastFrameUrl)
-                        .parameters(parameters)
-                        .build();
-        VideoSynthesisResult result = null;
-        try {
-            System.out.println("---sync call, please wait a moment----");
-            result = videoSynthesis.call(param);
-        } catch (ApiException | NoApiKeyException e){
-            throw new RuntimeException(e.getMessage());
-        } catch (InputRequiredException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(JsonUtils.toJson(result));
-    }
-
-    /**
-     * 将文件编码为Base64字符串
-     * @param filePath 文件路径
-     * @return Base64字符串，格式为 data:{MIME_type};base64,{base64_data}
-     */
-    public static String encodeFile(String filePath) {
-        Path path = Paths.get(filePath);
-        if (!Files.exists(path)) {
-            throw new IllegalArgumentException("文件不存在: " + filePath);
-        }
-        // 检测MIME类型
-        String mimeType = null;
-        try {
-            mimeType = Files.probeContentType(path);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("无法检测文件类型: " + filePath);
-        }
-        if (mimeType == null || !mimeType.startsWith("image/")) {
-            throw new IllegalArgumentException("不支持或无法识别的图像格式");
-        }
-        // 读取文件内容并编码
-        byte[] fileBytes = null;
-        try{
-            fileBytes = Files.readAllBytes(path);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("无法读取文件内容: " + filePath);
-        }
-
-        String encodedString = Base64.getEncoder().encodeToString(fileBytes);
-        return "data:" + mimeType + ";base64," + encodedString;
-    }
-
-    public static void main(String[] args) {
-        syncCall();
-    }
-}
-```
-
-##### 响应示例
-
-> video\_url 有效期24小时，请及时下载视频。
-
-```
-{
-    "request_id": "e6bb4517-c073-9c10-b748-dedb8c11bb41",
-    "output": {
-        "task_id": "984784fe-83c1-4fc4-88c7-52c2c1fa92a2",
-        "task_status": "SUCCEEDED",
-        "video_url": "https://dashscope-result-wlcb-acdr-1.oss-cn-wulanchabu-acdr-1.aliyuncs.com/xxx.mp4?xxxxx"
-    },
-    "usage": {
-        "video_count": 1,
-        "video_duration": 5,
-        "video_ratio": "standard"
-    }
-}
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
 ```
 
 ## 异步调用
@@ -1049,115 +849,7 @@ import java.util.Map;
 public class Kf2vAsync {
 
     static {
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
-    }
-
-    // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey="sk-xxx"
-    // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    static String apiKey = System.getenv("DASHSCOPE_API_KEY");
-
-    // 公网URL
-    static String firstFrameUrl = "https://wanx.alicdn.com/material/20250318/first_frame.png";
-    static String lastFrameUrl = "https://wanx.alicdn.com/material/20250318/last_frame.png";
-
-    public static void asyncCall(){
-
-        // 设置parameters参数
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("prompt_extend", true);
-        parameters.put("resolution", "720P");
-
-        VideoSynthesis videoSynthesis = new VideoSynthesis();
-        VideoSynthesisParam param =
-                VideoSynthesisParam.builder()
-                        .apiKey(apiKey)
-                        .model("wan2.2-kf2v-flash")
-                        .prompt("写实风格，一只黑色小猫好奇地看向天空，镜头从平视逐渐上升，最后俯拍它的好奇的眼神。")
-                        .firstFrameUrl(firstFrameUrl)
-                        .lastFrameUrl(lastFrameUrl)
-                        .parameters(parameters)
-                        .build();
-        VideoSynthesisResult result = null;
-        try {
-            System.out.println("---async call, please wait a moment----");
-            result = videoSynthesis.asyncCall(param);
-        } catch (ApiException | NoApiKeyException e){
-            throw new RuntimeException(e.getMessage());
-        } catch (InputRequiredException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(JsonUtils.toJson(result));
-
-        String taskId = result.getOutput().getTaskId();
-
-        System.out.println("taskId=" + taskId);
-
-        try {
-            result = videoSynthesis.wait(taskId, apiKey);
-        } catch (ApiException | NoApiKeyException e){
-            throw new RuntimeException(e.getMessage());
-        }
-        System.out.println(JsonUtils.toJson(result));
-        System.out.println(JsonUtils.toJson(result.getOutput()));
-    }
-
-    // 获取任务列表
-    public static void listTask() throws ApiException, NoApiKeyException {
-        VideoSynthesis is = new VideoSynthesis();
-        AsyncTaskListParam param = AsyncTaskListParam.builder().build();
-        param.setApiKey(apiKey);
-        VideoSynthesisListResult result = is.list(param);
-        System.out.println(result);
-    }
-
-    // 获取单个任务结果
-    public static void fetchTask(String taskId) throws ApiException, NoApiKeyException {
-        VideoSynthesis is = new VideoSynthesis();
-        // 如果已设置 DASHSCOPE_API_KEY 为环境变量，apiKey 可为空
-        VideoSynthesisResult result = is.fetch(taskId, apiKey);
-        System.out.println(result.getOutput());
-        System.out.println(result.getUsage());
-    }
-
-    public static void main(String[] args){
-        asyncCall();
-    }
-}
-```
-
-##### 响应示例
-
-1、创建任务的响应示例
-
-```
-{
-    "request_id": "5dbf9dc5-4f4c-9605-85ea-xxxxxxxx",
-    "output": {
-        "task_id": "7277e20e-aa01-4709-xxxxxxxx",
-        "task_status": "PENDING"
-    }
-}
-```
-
-2、查询任务结果的响应示例
-
-> video\_url 有效期24小时，请及时下载视频。
-
-```
-{
-    "request_id": "1625235c-c13e-93ec-aff7-xxxxxxxx",
-    "output": {
-        "task_id": "464a5e46-79a6-46fd-9823-xxxxxxxx",
-        "task_status": "SUCCEEDED",
-        "video_url": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.mp4?xxxxxx"
-    },
-    "usage": {
-        "video_count": 1,
-        "video_duration": 5,
-        "video_ratio": "standard"
-    }
-}
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
 ```
 
 ## **使用限制**

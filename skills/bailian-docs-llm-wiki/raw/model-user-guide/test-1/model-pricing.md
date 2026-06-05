@@ -54,6 +54,8 @@ qwen3.7-max
 
 qwen3.7-max-2026-05-20
 
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
 非思考和思考模式
 
 0<Token≤1M
@@ -214,8 +216,6 @@ qwen3-max-preview
 
 qwen-max
 
-> 当前能力等同于qwen-max-2024-09-19
-
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 仅非思考模式
@@ -226,51 +226,9 @@ qwen-max
 
 9.6元
 
-各100万Token
+100万Token
 
 有效期：阿里云百炼开通后90天内
-
-qwen-max-latest
-
-> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
-
-仅非思考模式
-
-无阶梯计价
-
-2.4元
-
-9.6元
-
-qwen-max-2025-01-25
-
-仅非思考模式
-
-无阶梯计价
-
-2.4元
-
-9.6元
-
-qwen-max-2024-09-19
-
-仅非思考模式
-
-无阶梯计价
-
-20元
-
-60元
-
-qwen-max-2024-04-28
-
-仅非思考模式
-
-无阶梯计价
-
-40元
-
-120元
 
 ## 全球
 
@@ -307,6 +265,8 @@ qwen3.7-max
 36元
 
 qwen3.7-max-2026-05-20
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
 非思考和思考模式
 
@@ -423,6 +383,8 @@ qwen3.7-max
 56.207元
 
 qwen3.7-max-2026-05-20
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
 非思考和思考模式
 
@@ -558,29 +520,7 @@ qwen3-max-preview
 
 qwen-max
 
-> 当前能力等同于qwen-max-2025-01-25
-
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
-
-仅非思考模式
-
-无阶梯计价
-
-11.743元
-
-46.971元
-
-qwen-max-latest
-
-仅非思考模式
-
-无阶梯计价
-
-11.743元
-
-46.971元
-
-qwen-max-2025-01-25
 
 仅非思考模式
 
@@ -680,6 +620,54 @@ qwen3-max-2026-01-23
 
 **思考模式（思维链+回答）**
 
+qwen3.7-plus
+
+> 当前能力等同于qwen3.7-plus-2026-05-26
+
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+0<Token≤256K
+
+2元
+
+8元
+
+8元
+
+各100万Token
+
+有效期：阿里云百炼开通后90天内
+
+256K<Token≤1M
+
+6元
+
+24元
+
+24元
+
+qwen3.7-plus-2026-05-26
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+0<Token≤256K
+
+2元
+
+8元
+
+8元
+
+256K<Token≤1M
+
+6元
+
+24元
+
+24元
+
 qwen3.6-plus
 
 > 当前能力等同于qwen3.6-plus-2026-04-02
@@ -691,10 +679,6 @@ qwen3.6-plus
 12元
 
 12元
-
-各100万Token
-
-有效期：阿里云百炼开通后90天内
 
 256K<Token≤1M
 
@@ -1018,6 +1002,48 @@ qwen-plus-2024-12-20
 
 **思考模式（思维链+回答）**
 
+qwen3.7-plus
+
+> 当前能力等同于qwen3.7-plus-2026-05-26
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+0<Token≤256K
+
+2元
+
+8元
+
+8元
+
+256K<Token≤1M
+
+6元
+
+24元
+
+24元
+
+qwen3.7-plus-2026-05-26
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+0<Token≤256K
+
+2元
+
+8元
+
+8元
+
+256K<Token≤1M
+
+6元
+
+24元
+
+24元
+
 qwen3.6-plus
 
 > 当前能力等同于qwen3.6-plus-2026-04-02
@@ -1235,6 +1261,48 @@ qwen-plus-2025-07-28
 **非思考模式**
 
 **思考模式（思维链+回答）**
+
+qwen3.7-plus
+
+> 当前能力等同于qwen3.7-plus-2026-05-26
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+0<Token≤256K
+
+2.936元
+
+11.744元
+
+11.744元
+
+256K<Token≤1M
+
+8.808元
+
+35.232元
+
+35.232元
+
+qwen3.7-plus-2026-05-26
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+0<Token≤256K
+
+2.936元
+
+11.744元
+
+11.744元
+
+256K<Token≤1M
+
+8.808元
+
+35.232元
+
+35.232元
 
 qwen3.6-plus
 
@@ -2124,8 +2192,6 @@ qwen3.5-flash-2026-02-23
 
 qwen-turbo
 
-> 当前能力等同于qwen-turbo-2025-04-28
-
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 非思考和思考模式
@@ -2135,70 +2201,10 @@ qwen-turbo
 0.6元
 
 3元
-
-各100万Token
-
-有效期：阿里云百炼开通后90天内
-
-qwen-turbo-latest
-
-> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
-
-非思考和思考模式
-
-0.3元
-
-0.6元
-
-3元
-
-qwen-turbo-2025-07-15
-
-非思考和思考模式
-
-0.3元
-
-0.6元
-
-3元
-
-qwen-turbo-2025-04-28
-
-非思考和思考模式
-
-0.3元
-
-0.6元
-
-3元
-
-##### **更多模型**
-
-**模型 ID（Model ID）**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-有效期：百炼开通后90天内
-
-qwen-turbo-2025-02-11
-
-0.3元
-
-0.6元
 
 100万Token
 
-qwen-turbo-2024-11-01
-
-0.3元
-
-0.6元
-
-1000万Token
+有效期：阿里云百炼开通后90天内
 
 ## **国际**
 
@@ -2222,8 +2228,6 @@ qwen-turbo-2024-11-01
 
 qwen-turbo
 
-> 当前能力等同于qwen-turbo-2025-04-28
-
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 非思考和思考
@@ -2233,40 +2237,6 @@ qwen-turbo
 1.468元
 
 3.67元
-
-qwen-turbo-latest
-
-非思考和思考
-
-0.367元
-
-1.468元
-
-3.67元
-
-qwen-turbo-2025-04-28
-
-非思考和思考
-
-0.367元
-
-1.468元
-
-3.67元
-
-##### 更多模型
-
-**模型 ID（Model ID）**
-
-**输入单价 （每百万Token）**
-
-**输出单价 （每百万Token）**
-
-qwen-turbo-2024-11-01
-
-0.367元
-
-1.468元
 
 ### **QwQ**
 
@@ -2290,8 +2260,6 @@ qwen-turbo-2024-11-01
 
 qwq-plus
 
-> 当前能力等同于qwq-plus-2025-03-05
-
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 仅思考模式
@@ -2300,25 +2268,9 @@ qwq-plus
 
 4元
 
-各100万Token
+100万Token
 
 有效期：阿里云百炼开通后90天内
-
-qwq-plus-latest
-
-仅思考模式
-
-1.6元
-
-4元
-
-qwq-plus-2025-03-05
-
-仅思考模式
-
-1.6元
-
-4元
 
 ## 国际
 
@@ -2337,8 +2289,6 @@ qwq-plus-2025-03-05
 **输出单价 （每百万Token）**
 
 qwq-plus
-
-> 当前能力等同于qwq-plus-2025-03-05
 
 仅思考模式
 
@@ -3194,8 +3144,6 @@ qwen-omni-turbo-realtime-2025-05-08
 
 qvq-max
 
-> 当前能力等同于qvq-max-2025-03-25
-
 8元
 
 32元
@@ -3204,39 +3152,7 @@ qvq-max
 
 有效期：阿里云百炼开通后90天内
 
-qvq-max-latest
-
-8元
-
-32元
-
-qvq-max-2025-05-15
-
-8元
-
-32元
-
-qvq-max-2025-03-25
-
-8元
-
-32元
-
 qvq-plus
-
-> 当前能力等同于qvq-plus-2025-05-15
-
-2元
-
-5元
-
-qvq-plus-latest
-
-2元
-
-5元
-
-qvq-plus-2025-05-15
 
 2元
 
@@ -3257,20 +3173,6 @@ qvq-plus-2025-05-15
 **输出单价 （每百万Token）**
 
 qvq-max
-
-> 当前能力等同于qvq-max-2025-03-25
-
-8.807元
-
-35.228元
-
-qvq-max-latest
-
-8.807元
-
-35.228元
-
-qvq-max-2025-03-25
 
 8.807元
 
@@ -3462,8 +3364,6 @@ qwen3-vl-flash-2025-10-15
 
 qwen-vl-max
 
-> 当前能力等同于qwen-vl-max-2025-08-13
-
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
@@ -3478,67 +3378,7 @@ qwen-vl-max
 
 有效期：阿里云百炼开通后90天内
 
-qwen-vl-max-latest
-
-> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
-
-无阶梯计价
-
-1.6元
-
-4元
-
-qwen-vl-max-2025-08-13
-
-无阶梯计价
-
-1.6元
-
-4元
-
-qwen-vl-max-2025-04-08
-
-无阶梯计价
-
-3元
-
-9元
-
-qwen-vl-max-2025-04-02
-
-无阶梯计价
-
-3元
-
-9元
-
-qwen-vl-max-2025-01-25
-
-无阶梯计价
-
-3元
-
-9元
-
-qwen-vl-max-2024-12-30
-
-无阶梯计价
-
-3元
-
-9元
-
-qwen-vl-max-2024-11-19
-
-无阶梯计价
-
-3元
-
-9元
-
 qwen-vl-plus
-
-> 当前能力等同于qwen-vl-plus-2025-08-15
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
@@ -3549,56 +3389,6 @@ qwen-vl-plus
 0.8元
 
 2元
-
-qwen-vl-plus-latest
-
-> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
-
-无阶梯计价
-
-0.8元
-
-2元
-
-qwen-vl-plus-2025-08-15
-
-无阶梯计价
-
-0.8元
-
-2元
-
-qwen-vl-plus-2025-07-10
-
-无阶梯计价
-
-0.15元
-
-1.5元
-
-qwen-vl-plus-2025-05-07
-
-无阶梯计价
-
-1.5元
-
-4.5元
-
-qwen-vl-plus-2025-01-25
-
-无阶梯计价
-
-1.5元
-
-4.5元
-
-qwen-vl-plus-2025-01-02
-
-无阶梯计价
-
-1.5元
-
-4.5元
 
 ## 全球
 
@@ -3886,33 +3676,7 @@ qwen3-vl-flash-2025-10-15
 
 qwen-vl-max
 
-> 当前能力等同于qwen-vl-max-2025-08-13
-
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
-
-无阶梯计价
-
-5.871元
-
-23.486元
-
-qwen-vl-max-latest
-
-无阶梯计价
-
-5.871元
-
-23.486元
-
-qwen-vl-max-2025-08-13
-
-无阶梯计价
-
-5.871元
-
-23.486元
-
-qwen-vl-max-2025-04-08
 
 无阶梯计价
 
@@ -3922,41 +3686,7 @@ qwen-vl-max-2025-04-08
 
 qwen-vl-plus
 
-> 当前能力等同于qwen-vl-plus-2025-08-15
-
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
-
-无阶梯计价
-
-1.541元
-
-4.624元
-
-qwen-vl-plus-latest
-
-无阶梯计价
-
-1.541元
-
-4.624元
-
-qwen-vl-plus-2025-08-15
-
-无阶梯计价
-
-1.541元
-
-4.624元
-
-qwen-vl-plus-2025-05-07
-
-无阶梯计价
-
-1.541元
-
-4.624元
-
-qwen-vl-plus-2025-01-25
 
 无阶梯计价
 
@@ -4534,8 +4264,6 @@ qwen3-coder-flash-2025-07-28
 
 qwen-coder-plus
 
-> 当前能力等同于qwen-coder-plus-2024-11-06
-
 无阶梯计价
 
 3.5元
@@ -4546,41 +4274,7 @@ qwen-coder-plus
 
 有效期：阿里云百炼开通后90天内
 
-qwen-coder-plus-latest
-
-无阶梯计价
-
-3.5元
-
-7元
-
-qwen-coder-plus-2024-11-06
-
-无阶梯计价
-
-3.5元
-
-7元
-
 qwen-coder-turbo
-
-> 当前能力等同于qwen-coder-turbo-2024-09-19
-
-无阶梯计价
-
-2元
-
-6元
-
-qwen-coder-turbo-latest
-
-无阶梯计价
-
-2元
-
-6元
-
-qwen-coder-turbo-2024-09-19
 
 无阶梯计价
 
@@ -5590,36 +5284,6 @@ qwen3-8b
 
 5元
 
-qwen3-4b
-
-非思考和思考模式
-
-0.3元
-
-1.2元
-
-3元
-
-qwen3-1.7b
-
-非思考和思考模式
-
-0.3元
-
-1.2元
-
-3元
-
-qwen3-0.6b
-
-非思考和思考模式
-
-0.3元
-
-1.2元
-
-3元
-
 ## 全球
 
 服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
@@ -5880,36 +5544,6 @@ qwen3-8b
 
 15.412元
 
-qwen3-4b
-
-非思考和思考模式
-
-0.807元
-
-3.082元
-
-9.247元
-
-qwen3-1.7b
-
-非思考和思考模式
-
-0.807元
-
-3.082元
-
-9.247元
-
-qwen3-0.6b
-
-非思考和思考模式
-
-0.807元
-
-3.082元
-
-9.247元
-
 ### **QwQ-开源版**
 
 **说明**
@@ -5925,16 +5559,6 @@ qwen3-0.6b
 **输出单价（每百万Token）**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-qwq-32b
-
-2元
-
-6元
-
-100万Token
-
-有效期：阿里云百炼开通后90天内
 
 ### **QwQ-Preview**
 
@@ -5954,18 +5578,6 @@ qwq-32b
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
-qwq-32b-preview
-
-> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
-
-2元
-
-6元
-
-各100万Token
-
-有效期：阿里云百炼开通后90天内
-
 ### **Qwen2.5**
 
 计费规则：按输入Token和输出Token计费。
@@ -5982,60 +5594,6 @@ qwq-32b-preview
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
-qwen2.5-14b-instruct-1m
-
-1元
-
-3元
-
-各100万Token
-
-有效期：阿里云百炼开通后90天内
-
-qwen2.5-7b-instruct-1m
-
-0.5元
-
-1元
-
-qwen2.5-72b-instruct
-
-4元
-
-12元
-
-qwen2.5-32b-instruct
-
-2元
-
-6元
-
-qwen2.5-14b-instruct
-
-1元
-
-3元
-
-qwen2.5-7b-instruct
-
-0.5元
-
-1元
-
-qwen2.5-3b-instruct
-
-0.3元
-
-0.9元
-
-qwen2.5-1.5b-instruct
-
-目前仅供免费体验
-
-> 免费额度用完后不可调用，推荐使用[Qwen3](https://help.aliyun.com/zh/model-studio/deep-thinking)、[DeepSeek -阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)、[Kimi-阿里云](https://help.aliyun.com/zh/model-studio/kimi-api)作为替代模型
-
-qwen2.5-0.5b-instruct
-
 ## 国际
 
 服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
@@ -6049,42 +5607,6 @@ qwen2.5-0.5b-instruct
 **输入单价 （每百万Token）**
 
 **输出单价 （每百万Token）**
-
-qwen2.5-14b-instruct-1m
-
-5.908元
-
-23.632元
-
-qwen2.5-7b-instruct-1m
-
-2.701元
-
-10.789元
-
-qwen2.5-72b-instruct
-
-10.275元
-
-41.1元
-
-qwen2.5-32b-instruct
-
-5.137元
-
-20.55元
-
-qwen2.5-14b-instruct
-
-2.569元
-
-10.275元
-
-qwen2.5-7b-instruct
-
-1.284元
-
-5.137元
 
 ### **QVQ**
 
@@ -6101,16 +5623,6 @@ qwen2.5-7b-instruct
 **输出单价（每百万Token）**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-qvq-72b-preview
-
-12元
-
-36元
-
-10万Token
-
-有效期：阿里云百炼开通后90天内
 
 ### **Qwen-Omni**
 
@@ -6344,44 +5856,6 @@ qwen3-vl-8b-instruct
 
 2元
 
-##### **更多模型**
-
-**模型 ID（Model ID）**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-qwen2.5-vl-72b-instruct
-
-16元
-
-48元
-
-各100万 Token
-
-有效期：阿里云百炼开通后90天内
-
-qwen2.5-vl-32b-instruct
-
-8元
-
-24元
-
-qwen2.5-vl-7b-instruct
-
-2元
-
-5元
-
-qwen2.5-vl-3b-instruct
-
-1.2元
-
-3.6元
-
 ## 全球
 
 服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
@@ -6542,44 +6016,6 @@ qwen3-vl-8b-instruct
 
 5.137元
 
-##### **更多模型**
-
-**模型 ID（Model ID）**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-qwen2.5-vl-72b-instruct
-
-20.55元
-
-61.65元
-
-各100万 Token
-
-有效期：阿里云百炼开通后90天内
-
-qwen2.5-vl-32b-instruct
-
-10.275元
-
-30.825元
-
-qwen2.5-vl-7b-instruct
-
-2.569元
-
-7.706元
-
-qwen2.5-vl-3b-instruct
-
-1.541元
-
-4.624元
-
 ### **Qwen-Audio**
 
 **说明**
@@ -6623,22 +6059,6 @@ qwen-audio-chat
 **输出单价（每百万Token）**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-qwen2.5-math-72b-instruct
-
-4元
-
-12元
-
-各100万Token
-
-有效期：阿里云百炼开通后90天内
-
-qwen2.5-math-7b-instruct
-
-1元
-
-2元
 
 ### **Qwen-Coder**
 
@@ -6721,30 +6141,6 @@ qwen3-coder-30b-a3b-instruct
 3.75元
 
 15元
-
-qwen2.5-coder-32b-instruct
-
-无阶梯计价
-
-2元
-
-6元
-
-qwen2.5-coder-14b-instruct
-
-无阶梯计价
-
-2元
-
-6元
-
-qwen2.5-coder-7b-instruct
-
-无阶梯计价
-
-1元
-
-2元
 
 ## 全球
 
@@ -8784,13 +8180,17 @@ kling/kling-v3-omni-image-generation
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
-fun-music-v1
+fun-music-preview
 
-0.002元
+0.005元
 
 1,000秒
 
 有效期：阿里云百炼开通后90天内
+
+fun-music-v1
+
+0.002元
 
 ## **语音合成（文本转语音）**
 

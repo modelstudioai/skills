@@ -2,7 +2,11 @@
 
 本文档介绍如何使用 DashScope Java SDK 调用实时语音识别（Qwen-ASR-Realtime）模型。
 
-**用户指南：**模型介绍、功能特性和完整示例代码请参见[实时语音识别-千问](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)
+**重要**
+
+新加坡地域的旧版域名 `wss://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
+**用户指南：**模型介绍、功能特性和完整示例代码请参见[实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)
 
 ## **前提条件**
 
@@ -10,7 +14,7 @@
     
 2.  [获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
     
-3.  了解[交互流程](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-interaction-process)。
+3.  了解[WebSocket API](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-interaction-process)。
     
 
 ## **请求参数**
@@ -22,7 +26,7 @@
     ```
     OmniRealtimeParam param = OmniRealtimeParam.builder()
                     .model("qwen3-asr-flash-realtime")
-                    // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime
+                    // 以下为华北2（北京）地域的URL，各地域的URL不同。
                     .url("wss://dashscope.aliyuncs.com/api-ws/v1/realtime")
                     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                     // 若没有配置环境变量，请用百炼API Key将下行替换为：.apikey("sk-xxx")
@@ -54,9 +58,9 @@
     
     语音识别服务地址：
     
-    -   中国内地：`wss://dashscope.aliyuncs.com/api-ws/v1/realtime`
+    -   华北2（北京）地域：`wss://dashscope.aliyuncs.com/api-ws/v1/realtime`
         
-    -   国际：`wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime`。
+    -   新加坡地域：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`。调用时请将`WorkspaceId`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
         
     
     `apikey`

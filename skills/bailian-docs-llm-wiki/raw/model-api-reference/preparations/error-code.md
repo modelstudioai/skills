@@ -362,9 +362,9 @@ AI 助理准确分析出原因，并给出解决方案：
     
 -   **文件 URL**：图像文件不得超过 10 MB；对于视频文件，
     
-    -   Qwen3-VL、qwen-vl-max、qwen-vl-max-latest、qwen-vl-max-2025-08-13、qwen-vl-max-2025-04-08：不超过 2GB；
+    -   Qwen3-VL、qwen-vl-max：不超过 2GB；
         
-    -   qwen-vl-plus系列及qwen-vl-max-2025-04-08之前的更新的模型：不超过 1GB；
+    -   qwen-vl-plus系列：不超过 1GB；
         
     -   其他模型不超过 150MB。
         
@@ -513,7 +513,7 @@ AI 助理准确分析出原因，并给出解决方案：
     
     **解决方案：**
     
-    1.  通过DashScope使用qwen3.6-plus、qwen3-vl-plus等**多模态模型**时：需使用MultiModalConversation.call() 或multimodal-generation端点，具体参考[图像与视频理解](https://help.aliyun.com/zh/model-studio/vision)。
+    1.  通过DashScope使用qwen3.7-plus、qwen3-vl-plus等**多模态模型**时：需使用MultiModalConversation.call() 或multimodal-generation端点，具体参考[图像与视频理解](https://help.aliyun.com/zh/model-studio/vision)。
         
         > 若使用 spring-ai-alibaba 框架，请确认是否设置多模态参数[withMultiModel](https://github.com/spring-ai-alibaba/examples/blob/c66ffdec789defe4adf86b34bac0084df3b71e92/spring-ai-alibaba-multi-model-example/dashscope-multi-model/src/main/java/com/alibaba/cloud/ai/example/multi/controller/MultiModelController.java#L82)。
         
@@ -741,7 +741,7 @@ AI 助理准确分析出原因，并给出解决方案：
 
 ### **request timeout after 23 seconds.**
 
-**原因：** 超过23秒未向服务发送数据。该报错信息在使用[实时语音合成（Sambert）](https://help.aliyun.com/zh/model-studio/sambert-speech-synthesis/)、[实时语音识别/翻译（Gummy）](https://help.aliyun.com/zh/model-studio/gummy-speech-recognition-translation)、[语音识别（Paraformer）](https://help.aliyun.com/zh/model-studio/paraformer-speech-recognition)和[实时语音合成（CosyVoice）](https://help.aliyun.com/zh/model-studio/cosyvoice-large-model-for-speech-synthesis/)时产生。
+**原因：** 超过23秒未向服务发送数据。该报错信息在使用[实时语音合成（Sambert）](https://help.aliyun.com/zh/model-studio/sambert-speech-synthesis/)、[语音识别（Paraformer）](https://help.aliyun.com/zh/model-studio/paraformer-speech-recognition)和[实时语音合成（CosyVoice）](https://help.aliyun.com/zh/model-studio/cosyvoice-large-model-for-speech-synthesis/)时产生。
 
 **解决方案：** 请检查为什么长时间未向服务器发送数据。如果长时间（超过23秒）不向服务端发送消息，请及时结束任务。
 
@@ -925,7 +925,7 @@ AI 助理准确分析出原因，并给出解决方案：
             
         -   仅支持中文 `instruction`
             
-        -   不同音色支持的 `instruction` 不同，详情请参见[音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
+        -   不同音色支持的 `instruction` 不同，详情请参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
             
 
 **解决方案：**
@@ -1514,7 +1514,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 -   [CosyVoice声音复刻](https://help.aliyun.com/zh/model-studio/voice-replica-1/)更新、查询或删除接口调用时，对应音色不存在。
     
--   使用[定制热词（Paraformer）](https://help.aliyun.com/zh/model-studio/custom-hot-words/)或[定制热词（Gummy）](https://help.aliyun.com/zh/model-studio/custom-hot-words-for-gummy)时，更新、查询或删除接口调用的热词资源不存在。
+-   使用[定制热词（Paraformer）](https://help.aliyun.com/zh/model-studio/custom-hot-words/)时，更新、查询或删除接口调用的热词资源不存在。
     
 
 ## **400-**Throttling.AllocationQuota
@@ -1527,7 +1527,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 ### **Free allocated quota exceeded.**
 
-**原因：** 使用定制热词（Paraformer）或定制热词（Gummy）时，热词数目已超过上限（每个账号默认10个，Paraformer和Gummy共用）。
+**原因：** 使用定制热词（Paraformer）时，热词数目已超过上限（每个账号默认10个）。
 
 **解决方案：** 删除部分热词。
 
@@ -1709,7 +1709,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
     
 -   **Coding Plan 专属 API Key**：Coding Plan 套餐提供专属 API Key（以 `sk-sp-` 开头），**必须配合专属 API 地址使用**（如 https://coding.dashscope.aliyuncs.com/v1），与通用 API Key 的使用方式不同。请确认同时更新了 API Key 和 Base URL，具体配置方法请参见[接入AI工具](https://help.aliyun.com/zh/model-studio/use-coding-plan-in-ai-tools/)。
     
--   **地域不匹配**：API Key 和 Base URL 属于不同的地域，例如使用了中国大陆（北京）地域的 API Key 和国际（新加坡）地域的 Base URL（含 `-intl`）。请确认您使用的 API Key 位于[北京](https://bailian.console.aliyun.com/?tab=globalset#/efm/api_key)地域页面或[新加坡](https://modelstudio.console.aliyun.com/?tab=globalset#/efm/api_key)地域页面，或[美国](https://modelstudio.console.aliyun.com/us-east-1)地域页面。各地域对应的 Base URL 如下：
+-   **地域不匹配**：API Key 和 Base URL 属于不同的地域，例如使用了华北2（北京）地域的 API Key 和新加坡地域的 Base URL。请确认您使用的 API Key 位于[北京](https://bailian.console.aliyun.com/?tab=globalset#/efm/api_key)地域页面或[新加坡](https://modelstudio.console.aliyun.com/?tab=globalset#/efm/api_key)地域页面，或[美国](https://modelstudio.console.aliyun.com/us-east-1)地域页面。各地域对应的 Base URL 如下：
     
     **地域**
     
@@ -1717,23 +1717,25 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
     
     **DashScope**
     
-    中国内地（北京）
+    华北2（北京）
     
     `https://dashscope.aliyuncs.com/compatible-mode/v1`
     
     `https://dashscope.aliyuncs.com/api/v1`
     
-    国际（新加坡）
+    新加坡
     
-    `https://dashscope-intl.aliyuncs.com/compatible-mode/v1`
+    `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
     
-    `https://dashscope-intl.aliyuncs.com/api/v1`
+    `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
     
     美国（弗吉尼亚）
     
     `https://dashscope-us.aliyuncs.com/compatible-mode/v1`
     
     `https://dashscope-us.aliyuncs.com/api/v1`
+    
+    > 新加坡地域的域名迁移说明：新加坡地域旧版域名 https://dashscope-intl.aliyuncs.com 即将下线，请迁移至 https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com。
     
 -   **工具适配问题**：第三方工具未正确适配（如[Dify](https://help.aliyun.com/zh/model-studio/dify)最新版本插件不稳定导致报错，可尝试安装旧版本千问插件；旧版本[Cline](https://help.aliyun.com/zh/model-studio/cline)调用模型时**API Provider**选择了**Alibaba Qwen**，应选择**OpenAI兼容**）。
     
@@ -2402,7 +2404,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 ### **Invalid payload data**
 
-**原因：** 使用语音识别/翻译（Gummy）的WebSocket API，发送给服务端的JSON格式有误。
+**原因：** 使用语音识别的WebSocket API，发送给服务端的JSON格式有误。
 
 **解决方案：**
 
@@ -2413,7 +2415,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 ### **The decoded text message was too big for the output buffer and the endpoint does not support partial messages**
 
-**原因：** 使用语音识别（Paraformer）或语音识别/翻译（Gummy）的流式语音识别时，服务返回的识别结果数据量过大。
+**原因：** 使用语音识别（Paraformer）的流式语音识别时，服务返回的识别结果数据量过大。
 
 **解决方案：** 请分段发送待识别音频，建议每次发送的音频时长约为100毫秒，数据大小保持在1KB至16KB之间。
 
@@ -2556,7 +2558,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 ### **NO\_VALID\_AUDIO\_ERROR**
 
-**原因：** 使用语音识别（Paraformer）或语音识别/翻译（Gummy）时，待识别音频无效。
+**原因：** 使用语音识别（Paraformer）时，待识别音频无效。
 
 **解决方案：** 请检查音频格式、采样率等是否满足要求。
 

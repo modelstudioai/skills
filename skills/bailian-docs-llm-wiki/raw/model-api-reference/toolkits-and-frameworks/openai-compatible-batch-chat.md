@@ -21,18 +21,20 @@
 
 服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
 
--   **文本生成模型：**qwen3.7-max、qwen3.6-plus、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-max、qwen-plus、qwen-flash、deepseek-v3.2
+-   **文本生成模型：**qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-max、qwen-plus、qwen-flash、deepseek-v3.2
     
--   **图像与视频理解模型：**qwen3.6-plus、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus、qwen3-vl-flash
+-   **图像与视频理解模型：**qwen3.7-plus、qwen3.6-plus、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus、qwen3-vl-flash
     
 
 **重要**
 
--   在Batch 场景下，`qwen3.7-max`、`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`和`qwen3.5-flash`单次请求的输入 Token 数最大支持 256K。
+-   在Batch 场景下，`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`和`qwen3.5-flash`单次请求的上下文 Token 数最大支持 256K。
     
 -   部分模型支持思考模式，开启后会产生思考`tokens`导致成本增加。
     
--   `qwen3.7-max`、`qwen3.6`和`qwen3.5` 系列模型默认开启思考模式。建议使用混合思考模型时，显式设置`enable_thinking`参数（`true`开启/`false`关闭）。
+-   `qwen3.7`、`qwen3.6`和`qwen3.5` 系列模型默认开启思考模式。建议使用混合思考模型时，显式设置`enable_thinking`参数（`true`开启/`false`关闭）。
+    
+-   在 JSONL 请求体中，`enable_thinking` 为 `body` 的顶层参数，须与 `model` 同级传入，不能放在 `extra_body` 中。
     
 
 ## **如何使用**
@@ -510,7 +512,7 @@ curl -X POST https://batch.dashscope.aliyuncs.com/compatible-mode/v1/chat/comple
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ## 常见问题
 

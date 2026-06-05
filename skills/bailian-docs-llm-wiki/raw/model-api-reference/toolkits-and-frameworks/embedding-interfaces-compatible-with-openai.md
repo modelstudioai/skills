@@ -9,6 +9,10 @@
 -   model：替换为以下模型列表中的模型名称
     
 
+**重要**
+
+新加坡地域旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
 ## **支持的模型**
 
 **模型名称**
@@ -171,4 +175,4 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings' \
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。

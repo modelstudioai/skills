@@ -9,6 +9,10 @@
 2.  [获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
     
 
+**重要**
+
+新加坡地域的旧版域名 `wss://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
 ## **请求参数**
 
 -   以下参数通过`OmniRealtimeConversation`的构造方法设置。
@@ -64,7 +68,7 @@
     
     conversation = OmniRealtimeConversation(
         model='qwen3.5-livetranslate-flash-realtime',
-        # 以下为中国内地地域url，若使用国际版，需将url替换为：wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime
+        # 以下为华北2（北京）地域的URL，各地域的URL不同。
         url='wss://dashscope.aliyuncs.com/api-ws/v1/realtime',
         callback=MyCallback(conversation=None)  # 暂时传None，稍后注入
     )
@@ -108,7 +112,7 @@
     
     -   中国内地：`wss://dashscope.aliyuncs.com/api-ws/v1/realtime`
         
-    -   国际：`wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime`
+    -   新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`
         
     
 -   以下参数通过`OmniRealtimeConversation`的`update_session`方法设置。
@@ -451,7 +455,7 @@ def main():
     # 创建实时会话
     conversation = OmniRealtimeConversation(
         model="qwen3.5-livetranslate-flash-realtime",
-        # 国际地域使用 wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime
+        # 以下为华北2（北京）地域的URL，各地域的URL不同。
         url="wss://dashscope.aliyuncs.com/api-ws/v1/realtime",  
         callback=callback
     )
@@ -486,6 +490,7 @@ def main():
         speaker.stop_stream()
         speaker.close()
         pya.terminate()
+        conversation.end_session()
         conversation.close()
         sys.exit(0)
 

@@ -19,7 +19,7 @@ qwen3.7-max、qwen3.6-plus、qwen3.6-flash 模型内置工具的费用可通过 
 
 ### **MCP 服务**
 
-百炼 MCP 广场提供联网搜索、代码解释器、网页抓取等 MCP 服务，部分服务**限时免费**，每月提供一定免费额度。具体价格以[MCP 广场](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/mcp-market)各服务详情页为准。
+百炼 MCP 广场提供联网搜索、代码解释器、网页抓取等 MCP 服务。联网搜索 MCP 全部用户前 2000 次调用免费，免费额度用尽后按 29 元/千次计费；其他 MCP 服务部分**限时免费**，每月提供一定免费额度。具体价格以[MCP 广场](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/mcp-market)各服务详情页为准。
 
 ## **使用方式**
 

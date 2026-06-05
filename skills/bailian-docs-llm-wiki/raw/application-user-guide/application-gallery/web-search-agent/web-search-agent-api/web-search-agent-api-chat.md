@@ -183,6 +183,14 @@ bool
 
 是否透出相关问题
 
+parameters.agent\_options.show\_step\_info
+
+bool
+
+否
+
+是否展示工具调用状态信息，默认为 false
+
 ## **返回参数**
 
 **参数名**
@@ -545,6 +553,44 @@ tool\_calling\_image\_search
 tool\_calling\_image\_to\_image\_search
 
 图搜图
+
+## 工具调用状态信息
+
+### **参数**
+
+工具调用的状态在消息中的\["extra"\]\["step\_change"\]字段中，工具调用的信息在\["extra"\]\["step\_info"\]中，工具调用状态和工具调用信息的映射如下：
+
+工具调用的 step 状态
+
+状态含义
+
+工具调用状态信息 step\_info
+
+tool\_call\_start
+
+开始工具调用
+
+开始调用 xxx 工具
+
+tool\_calling
+
+正在调用工具
+
+正在调用 xxx 工具
+
+tool\_calling\_return
+
+工具调用完成
+
+xxx 工具调用完成，xxx
+
+以联网搜索工具为例，其工具调用的状态信息会经历如下这个状态：
+
+```
+"step_change": "tool_call_start", "step": "tool_calling_search","step_info": "开始调用联网检索工具"
+"step_change": "tool_calling", "step": "tool_calling_search","step_info": "正在调用联网检索工具"
+"step_change": "tool_return", "step": "tool_calling_search",  "step_info": "联网检索工具调用完成，检索到10个网页"
+```
 
 ## 图文并茂消息协议
 

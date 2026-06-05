@@ -2,7 +2,7 @@
 
 本文介绍Paraformer录音文件识别RESTful API的参数和接口细节。
 
-**用户指南：**关于模型介绍和选型建议请参见[录音文件识别-Fun-ASR/Paraformer/SenseVoice](https://help.aliyun.com/zh/model-studio/recording-file-recognition)。
+**用户指南：**关于模型介绍和选型建议请参见[录音文件识别-Fun-ASR/Paraformer](https://help.aliyun.com/zh/model-studio/recording-file-recognition)。
 
 目前提供了[提交任务接口](#418f2ac8ecxm4)和[查询任务接口](#480630e0582sb)，通常情况下，您可以先调用提交任务接口上传识别任务，然后循环调用查询任务接口，直至任务完成。
 
@@ -53,8 +53,7 @@ X-DashScope-Async: enable // 请勿遗漏该请求头，否则无法提交任务
     "model":"paraformer-v2", //模型名，必选
     "input":{
         "file_urls":[
-            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
-            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav"
+            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav"
         ] //待识别文件，必选
     }
     "parameters":{
@@ -85,8 +84,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transc
      --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
      --header "Content-Type: application/json" \
      --header "X-DashScope-Async: enable" \
-     --data '{"model":"paraformer-v2","input":{"file_urls":["https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
-              "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav"]},"parameters":{"channel_id":[0]}}'
+     --data '{"model":"paraformer-v2","input":{"file_urls":["https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav"]},"parameters":{"channel_id":[0]}}'
 ```
 
 **参数**
@@ -117,7 +115,7 @@ array\[string\]
 
 是
 
-音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求最多支持100个URL。
+音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。
 
 **重要**
 
@@ -446,19 +444,14 @@ string
     "end_time": "2024-09-12 15:11:40.903",
     "results": [
       {
-        "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav",
-        "transcription_url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/pre/filetrans-16k/20240912/15%3A11/3bdf7689-b598-409d-806a-121cff5e4a31-1.json?Expires=1726211500&OSSAccessKeyId=yourOSSAccessKeyId&Signature=Fj%2BaF%2FH0Kayj3w3My2ECBeP****%3D",
-        "subtask_status": "SUCCEEDED"
-      },
-      {
         "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
         "transcription_url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/pre/filetrans-16k/20240912/15%3A11/409a4b92-445b-4dd8-8c1d-f110954d82d8-1.json?Expires=1726211500&OSSAccessKeyId=yourOSSAccessKeyId&Signature=v5Owy5qoAfT7mzGmQgH0g8C****%3D",
         "subtask_status": "SUCCEEDED"
       }
     ],
     "task_metrics": {
-      "TOTAL": 2,
-      "SUCCEEDED": 2,
+      "TOTAL": 1,
+      "SUCCEEDED": 1,
       "FAILED": 0
     }
   },
@@ -481,11 +474,6 @@ string
     "end_time": "2024-12-16 16:31:02.375",
     "results": [
         {
-            "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/long_audio_demo_cn.mp3",
-            "transcription_url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20241216/xxxx",
-            "subtask_status": "SUCCEEDED"
-        },
-        {
             "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/rich_text_exaple_1.wav",
             "code": "InvalidFile.DownloadFailed",
             "message": "The audio file cannot be downloaded.",
@@ -493,8 +481,8 @@ string
         }
     ],
     "task_metrics": {
-        "TOTAL": 2,
-        "SUCCEEDED": 1,
+        "TOTAL": 1,
+        "SUCCEEDED": 0,
         "FAILED": 1
     }
 }
@@ -711,7 +699,6 @@ import time
 api_key = "your-dashscope-api-key"  # 在此处替换为您的API Key
 file_urls = [
     "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
-    "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav",
 ]
 language_hints = ["zh", "en"]
 
@@ -787,7 +774,7 @@ print("transcription result: ", result)
 
 ## **错误码**
 
-如遇报错问题，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行排查。
+如遇报错问题，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行排查。
 
 若问题仍未解决，请加入[开发者群](https://github.com/aliyun/alibabacloud-bailian-speech-demo)反馈遇到的问题，并提供Request ID，以便进一步排查问题。
 

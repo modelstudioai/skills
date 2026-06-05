@@ -16,6 +16,14 @@
 
 推理模型
 
+2026-06-01
+
+qwen3.7-plus、qwen3.7-plus-2026-05-26
+
+千问3.7Plus系列，在强大文本能力的基础上全面升级了视觉-语言能力，同时保持了在编码、工具使用和生产力工作流方面的完整智能体能力。其核心特色为多模态交互混合智能体能力，能够感知真实世界场景、读取屏幕并操作 GUI、基于视觉参考生成代码、端到端导航移动应用。
+
+推理模型
+
 2026-05-29
 
 vanchin/deepseek-v4-pro
@@ -721,7 +729,7 @@ qwen3-asr-flash、qwen3-asr-flash-2025-09-08
 
 cosyvoice-v3-flash
 
-语音合成CosyVoice新增24个音色（详情请参见[音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)）：
+语音合成CosyVoice新增24个音色（详情请参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)）：
 
 -   方言：龙嘉怡、龙老铁
     
@@ -885,7 +893,7 @@ cosyvoice-v3-flash、cosyvoice-v3-plus
 
 CosyVoice模型音色更新：
 
--   cosyvoice-v3-flash模型新增5个系统音色：longanrou\_v3、longyingjing\_v3、longyingling\_v3、longanling\_v3和longhan\_v3，均支持时间戳与SSML功能，详情请参见[音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)。
+-   cosyvoice-v3-flash模型新增5个系统音色：longanrou\_v3、longyingjing\_v3、longyingling\_v3、longanling\_v3和longhan\_v3，均支持时间戳与SSML功能，详情请参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)。
     
 -   cosyvoice-v3-flash和cosyvoice-v3-plus模型的复刻音色功能增强：支持时间戳与SSML功能，韵律效果提升。请参见[CosyVoice声音复刻/设计API](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)创建新音色体验。
     
@@ -1496,7 +1504,7 @@ qwen-plus 已更新，支持[思考模式](https://help.aliyun.com/zh/model-stud
 
 cosyvoice-v2
 
-cosyvoice-v2 全新升级，新增多种音色，不仅丰富了语言支持范围（如粤语、韩语、日语），还引入了更多风格化音色（如英式英语、美式英语）。详情请参见[音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)。
+cosyvoice-v2 全新升级，新增多种音色，不仅丰富了语言支持范围（如粤语、韩语、日语），还引入了更多风格化音色（如英式英语、美式英语）。详情请参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)。
 
 文本向量
 
@@ -2228,6 +2236,14 @@ qwen1.5-110b-chat
 
 推理模型
 
+2026-06-02
+
+qwen3.7-plus、qwen3.7-plus-2026-05-26
+
+千问3.7Plus系列，在强大文本能力的基础上全面升级了视觉-语言能力，同时保持了在编码、工具使用和生产力工作流方面的完整智能体能力。其核心特色为多模态交互混合智能体能力，能够感知真实世界场景、读取屏幕并操作 GUI、基于视觉参考生成代码、端到端导航移动应用。
+
+推理模型
+
 2026-05-21
 
 qwen3.7-max、qwen3.7-max-2026-05-20
@@ -2554,6 +2570,14 @@ qwen-flash、qwen-flash-2025-07-28
 **模型规格**
 
 **功能说明**
+
+推理模型
+
+2026-06-01
+
+qwen3.7-plus、qwen3.7-plus-2026-05-26
+
+千问3.7Plus系列，在强大文本能力的基础上全面升级了视觉-语言能力，同时保持了在编码、工具使用和生产力工作流方面的完整智能体能力。其核心特色为多模态交互混合智能体能力，能够感知真实世界场景、读取屏幕并操作 GUI、基于视觉参考生成代码、端到端导航移动应用。
 
 推理模型
 

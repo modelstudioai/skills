@@ -6,14 +6,14 @@
 
 可参考以下选型指南快速选择：
 
--   [AI 通用型节省计划](#universal-savings-plan)**（推荐）**：通过承诺每月消费金额来换取阶梯式折扣，最高可享 5.3 折优惠。该方案可抵扣[阿里直供](#85a29cab67489)的全部模型，灵活性最高，**是绝大多数场景下的首选**。
+-   [AI 通用型节省计划](#bi9fizb4qqi7x)**（推荐）**：通过承诺每月消费金额来换取阶梯式折扣，最高可享 5.3 折优惠。该方案可抵扣[阿里直供](#85a29cab67489)的全部模型，灵活性最高，**是绝大多数场景下的首选**。
     
--   [其他模型节省计划](#cb5e825e04esu)：一次性购买固定金额，用于抵扣特定模型系列的调用费用。仅适用于部分模型系列（如万相系列、语音模型系列等），且折扣通常不如AI 通用型节省计划，可按需使用。
+-   [其他模型节省计划](#cb5e825e04esu)：一次性购买固定金额，用于抵扣特定模型系列的调用费用。仅适用于特定模型系列（如语音模型系列），且折扣通常不如AI 通用型节省计划，可按需使用。
     
 -   [资源包](#0a9293f0f8tuj)：一次性购买具体资源量（如Tokens、生成图片数量等）。仅适用于抵扣单个特定模型（例如 qwen-plus），且折扣通常不如 AI 通用型节省计划，可按需使用。
     
 
-为最大化成本效益，建议优先了解并选择 [AI 通用型节省计划](#universal-savings-plan)。
+为最大化成本效益，建议优先了解并选择 [AI 通用型节省计划](#bi9fizb4qqi7x)。
 
 ## **AI 通用型节省计划**
 
@@ -75,7 +75,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
     > 三方直供模型不支持抵扣，详情参见[三方直供模型支持抵扣 AI 通用型节省计划吗？](#85a29cab67489)
     
 
-**每月承诺消费金额**
+**每月承诺消费金额范围**
 
 用于抵扣模型服务按量计费的每月承诺消费额。可自定义金额，1000 元起，以 10 元为单位调整，不设上限。
 
@@ -103,6 +103,8 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 不同模型、不同档位、承诺周期和付款方式享受不同的折扣。
 
 例如：选择了为期 12 个月、每月承诺消费 10,000 元的节省计划，采用全预付的方式支付，此时调用千问文本生成模型（A 类）时，享受 8 折优惠，即一次原价 1 元的模型调用，实际从节省计划额度中抵扣 0.8 元。
+
+以下表格中的金额范围含起始值、不含结束值。例如 1,000 - 5,000 表示金额大于等于 1,000 且小于 5,000。
 
 **付款方式**
 
@@ -134,7 +136,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 **全预付**
 
-\[1,000, 5,000)
+1,000 - 5,000
 
 8.8折
 
@@ -154,7 +156,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 无折扣
 
-\[5,000, 10,000)
+5,000 - 10,000
 
 8.6折
 
@@ -174,7 +176,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 无折扣
 
-\[10,000, 30,000)
+10,000 - 30,000
 
 8.4折
 
@@ -194,7 +196,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 无折扣
 
-\[30,000, 50,000)
+30,000 - 50,000
 
 8.2折
 
@@ -214,7 +216,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 无折扣
 
-\[50,000, 100,000)
+50,000 - 100,000
 
 8折
 
@@ -234,7 +236,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 无折扣
 
-\[100,000, 300,000)
+100,000 - 300,000
 
 7.8折
 
@@ -254,7 +256,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 无折扣
 
-\[300,000, 1,000,000)
+300,000 - 1,000,000
 
 7.6折
 
@@ -274,7 +276,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 无折扣
 
-\[1,000,000, ~)
+1,000,000+
 
 7.4折
 
@@ -298,7 +300,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 > 需联系商务经理开通
 
-\[1,000, 5,000)
+1,000 - 5,000
 
 9折
 
@@ -318,7 +320,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 无折扣
 
-\[5,000, 10,000)
+5,000 - 10,000
 
 8.8折
 
@@ -338,7 +340,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 无折扣
 
-\[10,000, 30,000)
+10,000 - 30,000
 
 8.6折
 
@@ -358,7 +360,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 无折扣
 
-\[30,000, 50,000)
+30,000 - 50,000
 
 8.4折
 
@@ -378,7 +380,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 无折扣
 
-\[50,000, 100,000)
+50,000 - 100,000
 
 8.2折
 
@@ -398,7 +400,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 无折扣
 
-\[100,000, 300,000)
+100,000 - 300,000
 
 8折
 
@@ -418,7 +420,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 无折扣
 
-\[300,000, 1,000,000)
+300,000 - 1,000,000
 
 7.8折
 
@@ -519,10 +521,6 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 语音合成字数用量、语音识别时长用量
 
-百炼大模型-万相模型
-
-图片生成张数用量、视频生成时长用量
-
 #### 查询账单
 
 进入[费用与成本](https://usercenter2.aliyun.com/home)控制台，左侧菜单选择，**产品名称**选择**大模型服务平台百炼**，**商品名称**选择 **AI 通用型节省计划**。页面默认展示当月明细账单。详情请参考[如何查询节省计划账单](https://help.aliyun.com/zh/user-center/how-to-check-the-savings-plan-bill)。
@@ -554,7 +552,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 ### **支持的节省计划**
 
-## **大语言模型**
+#### **大语言模型**
 
 **购买方式**
 
@@ -606,47 +604,9 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 **说明**
 
-不支持向量模型（embedding）和排序模型（rerank）。如需抵扣这些模型，请参考[AI 通用型节省计划](#universal-savings-plan)或[向量及排序模型节省计划](#1a5d3540e3749)。
+不支持向量模型（embedding）和排序模型（rerank）。如需抵扣这些模型，请参考[AI 通用型节省计划](#bi9fizb4qqi7x)或[向量及排序模型节省计划](#1a5d3540e3749)。
 
-## **万相模型**
-
-**购买方式**
-
-[点击购买万相模型节省计划](https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn)
-
-**购买说明**
-
-阿里云百炼提供五个购买档位，分别为：
-
--   20元：无折扣
-    
--   100元：无折扣
-    
--   1,000元：享 9.8 折优惠
-    
--   10,000元：享 9.5 折优惠
-    
--   30,000元：享 9 折优惠
-    
-
-优惠示例：以 1,000元 档位为例，假设生成某个视频消费1元，实际将从节省计划中抵扣1\*0.98=0.98元。
-
-**有效期**
-
--   对于20元、100元两档，有效期3个月。
-    
--   对于1,000元、10,000元、30,000元三档，有效期6个月。
-    
-
-**适用模型**
-
-**图像生成**：wan2.6-image、wan2.6-t2i、wan2.5-t2i-preview、wan2.5-i2i-preview、wan2.2-t2i-plus、wan2.2-t2i-flash、wanx2.0-t2i-turbo、wanx2.1-t2i-plus、wanx2.1-imageedit、wanx2.1-t2i-turbo、wanx-sketch-to-image-lite、wanx-v1
-
-**视频生成**：wan2.6-t2v、wan2.6-i2v、wan2.6-r2v、wan2.5-t2v-preview、wan2.5-i2v-preview、wan2.2-t2v-plus、wan2.2-i2v-flash、wan2.2-t2v-flash、wan2.2-i2v-plus、wanx2.1-vace-plus、wanx2.1-kf2v-plus、wanx2.1-t2v-turbo、wanx2.1-t2v-plus、wanx2.1-i2v-turbo、wanx2.1-i2v-plus
-
-请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)查看全部模型及其调用价格。
-
-## **千问语音模型**
+#### **千问语音模型**
 
 **购买方式**
 
@@ -696,17 +656,11 @@ ASR模型按秒计费，TTS模型按字符计费，请前往[百炼控制台](ht
         
     -   **实时语音识别（Qwen-ASR-Realtime）：**qwen3-asr-flash-realtime、qwen3-asr-flash-realtime-2025-10-27
         
-    -   **实时长语音识别/翻译（Gummy）：**gummy-realtime-v1
-        
-    -   **实时短语音（一句话）识别/翻译（Gummy）：**gummy-chat-v1
-        
     -   **录音文件识别（Paraformer）：**paraformer-v2、paraformer-v1、paraformer-8k-v2、paraformer-8k-v1、paraformer-mtl-v1
         
     -   **录音文件识别（Fun-ASR）：**fun-asr、fun-asr-2025-11-07、fun-asr-2025-08-25、fun-asr-mtl、fun-asr-mtl-2025-08-25
         
     -   **录音文件识别（Qwen-ASR）：**qwen3-asr-flash-filetrans、qwen3-asr-flash-filetrans-2025-11-17、qwen3-asr-flash、qwen3-asr-flash-2025-09-08
-        
-    -   **录音文件识别（SenseVoice）：**sensevoice-v1
         
 -   **新加坡：**
     
@@ -723,7 +677,7 @@ ASR模型按秒计费，TTS模型按字符计费，请前往[百炼控制台](ht
 
 请前往百炼控制台查看全部模型。
 
-## 向量及排序模型
+#### 向量及排序模型
 
 **购买方式**
 
@@ -822,17 +776,11 @@ ASR模型按秒计费，TTS模型按字符计费，请前往[百炼控制台](ht
 
 **适用模型**
 
-qwen-plus 及 qwen-plus-latest
+qwen-plus 及 qwen-plus-latest的实时推理服务（[非思考模式](https://help.aliyun.com/zh/model-studio/deep-thinking)）
 
-的实时推理服务（[非思考模式](https://help.aliyun.com/zh/model-studio/deep-thinking)）
+qwen-max的实时推理服务（[非思考模式](https://help.aliyun.com/zh/model-studio/deep-thinking)）
 
-qwen-max及qwen-max-latest
-
-的实时推理服务（[非思考模式](https://help.aliyun.com/zh/model-studio/deep-thinking)）
-
-qwen-turbo及qwen-turbo-latest
-
-的实时推理服务（[非思考模式](https://help.aliyun.com/zh/model-studio/deep-thinking)）
+qwen-turbo的实时推理服务（[非思考模式](https://help.aliyun.com/zh/model-studio/deep-thinking)）
 
 **包含输入和输出总Tokens**
 
@@ -870,7 +818,7 @@ qwen-turbo及qwen-turbo-latest
             
         -   [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)、[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)、[模型调优](https://help.aliyun.com/zh/model-studio/model-training-overview)、[模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)产生的费用。
             
--   **qwen-max**、**qwen-max-latest、qwen-turbo**、**qwen-turbo-latest**
+-   **qwen-max**、**qwen-turbo**
     
     -   仅支持抵扣实时推理产生的费用（[非思考模式](https://help.aliyun.com/zh/model-studio/deep-thinking)，包含输入和输出），不支持抵扣[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)、[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)、[模型调优](https://help.aliyun.com/zh/model-studio/model-training-overview)、[模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)产生的费用。
         
@@ -935,7 +883,7 @@ qwen-turbo及qwen-turbo-latest
 
 ## **常见问题**
 
-#### **节省计划和资源包是否支持退订？**
+### **节省计划和资源包是否支持退订？**
 
 -   节省计划：自 2026 年 04 月 03 日 10:00:00（UTC+8）起，符合以下条件的节省计划支持自助退订，可在[资源退订](https://billing-cost.console.aliyun.com/refund/refund)控制台中操作：
     
@@ -949,28 +897,26 @@ qwen-turbo及qwen-turbo-latest
 -   资源包：未发生使用的部分，可按未使用额度费用[申请退款](https://billing-cost.console.aliyun.com/refund/refund?commodityType=RESOURCE_PLANS&refundType=NOREASON_REFUND)；已使用的部分则无法退款。
     
 
-#### **资源包和节省计划如果同时存在，怎么扣费？**
+### **资源包和节省计划如果同时存在，怎么扣费？**
 
 系统的抵扣优先级为：**免费额度 > 资源包 > 其他模型节省计划 > AI 通用型节省计划 > 按量付费**。即：先用免费额度；用完后扣资源包；资源包不够或不适用时，扣节省计划；最后才使用账户余额。
 
-#### **为什么购买了节省计划，但没有抵扣？**
+### **为什么购买了节省计划，但没有抵扣？**
 
 常见原因如下：
 
-1.  **模型不匹配**：购买了其他节省计划，但调用的模型不在适用范围内。例如：购买了大语言模型节省计划，却调用了万相系列模型或向量模型（embedding）、排序模型（rerank）。可以选择购买 [AI 通用型节省计划](#universal-savings-plan)以实现跨模型抵扣。
+1.  **模型不匹配**：购买了其他节省计划，但调用的模型不在适用范围内。例如：购买了大语言模型节省计划，却调用了万相系列模型或向量模型（embedding）、排序模型（rerank）。可以选择购买 [AI 通用型节省计划](#bi9fizb4qqi7x)以实现跨模型抵扣。
     
 2.  **使用了不支持的功能**：AI 通用型节省计划和其他节省计划均不支持抵扣[模型调优](https://help.aliyun.com/zh/model-studio/model-training-overview)、[模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)费用。只有 AI 通用型节省计划支持抵扣上下文缓存、批量推理、工具调用等产生的费用，而其他节省计划不支持。
     
 3.  **免费额度未用完**：系统抵扣顺序为：**免费额度 > 节省计划**。节省计划仅抵扣免费额度用尽后产生的账单。
     
 
-#### **三方直供模型支持抵扣 AI 通用型节省计划吗？**
+### **三方直供模型支持抵扣 AI 通用型节省计划吗？**
 
-[C 类模型](#standard-sp-row3)中，阿里直供的模型支持抵扣，三方直供的模型不支持抵扣。可以在[百炼模型广场](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)中通过模型卡片右上角标识判断。
+[C 类模型](#ho1f5x10wuun0)中，阿里直供的模型支持抵扣，三方直供的模型不支持抵扣。可以在[百炼模型广场](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)中通过模型卡片右上角标识（如"阿里直供"或"三方直供"标签）判断。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9433444771/p1062187.png)
-
-#### **为什么购买了资源包，但没有抵扣？**
+### **为什么购买了资源包，但没有抵扣？**
 
 资源包的抵扣需要满足特定条件，常见原因如下：
 
@@ -983,10 +929,10 @@ qwen-turbo及qwen-turbo-latest
 4.  免费额度未用完：系统抵扣顺序为：**免费额度 > 资源包**。资源包仅抵扣免费额度用尽后产生的账单。
     
 
-#### **如果先购买了资源包但未开通阿里云百炼服务，应该如何使用？**
+### **如果先购买了资源包但未开通阿里云百炼服务，应该如何使用？**
 
 请先[开通阿里云百炼的模型服务](https://help.aliyun.com/zh/model-studio/get-api-key#02dae3d7d6nip)。服务开通后，优先会抵扣免费额度，待免费额度消耗完后，才会开始抵扣资源包。
 
-#### **购买了大语言模型节省计划，能抵扣向量模型（embedding）和排序模型（rerank）吗？**
+### **购买了大语言模型节省计划，能抵扣向量模型（embedding）和排序模型（rerank）吗？**
 
-不能。大语言模型推理节省计划仅适用于文本生成模型，不支持抵扣向量模型和排序模型。如果您的业务同时涉及大语言模型与向量、排序模型（例如 RAG 场景），建议选择[AI 通用型节省计划](#universal-savings-plan)，或单独购买[向量及排序模型节省计划](#1a5d3540e3749)。
+不能。大语言模型推理节省计划仅适用于文本生成模型，不支持抵扣向量模型和排序模型。如果您的业务同时涉及大语言模型与向量、排序模型（例如 RAG 场景），建议选择[AI 通用型节省计划](#bi9fizb4qqi7x)，或单独购买[向量及排序模型节省计划](#1a5d3540e3749)。

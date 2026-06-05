@@ -33,7 +33,7 @@
 
 支持用户使用自定义数据源，获取分析热点话题的任务结果
 
-[GetCustomSourceTopicAnalysisTask - 获取自定义源话题分析任务结果](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getcustomsourcetopicanalysistask)
+[获取自定义源话题分析任务结果](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getcustomsourcetopicanalysistask)
 
 导出自定义数据源热点话题分析结果
 

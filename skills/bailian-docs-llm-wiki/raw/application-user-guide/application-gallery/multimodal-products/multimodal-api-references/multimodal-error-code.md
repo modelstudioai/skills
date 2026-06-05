@@ -156,12 +156,12 @@
 
 （1）官方音色：
 
--   参考官方文档：cosyvoice-v2 / cosyvoice-v3 / cosyvoice-v3-plus / cosyvoice-v3-flash 支持的官方音色参考[音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)，qwen-tts-realtime / qwen3-tts 支持的官方音色参考[支持的音色](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#422789c49bqqx)，sambert支持的音色参考[模型列表](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#74cedcb97el0b)（去掉开头的"sambert-"和末尾的"-v1"后就是voice的取值）。
+-   参考官方文档：cosyvoice-v2 / cosyvoice-v3 / cosyvoice-v3-plus / cosyvoice-v3-flash 支持的官方音色参考[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)，qwen-tts-realtime / qwen3-tts 支持的官方音色参考[支持的音色](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#422789c49bqqx)，sambert支持的音色参考[模型列表](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#74cedcb97el0b)（去掉开头的"sambert-"和末尾的"-v1"后就是voice的取值）。
     
 -   其他语音合成模型的音色都可以在多模态交互控制台上查看：在左侧**语音交互**配置区域选择对应的语音合成模型，点击右侧**语音交互体验**区域的右上角即可查看可用的音色列表。
     
 
-（2）复刻音色，确认音色状态为“OK”后才能使用。查询方法参考[查询指定音色](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api#34490e5a2by7z)。
+（2）复刻音色，确认音色状态为“OK”后才能使用。查询方法参考[查询特定音色](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api#34490e5a2by7z)。
 
 ## **451-**NoSpeechRecognized
 

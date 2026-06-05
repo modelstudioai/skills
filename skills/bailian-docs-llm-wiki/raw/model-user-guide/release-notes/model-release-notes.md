@@ -12,7 +12,7 @@
     
 -   [通义千问VL系列模型降价通知](https://help.aliyun.com/zh/model-studio/qwen-vl-model-billing-notice)
     
--   [通义千问系列模型降价通知](https://help.aliyun.com/zh/model-studio/qwen-model-billing-notice)
+-   [千问系列模型降价通知](https://help.aliyun.com/zh/model-studio/qwen-model-billing-notice)
     
 -   [“云工开物”高校计划](https://help.aliyun.com/zh/model-studio/introduction-to-yungongkaiwu)
     
@@ -20,6 +20,26 @@
     
 
 ## **功能动态**
+
+## 2026年
+
+**1月15日**
+
+**日期**
+
+**功能模块**
+
+**功能点**
+
+**功能说明**
+
+1月22日
+
+模型调优
+
+支持调优的模型新增
+
+qwen3 系列、 qwen3-vl 系列和万相系列的更多参数量的模型支持[模型调优](https://help.aliyun.com/zh/model-studio/model-training-overview)。
 
 ## 2025年
 
@@ -104,9 +124,9 @@
 
 模型调优与部署
 
-**新增** 通义千问3-VL-8B-Instruct、通义千问3-VL-8B-Thinking 支持 SFT 模型调优和部署。
+**新增** 千问3-VL-8B-Instruct、千问3-VL-8B-Thinking 支持 SFT 模型调优和部署。
 
-通义千问3-VL-8B-Instruct、通义千问3-VL-8B-Thinking 支持 SFT [模型调优](https://help.aliyun.com/zh/model-studio/model-training-overview)和 调优后模型部署。
+千问3-VL-8B-Instruct、千问3-VL-8B-Thinking 支持 SFT [模型调优](https://help.aliyun.com/zh/model-studio/model-training-overview)和 调优后模型部署。
 
 SFT（有监督微调）支持全参微调和高效微调（LoRA）两种方式。
 
@@ -124,9 +144,9 @@ SFT（有监督微调）支持全参微调和高效微调（LoRA）两种方式�
 
 模型调优与部署
 
-**通义千问2.5、通义千问 3**系列支持 DPO 训练
+**千问2.5、千问 3**系列支持 DPO 训练
 
-通义千问3-32B、14B、8B 和 通义千问 2.5-72B、32B、14B、8B 新增支持 [DPO 偏好训练](https://help.aliyun.com/zh/model-studio/model-training-overview#c85dc8544chqv)。
+千问3-32B、14B、8B 和 千问 2.5-72B、32B、14B、8B 新增支持 [DPO 偏好训练](https://help.aliyun.com/zh/model-studio/model-training-overview#c85dc8544chqv)。
 
 DPO 偏好训练通过引入负反馈，从而降低幻觉，使得模型输出更符合人类偏好。
 
@@ -144,9 +164,9 @@ DPO 偏好训练通过引入负反馈，从而降低幻觉，使得模型输出�
 
 模型调优与部署
 
-通义千问2.5-VL 模型支持调优和部署
+千问2.5-VL 模型支持调优和部署
 
-通义千问2.5-VL-72B、32B、7B 模型支持[模型调优并部署](https://help.aliyun.com/zh/model-studio/model-training-overview)。
+千问2.5-VL-72B、32B、7B 模型支持[模型调优并部署](https://help.aliyun.com/zh/model-studio/model-training-overview)。
 
 **7月**
 
@@ -220,7 +240,7 @@ DPO 偏好训练通过引入负反馈，从而降低幻觉，使得模型输出�
 
 DeepSeek系列模型计费调整
 
--   部分模型由免费体验转为计费，具体请参见[DeepSeek-阿里云百炼](https://help.aliyun.com/zh/model-studio/deepseek-api)。
+-   部分模型由免费体验转为计费，具体请参见[DeepSeek -阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)。
     
 
 2月7日
@@ -235,7 +255,7 @@ qwen-max模型降价
         
     -   Batch调用的输入价格从0.01元/千Token降至0.0012元/千Token，输出价格从0.03元/千Token降至0.0048元/千Token。
         
--   最新计费详情可参见[模型列表](https://help.aliyun.com/zh/model-studio/models#30b9037475ntm)。
+-   最新计费详情可参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)。
     
 
 **1月**
@@ -252,7 +272,7 @@ qwen-max模型降价
 
 计费
 
-部分通义系列模型价格调整
+部分千问系列模型价格调整
 
 -   qwen2.5-14b-instruct和qwen2.5-7b-instruct模型降价50%：
     
@@ -266,7 +286,7 @@ qwen-max模型降价
         
     -   qwen2-vl-72b-instruct模型的输入价格为0.016元/千Token，输出价格为0.048元/千Token。
         
--   最新计费详情可参见[模型列表](https://help.aliyun.com/zh/model-studio/models#30b9037475ntm)。
+-   最新计费详情可参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)。
     
 
 1月21日
@@ -294,9 +314,9 @@ qwen-max模型降价
 
 计费
 
-通义千问VL模型降价
+千问VL模型降价
 
--   通义千问视觉理解模型降价调整，降幅最高可达85%。具体说明请参考[通义千问VL系列模型降价通知](https://help.aliyun.com/zh/model-studio/qwen-vl-model-billing-notice)。
+-   千问视觉理解模型降价调整，降幅最高可达85%。具体说明请参考[通义千问VL系列模型降价通知](https://help.aliyun.com/zh/model-studio/qwen-vl-model-billing-notice)。
     
 
 12月27日
@@ -336,9 +356,9 @@ batch支持任务通知
 
 batch支持的模型新增两个。
 
--   提交Batch任务之后，可以通过查询Batch任务接口获取状态和信息，Batch任务执行时间有时会比较长，持续查询Batch任务效率较低，Batch支持任务完成之后通知，减少不必要的任务查询，提高效率。Batch任务完成通知支持两种方式：Callback回调和EventBridge消息。详情参见[OpenAI兼容-Batch](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)。
+-   提交Batch任务之后，可以通过查询Batch任务接口获取状态和信息，Batch任务执行时间有时会比较长，持续查询Batch任务效率较低，Batch支持任务完成之后通知，减少不必要的任务查询，提高效率。Batch任务完成通知支持两种方式：Callback回调和EventBridge消息。详情参见[OpenAI兼容-Batch（文件输入）](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)。
     
--   支持的模型新增：qwen-vl-max、qwen-vl-plus、qwq-32b-preview，计费说明点击[模型列表](https://help.aliyun.com/zh/model-studio/models)进行查看。
+-   支持的模型新增：qwen-vl-max、qwen-vl-plus、qwq-32b-preview，计费说明点击[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)进行查看。
     
 
 12月20日
@@ -347,7 +367,7 @@ batch支持的模型新增两个。
 
 新增search\_options参数
 
--   配置联网搜索相关的参数，如搜索来源、搜索数量等。可用于qwen-max、qwen-plus、qwen-turbo模型，使用方法请参见[通义千问API文档-DashScope](https://help.aliyun.com/zh/model-studio/qwen-api-reference/#69cac67a477k2)。
+-   配置联网搜索相关的参数，如搜索来源、搜索数量等。可用于qwen-max、qwen-plus、qwen-turbo模型，使用方法请参见[千问API文档-DashScope](https://help.aliyun.com/zh/model-studio/qwen-api-reference/#69cac67a477k2)。
     
 
 **11月**
@@ -404,7 +424,7 @@ batch支持的模型新增两个。
 
 模型推理支持预付费
 
--   支持购买节省计划（预付费），用于抵扣模型推理超出免费额度后产生的推理费用，适用于通义千问、通义法睿、百川-开源版、ChatGLM以及OpenNLU模型，具体请参见[计费项](https://help.aliyun.com/zh/model-studio/billing-for-model-studio#e809b14603ypm)。
+-   支持购买节省计划（预付费），用于抵扣模型推理超出免费额度后产生的推理费用，适用于千问、通义法睿、百川-开源版、ChatGLM以及OpenNLU模型，具体请参见[计费项](https://help.aliyun.com/zh/model-studio/billing-for-model-studio#e809b14603ypm)。
     
 
 9月19日
@@ -413,19 +433,19 @@ batch支持的模型新增两个。
 
 免费额度有效期延长
 
--   部分模型免费额度由原来的30天延期为180天，具体明细请查看[通义千问系列模型免费额度有效期调整通知](https://help.aliyun.com/zh/model-studio/qwen-model-free-quota-adjustment)。
+-   部分模型免费额度由原来的30天延期为180天，具体明细请查看[千问系列模型免费额度有效期调整通知](https://help.aliyun.com/zh/model-studio/qwen-model-free-quota-adjustment)。
     
 
-部分通义系列模型降价调整
+部分千问系列模型降价调整
 
--   qwen-max、qwen-turbo、qwen-plus模型费用降价，具体说明请参考[通义千问系列模型降价通知](https://help.aliyun.com/zh/model-studio/qwen-model-billing-notice)。
+-   qwen-max、qwen-turbo、qwen-plus模型费用降价，具体说明请参考[千问系列模型降价通知](https://help.aliyun.com/zh/model-studio/qwen-model-billing-notice)。
     
 
 模型广场
 
 新增模型类型
 
--   新增通义千问Coder、通义千问Audio、通义千问2.5开源版等模型，点击[模型列表](https://help.aliyun.com/zh/model-studio/models)进行查看。
+-   新增千问Coder、千问Audio、千问2.5开源版等模型，点击模型列表进行查看。
     
 
 限流
@@ -459,7 +479,7 @@ batch支持的模型新增两个。
 
 新增支持模型训练的模型
 
--   qwen-turbo-0624、qwen-plus-0723支持模型训练，计费规则请参见[模型列表](https://help.aliyun.com/zh/model-studio/models)。
+-   qwen-turbo-0624、qwen-plus-0723支持模型训练，计费规则请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)。
     
 
 9月6日
@@ -468,7 +488,7 @@ batch支持的模型新增两个。
 
 大模型计费调整
 
--   qwen-vl-max-0809、qwen-vl-max-0201、sensevoice-v1、paraformer-realtime-v2模型开始计费，计费规则请参见[模型列表](https://help.aliyun.com/zh/model-studio/models#c05fe72732770)。​
+-   qwen-vl-max-0809、qwen-vl-max-0201、sensevoice-v1、paraformer-realtime-v2模型开始计费，计费规则请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)。​
     
 
 **8月**
@@ -500,7 +520,7 @@ OpenAI接口兼容
 
 新增Vision调用模式
 
--   新增**Vision调用模式**，用户仅需在原有框架中，调整API-KEY、BASE\_URL、model等参数，即可直接使用通义千问视觉模型，实现与OpenAI接口及工具的无缝对接。点击[OpenAI兼容-Vision](https://help.aliyun.com/zh/model-studio/qwen-vl-compatible-with-openai)进行体验。
+-   新增**Vision调用模式**，用户仅需在原有框架中，调整API-KEY、BASE\_URL、model等参数，即可直接使用千问视觉模型，实现与OpenAI接口及工具的无缝对接。点击[OpenAI兼容-Vision](https://help.aliyun.com/zh/model-studio/qwen-vl-compatible-with-openai)进行体验。
     
 
 8月23日
@@ -509,7 +529,7 @@ OpenAI接口兼容
 
 新增batch调用模式
 
--   新增**batch调用模式**，批量发送模型调用请求，24小时内异步返回结果，费用为实时调用的一半。点击[OpenAI兼容-Batch](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)进行体验。计费说明点击[模型列表](https://help.aliyun.com/zh/model-studio/models)进行查看。
+-   新增**batch调用模式**，批量发送模型调用请求，24小时内异步返回结果，费用为实时调用的一半。点击[OpenAI兼容-Batch（文件输入）](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)进行体验。计费说明点击[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)进行查看。
     
 
 > 适用于大批量、异步延时类推理需求，如基于大模型进行数据处理与清洗、海量数据的分析任务、自动化抽取任务等。
@@ -587,9 +607,9 @@ OpenAI接口兼容
 
 模型广场
 
-通义千问系列模型升级
+千问系列模型升级
 
--   **提升了qwen-plus&qwen-turbo的模型性能**。点击[通义千问](https://help.aliyun.com/zh/model-studio/qwen-api-reference/)查看详情。
+-   **提升了qwen-plus&qwen-turbo的模型性能**。点击[文本生成](https://help.aliyun.com/zh/model-studio/qwen-api-reference/)查看详情。
     
 
 7月2日
@@ -645,14 +665,14 @@ OpenAI接口兼容
 
 部分模型降价调整，区分输入和输出分别计费
 
--   调整通义千问部分模型规格的计费模式，区分输入和输出分别计费。同时做全线降价调整，点击[通义千问系列大模型价格调整通知](https://help.aliyun.com/zh/document_detail/2787499.html)查看详情。
+-   调整千问部分模型规格的计费模式，区分输入和输出分别计费。同时做全线降价调整，点击[通义千问系列大模型价格调整通知](https://help.aliyun.com/zh/document_detail/2787499.html)查看详情。
     
 
 商业化
 
 新人免费额度策略调整
 
--   新开通的用户可以享受主流通义千问系列大模型共3600万免费tokens。（**当前活动已下线**）
+-   新开通的用户可以享受主流千问系列大模型共3600万免费tokens。（**当前活动已下线**）
     
 
 5月3日
@@ -698,7 +718,7 @@ OpenAI接口兼容
 
 -   支持qwen-plus及qwen1.5-72B模型SFT及部署。
     
--   支持千亿模型通义千问1.5-开源版-110B模型的SFT及部署。点击[在控制台进行模型调优](https://help.aliyun.com/zh/model-studio/model-training-on-console)查看详情。
+-   支持千亿模型千问1.5-开源版-110B模型的SFT及部署。点击[在控制台进行模型调优](https://help.aliyun.com/zh/model-studio/model-training-on-console)查看详情。
     
 
 数据处理
@@ -744,9 +764,9 @@ OpenAI接口兼容
 
 新增体验模型
 
--   新增通义千问VL模型支持在模型体验中心交互。点击[通义千问](https://help.aliyun.com/zh/document_detail/2713153.html)查看详情。
+-   新增千问VL模型支持在模型体验中心交互。点击[通义千问](https://help.aliyun.com/zh/document_detail/2713153.html)查看详情。
     
--   新增通义万象模型，支持在模型体验中心交互。点击[通义万相](https://help.aliyun.com/zh/document_detail/2713156.html)查看详情。
+-   新增千问万象模型，支持在模型体验中心交互。点击[通义万相](https://help.aliyun.com/zh/document_detail/2713156.html)查看详情。
     
 -   模型体验中心自动滚动到底部逻辑优化。
     
@@ -757,7 +777,7 @@ OpenAI接口兼容
 
 模型下线升级
 
--   **qwen-max-1201**计划于2024年4月22日下线升级，如您继续使用，建议提前替换到**qwen-max**。点击[通义千问模型版本升级说明](https://help.aliyun.com/zh/model-studio/tongyi-qianwen-discontinuation-notice)查看详情。
+-   **qwen-max-1201**计划于2024年4月22日下线升级，如您继续使用，建议提前替换到**qwen-max**。点击[千问模型版本升级说明](https://help.aliyun.com/zh/model-studio/tongyi-qianwen-discontinuation-notice)查看详情。
     
 
 **3月**
@@ -776,7 +796,7 @@ OpenAI接口兼容
 
 阿里云百炼大模型整体功能模块更新
 
--   新增[通义千问系列&三方开源](https://help.aliyun.com/zh/document_detail/2666503.html)大语言模型。
+-   新增[千问系列&三方开源](https://help.aliyun.com/zh/document_detail/2666503.html)大语言模型。
     
 -   新增模型中心内容更新，点击[模型](https://help.aliyun.com/zh/model-studio/model)查看详情。
     
@@ -791,9 +811,9 @@ OpenAI接口兼容
 
 新增大模型&计费调整
 
--   新增通义系列大模型。
+-   新增千问系列大模型。
     
--   大模型计费调整，点击[通义系列大模型计费调整通知](https://help.aliyun.com/zh/model-studio/model-billing-notice)查看详情。
+-   大模型计费调整，点击[千问系列大模型计费调整通知](https://help.aliyun.com/zh/model-studio/model-billing-notice)查看详情。
     
 
 **2月**
@@ -828,9 +848,9 @@ OpenAI接口兼容
 
 模型部署
 
-新增模型部署类型-通义千问-Plus
+新增模型部署类型-千问-Plus
 
--   支持通义千问-Plus大模型的独立部署。
+-   支持千问-Plus大模型的独立部署。
     
 
 **1月**
@@ -867,4 +887,4 @@ OpenAI接口兼容
 
 新增模型训练版本
 
--   支持通义千问-Plus、通义千问-Turbo模型训练。
+-   支持千问-Plus、千问-Turbo模型训练。

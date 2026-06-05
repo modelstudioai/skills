@@ -17,13 +17,9 @@
 
 下面的命令使用已经调优好的自定义模型`qwen3-8b-ft-202511132025-0260`，创建一个专属服务`qwen3-8b-ft-202511132025-0260`。
 
-获取自定义模型 ID 的方法：前往[百炼控制台-模型调优](https://bailian.console.aliyun.com/cn-beijing?tab=model#/efm/model_manager)，点击需要部署的**任务名称** -> **产出** -> 点击蓝色字体的模型名称，进入**我的模型**页面。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0984437771/p1071306.png)
+获取自定义模型 ID 的方法：前往[百炼控制台-模型调优](https://bailian.console.aliyun.com/cn-beijing?tab=model#/efm/model_manager)，点击需要部署的**任务名称** -> **产出** -> 点击蓝色字体的模型名称，进入**我的模型**页面，在模型基本信息区域可查看模型 ID。
 
 使用**模型 ID** 作为输入的`model_name`参数，即可使用 API 部署该模型。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0984437771/p1071307.png)
 
 ## 按预置吞吐（PTU）计费
 
@@ -31,7 +27,7 @@
 
 执行以下部署命令后，即便您还没有调用模型，模型部署服务仍将在部署成功后开始计费。建议您先确认服务计费规则，再执行部署命令。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5681566771/p1069175.png)
+按预置吞吐计费模式按预置吞吐的使用时长收费，适用于追求稳定吞吐保障和高并发低延迟、且流量可预估的场景。该模式下，**吞吐/并发**和**生成速度**均为平台预置，用户不可调。
 
 ```
 curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
@@ -57,7 +53,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 -   模型单元-后付费方式的算力资源先买到先得。如购买不成功会全额退款。
     
 
-#### ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1816324671/p1028065.png)
+选择**按模型单元计费**计费方式，计费模式为按模型单元的使用时长收费，适用场景为模型调优后的大规模推理业务，资源专属，性能和成本灵活可调；吞吐/并发和生成速度均为客户自定义。
 
 ```
 curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
@@ -103,7 +99,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 
 ### 按模型 Token 使用量计费
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1816324671/p1028063.png)
+选择计费方式为**按Token计费**，计费模式为按Token用量收费，适用于高性价比诉求且对并发和延迟要求不高的场景。该模式价格优势最高，吞吐/并发和生成速度均由平台预置，用户不可调。
 
 ```
 curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
@@ -125,7 +121,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 
 执行以下部署命令后，即便您还没有调用模型，模型部署服务仍将在部署成功后开始计费。建议您先确认服务计费规则，再执行部署命令。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1816324671/p1028070.png)
+选择**计费方式**为**按算力计费**，计费模式为按算力单元的使用时长收费，适用于模型调优后的大规模推理业务，资源专属，性能和成本灵活可调。吞吐/并发和生成速度均为客户自定义。
 
 ```
 curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
@@ -215,14 +211,12 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8b-ft-202511132025
 from dashscope import Generation
 from http import HTTPStatus
 import os
-
 response = Generation.call(
     model='qwen3-8b',
     prompt='你是谁？',
     enable_thinking=False,
     api_key=os.getenv('DASHSCOPE_API_KEY'),
 )
-
 if response.status_code == HTTPStatus.OK:
     print(response.output)
     print(response.usage)
@@ -299,9 +293,9 @@ curl --request DELETE 'https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8
     
     > API 调用报错：`Workspace xxx does not have deployment privilege for model xxxx`。
     
-    ![PixPin\_2025-11-27\_15-03-57](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1816324671/p1030115.png)
+    在对应业务空间的**操作**列，单击**模型权限流控设置**。
     
-    ![PixPin\_2025-11-27\_15-06-41](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1816324671/p1030118.png)
+    在**模型列表**中找到目标模型，查看**模型部署**列的授权状态。若显示**未授权**，单击**操作**列的**编辑**进行授权。
     
     如果提示权限不足，请联系您的组织或 IT 管理员添加相关权限或代为操作。
     
@@ -309,6 +303,6 @@ curl --request DELETE 'https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8
     
     > API 调用报错：`Workspace access denied`。
     
-    ![PixPin\_2025-11-27\_16-41-26](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1816324671/p1030231.png)
+    在左侧导航栏点击**权限管理**，确认用户列表中包含 API Key 的归属账号（类型为**主账号**）。
     
     如果提示权限不足，请联系您的组织或 IT 管理员添加相关权限或代为操作。

@@ -8,15 +8,9 @@ DashScope SDK 目前仅支持 Java 和 Python。使用其他编程语言时，�
 
 ## **服务端点**
 
-WebSocket URL 固定如下：
-
-## 中国内地
+Paraformer仅支持在华北2（北京）地域使用。WebSocket URL 固定如下：
 
 `wss://dashscope.aliyuncs.com/api-ws/v1/inference`
-
-## 国际
-
-`wss://dashscope-intl.aliyuncs.com/api-ws/v1/inference`
 
 **重要**
 
@@ -74,7 +68,7 @@ Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或�
 
 客户端事件和服务端事件的详细说明，请参见[客户端事件](https://help.aliyun.com/zh/model-studio/paraformer-client-events)和[服务端事件](https://help.aliyun.com/zh/model-studio/paraformer-server-events)。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1448119771/CAEQURiBgMCczta5pxkiIGY0N2Q2YjIwZTM1MTQyNTY4ZmFkY2MwN2JmOTllODFl4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4039640871/CAEQURiBgMCczta5pxkiIGY0N2Q2YjIwZTM1MTQyNTY4ZmFkY2MwN2JmOTllODFl4709861_20241015153444.149.svg)
 
 按时间顺序，客户端与服务端的交互流程如下：
 

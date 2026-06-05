@@ -2,7 +2,7 @@
 
 本文档提供了Paraformer录音文件识别Android SDK的详细使用指南，帮助您将语音转换为文本。
 
-**用户指南：**关于模型介绍和选型建议请参见[录音文件识别](https://help.aliyun.com/zh/model-studio/recording-file-recognition)。
+**用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)
 
 ## **快速开始**
 
@@ -174,8 +174,7 @@
     ```
     {
         "file_urls": [
-            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
-            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav"
+            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav"
         ],
         "async_request": false,
         "nls_config": {
@@ -202,7 +201,7 @@
     
     是
     
-    音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求最多支持100个URL。
+    音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。
     
     若录音文件存储在阿里云OSS，使用SDK方式不支持使用以 oss://为前缀的临时 URL。
     
@@ -618,8 +617,7 @@
     ```
     {
         "file_urls": [
-            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
-            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav"
+            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav"
         ],
         "async_request": false,
         "nls_config": {

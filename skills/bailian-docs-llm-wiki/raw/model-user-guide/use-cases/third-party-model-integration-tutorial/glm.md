@@ -2,6 +2,10 @@
 
 本文介绍了在阿里云百炼平台通过API调用 GLM 系列模型的方法。每个模型各有100万免费Token。
 
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
 ## **快速开始**
 
 glm-5.1 是 GLM 系列最新模型，支持通过`enable_thinking`参数设置思考与非思考模式。运行以下代码快速调用思考模式的 glm-5.1 模型。

@@ -43,6 +43,21 @@ String
 
 Qwen-Omni 实时模型的名称。参见[模型列表](https://help.aliyun.com/zh/model-studio/models#6deec483126rk)。
 
+url
+
+String
+
+调用地址：
+
+-   新加坡地域：wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime，请将{WorkspaceId}替换为您的业务空间ID。
+    
+-   北京地域：wss://dashscope.aliyuncs.com/api-ws/v1/realtime
+    
+
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
 下述请求参数可以通过`OmniRealtimeConfig`对象的链式方法或setter配置、之后作为参数传入updateSession接口完成配置。
 
 **参数**

@@ -52,9 +52,9 @@ HTTP 请求地址：`POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat
 
 ## 新加坡地域
 
-SDK 调用配置的`base_url`：`https://dashscope-intl.aliyuncs.com/compatible-mode/v1`
+SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
-HTTP 请求地址：`POST https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions`
+HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
 以文本输入为例，通过 OpenAI 兼容方式调用子业务空间的`qwen-plus`标准模型。与默认业务空间的模型调用的区别在于：**必须使用该子业务空间的 API Key**。
 
@@ -334,9 +334,9 @@ SDK 调用无需配置 `base_url`。
 
 HTTP 请求地址：
 
--   千问大语言模型：`POST https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+-   千问大语言模型：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
     
--   千问VL/OCR模型：`POST https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+-   千问VL/OCR模型：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
     
 
 SDK调用配置的`base_url`：
@@ -344,7 +344,7 @@ SDK调用配置的`base_url`：
 ## **Python代码**
 
 ```
-dashscope.base_http_api_url = 'https://dashscope-intl.aliyuncs.com/api/v1'
+dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
 ```
 
 ## **Java代码**
@@ -353,14 +353,14 @@ dashscope.base_http_api_url = 'https://dashscope-intl.aliyuncs.com/api/v1'
     
     ```
     import com.alibaba.dashscope.protocol.Protocol;
-    Generation gen = new Generation(Protocol.HTTP.getValue(), "https://dashscope-intl.aliyuncs.com/api/v1");
+    Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1");
     ```
     
 -   **方式二：**
     
     ```
     import com.alibaba.dashscope.utils.Constants;
-    Constants.baseHttpApiUrl="https://dashscope-intl.aliyuncs.com/api/v1";
+    Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
     ```
     
 
@@ -733,14 +733,14 @@ curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-genera
 
 ## **错误码**
 
-如果模型调用失败并返回报错信息，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ## **下一步**
 
 **查看更多模型**
 
-示例代码以`qwen-plus`模型为例，阿里云百炼还支持其他千问模型及 DeepSeek 等第三方模型，**支持的模型**以及对应的**API参考**文档请参见[模型列表](https://help.aliyun.com/zh/model-studio/models)。
+示例代码以`qwen-plus`模型为例，阿里云百炼还支持其他千问模型及 DeepSeek 等第三方模型，**支持的模型**以及对应的**API参考**文档请参见[选择模型](https://help.aliyun.com/zh/model-studio/models)。
 
 **了解进阶用法**
 
-示例代码仅完成了简单问答，如果您想了解千问 API 的更多用法，如[流式输出](https://help.aliyun.com/zh/model-studio/stream)、[结构化输出](https://help.aliyun.com/zh/model-studio/qwen-structured-output)、[Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling)等，请参见[文本生成模型概述](https://help.aliyun.com/zh/model-studio/text-generation)。
+示例代码仅完成了简单问答，如果您想了解千问 API 的更多用法，如[流式输出](https://help.aliyun.com/zh/model-studio/stream)、[结构化输出](https://help.aliyun.com/zh/model-studio/qwen-structured-output)、[Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling)等，请参见[概述](https://help.aliyun.com/zh/model-studio/text-generation)。

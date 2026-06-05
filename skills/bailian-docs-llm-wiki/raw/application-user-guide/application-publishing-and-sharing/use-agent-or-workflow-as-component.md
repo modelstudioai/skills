@@ -36,8 +36,6 @@
     
     本例使用的 MCP 服务限时免费。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577295471/p949373.png)
-    
 2.  **测试效果：**在对话框中输入“请你查询杭州的气温变化趋势”，智能体将输出一份气温折线图。
     
 
@@ -46,8 +44,6 @@
 1.  **创建应用：**前往[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)，创建一个新的任务型（或对话型）工作流应用。
     
 2.  **配置开始节点：**删除默认的 city 和 date 参数，在本例中不会使用。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577295471/p949232.png)
     
 3.  **配置大模型节点：**拖入一个大模型节点。连接开始节点和大模型节点。除以下配置外，其他配置保持不变。
     
@@ -89,8 +85,6 @@
     
     输入‘/’呼出变量菜单，选择"系统变量/query"
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577295471/p949231.png)
-    
 4.  **配置结束节点：**连接大模型节点和结束节点。除以下配置外，其他配置保持不变。
     
     **配置项**
@@ -105,8 +99,6 @@
     
     输入‘/’呼出变量菜单，选择"大模型1/result"
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577295471/p949238.png)
-    
 5.  **测试效果：**在测试窗（或对话框）中输入“查询杭州气温变化趋势”，工作流将输出一份文字预报。
     
 
@@ -120,18 +112,16 @@
     
 2.  **发布组件：**在发布应用时选择**发布应用组件**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577295471/p949278.png)
+    在弹出的发布成功对话框中，单击**发布应用组件**右侧的**立即发布**链接。
     
     也可以随时在**发布渠道**里创建组件。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577295471/p950361.png)
+    在**组件**区域，单击**\+ 创建**。
     
 
 ## **在管理面板发布组件**
 
 控制台提供了**[组件管理](https://bailian.console.aliyun.com/?tab=app#/component-manage)**，您可以点击**创建组件**来将已有的智能体发布为组件，您也可以查看、修改或删除应用组件。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577295471/p949167.png)
 
 ### **步骤三：配置组件名称和参数**
 
@@ -230,7 +220,7 @@ imageList
 
 模型识别
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577295471/p949513.png)
+其中 **query** 参数类型为 **String**，设置为必填；**imageList** 参数类型为 **Array<String>**，设置为非必填。完成配置后单击**确定发布**。
 
 ### **步骤四：接入组件到智能体/工作流应用**
 
@@ -262,10 +252,6 @@ imageList
     
     天气分析智能体
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577295471/p949394.png)
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577295471/p950349.png)
-    
 2.  **测试效果：**在对话框中输入“请你查询杭州天气预报”，智能体将调用组件输出一份天气预报，表明组件已成功接入智能体。
     
 
@@ -276,8 +262,6 @@ imageList
 1.  **创建应用：**前往[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)，创建一个新的任务型（或对话型）工作流应用。
     
 2.  **配置开始节点：**删除默认的 city 和 date 参数，在本例中不会使用。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577295471/p949232.png)
     
 3.  **配置组件节点：**拖入一个组件节点。选择之前创建的智能体或工作流组件。连接开始节点和组件节点。除以下配置外，其他配置保持不变。
     
@@ -299,8 +283,6 @@ imageList
     
     开启
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577295471/p949436.png)
-    
 4.  **配置结束节点：**连接组件节点和结束节点。除以下配置外，其他配置保持不变。
     
     **配置项**
@@ -314,8 +296,6 @@ imageList
     文本框
     
     输入‘/’呼出变量菜单，选择"组件1/result"
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577295471/p949439.png)
     
 5.  **测试效果：**在测试窗（或对话框）中输入“查询杭州气温变化趋势”，工作流将输出一份天气预报，表明组件已成功接入工作流。
     

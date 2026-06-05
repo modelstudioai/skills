@@ -9,21 +9,14 @@ AI妙笔提供了智能配图的功能，可以帮助用户在文章创作过程
 -   点击“智能配图”，即可生成相关的图片素材。
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0779843071/p750149.png)
+可选的图片风格包括**默认**、**水彩**、**油画**、**中国画**、**扁平插画**、**二次元**、**素描**、**3D卡通**；比例可选**1:1**、**16:9**或**9:16**。设置完成后单击**生成图片**。
 
 -   例如输入内容：“亚运会、杭州、巨型室内场馆”；随后选择一个您需要的图片风格，如：3D卡通。
     
 
-生成效果如下：
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0779843071/p750151.png)
+同时可设置图片比例为1:1、16:9或9:16。单击**生成图片**后，右侧展示4张生成结果，可单击**换一换**重新生成、单击**弃用**放弃，或单击**采纳**将选中图片插入文档。
 
 -   如果内容符合您的预期，点击“保存”即可。
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0779843071/p750150.png)
-
 -   随后，即可在“文档管理”即可看到刚刚保存的内容。
-    
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0779843071/p750148.png)

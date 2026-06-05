@@ -114,11 +114,17 @@ qwen-image-edit
 
 北京和新加坡地域拥有独立的 **API Key** 与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错。
 
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
 ## HTTP调用
 
 **北京地域**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-**新加坡地域**：`POST https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+**新加坡地域**：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 #### 请求参数
 
@@ -489,7 +495,7 @@ import os
 from dashscope import MultiModalConversation
 import dashscope
 
-# 以下为中国（北京）地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
 dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
 # 模型支持输入1-3张图片
@@ -543,7 +549,7 @@ import base64
 import mimetypes
 import dashscope
 
-# 以下为中国（北京）地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
 dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
 # ---用于 Base64 编码 ---
@@ -695,7 +701,7 @@ import java.util.*;
 public class QwenImageEdit {
 
     static {
-        // 以下为中国（北京）地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+        // 以下为中国（北京）地域url，若使用新加坡地域的模型，需将url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1
         Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
     }
 
@@ -775,7 +781,7 @@ import java.util.*;
 public class QwenImageEdit {
      
     static {
-        // 以下为中国（北京）地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+        // 以下为中国（北京）地域url，若使用新加坡地域的模型，需将url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1
         Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
     }
     

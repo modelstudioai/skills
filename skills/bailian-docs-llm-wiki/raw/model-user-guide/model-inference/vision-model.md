@@ -4,7 +4,7 @@
 
 ## 图像与视频理解
 
-推荐从`qwen3.6-plus`开始，它是千问旗舰模型，支持1M上下文、最长2小时视频、Function Calling和内置工具等完整功能。当您的场景稳定后，可以尝试`qwen3.6-flash`来降低成本，它提供接近旗舰的效果，并支持相同的上下文长度和功能集。
+推荐从`qwen3.7-plus`开始，它是千问旗舰模型，支持1M上下文、最长2小时视频、Function Calling和内置工具等完整功能。当您的场景稳定后，可以尝试`qwen3.6-flash`来降低成本，它提供接近旗舰的效果，并支持相同的上下文长度和功能集。
 
 ### 图像分辨率
 
@@ -12,7 +12,7 @@
 
 ### 视频支持
 
--   最长2小时 / 2GB：`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
+-   最长2小时 / 2GB：`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
     
 -   最长1小时 / 2GB：`qwen3-vl-plus`、`qwen3-vl-flash`
     
@@ -23,16 +23,16 @@
 
 让模型根据图像或视频中的内容执行操作。
 
--   Function Calling：Qwen3.6、Qwen3.5和Qwen3-VL系列模型均支持
+-   Function Calling：Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列模型均支持
     
--   内置工具（联网搜索、代码执行，无需额外配置）：仅`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
+-   内置工具（联网搜索、代码执行，无需额外配置）：仅`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
     
 
 ### 结构化输出
 
 从视觉输入中获取有效的JSON输出，例如从照片中提取商品信息。
 
-Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能。
+Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能。
 
 ## OCR与文档提取
 
@@ -60,7 +60,7 @@ Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能。
 
 **结构化输出**
 
-`qwen3.6-plus`
+`qwen3.7-plus`
 
 1M
 
@@ -70,7 +70,7 @@ Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能。
 
 2GB
 
-256
+2048
 
 64
 
@@ -121,6 +121,68 @@ Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能。
 支持
 
 ## 所有模型
+
+### Qwen3.7
+
+**模型ID**
+
+**输入**
+
+**输出**
+
+**上下文**
+
+**最大输出**
+
+**最大图片数**
+
+**最大视频数**
+
+**Function Calling**
+
+**内置工具**
+
+**结构化输出**
+
+`qwen3.7-plus`
+
+文本、图像、视频
+
+文本
+
+1M
+
+64k
+
+2048
+
+64
+
+支持
+
+支持
+
+支持
+
+`qwen3.7-plus-2026-05-26`
+
+文本、图像、视频
+
+文本
+
+1M
+
+64k
+
+2048
+
+64
+
+支持
+
+支持
+
+支持
 
 ### Qwen3.6
 

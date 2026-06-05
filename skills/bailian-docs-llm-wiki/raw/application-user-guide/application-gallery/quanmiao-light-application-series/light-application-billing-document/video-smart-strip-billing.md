@@ -171,7 +171,7 @@
 
 #### **1\. 离线调用怎么增加并发配额？**
 
-可以通过[GetVideoDetectShotConfig - 智能拆条-获取配置](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-getvideodetectshotconfig)、[UpdateVideoDetectShotConfig - 智能拆条-更新配置](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-updatevideodetectshotconfig)接口查看和扩缩并发。
+可以通过[智能拆条-获取配置](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-getvideodetectshotconfig)、[智能拆条-更新配置](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-updatevideodetectshotconfig)接口查看和扩缩并发。
 
 #### **2\. 一并发收费是1元/小时，这个时间是怎么定义的？**
 

@@ -10,7 +10,7 @@ Completions 接口专为文本补全场景设计，适合代码补全、内容�
 
 当前支持 [Qwen Coder](https://help.aliyun.com/zh/model-studio/qwen-coder) 部分模型：
 
-qwen2.5-coder-7b-instruct、qwen2.5-coder-14b-instruct、qwen2.5-coder-32b-instruct、qwen-coder-turbo-0919、qwen-coder-turbo-latest、qwen-coder-turbo
+qwen-coder-turbo
 
 ## **前提条件**
 
@@ -51,7 +51,7 @@ client = OpenAI(
 )
 
 completion = client.completions.create(
-  model="qwen2.5-coder-32b-instruct",
+  model="qwen-coder-turbo",
   prompt="<|fim_prefix|>写一个python的快速排序函数，def quick_sort(arr):<|fim_suffix|>",
 )
 
@@ -73,7 +73,7 @@ const openai = new OpenAI(
 
 async function main() {
     const completion = await openai.completions.create({
-        model: "qwen2.5-coder-32b-instruct",
+        model: "qwen-coder-turbo",
         prompt: "<|fim_prefix|>写一个python的快速排序函数，def quick_sort(arr):<|fim_suffix|>",
     });
     console.log(completion.choices[0].text)
@@ -89,7 +89,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen2.5-coder-32b-instruct",
+    "model": "qwen-coder-turbo",
     "prompt": "<|fim_prefix|>写一个python的快速排序函数，def quick_sort(arr):<|fim_suffix|>"
 }'
 ```
@@ -132,7 +132,7 @@ prefix_content = f"""def reverse_words_with_special_chars(s):
 suffix_content = "return result"
 
 completion = client.completions.create(
-  model="qwen2.5-coder-32b-instruct",
+  model="qwen-coder-turbo",
   prompt=f"<|fim_prefix|>{prefix_content}<|fim_suffix|>{suffix_content}<|fim_middle|>",
 )
 
@@ -165,7 +165,7 @@ const suffixContent = "return result";
 
 async function main() {
   const completion = await client.completions.create({
-    model: "qwen2.5-coder-32b-instruct",
+    model: "qwen-coder-turbo",
     prompt: `<|fim_prefix|>${prefixContent}<|fim_suffix|>${suffixContent}<|fim_middle|>`
   });
 
@@ -182,7 +182,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen2.5-coder-32b-instruct",
+    "model": "qwen-coder-turbo",
     "prompt": "<|fim_prefix|>def reverse_words_with_special_chars(s):\n\"\"\"\n反转字符串中的每个单词（保留非字母字符的位置），并保持单词顺序。\n    示例:\n    reverse_words_with_special_chars(\"Hello, world!\") -> \"olleH, dlrow!\"\n    参数:\n        s (str): 输入字符串（可能包含标点符号）\n    返回:\n        str: 处理后的字符串，单词反转但非字母字符位置不变\n\"\"\"\n<|fim_suffix|>return result<|fim_middle|>"
 }'
 ```
@@ -400,4 +400,4 @@ integer
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。

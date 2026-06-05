@@ -19,18 +19,10 @@ GET https://dashscope.aliyuncs.com/api/v1/deployments/models
 
 ### **请求示例**
 
-通过下面的命令可以查询支持部署的模型，推荐使用`version=v1.0`获取包含部署方案和模板信息的完整响应。
+通过下面的命令可以查询支持部署的模型。
 
 ```
-curl "https://dashscope.aliyuncs.com/api/v1/deployments/models?page_no=1&page_size=100&version=v1.0&model_source=base" \
-    --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
-    --header 'Content-Type: application/json'
-```
-
-查询用户微调模型：
-
-```
-curl "https://dashscope.aliyuncs.com/api/v1/deployments/models?page_no=1&page_size=100&version=v1.0&model_source=custom" \
+curl "https://dashscope.aliyuncs.com/api/v1/deployments/models?page_no=1&page_size=100" \
     --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
     --header 'Content-Type: application/json'
 ```
@@ -65,27 +57,7 @@ query
 
 否
 
-页大小，默认为50，最大值为100，最小值为1。
-
-model\_source
-
-String
-
-query
-
-否
-
-模型来源。`base`表示系统模型（默认），`custom`表示用户微调模型。
-
-version
-
-String
-
-query
-
-否
-
-API 版本，推荐使用`v1.0`。使用`v1.0`时，响应中将包含完整的部署方案和模板信息。
+页大小，默认为50，最大值为200，最小值为1。
 
 ### **响应示例**
 
@@ -93,56 +65,22 @@ API 版本，推荐使用`v1.0`。使用`v1.0`时，响应中将包含完整的�
 
 ```
 {
-    "request_id": "f7da015c-ea90-4d96-af89-2f8d7604026a",
-    "output": {
-        "page_no": 1,
-        "page_size": 100,
-        "total": 5,
-        "models": [
+    "request_id":"f7da015c-ea90-4d96-af89-2f8d7604026a",
+    "output":{
+        "models":[
             {
-                "model_name": "qwen3-8b",
-                "plans": [
-                    {
-                        "plan": "mu",
-                        "templates": [
-                            {
-                                "template_id": "MU1",
-                                "template_name": "单机部署-标准推理型",
-                                "template_type": "COUPLED",
-                                "template_version": "v1",
-                                "template_desc": "适用于标准推理场景",
-                                "roles": {
-                                    "unified": {
-                                        "model_unit_spec": "MU1",
-                                        "capacity_unit_per_instance": 4
-                                    }
-                                }
-                            },
-                            {
-                                "template_id": "MU1-PD",
-                                "template_name": "PD分离部署-标准推理型",
-                                "template_type": "SEPERATED",
-                                "template_version": "v1",
-                                "template_desc": "适用于PD分离推理场景",
-                                "roles": {
-                                    "prefill": {
-                                        "model_unit_spec": "MU1",
-                                        "capacity_unit_per_instance": 4
-                                    },
-                                    "decode": {
-                                        "model_unit_spec": "MU1",
-                                        "capacity_unit_per_instance": 4
-                                    }
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "plan": "lora"
-                    }
-                ]
+                "model_name":"emo",
+                "base_capacity":1
+            },
+            {
+                "model_name":"qwen-plus-ft-20230703-cx7f",
+                "base_capacity":8
             }
-        ]
+            ...
+        ],
+        "page_no":1,
+        "page_size":50,
+        "total":2
     }
 }
 ```
@@ -155,35 +93,17 @@ API 版本，推荐使用`v1.0`。使用`v1.0`时，响应中将包含完整的�
 
 **说明**
 
-models
-
-Array
-
-可部署模型列表。
-
-models\[\].model\_name
+model\_name
 
 String
 
-模型名称。
+支持部署的模型名称。
 
-models\[\].plans
-
-Array
-
-该模型支持的部署方案列表。使用`version=v1.0`时返回。
-
-models\[\].plans\[\].plan
+base\_capacity
 
 String
 
-部署方案类型：`mu`（模型单元）、`cu`（算力单元）、`ptu`（预置吞吐量）、`lora`（LoRA共享部署）。
-
-models\[\].plans\[\].templates
-
-Array
-
-部署模板列表（`plan=mu`时返回）。
+该字段定义了模型部署所需的最小资源单元数量。
 
 page\_no
 
@@ -203,70 +123,6 @@ Long
 
 满足查询条件的所有模型个数。
 
-### **模板字段说明（templates）**
-
-**参数**
-
-**类型**
-
-**说明**
-
-template\_id
-
-String
-
-模板 ID，在[创建模型部署任务](#13f7a7d05829h)时作为`template_id`参数传入。
-
-template\_name
-
-String
-
-模板显示名称。
-
-template\_type
-
-String
-
-模板类型：`COUPLED`（非 PD 分离，使用`capacity`参数）、`SEPERATED`（PD 分离，使用`prefill_capacity`和`decode_capacity`参数）。
-
-template\_version
-
-String
-
-模板版本。
-
-template\_desc
-
-String
-
-模板描述。
-
-roles
-
-Object
-
-节点角色配置。COUPLED 模式包含`unified`节点，SEPERATED 模式包含`prefill`和`decode`节点。
-
-### **roles 节点字段说明**
-
-**参数**
-
-**类型**
-
-**说明**
-
-model\_unit\_spec
-
-String
-
-模型单元规格。
-
-capacity\_unit\_per\_instance
-
-Number
-
-单实例容量单元数，即 base\_capacity。创建部署时`capacity`必须是该值的整数倍。
-
 ## 创建模型部署任务
 
 ### **地址**
@@ -283,7 +139,7 @@ POST https://dashscope.aliyuncs.com/api/v1/deployments
 
 执行以下部署命令后，即便您还没有调用模型，模型部署服务仍将在部署成功后开始计费。建议您先确认服务计费规则，再执行部署命令。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5681566771/p1069175.png)
+按预置吞吐计费模式按预置吞吐的使用时长收费，适用于追求稳定吞吐保障和高并发低延迟、且流量可预估的场景。该模式下，**吞吐/并发**和**生成速度**均为平台预置，用户不可调。
 
 ```
 curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
@@ -309,7 +165,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 -   模型单元-后付费方式的算力资源先买到先得。如购买不成功会全额退款。
     
 
-#### ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1816324671/p1028065.png)
+选择**按模型单元计费**计费方式，计费模式为按模型单元的使用时长收费，适用场景为模型调优后的大规模推理业务，资源专属，性能和成本灵活可调；吞吐/并发和生成速度均为客户自定义。
 
 ```
 curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
@@ -355,7 +211,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 
 #### 按模型 Token 使用量计费
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1816324671/p1028063.png)
+选择计费方式为**按Token计费**，计费模式为按Token用量收费，适用于高性价比诉求且对并发和延迟要求不高的场景。该模式价格优势最高，吞吐/并发和生成速度均由平台预置，用户不可调。
 
 ```
 curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
@@ -377,7 +233,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 
 执行以下部署命令后，即便您还没有调用模型，模型部署服务仍将在部署成功后开始计费。建议您先确认服务计费规则，再执行部署命令。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1816324671/p1028070.png)
+选择**计费方式**为**按算力计费**，计费模式为按算力单元的使用时长收费，适用于模型调优后的大规模推理业务，资源专属，性能和成本灵活可调。吞吐/并发和生成速度均为客户自定义。
 
 ```
 curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
@@ -413,71 +269,55 @@ body
 
 待部署的模型名称，对应[我的模型](https://bailian.console.aliyun.com/?tab=model#/efm/model_center)中的模型 ID。
 
+capacity
+
+Number
+
+body
+
+是
+
+表示实际分配给模型的资源单元数量。**必须**是`[base_capacity](#4d68826158yix)`的整数倍。
+
+> 按 Token 用量计费的部署方式，capacity 参数设置无效，但必须填写。如需希望扩缩容，请前往百炼模型部署[控制台](https://bailian.console.aliyun.com/tab=model?tab=model#/efm/model_deploy)填写表单申请。
+
 plan
 
 String
 
 body
 
-是
+否
 
-部署方案，支持以下计费模式：
+支持三种部署后的计费模式：
 
 **计费方式**
 
 **plan 设置**
 
+按算力计费
+
+不设置该参数
+
+按 Token 用量计费
+
+`"plan": "lora"`
+
 按模型单元计费
 
 `"plan": "mu"`
 
-按算力单元计费
-
-`"plan": "cu"`
-
-预置吞吐量
-
-`"plan": "ptu"`
-
-LoRA 共享部署（按 Token 用量计费）
-
-`"plan": "lora"`
-
 调优后的模型支持的部署方式可以在[我的模型](https://bailian.console.aliyun.com/?tab=model#/efm/model_center)中快速查询到。
 
-**说明**
-
-CosyVoice 系列调优模型当前仅支持`"plan": "mu"`。
-
-name
+diasplay\_name
 
 String
 
 body
 
-是
+否
 
 模型的控制台显示名称
-
-capacity
-
-Integer
-
-body
-
-否
-
-仅`"plan": "mu"`时必填，部署使用的资源单元数量，需为`base_capacity`的整数倍。不同`deploy_spec`的取值约束不同，例如`MU2`必须为 8 的倍数，`MU5`可填 1。样例：`"capacity": 1`。
-
-billing\_method
-
-String
-
-body
-
-否
-
-仅`"plan": "mu"`时必填，计费方式。当前支持`"POST_PAY"`（后付费）。样例：`"billing_method": "POST_PAY"`。
 
 deploy\_spec
 
@@ -492,10 +332,6 @@ body
 具体支持情况请参考：[模型单元部署的功能支持情况](#2fc096b2fdw9z)。
 
 当设置`"plan": "mu"`时，该参数**必须填写**。样例：`"deploy_spec": "MU1"`。
-
-**说明**
-
-CosyVoice 等部分调优模型不接受 `MU1` / `MU2` 等友好名缩写，必须使用具体规格的真实 ID（形如 `dps-20260521172224-1vabse`）。可通过[获取可以部署的模型列表](#dc35528058t0d)接口返回的 `deploy_specs` 字段获取。
 
 enable\_thinking
 
@@ -537,54 +373,6 @@ body
 
 部分模型支持， token per minute，每分钟 Token 使用量。
 
-ptu\_capacity
-
-Object
-
-body
-
-否
-
-仅`"plan": "ptu"`时，可填写该设置。
-
-具体支持情况请参考：[PTU部署的功能支持情况](#2fc096b2fdw9z)。
-
-如果不填写该参数，将默认按照 `10,000 input_tpm` 和 `1,000 output_tpm` 进行设置。
-
-当设置`"plan": "ptu"`时，该参数才生效。
-
-样例：`"ptu_capacity": { "input_tpm": 10000, "output_tpm": 1000 }`。
-
-ptu\_capacity.input\_tpm
-
-Number
-
-body
-
-否
-
-所有模型支持，input token pre-minute，部署的模型每分钟支持的最大输入 Token 量。
-
-ptu\_capacity.output\_tpm
-
-Number
-
-body
-
-否
-
-所有模型支持，output token pre-minute，部署的模型每分钟支持的最大输出 Token 量。
-
-ptu\_capacity.thinking\_output\_tpm
-
-Number
-
-body
-
-否
-
-部分模型支持，thinking output token pre-minute，部署的模型每分钟支持的预置思考最大输出 Token 量。
-
 suffix
 
 String
@@ -599,316 +387,11 @@ body
 
 ### **支持的模型**
 
-点击这里查看**支持情况**与计费
+**模型单元**部署模式下，限流、推理加速等功能的**支持情况**。
 
-#### 按使用时长计费（预置吞吐）
-
-`**费用 = 使用时长 × (输入 TPM 单价 × 输入 TPM + 输出 TPM 单价 × 输出 TPM)**`
-
-后付费按小时计算：使用时长单位为小时，单价取下表"持续 1 小时"列；预付费按天计算：使用时长单位为天，单价取下表"持续 1 天"列。
-
--   预付费订单支付后实时生效，有效期 N 天至第 N 天 23:59 结束。若在 22:00 后下单，到期日将自动顺延1天。
-    
--   预付费订单到期后，将延后2小时停止服务，停止后资源保留14小时后释放。
-    
--   预付费订单无法提前终止服务。
-    
--   后付费时，如果账户欠费，部署的资源将保留并继续计费 24 小时，之后自动释放资源。
-    
-
-当模型输入超过最长输入 Token 或 超出购买的 TPM 量时，相关调用将自动切换为当前模型的按量付费模式。此时，推理性能可能下降，[限流](https://help.aliyun.com/zh/model-studio/rate-limit)将受业务空间中当前快照模型的公共流量的管控，[费用](https://help.aliyun.com/zh/model-studio/model-pricing)按模型调用（按量付费）标准计收。
-
--   此时，调用 API 返回 Header 将包含：`x-dashscope-ptu-overflow:true`。
-    
--   TPM 统计请前往：[模型监控（北京）](https://bailian.console.aliyun.com/?tab=model#/model-telemetry)。
-    
-
-缩容场景（降配）的具体降费退费规则请参考：[降配退款规则说明](https://help.aliyun.com/zh/user-center/description-of-downgrade-refund-rules)。
+#### 文本生成
 
 ##### 千问
-
-**模型名称**
-
-**模型代码**
-
-**最长输入Token**
-
-**后付费输入**
-
-**Per 10K TPM/小时**
-
-**后付费输出**
-
-**Per 1K TPM/小时**
-
-**预付费输入**
-
-**Per 10K TPM/天**
-
-**预付费输出**
-
-**Per 1K TPM/天**
-
-千问3.7-Max-2026-05-20
-
-qwen3.7-max-2026-05-20
-
-128,000
-
-¥28.8
-
-¥8.64
-
-¥345.6
-
-¥103.68
-
-千问3.6-Flash-2026-04-16
-
-qwen3.6-flash-2026-04-16
-
-128,000
-
-¥2.88
-
-¥1.73
-
-¥34.56
-
-¥20.74
-
-千问3.6-Plus-2026-04-02
-
-qwen3.6-plus-2026-04-02
-
-128,000
-
-¥4.8
-
-¥2.88
-
-¥57.6
-
-¥34.56
-
-千问3.5-Plus-2026-04-20
-
-qwen3.5-plus-2026-04-20
-
-128,000
-
-¥1.92
-
-¥1.15
-
-¥23.04
-
-¥13.82
-
-千问3-Max-2025-09-23
-
-qwen3-max-2025-09-23
-
-128,000
-
-¥7.68
-
-¥3.08
-
-¥92.16
-
-¥36.96
-
-千问-Flash-2025-07-28
-
-qwen-flash-2025-07-28
-
-128,000
-
-¥0.36
-
-¥0.36
-
-¥4.32
-
-¥4.32
-
-千问-Plus-2025-12-01
-
-qwen-plus-2025-12-01
-
-128,000
-
-¥1.92
-
-非思考：¥0.48
-
-思考：¥1.92
-
-¥23.04
-
-非思考：¥5.76
-
-思考：¥23.04
-
-##### DeepSeek
-
-**模型名称**
-
-**模型代码**
-
-**最长输入Token**
-
-**后付费输入**
-
-**Per 10K TPM/小时**
-
-**后付费输出**
-
-**Per 1K TPM/小时**
-
-**预付费输入**
-
-**Per 10K TPM/天**
-
-**预付费输出**
-
-**Per 1K TPM/天**
-
-DeepSeek-v4-Pro
-
-deepseek-v4-pro
-
-64,000
-
-¥43.2
-
-¥8.64
-
-¥518.4
-
-¥103.68
-
-DeepSeek-v3.2
-
-deepseek-v3.2
-
-64,000
-
-¥7.2
-
-¥1.08
-
-¥86.4
-
-¥12.96
-
-DeepSeek-v3
-
-deepseek-v3
-
-64,000
-
-¥7.2
-
-¥2.88
-
-¥86.4
-
-¥34.56
-
-##### 千问VL
-
-**模型名称**
-
-**模型代码**
-
-**最长输入Token**
-
-**后付费输入**
-
-**Per 10K TPM/小时**
-
-**后付费输出**
-
-**Per 1K TPM/小时**
-
-**预付费输入**
-
-**Per 10K TPM/天**
-
-**预付费输出**
-
-**Per 1K TPM/天**
-
-千问3-VL-Plus-2025-09-23
-
-qwen3-vl-plus-2025-09-23
-
-128,000
-
-¥2.4
-
-¥2.4
-
-¥28.8
-
-¥28.8
-
-##### 更多模型
-
-**模型名称**
-
-**模型代码**
-
-**最长输入Token**
-
-**后付费输入**
-
-**Per 10K TPM/小时**
-
-**后付费输出**
-
-**Per 1K TPM/小时**
-
-**预付费输入**
-
-**Per 10K TPM/天**
-
-**预付费输出**
-
-**Per 1K TPM/天**
-
-GLM-5.1
-
-glm-5.1
-
-64,000
-
-¥21.6
-
-¥8.64
-
-¥259.2
-
-¥103.68
-
-#### 按使用时长计费（模型单元）
-
-`**费用 = 使用时长（小时）× 模型单元数量 × 模型单元单价**`
-
-"模型单元单价"在后付费场景下取下表"小时单价"列；预付费按月计费时，公式改为 **包月数 × 模型单元数量 × 月单价**。
-
--   预付费购买的首月，如在首月内提前退订，日单价（≈ 月单价 / 30）将按 **1.2** 倍计费（不满一天按一天计费）
-    
-
-**说明**
-
-模型单元-后付费方式的算力资源先买到先得。如购买不成功会全额退款。
-
-##### 文本生成
-
-###### 千问
 
 **模型名称**
 
@@ -924,13 +407,13 @@ glm-5.1
 
 qwen3.6-35b-a3b
 
-MU8
+MU8 x 1
 
 ¥47
 
 ¥22,400
 
-MU9
+MU9 x 1
 
 ¥51
 
@@ -940,23 +423,35 @@ MU9
 
 qwen3.6-27b
 
-MU9
+MU9 x 1
 
 ¥51
 
 ¥24,600
 
+千问3.6-Flash-2026-04-16
+
+qwen3.6-flash-2026-04-16
+
+MU1 x 2
+
+¥108
+
+¥52,236
+
 千问3.6-Plus-2026-04-02
 
 qwen3.6-plus-2026-04-02
 
-MU1
+MU1 x 8
 
-¥54
+MU1 x 16（PD分离模式）
+
+¥432
 
 PD分离模式：¥864
 
-¥26,118
+¥208,944
 
 PD分离模式：¥417,888
 
@@ -964,73 +459,81 @@ PD分离模式：¥417,888
 
 qwen3.5-397b-a17b
 
-MU3
+MU2 x 8
 
-¥137
+¥504
+
+¥240,288
+
+MU3 x 8
+
+MU3 x 16（PD分离模式）
+
+¥1,096
 
 PD分离模式：¥2,192
 
-¥65,969
+¥527,752
 
 PD分离模式：¥1,055,504
 
-MU6
+MU6 x 16
 
-¥25
+¥400
 
-¥12,089
+¥193,424
 
 千问3.5-122B-A10B
 
 qwen3.5-122b-a10b
 
-MU1
+MU1 x 4
 
-¥54
+¥216
 
-¥26,118
+¥104,472
 
-MU2
+MU2 x 8
 
-¥80
+¥504
 
-¥38,000
+¥240,288
 
-MU6
+MU6 x 16
 
-¥25
+¥400
 
-¥12,089
+¥193,424
 
-MU9
+MU9 x 2
 
-¥51
+¥102
 
-¥24,600
+¥49,200
 
 千问3.5-35B-A3B
 
 qwen3.5-35b-a3b
 
-MU1
+MU1 x 2
 
-¥54
+¥108
 
-¥26,118
+¥52,236
 
-MU2
+MU2 x 8
 
-¥80
+¥504
 
-¥38,000
+¥240,288
 
-MU8
+MU8 x 1
 
 ¥47
 
 ¥22,400
 
-MU9
+MU9 x 1
 
 ¥51
 
@@ -1040,13 +543,13 @@ MU9
 
 qwen3.5-27b
 
-MU1
+MU1 x 2
 
-¥54
+¥108
 
-¥26,118
+¥52,236
 
-MU9
+MU9 x 1
 
 ¥51
 
@@ -1056,45 +559,59 @@ MU9
 
 qwen3.5-9b
 
-MU1
+MU1 x 2
 
-¥54
+¥108
 
-¥26,118
+¥52,236
 
-MU8
+MU8 x 1
 
 ¥47
 
 ¥22,400
 
-MU9
+MU9 x 1
 
 ¥51
 
 ¥24,600
 
+千问3.5-Flash-2026-02-23
+
+qwen3.5-flash-2026-02-23
+
+MU1 x 2
+
+¥108
+
+¥52,236
+
+MU8 x 1（模型压缩）
+
+¥47
+
+¥22,400
+
 千问3.5-Plus-2026-02-15
 
 qwen3.5-plus-2026-02-15
 
-MU1
-
-¥54
+MU1 x 16（PD分离模式）
 
 PD分离模式：¥864
 
-¥26,118
-
 PD分离模式：¥417,888
 
-MU3
+MU3 x 8
 
-¥137
+MU3 x 16（PD分离模式）
+
+¥1,096
 
 PD分离模式：¥2,192
 
-¥65,969
+¥527,752
 
 PD分离模式：¥1,055,504
 
@@ -1102,87 +619,87 @@ PD分离模式：¥1,055,504
 
 qwen3-235b-a22b-instruct-2507
 
-MU1
+MU1 x 4
 
-¥54
+¥216
 
-¥26,118
+¥104,472
 
-MU2
+MU2 x 8
 
-¥80
+¥504
 
-¥38,000
+¥240,288
 
 千问3-Next-80B-A3B-Instruct
 
 qwen3-next-80b-a3b-instruct
 
-MU1
+MU1 x 2
 
-¥54
+¥108
 
-¥26,118
+¥52,236
 
 千问3-32B
 
 qwen3-32b
 
-MU1
+MU1 x 4
 
-¥54
+¥216
 
-¥26,118
+¥104,472
 
-MU6
+MU6 x 4
 
-¥25
+¥100
 
-¥12,089
+¥48,356
 
 千问3-30B-A3B
 
 qwen3-30b-a3b
 
-MU9
+MU9 x 2
 
-¥51
+¥102
 
-¥24,600
+¥49,200
 
 千问3-30B-A3B-Instruct-2507
 
 qwen3-30b-a3b-instruct-2507
 
-MU1
+MU1 x 4
 
-¥54
+¥216
 
-¥26,118
+¥104,472
 
-MU2
+MU2 x 8
 
-¥80
+¥504
 
-¥38,000
+¥240,288
 
 千问3-8B
 
 qwen3-8b
 
-MU1
+MU1 x 2
 
-¥54
+¥108
 
-¥26,118
+¥52,236
 
-MU2
+MU2 x 2
 
-¥80
+¥126
 
-¥38,000
+¥60,072
 
-MU5
+MU5 x 1
 
 ¥21
 
@@ -1192,13 +709,13 @@ MU5
 
 qwen3-4b
 
-MU1
+MU1 x 2
 
-¥54
+¥108
 
-¥26,118
+¥52,236
 
-MU5
+MU5 x 1
 
 ¥21
 
@@ -1208,13 +725,13 @@ MU5
 
 qwen3-1.7b
 
-MU1
+MU1 x 2
 
-¥54
+¥108
 
-¥26,118
+¥52,236
 
-MU5
+MU5 x 1
 
 ¥21
 
@@ -1224,13 +741,13 @@ MU5
 
 qwen3-embedding-0.6b
 
-MU5
+MU5 x 1
 
 ¥21
 
 ¥10,139
 
-MU6
+MU6 x 1
 
 ¥25
 
@@ -1240,7 +757,7 @@ MU6
 
 qwen3-moe-rerank-0.6b
 
-MU5
+MU5 x 1
 
 ¥21
 
@@ -1250,13 +767,13 @@ MU5
 
 qwen3-rerank-0.6b
 
-MU5
+MU5 x 1
 
 ¥21
 
 ¥10,139
 
-MU6
+MU6 x 1
 
 ¥25
 
@@ -1266,23 +783,23 @@ MU6
 
 qwen3-max-2025-09-23
 
-MU2
+MU2 x 8
 
-¥80
+¥504
 
-¥38,000
+¥240,288
 
-MU3
+MU3 x 8
 
-¥137
+¥1,096
 
-¥65,969
+¥527,752
 
 千问3-Rerank
 
 qwen3-rerank
 
-MU5
+MU5 x 1
 
 ¥21
 
@@ -1292,43 +809,43 @@ MU5
 
 qwen2.5-72b-instruct
 
-MU1
+MU1 x 4
 
-¥54
+¥216
 
-¥26,118
+¥104,472
 
 千问2.5-开源版-32B
 
 qwen2.5-32b-instruct
 
-MU1
+MU1 x 4
 
-¥54
+¥216
 
-¥26,118
+¥104,472
 
 千问2.5-开源版-14B
 
 qwen2.5-14b-instruct
 
-MU1
+MU1 x 2
 
-¥54
+¥108
 
-¥26,118
+¥52,236
 
 千问2.5-开源版-7B
 
 qwen2.5-7b-instruct
 
-MU1
+MU1 x 2
 
-¥54
+¥108
 
-¥26,118
+¥52,236
 
-MU5
+MU5 x 1
 
 ¥21
 
@@ -1338,7 +855,7 @@ MU5
 
 qwen2.5-3b-instruct
 
-MU5
+MU5 x 1
 
 ¥21
 
@@ -1348,23 +865,25 @@ MU5
 
 qwen-flash-2025-07-28
 
-MU1
+MU1 x 4
 
-¥54
+¥216
 
-¥26,118
+¥104,472
 
 千问-Plus-2025-07-28
 
 qwen-plus-2025-07-28
 
-MU1
+MU1 x 4
 
-¥54
+MU1 x 16（PD分离模式）
+
+¥216
 
 PD分离模式：¥864
 
-¥26,118
+¥104,472
 
 PD分离模式：¥417,888
 
@@ -1372,13 +891,13 @@ PD分离模式：¥417,888
 
 qwen-plus-2025-12-01
 
-MU1
+MU1 x 4
 
-¥54
+¥216
 
-¥26,118
+¥104,472
 
-###### GLM
+##### GLM
 
 **模型名称**
 
@@ -1394,13 +913,9 @@ GLM-5
 
 glm-5
 
-MU3
-
-¥137
+MU3 x 16（PD分离模式）
 
 PD分离模式：¥2,192
-
-¥65,969
 
 PD分离模式：¥1,055,504
 
@@ -1408,17 +923,13 @@ GLM-4.7
 
 glm-4.7
 
-MU6
-
-¥25
+MU6 x 32（PD分离模式）
 
 PD分离模式：¥800
 
-¥12,089
-
 PD分离模式：¥386,848
 
-###### DeepSeek
+##### DeepSeek
 
 **模型名称**
 
@@ -1434,27 +945,23 @@ DeepSeek-v4-Flash
 
 deepseek-v4-flash
 
-MU1
+MU1 x 8
 
-¥54
+¥432
 
-¥26,118
+¥208,944
 
 DeepSeek-v3.2
 
 deepseek-v3.2
 
-MU2
+MU2 x 16（PD分离模式）
 
-¥80
+PD分离模式：¥1,008
 
-PD分离模式：¥1,280
+PD分离模式：¥480,576
 
-¥38,000
-
-PD分离模式：¥608,000
-
-###### 更多模型
+##### 更多模型
 
 **模型名称**
 
@@ -1470,13 +977,9 @@ MiniMax-M2.5
 
 MiniMax-M2.5
 
-MU1
-
-¥54
+MU1 x 16（PD分离模式）
 
 PD分离模式：¥864
-
-¥26,118
 
 PD分离模式：¥417,888
 
@@ -1484,11 +987,11 @@ Kimi-K2.5
 
 kimi-k2.5
 
-MU2
+MU2 x 8
 
-¥80
+¥504
 
-¥38,000
+¥240,288
 
 模型类型：
 
@@ -1504,9 +1007,9 @@ MU2
     该部署模式部署的模型在进行模型推理时，将首 Token 计算（Prefill）和后续 Token 计算（Decode）两个计算阶段，拆到不同的计算节点执行。
     
 
-##### 多模态
+#### 多模态
 
-###### 千问VL
+##### 千问VL
 
 **模型名称**
 
@@ -1522,57 +1025,57 @@ MU2
 
 qwen3-vl-235b-a22b-instruct
 
-MU1
+MU1 x 4
 
-¥54
+¥216
 
-¥26,118
+¥104,472
 
 千问3-VL-235B-A22B-Thinking
 
 qwen3-vl-235b-a22b-thinking
 
-MU1
+MU1 x 4
 
-¥54
+¥216
 
-¥26,118
+¥104,472
 
 千问3-VL-32B-Instruct
 
 qwen3-vl-32b-instruct
 
-MU2
+MU2 x 8
 
-¥80
+¥504
 
-¥38,000
+¥240,288
 
 千问3-VL-8B-Instruct
 
 qwen3-vl-8b-instruct
 
-MU1
+MU1 x 2
 
-¥54
+¥108
 
-¥26,118
+¥52,236
 
 千问3-VL-4B-Instruct
 
 qwen3-vl-4b-instruct
 
-MU1
+MU1 x 2
 
-¥54
+¥108
 
-¥26,118
+¥52,236
 
 千问3-VL-2B-Instruct
 
 qwen3-vl-2b-instruct
 
-MU5
+MU5 x 1
 
 ¥21
 
@@ -1582,7 +1085,7 @@ MU5
 
 qwen3-vl-embedding-2b
 
-MU5
+MU5 x 1
 
 ¥21
 
@@ -1592,43 +1095,43 @@ MU5
 
 qwen3-vl-flash-2025-10-15
 
-MU1
+MU1 x 4
 
-¥54
+¥216
 
-¥26,118
+¥104,472
 
 千问3-VL-Plus-2025-09-23
 
 qwen3-vl-plus-2025-09-23
 
-MU1
+MU1 x 4
 
-¥54
+¥216
 
-¥26,118
+¥104,472
 
 千问VL-Max-2025-08-13
 
 qwen-vl-max-2025-08-13
 
-MU6
+MU6 x 4
 
-¥25
+¥100
 
-¥12,089
+¥48,356
 
 千问VL-OCR-2025-11-20
 
 qwen-vl-ocr-2025-11-20
 
-MU6
+MU6 x 4
 
-¥25
+¥100
 
-¥12,089
+¥48,356
 
-###### 千问 Omni
+##### 千问 Omni
 
 **模型名称**
 
@@ -1644,13 +1147,13 @@ MU6
 
 qwen3.5-omni-flash
 
-MU8
+MU8 x 1
 
 ¥47
 
 ¥22,400
 
-MU9
+MU9 x 1
 
 ¥51
 
@@ -1660,11 +1163,11 @@ MU9
 
 qwen3.5-omni-plus
 
-MU9
+MU9 x 8
 
-¥51
+¥408
 
-¥24,600
+¥196,800
 
 模型类型：
 
@@ -1675,7 +1178,7 @@ MU9
 -   Instruct/Thinking - 可在模型部署时**选择是否开启思考模式**。
     
 
-##### 语音合成
+#### 语音合成
 
 **CosyVoice**
 
@@ -1695,198 +1198,9 @@ cosyvoice-v3-flash
 
 MU5
 
-¥20
+¥21
 
-¥9,500
-
-#### 按模型 Token 使用量
-
-`**费用 = 模型输入 Token 数 × 模型输入单价 + 模型输出 Token 数 × 模型输出单价（最小计费单位：1 token）**`
-
--   仅当对下列基础模型完成 SFT 高效训练并得到自定义模型后，才支持按模型 Token 使用量计费。
-    
-
-##### 千问
-
-**基础模型**
-
-**模型代码**
-
-**输入**
-
-**元/千Token**
-
-**输出**
-
-**元/千Token**
-
-千问3-32B
-
-qwen3-32b
-
-¥0.002
-
-非思考模式：¥0.008
-
-思考模式：¥0.02
-
-千问3-14B
-
-qwen3-14b
-
-¥0.001
-
-非思考模式：¥0.004
-
-思考模式：¥0.01
-
-千问3-8B
-
-qwen3-8b
-
-¥0.0005
-
-非思考模式：¥0.002
-
-思考模式：¥0.005
-
-千问2.5-开源版-72B
-
-qwen2.5-72b-instruct
-
-¥0.004
-
-¥0.012
-
-千问2.5-开源版-32B
-
-qwen2.5-32b-instruct
-
-¥0.002
-
-¥0.006
-
-千问2.5-开源版-14B
-
-qwen2.5-14b-instruct
-
-¥0.001
-
-¥0.003
-
-千问2.5-开源版-7B
-
-qwen2.5-7b-instruct
-
-¥0.0005
-
-¥0.001
-
-##### 千问VL
-
-**基础模型**
-
-**模型代码**
-
-**输入**
-
-**元/千Token**
-
-**输出**
-
-**元/千Token**
-
-千问3-VL-8B-Instruct
-
-qwen3-vl-8b-instruct
-
-¥0.0005
-
-¥0.002
-
-千问2.5-VL-72B
-
-qwen2.5-vl-72b-instruct
-
-¥0.016
-
-¥0.048
-
-千问2.5-VL-32B
-
-qwen2.5-vl-32b-instruct
-
-¥0.008
-
-¥0.024
-
-千问2.5-VL-7B
-
-qwen2.5-vl-7b-instruct
-
-¥0.002
-
-¥0.005
-
-#### **图片、视频生成模型（预置）-按实例时长计费**
-
-`**费用 = 资源占用时长（小时）× 实例数量 × 实例单价（不满 1 小时按 1 小时计费）**`
-
-"实例单价"在后付费场景下取下表"后付费单价（元/实例/小时）"列；预付费按月计费时，公式改为 **包月数 × 实例数量 × 预付费单价（元/月）**。
-
-##### 图片生成
-
-**模型服务**
-
-**模型类型**
-
-**独占实例资源规格**
-
-**后付费单价（元/实例/小时）**
-
-**预付费单价**
-
-**（元/月）**
-
-万相-文本生成图像-0521
-
-预置模型
-
-轻量版
-
-¥20/实例/小时
-
-¥10,000/月
-
-##### 视频生成
-
-**模型服务**
-
-**模型类型**
-
-**独占实例资源规格**
-
-**后付费单价（元/实例/小时）**
-
-**预付费单价**
-
-**（元/月）**
-
-悦动人像EMO-detect
-
-预置模型
-
-轻量版
-
-¥20/实例/小时
-
-¥10,000/月
-
-悦动人像EMO
-
-舞动人像AnimateAnyone-detect
-
-舞动人像AnimateAnyone
+¥10,139
 
 ### **响应示例**
 
@@ -2063,34 +1377,6 @@ tpm\_limit
 Number
 
 Token per minute，每分钟 Token 使用量。
-
-仅预置吞吐量（ptu）部署方式响应
-
-ptu\_capacity
-
-Object
-
-当设置`"plan": "ptu"`时，该参数才生效。
-
-样例：`"ptu_capacity": { "input_tpm": 10000, "output_tpm": 1000 }`。
-
-ptu\_capacity.input\_tpm
-
-Number
-
-所有模型支持，input token pre-minute，部署的模型每分钟支持的最大输入 Token 量。
-
-ptu\_capacity.output\_tpm
-
-Number
-
-所有模型支持，output token pre-minute，部署的模型每分钟支持的最大输出 Token 量。
-
-ptu\_capacity.thinking\_output\_tpm
-
-Number
-
-部分模型支持，thinking output token pre-minute，部署的模型每分钟支持的预置思考最大输出 Token 量。
 
 ## 修改部署的模型设置
 
@@ -2338,7 +1624,8 @@ query
         "workspace_id": "llm-v71tlv3d***",
         "charge_type": "post_paid",
         "creator": "175805416***",
-        "modifier": "175805416***"
+        "modifier": "175805416***",
+        "plan": "cu"
       }
     ]
   }
@@ -2400,53 +1687,9 @@ Number
 
 body
 
-条件必选
-
-仅`"plan": "mu"`时，可填写该设置。
-
-具体支持情况请参考：[模型单元部署的功能支持情况](#2fc096b2fdw9z)。
+是
 
 更新之后，模型所使用的资源单元。**必须**是`[base_capacity](#4d68826158yix)`的整数倍。
-
-ptu\_capacity
-
-Object
-
-body
-
-条件必选
-
-仅`"plan": "ptu"`时，可填写该设置。
-
-具体支持情况请参考：[PTU部署的功能支持情况](#2fc096b2fdw9z)。
-
-当设置`"plan": "ptu"`时，该参数才生效。
-
-样例：`"ptu_capacity": { "input_tpm": 10000, "output_tpm": 1000 }`。
-
-ptu\_capacity.input\_tpm
-
-Number
-
-body
-
-所有模型支持，input token pre-minute，部署的模型每分钟支持的最大输入 Token 量。
-
-ptu\_capacity.output\_tpm
-
-Number
-
-body
-
-所有模型支持，output token pre-minute，部署的模型每分钟支持的最大输出 Token 量。
-
-ptu\_capacity.thinking\_output\_tpm
-
-Number
-
-body
-
-部分模型支持，thinking output token pre-minute，部署的模型每分钟支持的预置思考最大输出 Token 量。
 
 ### **响应示例**
 

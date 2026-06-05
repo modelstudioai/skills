@@ -84,6 +84,10 @@ qwen-image
 
 北京和新加坡地域拥有独立的 **API Key** 与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错。
 
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
 ## **同步接口（推荐）**
 
 ### **HTTP调用**
@@ -92,7 +96,9 @@ qwen-image
 
 **北京地域**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-**新加坡地域**：`POST https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+**新加坡地域**：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 #### 请求参数
 
@@ -400,7 +406,7 @@ import os
 import dashscope
 from dashscope import MultiModalConversation
 
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
 dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
 messages = [
@@ -503,7 +509,7 @@ import java.util.Map;
 public class QwenImage {
 
     static {
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
         Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
     }
 
@@ -597,7 +603,7 @@ public class QwenImage {
 
 **北京地域**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
 
-**新加坡地域**：`POST https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
+**新加坡地域**：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
 
 **说明**
 
@@ -826,7 +832,9 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
 
 ##### 新加坡
 
-`GET https://dashscope-intl.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -1025,7 +1033,7 @@ from dashscope import ImageSynthesis
 import os
 import dashscope
 
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
 dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
 prompt = "一副典雅庄重的对联悬挂于厅堂之中，房间是个安静古典的中式布置，桌子上放着一些青花瓷，对联上左书“义本生知人机同道善思新”，右书“通云赋智乾坤启数高志远”， 横批“智启千问”，字体飘逸，在中间挂着一幅中国风的画作，内容是岳阳楼。"
@@ -1098,7 +1106,7 @@ import os
 import dashscope
 import time
 
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
 dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
 prompt = "一副典雅庄重的对联悬挂于厅堂之中，房间是个安静古典的中式布置，桌子上放着一些青花瓷，对联上左书“义本生知人机同道善思新”，右书“通云赋智乾坤启数高志远”， 横批“智启千问”，字体飘逸，在中间挂着一幅中国风的画作，内容是岳阳楼。"
@@ -1261,7 +1269,7 @@ import java.util.Map;
 
 public class Text2Image {
     static {
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
         Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
     }
 
@@ -1351,7 +1359,7 @@ import java.util.Map;
 public class Text2Image {
 
     static {
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
         Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
     }
 
@@ -1527,7 +1535,7 @@ A：
     -   `qwen-image-plus-2026-01-09`：千问图像生成的全新快照版模型，为`qwen-image-max`的蒸馏加速版，支持快速生成高质量图像。
         
 -   **图像编辑模型**：  
-    `qwen-image-edit`：根据输入的图像和文本指令，执行图生图、局部修改等操作，详情请参见[千问-图像编辑](https://help.aliyun.com/zh/model-studio/qwen-image-edit-api)。
+    `qwen-image-edit`：根据输入的图像和文本指令，执行图生图、局部修改等操作，详情请参见[千问-图像编辑](https://help.aliyun.com/zh/model-studio/qwen-image-edit-api)。  
     
 
 ### **Q：如何获取图像存储的访问域名白名单？**

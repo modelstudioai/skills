@@ -85,15 +85,13 @@
     
 2.  在页面下方的**网关入口**页签，单击**NLB**类型的实例ID。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8001540471/p907082.png)
-    
 3.  获取可用区的VIP。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8001540471/p920407.png)
+    在网络型负载均衡NLB控制台，进入目标实例的**实例详情**页签，在下方可用区表格中查看**交换机ID**列和**VIP**列，获取各可用区对应的交换机ID与VIP地址。
     
 4.  单击交换机ID，获取所有交换机的网段。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8001540471/p920409.png)
+    在交换机详情页的基本信息区域，查看**IPv4网段**（如`192.168.0.0/24`）和**IPv6网段**字段，记录交换机的网段信息。
     
 
 ## 步骤3：配置可用区IP

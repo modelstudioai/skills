@@ -1,8 +1,12 @@
 # Java SDK
 
-本文介绍 DashScope Java SDK 调用[实时语音合成-千问](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)时的关键接口与请求参数。
+本文介绍 DashScope Java SDK 调用[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)时的关键接口与请求参数。
 
-**用户指南**：关于模型介绍和选型建议请参见[实时语音合成-千问](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)或[语音合成-千问](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)。
+**用户指南**：关于模型介绍和选型建议请参见[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)或[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)。
+
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 ## **前期准备**
 
@@ -162,7 +166,7 @@ public class Main {
         QwenTtsRealtimeParam param = QwenTtsRealtimeParam.builder()
                 // 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash-realtime
                 .model("qwen3-tts-flash-realtime")
-                // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime
+                // 以下为华北2（北京）地域的URL，各地域的URL不同。
                 .url("wss://dashscope.aliyuncs.com/api-ws/v1/realtime")
                 // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 .apikey(System.getenv("DASHSCOPE_API_KEY"))
@@ -392,7 +396,7 @@ public class Main {
         QwenTtsRealtimeParam param = QwenTtsRealtimeParam.builder()
                 // 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash-realtime
                 .model("qwen3-tts-flash-realtime")
-                // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime
+                // 以下为华北2（北京）地域的URL，各地域的URL不同。
                 .url("wss://dashscope.aliyuncs.com/api-ws/v1/realtime")
                 // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 .apikey(System.getenv("DASHSCOPE_API_KEY"))
@@ -543,9 +547,11 @@ String
 
 是
 
-中国内地：`wss://dashscope.aliyuncs.com/api-ws/v1/realtime`
+华北2（北京）地域：`wss://dashscope.aliyuncs.com/api-ws/v1/realtime`
 
-国际：`wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime`
+新加坡地域：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 下述请求参数可以通过`QwenTtsRealtimeConfig`对象的链式方法或setter配置、之后作为参数传入updateSession接口完成配置。
 

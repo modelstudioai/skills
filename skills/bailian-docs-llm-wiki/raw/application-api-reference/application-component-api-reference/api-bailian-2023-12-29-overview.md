@@ -130,6 +130,18 @@ API概述
 
 获取连接器信息。当前接口仅支持获取文件连接器信息。
 
+DeleteConnector
+
+删除连接器
+
+删除连接器
+
+[UpdateConnector](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updateconnector)
+
+编辑连接器
+
+编辑连接器
+
 ## 知识库
 
 API

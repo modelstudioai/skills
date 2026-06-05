@@ -451,7 +451,7 @@ public class MiaoCeSubmitCustomTopicSelectionPerspectiveAnalysisTaskTest {
 
 ## SASS页面查询类接口
 
-涉及接口：[ListHotSources - 获取三方热榜源列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listhotsources)、[ListHotTopics - 获取热点话题列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listhottopics)、[ListHotViewPoints - 获取热门视角列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listhotviewpoints)、[ListWebReviewPoints - 获取网友视角列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listwebreviewpoints)、[ListFreshViewPoints - 获取新颖视角列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listfreshviewpoints)、[ListTimedViewAttitude - 获取时效性视角列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listtimedviewattitude)。
+涉及接口：[获取三方热榜源列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listhotsources)、[获取热点话题列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listhottopics)、[获取热门视角列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listhotviewpoints)、[获取网友视角列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listwebreviewpoints)、[获取新颖视角列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listfreshviewpoints)、[获取时效性视角列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listtimedviewattitude)。
 
 ```
 package org.example.miaoce;

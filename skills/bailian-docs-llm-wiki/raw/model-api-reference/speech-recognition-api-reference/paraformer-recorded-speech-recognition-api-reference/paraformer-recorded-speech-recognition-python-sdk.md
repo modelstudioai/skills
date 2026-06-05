@@ -2,7 +2,7 @@
 
 本文介绍Paraformer录音文件识别Python SDK的参数和接口细节。
 
-**用户指南：**关于模型介绍和选型建议请参见[录音文件识别-Fun-ASR/Paraformer/SenseVoice](https://help.aliyun.com/zh/model-studio/recording-file-recognition)。
+**用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)
 
 ## **前提条件**
 
@@ -30,7 +30,7 @@
 
 ### **异步提交任务+同步等待任务结束**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2768418771/CAEQURiBgMCvo5zjpxkiIDQyNzUwZjVjMWM3MjQ5Nzg4ODBjNDRjNzE1ZGFiOGFj4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7311040871/CAEQURiBgMCvo5zjpxkiIDQyNzUwZjVjMWM3MjQ5Nzg4ODBjNDRjNzE1ZGFiOGFj4709861_20241015153444.149.svg)
 
 1.  调用[核心类（Transcription）](#adcb5e9bddbyq)的`async_call`方法并设置[请求参数](#340f6879fci7d)。
     
@@ -61,8 +61,7 @@ import json
 
 task_response = Transcription.async_call(
     model='paraformer-v2',
-    file_urls=['https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav',
-               'https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav'],
+    file_urls=['https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav'],
     language_hints=['zh', 'en']  # “language_hints”只支持paraformer-v2模型
 )
 
@@ -74,7 +73,7 @@ if transcribe_response.status_code == HTTPStatus.OK:
 
 ### **异步提交任务+异步查询任务执行结果**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2768418771/CAEQURiBgMCN3qzkpxkiIGE0YmU4YTdjMWNiNzRmYjJhMjFlMWZkZmFmOWQ1NmEx4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7311040871/CAEQURiBgMCN3qzkpxkiIGE0YmU4YTdjMWNiNzRmYjJhMjFlMWZkZmFmOWQ1NmEx4709861_20241015153444.149.svg)
 
 1.  调用[核心类（Transcription）](#adcb5e9bddbyq)的`async_call`方法并设置[请求参数](#340f6879fci7d)。
     
@@ -105,8 +104,7 @@ import json
 
 transcribe_response = Transcription.async_call(
     model='paraformer-v2',
-    file_urls=['https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav',
-               'https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav'],
+    file_urls=['https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav'],
     language_hints=['zh', 'en']  # “language_hints”只支持paraformer-v2模型
 )
 
@@ -156,7 +154,7 @@ list\[str\]
 
 是
 
-音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求最多支持100个URL。
+音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。
 
 若录音文件存储在阿里云OSS，使用SDK方式不支持使用以 oss://为前缀的临时 URL。
 
@@ -395,7 +393,7 @@ int
         "submit_time":"2025-02-13 16:55:08.573",
         "scheduled_time":"2025-02-13 16:55:08.592",
         "task_metrics":{
-            "TOTAL":2,
+            "TOTAL":1,
             "SUCCEEDED":0,
             "FAILED":0
         }
@@ -418,8 +416,8 @@ int
         "submit_time":"2025-02-13 17:31:20.681",
         "scheduled_time":"2025-02-13 17:31:20.703",
         "task_metrics":{
-            "TOTAL":2,
-            "SUCCEEDED":1,
+            "TOTAL":1,
+            "SUCCEEDED":0,
             "FAILED":0
         }
     },
@@ -446,16 +444,11 @@ int
                 "file_url":"https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
                 "transcription_url":"https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20250213/17%3A31/20ee4e4f-0404-4806-b617-c7d4c62eed19-1.json?Expires=1739525481&OSSAccessKeyId=yourOSSAccessKeyId&Signature=3q%2B1uQmRwltd7FPn5HQM2mBKw74%3D",
                 "subtask_status":"SUCCEEDED"
-            },
-            {
-                "file_url":"https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav",
-                "transcription_url":"https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20250213/17%3A31/be4f14c5-e46b-47ff-b03a-476ae9a45fd3-1.json?Expires=1739525481&OSSAccessKeyId=yourOSSAccessKeyId&Signature=EUX%2FRkGcn46L5d93ihQmpWUeYE4%3D",
-                "subtask_status":"SUCCEEDED"
             }
         ],
         "task_metrics":{
-            "TOTAL":2,
-            "SUCCEEDED":2,
+            "TOTAL":1,
+            "SUCCEEDED":1,
             "FAILED":0
         }
     },
@@ -481,11 +474,6 @@ int
         "end_time": "2024-12-16 16:31:02.375",
         "results": [
             {
-                "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/long_audio_demo_cn.mp3",
-                "transcription_url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20241216/xxxx",
-                "subtask_status": "SUCCEEDED"
-            },
-            {
                 "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/rich_text_exaple_1.wav",
                 "code": "InvalidFile.DownloadFailed",
                 "message": "The audio file cannot be downloaded.",
@@ -493,8 +481,8 @@ int
             }
         ],
         "task_metrics": {
-            "TOTAL": 2,
-            "SUCCEEDED": 1,
+            "TOTAL": 1,
+            "SUCCEEDED": 0,
             "FAILED": 1
         }
     },
@@ -575,7 +563,7 @@ transcription\_url
     "submit_time":"2025-02-13 17:59:27.754",
     "scheduled_time":"2025-02-13 17:59:27.789",
     "task_metrics":{
-        "TOTAL":2,
+        "TOTAL":1,
         "SUCCEEDED":0,
         "FAILED":0
     }
@@ -591,7 +579,7 @@ transcription\_url
     "submit_time":"2025-02-13 17:59:27.754",
     "scheduled_time":"2025-02-13 17:59:27.789",
     "task_metrics":{
-        "TOTAL":2,
+        "TOTAL":1,
         "SUCCEEDED":0,
         "FAILED":0
     }
@@ -612,16 +600,11 @@ transcription\_url
             "file_url":"https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
             "transcription_url":"https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20250213/17%3A59/70e737cc-bf8c-418b-b0c8-83fab192a0fa-1.json?Expires=1739527168&OSSAccessKeyId=yourOSSAccessKeyId&Signature=AtGjIKI%2BdgbzjJIu%2BHsr1R5nSAY%3D",
             "subtask_status":"SUCCEEDED"
-        },
-        {
-            "file_url":"https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_male2.wav",
-            "transcription_url":"https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20250213/17%3A59/ce1ebe74-be78-4ac8-b4f8-8e438a14d1c2-1.json?Expires=1739527168&OSSAccessKeyId=yourOSSAccessKeyId&Signature=z5s0ROpSU8HwiM8WHPNVpkuFG3A%3D",
-            "subtask_status":"SUCCEEDED"
         }
     ],
     "task_metrics":{
-        "TOTAL":2,
-        "SUCCEEDED":2,
+        "TOTAL":1,
+        "SUCCEEDED":1,
         "FAILED":0
     }
 }
@@ -640,11 +623,6 @@ transcription\_url
     "end_time": "2024-12-16 16:31:02.375",
     "results": [
         {
-            "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/long_audio_demo_cn.mp3",
-            "transcription_url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20241216/xxxx",
-            "subtask_status": "SUCCEEDED"
-        },
-        {
             "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/rich_text_exaple_1.wav",
             "code": "InvalidFile.DownloadFailed",
             "message": "The audio file cannot be downloaded.",
@@ -652,8 +630,8 @@ transcription\_url
         }
     ],
     "task_metrics": {
-        "TOTAL": 2,
-        "SUCCEEDED": 1,
+        "TOTAL": 1,
+        "SUCCEEDED": 0,
         "FAILED": 1
     }
 }
@@ -919,7 +897,7 @@ def fetch(cls,
 
 ## **错误码**
 
-如遇报错问题，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行排查。
+如遇报错问题，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行排查。
 
 若问题仍未解决，请加入[开发者群](https://github.com/aliyun/alibabacloud-bailian-speech-demo)反馈遇到的问题，并提供Request ID，以便进一步排查问题。
 
@@ -936,11 +914,6 @@ def fetch(cls,
     "end_time": "2024-12-16 16:31:02.375",
     "results": [
         {
-            "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/long_audio_demo_cn.mp3",
-            "transcription_url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20241216/xxxx",
-            "subtask_status": "SUCCEEDED"
-        },
-        {
             "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/rich_text_exaple_1.wav",
             "code": "InvalidFile.DownloadFailed",
             "message": "The audio file cannot be downloaded.",
@@ -948,8 +921,8 @@ def fetch(cls,
         }
     ],
     "task_metrics": {
-        "TOTAL": 2,
-        "SUCCEEDED": 1,
+        "TOTAL": 1,
+        "SUCCEEDED": 0,
         "FAILED": 1
     }
 }

@@ -2,14 +2,24 @@
 
 阿里云百炼的通义千问视觉模型兼容OpenAI接口规范。将原有 OpenAI 应用迁移至阿里云百炼只需调整三个参数：
 
--   base\_url：替换为 https://dashscope.aliyuncs.com/compatible-mode/v1
+-   base\_url：
     
-    > 若使用弗吉尼亚地域模型，需要将base\_url换成https://dashscope-us.aliyuncs.com/compatible-mode/v1，若使用新加坡地域的模型，需要将url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
-    
+    -   华北2（北京）地域Lhttps://dashscope.aliyuncs.com/compatible-mode/v1
+        
+    -   新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1，调用时请将{WorkspaceId}替换为真实的业务空间ID
+        
+    -   美国（弗吉尼亚）：https://dashscope-us.aliyuncs.com/compatible-mode/v1
+        
+    -   新加坡：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1，调用时请将{WorkspaceId}替换为真实的业务空间ID
+        
 -   api\_key：替换为[阿里云百炼API Key](https://help.aliyun.com/zh/model-studio/get-api-key)
     
 -   model: 替换为以下模型列表中的名称
     
+
+**重要**
+
+新加坡地域旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 ## **支持的模型**
 
@@ -19,9 +29,9 @@
     
     -   qwen3-vl-plus、qwen3-vl-plus-2025-12-19、qwen3-vl-plus-2025-09-23、qwen3-vl-flash、qwen3-vl-flash-2025-10-15、qwen3-vl-235b-a22b-thinking、qwen3-vl-235b-a22b-instruct、qwen3-vl-32b-instruct、qwen3-vl-30b-a3b-thinking、qwen3-vl-30b-a3b-instruct、qwen3-vl-8b-thinking、qwen3-vl-8b-instruct
         
-    -   qwen-vl-max、qwen-vl-max、qwen-vl-max-latest、qwen-vl-max-2025-08-13、qwen-vl-max-2025-04-08、qwen-vl-max-2025-04-02、qwen-vl-max-2025-01-25、qwen-vl-max-2024-12-30、qwen-vl-max-2024-11-19、qwen-vl-plus、qwen-vl-plus-latest、qwen-vl-plus-2025-08-15、qwen-vl-plus-2025-07-10、qwen-vl-plus-2025-05-07、qwen-vl-plus-2025-01-25、qwen-vl-plus-2025-01-02、qwen2.5-vl-72b-instruct 、qwen2.5-vl-32b-instruct
+    -   qwen-vl-max、qwen-vl-max、qwen-vl-plus 
         
--   QVQ系列模型：qvq-max、qvq-max-latest、qvq-max-2025-05-15、qvq-max-2025-03-25、qvq-plus、qvq-plus-latest、qvq-plus-2025-05-15
+-   QVQ系列模型：qvq-max、qvq-plus
     
 -   通义千问OCR系列模型：qwen-vl-ocr、qwen-vl-ocr-latest、qwen-vl-ocr-2025-11-20、qwen-vl-ocr-2025-08-28、qwen-vl-ocr-2025-04-13、qwen-vl-ocr-2024-10-28
     
@@ -32,9 +42,9 @@
     
 -   qwen3-vl-plus、qwen3-vl-plus-2025-12-19、qwen3-vl-plus-2025-09-23、qwen3-vl-flash、qwen3-vl-flash-2025-10-15、qwen3-vl-235b-a22b-thinking、qwen3-vl-235b-a22b-instruct、qwen3-vl-32b-instruct、qwen3-vl-30b-a3b-thinking、qwen3-vl-30b-a3b-instruct、qwen3-vl-8b-thinking、qwen3-vl-8b-instruct
     
--   qwen-vl-max、qwen-vl-max、qwen-vl-max-latest、qwen-vl-max-2025-08-13、qwen-vl-max-2025-04-08、qwen-vl-max-2025-04-02、qwen-vl-max-2025-01-25、qwen-vl-plus、qwen-vl-plus-latest、qwen-vl-plus-2025-08-15、qwen-vl-plus-2025-07-10、qwen-vl-plus-2025-05-07、qwen-vl-plus-2025-01-25、qwen2.5-vl-72b-instruct 、qwen2.5-vl-32b-instruct、qwen2.5-vl-7b-instruct、qwen2.5-vl-3b-instruct
+-   qwen-vl-max、qwen-vl-max、qwen-vl-plus 
     
--   QVQ系列模型：qvq-max、qvq-max-latest、qvq-max-2025-03-25
+-   QVQ系列模型：qvq-max
     
 -   通义千问OCR系列模型：qwen-vl-ocr、qwen-vl-ocr-2025-11-20
     
@@ -57,8 +67,7 @@ def get_response():
     client = OpenAI(
         # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
         api_key=os.getenv("DASHSCOPE_API_KEY"),
-        # 以下为北京地域的 base_url，若使用弗吉尼亚地域模型，需要将base_url换成https://dashscope-us.aliyuncs.com/compatible-mode/v1
-        # 若使用新加坡地域的模型，需将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+                # 以下为华北2（北京）地域的URL，各地域URL不同。
         base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
     )
     completion = client.chat.completions.create(
@@ -142,8 +151,7 @@ def get_response():
     llm = ChatOpenAI(
       # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
       api_key=os.getenv("DASHSCOPE_API_KEY"),
-      # 以下为北京地域的 base_url，若使用弗吉尼亚地域模型，需要将base_url换成https://dashscope-us.aliyuncs.com/compatible-mode/v1
-      # 若使用新加坡地域的模型，需将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+            # 以下为华北2（北京）地域的URL，各地域URL不同。
       base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
       model="qwen3-vl-plus",
       )
@@ -232,8 +240,7 @@ def get_response():
     llm = ChatOpenAI(
         # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
         api_key=os.getenv("DASHSCOPE_API_KEY"),
-        # 以下为北京地域的 base_url，若使用弗吉尼亚地域模型，需要将base_url换成https://dashscope-us.aliyuncs.com/compatible-mode/v1
-        # 若使用新加坡地域的模型，需将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+                # 以下为华北2（北京）地域的URL，各地域URL不同。
         base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
         model="qwen3-vl-plus",
         # 通过以下设置，在流式输出的最后一行展示token使用信息
@@ -303,7 +310,7 @@ if __name__ == "__main__":
 
 ```
 北京：POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
-新加坡：POST https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
+新加坡：POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 弗吉尼亚：POST https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions
 ```
 
@@ -322,9 +329,7 @@ curl
 ```
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下为北京地域的 base_url，若使用弗吉尼亚地域模型，需要将base_url换成https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions
-# 若使用新加坡地域的模型，需将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
-# === 执行时请删除该注释 ===
+# 以下为华北2（北京）地域的URL，各地域URL不同。
 
 curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -392,9 +397,7 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completi
 ```
 # ======= 重要提示 =======
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-# 以下是北京地域base_url，若使用弗吉尼亚地域模型，需要将base_url换成https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions
-# 如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
-# === 执行时请删除该注释 ===
+# 以下为华北2（北京）地域的URL，各地域URL不同。
 
 curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \

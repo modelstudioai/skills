@@ -231,23 +231,17 @@ qwen-max
 
 1,200
 
-qwen-max-latest
+qwen3.7-plus
 
-qwen-max-2025-01-25
+30,000
 
-（qwen-max-0125）
+5,000,000
 
-60
+qwen3.7-plus-2026-05-26
 
-100,000
+600
 
-qwen-max-2024-09-19
-
-（qwen-max-0919）
-
-qwen-max-2024-04-28
-
-（qwen-max-0428）
+1,000,000
 
 qwen3.6-plus
 
@@ -377,45 +371,11 @@ qwen-turbo
 
 5,000,000
 
-qwen-turbo-latest
-
-qwen-turbo-2025-07-15
-
-(qwen-turbo-0715)
-
-60
-
-100,000
-
-qwen-turbo-2025-04-28
-
-(qwen-turbo-0428)
-
-1,000,000
-
-qwen-turbo-2025-02-11
-
-(qwen-turbo-0211)
-
-5,000,000
-
-qwen-turbo-2024-11-01
-
-(qwen-turbo-1101)
-
 qwq-plus
 
 600
 
 1,000,000
-
-qwq-plus-latest
-
-qwq-plus-2025-03-05
-
-60
-
-100,000
 
 qwen-long
 
@@ -476,6 +436,18 @@ qwen3-max-2025-09-23
 100,000
 
 qwen3-max-preview
+
+600
+
+1,000,000
+
+qwen3.7-plus
+
+30,000
+
+5,000,000
+
+qwen3.7-plus-2026-05-26
 
 600
 
@@ -617,19 +589,17 @@ qwen-max
 
 1,000,000
 
-qwen-max-latest
+qwen3.7-plus
 
-600
+15,000
 
-1,000,000
+5,000,000
 
-qwen-max-2025-01-25
-
-(qwen-max-0125)
+qwen3.7-plus-2026-05-26
 
 60
 
-100,000
+1,000,000
 
 qwen3.6-plus
 
@@ -742,26 +712,6 @@ qwq-plus
 qwen-turbo
 
 600
-
-5,000,000
-
-qwen-turbo-latest
-
-600
-
-5,000,000
-
-qwen-turbo-2025-04-28
-
-(qwen-turbo-0428)
-
-60
-
-1,000,000
-
-qwen-turbo-2024-11-01
-
-(qwen-turbo-1101)
 
 5,000,000
 
@@ -899,87 +849,19 @@ qwen-vl-max
 
 1,000,000
 
-qwen-vl-max-latest
-
-qwen-vl-max-2025-08-13
-
-（qwen-vl-max-0813）
-
-60
-
-100,000
-
-qwen-vl-max-2025-04-08
-
-（qwen-vl-max-0408）
-
-qwen-vl-max-2025-04-02
-
-（qwen-vl-max-0402）
-
-qwen-vl-max-2025-01-25
-
-（qwen-vl-max-0125）
-
-qwen-vl-max-2024-12-30
-
-（qwen-vl-max-1230）
-
-qwen-vl-max-2024-11-19
-
-（qwen-vl-max-1119）
-
 qwen-vl-plus
 
 1,200
 
 1,000,000
 
-qwen-vl-plus-latest
-
-qwen-vl-plus-2025-08-15
-
-（qwen-vl-plus-0815）
-
-60
+qvq-max
 
 100,000
 
-qwen-vl-plus-2025-07-10
-
-（qwen-vl-plus-0710）
-
-qwen-vl-plus-2025-05-07
-
-（qwen-vl-plus-0507）
-
-qwen-vl-plus-2025-01-25
-
-（qwen-vl-plus-0125）
-
-qwen-vl-plus-2025-01-02
-
-（qwen-vl-plus-0102）
-
-qvq-max
-
-qvq-max-latest
-
-qvq-max-2025-05-15
-
-（qvq-max-0515）
-
-qvq-max-2025-03-25
-
-（qvq-max-0325）
+60
 
 qvq-plus
-
-qvq-plus-latest
-
-qvq-plus-2025-05-15
-
-（qvq-plus-0515）
 
 ## **全球**
 
@@ -1079,57 +961,17 @@ qwen-vl-max
 
 1,000,000
 
-qwen-vl-max-latest
-
-qwen-vl-max-2025-08-13
-
-(qwen-vl-max-0813)
-
-60
-
-100,000
-
-qwen-vl-max-2025-04-08
-
-(qwen-vl-max-0408)
-
-1,200
-
-1,000,000
-
 qwen-vl-plus
 
-qwen-vl-plus-latest
-
-qwen-vl-plus-2025-08-15
-
-(qwen-vl-plus-0815)
-
-120
+1,200
 
 1,000,000
-
-qwen-vl-plus-2025-05-07
-
-(qwen-vl-plus-0507)
-
-qwen-vl-plus-2025-01-25
-
-(qwen-vl-plus-0125)
-
-1,200
 
 qvq-max
 
 60
 
 100,000
-
-qvq-max-latest
-
-qvq-max-2025-03-25
-
-(qvq-max-0325)
 
 ## **美国**
 
@@ -1535,16 +1377,6 @@ qwen-math-turbo
 
 1,000,000
 
-qwen-math-turbo-latest
-
-qwen-math-turbo-2024-09-19
-
-（qwen-math-turbo-0919）
-
-60
-
-100,000
-
 ### **千问Coder**
 
 ## **中国内地**
@@ -1593,31 +1425,11 @@ qwen-coder-plus
 
 1,200
 
-qwen-coder-plus-latest
-
-qwen-coder-plus-2024-11-06
-
-（qwen-coder-plus-1106）
-
-120
-
-200,000
-
 qwen-coder-turbo
 
 1,200
 
 1,000,000
-
-qwen-coder-turbo-latest
-
-qwen-coder-turbo-2024-09-19
-
-（qwen-coder-turbo-0919）
-
-60
-
-100,000
 
 ## **全球**
 
@@ -1951,44 +1763,6 @@ qwen3-14b
 
 qwen3-8b
 
-qwen3-4b
-
-qwen3-1.7b
-
-qwen3-0.6b
-
-qwq-32b
-
-qwq-32b-preview
-
-1,200
-
-qwen2.5-72b-instruct
-
-qwen2.5-32b-instruct
-
-qwen2.5-14b-instruct
-
-qwen2.5-14b-instruct-1m
-
-5,000,000
-
-qwen2.5-7b-instruct
-
-1,000,000
-
-qwen2.5-7b-instruct-1m
-
-5,000,000
-
-qwen2.5-3b-instruct
-
-2,000,000
-
-qwen2.5-1.5b-instruct
-
-qwen2.5-0.5b-instruct
-
 ## **全球**
 
 服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
@@ -2111,32 +1885,6 @@ qwen3-14b
 
 qwen3-8b
 
-qwen3-4b
-
-qwen3-1.7b
-
-qwen3-0.6b
-
-qwen2.5-14b-instruct-1m
-
-1,200
-
-5,000,000
-
-qwen2.5-7b-instruct-1m
-
-qwen2.5-72b-instruct
-
-60
-
-150,000
-
-qwen2.5-32b-instruct
-
-qwen2.5-14b-instruct
-
-qwen2.5-7b-instruct
-
 ### **Qwen-VL**
 
 ## **中国内地**
@@ -2178,24 +1926,6 @@ qwen3-vl-235b-a22b-thinking
 100,000
 
 qwen3-vl-235b-a22b-instruct
-
-qwen2.5-vl-72b-instruct
-
-qwen2.5-vl-32b-instruct
-
-qwen2.5-vl-7b-instruct
-
-1,200
-
-1,000,000
-
-qwen2.5-vl-3b-instruct
-
-qvq-72b-preview
-
-60
-
-100,000
 
 ## **全球**
 
@@ -2272,18 +2002,6 @@ qwen3-vl-8b-instruct
 qwen3-vl-235b-a22b-thinking
 
 qwen3-vl-235b-a22b-instruct
-
-qwen2.5-vl-72b-instruct
-
-qwen2.5-vl-32b-instruct
-
-qwen2.5-vl-7b-instruct
-
-1,200
-
-1,000,000
-
-qwen2.5-vl-3b-instruct
 
 ### **Qwen-Omni**
 
@@ -2395,14 +2113,6 @@ qwen3-omni-30b-a3b-captioner
 
 > **含输入与输出Token**
 
-qwen2.5-math-72b-instruct
-
-1,200
-
-1,000,000
-
-qwen2.5-math-7b-instruct
-
 ### **Qwen-Coder**
 
 ## **中国内地**
@@ -2430,14 +2140,6 @@ qwen3-coder-next
 qwen3-coder-480b-a35b-instruct
 
 qwen3-coder-30b-a3b-instruct
-
-qwen2.5-coder-32b-instruct
-
-1,200
-
-qwen2.5-coder-14b-instruct
-
-qwen2.5-coder-7b-instruct
 
 ## **全球**
 
@@ -2899,13 +2601,13 @@ ZHIPU/GLM-5.1
 
 200
 
-30,000,000
+3,000,000
 
 ZHIPU/GLM-5
 
 200
 
-30,000,000
+3,000,000
 
 ### **MiniMax**
 
@@ -3639,9 +3341,11 @@ kling/kling-v3-image-generation
 
 **每分钟调用次数（RPM）**
 
-fun-music-v1
+fun-music-preview
 
 180
+
+fun-music-v1
 
 ## **语音合成（文本转语音）**
 
@@ -5675,14 +5379,6 @@ qwen1.5-1.8b-chat
 
 qwen1.5-0.5b-chat
 
-qwen2.5-coder-3b-instruct
-
-qwen2.5-coder-1.5b-instruct
-
-qwen2.5-coder-0.5b-instruct
-
-qwen2.5-math-1.5b-instruct
-
 千问VL
 
 qwen2-vl-72b-instruct
@@ -5978,40 +5674,6 @@ qwen-vl-max-2024-02-01
 （qwen-vl-max-0201）
 
 qwen-vl-max
-
-文本生成-千问-开源版
-
-qwen-72b-chat
-
-qwen2.5-72b-instruct
-
-qwen-14b-chat
-
-qwen2.5-14b-instruct
-
-qwen-7b-chat
-
-qwen2.5-7b-instruct
-
-qwen-1.8b-chat
-
-qwen2.5-1.5b-instruct
-
-qwen-1.8b-longcontext-chat
-
-qwen2.5-1.5b-instruct
-
-qwen2-math-72b-instruct
-
-qwen2.5-math-72b-instruct
-
-qwen2-math-7b-instruct
-
-qwen2.5-math-7b-instruct
-
-qwen2-math-1.5b-instruct
-
-qwen2.5-math-7b-instruct
 
 **类别**
 

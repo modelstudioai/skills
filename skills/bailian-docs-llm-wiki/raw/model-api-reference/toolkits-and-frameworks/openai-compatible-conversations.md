@@ -6,13 +6,17 @@
 
 创建一个新会话，可同时添加初始消息项。
 
-**中国内地：POST** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations`
+**华北2（北京）：POST** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations`
 
-**国际：POST** `https://dashscope-intl.aliyuncs.com/compatible-mode/v1/conversations`
+**新加坡：POST** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations`
 
 **重要**
 
 旧版URL路径 `/api/v2/apps/protocols/compatible-mode/v1/conversations` 即将停止维护，请尽快迁移至新版路径 `/compatible-mode/v1/conversations`。
+
+**重要**
+
+新加坡地域旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 **items** `_array_`（可选）
 
@@ -132,9 +136,9 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations
 
 获取指定会话的信息。
 
-**中国内地：GET** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
+**华北2（北京）：GET** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
 
-**国际：GET** `https://dashscope-intl.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
+**新加坡：GET** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
 
 **conversation\_id** `_string_` **(必选, Path)**
 
@@ -211,9 +215,9 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations
 
 更新会话的元数据信息。
 
-**中国内地：POST** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
+**华北2（北京）：POST** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
 
-**国际：POST** `https://dashscope-intl.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
+**新加坡：POST** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
 
 **conversation\_id** `_string_` **(必选, Path)**
 
@@ -304,9 +308,9 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations
 
 删除指定会话。会话中的消息项不会被删除。
 
-**中国内地：DELETE** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
+**华北2（北京）：DELETE** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
 
-**国际：DELETE** `https://dashscope-intl.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
+**新加坡：DELETE** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
 
 **conversation\_id** `_string_` **(必选, Path)**
 
@@ -376,9 +380,9 @@ curl --location --request DELETE 'https://dashscope.aliyuncs.com/compatible-mode
 
 向指定会话添加消息项。
 
-**中国内地：POST** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items`
+**华北2（北京）：POST** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items`
 
-**国际：POST** `https://dashscope-intl.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items`
+**新加坡：POST** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items`
 
 **conversation\_id** `_string_` **(必选, Path)**
 
@@ -537,9 +541,9 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations
 
 列出会话中的所有消息项。
 
-**中国内地：GET** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items`
+**华北2（北京）：GET** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items`
 
-**国际：GET** `https://dashscope-intl.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items`
+**新加坡：GET** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items`
 
 **conversation\_id** `_string_` **(必选, Path)**
 
@@ -678,9 +682,9 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations
 
 获取指定消息项的详情。
 
-**中国内地：GET** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items/{item_id}`
+**华北2（北京）：GET** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items/{item_id}`
 
-**国际：GET** `https://dashscope-intl.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items/{item_id}`
+**新加坡：GET** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items/{item_id}`
 
 **conversation\_id** `_string_` **(必选, Path)**
 
@@ -783,9 +787,9 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations
 
 删除指定的消息项。
 
-**中国内地：DELETE** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items/{item_id}`
+**华北2（北京）：DELETE** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items/{item_id}`
 
-**国际：DELETE** `https://dashscope-intl.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items/{item_id}`
+**新加坡：DELETE** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items/{item_id}`
 
 **conversation\_id** `_string_` **(必选, Path)**
 
@@ -887,12 +891,12 @@ conversation = client.conversations.create(
 )
 
 response1 = client.responses.create(
-    conversation=conversation.id, model="qwen3.6-plus", input="李红今年多大了"
+    conversation=conversation.id, model="qwen3.7-plus", input="李红今年多大了"
 )
 print(f"第一轮响应: {response1.output_text}")
 
 response2 = client.responses.create(
-    conversation=conversation.id, model="qwen3.6-plus", input="她的兴趣爱好是什么？"
+    conversation=conversation.id, model="qwen3.7-plus", input="她的兴趣爱好是什么？"
 )
 print(f"第二轮响应: {response2.output_text}")
 ```
@@ -919,14 +923,14 @@ const conversation = await client.conversations.create({
 
 const response1 = await client.responses.create({
   conversation: conversation.id,
-  model: "qwen3.6-plus",
+  model: "qwen3.7-plus",
   input: "李红今年多大了"
 });
 console.log("第一轮响应:", response1.output_text);
 
 const response2 = await client.responses.create({
   conversation: conversation.id,
-  model: "qwen3.6-plus",
+  model: "qwen3.7-plus",
   input: "她的兴趣爱好是什么？"
 });
 console.log("第二轮响应:", response2.output_text);

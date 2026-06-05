@@ -10,10 +10,9 @@
 - [application publishing and sharing](guides/application-publishing-and-sharing.md) — 3 篇源文档
 - [application support](guides/application-support.md) — 2 篇源文档
 - [application use cases](guides/application-use-cases.md) — 5 篇源文档
-- [assistant api](guides/assistant-api.md) — 1 篇源文档
 - [bailian application calling](guides/bailian-application-calling.md) — 3 篇源文档
 - [data connection overview](guides/data-connection-overview.md) — 1 篇源文档
-- [fine tuning](guides/fine-tuning.md) — 6 篇源文档
+- [fine tuning](guides/fine-tuning.md) — 7 篇源文档
 - [get started with models](guides/get-started-with-models.md) — 5 篇源文档
 - [knowledge base](guides/knowledge-base.md) — 6 篇源文档
 - [llm application](guides/llm-application.md) — 6 篇源文档
@@ -27,7 +26,7 @@
 - [plug in](guides/plug-in.md) — 3 篇源文档
 - [prompt](guides/prompt.md) — 5 篇源文档
 - [release notes](guides/release-notes.md) — 2 篇源文档
-- [security and compliance](guides/security-and-compliance.md) — 11 篇源文档
+- [security and compliance](guides/security-and-compliance.md) — 12 篇源文档
 - [start using](guides/start-using.md) — 2 篇源文档
 - [support](guides/support.md) — 2 篇源文档
 - [test 1](guides/test-1.md) — 5 篇源文档
@@ -39,8 +38,7 @@
 
 - [3d generation](api/3d-generation.md) — 1 篇源文档
 - [application call](api/application-call.md) — 5 篇源文档
-- [application component api reference](api/application-component-api-reference.md) — 55 篇源文档
-- [assistantapi](api/assistantapi.md) — 7 篇源文档
+- [application component api reference](api/application-component-api-reference.md) — 56 篇源文档
 - [deploy dedicated services](api/deploy-dedicated-services.md) — 2 篇源文档
 - [frameworks](api/frameworks.md) — 3 篇源文档
 - [general text embedding](api/general-text-embedding.md) — 2 篇源文档
@@ -57,28 +55,8 @@
 - [qwen api reference](api/qwen-api-reference.md) — 1 篇源文档
 - [specialized model](api/specialized-model.md) — 4 篇源文档
 - [speech recognition api reference](api/speech-recognition-api-reference.md) — 34 篇源文档
-- [speech synthesis api reference](api/speech-synthesis-api-reference.md) — 29 篇源文档
+- [speech synthesis api reference](api/speech-synthesis-api-reference.md) — 28 篇源文档
 - [speech translation api reference](api/speech-translation-api-reference.md) — 5 篇源文档
 - [toolkits and frameworks](api/toolkits-and-frameworks.md) — 10 篇源文档
 - [video generation api](api/video-generation-api.md) — 31 篇源文档
-
-## 横切概念
-
-- [多轮对话](concepts/multi-turn-conversation.md) — 关联 6 个主题
-- [函数调用（工具调用）](concepts/function-calling.md) — 关联 7 个主题
-- [检索增强生成（RAG）](concepts/rag.md) — 关联 7 个主题
-- [流式输出](concepts/streaming.md) — 关联 6 个主题
-- [向量化与语义检索](concepts/embedding-and-retrieval.md) — 关联 6 个主题
-- [异步任务模式](concepts/async-task.md) — 关联 6 个主题
-- [OpenAI 兼容接口](concepts/openai-compatible-api.md) — 关联 7 个主题
-- [Token（令牌计量）](concepts/token.md) — 关联 7 个主题
-
-## 对比分析
-
-- [模型监控与应用监控对比](comparisons/model-monitoring-vs-application-monitoring.md) — 对比 2 个主题
-- [模型评估与应用评估对比](comparisons/model-evaluation-vs-application-evaluation.md) — 对比 2 个主题
-- [模型微调、模型训练与模型部署对比](comparisons/fine-tuning-vs-model-training-vs-model-deployment.md) — 对比 3 个主题
-- [图像生成、视频生成与3D生成对比](comparisons/image-vs-video-vs-3d-generation.md) — 对比 3 个主题
-- [文本Embedding与多模态向量对比](comparisons/text-embedding-vs-multimodal-vector.md) — 对比 2 个主题
-- [语音合成、语音识别与语音翻译对比](comparisons/speech-synth-vs-recognition-vs-translation.md) — 对比 3 个主题
 

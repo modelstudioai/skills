@@ -29,6 +29,10 @@ wan2.2-animate-move 提供两种服务模式：标准模式`wan-std`和专业模
 
 北京和新加坡地域拥有独立的 **API Key** 与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错。
 
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
 ## HTTP调用
 
 视频生成任务耗时较长，API 采用异步调用，分为两个步骤：创建任务，然后轮询获取结果。
@@ -37,7 +41,7 @@ wan2.2-animate-move 提供两种服务模式：标准模式`wan-std`和专业模
 
 **北京地域**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis`
 
-**新加坡地域**：`POST https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis`
+**新加坡地域**：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis`
 
 **说明**
 
@@ -50,7 +54,7 @@ wan2.2-animate-move 提供两种服务模式：标准模式`wan-std`和专业模
 
 ## 图生动作
 
-以下为北京地域 base\_url，若使用新加坡地域的模型，需将 base\_url 替换为：`https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis`
+以下为华北2（北京）地域的URL，各地域的URL不同。
 
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis' \
@@ -248,7 +252,9 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2video
 
 #### 新加坡
 
-`GET https://dashscope-intl.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -271,7 +277,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2video
 
 将`0385dc79-5ff8-4d82-bcb6-xxxxxx`替换为实际的 task\_id。
 
-> 以下为北京地域 base\_url，若使用新加坡地域的模型，需将 base\_url 替换为：`https://dashscope-intl.aliyuncs.com/api/v1/tasks/0385dc79-5ff8-4d82-bcb6-xxxxxx`
+> 以下为华北2（北京）地域的URL，各地域的URL不同。
 
 ```
 curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/0385dc79-5ff8-4d82-bcb6-xxxxxx \

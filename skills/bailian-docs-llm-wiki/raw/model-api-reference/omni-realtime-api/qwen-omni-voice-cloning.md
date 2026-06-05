@@ -8,6 +8,10 @@
 
 本文档专用于千问Omni和千问Omni-Realtime声音复刻接口；若您使用的是语音合成模型，请参见[语音合成](https://help.aliyun.com/zh/model-studio/speech-synthesis-api-reference/)。
 
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
 ## **音频要求**
 
 高质量的输入音频是获得优质复刻效果的基础。
@@ -48,7 +52,7 @@ WAV (16bit)、MP3、M4A
 
 ## 快速开始：复刻与使用音色
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4508558771/CAEQbxiBgICd6_Do8BkiIDM3NjYwZDQxMGIyMTQzMDdhOGMyY2YwNWFhMmM2NjVi5899512_20251120114927.389.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6298830871/CAEQbxiBgICd6_Do8BkiIDM3NjYwZDQxMGIyMTQzMDdhOGMyY2YwNWFhMmM2NjVi5899512_20251120114927.389.svg)
 
 ### 1\. 工作流程
 
@@ -145,7 +149,7 @@ def create_voice(file_path: str,
     base64_str = base64.b64encode(file_path_obj.read_bytes()).decode()
     data_uri = f"data:{audio_mime_type};base64,{base64_str}"
 
-    # 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization
+    # 以下为华北2（北京）地域的URL，各地域的URL不同。
     url = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization"
     payload = {
         "model": "qwen-voice-enrollment",
@@ -192,7 +196,7 @@ class SimpleCallback(OmniRealtimeCallback):
 if __name__ == '__main__':
     # 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
     dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
-    # 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime
+    # 以下为华北2（北京）地域的URL，各地域的URL不同。
     url = "wss://dashscope.aliyuncs.com/api-ws/v1/realtime"
 
     # 1. 声音复刻：创建专属音色
@@ -279,7 +283,7 @@ public class Main {
                         + "}"
                         + "}";
 
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
         String url = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization";
         HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
         con.setRequestMethod("POST");
@@ -360,7 +364,7 @@ public class Main {
                     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                     // 若没有配置环境变量，请用百炼API Key将下行替换为：.apikey("sk-xxx")
                     .apikey(System.getenv("DASHSCOPE_API_KEY"))
-                    // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime
+                    // 以下为华北2（北京）地域的URL，各地域的URL不同。
                     .url("wss://dashscope.aliyuncs.com/api-ws/v1/realtime")
                     .build();
 
@@ -460,7 +464,7 @@ def create_voice(file_path: str,
     base64_str = base64.b64encode(file_path_obj.read_bytes()).decode()
     data_uri = f"data:{audio_mime_type};base64,{base64_str}"
 
-    # 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization
+    # 以下为华北2（北京）地域的URL，各地域的URL不同。
     url = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization"
     payload = {
         "model": "qwen-voice-enrollment",
@@ -486,7 +490,7 @@ def create_voice(file_path: str,
         raise RuntimeError(f"解析 voice 响应失败: {e}")
 
 if __name__ == '__main__':
-    # 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+    # 以下为华北2（北京）地域的URL，各地域的URL不同。
     dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
     # 1. 声音复刻：创建专属音色
@@ -595,7 +599,7 @@ public class Main {
                         + "}"
                         + "}";
 
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
         String url = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization";
         HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
         con.setRequestMethod("POST");
@@ -644,7 +648,7 @@ public class Main {
                     + "\"stream_options\": {\"include_usage\": true}"
                     + "}";
 
-            // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
+            // 以下为华北2（北京）地域的URL，各地域的URL不同。
             String url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions";
             HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
             con.setRequestMethod("POST");
@@ -715,7 +719,7 @@ public class Main {
     国际：
     
     ```
-    POST https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization
+    POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization
     ```
     
 -   **请求头**
@@ -1018,7 +1022,7 @@ public class Main {
     
     ```
     # ======= 重要提示 =======
-    # 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization
+    # 以下为华北2（北京）地域的URL，各地域的URL不同。
     # 新加坡地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # === 执行时请删除该注释 ===
     
@@ -1056,7 +1060,7 @@ public class Main {
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = "sk-xxx"
     api_key = os.getenv("DASHSCOPE_API_KEY")
-    # 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization
+    # 以下为华北2（北京）地域的URL，各地域的URL不同。
     url = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization"
     
     payload = {
@@ -1115,7 +1119,7 @@ public class Main {
             // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
             // 若没有配置环境变量，请用百炼API Key将下行替换为：String apiKey = "sk-xxx"
             String apiKey = System.getenv("DASHSCOPE_API_KEY");
-            // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization
+            // 以下为华北2（北京）地域的URL，各地域的URL不同。
             String apiUrl = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization";
     
             try {
@@ -1191,7 +1195,7 @@ public class Main {
     国际：
     
     ```
-    POST https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization
+    POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization
     ```
     
 -   **请求头**
@@ -1381,7 +1385,7 @@ public class Main {
     
     ```
     # ======= 重要提示 =======
-    # 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization
+    # 以下为华北2（北京）地域的URL，各地域的URL不同。
     # 新加坡地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # === 执行时请删除该注释 ===
     
@@ -1407,7 +1411,7 @@ public class Main {
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = "sk-xxx"
     api_key = os.getenv("DASHSCOPE_API_KEY")
-    # 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization
+    # 以下为华北2（北京）地域的URL，各地域的URL不同。
     url = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization"
     
     payload = {
@@ -1457,7 +1461,7 @@ public class Main {
             // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
             // 若没有配置环境变量，请用百炼API Key将下行替换为：String apiKey = "sk-xxx"
             String apiKey = System.getenv("DASHSCOPE_API_KEY");
-            // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization
+            // 以下为华北2（北京）地域的URL，各地域的URL不同。
             String apiUrl = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization";
     
             // JSON 请求体（旧版本 Java 无 """ 多行字符串）
@@ -1536,7 +1540,7 @@ public class Main {
     国际：
     
     ```
-    POST https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization
+    POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization
     ```
     
 -   **请求头**
@@ -1672,7 +1676,7 @@ public class Main {
     
     ```
     # ======= 重要提示 =======
-    # 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization
+    # 以下为华北2（北京）地域的URL，各地域的URL不同。
     # 新加坡地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # === 执行时请删除该注释 ===
     
@@ -1697,7 +1701,7 @@ public class Main {
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = "sk-xxx"
     api_key = os.getenv("DASHSCOPE_API_KEY")
-    # 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization
+    # 以下为华北2（北京）地域的URL，各地域的URL不同。
     url = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization"
     
     voice_to_delete = "yourVoice"  # 要删除的音色（替换为真实值）
@@ -1746,7 +1750,7 @@ public class Main {
             // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
             // 若没有配置环境变量，请用百炼API Key将下行替换为：String apiKey = "sk-xxx"
             String apiKey = System.getenv("DASHSCOPE_API_KEY");
-            // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization
+            // 以下为华北2（北京）地域的URL，各地域的URL不同。
             String apiUrl = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization";
             String voiceToDelete = "yourVoice"; // 要删除的音色（替换为真实值）
     
@@ -1906,4 +1910,4 @@ public class Main {
 
 ## **错误信息**
 
-如遇报错问题，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行排查。
+如遇报错问题，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行排查。

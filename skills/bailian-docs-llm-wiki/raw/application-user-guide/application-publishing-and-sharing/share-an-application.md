@@ -10,8 +10,6 @@
 
 1.  访问百炼控制台的**[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)**页面，单击目标智能体应用卡片区域的**发布**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8335990571/p979170.png)
-    
 2.  **智能体应用**支持以下五种分享或发布方式。
     
     -   [方式一：通过官方网页版分享](#1bd3927a2fxvh)
@@ -24,8 +22,6 @@
         
     -   [方式五：发布应用为组件](#57013457c3qe7)
         
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3275016571/p1000804.png)
     
 
 ### **通过****官方网页版****或****UI 应用****分享应用**
@@ -49,7 +45,7 @@
         
         > **启用应用观测**后可以在**应用观测**页面**关闭观测**。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0527654571/p994338.png)
+        发布成功后，页面显示绿色 **已发布** 标签及分享链接（含失效时间），可通过 **有效期7天** 下拉框调整链接有效期，单击 **网页下线** 可将网页下线。
         
     3.  单击右侧的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0527654571/p994511.png)图标复制应用网页版链接，可以按需将链接分享给其他用户，持有该链接的阿里云用户均可访问此应用。
         
@@ -63,11 +59,9 @@
         
     3.  访问百炼控制台的[UI设计器](https://bailian.console.aliyun.com/?tab=app#/app-ui)页面，鼠标悬停于已发布的UI上，单击**环境部署**。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7508903571/p983429.png)
-        
     4.  可以将**应用地址**分享给其他用户，持有该链接的阿里云用户均可访问此应用。单击**下线**可以停止该应用服务。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0527654571/p994604.png)
+        在**应用环境信息**弹窗中，**开发环境**显示**已发布**状态及可用的应用地址，**生产环境**显示**未发布**状态，应用地址显示为无。
         
 
 ### **通过**钉钉**发布应用**
@@ -75,8 +69,6 @@
 1.  单击智能体应用的**发布平台**页签，单击**钉钉机器人**卡片右侧的**请先授权**。
     
     > 如果已经授权，请直接跳转至步骤3操作。
-    
-    ![钉钉](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0527654571/p994537.png)
     
 2.  在**授权**对话框中，选中**勾选同意上述条款**后，单击**确认授权**。
     
@@ -89,7 +81,7 @@
     -   授权API-KEY加密传输给计算巢AppFlow用以调用百炼平台的应用。
         
     
-3.  单击**钉钉机器人**卡片右侧的**创建**，在**配置钉钉**面板的**选择API KEY**配置向导页，选中目标API KEY，单击**下一步**。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3719962371/p877401.png)
+3.  单击**钉钉机器人**卡片右侧的**创建**，在**配置钉钉**面板的**选择API KEY**配置向导页，选中目标API KEY，单击**下一步**。在 **选择API KEY** 步骤中，从列表中选中已有的API KEY，然后单击 **下一步**。如需新建或管理密钥，可单击右上方的 **管理API-KEY** 或 **创建API-KEY** 按钮。
     
 
 > 如果没有可选API KEY，请单击**创建API Key**，完成创建后再选择。也可以单击**管理API Key**，跳转至**我的API-KEY**页面，对API-KEY进行管理。
@@ -112,25 +104,20 @@
             
         -   如果已经创建过应用，请点击**快速构建 AI 应用** > **立即开始**。
             
+    2.  在左侧导航栏中，点击**钉钉应用**，在页面右上角点击**创建应用**。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2120582271/p830053.png)
-        
-    2.  在左侧导航栏中，点击**钉钉应用**，在页面右上角点击**创建应用**。![11](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2120582271/p830054.png)
-        
-    3.  填写**应用名称**和**应用描述**，可以选择上传**应用图标**，点击**保存**。![12](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2120582271/p830055.png)
+    3.  填写**应用名称**和**应用描述**，可以选择上传**应用图标**，点击**保存**。
         
     
     **步骤二：获取应用 Client ID 和 Client Secret**
     
     在左侧菜单选择**凭证与基础信息**，复制 Client ID 和 Client Secret，用于下一步创建连接流。
     
-    ![21](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2120582271/p830138.png)
-    
     **步骤三：创建消息卡片，获取卡片模板 ID**
     
     钉钉机器人通过卡片消息支持流式返回结果，您需要创建卡片模板供消息发送使用。
     
-    1.  访问[卡片平台](https://open-dev.dingtalk.com/fe/card)，点击**新建模板**。![29](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2120582271/p830244.png)
+    1.  访问[卡片平台](https://open-dev.dingtalk.com/fe/card)，点击**新建模板**。
         
     2.  在创建模板输入框，填入模板信息，点击创建。
         
@@ -142,12 +129,9 @@
             
         -   **从模板创建**：无需选择预设模板。
             
+    3.  在模拟编辑页面，无需修改任何配置，**保存**并**发布**模板，点击**返回**。创建成功后，进入AI卡片模板编辑器界面。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2120582271/p830272.png)
-        
-    3.  在模拟编辑页面，无需修改任何配置，**保存**并**发布**模板，点击**返回**。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2120582271/p830465.png)
-        
-    4.  在左侧菜单中，点击**模板列表**，复制**模板 ID**。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2120582271/p830274.png)
+    4.  在左侧菜单中，点击**模板列表**，复制**模板 ID**。返回模板列表后，在已创建的模板卡片底部找到 **模板 ID** 行，单击右侧复制图标复制该 ID，后续步骤中将使用此模板 ID。
         
     
     **步骤四：授予应用发送卡片消息权限**
@@ -156,12 +140,12 @@
     
     1.  访问[钉钉应用列表](https://open-dev.dingtalk.com/fe/app)。点击刚才创建的应用名称，以进入详情页面。
         
-    2.  在左侧菜单选择**权限管理**。在左侧搜索框分别输入`Card.Streaming.Write`和`Card.Instance.Write`，并在操作列点击**申请权限**。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2120582271/p830282.png)
+    2.  在左侧菜单选择**权限管理**。在左侧搜索框分别输入`Card.Streaming.Write`和`Card.Instance.Write`，并在操作列点击**申请权限**。
         
     3.  获取权限后，请将模板 ID、Client ID、Client Secret 填回百炼应用的发布配置窗口，即可发布百炼应用到钉钉应用。
         
     
-2.  钉钉应用创建完成后，在百炼应用**发布渠道**页签，复制**回调地址**。您可以按需将**回调地址**分享给目标用户。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3719962371/p877459.png)
+2.  钉钉应用创建完成后，在百炼应用**发布渠道**页签，复制**回调地址**。您可以按需将**回调地址**分享给目标用户。
     
     获取到**回调地址**的用户，可以为钉钉应用配置机器人，添加到群聊中以回答用户问题。
     
@@ -171,7 +155,7 @@
     
     1.  访问[钉钉应用列表](https://open-dev.dingtalk.com/fe/app)。找到刚才创建的应用，点击应用名称进入详情页面。
         
-    2.  在**添加应用能力**页面，找到机器人卡片，点击**添加**。![13](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2120582271/p830056.png)
+    2.  在**添加应用能力**页面，找到机器人卡片，点击**添加**。
         
     3.  打开**机器人配置**开关。
         
@@ -183,17 +167,14 @@
             
         -   点击**发布**。
             
-        
-        ![30](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2120582271/p830299.png)
-        
     
     **步骤二：发布应用版本**
     
     应用创建完成后，如果需要将应用供企业内其他用户使用，需发布一个版本。
     
-    1.  点击**应用开发**，在**钉钉应用**页面，点击刚才创建的应用。![8](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2120582271/p830050.png)
+    1.  点击**应用开发**，在**钉钉应用**页面，点击刚才创建的应用。
         
-    2.  在左侧菜单栏，点击**版本管理与发布**。在右上角点击**创建新版本**。在版本详情页，输入**应用版本号**和**版本描述**信息，选择合适的**应用可见范围**，完成后点击**保存**。并在弹窗中点击**直接发布**。![10](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2120582271/p830052.png)
+    2.  在左侧菜单栏，点击**版本管理与发布**。在右上角点击**创建新版本**。在版本详情页，输入**应用版本号**和**版本描述**信息，选择合适的**应用可见范围**，完成后点击**保存**。并在弹窗中点击**直接发布**。
         
     
     **步骤三：测试机器人**
@@ -202,9 +183,9 @@
     
     1.  在钉钉**群管理**中添加机器人​。
         
-        进入钉钉群**群设置**页面，点击**机器人**卡片区域，在**机器人管理**页面，点击**添加机器人**。在**添加机器人**的**搜索**文本框中输入目标机器人名称，并选中要添加的机器人。点击**添加**，完成后再点击**完成添加**。![14](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2120582271/p830057.png)
+        进入钉钉群**群设置**页面，点击**机器人**卡片区域，在**机器人管理**页面，点击**添加机器人**。在**添加机器人**的**搜索**文本框中输入目标机器人名称，并选中要添加的机器人。点击**添加**，完成后再点击**完成添加**。
         
-    2.  在钉钉群中@机器人，进行交流互动。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2120582271/p830339.png)
+    2.  在钉钉群中@机器人，进行交流互动。添加完成后，群成员在聊天中通过 **@机器人名称**（如 **@百炼手机答疑**）向机器人提问，机器人将自动回复相关答案。
         
     
 
@@ -214,7 +195,7 @@
 
 1.  在智能体应用的**发布平台**页签，单击**微信公众号**卡片右侧的**创建**。
     
-2.  在**配置微信**面板的**选择API KEY**配置向导页，选中目标API KEY，单击**下一步**。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3719962371/p877401.png)
+2.  在**配置微信**面板的**选择API KEY**配置向导页，选中目标API KEY，单击**下一步**。
     
     > 如果没有可选API KEY，您也可以单击**创建API Key**，完成创建后再选择。您也可以单击**管理API Key**，跳转至**我的API-KEY**页面，对API-KEY进行管理。
     
@@ -222,13 +203,11 @@
     
     如果没有微信凭证可选项，您可以单击**前往新建**。具体操作，请参见以下步骤。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3719962371/p877461.png)
+    在对话框中，输入**开发者ID（AppID）**，完成后单击**授权**。
     
-    在对话框中，输入**开发者ID（AppID）**，完成后单击**授权**。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3719962371/p877465.png)
+    **开发者ID（AppID）**的获取方法：访问[微信公众号后台](https://mp.weixin.qq.com/)，在左侧菜单选择**设置与开发** > **开发接口管理**。选择基本配置页签，获取 AppID。
     
-    **开发者ID（AppID）**的获取方法：访问[微信公众号后台](https://mp.weixin.qq.com/)，在左侧菜单选择**设置与开发** > **开发接口管理**。选择基本配置页签，获取 AppID。![2024-11-07\_16-27-30](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3719962371/p877464.png)
-    
-4.  微信公众号AI机器人创建完成后，在**发布渠道**页签，将鼠标悬浮至**微信公众号**右侧的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3719962371/p877475.png)图标，您可以按需将二维码分享给目标用户。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3719962371/p877474.png)
+4.  微信公众号AI机器人创建完成后，在**发布渠道**页签，将鼠标悬浮至**微信公众号**右侧的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3719962371/p877475.png)图标，您可以按需将二维码分享给目标用户。配置完成后，微信公众号卡片显示 **已创建** 状态，提示已生成微信客服二维码。单击 **扫码使用** 按钮，通过微信扫码体验AI机器人客服功能。
     
 
 ### **发布应用为组件**
@@ -309,7 +288,7 @@
         
         仅支持选择已发布的智能体组件。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0527654571/p965003.png)
+        单击**智能体**对应的**+**按钮，在弹出的**选择智能体**面板中完成选择。
         
     2.  配置完成后，输入组件功能相关的问题测试效果。
         
@@ -321,8 +300,6 @@
     1.  在阿里云百炼的[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面，创建[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)时，将**组件**节点拖入画布，再选择组件。
         
         支持选择已发布的智能体组件或工作流组件。
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0527654571/p965002.png)
         
     2.  配置完成后，输入组件功能相关的问题测试效果。
         
@@ -336,26 +313,20 @@
 
 1.  在智能体应用的**AI实时互动**页签，单击**语音互动/视频互动**，单击页面右侧的**去配置**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3275016571/p1000827.png)
-    
 2.  在**查看API-KEY**配置向导页，选中目标API KEY，单击**确定**。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0765846371/p903087.png)
     
 3.  点击右上角![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3275016571/p1000851.png)，生成临时体验二维码，通过手机微信/钉钉/浏览器扫码体验交互效果。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3275016571/p1000844.png)
+    二维码有效期为24小时，也可点击**复制链接**直接分享体验链接。
     
 4.  测试完毕后，点击**发布**\>**确认发布**。发布后，进入**发布渠道**，完成智能媒体服务开通和 SLR 授权后，创建互动智能体。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3275016571/p1000853.png)
     
     音视频实时互动应用支持两种发布渠道：
     
     1.  H5/APP 扫码：点击**生成分享链接**，**设置Token有效时间**，点击**确认**。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3275016571/p1000857.png)
+        在弹出的 **分享与体验** 弹窗中，**H5体验** 支持使用微信或钉钉扫码，也可复制链接后在手机浏览器中打开；**APP体验** 需通过 **AI智能体** > **自定义智能体** > **授权Token** 中扫码体验。iOS端安装时需在 **设置** > **通用** > **VPN与设备管理** 中找到Taobao对应的信任描述并选择信任。
         
     2.  SDK 集成：点击**SDK集成**，可以选择**快速集成**快速部署和运行音视频互动服务，也可以根据业务需求选择**开发集成**进一步扩展更多高级功能。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3275016571/p1000875.png)
+        **快速集成**支持**WEB**、**IOS**、**安卓**三个平台，页面提供**分享ID**（可单击**重新生成**更新），将安装代码添加到网页`<body>`区域并填入分享ID即可免AppServer调试运行（仅限测试）。**开发集成**基于AICallKit SDK，提供**含UI方案**和**不含UI方案**两种集成选项。

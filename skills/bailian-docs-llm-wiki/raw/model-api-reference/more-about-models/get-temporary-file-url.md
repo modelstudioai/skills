@@ -1106,7 +1106,7 @@ oss://dashscope-instant/xxx/2024-07-18/xxxx/cat.png
 
 ## **错误码**
 
-如果接口调用失败并返回报错信息，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果接口调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 本文的API还有特定状态码，具体如下所示。
 
@@ -1138,7 +1138,7 @@ The media format is not supported or incorrect for the data inspection.
 
 -   请求Header 缺少必要参数，请设置 `X-DashScope-OssResourceResolve: enable`**。**
     
--   上传的图片格式不符合模型要求，更多信息请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)。
+-   上传的图片格式不符合模型要求，更多信息请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
     
 
 403

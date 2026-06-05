@@ -6,7 +6,7 @@
 
 ## **工作流程**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2842820871/CAEQaxiBgIDB5qWk4BkiIDViYzQ0MWUwNTYyNDQ3NDM5NzM0ZTc4N2Y3NTU2NjA56318723_20260129171731.699.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9591740871/CAEQaxiBgIDB5qWk4BkiIDViYzQ0MWUwNTYyNDQ3NDM5NzM0ZTc4N2Y3NTU2NjA56318723_20260129171731.699.svg)
 
 ## **前提条件**
 
@@ -20,8 +20,12 @@
     
     -   **中国内地：**`https://dashscope.aliyuncs.com/compatible-mode/v1`
         
-    -   **国际：**`https://dashscope-intl.aliyuncs.com/compatible-mode/v1`
+    -   **国际：**`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
         
+
+**重要**
+
+新加坡地域旧版域名 `https://dashscope-intl.aliyuncs.com`即将下线，请迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 ## **适用范围**
 
@@ -44,7 +48,7 @@
     
     -   千问 Max：qwen3.7-max、qwen3-max
         
-    -   千问 Plus：qwen3.6-plus、qwen3.5-plus、qwen-plus、qwen-plus-latest
+    -   千问 Plus：qwen3.7-plus、qwen3.6-plus、qwen3.5-plus、qwen-plus、qwen-plus-latest
         
     -   千问 Flash：qwen3.6-flash、qwen3.5-flash、qwen-flash
         
@@ -54,7 +58,7 @@
         
 -   **多模态模型**
     
-    -   [图像与视频理解](https://help.aliyun.com/zh/model-studio/vision)：qwen3.6-plus、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus、qwen3-vl-flash
+    -   [图像与视频理解](https://help.aliyun.com/zh/model-studio/vision)：qwen3.7-plus、qwen3.6-plus、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus、qwen3-vl-flash
         
     -   [文字提取](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr)：qwen-vl-ocr、qwen-vl-ocr-latest
         
@@ -63,11 +67,13 @@
 
 **重要**
 
--   在Batch 场景下，`qwen3.7-max`、`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`和`qwen3.5-flash`单次请求的输入 Token 数最大支持 256K。
+-   在Batch 场景下，`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`和`qwen3.5-flash`单次请求的上下文 Token 数最大支持 256K。
     
 -   部分模型支持思考模式，开启后会产生思考`tokens`导致成本增加。
     
 -   `qwen3.7-max`、`qwen3.6`和`qwen3.5` 系列模型默认开启思考模式。建议使用混合思考模型时，显式设置`enable_thinking`参数（`true`开启/`false`关闭）。
+    
+-   在 JSONL 请求体中，`enable_thinking` 为 `body` 的顶层参数，须与 `model` 同级传入，不能放在 `extra_body` 中。
     
 
 ### 国际
@@ -113,6 +119,20 @@
 
 > 如需调整文件路径或其他参数，请根据实际情况修改代码。
 
+**说明**
+
+**复用已有文件 ID：**文件上传后返回的 ID（如 `file-batch-xxx`）可重复使用。如果输入内容不变，无需每次重新上传，直接用已有 ID 创建任务即可：
+
+```
+batch = client.batches.create(
+    input_file_id="file-batch-xxx",  # 直接使用已有文件 ID，无需重新上传
+    endpoint="/v1/chat/completions",
+    completion_window="24h"
+)
+```
+
+可通过 `client.files.list(purpose="batch")` 接口查询已上传的 Batch 文件 ID。
+
 **示例代码**
 
 ## **OpenAI Python SDK**
@@ -128,7 +148,7 @@ client = OpenAI(
     # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"，但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     # 新加坡和北京地域的API Key不同。
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
     # 注意：切换地域时，API Key也需要对应更换
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"  # 阿里云百炼服务的base_url
 )
@@ -237,7 +257,7 @@ const fs = require('fs');
 // 北京地域的 Base URL
 const BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 // 如果使用新加坡地域，使用以下 URL：
-// const BASE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
+// const BASE_URL = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1';
 
 const apiKey = process.env.DASHSCOPE_API_KEY;
 if (!apiKey) {
@@ -359,14 +379,14 @@ import java.util.Scanner;
  *
  * 地域配置说明：
  * - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
- * - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+ * - 新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
  */
 public class BatchAPITest {
 
     // 北京地域的 Base URL（默认）
     private static final String BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
     // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-    // private static final String BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1";
+    // private static final String BASE_URL = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1";
 
     private static String API_KEY;
 
@@ -581,13 +601,13 @@ public class BatchAPITest {
 #
 # 地域配置说明：
 # - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
-# - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+# - 新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
 
 API_KEY="${DASHSCOPE_API_KEY}"
 BASE_URL="https://dashscope.aliyuncs.com/compatible-mode/v1"
 
 # 如果使用新加坡地域，请将 BASE_URL 替换为：
-# BASE_URL="https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
+# BASE_URL="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
 
 # 检查 API Key
 if [ -z "$API_KEY" ]; then
@@ -842,6 +862,20 @@ Batch API使用流程分为四步：上传文件、创建任务、查询任务�
 
 > 上传文件， `purpose` 必须是 `batch` 。
 
+**说明**
+
+**复用已有文件 ID：**文件上传后返回的 ID（如 `file-batch-xxx`）可重复使用。如果输入内容不变，无需每次重新上传，直接用已有 ID 创建任务即可：
+
+```
+batch = client.batches.create(
+    input_file_id="file-batch-xxx",  # 直接使用已有文件 ID，无需重新上传
+    endpoint="/v1/chat/completions",
+    completion_window="24h"
+)
+```
+
+可通过 `client.files.list(purpose="batch")` 接口查询已上传的 Batch 文件 ID。
+
 ## **OpenAI Python SDK**
 
 #### 请求示例
@@ -855,7 +889,7 @@ client = OpenAI(
     # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     # 新加坡和北京地域的API Key不同。
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
     # 注意：切换地域时，API Key也需要对应更换
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
@@ -886,7 +920,7 @@ const fs = require('fs');
 // 北京地域配置（默认）
 const BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-// const BASE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
+// const BASE_URL = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1';
 // 注意：切换地域时，API Key也需要对应更换
 
 const apiKey = process.env.DASHSCOPE_API_KEY;
@@ -932,7 +966,7 @@ import java.util.regex.Matcher;
  * 
  * 地域配置：
  * - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
- * - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+ * - 新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
  * 注意：切换地域时，API Key也需要对应更换
  */
 public class BatchAPIUploadFile {
@@ -940,7 +974,7 @@ public class BatchAPIUploadFile {
     // 北京地域配置（默认）
     private static final String BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
     // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-    // private static final String BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1";
+    // private static final String BASE_URL = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1";
     // 注意：切换地域时，API Key也需要对应更换
     
     private static String API_KEY;
@@ -1012,7 +1046,7 @@ String fileId = uploadFile("test.jsonl");
 ```
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
-# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/files
+# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/files
 # === 执行时请删除该注释 ===
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1051,7 +1085,7 @@ client = OpenAI(
     # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     # 新加坡和北京地域的API Key不同。
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
     # 注意：切换地域时，API Key也需要对应更换
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
@@ -1084,7 +1118,7 @@ const OpenAI = require('openai');
 // 北京地域配置（默认）
 const BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-// const BASE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
+// const BASE_URL = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1';
 // 注意：切换地域时，API Key也需要对应更换
 
 const apiKey = process.env.DASHSCOPE_API_KEY;
@@ -1129,7 +1163,7 @@ import java.util.regex.Matcher;
  * 
  * 地域配置：
  * - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
- * - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+ * - 新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
  * 注意：切换地域时，API Key也需要对应更换
  */
 public class BatchAPICreateBatch {
@@ -1137,7 +1171,7 @@ public class BatchAPICreateBatch {
     // 北京地域配置（默认）
     private static final String BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
     // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-    // private static final String BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1";
+    // private static final String BASE_URL = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1";
     // 注意：切换地域时，API Key也需要对应更换
     
     private static String API_KEY;
@@ -1198,7 +1232,7 @@ String response = sendRequest("POST", "/batches", jsonBody);
 ```
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
-# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/batches
+# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/batches
 # === 执行时请删除该注释 ===
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/batches \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1507,7 +1541,7 @@ client = OpenAI(
     # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     # 新加坡和北京地域的API Key不同。
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
     # 注意：切换地域时，API Key也需要对应更换
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
@@ -1534,7 +1568,7 @@ const OpenAI = require('openai');
 // 北京地域配置（默认）
 const BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-// const BASE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
+// const BASE_URL = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1';
 // 注意：切换地域时，API Key也需要对应更换
 
 const apiKey = process.env.DASHSCOPE_API_KEY;
@@ -1574,7 +1608,7 @@ import java.util.regex.Matcher;
  * 
  * 地域配置：
  * - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
- * - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+ * - 新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
  * 注意：切换地域时，API Key也需要对应更换
  */
 public class BatchAPIRetrieveBatch {
@@ -1582,7 +1616,7 @@ public class BatchAPIRetrieveBatch {
     // 北京地域配置（默认）
     private static final String BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
     // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-    // private static final String BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1";
+    // private static final String BASE_URL = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1";
     // 注意：切换地域时，API Key也需要对应更换
     
     private static String API_KEY;
@@ -1642,7 +1676,7 @@ public class BatchAPIRetrieveBatch {
 ```
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
-# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/batches/batch_id
+# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/batches/batch_id
 # === 执行时请删除该注释 ===
 curl --request GET 'https://dashscope.aliyuncs.com/compatible-mode/v1/batches/batch_id' \
  -H "Authorization: Bearer $DASHSCOPE_API_KEY"
@@ -1755,7 +1789,7 @@ client = OpenAI(
     # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     # 新加坡和北京地域的API Key不同。
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
 batches = client.batches.list(after="batch_xxx", limit=2,extra_query={'ds_name':'任务名称','input_file_ids':'file-batch-xxx,file-batch-xxx','status':'completed,expired','create_after':'20250304000000','create_before':'20250306123000'})
@@ -1781,7 +1815,7 @@ const OpenAI = require('openai');
 // 北京地域配置（默认）
 const BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-// const BASE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
+// const BASE_URL = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1';
 // 注意：切换地域时，API Key也需要对应更换
 
 const apiKey = process.env.DASHSCOPE_API_KEY;
@@ -1834,7 +1868,7 @@ import java.util.regex.Matcher;
  * 
  * 地域配置：
  * - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
- * - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+ * - 新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
  * 注意：切换地域时，API Key也需要对应更换
  */
 public class BatchAPIListBatches {
@@ -1842,7 +1876,7 @@ public class BatchAPIListBatches {
     // 北京地域配置（默认）
     private static final String BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
     // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-    // private static final String BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1";
+    // private static final String BASE_URL = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1";
     // 注意：切换地域时，API Key也需要对应更换
     
     private static String API_KEY;
@@ -1902,7 +1936,7 @@ public class BatchAPIListBatches {
 ```
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
-# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/batches?xxx同下方内容xxx
+# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/batches?xxx同下方内容xxx
 # === 执行时请删除该注释 ===
 curl --request GET  'https://dashscope.aliyuncs.com/compatible-mode/v1/batches?after=batch_xxx&limit=2&ds_name=Batch&input_file_ids=file-batch-xxx,file-batch-xxx&status=completed,failed&create_after=20250303000000&create_before=20250320000000' \
  -H "Authorization: Bearer $DASHSCOPE_API_KEY"
@@ -2086,7 +2120,7 @@ client = OpenAI(
     # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     # 新加坡和北京地域的API Key不同。
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
 batch = client.batches.cancel("batch_id")  # 将batch_id替换为Batch任务的id
@@ -2112,7 +2146,7 @@ const OpenAI = require('openai');
 // 北京地域配置（默认）
 const BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-// const BASE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
+// const BASE_URL = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1';
 // 注意：切换地域时，API Key也需要对应更换
 
 const apiKey = process.env.DASHSCOPE_API_KEY;
@@ -2152,7 +2186,7 @@ import java.util.regex.Matcher;
  * 
  * 地域配置：
  * - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
- * - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+ * - 新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
  * 注意：切换地域时，API Key也需要对应更换
  */
 public class BatchAPICancelBatch {
@@ -2160,7 +2194,7 @@ public class BatchAPICancelBatch {
     // 北京地域配置（默认）
     private static final String BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
     // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-    // private static final String BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1";
+    // private static final String BASE_URL = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1";
     // 注意：切换地域时，API Key也需要对应更换
     
     private static String API_KEY;
@@ -2219,7 +2253,7 @@ public class BatchAPICancelBatch {
 ```
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
-# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/batches/batch_id/cancel
+# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/batches/batch_id/cancel
 # === 执行时请删除该注释 ===
 curl --request POST 'https://dashscope.aliyuncs.com/compatible-mode/v1/batches/batch_id/cancel' \
  -H "Authorization: Bearer $DASHSCOPE_API_KEY"
@@ -2282,7 +2316,7 @@ client = OpenAI(
     # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     # 新加坡和北京地域的API Key不同。
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
     # 注意：切换地域时，API Key也需要对应更换
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
@@ -2322,7 +2356,7 @@ const fs = require('fs');
 // 北京地域配置（默认）
 const BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-// const BASE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
+// const BASE_URL = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1';
 // 注意：切换地域时，API Key也需要对应更换
 
 const apiKey = process.env.DASHSCOPE_API_KEY;
@@ -2372,7 +2406,7 @@ import java.util.regex.Matcher;
  * 
  * 地域配置：
  * - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
- * - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+ * - 新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
  * 注意：切换地域时，API Key也需要对应更换
  */
 public class BatchAPIDownloadFile {
@@ -2380,7 +2414,7 @@ public class BatchAPIDownloadFile {
     // 北京地域配置（默认）
     private static final String BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
     // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-    // private static final String BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1";
+    // private static final String BASE_URL = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1";
     // 注意：切换地域时，API Key也需要对应更换
     
     private static String API_KEY;
@@ -2446,7 +2480,7 @@ System.out.println(content);
 ```
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
-# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/files/file-batch_output-xxx/content
+# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/files/file-batch_output-xxx/content
 # === 执行时请删除该注释 ===
 curl -X GET https://dashscope.aliyuncs.com/compatible-mode/v1/files/file-batch_output-xxx/content \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" > result.jsonl
@@ -2610,7 +2644,7 @@ batch_job = client.batches.create(
         
     3.  在弹出面板中，单击**复制文件URL**。
         
-2.  **SDK**：生成OSS文件 URL，参考[使用预签名URL下载文件](https://help.aliyun.com/zh/oss/developer-reference/download-using-a-presigned-url)。
+2.  **SDK**：生成OSS文件 URL，参考[使用预签名URL下载（Java SDK V1）](https://help.aliyun.com/zh/oss/developer-reference/download-using-a-presigned-url)。
     
 
 **方式二：使用资源标识符（推荐）**
@@ -2666,7 +2700,7 @@ client = OpenAI(
     # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     # 新加坡和北京地域的API Key不同。
     api_key=os.getenv("DASHSCOPE_API_KEY"), 
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
     # 注意：切换地域时，API Key也需要对应更换
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )

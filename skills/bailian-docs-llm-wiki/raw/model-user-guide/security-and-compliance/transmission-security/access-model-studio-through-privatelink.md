@@ -8,7 +8,7 @@
 
 VPC 内的计算资源访问终端节点时，流量将通过 PrivateLink 转发至阿里云百炼服务端，不经过公网。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3813439771/CAEQYxiBgMCtvojh0RkiIDEzOTVhZTNhNGQxYTQ3YTQ5MjlhODJjZjM4MTY2NjQw5274221_20250627113930.173.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7547650871/CAEQYxiBgMCtvojh0RkiIDEzOTVhZTNhNGQxYTQ3YTQ5MjlhODJjZjM4MTY2NjQw5274221_20250627113930.173.svg)
 
 如需从其他地域的VPC内进行私网访问，请参考[跨地域私网访问阿里云百炼 API](#a576f2631au0h)。
 
@@ -248,7 +248,7 @@ public class Main {
 
 配置完成后，在发起端 VPC 内访问前文中配置好的终端节点默认服务域名时，转发路由器（TR）会将流量路由至阿里云百炼服务所在地域的终端节点，实现跨地域私网访问阿里云百炼 API。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3813439771/CAEQZhiBgICUtYmu2RkiIDk3YWZiYjVkYWUyNTQwNDI4ZTQyZGMyMTk5MDIyYzg45274221_20250627113930.173.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7547650871/CAEQZhiBgICUtYmu2RkiIDk3YWZiYjVkYWUyNTQwNDI4ZTQyZGMyMTk5MDIyYzg45274221_20250627113930.173.svg)
 
 默认情况下，终端节点的默认服务域名可以在跨地域互联的 VPC 内直接被访问，但自定义服务域名仅在终端节点所在地域 VPC 内有效。因此，如需在发起端通过自定义域名私网访问阿里云百炼 API ，可参考[快速使用内网域名解析](https://help.aliyun.com/zh/dns/pvtz-quickly-use-the-built-in-domain-name-resolution)，创建一个与自定义服务域名同名的内网域名，将该域名通过 CNAME 记录解析至该终端节点的默认服务域名：
 

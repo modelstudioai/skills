@@ -46,7 +46,7 @@
       "modelAlias": "qwen-image-2.0",
       "versionTag": "MAJOR",
       "equivalentSnapshot": "qwen-image-2.0-2026-03-03",
-      "latestOnlineAt": "2026-03-03T11:31:36.978+00:00",
+      "latestOnlineAt": "2026-03-03T11:31:36.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-Image-2.0",
       "docUrl": "https://help.aliyun.com/document_detail/2976416.html",

@@ -16,9 +16,9 @@ qwen3.7-max
 
 ](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-max)[
 
-qwen3.6-plus
+qwen3.7-plus
 
-](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.6-plus)[
+](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-plus)[
 
 qwen3.6-flash
 
@@ -66,9 +66,9 @@ mimo-v2.5-pro
 
 [
 
-qwen3.6-plus
+qwen3.7-plus
 
-](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.6-plus)[
+](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-plus)[
 
 qwen3.5-omni-plus
 

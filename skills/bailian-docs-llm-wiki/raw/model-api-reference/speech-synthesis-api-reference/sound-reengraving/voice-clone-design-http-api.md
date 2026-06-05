@@ -6,21 +6,21 @@
 
 ## **服务端点****（CosyVoice/Qwen-TTS）**
 
-## 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+## 华北2（北京）
 
 `POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization`
 
-## 国际
+## 新加坡
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization`
 
-`POST https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization`
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 ## **服务端点（MiniMax）**
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
 
 HTTP请求地址：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
@@ -56,7 +56,7 @@ string
 
 ### **请求体**
 
-以下为北京地域URL，若使用新加坡地域的模型，需将URL替换为：`https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization`。
+以下为华北2（北京）地域的URL，各地域的URL不同。
 
 ## CosyVoice声音复刻
 
@@ -583,7 +583,7 @@ MiniMax不支持该功能。
 
 ### **请求体**
 
-以下为北京地域URL，若使用新加坡地域的模型，需将URL替换为：`https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization`。
+以下为华北2（北京）地域的URL，各地域的URL不同。
 
 ## CosyVoice
 
@@ -791,7 +791,7 @@ CosyVoice固定为1。Qwen固定为0。
 
 ### **请求体**
 
-以下为北京地域URL，若使用新加坡地域的模型，需将URL替换为：`https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization`。
+以下为华北2（北京）地域的URL，各地域的URL不同。
 
 ## CosyVoice
 
@@ -892,7 +892,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customizat
 
 ### **请求体**
 
-以下为北京地域URL，若使用新加坡地域的模型，需将URL替换为：`https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization`。
+以下为华北2（北京）地域的URL，各地域的URL不同。
 
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
@@ -968,7 +968,7 @@ MiniMax不支持该功能。
 
 ### **请求体**
 
-以下为北京地域URL，若使用新加坡地域的模型，需将URL替换为：`https://dashscope-intl.aliyuncs.com/api/v1/services/audio/tts/customization`。
+以下为华北2（北京）地域的URL，各地域的URL不同。
 
 ## CosyVoice
 

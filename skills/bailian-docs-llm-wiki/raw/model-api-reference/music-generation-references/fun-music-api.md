@@ -87,7 +87,12 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generat
 
 **model** `_string_` **（必选）**
 
-模型名称，固定为 `fun-music-v1`。
+模型名称。可选值：
+
+-   `fun-music-preview`
+    
+-   `fun-music-v1`
+    
 
 **input** `_object_` **（必选）**
 

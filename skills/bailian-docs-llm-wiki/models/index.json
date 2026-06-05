@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2026-06-01",
-  "totalFamilies": 161,
-  "totalModels": 357,
+  "updatedAt": "2026-06-05",
+  "totalFamilies": 162,
+  "totalModels": 359,
   "capabilityDistribution": {
-    "TG": 32,
+    "TG": 33,
     "IG": 29,
     "VG": 25,
     "TTS": 16,
@@ -20,7 +20,7 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 95,
+    "qwen": 96,
     "qwen-domain-model": 33,
     "wan": 13,
     "happyhorse": 4,
@@ -413,8 +413,9 @@
       "providers": [
         "qwen"
       ],
-      "itemCount": 1,
+      "itemCount": 2,
       "items": [
+        "fun-music-preview",
         "fun-music-v1"
       ]
     },
@@ -2094,6 +2095,24 @@
       "items": [
         "qwen3.7-max",
         "qwen3.7-max-preview"
+      ],
+      "maxContextWindow": 1000000
+    },
+    {
+      "slug": "qwen3.7-plus",
+      "name": "Qwen3.7-Plus",
+      "primaryCapability": "TG",
+      "capabilities": [
+        "TG",
+        "Reasoning",
+        "VU"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen3.7-plus"
       ],
       "maxContextWindow": 1000000
     },

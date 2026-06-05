@@ -9,19 +9,17 @@ AI妙笔通过集成夸克通用搜索引擎，能够提供一个强大的搜索
 -   点击“搜索素材”即可对相关内容进行丰富
     
 
-### ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1632943071/p750152.png)
+在左侧搜索框中输入关键词（如"中国的传媒发展"），单击**搜索**按钮，下方将展示**AI生成**内容摘要及网络搜索结果条目，可将相关素材引用至右侧编辑区。
 
 -   点击“回车”按钮即可自动填入至右侧编辑界面。
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1632943071/p750153.png)
-
 -   点击“+”按钮即可把符合您预期的文章内容添加至素材库。
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1632943071/p750154.png)
+在弹出的窗口中，勾选**我的素材库**，然后单击**添加**。
 
 -   随后即可在【素材库】找到您刚刚添加的内容。
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1632943071/p750155.png)
+在左侧导航栏单击**素材库**进入素材库页面，在**公共**页签下的素材列表中即可查看到已添加的素材条目。

@@ -25,7 +25,7 @@
 
 ### **第一步：上传文档到文档库**
 
-通过[UploadDoc - 文档上传](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-uploaddoc)接口上传文档到妙读文档库，如下为示例代码：
+通过[文档上传](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-uploaddoc)接口上传文档到妙读文档库，如下为示例代码：
 
 ```
 package com.aliyun.sdk.service.aimiaobi20230801;
@@ -109,7 +109,7 @@ public class uploadDocTest {
 
 ### **第二步：获得上传的⽂档信息**
 
-上传完文档后需要使用[GetDocInfo - 获取文档信息](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdocinfo)接口获取文档是否上传成功的信息。
+上传完文档后需要使用[获取文档信息](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdocinfo)接口获取文档是否上传成功的信息。
 
 ```
 import com.alibaba.fastjson.JSON;
@@ -168,12 +168,12 @@ CompletableFuture<GetDocInfoResponse> future = client.getDocInfo(request);
 
 您可以为指定的文档进行辅助阅读的操作，妙读提供导读、脑图、文档问答等辅助阅读能力。下面是文档导读、全文脑图、文档问答的示例代码：
 
-1.  ##### [RunDocIntroduction - 文档导读](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundocintroduction)
+1.  ##### [文档导读](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundocintroduction)
     
 
 -   针对一篇文章、视频或者URL，生成文章的导读内容，包含全文总结、关键要点、章节速览（即分段、每段的总结、段落摘要）。此外支持多种多语言的输入和输出。
     
--   如果用户仅需要对文章进行全文总结，可使用RunDocSummary接口实现，具体请参《[RunDocSummary - 文档摘要](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundocsummary)》。
+-   如果用户仅需要对文章进行全文总结，可使用RunDocSummary接口实现，具体请参《[文档摘要](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundocsummary)》。
     
 
 如下为示例代码：
@@ -251,7 +251,7 @@ public class runDocIntroductionTest {
 }
 ```
 
-2.  ##### [RunDocBrainmap - 全文脑图](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundocbrainmap)
+2.  ##### [全文脑图](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundocbrainmap)
     
 
 -   针对文章或者书，生成三级脑图，且支持生成多语种，支持控制脑图第二级数量，支持控制叶子节点的字数。
@@ -319,7 +319,7 @@ public class runDocBrainmap {
 }
 ```
 
-2.  ##### [RunDocQa - 文档问答（文章问答/多模态文件问答）](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundocqa)
+2.  ##### [文档问答（文章问答/多模态文件问答）](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundocqa)
     
 
 -   针对一个自然语言类的query，在指定的文章范围内给出文字答案（有图则会配图），并显示溯源信息。 多模态文件问答：针对一个自然语言类的query，在指定的多模态文件范围内给出文字答案，并带上相关的图片、视频片段或者文字，并显示溯源信息。
@@ -413,4 +413,4 @@ public class runDocQATest {
 
 问：文件上传成功后，马上调用妙读的导读和脑图的接口时，为什么返回的Errorcode是Failed，显示文件内容为空？
 
-答：[UploadDoc - 文档上传](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-uploaddoc)为异步调用接口，需要先用[GetDocInfo - 获取文档信息](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdocinfo)接口获取其真实的状态，当状态为成功后，才可对文档进行生成文档脑图、文档摘要、进行文档问答等操作。
+答：[文档上传](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-uploaddoc)为异步调用接口，需要先用[获取文档信息](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdocinfo)接口获取其真实的状态，当状态为成功后，才可对文档进行生成文档脑图、文档摘要、进行文档问答等操作。

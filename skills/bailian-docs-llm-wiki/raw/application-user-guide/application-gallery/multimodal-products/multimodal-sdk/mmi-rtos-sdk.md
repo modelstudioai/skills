@@ -476,6 +476,14 @@ String
 
 产品标识，在百炼控制台创建应用之后会生成该ID
 
+workspaceId
+
+String
+
+否
+
+工作空间ID
+
 requestTime
 
 String
@@ -490,7 +498,7 @@ String
 
 是
 
-JSON加密信息，，由设备端SDK生成的数据中提取，参考[设备注册接口](#Gejwz)
+JSON加密信息，由设备端SDK生成的数据中提取，参考[设备注册接口](#Gejwz)
 
 **接口出参：DeviceRegisterResponseBody对象**
 
@@ -579,6 +587,12 @@ appId
 String
 
 产品标识
+
+workspaceId
+
+String
+
+工作空间ID
 
 deviceName
 
@@ -991,7 +1005,7 @@ if __name__ == '__main__':
     
 2.  **endPoint**：bailianmodelonchip.cn-beijing.aliyuncs.com
     
-3.  GetTokenResponseBodyData需要通过JSON.toJSONString转换成json格式，再下发给设备端，这部分逻辑需要厂商自行实现
+3.  GetTokenResponseBodyData需要通过JSON.toJSONString转换成json格式，再下发给设备端，这部分逻辑需要厂商自行实现。另外，**tokenKey**参数需要传入百炼的API Key，获取方式请参考百炼平台文档。
     
 
 ### **2.3 云端错误码**

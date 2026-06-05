@@ -2,7 +2,7 @@
 
 通过Python SDK管理定制热词列表，包括VocabularyService类的方法说明与示例代码。
 
-**用户指南：**[自定义热词](https://help.aliyun.com/zh/model-studio/custom-hot-words-user-guide)。
+**用户指南：**[自定义热词](https://help.aliyun.com/zh/model-studio/custom-hot-words-user-guide)。热词列表数量上限等使用限制详见[限制与计费](https://help.aliyun.com/zh/model-studio/custom-hot-words-user-guide#hw10-limit-sec)。
 
 **重要**
 
@@ -12,17 +12,19 @@
 
 SDK 默认使用**北京地域**的服务端点。如需切换到其他地域，需在初始化前修改 `dashscope.base_http_api_url`。
 
-### 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+### 华北2（北京）
 
 `https://dashscope.aliyuncs.com/api/v1`
 
-### 国际
+### 新加坡
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
-`https://dashscope-intl.aliyuncs.com/api/v1`
+调用时请将`WorkspaceId`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+**重要**
+
+新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 **切换到新加坡地域**：
 
@@ -30,7 +32,7 @@ SDK 默认使用**北京地域**的服务端点。如需切换到其他地域，
 import dashscope
 
 # 在代码开头设置
-dashscope.base_http_api_url = 'https://dashscope-intl.aliyuncs.com/api/v1'
+dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
 ```
 
 **注意**：
@@ -451,7 +453,7 @@ import os
 # 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
 dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
 
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
 dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
 prefix = 'testpfx'
@@ -483,7 +485,7 @@ import os
 # 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
 dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
 
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
 dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
 service = VocabularyService()
@@ -503,7 +505,7 @@ import os
 # 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
 dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
 
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
 dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
 service = VocabularyService()
@@ -523,7 +525,7 @@ import os
 # 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
 dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
 
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
 dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
 service = VocabularyService()
@@ -545,7 +547,7 @@ import os
 # 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
 dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
 
-# 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1
+# 以下为华北2（北京）地域的URL，各地域的URL不同。
 dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
 service = VocabularyService()

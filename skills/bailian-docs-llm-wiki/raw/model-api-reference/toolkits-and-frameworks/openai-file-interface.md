@@ -8,10 +8,14 @@
 
 ### **前提条件**
 
--   阿里云百炼API-KEY：[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)
+-   阿里云百炼API-KEY：[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)
     
 -   使用OpenAI SDK调用服务，您还需安装[OpenAI SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
     
+
+**重要**
+
+新加坡地域旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 ## 支持的模型
 
@@ -117,7 +121,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 
 将purpose指定为`batch`，输入文件必须是jsonl文件且符合[输入文件大小与格式要求](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/#578afe12c1uvz)，上传Batch任务的单个文件最大为500 MB。
 
-> 关于Batch调用的更多用法，请参考[OpenAI兼容-Batch](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)。
+> 关于Batch调用的更多用法，请参考[OpenAI兼容-Batch（文件输入）](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)。
 
 #### **请求示例**
 
@@ -194,6 +198,74 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
     "status": "processed",
     "status_details": null
 }
+```
+
+## 用于创建调优任务
+
+将purpose指定为`fine-tune`，输入文件必须是jsonl文件且符合[输入文件大小与格式要求](https://help.aliyun.com/zh/model-studio/model-customization-file-management-service#7d3645a119ovw)，上传调优数据集/训练集的单个文件最大为300 MB。
+
+> 关于使用 API 进行模型调优的更多用法，请参考[模型调优](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide)
+
+#### **请求示例**
+
+Python
+
+```
+import os
+from pathlib import Path
+from openai import OpenAI
+
+client = OpenAI(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+)
+
+# file.jsonl 是一个本地示例文件
+file_object = client.files.create(file=Path("file.jsonl"), purpose="fine-tune")
+
+print(file_object.model_dump_json())
+```
+
+Java
+
+```
+import com.openai.client.OpenAIClient;
+import com.openai.client.okhttp.OpenAIOkHttpClient;
+import com.openai.models.files.*;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+public class Main {
+    public static void main(String[] args) {
+        // 创建客户端，使用环境变量中的API密钥
+        OpenAIClient client = OpenAIOkHttpClient.builder()
+                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+                .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
+                .build();
+        // 设置文件路径,请根据实际需求修改路径与文件名
+        Path filePath = Paths.get("src/main/java/org/example/file.jsonl");
+        // 创建文件上传参数
+        FileCreateParams params = FileCreateParams.builder()
+                .file(filePath)
+                .purpose(FilePurpose.of("fine-tune"))
+                .build();
+
+        // 上传文件
+        FileObject fileObject = client.files().create(params);
+        System.out.println(fileObject);
+    }
+}
+```
+
+curl
+
+```
+curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--form 'file=@"file.jsonl"' \
+--form 'purpose="fine-tune"'
 ```
 
 ### **查询文件信息**
@@ -452,8 +524,6 @@ print(file_object.model_dump_json())
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.FileDeleteParams;
-import com.openai.models.FileListPage;
-import com.openai.models.FileListParams;
 
 public class Main {
     public static void main(String[] args) {
@@ -591,7 +661,7 @@ _String_
 
 `file-extract`: 用于[Qwen-Long](https://help.aliyun.com/zh/model-studio/long-context-qwen-long)与[Qwen-Doc](https://help.aliyun.com/zh/model-studio/data-mining-qwen-doc)模型的文档理解与数据提取；
 
-`batch`: 用于[OpenAI兼容-Batch](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)任务；
+`batch`: 用于[OpenAI兼容-Batch（文件输入）](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)任务；
 
 "file-extract"
 
@@ -782,4 +852,4 @@ true
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。

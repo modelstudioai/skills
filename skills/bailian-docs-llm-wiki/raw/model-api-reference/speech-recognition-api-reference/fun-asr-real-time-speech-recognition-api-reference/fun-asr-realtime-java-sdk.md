@@ -2,109 +2,17 @@
 
 本文介绍Fun-ASR实时语音识别Java SDK的参数和接口细节。
 
-**用户指南：**关于模型介绍和选型建议请参见[实时语音识别-Fun-ASR/Gummy/Paraformer](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition)。
+**重要**
+
+新加坡地域的旧版域名 `wss://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+
+**用户指南：**关于模型介绍和选型建议请参见[实时语音识别-Fun-ASR/Paraformer](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition)。
 
 ## **前提条件**
 
 -   已开通服务并[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
     
 -   [安装最新版DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
-    
-
-## **模型列表**
-
-### 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
-**模型名称**
-
-**版本**
-
-**单价**
-
-**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-fun-asr-realtime
-
-> 当前等同fun-asr-realtime-2025-11-07
-
-稳定版
-
-0.00033元/秒
-
-36,000秒（10小时）
-
-有效期：阿里云百炼开通后90天
-
-fun-asr-realtime-2026-02-28
-
-快照版
-
-fun-asr-realtime-2025-11-07
-
-快照版
-
-fun-asr-realtime-2025-09-15
-
-fun-asr-flash-8k-realtime
-
-> 当前等同fun-asr-flash-8k-realtime-2026-01-28
-
-稳定版
-
-0.00022元/秒
-
-fun-asr-flash-8k-realtime-2026-01-28
-
-快照版
-
--   **支持的语种**：
-    
-    -   fun-asr-realtime、fun-asr-realtime-2026-02-28、fun-asr-realtime-2025-11-07：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英文、日语
-        
-    -   fun-asr-realtime-2025-09-15：中文（普通话）、英文
-        
--   **支持的采样率**：
-    
-    -   fun-asr-flash-8k-realtime、fun-asr-flash-8k-realtime-2026-01-28：8kHz
-        
-    -   其他模型：16kHz
-        
--   **支持的音频格式**：pcm、wav、mp3、opus、speex、aac、amr
-    
-
-### **国际**
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，数据存储位于**新加坡接入地域**，模型推理计算资源在全球范围内动态调度（不含中国内地）。
-
-**模型名称**
-
-**版本**
-
-**单价**
-
-**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-fun-asr-realtime
-
-> 当前等同fun-asr-realtime-2025-11-07
-
-稳定版
-
-0.00066元/秒
-
-无免费额度
-
-fun-asr-realtime-2025-11-07
-
-快照版
-
--   **支持的语种**：中文（普通话、粤语、吴语、闽南语、客家话、赣语、湘语、晋语；并支持中原、西南、冀鲁、江淮、兰银、胶辽、东北、北京、港台等，包括河南、陕西、湖北、四川、重庆、云南、贵州、广东、广西、河北、天津、山东、安徽、南京、江苏、杭州、甘肃、宁夏等地区官话口音）、英文、日语
-    
--   **支持的采样率**：16kHz
-    
--   **支持的音频格式**：pcm、wav、mp3、opus、speex、aac、amr
     
 
 ## **快速开始**
@@ -135,7 +43,7 @@ import java.io.File;
 
 public class Main {
     public static void main(String[] args) {
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：wss://dashscope-intl.aliyuncs.com/api-ws/v1/inference
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
         Constants.baseWebsocketApiUrl = "wss://dashscope.aliyuncs.com/api-ws/v1/inference";
         // 创建Recognition实例
         Recognition recognizer = new Recognition();
@@ -216,7 +124,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：wss://dashscope-intl.aliyuncs.com/api-ws/v1/inference
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
         Constants.baseWebsocketApiUrl = "wss://dashscope.aliyuncs.com/api-ws/v1/inference";
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.submit(new RealtimeRecognitionTask());
@@ -341,7 +249,7 @@ class TimeUtils {
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：wss://dashscope-intl.aliyuncs.com/api-ws/v1/inference
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
         Constants.baseWebsocketApiUrl = "wss://dashscope.aliyuncs.com/api-ws/v1/inference";
         // 实际应用中，该方法仅在程序最开始执行一次即可，不必多次执行该方法。
         warmUp();
@@ -495,7 +403,7 @@ import java.nio.ByteBuffer;
 
 public class Main {
     public static void main(String[] args) throws NoApiKeyException {
-        // 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：wss://dashscope-intl.aliyuncs.com/api-ws/v1/inference
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。
         Constants.baseWebsocketApiUrl = "wss://dashscope.aliyuncs.com/api-ws/v1/inference";
         // 创建一个Flowable<ByteBuffer>
         Flowable<ByteBuffer> audioSource =
@@ -1333,7 +1241,7 @@ public String getPunctuation()
 
 ## **错误码**
 
-如遇报错问题，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行排查。
+如遇报错问题，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行排查。
 
 若问题仍未解决，请加入[开发者群](https://github.com/aliyun/alibabacloud-bailian-speech-demo)反馈遇到的问题，并提供Request ID，以便进一步排查问题。
 
