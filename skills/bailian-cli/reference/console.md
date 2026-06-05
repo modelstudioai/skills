@@ -1,7 +1,7 @@
 # `bl console` commands
 
 > Auto-generated from `packages/cli/src/commands/catalog.ts`. Do not edit by hand.
-> Regenerate: `pnpm --filter bailian-cli run generate:reference` (runs automatically on `build`).
+> Regenerate: `pnpm --filter bailian-cli run generate:reference`.
 
 Index: [index.md](index.md)
 
