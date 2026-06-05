@@ -1,7 +1,7 @@
 # `bl vision` commands
 
 > Auto-generated from `packages/cli/src/commands/catalog.ts`. Do not edit by hand.
-> Regenerate: `pnpm --filter bailian-cli run generate:reference` (runs automatically on `build`).
+> Regenerate: `pnpm --filter bailian-cli run generate:reference`.
 
 Index: [index.md](index.md)
 
@@ -28,7 +28,7 @@ Index: [index.md](index.md)
 | `--image <path-or-url>` | string | no | Local image path or URL |
 | `--video <url>` | array | no | Video file URL or local path (mp4/mov/avi/mkv/webm) |
 | `--prompt <text>` | string | no | Question about the content (default: auto-detected) |
-| `--model <model>` | string | no | Vision model (default: qwen-vl-max) |
+| `--model <model>` | string | no | Vision model (default: qwen3-vl-plus) |
 
 #### Examples
 
