@@ -1,7 +1,7 @@
 # bailian-cli (`bl`) command reference
 
 > Auto-generated from `packages/cli/src/commands/catalog.ts`. Do not edit by hand.
-> Regenerate: `pnpm --filter bailian-cli run generate:reference` (runs automatically on `build`).
+> Regenerate: `pnpm --filter bailian-cli run generate:reference`.
 
 Command **details** are in sibling `<group>.md` files in this directory.
 Use this index for the full quick index and global flags.
@@ -23,6 +23,9 @@ Use this index for the full quick index and global flags.
 | `bl image edit` | Edit an existing image with text instructions (Qwen-Image) | [image.md](image.md) |
 | `bl image generate` | Generate images (Qwen-Image / wan2.x) | [image.md](image.md) |
 | `bl knowledge retrieve` | Retrieve from a Bailian knowledge base (requires AK/SK) | [knowledge.md](knowledge.md) |
+| `bl mcp call` | Call a tool on an MCP server (tools/call) | [mcp.md](mcp.md) |
+| `bl mcp list` | List MCP servers activated under your Bailian account | [mcp.md](mcp.md) |
+| `bl mcp tools` | List tools exposed by an MCP server (tools/list) | [mcp.md](mcp.md) |
 | `bl memory add` | Add memory from messages or custom content | [memory.md](memory.md) |
 | `bl memory delete` | Delete a memory node | [memory.md](memory.md) |
 | `bl memory list` | List memory nodes for a user | [memory.md](memory.md) |
@@ -30,8 +33,9 @@ Use this index for the full quick index and global flags.
 | `bl memory profile get` | Get user profile by schema ID and user ID | [memory.md](memory.md) |
 | `bl memory search` | Search memory nodes by query or messages | [memory.md](memory.md) |
 | `bl memory update` | Update a memory node content | [memory.md](memory.md) |
-| `bl model list` | List available foundation models | [model.md](model.md) |
 | `bl omni` | Multimodal chat with text + audio output (Qwen-Omni) | [omni.md](omni.md) |
+| `bl pipeline run` | Run a pipeline workflow definition | [pipeline.md](pipeline.md) |
+| `bl pipeline validate` | Validate a pipeline definition without executing | [pipeline.md](pipeline.md) |
 | `bl search web` | Search the web using DashScope MCP WebSearch service | [search.md](search.md) |
 | `bl speech recognize` | Recognize speech from audio files (FunAudio-ASR) | [speech.md](speech.md) |
 | `bl speech synthesize` | Synthesize speech from text (CosyVoice TTS) | [speech.md](speech.md) |
@@ -56,9 +60,10 @@ Use this index for the full quick index and global flags.
 | `file` | `upload` | [file.md](file.md) |
 | `image` | `edit`, `generate` | [image.md](image.md) |
 | `knowledge` | `retrieve` | [knowledge.md](knowledge.md) |
+| `mcp` | `call`, `list`, `tools` | [mcp.md](mcp.md) |
 | `memory` | `add`, `delete`, `list`, `profile create`, `profile get`, `search`, `update` | [memory.md](memory.md) |
-| `model` | `list` | [model.md](model.md) |
 | `omni` | `(root)` | [omni.md](omni.md) |
+| `pipeline` | `run`, `validate` | [pipeline.md](pipeline.md) |
 | `search` | `web` | [search.md](search.md) |
 | `speech` | `recognize`, `synthesize` | [speech.md](speech.md) |
 | `text` | `chat` | [text.md](text.md) |
@@ -90,6 +95,6 @@ Available on every command (in addition to command-specific options):
 
 ## Notes
 
-- Console commands (`app list`, `model list`, `usage free`, `console call`) require `bl auth login --console`.
+- Console commands (`app list`, `usage free`, `console call`) require `bl auth login --console`.
 - Most API commands use `DASHSCOPE_API_KEY` or `bl auth login --api-key`.
 - Default output: **text** in TTY; **json** when piped.
