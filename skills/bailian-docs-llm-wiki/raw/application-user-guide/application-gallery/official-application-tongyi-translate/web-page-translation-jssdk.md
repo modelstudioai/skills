@@ -44,7 +44,6 @@ interface ITokenResponseData {
     body: string;
   };
 }
-
 interface ITokenRequestData {
   sourceLanguage: string;
   targetLanguage: string;
@@ -53,11 +52,9 @@ interface ITokenRequestData {
   scene: 'mt-turbo',
   fallbackTimeoutMs: number;
 }
-
 interface ISetupConfig {
   getToken: (data: ITokenRequestData) => Promise<ITokenResponseData>;
 }
-
 // 只用初始化一次，不需要每次翻译都初始化
 __AliTranslate.setup({
   getToken: async (data) => {
@@ -80,7 +77,6 @@ interface IPageTranslate {
   target?: HTMLElement; // 要翻译的目标区域，默认为body
   except?: string; // 要排除翻译的区域，默认为空
 }
-
 const instance = __AliTranslate.pageTranslate({
   // 详细参数见PageTranslate参数
   lazyload: true,
@@ -97,7 +93,6 @@ interface IParagraphTranslate {
   target?: HTMLElement; // 要翻译的目标区域，默认为body
   dynamic?: boolean; // 是否支持动态翻译，默认为false
 }
-
 const instance = __AliTranslate.paragraphTranslate({
   // 详细参数见ParagrapthTranslate参数
   srcLanguage: 'zh',
@@ -237,7 +232,6 @@ Node.js
 ```
 // 通过calculateSignature方法生成签名
 import * as crypto from 'crypto';
-
 export interface SignatureRequest {
   httpMethod: string;
   canonicalUri: string;
@@ -248,7 +242,6 @@ export interface SignatureRequest {
   body: any;
   queryParam: Record<string, any>;
 }
-
 export interface BatchTranslateRequest {
   scene: string;
   sourceLanguage: string;
@@ -256,7 +249,6 @@ export interface BatchTranslateRequest {
   targetLanguage: string;
   text: { [key: string]: string };
 }
-
 export class Request implements SignatureRequest {
   httpMethod: string;
   canonicalUri: string;
@@ -266,7 +258,6 @@ export class Request implements SignatureRequest {
   headers: Record<string, string>;
   body: any;
   queryParam: Record<string, any>;
-
   constructor(httpMethod: string, canonicalUri: string, host: string, xAcsAction: string, xAcsVersion: string) {
     this.httpMethod = httpMethod;
     this.canonicalUri = canonicalUri || '/';
@@ -278,7 +269,6 @@ export class Request implements SignatureRequest {
     this.queryParam = {};
     this.initHeader();
   }
-
   private initHeader() {
     const date = new Date();
     this.headers = {
@@ -290,7 +280,6 @@ export class Request implements SignatureRequest {
     }
   }
 }
-
 const ALGORITHM = 'ACS3-HMAC-SHA256';
 const accessKeyId = process.env.ACCESS_KEY_ID; // 这里填入阿里云的AK
 const accessKeySecret = process.env.ACCESS_KEY_SECRET; // 这里填入阿里云的SK
@@ -301,7 +290,6 @@ const canonicalUri = '/anytrans/translate/batchForHtml';
 const xAcsAction = 'BatchTranslateForHtml';
 const xAcsVersion = '2025-07-07';
 const host = 'anytrans.cn-beijing.aliyuncs.com';
-
 export interface SignedRequest {
   url: string;
   method: string;
@@ -309,39 +297,31 @@ export interface SignedRequest {
   headers: Record<string, string>;
   body?: any; // 可能是 Uint8Array 或 Base64 字符串
 }
-
 export function getAuthorization(signRequest: SignatureRequest): SignedRequest {
   try {
     const newQueryParam: Record<string, any> = {};
     processObject(newQueryParam, "", signRequest.queryParam);
     signRequest.queryParam = newQueryParam;
-
     // 步骤 1：拼接规范请求串
     const canonicalQueryString = Object.entries(signRequest.queryParam)
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([key, value]) => `${percentCode(key)}=${percentCode(value)}`)
       .join('&');
-
     // 请求体，当请求正文为空时，比如GET请求，RequestPayload固定为空字符串
     const requestPayload = signRequest.body || encoder.encode('');
     const hashedRequestPayload = sha256Hex(requestPayload);
     signRequest.headers['x-acs-content-sha256'] = hashedRequestPayload;
-
     // 将所有key都转换为小写
     signRequest.headers = Object.fromEntries(
       Object.entries(signRequest.headers).map(([key, value]) => [key.toLowerCase(), value])
     );
-
     const sortedKeys = Object.keys(signRequest.headers)
       .filter(key => key.startsWith('x-acs-') || key === 'host' || key === 'content-type')
       .sort();
-
     // 已签名消息头列表，多个请求头名称（小写）按首字母升序排列并以英文分号（;）分隔
     const signedHeaders = sortedKeys.join(";")
-
     // 构造请求头，多个规范化消息头，按照消息头名称（小写）的字符代码顺序以升序排列后拼接在一起
     const canonicalHeaders = sortedKeys.map(key => `${key}:${signRequest.headers[key]}`).join('\n') + '\n';
-
     const canonicalRequest = [
       signRequest.httpMethod,
       signRequest.canonicalUri,
@@ -351,28 +331,23 @@ export function getAuthorization(signRequest: SignatureRequest): SignedRequest {
       hashedRequestPayload
     ].join('\n');
     console.log('canonicalRequest=========>\n', canonicalRequest);
-
     // 步骤 2：拼接待签名字符串
     const hashedCanonicalRequest = sha256Hex(encoder.encode(canonicalRequest));
     const stringToSign = `${ALGORITHM}\n${hashedCanonicalRequest}`;
     console.log('stringToSign=========>', stringToSign);
-
     // 步骤 3：计算签名
     const signature = hmac256(accessKeySecret!, stringToSign);
     console.log('signature=========>', signature);
-
     // 步骤 4：拼接 Authorization
     const authorization = `${ALGORITHM} Credential=${accessKeyId},SignedHeaders=${signedHeaders},Signature=${signature}`;
     console.log('authorization=========>', authorization);
     signRequest.headers['Authorization'] = authorization;
-
     // 构建完整的URL
     let url = `https://${signRequest.host}${signRequest.canonicalUri}`;
     if (signRequest.queryParam && Object.keys(signRequest.queryParam).length > 0) {
       const query = new URLSearchParams(signRequest.queryParam);
       url += '?' + query.toString();
     }
-
     return {
       url,
       host: signRequest.host,
@@ -386,26 +361,22 @@ export function getAuthorization(signRequest: SignatureRequest): SignedRequest {
     throw error;
   }
 }
-
 function percentCode(str: string): string {
   return encodeURIComponent(str)
     .replace(/\+/g, '%20')
     .replace(/\*/g, '%2A')
     .replace(/~/g, '%7E');
 }
-
 function hmac256(key: string, data: string): string {
   const hmac = crypto.createHmac('sha256', key);
   hmac.update(data, 'utf8');
   return hmac.digest('hex').toLowerCase();
 }
-
 function sha256Hex(bytes: any): string {
   const hash = crypto.createHash('sha256');
   const digest = hash.update(bytes).digest('hex');
   return digest.toLowerCase();
 }
-
 function processObject(map: Record<string, any>, key: string, value: any): void {
   // 如果值为空，则无需进一步处理
   if (value === null) {
@@ -414,7 +385,6 @@ function processObject(map: Record<string, any>, key: string, value: any): void 
   if (key === null) {
     key = "";
   }
-
   // 当值为Array类型时，遍历Array中的每个元素，并递归处理
   if (Array.isArray(value)) {
     value.forEach((item, index) => {
@@ -433,7 +403,6 @@ function processObject(map: Record<string, any>, key: string, value: any): void 
     map[key] = String(value);
   }
 }
-
 export function formDataToString(formData: Record<string, any>): string {
   const tmp: Record<string, any> = {};
   processObject(tmp, "", formData);
@@ -446,7 +415,6 @@ export function formDataToString(formData: Record<string, any>): string {
   }
   return queryString;
 }
-
 // 固定变量签名计算方法
 export interface FixedSignatureResult {
   httpMethod: string;
@@ -460,33 +428,25 @@ export interface FixedSignatureResult {
   workspaceId: string;
   authorization: string;
 }
-
 export function calculateSignature(req: BatchTranslateRequest): SignedRequest {
   // 创建请求实例
   const signRequest = new Request(httpMethod, canonicalUri, host, xAcsAction, xAcsVersion);
-
   // 设置查询参数
   signRequest.queryParam = {
     RegionId: 'cn-beijing',
   };
-
   // 创建 body 的 Uint8Array
   const bodyUint8Array = encoder.encode(JSON.stringify({
     ...req,
     workspaceId,
   }));
-
   // 用于签名计算的 body
   signRequest.body = bodyUint8Array;
-
   signRequest.headers['content-type'] = 'application/json';
-
   // 获取签名
   const result = getAuthorization(signRequest);
-
   // 将 body 转换为 Base64 字符串用于传输
   const bodyBase64 = Buffer.from(bodyUint8Array).toString('base64');
-
   return {
     ...result,
     body: bodyBase64 // 返回 Base64 字符串而不是 Uint8Array
@@ -512,7 +472,6 @@ import java.net.URLEncoder;
 import java.io.UnsupportedEncodingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
-
 /**
  * 签名请求接口
  */
@@ -525,12 +484,10 @@ interface SignatureRequest {
     Map<String, String> getHeaders();
     byte[] getBody();
     Map<String, Object> getQueryParam();
-    
     void setHeaders(Map<String, String> headers);
     void setBody(byte[] body);
     void setQueryParam(Map<String, Object> queryParam);
 }
-
 /**
  * 批量翻译请求数据类
  */
@@ -540,10 +497,8 @@ class BatchTranslateRequest {
     private boolean streaming;
     private String targetLanguage;
     private Map<String, String> text;
-    
     // 构造函数
     public BatchTranslateRequest() {}
-    
     public BatchTranslateRequest(String scene, 
                                String sourceLanguage, boolean streaming, 
                                String targetLanguage, Map<String, String> text) {
@@ -553,24 +508,18 @@ class BatchTranslateRequest {
         this.targetLanguage = targetLanguage;
         this.text = text;
     }
-    
     // Getters and Setters
     public String getScene() { return scene; }
     public void setScene(String scene) { this.scene = scene; }
-    
     public String getSourceLanguage() { return sourceLanguage; }
     public void setSourceLanguage(String sourceLanguage) { this.sourceLanguage = sourceLanguage; }
-    
     public boolean isStreaming() { return streaming; }
     public void setStreaming(boolean streaming) { this.streaming = streaming; }
-    
     public String getTargetLanguage() { return targetLanguage; }
     public void setTargetLanguage(String targetLanguage) { this.targetLanguage = targetLanguage; }
-    
     public Map<String, String> getText() { return text; }
     public void setText(Map<String, String> text) { this.text = text; }
 }
-
 /**
  * 请求实现类
  */
@@ -583,7 +532,6 @@ class Request implements SignatureRequest {
     private Map<String, String> headers;
     private byte[] body;
     private Map<String, Object> queryParam;
-    
     public Request(String httpMethod, String canonicalUri, String host, 
                   String xAcsAction, String xAcsVersion) {
         this.httpMethod = httpMethod;
@@ -596,19 +544,16 @@ class Request implements SignatureRequest {
         this.queryParam = new HashMap<>();
         initHeader();
     }
-    
     private void initHeader() {
         Instant now = Instant.now();
         String date = DateTimeFormatter.ISO_INSTANT.format(now);
         String nonce = generateRandomHex(16);
-        
         this.headers.put("host", this.host);
         this.headers.put("x-acs-action", this.xAcsAction);
         this.headers.put("x-acs-version", this.xAcsVersion);
         this.headers.put("x-acs-date", date);
         this.headers.put("x-acs-signature-nonce", nonce);
     }
-    
     private String generateRandomHex(int length) {
         SecureRandom random = new SecureRandom();
         byte[] bytes = new byte[length];
@@ -619,7 +564,6 @@ class Request implements SignatureRequest {
         }
         return sb.toString();
     }
-    
     // Getters
     @Override
     public String getHttpMethod() { return httpMethod; }
@@ -637,7 +581,6 @@ class Request implements SignatureRequest {
     public byte[] getBody() { return body; }
     @Override
     public Map<String, Object> getQueryParam() { return queryParam; }
-    
     // Setters
     @Override
     public void setHeaders(Map<String, String> headers) { this.headers = headers; }
@@ -646,7 +589,6 @@ class Request implements SignatureRequest {
     @Override
     public void setQueryParam(Map<String, Object> queryParam) { this.queryParam = queryParam; }
 }
-
 /**
  * 签名后的请求结果
  */
@@ -656,7 +598,6 @@ class SignedRequest {
     private String host;
     private Map<String, String> headers;
     private String body; // Base64 字符串
-    
     public SignedRequest(String url, String method, String host, 
                         Map<String, String> headers, String body) {
         this.url = url;
@@ -665,7 +606,6 @@ class SignedRequest {
         this.headers = headers;
         this.body = body;
     }
-    
     // Getters
     public String getUrl() { return url; }
     public String getMethod() { return method; }
@@ -673,7 +613,6 @@ class SignedRequest {
     public Map<String, String> getHeaders() { return headers; }
     public String getBody() { return body; }
 }
-
 /**
  * 固定签名结果接口
  */
@@ -689,7 +628,6 @@ interface FixedSignatureResult {
     String getWorkspaceId();
     String getAuthorization();
 }
-
 /**
  * Node签名计算主类
  */
@@ -698,15 +636,12 @@ public class NodeSignature {
     private static final String ACCESS_KEY_ID = System.getenv("ACCESS_KEY_ID"); // 这里填入阿里云的AK
     private static final String ACCESS_KEY_SECRET = System.getenv("ACCESS_KEY_SECRET"); // 这里填入阿里云的SK
     private static final String WORKSPACE_ID = System.getenv("WORKSPACE_ID"); // 这里填入百炼的WorkspaceId
-    
     private static final String HTTP_METHOD = "POST";
     private static final String CANONICAL_URI = "/anytrans/translate/batchForHtml";
     private static final String X_ACS_ACTION = "BatchTranslateForHtml";
     private static final String X_ACS_VERSION = "2025-07-07";
     private static final String HOST = "anytrans.cn-beijing.aliyuncs.com";
-    
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    
     /**
      * 获取授权信息
      */
@@ -715,18 +650,15 @@ public class NodeSignature {
             Map<String, Object> newQueryParam = new HashMap<>();
             processObject(newQueryParam, "", signRequest.getQueryParam());
             signRequest.setQueryParam(newQueryParam);
-            
             // 步骤 1：拼接规范请求串
             String canonicalQueryString = signRequest.getQueryParam().entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
                 .map(entry -> percentCode(entry.getKey()) + "=" + percentCode(String.valueOf(entry.getValue())))
                 .collect(Collectors.joining("&"));
-            
             // 请求体，当请求正文为空时，比如GET请求，RequestPayload固定为空字符串
             byte[] requestPayload = signRequest.getBody() != null ? signRequest.getBody() : new byte[0];
             String hashedRequestPayload = sha256Hex(requestPayload);
             signRequest.getHeaders().put("x-acs-content-sha256", hashedRequestPayload);
-            
             // 将所有key都转换为小写
             Map<String, String> lowerCaseHeaders = signRequest.getHeaders().entrySet().stream()
                 .collect(Collectors.toMap(
@@ -734,20 +666,16 @@ public class NodeSignature {
                     Map.Entry::getValue
                 ));
             signRequest.setHeaders(lowerCaseHeaders);
-            
             List<String> sortedKeys = lowerCaseHeaders.keySet().stream()
                 .filter(key -> key.startsWith("x-acs-") || key.equals("host") || key.equals("content-type"))
                 .sorted()
                 .collect(Collectors.toList());
-            
             // 已签名消息头列表，多个请求头名称（小写）按首字母升序排列并以英文分号（;）分隔
             String signedHeaders = String.join(";", sortedKeys);
-            
             // 构造请求头，多个规范化消息头，按照消息头名称（小写）的字符代码顺序以升序排列后拼接在一起
             String canonicalHeaders = sortedKeys.stream()
                 .map(key -> key + ":" + lowerCaseHeaders.get(key))
                 .collect(Collectors.joining("\n")) + "\n";
-            
             String canonicalRequest = String.join("\n", Arrays.asList(
                 signRequest.getHttpMethod(),
                 signRequest.getCanonicalUri(),
@@ -757,22 +685,18 @@ public class NodeSignature {
                 hashedRequestPayload
             ));
             System.out.println("canonicalRequest=========>\n" + canonicalRequest);
-            
             // 步骤 2：拼接待签名字符串
             String hashedCanonicalRequest = sha256Hex(canonicalRequest.getBytes(StandardCharsets.UTF_8));
             String stringToSign = ALGORITHM + "\n" + hashedCanonicalRequest;
             System.out.println("stringToSign=========>" + stringToSign);
-            
             // 步骤 3：计算签名
             String signature = hmac256(ACCESS_KEY_SECRET, stringToSign);
             System.out.println("signature=========>" + signature);
-            
             // 步骤 4：拼接 Authorization
             String authorization = String.format("%s Credential=%s,SignedHeaders=%s,Signature=%s",
                 ALGORITHM, ACCESS_KEY_ID, signedHeaders, signature);
             System.out.println("authorization=========>" + authorization);
             lowerCaseHeaders.put("authorization", authorization);
-            
             // 构建完整的URL
             String url = "https://" + signRequest.getHost() + signRequest.getCanonicalUri();
             if (signRequest.getQueryParam() != null && !signRequest.getQueryParam().isEmpty()) {
@@ -788,20 +712,16 @@ public class NodeSignature {
                     .collect(Collectors.joining("&"));
                 url += "?" + query;
             }
-            
             String bodyString = signRequest.getBody() != null ? 
                 Base64.getEncoder().encodeToString(signRequest.getBody()) : null;
-            
             return new SignedRequest(url, signRequest.getHttpMethod().toUpperCase(), 
                                    signRequest.getHost(), lowerCaseHeaders, bodyString);
-                                   
         } catch (Exception error) {
             System.err.println("Failed to get authorization");
             error.printStackTrace();
             throw new RuntimeException(error);
         }
     }
-    
     /**
      * URL编码
      */
@@ -815,7 +735,6 @@ public class NodeSignature {
             throw new RuntimeException(e);
         }
     }
-    
     /**
      * HMAC-SHA256加密
      */
@@ -830,7 +749,6 @@ public class NodeSignature {
             throw new RuntimeException(e);
         }
     }
-    
     /**
      * SHA256哈希
      */
@@ -843,7 +761,6 @@ public class NodeSignature {
             throw new RuntimeException(e);
         }
     }
-    
     /**
      * 字节数组转十六进制字符串
      */
@@ -854,7 +771,6 @@ public class NodeSignature {
         }
         return sb.toString();
     }
-    
     /**
      * 处理对象，将嵌套对象展平
      */
@@ -866,7 +782,6 @@ public class NodeSignature {
         if (key == null) {
             key = "";
         }
-        
         // 当值为Array类型时，遍历Array中的每个元素，并递归处理
         if (value instanceof List) {
             List<?> list = (List<?>) value;
@@ -892,14 +807,12 @@ public class NodeSignature {
             map.put(key, String.valueOf(value));
         }
     }
-    
     /**
      * 表单数据转字符串
      */
     public static String formDataToString(Map<String, Object> formData) {
         Map<String, Object> tmp = new HashMap<>();
         processObject(tmp, "", formData);
-        
         return tmp.entrySet().stream()
             .map(entry -> {
                 try {
@@ -911,7 +824,6 @@ public class NodeSignature {
             })
             .collect(Collectors.joining("&"));
     }
-    
     /**
      * 固定变量签名计算方法
      */
@@ -919,12 +831,10 @@ public class NodeSignature {
         try {
             // 创建请求实例
             Request signRequest = new Request(HTTP_METHOD, CANONICAL_URI, HOST, X_ACS_ACTION, X_ACS_VERSION);
-            
             // 设置查询参数
             Map<String, Object> queryParam = new HashMap<>();
             queryParam.put("RegionId", "cn-beijing");
             signRequest.setQueryParam(queryParam);
-            
             // 创建请求体数据
             Map<String, Object> bodyData = new HashMap<>();
             bodyData.put("scene", req.getScene());
@@ -933,20 +843,15 @@ public class NodeSignature {
             bodyData.put("targetLanguage", req.getTargetLanguage());
             bodyData.put("text", req.getText());
             bodyData.put("workspaceId", WORKSPACE_ID);
-            
             // 创建 body 的字节数组
             String jsonString = objectMapper.writeValueAsString(bodyData);
             byte[] bodyBytes = jsonString.getBytes(StandardCharsets.UTF_8);
-            
             // 用于签名计算的 body
             signRequest.setBody(bodyBytes);
             signRequest.getHeaders().put("content-type", "application/json");
-            
             // 获取签名
             SignedRequest result = getAuthorization(signRequest);
-            
             return result;
-            
         } catch (JsonProcessingException e) {
             throw new RuntimeException("JSON序列化失败", e);
         }
@@ -964,7 +869,7 @@ public class NodeSignature {
 
 登录AK/SK对应的阿里云账号后，在[百炼](https://bailian.console.aliyun.com/)左下角的业务空间详情中获取
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3845767571/p997485.png)![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3845767571/p997486.png)
+弹窗中的**业务空间id**即对应所需的workspaceId，单击字段右侧的复制图标可直接复制。
 
 #### **3\. 网络接口调用报没有权限**
 

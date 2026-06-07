@@ -60,11 +60,9 @@
 
 此步骤必须配置，否则控制台预览/上传将失败。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9736823771/p1059007.png)
-
 -   入口：oss控制台 > Bucket > 数据安全 > CORS设置，也可以点击下面的链接进行访问：[https://oss.console.aliyun.com/bucket/oss-{region}/{bucket}/data-security/cors](https://oss.console.aliyun.com/bucket/oss-{region}/{bucket}/data-security/cors)；
     
--   CORS规则配置（严格按此填写）：
+-   CORS规则配置（严格按此填写）。
     
 
 **字段**
@@ -99,13 +97,11 @@
 
 进入[妙搜控制台](https://aimiaobi.console.aliyun.com/?product_code=g_broadscope_search#/searchSystemConfig?activeKey=storageSetting)，进入**配置**，在云存储设置中进行授权和配置。
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9736823771/p1057658.png)
-
-#### **① 授权（RAM角色绑定）**
+#### **授权（RAM角色绑定）**
 
 点击 「授权」按钮 ：授权成功后按钮变为「已授权」，全妙有所有bucket下/aimiaobi目录的读写权限，但此时文件仍上传至全妙自有存储（因尚未配置Bucket参数）。
 
-#### **② 设置（绑定Bucket）**
+#### **设置（绑定Bucket）**
 
 -   填写以下2项并点击 「保存」：
     
@@ -119,8 +115,6 @@
 ## 取消OSS授权配置
 
 进入[RAM访问控制>角色](https://ram.console.aliyun.com/roles)，筛选[AliyunServiceRoleForAIMiaoBiAccessingOss](https://ram.console.aliyun.com/roles/detail?roleName=AliyunServiceRoleForAIMiaoBiAccessingOss)角色名称，进行删除。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9736823771/p1059016.png)
 
 ## **无活跃订单**
 

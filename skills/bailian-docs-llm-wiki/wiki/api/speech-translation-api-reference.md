@@ -38,7 +38,7 @@ POST `${base_url}/chat/completions`。关键字段：
 - **`messages`**（必填）：仅允许一个 `user` 消息，`content` 数组里放：
   - `type: "input_audio"` + `input_audio.data`（URL 或 Base64 Data URL）+ `input_audio.format`（如 `mp3`、`wav`）。
   - 或 `type: "video_url"` + `video_url.url`（公网 URL 或 Base64 Data URL）。
-- **`stream`**（必填）：必须为 `true`，模型只支持流式输出。
+- **`stream`**（必填）：必须为 `true`，模型只支持[流式输出](../concepts/streaming.md)。
 - **`stream_options.include_usage`**：建议设为 `true`，便于在最后一个 chunk 拿到 Token 用量。
 - **`modalities`**：`["text"]` 仅输出文本，或 `["text","audio"]` 同时输出语音。
 - **`audio`**：当 `modalities` 含 `audio` 时必填，设置 `voice`（音色）与 `format`（仅支持 `wav`）。
@@ -137,7 +137,7 @@ SDK 把上述 WebSocket 收发包装成方法 + 回调，避免手写事件路�
 
 ## 限制与注意事项
 
-- 流式输出是硬性要求，非实时 API 设置 `stream=false` 会被拒绝。
+- [流式输出](../concepts/streaming.md)是硬性要求，非实时 API 设置 `stream=false` 会被拒绝。
 - 实时 API 必须先 `session.update` 再 `input_audio_buffer.append`；图像帧必须在首个音频帧之后再发。
 - 客户端必须监听 `session.finished` 后再主动断开 WebSocket，否则可能丢失尾音段的翻译结果。
 - 不同地域使用不同的 API Key 与 base URL；新加坡地域请按上文「地域与接入端点」迁移到新版域名。
@@ -150,5 +150,6 @@ SDK 把上述 WebSocket 收发包装成方法 + 回调，避免手写事件路�
 - [服务端事件](../../raw/model-api-reference/speech-translation-api-reference/live-translator-api/live-translator-server-events.md)
 - [实时音视频翻译（Qwen-LiveTranslate）Python SDK-API参考](../../raw/model-api-reference/speech-translation-api-reference/live-translator-api/qwen-livetranslate-python-sdk.md)
 - [实时音视频翻译（Qwen-LiveTranslate）Java SDK-API参考](../../raw/model-api-reference/speech-translation-api-reference/live-translator-api/qwen-livetranslate-java-sdk.md)
+
 
 

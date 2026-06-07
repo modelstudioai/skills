@@ -86,7 +86,7 @@
 
 ### 音乐生成
 
-百聆 Fun-Music（`fun-music-v1` / `fun-music-preview`）通过 `prompt`（描述风格/场景，模型自动写词）或 `lyrics`（自定义歌词）生成男/女声中英文歌曲，支持 MP3 / WAV、流式与非流式输出。
+百聆 Fun-Music（`fun-music-v1` / `fun-music-preview`）通过 `prompt`（描述风格/场景，模型自动写词）或 `lyrics`（自定义歌词）生成男/女声中英文歌曲，支持 MP3 / WAV、流式与非[流式输出](../concepts/streaming.md)。
 
 - `lyrics` 与 `prompt` 至少传一个；同时传时 `lyrics` 生效，`prompt` 被忽略。
 - 字符数限制因流式模式而异：非流式 `lyrics` 中文 5~350 / 英文 5~2000、`prompt` 1~2000；流式 `lyrics` 中文 300~350 / 英文 200~250 词、`prompt` 5~1000 词。
@@ -137,7 +137,7 @@ Tripo 系列通过 `prompt`（文生 3D）、`image`（单图生 3D）或 `image
 
 - **地域限制**：Tripo 3D 与 Fun-Music 仅在中国内地（北京）地域可用；Legacy `wanx2.1-imageedit` 同样仅限北京。其它海外节点的模型清单见各子文档中的"模型广场"区域链接。
 - **版本快照与稳定性**：所有"latest/主版本"模型会持续更新，需要稳定行为的生产场景请固定具体日期快照（如 `qwen3.7-plus-2026-05-26`），但批量推理通常只在主线版本生效。
-- **输出/资源有效期**：Tripo 输出 URL 有效期 2 小时；Fun-Music 音频 URL 有效期 24 小时；ASR 异步任务结果 24 小时；请及时下载保存。
+- **输出/资源有效期**：Tripo 输出 URL 有效期 2 小时；Fun-Music 音频 URL 有效期 24 小时；ASR [异步任务](../concepts/async-task.md)结果 24 小时；请及时下载保存。
 - **互斥参数**：Tripo 的 `prompt`/`image`/`images` 三者互斥；Fun-Music 同时传 `lyrics` 与 `prompt` 时 `prompt` 被忽略；S2S 联网搜索与 Function Calling 不可同时开启。
 - **旧版迁移建议**：文本生成与视觉理解的 Qwen2.5、Qwen3-VL、QVQ、Qwen-Omni-Turbo 等不再首选推荐，新项目建议直接使用 Qwen3.5 / Qwen3.6 / Qwen3.7 系列；ASR 推荐从 Paraformer / Gummy / SenseVoice 迁移到 Fun-ASR 或 Qwen-ASR。
 - **Token / 像素消耗**：视觉模型按 `h * w / (32 * 32) + 2` 计算每图 Token，高分辨率显著增加成本；文本模型的"思考预算"会单独计费，长上下文需评估总 Token。
@@ -156,5 +156,6 @@ Tripo 系列通过 `prompt`（文生 3D）、`image`（单图生 3D）或 `image
 - [语音转语音](../../raw/model-user-guide/model-inference/s2s-model.md)
 - [全模态](../../raw/model-user-guide/model-inference/omni.md)
 - [向量与重排序](../../raw/model-user-guide/model-inference/embedding-rerank-model.md)
+
 
 

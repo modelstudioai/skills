@@ -60,7 +60,7 @@ Chat Completions 的演进版本，面向智能体场景：
 复用 `/v1/chat/completions` 端点，`messages.content` 改为数组，含 `text` 与 `image_url` 两种 type。支持：
 
 - 通义千问 VL：`qwen3-vl-plus`、`qwen3-vl-flash`、`qwen3-vl-235b-a22b-thinking/instruct`、`qwen3-vl-32b-instruct`、`qwen3-vl-30b/8b` 系列、`qwen-vl-max`、`qwen-vl-plus`
-- QVQ 推理模型：`qvq-max`、`qvq-plus`（**仅支持流式输出**）
+- QVQ 推理模型：`qvq-max`、`qvq-plus`（**仅支持[流式输出](../concepts/streaming.md)**）
 - OCR 模型：`qwen-vl-ocr` 系列
 
 调用示例与 LangChain（`langchain_openai`）集成方式见 [OpenAI Vision接口兼容](../../raw/model-api-reference/toolkits-and-frameworks/qwen-vl-compatible-with-openai.md)。
@@ -121,7 +121,7 @@ Chat Completions 的演进版本，面向智能体场景：
 - **思考模式**：`qwen3.7`、`qwen3.6`、`qwen3.5` 系列默认开启思考模式，会产生思考 Token 增加成本。建议显式设置 `enable_thinking`（`true`/`false`）。
 - **Batch 顶层参数**：JSONL 请求体中 `enable_thinking` 必须放在 `body` 顶层（与 `model` 同级），**不能**放进 `extra_body`。
 - **超长上下文**：Batch 场景下 `qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus/flash`、`qwen3.5-plus/flash` 单次请求最大支持 256K Token。
-- **流式输出**：通过 `stream=True` 启用；如需在末尾返回 Token 使用统计，加 `stream_options={"include_usage": true}`。
+- **[流式输出](../concepts/streaming.md)**：通过 `stream=True` 启用；如需在末尾返回 Token 使用统计，加 `stream_options={"include_usage": true}`。
 - **确定性输出**：传入相同 `seed` 并保持其他参数不变，模型尽量返回一致结果（取值范围 0 ~ 2³¹−1）。
 - **采样控制**：`temperature` 与 `top_p` 二选一即可，无需同时设置。
 
@@ -131,7 +131,7 @@ Chat Completions 的演进版本，面向智能体场景：
 
 两种集成路径：
 
-- **`langchain_openai.ChatOpenAI`**：走 OpenAI 兼容接口，**仅支持** OpenAI 兼容模式所列模型；`pip install langchain_openai` 后传入 `api_key`、`base_url`、`model` 即可。
+- **`langchain_openai.ChatOpenAI`**：走 [OpenAI 兼容接口](../concepts/openai-compatible-api.md)，**仅支持** OpenAI 兼容模式所列模型；`pip install langchain_openai` 后传入 `api_key`、`base_url`、`model` 即可。
 - **`langchain_community.chat_models.tongyi.ChatTongyi`**：走 DashScope 原生接口，**支持百炼全部文本生成模型**（含部署后模型）；`pip install langchain-community dashscope`，通过 `dashscope_api_key` 鉴权，支持 `streaming=True`。
 
 LangChain JavaScript 同时提供 `@langchain/openai` 的 `ChatOpenAI` 与 `@langchain/community` 的 `ChatAlibabaTongyi` 两种实现。完整示例见 [在LangChain中使用阿里云百炼](../../raw/model-api-reference/toolkits-and-frameworks/use-bailian-in-langchain.md)。
@@ -160,5 +160,6 @@ LangChain JavaScript 同时提供 `@langchain/openai` 的 `ChatOpenAI` 与 `@lan
 - [OpenAI兼容-Batch（文件输入）](../../raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)
 - [OpenAI Conversations接口兼容](../../raw/model-api-reference/toolkits-and-frameworks/openai-compatible-conversations.md)
 - [在LangChain中使用阿里云百炼](../../raw/model-api-reference/toolkits-and-frameworks/use-bailian-in-langchain.md)
+
 
 

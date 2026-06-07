@@ -6,7 +6,7 @@
 
 ## 适用范围
 
--   **支持的模型**：[模型列表](https://help.aliyun.com/zh/model-studio/models)中的所有模型均支持查看用量，包括基于它们[调优后的模型](https://help.aliyun.com/zh/model-studio/model-deployment-introduction#f17bf700c06k5)。
+-   **支持的模型**：模型列表中的所有模型均支持查看用量，包括基于它们[调优后的模型](https://help.aliyun.com/zh/model-studio/model-deployment-introduction#f17bf700c06k5)。
     
 
 ## 查看免费额度使用情况
@@ -20,7 +20,7 @@
 
 **说明**
 
-**免费额度用完即停：**开启后，免费额度用尽时服务将自动停止（返回403错误：AllocationQuota.FreeTierOnly），避免产生免费额度以外的费用。若您希望在免费额度用尽后仍继续使用模型服务，并根据实际产生的用量付费，请保持本功能关闭状态。您只能在账户内仍有未消耗的免费额度时开启本功能。一旦功能开启，若您需要关闭本功能，需要在免费额度完全消耗后再进行关闭（免费额度出账周期为分钟级；控制台免费额度数据非实时、可能有延迟，请以控制台显示的免费额度数值为准）
+**免费额度用完即停：** 开启后，免费额度用尽时服务将自动停止（返回403错误：AllocationQuota.FreeTierOnly），避免产生免费额度以外的费用。若您希望在免费额度用尽后仍继续使用模型服务，并根据实际产生的用量付费，请保持本功能关闭状态。您只能在账户内仍有未消耗的免费额度时开启本功能。一旦功能开启，若您需要关闭本功能，需要在免费额度完全消耗后再进行关闭（免费额度消耗记录可在账单中查看，账单记录按分钟汇总生成；控制台免费额度数据分钟级更新，支持手动刷新页面同步，请以控制台显示的免费额度数值为准。）
 
 ## 查看模型用量
 
@@ -34,7 +34,7 @@
     
 2.  如需查询某个具体模型的用量，可在页面右侧搜索框输入模型名称（如`qwen-plus`）筛选对应数据。
     
-    > 可前往[模型列表](https://help.aliyun.com/zh/model-studio/models)查询模型名称。
+    > 可前往模型列表查询模型名称。
     
 
 ## **模型用量统计单位说明**
@@ -69,7 +69,7 @@
 
 按成功生成的 **图像张数** 计费。
 
-[视频生成](https://help.aliyun.com/zh/model-studio/models#a42bdc182c8ee)
+视频生成
 
 **秒**
 
@@ -117,7 +117,7 @@
 
 -   **控制模型输出长度：** 在调用模型 API 时，合理[限制思考长度](https://help.aliyun.com/zh/model-studio/deep-thinking#6f0633b9cdts1)和设置 `[max_tokens](https://help.aliyun.com/zh/model-studio/qwen-api-reference/)` 参数，可限制模型单次生成内容的最大长度（从而控制费用）。
     
--   **根据任务类型选择模型：** 对于分类、摘要等简单任务，优先选择成本更低的轻量级模型（如 `qwen-turbo`），而不是始终使用功能强大但价格也较高的模型（如 `qwen-max`）。
+-   **根据任务类型选择模型：** 对于分类、摘要等简单任务，优先选择成本更低的轻量级模型，而不是始终使用功能强大但价格也较高的模型。
     
 -   **监控与告警：** 通过[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry/)监控用量趋势，并可配置用量告警，当用量出现异常时及时收到通知。
     
@@ -150,7 +150,7 @@
 -   `Hello World`：约 **2** 个 Token
     
 
-每个模型都有最大输入和输出 Token 数（详见[模型列表](https://help.aliyun.com/zh/model-studio/models)），超过限制会导致请求失败。
+每个模型都有最大输入和输出 Token 数（详见模型列表），超过限制会导致请求失败。
 
 **实时推理**
 
@@ -162,7 +162,7 @@
     
 -   [阿里云百炼应用](https://help.aliyun.com/zh/model-studio/application-introduction)（智能体/工作流/智能体编排应用，以及涉及到模型调用的节点，如大模型节点、意图分类节点以及智能体群组节点等）的测试态和发布态
     
--   [Assistant API](https://help.aliyun.com/zh/model-studio/assistant-api/)调用
+-   [Assistant API（下线中）](https://help.aliyun.com/zh/model-studio/assistant-api/)调用
     
 -   [应用调用](https://help.aliyun.com/zh/model-studio/application-calling-guide)
     

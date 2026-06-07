@@ -4,7 +4,7 @@
 
 ## 加解密过程
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2904789771/CAEQWhiBgMDutN2xvBkiIGU1NWJmYmRkYzEzMTQ4YTU5YTg5YmJiZWVkODk1ZWQw4860485_20250226112255.459.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3732870871/CAEQWhiBgMDutN2xvBkiIGU1NWJmYmRkYzEzMTQ4YTU5YTg5YmJiZWVkODk1ZWQw4860485_20250226112255.459.svg)
 
 采用混合加密机制：数据由AES对称算法加密，其密钥通过RSA非对称加密实现安全传输。
 
@@ -106,7 +106,6 @@ import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.utils.JsonUtils;
-
 public class Main {
     public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {
         Generation gen = new Generation();
@@ -161,7 +160,6 @@ DashScope SDK会自动完成解密，返回的响应内容为明文，无需手�
 ```
 import os
 import dashscope
-
 messages = [
     {'role': 'system', 'content': 'You are a helpful assistant.'},
     {'role': 'user', 'content': '你是谁？'}
@@ -299,7 +297,6 @@ DashScope SDK会自动完成解密，返回的响应内容为明文，无需手�
     
     ```
     private static final int GCM_IV_LENGTH = 12; // 12 字节 IV
-        
     private static byte[] generateIv() {
         byte[] iv = new byte[GCM_IV_LENGTH];
         SecureRandom secureRandom = new SecureRandom(); // 随机生成确保唯一性
@@ -313,7 +310,6 @@ DashScope SDK会自动完成解密，返回的响应内容为明文，无需手�
     ```
     # 常量定义
     GCM_IV_LENGTH = 12       # 12字节IV
-    
     def generate_iv():
         """生成12字节随机IV"""
         return os.urandom(GCM_IV_LENGTH)
@@ -331,9 +327,31 @@ DashScope SDK会自动完成解密，返回的响应内容为明文，无需手�
             
     -   **处理流程**：
         
-        1.  将input序列化为JSON字符串：将下图中深色部分内容（即“`{"messages":[......]}`”）序列化
+        1.  将input序列化为JSON字符串：将下方示例中深色部分内容（即“`{"messages":[......]}`”）序列化
             
-            ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8897562571/p976004.png)
+            ```
+            curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-g..." \
+            --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+            --header "Content-Type: application/json" \
+            --data '{
+                "model": "qwen-plus",
+                "input":{
+                    "messages":[
+                        {
+                            "role": "system",
+                            "content": "You are a helpful assistant."
+                        },
+                        {
+                            "role": "user",
+                            "content": "你是谁? "
+                        }
+                    ]
+                },
+                "parameters": {
+                    "result_format": "message"
+                }
+            }'
+            ```
             
         2.  对序列化后的`input`执行AES-GCM加密
             
@@ -345,14 +363,11 @@ DashScope SDK会自动完成解密，返回的响应内容为明文，无需手�
         
         ```
         private static final int GCM_TAG_LENGTH = 128; // 128 位 Tag(16 字节)
-        
         private static String encryptInputWithAes(SecretKey aesSecretKey,byte[] iv, String input) throws Exception {
                 byte[] content = input.getBytes(StandardCharsets.UTF_8);
-        
                 Cipher aesCipher = Cipher.getInstance("AES/GCM/NoPadding");
                 GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH, iv);
                 aesCipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(aesSecretKey.getEncoded(), "AES"), gcmParameterSpec);
-        
                 byte[] encryptedBytes = aesCipher.doFinal(content);
                 return Base64.encodeBase64String(encryptedBytes);
         }
@@ -369,19 +384,14 @@ DashScope SDK会自动完成解密，返回的响应内容为明文，无需手�
                 modes.GCM(iv, tag=None),
                 backend=default_backend()
             ).encryptor()
-            
             # 关联数据设为空（根据需求可调整）
             aesgcm.authenticate_additional_data(b'')
-            
             # 加密数据
             ciphertext = aesgcm.update(plaintext.encode('utf-8')) + aesgcm.finalize()
-            
             # 获取认证标签
             tag = aesgcm.tag
-            
             # 组合密文和标签
             encrypted_data = ciphertext + tag
-            
             # 返回Base64编码结果
             return base64.b64encode(encrypted_data).decode('utf-8')
         ```
@@ -419,16 +429,13 @@ DashScope SDK会自动完成解密，返回的响应内容为明文，无需手�
         private static String encryptAesKeyWithRsaPublicKey(SecretKey aesSecretKey, String publicKey) throws Exception {
                 byte[] aesKeyBytes = aesSecretKey.getEncoded();
                 String base64AesKey = Base64.encodeBase64String(aesKeyBytes);
-        
                 byte[] publicKeyBytes = Base64.decodeBase64(publicKey);
                 X509EncodedKeySpec spec = new X509EncodedKeySpec(publicKeyBytes);
                 KeyFactory kf = KeyFactory.getInstance("RSA");
                 PublicKey pubKey = kf.generatePublic(spec);
-        
                 Cipher rsaCipher = Cipher.getInstance("RSA");
                 rsaCipher.init(Cipher.ENCRYPT_MODE, pubKey);
                 byte[] encryptedBytes = rsaCipher.doFinal(base64AesKey.getBytes());
-        
                 return Base64.encodeBase64String(encryptedBytes);
         }
         ```
@@ -440,22 +447,18 @@ DashScope SDK会自动完成解密，返回的响应内容为明文，无需手�
             """使用RSA公钥加密AES密钥"""
             # 解码Base64格式的公钥
             public_key_bytes = base64.b64decode(public_key_str)
-            
             # 加载公钥
             public_key = serialization.load_der_public_key(
                 public_key_bytes,
                 backend=default_backend()
             )
-            
             # 先对AES密钥进行Base64编码
             base64_aes_key = base64.b64encode(aes_key).decode('utf-8')
-            
             # 使用RSA加密
             encrypted_bytes = public_key.encrypt(
                 base64_aes_key.encode('utf-8'),
                 padding.PKCS1v15()
             )
-            
             # 返回Base64编码的加密结果
             return base64.b64encode(encrypted_bytes).decode('utf-8')
         ```
@@ -476,7 +479,19 @@ DashScope SDK会自动完成解密，返回的响应内容为明文，无需手�
 
 最终发送给大模型的HTTP请求内容格式如下：
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8897562571/p980080.png)
+```
+curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
+--header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header "Content-Type: application/json" \
+--header "X-DashScope-EncryptionKey: {\"public_key_id\": \"17xxx0\", \"encrypt_key\": \"F3WT...sR9UGIw==\", \"iv\": \"oxxxlouK/\"}" \
+--data '{
+    "model": "qwen-plus",
+    "input":"+J2aT8GNBUD9rFBsBL0dRP60fZpmDuUAAoHQPXoGUL7/xskvxY9BMyJWm2rtNK2siPHkW12p9wgQEaEZcdM5xp3zCKlUvzCw",
+    "parameters": {
+        "result_format": "message"
+    }
+}'
+```
 
 **示例代码：**
 
@@ -485,30 +500,23 @@ Java
 ```
 private static String sendEncryptedRequest(String apiKey, String publicKeyId, String encryptedAesKey, byte[] iv, String encryptedInput) throws Exception {
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder().build();
-
         JSONObject requestBodyJson = new JSONObject();
         requestBodyJson.put("model", "qwen-max");
         requestBodyJson.put("input", encryptedInput);
-
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), requestBodyJson.toJSONString());
-
         JSONObject headerJson = new JSONObject();
         headerJson.put("Content-Type", "application/json");
         headerJson.put("Accept", "application/json");
         headerJson.put("Authorization","Bearer " + apiKey);
-
         String encryptionHeader = String.format("{\"public_key_id\": \"%s\", \"encrypt_key\": \"%s\", \"iv\": \"%s\"}", publicKeyId, encryptedAesKey, Base64.encodeBase64String(iv));
         headerJson.put("X-DashScope-EncryptionKey", encryptionHeader);
-
         Headers headers = Headers.of(JSONObject.parseObject(headerJson.toString(), Map.class));
-
         String url = "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation";
         Request request = new Request.Builder()
                 .url(url)
                 .post(requestBody)
                 .headers(headers)
                 .build();
-
         return okHttpClient.newCall(request).execute().body().string();
 }
 ```
@@ -519,7 +527,6 @@ Python
 def send_encrypted_request(api_key, public_key_id, encrypted_aes_key, iv, encrypted_input):
     """发送加密请求到API端点"""
     url = "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation"
-    
     # 构建请求头
     headers = {
         "Content-Type": "application/json",
@@ -531,20 +538,17 @@ def send_encrypted_request(api_key, public_key_id, encrypted_aes_key, iv, encryp
             "iv": base64.b64encode(iv).decode('utf-8')
         })
     }
-    
     # 构建请求体
     payload = {
         "model": "qwen-max",
         "input": encrypted_input
     }
-    
     # 发送POST请求
     response = requests.post(
         url,
         headers=headers,
         json=payload
     )
-    
     # 检查响应状态
     response.raise_for_status()
     return response.json()
@@ -574,11 +578,9 @@ def send_encrypted_request(api_key, public_key_id, encrypted_aes_key, iv, encryp
     private static String decryptResponseWithAes(SecretKey aesSecretKey, byte[] iv, String response) throws Exception {
             JSONObject responseJson = JSONObject.parseObject(response, JSONObject.class);
             String encryptedOutput = responseJson.getString("output");
-    
             Cipher aesCipher = Cipher.getInstance("AES/GCM/NoPadding");
             GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH, iv);
             aesCipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(aesSecretKey.getEncoded(), "AES"), gcmParameterSpec);
-    
             byte[] decryptedBytes = aesCipher.doFinal(Base64.decodeBase64(encryptedOutput));
             return new String(decryptedBytes);
     }
@@ -593,27 +595,21 @@ def send_encrypted_request(api_key, public_key_id, encrypted_aes_key, iv, encryp
         encrypted_output = response_data.get("output")
         if not encrypted_output:
             raise ValueError("Response missing 'output' field")
-        
         # 解码Base64数据
         encrypted_data = base64.b64decode(encrypted_output)
-        
         # 分离密文和标签（标签长度16字节）
         ciphertext = encrypted_data[:-16]
         tag = encrypted_data[-16:]
-        
         # 创建AES-GCM解密器
         aesgcm = Cipher(
             algorithms.AES(aes_key),
             modes.GCM(iv, tag),
             backend=default_backend()
         ).decryptor()
-        
         # 验证关联数据（与加密时一致）
         aesgcm.authenticate_additional_data(b'')
-        
         # 解密数据
         decrypted_bytes = aesgcm.update(ciphertext) + aesgcm.finalize()
-        
         return decrypted_bytes.decode('utf-8')
     ```
     
@@ -651,117 +647,89 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-
 public class Main {
     // 采用AES-GCM 加密模式，以提升数据安全和完整性保护，在此指定IV、Tag长度
     private static final int GCM_TAG_LENGTH = 128; // 128 位 Tag(16 字节)
     private static final int GCM_IV_LENGTH = 12; // 12 字节 IV
-
     public static void main(String[] args) throws Exception {
         String publicKeyId = "xxx"; // 需要替换为实际获取到的RSA公钥 public_key_id 值
         String publicKey = "xxx"; // 需要替换为实际获取到的RSA公钥 public_key 值
-
         // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：String apiKey = "sk-xxx"，但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
         String apiKey = System.getenv("DASHSCOPE_API_KEY");
-
         // 生成 AES 密钥
         SecretKey aesSecretKey = generateAesSecretKey();
-
         // 生成唯一性iv
         byte[] iv = generateIv();
-
         // 加密 input 数据
         String input = "{\"messages\": [{\"role\":\"user\",\"content\":\"你是谁？\"}]}";
         String encryptedInput = encryptInputWithAes(aesSecretKey, iv, input);
-
         // 使用 RSA 公钥加密 AES 密钥
         String encryptedAesKey = encryptAesKeyWithRsaPublicKey(aesSecretKey, publicKey);
-
         // 构建并发送请求
         String response = sendEncryptedRequest(apiKey, publicKeyId, encryptedAesKey, iv, encryptedInput);
-
         // 解密响应内容
         String decryptOutput = decryptResponseWithAes(aesSecretKey, iv, response);
         System.out.println("输出的内容是: " + decryptOutput);
     }
-
     private static SecretKey generateAesSecretKey() throws Exception {
         KeyGenerator keyGen = KeyGenerator.getInstance("AES");
         SecureRandom secureRandom = new SecureRandom();
         keyGen.init(256, secureRandom); // AES密钥长度支持128、192、256 位。
         return keyGen.generateKey();
     }
-
     private static byte[] generateIv() {
         byte[] iv = new byte[GCM_IV_LENGTH];
         SecureRandom secureRandom = new SecureRandom(); // 随机生成确保唯一性
         secureRandom.nextBytes(iv);
         return iv;
     }
-
     private static String encryptAesKeyWithRsaPublicKey(SecretKey aesSecretKey, String publicKey) throws Exception {
         byte[] aesKeyBytes = aesSecretKey.getEncoded();
         String base64AesKey = Base64.encodeBase64String(aesKeyBytes);
-
         byte[] publicKeyBytes = Base64.decodeBase64(publicKey);
         X509EncodedKeySpec spec = new X509EncodedKeySpec(publicKeyBytes);
         KeyFactory kf = KeyFactory.getInstance("RSA");
         PublicKey pubKey = kf.generatePublic(spec);
-
         Cipher rsaCipher = Cipher.getInstance("RSA");
         rsaCipher.init(Cipher.ENCRYPT_MODE, pubKey);
         byte[] encryptedBytes = rsaCipher.doFinal(base64AesKey.getBytes());
-
         return Base64.encodeBase64String(encryptedBytes);
     }
-
     private static String encryptInputWithAes(SecretKey aesSecretKey, byte[] iv, String input) throws Exception {
         byte[] content = input.getBytes(StandardCharsets.UTF_8);
-
         Cipher aesCipher = Cipher.getInstance("AES/GCM/NoPadding");
         GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH, iv);
         aesCipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(aesSecretKey.getEncoded(), "AES"), gcmParameterSpec);
-
         byte[] encryptedBytes = aesCipher.doFinal(content);
         return Base64.encodeBase64String(encryptedBytes);
     }
-
     private static String sendEncryptedRequest(String apiKey, String publicKeyId, String encryptedAesKey, byte[] iv, String encryptedInput) throws Exception {
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder().build();
         JSONObject requestBodyJson = new JSONObject();
         requestBodyJson.put("model", "qwen-max");
         requestBodyJson.put("input", encryptedInput);
-
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), requestBodyJson.toJSONString());
-
         JSONObject headerJson = new JSONObject();
         headerJson.put("Content-Type", "application/json");
         headerJson.put("Accept", "application/json");
         headerJson.put("Authorization","Bearer " + apiKey);
-
         String encryptionHeader = String.format("{\"public_key_id\": \"%s\", \"encrypt_key\": \"%s\", \"iv\": \"%s\"}", publicKeyId, encryptedAesKey, Base64.encodeBase64String(iv));
         headerJson.put("X-DashScope-EncryptionKey", encryptionHeader);
-
         Headers headers = Headers.of(JSONObject.parseObject(headerJson.toString(), Map.class));
-
         String url = "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation";
         Request request = new Request.Builder()
                 .url(url)
                 .post(requestBody)
                 .headers(headers)
                 .build();
-
         return okHttpClient.newCall(request).execute().body().string();
     }
-
     private static String decryptResponseWithAes(SecretKey aesSecretKey, byte[] iv,String response) throws Exception {
         JSONObject responseJson = JSONObject.parseObject(response, JSONObject.class);
         String encryptedOutput = responseJson.getString("output");
-
         Cipher aesCipher = Cipher.getInstance("AES/GCM/NoPadding");
         GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH, iv);
         aesCipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(aesSecretKey.getEncoded(), "AES"), gcmParameterSpec);
-
         byte[] decryptedBytes = aesCipher.doFinal(Base64.decodeBase64(encryptedOutput));
         return new String(decryptedBytes);
     }
@@ -779,72 +747,55 @@ from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.backends import default_backend
 import requests
-
 # 常量定义
 GCM_IV_LENGTH = 12       # 12字节IV
-
 def main():
     public_key_id = "xxx"  # 需要替换为实际获取到的RSA公钥 public_key_id 值
     public_key = "xxx"     # 需要替换为实际获取到的RSA公钥 public_key 值
-    
     # 从环境变量获取API密钥
     api_key = os.getenv("DASHSCOPE_API_KEY")
     if not api_key:
         # 若没有配置环境变量，请放开下面这行注释代码，并将"sk-xxx"替换为实际的阿里云百炼API Key，不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
         # api_key = "sk-xxx"
         raise ValueError("DASHSCOPE_API_KEY environment variable not set")
-
     # 生成AES密钥
     aes_secret_key = generate_aes_secret_key()
-    
     # 生成IV
     iv = generate_iv()
-    
     # 加密输入数据
     input_data = '{"messages": [{"role":"user","content":"你是谁？"}]}'
     encrypted_input = encrypt_input_with_aes(aes_secret_key, iv, input_data)
-    
     # 使用RSA公钥加密AES密钥
     encrypted_aes_key = encrypt_aes_key_with_rsa(aes_secret_key, public_key)
-    
     # 发送加密请求
     response = send_encrypted_request(api_key, public_key_id, encrypted_aes_key, iv, encrypted_input)
-    
     # 解密响应
     decrypted_output = decrypt_response_with_aes(aes_secret_key, iv, response)
     print("输出的内容是:", decrypted_output)
-
 def generate_aes_secret_key():
     """生成256位AES密钥"""
     return os.urandom(32)  # 32字节 = 256位
-
 def generate_iv():
     """生成12字节随机IV"""
     return os.urandom(GCM_IV_LENGTH)
-
 def encrypt_aes_key_with_rsa(aes_key, public_key_str):
     """使用RSA公钥加密AES密钥"""
     # 解码Base64格式的公钥
     public_key_bytes = base64.b64decode(public_key_str)
-    
     # 加载公钥
     public_key = serialization.load_der_public_key(
         public_key_bytes,
         backend=default_backend()
     )
-    
     # 先对AES密钥进行Base64编码
     base64_aes_key = base64.b64encode(aes_key).decode('utf-8')
-    
     # 使用RSA加密
     encrypted_bytes = public_key.encrypt(
         base64_aes_key.encode('utf-8'),
         padding.PKCS1v15()
     )
-    
     # 返回Base64编码的加密结果
     return base64.b64encode(encrypted_bytes).decode('utf-8')
-
 def encrypt_input_with_aes(aes_key, iv, plaintext):
     """使用AES-GCM加密数据"""
     # 创建AES-GCM加密器
@@ -853,26 +804,19 @@ def encrypt_input_with_aes(aes_key, iv, plaintext):
         modes.GCM(iv, tag=None),
         backend=default_backend()
     ).encryptor()
-    
     # 关联数据设为空（根据需求可调整）
     aesgcm.authenticate_additional_data(b'')
-    
     # 加密数据
     ciphertext = aesgcm.update(plaintext.encode('utf-8')) + aesgcm.finalize()
-    
     # 获取认证标签
     tag = aesgcm.tag
-    
     # 组合密文和标签
     encrypted_data = ciphertext + tag
-    
     # 返回Base64编码结果
     return base64.b64encode(encrypted_data).decode('utf-8')
-
 def send_encrypted_request(api_key, public_key_id, encrypted_aes_key, iv, encrypted_input):
     """发送加密请求到API端点"""
     url = "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation"
-    
     # 构建请求头
     headers = {
         "Content-Type": "application/json",
@@ -884,53 +828,42 @@ def send_encrypted_request(api_key, public_key_id, encrypted_aes_key, iv, encryp
             "iv": base64.b64encode(iv).decode('utf-8')
         })
     }
-    
     # 构建请求体
     payload = {
         "model": "qwen-max",
         "input": encrypted_input
     }
-    
     # 发送POST请求
     response = requests.post(
         url,
         headers=headers,
         json=payload
     )
-    
     # 检查响应状态
     response.raise_for_status()
     return response.json()
-
 def decrypt_response_with_aes(aes_key, iv, response_data):
     """使用AES-GCM解密响应"""
     # 提取加密的输出
     encrypted_output = response_data.get("output")
     if not encrypted_output:
         raise ValueError("Response missing 'output' field")
-    
     # 解码Base64数据
     encrypted_data = base64.b64decode(encrypted_output)
-    
     # 分离密文和标签（标签长度16字节）
     ciphertext = encrypted_data[:-16]
     tag = encrypted_data[-16:]
-    
     # 创建AES-GCM解密器
     aesgcm = Cipher(
         algorithms.AES(aes_key),
         modes.GCM(iv, tag),
         backend=default_backend()
     ).decryptor()
-    
     # 验证关联数据（与加密时一致）
     aesgcm.authenticate_additional_data(b'')
-    
     # 解密数据
     decrypted_bytes = aesgcm.update(ciphertext) + aesgcm.finalize()
-    
     return decrypted_bytes.decode('utf-8')
-
 if __name__ == "__main__":
     main()
 ```

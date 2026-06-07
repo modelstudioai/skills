@@ -15,7 +15,7 @@
     -   开箱即用，无需额外配置
         
     
-    ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2517343571/p987781.png)
+    此外还包括**油价查询**、**金价查询**、**银价查询**、**汇率查询**、**新闻资讯**、**路线规划**和**本地生活**等插件，所有推荐插件默认已启用。
     
 2.  **插件广场中的插件**
     
@@ -38,7 +38,7 @@
         
     2.  绑定插件：单击**添加**按钮绑定创建的插件（如“寝室公约查询工具”）。
         
-        ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2517343571/p987782.png)
+        在**选择插件**面板中，切换到**自定义插件**页签即可找到已创建的插件。
         
 
 ## **客户端调用插件**
@@ -57,7 +57,6 @@
     pluginParams.put("article_index",2);
     HashMap<String, Object> userDefinedParams = new HashMap<>();
     userDefinedParams.put("your_plugin_code",pluginParams);
-    
     MultiModalRequestParam.BizParams bizParams = MultiModalRequestParam.BizParams
        .builder()
        .userDefinedParams(userDefinedParams)
@@ -77,7 +76,6 @@
     ```
     var pluginParam = ["article_index" : 2]
     var userDefinedParams = ["your_plugin_code" : pluginParam]
-    
     multiBuilder.bizParams = MultiModalRequestParam.BizParams(builder: {
       bizBuilder in
       bizBuilder.userDefinedParams = userDefinedParams

@@ -22,23 +22,15 @@
 
 1.在阿里云百炼控制台的应用广场中点击[千问联网检索Agent](https://bailian.console.aliyun.com/cn-beijing?spm=5176.28197581.0.0.3d7b74a1gf57op&tab=app#/app/app-market/web-search-agent)卡片，进入应用详情。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6289754771/p1061874.png)
-
 2.首次试用时，点击右上角**前往开通**完成应用开通。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6289754771/p1061207.png)
 
 ### **应用管理**
 
 点击**我的应用**进入应用管理页面，页面展示所有已创建的应用和应用key等信息，首次使用需要新增应用。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6289754771/p1061210.png)
-
 ### **应用配置**
 
 点击应用卡片或新增应用进入应用配置界面。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6289754771/p1061227.png)
 
 #### **1.基础信息**
 
@@ -59,7 +51,7 @@
     
 -   **信息时效性范围限制**：支持自定义时间跨度，实现时间区间定向检索功能
     
--   **指定检索范围**：开启后，系统支持配置最多 100 个优先检索源，将优先从此范围网站获取信息，若无匹配信息则会切换至其他网站搜索，实现“精准优先 + 全域保障”的双重覆盖机制![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6289754771/p1061246.png)
+-   **指定检索范围**：开启后，系统支持配置最多 100 个优先检索源，将优先从此范围网站获取信息，若无匹配信息则会切换至其他网站搜索，实现"精准优先 + 全域保障"的双重覆盖机制。**指定检索范围**：开启后单击**配置**，在弹出的**指定检索范围**对话框中单击**\+ 添加网站**，输入目标网站域名（最多100个），例如`tieba.baidu.com`、`baike.baidu.com`，单击**确定**完成配置。
     
 -   **单轮检索条数：**数量越高信息越全，但会占用更多资源，增加耗时
     
@@ -98,7 +90,7 @@
 
 配置完成后，可在输入框输入query进行测试。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6289754771/p1061333.png)
+测试结果将展示检索回答内容、参考来源链接、token 统计信息（输入/输出/用时）及推荐追问问题。
 
 ### **应用发布**
 

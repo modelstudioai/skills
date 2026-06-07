@@ -22,9 +22,7 @@ AI妙搜是一款基于multi-agent架构的多模态搜索产品，能够提供�
 
 1.  前往阿里云百炼[应用广场](https://bailian.console.aliyun.com/#/app-market/solution)页面，在**全部应用**页签下找到全妙应用，点击其卡片区域进入全妙产详页。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6038620771/p1052587.png)
-    
-2.  点击妙搜即可进入[妙搜](https://aimiaobi.console.aliyun.com/?product_code=g_broadscope_search&from=bailian#/home)产品页面。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6038620771/p1052588.png)
+2.  点击妙搜即可进入[妙搜](https://aimiaobi.console.aliyun.com/?product_code=g_broadscope_search&from=bailian#/home)产品页面。进入全妙产详页后，页面中部展示**妙策**、**妙笔**、**妙搜**、**妙读**和**原子能力**五大功能模块，找到并点击**妙搜**卡片即可进入对应功能。
     
 
 ## **搜索类型**
@@ -92,8 +90,6 @@ AI妙搜是一款基于multi-agent架构的多模态搜索产品，能够提供�
 
 妙搜支持**手动创建数据源**、**授权OSS对接数据源**、**视频理解Agent引入数据源**、**通过API引入数据源**四种方式添加数据源。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8256823771/p1057660.png)
-
 #### **类型一：手动创建数据源**
 
 分组上传文件，体验基于数据源的搜索效果。支持文本、图片、视频三种数据源的上传。
@@ -141,7 +137,7 @@ AI妙搜是一款基于multi-agent架构的多模态搜索产品，能够提供�
     -   视频：支持添加标签、meta信息（key value、ASR、视频理解Agent解析结果）
         
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6038620771/p1052519.png)
+在数据源详情页，支持通过**文件名称**、**文件类型**和**日期范围**筛选数据，在文件列表**操作**列单击**标签**或**Meta信息**进入对应维护页面。
 
 ## **应用搜索数据源**
 
@@ -153,17 +149,11 @@ AI妙搜是一款基于multi-agent架构的多模态搜索产品，能够提供�
 
 用户可输入搜索问题，并灵活配置搜索模式、目标数据源、回答形式、大模型及期望返回的模态类型等参数，确认后即可开始搜索。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6038620771/p1052521.png)
-
-搜索结果：
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6038620771/p1052522.png)
+搜索结果页面左侧上方展示**总结生成答案**区域，由大模型根据检索内容自动生成摘要回答；下方展示匹配的视频片段缩略图及 ASR 转录文本。右侧**数据源**面板列出**精排结果**，引用文本中与查询相关的关键词以紫色高亮标记。页面底部提供输入框，支持对当前话题继续追问。
 
 ### **元数据与标签可视化**
 
 在完成“问答式搜索”或“纯搜索”后，可点击对应的音视频内容，查看视频理解分析结果及ASR生成的两路meta信息。且会针对query及答案中对应到meta信息最相关的部分，做片段及关键词的高亮。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6038620771/p1052520.png)
 
 ## **常见问题**
 

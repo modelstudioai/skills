@@ -12,13 +12,9 @@
 
 使用主账号在阿里云上[RAM用户管理](https://ram.console.aliyun.com/users)创建子账号，并申请ak、sk并记录下来。只需要一个子账号，后续不同账号下数据权限通过AssumeRole 接口中的RoleSessionName来区分
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7319255671/p1034549.png)
-
 ##### **2\. 给子账号新增授权**
 
 进入用户详情页面，在权限管理tab，给子账号新增授权，增加AliyunSTSAssumeRoleAccess和AliyunAiMiaoBiFullAccess 权限
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7319255671/p1034550.png)
 
 ##### **3\. 给**主账号**创建角色**
 
@@ -27,8 +23,6 @@
 ##### **4\. 进入百炼控制台确认角色**
 
 使用主账号进入百炼控制台，在权限配置地方配置，选择新增用户，弹窗中类型选择RAM角色，RAM角色中选择刚刚创建的角色，确定即可。**注意是给角色授权，而不是给用户授权**。
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7319255671/p1034552.png)
 
 ##### **5\. 生成免登录地址**
 
@@ -42,7 +36,7 @@
     
     1.  其中Destination参数就是需要跳转全妙的目标地址（需要将全妙地址的host域名aimiaobi.console.aliyun.com改为aimiaobi4service.console.aliyun.com），如需定制内容，您可以[在这里定制生成](https://aimiaobi.console.aliyun.com/#/iframeConfig)；
         
-    2.  LoginUrl使用上面服务链接，例如https://xx.com/aimiaobi，用于登录失效时，自动重定向到对应登录地址重新进行用户登录认证。![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3483236771/p1068279.png)
+    2.  LoginUrl使用上面服务链接，例如https://xx.com/aimiaobi，用于登录失效时，自动重定向到对应登录地址重新进行用户登录认证。Login 接口包含以下必填请求参数（均为 String 类型，需 URLEncode）：**Action**，值为 `Login`，表示操作接口名；**LoginUrl**，登录页地址，Session 失效后跳转回该地址重新登录；**Destination**，登录成功后的跳转目的地址，必须为阿里云官网域名；**SigninToken**，通过 GetSignInToken 接口获取的临时安全令牌。
         
 
 ##### **6\. 嵌入**

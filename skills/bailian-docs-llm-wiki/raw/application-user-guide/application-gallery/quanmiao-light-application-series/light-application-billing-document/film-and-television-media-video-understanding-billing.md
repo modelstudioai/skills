@@ -179,7 +179,7 @@
 -   开通时间：下单后立即生效
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5451358571/p1007256.png)
+选择**承诺消费金额**（可选10000元、20000元、50000元、100000元或200000元），然后单击**立即购买**完成付款。
 
 ### **折扣力度**
 
@@ -254,7 +254,7 @@
 
 #### **1\. 离线调用怎么增加并发配额？**
 
-可以通过[GetVideoAnalysisConfig - 视频理解-获取配置](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-getvideoanalysisconfig)、[UpdateVideoAnalysisConfig - 视频理解-更新配置](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-updatevideoanalysisconfig)接口查看和扩缩并发。
+可以通过[视频理解-获取配置](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-getvideoanalysisconfig)、[视频理解-更新配置](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-updatevideoanalysisconfig)接口查看和扩缩并发。
 
 #### **2\. 一并发收费是1元/小时，这个时间是怎么定义的？**
 

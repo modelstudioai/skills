@@ -21,17 +21,15 @@
 1.  在[多模态开发套件](https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.394f1b92MoDMrb&tab=app#/app/app-market/multi-modal-app)中创建多模态交互应用，选择全能版（不要选择视觉版），关闭语音交互。保持意图识别、文本模型开启。
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1307419671/p1048442.png)
+文本模型选择**多模态交互专有模型-高速版**。
 
 2.  关闭对话承接语、知识库、联网搜索、长期记忆。
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1307419671/p1048441.png)
+将**携带上下文轮数**设置为 `5`。
 
 3.  技能、MCP服务全部清空，Agent只保留生图玩法Agent。
     
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0778149671/p1049190.png)
 
 4.  配置图像生成Agent，支持涂鸦生图、生图助手、文生图3种玩法。
     
@@ -44,7 +42,7 @@
 5.  每种功能支持模型选择、提示词、正向提示词智能优化，反向提示词等选项。提示词可以添加变量，用于动态传入不同提示词。
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1307419671/p1048445.png)
+涂鸦生图的**模型选择**提供三个选项：**图生图高级版**、**图生图均衡版**、**图生图轻量版**。
 
 6.  配置完成后请点击右上角发布按键进行发布（必须发布后才能测试）。
     
@@ -356,7 +354,7 @@ size用来指定生成图片的分辨率，分辨率和选择的玩法及模型�
 
 本实践仅在当需要传递生图agent内的提示词自定义变量时需要填充。
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1307419671/p1048444.png)
+在涂鸦生图配置面板的提示词区域，单击右上角的 **{x} 自定义变量** 按钮即可添加自定义变量，其中 `${style}` 为默认预置变量。
 
 **一级参数**
 
@@ -843,4 +841,25 @@ string
 2.  当图像合成结束，output.finished = true，此时output.text字段为img\_url
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1307419671/p1048446.png)
+```
+id:1 合成过程中
+event:result
+:HTTP_STATUS/200
+data:{"output":{"round_id":"6633eccfd6a44090b49bbbfe84a8xxx","llm_request_id":"f22feed889994756b3787de8b08bxxx","extra_info":{"tool_infos":[{"output":"","tool_name":"image_to_image","arguments":{},"type":"agent","success":true}]},"dialog_id":"00cd961c-bf58-49f5-b3bb-7c5ca9xxx","spoken":"","finished":false,"text":"","event":"RespondingContent"},"request_id":"a162bf16-8156-4b13-88f6-fcb7xxx"}
+id:2 合成过程中
+event:result
+:HTTP_STATUS/200
+data:{"output":{"round_id":"6633eccfd6a44090b49bbbfe84xxx","llm_request_id":"f22feed889994756b3787de8b0xxx","extra_info":{"agent_info":{"round":1,"device":{"device_id":"xxx-test-251222-123"},"intent_infos":[{"intent":"open_image_to_image","domain":"image_to_image"}]},"query":""},"dialog_id":"00cd961c-bf58-49f5-b3bb-7c5xxx","spoken":"RUNNING","finished":false,"text":"RUNNING","event":"RespondingContent"},"request_id":"a162bf16-8156-4b13-88f6-fcb7xxx"}
+id:3 合成过程中
+event:result
+:HTTP_STATUS/200
+data:{"output":{"round_id":"6633eccfd6a44090b49bbbfe84xxx","llm_request_id":"f22feed889994756b3787de8bxxx","extra_info":{"agent_info":{"round":1,"device":{"device_id":"xxx-test-251222-123"},"intent_infos":[{"intent":"open_image_to_image","domain":"image_to_image"}]},"query":""},"dialog_id":"00cd961c-bf58-49f5-b3bb-7c5cxxx","spoken":"RUNNING","finished":false,"text":"RUNNING","event":"RespondingContent"},"request_id":"a162bf16-8156-4b13-88f6-fcb71xxx"}
+id:4 合成过程中
+event:result
+:HTTP_STATUS/200
+data:{"output":{"round_id":"6633eccfd6a44090b49bbb1xxx","llm_request_id":"f22feed889994756b3787xxx","extra_info":{"agent_info":{"round":1,"device":{"device_id":"xxx-test-251222-123"},"intent_infos":[{"intent":"open_image_to_image","domain":"image_to_image"}]},"query":""},"dialog_id":"00cd961c-bf58-49f5-b3bb-xxx","spoken":"RUNNING","finished":false,"text":"RUNNING","event":"RespondingContent"},"request_id":"a162bf16-8156-4b13-88f6-fclxxx"}
+id:5 合成结束
+event:result
+:HTTP_STATUS/200
+data:{"output":{"round_id":"6633eccfd6a44090b49bbbfxxx","llm_request_id":"f22feed889994756b3787de8xxx","extra_info":{"tool_infos":[{"output":"","tool_name":"image_to_image","arguments":{},"type":"agent","success":true}],"agent_info":{"round":1,"device":{"device_id":"xxx-test-251222-123"},"intent_infos":[{"intent":"open_image_to_image","domain":"image_to_image"}]},"query":""},"finish_reason":"stop","dialog_id":"00cd961c-bf58-49f5-b3bb-7cxxx","spoken":"https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/1d/03/20260107/c6e3cb4b/eb8e554d-66ff-44ca-ba0d-f05481405d2c-1-1.png?Expires=1767854752&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=R5cy52xL0ODxZcoiZAmsD5Rxxx","finished":true,"text":"https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/1d/03/20260107/c6e3cb4b/eb8e554d-66ff-44ca-ba0d-f05481405d2c-1-1.png?Expires=1767854752&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1fASuh&Signature=R5cy52xL0ODxZcoiZxxx","event":"RespondingContent"},"request_id":"a162bf16-8156-4b13-88f6-fcbxxx"}
+```

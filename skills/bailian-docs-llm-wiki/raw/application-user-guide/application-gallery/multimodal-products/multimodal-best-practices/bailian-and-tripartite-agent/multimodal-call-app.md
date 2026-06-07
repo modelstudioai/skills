@@ -15,7 +15,7 @@
 3.  测试并发布应用。
     
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9888172571/p986224.png)
+选择模型为**通义千问-Turbo-Latest 1M**，注意关闭思考模式。在提示词区域编写指令，可通过`${user_name}`等变量实现客户端透传。在技能配置中可按需启用**MCP服务**、**插件**、**智能体**、**工作流**等能力。配置完成后在右侧对话区域测试应用效果。
 
 ## **在多模交互应用中接入**
 
@@ -26,7 +26,7 @@
 2.  发布应用。
     
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9888172571/p986235.png)
+完成上述步骤后，可在多模交互应用的Agent列表中看到已导入的【西游记大全】应用，确认应用状态为已发布。
 
 ## **应用测试和参数配置**
 
@@ -36,7 +36,7 @@
 
 进入【西游记大全】应用的方式为语音说： **打开西游记大全,帮我查一下三清是谁**。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9888172571/p986238.png)
+系统成功调用**西游记大全**Agent，回复了关于道教三清（元始天尊、灵宝天尊、道德天尊）的儿童化科普内容，验证语音交互测试通过。
 
 ### **参数配置**
 
@@ -146,17 +146,14 @@ private void updateParams(){
             userAgentPromptParams.put("text","今天是 2025年 1 月 9 日");
             JSONObject agentIdParams = new JSONObject();
             agentIdParams.put("user_prompt_params", userAgentPromptParams);
-
             JSONObject userDefinedParams = new JSONObject();
             userDefinedParams.put("tpa_2009506107285893120", agentIdParams); //key为app_id
-
             MultiModalRequestParam updateParams = MultiModalRequestParam
                     .builder()
                     .bizParams(MultiModalRequestParam.BizParams.builder()
                             .userDefinedParams(userDefinedParams)
                             .build())
                     .build();
-
             Log.i(TAG, "bizParams: " + updateParams.getParametersAsJson());
             multiModalDialog.updateInfo(updateParams.getParametersAsJson());
         } catch (JSONException e) {
@@ -212,7 +209,6 @@ try {
 } catch (JSONException e) {
     e.printStackTrace();
 }
-
 multimodalDialog.updateInfo(updateParams);
 ```
 
@@ -230,7 +226,6 @@ HashMap<String, Object> userPromptParams = new HashMap<>();
 userPromptParams.put("user_prompt_params",appParams);
 HashMap<String, Object> userDefinedParams = new HashMap<>();
 userDefinedParams.put("67f3ad7d6496475483db4a184c926e77",userPromptParams); //西游记大全的 appid
-
 MultiModalRequestParam.BizParams bizParams = MultiModalRequestParam.BizParams
    .builder()
    .userDefinedParams(userDefinedParams)
@@ -240,13 +235,11 @@ MultiModalRequestParam.BizParams bizParams = MultiModalRequestParam.BizParams
 -   运行 Demo 通过语音请求【西游记大全】 Agent。由于端侧设置了用户名为“大米”，可以看到 APP 回复的昵称为“大米”，验证链路测试通过。
     
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9888172571/p986380.png)
-
 ## **由百炼平台应用主动退出接管模式**
 
 在多模态交互应用中，您可以为接入的百炼平台应用开启“对话接管”模式。开启后，当用户通过“触发指令”唤起该应用，后续的多轮对话将持续由其处理，直到用户说出“退出指令”，或由应用本身主动结束对话。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9332574671/p1031331.png)
+在**配置应用**弹窗中，开启**由该应用接管后续所有对话**开关，设置触发指令（例如"打开西游记大全"）和退出指令（例如"退出西游记大全"），然后单击**确定**。
 
 除了让用户说出“退出指令”外，百炼应用内部也可以根据自身的业务逻辑，主动判断并决定何时退出接管模式。这种方式更为灵活，能实现更智能的对话流程控制。
 
@@ -273,7 +266,7 @@ MultiModalRequestParam.BizParams bizParams = MultiModalRequestParam.BizParams
 
 您还可以为接入的百炼平台应用单独指定音色，以便与主链路的音色进行区分。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9865798671/p1047510.png)
+在**配置应用**弹窗中，关闭**应用播报音色与主链路保持一致**开关，然后在**音色**下拉框中选择需要的音色（例如**龙安欢**）。
 
 -   除了在管控台为每个接入的百炼平台应用指定音色，您还可以通过API参数进行更精细的音色控制。设置方式
     
@@ -310,4 +303,4 @@ SDK
 -   百炼应用ID查看方式
     
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9865798671/p1047514.png)
+在百炼平台的**我的应用**页面中，找到目标应用卡片，卡片上显示的**应用ID**即为需要填入的百炼应用 ID。

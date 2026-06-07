@@ -250,7 +250,6 @@
   }
 }
 ```
-
 ```
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
@@ -274,7 +273,6 @@
   }
 }
 ```
-
 ```
 {
   "tool_set_name": "content_manager",
@@ -407,8 +405,6 @@
 -   自动回复：下发指令的同时，自动输出回复。
     
 
-![截屏2025-11-25 15](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4861376671/p1038882.png)
-
 ### **端侧接受指令**
 
 如 3.1 配置取消静音技能需要回复。
@@ -426,7 +422,6 @@
             "finish_reason": "stop",
             "extra_info": {
                 "tool_infos": [
-
                 ],
                 "agent_info": {
                     "intent_infos": [
@@ -572,20 +567,16 @@ Object
 
 ```
 public static HashMap<String,Object> getAgentorCommandResult() {
-
   HashMap<String,Object> commandResult = new HashMap<>();
   commandResult.put("command_request_id", "35b635f3-6511-450e-8fa1-6955d5279367");
   commandResult.put("invoke_result", new Object<>());
     // invoke_result.structuredContent.success = true/false 执行结果
-
   ArrayList<Object> commandResults = new ArrayList<>();
   commandResults.add(commandResult);
-
   HashMap<String,Object> passThroughParams = new HashMap<>();
   passThroughParams.put("command_results", commandResults);
   return passThroughParams;
 }
- 
 //发起打开 agent 请求
 MultiModalRequestParam.UpdateParams updateParams = MultiModalRequestParam.UpdateParams.builder()
     .bizParams(MultiModalRequestParam.BizParams.builder()

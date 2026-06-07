@@ -207,3 +207,4 @@ Paraformer-v2 与 Fun-ASR 的实时及录音识别都支持 `vocabulary_id` 热�
 - [定制热词Python SDK参考](../../raw/model-api-reference/speech-recognition-api-reference/custom-hot-words/vocabulary-python-sdk.md)
 
 
+

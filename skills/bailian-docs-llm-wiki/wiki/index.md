@@ -40,7 +40,11 @@
 - [3d generation](api/3d-generation.md) — 1 篇源文档
 - [application call](api/application-call.md) — 5 篇源文档
 - [application component api reference](api/application-component-api-reference.md) — 56 篇源文档
+- [custom models api](api/custom-models-api.md) — 1 篇源文档
 - [deploy dedicated services](api/deploy-dedicated-services.md) — 2 篇源文档
+- [deployments api](api/deployments-api.md) — 1 篇源文档
+- [file management api](api/file-management-api.md) — 1 篇源文档
+- [fine tuning jobs api](api/fine-tuning-jobs-api.md) — 1 篇源文档
 - [frameworks](api/frameworks.md) — 3 篇源文档
 - [general text embedding](api/general-text-embedding.md) — 2 篇源文档
 - [image generation](api/image-generation.md) — 25 篇源文档
@@ -64,23 +68,21 @@
 
 ## 横切概念
 
-- [地域与可用性限制](concepts/region-availability.md) — 关联 7 个主题
-- [函数调用与工具集成](concepts/function-calling-and-tools.md) — 关联 5 个主题
-- [流式输出（SSE 与 WebSocket）](concepts/streaming-output.md) — 关联 5 个主题
-- [业务空间（Workspace）隔离](concepts/workspace-isolation.md) — 关联 5 个主题
-- [异步任务轮询模式](concepts/async-task-pattern.md) — 关联 6 个主题
-- [API Key 与鉴权](concepts/api-key-authentication.md) — 关联 5 个主题
-- [DashScope SDK 与原生 API](concepts/dashscope-sdk.md) — 关联 7 个主题
-- [OpenAI 兼容接口](concepts/openai-compatible-api.md) — 关联 7 个主题
-- [RAG 检索增强生成](concepts/rag-knowledge-base.md) — 关联 6 个主题
-- [Token 计费与限流配额](concepts/token-billing-and-quota.md) — 关联 5 个主题
+- [函数调用与工具使用](concepts/function-calling.md) — 关联 7 个主题
+- [检索增强生成](concepts/rag.md) — 关联 8 个主题
+- [流式输出](concepts/streaming.md) — 关联 7 个主题
+- [异步任务](concepts/async-task.md) — 关联 7 个主题
+- [API Key 与鉴权](concepts/api-key-auth.md) — 关联 6 个主题
+- [DashScope 接口](concepts/dashscope-api.md) — 关联 7 个主题
+- [OpenAI 兼容接口](concepts/openai-compatible-api.md) — 关联 9 个主题
+- [Token 计量与计费](concepts/token-metering.md) — 关联 7 个主题
 
 ## 对比分析
 
-- [会话记忆与长期记忆对比](comparisons/memory-short-vs-long.md) — 对比 2 个主题
-- [模型微调与训练对比](comparisons/fine-tuning-vs-training.md) — 对比 2 个主题
+- [模型评测与应用评测对比](comparisons/evaluation-comparison.md) — 对比 2 个主题
+- [模型微调、模型压缩与模型部署对比](comparisons/model-optimization-comparison.md) — 对比 3 个主题
+- [图像生成、视频生成与 3D 生成对比](comparisons/multimodal-generation-comparison.md) — 对比 3 个主题
 - [文本向量与多模态向量对比](comparisons/text-vs-multimodal-embedding.md) — 对比 2 个主题
-- [应用监控与模型监控对比](comparisons/monitoring-app-vs-model.md) — 对比 2 个主题
-- [应用评测与模型评测对比](comparisons/evaluation-app-vs-model.md) — 对比 2 个主题
-- [语音合成、识别与翻译 API 对比](comparisons/speech-apis-comparison.md) — 对比 3 个主题
+- [应用监控与模型监控对比](comparisons/monitoring-comparison.md) — 对比 2 个主题
+- [语音合成、语音识别与语音翻译 API 对比](comparisons/speech-apis-comparison.md) — 对比 3 个主题
 

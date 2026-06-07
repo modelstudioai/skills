@@ -1,6 +1,6 @@
 # qwen api reference
 
-百炼平台提供多种接口用于调用通义千问（Qwen）系列文本生成模型。开发者可根据自身技术栈和业务需求，选择兼容 OpenAI、Anthropic 的标准接口或百炼原生 DashScope 接口进行集成。
+百炼平台提供多种接口用于调用通义千问（Qwen）系列文本生成模型。开发者可根据自身技术栈和业务需求，选择兼容 OpenAI、Anthropic 的标准接口或百炼原生 [DashScope 接口](../concepts/dashscope-api.md)进行集成。
 
 ## 支持的接口类型
 
@@ -30,12 +30,13 @@
 
 ## 注意事项
 
-- 不同接口支持的参数范围可能存在差异，DashScope 接口覆盖面最广。
+- 不同接口支持的参数范围可能存在差异，[DashScope 接口](../concepts/dashscope-api.md)覆盖面最广。
 - OpenAI 兼容 Responses 接口会自动管理对话历史，无需手动维护上下文，但这也意味着对话状态管理逻辑与其他接口不同。
 - 如需了解各接口的完整功能对比和参数细节，建议查阅 [文本生成模型API参考](../../raw/model-api-reference/qwen-api-reference.md) 中链接的各子文档。
 
 ## 来源文档
 
 - [文本生成模型API参考](../../raw/model-api-reference/qwen-api-reference.md)
+
 
 

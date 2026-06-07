@@ -23,15 +23,15 @@
 
 模型在调优过程中，会学习训练数据中的知识、语气、表达习惯、自我认知等业务/场景特征。也由于已经在训练过程中学习到了大量特定行业/场景的样例，训练后模型 One-Shot 或者 Zero-Shot 的 Prompt 效果会比训练前 Few-Shot 效果更好，这样可以节省大量输入 token，从而降低模型输出延迟。
 
-#### **模型调优流程**
+### **模型调优流程**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9438830871/CAEQZhiBgMDg9PGS2hkiIDNlZDFiMGRlMTJhOTQ1YzJhMmNjNDM3NzQ1ZjNiOGZk4608430_20240830103738.564.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6767460871/CAEQZhiBgMDg9PGS2hkiIDNlZDFiMGRlMTJhOTQ1YzJhMmNjNDM3NzQ1ZjNiOGZk4608430_20240830103738.564.svg)
 
 详情参见：
 
 #### **支持的模型**
 
-## 文本生成
+#### 文本生成
 
 **模型服务**
 
@@ -259,7 +259,7 @@ qwen-plus-character-2025-11-06
 
 > `-Base`表示该模型只完成了预训练，虽然模型内已经存储了海量的知识，但无法正常进行对话。
 
-## 视觉理解（千问VL）
+#### 视觉理解（千问VL）
 
 **模型服务**
 
@@ -439,7 +439,7 @@ CPT 之后，DPO 之前
 
 较短，收敛速度快。
 
-## 计费说明
+#### 计费说明
 
 **计费方式**
 
@@ -455,7 +455,7 @@ CPT 之后，DPO 之前
 
 以下为预置模型的训练单价，自定义模型的训练单价与对应的预置模型单价相同。
 
-## 千问
+#### 千问
 
 **模型服务**
 
@@ -553,7 +553,7 @@ qwen-plus-character-2025-11-06
 
 ¥0.15/千Token
 
-## 千问VL
+#### 千问VL
 
 **模型服务**
 
@@ -614,7 +614,7 @@ qwen2.5-vl-7b-instruct
     3.  即使最后一定要进行模型调优，最初的 Prompt 工程、插件迭代优化相关工作也不会浪费。您的这些前期工作可以充分地在构建调优数据集时复用（用于构建数据集的输入）。
         
 
-## **调优效果展示**
+### **调优效果展示**
 
 #### [**角色扮演**](https://www.aliyun.com/solution/tech-solution-deploy/2978350)
 
@@ -685,7 +685,7 @@ qwen2.5-vl-7b-instruct
 
 **步骤七**：使用阿里云百炼[模型评测](https://bailian.console.aliyun.com/?tab=model#/efm/model_evaluate)功能评估自定义模型的训练效果，相关信息请参见[模型评测](https://help.aliyun.com/zh/model-studio/model-evaluation-overview)。
 
-## **典型的调优流程**
+#### **典型的调优流程**
 
 百炼提供的三种调优方式并不互斥，而是递进的、相辅相成的。
 
@@ -718,7 +718,7 @@ qwen2.5-vl-7b-instruct
 
 ## **调优数据格式**
 
-### **SFT 训练集**
+#### **SFT 训练集**
 
 SFT ChatML（Chat Markup Language）格式训练数据，支持多轮对话和多种角色设置。
 
@@ -747,7 +747,7 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-s
  {"role": "assistant", "content": "期望的模型输出2", "loss_weight": 0.5}
 ```
 
-## SFT 思考模型（thinking）
+#### SFT 思考模型（thinking）
 
 训练数据支持多轮对话和多种角色设置，但只能针对**最后**的 assistant 输出进行训练，**一行训练数据展开后结构如下**：
 
@@ -781,7 +781,7 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-s
 {"role": "assistant", "content": "<think>\n期望的思考内容2\n</think>\n\n期望的输出2", "loss_weight": 1.0}
 ```
 
-## SFT 视觉理解（千问VL）
+#### SFT 视觉理解（千问VL）
 
 > 不支持OpenAI 的`name`、`weight`参数，所有的 assistant 输出都会被训练。
 
@@ -929,7 +929,7 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-
 
 如果训练思考模型（Thinking），也需要遵循[SFT 思考模型（thinking）](#f5454632ef4yo)的数据格式要求。
 
-#### **压缩包要求：**
+##### **压缩包要求：**
 
 1.  压缩包格式：ZIP。最大支持 2 GB， ZIP 包内文件夹、文件名仅支持 ASCII 字符集中的字母 (a-z, A-Z)、数字 (0-9)、下划线 (\_)、连字符 (-)。
     
@@ -941,7 +941,7 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-
     
 5.  压缩包目录结构：
     
-    ### **单层目录（推荐）**
+    #### **单层目录（推荐）**
     
     图片文件与 `data.jsonl` 文件均位于压缩包根目录下。
     
@@ -952,7 +952,7 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-
        |--- video1.mp4
     ```
     
-    ## 多层目录
+    #### 多层目录
     
     1.  data.jsonl 必须在压缩包根目录下。
         
@@ -973,7 +973,7 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-
     ```
     
 
-## DPO 数据集
+#### DPO 数据集
 
 DPO ChatML 格式训练数据，**一行训练数据展开后结构如下**：
 
@@ -1012,7 +1012,7 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-s
    {"role": "assistant", "content": "赞同的模型期望输出3", "loss_weight": 1.0},
 ```
 
-## CPT 训练集
+#### CPT 训练集
 
 CPT 纯文本格式训练数据，**一行训练数据展开后结构如下**：
 

@@ -19,24 +19,16 @@
 1.  在[多模态开发套件](https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.394f1b92MoDMrb&tab=app#/app/app-market/multi-modal-app)中创建多模态交互应用，模版选择全能版本(不要选择视觉版)，关闭语音交互。
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6138796671/p1038917.png)
-
 ⚠️注意：关闭语音交互配置即可，意图识别配置、文本模型配置均需打开。
 
 2.  关闭 对话承接语、知识库、联网搜索、长期记忆配置。
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6138796671/p1038914.png)
-
 3.  技能配置全部清空、Agent配置只保留拍照问答。
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6138796671/p1038916.png)
-
 4.  配置拍照问答Agent，启动指令置空，模型推荐选择“视觉理解均衡版”，请按需要配置提示词。
     
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6138796671/p1038915.png)
 
 测试图片描述场景，提示词可使用如下(仅做演示支持，用户可按场景编辑)
 

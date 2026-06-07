@@ -1,6 +1,6 @@
 # video generation api
 
-百炼平台聚合了通义万相（Wan/HappyHorse）、爱诗 Pixverse、可灵 Kling、Vidu 以及一系列数字人 / 特效模型，提供统一的视频生成 HTTP 与 SDK 调用入口。所有视频生成任务均为**异步任务**——客户端先提交任务获取 `task_id`，再轮询 / WebSocket 查询任务结果，最终拿到可下载的视频 URL（默认 24 小时有效，需自行转存）。
+百炼平台聚合了通义万相（Wan/HappyHorse）、爱诗 Pixverse、可灵 Kling、Vidu 以及一系列数字人 / 特效模型，提供统一的视频生成 HTTP 与 SDK 调用入口。所有视频生成任务均为**[异步任务](../concepts/async-task.md)**——客户端先提交任务获取 `task_id`，再轮询 / WebSocket 查询任务结果，最终拿到可下载的视频 URL（默认 24 小时有效，需自行转存）。
 
 ## 支持的能力分类
 
@@ -100,5 +100,6 @@
 - [万相-视频编辑API参考（2.1）](../../raw/model-api-reference/video-generation-api/legacy-video-models/legacy-wanx-vace-api-reference.md)
 - [万相-文生视频API参考（2.1-2.6）](../../raw/model-api-reference/video-generation-api/legacy-video-models/legacy-wan-text-to-video-api-reference.md)
 - [万相-参考生视频API参考（2.6）](../../raw/model-api-reference/video-generation-api/legacy-video-models/legacy-wan-reference-to-video-api-reference.md)
+
 
 

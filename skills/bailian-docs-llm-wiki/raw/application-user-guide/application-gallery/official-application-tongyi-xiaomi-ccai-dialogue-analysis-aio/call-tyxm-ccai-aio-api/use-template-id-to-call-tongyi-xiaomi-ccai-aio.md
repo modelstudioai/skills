@@ -15,16 +15,12 @@
 
 ### **workspaceId**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9493376271/p851107.png)
-
 1.  访问[**业务空间管理**](https://bailian.console.aliyun.com/?admin=1#/efm/business_management)页面。
     
 2.  业务空间管理列表中Workspace ID为入参中workspaceId。
     
 
 ### **appId**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3298853471/p935542.png)
 
 1.  访问**应用广场**页面，点击通义晓蜜CCAI-对话分析AIO的**查看详情**。
     
@@ -34,8 +30,6 @@
     
 
 ### **templateIds**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9493376271/p851114.png)
 
 1.  访问**[应用广场](https://bailian.console.aliyun.com/#/app-market)**，点击通义晓蜜CCAI-对话分析AIO的**查看详情**。
     
@@ -104,7 +98,6 @@ import darabonba.core.RequestConfiguration;
 import darabonba.core.ResponseIterable;
 import darabonba.core.ResponseIterator;
 import darabonba.core.client.ClientOverrideConfiguration;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -112,22 +105,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 public class CcaiPaasTest {
-
     private static String workspaceId="YOUR_WORKSPACEID";
     private static String accessKeyId="YOUR_ACCESS_KEY_ID";
     private static String accessKeySecret="YOUR_ACCESS_KEY_SECRET";
     private static String appId="YOUR_APPID";
     private static Long templateId=1L; //替换为您在模板管理中的模板ID
-
     private static StaticCredentialProvider provider = StaticCredentialProvider.create(
             Credential.builder()
                     .accessKeyId(accessKeyId)
                     .accessKeySecret(accessKeySecret)
                     .build()
     );
-
     private static AsyncClient client = AsyncClient.builder()
             .region("cn-shanghai") 
             .credentialsProvider(provider)
@@ -139,7 +128,6 @@ public class CcaiPaasTest {
                             .setProtocol("HTTPS")
                             .setEndpointOverride("contactcenterai.cn-shanghai.aliyuncs.com")
             ).build();
-
     public static void main(String[] args) throws Exception{
        //对话内容
         List<RunCompletionRequest.Sentences> sentenceDTOList = new ArrayList<>();
@@ -149,20 +137,17 @@ public class CcaiPaasTest {
         sentenceDTOList.add(sentenceDto2);
         RunCompletionRequest.Dialogue dialogue = RunCompletionRequest.Dialogue.builder().sessionId("session_01_asdfasdfasd")
                 .sentences(sentenceDTOList).build();
-
         //属性信息
         List<RunCompletionRequest.Fields> fieldList = new ArrayList<>();
         RunCompletionRequest.Fields field1 = RunCompletionRequest.Fields.builder().name("姓名").desc("用户的名称").build();
         RunCompletionRequest.Fields field2 = RunCompletionRequest.Fields.builder().name("信用卡号").desc("用户的信用卡号").build();
         fieldList.add(field1);
         fieldList.add(field2);
-
         //构建请求参数
         RunCompletionRequest completionParam = RunCompletionRequest.builder()
                 .workspaceId(workspaceId).appId(appId).requestConfiguration(RequestConfiguration.create()
                         .setHttpMethod(HttpMethod.POST)).modelCode("tyxmTurbo").dialogue(dialogue).fields(fieldList).templateIds(Arrays.asList(templateId)).stream(true).build();
         System.out.println(JSON.toJSONString(completionParam));
-
         //发送请求
         ResponseIterable<RunCompletionResponseBody> x = client.runCompletionWithResponseIterable(completionParam);
         ResponseIterator<RunCompletionResponseBody> iterator = x.iterator();
@@ -174,7 +159,6 @@ public class CcaiPaasTest {
             //System.out.println(event.getRequestId());
             lastTxt=event.getText();
         }
-
         System.out.println("ALL***********************");
         System.out.println(lastTxt);
         System.out.println("请求成功的请求头值：");
@@ -208,7 +192,6 @@ import darabonba.core.RequestConfiguration;
 import darabonba.core.ResponseIterable;
 import darabonba.core.ResponseIterator;
 import darabonba.core.client.ClientOverrideConfiguration;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -216,22 +199,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 public class CcaiPaasTest {
-
     private static String workspaceId="YOUR_WORKSPACEID";
     private static String accessKeyId="YOUR_ACCESS_KEY_ID";
     private static String accessKeySecret="YOUR_ACCESS_KEY_SECRET";
     private static String appId="YOUR_APPID";
     private static Long templateId=1L; //替换为您在模板管理中的模板ID
-
     private static StaticCredentialProvider provider = StaticCredentialProvider.create(
             Credential.builder()
                     .accessKeyId(accessKeyId)
                     .accessKeySecret(accessKeySecret)
                     .build()
     );
-
     private static AsyncClient client = AsyncClient.builder()
             .region("cn-shanghai") 
             .credentialsProvider(provider)
@@ -243,7 +222,6 @@ public class CcaiPaasTest {
                             .setProtocol("HTTPS")
                             .setEndpointOverride("contactcenterai.cn-shanghai.aliyuncs.com")
             ).build();
-
     public static void main(String[] args) throws Exception{
         //对话内容
         List<RunCompletionRequest.Sentences> sentenceDTOList = new ArrayList<>();
@@ -253,20 +231,17 @@ public class CcaiPaasTest {
         sentenceDTOList.add(sentenceDto2);
         RunCompletionRequest.Dialogue dialogue = RunCompletionRequest.Dialogue.builder().sessionId("session_01_asdfasdfasd")
                 .sentences(sentenceDTOList).build();
-
         //属性信息
         List<RunCompletionRequest.Fields> fieldList = new ArrayList<>();
         RunCompletionRequest.Fields field1 = RunCompletionRequest.Fields.builder().name("姓名").desc("用户的名称").build();
         RunCompletionRequest.Fields field2 = RunCompletionRequest.Fields.builder().name("信用卡号").desc("用户的信用卡号").build();
         fieldList.add(field1);
         fieldList.add(field2);
-        
         //构建请求参数
         RunCompletionRequest completionParam = RunCompletionRequest.builder()
                 .workspaceId(workspaceId).appId(appId).requestConfiguration(RequestConfiguration.create()
                         .setHttpMethod(HttpMethod.POST)).dialogue(dialogue).fields(fieldList).templateIds(Arrays.asList(templateId)).stream(false).build();
         System.out.println(JSON.toJSONString(completionParam));
-
         //发送请求
         CompletableFuture<RunCompletionResponse> x = client.runCompletion(completionParam);
         RunCompletionResponse generateCompletionResponse = x.get(10, TimeUnit.SECONDS);
@@ -281,9 +256,7 @@ Python
 
 ```
 import asyncio
-
 from alibabacloud_contactcenterai20240603.client import Client
-
 import alibabacloud_contactcenterai20240603
 import alibabacloud_tea_openapi
 from alibabacloud_tea_openapi.models import Config
@@ -292,20 +265,17 @@ from alibabacloud_contactcenterai20240603.models import RunCompletionMessageRequ
     RunCompletionRequest
 from alibabacloud_contactcenterai20240603.models import RunCompletionMessageRequest
 from alibabacloud_contactcenterai20240603.models import RunCompletionMessageRequestMessages
-
 ak = "YOUR_ACCESS_KEY_ID"
 sk = "YOUR_ACCESS_KEY_SECRET"
 workSpace = "YOUR_WORKSPACEID"
 appId = "YOUR_APPID"
 templateId = "YOUR_TEMPLATE"
-
 async def run_async():
     config = Config()
     config.access_key_id = ak
     config.access_key_secret = sk
     config.endpoint = "contactcenterai.cn-shanghai.aliyuncs.com"
     config.region_id = "cn-shanghai"
-
     client = Client(config)
     # 对话
     sentence1 = RunCompletionRequestDialogueSentences("chat01", "user", "我要办理信用卡")
@@ -319,18 +289,15 @@ async def run_async():
     fieldsList = [fields1, fields2]
     # 构建请求参数
     templateIds = [templateId]
-
     request = RunCompletionRequest()
     request.dialogue = dialogue
     request.fields = fieldsList
     request.model_code = "tyxmTurbo"
     request.stream = False
     request.template_ids = templateIds
-
     response = await client.run_completion_async(workSpace, appId, request)
     body = response.body
     print(body)
-
 if __name__ == '__main__':
     asyncio.run(run_async())
 ```
@@ -351,22 +318,17 @@ import com.aliyun.contactcenterai20240603.Client;
 import com.aliyun.contactcenterai20240603.models.*;
 import com.aliyun.teaopenapi.models.Config;
 import java.util.*;
-
 public class CcaiPaasTest {
-
     private static String workspaceId="YOUR_WORKSPACEID";
     private static String accessKeyId="YOUR_ACCESS_KEY_ID";
     private static String accessKeySecret="YOUR_ACCESS_KEY_SECRET";
     private static String appId="YOUR_APPID";
     private static Long templateId=1L; //替换为您在模板管理中的模板ID
-
     public static void main(String[] args) throws Exception{
         Config config = new Config();
         config.setAccessKeyId(accessKeyId).setAccessKeySecret(accessKeySecret).setEndpoint("contactcenterai.cn-shanghai.aliyuncs.com")
                 .setRegionId("cn-shanghai").setProtocol("HTTPS");
-
         Client client = new Client(config);
-
         RunCompletionRequest request = new RunCompletionRequest();
         //对话信息
         List<RunCompletionRequest.RunCompletionRequestDialogueSentences> sentenceDTOList = new ArrayList<>();
@@ -376,7 +338,6 @@ public class CcaiPaasTest {
         sentenceDto2.setRole("agent").setText("好的，稍等10分钟，我现在为您办理，请先提供相关的个人信息");
         sentenceDTOList.add(sentenceDto1);
         sentenceDTOList.add(sentenceDto2);
-
         //属性填充
         List<RunCompletionRequest.RunCompletionRequestFields> fieldList = new ArrayList<>();
         RunCompletionRequest.RunCompletionRequestFields field1 = new RunCompletionRequest.RunCompletionRequestFields();
@@ -385,12 +346,10 @@ public class CcaiPaasTest {
         field2.setName("信用卡号").setDesc("用户的信用卡号");
         fieldList.add(field1);
         fieldList.add(field2);
-
         RunCompletionRequest.RunCompletionRequestDialogue dialogue = new RunCompletionRequest.RunCompletionRequestDialogue();
         dialogue.setSessionId("session_01_asdfasdfasd").setSentences(sentenceDTOList);
         //构建请求参数
         request.setDialogue(dialogue).setStream(false).setModelCode("tyxmTurbo").setFields(fieldList).setTemplateIds(Arrays.asList(templateId));
-
         RunCompletionResponse runCompletionResponse = client.runCompletion(workspaceId, appId, request);
         RunCompletionResponseBody responseBody = runCompletionResponse.getBody();
         System.out.println(JSON.toJSONString(responseBody));
@@ -402,7 +361,6 @@ Python
 
 ```
 from alibabacloud_contactcenterai20240603.client import Client
-
 import alibabacloud_contactcenterai20240603
 import alibabacloud_tea_openapi
 from alibabacloud_tea_openapi.models import Config
@@ -411,20 +369,17 @@ from alibabacloud_contactcenterai20240603.models import RunCompletionMessageRequ
     RunCompletionRequest
 from alibabacloud_contactcenterai20240603.models import RunCompletionMessageRequest
 from alibabacloud_contactcenterai20240603.models import RunCompletionMessageRequestMessages
-
 ak = "YOUR_ACCESS_KEY_ID"
 sk = "YOUR_ACCESS_KEY_SECRET"
 workSpace = "YOUR_WORKSPACEID"
 appId = "YOUR_APPID"
 templateId = "YOUR_TEMPLATE"
-
 if __name__ == '__main__':
     config = Config()
     config.access_key_id = ak
     config.access_key_secret = sk
     config.endpoint = "contactcenterai.cn-shanghai.aliyuncs.com"
     config.region_id = "cn-shanghai"
-
     client = Client(config)
     # 对话
     sentence1 = RunCompletionRequestDialogueSentences("chat01", "user", "我要办理信用卡")
@@ -437,14 +392,12 @@ if __name__ == '__main__':
     fieldsList = [fields1, fields2]
     # 构建请求参数
     templateIds = [templateId]
- 
     request = RunCompletionRequest()
     request.dialogue = dialogue
     request.fields = fieldsList
     request.model_code = "tyxmTurbo"
     request.stream = False
     request.template_ids = templateIds
-
     response = client.run_completion(workSpace, appId, request)
     body = response.body
     print(body)

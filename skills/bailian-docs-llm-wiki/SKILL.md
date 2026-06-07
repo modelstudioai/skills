@@ -148,21 +148,19 @@ description: >-
 | 模型家族总览 / 按能力分桶浏览         | `models/index.md`                                        |
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
 | OpenAI 兼容接口 | `wiki/concepts/openai-compatible-api.md` |
-| DashScope SDK 与原生 API | `wiki/concepts/dashscope-sdk.md` |
-| API Key 与鉴权 | `wiki/concepts/api-key-authentication.md` |
-| 流式输出（SSE 与 WebSocket） | `wiki/concepts/streaming-output.md` |
-| RAG 检索增强生成 | `wiki/concepts/rag-knowledge-base.md` |
-| 函数调用与工具集成 | `wiki/concepts/function-calling-and-tools.md` |
-| 业务空间（Workspace）隔离 | `wiki/concepts/workspace-isolation.md` |
-| 异步任务轮询模式 | `wiki/concepts/async-task-pattern.md` |
-| 地域与可用性限制 | `wiki/concepts/region-availability.md` |
-| Token 计费与限流配额 | `wiki/concepts/token-billing-and-quota.md` |
-| 语音合成、识别与翻译 API 对比 | `wiki/comparisons/speech-apis-comparison.md` |
+| 异步任务 | `wiki/concepts/async-task.md` |
+| 检索增强生成 | `wiki/concepts/rag.md` |
+| Token 计量与计费 | `wiki/concepts/token-metering.md` |
+| 流式输出 | `wiki/concepts/streaming.md` |
+| DashScope 接口 | `wiki/concepts/dashscope-api.md` |
+| 函数调用与工具使用 | `wiki/concepts/function-calling.md` |
+| API Key 与鉴权 | `wiki/concepts/api-key-auth.md` |
+| 语音合成、语音识别与语音翻译 API 对比 | `wiki/comparisons/speech-apis-comparison.md` |
+| 图像生成、视频生成与 3D 生成对比 | `wiki/comparisons/multimodal-generation-comparison.md` |
 | 文本向量与多模态向量对比 | `wiki/comparisons/text-vs-multimodal-embedding.md` |
-| 会话记忆与长期记忆对比 | `wiki/comparisons/memory-short-vs-long.md` |
-| 模型微调与训练对比 | `wiki/comparisons/fine-tuning-vs-training.md` |
-| 应用评测与模型评测对比 | `wiki/comparisons/evaluation-app-vs-model.md` |
-| 应用监控与模型监控对比 | `wiki/comparisons/monitoring-app-vs-model.md` |
+| 模型评测与应用评测对比 | `wiki/comparisons/evaluation-comparison.md` |
+| 应用监控与模型监控对比 | `wiki/comparisons/monitoring-comparison.md` |
+| 模型微调、模型压缩与模型部署对比 | `wiki/comparisons/model-optimization-comparison.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 

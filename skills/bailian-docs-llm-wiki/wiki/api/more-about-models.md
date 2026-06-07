@@ -1,6 +1,6 @@
 # [more](more.md) about models
 
-本主题汇总阿里云百炼模型 API 之外的若干**周边能力与运维接口**：临时 API Key 派发、异步任务管理（查询/批量查询/取消/事件通知）、DashScope SDK 连接复用、子业务空间隔离调用，以及本地文件临时 URL 上传。这些能力面向需要在生产场景中安全地分发凭证、高并发地调度模型、并合理治理多业务空间与文件输入的开发者。
+本主题汇总阿里云百炼模型 API 之外的若干**周边能力与运维接口**：临时 API Key 派发、[异步任务](../concepts/async-task.md)管理（查询/批量查询/取消/事件通知）、DashScope SDK 连接复用、子业务空间隔离调用，以及本地文件临时 URL 上传。这些能力面向需要在生产场景中安全地分发凭证、高并发地调度模型、并合理治理多业务空间与文件输入的开发者。
 
 ## 临时 API Key
 
@@ -8,9 +8,9 @@
 
 > **注意**：北京、新加坡、弗吉尼亚三个地域的永久 API Key 互相独立，临时 Key 也必须在对应地域调用。
 
-## 异步任务管理
+## [异步任务](../concepts/async-task.md)管理
 
-文生图、文生视频、长语音识别等**长耗时任务**采用"先创建任务返回 task_id，再凭 task_id 获取结果"的异步调用模型。除模型自身的提交接口外，百炼额外提供一组**通用的异步任务管理 API**：
+文生图、文生视频、长语音识别等**长耗时任务**采用"先创建任务返回 task_id，再凭 task_id 获取结果"的异步调用模型。除模型自身的提交接口外，百炼额外提供一组**通用的[异步任务](../concepts/async-task.md)管理 API**：
 
 | 接口 | 方法/路径 | 用途 |
 | --- | --- | --- |
@@ -102,5 +102,6 @@
 - [通过HTTP回调URL或MQ接收异步任务完成通知](../../raw/model-api-reference/more-about-models/async-task-api.md)
 - [子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)
 - [上传本地文件获取临时URL](../../raw/model-api-reference/more-about-models/get-temporary-file-url.md)
+
 
 

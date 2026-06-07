@@ -287,7 +287,7 @@ list
 
 在管控台选择技能根据执行情况回复。
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9742967671/p1041234.png)
+回复方式包含两个选项：**根据执行情况回复**（根据设备返回的执行结果生成回复，如果设备不返回结果则仅下发指令）和**自动回复**（下发指令的同时自动生成回复）。
 
 通过语音指令“取消静音”的下发结果为：
 
@@ -302,7 +302,6 @@ list
             "finish_reason": "stop",
             "extra_info": {
                 "tool_infos": [
-
                 ],
                 "agent_info": {
                     "intent_infos": [
@@ -401,20 +400,16 @@ JSON object
 
 ```
 public static HashMap<String,Object> getAgentorCommandResult() {
-
   HashMap<String,Object> commandResult = new HashMap<>();
   commandResult.put("command_request_id", "35b635f3-6511-450e-8fa1-6955d5279367");
   commandResult.put("invoke_result", new Object<>());
     // invoke_result.structuredContent.success = true/false 执行结果
-
   ArrayList<Object> commandResults = new ArrayList<>();
   commandResults.add(commandResult);
-
   HashMap<String,Object> passThroughParams = new HashMap<>();
   passThroughParams.put("command_results", commandResults);
   return passThroughParams;
 }
- 
 //发起打开 agent 请求
 MultiModalRequestParam.UpdateParams updateParams = MultiModalRequestParam.UpdateParams.builder()
     .bizParams(MultiModalRequestParam.BizParams.builder()

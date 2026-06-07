@@ -243,6 +243,26 @@ array
 
 新闻对象
 
+CustomField
+
+string
+
+否
+
+自定义字段，后续可以根据 ListHotTopics 接口使用该字段筛选。
+
+xxx
+
+TopicUrl
+
+string
+
+否
+
+话题 URL，无其他作用，仅供 ListHotTopics 透传作用
+
+https://www.example.com/topic/123
+
 TopicsFileUrl
 
 string

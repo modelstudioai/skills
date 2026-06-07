@@ -101,7 +101,7 @@ GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}
 - **地域限制**：仅适用于"中国内地（北京）"地域，必须使用该地域的 API Key
 - **开通要求**：需在百炼控制台搜索"Tripo"并开通服务
 - **task_id 有效期**：24 小时，超时后返回 `UNKNOWN` 状态
-- **查询 RPS 限制**：默认 20，如需更高频建议配置异步任务回调
+- **查询 RPS 限制**：默认 20，如需更高频建议配置[异步任务](../concepts/async-task.md)回调
 - **请勿重复创建任务**：获取 task_id 后轮询即可
 - **图片要求**：JPEG/PNG 格式，分辨率 20~6000px，文件 ≤20MB
 - **多图模式**：数组固定 4 个元素（前、左、后、右），多图分辨率和宽高比无需一致
@@ -111,5 +111,6 @@ GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}
 ## 来源文档
 
 - [Tripo-3D模型生成](../../raw/model-api-reference/3d-generation/tripo-3d-generation-api-reference.md)
+
 
 

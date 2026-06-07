@@ -221,24 +221,19 @@ object.music\_keyword
 
 ```
 package com.tongyi.multimodal_dialog.utils;
-
 import android.media.MediaPlayer;
 import android.util.Log;
-
 import java.io.IOException;
-
 /**
  * 网络MP3播放工具类
  * 支持通过URL播放MP3文件，提供播放、停止和播放完成回调功能
  */
 public class NetworkMp3Player {
     private static final String TAG = "NetworkMp3Player";
-    
     private MediaPlayer mediaPlayer;
     private OnPlayCallback playCallback;
     private boolean isPlaying = false;
     private String currentUrl = null;
-
     /**
      * 播放回调接口
      */
@@ -247,23 +242,19 @@ public class NetworkMp3Player {
          * 播放开始回调
          */
         void onPlayStart();
-
         /**
          * 播放完成回调
          */
         void onPlayComplete();
-
         /**
          * 播放错误回调
          * @param error 错误信息
          */
         void onPlayError(String error);
     }
-
     public NetworkMp3Player() {
         initMediaPlayer();
     }
-
     /**
      * 初始化MediaPlayer
      */
@@ -279,7 +270,6 @@ public class NetworkMp3Player {
                     }
                 }
             });
-
             mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                 @Override
                 public boolean onError(MediaPlayer mp, int what, int extra) {
@@ -292,7 +282,6 @@ public class NetworkMp3Player {
                     return true;
                 }
             });
-
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
@@ -305,7 +294,6 @@ public class NetworkMp3Player {
             });
         }
     }
-
     /**
      * 播放网络MP3
      * @param url MP3文件的URL地址
@@ -318,14 +306,11 @@ public class NetworkMp3Player {
             }
             return;
         }
-
         this.playCallback = callback;
         this.currentUrl = url; // 保存当前播放的URL
-
         try {
             stop(); // 停止当前播放
             initMediaPlayer(); // 重新初始化
-
             mediaPlayer.setDataSource(url);
             mediaPlayer.prepareAsync(); // 异步准备播放
         } catch (IOException e) {
@@ -340,7 +325,6 @@ public class NetworkMp3Player {
             }
         }
     }
-
     /**
      * 停止播放
      */
@@ -356,7 +340,6 @@ public class NetworkMp3Player {
             }
         }
     }
-
     /**
      * 暂停播放
      */
@@ -366,7 +349,6 @@ public class NetworkMp3Player {
             isPlaying = false;
         }
     }
-
     /**
      * 恢复播放
      */
@@ -376,7 +358,6 @@ public class NetworkMp3Player {
             isPlaying = true;
         }
     }
-
     /**
      * 是否正在播放
      * @return true表示正在播放，false表示未播放
@@ -384,7 +365,6 @@ public class NetworkMp3Player {
     public boolean isPlaying() {
         return isPlaying;
     }
-
     /**
      * 释放资源
      */
@@ -396,7 +376,6 @@ public class NetworkMp3Player {
         }
         isPlaying = false;
     }
-
     /**
      * 获取当前播放的URL
      * @return 当前播放的URL，如果没有播放则返回null
@@ -408,7 +387,7 @@ public class NetworkMp3Player {
 ```
 
 -   解析上述下发结果中的“audios” 获取音乐地址。并通过 mp3 播放器进行播放。在 demo 中，我们适配了一个简单的 UI 用于显示音乐播放状态。  
-    ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6440007671/p1039326.png)
+    集成完成后，用户发送语音指令"打开音乐电台"，应用连接成功后将显示音乐播放卡片，包含当前播放歌曲名称、播放进度条及**停止**按钮，可控制音乐播放。  
     
 -   完整代码请参考 Android SDK demo。其他语言请通过类似的解析和播放实现相同功能。
     

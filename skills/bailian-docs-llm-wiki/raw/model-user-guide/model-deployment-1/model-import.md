@@ -6,7 +6,7 @@
 
 导入前，请确保满足以下条件：
 
--   **OSS Bucket 准备**：已创建 OSS Bucket，并为目标 Bucket 添加标签。详见[首次从 OSS 导入模型文件](#ed9633f0476gu)。
+-   **OSS Bucket 准备**：已创建 OSS Bucket，并为目标 Bucket 添加标签。
     
     **说明**
     
@@ -186,19 +186,15 @@ repetition\_penalty（DashScope 协议）
 
 > 如果您尚不清楚主账号和子账号的概念和区别，请先阅读[权限管理](https://help.aliyun.com/zh/model-studio/permission-management-overview)。
 
-### 使用主账号
+## 使用主账号
 
 1.  单击**前往授权**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7865858471/p961834.png)
+    在 **导入方式** 中选择 **从OSS导入** 后，页面会显示"您还未授权OSS"的提示信息，在提示栏右侧找到 **前往授权** 链接。
     
 2.  在弹出的对话框中，单击**确认授权**，系统将为您自动开通[OSS服务关联角色](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#32a41eac73z64)（必要条件）。
     
     > 通常秒级生效，服务高峰期可能会稍有延迟。
-    
-    > [遇到“本次请求失败，尝试重新提交试试或联系管理员，错误码：10041495”怎么办](https://help.aliyun.com/zh/model-studio/my-model-center#a25cf9b36eh5o)
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3105663471/p937216.png)
     
 3.  为目标 OSS Bucket 添加`bailian-datahub-access`标签。
     
@@ -208,30 +204,22 @@ repetition\_penalty（DashScope 协议）
         
     2.  在待添加标签的Bucket**标签**列，悬停鼠标于![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1134056371/p903505.png)图标上，然后单击**前往编辑**。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3105663471/p937209.png)
-        
     3.  单击**创建标签**。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1134056371/p903515.png)
-        
     4.  单击**标签**，添加标签名为`bailian-datahub-access`，标签值为`read`的标签，然后单击**保存**。
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1134056371/p903517.png)
         
 4.  返回**导入模型**界面，重新选择目标 Bucket 再尝试导入。
     
     > **请注意，阿里云百炼不支持访问保存在 Bucket 根目录下的文件。**请您选择 Bucket 下的现有文件夹或新建一个文件夹供阿里云百炼访问。
     
 
-### 使用**子账号**
+## 使用**子账号**
 
 1.  单击**前往授权**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7865858471/p961834.png)
-    
 2.  在弹出的对话框中，单击**确认授权**。界面会提示**授权失败**、**当前用户没有创建服务关联角色的权限**（因为当前子账号没有创建服务关联角色的权限。接下来需要先授予子账号创建服务关联角色的权限，再授予子账号通过阿里云百炼访问OSS的权限）。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3105663471/p913212.png)
+    对话框中显示 Service Name 为 `datahub.sfm.aliyuncs.com`，服务关联角色名称为 `AliyunServiceRoleForSFMDataHubOSSImport`，执行该操作所需的用户权限为 `ram:CreateServiceLinkedRole`。
     
 3.  授予子账号创建服务关联角色的权限。
     
@@ -254,31 +242,23 @@ repetition\_penalty（DashScope 协议）
         }
         ```
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1134056371/p903452.png)
-        
     3.  输入权限策略名称后，单击**确定**。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1134056371/p903416.png)
+        本示例中，权限策略名称为`服务关联角色`。
         
     4.  在左侧导航栏，选择**身份管理** > **用户**。在页面列表中找到待授权的子账号，然后单击子账号**操作**列的**添加权限**。
         
     5.  在权限策略中选择刚才创建的权限策略（自定义策略），单击**确认新增授权**。至此，子账号拥有了创建服务关联角色的权限。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4482537371/p907087.png)
-        
 4.  授权子账号通过阿里云百炼访问OSS。
     
     1.  返回**导入模型**界面，单击**前往授权**。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3105663471/p937184.png)
+        **导入方式**选择**OSS**后，界面提示**您还未授权OSS**。
         
     2.  在弹出的对话框中，单击**确认授权**，系统将为您自动开通[OSS服务关联角色](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#32a41eac73z64)（必要条件）。
         
         > 通常秒级生效，服务高峰期可能会稍有延迟。
-        
-        > [遇到“本次请求失败，尝试重新提交试试或联系管理员，错误码：10041495”怎么办](https://help.aliyun.com/zh/model-studio/my-model-center#a25cf9b36eh5o)
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3105663471/p937216.png)
         
 5.  为目标 OSS Bucket 添加`bailian-datahub-access`标签。
     
@@ -288,15 +268,9 @@ repetition\_penalty（DashScope 协议）
         
     2.  在待添加标签的Bucket**标签**列，悬停鼠标于![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1134056371/p903505.png)图标上，然后单击**前往编辑**。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3105663471/p937209.png)
-        
     3.  单击**创建标签**。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1134056371/p903515.png)
-        
     4.  单击**标签**，添加标签名为`bailian-datahub-access`，标签值为`read`的标签，然后单击**保存**。
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1134056371/p903517.png)
         
 6.  返回**导入模型**界面，重新选择目标 Bucket 再尝试导入。
     

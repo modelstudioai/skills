@@ -207,8 +207,6 @@
     
 2.  在**系统属性**窗口，单击**环境变量**，然后在**系统变量**区域下单击**新建**，**变量名**填入`DASHSCOPE_API_KEY`，**变量值**填入您的DashScope API Key。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8252115371/p894015.png)
-    
 3.  依次单击三个窗口的**确定**，关闭系统属性配置页面，完成环境变量配置。
     
 4.  打开CMD（命令提示符）窗口或Windows PowerShell窗口，执行如下命令检查环境变量是否生效。
@@ -218,16 +216,27 @@
         ```
         echo %DASHSCOPE_API_KEY%
         ```
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1317988371/p912522.png)
+        ```
+        Microsoft Windows [版本 10.0.19045.5371]
+        (c) Microsoft Corporation。保留所有权利。
+        C:\Windows\system32>echo %DASHSCOPE_API_KEY%
+        sk-ee16697?fe4
+        C:\Windows\system32>
+        ```
         
     -   Windows PowerShell查询命令：
         
         ```
         echo $env:DASHSCOPE_API_KEY
         ```
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1317988371/p912525.png)
+        ```
+        Windows PowerShell
+        版权所有 (C) Microsoft Corporation。保留所有权利。
+        尝试新的跨平台 PowerShell https://aka.ms/pscore6
+        PS C:\Windows\system32> echo $env:DASHSCOPE_API_KEY
+        sk-ee166797fe40xxx
+        PS C:\Windows\system32>
+        ```
         
 
 ### **CMD**
@@ -251,8 +260,6 @@
     echo %DASHSCOPE_API_KEY%
     ```
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1317988371/p912522.png)
-    
 
 #### **添加临时性环境变量**
 
@@ -268,8 +275,6 @@ set DASHSCOPE_API_KEY=YOUR_DASHSCOPE_API_KEY
 ```
 echo %DASHSCOPE_API_KEY%
 ```
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1317988371/p912522.png)
 
 ### **PowerShell**
 
@@ -292,8 +297,6 @@ echo %DASHSCOPE_API_KEY%
     echo $env:DASHSCOPE_API_KEY
     ```
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1317988371/p912525.png)
-    
 
 ### 添加临时性环境变量
 
@@ -309,8 +312,6 @@ $env:DASHSCOPE_API_KEY = "YOUR_DASHSCOPE_API_KEY"
 ```
 echo $env:DASHSCOPE_API_KEY
 ```
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1317988371/p912525.png)
 
 ## **常见问题**
 

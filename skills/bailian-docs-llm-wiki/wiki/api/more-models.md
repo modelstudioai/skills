@@ -81,7 +81,7 @@
 
 - **单轮对话**：`dashscope.Generation.call(model="farui-plus", messages=..., result_format="message")`。
 - **多轮对话**：把上一轮 `assistant` 响应追加进 `messages` 列表继续 `call`。
-- **流式输出**：Python 设 `stream=True, incremental_output=True`；Java 使用 `gen.streamCall(param)`。
+- **[流式输出](../concepts/streaming.md)**：Python 设 `stream=True, incremental_output=True`；Java 使用 `gen.streamCall(param)`。
 
 > **注意**：DashScope Java SDK 中 `Generation` 等请求对象**不是线程安全**的，复用时需自行加锁或及时关闭，避免并发问题。
 
@@ -105,5 +105,6 @@
 - [文本排序](../../raw/model-api-reference/more-models/text-rerank-api.md)
 - [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)
 - [通义法睿大语言模型](../../raw/model-api-reference/more-models/tongyi-farui-api.md)
+
 
 

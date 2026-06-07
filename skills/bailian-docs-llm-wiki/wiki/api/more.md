@@ -128,3 +128,4 @@ resp = client.retrieve("请传入实际的业务空间ID", retrieve_request)
 - [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md)
 
 
+

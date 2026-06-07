@@ -82,7 +82,7 @@
     
 6.  **doc\_reference\_type 参数设置后不生效？**
     
-    doc\_reference\_type 参数只在旧版本应用中生效，新版本应用中直接在应用操作页面开启展示答案来源按钮即可。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7131773271/p834944.png)
+    doc\_reference\_type 参数只在旧版本应用中生效，新版本应用中直接在应用操作页面开启展示答案来源按钮即可。请检查应用配置中**展示回答来源**开关是否已开启。若该开关处于关闭状态，`doc_reference_type` 参数设置将不会生效。
     
 
 ## **产品相关**

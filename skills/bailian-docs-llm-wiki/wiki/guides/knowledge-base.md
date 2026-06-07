@@ -1,6 +1,6 @@
 # knowledge base
 
-百炼知识库（Bailian Knowledge Base）基于 RAG（检索增强生成）为大模型补充私有数据与最新信息，使大模型能够回答特定领域问题。它将文件解析、切分、向量化并落入向量库，应用调用时按语义相似度召回切片并交由大模型生成答案，详见 [知识库](../../raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+百炼知识库（Bailian Knowledge Base）基于 RAG（[检索增强生成](../concepts/rag.md)）为大模型补充私有数据与最新信息，使大模型能够回答特定领域问题。它将文件解析、切分、向量化并落入向量库，应用调用时按语义相似度召回切片并交由大模型生成答案，详见 [知识库](../../raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
 
 ## 知识库类型与使用场景
 
@@ -133,5 +133,6 @@ Rerank 开关位置因调用方式而异（**配置错误可能产生非预期�
 - [知识库配额与限制](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-specifications.md)
 - [知识库计费说明](../../raw/application-user-guide/knowledge-base/billing-for-knowledge-base.md)
 - [知识库API指南](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)
+
 
 

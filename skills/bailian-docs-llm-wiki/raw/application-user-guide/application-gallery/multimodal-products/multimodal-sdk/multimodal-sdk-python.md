@@ -720,9 +720,9 @@ conversation.request_to_respond("transcript", "今天天气不错", parameters=N
 -   在管控台项目【提示词】配置自定义变量。
     
 
-如下图示例，定义了一个`user_name`字段代表用户昵称。并将变量`user_name`以占位符形式${user\_name} 插入到Prompt 中。
+例如，定义了一个`user_name`字段代表用户昵称。并将变量`user_name`以占位符形式${user\_name} 插入到Prompt 中。
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975545.png)
+在**提示词**编辑页面顶部，单击**{x} 自定义变量**选项卡添加变量，添加后的变量将显示在编辑区上方，可在提示词正文中以 `${变量名}` 的占位符格式引用。
 
 -   在代码中设置变量。
     
@@ -739,7 +739,7 @@ request_params = RequestParameters(upstream=up_stream, downstream=down_stream,
 -   请求回复
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975544.png)
+发送请求后，AI 助手将使用自定义变量值进行回复。例如，当设置 `user_name` 为"大米"时，AI 回复中将以"亲爱的大米"作为个性化称呼与用户交互。
 
 ### **使用文本请求对话结果**
 

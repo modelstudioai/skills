@@ -26,7 +26,7 @@
 | 请求结构 | `{ "input": { "prompt": ... }, "parameters": {}, "debug": {} }` | `{ "input": "..." }` 或消息数组 |
 | 主要优势 | 功能最全、性能最高，支持多轮上下文、流式、Plugin、RAG、Function Calling 等 | 易于迁移现有 OpenAI 代码、复用 OpenAI 生态工具 |
 | 多模态输入 | 支持文本/图片/文件/音视频等场景 | 支持 `input_text` / `input_image` / `input_file` 三种内容块 |
-| 异步调用 | 通过原生异步任务接口 | 在请求体设置 `background=true` |
+| 异步调用 | 通过原生[异步任务](../concepts/async-task.md)接口 | 在请求体设置 `background=true` |
 
 > **注意**：如果应用同时希望获得完整功能与最优性能，应优先选择 DashScope API；OpenAI Responses API 适合需要快速接入 OpenAI 生态或迁移已有代码的场景。
 
@@ -44,7 +44,7 @@
 - `input.prompt`（string，必选）：用户输入。
 - `input.messages`（array，可选）：多轮对话历史，每个元素含 `role`、`content`。
 - `input.biz_params`（object，可选）：工作流应用的业务变量；新版智能体应用按其专属字段约定填写。
-- `parameters`（object，可选）：模型/流程级别参数，如 `top_p`、`top_k`、`temperature`、`incremental_output`（流式输出增量模式）等。
+- `parameters`（object，可选）：模型/流程级别参数，如 `top_p`、`top_k`、`temperature`、`incremental_output`（[流式输出](../concepts/streaming.md)增量模式）等。
 - `debug`（object，可选）：调试信息开关。
 
 ### 在线调试
@@ -70,8 +70,8 @@ DashScope API 的完整字段、新版智能体的专属请求结构和典型场
   - 文本：`{ "type": "input_text", "text": "..." }`。
   - 图片：`{ "type": "input_image", "image_url": "..." }`。
   - 文件：`{ "type": "input_file", "file_url": "..." }`，仅**智能体应用**支持。
-- `stream`（boolean，默认 false）：是否流式输出。工作流应用启用流式输出还需在**结束节点**或**流程输出节点**勾选**流式输出**开关并重新发布。
-- `background`（boolean，默认 false）：是否以异步方式执行任务；`true` 时会立即返回任务 ID，且**异步任务不支持流式输出**。
+- `stream`（boolean，默认 false）：是否[流式输出](../concepts/streaming.md)。工作流应用启用[流式输出](../concepts/streaming.md)还需在**结束节点**或**流程输出节点**勾选**流式输出**开关并重新发布。
+- `background`（boolean，默认 false）：是否以异步方式执行任务；`true` 时会立即返回任务 ID，且**[异步任务](../concepts/async-task.md)不支持流式输出**。
 
 ### 多模态输入应用配置
 
@@ -97,7 +97,7 @@ DashScope API 的完整字段、新版智能体的专属请求结构和典型场
 
 异步调用的完整 Python/Java 示例与状态机说明参见 [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)。
 
-> **注意**：异步任务暂不支持流式输出（`stream=true` 与 `background=true` 不能同时启用）。
+> **注意**：[异步任务](../concepts/async-task.md)暂不支持流式输出（`stream=true` 与 `background=true` 不能同时启用）。
 
 ## 流式输出要点
 
@@ -124,5 +124,6 @@ DashScope API 的完整字段、新版智能体的专属请求结构和典型场
 - [新版智能体应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md)
 - [应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)
 - [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)
+
 
 

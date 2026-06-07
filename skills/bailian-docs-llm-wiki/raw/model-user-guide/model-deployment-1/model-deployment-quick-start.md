@@ -60,7 +60,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-    "name": "my_qwen_plus",  
+    "name": "my_qwen_plus",
     "model_name": "qwen-plus-2025-12-01",
     "plan": "mu",
     "deploy_spec": "MU1",
@@ -105,7 +105,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
---data '{        
+--data '{
     "model_name": "qwen3-8b-ft-202511132025-0260",
     "plan": "lora",
     "capacity": 1,
@@ -113,27 +113,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 }'
 ```
 
-> capacity 参数设置无效，但必须填写。如需希望扩缩容，请前往百炼模型部署[控制台](https://bailian.console.aliyun.com/tab=model?tab=model#/efm/model_deploy)填写表单申请。
-
-#### **按算力单元的使用时长收费（仅适用于图片生成、视频生成）**
-
-**说明**
-
-执行以下部署命令后，即便您还没有调用模型，模型部署服务仍将在部署成功后开始计费。建议您先确认服务计费规则，再执行部署命令。
-
-选择**计费方式**为**按算力计费**，计费模式为按算力单元的使用时长收费，适用于模型调优后的大规模推理业务，资源专属，性能和成本灵活可调。吞吐/并发和生成速度均为客户自定义。
-
-```
-curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
---header "Authorization: Bearer $DASHSCOPE_API_KEY" \
---header 'Content-Type: application/json' \
---data '{        
-    "model_name": "animate-anyone-detect",
-    "capacity": 2,
-    "plan": "cu",
-    "name": "my_animate"
-}'
-```
+> capacity 参数设置无效，但必须填写。如需希望扩缩容，请前往百炼模型部署[控制台](https://bailian.console.aliyun.com/?tab=model#/efm/model_deploy)填写表单申请。
 
 命令执行成功后，返回如下结果：（以 Lora 部署为例）
 

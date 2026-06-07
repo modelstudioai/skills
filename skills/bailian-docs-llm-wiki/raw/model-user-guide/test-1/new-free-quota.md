@@ -151,7 +151,7 @@
 
 常见原因：
 
--   使用了没有免费额度的模型（例如：qwen3.7-max 和 qwen3.7-max-2026-05-20 的免费额度不共享）。
+-   使用的模型已经没有免费额度。
     
 -   免费额度不支持抵扣[OpenAI兼容-Batch（文件输入）](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)产生的费用。
     

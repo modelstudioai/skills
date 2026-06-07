@@ -8,7 +8,7 @@
 | --- | --- | --- | --- |
 | 机器翻译 | `qwen-mt-plus` | 多语言翻译、术语干预、翻译记忆、领域提示 | OpenAI 兼容 / DashScope |
 | 深度研究 | `qwen-deep-research` | 两阶段研究：反问澄清 + 深入分析，返回带引用的报告 | 仅 Python DashScope SDK |
-| 文字识别 | `qwen-vl-ocr-latest` | 图像 OCR、票据/结构化字段抽取、流式输出 | OpenAI 兼容 / DashScope |
+| 文字识别 | `qwen-vl-ocr-latest` | 图像 OCR、票据/结构化字段抽取、[流式输出](../concepts/streaming.md) | OpenAI 兼容 / DashScope |
 | 界面交互 | `gui-plus-2026-02-26` | 基于截图执行鼠标/键盘等 GUI 操作，工具调用模式 | OpenAI 兼容 / DashScope |
 
 各模型对应的接口与参数详见 [Qwen-MT API参考](../../raw/model-api-reference/specialized-model/qwen-mt-api.md)、[Qwen-Deep-Research API 参考](../../raw/model-api-reference/specialized-model/qwen-deep-research-api.md)、[Qwen-OCR API参考](../../raw/model-api-reference/specialized-model/qwen-vl-ocr-api-reference.md) 与 [GUI-Plus API参考](../../raw/model-api-reference/specialized-model/gui-plus-interface-interaction-model.md)。
@@ -63,7 +63,7 @@ HTTP 调用统一为 `POST <base_url>/chat/completions`。GUI-Plus 当前文档�
 - `{"type": "text", "text": "..."}`：可选 Prompt；不传时使用默认 Prompt `Please output only the text content from the image without any additional descriptions or formatting.`，仅做纯文本提取。
 - `min_pixels` / `max_pixels`：图像预处理的像素阈值，控制放缩范围（示例值 `32*32*3` 至 `32*32*8192`）。
 
-支持流式输出，开启方式与通用 chat 接口一致：`stream=True`，`stream_options={"include_usage": True}`。模型名建议使用 `qwen-vl-ocr-latest` 跟随最新版本。结合 Prompt 可让模型按 JSON schema 输出结构化字段（如车票发票号码、票价、座位号），示例见 [Qwen-OCR API参考](../../raw/model-api-reference/specialized-model/qwen-vl-ocr-api-reference.md)。
+支持[流式输出](../concepts/streaming.md)，开启方式与通用 chat 接口一致：`stream=True`，`stream_options={"include_usage": True}`。模型名建议使用 `qwen-vl-ocr-latest` 跟随最新版本。结合 Prompt 可让模型按 JSON schema 输出结构化字段（如车票发票号码、票价、座位号），示例见 [Qwen-OCR API参考](../../raw/model-api-reference/specialized-model/qwen-vl-ocr-api-reference.md)。
 
 ## GUI-Plus：界面交互模型
 
@@ -74,14 +74,14 @@ GUI-Plus 用于让模型基于屏幕截图执行鼠标/键盘等 GUI 操作，�
 - `messages[1]`：用户消息，`content` 中一并传入屏幕截图（`image_url`）和自然语言指令。
 - `extra_body.vl_high_resolution_images`：建议设为 `true`，让模型按高分辨率处理截图，便于定位坐标。
 
-模型按照 system [prompt](../guides/prompt.md) 约束的格式返回：第一行 `Action:` 简要描述要做的操作，紧跟一个 `<tool_call>` 块，其中 JSON 给出 `name=computer_use` 与具体 `arguments`（动作类型、坐标、文本等）。客户端解析后执行动作并把新截图回传给模型，循环直到 `action=terminate`。完整 system prompt 与示例代码见 [GUI-Plus API参考](../../raw/model-api-reference/specialized-model/gui-plus-interface-interaction-model.md)。
+模型按照 system [prompt](../guides/prompt.md) 约束的格式返回：第一行 `Action:` 简要描述要做的操作，紧跟一个 `<tool_call>` 块，其中 JSON 给出 `name=computer_use` 与具体 `arguments`（动作类型、坐标、文本等）。客户端解析后执行动作并把新截图回传给模型，循环直到 `action=terminate`。完整 system [prompt](../guides/prompt.md) 与示例代码见 [GUI-Plus API参考](../../raw/model-api-reference/specialized-model/gui-plus-interface-interaction-model.md)。
 
 ## 使用前的通用注意事项
 
 - **API Key 与环境变量**：所有调用都需要先获取 API Key 并配置 `DASHSCOPE_API_KEY` 环境变量；不同地域的 Key 不可混用。
-- **SDK 兼容性**：Qwen-MT、Qwen-OCR、GUI-Plus 三类模型同时支持 OpenAI 兼容与 DashScope 接口；Qwen-Deep-Research 仅支持 Python DashScope SDK 与等价的 curl 调用。
-- **请求体差异**：OpenAI 兼容接口下，所有专属字段（如 `translation_options`、`vl_high_resolution_images`）应放在 `extra_body` 内；DashScope 接口则放在 `parameters` 中。
-- **响应解析**：Qwen-Deep-Research 与 Qwen-OCR 推荐使用流式输出，需要按 SSE 逐块拼接 `content`；GUI-Plus 客户端需自行解析 `<tool_call>` JSON 并把执行结果回填到 `messages`。
+- **SDK 兼容性**：Qwen-MT、Qwen-OCR、GUI-Plus 三类模型同时支持 OpenAI 兼容与 [DashScope 接口](../concepts/dashscope-api.md)；Qwen-Deep-Research 仅支持 Python DashScope SDK 与等价的 curl 调用。
+- **请求体差异**：[OpenAI 兼容接口](../concepts/openai-compatible-api.md)下，所有专属字段（如 `translation_options`、`vl_high_resolution_images`）应放在 `extra_body` 内；[DashScope 接口](../concepts/dashscope-api.md)则放在 `parameters` 中。
+- **响应解析**：Qwen-Deep-Research 与 Qwen-OCR 推荐使用[流式输出](../concepts/streaming.md)，需要按 SSE 逐块拼接 `content`；GUI-Plus 客户端需自行解析 `<tool_call>` JSON 并把执行结果回填到 `messages`。
 - **图像与坐标**：GUI-Plus 与 Qwen-OCR 都接受图像输入；GUI-Plus 还需要客户端按模型返回的坐标在真实屏幕上执行动作，确保渲染分辨率与模型理解一致。
 
 ## 来源文档
@@ -90,5 +90,6 @@ GUI-Plus 用于让模型基于屏幕截图执行鼠标/键盘等 GUI 操作，�
 - [Qwen-Deep-Research API 参考](../../raw/model-api-reference/specialized-model/qwen-deep-research-api.md)
 - [Qwen-OCR API参考](../../raw/model-api-reference/specialized-model/qwen-vl-ocr-api-reference.md)
 - [GUI-Plus API参考](../../raw/model-api-reference/specialized-model/gui-plus-interface-interaction-model.md)
+
 
 

@@ -6,15 +6,13 @@
 
 1.  在[阿里云百炼官网](https://bailian.console.aliyun.com/?spm=a2ty02.31808181.d_app-market.1.38a374a1XgQHkZ&tab=app#/app-market/newTemplate)中，找到「应用开发」-「应用实践」，在应用广场中选择多模态交互开发套件。
     
-    ![截屏2026-01-08 15](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9961748671/p1042976.png)
-    
-    ![截屏2026-01-08 15](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9961748671/p1042972.png)
+    单击**应用模板**Tab。
     
 2.  点击右上角「免费开通」，在开通页面中勾选服务协议后点击「立即购买」即可开通成功。
     
-    ![截屏2026-01-08 16](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9961748671/p1042996.png)![截屏2026-01-08 16](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9961748671/p1043005.png)
+    开通页面展示**多模态交互开发套件按量后付费**产品信息，包含闲聊及插件、知识库检索、语音翻译、视觉理解、播客、百炼其他应用共六项API能力，收费模式为**开通型后付费**。
     
-3.  开通成功后，点击「管理控制台」回到阿里云百炼官网。![截屏2026-01-08 16](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9961748671/p1043011.png)
+3.  开通成功后，点击「管理控制台」回到阿里云百炼官网。
     
     **说明**
     
@@ -22,9 +20,7 @@
     
 4.  点击「应用开发」找到多模态交互开发套件应用，点击前往创建应用。您可以基于业务需求，选择创建不同类型的应用。
     
-    ![截屏2026-01-08 16](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9961748671/p1043017.png)
-    
-    ![截屏2026-01-08 16](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9961748671/p1043018.png)
+    应用概览页面提供两种应用类型：**多模态交互应用**（实时"视频+语音"对话，适用于带摄像头和麦克风的软硬件产品，如AI眼镜）和**语音交互应用**（纯语音对话，适用于仅带麦克风的软硬件产品，如AI耳机）。选择目标类型后，单击对应卡片中的**创建应用**按钮。
     
 
 -   多模态交互应用：实时“视频+语音”对话，适用于带摄像头和麦克风、需要实时视频对话能力的软硬件。例如AI眼镜、AI视频对话APP等。
@@ -37,9 +33,7 @@
             
         -   「推荐模型」支持视觉理解均衡版、高级版；「更多模型」支持Qwen3.6-plus、Qwen3.5-plus、Qwen3.5-flash等多模态模型。
             
-        -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9639482671/p1025714.png)![截屏2026-04-27 14](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7115827771/p1071089.png)
-            
-        -   ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7115827771/p1071090.png)
+        -   在**多模态交互开发套件**页面，单击**从场景模板开始**，选择设备模板（如**AR眼镜**），在弹出的版本选择浮层中选择**视觉版**即可创建应用。
             
 -   语音交互应用：实时纯语音对话，适用于带麦克风的软硬件。例如AI耳机、儿童玩具等。支持选择全能版或轻量版。（本应用不支持实时视频对话）
     
@@ -47,14 +41,10 @@
         
     -   轻量版：更快速、更低价的语音闲聊，不支持意图识别、工具调用和Agent等能力。
         
-    -   ![截屏2025-09-19 15](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0259158571/p1008976.png)
-        
 
 ## **应用管理**
 
 您可以在[**我的应用**](https://bailian.console.aliyun.com/?tab=app#/app/app-market/multi-modal-app)页面，查看所有已经创建的应用。
-
-![截屏2026-03-09 13](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1468303771/p1057774.png)
 
 点击API接入、下载SDK，可以查看对应的开发文档。
 
@@ -72,8 +62,6 @@
 
 单轮对话的延迟统计口径为：从语音识别结束到语音合成首字输出。未接入语音模型时，统计口径为从文本输入到文本首字输出。
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1468303771/p1057749.png)
+数据看板页面顶部展示**应用数据概览**，包括应用总量、已发布应用数量、草稿中应用数量及已发布编辑中应用数量。支持按**类型**和**应用ID**筛选具体应用，页面下方以折线图展示所选时间范围内的对话次数趋势。
 
 您也可以在应用列表中，点击【查看数据】，跳转到数据看板。
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1468303771/p1057750.png)

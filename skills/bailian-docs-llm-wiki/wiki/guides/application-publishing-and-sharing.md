@@ -113,7 +113,7 @@ UI 应用基于阿里云[多端低代码开发平台魔笔](../../raw/applicatio
 ### 引用方式
 
 - **智能体应用**：在 **技能** 中加入组件，作为工具由大模型按需调用；若参数为 `业务透传`，可在测试时手动填 **入参变量配置**，或在 API 调用中通过 `biz_param` 传入。
-- **工作流应用**：拖入 **组件** 节点，选中已发布组件，从开始节点连线传入 `query` 等参数，并将组件输出（`result`）接入结束节点。流式输出需在节点上手动开启。
+- **工作流应用**：拖入 **组件** 节点，选中已发布组件，从开始节点连线传入 `query` 等参数，并将组件输出（`result`）接入结束节点。[流式输出](../concepts/streaming.md)需在节点上手动开启。
 
 ### 限制与注意事项
 
@@ -141,5 +141,6 @@ UI 应用基于阿里云[多端低代码开发平台魔笔](../../raw/applicatio
 - [分享智能体应用](../../raw/application-user-guide/application-publishing-and-sharing/share-an-application.md)
 - [使用智能体或工作流作为组件](../../raw/application-user-guide/application-publishing-and-sharing/use-agent-or-workflow-as-component.md)
 - [UI设计器](../../raw/application-user-guide/application-publishing-and-sharing/ui-designer.md)
+
 
 

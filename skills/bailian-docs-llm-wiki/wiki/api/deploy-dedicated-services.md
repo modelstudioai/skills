@@ -1,114 +1,99 @@
 # deploy dedicated services
 
-本主题汇总阿里云百炼平台与「专属服务部署」相关的 HTTP API：将自定义模型从 OSS 导入到百炼，以及把基础模型或导入后的模型部署为可调用的专属推理服务。两类 API 共同构成一条完整链路——**先通过模型导入接口把权重落到平台、再通过模型部署接口拉起推理实例并产出 `deployed_model` 标识**，供后续业务调用。
+阿里云百炼平台提供模型专属部署服务，允许开发者将平台预置模型或自定义微调模型部署为独立推理实例，获得专属算力资源与可控的吞吐、并发和延迟表现。该服务覆盖模型部署与模型导入两大 API 体系，支持多种计费模式和丰富的模型类型，适用于从原型验证到生产级推理的各类场景。
 
-## 整体流程
+## 核心流程
 
-典型链路分为两段：
+专属部署涉及两个主要环节：
 
-1. **模型导入**（可选）：若要部署自定义微调权重，先调 [模型导入API参考](../../raw/model-api-reference/deploy-dedicated-services/model-import-api-reference.md) 创建导入任务，把 OSS 上的 LoRA / 全参微调权重注册到百炼，得到形如 `qwen3-32b-offline-20240101-abc1` 的系统生成模型名。
-2. **模型部署**：根据需要的计费模式，调 [模型部署API参考](../../raw/model-api-reference/deploy-dedicated-services/model-deployment-api.md) 创建部署任务，产出 `deployed_model` 标识；该标识就是后续 SDK / HTTP 调用时传入的 model id。
+1. **模型导入**（可选）：将 OSS 上的自定义微调模型（LoRA 或全参）导入百炼平台，详见[模型导入API参考](../../raw/model-api-reference/deploy-dedicated-services/model-import-api-reference.md)。
+2. **模型部署**：对平台已有模型或导入后的模型创建部署实例，获取专属推理端点，详见[模型部署API参考](../../raw/model-api-reference/deploy-dedicated-services/model-deployment-api.md)。
 
-两类 API 都通过 `DASHSCOPE_API_KEY` 鉴权，公共请求头为：
-
-- `Authorization: Bearer ${DASHSCOPE_API_KEY}`
-- `Content-Type: application/json`
-
-## 模型导入 API
-
-模型导入用于把 OSS Bucket 中的自定义模型权重注册到百炼，导入完成后才能作为 `model_name` 进入部署流程。详细字段见 [模型导入API参考](../../raw/model-api-reference/deploy-dedicated-services/model-import-api-reference.md)。
-
-### 接口一览
-
-| 操作 | 方法与路径 |
-| --- | --- |
-| 创建导入任务 | `POST /api/v1/custom_models/import` |
-| 查询导入任务详情 | `GET /api/v1/custom_models/import/{job_id}` |
-| 查询导入任务列表 | `GET /api/v1/custom_models/import` |
-| 删除导入的模型 | `DELETE /api/v1/custom_models/import/{job_id}` |
-
-### 关键参数（创建导入任务）
-
-- `model_name`（必填）：基础模型名称，例如 `qwen3-32b`，需在「支持导入的基础模型」列表中。
-- `weight_type`（必填）：`full` 表示全参微调，`lora` 表示 LoRA 微调。
-- `source`（必填）：当前仅支持 `oss`；响应中返回大写 `OSS`。
-- `storage_info.bucket_name` / `storage_info.object_key`（必填）：OSS Bucket 名称与文件前缀，`object_key` 必须以 `/` 结尾，例如 `models/qwen3-32b-lora/`。
-- `display_name`（可选）：控制台展示名称，最长 50 字符，不传则默认沿用基础模型名。
-
-### 任务生命周期
-
-导入任务依次经历 `PENDING → RUNNING → SUCCESSED / FAILED`：
-
-- 只有处于 `SUCCESSED` 或 `FAILED` 的任务可以被 `DELETE` 删除。
-- 任务失败时，详情响应会带 `error_code`（例如 `OSS获取文件失败，请检查OSS内文件`）。
-- 异常请求统一返回 `code` + `message` 错误体，常见错误码：`InvalidParameter`、`NotFound`、`OperationDenied`、`InvalidApiKey`、`InternalError`。
+所有接口均通过 HTTP 调用，基础地址为 `https://dashscope.aliyuncs.com/api/v1/`，需在请求头中携带 `Authorization: Bearer ${DASHSCOPE_API_KEY}`。
 
 ## 模型部署 API
 
-模型部署 API 用于把已支持的基础模型（或导入完成的自定义模型）以四种计费模式拉起为专属推理服务。完整字段、模型规格价格表见 [模型部署API参考](../../raw/model-api-reference/deploy-dedicated-services/model-deployment-api.md)。
+### 查询可部署模型
 
-### 接口一览
+```
+GET /deployments/models?page_no=1&page_size=100
+```
 
-| 操作 | 方法与路径 |
-| --- | --- |
-| 查询可部署的模型列表 | `GET /api/v1/deployments/models` |
-| 创建模型部署任务 | `POST /api/v1/deployments` |
+返回当前支持部署的模型列表，包含 `model_name`（模型名称）和 `base_capacity`（最小资源单元数）。分页参数 `page_size` 最大为 200。
 
-`/deployments/models` 支持 `page_no` / `page_size` 分页（`page_size` 范围 1–200，默认 50），返回每个模型的 `model_name` 与 `base_capacity`（部署所需最小资源单元数）。
+### 创建部署任务
 
-### 四种计费 / 部署模式
+```
+POST /deployments
+```
 
-`POST /api/v1/deployments` 通过 `plan` 字段区分计费模式：
+根据所选计费模式设置不同的请求参数：
 
-| 计费模式 | `plan` 取值 | 适用场景 | 关键参数 |
-| --- | --- | --- | --- |
-| 按预置吞吐（PTU）| `ptu` | 稳定高并发、低延迟、流量可预估 | `ptu_capacity.input_tpm` / `ptu_capacity.output_tpm` |
-| 按模型单元使用时长 | `mu` | 大规模推理、性能与成本灵活可调 | `deploy_spec`（如 `MU1`，**必填**）、`capacity`、`enable_thinking`、`max_context_length`、`rpm_limit`、`tpm_limit` |
-| 按 Token 用量 | `lora` | 高性价比、对并发/延迟不敏感（如 LoRA 微调模型） | `capacity`（必填但实际无效，扩缩容走控制台表单） |
-| 按算力单元使用时长（图片/视频生成专用）| 不设置 `plan` | 多模态生成类调优后的大规模推理 | `capacity` |
+| 计费模式 | `plan` 值 | 适用场景 | 吞吐/并发可调 |
+|---------|----------|---------|-------------|
+| 按预置吞吐（PTU） | `ptu` | 稳定吞吐、高并发低延迟、流量可预估 | 否（平台预置） |
+| 按模型单元计费 | `mu` | 大规模推理、资源专属、灵活调参 | 是（自定义） |
+| 按 Token 用量计费 | `lora` | 高性价比、对并发延迟要求不高 | 否（平台预置） |
+| 按算力单元计费 | 不设置 | 图片/视频生成模型 | 是（自定义） |
 
-> **注意**：执行 `POST /api/v1/deployments` 后，即使尚未调用模型，部署成功后即开始计费——务必先确认计费规则再下发部署命令。
+关键请求参数：
 
-### 常用请求参数
+- `model_name`（必填）：待部署的模型 ID
+- `capacity`（必填）：资源单元数量，须为 `base_capacity` 的整数倍
+- `deploy_spec`：仅 `mu` 模式必填，如 `MU1`
+- `enable_thinking`：部分模型可切换思考模式
+- `max_context_length`：部分模型可配置最长上下文
+- `rpm_limit` / `tpm_limit`：部分模型支持服务限流
+- `suffix`：同一模型多次部署时需指定后缀以区分
 
-- `model_name`（必填）：待部署的模型 ID，对应控制台「我的模型」。
-- `capacity`（必填）：分配给模型的资源单元数量，**必须是 `base_capacity` 的整数倍**；`plan=lora` 时该字段无效但仍需填写。
-- `name` / `display_name`：部署任务名称与控制台显示名。
-- `suffix`：部署后生成的新模型名后缀，最长 8 字符且全局唯一；同一模型多次部署时必须设置以便区分。
-- `enable_thinking`：部分模型支持，区分 Instruct（非思考）与 Thinking（思考）推理模式；部分模型支持「Instruct/Thinking」，部署时再选。
-- `max_context_length`、`rpm_limit`、`tpm_limit`：仅 `plan=mu` 的部分模型支持，用于自定义最长上下文与 RPM/TPM 限流。
+> **注意**：部署任务创建成功即开始计费，即使尚未发送推理请求。按 Token 用量计费模式下 `capacity` 参数虽设置无效但必须填写。
 
-### 模型单元（MU）部署支持
+### 部署状态
 
-`plan=mu` 模式支持的模型覆盖文本生成、多模态、语音合成等场景，包括但不限于：
+部署任务经历以下生命周期：`PENDING` → `RUNNING`（可服务）→ `STOPPED` / `DELETING` / `FAILED`。
 
-- **千问系列**：qwen3.6 / qwen3.5 / qwen3 / qwen2.5 各尺寸（含 MoE、Embedding、Rerank），以及 qwen-flash / qwen-plus 的定版模型。
-- **多模态**：qwen3-vl 系列、qwen-vl-max / qwen-vl-ocr、qwen3.5-omni-flash / plus。
-- **第三方**：GLM-5 / GLM-4.7、DeepSeek-v4-Flash / DeepSeek-v3.2、MiniMax-M2.5、Kimi-K2.5。
-- **语音**：cosyvoice-v3-flash。
+## 模型导入 API
 
-> **注意**：部分大模型仅在 **PD 分离模式**（Prefill 与 Decode 拆到不同计算节点）下提供，目的是「降低首 Token 延迟、提高吞吐」；PD 分离规格的小时单价显著高于普通规格，下单前需对照 [模型部署API参考](../../raw/model-api-reference/deploy-dedicated-services/model-deployment-api.md) 的价格表。
+当需要部署自定义微调模型时，需先通过导入 API 将模型文件从 OSS 导入百炼平台。完整流程参见[模型导入API参考](../../raw/model-api-reference/deploy-dedicated-services/model-import-api-reference.md)。
 
-### 响应与部署生命周期
+### 创建导入任务
 
-创建成功后响应包含 `deployed_model`（新模型唯一标识，调用时使用）、`base_model`、`base_capacity` / `capacity` / `ready_capacity`、`workspace_id`、`charge_type`（如 `post_paid`）等字段。部署状态字段 `status` 可能为：
+```
+POST /custom_models/import
+```
 
-- `PENDING`：正在创建部署任务。
-- `UPDATING`：正在更新部署任务。
-- `RUNNING`：可正常处理推理请求。
-- `STOPPED`：已停止，不再计费。
-- `DELETING`：正在删除。
-- `FAILED`：创建或更新失败。
+关键参数：
 
-## 使用建议与限制
+- `model_name`：基础模型名称（如 `qwen3-32b`）
+- `source`：当前仅支持 `oss`
+- `weight_type`：`full`（全参微调）或 `lora`（LoRA 微调）
+- `storage_info`：包含 `bucket_name` 和 `object_key`（须以 `/` 结尾）
 
-- **先导入、后部署**：自定义权重必须先通过模型导入 API 完成 `SUCCESSED`，其响应中的 `model_name` 才能作为部署 API 的 `model_name`。
-- **OSS 前置条件**：调用导入 API 前需创建 OSS Bucket 并完成百炼平台的 OSS 授权，模型文件需满足导入要求（详见 OSS 授权与文件格式约束的官方说明）。
-- **capacity 约束**：除 `plan=lora` 外，`capacity` 必须为 `base_capacity` 的整数倍；可先调 `GET /api/v1/deployments/models` 取得 `base_capacity` 后再换算。
-- **多次部署同一模型**：必须显式设置 `suffix`，否则会因生成的 `deployed_model` 冲突而失败。
-- **扩缩容**：`plan=lora`（按 Token 计费）部署后无法通过 API 修改 `capacity`，需前往百炼模型部署控制台填写表单申请。
-- **计费起点**：部署成功立刻开始计费，与是否发起模型调用无关；不再使用时记得通过控制台或对应 API 停止/删除部署任务。
-- **错误处理**：导入 API 的失败原因通过 `error_code` 暴露；部署 API 的常见失败包括资源不足、`deploy_spec` 与模型不匹配、`capacity` 非整数倍等，可先在控制台验证后再回到 API 自动化流程。
+### 导入任务管理
+
+- **查询详情**：`GET /custom_models/import/{job_id}`
+- **查询列表**：`GET /custom_models/import?page_no=1&page_size=10`，支持按 `status` 和 `model_name` 过滤
+- **删除任务**：`DELETE /custom_models/import/{job_id}`，仅 `SUCCESSED` 或 `FAILED` 状态可删除
+
+导入任务状态流转：`PENDING` → `RUNNING` → `SUCCESSED` / `FAILED`。
+
+## 支持的模型
+
+模型单元（MU）部署模式支持的模型覆盖多个类别，详细规格与定价见[模型部署API参考](../../raw/model-api-reference/deploy-dedicated-services/model-deployment-api.md)中的支持模型表：
+
+- **文本生成**：千问系列（Qwen 3.6/3.5/3/2.5 等各尺寸）、GLM-5/4.7、DeepSeek-v4-Flash/v3.2、MiniMax-M2.5、Kimi-K2.5
+- **多模态**：千问 VL 系列（视觉理解）、千问 Omni 系列（全模态）
+- **语音合成**：CosyVoice-v3-Flash
+- **Embedding/Rerank**：千问3-Embedding-0.6B、千问3-Rerank 系列
+
+部分模型支持 PD 分离模式（Prefill-Decode 分离），可降低首 Token 延迟并提高吞吐。
+
+## 注意事项
+
+- 使用前需获取百炼 API-KEY 并熟悉模型部署基本流程
+- 模型导入前须完成 OSS Bucket 创建和百炼平台的 OSS 授权
+- 模型单元按小时或包月计费，不同 MU 规格（MU1-MU9）对应不同算力和价格
+- 常见错误码包括 `InvalidParameter`（参数无效）、`NotFound`（资源不存在）、`OperationDenied`（操作被拒绝）、`InvalidApiKey`（密钥无效）
 
 ## 来源文档
 

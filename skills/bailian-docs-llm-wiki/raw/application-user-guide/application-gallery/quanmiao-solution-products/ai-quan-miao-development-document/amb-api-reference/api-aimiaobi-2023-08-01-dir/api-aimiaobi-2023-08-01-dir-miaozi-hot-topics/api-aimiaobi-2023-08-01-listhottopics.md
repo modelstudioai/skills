@@ -6,29 +6,36 @@
 
 [您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListHotTopics)
 
-[![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png)调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListHotTopics)
+ [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListHotTopics)
 
-## 授权信息
+## **授权信息**
 
 下表是API对应的授权信息，可以在RAM权限策略语句的`Action`元素中使用，用来给RAM用户或RAM角色授予调用此API的权限。具体说明如下：
 
 -   操作：是指具体的权限点。
+    
 -   访问级别：是指每个操作的访问级别，取值为写入（Write）、读取（Read）或列出（List）。
+    
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
-    -   对于必选的资源类型，用前面加 \* 表示。
+    
+    -   对于必选的资源类型，用前面加 \* 表示。
+        
     -   对于不支持资源级授权的操作，用`全部资源`表示。
+        
 -   条件关键字：是指云产品自身定义的条件关键字。
+    
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
+    
 
-操作
+**操作**
 
-访问级别
+**访问级别**
 
-资源类型
+**资源类型**
 
-条件关键字
+**条件关键字**
 
-关联操作
+**关联操作**
 
 aimiaobi:ListHotTopics
 
@@ -42,17 +49,23 @@ list
 
 无
 
+## 请求语法
+
+```
+POST  HTTP/1.1
+```
+
 ## 请求参数
 
-名称
+**名称**
 
-类型
+**类型**
 
-必填
+**必填**
 
-描述
+**描述**
 
-示例值
+**示例值**
 
 AgentKey
 
@@ -83,8 +96,6 @@ array
 否
 
 热榜主题事件筛选
-
-Topic
 
 string
 
@@ -121,8 +132,6 @@ array
 否
 
 热榜主题 ID 列表
-
-TopicId
 
 string
 
@@ -162,15 +171,45 @@ integer
 
 1
 
-## 返回参数
+CustomField
 
-名称
+string
 
-类型
+否
 
-描述
+自定义业务字段筛选（keyword 精确匹配），长度上限 255 字符
 
-示例值
+biz-tag-001
+
+CreateTimeStart
+
+string
+
+否
+
+话题创建时间筛选起点（包含），格式：yyyy-MM-dd HH:mm:ss
+
+2026-06-01 00:00:00
+
+CreateTimeEnd
+
+string
+
+否
+
+话题创建时间筛选终点（包含），格式：yyyy-MM-dd HH:mm:ss
+
+2026-06-04 23:59:59
+
+## **返回参数**
+
+**名称**
+
+**类型**
+
+**描述**
+
+**示例值**
 
 object
 
@@ -190,9 +229,7 @@ array<object>
 
 业务数据
 
-Data
-
-object
+array<object>
 
 热点事件列表
 
@@ -214,7 +251,7 @@ string
 
 HotValue
 
-long
+integer
 
 热度值
 
@@ -242,17 +279,13 @@ array<object>
 
 结构化主题摘要列表
 
-StructureSummary
-
-object
+array<object>
 
 DocList
 
 array<object>
 
 生成该标题摘要引用的文章
-
-DocList
 
 object
 
@@ -357,6 +390,30 @@ string
 
 数据版本
 
+CustomField
+
+string
+
+自定义业务字段（keyword）
+
+biz-tag-001
+
+CreateTime
+
+string
+
+话题创建时间，格式：yyyy-MM-dd HH:mm:ss
+
+2026-06-04 12:34:56
+
+TopicUrl
+
+string
+
+话题原文链接
+
+https://www.example.com/topic/123
+
 HttpStatusCode
 
 integer
@@ -447,7 +504,10 @@ integer
       "TaskStatus": 26,
       "Topic": "主题唯一名称",
       "TopicSource": "Toutiao",
-      "Version": "数据版本"
+      "Version": "数据版本",
+      "CustomField": "biz-tag-001",
+      "CreateTime": "2026-06-04 12:34:56",
+      "TopicUrl": "https://www.example.com/topic/123"
     }
   ],
   "HttpStatusCode": 200,
@@ -462,4 +522,8 @@ integer
 
 ## 错误码
 
-访问[错误中心](< https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode>)查看更多错误码。
+访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
+
+## **变更历史**
+
+更多信息，参考[变更详情](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/ListHotTopics#workbench-doc-change-demo)。

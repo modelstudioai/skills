@@ -18,16 +18,12 @@
 
 ### **Workspace ID**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9268853471/p935593.png)
-
 1.  访问[**业务空间管理**](https://bailian.console.aliyun.com/?admin=1#/efm/business_management)页面。
     
 2.  在业务空间管理列表中获取的Workspace ID为入参中workspaceId。
     
 
 ### **App ID**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9268853471/p935592.png)
 
 1.  访问**[应用广场](https://bailian.console.aliyun.com/#/app-market)**页面，点击通义晓蜜CCAI-对话分析AIO的**查看详情**。
     
@@ -78,33 +74,25 @@ import com.aliyun.teaopenapi.models.Config;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 public class CcaiPaasTest {
-
   public static void main(String[] args) throws Exception{
         String accessKeyId = "YOUR_ACCESS_KEY_ID";
         String accessKeySecret = "YOUR_ACCESS_KEY_SECRET";
         String workspaceId = "YOUR_WORKSPACEID";
         String appId = "YOUR_APPID";
-
         Config config = new Config();
         config.setAccessKeyId(accessKeyId).setAccessKeySecret(accessKeySecret).setEndpoint("contactcenterai.cn-shanghai.aliyuncs.com")
                 .setRegionId("cn-shanghai").setProtocol("HTTPS");
-
         Client client = new Client(config);
-
         AnalyzeImageRequest request = new AnalyzeImageRequest();
         request.setStream(false);
         request.setResultTypes(Arrays.asList("watermark"));
-
         List<String> imageList = new ArrayList<>();
         imageList.add("http://img.alicdn.com/imgextra/i3/O1CN01sRvtsv1WKi6WlKiiP_!!6000000002770-0-tps-1024-1024.jpg");
         request.setImageUrls(imageList);
-
         AnalyzeImageResponse response=client.analyzeImage(workspaceId,appId,request);
         System.out.println(response);
     }
-     
 }
 ```
 
@@ -126,7 +114,6 @@ import darabonba.core.RequestConfiguration;
 import darabonba.core.ResponseIterable;
 import darabonba.core.ResponseIterator;
 import darabonba.core.client.ClientOverrideConfiguration;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -134,21 +121,17 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 public class CcaiPaasTest {
-
     private static String accessKeyId="YOUR_ACCESS_KEY_ID";
     private static String accessKeySecret="YOUR_ACCESS_KEY_SECRET";
     private static String workspaceId="YOUR_WORKSPACEID";
     private static String appId="YOUR_APPID";
-
     private static StaticCredentialProvider provider = StaticCredentialProvider.create(
             Credential.builder()
                     .accessKeyId(accessKeyId)
                     .accessKeySecret(accessKeySecret)
                     .build()
     );
-
     private static AsyncClient client = AsyncClient.builder()
             .region("cn-shanghai") 
             .credentialsProvider(provider)
@@ -160,21 +143,16 @@ public class CcaiPaasTest {
                             .setProtocol("HTTPS")
                             .setEndpointOverride("contactcenterai.cn-shanghai.aliyuncs.com")
             ).build();
-
     public static void main(String[] args) throws Exception{
-
         List<String> imageList = new ArrayList<>();
         imageList.add("https://img.alicdn.com/imgextra/i3/O1CN01sRvtsv1WKi6WlKiiP_!!6000000002770-0-tps-1024-1024.jpg");
-
         AnalyzeImageRequest request =  AnalyzeImageRequest.builder().appId(appId).workspaceId(workspaceId)
                 .resultTypes(Arrays.asList("watermark")).stream(false).imageUrls(imageList).build();
-
         CompletableFuture<AnalyzeImageResponse> x = client.analyzeImage(request);
         AnalyzeImageResponse generateCompletionResponse = x.get(10, TimeUnit.SECONDS);
         System.out.println("ALL**********************");
         System.out.println(JSON.toJSONString(generateCompletionResponse.getBody()));
         System.out.println(generateCompletionResponse.getBody().getRequestId());
-       
     }
 }
 ```
@@ -197,7 +175,6 @@ import darabonba.core.RequestConfiguration;
 import darabonba.core.ResponseIterable;
 import darabonba.core.ResponseIterator;
 import darabonba.core.client.ClientOverrideConfiguration;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -205,21 +182,17 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 public class CcaiPaasTest {
-
     private static String accessKeyId="YOUR_ACCESS_KEY_ID";
     private static String accessKeySecret="YOUR_ACCESS_KEY_SECRET";
     private static String workspaceId="YOUR_WORKSPACEID";
     private static String appId="YOUR_APPID";
-
     private static StaticCredentialProvider provider = StaticCredentialProvider.create(
             Credential.builder()
                     .accessKeyId(accessKeyId)
                     .accessKeySecret(accessKeySecret)
                     .build()
     );
-
     private static AsyncClient client = AsyncClient.builder()
             .region("cn-shanghai") 
             .credentialsProvider(provider)
@@ -231,15 +204,11 @@ public class CcaiPaasTest {
                             .setProtocol("HTTPS")
                             .setEndpointOverride("contactcenterai.cn-shanghai.aliyuncs.com")
             ).build();
-
     public static void main(String[] args) throws Exception{
-
         List<String> imageList = new ArrayList<>();
         imageList.add("https://img.alicdn.com/imgextra/i3/O1CN01sRvtsv1WKi6WlKiiP_!!6000000002770-0-tps-1024-1024.jpg");
-        
         AnalyzeImageRequest request = AnalyzeImageRequest.builder().appId(appId).workspaceId(workspaceId)
                 .resultTypes(Arrays.asList("watermark")).stream(true).imageUrls(imageList).build();
-
         ResponseIterable<AnalyzeImageResponseBody> x = client.analyzeImageWithResponseIterable(request);
         ResponseIterator<AnalyzeImageResponseBody> iterator = x.iterator();
         String lastTxt = "";
@@ -248,7 +217,6 @@ public class CcaiPaasTest {
             lastTxt = event.getText();
             System.out.println(JSON.toJSONString(event));
         }
-
         System.out.println("ALL***********************");
         System.out.println(lastTxt);
         System.out.println("请求成功的请求头值：");

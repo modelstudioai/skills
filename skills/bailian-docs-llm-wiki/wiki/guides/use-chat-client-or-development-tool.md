@@ -48,7 +48,7 @@
 - **希望留在 IDE 内**：VS Code 用户可选 Cline 或 Cursor（独立编辑器），JetBrains 用户可选 Qoder/Qoder CN，国内开发者使用 [Qoder CN（原 Lingma）](../../raw/model-user-guide/use-chat-client-or-development-tool/lingma-agent.md) 体验本土化场景更佳。
 - **需要把模型接入聊天群组**：[OpenClaw](../../raw/model-user-guide/use-chat-client-or-development-tool/openclaw.md) 提供钉钉、飞书、企业微信、QQ 渠道插件以及 Cron 定时任务能力，可一站式搭建群机器人。
 - **构建低代码工作流或 RAG 应用**：[Dify](../../raw/model-user-guide/use-chat-client-or-development-tool/dify.md) 适合配合知识库做企业级应用编排。
-- **图像/视频生成 API 调试**：直接用 [Postman 或 cURL](../../raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)，便于查看异步任务回调与 RequestId。
+- **图像/视频生成 API 调试**：直接用 [Postman 或 cURL](../../raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)，便于查看[异步任务](../concepts/async-task.md)回调与 RequestId。
 
 ## 关键配置注意事项
 
@@ -83,5 +83,6 @@
 - [使用Postman或cURL调用图像/视频生成API](../../raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)
 - [Dify](../../raw/model-user-guide/use-chat-client-or-development-tool/dify.md)
 - [更多工具](../../raw/model-user-guide/use-chat-client-or-development-tool/more-tools.md)
+
 
 

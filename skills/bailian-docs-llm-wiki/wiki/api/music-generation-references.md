@@ -7,7 +7,7 @@
 ## 支持的模型与服务端点
 
 - 服务端点：`POST https://dashscope.aliyuncs.com/api/v1/services/audio/music/generation`
-- 通信协议：HTTPS；流式输出走 SSE（Server-Sent Events）
+- 通信协议：HTTPS；[流式输出](../concepts/streaming.md)走 SSE（Server-Sent Events）
 - 可选模型（`model` 字段必填）：
   - `fun-music-preview`
   - `fun-music-v1`
@@ -20,7 +20,7 @@
 | --- | --- | --- | --- |
 | `Authorization` | string | 是 | `Bearer {api-key}`，需替换为实际 API Key |
 | `Content-Type` | string | 是 | 固定为 `application/json` |
-| `X-DashScope-SSE` | string | 否 | 设为 `enable` 时启用 SSE 流式输出 |
+| `X-DashScope-SSE` | string | 否 | 设为 `enable` 时启用 SSE [流式输出](../concepts/streaming.md) |
 
 API Key 获取方式参见百炼文档；请求头要求与示例完整说明见 [音乐生成Fun-Music API参考](../../raw/model-api-reference/music-generation-references/fun-music-api.md)。
 
@@ -49,7 +49,7 @@ API Key 获取方式参见百炼文档；请求头要求与示例完整说明见
 
 ## 使用方式
 
-### 非流式输出
+### 非[流式输出](../concepts/streaming.md)
 
 ```bash
 curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generation' \
@@ -121,5 +121,6 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generat
 ## 来源文档
 
 - [音乐生成Fun-Music API参考](../../raw/model-api-reference/music-generation-references/fun-music-api.md)
+
 
 

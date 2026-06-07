@@ -14,7 +14,7 @@ RAM用户调用热词OpenAPI需要访问多模态对话产品的权限，授权�
 
 为方便您快速接入热词OpenAPI，建议使用阿里云SDK调用OpenAPI，可在[OpenAPI调试页面](https://api.aliyun.com/api/MultimodalDialog/2025-09-03/Vocabulary?RegionId=cn-beijing&tab=DEMO&lang=JAVA&useCommon=true)查看示例代码，并下载完整示例工程。
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8629232671/p1018133.png)
+在OpenAPI门户左侧导航栏选择**调试** > **热词管理 Vocabulary**，右侧SDK示例面板默认展示Java代码，其中endpoint配置为`multimodaldialog.cn-beijing.aliyuncs.com`，单击**运行示例**按钮可直接运行示例代码。
 
 ### **请求参数**
 

@@ -36,7 +36,7 @@
     
     > 主账号可以查看全部API Key，子账号仅能查看自己创建的API Key。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6147424771/p1061684.png)
+    在 **API Key** 页面，可单击右上角 **\+ 创建API Key** 新建密钥。列表中包含 **ID**、**API Key**、**描述**、**归属账号**、**创建时间** 和 **操作**（含 **禁用**）等列。
     
 
 ## 新加坡、美国（弗吉尼亚）地域
@@ -55,7 +55,7 @@
     
     > 主账号可以查看全部API Key，子账号仅能查看自己创建的API Key。
     
-    ![2026-02-11\_11-56-27](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0009970771/p1054137.jpg)
+    单击右上角**\+ 创建 API Key**按钮可新建 API Key。
     
 
 ## 德国（法兰克福）地域
@@ -72,7 +72,7 @@
     
     > 主账号可以查看全部API Key，子账号仅能查看自己创建的API Key。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2663279771/p1074937.png)
+    在**API Key**管理页面，单击右上角**\+ 创建API Key**创建密钥。对已有 API Key，可在操作列执行**禁用**、**编辑**或**删除**操作。
     
 
 **何时选择其他归属账号或业务空间？**
