@@ -1,6 +1,6 @@
 # [more](more.md) models
 
-本页汇总百炼平台中三类“非通用聊天”补充模型 API：用于检索召回二次精排的**文本/多模态排序模型**、用于路由与函数调用的**意图理解模型**、以及面向法律垂直行业的**通义法睿大模型**。它们各自有独立的接入端点与参数结构，开发者按业务场景选用即可。
+本页汇总百炼平台中三类“非通用聊天”补充模型 API：用于检索召回二次精排的**文本/多模态排序模型**、用于路由与[函数调用](../concepts/function-calling.md)的**意图理解模型**、以及面向法律垂直行业的**通义法睿大模型**。它们各自有独立的接入端点与参数结构，开发者按业务场景选用即可。
 
 ## 支持的模型一览
 
@@ -9,7 +9,7 @@
 | 排序 | `qwen3-rerank` | 单条 ≤ 4,000 Token；单次 ≤ 500 文档；总输入 ≤ 30,000 Token | 文本语义检索、RAG | [文本排序](../../raw/model-api-reference/more-models/text-rerank-api.md) |
 | 排序 | `qwen3-vl-rerank` | 单条 ≤ 8,000 Token；单次 ≤ 100 文本 / 40 图片 / 4 视频；总输入 ≤ 120,000 Token | 跨模态搜索、图像聚类、图片检索 | [文本排序](../../raw/model-api-reference/more-models/text-rerank-api.md) |
 | 排序 | `gte-rerank-v2` | 单条 ≤ 4,000 Token；总输入 ≤ 30,000 Token | 通用文本精排（50+ 语种） | [文本排序](../../raw/model-api-reference/more-models/text-rerank-api.md) |
-| 意图 | `tongyi-intent-detect-v3` | 上下文 8,192 Token；最大输出 1,024 Token | 意图识别、函数调用路由 | [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md) |
+| 意图 | `tongyi-intent-detect-v3` | 上下文 8,192 Token；最大输出 1,024 Token | 意图识别、[函数调用](../concepts/function-calling.md)路由 | [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md) |
 | 法律 | `farui-plus` | 上下文 12k Token；最大输出 2k Token | 法律咨询、文书生成、争议焦点识别 | [通义法睿大语言模型](../../raw/model-api-reference/more-models/tongyi-farui-api.md) |
 
 > **注意**：根据 [文本排序](../../raw/model-api-reference/more-models/text-rerank-api.md) 中的公告，`gte-rerank` 将于 **2026-05-30 下线**，新接入请改用 `qwen3-rerank`。`gte-rerank-v2` 暂不受影响。
@@ -54,7 +54,7 @@
 
 依据 [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)，通过不同的 System Message 模板切换：
 
-1. **同时输出意图与函数调用**：System Message 末尾加 `Response in INTENT_MODE.`，并把工具 JSON Schema 列表注入 System。响应是 `<tags>...</tags><tool_call>...</tool_call><content>...</content>` 三段式文本，需要用正则解析（文档给出了 `parse_text` 参考实现）。
+1. **同时输出意图与[函数调用](../concepts/function-calling.md)**：System Message 末尾加 `Response in INTENT_MODE.`，并把工具 JSON Schema 列表注入 System。响应是 `<tags>...</tags><tool_call>...</tool_call><content>...</content>` 三段式文本，需要用正则解析（文档给出了 `parse_text` 参考实现）。
 2. **只输出意图标签**：System Message 提供 `{"意图key": "意图描述"}` 字典，要求 `Just reply with the chosen tag.`，模型只返回选中的 key。
 3. **只输出函数调用信息**：与模式 1 类似但只回工具调用部分。
 
@@ -105,6 +105,7 @@
 - [文本排序](../../raw/model-api-reference/more-models/text-rerank-api.md)
 - [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)
 - [通义法睿大语言模型](../../raw/model-api-reference/more-models/tongyi-farui-api.md)
+
 
 
 

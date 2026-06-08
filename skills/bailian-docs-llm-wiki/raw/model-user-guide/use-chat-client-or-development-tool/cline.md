@@ -64,7 +64,7 @@ API Key
 
 Model ID
 
-填入 Coding Plan [支持的模型](https://help.aliyun.com/zh/model-studio/coding-plan)，如 `qwen3.6-plus`。
+填入 Coding Plan [支持的模型](https://help.aliyun.com/zh/model-studio/coding-plan)，如 `qwen3.7-plus`。
 
 ### 按量计费
 

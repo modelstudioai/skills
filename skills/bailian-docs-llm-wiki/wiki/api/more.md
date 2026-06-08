@@ -98,7 +98,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=180
 
 ### 前置条件
 
-- 子账号需获取 `AliyunBailianDataFullAccess` 策略并加入对应业务空间；主账号无此限制。
+- 子账号需获取 `AliyunBailianDataFullAccess` 策略并加入对应[业务空间](../concepts/workspace.md)；主账号无此限制。
 - 已安装阿里云百炼 SDK（`alibabacloud_bailian20231229`）。
 - 已配置 `ALIBABA_CLOUD_ACCESS_KEY_ID` / `ALIBABA_CLOUD_ACCESS_KEY_SECRET` 到环境变量。
 - 知识库的字段需在创建时设置为**参与检索**，否则无法被 SearchFilters 命中。
@@ -126,6 +126,7 @@ resp = client.retrieve("请传入实际的业务空间ID", retrieve_request)
 - [服务关联角色](../../raw/application-api-reference/more/bailian-service-linked-role.md)
 - [生成临时API Key](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md)
 - [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md)
+
 
 
 

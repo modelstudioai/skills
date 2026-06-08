@@ -586,7 +586,7 @@ OSS
     
     **如何设置EventBridge白名单**
     
-    1.  访问[RDS控制台](https://rdsnext.console.aliyun.com/)，点击左侧导航栏中的**实例列表**，然后点击包含数据表的RDS实例。接着，点击左侧导航栏中的**数据库连接**，点击外网地址旁的**设置白名单**。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8520240571/p960931.png)
+    1.  访问[RDS控制台](https://rdsnext.console.aliyun.com/)，点击左侧导航栏中的**实例列表**，然后点击包含数据表的RDS实例。接着，点击左侧导航栏中的**数据库连接**，点击外网地址旁的**设置白名单**。
         
     2.  点击**添加白名单分组**，并将以下 EventBridge 公网 IP 地址**全部添加**至白名单分组中。
         
@@ -616,8 +616,6 @@ OSS
     > 若该 RDS 实例未开通外网地址，请先按照界面指引完成 RDS 外网地址开通。
     
     > 高可用系列RDS请勿使用**数据库代理连接**区域的**代理连接地址**或**内网地址**。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8520240571/p961377.png)
     
     **数据库端口**
     
@@ -674,8 +672,6 @@ OSS
     
     > 高可用系列RDS请勿使用**数据库代理连接**区域的**代理连接地址**或**内网地址**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9520240571/p961406.png)
-    
     **数据库端口**
     
     填写RDS实例的**内网端口**。该信息同样可以在RDS实例的**数据库连接**界面获取。
@@ -694,7 +690,7 @@ OSS
     
     应填写RDS实例的**VPC ID**。该信息同样可以在RDS实例的**数据库连接**界面获取。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8520240571/p961413.png)
+    VPC ID 显示在该页面的**网络类型**区域中。
     
     **VSwitch ID**
     
@@ -702,7 +698,7 @@ OSS
     
     > RDS MySQL高可用系列实例可能拥有多个 VSwitch ID，请完整填写该实例关联的所有 VSwitch ID。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8520240571/p961526.png)
+    在 RDS 控制台左侧菜单选择**数据库连接**，在**网络类型**信息区域将鼠标悬浮于 VPC ID 上，即可在下方查看 VSwitch ID。
     
     **安全组ID**
     
@@ -710,9 +706,7 @@ OSS
     
     -   安全组的地域需与上方**所属地域**保持一致；
         
-    -   安全组的网络需选择RDS所在的VPC；
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1538323571/p988790.png)
+    -   安全组的网络需选择RDS所在的VPC，即在创建安全组页面的**网络**下拉框中选择RDS实例所在的VPC；
         
     -   安全组类型支持普通安全组和企业级安全组。
         
@@ -720,9 +714,9 @@ OSS
         
         -   **正确示例：**
             
-            ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8520240571/p961532.png)
+            安全组详情页中，**安全组ID** 以 sg 开头（此处部分信息已脱敏），**组内连通策略** 为 **组内互通**，**安全组类型** 为 **普通安全组**。**访问规则** 区域选中 **入方向** Tab，当前入方向未设置任何访问规则限制（0 条）。
             
-        -   **错误示例：**![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9520240571/p961531.png)
+        -   **错误示例：**安全组**入方向**配置了 5 条允许规则（优先级均为 1）：**所有 ICMP-IPv4**（端口 -1/-1）、自定义 TCP 端口 **RDP(3389)**、自定义 TCP 端口 **SSH(22)**、自定义 TCP 端口 **HTTPS(443)**、自定义 TCP 端口 **HTTP(80)**，访问来源均为 `0.0.0.0/0`。入方向虽然允许任意 IP 访问，但仅开放了特定端口。
             
     
 3.  连通性检测通过后，点击**确认**，提交新建任务。系统将为您自动配置RDS数据源，期间当前业务空间会被锁定，禁止同时创建其他数据源。
@@ -769,17 +763,12 @@ OSS
     
     1.  访问[ECS控制台](https://ecs.console.aliyun.com/home)，点击左侧导航栏中的**安全组**，找到与您自建MySQL关联的安全组，然后点击**操作**栏中的**管理规则。**
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8520240571/p968572.png)
-        
     2.  在安全组详情页，点击**增加规则**，将以下EventBridge公网IP地址**全部添加**至该安全组中，并且需要放行**所有流量**和**全部端口**。
         
         > 不可使用由第三方产品或服务间接创建的安全组。
         
         -   39.105.55.188,39.105.110.43,47.95.35.213,47.95.33.100,39.106.255.198,47.93.177.159,47.95.32.154,39.107.99.72
             
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9520240571/p968577.png)
-        
     3.  点击**确定**，安全组生效。
         
     4.  在您的MySQL中，创建一个允许全部来源流量的数据库账号（也可以使用已有账号）然后执行以下GRANT授权命令。
@@ -789,10 +778,8 @@ OSS
         ```
         -- 创建用户（合并为单条语句），请将user1替换为您的实际数据库账号
         CREATE USER 'user1'@'%' IDENTIFIED BY 'user1的密码';
-        
         -- 授予基础权限（合并为单条语句），请将user1替换为您的实际数据库账号
         GRANT ALL PRIVILEGES ON *.* TO 'user1'@'%' WITH GRANT OPTION;
-        
         -- 刷新权限（仅需一次）
         FLUSH PRIVILEGES;
         ```
@@ -867,10 +854,8 @@ OSS
         ```
         -- 创建用户（合并为单条语句），请将user1替换为您的实际数据库账号
         CREATE USER 'user1'@'%' IDENTIFIED BY 'user1的密码';
-        
         -- 授予基础权限（合并为单条语句），请将user1替换为您的实际数据库账号
         GRANT ALL PRIVILEGES ON *.* TO 'user1'@'%' WITH GRANT OPTION;
-        
         -- 刷新权限（仅需一次）
         FLUSH PRIVILEGES;
         ```
@@ -907,8 +892,6 @@ OSS
     
     填写您自建MySQL的**私网地址**。您可以在ECS的**实例**界面获取该信息：前往[ECS控制台](https://ecs.console.aliyun.com/home)，点击左侧导航栏中的**实例**，即可查看对应实例的**私网地址**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8520240571/p968587.png)
-    
     **数据库端口**
     
     填写您自建MySQL的端口。
@@ -925,13 +908,11 @@ OSS
     
     填写您自建MySQL所部署ECS实例所在VPC的**实例ID**（vpc-xxxxxx）。该信息同样可以前往[ECS控制台](https://ecs.console.aliyun.com/home)获取。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8520240571/p968620.png)
+    在左侧导航栏选择**实例与镜像** > **实例**，在实例列表中找到目标实例，在**专有网络**列中即可查看对应的 VPC ID 和交换机 ID。
     
     **VSwitch ID**
     
     实例VPC ID下方即是VSwitch ID（vsw-xxxxxx）。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9520240571/p968618.png)
     
     **安全组ID**
     
@@ -941,18 +922,10 @@ OSS
         
     -   安全组的网络需选择ECS所在的VPC；
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1538323571/p988802.png)
-        
     -   安全组类型支持普通安全组和企业级安全组。
         
     -   **入方向**未设置任何访问限制；
         
-        -   **正确示例：**
-            
-            ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8520240571/p961532.png)
-            
-        -   **错误示例：**![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9520240571/p961531.png)
-            
     
 4.  连通性检测通过后，点击**创建数据源**，提交新建任务。系统将为您自动配置MySQL数据源，期间当前业务空间会被锁定，禁止同时创建其他数据源。
     
@@ -1278,7 +1251,7 @@ VSwitch ID
 
 -   **我想使用RAM用户开通EventBridge服务关联角色，应如何为该RAM用户配置权限？**
     
-    1.  主账号为RAM用户配置如下三个系统策略：`AliyunBailianFullAccess`、`AliyunEventBridgeFullAccess`和`AliyunRDSReadOnlyAccess`。具体操作请参考[为RAM用户授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)。
+    1.  主账号为RAM用户配置如下三个系统策略：`AliyunBailianFullAccess`、`AliyunEventBridgeFullAccess`和`AliyunRDSReadOnlyAccess`。具体操作请参考[管理RAM用户的权限](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)。
         
     2.  主账号为RAM用户配置**创建服务关联角色**系统策略。
         

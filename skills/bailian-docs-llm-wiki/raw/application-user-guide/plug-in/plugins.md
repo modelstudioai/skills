@@ -8,15 +8,15 @@
 
 ## 主账号
 
-如果您使用主账号登录阿里云百炼，请在**[插件](https://bailian.console.aliyun.com/#/plugin-market)**页面，勾选同意上述条款，单击**授权并进入**。
+如果您使用主账号登录阿里云百炼，请在[**插件**](https://bailian.console.aliyun.com/#/plugin-market)页面，勾选同意上述条款，单击**授权并进入**。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9200547371/p907876.png)
+授权页面将创建服务关联角色 `AliyunServiceRoleForSFMAccessCloudAPI`，对应权限策略为 `AliyunServiceRolePolicyForSFMAccessCloudAPI`，用于授权百炼大模型平台访问您的阿里云市场商品清单并根据插件配置进行API调用。
 
 ## RAM用户（子账号）
 
-如果您使用RAM用户（子账号）登录阿里云百炼，在**[插件](https://bailian.console.aliyun.com/#/plugin-market)**页面，勾选同意上述条款，单击**授权并进入**时，会有如下提示：
+如果您使用RAM用户（子账号）登录阿里云百炼，在[**插件**](https://bailian.console.aliyun.com/#/plugin-market)页面，勾选同意上述条款，单击**授权并进入**时，会有如下提示：
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9200547371/p907884.png)
+系统弹出**云市场服务关联角色**对话框，显示错误码 140052，服务关联角色名称为 `AliyunServiceRoleForSFMAccessCloudAPI`。
 
 这是因为该RAM用户（子账号）不具备创建服务关联角色的权限。请按照下述操作先授予RAM用户（子账号）创建服务关联角色的权限。获得授权后，RAM用户（子账号）即可进入**插件**页面。
 
@@ -45,13 +45,11 @@
         }
         ```
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9200547371/p907881.png)
-        
     5.  单击**确定**。
         
     6.  设置权限策略名称，单击**确定**。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9200547371/p907882.png)
+        例如，输入名称为`服务关联角色`。
         
     7.  在左侧导航栏，选择。
         
@@ -61,9 +59,9 @@
         
         至此，RAM用户（子账号）拥有了创建服务关联角色的权限。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9200547371/p907880.png)
+        在策略类型下拉框中选择**自定义策略**进行筛选，即可找到并勾选目标权限策略。
         
-2.  返回**[插件](https://bailian.console.aliyun.com/#/plugin-market)**页面，勾选同意上述条款，单击**授权并进入**。
+2.  返回[**插件**](https://bailian.console.aliyun.com/#/plugin-market)页面，勾选同意上述条款，单击**授权并进入**。
     
 
 ## **官方插件说明**
@@ -177,10 +175,6 @@ plt.show()
 
 大模型应用具备了良好的计算能力，能够生成准确的计算结果。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3333247371/p906990.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3333247371/p906988.png)
-
 图片生成
 
 **示例输入**
@@ -215,10 +209,6 @@ plt.show()
 
 您可以在**输出参数**中查看大模型的回答参考了哪些网页。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3333247371/p906959.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3333247371/p906960.png)
-
 生成二维码
 
 **示例输入**
@@ -232,10 +222,6 @@ plt.show()
 大模型应用无法直接生成二维码，而是提供了将链接转化为二维码的操作指南。
 
 大模型应用具备了生成二维码的能力，能够根据阿里云百炼简介文档的URL链接生成对应二维码。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3333247371/p906994.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3333247371/p906995.png)
 
 GitHub搜索
 
@@ -252,10 +238,6 @@ GitHub搜索：通义千问
 大模型应用具备了查询GitHub项目的能力，能够给出与千问有关的项目列表。
 
 > GitHub搜索插件目前支持检索出项目标题、链接和摘要，不支持访问项目详情。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3333247371/p906997.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3333247371/p906998.png)
 
 组合使用插件
 
@@ -281,11 +263,9 @@ GitHub搜索：通义千问
 
 **步骤一：在子业务空间调用官方插件时，需要先执行以下步骤为子业务空间授权。在默认业务空间调用官方插件不需要执行此步骤。**
 
-1.  访问**[插件](https://bailian.console.aliyun.com/#/plugin-market)**页面，找到需要授权的目标插件并单击**查看详情**。
+1.  访问[**插件**](https://bailian.console.aliyun.com/#/plugin-market)页面，找到需要授权的目标插件并单击**查看详情**。
     
 2.  单击**授权**，选择待授权的子业务空间，单击**确定**完成授权。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1145514671/p905060.png)
     
 
 **步骤二：**[调用插件](#55bb7f428fczt)**。**
@@ -298,11 +278,11 @@ GitHub搜索：通义千问
 
 **步骤一：开通三方插件。**
 
-1.  访问**[插件](https://bailian.console.aliyun.com/#/plugin-market)**页面，找到目标插件并单击**查看详情**。
+1.  访问[**插件**](https://bailian.console.aliyun.com/#/plugin-market)页面，找到目标插件并单击**查看详情**。
     
 2.  选择套餐，单击**免费试用**或**立即购买**，根据界面指引开通插件。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5626098371/p910094.png)
+    开通成功后，插件详情卡片中将显示**已开通**状态标签。
     
 
 **步骤二：**[调用插件](#55bb7f428fczt)**。**
@@ -323,13 +303,11 @@ GitHub搜索：通义千问
         
         > 您也可以单击**选择插件**，继续添加其他工具。最多支持添加10个工具。智能体应用会根据输入选择调用一个或多个工具。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1145514671/p944232.png)
-        
     5.  在输入框中与大模型进行对话，测试工具的使用效果是否符合预期。
         
     6.  测试完成后，发布应用。
         
--   **方式二**：访问**[应用管理](https://bailian.console.aliyun.com/#/app-center)**页面，在指定智能体或工作流应用内，添加指定插件，测试插件使用效果，并**发布**应用。具体操作请参见[智能体应用插件能力](https://help.aliyun.com/zh/model-studio/single-agent-application#550c6b3ddevkl)、[工作流应用插件节点](https://help.aliyun.com/zh/model-studio/workflow-application/#341c98019dvo8)。
+-   **方式二**：访问[**应用管理**](https://bailian.console.aliyun.com/#/app-center)页面，在指定智能体或工作流应用内，添加指定插件，测试插件使用效果，并**发布**应用。具体操作请参见[智能体应用插件能力](https://help.aliyun.com/zh/model-studio/single-agent-application#550c6b3ddevkl)、[工作流应用插件节点](https://help.aliyun.com/zh/model-studio/workflow-application/#341c98019dvo8)。
     
 -   **方式三**：通过Assistant API调用工具。请在[Assistant API文档](https://help.aliyun.com/zh/model-studio/quick-start-of-assistant-api)中搜索`tools`关键字，查看如何使用Assistant API调用工具。
     
@@ -342,7 +320,7 @@ GitHub搜索：通义千问
     
 2.  在**插件工具**下获取工具ID。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0971396371/p905217.png)
+    此示例中，工具 ID 为 `calculator`。
     
 
 ## 相关文档

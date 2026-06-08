@@ -8,7 +8,7 @@
 
 ## **步骤二：获取 API Key 和 Base URL**
 
--   **API Key**：在[管理后台](https://tokenplan-enterprise.bailian.console.aliyun.com)创建成员账号（账号格式：英文字母、数字、下划线，不能以数字开头），分配席位后，为成员生成 API Key。详见[团队管理](https://help.aliyun.com/zh/model-studio/token-plan-team)。
+-   **API Key**：在 Token Plan 控制台的[成员管理页面](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)或管理平台创建成员账号，分配席位后，为成员生成 API Key。详见[团队管理](https://help.aliyun.com/zh/model-studio/token-plan-team)。
     
 -   **Base URL**：根据 AI 工具支持的协议，选择对应的 Base URL。
     
@@ -65,7 +65,7 @@ Token Plan 团队版支持图像生成模型（qwen-image-2.0、wan2.7-image 等
 
 通过接入工具调用，模型可以在对话中调用联网搜索、代码解释器等扩展能力。
 
--   qwen3.7-max、qwen3.6-plus、qwen3.6-flash：内置联网搜索、代码解释器、网页抓取、以图搜图、文搜图 5 个工具，通过 Responses API 直接调用。内置工具不额外收费，产生的 token 消耗统一从套餐 Credits 中抵扣。
+-   qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash：内置联网搜索、代码解释器、网页抓取、以图搜图、文搜图 5 个工具，通过 Responses API 直接调用。内置工具不额外收费，产生的 token 消耗统一从套餐 Credits 中抵扣。
     
 -   其他模型：通过 MCP 服务接入工具。
     

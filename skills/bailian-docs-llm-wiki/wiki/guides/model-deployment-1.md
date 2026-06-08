@@ -135,8 +135,8 @@ if response.status_code == HTTPStatus.OK:
 
 ## 权限与常见问题
 
-- **部署权限不足**：检查 API Key 归属的业务空间是否拥有模型部署权限，以及 API Key 归属账号在该业务空间中是否有操作权限。
-- **API Key 业务空间**：确保 API Key 所在的业务空间与模型部署所在的业务空间一致。
+- **部署权限不足**：检查 API Key 归属的[业务空间](../concepts/workspace.md)是否拥有模型部署权限，以及 API Key 归属账号在该[业务空间](../concepts/workspace.md)中是否有操作权限。
+- **API Key [业务空间](../concepts/workspace.md)**：确保 API Key 所在的业务空间与模型部署所在的业务空间一致。
 - **OSS 授权问题**：子账号需要主账号先授予 `ram:CreateServiceLinkedRole` 权限，再完成服务关联角色的创建。
 - **10041495 报错**：主账号未开通 OSS 服务，需前往 OSS 控制台开通后重试。
 
@@ -145,5 +145,6 @@ if response.status_code == HTTPStatus.OK:
 - [模型部署简介](../../raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)
 - [使用 API或命令行进行模型部署](../../raw/model-user-guide/model-deployment-1/model-deployment-quick-start.md)
 - [模型导入](../../raw/model-user-guide/model-deployment-1/model-import.md)
+
 
 

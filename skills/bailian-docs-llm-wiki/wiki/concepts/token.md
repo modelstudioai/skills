@@ -1,100 +1,78 @@
-# Token（令牌计量）
+# Token 计量与计费
 
-Token 是大语言模型处理文本的基本计量单位，模型将输入和输出文本拆分为 Token 序列进行处理。在百炼平台中，Token 既是模型能力的度量尺度（如上下文窗口长度），也是计费和资源管控的核心单位。
+Token 是百炼平台衡量大模型输入与输出文本量的基本单位，也是模型推理调用的核心计费依据。平台按输入 Token 和输出 Token 分别定价，不同模型、不同地域的单价各异。
 
 ## 什么是 Token
 
-Token 并非直接等同于字符或单词。对于中文，1 个 Token 大约对应 1.5 个汉字；对于英文，1 个 Token 大约对应 4 个字符或 0.75 个单词。一次模型调用的 Token 消耗 = 输入 Token + 输出 Token（部分场景还包含思考 Token）。
+Token 是模型处理文本时的最小语义片段。中文场景下，1 个汉字通常对应 1～2 个 Token；英文中一个单词约 1～3 个 Token。模型的输入（包括系统提示词、用户消息、上下文历史）和输出（模型生成的回答）均以 Token 为单位计量。
 
-## 在百炼平台中的使用场景
+## 计费规则
 
-### 模型推理计费
+百炼平台模型推理按量后付费，核心公式为：
 
-百炼按量付费模式以 Token 为核心计量单位，按输入 Token 和输出 Token 分别定价。部分模型实行阶梯计费，单价取决于单次请求的输入 Token 总量：
+```
+费用 = 输入 Token 数 × 输入单价 + 输出 Token 数 × 输出单价
+```
 
-| 阶梯示例（qwen3-max） | 输入单价 | 输出单价 |
-|------------------------|----------|----------|
-| 0 < Token ≤ 32K | 2.5 元/百万 Token | 10 元/百万 Token |
-| 32K < Token ≤ 128K | 4 元/百万 Token | 16 元/百万 Token |
-| 128K < Token ≤ 256K | 7 元/百万 Token | 28 元/百万 Token |
+关键规则：
 
-Token Plan 团队版则将 Token 消耗折算为 Credits 进行抵扣。
+- **阶梯计费**：部分模型按单次请求的输入 Token 总量分阶梯定价（如 0～128K、128K～1M），所有 Token 统一按命中阶梯的单价结算，不分段。
+- **思考 Token**：支持深度思考的模型，思考过程产生的 Token 按输出 Token 计费，单价可能高于普通输出。
+- **Batch 调用**：批量推理享受半价优惠，但不能与上下文缓存折扣同时生效。
+- **多模态折算**：图像、视频、音频等非文本模态会折算为等效 Token 数参与计费。
 
-### 上下文窗口
+### 代表价格（中国内地）
 
-上下文窗口以 Token 为单位衡量模型单次可处理的最大信息量：
+| 模型 | 输入（元/百万 Token） | 输出（元/百万 Token） |
+|------|----------------------|---------------------|
+| qwen3.7-max | 12 | 36 |
+| qwen3.7-plus (0～256K) | 2 | 8 |
+| qwen-plus (0～128K) | 0.8 | 2（非思考）/ 8（思考） |
 
-| 上下文长度 | 代表模型 |
-|-----------|---------|
-| 1M Token（约 70 万汉字） | qwen3.7-max、qwen3.6-plus、qwen3.6-flash、deepseek-v4-pro |
-| 256K Token | qwen3.6-max-preview、kimi-k2.6 |
-| 128K~198K Token | glm-5.1（198K）、MiniMax-M2.5（192K） |
+国际地域（新加坡、弗吉尼亚、法兰克福）单价约为中国内地版的 1.5 倍以上。
 
-### 监控与用量统计
+## Token 在不同场景中的应用
 
-百炼模型监控以 Token 为核心统计口径（大语言模型场景），提供以下指标：
+### 模型推理调用
 
-- **TPM**（Tokens Per Minute）：每分钟 Token 吞吐量
-- **Token 总量**：按业务空间汇总的输入/输出 Token 消耗
-- **平均单次请求 Token 量**：用于成本分析和异常检测
+每次 API 请求的输入 Token（[prompt](../guides/prompt.md) + 历史消息）和输出 Token（模型回复）合计计费。通过 `max_tokens` 参数可限制单次生成的最大输出长度，直接控制费用上限。
 
-在应用观测中，可按 Token 总量、输入 Token、输出 Token 进行 Span 筛选和统计。
+### Token Plan 团队版
+
+Token Plan 以 Credits 为统一计量单位，本质上是对 Token 消耗的预付费封装。不同套餐提供不同月度 Credits 额度（25,000 / 100,000 / 250,000），超出后暂停服务直到下月刷新或购买共享用量包。
 
 ### 模型训练
 
-模型调优按训练 Token 用量计费。训练数据中的 `max_length` 参数定义单条样本的最大 Token 长度，超长数据将被丢弃（推荐值 8192）。
+训练场景同样按 Token 计费，公式为：`(训练数据 Token + 混合训练数据 Token) × 循环次数 × 单价`。图像和视频生成模型的训练 Token 有独立换算规则。
 
-### 向量模型
+### 模型监控与用量统计
 
-Embedding 模型对输入文本有单行最大 Token 限制：
+平台在监控面板中提供 TPM（每分钟 Token 数）指标，用于观测吞吐量和触发告警。用量统计页面按模型维度展示历史 Token 消耗趋势，支持按[业务空间](workspace.md)筛选。
 
-| 模型版本 | 单行最大 Token |
-|---------|--------------|
-| text-embedding-v4 / v3 | 8,192 |
-| text-embedding-v2 / v1 | 2,048 |
+## 关键参数与配置
 
-## 关键参数和配置
-
-| 参数 | 作用 | 典型场景 |
-|------|------|---------|
-| `max_tokens` | 限制模型单次输出的最大 Token 数 | 控制输出长度和成本 |
-| `enable_thinking` | 开启思考模式，消耗额外思考 Token | 复杂推理任务 |
-| thinking budget | 思考模式下的最大思考 Token 预算（如 qwen3.7-max 为 256K） | 深度推理场景 |
-| `max_length`（训练） | 训练样本的最大 Token 长度 | 模型调优 |
+| 参数 / 配置 | 说明 |
+|-------------|------|
+| `max_tokens` | 限制单次请求的最大输出 Token 数，控制费用和响应长度 |
+| RPM / TPM 限流 | 按主账号维度聚合，每个模型独立计算；超出触发 429 错误 |
+| 免费额度用完即停 | 开启后免费 Token 额度耗尽自动停止服务，避免超额扣费 |
+| `temperature` / `top_p` | 间接影响 Token 消耗——较低随机性倾向于更短输出 |
 
 ## 成本优化建议
 
-- **合理设置 `max_tokens`**：避免不必要的输出 Token 消耗。
-- **按任务选模型**：简单任务使用轻量模型（如 qwen3.6-flash），降低单价。
-- **利用上下文缓存**：输入 Token 可享折扣（不与 Batch 调用同时生效）。
-- **Batch 调用**：非实时场景使用批量推理，输入输出单价均为实时价格的 50%。
-- **监控告警**：配置 Token 用量告警，及时发现异常调用。
-- **免费额度用完即停**：开启后额度耗尽自动停止，避免意外扣费。
-
-## 费用抵扣顺序
-
-Token 消耗产生的费用按以下顺序抵扣：
-
-1. 免费额度
-2. 资源包
-3. 其他模型节省计划
-4. AI 通用型节省计划
-5. 按量付费
-
-## 注意事项
-
-- 不同模型类型的用量统计口径不同：大语言模型按 Token，图像生成按张，视频生成按秒。
-- 免费额度为分钟级出账，控制台显示存在延迟。
-- Token Plan、Coding Plan 和百炼按量计费三者的计量体系互不相通。
-- 账户欠费时，即使模型仍有免费 Token 额度也无法调用（Token Plan 和 Coding Plan 套餐额度除外）。
+1. **精简 Prompt**：减少冗余上下文，降低输入 Token 数。
+2. **选择合适模型**：简单任务用 Flash/Turbo 级别，复杂任务再上 Max/Plus。
+3. **设置 max_tokens**：明确输出上限，防止模型生成过长回复。
+4. **使用节省计划**：承诺月消费额可获最高 5.3 折，适合稳定用量场景。
+5. **批量推理**：非实时任务使用 Batch 调用享半价。
+6. **上下文缓存**：重复前缀的多轮对话可复用缓存，减少重复 Token 计费。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
 - [test 1](../guides/test-1.md)
 - [model monitoring](../guides/model-monitoring.md)
-- [application monitoring](../guides/application-monitoring.md)
-- [model inference](../guides/model-inference.md)
-- [model training](../api/model-training.md)
-- [general text embedding](../api/general-text-embedding.md)
+- [support](../guides/support.md)
+- [get started with models](../guides/get-started-with-models.md)
+
 

@@ -1,15 +1,15 @@
 # application component api reference
 
-阿里云百炼应用组件 API（产品代号 `bailian/2023-12-29`）提供面向应用开发的资源管理能力，覆盖**数据连接**（类目/文件/表格/解析器/连接器）、**Prompt 工程**、**知识库（RAG）**、**长期记忆体** 以及若干辅助接口（临时存储、支付宝打赏）。所有接口采用 [ROA](https://help.aliyun.com/zh/sdk/product-overview/roa-mechanism) 签名风格，按业务空间（`WorkspaceId`）维度组织资源，建议优先使用官方 SDK 调用而不是手动签名。
+阿里云百炼应用组件 API（产品代号 `bailian/2023-12-29`）提供面向应用开发的资源管理能力，覆盖**数据连接**（类目/文件/表格/解析器/连接器）、**Prompt 工程**、**知识库（RAG）**、**长期记忆体** 以及若干辅助接口（临时存储、支付宝打赏）。所有接口采用 [ROA](https://help.aliyun.com/zh/sdk/product-overview/roa-mechanism) 签名风格，按[业务空间](../concepts/workspace.md)（`WorkspaceId`）维度组织资源，建议优先使用官方 SDK 调用而不是手动签名。
 
 ## 服务接入与认证
 
 - **服务接入点**：当前公网接入点为 `bailian.cn-beijing.aliyuncs.com`，详见 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)。
 - **认证方式**：基于 AccessKey + ROA 签名。强烈建议使用 RAM 用户的 AccessKey，并按最小权限原则授权；阿里云主账号可直接调用，但生产环境不建议直接使用。背景与 SDK 下载入口见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)。
-- **RAM 授权**：调用本组系列接口的 RAM 用户需挂载 `AliyunBailianDataFullAccess` 策略，并被加入对应业务空间，否则会鉴权失败。各接口对应的细粒度操作（如 `sfm:AddCategory`、`sfm:CreateIndex`、`sfm:Retrieve` 等）汇总见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)。
+- **RAM 授权**：调用本组系列接口的 RAM 用户需挂载 `AliyunBailianDataFullAccess` 策略，并被加入对应[业务空间](../concepts/workspace.md)，否则会鉴权失败。各接口对应的细粒度操作（如 `sfm:AddCategory`、`sfm:CreateIndex`、`sfm:Retrieve` 等）汇总见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)。
 - **版本说明**：本接口集合对应 `2023-12-29` 版本，新增字段、废弃字段、行为变更以 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 为准。
 
-> **注意**：所有接口的请求路径都包含 `{WorkspaceId}` 路径参数，业务空间 ID 须事先在控制台准备好（格式形如 `llm-xxxxxxxxxxxx`）。AccessKey 一旦泄露所有资源面临未授权访问，建议至少为 API 调用单独建立一个 RAM 用户。
+> **注意**：所有接口的请求路径都包含 `{WorkspaceId}` 路径参数，[业务空间](../concepts/workspace.md) ID 须事先在控制台准备好（格式形如 `llm-xxxxxxxxxxxx`）。AccessKey 一旦泄露所有资源面临未授权访问，建议至少为 API 调用单独建立一个 RAM 用户。
 
 ## 数据连接 API（原"应用数据"）
 
@@ -192,6 +192,7 @@
 - [DeleteMemoryNode - 删除记忆片段](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-deletememorynode.md)
 - [ListMemoryNodes - 获取记忆片段列表](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-listmemorynodes.md)
 - [UpdateConnector - 编辑连接器](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-updateconnector.md)
+
 
 
 

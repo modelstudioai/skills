@@ -34,7 +34,7 @@
 - 阿里云**不会**将用户数据用于模型训练
 - 传输数据经 AES-256 加密
 - 根据法律法规要求，平台会存储模型与应用调用时产生的数据，具体条款参见《阿里云百炼服务协议》
-- 支持通过业务空间权限管理实现不同用户间的数据隔离
+- 支持通过[业务空间](../concepts/workspace.md)权限管理实现不同用户间的数据隔离
 - 控制台最多展示 100 条历史对话记录，不设时间限制
 
 更多产品相关问答可参考[常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)中的产品相关章节。
@@ -75,5 +75,6 @@
 
 - [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)
 - [相关协议](../../raw/model-user-guide/support/related-agreements.md)
+
 
 

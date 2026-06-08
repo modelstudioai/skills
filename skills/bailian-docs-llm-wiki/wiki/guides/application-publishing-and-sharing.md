@@ -23,7 +23,7 @@
 
 - 已在百炼控制台中构建并**发布**目标应用（智能体或工作流）。
 - 钉钉 / 微信渠道首次使用时，需要授权阿里云 SLR 关联计算巢 AppFlow，并允许 API-KEY 加密传输给 AppFlow（在创建首个钉钉或微信渠道时一次性弹出）。
-- UI 应用要求百炼应用、API Key、UI 设计必须归属于**同一业务空间**，否则在 UI 设计器内无法选择到目标 API Key 与应用，详见 [UI设计器](../../raw/application-user-guide/application-publishing-and-sharing/ui-designer.md)。
+- UI 应用要求百炼应用、API Key、UI 设计必须归属于**同一[业务空间](../concepts/workspace.md)**，否则在 UI 设计器内无法选择到目标 API Key 与应用，详见 [UI设计器](../../raw/application-user-guide/application-publishing-and-sharing/ui-designer.md)。
 
 ## 官方网页版与 UI 应用
 
@@ -141,6 +141,7 @@ UI 应用基于阿里云[多端低代码开发平台魔笔](../../raw/applicatio
 - [分享智能体应用](../../raw/application-user-guide/application-publishing-and-sharing/share-an-application.md)
 - [使用智能体或工作流作为组件](../../raw/application-user-guide/application-publishing-and-sharing/use-agent-or-workflow-as-component.md)
 - [UI设计器](../../raw/application-user-guide/application-publishing-and-sharing/ui-designer.md)
+
 
 
 

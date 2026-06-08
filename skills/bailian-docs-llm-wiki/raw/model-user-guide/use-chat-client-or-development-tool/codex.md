@@ -27,9 +27,9 @@ Codex 是 OpenAI 推出的终端 AI 编程助手。可通过 Token Plan 团队�
 
 `model`请选择[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)。将`OPENAI_API_KEY`环境变量设置为 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)。
 
-#### Responses API（qwen3.7-max、qwen3.6-plus、qwen3.6-flash）
+#### Responses API（qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash）
 
-qwen3.7-max、qwen3.6-plus 和 qwen3.6-flash 支持 Responses API，可使用最新版 Codex。
+qwen3.7-max、qwen3.7-plus、qwen3.6-plus 和 qwen3.6-flash 支持 Responses API，可使用最新版 Codex。
 
 ```
 model_provider = "Model_Studio_Token_Plan"
@@ -148,7 +148,7 @@ npm install -g @openai/codex@0.80.0
 ```
 ```
 model_provider = "Model_Studio_Coding_Plan"
-model = "qwen3.6-plus"
+model = "qwen3.7-plus"
 [model_providers.Model_Studio_Coding_Plan]
 name = "Model_Studio_Coding_Plan"
 base_url = "https://coding.dashscope.aliyuncs.com/v1"

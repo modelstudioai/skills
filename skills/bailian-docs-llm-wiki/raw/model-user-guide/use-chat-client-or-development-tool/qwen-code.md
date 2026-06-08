@@ -74,6 +74,17 @@ Qwen Code 是一款终端 AI 编程工具，可以通过按量计费、Coding Pl
         }
       },
       {
+        "id": "qwen3.7-plus",
+        "name": "[Token Plan 团队版] qwen3.7-plus",
+        "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "extra_body": {
+            "enable_thinking": true
+          }
+        }
+      },
+      {
         "id": "qwen3.6-plus",
         "name": "[Token Plan 团队版] qwen3.6-plus",
         "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
@@ -174,7 +185,7 @@ Qwen Code 是一款终端 AI 编程工具，可以通过按量计费、Coding Pl
     "region": "china"
   },
   "model": {
-    "name": "qwen3.6-plus"
+    "name": "qwen3.7-plus"
   },
   "$version": 3
 }
@@ -200,6 +211,17 @@ Qwen Code 是一款终端 AI 编程工具，可以通过按量计费、Coding Pl
   },
   "modelProviders": {
     "openai": [
+      {
+        "id": "qwen3.7-plus",
+        "name": "[Bailian Coding Plan] qwen3.7-plus",
+        "baseUrl": "https://coding.dashscope.aliyuncs.com/v1",
+        "envKey": "BAILIAN_CODING_PLAN_API_KEY",
+        "generationConfig": {
+          "extra_body": {
+            "enable_thinking": true
+          }
+        }
+      },
       {
         "id": "qwen3.6-plus",
         "name": "[Bailian Coding Plan] qwen3.6-plus",
@@ -285,7 +307,7 @@ Qwen Code 是一款终端 AI 编程工具，可以通过按量计费、Coding Pl
     "region": "china"
   },
   "model": {
-    "name": "qwen3.6-plus"
+    "name": "qwen3.7-plus"
   },
   "$version": 3
 }

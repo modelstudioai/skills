@@ -118,7 +118,7 @@
 
 1. **跟踪能力变更**：优先以 [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md) 作为"功能可用性"事实源；该页同时挂着公告通知（含降价、免费额度调整、合作活动等）。
 2. **决定调用哪个模型**：以 [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md) 上架表的"模型规格"字段为准；规格名带日期后缀的是**快照**，不带日期后缀的是**主线别名**。
-3. **关注地域**：上架记录按"部署范围 + 地域"分段。当前主要部署范围"中国内地"对应华北 2（北京），跨区域调用前需要核对当前业务空间是否可达。
+3. **关注地域**：上架记录按"部署范围 + 地域"分段。当前主要部署范围"中国内地"对应华北 2（北京），跨区域调用前需要核对当前[业务空间](../concepts/workspace.md)是否可达。
 4. **关注下线**：上架表不展示下线模型，必须配合 [模型下线机制说明](https://help.aliyun.com/zh/model-studio/model-depreciation) 与平台站内通知一起看；下线前会给出迁移建议（如 `qwen-max-1201 → qwen-max`、`qwen-max-longcontext → qwen-max`）。
 5. **关注计费与免费额度**：DeepSeek 部分模型已经由"免费体验"转为计费，新人免费额度有效期与"用完即停"开关都会影响实际可用预算，开发前请阅读 [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md) 中"计费"相关条目。
 
@@ -128,6 +128,7 @@
 
 - [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)
 - [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)
+
 
 
 

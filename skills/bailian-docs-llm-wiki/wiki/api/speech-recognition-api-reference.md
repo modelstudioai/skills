@@ -156,7 +156,7 @@ Paraformer-v2 与 Fun-ASR 的实时及录音识别都支持 `vocabulary_id` 热�
 - 创建时需指定 `target_model`（如 `paraformer-v2`、`fun-asr`）、`prefix`（前缀，便于区分业务）、`vocabulary[]`（每条 `{"text": "...", "weight": 1-4}`），返回 `vocabulary_id` 即可在识别请求中使用。
 - HTTP / Java / Python 三种调用方式分别见 [定制热词HTTP API参考](../../raw/model-api-reference/speech-recognition-api-reference/custom-hot-words/vocabulary-http-api.md)、[Java SDK](../../raw/model-api-reference/speech-recognition-api-reference/custom-hot-words/vocabulary-java-sdk.md)、[Python SDK](../../raw/model-api-reference/speech-recognition-api-reference/custom-hot-words/vocabulary-python-sdk.md)。
 
-> **注意**：新加坡地域的**子业务空间**暂不支持热词功能；Paraformer 老 v1 系列只能使用 `resource_id` / `phrase_id` 方案（参见 `paraformer-asr-phrase-manager`），与 v2 的 `vocabulary_id` 不兼容。
+> **注意**：新加坡地域的**子[业务空间](../concepts/workspace.md)**暂不支持热词功能；Paraformer 老 v1 系列只能使用 `resource_id` / `phrase_id` 方案（参见 `paraformer-asr-phrase-manager`），与 v2 的 `vocabulary_id` 不兼容。
 
 ## 限制与注意事项
 
@@ -205,6 +205,7 @@ Paraformer-v2 与 Fun-ASR 的实时及录音识别都支持 `vocabulary_id` 热�
 - [定制热词HTTP API参考](../../raw/model-api-reference/speech-recognition-api-reference/custom-hot-words/vocabulary-http-api.md)
 - [定制热词Java SDK参考](../../raw/model-api-reference/speech-recognition-api-reference/custom-hot-words/vocabulary-java-sdk.md)
 - [定制热词Python SDK参考](../../raw/model-api-reference/speech-recognition-api-reference/custom-hot-words/vocabulary-python-sdk.md)
+
 
 
 

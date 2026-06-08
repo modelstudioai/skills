@@ -4,7 +4,7 @@
 
 ## 支持范围
 
-**模型用量统计**支持[模型列表](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)中的所有模型，包括基于其调优后的自定义模型。数据按业务空间维度统计，延迟约 1 小时。
+**模型用量统计**支持[模型列表](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)中的所有模型，包括基于其调优后的自定义模型。数据按[业务空间](../concepts/workspace.md)维度统计，延迟约 1 小时。
 
 **模型监控**的覆盖范围因功能而异：
 
@@ -43,11 +43,11 @@
 
 - **近 30 天用量**：在「模型用量：用量统计」页面按模型类型和时间范围查询，支持按模型名称搜索。
 - **30 天以前**：通过阿里云「费用与成本」页面导出账单查询。
-- **按账号维度汇总**：用量统计页面仅支持按业务空间维度，如需按账号汇总，需导出账单详情。
+- **按账号维度汇总**：用量统计页面仅支持按[业务空间](../concepts/workspace.md)维度，如需按账号汇总，需导出账单详情。
 
 ## 监控指标
 
-系统自动采集主账号下所有业务空间的模型调用数据。监控指标分为四类：
+系统自动采集主账号下所有[业务空间](../concepts/workspace.md)的模型调用数据。监控指标分为四类：
 
 - **安全**：内容安全错误次数等
 - **成本**：平均单次请求调用量、Token 消耗等
@@ -108,5 +108,6 @@
 
 - [模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)
 - [模型监控](../../raw/model-user-guide/model-monitoring/model-telemetry.md)
+
 
 

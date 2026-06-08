@@ -1,6 +1,6 @@
 # [more](more.md) about models
 
-本主题汇总阿里云百炼模型 API 之外的若干**周边能力与运维接口**：临时 API Key 派发、[异步任务](../concepts/async-task.md)管理（查询/批量查询/取消/事件通知）、DashScope SDK 连接复用、子业务空间隔离调用，以及本地文件临时 URL 上传。这些能力面向需要在生产场景中安全地分发凭证、高并发地调度模型、并合理治理多业务空间与文件输入的开发者。
+本主题汇总阿里云百炼模型 API 之外的若干**周边能力与运维接口**：临时 API Key 派发、[异步任务](../concepts/async-task.md)管理（查询/批量查询/取消/事件通知）、DashScope SDK 连接复用、子[业务空间](../concepts/workspace.md)隔离调用，以及本地文件临时 URL 上传。这些能力面向需要在生产场景中安全地分发凭证、高并发地调度模型、并合理治理多[业务空间](../concepts/workspace.md)与文件输入的开发者。
 
 ## 临时 API Key
 
@@ -20,9 +20,9 @@
 
 任务状态枚举为 `PENDING`/`RUNNING`/`SUCCEEDED`/`FAILED`/`CANCELED`/`UNKNOWN`。三个接口共用 20 QPS 的账号级限流；查询返回结果**仅保留 24 小时**（具体以对应模型文档为准），过期会被自动清理。权限上只能查询/取消**同一阿里云主账号**下的任务（含其名下任何 API Key 提交的任务）。完整入参、出参字段与样例响应见 [异步任务管理 API](../../raw/model-api-reference/more-about-models/manage-asynchronous-tasks.md)。
 
-## 异步任务完成通知（替代轮询）
+## [异步任务](../concepts/async-task.md)完成通知（替代轮询）
 
-高频轮询查询接口会同时消耗业务系统资源并触发 20 QPS 限流。百炼已将异步任务接入**事件总线 EventBridge**：任务完成（无论成功失败）会生成 `dashscope:System:AsyncTaskFinish` 事件，可通过事件总线推送给两类目标，业务侧仅需 **一次** 拉取结果即可：
+高频轮询查询接口会同时消耗业务系统资源并触发 20 QPS 限流。百炼已将[异步任务](../concepts/async-task.md)接入**事件总线 EventBridge**：任务完成（无论成功失败）会生成 `dashscope:System:AsyncTaskFinish` 事件，可通过事件总线推送给两类目标，业务侧仅需 **一次** 拉取结果即可：
 
 - **HTTP 回调 URL**：业务方提供一个支持公网或 VPC 的 `POST` 接口接收 JSON 事件。配置简单，适合大多数场景。
 - **云消息队列 RocketMQ**：事件转发至 RocketMQ Topic，业务方通过 PushConsumer 消费。能保证消息不丢失、支持失败重试，适合**高可靠性**要求。
@@ -59,7 +59,7 @@
 
 完整代码示例（含连接池参数、`base_http_api_url` 配置、API Key 环境变量读取）见 [DashScope SDK连接复用配置](../../raw/model-api-reference/more-about-models/connection-multiplexing-configuration.md)。
 
-## 子业务空间的模型调用
+## 子[业务空间](../concepts/workspace.md)的模型调用
 
 百炼默认业务空间的 API Key 权限较大（可调用所有模型）。当需要按 RAM 用户授权可用模型，或为不同业务/场景**独立账单**时，可在子业务空间中创建 API Key 并按以下要点调用：
 
@@ -92,7 +92,7 @@
 
 ## 错误码参考
 
-上述所有接口在调用失败时返回的 `code` / `message` 取值，请统一查阅百炼[错误码](https://help.aliyun.com/zh/model-studio/error-code)页面；本主题中列出的接口特有错误码（如异步任务的 `UnsupportedOperation`、临时 URL 的 `InvalidParameter.DataInspection` / `AccessDenied` / `Throttling.RateQuota`）已在各自源文档中标注语义和处置建议。
+上述所有接口在调用失败时返回的 `code` / `message` 取值，请统一查阅百炼[错误码](https://help.aliyun.com/zh/model-studio/error-code)页面；本主题中列出的接口特有错误码（如[异步任务](../concepts/async-task.md)的 `UnsupportedOperation`、临时 URL 的 `InvalidParameter.DataInspection` / `AccessDenied` / `Throttling.RateQuota`）已在各自源文档中标注语义和处置建议。
 
 ## 来源文档
 
@@ -102,6 +102,7 @@
 - [通过HTTP回调URL或MQ接收异步任务完成通知](../../raw/model-api-reference/more-about-models/async-task-api.md)
 - [子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)
 - [上传本地文件获取临时URL](../../raw/model-api-reference/more-about-models/get-temporary-file-url.md)
+
 
 
 

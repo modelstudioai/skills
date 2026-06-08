@@ -118,7 +118,7 @@ Rerank 开关位置因调用方式而异（**配置错误可能产生非预期�
 ## 权限与安全
 
 - RAM 子账号默认无写权限，需主账号授予「管理员」或同时包含「应用数据-操作」与「知识库-操作」的页面权限。
-- 知识库**仅限其所在业务空间内成员访问**，不对外公开；阿里云不会将其用于回答他人或模型训练。
+- 知识库**仅限其所在[业务空间](../concepts/workspace.md)内成员访问**，不对外公开；阿里云不会将其用于回答他人或模型训练。
 - 调用 API 报 `BailianIndexServiceNotOpen` 表示服务未激活，需在控制台手动开通。
 
 ## 长文本 LLM vs RAG 选型
@@ -133,6 +133,7 @@ Rerank 开关位置因调用方式而异（**配置错误可能产生非预期�
 - [知识库配额与限制](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-specifications.md)
 - [知识库计费说明](../../raw/application-user-guide/knowledge-base/billing-for-knowledge-base.md)
 - [知识库API指南](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)
+
 
 
 

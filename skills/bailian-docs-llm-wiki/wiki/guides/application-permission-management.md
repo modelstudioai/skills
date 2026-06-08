@@ -1,12 +1,12 @@
 # application permission management
 
-阿里云百炼平台提供基于控制台页面级和模型级的多维度权限控制体系，通过业务空间（Workspace）作为最小管理单元，实现精细化的用户、模型和 API Key 权限管理。该体系支持多地域、多用户的复杂组织架构，满足从开发到生产环境的权限隔离需求。
+阿里云百炼平台提供基于控制台页面级和模型级的多维度权限控制体系，通过[业务空间](../concepts/workspace.md)（Workspace）作为最小管理单元，实现精细化的用户、模型和 API Key 权限管理。该体系支持多地域、多用户的复杂组织架构，满足从开发到生产环境的权限隔离需求。
 
 ## 角色与权限模型
 
 百炼的权限管理基于三种角色，详见 [权限管理](../../raw/application-user-guide/application-permission-management/application-permission-management-overview.md)：
 
-| 权限项 | 超级管理员 | 业务空间管理员 | 普通用户 |
+| 权限项 | 超级管理员 | [业务空间](../concepts/workspace.md)管理员 | 普通用户 |
 |--------|-----------|--------------|---------|
 | 模型调用 & 限流管理 | ✅ | ❌ | ❌ |
 | 模型调优 / 部署管理 | ✅ | ❌ | ❌ |
@@ -22,7 +22,7 @@
 - **阿里云主账号**：天然拥有最高权限。
 - **拥有 `AliyunBailianFullAccess` 策略的 RAM 用户**：可跨地域、跨空间管理所有权限（OpenAPI 接口权限除外）。
 
-### 业务空间管理员
+### [业务空间](../concepts/workspace.md)管理员
 
 拥有某个业务空间**权限管理**页面访问权的 RAM 用户，管理员权限自动包含该空间下所有页面的访问权限。
 
@@ -102,6 +102,7 @@ RAM 用户默认无权查看账单或购买预付费产品，需在 RAM 控制�
 ## 来源文档
 
 - [权限管理](../../raw/application-user-guide/application-permission-management/application-permission-management-overview.md)
+
 
 
 

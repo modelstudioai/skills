@@ -72,7 +72,7 @@ hermes config set model.provider custom
 hermes config set model.base_url https://coding.dashscope.aliyuncs.com/apps/anthropic
 hermes config set model.api_mode anthropic_messages
 hermes config set model.api_key YOUR_API_KEY
-hermes config set model.default qwen3.6-plus
+hermes config set model.default qwen3.7-plus
 ```
 
 以上命令将配置写入 `~/.hermes/config.yaml`。也可以直接编辑该文件，写入以下内容：
@@ -81,7 +81,7 @@ config.yaml 配置示例
 
 ```
 model:
-  default: qwen3.6-plus
+  default: qwen3.7-plus
   provider: custom
   base_url: https://coding.dashscope.aliyuncs.com/apps/anthropic
   api_mode: anthropic_messages

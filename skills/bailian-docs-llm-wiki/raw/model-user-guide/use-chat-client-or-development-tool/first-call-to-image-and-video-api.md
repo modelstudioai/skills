@@ -22,7 +22,7 @@ Postman 和 cURL仅适用于快速测试与功能验证。对于生产环境�
 
 **HTTP调用示例（文生图）**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9815260871/CAEQZRiBgICJ0seH1xkiIDgzYWE2MTBkZjkzODRkNDA5NzczNTE0NjBiMGE1Y2Nm5274221_20250627113930.173.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9388180871/CAEQZRiBgICJ0seH1xkiIDgzYWE2MTBkZjkzODRkNDA5NzczNTE0NjBiMGE1Y2Nm5274221_20250627113930.173.svg)
 
 ## **方式一：使用Postman发送请求（推荐）**
 
@@ -100,8 +100,6 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
     
     > 各模式支持的模型请参见百炼控制台，当前地域与服务部署范围为[系统预设绑定关系](https://help.aliyun.com/zh/model-studio/regions/#6e9530261dv6q)，不支持自由组合。
     
-    ![1](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8873184671/p1031753.jpg)
-    
 3.  点击**Headers**标签页，添加以下三个键值对。
     
     **Key**
@@ -110,7 +108,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
     
     **说明**
     
-    ![2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8873184671/p1031762.jpg)
+    在 Postman 的 **Headers** 标签页中，配置以下关键请求头：**X-DashScope-Async** 设置为 `enable`，**Authorization** 设置为 `Bearer <your-api-key>`，**Content-Type** 设置为 `application/json`。
     
     X-DashScope-Async
     
@@ -150,11 +148,17 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
     -   （可选）点击页面右侧的 `**Beautify**`，可以格式化JSON格式，使其更易阅读。
         
     
-    ![3-zh](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8873184671/p1031786.jpg)
-    
 5.  点击**Send**发送请求，并获取 `task_id`。有效期 24 小时，过期后无法查询，请及时获取结果。
     
-    ![4-](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8873184671/p1031813.jpg)
+    ```
+    {
+        "request_id": "896b2ccd-a0cd-40a8-a557-bb73cee5cf95",
+        "output": {
+            "task_id": "42442de9-917d-4c41-80a7-37fb7ad25ed2",
+            "task_status": "PENDING"
+        }
+    }
+    ```
     
 
 ### **步骤2：根据task\_id查询结果**
@@ -186,11 +190,17 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id} \
     5.  点击**Send**发送请求。
         
     
-    ![4-zh](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8873184671/p1031837.jpg)
-    
 2.  检查返回结果。重复发送此请求（轮询），直到 task\_status 变为 SUCCEEDED，获取图像的URL。图像URL有效期为**24小时**，请及时下载。
     
-    ![6-zh-zh](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8873184671/p1031954.jpg)
+    ```
+    "results": [
+                {
+                    "orig_prompt": "一间有着精致窗户的花店，漂亮的木质门，摆放着花朵",
+                    "actual_prompt": "一间温馨雅致的花店，外墙装饰着精致的雕花窗户，窗框为浅色木质，镶嵌着透明玻璃，透出店内柔和的光线。花店正门是一扇漂亮的实木门，表面保留了天然木纹，配以黄铜门把手和复古门牌，显得古朴而有质感。门前台阶两侧和店内窗台、门口处错落有致地摆放着各式鲜花——包括玫瑰、百合、绣球、郁金香等，色彩缤纷、生机盎然。部分花束用牛皮纸包裹，系着麻绳，散发出自然清新的气息。背景为宁静的欧洲小镇街景，石板路与绿植相映成趣。整体画面采用写实摄影风格，光线柔和，色调温暖，突出花店的精致与浪漫氛围。",
+                    "url": "https://dashscope-result-wlcb.oss-cn-wulanchabu.aliyuncs.com/1d/3a/20251203/7a2bee47/42442de9-917d-4c41-80a7-37fb7ad25ed2.png?xxx"
+                }
+            ]
+    ```
     
 
 ## **方式二：使用cURL发送请求**
@@ -257,7 +267,23 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id} \
     
 -   成功请求后将返回`task_id`。有效期 24 小时，过期后无法查询。请及时获取结果。
     
-    ![task\_id-zh](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8873184671/p1031717.jpg)
+    ```
+    curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis \
+        -H 'X-DashScope-Async: enable' \
+        -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+        -H 'Content-Type: application/json' \
+        -d '{
+        "model": "wan2.5-t2i-preview",
+        "input": {
+            "prompt": "一间有着精致窗户的花店，漂亮的木质门，摆放着花朵"
+        },
+        "parameters": {
+            "size": "1024*1024",
+            "n": 1
+        }
+    }'
+    {"request_id":"ca3b5224-bc60-4e47-80f4-2790040e9e55","output":{"task_id":"2de3f7e1-52ce-4cf4-a466-f2d318061c43","task_status":"PENDING"}}
+    ```
     
 
 ### **步骤2：根据task\_id查询结果**
@@ -275,7 +301,11 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id} \
     
     > 由于模型处理时间较长（十几秒到几分钟不等），您可能需要轮询本接口。建议每隔3-5秒查询一次，直到 `task_status` 不为 `RUNNING`。
     
-    ![result-zh](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8873184671/p1031719.jpg)
+    ```
+    curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/2de3f7e1-52ce-4cf4-a466-f2d3f8061c43 \
+    --header "Authorization: Bearer $DASHSCOPE_API_KEY"
+    {"request_id":"24143559-9964-4898-8f9c-d968bba182b9","output":{"task_id":"2de3f7e1-52ce-4cf4-a466-f2d3f8061c43","task_status":"SUCCEEDED","submit_time":"2025-12-03 10:19:18.293","scheduled_time":"2025-12-03 10:19:18.320","end_time":"2025-12-03 10:19:31.890","results":[{"orig_prompt":"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵","actual_prompt":"一间温馨雅致的花店，外墙装饰着精致的雕花窗户，窗框为深褐色木质结构，玻璃洁净透亮，透出店内柔和的光线。花店正门是一扇漂亮的实木门，表面保留天然木纹，配以黄铜门把手和复古门牌，散发出浓厚的手工艺气息。门前台阶两侧和店内窗台、门口区域错落有致地摆放着各式鲜花——有盛开的玫瑰、淡雅的绣球、清新的雏菊和翠绿的尤加利叶，色彩丰富而和谐。背景为宁静的欧洲小镇街景，石板路与爬满藤蔓的邻墙烘托出浪漫氛围。整体画面采用写实摄影风格，光线柔和自然，突出木质纹理与花卉细节。","url":"https://dashscope-result-wlcb.oss-cn-wulanchabu.aliyuncs.com/1d/59/20251203/7a2bee47/2de3f7e1-52ce-4cf4-a466-f2d3f8061c43.png?Expires=1764814771&OSSAccessKeyId=xxx"}],"task_metrics":{"TOTAL":1,"FAILED":0,"SUCCEEDED":1}},"usage":{"image_count":1}}
+    ```
     
 
 ## **下一步**

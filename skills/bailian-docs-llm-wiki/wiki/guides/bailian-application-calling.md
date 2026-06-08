@@ -92,7 +92,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/YOUR_APP_ID/completion \
 适用于在自定义插件或工作流自定义节点中接收外部传入的业务变量，例如把内部业务 ID、用户上下文直送插件后端。流程：
 
 1. 在控制台创建插件工具，将目标输入参数的**传参方式**设为**业务透传**（创建步骤、鉴权配置见 [应用的自定义参数传递](../../raw/application-user-guide/bailian-application-calling/pass-through-of-application-parameters.md)）。
-2. 将插件关联到**同一业务空间**下的智能体应用，并发布应用。
+2. 将插件关联到**同一[业务空间](../concepts/workspace.md)**下的智能体应用，并发布应用。
 3. 调用时通过 `biz_params.user_defined_params.<plugin_id>` 传入键值：
 
 ```python
@@ -129,7 +129,7 @@ HTTP 调用时把 `biz_params` 放在 `input` 内：
 
 - **地域限制**：当前仅支持中国大陆版（北京地域）。
 - **`session_id` 限制**：有效期 1 小时，最多 50 轮；超出需改用 `messages` 自管理。
-- **插件作用域**：自定义插件仅能与**同一业务空间**的智能体应用关联。
+- **插件作用域**：自定义插件仅能与**同一[业务空间](../concepts/workspace.md)**的智能体应用关联。
 - **插件描述与参数命名**：插件描述、工具描述、参数名/参数描述都会被大模型用于判断是否调用、如何取参，务必使用自然语言、清晰准确，并尽量给出示例。
 - **传参方式**：若希望参数完全由调用方传入而非大模型推断，**必须**将输入参数设为**业务透传**。
 - **API Key 安全**：禁止把 `sk-xxx` 硬编码到生产代码，统一通过环境变量加载。
@@ -141,6 +141,7 @@ HTTP 调用时把 `biz_params` 放在 `input` 内：
 - [应用的自定义参数传递](../../raw/application-user-guide/bailian-application-calling/pass-through-of-application-parameters.md)
 - [调用智能体应用](../../raw/application-user-guide/bailian-application-calling/call-single-agent-application.md)
 - [调用工作流应用](../../raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md)
+
 
 
 

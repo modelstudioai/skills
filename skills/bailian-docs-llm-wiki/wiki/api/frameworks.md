@@ -100,7 +100,7 @@ DashScopeAgentOptions.builder()
 | Spring AI Alibaba（知识库检索） | `AI_DASHSCOPE_API_KEY` |
 | Spring AI Alibaba（应用调用） | `DASHSCOPE_API_KEY` |
 
-> **注意**：两篇 Spring AI Alibaba 文档中推荐的 API Key 环境变量名不一致（`AI_DASHSCOPE_API_KEY` vs `DASHSCOPE_API_KEY`），业务空间 ID 的环境变量名也不同（`AI_DASHSCOPE_WORKSPACE_ID` vs `WORKSPACE_ID`）。请以各自示例项目的 `application.yml` 中的配置为准。
+> **注意**：两篇 Spring AI Alibaba 文档中推荐的 API Key 环境变量名不一致（`AI_DASHSCOPE_API_KEY` vs `DASHSCOPE_API_KEY`），[业务空间](../concepts/workspace.md) ID 的环境变量名也不同（`AI_DASHSCOPE_WORKSPACE_ID` vs `WORKSPACE_ID`）。请以各自示例项目的 `application.yml` 中的配置为准。
 
 ## 限制与注意事项
 
@@ -113,6 +113,7 @@ DashScopeAgentOptions.builder()
 - [通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)
 - [通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)
 - [使用Spring AI Alibaba集成阿里云百炼大模型应用](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-llm-application.md)
+
 
 
 

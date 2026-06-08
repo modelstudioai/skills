@@ -36,8 +36,6 @@
     
 4.  单击**完成创建**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3883543271/p832848.png)
-    
 
 ### **1.2 设置Bucket对阿里云百炼可操作**
 
@@ -54,8 +52,6 @@
     -   标签名称：输入`bailian-safe-workspace-oss-access`。
         
     -   标签值：输入`ReadAndWrite`。
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3883543271/p833144.png)
         
 5.  单击**保存**，完成设置。
     
@@ -97,8 +93,6 @@
     
     在**资源配置**页面的**OSS配置**区域，单击**去授权**，再单击**确定授权**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6349440471/p914687.png)
-    
 5.  选择刚才创建的Bucket“bailian-safe-workspace-oss-access”。
     
 6.  单击**保存**，完成配置。
@@ -118,8 +112,6 @@
 1.  登录[云原生数据仓库AnalyticDB PostgreSQL版控制台](https://gpdbnext.console.aliyun.com/gpdb/overview)。
     
 2.  单击页面右上角的**购买实例**，配置以下各项参数，其余参数保持默认值即可。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3883543271/p833164.png)
     
     **参数名称**
     
@@ -170,7 +162,7 @@
     
     在**资源配置**页面的**ADB配置**区域，单击**去授权**，再单击**确定授权**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6349440471/p914700.png)
+    授权的角色名称为 `AliyunServiceRoleForSFMAccessADB`，角色权限策略为 `AliyunServiceRolePolicyForSFMAccessADB`。
     
 5.  选择刚才购买的ADB实例ID。
     
@@ -200,8 +192,6 @@
     地域：选择“华北2（北京）”。
     
     可用区：请在“北京可用区H”、“北京可用区G”或“北京可用区L”中任选其一。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3883543271/p833208.png)
     
     **可用区数量**
     
@@ -244,11 +234,9 @@
     
 2.  在左侧导航栏中选择**安全配置**，再单击**VPC私网访问白名单**后的**修改**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6349440471/p920418.png)
-    
 3.  单击**新增IP白名单分组**，将[获取可用区IP及交换机网段](https://help.aliyun.com/zh/model-studio/configure-zone-ip#aba8d442fbrbl)中获取的交换机网段添加到白名单分组中。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6349440471/p920423.png)
+    在弹出的对话框中，设置 **IP白名单分组名称**（例如 `mse_switch_iplist`），并在 **白名单内IP地址** 中填写交换机网段（例如 `192.168.0.0/24,172.16.1.0/24`），然后单击 **确认**。
     
 
 ### **3.3 配置ES**

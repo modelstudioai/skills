@@ -74,11 +74,11 @@ npm install -g @anthropic-ai/claude-code
     "env": {
         "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY",
         "ANTHROPIC_BASE_URL": "https://coding.dashscope.aliyuncs.com/apps/anthropic",
-        "ANTHROPIC_MODEL": "qwen3.6-plus",
-        "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3.6-plus",
-        "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3.6-plus",
-        "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.6-plus",
-        "CLAUDE_CODE_SUBAGENT_MODEL": "qwen3.6-plus"
+        "ANTHROPIC_MODEL": "qwen3.7-plus",
+        "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3.7-plus",
+        "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3.7-plus",
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.7-plus",
+        "CLAUDE_CODE_SUBAGENT_MODEL": "qwen3.7-plus"
     }
 }
 ```

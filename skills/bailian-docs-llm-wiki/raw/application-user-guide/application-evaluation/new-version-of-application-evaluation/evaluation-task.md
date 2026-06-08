@@ -8,8 +8,6 @@
 
 1.  访问[评测任务](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/efm/app_evaluate/tabs?activeKey=task&pageNum=1&statuses=%5B%22all%22%5D&name=)页面，单击**创建评测任务**，配置以下基本信息：
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7744803771/p1048186.png)
-    
     **字段**
     
     **说明**
@@ -100,15 +98,15 @@
         
         两种模式下均可点击**标注**查看单条数据的完整信息，进行逐条标注。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0642430771/p1050528.png)
+        单条标注页面分为三栏：左栏 **评测集数据** 展示原始数据，中栏 **应用输出** 展示智能体输出结果，右栏 **人工标注** 区域包含 **智能体标签（布尔值）**（可选 **true**、**false** 或 **Pass**）和 **文本（文本）** 输入框（上限 200 字）。页面底部通过 **上一条** 和 **下一条** 逐条切换数据。
         
 
--   **指标统计：**展示综合得分和评测进度等信息。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1845933771/p1057903.png)
+-   **指标统计：**展示综合得分和评测进度等信息。指标统计页面包含**综合得分**仪表盘（显示整体评测得分百分比）、**评测进度**区域（展示评测集总量、未完成量、已完成量）、**得分汇总**区域（以柱状图展示各评估器的通过率）以及**得分明细 - 数据项分布**区域。
     
 
 ## **计费说明**
 
-评测任务调用大模型产生的Token费用正常计费。消耗的Token量可访问[评测任务](https://bailian.console.aliyun.com/cn-beijing?tab=app#/efm/app_evaluate/tabs?pageNum=1&statuses=%5B%22all%22%5D&name=)页面查看，价格详情请参见[模型列表](https://help.aliyun.com/zh/model-studio/models)。
+评测任务调用大模型产生的Token费用正常计费。消耗的Token量可访问[评测任务](https://bailian.console.aliyun.com/cn-beijing?tab=app#/efm/app_evaluate/tabs?pageNum=1&statuses=%5B%22all%22%5D&name=)页面查看，价格详情请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)。
 
 ## 常见问题
 
@@ -126,4 +124,4 @@
     
 4.  **如何返回旧版应用评测？**
     
-    访问[应用评测](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/efm/app_evaluate/tabs?activeKey=task&pageNum=1&statuses=%5B%22all%22%5D&name=)页面，在左上角单击**返回旧版**。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0642430771/p1052985.png)
+    访问[应用评测](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/efm/app_evaluate/tabs?activeKey=task&pageNum=1&statuses=%5B%22all%22%5D&name=)页面，在左上角单击**返回旧版**。

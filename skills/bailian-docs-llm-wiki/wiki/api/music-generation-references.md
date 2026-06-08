@@ -66,7 +66,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generat
 
 返回体中 `output.audio.url` 直接给出完整音频文件的 OSS 下载链接（有效期 24 小时），`output.extra_info.lyrics` 给出最终歌词，`usage.duration` 给出音乐时长（秒，用于计费）。
 
-### 流式输出（SSE）
+### [流式输出](../concepts/streaming-output.md)（SSE）
 
 请求时额外加上 `X-DashScope-SSE: enable`：
 
@@ -84,7 +84,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generat
   }'
 ```
 
-流式输出特点：
+[流式输出](../concepts/streaming-output.md)特点：
 
 - 中间消息：`output.audio.data` 为 Base64 音频数据片段，`finish_reason` 为字符串 `"null"`
 - 最终消息：`output.audio.data` 为空字符串，`output.audio.url` 给出完整音频 OSS URL，`extra_info` 补齐 `lyrics`、`sample_rate`、`channels`，`finish_reason` 为 `stop`
@@ -121,6 +121,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generat
 ## 来源文档
 
 - [音乐生成Fun-Music API参考](../../raw/model-api-reference/music-generation-references/fun-music-api.md)
+
 
 
 

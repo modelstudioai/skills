@@ -10,7 +10,7 @@
 
 - **API Key**：通过[密钥管理](https://bailian.console.aliyun.com/?tab=app#/api-key)创建并配置到环境变量 `DASHSCOPE_API_KEY`。
 - **APP ID**：每个应用的唯一标识。在[应用管理](https://bailian.console.aliyun.com/#/app-center)页面的应用卡片上复制；HTTP 调用时将其拼到 URL 的 `APP_ID` 占位符位置，SDK 调用时作为 `app_id`/`appId` 参数传入。
-- **Workspace ID**（条件必填）：业务空间标识。当应用位于**子业务空间**，或调用德国（法兰克福）地域下的模型时，请求中必须携带 `Workspace ID`。
+- **Workspace ID**（条件必填）：[业务空间](../concepts/workspace.md)标识。当应用位于**子[业务空间](../concepts/workspace.md)**，或调用德国（法兰克福）地域下的模型时，请求中必须携带 `Workspace ID`。
 
 > **注意**：目前 APP ID 与 Workspace ID 只能通过控制台手动获取，不支持通过 API 或 CLI 查询。详细的控制台操作步骤参见 [获取APP ID和Workspace ID](../../raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)。
 
@@ -70,8 +70,8 @@ DashScope API 的完整字段、新版智能体的专属请求结构和典型场
   - 文本：`{ "type": "input_text", "text": "..." }`。
   - 图片：`{ "type": "input_image", "image_url": "..." }`。
   - 文件：`{ "type": "input_file", "file_url": "..." }`，仅**智能体应用**支持。
-- `stream`（boolean，默认 false）：是否[流式输出](../concepts/streaming.md)。工作流应用启用[流式输出](../concepts/streaming.md)还需在**结束节点**或**流程输出节点**勾选**流式输出**开关并重新发布。
-- `background`（boolean，默认 false）：是否以异步方式执行任务；`true` 时会立即返回任务 ID，且**[异步任务](../concepts/async-task.md)不支持流式输出**。
+- `stream`（boolean，默认 false）：是否[流式输出](../concepts/streaming.md)。工作流应用启用[流式输出](../concepts/streaming.md)还需在**结束节点**或**流程输出节点**勾选**[流式输出](../concepts/streaming-output.md)**开关并重新发布。
+- `background`（boolean，默认 false）：是否以异步方式执行任务；`true` 时会立即返回任务 ID，且**[异步任务](../concepts/async-task.md)不支持[流式输出](../concepts/streaming-output.md)**。
 
 ### 多模态输入应用配置
 
@@ -97,7 +97,7 @@ DashScope API 的完整字段、新版智能体的专属请求结构和典型场
 
 异步调用的完整 Python/Java 示例与状态机说明参见 [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)。
 
-> **注意**：[异步任务](../concepts/async-task.md)暂不支持流式输出（`stream=true` 与 `background=true` 不能同时启用）。
+> **注意**：[异步任务](../concepts/async-task.md)暂不支持[流式输出](../concepts/streaming-output.md)（`stream=true` 与 `background=true` 不能同时启用）。
 
 ## 流式输出要点
 
@@ -112,7 +112,7 @@ DashScope API 的完整字段、新版智能体的专属请求结构和典型场
 ## 关键限制与注意事项
 
 - 本组 API 仅支持**中国大陆（北京地域）**。
-- 子业务空间下的应用必须显式传入 `Workspace ID`；RAM 子账号默认只能查看其加入的业务空间，查询全部业务空间需主账号或拥有 `AliyunBailianFullAccess` / `AliyunBailianControlFullAccess` 权限。
+- 子[业务空间](../concepts/workspace.md)下的应用必须显式传入 `Workspace ID`；RAM 子账号默认只能查看其加入的业务空间，查询全部业务空间需主账号或拥有 `AliyunBailianFullAccess` / `AliyunBailianControlFullAccess` 权限。
 - 多轮对话上下文需由客户端自行维护；服务端的会话/Response 上下文功能在 Responses API 中**尚未上线**。
 - 异步调用与流式输出互斥；图像/文件输入需要对应的应用类型与模型选择，否则请求会失败。
 - 选择 API 时优先考虑：是否需要 OpenAI 生态兼容（→ Responses API）、是否需要平台全功能与最佳性能（→ DashScope API）。
@@ -124,6 +124,7 @@ DashScope API 的完整字段、新版智能体的专属请求结构和典型场
 - [新版智能体应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md)
 - [应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)
 - [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)
+
 
 
 

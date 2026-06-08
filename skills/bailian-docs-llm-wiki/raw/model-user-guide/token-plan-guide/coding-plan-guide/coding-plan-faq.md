@@ -12,7 +12,7 @@
 
 阿里云 AI 助理会分析原因并给出解决方案：
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4077616771/p1067334.png)
+错误原因包括三类：模型名称不正确或拼写错误；套餐权限不足（Lite 套餐支持除 `qwen3.6-plus` 外的全系主力模型，包括千问、GLM、Kimi、MiniMax，Pro 套餐支持所有模型，包括 Pro 专属的 `qwen3.6-plus`，Lite 套餐调用 `qwen3.6-plus` 会触发该报错）；API Key 或 Base URL 配置错误。
 
 ## **接入与配置相关问题**
 
@@ -46,11 +46,11 @@
 
 1.  [使用套餐专属 API Key](https://help.aliyun.com/zh/model-studio/coding-plan-quickstart#2782cf93b1w8h)
     
-2.  前往[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)确认订阅是否过期
+2.  前往[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan 页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=globalset#/efm/coding_plan)确认订阅是否过期
     
-3.  前往[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)重新复制 API Key，确保完整且无空格
+3.  前往[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan 页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=globalset#/efm/coding_plan)重新复制 API Key，确保完整且无空格
     
-4.  如以上均正常仍报错，可在 [Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)重置 API Key，重置后请使用新 API Key 进行配置
+4.  如以上均正常仍报错，可在 [Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan 页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=globalset#/efm/coding_plan)重置 API Key，重置后请使用新 API Key 进行配置
     
 
 **model 'xxx' is not supported**
@@ -70,6 +70,10 @@ Anthropic 兼容端点：`https://coding.dashscope.aliyuncs.com/apps/anthropic`
 
 OpenAI 兼容端点：`https://coding.dashscope.aliyuncs.com/v1`
 
+Anthropic 兼容端点：`https://coding-intl.dashscope.aliyuncs.com/apps/anthropic`
+
+OpenAI 兼容端点：`https://coding-intl.dashscope.aliyuncs.com/v1`
+
 **404 status code (no body)**
 
 Base URL 路径错误。例如：在 Claude Code 中错误地将 Base URL 配置为`https://coding.dashscope.aliyuncs.com/v1`，正确的配置应该是`https://coding.dashscope.aliyuncs.com/apps/anthropic`。
@@ -77,6 +81,10 @@ Base URL 路径错误。例如：在 Claude Code 中错误地将 Base URL 配置
 Anthropic 兼容端点：`https://coding.dashscope.aliyuncs.com/apps/anthropic`
 
 OpenAI 兼容端点：`https://coding.dashscope.aliyuncs.com/v1`
+
+Anthropic 兼容端点：`https://coding-intl.dashscope.aliyuncs.com/apps/anthropic`
+
+OpenAI 兼容端点：`https://coding-intl.dashscope.aliyuncs.com/v1`
 
 **Connection error**
 
@@ -118,7 +126,13 @@ Base URL 拼写错误或网络问题
 
 ### **Claude Code 报错 “Unable to connect to Anthropic services. Failed to connect to api.anthropic.com: ERR\_BAD\_REQUEST”怎么办**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7935123771/p1049322.png)
+```
+Unable to connect to Anthropic services
+Failed to connect to api.anthropic.com: ERR_BAD_REQUEST
+Please check your internet connection and network settings.
+Note: Claude Code might not be available in your country. Check supported
+countries at https://anthropic.com/supported-countries
+```
 
 **原因**：Claude Code 首次启动时会尝试连接 api.anthropic.com 完成初始化认证，但 Claude Code 在部分国家和地区不可用，导致连接失败。
 
@@ -145,7 +159,7 @@ Base URL 拼写错误或网络问题
 
 该报错表示请求内容（如代码上下文、对话历史）过大，超出最大输入限制。请按以下方式处理：
 
-1.  执行 `/new` 新建对话，或执行 `/compact` 压缩上下文。更多缓解上下文超限的方法，请参见[各模型的上下文长度是多少？超出上下文长度如何处理？](#fb46a77831l0o)。
+1.  执行 `/new` 新建对话，或执行 `/compact` 压缩上下文。更多缓解上下文超限的方法，请参见。
     
 2.  若以上方法无法解决，请将 OpenCode 更新至 1.2.16 或以上版本，该版本修复了相关问题。
     
@@ -157,6 +171,10 @@ Base URL 拼写错误或网络问题
 **模型名称**
 
 **最大思维链长度**
+
+qwen3.7-plus
+
+262,144
 
 qwen3.6-plus
 
@@ -212,11 +230,29 @@ Coding Plan 支持深度思考的模型多为默认支持思考模式，常见�
 
 **开启思考模式**：输入`/config`，移动到`Thinking mode`，通过`Enter`切换为`true`开启思考模式。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7325012771/p1055133.png)
-
 **查看思考过程**：使用快捷键 `Ctrl + O` 可查看思考过程。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9530922771/p1055595.png)
+```
+● 我是 Claude Code, Anthropic 官方的命令行界面工具。                05:13 PM  kimi-k2.5
+  我的核心定位是软件工程助手：
+  - 编写、修改、调试代码
+  - 探索和分析代码库
+  - 运行终端命令和自动化任务
+  - 提供技术性的代码解释和建议
+  我的输出风格简洁直接，优先技术准确性。我由 Claude Opus 4.6
+  驱动，通过调用工具来完成实际任务，而不是仅进行对话。
+∴ Thinking…
+  用户问"思考后回答我：你是谁？"，我需要先思考再回答。
+  根据系统提示，我是 Claude Code, Anthropic 的官方 CLI 工具。我由 Claude Opus 4.6
+  驱动（根据背景信息中的 model ID: 'claude-opus-4-6'）。
+  我的特点是：
+  1. 专注于软件工程任务
+  2. 使用工具来完成任务（而不是仅仅对话）
+  3. 保持简洁、专业的语调
+  4. 不主动使用表情符号
+  5. 技术准确性优先于情感验证
+  我需要思考后回答，所以应该给出一个简洁但准确的自我介绍。
+```
 
 ## OpenCode
 
@@ -276,6 +312,45 @@ Coding Plan 支持深度思考的模型多为默认支持思考模式，常见�
   "$version": 3
 }
 ```
+```
+{
+  "ide": {
+    "hasSeenNudge": true
+  },
+  "env": {
+    "BAILIAN_CODING_PLAN_API_KEY": "sk-sp-xxx"
+  },
+  "modelProviders": {
+    "openai": [
+      {
+        "id": "qwen3.6-plus",
+        "name": "[Bailian Coding Plan] qwen3.6-plus",
+        "baseUrl": "https://coding-intl.dashscope.aliyuncs.com/v1",
+        "envKey": "BAILIAN_CODING_PLAN_API_KEY",
+        "generationConfig": {
+          "extra_body": {
+            "enable_thinking": true
+          }
+        }
+      },
+      ...
+    ]
+  },
+  "security": {
+    "auth": {
+      "selectedType": "openai"
+    }
+  },
+  "codingPlan": {
+    "region": "china",
+    "version": "xxx"
+  },
+  "model": {
+    "name": "qwen3.6-plus"
+  },
+  "$version": 3
+}
+```
 
 ## OpenClaw
 
@@ -285,13 +360,19 @@ OpenClaw 开启思考模式的步骤如下：
     
     在终端执行 `openclaw tui` 进入TUI 界面，在对话框输入`openclaw --version`查看版本，确认 OpenClaw 是否为`v2026.03.02`或更高版本，低版本的 OpenClaw 可能无法开启思考模式。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4890023771/p1058523.png)
+    ```
+    openclaw --version
+    OpenClaw 2026.3.8 (commit: 3caab92)
+    ```
     
 2.  **选择思考级别**
     
     继续在 OpenClaw 的 TUI 界面，输入`/think high`命令选择[思考级别](https://docs.openclaw.ai/tools/thinking)（本示例选择`high`作为当前会话的思考级别）。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8479172771/p1057350.png)
+    ```
+    /think high
+    → high
+    ```
     
 3.  **修改配置文件**
     
@@ -313,7 +394,7 @@ OpenClaw 开启思考模式的步骤如下：
         {
           "id": "qwen3-max-2026-01-23",
           "name": "qwen3-max-2026-01-23",
-          "reasoning": true, 
+          "reasoning": true,
           "compat": {
             "thinkingFormat": "qwen"
           },
@@ -434,7 +515,6 @@ OpenClaw 开启思考模式的步骤如下：
     # 删除旧凭证和模型缓存
     rm ~/.openclaw/agents/main/agent/auth-profiles.json
     rm ~/.openclaw/agents/main/agent/models.json
-    
     # 重启 Gateway 使配置重新生效
     openclaw gateway restart
     ```
@@ -448,13 +528,13 @@ OpenClaw 开启思考模式的步骤如下：
     
     若 Base URL 或模型提供商配置有误，导致请求未进入 Coding Plan 专属通道，而是被路由到了 通用的API 调用，从而触发限流。
     
-    -   若使用 Coding Plan 套餐，请核对[OpenClaw配置文件](https://help.aliyun.com/zh/model-studio/openclaw#0c6a73ae73mqr)中的 `models`、`agents`、`gateway`（含嵌套字段），确保与文档配置一致。例如：模型服务提供商的结构为`{ "models": { "providers": { "**bailian**": {...} } } }` 。
+    -   若使用 Coding Plan 套餐，请核对[OpenClaw配置文件](https://help.aliyun.com/zh/model-studio/openclaw#0c6a73ae73mqr)中的 `models`、`agents`、`gateway`（含嵌套字段），确保与文档配置一致。例如：模型服务提供商的结构为`{ "models": { "providers": { "bailian": {...} } } }` 。
         
     -   若当前未使用 Coding Plan 套餐，建议切换至 Coding Plan 以获取专属额度。
         
-2.  超出套餐限额：在[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)查看套餐用量情况。
+2.  超出套餐限额：在[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=dashboard#/efm/coding_plan)查看套餐用量情况。
     
-3.  尝试重置 API Key**：**若完成上述排查后问题仍未解决，请前往[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)重置 API Key。
+3.  尝试重置 API Key**：**若完成上述排查后问题仍未解决，请前往[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=dashboard#/efm/coding_plan)重置 API Key。
     
 
 ### **OpenClaw 启动时报错 "Failed to discover Alibaba Cloud models" 怎么办？**
@@ -477,12 +557,12 @@ OpenClaw 启动时出现以下报错信息：
 3.  如需屏蔽此提示，请将 `~/.openclaw/agents/main/agent/auth-profiles.json` 文件中的`alibaba-cloud:default profile`删除，例如，当前为
     
     ```
-    "profiles": {                                                                                                                                                                                                   
-         "alibaba-cloud:default": {                                                                                                                                                                                    
-           "type": "api_key",                                                                                                                                                                                          
-           "provider": "alibaba-cloud",                                                                                                                                                                                
-           "key": "sk-sp-xxxxx"                                                                                                                                                                                        
-         }                                                                                                                                                                                                             
+    "profiles": {
+         "alibaba-cloud:default": {
+           "type": "api_key",
+           "provider": "alibaba-cloud",
+           "key": "sk-sp-xxxxx"
+         }
        }
     ```
     
@@ -511,11 +591,11 @@ OpenClaw 启动时出现以下报错信息：
 
 可能原因：
 
--   **API Key 格式错误：**API Key 填写为空、格式不正确、复制不完整，或在复制时误带了多余的空格。请确认API Key 为Coding Plan 专属 [API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)（以 `sk-sp-` 开头），复制完整且无空格。
+-   **API Key 格式错误：**API Key 填写为空、格式不正确、复制不完整，或在复制时误带了多余的空格。请确认API Key 为Coding Plan 专属 [API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[API Key](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=globalset#/efm/coding_plan)（以 `sk-sp-` 开头），复制完整且无空格。
     
 -   **Coding Plan 订阅状态已过期或失效：** Coding Plan 专属 API Key依赖于套餐的订阅状态。如果 Coding Plan 套餐已到期或失效，对应的专属 Key 将无法继续使用。请确保Coding Plan 订阅状态是否仍然有效。
     
--   **使用了错误的Base URL**：配置了 Coding Plan 专属 API Key（以 `sk-sp-` 开头），但 Base URL 仍保留为阿里云百炼通用地址（如 https://dashscope.aliyuncs.com/compatible-mode/v1）。请根据[接入的AI工具](https://help.aliyun.com/zh/model-studio/use-chat-client-or-development-tool/)，将 Base URL 替换为下表中Coding Plan 专属地址。
+-   **使用了错误的Base URL**：配置了 Coding Plan 专属 API Key（以 `sk-sp-` 开头），但 Base URL 仍保留为阿里云百炼通用地址（如 [https://dashscope](https://dashscope).aliyuncs.com/compatible-mode/v1）。请根据[接入的AI工具](https://help.aliyun.com/zh/model-studio/use-chat-client-or-development-tool/)，将 Base URL 替换为下表中Coding Plan 专属地址。
     
     **工具**
     
@@ -527,39 +607,39 @@ OpenClaw 启动时出现以下报错信息：
     
     OpenAI 兼容
     
-    https://coding.dashscope.aliyuncs.com/v1
+    https://coding\-intl.dashscope.aliyuncs.com/v1
     
     OpenCode
     
     Anthropic 兼容
     
-    https://coding.dashscope.aliyuncs.com/apps/anthropic/v1
+    https://coding\-intl.dashscope.aliyuncs.com/apps/anthropic/v1
     
     Claude Code
     
     Anthropic 兼容
     
-    https://coding.dashscope.aliyuncs.com/apps/anthropic
+    https://coding\-intl.dashscope.aliyuncs.com/apps/anthropic
     
     Cursor
     
     OpenAI 兼容
     
-    https://coding.dashscope.aliyuncs.com/v1
+    https://coding\-intl.dashscope.aliyuncs.com/v1
     
     VSCode Cline
     
     OpenAI 兼容
     
-    https://coding.dashscope.aliyuncs.com/v1
+    https://coding\-intl.dashscope.aliyuncs.com/v1
     
     Qwen Code
     
     OpenAI 兼容
     
-    https://coding.dashscope.aliyuncs.com/v1
+    https://coding\-intl.dashscope.aliyuncs.com/v1
     
--   **使用了错误的API Key**：配置了 Coding Plan 的专属 Base URL，但 API Key 误填了阿里云百炼的通用 API Key（以 `sk-` 开头）。请将API Key更新为Coding Plan 专属 [API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)。
+-   **使用了错误的API Key**：配置了 Coding Plan 的专属 Base URL，但 API Key 误填了阿里云百炼的通用 API Key（以 `sk-` 开头）。请将API Key更新为Coding Plan 专属 [API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[API Key](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=globalset#/efm/coding_plan)。
     
 -   **OpenClaw历史配置缓存导致配置错误：**请删除`~/.openclaw/agents/main/agent/models.json`文件中的`providers.bailian`配置项，并重启OpenClaw。
     
@@ -591,7 +671,7 @@ Coding Plan 仅限在编程工具（如 Claude Code、Qwen Code 等）中使用�
     
     -   原因：如果在 AI 工具中配置的是通用 API Key（格式为`sk-xxx`）和通用 Base URL（不含 coding 关键字），系统会将其识别为按量计费调用，产生按量计费的账单。
         
-    -   解决方案：请务必使用Coding Plan专属配置。**API Key** 的格式必须为`sk-sp-xxx`，**Base URL** 必须包含 `coding` 关键字（如 `https://coding.dashscope.aliyuncs.com/xxx`）。详情请参见[获取套餐专属 API Key 和 Base URL](https://help.aliyun.com/zh/model-studio/coding-plan-quickstart#2782cf93b1w8h)。
+    -   解决方案：请务必使用Coding Plan专属配置。**API Key** 的格式必须为`sk-sp-xxx`，**Base URL** 必须包含 `coding` 关键字（如 `https://coding<!--XW-S id="W1226ac62" tag="span" attrs='data-tag=ph;id=d90ad999b3a0u;props=intl' v="1"-->-intl<!--XW-E id="W1226ac62"-->.dashscope.aliyuncs.com/xxx`）。详情请参见[获取套餐专属 API Key 和 Base URL](https://help.aliyun.com/zh/model-studio/coding-plan-quickstart#2782cf93b1w8h)。
         
 2.  **账单结算延时导致欠费（费用产生于开通Coding Plan套餐前）**
     
@@ -635,11 +715,11 @@ Coding Plan 是一个独立的订阅产品，其计费和配额系统**不参与
 
 ### **如何查看 Token 消耗信息？**
 
-暂无法查看。Coding Plan的额度消耗与 Token 消耗无关，只与模型调用次数有关。可在[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)查看用量信息。
+暂无法查看。Coding Plan的额度消耗与 Token 消耗无关，只与模型调用次数有关。可在[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=dashboard#/efm/coding_plan)查看用量信息。
 
 ### 可以查询 Coding Plan 套餐内特定模型（如qwen3.6-plus）的使用量吗？
 
-不支持。[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)仅展示套餐总额度的整体消耗和剩余情况。
+不支持。[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=dashboard#/efm/coding_plan)仅展示套餐总额度的整体消耗和剩余情况。
 
 ### **Coding Plan 有年付套餐吗？**
 
@@ -681,7 +761,7 @@ Coding Plan 是一个独立的订阅产品，其计费和配额系统**不参与
 
 ### **续费入口在哪里？**
 
-Pro 套餐可以在[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)或[资源续订页面](https://billing-cost.console.aliyun.com/renew/manual)进行续费。Lite 基础套餐停止续费通知请参见[公告](https://www.aliyun.com/notice/118175)。
+Pro 套餐可以在[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=dashboard#/efm/coding_plan)或[资源续订页面](https://billing-cost.console.aliyun.com/renew/manual)进行续费。Lite 基础套餐停止续费通知请参见[公告](https://www.aliyun.com/notice/118175)。
 
 ## **产品功能相关问题**
 
@@ -738,6 +818,10 @@ Coding Plan 的 API Key 仅供个人使用，暂不支持多人共享，请勿�
 
 **上下文长度（Tokens）**
 
+qwen3.7-plus
+
+1,000,000
+
 qwen3.6-plus
 
 1,000,000
@@ -776,7 +860,7 @@ glm-4.7
 
 当遇到与上下文超限相关的报错时，建议新建会话。此外，可以通过以下方式来避免超出上下文长度：
 
-1.  **切换模型**：切换支持更长上下文的模型，如 qwen3.6-plus、qwen3.5-plus、qwen3-coder-plus。
+1.  **切换模型**：切换支持更长上下文的模型，如 qwen3.7-plus、qwen3.6-plus、qwen3.5-plus、qwen3-coder-plus。
     
 2.  **减少无关文件**：建议在具体的项目目录中启动 AI 编程工具，同时仅保留必要的项目文件。
     
@@ -789,7 +873,7 @@ glm-4.7
 
 ### Coding Plan 如何重置 API Key？
 
-在[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)，点击Coding Plan 的 API Key 旁边的**重置**按钮即可。
+在[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=dashboard#/efm/coding_plan)，点击Coding Plan 的 API Key旁边的**重置**按钮即可。
 
 **说明**
 
@@ -813,7 +897,7 @@ glm-4.7
 
 ### **Coding Plan 支持设置使用的IP白名单吗？**
 
-不支持。如果API Key泄露，请在[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)重置API Key。
+不支持。如果API Key泄露，请在[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=dashboard#/efm/coding_plan)重置API Key。
 
 ### **子账号如何查看获取 Coding Plan API Key？**
 
@@ -849,9 +933,9 @@ API Key 格式
 
 Base URL域名
 
-`coding.dashscope.aliyuncs.com`
+`coding-intl.dashscope.aliyuncs.com`
 
-`dashscope.aliyuncs.com`
+`dashscope-intl.aliyuncs.com`
 
 计费方式
 

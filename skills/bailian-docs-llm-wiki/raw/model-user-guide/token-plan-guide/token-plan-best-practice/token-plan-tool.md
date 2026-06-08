@@ -6,7 +6,7 @@ Token Plan 团队版支持通过模型内置工具和 MCP 服务两种方式为 
 
 Token Plan 团队版提供两种方式接入工具：
 
--   **模型内置工具**：qwen3.7-max、qwen3.6-plus、qwen3.6-flash 模型的 Responses API 内置了联网搜索、代码解释器、网页抓取、以图搜图、文搜图五种工具。启用后，模型会在需要时自动调用相应工具。
+-   **模型内置工具**：qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash 模型的 Responses API 内置了联网搜索、代码解释器、网页抓取、以图搜图、文搜图五种工具。启用后，模型会在需要时自动调用相应工具。
     
 -   **MCP 服务**：其他模型（如 deepseek-v3.2、glm-5 等）可通过百炼 MCP 广场的 MCP 服务获取工具能力。本文以联网搜索 MCP 为例说明接入方式，其他 MCP 服务的接入方式类似。
     
@@ -15,7 +15,7 @@ Token Plan 团队版提供两种方式接入工具：
 
 ### **模型内置工具**
 
-qwen3.7-max、qwen3.6-plus、qwen3.6-flash 模型内置工具的费用可通过 Token Plan 团队版抵扣，内置工具不额外收费，产生的 token 消耗统一从套餐 Credits 中抵扣。具体价格以[控制台模型详情页](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/qwen3.6-plus)为准。
+qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash 模型内置工具的费用可通过 Token Plan 团队版抵扣，内置工具不额外收费，产生的 token 消耗统一从套餐 Credits 中抵扣。具体价格以[控制台模型详情页](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/qwen3.6-plus)为准。
 
 ### **MCP 服务**
 
@@ -23,9 +23,9 @@ qwen3.7-max、qwen3.6-plus、qwen3.6-flash 模型内置工具的费用可通过 
 
 ## **使用方式**
 
-### **使用 qwen3.7-max / qwen3.6-plus / qwen3.6-flash 模型内置工具**
+### **使用 qwen3.7-max / qwen3.7-plus / qwen3.6-plus / qwen3.6-flash 模型内置工具**
 
-将 AI 工具的模型设置为 `qwen3.7-max`、`qwen3.6-plus` 或 `qwen3.6-flash`，在对话中直接提问即可。模型会根据问题自动调用相应的内置工具：
+将 AI 工具的模型设置为 `qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus` 或 `qwen3.6-flash`，在对话中直接提问即可。模型会根据问题自动调用相应的内置工具：
 
 **工具**
 

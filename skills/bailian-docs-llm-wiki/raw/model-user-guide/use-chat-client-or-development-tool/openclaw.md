@@ -145,6 +145,16 @@ Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/to
                 "compat": { "thinkingFormat": "openai" }
               },
               {
+                "id": "qwen3.7-plus",
+                "name": "qwen3.7-plus",
+                "reasoning": false,
+                "input": ["text", "image"],
+                "contextWindow": 1000000,
+                "maxTokens": 65536,
+                "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+                "compat": { "thinkingFormat": "openai" }
+              },
+              {
                 "id": "qwen3.6-plus",
                 "name": "qwen3.6-plus",
                 "reasoning": false,
@@ -248,10 +258,11 @@ Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/to
       "agents": {
         "defaults": {
           "model": {
-            "primary": "bailian-token-plan/qwen3.6-plus"
+            "primary": "bailian-token-plan/qwen3.7-plus"
           },
           "models": {
             "bailian-token-plan/qwen3.7-max": {},
+            "bailian-token-plan/qwen3.7-plus": {},
             "bailian-token-plan/qwen3.6-plus": {},
             "bailian-token-plan/qwen3.6-flash": {},
             "bailian-token-plan/deepseek-v4-pro": {},
@@ -332,6 +343,16 @@ Web UI 方式仅在 OpenClaw **≤ 2026.3.28** 可用，更高版本请使用方
                 "compat": { "thinkingFormat": "openai" }
               },
               {
+                "id": "qwen3.7-plus",
+                "name": "qwen3.7-plus",
+                "reasoning": false,
+                "input": ["text", "image"],
+                "contextWindow": 1000000,
+                "maxTokens": 65536,
+                "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+                "compat": { "thinkingFormat": "openai" }
+              },
+              {
                 "id": "qwen3.6-plus",
                 "name": "qwen3.6-plus",
                 "reasoning": false,
@@ -435,10 +456,11 @@ Web UI 方式仅在 OpenClaw **≤ 2026.3.28** 可用，更高版本请使用方
       "agents": {
         "defaults": {
           "model": {
-            "primary": "bailian-token-plan/qwen3.6-plus"
+            "primary": "bailian-token-plan/qwen3.7-plus"
           },
           "models": {
             "bailian-token-plan/qwen3.7-max": {},
+            "bailian-token-plan/qwen3.7-plus": {},
             "bailian-token-plan/qwen3.6-plus": {},
             "bailian-token-plan/qwen3.6-flash": {},
             "bailian-token-plan/deepseek-v4-pro": {},
@@ -515,6 +537,16 @@ Coding Plan [支持的模型](https://help.aliyun.com/zh/model-studio/coding-pla
             "api": "anthropic-messages",
             "models": [
               {
+                "id": "qwen3.7-plus",
+                "name": "qwen3.7-plus",
+                "reasoning": false,
+                "input": ["text", "image"],
+                "contextWindow": 1000000,
+                "maxTokens": 65536,
+                "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+                "compat": { "thinkingFormat": "openai" }
+              },
+              {
                 "id": "qwen3.6-plus",
                 "name": "qwen3.6-plus",
                 "reasoning": false,
@@ -607,9 +639,10 @@ Coding Plan [支持的模型](https://help.aliyun.com/zh/model-studio/coding-pla
       "agents": {
         "defaults": {
           "model": {
-            "primary": "bailian-coding-plan/qwen3.6-plus"
+            "primary": "bailian-coding-plan/qwen3.7-plus"
           },
           "models": {
+            "bailian-coding-plan/qwen3.7-plus": {},
             "bailian-coding-plan/qwen3.6-plus": {},
             "bailian-coding-plan/qwen3.5-plus": {},
             "bailian-coding-plan/qwen3-max-2026-01-23": {},
@@ -679,6 +712,16 @@ Web UI 方式仅在 OpenClaw **≤ 2026.3.28** 可用，更高版本请使用[�
             "api": "anthropic-messages",
             "models": [
               {
+                "id": "qwen3.7-plus",
+                "name": "qwen3.7-plus",
+                "reasoning": false,
+                "input": ["text", "image"],
+                "contextWindow": 1000000,
+                "maxTokens": 65536,
+                "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+                "compat": { "thinkingFormat": "openai" }
+              },
+              {
                 "id": "qwen3.6-plus",
                 "name": "qwen3.6-plus",
                 "reasoning": false,
@@ -771,9 +814,10 @@ Web UI 方式仅在 OpenClaw **≤ 2026.3.28** 可用，更高版本请使用[�
       "agents": {
         "defaults": {
           "model": {
-            "primary": "bailian-coding-plan/qwen3.6-plus"
+            "primary": "bailian-coding-plan/qwen3.7-plus"
           },
           "models": {
+            "bailian-coding-plan/qwen3.7-plus": {},
             "bailian-coding-plan/qwen3.6-plus": {},
             "bailian-coding-plan/qwen3.5-plus": {},
             "bailian-coding-plan/qwen3-max-2026-01-23": {},

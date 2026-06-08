@@ -17,11 +17,11 @@ API Key 是调用百炼服务的唯一鉴权凭证。在百炼控制台的 **API
 | 美国（弗吉尼亚） | `https://dashscope-us.aliyuncs.com/compatible-mode/v1` |
 | 德国（法兰克福） | `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1` |
 
-其中新加坡和德国（法兰克福）地域的 Base URL 需将 `{WorkspaceId}` 替换为实际的业务空间 ID。
+其中新加坡和德国（法兰克福）地域的 Base URL 需将 `{WorkspaceId}` 替换为实际的[业务空间](../concepts/workspace.md) ID。
 
 ### 权限与配额
 
-- API Key 的调用权限由**归属业务空间**决定。默认业务空间下的 API Key 可调用所有标准模型；子业务空间的 API Key 仅限已授权的模型。
+- API Key 的调用权限由**归属[业务空间](../concepts/workspace.md)**决定。默认[业务空间](../concepts/workspace.md)下的 API Key 可调用所有标准模型；子业务空间的 API Key 仅限已授权的模型。
 - 华北2（北京）地域支持为 API Key 配置 IP 访问白名单（IPv4/IPv6，最多 20 条）。
 - 每个主账号在每个地域最多可创建 50 个 API Key（美国弗吉尼亚地域为每个归属账号 20 个）。
 - API Key 无失效日期，删除后即失效。如需临时授权，可生成有效期 60 秒的临时 API Key。
@@ -111,5 +111,6 @@ Node.js 安装失败时可先配置镜像源：`npm config set registry https://
 - [将API Key配置到环境变量](../../raw/model-api-reference/preparations/configure-api-key-through-environment-variables.md)
 - [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)
 - [错误码](../../raw/model-api-reference/preparations/error-code.md)
+
 
 

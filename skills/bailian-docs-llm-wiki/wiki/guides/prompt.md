@@ -51,7 +51,7 @@
 
 | 参数 | 含义 | 获取方式 |
 | --- | --- | --- |
-| `workspaceId` | 业务空间 ID | 参考「获取 APP ID 和 Workspace ID」 |
+| `workspaceId` | [业务空间](../concepts/workspace.md) ID | 参考「获取 APP ID 和 Workspace ID」 |
 | `promptTemplateId` | 模板 ID | 模板卡片上展示 |
 
 响应体关键字段：`name`（模板名）、`content`（含变量占位）、`variables`（变量列表）、`promptTemplateId`、`requestId`。
@@ -149,6 +149,7 @@
 - [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)
 - [使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)
 - [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)
+
 
 
 

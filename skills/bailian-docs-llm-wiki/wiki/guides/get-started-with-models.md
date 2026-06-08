@@ -24,7 +24,7 @@
 
 接入要点：
 
-1. **注册并开通百炼**：使用阿里云主账号登录控制台后会自动开通；新加坡与法兰克福地域调用时还需填入业务空间 ID（WorkspaceId）。
+1. **注册并开通百炼**：使用阿里云主账号登录控制台后会自动开通；新加坡与法兰克福地域调用时还需填入[业务空间](../concepts/workspace.md) ID（WorkspaceId）。
 2. **获取 API Key**：在控制台 API Key 页面创建，建议通过环境变量 `DASHSCOPE_API_KEY` 注入，避免硬编码到代码里。
 3. **安装 SDK**：Python ≥ 3.8，可选 `pip install -U openai` 或 `pip install -U dashscope`；Node.js 直接使用 `openai` 包；任意语言也可走 `curl`。
 4. **发起首个请求**：把 `api_key` 设为环境变量、`base_url` 指向所选地域、`model` 设为 `qwen-plus` 等模型 ID 即可。
@@ -51,11 +51,11 @@
 
 地域间功能也存在差异，例如**批量推理、模型告警、模型调优只在北京和（部分）新加坡支持**，弗吉尼亚与法兰克福不支持。在美国地域使用 `-us` 后缀模型名（如 `qwen-plus-us`）可强制限定美国境内推理；不带后缀走全球部署范围。完整的接入信息、Base URL 列表与功能矩阵参见 [选择地域和服务部署范围](../../raw/model-user-guide/get-started-with-models/regions.md)。
 
-> **注意**：新加坡旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请迁移到新版 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。新加坡与法兰克福的 Base URL 中 `{WorkspaceId}` 必须替换为真实业务空间 ID，否则调用会失败。
+> **注意**：新加坡旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请迁移到新版 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。新加坡与法兰克福的 Base URL 中 `{WorkspaceId}` 必须替换为真实[业务空间](../concepts/workspace.md) ID，否则调用会失败。
 
 ## 限流：RPM / TPM 与避免策略
 
-限流按**主账号维度**聚合（账号下所有 RAM 子账号、业务空间、API Key 共享额度），按**模型独立**计算。每个模型同时受 RPM（每分钟请求数）与 TPM（每分钟 Token 数）双限制，超出任一阈值即触发。
+限流按**主账号维度**聚合（账号下所有 RAM 子账号、[业务空间](../concepts/workspace.md)、API Key 共享额度），按**模型独立**计算。每个模型同时受 RPM（每分钟请求数）与 TPM（每分钟 Token 数）双限制，超出任一阈值即触发。
 
 **常见报错与对应策略**：
 
@@ -98,6 +98,7 @@
 - [选择模型](../../raw/model-user-guide/get-started-with-models/models.md)
 - [选择地域和服务部署范围](../../raw/model-user-guide/get-started-with-models/regions.md)
 - [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)
+
 
 
 

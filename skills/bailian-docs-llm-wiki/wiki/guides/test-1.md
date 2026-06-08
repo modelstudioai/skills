@@ -96,7 +96,7 @@
 
 ### 分账管理
 
-给业务空间绑定标签即可按部门或项目归集费用，分账账单 T+1 天生效。详见[账单查询与成本管理](../../raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
+给[业务空间](../concepts/workspace.md)绑定标签即可按部门或项目归集费用，分账账单 T+1 天生效。详见[账单查询与成本管理](../../raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
 
 ## 欠费与停止计费
 
@@ -122,5 +122,6 @@
 - [节省计划与资源包](../../raw/model-user-guide/test-1/savings-plan-and-resource-package.md)
 - [账单查询与成本管理](../../raw/model-user-guide/test-1/bill-query-and-cost-management.md)
 - [模型调用价格](../../raw/model-user-guide/test-1/model-pricing.md)
+
 
 

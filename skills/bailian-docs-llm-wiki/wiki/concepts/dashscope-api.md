@@ -1,74 +1,62 @@
 # DashScope 接口
 
-DashScope 接口是阿里云百炼平台的原生 API 体系，提供最完整的功能集和参数支持，是百炼各类模型服务与应用调用的统一入口。所有 DashScope 接口均以 `https://dashscope.aliyuncs.com` 为 Base URL，通过 API Key 进行鉴权。
+DashScope 是阿里云百炼平台的原生 API 接口体系，提供最完整的功能集和参数支持，是百炼所有模型服务和应用调用的底层通信协议。相比 [OpenAI 兼容接口](openai-compatible-api.md)和 Anthropic 兼容接口，DashScope 接口覆盖面最广，适用于需要使用百炼全部能力的场景。
 
-## 接口定位与选型
+## 接口定位
 
-百炼平台同时提供 DashScope 原生接口和多种兼容接口（OpenAI Chat Completions、OpenAI Responses、Anthropic Messages）。DashScope 接口的核心优势在于功能覆盖最广、性能最优，适合需要使用平台全部能力的场景。如果项目已有 OpenAI 或 Anthropic 代码，可选择对应的兼容接口以降低迁移成本。
+百炼平台同时提供多种 API 接口风格，DashScope 接口在其中的定位为：
 
-| 接口类型 | 适用场景 |
-|---------|---------|
-| DashScope 原生 | 需要完整功能集、最优性能，或使用百炼专属能力（如长期记忆、[异步任务](async-task.md)管理） |
-| OpenAI 兼容 | 迁移已有 OpenAI 应用，或复用 OpenAI 生态工具链 |
-| Anthropic 兼容 | 使用 Anthropic 生态的开发者 |
+| 维度 | DashScope 接口 | 兼容接口（OpenAI/Anthropic） |
+|------|---------------|---------------------------|
+| 功能覆盖 | 最完整，支持全部平台能力 | 部分功能可能不支持 |
+| 性能 | 最优 | 与 DashScope 一致 |
+| 迁移成本 | 需要适配百炼专有协议 | 可直接复用现有代码 |
+| 适用场景 | 新项目、需要完整功能集 | 从其他平台迁移的项目 |
 
-## 主要使用场景
+## 使用场景
 
 ### 文本生成模型调用
 
-通过 DashScope 接口调用通义千问（Qwen）系列模型，支持多轮对话、[流式输出](streaming.md)、Function Calling 等完整能力。HTTP 端点为模型对应的 DashScope 路径，SDK 层面使用 `dashscope` 包直接调用。
+通过 DashScope 接口调用通义千问（Qwen）系列模型，端点为：
+
+```
+POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation
+```
+
+支持完整的参数集，包括 `top_p`、`top_k`、`temperature`、[流式输出](streaming-output.md)（`incremental_output`）等。
 
 ### 应用调用（智能体与工作流）
 
-调用已发布的智能体或工作流应用，HTTP 端点为：
+调用百炼平台已发布的智能体和工作流应用，端点为：
 
 ```
 POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion
 ```
 
-支持单轮/多轮对话、[流式输出](streaming.md)、自定义插件参数透传、多模态输入等。SDK 调用方式为 `Application.call()`（Python）或 `ApplicationParam.builder()`（Java）。
+支持多轮对话（`messages` 或 `session_id`）、多模态输入（文本/图片/文件/音视频）、Plugin、RAG、Function Calling 以及[异步任务](async-task.md)等能力。
 
-### 长期记忆管理
+### 框架集成
 
-长期记忆 API 基于 DashScope 服务，Base URL 为 `https://dashscope.aliyuncs.com/api/v2/apps/memory/`，提供记忆片段的增删改查、语义搜索及用户画像管理共 11 个接口。
+主流开发框架通过 DashScope SDK 接入百炼服务：
 
-### 文本向量化
+- **Python**：DashScope SDK（`pip install -U dashscope`），通过 `Application.call()` 或模型专属接口调用
+- **Java**：DashScope SDK（Maven artifact `com.alibaba:dashscope-sdk-java`，建议 >= 2.12.0），通过 `ApplicationParam.builder()` 构建请求
+- **LlamaIndex**：使用 `DashScopeParse`、`DashScopeCloudIndex` 等组件构建 RAG 应用
+- **Spring AI Alibaba**：通过 `DashScopeAgent` 和 `DashScopeDocumentRetriever` 集成
 
-通用文本向量模型（text-embedding 系列）通过 DashScope 同步接口或异步批处理接口调用，可将文本转换为数值向量用于语义搜索、推荐等下游任务。
+## 关键参数与配置
 
-### [异步任务](async-task.md)管理
+### 鉴权
 
-文生图、文生视频等长耗时任务采用异步调用模型，通过 `GET /api/v1/tasks/{task_id}` 等接口查询、取消任务，并支持通过 EventBridge 接收任务完成通知以替代轮询。
+所有 DashScope 接口请求必须在 Header 中携带 API Key：
 
-## 鉴权与凭证
-
-- **API Key**：唯一鉴权凭证，在百炼控制台的密钥管理页面创建。建议配置到环境变量 `DASHSCOPE_API_KEY`，避免硬编码。
-- **请求头**：HTTP 调用时在 Header 中携带 `Authorization: Bearer $DASHSCOPE_API_KEY`。
-- **临时 API Key**：面向浏览器等不可信环境，通过 `POST /api/v1/tokens` 换取有效期 1-1800 秒的临时凭证（以 `st-` 开头）。
-
-## SDK 与调用方式
-
-| 语言 | DashScope SDK | 安装 |
-|------|--------------|------|
-| Python（≥3.8） | `dashscope` | `pip install -U dashscope` |
-| Java | `com.alibaba:dashscope-sdk-java`（建议 ≥2.12.0） | Maven/Gradle 引入依赖 |
-| 其他语言 | 无官方 SDK | 直接使用 HTTP 接口（cURL/PHP/Node.js/Go/C# 等） |
-
-### 快速示例（Python）
-
-```python
-import os
-from dashscope import Application
-
-response = Application.call(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    app_id="YOUR_APP_ID",
-    prompt="你好"
-)
-print(response.output.text)
+```
+Authorization: Bearer $DASHSCOPE_API_KEY
 ```
 
-## 多地域支持
+建议通过环境变量 `DASHSCOPE_API_KEY` 注入，避免硬编码。
+
+### 多地域 Base URL
 
 | 地域 | Base URL |
 |------|----------|
@@ -77,25 +65,35 @@ print(response.output.text)
 | 美国（弗吉尼亚） | `https://dashscope-us.aliyuncs.com` |
 | 德国（法兰克福） | `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com` |
 
-各地域的 API Key 互相独立，调用时需使用对应地域的凭证和 Base URL。
+不同地域的 API Key 互相独立，不可跨地域使用。
 
-## 关键配置参数
+### 请求体结构
 
-高并发场景下建议配置 SDK 连接池以复用 TCP 连接：
+DashScope 接口统一采用以下根字段结构：
 
-- **Java SDK**：通过 `ConnectionConfigurations.builder()` 设置 `connectionPoolSize`（默认 32）、`connectionIdleTimeout`（默认 300 秒）等参数。
-- **Python SDK**：异步调用时传入 `aiohttp.TCPConnector(limit=...)` 控制并发连接数。
+- `input`：包含 `prompt`（用户输入）、`messages`（对话历史）等
+- `parameters`：模型/流程级参数，如 `top_p`、`temperature`、`incremental_output`
+- `debug`：调试信息开关
 
-[异步任务](async-task.md)管理接口的账号级限流为 20 QPS，查询结果保留 24 小时。
+### 连接复用（高并发场景）
+
+- **Java SDK**：内置 OkHttp 连接池，关键参数包括 `connectionPoolSize`（默认 32）、`maximumAsyncRequests`（默认 32）、`connectionIdleTimeout`（默认 300 秒）
+- **Python SDK**：根据同步/异步调用方式分别配置
+
+## 注意事项
+
+- 当应用位于子[业务空间](workspace.md)时，请求中必须携带 `Workspace ID`
+- DashScope 接口与 [OpenAI 兼容接口](openai-compatible-api.md)支持的参数范围可能存在差异，DashScope 覆盖面最广
+- 新版智能体应用（Agent 2.0）与旧版智能体/工作流应用的请求字段并不完全一致，需参考对应文档
+- [异步任务](async-task.md)（文生图、文生视频等）采用"提交任务获取 task_id → 轮询或回调获取结果"模式，查询结果仅保留 24 小时
 
 ## 关联主题页
 
 - [qwen api reference](../api/qwen-api-reference.md)
 - [application call](../api/application-call.md)
-- [long term memory new](../api/long-term-memory-new.md)
 - [bailian application calling](../guides/bailian-application-calling.md)
+- [frameworks](../api/frameworks.md)
 - [more about models](../api/more-about-models.md)
 - [preparations](../api/preparations.md)
-- [general text embedding](../api/general-text-embedding.md)
 
 

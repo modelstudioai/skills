@@ -15,7 +15,7 @@
 ### Agent 与 Assistant API
 
 - **核心区别**：Agent 侧重于调整插件模型、基于上下文的理解，开发者自行开发；Assistant API 提供各类封装，方便调优。
-- **参数理解**：自定义 API 插件遵循协议传给大模型理解；函数调用时，大模型会学习传入的参数信息并返回完整结果。
+- **参数理解**：自定义 API 插件遵循协议传给大模型理解；[函数调用](../concepts/function-calling.md)时，大模型会学习传入的参数信息并返回完整结果。
 
 ### RAG 检索增强
 
@@ -41,7 +41,7 @@ incremental_output=True   # 增量式流式输出
 | 问题 | 说明 |
 |------|------|
 | PDF 上传报错 `140010` | 确保文件后缀为小写 `pdf` |
-| 文档数量上限 | 每个业务空间最多 10 万个文档，超出需提交工单申请扩容 |
+| 文档数量上限 | 每个[业务空间](../concepts/workspace.md)最多 10 万个文档，超出需提交工单申请扩容 |
 | 上传接口 MD5 参数 | 用于验证上传文件的完整性 |
 | 结构化数据导入缺失 | 检查表格中是否存在空行，空行后的数据不会被识别；首行为空行则视为空文件 |
 
@@ -66,6 +66,7 @@ incremental_output=True   # 增量式流式输出
 
 - [常见问题](../../raw/application-user-guide/application-support/application-faq.md)
 - [相关协议](../../raw/application-user-guide/application-support/application-related-agreements.md)
+
 
 
 

@@ -64,6 +64,15 @@ OpenCode 是一款终端 AI 编程工具，可以通过按量计费、Coding Pla
             }
           }
         },
+        "qwen3.7-plus": {
+          "name": "Qwen3.7 Plus",
+          "options": {
+            "thinking": {
+              "type": "enabled",
+              "budgetTokens": 8192
+            }
+          }
+        },
         "qwen3.6-plus": {
           "name": "Qwen3.6 Plus",
           "options": {
@@ -152,6 +161,15 @@ OpenCode 是一款终端 AI 编程工具，可以通过按量计费、Coding Pla
         "apiKey": "YOUR_API_KEY"
       },
       "models": {
+        "qwen3.7-plus": {
+          "name": "Qwen3.7 Plus",
+          "options": {
+            "thinking": {
+              "type": "enabled",
+              "budgetTokens": 1024
+            }
+          }
+        },
         "qwen3.6-plus": {
           "name": "Qwen3.6 Plus",
           "options": {
@@ -234,6 +252,15 @@ OpenCode 是一款终端 AI 编程工具，可以通过按量计费、Coding Pla
       "models": {
         "qwen3.7-max": {
           "name": "Qwen3.7 Max",
+          "options": {
+            "thinking": {
+              "type": "enabled",
+              "budgetTokens": 8192
+            }
+          }
+        },
+        "qwen3.7-plus": {
+          "name": "Qwen3.7 Plus",
           "options": {
             "thinking": {
               "type": "enabled",

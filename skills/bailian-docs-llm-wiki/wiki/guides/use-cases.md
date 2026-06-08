@@ -61,7 +61,7 @@
 
 - 安装 `llama-index-core`、`llama-index-llms-dashscope`、`llama-index-indices-managed-dashscope`（Python ≥ 3.8 且 ≤ 3.12）。
 - 通过 `DashScopeParse` 在线解析 `.doc / .docx / .pdf`（单文件 ≤ 100 MB、≤ 1000 页）。
-- 解析结果用 `DashScopeCloudIndex.from_documents()` 写入百炼托管索引，后续按业务空间检索。
+- 解析结果用 `DashScopeCloudIndex.from_documents()` 写入百炼托管索引，后续按[业务空间](../concepts/workspace.md)检索。
 
 需先开通百炼"知识库"服务并准备 `DASHSCOPE_WORKSPACE_ID`。完整端到端示例见 [基于LlamaIndex构建RAG应用](../../raw/model-user-guide/use-cases/build-rag-applications-based-on-llamaindex.md)。
 
@@ -144,6 +144,7 @@
 - [Vidu视频生成Prompt指南](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/vidu-video-generation-prompt-guide.md)
 - [MiMo-小米](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/mimo.md)
 - [Stepfun-阶跃星辰](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/stepfun.md)
+
 
 
 
