@@ -48,15 +48,20 @@ This skill provides a structured, offline-first knowledge base that your agent r
 
 ## Prerequisites
 
-This skill requires Alibaba Cloud Model Studio CLI (`bl`). Before using this skill, check if `bl` is installed:
+This skill requires Alibaba Cloud Model Studio CLI (`bl`) and a valid API Key.
+
+1. **Get your API Key:** [Aliyun Model Studio Console](https://bailian.console.aliyun.com/cn-beijing/?source_channel=key_github&tab=app#/api-key)
+2. **Install CLI:** [Install Guide](https://bailian.console.aliyun.com/cli?source_channel=cli_github&) or run `npm install -g bailian-cli`
+3. **Authenticate:**
+   ```bash
+   bl auth login --api-key sk-xxxxx
+   ```
+
+Verify installation:
 
 ```bash
 bl --version
 ```
-
-If not installed or the command is not found, follow the install guide:
-
-> https://bailian.aliyun.com/cli/install.md
 
 ## License
 
