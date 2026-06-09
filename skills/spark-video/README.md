@@ -191,7 +191,8 @@ it'll run the right command.
 - After install the agent doesn't recognize `spark-video` → restart the
   agent / open a new session
 - `bl: command not found` → `npm install -g bailian-cli && npx skills add modelstudioai/cli --all -g && npx skills add modelstudioai/skills --all -g && bl auth login`
-  (full install guide: <https://bailian.aliyun.com/cli/install.md>)
+  (full install guide: <https://bailian.console.aliyun.com/cli?source_channel=cli_github&>)
+- **Need an API Key?** → [Get your free API Key](https://bailian.console.aliyun.com/cn-beijing/?source_channel=key_github&tab=app#/api-key), then `bl auth login --api-key sk-xxxxx`
 - `Permission denied: scripts/bl` → `chmod +x scripts/*.sh scripts/bl`
 - Render seems stuck → `tail -f projects/<p>/<e>/logs/model_calls.jsonl | jq .`
 
