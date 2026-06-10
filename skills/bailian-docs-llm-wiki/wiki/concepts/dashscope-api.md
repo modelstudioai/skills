@@ -1,139 +1,87 @@
-# DashScope API 协议
+# DashScope 接口
 
-DashScope API 是百炼平台的原生统一调用协议，覆盖文本、图像、音频、视频、3D 等多模态模型的推理与生成任务。相比 OpenAI / Anthropic 兼容接口，DashScope 提供最完整的功能集和参数支持，是所有百炼能力的底层传输层。
+DashScope 是阿里云百炼平台的原生 API 体系，为文本生成、图像生成、视频生成、语音合成与识别、应用调用等全部模态提供统一的接入端点和鉴权机制。相比 OpenAI / Anthropic 兼容接口，DashScope 接口覆盖的功能集最完整、参数支持最广泛，是需要使用百炼平台全部能力时的首选。
 
-## 协议形态
+## 统一鉴权与端点
 
-DashScope API 同时提供两种传输形态，按任务耗时自动选择：
+所有 DashScope 接口共享同一套鉴权方式：在请求头中携带 `Authorization: Bearer <API_KEY>`，API Key 通过百炼控制台创建，建议写入环境变量 `DASHSCOPE_API_KEY` 以避免硬编码泄露。
 
-| 形态 | 适用场景 | 典型模态 |
-| --- | --- | --- |
-| 同步（HTTP POST / WebSocket） | 响应延迟低、单次即可完成的任务 | 文本对话、语音合成（流式）、实时翻译 |
-| [异步任务](async-task.md)（Async Task） | 耗时较长、需后台排队的任务 | 视频生成、图像生成、3D 模型生成 |
+不同地域使用不同的端点基础域名：
 
-[异步任务](async-task.md)协议是最具辨识度的模式，整个流程分两步：
+| 地域 | HTTP 端点 |
+| --- | --- |
+| 华北2（北京） | `https://dashscope.aliyuncs.com/api/v1/...` |
+| 新加坡 | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/...` |
+| 美国（弗吉尼亚） | `https://dashscope-us.aliyuncs.com/api/v1/...` |
+| 德国（法兰克福） | `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/...` |
 
-1. **创建任务**：`POST` 请求到对应服务的 `/api/v1/services/aigc/...` 端点，请求头必须带 `X-DashScope-Async: enable`，响应返回 `task_id`。
-2. **轮询结果**：`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`，直到状态为 `SUCCEEDED` 或 `FAILED`。`task_id` 有效期 24 小时，切勿重复创建任务。
+模型、端点和 API Key 必须属于同一地域，跨地域调用会失败。新加坡与法兰克福地域的 URL 中需将 `{WorkspaceId}` 替换为真实的[业务空间](workspace.md) ID。
 
-开启[流式输出](streaming-output.md)则使用 `X-DashScope-SSE: enable` 请求头，服务端通过 Server-Sent Events 逐步返回中间结果。
-
-## 统一鉴权
-
-所有 DashScope 请求共享同一套鉴权体系，API Key 通过环境变量 `DASHSCOPE_API_KEY` 管理：
-
-```
-Authorization: Bearer <your_api_key>
-```
-
-- HTTP 请求：放在请求头 `Authorization` 字段。
-- WebSocket 请求：在握手阶段的 Header 中携带，无效 Key 返回 HTTP 401/403。
-- 可选 Header：`X-DashScope-WorkSpace`（[业务空间](workspace.md) ID）、`user-agent`（客户端标识）。
-
-## 多地域端点
-
-DashScope 按地域隔离端点，模型、Endpoint URL、API Key **必须属于同一地域**，跨地域调用会失败：
-
-| 地域 | HTTP Endpoint | WebSocket Endpoint |
-| --- | --- | --- |
-| 华北 2（北京） | `https://dashscope.aliyuncs.com/api/v1/...` | `wss://dashscope.aliyuncs.com/api-ws/v1/...` |
-| 新加坡 | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/...` | `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/...` |
-| 美国（弗吉尼亚） | `https://dashscope-us.aliyuncs.com/api/v1/...` | — |
-| 德国（法兰克福） | `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/...` | — |
-
-> 新加坡/法兰克福 URL 中的 `{WorkspaceId}` 需替换为真实的工作空间 ID。新加坡地域旧版域名 `dashscope-intl.aliyuncs.com` 即将下线，应迁移到新域名。
-
-## 各场景的调用模式
+## 各场景的调用方式
 
 ### 文本生成
 
-Qwen 系列模型的 DashScope 原生接口提供最完整参数支持（思考模式 `enable_thinking`、Function Calling、结构化输出、批量推理等）。相比 [OpenAI 兼容接口](openai-compatible-api.md)，DashScope 原生接口的参数覆盖面最广。
+通义千问（Qwen）系列模型通过 DashScope 接口调用时拥有最完整的功能集和参数支持，端点与 [OpenAI 兼容接口](openai-compatible-api.md)并行提供。当项目需要使用百炼独有的高级参数时，应优先选择 DashScope 原生接口。
 
-端点：`POST /api/v1/services/aigc/text-generation/generation`
+### 应用调用
 
-### 图像生成与编辑
+调用已发布的智能体或工作流应用时，DashScope API 端点为：
 
-文生图、图像编辑等任务采用**同步或异步** HTTP 接口，按模型不同选择端点：
+```
+POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion
+```
 
-- 千问图像 / Z-Image / 万相 V2+：`/api/v1/services/aigc/multimodal-generation/generation`（同步）
-- 万相 V1、专项能力（翻译、局部重绘、扩图、虚拟模特等）：`/api/v1/services/aigc/image2image/image-synthesis`（异步）
-
-请求体核心字段：`model`、`input.prompt`、`input.media`（参考图数组）、`parameters`（`size`、`n`、`style` 等）。
+请求体核心字段包括 `input.prompt`（用户输入）、`input.messages`（多轮对话历史）、`parameters`（模型参数如 `temperature`、`top_p`、`incremental_output` 等）。SDK 层面通过 `Application.call`（Python）或 `ApplicationParam.builder`（Java）封装。DashScope API 在应用调用场景中功能最全、性能最高，支持多轮上下文、[流式输出](streaming.md)、Plugin、RAG、Function Calling 等。
 
 ### 视频生成
 
-所有视频生成模型（万相 Wan、HappyHorse、可灵 Kling 等）统一走**[异步任务](async-task.md)协议**：
+视频生成 API 统一采用[异步任务](async-task.md)协议，分两步完成：
 
-- 创建端点：`POST /api/v1/services/aigc/video-generation/video-synthesis`
-- 请求头：`X-DashScope-Async: enable`
-- 关键参数：`model`、`input.prompt`、`input.media`（`first_frame` / `last_frame` / `reference_image` 等）、`parameters`（`resolution`、`ratio`、`duration`、`prompt_extend`）
+1. **创建任务**：`POST .../services/aigc/video-generation/video-synthesis`，请求头需额外携带 `X-DashScope-Async: enable`。
+2. **轮询结果**：`GET .../tasks/{task_id}`，task_id 有效期 24 小时。
 
-任务耗时通常 1–5 分钟，视频编辑统一模型约 5–10 分钟。
+请求体通过 `model` 指定模型、`input.prompt` 提供提示词、`input.media` 传入媒体素材、`parameters` 控制分辨率和时长等参数。
 
-### 语音合成（TTS）
+### 图像生成
 
-| 模式 | 协议 | 端点 |
-| --- | --- | --- |
-| 非实时（Qwen-TTS / CosyVoice） | HTTP POST，可选 SSE 流式 | `/api/v1/services/audio/tts/SpeechSynthesizer` |
-| 实时流式（CosyVoice / Qwen-TTS Realtime） | WebSocket 双向流 | `wss://dashscope.aliyuncs.com/api-ws/v1/inference` |
+图像生成模型可通过 HTTP 或 DashScope SDK 调用。万相 2.6 及以上版本支持 HTTP 同步调用；较早版本仅支持异步调用（创建任务 + 轮询结果），流程与视频生成一致。
 
-WebSocket 实时合成通过三类事件交互：`run-task`（声明模型与参数）→ `continue-task`（携带文本）→ `finish-task`（结束）。音频格式支持 `pcm` / `wav` / `mp3` / `opus`，采样率可选 8000–48000 Hz。
+### 语音合成与识别
 
-### 语音识别（ASR）与实时翻译
+语音类接口同时提供 HTTP REST 和 WebSocket 两种协议。实时语音合成（CosyVoice）采用 WebSocket 双向流，通过 `run-task`、`continue-task`、`finish-task` 三类事件交互；非实时合成使用 HTTP POST，可选开启 SSE 流式返回。WebSocket 端点为 `wss://dashscope.aliyuncs.com/api-ws/v1/realtime`。
 
-ASR 与实时音视频翻译同样基于 WebSocket 长连接，端点路径为 `/api-ws/v1/realtime`，鉴权方式一致。
+## SDK 与接入方式
 
-## 请求体通用结构
+百炼提供官方 DashScope SDK（Python、Java）以及 OpenAI 兼容的多语言 SDK。DashScope SDK 安装方式：
 
-尽管不同模态的端点路径不同，DashScope 请求体遵循统一的顶层结构：
+```bash
+# Python
+pip install -U dashscope
 
-```json
-{
-  "model": "<model-name>",
-  "input": {
-    "prompt": "文本提示",
-    "media": [],
-    "text": "待处理文本"
-  },
-  "parameters": {
-    "resolution": "1080P",
-    "size": "1024*1024",
-    "n": 1
-  }
-}
+# Java (Maven)
+<dependency>
+  <groupId>com.alibaba</groupId>
+  <artifactId>dashscope-sdk-java</artifactId>
+</dependency>
 ```
 
-- `model`：模型标识符（如 `qwen3.7-plus`、`wan2.7-t2v`、`cosyvoice-v3.5-plus`）。
-- `input`：输入数据，按模态包含 `prompt` / `text` / `media` / `voice` 等字段。
-- `parameters`：控制生成行为的参数，因模型而异。
+语音场景还提供 Android 和 iOS 原生 SDK。
 
-## SDK 支持
+## 关键配置与最佳实践
 
-DashScope 提供 Python 与 Java 两种官方 SDK，封装了鉴权、重试、流式解析等细节：
-
-- **Python SDK**：`dashscope` 包，覆盖所有模态的高层 API。
-- **Java SDK**：`dashscope-sdk-java`，提供同步 / 异步 / 流式三种调用模式。
-- **移动端 SDK**：Android / iOS SDK 主要面向语音合成场景。
-
-对于视频生成、图像生成等异步任务，SDK 内部封装了"提交 + 轮询"的两步流程，开发者只需调用一个方法即可等待最终结果。
-
-## 与其他接口的关系
-
-百炼平台同时提供 OpenAI 兼容（Chat Completions / Responses）和 Anthropic 兼容（Messages）接口，这些接口在底层部分能力仍依赖 DashScope 协议，但对开发者屏蔽了异步任务、地域端点等细节。选择建议：
-
-- **迁移现有 OpenAI 应用** → OpenAI 兼容 Chat Completions，改动最小。
-- **需要内置工具且免维护对话历史** → OpenAI 兼容 Responses。
-- **需要百炼全部能力（多模态、异步任务、完整参数控制）** → DashScope 原生接口。
-
-DashScope 原生接口是所有接口中功能覆盖面最广的选择，尤其在视频生成、图像编辑、语音合成等非文本模态上，通常只有 DashScope 端点可用。
+- **连接复用**：高并发场景下应配置 DashScope SDK 的连接池参数（Java SDK 内置 OkHttp 连接池，可调整 `connectionPoolSize`、`maximumAsyncRequests` 等）以减少 TCP 连接建立开销。
+- **[异步任务](async-task.md)管理**：长耗时任务（文生图、文生视频、长语音识别）返回 `task_id` 后，可通过通用任务管理 API 查询、批量查询或取消任务，查询结果保留 24 小时。建议接入 EventBridge 事件通知替代高频轮询。
+- **临时 API Key**：在浏览器或移动端等不可信环境中，可通过后端接口换取有效期 1~1800 秒的临时 Key（以 `st-` 开头），到期自动失效。
+- **[业务空间](workspace.md)隔离**：当应用位于子[业务空间](workspace.md)时，请求中必须携带 `Workspace ID`。同一业务空间内的 API Key 权限相同，无需为不同模态分别创建。
 
 ## 关联主题页
 
 - [qwen api reference](../api/qwen-api-reference.md)
+- [application call](../api/application-call.md)
 - [video generation api](../api/video-generation-api.md)
-- [model inference](../guides/model-inference.md)
-- [image generation](../api/image-generation.md)
 - [audio api references](../api/audio-api-references.md)
-- [speech synthesis api reference](../api/speech-synthesis-api-reference.md)
+- [image generation](../api/image-generation.md)
+- [preparations](../api/preparations.md)
+- [more about models](../api/more-about-models.md)
 
 

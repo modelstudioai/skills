@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-06-07",
+  "updatedAt": "2026-06-10",
   "totalFamilies": 162,
-  "totalModels": 359,
+  "totalModels": 360,
   "capabilityDistribution": {
     "TG": 33,
     "IG": 29,
@@ -861,10 +861,11 @@
       "providers": [
         "pixverse"
       ],
-      "itemCount": 3,
+      "itemCount": 4,
       "items": [
         "pixverse/pixverse-v6-it2v",
         "pixverse/pixverse-v6-kf2v",
+        "pixverse/pixverse-v6-r2v",
         "pixverse/pixverse-v6-t2v"
       ]
     },

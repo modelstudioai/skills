@@ -65,20 +65,20 @@
 
 ## 横切概念
 
-- [函数调用](concepts/function-calling.md) — 关联 4 个主题
-- [检索增强生成（RAG）](concepts/rag.md) — 关联 6 个主题
-- [流式输出](concepts/streaming-output.md) — 关联 5 个主题
+- [函数调用](concepts/function-calling.md) — 关联 7 个主题
+- [检索增强生成](concepts/rag.md) — 关联 6 个主题
+- [流式输出](concepts/streaming.md) — 关联 6 个主题
 - [业务空间](concepts/workspace.md) — 关联 5 个主题
 - [异步任务](concepts/async-task.md) — 关联 5 个主题
-- [DashScope API 协议](concepts/dashscope-api.md) — 关联 6 个主题
-- [OpenAI 兼容接口](concepts/openai-compatible-api.md) — 关联 5 个主题
-- [Token 计费与成本管理](concepts/token-billing.md) — 关联 6 个主题
+- [DashScope 接口](concepts/dashscope-api.md) — 关联 7 个主题
+- [OpenAI 兼容接口](concepts/openai-compatible-api.md) — 关联 6 个主题
+- [Token 计量与计费](concepts/token.md) — 关联 6 个主题
 
 ## 对比分析
 
-- [模型监控 vs 应用监控](comparisons/model-monitoring-vs-app-monitoring.md) — 对比 2 个主题
-- [模型评测 vs 应用评测](comparisons/model-eval-vs-app-eval.md) — 对比 2 个主题
-- [图像/视频/3D 生成对比](comparisons/image-video-3d-generation.md) — 对比 3 个主题
-- [微调指南 vs 微调任务 API](comparisons/fine-tuning-guide-vs-api.md) — 对比 2 个主题
-- [语音合成 vs 语音识别](comparisons/speech-synthesis-vs-recognition.md) — 对比 2 个主题
+- [模型监控与应用监控对比](comparisons/monitoring-comparison.md) — 对比 2 个主题
+- [模型评估与应用评估对比](comparisons/evaluation-comparison.md) — 对比 2 个主题
+- [图像生成、视频生成与3D生成对比](comparisons/media-generation-comparison.md) — 对比 3 个主题
+- [语音合成、语音识别与语音翻译对比](comparisons/speech-apis-comparison.md) — 对比 3 个主题
+- [知识库与记忆库对比](comparisons/knowledge-vs-memory.md) — 对比 2 个主题
 

@@ -75,7 +75,7 @@
 
 -   图像生成-文生图：[wan-image-t2i-training-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260601/iszvtr/wan-image-t2i-training.zip)
     
--   图像生成-图生图：[wan-image-i2i-training-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260601/rtexkn/wan-image-i2i-training.zip)
+-   图像生成-图生图：[wan-image-i2i-training-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260610/yynsck/wan-image-i2i-training.zip)
     
 
 **请求示例**
@@ -578,7 +578,7 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxx
     
     -   **文生图：**[wan-image-t2i-valid-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260601/ulrlhp/wan-image-t2i-valid-dataset.zip)
         
-    -   **图生图：**[wan-image-i2i-valid-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260601/ktseto/wan-image-i2i-valid-dataset.zip)
+    -   **图生图：**[wan-image-i2i-valid-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260610/jrggzt/wan-image-i2i-valid-dataset.zip)
         
 -   zip包目录结构：
     

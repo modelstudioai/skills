@@ -2,6 +2,10 @@
 
 本文档介绍如何在阿里云百炼平台通过OpenAI兼容接口或DashScope SDK调用DeepSeek系列模型。
 
+**重要**
+
+deepseek-v3、deepseek-v3.1、deepseek-v3.2、deepseek-v3.2-exp、deepseek-r1、deepseek-r1-0528、deepseek-r1-distill-qwen-7b/14b/32b 将于**2026年7月9日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-plus)、[qwen3.7-max](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-max)、[qwen3.6-flash](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.6-flash)。
+
 ## **快速开始**
 
 deepseek-v4-pro 是 DeepSeek 系列最新模型，在编程、数学和通用任务方面表现出色。您可以通过`enable_thinking`参数在思考与非思考模式之间切换。以下示例展示如何调用思考模式的 deepseek-v4-pro 模型。

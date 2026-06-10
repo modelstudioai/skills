@@ -1,79 +1,84 @@
-# 语音合成、识别与翻译 API 对比
+# 语音合成、语音识别与语音翻译对比
 
-百炼平台围绕语音场景提供三类核心 API：语音合成（TTS）、语音识别（ASR）和语音翻译（Speech Translation）。三者在数据流向、模型家族、交互协议等方面差异显著，开发者需要根据业务场景准确选型。本页从 API 维度系统对比三类能力的关键差异，帮助开发者快速定位适合的接入方案。
+百炼平台围绕语音提供三大类 API：语音合成（TTS）将文本转为语音，语音识别（ASR）将语音转为文本，语音翻译则在识别的基础上叠加跨语种翻译能力。三者在输入输出、协议、模型选择和典型场景上存在显著差异，本文从技术选型角度进行系统对比，帮助开发者根据业务需求选择合适的 API。
 
 ## 核心维度对比
 
-| 维度 | 语音合成（TTS） | 语音识别（ASR） | 语音翻译（Speech Translation） |
+| 维度 | 语音合成（TTS） | 语音识别（ASR） | 语音翻译 |
 | --- | --- | --- | --- |
-| **数据流向** | 文本 → 音频 | 音频 → 文本 | 音频/视频 → 文本（可选音频） |
-| **主要模型族** | Qwen-TTS、CosyVoice、Sambert、MiniMax | Qwen-ASR、Paraformer、Fun-ASR | Qwen-LiveTranslate |
-| **非实时协议** | HTTP（DashScope MultiModalConversation / 同步） | DashScope 异步 RESTful（提交-轮询）、OpenAI 兼容同步 | OpenAI 兼容 Chat Completions（流式 SSE） |
-| **实时协议** | WebSocket（DashScope 协议） | WebSocket（DashScope 协议 / Realtime 协议） | WebSocket（客户端/服务端事件） |
-| **SDK 覆盖** | Python / Java / Android / iOS / HTTP | Python / Java / Android / iOS | Python SDK / Java SDK / HTTP |
-| **输入格式** | 纯文本（部分支持 SSML 标记） | PCM / WAV / MP3 / Opus / AMR 等音频 | 音频文件 URL / Base64、视频文件 URL / Base64 |
-| **输出格式** | WAV / MP3 / PCM / Opus 音频流 | JSON 结构化文本（含时间戳、词级别） | 增量文本 chunk；可选 WAV 音频输出 |
-| **计费单位** | 按字符数计费 | 按音频时长计费 | 按音频/视频时长计费 |
-| **典型延迟** | 实时流式首包 < 300ms；非实时视文本长度而定 | 实时流式延迟 < 500ms；录音文件异步数分钟 | 实时毫秒级；非实时视文件时长而定 |
+| **功能方向** | 文本 → 语音 | 语音 → 文本 | 语音 → 翻译文本（可选输出音频） |
+| **输入格式** | 纯文本（支持指令控制语速、情绪等） | 音频流（PCM/WAV/MP3/OPUS 等）或音频文件 URL | 音频流（PCM/OPUS）或音频/视频文件 URL |
+| **输出格式** | 音频流（PCM/WAV/MP3 等） | 结构化文本（含时间戳、逐字信息） | 翻译文本 + 可选音频（WAV） |
+| **主要协议** | HTTP（非实时）/ WebSocket（实时流式） | WebSocket（实时）/ RESTful（录音文件异步） | OpenAI 兼容 HTTP（离线）/ WebSocket（实时） |
+| **代表模型** | Qwen-TTS、CosyVoice、Sambert、MiniMax Speech | Fun-ASR、Paraformer、Qwen-ASR | qwen3-livetranslate-flash、qwen3.5-livetranslate-flash-realtime |
+| **支持地域** | 北京、新加坡（Sambert 仅北京） | 北京、新加坡（Paraformer 实时仅北京） | 北京、新加坡 |
+| **鉴权方式** | DashScope API Key（Bearer Token） | DashScope API Key（Bearer Token） | DashScope API Key（Bearer Token） |
+| **多语种支持** | 中文、英文等（因模型而异） | 中文、英文、日语、粤语及多种外语 | 多语种，支持自动语种识别 |
 
-## 接入端点对比
+## 模型系列与协议对比
 
-| 地域 | 语音合成 | 语音识别 | 语音翻译 |
+| API 类型 | 模型系列 | 协议 | 实时/离线 | 流式能力 |
+| --- | --- | --- | --- | --- |
+| 语音合成 | Qwen-TTS（非实时） | HTTP | 离线 | 支持[流式输出](../concepts/streaming.md) |
+| 语音合成 | Qwen-TTS Realtime | WebSocket | 实时 | 流式文本输入 + 流式音频输出 |
+| 语音合成 | CosyVoice | WebSocket | 实时 | 三段式事件协议，流式文本输入 |
+| 语音合成 | Sambert | WebSocket | 实时 | 一次性文本输入，流式音频输出 |
+| 语音合成 | MiniMax Speech | HTTP | 同步/流式 | 支持[流式输出](../concepts/streaming.md) |
+| 语音识别 | Fun-ASR / Paraformer 实时 | WebSocket | 实时 | 流式音频输入 + 实时文本输出 |
+| 语音识别 | Qwen-ASR | WebSocket | 实时 | 流式音频输入，支持 VAD/Manual 断句 |
+| 语音识别 | Paraformer 录音文件 | RESTful | 离线异步 | 提交任务 + 轮询结果 |
+| 语音翻译 | qwen3-livetranslate-flash | OpenAI 兼容 HTTP | 离线 | 仅[流式输出](../concepts/streaming.md)（stream 必须为 true） |
+| 语音翻译 | qwen3.5-livetranslate-flash-realtime | WebSocket | 实时 | 双向事件流 |
+
+## 交互协议对比
+
+| 特性 | 语音合成 | 语音识别 | 语音翻译 |
 | --- | --- | --- | --- |
-| **北京（华北 2）HTTP** | `https://dashscope.aliyuncs.com` | `https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription` | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
-| **北京 WebSocket** | `wss://dashscope.aliyuncs.com/api-ws/v1/inference` | `wss://dashscope.aliyuncs.com/api-ws/v1/inference`（Paraformer/Fun-ASR）；`wss://dashscope.aliyuncs.com/api-ws/v1/realtime`（Qwen-ASR） | `wss://dashscope.aliyuncs.com/api-ws/v1/realtime` |
-| **新加坡（新版）** | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com` | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com` | `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime` |
+| **WebSocket 事件模型** | run-task / continue-task / finish-task（CosyVoice）；session 事件协议（Qwen-TTS Realtime） | run-task / finish-task | session.update / input_audio_buffer.append / session.finish |
+| **HTTP 接口风格** | DashScope MultiModalConversation（Qwen-TTS）；OpenAI 兼容（MiniMax） | RESTful [异步任务](../concepts/async-task.md)（Paraformer 录音文件） | OpenAI 兼容 chat/completions |
+| **连接复用** | 支持（CosyVoice 建议复用连接处理多任务） | 支持 | 支持 |
+| **心跳保活** | 视模型而定 | 支持（heartbeat 参数避免静音超时断连） | 无需（持续发送音频数据） |
 
-> 所有端点统一通过 `Authorization: Bearer <API_KEY>` 鉴权，北京与新加坡的 API Key 不通用，需分别申请。新加坡旧版 `dashscope-intl.aliyuncs.com` 域名即将下线，建议尽快迁移到带 WorkspaceId 的新版域名。
+## 特色能力对比
 
-## 模型选型参考
-
-| 场景需求 | 推荐 API | 推荐模型 | 理由 |
+| 能力 | 语音合成 | 语音识别 | 语音翻译 |
 | --- | --- | --- | --- |
-| 文本转语音播报（离线） | 语音合成 - 非实时 | `qwen3-tts-flash` | 新一代模型，音质好，支持多音色 |
-| 交互式对话语音输出 | 语音合成 - 实时 | `qwen3-tts-flash-realtime` / `cosyvoice-v3.5-plus` | 低延迟[流式输出](../concepts/streaming-output.md)，适合对话场景 |
-| 自定义音色品牌化 | 语音合成 - 声音复刻 | `voice-enrollment` | 复刻专属音色，品牌一致性 |
-| 会议/通话录音转写 | 语音识别 - 录音文件 | `qwen3-asr-flash-filetrans` / `paraformer-v2` | 异步处理，支持长音频，准确率高 |
-| 实时字幕/语音输入 | 语音识别 - 实时 | `qwen3-asr-realtime` / `paraformer-realtime-v2` | 流式识别，低延迟 |
-| 多语种录音文件翻译 | 语音翻译 - 非实时 | `qwen3-livetranslate-flash` | 支持音频/视频文件，自动检测源语言 |
-| 同声传译/实时会议翻译 | 语音翻译 - 实时 | `qwen3.5-livetranslate-flash-realtime` | 毫秒级响应，支持流式音频输入 |
+| **音色定制** | 支持（多音色库 + 声音复刻） | 不适用 | 支持预设音色与声音复刻 |
+| **情绪/语调控制** | Qwen-TTS instruct 模型支持自然语言指令；MiniMax 支持情绪标签 | 不适用 | 不适用 |
+| **热词定制** | 不适用 | 支持（vocabulary_id） | 支持（translation.corpus.phrases） |
+| **语义断句** | 不适用 | 支持（semantic_punctuation_enabled） | 不适用 |
+| **时间戳输出** | 不适用 | 支持（逐字时间戳 + 句级时间戳） | 不适用 |
+| **视频输入** | 不适用 | 不适用 | 实时翻译支持图像帧输入 |
+| **ASR + 翻译联合** | 不适用 | 不适用 | 可同时返回源语言 ASR 结果与翻译文本 |
 
-## 协议与交互模式差异
+## 适用场景建议
 
-### 语音合成
+**选择语音合成（TTS）的场景：**
 
-- **非实时**：单次 HTTP 请求返回完整音频，适合短文本离线生成。Qwen-TTS 使用 MultiModalConversation 接口；MiniMax 使用独立 HTTP 同步接口。
-- **实时**：WebSocket 双向通信，客户端分段发送文本，服务端流式返回音频 chunk。CosyVoice 使用 `run-task` / `continue-task` / `finish-task` 事件模型；Qwen-TTS-Realtime 使用 `session.update` / `input_text.append` / `response.create` 事件模型。
+- 智能客服、语音播报、有声读物等需要将文本转为自然语音的应用
+- 需要精细控制语速、语调、情绪的交互式对话场景（推荐 Qwen-TTS instruct 或 CosyVoice）
+- 批量离线音频生成（推荐 Qwen-TTS 非实时或 MiniMax HTTP 接口）
+- 需要低延迟实时语音输出的场景（推荐 Qwen-TTS Realtime 或 CosyVoice）
 
-### 语音识别
+**选择语音识别（ASR）的场景：**
 
-- **录音文件**：异步"提交-轮询"模式。提交音频 URL 后获得 `task_id`，轮询直到状态为 `SUCCEEDED`。Qwen-ASR 额外支持 OpenAI 兼容同步接口（仅短音频）。
-- **实时**：WebSocket 流式上传 PCM/Opus 音频帧，服务端增量返回识别结果（含中间结果和最终结果）。
+- 实时会议转写、直播字幕、语音输入法等需要低延迟的实时转写场景（推荐 Fun-ASR 或 Qwen-ASR）
+- 长音频离线批量转写，如录音回放、客服质检（推荐 Paraformer 录音文件识别）
+- 需要多语种支持或精细 VAD 控制的场景（推荐 Qwen-ASR，支持 VAD/Manual 两种断句模式）
 
-### 语音翻译
+**选择语音翻译的场景：**
 
-- **非实时**：使用 OpenAI 兼容的 Chat Completions 接口，必须开启 `stream: true`，通过 SSE 接收翻译文本增量。支持同时输出翻译音频。
-- **实时**：WebSocket 事件驱动，客户端持续发送 `input_audio_buffer.append`，服务端返回翻译文本和可选音频。支持同时传入图像帧用于视频翻译。
+- 直播同声传译、跨语种实时会议等低延迟翻译场景（推荐 qwen3.5-livetranslate-flash-realtime）
+- 整段音视频的离线翻译与字幕生成（推荐 qwen3-livetranslate-flash）
+- 需要翻译文本与翻译语音同时输出的场景
+- 视频会议中需要结合画面理解辅助翻译的场景（实时翻译支持视频帧输入）
 
-## 增强能力对比
+## 技术选型决策参考
 
-| 增强能力 | 语音合成 | 语音识别 | 语音翻译 |
-| --- | --- | --- | --- |
-| 热词/关键词增强 | 不适用 | 支持（Paraformer / Fun-ASR / Qwen-ASR） | 不支持 |
-| 语种自动检测 | 部分支持（需指定 language_type） | 支持（Fun-ASR mtl 多语种模型） | 支持（source_lang 可留空） |
-| 时间戳输出 | 不适用 | 支持（句级/词级） | 支持（句级） |
-| 说话人分离 | 不适用 | 支持（Paraformer / Fun-ASR） | 不支持 |
-| 情感/风格控制 | 支持（Qwen-TTS-Instruct instructions 参数） | 不适用 | 不适用 |
-| 自定义音色 | 支持（声音复刻/声音设计） | 不适用 | 支持（输出音频时可选 voice） |
-| ITN（逆文本正则化） | 不适用 | 支持 | 不适用 |
-
-## 技术选型建议
-
-1. **明确数据流向**：文本变声音选 TTS，声音变文字选 ASR，跨语言选 Translation。
-2. **实时性要求**：对话/直播等低延迟场景选实时 WebSocket 接口；离线批处理选非实时 HTTP/异步接口。
-3. **模型家族选择**：新项目优先选 Qwen 系列（qwen3-tts / qwen3-asr / qwen3-livetranslate），架构更新、能力更全；存量系统如已接入 Paraformer / CosyVoice 可继续使用。
-4. **SDK vs 原生协议**：Python / Java 项目推荐使用 DashScope SDK 减少协议处理代码；移动端（Android / iOS）TTS 和 ASR 有专用 SDK，翻译暂无移动端 SDK。
-5. **地域选择**：国内业务用北京端点；海外业务用新加坡新版域名（带 WorkspaceId），注意 API Key 需分别申请。
+1. **明确数据流向**：文本到语音选 TTS，语音到文本选 ASR，语音到另一语言选语音翻译。
+2. **实时性要求**：需要低延迟流式处理选 WebSocket 协议的实时模型；可接受延迟选 HTTP/RESTful 离线接口。
+3. **地域合规**：部分模型仅支持北京地域（如 Sambert、Paraformer 实时），海外部署需确认新加坡地域的模型可用性。
+4. **组合使用**：语音翻译内置了 ASR 能力，无需单独调用 ASR 再翻译；但如果只需转写不需翻译，直接使用 ASR 更高效。TTS 可与 ASR 或语音翻译搭配，实现完整的语音交互链路。
 
 ## 被对比主题页
 

@@ -9,12 +9,12 @@
 | 角色 | 关键能力 |
 | --- | --- |
 | 超级管理员（主账号 / 拥有 `AliyunBailianFullAccess` 的 RAM 用户） | 跨空间管理用户、模型调用/训练/部署授权、限流、API Key |
-| 业务空间管理员 | 管理本空间的用户、页面权限、API Key |
+| [业务空间](../concepts/workspace.md)管理员 | 管理本空间的用户、页面权限、API Key |
 | 普通用户 | 按授权访问空间、页面和资源 |
 
 要点：
 
-- **API Key 权限**：单个 API Key 只能归属一个地域内的一个业务空间和一个用户，不可转移。API Key 的可调用模型和限流与归属空间保持一致，不受用户控制台页面权限影响。自 2026 年 3 月 25 日起，华北2（北京）地域新建的 API Key 均归属主账号。华北2（北京）的 API Key 支持设置 IP 访问白名单。
+- **API Key 权限**：单个 API Key 只能归属一个地域内的一个[业务空间](../concepts/workspace.md)和一个用户，不可转移。API Key 的可调用模型和限流与归属空间保持一致，不受用户控制台页面权限影响。自 2026 年 3 月 25 日起，华北2（北京）地域新建的 API Key 均归属主账号。华北2（北京）的 API Key 支持设置 IP 访问白名单。
 - **OpenAPI 接口权限**：RAM 用户默认无权调用百炼应用、知识库、Prompt 工程等 Open API，需要主账号在 RAM 控制台授予 `AliyunBailianDataFullAccess` 或 `AliyunBailianDataReadOnlyAccess` 系统策略。
 - **生产环境建议**：按环境（dev / test / prod）或按业务线划分空间，把主账号总配额按比例分配到各空间并预留缓冲。详见 [权限管理](../../raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
 
@@ -98,7 +98,7 @@
 
 > **注意**：第三方模型的备案信息由提供方负责，阿里云百炼不作额外承诺，相关权利义务以《阿里云百炼服务协议》第 5.1.1.2 条、第 5.1.2 条为准。
 
-## 安全存储业务空间
+## 安全存储[业务空间](../concepts/workspace.md)
 
 面向有私有网络数据隔离需求的用户，百炼提供**安全存储业务空间**（需联系商务开通）。整体流程：
 
@@ -140,5 +140,6 @@
 - [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md)
 - [配置私有网络中的资源](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)
 - [模型备案信息公示](../../raw/model-user-guide/security-and-compliance/model-filing-information-publicity.md)
+
 
 

@@ -554,21 +554,31 @@ contents `_array_`**（必选）**
 }
 ```
 
-> `tongyi-embedding-vision-plus-2026-03-06` 和 `tongyi-embedding-vision-flash-2026-03-06` 模型返回更详细的 usage 格式：
+**说明**
+
+不同模型返回的 `usage` 字段存在差异，请参考以下说明：
+
+-   `tongyi-embedding-vision-*` 系列模型：返回 `input_tokens`（含文本和图片 Token 总和）、`input_tokens_details`（含 `image_tokens` 和 `text_tokens`）、`output_tokens`、`total_tokens`。以上响应示例对应此类模型。
+    
+-   `qwen3-vl-embedding`：仅返回 `input_tokens`（仅含文本 Token，包括系统模板 Token）、`image_tokens`、`total_tokens`（= `input_tokens` + `image_tokens`）。不返回 `input_tokens_details` 和 `output_tokens`。示例：
+    
 
 ```
 {
-        "usage": {
-            "input_tokens": 432,
-            "input_tokens_details": {
-                "image_tokens": 402,
-                "text_tokens": 30
-            },
-            "output_tokens": 1,
-            "total_tokens": 433
-        }
+    "usage": {
+        "input_tokens": 43,
+        "image_tokens": 1247,
+        "total_tokens": 1290
     }
+}
 ```
+
+**说明**
+
+-   `qwen2.5-vl-embedding`：仅返回 `input_tokens` 和 `image_tokens`，不返回 `total_tokens`、`input_tokens_details` 和 `output_tokens`。
+    
+-   `multimodal-embedding-v1`：返回 `input_tokens`、`image_tokens`、`image_count` 和 `duration`，不返回 `total_tokens`、`input_tokens_details` 和 `output_tokens`。
+    
 
 ## 异常响应
 
@@ -624,11 +634,11 @@ contents `_array_`**（必选）**
 
 **input\_tokens** `_int_`
 
-本次请求输入内容的 Token 数目。
+本次请求输入内容的 Token 数目。对于 `qwen3-vl-embedding` 和 `qwen2.5-vl-embedding` 模型，该值仅包含文本 Token（含系统模板 Token），不包含图片/视频 Token；对于 `tongyi-embedding-vision-*` 系列模型，该值包含文本和图片/视频 Token 的总和。
 
 **input\_tokens\_details** `_object_`
 
-输入 Token 的详细分类信息。
+输入 Token 的详细分类信息。仅 `tongyi-embedding-vision-*` 系列模型返回此字段，`qwen3-vl-embedding`、`qwen2.5-vl-embedding` 和 `multimodal-embedding-v1` 不返回此字段。
 
 **属性**
 
@@ -642,23 +652,23 @@ contents `_array_`**（必选）**
 
 **output\_tokens** `_int_`
 
-本次请求输出的 Token 数目。
+本次请求输出的 Token 数目。仅 `tongyi-embedding-vision-*` 系列模型返回此字段，其他模型不返回此字段。
 
 **total\_tokens** `_int_`
 
-输入与输出的 Token 总数。
+输入与输出的 Token 总数。对于 `qwen3-vl-embedding` 模型，`total_tokens` = `input_tokens` + `image_tokens`。仅 `qwen3-vl-embedding` 和 `tongyi-embedding-vision-*` 系列模型返回此字段，`qwen2.5-vl-embedding` 和 `multimodal-embedding-v1` 不返回此字段。
 
 **image\_tokens** `_int_`
 
-本次请求输入的图片或视频的Token数量。系统会对输入视频进行抽帧处理，帧数上限受系统配置控制，随后基于处理结果计算 Token。
+本次请求输入的图片或视频的 Token 数量。系统会对输入视频进行抽帧处理，帧数上限受系统配置控制，随后基于处理结果计算 Token。仅 `qwen3-vl-embedding`、`qwen2.5-vl-embedding` 和 `multimodal-embedding-v1` 返回此字段（作为顶层字段），`tongyi-embedding-vision-*` 系列模型的图片 Token 包含在 `input_tokens_details.image_tokens` 中。
 
 **image\_count** `_int_`
 
-本次请求输入的图片数量。
+本次请求输入的图片数量。仅 `multimodal-embedding-v1` 返回此字段。
 
 **duration** `_int_`
 
-本次请求输入的视频时长（秒）。
+本次请求输入的视频时长（秒）。仅 `multimodal-embedding-v1` 返回此字段。
 
 ## **SDK使用**
 

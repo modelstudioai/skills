@@ -549,6 +549,14 @@ qwen3.7-max
 
 5,000,000
 
+qwen3.7-max-2026-06-08
+
+全球
+
+600
+
+1,000,000
+
 qwen3.7-max-2026-05-20
 
 全球
@@ -762,6 +770,14 @@ qwen3.7-max
 国际
 
 600
+
+1,000,000
+
+qwen3.7-max-2026-06-08
+
+国际
+
+60
 
 1,000,000
 
@@ -1030,6 +1046,14 @@ qwen3.7-max
 30,000
 
 5,000,000
+
+qwen3.7-max-2026-06-08
+
+全球
+
+600
+
+1,000,000
 
 qwen3.7-max-2026-05-20
 
@@ -5575,21 +5599,25 @@ fun-music-v1
 
 ### **千问语音合成**
 
-#### 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+#### 华北2（北京）
 
 ##### **千问3-TTS-Instruct-Flash**
 
 **模型名称**
 
+**服务部署范围**
+
 **每分钟调用次数（RPM）**
 
 qwen3-tts-instruct-flash
 
+中国内地
+
 180
 
 qwen3-tts-instruct-flash-2026-01-26
+
+中国内地
 
 180
 
@@ -5597,9 +5625,13 @@ qwen3-tts-instruct-flash-2026-01-26
 
 **模型名称**
 
+**服务部署范围**
+
 **每分钟调用次数（RPM）**
 
 qwen3-tts-vd-2026-01-26
+
+中国内地
 
 180
 
@@ -5607,9 +5639,13 @@ qwen3-tts-vd-2026-01-26
 
 **模型名称**
 
+**服务部署范围**
+
 **每分钟调用次数（RPM）**
 
 qwen3-tts-vc-2026-01-22
+
+中国内地
 
 180
 
@@ -5617,23 +5653,33 @@ qwen3-tts-vc-2026-01-22
 
 **模型名称**
 
+**服务部署范围**
+
 **每分钟调用次数（RPM）**
 
 qwen3-tts-flash
+
+中国内地
 
 180
 
 qwen3-tts-flash-2025-11-27
 
+中国内地
+
 180
 
 qwen3-tts-flash-2025-09-18
+
+中国内地
 
 10
 
 ##### 千问-TTS
 
 **模型名称**
+
+**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -5647,31 +5693,43 @@ qwen3-tts-flash-2025-09-18
 
 qwen-tts
 
+中国内地
+
 10
 
 100,000
 
 qwen-tts-latest
 
+中国内地
+
 qwen-tts-2025-05-22
+
+中国内地
 
 qwen-tts-2025-04-10
 
-#### 国际
+中国内地
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
 ##### **千问3-TTS-Instruct-Flash**
 
 **模型名称**
 
+**服务部署范围**
+
 **每分钟调用次数（RPM）**
 
 qwen3-tts-instruct-flash
 
+国际
+
 180
 
 qwen3-tts-instruct-flash-2026-01-26
+
+国际
 
 180
 
@@ -5679,9 +5737,13 @@ qwen3-tts-instruct-flash-2026-01-26
 
 **模型名称**
 
+**服务部署范围**
+
 **每分钟调用次数（RPM）**
 
 qwen3-tts-vd-2026-01-26
+
+国际
 
 180
 
@@ -5689,9 +5751,13 @@ qwen3-tts-vd-2026-01-26
 
 **模型名称**
 
+**服务部署范围**
+
 **每分钟调用次数（RPM）**
 
 qwen3-tts-vc-2026-01-22
+
+国际
 
 180
 
@@ -5699,37 +5765,49 @@ qwen3-tts-vc-2026-01-22
 
 **模型名称**
 
+**服务部署范围**
+
 **每分钟调用次数（RPM）**
 
 qwen3-tts-flash
+
+国际
 
 180
 
 qwen3-tts-flash-2025-11-27
 
+国际
+
 180
 
 qwen3-tts-flash-2025-09-18
+
+国际
 
 10
 
 ### **千问实时语音合成**
 
-#### 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+#### 华北2（北京）
 
 ##### **千问3-TTS-Instruct-Flash-Realtime**
 
 **模型名称**
 
+**服务部署范围**
+
 **每分钟调用次数（RPM）**
 
 qwen3-tts-instruct-flash-realtime
 
+中国内地
+
 180
 
 qwen3-tts-instruct-flash-realtime-2026-01-22
+
+中国内地
 
 180
 
@@ -5737,47 +5815,69 @@ qwen3-tts-instruct-flash-realtime-2026-01-22
 
 **模型名称**
 
+**服务部署范围**
+
 **每分钟调用次数（RPM）**
 
 qwen3-tts-vd-realtime-2026-01-15
+
+中国内地
 
 180
 
 qwen3-tts-vd-realtime-2025-12-16
 
+中国内地
+
 ##### 千问3-TTS-VC-Realtime
 
 **模型名称**
+
+**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
 qwen3-tts-vc-realtime-2026-01-15
 
+中国内地
+
 180
 
 qwen3-tts-vc-realtime-2025-11-27
+
+中国内地
 
 ##### 千问3-TTS-Flash-Realtime
 
 **模型名称**
 
+**服务部署范围**
+
 **每分钟调用次数（RPM）**
 
 qwen3-tts-flash-realtime
+
+中国内地
 
 180
 
 qwen3-tts-flash-realtime-2025-11-27
 
+中国内地
+
 180
 
 qwen3-tts-flash-realtime-2025-09-18
+
+中国内地
 
 10
 
 ##### 千问-TTS-Realtime
 
 **模型名称**
+
+**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -5791,29 +5891,39 @@ qwen3-tts-flash-realtime-2025-09-18
 
 qwen-tts-realtime
 
+中国内地
+
 10
 
 100,000
 
 qwen-tts-realtime-latest
 
+中国内地
+
 qwen-tts-realtime-2025-07-15
 
-#### 国际
+中国内地
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
 ##### **千问3-TTS-Instruct-Flash-Realtime**
 
 **模型名称**
 
+**服务部署范围**
+
 **每分钟调用次数（RPM）**
 
 qwen3-tts-instruct-flash-realtime
 
+国际
+
 180
 
 qwen3-tts-instruct-flash-realtime-2026-01-22
+
+国际
 
 180
 
@@ -5821,173 +5931,223 @@ qwen3-tts-instruct-flash-realtime-2026-01-22
 
 **模型名称**
 
+**服务部署范围**
+
 **每分钟调用次数（RPM）**
 
 qwen3-tts-vd-realtime-2026-01-15
+
+国际
 
 180
 
 qwen3-tts-vd-realtime-2025-12-16
 
+国际
+
 ##### 千问3-TTS-VC-Realtime
 
 **模型名称**
+
+**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
 qwen3-tts-vc-realtime-2026-01-15
 
+国际
+
 180
 
 qwen3-tts-vc-realtime-2025-11-27
+
+国际
 
 ##### 千问3-TTS-Flash-Realtime
 
 **模型名称**
 
+**服务部署范围**
+
 **每分钟调用次数（RPM）**
 
 qwen3-tts-flash-realtime
+
+国际
 
 180
 
 qwen3-tts-flash-realtime-2025-11-27
 
+国际
+
 180
 
 qwen3-tts-flash-realtime-2025-09-18
+
+国际
 
 10
 
 ### **千问声音复刻**
 
-#### 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+#### 华北2（北京）
 
 **模型名称**
+
+**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
 qwen-voice-enrollment
+
+中国内地
 
 180
 
-#### 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
 **模型名称**
+
+**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
 qwen-voice-enrollment
+
+国际
 
 180
 
 ### **千问声音设计**
 
-#### 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+#### 华北2（北京）
 
 **模型名称**
+
+**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
 qwen-voice-design
+
+中国内地
 
 180
 
-#### 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
 **模型名称**
+
+**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
 qwen-voice-design
+
+国际
 
 180
 
 ### **CosyVoice语音合成**
 
-#### 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+#### 华北2（北京）
 
 **模型名称**
+
+**服务部署范围**
 
 **提交作业接口RPS限制**
 
 cosyvoice-v3.5-plus
 
+中国内地
+
 3
 
 cosyvoice-v3.5-flash
 
+中国内地
+
 cosyvoice-v3-plus
+
+中国内地
 
 cosyvoice-v3-flash
 
+中国内地
+
 cosyvoice-v2
+
+中国内地
 
 cosyvoice-v1
 
-#### 国际
+中国内地
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
 **模型名称**
+
+**服务部署范围**
 
 **提交作业接口RPS限制**
 
 cosyvoice-v3-plus
 
+国际
+
 3
 
 cosyvoice-v3-flash
+
+国际
 
 ### **CosyVoice声音复刻/设计**
 
 CosyVoice声音复刻共用一个模型，共用限流额度。
 
-#### 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+#### 华北2（北京）
 
 **模型名称**
+
+**服务部署范围**
 
 **提交作业接口RPS限制**
 
 voice-enrollment
+
+中国内地
 
 10
 
-#### 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
 **模型名称**
+
+**服务部署范围**
 
 **提交作业接口RPS限制**
 
 voice-enrollment
+
+国际
 
 10
 
 ### **Sambert语音合成**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
+#### **华北2（北京）**
 
 **模型服务**
+
+**服务部署范围**
 
 **提交作业接口RPS限制**
 
 Sambert系列模型
+
+中国内地
 
 20
 
@@ -6045,11 +6205,11 @@ MiniMax/speech-02-turbo
 
 ### **千问3-LiveTranslate-Flash**
 
-#### 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+#### 华北2（北京）
 
 **模型名称**
+
+**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -6063,17 +6223,21 @@ MiniMax/speech-02-turbo
 
 qwen3-livetranslate-flash
 
+中国内地
+
 100
 
 100,000
 
 qwen3-livetranslate-flash-2025-12-01
 
-#### 国际
+中国内地
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
 **模型名称**
+
+**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -6087,19 +6251,23 @@ qwen3-livetranslate-flash-2025-12-01
 
 qwen3-livetranslate-flash
 
+国际
+
 100
 
 100,000
 
 qwen3-livetranslate-flash-2025-12-01
+
+国际
 
 ### **千问-LiveTranslate-Flash-Realtime**
 
-#### 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+#### 华北2（北京）
 
 **模型名称**
+
+**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -6113,21 +6281,29 @@ qwen3-livetranslate-flash-2025-12-01
 
 qwen3.5-livetranslate-flash-realtime
 
+中国内地
+
 10
 
 100,000
 
 qwen3.5-livetranslate-flash-realtime-2026-05-19
 
+中国内地
+
 qwen3-livetranslate-flash-realtime
+
+中国内地
 
 qwen3-livetranslate-flash-realtime-2025-09-22
 
-#### 国际
+中国内地
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
 **模型名称**
+
+**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -6141,243 +6317,341 @@ qwen3-livetranslate-flash-realtime-2025-09-22
 
 qwen3.5-livetranslate-flash-realtime
 
+国际
+
 10
 
 100,000
 
 qwen3.5-livetranslate-flash-realtime-2026-05-19
 
+国际
+
 qwen3-livetranslate-flash-realtime
 
+国际
+
 qwen3-livetranslate-flash-realtime-2025-09-22
+
+国际
 
 ### **千问录音文件识别**
 
-#### 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+#### 华北2（北京）
 
 ##### 千问3-ASR-Flash-Filetrans
 
 **模型名称**
 
+**服务部署范围**
+
 **每分钟调用次数（RPM）**
 
 qwen3-asr-flash-filetrans
+
+中国内地
 
 100
 
 qwen3-asr-flash-filetrans-2025-11-17
 
+中国内地
+
 ##### **千问3-ASR-Flash**
 
 **模型名称**
+
+**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
 qwen3-asr-flash
 
+中国内地
+
 100
 
 qwen3-asr-flash-2026-02-10
 
+中国内地
+
 qwen3-asr-flash-2025-09-08
 
-#### 国际
+中国内地
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
 ##### 千问3-ASR-Flash-Filetrans
 
 **模型名称**
 
+**服务部署范围**
+
 **每分钟调用次数（RPM）**
 
 qwen3-asr-flash-filetrans
+
+国际
 
 100
 
 qwen3-asr-flash-filetrans-2025-11-17
 
+国际
+
 ##### **千问3-ASR-Flash**
 
 **模型名称**
+
+**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
 qwen3-asr-flash
 
+国际
+
 100
 
 qwen3-asr-flash-2026-02-10
 
+国际
+
 qwen3-asr-flash-2025-09-08
 
-#### 美国
+国际
 
-服务部署范围为[美国](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于美国境内；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）。
+#### 美国（弗吉尼亚）
 
 **模型名称**
+
+**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
 qwen3-asr-flash-us
 
+美国
+
 100
 
 qwen3-asr-flash-2025-09-08-us
 
+美国
+
 ### **千问实时语音识别**
 
-#### 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+#### 华北2（北京）
 
 **模型名称**
+
+**服务部署范围**
 
 **每秒钟调用次数（RPS）**
 
 qwen3-asr-flash-realtime
 
+中国内地
+
 20
 
 qwen3-asr-flash-realtime-2026-02-10
 
+中国内地
+
 qwen3-asr-flash-realtime-2025-10-27
 
-#### 国际
+中国内地
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
 **模型名称**
+
+**服务部署范围**
 
 **每秒钟调用次数（RPS）**
 
 qwen3-asr-flash-realtime
 
+国际
+
 20
 
 qwen3-asr-flash-realtime-2026-02-10
 
+国际
+
 qwen3-asr-flash-realtime-2025-10-27
+
+国际
 
 ### **Fun-ASR录音文件识别**
 
-#### 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+#### 华北2（北京）
 
 **模型名称**
+
+**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
 fun-asr
 
+中国内地
+
 600
 
 fun-asr-2025-11-07
 
+中国内地
+
 fun-asr-2025-08-25
 
+中国内地
+
 fun-asr-mtl
+
+中国内地
 
 fun-asr-mtl-2025-08-25
 
-#### 国际
+中国内地
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
 **模型名称**
+
+**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
 fun-asr
 
+国际
+
 600
 
 fun-asr-2025-11-07
+
+国际
 
 600
 
 fun-asr-2025-08-25
 
+国际
+
 600
 
 fun-asr-mtl
+
+国际
 
 100
 
 fun-asr-mtl-2025-08-25
+
+国际
 
 100
 
 ### **Fun-ASR实时语音识别**
 
-#### 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+#### 华北2（北京）
 
 **模型名称**
+
+**服务部署范围**
 
 **提交作业接口RPS限制**
 
 fun-asr-realtime
+
+中国内地
 
 20
 
 fun-asr-realtime-2026-02-28
 
+中国内地
+
 fun-asr-realtime-2025-11-07
+
+中国内地
 
 fun-asr-realtime-2025-09-15
 
+中国内地
+
 fun-asr-flash-8k-realtime
+
+中国内地
 
 fun-asr-flash-8k-realtime-2026-01-28
 
-#### 国际
+中国内地
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
 **模型名称**
+
+**服务部署范围**
 
 **提交作业接口RPS限制**
 
 fun-asr-realtime
 
+国际
+
 20
 
 fun-asr-realtime-2025-11-07
 
+国际
+
 ### **Paraformer语音识别**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
+#### **华北2（北京）**
 
 **模型名称**
+
+**服务部署范围**
 
 **提交作业接口RPS限制**
 
 paraformer-realtime-v2
 
+中国内地
+
 20
 
 paraformer-realtime-v1
 
+中国内地
+
 paraformer-realtime-8k-v2
+
+中国内地
 
 paraformer-realtime-8k-v1
 
+中国内地
+
 **模型名称**
+
+**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
 paraformer-v2
 
+中国内地
+
 1,200
 
 **模型名称**
+
+**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
@@ -6387,11 +6661,15 @@ paraformer-v2
 
 paraformer-v1
 
+中国内地
+
 600
 
 6,000,000
 
 paraformer-mtl-v1
+
+中国内地
 
 600
 
@@ -6399,17 +6677,23 @@ paraformer-mtl-v1
 
 **模型名称**
 
+**服务部署范围**
+
 **提交作业接口RPS限制**
 
 **同时处理中任务数量（并发数）**
 
 paraformer-8k-v2
 
+中国内地
+
 20
 
 100
 
 paraformer-8k-v1
+
+中国内地
 
 10
 

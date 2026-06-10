@@ -316,6 +316,18 @@ qwen3.7-max
 
 36元
 
+qwen3.7-max-2026-06-08
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+12元
+
+36元
+
 qwen3.7-max-2026-05-20
 
 全球
@@ -427,6 +439,18 @@ qwen3.7-max
 > 当前能力等同于qwen3.7-max-2026-05-20
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+国际
+
+非思考和思考模式
+
+0<Token≤1M
+
+18.736元
+
+56.207元
+
+qwen3.7-max-2026-06-08
 
 国际
 

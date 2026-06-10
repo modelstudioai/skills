@@ -21,7 +21,7 @@ API Key 的调用权限由其**归属[业务空间](../concepts/workspace.md)**�
 
 - **默认[业务空间](../concepts/workspace.md)**的 Key：可调用所有标准模型及默认空间内的应用。
 - **子[业务空间](../concepts/workspace.md)**的 Key：仅可调用该空间已授权的标准模型及空间内应用。
-- **调优后的模型**：部署后仅能由其所在业务空间的 Key 调用，无需额外授权。
+- **调优后的模型**：部署后仅能由其所在[业务空间](../concepts/workspace.md)的 Key 调用，无需额外授权。
 
 ### Base URL 对照
 
@@ -34,7 +34,7 @@ API Key 的调用权限由其**归属[业务空间](../concepts/workspace.md)**�
 | 美国（弗吉尼亚） | `https://dashscope-us.aliyuncs.com/compatible-mode/v1` |
 | 德国（法兰克福） | `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1` |
 
-新加坡与法兰克福地域需把 `WorkspaceId` 替换为真实的业务空间 ID。
+新加坡与法兰克福地域需把 `WorkspaceId` 替换为真实的[业务空间](../concepts/workspace.md) ID。
 
 ## 3. 配置环境变量
 
@@ -129,7 +129,7 @@ go get 'github.com/openai/openai-go/v3'
 ### 鉴权与账户类
 
 - `Arrearage`：账号欠费，前往费用与成本页面充值。
-- `Access denied`：检查 API Key 归属业务空间、RAM 用户是否被删除（删除后该用户创建的所有 Key 立即失效）。
+- `Access denied`：检查 API Key 归属[业务空间](../concepts/workspace.md)、RAM 用户是否被删除（删除后该用户创建的所有 Key 立即失效）。
 
 ### 数量限制
 
@@ -144,5 +144,6 @@ go get 'github.com/openai/openai-go/v3'
 - [将API Key配置到环境变量](../../raw/model-api-reference/preparations/configure-api-key-through-environment-variables.md)
 - [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)
 - [错误码](../../raw/model-api-reference/preparations/error-code.md)
+
 
 

@@ -2,6 +2,10 @@
 
 本文档介绍如何调用阿里云百炼部署的 Kimi 模型推理服务。
 
+**重要**
+
+Moonshot-Kimi-K2-Instruct、kimi-k2-thinking 将于**2026年7月9日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-plus)、[qwen3.7-max](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-max)、[qwen3.6-flash](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.6-flash)。
+
 **支持的地域：**华北2（北京）、美国（弗吉尼亚）、德国（法兰克福）。
 
 **模型体验：**您可以前往[模型体验中心](https://bailian.console.aliyun.com/cn-beijing?tab=model#/efm/model_experience_center/text)体验 Kimi 模型效果。
@@ -128,7 +132,7 @@ client = OpenAI(
 )
 
 completion = client.chat.completions.create(
-    model="kimi-k2-thinking",
+    model="kimi-k2.6",
     messages=[{"role": "user", "content": "你是谁"}],
     stream=True,
 )
@@ -202,7 +206,7 @@ async function main() {
     const messages = [{ role: 'user', content: '你是谁' }];
 
     const stream = await openai.chat.completions.create({
-        model: 'kimi-k2-thinking',
+        model: 'kimi-k2.6',
         messages,
         stream: true,
     });
@@ -278,10 +282,10 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "kimi-k2-thinking",
+    "model": "kimi-k2.6",
     "messages": [
         {
-            "role": "user", 
+            "role": "user",
             "content": "你是谁"
         }
     ]
@@ -312,28 +316,28 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
     },
     "created": 1762753998,
     "system_fingerprint": null,
-    "model": "kimi-k2-thinking",
+    "model": "kimi-k2.6",
     "id": "chatcmpl-485ab490-90ec-48c3-85fa-1c732b683db2"
 }
 ```
 
 ## DashScope
 
-> 以下 DashScope 示例使用 `text-generation` 端点，仅适用于纯文本模型（kimi-k2-thinking、Moonshot-Kimi-K2-Instruct）。多模态模型（kimi-k2.5、kimi-k2.6）需使用 `multimodal-generation` 端点，请参见[多模态调用示例](#af95c67524)。
+> 以下 DashScope 示例使用 `multimodal-generation` 端点调用 kimi-k2.6（支持文本与多模态）。更多多模态用法请参见[多模态调用示例](#af95c67524)。
 
 ## Python
 
 ```
 import os
-from dashscope import Generation
+from dashscope import MultiModalConversation
 
 # 初始化请求参数
 messages = [{"role": "user", "content": "你是谁？"}]
 
-completion = Generation.call(
+completion = MultiModalConversation.call(
     # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    model="kimi-k2-thinking",
+    model="kimi-k2.6",
     messages=messages,
     result_format="message",  # 设置结果格式为 message
     stream=True,              # 开启流式输出
@@ -399,77 +403,40 @@ for chunk in completion:
 
 ```
 // dashscope SDK的版本 >= 2.19.4
-import com.alibaba.dashscope.aigc.generation.Generation;
-import com.alibaba.dashscope.aigc.generation.GenerationParam;
-import com.alibaba.dashscope.aigc.generation.GenerationResult;
-import com.alibaba.dashscope.common.Message;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
+import com.alibaba.dashscope.common.MultiModalMessage;
 import com.alibaba.dashscope.common.Role;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
-import io.reactivex.Flowable;
-import java.lang.System;
 import java.util.Arrays;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Collections;
 
 public class Main {
-    private static final Logger logger = LoggerFactory.getLogger(Main.class);
-    private static StringBuilder reasoningContent = new StringBuilder();
-    private static StringBuilder finalContent = new StringBuilder();
-    private static boolean isFirstPrint = true;
-
-    private static void handleGenerationResult(GenerationResult message) {
-        String reasoning = message.getOutput().getChoices().get(0).getMessage().getReasoningContent();
-        String content = message.getOutput().getChoices().get(0).getMessage().getContent();
-
-        if (reasoning!= null&&!reasoning.isEmpty()) {
-            reasoningContent.append(reasoning);
-            if (isFirstPrint) {
-                System.out.println("====================思考过程====================");
-                isFirstPrint = false;
-            }
-            System.out.print(reasoning);
-        }
-
-        if (content!= null&&!content.isEmpty()) {
-            finalContent.append(content);
-            if (!isFirstPrint) {
-                System.out.println("\n====================完整回复====================");
-                isFirstPrint = true;
-            }
-            System.out.print(content);
-        }
-    }
-    private static GenerationParam buildGenerationParam(Message userMsg) {
-        return GenerationParam.builder()
-                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
-                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("kimi-k2-thinking")
-                .incrementalOutput(true)
-                .resultFormat("message")
-                .messages(Arrays.asList(userMsg))
-                .build();
-    }
-    public static void streamCallWithMessage(Generation gen, Message userMsg)
-            throws NoApiKeyException, ApiException, InputRequiredException {
-        GenerationParam param = buildGenerationParam(userMsg);
-        Flowable<GenerationResult> result = gen.streamCall(param);
-        result.blockingForEach(message -> handleGenerationResult(message));
-    }
-
     public static void main(String[] args) {
         try {
-            Generation gen = new Generation();
-            Message userMsg = Message.builder().role(Role.USER.getValue()).content("你是谁？").build();
-            streamCallWithMessage(gen, userMsg);
-            // 打印最终结果
-            // if (reasoningContent.length() > 0) {
-            //     System.out.println("\n====================完整回复====================");
-            //     System.out.println(finalContent.toString());
-            // }
+            MultiModalConversation conv = new MultiModalConversation();
+
+            MultiModalMessage userMsg = MultiModalMessage.builder()
+                    .role(Role.USER.getValue())
+                    .content(Arrays.asList(Collections.singletonMap("text", "你是谁？")))
+                    .build();
+
+            MultiModalConversationParam param = MultiModalConversationParam.builder()
+                    // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
+                    .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+                    .model("kimi-k2.6")
+                    .messages(Arrays.asList(userMsg))
+                    .build();
+
+            MultiModalConversationResult result = conv.call(param);
+
+            String content = result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text");
+            System.out.println("回复: " + content);
         } catch (ApiException | NoApiKeyException | InputRequiredException e) {
-            logger.error("An exception occurred: {}", e.getMessage());
+            System.err.println("An exception occurred: " + e.getMessage());
         }
         System.exit(0);
     }
@@ -500,11 +467,11 @@ public class Main {
 ## curl
 
 ```
-curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
+curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "kimi-k2-thinking",
+    "model": "kimi-k2.6",
     "input":{
         "messages":[      
             {

@@ -191,6 +191,8 @@ string
 -   对文件上传要求限制，请参见[知识库配额与限制](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-specifications)。
     
 
+**重要** 当导入的文件名称与知识库中已有文件名称重复时，接口仍会返回`Status`为`SUCCESS`，但该文件实际不会被导入知识库，已有的同名文件保持不变。请确保每次导入的文件名称唯一。
+
 **说明**
 
 如需新增数据表并上传数据，请使用阿里云百炼控制台，API 不支持。

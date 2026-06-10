@@ -4,6 +4,10 @@
 
 **重要**
 
+MiniMax-M2.1 将于**2026年7月9日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-plus)、[qwen3.7-max](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-max)、[qwen3.6-flash](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.6-flash)。
+
+**重要**
+
 本文档仅适用于中国内地地域。如需使用模型，需从中国内地地域[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
 
 ## **快速开始**
@@ -493,10 +497,10 @@ MiniMax-M2.1
 
 MiniMax-M2.5 模型擅长编程、办公、文本摘要等任务，且输出速度快，推荐使用。
 
-模型上下文长度与价格信息请参见[模型列表](https://help.aliyun.com/zh/model-studio/models)。
+模型上下文长度与价格信息请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)。
 
 按照模型的输入与输出 Token 数量计费。
 
 ## **错误码**
 
-如果模型调用失败并返回报错信息，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。

@@ -1,83 +1,84 @@
 # OpenAI 兼容接口
 
-OpenAI 兼容接口是阿里云百炼平台为现有 OpenAI 生态应用提供的零改造迁移通道。开发者只需替换 `api_key`、`base_url` 和 `model` 三个参数，即可把基于 OpenAI SDK 编写的代码、接入的第三方工具（Cursor、Cherry Studio、Claude Code、LangChain 等）平滑切换到百炼所托管的千问（Qwen）系列及第三方模型。
+OpenAI 兼容接口是阿里云百炼平台提供的一组遵循 OpenAI API 规范的服务端点，开发者只需将 `api_key`、`base_url` 和 `model` 三个参数替换为百炼的值，即可将现有 OpenAI 应用无缝迁移到百炼服务，调用千问（Qwen）全系列及第三方大模型。
 
-## 核心接入模型
+## 接口类型
 
-所有 OpenAI 兼容接口共享统一的接入三要素：
+百炼提供多种 OpenAI 兼容端点，覆盖不同业务场景：
 
-| 参数 | 说明 |
-| --- | --- |
-| `api_key` | 阿里云百炼 API Key，可在百炼控制台创建。**各地域的 Key 互不通用**，切换地域需同步更换。 |
-| `base_url` | 兼容模式根路径，按地域不同取值（见下文"服务地址"）。 |
-| `model` | 百炼模型名称，例如 `qwen-plus`、`qwen3.7-max`、`qwen3-vl-plus`、`text-embedding-v4` 等。 |
+| 接口 | 端点路径 | 典型用途 |
+|------|---------|---------|
+| Chat Completions | `/compatible-mode/v1/chat/completions` | 文本对话、多轮会话，最常用的接口 |
+| Responses | `/compatible-mode/v1/responses` | 内置联网搜索、代码解释器等工具，自动管理对话历史 |
+| Completions | `/compatible-mode/v1/completions` | 代码补全、文本续写（仅 `qwen-coder-turbo`） |
+| Vision | `/compatible-mode/v1/chat/completions` | 图像与视频理解 |
+| Embeddings | `/compatible-mode/v1/embeddings` | 文本向量化 |
+| Files | `/compatible-mode/v1/files` | 文件上传与管理 |
+| Batch | `/compatible-mode/v1/batches` | 异步文件批量推理 |
 
-调用方式与 OpenAI 官方 SDK 完全一致：通过 `OpenAI(api_key=..., base_url=...)` 构造客户端后，即可使用熟悉的 `chat.completions.create(...)` 等方法。
+其中 Chat Completions 是使用最广泛的接口，支持千问全系列文本模型，包括流式与非[流式输出](streaming.md)。Responses 接口是其演进版本，通过 `previous_response_id` 自动关联多轮对话，无需手动维护消息列表。
 
-## 支持的接口类型
+## 认证与服务地址
 
-百炼基于 OpenAI 协议对外暴露八类接口，覆盖从对话、推理到检索的完整能力：
+所有接口统一使用百炼 API Key 认证，通过 `Authorization: Bearer <API_KEY>` 请求头或 SDK 的 `api_key` 参数传入。建议将 API Key 配置到环境变量 `DASHSCOPE_API_KEY`。
 
-| 接口 | 端点路径 | 适用场景 |
-| --- | --- | --- |
-| Chat Completions | `/v1/chat/completions` | 最通用的对话接口，覆盖千问商业版与开源版全系列模型。 |
-| Responses | `/v1/responses` | Chat Completions 的演进版，内置联网搜索、代码解释器、网页抓取等工具，并通过 `previous_response_id` 自动关联上下文。 |
-| Completions | `/v1/completions` | 文本/代码补全，支持前缀补全与中间填充（FIM）。当前仅 `qwen-coder-turbo` 在北京地域可用。 |
-| Vision | `/v1/chat/completions` | 复用 Chat 端点，`messages.content` 以数组形式传入 `text` 与 `image_url`，支持多模态理解。 |
-| Embedding | `/v1/embeddings` | 向量检索场景，支持 `text-embedding-v4` 等模型。 |
-| Files | `/v1/files` | 文件上传与管理，用于 Batch 或 Assistants 类场景。 |
-| Batch | `/compatible-mode/v1/batches` | 大批量异步推理，使用独立的 Batch 域名。 |
-| Conversations | `/v1/conversations` | 长对话历史管理，由服务端维护会话状态。 |
+各地域的 Base URL：
 
-> **说明**：Anthropic 兼容的 Messages 接口、以及百炼原生 DashScope 接口属于另外两类并行的调用方式，不在 OpenAI 兼容协议范围内。需要完整功能集（例如更多采样参数、特殊控制字段）时，应优先使用 DashScope 原生接口。
-
-## 服务地址（base_url）
-
-不同地域与用途对应不同的 `base_url`，调用前务必选对：
-
-| 地域 / 用途 | base_url |
-| --- | --- |
-| 华北 2（北京） | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
+| 地域 | Base URL |
+|------|---------|
+| 华北2（北京） | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
 | 美国（弗吉尼亚） | `https://dashscope-us.aliyuncs.com/compatible-mode/v1` |
 | 新加坡 | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1` |
 | 德国（法兰克福） | `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1` |
-| Token Plan 团队版 | `https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` |
-| Batch（同步 / 文件输入，中国内地） | `https://batch.dashscope.aliyuncs.com/compatible-mode/v1` |
 
-> **迁移提示**：新加坡地域旧版域名 `dashscope-intl.aliyuncs.com` 即将下线，应迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`；Responses / Conversations 的旧版路径 `/api/v2/apps/protocols/compatible-mode/v1/...` 也即将停止维护，应迁移到 `/compatible-mode/v1/...`。
+不同地域的 API Key 不通用，切换地域时必须同时更换 `base_url` 和 API Key。新加坡和法兰克福地域的 URL 需填入[业务空间](workspace.md) ID（WorkspaceId）。
 
-## 典型使用场景
+## 快速接入示例
 
-- **迁移已有 OpenAI 应用**：业务代码已经基于 `openai` Python/Node SDK 开发完成，只需替换三参数即可切换到千问模型，无需重写调用逻辑。
-- **接入第三方客户端与 IDE 插件**：Cursor、Cherry Studio、Chatbox、Cline、Claude Code、Codex、Kilo CLI、Qwen Code 等工具均以 OpenAI 协议对接百炼，按工具文档填入 `base_url` 与 `api_key` 即可使用。
-- **对接 LangChain / LangChain4j 等框架**：通过 `ChatOpenAI` 等标准组件传入百炼的 `base_url` 和 `api_key`，可直接把百炼模型接入 Agent、RAG、工作流编排等场景。
-- **调用专用模型**：Qwen-MT（机器翻译）、Qwen-OCR（文字识别）、GUI-Plus（界面交互）等专用模型也通过 `/v1/chat/completions` 接入，借助 `extra_body` 传入领域专属字段（如翻译的 `translation_options`、OCR 的结构化抽取配置）。
-- **构建多地域合规部署**：数据不出中国内地选北京地域；数据不经过中国内地选新加坡或德国地域；全球资源池可选美国（弗吉尼亚）或德国地域。同一套代码仅切换 `base_url` 与 `api_key` 即可完成地域迁移。
+使用 OpenAI Python SDK 调用百炼模型：
 
-## 关键参数与配置
+```python
+import os
+from openai import OpenAI
 
-- **认证**：推荐将 API Key 写入环境变量 `DASHSCOPE_API_KEY`，避免在代码中硬编码。SDK 初始化时通过 `api_key=os.getenv("DASHSCOPE_API_KEY")` 读取。
-- **地域一致性**：`api_key`、`base_url`、HTTP Endpoint 三者必须属于同一地域，混用会返回鉴权或路由错误。
-- **Responses 上下文管理**：Responses 接口通过响应顶层的 `id`（UUID）与请求中的 `previous_response_id` 自动串联多轮对话，有效期 7 天，无需手动维护 `messages` 历史。
-- **Completions 模式**：`/v1/completions` 支持前缀补全与 FIM（`<|fim_prefix|>{prefix}<|fim_middle|>{suffix}<|fim_middle|>`），但仅 `qwen-coder-turbo` 模型可用，且仅限北京地域。
-- **[流式输出](streaming-output.md)**：所有对话类接口均支持 `stream=True`，通过 SSE 返回增量 token，专用模型（MT、OCR、GUI-Plus）同样适用。
-- **参数覆盖差异**：OpenAI 兼容接口覆盖大部分常用参数（`temperature`、`top_p`、`max_tokens`、`stop`、`seed`、`presence_penalty` 等），但功能最完整的是 DashScope 原生接口；某些百炼专有参数（例如 Qwen-MT 的 `translation_options`）需放在 `extra_body` 中传入。
+client = OpenAI(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+)
+completion = client.chat.completions.create(
+    model="qwen3.7-plus",
+    messages=[{"role": "user", "content": "你好"}]
+)
+print(completion.choices[0].message.content)
+```
 
-## 与其他接口的关系
+同样支持 Node.js（OpenAI SDK）、curl 及各类第三方客户端（Cursor、Cherry Studio、Chatbox、Cline 等）。
 
-百炼同时提供 Anthropic 兼容 Messages 接口与 DashScope 原生接口。选型建议：
+## 专用模型的兼容接口使用
 
-- 已有 OpenAI 代码或接入 OpenAI 生态工具 → 优先 OpenAI 兼容接口，改动最小。
-- 需要自动管理对话历史且使用内置工具（联网、代码解释器） → 选 OpenAI 兼容 Responses 接口。
-- 使用 Anthropic 生态（Claude Code、OpenCode、Hermes Agent 等）→ 选 Anthropic 兼容 Messages 接口。
-- 需要完整参数集、或调用 OpenAI 协议尚未覆盖的百炼专有功能（例如 Qwen-Deep-Research）→ 选 DashScope 原生接口。
+百炼的专用模型（Qwen-MT 机器翻译、Qwen-OCR 文字识别、GUI-Plus 界面交互等）也通过 OpenAI 兼容接口调用，但请求体中需传入模型专属字段。例如 Qwen-MT 需在 `extra_body.translation_options` 中指定源语言、目标语言和术语表。
+
+## 与 DashScope 原生接口的对比
+
+百炼同时提供 DashScope 原生接口，两者的主要区别：
+
+- **OpenAI 兼容接口**：迁移成本最低，可直接复用 OpenAI SDK 和生态工具，适合已有 OpenAI 代码的项目。
+- **DashScope 原生接口**：百炼原生协议，提供最完整的功能集和参数支持，适合需要平台全部能力的场景。
+
+## 注意事项
+
+- 不同接口支持的参数范围存在差异，[DashScope 接口](dashscope-api.md)覆盖面最广。
+- Responses 接口会自动管理对话历史（有效期 7 天），上下文管理逻辑与 Chat Completions 不同。
+- 使用 Token Plan 团队版、Coding Plan 等计费方案时，Base URL 与按量计费不同，需根据计费方案选择对应地址。
+- 新加坡地域旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请尽快迁移至新版域名。
 
 ## 关联主题页
 
 - [qwen api reference](../api/qwen-api-reference.md)
+- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
 - [get started with models](../guides/get-started-with-models.md)
 - [use chat client or development tool](../guides/use-chat-client-or-development-tool.md)
-- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
 - [specialized model](../api/specialized-model.md)
+- [frameworks](../api/frameworks.md)
 
 

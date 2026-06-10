@@ -1,4 +1,4 @@
-# 模型部署简介
+# 模型部署
 
 无论是平台的预置模型还是您[调优](https://help.aliyun.com/zh/model-studio/model-training-overview)后的模型，您可通过部署获得独立的、资源专享的推理服务，以满足您对高并发、低延迟等不同性能的业务需求。
 

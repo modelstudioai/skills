@@ -8,11 +8,11 @@
 
 ### **费用概览**
 
-登录百炼控制台[费用概览](https://bailian.console.aliyun.com/?tab=model#/costing-balance/overview)页，选择**账期月份**：
+登录[百炼控制台](https://bailian.console.aliyun.com/)，在左侧菜单选择**用量 & 费用** > [**费用概览**](https://bailian.console.aliyun.com/?tab=model#/costing-balance/overview)，选择**账期月份**：
 
 > 该页面仅展示**大模型推理**相关费用。**模型训练**和**知识库**等费用请通过[账单详情](#29f8b9b9a4lmc)查看。
 
--   **查看总消费与构成**：顶部展示当月**总消费金额**，拆分为**订阅购买费用**（Token Plan、预置吞吐、模型单元、节省计划等）与**账单费用**（按量产生的模型调用与训练）；单击卡片**查看明细**可展开分项。下方**账单概览**仅展示后付费账单金额，不含预付费（订阅购买）金额。当月查看时，**账单费用**通常先更新，**账单概览**出账稍有延迟。
+-   **查看总消费与构成**：顶部展示当月**总消费金额**，拆分为**订阅购买费用**（Token Plan、预置吞吐、模型单元、节省计划等）与**账单费用**（按量产生的模型调用与训练）；点击**订阅购买费用**或**账单费用**卡片的**查看明细**可展开分项。下方**账单趋势**仅展示后付费账单金额，不含预付费（订阅购买）金额。当月查看时，**账单费用**通常先更新，**账单趋势**出账稍有延迟。
     
 -   **按模型或 API Key 查询费用**：在**账单趋势**区域，**模型**下拉选择目标模型（或按 **API Key ID** 筛选），切换至**列表**视图，累计**应付金额**列即为该项当月总费用。
     
@@ -165,7 +165,7 @@
 
 **在哪里查看模型调用次数和统计？**
 
-进入[阿里云百炼控制台](https://modelstudio.console.alibabacloud.com/)，右上角选择目标地域，打开[模型监控](https://bailian.console.aliyun.com/?tab=model#/model-telemetry)页面。
+进入[阿里云百炼控制台](https://modelstudio.console.alibabacloud.com/)，右上角选择目标地域，在左侧菜单选择**用量 & 费用** > [模型用量](https://bailian.console.aliyun.com/?tab=costing-balance#/costing-balance/usage-statistics)。
 
 **按量付费是实时扣款吗？**
 

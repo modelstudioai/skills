@@ -144,7 +144,7 @@ Vidu 提供 q3-pro / q3-turbo / q2 系列，覆盖文生视频、图生视频（
 | `ratio` / `size` | 宽高比（如 `16:9`）或像素尺寸（如 `1280*720`），不同模型字段名不同 |
 | `duration` | 视频时长，单位秒，常见 5 / 10 / 15 |
 | `prompt_extend` | 是否开启智能改写（优化 [prompt](../guides/prompt.md)、多镜头必填 `true`） |
-| `shot_type` | `multi` 启用多镜头（旧版模型），wan2.7 由 prompt 自然语言控制 |
+| `shot_type` | `multi` 启用多镜头（旧版模型），wan2.7 由 [prompt](../guides/prompt.md) 自然语言控制 |
 | `watermark` | 是否添加水印 |
 | `audio` | PixVerse 等支持自动生成配乐 |
 | `multi_shot` + `multi_prompt` | Kling 专用智能分镜，每个子项独立 `prompt` 和 `duration` |
@@ -200,5 +200,6 @@ Vidu 提供 q3-pro / q3-turbo / q2 系列，覆盖文生视频、图生视频（
 - [万相-视频编辑API参考（2.1）](../../raw/model-api-reference/video-generation-api/legacy-video-models/legacy-wanx-vace-api-reference.md)
 - [万相-文生视频API参考（2.1-2.6）](../../raw/model-api-reference/video-generation-api/legacy-video-models/legacy-wan-text-to-video-api-reference.md)
 - [万相-参考生视频API参考（2.6）](../../raw/model-api-reference/video-generation-api/legacy-video-models/legacy-wan-reference-to-video-api-reference.md)
+
 
 

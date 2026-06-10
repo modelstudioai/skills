@@ -88,6 +88,12 @@ API概述
 
 永久删除应用数据中的指定文件。不支持通过API删除数据表，详见下方接口说明。
 
+[DeleteFiles](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletefiles)
+
+批量删除文件
+
+批量删除文件
+
 [GetParseSettings](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getparsesettings)
 
 获取类目解析设置
@@ -367,9 +373,3 @@ API概述
 申请临时文件上传许可
 
 该接口用于高代码部署，其他场景暂不支持。用于申请临时文件上传许可，之后需要自己完成文件上传动作。
-
-DeleteFiles
-
-批量删除文件
-
-批量删除文件

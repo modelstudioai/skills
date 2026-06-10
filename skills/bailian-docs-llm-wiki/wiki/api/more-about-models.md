@@ -64,12 +64,12 @@
 百炼默认[业务空间](../concepts/workspace.md)的 API Key 权限较大（可调用所有模型）。当需要按 RAM 用户授权可用模型，或为不同业务/场景**独立账单**时，可在子[业务空间](../concepts/workspace.md)中创建 API Key 并按以下要点调用：
 
 - **调用标准模型**（如 `qwen-plus`）：在子[业务空间](../concepts/workspace.md)内为该空间 [设置模型调用权限](https://help.aliyun.com/zh/model-studio/permission-management-overview#f642213a1f38l) 后再调用。
-- **调用百炼调优后部署的模型**：无需额外授权，但**只能由该模型所在业务空间的 API Key 调用**；且**仅支持 DashScope 协议**，不支持 OpenAI 兼容方式。
+- **调用百炼调优后部署的模型**：无需额外授权，但**只能由该模型所在[业务空间](../concepts/workspace.md)的 API Key 调用**；且**仅支持 DashScope 协议**，不支持 OpenAI 兼容方式。
 - **地域差异**：
   - 北京地域 OpenAI 兼容：`base_url = https://dashscope.aliyuncs.com/compatible-mode/v1`
   - 新加坡地域 OpenAI 兼容：`base_url = https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`（DashScope 协议同理替换 host）
 
-调用代码与默认业务空间几乎一致，**关键区别只是必须使用子业务空间自己的 API Key**。Python/Java/Node.js/Go/C#/PHP/curl 完整示例见 [子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)。
+调用代码与默认[业务空间](../concepts/workspace.md)几乎一致，**关键区别只是必须使用子[业务空间](../concepts/workspace.md)自己的 API Key**。Python/Java/Node.js/Go/C#/PHP/curl 完整示例见 [子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)。
 
 ## 本地文件临时 URL（仅测试场景）
 
@@ -102,6 +102,7 @@
 - [通过HTTP回调URL或MQ接收异步任务完成通知](../../raw/model-api-reference/more-about-models/async-task-api.md)
 - [子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)
 - [上传本地文件获取临时URL](../../raw/model-api-reference/more-about-models/get-temporary-file-url.md)
+
 
 
 
