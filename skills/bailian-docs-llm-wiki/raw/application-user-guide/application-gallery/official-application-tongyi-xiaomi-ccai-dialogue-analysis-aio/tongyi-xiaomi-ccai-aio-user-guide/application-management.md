@@ -4,15 +4,15 @@
 
 ## **我的应用**
 
-路径：[应用广场](https://bailian.console.aliyun.com/#/app-market)→ 点击[应用实践](https://bailian.console.aliyun.com/?tab=app#/app-market/lightApplication)→ 找到**通义晓蜜CCAI-对话分析AIO**，选择[查看详情](https://bailian.console.aliyun.com/?tab=app#/app/app-market/ccai)，即可进入**我的应用****。**![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4679940671/p1016065.png)
+路径：[应用广场](https://bailian.console.aliyun.com/#/app-market)→ 点击[应用实践](https://bailian.console.aliyun.com/?tab=app#/app-market/lightApplication)→ 找到**通义晓蜜CCAI-对话分析AIO**，选择[查看详情](https://bailian.console.aliyun.com/?tab=app#/app/app-market/ccai)，即可进入**我的应用** **。** 在**应用广场**页面，找到**通义晓蜜CCAI-对话分析AIO**应用卡片，单击**立即查看**。
 
 ### 3.1 应用复制、删除、修改
 
--   **应用复制：**在**我的应用**中，可以点击应用右上角选择复制应用，对该应用进行复制。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7209853471/p935536.png)![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7209853471/p935538.png)
+-   **应用复制：**在**我的应用**中，可以点击应用右上角选择复制应用，对该应用进行复制。应用复制：在**我的应用**页面，单击目标应用卡片右上角的菜单图标，选择**复制应用**，即可复制该应用。应用复制成功后，在**我的应用**列表中可看到新增的复制应用卡片，其名称自动追加"副本"后缀。每张应用卡片底部提供**管理**、**调用量**、**API调用**三个操作入口。
     
--   **应用修改：**同时可以点击应用右上角选择修改应用，对该应用名称进行修改。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7209853471/p935539.png)![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0159666271/p850637.png)
+-   **应用修改：**同时可以点击应用右上角选择修改应用，对该应用名称进行修改。应用修改：在**我的应用**中，点击应用右上角的三点菜单，选择**修改应用**，即可对该应用信息进行修改。应用修改：可以在**编辑应用名称**对话框中修改**应用名称**，名称最多支持50个字符，修改完成后单击**确定**保存。
     
--   **应用删除：**如果需要删除该应用，可以点击应用的右上角选择删除应用，对该应用进行删除，弹出“确认删除”二次确认框，选择确认删除，将成功删除。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7209853471/p935540.png)![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0159666271/p850646.png)
+-   **应用删除：**如果需要删除该应用，可以点击应用的右上角选择删除应用，对该应用进行删除，弹出“确认删除”二次确认框，选择确认删除，将成功删除。应用删除：同样可以点击应用右上角选择**删除应用**，对该应用进行删除。应用删除：点击应用右上角选择删除应用，系统弹出**确认删除**对话框，提示"删除已发布应用可能会对您的线上业务产生影响，您确定删除吗？"，单击**确认删除**完成删除操作，单击**取消**可取消操作。
     
 
 ### 3.2 API调用
@@ -21,9 +21,9 @@
     
     -   当通过**对话分析Agent创建方式**创建应用时，使用自定义指令的API调用：
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9774988371/p910406.png)
+        在**对话分析Agent**的自定义指令页面右上角，单击**API示例**按钮，页面右侧展开API调用信息面板，依次包含：获取AccessKeyID和AccessKeySecret、获取Workspace ID和App ID、安装SDK（支持Java、Python、Go，Java通过Maven dependency引入）以及代码示例（支持Java、Curl、Python、Go）。代码示例中展示了`CcAiPassSync`类的调用逻辑，包括设置`workspaceId`与`appId`常量、构造`RunCompletionRequest`请求及组装对话内容。左侧**指令信息**区域可引入`${dialogue}`和`${fields}`两个变量，**模型配置**选择所需模型后，单击底部**测试（command + enter）**按钮即可在中间**效果测试**区域查看调用结果。
         
-    -   通过**自定义创建方式**的API调用：![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9774988371/p910410.png)
+    -   通过**自定义创建方式**的API调用：单击页面顶部的**API示例**按钮，右侧面板展示API调用所需信息。单击**获取API-KEY、APP-ID和Workspace ID**蓝色链接获取AccessKey ID、AccessKey Secret、Workspace ID和App ID。安装SDK时，在Maven项目的pom.xml中添加依赖`com.aliyun:alibabacloud-ccai-passthrough-sync`（版本3.3.3）。代码示例使用Java类`CcAiPassSync`，设置`workspaceId`和`appId`参数，构造`RunCompletionRequest`对象，传入包含user和agent角色的对话句子列表进行调用。
         
 
 ### **3.3 调用量**
@@ -35,4 +35,4 @@
 -   查询某个日期区间数据时，折线图展示按天调用量曲线。
     
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7209853471/p935534.png)
+在**调用量**页签中，可通过**所属空间**、**选择模型**、**应用**、**数据来源**下拉筛选条件，以及时间范围（**昨天**、**近3天**、**近七天**、**近15天**或自定义日期范围）查看对应的调用次数统计折线图。

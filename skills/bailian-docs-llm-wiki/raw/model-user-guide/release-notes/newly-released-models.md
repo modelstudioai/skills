@@ -16,6 +16,22 @@
 
 推理模型
 
+2026-06-10
+
+qwen3.7-max-2026-06-08
+
+Qwen3.7系列中规模最大、综合能力最强的Max模型，相较于5月20日快照增加了视觉模态理解能力，能够感知真实世界场景，具备多模态交互混合智能体能力。
+
+参考生视频
+
+2026-06-08
+
+pixverse/pixverse-v6-r2v
+
+爱诗V6-参考生视频模型，参考多张图像生成视频。相较于v5.6全面升级，通用场景推荐使用。支持将一张多宫格分镜拼接图一键转化为视频。[爱诗-参考生视频](https://help.aliyun.com/zh/model-studio/pixverse-reference-to-video-api-reference)
+
+推理模型
+
 2026-06-01
 
 qwen3.7-plus、qwen3.7-plus-2026-05-26
@@ -2122,7 +2138,7 @@ Qwen2-Math系列模型
 
 FLUX文生图模型
 
--   FLUX文生图模型是由 Black Forest Labs 开源的高质量文本到图像生成模型，它在多个维度上展现了卓越性能，尤其在文本引导的图像生成、多主体场景构建、以及精细的手部细节生成等方面，实现了显著的提升，为文生图领域设定了新的技术标杆。点击[文生图FLUX](https://help.aliyun.com/zh/model-studio/videos/flux/)进行了解。
+-   FLUX文生图模型是由 Black Forest Labs 开源的高质量文本到图像生成模型，它在多个维度上展现了卓越性能，尤其在文本引导的图像生成、多主体场景构建、以及精细的手部细节生成等方面，实现了显著的提升，为文生图领域设定了新的技术标杆。点击[文生图FLUX](https://help.aliyun.com/zh/model-studio/videos/flux)进行了解。
     
 
 llama系列

@@ -172,13 +172,13 @@ ESP32
 
 v1.2.1
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/kxlvnp/qwen_sdk_core_esp32_v1.2.1_0d0164d_800443.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260609/mrxfsv/qwen_sdk_core_esp32_v1.2.1_0d0164d_809947.tar.gz)
 
 ESP32S3
 
 v1.2.1
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/vggyuw/qwen_sdk_core_esp32s3_v1.2.1_0d0164d_800443.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260609/uljqro/qwen_sdk_core_esp32s3_v1.2.1_0d0164d_809943.tar.gz)
 
 9
 

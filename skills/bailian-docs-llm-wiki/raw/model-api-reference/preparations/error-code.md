@@ -1852,9 +1852,13 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 ### The free tier of the model has been exhausted. If you wish to continue access the model on a paid basis, please disable the "use free tier only" mode in the management console.
 
-**原因**：开启了[免费额度用完即停](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)，且免费额度耗尽后发起请求。
+**原因一**：全新未认证用户免费额度用尽后发起请求。
 
-> 控制台免费额度显示有小时级延迟。即使额度已用完，界面仍可能显示剩余额度。
+**解决方案**：[认证](https://myaccount.console.aliyun.com/cert-info)并充值后再进行调用。
+
+**原因二**：用户开启了[免费额度用完即停](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)，且免费额度耗尽后发起请求。
+
+> 控制台显示的免费额度为分钟级更新（需手动刷新页面）。
 
 **解决方案**：
 

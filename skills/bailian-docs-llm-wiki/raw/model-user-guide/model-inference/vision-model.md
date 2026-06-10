@@ -25,7 +25,7 @@
 
 -   Function Calling：Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列模型均支持
     
--   内置工具（联网搜索、代码执行，无需额外配置）：仅`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
+-   内置工具（联网搜索、代码执行，无需额外配置）：仅`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
     
 
 ### 结构化输出
@@ -36,7 +36,7 @@ Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能
 
 ## OCR与文档提取
 
-`qwen-vl-ocr`专为文档、表格、试卷和手写内容的文字提取而优化。您也可以使用`qwen3.6-plus`或`qwen3.6-flash`进行通用图片文字提取。
+`qwen-vl-ocr`专为文档、表格、试卷和手写内容的文字提取而优化。您也可以使用`qwen3.7-plus`或`qwen3.6-flash`进行通用图片文字提取。
 
 ## 推荐模型
 
@@ -143,6 +143,26 @@ Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能
 **内置工具**
 
 **结构化输出**
+
+`qwen3.7-max-2026-06-08`
+
+文本、图像、视频
+
+文本
+
+1M
+
+64k
+
+2048
+
+64
+
+支持
+
+支持
+
+\--
 
 `qwen3.7-plus`
 

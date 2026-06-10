@@ -117,7 +117,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/files' \
 
 **请求示例**
 
-请将`<替换为训练数据集的文件id>`完整替换为上一步获取的`file_id`。
+请将`<替换为训练数据集的文件id>`完整替换为上一步获取的`file_id`。完整参数说明与格式约束请参见[超参数](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#5f391e4b3cezf)。
 
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
@@ -146,7 +146,12 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 
 **说明**
 
-图像生成模型的超参数与视频模型有所差异（使用 `max_steps`/`eval_steps` 而非 n\_epochs/eval\_epochs）。完整参数说明与格式约束请参见[超参数](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#5f391e4b3cezf)。
+**训练耗时**（仅供参考）：
+
+-   文生图（t2i）：2K，300 步，约 77 分钟。
+    
+-   图生图（i2i）：2K，300 步，约 110 分钟。
+    
 
 **响应示例**
 
@@ -1037,7 +1042,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
 
 ## **API文档**
 
-[视频/图像生成模型微调](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference)
+[视频/图像生成模型微调 API 参考](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference)
 
 ## **常见问题**
 

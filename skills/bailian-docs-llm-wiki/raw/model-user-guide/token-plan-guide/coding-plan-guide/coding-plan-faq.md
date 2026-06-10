@@ -12,7 +12,7 @@
 
 阿里云 AI 助理会分析原因并给出解决方案：
 
-错误原因包括三类：模型名称不正确或拼写错误；套餐权限不足（Lite 套餐支持除 `qwen3.6-plus` 外的全系主力模型，包括千问、GLM、Kimi、MiniMax，Pro 套餐支持所有模型，包括 Pro 专属的 `qwen3.6-plus`，Lite 套餐调用 `qwen3.6-plus` 会触发该报错）；API Key 或 Base URL 配置错误。
+错误原因包括三类：模型名称不正确或拼写错误；使用了 Coding Plan 不支持的模型（Lite 套餐和 Pro 套餐均支持套餐内全部模型，包括千问、GLM、Kimi、MiniMax 等，使用套餐支持列表以外的模型会触发该报错）；API Key 或 Base URL 配置错误。
 
 ## **接入与配置相关问题**
 

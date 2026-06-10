@@ -56,7 +56,7 @@ String
 
 **重要**
 
-新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+新加坡地域的旧版域名 `wss://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 下述请求参数可以通过`OmniRealtimeConfig`对象的链式方法或setter配置、之后作为参数传入updateSession接口完成配置。
 
@@ -188,6 +188,14 @@ turnDetectionSilenceDurationMs
 Integer
 
 检测语音停止的静音持续时间，超过此值后会触发模型响应。默认值为800，参数范围\[200, 6000\]。
+
+turnDetectionParam
+
+Map
+
+VAD 扩展参数，用于传入 `turn_detection` 的额外配置项。当前支持传入 `idle_timeout_ms`（Integer）：静默超时时间（毫秒）。**仅在使用 `qwen3.5-omni-plus-realtime` 或 `qwen3.5-omni-flash-realtime` 模型且 VAD 类型为 `server_vad` 时生效。**服务端完成音频播报且用户持续静默超过该时间（未触发 `speech.started`）后，模型将主动触发一轮响应，基于当前上下文引导用户继续对话。取值范围：\[5000, 30000\]。
+
+示例：`turnDetectionParam(Map.of("idle_timeout_ms", 5000))`
 
 enable\_search
 

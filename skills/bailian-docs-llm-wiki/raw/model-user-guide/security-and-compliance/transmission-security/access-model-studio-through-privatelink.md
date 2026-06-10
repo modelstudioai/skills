@@ -8,7 +8,7 @@
 
 VPC 内的计算资源访问终端节点时，流量将通过 PrivateLink 转发至阿里云百炼服务端，不经过公网。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7547650871/CAEQYxiBgMCtvojh0RkiIDEzOTVhZTNhNGQxYTQ3YTQ5MjlhODJjZjM4MTY2NjQw5274221_20250627113930.173.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2868390871/CAEQYxiBgMCtvojh0RkiIDEzOTVhZTNhNGQxYTQ3YTQ5MjlhODJjZjM4MTY2NjQw5274221_20250627113930.173.svg)
 
 如需从其他地域的VPC内进行私网访问，请参考[跨地域私网访问阿里云百炼 API](#a576f2631au0h)。
 
@@ -39,7 +39,7 @@ VPC 内的计算资源访问终端节点时，流量将通过 PrivateLink 转发
         
     -   **终端节点服务**：选择**阿里云服务**，在下方输入框中筛选后选中**com.aliyuncs.dashscope**。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4538798271/p857590.png)
+        将 **是否开启自定义服务域名** 设置为 **开启**。
         
     -   **专有网络**：选择计划用于访问阿里云百炼服务的 VPC。终端节点将被创建到 VPC 内，VPC 内的 ECS、容器等资源才能通过私网域名访问阿里云百炼服务。
         
@@ -58,7 +58,7 @@ VPC 内的计算资源访问终端节点时，流量将通过 PrivateLink 转发
 
 **默认服务域名**仅支持 HTTP 协议，如需 HTTPS 访问，可使用**自定义服务域名**。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8721814471/p936726.png)
+在**基本信息**页签下找到**终端节点服务域名**区域，可获取默认服务域名（格式为 `ep-{实例ID}.privatelink.aliyuncs.com`）。开启**自定义服务域名**开关后，可获取自定义服务域名（格式为 `vpc-{实例ID}.{地域ID}.dashscope.aliyuncs.com`）。
 
 ### **步骤三：调用验证**
 
@@ -106,7 +106,6 @@ curl -X POST http://ep-***.dashscope.cn-beijing.privatelink.aliyuncs.com/compati
 ```
 import os
 from openai import OpenAI
-
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
     # 将原始域名替换为上一步骤中获取到的终端节点服务域名
@@ -129,7 +128,6 @@ from http import HTTPStatus
 # 建议dashscope SDK 的版本 >= 1.14.0
 import dashscope
 from dashscope import Generation
-
 # 将原始域名替换为上一步骤中获取到的终端节点服务域名
 dashscope.base_http_api_url = "http://ep-***.dashscope.cn-beijing.privatelink.aliyuncs.com/api/v1"
 dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
@@ -155,7 +153,6 @@ else:
 ```
 // 建议DashScope SDK的版本 >= 2.12.0
 import java.util.Arrays;
-
 import com.alibaba.dashscope.aigc.generation.Generation;
 import com.alibaba.dashscope.aigc.generation.GenerationParam;
 import com.alibaba.dashscope.aigc.generation.GenerationResult;
@@ -166,7 +163,6 @@ import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.protocol.Protocol;
 import com.alibaba.dashscope.utils.JsonUtils;
-
 public class Main {
     public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {
         // 将原始域名替换为上一步骤中获取到的终端节点服务域名
@@ -248,7 +244,7 @@ public class Main {
 
 配置完成后，在发起端 VPC 内访问前文中配置好的终端节点默认服务域名时，转发路由器（TR）会将流量路由至阿里云百炼服务所在地域的终端节点，实现跨地域私网访问阿里云百炼 API。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7547650871/CAEQZhiBgICUtYmu2RkiIDk3YWZiYjVkYWUyNTQwNDI4ZTQyZGMyMTk5MDIyYzg45274221_20250627113930.173.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3868390871/CAEQZhiBgICUtYmu2RkiIDk3YWZiYjVkYWUyNTQwNDI4ZTQyZGMyMTk5MDIyYzg45274221_20250627113930.173.svg)
 
 默认情况下，终端节点的默认服务域名可以在跨地域互联的 VPC 内直接被访问，但自定义服务域名仅在终端节点所在地域 VPC 内有效。因此，如需在发起端通过自定义域名私网访问阿里云百炼 API ，可参考[快速使用内网域名解析](https://help.aliyun.com/zh/dns/pvtz-quickly-use-the-built-in-domain-name-resolution)，创建一个与自定义服务域名同名的内网域名，将该域名通过 CNAME 记录解析至该终端节点的默认服务域名：
 
@@ -306,9 +302,9 @@ public class Main {
         
         **错误示例**
         
-        ![2025-12-17\_19-47-04](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8354116671/p1036091.jpg)
+        在**编辑记录**页面，**记录类型**选择**CNAME**，**主机记录**中使用连字符（`-`）分隔单词，例如 `test-for-dns-right`，后缀为 `.dashscope.aliyuncs.com`，**记录值**填写对应的Endpoint地址。
         
-        ![2025-12-17\_19-47-44](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8354116671/p1036092.jpg)
+        在**编辑记录**页面中，**主机记录**字段填写为 `test_for_dns_wrong`，使用了下划线（`_`）作为分隔符，这是错误的命名方式。DNS 主机记录不支持下划线字符，应使用短横线（`-`）等合法字符替代。
         
     3.  **记录值**：填写百炼终端节点的默认服务域名。例如：`ep-***.dashscope.cn-beijing.privatelink.aliyuncs.com`。
         

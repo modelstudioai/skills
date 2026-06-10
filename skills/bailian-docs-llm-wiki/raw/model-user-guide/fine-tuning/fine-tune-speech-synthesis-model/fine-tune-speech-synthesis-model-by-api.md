@@ -133,9 +133,13 @@ CosyVoice 模型调优涉及两部分费用：**训练费用**（按训练消耗
 
 -   **音频语种**必须为基础模型 `cosyvoice-v3-flash` 已支持的语种。
     
--   **文本语种**（`data.jsonl` 中 `text` 字段）必须与对应音频的语种保持一致。
+-   **文本语种**（`data.jsonl` 中 `text` 字段）必须与对应音频的语种保持一致。单条样本包含多语种混读时的处理方式见下方**允许多语种混合**条目。
     
 -   **不可扩展**：基础模型不支持的语种无法通过调优新增，例如使用保加利亚语音频训练，模型仍无法合成保加利亚语。
+    
+-   **允许多语种混合**：同一训练集中的不同样本可以分属不同语种（如部分中文、部分英文），不影响单语种的合成质量。单条样本内出现多语种混读（如"Hello 世界"）时，`text` 字段应按实际读音转写对应文字。
+    
+-   **辅助语种音素覆盖**：当训练集以一种语种为主、辅以少量其他语种时（如中文为主 + 少量英文），辅助语种的训练样本应尽量覆盖该语种的全部音素（以美式英语为例，需覆盖 20 个元音和 24 个辅音），以保证辅助语种的音色还原度。
     
 
 ### **音频规格要求**
@@ -166,7 +170,14 @@ CosyVoice 模型调优涉及两部分费用：**训练费用**（按训练消耗
 
 录音环境与内容
 
-建议在录音棚或低噪环境录制；训练音频应清洗背景噪声、笑声、咳嗽、明显呼吸声、长停顿等非语音内容。
+建议在录音棚或低噪环境录制以减少背景噪声。训练音频中的副语言内容（笑声、叹气、咳嗽、呼吸声、长停顿等）会被调优学习，模型推理时将根据上下文自动在合适位置产出同类声音；如需产出更纯净的语音，建议在数据准备阶段预先清洗这些内容。
+
+**重要**
+
+-   **训练数据特征直接影响调优产物**：调优本质是拟合训练数据集的声学特征，训练音频中发音人的语速、情感倾向与停顿节奏等统计特性会直接反映在调优产物的默认合成风格上。例如训练数据以慢速平静朗读为主，产物推理时默认语速和情感倾向也会偏慢偏平。请根据目标合成场景选择风格一致的训练音频。
+    
+-   **警惕训练音频中的错读**：若训练数据中存在非标准读音（如将"捕捉"读成 pǔ zhuō），调优产物可能复现该读音，且出现次数越多越容易被学习。建议在标注阶段人工复核音频中的字词读音准确性。
+    
 
 ### **目录结构**
 
@@ -279,15 +290,15 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/fine-tunes
 }'
 ```
 
-关键请求字段：`model` 固定为 `cosyvoice-v3-flash`，`training_type` 固定为 `efficient_sft`，`training_file_ids` 仅支持挂载一个训练文件 ID，`hyper_parameters` 内 8 个 LM / FM 子字段全部必填。每个字段的取值范围、类型、传参方式请参见 [创建调优任务](https://help.aliyun.com/zh/model-studio/model-training-api-reference#a5e10ec104yio)。
+关键请求字段：`model` 固定为 `cosyvoice-v3-flash`，`training_type` 固定为 `efficient_sft`，`training_file_ids` 仅支持挂载一个训练文件 ID，`hyper_parameters` 内 8 个 LM / FM 子字段全部必填。每个字段的取值范围、类型、传参方式请参见 [创建调优任务](https://help.aliyun.com/zh/model-studio/create-fine-tuning-job-api)。
 
 **说明**
 
-请求成功后，请保存响应中的两个关键字段：`output.job_id`（任务 ID，下一步查询任务状态与日志时使用）与 `output.finetuned_output`（调优后模型 ID，训练完成后用于部署模型）。任务创建后 `status` 初始为 `PENDING`，将随训练进度变化。响应字段的完整说明请参见 [返回参数](https://help.aliyun.com/zh/model-studio/model-training-api-reference#5029d0724bzmm)。
+请求成功后，请保存响应中的两个关键字段：`output.job_id`（任务 ID，下一步查询任务状态与日志时使用）与 `output.finetuned_output`（调优后模型 ID，训练完成后用于部署模型）。任务创建后 `status` 初始为 `PENDING`，将随训练进度变化。响应字段的完整说明请参见[创建调优任务](https://help.aliyun.com/zh/model-studio/create-fine-tuning-job-api)中的返回参数。
 
 ### **超参数说明**
 
-CosyVoice 调优涉及两个子网络：**LM**（Language Model，将文本转为离散语音 token 的自回归语言模型）与 **FM**（Flow Matching，将语音 token 还原为 Mel 谱的流匹配模型），两者的训练超参分别以 `lm_*` 与 `fm_*` 前缀区分。超参数决定训练轮次与 Checkpoint 保存策略，直接影响调优耗时、Token 消耗与最终模型效果。
+CosyVoice 调优涉及两个子网络：**LM**（Language Model，将文本转为离散语音 token 的自回归语言模型，**对韵律影响较大**）与 **FM**（Flow Matching，将语音 token 还原为 Mel 谱的流匹配模型，**对音色还原度影响较大**），两者已解耦、可独立调整，训练超参分别以 `lm_*` 与 `fm_*` 前缀区分。超参数决定训练轮次与 Checkpoint 保存策略，直接影响调优耗时、Token 消耗与最终模型效果。
 
 **建议先用以下推荐值跑通一次完整流程，根据效果再决定是否调整：**
 
@@ -296,11 +307,11 @@ CosyVoice 调优涉及两个子网络：**LM**（Language Model，将文本转�
 -   **FM 网络**：`fm_max_epoch=100`，`fm_step=10`，`fm_num=3`，`fm_batch_size=2000`。
     
 
-其中 `*_max_epoch` 为训练总轮次，`*_step` 为保存 Checkpoint 的步长，`*_num` 为最多保留的 Checkpoint 个数，`*_batch_size` 为训练批次大小。各字段的完整取值范围请参见 [CosyVoice 语音合成模型 hyper\_parameters](https://help.aliyun.com/zh/model-studio/model-training-api-reference#cv-hp-collapse)。
+其中 `*_max_epoch` 为训练总轮次，`*_step` 为保存 Checkpoint 的步长，`*_num` 为最多保留的 Checkpoint 个数，`*_batch_size` 为训练批次大小。各字段的完整取值范围请参见 [CosyVoice 语音合成模型 hyper\_parameters](https://help.aliyun.com/zh/model-studio/create-fine-tuning-job-api#m04a5iuadpoqq)。
 
 **说明**
 
-提高 `lm_max_epoch` 或 `fm_max_epoch` 会按计费公式线性增加 Token 消耗与训练时长（详见[训练费用](#cv-billing-train-title)）。
+提高 `lm_max_epoch` 或 `fm_max_epoch` 会按计费公式线性增加 Token 消耗与训练时长（详见[训练费用](#cv-billing-train-title)）。同时，**训练轮次越高，基础模型原有能力的"遗忘"越严重**，可能导致长文本稳定性、多音字准确率等方面退化。推荐值（`lm_max_epoch=60`、`fm_max_epoch=100`）为兼顾音色还原度与基础能力保留的经验值。
 
 **实测对照**：以下为一次实操样本数据，便于您在开工前对耗时与费用建立预期，**实际数值随数据量、超参与队列等待时间不同而变化**。
 
@@ -334,7 +345,7 @@ CosyVoice 调优涉及两个子网络：**LM**（Language Model，将文本转�
 
 ### **模型产出（Checkpoint）**
 
-单次调优任务可能产出多个 Checkpoint（候选模型，可通过[查询调优任务 Checkpoint 列表](https://help.aliyun.com/zh/model-studio/model-training-api-reference#cv-cp-h2)接口查看），具体数量与排序由超参数中的 `lm_num`、`fm_num` 与 `*_step` 共同决定。
+单次调优任务可能产出多个 Checkpoint（候选模型，可通过[列举 Checkpoint](https://help.aliyun.com/zh/model-studio/list-checkpoints-api)接口查看），具体数量与排序由超参数中的 `lm_num`、`fm_num` 与 `*_step` 共同决定。
 
 1.  **选模型**：分别从 LM、FM 的最大轮次往回数，每隔 `*_step` 选一个，共选 `*_num` 个。
     
@@ -410,7 +421,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<job_id>' \
 --header 'Content-Type: application/json'
 ```
 
-响应中 `output.status` 字段表示当前阶段：`PENDING`（待开始）→ `QUEUING`（排队中，平台同一时刻仅运行一个训练任务）→ `RUNNING`（训练进行中）→ `SUCCEEDED`（训练成功）。异常终止状态包括 `FAILED`（训练失败）、`CANCELING`（取消中）与 `CANCELED`（已取消）。状态字段的完整定义请参见[查询调优任务详情](https://help.aliyun.com/zh/model-studio/model-training-api-reference#faa99e295ckyg)。
+响应中 `output.status` 字段表示当前阶段：`PENDING`（待开始）→ `QUEUING`（排队中，平台同一时刻仅运行一个训练任务）→ `RUNNING`（训练进行中）→ `SUCCEEDED`（训练成功）。异常终止状态包括 `FAILED`（训练失败）、`CANCELING`（取消中）与 `CANCELED`（已取消）。状态字段的完整定义请参见[查询调优任务详情](https://help.aliyun.com/zh/model-studio/get-fine-tuning-job-api)。
 
 **说明**
 
@@ -426,7 +437,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<job_id>/logs?
 --header 'Content-Type: application/json'
 ```
 
-通过 `offset` 控制起始位置，`line` 控制最多返回的行数（示例每次拉取 1000 行）。响应字段说明请参见[获取调优任务日志](https://help.aliyun.com/zh/model-studio/model-training-api-reference#e76df8eaa2vbs)。
+通过 `offset` 控制起始位置，`line` 控制最多返回的行数（示例每次拉取 1000 行）。响应字段说明请参见[查询调优日志](https://help.aliyun.com/zh/model-studio/get-fine-tuning-job-logs-api)。
 
 ## **部署模型**
 
@@ -483,7 +494,7 @@ II 型模型单元
 
 ### **方式二：通过 API 部署（推荐自动化集成）**
 
-API 部署需按以下顺序调用三个接口；各字段完整的取值约束请参见[模型部署-API详情](https://help.aliyun.com/zh/model-studio/model-deployment-api)。
+API 部署需按以下顺序调用三个接口；各字段完整的取值约束请参见[模型部署](https://help.aliyun.com/zh/model-studio/deployments-api/)。
 
 1.  **查询可部署的模型**（`GET /api/v1/deployments/models`）：获取后续创建部署所需的 `model_name`、`template_id` 与 `capacity_unit_per_instance`：
     
@@ -606,7 +617,7 @@ API 部署需按以下顺序调用三个接口；各字段完整的取值约束�
     --header 'Content-Type: application/json'
     ```
     
-    当响应中 `status` 字段值为 `RUNNING` 时，表示该模型已可供调用。更多模型部署相关的操作（如扩缩容、下线等）请参见[模型部署-API详情](https://help.aliyun.com/zh/model-studio/model-deployment-api)。
+    当响应中 `status` 字段值为 `RUNNING` 时，表示该模型已可供调用。更多模型部署相关的操作（如扩缩容、下线等）请参见[模型部署](https://help.aliyun.com/zh/model-studio/deployments-api/)。
     
 
 ## **调用模型**
@@ -720,7 +731,7 @@ with open('output.mp3', 'wb') as f:
 
 **说明**
 
-**正式上线前建议小范围验证基础能力**：调优产物的非音色能力（多音字与专有名词读音、长文本稳定性等）均由基础模型 `cosyvoice-v3-flash` 决定，建议在您的目标使用场景上抽样实测后再放量。
+**正式上线前建议小范围验证基础能力**：调优产物的非音色能力（多音字与专有名词读音、长文本稳定性等）继承自基础模型 `cosyvoice-v3-flash`，但可能受训练数据质量和训练轮次影响（详见[音频规格要求](#cv-dataset-audio-title)与[超参数说明](#cv-create-hp-title)），建议在您的目标使用场景上抽样实测后再放量。
 
 ### **选用更优的 Checkpoint**
 
@@ -739,7 +750,7 @@ with open('output.mp3', 'wb') as f:
 
 在以下场景中，部署实例不再承载业务流量，应立即下线以停止计费：完成多 Checkpoint 评测后落选的实例、被新版本替换的旧实例、临时压测或验证使用的实例、创建失败需要重建的实例等。
 
-**下线方法**：调用 `DELETE /api/v1/deployments/{deployed_model}`，响应中 `output.status` 变为 `DELETING` 即表示受理。完整字段说明请参见[删除模型部署任务](https://help.aliyun.com/zh/model-studio/model-deployment-api#a526c00058g7g)。
+**下线方法**：调用 `DELETE /api/v1/deployments/{deployed_model}`，响应中 `output.status` 变为 `DELETING` 即表示受理。完整字段说明请参见[删除部署](https://help.aliyun.com/zh/model-studio/delete-deployment-api)。
 
 **重要**
 
@@ -749,13 +760,13 @@ with open('output.mp3', 'wb') as f:
 
 当业务并发上量、整体吞吐不足或活动期需要弹性扩容时，需要调整部署的副本数。不同部署模版（**单机部署** 与 **单机部署-旗舰级复杂推理**）对应的单副本算力与适用场景不同，详见[部署模版](#cv-deploy-sub-template-t)，请结合业务并发反推副本数。
 
-**扩缩容方法**：调用 `PUT /api/v1/deployments/{deployed_model}/scale`，请求体传入新的 `capacity`。注意 `capacity` 是**总模型单元数量**而非副本数，且必须为该模版 `capacity_unit_per_instance` 的整数倍，取值示例参见[取值示例](#cv-deploy-api-step2-field-li-cap-examples-p)。完整字段说明请参见[更新模型部署任务](https://help.aliyun.com/zh/model-studio/model-deployment-api#2b90319058wqr)。
+**扩缩容方法**：调用 `PUT /api/v1/deployments/{deployed_model}/scale`，请求体传入新的 `capacity`。注意 `capacity` 是**总模型单元数量**而非副本数，且必须为该模版 `capacity_unit_per_instance` 的整数倍，取值示例参见[取值示例](#cv-deploy-api-step2-field-li-cap-examples-p)。完整字段说明请参见[部署扩缩容](https://help.aliyun.com/zh/model-studio/scale-deployment-api)。
 
 副本数线性影响计费金额，扩容前请按[部署费用](#cv-billing-deploy-title)的公式估算成本变化。
 
 ### **重新调优后的版本切换**
 
-当补充新数据或调整超参产出新的 `finetuned_output` 时，需要将线上调用切换到新模型。**重新调优产出的是新模型，而不是同一模型的新版本**，必须创建新的部署实例，无法在旧 `deployed_model` 上原地替换底层模型。
+当补充新数据或调整超参时，**推荐始终从基础模型** `**cosyvoice-v3-flash**` **重新训练**，不建议在已调优产物上做增量训练。重新调优产出的是新的 `finetuned_output`，**不是同一模型的新版本**，必须创建新的部署实例，无法在旧 `deployed_model` 上原地替换底层模型。
 
 **推荐切换流程**：
 
@@ -765,6 +776,10 @@ with open('output.mp3', 'wb') as f:
     
 3.  验证通过后切流量到新部署，再下线旧部署（参见[及时下线不再使用的部署](#cv-prod-offline-t)），完成版本替换。
     
+
+**重要**
+
+**调优产物冻结在训练时的基础模型版本**：当基础模型 `cosyvoice-v3-flash` 后续升级（如新增语种、扩展 SSML 标签等）时，已部署的调优产物**不会**自动获得升级带来的能力增强，其能力始终锁定在调优时的基础模型版本。如需使用新版本基础模型的能力，须基于新版本重新调优并部署。
 
 ## **API 参考**
 
@@ -788,7 +803,7 @@ with open('output.mp3', 'wb') as f:
 
 [上传调优文件](#cv-upload-title)
 
-[上传文件](https://help.aliyun.com/zh/model-studio/model-customization-file-management-service#d031ae7105c1g)
+[上传文件](https://help.aliyun.com/zh/model-studio/upload-file-api)
 
 创建调优任务
 
@@ -798,7 +813,7 @@ with open('output.mp3', 'wb') as f:
 
 [创建调优任务](#cv-create-title)
 
-[创建调优任务](https://help.aliyun.com/zh/model-studio/model-training-api-reference#a5e10ec104yio)
+[创建调优任务](https://help.aliyun.com/zh/model-studio/create-fine-tuning-job-api)
 
 查询任务详情
 
@@ -808,7 +823,7 @@ with open('output.mp3', 'wb') as f:
 
 [查询任务详情](#cv-query-sub-detail-t)
 
-[查询调优任务详情](https://help.aliyun.com/zh/model-studio/model-training-api-reference#faa99e295ckyg)
+[查询调优任务详情](https://help.aliyun.com/zh/model-studio/get-fine-tuning-job-api)
 
 获取训练日志
 
@@ -818,7 +833,7 @@ with open('output.mp3', 'wb') as f:
 
 [获取训练日志](#cv-query-sub-logs-t)
 
-[获取调优任务日志](https://help.aliyun.com/zh/model-studio/model-training-api-reference#e76df8eaa2vbs)
+[查询调优日志](https://help.aliyun.com/zh/model-studio/get-fine-tuning-job-logs-api)
 
 查询 Checkpoint 列表
 
@@ -828,7 +843,7 @@ with open('output.mp3', 'wb') as f:
 
 [选用更优的 Checkpoint](#cv-prod-ckpt-t)
 
-[查询调优任务 Checkpoint 列表](https://help.aliyun.com/zh/model-studio/model-training-api-reference#cv-cp-h2)
+[列举 Checkpoint](https://help.aliyun.com/zh/model-studio/list-checkpoints-api)
 
 查询可部署的模型
 
@@ -838,7 +853,7 @@ with open('output.mp3', 'wb') as f:
 
 [方式二·步骤 1](#cv-deploy-api-step1-li)
 
-[获取可以部署的模型列表](https://help.aliyun.com/zh/model-studio/model-deployment-api#dc35528058t0d)
+[列举可部署模型](https://help.aliyun.com/zh/model-studio/list-deployable-models-api)
 
 创建部署任务
 
@@ -848,7 +863,7 @@ with open('output.mp3', 'wb') as f:
 
 [方式二·步骤 2](#cv-deploy-api-step2-li)
 
-[创建模型部署任务](https://help.aliyun.com/zh/model-studio/model-deployment-api#13f7a7d05829h)
+[创建部署](https://help.aliyun.com/zh/model-studio/create-deployment-api)
 
 查询部署状态
 
@@ -858,7 +873,7 @@ with open('output.mp3', 'wb') as f:
 
 [方式二·步骤 3](#cv-deploy-api-step3-li)
 
-[查询模型部署任务](https://help.aliyun.com/zh/model-studio/model-deployment-api#674e5780584jv)
+[查询部署详情](https://help.aliyun.com/zh/model-studio/get-deployment-api)
 
 扩缩容部署
 
@@ -868,7 +883,7 @@ with open('output.mp3', 'wb') as f:
 
 [副本数规划与扩缩容](#cv-prod-capacity-t)
 
-[更新模型部署任务](https://help.aliyun.com/zh/model-studio/model-deployment-api#2b90319058wqr)
+[部署扩缩容](https://help.aliyun.com/zh/model-studio/scale-deployment-api)
 
 下线部署
 
@@ -878,7 +893,7 @@ with open('output.mp3', 'wb') as f:
 
 [及时下线不再使用的部署](#cv-prod-offline-t)
 
-[删除模型部署任务](https://help.aliyun.com/zh/model-studio/model-deployment-api#a526c00058g7g)
+[删除部署](https://help.aliyun.com/zh/model-studio/delete-deployment-api)
 
 语音合成（HTTP）
 

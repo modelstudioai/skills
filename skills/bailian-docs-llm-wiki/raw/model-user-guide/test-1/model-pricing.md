@@ -14,11 +14,15 @@
 
 影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费；若模型支持[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)，仅输入Token享有折扣。两者不能同时生效。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -32,6 +36,8 @@
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen3.7-max
 
 > 当前能力等同于qwen3.7-max-2026-05-20
@@ -40,6 +46,8 @@ qwen3.7-max
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤1M
@@ -48,13 +56,25 @@ qwen3.7-max
 
 36元
 
-各100万Token
+100万Token
 
-有效期：阿里云百炼开通后90天内
+qwen3.7-max-2026-06-08
+
+中国内地
+
+非思考和思考模式
+
+0<Token≤1M
+
+12元
+
+36元
+
+100万Token
 
 qwen3.7-max-2026-05-20
 
-> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+中国内地
 
 非思考和思考模式
 
@@ -63,11 +83,15 @@ qwen3.7-max-2026-05-20
 12元
 
 36元
+
+100万Token
 
 qwen3.7-max-preview
 
 > 当前能力等同于qwen3.7-max-2026-05-17
 
+中国内地
+
 仅思考模式
 
 0<Token≤1M
@@ -75,9 +99,13 @@ qwen3.7-max-preview
 12元
 
 36元
+
+100万Token
 
 qwen3.7-max-2026-05-17
 
+中国内地
+
 仅思考模式
 
 0<Token≤1M
@@ -85,10 +113,14 @@ qwen3.7-max-2026-05-17
 12元
 
 36元
+
+100万Token
 
 qwen3.6-max-preview
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+中国内地
 
 非思考和思考模式
 
@@ -97,6 +129,8 @@ qwen3.6-max-preview
 9元
 
 54元
+
+100万Token
 
 128K<Token≤256K
 
@@ -112,6 +146,8 @@ qwen3-max
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤32K
@@ -119,6 +155,8 @@ qwen3-max
 2.5元
 
 10元
+
+100万Token
 
 32K<Token≤128K
 
@@ -134,6 +172,8 @@ qwen3-max
 
 qwen3-max-2026-01-23
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤32K
@@ -141,6 +181,8 @@ qwen3-max-2026-01-23
 2.5元
 
 10元
+
+100万Token
 
 32K<Token≤128K
 
@@ -156,6 +198,8 @@ qwen3-max-2026-01-23
 
 qwen3-max-2025-09-23
 
+中国内地
+
 仅非思考模式
 
 0<Token≤32K
@@ -163,6 +207,8 @@ qwen3-max-2025-09-23
 6元
 
 24元
+
+100万Token
 
 32K<Token≤128K
 
@@ -180,6 +226,8 @@ qwen3-max-preview
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤32K
@@ -187,6 +235,8 @@ qwen3-max-preview
 6元
 
 24元
+
+100万Token
 
 32K<Token≤128K
 
@@ -204,6 +254,8 @@ qwen3-max-preview
 
 **模型 ID（Model ID）**
 
+**服务部署范围**
+
 **模式**
 
 **单次请求的输入Token数**
@@ -214,9 +266,13 @@ qwen3-max-preview
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen-max
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
+
+中国内地
 
 仅非思考模式
 
@@ -228,17 +284,11 @@ qwen-max
 
 100万Token
 
-有效期：阿里云百炼开通后90天内
-
-## 全球
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -256,6 +306,8 @@ qwen3.7-max
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+全球
+
 非思考和思考模式
 
 0<Token≤1M
@@ -266,7 +318,7 @@ qwen3.7-max
 
 qwen3.7-max-2026-05-20
 
-> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+全球
 
 非思考和思考模式
 
@@ -281,6 +333,8 @@ qwen3-max
 > 当前能力等同于qwen3-max-2026-01-23
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
 
 仅非思考模式
 
@@ -303,6 +357,8 @@ qwen3-max
 28元
 
 qwen3-max-2025-09-23
+
+全球
 
 仅非思考模式
 
@@ -328,6 +384,8 @@ qwen3-max-preview
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+全球
+
 非思考和思考模式
 
 0<Token≤32K
@@ -348,15 +406,11 @@ qwen3-max-preview
 
 60元
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -374,6 +428,8 @@ qwen3.7-max
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+国际
+
 非思考和思考模式
 
 0<Token≤1M
@@ -384,7 +440,7 @@ qwen3.7-max
 
 qwen3.7-max-2026-05-20
 
-> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+国际
 
 非思考和思考模式
 
@@ -397,6 +453,8 @@ qwen3.7-max-2026-05-20
 qwen3.6-max-preview
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+国际
 
 非思考和思考模式
 
@@ -418,6 +476,8 @@ qwen3-max
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+国际
+
 非思考和思考模式
 
 0<Token≤32K
@@ -440,6 +500,8 @@ qwen3-max
 
 qwen3-max-2026-01-23
 
+国际
+
 非思考和思考模式
 
 0<Token≤32K
@@ -461,6 +523,8 @@ qwen3-max-2026-01-23
 110.089元
 
 qwen3-max-2025-09-23
+
+国际
 
 仅非思考模式
 
@@ -486,6 +550,8 @@ qwen3-max-preview
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+国际
+
 非思考和思考模式
 
 0<Token≤32K
@@ -510,6 +576,8 @@ qwen3-max-preview
 
 **模型 ID（Model ID）**
 
+**服务部署范围**
+
 **模式**
 
 **单次请求的输入Token数**
@@ -522,6 +590,8 @@ qwen-max
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
+国际
+
 仅非思考模式
 
 无阶梯计价
@@ -530,15 +600,11 @@ qwen-max
 
 46.971元
 
-## 欧盟
-
-服务部署范围为[欧盟](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于欧盟境内；静态数据存储于您所选的地域。该部署范围支持的地域：德国（法兰克福）。
-
-**说明**
-
-欧盟部署范围下的模型无免费额度。
+#### 德国（法兰克福）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -550,9 +616,79 @@ qwen-max
 
 > **思维链+回答**
 
+qwen3.7-max
+
+> 当前能力等同于qwen3.7-max-2026-05-20
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+12元
+
+36元
+
+qwen3.7-max-2026-06-08
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+12元
+
+36元
+
+qwen3.7-max-2026-05-20
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+12元
+
+36元
+
 qwen3-max
 
 > 当前能力等同于qwen3-max-2026-01-23
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+仅非思考模式
+
+0<Token≤32K
+
+2.5元
+
+10元
+
+32K<Token≤128K
+
+4元
+
+16元
+
+128K<Token≤256K
+
+7元
+
+28元
+
+qwen3-max
+
+> 当前能力等同于qwen3-max-2026-01-23
+
+欧盟
 
 非思考和思考模式
 
@@ -576,6 +712,8 @@ qwen3-max
 
 qwen3-max-2026-01-23
 
+欧盟
+
 非思考和思考模式
 
 0<Token≤32K
@@ -596,17 +734,71 @@ qwen3-max-2026-01-23
 
 112.413元
 
+qwen3-max-2025-09-23
+
+全球
+
+仅非思考模式
+
+0<Token≤32K
+
+6元
+
+24元
+
+32K<Token≤128K
+
+10元
+
+40元
+
+128K<Token≤256K
+
+15元
+
+60元
+
+qwen3-max-preview
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤32K
+
+6元
+
+24元
+
+32K<Token≤128K
+
+10元
+
+40元
+
+128K<Token≤256K
+
+15元
+
+60元
+
 ### **千问Plus**
 
 计费规则：按输入Token和输出Token计费。
 
 影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单次请求的输入Token范围**
 
@@ -615,6 +807,8 @@ qwen3-max-2026-01-23
 **输出单价（每百万Token）**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 **非思考模式**
 
@@ -628,6 +822,8 @@ qwen3.7-plus
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 0<Token≤256K
 
 2元
@@ -636,9 +832,7 @@ qwen3.7-plus
 
 8元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 256K<Token≤1M
 
@@ -652,6 +846,8 @@ qwen3.7-plus-2026-05-26
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 0<Token≤256K
 
 2元
@@ -659,6 +855,8 @@ qwen3.7-plus-2026-05-26
 8元
 
 8元
+
+100万Token
 
 256K<Token≤1M
 
@@ -672,6 +870,8 @@ qwen3.6-plus
 
 > 当前能力等同于qwen3.6-plus-2026-04-02
 
+中国内地
+
 0<Token≤256K
 
 2元
@@ -679,6 +879,8 @@ qwen3.6-plus
 12元
 
 12元
+
+100万Token
 
 256K<Token≤1M
 
@@ -690,6 +892,8 @@ qwen3.6-plus
 
 qwen3.6-plus-2026-04-02
 
+中国内地
+
 0<Token≤256K
 
 2元
@@ -697,6 +901,8 @@ qwen3.6-plus-2026-04-02
 12元
 
 12元
+
+100万Token
 
 256K<Token≤1M
 
@@ -710,6 +916,8 @@ qwen3.5-plus
 
 > 当前能力等同于qwen3.5-plus-2026-02-15
 
+中国内地
+
 0<Token≤128K
 
 0.8元
@@ -717,6 +925,8 @@ qwen3.5-plus
 4.8元
 
 4.8元
+
+100万Token
 
 128K<Token≤256K
 
@@ -736,6 +946,8 @@ qwen3.5-plus
 
 qwen3.5-plus-2026-04-20
 
+中国内地
+
 0<Token≤128K
 
 0.8元
@@ -743,6 +955,8 @@ qwen3.5-plus-2026-04-20
 4.8元
 
 4.8元
+
+100万Token
 
 128K<Token≤256K
 
@@ -762,6 +976,8 @@ qwen3.5-plus-2026-04-20
 
 qwen3.5-plus-2026-02-15
 
+中国内地
+
 0<Token≤128K
 
 0.8元
@@ -769,6 +985,8 @@ qwen3.5-plus-2026-02-15
 4.8元
 
 4.8元
+
+100万Token
 
 128K<Token≤256K
 
@@ -792,6 +1010,8 @@ qwen-plus
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
+中国内地
+
 0<Token≤128K
 
 0.8元
@@ -799,6 +1019,8 @@ qwen-plus
 2元
 
 8元
+
+100万Token
 
 128K<Token≤256K
 
@@ -820,6 +1042,8 @@ qwen-plus-latest
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
+中国内地
+
 0<Token≤128K
 
 0.8元
@@ -827,6 +1051,8 @@ qwen-plus-latest
 2元
 
 8元
+
+100万Token
 
 128K<Token≤256K
 
@@ -846,6 +1072,8 @@ qwen-plus-latest
 
 qwen-plus-2025-12-01
 
+中国内地
+
 0<Token≤128K
 
 0.8元
@@ -853,6 +1081,8 @@ qwen-plus-2025-12-01
 2元
 
 8元
+
+100万Token
 
 128K<Token≤256K
 
@@ -872,6 +1102,8 @@ qwen-plus-2025-12-01
 
 qwen-plus-2025-09-11
 
+中国内地
+
 0<Token≤128K
 
 0.8元
@@ -879,6 +1111,8 @@ qwen-plus-2025-09-11
 2元
 
 8元
+
+100万Token
 
 128K<Token≤256K
 
@@ -898,6 +1132,8 @@ qwen-plus-2025-09-11
 
 qwen-plus-2025-07-28
 
+中国内地
+
 0<Token≤128K
 
 0.8元
@@ -905,6 +1141,8 @@ qwen-plus-2025-07-28
 2元
 
 8元
+
+100万Token
 
 128K<Token≤256K
 
@@ -924,6 +1162,8 @@ qwen-plus-2025-07-28
 
 qwen-plus-2025-07-14
 
+中国内地
+
 无阶梯计价
 
 0.8元
@@ -931,9 +1171,13 @@ qwen-plus-2025-07-14
 2元
 
 8元
+
+100万Token
 
 qwen-plus-2025-04-28
 
+中国内地
+
 无阶梯计价
 
 0.8元
@@ -941,10 +1185,14 @@ qwen-plus-2025-04-28
 2元
 
 8元
+
+100万Token
 
 ##### **更多模型**
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单次请求的输入Token范围**
 
@@ -954,7 +1202,11 @@ qwen-plus-2025-04-28
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen-plus-2025-01-25
+
+中国内地
 
 无阶梯计价
 
@@ -962,35 +1214,37 @@ qwen-plus-2025-01-25
 
 2元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 qwen-plus-2025-01-12
 
+中国内地
+
 无阶梯计价
 
 0.8元
 
 2元
+
+100万Token
 
 qwen-plus-2024-12-20
 
+中国内地
+
 无阶梯计价
 
 0.8元
 
 2元
 
-## 全球
+100万Token
 
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单次请求的输入Token范围**
 
@@ -1007,6 +1261,8 @@ qwen3.7-plus
 > 当前能力等同于qwen3.7-plus-2026-05-26
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
 
 0<Token≤256K
 
@@ -1028,6 +1284,8 @@ qwen3.7-plus-2026-05-26
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+全球
+
 0<Token≤256K
 
 2元
@@ -1048,6 +1306,8 @@ qwen3.6-plus
 
 > 当前能力等同于qwen3.6-plus-2026-04-02
 
+全球
+
 0<Token≤256K
 
 2元
@@ -1065,6 +1325,8 @@ qwen3.6-plus
 48元
 
 qwen3.6-plus-2026-04-02
+
+全球
 
 0<Token≤256K
 
@@ -1085,6 +1347,8 @@ qwen3.6-plus-2026-04-02
 qwen3.5-plus
 
 > 当前能力等同于qwen3.5-plus-2026-02-15
+
+全球
 
 0<Token≤128K
 
@@ -1111,6 +1375,8 @@ qwen3.5-plus
 24元
 
 qwen3.5-plus-2026-02-15
+
+全球
 
 0<Token≤128K
 
@@ -1140,31 +1406,7 @@ qwen-plus
 
 > 当前能力等同于qwen-plus-2025-12-01
 
-0<Token≤128K
-
-0.8元
-
-2元
-
-8元
-
-128K<Token≤256K
-
-2.4元
-
-20元
-
-24元
-
-256K<Token≤1M
-
-4.8元
-
-48元
-
-64元
-
-qwen-plus-2025-12-01
+全球
 
 0<Token≤128K
 
@@ -1189,369 +1431,13 @@ qwen-plus-2025-12-01
 48元
 
 64元
-
-qwen-plus-2025-09-11
-
-0<Token≤128K
-
-0.8元
-
-2元
-
-8元
-
-128K<Token≤256K
-
-2.4元
-
-20元
-
-24元
-
-256K<Token≤1M
-
-4.8元
-
-48元
-
-64元
-
-qwen-plus-2025-07-28
-
-0<Token≤128K
-
-0.8元
-
-2元
-
-8元
-
-128K<Token≤256K
-
-2.4元
-
-20元
-
-24元
-
-256K<Token≤1M
-
-4.8元
-
-48元
-
-64元
-
-## **国际**
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
-
-**模型 ID（Model ID）**
-
-**单次请求的输入Token范围**
-
-**输入单价 （每百万Token）**
-
-**输出单价 （每百万Token）**
-
-**非思考模式**
-
-**思考模式（思维链+回答）**
-
-qwen3.7-plus
-
-> 当前能力等同于qwen3.7-plus-2026-05-26
-
-> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
-
-0<Token≤256K
-
-2.936元
-
-11.744元
-
-11.744元
-
-256K<Token≤1M
-
-8.808元
-
-35.232元
-
-35.232元
-
-qwen3.7-plus-2026-05-26
-
-> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
-
-0<Token≤256K
-
-2.936元
-
-11.744元
-
-11.744元
-
-256K<Token≤1M
-
-8.808元
-
-35.232元
-
-35.232元
-
-qwen3.6-plus
-
-> 当前能力等同于qwen3.6-plus-2026-04-02
-
-0<Token≤256K
-
-3.7471元
-
-22.4826元
-
-22.4826元
-
-256K<Token≤1M
-
-14.9884元
-
-44.965元
-
-44.965元
-
-qwen3.6-plus-2026-04-02
-
-0<Token≤256K
-
-3.7471元
-
-22.4826元
-
-22.4826元
-
-256K<Token≤1M
-
-14.9884元
-
-44.965元
-
-44.965元
-
-qwen3.5-plus
-
-> 当前能力等同于qwen3.5-plus-2026-02-15
-
-0<Token≤256K
-
-2.936元
-
-17.614元
-
-17.614元
-
-256K<Token≤1M
-
-3.67元
-
-22.018元
-
-22.018元
-
-qwen3.5-plus-2026-04-20
-
-0<Token≤256K
-
-2.936元
-
-17.614元
-
-17.614元
-
-256K<Token≤1M
-
-3.67元
-
-22.018元
-
-22.018元
-
-qwen3.5-plus-2026-02-15
-
-0<Token≤256K
-
-2.936元
-
-17.614元
-
-17.614元
-
-256K<Token≤1M
-
-3.67元
-
-22.018元
-
-22.018元
-
-qwen-plus
-
-> 当前能力等同于qwen-plus-2025-12-01
-
-0<Token≤256K
-
-2.936元
-
-8.807元
-
-29.357元
-
-256K<Token≤1M
-
-8.807元
-
-26.421元
-
-88.071元
-
-qwen-plus-latest
-
-0<Token≤256K
-
-2.936元
-
-8.807元
-
-29.357元
-
-256K<Token≤1M
-
-8.807元
-
-26.421元
-
-88.071元
-
-qwen-plus-2025-12-01
-
-0<Token≤256K
-
-2.936元
-
-8.807元
-
-29.357元
-
-256K<Token≤1M
-
-8.807元
-
-26.421元
-
-88.071元
-
-qwen-plus-2025-09-11
-
-0<Token≤256K
-
-2.936元
-
-8.807元
-
-29.357元
-
-256K<Token≤1M
-
-8.807元
-
-26.421元
-
-88.071元
-
-qwen-plus-2025-07-28
-
-0<Token≤256K
-
-2.936元
-
-8.807元
-
-29.357元
-
-256K<Token≤1M
-
-8.807元
-
-26.421元
-
-88.071元
-
-qwen-plus-2025-07-14
-
-无阶梯计价
-
-2.936元
-
-8.807元
-
-29.357元
-
-qwen-plus-2025-04-28
-
-无阶梯计价
-
-2.936元
-
-8.807元
-
-29.357元
-
-##### **更多模型**
-
-**模型 ID（Model ID）**
-
-**单次请求的输入Token范围**
-
-**输入单价 （每百万Token）**
-
-**输出单价 （每百万Token）**
-
-qwen-plus-2025-01-25
-
-无阶梯计价
-
-2.936元
-
-8.807元
-
-## 美国
-
-服务部署范围为[美国](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于美国境内；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）。
-
-**说明**
-
-美国部署范围下的模型无免费额度。
-
-**模型 ID（Model ID）**
-
-**单次请求的输入Token范围**
-
-**输入单价 （每百万Token）**
-
-**输出单价 （每百万Token）**
-
-**非思考模式**
-
-**思考模式（思维链+回答）**
 
 qwen-plus-us
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+美国
+
 0<Token≤256K
 
 2.936元
@@ -1567,9 +1453,39 @@ qwen-plus-us
 26.421元
 
 88.071元
+
+qwen-plus-2025-12-01
+
+全球
+
+0<Token≤128K
+
+0.8元
+
+2元
+
+8元
+
+128K<Token≤256K
+
+2.4元
+
+20元
+
+24元
+
+256K<Token≤1M
+
+4.8元
+
+48元
+
+64元
 
 qwen-plus-2025-12-01-us
 
+美国
+
 0<Token≤256K
 
 2.936元
@@ -1586,15 +1502,67 @@ qwen-plus-2025-12-01-us
 
 88.071元
 
-## 欧盟
+qwen-plus-2025-09-11
 
-服务部署范围为[欧盟](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于欧盟境内；静态数据存储于您所选的地域。该部署范围支持的地域：德国（法兰克福）。
+全球
 
-**说明**
+0<Token≤128K
 
-欧盟部署范围下的模型无免费额度。
+0.8元
+
+2元
+
+8元
+
+128K<Token≤256K
+
+2.4元
+
+20元
+
+24元
+
+256K<Token≤1M
+
+4.8元
+
+48元
+
+64元
+
+qwen-plus-2025-07-28
+
+全球
+
+0<Token≤128K
+
+0.8元
+
+2元
+
+8元
+
+128K<Token≤256K
+
+2.4元
+
+20元
+
+24元
+
+256K<Token≤1M
+
+4.8元
+
+48元
+
+64元
+
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单次请求的输入Token范围**
 
@@ -1606,9 +1574,501 @@ qwen-plus-2025-12-01-us
 
 **思考模式（思维链+回答）**
 
+qwen3.7-plus
+
+> 当前能力等同于qwen3.7-plus-2026-05-26
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+国际
+
+0<Token≤256K
+
+2.998元
+
+11.991元
+
+11.991元
+
+256K<Token≤1M
+
+8.993元
+
+35.972元
+
+35.972元
+
+qwen3.7-plus-2026-05-26
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+国际
+
+0<Token≤256K
+
+2.998元
+
+11.991元
+
+11.991元
+
+256K<Token≤1M
+
+8.993元
+
+35.972元
+
+35.972元
+
+qwen3.6-plus
+
+> 当前能力等同于qwen3.6-plus-2026-04-02
+
+国际
+
+0<Token≤256K
+
+3.7471元
+
+22.4826元
+
+22.4826元
+
+256K<Token≤1M
+
+14.9884元
+
+44.965元
+
+44.965元
+
+qwen3.6-plus-2026-04-02
+
+国际
+
+0<Token≤256K
+
+3.7471元
+
+22.4826元
+
+22.4826元
+
+256K<Token≤1M
+
+14.9884元
+
+44.965元
+
+44.965元
+
+qwen3.5-plus
+
+> 当前能力等同于qwen3.5-plus-2026-02-15
+
+国际
+
+0<Token≤256K
+
+2.936元
+
+17.614元
+
+17.614元
+
+256K<Token≤1M
+
+3.67元
+
+22.018元
+
+22.018元
+
+qwen3.5-plus-2026-04-20
+
+国际
+
+0<Token≤256K
+
+2.936元
+
+17.614元
+
+17.614元
+
+256K<Token≤1M
+
+3.67元
+
+22.018元
+
+22.018元
+
+qwen3.5-plus-2026-02-15
+
+国际
+
+0<Token≤256K
+
+2.936元
+
+17.614元
+
+17.614元
+
+256K<Token≤1M
+
+3.67元
+
+22.018元
+
+22.018元
+
 qwen-plus
 
 > 当前能力等同于qwen-plus-2025-12-01
+
+国际
+
+0<Token≤256K
+
+2.936元
+
+8.807元
+
+29.357元
+
+256K<Token≤1M
+
+8.807元
+
+26.421元
+
+88.071元
+
+qwen-plus-latest
+
+国际
+
+0<Token≤256K
+
+2.936元
+
+8.807元
+
+29.357元
+
+256K<Token≤1M
+
+8.807元
+
+26.421元
+
+88.071元
+
+qwen-plus-2025-12-01
+
+国际
+
+0<Token≤256K
+
+2.936元
+
+8.807元
+
+29.357元
+
+256K<Token≤1M
+
+8.807元
+
+26.421元
+
+88.071元
+
+qwen-plus-2025-09-11
+
+国际
+
+0<Token≤256K
+
+2.936元
+
+8.807元
+
+29.357元
+
+256K<Token≤1M
+
+8.807元
+
+26.421元
+
+88.071元
+
+qwen-plus-2025-07-28
+
+国际
+
+0<Token≤256K
+
+2.936元
+
+8.807元
+
+29.357元
+
+256K<Token≤1M
+
+8.807元
+
+26.421元
+
+88.071元
+
+qwen-plus-2025-07-14
+
+国际
+
+无阶梯计价
+
+2.936元
+
+8.807元
+
+29.357元
+
+qwen-plus-2025-04-28
+
+国际
+
+无阶梯计价
+
+2.936元
+
+8.807元
+
+29.357元
+
+##### **更多模型**
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**单次请求的输入Token范围**
+
+**输入单价 （每百万Token）**
+
+**输出单价 （每百万Token）**
+
+qwen-plus-2025-01-25
+
+国际
+
+无阶梯计价
+
+2.936元
+
+8.807元
+
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**单次请求的输入Token范围**
+
+**输入单价 （每百万Token）**
+
+**输出单价 （每百万Token）**
+
+**非思考模式**
+
+**思考模式（思维链+回答）**
+
+qwen3.7-plus
+
+> 当前能力等同于qwen3.7-plus-2026-05-26
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+0<Token≤256K
+
+2元
+
+8元
+
+8元
+
+256K<Token≤1M
+
+6元
+
+24元
+
+24元
+
+qwen3.7-plus-2026-05-26
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+0<Token≤256K
+
+2元
+
+8元
+
+8元
+
+256K<Token≤1M
+
+6元
+
+24元
+
+24元
+
+qwen3.6-plus
+
+> 当前能力等同于qwen3.6-plus-2026-04-02
+
+全球
+
+0<Token≤256K
+
+2元
+
+12元
+
+12元
+
+256K<Token≤1M
+
+8元
+
+48元
+
+48元
+
+qwen3.6-plus-2026-04-02
+
+全球
+
+0<Token≤256K
+
+2元
+
+12元
+
+12元
+
+256K<Token≤1M
+
+8元
+
+48元
+
+48元
+
+qwen3.5-plus
+
+> 当前能力等同于qwen3.5-plus-2026-02-15
+
+全球
+
+0<Token≤128K
+
+0.8元
+
+4.8元
+
+4.8元
+
+128K<Token≤256K
+
+2元
+
+12元
+
+12元
+
+256K<Token≤1M
+
+4元
+
+24元
+
+24元
+
+qwen3.5-plus-2026-02-15
+
+全球
+
+0<Token≤128K
+
+0.8元
+
+4.8元
+
+4.8元
+
+128K<Token≤256K
+
+2元
+
+12元
+
+12元
+
+256K<Token≤1M
+
+4元
+
+24元
+
+24元
+
+qwen-plus
+
+> 当前能力等同于qwen-plus-2025-12-01
+
+全球
+
+0<Token≤128K
+
+0.8元
+
+2元
+
+8元
+
+128K<Token≤256K
+
+2.4元
+
+20元
+
+24元
+
+256K<Token≤1M
+
+4.8元
+
+48元
+
+64元
+
+qwen-plus
+
+> 当前能力等同于qwen-plus-2025-12-01
+
+欧盟
 
 0<Token≤256K
 
@@ -1628,6 +2088,36 @@ qwen-plus
 
 qwen-plus-2025-12-01
 
+全球
+
+0<Token≤128K
+
+0.8元
+
+2元
+
+8元
+
+128K<Token≤256K
+
+2.4元
+
+20元
+
+24元
+
+256K<Token≤1M
+
+4.8元
+
+48元
+
+64元
+
+qwen-plus-2025-12-01
+
+欧盟
+
 0<Token≤256K
 
 2.998元
@@ -1643,6 +2133,62 @@ qwen-plus-2025-12-01
 26.979元
 
 89.93元
+
+qwen-plus-2025-09-11
+
+全球
+
+0<Token≤128K
+
+0.8元
+
+2元
+
+8元
+
+128K<Token≤256K
+
+2.4元
+
+20元
+
+24元
+
+256K<Token≤1M
+
+4.8元
+
+48元
+
+64元
+
+qwen-plus-2025-07-28
+
+全球
+
+0<Token≤128K
+
+0.8元
+
+2元
+
+8元
+
+128K<Token≤256K
+
+2.4元
+
+20元
+
+24元
+
+256K<Token≤1M
+
+4.8元
+
+48元
+
+64元
 
 ### **千问Flash**
 
@@ -1650,11 +2196,15 @@ qwen-plus-2025-12-01
 
 影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费；若模型支持[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)，仅输入Token享有折扣。两者不能同时生效。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -1668,33 +2218,17 @@ qwen-plus-2025-12-01
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
-qwen3.6-flash
-
-> 当前能力等同于qwen3.6-flash-2026-04-16
-
-> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
-
-> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
-
-非思考和思考模式
-
-0<Token≤256K
-
-1.2元
-
-7.2元
-
-各100万Token
-
 有效期：阿里云百炼开通后90天内
 
-256K<Token≤1M
+qwen3.6-flash
 
-4.8元
+> 当前能力等同于qwen3.6-flash-2026-04-16
 
-28.8元
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
-qwen3.6-flash-2026-04-16
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+中国内地
 
 非思考和思考模式
 
@@ -1703,6 +2237,28 @@ qwen3.6-flash-2026-04-16
 1.2元
 
 7.2元
+
+100万Token
+
+256K<Token≤1M
+
+4.8元
+
+28.8元
+
+qwen3.6-flash-2026-04-16
+
+中国内地
+
+非思考和思考模式
+
+0<Token≤256K
+
+1.2元
+
+7.2元
+
+100万Token
 
 256K<Token≤1M
 
@@ -1718,6 +2274,8 @@ qwen3.5-flash
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤128K
@@ -1725,6 +2283,8 @@ qwen3.5-flash
 0.2元
 
 2元
+
+100万Token
 
 128K<Token≤256K
 
@@ -1740,6 +2300,8 @@ qwen3.5-flash
 
 qwen3.5-flash-2026-02-23
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤128K
@@ -1747,6 +2309,8 @@ qwen3.5-flash-2026-02-23
 0.2元
 
 2元
+
+100万Token
 
 128K<Token≤256K
 
@@ -1768,6 +2332,8 @@ qwen-flash
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤128K
@@ -1775,6 +2341,8 @@ qwen-flash
 0.15元
 
 1.5元
+
+100万Token
 
 128K<Token≤256K
 
@@ -1790,6 +2358,8 @@ qwen-flash
 
 qwen-flash-2025-07-28
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤128K
@@ -1797,6 +2367,8 @@ qwen-flash-2025-07-28
 0.15元
 
 1.5元
+
+100万Token
 
 128K<Token≤256K
 
@@ -1810,15 +2382,11 @@ qwen-flash-2025-07-28
 
 12元
 
-## 全球
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -1836,6 +2404,8 @@ qwen3.6-flash
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+全球
+
 非思考和思考模式
 
 0<Token≤256K
@@ -1851,6 +2421,8 @@ qwen3.6-flash
 28.8元
 
 qwen3.6-flash-2026-04-16
+
+全球
 
 非思考和思考模式
 
@@ -1871,6 +2443,8 @@ qwen3.5-flash
 > 当前能力等同于qwen3.5-flash-2026-02-23
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
 
 非思考和思考模式
 
@@ -1893,6 +2467,8 @@ qwen3.5-flash
 12元
 
 qwen3.5-flash-2026-02-23
+
+全球
 
 非思考和思考模式
 
@@ -1922,27 +2498,7 @@ qwen-flash
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
-非思考和思考模式
-
-0<Token≤128K
-
-0.15元
-
-1.5元
-
-128K<Token≤256K
-
-0.6元
-
-6元
-
-256K<Token≤1M
-
-1.2元
-
-12元
-
-qwen-flash-2025-07-28
+全球
 
 非思考和思考模式
 
@@ -1963,147 +2519,13 @@ qwen-flash-2025-07-28
 1.2元
 
 12元
-
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
-
-**模型 ID（Model ID）**
-
-**模式**
-
-**单次请求的输入Token数**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-> **思维链+回答**
-
-qwen3.6-flash
-
-> 当前能力等同于qwen3.6-flash-2026-04-16
-
-> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
-
-非思考和思考模式
-
-0<Token≤256K
-
-1.87355元
-
-11.2413元
-
-256K<Token≤1M
-
-7.4942元
-
-29.9758元
-
-qwen3.6-flash-2026-04-16
-
-非思考和思考模式
-
-0<Token≤256K
-
-1.87355元
-
-11.2413元
-
-256K<Token≤1M
-
-7.4942元
-
-29.9758元
-
-qwen3.5-flash
-
-> 当前能力等同于qwen3.5-flash-2026-02-23
-
-> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
-
-> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
-
-非思考和思考模式
-
-0<Token≤1M
-
-0.734元
-
-2.936元
-
-qwen3.5-flash-2026-02-23
-
-非思考和思考模式
-
-0<Token≤1M
-
-0.734元
-
-2.936元
-
-qwen-flash
-
-> 当前能力等同于qwen-flash-2025-07-28
-
-> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
-
-> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
-
-非思考和思考模式
-
-0<Token≤256K
-
-0.367元
-
-2.936元
-
-256K<Token≤1M
-
-1.835元
-
-14.678元
-
-qwen-flash-2025-07-28
-
-非思考和思考模式
-
-0<Token≤256K
-
-0.367元
-
-2.936元
-
-256K<Token≤1M
-
-1.835元
-
-14.678元
-
-## 美国
-
-服务部署范围为[美国](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于美国境内；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）。
-
-**说明**
-
-美国部署范围下的模型无免费额度。
-
-**模型 ID（Model ID）**
-
-**单次请求的输入Token范围**
-
-**输入单价 （每百万Token）**
-
-**输出单价 （每百万Token）**
 
 qwen-flash-us
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+美国
+
 0<Token≤256K
 
 0.367元
@@ -2115,9 +2537,35 @@ qwen-flash-us
 1.835元
 
 14.678元
+
+qwen-flash-2025-07-28
+
+全球
+
+非思考和思考模式
+
+0<Token≤128K
+
+0.15元
+
+1.5元
+
+128K<Token≤256K
+
+0.6元
+
+6元
+
+256K<Token≤1M
+
+1.2元
+
+12元
 
 qwen-flash-2025-07-28-us
 
+美国
+
 0<Token≤256K
 
 0.367元
@@ -2130,17 +2578,15 @@ qwen-flash-2025-07-28-us
 
 14.678元
 
-## 欧盟
-
-服务部署范围为[欧盟](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于欧盟境内；静态数据存储于您所选的地域。该部署范围支持的地域：德国（法兰克福）。
-
-**说明**
-
-欧盟部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
 
+**服务部署范围**
+
 **模式**
+
+**单次请求的输入Token数**
 
 **输入单价（每百万Token）**
 
@@ -2148,9 +2594,207 @@ qwen-flash-2025-07-28-us
 
 > **思维链+回答**
 
+qwen3.6-flash
+
+> 当前能力等同于qwen3.6-flash-2026-04-16
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+国际
+
+非思考和思考模式
+
+0<Token≤256K
+
+1.87355元
+
+11.2413元
+
+256K<Token≤1M
+
+7.4942元
+
+29.9758元
+
+qwen3.6-flash-2026-04-16
+
+国际
+
+非思考和思考模式
+
+0<Token≤256K
+
+1.87355元
+
+11.2413元
+
+256K<Token≤1M
+
+7.4942元
+
+29.9758元
+
 qwen3.5-flash
 
 > 当前能力等同于qwen3.5-flash-2026-02-23
+
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+国际
+
+非思考和思考模式
+
+0<Token≤1M
+
+0.734元
+
+2.936元
+
+qwen3.5-flash-2026-02-23
+
+国际
+
+非思考和思考模式
+
+0<Token≤1M
+
+0.734元
+
+2.936元
+
+qwen-flash
+
+> 当前能力等同于qwen-flash-2025-07-28
+
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+国际
+
+非思考和思考模式
+
+0<Token≤256K
+
+0.367元
+
+2.936元
+
+256K<Token≤1M
+
+1.835元
+
+14.678元
+
+qwen-flash-2025-07-28
+
+国际
+
+非思考和思考模式
+
+0<Token≤256K
+
+0.367元
+
+2.936元
+
+256K<Token≤1M
+
+1.835元
+
+14.678元
+
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**模式**
+
+**单次请求的输入Token数**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+> **思维链+回答**
+
+qwen3.6-flash
+
+> 当前能力等同于qwen3.6-flash-2026-04-16
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤256K
+
+1.2元
+
+7.2元
+
+256K<Token≤1M
+
+4.8元
+
+28.8元
+
+qwen3.6-flash-2026-04-16
+
+全球
+
+非思考和思考模式
+
+0<Token≤256K
+
+1.2元
+
+7.2元
+
+256K<Token≤1M
+
+4.8元
+
+28.8元
+
+qwen3.5-flash
+
+> 当前能力等同于qwen3.5-flash-2026-02-23
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤128K
+
+0.2元
+
+2元
+
+128K<Token≤256K
+
+0.8元
+
+8元
+
+256K<Token≤1M
+
+1.2元
+
+12元
+
+qwen3.5-flash
+
+> 当前能力等同于qwen3.5-flash-2026-02-23
+
+欧盟
 
 非思考和思考模式
 
@@ -2160,11 +2804,91 @@ qwen3.5-flash
 
 qwen3.5-flash-2026-02-23
 
+全球
+
+非思考和思考模式
+
+0<Token≤128K
+
+0.2元
+
+2元
+
+128K<Token≤256K
+
+0.8元
+
+8元
+
+256K<Token≤1M
+
+1.2元
+
+12元
+
+qwen3.5-flash-2026-02-23
+
+欧盟
+
 非思考和思考模式
 
 0.749元
 
 2.998元
+
+qwen-flash
+
+> 当前能力等同于qwen-flash-2025-07-28
+
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤128K
+
+0.15元
+
+1.5元
+
+128K<Token≤256K
+
+0.6元
+
+6元
+
+256K<Token≤1M
+
+1.2元
+
+12元
+
+qwen-flash-2025-07-28
+
+全球
+
+非思考和思考模式
+
+0<Token≤128K
+
+0.15元
+
+1.5元
+
+128K<Token≤256K
+
+0.6元
+
+6元
+
+256K<Token≤1M
+
+1.2元
+
+12元
 
 ### **千问Turbo**
 
@@ -2172,11 +2896,15 @@ qwen3.5-flash-2026-02-23
 
 影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -2185,6 +2913,8 @@ qwen3.5-flash-2026-02-23
 **输出单价（每百万Token）**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 **非思考模式**
 
@@ -2193,6 +2923,8 @@ qwen3.5-flash-2026-02-23
 qwen-turbo
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
+
+中国内地
 
 非思考和思考模式
 
@@ -2204,17 +2936,11 @@ qwen-turbo
 
 100万Token
 
-有效期：阿里云百炼开通后90天内
-
-## **国际**
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -2229,6 +2955,8 @@ qwen-turbo
 qwen-turbo
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
+
+国际
 
 非思考和思考
 
@@ -2244,11 +2972,15 @@ qwen-turbo
 
 影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -2258,9 +2990,13 @@ qwen-turbo
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwq-plus
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
+
+中国内地
 
 仅思考模式
 
@@ -2270,17 +3006,11 @@ qwq-plus
 
 100万Token
 
-有效期：阿里云百炼开通后90天内
-
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -2289,6 +3019,8 @@ qwq-plus
 **输出单价 （每百万Token）**
 
 qwq-plus
+
+国际
 
 仅思考模式
 
@@ -2302,57 +3034,73 @@ qwq-plus
 
 影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
 
-## 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
 **输出单价（每百万Token）**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 qwen-long
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
+中国内地
+
 0.5元
 
 2元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 qwen-long-latest
 
+中国内地
+
 0.5元
 
 2元
+
+100万Token
 
 qwen-long-2025-01-25
 
+中国内地
+
 0.5元
 
 2元
+
+100万Token
 
 ### **千问Omni**
 
 计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费与限流](https://help.aliyun.com/zh/model-studio/qwen-omni#12db7427b94qt)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
 **输出单价（每百万Token）**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 **文本/图片/视频**
 
@@ -2370,6 +3118,8 @@ qwen3.5-omni-plus
 
 > 当前能力等同于qwen3.5-omni-plus-2026-03-15
 
+中国内地
+
 7元
 
 53元
@@ -2378,12 +3128,12 @@ qwen3.5-omni-plus
 
 213元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 qwen3.5-omni-plus-2026-03-15
 
+中国内地
+
 7元
 
 53元
@@ -2391,11 +3141,15 @@ qwen3.5-omni-plus-2026-03-15
 40元
 
 213元
+
+100万Token
 
 qwen3.5-omni-flash
 
 > 当前能力等同于qwen3.5-omni-flash-2026-03-15
 
+中国内地
+
 2.2元
 
 18元
@@ -2403,9 +3157,13 @@ qwen3.5-omni-flash
 13.3元
 
 72元
+
+100万Token
 
 qwen3.5-omni-flash-2026-03-15
 
+中国内地
+
 2.2元
 
 18元
@@ -2413,10 +3171,14 @@ qwen3.5-omni-flash-2026-03-15
 13.3元
 
 72元
+
+100万Token
 
 ##### 更多模型
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -2425,6 +3187,8 @@ qwen3.5-omni-flash-2026-03-15
 **输出单价（每百万Token）**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 **文本**
 
@@ -2448,6 +3212,8 @@ qwen3-omni-flash
 
 > 当前能力等同于qwen3-omni-flash-2025-12-01
 
+中国内地
+
 非思考和思考模式
 
 1.8元
@@ -2462,12 +3228,12 @@ qwen3-omni-flash
 
 62.6元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 qwen3-omni-flash-2025-12-01
 
+中国内地
+
 非思考和思考模式
 
 1.8元
@@ -2481,9 +3247,13 @@ qwen3-omni-flash-2025-12-01
 12.7元
 
 62.6元
+
+100万Token
 
 qwen3-omni-flash-2025-09-15
 
+中国内地
+
 非思考和思考模式
 
 1.8元
@@ -2497,11 +3267,15 @@ qwen3-omni-flash-2025-09-15
 12.7元
 
 62.6元
+
+100万Token
 
 qwen-omni-turbo
 
 > 当前能力等同于qwen-omni-turbo-2025-03-26
 
+中国内地
+
 非思考模式
 
 0.4元
@@ -2515,9 +3289,13 @@ qwen-omni-turbo
 4.5元
 
 50元
+
+100万Token
 
 qwen-omni-turbo-latest
 
+中国内地
+
 非思考模式
 
 0.4元
@@ -2531,9 +3309,13 @@ qwen-omni-turbo-latest
 4.5元
 
 50元
+
+100万Token
 
 qwen-omni-turbo-2025-03-26
 
+中国内地
+
 非思考模式
 
 0.4元
@@ -2547,9 +3329,13 @@ qwen-omni-turbo-2025-03-26
 4.5元
 
 50元
+
+100万Token
 
 qwen-omni-turbo-2025-01-19
 
+中国内地
+
 非思考模式
 
 0.4元
@@ -2564,15 +3350,13 @@ qwen-omni-turbo-2025-01-19
 
 50元
 
-## 国际
+100万Token
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -2594,6 +3378,8 @@ qwen3.5-omni-plus
 
 > 当前能力等同于qwen3.5-omni-plus-2026-03-15
 
+国际
+
 10.49元
 
 82.44元
@@ -2603,6 +3389,8 @@ qwen3.5-omni-plus
 329.74元
 
 qwen3.5-omni-plus-2026-03-15
+
+国际
 
 10.49元
 
@@ -2616,6 +3404,8 @@ qwen3.5-omni-flash
 
 > 当前能力等同于qwen3.5-omni-flash-2026-03-15
 
+国际
+
 3元
 
 22.48元
@@ -2625,6 +3415,8 @@ qwen3.5-omni-flash
 89.18元
 
 qwen3.5-omni-flash-2026-03-15
+
+国际
 
 3元
 
@@ -2637,6 +3429,8 @@ qwen3.5-omni-flash-2026-03-15
 ##### 更多模型
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -2666,6 +3460,8 @@ qwen3-omni-flash
 
 > 当前能力等同于qwen3-omni-flash-2025-12-01
 
+国际
+
 非思考和思考模式
 
 3.156元
@@ -2682,6 +3478,8 @@ qwen3-omni-flash
 
 qwen3-omni-flash-2025-12-01
 
+国际
+
 非思考和思考模式
 
 3.156元
@@ -2697,6 +3495,8 @@ qwen3-omni-flash-2025-12-01
 110.896元
 
 qwen3-omni-flash-2025-09-15
+
+国际
 
 非思考和思考模式
 
@@ -2716,6 +3516,8 @@ qwen-omni-turbo
 
 > 当前能力等同于qwen-omni-turbo-2025-03-26
 
+国际
+
 非思考模式
 
 0.514元
@@ -2732,6 +3534,8 @@ qwen-omni-turbo
 
 qwen-omni-turbo-latest
 
+国际
+
 非思考模式
 
 0.514元
@@ -2747,6 +3551,8 @@ qwen-omni-turbo-latest
 65.246元
 
 qwen-omni-turbo-2025-03-26
+
+国际
 
 非思考模式
 
@@ -2766,199 +3572,237 @@ qwen-omni-turbo-2025-03-26
 
 计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费与限流](https://help.aliyun.com/zh/model-studio/realtime#dc0370c95d3ja)。
 
-## 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
-
-**模型 ID（Model ID）**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-**文本/图片**
-
-**音频**
-
-**文本**
-
-> 多模态输入
-
-**文本+音频**
-
-> 仅音频计费
-
-qwen3.5-omni-plus-realtime
-
-10元
-
-80元
-
-60元
-
-300元
-
-各100万Token
-
-有效期：阿里云百炼开通后90天内
-
-qwen3.5-omni-plus-realtime-2026-03-15
-
-10元
-
-80元
-
-60元
-
-300元
-
-qwen3.5-omni-flash-realtime
-
-3.3元
-
-27元
-
-20元
-
-107元
-
-qwen3.5-omni-flash-realtime-2026-03-15
-
-3.3元
-
-27元
-
-20元
-
-107元
-
-##### 更多模型
-
-**模型 ID（Model ID）**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-**文本**
-
-**音频**
-
-**图片**
-
-**文本**
-
-> 仅纯文本输入
-
-**文本**
-
-> 多模态输入
-
-**文本+音频**
-
-> 仅音频计费
-
-qwen3-omni-flash-realtime
-
-2.2元
-
-18.9元
-
-3.9元
-
-8.3元
-
-15.2元
-
-75.1元
-
-各100万Token
-
-有效期：阿里云百炼开通后90天内
-
-qwen3-omni-flash-realtime-2025-12-01
-
-2.2元
-
-18.9元
-
-3.9元
-
-8.3元
-
-15.2元
-
-75.1元
-
-qwen3-omni-flash-realtime-2025-09-15
-
-2.2元
-
-18.9元
-
-3.9元
-
-8.3元
-
-15.2元
-
-75.1元
-
-qwen-omni-turbo-realtime
-
-1.6元
-
-25元
-
-6元
-
-6.4元
-
-18元
-
-50元
-
-qwen-omni-turbo-realtime-latest
-
-1.6元
-
-25元
-
-6元
-
-6.4元
-
-18元
-
-50元
-
-qwen-omni-turbo-realtime-2025-05-08
-
-1.6元
-
-25元
-
-6元
-
-6.4元
-
-18元
-
-50元
-
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
 **说明**
 
-国际部署范围下的模型无免费额度。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
+
+**文本/图片**
+
+**音频**
+
+**文本**
+
+> 多模态输入
+
+**文本+音频**
+
+> 仅音频计费
+
+qwen3.5-omni-plus-realtime
+
+中国内地
+
+10元
+
+80元
+
+60元
+
+300元
+
+100万Token
+
+qwen3.5-omni-plus-realtime-2026-03-15
+
+中国内地
+
+10元
+
+80元
+
+60元
+
+300元
+
+100万Token
+
+qwen3.5-omni-flash-realtime
+
+中国内地
+
+3.3元
+
+27元
+
+20元
+
+107元
+
+100万Token
+
+qwen3.5-omni-flash-realtime-2026-03-15
+
+中国内地
+
+3.3元
+
+27元
+
+20元
+
+107元
+
+100万Token
+
+##### 更多模型
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
+
+**文本**
+
+**音频**
+
+**图片**
+
+**文本**
+
+> 仅纯文本输入
+
+**文本**
+
+> 多模态输入
+
+**文本+音频**
+
+> 仅音频计费
+
+qwen3-omni-flash-realtime
+
+中国内地
+
+2.2元
+
+18.9元
+
+3.9元
+
+8.3元
+
+15.2元
+
+75.1元
+
+100万Token
+
+qwen3-omni-flash-realtime-2025-12-01
+
+中国内地
+
+2.2元
+
+18.9元
+
+3.9元
+
+8.3元
+
+15.2元
+
+75.1元
+
+100万Token
+
+qwen3-omni-flash-realtime-2025-09-15
+
+中国内地
+
+2.2元
+
+18.9元
+
+3.9元
+
+8.3元
+
+15.2元
+
+75.1元
+
+100万Token
+
+qwen-omni-turbo-realtime
+
+中国内地
+
+1.6元
+
+25元
+
+6元
+
+6.4元
+
+18元
+
+50元
+
+100万Token
+
+qwen-omni-turbo-realtime-latest
+
+中国内地
+
+1.6元
+
+25元
+
+6元
+
+6.4元
+
+18元
+
+50元
+
+100万Token
+
+qwen-omni-turbo-realtime-2025-05-08
+
+中国内地
+
+1.6元
+
+25元
+
+6元
+
+6.4元
+
+18元
+
+50元
+
+100万Token
+
+#### 新加坡
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -2978,6 +3822,8 @@ qwen-omni-turbo-realtime-2025-05-08
 
 qwen3.5-omni-plus-realtime
 
+国际
+
 15.74元
 
 123.65元
@@ -2987,6 +3833,8 @@ qwen3.5-omni-plus-realtime
 464.64元
 
 qwen3.5-omni-plus-realtime-2026-03-15
+
+国际
 
 15.74元
 
@@ -2998,6 +3846,8 @@ qwen3.5-omni-plus-realtime-2026-03-15
 
 qwen3.5-omni-flash-realtime
 
+国际
+
 4.12元
 
 33.72元
@@ -3007,6 +3857,8 @@ qwen3.5-omni-flash-realtime
 132.65元
 
 qwen3.5-omni-flash-realtime-2026-03-15
+
+国际
 
 4.12元
 
@@ -3019,6 +3871,8 @@ qwen3.5-omni-flash-realtime-2026-03-15
 ##### 更多模型
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -3044,6 +3898,8 @@ qwen3.5-omni-flash-realtime-2026-03-15
 
 qwen3-omni-flash-realtime
 
+国际
+
 3.816元
 
 33.54元
@@ -3057,6 +3913,8 @@ qwen3-omni-flash-realtime
 133.06元
 
 qwen3-omni-flash-realtime-2025-12-01
+
+国际
 
 3.816元
 
@@ -3072,6 +3930,8 @@ qwen3-omni-flash-realtime-2025-12-01
 
 qwen3-omni-flash-realtime-2025-09-15
 
+国际
+
 3.816元
 
 33.54元
@@ -3085,6 +3945,8 @@ qwen3-omni-flash-realtime-2025-09-15
 133.06元
 
 qwen-omni-turbo-realtime
+
+国际
 
 1.982元
 
@@ -3100,6 +3962,8 @@ qwen-omni-turbo-realtime
 
 qwen-omni-turbo-realtime-latest
 
+国际
+
 1.982元
 
 32.586元
@@ -3113,6 +3977,8 @@ qwen-omni-turbo-realtime-latest
 65.246元
 
 qwen-omni-turbo-realtime-2025-05-08
+
+国际
 
 1.982元
 
@@ -3130,11 +3996,15 @@ qwen-omni-turbo-realtime-2025-05-08
 
 计费规则：按输入Token和输出Token计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -3142,37 +4012,41 @@ qwen-omni-turbo-realtime-2025-05-08
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qvq-max
+
+中国内地
 
 8元
 
 32元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 qvq-plus
+
+中国内地
 
 2元
 
 5元
 
-## 国际
+100万Token
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价 （每百万Token）**
 
 **输出单价 （每百万Token）**
 
 qvq-max
+
+国际
 
 8.807元
 
@@ -3184,11 +4058,15 @@ qvq-max
 
 影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -3202,6 +4080,8 @@ qvq-max
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen3-vl-plus
 
 > 当前能力等同于qwen3-vl-plus-2025-12-19
@@ -3209,6 +4089,8 @@ qwen3-vl-plus
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+中国内地
 
 非思考和思考模式
 
@@ -3218,9 +4100,7 @@ qwen3-vl-plus
 
 10元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 32K<Token≤128K
 
@@ -3236,6 +4116,8 @@ qwen3-vl-plus
 
 qwen3-vl-plus-2025-12-19
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤32K
@@ -3243,6 +4125,8 @@ qwen3-vl-plus-2025-12-19
 1元
 
 10元
+
+100万Token
 
 32K<Token≤128K
 
@@ -3258,6 +4142,8 @@ qwen3-vl-plus-2025-12-19
 
 qwen3-vl-plus-2025-09-23
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤32K
@@ -3265,6 +4151,8 @@ qwen3-vl-plus-2025-09-23
 1元
 
 10元
+
+100万Token
 
 32K<Token≤128K
 
@@ -3286,6 +4174,8 @@ qwen3-vl-flash
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤32K
@@ -3293,6 +4183,8 @@ qwen3-vl-flash
 0.15元
 
 1.5元
+
+100万Token
 
 32K<Token≤128K
 
@@ -3308,6 +4200,8 @@ qwen3-vl-flash
 
 qwen3-vl-flash-2026-01-22
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤32K
@@ -3315,6 +4209,8 @@ qwen3-vl-flash-2026-01-22
 0.15元
 
 1.5元
+
+100万Token
 
 32K<Token≤128K
 
@@ -3330,6 +4226,8 @@ qwen3-vl-flash-2026-01-22
 
 qwen3-vl-flash-2025-10-15
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤32K
@@ -3337,6 +4235,8 @@ qwen3-vl-flash-2025-10-15
 0.15元
 
 1.5元
+
+100万Token
 
 32K<Token≤128K
 
@@ -3354,19 +4254,25 @@ qwen3-vl-flash-2025-10-15
 
 **模型 ID（Model ID）**
 
+**服务部署范围**
+
 **单次请求的输入Token数**
 
 **输入单价（每百万Token）**
 
 **输出单价（每百万Token）**
 
-**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 qwen-vl-max
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+中国内地
 
 无阶梯计价
 
@@ -3374,9 +4280,7 @@ qwen-vl-max
 
 4元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 qwen-vl-plus
 
@@ -3384,21 +4288,21 @@ qwen-vl-plus
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 无阶梯计价
 
 0.8元
 
 2元
 
-## 全球
+100万Token
 
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -3409,54 +4313,6 @@ qwen-vl-plus
 **输出单价（每百万Token）**
 
 > **思维链+回答**
-
-qwen3-vl-plus
-
-> 当前能力等同于qwen3-vl-plus-2025-12-19
-
-> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
-
-非思考和思考模式
-
-0<Token≤32K
-
-1元
-
-10元
-
-32K<Token≤128K
-
-1.5元
-
-15元
-
-128K<Token≤256K
-
-3元
-
-30元
-
-qwen3-vl-plus-2025-09-23
-
-非思考和思考模式
-
-0<Token≤32K
-
-1元
-
-10元
-
-32K<Token≤128K
-
-1.5元
-
-15元
-
-128K<Token≤256K
-
-3元
-
-30元
 
 qwen3-vl-flash
 
@@ -3464,27 +4320,7 @@ qwen3-vl-flash
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
-非思考和思考模式
-
-0<Token≤32K
-
-0.15元
-
-1.5元
-
-32K<Token≤128K
-
-0.3元
-
-3元
-
-128K<Token≤256K
-
-0.6元
-
-6元
-
-qwen3-vl-flash-2025-10-15
+全球
 
 非思考和思考模式
 
@@ -3505,218 +4341,12 @@ qwen3-vl-flash-2025-10-15
 0.6元
 
 6元
-
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
-
-**模型 ID（Model ID）**
-
-**模式**
-
-**单次请求的输入Token数**
-
-**输入单价 （每百万Token）**
-
-**输出单价 （每百万Token）**
-
-qwen3-vl-plus
-
-> 当前能力等同于qwen3-vl-plus-2025-12-19
-
-> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
-
-非思考和思考模式
-
-0<Token≤32K
-
-1.468元
-
-11.743元
-
-32K<Token≤128K
-
-2.202元
-
-17.614元
-
-128K<Token≤256K
-
-4.404元
-
-35.228元
-
-qwen3-vl-plus-2025-12-19
-
-非思考和思考模式
-
-0<Token≤32K
-
-1.468元
-
-11.743元
-
-32K<Token≤128K
-
-2.202元
-
-17.614元
-
-128K<Token≤256K
-
-4.404元
-
-35.228元
-
-qwen3-vl-plus-2025-09-23
-
-非思考和思考模式
-
-0<Token≤32K
-
-1.468元
-
-11.743元
-
-32K<Token≤128K
-
-2.202元
-
-17.614元
-
-128K<Token≤256K
-
-4.404元
-
-35.228元
-
-qwen3-vl-flash
-
-> 当前能力等同于qwen3-vl-flash-2026-01-22
-
-> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
-
-非思考和思考模式
-
-0<Token≤32K
-
-0.367元
-
-2.936元
-
-32K<Token≤128K
-
-0.55元
-
-4.404元
-
-128K<Token≤256K
-
-0.881元
-
-7.046元
-
-qwen3-vl-flash-2026-01-22
-
-非思考和思考模式
-
-0<Token≤32K
-
-0.367元
-
-2.936元
-
-32K<Token≤128K
-
-0.55元
-
-4.404元
-
-128K<Token≤256K
-
-0.881元
-
-7.046元
-
-qwen3-vl-flash-2025-10-15
-
-非思考和思考模式
-
-0<Token≤32K
-
-0.367元
-
-2.936元
-
-32K<Token≤128K
-
-0.55元
-
-4.404元
-
-128K<Token≤256K
-
-0.881元
-
-7.046元
-
-##### **更多模型**
-
-**模型 ID（Model ID）**
-
-**单次请求的输入Token数**
-
-**输入单价 （每百万Token）**
-
-**输出单价 （每百万Token）**
-
-qwen-vl-max
-
-> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
-
-无阶梯计价
-
-5.871元
-
-23.486元
-
-qwen-vl-plus
-
-> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
-
-无阶梯计价
-
-1.541元
-
-4.624元
-
-## 美国
-
-服务部署范围为[美国](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于美国境内；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）。
-
-**说明**
-
-美国部署范围下的模型无免费额度。
-
-**模型 ID（Model ID）**
-
-**模式**
-
-**单次请求的输入Token数**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-> **思维链+回答**
 
 qwen3-vl-flash-us
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+美国
 
 非思考和思考模式
 
@@ -3740,6 +4370,8 @@ qwen3-vl-flash-us
 
 qwen3-vl-flash-2026-01-22-us
 
+美国
+
 非思考和思考模式
 
 0<Token≤32K
@@ -3759,9 +4391,35 @@ qwen3-vl-flash-2026-01-22-us
 0.881元
 
 7.046元
+
+qwen3-vl-flash-2025-10-15
+
+全球
+
+非思考和思考模式
+
+0<Token≤32K
+
+0.15元
+
+1.5元
+
+32K<Token≤128K
+
+0.3元
+
+3元
+
+128K<Token≤256K
+
+0.6元
+
+6元
 
 qwen3-vl-flash-2025-10-15-us
 
+美国
+
 非思考和思考模式
 
 0<Token≤32K
@@ -3782,15 +4440,265 @@ qwen3-vl-flash-2025-10-15-us
 
 7.046元
 
-## 欧盟
+qwen3-vl-plus
 
-服务部署范围为[欧盟](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于欧盟境内；静态数据存储于您所选的地域。该部署范围支持的地域：德国（法兰克福）。
+> 当前能力等同于qwen3-vl-plus-2025-12-19
 
-**说明**
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
-欧盟部署范围下的模型无免费额度。
+全球
+
+非思考和思考模式
+
+0<Token≤32K
+
+1元
+
+10元
+
+32K<Token≤128K
+
+1.5元
+
+15元
+
+128K<Token≤256K
+
+3元
+
+30元
+
+qwen3-vl-plus-2025-09-23
+
+全球
+
+非思考和思考模式
+
+0<Token≤32K
+
+1元
+
+10元
+
+32K<Token≤128K
+
+1.5元
+
+15元
+
+128K<Token≤256K
+
+3元
+
+30元
+
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
+
+**模式**
+
+**单次请求的输入Token数**
+
+**输入单价 （每百万Token）**
+
+**输出单价 （每百万Token）**
+
+qwen3-vl-plus
+
+> 当前能力等同于qwen3-vl-plus-2025-12-19
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+国际
+
+非思考和思考模式
+
+0<Token≤32K
+
+1.468元
+
+11.743元
+
+32K<Token≤128K
+
+2.202元
+
+17.614元
+
+128K<Token≤256K
+
+4.404元
+
+35.228元
+
+qwen3-vl-plus-2025-12-19
+
+国际
+
+非思考和思考模式
+
+0<Token≤32K
+
+1.468元
+
+11.743元
+
+32K<Token≤128K
+
+2.202元
+
+17.614元
+
+128K<Token≤256K
+
+4.404元
+
+35.228元
+
+qwen3-vl-plus-2025-09-23
+
+国际
+
+非思考和思考模式
+
+0<Token≤32K
+
+1.468元
+
+11.743元
+
+32K<Token≤128K
+
+2.202元
+
+17.614元
+
+128K<Token≤256K
+
+4.404元
+
+35.228元
+
+qwen3-vl-flash
+
+> 当前能力等同于qwen3-vl-flash-2026-01-22
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+国际
+
+非思考和思考模式
+
+0<Token≤32K
+
+0.367元
+
+2.936元
+
+32K<Token≤128K
+
+0.55元
+
+4.404元
+
+128K<Token≤256K
+
+0.881元
+
+7.046元
+
+qwen3-vl-flash-2026-01-22
+
+国际
+
+非思考和思考模式
+
+0<Token≤32K
+
+0.367元
+
+2.936元
+
+32K<Token≤128K
+
+0.55元
+
+4.404元
+
+128K<Token≤256K
+
+0.881元
+
+7.046元
+
+qwen3-vl-flash-2025-10-15
+
+国际
+
+非思考和思考模式
+
+0<Token≤32K
+
+0.367元
+
+2.936元
+
+32K<Token≤128K
+
+0.55元
+
+4.404元
+
+128K<Token≤256K
+
+0.881元
+
+7.046元
+
+##### **更多模型**
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**单次请求的输入Token数**
+
+**输入单价 （每百万Token）**
+
+**输出单价 （每百万Token）**
+
+qwen-vl-max
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+国际
+
+无阶梯计价
+
+5.871元
+
+23.486元
+
+qwen-vl-plus
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+国际
+
+无阶梯计价
+
+1.541元
+
+4.624元
+
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -3802,53 +4710,39 @@ qwen3-vl-flash-2025-10-15-us
 
 > **思维链+回答**
 
-qwen3-vl-plus
+qwen3-vl-flash
+
+> 当前能力等同于qwen3-vl-flash-2025-10-15
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
 
 非思考和思考模式
 
 0<Token≤32K
 
-1.499元
+0.15元
 
-11.991元
-
-32K<Token≤128K
-
-2.248元
-
-17.986元
-
-128K<Token≤256K
-
-4.497元
-
-35.972元
-
-qwen3-vl-plus-2025-09-23
-
-非思考和思考模式
-
-0<Token≤32K
-
-1.499元
-
-11.991元
+1.5元
 
 32K<Token≤128K
 
-2.248元
+0.3元
 
-17.986元
+3元
 
 128K<Token≤256K
 
-4.497元
+0.6元
 
-35.972元
+6元
 
 qwen3-vl-flash
 
 > 当前能力等同于qwen3-vl-flash-2026-01-22
+
+欧盟
 
 非思考和思考模式
 
@@ -3872,6 +4766,8 @@ qwen3-vl-flash
 
 qwen3-vl-flash-2026-01-22
 
+欧盟
+
 非思考和思考模式
 
 0<Token≤32K
@@ -3894,6 +4790,32 @@ qwen3-vl-flash-2026-01-22
 
 qwen3-vl-flash-2025-10-15
 
+全球
+
+非思考和思考模式
+
+0<Token≤32K
+
+0.15元
+
+1.5元
+
+32K<Token≤128K
+
+0.3元
+
+3元
+
+128K<Token≤256K
+
+0.6元
+
+6元
+
+qwen3-vl-flash-2025-10-15
+
+欧盟
+
 非思考和思考模式
 
 0<Token≤32K
@@ -3914,17 +4836,121 @@ qwen3-vl-flash-2025-10-15
 
 7.194元
 
+qwen3-vl-plus
+
+> 当前能力等同于qwen3-vl-plus-2025-12-19
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤32K
+
+1元
+
+10元
+
+32K<Token≤128K
+
+1.5元
+
+15元
+
+128K<Token≤256K
+
+3元
+
+30元
+
+qwen3-vl-plus
+
+欧盟
+
+非思考和思考模式
+
+0<Token≤32K
+
+1.499元
+
+11.991元
+
+32K<Token≤128K
+
+2.248元
+
+17.986元
+
+128K<Token≤256K
+
+4.497元
+
+35.972元
+
+qwen3-vl-plus-2025-09-23
+
+全球
+
+非思考和思考模式
+
+0<Token≤32K
+
+1元
+
+10元
+
+32K<Token≤128K
+
+1.5元
+
+15元
+
+128K<Token≤256K
+
+3元
+
+30元
+
+qwen3-vl-plus-2025-09-23
+
+欧盟
+
+非思考和思考模式
+
+0<Token≤32K
+
+1.499元
+
+11.991元
+
+32K<Token≤128K
+
+2.248元
+
+17.986元
+
+128K<Token≤256K
+
+4.497元
+
+35.972元
+
 ### 千问OCR
 
 计费规则：按输入Token和输出Token计费。
 
 影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -3932,59 +4958,77 @@ qwen3-vl-flash-2025-10-15
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen-vl-ocr
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
+
+中国内地
 
 0.3元
 
 0.5元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 qwen-vl-ocr-latest
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
+中国内地
+
 0.3元
 
 0.5元
+
+100万Token
 
 qwen-vl-ocr-2025-11-20
 
+中国内地
+
 0.3元
 
 0.5元
+
+100万Token
 
 qwen-vl-ocr-2025-08-28
 
+中国内地
+
 5元
 
 5元
+
+100万Token
 
 qwen-vl-ocr-2025-04-13
 
+中国内地
+
 5元
 
 5元
+
+100万Token
 
 qwen-vl-ocr-2024-10-28
 
-5元
+中国内地
 
 5元
 
-## 全球
+5元
 
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
+100万Token
 
-**说明**
-
-全球部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -3992,25 +5036,25 @@ qwen-vl-ocr-2024-10-28
 
 qwen-vl-ocr
 
+全球
+
 0.3元
 
 0.5元
 
 qwen-vl-ocr-2025-11-20
 
+全球
+
 0.3元
 
 0.5元
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -4018,27 +5062,57 @@ qwen-vl-ocr-2025-11-20
 
 qwen-vl-ocr
 
+国际
+
 0.514元
 
 1.174元
 
 qwen-vl-ocr-2025-11-20
 
+国际
+
 0.514元
 
 1.174元
+
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+qwen-vl-ocr
+
+全球
+
+0.3元
+
+0.5元
+
+qwen-vl-ocr-2025-11-20
+
+全球
+
+0.3元
+
+0.5元
 
 ### 千问Audio
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
 
 计费规则：按输入Token和输出Token计费。
 
 音频Token计算规则：每一秒钟的音频对应25个Token。若音频时长不足1秒，则按25个Token计算。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -4046,27 +5120,31 @@ qwen-vl-ocr-2025-11-20
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen-audio-turbo
+
+中国内地
 
 目前仅供免费体验。
 
 > 免费额度用完后不可调用，推荐使用[全模态（Qwen-Omni）](https://help.aliyun.com/zh/model-studio/qwen-omni)作为替代模型
 
-各10万Token
-
-有效期：阿里云百炼开通后90天内
+10万Token
 
 qwen-audio-turbo-latest
 
+中国内地
+
 ### 千问数学模型
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
 
 计费规则：按输入Token和输出Token计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -4074,17 +5152,21 @@ qwen-audio-turbo-latest
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen-math-plus
+
+中国内地
 
 4元
 
 12元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 qwen-math-turbo
+
+中国内地
 
 2元
 
@@ -4096,11 +5178,15 @@ qwen-math-turbo
 
 影响计费的因素：若模型支持[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)，仅输入Token享有折扣。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单次请求的输入Token数**
 
@@ -4108,7 +5194,9 @@ qwen-math-turbo
 
 **输出单价（每百万Token）**
 
-**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 qwen3-coder-plus
 
@@ -4116,15 +5204,15 @@ qwen3-coder-plus
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 0<Token≤32K
 
 4元
 
 16元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 32K<Token≤128K
 
@@ -4146,11 +5234,15 @@ qwen3-coder-plus
 
 qwen3-coder-plus-2025-09-23
 
+中国内地
+
 0<Token≤32K
 
 4元
 
 16元
+
+100万Token
 
 32K<Token≤128K
 
@@ -4172,11 +5264,15 @@ qwen3-coder-plus-2025-09-23
 
 qwen3-coder-plus-2025-07-22
 
+中国内地
+
 0<Token≤32K
 
 4元
 
 16元
+
+100万Token
 
 32K<Token≤128K
 
@@ -4200,11 +5296,15 @@ qwen3-coder-flash
 
 > 当前能力等同于qwen3-coder-flash-2025-07-28
 
+中国内地
+
 0<Token≤32K
 
 1元
 
 4元
+
+100万Token
 
 32K<Token≤128K
 
@@ -4226,11 +5326,15 @@ qwen3-coder-flash
 
 qwen3-coder-flash-2025-07-28
 
+中国内地
+
 0<Token≤32K
 
 1元
 
 4元
+
+100万Token
 
 32K<Token≤128K
 
@@ -4254,343 +5358,9 @@ qwen3-coder-flash-2025-07-28
 
 **模型 ID（Model ID）**
 
-**单次请求的输入Token数**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-qwen-coder-plus
-
-无阶梯计价
-
-3.5元
-
-7元
-
-各100万Token
-
-有效期：阿里云百炼开通后90天内
-
-qwen-coder-turbo
-
-无阶梯计价
-
-2元
-
-6元
-
-## 全球
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
-
-**模型 ID（Model ID）**
+**服务部署范围**
 
 **单次请求的输入Token数**
-
-**输入单价 （每百万Token）**
-
-**输出单价 （每百万Token）**
-
-qwen3-coder-plus
-
-> 当前能力等同于qwen3-coder-plus-2025-09-23
-
-0<Token≤32K
-
-4元
-
-16元
-
-32K<Token≤128K
-
-6元
-
-24元
-
-128K<Token≤256K
-
-10元
-
-40元
-
-256K<Token≤1M
-
-20元
-
-200元
-
-qwen3-coder-plus-2025-09-23
-
-0<Token≤32K
-
-4元
-
-16元
-
-32K<Token≤128K
-
-6元
-
-24元
-
-128K<Token≤256K
-
-10元
-
-40元
-
-256K<Token≤1M
-
-20元
-
-200元
-
-qwen3-coder-plus-2025-07-22
-
-0<Token≤32K
-
-4元
-
-16元
-
-32K<Token≤128K
-
-6元
-
-24元
-
-128K<Token≤256K
-
-10元
-
-40元
-
-256K<Token≤1M
-
-20元
-
-200元
-
-qwen3-coder-flash
-
-> 当前能力等同于qwen3-coder-flash-2025-07-28
-
-0<Token≤32K
-
-1元
-
-4元
-
-32K<Token≤128K
-
-1.5元
-
-6元
-
-128K<Token≤256K
-
-2.5元
-
-10元
-
-256K<Token≤1M
-
-5元
-
-25元
-
-qwen3-coder-flash-2025-07-28
-
-0<Token≤32K
-
-1元
-
-4元
-
-32K<Token≤128K
-
-1.5元
-
-6元
-
-128K<Token≤256K
-
-2.5元
-
-10元
-
-256K<Token≤1M
-
-5元
-
-25元
-
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际（新加坡）模型无免费额度。
-
-**模型 ID（Model ID）**
-
-**单次请求的输入Token数**
-
-**输入单价 （每百万Token）**
-
-**输出单价 （每百万Token）**
-
-qwen3-coder-plus
-
-> 当前能力等同于qwen3-coder-plus-2025-09-23
-
-0<Token≤32K
-
-7.339元
-
-36.696元
-
-32K<Token≤128K
-
-13.211元
-
-66.053元
-
-128K<Token≤256K
-
-22.018元
-
-110.089元
-
-256K<Token≤1M
-
-44.035元
-
-440.354元
-
-qwen3-coder-plus-2025-09-23
-
-0<Token≤32K
-
-7.339元
-
-36.696元
-
-32K<Token≤128K
-
-13.211元
-
-66.053元
-
-128K<Token≤256K
-
-22.018元
-
-110.089元
-
-256K<Token≤1M
-
-44.035元
-
-440.354元
-
-qwen3-coder-plus-2025-07-22
-
-0<Token≤32K
-
-7.339元
-
-36.696元
-
-32K<Token≤128K
-
-13.211元
-
-66.053元
-
-128K<Token≤256K
-
-22.018元
-
-110.089元
-
-256K<Token≤1M
-
-44.035元
-
-440.354元
-
-qwen3-coder-flash
-
-> 当前能力等同于qwen3-coder-flash-2025-07-28
-
-0<Token≤32K
-
-2.202元
-
-11.009元
-
-32K<Token≤128K
-
-3.67元
-
-18.348元
-
-128K<Token≤256K
-
-5.871元
-
-29.357元
-
-256K<Token≤1M
-
-11.743元
-
-70.457元
-
-qwen3-coder-flash-2025-07-28
-
-0<Token≤32K
-
-2.202元
-
-11.009元
-
-32K<Token≤128K
-
-3.67元
-
-18.348元
-
-128K<Token≤256K
-
-5.871元
-
-29.357元
-
-256K<Token≤1M
-
-11.743元
-
-70.457元
-
-### **千问翻译模型**
-
-计费规则：按输入Token和输出Token计费。
-
-## 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
-
-**模型 ID（Model ID）**
 
 **输入单价（每百万Token）**
 
@@ -4598,55 +5368,575 @@ qwen3-coder-flash-2025-07-28
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
-qwen-mt-plus
+有效期：阿里云百炼开通后90天内
 
-1.8元
+qwen-coder-plus
 
-5.4元
+中国内地
 
-各100万Token
+无阶梯计价
+
+3.5元
+
+7元
+
+100万Token
+
+qwen-coder-turbo
+
+中国内地
+
+无阶梯计价
+
+2元
+
+6元
+
+100万Token
+
+#### 美国（弗吉尼亚）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**单次请求的输入Token数**
+
+**输入单价 （每百万Token）**
+
+**输出单价 （每百万Token）**
+
+qwen3-coder-plus
+
+> 当前能力等同于qwen3-coder-plus-2025-09-23
+
+全球
+
+0<Token≤32K
+
+4元
+
+16元
+
+32K<Token≤128K
+
+6元
+
+24元
+
+128K<Token≤256K
+
+10元
+
+40元
+
+256K<Token≤1M
+
+20元
+
+200元
+
+qwen3-coder-plus-2025-09-23
+
+全球
+
+0<Token≤32K
+
+4元
+
+16元
+
+32K<Token≤128K
+
+6元
+
+24元
+
+128K<Token≤256K
+
+10元
+
+40元
+
+256K<Token≤1M
+
+20元
+
+200元
+
+qwen3-coder-plus-2025-07-22
+
+全球
+
+0<Token≤32K
+
+4元
+
+16元
+
+32K<Token≤128K
+
+6元
+
+24元
+
+128K<Token≤256K
+
+10元
+
+40元
+
+256K<Token≤1M
+
+20元
+
+200元
+
+qwen3-coder-flash
+
+> 当前能力等同于qwen3-coder-flash-2025-07-28
+
+全球
+
+0<Token≤32K
+
+1元
+
+4元
+
+32K<Token≤128K
+
+1.5元
+
+6元
+
+128K<Token≤256K
+
+2.5元
+
+10元
+
+256K<Token≤1M
+
+5元
+
+25元
+
+qwen3-coder-flash-2025-07-28
+
+全球
+
+0<Token≤32K
+
+1元
+
+4元
+
+32K<Token≤128K
+
+1.5元
+
+6元
+
+128K<Token≤256K
+
+2.5元
+
+10元
+
+256K<Token≤1M
+
+5元
+
+25元
+
+#### 新加坡
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**单次请求的输入Token数**
+
+**输入单价 （每百万Token）**
+
+**输出单价 （每百万Token）**
+
+qwen3-coder-plus
+
+> 当前能力等同于qwen3-coder-plus-2025-09-23
+
+国际
+
+0<Token≤32K
+
+7.339元
+
+36.696元
+
+32K<Token≤128K
+
+13.211元
+
+66.053元
+
+128K<Token≤256K
+
+22.018元
+
+110.089元
+
+256K<Token≤1M
+
+44.035元
+
+440.354元
+
+qwen3-coder-plus-2025-09-23
+
+国际
+
+0<Token≤32K
+
+7.339元
+
+36.696元
+
+32K<Token≤128K
+
+13.211元
+
+66.053元
+
+128K<Token≤256K
+
+22.018元
+
+110.089元
+
+256K<Token≤1M
+
+44.035元
+
+440.354元
+
+qwen3-coder-plus-2025-07-22
+
+国际
+
+0<Token≤32K
+
+7.339元
+
+36.696元
+
+32K<Token≤128K
+
+13.211元
+
+66.053元
+
+128K<Token≤256K
+
+22.018元
+
+110.089元
+
+256K<Token≤1M
+
+44.035元
+
+440.354元
+
+qwen3-coder-flash
+
+> 当前能力等同于qwen3-coder-flash-2025-07-28
+
+国际
+
+0<Token≤32K
+
+2.202元
+
+11.009元
+
+32K<Token≤128K
+
+3.67元
+
+18.348元
+
+128K<Token≤256K
+
+5.871元
+
+29.357元
+
+256K<Token≤1M
+
+11.743元
+
+70.457元
+
+qwen3-coder-flash-2025-07-28
+
+国际
+
+0<Token≤32K
+
+2.202元
+
+11.009元
+
+32K<Token≤128K
+
+3.67元
+
+18.348元
+
+128K<Token≤256K
+
+5.871元
+
+29.357元
+
+256K<Token≤1M
+
+11.743元
+
+70.457元
+
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**单次请求的输入Token数**
+
+**输入单价 （每百万Token）**
+
+**输出单价 （每百万Token）**
+
+qwen3-coder-plus
+
+> 当前能力等同于qwen3-coder-plus-2025-09-23
+
+全球
+
+0<Token≤32K
+
+4元
+
+16元
+
+32K<Token≤128K
+
+6元
+
+24元
+
+128K<Token≤256K
+
+10元
+
+40元
+
+256K<Token≤1M
+
+20元
+
+200元
+
+qwen3-coder-plus-2025-09-23
+
+全球
+
+0<Token≤32K
+
+4元
+
+16元
+
+32K<Token≤128K
+
+6元
+
+24元
+
+128K<Token≤256K
+
+10元
+
+40元
+
+256K<Token≤1M
+
+20元
+
+200元
+
+qwen3-coder-plus-2025-07-22
+
+全球
+
+0<Token≤32K
+
+4元
+
+16元
+
+32K<Token≤128K
+
+6元
+
+24元
+
+128K<Token≤256K
+
+10元
+
+40元
+
+256K<Token≤1M
+
+20元
+
+200元
+
+qwen3-coder-flash
+
+> 当前能力等同于qwen3-coder-flash-2025-07-28
+
+全球
+
+0<Token≤32K
+
+1元
+
+4元
+
+32K<Token≤128K
+
+1.5元
+
+6元
+
+128K<Token≤256K
+
+2.5元
+
+10元
+
+256K<Token≤1M
+
+5元
+
+25元
+
+qwen3-coder-flash-2025-07-28
+
+全球
+
+0<Token≤32K
+
+1元
+
+4元
+
+32K<Token≤128K
+
+1.5元
+
+6元
+
+128K<Token≤256K
+
+2.5元
+
+10元
+
+256K<Token≤1M
+
+5元
+
+25元
+
+### **千问翻译模型**
+
+计费规则：按输入Token和输出Token计费。
+
+**说明**
+
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：阿里云百炼开通后90天内
 
-qwen-mt-flash
-
-0.7元
-
-1.95元
-
-qwen-mt-lite
-
-0.6元
-
-1.6元
-
-qwen-mt-turbo
-
-0.7元
-
-1.95元
-
-## **全球**
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
-
-**模型 ID（Model ID）**
-
-**输入单价 （每百万Token）**
-
-**输出单价 （每百万Token）**
-
 qwen-mt-plus
+
+中国内地
 
 1.8元
 
 5.4元
 
+100万Token
+
 qwen-mt-flash
+
+中国内地
+
+0.7元
+
+1.95元
+
+100万Token
+
+qwen-mt-lite
+
+中国内地
+
+0.6元
+
+1.6元
+
+100万Token
+
+qwen-mt-turbo
+
+中国内地
+
+0.7元
+
+1.95元
+
+100万Token
+
+#### 美国（弗吉尼亚）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价 （每百万Token）**
+
+**输出单价 （每百万Token）**
+
+qwen-mt-flash
+
+全球
 
 0.7元
 
@@ -4654,25 +5944,41 @@ qwen-mt-flash
 
 qwen-mt-lite
 
+全球
+
 0.6元
 
 1.6元
 
-## **国际**
+qwen-mt-lite-us
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+美国
 
-**说明**
+0.881元
 
-国际（新加坡）模型无免费额度。
+2.642元
+
+qwen-mt-plus
+
+全球
+
+1.8元
+
+5.4元
+
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价 （每百万Token）**
 
 **输出单价 （每百万Token）**
 
 qwen-mt-plus
+
+国际
 
 18.055元
 
@@ -4680,11 +5986,15 @@ qwen-mt-plus
 
 qwen-mt-flash
 
+国际
+
 1.174元
 
 3.596元
 
 qwen-mt-lite
+
+国际
 
 0.881元
 
@@ -4692,39 +6002,55 @@ qwen-mt-lite
 
 qwen-mt-turbo
 
+国际
+
 1.174元
 
 3.596元
 
-## 美国
-
-服务部署范围为[美国](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于美国境内；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）。
-
-**说明**
-
-美国部署范围下的模型无免费额度。
+#### 德国（法兰克福）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价 （每百万Token）**
 
 **输出单价 （每百万Token）**
 
-qwen-mt-lite-us
+qwen-mt-plus
 
-0.881元
+全球
 
-2.642元
+1.8元
+
+5.4元
+
+qwen-mt-flash
+
+全球
+
+0.7元
+
+1.95元
+
+qwen-mt-lite
+
+全球
+
+0.6元
+
+1.6元
 
 ### 千问数据挖掘模型
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 计费规则：按输入Token和输出Token计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -4734,6 +6060,8 @@ qwen-mt-lite-us
 
 qwen-doc-turbo
 
+中国内地
+
 0.6元
 
 1元
@@ -4742,13 +6070,13 @@ qwen-doc-turbo
 
 ### **千问深入研究模型**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 计费规则：按输入Token和输出Token计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -4758,21 +6086,33 @@ qwen-doc-turbo
 
 qwen-deep-research
 
+中国内地
+
 54元
 
 163元
 
 无免费额度
 
+qwen-deep-research-2025-12-15
+
+中国内地
+
+79元
+
+236元
+
+无免费额度
+
 ### **通义晓蜜对话分析模型**
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
 
 计费规则：按输入Token和输出Token计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -4780,21 +6120,27 @@ qwen-deep-research
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 tongyi-xiaomi-analysis-flash
+
+中国内地
 
 0.2元
 
 0.4元
 
-各100万Token
-
-有效期：百炼开通后90天内
+100万Token
 
 tongyi-xiaomi-analysis-pro
+
+中国内地
 
 1.0元
 
 2.7元
+
+100万Token
 
 ## **文本生成-千问-开源版**
 
@@ -4802,11 +6148,15 @@ tongyi-xiaomi-analysis-pro
 
 计费规则：按输入Token和输出Token计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单次请求的输入Token范围**
 
@@ -4816,11 +6166,15 @@ tongyi-xiaomi-analysis-pro
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 **非思考模式**
 
 **思考模式（思维链+回答）**
 
 qwen3.6-35b-a3b
+
+中国内地
 
 0<Token≤256K
 
@@ -4830,11 +6184,11 @@ qwen3.6-35b-a3b
 
 10.8元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 qwen3.6-27b
+
+中国内地
 
 0<Token≤256K
 
@@ -4844,11 +6198,13 @@ qwen3.6-27b
 
 18元
 
-## 全球
+100万Token
 
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单次请求的输入Token范围**
 
@@ -4861,6 +6217,8 @@ qwen3.6-27b
 **思考模式（思维链+回答）**
 
 qwen3.6-35b-a3b
+
+全球
 
 0<Token≤256K
 
@@ -4870,11 +6228,11 @@ qwen3.6-35b-a3b
 
 10.8元
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单次请求的输入Token范围**
 
@@ -4887,6 +6245,8 @@ qwen3.6-35b-a3b
 **思考模式（思维链+回答）**
 
 qwen3.6-35b-a3b
+
+国际
 
 0<Token≤256K
 
@@ -4898,6 +6258,8 @@ qwen3.6-35b-a3b
 
 qwen3.6-27b
 
+国际
+
 0<Token≤256K
 
 4.49652元
@@ -4906,15 +6268,47 @@ qwen3.6-27b
 
 26.97912元
 
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**单次请求的输入Token范围**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+**非思考模式**
+
+**思考模式（思维链+回答）**
+
+qwen3.6-35b-a3b
+
+全球
+
+0<Token≤256K
+
+1.8元
+
+10.8元
+
+10.8元
+
 ### **Qwen3.5**
 
 计费规则：按输入Token和输出Token计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单次请求的输入Token范围**
 
@@ -4924,24 +6318,26 @@ qwen3.6-27b
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
-**非思考模式**
-
-**思考模式（思维链+回答）**
-
-qwen3.5-397b-a17b
-
-0<Token≤128K
-
-1.2元
-
-7.2元
-
-7.2元
-
-各100万Token
-
 有效期：阿里云百炼开通后90天内
 
+**非思考模式**
+
+**思考模式（思维链+回答）**
+
+qwen3.5-397b-a17b
+
+中国内地
+
+0<Token≤128K
+
+1.2元
+
+7.2元
+
+7.2元
+
+100万Token
+
 128K<Token≤256K
 
 3元
@@ -4952,6 +6348,8 @@ qwen3.5-397b-a17b
 
 qwen3.5-122b-a10b
 
+中国内地
+
 0<Token≤128K
 
 0.8元
@@ -4959,6 +6357,8 @@ qwen3.5-122b-a10b
 6.4元
 
 6.4元
+
+100万Token
 
 128K<Token≤256K
 
@@ -4970,6 +6370,8 @@ qwen3.5-122b-a10b
 
 qwen3.5-27b
 
+中国内地
+
 0<Token≤128K
 
 0.6元
@@ -4977,6 +6379,8 @@ qwen3.5-27b
 4.8元
 
 4.8元
+
+100万Token
 
 128K<Token≤256K
 
@@ -4988,6 +6392,8 @@ qwen3.5-27b
 
 qwen3.5-35b-a3b
 
+中国内地
+
 0<Token≤128K
 
 0.4元
@@ -4995,6 +6401,8 @@ qwen3.5-35b-a3b
 3.2元
 
 3.2元
+
+100万Token
 
 128K<Token≤256K
 
@@ -5004,11 +6412,11 @@ qwen3.5-35b-a3b
 
 12.8元
 
-## 全球
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单次请求的输入Token范围**
 
@@ -5021,6 +6429,8 @@ qwen3.5-35b-a3b
 **思考模式（思维链+回答）**
 
 qwen3.5-397b-a17b
+
+全球
 
 0<Token≤128K
 
@@ -5040,6 +6450,8 @@ qwen3.5-397b-a17b
 
 qwen3.5-122b-a10b
 
+全球
+
 0<Token≤128K
 
 0.8元
@@ -5057,6 +6469,8 @@ qwen3.5-122b-a10b
 16元
 
 qwen3.5-27b
+
+全球
 
 0<Token≤128K
 
@@ -5076,6 +6490,8 @@ qwen3.5-27b
 
 qwen3.5-35b-a3b
 
+全球
+
 0<Token≤128K
 
 0.4元
@@ -5092,11 +6508,11 @@ qwen3.5-35b-a3b
 
 12.8元
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单次请求的输入Token范围**
 
@@ -5109,6 +6525,8 @@ qwen3.5-35b-a3b
 **思考模式（思维链+回答）**
 
 qwen3.5-397b-a17b
+
+国际
 
 0<Token≤256K
 
@@ -5120,6 +6538,8 @@ qwen3.5-397b-a17b
 
 qwen3.5-122b-a10b
 
+国际
+
 0<Token≤256K
 
 2.936元
@@ -5129,6 +6549,8 @@ qwen3.5-122b-a10b
 23.486元
 
 qwen3.5-27b
+
+国际
 
 0<Token≤256K
 
@@ -5140,6 +6562,8 @@ qwen3.5-27b
 
 qwen3.5-35b-a3b
 
+国际
+
 0<Token≤256K
 
 1.835元
@@ -5148,15 +6572,115 @@ qwen3.5-35b-a3b
 
 14.678元
 
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**单次请求的输入Token范围**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+**非思考模式**
+
+**思考模式（思维链+回答）**
+
+qwen3.5-397b-a17b
+
+全球
+
+0<Token≤128K
+
+1.2元
+
+7.2元
+
+7.2元
+
+128K<Token≤256K
+
+3元
+
+18元
+
+18元
+
+qwen3.5-122b-a10b
+
+全球
+
+0<Token≤128K
+
+0.8元
+
+6.4元
+
+6.4元
+
+128K<Token≤256K
+
+2元
+
+16元
+
+16元
+
+qwen3.5-27b
+
+全球
+
+0<Token≤128K
+
+0.6元
+
+4.8元
+
+4.8元
+
+128K<Token≤256K
+
+1.8元
+
+14.4元
+
+14.4元
+
+qwen3.5-35b-a3b
+
+全球
+
+0<Token≤128K
+
+0.4元
+
+3.2元
+
+3.2元
+
+128K<Token≤256K
+
+1.6元
+
+12.8元
+
+12.8元
+
 ### **Qwen3**
 
 计费规则：按输入Token和输出Token计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -5166,12 +6690,16 @@ qwen3.5-35b-a3b
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 **非思考模式**
 
 **思考模式（思维链+回答）**
 
 qwen3-next-80b-a3b-thinking
 
+中国内地
+
 仅思考模式
 
 1元
@@ -5180,12 +6708,12 @@ qwen3-next-80b-a3b-thinking
 
 10元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 qwen3-next-80b-a3b-instruct
 
+中国内地
+
 仅非思考模式
 
 1元
@@ -5194,7 +6722,11 @@ qwen3-next-80b-a3b-instruct
 
 \-
 
+100万Token
+
 qwen3-235b-a22b-thinking-2507
+
+中国内地
 
 仅思考模式
 
@@ -5203,9 +6735,13 @@ qwen3-235b-a22b-thinking-2507
 \-
 
 20元
+
+100万Token
 
 qwen3-235b-a22b-instruct-2507
 
+中国内地
+
 仅非思考模式
 
 2元
@@ -5214,7 +6750,11 @@ qwen3-235b-a22b-instruct-2507
 
 \-
 
+100万Token
+
 qwen3-30b-a3b-thinking-2507
+
+中国内地
 
 仅思考模式
 
@@ -5224,7 +6764,11 @@ qwen3-30b-a3b-thinking-2507
 
 7.5元
 
+100万Token
+
 qwen3-30b-a3b-instruct-2507
+
+中国内地
 
 仅非思考模式
 
@@ -5234,7 +6778,11 @@ qwen3-30b-a3b-instruct-2507
 
 \-
 
+100万Token
+
 qwen3-235b-a22b
+
+中国内地
 
 非思考和思考模式
 
@@ -5243,9 +6791,13 @@ qwen3-235b-a22b
 8元
 
 20元
+
+100万Token
 
 qwen3-32b
 
+中国内地
+
 非思考和思考模式
 
 2元
@@ -5254,7 +6806,11 @@ qwen3-32b
 
 20元
 
+100万Token
+
 qwen3-30b-a3b
+
+中国内地
 
 非思考和思考模式
 
@@ -5264,7 +6820,11 @@ qwen3-30b-a3b
 
 7.5元
 
+100万Token
+
 qwen3-14b
+
+中国内地
 
 非思考和思考模式
 
@@ -5274,7 +6834,11 @@ qwen3-14b
 
 10元
 
+100万Token
+
 qwen3-8b
+
+中国内地
 
 非思考和思考模式
 
@@ -5284,11 +6848,13 @@ qwen3-8b
 
 5元
 
-## 全球
+100万Token
 
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -5296,13 +6862,13 @@ qwen3-8b
 
 **输出单价（每百万Token）**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
 **非思考模式**
 
 **思考模式（思维链+回答）**
 
 qwen3-next-80b-a3b-thinking
+
+全球
 
 仅思考模式
 
@@ -5312,9 +6878,9 @@ qwen3-next-80b-a3b-thinking
 
 10元
 
-无免费额度
-
 qwen3-next-80b-a3b-instruct
+
+全球
 
 仅非思考模式
 
@@ -5325,6 +6891,8 @@ qwen3-next-80b-a3b-instruct
 \-
 
 qwen3-235b-a22b-thinking-2507
+
+全球
 
 仅思考模式
 
@@ -5336,6 +6904,8 @@ qwen3-235b-a22b-thinking-2507
 
 qwen3-235b-a22b-instruct-2507
 
+全球
+
 仅非思考模式
 
 1.688元
@@ -5345,6 +6915,8 @@ qwen3-235b-a22b-instruct-2507
 \-
 
 qwen3-30b-a3b-thinking-2507
+
+全球
 
 仅思考模式
 
@@ -5356,6 +6928,8 @@ qwen3-30b-a3b-thinking-2507
 
 qwen3-30b-a3b-instruct-2507
 
+全球
+
 仅非思考模式
 
 0.75元
@@ -5366,6 +6940,8 @@ qwen3-30b-a3b-instruct-2507
 
 qwen3-235b-a22b
 
+全球
+
 非思考和思考模式
 
 2元
@@ -5375,6 +6951,8 @@ qwen3-235b-a22b
 20元
 
 qwen3-32b
+
+全球
 
 非思考和思考模式
 
@@ -5386,6 +6964,8 @@ qwen3-32b
 
 qwen3-30b-a3b
 
+全球
+
 非思考和思考模式
 
 0.75元
@@ -5395,6 +6975,8 @@ qwen3-30b-a3b
 7.5元
 
 qwen3-14b
+
+全球
 
 非思考和思考模式
 
@@ -5406,6 +6988,8 @@ qwen3-14b
 
 qwen3-8b
 
+全球
+
 非思考和思考模式
 
 0.5元
@@ -5414,11 +6998,11 @@ qwen3-8b
 
 5元
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -5428,11 +7012,15 @@ qwen3-8b
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 **非思考模式**
 
 **思考模式（思维链+回答）**
 
 qwen3-next-80b-a3b-thinking
+
+国际
 
 仅思考模式
 
@@ -5446,6 +7034,8 @@ qwen3-next-80b-a3b-thinking
 
 qwen3-next-80b-a3b-instruct
 
+国际
+
 仅非思考模式
 
 1.101元
@@ -5454,7 +7044,11 @@ qwen3-next-80b-a3b-instruct
 
 \-
 
+无免费额度
+
 qwen3-235b-a22b-thinking-2507
+
+国际
 
 仅思考模式
 
@@ -5464,7 +7058,11 @@ qwen3-235b-a22b-thinking-2507
 
 16.88元
 
+无免费额度
+
 qwen3-235b-a22b-instruct-2507
+
+国际
 
 仅非思考模式
 
@@ -5474,7 +7072,11 @@ qwen3-235b-a22b-instruct-2507
 
 \-
 
+无免费额度
+
 qwen3-30b-a3b-thinking-2507
+
+国际
 
 仅思考模式
 
@@ -5484,7 +7086,11 @@ qwen3-30b-a3b-thinking-2507
 
 17.614元
 
+无免费额度
+
 qwen3-30b-a3b-instruct-2507
+
+国际
 
 仅非思考模式
 
@@ -5494,7 +7100,11 @@ qwen3-30b-a3b-instruct-2507
 
 \-
 
+无免费额度
+
 qwen3-235b-a22b
+
+国际
 
 非思考和思考模式
 
@@ -5504,7 +7114,167 @@ qwen3-235b-a22b
 
 61.65元
 
+无免费额度
+
 qwen3-32b
+
+国际
+
+非思考和思考模式
+
+1.174元
+
+4.697元
+
+4.697元
+
+无免费额度
+
+qwen3-30b-a3b
+
+国际
+
+非思考和思考模式
+
+1.468元
+
+5.871元
+
+17.614元
+
+无免费额度
+
+qwen3-14b
+
+国际
+
+非思考和思考模式
+
+2.569元
+
+10.275元
+
+30.825元
+
+无免费额度
+
+qwen3-8b
+
+国际
+
+非思考和思考模式
+
+1.321元
+
+5.137元
+
+15.412元
+
+无免费额度
+
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**模式**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+**非思考模式**
+
+**思考模式（思维链+回答）**
+
+qwen3-next-80b-a3b-thinking
+
+全球
+
+仅思考模式
+
+1元
+
+\-
+
+10元
+
+qwen3-next-80b-a3b-instruct
+
+全球
+
+仅非思考模式
+
+1元
+
+4元
+
+\-
+
+qwen3-235b-a22b-thinking-2507
+
+全球
+
+仅思考模式
+
+1.688元
+
+\-
+
+16.88元
+
+qwen3-235b-a22b-instruct-2507
+
+全球
+
+仅非思考模式
+
+1.688元
+
+6.752元
+
+\-
+
+qwen3-30b-a3b-thinking-2507
+
+全球
+
+仅思考模式
+
+0.75元
+
+\-
+
+7.5元
+
+qwen3-30b-a3b-instruct-2507
+
+全球
+
+仅非思考模式
+
+0.75元
+
+3元
+
+\-
+
+qwen3-235b-a22b
+
+全球
+
+非思考和思考模式
+
+2元
+
+8元
+
+20元
+
+qwen3-32b
+
+全球
 
 非思考和思考模式
 
@@ -5516,129 +7286,61 @@ qwen3-32b
 
 qwen3-30b-a3b
 
+全球
+
 非思考和思考模式
 
-1.468元
+0.75元
 
-5.871元
+3元
 
-17.614元
+7.5元
 
 qwen3-14b
 
+全球
+
 非思考和思考模式
 
-2.569元
+1元
 
-10.275元
+4元
 
-30.825元
+10元
 
 qwen3-8b
 
+全球
+
 非思考和思考模式
 
-1.321元
+0.5元
 
-5.137元
+2元
 
-15.412元
-
-### **QwQ-开源版**
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
-计费规则：按输入Token和输出Token计费。
-
-**模型 ID（Model ID）**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-### **QwQ-Preview**
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
-计费规则：按输入Token和输出Token计费。
-
-影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
-
-**模型 ID（Model ID）**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-### **Qwen2.5**
-
-计费规则：按输入Token和输出Token计费。
-
-## 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
-
-**模型 ID（Model ID）**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际（新加坡）模型无免费额度。
-
-**模型 ID（Model ID）**
-
-**输入单价 （每百万Token）**
-
-**输出单价 （每百万Token）**
-
-### **QVQ**
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
-计费规则：按输入Token和输出Token计费。
-
-**模型 ID（Model ID）**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+5元
 
 ### **Qwen-Omni**
 
 计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费与限流](https://help.aliyun.com/zh/model-studio/qwen-omni#12db7427b94qt)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
 **输出单价（每百万Token）**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 **文本**
 
@@ -5659,6 +7361,8 @@ qwen3-8b
 > 仅音频计费
 
 qwen2.5-omni-7b
+
+中国内地
 
 0.6元
 
@@ -5674,17 +7378,11 @@ qwen2.5-omni-7b
 
 100万Token（不区分模态）
 
-有效期：阿里云百炼开通后90天
-
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际（新加坡）模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -5709,6 +7407,8 @@ qwen2.5-omni-7b
 > 仅音频计费
 
 qwen2.5-omni-7b
+
+国际
 
 0.734元
 
@@ -5726,11 +7426,15 @@ qwen2.5-omni-7b
 
 计费规则：按输入Token和输出Token计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -5738,7 +7442,11 @@ qwen2.5-omni-7b
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen3-omni-30b-a3b-captioner
+
+中国内地
 
 15.8元
 
@@ -5746,23 +7454,19 @@ qwen3-omni-30b-a3b-captioner
 
 100万Token
 
-有效期：阿里云百炼开通后90天内
-
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际（新加坡）模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
 **输出单价（每百万Token）**
 
 qwen3-omni-30b-a3b-captioner
+
+国际
 
 27.962元
 
@@ -5772,11 +7476,15 @@ qwen3-omni-30b-a3b-captioner
 
 计费规则：按输入Token和输出Token计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -5788,27 +7496,11 @@ qwen3-omni-30b-a3b-captioner
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
-qwen3-vl-235b-a22b-thinking
-
-仅思考模式
-
-2元
-
-20元
-
-各100万 Token
-
 有效期：阿里云百炼开通后90天内
 
-qwen3-vl-235b-a22b-instruct
+qwen3-vl-235b-a22b-thinking
 
-仅非思考模式
-
-2元
-
-8元
-
-qwen3-vl-32b-thinking
+中国内地
 
 仅思考模式
 
@@ -5816,7 +7508,11 @@ qwen3-vl-32b-thinking
 
 20元
 
-qwen3-vl-32b-instruct
+100万 Token
+
+qwen3-vl-235b-a22b-instruct
+
+中国内地
 
 仅非思考模式
 
@@ -5824,7 +7520,35 @@ qwen3-vl-32b-instruct
 
 8元
 
+100万 Token
+
+qwen3-vl-32b-thinking
+
+中国内地
+
+仅思考模式
+
+2元
+
+20元
+
+100万 Token
+
+qwen3-vl-32b-instruct
+
+中国内地
+
+仅非思考模式
+
+2元
+
+8元
+
+100万 Token
+
 qwen3-vl-30b-a3b-thinking
+
+中国内地
 
 仅思考模式
 
@@ -5832,7 +7556,11 @@ qwen3-vl-30b-a3b-thinking
 
 7.5元
 
+100万 Token
+
 qwen3-vl-30b-a3b-instruct
+
+中国内地
 
 仅非思考模式
 
@@ -5840,7 +7568,11 @@ qwen3-vl-30b-a3b-instruct
 
 3元
 
+100万 Token
+
 qwen3-vl-8b-thinking
+
+中国内地
 
 仅思考模式
 
@@ -5848,7 +7580,11 @@ qwen3-vl-8b-thinking
 
 5元
 
+100万 Token
+
 qwen3-vl-8b-instruct
+
+中国内地
 
 仅非思考模式
 
@@ -5856,15 +7592,13 @@ qwen3-vl-8b-instruct
 
 2元
 
-## 全球
+100万 Token
 
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -5876,6 +7610,8 @@ qwen3-vl-8b-instruct
 
 qwen3-vl-235b-a22b-thinking
 
+全球
+
 仅思考模式
 
 2元
@@ -5883,6 +7619,8 @@ qwen3-vl-235b-a22b-thinking
 20元
 
 qwen3-vl-235b-a22b-instruct
+
+全球
 
 仅非思考模式
 
@@ -5892,6 +7630,8 @@ qwen3-vl-235b-a22b-instruct
 
 qwen3-vl-32b-thinking
 
+全球
+
 仅思考模式
 
 1.174元
@@ -5899,6 +7639,8 @@ qwen3-vl-32b-thinking
 4.697元
 
 qwen3-vl-32b-instruct
+
+全球
 
 仅非思考模式
 
@@ -5908,6 +7650,8 @@ qwen3-vl-32b-instruct
 
 qwen3-vl-30b-a3b-thinking
 
+全球
+
 仅思考模式
 
 0.75元
@@ -5915,6 +7659,8 @@ qwen3-vl-30b-a3b-thinking
 7.5元
 
 qwen3-vl-30b-a3b-instruct
+
+全球
 
 仅非思考模式
 
@@ -5924,6 +7670,8 @@ qwen3-vl-30b-a3b-instruct
 
 qwen3-vl-8b-thinking
 
+全球
+
 仅思考模式
 
 0.5元
@@ -5932,17 +7680,19 @@ qwen3-vl-8b-thinking
 
 qwen3-vl-8b-instruct
 
+全球
+
 仅非思考模式
 
 0.5元
 
 2元
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -5953,6 +7703,8 @@ qwen3-vl-8b-instruct
 > **思维链+回答**
 
 qwen3-vl-235b-a22b-thinking
+
+国际
 
 仅思考模式
 
@@ -5962,6 +7714,8 @@ qwen3-vl-235b-a22b-thinking
 
 qwen3-vl-235b-a22b-instruct
 
+国际
+
 仅非思考模式
 
 2.936元
@@ -5969,6 +7723,8 @@ qwen3-vl-235b-a22b-instruct
 11.743元
 
 qwen3-vl-32b-thinking
+
+国际
 
 仅思考模式
 
@@ -5978,6 +7734,8 @@ qwen3-vl-32b-thinking
 
 qwen3-vl-32b-instruct
 
+国际
+
 仅非思考模式
 
 1.174元
@@ -5985,6 +7743,8 @@ qwen3-vl-32b-instruct
 4.697元
 
 qwen3-vl-30b-a3b-thinking
+
+国际
 
 仅思考模式
 
@@ -5994,6 +7754,8 @@ qwen3-vl-30b-a3b-thinking
 
 qwen3-vl-30b-a3b-instruct
 
+国际
+
 仅非思考模式
 
 1.468元
@@ -6001,6 +7763,8 @@ qwen3-vl-30b-a3b-instruct
 5.871元
 
 qwen3-vl-8b-thinking
+
+国际
 
 仅思考模式
 
@@ -6010,21 +7774,117 @@ qwen3-vl-8b-thinking
 
 qwen3-vl-8b-instruct
 
+国际
+
 仅非思考模式
 
 1.321元
 
 5.137元
 
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**模式**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+> **思维链+回答**
+
+qwen3-vl-235b-a22b-thinking
+
+全球
+
+仅思考模式
+
+2元
+
+20元
+
+qwen3-vl-235b-a22b-instruct
+
+全球
+
+仅非思考模式
+
+2元
+
+8元
+
+qwen3-vl-32b-thinking
+
+全球
+
+仅思考模式
+
+1.174元
+
+4.697元
+
+qwen3-vl-32b-instruct
+
+全球
+
+仅非思考模式
+
+1.174元
+
+4.697元
+
+qwen3-vl-30b-a3b-thinking
+
+全球
+
+仅思考模式
+
+0.75元
+
+7.5元
+
+qwen3-vl-30b-a3b-instruct
+
+全球
+
+仅非思考模式
+
+0.75元
+
+3元
+
+qwen3-vl-8b-thinking
+
+全球
+
+仅思考模式
+
+0.5元
+
+5元
+
+qwen3-vl-8b-instruct
+
+全球
+
+仅非思考模式
+
+0.5元
+
+2元
+
 ### **Qwen-Audio**
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
 
 计费规则：按输入Token和输出Token计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -6032,43 +7892,35 @@ qwen3-vl-8b-instruct
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen2-audio-instruct
+
+中国内地
 
 目前仅供免费体验。
 
 > 免费额度用完后不可调用，推荐使用[全模态（Qwen-Omni）](https://help.aliyun.com/zh/model-studio/qwen-omni)作为替代模型。
 
-各10万Token
-
-有效期：阿里云百炼开通后90天内
+10万Token
 
 qwen-audio-chat
 
-### **Qwen-Math**
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
-计费规则：按输入Token和输出Token计费。
-
-**模型 ID（Model ID）**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+中国内地
 
 ### **Qwen-Coder**
 
 计费规则：按输入Token和输出Token计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单次请求的输入Token数**
 
@@ -6078,7 +7930,11 @@ qwen-audio-chat
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen3-coder-next
+
+中国内地
 
 0<Token≤32K
 
@@ -6086,9 +7942,7 @@ qwen3-coder-next
 
 4元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 32K<Token≤128K
 
@@ -6104,11 +7958,15 @@ qwen3-coder-next
 
 qwen3-coder-480b-a35b-instruct
 
+中国内地
+
 0<Token≤32K
 
 6元
 
 24元
+
+100万Token
 
 32K<Token≤128K
 
@@ -6124,11 +7982,15 @@ qwen3-coder-480b-a35b-instruct
 
 qwen3-coder-30b-a3b-instruct
 
+中国内地
+
 0<Token≤32K
 
 1.5元
 
 6元
+
+100万Token
 
 32K<Token≤128K
 
@@ -6142,15 +8004,11 @@ qwen3-coder-30b-a3b-instruct
 
 15元
 
-## 全球
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单次请求的输入Token数**
 
@@ -6160,6 +8018,8 @@ qwen3-coder-30b-a3b-instruct
 
 qwen3-coder-480b-a35b-instruct
 
+全球
+
 0<Token≤32K
 
 6元
@@ -6180,6 +8040,8 @@ qwen3-coder-480b-a35b-instruct
 
 qwen3-coder-30b-a3b-instruct
 
+全球
+
 0<Token≤32K
 
 1.5元
@@ -6198,15 +8060,11 @@ qwen3-coder-30b-a3b-instruct
 
 15元
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际（新加坡）模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单次请求的输入Token数**
 
@@ -6215,6 +8073,8 @@ qwen3-coder-30b-a3b-instruct
 **输出单价（每百万Token）**
 
 qwen3-coder-next
+
+国际
 
 0<Token≤32K
 
@@ -6235,6 +8095,8 @@ qwen3-coder-next
 29.357元
 
 qwen3-coder-480b-a35b-instruct
+
+国际
 
 0<Token≤32K
 
@@ -6256,6 +8118,8 @@ qwen3-coder-480b-a35b-instruct
 
 qwen3-coder-30b-a3b-instruct
 
+国际
+
 0<Token≤32K
 
 3.303元
@@ -6274,15 +8138,11 @@ qwen3-coder-30b-a3b-instruct
 
 44.035元
 
-## 欧盟
-
-服务部署范围为[欧盟](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于欧盟境内；静态数据存储于您所选的地域。该部署范围支持的地域：德国（法兰克福）。
-
-**说明**
-
-欧盟部署范围下的模型无免费额度。
+#### 德国（法兰克福）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单次请求的输入Token数**
 
@@ -6290,7 +8150,53 @@ qwen3-coder-30b-a3b-instruct
 
 **输出单价（每百万Token）**
 
+qwen3-coder-30b-a3b-instruct
+
+全球
+
+0<Token≤32K
+
+1.5元
+
+6元
+
+32K<Token≤128K
+
+2.25元
+
+9元
+
+128K<Token≤200K
+
+3.75元
+
+15元
+
+qwen3-coder-480b-a35b-instruct
+
+全球
+
+0<Token≤32K
+
+6元
+
+24元
+
+32K<Token≤128K
+
+9元
+
+36元
+
+128K<Token≤200K
+
+15元
+
+60元
+
 qwen3-coder-next
+
+欧盟
 
 0<Token≤32K
 
@@ -6318,11 +8224,15 @@ qwen3-coder-next
 
 影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -6332,113 +8242,155 @@ qwen3-coder-next
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 deepseek-v4-pro
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+中国内地
 
 12元
 
 24元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 deepseek-v4-flash
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 1元
 
 2元
+
+100万Token
 
 deepseek-v3.2
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 2元
 
 3元
+
+100万Token
 
 deepseek-v3.2-exp
 
+中国内地
+
 2元
 
 3元
 
+100万Token
+
 deepseek-v3.1
+
+中国内地
 
 4元
 
 12元
 
+100万Token
+
 deepseek-r1
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
+中国内地
+
 4元
 
 16元
+
+100万Token
 
 deepseek-r1-0528
 
+中国内地
+
 4元
 
 16元
+
+100万Token
 
 deepseek-v3
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
+中国内地
+
 2元
 
 8元
 
+100万Token
+
 deepseek-r1-distill-qwen-1.5b
+
+中国内地
 
 限时免费
 
 deepseek-r1-distill-qwen-7b
 
+中国内地
+
 0.5元
 
 1元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 deepseek-r1-distill-qwen-14b
+
+中国内地
 
 1元
 
 3元
 
+100万Token
+
 deepseek-r1-distill-qwen-32b
+
+中国内地
 
 2元
 
 6元
 
+100万Token
+
 deepseek-r1-distill-llama-8b
+
+中国内地
 
 限时免费
 
 deepseek-r1-distill-llama-70b
 
+中国内地
+
 目前仅供免费体验
 
 > 免费额度用完后不可调用，推荐使用[深度思考](https://help.aliyun.com/zh/model-studio/deep-thinking)、[DeepSeek -阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)、[Kimi-阿里云](https://help.aliyun.com/zh/model-studio/kimi-api)作为替代模型
 
-各100万Token
+100万Token
 
-有效期：阿里云百炼开通后90天内
-
-## 全球
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -6449,6 +8401,8 @@ deepseek-r1-distill-llama-70b
 deepseek-v4-pro
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
 
 12元
 
@@ -6458,19 +8412,17 @@ deepseek-v4-flash
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+全球
+
 1元
 
 2元
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际（新加坡）模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -6481,6 +8433,8 @@ deepseek-v4-flash
 deepseek-v4-pro
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+国际
 
 17.986元
 
@@ -6490,6 +8444,8 @@ deepseek-v4-flash
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+国际
+
 1.499元
 
 2.998元
@@ -6498,17 +8454,51 @@ deepseek-v3.2
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+国际
+
 4.272元
 
 12.815元
 
-### **DeepSeek-硅基流动**
-
-**说明**
-
-服务部署范围仅支持中国内地。
+#### 德国（法兰克福）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+> **思维链+回答**
+
+deepseek-v4-pro
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+12元
+
+24元
+
+deepseek-v4-flash
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+1元
+
+2元
+
+### **DeepSeek-硅基流动**
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -6520,6 +8510,8 @@ deepseek-v3.2
 
 siliconflow/deepseek-v3.2
 
+中国内地
+
 2元
 
 3元
@@ -6528,11 +8520,15 @@ siliconflow/deepseek-v3.2
 
 siliconflow/deepseek-v3.1-terminus
 
+中国内地
+
 4元
 
 12元
 
 siliconflow/deepseek-r1-0528
+
+中国内地
 
 4元
 
@@ -6540,17 +8536,19 @@ siliconflow/deepseek-r1-0528
 
 siliconflow/deepseek-v3-0324
 
+中国内地
+
 2元
 
 8元
 
 ### **DeepSeek-快手万擎**
 
-**说明**
-
-服务部署范围仅支持中国内地。
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -6564,6 +8562,8 @@ vanchin/deepseek-v3.2-think
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 2元
 
 3元
@@ -6574,6 +8574,8 @@ vanchin/deepseek-v3.1-terminus
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 4元
 
 12元
@@ -6581,6 +8583,8 @@ vanchin/deepseek-v3.1-terminus
 vanchin/deepseek-r1
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+中国内地
 
 4元
 
@@ -6590,11 +8594,15 @@ vanchin/deepseek-v3
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 2元
 
 8元
 
 vanchin/deepseek-ocr
+
+中国内地
 
 0.216元
 
@@ -6604,11 +8612,15 @@ vanchin/deepseek-ocr
 
 计费规则：按输入Token和输出Token计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -6618,7 +8630,11 @@ vanchin/deepseek-ocr
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 kimi-k2.6
+
+中国内地
 
 非思考和思考模式
 
@@ -6626,11 +8642,11 @@ kimi-k2.6
 
 27元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 kimi-k2.5
+
+中国内地
 
 非思考和思考模式
 
@@ -6638,7 +8654,11 @@ kimi-k2.5
 
 21元
 
+100万Token
+
 kimi-k2-thinking
+
+中国内地
 
 仅思考模式
 
@@ -6646,7 +8666,11 @@ kimi-k2-thinking
 
 16元
 
+100万Token
+
 Moonshot-Kimi-K2-Instruct
+
+中国内地
 
 非思考模式
 
@@ -6654,11 +8678,13 @@ Moonshot-Kimi-K2-Instruct
 
 16元
 
-## 全球
+100万Token
 
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -6666,9 +8692,9 @@ Moonshot-Kimi-K2-Instruct
 
 **输出单价（每百万Token）**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
 kimi-k2.5
+
+全球
 
 非思考和思考模式
 
@@ -6676,17 +8702,37 @@ kimi-k2.5
 
 21元
 
-无
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**模式**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+kimi-k2.5
+
+全球
+
+非思考和思考模式
+
+4元
+
+21元
 
 ### **Kimi-月之暗面**
 
-**说明**
-
-服务部署范围仅支持中国内地。
-
 计费规则：按输入Token和输出Token计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -6700,6 +8746,8 @@ kimi/kimi-k2.6
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 6.5元
 
 27元
@@ -6710,6 +8758,8 @@ kimi/kimi-k2.5
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 4元
 
 21元
@@ -6718,11 +8768,15 @@ kimi/kimi-k2.5
 
 计费规则：按输入Token和输出Token计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -6736,7 +8790,11 @@ kimi/kimi-k2.5
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 glm-5.1
+
+中国内地
 
 非思考和思考模式
 
@@ -6746,9 +8804,7 @@ glm-5.1
 
 24元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 32K<Token≤200K
 
@@ -6758,6 +8814,8 @@ glm-5.1
 
 glm-5
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤32K
@@ -6765,6 +8823,8 @@ glm-5
 4元
 
 18元
+
+100万Token
 
 32K<Token≤198K
 
@@ -6774,6 +8834,8 @@ glm-5
 
 glm-4.7
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤32K
@@ -6781,6 +8843,8 @@ glm-4.7
 3元
 
 14元
+
+100万Token
 
 32K<Token≤166K
 
@@ -6790,6 +8854,8 @@ glm-4.7
 
 glm-4.6
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤32K
@@ -6797,6 +8863,8 @@ glm-4.6
 3元
 
 14元
+
+100万Token
 
 32K<Token≤166K
 
@@ -6806,6 +8874,8 @@ glm-4.6
 
 glm-4.5
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤32K
@@ -6813,6 +8883,8 @@ glm-4.5
 3元
 
 14元
+
+100万Token
 
 32K<Token≤96K
 
@@ -6822,6 +8894,8 @@ glm-4.5
 
 glm-4.5-air
 
+中国内地
+
 非思考和思考模式
 
 0<Token≤32K
@@ -6830,21 +8904,19 @@ glm-4.5-air
 
 6元
 
+100万Token
+
 32K<Token≤96K
 
 1.2元
 
 8元
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际（新加坡）模型无免费额度。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -6856,39 +8928,9 @@ glm-4.5-air
 
 > **思维链和回答**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
 glm-5.1
 
-非思考和思考模式
-
-0<Token≤200K
-
-10.492元
-
-32.974元
-
-无
-
-## 全球
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**模型 ID（Model ID）**
-
-**模式**
-
-**单次请求的输入Token数**
-
-**输入单价（每百万Token）**
-
-**输出单价（每百万Token）**
-
-> **思维链和回答**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-glm-5.1
+全球
 
 非思考和思考模式
 
@@ -6898,7 +8940,73 @@ glm-5.1
 
 24元
 
-无
+32K<Token≤200K
+
+8元
+
+28元
+
+#### 新加坡
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**模式**
+
+**单次请求的输入Token数**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+> **思维链和回答**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
+
+glm-5.1
+
+国际
+
+非思考和思考模式
+
+0<Token≤200K
+
+10.492元
+
+32.974元
+
+100万Token
+
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**模式**
+
+**单次请求的输入Token数**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+> **思维链和回答**
+
+glm-5.1
+
+全球
+
+非思考和思考模式
+
+0<Token≤32K
+
+6元
+
+24元
 
 32K<Token≤200K
 
@@ -6908,13 +9016,13 @@ glm-5.1
 
 ### **GLM-智谱**
 
-**说明**
-
-服务部署范围仅支持中国内地。
-
 计费规则：按输入Token和输出Token计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -6928,6 +9036,8 @@ glm-5.1
 
 ZHIPU/GLM-5.1
 
+中国内地
+
 非思考和思考模式
 
 8元
@@ -6937,6 +9047,8 @@ ZHIPU/GLM-5.1
 无
 
 ZHIPU/GLM-5
+
+中国内地
 
 非思考和思考模式
 
@@ -6948,13 +9060,13 @@ ZHIPU/GLM-5
 
 ### MiniMax
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 计费规则：按输入Token和输出Token计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -6966,7 +9078,11 @@ ZHIPU/GLM-5
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 MiniMax-M2.5
+
+中国内地
 
 仅思考模式
 
@@ -6974,11 +9090,11 @@ MiniMax-M2.5
 
 8.4元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 MiniMax-M2.1
+
+中国内地
 
 仅思考模式
 
@@ -6988,13 +9104,13 @@ MiniMax-M2.1
 
 ### **MiniMax-稀宇科技**
 
-**说明**
-
-服务部署范围仅支持中国内地。
-
 计费规则：按输入Token和输出Token计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **模式**
 
@@ -7010,6 +9126,8 @@ MiniMax/MiniMax-M3
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 非思考和思考模式
 
 4.2元
@@ -7022,6 +9140,8 @@ MiniMax/MiniMax-M2.7
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 仅思考模式
 
 2.1元
@@ -7031,6 +9151,8 @@ MiniMax/MiniMax-M2.7
 MiniMax/MiniMax-M2.5
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+中国内地
 
 仅思考模式
 
@@ -7042,6 +9164,8 @@ MiniMax/MiniMax-M2.1
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
+中国内地
+
 仅思考模式
 
 2.1元
@@ -7050,13 +9174,13 @@ MiniMax/MiniMax-M2.1
 
 ### **MiMo-小米**
 
-**说明**
-
-服务部署范围仅支持中国内地。
-
 计费规则：按输入Token和输出Token计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入Token数量**
 
@@ -7069,6 +9193,8 @@ MiniMax/MiniMax-M2.1
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 xiaomi/mimo-v2.5-pro
+
+中国内地
 
 0<Token≤256K
 
@@ -7086,11 +9212,11 @@ xiaomi/mimo-v2.5-pro
 
 ### **Stepfun-阶跃星辰**
 
-**说明**
-
-服务部署范围仅支持中国内地。
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -7101,6 +9227,8 @@ xiaomi/mimo-v2.5-pro
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 stepfun/step-3.7-flash
+
+中国内地
 
 1.35元
 
@@ -7134,93 +9262,141 @@ stepfun/step-3.7-flash
 
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen-image-2.0-pro
+
+中国内地
 
 0.5元/张
 
-各100张
-
-有效期：阿里云百炼开通后90天内
+100张
 
 qwen-image-2.0-pro-2026-04-22
 
+中国内地
+
 0.5元/张
+
+100张
 
 qwen-image-2.0-pro-2026-03-03
 
+中国内地
+
 0.5元/张
+
+100张
 
 qwen-image-2.0
 
+中国内地
+
 0.2元/张
+
+100张
 
 qwen-image-2.0-2026-03-03
 
+中国内地
+
 0.2元/张
+
+100张
 
 qwen-image-max
 
 > 当前能力等同于qwen-image-max-2025-12-30
 
+中国内地
+
 0.5元/张
+
+100张
 
 qwen-image-max-2025-12-30
 
+中国内地
+
 0.5元/张
+
+100张
 
 qwen-image-plus
 
 > 当前能力等同于qwen-image
 
+中国内地
+
 0.2元/张
+
+100张
 
 qwen-image-plus-2026-01-09
 
+中国内地
+
 0.2元/张
+
+100张
 
 qwen-image
 
+中国内地
+
 0.25元/张
 
-## 国际
+100张
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 qwen-image-2.0-pro
 
+国际
+
 0.550443元/张
 
 qwen-image-2.0-pro-2026-04-22
+
+国际
 
 0.550443元/张
 
 qwen-image-2.0-pro-2026-03-03
 
+国际
+
 0.550443元/张
 
 qwen-image-2.0
 
+国际
+
 0.256873元/张
 
 qwen-image-2.0-2026-03-03
+
+国际
 
 0.256873元/张
 
@@ -7228,9 +9404,13 @@ qwen-image-max
 
 > 当前能力等同于qwen-image-max-2025-12-30
 
+国际
+
 0.550443元/张
 
 qwen-image-max-2025-12-30
+
+国际
 
 0.550443元/张
 
@@ -7238,13 +9418,19 @@ qwen-image-plus
 
 > 当前能力等同于qwen-image
 
+国际
+
 0.220177元/张
 
 qwen-image-plus-2026-01-09
 
+国际
+
 0.220177元/张
 
 qwen-image
+
+国际
 
 0.256873元/张
 
@@ -7252,97 +9438,149 @@ qwen-image
 
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen-image-2.0-pro
+
+中国内地
 
 0.5元/张
 
-各100张
-
-有效期：阿里云百炼开通后90天内
+100张
 
 qwen-image-2.0-pro-2026-04-22
 
+中国内地
+
 0.5元/张
+
+100张
 
 qwen-image-2.0-pro-2026-03-03
 
+中国内地
+
 0.5元/张
+
+100张
 
 qwen-image-2.0
 
+中国内地
+
 0.2元/张
+
+100张
 
 qwen-image-2.0-2026-03-03
 
+中国内地
+
 0.2元/张
+
+100张
 
 qwen-image-edit-max
 
 > 当前能力等同于qwen-image-edit-max-2026-01-16
 
+中国内地
+
 0.5元/张
+
+100张
 
 qwen-image-edit-max-2026-01-16
 
+中国内地
+
 0.5元/张
+
+100张
 
 qwen-image-edit-plus
 
 > 当前能力等同于qwen-image-edit-plus-2025-10-30
 
+中国内地
+
 0.2元/张
+
+100张
 
 qwen-image-edit-plus-2025-12-15
 
+中国内地
+
 0.2元/张
+
+100张
 
 qwen-image-edit-plus-2025-10-30
 
+中国内地
+
 0.2元/张
+
+100张
 
 qwen-image-edit
 
+中国内地
+
 0.3元/张
 
-## 国际
+100张
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 qwen-image-2.0-pro
 
+国际
+
 0.550443元/张
 
 qwen-image-2.0-pro-2026-04-22
+
+国际
 
 0.550443元/张
 
 qwen-image-2.0-pro-2026-03-03
 
+国际
+
 0.550443元/张
 
 qwen-image-2.0
 
+国际
+
 0.256873元/张
 
 qwen-image-2.0-2026-03-03
+
+国际
 
 0.256873元/张
 
@@ -7350,9 +9588,13 @@ qwen-image-edit-max
 
 > 当前能力等同于qwen-image-edit-max-2026-01-16
 
+国际
+
 0.550443元/张
 
 qwen-image-edit-max-2026-01-16
+
+国际
 
 0.550443元/张
 
@@ -7360,57 +9602,75 @@ qwen-image-edit-plus
 
 > 当前能力等同于qwen-image-edit-plus-2025-10-30
 
+国际
+
 0.220177元/张
 
 qwen-image-edit-plus-2025-12-15
+
+国际
 
 0.220177元/张
 
 qwen-image-edit-plus-2025-10-30
 
+国际
+
 0.220177元/张
 
 qwen-image-edit
+
+国际
 
 0.330266元/张
 
 ### **千问图像翻译**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen-mt-image
+
+中国内地
 
 0.003元/张
 
 100张
 
-有效期：阿里云百炼开通后90天内
-
 ### **Z-Image**
 
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 z-image-turbo
+
+中国内地
 
 关闭提示词改写（`prompt_extend=false`）：0.1元/张
 
@@ -7418,21 +9678,17 @@ z-image-turbo
 
 100张
 
-有效期：阿里云百炼开通后90天内
-
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 z-image-turbo
+
+国际
 
 关闭提示词改写（`prompt_extend=false`）：0.110089元/张
 
@@ -7442,13 +9698,15 @@ z-image-turbo
 
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
 
-0
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
@@ -7458,11 +9716,15 @@ z-image-turbo
 
 wan2.6-t2i
 
+中国内地
+
 0.20元/张
 
 50张
 
 wan2.5-t2i-preview
+
+中国内地
 
 0.20元/张
 
@@ -7470,11 +9732,15 @@ wan2.5-t2i-preview
 
 wan2.2-t2i-plus
 
+中国内地
+
 0.20元/张
 
 100张
 
 wan2.2-t2i-flash
+
+中国内地
 
 0.14元/张
 
@@ -7482,11 +9748,15 @@ wan2.2-t2i-flash
 
 wanx2.1-t2i-plus
 
+中国内地
+
 0.20元/张
 
 500张
 
 wanx2.1-t2i-turbo
+
+中国内地
 
 0.14元/张
 
@@ -7494,77 +9764,105 @@ wanx2.1-t2i-turbo
 
 wanx2.0-t2i-turbo
 
+中国内地
+
 0.04元/张
 
 500张
 
 wanx-v1
 
+中国内地
+
 0.16元/张
 
 500张
 
-## 全球
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 wan2.6-t2i
+
+全球
 
 0.20元/张
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 wan2.6-t2i
+
+国际
 
 0.220177元/张
 
 wan2.5-t2i-preview
 
+国际
+
 0.220177元/张
 
 wan2.2-t2i-plus
+
+国际
 
 0.366962元/张
 
 wan2.2-t2i-flash
 
+国际
+
 0.183481元/张
 
 wan2.1-t2i-plus
+
+国际
 
 0.366962元/张
 
 wan2.1-t2i-turbo
 
+国际
+
 0.183481元/张
+
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输出单价**
+
+wan2.6-t2i
+
+全球
+
+0.20元/张
 
 ### **万相图像生成与编辑**
 
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
@@ -7573,6 +9871,8 @@ wan2.1-t2i-turbo
 有效期：阿里云百炼开通后90天内
 
 wan2.7-image-pro
+
+中国内地
 
 0.50元/张
 
@@ -7580,65 +9880,87 @@ wan2.7-image-pro
 
 wan2.7-image
 
+中国内地
+
 0.20元/张
 
 50张
 
 wan2.6-image
 
+中国内地
+
 0.20元/张
 
 50张
 
-## 全球
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 wan2.6-image
 
+全球
+
 0.20元/张
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 wan2.7-image-pro
 
+国际
+
 0.562065元/张
 
 wan2.7-image
+
+国际
 
 0.220177元/张
 
 wan2.6-image
 
+国际
+
 0.220177元/张
+
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输出单价**
+
+wan2.6-image
+
+全球
+
+0.20元/张
 
 ### **万相通用图像编辑**
 
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
@@ -7647,6 +9969,8 @@ wan2.6-image
 有效期：阿里云百炼开通后90天内
 
 wan2.5-i2i-preview
+
+中国内地
 
 0.20元/张
 
@@ -7654,63 +9978,69 @@ wan2.5-i2i-preview
 
 wanx2.1-imageedit
 
+中国内地
+
 0.14元/张
 
 500张
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 wan2.5-i2i-preview
 
+国际
+
 0.220177元/张
 
 ### **万相涂鸦作画**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 wanx-sketch-to-image-lite
+
+中国内地
 
 0.06元/张
 
 500张
 
-有效期：阿里云百炼开通后90天内
-
 ### **万相图像局部重绘**
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
 
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 wanx-x-painting
+
+中国内地
 
 目前仅供免费体验。
 
@@ -7718,89 +10048,97 @@ wanx-x-painting
 
 500张
 
-有效期：阿里云百炼开通后90天内
-
 ### 人像风格重绘
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
 
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 wanx-style-repaint-v1
+
+中国内地
 
 0.12元/张
 
 500张
 
-有效期：阿里云百炼开通后90天内
-
 ### **图像背景生成**
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
 
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 wanx-background-generation-v2
+
+中国内地
 
 0.08元/张
 
 500张
 
-有效期：阿里云百炼开通后90天内
-
 ### **图像画面扩展**
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
 
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 image-out-painting
+
+中国内地
 
 0.18元/张
 
 500张
 
-有效期：阿里云百炼开通后90天内
-
 ### **人物实例分割**
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
 
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 image-instance-segmentation
+
+中国内地
 
 目前仅供免费体验。
 
@@ -7808,23 +10146,25 @@ image-instance-segmentation
 
 500张
 
-有效期：阿里云百炼开通后90天内
-
 ### **图像擦除补全**
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
 
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 image-erase-completion
+
+中国内地
 
 目前仅供免费体验。
 
@@ -7832,23 +10172,25 @@ image-erase-completion
 
 500张
 
-有效期：阿里云百炼开通后90天内
-
 ### **虚拟模特**
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
 
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 wanx-virtualmodel
+
+中国内地
 
 目前仅供免费体验。
 
@@ -7856,25 +10198,29 @@ wanx-virtualmodel
 
 各500张
 
-有效期：阿里云百炼开通后90天内
-
 virtualmodel-v2
+
+中国内地
 
 ### **鞋靴模特**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 shoemodel-v1
+
+中国内地
 
 目前仅供免费体验。
 
@@ -7882,23 +10228,25 @@ shoemodel-v1
 
 500张
 
-有效期：阿里云百炼开通后90天内
-
 ### **创意海报生成**
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
 
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 wanx-poster-generation-v1
+
+中国内地
 
 目前仅供免费体验。
 
@@ -7906,13 +10254,7 @@ wanx-poster-generation-v1
 
 500张
 
-有效期：阿里云百炼开通后90天内
-
 ### **人物写真生成-FaceChain**
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
 
 -   facechain-facedetect：限时免费。
     
@@ -7921,25 +10263,27 @@ wanx-poster-generation-v1
 -   facechain-generation：输入不计费，输出计费。输出按成功生成的图片张数计费，计费规则请参见[图像生成](#26310bc5cf4do)。
     
 
-**模型服务**
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
-人物图像检测
-
 facechain-facedetect
 
-限时免费
+中国内地
 
 限时免费
 
-人物形象训练
+限时免费
 
 facechain-finetune
+
+中国内地
 
 2.5元/次
 
@@ -7947,9 +10291,9 @@ facechain-finetune
 
 有效期：申请通过后90天内
 
-人物写真生成
-
 facechain-generation
+
+中国内地
 
 0.18元/张
 
@@ -7959,41 +10303,35 @@ facechain-generation
 
 ### **创意文字生成-WordArt锦书**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
-**模型服务**
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
-文字纹理生成
+有效期：阿里云百炼开通后90天内
 
 wordart-texture
+
+中国内地
 
 0.08元/张
 
 500张
 
-有效期：阿里云百炼开通后90天内
-
-文字变形
-
 wordart-semantic
+
+中国内地
 
 0.24元/张
 
 ### **AI试衣-OutfitAnyone**
-
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
 
 -   aitryon：输入不计费，输出计费。计费规则请参见[图像生成](#26310bc5cf4do)。
     
@@ -8004,41 +10342,45 @@ wordart-semantic
 -   aitryon-refiner：输入不计费，输出计费。计费规则请参见[图像生成](#26310bc5cf4do)。
     
 
-**模型服务**
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：阿里云百炼开通后90天内
 
-AI试衣-基础版
-
 aitryon
 
-400张
+中国内地
 
-AI试衣-Plus版
+400张
 
 aitryon-plus
 
-400张
+中国内地
 
-AI试衣-图片分割
+400张
 
 aitryon-parsing-v1
 
-400张
+中国内地
 
-AI试衣-图片精修
+400张
 
 aitryon-refiner
 
+中国内地
+
 100张
 
-**模型服务**
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单价**
 
@@ -8046,9 +10388,9 @@ aitryon-refiner
 
 **阶梯层级**
 
-AI试衣-基础版
-
 aitryon
+
+中国内地
 
 0.20元/张
 
@@ -8056,9 +10398,9 @@ aitryon
 
 无
 
-AI试衣-Plus版
-
 aitryon-plus
+
+中国内地
 
 0.50元/张
 
@@ -8066,9 +10408,9 @@ aitryon-plus
 
 无
 
-AI试衣-图片分割
-
 aitryon-parsing-v1
+
+中国内地
 
 0.004元/张
 
@@ -8076,9 +10418,9 @@ aitryon-parsing-v1
 
 无
 
-AI试衣-图片精修
-
 aitryon-refiner
+
+中国内地
 
 0.30元/张
 
@@ -8126,13 +10468,13 @@ aitryon-refiner
 
 ### **可灵-图像生成**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 > 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出图像分辨率**
 
@@ -8141,6 +10483,8 @@ aitryon-refiner
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 kling/kling-v3-image-generation
+
+中国内地
 
 1K
 
@@ -8153,6 +10497,8 @@ kling/kling-v3-image-generation
 0.2元/张
 
 kling/kling-v3-omni-image-generation
+
+中国内地
 
 1K
 
@@ -8168,27 +10514,31 @@ kling/kling-v3-omni-image-generation
 
 ## **音乐生成**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 计费规则：按输出音频的秒数计费，输入不计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价（每秒）**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 fun-music-preview
+
+中国内地
 
 0.005元
 
 1,000秒
 
-有效期：阿里云百炼开通后90天内
-
 fun-music-v1
+
+中国内地
 
 0.002元
 
@@ -8196,129 +10546,155 @@ fun-music-v1
 
 ### **Qwen-TTS**
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
 
-## **千问3-TTS-Instruct-Flash**
+#### 华北2（北京）
+
+#### **千问3-TTS-Instruct-Flash**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 qwen3-tts-instruct-flash
 
+中国内地
+
 0.8元
 
 不计费
 
 1万字符
-
-有效期：阿里云百炼开通后90天内
 
 qwen3-tts-instruct-flash-2026-01-26
 
+中国内地
+
 0.8元
 
 不计费
 
-## **千问3-TTS-VD**
+1万字符
+
+#### **千问3-TTS-VD**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 qwen3-tts-vd-2026-01-26
 
+中国内地
+
 0.8元
 
 不计费
 
 1万字符
 
-有效期：阿里云百炼开通后90天内
-
-## **千问3-TTS-VC**
+#### **千问3-TTS-VC**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 qwen3-tts-vc-2026-01-22
 
+中国内地
+
 0.8元
 
 不计费
 
 1万字符
 
-有效期：阿里云百炼开通后90天内
-
-## 千问3-TTS-Flash
+#### 千问3-TTS-Flash
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 qwen3-tts-flash
 
 > 当前能力等同于qwen3-tts-flash-2025-11-27
 
+中国内地
+
 0.8元
 
 不计费
 
 1万字符
 
-有效期：阿里云百炼开通后90天内
-
 qwen3-tts-flash-2025-11-27
+
+中国内地
 
 0.8元
 
 不计费
+
+1万字符
 
 qwen3-tts-flash-2025-09-18
 
+中国内地
+
 0.8元
 
 不计费
 
-2025年11月13日0点前开通阿里云百炼：2000字符
-
 2025年11月13日0点后开通阿里云百炼：1万字符
 
-有效期：阿里云百炼开通后90天内
-
-## 千问-TTS
+#### 千问-TTS
 
 计费规则：按输入Token和输出Token计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -8326,87 +10702,111 @@ qwen3-tts-flash-2025-09-18
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen-tts-flash
+
+中国内地
 
 1.6元
 
 10元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 qwen-tts-latest
 
+中国内地
+
 1.6元
 
 10元
+
+100万Token
 
 qwen-tts-2025-05-22
 
+中国内地
+
 1.6元
 
 10元
+
+100万Token
 
 qwen-tts-2025-04-10
 
+中国内地
+
 1.6元
 
 10元
 
-## 国际
+100万Token
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
-**说明**
-
-国际部署范围下的模型无免费额度。
-
-## **千问3-TTS-Instruct-Flash**
+#### **千问3-TTS-Instruct-Flash**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
 qwen3-tts-instruct-flash
 
+国际
+
 0.8元
 
 qwen3-tts-instruct-flash-2026-01-26
 
+国际
+
 0.8元
 
-## **千问3-TTS-VD**
+#### **千问3-TTS-VD**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
 qwen3-tts-vd-2026-01-26
 
+国际
+
 0.8元
 
-## **千问3-TTS-VC**
+#### **千问3-TTS-VC**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
 qwen3-tts-vc-2026-01-22
 
+国际
+
 0.8元
 
-## 千问3-TTS-Flash
+#### 千问3-TTS-Flash
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
@@ -8414,115 +10814,141 @@ qwen3-tts-flash
 
 > 当前能力等同于qwen3-tts-flash-2025-11-27
 
+国际
+
 0.733924元
 
 qwen3-tts-flash-2025-11-27
 
+国际
+
 0.733924元
 
 qwen3-tts-flash-2025-09-18
+
+国际
 
 0.733924元
 
 ### **Qwen-TTS-Realtime**
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
 
-## **千问3-TTS-Instruct-Flash-Realtime**
+#### 华北2（北京）
+
+#### **千问3-TTS-Instruct-Flash-Realtime**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 qwen3-tts-instruct-flash-realtime
 
+中国内地
+
 1元
 
 不计费
 
 1万字符
-
-有效期：阿里云百炼开通后90天内
 
 qwen3-tts-instruct-flash-realtime-2026-01-22
 
+中国内地
+
 1元
 
 不计费
 
 1万字符
 
-有效期：阿里云百炼开通后90天内
-
-## 千问3-TTS-VD-Realtime
+#### 千问3-TTS-VD-Realtime
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 qwen3-tts-vd-realtime-2026-01-15
 
+中国内地
+
 1元
 
 不计费
 
 1万字符
-
-有效期：阿里云百炼开通后90天内
 
 qwen3-tts-vd-realtime-2025-12-16
 
+中国内地
+
 1元
 
 不计费
 
 1万字符
 
-有效期：阿里云百炼开通后90天内
-
-## 千问3-TTS-VC-Realtime
+#### 千问3-TTS-VC-Realtime
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
 **输出单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 qwen3-tts-vc-realtime-2026-01-15
 
+中国内地
+
 1元
 
 不计费
 
 1万字符
 
-有效期：阿里云百炼开通后90天内
-
 qwen3-tts-vc-realtime-2025-11-27
 
-## 千问3-TTS-Flash-Realtime
+中国内地
+
+1万字符
+
+#### 千问3-TTS-Flash-Realtime
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
@@ -8530,19 +10956,21 @@ qwen3-tts-vc-realtime-2025-11-27
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen3-tts-flash-realtime
+
+中国内地
 
 1元
 
 不计费
 
-2025年11月13日0点前开通阿里云百炼：2000字符
-
 2025年11月13日0点后开通阿里云百炼：1万字符
 
-有效期：阿里云百炼开通后90天内
-
 qwen3-tts-flash-realtime-2025-11-27
+
+中国内地
 
 1元
 
@@ -8550,25 +10978,23 @@ qwen3-tts-flash-realtime-2025-11-27
 
 1万字符
 
-有效期：阿里云百炼开通后90天内
-
 qwen3-tts-flash-realtime-2025-09-18
+
+中国内地
 
 1元
 
 不计费
 
-2025年11月13日0点前开通阿里云百炼：2000字符
-
 2025年11月13日0点后开通阿里云百炼：1万字符
 
-有效期：阿里云百炼开通后90天内
-
-## 千问-TTS-Realtime
+#### 千问-TTS-Realtime
 
 计费规则：按输入Token和输出Token计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -8576,99 +11002,129 @@ qwen3-tts-flash-realtime-2025-09-18
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen-tts-realtime
+
+中国内地
 
 2.4元
 
 12元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 qwen-tts-realtime-latest
 
+中国内地
+
 2.4元
 
 12元
+
+100万Token
 
 qwen-tts-realtime-2025-07-15
 
+中国内地
+
 2.4元
 
 12元
 
-## 国际
+100万Token
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+#### 新加坡
 
-**说明**
-
-国际部署范围下的模型无免费额度。
-
-## **千问3-TTS-Instruct-Flash-Realtime**
+#### **千问3-TTS-Instruct-Flash-Realtime**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
 qwen3-tts-instruct-flash-realtime
 
+国际
+
 1元
 
 qwen3-tts-instruct-flash-realtime-2026-01-22
 
+国际
+
 1元
 
-## 千问3-TTS-VD-Realtime
+#### 千问3-TTS-VD-Realtime
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
 qwen3-tts-vd-realtime-2026-01-15
 
+国际
+
 0.954101元
 
 qwen3-tts-vd-realtime-2025-12-16
 
+国际
+
 0.954101元
 
-## 千问3-TTS-VC-Realtime
+#### 千问3-TTS-VC-Realtime
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
 qwen3-tts-vc-realtime-2026-01-15
 
+国际
+
 0.954101元
 
 qwen3-tts-vc-realtime-2025-11-27
 
-## 千问3-TTS-Flash-Realtime
+国际
+
+#### 千问3-TTS-Flash-Realtime
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
 
+**服务部署范围**
+
 **输入单价（每万字符）**
 
 qwen3-tts-flash-realtime
+
+国际
 
 0.954101元
 
 qwen3-tts-flash-realtime-2025-11-27
 
+国际
+
 0.954101元
 
 qwen3-tts-flash-realtime-2025-09-18
+
+国际
 
 0.954101元
 
@@ -8676,35 +11132,41 @@ qwen3-tts-flash-realtime-2025-09-18
 
 计费规则：按新建音色个数计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单价（每个音色）**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen-voice-enrollment
+
+中国内地
 
 0.01元
 
 1000个音色/账号
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单价（每个音色）**
 
 qwen-voice-enrollment
+
+国际
 
 0.01元
 
@@ -8712,115 +11174,151 @@ qwen-voice-enrollment
 
 计费规则：按新建音色个数计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单价（每个音色）**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen-voice-design
+
+中国内地
 
 0.2元
 
 10个音色/账号
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单价（每个音色）**
 
 qwen-voice-design
 
+国际
+
 0.2元
 
 ### **CosyVoice**
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
 
+**服务部署范围**
+
 **输入单价（每万字符）**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 cosyvoice-v3.5-plus
+
+中国内地
 
 1.5元
 
 1万字符
 
-有效期：阿里云百炼开通后90天内
-
 cosyvoice-v3.5-flash
+
+中国内地
 
 0.8元
 
+1万字符
+
 cosyvoice-v3-plus
 
+中国内地
+
 2元
+
+1万字符
 
 cosyvoice-v3-flash
 
+中国内地
+
 1元
+
+1万字符
 
 cosyvoice-v2
 
+中国内地
+
 2元
+
+1万字符
 
 cosyvoice-v1
 
+中国内地
+
 2元
 
-## 国际
+1万字符
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 cosyvoice-v3-plus
+
+国际
 
 1.9082元
 
-无免费额度
+1万字符
 
 cosyvoice-v3-flash
 
+国际
+
 0.9541元
+
+100万Token
 
 ### **Sambert**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 计费规则：按输入文本的字符数计费，输出不计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每万字符）**
 
@@ -8828,21 +11326,21 @@ cosyvoice-v3-flash
 
 参见[模型列表](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#57d33631f7doi)
 
+中国内地
+
 1元
 
 每主账号每模型每月3万字符。
 
 ### MiniMax
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 计费规则：按输入文本的字符数计费，输出不计费。
 
 复刻音色收取一次性费用，费用在首次使用该音色进行语音合成的时候，与语音合成的费用一同出账。
 
 **模型名称**
+
+**服务部署范围**
 
 **语音合成单价（每万字符）**
 
@@ -8851,6 +11349,8 @@ cosyvoice-v3-flash
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 MiniMax/speech-2.8-hd
+
+中国内地
 
 3.5元
 
@@ -8862,13 +11362,19 @@ MiniMax/speech-2.8-hd
 
 MiniMax/speech-02-hd
 
+中国内地
+
 3.5元
 
 MiniMax/speech-2.8-turbo
 
+中国内地
+
 2元
 
 MiniMax/speech-02-turbo
+
+中国内地
 
 2元
 
@@ -8878,17 +11384,23 @@ MiniMax/speech-02-turbo
 
 计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费说明](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#6a95f2fc38za0)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
 **输出单价（每百万Token）**
 
-**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 **输入：音频**
 
@@ -8900,6 +11412,8 @@ MiniMax/speech-02-turbo
 
 qwen3.5-livetranslate-flash-realtime
 
+中国内地
+
 40元
 
 3.3元
@@ -8908,12 +11422,12 @@ qwen3.5-livetranslate-flash-realtime
 
 160元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 qwen3.5-livetranslate-flash-realtime-2026-05-19
 
+中国内地
+
 40元
 
 3.3元
@@ -8922,7 +11436,11 @@ qwen3.5-livetranslate-flash-realtime-2026-05-19
 
 160元
 
+100万Token
+
 qwen3-livetranslate-flash-realtime
+
+中国内地
 
 64元
 
@@ -8931,9 +11449,13 @@ qwen3-livetranslate-flash-realtime
 64元
 
 240元
+
+100万Token
 
 qwen3-livetranslate-flash-realtime-2025-09-22
 
+中国内地
+
 64元
 
 8元
@@ -8942,15 +11464,13 @@ qwen3-livetranslate-flash-realtime-2025-09-22
 
 240元
 
-## **国际**
+100万Token
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价 (每百万 Token)**
 
@@ -8966,6 +11486,8 @@ qwen3-livetranslate-flash-realtime-2025-09-22
 
 qwen3.5-livetranslate-flash-realtime
 
+国际
+
 56.207元
 
 4.122元
@@ -8975,6 +11497,8 @@ qwen3.5-livetranslate-flash-realtime
 224.826元
 
 qwen3.5-livetranslate-flash-realtime-2026-05-19
+
+国际
 
 56.207元
 
@@ -8986,6 +11510,8 @@ qwen3.5-livetranslate-flash-realtime-2026-05-19
 
 qwen3-livetranslate-flash-realtime
 
+国际
+
 73.392元
 
 9.541元
@@ -8996,6 +11522,8 @@ qwen3-livetranslate-flash-realtime
 
 qwen3-livetranslate-flash-realtime-2025-09-22
 
+国际
+
 73.392元
 
 9.541元
@@ -9004,15 +11532,119 @@ qwen3-livetranslate-flash-realtime-2025-09-22
 
 278.891元
 
+### **千问-LiveTranslate-Flash**
+
+计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费说明](https://help.aliyun.com/zh/model-studio/qwen3-livetranslate-flash#e02a82e668y2c)。
+
+**说明**
+
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
+
+**输入：音频**
+
+**输入：图片**
+
+**输出：文本**
+
+**输出：音频**
+
+qwen3-livetranslate-flash
+
+中国内地
+
+10元
+
+4元
+
+10元
+
+40元
+
+100万Token
+
+qwen3-livetranslate-flash-2025-12-01
+
+中国内地
+
+10元
+
+4元
+
+10元
+
+40元
+
+100万Token
+
+#### 新加坡
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价 (每百万 Token)**
+
+**输出单价 (每百万 Token)**
+
+**输入：音频**
+
+**输入：图片**
+
+**输出：文本**
+
+**输出：音频**
+
+qwen3-livetranslate-flash
+
+国际
+
+11.573元
+
+4.629元
+
+11.573元
+
+46.292元
+
+qwen3-livetranslate-flash-2025-12-01
+
+国际
+
+11.573元
+
+4.629元
+
+11.573元
+
+46.292元
+
 ### **千问ASR**
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 计费规则：按输入音频的秒数计费，输出不计费。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价**
 
@@ -9020,7 +11652,11 @@ qwen3-livetranslate-flash-realtime-2025-09-22
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen3-asr-flash-filetrans
+
+中国内地
 
 0.00022元/秒
 
@@ -9028,61 +11664,39 @@ qwen3-asr-flash-filetrans
 
 36,000秒（10小时）
 
-有效期：阿里云百炼开通后90天内
-
 qwen3-asr-flash-filetrans-2025-11-17
+
+中国内地
+
+36,000秒（10小时）
 
 qwen3-asr-flash
 
 > 当前能力等同于qwen3-asr-flash-2025-09-08
 
+中国内地
+
+36,000秒（10小时）
+
 qwen3-asr-flash-2026-02-10
+
+中国内地
+
+36,000秒（10小时）
 
 qwen3-asr-flash-2025-09-08
 
-## 国际
+中国内地
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+36,000秒（10小时）
 
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 计费规则：按输入音频的秒数计费，输出不计费。
 
 **模型 ID（Model ID）**
 
-**输入单价**
-
-**输出单价**
-
-qwen3-asr-flash-filetrans
-
-0.00026元/秒
-
-不计费
-
-qwen3-asr-flash-filetrans-2025-11-17
-
-qwen3-asr-flash
-
-> 当前能力等同于qwen3-asr-flash-2025-09-08
-
-qwen3-asr-flash-2026-02-10
-
-qwen3-asr-flash-2025-09-08
-
-## 美国
-
-服务部署范围为[美国](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于美国境内；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）。
-
-**说明**
-
-美国部署范围下的模型无免费额度。
-
-计费规则：按输入音频的秒数计费，输出不计费。
-
-**模型 ID（Model ID）**
+**服务部署范围**
 
 **输入单价**
 
@@ -9090,57 +11704,125 @@ qwen3-asr-flash-2025-09-08
 
 qwen3-asr-flash-us
 
+美国
+
 0.000035元/秒
 
 不计费
 
 qwen3-asr-flash-2025-09-08-us
 
+美国
+
+0.000035元/秒
+
+#### 新加坡
+
+计费规则：按输入音频的秒数计费，输出不计费。
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价**
+
+**输出单价**
+
+qwen3-asr-flash-filetrans
+
+国际
+
+0.00026元/秒
+
+不计费
+
+qwen3-asr-flash-filetrans-2025-11-17
+
+国际
+
+0.00026元/秒
+
+qwen3-asr-flash
+
+> 当前能力等同于qwen3-asr-flash-2025-09-08
+
+国际
+
+0.00026元/秒
+
+qwen3-asr-flash-2026-02-10
+
+国际
+
+0.00026元/秒
+
+qwen3-asr-flash-2025-09-08
+
+国际
+
+0.00026元/秒
+
 ### **千问ASR-Realtime**
 
 计费规则：按输入音频的秒数计费，输出不计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen3-asr-flash-realtime
+
+中国内地
 
 0.00033元/秒
 
 36,000秒（10小时）
 
-有效期：阿里云百炼开通后90天内
-
 qwen3-asr-flash-realtime-2026-02-10
+
+中国内地
+
+36,000秒（10小时）
 
 qwen3-asr-flash-realtime-2025-10-27
 
-## 国际
+中国内地
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+36,000秒（10小时）
 
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价**
 
 qwen3-asr-flash-realtime
 
+国际
+
 0.00066元/秒
 
 qwen3-asr-flash-realtime-2026-02-10
 
+国际
+
 qwen3-asr-flash-realtime-2025-10-27
+
+国际
 
 ### **Fun-ASR**
 
@@ -9148,129 +11830,189 @@ qwen3-asr-flash-realtime-2025-10-27
 
 计费规则：按输入音频的秒数计费，输出不计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 fun-asr
+
+中国内地
 
 0.00022元/秒
 
 36,000秒（10小时）
 
-有效期：阿里云百炼开通后90天
-
 fun-asr-2025-11-07
+
+中国内地
+
+36,000秒（10小时）
 
 fun-asr-2025-08-25
 
+中国内地
+
+36,000秒（10小时）
+
 fun-asr-mtl
+
+中国内地
+
+36,000秒（10小时）
 
 fun-asr-mtl-2025-08-25
 
-## 国际
+中国内地
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+36,000秒（10小时）
 
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价**
 
 fun-asr
+
+国际
 
 0.00026元/秒
 
 fun-asr-2025-11-07
 
+国际
+
 fun-asr-2025-08-25
+
+国际
 
 fun-asr-mtl
 
+国际
+
 fun-asr-mtl-2025-08-25
+
+国际
 
 #### **实时语音识别**
 
 计费规则：按输入音频的秒数计费，输出不计费。
 
-## 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 fun-asr-realtime
+
+中国内地
 
 0.00033元/秒
 
 36,000秒（10小时）
 
-有效期：阿里云百炼开通后90天
-
 fun-asr-realtime-2026-02-28
+
+中国内地
+
+36,000秒（10小时）
 
 fun-asr-realtime-2025-11-07
 
+中国内地
+
+36,000秒（10小时）
+
 fun-asr-realtime-2025-09-15
+
+中国内地
+
+36,000秒（10小时）
 
 fun-asr-mtl-realtime
 
+中国内地
+
+36,000秒（10小时）
+
 fun-asr-mtl-realtime-2025-12-10
+
+中国内地
+
+36,000秒（10小时）
 
 fun-asr-flash-8k-realtime
 
+中国内地
+
 0.00022元/秒
+
+36,000秒（10小时）
 
 fun-asr-flash-8k-realtime-2026-01-28
 
-## 国际
+中国内地
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+36,000秒（10小时）
 
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价**
 
 fun-asr-realtime
 
+国际
+
 0.00066元/秒
 
 fun-asr-realtime-2025-11-07
+
+国际
 
 ### **Paraformer**
 
 #### **录音文件识别**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 计费规则：按输入音频的秒数计费，输出不计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 paraformer-v2
+
+中国内地
 
 0.00008元/秒
 
@@ -9282,27 +12024,37 @@ paraformer-v2
 
 paraformer-8k-v2
 
+中国内地
+
 paraformer-v1
+
+中国内地
 
 paraformer-8k-v1
 
+中国内地
+
 paraformer-mtl-v1
+
+中国内地
 
 #### **实时语音识别**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 计费规则：按输入音频的秒数计费，输出不计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 paraformer-realtime-v2
+
+中国内地
 
 0.00024元/秒
 
@@ -9314,9 +12066,15 @@ paraformer-realtime-v2
 
 paraformer-realtime-v1
 
+中国内地
+
 paraformer-realtime-8k-v2
 
+中国内地
+
 paraformer-realtime-8k-v1
+
+中国内地
 
 ## **视频生成**
 
@@ -9341,11 +12099,15 @@ paraformer-realtime-8k-v1
 
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
@@ -9357,6 +12119,8 @@ paraformer-realtime-8k-v1
 
 happyhorse-1.0-t2v
 
+中国内地
+
 720P
 
 0.9元/秒
@@ -9367,21 +12131,19 @@ happyhorse-1.0-t2v
 
 1.6元/秒
 
-## 全球
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输出单价**
 
 happyhorse-1.0-t2v
+
+全球
 
 720P
 
@@ -9391,21 +12153,19 @@ happyhorse-1.0-t2v
 
 1.6元/秒
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输出单价**
 
 happyhorse-1.0-t2v
+
+国际
 
 720P
 
@@ -9414,16 +12174,42 @@ happyhorse-1.0-t2v
 1080P
 
 1.798608元/秒
+
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输出视频分辨率**
+
+**输出单价**
+
+happyhorse-1.0-t2v
+
+全球
+
+720P
+
+0.9元/秒
+
+1080P
+
+1.6元/秒
 
 ### **HappyHorse-图生视频-基于首帧**
 
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
@@ -9435,6 +12221,8 @@ happyhorse-1.0-t2v
 
 happyhorse-1.0-i2v
 
+中国内地
+
 720P
 
 0.9元/秒
@@ -9445,21 +12233,19 @@ happyhorse-1.0-i2v
 
 1.6元/秒
 
-## 全球
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输出单价**
 
 happyhorse-1.0-i2v
+
+全球
 
 720P
 
@@ -9469,21 +12255,19 @@ happyhorse-1.0-i2v
 
 1.6元/秒
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输出单价**
 
 happyhorse-1.0-i2v
+
+国际
 
 720P
 
@@ -9492,16 +12276,42 @@ happyhorse-1.0-i2v
 1080P
 
 1.798608元/秒
+
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输出视频分辨率**
+
+**输出单价**
+
+happyhorse-1.0-i2v
+
+全球
+
+720P
+
+0.9元/秒
+
+1080P
+
+1.6元/秒
 
 ### **HappyHorse-参考生视频**
 
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
@@ -9513,6 +12323,8 @@ happyhorse-1.0-i2v
 
 happyhorse-1.0-r2v
 
+中国内地
+
 720P
 
 0.9元/秒
@@ -9523,21 +12335,19 @@ happyhorse-1.0-r2v
 
 1.6元/秒
 
-## 全球
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输出单价**
 
 happyhorse-1.0-r2v
+
+全球
 
 720P
 
@@ -9547,21 +12357,19 @@ happyhorse-1.0-r2v
 
 1.6元/秒
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输出单价**
 
 happyhorse-1.0-r2v
+
+国际
 
 720P
 
@@ -9570,16 +12378,42 @@ happyhorse-1.0-r2v
 1080P
 
 1.798608元/秒
+
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输出视频分辨率**
+
+**输出单价**
+
+happyhorse-1.0-r2v
+
+全球
+
+720P
+
+0.9元/秒
+
+1080P
+
+1.6元/秒
 
 ### **HappyHorse-视频编辑**
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 计费规则：输入视频和输出视频均计费，按**视频秒数**计费，失败不计费也不占用免费额度。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
@@ -9591,6 +12425,8 @@ happyhorse-1.0-r2v
 
 happyhorse-1.0-video-edit
 
+中国内地
+
 720P
 
 0.9元/秒
@@ -9601,23 +12437,21 @@ happyhorse-1.0-video-edit
 
 1.6元/秒
 
-## 全球
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 计费规则：输入视频和输出视频均计费，按**视频秒数**计费，失败不计费也不占用免费额度。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输入和输出单价**
 
 happyhorse-1.0-video-edit
+
+全球
 
 720P
 
@@ -9627,23 +12461,21 @@ happyhorse-1.0-video-edit
 
 1.6元/秒
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 计费规则：输入视频和输出视频均计费，按**视频秒数**计费，失败不计费也不占用免费额度。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输入和输出单价**
 
 happyhorse-1.0-video-edit
+
+国际
 
 720P
 
@@ -9652,16 +12484,44 @@ happyhorse-1.0-video-edit
 1080P
 
 1.798608元/秒
+
+#### 德国（法兰克福）
+
+计费规则：输入视频和输出视频均计费，按**视频秒数**计费，失败不计费也不占用免费额度。
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输出视频分辨率**
+
+**输入和输出单价**
+
+happyhorse-1.0-video-edit
+
+全球
+
+720P
+
+0.9元/秒
+
+1080P
+
+1.6元/秒
 
 ### **万相-文生视频**
 
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
@@ -9672,6 +12532,8 @@ happyhorse-1.0-video-edit
 有效期：阿里云百炼开通后90天内
 
 wan2.7-t2v-2026-04-25
+
+中国内地
 
 720P
 
@@ -9685,6 +12547,8 @@ wan2.7-t2v-2026-04-25
 
 wan2.7-t2v
 
+中国内地
+
 720P
 
 0.6元/秒
@@ -9697,6 +12561,8 @@ wan2.7-t2v
 
 wan2.6-t2v
 
+中国内地
+
 720P
 
 0.6元/秒
@@ -9708,6 +12574,8 @@ wan2.6-t2v
 1元/秒
 
 wan2.5-t2v-preview
+
+中国内地
 
 480P
 
@@ -9725,6 +12593,8 @@ wan2.5-t2v-preview
 
 wan2.2-t2v-plus
 
+中国内地
+
 480P
 
 0.14元/秒
@@ -9736,6 +12606,8 @@ wan2.2-t2v-plus
 0.70元/秒
 
 wanx2.1-t2v-turbo
+
+中国内地
 
 480P
 
@@ -9749,27 +12621,27 @@ wanx2.1-t2v-turbo
 
 wanx2.1-t2v-plus
 
+中国内地
+
 720P
 
 0.70元/秒
 
 200秒
 
-## 全球
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输出单价**
 
 wan2.6-t2v
+
+全球
 
 720P
 
@@ -9779,21 +12651,31 @@ wan2.6-t2v
 
 1元/秒
 
-## 国际
+wan2.6-t2v-us
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+美国
 
-**说明**
+720P
 
-国际部署范围下的模型无免费额度。
+0.733924元/秒
+
+1080P
+
+1.100886元/秒
+
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输出单价**
 
 wan2.7-t2v-2026-04-25
+
+国际
 
 720P
 
@@ -9805,6 +12687,8 @@ wan2.7-t2v-2026-04-25
 
 wan2.7-t2v
 
+国际
+
 720P
 
 0.733924元/秒
@@ -9815,6 +12699,8 @@ wan2.7-t2v
 
 wan2.6-t2v
 
+国际
+
 720P
 
 0.733924元/秒
@@ -9824,6 +12710,8 @@ wan2.6-t2v
 1.100886元/秒
 
 wan2.5-t2v-preview
+
+国际
 
 480P
 
@@ -9839,6 +12727,8 @@ wan2.5-t2v-preview
 
 wan2.2-t2v-plus
 
+国际
+
 480P
 
 0.146785元/秒
@@ -9848,6 +12738,8 @@ wan2.2-t2v-plus
 0.733924元/秒
 
 wan2.1-t2v-turbo
+
+国际
 
 480P
 
@@ -9859,43 +12751,47 @@ wan2.1-t2v-turbo
 
 wan2.1-t2v-plus
 
+国际
+
 720P
 
 0.733924元/秒
 
-## 美国
-
-服务部署范围为[美国](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于美国境内；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）。
-
-**说明**
-
-美国部署范围下的模型无免费额度。
+#### 德国（法兰克福）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输出单价**
 
-wan2.6-t2v-us
+wan2.6-t2v
+
+全球
 
 720P
 
-0.733924元/秒
+0.6元/秒
 
 1080P
 
-1.100886元/秒
+1元/秒
 
 ### **万相-图生视频**
 
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频类型**
 
@@ -9909,6 +12805,8 @@ wan2.6-t2v-us
 
 wan2.7-i2v-2026-04-25
 
+中国内地
+
 有声视频
 
 720P
@@ -9923,6 +12821,8 @@ wan2.7-i2v-2026-04-25
 
 wan2.7-i2v
 
+中国内地
+
 有声视频
 
 720P
@@ -9935,15 +12835,11 @@ wan2.7-i2v
 
 1元/秒
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频类型**
 
@@ -9952,6 +12848,8 @@ wan2.7-i2v
 **输出单价**
 
 wan2.7-i2v-2026-04-25
+
+国际
 
 有声视频
 
@@ -9964,6 +12862,8 @@ wan2.7-i2v-2026-04-25
 1.100886元/秒
 
 wan2.7-i2v
+
+国际
 
 有声视频
 
@@ -9979,11 +12879,15 @@ wan2.7-i2v
 
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频类型**
 
@@ -9996,6 +12900,8 @@ wan2.7-i2v
 有效期：阿里云百炼开通后90天内
 
 wan2.6-i2v-flash
+
+中国内地
 
 有声视频
 
@@ -10025,6 +12931,8 @@ wan2.6-i2v-flash
 
 wan2.6-i2v
 
+中国内地
+
 有声视频
 
 720P
@@ -10038,6 +12946,8 @@ wan2.6-i2v
 1元/秒
 
 wan2.5-i2v-preview
+
+中国内地
 
 有声视频
 
@@ -10057,6 +12967,8 @@ wan2.5-i2v-preview
 
 wan2.2-i2v-flash
 
+中国内地
+
 无声视频
 
 480P
@@ -10075,6 +12987,8 @@ wan2.2-i2v-flash
 
 wan2.2-i2v-plus
 
+中国内地
+
 无声视频
 
 480P
@@ -10088,6 +13002,8 @@ wan2.2-i2v-plus
 0.70元/秒
 
 wanx2.1-i2v-turbo
+
+中国内地
 
 无声视频
 
@@ -10103,6 +13019,8 @@ wanx2.1-i2v-turbo
 
 wanx2.1-i2v-plus
 
+中国内地
+
 无声视频
 
 720P
@@ -10111,15 +13029,11 @@ wanx2.1-i2v-plus
 
 200秒
 
-## 全球
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频类型**
 
@@ -10128,6 +13042,8 @@ wanx2.1-i2v-plus
 **输出单价**
 
 wan2.6-i2v
+
+全球
 
 有声视频
 
@@ -10139,15 +13055,25 @@ wan2.6-i2v
 
 1元/秒
 
-## 国际
+wan2.6-i2v-us
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+美国
 
-**说明**
+有声视频
 
-国际部署范围下的模型无免费额度。
+720P
+
+0.733924元/秒
+
+1080P
+
+1.100886元/秒
+
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频类型**
 
@@ -10156,6 +13082,8 @@ wan2.6-i2v
 **输出单价**
 
 wan2.6-i2v-flash
+
+国际
 
 有声视频
 
@@ -10183,6 +13111,8 @@ wan2.6-i2v-flash
 
 wan2.6-i2v
 
+国际
+
 有声视频
 
 720P
@@ -10194,6 +13124,8 @@ wan2.6-i2v
 1.100886元/秒
 
 wan2.5-i2v-preview
+
+国际
 
 有声视频
 
@@ -10211,6 +13143,8 @@ wan2.5-i2v-preview
 
 wan2.2-i2v-flash
 
+国际
+
 无声视频
 
 480P
@@ -10222,6 +13156,8 @@ wan2.2-i2v-flash
 0.264213元/秒
 
 wan2.2-i2v-plus
+
+国际
 
 无声视频
 
@@ -10235,6 +13171,8 @@ wan2.2-i2v-plus
 
 wan2.1-i2v-turbo
 
+国际
+
 无声视频
 
 480P
@@ -10247,21 +13185,19 @@ wan2.1-i2v-turbo
 
 wan2.1-i2v-plus
 
+国际
+
 无声视频
 
 720P
 
 0.733924元/秒
 
-## 美国
-
-服务部署范围为[美国](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于美国境内；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）。
-
-**说明**
-
-美国部署范围下的模型无免费额度。
+#### 德国（法兰克福）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频类型**
 
@@ -10269,27 +13205,33 @@ wan2.1-i2v-plus
 
 **输出单价**
 
-wan2.6-i2v-us
+wan2.6-i2v
+
+全球
 
 有声视频
 
 720P
 
-0.733924元/秒
+0.6元/秒
 
 1080P
 
-1.100886元/秒
+1元/秒
 
 ### **万相-图生视频-基于首尾帧**
 
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
@@ -10300,6 +13242,8 @@ wan2.6-i2v-us
 有效期：阿里云百炼开通后90天内
 
 wan2.2-kf2v-flash
+
+中国内地
 
 480P
 
@@ -10317,27 +13261,27 @@ wan2.2-kf2v-flash
 
 wanx2.1-kf2v-plus
 
+中国内地
+
 720P
 
 0.70元/秒
 
 200秒
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输出单价**
 
 wan2.1-kf2v-plus
+
+国际
 
 720P
 
@@ -10354,11 +13298,11 @@ wan2.1-kf2v-plus
 -   输出视频的计费时长为**成功生成的视频秒数**。
     
 
-## 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频类型**
 
@@ -10371,6 +13315,8 @@ wan2.1-kf2v-plus
 有效期：阿里云百炼开通后90天内
 
 wan2.7-r2v
+
+中国内地
 
 有声视频
 
@@ -10385,6 +13331,8 @@ wan2.7-r2v
 1元/秒
 
 wan2.6-r2v-flash
+
+中国内地
 
 有声视频
 
@@ -10414,6 +13362,8 @@ wan2.6-r2v-flash
 
 wan2.6-r2v
 
+中国内地
+
 有声视频
 
 720P
@@ -10426,15 +13376,11 @@ wan2.6-r2v
 
 1元/秒
 
-## 全球
-
-服务部署范围为[全球](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度；静态数据存储于您所选的地域。该部署范围支持的地域：美国（弗吉尼亚）、德国（法兰克福）。
-
-**说明**
-
-全球部署范围下的模型无免费额度。
+#### 美国（弗吉尼亚）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频类型**
 
@@ -10443,6 +13389,8 @@ wan2.6-r2v
 **输入和输出单价**
 
 wan2.6-r2v
+
+全球
 
 有声视频
 
@@ -10454,15 +13402,11 @@ wan2.6-r2v
 
 1元/秒
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频类型**
 
@@ -10471,6 +13415,8 @@ wan2.6-r2v
 **输入和输出单价**
 
 wan2.7-r2v
+
+国际
 
 有声视频
 
@@ -10483,6 +13429,8 @@ wan2.7-r2v
 1.100886元/秒
 
 wan2.6-r2v-flash
+
+国际
 
 有声视频
 
@@ -10510,6 +13458,8 @@ wan2.6-r2v-flash
 
 wan2.6-r2v
 
+国际
+
 有声视频
 
 720P
@@ -10520,15 +13470,45 @@ wan2.6-r2v
 
 1.100886元/秒
 
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输出视频类型**
+
+**输出视频分辨率**
+
+**输入和输出单价**
+
+wan2.6-r2v
+
+全球
+
+有声视频
+
+720P
+
+0.6元/秒
+
+1080P
+
+1元/秒
+
 ### **万相-视频编辑**
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 计费规则：输入视频和输出视频均计费，按**视频秒数**计费，失败不计费也不占用免费额度。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
@@ -10539,6 +13519,8 @@ wan2.6-r2v
 有效期：阿里云百炼开通后90天内
 
 wan2.7-videoedit
+
+中国内地
 
 720P
 
@@ -10554,6 +13536,8 @@ wan2.7-videoedit
 
 **模型 ID（Model ID）**
 
+**服务部署范围**
+
 **输出视频分辨率**
 
 **输出单价**
@@ -10564,29 +13548,29 @@ wan2.7-videoedit
 
 wanx2.1-vace-plus
 
+中国内地
+
 720P
 
 0.70元/秒
 
 50秒
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 计费规则：输入视频和输出视频均计费，按**视频秒数**计费，失败不计费也不占用免费额度。
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输入和输出单价**
 
 wan2.7-videoedit
+
+国际
 
 720P
 
@@ -10600,11 +13584,15 @@ wan2.7-videoedit
 
 **模型 ID（Model ID）**
 
+**服务部署范围**
+
 **输出视频分辨率**
 
 **输出单价**
 
 wan2.1-vace-plus
+
+国际
 
 720P
 
@@ -10612,18 +13600,16 @@ wan2.1-vace-plus
 
 ### **万相-数字人**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 -   wan2.2-s2v-detect：输入计费，输出不计费。输入按检测的图像张数计费，只要请求成功（无论检测结果通过与否），每张输入图像均计费一次。
     
 -   wan2.2-s2v：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](#d809366847gza)。
     
 
-**模型服务**
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单价**
 
@@ -10631,17 +13617,17 @@ wan2.1-vace-plus
 
 有效期：阿里云百炼开通后90天内
 
-图像检测
-
 wan2.2-s2v-detect
+
+中国内地
 
 输入图像：0.004元/张
 
 200张
 
-视频生成
-
 wan2.2-s2v
+
+中国内地
 
 输出视频：
 
@@ -10656,11 +13642,15 @@ wan2.2-s2v
 
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频模式**
 
@@ -10668,7 +13658,11 @@ wan2.2-s2v
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 wan2.2-animate-move
+
+中国内地
 
 标准模式`wan-std`
 
@@ -10682,21 +13676,19 @@ wan2.2-animate-move
 
 0.6元/秒
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频模式**
 
 **输出单价**
 
 wan2.2-animate-move
+
+国际
 
 标准模式`wan-std`
 
@@ -10710,11 +13702,15 @@ wan2.2-animate-move
 
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频模式**
 
@@ -10722,7 +13718,11 @@ wan2.2-animate-move
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 wan2.2-animate-mix
+
+中国内地
 
 标准模式`wan-std`
 
@@ -10736,21 +13736,19 @@ wan2.2-animate-mix
 
 0.9元/秒
 
-## 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频模式**
 
 **输出单价**
 
 wan2.2-animate-mix
+
+国际
 
 标准模式`wan-std`
 
@@ -10762,10 +13760,6 @@ wan2.2-animate-mix
 
 ### **舞动人像AnimateAnyone**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 -   animate-anyone-detect-gen2：输入计费，输出不计费。输入按检测的图像张数计费，只要请求成功（无论检测结果通过与否），每张输入图像均计费一次。
     
 -   animate-anyone-template-gen2：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](#d809366847gza)。
@@ -10773,9 +13767,11 @@ wan2.2-animate-mix
 -   animate-anyone-gen2：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](#d809366847gza)。
     
 
-**模型服务**
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单价**
 
@@ -10783,25 +13779,25 @@ wan2.2-animate-mix
 
 有效期：阿里云百炼开通后90天内
 
-图像检测
-
 animate-anyone-detect-gen2
+
+中国内地
 
 输入图像：0.004元/张
 
 200张
 
-动作模板生成
-
 animate-anyone-template-gen2
+
+中国内地
 
 输出视频：0.08元/秒
 
 1800秒（30分钟）
 
-视频生成
-
 animate-anyone-gen2
+
+中国内地
 
 输出视频：0.08元/秒
 
@@ -10809,18 +13805,16 @@ animate-anyone-gen2
 
 ### **悦动人像EMO**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 -   emo-detect-v1：输入计费，输出不计费。输入按检测的图像张数计费，只要请求成功（无论检测结果通过与否），每张输入图像均计费一次。
     
 -   emo-v1：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](#d809366847gza)。
     
 
-**模型服务**
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单价**
 
@@ -10828,17 +13822,17 @@ animate-anyone-gen2
 
 有效期：阿里云百炼开通后90天内
 
-图像检测
-
 emo-detect-v1
+
+中国内地
 
 输入图像：0.004元/张
 
 200张
 
-视频生成
-
 emo-v1
+
+中国内地
 
 输出视频：
 
@@ -10851,18 +13845,16 @@ emo-v1
 
 ### **灵动人像LivePortrait**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 -   liveportrait-detect：输入计费，输出不计费。输入按检测的图像张数计费，只要请求成功（无论检测结果通过与否），每张输入图像均计费一次。
     
 -   liveportrait：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](#d809366847gza)。
     
 
-**模型服务**
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单价**
 
@@ -10870,17 +13862,17 @@ emo-v1
 
 有效期：阿里云百炼开通后90天内
 
-图像检测
-
 liveportrait-detect
+
+中国内地
 
 输入图像：0.004元/张
 
 200张
 
-视频生成
-
 liveportrait
+
+中国内地
 
 输出视频：0.02元/秒
 
@@ -10888,18 +13880,16 @@ liveportrait
 
 ### **表情包Emoji**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 -   emoji-detect-v1：输入计费，输出不计费。输入按检测的图像张数计费，只要请求成功（无论检测结果通过与否），每张输入图像均计费一次。
     
 -   emoji-v1：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](#d809366847gza)。
     
 
-**模型服务**
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **单价**
 
@@ -10907,17 +13897,17 @@ liveportrait
 
 有效期：阿里云百炼开通后90天内
 
-图像检测
-
 emoji-detect-v1
+
+中国内地
 
 输入图像：0.004元/张
 
 200张
 
-视频生成
-
 emoji-v1
+
+中国内地
 
 输出视频：0.08元/秒
 
@@ -10925,13 +13915,13 @@ emoji-v1
 
 ### **声动人像VideoRetalk**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出单价**
 
@@ -10941,19 +13931,21 @@ emoji-v1
 
 videoretalk
 
+中国内地
+
 0.08元/秒
 
 1800秒（30分钟）
 
 ### **视频风格重绘**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
@@ -10961,15 +13953,17 @@ videoretalk
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 video-style-transform
+
+中国内地
 
 540P
 
 0.2元/秒
 
 600秒
-
-有效期：阿里云百炼开通后90天内
 
 720P
 
@@ -10979,13 +13973,13 @@ video-style-transform
 
 **爱诗-文生视频**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频类型**
 
@@ -10993,9 +13987,11 @@ video-style-transform
 
 **输出单价**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 pixverse/pixverse-c1-t2v
+
+中国内地
 
 有声视频
 
@@ -11041,6 +14037,8 @@ pixverse/pixverse-c1-t2v
 
 pixverse/pixverse-v6-t2v
 
+中国内地
+
 有声视频
 
 `audio=true`
@@ -11048,6 +14046,8 @@ pixverse/pixverse-v6-t2v
 360P
 
 0.21元/秒
+
+无免费额度
 
 540P
 
@@ -11083,6 +14083,8 @@ pixverse/pixverse-v6-t2v
 
 pixverse/pixverse-v5.6-t2v
 
+中国内地
+
 有声视频
 
 `audio=true`
@@ -11090,6 +14092,54 @@ pixverse/pixverse-v5.6-t2v
 360P
 
 0.47元/秒
+
+无免费额度
+
+540P
+
+0.47元/秒
+
+720P
+
+0.53元/秒
+
+1080P
+
+0.7元/秒
+
+无声视频
+
+`audio=false`
+
+360P
+
+0.21元/秒
+
+540P
+
+0.21元/秒
+
+720P
+
+0.27元/秒
+
+1080P
+
+0.44元/秒
+
+pixverse/pixverse-v5.6-it2v
+
+中国内地
+
+有声视频
+
+`audio=true`
+
+360P
+
+0.47元/秒
+
+无免费额度
 
 540P
 
@@ -11125,13 +14175,13 @@ pixverse/pixverse-v5.6-t2v
 
 **爱诗-图生视频-基于首帧**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频类型**
 
@@ -11139,9 +14189,11 @@ pixverse/pixverse-v5.6-t2v
 
 **输出单价**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 pixverse/pixverse-c1-it2v
+
+中国内地
 
 有声视频
 
@@ -11187,6 +14239,8 @@ pixverse/pixverse-c1-it2v
 
 pixverse/pixverse-v6-it2v
 
+中国内地
+
 有声视频
 
 `audio=true`
@@ -11194,6 +14248,8 @@ pixverse/pixverse-v6-it2v
 360P
 
 0.21元/秒
+
+无免费额度
 
 540P
 
@@ -11229,6 +14285,8 @@ pixverse/pixverse-v6-it2v
 
 pixverse/pixverse-v5.6-it2v
 
+中国内地
+
 有声视频
 
 `audio=true`
@@ -11236,6 +14294,8 @@ pixverse/pixverse-v5.6-it2v
 360P
 
 0.47元/秒
+
+无免费额度
 
 540P
 
@@ -11271,13 +14331,13 @@ pixverse/pixverse-v5.6-it2v
 
 **爱诗-图生视频-基于首尾帧**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频类型**
 
@@ -11285,9 +14345,11 @@ pixverse/pixverse-v5.6-it2v
 
 **输出单价**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 pixverse/pixverse-c1-kf2v
+
+中国内地
 
 有声视频
 
@@ -11333,6 +14395,8 @@ pixverse/pixverse-c1-kf2v
 
 pixverse/pixverse-v6-kf2v
 
+中国内地
+
 有声视频
 
 `audio=true`
@@ -11340,6 +14404,8 @@ pixverse/pixverse-v6-kf2v
 360P
 
 0.21元/秒
+
+无免费额度
 
 540P
 
@@ -11375,6 +14441,8 @@ pixverse/pixverse-v6-kf2v
 
 pixverse/pixverse-v5.6-kf2v
 
+中国内地
+
 有声视频
 
 `audio=true`
@@ -11382,6 +14450,8 @@ pixverse/pixverse-v5.6-kf2v
 360P
 
 0.47元/秒
+
+无免费额度
 
 540P
 
@@ -11417,13 +14487,13 @@ pixverse/pixverse-v5.6-kf2v
 
 **爱诗-参考生视频**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频类型**
 
@@ -11431,9 +14501,11 @@ pixverse/pixverse-v5.6-kf2v
 
 **输出单价**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 pixverse/pixverse-c1-r2v
+
+中国内地
 
 有声视频
 
@@ -11479,6 +14551,8 @@ pixverse/pixverse-c1-r2v
 
 pixverse/pixverse-v5.6-r2v
 
+中国内地
+
 有声视频
 
 `audio=true`
@@ -11486,6 +14560,8 @@ pixverse/pixverse-v5.6-r2v
 360P
 
 0.47元/秒
+
+无免费额度
 
 540P
 
@@ -11521,13 +14597,13 @@ pixverse/pixverse-v5.6-r2v
 
 **可灵-视频生成**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频类型**
 
@@ -11535,9 +14611,11 @@ pixverse/pixverse-v5.6-r2v
 
 **输出单价**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 kling/kling-v3-video-generation
+
+中国内地
 
 无声视频
 
@@ -11563,11 +14641,15 @@ kling/kling-v3-video-generation
 
 kling/kling-v3-omni-video-generation
 
+中国内地
+
 无声视频（无参考视频）
 
 720P
 
 0.6元/秒
+
+无免费额度
 
 1080P
 
@@ -11595,21 +14677,23 @@ kling/kling-v3-omni-video-generation
 
 **Vidu-文生视频**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输出单价**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 vidu/viduq3-pro\_text2video
+
+中国内地
 
 540P
 
@@ -11627,9 +14711,13 @@ vidu/viduq3-pro\_text2video
 
 vidu/viduq3-turbo\_text2video
 
+中国内地
+
 540P
 
 0.25元/秒
+
+无免费额度
 
 720P
 
@@ -11641,9 +14729,13 @@ vidu/viduq3-turbo\_text2video
 
 vidu/viduq2\_text2video
 
+中国内地
+
 540P
 
 0.1125元/秒
+
+无免费额度
 
 720P
 
@@ -11655,21 +14747,23 @@ vidu/viduq2\_text2video
 
 **Vidu-图生视频-基于首帧**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输出单价**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 vidu/viduq3-pro\_img2video
+
+中国内地
 
 540P
 
@@ -11687,9 +14781,13 @@ vidu/viduq3-pro\_img2video
 
 vidu/viduq3-turbo\_img2video
 
+中国内地
+
 540P
 
 0.25元/秒
+
+无免费额度
 
 720P
 
@@ -11701,9 +14799,13 @@ vidu/viduq3-turbo\_img2video
 
 vidu/viduq2-pro\_img2video
 
+中国内地
+
 540P
 
 0.15625元/秒
+
+无免费额度
 
 720P
 
@@ -11715,9 +14817,13 @@ vidu/viduq2-pro\_img2video
 
 vidu/viduq2-turbo\_img2video
 
+中国内地
+
 540P
 
 0.0875元/秒
+
+无免费额度
 
 720P
 
@@ -11729,9 +14835,13 @@ vidu/viduq2-turbo\_img2video
 
 vidu/viduq2-pro-fast\_img2video
 
+中国内地
+
 720P
 
 0.1元/秒
+
+无免费额度
 
 1080P
 
@@ -11739,21 +14849,23 @@ vidu/viduq2-pro-fast\_img2video
 
 **Vidu-图生视频-基于首尾帧**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输出单价**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 vidu/viduq3-pro\_start-end2video
+
+中国内地
 
 540P
 
@@ -11771,9 +14883,13 @@ vidu/viduq3-pro\_start-end2video
 
 vidu/viduq3-turbo\_start-end2video
 
+中国内地
+
 540P
 
 0.25元/秒
+
+无免费额度
 
 720P
 
@@ -11785,9 +14901,13 @@ vidu/viduq3-turbo\_start-end2video
 
 vidu/viduq2-pro\_start-end2video
 
+中国内地
+
 540P
 
 0.15625元/秒
+
+无免费额度
 
 720P
 
@@ -11799,9 +14919,13 @@ vidu/viduq2-pro\_start-end2video
 
 vidu/viduq2-turbo\_start-end2video
 
+中国内地
+
 540P
 
 0.0875元/秒
+
+无免费额度
 
 720P
 
@@ -11813,21 +14937,23 @@ vidu/viduq2-turbo\_start-end2video
 
 **Vidu-参考生视频**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输出视频分辨率**
 
 **输出单价**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 vidu/viduq3-mix\_reference2video
+
+中国内地
 
 720P
 
@@ -11841,9 +14967,13 @@ vidu/viduq3-mix\_reference2video
 
 vidu/viduq3\_reference2video
 
+中国内地
+
 540P
 
 0.3125元/秒
+
+无免费额度
 
 720P
 
@@ -11855,9 +14985,13 @@ vidu/viduq3\_reference2video
 
 vidu/viduq3-turbo\_reference2video
 
+中国内地
+
 540P
 
 0.15625元/秒
+
+无免费额度
 
 720P
 
@@ -11869,9 +15003,13 @@ vidu/viduq3-turbo\_reference2video
 
 vidu/viduq2-pro\_reference2video
 
+中国内地
+
 540P
 
 0.25元/秒
+
+无免费额度
 
 720P
 
@@ -11883,9 +15021,13 @@ vidu/viduq2-pro\_reference2video
 
 vidu/viduq2\_reference2video
 
+中国内地
+
 540P
 
 0.21875元/秒
+
+无免费额度
 
 720P
 
@@ -11899,13 +15041,13 @@ vidu/viduq2\_reference2video
 
 **Tripo-3D模型生成**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 计费规则：输入不计费，输出按次数计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **3D任务类型**
 
@@ -11914,6 +15056,8 @@ vidu/viduq2\_reference2video
 **输出单价**
 
 Tripo/Tripo-H3.1
+
+中国内地
 
 文生3D
 
@@ -11969,6 +15113,8 @@ Tripo/Tripo-H3.1
 
 Tripo/Tripo-P1.0
 
+中国内地
+
 文生3D
 
 无贴图
@@ -12003,11 +15149,11 @@ Tripo/Tripo-P1.0
 
 影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
 
-## 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -12019,6 +15165,8 @@ text-embedding-v4
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
+中国内地
+
 0.5元
 
 100万Token
@@ -12026,6 +15174,8 @@ text-embedding-v4
 text-embedding-v3
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
+
+中国内地
 
 0.5元
 
@@ -12035,6 +15185,8 @@ text-embedding-v2
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
+中国内地
+
 0.7元
 
 50万Token
@@ -12043,11 +15195,15 @@ text-embedding-v1
 
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
+中国内地
+
 0.7元
 
 50万Token
 
 text-embedding-async-v2
+
+中国内地
 
 0.7元
 
@@ -12055,43 +15211,47 @@ text-embedding-async-v2
 
 text-embedding-async-v1
 
+中国内地
+
 0.7元
 
 2000万Token
 
-## **国际**
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
 text-embedding-v4
 
+国际
+
 0.514元
 
 text-embedding-v3
+
+国际
 
 0.514元
 
 ## **多模态向量**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 计费规则：按输入Token计费，输出不计费。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
 
+**服务部署范围**
+
 **输入单价（每百万Token）**
 
-**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
 
 **文本**
 
@@ -12099,33 +15259,49 @@ text-embedding-v3
 
 qwen3-vl-embedding
 
+中国内地
+
 0.7元
 
 1.8元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 qwen2.5-vl-embedding
 
+中国内地
+
+100万Token
+
 tongyi-embedding-vision-plus
 
+中国内地
+
 0.5元
 
 0.5元
+
+100万Token
 
 tongyi-embedding-vision-flash
 
+中国内地
+
 0.15元
 
 0.15元
+
+100万Token
 
 multimodal-embedding-v1
+
+中国内地
 
 0.7元
 
 0.9元
+
+100万Token
 
 ## **文本排序**
 
@@ -12133,55 +15309,73 @@ multimodal-embedding-v1
 
 计费规则：按输入Token计费，输出不计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-qwen3-rerank
-
-0.5元
-
-各100万Token
 
 有效期：阿里云百炼开通后90天内
 
-gte-rerank-v2
+qwen3-vl-rerank
 
-0.8元
+中国内地
 
-## 国际
+文本输入：0.7元
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+图片输入：1.8元
 
-**模型 ID（Model ID）**
-
-**输入单价（每百万Token）**
-
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+100万Token
 
 qwen3-rerank
 
-0.74942元
+中国内地
 
-无免费额度
+文本输入：0.5元
+
+100万Token
+
+gte-rerank-v2
+
+中国内地
+
+文本输入：0.8元
+
+100万Token
+
+#### 新加坡
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每百万Token）**
+
+qwen3-rerank
+
+国际
+
+0.74942元
 
 ## **行业模型**
 
 ### **通义法睿**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 计费规则：按输入Token和输出Token计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -12191,6 +15385,8 @@ qwen3-rerank
 
 farui-plus
 
+中国内地
+
 20元
 
 20元
@@ -12199,13 +15395,13 @@ farui-plus
 
 ### **意图理解**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 计费规则：按输入Token和输出Token计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -12213,7 +15409,11 @@ farui-plus
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 tongyi-intent-detect-v3
+
+中国内地
 
 0.4元
 
@@ -12221,17 +15421,19 @@ tongyi-intent-detect-v3
 
 100万Token
 
-有效期：阿里云百炼开通后90天内
-
 ### **角色扮演**
 
 计费规则：按输入Token和输出Token计费。
 
-## 中国内地
+**说明**
 
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -12239,43 +15441,49 @@ tongyi-intent-detect-v3
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 qwen-plus-character
 
 > [Session Cache](https://help.aliyun.com/zh/model-studio/role-play#6034f997cde74)享有折扣
+
+中国内地
 
 0.8元
 
 2元
 
-各100万Token
-
-有效期：阿里云百炼开通后90天内
+100万Token
 
 qwen-flash-character
 
 > [Session Cache](https://help.aliyun.com/zh/model-studio/role-play#6034f997cde74)享有折扣
 
+中国内地
+
 0.25元
 
 1.5元
+
+100万Token
 
 qwen-flash-character-2026-02-26
 
 > [Session Cache](https://help.aliyun.com/zh/model-studio/role-play#6034f997cde74)享有折扣
 
+中国内地
+
 0.18元
 
 1.5元
 
-## 国际
+100万Token
 
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
-
-**说明**
-
-国际部署范围下的模型无免费额度。
+#### 新加坡
 
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价 （每百万Token）**
 
@@ -12285,6 +15493,8 @@ qwen-plus-character
 
 > [Session Cache](https://help.aliyun.com/zh/model-studio/role-play#6034f997cde74)享有折扣
 
+国际
+
 3.747元
 
 10.492元
@@ -12293,11 +15503,15 @@ qwen-flash-character
 
 > [Session Cache](https://help.aliyun.com/zh/model-studio/role-play#6034f997cde74)享有折扣
 
+国际
+
 0.375元
 
 2.998元
 
 qwen-plus-character-ja
+
+国际
 
 3.67元
 
@@ -12305,13 +15519,13 @@ qwen-plus-character-ja
 
 ### **界面交互**
 
-**说明**
-
-服务部署范围仅支持[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)。数据存储位于**北京接入地域**，模型推理计算资源仅限于中国内地。
-
 计费规则：按输入Token和输出Token计费。
 
+#### 华北2（北京）
+
 **模型 ID（Model ID）**
+
+**服务部署范围**
 
 **输入单价（每百万Token）**
 
@@ -12319,7 +15533,11 @@ qwen-plus-character-ja
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+有效期：阿里云百炼开通后90天内
+
 gui-plus
+
+中国内地
 
 1.5元
 
@@ -12327,9 +15545,9 @@ gui-plus
 
 100万Token
 
-有效期：阿里云百炼开通后90天内
-
 gui-plus-2026-02-26
+
+中国内地
 
 ## 错误码
 

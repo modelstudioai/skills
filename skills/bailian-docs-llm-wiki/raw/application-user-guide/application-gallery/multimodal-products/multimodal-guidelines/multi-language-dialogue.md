@@ -500,21 +500,17 @@
 1.  在控制台点击创建「多模态应用」。
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1476777671/p1041959.png)
-
 2.  选择所需语种和品类，创建应用。系统会提供最合适的模型、提示词和功能组合。
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1476777671/p1041957.png)
+本示例中，**对话语言**选择**英语**，场景模板选择**AI眼镜**。
 
 3.  根据业务场景调整提示词等内容，当前语种不可用的功能会被隐藏。
     
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1476777671/p1041956.png)
+在**语音交互**页签中，可配置**语音识别**（如 Fun-ASR 实时语音识别）和**语音合成**（如 CosyVoice-v3-Flash 大模型），以及**热词**、**即时纠错**和**对话打断**（任意语音打断/全双工 或 点击打断/半双工）等选项。页面还包含**理解和生成**、**技能**、**Agent**页签供后续配置。
 
-4.  点击「立即运行」，在右侧选择合适的音色。
+4.  点击「立即运行」，在右侧运行面板的音色选择区域中，浏览可用音色列表并选择合适的音色。
     
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1476777671/p1041958.png)
 
 5.  在右侧进行对话体验，以及后续的发布、开发接入和购买等流程。

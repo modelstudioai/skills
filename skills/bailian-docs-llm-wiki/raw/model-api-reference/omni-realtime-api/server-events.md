@@ -156,6 +156,10 @@ VAD检测阈值。
 
 检测语音停止的静音持续时间。
 
+**idle\_timeout\_ms** `_integer_`
+
+静默超时时间（毫秒）。仅在 `server_vad` 模式下，使用 `qwen3.5-omni-plus-realtime` 或 `qwen3.5-omni-flash-realtime` 模型时返回。
+
 **enable\_search** `_boolean_`
 
 是否启用联网搜索功能。仅 Qwen3.5-Omni-Realtime 模型支持。
@@ -297,6 +301,10 @@ VAD检测阈值。
 **silence\_duration\_ms** `_integer_`
 
 检测语音停止的静音持续时间。
+
+**idle\_timeout\_ms** `_integer_`
+
+静默超时时间（毫秒）。仅在 `server_vad` 模式下，使用 `qwen3.5-omni-plus-realtime` 或 `qwen3.5-omni-flash-realtime` 模型时返回。
 
 **enable\_search** `_boolean_`（可选）
 

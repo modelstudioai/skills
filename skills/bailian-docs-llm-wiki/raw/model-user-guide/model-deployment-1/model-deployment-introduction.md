@@ -14,7 +14,7 @@
 
 计费方式在服务创建后无法更改。如需切换，必须下线已经部署的模型后再重新部署。
 
-**预置吞吐**
+**预置吞吐**（PTU，Provisioned Throughput Unit）
 
 **（高吞吐；高性能）**
 
@@ -443,7 +443,11 @@ glm-5.1
 
 **小时单价（元）**
 
+**最小计费：分钟**
+
 **包月单价（元）**
+
+**最小计费：天**
 
 千问3.6-35B-A3B
 
@@ -943,7 +947,11 @@ MU1 x 4
 
 **小时单价（元）**
 
+**最小计费：分钟**
+
 **包月单价（元）**
+
+**最小计费：天**
 
 GLM-5
 
@@ -975,7 +983,11 @@ PD分离模式：¥386,848
 
 **小时单价（元）**
 
+**最小计费：分钟**
+
 **包月单价（元）**
+
+**最小计费：天**
 
 DeepSeek-v4-Flash
 
@@ -1007,7 +1019,11 @@ PD分离模式：¥480,576
 
 **小时单价（元）**
 
+**最小计费：分钟**
+
 **包月单价（元）**
+
+**最小计费：天**
 
 MiniMax-M2.5
 
@@ -1055,7 +1071,11 @@ MU2 x 8
 
 **小时单价（元）**
 
+**最小计费：分钟**
+
 **包月单价（元）**
+
+**最小计费：天**
 
 千问3-VL-235B-A22B-Instruct
 
@@ -1177,7 +1197,11 @@ MU6 x 4
 
 **小时单价（元）**
 
+**最小计费：分钟**
+
 **包月单价（元）**
+
+**最小计费：天**
 
 千问3.5-Omni-Flash
 
@@ -1503,7 +1527,7 @@ print(completion)
 
 ### **可以上传和部署自己的模型吗？**
 
-支持在[我的模型控制台（北京）](https://pre-bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_center)导入部分开源模型，详细支持列表请参考：[模型导入](https://help.aliyun.com/zh/model-studio/model-import)。
+支持在[我的模型控制台（北京）](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_center)导入部分开源模型，详细支持列表请参考：[模型导入](https://help.aliyun.com/zh/model-studio/model-import)。
 
 此外，阿里云人工智能平台 PAI 提供了部署自有模型的功能，您可以参考[PAI-LLM大语言模型部署](https://help.aliyun.com/zh/pai/deploy-an-llm/)了解部署方法。
 

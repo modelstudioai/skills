@@ -1,128 +1,129 @@
 # application [use cases](use-cases.md)
 
-本页汇总百炼平台开箱即用的若干典型应用方案，覆盖在网站、微信公众号、钉钉、企业微信等渠道上接入基于百炼 RAG 的 AI 助手/客服/机器人，以及在本地基于通义千问 API 构建 RAG 应用的方案。所有渠道接入方案均依托 AppFlow（无代码集成）+ 百炼智能体应用 + 知识库三件套实现，开发者可在 10 分钟内完成最小可用版本。
+百炼平台提供多种典型应用场景的接入方案，帮助开发者在数分钟内为网站、微信公众号、企业微信、钉钉以及本地部署的 RAG 应用接入大模型能力。所有方案都基于「百炼智能体应用 + AppFlow 连接流 + 知识库（可选）」的统一架构，按 token 计费，新用户有免费额度覆盖初期投入。
 
-## 方案矩阵
+## 支持的接入渠道
 
-下表整理了各场景的入口、是否需要外部凭证、典型耗时与文档链接，便于按渠道快速选型。
-
-| 渠道 / 场景 | 集成方式 | 关键外部凭证 | 适用文档 |
+| 渠道 | 说明 | 是否需要编码 | 核心依赖 |
 | --- | --- | --- | --- |
-| 网站悬浮 AI 助手 | AppFlow + Web 集成（悬浮挂件脚本） | 百炼 API Key、应用 ID | [在网站上增加一个AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-website-in-10-minutes.md) |
-| 微信公众号智能客服 | AppFlow + 微信公众号连接流（认证/未认证两条模板） | 百炼 API Key、应用 ID、公众号 AppID | [10分钟让微信公众号成为智能客服](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-wechat-in-10-minutes.md) |
-| 钉钉群机器人 | AppFlow + 钉钉应用（HTTP 模式 Webhook） | 百炼 API Key、应用 ID、钉钉 Client ID / Secret，并开通 `Card.Streaming.Write`、`Card.Instance.Write` | [10分钟在钉钉上增加一个AI机器人](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-dingtalk-in-10-minutes.md) |
-| 企业微信内部应用 | AppFlow + 企业微信 API 接收消息 | 百炼 API Key、应用 ID、企业 ID、AgentId、Secret，需配置可信 IP 与可信域名 | [在企业微信中集成一个 AI 助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-work-wechat.md) |
-| 本地 RAG 应用 | Python（FastAPI + Gradio + LlamaIndex），调用百炼通义千问 API 与可选 Embedding | 百炼 API Key | [基于本地知识库构建RAG应用](../../raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md) |
+| 网站 | 通过 AppFlow 的 Web 页面集成，在网站 HTML 中嵌入几行脚本 | 仅粘贴脚本 | AppFlow AI 助手 Web 集成 |
+| 微信公众号（订阅号） | 通过 AppFlow 模板将公众号消息转发到百炼 RAG 应用 | 无 | 公众号认证状态决定使用不同模板 |
+| 企业微信 | 自建企业微信应用 + AppFlow 连接流 + Webhook 配置 | 无 | 企业 ID、AgentId、Secret |
+| 钉钉 | 自建钉钉应用 + AppFlow 连接流 + 机器人配置 | 无 | Client ID、Client Secret |
+| 本地 RAG | 本地 Python 服务 + 通义千问 API + Gradio 界面 | 需要 Python 环境 | LlamaIndex、百炼 Embedding API |
 
-## 共用前置步骤：创建大模型问答应用
+各渠道的详细接入步骤请参考：[在网站上增加一个AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-website-in-10-minutes.md)、[10分钟让微信公众号成为智能客服](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-wechat-in-10-minutes.md)、[在企业微信中集成一个 AI 助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-work-wechat.md)、[在钉钉上增加一个AI机器人](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-dingtalk.md)、[基于本地知识库构建RAG应用](../../raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)。
 
-四个渠道集成方案（网站、微信公众号、钉钉、企业微信）共享同一段前置步骤：
+## 通用接入流程
 
-1. 进入百炼控制台**应用管理**，创建**智能体应用**。
-2. 选择模型并保存其它默认参数；可选择性填写一段 system Prompt 设置角色。
-3. 发布应用，前往**应用管理**复制**应用 ID**，前往**密钥管理 / API Key** 页创建并保存 **API Key**。
+所有渠道都遵循以下步骤，差异仅在第二步的「平台侧配置」：
 
-> **注意**：原文档中网站方案选模型为 **Qwen3.5-Plus**，而钉钉、微信公众号、企业微信方案均建议选**千问-Plus（qwen-plus）**。两者均为百炼推荐的"能力均衡"档位，没有功能差异；按当时控制台中可选的最新 Plus 档模型选择即可，不影响后续 AppFlow / Webhook 配置。
+1. **创建百炼智能体应用**：在百炼控制台 → 应用管理 → 创建智能体应用，选择模型并配置 Prompt，发布后获得**应用 ID**。
+2. **获取 API Key**：在百炼控制台 → 密钥管理 中创建 API Key。
+3. **创建 AppFlow 连接流**：使用对应渠道的 AppFlow 预置模板，分别配置「平台侧凭证」（如微信 AppID、企业微信 AgentId/Secret、钉钉 Client ID/Secret）和「百炼凭证」（API Key + 应用 ID），完成后发布连接流并获得 **WebhookUrl**（网站集成除外）。
+4. **平台侧配置**：把 WebhookUrl 填入对应平台的机器人/消息接收配置中。
+5. **（可选）配置知识库**：让 AI 能回答私域问题，具体见下文「知识库配置」。
 
-阿里云百炼对新用户提供[免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota)，可覆盖以上教程消耗。
+## 各渠道关键差异
 
-## 渠道集成方案
+### 网站
 
-### 网站集成（悬浮挂件）
-
-通过 AppFlow 创建 **AI 助手**，导入模型时选择**阿里云百炼**作为模型服务平台并新增凭证（填入 API Key + 应用 ID）；然后创建 **Web 页面集成**，自定义字体、背景、头像、预置问题。最后回到 **Web 集成 → 登录配置 → 匿名方式**，复制**悬浮挂件部署脚本**粘贴到目标网站 HTML 中即可。详见 [在网站上增加一个AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-website-in-10-minutes.md)。
-
-如果暂时没有自有网站，可使用文档提供的[函数计算 FC 一键部署模板](https://fcnext.console.aliyun.com/applications/create?template=web-page-deploy)体验完整流程。
+- 不走 Webhook，而是通过 AppFlow 的 **Web 页面集成** → 复制「悬浮挂件部署脚本」，粘贴到网站 HTML 文件中即可。
+- 支持自定义字体、背景、头像、预置问题等可视化样式。
+- 也可用函数计算 FC 一键部署示例网站快速体验。
 
 ### 微信公众号
 
-公众号渠道的关键决策是**是否完成微信认证**——它决定了应使用哪一份 AppFlow 模板：
-
-- 已认证：使用[客户消息](https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Service_Center_messages.html)接口，对响应时间无 5 秒硬限制。
-- 未认证：只能使用[被动回复消息](https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Passive_user_reply_message.html)接口，**5 秒超时即放弃回复**。对此场景应在百炼应用 Prompt 中强制要求简短回答（如"请总是给出简短的回答，不要讲太多"），或改用 **qwen-turbo** 以压缩首字延迟，否则极易触发限制。
-
-授权过程必须用**公众号主管理员**微信扫码完成，普通管理员会失败。详见 [10分钟让微信公众号成为智能客服](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-wechat-in-10-minutes.md)。
-
-> **注意**：服务器配置一旦开启，公众号原有的**自定义菜单会因冲突自动关闭**；未认证账号无法同时启用服务器配置和自定义菜单，已认证账号可通过 `access_token` + `menu/create` 接口重新配置菜单。
-
-### 钉钉
-
-钉钉方案要求账号具备[开发者权限](https://open.dingtalk.com/document/orgapp/obtain-developer-permissions)，创建钉钉应用后需要**开通两项卡片消息权限**：`Card.Streaming.Write` 与 `Card.Instance.Write`。AppFlow 模板创建连接流后，会得到一个 **WebhookUrl**，将其填入钉钉应用的**机器人配置 → HTTP 模式 → 消息接收地址**即可。
-
-> **注意**：消息接收模式**必须**选择 **HTTP 模式**，AppFlow 暂不支持 Stream 模式，选错将导致机器人不回消息。
-
-应用配置完毕后，需进入**版本管理与发布**创建新版本并选择**应用可见范围**，才能被组织内成员搜索到。详见 [10分钟在钉钉上增加一个AI机器人](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-dingtalk-in-10-minutes.md)。
-
-可选增强：通过修改 AppFlow 卡片模板与 Prompt（`{{Node2.reasoning}}` / `{{Node2.text}}`），可在卡片中展示**回答引用的文档**或 **DeepSeek 深度思考过程**。
+- **已认证**公众号使用「客户消息」接口，支持长回复；**未认证**公众号只能走「被动回复」，响应时间被微信限制为 5 秒。
+- 开启服务器配置后，原有**自定义菜单会被关闭**。未认证订阅号无法通过接口恢复自定义菜单；已认证服务号/订阅号需通过微信菜单接口重新配置。
 
 ### 企业微信
 
-企业微信方案与钉钉类似，差异点在于必须配置**企业可信 IP**与**API 接收消息**（URL = WebhookUrl，Token / EncodingAESKey 由 AppFlow 创建凭证时生成）。
+- 需要在企业微信开发者中心创建「企业内部应用」，获取 **企业 ID、AgentId、Secret**。
+- AppFlow 连接流发布后会生成 Token 和 EncodingAESKey，需填入企业微信「API 接收消息」页面。
+- 必须配置**企业可信 IP**，否则通讯录、身份校验等接口会被限制。
+- 若遇到「域名主体校验未通过」，需要通过 AppFlow 域名管理添加二级域名（需在阿里云备案），或使用 Nginx/ECS 代理转发。
 
-- **域名校验**：企业微信要求接收消息域名与企业备案主体一致。若 WebhookUrl 主机名校验失败，需通过 AppFlow 域名管理添加二级域名（已在阿里云备案的可一键创建 CNAME），或勾选 **AppFlow 凭证 → 内网代理**，由计算巢 / 自有 Nginx / ECS 托管实例做请求转发。
-- **可信 IP 唯一性**：同一个可信 IP 仅能服务一个企业，否则企业微信会判定为第三方服务商，导致通讯录、身份校验接口不可用。需通过自有 ECS 或托管实例做请求转发以隔离。
+### 钉钉
 
-详见 [在企业微信中集成一个 AI 助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-work-wechat.md)。
+- 需要在钉钉开放平台创建应用并获取 **Client ID、Client Secret**。
+- 必须为应用授予 `Card.Streaming.Write` 和 `Card.Instance.Write` 权限（发送卡片消息）。
+- 机器人消息接收模式**只能选 HTTP 模式**，选 Stream 模式会导致无法返回消息。
+- 应用需「创建版本并发布」后，其他组织成员才能使用。
+- 如需在回答中展示引用文档或 DeepSeek 深度思考过程，需使用特定的钉钉卡片模板和 AppFlow 工作流模板。
 
-## 本地 RAG 应用（Python 方案）
+### 本地 RAG
 
-如果业务需要把**知识库与检索环节保留在本地**（更灵活的切分策略 / 嵌入模型 / 避免大文件上传），可参考 [基于本地知识库构建RAG应用](../../raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)。该方案将**检索**留在本地（LlamaIndex 向量存储 + 可选嵌入模型），**生成**调用百炼通义千问 API。
+- 通过 Python 脚本搭建本地检索 + 云端生成的 RAG 应用，不依赖 AppFlow。
+- Python 版本要求 3.8 ~ 3.12，默认使用百炼 Embedding API；也可切换为本地 Embedding 模型（如 GTE-large）。
+- 支持临时上传文件（pdf/docx/txt/xlsx/csv）和持久化知识库两种方式。
+- 通过 Gradio 界面交互，也可通过 Gradio 自动生成的 API 集成到业务系统。
 
-环境与运行：
+## 支持的模型
 
-- Python `>= 3.8` 且 `<= 3.12`。
-- 解压 [local_rag.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250414/odwvrb/local_rag.zip)，`pip install -r requirements.txt`。
-- 配置 `DASHSCOPE_API_KEY` 到环境变量。
-- `uvicorn main:app --port 7866` 启动 Gradio 界面，浏览器访问 `http://127.0.0.1:7866`。
+所有方案默认推荐 **千问-Plus（Qwen-Plus）**，效果、速度、成本均衡。其他可选模型：
 
-知识库与文件管理：
+- **Qwen-Max**：效果最优，速度较慢、成本较高，适合复杂推理。
+- **Qwen-Turbo**：速度最快、成本最低，适合对响应延迟敏感但准确度要求不高的场景。
 
-- 临时上传：在 RAG 问答输入框旁直接附件上传 pdf / docx / txt / xlsx / csv，**页面刷新后失效**。
-- 长期使用：通过**上传数据**+**创建知识库**入口，结构化数据落 `File/Structured`，非结构化落 `File/Unstructured`，向量数据落 `VectorStore`。
-- 单文件不建议超过 100 MB（受嵌入模型 API 限流影响）。
+> **注意**：网站集成文档中推荐的模型已更新为 **Qwen3.5-Plus**，而微信公众号、企业微信、钉钉三篇文档仍写作「千问-Plus」。实际选择时以百炼控制台当前可用模型列表为准，两者在能力定位上等价。
 
-可调参数（在 Gradio 界面中即时生效）：
+## 关键参数
 
-- 模型：`qwen-max`（效果）/ `qwen-plus`（均衡）/ `qwen-turbo`（速度）。
-- 温度：控制随机性。
-- 最大回复长度：控制输出 token 上限。
-- 携带上下文轮数：设为 1 表示无历史。
-- 召回片段数 / 相似度阈值：检索粒度调优。
-- 默认嵌入模型为百炼托管 API；如需切到本地 GTE 中文 embedding，按文档取消 `chat.py` / `create_kb.py` 中的 ModelScope 段注释并 `modelscope download` 模型。
+### 模型参数
 
-应用同时通过 **Gradio "通过 API 使用"** 提供 API 自动文档，可直接集成进业务后端。
+| 参数 | 说明 |
+| --- | --- |
+| 温度 | 越高生成越随机；客服场景建议偏低 |
+| 最大回复长度 | 控制最多 token 数，详细描述调高、简短回答调低 |
+| 携带上下文轮数 | 设为 1 时模型不参考历史对话 |
 
-## 通用配置与运维要点
+### RAG 参数
 
-### 知识库（RAG）
+| 参数 | 说明 |
+| --- | --- |
+| 召回片段数 | 越大参考信息越多，但可能引入噪音 |
+| 相似度阈值 | 过滤相似度低于该值的片段；设为 0 表示不过滤 |
 
-四个渠道集成方案的"为应用增加私有知识"步骤完全一致：
+本地 RAG 还支持调整文档切分策略和更换嵌入模型。
 
-1. **数据连接 / 文件上传**：在百炼控制台**数据连接 → 默认文件连接器**（或**数据中心 → 文件**）导入数据，解析通常需要 1–6 分钟。
-2. **创建知识库**：选**标准版**，绑定上传的文件，向量存储类型若希望多应用共享可选 **ADB-PG**，否则保留默认。
-3. **应用绑定**：回到应用配置页绑定知识库，**调用方式选"必定调用"**，测试通过后**发布**。
+## 知识库配置
 
-### 对话日志 / 链路调试
+无论哪种接入渠道，让 AI 回答私域问题的关键都是给百炼应用**挂载知识库**：
 
-对于通过 AppFlow 接入的方案（公众号、钉钉、企业微信），可在 AppFlow 工作流中编辑版本，添加 **SLS 日志云服务** 节点并选择**写入日志**动作，将对话 Key/Value 写入指定 Project + Logstore（需开启全文索引才能查询）。出现"对话无响应"先到 AppFlow **运行日志 → 详情**排查；常见原因：
+1. **上传文档**：在百炼控制台 → 数据连接 / 文件页签上传 pdf、docx、txt、xlsx、csv 等文件，单文档最大 100MB 或 1000 页。
+2. **创建知识库**：在知识库页面创建标准版，勾选上一步上传的文档。向量存储可选默认或 **ADB-PG**（集中管理多个应用的向量数据时推荐）。
+3. **应用引用知识库**：在应用的「知识库 / 文档」配置中添加目标知识库，调用方式建议选「**必定调用**」，验证效果后点击「发布」。
 
-- 应用 ID 填错或前后含空格；
-- 公众号未认证却用了已认证模板；
-- 微信公众号未配置 AppFlow 白名单 IP；
-- 模型生成超过 5 秒（仅未认证公众号场景触发）。
+> **注意**：本地 RAG 同时支持「临时文件」和「持久化知识库」两种知识源，若两者同时使用，应用会优先参考临时文件。
 
-### 应用质量与持续优化
+## 限制与注意事项
 
-正式上线前建议通过百炼[人工评测 / 应用评测](https://help.aliyun.com/zh/model-studio/evaluate-application/)流程组织业务方共建测试集；不达预期时迭代 Prompt、补私有知识或调整文档切分策略。
+- **新用户免费额度**可覆盖所有教程场景的资源消耗，超出后按 token 计费。
+- **微信公众号未认证**：被动回复 5 秒超时限制会导致长回答失败，建议完成认证，或在 Prompt 中要求模型「给出简短回答」并改用 Qwen-Turbo。
+- **企业微信域名主体校验**：Webhook 域名必须与企业主体备案一致，否则需配置二级域名或 Nginx 代理。
+- **企业微信可信 IP**：一个可信 IP 只能用于一个企业，多企业共用会被识别为服务商。建议使用自有 ECS 或托管实例转发请求。
+- **钉钉机器人**：消息接收模式必须选 HTTP 模式；应用必须发布版本后其他成员才能使用。
+- **本地 RAG 文件体积**：受 Embedding API 限流影响，不建议上传超过 100MB 的单文件。
+- **文档解析时间**：上传大文档后，百炼通常需要 1~6 分钟解析，请耐心等待。
+
+## 应用评测与优化
+
+正式上线前建议组织业务人员参与**人工评测**，验证回答是否符合预期。效果不佳时的优化方向：
+
+- **优化提示词**：明确角色、回复风格、边界（参考 [prompt](prompt.md) engineering 最佳实践）。
+- **完善知识库**：补充缺失文档、调整切分策略。
+- **调整参数**：温度、召回片段数、相似度阈值等。
+- **本地 RAG**：可尝试更换嵌入模型（如从云端 API 切换到 GTE-large 本地模型）对比召回效果。
+
+如需记录对话日志用于分析，可在 AppFlow 连接流中追加 SLS 日志云服务节点，将用户输入、模型输出写入指定的 Project / Logstore。
 
 ## 来源文档
 
 - [在网站上增加一个AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-website-in-10-minutes.md)
 - [10分钟让微信公众号成为智能客服](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-wechat-in-10-minutes.md)
-- [10分钟在钉钉上增加一个AI机器人](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-dingtalk-in-10-minutes.md)
 - [基于本地知识库构建RAG应用](../../raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)
 - [在企业微信中集成一个 AI 助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-work-wechat.md)
-
-
+- [在钉钉上增加一个AI机器人](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-dingtalk.md)
 
 

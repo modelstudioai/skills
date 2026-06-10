@@ -56,7 +56,7 @@
 
 1. **同时输出意图与[函数调用](../concepts/function-calling.md)**：System Message 末尾加 `Response in INTENT_MODE.`，并把工具 JSON Schema 列表注入 System。响应是 `<tags>...</tags><tool_call>...</tool_call><content>...</content>` 三段式文本，需要用正则解析（文档给出了 `parse_text` 参考实现）。
 2. **只输出意图标签**：System Message 提供 `{"意图key": "意图描述"}` 字典，要求 `Just reply with the chosen tag.`，模型只返回选中的 key。
-3. **只输出函数调用信息**：与模式 1 类似但只回工具调用部分。
+3. **只输出[函数调用](../concepts/function-calling.md)信息**：与模式 1 类似但只回工具调用部分。
 
 ### 调用方式
 
@@ -105,6 +105,7 @@
 - [文本排序](../../raw/model-api-reference/more-models/text-rerank-api.md)
 - [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)
 - [通义法睿大语言模型](../../raw/model-api-reference/more-models/tongyi-farui-api.md)
+
 
 
 

@@ -26,7 +26,7 @@ client = OpenAI(
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
-    model="qwen3.6-plus",
+    model="qwen3.7-plus",
     messages=[{'role': 'user', 'content': '你是谁？'}]
 )
 print(completion.choices[0].message.content)
@@ -51,7 +51,7 @@ const openai = new OpenAI(
 
 async function main() {
     const completion = await openai.chat.completions.create({
-        model: "qwen3.6-plus",
+        model: "qwen3.7-plus",
         messages: [{ role: "user", content: "你是谁？"}],
     });
     console.log(completion.choices[0].message.content)
@@ -78,7 +78,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.6-plus",
+    "model": "qwen3.7-plus",
     "messages": [
         {
             "role": "user",
@@ -151,7 +151,14 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 
 ### **新用户免费额度**
 
-百炼为新用户提供北京地域专属的新人免费额度，用于体验模型调用。额度用完后自动转为按量付费。如需避免意外扣费，可开启[免费额度用完即停](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)功能，额度耗尽时服务自动停止，详见[新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota)。
+百炼为新用户提供北京地域专属的新人免费额度，用于体验模型调用。
+
+-   未认证用户免费额度用完后无法继续使用，需要完成[认证](https://myaccount.console.aliyun.com/cert-info)并[充值](https://billing-cost.console.aliyun.com/fortune/fund-management/recharge)后方能继续按量付费。
+    
+-   已认证用户免费额度用完后自动转为按量付费，如需避免意外扣费，可开启[免费额度用完即停](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)功能，额度耗尽时服务自动停止。
+    
+
+详见[新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota)。
 
 ### **如何支付费用**
 

@@ -106,7 +106,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-支持
+不支持
 
 支持
 
@@ -254,9 +254,25 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
+不支持
+
+支持
+
+`qwen3.7-max-2026-06-08`
+
+1M
+
+64k
+
+256k
+
 支持
 
 支持
+
+不支持
+
+不支持
 
 `qwen3.7-max-2026-05-20`
 
@@ -270,7 +286,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-支持
+不支持
 
 不支持
 
@@ -286,7 +302,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-支持
+不支持
 
 不支持
 
@@ -302,7 +318,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-支持
+不支持
 
 不支持
 

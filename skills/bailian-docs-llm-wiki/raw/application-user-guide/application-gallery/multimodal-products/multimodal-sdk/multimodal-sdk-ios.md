@@ -40,7 +40,7 @@ SDK支持 **Push2Talk**、 **Tap2Talk**和**Duplex**（全双工）三种交互�
 
 ## **环境和依赖**
 
--   导入SDK ([multimodal-dialog-ios-1.0.5.1.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260304/gqwdjp/multimodal-dialog-ios-1.0.5.1.zip)）
+-   导入SDK ([multimodal-dialog-ios-1.0.6.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260609/marpxc/multimodal-dialog-ios-1.0.6.zip))
     
     -   multimodal\_dialog.framework 百炼多模对话SDK。
         

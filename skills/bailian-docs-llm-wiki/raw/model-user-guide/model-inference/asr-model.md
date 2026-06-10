@@ -784,6 +784,16 @@ HTTP
 
 ≤2 GB；≤12 小时（启用说话人分离建议 ≤2 小时）
 
+**Fun-ASR**（`fun-asr-realtime`、`fun-asr-realtime-2026-02-28`）
+
+URL / Base64，单次 1 个
+
+`aac`、`amr`、`avi`、`flac`、`flv`、`m4a`、`mkv`、`mov`、`mp3`、`mp4`、`mpeg`、`ogg`、`opus`、`wav`、`webm`、`wma`、`wmv`
+
+任意
+
+≤2 GB；≤5 分钟
+
 **Paraformer**（`paraformer-v2/v1`、`paraformer-mtl-v1`、`paraformer-8k-v2/v1`）
 
 同 Fun-ASR

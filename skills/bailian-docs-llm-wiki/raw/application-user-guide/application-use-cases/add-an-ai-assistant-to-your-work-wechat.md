@@ -39,11 +39,9 @@
     你叫小助，可以帮助用户解答产品选购、使用等方面的问题。
     ```
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9805168571/p944468.png)
+    在右侧**调试**区域输入问题进行测试，智能体将按照提示词设定进行回复，例如询问身份时会回答"我叫小助"。
     
 3.  在页面右侧可以提问验证模型效果。不过目前它还无法准确回答您公司的商品信息。点击右上角的**发布**，我们将在后面的步骤中去解决这一问题。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5082715571/p996997.png)
     
 
 ### **1.2 获取调用 API 所需的应用ID和API Key**
@@ -52,7 +50,7 @@
 
 1.  在[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)中可以查看所有百炼应用 ID。保存应用 ID 到本地用于后续配置。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2115805571/p959107.png)
+    在应用概览页面，单击**应用ID**右侧的复制图标即可复制应用ID。
     
 2.  前往[API Key](https://bailian.console.aliyun.com/?tab=app#/api-key)页面，点击**创建API Key**，在弹出窗口中创建一个新 API-Key。保存 API-Key 到本地用于后续配置。
     
@@ -63,49 +61,41 @@
 
 ### **2.1 创建应用**
 
-1.  访问[企业微信开发者中心](https://developer.work.weixin.qq.com/login)，扫码登录，点击**立即创建**。根据指引选择**以企业身份创建**和**企业内部应用**。![2024-08-12\_16-48-56](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7752553271/p833961.png)
+1.  访问[企业微信开发者中心](https://developer.work.weixin.qq.com/login)，扫码登录，点击**立即创建**。根据指引选择**以企业身份创建**和**企业内部应用**。
     
-2.  在顶部导航栏中，选择**应用管理**，在**应用**页面下半部分点击**创建应用**。![2024-08-12\_17-50-42](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7752553271/p834042.png)
+2.  在顶部导航栏中，选择**应用管理**，在**应用**页面下半部分点击**创建应用**。
     
-3.  在**创建应用**页面，填写**应用名称**和**应用介绍**，上传应用 logo，选择可见范围，完成后点击**创建应用**。![2024-08-12\_17-53-01](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4648953271/p834043.png)
+3.  在**创建应用**页面，填写**应用名称**和**应用介绍**，上传应用 logo，选择可见范围，完成后点击**创建应用**。
     
 
 ### **2.2 获取**企业 ID**、应用** AgentId **和 Secret**
 
 1.  在应用详情页面，复制 AgentID和 Secret，用于下一步创建连接流。
     
-    ![2024-08-12\_17-56-23](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4648953271/p834048.png)
-    
-2.  在顶部导航栏中，选择**我的企业**，在**企业信息**页面，复制企业 ID，用于下一步创建连接流。![2024-08-12\_18-04-56](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4648953271/p834054.png)
+2.  在顶部导航栏中，选择**我的企业**，在**企业信息**页面，复制企业 ID，用于下一步创建连接流。
     
 
 ## 3\. 创建企业微信连接流
 
 AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将阿里云百炼 RAG 应用和企业微信连接起来。您可以通过预置的 AppFlow 模板创建一个企业微信连接流。
 
-1.  使用[AppFlow模板](https://appflow.console.aliyun.com/vendor/cn-hangzhou/flow/fastTemplate/tl-qiyeweixinself0813shzoa?from=solution)创建连接流，点击**立即使用**进入创建流程。![2024-08-13\_16-22-35](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4648953271/p834553.png)
+1.  使用[AppFlow模板](https://appflow.console.aliyun.com/vendor/cn-hangzhou/flow/fastTemplate/tl-qiyeweixinself0813shzoa?from=solution)创建连接流，点击**立即使用**进入创建流程。在 AppFlow 中找到**企业微信自建应用大模型自动回复**模板，单击**立即使用**。
     
 2.  在企业微信的**账户授权**配置向导页，点击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6252853471/p935918.png)按钮，再点击**添加新凭证**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8677115371/p884244.png)
+    在**请选择凭证**下拉框右侧点击刷新按钮（若已有凭证可直接选择），或点击下方**添加新凭证**按钮创建新的企业微信凭证。
     
 3.  在**创建凭证**对话框中，设置一个自定义凭证名称，填入之前获取的企业微信的企业ID、应用 AgentId 和 Secret。保存AppFlow生成的 Token 和 EncodingAESKey到本地（[4.1 配置API接收消息](#d6e2ae9678564)时需要填写）、保存IP白名单到本地（在[4.2 配置企业可信IP](#9bbf4aacacund)时需要填写）。点击**下一步**。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3916131471/p924261.png)
     
 4.  点击**保存**，完成配置。
     
 5.  在阿里云百炼的**账户授权**配置向导页，点击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6252853471/p935919.png)按钮，再点击**添加新凭证**。在**创建凭证**对话框中，设置一个自定义凭证名称，并填入之前获取的 API-KEY。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8677115371/p884505.png)
-    
-6.  在**执行动作**配置向导页，填写**应用Id**，**应用Id**可以[在阿里云百炼控制台应用管理](https://bailian.console.aliyun.com/#/app-center)获取，完成后点击**下一步**。![2024-08-13\_18-06-24](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4648953271/p834563.png)
+6.  在**执行动作**配置向导页，填写**应用Id**，**应用Id**可以[在阿里云百炼控制台应用管理](https://bailian.console.aliyun.com/#/app-center)获取，完成后点击**下一步**。
     
 7.  在**基本信息**配置向导页，填写**连接流名称**和**连接流描述**（建议保持默认），完成后点击**下一步**。
     
 8.  界面提示流程配置成功，复制并保存 **WebhookUrl**（[4.1 配置API接收消息](#d6e2ae9678564)时需要填写），点击**发布**。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8677115371/p883865.png)
     
 
 ## 4\. 配置企业微信应用
@@ -116,11 +106,11 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
 
 1.  访问[企业微信应用列表](https://work.weixin.qq.com/wework_admin/frame#apps)。找到刚刚创建的应用，点击应用名称进入详情页面。
     
-2.  在应用详情页面，找到接收消息卡片，点击**设置API接收**。![2024-08-12\_17-54-59](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4648953271/p834066.png)
+2.  在应用详情页面，找到接收消息卡片，点击**设置API接收**。
     
-3.  在**API接收消息**页面，您可以参考下图完成配置，然后点击**保存**。
+3.  在**API接收消息**页面，您可以参考以下说明完成配置，然后点击**保存**。
     
-    ![2024-08-12\_18-06-33](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4648953271/p834067.png)
+    在 **选择需要接收的消息事件类型** 区域，勾选以下事件：**用户发送的普通消息**、**自定义菜单操作**、**审批状态通知事件**、**外部联系人变更回调**、**微信客服消息和事件**、**支付和退款通知**、**上下游变更回调**、**直播状态变更回调**、**会议室预定状态变更回调**、**成员申请高级功能状态通知**；不勾选 **上报地理位置** 和 **上报进入应用事件**。
     
     -   **URL**填入上一步复制的 **WebhookUrl**。
         
@@ -136,7 +126,7 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
 
 ### **4.2 配置企业可信IP**
 
-1.  在应用详情页面，在页面下方开发者接口找到**企业可信IP**卡片，点击**配置**。![2024-08-12\_22-13-09](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7752553271/p834113.png)
+1.  在应用详情页面，在页面下方开发者接口找到**企业可信IP**卡片，点击**配置**。
     
 2.  在企业可信IP对话框，粘贴复制的 IP 地址，然后点击**确定**。
     
@@ -145,9 +135,9 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
 
 你可以在企业微信中搜索应用并发送消息，查看效果。
 
-1.  在企业微信顶部搜索框搜索应用名称，点击应用进入聊天。![2024-08-12\_22-23-04](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4648953271/p834109.png)
+1.  在企业微信顶部搜索框搜索应用名称，点击应用进入聊天。在搜索栏中输入**AI 助手**，在搜索结果的**应用**分类下找到并单击**AI 助手**。
     
-2.  与应用对话，进行交流互动。![2024-08-12\_22-23-58](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7752553271/p834110.png)
+2.  与应用对话，进行交流互动。进入聊天后，发送问题进行测试，**AI 助手**将自动生成回复内容。
     
 
 ## 5\. 为大模型问答应用增加私有知识
@@ -162,17 +152,17 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
     
     > 根据您上传的文档大小，百炼需要一定时间解析，通常占用1~6分钟，请您耐心等待。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5603325471/p944474.png)
+    在导入数据页面，**导入方式**选择**本地上传**。支持 .pdf、.doc、.docx、.txt、.md、.pptx、.ppt、.png、.jpg、.jpeg、.bmp、.gif、.xls、.xlsx 格式，单文档最大 100MB 或 1000 页，单图片最大 20MB，最多上传 200 个文件。文件将被存储到新加坡区域。**文档识别**选择**文档智能解析**，可按需在**新增标签**区域添加标签。
     
 2.  **创建知识库：**进入[知识库](https://bailian.console.aliyun.com/?tab=app#/knowledge-base)页面，点击**立即开通并创建**（首次使用）或**创建知识库**。选择**创建**标准版，填写**知识库名称**，其余设置可保持默认，点击**下一步**，选择刚才上传的文档，其他参数保持默认即可。后续大模型回答时可以检索参考知识库中的文档。
     
     > 选择向量存储类型时，如果您希望集中存储、灵活管理多个应用的向量数据，可选择**ADB-PG**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5301724671/p944483.png)
+    在数据来源中选择**选择文件**，在左侧**默认类目**下勾选目标文档，单击**下一步**。
     
 3.  **引用知识：**完成知识库的创建后，可以返回[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)进入到刚才创建的应用配置界面，打开**知识库**开关、单击**+知识库**选择目标知识库，测试验证符合预期后点击**发布**。Prompt 中会被自动添加一段信息，以便大模型在后续回答时参考检索出来的信息。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9805168571/p944485.png)
+    在应用配置页面中，**文件处理**区域可选择**全文引用**、**切片检索**或**自定义处理**三种处理方式。**知识**区域可设置**调用方式**（如**必定调用**），已添加的知识文档支持配置**相似度阈值**和**权重**。
     
 
 ### **5.2 检验效果**
@@ -203,7 +193,7 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
     
     1.  访问[AppFlow域名管理](https://appflow.console.aliyun.com/vendor/cn-hangzhou/flow/domain/manage)页面，单击**添加域名**按钮，进入**添加域名**页面，填入可用的二级域名，如`airobot.example.com`。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6628845571/p979298.png)
+        在 **设置HTTPS** 步骤中选择 **禁用**，完成后系统在 **添加DNS记录** 步骤生成一条 CNAME 记录值（格式为 `xxx.appflow.aliyunnest.com`），需将该记录配置到域名的 DNS 解析中。
         
     2.  参考[CNAME 记录](https://help.aliyun.com/zh/dns/add-a-dns-record#a11de0e439vrv)，将该二级域名解析到上一步的**记录值**。
         
@@ -215,15 +205,11 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
     
     1.  在AppFlow的[连接凭证](https://appflow.console.aliyun.com/vendor/cn-hangzhou/connector/user/auth/manage)页面编辑企业微信的连接凭证。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5577115371/p893881.png)
-        
     2.  点击**下一步**，勾选**内网代理**。
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5577115371/p893391.png)
         
     3.  首次勾选**内网代理**时，会弹出AppFlow服务关联角色授权创建页面，请您确认并授权。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5577115371/p893399.png)
+        弹窗中角色名称为 `AliyunServiceRoleForAppFlow`，权限策略为 `AliyunServiceRolePolicyForAppFlow`，确认后单击**授权**。
         
     4.  配置可信域名。
         
@@ -232,8 +218,6 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
         如果您没有在阿里云备案的可信主体域名，同时也没有Nginx代理，可以通过点击**部署Nginx代理实例**一键自动为您部署并配置Nginx代理。按控制台提示直接确认订单或更改您期望的配置下单，等待部署完成即可。部署过程通常耗时1-3分钟，请刷新列表并耐心等待。
         
         部署完成后，点击下拉框选择计算巢实例，用计算巢实例Host替换[API接收消息](#d6e2ae9678564)的URL（即已经填写的WebhookUrl）中的主机名，复制IP白名单并添加到[企业可信IP](#9bbf4aacacund)中，点击**保存**，完成配置。
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5577115371/p893430.png)
         
         ## 使用自有的Nginx代理
         
@@ -257,11 +241,11 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
 
 如果您有阿里云的云服务器 ECS，您可以使用阿里云服务器进行请求转发，解决可信 IP 的问题：
 
-1.  修改 AppFlow 中配置的企业微信的连接凭证。![2024-09-04\_14-19-00](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5111255271/p844476.png)
+1.  修改 AppFlow 中配置的企业微信的连接凭证。在 AppFlow 控制台左侧导航栏单击**连接凭证**，在连接器列表中选择**企业微信**，找到目标凭证，单击操作列的**编辑**。
     
 2.  修改内容：在**内网代理配置**页面选择**使用可信主体域名** > **ECS实例**或**使用自有Nginx代理** > **ECS实例**，选择对应地域和实例， 点击保存。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5577115371/p884603.png)
+    页面下方包含 **IP白名单** 区域，可在文本域中查看白名单IP，单击 **复制IP** 将其复制。
     
 3.  将代理机器的 IP 添加到企业微信可信 IP。访问[企业微信应用列表](https://work.weixin.qq.com/wework_admin/frame#apps)，进入应用详情页面，在页面下方开发者接口找到**企业可信IP**卡片，点击**配置**。
     
@@ -270,11 +254,11 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
 
 1.  在您的非阿里云服务器中找一台可以访问公网的机器，按照[文档](https://help.aliyun.com/zh/ecs/user-guide/manage-servers-that-are-not-provided-by-alibaba-cloud)安装云助手 。
     
-2.  修改 AppFlow 中配置的企业微信的连接凭证。![2024-09-04\_14-19-00](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5111255271/p844476.png)
+2.  修改 AppFlow 中配置的企业微信的连接凭证。在 AppFlow 控制台左侧导航栏单击**连接凭证**，在连接器列表中选择**企业微信**，找到目标凭证，单击操作列的**编辑**。
     
 3.  修改内容：在**内网代理配置**页面选择**使用可信主体域名** > **ECS实例**或**使用自有Nginx代理** > **ECS实例**，选择对应托管地域和托管实例， 点击**保存**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5577115371/p884602.png)
+    选择 **托管实例** 后，需配置 **IP白名单**；若页面提示"无法获取您的代理转发机器公网"，请自行查询出口IP并添加至白名单。
     
 
 4\. 将代理机器的 IP 添加到企业微信可信 IP。访问[企业微信应用列表](https://work.weixin.qq.com/wework_admin/frame#apps)，进入应用详情页面，在页面下方开发者接口找到**企业可信IP**卡片，点击**配置**。
@@ -307,5 +291,3 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
 1.  访问[AppFlow控制台的连接流](https://appflow.console.aliyun.com/vendor/cn-hangzhou/flow/manage)页面。
     
 2.  在**操作**列点击**webhookUrl**进行查看。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8677115371/p883573.png)

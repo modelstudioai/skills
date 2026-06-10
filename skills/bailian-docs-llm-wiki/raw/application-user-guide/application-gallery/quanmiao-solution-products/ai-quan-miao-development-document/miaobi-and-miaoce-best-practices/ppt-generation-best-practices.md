@@ -84,13 +84,11 @@ public static AsyncClient getClient() {
     }
     return client;
 }
-
 AsyncClient client = getClient();
 RunPptOutlineGenerationRequest runRequest = RunPptOutlineGenerationRequest.builder()
       .workspaceId(workspaceId)
       .prompt("生成一个关于消防主题的ppt")
       .build();
-
 ResponseIterator<RunPptOutlineGenerationResponseBody> iterator = client.runPptOutlineGenerationWithResponseIterable(runRequest).iterator();
 while (iterator.hasNext()) {
     RunPptOutlineGenerationResponseBody event = iterator.next();
@@ -105,15 +103,12 @@ Python
 # 1、python版本：3.7+；
 # 2、安装依赖：pip3 install alibabacloud-tea-openapi-sse==1.0.2
 import os
-
 from alibabacloud_tea_openapi_sse.client import Client as OpenApiClient
 from alibabacloud_tea_openapi_sse import models as open_api_models
 from alibabacloud_tea_util_sse import models as util_models
 import asyncio
 import json
-
 biz_param = ('{"WorkspaceId":"llm-xxxxxx","Prompt":"生成一个关于消防主题的ppt"}')
-
 class AiMiaoBi:
     def __init__(self) -> None:
         # 工程代码泄露可能会导致 AccessKey 泄露，并威胁账号下所有资源的安全性。以下代码示例仅供参考。
@@ -126,7 +121,6 @@ class AiMiaoBi:
         self._api_info = self._create_api_info()
         self._runtime = util_models.RuntimeOptions(read_timeout=1000 * 100)
         self._client = self._create_client(self.access_key_id, self.access_key_secret, self.endpoint)
-
     def _create_client(
             self,
             access_key_id: str,
@@ -139,7 +133,6 @@ class AiMiaoBi:
             endpoint=endpoint
         )
         return OpenApiClient(config)
-
     def _create_api_info(self) -> open_api_models.Params:
         """
         API 相关
@@ -165,19 +158,16 @@ class AiMiaoBi:
             body_type='sse'
         )
         return params
-
     async def do_sse_query(self):
         if biz_param == '':
             param = {}
         else:
             param: dict = json.loads(biz_param)
-
         request = open_api_models.OpenApiRequest(
             body=param
         )
         sse_receiver = self._client.call_sse_api_async(params=self._api_info, request=request, runtime=self._runtime)
         return sse_receiver
-
 # 接口调用
 async def run():
     aiMiaoBi = AiMiaoBi()
@@ -192,7 +182,6 @@ async def run():
             print('------json.JSONDecodeError-end--------')
             continue
     print('------end--------')
-
 if __name__ == '__main__':
     asyncio.run(run())
 ```
@@ -208,7 +197,6 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
-
 const OpenApi = require('@alicloud/openapi-core');
 const Dara = require('@darabonba/typescript');
 class Client {
@@ -251,7 +239,6 @@ class Client {
         });
         return params;
     }
-
     static async main(args) {
         var _a, e_1, _b, _c;
         let client = Client.createClient();
@@ -336,7 +323,6 @@ try {
 
 ```
 taskId = "xxxx";
-
 AsyncClient client = ClientHelper.getClient();
 InitiatePptCreationV2Request request = InitiatePptCreationV2Request.builder()
       .workspaceId(workspaceId)
@@ -403,14 +389,12 @@ await window.Quanmiao.createPPT({
 
 ```
 taskId = "6831f55d-fa3b-4592-b3fd-bdf47ca2ab96";
-
 AsyncClient client = ClientHelper.getClient();
 BindPptArtifactRequest request = BindPptArtifactRequest.builder()
       .workspaceId(workspaceId)
       .taskId(taskId)
       .artifactId(12345)
       .build();
-
 CompletableFuture<BindPptArtifactResponse> future = client.bindPptArtifact(request);
 try {
     BindPptArtifactResponse response = future.get();
@@ -448,7 +432,6 @@ InitiatePptCreationV2Request request = InitiatePptCreationV2Request.builder()
         .isMobile(true) // 是否是移动端，按需填入
         .outline("#说说中国传统文化艺术的魅力\n##1. 传统文化艺术的源远流长\n###1.1 中国古代艺术发展历程\n####1.1.1 古代绘画艺术的演变\n- 从新石器时代的彩陶绘画到东汉时期帛画的出现，绘画形式不断丰富，展现了古人对美的独特追求。\n- 唐代绘画风格多样，吴道子的《送子天王图》线条流畅，色彩绚丽，体现了唐代绘画的高超技艺。\n")
         .build();
-
 CompletableFuture<InitiatePptCreationV2Response> future = client.initiatePptCreationV2  (request);
 try {
     InitiatePptCreationV2Response response = future.get();
@@ -510,7 +493,7 @@ await window.Quanmiao.createPPT({
 
 由于该场景涉及大量计算操作，RT较高，所以进行了异步设计。用户需要通过GetPptInfo接口获取对应的数据，然后再进行后续操作。
 
-1.  初始化，如下为代码示例：
+1.  初始化，如下为代码示例。
     
 
 ```
@@ -521,7 +504,6 @@ InitiatePptCreationV2Request request = InitiatePptCreationV2Request.builder()
         .processType(2) //注意这里的类型
         .outline("#说说中国传统文化艺术的魅力\n##1. 传统文化艺术的源远流长\n###1.1 中国古代艺术发展历程\n####1.1.1 古代绘画艺术的演变\n- 从新石器时代的彩陶绘画到东汉时期帛画的出现，绘画形式不断丰富，展现了古人对美的独特追求。\n- 唐代绘画风格多样，吴道子的《送子天王图》线条流畅，色彩绚丽，体现了唐代绘画的高超技艺。\n")
         .build();
-
 CompletableFuture<InitiatePptCreationV2Response> future = client.initiatePptCreationV2  (request);
 try {
     InitiatePptCreationV2Response response = future.get();
@@ -533,7 +515,7 @@ try {
 }
 ```
 
-2.  轮询pptArtifactId，如下为代码示例：
+2.  轮询pptArtifactId，如下为代码示例。
     
 
 ```
@@ -585,7 +567,7 @@ await window.Quanmiao.editPPT({
 
 异步设计，同【场景三】。
 
-1.  获取导出任务的ID，如下为代码示例：
+1.  获取导出任务的ID，如下为代码示例。
     
 
 ```
@@ -596,7 +578,6 @@ InitiatePptCreationV2Request request = InitiatePptCreationV2Request.builder()
         .processType(3) //注意这里的类型
         .outline("#说说中国传统文化艺术的魅力\n##1. 传统文化艺术的源远流长\n###1.1 中国古代艺术发展历程\n####1.1.1 古代绘画艺术的演变\n- 从新石器时代的彩陶绘画到东汉时期帛画的出现，绘画形式不断丰富，展现了古人对美的独特追求。\n- 唐代绘画风格多样，吴道子的《送子天王图》线条流畅，色彩绚丽，体现了唐代绘画的高超技艺。\n")
         .build();
-
 CompletableFuture<InitiatePptCreationV2Response> future = client.initiatePptCreationV2  (request);
 try {
     InitiatePptCreationV2Response response = future.get();
@@ -608,7 +589,7 @@ try {
 }
 ```
 
-2.  轮询exportTaskId，如下为代码示例：
+2.  轮询exportTaskId，如下为代码示例。
     
 
 ```
@@ -638,7 +619,7 @@ try {
 return null;
 ```
 
-3.  轮询任务结果，如下为示例代码：
+3.  轮询任务结果，如下为示例代码。
     
 
 ```
@@ -647,7 +628,6 @@ GetPptArtifactExportResultRequest request = GetPptArtifactExportResultRequest.bu
         .workspaceId(workspaceId)
         .exportTaskId("2dxxx529c-b065-43ff-a04d-xxx")
         .build();
-
 for(int i = 0; i < 30; i++) {
     CompletableFuture<GetPptArtifactExportResultResponse> future = client.getPptArtifactExportResult(request);
     try {
@@ -658,7 +638,6 @@ for(int i = 0; i < 30; i++) {
     } catch (ExecutionException e) {
         throw new RuntimeException(e);
     }
-    
     try {
         Thread.sleep(3000L);
     } catch (InterruptedException e) {
@@ -673,7 +652,7 @@ for(int i = 0; i < 30; i++) {
 
 异步设计，同【场景三】。
 
-1.  获取导出任务的ID，如下为示例代码：
+1.  获取导出任务的ID，如下为示例代码。
     
 
 ```
@@ -684,7 +663,6 @@ InitiatePptCreationV2Request request = InitiatePptCreationV2Request.builder()
         .processType(4) //注意这里的类型
         .outline("#说说中国传统文化艺术的魅力\n##1. 传统文化艺术的源远流长\n###1.1 中国古代艺术发展历程\n####1.1.1 古代绘画艺术的演变\n- 从新石器时代的彩陶绘画到东汉时期帛画的出现，绘画形式不断丰富，展现了古人对美的独特追求。\n- 唐代绘画风格多样，吴道子的《送子天王图》线条流畅，色彩绚丽，体现了唐代绘画的高超技艺。\n")
         .build();
-
 CompletableFuture<InitiatePptCreationV2Response> future = client.initiatePptCreationV2  (request);
 try {
     InitiatePptCreationV2Response response = future.get();
@@ -696,7 +674,7 @@ try {
 }
 ```
 
-2.  轮询exportFileLink，如下为示例代码：
+2.  轮询exportFileLink，如下为示例代码。
     
 
 ```
@@ -741,11 +719,11 @@ Demo示例可下载如下文档：
 
 本地网页端口：[http://localhost:8080/ppt](http://localhost:8080/ppt)。
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3754149771/p1074831.png)
+打开该页面后，显示**大纲设置**界面，包含**AI智能生成大纲**标签页、一个多行文本输入框以及**生成大纲**按钮，页面初始状态为空白，等待用户输入内容。
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3754149771/p1074833.png)
+在文本框中输入主题（如"北京传统文化发展趋势"），单击**生成大纲**按钮，系统自动生成大纲并显示进度状态与任务ID。生成完成后，下方**大纲编辑**区域以层级结构展示大纲内容，包含**主题**、**章节**、**小节**、**子节**和**内容**五个层级，各层级通过递增缩进和不同颜色的左侧竖线加以区分，支持在对应输入框中编辑各级标题与描述文字。
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3754149771/p1074832.png)
+打开本地网页后，在**选择场景，生成PPT**区域提供四种集成场景按钮：**一站式SaaS，全部流程通过JS SDK来进行**、**先由服务端创建作品，然后通过JS SDK编辑作品**、**不集成JS SDK，完全由后端完成，并返回导出任务ID，然后轮询作品结果**、**完全由后端完成，直接轮询获取导出文件链接**。单击任一场景按钮即可生成PPT，完成后页面显示**导出完成!**提示及**点击下载 PPT 文件**链接，单击即可下载生成的PPT文件。
 
 ##### **前端示例：**
 
@@ -755,7 +733,7 @@ Demo示例可下载如下文档：
 
 示例效果（具体调试信息，请关注控制台打印信息）：
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3754149771/p1074834.png)
+启动本地服务后，界面左侧显示**SDK 调试**面板，包含**基于内置模板生成PPT**、**基于自定义模板生成PPT**、**编辑PPT作品**（当前高亮选中）、**预览PPT作品**、**销毁PPT**五个功能按钮。主编辑区域展示AI生成的PPT封面幻灯片，顶部工具栏提供文本、形状、图片、素材、表格、图表、公式、LOGO等编辑工具，右侧提供设计、模板、美化、合成、背景、大纲、备注等辅助面板，底部标注"\*AI生成内容，仅供参考"。
 
 ## **5 其他**
 

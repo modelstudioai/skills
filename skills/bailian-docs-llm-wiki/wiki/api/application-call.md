@@ -99,11 +99,11 @@ DashScope API 的完整字段、新版智能体的专属请求结构和典型场
 
 > **注意**：[异步任务](../concepts/async-task.md)暂不支持[流式输出](../concepts/streaming-output.md)（`stream=true` 与 `background=true` 不能同时启用）。
 
-## 流式输出要点
+## [流式输出](../concepts/streaming-output.md)要点
 
 - DashScope API：通过 SDK 参数（如 Python 的 `stream=True`）或 HTTP Header（`X-DashScope-SSE: enable`）开启，事件结构以 DashScope 自定义协议返回。
 - Responses API：在请求体中设置 `stream=true`，事件以 SSE 形式按 `id / event / data` 行返回；通过 `response.output_text.delta` 事件实时拼接 `delta` 即可获得渐进式文本。
-- **工作流应用**：除接口层开启流式外，还必须在**结束节点**或**流程输出节点**启用**流式输出**并重新发布应用，否则流式开关不生效。
+- **工作流应用**：除接口层开启流式外，还必须在**结束节点**或**流程输出节点**启用**[流式输出](../concepts/streaming-output.md)**并重新发布应用，否则流式开关不生效。
 
 ## 错误码与排查
 
@@ -112,9 +112,9 @@ DashScope API 的完整字段、新版智能体的专属请求结构和典型场
 ## 关键限制与注意事项
 
 - 本组 API 仅支持**中国大陆（北京地域）**。
-- 子[业务空间](../concepts/workspace.md)下的应用必须显式传入 `Workspace ID`；RAM 子账号默认只能查看其加入的业务空间，查询全部业务空间需主账号或拥有 `AliyunBailianFullAccess` / `AliyunBailianControlFullAccess` 权限。
+- 子[业务空间](../concepts/workspace.md)下的应用必须显式传入 `Workspace ID`；RAM 子账号默认只能查看其加入的[业务空间](../concepts/workspace.md)，查询全部[业务空间](../concepts/workspace.md)需主账号或拥有 `AliyunBailianFullAccess` / `AliyunBailianControlFullAccess` 权限。
 - 多轮对话上下文需由客户端自行维护；服务端的会话/Response 上下文功能在 Responses API 中**尚未上线**。
-- 异步调用与流式输出互斥；图像/文件输入需要对应的应用类型与模型选择，否则请求会失败。
+- 异步调用与[流式输出](../concepts/streaming-output.md)互斥；图像/文件输入需要对应的应用类型与模型选择，否则请求会失败。
 - 选择 API 时优先考虑：是否需要 OpenAI 生态兼容（→ Responses API）、是否需要平台全功能与最佳性能（→ DashScope API）。
 
 ## 来源文档
@@ -124,6 +124,7 @@ DashScope API 的完整字段、新版智能体的专属请求结构和典型场
 - [新版智能体应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md)
 - [应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)
 - [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)
+
 
 
 

@@ -24,11 +24,11 @@
 
 ### [业务空间](../concepts/workspace.md)管理员
 
-拥有某个业务空间**权限管理**页面访问权的 RAM 用户，管理员权限自动包含该空间下所有页面的访问权限。
+拥有某个[业务空间](../concepts/workspace.md)**权限管理**页面访问权的 RAM 用户，管理员权限自动包含该空间下所有页面的访问权限。
 
-## 业务空间权限管理
+## [业务空间](../concepts/workspace.md)权限管理
 
-业务空间按地理区域划分，**单个业务空间不能跨地域存在**。根据 [权限管理](../../raw/application-user-guide/application-permission-management/application-permission-management-overview.md) 文档，业务空间支持以下权限维度：
+[业务空间](../concepts/workspace.md)按地理区域划分，**单个业务空间不能跨地域存在**。根据 [权限管理](../../raw/application-user-guide/application-permission-management/application-permission-management-overview.md) 文档，业务空间支持以下权限维度：
 
 - **模型调用控制**：管理模型是否可在该空间调用（控制台及 API），并设置请求数限流和 Token 限流。
 - **模型训练控制**：管理模型是否可进行调优及调优后部署。
@@ -102,6 +102,7 @@ RAM 用户默认无权查看账单或购买预付费产品，需在 RAM 控制�
 ## 来源文档
 
 - [权限管理](../../raw/application-user-guide/application-permission-management/application-permission-management-overview.md)
+
 
 
 

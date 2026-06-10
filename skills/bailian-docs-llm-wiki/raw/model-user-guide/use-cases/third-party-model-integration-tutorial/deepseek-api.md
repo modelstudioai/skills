@@ -21,14 +21,12 @@ deepseek-v4-pro 是 DeepSeek 系列最新模型，在编程、数学和通用任
 ```
 from openai import OpenAI
 import os
-
 # 初始化OpenAI客户端
 client = OpenAI(
     # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
-
 messages = [{"role": "user", "content": "你是谁"}]
 completion = client.chat.completions.create(
     model="deepseek-v4-pro",
@@ -40,26 +38,22 @@ completion = client.chat.completions.create(
         "include_usage": True
     },
 )
-
 reasoning_content = ""  # 完整思考过程
 answer_content = ""  # 完整回复
 is_answering = False  # 是否进入回复阶段
 print("\n" + "=" * 20 + "思考过程" + "=" * 20 + "\n")
-
 for chunk in completion:
     if not chunk.choices:
         print("\n" + "=" * 20 + "Token 消耗" + "=" * 20 + "\n")
         print(chunk.usage)
+        print("Request ID:", chunk.id)
         continue
-
     delta = chunk.choices[0].delta
-
     # 只收集思考内容
     if hasattr(delta, "reasoning_content") and delta.reasoning_content is not None:
         if not is_answering:
             print(delta.reasoning_content, end="", flush=True)
         reasoning_content += delta.reasoning_content
-
     # 收到content，开始进行回复
     if hasattr(delta, "content") and delta.content:
         if not is_answering:
@@ -73,22 +67,16 @@ for chunk in completion:
 
 ```
 ====================思考过程====================
-
 嗯，用户问了一个非常简单的自我介绍问题："你是谁"。
-
 我需要明确自己的身份，用简洁友好的方式介绍我是DeepSeek，说明我的创造者、基本特性和可提供的帮助。
-
 想到了可以这样组织回答：先直接表明身份，说明由深度求索公司创造，然后列出一些关键特点（免费、长上下文、文件上传等），最后以友好的邀请结束，询问是否需要帮助。
 ====================完整回复====================
-
 你好！我是 DeepSeek，由深度求索公司创造的 AI 助手。
-
 我可以帮你解答各种问题、进行文字创作、分析文档、编程辅助等等。我最大的特点是**免费使用**、**超长上下文**（能一次处理整本三体三部曲那么多内容）、支持**文件上传**和**联网搜索**（需手动开启）。
-
 有什么我可以帮你的吗？不管是学习、工作还是日常闲聊，我都很乐意陪你聊聊！
 ====================Token 消耗====================
-
 CompletionUsage(completion_tokens=238, prompt_tokens=5, total_tokens=243, completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=None, audio_tokens=None, reasoning_tokens=93, rejected_prediction_tokens=None), prompt_tokens_details=None)
+Request ID: chatcmpl-a1b2c3d4-e5f6-7890-abcd-ef1234567890
 ```
 
 ## **Node.js**
@@ -98,22 +86,18 @@ CompletionUsage(completion_tokens=238, prompt_tokens=5, total_tokens=243, comple
 ```
 import OpenAI from "openai";
 import process from 'process';
-
 // 初始化OpenAI客户端
 const openai = new OpenAI({
     // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: "sk-xxx"
     apiKey: process.env.DASHSCOPE_API_KEY, 
     baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'
 });
-
 let reasoningContent = ''; // 完整思考过程
 let answerContent = ''; // 完整回复
 let isAnswering = false; // 是否进入回复阶段
-
 async function main() {
     try {
         const messages = [{ role: 'user', content: '你是谁' }];
-        
         const stream = await openai.chat.completions.create({
             model: 'deepseek-v4-pro',
             messages,
@@ -124,18 +108,15 @@ async function main() {
                 include_usage: true
             },
         });
-
         console.log('\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\n');
-
         for await (const chunk of stream) {
             if (!chunk.choices?.length) {
                 console.log('\n' + '='.repeat(20) + 'Token 消耗' + '='.repeat(20) + '\n');
                 console.log(chunk.usage);
+                console.log('Request ID:', chunk.id);
                 continue;
             }
-
             const delta = chunk.choices[0].delta;
-            
             // 只收集思考内容
             if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {
                 if (!isAnswering) {
@@ -143,7 +124,6 @@ async function main() {
                 }
                 reasoningContent += delta.reasoning_content;
             }
-
             // 收到content，开始进行回复
             if (delta.content !== undefined && delta.content) {
                 if (!isAnswering) {
@@ -158,7 +138,6 @@ async function main() {
         console.error('Error:', error);
     }
 }
-
 main();
 ```
 
@@ -166,27 +145,21 @@ main();
 
 ```
 ====================思考过程====================
-
 嗯，用户问了一个非常简单的自我介绍问题："你是谁"。
-
 我需要明确自己的身份，用简洁友好的方式介绍我是DeepSeek，说明我的创造者、基本特性和可提供的帮助。
-
 想到了可以这样组织回答：先直接表明身份，说明由深度求索公司创造，然后列出一些关键特点（免费、长上下文、文件上传等），最后以友好的邀请结束，询问是否需要帮助。
 ====================完整回复====================
-
 你好！我是 DeepSeek，由深度求索公司创造的 AI 助手。
-
 我可以帮你解答各种问题、进行文字创作、分析文档、编程辅助等等。我最大的特点是**免费使用**、**超长上下文**（能一次处理整本三体三部曲那么多内容）、支持**文件上传**和**联网搜索**（需手动开启）。
-
 有什么我可以帮你的吗？不管是学习、工作还是日常闲聊，我都很乐意陪你聊聊！
 ====================Token 消耗====================
-
 {
   prompt_tokens: 5,
   completion_tokens: 243,
   total_tokens: 248,
   completion_tokens_details: { reasoning_tokens: 83 }
 }
+Request ID: chatcmpl-a1b2c3d4-e5f6-7890-abcd-ef1234567890
 ```
 
 ## **HTTP**
@@ -224,10 +197,8 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 ```
 import os
 from dashscope import Generation
-
 # 初始化请求参数
 messages = [{"role": "user", "content": "你是谁？"}]
-
 completion = Generation.call(
     # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
@@ -238,13 +209,10 @@ completion = Generation.call(
     stream=True,              # 开启流式输出
     incremental_output=True,  # 开启增量输出
 )
-
 reasoning_content = ""  # 完整思考过程
 answer_content = ""     # 完整回复
 is_answering = False    # 是否进入回复阶段
-
 print("\n" + "=" * 20 + "思考过程" + "=" * 20 + "\n")
-
 for chunk in completion:
     message = chunk.output.choices[0].message
     # 只收集思考内容
@@ -252,7 +220,6 @@ for chunk in completion:
         if not is_answering:
             print(message.reasoning_content, end="", flush=True)
         reasoning_content += message.reasoning_content
-
     # 收到 content，开始进行回复
     if message.content:
         if not is_answering:
@@ -260,31 +227,25 @@ for chunk in completion:
             is_answering = True
         print(message.content, end="", flush=True)
         answer_content += message.content
-
 print("\n" + "=" * 20 + "Token 消耗" + "=" * 20 + "\n")
 print(chunk.usage)
+print("Request ID:", chunk.request_id)
 ```
 
 ### **返回结果**
 
 ```
 ====================思考过程====================
-
 嗯，用户问了一个非常简单的自我介绍问题："你是谁"。
-
 我需要明确自己的身份，用简洁友好的方式介绍我是DeepSeek，说明我的创造者、基本特性和可提供的帮助。
-
 想到了可以这样组织回答：先直接表明身份，说明由深度求索公司创造，然后列出一些关键特点（免费、长上下文、文件上传等），最后以友好的邀请结束，询问是否需要帮助。
 ====================完整回复====================
-
 你好！我是 DeepSeek，由深度求索公司创造的 AI 助手。
-
 我可以帮你解答各种问题、进行文字创作、分析文档、编程辅助等等。我最大的特点是**免费使用**、**超长上下文**（能一次处理整本三体三部曲那么多内容）、支持**文件上传**和**联网搜索**（需手动开启）。
-
 有什么我可以帮你的吗？不管是学习、工作还是日常闲聊，我都很乐意陪你聊聊！
 ====================Token 消耗====================
-
 {"input_tokens": 6, "output_tokens": 240, "total_tokens": 246, "output_tokens_details": {"reasoning_tokens": 92}}
+Request ID: 85735883-9062-9c33-a963-0bc12584ee68
 ```
 
 ## **Java**
@@ -308,12 +269,13 @@ import com.alibaba.dashscope.exception.NoApiKeyException;
 import io.reactivex.Flowable;
 import java.lang.System;
 import java.util.Arrays;
-
 public class Main {
     private static StringBuilder reasoningContent = new StringBuilder();
     private static StringBuilder finalContent = new StringBuilder();
     private static boolean isFirstPrint = true;
+    private static String requestId = "";
     private static void handleGenerationResult(GenerationResult message) {
+        requestId = message.getRequestId();
         String reasoning = message.getOutput().getChoices().get(0).getMessage().getReasoningContent();
         String content = message.getOutput().getChoices().get(0).getMessage().getContent();
         if (reasoning != null && !reasoning.isEmpty()) {
@@ -355,6 +317,7 @@ public class Main {
             Generation gen = new Generation();
             Message userMsg = Message.builder().role(Role.USER.getValue()).content("你是谁？").build();
             streamCallWithMessage(gen, userMsg);
+            System.out.println("\nRequest ID: " + requestId);
         } catch (ApiException | NoApiKeyException | InputRequiredException e) {
             System.err.println("An exception occurred: " + e.getMessage());
         }
@@ -366,18 +329,12 @@ public class Main {
 
 ```
 ====================思考过程====================
-
 嗯，用户问了一个非常简单的自我介绍问题："你是谁"。
-
 我需要明确自己的身份，用简洁友好的方式介绍我是DeepSeek，说明我的创造者、基本特性和可提供的帮助。
-
 想到了可以这样组织回答：先直接表明身份，说明由深度求索公司创造，然后列出一些关键特点（免费、长上下文、文件上传等），最后以友好的邀请结束，询问是否需要帮助。
 ====================完整回复====================
-
 你好！我是 DeepSeek，由深度求索公司创造的 AI 助手。
-
 我可以帮你解答各种问题、进行文字创作、分析文档、编程辅助等等。我最大的特点是**免费使用**、**超长上下文**（能一次处理整本三体三部曲那么多内容）、支持**文件上传**和**联网搜索**（需手动开启）。
-
 有什么我可以帮你的吗？不管是学习、工作还是日常闲聊，我都很乐意陪你聊聊！
 ```
 
@@ -425,12 +382,10 @@ deepseek-v4-pro 和 deepseek-v4-flash 默认开启思考模式。通过`reasonin
 ```
 from openai import OpenAI
 import os
-
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
-
 completion = client.chat.completions.create(
     model="deepseek-v4-pro",
     messages=[{"role": "user", "content": "9.9和9.11哪个大"}],
@@ -443,12 +398,10 @@ print(completion.choices[0].message.content)
 
 ```
 import OpenAI from "openai";
-
 const openai = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
     baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
 });
-
 const completion = await openai.chat.completions.create({
     model: "deepseek-v4-pro",
     messages: [{ role: "user", content: "9.9和9.11哪个大" }],
@@ -475,7 +428,6 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 ```
 import os
 from dashscope import Generation
-
 response = Generation.call(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
     model="deepseek-v4-pro",
@@ -800,7 +752,7 @@ deepseek-v4-pro 在编程、数学和通用任务方面表现出色，deepseek-v
 
 访问[费用与成本](https://usercenter2.aliyun.com/home)中心进行充值，确保您的账户没有欠费即可调用 DeepSeek 模型。
 
-> 调用 DeepSeek 模型会自动扣费，出账周期为分钟级，消费明细请前往 \*\*[账单详情](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail-by-instance)\*\* 进行查看。
+> 调用 DeepSeek 模型会自动扣费，出账周期为分钟级，消费明细请前往 [**账单详情**](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail-by-instance) 进行查看。
 
 ### **如何接入**[Chatbox](https://chatboxai.app/zh)**、**[Cherry Studio](https://cherry-ai.com/)**或**[Dify](https://cloud.dify.ai/apps)**？**
 
@@ -828,8 +780,6 @@ DeepSeek 模型仅支持文本输入，不支持图片或文档输入。如需�
 
 > 数据按小时更新，高峰期可能有小时级延迟，请您耐心等待。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8923304571/p992752.png)
-
 ### **还有哪些使用DeepSeek的方式？**
 
 在百炼平台使用DeepSeek有三种方式：
@@ -845,4 +795,4 @@ DeepSeek 模型仅支持文本输入，不支持图片或文档输入。如需�
 
 ## **错误码**
 
-如果执行报错，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果执行报错，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
