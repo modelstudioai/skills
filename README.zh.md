@@ -109,6 +109,12 @@ npx skills add modelstudioai/skills
 
 本仓库代码以 [Apache-2.0](./LICENSE) 协议发布。
 
+## 📖 完整教程
+
+从注册到实战、Skill 加载、跨 AI Agent 框架使用，完整的中文教程在文档站：
+
+**[modelstudioai.github.io/guide/](https://modelstudioai.github.io/guide/)**
+
 ---
 
 > **免责声明** — 本仓库技能会指导 Agent 通过 `bl` 代你调用 DashScope / 百炼 API，费用由你的阿里云账号承担。生成内容可能不准确，使用前请自行核对。请妥善保管 API Key。本项目按「现状」提供，不作任何担保。
