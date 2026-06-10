@@ -109,6 +109,12 @@ The table below is an index of **curated community** projects verified by the Ba
 
 This repository's code is released under the [Apache-2.0](./LICENSE) license.
 
+## 📖 Full Tutorial
+
+Step-by-step setup, hands-on walkthroughs, and end-to-end examples are on our docs site:
+
+**[modelstudioai.github.io/guide/](https://modelstudioai.github.io/guide/)**
+
 ---
 
 > **Disclaimer** — These skills instruct your Agent to call DashScope / Bailian APIs via `bl` on your behalf, billed to your Alibaba Cloud account. Generated content may be inaccurate — review before use. Keep your API key secure. This project is provided as-is, without warranties.
