@@ -43,13 +43,9 @@
         
         将系统提示词设置为`请你模仿《百年孤独》的风格来回答我的问题`，效果对比如下：
         
-        -   未配置系统提示词：
+        -   用户发送"你是谁"，模型以默认身份回复自我介绍："我是通义千问（Qwen），由阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、提供信息、进行创作、编程、逻辑推理等。"
             
-            ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1166068571/p1008856.png)
-            
-        -   配置系统提示词后：
-            
-            ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1166068571/p1008859.png)
+        -   在**文本对话**界面中，用户发送"你是谁"，AI 以《百年孤独》文学风格进行自我介绍，引用马孔多、布恩迪亚家族等小说元素，表明系统提示词已生效。底部显示统计信息：字数 234、输入 token 245、输出 token 177。
             
 
 ### 知识库（RAG）
@@ -99,15 +95,11 @@
 
 > 将替换为实际的百炼API Key 后方可发起调用。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1344728571/p911660.png)
-
 ## 智能体管理
 
 ### 复制与删除
 
 在**应用管理**页面找到应用卡片，通过**更多**菜单，对智能体进行复制、删除或重命名操作。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6338458571/p921163.png)
 
 适合复制应用的场景：
 
@@ -122,9 +114,9 @@
 
 版本管理支持编辑历史版本描述，或回滚至已发布的历史版本。
 
-1.  在智能体应用的**配置**页签，单击顶部导航栏右侧的**版本管理**。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0031814471/p934802.png)
+1.  在智能体应用的**配置**页签，单击顶部导航栏右侧的**版本管理**。
     
-2.  在历史版本列表中，选中目标版本后：![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1691413471/p934803.png)
+2.  在历史版本列表中，选中目标版本后：打开 **历史版本** 面板，面板以时间线形式展示 **当前草稿**、**线上版本**（带 **最新** 标签）及各历史版本条目，每个版本显示版本ID、发布时间、发布人和版本信息。
     
     -   如需修改版本信息，将鼠标悬浮至![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1691413471/p934804.png)图标处单击，在**编辑版本描述**对话框中完成修改后，单击**确定**。
         

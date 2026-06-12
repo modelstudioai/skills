@@ -788,7 +788,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3-235b-a22b`
 
-256k
+128k
 
 支持
 
@@ -802,7 +802,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3-235b-a22b-thinking-2507`
 
-256k
+128k
 
 支持
 
@@ -816,7 +816,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3-235b-a22b-instruct-2507`
 
-256k
+128k
 
 不支持
 
@@ -830,7 +830,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3-next-80b-a3b-thinking`
 
-256k
+128k
 
 支持
 
@@ -844,7 +844,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3-next-80b-a3b-instruct`
 
-256k
+128k
 
 不支持
 
@@ -858,7 +858,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3-32b`
 
-256k
+128k
 
 支持
 
@@ -872,7 +872,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3-30b-a3b`
 
-256k
+128k
 
 支持
 
@@ -886,7 +886,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3-30b-a3b-thinking-2507`
 
-256k
+80k
 
 支持
 
@@ -900,7 +900,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3-30b-a3b-instruct-2507`
 
-256k
+128k
 
 不支持
 
@@ -914,7 +914,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3-14b`
 
-256k
+128k
 
 支持
 
@@ -928,49 +928,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3-8b`
 
-256k
-
-支持
-
-支持
-
-不支持
-
-支持
-
-不支持
-
-`qwen3-4b`
-
-256k
-
-支持
-
-支持
-
-不支持
-
-支持
-
-不支持
-
-`qwen3-1.7b`
-
-256k
-
-支持
-
-支持
-
-不支持
-
-支持
-
-不支持
-
-`qwen3-0.6b`
-
-256k
+128k
 
 支持
 
@@ -1099,176 +1057,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 `qwen3-coder-30b-a3b-instruct`
 
 256k
-
-不支持
-
-支持
-
-不支持
-
-支持
-
-不支持
-
-#### Qwen2.5（开源）
-
-**模型**
-
-**上下文**
-
-**思考模式**
-
-**Function Calling**
-
-**内置工具**
-
-**结构化输出**
-
-**批量调用**
-
-`qwen2.5-omni-7b`
-
-1M
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
-`qwen2.5-vl-72b-instruct`
-
-1M
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
-`qwen2.5-vl-32b-instruct`
-
-1M
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
-`qwen2.5-vl-7b-instruct`
-
-1M
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
-`qwen2.5-vl-3b-instruct`
-
-1M
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
-不支持
-
-`qwen2.5-72b-instruct`
-
-1M
-
-不支持
-
-支持
-
-不支持
-
-支持
-
-不支持
-
-`qwen2.5-32b-instruct`
-
-1M
-
-不支持
-
-支持
-
-不支持
-
-支持
-
-不支持
-
-`qwen2.5-14b-instruct`
-
-1M
-
-不支持
-
-支持
-
-不支持
-
-支持
-
-不支持
-
-`qwen2.5-14b-instruct-1m`
-
-1M
-
-不支持
-
-支持
-
-不支持
-
-支持
-
-不支持
-
-`qwen2.5-7b-instruct`
-
-1M
-
-不支持
-
-支持
-
-不支持
-
-支持
-
-不支持
-
-`qwen2.5-7b-instruct-1m`
-
-1M
 
 不支持
 
@@ -1484,6 +1272,20 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 **批量调用**
 
+`qwen2.5-omni-7b`
+
+32k
+
+不支持
+
+不支持
+
+不支持
+
+不支持
+
+不支持
+
 `qwen-plus`及其快照版本
 
 1M
@@ -1498,9 +1300,9 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持（仅主线版本）
 
-`qwen-max`及其快照版本
+`qwen-max`
 
-128k
+32k
 
 支持
 
@@ -1528,7 +1330,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen-turbo`及其快照版本
 
-1M
+128k
 
 支持
 
@@ -1628,7 +1430,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `glm-4.5`
 
-198k
+128k
 
 支持
 
@@ -1642,7 +1444,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `glm-4.5-air`
 
-198k
+128k
 
 支持
 
@@ -1698,7 +1500,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `Moonshot-Kimi-K2-Instruct`
 
-256k
+128k
 
 不支持
 

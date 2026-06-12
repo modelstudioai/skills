@@ -807,7 +807,7 @@ status
 
 _String_
 
-文件的当前状态。
+文件的当前状态。可能的状态有：`uploaded`（已上传）, `processed`（处理中）, `error`（异常）。
 
 "processed"
 

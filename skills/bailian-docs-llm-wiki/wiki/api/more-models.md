@@ -1,113 +1,212 @@
 # [more](more.md) models
 
-本页汇总百炼平台中三类“非通用聊天”补充模型 API：用于检索召回二次精排的**文本/多模态排序模型**、用于路由与[函数调用](../concepts/function-calling.md)的**意图理解模型**、以及面向法律垂直行业的**通义法睿大模型**。它们各自有独立的接入端点与参数结构，开发者按业务场景选用即可。
+百炼平台除了主流的通义千问系列大语言模型外，还提供多个面向特定场景的专用模型，包括机器翻译（Qwen-MT）、深度研究（Qwen-Deep-Research）、文本/多模态排序（qwen3-rerank / qwen3-vl-rerank）、意图理解（tongyi-intent-detect）以及法律领域（通义法睿）。这些模型均通过 [OpenAI 兼容接口](../concepts/openai-compatible-api.md)或 DashScope API 调用，开发者可根据业务场景按需选用。
 
-## 支持的模型一览
+## 模型一览
 
-| 类别 | 模型 | 上下文 / 输入限制 | 主要用途 | 详细文档 |
-| --- | --- | --- | --- | --- |
-| 排序 | `qwen3-rerank` | 单条 ≤ 4,000 Token；单次 ≤ 500 文档；总输入 ≤ 30,000 Token | 文本语义检索、RAG | [文本排序](../../raw/model-api-reference/more-models/text-rerank-api.md) |
-| 排序 | `qwen3-vl-rerank` | 单条 ≤ 8,000 Token；单次 ≤ 100 文本 / 40 图片 / 4 视频；总输入 ≤ 120,000 Token | 跨模态搜索、图像聚类、图片检索 | [文本排序](../../raw/model-api-reference/more-models/text-rerank-api.md) |
-| 排序 | `gte-rerank-v2` | 单条 ≤ 4,000 Token；总输入 ≤ 30,000 Token | 通用文本精排（50+ 语种） | [文本排序](../../raw/model-api-reference/more-models/text-rerank-api.md) |
-| 意图 | `tongyi-intent-detect-v3` | 上下文 8,192 Token；最大输出 1,024 Token | 意图识别、[函数调用](../concepts/function-calling.md)路由 | [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md) |
-| 法律 | `farui-plus` | 上下文 12k Token；最大输出 2k Token | 法律咨询、文书生成、争议焦点识别 | [通义法睿大语言模型](../../raw/model-api-reference/more-models/tongyi-farui-api.md) |
+| 模型 | 用途 | 调用接口 | 关键限制 |
+|------|------|----------|----------|
+| qwen-mt-turbo / qwen-mt-plus | 机器翻译，支持术语干预、翻译记忆、领域提示 | OpenAI 兼容 | 通过 `translation_options` 传递翻译参数 |
+| qwen-deep-research | 深度研究，两阶段（反问确认 + 深入研究） | DashScope（仅 Python SDK） | 仅支持华北2（北京）地域 |
+| qwen3-rerank | 文本语义排序，RAG 场景 | HTTP / DashScope SDK | 最大 500 条文档，单条 4,000 Token |
+| qwen3-vl-rerank | 多模态排序（文本+图片+视频） | HTTP / DashScope SDK | 文本 100 条、图片 40 条、视频 4 条 |
+| gte-rerank-v2 | 文本排序（多语种） | HTTP / DashScope SDK | 已计划下线，推荐迁移到 qwen3-rerank |
+| tongyi-intent-detect-v3 | 百毫秒级意图识别 + 工具选择 | OpenAI 兼容 / DashScope | 上下文 8,192 Token，输出 1,024 Token |
+| farui-plus | 法律咨询、文书生成、案情分析 | DashScope SDK | 上下文 12k Token，输出 2k Token |
 
-> **注意**：根据 [文本排序](../../raw/model-api-reference/more-models/text-rerank-api.md) 中的公告，`gte-rerank` 将于 **2026-05-30 下线**，新接入请改用 `qwen3-rerank`。`gte-rerank-v2` 暂不受影响。
+## Qwen-MT 翻译模型
 
-## 一、文本 / 多模态排序模型
+Qwen-MT 通过 [OpenAI 兼容接口](../concepts/openai-compatible-api.md)调用，核心参数放在 `extra_body.translation_options` 中。详细参数说明参见 [Qwen-MT API参考](../../raw/model-api-reference/more-models/qwen-mt-api.md)。
 
-排序模型用于在“召回 → 精排”两阶段检索流水线中，对召回结果做二次精排，把与 Query 最相关的文档顶到前面。
+### 基本调用
 
-### 接入端点
+```python
+from openai import OpenAI
 
-不同模型走不同接口（详见 [文本排序](../../raw/model-api-reference/more-models/text-rerank-api.md)）：
+client = OpenAI(
+    api_key="sk-xxx",
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+)
 
-- `qwen3-rerank` → `POST https://dashscope.aliyuncs.com/compatible-api/v1/reranks`（OpenAI 兼容风格，参数 **扁平化**，不需要 `input`/`parameters` 嵌套）
-- `qwen3-vl-rerank` / `gte-rerank-v2` → `POST https://dashscope.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank`（DashScope 原生风格，参数走 `input` + `parameters` 嵌套）
+completion = client.chat.completions.create(
+    model="qwen-mt-plus",
+    messages=[{"role": "user", "content": "我看到这个视频后没有笑"}],
+    extra_body={
+        "translation_options": {
+            "source_lang": "Chinese",
+            "target_lang": "English"
+        }
+    }
+)
+```
 
-> **注意**：同一份代码不能在两个端点间直接复用，请求体结构与响应字段位置都不同（例如 `qwen3-rerank` 的 `results` 在响应顶层，其它两个模型在 `output.results` 下）。
+### 高级功能
 
-### 关键参数
+- **术语干预**：在 `translation_options.terms` 中指定源语言词汇与目标译文的映射列表，确保专业术语翻译一致性。
+- **翻译记忆**：通过 `translation_options.tm_list` 提供历史翻译对照，提升同领域文档翻译质量。
+- **领域提示**：通过 `translation_options.domains` 传入领域描述文本，引导模型采用特定领域的翻译风格。
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `model` | string | 必填，取上表中的模型名 |
-| `query` | string / object | 必填。`qwen3-vl-rerank` 支持 `{"text": ...}` 或 `{"image": ...}` 两种模态对象 |
-| `documents` | array | 必填。`qwen3-vl-rerank` 元素可为 `{"text"/"image"/"video": ...}`；视频只支持 URL，图片支持 URL 或 `data:image/{format};base64,{data}` |
-| `top_n` | int | 可选，返回前 N 条；超过总数则返回全部 |
-| `return_documents` | bool | 可选，是否回传文档原文。仅 `gte-rerank-v2` 和 `qwen3-vl-rerank` 支持；`qwen3-rerank` 不支持 |
-| `instruct` | string | 可选，自定义排序任务指令（如问答检索 vs. 语义相似度）。仅 `qwen3-rerank` / `qwen3-vl-rerank` 生效，建议英文撰写 |
-| `fps` | float | 可选，视频抽帧比例 0–1，默认 1.0。仅 `qwen3-vl-rerank` |
+### 多地域支持
 
-### 限制与注意
+Qwen-MT 支持北京、新加坡、美国（弗吉尼亚）三个地域，不同地域使用不同的 `base_url` 和 API Key：
 
-- 单条 Query / Document 超过 Token 上限会被**截断**后再计算，可能导致排序结果不准。
-- 总输入 Token 计算公式：`Query Tokens × Document 数量 + Document Tokens 总和`，不得超过模型的“请求最大输入 Token”。
-- `relevance_score` 取值 0.0–1.0，**只是本次请求内的相对分数**，不能跨请求比较。
-- 多模态文档的图片支持 JPEG/PNG/WEBP/BMP/TIFF/ICO/DIB/ICNS/SGI，视频仅支持 MP4/AVI/MOV。
+| 地域 | base_url |
+|------|----------|
+| 北京 | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
+| 新加坡 | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1` |
+| 美国（弗吉尼亚） | `https://dashscope-us.aliyuncs.com/compatible-mode/v1` |
 
-## 二、意图理解模型 `tongyi-intent-detect-v3`
+## Qwen-Deep-Research 深度研究
 
-意图理解模型可在百毫秒级内解析用户意图并选择工具，常用于路由层（替代“先让通用大模型识别意图”的高成本写法）。
+Qwen-Deep-Research 采用两阶段调用流程，详细 API 参数参见 [Qwen-Deep-Research API 参考](../../raw/model-api-reference/more-models/qwen-deep-research-api.md)。
 
-### 三种工作模式（由 System Message 决定）
+### 调用流程
 
-依据 [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)，通过不同的 System Message 模板切换：
+1. **第一步（反问确认）**：发送研究主题，模型返回澄清式问题帮助聚焦方向。
+2. **第二步（深入研究）**：将第一步的模型回复作为 `assistant` 消息，加上用户回答，发起正式研究请求。
 
-1. **同时输出意图与[函数调用](../concepts/function-calling.md)**：System Message 末尾加 `Response in INTENT_MODE.`，并把工具 JSON Schema 列表注入 System。响应是 `<tags>...</tags><tool_call>...</tool_call><content>...</content>` 三段式文本，需要用正则解析（文档给出了 `parse_text` 参考实现）。
-2. **只输出意图标签**：System Message 提供 `{"意图key": "意图描述"}` 字典，要求 `Just reply with the chosen tag.`，模型只返回选中的 key。
-3. **只输出[函数调用](../concepts/function-calling.md)信息**：与模式 1 类似但只回工具调用部分。
+```python
+import dashscope
+
+# 第一步
+messages = [{"role": "user", "content": "研究一下人工智能在教育中的应用"}]
+responses = dashscope.Generation.call(
+    model="qwen-deep-research", messages=messages, stream=True
+)
+
+# 收集反问内容后进入第二步
+messages.append({"role": "assistant", "content": step1_content})
+messages.append({"role": "user", "content": "我主要关注个性化学习方面"})
+responses = dashscope.Generation.call(
+    model="qwen-deep-research", messages=messages
+)
+```
+
+### 响应阶段
+
+流式响应中通过 `phase` 字段标识当前阶段：
+
+- `ResearchPlanning` -- 研究规划
+- `WebResearch` -- 网络搜索（包含搜索查询和引用来源）
+- `KeepAlive` -- 连接保持
+- `answer` -- 最终回答（包含 `references` 引用列表）
+
+可通过 `output_format` 参数控制报告详细程度：`model_detailed_report`（约 6,000 Token）或 `model_summary_report`（约 1,500-2,000 Token）。
+
+> **注意**：该模型仅支持华北2（北京）地域，且当前仅支持 Python DashScope SDK，不支持 Java SDK 和 [OpenAI 兼容接口](../concepts/openai-compatible-api.md)。
+
+## 文本排序模型
+
+排序模型（Rerank）用于对检索召回的文档进行二次精排，提升 RAG 等应用的准确率。详细参数参见 [文本排序](../../raw/model-api-reference/more-models/text-rerank-api.md)。
+
+### 接口差异
+
+不同模型使用不同的 API 端点：
+
+- **qwen3-rerank**：`POST https://dashscope.aliyuncs.com/compatible-api/v1/reranks`，请求体中 `query`、`documents` 与 `model` 同级。
+- **qwen3-vl-rerank / gte-rerank-v2**：`POST https://dashscope.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank`，使用嵌套的 `input` 和 `parameters` 结构。
+
+### 基本调用（qwen3-rerank）
+
+```bash
+curl -X POST https://dashscope.aliyuncs.com/compatible-api/v1/reranks \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen3-rerank",
+    "query": "什么是文本排序模型",
+    "documents": [
+      "文本排序模型广泛用于搜索引擎和推荐系统中",
+      "量子计算是计算科学的一个前沿领域",
+      "预训练语言模型的发展给文本排序模型带来了新的进展"
+    ],
+    "top_n": 2
+  }'
+```
+
+### 多模态排序（qwen3-vl-rerank）
+
+qwen3-vl-rerank 支持文本、图片、视频三种模态的混合排序。查询可以是文本或图片，文档可以是文本、图片（URL 或 Base64）或视频（仅 URL）。通过 `fps` 参数控制视频抽帧密度。
+
+### 自定义排序策略
+
+通过 `instruct` 参数可指定排序任务类型：
+
+- 问答检索（默认）：`"Given a web search query, retrieve relevant passages that answer the query."`
+- 语义相似度：`"Retrieve semantically similar text."`
+
+> **注意**：gte-rerank 模型已计划下线，建议迁移到 qwen3-rerank。`relevance_score` 为当前请求内的相对分数，不可跨请求比较。
+
+## 意图理解模型
+
+tongyi-intent-detect-v3 能在百毫秒级延迟内完成意图识别和工具选择，适用于需要快速响应的对话系统。详细参数与用法参见 [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)。
+
+### 三种工作模式
+
+1. **意图 + 函数调用**：在 System Message 中添加工具定义并附加 `Response in INTENT_MODE.`，模型返回 `<tags>`、`<tool_call>`、`<content>` 三段结构。
+2. **仅意图分类**：在 System Message 中提供意图标签字典，模型直接返回匹配的标签名。
+3. **仅函数调用**：标准 function calling 模式。
+
+### 响应解析
+
+意图+函数调用模式的响应需要用正则解析：
+
+```python
+import re, json
+
+def parse_text(text):
+    tags = re.search(r'<tags>(.*?)</tags>', text, re.DOTALL)
+    tool_call = re.search(r'<tool_call>(.*?)</tool_call>', text, re.DOTALL)
+    content = re.search(r'<content>(.*?)</content>', text, re.DOTALL)
+    return {
+        "tags": tags.group(1).strip() if tags else "",
+        "tool_call": json.loads(tool_call.group(1).strip()) if tool_call else [],
+        "content": content.group(1).strip() if content else ""
+    }
+```
+
+### 性能优化
+
+将意图分类标签用单个大写字母（A、B、C...）代替完整名称，可使模型始终返回单个 Token，进一步降低响应延迟。
+
+## 通义法睿法律模型
+
+farui-plus 是基于千问、经法律行业数据专门训练的法律大模型，支持法律咨询、起诉书/合同生成、案情分析等场景。详细用法参见 [通义法睿大语言模型](../../raw/model-api-reference/more-models/tongyi-farui-api.md)。
 
 ### 调用方式
 
-- **OpenAI 兼容**：`base_url=https://dashscope.aliyuncs.com/compatible-mode/v1`，使用 `client.chat.completions.create(model="tongyi-intent-detect-v3", ...)`。
-- **DashScope 原生**：`dashscope.Generation.call(model="tongyi-intent-detect-v3", messages=..., result_format="message")`。
+通义法睿通过 DashScope SDK 调用（Python / Java），支持单轮对话、多轮对话和[流式输出](../concepts/streaming.md)：
 
-### 性能优化技巧
+```python
+import dashscope
 
-为压缩响应延迟，可以把意图标签**用单大写字母（A/B/C/...）指代**，模型输出会被压缩为 1 个 Token，显著降低响应时间。这一技巧仅对“只输出意图标签”模式有效。
+response = dashscope.Generation.call(
+    model="farui-plus",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "我哥欠我10000块钱，给我生成起诉书。"}
+    ],
+    result_format="message"
+)
+```
 
-### 配额与计费
+### 计费
 
-`tongyi-intent-detect-v3` 上下文 8,192 Token、最大输入 8,192、最大输出 1,024；输入 0.4 元/百万 Token、输出 1 元/百万 Token；开通后 90 天内享 100 万 Token 免费额度。
+输入成本 20 元/百万 Token，上下文长度 12k Token，最大输出 2k Token。
 
-## 三、通义法睿大模型 `farui-plus`
+## 通用注意事项
 
-通义法睿是基于千问、用法律行业数据继续训练的垂直大模型，覆盖法律咨询、推理法律适用、推荐裁判类案、辅助案情分析、生成法律文书、检索法律知识、合同条款审查等场景。
-
-### 接入方式
-
-仅通过 DashScope SDK 调用（参见 [通义法睿大语言模型](../../raw/model-api-reference/more-models/tongyi-farui-api.md)），支持 Python 与 Java：
-
-- **单轮对话**：`dashscope.Generation.call(model="farui-plus", messages=..., result_format="message")`。
-- **多轮对话**：把上一轮 `assistant` 响应追加进 `messages` 列表继续 `call`。
-- **[流式输出](../concepts/streaming.md)**：Python 设 `stream=True, incremental_output=True`；Java 使用 `gen.streamCall(param)`。
-
-> **注意**：DashScope Java SDK 中 `Generation` 等请求对象**不是线程安全**的，复用时需自行加锁或及时关闭，避免并发问题。
-
-### 关键参数与限制
-
-- 上下文 12k Token，最大输入 12k、最大输出 2k。
-- 输出成本 20 元/百万 Token（文档未单列输入成本，按输出价计费部分以官方计费页为准）。
-- 限流规则参见百炼平台“限流”页面，未在 API 文档中单列。
-
-## 通用约定
-
-无论使用哪一类模型，都需要先完成两步前置：
-
-1. [获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key) 并配置到环境变量 `DASHSCOPE_API_KEY`。
-2. SDK 调用前安装对应语言的 DashScope SDK（Python / Java）。
-
-所有失败响应都通过顶层 `code` + `message` 指明出错原因，详细错误码与限流规则统一参考百炼平台“错误码”与“限流”文档。
+- 所有模型调用前需 [获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key) 并配置到环境变量 `DASHSCOPE_API_KEY`。
+- 不同地域的 API Key 不通用，需分别申请。
+- 模型限流条件参见 [限流文档](https://help.aliyun.com/zh/model-studio/rate-limit)，错误码参见 [错误码文档](https://help.aliyun.com/zh/model-studio/error-code)。
+- SDK 调用时参数命名与 HTTP 接口基本一致，但结构有所封装（如 HTTP 使用嵌套的 `input`/`parameters`，SDK 使用扁平参数），开发时注意区分。
 
 ## 来源文档
 
+- [Qwen-MT API参考](../../raw/model-api-reference/more-models/qwen-mt-api.md)
+- [Qwen-Deep-Research API 参考](../../raw/model-api-reference/more-models/qwen-deep-research-api.md)
 - [文本排序](../../raw/model-api-reference/more-models/text-rerank-api.md)
 - [意图理解能力](../../raw/model-api-reference/more-models/intent-detect-capability.md)
 - [通义法睿大语言模型](../../raw/model-api-reference/more-models/tongyi-farui-api.md)
-
-
-
-
 
 

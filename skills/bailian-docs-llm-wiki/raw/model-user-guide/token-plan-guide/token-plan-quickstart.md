@@ -41,6 +41,8 @@ Anthropic 兼容
 
  [**Qwen Code**开源命令行 AI 编码工具](https://help.aliyun.com/zh/model-studio/qwen-code)
 
+ [**QwenPaw**开源个人 AI 助手，支持本地与云端部署](https://help.aliyun.com/zh/model-studio/qwenpaw)
+
  [**Cherry Studio**多模型桌面客户端](https://help.aliyun.com/zh/model-studio/cherry-studio)
 
  [**Chatbox**跨平台 AI 桌面客户端](https://help.aliyun.com/zh/model-studio/chatbox)

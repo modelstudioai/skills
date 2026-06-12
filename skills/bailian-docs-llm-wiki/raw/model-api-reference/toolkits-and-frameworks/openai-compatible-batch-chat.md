@@ -17,9 +17,7 @@
 
 ## **适用范围**
 
-### **中国内地**
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+### **华北2（北京）**
 
 -   **文本生成模型：**qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-max、qwen-plus、qwen-flash、deepseek-v3.2
     
@@ -505,7 +503,7 @@ curl -X POST https://batch.dashscope.aliyuncs.com/compatible-mode/v1/chat/comple
 
 **说明**
 
--   批量推理为独立计费项，支持[AI 通用型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#universal-savings-plan)，但不支持[预付费](https://common-buy.aliyun.com/?commodityCode=sfm_llminference_spn_public_cn)（节省计划）、[新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota)等优惠，以及[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)等功能。
+-   批量推理为独立计费项，支持[节省计划与资源包](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#universal-savings-plan)，但不支持[预付费](https://common-buy.aliyun.com/?commodityCode=sfm_llminference_spn_public_cn)（节省计划）、[新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota)等优惠，以及[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)等功能。
     
 -   部分模型（如 qwen3.5-plus、qwen3.5-flash）默认开启思考模式，会产生额外的思考tokens，并按输出token价格计费，导致成本增加。建议根据任务复杂度设置enable\_thinking参数以控制成本，具体请参考[深度思考](https://help.aliyun.com/zh/model-studio/deep-thinking)。
     

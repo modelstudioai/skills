@@ -1,15 +1,15 @@
 # deployments api
 
-百炼平台提供模型部署 API（Deployments API），用于将微调或导入的模型发布为在线推理服务。部署完成后，应用即可通过推理接口调用该模型。
+百炼平台提供[模型部署](../concepts/model-deployment.md) API（Deployments API），用于将微调或导入的模型发布为在线推理服务。部署完成后，应用即可通过推理接口调用该模型。
 
 ## 功能定位
 
-模型部署是连接"模型资产"与"在线推理"的桥梁。开发者通过 [模型部署](../../raw/model-api-reference/deployments-api.md) 创建部署任务后，会得到一个可被推理接口寻址的 endpoint。
+[模型部署](../concepts/model-deployment.md)是连接"模型资产"与"在线推理"的桥梁。开发者通过 [模型部署](../../raw/model-api-reference/deployments-api.md) 创建部署任务后，会得到一个可被推理接口寻址的 endpoint。
 
 核心用途：
 
 - 将微调产出的模型版本发布为在线服务
-- 将导入的自定义模型部署为可调用服务
+- 将导入的自定义[模型部署](../concepts/model-deployment.md)为可调用服务
 
 ## 使用方式
 
@@ -22,6 +22,7 @@
 ## 来源文档
 
 - [模型部署](../../raw/model-api-reference/deployments-api.md)
+
 
 
 

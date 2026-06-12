@@ -33,14 +33,14 @@
 - [test 1](guides/test-1.md) — 5 篇源文档
 - [token plan guide](guides/token-plan-guide.md) — 10 篇源文档
 - [use cases](guides/use-cases.md) — 20 篇源文档
-- [use chat client or development tool](guides/use-chat-client-or-development-tool.md) — 16 篇源文档
+- [use chat client or development tool](guides/use-chat-client-or-development-tool.md) — 17 篇源文档
 
 ## API 参考
 
 - [3d generation](api/3d-generation.md) — 1 篇源文档
 - [application call](api/application-call.md) — 5 篇源文档
 - [application component api reference](api/application-component-api-reference.md) — 57 篇源文档
-- [audio api references](api/audio-api-references.md) — 19 篇源文档
+- [audio api references](api/audio-api-references.md) — 20 篇源文档
 - [deployments api](api/deployments-api.md) — 1 篇源文档
 - [file management api](api/file-management-api.md) — 1 篇源文档
 - [fine tuning jobs api](api/fine-tuning-jobs-api.md) — 1 篇源文档
@@ -50,14 +50,14 @@
 - [long term memory new](api/long-term-memory-new.md) — 1 篇源文档
 - [more](api/more.md) — 3 篇源文档
 - [more about models](api/more-about-models.md) — 6 篇源文档
-- [more models](api/more-models.md) — 3 篇源文档
+- [more models](api/more-models.md) — 5 篇源文档
 - [music generation references](api/music-generation-references.md) — 1 篇源文档
 - [omni realtime api](api/omni-realtime-api.md) — 6 篇源文档
 - [preparations](api/preparations.md) — 4 篇源文档
 - [qwen api reference](api/qwen-api-reference.md) — 1 篇源文档
-- [specialized model](api/specialized-model.md) — 4 篇源文档
+- [specialized model](api/specialized-model.md) — 2 篇源文档
 - [speech recognition api reference](api/speech-recognition-api-reference.md) — 27 篇源文档
-- [speech synthesis api reference](api/speech-synthesis-api-reference.md) — 18 篇源文档
+- [speech synthesis api reference](api/speech-synthesis-api-reference.md) — 17 篇源文档
 - [speech translation api reference](api/speech-translation-api-reference.md) — 3 篇源文档
 - [toolkits and frameworks](api/toolkits-and-frameworks.md) — 10 篇源文档
 - [vector and sort](api/vector-and-sort.md) — 1 篇源文档
@@ -65,20 +65,23 @@
 
 ## 横切概念
 
-- [函数调用](concepts/function-calling.md) — 关联 7 个主题
+- [函数调用与工具使用](concepts/function-calling.md) — 关联 6 个主题
 - [检索增强生成](concepts/rag.md) — 关联 6 个主题
 - [流式输出](concepts/streaming.md) — 关联 6 个主题
+- [模型部署](concepts/model-deployment.md) — 关联 6 个主题
 - [业务空间](concepts/workspace.md) — 关联 5 个主题
 - [异步任务](concepts/async-task.md) — 关联 5 个主题
 - [DashScope 接口](concepts/dashscope-api.md) — 关联 7 个主题
-- [OpenAI 兼容接口](concepts/openai-compatible-api.md) — 关联 6 个主题
+- [OpenAI 兼容接口](concepts/openai-compatible-api.md) — 关联 9 个主题
+- [Prompt 工程](concepts/prompt-engineering.md) — 关联 6 个主题
 - [Token 计量与计费](concepts/token.md) — 关联 6 个主题
 
 ## 对比分析
 
-- [模型监控与应用监控对比](comparisons/monitoring-comparison.md) — 对比 2 个主题
-- [模型评估与应用评估对比](comparisons/evaluation-comparison.md) — 对比 2 个主题
-- [图像生成、视频生成与3D生成对比](comparisons/media-generation-comparison.md) — 对比 3 个主题
-- [语音合成、语音识别与语音翻译对比](comparisons/speech-apis-comparison.md) — 对比 3 个主题
-- [知识库与记忆库对比](comparisons/knowledge-vs-memory.md) — 对比 2 个主题
+- [模型监控与应用监控对比](comparisons/model-monitoring-vs-app-monitoring.md) — 对比 2 个主题
+- [模型评估与应用评估对比](comparisons/model-eval-vs-app-eval.md) — 对比 2 个主题
+- [模型微调、压缩与部署对比](comparisons/fine-tuning-vs-compression-vs-deployment.md) — 对比 3 个主题
+- [图像生成、视频生成与 3D 生成对比](comparisons/image-video-3d-generation.md) — 对比 3 个主题
+- [语音合成、识别与翻译 API 对比](comparisons/speech-apis-comparison.md) — 对比 3 个主题
+- [知识库与记忆库对比](comparisons/knowledge-base-vs-memory.md) — 对比 2 个主题
 

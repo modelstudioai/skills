@@ -6,7 +6,7 @@
 
 **重要**
 
-该功能仅在[中国内地部署范围](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)（北京地域）下可用。
+本文描述的功能仅在华北2（北京）地域可用。
 
 ## **服务端点**
 

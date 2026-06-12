@@ -867,6 +867,12 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.ap-southeast-1.maas.aliyunc
 
 调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
+## 美国（弗吉尼亚）
+
+HTTP请求地址：`POST https://dashscope-us.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+
+SDK调用配置的base\_url：`https://dashscope-us.aliyuncs.com/api/v1`
+
 ### **请求体**
 
 以下示例为音频 URL 识别；本地音频文件识别示例请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。

@@ -4,7 +4,7 @@
 
 ## **适用范围**
 
--   **适用部署模式及地域**：本文档仅适用于[中国内地部署模式](https://help.aliyun.com/zh/model-studio/regions/)下的北京地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
+-   **适用部署模式及地域**：本文描述的功能仅在华北2（北京）地域可用，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
     
 -   **开通账号权限**：若使用[阿里云子账号](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)（[RAM用户](https://help.aliyun.com/zh/ram/user-guide/overview-of-ram-users)），需要为子账号授予模型调用、训练和部署[权限](https://help.aliyun.com/zh/model-studio/use-workspace#895b613347th4)。
     
@@ -12,7 +12,7 @@
     
 -   **支持微调的模型**：
     
-    -   图像生成（文生图/图生图）：wan2.7-image-pro。
+    -   图像生成（文生图/图生图）：wan2.7-image-pro、wan2.7-image。
         
 
 ## **如何微调模型**
@@ -1027,17 +1027,19 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
     
     37,152
     
--   **模型部署**：**免费**。
+-   **模型部署与调用**：部署免费，调用按微调的基础模型的标准调用价格计费。
     
--   **模型调用：收费，**按微调的基础模型的标准调用价格计费**。**
+    **模型名称**
     
-    **模型 ID（Model ID）**
-    
-    **输出单价**
+    **Lora部署调用价格**
     
     wan2.7-image-pro
     
     0.50元/张
+    
+    wan2.7-image
+    
+    0.20元/张
     
 
 ## **API文档**

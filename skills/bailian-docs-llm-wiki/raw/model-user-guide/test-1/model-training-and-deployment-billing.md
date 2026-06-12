@@ -76,6 +76,12 @@ qwen3-8b
 
 ¥0.006/千Token
 
+Qwen3-4B-Instruct-2507
+
+qwen3-4b-instruct-2507
+
+¥0.006/千Token
+
 Qwen3-1.7B
 
 qwen3-1.7b
@@ -233,6 +239,12 @@ wan2.7-image-pro
 
 0.08元
 
+万相-图像生成
+
+wan2.7-image
+
+0.08元
+
 **计费示例**
 
 假设使用 wan2.7-image-pro 模型进行 t2i 微调，max\_steps = 200，max\_token\_length = "1k"，训练单价 = 0.08元/千Token：
@@ -335,7 +347,7 @@ wan2.2-kf2v-flash
 -   后付费时，如果账户欠费，部署的资源将保留并继续计费 24 小时，之后自动释放资源。
     
 
-当模型输入超过最长输入 Token 或 超出购买的 TPM 量时，相关调用将自动切换为当前模型的按量付费模式。此时，推理性能可能下降，[限流](https://help.aliyun.com/zh/model-studio/rate-limit)将受业务空间中当前快照模型的公共流量的管控，[费用](https://help.aliyun.com/zh/model-studio/model-pricing)按模型调用（按量付费）标准计收。
+当模型输入超过最长输入 Token 或 超出购买的 TPM 量时，相关调用将自动切换为当前模型的按量付费模式。此时，推理性能可能下降，将受业务空间中当前快照模型的公共流量的管控，[费用](https://help.aliyun.com/zh/model-studio/model-pricing)按模型调用（按量付费）标准计收。
 
 -   此时，调用 API 返回 Header 将包含：`x-dashscope-ptu-overflow:true`。
     
@@ -643,6 +655,16 @@ glm-5.1
 
 **最小计费：天**
 
+千问3.7-Plus-2026-05-26
+
+qwen3.7-plus-2026-05-26
+
+MU3 x 8
+
+¥1,096
+
+¥527,752
+
 千问3.6-35B-A3B
 
 qwen3.6-35b-a3b
@@ -783,12 +805,6 @@ MU9 x 1
 
 qwen3.5-27b
 
-MU1 x 2
-
-¥108
-
-¥52,236
-
 MU9 x 1
 
 ¥51
@@ -798,12 +814,6 @@ MU9 x 1
 千问3.5-9B
 
 qwen3.5-9b
-
-MU1 x 2
-
-¥108
-
-¥52,236
 
 MU8 x 1
 
@@ -1587,19 +1597,19 @@ qwen2.5-vl-7b-instruct
 
 ### **图像生成模型-万相**
 
-经过SFT-LoRA高效微调的万相图像生成模型，调用按微调的基础模型的标准调用价格计费。模型训练和部署流程请参见[图像生成模型调优](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide)。
+经过SFT-LoRA高效微调的万相图像生成模型，部署免费，调用按微调的基础模型的标准调用价格计费。模型训练和部署流程请参见[图像生成模型调优](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide)。
 
 **模型名称**
 
-**部署价格**
-
-**调用价格**
+**Lora部署调用价格**
 
 wan2.7-image-pro
 
-免费
-
 0.50元/张
+
+wan2.7-image
+
+0.20元/张
 
 ## **常见问题**
 

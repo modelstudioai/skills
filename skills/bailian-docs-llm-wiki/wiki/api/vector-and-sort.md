@@ -127,3 +127,4 @@ POST https://dashscope.aliyuncs.com/api/v1/services/embeddings/multimodal-embedd
 - [Multimodal-Embedding API详情](../../raw/model-api-reference/vector-and-sort/multimodal-vector/multimodal-embedding-api-reference.md)
 
 
+

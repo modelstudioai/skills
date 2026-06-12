@@ -137,6 +137,8 @@ MiniMax-M2.5
 
 提供标准坐席、高级坐席、尊享坐席三个档位，匹配不同使用强度。
 
+席位（坐席）是 Token Plan 团队版的最小订阅单位，代表一个团队成员的使用名额。管理员在[团队管理](https://help.aliyun.com/zh/model-studio/token-plan-team)中将席位分配给成员后，系统自动为该成员生成专属的 API Key。每个席位绑定一个成员、对应一个 API Key，不可共享。
+
 **坐席类型**
 
 **价格**

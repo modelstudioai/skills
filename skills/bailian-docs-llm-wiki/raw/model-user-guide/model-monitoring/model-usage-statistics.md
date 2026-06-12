@@ -2,7 +2,7 @@
 
 介绍如何查看阿里云百炼各模型的用量。
 
-> 如需了解免费额度相关内容，请参考[新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota)文档。您也可以在[免费额度](https://bailian.console.aliyun.com/?tab=model#/model-usage/free-quota)页面查看和管理免费额度使用情况。
+> 如需了解免费额度相关内容，请参考[新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota)文档。您也可以在[免费额度](https://bailian.console.aliyun.com/?tab=costing-balance#/costing-balance/free-quota)页面查看和管理免费额度使用情况。
 
 ## 适用范围
 
@@ -13,7 +13,7 @@
 
 ### 在控制台查看免费额度使用情况
 
-1.  进入[模型用量：免费额度](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-usage/free-quota)页面，选择模型类型页签查看各模型的免费额度使用情况。
+1.  进入[免费额度](https://bailian.console.aliyun.com/cn-beijing/?tab=costing-balance#/costing-balance/free-quota)页面，选择模型类型页签查看各模型的免费额度使用情况。
     
 2.  在全部模型表格中，可通过搜索、排序、筛选等方式查找特定模型，并可切换**免费额度用完即停**开关或使用批量操作功能管理免费额度设置。
     
@@ -24,7 +24,7 @@
 
 ## 查看模型用量
 
-在[模型用量：用量统计](https://bailian.console.aliyun.com/?tab=model#/model-usage/usage-statistics)页面查看。数据按[业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)维度统计，不支持按阿里云账号维度统计（[如何解决](#c030d2aac0bxx)）。数据延迟**约为 1 小时**。
+在[模型用量](https://bailian.console.aliyun.com/?tab=costing-balance#/costing-balance/usage-statistics)页面查看。数据按[业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)维度统计，不支持按阿里云账号维度统计（[如何解决](#c030d2aac0bxx)）。数据延迟**约为 1 小时**。
 
 1.  进入页面后，选择对应的模型类型（如**大语言模型**）页签，再按需选择统计时间范围。页面将汇总展示所选时间段内，该推理类型下所有已调用过模型的用量。
     
@@ -35,6 +35,17 @@
 2.  如需查询某个具体模型的用量，可在页面右侧搜索框输入模型名称（如`qwen-plus`）筛选对应数据。
     
     > 可前往模型列表查询模型名称。
+    
+
+## 查看费用概览
+
+在[费用概览](https://bailian.console.aliyun.com/?tab=costing-balance#/costing-balance/cost-overview)页面，可查看百炼服务的费用汇总信息，包括：
+
+-   **费用卡片**：展示当前账期的总消费金额、订阅购买费用和账单费用，并可跳转查看明细。
+    
+-   **账单趋势**：以图表或列表形式展示费用趋势，支持按月或按天统计，可按产品分类、API Key ID、模型筛选。
+    
+-   **费用告警**：可设置费用告警，在费用异常时及时收到通知。
     
 
 ## **模型用量统计单位说明**

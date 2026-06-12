@@ -22,7 +22,7 @@ Postman 和 cURL仅适用于快速测试与功能验证。对于生产环境�
 
 **HTTP调用示例（文生图）**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9388180871/CAEQZRiBgICJ0seH1xkiIDgzYWE2MTBkZjkzODRkNDA5NzczNTE0NjBiMGE1Y2Nm5274221_20250627113930.173.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4178421871/CAEQZRiBgICJ0seH1xkiIDgzYWE2MTBkZjkzODRkNDA5NzczNTE0NjBiMGE1Y2Nm5274221_20250627113930.173.svg)
 
 ## **方式一：使用Postman发送请求（推荐）**
 
@@ -98,7 +98,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
     -   美国（弗吉尼亚）：`https://dashscope-us.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
         
     
-    > 各模式支持的模型请参见百炼控制台，当前地域与服务部署范围为[系统预设绑定关系](https://help.aliyun.com/zh/model-studio/regions/#6e9530261dv6q)，不支持自由组合。
+    > 各地域支持的模型请参见百炼控制台，当前地域与服务部署范围为[系统预设绑定关系](https://help.aliyun.com/zh/model-studio/regions/#6e9530261dv6q)，不支持自由组合。
     
 3.  点击**Headers**标签页，添加以下三个键值对。
     

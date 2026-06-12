@@ -4,7 +4,7 @@
 
 **重要**
 
-本文档仅适用于“中国内地（北京）”地域。
+本文档仅适用于“华北二（北京）”地域。
 
 ## 计费方式
 
@@ -141,7 +141,7 @@
 -   后付费时，如果账户欠费，部署的资源将保留并继续计费 24 小时，之后自动释放资源。
     
 
-当模型输入超过最长输入 Token 或 超出购买的 TPM 量时，相关调用将自动切换为当前模型的按量付费模式。此时，推理性能可能下降，[限流](https://help.aliyun.com/zh/model-studio/rate-limit)将受业务空间中当前快照模型的公共流量的管控，[费用](https://help.aliyun.com/zh/model-studio/model-pricing)按模型调用（按量付费）标准计收。
+当模型输入超过最长输入 Token 或 超出购买的 TPM 量时，相关调用将自动切换为当前模型的按量付费模式。此时，推理性能可能下降，将受业务空间中当前快照模型的公共流量的管控，[费用](https://help.aliyun.com/zh/model-studio/model-pricing)按模型调用（按量付费）标准计收。
 
 -   此时，调用 API 返回 Header 将包含：`x-dashscope-ptu-overflow:true`。
     
@@ -449,6 +449,16 @@ glm-5.1
 
 **最小计费：天**
 
+千问3.7-Plus-2026-05-26
+
+qwen3.7-plus-2026-05-26
+
+MU3 x 8
+
+¥1,096
+
+¥527,752
+
 千问3.6-35B-A3B
 
 qwen3.6-35b-a3b
@@ -589,12 +599,6 @@ MU9 x 1
 
 qwen3.5-27b
 
-MU1 x 2
-
-¥108
-
-¥52,236
-
 MU9 x 1
 
 ¥51
@@ -604,12 +608,6 @@ MU9 x 1
 千问3.5-9B
 
 qwen3.5-9b
-
-MU1 x 2
-
-¥108
-
-¥52,236
 
 MU8 x 1
 
@@ -1406,7 +1404,7 @@ qwen2.5-vl-7b-instruct
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8117463771/p1059808.png)
 
-2.  选择模型、计费方式，其他设置保持默认，最后设置模型名称并开始部署。
+2.  填写服务名称，选择模型和计费方式，其他设置保持默认，点击确认。
     
     > 需先完成[模型调优](https://help.aliyun.com/zh/model-studio/model-training-on-console#a6da1accf0dun)，方可部署大部分模型。
     
@@ -1426,6 +1424,26 @@ qwen2.5-vl-7b-instruct
 
 **配置详情**
 
+服务名称
+
+自定义部署服务的名称。
+
+选择模型
+
+选择要部署的模型，包括平台预置模型和已调优的模型。
+
+模型单元类型
+
+选择部署规格，不同规格对应不同的算力和性能。
+
+部署副本数
+
+设置初始部署副本数量，影响服务的并发处理能力。
+
+部署模版
+
+选择部署模版（如"单机部署"），不同模版对应不同的资源配置方案。仅在模型单元计费模式下可用。
+
 配置模型推理模式
 
 部分模型在以**模型单元**方式部署时，可配置推理模式、最长上下文等。
@@ -1443,11 +1461,34 @@ qwen2.5-vl-7b-instruct
 
 部分模型的**模型单元**部署模式支持该设置，可限制模型调用的 RPM、TPM。
 
+## 部署列表页
+
+部署成功后，您可以在部署列表页查看和管理所有部署服务。列表页包含以下信息：
+
+-   **服务名称**：部署服务的名称，单击可查看部署详情。
+    
+-   **模型名称**：部署使用的模型。
+    
+-   **模型Code**：模型部署成功后生成的唯一标识，用于 API 调用时指定模型。
+    
+-   **部署状态/事件状态**：包括待部署、部署中、运行中、部署失败、下线中、服务暂停、已停止、删除中、退订停服/欠费停服、停服恢复中、运行中（变配中）、运行中（变配失败）等状态。
+    
+-   **计费方式**：当前部署服务的计费方式。
+    
+-   **部署详情**：模型单元类型、副本数等配置信息。
+    
+-   **限流详情**：展示当前部署服务的 RPM（每分钟请求数）、TPM（每分钟 Token 数）等限流配置。
+    
+-   **服务时间**：展示部署服务的创建时间与到期时间。
+    
+-   **操作**：根据部署状态和计费方式，可执行更新、监控、扩缩容、续费、下线、删除、体验等操作。
+    
+
 ## **部署后调用**
 
 模型部署成功后，支持通过 [OpenAI 兼容](https://help.aliyun.com/zh/model-studio/qwen-api-reference/#d397bcc41eu3q)、[Dashscope](https://help.aliyun.com/zh/model-studio/qwen-api-reference/#69cac67a477k2)及[Assistant SDK](https://help.aliyun.com/zh/model-studio/assistant#87b4aacb4bsww)进行调用。
 
-在调用已部署成功的模型时，`model`的取值应为模型部署成功后的模型`code`。请前往[模型部署控制台（北京）](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_deploy/create)界面获取**模型code**。
+在调用已部署成功的模型时，`model`的取值应为模型部署成功后的模型`code`。请前往[模型部署控制台（北京）](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_deploy)界面获取**模型code**。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0929900771/p1051901.png)
 
@@ -1517,11 +1558,33 @@ print(completion)
 -   按 Token 调用量：点击**扩容**按钮，填写并提交扩容申请表单，等待人工审核。
     
 
+此外，您还可以通过操作列的伸缩配置按钮，配置自动伸缩策略（包括伸缩阈值、最小/最大副本数、定时伸缩等）。
+
 ## **部署服务下线**
 
-前往[模型部署控制台（北京）](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_deploy/create)，找到要下线的部署服务，点击**下线**并确认。下线后将不再产生计费。
+前往[模型部署控制台（北京）](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_deploy/create)，找到要停止的部署服务，根据计费类型点击对应操作：
+
+-   模型单元预付费：点击**下线**并确认。
+    
+-   后付费：点击**删除**并确认。
+    
+
+操作完成后将不再产生计费。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0929900771/p1051902.png)
+
+## 其他操作
+
+除下线外，部署列表页的操作列还支持以下操作：
+
+-   **更新**：更新已部署服务的模型版本，支持全部更新或分批更新（金丝雀发布）。
+    
+-   **删除**：按量付费服务可直接删除，停止计费。
+    
+-   **续费**：预付费服务可续费延长服务时间，支持自动续费。
+    
+-   **购买容量包**：为预置吞吐部署购买容量包。
+    
 
 ## **常见问题**
 

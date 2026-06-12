@@ -31,83 +31,11 @@ BASE\_URL表示模型服务的网络访问点或地址。通过该地址，您�
 
 ### **支持的模型列表**
 
-当前OpenAI兼容接口支持的千问系列模型如下表所示。
+支持的模型：Qwen 大语言模型（商业版、开源版）、Qwen-VL、Qwen-Coder、Qwen-Omni、Qwen-Math、DeepSeek（阿里云直供、硅基流动直供、快手万擎直供）、Kimi（阿里云直供、月之暗面直供）、GLM（阿里云直供）、MiniMax（阿里云直供、稀宇科技直供）。
 
-## 中国内地
+> 三方直供模型仅在中国站的中国内地地域可用，调用前需先在百炼控制台开通对应服务（以 SiliconFlow DeepSeek 为例：搜索 deepseek → 找到 SiliconFlow DeepSeek 模型卡片 → 单击立即开通 → 确认授权）。
 
--   **商业版**
-    
-    -   **千问Max系列**：qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.6-max-preview、qwen3-max、qwen3-max-preview、qwen3-max-2025-09-23及之后的快照版模型、qwen-max
-        
-    -   **千问Plus系列**：qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.5-plus、qwen3.5-plus-2026-02-15、qwen-plus、qwen-plus-latest、qwen-plus-2024-12-20及之后的快照版模型
-        
-    -   **千问Flash系列**：qwen3.6-flash、qwen3.6-flash-2026-04-16、qwen3.5-flash、qwen3.5-flash-2026-02-23及之后的快照版模型；qwen-flash、qwen-flash-2025-07-28
-        
-    -   **千问Turbo系列**：qwen-turbo
-        
-    -   **千问Coder系列**：qwen3-coder-plus、qwen3-coder-plus-2025-07-22及之后的快照模型、qwen3-coder-flash、qwen3-coder-flash-2025-07-28及之后的快照模型、qwen-coder-plus、qwen-coder-turbo
-        
-    -   **千问Long系列**：qwen-long、qwen-long-latest、qwen-long-2025-01-25
-        
-    -   **QwQ系列**：qwq-plus
-        
-    -   **千问数学模型**：qwen-math-plus、qwen-math-plus-latest、qwen-math-plus-2024-08-16及之后的快照版模型、qwen-math-turbo
-        
--   **开源版**
-    
-    -   qwen3.6-35b-a3b、qwen3.5-397b-a17b、qwen3.5-122b-a10b、qwen3.5-27b、qwen3.5-35b-a3b
-        
-    -   qwen3-next-80b-a3b-thinking、qwen3-next-80b-a3b-instruct、qwen3-235b-a22b-thinking-2507、qwen3-235b-a22b-instruct-2507、qwen3-30b-a3b-thinking-2507、qwen3-30b-a3b-instruct-2507、qwen3-235b-a22b、qwen3-32b、qwen3-30b-a3b、qwen3-14b、qwen3-8b
-        
-    -   codeqwen1.5-7b-chat
-        
-
-## 美国
-
--   **商业版**
-    
-    -   **千问Plus系列**：qwen-plus-us、qwen-plus-2025-12-01-us及之后的快照版模型
-        
-    -   **千问Flash系列**：qwen-flash-us、qwen-flash-2025-07-28-us
-        
-
-## 国际
-
--   **商业版**
-    
-    -   **千问Max系列**：qwen3.7-max、qwen3.7-max-2026-05-20、qwen3-max、qwen3-max-preview、qwen3-max-2025-09-23及之后的快照版模型、qwen-max
-        
-    -   **千问Plus系列**：qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.5-plus、qwen3.5-plus-2026-02-15、qwen3.5-flash、qwen3.5-flash-2026-02-23及之后的快照版模型、qwen-plus、qwen-plus-latest、qwen-plus-2025-01-25及之后的快照版模型
-        
-    -   **千问Flash系列**：qwen3.6-flash、qwen3.6-flash-2026-04-16、qwen3.5-flash、qwen3.5-flash-2026-02-23及之后的快照版模型；qwen-flash、qwen-flash-2025-07-28
-        
-    -   **千问Turbo系列**：qwen-turbo
-        
-    -   **千问Coder系列**：qwen3-coder-plus、qwen3-coder-plus-2025-07-22及之后的快照模型、qwen3-coder-flash、qwen3-coder-flash-2025-07-28及之后的快照模型
-        
-    -   **QwQ系列**：qwq-plus
-        
--   **开源版**
-    
-    -   qwen3.6-35b-a3b、qwen3.5-397b-a17b、qwen3.5-122b-a10b、qwen3.5-27b、qwen3.5-35b-a3b
-        
-    -   qwen3-next-80b-a3b-thinking、qwen3-next-80b-a3b-instruct、qwen3-235b-a22b-thinking-2507、qwen3-235b-a22b-instruct-2507、qwen3-30b-a3b-thinking-2507、qwen3-30b-a3b-instruct-2507、qwen3-235b-a22b、qwen3-32b、qwen3-30b-a3b、qwen3-14b、qwen3-8b
-        
-
-## 全球
-
--   **商业版**
-    
-    -   **千问Max系列**：qwen3.7-max、qwen3.7-max-2026-05-20、qwen3-max、qwen3-max-preview、qwen3-max-2025-09-23及之后的快照版模型
-        
-    -   **千问Plus系列**：qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.5-plus、qwen3.5-plus-2026-02-15、qwen-plus、qwen-plus-latest、qwen-plus-2024-12-20及之后的快照版模型
-        
-    -   **千问Flash系列**：qwen3.5-flash、qwen3.5-flash-2026-02-23及之后的快照版模型；qwen-flash、qwen-flash-2025-07-28
-        
--   **开源版**
-    
-    -   qwen3.5-397b-a17b、qwen3.5-122b-a10b、qwen3.5-27b、qwen3.5-35b-a3b、qwen3-next-80b-a3b-thinking、qwen3-next-80b-a3b-instruct、qwen3-235b-a22b-thinking-2507、qwen3-235b-a22b-instruct-2507、qwen3-30b-a3b-thinking-2507、qwen3-30b-a3b-instruct-2507、qwen3-235b-a22b、qwen3-32b、qwen3-30b-a3b、qwen3-14b、qwen3-8b
-        
+> Qwen-Audio不支持OpenAI兼容协议，仅支持DashScope协议。
 
 ## 通过OpenAI SDK调用
 

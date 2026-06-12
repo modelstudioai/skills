@@ -9,7 +9,7 @@
 关键要点：
 
 - **模型调用计费**：不同模型单价不同，详见百炼控制台模型市场页面
-- **模型部署与训练**：单独计费，具体规则参见模型部署计费文档
+- **[模型部署](../concepts/model-deployment.md)与训练**：单独计费，具体规则参见[模型部署](../concepts/model-deployment.md)计费文档
 - **发票与账单**：可在阿里云费用与成本控制台查看扣款明细并申请开票
 - **万相会员**：与百炼 API 调用的计费体系相互独立，会员权益不适用于百炼 API 调用
 
@@ -75,6 +75,7 @@
 
 - [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)
 - [相关协议](../../raw/model-user-guide/support/related-agreements.md)
+
 
 
 

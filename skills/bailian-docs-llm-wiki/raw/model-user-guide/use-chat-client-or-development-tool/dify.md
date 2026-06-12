@@ -23,18 +23,20 @@ Dify 是一个开源的大模型应用开发平台，您可以基于阿里云百
 
 单击页面右上角的头像-**设置**，在**模型供应商**处找到**通义千问**卡片，点击**设置**。
 
--   若使用**北京地域**模型，在卡片的 **API-KEY 设置**界面填入**中国内地版** API Key，并设置**使用国际端点**为**否**。
+-   若使用华北2（北京）地域的模型，在卡片的 **API-KEY 设置**界面填入该地域的 API Key，并设置**使用国际端点**为**否**。
     
--   若使用**新加坡地域**模型，在卡片的 **API-KEY 设置**界面填入****国际版**** API Key，并设置**使用国际端点**为**是**。
+-   若使用新加坡地域模型，在卡片的 **API-KEY 设置**界面填入该地域的API Key，并设置**使用国际端点**为**是**。
     
 
 > 若 API Key 配置过程报错：**Invalid API-key provided**，可尝试安装较早版本的千问插件。
+
+![20251127172111](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8671034671/p1030274.jpg)
 
 ### **1.3. 选择模型**
 
 单击**通义千问**卡片中的显示模型，打开您需要使用的模型开关。
 
-> 若插件内暂未包含最新版千问模型，可尝试安装 **OpenAI-API-compatible** 插件，在插件设置中的 **API endpoint URL** 填入`https://dashscope.aliyuncs.com/compatible-mode/v1`（北京地域）或`https://dashscope-intl.aliyuncs.com/compatible-mode/v1`（新加坡地域）。
+> 若插件内暂未包含最新版千问模型，可尝试安装 **OpenAI-API-compatible** 插件，在插件设置中的 **API endpoint URL** 填入`https://dashscope.aliyuncs.com/compatible-mode/v1`（华北2（北京）地域）或`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`（新加坡地域）。其中`WorkspaceId`需替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## **2\. 开始使用**
 
@@ -75,7 +77,11 @@ Dify 具有多种大模型应用类型，请选择您使用的类型进行参考
     
     单击**添加消息**，在**USER**对应的消息下输入问题：“你是谁”，单击节点右上角的运行按钮![20251127203142](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4671034671/p1030341.jpg)。
     
-    运行完成后，输出结果的`text`字段中，思考内容被`...`标签包裹，标签之后为模型的回复正文。
+    运行完成后，输出结果的`text`字段中，思考内容被\`
+    
+    ...
+    
+    \`标签包裹，标签之后为模型的回复正文。
     
     LLM节点返回的`text`字段包含思考与回复内容，您可以使用Dify的代码执行节点，通过正则表达式分别提取。
     
@@ -84,20 +90,16 @@ Dify 具有多种大模型应用类型，请选择您使用的类型进行参考
 
 1.  **创建知识库**
     
-    创建一个[知识库](https://cloud.dify.ai/datasets)并进入。
-    
-2.  **选择数据源**
-    
-    在此步骤上传您的知识库文件。
-    
-3.  **文本分段与清洗**
-    
-    您可以在此步骤配置阿里云百炼提供的 Embedding 模型与 Rerank 模型，此处以 text-embedding-v4 与 gte-rerank-v2 为例。其余参数请您按需配置。
-    
-    > gte-rerank-v2仅支持**北京地域**。
-    
-    > Embedding 模型暂时无法选择multimodal-embedding-v1模型，敬请关注后续动态。
-    
+
+创建一个[知识库](https://cloud.dify.ai/datasets)并进入。 2. **选择数据源**
+
+在此步骤上传您的知识库文件。 3. **文本分段与清洗**
+
+您可以在此步骤配置阿里云百炼提供的 Embedding 模型与 Rerank 模型，此处以 text-embedding-v4 与 gte-rerank-v2 为例。其余参数请您按需配置。
+
+> gte-rerank-v2仅支持。
+
+> Embedding 模型暂时无法选择multimodal-embedding-v1模型，敬请关注后续动态。
 
 ## **常见问题**
 
@@ -126,7 +128,7 @@ A：Dify 没有提供万相模型相关的插件，通过Dify的Chatflow/工作�
 
 1.  **下载并导入工作流模板**
     
-    下载我们写好的模板：[万相-文生图Demo.yml](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250520/uuxncy/%E9%80%9A%E4%B9%89%E4%B8%87%E7%9B%B8-%E6%96%87%E7%94%9F%E5%9B%BEDemo.yml)或 [万相-文生视频Demo.yml](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250522/ksblgi/%E9%80%9A%E4%B9%89%E4%B8%87%E7%9B%B8-%E6%96%87%E7%94%9F%E8%A7%86%E9%A2%91Demo.yml)，在[工作室](https://cloud.dify.ai/apps)单击**导入DSL文件**并选择下载的模板文件。
+    下载我们写好的模板：_万相-文生图Demo.yml（ICMS 附件，file\_id=135184，需在线下载）\*\*Wanx - Text-to-Image Demo.yml（ICMS 附件，file\_id=148265，需在线下载）_或 _万相-文生视频Demo.yml（ICMS 附件，file\_id=135439，需在线下载）\*\*Wanx - Text-to-Video Demo.yml（ICMS 附件，file\_id=148266，需在线下载）_，在[工作室](https://cloud.dify.ai/apps)单击**导入DSL文件**并选择下载的模板文件。
     
 2.  **配置环境变量**
     
@@ -145,7 +147,7 @@ A：Dify 没有提供万相模型相关的插件，通过Dify的Chatflow/工作�
     为了在其它大模型应用中使用万相的文生图/视频功能，您可以在界面右上方单击**发布**并选择**发布为工具**。
     
 
-> 模板使用的模型为北京地域的`wanx2.1-t2i-turbo`（文生图）/`wanx2.1-t2v-turbo`（文生视频）。您可以在STEP1节点修改模型，在STEP1和STEP3节点修改地域API。
+> 模板使用的模型为北京地域的`wanx2.1-t2i-turbo``wan2.2-t2i-flash`（文生图）/`wanx2.1-t2v-turbo``wan2.1-t2v-turbo`（文生视频）。您可以在STEP1节点修改模型，在STEP1和STEP3节点修改地域API。
 
 ### **Q4：如何私有化部署 Dify？**
 

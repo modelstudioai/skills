@@ -191,6 +191,62 @@ bool
 
 是否展示工具调用状态信息，默认为 false
 
+parameters.agent\_options.location
+
+object
+
+否
+
+请求位置信息
+
+parameters.agent\_options.location.address
+
+string
+
+否
+
+具体地址
+
+parameters.agent\_options.location.province
+
+string
+
+否
+
+省份
+
+parameters.agent\_options.location.city
+
+string
+
+否
+
+城市
+
+parameters.agent\_options.location.district
+
+string
+
+否
+
+区/县
+
+parameters.agent\_options.location.longitude
+
+string
+
+否
+
+经度（小数点6位）
+
+parameters.agent\_options.location.latitude
+
+string
+
+否
+
+维度（小数点6位）
+
 ## **返回参数**
 
 **参数名**
@@ -554,6 +610,20 @@ tool\_calling\_image\_to\_image\_search
 
 图搜图
 
+### **本地生活 POI 工具**
+
+**工具调用的 step 消息**
+
+**工具名**
+
+tool\_calling\_poi\_search
+
+关键字搜索
+
+tool\_calling\_around\_search
+
+周边搜索
+
 ## 工具调用状态信息
 
 ### **参数**
@@ -786,6 +856,240 @@ data: {
     },
     "usage": null,
     "request_id": "chenwen-test-web-search-01"
+}
+```
+
+## **本地生活 POI 卡片渲染**
+
+**开启本地生活后**模型会输出基于位置检索POI的结果信息。同时**开启图文并茂**后，在POI 检索结果信息中会穿插图片，图片在消息正文中的为 html 标准图片格式，示例如下：
+
+```
+<img src=\"https://aos-comment.amap.com/B0FFGD1PB5/comment/content_media_external_file_9739_ss__1749454867961_64014666.jpg\" data-type=\"poi\" data-url=\"https://www.amap.com/detail/B0FFGD1PB5\" data-title=\"吴山景区吴山广场-吴山文化公园\" alt=\"吴山景区吴山广场-吴山文化公园\" width=\"400\" height=\"auto\"/>\n
+```
+
+标签中：
+
+-   data-type：数据类型，poi 为地图卡片
+    
+-   src ：第一个卡片图片的链接
+    
+-   data-url ：卡片对应高德链接
+    
+-   data-tile ：卡片标题
+    
+-   width/height ：图片的尺寸宽和高
+    
+
+在包含图片的模型消息中，additional\_kwargs 字段中包含了如下两个字段：
+
+-   data\_type，如果为地图卡片的图片消息，则值为 poi
+    
+-   data\_json，包含当前内容相关的所有地图卡片，正文中只显示一个。这里是所有相关卡片的集合，数据类型为 json。
+    
+
+在 data\_json 中，每个地图卡片的消息体如下所示：
+
+**字段**
+
+**类型**
+
+**说明**
+
+name
+
+string
+
+地点名称
+
+id
+
+string
+
+地点唯一标识
+
+distance
+
+string
+
+离中心点距离，单位米；仅在周边搜索的时候有值返回
+
+location
+
+string
+
+poi 经纬度
+
+type
+
+string
+
+poi 所属类型
+
+typecode
+
+string
+
+poi 分类编码
+
+pname
+
+string
+
+poi 所属省份
+
+cityname
+
+string
+
+poi 所属城市
+
+adname
+
+string
+
+poi 所属区县
+
+address
+
+string
+
+poi 详细地址
+
+photos
+
+object
+
+返回 poi 图片相关信息
+
+photos\[\].title
+
+string
+
+poi 的图片介绍
+
+photos\[\].url
+
+string
+
+poi 图片的下载链接
+
+business
+
+object
+
+设置后返回 poi 商业信息
+
+business 个性化字段
+
+**字段**
+
+**类型**
+
+**说明**
+
+business\_area
+
+string
+
+poi 所属商圈
+
+opentime\_today
+
+string
+
+poi 今日营业时间，如 08:30-17:30 08:30-09:00 12:00-13:30 09:00-13:00
+
+opentime\_week
+
+string
+
+poi 营业时间描述，如 周一至周五:08:30-17:30(延时服务时间:08:30-09:00；12:00-13:30)；周六延时服务时间:09:00-13:00(法定节假日除外)
+
+tel
+
+string
+
+poi 的联系电话
+
+tag
+
+string
+
+poi 特色内容，目前仅在美食poi下返回
+
+rating
+
+string
+
+poi 评分，目前仅在餐饮、酒店、景点、影院类 POI 下返回
+
+cost
+
+string
+
+poi 人均消费，目前仅在餐饮、酒店、景点、影院类 POI 下返回
+
+parking\_type
+
+string
+
+停车场类型（地下、地面、路边），目前仅在停车场类 POI 下返回
+
+下方展示**开启本地生活和图文混出**后的示例
+
+```
+"additional_kwargs": {
+  "data_type": "poi",
+  "data_json": [
+    {
+      "address": "四宜亭吴山景区(吴山广场地铁站D口步行150米)",
+      "distance": "352",
+      "business": {
+        "opentime_today": "24小时营业",
+        "keytag": "城市公园",
+        "rating": "3.8",
+        "business_area": "吴山",
+        "tel": "0571-8703****",
+        "rectag": "城市公园",
+        "opentime_week": "周一至周日 00:00-24:00"
+      },
+      "pcode": "330000",
+      "adcode": "330102",
+      "pname": "浙江省",
+      "cityname": "杭州市",
+      "type": "风景名胜;公园广场;公园",
+      "photos": [
+        {
+          "title": "",
+          "url": "https://aos-comment.amap.com/B0FFGD1PB5/comment/content_media_external_file_9739_ss__1749454867961_64014666.jpg"
+        },
+        {
+          "title": "",
+          "url": "https://aos-comment.amap.com/B0FFGD1PB5/comment/content_media_external_images_media_1000008441_ss__1751303656358_97699056.jpg"
+        },
+        {
+          "title": "",
+          "url": "https://aos-comment.amap.com/B0FFGD1PB5/comment/content_media_external_file_9746_ss__1749454867953_49866303.jpg"
+        }
+      ],
+      "typecode": "110101",
+      "adname": "上城区",
+      "citycode": "0571",
+      "navi": {
+        "navi_poiid": "H51F022002_375744",
+        "entr_location": "120.163399,30.239046",
+        "gridcode": "4520218310"
+      },
+      "name": "吴山景区吴山广场-吴山文化公园",
+      "indoor": {
+        "indoor_map": "0"
+      },
+      "location": "120.163789,30.238795",
+      "id": "B0FFGD1PB5",
+      "distance_text": "距离紫阳街道吴山小普陀吴山景区352米",
+      "from": "浙江省杭州市上城区紫阳街道吴山小普陀吴山景区"
+    }
+  ]
 }
 ```
 

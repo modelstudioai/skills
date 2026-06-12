@@ -720,7 +720,7 @@ HTTP
 
 **大小/时长**
 
-**Fun-ASR-Realtime / Fun-ASR-MTL-Realtime**（`fun-asr-realtime`、`fun-asr-mtl-realtime` 系列）
+**Fun-ASR-Realtime**（`fun-asr-realtime` 系列）
 
 二进制（Binary）流
 
@@ -784,7 +784,7 @@ HTTP
 
 ≤2 GB；≤12 小时（启用说话人分离建议 ≤2 小时）
 
-**Fun-ASR**（`fun-asr-realtime`、`fun-asr-realtime-2026-02-28`）
+**Fun-ASR-Realtime**（`fun-asr-realtime`、`fun-asr-realtime-2026-02-28`）
 
 URL / Base64，单次 1 个
 

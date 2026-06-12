@@ -1,87 +1,110 @@
 # DashScope 接口
 
-DashScope 是阿里云百炼平台的原生 API 体系，为文本生成、图像生成、视频生成、语音合成与识别、应用调用等全部模态提供统一的接入端点和鉴权机制。相比 OpenAI / Anthropic 兼容接口，DashScope 接口覆盖的功能集最完整、参数支持最广泛，是需要使用百炼平台全部能力时的首选。
+DashScope 是阿里云百炼平台的原生 API 接口体系，提供最完整的功能集和参数支持，是百炼所有模型与应用服务的统一调用入口。其服务端点统一托管在 `dashscope.aliyuncs.com`，覆盖文本生成、语音合成、语音识别、应用调用等全部能力。
 
-## 统一鉴权与端点
+## 在百炼平台中的定位
 
-所有 DashScope 接口共享同一套鉴权方式：在请求头中携带 `Authorization: Bearer <API_KEY>`，API Key 通过百炼控制台创建，建议写入环境变量 `DASHSCOPE_API_KEY` 以避免硬编码泄露。
+百炼平台同时提供多种 API 接口风格（OpenAI 兼容、Anthropic 兼容、DashScope 原生），其中 DashScope 接口具备以下独特优势：
 
-不同地域使用不同的端点基础域名：
+- **功能覆盖最广**：支持百炼平台全部能力，包括文本生成、多模态输入、语音合成与识别、应用调用、深度研究等，其他兼容接口可能仅覆盖部分功能。
+- **参数支持最全**：提供最完整的请求参数集，如 `top_p`、`top_k`、`temperature`、`incremental_output`（流式增量输出）等控制参数在 DashScope 接口中均可使用。
+- **性能最优**：作为平台原生接口，在延迟和吞吐方面表现最佳。
 
-| 地域 | HTTP 端点 |
-| --- | --- |
-| 华北2（北京） | `https://dashscope.aliyuncs.com/api/v1/...` |
-| 新加坡 | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/...` |
-| 美国（弗吉尼亚） | `https://dashscope-us.aliyuncs.com/api/v1/...` |
-| 德国（法兰克福） | `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/...` |
+## 核心服务端点
 
-模型、端点和 API Key 必须属于同一地域，跨地域调用会失败。新加坡与法兰克福地域的 URL 中需将 `{WorkspaceId}` 替换为真实的[业务空间](workspace.md) ID。
+DashScope 接口根据服务类型使用不同的端点和协议：
 
-## 各场景的调用方式
+| 服务类型 | 协议 | 端点 |
+|---------|------|------|
+| 文本生成（Qwen 系列） | HTTPS | `POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation` |
+| 应用调用（智能体/工作流） | HTTPS | `POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion` |
+| 语音合成（实时） | WebSocket | `wss://dashscope.aliyuncs.com/api-ws/v1/inference` |
+| 语音合成（非实时） | HTTPS | `POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/SpeechSynthesizer` |
+| 语音识别（实时） | WebSocket | `wss://dashscope.aliyuncs.com/api-ws/v1/inference` |
+| 录音文件识别 | HTTPS | `POST https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription` |
+| 兼容模式入口 | HTTPS | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
+
+多地域部署时，新加坡使用 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，美国使用 `dashscope-us.aliyuncs.com`，德国使用 `{WorkspaceId}.eu-central-1.maas.aliyuncs.com`。
+
+## 鉴权方式
+
+所有 DashScope 接口采用 API Key 鉴权，通过请求头 `Authorization: Bearer <your_api_key>` 传递。建议将 API Key 配置到环境变量 `DASHSCOPE_API_KEY`，避免硬编码泄露。
+
+公共请求头：
+
+| 参数 | 说明 |
+|------|------|
+| `Authorization` | `Bearer <API_KEY>`，必填 |
+| `Content-Type` | `application/json`（HTTPS 请求） |
+| `X-DashScope-WorkSpace` | [业务空间](workspace.md) ID，子[业务空间](workspace.md)或特定地域时必填 |
+| `X-DashScope-Async` | 设为 `enable` 以提交[异步任务](async-task.md)（录音文件识别等） |
+| `X-DashScope-DataInspection` | 数据合规检测开关 |
+
+## 典型使用场景
 
 ### 文本生成
 
-通义千问（Qwen）系列模型通过 DashScope 接口调用时拥有最完整的功能集和参数支持，端点与 [OpenAI 兼容接口](openai-compatible-api.md)并行提供。当项目需要使用百炼独有的高级参数时，应优先选择 DashScope 原生接口。
+通过 DashScope SDK 调用 Qwen 系列模型，请求体使用 `input` / `parameters` 结构：
+
+```python
+import dashscope
+
+response = dashscope.Generation.call(
+    model="qwen-plus",
+    messages=[{"role": "user", "content": "你好"}],
+    result_format="message",
+    stream=True
+)
+```
 
 ### 应用调用
 
-调用已发布的智能体或工作流应用时，DashScope API 端点为：
+调用已发布的智能体或工作流应用：
 
-```
-POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion
-```
+```python
+from dashscope import Application
 
-请求体核心字段包括 `input.prompt`（用户输入）、`input.messages`（多轮对话历史）、`parameters`（模型参数如 `temperature`、`top_p`、`incremental_output` 等）。SDK 层面通过 `Application.call`（Python）或 `ApplicationParam.builder`（Java）封装。DashScope API 在应用调用场景中功能最全、性能最高，支持多轮上下文、[流式输出](streaming.md)、Plugin、RAG、Function Calling 等。
-
-### 视频生成
-
-视频生成 API 统一采用[异步任务](async-task.md)协议，分两步完成：
-
-1. **创建任务**：`POST .../services/aigc/video-generation/video-synthesis`，请求头需额外携带 `X-DashScope-Async: enable`。
-2. **轮询结果**：`GET .../tasks/{task_id}`，task_id 有效期 24 小时。
-
-请求体通过 `model` 指定模型、`input.prompt` 提供提示词、`input.media` 传入媒体素材、`parameters` 控制分辨率和时长等参数。
-
-### 图像生成
-
-图像生成模型可通过 HTTP 或 DashScope SDK 调用。万相 2.6 及以上版本支持 HTTP 同步调用；较早版本仅支持异步调用（创建任务 + 轮询结果），流程与视频生成一致。
-
-### 语音合成与识别
-
-语音类接口同时提供 HTTP REST 和 WebSocket 两种协议。实时语音合成（CosyVoice）采用 WebSocket 双向流，通过 `run-task`、`continue-task`、`finish-task` 三类事件交互；非实时合成使用 HTTP POST，可选开启 SSE 流式返回。WebSocket 端点为 `wss://dashscope.aliyuncs.com/api-ws/v1/realtime`。
-
-## SDK 与接入方式
-
-百炼提供官方 DashScope SDK（Python、Java）以及 OpenAI 兼容的多语言 SDK。DashScope SDK 安装方式：
-
-```bash
-# Python
-pip install -U dashscope
-
-# Java (Maven)
-<dependency>
-  <groupId>com.alibaba</groupId>
-  <artifactId>dashscope-sdk-java</artifactId>
-</dependency>
+response = Application.call(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    app_id="YOUR_APP_ID",
+    prompt="你是谁？"
+)
 ```
 
-语音场景还提供 Android 和 iOS 原生 SDK。
+### 语音服务
 
-## 关键配置与最佳实践
+语音合成和语音识别通过 WebSocket 协议实现实时双向流式通信，客户端通过 `run-task` → 数据流 → `finish-task` 三阶段事件控制流程。
 
-- **连接复用**：高并发场景下应配置 DashScope SDK 的连接池参数（Java SDK 内置 OkHttp 连接池，可调整 `connectionPoolSize`、`maximumAsyncRequests` 等）以减少 TCP 连接建立开销。
-- **[异步任务](async-task.md)管理**：长耗时任务（文生图、文生视频、长语音识别）返回 `task_id` 后，可通过通用任务管理 API 查询、批量查询或取消任务，查询结果保留 24 小时。建议接入 EventBridge 事件通知替代高频轮询。
-- **临时 API Key**：在浏览器或移动端等不可信环境中，可通过后端接口换取有效期 1~1800 秒的临时 Key（以 `st-` 开头），到期自动失效。
-- **[业务空间](workspace.md)隔离**：当应用位于子[业务空间](workspace.md)时，请求中必须携带 `Workspace ID`。同一业务空间内的 API Key 权限相同，无需为不同模态分别创建。
+## SDK 支持
+
+DashScope 提供多语言官方 SDK：
+
+| 语言 | 安装方式 | 最低版本建议 |
+|------|---------|-------------|
+| Python | `pip install -U dashscope` | 最新版 |
+| Java | Maven: `com.alibaba:dashscope-sdk-java` | ≥ 2.12.0 |
+| Android / iOS | 平台原生 SDK | — |
+
+对于 Node.js、Go、PHP、C# 等语言，可直接通过 HTTP 接口或 OpenAI 兼容 SDK 调用，将 `base_url` 指向 `https://dashscope.aliyuncs.com/compatible-mode/v1` 即可。
+
+## 与兼容接口的对比
+
+| 维度 | DashScope 原生 | OpenAI 兼容 | Anthropic 兼容 |
+|------|---------------|-------------|----------------|
+| 功能覆盖 | 最全 | 部分功能 | 部分功能 |
+| 迁移成本 | 需学习专属 API | 对 OpenAI 用户零成本 | 对 Anthropic 用户零成本 |
+| 应用调用支持 | 完整（智能体+工作流） | 通过 Responses API 支持 | 不支持 |
+| 语音/音频能力 | 完整 | 不支持 | 不支持 |
+| 建议场景 | 需要完整功能集或最优性能 | 迁移现有 OpenAI 项目 | 迁移现有 Anthropic 项目 |
 
 ## 关联主题页
 
 - [qwen api reference](../api/qwen-api-reference.md)
 - [application call](../api/application-call.md)
-- [video generation api](../api/video-generation-api.md)
+- [bailian application calling](../guides/bailian-application-calling.md)
 - [audio api references](../api/audio-api-references.md)
-- [image generation](../api/image-generation.md)
+- [speech recognition api reference](../api/speech-recognition-api-reference.md)
+- [more models](../api/more-models.md)
 - [preparations](../api/preparations.md)
-- [more about models](../api/more-about-models.md)
 
 

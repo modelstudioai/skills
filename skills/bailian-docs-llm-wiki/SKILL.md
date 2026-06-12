@@ -147,19 +147,22 @@ description: >-
 | **按家族筛选**：按 primaryCapability / providers / itemCount / maxContextWindow 找家族 | `models/families.jsonl`（一行一家族，含 items[] 摘要） |
 | 模型家族总览 / 按能力分桶浏览         | `models/index.md`                                        |
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
-| 函数调用 | `wiki/concepts/function-calling.md` |
-| 检索增强生成 | `wiki/concepts/rag.md` |
-| Token 计量与计费 | `wiki/concepts/token.md` |
-| 流式输出 | `wiki/concepts/streaming.md` |
 | OpenAI 兼容接口 | `wiki/concepts/openai-compatible-api.md` |
 | DashScope 接口 | `wiki/concepts/dashscope-api.md` |
 | 异步任务 | `wiki/concepts/async-task.md` |
+| 检索增强生成 | `wiki/concepts/rag.md` |
+| Token 计量与计费 | `wiki/concepts/token.md` |
+| 流式输出 | `wiki/concepts/streaming.md` |
 | 业务空间 | `wiki/concepts/workspace.md` |
-| 语音合成、语音识别与语音翻译对比 | `wiki/comparisons/speech-apis-comparison.md` |
-| 图像生成、视频生成与3D生成对比 | `wiki/comparisons/media-generation-comparison.md` |
-| 模型评估与应用评估对比 | `wiki/comparisons/evaluation-comparison.md` |
-| 模型监控与应用监控对比 | `wiki/comparisons/monitoring-comparison.md` |
-| 知识库与记忆库对比 | `wiki/comparisons/knowledge-vs-memory.md` |
+| 函数调用与工具使用 | `wiki/concepts/function-calling.md` |
+| 模型部署 | `wiki/concepts/model-deployment.md` |
+| Prompt 工程 | `wiki/concepts/prompt-engineering.md` |
+| 语音合成、识别与翻译 API 对比 | `wiki/comparisons/speech-apis-comparison.md` |
+| 图像生成、视频生成与 3D 生成对比 | `wiki/comparisons/image-video-3d-generation.md` |
+| 模型评估与应用评估对比 | `wiki/comparisons/model-eval-vs-app-eval.md` |
+| 模型监控与应用监控对比 | `wiki/comparisons/model-monitoring-vs-app-monitoring.md` |
+| 模型微调、压缩与部署对比 | `wiki/comparisons/fine-tuning-vs-compression-vs-deployment.md` |
+| 知识库与记忆库对比 | `wiki/comparisons/knowledge-base-vs-memory.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 

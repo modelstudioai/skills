@@ -4,7 +4,7 @@
 
 ## **适用范围**
 
--   **适用部署模式及地域**：本文档仅适用于[中国内地部署模式](https://help.aliyun.com/zh/model-studio/regions/)下的北京地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
+-   **适用地域**：本文描述的功能仅在华北2（北京）地域可用，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
     
 -   **开通账号权限**：若使用[阿里云子账号](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)（[RAM用户](https://help.aliyun.com/zh/ram/user-guide/overview-of-ram-users)），需要为子账号授予模型调用、训练和部署[权限](https://help.aliyun.com/zh/model-studio/use-workspace#895b613347th4)。
     
@@ -111,7 +111,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/files' \
 
 **说明**
 
-不同模型的微调参数的值有所差异，超参数设置请参见[超参数](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-api-reference#5f391e4b3cezf)，更多调用示例请参见[请求示例](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-api-reference#1a9196bd16o9h)。
+不同模型的微调参数的值有所差异，超参数设置请参见[超参数](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#5f391e4b3cezf)，更多调用示例请参见[请求示例](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#1a9196bd16o9h)。
 
 **请求示例**
 
@@ -124,18 +124,22 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-    "model":"wan2.5-i2v-preview",
-    "training_file_ids":[
+    "model": "wan2.5-i2v-preview",
+    "training_file_ids": [
         "<替换为训练数据集的文件id>"
     ],
-    "training_type":"efficient_sft",
-    "hyper_parameters":{
-        "n_epochs":400,
-        "batch_size":2,
-        "learning_rate":2e-5,
-        "split":0.9,
-        "eval_epochs": 20,
-        "max_pixels": 36864
+    "training_type": "efficient_sft",
+    "hyper_parameters": {
+        "n_epochs": 400,
+        "batch_size": 2,
+        "learning_rate": 2e-5,
+        "split": 0.9,
+        "max_split_val_dataset_sample": 5,
+        "eval_epochs": 50,
+        "max_pixels": 36864,
+        "save_total_limit": 10,
+        "lora_rank": 32,
+        "lora_alpha": 32
     }
 }'
 ```
@@ -147,18 +151,22 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-    "model":"wan2.2-kf2v-flash",
-    "training_file_ids":[
+    "model": "wan2.2-kf2v-flash",
+    "training_file_ids": [
         "<替换为训练数据集的文件id>"
     ],
-    "training_type":"efficient_sft",
-    "hyper_parameters":{
-        "n_epochs":400,
-        "batch_size":4,
-        "learning_rate":2e-5,
-        "split":0.9,
-        "eval_epochs": 20,
-        "max_pixels": 262144
+    "training_type": "efficient_sft",
+    "hyper_parameters": {
+        "n_epochs": 400,
+        "batch_size": 4,
+        "learning_rate": 2e-5,
+        "split": 0.9,
+        "max_split_val_dataset_sample": 5,
+        "eval_epochs": 50,
+        "max_pixels": 262144,
+        "save_total_limit": 10,
+        "lora_rank": 32,
+        "lora_alpha": 32
     }
 }'
 ```
@@ -169,7 +177,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 
 -   `job_id`：任务ID，用于查询进度。
     
--   `finetuned_output`：微调后的新模型名称，后续部署和调用时必须使用此名称。
+-   `finetuned_output`：微调后的新模型名称，后续部署时必须使用此名称。
     
 -   `status`：模型训练状态。创建微调任务后，初始状态为PENDING，表示训练待开始。
     
@@ -378,7 +386,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 **说明**
 
-调用微调后的 LoRA 模型时，输入参数用法基本与[图生视频-基于首帧API](https://help.aliyun.com/zh/model-studio/legacy-image-to-video-api-reference/) 一致。
+调用微调后的 LoRA 模型时，输入参数用法基本与[万相-图生视频-基于首帧（2.1-2.6）](https://help.aliyun.com/zh/model-studio/legacy-image-to-video-api-reference/)保持一致。
 
 下表仅列出 LoRA 模型**特有的参数用法或特定限制**。对于未在下表中提及的通用参数（例如 `duration`），请参照 API 文档进行设置。
 
@@ -412,26 +420,14 @@ string
 
 文本提示词。
 
-此参数是否生效，取决于[aigc\_config.use\_input\_prompt](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-api-reference#8e783d6f60i7l) 的配置：
+此参数是否生效，取决于[aigc\_config.use\_input\_prompt](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#8e783d6f60i7l) 的配置：
 
 -   当`use_input_prompt=true`时：此参数生效。系统将根据这段提示词来生成视频。
     
--   当`use_input_prompt=false`时：此参数会被忽略。系统将使用预置模板[aigc\_config.prompt](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-api-reference#8e783d6f60i7l)自动生成提示词。
+-   当`use_input_prompt=false`时：此参数会被忽略。系统将使用预置模板[aigc\_config.prompt](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#8e783d6f60i7l)自动生成提示词。
     
 
 \-
-
-input.img\_url
-
-string
-
-是
-
-首帧图像URL。
-
-传入方式请参见[img\_url参数](https://help.aliyun.com/zh/model-studio/legacy-image-to-video-api-reference/)。
-
-https://help-static-aliyun-doc.aliyuncs.com/xxx.jpg
 
 parameters.resolution
 
@@ -442,8 +438,6 @@ string
 生成的视频分辨率档位。
 
 wan2.2和wan2.5模型：480P、720P。默认值为720P。
-
-。
 
 720P
 
@@ -533,11 +527,11 @@ string
 
 文本提示词。
 
-此参数是否生效，取决于[aigc\_config.use\_input\_prompt](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-api-reference#8e783d6f60i7l) 的配置：
+此参数是否生效，取决于[aigc\_config.use\_input\_prompt](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#8e783d6f60i7l) 的配置：
 
 -   当`use_input_prompt=true`时：此参数生效。系统将根据这段提示词来生成视频。
     
--   当`use_input_prompt=false`时：此参数会被忽略，无需传入。系统将使用预置模板[aigc\_config.prompt](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-api-reference#8e783d6f60i7l)自动生成提示词。
+-   当`use_input_prompt=false`时：此参数会被忽略，无需传入。系统将使用预置模板[aigc\_config.prompt](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#8e783d6f60i7l)自动生成提示词。
     
 
 \-
@@ -969,7 +963,7 @@ s86b5p 或 m01aa
         
         **示例代码**
         
-        > 代码调用详见[视觉理解](https://help.aliyun.com/zh/model-studio/vision)。
+        > 代码调用详见[图像与视频理解](https://help.aliyun.com/zh/model-studio/vision)。
         
         ```
         import os
@@ -1025,7 +1019,7 @@ s86b5p 或 m01aa
 
 ##### **方式一：未上传验证集（系统自动划分）**
 
-在[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-api-reference#e702c9786b40q)时，如果没有单独上传验证集，即未传入`validation_file_ids`参数，系统将根据以下两个[超参数](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-api-reference#5f391e4b3cezf)，自动从**训练集**中划分出一部分作为验证集：
+在[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#e702c9786b40q)时，如果没有单独上传验证集，即未传入`validation_file_ids`参数，系统将根据以下两个[超参数](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#5f391e4b3cezf)，自动从**训练集**中划分出一部分作为验证集：
 
 -   `split`：训练集划分比例。例如，0.9 表示将90%的数据用于训练，剩余的10%用作验证。
     
@@ -1051,9 +1045,9 @@ s86b5p 或 m01aa
 
 1.  **准备验证集**：将验证数据打包成一个独立的 `.zip` 文件，请参见[验证集格式](#4a214aadd60df)。
     
-2.  **上传验证集**：调用[上传数据集](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-api-reference#Kv4zB)接口，上传这个验证集 `.zip` 文件，获得一个专属的文件ID。
+2.  **上传验证集**：调用[上传数据集](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#Kv4zB)接口，上传这个验证集 `.zip` 文件，获得一个专属的文件ID。
     
-3.  **创建任务时指定验证集**：在调用[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-api-reference#e702c9786b40q)接口时，将这个文件ID填入 `validation_file_ids` 参数中。
+3.  **创建任务时指定验证集**：在调用[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#e702c9786b40q)接口时，将这个文件ID填入 `validation_file_ids` 参数中。
     
     ```
     {
@@ -1069,7 +1063,7 @@ s86b5p 或 m01aa
 
 在训练过程中，系统会定期保存模型的“快照”（即 Checkpoint）。默认情况下，系统会输出**最后一个Checkpoint**作为最终的微调模型。但中间过程产出的Checkpoint效果可能优于最终版本，您可以从中挑选出最满意的一个进行部署。
 
-系统将按照[超参数](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-api-reference#5f391e4b3cezf)`eval_epochs`设定的间隔，在**验证集**上运行Checkpoint并生成预览视频。
+系统将按照[超参数](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#5f391e4b3cezf)`eval_epochs`设定的间隔，在**验证集**上运行Checkpoint并生成预览视频。
 
 -   **如何评估**：通过直接观察生成的预览视频来判断效果。
     
@@ -1086,7 +1080,7 @@ s86b5p 或 m01aa
 
 **请求示例**
 
--   `<替换为微调任务job_id>`：完整替换为[创建微调任务接口](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-api-reference#e69160039ceah)的输出参数`job_id`。
+-   `<替换为微调任务job_id>`：完整替换为[创建微调任务接口](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#e69160039ceah)的输出参数`job_id`。
     
 
 ```
@@ -1140,9 +1134,9 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
         "total": 1,
         "list": [
             {
-                "video_path": "https://finetune-swap-wulanchabu.oss-cn-wulanchabu.aliyuncs.com/xxx.mp4?Expires=xxxx",
-                "prompt": "视频开头展示了一位年轻男性坐在咖啡馆的场景。他穿着一件米色的Polo衫，神情专注且略显沉思，手指轻轻托着下巴。他的面前摆放着一杯热气腾腾的咖啡，背景是木质条纹的墙壁和一个装饰牌。然后开始展示s86b5p金钱雨特效，无数巨大尺寸的美元钞票（米黄底/深绿图案）如暴雨般倾泻而下，密集地砸向并环绕他。钞票持续落下，他双臂舒展上扬，脖颈微仰，表情惊喜，完全沉浸在这场狂野的金钱雨中。",
-                "first_frame_path": "https://finetune-swap-wulanchabu.oss-cn-wulanchabu.aliyuncs.com/xxx.jpeg"
+                "video_path": "https://finetune-result.oss-cn-wulanchabu.aliyuncs.com/xxx.mp4?Expires=xxxx",
+                "prompt": "视频开头展示了一位年轻男性坐在咖啡馆的场景...",
+                "first_frame_path": "https://finetune-result.oss-cn-wulanchabu.aliyuncs.com/xxx.jpeg"
             }
         ]
     }
@@ -1161,7 +1155,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
     
 -   `<替换为待导出的checkpoint>`：完整替换为checkpoint的值，例如“checkpoint-160”。
     
--   `<替换为控制台展示的导出模型名称>`：完整替换为自定义的模型名称，仅用于控制台展示，例如“wan2.5-checkpoint-160”。该名称必须全局唯一，不支持重复名称多次导出，参数填写请参见[导出Checkpoint](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-api-reference#2636e0fdfewpw)。
+-   `<替换为控制台展示的导出模型名称>`：完整替换为自定义的模型名称，仅用于控制台展示，例如“wan2.5-checkpoint-160”。该名称必须全局唯一，不支持重复名称多次导出，参数填写请参见[导出Checkpoint](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#2636e0fdfewpw)。
     
 
 ```
@@ -1240,7 +1234,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
 -   Prompt：确保触发词为**无意义稀有词**（如 s86b5p），避免使用常用词（如 running）造成干扰。
     
 
-**2\. 调整超参数：**参数说明请参见[超参数](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-api-reference#5f391e4b3cezf)。
+**2\. 调整超参数：**参数说明请参见[超参数](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#5f391e4b3cezf)。
 
 -   **n\_epochs (训练轮数)**
     
@@ -1263,7 +1257,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
     
     -   费用 = 训练 Tokens 总量 × 单价。请参见[模型训练计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing)。
         
-    -   训练结束后，在[查询微调任务状态](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-api-reference#a242dac535nqt)接口 `usage` 字段查看训练消耗的总 Token 数。
+    -   训练结束后，在[查询微调任务状态](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#a242dac535nqt)接口 `usage` 字段查看训练消耗的总 Token 数。
         
 -   **模型部署**：**免费**。
     
@@ -1274,7 +1268,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
 
 ## **API文档**
 
-[视频生成模型微调API参考](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-api-reference)
+[视频生成模型微调API参考](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference)
 
 ## **常见问题**
 

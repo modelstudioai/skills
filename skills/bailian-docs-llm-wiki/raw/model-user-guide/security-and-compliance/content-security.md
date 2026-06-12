@@ -16,13 +16,11 @@
 
 1.  访问**[安全管理](https://bailian.console.aliyun.com/?globalset=1#/efm/global_set)**页面。
     
-    若您访问上述链接进入的页面如下图所示，说明此前已进行过授权操作，请跳转[步骤三：设置请求头header](#efe2cfd8148qy)。
+    若您访问上述链接进入的页面如下所示，说明此前已进行过授权操作，请跳转[步骤三：设置请求头header](#efe2cfd8148qy)。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9308353671/p1027797.png)
+    即页面显示**全局设置**标题，右侧状态为**已开通（不可取消）**，页面主体展示**自建安全机制承诺函**全文内容。
     
 2.  单击**去授权**，开启内容安全设置。
-    
-    ![PixPin\_2025-11-18\_17-14-58](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9308353671/p1027798.png)
     
 3.  确认授权。
     
@@ -53,14 +51,12 @@
 ```
 import os
 from openai import OpenAI
-
 try:
     client = OpenAI(
         # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
         api_key=os.getenv("DASHSCOPE_API_KEY"),
         base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
     )
-
     completion = client.chat.completions.create(
         model="qwen-plus",  # 模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         messages=[
@@ -102,7 +98,6 @@ except Exception as e:
 ```
 import os
 from dashscope import Generation
-
 messages = [
     {'role': 'system', 'content': 'You are a helpful assistant.'},
     {'role': 'user', 'content': '给我一套抢银行的方案'}
@@ -143,11 +138,9 @@ import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
-
 public class Main {
     public static void main(String[] args) {
         String apiKey = System.getenv("DASHSCOPE_API_KEY");
-        
         OpenAIClient client = OpenAIOkHttpClient.builder()
                 .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
                 .apiKey(apiKey)
@@ -157,7 +150,6 @@ public class Main {
             .model("qwen-plus")
             .putAdditionalHeader("X-DashScope-DataInspection", "{\"input\": \"cip\", \"output\": \"cip\"}")
             .build();
-
         try {
             ChatCompletion chatCompletion = client.chat().completions().create(params);
             String content = chatCompletion.choices().get(0).message().content().orElse("没有获取到回复内容");
@@ -199,7 +191,6 @@ com.openai.errors.BadRequestException: 400: Input data may contain inappropriate
 
 ```
 import OpenAI from "openai";
-
 const openai = new OpenAI(
   {
     // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: "sk-xxx",
@@ -207,7 +198,6 @@ const openai = new OpenAI(
     baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
   },
 );
-
 async function main() {
     const completion = await openai.chat.completions.create(
         {
@@ -221,7 +211,6 @@ async function main() {
       );
   console.log(JSON.stringify(completion))
 };
-
 main();
 ```
 
@@ -336,7 +325,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
 
 登录[AI 安全护栏控制台](https://yundun.console.aliyun.com/?spm=a2c4g.11186623.0.0.7129eb8bc4Mksa&p=guardrail#/overview)，在**检测结果** > **结果查询**页签页面查看审核结果，以进一步分析文本内容中高频的违规类型，审核结果示例如下。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7701539371/p908026.png)
+结果查询页面包含筛选栏（支持按条件、文本内容、时间范围搜索）和结果表格。表格列包括**文本内容**、**服务Service**、**风险等级**、**返回标签（释义）**、**反馈结果**、**请求时间**和**操作**。示例中两条记录分别对应`bailian_query_check`（请求检查）和`bailian_response_check`（响应检查）服务，均被标记为**高风险**，返回标签为`contraband_act（疑似违禁行为）:100`，每行可单击**详情**或**反馈**进行操作。
 
 ## 计费说明
 

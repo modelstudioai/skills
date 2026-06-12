@@ -23,7 +23,7 @@ CosyVoice 模型调优面向**同一发音人**多条录音的高还原度专属
     
 -   **支持调优的模型**：`cosyvoice-v3-flash`。
     
--   **支持的服务部署范围与地域**：CosyVoice 模型调优仅对服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)的情况可用，且仅支持**华北2（北京）**地域。
+-   **支持的地域**：CosyVoice 模型调优服务仅支持**华北2（北京）**地域。
     
 
 ### **调优产物**
@@ -95,7 +95,7 @@ CosyVoice 模型调优涉及两部分费用：**训练费用**（按训练消耗
 
 调优后的模型部署后按**模型单元的使用时长**计费，公式为：费用\=使用时长（小时）×模型单元数量×模型单元单价。
 
-其中，模型单元数量\=单副本模型单元×部署副本数，可选的模版及对应的模型单元类型参见[部署模版](#cv-deploy-sub-template-t)；各模型单元类型的单价、计费起止时刻请参见[模型部署简介](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)。
+其中，模型单元数量\=单副本模型单元×部署副本数，可选的模版及对应的模型单元类型参见[部署模版](#cv-deploy-sub-template-t)；各模型单元类型的单价、计费起止时刻请参见[模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)。
 
 ## **前提条件**
 
@@ -481,7 +481,7 @@ II 型模型单元
 
 ### **方式一：通过控制台部署（推荐日常使用）**
 
-**操作入口**：前往[阿里云百炼控制台](https://bailian.console.aliyun.com/?tab=model#/efm/model_center)的**我的模型**页面，找到调优成功的模型并提交部署。完整操作步骤请参见[模型部署简介](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)。
+**操作入口**：前往[阿里云百炼控制台](https://bailian.console.aliyun.com/?tab=model#/efm/model_center)的**我的模型**页面，找到调优成功的模型并提交部署。完整操作步骤请参见[模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)。
 
 **关键参数**：仅需选择以下两项，其余字段由模版与副本数自动决定：
 

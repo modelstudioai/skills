@@ -4,7 +4,7 @@
 
 **重要**
 
-本文档仅适用于[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)，必须使用对应的[API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/api-key)。
+本文档描述的功能仅在华北2（北京）地域可用，必须使用该地域的[API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/api-key)。
 
 ## **模型概览**
 

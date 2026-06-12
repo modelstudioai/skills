@@ -1,82 +1,87 @@
 # 异步任务
 
-异步任务是百炼平台处理长耗时模型调用的核心协议。对于视频生成、3D 模型生成、部分图像生成以及模型微调等需要较长处理时间的操作，平台统一采用"先创建任务获取 task_id，再凭 task_id 轮询或接收回调获取结果"的两步式异步调用模型。
+异步任务是百炼平台中用于处理长耗时 AI 生成请求的调用模式。当模型推理需要较长时间（通常数十秒到数分钟）时，平台采用"先提交任务获取 task_id，再凭 task_id 轮询或接收回调获取结果"的两步式异步流程，避免 HTTP 连接超时。
+
+## 适用场景
+
+百炼平台中以下类型的 API 均采用异步任务模式：
+
+- **视频生成**：文生视频、图生视频、参考生视频、视频编辑、数字人等，耗时通常 1-5 分钟
+- **图像生成**：部分模型（如万相文生图 V1）仅支持异步调用；大多数图像模型同时支持同步和异步
+- **3D 模型生成**：文生 3D、单图/多图生 3D
+- **音乐生成**：Fun-Music 系列的非流式模式
+- **长语音识别**等其他长耗时任务
 
 ## 调用流程
 
-### 第一步：创建任务
+### 步骤 1：创建任务
 
-向对应模型的 API 端点发送 POST 请求，请求头中必须包含：
+通过 `POST` 请求向对应模型的服务端点提交参数。请求头中**必须**包含：
 
-| 请求头 | 值 | 说明 |
-| --- | --- | --- |
-| `X-DashScope-Async` | `enable` | 启用异步模式，缺少此头会报错 |
-| `Authorization` | `Bearer $DASHSCOPE_API_KEY` | API Key 鉴权 |
-| `Content-Type` | `application/json` | 请求体格式 |
+```
+X-DashScope-Async: enable
+Authorization: Bearer $DASHSCOPE_API_KEY
+Content-Type: application/json
+```
 
-成功后返回 `task_id`，有效期 24 小时。获取 task_id 后切勿重复创建任务。
+> **重要**：缺少 `X-DashScope-Async: enable` 请求头会导致报错 "current user api does not [support](../guides/support.md) synchronous calls"。
 
-### 第二步：查询结果
+成功后返回 `task_id`，有效期为 **24 小时**。请妥善保存 task_id，不要对同一请求重复创建任务。
+
+### 步骤 2：获取结果
+
+有两种方式获取任务结果：
+
+**方式一：轮询查询**
 
 ```
 GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}
 ```
 
-建议轮询间隔 15 秒。高频轮询场景推荐改用事件通知替代轮询。
+建议轮询间隔 15 秒。任务状态流转为：`PENDING` → `RUNNING` → `SUCCEEDED` / `FAILED`。
 
-## 任务状态
+**方式二：事件回调（推荐）**
 
-| 状态 | 含义 |
-| --- | --- |
-| `PENDING` | 任务已提交，等待调度 |
-| `RUNNING` | 任务执行中 |
-| `SUCCEEDED` | 任务成功完成 |
-| `FAILED` | 任务异常终止 |
-| `CANCELED` | 用户主动取消 |
-| `UNKNOWN` | task_id 已过期或无法识别 |
+通过阿里云事件总线 EventBridge 接收任务完成通知，避免高频轮询消耗资源和触发限流。支持两种事件目标：
+
+- **HTTP 回调 URL**：业务方提供公网或 VPC 可达的 POST 接口接收 JSON 事件，配置简单
+- **云消息队列 RocketMQ**：事件转发至 RocketMQ Topic，保证消息不丢失、支持失败重试，适合高可靠性场景
+
+事件类型为 `dashscope:System:AsyncTaskFinish`，事件体包含 `task_id`、`task_status`、`region` 等字段。注意事件规则的地域必须与任务地域一致。
 
 ## 任务管理 API
 
-百炼提供一组通用的异步任务管理接口，适用于所有异步任务类型：
+百炼提供一组通用的异步任务管理接口：
 
-| 操作 | 方法与路径 | 说明 |
-| --- | --- | --- |
-| 查询单个任务 | `GET /api/v1/tasks/{task_id}` | 获取任务状态与结果 |
-| 批量查询任务 | `GET /api/v1/tasks/` | 支持按时间范围、模型名、状态分页查询 |
+| 接口 | 方法与路径 | 说明 |
+|------|-----------|------|
+| 查询单个任务 | `GET /api/v1/tasks/{task_id}` | 获取任务状态及结果 |
+| 批量查询任务 | `GET /api/v1/tasks/` | 按时间范围、模型名称、状态等条件批量查询 |
 | 取消任务 | `POST /api/v1/tasks/{task_id}/cancel` | 仅支持 `PENDING` 状态的任务 |
 
-三个接口共用 20 QPS 的账号级限流，查询结果仅保留 24 小时。权限范围为同一阿里云主账号下所有 API Key 提交的任务。
+任务状态枚举值：`PENDING`、`RUNNING`、`SUCCEEDED`、`FAILED`、`CANCELED`、`UNKNOWN`。
 
-## 事件通知（替代轮询）
+## 关键限制
 
-高频轮询会消耗业务资源并触发限流。百炼已将异步任务接入事件总线 EventBridge，任务完成时（无论成功或失败）会生成 `dashscope:System:AsyncTaskFinish` 事件，支持两种推送目标：
+- **task_id 有效期**：24 小时，过期后查询返回 `UNKNOWN` 状态
+- **查询限流**：三个管理接口共用 20 QPS 的账号级限流，高频场景建议使用事件回调替代轮询
+- **权限范围**：只能查询/取消同一阿里云主账号下的任务（含其所有 API Key 提交的任务）
+- **结果保留**：查询返回结果仅保留 24 小时，具体以对应模型文档为准
+- **下载链接时效**：任务成功后返回的文件下载 URL 通常有独立的有效期（如 3D 模型为 2 小时），需及时下载
 
-- **HTTP 回调 URL**：业务方提供一个 POST 接口接收 JSON 事件，配置简单，适合大多数场景。
-- **云消息队列 RocketMQ**：事件转发至 RocketMQ Topic，支持失败重试，适合高可靠性要求。
+## 开发建议
 
-事件规则的地域必须与任务地域一致，否则无法收到通知。事件 Body 中的 `data.user_api_unique_key` 字段支持按模型名过滤。
-
-## 适用场景
-
-| 场景 | 典型模型 | 任务耗时 |
-| --- | --- | --- |
-| 视频生成（文生视频、图生视频等） | wan2.7-t2v、kling-v3 等 | 1–10 分钟 |
-| 3D 模型生成 | Tripo-H3.1、Tripo-P1.0 | 数分钟 |
-| 图像生成（万相 2.5 及以下版本） | wanx2.1-t2i-turbo 等 | 数秒至数分钟 |
-| 模型微调训练 | Qwen 系列基座模型 | 数十分钟至数小时 |
-
-> **提示**：万相 2.6 及以上版本的图像生成已支持 HTTP 同步调用，无需异步流程。
-
-## 多地域注意事项
-
-模型、Endpoint URL 和 API Key 必须属于同一地域，跨地域调用会失败。主要地域包括华北2（北京）、新加坡、美国（弗吉尼亚）和德国（法兰克福），各地域的 Endpoint URL 格式不同，详见对应模型的 API 文档。
+1. 获取 task_id 后立即持久化存储，避免因进程重启丢失
+2. 生产环境优先使用 EventBridge 回调替代轮询，降低资源消耗和限流风险
+3. 对于高并发场景，配合 DashScope SDK 的连接池复用功能，减少 TCP 连接开销
+4. 实现幂等性检查，避免对同一请求重复创建异步任务
 
 ## 关联主题页
 
 - [video generation api](../api/video-generation-api.md)
-- [3d generation](../api/3d-generation.md)
 - [image generation](../api/image-generation.md)
+- [3d generation](../api/3d-generation.md)
 - [more about models](../api/more-about-models.md)
-- [fine tuning jobs api](../api/fine-tuning-jobs-api.md)
+- [music generation references](../api/music-generation-references.md)
 
 

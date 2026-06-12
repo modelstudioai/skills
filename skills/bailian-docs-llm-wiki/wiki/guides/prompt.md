@@ -39,7 +39,7 @@
 [自定义Prompt模板](../../raw/application-user-guide/prompt/prompt-custom-template.md) 介绍了两种文本生成模板的输入模式，以及单独的图片生成模板入口：
 
 - **自定义创建**：粘贴已有 Prompt，可调用「优化 Prompt」二次润色，再保存。
-- **基于 Prompt 工程创建**：按内置框架填字段后由平台自动优化。可选框架：
+- **基于 [Prompt 工程](../concepts/prompt-engineering.md)创建**：按内置框架填字段后由平台自动优化。可选框架：
   - **ICIO**（Instruction / Context / Input Data / Output Indicator）：适合数据分析、内容生成、摘要等明确任务。
   - **CRISPE**（Capacity & Role / Insight / Statement / Personality / Experiment）：适合需要 AI 扮演特定角色的交互，如智能客服、面试模拟。
   - **RASCEF**（Role / Action / Script / Content / Example / Format）：适合多步骤的复杂业务，如项目规划、上市策略。
@@ -149,6 +149,7 @@
 - [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)
 - [使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)
 - [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)
+
 
 
 

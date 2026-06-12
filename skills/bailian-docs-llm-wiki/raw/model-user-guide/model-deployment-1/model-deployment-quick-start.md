@@ -8,7 +8,7 @@
 
 ## 前提条件
 
--   您已经完整阅读了[模型部署简介](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)，熟悉如何在阿里云百炼平台进行模型部署的支持的模型和基本步骤。
+-   您已经完整阅读了[模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)，熟悉如何在阿里云百炼平台进行模型部署的支持的模型和基本步骤。
     
 -   您需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
     
@@ -77,6 +77,26 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 **配置内容**
 
 **配置详情**
+
+服务名称
+
+自定义部署服务的名称。
+
+选择模型
+
+选择要部署的模型，包括平台预置模型和已调优的模型。
+
+模型单元类型
+
+选择部署规格，不同规格对应不同的算力和性能。
+
+部署副本数
+
+设置初始部署副本数量，影响服务的并发处理能力。
+
+部署模版
+
+选择部署模版（如"单机部署"），不同模版对应不同的资源配置方案。仅在模型单元计费模式下可用。
 
 配置模型推理模式
 
@@ -277,12 +297,8 @@ curl --request DELETE 'https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8
     
     在**模型列表**中找到目标模型，查看**模型部署**列的授权状态。若显示**未授权**，单击**操作**列的**编辑**进行授权。
     
-    如果提示权限不足，请联系您的组织或 IT 管理员添加相关权限或代为操作。
-    
 2.  API Key 的**归属账号**在**归属业务空间**中拥有操作权限。请前往[百炼控制台](https://bailian.console.aliyun.com/?tab=model#/model-market)，点击左下角的业务空间，切换到对应业务空间，再点击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1816324671/p1030217.png)检查对应业务空间的模型部署权限设置。
     
     > API 调用报错：`Workspace access denied`。
     
     在左侧导航栏点击**权限管理**，确认用户列表中包含 API Key 的归属账号（类型为**主账号**）。
-    
-    如果提示权限不足，请联系您的组织或 IT 管理员添加相关权限或代为操作。

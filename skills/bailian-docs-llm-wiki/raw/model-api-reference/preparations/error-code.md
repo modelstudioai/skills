@@ -1760,6 +1760,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 -   中国站用户请使用**华北2（北京）地域的接入地址；国际站用户请使用新加坡**地域的接入地址。使用[在线调试](https://api.aliyun.com/api/bailian/2023-12-29/CreateIndex)时，确认服务地址正确。
     
 
+## **401-**invalid access token or token expired
+
+### **invalid access token or token expired.**
+
+**可能原因：** Token Plan 误用了 Coding Plan 或其他套餐的 Base URL。
+
+**解决方案：** 请使用 Token Plan 专属的 Base URL：
+
+-   Anthropic 兼容端点：`https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic`
+    
+-   OpenAI 兼容端点：`https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
+    
+
 ## **403-**AccessDenied/access\_denied
 
 ### **Current user api does not support asynchronous calls.**

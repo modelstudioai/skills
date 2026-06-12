@@ -25,9 +25,11 @@
 
 ### **模型调优流程**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6767460871/CAEQZhiBgMDg9PGS2hkiIDNlZDFiMGRlMTJhOTQ1YzJhMmNjNDM3NzQ1ZjNiOGZk4608430_20240830103738.564.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6376411871/CAEQZhiBgMDg9PGS2hkiIDNlZDFiMGRlMTJhOTQ1YzJhMmNjNDM3NzQ1ZjNiOGZk4608430_20240830103738.564.svg)
 
 详情参见：
+
+**支持的模型**
 
 #### **支持的模型**
 
@@ -41,7 +43,7 @@
 
 **SFT全参训练（sft）**
 
-**SFT高效训练（sft\_efficient）**
+**SFT高效训练（efficient\_sft）**
 
 **DPO全参训练（dpo\_full）**
 
@@ -150,6 +152,20 @@ Qwen3-8B
 qwen3-8b
 
 ×
+
+支持
+
+支持
+
+支持
+
+支持
+
+Qwen3-4B-Instruct-2507
+
+qwen3-4b-instruct-2507
+
+支持
 
 支持
 
@@ -269,7 +285,7 @@ qwen-plus-character-2025-11-06
 
 **SFT全参训练（sft）**
 
-**SFT高效训练（sft\_efficient）**
+**SFT高效训练（efficient\_sft）**
 
 **DPO全参训练（dpo\_full）**
 
@@ -508,6 +524,12 @@ qwen3-14b
 Qwen3-8B
 
 qwen3-8b
+
+¥0.006/千Token
+
+Qwen3-4B-Instruct-2507
+
+qwen3-4b-instruct-2507
 
 ¥0.006/千Token
 
@@ -803,7 +825,7 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-
 ]}
 ```
 
-点击此处查看更多支持的参数
+**点击此处查看更多支持的参数**
 
 **字段**
 
@@ -929,7 +951,7 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-
 
 如果训练思考模型（Thinking），也需要遵循[SFT 思考模型（thinking）](#f5454632ef4yo)的数据格式要求。
 
-##### **压缩包要求：**
+#### **压缩包要求：**
 
 1.  压缩包格式：ZIP。最大支持 2 GB， ZIP 包内文件夹、文件名仅支持 ASCII 字符集中的字母 (a-z, A-Z)、数字 (0-9)、下划线 (\_)、连字符 (-)。
     

@@ -6,7 +6,7 @@
 
 ## **工作流程**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9591740871/CAEQaxiBgIDB5qWk4BkiIDViYzQ0MWUwNTYyNDQ3NDM5NzM0ZTc4N2Y3NTU2NjA56318723_20260129171731.699.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0095421871/CAEQaxiBgIDB5qWk4BkiIDViYzQ0MWUwNTYyNDQ3NDM5NzM0ZTc4N2Y3NTU2NjA56318723_20260129171731.699.svg)
 
 ## **前提条件**
 
@@ -29,9 +29,7 @@
 
 ## **适用范围**
 
-### 中国内地
-
-服务部署范围为[中国内地](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源仅限于中国内地；静态数据存储于您所选的地域。该部署范围支持的地域：华北2（北京）。
+### 华北2（北京）
 
 **支持的模型**
 
@@ -76,9 +74,7 @@
 -   在 JSONL 请求体中，`enable_thinking` 为 `body` 的顶层参数，须与 `model` 同级传入，不能放在 `extra_body` 中。
     
 
-### 国际
-
-服务部署范围为[国际](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)时，模型推理计算资源在全球范围内动态调度（不含中国内地）；静态数据存储于您所选的地域。该部署范围支持的地域：新加坡。
+### 新加坡
 
 **支持的模型**：qwen-max、qwen-plus、qwen-turbo。
 

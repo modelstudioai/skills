@@ -23,31 +23,9 @@
 
 ## **支持的模型**
 
-## 中国内地（北京）
+支持的模型：Qwen-VL、QVQ、Qwen-OCR
 
--   通义千问VL 系列模型
-    
-    -   qwen3-vl-plus、qwen3-vl-plus-2025-12-19、qwen3-vl-plus-2025-09-23、qwen3-vl-flash、qwen3-vl-flash-2025-10-15、qwen3-vl-235b-a22b-thinking、qwen3-vl-235b-a22b-instruct、qwen3-vl-32b-instruct、qwen3-vl-30b-a3b-thinking、qwen3-vl-30b-a3b-instruct、qwen3-vl-8b-thinking、qwen3-vl-8b-instruct
-        
-    -   qwen-vl-max、qwen-vl-max、qwen-vl-plus 
-        
--   QVQ系列模型：qvq-max、qvq-plus
-    
--   通义千问OCR系列模型：qwen-vl-ocr、qwen-vl-ocr-latest、qwen-vl-ocr-2025-11-20、qwen-vl-ocr-2025-08-28、qwen-vl-ocr-2025-04-13、qwen-vl-ocr-2024-10-28
-    
-
-## 国际（新加坡）
-
--   Qwen-VL 系列模型：
-    
--   qwen3-vl-plus、qwen3-vl-plus-2025-12-19、qwen3-vl-plus-2025-09-23、qwen3-vl-flash、qwen3-vl-flash-2025-10-15、qwen3-vl-235b-a22b-thinking、qwen3-vl-235b-a22b-instruct、qwen3-vl-32b-instruct、qwen3-vl-30b-a3b-thinking、qwen3-vl-30b-a3b-instruct、qwen3-vl-8b-thinking、qwen3-vl-8b-instruct
-    
--   qwen-vl-max、qwen-vl-max、qwen-vl-plus 
-    
--   QVQ系列模型：qvq-max
-    
--   通义千问OCR系列模型：qwen-vl-ocr、qwen-vl-ocr-2025-11-20
-    
+> 各地域支持的模型有所差异，详情请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market)。
 
 ## 模型调用
 

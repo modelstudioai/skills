@@ -4,7 +4,7 @@
 
 **重要**
 
-本文档仅适用于中国内地地域。如需使用模型，需从中国内地地域[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
 
 ## **服务开通**
 
