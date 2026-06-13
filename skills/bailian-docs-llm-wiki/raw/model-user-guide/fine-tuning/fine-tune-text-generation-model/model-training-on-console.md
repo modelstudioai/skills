@@ -1,6 +1,6 @@
 # 在控制台进行模型调优
 
-本文将详细介绍如何在控制台进行模型调优任务，并帮助您选择正确的调优方式与参数。模型调优包含模型微调（SFT）、继续预训练（CPT）、模型偏好训练（DPO）三种模型训练方式。
+本文介绍如何在控制台进行模型调优任务，并帮助您选择正确的调优方式与参数。模型调优包含模型微调（SFT）、继续预训练（CPT）、模型偏好训练（DPO）三种模型训练方式。
 
 **重要**
 
@@ -8,15 +8,17 @@
 
 ## **模型调优流程**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5840779771/CAEQZhiBgMDg9PGS2hkiIDNlZDFiMGRlMTJhOTQ1YzJhMmNjNDM3NzQ1ZjNiOGZk4608430_20240830103738.564.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0498521871/CAEQZhiBgMDg9PGS2hkiIDNlZDFiMGRlMTJhOTQ1YzJhMmNjNDM3NzQ1ZjNiOGZk4608430_20240830103738.564.svg)
 
 ## **步骤一：选择调优方式**
 
 前往[模型调优](https://bailian.console.aliyun.com/?tab=model#/efm/model_manager)页面，点击“**创建训练任务**”按钮。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1689372671/p1022625.png)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6609399771/p1075286.png)
 
-### CPT、**SFT 与 DPO 如何选择**
+在**基础信息**区域，可以设置**任务名称**和**任务优先级**。任务优先级分为 L0、L1、L2、L3 四级，优先级从高到低排列，影响训练任务的调度顺序。优先级越高，训练任务越早被调度执行。
+
+### CPT、**SFT、DPO 如何选择**
 
 CPT（继续预训练，Continual Pre-Training）目的是通过海量的无标记训练数据，**提升模型在特定行业的表现。**
 
@@ -138,7 +140,7 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-
 ]}
 ```
 
-点击此处查看更多支持的参数
+**点击此处查看更多支持的参数**
 
 **字段**
 
@@ -357,9 +359,9 @@ CPT 纯文本格式训练数据，**一行训练数据展开后结构如下**：
 
 训练数据集样例：[CPT-文本生成训练集示例.jsonl](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241127/qrtlrz/CPT-%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90%E8%AE%AD%E7%BB%83%E9%9B%86%E6%A0%BC%E5%BC%8F%E7%A4%BA%E4%BE%8B.jsonl)
 
-两种训练方式的数据量要求请参见[数据集的规模要求](https://help.aliyun.com/zh/model-studio/model-training-overview#94f81fc780fvz)。
+各训练方式的数据量要求请参见[数据集的规模要求](https://help.aliyun.com/zh/model-studio/model-training-overview#94f81fc780fvz)。
 
-**阿里云百炼推荐您以先 CPT（可选），后 SFT，最后 DPO 的顺序使用模型调优：**
+**阿里云百炼推荐您以先 CPT（可选），后 SFT，再 DPO 的顺序使用模型调优：**
 
 1.  先收集海量（至少1000万Token）的特定领域的无标签样本，进行CPT训练，将模型训练成特定行业/领域的专家。
     
@@ -370,207 +372,11 @@ CPT 纯文本格式训练数据，**一行训练数据展开后结构如下**：
 
 **模型选择**
 
-如果您是第一次进行模型调优，请选择您期望的**预置模型**。
+如果您是第一次进行模型调优，请选择您期望的**官方模型**。
 
-如果您是因为模型训练效果不好需要再次训练某个模型，请选择**自定义模型 > 您需要二次训练的模型。**
+如果您是因为模型训练效果不好需要再次训练某个模型，请选择**我的模型 > 您需要二次训练的模型。**
 
-支持的预置模型：
-
-**模型服务**
-
-**模型代码**
-
-**CPT全参训练（cpt）**
-
-**SFT全参训练（sft）**
-
-**SFT高效训练（sft\_efficient）**
-
-**DPO全参训练（dpo\_full）**
-
-**DPO高效训练（dpo\_lora）**
-
-Qwen3.5-27B
-
-qwen3.5-27b
-
-×
-
-支持
-
-支持
-
-×
-
-×
-
-Qwen3.5-9B
-
-qwen3.5-9b
-
-×
-
-支持
-
-支持
-
-×
-
-×
-
-Qwen3-32B
-
-qwen3-32b
-
-×
-
-支持
-
-支持
-
-支持
-
-支持
-
-Qwen3-30B-A3B-Instruct-2507
-
-qwen3-30b-a3b-instruct-2507
-
-支持
-
-支持
-
-支持
-
-×
-
-×
-
-Qwen3-14B
-
-qwen3-14b
-
-×
-
-支持
-
-支持
-
-支持
-
-支持
-
-Qwen3-8B
-
-qwen3-8b
-
-×
-
-支持
-
-支持
-
-支持
-
-支持
-
-Qwen3-1.7B
-
-qwen3-1.7b
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-Qwen3-0.6B
-
-qwen3-0.6b
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-Qwen2.5-72B-Instruct
-
-qwen2.5-72b-instruct
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-Qwen2.5-32B-Instruct
-
-qwen2.5-32b-instruct
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-Qwen2.5-14B-Instruct
-
-qwen2.5-14b-instruct
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-Qwen2.5-7B-Instruct
-
-qwen2.5-7b-instruct
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-千问-Plus-Character-2025-11-06
-
-qwen-plus-character-2025-11-06
-
-×
-
-支持
-
-支持
-
-支持
-
-支持
+选择模型后，部分模型会显示**训练模态**选项（如文本生成、视觉理解），请根据您的业务场景选择对应的模态。如果模型支持，还会显示**思考模式**选项（如 Instruct、Thinking），请根据需要选择。
 
 ### **全参训练与高效训练**
 
@@ -581,7 +387,7 @@ qwen-plus-character-2025-11-06
 
 由于两种训练方式的费用相同，阿里云百炼推荐您如果**模型支持全参训练，请优先选择全参训练**，因为全参训练效果比高效训练效果要好，性价比更高。
 
-## **步骤二：参数配置**
+## **步骤二：超参配置**
 
 训练参数介绍：
 
@@ -597,7 +403,7 @@ qwen-plus-character-2025-11-06
 
 使用默认值
 
-批次大小，代表模型训练过程中，模型更新模型参数的数据步长，可理解为模型每看多少数据即更新一次模型参数，一般建议的批次大小为16/32，表示模型每看16或32条数据即更新一次参数
+批次大小，代表模型训练过程中，模型更新模型参数的数据步长，可理解为模型每看多少数据即更新一次模型参数，一般建议的批次大小为16/32，表示模型每看16或32条数据即更新一次参数。具体取值范围因模型和训练方式不同而异，请以控制台显示为准。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1689372671/p1024792.png)
 
@@ -625,7 +431,7 @@ qwen-plus-character-2025-11-06
 
 模型遍历训练的次数，请根据模型调优实际使用经验进行调整。
 
-模型训练循环次数越多，训练时间越长，训练费用越高。
+模型训练循环次数越多，训练时间越长，训练费用越高。取值范围 \[1, 200\]。
 
 验证步数 (eval\_steps)
 
@@ -653,7 +459,7 @@ SFT 会直接丢弃该条数据，不进行训练；
 
 DPO 则会自动截断超出配置长度的后续 token，截短后的数据仍会被训练。
 
-字符与 token 之间的关系请参考 [Token和字符串之间怎么换算](https://help.aliyun.com/zh/model-studio/billing-for-model-studio#35d3b2ad2386c)
+字符与 token 之间的关系请参考 [Token和字符串之间怎么换算](https://help.aliyun.com/zh/model-studio/billing-for-model-studio#35d3b2ad2386c)。取值范围 \[500, 32768\]。
 
 学习率预热比例 (warmup\_ratio)
 
@@ -665,7 +471,7 @@ DPO 则会自动截断超出配置长度的后续 token，截短后的数据仍�
 
 比例过大效果与过低的学习率相同，会导致调优后的模型表现不会有太大变化。
 
-比例过小效果与过高的学习率相同，可能导致调优后的模型表现不一定更好，甚至变差。
+比例过小效果与过高的学习率相同，可能导致调优后的模型表现不一定更好，甚至变差。取值范围 \[0, 1\]。
 
 `该参数仅对学习率调整策略“Constant”无效。`
 
@@ -673,7 +479,7 @@ DPO 则会自动截断超出配置长度的后续 token，截短后的数据仍�
 
 使用默认值
 
-L2正则化强度。L2正则化能在一定程度上保持模型的通用能力。数值过大会导致模型调优效果不明显。
+L2正则化强度。L2正则化能在一定程度上保持模型的通用能力。数值过大会导致模型调优效果不明显。取值范围 \[0, 0.2\]。
 
 **高效训练参数**
 
@@ -695,7 +501,7 @@ LoRA训练中的低秩矩阵值的丢弃率。
 
 使用推荐数值能增强模型通用化能力。
 
-数值过大会导致模型调优效果不明显。
+数值过大会导致模型调优效果不明显。取值范围 \[0, 0.2\]。
 
 **LoRA秩值 (lora\_rank)**
 
@@ -709,13 +515,24 @@ LoRA训练中的低秩矩阵的秩大小。秩越大调优效果会更好一点�
 
 用于冻结视觉主干网络的参数，使其在训练过程中不更新权重。仅适用于 千问-VL（视觉理解）模型。
 
-**说明**
+**警告**
 
 只有 freeze\_vit 设置为“true”时，模型才能进行按 [Token 用量](https://help.aliyun.com/zh/model-studio/model-deployment-introduction#9ea9924cd8138)计费。
 
+**说明**
+
+不同训练方式支持的参数有所不同：
+
+-   **SFT**（高效训练）：支持以上全部参数。
+    
+-   **DPO**（高效训练）：支持除"是否冻结VIT"（freeze\_vit）外的全部参数。
+    
+-   **CPT**（全参训练）：仅支持批次大小、学习率、循环次数、验证步数、学习率调整策略、序列长度，不支持 LoRA 相关参数、学习率预热比例和权重衰减。
+    
+
 ### **学习率调整策略介绍**
 
-“**学习率调整策略**” 是在 **超参配置 > 更多配置** 下的第一个配置，配置包含8种不同的策略。
+“**学习率调整策略**” 是在 **超参配置 > 展开配置**下的第一个配置，配置包含8种不同的策略。
 
 策略详情请参见：
 
@@ -769,13 +586,33 @@ reduce\_lr\_on\_plateau：当监控的指标（验证损失或验证准确率）
 
 ## **步骤三：选择训练数据**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1689372671/p1025101.png)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6609399771/p1075287.png)
 
 数据集构建技巧请参考[数据集构建技巧](https://help.aliyun.com/zh/model-studio/model-training-overview#aebd25a7f1g2v)。上传调优数据集请前往[数据管理](https://bailian.console.aliyun.com/?tab=model#/efm/model_data)页面。
 
-## **步骤四：训练产出**
+在**数据配置**区域，可以设置以下内容：
 
-> 仅 SFT 微调训练支持设置该功能设置
+-   **训练集**：支持**数据集选择**和**数据集挂载**两种方式。数据集选择用于选择已上传的调优数据集作为训练数据；数据集挂载用于直接挂载 OSS 中的数据文件。
+    
+-   **混合训练**：开启后，可以额外添加混合训练数据集。混合训练数据用于在微调过程中保持模型的通用能力，避免模型因过度适应特定任务数据而丧失原有的通用对话能力。如果您有多个业务场景的数据，建议开启混合训练。
+    
+-   **验证集**：支持**自动切分**和**选择数据集**两种方式。选择自动切分时，平台将从训练数据集中随机抽取 10% 的数据作为验证集。您也可以选择独立上传单独的验证数据集。验证集用于在训练过程中评估模型效果，显示验证损失（Validation Loss）和验证准确率（Validation Token Accuracy）。
+    
+
+## **步骤四：训练资源配置**
+
+在**训练资源配置**区域，选择训练任务的计费方式。
+
+-   **按 Token 计费**：使用平台闲时共享资源，按训练实际消耗的 Tokens 数量计费。训练速度取决于资源可用情况，可能存在排队等待。
+    
+
+**说明**
+
+详细计费说明和价格请参见[模型调优简介 - 计费说明](https://help.aliyun.com/zh/model-studio/model-training-overview#65c159ae62441)。
+
+## **步骤五：训练产出**
+
+> 以下配置适用于 SFT、DPO、CPT 训练。
 
 **说明**
 
@@ -787,18 +624,20 @@ reduce\_lr\_on\_plateau：当监控的指标（验证损失或验证准确率）
 
 -   **模型名称**：设置训练产出模型的名称。训练完成后，产出的最后一个 Checkpoint 将以该名称自动发布至**我的模型**。
     
--   **保存模型数量限制**：设置最多保留的 Checkpoint 数量。
+-   **导出数量上限**：设置最多保留的 Checkpoint 数量。
+    
+-   **Checkpoint 保存间隔**：设置 Checkpoint 的保存频率，支持按 epoch（训练轮次）或 step（训练步数）保存。
     
 -   **模型加密**（安全升级）：开启后，平台会为模型文件启用 OSS 服务端加密，使用 OSS 完全托管密钥进行加解密（SSE-OSS），加密算法为 AES256。
     
 
-## **步骤五：**训练模型
+## **步骤六：**训练模型
 
 点击“**开始训练**” > 确认“**模型调优计费提醒**” > 模型开始训练。
 
 > 如遇权限不足，请参考：[模型调优时报权限不足怎么办？](#7aa5abac6e3pm)
 
-模型训练时点击”**查看日志**”按钮可以查询模型训练过程中实时产生的日志，也可以前往**指标**标签页查看训练损失（Training Loss）、验证损失（Validation Loss）、验证准确率（Validation Token Accuracy）。
+模型训练时点击”**日志**”按钮可以查询模型训练过程中实时产生的日志，也可以前往指标的标签页查看训练损失（Training Loss）、验证损失（Validation Loss）、验证准确率（Validation Token Accuracy）。
 
 **训练完成后**，请确认训练损失（Training Loss）与验证损失（Validation Loss）的差异变化趋势。
 
@@ -819,11 +658,11 @@ reduce\_lr\_on\_plateau：当监控的指标（验证损失或验证准确率）
 3.  如果没有上述情况请继续后续步骤。
     
 
-## **步骤六：发布模型用于部署**
+## **步骤七：发布模型用于部署**
 
 > 仅 SFT微调训练支持选择发布训练中间状态的模型快照
 
-模型训练完成后，根据[步骤四：训练产出](#ae6a2ec3ee3nw)中的配置，产出的最后一个 Checkpoint 会以设定的模型名称**自动发布**至[我的模型](https://bailian.console.aliyun.com/?tab=model#/efm/model_center)页面。
+模型训练完成后，根据[步骤五：训练产出](#ae6a2ec3ee3nw)中的配置，产出的最后一个 Checkpoint 会以设定的模型名称**自动发布**至[我的模型](https://bailian.console.aliyun.com/?tab=model#/efm/model_center)页面。
 
 如需发布其他训练中间阶段的 Checkpoint，可以在训练任务详情页的**产出**标签页中查看所有保存的 Checkpoint 列表，选择目标 Checkpoint 并点击**发布模型**。
 
@@ -835,11 +674,11 @@ Checkpoint 有保存时长限制，超过保存时长后将被自动清理，届
 
 发布完成后的模型可以在[我的模型](https://bailian.console.aliyun.com/?tab=model#/efm/model_center)页面查看，并进行部署。
 
-## **步骤七：部署模型**
+## **步骤八：部署模型**
 
-前往[我的模型](https://bailian.console.aliyun.com/?tab=model#/efm/model_center)页面中快速查询模型支持的部署模式、模型 ID 等相关信息，部署好后就可以对调优好的模型进行评测。模型部署相关信息请参见[帮助中心：模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)。
+前往[我的模型](https://bailian.console.aliyun.com/?tab=model#/efm/model_center)页面中快速查询模型支持的部署模式、模型 ID 等相关信息，部署好后就可以对调优好的模型进行评测。模型部署相关信息请参见[模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)。
 
-## **步骤八：**评测**模型**
+## **步骤九：**评测**模型**
 
 **重要**
 
@@ -847,14 +686,10 @@ Checkpoint 有保存时长限制，超过保存时长后将被自动清理，届
 
 使用阿里云百炼[模型评测](https://bailian.console.aliyun.com/?tab=model#/efm/model_evaluate)功能评估自定义模型的训练效果，相关信息请参见[帮助中心：模型评测简介](https://help.aliyun.com/zh/model-studio/model-evaluation-overview)。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5840779771/CAEQaxiBgICsmePZ3RkiIGI2M2Y2M2M0MjI5NjQwZmE5YWJhMjgwMjNhZGY3ZGQ04464811_20240625101944.455.svg)
-
 ## **常见问题**
 
 ### **什么时候可以使用模型调优功能？**
 
--   如果您并不是需要对文本生成模型进行调优，请直接前往[Paraformer语音识别热词定制与管理](https://help.aliyun.com/zh/model-studio/paraformer-asr-phrase-manager)页面。
-    
 -   文本生成模型调优虽然能在特定业务/场景取得非常好的效果，但有以下限制：
     
     -   **耗时较长**，包括：拥有一个大规模（最少 0.5亿 token）CPT 数据集、构建一个有效（1000+）SFT 数据集、收集足够的（100+）Bad Case 构建[模型部署计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing#2083766ef99p1)有效 DPO 数据集、模型优化迭代速度慢等。
@@ -898,15 +733,29 @@ Checkpoint 有保存时长限制，超过保存时长后将被自动清理，届
 
 ### **模型调优、模型部署、模型评测怎么收费？**
 
-模型调优计费方式与模型调用计费方式相同，但费用会更高。训练好的模型在部署后只收取部署费用，不收取模型的调用费用。模型评测不额外收费。详细数据请参考[模型训练与部署计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing)。
-
-### **还有什么方法能进行模型调优？**
-
--   在百炼平台上还可以[使用 API 进行模型调优](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide)。
-    
--   如果需要上传和微调自己的模型，请前往阿里云人工智能平台 PAI ，进行[模型微调与训练](https://help.aliyun.com/zh/pai/use-cases/model-fine-tuning-and-training/)。
-    
+模型调优按训练实际消耗的 Tokens 数量计费。训练好的模型在部署后只收取部署费用，不收取模型的调用费用。模型评测不额外收费。详细数据请参考[模型训练与部署计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing)。
 
 ### **在阿里云百炼调优完成的模型可以下载到本地部署吗？**
 
 阿里云百炼平台进行调优的模型不支持导出，只支持在阿里云百炼上部署后测试、调用。
+
+### **模型调优训练失败，提示训练数据量不足怎么办？**
+
+当模型调优训练失败且原因为训练数据量不足时，您可以尝试调整**序列长度**（max\_length）参数来解决。
+
+**原因说明**
+
+序列长度决定了单条训练数据支持的最大Token长度。在SFT（有监督微调）训练中，超过序列长度的数据会被直接丢弃。如果序列长度设置过大，可能导致大量训练数据因超长被丢弃，实际参与训练的数据量不足，从而导致训练失败。
+
+**解决方案**
+
+1.  在创建训练任务时，展开**参数配置**，找到**max\_length**（序列长度）参数。
+    
+2.  将序列长度调整为较小的值（如8192），使更多训练数据能够满足长度要求，参与模型训练。
+    
+3.  重新提交训练任务。
+    
+
+**说明**
+
+您可以在模型调优任务列表中，点击训练失败任务右侧的**日志**，查看具体的训练失败原因。

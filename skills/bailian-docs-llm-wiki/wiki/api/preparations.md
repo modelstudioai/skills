@@ -18,7 +18,7 @@ API Key 是调用百炼模型和应用的唯一鉴权凭证。创建 API Key 需
 ### 权限与[业务空间](../concepts/workspace.md)
 
 - API Key 的调用权限由其**归属[业务空间](../concepts/workspace.md)**决定，同一空间内的 API Key 权限相同，无需为不同模型类型分别创建。
-- 默认[业务空间](../concepts/workspace.md)下的 API Key 可调用所有标准模型；子业务空间下的 API Key 仅可调用已授权的模型。
+- 默认[业务空间](../concepts/workspace.md)下的 API Key 可调用所有标准模型；子[业务空间](../concepts/workspace.md)下的 API Key 仅可调用已授权的模型。
 - 目前仅华北2（北京）地域支持为 API Key 配置 IP 访问白名单等精细权限控制。
 
 ### 数量限制
@@ -117,5 +117,6 @@ source ~/.bashrc
 - [将API Key配置到环境变量](../../raw/model-api-reference/preparations/configure-api-key-through-environment-variables.md)
 - [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)
 - [错误码](../../raw/model-api-reference/preparations/error-code.md)
+
 
 

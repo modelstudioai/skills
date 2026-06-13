@@ -65,23 +65,21 @@
 
 ## 横切概念
 
-- [函数调用与工具使用](concepts/function-calling.md) — 关联 6 个主题
-- [检索增强生成](concepts/rag.md) — 关联 6 个主题
-- [流式输出](concepts/streaming.md) — 关联 6 个主题
-- [模型部署](concepts/model-deployment.md) — 关联 6 个主题
-- [业务空间](concepts/workspace.md) — 关联 5 个主题
+- [检索增强生成（RAG）](concepts/rag.md) — 关联 5 个主题
+- [流式输出](concepts/streaming.md) — 关联 5 个主题
+- [模型部署](concepts/model-deployment.md) — 关联 5 个主题
+- [业务空间](concepts/workspace.md) — 关联 6 个主题
 - [异步任务](concepts/async-task.md) — 关联 5 个主题
-- [DashScope 接口](concepts/dashscope-api.md) — 关联 7 个主题
-- [OpenAI 兼容接口](concepts/openai-compatible-api.md) — 关联 9 个主题
-- [Prompt 工程](concepts/prompt-engineering.md) — 关联 6 个主题
-- [Token 计量与计费](concepts/token.md) — 关联 6 个主题
+- [DashScope 接口](concepts/dashscope-api.md) — 关联 5 个主题
+- [OpenAI 兼容接口](concepts/openai-compatible-api.md) — 关联 8 个主题
+- [Prompt 工程](concepts/prompt-engineering.md) — 关联 5 个主题
+- [Token 计量与计费](concepts/token.md) — 关联 5 个主题
 
 ## 对比分析
 
-- [模型监控与应用监控对比](comparisons/model-monitoring-vs-app-monitoring.md) — 对比 2 个主题
-- [模型评估与应用评估对比](comparisons/model-eval-vs-app-eval.md) — 对比 2 个主题
-- [模型微调、压缩与部署对比](comparisons/fine-tuning-vs-compression-vs-deployment.md) — 对比 3 个主题
-- [图像生成、视频生成与 3D 生成对比](comparisons/image-video-3d-generation.md) — 对比 3 个主题
+- [模型监控 vs 应用监控](comparisons/monitoring-comparison.md) — 对比 2 个主题
+- [模型评测 vs 应用评测](comparisons/evaluation-comparison.md) — 对比 2 个主题
+- [模型微调 vs 模型压缩 vs 模型部署](comparisons/model-optimization-comparison.md) — 对比 3 个主题
+- [图像生成 vs 视频生成 vs 3D 生成](comparisons/generation-modalities-comparison.md) — 对比 3 个主题
 - [语音合成、识别与翻译 API 对比](comparisons/speech-apis-comparison.md) — 对比 3 个主题
-- [知识库与记忆库对比](comparisons/knowledge-base-vs-memory.md) — 对比 2 个主题
 

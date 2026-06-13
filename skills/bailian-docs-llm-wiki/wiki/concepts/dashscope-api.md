@@ -1,110 +1,99 @@
 # DashScope 接口
 
-DashScope 是阿里云百炼平台的原生 API 接口体系，提供最完整的功能集和参数支持，是百炼所有模型与应用服务的统一调用入口。其服务端点统一托管在 `dashscope.aliyuncs.com`，覆盖文本生成、语音合成、语音识别、应用调用等全部能力。
+DashScope 是阿里云百炼平台的原生 API 接口体系，提供最完整的功能集和参数支持，是百炼所有模型调用与应用调用的底层通道。开发者通过 DashScope 端点可以调用通义千问系列模型、触发智能体和工作流应用，并管理[异步任务](async-task.md)等平台能力。
 
-## 在百炼平台中的定位
+## 接口定位
 
-百炼平台同时提供多种 API 接口风格（OpenAI 兼容、Anthropic 兼容、DashScope 原生），其中 DashScope 接口具备以下独特优势：
+百炼平台同时提供 OpenAI 兼容、Anthropic 兼容和 DashScope 原生三类接口。其中 DashScope 接口的覆盖面最广：
 
-- **功能覆盖最广**：支持百炼平台全部能力，包括文本生成、多模态输入、语音合成与识别、应用调用、深度研究等，其他兼容接口可能仅覆盖部分功能。
-- **参数支持最全**：提供最完整的请求参数集，如 `top_p`、`top_k`、`temperature`、`incremental_output`（流式增量输出）等控制参数在 DashScope 接口中均可使用。
-- **性能最优**：作为平台原生接口，在延迟和吞吐方面表现最佳。
+- **模型调用**：支持全部文本生成参数（`top_p`、`top_k`、`temperature`、增量[流式输出](streaming.md)等），以及多模态输入（文本、图片、文件、音视频）。
+- **应用调用**：支持智能体（含 Agent 2.0）和工作流应用的完整功能，包括多轮对话、Plugin、RAG、Function Calling 等。
+- **[异步任务](async-task.md)管理**：文生图、文生视频等长耗时任务的提交、查询、取消，以及 EventBridge 事件通知。
 
-## 核心服务端点
+当项目需要使用百炼平台的全部能力时，应优先选择 DashScope 接口。
 
-DashScope 接口根据服务类型使用不同的端点和协议：
+## 核心端点
 
-| 服务类型 | 协议 | 端点 |
-|---------|------|------|
-| 文本生成（Qwen 系列） | HTTPS | `POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation` |
-| 应用调用（智能体/工作流） | HTTPS | `POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion` |
-| 语音合成（实时） | WebSocket | `wss://dashscope.aliyuncs.com/api-ws/v1/inference` |
-| 语音合成（非实时） | HTTPS | `POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/SpeechSynthesizer` |
-| 语音识别（实时） | WebSocket | `wss://dashscope.aliyuncs.com/api-ws/v1/inference` |
-| 录音文件识别 | HTTPS | `POST https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription` |
-| 兼容模式入口 | HTTPS | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
-
-多地域部署时，新加坡使用 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，美国使用 `dashscope-us.aliyuncs.com`，德国使用 `{WorkspaceId}.eu-central-1.maas.aliyuncs.com`。
+| 场景 | HTTP 端点 | 说明 |
+|------|-----------|------|
+| 模型调用（文本生成） | `POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation` | 直接调用通义千问等模型 |
+| 应用调用 | `POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion` | 调用已发布的智能体或工作流应用 |
+| [异步任务](async-task.md)查询 | `GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}` | 查询长耗时任务状态与结果 |
+| 临时 API Key | `POST https://dashscope.aliyuncs.com/api/v1/tokens` | 为前端等不可信环境生成短期凭证 |
 
 ## 鉴权方式
 
-所有 DashScope 接口采用 API Key 鉴权，通过请求头 `Authorization: Bearer <your_api_key>` 传递。建议将 API Key 配置到环境变量 `DASHSCOPE_API_KEY`，避免硬编码泄露。
+所有 DashScope 请求均需在 HTTP Header 中携带 API Key：
 
-公共请求头：
-
-| 参数 | 说明 |
-|------|------|
-| `Authorization` | `Bearer <API_KEY>`，必填 |
-| `Content-Type` | `application/json`（HTTPS 请求） |
-| `X-DashScope-WorkSpace` | [业务空间](workspace.md) ID，子[业务空间](workspace.md)或特定地域时必填 |
-| `X-DashScope-Async` | 设为 `enable` 以提交[异步任务](async-task.md)（录音文件识别等） |
-| `X-DashScope-DataInspection` | 数据合规检测开关 |
-
-## 典型使用场景
-
-### 文本生成
-
-通过 DashScope SDK 调用 Qwen 系列模型，请求体使用 `input` / `parameters` 结构：
-
-```python
-import dashscope
-
-response = dashscope.Generation.call(
-    model="qwen-plus",
-    messages=[{"role": "user", "content": "你好"}],
-    result_format="message",
-    stream=True
-)
+```
+Authorization: Bearer $DASHSCOPE_API_KEY
 ```
 
-### 应用调用
-
-调用已发布的智能体或工作流应用：
-
-```python
-from dashscope import Application
-
-response = Application.call(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    app_id="YOUR_APP_ID",
-    prompt="你是谁？"
-)
-```
-
-### 语音服务
-
-语音合成和语音识别通过 WebSocket 协议实现实时双向流式通信，客户端通过 `run-task` → 数据流 → `finish-task` 三阶段事件控制流程。
+API Key 在百炼控制台的密钥管理页面创建，建议通过 `DASHSCOPE_API_KEY` 环境变量注入，避免硬编码。对于前端场景，可通过临时 API Key 接口换取有效期 1-1800 秒的短期凭证（以 `st-` 开头）。
 
 ## SDK 支持
 
-DashScope 提供多语言官方 SDK：
+DashScope 提供多语言 SDK，覆盖主流开发场景：
 
-| 语言 | 安装方式 | 最低版本建议 |
-|------|---------|-------------|
-| Python | `pip install -U dashscope` | 最新版 |
-| Java | Maven: `com.alibaba:dashscope-sdk-java` | ≥ 2.12.0 |
-| Android / iOS | 平台原生 SDK | — |
+| 语言 | SDK / 方式 | 推荐版本 |
+|------|-----------|---------|
+| Python | `dashscope` 包（`Application.call` / `Generation.call`） | 最新版（自定义参数透传需 >= 1.14.0） |
+| Java | `com.alibaba:dashscope-sdk-java`（`ApplicationParam.builder`） | >= 2.12.0 |
+| 其他语言 | HTTP 直接调用（PHP、Node.js、Go、C# 等） | -- |
 
-对于 Node.js、Go、PHP、C# 等语言，可直接通过 HTTP 接口或 OpenAI 兼容 SDK 调用，将 `base_url` 指向 `https://dashscope.aliyuncs.com/compatible-mode/v1` 即可。
+## 关键参数
+
+### 模型调用参数
+
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `model` | string | 模型名称，如 `qwen-max`、`qwen-plus` |
+| `input.prompt` 或 `input.messages` | string / array | 用户输入或多轮对话历史 |
+| `parameters.top_p` | float | 核采样概率 |
+| `parameters.top_k` | int | 采样候选数 |
+| `parameters.temperature` | float | 生成随机性控制 |
+| `parameters.incremental_output` | bool | 流式场景下是否增量输出 |
+
+### 应用调用参数
+
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `app_id` | string | 目标应用 ID |
+| `input.prompt` | string | 用户当前轮输入 |
+| `input.messages` | array | 自行管理的多轮对话历史（优先级高于 `session_id`） |
+| `session_id` | string | 云端托管会话 ID（有效期 1 小时，最多 50 轮） |
+| `input.biz_params` | object | 自定义插件/节点的业务透传参数 |
+
+## 框架集成
+
+主流框架通过 DashScope 接口与百炼平台对接：
+
+- **LlamaIndex**（Python）：通过 `DashScopeParse`、`DashScopeCloudIndex` 等组件构建云端 RAG 应用，底层调用 DashScope 端点。
+- **Spring AI Alibaba**（Java）：通过 `DashScopeDocumentRetriever` 和 `DashScopeAgent` 实现知识库检索与应用调用，配置中使用 `DASHSCOPE_API_KEY` 或 `AI_DASHSCOPE_API_KEY` 鉴权。
+
+## 连接复用
+
+高并发场景下，DashScope SDK 支持连接池复用以降低延迟：
+
+- **Java SDK**：内置 OkHttp 连接池，可配置 `connectionPoolSize`（默认 32）、`connectionIdleTimeout`（默认 300 秒）等参数。
+- **Python SDK**：支持 `httpx` 连接复用，适当调整超时与并发参数。
 
 ## 与兼容接口的对比
 
 | 维度 | DashScope 原生 | OpenAI 兼容 | Anthropic 兼容 |
-|------|---------------|-------------|----------------|
-| 功能覆盖 | 最全 | 部分功能 | 部分功能 |
-| 迁移成本 | 需学习专属 API | 对 OpenAI 用户零成本 | 对 Anthropic 用户零成本 |
-| 应用调用支持 | 完整（智能体+工作流） | 通过 Responses API 支持 | 不支持 |
-| 语音/音频能力 | 完整 | 不支持 | 不支持 |
-| 建议场景 | 需要完整功能集或最优性能 | 迁移现有 OpenAI 项目 | 迁移现有 Anthropic 项目 |
+|------|---------------|-------------|---------------|
+| 功能覆盖 | 最完整 | 部分参数不支持 | 部分参数不支持 |
+| 迁移成本 | 需使用 DashScope SDK 或自行构造请求 | 可直接复用 OpenAI 客户端库 | 可复用 Anthropic SDK |
+| 适用场景 | 需要全部平台能力 | 迁移 OpenAI 项目 | 迁移 Anthropic 项目 |
+
+当不确定选择哪种接口时，DashScope 原生接口是最稳妥的选择——它覆盖所有功能，且通常能获得最优性能。
 
 ## 关联主题页
 
 - [qwen api reference](../api/qwen-api-reference.md)
 - [application call](../api/application-call.md)
 - [bailian application calling](../guides/bailian-application-calling.md)
-- [audio api references](../api/audio-api-references.md)
-- [speech recognition api reference](../api/speech-recognition-api-reference.md)
-- [more models](../api/more-models.md)
-- [preparations](../api/preparations.md)
+- [more about models](../api/more-about-models.md)
+- [frameworks](../api/frameworks.md)
 
 

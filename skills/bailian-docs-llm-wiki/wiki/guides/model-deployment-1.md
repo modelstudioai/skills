@@ -190,7 +190,7 @@ curl --request DELETE \
 
 ## 常见问题
 
-**权限不足**：确保 API Key 的归属[业务空间](../concepts/workspace.md)拥有模型部署权限，且归属账号在该[业务空间](../concepts/workspace.md)中有操作权限。前往[业务空间管理](https://bailian.console.aliyun.com/?tab=globalset#/efm/business_management)检查模型部署授权状态。
+**权限不足**：确保 API Key 的归属[业务空间](../concepts/workspace.md)拥有[模型部署](../concepts/model-deployment.md)权限，且归属账号在该[业务空间](../concepts/workspace.md)中有操作权限。前往[业务空间管理](https://bailian.console.aliyun.com/?tab=globalset#/efm/business_management)检查[模型部署](../concepts/model-deployment.md)授权状态。
 
 **导入模型推理效果不一致**：百炼推理引擎参数可能与本地框架默认值不同。建议将 `temperature` 设为 1.0、`top_p` 设为 1.0、`repetition_penalty` 设为 1.0 以对齐 vLLM 默认行为。
 
@@ -201,5 +201,6 @@ curl --request DELETE \
 - [模型部署](../../raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)
 - [使用 API或命令行进行模型部署](../../raw/model-user-guide/model-deployment-1/model-deployment-quick-start.md)
 - [模型导入](../../raw/model-user-guide/model-deployment-1/model-import.md)
+
 
 

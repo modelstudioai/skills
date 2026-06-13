@@ -16,7 +16,7 @@
 3.  推理结果回到接入地域存储，再响应给应用（用户静态数据始终存于所选地域）。
     
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8233230871/CAEQbxiBgICHvaa58hkiIDlkZWFlMzZlYTEyOTQ3MmM5YzQ5ZTkyYTRkNGVkNzU47466796_20260515102254.505.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6217721871/CAEQbxiBgICHvaa58hkiIDlkZWFlMzZlYTEyOTQ3MmM5YzQ5ZTkyYTRkNGVkNzU47466796_20260515102254.505.svg)
 
 ## 选择地域和服务部署范围
 
@@ -68,13 +68,22 @@
 
 每个地域有独立的 Base URL、API Key 和模型列表，**不能跨地域混用**。
 
+**重要**
+
+百炼为华北2（北京）、新加坡地域推出了新版域名 `{WorkspaceId}.{region}.maas.aliyuncs.com`，`{WorkspaceId}` 为业务空间 ID（可前往各地域的[业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)页面获取），`{region}` 取值为 `cn-beijing`、`ap-southeast-1`。以下旧版域名即将下线，请尽快替换：
+
+-   华北2（北京）：请从 `dashscope.aliyuncs.com` 替换为 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡：请从 `dashscope-intl.aliyuncs.com` 替换为 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
 ### 华北2（北京）
 
--   Base URL（OpenAI 兼容）：`https://dashscope.aliyuncs.com/compatible-mode/v1`
+-   Base URL（OpenAI 兼容）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`，调用时请从`WorkspaceId`替换为真实的[业务空间 ID](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)。
     
--   Base URL（Anthropic 兼容）：`https://dashscope.aliyuncs.com/apps/anthropic`
+-   Base URL（Anthropic 兼容）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic`
     
--   Base URL（DashScope）：`https://dashscope.aliyuncs.com/api/v1`
+-   Base URL（DashScope）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
     
 -   API Key：[密钥管理（北京）](https://bailian.console.aliyun.com/?apiKey=1#/api-key)
     
@@ -83,7 +92,7 @@
 
 ### 新加坡
 
--   Base URL（OpenAI 兼容）：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`，调用时请将`WorkspaceId`替换为真实的[业务空间 ID](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=globalset#/efm/business_management)。
+-   Base URL（OpenAI 兼容）：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`，调用时请从`WorkspaceId`替换为真实的[业务空间 ID](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=globalset#/efm/business_management)。
     
 -   Base URL（Anthropic 兼容）：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic`
     
@@ -93,10 +102,6 @@
     
 -   模型列表：[可用模型（新加坡）](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=doc#/doc/?type=model&url=2840914)
     
-
-**重要**
-
-新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
 
 ### 美国（弗吉尼亚）
 

@@ -64,7 +64,7 @@
 
 模型监控提供三个层次的成本管理能力：
 
-- **汇总**：按业务空间维度汇总模型的历史 Token 消耗，支持按时间范围和 API Key 筛选。
+- **汇总**：按[业务空间](../concepts/workspace.md)维度汇总模型的历史 Token 消耗，支持按时间范围和 API Key 筛选。
 - **追踪**：记录每一次模型调用的 Token 消耗（需开通推理日志，仅限部分模型）。
 - **告警**：设置 Token 消耗阈值，异常消耗时立即通知。
 
@@ -123,5 +123,6 @@
 
 - [模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)
 - [模型监控](../../raw/model-user-guide/model-monitoring/model-telemetry.md)
+
 
 

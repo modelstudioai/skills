@@ -123,7 +123,7 @@
 
 ### 停止计费
 
-不再使用时，停止 API 调用并删除 API-Key 即可停止推理计费；模型部署需手动下线；Coding Plan 和 Token Plan 需关闭自动续费。
+不再使用时，停止 API 调用并删除 API-Key 即可停止推理计费；[模型部署](../concepts/model-deployment.md)需手动下线；Coding Plan 和 Token Plan 需关闭自动续费。
 
 详见[账单查询与成本管理](../../raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
 
@@ -134,5 +134,6 @@
 - [节省计划与资源包](../../raw/model-user-guide/test-1/savings-plan-and-resource-package.md)
 - [账单查询与成本管理](../../raw/model-user-guide/test-1/bill-query-and-cost-management.md)
 - [模型调用价格](../../raw/model-user-guide/test-1/model-pricing.md)
+
 
 

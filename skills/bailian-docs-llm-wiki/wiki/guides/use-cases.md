@@ -181,3 +181,4 @@ Vidu 视频生成模型有独立的 Prompt 指南，公式为：主体/场景 + 
 - [Stepfun-阶跃星辰](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/stepfun.md)
 
 
+

@@ -1,86 +1,90 @@
 # 异步任务
 
-异步任务是百炼平台中用于处理长耗时 AI 生成请求的调用模式。当模型推理需要较长时间（通常数十秒到数分钟）时，平台采用"先提交任务获取 task_id，再凭 task_id 轮询或接收回调获取结果"的两步式异步流程，避免 HTTP 连接超时。
+异步任务是百炼平台中用于处理长耗时 AI 生成请求的核心调用模式。开发者通过"创建任务获取 task_id → 轮询或回调获取结果"的两步流程，完成视频生成、3D 模型生成、图像生成、音乐生成等需要较长处理时间的 API 调用。
 
 ## 适用场景
 
 百炼平台中以下类型的 API 均采用异步任务模式：
 
-- **视频生成**：文生视频、图生视频、参考生视频、视频编辑、数字人等，耗时通常 1-5 分钟
-- **图像生成**：部分模型（如万相文生图 V1）仅支持异步调用；大多数图像模型同时支持同步和异步
-- **3D 模型生成**：文生 3D、单图/多图生 3D
-- **音乐生成**：Fun-Music 系列的非流式模式
-- **长语音识别**等其他长耗时任务
+- **视频生成**：文生视频、图生视频、参考生视频、视频编辑、数字人等，耗时通常 1-5 分钟。涵盖万相（Wan）、HappyHorse、PixVerse、可灵（Kling）、Vidu 等多家模型。
+- **3D 模型生成**：通过 Tripo 模型实现文生 3D、单图生 3D、多图生 3D，生成高精度三维模型。
+- **图像生成**：部分图像生成模型（如万相文生图 V1 版）仅支持异步调用；其他模型同时支持同步和异步两种模式。
+- **音乐生成**：Fun-Music 系列模型支持非流式异步输出。
+- **长语音识别**：长时间音频的转写任务。
 
 ## 调用流程
 
 ### 步骤 1：创建任务
 
-通过 `POST` 请求向对应模型的服务端点提交参数。请求头中**必须**包含：
+通过 `POST` 请求向对应的模型端点提交参数。请求头中**必须**设置 `X-DashScope-Async: enable`，否则会收到错误 "current user api does not [support](../guides/support.md) synchronous calls"。
 
-```
-X-DashScope-Async: enable
-Authorization: Bearer $DASHSCOPE_API_KEY
-Content-Type: application/json
-```
+必选请求头：
 
-> **重要**：缺少 `X-DashScope-Async: enable` 请求头会导致报错 "current user api does not [support](../guides/support.md) synchronous calls"。
+| 请求头 | 值 |
+|--------|-----|
+| `Content-Type` | `application/json` |
+| `Authorization` | `Bearer $DASHSCOPE_API_KEY` |
+| `X-DashScope-Async` | `enable` |
 
-成功后返回 `task_id`，有效期为 **24 小时**。请妥善保存 task_id，不要对同一请求重复创建任务。
+成功后返回 `task_id`，有效期为 **24 小时**。请勿重复创建任务，获取 task_id 后直接轮询即可。
 
 ### 步骤 2：获取结果
 
-有两种方式获取任务结果：
-
-**方式一：轮询查询**
+通过 `GET` 请求查询任务状态：
 
 ```
 GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}
 ```
 
-建议轮询间隔 15 秒。任务状态流转为：`PENDING` → `RUNNING` → `SUCCEEDED` / `FAILED`。
+建议轮询间隔 15 秒。
 
-**方式二：事件回调（推荐）**
+## 任务状态
 
-通过阿里云事件总线 EventBridge 接收任务完成通知，避免高频轮询消耗资源和触发限流。支持两种事件目标：
+任务在生命周期中经历以下状态：
 
-- **HTTP 回调 URL**：业务方提供公网或 VPC 可达的 POST 接口接收 JSON 事件，配置简单
-- **云消息队列 RocketMQ**：事件转发至 RocketMQ Topic，保证消息不丢失、支持失败重试，适合高可靠性场景
-
-事件类型为 `dashscope:System:AsyncTaskFinish`，事件体包含 `task_id`、`task_status`、`region` 等字段。注意事件规则的地域必须与任务地域一致。
+| 状态 | 说明 |
+|------|------|
+| `PENDING` | 排队中，尚未开始执行 |
+| `RUNNING` | 正在执行 |
+| `SUCCEEDED` | 执行成功，可获取结果 |
+| `FAILED` | 执行失败 |
+| `CANCELED` | 已取消 |
+| `UNKNOWN` | task_id 过期或无效 |
 
 ## 任务管理 API
 
 百炼提供一组通用的异步任务管理接口：
 
-| 接口 | 方法与路径 | 说明 |
+| 接口 | 方法与路径 | 用途 |
 |------|-----------|------|
-| 查询单个任务 | `GET /api/v1/tasks/{task_id}` | 获取任务状态及结果 |
-| 批量查询任务 | `GET /api/v1/tasks/` | 按时间范围、模型名称、状态等条件批量查询 |
+| 查询单个任务 | `GET /api/v1/tasks/{task_id}` | 获取任务状态与结果 |
+| 批量查询任务 | `GET /api/v1/tasks/` | 按时间、模型名、状态等条件批量查询 |
 | 取消任务 | `POST /api/v1/tasks/{task_id}/cancel` | 仅支持 `PENDING` 状态的任务 |
 
-任务状态枚举值：`PENDING`、`RUNNING`、`SUCCEEDED`、`FAILED`、`CANCELED`、`UNKNOWN`。
+三个接口共用 **20 QPS** 的账号级限流。查询结果仅保留 24 小时，过期后自动清理。权限范围限于同一阿里云主账号下的所有任务。
 
-## 关键限制
+## 替代轮询：事件通知
 
-- **task_id 有效期**：24 小时，过期后查询返回 `UNKNOWN` 状态
-- **查询限流**：三个管理接口共用 20 QPS 的账号级限流，高频场景建议使用事件回调替代轮询
-- **权限范围**：只能查询/取消同一阿里云主账号下的任务（含其所有 API Key 提交的任务）
-- **结果保留**：查询返回结果仅保留 24 小时，具体以对应模型文档为准
-- **下载链接时效**：任务成功后返回的文件下载 URL 通常有独立的有效期（如 3D 模型为 2 小时），需及时下载
+高频轮询会消耗资源并触发限流。百炼支持通过 **EventBridge 事件总线**接收任务完成通知，任务完成时（无论成功或失败）会生成 `dashscope:System:AsyncTaskFinish` 事件。支持两种接收方式：
 
-## 开发建议
+- **HTTP 回调 URL**：业务方提供一个公网或 VPC 可访问的 POST 接口接收 JSON 事件，配置简单，适合大多数场景。
+- **云消息队列 RocketMQ**：事件转发至 RocketMQ Topic，保证消息不丢失、支持失败重试，适合高可靠性要求。
 
-1. 获取 task_id 后立即持久化存储，避免因进程重启丢失
-2. 生产环境优先使用 EventBridge 回调替代轮询，降低资源消耗和限流风险
-3. 对于高并发场景，配合 DashScope SDK 的连接池复用功能，减少 TCP 连接开销
-4. 实现幂等性检查，避免对同一请求重复创建异步任务
+配置时需注意：事件规则的地域必须与任务地域一致，否则无法收到通知。
+
+## 注意事项
+
+- `X-DashScope-Async: enable` 请求头不可省略，缺少时接口会直接报错。
+- `task_id` 有效期为 24 小时，过期后查询返回 `UNKNOWN` 状态。
+- 取消操作仅对 `PENDING` 状态有效，`RUNNING` 及之后的状态不可取消。
+- 结果中的文件下载链接（如视频 URL、3D 模型 URL）通常也有时效限制（一般为 2-24 小时），需及时下载。
+- 部分模型（如 PixVerse、可灵、Vidu、Tripo）仅适用于北京地域，需使用对应地域的 API Key。
 
 ## 关联主题页
 
 - [video generation api](../api/video-generation-api.md)
-- [image generation](../api/image-generation.md)
 - [3d generation](../api/3d-generation.md)
+- [image generation](../api/image-generation.md)
 - [more about models](../api/more-about-models.md)
 - [music generation references](../api/music-generation-references.md)
 

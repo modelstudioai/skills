@@ -179,7 +179,7 @@ CosyVoice-v3-Plus、通义千问3-TTS 系列
 
 闲聊及插件
 
-Qwen3.6-Plus、Qwen-Max、Qwen3-Coder-Plus
+Qwen3.7-Plus、Qwen3.6-Plus、Qwen-Max、Qwen3-Coder-Plus
 
 2x
 
@@ -191,7 +191,7 @@ Qwen3.6-Max
 
 6x
 
-Qwen3.5-Omni-Plus（文本输出）、deepseek-v4-pro、qvq-72b-preview
+Qwen3.7-Max、Qwen3.5-Omni-Plus（文本输出）、deepseek-v4-pro、qvq-72b-preview
 
 8x
 
@@ -355,6 +355,8 @@ Qwen-Deep-Research
     
     -   例如：2026 年 7 月 1 日下单 100 台 1 年期设备订阅，于 2026 年 10 月 1 日激活，则其使用期限至 2027 年 10 月 1 日
         
+
+退订规则：购买后不支持退款。
 
 ## **节省计划**
 

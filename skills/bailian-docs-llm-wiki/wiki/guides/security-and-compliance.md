@@ -7,10 +7,10 @@
 百炼基于**[业务空间](../concepts/workspace.md)**进行精细化权限管理，[业务空间](../concepts/workspace.md)是权限控制和账单分账的最小管理单元。权限体系包含三种角色：
 
 - **超级管理员**：拥有 `AliyunBailianFullAccess` 系统策略的阿里云主账号或 RAM 用户，可跨空间统一管理用户权限、模型授权、限流和 API Key。
-- **[业务空间](../concepts/workspace.md)管理员**：负责特定业务空间内的用户权限和资源管理。
+- **[业务空间](../concepts/workspace.md)管理员**：负责特定[业务空间](../concepts/workspace.md)内的用户权限和资源管理。
 - **普通用户**：根据分配的权限使用资源。
 
-| 权限项 | 超级管理员 | 业务空间管理员 | 普通用户 |
+| 权限项 | 超级管理员 | [业务空间](../concepts/workspace.md)管理员 | 普通用户 |
 |--------|-----------|--------------|---------|
 | 模型调用 & 限流 | 支持 | 不支持 | 不支持 |
 | 模型调优/部署 | 支持 | 不支持 | 不支持 |
@@ -19,7 +19,7 @@
 
 ### API Key 权限
 
-单个 API Key 归属一个地域内的一个业务空间和一个用户，不可转移。API Key 的可调用功能和模型限流与归属业务空间一致，不受用户控制台权限管理的影响。华北2（北京）地域的 API Key 支持设置 IP 访问白名单。
+单个 API Key 归属一个地域内的一个[业务空间](../concepts/workspace.md)和一个用户，不可转移。API Key 的可调用功能和模型限流与归属业务空间一致，不受用户控制台权限管理的影响。华北2（北京）地域的 API Key 支持设置 IP 访问白名单。
 
 ### OpenAPI 接口权限
 
@@ -135,5 +135,6 @@ Java SDK 设置 `enableEncrypt(true)`，Python SDK 设置 `enable_encryption=Tru
 - [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md)
 - [配置私有网络中的资源](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)
 - [模型备案信息公示](../../raw/model-user-guide/security-and-compliance/model-filing-information-publicity.md)
+
 
 
