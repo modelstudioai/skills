@@ -81,3 +81,4 @@ Paraformer 实时识别仅支持华北2（北京）地域，不支持新加坡�
 - [speech translation api reference](../api/speech-translation-api-reference.md)
 
 
+
