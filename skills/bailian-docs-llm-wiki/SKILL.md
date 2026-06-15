@@ -149,18 +149,19 @@ description: >-
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
 | OpenAI 兼容接口 | `wiki/concepts/openai-compatible-api.md` |
 | 异步任务 | `wiki/concepts/async-task.md` |
-| Token 计量与计费 | `wiki/concepts/token.md` |
-| 检索增强生成（RAG） | `wiki/concepts/rag.md` |
-| 流式输出 | `wiki/concepts/streaming.md` |
-| DashScope 接口 | `wiki/concepts/dashscope-api.md` |
+| Token 与计量 | `wiki/concepts/token.md` |
 | 业务空间 | `wiki/concepts/workspace.md` |
-| 模型部署 | `wiki/concepts/model-deployment.md` |
+| 检索增强生成 | `wiki/concepts/rag.md` |
+| DashScope 接口 | `wiki/concepts/dashscope-api.md` |
+| 流式输出 | `wiki/concepts/streaming-output.md` |
 | Prompt 工程 | `wiki/concepts/prompt-engineering.md` |
+| 模型部署 | `wiki/concepts/model-deployment.md` |
+| 函数调用与工具集成 | `wiki/concepts/function-calling.md` |
 | 语音合成、识别与翻译 API 对比 | `wiki/comparisons/speech-apis-comparison.md` |
-| 图像生成 vs 视频生成 vs 3D 生成 | `wiki/comparisons/generation-modalities-comparison.md` |
-| 模型微调 vs 模型压缩 vs 模型部署 | `wiki/comparisons/model-optimization-comparison.md` |
-| 模型监控 vs 应用监控 | `wiki/comparisons/monitoring-comparison.md` |
-| 模型评测 vs 应用评测 | `wiki/comparisons/evaluation-comparison.md` |
+| 图像、视频、3D 与音乐生成对比 | `wiki/comparisons/media-generation-comparison.md` |
+| 应用监控与模型监控对比 | `wiki/comparisons/monitoring-comparison.md` |
+| 知识库与记忆库对比 | `wiki/comparisons/knowledge-vs-memory.md` |
+| 文本向量与排序对比 | `wiki/comparisons/embedding-vs-reranking.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 

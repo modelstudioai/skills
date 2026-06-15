@@ -23,7 +23,7 @@
 
 ## 2026年
 
-**1月15日**
+**6月**
 
 **日期**
 
@@ -33,13 +33,375 @@
 
 **功能说明**
 
+6月9日
+
+模型评测
+
+模型评测新增排行榜与综合评测
+
+提供排行榜(Leaderboard) 管理入口和综合评测能力, 支持 BLEU\_4 等评分方法。[了解详情](https://help.aliyun.com/zh/model-studio/model-evaluation-overview)
+
+6月5日
+
+模型导入
+
+模型导入功能国际站上线
+
+模型导入功能在国际站上线，支持从 OSS 导入 LoRA 微调模型，[了解详情](https://help.aliyun.com/zh/model-studio/model-import)
+
+6月3日
+
+模型导入
+
+模型导入 API 上线
+
+API 参考新增模型导入目录, 涵盖导入任务与自定义模型对象的完整 API 接口，[了解详情](https://help.aliyun.com/zh/model-studio/custom-models-api/)
+
+6月3日
+
+API 鉴权
+
+新增生成临时 API Key 文档
+
+新增生成临时 API Key 文档，在不可信环境下避免永久 API Key 泄露，[了解详情](https://help.aliyun.com/zh/model-studio/application-obtain-temporary-authentication-token)
+
+6月1日
+
+Responses API
+
+Responses API 新增异步调用
+
+Responses API 新增异步调用模式，通过 background=true 提交长耗时任务并轮询结果，[了解详情](https://help.aliyun.com/zh/model-studio/asynchronous-call-api-reference#7226dca8fe4ld)
+
+6月1日
+
+应用 - 通义听悟 Agent
+
+通义听悟 Agent 新增特惠 ASR 资源包
+
+新增通义听悟 Agent 特惠 ASR 资源包，覆盖汽车销售/客户画像等场景，[了解详情](https://help.aliyun.com/zh/model-studio/purchase-and-use-discount-asr#2fe6db248dqwx)
+
+6月1日
+
+Spring AI Alibaba
+
+Spring AI Alibaba 调用百炼应用文档上线
+
+新增使用 Spring AI Alibaba 框架调用百炼智能体、工作流应用文档，[了解详情](https://help.aliyun.com/zh/model-studio/spring-ai-alibaba-integrate-llm-application#26239bc5e4is9)
+
+**5月**
+
+**日期**
+
+**功能模块**
+
+**功能点**
+
+**功能说明**
+
+5月31日
+
+模型调优
+
+模型调优新增强化学习训练 (邀约制)
+
+提供强化学习 (RL) 训练能力, 支持基于奖励信号优化模型策略, 当前邀约制开放, [了解详情](https://help.aliyun.com/zh/model-studio/rl-training-overview/)
+
+5月28日
+
+模型调优
+
+模型调优新增图像生成模型类型支持
+
+在模型调优中支持图像生成模型(如 Wan / Wanx)进行定制训练。[了解详情](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide)
+
+5月26日
+
+多模态翻译
+
+通义多模态翻译 API 参考上线
+
+通义多模态翻译 API 目录上线, 覆盖文本翻译、图片翻译、文档翻译、网页翻译等接口，[了解详情](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-dir/)
+
+5月25日
+
+模型压缩
+
+模型压缩模块上线
+
+新增模型压缩模块，使用量化算法将全精度微调模型转为低精度版本，降低部署成本，[了解详情](https://help.aliyun.com/zh/model-studio/model-compression-introduction#6w2ox667clm6i)
+
+5月21日
+
+应用组件 - 数据连接
+
+数据连接新增 ListCategory 接口
+
+数据连接新增 ListCategory 接口, 查询原应用数据类目列表，[了解详情](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listcategory)
+
+5月21日
+
+通义听悟 Agent
+
+通义听悟 Agent 工业生产指令转写 WebSocket 协议上线
+
+通义听悟 Agent 工业生产指令转写新增 WebSocket 交互协议文档，[了解详情](https://help.aliyun.com/zh/model-studio/tingwu-industrial-instruction-api-websocket#a2ed5abb5bmgm)
+
+5月15日
+
+应用 - 数据连接（原应用数据）
+
+数据连接新增 ChangeParseSetting 接口
+
+数据连接新增 ChangeParseSetting 接口, 支持按文件类型配置解析方式，[了解详情](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-changeparsesetting)
+
+5月15日
+
+模型 - API
+
+文本生成 API 入口聚合四类接口
+
+文本生成 API 入口新增 OpenAI Responses 与 Anthropic Messages 接口分类，[了解详情](https://help.aliyun.com/zh/model-studio/qwen-api-reference/)
+
+5月11日
+
+应用调用 API
+
+新版智能体应用 DashScope API 首发
+
+发布新版智能体应用 DashScope API 参考，支持单轮/多轮、流式、文件问答、视觉理解，[了解详情](https://help.aliyun.com/zh/model-studio/new-agent-application-api-reference)
+
+5月8日
+
+Token Plan
+
+Token Plan 团队版团队管理上线
+
+Token Plan 团队版新增团队管理：支持 SSO/钉钉登录、席位分配、Credits 用量监控，[了解详情](https://help.aliyun.com/zh/model-studio/token-plan-team#tp05-h-enter)
+
+5月4日
+
+模型调优
+
+模型调优新增 0 代码安全合规强化
+
+文本生成模型调优新增 0 代码强化大模型安全合规能力训练流程，[了解详情](https://help.aliyun.com/zh/model-studio/enhance-the-security-compliance-of-large-models)
+
+**4月**
+
+**日期**
+
+**功能模块**
+
+**功能点**
+
+**功能说明**
+
+4月28日
+
+应用 - 多模态交互开发套件
+
+多模态交互开发套件服务端 Java SDK 上线
+
+新增服务端 Java SDK，含下载安装、关键接口与代码示例，[了解详情](https://help.aliyun.com/zh/model-studio/multimodal-sdk-java/#8017a962a1ysj)
+
+4月24日
+
+知识库 RAG
+
+知识库新增日志与监控
+
+知识库检索调用全量投递至 SLS 日志服务，支持审计/排查/统计/告警，[了解详情](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-log-monitoring)
+
+4月23日
+
+模型 - API
+
+异步任务支持事件总线 HTTP 回调与 RocketMQ
+
+异步任务支持通过事件总线 EventBridge 主动推送任务完成事件，无需轮询，[了解详情](https://help.aliyun.com/zh/model-studio/async-task-api#f9e4c6c88c6ho)
+
+4月14日
+
+应用 - 多模态交互开发套件
+
+多模态交互开发套件移动端 Android SDK 上线
+
+新增移动端 Android SDK，含下载安装、关键接口与代码示例，[了解详情](https://help.aliyun.com/zh/model-studio/multimodal-sdk-android/#70ff64b2c6lc0)
+
+4月9日
+
+多模态交互 SDK
+
+RTOS C SDK 新增 License 模式
+
+多模态交互开发套件 RTOS C SDK 新增 License 模式，覆盖嵌入式硬件半托管/全托管接入，[了解详情](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk)
+
+4月7日
+
+应用组件-Prompt 工程
+
+应用组件 Prompt 工程 API 上线
+
+应用组件新增 Prompt 工程模块及其 API，提供 Prompt 模板管理能力，[了解详情](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-dir-prompt-engineering/)
+
+4月1日
+
+应用发布与分享-UI 设计器
+
+UI 设计器上线
+
+百炼 UI 设计器上线，集成魔笔低代码能力，可视化拖放构建网页 UI 应用，[了解详情](https://help.aliyun.com/zh/model-studio/ui-designer#845c1f4aba43y)
+
+**3月**
+
+**日期**
+
+**功能模块**
+
+**功能点**
+
+**功能说明**
+
+3月20日
+
+记忆库
+
+记忆库 Memory 2.0 上线
+
+新增长期记忆能力：自动从对话提取记忆片段与用户画像，支持多应用共享同一记忆库，[了解详情](https://help.aliyun.com/zh/model-studio/memory-library#1i6c2jx3ve6tj)
+
+3月19日
+
+官方应用-千问联网检索 Agent
+
+联网检索 Agent 官方应用上线
+
+应用广场新增联网检索 Agent 官方应用，提供产品简介、API 参考与说明，[了解详情](https://help.aliyun.com/zh/model-studio/web-search-agent/)
+
+3月19日
+
+全妙-PPT 生成
+
+全妙 PPT 生成 API 模块上线
+
+全妙解决方案-PPT 生成模块开放完整 API：模板、文档、作品等接口，[了解详情](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-dir-ppt-generation/)
+
+**2月**
+
+**日期**
+
+**功能模块**
+
+**功能点**
+
+**功能说明**
+
+2月28日
+
+多模态交互开发套件
+
+多模态交互开发套件新增 Linux C++ SDK
+
+多模态交互开发套件新增 Linux C++ SDK 文档，含下载安装与关键接口示例，[了解详情](https://help.aliyun.com/zh/model-studio/multimodal-sdk-linux#985cb1a0a4zdz)
+
+2月22日
+
+接入客户端开发工具
+
+接入客户端开发工具新增 Kilo CLI 等编程工具
+
+接入客户端开发工具新增 Kilo CLI，支持 Token Plan/Coding Plan/按量计费三种方式接入，[了解详情](https://help.aliyun.com/zh/model-studio/kilo-cli#533be0ee63qvd)
+
+2月6日
+
+应用 - 通义多模态翻译
+
+通义多模态翻译网页翻译 JSSDK 上线
+
+新增网页翻译 JSSDK，通过插入脚本一键完成网站多语言改造，[了解详情](https://help.aliyun.com/zh/model-studio/web-page-translation-jssdk#32940c468bp2y)
+
+2月6日
+
+插件
+
+国际站官方插件新增 Image Generation
+
+国际站官方插件列表新增 text\_to\_image (Image Generation)，[了解详情](https://help.aliyun.com/zh/model-studio/plugins#00edef12dc50q)
+
+2月6日
+
+MCP
+
+新增官方 MCP 服务
+
+上线官方 MCP 服务，支持平台内集成与外部第三方接入（如 Amap Maps），[了解详情](https://help.aliyun.com/zh/model-studio/official-and-third-party-mcp)
+
+2月6日
+
+多模态交互开发套件
+
+多模态交互开发套件新增 Android/iOS Lite SDK
+
+新增多模态交互开发套件 Android/iOS Lite SDK 与音色列表，[了解详情](https://help.aliyun.com/zh/model-studio/multimodal-sdk-android-lite#d2dba24286nyf)
+
+2月6日
+
+声音复刻 API
+
+CosyVoice 声音复刻 API 接口详情上线
+
+新增 CosyVoice 声音复刻 API 接口详情文档，覆盖音色复刻任务创建/查询，[了解详情](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-api-reference)
+
+2月5日
+
+应用 - 知识库
+
+知识库检索新增排序模型与指令干预模式
+
+Retrieve 接口新增排序模型选项与指令干预模式，平台检索能力扩展，[了解详情](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-51)
+
+**1月**
+
+**日期**
+
+**功能模块**
+
+**功能点**
+
+**功能说明**
+
+1月23日
+
+模型部署
+
+使用 API 部署新增预置模型与按模型单元时长计费
+
+模型部署 API 新增 qwen-flash/qwen-plus 等预置模型部署，并新增按模型单元 (MU) 时长计费模式，[了解详情](https://help.aliyun.com/zh/model-studio/model-deployment-quick-start)
+
 1月22日
 
 模型调优
 
-支持调优的模型新增
+调优新增视觉理解模型类型支持
 
-qwen3 系列、 qwen3-vl 系列和万相系列的更多参数量的模型支持[模型调优](https://help.aliyun.com/zh/model-studio/model-training-overview)。
+模型调优新增视觉理解(VL)模型类型支持，可对多模态模型进行定制训练，[了解详情](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide)
+
+1月21日
+
+应用 - 多模态交互开发套件
+
+多模态交互开发套件应用配置上线
+
+应用配置页面支持语音交互、理解与生成、技能、Agent 四大模块配置，[了解详情](https://help.aliyun.com/zh/model-studio/multimodal-app-configuration#a45151c0cfuyw)
+
+1月21日
+
+模型调优
+
+模型调优新增视频生成模型类型
+
+模型调优新增视频生成模型类型支持，可对万相系列等视频模型定制训练，[了解详情](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-guide)
 
 ## 2025年
 
@@ -146,7 +508,7 @@ SFT（有监督微调）支持全参微调和高效微调（LoRA）两种方式�
 
 **千问2.5、千问 3**系列支持 DPO 训练
 
-千问3-32B、14B、8B 和 千问 2.5-72B、32B、14B、8B 新增支持 [DPO 偏好训练](https://help.aliyun.com/zh/model-studio/model-training-overview#c85dc8544chqv)。
+千问3-32B、14B、8B 和 千问 2.5-72B、32B、14B、8B 新增支持 [DPO 偏好训练](https://help.aliyun.com/zh/model-studio/model-training-overview)。
 
 DPO 偏好训练通过引入负反馈，从而降低幻觉，使得模型输出更符合人类偏好。
 
@@ -367,7 +729,7 @@ batch支持的模型新增两个。
 
 新增search\_options参数
 
--   配置联网搜索相关的参数，如搜索来源、搜索数量等。可用于qwen-max、qwen-plus、qwen-turbo模型，使用方法请参见[千问API文档-DashScope](https://help.aliyun.com/zh/model-studio/qwen-api-reference/#69cac67a477k2)。
+-   配置联网搜索相关的参数，如搜索来源、搜索数量等。可用于qwen-max、qwen-plus、qwen-turbo模型，使用方法请参见[千问API文档-DashScope](https://help.aliyun.com/zh/model-studio/qwen-api-reference/)。
     
 
 **11月**
@@ -424,7 +786,7 @@ batch支持的模型新增两个。
 
 模型推理支持预付费
 
--   支持购买节省计划（预付费），用于抵扣模型推理超出免费额度后产生的推理费用，适用于千问、通义法睿、百川-开源版、ChatGLM以及OpenNLU模型，具体请参见[计费项](https://help.aliyun.com/zh/model-studio/billing-for-model-studio#e809b14603ypm)。
+-   支持购买节省计划（预付费），用于抵扣模型推理超出免费额度后产生的推理费用，适用于千问、通义法睿、百川-开源版、ChatGLM以及OpenNLU模型，具体请参见[预付费（节省计划）](https://help.aliyun.com/zh/model-studio/billing-for-model-studio#fbac89b85e976)。
     
 
 9月19日

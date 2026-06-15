@@ -19,7 +19,7 @@
 
 ### API Key 权限
 
-单个 API Key 归属一个地域内的一个[业务空间](../concepts/workspace.md)和一个用户，不可转移。API Key 的可调用功能和模型限流与归属业务空间一致，不受用户控制台权限管理的影响。华北2（北京）地域的 API Key 支持设置 IP 访问白名单。
+单个 API Key 归属一个地域内的一个[业务空间](../concepts/workspace.md)和一个用户，不可转移。API Key 的可调用功能和模型限流与归属[业务空间](../concepts/workspace.md)一致，不受用户控制台权限管理的影响。华北2（北京）地域的 API Key 支持设置 IP 访问白名单。
 
 ### OpenAPI 接口权限
 
@@ -27,8 +27,8 @@ RAM 用户默认无权调用百炼应用的数据、知识库、[Prompt 工程](
 
 ### 生产环境建议
 
-- **按环境划分空间**（推荐）：为开发、测试、生产创建独立业务空间，实现环境隔离。
-- **限流策略**：将主账号总配额按比例分配给各业务空间，预留缓冲应对突发流量。
+- **按环境划分空间**（推荐）：为开发、测试、生产创建独立[业务空间](../concepts/workspace.md)，实现环境隔离。
+- **限流策略**：将主账号总配额按比例分配给各[业务空间](../concepts/workspace.md)，预留缓冲应对突发流量。
 
 ## 数据传输加密
 
@@ -84,11 +84,11 @@ Java SDK 设置 `enableEncrypt(true)`，Python SDK 设置 `enable_encryption=Tru
 
 当输入内容违规时，API 返回 `data_inspection_failed` 错误。详见 [输入输出AI安全护栏](../../raw/model-user-guide/security-and-compliance/content-security.md)。
 
-## 安全存储业务空间
+## 安全存储[业务空间](../concepts/workspace.md)
 
-百炼提供安全存储业务空间，支持在私有网络环境中部署应用，数据存储在客户自有的 ElasticSearch、AnalyticDB 和 OSS 中。配置流程：
+百炼提供安全存储[业务空间](../concepts/workspace.md)，支持在私有网络环境中部署应用，数据存储在客户自有的 ElasticSearch、AnalyticDB 和 OSS 中。配置流程：
 
-1. **创建安全存储业务空间**并配置反向终端节点。
+1. **创建安全存储[业务空间](../concepts/workspace.md)**并配置反向终端节点。
 2. **配置可用区 IP**：创建 MSE 云原生网关，获取可用区 VIP 并配置。
 3. **配置私有网络资源**：分别配置 OSS Bucket（需设置 `bailian-safe-workspace-oss-access` 标签）、ADB 实例和 ES 实例。
 4. **配置 MSE 云原生网关**：创建服务和路由，激活安全存储业务空间。
@@ -135,6 +135,8 @@ Java SDK 设置 `enableEncrypt(true)`，Python SDK 设置 `enable_encryption=Tru
 - [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md)
 - [配置私有网络中的资源](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)
 - [模型备案信息公示](../../raw/model-user-guide/security-and-compliance/model-filing-information-publicity.md)
+
+
 
 
 

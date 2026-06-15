@@ -1,78 +1,62 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台将 AI 模型的生成结果以增量分片方式持续推送给客户端的技术，区别于传统"等待完整结果后一次性返回"的同步模式。它显著降低了首字节延迟，使语音合成、实时对话、音乐生成等场景可以在模型仍在生成后续内容时就开始播放或处理已到达的部分。
+流式输出（Streaming Output）是指服务端在生成结果的过程中，将数据分片逐步推送给客户端，而非等待全部生成完毕后一次性返回。在百炼平台中，流式输出广泛应用于文本生成、语音合成、音乐生成和实时多模态交互等场景，显著降低用户感知的首次响应延迟。
 
-## 两种协议形态
+## 流式输出的核心价值
 
-百炼平台的流式输出根据场景分为两类协议：
+- **降低首包延迟**：客户端无需等待完整结果即可开始渲染或播放，用户体验更流畅。
+- **支持大体量内容**：长文本、长音频等场景下，流式传输可避免单次响应体过大导致的超时或内存压力。
+- **实时交互基础**：在语音对话、实时 TTS 等场景中，流式输出是实现低延迟双向通信的必要机制。
 
-| 协议 | 适用场景 | 特点 |
-| --- | --- | --- |
-| **WebSocket 双向流** | 实时语音合成（CosyVoice、Qwen-TTS Realtime）、实时语音识别（Fun-ASR、Paraformer、Qwen-ASR）、实时多模态对话（Qwen-Omni-Realtime） | 客户端与服务端保持长连接，双向持续收发数据；延迟最低，适合实时交互 |
-| **HTTP SSE（Server-Sent Events）** | 非实时语音合成（CosyVoice HTTP、Qwen-TTS 非实时）、音乐生成（Fun-Music） | 客户端发起单次 HTTP 请求，服务端通过 SSE 分块返回；接入简单，适合单向推送 |
+## 在百炼平台不同场景中的使用方式
 
-## 在百炼各场景中的使用方式
+### 文本生成（Qwen 大模型）
 
-### 实时语音合成（WebSocket）
+通过 [OpenAI 兼容接口](openai-compatible-api.md)或 DashScope 原生接口调用 Qwen 系列模型时，设置 `stream: true` 即可启用流式输出。服务端以 SSE（Server-Sent Events）协议逐 token 推送生成内容，每个事件包含增量文本片段，最终事件通过 `finish_reason: stop` 标识生成结束。
 
-CosyVoice 和 Qwen-TTS Realtime 通过 WebSocket 进行实时流式合成：
+### 语音合成（TTS）
 
-- **CosyVoice**：客户端通过 `run-task` → 多次 `continue-task`（携带文本片段）→ `finish-task` 三步事件驱动合成，服务端将音频以二进制分片持续推回。
-- **Qwen-TTS Realtime**：提供 ServerCommit（服务端自动判断分段）和 Commit（客户端显式提交）两种模式；音频通过 `response.audio.delta`（Base64 编码）分片下发。
+百炼平台的语音合成支持两种流式输出方式：
 
-### 实时语音识别（WebSocket）
+- **Qwen-TTS 非实时 API**：通过 HTTP REST 接口调用时，支持流式输出模式，服务端分片返回音频数据。
+- **Qwen-TTS-Realtime / CosyVoice**：基于 WebSocket 协议的实时合成，客户端流式发送文本，服务端流式返回音频 PCM/WAV/MP3 数据片段，适用于低延迟实时播报场景。
 
-- **Fun-ASR / Paraformer 实时**：客户端持续发送音频流，服务端持续推送 `result-generated` 事件，其中包含中间结果（`sentence_end=false`）和最终结果（`sentence_end=true`）。
-- **Qwen-ASR 实时**：支持 VAD 自动断句和 Manual 手动提交两种模式，持续返回识别结果。
+### 语音识别（ASR）
 
-### 实时多模态对话（WebSocket）
+实时语音识别（Fun-ASR、Paraformer、Qwen-ASR）天然采用流式模式：客户端持续发送音频流，服务端通过 WebSocket 持续推送识别中间结果与最终结果（以 `sentence_end: true` 标识句尾）。
 
-Qwen-Omni-Realtime 将语音输入、图像输入与模型响应整合在一条 WebSocket 连接中。模型的语音输出通过 `response.audio.delta` 流式下发，客户端收到分片即可开始播放，无需等待整句合成完毕。
+### 音乐生成（Fun-Music）
 
-### 非实时合成与音乐生成（HTTP SSE）
+请求时添加 `X-DashScope-SSE: enable` 请求头即可启用 SSE 流式输出。中间消息通过 `output.audio.data` 返回 Base64 编码的音频片段（`finish_reason` 为 `"null"`），最终消息通过 `output.audio.url` 返回完整音频下载链接并附带歌词等元信息（`finish_reason` 为 `stop`）。
 
-对于非交互场景，可通过在 HTTP 请求头中添加 `X-DashScope-SSE: enable` 启用流式返回：
+### 实时多模态交互（Omni-Realtime）
 
-- **非实时 CosyVoice / Qwen-TTS**：开启 SSE 后，音频数据以分片形式逐步返回。
-- **音乐生成（Fun-Music）**：中间消息的 `output.audio.data` 为 Base64 音频片段（`finish_reason` 为 `"null"`），最终消息补全完整音频 URL、歌词、采样率等元信息（`finish_reason` 为 `stop`）。
+Qwen-Omni-Realtime API 通过 WebSocket 实现全双工流式交互。服务端以 `response.audio.delta` 事件流式返回 24 kHz PCM 音频，同时通过 `response.text.delta` 等事件流式返回文本转录和推理结果。
 
-## 关键参数与配置
+## 关键参数和配置
 
-### SSE 流式输出
+| 场景 | 协议 | 启用方式 | 数据格式 |
+| --- | --- | --- | --- |
+| 文本生成 | HTTP SSE | 请求体设置 `stream: true` | 增量文本 token |
+| 音乐生成 | HTTP SSE | 请求头 `X-DashScope-SSE: enable` | Base64 音频片段 |
+| 语音合成（非实时） | HTTP | SDK 参数或 `stream: true` | 音频数据分片 |
+| 语音合成（实时） | WebSocket | 建立连接即为流式 | PCM/WAV/MP3 音频帧 |
+| 语音识别 | WebSocket | 建立连接即为流式 | JSON 识别结果 |
+| 多模态实时 | WebSocket | 建立连接即为流式 | 音频 PCM + 文本 JSON |
 
-| 参数 | 位置 | 说明 |
-| --- | --- | --- |
-| `X-DashScope-SSE` | HTTP 请求头 | 设为 `enable` 启用 SSE 流式返回 |
+## 开发注意事项
 
-### WebSocket 流式输出
-
-不同模型的交互事件和参数有所差异，常见配置包括：
-
-| 参数 | 适用模型 | 说明 |
-| --- | --- | --- |
-| `format` | CosyVoice / ASR 系列 | 音频编码格式：`pcm`、`wav`、`mp3`、`opus` |
-| `sample_rate` | CosyVoice / ASR 系列 | 采样率，如 16000、24000、44100、48000 Hz |
-| `turn_detection` | Qwen-Omni-Realtime / Qwen-ASR | 交互模式：`server_vad`（自动断句）、`semantic_vad`（语义断句）或 `null`（手动模式） |
-| `mode` | Qwen-TTS Realtime | `ServerCommit`（服务端分段）或 `Commit`（客户端显式提交） |
-
-### 流式响应的消息结构
-
-- **WebSocket**：通过事件类型区分中间结果与最终结果（如 `result-generated` 的 `sentence_end` 字段、`response.audio.delta` 与 `response.audio.done`）。
-- **SSE**：通过 `finish_reason` 字段判断——`"null"` 表示中间片段，`"stop"` 表示生成结束。
-
-## 开发者建议
-
-1. **优先选择 WebSocket**：需要实时交互（对话、同传、实时播报）的场景务必使用 WebSocket 协议，SSE 无法满足双向低延迟需求。
-2. **及时消费分片**：流式输出的价值在于"边生成边播放/展示"，客户端应做好缓冲区管理，避免攒齐所有分片后再处理。
-3. **正确处理结束信号**：无论 WebSocket 还是 SSE，都需要监听结束事件（`done` / `finish_reason: stop`）后再执行清理或拼接最终结果。
-4. **关注地域差异**：WebSocket 和 SSE 端点按华北2（北京）与新加坡分别提供，新加坡地域需使用新版 `{WorkspaceId}` 域名。
+- **SSE 流式输出**需客户端支持逐行解析 `data:` 前缀的事件流，推荐使用官方 SDK 而非手动解析。
+- **WebSocket 流式输出**的音频数据通常为原始 PCM 格式，客户端需按指定采样率（如 16 kHz 输入、24 kHz 输出）正确解码和播放。
+- 流式输出过程中如遇错误，服务端会通过 `error` 事件或 HTTP 错误状态码通知，客户端应做好异常处理和重连逻辑。
+- 部分模型和接口对流式与非流式模式下的输入参数限制不同（如 Fun-Music 歌词长度限制），请参考各 API 文档确认。
 
 ## 关联主题页
 
-- [speech synthesis api reference](../api/speech-synthesis-api-reference.md)
 - [omni realtime api](../api/omni-realtime-api.md)
+- [speech synthesis api reference](../api/speech-synthesis-api-reference.md)
 - [speech recognition api reference](../api/speech-recognition-api-reference.md)
 - [music generation references](../api/music-generation-references.md)
-- [audio api references](../api/audio-api-references.md)
+- [qwen api reference](../api/qwen-api-reference.md)
 
 

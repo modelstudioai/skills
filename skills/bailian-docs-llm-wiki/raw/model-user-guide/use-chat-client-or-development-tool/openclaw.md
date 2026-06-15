@@ -1824,3 +1824,15 @@ openclaw dashboard --no-open
 ```
 
 执行 `openclaw devices list`，确认设备显示在 Paired 列表中即为正常。
+
+没有主动使用 OpenClaw，但仍产生了 Token 消耗
+
+**原因：**OpenClaw 内置心跳机制（Heartbeat），网关运行期间会按固定间隔（默认 30 分钟）自动调用已配置的模型，检查是否有待处理任务。每次心跳都会消耗少量 Token。
+
+**如何确认：**查看 `~/.openclaw/agents/main/sessions/` 目录下的会话记录文件（.jsonl），其中包含 `[OpenClaw heartbeat poll]` 标记的心跳调用记录。
+
+**解决方法：**
+
+-   **停止网关**：不使用时执行 `openclaw gateway stop`，心跳随即停止。
+    
+-   **增大心跳间隔**：在 `~/.openclaw/openclaw.json` 中设置 `agents.defaults.heartbeat.every`，例如 `"2h"` 表示每 2 小时一次。
