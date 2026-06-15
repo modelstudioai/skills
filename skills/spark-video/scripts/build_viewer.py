@@ -429,7 +429,7 @@ details > summary {{ cursor:pointer; color:var(--mute); font-size:13px; user-sel
 details[open] > summary {{ color: var(--fg); margin-bottom: 8px; }}
 .grid {{ display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:14px; }}
 .entity {{ background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px; }}
-.entity img {{ width:100%; height:180px; object-fit:cover; border-radius:6px; background:var(--bg); }}
+.entity img {{ width:100%; height:180px; object-fit:contain; border-radius:6px; background:var(--bg); }}
 .entity h4 {{ margin: 10px 0 4px; font-size: 15px; }}
 .entity audio {{ width:100%; margin-top:6px; }}
 .entity .fm {{ font-size:12px; color:var(--mute); }}

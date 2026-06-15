@@ -22,7 +22,7 @@ LORE_FILENAME = "lore.md"
 
 
 class ImagerySystem(BaseModel):
-    """Visual motif system (山音"意象体系").
+    """Visual motif system (Shanyin "imagery system").
 
     The director should land each motif in the storyboard at least N times
     (short film: N>=2). Highlight elements are the *parts* of frame the
@@ -36,9 +36,9 @@ class ImagerySystem(BaseModel):
 
 
 class DualPacing(BaseModel):
-    """Dual-track pacing (山音"双轨节奏").
+    """Dual-track pacing (Shanyin "dual-track pacing").
 
-    *external* describes plot tightness (起承转合 + 快慢中).
+    *external* describes plot tightness (setup-develop-turn-resolve + fast/medium/slow).
     *internal* describes the protagonist's emotional curve.
     Mismatch between the two is a hallmark of mature storytelling.
     """
@@ -69,16 +69,16 @@ class LoreFront(BaseModel):
     # shot prompt for cohesion. Keep it short (<60 chars).
     mood_anchor: str | None = None
 
-    # ── 山音融合：导演定调系统 ──────────────────────────────
+    # ── Shanyin fusion: director tone system ──────────────────────────────
     # One-sentence dramatic action: the *engine* of the story.
-    # Example: "钱夫人为找回面子, 反复挑衅郭芙蓉, 终被一拳放倒"
+    # Example: "钱夫人 keeps provoking 郭芙蓉 to save face, until one punch ends it"
     dramatic_action: str | None = None
 
     # Visual motif system; richer than mood_anchor.
     imagery_system: ImagerySystem | None = None
 
     # Director-style reference fusion.
-    # Example: "宁浩式群像喜剧节奏 + 张艺谋色彩饱和度"
+    # Example: "Ning Hao-style ensemble comedy pacing + Zhang Yimou color saturation"
     director_reference: str | None = None
 
     # External plot pacing + internal emotional pacing (two tracks).
@@ -145,50 +145,50 @@ def render_for_prompt(lore: Lore) -> str:
     if f.era: head_bits.append(f.era)
     if f.location: head_bits.append(f.location)
     if head_bits:
-        parts.append(f"# 世界观: {' · '.join(head_bits)}")
+        parts.append(f"# World: {' · '.join(head_bits)}")
 
     if f.mood_anchor:
-        parts.append(f"- 风格锚词 (每段 prompt 末尾必带): \"{f.mood_anchor}\"")
+        parts.append(f"- Style anchor (append to every prompt): \"{f.mood_anchor}\"")
     if f.dramatic_action:
-        parts.append(f"- 核心戏剧动作: {f.dramatic_action}")
+        parts.append(f"- Core dramatic action: {f.dramatic_action}")
     if f.director_reference:
-        parts.append(f"- 导演定调: {f.director_reference}")
+        parts.append(f"- Director tone: {f.director_reference}")
     if f.dual_pacing and (f.dual_pacing.external or f.dual_pacing.internal):
         ext = f.dual_pacing.external or "—"
         intn = f.dual_pacing.internal or "—"
-        parts.append(f"- 双轨节奏: 外部「{ext}」/ 内部「{intn}」")
+        parts.append(f"- Dual-track pacing: external「{ext}」/ internal「{intn}」")
     if f.imagery_system:
         if f.imagery_system.motifs:
             parts.append(
-                "- 视觉母题 (storyboard 中至少落地 2 次): "
+                "- Visual motifs (land at least 2× in storyboard): "
                 + "; ".join(f.imagery_system.motifs)
             )
         if f.imagery_system.highlight_elements:
             parts.append(
-                "- 强化视觉元素: " + "; ".join(f.imagery_system.highlight_elements)
+                "- Highlight elements: " + "; ".join(f.imagery_system.highlight_elements)
             )
     if f.visual_style:
-        parts.append(f"- 视觉风格: {f.visual_style}")
+        parts.append(f"- Visual style: {f.visual_style}")
     if f.camera_language:
-        parts.append(f"- 镜头语言: {f.camera_language}")
+        parts.append(f"- Camera language: {f.camera_language}")
     if f.palette:
-        parts.append(f"- 色板: {', '.join(f.palette)}")
+        parts.append(f"- Palette: {', '.join(f.palette)}")
     if f.forbidden:
-        parts.append(f"- 严禁出现: " + "; ".join(f.forbidden))
+        parts.append(f"- Forbidden: " + "; ".join(f.forbidden))
     if f.allowed:
-        parts.append(f"- 明确允许: " + "; ".join(f.allowed))
+        parts.append(f"- Explicitly allowed: " + "; ".join(f.allowed))
 
     defaults: list[str] = []
-    if f.duration_target_s: defaults.append(f"目标时长 {f.duration_target_s}s")
-    if f.default_shot_duration: defaults.append(f"单段默认 {f.default_shot_duration}s")
-    if f.default_resolution: defaults.append(f"分辨率 {f.default_resolution}")
-    if f.default_ratio: defaults.append(f"宽高比 {f.default_ratio}")
+    if f.duration_target_s: defaults.append(f"target duration {f.duration_target_s}s")
+    if f.default_shot_duration: defaults.append(f"default shot {f.default_shot_duration}s")
+    if f.default_resolution: defaults.append(f"resolution {f.default_resolution}")
+    if f.default_ratio: defaults.append(f"aspect ratio {f.default_ratio}")
     if defaults:
-        parts.append(f"- 默认参数: {', '.join(defaults)}")
+        parts.append(f"- Defaults: {', '.join(defaults)}")
 
     if lore.body:
         parts.append("")
-        parts.append("## 设定正文 (供 Skill 阅读)")
+        parts.append("## Lore body (for Skill reading)")
         parts.append(lore.body)
 
     return "\n".join(parts)
@@ -201,55 +201,55 @@ LORE_TEMPLATE = """\
 # mood_anchor through every shot prompt for visual cohesion.
 
 title: {title}
-genre: []          # e.g. [武侠喜剧, 情景喜剧]  /  [科幻, 悬疑]
-era:               # 时空背景, e.g. 明朝架空 / 2049 近未来 / 维多利亚时代蒸汽朋克
-location:          # 主要发生地, e.g. 七侠镇 · 同福客栈
+genre: []          # e.g. [wuxia comedy, sitcom] / [sci-fi, thriller]
+era:               # setting, e.g. Ming-era alt-history / 2049 near-future / Victorian steampunk
+location:          # primary location, e.g. Qixia Town · Tongfu Inn
 
 # --- visual / camera direction ---
-visual_style:      # 一句话描述, e.g. 暖色调, 喜剧光线, 略夸张的肢体语言
-camera_language:   # e.g. 中近景为主, 偶尔大特写抓表情, 摇镜代替剪辑
+visual_style:      # one-line, e.g. warm tones, comedic lighting, slightly exaggerated body language
+camera_language:   # e.g. medium close-ups, occasional big close-ups for expressions, pans over cuts
 palette: []        # color names or hex, e.g. [warm-amber, faded-red, ink-black]
 
 # --- mood_anchor: single sentence appended to EVERY shot prompt ---
 # Keep it short, concrete, and constant across the whole project.
-# Example: "明朝架空, 喜剧光线, 暖色调, 略夸张的肢体语言"
+# Example: "Ming-era alt-history, comedy lighting, warm tones, slightly exaggerated body language"
 mood_anchor:
 
-# --- 山音融合：导演定调系统（可选，留空向后兼容）------------------
-# 一句话核心戏剧动作 —— 故事的引擎。
-# Example: "钱夫人为找回面子, 反复挑衅郭芙蓉, 终被一拳放倒"
+# --- Shanyin fusion: director tone system (optional, blank for back-compat) ---
+# One-sentence core dramatic action — the engine of the story.
+# Example: "钱夫人 keeps provoking 郭芙蓉 to save face, until one punch ends it"
 dramatic_action:
 
-# 视觉母题系统 —— 比 mood_anchor 更具故事性的"符号"。
-# 导演会让母题在 storyboard 中至少落地 2 次（短片）。
+# Visual motif system — story symbols richer than mood_anchor.
+# The director lands each motif in the storyboard at least 2× (short film).
 # imagery_system:
-#   motifs:                 # 贯穿全片的视觉意象
-#     - "搓动的围裙"
-#     - "翻飞的红盖头"
-#   highlight_elements:     # 需要镜头特别强化的元素
-#     - "发饰特写"
-#     - "权杖象征"
+#   motifs:                 # recurring visual imagery
+#     - "wrung apron"
+#     - "fluttering red veil"
+#   highlight_elements:     # elements the camera should emphasize
+#     - "hair ornament close-up"
+#     - "scepter as symbol"
 imagery_system:
   motifs: []
   highlight_elements: []
 
-# 导演风格融合 —— 用 1-2 位真实导演的方法论锚定调性。
-# Example: "宁浩式群像喜剧节奏 + 张艺谋色彩饱和度"
+# Director style fusion — anchor tone with 1-2 real directors' methods.
+# Example: "Ning Hao-style ensemble comedy pacing + Zhang Yimou color saturation"
 director_reference:
 
-# 双轨节奏 —— 外部情节松紧 + 内部情感曲线。
-# 错位是高级叙事手法（外部慢但内部紧 / 外部紧但内部空）。
+# Dual-track pacing — external plot tightness + internal emotional curve.
+# Misalignment is advanced storytelling (slow outside / tight inside, etc.).
 # dual_pacing:
-#   external: "起-缓 / 承-紧 / 转-爆 / 合-顿"
-#   internal: "面子-愠怒-爆发-错愕"
+#   external: "setup-slow / develop-tight / turn-burst / resolve-pause"
+#   internal: "face-pride / simmer / explode / stunned"
 dual_pacing:
   external:
   internal:
-# --- /山音融合 -------------------------------------------------
+# --- / Shanyin fusion -------------------------------------------------
 
 # --- world rules ---
-forbidden: []      # e.g. [真实历史人物姓名, IP 直接同名, 血腥镜头]
-allowed: []        # e.g. [夸张武打, 第四面墙吐槽]
+forbidden: []      # e.g. [real historical figures by name, direct IP names, gore]
+allowed: []        # e.g. [exaggerated martial arts, fourth-wall jokes]
 
 # --- defaults the storyboard can pick up ---
 duration_target_s: 180
@@ -258,29 +258,31 @@ default_resolution: 720P
 default_ratio: "16:9"
 ---
 
-# 世界观
+# World
 
-(几句话讲清这是个什么世界、什么调性、为什么有趣。LLM 写剧本前会先读这段。)
+(A few sentences on what world this is, its tone, and why it's interesting.
+The LLM reads this before writing the script.)
 
-## 视觉风格参考
+## Visual style reference
 
-- 灯光:
-- 服饰:
-- 道具/场景质感:
+- Lighting:
+- Costumes:
+- Prop / set texture:
 
-## 镜头语言原则
+## Camera language principles
 
-- 喜剧/紧张/惊悚的节奏处理:
-- 群戏 vs 双人戏的镜头偏好:
-- 转场习惯:
+- Comedy / tension / thriller pacing:
+- Group vs two-shot preferences:
+- Transition habits:
 
-## 写作禁区与口味
+## Writing taboos and taste
 
-- 严禁:
-- 我喜欢:
+- Forbidden:
+- I like:
 
-## 视觉母题说明 (可选)
+## Visual motif notes (optional)
 
-(简单说明每个 motif 在故事里承载的含义。例如 "搓动的围裙" 承载
-钱夫人的紧张与虚荣 —— 每次出现都强化她想维持体面但已经心虚的状态。)
+(Briefly explain what each motif means in the story. E.g. "wrung apron" carries
+钱夫人's tension and vanity — each appearance reinforces her need to keep
+face while already feeling guilty.)
 """

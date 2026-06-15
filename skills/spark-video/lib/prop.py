@@ -1,4 +1,4 @@
-"""Key prop (关键道具) management — folder-per-prop.
+"""Key prop management — folder-per-prop.
 
 Why this exists: AI video models have no cross-shot memory, so the
 *same* 红包 / 戒指 / 钥匙 / 玩具熊 in two consecutive shots renders as
@@ -110,7 +110,7 @@ class PropFront(BaseModel):
     description: str | None = Field(
         default=None,
         description=(
-            "One-line concrete description (材质 / 颜色 / 形状 / 关键细节). "
+            "One-line concrete description (material / color / shape / key details). "
             "Used as a textual fallback in t2v shots that can't take a "
             "reference image."
         ),
@@ -119,7 +119,7 @@ class PropFront(BaseModel):
         default_factory=list,
         description=(
             "Things this prop must NEVER be drawn as — especially OTHER "
-            "states of the same prop (e.g. for 红包-完整: '揉皱', '破损')."
+            "states of the same prop (e.g. for 红包-完整: 'crumpled', 'torn')."
         ),
     )
     notes: str | None = None
@@ -423,17 +423,18 @@ PROP_TEMPLATE = """\
 # Prop card for {name}.
 #
 # ⚠ HARD RULE: ONE FOLDER = ONE NARRATIVE STATE.
-# 同一个道具的不同故事状态 (完整 → 起皱 → 撕碎 / 干净 → 染血 / 关闭 →
-# 打开) 必须用 *不同* 的文件夹, 不要把多张状态图塞进同一个文件夹。
-# 模型会平均化文件夹里的所有图片, 输出一个不伦不类的中间态。
+# Different story states of the same prop (完整 → 起皱 → 撕碎 / clean →
+# bloodstained / closed → open) MUST use *separate* folders — do not
+# stuff multiple state images into one folder.
+# The model averages all images in a folder, producing a muddled in-between.
 #
 # Naming convention: <prop_name>-<state>
 #   props/红包-完整/
 #   props/红包-起皱/
 #   props/红包-撕碎/
 #
-# 同一个文件夹里的多张图只能是 *同一状态* 的不同视角 (正面/侧面/特写),
-# 这种情况 CLI 会自动拼成 grid 合成图。
+# Multiple images in one folder may only be *different angles of the same
+# state* (front/side/close-up). The CLI auto-composes a grid in that case.
 #
 # The folder name IS the prop's display name — shots reference it via
 # `Shot.props` in the storyboard.
@@ -451,35 +452,35 @@ category:
 # Leave blank if the prop has only one state across the whole episode.
 state:
 
-# Rough physical scale — helps the director choose 景别.
+# Rough physical scale — helps the director choose shot size.
 # size_class: hand-held | pocketable | room-scale | wearable | other
 size_class:
 
-# Single-line concrete description (材质 / 颜色 / 形状 / 关键细节).
+# Single-line concrete description (material / color / shape / key details).
 # Used as the textual fallback for t2v shots that can't take a
 # reference image. Example for 红包-完整:
-#   "标准中式红包, 大红色烫金底纹, 印有'囍'字, 平整无折痕, 厚度适中"
+#   "Standard Chinese red envelope, red with gold foil, '囍' character, flat uncreased, medium thickness"
 description:
 
 # Optional: things this prop must NEVER be drawn as. Especially other
 # states of the same prop. Example for 红包-完整:
-#   forbidden: ["揉皱", "破损", "边角磨损"]
+#   forbidden: ["crumpled", "torn", "worn edges"]
 forbidden: []
 
 # Optional free-form notes (where it appears, who handles it, etc.).
 notes:
 ---
 
-# 详细描述
+# Detailed description
 
-(自由文本: 道具的来历、谁拥有、在剧情中的关键时刻、与其他道具/角色
- 的互动方式。director 会读这段。如果有 state 字段, 务必在本体里再说
- 一次具体状态, 让 reviewer 也清楚。)
+(Free text: prop origin, owner, key story moments, interaction with other
+ props/characters. The director reads this. If `state` is set, restate
+ the specific condition in the body so the reviewer is clear too.)
 
-## 视觉锚点
+## Visual anchors
 
-- 材质 / 颜色 / 反光特性:
-- 关键细节 (logo / 刻字 / 磨损位置 / 装饰):
-- 拿在手里的尺寸感:
-- 不要画成的样子 (尤其其他状态):
+- Material / color / reflectivity:
+- Key details (logo / engraving / wear / decoration):
+- Size when held:
+- Do not render as (especially other states):
 """

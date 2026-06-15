@@ -24,6 +24,7 @@ class Settings:
     # Per-clip review + auto-rewrite (Zone 3 of the multi-agent pipeline).
     review_threshold: float
     review_model: str
+    review_timeout_s: int
     rewrite_model: str
     max_retry: int
     # Default video model family. ``wan`` | ``happyhorse``. Director skill
@@ -63,6 +64,7 @@ class Settings:
             projects_dir=Path(os.getenv("VIDEOGEN_PROJECTS_DIR", "./projects")).resolve(),
             review_threshold=float(os.getenv("VIDEOGEN_REVIEW_THRESHOLD", "7.0")),
             review_model=os.getenv("VIDEOGEN_REVIEW_MODEL", "qwen3-vl-plus").strip(),
+            review_timeout_s=int(os.getenv("VIDEOGEN_REVIEW_TIMEOUT_S", "300")),
             rewrite_model=os.getenv("VIDEOGEN_REWRITE_MODEL", "qwen-plus").strip(),
             max_retry=int(os.getenv("VIDEOGEN_MAX_RETRY", "3")),
             video_provider=os.getenv("VIDEOGEN_VIDEO_PROVIDER", "happyhorse").strip().lower(),

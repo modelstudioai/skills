@@ -296,7 +296,7 @@ def mux_audio(
       the gap (``tpad=stop_mode=clone``). If audio is shorter → trim
       the video to the audio length.
 
-    * ``narration`` (旁白模式默认): final length is ``audio`` plus up to
+    * ``narration`` (default for narration mode): final length is ``audio`` plus up to
       1 s of trailing picture when the source video is longer — the tail
       is silent so the beat gets a brief pause. If audio runs longer than
       video, freeze at most 1 s then trim excess audio so the clip never

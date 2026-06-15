@@ -3,15 +3,29 @@
 # dependencies = ["requests>=2.31"]
 # ///
 """
-render_shot.py — render a single shot via the configured provider.
+render_shot.py — render a single shot via the configured provider, then
+score it (the deterministic half of Zone 3).
 
 Reads SPARK_VIDEO_PROVIDER (default `bl`) and dispatches to the matching
 plugin under scripts/providers/. Also updates projects/<p>/<ep>/shots_state.json.
 
+After a successful render the clip is automatically reviewed (6-axis
+``bl omni`` score via lib/review.py) unless --no-review is passed or
+VIDEOGEN_REVIEW_MODEL is empty. The render→score→promote loop is one
+atomic, unskippable tool call:
+    * the 6-axis score is embedded into the attempt + written to
+      reviews/<shot>-ver<N>.json;
+    * on ACCEPT (avg >= threshold) the version is promoted to winner
+      (clips/<shot>.mp4) — no separate --accept-version step needed;
+    * on REJECT the winner is left unset for the agent to rewrite + retry.
+The agent still owns the *judgment*: how to rewrite a REJECTed prompt and
+when to escalate to the director.
+
 Usage:
     uv run scripts/render_shot.py --shot S01-001 --kind r2v \\
         --prompt "..." --duration 12 --media a.png b.png \\
-        [--voice cast.mp3] [--provider bl|wan27] [--force] [--reset-attempts]
+        [--voice cast.mp3] [--provider bl|wan27] [--force] [--reset-attempts] \\
+        [--characters 陆辰 钱夫人] [--no-review]
 
 Re-render flags:
     --force           render again even if a winner exists; keeps prior attempts
@@ -21,10 +35,12 @@ Re-render flags:
 
 Stdout (JSON):
     {"shot_id":"S01-001","version":1,"video_path":"...","last_frame_path":"...",
-     "duration_s":12.0,"provider":"bl","model":"happyhorse-1.0-r2v","elapsed_s":47.2}
+     "duration_s":12.0,"provider":"bl","model":"happyhorse-1.0-r2v","elapsed_s":47.2,
+     "review":{"score":8.2,"verdict":"ACCEPT","breakdown":{...},"critique":"..."},
+     "winner_version":1}
 
 Exit codes:
-    0 = ok
+    0 = ok (render succeeded; check stdout "review.verdict" for ACCEPT/REJECT/ERROR)
     1 = provider error
     2 = invalid args
     3 = timeout
@@ -46,6 +62,8 @@ from typing import Callable
 
 _HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(_HERE.parent))
+
+from lib import review as review_mod  # noqa: E402
 
 
 def _projects_root() -> Path:
@@ -142,6 +160,27 @@ def _extract_last_frame(video_path: Path, frame_path: Path) -> bool:
         return False
 
 
+def _shot_characters(ep_dir: Path, shot_id: str) -> list[str]:
+    """Read shot.characters from storyboard.json (raw JSON — no pydantic).
+
+    Used to attach the right cast portraits to the review's cast_match axis
+    when the caller didn't pass --characters explicitly. Returns [] if the
+    storyboard or shot is absent (review still runs, cast_match just weaker).
+    """
+    sb_path = ep_dir / "storyboard.json"
+    if not sb_path.exists():
+        return []
+    try:
+        sb = json.loads(sb_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return []
+    for shot in sb.get("shots", []) or []:
+        if shot.get("id") == shot_id:
+            chars = shot.get("characters") or []
+            return [c for c in chars if isinstance(c, str)]
+    return []
+
+
 def _load_provider(name: str):
     """Import scripts.providers.<name> dynamically."""
     try:
@@ -179,6 +218,13 @@ def main() -> int:
     ap.add_argument("--reset-attempts", action="store_true",
                     help="wipe existing attempts (and winner) before "
                          "rendering — implies --force")
+    ap.add_argument("--characters", nargs="*", default=None,
+                    help="cast names for the review's cast_match axis; "
+                         "defaults to storyboard.json's shot.characters")
+    ap.add_argument("--no-review", action="store_true",
+                    help="skip the automatic post-render clip review "
+                         "(score + ACCEPT/REJECT). Also disabled globally "
+                         "when VIDEOGEN_REVIEW_MODEL is set to empty string.")
     args = ap.parse_args()
 
     ep_dir = _episode_dir()
@@ -197,6 +243,8 @@ def main() -> int:
         if not src.exists():
             print(f"ERROR: {src} not found", file=sys.stderr)
             return 2
+        if dst.is_symlink() or dst.exists():
+            dst.unlink()
         import shutil as _sh
         _sh.copy2(src, dst)
 
@@ -283,11 +331,16 @@ def main() -> int:
         print(f"ERROR: --voice file not found: {voice}", file=sys.stderr)
         return 2
 
+    # Suppress model-generated BGM — cross-clip music can't be coherent.
+    render_prompt = args.prompt.rstrip()
+    if "no background music" not in render_prompt.lower():
+        render_prompt += " No background music."
+
     started = datetime.now(timezone.utc).isoformat()
     try:
         result = mod.render(
             kind=args.kind,
-            prompt=args.prompt,
+            prompt=render_prompt,
             media=media,
             voice=voice,
             duration=args.duration,
@@ -344,6 +397,57 @@ def main() -> int:
         entry["attempts"].append(attempt)
 
     _update_state(state_path, _append_succeeded)
+
+    # ── Automatic clip review (Zone 3, formerly the agent's manual step) ──
+    # Render → score → (auto-promote on ACCEPT) is now one atomic tool call so
+    # an inferior agent can't silently skip scoring. The agent keeps the
+    # judgment: rewriting a REJECTed prompt and deciding to escalate.
+    review = None
+    auto_promoted = False
+    if not args.no_review:
+        characters = (args.characters if args.characters is not None
+                      else _shot_characters(ep_dir, args.shot))
+        try:
+            review = review_mod.score_clip(
+                ep_dir=ep_dir,
+                shot_id=args.shot,
+                version=version,
+                video_path=clip_path,
+                characters=characters,
+                prompt=args.prompt,
+                duration=args.duration,
+            )
+        except Exception as e:  # never lose a render over a review crash
+            print(f"warn: review crashed for {args.shot} v{version}: {e}",
+                  file=sys.stderr)
+            review = {"score": None, "verdict": "ERROR", "error": str(e)}
+
+    if review is not None:
+        accept = review.get("verdict") == "ACCEPT"
+        winner_dst = ep_dir / "clips" / f"{args.shot}.mp4"
+        if accept:
+            if winner_dst.is_symlink() or winner_dst.exists():
+                winner_dst.unlink()
+            import shutil as _sh
+            _sh.copy2(clip_path, winner_dst)
+
+        def _embed_review(s: dict) -> None:
+            entry = s.setdefault(args.shot, {
+                "shot_id": args.shot, "attempts": [], "winner_version": None,
+                "winner_path": None, "needs_director_rewrite": False,
+            })
+            for a in entry["attempts"]:
+                if a.get("version") == version:
+                    a["review"] = review
+                    break
+            if accept:
+                entry["winner_version"] = version
+                entry["winner_path"] = str(winner_dst)
+                entry["needs_director_rewrite"] = False
+
+        _update_state(state_path, _embed_review)
+        auto_promoted = accept
+
     _refresh_viewer()
 
     out = {
@@ -356,6 +460,20 @@ def main() -> int:
         "model": result.get("model"),
         "elapsed_s": result.get("elapsed_s"),
     }
+    if review is not None:
+        out["review"] = {
+            "score": review.get("score"),
+            "verdict": review.get("verdict"),
+            "breakdown": review.get("breakdown"),
+            "critique": review.get("critique"),
+        }
+        out["winner_version"] = version if auto_promoted else None
+        if review.get("verdict") == "REJECT":
+            out["next"] = ("rewrite prompt and re-render (--force), or accept "
+                           "best-of-N with --accept-version when retries exhausted")
+        elif review.get("verdict") == "ERROR":
+            out["next"] = ("review could not run; inspect logs/model_calls.jsonl, "
+                           "then re-render or accept manually with --accept-version")
     print(json.dumps(out, ensure_ascii=False))
     return 0
 

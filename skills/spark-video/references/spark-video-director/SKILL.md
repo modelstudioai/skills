@@ -1,32 +1,32 @@
 ---
 name: spark-video-director
-description: Translate a screenplay (one scene at a time) into a provider-agnostic storyboard fragment for the spark-video pipeline. Wraps 山音超级导演大师 when available — the upstream Shanyin SKILL is the single source of truth for craft when present.
+description: Translate a screenplay (one scene at a time) into a provider-agnostic storyboard fragment for the spark-video pipeline. Wraps Shanyin Super Director Master when available — the upstream Shanyin SKILL is the single source of truth for craft when present.
 ---
 
-# 导演 Skill — spark-video 分镜师
+# Director Skill — spark-video Storyboarder
 
 You are the **director** of a long-form AI video shoot. Your craft
-authority is **`references/shanyin/director-master/SKILL.md`** (山音超级
-导演大师, by @山音) when it exists. This file does NOT replicate that
-methodology — it tells you how to plug 山音 into the spark-video pipeline
+authority is **`references/shanyin/director-master/SKILL.md`** (Shanyin Super
+Director Master, by @山音) when it exists. This file does NOT replicate that
+methodology — it tells you how to plug Shanyin into the spark-video pipeline
 + the **provider-agnostic shot kind surface** (`t2v` / `i2v` / `r2v`).
 
 If `references/shanyin/director-master/SKILL.md` does NOT exist, fall
-back to standard film-direction craft (景别 / 节奏 / 运镜 / 剪辑). The
+back to standard film-direction craft (framing / pacing / camera movement / editing). The
 pipeline still works — just less stylized.
 
 ## STEP 0 — required reads (every invocation)
 
 1. `references/shanyin/director-master/SKILL.md` if present — craft
-   authority (导演定调 → 节奏 → 微调 → 分镜). Plus the genre / form
+   authority (director tone → pacing → fine-tuning → storyboard). Plus the genre / form
    references under `references/shanyin/director-master/references/`.
 2. `projects/$SPARK_VIDEO_PROJECT/lore.md` — project world bible.
 3. `projects/$SPARK_VIDEO_PROJECT/episode-$SPARK_VIDEO_EPISODE/cast.json`
    — per-episode cast.
 4. The screenplay scene you are storyboarding (see Workflow below).
-5. `projects/<p>/<ep>/movie_set.json` — per-episode movie-set (布景)
+5. `projects/<p>/<ep>/movie_set.json` — per-episode movie-set (set dressing)
    bundle. Read BEFORE you decide which scenes get a `set_id`.
-6. `projects/<p>/<ep>/props.json` — per-episode key-prop (关键道具)
+6. `projects/<p>/<ep>/props.json` — per-episode key-prop
    bundle. Read BEFORE writing shot prompts so you know which named
    props are pinned and what their valid `Shot.props` names are.
 7. The **active provider** — read `$SPARK_VIDEO_PROVIDER` (default `bl`).
@@ -53,7 +53,7 @@ For each scene the producer hands you a scene number `N`. You must:
    wait — the screenwriter has not signaled "ready" yet.
 2. Read `projects/<p>/<ep>/scenes/scene-NN.md` (the screenplay).
 3. Read `projects/<p>/<ep>/direction.json` if it exists (the per-episode
-   "导演定调" — see below). If absent and this is scene 01, produce it
+   "director tone" — see below). If absent and this is scene 01, produce it
    first.
 
 ### Output you write per scene
@@ -88,7 +88,7 @@ Schema:
       "set_id": "<override scene.set_id, or null to inherit>",
       "use_prev_last_frame_as_first": true,
       "shot_group_id": "G01",
-      "shot_group_role": "建立",
+      "shot_group_role": "establish",
       "negative_prompt": "...",
       "seed": <int|null>,
       "candidates": 1
@@ -129,7 +129,7 @@ groups.** Every `false` you set unlocks a parallel render slot.
 
 ### Director tone — `direction.json`
 
-The "导演定调" stage from 山音 maps to a single per-episode file:
+The "director tone" stage from Shanyin maps to a single per-episode file:
 `projects/<p>/<ep>/direction.json`. Produce it once before scene 01.
 It captures the seven viewing decisions, imagery system, and dual-pacing
 curve. Subsequent scenes read it and stay consistent.
@@ -141,46 +141,46 @@ The mode is also persisted in `Storyboard.mode` after compile.
 
 | mode | What you write |
 |------|---------------|
-| `drama` (default — 短剧) | Every shot has `role: "drama"` (the schema default). Long r2v shots, dialog-driven. |
-| `narration` (旁白解说) | Each scene-NN.md is a list of `**节拍**`. Map each beat to one shot, with mode-specific roles: |
+| `drama` (default — short drama) | Every shot has `role: "drama"` (the schema default). Long r2v shots, dialog-driven. |
+| `narration` (voiceover recap) | Each scene-NN.md is a list of `**Beats**`. Map each beat to one shot, with mode-specific roles: |
 
 ### Beat → shot mapping (narration mode)
 
 | Beat type in scene-NN.md | Resulting shot fields |
 |--------------------------|------------------------|
-| `**旁白**: "<line>"` | `role: "narration"`, `narration_text: "<line>"`, `kind: "t2v"` (or `r2v` if 画面 explicitly references a cast member's face), `duration: 4` (range 3-6), `use_prev_last_frame_as_first: false`, `characters: []` (or just the locked face if r2v) |
-| `**对白**: ...` | `role: "drama"` (default), follow drama rules — long r2v shot, full cast list, longer duration (12-15s) |
+| `**Narration**: "<line>"` | `role: "narration"`, `narration_text: "<line>"`, `kind: "t2v"` (or `r2v` if the **Visual** line explicitly references a cast member's face), `duration: 4` (range 3-6), `use_prev_last_frame_as_first: false`, `characters: []` (or just the locked face if r2v) |
+| `**Dialog**: ...` | `role: "drama"` (default), follow drama rules — long r2v shot, full cast list, longer duration (12-15s) |
 
 Rules that matter for narration shots:
 
 - **Always break the chain** (`use_prev_last_frame_as_first: false`).
   Narration shots are visually independent — every one of them is its
   own chain group, which is exactly what we want for parallel render.
-- **Default `kind: "t2v"`**. Lock a face only when the 画面 description
+- **Default `kind: "t2v"`**. Lock a face only when the **Visual** description
   explicitly names a cast member visible in this beat — in that case
   use `r2v` and put just that one character in `characters`.
 - **Default `duration: 4`s.** TTS length drives the final clip duration.
-  Only go higher (5-6s) when the 画面 needs noticeable motion.
-- **旁白-视频对齐规则 (narration alignment)**:
-  - 渲染管线会让成片时长落在 `[TTS时长, TTS时长+1s]`：视频比旁白长时
-    保留最多 **1s** 无声尾画面;旁白比视频长时最多 **1s** 静帧补齐,
-    超出部分裁掉旁白。
-  - **视频 < 旁白** (差距 ≤ 20%): 优先微调 TTS speech rate 加速旁白
-    对齐视频。比如 4s 视频 + 4.6s 旁白 → rate × 1.15。
-  - **视频 ≪ 旁白** (差距 > 20% 或 >1s): 说明 `duration` 估错了——
-    把该 beat 的 `duration` 上调到 ≈ TTS 时长, 否则会裁掉旁白尾部。
-  - **旁白时长超过 provider 单镜上限** (e.g. happyhorse-1.0-r2v 硬封顶
-    10s, 旁白却有 17s): bump `duration` 不会突破 provider cap。
-    解决方案是**渲染续接片段** —— 把同一 shot 的第二段镜头落到
-    `clips/<shot_id>b.mp4` (例: `clips/S01-002b.mp4`)。stitch.py 会自动
-    用 1s xfade 把 a + b 拼成单段, 再做旁白对齐, 中间不会出现音画错位。
-    续接片段使用与主镜头相同的角色 / 场景参考图, prompt 描述这个 shot
-    的"下半段"动作 (例如主镜头是"走入办公室", 续接是"已走到落地窗前");
-    a + b 总时长应略大于旁白时长, 留 0.3-1s 缓冲。
-  - 核心原则: **单镜静帧 hold 不超过 1s**;需要更长停顿时用下一句旁白
-    前的无声尾画面, 而不是无限 freeze。
+  Only go higher (5-6s) when the **Visual** needs noticeable motion.
+- **Narration–video alignment rules**:
+  - The render pipeline targets final duration in `[TTS length, TTS length + 1s]`: when video is longer than narration,
+    keep at most **1s** of silent tail; when narration is longer than video, pad with at most **1s** freeze frame,
+    trimming excess narration beyond that.
+  - **Video < narration** (gap ≤ 20%): prefer nudging TTS speech rate to speed up narration
+    to match video. E.g. 4s video + 4.6s narration → rate × 1.15.
+  - **Video ≪ narration** (gap > 20% or >1s): `duration` was underestimated —
+    raise that beat's `duration` to ≈ TTS length, or narration tail gets cut off.
+  - **Narration exceeds provider per-shot cap** (e.g. happyhorse-1.0-r2v hard cap
+    10s, narration is 17s): bumping `duration` won't break the provider cap.
+    Solution: **render a continuation segment** — second segment lands at
+    `clips/<shot_id>b.mp4` (e.g. `clips/S01-002b.mp4`). `stitch.py` automatically
+    xfade-joins a + b into one segment, then aligns narration — no A/V drift in the middle.
+    Continuation uses the same character / set references as the main shot; prompt describes this shot's
+    "second half" action (e.g. main shot "walks into office", continuation "already at floor-to-ceiling window");
+    a + b total duration should be slightly longer than narration, with 0.3-1s buffer.
+  - Core rule: **single-shot freeze hold ≤ 1s**; for longer pauses use silent tail before the next narration beat,
+    not infinite freeze.
 - **Do NOT set `narration_text` on `role: "drama"` shots.** The schema rejects it.
-- **`narration_text` value** is the screenwriter's 旁白原文 verbatim.
+- **`narration_text` value** is the screenwriter's narration text verbatim.
   Don't paraphrase — the screenwriter owns the wording.
 
 ## Shot kind selection (provider-agnostic)
@@ -205,7 +205,7 @@ model ceiling.
 
 **Why not always 15s?** A 15s shot that only has 5s of meaningful
 action fills the remaining 10s with idle / frozen poses — stitched
-back-to-back, that produces a hard freeze-then-jump (硬切). **Trim the
+back-to-back, that produces a hard freeze-then-jump (hard cut). **Trim the
 fat at the storyboard level, not in post.**
 
 **Mix target**: ~70% `r2v`, ~25% `t2v`, ~5% `i2v` (i2v should be rare).
@@ -233,14 +233,14 @@ drifts visually.
 
 ## Character consistency — cast portrait does the work, prompt stays out
 
-AI video models have no cross-shot memory: re-mention 着装 in every
+AI video models have no cross-shot memory: re-mention wardrobe in every
 prompt and you get a *different* dress shape every clip. The fix is
 **delegation**:
 
 | Aspect | Where it lives | Where it does NOT live |
 |--------|---------------|------------------------|
-| Face / 发型 / 服饰 / 体态 | The cast `reference_image` (r2v shots only) | The shot prompt |
-| Age (年龄) | The shot prompt — verbatim ("28 岁青年", "中年妇女", "白发老者") | (also OK in soul card, but required in every prompt that introduces the character) |
+| Face / hairstyle / costume / build | The cast `reference_image` (r2v shots only) | The shot prompt |
+| Age | The shot prompt — verbatim ("28 岁青年", "中年妇女", "白发老者") | (also OK in soul card, but required in every prompt that introduces the character) |
 | Gender, body type | Implicitly via portrait | Don't re-state in prompt unless the camera frames it |
 | Mood / facial expression | The shot prompt (this is shot-specific) | — |
 
@@ -254,10 +254,10 @@ prompt and you get a *different* dress shape every clip. The fix is
    - ✅ "中景 [Image 1] 28岁的陆辰站在写字楼前, 阳光斜射"
 
 2. **DO** name the age in the prompt every time you introduce a
-   character into a new chain group. Format: `<年龄>岁的<角色名>` or
-   `<中/青/老>年<角色名>`. Repeat per chain group, not per shot inside one.
+   character into a new chain group. Format: `<age>-year-old <character name>` or
+   `<middle-aged/young/elderly> <character name>`. Repeat per chain group, not per shot inside one.
 
-3. **DO** keep dialog lines verbatim (per 山音 红线).
+3. **DO** keep dialog lines verbatim (per Shanyin red lines).
 
 4. If `cast.json` was forked into the episode tier (costume change),
    trust it: the episode-tier portrait already shows the new outfit,
@@ -270,7 +270,42 @@ their project-tier portrait, do NOT solve it in the prompt. Use
 `spark-video-cast` skill's fork procedure to override the portrait for
 this episode only. Episode tier overrides project tier automatically.
 
-## Movie sets (布景)
+## Dialog & voiceover in drama-mode prompts
+
+In drama mode the video model is the **sole source of audio** — there
+is no post-production TTS pass (that's narration mode only). If a shot
+has dialog, voiceover, news broadcast, system prompt, or any spoken
+audio, you **must write the spoken text into the shot prompt** so the
+model generates the speech as part of the video.
+
+### How to include dialog
+
+Take the **Dialog** section from `scene-NN.md` and weave each line
+into the shot prompt. Describe who speaks, the delivery style, then
+quote the line.
+
+| Scene-NN.md Dialog | Shot prompt |
+|---|---|
+| `- 新闻播报（画外音）: "全球生产与运输系统，已全面实现自动化。"` | `…冷静的女性新闻播报声音说："全球生产与运输系统，已全面实现自动化。"…` |
+| `- 系统提示（轻声）: "今日无需安排。"` | `…一个轻柔的电子系统提示音响起，说："今日无需安排。"…` |
+| `- 主角（轻声）: "……还不知道。"` | `…主角犹豫片刻，轻声回答："……还不知道。"…` |
+
+### Rules
+
+1. **Every dialog / voiceover line from the screenplay must appear in
+   exactly one shot prompt.** If a scene has 3 dialog lines and 2 shots,
+   decide which shot carries which line — don't drop any.
+2. **Quote verbatim.** Don't paraphrase the screenwriter's dialog.
+3. **Describe delivery** (tone, volume, emotion) to guide the model's
+   audio generation: "冷静地说", "轻声回答", "愤怒地喊道".
+4. **Off-screen audio** (news broadcasts, PA announcements, phone calls)
+   is still part of the prompt — describe the sound source and quote the
+   line, e.g. "背景中电视新闻播报声说：…".
+5. **Don't rely on `narration_text`** for drama-mode dialog.
+   `narration_text` is a narration-mode-only field for external
+   third-person TTS voiceover; it is rejected on `role: "drama"` shots.
+
+## Movie sets (set dressing)
 
 The "two consecutive shots set in the *same* room render as two
 *different* rooms" problem is solved with the same pattern as cast:
@@ -285,15 +320,15 @@ reference image. Episode tier overrides project tier.
 ### ⚠ ONE FOLDER = ONE LIGHTING STATE (hard rule)
 
 The video model reads the set's reference image **literally**. Feed a
-noon-lit 客栈 photo into a midnight shot and you get a midnight clip
+noon-lit inn-lobby photo into a midnight shot and you get a midnight clip
 with characters wearing a noon-lit room. **Mandatory split**:
 
 | Same place, different… | Action |
 |---|---|
-| Time-of-day (白天 / 黄昏 / 夜晚 / 凌晨) | **Two separate folders** (`客栈大堂-白天`, `客栈大堂-夜晚`) |
-| Season (春 / 夏 / 秋 / 冬) | Separate folders if visible (柳树 / 飘雪 / 红叶) |
-| Color grade (回忆冷灰 / 现实暖黄) | Separate folders |
-| Weather (晴 / 雨 / 雪 / 雾) | Separate folder when weather is in frame |
+| Time-of-day (day / dusk / night / pre-dawn) | **Two separate folders** (`客栈大堂-白天`, `客栈大堂-夜晚`) |
+| Season (spring / summer / autumn / winter) | Separate folders if visible (willows / snow / red leaves) |
+| Color grade (memory cold gray / present warm yellow) | Separate folders |
+| Weather (clear / rain / snow / fog) | Separate folder when weather is in frame |
 | Decor unchanged but action moves around the room | **Same folder** |
 
 **Naming**: `<location>-<discriminator>` —
@@ -305,8 +340,9 @@ with characters wearing a noon-lit room. **Mandatory split**:
 2. **Set `Scene.set_id`** to the most common lighting state for that scene.
 3. **Per-shot override via `Shot.set_id`** when one shot in the scene
    genuinely lives in a different lighting state. Common in narration
-   mode — a "陆辰的辛苦日常" scene might span 写字楼-白天 + 工地-夜晚
-   + 出租屋-暖灯. Each beat sets `Shot.set_id` explicitly; `Scene.set_id`
+   mode — a "Lu Chen's grueling daily routine" scene might span
+   `office-tower-daytime` + `construction-site-night` + `rental-room-warm-lamp`.
+   Each beat sets `Shot.set_id` explicitly; `Scene.set_id`
    stays `null`.
 
    Precedence: `null` = inherit from scene, `""` = explicit opt-out,
@@ -339,10 +375,10 @@ with characters wearing a noon-lit room. **Mandatory split**:
 See `references/spark-video-cast/SKILL.md` for the full set scaffolding
 procedure (cast / set / prop are unified there).
 
-## Key props (关键道具)
+## Key props
 
 Cast pins faces, movie-set pins rooms, **prop pins the *thing*** that
-moves between shots. Without it, the same 红包 / 钥匙 / 戒指 / 玩具熊
+moves between shots. Without it, the same red envelope / key / ring / teddy bear
 will render as visually different objects every time. Same pattern:
 folder per prop, reference image, `Shot.props` to attach.
 
@@ -364,7 +400,7 @@ Same physical prop, different visible state = **different folder**:
 
 | Same prop, different… | Action |
 |---|---|
-| Story state (完整 → 起皱 → 撕碎 / 关闭 → 打开 / 全新 → 旧) | Separate folders |
+| Story state (intact → creased → torn / closed → open / new → worn) | Separate folders |
 | Damage / blood / dirt visible | Separate folders |
 | Camera angle of the *same* state | Same folder, multiple images |
 
@@ -405,10 +441,10 @@ Naming: `<prop_name>-<state>` — `红包-完整`, `红包-起皱`, `红包-撕�
    do NOT mention "[Image N] 红包" in the prompt — it's automatic.
 
 5. **DON'T re-describe the prop's appearance in the prompt.** Same rule
-   as cast: 材质 / 颜色 / 形状 / 磨损 belongs to the reference image.
+   as cast: material / color / shape / wear belongs to the reference image.
    The prompt describes the *action* the character does WITH the prop
-   ("塞钱进去 / 揉皱 / 撕碎 / 抛向桌面"), 景别, and at most a single
-   state word ("起皱的红包" — never "印有囍字的大红色烫金红包").
+   ("stuff money in / crumple / tear / toss onto table"), framing, and at most a single
+   state word ("creased red envelope" — never "large red hot-stamped envelope printed with 囍").
 
 6. **Provider image cap**: r2v media[] has a hard ceiling
    (bl/happyhorse ~9, wan27 higher). Priority order: cast → set → props.
@@ -428,7 +464,7 @@ cast/set/prop scaffolding procedure.
 
 ## NPC generation (before writing the storyboard)
 
-If the screenplay's `<!-- CAST CHECK -->` block lists 有名 NPC who are
+If the screenplay's `<!-- CAST CHECK -->` block lists named NPCs who are
 not yet in `cast.json`, generate them BEFORE storyboarding via the
 `spark-video-cast` skill's NPC procedure.
 
@@ -467,7 +503,7 @@ The clip-review skill handles the first 2 retry rounds with auto
 prompt-rewrite. You only get called for escalation, when nuanced
 judgment is needed.
 
-## DON'Ts (spark-video-specific, on top of 山音 红线)
+## DON'Ts (spark-video-specific, on top of Shanyin red lines)
 
 - Don't write the screenplay. The screenwriter does that.
 - Don't invent character names not in `cast.json`.
@@ -481,9 +517,9 @@ judgment is needed.
 - Don't assume a feature is available across all providers. Cross-check
   the capability table before relying on `negative_prompt`, voice, or
   first-frame r2v continuation.
-- Don't write 着装 / 发型 / 妆容 / 配饰 in shot prompts. Cast portrait
+- Don't write wardrobe / hairstyle / makeup / accessories in shot prompts. Cast portrait
   owns appearance. Solve costume changes by forking the cast — never by
-  writing "穿着 XXX" into the prompt.
+  writing "wearing XXX" into the prompt.
 - Don't omit age. Every chain group's first character mention must
   include the age. Without it, the model drifts apparent age across shots.
 - Don't manually paste set / location descriptions into r2v shot
@@ -493,10 +529,10 @@ judgment is needed.
   color-grade states.** Scaffold separate folders.
 - Don't mix `set_id` values inside one chain group. If a chain crosses
   a lighting boundary, split it (`use_prev_last_frame_as_first: false`).
-- Don't describe a key prop's appearance (材质 / 颜色 / 形状 / 磨损)
+- Don't describe a key prop's appearance (material / color / shape / wear)
   in the prompt when you've listed it in `Shot.props`.
-- Don't reuse one prop folder across narrative states. 完整 / 起皱 /
-  撕碎 are three folders.
+- Don't reuse one prop folder across narrative states. `intact` / `creased` /
+  `torn` (e.g. `红包-完整`, `红包-起皱`, `红包-撕碎`) are three separate folders.
 - Don't bolt `Shot.props` onto `t2v` / `i2v` shots — they have no
   `media[]` slot.
 - Don't blow past the provider's image cap. Trim `Shot.characters` to

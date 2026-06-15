@@ -3,7 +3,7 @@ name: spark-video-clip-review
 description: Per-clip quality reviewer + render retry state machine. After each rendered shot, score it on 6 axes via `bl omni` (qwen3.5-omni-plus), then decide ACCEPT / REJECT-and-rewrite / REJECT-and-escalate. Handles up to N retry rounds with auto prompt rewriting; escalates to spark-video-director when retries are exhausted.
 ---
 
-# 视频审片 + 重渲 Skill — spark-video 片场质检员
+# Clip Review + Re-Render Skill — spark-video On-Set QA
 
 You are the **per-clip quality gate** of the pipeline. You run **after**
 each shot is rendered. You catch problems that only surface in the
@@ -18,6 +18,25 @@ export SPARK_VIDEO_SHOT=<S01-001>      # the shot you're reviewing
 export SPARK_VIDEO_PHASE=review
 ```
 
+## Scoring is automatic — you drive the *judgment*, not the mechanics
+
+**`render_shot.py` now scores every clip itself.** As of the Zone-3
+hardening, a successful render is immediately reviewed in the same tool
+call by `lib/review.py`: it builds the `bl omni` call, attaches the
+cast portraits for `shot.characters`, parses the 6-axis JSON, averages
+it, writes `reviews/<shot>-ver<N>.json`, embeds the review into
+`shots_state.json`, and — on ACCEPT (avg ≥ threshold) — promotes the
+version to winner (`clips/<shot>.mp4`). You do **not** hand-build the
+`bl omni` call anymore, and you do **not** copy the winner clip. That
+deterministic spine cannot be skipped.
+
+What is left to *you* is exactly the judgment a script can't do:
+- read the REJECT `critique` and rewrite the prompt to fix the specific
+  failure mode (face drift / dialog mismatch / physics …);
+- decide, when retries are exhausted, between best-of-N and re-cutting
+  the shot group;
+- write the escalation report for the director.
+
 ## The state machine (single source of truth)
 
 For each shot the renderer hands you, run this loop:
@@ -25,21 +44,25 @@ For each shot the renderer hands you, run this loop:
 ```
 ver = 1
 while ver <= max_retry:                # default max_retry = 3, env: SPARK_VIDEO_MAX_RETRY
-    render shot ver if not already rendered          # render_shot.py
-    review (bl omni → score JSON)
+    out = render_shot.py --shot <id> ...          # renders AND scores AND
+                                                  # auto-promotes winner on ACCEPT
+    verdict = out.review.verdict                  # ACCEPT | REJECT | ERROR
     if verdict == ACCEPT:
-        mark winner_version = ver in shots_state.json
-        copy clips/<id>-ver{ver}.mp4 → clips/<id>.mp4
-        DONE
-    elif ver < max_retry:
-        auto-rewrite prompt (bl text chat)
-        update scenes/scene-NN.json with new prompt (the new ver becomes ver+1)
-        ver += 1
-        SPARK_VIDEO_PHASE=rewrite             # log context
-    else:
-        winner = best-of-N (highest score across all attempts)
-        mark needs_director_rewrite = true
-        write projects/<p>/<ep>/reviews/escalation-<id>.md
+        # render_shot already set winner_version + copied clips/<id>.mp4. DONE.
+        break
+    elif verdict == ERROR:
+        # the judge was unreachable / returned junk — NOT a content reject.
+        # inspect logs/model_calls.jsonl; re-run render_shot (--force) or, if
+        # the clip looks fine to you, accept it manually with --accept-version.
+        handle and break or retry
+    elif ver < max_retry:                          # REJECT — YOUR judgment here
+        rewrite prompt from out.review.critique (bl text chat)   # SPARK_VIDEO_PHASE=rewrite
+        update scenes/scene-NN.json with the new prompt
+        ver += 1                                   # next render_shot --force renders ver+1
+    else:                                          # REJECT, retries exhausted
+        best = highest-scoring attempt in shots_state.json
+        render_shot.py --shot <id> --accept-version <best>       # promote best-of-N
+        write reviews/escalation-<shot>.md + needs_director_rewrite.json
         exit with escalation signal
 ```
 
@@ -48,7 +71,7 @@ The producer reads the escalation file and invokes the
 
 ## How to render + review one attempt
 
-### 1. Render
+### 1. Render (scoring happens automatically)
 ```bash
 export SPARK_VIDEO_SHOT=S01-002
 export SPARK_VIDEO_PHASE=render
@@ -59,42 +82,33 @@ uv run scripts/render_shot.py \
   --media projects/$SPARK_VIDEO_PROJECT/cast/陆辰/portrait1.png \
           projects/$SPARK_VIDEO_PROJECT/movie-set/客栈大堂-夜晚/set1.png
 
-# stdout (JSON):
-# {"shot_id":"S01-002","version":1,"video_path":"...","duration_s":12.0,"provider":"bl","model":"happyhorse-1.0-r2v","elapsed_s":47.2}
+# stdout (JSON) now includes the review verdict:
+# {"shot_id":"S01-002","version":1,"video_path":"...","duration_s":12.0,
+#  "provider":"bl","model":"happyhorse-1.0-r2v","elapsed_s":47.2,
+#  "review":{"score":6.2,"verdict":"REJECT","breakdown":{...},"critique":"..."},
+#  "winner_version":null,
+#  "next":"rewrite prompt and re-render (--force), or accept best-of-N ..."}
 ```
 
-The script writes `clips/S01-002-ver1.mp4`, extracts the last frame to
-`frames/S01-002-ver1_last.png`, and updates `shots_state.json` (you
-don't write to it directly).
+In one call the script: writes `clips/S01-002-ver1.mp4`, extracts the
+last frame, scores the clip on the 6 axes (auto-resolving cast portraits
+from `cast.json`), writes `reviews/S01-002-ver1.json`, embeds the review
+into `shots_state.json`, and — if `verdict == ACCEPT` — promotes the
+version to winner (`clips/S01-002.mp4`). **You only read the verdict from
+stdout.** You never write `shots_state.json`, build the `bl omni` call,
+or copy the winner clip.
 
-### 2. Review with `bl omni`
+Opt-outs: `--no-review` skips scoring for one render;
+`VIDEOGEN_REVIEW_MODEL=""` disables it globally (falls back to the old
+manual `--accept-version` flow). `--characters A B` overrides which cast
+portraits feed the `cast_match` axis (default: storyboard's
+`shot.characters`).
 
-```bash
-export SPARK_VIDEO_PHASE=review
+### 2. The review record (written for you)
 
-# Build the cast portrait flags
-CAST_IMAGES=""
-for char in $(jq -r ".shots[] | select(.id==\"$SPARK_VIDEO_SHOT\") | .characters[]" \
-              projects/$SPARK_VIDEO_PROJECT/episode-$SPARK_VIDEO_EPISODE/storyboard.json); do
-  portrait=$(find projects/$SPARK_VIDEO_PROJECT -path "*/cast/$char/portrait*.png" | head -1)
-  CAST_IMAGES="$CAST_IMAGES --image $portrait"
-done
-
-./scripts/bl omni \
-  --system "$(cat references/spark-video-clip-review/rubric.md)" \
-  --message "请对这段视频按 6 个维度打分 (0-10)，输出 JSON: {logic, proportion, physics, style, cast_match, dialog_attribution, critique, verdict}. 阈值 7.0。视频时长 12s。Shot 信息见 system prompt。台词:'<dialog from prompt>'。角色应为:'<characters>'。" \
-  --video projects/$SPARK_VIDEO_PROJECT/episode-$SPARK_VIDEO_EPISODE/clips/$SPARK_VIDEO_SHOT-ver1.mp4 \
-  $CAST_IMAGES \
-  --text-only \
-  --output json
-```
-
-The `bl omni` JSON output contains the model's response — parse the
-content field and extract the inner JSON.
-
-### 3. Write review record
-
-Save to `projects/<p>/<ep>/reviews/<shot>-ver<N>.json`:
+`reviews/<shot>-ver<N>.json` and `shots_state.json`'s
+`attempts[].review` carry the same object — this is what `viewer.html`
+(and a future progress console) renders:
 
 ```json
 {
@@ -102,12 +116,8 @@ Save to `projects/<p>/<ep>/reviews/<shot>-ver<N>.json`:
   "version": 1,
   "score": 6.2,
   "breakdown": {
-    "logic": 7,
-    "proportion": 6,
-    "physics": 7,
-    "style": 8,
-    "cast_match": 5,
-    "dialog_attribution": 4
+    "logic": 7, "proportion": 6, "physics": 7,
+    "style": 8, "cast_match": 5, "dialog_attribution": 4
   },
   "critique": "0:00–0:03 钱夫人脸型偏离参考图(下巴宽 + 发际线高); 0:04 那句\"你这小蹄子\"应是钱夫人说的, 但视频里嘴动的是郭芙蓉, 属于台词错位 ...",
   "verdict": "REJECT",
@@ -115,25 +125,36 @@ Save to `projects/<p>/<ep>/reviews/<shot>-ver<N>.json`:
 }
 ```
 
-`verdict = "ACCEPT"` if `score >= threshold` (default 7.0, env:
-`SPARK_VIDEO_REVIEW_THRESHOLD`), else `"REJECT"`.
+`verdict = "ACCEPT"` iff `score >= threshold` (default 7.0, env:
+`SPARK_VIDEO_REVIEW_THRESHOLD` / `VIDEOGEN_REVIEW_THRESHOLD`). The
+threshold is authoritative — the script ignores a lenient model verdict
+that disagrees with the arithmetic. A `verdict == "ERROR"` means the
+judge couldn't run (timeout / unparseable output); inspect
+`logs/model_calls.jsonl` rather than treating it as a content reject.
 
-### 4. Update shots_state.json (via render_shot.py only)
+### 3. On REJECT — rewrite the prompt (this is YOUR job)
 
 ```bash
-# If ACCEPT — promote this version to winner
-uv run scripts/render_shot.py --shot $SPARK_VIDEO_SHOT --accept-version 1
-
-# If REJECT and going to retry — auto-rewrite the prompt
 export SPARK_VIDEO_PHASE=rewrite
 ./scripts/bl text chat \
   --model qwen-plus \
   --system "$(cat references/spark-video-clip-review/rewrite-system.md)" \
-  --message "原 prompt: <prompt>\n评分: 6.2\n问题: <critique>\n请改写 prompt, 解决问题但保持故事意图不变. 输出新 prompt 文本, 不要解释."
+  --message "Original prompt: <prompt>\nScore: 6.2\nIssues: <critique>\nRewrite the prompt to fix the issues while keeping narrative intent unchanged. Output only the new prompt text, no explanation."
 
-# Take the new prompt, update scenes/scene-NN.json's shot,
-# then go back to step 1 with ver=2.
+# Update scenes/scene-NN.json's shot with the new prompt, then re-render
+# (the next attempt auto-scores again):
+uv run scripts/render_shot.py --shot $SPARK_VIDEO_SHOT --kind r2v \
+  --duration 12 --prompt "<rewritten>" --media ... --force
 ```
+
+### 4. Best-of-N when retries are exhausted
+
+```bash
+# Promote the highest-scoring attempt (no re-render, no re-score):
+uv run scripts/render_shot.py --shot $SPARK_VIDEO_SHOT --accept-version 2
+```
+
+Then write the escalation report (next section).
 
 ## Scoring rubric (6 axes)
 
@@ -148,7 +169,7 @@ into the headline `score`. Cast portraits for every character in
 | **physics** | Gravity, collisions, momentum, cloth, hair, fluid behaviour. |
 | **style** | Matches `lore.mood_anchor` / `visual_style` / `palette`. No `forbidden` term/asset visible. |
 | **cast_match** | Each visible character's face / hair / costume / build matches the **same-named cast portrait** passed alongside the video. Drift / wrong identity → low score. Named characters not in cast → low score. |
-| **dialog_attribution** | The character actually mouthing / voicing each line is the one the prompt assigned that line to. **A 的台词被 B 念 / B 的嘴动了说出 A 的台词** is a hard 0-3. Shots with no dialog → 10. |
+| **dialog_attribution** | The character actually mouthing / voicing each line is the one the prompt assigned that line to. **A's line delivered by B / B's mouth moves for A's line** is a hard 0-3. Shots with no dialog → 10. |
 
 **Default threshold**: `7.0` (env: `SPARK_VIDEO_REVIEW_THRESHOLD`).
 
@@ -163,26 +184,26 @@ director under
 `projects/<p>/<ep>/reviews/escalation-<shot>.md`:
 
 ```markdown
-# 升级到导演 · S01-002
+# Escalation to Director · S01-002
 
-## 三轮评分
+## Three scoring rounds
 | ver | score | logic | prop | phys | style | cast | dialog |
 |-----|-------|-------|------|------|-------|------|--------|
 | 1   | 6.2   | 7     | 6    | 7    | 8     | 5    | 4      |
 | 2   | 6.5   | 7.5   | 6    | 7    | 8     | 6    | 4      |
 | 3   | 6.6   | 7     | 6    | 7    | 8     | 6    | 6      |
 
-## 共性问题
-- (列出三轮里都出现的问题, 一句话定位时间 + 画面位置)
+## Recurring issues
+- (List problems that appeared in all three rounds — one sentence with timecode + frame position)
 - ...
 
-## 已尝试的修复方向
-- ver2 → ver3 prompt 主要变化: ...
-  结果: ...
+## Fix attempts already tried
+- ver2 → ver3 main prompt changes: ...
+  Result: ...
 
-## 建议导演改动
-- (具体到 storyboard.json 的字段 — prompt / kind / duration / characters / seed / scene.description / set_id / props)
-- 优先级排序
+## Suggested director changes
+- (Specific to storyboard.json fields — prompt / kind / duration / characters / seed / scene.description / set_id / props)
+- Priority order
 ```
 
 Also write `projects/<p>/<ep>/needs_director_rewrite.json`:
@@ -261,12 +282,32 @@ default cap is `SPARK_VIDEO_MAX_CONCURRENCY=4`.
 Within a chain group, the loop is sequential because shot N+1's
 `use_prev_last_frame_as_first=true` depends on shot N's last frame.
 
+For full-episode batch rendering, use `render_all.py` instead of
+manually fanning out per chain group:
+
+```bash
+uv run scripts/render_all.py --reset
+# Or after prompt rewrites:
+uv run scripts/render_all.py --rejected-only
+```
+
+It handles chain-group parallelism, media resolution, and first-frame
+chaining internally. You only intervene for prompt rewrites on REJECT.
+
 ## DON'Ts
 
 - ❌ Don't modify `storyboard.json` or `scenes/scene-NN.json` yourself
   (except via the auto-rewrite step, which targets one shot's `prompt`
   field). Structural changes are the director's job.
 - ❌ Don't override `winner_path` manually — `render_shot.py` maintains it.
+- ❌ Don't re-implement scoring by hand. `render_shot.py` already scores
+  every render via `lib/review.py` (cast portraits, 6-axis parse,
+  averaging, sidecar, promotion). Read the verdict from its stdout. The
+  only reason to call the judge yourself is debugging.
+- ❌ Don't `--no-review` or set `VIDEOGEN_REVIEW_MODEL=""` to "speed
+  things up". That silently drops the quality gate — the exact failure
+  this hardening exists to prevent. Disable review only on explicit user
+  request, and tell them.
 - ❌ Don't call `bl` directly — always use `./scripts/bl` so the call
   lands in `logs/model_calls.jsonl` (every prompt is part of the PE
   audit trail).
@@ -274,8 +315,6 @@ Within a chain group, the loop is sequential because shot N+1's
 - ❌ Don't widen the threshold to mask problems. If the threshold is
   wrong for the project, change `SPARK_VIDEO_REVIEW_THRESHOLD` and tell
   the user.
-- ❌ Don't review a clip without attaching the cast portraits. Without
-  them the `cast_match` axis is meaningless and `dialog_attribution`
-  can't tell who's speaking.
-- ❌ Don't trust the model to count correctly — if it returns 7
-  sub-scores or omits one, retry the omni call before recording.
+- ❌ Don't treat a `verdict == "ERROR"` as a content REJECT. It means the
+  judge couldn't run — diagnose via `logs/model_calls.jsonl`, don't
+  burn a rewrite round on it.

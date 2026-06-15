@@ -1,4 +1,4 @@
-"""Cast (角色) management — folder-per-character.
+"""Cast management — folder-per-character.
 
 Filesystem convention (one folder per character):
 

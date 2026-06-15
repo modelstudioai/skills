@@ -1,4 +1,4 @@
-"""Movie-set (布景) management — folder-per-set.
+"""Movie-set management — folder-per-set.
 
 Why this exists: AI video models have no cross-shot memory, so two
 shots set in the "same" location (e.g. 同福客栈大堂) often render as
@@ -101,19 +101,19 @@ class SetFront(BaseModel):
     # different values of any of these. See SET_TEMPLATE.
     time_of_day: str | None = Field(
         default=None,
-        description="白天 | 黄昏 | 夜晚 | 凌晨 | 全天 (one folder = one value)",
+        description="day | dusk | night | dawn | all-day (one folder = one value)",
     )
     season: str | None = Field(
         default=None,
-        description="春 | 夏 | 秋 | 冬 | 不分季节 (one folder = one value)",
+        description="spring | summer | autumn | winter | any (one folder = one value)",
     )
     color_grade: str | None = Field(
         default=None,
-        description="暖色 | 冷色 | 中性 | 高对比 | 低饱和 (one folder = one value)",
+        description="warm | cool | neutral | high-contrast | desaturated (one folder = one value)",
     )
     lighting: str | None = Field(
         default=None,
-        description="自然光 | 钨丝灯暖黄 | LED 冷白 | 霓虹 | 烛光 | 月光",
+        description="natural | tungsten-warm | LED-cool | neon | candlelight | moonlight",
     )
     weather: str | None = None
     description: str | None = Field(
@@ -437,16 +437,16 @@ SET_TEMPLATE = """\
 #
 # ⚠ HARD RULE: ONE FOLDER = ONE LIGHTING STATE.
 # AI video models read the reference image *literally* — feed a noon-lit
-# 客栈 photo into a 夜晚 shot and you'll get a noon-lit dream sequence
+# 客栈 photo into a night shot and you'll get a noon-lit dream sequence
 # with characters acting "tired". The fix is mandatory:
 #
 #   • Same physical place, different time-of-day  → TWO folders
 #       projects/<id>/movie-set/同福客栈大堂-白天/
 #       projects/<id>/movie-set/同福客栈大堂-夜晚/
 #   • Same place, different season / weather       → separate folders
-#       (柳树满枝-春, 飘雪-冬, 暴雨-夏)
+#       (willow-branches-spring, snow-winter, storm-summer)
 #   • Same place, different color grade            → separate folders
-#       (回忆冷灰, 现实暖黄)
+#       (flashback-cool-gray, present-warm-yellow)
 #
 # Use `time_of_day` + `season` + `color_grade` below as the suffix
 # convention so folder names stay self-explanatory.
@@ -465,25 +465,25 @@ name: {name}
 # A lock on each axis means "this set ONLY renders in this state".
 # If the story needs a different state, scaffold a separate folder.
 
-# 时段: 白天 | 黄昏 | 夜晚 | 凌晨 | 全天(慎用 — 仅当镜头都在均匀室内灯下)
+# time_of_day: day | dusk | night | dawn | all-day (use sparingly — only when all shots share even indoor lighting)
 time_of_day:
 
-# 季节: 春 | 夏 | 秋 | 冬 | 不分季节
+# season: spring | summer | autumn | winter | any
 season:
 
-# 色调: 暖色 | 冷色 | 中性 | 高对比 | 低饱和 | (or any concise tag)
+# color_grade: warm | cool | neutral | high-contrast | desaturated | (or any concise tag)
 color_grade:
 
-# 灯光: 自然光 | 钨丝灯暖黄 | LED 冷白 | 霓虹 | 烛光 | 月光
+# lighting: natural | tungsten-warm | LED-cool | neon | candlelight | moonlight
 lighting:
 
-# 天气: 晴 | 阴 | 雨 | 雪 | 雾 (省略 = 不限制 / 室内不适用)
+# weather: clear | overcast | rain | snow | fog (omit = unrestricted / N/A indoors)
 weather:
 
 # Single-line description woven into scene prompts whenever the
 # director writes a t2v shot in this location (t2v can't take a
 # reference image, so the textual fallback matters there). Keep it
-# concrete: 材质 / 灯光 / 关键道具 / 空间轮廓.
+# concrete: materials / lighting / key props / spatial outline.
 # Example: "明清木质客栈大堂, 二层木楼梯, 红灯笼, 八仙桌三张, 暖色调灯光, 白昼"
 description:
 
@@ -491,8 +491,8 @@ description:
 palette: []
 
 # Optional: things that must NEVER appear in this set, especially
-# OTHER lighting states ("夜景" for a 白天 set, "室外阳光" for an
-# interior at night, "雪" for a 夏 set).
+# OTHER lighting states ("night scene" for a day set, "outdoor sun" for
+# a night interior, "snow" for a summer set).
 forbidden: []
 
 # Optional free-form notes (camera angles to prefer, props that move
@@ -500,17 +500,18 @@ forbidden: []
 notes:
 ---
 
-# 详细描述
+# Detailed description
 
-(自由文本: 平面布局、可走机位、灯光预设、固定道具、可移动道具、镜头偏好。
- director 会读这段。务必确认与 frontmatter 的 time_of_day/season/color_grade
- 在文字上一致 —— "黄昏" 写在 frontmatter 但本体里描述 "正午阳光" 会让
- reviewer 也跟着混乱。)
+(Free text: floor plan, camera paths, lighting presets, fixed props,
+ movable props, shot preferences. The director reads this. Ensure the
+ body text matches frontmatter time_of_day/season/color_grade — writing
+ "midday sun" in the body while frontmatter says "dusk" confuses the
+ reviewer too.)
 
-## 视觉锚点
+## Visual anchors
 
-- 材质 / 颜色:
-- 关键道具:
-- 灯光基调 (与 frontmatter 的 lighting 字段呼应):
-- 不要拍到的东西 (尤其其他时段 / 季节 / 色调):
+- Materials / colors:
+- Key props:
+- Lighting baseline (echo the frontmatter `lighting` field):
+- Do not show (especially other time-of-day / season / color grade):
 """

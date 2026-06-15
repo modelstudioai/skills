@@ -128,7 +128,7 @@ def forbid_directive() -> str:
     model-generated BGM. Kept here so every provider injects the same
     string and the video reviewer can detect drift.
     """
-    return "（不要生成任何背景音乐 / 配乐 / 旋律, 只保留人声台词与环境音）"
+    return "(Do not generate any background music / score / melody; keep only dialog and ambient sound.)"
 
 
 def forbid_negative_terms() -> str:
@@ -136,4 +136,4 @@ def forbid_negative_terms() -> str:
     prompts (currently Wan). Same purpose as ``forbid_directive`` but in
     the negative-prompt vocabulary the model expects there.
     """
-    return "背景音乐, 配乐, 旋律, BGM, 音乐, soundtrack, music"
+    return "background music, score, melody, BGM, music, soundtrack"

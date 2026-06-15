@@ -75,13 +75,13 @@ def cmd_episode(args: argparse.Namespace) -> int:
 LORE_TEMPLATE = """\
 ---
 title: "{title}"
-mood_anchor: "TBD — 一句话视觉风格锚, append到每个 shot prompt 末尾"
-visual_style: "TBD — 整体美术风格 (写实 / 卡通 / 油画感 / 赛博朋克 / ...)"
+mood_anchor: "TBD — one-line visual style anchor, appended to every shot prompt"
+visual_style: "TBD — overall art direction (photoreal / cartoon / painterly / cyberpunk / ...)"
 genre: "TBD"
 duration_target_s: 180
 forbidden:
-  - 血腥
-  - 露骨
+  - gore
+  - explicit content
 imagery_system:
   motifs: []
   highlight_elements: []
@@ -89,21 +89,21 @@ imagery_system:
 
 # {title}
 
-## 世界观
+## Worldbuilding
 
-(把项目的世界观、时代背景、核心设定写在这里)
+(Describe the project's world, era, and core premise here.)
 
-## 主角弧线
+## Protagonist arc
 
-(角色们的核心驱动力 / 长线弧线)
+(Each character's core drive and long-term arc.)
 
-## 视觉锚
+## Visual anchor
 
-`mood_anchor` 是这个项目最重要的视觉一致性杠杆 —— 它会被附加到**每一个**
-shot prompt 的末尾。写它的时候像在写一句产品 tagline:
-- 太宽泛不行: "电影感"
-- 太具体不行: "焦距 50mm, F1.8, 色温 5600K, 拜耳滤镜"
-- 刚好: "暖黄路灯 + 浅景深 + 雨后湿地反光, 90 年代港片质感"
+`mood_anchor` is this project's most important visual-consistency lever — it is
+appended to **every** shot prompt. Write it like a product tagline:
+- Too broad: "cinematic"
+- Too specific: "50mm lens, F1.8, 5600K white balance, Bayer filter"
+- Just right: "warm streetlamps + shallow depth of field + wet pavement reflections, 90s Hong Kong film texture"
 """
 
 
@@ -148,35 +148,35 @@ def cmd_mood_anchor(args: argparse.Namespace) -> int:
 # --------------------------------------------------------------------- scene
 
 DRAMA_TEMPLATE = """\
-## 场景 {n} — <location>（<time of day>）
+## Scene {n} — <location> (<time of day>)
 
-**人物**: <characters from cast.json>
-**节奏**: <外部节奏>（外部）+ <内部节奏>（内部）
-**预估时长**: 30s
-**前史**: <one sentence — what characters carry into this scene>
+**Characters**: <characters from cast.json>
+**Pacing**: <external pace> (external) + <internal pace> (internal)
+**Estimated duration**: 30s
+**Backstory**: <one sentence — what characters carry into this scene>
 
-**剧情**:
+**Plot**:
 <2-4 sentences. Camera-visible action only.>
 
-**对白**:
-- <角色A>: "<dialog>"
-- <角色B>: "<dialog>"
+**Dialogue**:
+- <CharacterA>: "<dialog>"
+- <CharacterB>: "<dialog>"
 """
 
 NARRATION_TEMPLATE = """\
-## 场景 {n} — <location>（<time of day>）
+## Scene {n} — <location> (<time of day>)
 
-**类型**: narration
-**人物**: <characters appearing in any beat>
-**预估时长**: 30s
-**前史**: <one sentence>
+**Type**: narration
+**Characters**: <characters appearing in any beat>
+**Estimated duration**: 30s
+**Backstory**: <one sentence>
 
-**节拍**:
-1. **旁白**: "<≤ 60 字第三人称叙事>"
-   **画面**: <可拍画面 + 建议时长 4s>
-2. **对白**:
-   - <角色>: "<line>"
-   **画面**: <可拍画面 + 建议时长 12s>
+**Beats**:
+1. **Narration**: "<≤60 words, third-person narration>"
+   **Visual**: <filmable action + suggested duration 4s>
+2. **Dialogue**:
+   - <Character>: "<line>"
+   **Visual**: <filmable action + suggested duration 12s>
 """
 
 
@@ -201,22 +201,22 @@ CAST_MD_TEMPLATE = """\
 name: "{name}"
 age: "TBD"
 gender: "TBD"
-visual_anchor: "TBD — 一句话外貌, 给 t2i 用"
+visual_anchor: "TBD — one-line appearance for t2i"
 voice_traits: "TBD"
 dont:
-  - "不能出现的形象/着装"
+  - "forbidden looks / wardrobe"
 ---
 
 # {name}
 
-## 性格
+## Personality
 
-(三五句话写人物性格弧线、口头禅、动机)
+(A few sentences on personality arc, catchphrases, and motivation.)
 
-## 视觉锚
+## Visual anchor
 
-`visual_anchor` 应可直接拼进 t2i prompt。
-例: "28 岁青年, 短发, 深色 T 恤, 写实风格, 半身像"。
+`visual_anchor` should paste directly into a t2i prompt.
+Example: "28-year-old man, short hair, dark T-shirt, photoreal, half-body portrait."
 """
 
 
@@ -270,18 +270,18 @@ def _cast_fork(args: argparse.Namespace) -> int:
 SET_MD_TEMPLATE = """\
 ---
 name: "{name}"
-time_of_day: "TBD — 白天 | 黄昏 | 夜晚 | 凌晨"
+time_of_day: "TBD — day | dusk | night | dawn"
 season: "TBD"
-color_grade: "TBD — 冷 / 暖 / 中性 / 高对比霓虹 / ..."
+color_grade: "TBD — cool / warm / neutral / high-contrast neon / ..."
 lighting: "TBD"
 weather: "TBD"
 ---
 
 # {name}
 
-## 布景描述
+## Set description
 
-(材质 / 布局 / 关键道具 / 视觉特征。一句话能复用进 t2i prompt 最好)
+(Materials, layout, key props, visual signature. One sentence reusable in a t2i prompt is ideal.)
 """
 
 
@@ -306,17 +306,18 @@ def cmd_set(args: argparse.Namespace) -> int:
 PROP_MD_TEMPLATE = """\
 ---
 name: "{name}"
-state: "TBD — 完整 / 起皱 / 撕碎 / 关闭 / 打开 / ..."
+state: "TBD — intact / crumpled / torn / closed / open / ..."
 ---
 
 # {name}
 
-## 道具描述
+## Prop description
 
-(材质 / 颜色 / 形状 / 关键细节)
+(Material, color, shape, key details.)
 
-⚠ 一个文件夹 = 一种叙事状态。如果同一物品有多个状态（完整→起皱→撕碎），
-   每个状态都是一个**独立的文件夹**: 红包-完整 / 红包-起皱 / 红包-撕碎。
+⚠ One folder = one narrative state. If the same item has multiple states
+   (intact → crumpled → torn), each state is a **separate folder**:
+   红包-完整 / 红包-起皱 / 红包-撕碎.
 """
 
 

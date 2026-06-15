@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -129,6 +130,26 @@ def _lint(sb: Storyboard, ep_dir: Path) -> list[str]:
         if sc.set_id and set_names and sc.set_id not in set_names:
             warns.append(f"scene {sc.id}: set_id '{sc.set_id}' not in movie_set.json")
 
+    # Dialog duration vs shot duration
+    _CHARS_PER_SEC = 4.0
+    _BUFFER_S = 2  # leave room for action/reaction
+    for shot in sb.shots:
+        dialog = _extract_dialog(shot.prompt)
+        if dialog:
+            est_s = len(dialog) / _CHARS_PER_SEC
+            avail_s = shot.duration - _BUFFER_S
+            if est_s > shot.duration:
+                warns.append(
+                    f"{shot.id}: dialog too long for duration — "
+                    f"~{len(dialog)} chars ≈ {est_s:.0f}s speech, "
+                    f"but shot is only {shot.duration}s "
+                    f"(will be truncated; split the dialog or increase duration)")
+            elif est_s > avail_s:
+                warns.append(
+                    f"{shot.id}: dialog tight — "
+                    f"~{len(dialog)} chars ≈ {est_s:.0f}s speech in a {shot.duration}s shot "
+                    f"(leaves <{_BUFFER_S}s for action; consider splitting)")
+
     # Chain-group lighting consistency
     groups = compute_chain_groups(sb)
     shot_by_id = {s.id: s for s in sb.shots}
@@ -148,9 +169,170 @@ def _lint(sb: Storyboard, ep_dir: Path) -> list[str]:
                 sets_seen.add(effective_set)
         if len(sets_seen) > 1:
             warns.append(f"chain group {group[0]}..{group[-1]} mixes set_ids "
-                         f"{sorted(sets_seen)} (灯光统一铁律: split the chain)")
+                         f"{sorted(sets_seen)} (lighting consistency rule: split the chain)")
+
+    # Time-of-day / setting continuity within each scene
+    for sc in sb.scenes:
+        scene_shots = [s for s in sb.shots if s.scene == sc.id]
+        if not scene_shots:
+            continue
+
+        # Detect set_id time-of-day
+        effective_set = sc.set_id or ""
+        set_tod = _detect_time_of_day_from_set(effective_set)
+
+        shot_tods = []
+        for shot in scene_shots:
+            prompt_tod = _detect_time_of_day(shot.prompt)
+            shot_set = shot.set_id or effective_set or ""
+            shot_set_tod = _detect_time_of_day_from_set(shot_set)
+
+            # Prompt vs its own set_id
+            if prompt_tod and shot_set_tod and prompt_tod != shot_set_tod:
+                warns.append(
+                    f"{shot.id}: time-of-day conflict — prompt says "
+                    f"'{prompt_tod}' but set_id '{shot_set}' implies "
+                    f"'{shot_set_tod}'")
+
+            # Prompt vs scene set_id
+            if prompt_tod and set_tod and prompt_tod != set_tod and not shot.set_id:
+                warns.append(
+                    f"{shot.id}: time-of-day conflict — prompt says "
+                    f"'{prompt_tod}' but scene set '{effective_set}' implies "
+                    f"'{set_tod}'")
+
+            if prompt_tod:
+                shot_tods.append((shot.id, prompt_tod))
+
+        # Cross-shot consistency within the scene
+        if len(shot_tods) >= 2:
+            tods_set = set(t for _, t in shot_tods)
+            if len(tods_set) > 1:
+                examples = ", ".join(f"{sid}={t}" for sid, t in shot_tods[:4])
+                warns.append(
+                    f"scene {sc.id}: mixed time-of-day across shots "
+                    f"({examples}) — verify this is intentional")
 
     return warns
+
+
+def _llm_continuity_check(sb: Storyboard, ep_dir: Path) -> list[str]:
+    """Use LLM to check narrative continuity across shots within each scene.
+
+    Best-effort: returns [] on any failure (API down, timeout, parse error).
+    Never blocks compile.
+    """
+    bl = _HERE / "bl"
+    if not bl.exists():
+        return []
+
+    # Read lore for context
+    proj_dir = ep_dir.parent
+    lore_path = proj_dir / "lore.md"
+    lore_text = lore_path.read_text(encoding="utf-8")[:500] if lore_path.exists() else ""
+
+    # Build per-scene summaries
+    scene_blocks = []
+    shot_by_scene: dict[str, list] = {}
+    for s in sb.shots:
+        shot_by_scene.setdefault(s.scene, []).append(s)
+
+    for sc in sb.scenes:
+        shots = shot_by_scene.get(sc.id, [])
+        if not shots:
+            continue
+        lines = [f"## Scene {sc.id}: {sc.name} (set: {sc.set_id or 'none'})"]
+        for s in shots:
+            lines.append(
+                f"  {s.id} [{s.kind}, {s.duration}s, chars={s.characters}]: "
+                f"{s.prompt[:120]}{'...' if len(s.prompt) > 120 else ''}"
+            )
+        scene_blocks.append("\n".join(lines))
+
+    prompt = (
+        "你是一个影视剧本连贯性审查员。下面是一部短剧的分镜列表，按场景分组。\n"
+        "请检查以下问题，只输出有问题的条目，每条一行，格式: `[SHOT_ID] 问题描述`。\n"
+        "如果没有问题，输出一个空行。\n\n"
+        "检查项：\n"
+        "1. 同一场景内时间矛盾（如一个镜头白天，下一个镜头深夜）\n"
+        "2. 同一场景内地点矛盾（如一个镜头在办公室，下一个突然在户外但没有转场说明）\n"
+        "3. 角色行为逻辑矛盾（如角色已离开但下一个镜头又出现）\n"
+        "4. 动作连贯性问题（如前一个镜头角色站着，下一个镜头突然坐着，且是链式续接）\n"
+        "5. 台词内容与场景设定冲突\n\n"
+    )
+    if lore_text:
+        prompt += f"世界设定摘要:\n{lore_text}\n\n"
+    prompt += "分镜列表:\n" + "\n\n".join(scene_blocks)
+
+    try:
+        proc = subprocess.run(
+            [str(bl), "text", "chat", "--model", "qwen-plus",
+             "--message", prompt],
+            capture_output=True, text=True, timeout=30,
+        )
+        if proc.returncode != 0:
+            return []
+        # Parse output — extract lines starting with [S
+        output = proc.stdout
+        # Try to extract from JSON envelope
+        try:
+            envelope = json.loads(output)
+            choices = envelope.get("choices") or []
+            if choices:
+                content = choices[0].get("message", {}).get("content", "")
+            else:
+                content = output
+        except (json.JSONDecodeError, ValueError):
+            content = output
+
+        warns = []
+        for line in content.strip().splitlines():
+            line = line.strip()
+            if not line or line == "无" or line == "没有问题":
+                continue
+            if line.startswith("[S") or line.startswith("- [S") or line.startswith("S0"):
+                warns.append(line.lstrip("- "))
+            elif "S0" in line and ("矛盾" in line or "冲突" in line or "不一致" in line
+                                   or "问题" in line):
+                warns.append(line.lstrip("- "))
+        return warns
+    except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
+        return []
+
+
+_DAY_KEYWORDS = ("白天", "阳光", "日光", "晴天", "日照", "午后", "上午", "下午", "daylight")
+_NIGHT_KEYWORDS = ("夜晚", "夜色", "深夜", "黑夜", "月光", "凌晨", "夜市", "霓虹")
+
+
+def _detect_time_of_day(text: str) -> str | None:
+    """Detect day/night from prompt text. Returns 'day', 'night', or None."""
+    has_day = any(k in text for k in _DAY_KEYWORDS)
+    has_night = any(k in text for k in _NIGHT_KEYWORDS)
+    if has_day and not has_night:
+        return "day"
+    if has_night and not has_day:
+        return "night"
+    return None
+
+
+def _detect_time_of_day_from_set(set_id: str) -> str | None:
+    """Detect day/night from set_id naming convention (e.g. 'office-day')."""
+    s = set_id.lower()
+    if any(k in s for k in ("day", "白天", "日", "morning", "afternoon")):
+        return "day"
+    if any(k in s for k in ("night", "夜", "evening", "凌晨")):
+        return "night"
+    return None
+
+
+def _extract_dialog(prompt: str) -> str | None:
+    """Extract dialog text from a shot prompt (after '说道：' or '说道:')."""
+    import re
+    m = re.search(r"说道[：:](.+?)(?:真人写实|$)", prompt, re.DOTALL)
+    if not m:
+        return None
+    dialog = m.group(1).strip().rstrip("。！？，、")
+    return dialog if len(dialog) > 2 else None
 
 
 def _safe_load_json(p: Path) -> dict | None:
@@ -243,6 +425,16 @@ def cmd_compile(args: argparse.Namespace) -> int:
     sb_path.write_text(json.dumps(sb.model_dump(), ensure_ascii=False, indent=2))
     print(f"wrote {sb_path} ({len(sb.scenes)} scenes, {len(sb.shots)} shots)",
           file=sys.stderr)
+
+    # LLM continuity check (best-effort — never blocks compile)
+    continuity_warns = _llm_continuity_check(sb, ep_dir)
+    if continuity_warns:
+        print(f"\n{'='*60}", file=sys.stderr)
+        print("CONTINUITY ISSUES (from LLM review):", file=sys.stderr)
+        for w in continuity_warns:
+            print(f"  ⚠ {w}", file=sys.stderr)
+        print(f"{'='*60}\n", file=sys.stderr)
+
     return 0
 
 
@@ -257,7 +449,6 @@ def cmd_estimate(args: argparse.Namespace) -> int:
     n_shots = len(sb.shots)
     groups = compute_chain_groups(sb)
     max_concurrency = int(os.environ.get("SPARK_VIDEO_MAX_CONCURRENCY", "4"))
-    # Naive wall-clock: longest group's serialized time / concurrency
     group_times = [sum(int(_lookup(sb, sid).duration) for sid in g) for g in groups]
     wall_clock_factor = 1.5  # render_time ≈ 1.5x clip duration (rough)
     est_serial = sum(group_times) * wall_clock_factor
@@ -266,9 +457,21 @@ def cmd_estimate(args: argparse.Namespace) -> int:
 
     long_confirm = int(os.environ.get("SPARK_VIDEO_LONG_CONFIRM_S", "600"))
 
-    out = {
+    provider = sb.provider or os.environ.get("VIDEOGEN_VIDEO_PROVIDER", "happyhorse")
+    resolution = sb.resolution
+
+    duration_by_kind: dict[str, dict[str, int]] = {}
+    for s in sb.shots:
+        entry = duration_by_kind.setdefault(s.kind, {"shots": 0, "seconds": 0})
+        entry["shots"] += 1
+        entry["seconds"] += int(s.duration)
+
+    out: dict = {
         "shots": n_shots,
         "total_clip_seconds": total_sec,
+        "provider": provider,
+        "resolution": resolution,
+        "duration_by_kind": duration_by_kind,
         "parallel_groups": len(groups),
         "estimated_render_seconds_serial": int(est_serial),
         "estimated_render_seconds_parallel": int(est_parallel),
@@ -276,6 +479,16 @@ def cmd_estimate(args: argparse.Namespace) -> int:
         "concurrency_cap": max_concurrency,
         "long_confirm_threshold_s": long_confirm,
     }
+
+    if sb.mode == "narration":
+        tts_model = os.environ.get("VIDEOGEN_NARRATOR_TTS_MODEL", "cosyvoice-v3-flash")
+        tts_chars = sum(
+            len(s.narration_text or "")
+            for s in sb.shots
+            if s.role == "narration"
+        )
+        out["tts"] = {"model": tts_model, "estimated_chars": tts_chars}
+
     print(json.dumps(out, ensure_ascii=False, indent=2))
 
     if total_sec > long_confirm:

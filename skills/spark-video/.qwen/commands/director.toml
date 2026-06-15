@@ -16,7 +16,7 @@ Steps:
    `./bin/videogen cast soul template --project <p> --episode <e> --name "<NPC>"`
    Then re-run `./bin/videogen cast init --project <p> --episode <e>`.
 4. Define scenes[] (location+time+situation, detailed descriptions).
-5. Compile shots[] applying 续接黄金五条, mood_anchor on every prompt,
+5. Compile shots[] applying the five golden chain rules, mood_anchor on every prompt,
    dialog embedded in r2v shot prompts, protagonist stays in frame.
 6. Write projects/<p>/<e>/storyboard.json.
 7. Validate: `./bin/videogen storyboard validate --project <p> --episode <e>`

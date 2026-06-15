@@ -37,7 +37,7 @@ projects/**/*.aac
 projects/**/*.flac
 projects/**/*.m4a
 
-# === Vendored upstream skills (山音) — fetched by scripts/install-deps.sh ======
+# === Vendored upstream skills (Shanyin) — fetched by scripts/install-deps.sh ======
 references/shanyin/
 
 # === Log directories ===========================================================

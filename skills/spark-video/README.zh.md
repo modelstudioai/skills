@@ -116,21 +116,23 @@ Codex / …)。
 ## 安装 — 一句话交给 agent
 
 整个安装就是**一段 prompt**。打开任意支持 skills 的 agent
-(Claude Code / Cursor / Qwen Code / Gemini CLI / …),把下面这段粘进去:
+(Claude Code / Cursor / Qwen Code / Gemini CLI / …),把下面这整个代码块复制粘进去:
 
-> 帮我装 spark-video skill:
-> 1. 识别我当前所在 agent 在这个操作系统下的 skills 目录
->    (比如 `~/.claude/skills/`、`~/.qwen/skills/`、
->    `~/.cursor/skills/` …),把
->    `https://github.com/JohnKeating1997/spark-video.git` clone 到那里,
->    目录名叫 `spark-video`。
-> 2. 提醒我新开一个会话,让 skill 被加载。
-> 3. 新会话里读 `spark-video/SKILL.md`,跑 `./scripts/doctor.sh`,
->    用我系统的包管理器装上缺的依赖(`bl` / `ffmpeg` / `uv`),
->    每条命令都先问我确认。
-> 4. 问我要不要顺手 `./scripts/install-deps.sh` 拉 山音 craft 引用
->    (失败不影响主流程)。
-> 5. 再跑一次 doctor,全绿后告诉我可以开工了。
+```text
+帮我装 spark-video skill:
+1. 识别我当前所在 agent 在这个操作系统下的 skills 目录
+   (比如 `~/.claude/skills/`、`~/.qwen/skills/`、
+   `~/.cursor/skills/` …),把
+   `https://github.com/JohnKeating1997/spark-video.git` clone 到那里,
+   目录名叫 `spark-video`。
+2. 提醒我新开一个会话,让 skill 被加载。
+3. 新会话里读 `spark-video/SKILL.md`,跑 `./scripts/doctor.sh`,
+   用我系统的包管理器装上缺的依赖(`bl` / `ffmpeg` / `uv`),
+   每条命令都先问我确认。
+4. 问我要不要顺手 `./scripts/install-deps.sh` 拉 山音 craft 引用
+   (失败不影响主流程)。
+5. 再跑一次 doctor,全绿后告诉我可以开工了。
+```
 
 完事。不需要记路径,也不需要复制 platform-specific 的命令 —— agent 读
 `SKILL.md`(里面有完整的安装 runbook)自己驱动后面的步骤。
@@ -182,7 +184,7 @@ projects/<project>/<episode>/
 大多数情况直接交给 agent 处理 —— 说"帮我修 XX"就行。
 
 - 安装后 agent 不认识 `spark-video` → 重启 agent / 新开会话
-- `bl: command not found` → `npm install -g bailian-cli && npx skills add modelstudioai/cli --all -g && npx skills add modelstudioai/skills --all -g && bl auth login`
+- `bl: command not found` → `npm install -g bailian-cli && npx skills add modelstudioai/skills --all -g && bl auth login`
   (完整安装说明：<https://bailian.aliyun.com/cli/install.md>)
 - `Permission denied: scripts/bl` → `chmod +x scripts/*.sh scripts/bl`
 - 渲染卡住 → `tail -f projects/<p>/<e>/logs/model_calls.jsonl | jq .`

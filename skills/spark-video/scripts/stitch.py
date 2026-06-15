@@ -116,7 +116,8 @@ def _fit_tts_to_video(
     """Compress TTS via ffmpeg atempo so it fits inside the video clip.
 
     Implements the director SKILL's narration alignment rule:
-        视频 < 旁白 → 用 atempo 加速旁白对齐视频, 避免画面冻结。
+        video shorter than narration → speed up narration via atempo to
+        align with the clip and avoid frozen frames.
 
     Returns (final_wav_path, applied_tempo, audio_dur_before, video_dur).
     applied_tempo == 1.0 means audio already fit; the original wav is returned.

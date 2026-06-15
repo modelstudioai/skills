@@ -3,7 +3,27 @@ name: spark-video-episode
 description: One-shot autopilot orchestrator — runs the full spark-video pipeline (screenwriter ↔ director per-scene parallel → render chain-DAG parallel + per-clip review → stitch). User confirms at 4 gates (+ 1 mode gate at start + 1 BGM gate when bgm/ folder detected). Use when the user wants "make me an episode" in one command.
 ---
 
-# Producer Skill — spark-video 一键制片
+# Self-update
+
+Before starting any task, pull the latest version of this skill from
+its origin. The skill directory may be a git clone, a worktree, or
+symlinked from one — resolve to the real path first.
+
+```bash
+SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+SKILL_DIR="$(cd "$SKILL_DIR" && pwd -P)"          # resolve symlinks
+if git -C "$SKILL_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  git -C "$SKILL_DIR" pull --ff-only --quiet 2>/dev/null || true
+fi
+```
+
+Run this snippet (or the equivalent) at the start of every session that
+uses this skill. `--ff-only` ensures it never creates merge commits;
+if the local copy has diverged it silently skips the update. Failures
+are non-fatal — the skill works offline, just with the last-fetched
+version.
+
+# Producer Skill — spark-video one-shot production
 
 You are the **producer** of the spark-video pipeline. You orchestrate
 the other 5 sub-skills (`spark-video-screenwriter`, `spark-video-director`,
@@ -40,12 +60,12 @@ the corresponding flag was passed in the invocation.
 
 | Gate | When | What you show | What you ask |
 |---|---|---|---|
-| **GATE 0** | Before any work, unless `--mode` was set | One-paragraph explainer of drama vs narration mode | "Drama (短剧, default) or Narration (旁白解说)?" |
+| **GATE 0** | Before any work, unless `--mode` was set | One-paragraph explainer of drama vs narration mode | "Drama (short drama, default) or Narration (voiceover recap)?" |
 | **GATE 0.5** | After GATE 0, only if `projects/<p>/bgm/` or `projects/<p>/<ep>/bgm/` exists with audio files | List of available BGM tracks | "How should I use BGM? (a) off — model decides; (b) global — one track for the whole video; (c) scene — director picks per-scene. Also: forbid the video model from generating its own BGM? (default: yes)" |
-| **GATE 1** | After screenwriter finishes all scenes/scene-NN.md and you've compiled into `script.md` | The merged `script.md` | "剧本 OK 吗? Approve to proceed to storyboarding, or describe changes." |
-| **GATE 2** | After director finishes all scenes/scene-NN.json and you've compiled+validated into `storyboard.json`. If `--vfx`, run `spark-video-vfx-review` first and show its report. | `storyboard.json` summary (shot count, parallel groups, estimated duration & cost) + VFX report if run | "分镜 OK 吗? Approve to render, or describe changes." |
-| **GATE 3** | After all shots rendered + reviewed (winner_version set for each, escalations resolved) | Per-shot summary (winner version, best score, any that fell below threshold accepted-anyway) | "渲染 OK 吗? Approve to stitch final, or specify shots to re-render." |
-| **GATE 4** | After stitch completes | Path to `final/<project>-<episode>.mp4`, duration, file size | "OK to finalize? Want to re-render any shots or adjust BGM mix?" |
+| **GATE 1** | After screenwriter finishes all scenes/scene-NN.md and you've compiled into `script.md` | `viewer.html` (auto-opened) showing premise + script + cast/sets/props | "Script OK? Approve to proceed to storyboarding, or describe changes." |
+| **GATE 2** | After director finishes all scenes/scene-NN.json and you've compiled+validated into `storyboard.json`. If `--vfx`, run `spark-video-vfx-review` first and show its report. | `viewer.html` (auto-opened) showing storyboard summary + scenes + shots | "Storyboard OK? Approve to render, or describe changes." |
+| **GATE 3** | After all shots rendered + reviewed (winner_version set for each, escalations resolved) | `viewer.html` (auto-opened) showing all clips + reviews + winner highlights | "Renders OK? Approve to stitch final, or specify shots to re-render." |
+| **GATE 4** | After stitch completes | `viewer.html` (auto-opened) showing final mp4 + full production archive | "OK to finalize? Want to re-render any shots or adjust BGM mix?" |
 
 At any gate, if user says "no", listen to their feedback, do the edits,
 re-show, ask again.
@@ -137,10 +157,10 @@ test -f projects/$SPARK_VIDEO_PROJECT/lore.md || \
 
 ### Step 1 — GATE 0: mode
 Unless `--mode` was passed, present the two modes:
-- **drama** (短剧, default) — every shot is a long self-contained clip
+- **drama** (short drama, default) — every shot is a long self-contained clip
   driven by dialog + action. Use for 2–5 min original shorts.
-- **narration** (旁白解说) — 旁白 beats become short TTS-driven shots;
-  对白 beats stay drama. Maximises parallelism. Use for 10-min recap
+- **narration** (voiceover recap) — narration beats become short TTS-driven shots;
+  dialog beats stay drama. Maximises parallelism. Use for 10-min recap
   style content.
 
 Record the answer; pass to screenwriter + director as `--mode <choice>`.
@@ -191,7 +211,12 @@ uv run scripts/storyboard.py estimate
 ```
 
 ### Step 5 — GATE 1: script.md
-Show the user the merged `script.md`. Wait for approval.
+```bash
+uv run scripts/build_viewer.py            # opens viewer.html in browser for review
+```
+Show the user the merged `script.md` — point them to the viewer.html
+that just opened (it shows premise, lore, direction, script, cast,
+sets, props at this stage). Wait for approval.
 
 If they want changes, identify which scene(s), invoke screenwriter on
 those, re-compile.
@@ -205,37 +230,74 @@ Print the storyboard summary:
   - If estimate exits 2 (over `SPARK_VIDEO_LONG_CONFIRM_S`), surface
     the warning explicitly.
 
+**Cost estimation** — use `bailian-docs-llm-wiki` skill to look up pricing:
+1. Read the estimate JSON output: `provider`, `resolution`, `duration_by_kind`,
+   and (if narration mode) `tts`.
+2. For each kind in `duration_by_kind`, find the concrete model in
+   `bailian-docs-llm-wiki/models/models.jsonl` by matching provider family
+   and shot kind (e.g. provider `bl` + kind `r2v` → model `happyhorse-1.0-r2v`).
+3. Match the `resolution` (e.g. `720P` → price type `video_ratio_720p`) to get
+   the per-second unit price.
+4. Calculate: `sum(kind_seconds × unit_price)`. Add TTS cost if present
+   (match `tts.model` in models.jsonl for per-character pricing).
+5. **If a model has no pricing data in the skill, say so explicitly** — never
+   guess, never substitute another provider's price.
+
 If `--vfx`, run `spark-video-vfx-review` and show its report alongside.
 
-Wait for approval. If they want changes, route feedback to director
-(invoke `spark-video-director` skill with the specific scenes), re-compile.
-
-### Step 7 — Zone 2 + 3: render with per-clip review
-
 ```bash
-uv run scripts/storyboard.py graph
-# → [["S01-001","S01-002"], ["S02-001"], ...]
+uv run scripts/build_viewer.py            # opens viewer.html — now includes scenes + shots
 ```
 
-For each chain group, fan out a `spark-video-clip-review` invocation
-that loops through the group's shots sequentially. Different groups run
-in parallel up to `SPARK_VIDEO_MAX_CONCURRENCY`.
+Wait for approval (viewer.html shows the full storyboard breakdown).
+If they want changes, route feedback to director
+(invoke `spark-video-director` skill with the specific scenes), re-compile.
 
-Each clip-review invocation handles its own retry loop internally
-(render → review → auto-rewrite → re-render → ACCEPT or escalate).
-You only intervene when:
+### Step 7 — Zone 2 + 3: render all shots
+
+Use `render_all.py` for batch rendering — it handles chain-group
+parallelism, media resolution, first-frame chaining, and per-clip
+auto-review internally. **Never manually fan out `render_shot.py`
+calls or write ad-hoc batch scripts.**
+
+```bash
+# Full reset — re-render everything from scratch:
+uv run scripts/render_all.py --reset --ratio 9:16
+
+# After prompt changes — only re-render shots that were REJECT:
+uv run scripts/render_all.py --rejected-only
+
+# Re-render specific shots:
+uv run scripts/render_all.py --shot S01-002 --shot S03-004
+
+# Only re-render FAILED or winner-less shots:
+uv run scripts/render_all.py --failed-only
+```
+
+`render_all.py` handles:
+- Chain-group-aware parallelism (respects `use_prev_last_frame_as_first`)
+- Automatic media resolution from `cast.json` / `movie_set.json` / `props.json`
+- Per-clip auto-review via `render_shot.py` (includes single-axis veto)
+- Winner promotion on ACCEPT
+- `viewer.html` refresh after each shot
+
+The stdout JSON summary includes `rejected_shots` with each shot's
+`review.critique`. The agent owns prompt rewriting for REJECTs — read
+the critique, edit `scenes/scene-NN.json`, then re-run with
+`--rejected-only`.
+
+You only intervene beyond `render_all.py` when:
 - Escalation: `needs_director_rewrite.json` appears. Invoke
   `spark-video-director` with the escalation report, then re-render the
-  affected shot(s) with `--force --reset-attempts`.
-- Hard failure: a chain group's render_shot.py exits with non-zero
-  status. Read `logs/model_calls.jsonl` to diagnose, then retry or
-  escalate to the user.
-
-Monitor progress via `tail -f projects/<p>/<ep>/logs/model_calls.jsonl
-| jq .` or by polling `shots_state.json` for `winner_version` set on
-each shot.
+  affected shot(s) with `--shot <id>`.
+- Hard failure: check `logs/model_calls.jsonl` to diagnose, then retry
+  or escalate to the user.
 
 ### Step 8 — GATE 3: per-shot summary
+
+```bash
+uv run scripts/build_viewer.py             # opens viewer.html — all clips + reviews visible
+```
 
 Once all shots have `winner_version` set:
 
@@ -265,6 +327,11 @@ uv run scripts/stitch.py --crossfade 0.5
 
 ### Step 10 — GATE 4: final review
 
+```bash
+# stitch.py already rebuilt + opened viewer.html; if stale, force refresh:
+uv run scripts/build_viewer.py
+```
+
 Show:
 - Final mp4 path
 - Total duration (vs target)
@@ -291,13 +358,13 @@ back to the relevant step.
 The pattern is always: **listen → identify scope → invoke right
 sub-skill → re-show**. Examples:
 
-- "剧本不行, 钱夫人太弱" at GATE 1 → invoke `spark-video-screenwriter`
+- "The script is weak — 钱夫人 needs more bite" at GATE 1 → invoke `spark-video-screenwriter`
   with scope = which scenes, plus the user's note. Re-compile script.md,
   re-show.
-- "S03-002 这个 shot 太暗" at GATE 3 → don't re-render the whole
+- "S03-002 is too dark" at GATE 3 → don't re-render the whole
   storyboard. Just `uv run scripts/render_shot.py --shot S03-002 --force
   --reset-attempts` (auto-runs clip-review). Re-show updated shot.
-- "BGM 太响" at GATE 4 → edit `Storyboard.bgm.volume` (or
+- "BGM is too loud" at GATE 4 → edit `Storyboard.bgm.volume` (or
   `bgm-config.json`), re-run `uv run scripts/stitch.py`.
 
 ## DON'Ts

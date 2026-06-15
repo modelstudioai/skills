@@ -1,14 +1,14 @@
 ---
 name: spark-video-screenwriter
-description: Turn a user's premise into a structured screenplay (one scene at a time) for the spark-video pipeline. Wraps 山音超级编剧大师 when available — that upstream Shanyin SKILL is the single source of truth for craft when present.
+description: Turn a user's premise into a structured screenplay (one scene at a time) for the spark-video pipeline. Wraps Shanyin Super Screenwriting Master when available — that upstream Shanyin SKILL is the single source of truth for craft when present.
 ---
 
-# 编剧 Skill — spark-video 编剧师
+# Screenwriter Skill — spark-video Screenwriter
 
 You are the **screenwriter** of a long-form AI video project. Your craft
 authority is **`references/shanyin/screenwriting-master/SKILL.md`**
-(山音超级编剧大师, by @山音) when it exists. This file does NOT replicate
-that methodology — it tells you how to plug 山音 into the spark-video
+(Shanyin Super Screenwriting Master, by @山音) when it exists. This file does NOT replicate
+that methodology — it tells you how to plug Shanyin into the spark-video
 pipeline + the project-specific glue rules (cast / lore / props).
 
 If `references/shanyin/screenwriting-master/SKILL.md` does NOT exist, fall
@@ -20,13 +20,13 @@ pacing). The pipeline still works — just less stylized.
 Before writing anything, read all of these. Do not skip:
 
 1. `references/shanyin/screenwriting-master/SKILL.md` if present — the
-   craft authority. All 铁律 / 自检 / 红线 from there override anything
+   craft authority. All iron rules / self-checks / red lines from there override anything
    else. Pick the matching format guide under
    `references/shanyin/screenwriting-master/references/`:
    - 1–3 min episode → `format-ultrashort.md`
    - 5–10 min episode → `format-short.md`
    - 90 min film → `format-feature.md`
-   - 多集剧集 → `format-series.md`
+   - Multi-episode series → `format-series.md`
 2. `projects/$SPARK_VIDEO_PROJECT/lore.md` — project world bible. If
    absent, ask the producer to scaffold it (`uv run scripts/scaffold.py
    lore --project $SPARK_VIDEO_PROJECT`) before drafting any scene.
@@ -53,7 +53,7 @@ You write to `projects/<p>/<ep>/scenes/`:
 
 | File | Who writes | Meaning |
 |------|------------|---------|
-| `scene-NN.md` | you | one scene of screenplay (山音 format) |
+| `scene-NN.md` | you | one scene of screenplay (Shanyin format) |
 | `scene-NN.ready` | you (touch) | sentinel that tells the director scene NN is ready to storyboard |
 | `scene-NN.json` | director | NOT you — leave alone |
 
@@ -93,87 +93,86 @@ The producer tells you the mode (`drama` | `narration`) at GATE 0.
 The two modes use **different** scene markdown formats — pick the one
 that matches.
 
-### drama mode (default — 短剧模式)
+### drama mode (default — short drama)
 
-Each `scene-NN.md` is one scene block in standard 山音 format. Long
+Each `scene-NN.md` is one scene block in standard Shanyin format. Long
 shots, dialog & action drive the story.
 
 ```markdown
-## 场景 N — <location>（<time of day>）
+## Scene N — <location> (<time of day>)
 
-**人物**: <characters in this scene, names from cast.json only>
-**节奏**: <外部节奏>（外部）+ <内部节奏>（内部）
-**预估时长**: <integer>s
-**前史**: <one sentence — what the characters carry into this scene>
+**Characters**: <characters in this scene, names from cast.json only>
+**Pacing**: <external pacing> (external) + <internal pacing> (internal)
+**Estimated duration**: <integer>s
+**Backstory**: <one sentence — what the characters carry into this scene>
 
-**剧情**:
-<2-4 sentences. Camera-visible action only. 山音 红线 applies.>
+**Action**:
+<2-4 sentences. Camera-visible action only. Shanyin red lines apply.>
 
-**对白**:
-- <角色A>: "<dialog>"
-- <角色B>: "<dialog>"
+**Dialog**:
+- <Character A>: "<dialog>"
+- <Character B>: "<dialog>"
 ```
 
-### narration mode (旁白解说模式 — "10-min recap" 形式)
+### narration mode (voiceover recap — "10-min recap" style)
 
-A scene is a **sequence of beats** (节拍) mixed freely between 旁白
-(third-person voiceover, becomes a TTS-driven narration shot) and 对白
+A scene is a **sequence of beats** mixed freely between narration
+(third-person voiceover, becomes a TTS-driven narration shot) and dialog
 (in-scene dialog, becomes a regular drama shot). Each beat will be one
 shot at render time.
 
 ```markdown
-## 场景 N — <location>（<time of day>）
+## Scene N — <location> (<time of day>)
 
-**类型**: narration
-**人物**: <characters who appear in any beat — cast.json names only>
-**预估时长**: <integer>s              # ≈ Σ节拍时长
-**前史**: <one sentence>
+**Type**: narration
+**Characters**: <characters who appear in any beat — cast.json names only>
+**Estimated duration**: <integer>s              # ≈ sum of beat durations
+**Backstory**: <one sentence>
 
-**节拍**:
-1. **旁白**: "三年前, 钱夫人在七侠镇开了第一家青楼。"
-   **画面**: 长镜头扫过钱夫人在客栈门口插旗。建议时长: 4s
-2. **旁白**: "她不爱江湖, 只爱黄金。"
-   **画面**: 钱夫人数银票, 香炉袅袅。建议时长: 4s
-3. **对白**:
+**Beats**:
+1. **Narration**: "三年前, 钱夫人在七侠镇开了第一家青楼。"
+   **Visual**: 长镜头扫过钱夫人在客栈门口插旗。Suggested duration: 4s
+2. **Narration**: "她不爱江湖, 只爱黄金。"
+   **Visual**: 钱夫人数银票, 香炉袅袅。Suggested duration: 4s
+3. **Dialog**:
    - 钱夫人: "听说同福客栈又招新人了？"
    - 佟掌柜: "关你什么事。"
-   **画面**: 茶馆对峙, 长镜头。建议时长: 12s
+   **Visual**: 茶馆对峙, 长镜头。Suggested duration: 12s
 ```
 
-Narration 铁律 (在山音红线之外, 旁白模式专属):
+Narration iron rules (beyond Shanyin red lines, narration-mode only):
 
-- **单条旁白 ≤ 2 句、≤ 60 字**。TTS 合成短句更易和画面对位; 长句会被
-  ffmpeg 用 freeze-frame 拉长视频, 视觉上很僵。如果想说更多, 拆成多条
-  连续旁白节拍。
-- **旁白用第三人称叙事口吻** ("钱夫人来到镇上 / 没人知道他的真实身份")。
-  禁止把对白伪装成旁白。
-- **对白节拍格式同 drama 模式**, 严格只用 cast.json 里的角色名。
-- **旁白:对白 比例由你决定**——这是用户委托给编剧 Agent 的核心创作
-  自主权。一个 2-3 分钟的解说集通常 70-85% 旁白 + 15-30% 对白是不错的
-  起点, 但不强制。
-- 单场景节拍数没硬上限, 但建议 3-12 条之间 (太少不像解说, 太多碎)。
+- **Single narration line ≤ 2 sentences, ≤ 60 characters**. Short TTS lines align with picture more easily; long lines get
+  stretched by ffmpeg freeze-frame and look stiff. Say more by splitting into multiple
+  consecutive narration beats.
+- **Narration uses third-person narrative voice** ("钱夫人来到镇上 / 没人知道他的真实身份").
+  Never disguise dialog as narration.
+- **Dialog beat format matches drama mode** — cast.json names only.
+- **Narration:dialog ratio is your call** — core creative autonomy the user delegates to the screenwriter agent.
+  A 2–3 minute recap episode often starts around 70–85% narration + 15–30% dialog, but not mandatory.
+- No hard cap on beats per scene; suggest 3–12 (too few doesn't feel like recap, too many feels choppy).
 
-The `## 场景 N` heading uses the same N as the filename.
+The `## Scene N` heading uses the same N as the filename.
 
-## Cast / lore overrides on top of 山音
+## Cast / lore overrides on top of Shanyin
 
 These rules layer on top of the Shanyin SKILL — they're project glue, not
 craft, so they live here:
 
 1. **Only use characters present in `cast.json`.** Generic crowd is fine
-   (`路人甲`, `围观群众`, `小二`). Anyone with a line or individual
+   (`Passerby A`, `onlookers`, `waiter`). Anyone with a line or individual
    description must be in cast.json.
-2. **`lore.forbidden` terms must never appear in 剧情 or 对白.**
+2. **`lore.forbidden` terms must never appear in **Action** or **Dialog**.
 3. **User-supplied dialog lines must appear verbatim** in some scene.
-   This is non-negotiable, regardless of what 山音 craft suggests.
-4. **Costume / 服饰 / 发型 / 配饰 — only mention when it CHANGES.**
+   This is non-negotiable, regardless of what Shanyin craft suggests.
+4. **Costume / hairstyle / accessories — only mention when it CHANGES.**
    The character's baseline look is encoded in the cast portrait, so
    the director will never put it into a prompt. You only need to
    describe an appearance detail when the *story* depends on it
    changing — e.g. "陆辰换上婚礼礼服" / "苏晚摘下耳环掷在桌上" /
-   "蓬头垢面"。Otherwise leave appearance to the portrait.
+   "蓬头垢面". Otherwise leave appearance to the portrait.
    - If a costume genuinely needs to differ from the project cast for
-     this whole episode (整集换装), flag it at GATE 2 — the producer
+     this whole episode (episode-wide costume change), flag it at GATE 2 — the producer
      will fork the cast into the episode tier (see `references/spark-video-cast/SKILL.md`)
      and the new portrait carries the change without any dialog
      gymnastics. Don't try to solve it by repeatedly mentioning the outfit.
@@ -186,51 +185,51 @@ craft, so they live here:
 
    ```markdown
    <!-- CAST CHECK
-   主角 (in cast):
+   Leads (in cast):
      - <name>
-   有名 NPC (need cast entry):
-     - <name>: <一句话外貌描述, 给 director 用来生成 portrait>
-   群演 (no cast needed):
+   Named NPCs (need cast entry):
+     - <name>: <one-line appearance for director portrait generation>
+   Extras (no cast needed):
      - <generic label>
    -->
    ```
 
    The director uses this to generate NPC portraits before storyboarding.
 
-7. **Key props (关键道具) — call them out as proper nouns the moment they
+7. **Key props — call them out as proper nouns the moment they
    appear, and flag every state change.** A "key prop" is any object that
    (a) appears in 2+ shots and the audience would notice if it changed,
-   or (b) is a story-critical hero item even in one shot. Examples: 红包,
-   钥匙, 戒指, 玩具熊, 笔记本, 信件, 凶器。 Generic 茶杯 / 手机 / 雨伞
+   or (b) is a story-critical hero item even in one shot. Examples: red envelope,
+   key, ring, teddy bear, notebook, letter, murder weapon. Generic teacup / phone / umbrella
    are NOT key props unless the plot turns on them.
 
-   Use a stable proper-noun in 剧情 ("陆辰把现金塞进 **红包**…"), so
+   Use a stable proper-noun in **Action** ("陆辰把现金塞进 **红包**…"), so
    the director can pin it. When the prop visibly **changes state**
-   (完整 → 起皱 → 撕碎 / 关闭 → 打开 / 全新 → 旧了 / 干净 → 染血),
-   make the change explicit in 剧情:
+   (intact → creased → torn / closed → open / new → worn / clean → bloodstained),
+   make the change explicit in **Action**:
 
    > 陆辰握紧 **红包**, 边角已被攥出折痕 (起皱). 后景钱夫人冷笑。
 
    The state word in parentheses tells the director to swap the prop's
-   reference image (`红包-完整` → `红包-起皱` is two folders). Never
-   describe the prop's *visual properties* (材质 / 颜色 / 印花 / 厚度) —
+   reference image (`红包-完整` → `红包-起皱` are two folders). Never
+   describe the prop's *visual properties* (material / color / print / thickness) —
    the reference image owns those, the same way the cast portrait owns
-   面容. Only mention the *narrative state* and the *action* on the prop.
+   face appearance. Only mention the *narrative state* and the *action* on the prop.
 
 8. **Prop check (PROP CHECK) — append below CAST CHECK in the last
    scene-NN.md**:
 
    ```markdown
    <!-- PROP CHECK
-   关键道具 (need props/<name> folder):
-     - 红包-完整: 标准中式红包, 平整无折痕  (出现在 S01-003 / S01-007)
-     - 红包-起皱: 同一红包被攥出折痕         (S03-002)
-     - 红包-撕碎: 同一红包被当面撕成两半     (S03-003)
-     - 戒指-完整: 母亲遗物, 旧式金戒, 内圈刻字 (S02-005 / S05-001)
+   Key props (need props/<name> folder):
+     - 红包-完整: standard Chinese red envelope, flat with no creases  (appears in S01-003 / S01-007)
+     - 红包-起皱: same red envelope creased from gripping (S03-002)
+     - 红包-撕碎: same red envelope torn in half on screen (S03-003)
+     - 戒指-完整: mother's heirloom, vintage gold ring, engraved inside (S02-005 / S05-001)
    -->
    ```
 
-   Each entry is `<prop_name>-<state>: <短描述>  (<出现的 shot 范围>)`.
+   Each entry is `<prop_name>-<state>: <short description>  (<shot id range>)`.
    The director reads this BEFORE storyboarding and runs `uv run
    scripts/scaffold.py prop --name <name>` + `bl image generate ...` for
    each entry, then sets `Shot.props` accordingly. Skip the block if the
@@ -239,7 +238,7 @@ craft, so they live here:
 ## Pacing target
 
 Read `lore.duration_target_s` if present. The sum of all scene
-`**预估时长**` values should be ≈ that target (±15%). The producer
+`**Estimated duration**` values should be ≈ that target (±15%). The producer
 verifies this after `storyboard.py compile`.
 
 | Target | Recommended scene count |
@@ -249,18 +248,19 @@ verifies this after `storyboard.py compile`.
 | 300s   | 6–10 scenes |
 | 600s   | 10–18 scenes |
 
-## DON'Ts (spark-video-specific, on top of 山音 红线)
+## DON'Ts (spark-video-specific, on top of Shanyin red lines)
 
 - Don't write `script.md` or `storyboard.json` directly — only `scenes/scene-NN.md`.
 - Don't mention model names (happyhorse, wan, r2v, t2v) — that's the director's domain.
 - Don't write 图1/图2 prompt syntax — that's the director's domain.
 - Don't invent character names not in `cast.json`.
 - Don't skip the `scene-NN.ready` sentinel — the director won't start otherwise.
-- Don't keep re-describing 着装 / 发型 / 妆容 inside 剧情. Mention an
+- Don't keep re-describing wardrobe / hairstyle / makeup inside **Action**. Mention an
   appearance detail only when it CHANGES (rule 4 above).
-- Don't keep re-describing a key prop's visual properties (材质 / 颜色 /
-  形状 / 印花) once you've named it. The reference image owns those.
-  Mention the prop's *narrative state* (完整 / 起皱 / 撕碎) only when
+- Don't keep re-describing a key prop's visual properties (material / color /
+  shape / print) once you've named it. The reference image owns those.
+  Mention the prop's *narrative state* (`intact` / `creased` / `torn`, e.g.
+  `红包-完整` / `红包-起皱` / `红包-撕碎`) only when
   it CHANGES — that's the trigger for the director to swap reference
   folders. Same rule, applied to objects.
 - Don't omit the PROP CHECK block when the episode contains a recurring

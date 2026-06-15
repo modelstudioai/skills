@@ -5,19 +5,19 @@ A soul card is a markdown file with optional YAML front-matter:
     cast/钱夫人.md
     ---
     name: 钱夫人
-    archetype: 跋扈反派 / 笑点担当
-    voice_style: 嗓门大, 拖长音, 喜欢用反问
+    archetype: domineering villain / comic relief
+    voice_style: loud, drawn-out tones, rhetorical questions
     catchphrases: ["嗯哼? 你再说一遍?"]
-    mannerisms: [双手叉腰, 用扇子戳人胸口]
+    mannerisms: [hands on hips, poking chest with fan]
     relationships:
       - target: 佟掌柜
-        type: 死对头
-    do: [大场合一定要抢话]
-    dont: [不会真的下死手]
+        type: sworn rival
+    do: [always talk over others at big events]
+    dont: [never actually kill anyone]
     ---
 
-    # 人物小传
-    钱夫人原是江南绸缎商家千金...
+    # Character bio
+    钱夫人 was originally the daughter of a Jiangnan silk merchant...
 
 The YAML half is structured (validated below). The markdown half is free-form
 narrative — fed verbatim into the director Skill so the LLM gets full context.
@@ -140,31 +140,31 @@ def render_for_prompt(soul: Soul, *, indent: str = "") -> str:
     head_bits = []
     if f.archetype: head_bits.append(f.archetype)
     if f.occupation: head_bits.append(f.occupation)
-    if f.age: head_bits.append(f"{f.age}岁")
+    if f.age: head_bits.append(f"{f.age} years old")
     if f.gender: head_bits.append(f.gender)
     if head_bits:
-        parts.append(f"{indent}- 设定: {' · '.join(map(str, head_bits))}")
+        parts.append(f"{indent}- Profile: {' · '.join(map(str, head_bits))}")
 
     if f.voice_style:
-        parts.append(f"{indent}- 说话风格: {f.voice_style}")
+        parts.append(f"{indent}- Voice style: {f.voice_style}")
     if f.catchphrases:
-        parts.append(f"{indent}- 口头禅: " + " / ".join(f'"{c}"' for c in f.catchphrases))
+        parts.append(f"{indent}- Catchphrases: " + " / ".join(f'"{c}"' for c in f.catchphrases))
     if f.mannerisms:
-        parts.append(f"{indent}- 习惯动作: " + ", ".join(f.mannerisms))
+        parts.append(f"{indent}- Mannerisms: " + ", ".join(f.mannerisms))
     rels = [r for r in f.relationships if r.is_filled()]
     if rels:
         for r in rels:
             target = r.target or "(unknown)"
-            line = f"{target}({r.type or '关系'})"
+            line = f"{target} ({r.type or 'relationship'})"
             if r.backstory:
                 line += f": {r.backstory}"
-            parts.append(f"{indent}- 与 {line}")
+            parts.append(f"{indent}- With {line}")
     if f.do:
         parts.append(f"{indent}- DO: " + "; ".join(f.do))
     if f.dont:
         parts.append(f"{indent}- DON'T: " + "; ".join(f.dont))
     if soul.body:
-        parts.append(f"{indent}- 小传:")
+        parts.append(f"{indent}- Bio:")
         for line in soul.body.splitlines():
             parts.append(f"{indent}    {line}")
     return "\n".join(parts)

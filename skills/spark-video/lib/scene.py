@@ -46,41 +46,41 @@ def scene_json_path(project_id: str, episode_id: str, num: int) -> Path:
 
 
 SCENE_TEMPLATE_DRAMA = """\
-## 场景 {n} — <location>（<time of day>）
+## Scene {n} — <location> (<time of day>)
 
-**人物**: <characters in this scene, names from cast.json only>
-**节奏**: <外部节奏>（外部）+ <内部节奏>（内部）
-**预估时长**: <integer>s
-**前史**: <one sentence — what the characters carry into this scene>
+**Characters**: <characters in this scene, names from cast.json only>
+**Pacing**: <external pacing> (external) + <internal pacing> (internal)
+**Estimated duration**: <integer>s
+**Backstory**: <one sentence — what the characters carry into this scene>
 
-**剧情**:
-<2-4 sentences. Camera-visible action only. 山音 红线 applies.>
+**Plot**:
+<2-4 sentences. Camera-visible action only. Shanyin red lines apply.>
 
-**对白**:
-- <角色A>: "<dialog>"
-- <角色B>: "<dialog>"
+**Dialog**:
+- <Character A>: "<dialog>"
+- <Character B>: "<dialog>"
 """
 
-# Narration mode — beats are an ordered sequence of 旁白/对白 mixes.
-# Each 旁白 beat becomes ONE narration shot at render time (TTS replaces
-# audio). Each 对白 beat becomes a regular drama shot.
+# Narration mode — beats are an ordered sequence of narration/dialog mixes.
+# Each narration beat becomes ONE narration shot at render time (TTS replaces
+# audio). Each dialog beat becomes a regular drama shot.
 SCENE_TEMPLATE_NARRATION = """\
-## 场景 {n} — <location>（<time of day>）
+## Scene {n} — <location> (<time of day>)
 
-**类型**: narration
-**人物**: <characters that appear in any beat — names from cast.json only>
-**预估时长**: <integer>s   # ≈ Σ节拍时长
-**前史**: <one sentence>
+**Type**: narration
+**Characters**: <characters that appear in any beat — names from cast.json only>
+**Estimated duration**: <integer>s   # ≈ sum of beat durations
+**Backstory**: <one sentence>
 
-**节拍**:
-1. **旁白**: "<≤2句、≤60字的解说词>"
-   **画面**: <一句话描述; 建议时长 4s>
-2. **旁白**: "<下一句解说>"
-   **画面**: <画面描述; 建议时长 4s>
-3. **对白**:
-   - <角色A>: "<dialog>"
-   - <角色B>: "<dialog>"
-   **画面**: <画面描述; 建议时长 12s>
+**Beats**:
+1. **Narration**: "<≤2 sentences, ≤60 chars of voiceover>"
+   **Visual**: <one-line description; suggested duration 4s>
+2. **Narration**: "<next voiceover line>"
+   **Visual**: <visual description; suggested duration 4s>
+3. **Dialog**:
+   - <Character A>: "<dialog>"
+   - <Character B>: "<dialog>"
+   **Visual**: <visual description; suggested duration 12s>
 """
 
 # Back-compat alias — old code path used SCENE_TEMPLATE.
@@ -271,8 +271,8 @@ def compile_episode(
 
 
 _TITLE_RE = re.compile(r"^#\s+(.+)$", re.MULTILINE)
-_SCENE_HEADER_RE = re.compile(r"^##\s+场景\s*\d+\s*[—\-:：]?\s*(.+)$", re.MULTILINE)
-_DURATION_RE = re.compile(r"\*\*预估时长\*\*[:：]\s*(\d+)")
+_SCENE_HEADER_RE = re.compile(r"^##\s+Scene\s*\d+\s*[—\-:：]?\s*(.+)$", re.MULTILINE)
+_DURATION_RE = re.compile(r"\*\*Estimated duration\*\*[:：]\s*(\d+)")
 
 
 def _guess_title(project_id: str, episode_id: str, md_files: list[tuple[int, Path]]) -> str:
@@ -287,7 +287,7 @@ def _guess_title(project_id: str, episode_id: str, md_files: list[tuple[int, Pat
 
 
 def _infer_target_from_scenes(md_files: list[tuple[int, Path]]) -> int | None:
-    """Sum every scene's `**预估时长**` value as the script's intended target."""
+    """Sum every scene's `**Estimated duration**` value as the script's intended target."""
     total = 0
     found = False
     for _n, p in md_files:

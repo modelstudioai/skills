@@ -23,7 +23,7 @@ if command -v bl >/dev/null 2>&1; then
   fi
 else
   err "bl not found. Install (see https://bailian.aliyun.com/cli/install.md):"
-  err "  npm install -g bailian-cli && npx skills add modelstudioai/cli --all -g && npx skills add modelstudioai/skills --all -g"
+  err "  npm install -g bailian-cli && npx skills add modelstudioai/skills --all -g"
 fi
 
 # ffmpeg + ffprobe
