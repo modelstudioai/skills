@@ -1,0 +1,64 @@
+{
+  "name": "Llama-4-Scout-17B-16E-Instruct",
+  "description": "Llama 4 Scout，一个拥有170亿参数和16个专家的模型。利用了专家混合架构，以提供业界领先的文本和图像理解性能",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "openSource": true,
+      "description": "Llama 4 Scout，一个拥有170亿参数和16个专家的模型。利用了专家混合架构，以提供业界领先的文本和图像理解性能",
+      "features": [],
+      "provider": "meta",
+      "limit": {
+        "message": "model not exist"
+      },
+      "model": "llama-4-scout-17b-16e-instruct",
+      "capabilities": [
+        "VU",
+        "TG"
+      ],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 8192,
+      "latestOnlineAt": "2025-04-07T07:00:45.000+00:00",
+      "contextWindow": 1000000,
+      "maxInputTokens": 991808,
+      "inferenceProvider": "bailian",
+      "name": "Llama-4-Scout-17B-16E-Instruct",
+      "docUrl": "https://help.aliyun.com/document_detail/2856950.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
+        }
+      ]
+    }
+  ]
+}

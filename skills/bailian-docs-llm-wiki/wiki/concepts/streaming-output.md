@@ -1,62 +1,64 @@
 # 流式输出
 
-流式输出（Streaming Output）是指服务端在生成结果的过程中，将数据分片逐步推送给客户端，而非等待全部生成完毕后一次性返回。在百炼平台中，流式输出广泛应用于文本生成、语音合成、音乐生成和实时多模态交互等场景，显著降低用户感知的首次响应延迟。
+流式输出（Streaming Output）是指模型或服务在生成结果的过程中，将数据以增量片段的方式逐步返回给客户端，而非等待全部生成完毕后一次性返回。这种模式显著降低了用户感知的首字延迟，适用于对实时性要求较高的交互场景。
 
-## 流式输出的核心价值
+## 在百炼平台中的应用场景
 
-- **降低首包延迟**：客户端无需等待完整结果即可开始渲染或播放，用户体验更流畅。
-- **支持大体量内容**：长文本、长音频等场景下，流式传输可避免单次响应体过大导致的超时或内存压力。
-- **实时交互基础**：在语音对话、实时 TTS 等场景中，流式输出是实现低延迟双向通信的必要机制。
+流式输出在百炼平台的多种 API 和服务中广泛使用：
 
-## 在百炼平台不同场景中的使用方式
+### 文本生成
 
-### 文本生成（Qwen 大模型）
-
-通过 [OpenAI 兼容接口](openai-compatible-api.md)或 DashScope 原生接口调用 Qwen 系列模型时，设置 `stream: true` 即可启用流式输出。服务端以 SSE（Server-Sent Events）协议逐 token 推送生成内容，每个事件包含增量文本片段，最终事件通过 `finish_reason: stop` 标识生成结束。
+通义千问（Qwen）系列模型的各类接口（OpenAI 兼容 Chat Completions、DashScope 原生接口等）均支持流式输出。开发者通过设置 `stream` 参数为 `true`，即可让模型在生成过程中逐 token 返回结果，而非等待完整响应。这在聊天对话、长文本生成等场景中尤为重要。
 
 ### 语音合成（TTS）
 
-百炼平台的语音合成支持两种流式输出方式：
+- **Qwen-TTS 非实时 API**：支持流式输出模式，合成过程中分片返回音频数据。
+- **CosyVoice 实时语音合成**：通过 WebSocket 协议实现双向流式交互，边接收文本输入边输出合成音频。字级别时间戳功能仅在流式输出模式下可用。
+- **CosyVoice 非实时语音合成**：HTTP API 同样支持流式和非流式两种输出模式。
 
-- **Qwen-TTS 非实时 API**：通过 HTTP REST 接口调用时，支持流式输出模式，服务端分片返回音频数据。
-- **Qwen-TTS-Realtime / CosyVoice**：基于 WebSocket 协议的实时合成，客户端流式发送文本，服务端流式返回音频 PCM/WAV/MP3 数据片段，适用于低延迟实时播报场景。
+### 实时多模态交互
+
+Qwen-Omni-Realtime API 通过 WebSocket 实现实时语音、文本与图像的流式交互。服务端通过 `response.audio.delta` 等事件流式返回音频片段，`response.text.delta` 流式返回文本转录，实现低延迟的多模态对话体验。
 
 ### 语音识别（ASR）
 
-实时语音识别（Fun-ASR、Paraformer、Qwen-ASR）天然采用流式模式：客户端持续发送音频流，服务端通过 WebSocket 持续推送识别中间结果与最终结果（以 `sentence_end: true` 标识句尾）。
+实时语音识别服务（Fun-ASR、Paraformer、Qwen-ASR）通过 WebSocket 协议持续接收音频流并流式返回识别结果，包括中间结果和最终结果（`sentence_end=true`），满足实时转写场景需求。
 
-### 音乐生成（Fun-Music）
+### 应用调用
 
-请求时添加 `X-DashScope-SSE: enable` 请求头即可启用 SSE 流式输出。中间消息通过 `output.audio.data` 返回 Base64 编码的音频片段（`finish_reason` 为 `"null"`），最终消息通过 `output.audio.url` 返回完整音频下载链接并附带歌词等元信息（`finish_reason` 为 `stop`）。
+百炼平台的智能体应用和工作流应用同样支持流式输出，在调用 `Application.call()` 或 HTTP 接口时启用流式模式，可逐步接收应用的生成结果。
 
-### 实时多模态交互（Omni-Realtime）
+## 关键参数与配置
 
-Qwen-Omni-Realtime API 通过 WebSocket 实现全双工流式交互。服务端以 `response.audio.delta` 事件流式返回 24 kHz PCM 音频，同时通过 `response.text.delta` 等事件流式返回文本转录和推理结果。
+| 参数/配置 | 适用场景 | 说明 |
+|-----------|---------|------|
+| `stream` | 文本生成 API | 设为 `true` 开启流式输出，响应以 SSE（Server-Sent Events）格式逐块返回 |
+| `incremental_output` | DashScope 文本生成 | 控制流式输出是增量模式（仅返回新增内容）还是全量模式（每次返回完整结果） |
+| WebSocket 协议 | 语音合成/识别、实时多模态 | 天然支持双向流式通信，无需额外配置即可实现流式输出 |
+| `response_format` | 语音合成流式输出 | 指定输出音频格式（pcm、wav、mp3、opus），影响流式分片大小 |
+| SSE | HTTP 流式输出 | 通过 `text/event-stream` 内容类型实现 HTTP 长连接下的流式传输 |
 
-## 关键参数和配置
+## 实现方式对比
 
-| 场景 | 协议 | 启用方式 | 数据格式 |
-| --- | --- | --- | --- |
-| 文本生成 | HTTP SSE | 请求体设置 `stream: true` | 增量文本 token |
-| 音乐生成 | HTTP SSE | 请求头 `X-DashScope-SSE: enable` | Base64 音频片段 |
-| 语音合成（非实时） | HTTP | SDK 参数或 `stream: true` | 音频数据分片 |
-| 语音合成（实时） | WebSocket | 建立连接即为流式 | PCM/WAV/MP3 音频帧 |
-| 语音识别 | WebSocket | 建立连接即为流式 | JSON 识别结果 |
-| 多模态实时 | WebSocket | 建立连接即为流式 | 音频 PCM + 文本 JSON |
+百炼平台根据不同接口协议提供两种流式输出实现：
 
-## 开发注意事项
+- **HTTP SSE（Server-Sent Events）**：适用于文本生成、非实时语音合成等 HTTP 接口。客户端建立长连接后，服务端以 `data:` 前缀逐行推送结果片段。
+- **WebSocket**：适用于实时语音合成、语音识别、多模态实时交互等场景。支持全双工通信，客户端和服务端可同时收发数据，延迟更低。
 
-- **SSE 流式输出**需客户端支持逐行解析 `data:` 前缀的事件流，推荐使用官方 SDK 而非手动解析。
-- **WebSocket 流式输出**的音频数据通常为原始 PCM 格式，客户端需按指定采样率（如 16 kHz 输入、24 kHz 输出）正确解码和播放。
-- 流式输出过程中如遇错误，服务端会通过 `error` 事件或 HTTP 错误状态码通知，客户端应做好异常处理和重连逻辑。
-- 部分模型和接口对流式与非流式模式下的输入参数限制不同（如 Fun-Music 歌词长度限制），请参考各 API 文档确认。
+## 开发建议
+
+- 对于对话类应用，建议默认启用流式输出以提升用户体验。
+- 使用 HTTP SSE 时，注意处理连接中断和重连逻辑。
+- 使用 WebSocket 流式输出时，需按协议规范处理各类服务端事件（如 `task-started`、`result-generated`、`task-finished`）。
+- 在流式模式下，需在客户端实现结果拼接逻辑，将增量片段组装为完整响应。
 
 ## 关联主题页
 
+- [qwen api reference](../api/qwen-api-reference.md)
 - [omni realtime api](../api/omni-realtime-api.md)
 - [speech synthesis api reference](../api/speech-synthesis-api-reference.md)
+- [audio api references](../api/audio-api-references.md)
 - [speech recognition api reference](../api/speech-recognition-api-reference.md)
-- [music generation references](../api/music-generation-references.md)
-- [qwen api reference](../api/qwen-api-reference.md)
+- [bailian application calling](../guides/bailian-application-calling.md)
 
 

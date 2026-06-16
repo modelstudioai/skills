@@ -14,37 +14,112 @@
         ]
       },
       "openSource": true,
-      "description": "Kimi K2.6 是 Kimi 最新最智能的模型，Kimi K2.6 的通用 Agent、代码、视觉理解等综合能力得到全面提升，其中在博士级难度的完整版人类最后的考试（Humanity’s Last Exam）、在考察模型真实软件工程能力的 SWE-Bench Pro、评估 Agent 深度检索能力的 DeepSearchQA 等基准测试中均取得行业领先的成绩，同时支持文本、图片与视频输入，思考与非思考模式，对话与 Agent 任务。",
-      "maxOutputTokensThinking": 262144,
+      "description": "Kimi K2.7 Code 是月之暗面 Kimi发布并开源的新一代编程专用模型，定位为 Kimi 迄今最智能的 Coding 模型。Kimi K2.7 Code 是一个以编码为中心的智能体模型（coding-focused agentic model），专为长程软件工程任务优化。它擅长跨多文件重构、功能实现、长会话调试等需要可靠指令遵循和端到端完成率的复杂工作流。",
       "features": [
-        "model-experience",
         "function-calling",
         "structured-outputs",
         "prefix-completion",
         "cache"
       ],
       "provider": "moonshot-ai",
-      "model": "kimi/kimi-k2.6",
-      "prices": [
+      "limit": {
+        "message": "model not exist"
+      },
+      "model": "kimi/kimi-k2.7-code",
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 3000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 500,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 3000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 500,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": [
+        "TG",
+        "VU",
+        "Reasoning"
+      ],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 262144,
+      "latestOnlineAt": "2026-06-15T01:49:13.000+00:00",
+      "contextWindow": 262144,
+      "maxInputTokens": 262144,
+      "offlineInfo": {},
+      "inferenceProvider": "moonshot-ai",
+      "name": "kimi/kimi-k2.7-code",
+      "docUrl": "https://bailian.console.aliyun.com/cn-beijing?tab=doc#/doc/?type=model&url=3021620",
+      "predictConfig": [
         {
-          "priceUnit": "每百万tokens",
-          "price": "6.5",
-          "type": "input_token",
-          "priceName": "输入"
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
         },
         {
-          "priceUnit": "每百万tokens",
-          "price": "27",
-          "type": "output_token",
-          "priceName": "输出"
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
         },
         {
-          "priceUnit": "每百万tokens",
-          "price": "1.1",
-          "type": "input_token_cache",
-          "priceName": "输入（缓存命中）"
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
         }
       ],
+      "samples": {
+        "openai": {
+          "default": {
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"kimi/kimi-k2.7-code\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\n                    \"type\": \"image_url\",\n                    \"image_url\": {\n                        \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n                    },\n                },\n                {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"},\n            ],\n        },\n    ],\n)\nprint(completion.choices[0].message.content)",
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n  \"model\": \"kimi/kimi-k2.7-code\",\n  \"messages\": [\n  {\n    \"role\": \"user\",\n    \"content\": [\n      {\"type\": \"image_url\", \"image_url\": {\"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"}},\n      {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"}\n    ]\n  }]\n}'",
+            "nodejs": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI({\n  // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: \"sk-xxx\"\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: \"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n});\n\nasync function main() {\n  const response = await openai.chat.completions.create({\n    model: \"kimi/kimi-k2.7-code\",\n    messages: [\n      {\n        role: \"user\",\n        content: [{\n            type: \"image_url\",\n            image_url: {\n              \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n            }\n          },\n          {\n            type: \"text\",\n            text: \"请仅输出图像中的文本内容。\"\n          }\n        ]\n      }\n    ]\n  });\n  console.log(response.choices[0].message.content);\n}\nmain()"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Text",
+          "Image",
+          "Video"
+        ]
+      },
+      "openSource": true,
+      "description": "Kimi K2.6 是 Kimi 最新最智能的模型，Kimi K2.6 的通用 Agent、代码、视觉理解等综合能力得到全面提升，其中在博士级难度的完整版人类最后的考试（Humanity’s Last Exam）、在考察模型真实软件工程能力的 SWE-Bench Pro、评估 Agent 深度检索能力的 DeepSearchQA 等基准测试中均取得行业领先的成绩，同时支持文本、图片与视频输入，思考与非思考模式，对话与 Agent 任务。",
+      "maxOutputTokensThinking": 262144,
+      "features": [
+        "function-calling",
+        "structured-outputs",
+        "prefix-completion",
+        "cache"
+      ],
+      "provider": "moonshot-ai",
+      "limit": {
+        "message": "model not exist"
+      },
+      "model": "kimi/kimi-k2.6",
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 6,
@@ -115,35 +190,17 @@
       "openSource": false,
       "description": "Kimi K2.5 是 Kimi 在2026年最新推出的智能模型，在 Agent、代码、视觉理解及一系列通用智能任务上取得开源 SoTA 表现。同时 Kimi K2.5 也是 Kimi 迄今最全能的模型，原生的多模态架构设计，同时支持视觉与文本输入、思考与非思考模式、对话与 Agent 任务。",
       "features": [
-        "model-experience",
         "function-calling",
         "structured-outputs",
         "prefix-completion",
         "cache"
       ],
       "provider": "moonshot-ai",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "kimi/kimi-k2.5",
       "iconUrl": "https://img.alicdn.com/imgextra/i4/O1CN01KzHLBW1LISVEUaotl_!!6000000001276-2-tps-56-56.png",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "4",
-          "type": "input_token",
-          "priceName": "输入"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "21",
-          "type": "output_token",
-          "priceName": "输出"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "0.7",
-          "type": "input_token_cache",
-          "priceName": "输入（缓存命中）"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 6,

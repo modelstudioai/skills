@@ -105,7 +105,7 @@ CosyVoice 和 Qwen 系列的 WebSocket 模型支持通过 DashScope SDK（Java�
 
 以下为各场景下最推荐的模型，可前往模型广场查看详情。
 
-**模型**
+**模型ID**
 
 **系列**
 
@@ -159,7 +159,7 @@ HTTP
 
 部分 CosyVoice 模型支持 SSML 标记和 LaTeX 公式朗读。
 
-**模型**
+**模型ID**
 
 **API**
 
@@ -268,7 +268,7 @@ WebSocket
 
 ### Qwen3-TTS
 
-**模型**
+**模型ID**
 
 **API**
 
@@ -451,7 +451,7 @@ WebSocket
 
 ### MiniMax
 
-**模型**
+**模型ID**
 
 **API**
 
@@ -505,7 +505,7 @@ HTTP
 
 以下为按 Token 计费的旧版 Qwen-TTS 模型。若您已迁移到 Qwen3-TTS，可优先使用前文推荐的模型。
 
-**模型**
+**模型ID**
 
 **API**
 

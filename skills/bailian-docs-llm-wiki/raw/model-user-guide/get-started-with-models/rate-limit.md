@@ -78,7 +78,8 @@
     
     client = AsyncOpenAI(
         api_key=API_KEY,
-        base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
+        # 以下为华北2（北京）地域的URL，请将WorkspaceId替换为真实的业务空间ID。     
+        base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     )
     
     async def send_request(model):
@@ -4329,6 +4330,14 @@ vanchin/deepseek-ocr
 
 > **含输入与输出Token**
 
+kimi-k2.7-code
+
+中国内地
+
+500
+
+1,000,000
+
 kimi-k2.6
 
 中国内地
@@ -4377,6 +4386,14 @@ Moonshot-Kimi-K2-Instruct
 
 > **含输入与输出Token**
 
+kimi-k2.7-code
+
+全球
+
+500
+
+1,000,000
+
 kimi-k2.5
 
 全球
@@ -4400,6 +4417,14 @@ kimi-k2.5
 **每分钟消耗Token数（TPM）**
 
 > **含输入与输出Token**
+
+kimi-k2.7-code
+
+全球
+
+500
+
+1,000,000
 
 kimi-k2.5
 
@@ -4427,17 +4452,21 @@ kimi-k2.5
 
 > **含输入与输出Token**
 
-kimi/kimi-k2.6
+kimi/kimi-k2.7-code
 
 中国内地
 
 500
 
-> 同一个阿里云百炼API Key 下，kimi/kimi-k2.6与 kimi/kimi-k2.5 共享 500 RPM 限流配额。即这 2 个模型的每分钟请求总数加起来不能超过 500。
+> 同一个阿里云百炼API Key 下，在 3 个模型中共享 500 RPM 限流配额。即这 2 个模型的每分钟请求总数加起来不能超过 500。
 
 3,000,000
 
-> 同一个阿里云百炼API Key 下，kimi/kimi-k2.6 与 kimi/kimi-k2.5 共享 3000000 TPM 限流配额。即这 2 个模型的每分钟 Token 消耗总数加起来不能超过 3000000。
+> 同一个阿里云百炼API Key 下，在 3 个模型中共享 3000000 TPM 限流配额。即这 2 个模型的每分钟 Token 消耗总数加起来不能超过 3000000。
+
+kimi/kimi-k2.6
+
+中国内地
 
 kimi/kimi-k2.5
 

@@ -486,6 +486,18 @@ string
 
 可以设置多种，以逗号分隔，默认为transcript
 
+word\_timestamp\_enabled
+
+boolean
+
+否
+
+是否下发tts合成音频对应的时间戳。如果设置为true，会在RespondingContent.extra\_info下返回时间戳信息，用于客户端显示字幕等，默认为false。
+
+必须在intermediate\_text有指定dialog的情况下才会返回；
+
+只有[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list#undefined)中表明支持时间戳的音色和复刻音色才会返回。
+
 transmit\_rate\_limit
 
 int
@@ -1781,6 +1793,8 @@ object
 -   agent\_info: 智能体信息
     
 -   tool\_calls: 插件返回的信息
+    
+-   word\_timestamps: tts对应文本时间戳信息
     
 
 如果没有扩展信息要提交则省略此字段。

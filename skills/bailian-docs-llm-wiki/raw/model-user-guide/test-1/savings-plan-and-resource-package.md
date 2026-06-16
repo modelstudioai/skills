@@ -30,15 +30,17 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 ### **使用说明**
 
-**生效时间**：可按需选择“开通后立即生效”或“指定时间（按小时）生效”。
+**生效时间**：可按需选择”开通后立即生效”或”指定时间（按小时）生效”。
 
 **承诺周期说明**：**以月为单位**（从生效日到下个月的对应日），月承诺周期结束时，剩余额度自动过期，不可累积到下一周期。举例：如果一次性订阅了 3 个月的节省计划（月承诺额度 1000 元），**并非在 3 个月内获得 3000 元总额度，而是每月独立获得 1000 元额度**，当月未使用完的部分自动清零，不可累积到下个订阅月。
 
+**调用方式**：百炼控制台模型体验、API 代码调用、接入第三方工具（如[OpenClaw](https://help.aliyun.com/zh/model-studio/openclaw)等，填写按量计费接入凭证）。
+
 **抵扣范围**：
 
--   **支持抵扣**：模型调用（输入和输出 Tokens）、模型原生工具调用（如 Function Call、联网搜索、网页抓取等）、上下文缓存、批量推理等产生的费用。
+-   **支持抵扣**：模型调用（输入和输出 Tokens）、模型原生工具调用（如 Function Call、网页抓取等）、上下文缓存、批量推理等产生的费用。
     
--   **不支持抵扣**：模型调优、模型部署的费用，以及 MCP 广场和模型体验的联网搜索的费用。
+-   **不支持抵扣**：模型调优、模型部署的费用。
     
 
 **抵扣逻辑**：
@@ -66,7 +68,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 不同档位享受不同的折扣。
 
--   A 类：千问（不含 qwen3.6-max-preview）、千问-开源、文本向量、多模态向量、排序模型、行业模型、模型原生工具调用（[Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling)、[联网搜索](https://help.aliyun.com/zh/model-studio/web-search)、[网页抓取](https://help.aliyun.com/zh/model-studio/web-extractor)等；不含 MCP 广场和模型体验的联网搜索）
+-   A 类：千问（不含 qwen3.6-max-preview）、千问-开源、文本向量、多模态向量、排序模型、行业模型、模型原生工具调用（[Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling)、[网页抓取](https://help.aliyun.com/zh/model-studio/web-extractor)等）
     
 -   B 类：图像生成、语音合成、语音识别与翻译、视频生成与编辑
     
@@ -915,6 +917,10 @@ qwen-turbo的实时推理服务（[非思考模式](https://help.aliyun.com/zh/m
 ### **三方直供模型支持抵扣 AI 通用型节省计划吗？**
 
 [C 类模型](#ho1f5x10wuun0)中，阿里直供的模型支持抵扣，三方直供的模型不支持抵扣。可以在[百炼模型广场](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)中通过模型卡片右上角标识（如"阿里直供"或"三方直供"标签）判断。
+
+### **购买节省计划后如何使用？**
+
+节省计划在生效后无需手动激活或绑定。您通过百炼控制台模型体验、API 代码调用或接入第三方工具调用模型时，产生的费用会按[抵扣顺序](#59b7ecf08fiac)自动抵扣。您可以在[节省计划总览页面](”https://usercenter2.aliyun.com/resource/spn/overview”)查看抵扣明细。
 
 ### **为什么购买了资源包，但没有抵扣？**
 

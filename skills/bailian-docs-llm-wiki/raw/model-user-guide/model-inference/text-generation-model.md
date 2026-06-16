@@ -82,7 +82,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 ## 推荐模型
 
-**模型**
+**模型ID**
 
 **上下文**
 
@@ -180,7 +180,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-`kimi-k2.6`
+`kimi-k2.7-code`
 
 256k
 
@@ -226,7 +226,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 ### Qwen3.7
 
-**模型**
+**模型ID**
 
 **上下文**
 
@@ -356,7 +356,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 ### Qwen3.6
 
-**模型**
+**模型ID**
 
 **上下文**
 
@@ -454,7 +454,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 ### Qwen3.5
 
-**模型**
+**模型ID**
 
 **上下文**
 
@@ -600,7 +600,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 ### 第三方模型
 
-**模型**
+**模型ID**
 
 **上下文**
 
@@ -660,7 +660,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-`kimi-k2.6`
+`kimi-k2.7-code`
 
 256k
 
@@ -716,7 +716,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 #### Qwen3
 
-**模型**
+**模型ID**
 
 **上下文**
 
@@ -942,7 +942,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 #### Qwen3-Coder
 
-**模型**
+**模型ID**
 
 **上下文**
 
@@ -1070,7 +1070,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 #### 翻译
 
-**模型**
+**模型ID**
 
 **上下文**
 
@@ -1142,7 +1142,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 #### 千问Long
 
-**模型**
+**模型ID**
 
 **上下文**
 
@@ -1200,7 +1200,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 #### 角色扮演
 
-**模型**
+**模型ID**
 
 **上下文**
 
@@ -1258,7 +1258,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 #### 旧版Qwen
 
-**模型**
+**模型ID**
 
 **上下文**
 
@@ -1386,7 +1386,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 #### **三方模型**
 
-**模型**
+**模型ID**
 
 **上下文**
 
