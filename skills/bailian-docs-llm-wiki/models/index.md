@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 162 个模型家族 · 362 个主干模型 · 更新于 2026-06-16
+> 自动生成 · 共 167 个模型家族 · 370 个主干模型 · 更新于 2026-06-16
 
 **机器查询走结构化文件**：
 
@@ -11,7 +11,7 @@
 
 join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].slug`。
 
-## 文本生成 `TG` — 33 个家族
+## 文本生成 `TG` — 34 个家族
 
 - [通义法睿-Plus-32K](groups/farui-plus.json) — 通义法睿是以通义千问为基座经法律行业数据和知识专门训练的法律行业大模型产品，综合运用了模型精调、强化学习、 RAG检索增强、法律Agent技术，具有回答法律问题、推理法律适用、推荐裁判类案、辅助案情分…
   - 模型：`farui-plus`
@@ -23,6 +23,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`tongyi-intent-detect-v3`
 - [智谱GLM系列文本模型](groups/zhipu-models-market-place.json) — 由智谱提供的GLM系列文本模型API服务
   - 模型：`ZHIPU/GLM-5`, `ZHIPU/GLM-5.1`
+- [Baichuan2-Turbo](groups/baichuan2-turbo.json) — Baichuan2-Turbo系列模型是百川智能推出的大语言模型，采用搜索增强技术实现大模型与领域知识、全网知识的全面链接。
+  - 模型：`baichuan2-turbo`
 - [GLM](groups/glm-4.5.json) — GLM是由智谱提供的开源模型。
   - 模型：`glm-4.5`, `glm-4.5-air`, `glm-4.6`, `glm-4.7`, `glm-5`, `glm-5.1`
 - [Kimi](groups/kimi-models-market-place.json) — 由月之暗面提供的Kimi系列模型的API服务。
@@ -78,9 +80,9 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [StepFun推理模型](groups/stepfun-models-market-place.json) — 由阶跃星辰StepFun提供的Step系列推理模型API服务
   - 模型：`stepfun/step-3.7-flash`
 - [Vanchin DeepSeek](groups/vanchin-models-market-place.json) — 由快手万擎提供的DeepSeek系列模型API服务。
-  - 模型：`vanchin/deepseek-ocr`, `vanchin/deepseek-r1`, `vanchin/deepseek-v3`, `vanchin/deepseek-v3.1-terminus`, `vanchin/deepseek-v3.2-think`, `vanchin/deepseek-v4-pro`
+  - 模型：`vanchin/deepseek-ocr`, `vanchin/deepseek-r1`, `vanchin/deepseek-v3`, `vanchin/deepseek-v3.1-terminus`, `vanchin/deepseek-v3.2-speciale`, `vanchin/deepseek-v3.2-think`, `vanchin/deepseek-v4-pro`
 
-## 图像生成 `IG` — 29 个家族
+## 图像生成 `IG` — 30 个家族
 
 - [创意海报生成](groups/wanx-poster-generation-v1.json) — 创意海报生成，您的创意海报魔法工厂！它能够根据你的要求自动生成海报的背景和文字排版，支持多种海报风格，从宣传到祝福，让每一张海报都成为你的个性宣言。无需设计基础，轻松制作出彩作品，让创意触手可及。
   - 模型：`wanx-poster-generation-v1`
@@ -130,6 +132,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen-image`, `qwen-image-plus`
 - [Qwen-MT-Image](groups/qwen-mt-image.json) — 专注做图片翻译的模型服务，能将中、英、日等11个语言的图片翻译到指定的语言，精准还原图片排版和内容信息，支持术语定义、敏感词过滤、商品主体检测等自定义功能，提供灵活、准确、高效的图像本地化服务。
   - 模型：`qwen-mt-image`
+- [StableDiffusion文生图模型-v1.5](groups/stable-diffusion-v1.5.json) — stable-diffusion-v1.5是用stable-diffusion-v1.2 检查点的权重初始化的，并随后在 "laion-aesthetics v2 5+" 上以 512x512 的分辨…
+  - 模型：`stable-diffusion-v1.5`
 - [Wan-Image](groups/wan-image-edit.json) — 指令编辑图片内容，轻松实现局部修改、风格变化、一致性保持等
   - 模型：`wan2.5-i2i-preview`, `wan2.6-image`, `wan2.7-image`, `wan2.7-image-pro`, `wanx2.1-imageedit`
 - [Wan-T2I](groups/wan-text-to-image.json) — 文字生成图片，写实质感细腻画面，文字内容生成，艺术风格表现
@@ -232,7 +236,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 ## 推理 `Reasoning` — 14 个家族
 
 - [DeepSeek](groups/deepseek.json) — DeepSeek是由深度求索提供的开源模型，包含 V3.1、V3、R1以及基于Qwen2.5系列蒸馏的大语言模型。
-  - 模型：`deepseek-r1`, `deepseek-r1-0528`, `deepseek-r1-distill-qwen-1.5b`, `deepseek-r1-distill-qwen-14b`, `deepseek-r1-distill-qwen-32b`, `deepseek-r1-distill-qwen-7b`, `deepseek-v3`, `deepseek-v3.1`, `deepseek-v3.2`, `deepseek-v3.2-exp`, `deepseek-v4-flash`, `deepseek-v4-pro`
+  - 模型：`deepseek-r1`, `deepseek-r1-0528`, `deepseek-r1-distill-llama-70b`, `deepseek-r1-distill-llama-8b`, `deepseek-r1-distill-qwen-1.5b`, `deepseek-r1-distill-qwen-14b`, `deepseek-r1-distill-qwen-32b`, `deepseek-r1-distill-qwen-7b`, `deepseek-v3`, `deepseek-v3.1`, `deepseek-v3.2`, `deepseek-v3.2-exp`, `deepseek-v4-flash`, `deepseek-v4-pro`
 - [MiniMax](groups/MiniMax-M2.1.json) — MiniMax推出的旗舰级开源大模型，聚焦真实世界复杂任务，包含MiniMax-M2.1、MiniMax-M2.5等开源模型。
   - 模型：`MiniMax-M2.1`, `MiniMax-M2.5`
 - [QVQ-Max](groups/qvq-max.json) — 千问QVQ视觉推理模型，支持视觉输入及思维链输出，在数学、编程、视觉分析、创作以及通用任务上都表现了更强的能力。
@@ -260,6 +264,31 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen3.7-Max](groups/qwen3.7-max.json) — Qwen3.7系列中规模最大、综合能力最强的Max模型，当前开放纯文本模型能力供体验。Qwen3.7是面向智能体时代的新一代旗舰模型，核心优势在于智能体能力的广度与深度：在编程、办公与生产力、长周期自…
   - 模型：`qwen3.7-max`, `qwen3.7-max-preview`
 
+## 视觉理解 `VU` — 11 个家族
+
+- [GUI-Plus](groups/gui-plus.json) — GUI系列图形界面交互基础模型，针对手机端与电脑端图形界面理解与交互任务，性能优于开源版同类GUI模型。全面升级跨平台界面理解与多步任务规划，支持跨应用复杂任务；具备精细化动作执行与多角色多智能体协作…
+  - 模型：`gui-plus`
+- [Kimi](groups/Kimi-K2.json) — Kimi是由月之暗面提供的开源模型，包含k2.5、k2-thinking、k2-instruct等多模态和大语言模型。
+  - 模型：`kimi-k2-thinking`, `kimi-k2.5`, `kimi-k2.6`, `kimi-k2.7-code`, `Moonshot-Kimi-K2-Instruct`
+- [Llama-4-Maverick-17B-128E-Instruct](groups/llama-4-maverick-17b-128e-instruct.json) — Llama 4 Maverick，一个拥有170亿参数和128个专家的模型。利用了专家混合架构，以提供业界领先的文本和图像理解性能
+  - 模型：`llama-4-maverick-17b-128e-instruct`
+- [Llama-4-Scout-17B-16E-Instruct](groups/llama-4-scout-17b-16e-instruct.json) — Llama 4 Scout，一个拥有170亿参数和16个专家的模型。利用了专家混合架构，以提供业界领先的文本和图像理解性能
+  - 模型：`llama-4-scout-17b-16e-instruct`
+- [Qwen-VL-Max](groups/qwen-vl-max.json) — Qwen-VL-Max，即千问超大规模视觉语言模型。相比增强版，再次提升视觉推理能力和指令遵循能力，提供更高的视觉感知和认知水平。在更多复杂任务上提供最佳的性能。
+  - 模型：`qwen-vl-max`
+- [Qwen-VL-OCR](groups/qwen-vl-ocr.json) — Qwen-VL-OCR，即基于Qwen-VL训练的OCR识别大模型。通过统一模型的方式聚合多种图文识别、解析、处理类任务，提供强大的图文识别能力。
+  - 模型：`qwen-vl-ocr`, `qwen-vl-ocr-1028`, `qwen-vl-ocr-latest`
+- [Qwen-VL-Plus](groups/qwen-vl-plus.json) — Qwen-VL-Plus，即千问大规模视觉语言模型增强版。大幅提升细节识别能力和文字识别能力，支持超百万像素分辨率和任意长宽比规格的图像。在广泛的视觉任务上提供卓越的性能。
+  - 模型：`qwen-vl-plus`
+- [Qwen3-VL-Flash](groups/qwen3-vl-flash.json) — Qwen3系列小尺寸视觉理解模型，实现思考模式和非思考模式的有效融合，效果优于开源版Qwen3-VL-30B-A3B，响应速度快。全面升级图像/视频理解，支持长视频长文档等超长上下文、空间感知与万物识…
+  - 模型：`qwen3-vl-flash`
+- [Qwen3-VL-Plus](groups/qwen3-vl-plus.json) — Qwen3系列视觉理解模型，实现思考模式和非思考模式的有效融合，视觉智能体能力在OS World等公开测试集上达到世界顶尖水平。此版本在视觉coding、空间感知、多模态思考等方向全面升级；视觉感知与…
+  - 模型：`qwen3-vl-plus`
+- [Qwen3.6开源模型](groups/qwen3.6.json) — Qwen3.6系列开源模型，基于混合架构设计的原生视觉语言模型，模型效果相较于3.5系列同尺寸有大幅提升。
+  - 模型：`qwen3.6-27b`, `qwen3.6-35b-a3b`
+- [Qwen3开源模型](groups/qwen3.json) — Qwen3系列开源模型，包含混合模型、思考模型与非思考模型，思考能力与通用能力均达到同规模业界SOTA水平。
+  - 模型：`qwen3-14b`, `qwen3-235b-a22b`, `qwen3-235b-a22b-instruct-2507`, `qwen3-235b-a22b-thinking-2507`, `qwen3-30b-a3b`, `qwen3-30b-a3b-instruct-2507`, `qwen3-30b-a3b-thinking-2507`, `qwen3-32b`, `qwen3-8b`, `qwen3-coder-next`, `qwen3-next-80b-a3b-instruct`, `qwen3-next-80b-a3b-thinking`, `qwen3-vl-235b-a22b-instruct`, `qwen3-vl-235b-a22b-thinking`, `qwen3-vl-30b-a3b-instruct`, `qwen3-vl-30b-a3b-thinking`, `qwen3-vl-32b-instruct`, `qwen3-vl-32b-thinking`, `qwen3-vl-8b-instruct`, `qwen3-vl-8b-thinking`
+
 ## 语音识别 `ASR` — 11 个家族
 
 - [一句话识别及翻译V1.0](groups/gummy-chat-v1.json) — 多语言语音转写及翻译的多模态大模型。本模型支持60秒以内的实时语音识别，适用于语音搜索、设备指令等场景。提供10个混合语种的高准确率识别服务，同时支持中英日韩互译，以其他6个语种翻译成中文或英文。
@@ -284,27 +313,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen3-asr-flash-filetrans`
 - [Qwen3-Omni-30b-a3b-Captioner](groups/qwen3-omni-30b-a3b-captioner.json) — 千问3-Omni-30b-a3b-Captioner是一款强大的音频细粒度分析模型，专为在复杂多变的音频场景中生成精准、全面的内容描述而设计，可自动解析并描述从复杂语音、环境声到音乐、影视声效等各类音…
   - 模型：`qwen3-omni-30b-a3b-captioner`
-
-## 视觉理解 `VU` — 9 个家族
-
-- [GUI-Plus](groups/gui-plus.json) — GUI系列图形界面交互基础模型，针对手机端与电脑端图形界面理解与交互任务，性能优于开源版同类GUI模型。全面升级跨平台界面理解与多步任务规划，支持跨应用复杂任务；具备精细化动作执行与多角色多智能体协作…
-  - 模型：`gui-plus`
-- [Kimi](groups/Kimi-K2.json) — Kimi是由月之暗面提供的开源模型，包含k2.5、k2-thinking、k2-instruct等多模态和大语言模型。
-  - 模型：`kimi-k2-thinking`, `kimi-k2.5`, `kimi-k2.6`, `kimi-k2.7-code`, `Moonshot-Kimi-K2-Instruct`
-- [Qwen-VL-Max](groups/qwen-vl-max.json) — Qwen-VL-Max，即千问超大规模视觉语言模型。相比增强版，再次提升视觉推理能力和指令遵循能力，提供更高的视觉感知和认知水平。在更多复杂任务上提供最佳的性能。
-  - 模型：`qwen-vl-max`
-- [Qwen-VL-OCR](groups/qwen-vl-ocr.json) — Qwen-VL-OCR，即基于Qwen-VL训练的OCR识别大模型。通过统一模型的方式聚合多种图文识别、解析、处理类任务，提供强大的图文识别能力。
-  - 模型：`qwen-vl-ocr`, `qwen-vl-ocr-1028`, `qwen-vl-ocr-latest`
-- [Qwen-VL-Plus](groups/qwen-vl-plus.json) — Qwen-VL-Plus，即千问大规模视觉语言模型增强版。大幅提升细节识别能力和文字识别能力，支持超百万像素分辨率和任意长宽比规格的图像。在广泛的视觉任务上提供卓越的性能。
-  - 模型：`qwen-vl-plus`
-- [Qwen3-VL-Flash](groups/qwen3-vl-flash.json) — Qwen3系列小尺寸视觉理解模型，实现思考模式和非思考模式的有效融合，效果优于开源版Qwen3-VL-30B-A3B，响应速度快。全面升级图像/视频理解，支持长视频长文档等超长上下文、空间感知与万物识…
-  - 模型：`qwen3-vl-flash`
-- [Qwen3-VL-Plus](groups/qwen3-vl-plus.json) — Qwen3系列视觉理解模型，实现思考模式和非思考模式的有效融合，视觉智能体能力在OS World等公开测试集上达到世界顶尖水平。此版本在视觉coding、空间感知、多模态思考等方向全面升级；视觉感知与…
-  - 模型：`qwen3-vl-plus`
-- [Qwen3.6开源模型](groups/qwen3.6.json) — Qwen3.6系列开源模型，基于混合架构设计的原生视觉语言模型，模型效果相较于3.5系列同尺寸有大幅提升。
-  - 模型：`qwen3.6-27b`, `qwen3.6-35b-a3b`
-- [Qwen3开源模型](groups/qwen3.json) — Qwen3系列开源模型，包含混合模型、思考模型与非思考模型，思考能力与通用能力均达到同规模业界SOTA水平。
-  - 模型：`qwen3-14b`, `qwen3-235b-a22b`, `qwen3-235b-a22b-instruct-2507`, `qwen3-235b-a22b-thinking-2507`, `qwen3-30b-a3b`, `qwen3-30b-a3b-instruct-2507`, `qwen3-30b-a3b-thinking-2507`, `qwen3-32b`, `qwen3-8b`, `qwen3-coder-next`, `qwen3-next-80b-a3b-instruct`, `qwen3-next-80b-a3b-thinking`, `qwen3-vl-235b-a22b-instruct`, `qwen3-vl-235b-a22b-thinking`, `qwen3-vl-30b-a3b-instruct`, `qwen3-vl-30b-a3b-thinking`, `qwen3-vl-32b-instruct`, `qwen3-vl-32b-thinking`, `qwen3-vl-8b-instruct`, `qwen3-vl-8b-thinking`
 
 ## 实时语音识别 `Realtime-ASR` — 7 个家族
 
@@ -374,6 +382,11 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 
 - [Qwen-TTS-Realtime](groups/qwen-tts-realtime.json) — Qwen-TTS实时模型是通义实验室“qwen系列”模型中的语音合成利器。具备双向上下文感知能力，可以低延迟高保真完成多音色、方言及长文本的双向流式生成。
   - 模型：`qwen-tts-realtime`, `qwen-tts-realtime-latest`
+
+## Realtime-Voice-Replication `Realtime-Voice-Replication` — 1 个家族
+
+- [通义千问-TTS-VC-Realtime-2025-08-20](groups/qwen-tts-vc-realtime-2025-08-20.json) — qwen-tts-vc-realtime-2025-08-20是一个基于通义千问大模型的零样本语音克隆（Zero-Shot Voice Cloning）服务，具备强大的音色学习与个性化语音合成能力，支…
+  - 模型：`qwen-tts-vc-realtime-2025-08-20`
 
 ## 3D 生成 `3D-generation` — 1 个家族
 

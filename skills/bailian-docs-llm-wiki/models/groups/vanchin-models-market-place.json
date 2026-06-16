@@ -19,27 +19,10 @@
         "cache"
       ],
       "provider": "deepseek",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "vanchin/deepseek-v4-pro",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "12",
-          "type": "input_token",
-          "priceName": "输入"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "24",
-          "type": "output_token",
-          "priceName": "输出"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "1",
-          "type": "input_token_cache",
-          "priceName": "输入（缓存命中）"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
@@ -125,28 +108,11 @@
         "cache"
       ],
       "provider": "deepseek",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "vanchin/deepseek-v3.2-think",
       "iconUrl": "",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "2",
-          "type": "input_token",
-          "priceName": "输入"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "3",
-          "type": "output_token",
-          "priceName": "输出"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "0.2",
-          "type": "input_token_cache",
-          "priceName": "输入（缓存命中）"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
@@ -242,34 +208,97 @@
         ]
       },
       "openSource": true,
+      "description": "DeepSeek-V3.2 是兼顾高计算效率、卓越推理能力和智能体性能的人工智能模型。该模型基于 DeepSeek 稀疏注意力 (DSA)、可扩展的强化学习框架以及大规模智能体任务合成流程这三项关键技术突破构建而成。该模型为高计算能力版本 DeepSeek-V3.2-Speciale，旨在进一步突破推理能力的边界。",
+      "features": [
+        "function-calling",
+        "structured-outputs"
+      ],
+      "provider": "deepseek",
+      "limit": {
+        "message": "model not exist"
+      },
+      "model": "vanchin/deepseek-v3.2-speciale",
+      "iconUrl": "",
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 2000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 20,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 2000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 20,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": [
+        "Reasoning",
+        "TG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 131072,
+      "latestOnlineAt": "2026-04-07T08:55:34.000+00:00",
+      "contextWindow": 131072,
+      "maxInputTokens": 131072,
+      "inferenceProvider": "vanchin",
+      "name": "Vanchin/DeepSeek-V3.2-Speciale",
+      "docUrl": "https://help.aliyun.com/document_detail/3027089.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
+        }
+      ]
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
+      "openSource": true,
       "description": "DeepSeek-V3.1-Terminus 是 DeepSeek-V3.1 的更新版本，旨在保持模型原有核心能力的同时，针对用户反馈的问题进行了修复和优化。该版本的模型结构与 DeepSeek-V3 保持一致，并在特定领域进行了显著增强。",
       "features": [
         "function-calling",
         "cache"
       ],
       "provider": "deepseek",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "vanchin/deepseek-v3.1-terminus",
       "iconUrl": "",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "4",
-          "type": "input_token",
-          "priceName": "输入"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "12",
-          "type": "output_token",
-          "priceName": "输出"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "1.6",
-          "type": "input_token_cache",
-          "priceName": "输入（缓存命中）"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 6,
@@ -373,28 +402,11 @@
         "cache"
       ],
       "provider": "deepseek",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "vanchin/deepseek-v3",
       "iconUrl": "",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "2",
-          "type": "input_token",
-          "priceName": "输入"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "8",
-          "type": "output_token",
-          "priceName": "输出"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "0.8",
-          "type": "input_token_cache",
-          "priceName": "输入（缓存命中）"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 6,
@@ -480,28 +492,11 @@
         "cache"
       ],
       "provider": "deepseek",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "vanchin/deepseek-r1",
       "iconUrl": "",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "4",
-          "type": "input_token",
-          "priceName": "输入"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "16",
-          "type": "output_token",
-          "priceName": "输出"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "1.6",
-          "type": "input_token_cache",
-          "priceName": "输入（缓存命中）"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 6,
@@ -586,22 +581,11 @@
         "structured-outputs"
       ],
       "provider": "deepseek",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "vanchin/deepseek-ocr",
       "iconUrl": "",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "0.216",
-          "type": "input_token",
-          "priceName": "输入"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "0.216",
-          "type": "output_token",
-          "priceName": "输出"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 6,

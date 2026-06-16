@@ -16,7 +16,7 @@
 3.  推理结果回到接入地域存储，再响应给应用（用户静态数据始终存于所选地域）。
     
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6217721871/CAEQbxiBgICHvaa58hkiIDlkZWFlMzZlYTEyOTQ3MmM5YzQ5ZTkyYTRkNGVkNzU47466796_20260515102254.505.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9698061871/CAEQbxiBgICHvaa58hkiIDlkZWFlMzZlYTEyOTQ3MmM5YzQ5ZTkyYTRkNGVkNzU47466796_20260515102254.505.svg)
 
 ## 选择地域和服务部署范围
 
@@ -70,11 +70,11 @@
 
 **重要**
 
-百炼为华北2（北京）、新加坡地域推出了新版域名 `{WorkspaceId}.{region}.maas.aliyuncs.com`，`{WorkspaceId}` 为业务空间 ID（可前往各地域的[业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)页面获取），`{region}` 取值为 `cn-beijing`、`ap-southeast-1`。以下旧版域名即将下线，请尽快替换：
+百炼为华北2（北京）、新加坡地域推出了新版域名 `{WorkspaceId}.{region}.maas.aliyuncs.com`，`{WorkspaceId}` 为业务空间 ID（可前往各地域的[业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)页面获取），`{region}` 取值为 `cn-beijing`、`ap-southeast-1`。**新版专属域名能够为推理请求提供更加卓越的性能和更高的稳定性，建议迁移至新域名**：
 
--   华北2（北京）：请从 `dashscope.aliyuncs.com` 替换为 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+-   华北2（北京）：建议从 `dashscope.aliyuncs.com` 替换为 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
     
--   新加坡：请从 `dashscope-intl.aliyuncs.com` 替换为 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+-   新加坡：建议从 `dashscope-intl.aliyuncs.com` 替换为 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
     
 
 ### 华北2（北京）

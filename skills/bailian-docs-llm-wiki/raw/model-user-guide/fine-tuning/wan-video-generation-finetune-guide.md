@@ -766,7 +766,7 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxx
         
     -   单个视频文件大小无硬性限制（系统将自动预处理）。
         
-    -   单个视频时长：wan2.2模型 ≤ 5秒；wan2.5模型 ≤ 10秒。
+    -   单个视频时长：wan2.2模型建议2~5秒；wan2.5模型建议2~10秒。
         
 
 ### **数据收集和清洗**

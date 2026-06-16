@@ -18,12 +18,16 @@
 
 ### **Workspace ID**
 
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1229853471/p935590.png)
+
 1.  访问[**业务空间管理**](https://bailian.console.aliyun.com/?admin=1#/efm/business_management)页面。
     
 2.  在业务空间管理列表中获取的Workspace ID为入参中workspaceId。
     
 
 ### **App ID**
+
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1229853471/p935591.png)
 
 1.  访问**[应用广场](https://bailian.console.aliyun.com/#/app-market)**页面，点击**应用实践**。
     
@@ -65,27 +69,37 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 public class CcaiPaasTest {
+
   public static void main(String[] args) throws Exception{
         String accessKeyId = "YOUR_ACCESS_KEY_ID";
         String accessKeySecret = "YOUR_ACCESS_KEY_SECRET";
         String workspaceId = "YOUR_WORKSPACEID";
         String appId = "YOUR_APPID";
+
         Config config = new Config();
         config.setAccessKeyId(accessKeyId).setAccessKeySecret(accessKeySecret).setEndpoint("contactcenterai.cn-shanghai.aliyuncs.com")
                 .setRegionId("cn-shanghai").setProtocol("HTTPS");
+
         Client client = new Client(config);
+
         CreateTaskRequest request=new CreateTaskRequest();
+
+    
         request.setTaskType("audio");
         request.setResultTypes(Arrays.asList("summary"));
         request.setModelCode("tyxmPlus");
+
         CreateTaskRequest.CreateTaskRequestTranscription transcription=new CreateTaskRequest.CreateTaskRequestTranscription();
         transcription.setFileName("***.mkv");
         transcription.setVoiceFileUrl("https://***.oss-cn-beijing.aliyuncs.com/****/***.mkv");
         request.setTranscription(transcription);
+
         CreateTaskResponse response=client.createTask(workspaceId,appId,request);
         System.out.println(JSONObject.toJSONString(response.getBody()));
     }
+     
 }
 ```
 
@@ -100,36 +114,48 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 public class CcaiPaasTest {
      public static void main(String[] args) throws Exception{
         String accessKeyId = "YOUR_ACCESS_KEY_ID";
         String accessKeySecret = "YOUR_ACCESS_KEY_SECRET";
         String workspaceId = "YOUR_WORKSPACEID";
         String appId = "YOUR_APPID";
+
         Config config = new Config();
         config.setAccessKeyId(accessKeyId).setAccessKeySecret(accessKeySecret).setEndpoint("contactcenterai.cn-shanghai.aliyuncs.com")
                 .setRegionId("cn-shanghai").setProtocol("HTTPS");
+
         Client client = new Client(config);
+
         CreateTaskRequest request=new CreateTaskRequest();
+
         CreateTaskRequest.CreateTaskRequestDialogue dialogue = new CreateTaskRequest.CreateTaskRequestDialogue();
+
         List<CreateTaskRequest.CreateTaskRequestDialogueSentences> sentences = new ArrayList<>();
         CreateTaskRequest.CreateTaskRequestDialogueSentences sentences1 = new CreateTaskRequest.CreateTaskRequestDialogueSentences();
         sentences1.setRole("agent");
         sentences1.setText("请问有什么事，你什么性别,胖不胖");
         sentences.add(sentences1);
+
         CreateTaskRequest.CreateTaskRequestDialogueSentences  sentences2 = new  CreateTaskRequest.CreateTaskRequestDialogueSentences ();
         sentences2.setRole("user");
         sentences2.setText("我要买保险，我是男的，很瘦");
         sentences.add(sentences2);
         dialogue.setSentences(sentences);
         dialogue.setSessionId("sessionId-01");
+
         request.setDialogue(dialogue);
+        
         request.setTaskType("text");
         request.setResultTypes(Arrays.asList("summary"));
         request.setModelCode("tyxmPlus");
+
         CreateTaskResponse response=client.createTask(workspaceId,appId,request);
         System.out.println(JSONObject.toJSONString(response.getBody()));
     }
+
+ 
 }
 ```
 
@@ -144,14 +170,19 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 public class CcaiPaasTest {   
+    
     public static void main(String[] args) throws Exception{
         String accessKeyId = "YOUR_ACCESS_KEY_ID";
         String accessKeySecret = "YOUR_ACCESS_KEY_SECRET";
+     
         Config config = new Config();
         config.setAccessKeyId(accessKeyId).setAccessKeySecret(accessKeySecret).setEndpoint("contactcenterai.cn-shanghai.aliyuncs.com")
                 .setRegionId("cn-shanghai").setProtocol("HTTPS");
+
         Client client = new Client(config);
+
         String taskId = "*****-****-****-*****-****";
         GetTaskResultRequest request = new GetTaskResultRequest();
         request.setTaskId(taskId);

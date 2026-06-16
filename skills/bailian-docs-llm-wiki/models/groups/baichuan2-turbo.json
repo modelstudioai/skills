@@ -1,0 +1,44 @@
+{
+  "name": "Baichuan2-Turbo",
+  "description": "Baichuan2-Turbo系列模型是百川智能推出的大语言模型，采用搜索增强技术实现大模型与领域知识、全网知识的全面链接。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
+      "openSource": false,
+      "description": "Baichuan2-Turbo系列模型是百川智能推出的大语言模型，采用搜索增强技术实现大模型与领域知识、全网知识的全面链接。",
+      "features": [
+        "model-experience"
+      ],
+      "provider": "baichuan-ai",
+      "limit": {
+        "message": "model not exist"
+      },
+      "model": "baichuan2-turbo",
+      "capabilities": [
+        "TG"
+      ],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 2048,
+      "latestOnlineAt": "2024-05-08T13:20:44.000+00:00",
+      "contextWindow": 32000,
+      "maxInputTokens": 32000,
+      "inferenceProvider": "bailian",
+      "name": "Baichuan2-Turbo",
+      "docUrl": "https://help.aliyun.com/document_detail/2785549.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        }
+      ]
+    }
+  ]
+}

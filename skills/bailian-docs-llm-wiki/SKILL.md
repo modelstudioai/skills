@@ -104,6 +104,7 @@ description: >-
 | `ME` | 多模态嵌入 |
 | `TR` | 翻译 |
 | `3D-generation` | 3D 生成 |
+| `Realtime-Voice-Replication` | Realtime-Voice-Replication |
 
 一个模型常常带多个 capability，`index.md` 中按 `capabilities[0]`（主能力）归类，
 查找时按中文标签即可定位章节。
@@ -148,21 +149,21 @@ description: >-
 | 模型家族总览 / 按能力分桶浏览         | `models/index.md`                                        |
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
 | OpenAI 兼容接口 | `wiki/concepts/openai-compatible-api.md` |
-| 异步任务 | `wiki/concepts/async-task.md` |
-| 检索增强生成 | `wiki/concepts/rag.md` |
-| Token 与计费 | `wiki/concepts/token-and-billing.md` |
 | DashScope 接口 | `wiki/concepts/dashscope-api.md` |
-| 业务空间 | `wiki/concepts/workspace.md` |
+| 异步任务 | `wiki/concepts/async-task.md` |
+| Token 与计费 | `wiki/concepts/token-and-billing.md` |
+| 检索增强生成 | `wiki/concepts/rag.md` |
 | 流式输出 | `wiki/concepts/streaming-output.md` |
+| 业务空间 | `wiki/concepts/workspace.md` |
+| API Key 管理 | `wiki/concepts/api-key-management.md` |
+| 函数调用与工具调用 | `wiki/concepts/function-calling.md` |
 | Prompt 工程 | `wiki/concepts/prompt-engineering.md` |
-| 模型部署 | `wiki/concepts/model-deployment.md` |
-| 函数调用与工具集成 | `wiki/concepts/function-calling.md` |
-| 语音合成、识别与翻译 API 对比 | `wiki/comparisons/speech-apis-comparison.md` |
-| 图像、视频与 3D 生成对比 | `wiki/comparisons/content-generation-comparison.md` |
-| 模型微调、压缩与部署对比 | `wiki/comparisons/model-optimization-comparison.md` |
-| 模型监控与应用监控对比 | `wiki/comparisons/monitoring-comparison.md` |
+| 语音合成、识别与翻译 API 对比 | `wiki/comparisons/speech-api-comparison.md` |
+| 图像、视频与 3D 生成对比 | `wiki/comparisons/image-video-3d-generation.md` |
+| 模型评测与应用评测对比 | `wiki/comparisons/model-vs-app-evaluation.md` |
+| 模型监控与应用监控对比 | `wiki/comparisons/model-vs-app-monitoring.md` |
+| 模型微调、压缩与部署对比 | `wiki/comparisons/finetune-compress-deploy.md` |
 | 知识库与记忆库对比 | `wiki/comparisons/knowledge-vs-memory.md` |
-| 模型评测与应用评测对比 | `wiki/comparisons/evaluation-comparison.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 

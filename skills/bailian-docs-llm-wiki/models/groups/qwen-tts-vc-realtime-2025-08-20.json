@@ -1,0 +1,62 @@
+{
+  "name": "通义千问-TTS-VC-Realtime-2025-08-20",
+  "description": "qwen-tts-vc-realtime-2025-08-20是一个基于通义千问大模型的零样本语音克隆（Zero-Shot Voice Cloning）服务，具备强大的音色学习与个性化语音合成能力，支持用户通过少量音频样本快速定制专属音色。通过结合最新的大语言模型与先进的语音特征提取技术，该服务可为开发者、内容创作者、企业用户等提供高度个性化、音色丰富、情感自然的语音输出能力。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Audio"
+        ],
+        "request_modality": [
+          "Audio"
+        ]
+      },
+      "openSource": false,
+      "description": "qwen-tts-vc-realtime-2025-08-20是一个基于通义千问大模型的零样本语音克隆（Zero-Shot Voice Cloning）服务，具备强大的音色学习与个性化语音合成能力，支持用户通过少量音频样本快速定制专属音色。通过结合最新的大语言模型与先进的语音特征提取技术，该服务可为开发者、内容创作者、企业用户等提供高度个性化、音色丰富、情感自然的语音输出能力。",
+      "features": [],
+      "provider": "qwen",
+      "limit": {
+        "message": "model not exist"
+      },
+      "model": "qwen-tts-vc-realtime-2025-08-20",
+      "capabilities": [
+        "Realtime-Voice-Replication"
+      ],
+      "versionTag": "SNAPSHOT",
+      "maxOutputTokens": 7680,
+      "latestOnlineAt": "2025-08-22T15:15:53.000+00:00",
+      "contextWindow": 8192,
+      "maxInputTokens": 512,
+      "inferenceProvider": "bailian",
+      "name": "通义千问-TTS-VC-Realtime-2025-08-20",
+      "docUrl": "https://help.aliyun.com/document_detail/2938790.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
+        }
+      ]
+    }
+  ]
+}

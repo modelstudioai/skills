@@ -1051,6 +1051,14 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请确保音频时长在\[1, 180\]秒范围内。
 
+## **400-**InternalError.Algo.InvalidParameter
+
+### **The audio is too long**
+
+**原因：** 使用语音识别时，提供的音频时长或大小超过了模型的限制。
+
+**解决方案：** 不同语音识别模型对音频大小和时长有不同的限制，请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model/#asr-audio-spec02)文档的“音频规格”章节，确保音频符合对应模型的规格要求。
+
 ## **400-**InvalidFile.NoHuman
 
 ### **The input image has no human body. Please upload other image with single person.**

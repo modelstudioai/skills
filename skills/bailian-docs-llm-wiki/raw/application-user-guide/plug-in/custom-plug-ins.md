@@ -4,7 +4,7 @@
 
 ## **工作流程**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5012457771/CAEQZhiBgICczru.2hkiIGNhZjkzMjM4YWJlZjRhOGU5NzA1Mzk1MWFkNGI1MzBh4867389_20250110113852.335.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1340161871/CAEQZhiBgICczru.2hkiIGNhZjkzMjM4YWJlZjRhOGU5NzA1Mzk1MWFkNGI1MzBh4867389_20250110113852.335.svg)
 
 1.  **创建****/导入****插件：**定义插件的基础信息，或直接从云市场导入。
     
@@ -21,13 +21,9 @@
 
 ### **步骤一：创建插件**
 
-1.  访问**[插件](https://bailian.console.aliyun.com/?tab=app#/component-manage)**页面，单击**创建插件**。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3387656671/p948583.png)
+1.  访问[**插件**](https://bailian.console.aliyun.com/?tab=app#/component-manage)页面，单击**创建插件**。
     
 2.  填写插件信息。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5197455471/p948589.png)
     
     **插件名称**：输入具有语义的名称，支持中英文。
     
@@ -99,7 +95,7 @@
 
 1.  填写工具信息、配置输入/输出参数以及高级配置。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5197455471/p948908.png)
+    本示例中，**工具名称**填写"寝室公约查询工具"，**工具描述**填写"根据输入的数字索引查询特定条目的寝室公约内容"，**工具路径**填写`/article`，**请求方法**选择**POST**，**提交方式**选择**application/json**。输入参数：参数名称`article_index`，参数描述为"索引"，类型为**Number**，传入方法为**Body**，必填，传参方式为**大模型识别**。输出参数：参数名称`article`，参数描述为"寝室公约内容"，类型为**String**。高级配置中，用户输入Query为"请根据输入的索引值，查询对应条目的寝室公约内容"，输入参数`article_index`的Value为`5`。
     
     **工具参数说明**
     
@@ -191,8 +187,6 @@
     
 3.  在线调试工具API能否调通。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5197455471/p948913.png)
-    
     单击**测试工具**，输入鉴权信息（开启鉴权时填写）及入参的值，单击**开始运行**。
     
     > 如果运行失败，请根据**运行结果**中的报错信息对配置进行调整，并重新进行测试，直至成功运行。
@@ -206,7 +200,7 @@
 
 云市场提供了丰富的API，您可在云市场开通需要的API并将其导入至阿里云百炼插件列表中，以便应用进行调用。
 
-1.  访问**[插件](https://bailian.console.aliyun.com/?tab=app#/component-manage)**页面，单击**从云市场导入**。
+1.  访问[**插件**](https://bailian.console.aliyun.com/?tab=app#/component-manage)页面，单击**从云市场导入**。
     
 2.  首次在阿里云百炼平台上导入云市场 API 作为插件，需要先进行服务关联角色授权。
     
@@ -214,13 +208,13 @@
     
     如果您使用主账号登录百炼，请在**SLR授权**弹窗中，勾选同意上述条款，单击**确认授权**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p905283.png)
+    该弹窗显示角色名称为 `AliyunServiceRoleForSFMAccessCloudAPI`，角色权限策略为 `AliyunServiceRolePolicyForSFMAccessCloudAPI`，授权百炼大模型平台访问阿里云云市场商品清单并根据插件配置进行API调用。
     
     ## RAM用户（子账号）
     
     如果您使用RAM用户（子账号）登录百炼，在**SLR授权**弹窗中，勾选同意上述条款，单击**确认授权**时，会有如下提示：
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0593247371/p905985.png)
+    页面弹出**授权失败**弹窗，提示当前用户没有创建服务关联角色的权限，服务关联角色名称为 `AliyunServiceRoleForSFMAccessCloudAPI`。
     
     这是因为该RAM用户（子账号）不具备创建服务关联角色的权限。请按照下述操作先授予RAM用户（子账号）创建服务关联角色的权限。获得授权后，RAM用户（子账号）即可自行从云市场导入插件至百炼或使用主账号已经导入的插件。
     
@@ -249,13 +243,11 @@
             }
             ```
             
-            ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0593247371/p906017.png)
-            
         5.  单击**确定**。
             
         6.  设置权限策略名称，单击**确定**。
             
-            ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0593247371/p906000.png)
+            此处**名称**设置为`服务关联角色`。
             
         7.  在左侧导航栏，选择。
             
@@ -265,7 +257,7 @@
             
             至此，RAM用户（子账号）拥有了创建服务关联角色的权限。
             
-            ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0593247371/p906024.png)
+            在**资源范围**中选择**账号级别**，在权限策略筛选下拉框中选择**自定义策略**类型，即可找到并勾选目标策略。
             
     2.  RAM用户（子账号）自行从云市场导入插件至阿里云百炼或使用主账号已经导入的插件。
         
@@ -274,39 +266,29 @@
     
 3.  在**导入云市场插件**弹窗中，单击**点击查看**进入云市场开通需要的API。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p905284.png)
-    
 4.  您可以查看**云市场**页面，等待商品**状态**为**已开通**。
     
     当前页面还提供了API的AppKey、AppSecret、AppCode，如果插件需要鉴权，您可以在此处获取鉴权信息。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8398001571/p979365.png)
-    
 5.  开通成功后，返回阿里云百炼控制台，单击**从云市场导入**，重新打开**导入云市场插件**弹窗。选择已开通的API，再单击**确定**，进入**工具列表**页面。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p905297.png)
     
 6.  从云市场导入的插件为草稿状态，需要测试、发布后再使用。
     
     1.  单击工具所在行的**调试**，进入**工具测试**页面。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p905298.png)
-        
     2.  输入参数后，单击**开始运行**。
         
         若**运行成功**，则说明接口正常。否则，请参考界面提示信息修改配置。
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p905592.png)
         
     3.  返回**编辑工具**页面，单击**发布**，发布工具。
         
         > 从云市场导入插件时，系统将自动填充出参和入参信息，但可能会存在信息缺失的情况。在发布工具时，您需要关注无法发布的错误信息，以便根据错误提示有效地解决问题。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p905316.png)
+        例如，当**工具名称**超出20字符限制时，输入框右侧的字符计数将以红色显示（如`22/20`），您需要将名称缩短至限制范围内后再发布。
         
     4.  **已发布**且**启用**状态的工具才能用于后续调用。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p905318.png)
+        同时确保工具的**调试**状态为**成功**。
         
 
 ## 使用插件
@@ -344,7 +326,7 @@
             
     4.  测试完成后，**发布**应用。
         
--   **方式二**：在**[应用管理](https://bailian.console.aliyun.com/#/app-center)**页面中，进入**智能体应用**的编排页面，在**MCP**区块中添加MCP服务，测试插件使用效果，并**发布**应用。
+-   **方式二**：在[**应用管理**](https://bailian.console.aliyun.com/#/app-center)页面中，进入**智能体应用**的编排页面，在**MCP**区块中添加MCP服务，测试插件使用效果，并**发布**应用。
     
 
 ## API
@@ -358,8 +340,6 @@
 2.  将鼠标悬浮于工具名称旁边的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p902180.png)图标上。
     
 3.  单击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p902183.png)图标，复制工具ID。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0593247371/p906346.png)
     
 
 -   当通过API调用应用时，如果应用中关联的插件存在业务透传参数或开启了**用户级鉴权**，则需要通过参数`biz_params`传递鉴权信息或透传参数信息。具体操作请参见[工作流与旧版智能体应用 API](https://help.aliyun.com/zh/model-studio/agent-and-workflow-application-api-reference)。

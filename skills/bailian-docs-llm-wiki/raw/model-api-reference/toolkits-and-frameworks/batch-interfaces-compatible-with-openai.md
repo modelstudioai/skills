@@ -6,7 +6,7 @@
 
 ## **工作流程**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0095421871/CAEQaxiBgIDB5qWk4BkiIDViYzQ0MWUwNTYyNDQ3NDM5NzM0ZTc4N2Y3NTU2NjA56318723_20260129171731.699.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3334061871/CAEQaxiBgIDB5qWk4BkiIDViYzQ0MWUwNTYyNDQ3NDM5NzM0ZTc4N2Y3NTU2NjA56318723_20260129171731.699.svg)
 
 ## **前提条件**
 
@@ -25,7 +25,9 @@
 
 **重要**
 
-新加坡地域旧版域名 `https://dashscope-intl.aliyuncs.com`即将下线，请迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 ## **适用范围**
 

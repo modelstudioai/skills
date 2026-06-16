@@ -90,9 +90,9 @@ github\_search
 
 大模型应用具备了良好的计算能力，能够生成准确的计算结果。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9491396371/p904991.png)
+无插件时，大模型直接尝试计算并输出了错误的数值结果，与正确答案162,925,616不符。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9491396371/p904997.png)
+有插件时，大模型调用**calculator**插件，输入参数`payload__input__text`为`12313x13232`，输出参数`equations`为`["12313 * 13232"]`、`results`为`[162925616]`，AI回复正确计算结果。
 
 ## 支持的模型
 

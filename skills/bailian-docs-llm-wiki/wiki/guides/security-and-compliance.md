@@ -15,7 +15,7 @@
 | 模型调用 & 限流 | 支持 | 不支持 | 不支持 |
 | 模型调优/部署 | 支持 | 不支持 | 不支持 |
 | 用户管理 | 支持 | 支持 | 不支持 |
-| API Key 管理 | 支持 | 支持 | 不支持 |
+| [API Key 管理](../concepts/api-key-management.md) | 支持 | 支持 | 不支持 |
 
 ### API Key 权限
 
@@ -135,6 +135,7 @@ Java SDK 设置 `enableEncrypt(true)`，Python SDK 设置 `enable_encryption=Tru
 - [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md)
 - [配置私有网络中的资源](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)
 - [模型备案信息公示](../../raw/model-user-guide/security-and-compliance/model-filing-information-publicity.md)
+
 
 
 

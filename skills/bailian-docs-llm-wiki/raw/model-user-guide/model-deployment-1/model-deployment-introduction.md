@@ -150,6 +150,10 @@
 
 缩容场景（降配）的具体降费退费规则请参考：[降配退款规则说明](https://help.aliyun.com/zh/user-center/description-of-downgrade-refund-rules)。
 
+**说明**
+
+PTU 部署支持长输入阶梯容量系数和缓存折扣，详见[预置吞吐长输入与缓存](#)。
+
 ## 千问
 
 **模型名称**
@@ -299,6 +303,20 @@ qwen-plus-2025-12-01
 **预付费输出**
 
 **Per 1K TPM/天**
+
+DeepSeek-v4-Flash
+
+deepseek-v4-flash
+
+256,000
+
+¥3.6
+
+¥0.72
+
+¥43.2
+
+¥8.64
 
 DeepSeek-v4-Pro
 

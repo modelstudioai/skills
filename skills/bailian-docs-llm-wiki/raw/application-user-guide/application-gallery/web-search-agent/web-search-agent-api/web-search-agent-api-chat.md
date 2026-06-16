@@ -500,65 +500,81 @@ tool\_calling\_{工具名称}
 -   tool\_call\_start 表示工具调用开始、tool\_calling 表示获取到完整工具调用的参数并会抛出完整的工具调用参数、tool\_return 表示工具调用返回结果，同时会携带结构化的工具返回信息。
     
 
-步骤变化事件 (`step_change`)
-
 事件发生时 `step` 的值
+
+步骤变化事件 (`step_change`)
 
 事件名称
 
 解释说明
 
-plan\_start
-
 `planning`
+
+plan\_start
 
 开始规划
 
 `step` 状态变为 `planning`, 表示对应状态的开头（包含当前包）。
 
-plan\_end
+`planning`
+
+空
+
+规划中
+
+表示正在思考和工具调用
 
 `planning`
+
+plan\_end
 
 结束规划
 
 `step` 开始变成其他状态，事件发生时 `step` 仍为 `planning`，表示对应状态的结尾（包含当前包）。
 
-generation\_start
-
 `generating`
+
+generation\_start
 
 开始生成
 
 与 `plan` 事件同理
 
-generation\_end
+`generating`
+
+空
+
+生成中
+
+表示正在生成
 
 `generating`
+
+generation\_end
 
 结束生成
 
 与 `plan` 事件同理
 
-tool\_call\_start
-
 `tool_calling_{工具名称}`
+
+tool\_call\_start
 
 开始工具调用
 
 表示工具调用开始
 
-tool\_calling
-
 `tool_calling_{工具名称}`
+
+tool\_calling
 
 工具调用中
 
 会输出tool\_call的具体参数和工具名称，`tool_calling`状态变为`tool_calling_{工具名称}`。
 
-tool\_return
-
 `tool_calling_{工具名称}`
+
+tool\_return
 
 工具返回
 

@@ -1,4 +1,4 @@
-# 应用 API 参考
+# 工作流与旧版智能体应用 API
 
 本文介绍 DashScope API 调用阿里云百炼应用（**智能体**、**工作流**）的输入与输出参数，并提供典型场景下的调用示例。
 
@@ -15,7 +15,7 @@
 
 ## **前置准备**
 
-开始前，请确保您已完成以下操作：画
+开始前，请确保您已完成以下操作：
 
 1.  **创建应用：**前往[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)创建阿里云[百炼应用](https://help.aliyun.com/zh/model-studio/application-introduction)并获取应用 ID；
     
@@ -3490,7 +3490,7 @@ func main() {
 
 通过 `image_list` 参数传入图像 URL 或 Data URL（Base64 编码）启用视觉理解功能。
 
-**应用配置：**应用内需使用**[图像与视频理解](https://help.aliyun.com/zh/model-studio/vision)**模型。相关文档：[文件问答](https://help.aliyun.com/zh/model-studio/call-single-agent-application/#30619780ddy93)。
+**应用配置：**应用内需使用[图像与视频理解](https://help.aliyun.com/zh/model-studio/vision)模型。相关文档：[文件问答](https://help.aliyun.com/zh/model-studio/call-single-agent-application/#30619780ddy93)。
 
 **说明**
 
@@ -4452,7 +4452,7 @@ API 调用时，通过 `user_defined_params` 以 `mcp_id` 为 key 传入对应�
 
 **image\_list**`_array_`（可选）
 
-图片列表。支持图像 URL 和 Data URL（Base64 编码）。应用内需选择**[图像与视频理解](https://help.aliyun.com/zh/model-studio/vision)**模型。
+图片列表。支持图像 URL 和 Data URL（Base64 编码）。应用内需选择[图像与视频理解](https://help.aliyun.com/zh/model-studio/vision)模型。
 
 `base64`编码格式可构建为 [Data URL](https://www.rfc-editor.org/rfc/rfc2397)：`data:[MIME_type];base64,{base64_image}`。详细说明和代码示例见本文档右侧[视觉理解](#9f2f0735d57ix)章节。
 
@@ -4557,7 +4557,6 @@ API 调用时，通过 `user_defined_params` 以 `mcp_id` 为 key 传入对应�
 
 组合逻辑：  
 不同键之间为“与”(AND) 逻辑。例如，`"author": "John.Doe", "source": ["internal_wiki", "public_docs"]` 表示筛选出作者是 "John.Doe" 并且来源是 "internal\_wiki" 或 "public\_docs" 的文档。  
-  
 
 > Java SDK 中为 **metadataFilter**。
 
@@ -4600,7 +4599,6 @@ API 调用时，通过 `user_defined_params` 以 `mcp_id` 为 key 传入对应�
 
 组合逻辑：  
 不同键之间为“与”(AND) 逻辑。例如，`"year": 2024, "department": ["技术部", "产品部"]` 表示筛选出年份是 2024 并且 部门是 "技术部" 或 "产品部" 的文档切片。  
-  
 
 > Java SDK 中为 **structuredFilter**。
 

@@ -1,28 +1,63 @@
 # get started with models
 
-阿里云百炼是一站式大模型开发与应用平台，提供兼容 OpenAI 的 API 接口，集成千问（Qwen）全系列模型及 DeepSeek、Kimi、GLM 等第三方模型。开发者只需几行代码即可完成大模型调用，平台还提供可视化应用构建、模型微调、部署和评测等全链路服务。本文梳理从账号准备到发起第一个 API 请求的完整流程，并说明模型选择、地域规划与限流规则。
+阿里云百炼是一站式大模型开发与应用平台，提供兼容 OpenAI 的 API 接口，集成千问（Qwen）全系列及 DeepSeek、Kimi、GLM 等第三方模型。开发者只需几行代码即可完成模型调用，平台还提供可视化应用构建、模型微调与部署等全链路能力。本文介绍如何快速开始使用百炼的模型服务。
 
-## 快速开始
+## 前置准备
 
-### 1. 账号准备
+使用百炼模型 API 前，需完成以下准备工作（详见[首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md)）：
 
-1. 注册阿里云账号并完成实名认证。
-2. 使用主账号访问百炼控制台，自动开通服务。
-3. 在控制台创建 API Key（环境变量名 `DASHSCOPE_API_KEY`）。
-4. 若使用华北2（北京）、新加坡或德国（法兰克福）地域，还需获取[业务空间](../concepts/workspace.md) ID（WorkspaceId）填入 Base URL。
+1. **注册并开通**：注册阿里云账号，前往百炼控制台阅读并同意服务协议即可开通。
+2. **获取 API Key**：在控制台的 API Key 页面创建密钥。各地域的 API Key 相互独立，不可跨地域使用。
+3. **获取[业务空间](../concepts/workspace.md) ID**：使用华北2（北京）、新加坡或德国（法兰克福）地域时，需在 Base URL 中填入[业务空间](../concepts/workspace.md) ID（WorkspaceId）。
+4. **配置环境变量**：建议将 API Key 配置到环境变量 `DASHSCOPE_API_KEY`，避免硬编码泄露风险。
 
-详细步骤参见 [首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md)。
+## 选择地域
 
-### 2. 配置环境变量
+百炼提供四个地域的模型服务，每个地域有独立的 Base URL、API Key 和模型列表，**不能跨地域混用**。根据数据合规和延迟需求选择（详见[选择地域和服务部署范围](../../raw/model-user-guide/get-started-with-models/regions.md)）：
 
-将 API Key 写入环境变量，避免硬编码泄露风险：
+| 场景 | 推荐地域 | 服务部署范围 |
+|------|----------|-------------|
+| 无数据驻留限制，追求最大推理资源池 | 美国（弗吉尼亚）或德国（法兰克福） | 全球 |
+| 数据不出中国内地 | 华北2（北京） | 中国内地 |
+| 数据不经过中国内地 | 新加坡 | 国际 |
+| 数据不出美国 | 美国（弗吉尼亚） | 美国（使用 `-us` 后缀模型名） |
+| 数据不出欧盟 | 德国（法兰克福） | 欧盟 |
 
-- **Linux/macOS**：写入 `~/.bashrc` 或 `~/.zshrc`，执行 `source` 生效。
-- **Windows**：通过系统属性、`setx`（CMD）或 `[Environment]::SetEnvironmentVariable`（PowerShell）设置。
+各地域 Base URL（OpenAI 兼容）：
 
-### 3. 发起第一个请求
+- **华北2（北京）**：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
+- **新加坡**：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
+- **美国（弗吉尼亚）**：`https://dashscope-us.aliyuncs.com/compatible-mode/v1`
+- **德国（法兰克福）**：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1`
 
-百炼兼容 OpenAI 接口规范，使用 OpenAI SDK 即可调用。以 Python 为例：
+> **注意**：北京和新加坡地域推出了新版专属域名（含 WorkspaceId），在性能和稳定性上优于旧版，建议尽快迁移。
+
+## 选择模型
+
+百炼覆盖文本、图像、音频、视频、3D 等多种模态，详见[选择模型](../../raw/model-user-guide/get-started-with-models/models.md)。核心模型推荐：
+
+### 文本生成
+
+| 模型系列 | 代表模型 | 定位 |
+|---------|---------|------|
+| 千问 Max | qwen3.7-max | 效果最强，适合复杂多步骤任务 |
+| 千问 Plus | qwen3.7-plus | 效果、速度和成本均衡，多数场景推荐 |
+| 千问 Flash | qwen3.6-flash | 高性价比低延迟，适合简单任务 |
+| 第三方 | deepseek-v4-pro、kimi-k2.7-code、glm-5.1 等 | API 格式与千问一致 |
+
+### 其他模态
+
+- **图像与视频**：理解（qwen3.7-plus）和生成（wan2.7-image-pro、qwen-image-2.0-pro、happyhorse-1.0-t2v 等）
+- **音频与语音**：语音合成（cosyvoice-v3.5-plus）、语音识别（fun-asr）、音乐生成（fun-music-v1）、语音转语音
+- **全模态**：qwen3.5-omni-plus，融合文本、图像、音频、视频的理解与生成
+- **向量与重排序**：text-embedding-v4、qwen3-rerank
+- **3D 模型生成**：Tripo-H3.1、Tripo-P1.0
+
+## 快速调用示例
+
+百炼兼容 OpenAI 接口规范，只需调整 API Key、`base_url` 和模型名称即可将现有 OpenAI 代码迁移。支持 OpenAI SDK、DashScope SDK、Anthropic 兼容接口和 HTTP 直接调用。
+
+### Python（OpenAI SDK）
 
 ```python
 import os
@@ -33,100 +68,68 @@ client = OpenAI(
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
-    model="qwen-plus",
+    model="qwen3.7-plus",
     messages=[{'role': 'user', 'content': '你是谁？'}]
 )
 print(completion.choices[0].message.content)
 ```
 
-也支持 Node.js（OpenAI SDK）、DashScope SDK 和 curl 方式调用。将 `{WorkspaceId}` 替换为真实[业务空间](../concepts/workspace.md) ID，Base URL 根据地域不同而变化。
+### Node.js（OpenAI SDK）
 
-## 支持的模型
+```javascript
+import OpenAI from "openai";
 
-百炼提供覆盖多种模态的模型服务，详细列表参见 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md)。
+const openai = new OpenAI({
+    apiKey: process.env.DASHSCOPE_API_KEY,
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+});
 
-### 文本生成
+const completion = await openai.chat.completions.create({
+    model: "qwen3.7-plus",
+    messages: [{ role: "user", content: "你是谁？" }],
+});
+console.log(completion.choices[0].message.content);
+```
 
-| 层级 | 代表模型 | 定位 |
-|------|---------|------|
-| 旗舰 | qwen3.7-max | 效果最强，适合复杂多步骤任务 |
-| 均衡 | qwen3.7-plus | 效果、速度、成本均衡，多数场景推荐 |
-| 高性价比 | qwen3.6-flash | 低延迟，适合简单快速响应任务 |
-| 第三方 | deepseek-v4-pro、kimi-k2.7-code、glm-5.1 等 | API 格式与千问一致 |
+> **注意**：不同地域的 `base_url` 不通用，需替换为对应地域的 URL 和真实的[业务空间](../concepts/workspace.md) ID。
 
-### 多模态与其他能力
+## 限流与配额
 
-- **视觉理解/生成**：qwen3.7-plus（图像理解）、wan2.7-image-pro（图像生成）、happyhorse 系列（视频生成/编辑）
-- **语音**：cosyvoice-v3.5-plus（语音合成）、fun-asr / fun-asr-realtime（语音识别）
-- **全模态**：qwen3.5-omni-plus（融合文本、图像、音频、视频）
-- **向量与重排序**：text-embedding-v4、qwen3-rerank
-- **3D 生成**：Tripo-H3.1、Tripo-P1.0
+百炼按主账号维度对模型调用设置限流，账号下所有 RAM 子账号、业务空间和 API Key 的调用量合并计算。超出限制时请求被拒绝，通常一分钟内恢复。详见[限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)。
 
-## 地域与服务部署范围
+### 限流指标
 
-调用百炼前需选择地域（决定接入点和数据存储位置）和服务部署范围（决定推理执行位置）。各地域的 Base URL、API Key 和可用模型相互独立，不能跨地域混用。详情参见 [选择地域和服务部署范围](../../raw/model-user-guide/get-started-with-models/regions.md)。
+- **RPM**（每分钟请求数）：稳定版模型通常 15,000~30,000，快照版通常 60~600
+- **TPM**（每分钟 Token 数）：稳定版通常 5,000,000~10,000,000，快照版通常 100,000~1,000,000
 
-| 场景 | 推荐地域 | 服务部署范围 |
-|------|---------|------------|
-| 无合规限制，追求最大资源池 | 美国（弗吉尼亚）/ 德国（法兰克福） | 全球 |
-| 数据不出中国内地 | 华北2（北京） | 中国内地 |
-| 数据不经过中国内地 | 新加坡 | 国际 |
-| 数据不出美国/欧盟 | 美国（弗吉尼亚）/ 德国（法兰克福） | 美国/欧盟 |
+服务可能按秒级 RPS（RPM/60）与 TPS（TPM/60）执行，短时间内的请求爆发也可能触发限流。
 
-各地域 Base URL（OpenAI 兼容模式）：
+### 应对限流的策略
 
-- **华北2（北京）**：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
-- **新加坡**：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
-- **美国（弗吉尼亚）**：`https://dashscope-us.aliyuncs.com/compatible-mode/v1`
-- **德国（法兰克福）**：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1`
+1. **优先选用高限流模型**：稳定版或最新版比带日期的快照版本限流更宽松
+2. **平滑请求速率**：采用匀速调度、指数退避或请求队列，避免瞬时高峰
+3. **添加备选模型**：主模型触发限流后自动切换到备用模型
+4. **使用批量推理**：无需实时响应时，使用 Batch API（不受实时限流约束）
+5. **提升临时限流额度**：在百炼控制台的限流提额页面申请，提交后立即生效，有效期 30 天
 
-> **注意**：华北2（北京）和新加坡地域已推出新版域名 `{WorkspaceId}.{region}.maas.aliyuncs.com`，旧版域名 `dashscope.aliyuncs.com` / `dashscope-intl.aliyuncs.com` 即将下线，请尽快迁移。
+## 计费说明
 
-## 限流规则与应对
+开通百炼无需费用，调用模型时按量计费。新用户享有北京地域的免费额度。
 
-百炼按主账号维度设置限流，账号下所有 RAM 子账号、[业务空间](../concepts/workspace.md)和 API Key 的调用量合并计算。不同模型的限流额度相互独立。详情参见 [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)。
+- 已认证用户免费额度用完后自动转为按量付费
+- 未认证用户免费额度用完后需完成认证并充值
+- 可开启"免费额度用完即停"功能避免意外扣费
+- 订阅 Coding Plan（AI 编码套餐）可获得固定月费的请求额度
+- 模型调用按分钟出账，调用统计约一小时后可在控制台的模型监控页面查看
 
-### 限流类型
+## 各地域功能差异
 
-| 错误信息 | 触发原因 |
-|---------|---------|
-| `Requests rate limit exceeded` | 每分钟请求数（RPM）超限 |
-| `Allocated quota exceeded` | 每分钟 Token 消耗（TPM）超限 |
-| `Request rate increased too quickly` | 请求频率短时间内激增，触发稳定性保护 |
-
-### 典型限流额度（北京地域）
-
-| 模型 | RPM | TPM |
-|------|-----|-----|
-| qwen3.7-max（稳定版） | 30,000 | 5,000,000 |
-| qwen3.7-plus | 30,000 | 5,000,000 |
-| qwen3.6-flash | 30,000 | 10,000,000 |
-| qwen-plus | 30,000 | 5,000,000 |
-
-带日期后缀的快照版本限流通常更低（RPM 60~600）。
-
-### 应对策略
-
-1. **优先使用稳定版模型**（如 `qwen-plus`），限流额度高于快照版。
-2. **平滑请求速率**：采用匀速调度或指数退避，避免瞬时高峰。
-3. **添加备选模型**：主模型触发限流后自动切换到备用模型重试。
-4. **使用批量推理（Batch API）**：无需实时响应时，批量请求不受实时限流约束。
-5. **提升临时限流额度**：在百炼控制台的"限流提额"页面申请临时 TPM 提额，提交后立即生效，有效期 30 天。
-
-## 计费与免费额度
-
-- 开通百炼免费，调用模型时按量计费。
-- 新用户享有北京地域专属免费额度；已认证用户额度用完后自动转为按量付费。
-- 可开启"免费额度用完即停"功能防止意外扣费。
-- Coding Plan（AI 编码套餐）提供固定月费的请求额度，需使用专属 Base URL 和 API Key 调用。
-
-## 进阶功能
-
-- **模型微调**：支持有监督微调（SFT）、继续预训练（CPT）和直接偏好优化（DPO）。
-- **[模型部署](../concepts/model-deployment.md)**：将[模型部署](../concepts/model-deployment.md)为资源专享的推理服务，满足高并发低延迟需求。
-- **应用构建**：通过可视化智能体/工作流应用，或高代码应用部署 Python 后端服务。
-- **知识库（RAG）**：接入私有数据，增强模型回答准确性。
-- **插件与 MCP**：通过插件和模型上下文协议调用外部服务扩展能力。
+| 功能 | 北京 | 新加坡 | 弗吉尼亚 | 法兰克福 |
+|------|------|--------|----------|----------|
+| 实时推理 | 支持 | 支持 | 支持 | 支持 |
+| 批量推理 | 支持 | 支持 | 不支持 | 不支持 |
+| 模型调优 | 支持 | 不支持 | 不支持 | 不支持 |
+| 模型告警 | 支持 | 支持 | 不支持 | 不支持 |
 
 ## 来源文档
 
@@ -135,6 +138,5 @@ print(completion.choices[0].message.content)
 - [选择模型](../../raw/model-user-guide/get-started-with-models/models.md)
 - [选择地域和服务部署范围](../../raw/model-user-guide/get-started-with-models/regions.md)
 - [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)
-
 
 

@@ -12,7 +12,7 @@
 | 模型调优 / 部署管理 | ✅ | ❌ | ❌ |
 | 用户管理 | ✅ | ✅ | ❌ |
 | 用户可用页面管理 | ✅ | ✅ | ❌ |
-| API Key 管理 | ✅ | ✅ | ❌ |
+| [API Key 管理](../concepts/api-key-management.md) | ✅ | ✅ | ❌ |
 | 访问被授权的资源 | ✅ | ✅ | ✅ |
 | OpenAPI 接口权限 | 需主账号在 RAM 控制台单独授权 | 需主账号在 RAM 控制台单独授权 | 需主账号在 RAM 控制台单独授权 |
 
@@ -102,6 +102,7 @@ RAM 用户默认无权查看账单或购买预付费产品，需在 RAM 控制�
 ## 来源文档
 
 - [权限管理](../../raw/application-user-guide/application-permission-management/application-permission-management-overview.md)
+
 
 
 
