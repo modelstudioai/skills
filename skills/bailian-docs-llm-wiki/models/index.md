@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 162 个模型家族 · 360 个主干模型 · 更新于 2026-06-15
+> 自动生成 · 共 162 个模型家族 · 362 个主干模型 · 更新于 2026-06-16
 
 **机器查询走结构化文件**：
 
@@ -26,7 +26,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [GLM](groups/glm-4.5.json) — GLM是由智谱提供的开源模型。
   - 模型：`glm-4.5`, `glm-4.5-air`, `glm-4.6`, `glm-4.7`, `glm-5`, `glm-5.1`
 - [Kimi](groups/kimi-models-market-place.json) — 由月之暗面提供的Kimi系列模型的API服务。
-  - 模型：`kimi/kimi-k2.5`, `kimi/kimi-k2.6`
+  - 模型：`kimi/kimi-k2.5`, `kimi/kimi-k2.6`, `kimi/kimi-k2.7-code`
 - [MiMo文本模型](groups/xiaomi-models-market-place.json) — 由小米MiMo提供的MiMo文本模型API服务
   - 模型：`xiaomi/mimo-v2.5-pro`
 - [MiniMax文本模型](groups/minimax-models-market-place.json) — 由MiniMax提供的MiniMax-M系列文本模型API服务。
@@ -229,12 +229,10 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Sambert语音合成](groups/sambert.json) — 提供高效的文字转语音服务。该技术具备推理速度快、合成效果卓越、读音精准、韵律自然、声音还原度高以及表现力强等优点。此外，用户可以选择开启字级别和音素级别的时间戳，用于生成字幕或驱动数字人的嘴型。
   - 模型：`sambert-beth-v1`, `sambert-betty-v1`, `sambert-brian-v1`, `sambert-cally-v1`, `sambert-camila-v1`, `sambert-cindy-v1`, `sambert-clara-v1`, `sambert-donna-v1`, `sambert-eva-v1`, `sambert-hanna-v1`, `sambert-indah-v1`, `sambert-perla-v1`, `sambert-waan-v1`, `sambert-zhichu-v1`, `sambert-zhida-v1`, `sambert-zhide-v1`, `sambert-zhifei-v1`, `sambert-zhigui-v1`, `sambert-zhihao-v1`, `sambert-zhijia-v1`, `sambert-zhijing-v1`, `sambert-zhilun-v1`, `sambert-zhimao-v1`, `sambert-zhimiao-emo-v1`, `sambert-zhiming-v1`, `sambert-zhimo-v1`, `sambert-zhina-v1`, `sambert-zhinan-v1`, `sambert-zhiqi-v1`, `sambert-zhiqian-v1`, `sambert-zhiru-v1`, `sambert-zhishu-v1`, `sambert-zhishuo-v1`, `sambert-zhistella-v1`, `sambert-zhiting-v1`, `sambert-zhiwei-v1`, `sambert-zhixiang-v1`, `sambert-zhixiao-v1`, `sambert-zhiya-v1`, `sambert-zhiye-v1`, `sambert-zhiying-v1`, `sambert-zhiyuan-v1`, `sambert-zhiyue-v1`
 
-## 推理 `Reasoning` — 15 个家族
+## 推理 `Reasoning` — 14 个家族
 
 - [DeepSeek](groups/deepseek.json) — DeepSeek是由深度求索提供的开源模型，包含 V3.1、V3、R1以及基于Qwen2.5系列蒸馏的大语言模型。
   - 模型：`deepseek-r1`, `deepseek-r1-0528`, `deepseek-r1-distill-qwen-1.5b`, `deepseek-r1-distill-qwen-14b`, `deepseek-r1-distill-qwen-32b`, `deepseek-r1-distill-qwen-7b`, `deepseek-v3`, `deepseek-v3.1`, `deepseek-v3.2`, `deepseek-v3.2-exp`, `deepseek-v4-flash`, `deepseek-v4-pro`
-- [Kimi](groups/Kimi-K2.json) — Kimi是由月之暗面提供的开源模型，包含k2.5、k2-thinking、k2-instruct等多模态和大语言模型。
-  - 模型：`kimi-k2-thinking`, `kimi-k2.5`, `kimi-k2.6`, `Moonshot-Kimi-K2-Instruct`
 - [MiniMax](groups/MiniMax-M2.1.json) — MiniMax推出的旗舰级开源大模型，聚焦真实世界复杂任务，包含MiniMax-M2.1、MiniMax-M2.5等开源模型。
   - 模型：`MiniMax-M2.1`, `MiniMax-M2.5`
 - [QVQ-Max](groups/qvq-max.json) — 千问QVQ视觉推理模型，支持视觉输入及思维链输出，在数学、编程、视觉分析、创作以及通用任务上都表现了更强的能力。
@@ -287,10 +285,12 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen3-Omni-30b-a3b-Captioner](groups/qwen3-omni-30b-a3b-captioner.json) — 千问3-Omni-30b-a3b-Captioner是一款强大的音频细粒度分析模型，专为在复杂多变的音频场景中生成精准、全面的内容描述而设计，可自动解析并描述从复杂语音、环境声到音乐、影视声效等各类音…
   - 模型：`qwen3-omni-30b-a3b-captioner`
 
-## 视觉理解 `VU` — 8 个家族
+## 视觉理解 `VU` — 9 个家族
 
 - [GUI-Plus](groups/gui-plus.json) — GUI系列图形界面交互基础模型，针对手机端与电脑端图形界面理解与交互任务，性能优于开源版同类GUI模型。全面升级跨平台界面理解与多步任务规划，支持跨应用复杂任务；具备精细化动作执行与多角色多智能体协作…
   - 模型：`gui-plus`
+- [Kimi](groups/Kimi-K2.json) — Kimi是由月之暗面提供的开源模型，包含k2.5、k2-thinking、k2-instruct等多模态和大语言模型。
+  - 模型：`kimi-k2-thinking`, `kimi-k2.5`, `kimi-k2.6`, `kimi-k2.7-code`, `Moonshot-Kimi-K2-Instruct`
 - [Qwen-VL-Max](groups/qwen-vl-max.json) — Qwen-VL-Max，即千问超大规模视觉语言模型。相比增强版，再次提升视觉推理能力和指令遵循能力，提供更高的视觉感知和认知水平。在更多复杂任务上提供最佳的性能。
   - 模型：`qwen-vl-max`
 - [Qwen-VL-OCR](groups/qwen-vl-ocr.json) — Qwen-VL-OCR，即基于Qwen-VL训练的OCR识别大模型。通过统一模型的方式聚合多种图文识别、解析、处理类任务，提供强大的图文识别能力。

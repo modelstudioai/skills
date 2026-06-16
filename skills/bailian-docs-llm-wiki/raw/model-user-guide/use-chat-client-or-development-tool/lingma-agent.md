@@ -1,6 +1,6 @@
 # Qoder CN（原 Lingma）
 
-Qoder CN（原 Lingma）是阿里云智能编码助手，提供独立 IDE，可以通过 Coding Plan 或 Token Plan 团队版接入阿里云百炼。
+Qoder CN（原 Lingma）是阿里云智能编码助手，提供独立 IDE，可以通过 Token Plan、Coding Plan 或按量付费接入阿里云百炼。
 
 **说明**
 
@@ -31,7 +31,7 @@ Qoder CN 个人社区版和个人专业版均支持接入百炼，企业版不�
     
     类型
     
-    根据计费方案选择 **Token Plan** 或 **Coding Plan**
+    根据计费方案选择 **Token Plan**、**Coding Plan** 或 **按量付费**
     
     模型
     
@@ -44,6 +44,8 @@ Qoder CN 个人社区版和个人专业版均支持接入百炼，企业版不�
     -   Token Plan 团队版：[获取 API Key](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)
         
     -   Coding Plan：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)
+        
+    -   按量计费：[获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)
         
     
 3.  点击**添加**，通过校验后即可完成模型配置。
@@ -64,6 +66,8 @@ Qoder CN 个人社区版和个人专业版均支持接入百炼，企业版不�
 -   Coding Plan：[Coding Plan 常见问题](https://help.aliyun.com/zh/model-studio/coding-plan-faq)
     
 -   Token Plan 团队版：[Token Plan 团队版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-faq)
+    
+-   按量计费：[错误码](https://help.aliyun.com/zh/model-studio/error-code)
     
 
 ### 为什么在 Qoder CN 设置中找不到模型选项？

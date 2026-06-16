@@ -8656,6 +8656,18 @@ vanchin/deepseek-ocr
 
 有效期：阿里云百炼开通后90天内
 
+kimi-k2.7-code
+
+中国内地
+
+仅思考模式
+
+6.5元
+
+27元
+
+100万Token
+
 kimi-k2.6
 
 中国内地
@@ -8716,6 +8728,16 @@ Moonshot-Kimi-K2-Instruct
 
 **输出单价（每百万Token）**
 
+kimi-k2.7-code
+
+全球
+
+仅思考模式
+
+6.5元
+
+27元
+
 kimi-k2.5
 
 全球
@@ -8737,6 +8759,16 @@ kimi-k2.5
 **输入单价（每百万Token）**
 
 **输出单价（每百万Token）**
+
+kimi-k2.7-code
+
+全球
+
+仅思考模式
+
+6.5元
+
+27元
 
 kimi-k2.5
 
@@ -8766,7 +8798,7 @@ kimi-k2.5
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
-kimi/kimi-k2.6
+kimi/kimi-k2.7-code
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
@@ -8777,6 +8809,16 @@ kimi/kimi-k2.6
 27元
 
 无
+
+kimi/kimi-k2.6
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+中国内地
+
+6.5元
+
+27元
 
 kimi/kimi-k2.5
 

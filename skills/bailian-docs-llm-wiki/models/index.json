@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026-06-15",
+  "updatedAt": "2026-06-16",
   "totalFamilies": 162,
-  "totalModels": 360,
+  "totalModels": 362,
   "capabilityDistribution": {
     "TG": 33,
     "IG": 29,
     "VG": 25,
     "TTS": 16,
-    "Reasoning": 15,
+    "Reasoning": 14,
     "ASR": 11,
-    "VU": 8,
+    "VU": 9,
     "Realtime-ASR": 7,
     "Multimodal-Omni": 5,
     "Realtime-Omni": 4,
@@ -39,20 +39,21 @@
     {
       "slug": "Kimi-K2",
       "name": "Kimi",
-      "primaryCapability": "Reasoning",
+      "primaryCapability": "VU",
       "capabilities": [
-        "Reasoning",
         "VU",
+        "Reasoning",
         "TG"
       ],
       "providers": [
         "moonshot-ai"
       ],
-      "itemCount": 4,
+      "itemCount": 5,
       "items": [
         "kimi-k2-thinking",
         "kimi-k2.5",
         "kimi-k2.6",
+        "kimi-k2.7-code",
         "Moonshot-Kimi-K2-Instruct"
       ],
       "maxContextWindow": 262144
@@ -598,16 +599,17 @@
       "primaryCapability": "TG",
       "capabilities": [
         "TG",
-        "Reasoning",
-        "VU"
+        "VU",
+        "Reasoning"
       ],
       "providers": [
         "moonshot-ai"
       ],
-      "itemCount": 2,
+      "itemCount": 3,
       "items": [
         "kimi/kimi-k2.5",
-        "kimi/kimi-k2.6"
+        "kimi/kimi-k2.6",
+        "kimi/kimi-k2.7-code"
       ],
       "maxContextWindow": 262144
     },

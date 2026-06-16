@@ -40,9 +40,9 @@ deepseek-v4-flash
 
 ](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/deepseek-v4-flash)[
 
-kimi-k2.6
+kimi-k2.7-code
 
-](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/kimi-k2.6)[
+](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/kimi-k2.7-code)[
 
 glm-5.1
 
@@ -74,9 +74,9 @@ qwen3.5-omni-plus
 
 ](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.5-omni-plus)[
 
-kimi-k2.6
+kimi-k2.7-code
 
-](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/kimi-k2.6)
+](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/kimi-k2.7-code)
 
 ### 生成
 

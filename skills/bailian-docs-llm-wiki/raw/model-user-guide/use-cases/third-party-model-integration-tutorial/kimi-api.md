@@ -40,7 +40,7 @@ HTTP 请求地址：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/c
 
 纯文本模型（如 kimi-k2-thinking）的 HTTP 请求地址为`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
-多模态模型（如 kimi-k2.5、kimi-k2.6）的 HTTP 请求地址为`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+多模态模型（如 kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK 调用无需配置 `base_url`。
 
@@ -48,7 +48,7 @@ SDK 调用无需配置 `base_url`。
 
 纯文本模型（如 kimi-k2-thinking）的 HTTP 请求地址为`POST https://dashscope-us.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
-多模态模型（如 kimi-k2.5、kimi-k2.6）的 HTTP 请求地址为`POST https://dashscope-us.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+多模态模型（如 kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://dashscope-us.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的`base_url`：
 
@@ -79,7 +79,7 @@ dashscope.base_http_api_url = 'https://dashscope-us.aliyuncs.com/api/v1'
 
 纯文本模型（如 kimi-k2-thinking）的 HTTP 请求地址为`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
-多模态模型（如 kimi-k2.5、kimi-k2.6）的 HTTP 请求地址为`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+多模态模型（如 kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
@@ -513,16 +513,18 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 
 ## **多模态调用示例**
 
-kimi-k2.5、kimi-k2.6 支持同时处理文本、图像或视频输入，并可通过 `enable_thinking` 参数开启思考模式。以下示例展示如何调用多模态能力。
+kimi-k2.7-code、kimi-k2.6、kimi-k2.5 支持同时处理文本、图像或视频输入，并可通过 `enable_thinking` 参数开启思考模式。以下示例展示如何调用多模态能力。
 
 ### **开启或关闭思考模式**
 
-kimi-k2.5、kimi-k2.6属于混合思考模型，模型可以在思考后回复，也可直接回复；通过`enable_thinking`参数控制是否开启思考模式：
+kimi-k2.6、kimi-k2.5属于混合思考模型，模型可以在思考后回复，也可直接回复；通过`enable_thinking`参数控制是否开启思考模式：
 
 -   `true`：开启思考模式
     
 -   `false`（默认）：关闭思考模式
     
+
+kimi-k2.7-code 为仅思考模型，始终开启思考模式（`enable_thinking`默认为 `true`，不可关闭），`preserve_thinking`默认为 `true`。
 
 kimi-k2.6 支持通过 `preserve_thinking` 参数在多轮对话中传递思考过程，详情请参见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
 
@@ -936,7 +938,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 
 ## 视频文件
 
-kimi-k2.5、kimi-k2.6模型通过从视频中提取帧序列进行内容分析。您可以通过以下两个参数控制抽帧策略：
+kimi-k2.7-code、kimi-k2.6、kimi-k2.5模型通过从视频中提取帧序列进行内容分析。您可以通过以下两个参数控制抽帧策略：
 
 -   **fps**：控制抽帧频率，每隔 fps1​秒抽取一帧。取值范围为 \[0.1, 10\]，默认值为 2.0。
     
@@ -1860,6 +1862,22 @@ public class Main {
 
 [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)
 
+kimi-k2.7-code
+
+支持
+
+支持
+
+支持
+
+不支持
+
+不支持
+
+不支持
+
+支持
+
 kimi-k2.6
 
 支持
@@ -1940,6 +1958,20 @@ Moonshot-Kimi-K2-Instruct
 
 **max\_frames**
 
+kimi-k2.7-code
+
+true（仅思考模式，不可关闭）
+
+1.0
+
+0.95
+
+0.0
+
+2
+
+2000
+
 kimi-k2.6
 
 false
@@ -2006,6 +2038,8 @@ Moonshot-Kimi-K2-Instruct
 
 Kimi 系列模型是由月之暗面公司（Moonshot AI）推出的大语言模型。
 
+-   kimi-k2.7-code：Kimi 最强编程模型，长上下文指令遵循更可靠，编程任务成功率更高。支持文本、图片与视频输入、思考模式、对话与 Agent 任务。
+    
 -   kimi-k2.6：Kimi最新最智能的模型，具备更强更稳的长程代码编写能力，指令遵循和自我纠错能力显著提升。同时支持文本、图片与视频输入、思考与非思考模式、对话与 Agent 任务。
     
 -   kimi-k2.5：在 Agent、代码生成、视觉理解及一系列通用智能任务上取得开源 SOTA 表现。同时支持图像、视频与文本输入、思考与非思考模式、对话与 Agent 任务。
@@ -2014,6 +2048,8 @@ Kimi 系列模型是由月之暗面公司（Moonshot AI）推出的大语言模�
     
 -   Moonshot-Kimi-K2-Instruct：不支持深度思考，直接生成回复，响应速度更快，适用于需要快速直接回答的场景。
     
+
+> kimi-k2.7-code 价格信息请参见[模型调用计费](https://help.aliyun.com/zh/model-studio/model-pricing)。
 
 模型上下文长度与价格信息请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)。
 

@@ -755,7 +755,7 @@ Qwen3.5-Livetranslate支持60种语言（29种音频+文本，31种仅文本）�
 
 ## 推荐模型
 
-**模型**
+**模型ID**
 
 **API**
 
@@ -867,7 +867,7 @@ HTTP
 
 ### Qwen3.5-Omni
 
-**模型**
+**模型ID**
 
 **API**
 
@@ -977,7 +977,7 @@ HTTP
 
 ### Qwen3-Omni
 
-**模型**
+**模型ID**
 
 **API**
 
@@ -1063,7 +1063,7 @@ HTTP
 
 ### Qwen3.5-Livetranslate
 
-**模型**
+**模型ID**
 
 **API**
 
@@ -1089,7 +1089,7 @@ WebSocket
 
 ### Qwen3-Livetranslate
 
-**模型**
+**模型ID**
 
 **API**
 
@@ -1133,7 +1133,7 @@ HTTP
 
 以下模型不再更新，新项目建议使用Qwen3.5-Omni。
 
-**模型**
+**模型ID**
 
 **输入**
 

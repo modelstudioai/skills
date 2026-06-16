@@ -1,172 +1,147 @@
 # application component api reference
 
-百炼平台应用组件 API（`bailian/2023-12-29`）是阿里云大模型服务平台百炼提供的一组 RESTful 接口，用于以编程方式管理数据连接、知识库、Prompt 模板、长期记忆等应用组件资源。API 采用 ROA 签名风格，推荐通过官方 SDK 调用以简化签名计算。所有接口均需要通过 AccessKey 进行身份认证，并以[业务空间](../concepts/workspace.md)（WorkspaceId）作为资源隔离的基本单元。
+阿里云百炼平台应用组件 API（`bailian/2023-12-29`）提供了一组 ROA 风格的 OpenAPI，覆盖数据连接、知识库、[Prompt 工程](../concepts/prompt-engineering.md)等核心能力的全生命周期管理。开发者可通过官方 SDK 或自签名方式调用这些接口，在[业务空间](../concepts/workspace.md)维度下完成数据管理与知识库构建的自动化集成。所有接口均需要 AccessKey 认证，建议使用 RAM 用户并遵循最小权限原则。
 
 ## 接入准备
 
 ### 服务接入点
 
-API 当前支持两个地域，每个地域提供公网和 VPC 两种接入地址：
+API 当前支持两个地域，详见 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)：
 
 | 地域 | 地域 ID | 公网接入地址 | VPC 接入地址 |
 |------|---------|-------------|-------------|
-| 华北2（北京） | cn-beijing | `bailian.cn-beijing.aliyuncs.com` | `bailian-vpc.cn-beijing.aliyuncs.com` |
-| 新加坡 | ap-southeast-1 | `bailian.ap-southeast-1.aliyuncs.com` | `bailian-vpc.ap-southeast-1.aliyuncs.com` |
-
-详见 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)。
+| 华北2（北京） | cn-beijing | bailian.cn-beijing.aliyuncs.com | bailian-vpc.cn-beijing.aliyuncs.com |
+| 新加坡 | ap-southeast-1 | bailian.ap-southeast-1.aliyuncs.com | bailian-vpc.ap-southeast-1.aliyuncs.com |
 
 ### 认证与授权
 
-调用 API 前需准备 AccessKey。出于安全考虑，建议创建 RAM 用户并配置最小权限策略，而非直接使用阿里云主账号。百炼的 RAM 代码（RamCode）为 `sfm`，授权粒度为操作级。常用权限策略包括：
+- 推荐创建 RAM 用户并配置 AccessKey，避免使用阿里云主账号。
+- RAM 用户需获取相应权限策略（如 `AliyunBailianDataFullAccess` 或 `AliyunBailianDataReadOnlyAccess`）并加入[业务空间](../concepts/workspace.md)后方可调用 API。
+- 产品 RAM 代码为 `sfm`，授权粒度为操作级。详细权限点定义参见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)。
 
-- `AliyunBailianDataFullAccess`：数据读写全部权限
-- `AliyunBailianDataReadOnlyAccess`：数据只读权限
+### 调用方式
 
-RAM 用户调用前还需[加入业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)。详细的操作与资源权限映射请参见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)。
-
-### SDK 与调用方式
-
-官方提供多语言 SDK，可通过 [SDK 下载页](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29) 获取。不建议自签名对接（复杂度高，预计需 5 个工作日）。所有接口均可在 [OpenAPI Explorer](https://api.aliyun.com/) 中在线调试。
+推荐使用官方 [SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)，支持多语言。自签名对接较为复杂，建议联系技术支持（钉钉群：147535001692）获取指导。
 
 ## 数据连接（原应用数据）
 
-数据连接 API 用于管理百炼平台中的类目、文件、表格和连接器等数据资源。
+数据连接 API 管理文件的上传、分类和解析，是构建知识库的前置步骤。
 
 ### 类目管理
 
-| API | 说明 | 限流 |
-|-----|------|------|
-| AddCategory | 在指定[业务空间](../concepts/workspace.md)中创建类目（上限 500 个） | 5 次/秒 |
-| ListCategory | 分页查询类目列表（支持 NextToken 分页） | 5 次/秒 |
-| DeleteCategory | 永久删除指定类目 | 5 次/秒 |
+| 接口 | 说明 | 限流 |
+|------|------|------|
+| AddCategory | 新增类目（每空间最多 500 个） | 5 次/秒 |
+| ListCategory | 查询类目列表（支持分页） | 5 次/秒 |
+| DeleteCategory | 删除指定类目 | 5 次/秒 |
+
+> **注意**：不支持通过 API 新增或查询数据表，需通过控制台操作。
 
 ### 文件管理
 
-| API | 说明 | 限流 |
-|-----|------|------|
-| ApplyFileUploadLease | 申请上传租约，用于上传知识库文件或会话交互文件 | 5 次/秒 |
-| AddFile | 将临时存储空间中的文件导入数据连接 | 5 次/秒 |
-| AddFilesFromAuthorizedOss | 从已授权的 OSS Bucket 导入文件 | 5 次/秒 |
-| ListFile | 分页查询指定类目下的文件列表 | 5 次/秒 |
-| DescribeFile | 查询文件基本信息（名称、类型、状态等） | 5 次/秒 |
-| UpdateFileTag | 更新单个文件标签 | 5 次/秒 |
-| BatchUpdateFileTag | 批量更新文件标签 | 5 次/秒 |
-| DeleteFile | 永久删除指定文件 | 5 次/秒 |
-| DeleteFiles | 批量删除文件 | - |
+文件上传采用"租约"机制：先调用 `ApplyFileUploadLease` 获取上传地址，将文件 PUT 到该地址，再调用 `AddFile` 将文件导入百炼。也可通过 `AddFilesFromAuthorizedOss` 从已授权 OSS Bucket 批量导入。
 
-### 解析设置
+| 接口 | 说明 | 限流 |
+|------|------|------|
+| ApplyFileUploadLease | 申请上传租约 | 10 次/秒 |
+| AddFile | 导入文件到数据连接 | 10 次/秒 |
+| AddFilesFromAuthorizedOss | 从授权 OSS 导入 | 5 次/秒 |
+| ListFile | 查询文件列表 | 5 次/秒 |
+| DescribeFile | 查询文件状态 | 10 次/秒 |
+| UpdateFileTag / BatchUpdateFileTag | 更新文件标签（单个/批量） | 5 次/秒 |
+| DeleteFile | 删除文件（仅限 PARSE_FAILED 或 PARSE_SUCCESS 状态） | 10 次/秒 |
 
-| API | 说明 |
-|-----|------|
-| GetParseSettings | 获取类目的文档解析设置 |
-| GetAvailableParserTypes | 获取指定文件支持的解析器类型列表 |
-| ChangeParseSetting | 修改类目的解析设置 |
+文件导入时需指定解析器类型，可选项包括：
+- `DOCMIND`（智能文档解析）
+- `DOCMIND_DIGITAL`（电子文档解析）
+- `DOCMIND_LLM_VERSION`（大模型文档解析）
+- `DASH_QWEN_VL_PARSER`（Qwen VL 解析）
+- `DOCMIND_LLM_VERSION_MEDIA`（音视频解析）
+- `AUTO_SELECT`（自动选择）
 
-### 表格与连接器
+可通过 `GetAvailableParserTypes` 查询指定文件类型支持的解析器，通过 `GetParseSettings` / `ChangeParseSetting` 管理类目级别的默认解析配置。
 
-| API | 说明 |
-|-----|------|
-| AddTable | 添加数据表 |
-| UpdateTableFromAuthorizedOss | 从已授权 OSS Bucket 选择文件更新表格 |
-| AddConnector | 新增连接器 |
-| GetConnector | 获取连接器信息（当前仅支持文件连接器） |
-| UpdateConnector | 编辑连接器 |
+### 连接器与表格
 
-> **注意**：数据表的新增不支持通过 API 操作，需通过控制台的[应用数据](https://bailian.console.aliyun.com/?tab=app#/data-center)页面完成。
-
-文件管理的完整参数说明请参见 [AddFile - 添加文件](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addfile.md)。
-
-## [Prompt 工程](../concepts/prompt-engineering.md)
-
-Prompt 模板 API 提供模板的完整生命周期管理。
-
-| API | 说明 |
-|-----|------|
-| CreatePromptTemplate | 创建 Prompt 模板（暂不支持文生图模板） |
-| GetPromptTemplate | 获取指定 Prompt 模板详情 |
-| UpdatePromptTemplate | 更新 Prompt 模板 |
-| DeletePromptTemplate | 删除 Prompt 模板 |
-| ListPromptTemplates | 获取 Prompt 模板列表 |
-
-模板内容支持变量占位符语法（如 `${theme}`），可在运行时动态替换。详见 [CreatePromptTemplate - 创建Prompt模板](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-createprompttemplate.md)。
+| 接口 | 说明 |
+|------|------|
+| AddConnector | 新增连接器（当前仅支持文件类型） |
+| GetConnector | 获取连接器信息 |
+| AddTable | 为表格连接器添加表格 |
+| UpdateTableFromAuthorizedOss | 从授权 OSS 更新表格数据 |
 
 ## 知识库
 
-知识库 API 是本组件中最核心的功能模块，覆盖知识库全生命周期管理和检索。百炼支持两类知识库：基于文档或音视频的非结构化知识库，以及用于数据查询或图片问答的结构化知识库。
+知识库 API 支持创建和管理两类知识库：基于文档/音视频的非结构化知识库，以及用于数据查询/图片问答的结构化知识库。详细流程参见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)。
 
-### 知识库生命周期
+### 创建流程
 
-| API | 说明 | 限流 |
-|-----|------|------|
-| CreateIndex | 初始化知识库创建作业 | 10 次/秒 |
-| SubmitIndexJob | 提交知识库创建任务（CreateIndex 后必须调用） | 5 次/秒 |
-| GetIndexJobStatus | 查询创建/追加任务的执行状态 | 5 次/秒 |
-| SubmitIndexAddDocumentsJob | 向已有知识库追加文件 | 5 次/秒 |
-| UpdateIndex | 更新知识库配置 | - |
-| ListIndices | 查询知识库列表 | 5 次/秒 |
-| DeleteIndex | 删除知识库 | 5 次/秒 |
-| GetIndexMonitor | 获取知识库监控数据（含规格信息） | - |
+知识库创建为异步过程，典型调用链：
 
-> **注意**：`CreateIndex` 不具备幂等性，重复调用会创建多个同名知识库。建议通过"先查询（ListIndices）、后创建"的逻辑实现幂等。调用 `CreateIndex` 后**必须**再调用 `SubmitIndexJob` 才能完成知识库构建，否则将得到空知识库。
+1. `CreateIndex` — 初始化知识库（指定名称、类型、文档列表等）
+2. `SubmitIndexJob` — 提交创建任务开始构建
+3. `GetIndexJobStatus` — 轮询任务状态（建议间隔 5 秒以上）
 
-### 知识库文档管理
+> **注意**：`CreateIndex` 仅初始化作业，**必须**后续调用 `SubmitIndexJob` 才能完成创建，否则会得到一个空知识库。该接口不具幂等性，重复调用会创建多个同名知识库。
 
-| API | 说明 |
-|-----|------|
-| ListIndexDocuments | 查询知识库下的文件列表 |
-| ListIndexFileDetails | 查询知识库下的文件详情 |
-| DeleteIndexDocument | 删除知识库下的指定文件 |
+### 文件追加与删除
 
-### 知识库检索
+| 接口 | 说明 |
+|------|------|
+| SubmitIndexAddDocumentsJob | 向已有知识库追加文件（不支持结构化知识库） |
+| DeleteIndexDocument | 删除知识库中的文件（仅限 INSERT_ERROR 或 FINISH 状态，不可逆） |
+| ListIndexDocuments | 查询知识库文件列表 |
+| ListIndexFileDetails | 查询文件详情 |
 
-`Retrieve` 接口用于在指定知识库中检索信息。支持通过阿里云百炼 SDK（AccessKey 认证）或 Spring AI Alibaba（API-Key 认证）两种方式调用。由于检索和匹配过程较复杂，响应时间可能较长，建议合理设置超时和重试策略。
+> **注意**：`DeleteIndexDocument` 删除的是知识库中的文件索引，不会影响数据连接中已导入的源文件。`DeleteFile` 删除的是数据连接中的文件，不会影响已构建好的知识库。
+
+### 检索
+
+`Retrieve` 接口用于在知识库中执行语义检索，支持向量检索与关键词检索的混合模式。由于涉及复杂匹配，响应时间可能较长，建议合理设置超时策略。也可通过 [Spring AI Alibaba](https://help.aliyun.com/zh/model-studio/spring-ai-alibaba-integrate-knowledge-base) 配合 API-Key 调用。
+
+### 知识库管理
+
+| 接口 | 说明 |
+|------|------|
+| UpdateIndex | 更新知识库配置（名称、检索参数、规格等） |
+| ListIndices | 查询知识库列表 |
+| DeleteIndex | 删除知识库（不可逆，需先解除应用关联） |
+| GetIndexMonitor | 获取存储和 QPS 监控数据（查询范围最大 30 天） |
+
+`UpdateIndex` 支持调整的关键参数包括：
+- `DenseSimilarityTopK` / `SparseSimilarityTopK`：向量/关键词检索 Top K（两者之和不超过 200）
+- `RerankMinScore`：排序最低分数（0-1）
+- `PipelineCommercialType`：规格类型（standard / enterprise）
 
 ### 切片管理
 
-| API | 说明 |
-|-----|------|
-| ListChunks | 查询指定文件或知识库的切片列表 |
-| UpdateChunk | 修改切片内容 |
-| DeleteChunk | 删除指定切片 |
+| 接口 | 说明 |
+|------|------|
+| ListChunks | 查询文本切片列表 |
+| UpdateChunk | 修改切片内容和标题（仅支持文档搜索类知识库） |
+| DeleteChunk | 删除切片（硬删除，不可恢复） |
 
-对于文档搜索或音视频搜索类知识库，`ListChunks` 查询指定文件的所有切片；对于数据查询或图片问答类知识库，则获取全部文本切片。详见 [CreateIndex - 创建知识库](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-createindex.md)。
+## [Prompt 工程](../concepts/prompt-engineering.md)
 
-## 长期记忆
+Prompt 模板 API 支持创建、获取、更新、删除和列表查询五个操作，用于管理可复用的 Prompt 模板。模板内容支持 `${variable}` 格式的变量占位符。
 
-长期记忆 API 提供记忆体和记忆片段的管理能力，用于为智能体应用维护跨会话的上下文信息。
+| 接口 | 说明 |
+|------|------|
+| CreatePromptTemplate | 创建模板（暂不支持文生图模板） |
+| GetPromptTemplate | 获取模板详情 |
+| UpdatePromptTemplate | 增量更新模板 |
+| DeletePromptTemplate | 删除模板 |
+| ListPromptTemplates | 列表查询（支持按名称搜索、类型过滤、分页） |
 
-| API | 说明 |
-|-----|------|
-| CreateMemory | 创建长期记忆体 |
-| GetMemory | 获取长期记忆体详情 |
-| UpdateMemory | 更新长期记忆体 |
-| DeleteMemory | 删除长期记忆体 |
-| ListMemories | 获取长期记忆体列表 |
-| CreateMemoryNode | 创建记忆片段 |
-| GetMemoryNode | 获取记忆片段详情 |
-| UpdateMemoryNode | 更新记忆片段 |
-| DeleteMemoryNode | 删除记忆片段 |
-| ListMemoryNodes | 获取记忆片段列表 |
+模板类型分为 `System`（系统预置）和 `Custom`（用户自定义）。
 
-## 其他接口
+## 通用注意事项
 
-| API | 说明 |
-|-----|------|
-| ApplyTempStorageLease | 申请临时文件上传许可，用于获取临时存储空间的上传凭证 |
-| GetAlipayUrl | 获取支付宝打赏 URL |
-| GetAlipayTransferStatus | 查询支付宝打赏状态 |
-
-## 通用约定
-
-- **请求格式**：所有接口均通过 `POST` 方法调用，路径中包含 `{WorkspaceId}`
-- **限流**：大多数接口限频 5 次/秒，`CreateIndex` 为 10 次/秒，遇限流请稍后重试
-- **幂等性**：多数读取和删除接口具有幂等性；`CreateIndex` 不具有幂等性
-- **分页**：列表接口统一采用 `MaxResults` + `NextToken` 分页模式
-- **错误处理**：建议参考各接口文档中的错误码表和 [错误中心](https://api.aliyun.com/document/bailian/2023-12-29/errorCode) 处理异常
-
-## 版本变更
-
-API 版本标识为 `2023-12-29`，持续迭代中。近期主要变更包括新增 `UpdateIndex`（2026-01-19）、新增 `GetIndexMonitor`（2026-01-14）、`CreateIndex` 入参变更（2026-03-30）等。完整变更历史请参见 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md)。
+- **[业务空间](../concepts/workspace.md)**：所有 API 均以 `WorkspaceId` 为顶层作用域，操作前需确保目标资源在正确的[业务空间](../concepts/workspace.md)中。
+- **幂等性**：部分接口具有幂等性（如查询类接口），部分不具备（如 `AddCategory`、`CreateIndex`），调用前请查阅各接口文档。
+- **限流**：所有接口均有限流限制（通常 5-15 次/秒），超限时返回限流错误，需稍后重试。
+- **SDK 版本**：建议始终使用最新版 SDK 以获得完整功能支持和最佳兼容性。
+- **版本变更**：API 持续迭代，近期变更包括 `CreateIndex` 入参调整、`DescribeFile` 返回结构变更、`UpdateIndex` 和 `GetIndexMonitor` 新增等，详见 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md)。
 
 ## 来源文档
 
@@ -227,8 +202,6 @@ API 版本标识为 `2023-12-29`，持续迭代中。近期主要变更包括新
 - [ListMemoryNodes - 获取记忆片段列表](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-listmemorynodes.md)
 - [UpdateConnector - 编辑连接器](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-updateconnector.md)
 - [DeleteFiles - 批量删除文件](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-deletefiles.md)
-
-
 
 
 

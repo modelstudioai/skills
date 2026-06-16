@@ -202,8 +202,8 @@
         }
       },
       "capabilities": [
-        "TG",
-        "Reasoning"
+        "Reasoning",
+        "TG"
       ],
       "modelAlias": "",
       "versionTag": "SNAPSHOT",
@@ -391,6 +391,12 @@
       "latestOnlineAt": "2025-12-02T06:56:41.000+00:00",
       "contextWindow": 131072,
       "maxInputTokens": 98304,
+      "offlineInfo": {
+        "inference": {
+          "announceUrl": "https://www.aliyun.com/notice/118345",
+          "offlineTime": "2026-07-08 00:00:00"
+        }
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "DeepSeek-V3.2",
       "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
@@ -515,6 +521,12 @@
       "latestOnlineAt": "2025-09-30T14:44:03.000+00:00",
       "contextWindow": 131072,
       "maxInputTokens": 98304,
+      "offlineInfo": {
+        "inference": {
+          "announceUrl": "https://www.aliyun.com/notice/118345",
+          "offlineTime": "2026-07-08 00:00:00"
+        }
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "Deepseek-V3.2-Exp",
       "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
@@ -646,6 +658,12 @@
       "latestOnlineAt": "2025-08-22T16:31:50.000+00:00",
       "contextWindow": 131072,
       "maxInputTokens": 98304,
+      "offlineInfo": {
+        "inference": {
+          "announceUrl": "https://www.aliyun.com/notice/118345",
+          "offlineTime": "2026-07-08 00:00:00"
+        }
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "DeepSeek-V3.1",
       "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
@@ -769,6 +787,12 @@
       "latestOnlineAt": "2025-06-04T15:30:34.000+00:00",
       "contextWindow": 131072,
       "maxInputTokens": 98304,
+      "offlineInfo": {
+        "inference": {
+          "announceUrl": "https://www.aliyun.com/notice/118345",
+          "offlineTime": "2026-07-08 00:00:00"
+        }
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "DeepSeek-R1-0528",
       "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
@@ -884,6 +908,12 @@
       "latestOnlineAt": "2025-01-27T12:45:18.000+00:00",
       "contextWindow": 65536,
       "maxInputTokens": 57344,
+      "offlineInfo": {
+        "inference": {
+          "announceUrl": "https://www.aliyun.com/notice/118345",
+          "offlineTime": "2026-07-08 00:00:00"
+        }
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "DeepSeek-V3",
       "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
@@ -1020,6 +1050,12 @@
       "latestOnlineAt": "2025-06-17T16:00:00.000+00:00",
       "contextWindow": 131072,
       "maxInputTokens": 98304,
+      "offlineInfo": {
+        "inference": {
+          "announceUrl": "https://www.aliyun.com/notice/118345",
+          "offlineTime": "2026-07-08 00:00:00"
+        }
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "DeepSeek-R1",
       "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
@@ -1113,6 +1149,12 @@
       "latestOnlineAt": "2025-02-05T11:57:01.000+00:00",
       "contextWindow": 32768,
       "maxInputTokens": 32768,
+      "offlineInfo": {
+        "inference": {
+          "announceUrl": "https://www.aliyun.com/notice/118345",
+          "offlineTime": "2026-07-08 00:00:00"
+        }
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "DeepSeek-R1-Distill-Qwen-32B",
       "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
@@ -1206,6 +1248,12 @@
       "latestOnlineAt": "2025-02-05T11:57:01.000+00:00",
       "contextWindow": 32768,
       "maxInputTokens": 32768,
+      "offlineInfo": {
+        "inference": {
+          "announceUrl": "https://www.aliyun.com/notice/118345",
+          "offlineTime": "2026-07-08 00:00:00"
+        }
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "DeepSeek-R1-Distill-Qwen-14B",
       "docUrl": "https://help.aliyun.com/document_detail/2868565.html",
@@ -1299,6 +1347,12 @@
       "latestOnlineAt": "2025-02-05T11:57:01.000+00:00",
       "contextWindow": 32768,
       "maxInputTokens": 32768,
+      "offlineInfo": {
+        "inference": {
+          "announceUrl": "https://www.aliyun.com/notice/118345",
+          "offlineTime": "2026-07-08 00:00:00"
+        }
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "DeepSeek-R1-Distill-Qwen-7B",
       "docUrl": "https://help.aliyun.com/document_detail/2868565.html",

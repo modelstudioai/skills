@@ -8,7 +8,7 @@
 
 ### **费用概览**
 
-登录[百炼控制台](https://bailian.console.aliyun.com/)，在左侧菜单选择**用量 & 费用** > [**费用概览**](https://bailian.console.aliyun.com/?tab=model#/costing-balance/overview)，选择**账期月份**：
+登录[百炼控制台](https://bailian.console.aliyun.com/?tab=model)，单击顶部**模型**标签页，在左侧菜单选择**用量 & 费用** > [**费用概览**](https://bailian.console.aliyun.com/?tab=model#/costing-balance/overview)，选择**账期月份**：
 
 > 该页面仅展示**大模型推理**相关费用。**模型训练**和**知识库**等费用请通过[账单详情](#29f8b9b9a4lmc)查看。
 
@@ -165,7 +165,7 @@
 
 **在哪里查看模型调用次数和统计？**
 
-进入[阿里云百炼控制台](https://modelstudio.console.alibabacloud.com/)，右上角选择目标地域，在左侧菜单选择**用量 & 费用** > [模型用量](https://bailian.console.aliyun.com/?tab=costing-balance#/costing-balance/usage-statistics)。
+进入[阿里云百炼控制台](https://bailian.console.aliyun.com/?tab=model)，右上角选择目标地域，单击顶部**模型**标签页，在左侧菜单选择**用量 & 费用** > [模型用量](https://bailian.console.aliyun.com/?tab=costing-balance#/costing-balance/usage-statistics)。
 
 **按量付费是实时扣款吗？**
 
@@ -178,3 +178,15 @@
 **如何充值？**
 
 参考[如何充值缴费](https://help.aliyun.com/zh/user-center/use-alipay-online-banking-to-recharge-online)。
+
+**为什么没怎么用却产生了欠费？**
+
+**原因：**百炼的[联网搜索](https://help.aliyun.com/zh/model-studio/web-search)等附加功能按调用次数单独计费（后付费），与模型推理费用分开出账。即使您近期未主动操作控制台，历史创建的应用或代码中若开启了 `enable_search` 参数，每次被调用仍会产生联网搜索费用。
+
+**解决方案：**
+
+1.  在[账单详情](#29f8b9b9a4lmc)中筛选**大模型服务平台百炼**，查看**实例 ID（出账粒度）**列，确认产生费用的模型名称和调用渠道。
+    
+2.  检查应用代码或百炼应用配置中是否开启了 `enable_search`，如不再需要联网搜索，将该参数设为 `false` 或移除。
+    
+3.  如已停止所有调用但仍有扣费，检查是否有其他 API Key 或应用仍在运行，可在[API Key 管理](https://bailian.console.aliyun.com/?tab=model#/api-key)页面逐一排查或删除不再使用的 Key。

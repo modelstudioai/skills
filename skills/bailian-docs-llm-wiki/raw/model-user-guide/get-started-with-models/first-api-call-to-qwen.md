@@ -30,7 +30,7 @@
     
 3.  **获取API Key：**前往[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)页面，单击**创建API Key****，**即可通过API KEY调用大模型。
     
-4.  **获取业务空间ID：**使用**新加坡**或**德国（法兰克福）**地域的模型时，需在Base URL中填入业务空间ID（WorkspaceId），可在[业务空间管理](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=globalset#/efm/business_management)页面中查看。
+4.  **获取业务空间ID：**使用**华北2（北京）**、**新加坡**或**德国（法兰克福）**地域的模型时，需在Base URL中填入业务空间ID（WorkspaceId），可在[业务空间管理](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=globalset#/efm/business_management)页面中查看。
     
 
 ## **配置API Key到环境变量**
@@ -238,8 +238,6 @@
     
 2.  在**系统属性**窗口，单击**环境变量**，然后在**系统变量**区域下单击**新建**，**变量名**填入`DASHSCOPE_API_KEY`，**变量值**填入您的DashScope API Key。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8252115371/p894015.png)
-    
 3.  依次单击三个窗口的**确定**，关闭系统属性配置页面，完成环境变量配置。
     
 4.  打开CMD（命令提示符）窗口或Windows PowerShell窗口，执行如下命令检查环境变量是否生效。
@@ -249,16 +247,27 @@
         ```
         echo %DASHSCOPE_API_KEY%
         ```
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1317988371/p912522.png)
+        ```
+        Microsoft Windows [版本 10.0.19045.5371]
+        (c) Microsoft Corporation。保留所有权利。
+        C:\Windows\system32>echo %DASHSCOPE_API_KEY%
+        sk-ee16697?fe4
+        C:\Windows\system32>
+        ```
         
     -   Windows PowerShell查询命令：
         
         ```
         echo $env:DASHSCOPE_API_KEY
         ```
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1317988371/p912525.png)
+        ```
+        Windows PowerShell
+        版权所有 (C) Microsoft Corporation。保留所有权利。
+        尝试新的跨平台 PowerShell https://aka.ms/pscore6
+        PS C:\Windows\system32> echo $env:DASHSCOPE_API_KEY
+        sk-ee166797fe40xxx
+        PS C:\Windows\system32>
+        ```
         
 
 #### **CMD**
@@ -282,8 +291,6 @@
     echo %DASHSCOPE_API_KEY%
     ```
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1317988371/p912522.png)
-    
 
 ##### **添加临时性环境变量**
 
@@ -299,8 +306,6 @@ set DASHSCOPE_API_KEY=YOUR_DASHSCOPE_API_KEY
 ```
 echo %DASHSCOPE_API_KEY%
 ```
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1317988371/p912522.png)
 
 #### **PowerShell**
 
@@ -323,8 +328,6 @@ echo %DASHSCOPE_API_KEY%
     echo $env:DASHSCOPE_API_KEY
     ```
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1317988371/p912525.png)
-    
 
 ##### 添加临时性环境变量
 
@@ -340,8 +343,6 @@ $env:DASHSCOPE_API_KEY = "YOUR_DASHSCOPE_API_KEY"
 ```
 echo $env:DASHSCOPE_API_KEY
 ```
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1317988371/p912525.png)
 
 ## **选择开发语言**
 
@@ -492,8 +493,8 @@ pip install -U dashscope
         client = OpenAI(
             # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为: api_key="sk-xxx",
             api_key=os.getenv("DASHSCOPE_API_KEY"),
-            # 以下为华北2（北京）地域的URL，各地域的URL不同。
-            base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+            # 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将WorkspaceId替换为真实的业务空间ID。
+            base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
         )
     
         completion = client.chat.completions.create(
@@ -535,8 +536,8 @@ pip install -U dashscope
     from dashscope import Generation
     import dashscope
     
-    # 以下为华北2（北京）地域的URL，各地域的URL不同。
-    dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+    # 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将WorkspaceId替换为真实的业务空间ID。
+    dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
     messages = [
         {'role': 'system', 'content': 'You are a helpful assistant.'},
         {'role': 'user', 'content': '你是谁？'}
@@ -630,8 +631,8 @@ npm config set registry https://registry.npmmirror.com/
             {
                 // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为: apiKey: "sk-xxx",
                 apiKey: process.env.DASHSCOPE_API_KEY,
-                // 以下为华北2（北京）地域的URL，各地域的URL不同。
-                baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+                // 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将WorkspaceId替换为真实的业务空间ID。
+                baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
             }
         );
         const completion = await openai.chat.completions.create({
@@ -763,8 +764,8 @@ import com.alibaba.dashscope.protocol.Protocol;
 
 public class Main {
     public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        Generation gen = new Generation(Protocol.HTTP.getValue(), "https://dashscope.aliyuncs.com/api/v1");
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将WorkspaceId替换为真实的业务空间ID。
+        Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1");
         Message systemMsg = Message.builder()
                 .role(Role.SYSTEM.getValue())
                 .content("You are a helpful assistant.")
@@ -817,7 +818,7 @@ public class Main {
 **Windows**
 
 ```
-curl -X POST "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions" ^
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" ^
 -H "Authorization: Bearer %DASHSCOPE_API_KEY%" ^
 -H "Content-Type: application/json" ^
 -d "{
@@ -838,7 +839,7 @@ curl -X POST "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
 **Linux/macOS**
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -891,7 +892,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 **Windows**
 
 ```
-curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation" ^
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation" ^
 -H "Authorization: Bearer %DASHSCOPE_API_KEY%" ^
 -H "Content-Type: application/json" ^
 -d "{
@@ -917,7 +918,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generatio
 **Linux/macOS**
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -1015,8 +1016,8 @@ func main() {
 		log.Fatal(err)
 	}
 	// 创建 POST 请求
-	// 以下为华北2（北京）地域的URL，各地域的URL不同。
-	req, err := http.NewRequest("POST", "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions", bytes.NewBuffer(jsonData))
+	// 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将WorkspaceId替换为真实的业务空间ID。
+	req, err := http.NewRequest("POST", "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions", bytes.NewBuffer(jsonData))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -1046,8 +1047,8 @@ PHP
 ```
 <?php
 // 设置请求的URL
-// 以下为华北2（北京）地域的URL，各地域的URL不同。
-$url = 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions';
+// 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将WorkspaceId替换为真实的业务空间ID。
+$url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions';
 // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：$apiKey = "sk-xxx";
 $apiKey = getenv('DASHSCOPE_API_KEY');
 // 设置请求头
@@ -1111,8 +1112,8 @@ class Program
             Console.WriteLine("API Key 未设置。请确保环境变量 'DASHSCOPE_API_KEY' 已设置。");
             return;
         }
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        string url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions";
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将WorkspaceId替换为真实的业务空间ID。
+        string url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions";
         // 模型列表：https://help.aliyun.com/model-studio/getting-started/models
         string jsonContent = @"{
             ""model"": ""qwen-plus"",
@@ -1191,7 +1192,7 @@ A：请根据您的使用情况参考以下步骤：
 
 ## Cherry Studio
 
-1.  单击左下角的设置按钮，在**模型服务**栏中找到**阿里云百炼**，**API 密钥**输入您的 API Key，获取方法请参见：[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)；**API 地址**填入`https://dashscope.aliyuncs.com/compatible-mode/v1/`；单击**添加**。
+1.  单击左下角的设置按钮，在**模型服务**栏中找到**阿里云百炼**，**API 密钥**输入您的 API Key，获取方法请参见：[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)；**API 地址**填入`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/`（请将WorkspaceId替换为业务空间ID）；单击**添加**。
     
     ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3274214671/p920483.png)
     

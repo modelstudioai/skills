@@ -91,9 +91,9 @@ Java SDK 设置 `enableEncrypt(true)`，Python SDK 设置 `enable_encryption=Tru
 1. **创建安全存储[业务空间](../concepts/workspace.md)**并配置反向终端节点。
 2. **配置可用区 IP**：创建 MSE 云原生网关，获取可用区 VIP 并配置。
 3. **配置私有网络资源**：分别配置 OSS Bucket（需设置 `bailian-safe-workspace-oss-access` 标签）、ADB 实例和 ES 实例。
-4. **配置 MSE 云原生网关**：创建服务和路由，激活安全存储业务空间。
+4. **配置 MSE 云原生网关**：创建服务和路由，激活安全存储[业务空间](../concepts/workspace.md)。
 
-> **注意**：安全存储业务空间需要联系商务人员申请开通，且仅支持华北2（北京）地域。OSS Bucket 或 ES 实例被释放将导致安全存储空间不可用且无法恢复。
+> **注意**：安全存储[业务空间](../concepts/workspace.md)需要联系商务人员申请开通，且仅支持华北2（北京）地域。OSS Bucket 或 ES 实例被释放将导致安全存储空间不可用且无法恢复。
 
 ## 合规与备案
 
@@ -135,6 +135,8 @@ Java SDK 设置 `enableEncrypt(true)`，Python SDK 设置 `enable_encryption=Tru
 - [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md)
 - [配置私有网络中的资源](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)
 - [模型备案信息公示](../../raw/model-user-guide/security-and-compliance/model-filing-information-publicity.md)
+
+
 
 
 

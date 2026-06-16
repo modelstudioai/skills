@@ -24,14 +24,14 @@
 -   如果通过SDK调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk#8833b9274f4v8)
     
 
-kimi-k2.6 、kimi-k2.5 支持输入文本、图像或视频，可通过 `enable_thinking` 参数控制思考模式，默认开启思考模式：
+kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5 均支持输入文本、图像或视频。kimi/kimi-k2.7-code 为仅思考模型（`enable_thinking` 始终为 true，无法设置为 false）。kimi/kimi-k2.6、kimi/kimi-k2.5 可通过 `enable_thinking` 参数控制思考模式，默认开启思考模式：
 
 -   **思考模式**（`enable_thinking: true`）：模型会输出详细的推理过程（`reasoning_content`）
     
 -   **非思考模式**（`enable_thinking: false` 或不设置）：直接输出结果，不包含推理过程
     
 
-kimi-k2.6 支持通过 `preserve_thinking` 参数在多轮对话中传递思考过程，详情请参见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
+kimi/kimi-k2.7-code、kimi/kimi-k2.6 支持通过 `preserve_thinking` 参数在多轮对话中传递思考过程，详情请参见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
 
 以下示例演示如何调用思考模式的 kimi-k2.6 模型进行文本生成。
 
@@ -173,7 +173,7 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completi
 
 ## **多模态调用示例**
 
-kimi-k2.5 、kimi-k2.6不仅支持纯文本对话，还具备强大的多模态理解能力。本章节将介绍如何让模型理解图像和视频内容。
+kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5不仅支持纯文本对话，还具备强大的多模态理解能力。本章节将介绍如何让模型理解图像和视频内容。
 
 **重要**
 
@@ -560,7 +560,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 
 [结构化输出](https://help.aliyun.com/zh/model-studio/qwen-structured-output)
 
-kimi/kimi-k2.6
+kimi/kimi-k2.7-code
 
 支持
 
@@ -574,11 +574,13 @@ kimi/kimi-k2.6
 
 支持
 
+kimi/kimi-k2.6
+
 kimi/kimi-k2.5
 
--   kimi/kimi-k2.6、kimi/kimi-k2.5支持上下文缓存（隐式缓存，自动开启），kimi/kimi-k2.6命中缓存的输入Token按输入价格的16.9%计费，kimi/kimi-k2.5命中缓存的输入Token按输入价格的17.5%计费。
+-   kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5支持上下文缓存（隐式缓存，自动开启），kimi/kimi-k2.7-code命中缓存的输入Token按输入价格的20.0%计费，kimi/kimi-k2.6命中缓存的输入Token按输入价格的16.9%计费，kimi/kimi-k2.5命中缓存的输入Token按输入价格的17.5%计费。
     
--   在思考模式下，使用 kimi/kimi-k2.6、kimi/kimi-k2.5 进行工具调用时：必须在每轮 assistant 消息中保留 `reasoning_content` 字段，`tool_choice` 也仅支持 `"auto"`（默认）和 `"none"`），否则会报错。
+-   在思考模式下，使用 kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5 进行工具调用时：必须在每轮 assistant 消息中保留 `reasoning_content` 字段，`tool_choice` 也仅支持 `"auto"`（默认）和 `"none"`），否则会报错。
     
 
 ## **参数默认值**
@@ -599,12 +601,39 @@ kimi/kimi-k2.5
 
 **top\_k**
 
+**preserve\_thinking**
+
+kimi/kimi-k2.7-code
+
+仅支持设置为`true`
+
+1.0
+
+0.95
+
+0.0
+
+0.0
+
+auto
+
+\-
+
+默认开启
+
 kimi/kimi-k2.6
 
 仅支持设置为`true`
 
 思考模式：1.0  
-非思考模式：0.6
+非思考模式：0.6  
+  
+  
+  
+  
+  
+  
+  
 
 思考模式/非思考模式：0.95
 
@@ -616,18 +645,22 @@ kimi/kimi-k2.6
 
 \-
 
+默认关闭
+
 kimi/kimi-k2.5
+
+\-
 
 -   `stream_options`仅支持设置为`true`，`temperature`、`top_p`、`repetition_penalty`、`presence_penalty`不支持设置为其他值；
     
 -   在思考模式下，不支持强制调用某个工具，`tool_choice`仅支持设置为`auto`（默认值）和`none`。
     
--   “-”表示没有默认值，也不支持设置。
+-   ”-”表示没有默认值，也不支持设置。
     
 
 ## **模型列表与计费**
 
-kimi/kimi-k2.6、kimi/kimi-k2.5属于混合思考模型，通过`enable_thinking`参数控制是否开启思考模式（注意：无法通过`thinking_budget`限制思考长度）。
+kimi/kimi-k2.7-code 为仅思考模型（`enable_thinking` 始终为 true，无法设置为 false）。kimi/kimi-k2.6、kimi/kimi-k2.5属于混合思考模型，通过`enable_thinking`参数控制是否开启思考模式（注意：均无法通过`thinking_budget`限制思考长度）。
 
 模型上下文长度与价格信息请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)。
 
