@@ -104,7 +104,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "python": "# pip install websocket-client\nimport json\nimport websocket\nimport os\n\nAPI_KEY=os.getenv(\"DASHSCOPE_API_KEY\")\nAPI_URL = \"wss://dashscope.aliyuncs.com/api-ws/v1/realtime?model=qwen3-livetranslate-flash-realtime\"\n\nheaders = [\n\"Authorization: Bearer \" + API_KEY\n]\n\ndef on_open(ws):\nprint(f\"Connected to server: {API_URL}\")\ndef on_message(ws, message):\ndata = json.loads(message)\nprint(\"Received event:\", json.dumps(data, indent=2))\ndef on_error(ws, error):\nprint(\"Error:\", error)\n\nws = websocket.WebSocketApp(\nAPI_URL,\nheader=headers,\non_open=on_open,\non_message=on_message,\non_error=on_error\n)\n\nws.run_forever()",
+            "python": "# pip install websocket-client\nimport json\nimport websocket\nimport os\n\nAPI_KEY=os.getenv(\"DASHSCOPE_API_KEY\")\nAPI_URL = \"wss://[workspace-id].cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3-livetranslate-flash-realtime\"\n\nheaders = [\n\"Authorization: Bearer \" + API_KEY\n]\n\ndef on_open(ws):\nprint(f\"Connected to server: {API_URL}\")\ndef on_message(ws, message):\ndata = json.loads(message)\nprint(\"Received event:\", json.dumps(data, indent=2))\ndef on_error(ws, error):\nprint(\"Error:\", error)\n\nws = websocket.WebSocketApp(\nAPI_URL,\nheader=headers,\non_open=on_open,\non_message=on_message,\non_error=on_error\n)\n\nws.run_forever()",
             "docUrl": "https://help.aliyun.com/document_detail/2983281.html"
           }
         }

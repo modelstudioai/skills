@@ -16,11 +16,6 @@
       "features": [],
       "provider": "qwen",
       "model": "paraformer-realtime-8k-v1",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VoiceModel_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",
@@ -34,6 +29,12 @@
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2024-06-06T11:36:50.000+00:00",
+      "offlineInfo": {
+        "inference": {
+          "announceUrl": "https://www.aliyun.com/notice/118331",
+          "offlineTime": "2026-09-07 00:00:00"
+        }
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "Paraformer实时语音识别-8k-v1",
       "docUrl": "https://help.aliyun.com/document_detail/2712536.html",

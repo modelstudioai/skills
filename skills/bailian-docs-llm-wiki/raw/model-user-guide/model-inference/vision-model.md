@@ -533,10 +533,6 @@ Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能
     
 -   `qwen2.5-vl-32b-instruct`
     
--   `qwen2.5-vl-7b-instruct`
-    
--   `qwen2.5-vl-3b-instruct`
-    
 
 #### Qwen-Omni
 

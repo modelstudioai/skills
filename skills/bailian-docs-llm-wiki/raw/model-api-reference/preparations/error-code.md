@@ -1051,14 +1051,6 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请确保音频时长在\[1, 180\]秒范围内。
 
-## **400-**InternalError.Algo.InvalidParameter
-
-### **The audio is too long**
-
-**原因：** 使用语音识别时，提供的音频时长或大小超过了模型的限制。
-
-**解决方案：** 不同语音识别模型对音频大小和时长有不同的限制，请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model/#asr-audio-spec02)文档的“音频规格”章节，确保音频符合对应模型的规格要求。
-
 ## **400-**InvalidFile.NoHuman
 
 ### **The input image has no human body. Please upload other image with single person.**
@@ -1743,7 +1735,11 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
     
     `https://dashscope-us.aliyuncs.com/api/v1`
     
-    > 新加坡地域的域名迁移说明：新加坡地域旧版域名 https://dashscope-intl.aliyuncs.com 即将下线，请迁移至 https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com。
+    **重要**
+    
+    百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+    
+    其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
     
 -   **工具适配问题**：第三方工具未正确适配（如[Dify](https://help.aliyun.com/zh/model-studio/dify)最新版本插件不稳定导致报错，可尝试安装旧版本千问插件；旧版本[Cline](https://help.aliyun.com/zh/model-studio/cline)调用模型时**API Provider**选择了**Alibaba Qwen**，应选择**OpenAI兼容**）。
     
@@ -1867,6 +1863,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 -   如果调用子业务空间的模型，请参考[子业务空间的模型调用](https://help.aliyun.com/zh/model-studio/model-calling-in-sub-workspace)。
     
 -   也可改为使用主账号的API KEY，主账号具有所有业务空间的权限。
+    
+
+## **403-**Endpoint.AccessDenied
+
+### **Workspace endpoint access denied.**
+
+**原因：** 可能调用了已下线的模型（例如`qwen-max-2025-01-25`等历史快照版本）。模型下线后，对应的调用端点不再提供服务，会返回该报错。
+
+**解决方案：**
+
+-   前往[模型下线机制说明](https://help.aliyun.com/zh/model-studio/model-depreciation)确认所调用的模型是否已下线。
+    
+-   若模型已下线，请改用其推荐的替代模型重新调用。
     
 
 ## **403-AllocationQuota.**FreeTierOnly

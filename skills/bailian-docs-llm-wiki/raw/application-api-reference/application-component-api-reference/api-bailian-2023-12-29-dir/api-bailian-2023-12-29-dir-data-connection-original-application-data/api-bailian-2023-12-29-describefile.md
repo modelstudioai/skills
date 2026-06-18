@@ -15,29 +15,36 @@
 
 [您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/bailian/2023-12-29/DescribeFile)
 
-[![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png)调试](https://api.aliyun.com/api/bailian/2023-12-29/DescribeFile)
+ [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/bailian/2023-12-29/DescribeFile)
 
-## 授权信息
+## **授权信息**
 
 下表是API对应的授权信息，可以在RAM权限策略语句的`Action`元素中使用，用来给RAM用户或RAM角色授予调用此API的权限。具体说明如下：
 
 -   操作：是指具体的权限点。
+    
 -   访问级别：是指每个操作的访问级别，取值为写入（Write）、读取（Read）或列出（List）。
+    
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
-    -   对于必选的资源类型，用前面加 \* 表示。
+    
+    -   对于必选的资源类型，用前面加 \* 表示。
+        
     -   对于不支持资源级授权的操作，用`全部资源`表示。
+        
 -   条件关键字：是指云产品自身定义的条件关键字。
+    
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
+    
 
-操作
+**操作**
 
-访问级别
+**访问级别**
 
-资源类型
+**资源类型**
 
-条件关键字
+**条件关键字**
 
-关联操作
+**关联操作**
 
 sfm:DescribeFile
 
@@ -57,17 +64,17 @@ none
 GET /{WorkspaceId}/datacenter/file/{FileId}/ HTTP/1.1
 ```
 
-## 请求参数
+## 路径参数
 
-名称
+**名称**
 
-类型
+**类型**
 
-必填
+**必填**
 
-描述
+**描述**
 
-示例值
+**示例值**
 
 WorkspaceId
 
@@ -89,15 +96,29 @@ string
 
 file\_9a65732555b54d5ea10796ca5742ba22\_xxxxxxxx
 
-## 返回参数
+## 请求参数
 
-名称
+**名称**
 
-类型
+**类型**
 
-描述
+**必填**
 
-示例值
+**描述**
+
+**示例值**
+
+当前API无需请求参数
+
+## **返回参数**
+
+**名称**
+
+**类型**
+
+**描述**
+
+**示例值**
 
 object
 
@@ -164,12 +185,13 @@ string
 解析该文件使用的解析器类型。可能值为：
 
 -   DASHSCOPE\_DOCMIND：默认文档解析器。
+    
 
 DASHSCOPE\_DOCMIND
 
 SizeInBytes
 
-long
+integer
 
 文件大小，单位字节 Byte。
 
@@ -182,27 +204,42 @@ string
 用于文档类知识库的文件（类型为 UNSTRUCTURED），状态可能值为：
 
 -   INIT: 待解析。
+    
 -   IN\_PARSE\_QUEUE：解析队列排队中。
+    
 -   PARSING: 解析中。
+    
 -   PARSE\_SUCCESS：解析完成。
     
     **说明** 必须等到状态为 PARSE\_SUCCESS 才能将文档导入知识库。
     
 -   PARSE\_FAILED：解析失败。
+    
 
 用于智能体应用[会话交互](https://help.aliyun.com/zh/model-studio/user-guide/file-interaction)的文件（类型为 SESSION\_FILE），状态可能值为：
 
 -   INIT: 待解析。
+    
 -   IN\_PARSE\_QUEUE：解析队列排队中。
+    
 -   PARSING: 解析中。
+    
 -   PARSE\_SUCCESS：解析完成。
+    
 -   PARSE\_FAILED：解析失败。
+    
 -   SAFE\_CHECKING: 安全检测中。
+    
 -   SAFE\_CHECK\_FAILED: 安全检测失败。
+    
 -   INDEX\_BUILDING：索引构建中。
+    
 -   INDEX\_BUILD\_SUCCESS：索引构建成功。
+    
 -   INDEX\_BUILDING\_FAILED：索引构建失败。
+    
 -   INDEX\_DELETED：文件索引已删除。
+    
 -   FILE\_IS\_READY：文件准备完毕。
     
     **说明** 必须等到状态为 FILE\_IS\_READY 才能进行问答。
@@ -220,13 +257,19 @@ array
 
 文件关联的标签列表，一个文件支持关联多个标签。
 
-Tags
-
 string
 
 文件的标签。
 
 产品介绍
+
+ParseResultDownloadUrl
+
+string
+
+ParseErrorMessage
+
+string
 
 Message
 
@@ -259,7 +302,9 @@ boolean
 接口调用是否成功，可能值为：
 
 -   true：成功。
+    
 -   false：失败。
+    
 
 true
 
@@ -284,29 +329,20 @@ true
     "Tags": [
       "产品介绍"
     ],
-    "ParseResultDownloadUrl": ""
+    "ParseResultDownloadUrl": "",
+    "ParseErrorMessage": ""
   },
   "Message": "Requests throttling triggered.",
   "RequestId": "17204B98-xxxx-4F9A-8464-2446A84821CA",
-  "Status": 200,
+  "Status": "200",
   "Success": true
 }
 ```
 
 ## 错误码
 
-访问[错误中心](< https://api.aliyun.com/document/bailian/2023-12-29/errorCode>)查看更多错误码。
+访问[错误中心](https://api.aliyun.com/document/bailian/2023-12-29/errorCode)查看更多错误码。
 
-## 变更历史
+## **变更历史**
 
-变更时间
-
-变更内容概要
-
-操作
-
-2026-01-15
-
-OpenAPI 返回结构发生变更
-
-[查看变更详情](https://api.aliyun.com/document/bailian/2023-12-29/DescribeFile?updateTime=2026-01-15#workbench-doc-change-demo)
+更多信息，参考[变更详情](https://api.aliyun.com/document/bailian/2023-12-29/DescribeFile#workbench-doc-change-demo)。

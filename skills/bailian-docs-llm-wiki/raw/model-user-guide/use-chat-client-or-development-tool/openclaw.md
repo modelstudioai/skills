@@ -223,6 +223,16 @@ Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/to
                 "compat": { "thinkingFormat": "openai" }
               },
               {
+                "id": "glm-5.2",
+                "name": "glm-5.2",
+                "reasoning": false,
+                "input": ["text"],
+                "contextWindow": 1000000,
+                "maxTokens": 16384,
+                "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+                "compat": { "thinkingFormat": "openai" }
+              },
+              {
                 "id": "glm-5.1",
                 "name": "glm-5.1",
                 "reasoning": false,
@@ -270,6 +280,7 @@ Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/to
             "bailian-token-plan/deepseek-v3.2": {},
             "bailian-token-plan/kimi-k2.6": {},
             "bailian-token-plan/kimi-k2.5": {},
+            "bailian-token-plan/glm-5.2": {},
             "bailian-token-plan/glm-5.1": {},
             "bailian-token-plan/glm-5": {},
             "bailian-token-plan/MiniMax-M2.5": {}
@@ -421,6 +432,16 @@ Web UI 方式仅在 OpenClaw **≤ 2026.3.28** 可用，更高版本请使用方
                 "compat": { "thinkingFormat": "openai" }
               },
               {
+                "id": "glm-5.2",
+                "name": "glm-5.2",
+                "reasoning": false,
+                "input": ["text"],
+                "contextWindow": 1000000,
+                "maxTokens": 16384,
+                "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+                "compat": { "thinkingFormat": "openai" }
+              },
+              {
                 "id": "glm-5.1",
                 "name": "glm-5.1",
                 "reasoning": false,
@@ -468,6 +489,7 @@ Web UI 方式仅在 OpenClaw **≤ 2026.3.28** 可用，更高版本请使用方
             "bailian-token-plan/deepseek-v3.2": {},
             "bailian-token-plan/kimi-k2.6": {},
             "bailian-token-plan/kimi-k2.5": {},
+            "bailian-token-plan/glm-5.2": {},
             "bailian-token-plan/glm-5.1": {},
             "bailian-token-plan/glm-5": {},
             "bailian-token-plan/MiniMax-M2.5": {}

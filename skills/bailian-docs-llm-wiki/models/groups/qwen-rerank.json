@@ -87,7 +87,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"qwen3-vl-rerank\",\n    \"input\":{\n         \"query\": \"什么是文本排序模型\",\n         \"documents\": [\n         \"文本排序模型广泛用于搜索引擎和推荐系统中，它们根据文本相关性对候选文本进行排序\",\n         \"量子计算是计算科学的一个前沿领域\",\n         \"预训练语言模型的发展给文本排序模型带来了新的进展\"\n         ]\n    },\n    \"parameters\": {\n        \"return_documents\": true,\n        \"top_n\": 5\n    }\n}'"
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"qwen3-vl-rerank\",\n    \"input\":{\n         \"query\": \"什么是文本排序模型\",\n         \"documents\": [\n         \"文本排序模型广泛用于搜索引擎和推荐系统中，它们根据文本相关性对候选文本进行排序\",\n         \"量子计算是计算科学的一个前沿领域\",\n         \"预训练语言模型的发展给文本排序模型带来了新的进展\"\n         ]\n    },\n    \"parameters\": {\n        \"return_documents\": true,\n        \"top_n\": 5\n    }\n}'"
           }
         }
       }
@@ -173,7 +173,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"qwen3-rerank\",\n    \"input\":{\n         \"query\": \"什么是文本排序模型\",\n         \"documents\": [\n         \"文本排序模型广泛用于搜索引擎和推荐系统中，它们根据文本相关性对候选文本进行排序\",\n         \"量子计算是计算科学的一个前沿领域\",\n         \"预训练语言模型的发展给文本排序模型带来了新的进展\"\n         ]\n    },\n    \"parameters\": {\n        \"return_documents\": true,\n        \"top_n\": 5\n    }\n}'"
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"qwen3-rerank\",\n    \"input\":{\n         \"query\": \"什么是文本排序模型\",\n         \"documents\": [\n         \"文本排序模型广泛用于搜索引擎和推荐系统中，它们根据文本相关性对候选文本进行排序\",\n         \"量子计算是计算科学的一个前沿领域\",\n         \"预训练语言模型的发展给文本排序模型带来了新的进展\"\n         ]\n    },\n    \"parameters\": {\n        \"return_documents\": true,\n        \"top_n\": 5\n    }\n}'"
           }
         }
       }
@@ -264,7 +264,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"gte-rerank-v2\",\n    \"input\":{\n         \"query\": \"什么是文本排序模型\",\n         \"documents\": [\n         \"文本排序模型广泛用于搜索引擎和推荐系统中，它们根据文本相关性对候选文本进行排序\",\n         \"量子计算是计算科学的一个前沿领域\",\n         \"预训练语言模型的发展给文本排序模型带来了新的进展\"\n         ]\n    },\n    \"parameters\": {\n        \"return_documents\": true,\n        \"top_n\": 5\n    }\n}'"
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"gte-rerank-v2\",\n    \"input\":{\n         \"query\": \"什么是文本排序模型\",\n         \"documents\": [\n         \"文本排序模型广泛用于搜索引擎和推荐系统中，它们根据文本相关性对候选文本进行排序\",\n         \"量子计算是计算科学的一个前沿领域\",\n         \"预训练语言模型的发展给文本排序模型带来了新的进展\"\n         ]\n    },\n    \"parameters\": {\n        \"return_documents\": true,\n        \"top_n\": 5\n    }\n}'"
           }
         }
       }

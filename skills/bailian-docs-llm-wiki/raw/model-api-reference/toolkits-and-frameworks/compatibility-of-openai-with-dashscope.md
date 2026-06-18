@@ -14,6 +14,7 @@ BASE\_URL表示模型服务的网络访问点或地址。通过该地址，您�
     北京：https://dashscope.aliyuncs.com/compatible-mode/v1
     弗吉尼亚：https://dashscope-us.aliyuncs.com/compatible-mode/v1
     新加坡：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+    日本（东京）：https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1
     ```
     
 -   当您通过HTTP请求调用时，需要配置的完整访问endpoint如下：
@@ -22,6 +23,7 @@ BASE\_URL表示模型服务的网络访问点或地址。通过该地址，您�
     北京：POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
     弗吉尼亚：POST https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions
     新加坡：POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
+    日本（东京）：POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
     ```
     
 

@@ -8,6 +8,10 @@
 
 需使用[主账号](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)，或具备`管理员`或`API-Key`[页面权限](https://help.aliyun.com/zh/model-studio/member-management#febd776ce5lbx)的[子账号](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)操作。
 
+**重要**
+
+百炼已对华北2（北京）、新加坡地域的 API Key 生成和存储机制进行安全升级，新建的 API Key 仅在创建时展示一次明文。升级前已创建的 API Key 可继续正常使用，功能不受影响；建议您创建新密钥替换旧密钥，以获得更完善的权限管理和安全保障。
+
 ## 华北2（北京）地域
 
 1.  前往[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market)首页，在页面右上角选择**华北2（北京）**地域，进入[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)页面，单击**创建API Key**。
@@ -32,16 +36,33 @@
         仅允许名单内的 IP 使用该 API Key 发起调用。支持设置最多 **20** 个 IPv4、IPv6 的地址或网段。
         
     
-3.  点击API Key旁的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8412544571/p994217.png)图标获取该API Key。
+3.  创建成功后，弹窗会显示完整的API Key。请立即复制或下载保存，注意妥善保管，任何获取到该密钥的人都能以您的身份发起服务请求并产生费用。关闭弹窗后将**无法再次查看或复制**明文API Key。如果丢失，请重置或创建新的密钥。
     
     > 主账号可以查看全部API Key，子账号仅能查看自己创建的API Key。
     
-    在 **API Key** 页面，可单击右上角 **\+ 创建API Key** 新建密钥。列表中包含 **ID**、**API Key**、**描述**、**归属账号**、**创建时间** 和 **操作**（含 **禁用**）等列。
+    在**API Key**管理页面，单击右上角**\+ 创建API Key**创建密钥。对已有 API Key，可在操作列执行**禁用**、**编辑**或**删除**操作。
     
 
-## 新加坡、美国（弗吉尼亚）地域
+## 新加坡、日本（东京）、德国（法兰克福）地域
 
-1.  前往[阿里云百炼控制台](https://modelstudio.console.aliyun.com/ap-southeast-1)首页，在页面右上角切换到目标地域（如**新加坡**），进入**工作台**页签，然后在左侧导航栏中选择 **API Key** 进入API Key管理页面，单击**创建API Key**。
+1.  前往[阿里云百炼控制台](https://bailian.console.aliyun.com/ap-southeast-1)首页，在页面右上角切换到目标地域（如**新加坡**、**日本（东京）**、**德国（法兰克福）**），进入**工作台**页签，在左侧导航栏中选择**API Key**进入API Key管理页面，单击**创建API Key**。
+    
+2.  在弹窗中配置以下信息，并单击**确定**：
+    
+    -   **归属业务空间**：建议选择默认业务空间。
+        
+    -   **描述**：输入描述信息，方便后续识别该API Key的用途。
+        
+3.  创建成功后，弹窗会显示完整的API Key。请立即复制或下载保存，注意妥善保管，任何获取到该密钥的人都能以您的身份发起服务请求并产生费用。关闭弹窗后将**无法再次查看或复制**明文API Key。如果丢失，请重置或创建新的密钥。
+    
+    > 主账号可以查看全部API Key，子账号仅能查看自己创建的API Key。
+    
+    在**API Key**管理页面，单击右上角**\+ 创建API Key**创建密钥。对已有 API Key，可在操作列执行**禁用**、**编辑**或**删除**操作。
+    
+
+## 美国（弗吉尼亚）地域
+
+1.  前往[阿里云百炼控制台](https://bailian.console.aliyun.com/us-east-1)首页，在页面右上角切换到**美国（弗吉尼亚）**地域，进入**工作台**页签，在左侧导航栏中选择**API Key**进入API Key管理页面，单击**创建API Key**。
     
 2.  在弹窗中配置以下信息，并单击**确定**：
     
@@ -58,23 +79,6 @@
     单击右上角**\+ 创建 API Key**按钮可新建 API Key。
     
 
-## 德国（法兰克福）地域
-
-1.  前往[阿里云百炼控制台](https://bailian.console.aliyun.com/eu-central-1)首页，在页面右上角切换到目标地域（**德国（法兰克福）**），进入**工作台**页签，在左侧导航栏中选择**API Key**进入API Key管理页面，单击**创建API Key**。
-    
-2.  在弹窗中配置以下信息，并单击**确定**：
-    
-    -   **归属业务空间**：建议选择默认业务空间。
-        
-    -   **描述**：输入描述信息，方便后续识别该API Key的用途。
-        
-3.  创建成功后，弹窗会显示完整的API Key。请立即复制或下载保存，注意妥善保管，任何获取到该密钥的人都能以您的身份发起服务请求并产生费用。关闭弹窗后将**无法再次查看或复制**明文API Key。如果丢失，请重置或创建新的密钥。
-    
-    > 主账号可以查看全部API Key，子账号仅能查看自己创建的API Key。
-    
-    在**API Key**管理页面，单击右上角**\+ 创建API Key**创建密钥。对已有 API Key，可在操作列执行**禁用**、**编辑**或**删除**操作。
-    
-
 **何时选择其他归属账号或业务空间？**
 
 如果您有团队协作或成本分摊需求，可以了解以下概念：
@@ -82,7 +86,7 @@
 -   **归属业务空间**：用于隔离不同项目或团队的资源和权限。若需管控某类用户可调用的模型，或对模型调用的费用进行分账，请创建/选择列表中的子业务空间。
     
 
-详情请参见[API-Key 权限](https://help.aliyun.com/zh/model-studio/permission-management-overview#f2704153a055r)以及[账单查询与成本管理](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management)。
+详情请参见[API Key 权限](https://help.aliyun.com/zh/model-studio/permission-management-overview#f2704153a055r)以及[账单查询与成本管理](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management)。
 
 ## **二、使用API Key**
 
@@ -105,6 +109,8 @@
         -   **美国（弗吉尼亚）**：`https://dashscope-us.aliyuncs.com/compatible-mode/v1`
             
         -   **德国（法兰克福）**：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1`，调用时请将`WorkspaceId`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+            
+        -   **日本（东京）**：`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1`，调用时请将`WorkspaceId`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
             
     -   模型名称，如qwen-plus
         
@@ -152,7 +158,7 @@ API Key的调用权限完全由其**归属业务空间**决定。**同一空间�
 
 **Q：单个主账号下最多能创建多少个API Key？**
 
-A：对于华北2（北京）、新加坡和德国（法兰克福）地域，每个主账号在每个地域最多可创建50个API Key。
+A：对于华北2（北京）、新加坡、日本（东京）和德国（法兰克福）地域，每个主账号在每个地域最多可创建50个API Key。
 
 对于美国（弗吉尼亚）地域，每个归属账号（包括主账号）最多可创建20个API Key。
 

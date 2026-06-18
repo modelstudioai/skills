@@ -516,6 +516,8 @@ String
 -   cloud\_duplex：未启用本地能力(VAD、AEC)的双工模式。
     
 
+注意：SDK中的AEC为软件AEC， 需使用回声硬参考，保障mic和ref时延严格稳定对齐。推荐使用硬件AEC。
+
 debug\_path
 
 String

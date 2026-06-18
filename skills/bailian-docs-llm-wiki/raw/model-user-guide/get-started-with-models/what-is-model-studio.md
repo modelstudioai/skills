@@ -20,6 +20,7 @@ from openai import OpenAI
 # - 华北2（北京）: https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，请将WorkspaceId替换为业务空间ID
 # - 新加坡: https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
 # - 德国（法兰克福）: https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1
+# - 日本（东京）: https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1
 # - 美国（弗吉尼亚）: https://dashscope-us.aliyuncs.com/compatible-mode/v1
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
@@ -42,6 +43,7 @@ import OpenAI from "openai";
 // - 美国（弗吉尼亚）: https://dashscope-us.aliyuncs.com/compatible-mode/v1
 // - 新加坡: https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1，请将WorkspaceId替换为业务空间ID
 // - 德国（法兰克福）: https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1，请将WorkspaceId替换为业务空间ID
+// - 日本（东京）: https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1，请将WorkspaceId替换为业务空间ID
 const openai = new OpenAI(
     {
         apiKey: process.env.DASHSCOPE_API_KEY,
@@ -71,6 +73,8 @@ main()
 -   新加坡： `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`，请将WorkspaceId替换为业务空间ID
     
 -   德国（法兰克福）： `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`，请将WorkspaceId替换为业务空间ID
+    
+-   日本（东京）： `https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`，请将WorkspaceId替换为业务空间ID
     
 
 ```
@@ -168,7 +172,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 -   **消费明细：**前往[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)和[成本分析](https://usercenter2.aliyun.com/expense-manage/expense-analyze)页面查看。
     
--   **调用统计：**模型调用完约**一小时后**，前往[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing?spm=5176.29619931.J__Z58Z6CX7MY__Ll8p1ZOR.1.7dd7521cmX1pAh&tab=model#/model-market)，在页面右上角选择目标地域，进入[模型监控](https://bailian.console.aliyun.com/?tab=model#/model-telemetry)页面并设置查询条件，点击目标模型**操作**列的**监控**，即可查看调用量、Token 消耗、成功率等统计数据。详情请参见[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry/)。
+-   **调用统计：**模型调用完约**一小时后**，前往[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing?spm=5176.29619931.J__Z58Z6CX7MY__Ll8p1ZOR.1.7dd7521cmX1pAh&tab=model#/model-market)，在页面右上角选择目标地域，进入[模型监控](https://bailian.console.aliyun.com/?tab=model#/model-telemetry)页面并设置查询条件，点击目标模型**操作**列的**监控**，即可查看调用量、Token 消耗、成功率等统计数据。详情请参见[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)。
     
 -   **Coding Plan 用量：**如已订阅 Coding Plan（AI 编码套餐），可在[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)查看当前套餐的请求消耗情况。Coding Plan 采用固定月费，提供月度请求额度，支持在 AI 编码工具中使用，详情请参见[Coding Plan概述](https://help.aliyun.com/zh/model-studio/coding-plan)。
     
@@ -196,7 +200,7 @@ A：不会。阿里云严格保护数据隐私，不会将您的数据用于模�
 
 A：目前提供以下地域的模型服务：
 
-华北2（[北京](https://bailian.console.aliyun.com/?tab=model#/model-market)）、美国**（**[弗吉尼亚](https://modelstudio.console.aliyun.com/us-east-1)**）**、国际（[新加坡](https://modelstudio.console.aliyun.com/?tab=doc#/doc/?type=model&url=2840914)）和德国**（**[法兰克福](https://modelstudio.console.aliyun.com/eu-central-1)**）**地域
+华北2（[北京](https://bailian.console.aliyun.com/?tab=model#/model-market)）、美国**（**[弗吉尼亚](https://modelstudio.console.aliyun.com/us-east-1)**）**、国际（[新加坡](https://modelstudio.console.aliyun.com/?tab=doc#/doc/?type=model&url=2840914)）、德国**（**[法兰克福](https://modelstudio.console.aliyun.com/eu-central-1)**）**和日本**（**[东京](https://modelstudio.console.aliyun.com/ap-northeast-1)**）**地域
 
 建议选择邻近地域以降低网络延迟。各地域的接入点（Endpoint/Base URL）不同，API Key 不通用，支持的模型、平台功能与价格也有所差异，详情请参见[选择模型](https://help.aliyun.com/zh/model-studio/models)。
 

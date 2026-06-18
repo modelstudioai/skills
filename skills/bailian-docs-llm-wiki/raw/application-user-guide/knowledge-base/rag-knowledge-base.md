@@ -1393,7 +1393,7 @@
 
 -   [在网站上增加一个AI助手](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-website-in-10-minutes)
     
--   [10分钟在钉钉创建AI机器人](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-dingtalk-in-10-minutes)
+-   [10分钟在钉钉创建AI机器人](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-dingtalk)
     
 -   [10分钟实现微信公众号智能客服](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-wechat-in-10-minutes)
     

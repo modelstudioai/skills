@@ -54,7 +54,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/out-painting' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'X-DashScope-Async: enable' \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"image-out-painting\",\n    \"input\": {\n        \"image_url\": \"https://vigen-video.oss-cn-shanghai.aliyuncs.com/demo_image/image_demo_input.png\"\n    },\n    \"parameters\":{\n        \"x_scale\":2,\n        \"y_scale\":2,\n        \"best_quality\":false,\n        \"limit_image_size\":true\n    }\n}'"
+            "curl": "curl --location --request POST 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/out-painting' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'X-DashScope-Async: enable' \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"image-out-painting\",\n    \"input\": {\n        \"image_url\": \"https://vigen-video.oss-cn-shanghai.aliyuncs.com/demo_image/image_demo_input.png\"\n    },\n    \"parameters\":{\n        \"x_scale\":2,\n        \"y_scale\":2,\n        \"best_quality\":false,\n        \"limit_image_size\":true\n    }\n}'"
           }
         }
       }

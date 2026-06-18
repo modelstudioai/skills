@@ -1,5 +1,7 @@
 # 模型调用价格
 
+模型调用默认**按量计费**，涵盖各类模型的计费规则与价格。
+
 ## **阶梯计费规则**
 
 百炼部分模型实行阶梯计费。单价取决于单次请求的输入 Token 总量。该请求的所有 Token 均按对应阶梯的单价结算。
@@ -807,6 +809,52 @@ qwen3-max-preview
 15元
 
 60元
+
+#### 日本（东京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**模式**
+
+**单次请求的输入Token数**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+> **思维链+回答**
+
+qwen3.7-max
+
+> 当前能力等同于qwen3.7-max-2026-05-20
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+12元
+
+36元
+
+qwen3.7-max-2026-05-20
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+12元
+
+36元
 
 ### **千问Plus**
 
@@ -2214,6 +2262,158 @@ qwen-plus-2025-07-28
 
 64元
 
+#### 日本（东京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**单次请求的输入Token范围**
+
+**输入单价 （每百万Token）**
+
+**输出单价 （每百万Token）**
+
+**非思考模式**
+
+**思考模式（思维链+回答）**
+
+qwen3.7-plus
+
+> 当前能力等同于qwen3.7-plus-2026-05-26
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+日本
+
+0<Token≤256K
+
+2.998元
+
+11.991元
+
+11.991元
+
+256K<Token≤1M
+
+8.993元
+
+35.972元
+
+35.972元
+
+qwen3.7-plus-2026-05-26
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+日本
+
+0<Token≤256K
+
+2.998元
+
+11.991元
+
+11.991元
+
+256K<Token≤1M
+
+8.993元
+
+35.972元
+
+35.972元
+
+qwen3.7-plus
+
+> 当前能力等同于qwen3.7-plus-2026-05-26
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+0<Token≤256K
+
+2元
+
+8元
+
+8元
+
+256K<Token≤1M
+
+6元
+
+24元
+
+24元
+
+qwen3.7-plus-2026-05-26
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+0<Token≤256K
+
+2元
+
+8元
+
+8元
+
+256K<Token≤1M
+
+6元
+
+24元
+
+24元
+
+qwen3.6-plus
+
+> 当前能力等同于qwen3.6-plus-2026-04-02
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+0<Token≤256K
+
+2元
+
+12元
+
+12元
+
+256K<Token≤1M
+
+8元
+
+48元
+
+48元
+
+qwen3.6-plus-2026-04-02
+
+全球
+
+0<Token≤256K
+
+2元
+
+12元
+
+12元
+
+256K<Token≤1M
+
+8元
+
+48元
+
+48元
+
 ### **千问Flash**
 
 计费规则：按输入Token和输出Token计费。
@@ -2913,6 +3113,62 @@ qwen-flash-2025-07-28
 1.2元
 
 12元
+
+#### 日本（东京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**模式**
+
+**单次请求的输入Token数**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+> **思维链+回答**
+
+qwen3.6-flash
+
+> 当前能力等同于qwen3.6-flash-2026-04-16
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤256K
+
+1.2元
+
+7.2元
+
+256K<Token≤1M
+
+4.8元
+
+28.8元
+
+qwen3.6-flash-2026-04-16
+
+全球
+
+非思考和思考模式
+
+0<Token≤256K
+
+1.2元
+
+7.2元
+
+256K<Token≤1M
+
+4.8元
+
+28.8元
 
 ### **千问Turbo**
 
@@ -4983,6 +5239,16 @@ qwen3-vl-plus-2025-09-23
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：阿里云百炼开通后90天内
+
+qwen3.5-ocr
+
+中国内地
+
+0.5元
+
+2元
+
+100万Token
 
 qwen-vl-ocr
 
@@ -8432,6 +8698,16 @@ deepseek-v4-pro
 
 24元
 
+deepseek-v4-pro-us
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+国际
+
+17.986元
+
+35.972元
+
 deepseek-v4-flash
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
@@ -8441,6 +8717,16 @@ deepseek-v4-flash
 1元
 
 2元
+
+deepseek-v4-flash-us
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+国际
+
+1.499元
+
+2.998元
 
 #### 新加坡
 
@@ -8515,6 +8801,58 @@ deepseek-v4-flash
 1元
 
 2元
+
+#### 日本（东京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+> **思维链+回答**
+
+deepseek-v4-pro
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+12元
+
+24元
+
+deepseek-v4-flash
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+1元
+
+2元
+
+deepseek-v4-pro
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+日本
+
+17.986元
+
+35.972元
+
+deepseek-v4-flash
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+日本
+
+1.499元
+
+2.998元
 
 ### **DeepSeek-硅基流动**
 
@@ -8780,6 +9118,28 @@ kimi-k2.5
 
 21元
 
+#### 日本（东京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**模式**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+kimi-k2.5
+
+全球
+
+非思考和思考模式
+
+4元
+
+21元
+
 ### **Kimi-月之暗面**
 
 计费规则：按输入Token和输出Token计费。
@@ -8798,6 +9158,18 @@ kimi-k2.5
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+kimi/kimi-k2.7-code-highspeed
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+中国内地
+
+13元
+
+54元
+
+无
+
 kimi/kimi-k2.7-code
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
@@ -8807,8 +9179,6 @@ kimi/kimi-k2.7-code
 6.5元
 
 27元
-
-无
 
 kimi/kimi-k2.6
 
@@ -8857,6 +9227,20 @@ kimi/kimi-k2.5
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：阿里云百炼开通后90天内
+
+glm-5.2
+
+中国内地
+
+非思考和思考模式
+
+不区分阶梯
+
+8元
+
+28元
+
+100万Token
 
 glm-5.1
 
@@ -8994,6 +9378,18 @@ glm-4.5-air
 
 > **思维链和回答**
 
+glm-5.2
+
+全球
+
+非思考和思考模式
+
+不区分阶梯
+
+8元
+
+28元
+
 glm-5.1
 
 全球
@@ -9062,7 +9458,55 @@ glm-5.1
 
 > **思维链和回答**
 
+glm-5.2
+
+全球
+
+非思考和思考模式
+
+不区分阶梯
+
+8元
+
+28元
+
 glm-5.1
+
+全球
+
+非思考和思考模式
+
+0<Token≤32K
+
+6元
+
+24元
+
+32K<Token≤200K
+
+8元
+
+28元
+
+#### 日本（东京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**模式**
+
+**单次请求的输入Token数**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+> **思维链和回答**
+
+glm-5.1
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
 全球
 
@@ -9099,6 +9543,18 @@ glm-5.1
 > **思维链和回答**
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+ZHIPU/GLM-5.2
+
+中国内地
+
+非思考和思考模式
+
+8元
+
+28元
+
+无
 
 ZHIPU/GLM-5.1
 
@@ -11944,6 +12400,14 @@ fun-asr-mtl-2025-08-25
 
 36,000秒（10小时）
 
+fun-asr-flash-2026-06-15
+
+中国内地
+
+0.00022元/秒
+
+36,000秒（10小时）
+
 #### 新加坡
 
 **模型 ID（Model ID）**
@@ -11973,6 +12437,12 @@ fun-asr-mtl
 fun-asr-mtl-2025-08-25
 
 国际
+
+fun-asr-flash-2026-06-15
+
+国际
+
+0.00026元/秒
 
 #### **实时语音识别**
 

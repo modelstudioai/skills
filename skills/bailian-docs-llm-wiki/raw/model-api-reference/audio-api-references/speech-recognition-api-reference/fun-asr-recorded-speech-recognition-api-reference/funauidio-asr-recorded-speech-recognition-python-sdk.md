@@ -4,7 +4,9 @@
 
 **重要**
 
-新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 **用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model/#asr-audio-spec02)。
 
@@ -34,7 +36,7 @@
 
 ### **异步提交任务+同步等待任务结束**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5391190871/CAEQURiBgMCvo5zjpxkiIDQyNzUwZjVjMWM3MjQ5Nzg4ODBjNDRjNzE1ZGFiOGFj4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1581261871/CAEQURiBgMCvo5zjpxkiIDQyNzUwZjVjMWM3MjQ5Nzg4ODBjNDRjNzE1ZGFiOGFj4709861_20241015153444.149.svg)
 
 1.  调用[核心类（Transcription）](#adcb5e9bddbyq)的`async_call`方法并设置[请求参数](#340f6879fci7d)。
     
@@ -81,7 +83,7 @@ if transcribe_response.status_code == HTTPStatus.OK:
 
 ### **异步提交任务+异步查询任务执行结果**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5391190871/CAEQURiBgMCN3qzkpxkiIGE0YmU4YTdjMWNiNzRmYjJhMjFlMWZkZmFmOWQ1NmEx4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1581261871/CAEQURiBgMCN3qzkpxkiIGE0YmU4YTdjMWNiNzRmYjJhMjFlMWZkZmFmOWQ1NmEx4709861_20241015153444.149.svg)
 
 1.  调用[核心类（Transcription）](#adcb5e9bddbyq)的`async_call`方法并设置[请求参数](#340f6879fci7d)。
     

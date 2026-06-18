@@ -78,7 +78,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"qwen-mt-image\",\n    \"input\": {\n        \"image_url\": \"https://img.alicdn.com/imgextra/i2/O1CN01XsvEqj1fNlMqLNBHR_!!6000000003995-0-tps-5933-2930.jpg\",\n        \"source_lang\": \"en\",\n        \"target_lang\": \"ja\"\n    }\n}'"
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"qwen-mt-image\",\n    \"input\": {\n        \"image_url\": \"https://img.alicdn.com/imgextra/i2/O1CN01XsvEqj1fNlMqLNBHR_!!6000000003995-0-tps-5933-2930.jpg\",\n        \"source_lang\": \"en\",\n        \"target_lang\": \"ja\"\n    }\n}'"
           }
         }
       }

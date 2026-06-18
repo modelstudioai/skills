@@ -13,9 +13,7 @@
       },
       "openSource": false,
       "description": "输入文字描述，秒级生成与语义精准匹配的高质量视频，支持多种风格。PixVerse V5.6 是爱诗科技自研的视频生成大模型，在文生视频与图生视频能力上实现全面升级。模型在画面清晰度、复杂运动稳定性与音画协同方面显著提升，多角色对话场景下嘴型与台词同步更准确，情绪表达更自然。同时优化构图、光影与质感一致性，整体生成质量进一步提升。PixVerse V5.6 在 Artificial Analysis 文生视频与图生视频榜单中位列全球第一梯队。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "pixverse",
       "model": "pixverse/pixverse-v5.6-t2v",
       "iconUrl": "",
@@ -23,56 +21,48 @@
         {
           "priceUnit": "每秒",
           "price": "0.47",
-          "discount": 0.8,
           "type": "video_ratio_360p",
           "priceName": "视频生成（360P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.47",
-          "discount": 0.8,
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.53",
-          "discount": 0.8,
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.7",
-          "discount": 0.8,
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.21",
-          "discount": 0.8,
           "type": "360P_no_audio",
           "priceName": "视频生成（360P 无声）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.21",
-          "discount": 0.8,
           "type": "540P_no_audio",
           "priceName": "视频生成（540P 无声）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.27",
-          "discount": 0.8,
           "type": "720P_no_audio",
           "priceName": "视频生成（720P 无声）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.44",
-          "discount": 0.8,
           "type": "1080P_no_audio",
           "priceName": "视频生成（1080P 无声）"
         }
@@ -131,7 +121,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v5.6-t2v\",\n    \"input\": {\n        \"prompt\": \"一只小猫在月光下奔跑\"\n    },\n    \"parameters\": {\n        \"size\": \"1280*720\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v5.6-t2v\",\n    \"input\": {\n        \"prompt\": \"一只小猫在月光下奔跑\"\n    },\n    \"parameters\": {\n        \"size\": \"1280*720\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
             "docUrl": "https://help.aliyun.com/document_detail/3025608.html"
           }
         }
@@ -157,56 +147,48 @@
         {
           "priceUnit": "每秒",
           "price": "0.47",
-          "discount": 0.8,
           "type": "video_ratio_360p",
           "priceName": "视频生成（360P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.47",
-          "discount": 0.8,
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.53",
-          "discount": 0.8,
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.7",
-          "discount": 0.8,
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.21",
-          "discount": 0.8,
           "type": "360P_no_audio",
           "priceName": "视频生成（360P 无声）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.21",
-          "discount": 0.8,
           "type": "540P_no_audio",
           "priceName": "视频生成（540P 无声）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.27",
-          "discount": 0.8,
           "type": "720P_no_audio",
           "priceName": "视频生成（720P 无声）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.44",
-          "discount": 0.8,
           "type": "1080P_no_audio",
           "priceName": "视频生成（1080P 无声）"
         }
@@ -265,7 +247,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v5.6-r2v\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"size\": \"1280*720\",\n        \"duration\": 5,\n        \"audio\": false,\n        \"watermark\": true\n    }\n}'",
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v5.6-r2v\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"size\": \"1280*720\",\n        \"duration\": 5,\n        \"audio\": false,\n        \"watermark\": true\n    }\n}'",
             "docUrl": "https://help.aliyun.com/document_detail/3025612.html"
           }
         }
@@ -291,56 +273,48 @@
         {
           "priceUnit": "每秒",
           "price": "0.47",
-          "discount": 0.8,
           "type": "video_ratio_360p",
           "priceName": "视频生成（360P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.47",
-          "discount": 0.8,
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.53",
-          "discount": 0.8,
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.7",
-          "discount": 0.8,
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.21",
-          "discount": 0.8,
           "type": "360P_no_audio",
           "priceName": "视频生成（360P 无声）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.21",
-          "discount": 0.8,
           "type": "540P_no_audio",
           "priceName": "视频生成（540P 无声）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.27",
-          "discount": 0.8,
           "type": "720P_no_audio",
           "priceName": "视频生成（720P 无声）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.44",
-          "discount": 0.8,
           "type": "1080P_no_audio",
           "priceName": "视频生成（1080P 无声）"
         }
@@ -399,7 +373,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v5.6-kf2v\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"first_frame\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/first_frame.png\"\n            },\n            {\n                \"type\": \"last_frame\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/last_frame.png\"\n            }\n        ],\n        \"prompt\": \"一只小猫从窗台向下跳跃，轻盈地落在沙发上，然后好奇地环顾四周。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"duration\": 5,\n        \"watermark\": false\n    }\n}'",
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v5.6-kf2v\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"first_frame\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/first_frame.png\"\n            },\n            {\n                \"type\": \"last_frame\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/last_frame.png\"\n            }\n        ],\n        \"prompt\": \"一只小猫从窗台向下跳跃，轻盈地落在沙发上，然后好奇地环顾四周。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"duration\": 5,\n        \"watermark\": false\n    }\n}'",
             "docUrl": "https://help.aliyun.com/document_detail/3025611.html"
           }
         }
@@ -417,9 +391,7 @@
       },
       "openSource": false,
       "description": "上传任意图片，自由定制剧情、节奏与风格，生成生动连贯的视频。PixVerse V5.6 是爱诗科技自研的视频生成大模型，在文生视频与图生视频能力上实现全面升级。模型在画面清晰度、复杂运动稳定性与音画协同方面显著提升，多角色对话场景下嘴型与台词同步更准确，情绪表达更自然。同时优化构图、光影与质感一致性，整体生成质量进一步提升。PixVerse V5.6 在 Artificial Analysis 文生视频与图生视频榜单中位列全球第一梯队。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "pixverse",
       "model": "pixverse/pixverse-v5.6-it2v",
       "iconUrl": "",
@@ -427,56 +399,48 @@
         {
           "priceUnit": "每秒",
           "price": "0.47",
-          "discount": 0.8,
           "type": "video_ratio_360p",
           "priceName": "视频生成（360P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.47",
-          "discount": 0.8,
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.53",
-          "discount": 0.8,
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.7",
-          "discount": 0.8,
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.21",
-          "discount": 0.8,
           "type": "360P_no_audio",
           "priceName": "视频生成（360P 无声）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.21",
-          "discount": 0.8,
           "type": "540P_no_audio",
           "priceName": "视频生成（540P 无声）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.27",
-          "discount": 0.8,
           "type": "720P_no_audio",
           "priceName": "视频生成（720P 无声）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.44",
-          "discount": 0.8,
           "type": "1080P_no_audio",
           "priceName": "视频生成（1080P 无声）"
         }
@@ -535,7 +499,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.comm/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v5.6-it2v\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp\"\n            }\n        ],\n        \"prompt\": \"镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"duration\": 5,\n        \"audio\": false,\n        \"watermark\": true\n    }\n}'",
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v5.6-it2v\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp\"\n            }\n        ],\n        \"prompt\": \"镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"duration\": 5,\n        \"audio\": false,\n        \"watermark\": true\n    }\n}'",
             "docUrl": "https://help.aliyun.com/document_detail/3025609.html"
           }
         }

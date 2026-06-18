@@ -1,44 +1,53 @@
 # frameworks
 
-阿里云百炼平台支持通过主流开发框架集成大模型服务和数据管理能力，目前主要支持 **LlamaIndex**（Python）和 **Spring AI Alibaba**（Java）两大框架。开发者可以基于这些框架快速构建 RAG 应用、知识库检索服务以及智能体应用。
-
-## 支持的框架与适用场景
-
-| 框架 | 语言 | 适用场景 | 环境要求 |
-|------|------|---------|---------|
-| LlamaIndex | Python | 构建云端 RAG 应用（知识库问答、客户支持） | Python 3.9+ |
-| Spring AI Alibaba | Java | 知识库检索、智能体应用、工作流应用集成 | JDK 17+，Spring Boot 3.x |
+百炼平台支持通过第三方开发框架集成其大模型服务和知识库能力，目前主要覆盖 LlamaIndex（Python）和 Spring AI Alibaba（Java）两个生态。开发者可以利用这些框架快速构建 RAG 应用、检索知识库或调用百炼大模型应用，而无需直接对接底层 API。以下按框架分别介绍其集成方式、适用场景和关键参数。
 
 ## LlamaIndex 集成
 
-根据 [通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)，LlamaIndex 方案将知识库部署在云端，提供从本地文件读取到云端知识库构建，再到检索引擎和 RAG 应用搭建的完整流程。
+LlamaIndex 提供了基于 Python 的 RAG 应用构建框架，百炼通过 `DashScopeCloudIndex` 等组件与之对接，详细用法参见[通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)。
 
-### 核心组件
+### 适用场景
 
-- **`DashScopeParse`**：解析 `.txt`、`.docx`、`.pdf` 等非结构化文件
-- **`DashScopeCloudIndex`**：创建和管理云端知识库
-- **`DashScopeRerank`**：对检索结果进行语义重排
+- 私域知识问答、客户支持等需要检索增强生成的场景
+- 已熟悉 LlamaIndex API 的 Python 开发者
+
+### 前提条件
+
+- Python 3.9 及以上
+- 已开通百炼服务并获取 API Key，配置到环境变量
+
+### 核心流程
+
+1. **构建云端知识库**：使用 `SimpleDirectoryReader` 读取本地 `.txt`、`.docx`、`.pdf` 文件，通过 `DashScopeParse` 解析后上传至百炼应用数据，调用 `DashScopeCloudIndex.from_documents()` 创建知识库。
+2. **构建检索引擎**：通过 `index.as_query_engine()` 创建检索引擎，支持配置相似度阈值（`similarity_cutoff`）、Top-K 数量（`similarity_top_k`）和重排模型（`DashScopeRerank`，默认 `gte-rerank`）。
+3. **交互问答**：引擎接收用户提问，从云端知识库检索相关片段，合并后送入大模型（默认 `qwen-max`）生成回答。
 
 ### 关键参数
 
-```python
-Settings.llm = DashScope(model_name="qwen-max")  # 生成回答使用的模型
-similarity_top_k = 5       # 检索返回的最大结果数
-similarity_cutoff = 0.4    # 最低相似度阈值
-top_n = 1                  # 重排后返回的结果数
-```
+| 参数 | 说明 | 默认值 |
+|------|------|--------|
+| `model_name` | 生成回答使用的大模型 | `qwen-max` |
+| `similarity_top_k` | 检索返回的最高相似度结果数 | 5 |
+| `similarity_cutoff` | 最低相似度过滤阈值 | 0.4 |
+| `top_n`（Rerank） | 重排后返回的结果数 | 1 |
 
-`model_name` 支持 `qwen-max` 等千问系列模型。
+### 限制
 
-> **注意**：该方案使用默认的智能文档切分与官方向量模型，不支持自定义文档切分方式或自定义嵌入模型。如需灵活控制，可考虑基于本地知识库构建 RAG 应用。
+- 云端知识库方案使用默认的智能文档切分和官方向量模型，不支持自定义切分方式或自定义嵌入模型
+- 仅支持非结构化数据文件（`.txt`、`.docx`、`.pdf` 等）
 
 ## Spring AI Alibaba 集成
 
-Spring AI Alibaba 支持两种集成方式：知识库检索和大模型应用调用。
+Spring AI Alibaba 面向 Java 生态，提供了检索百炼知识库和调用百炼大模型应用两种集成方式。
 
-### 知识库检索
+### 环境要求
 
-参见 [通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)，通过 `DashScopeDocumentRetriever` 检索百炼知识库中的相关文本切片，结合大模型生成回答。
+- JDK 17 或更高版本
+- Spring Boot 3.x
+
+### 检索百炼知识库
+
+通过 `DashScopeDocumentRetriever` 检索百炼云端知识库中的文本切片，结合 `ChatClient` 生成回答。具体步骤参见[通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)。
 
 核心配置：
 
@@ -50,24 +59,17 @@ spring:
       # workspace-id: ${AI_DASHSCOPE_WORKSPACE_ID}  # 子业务空间时需要
 ```
 
-关键代码：
+关键组件：
 
-```java
-DocumentRetriever retriever = new DashScopeDocumentRetriever(dashscopeApi,
-    DashScopeDocumentRetrieverOptions.builder().withIndexName(INDEX_NAME).build());
+- `DashScopeDocumentRetriever`：根据知识库名称检索相关文本切片
+- `DocumentRetrievalAdvisor`：将检索结果作为上下文注入提示词
+- `ChatClient`：调用大模型生成回答，默认使用 `qwen-max`
 
-this.chatClient = builder
-    .defaultAdvisors(new DocumentRetrievalAdvisor(retriever, retrievalSystemTemplate))
-    .build();
-```
+### 集成百炼大模型应用
 
-知识库需提前在百炼控制台创建，`INDEX_NAME` 设置为知识库名称。默认使用 `qwen-max` 模型，可通过 `DashScopeChatOptions` 切换其他模型。
+通过 `DashScopeAgent` 调用百炼平台创建的智能体应用或工作流应用，支持非流式和流式两种调用方式。详细步骤参见[使用Spring AI Alibaba集成阿里云百炼大模型应用](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-llm-application.md)。
 
-### 大模型应用调用
-
-参见 [使用Spring AI Alibaba集成阿里云百炼大模型应用](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-llm-application.md)，通过 `DashScopeAgent` 调用百炼平台上的智能体应用和工作流应用，支持非流式和流式两种调用方式。
-
-配置示例：
+核心配置：
 
 ```yaml
 spring:
@@ -78,51 +80,41 @@ spring:
       api-key: ${DASHSCOPE_API_KEY}
 ```
 
-流式调用时可配置增量输出和思考过程：
+关键组件：
 
-```java
-DashScopeAgentOptions.builder()
-    .withSessionId("current_session_id")
-    .withIncrementalOutput(true)
-    .withHasThoughts(true)
-    .build();
+- `DashScopeAgent`：封装百炼应用调用，支持 `call()`（非流式）和 `stream()`（流式）
+- `DashScopeAgentOptions`：配置应用 ID、会话 ID、增量输出等参数
+
+Maven 依赖：
+
+```xml
+<dependency>
+    <groupId>com.alibaba.cloud.ai</groupId>
+    <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
+    <version>1.0.0.2</version>
+</dependency>
 ```
 
-> **注意**：仅支持集成智能体应用和工作流应用，不支持其他类型的百炼应用。
+> **注意**：集成百炼大模型应用仅支持智能体应用和工作流应用两种类型，不支持其他应用类型。
 
-## API Key 配置
+## 框架对比
 
-所有框架均需配置百炼 API Key，但环境变量命名存在差异：
+| 维度 | LlamaIndex | Spring AI Alibaba |
+|------|-----------|-------------------|
+| 语言 | Python | Java |
+| 最低运行时 | Python 3.9 | JDK 17 + Spring Boot 3.x |
+| 知识库集成 | 支持（云端构建 + 检索） | 支持（检索已有知识库） |
+| 应用调用 | 不涉及 | 支持（智能体/工作流应用） |
+| [流式输出](../concepts/streaming.md) | 未提及 | 支持 |
 
-| 框架/场景 | 推荐环境变量名 |
-|-----------|---------------|
-| LlamaIndex | 通过 `配置API Key到环境变量` 文档设置 |
-| Spring AI Alibaba（知识库检索） | `AI_DASHSCOPE_API_KEY` |
-| Spring AI Alibaba（应用调用） | `DASHSCOPE_API_KEY` |
+## 计费说明
 
-> **注意**：两篇 Spring AI Alibaba 文档中推荐的 API Key 环境变量名不一致（`AI_DASHSCOPE_API_KEY` vs `DASHSCOPE_API_KEY`），[业务空间](../concepts/workspace.md) ID 的环境变量名也不同（`AI_DASHSCOPE_WORKSPACE_ID` vs `WORKSPACE_ID`）。请以各自示例项目的 `application.yml` 中的配置为准。
-
-## 限制与注意事项
-
-- **LlamaIndex**：仅支持非结构化数据文件（`.txt`、`.docx`、`.pdf`），文件上传和模型推理均需公网访问。
-- **Spring AI Alibaba**：依赖版本为 `spring-ai-alibaba-starter-dashscope:1.0.0.2`，需确保 Spring Boot 3.x 兼容性。
-- **计费**：框架本身不收费，但调用模型会产生推理费用。
+框架本身不收取费用。通过框架调用百炼模型时会产生模型推理费用，知识库检索也可能产生相关费用。
 
 ## 来源文档
 
 - [通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)
 - [通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)
 - [使用Spring AI Alibaba集成阿里云百炼大模型应用](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-llm-application.md)
-
-
-
-
-
-
-
-
-
-
-
 
 

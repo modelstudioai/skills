@@ -33,7 +33,7 @@ Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/?tab=pla
 
 Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)
 
-部分模型名称需调整：kimi-k2.6 写为 **kimi-k2-6**，kimi-k2.5 写为 **kimi-k2-5**，glm-5.1 写为 **glm-5-1**，glm-5 写为 **glm-5-0**。
+部分模型名称需调整：kimi-k2.6 写为 **kimi-k2-6**，kimi-k2.5 写为 **kimi-k2-5**，glm-5.2 写为 **glm-5-2**，glm-5.1 写为 **glm-5-1**，glm-5 写为 **glm-5-0**。
 
 ### Coding Plan
 

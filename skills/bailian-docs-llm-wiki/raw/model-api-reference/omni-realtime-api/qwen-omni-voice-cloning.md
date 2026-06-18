@@ -10,7 +10,9 @@
 
 **重要**
 
-新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 ## **音频要求**
 
@@ -52,7 +54,7 @@ WAV (16bit)、MP3、M4A
 
 ## 快速开始：复刻与使用音色
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6298830871/CAEQbxiBgICd6_Do8BkiIDM3NjYwZDQxMGIyMTQzMDdhOGMyY2YwNWFhMmM2NjVi5899512_20251120114927.389.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1397661871/CAEQbxiBgICd6_Do8BkiIDM3NjYwZDQxMGIyMTQzMDdhOGMyY2YwNWFhMmM2NjVi5899512_20251120114927.389.svg)
 
 ### 1\. 工作流程
 

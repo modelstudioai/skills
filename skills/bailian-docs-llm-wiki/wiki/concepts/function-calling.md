@@ -1,64 +1,90 @@
-# 函数调用与工具调用
+# 函数调用（Function Calling）
 
-函数调用（Function Calling）与工具调用（Tool Calling）是大模型与外部系统交互的核心机制，允许模型在对话过程中识别用户意图并自动调用预定义的函数或工具来获取信息、执行操作，从而突破模型自身在实时数据访问和精确计算等方面的局限。
+函数调用（Function Calling）是大语言模型与外部工具和服务交互的核心机制。通过该能力，模型可以根据用户输入自主判断是否需要调用预定义的函数，并生成符合函数签名的结构化参数，从而实现信息检索、精确计算、业务操作等大模型本身无法直接完成的任务。
 
-## 基本原理
+## 在百炼平台中的定位
 
-函数调用的本质是让大模型充当"调度器"：模型根据用户输入和工具描述判断是否需要调用工具，若需要则生成结构化的调用请求（包含函数名和参数），由客户端执行实际调用后将结果返回模型，模型再结合结果生成最终回答。整个过程中模型并不直接执行函数，而是输出调用意图。
+在阿里云百炼平台中，函数调用是连接大模型与外部能力的桥梁。它贯穿了模型推理、应用编排、插件系统等多个层面：
 
-## 在百炼平台中的使用场景
+- **模型推理层**：Qwen 系列主力模型（qwen3.7-max、qwen3.7-plus、qwen3.6-flash 等）以及 DeepSeek 系列均原生支持 Function Calling，开发者可在对话请求中声明可用函数，由模型自动决策调用时机。
+- **应用编排层**：智能体应用中的插件工具本质上通过 Function Calling 实现——大模型根据用户意图、工具名称和描述自动选择并调用合适的工具。
+- **API 接口层**：百炼的多种 API 协议（OpenAI 兼容 Chat Completions、Responses、Anthropic 兼容 Messages、DashScope 原生接口）均支持 Function Calling，开发者可按已有技术栈选择接入方式。
 
-### 模型推理接口中的 Function Calling
+## 工作原理
 
-百炼平台的文本生成模型普遍支持 Function Calling 能力。开发者通过 API 的 `tools` 参数声明可用函数的名称、描述和参数结构（JSON Schema），模型在推理时自动决定是否调用。主流模型支持情况：
+函数调用遵循以下流程：
 
-| 模型 | Function Calling | 备注 |
-|------|-----------------|------|
-| qwen3.7-max | 支持 | 最强推理能力 |
-| qwen3.7-plus | 支持 | 能力与成本均衡 |
-| qwen3.6-flash | 支持 | 低成本选择 |
-| deepseek-v4-pro | 支持 | 第三方模型 |
+1. **声明函数**：开发者在 API 请求的 `tools` 参数中定义可用函数的名称、描述和参数 schema。
+2. **模型决策**：模型根据用户输入内容和函数描述，自主判断是否需要调用函数，以及调用哪个函数。
+3. **参数生成**：模型按照函数的参数 schema 生成结构化的 JSON 参数。
+4. **应用执行**：应用端接收模型返回的函数调用请求，执行实际的函数逻辑并获取结果。
+5. **结果整合**：将函数执行结果回传给模型，模型结合工具返回内容与用户原始问题，生成最终回复。
 
-百炼同时提供 OpenAI 兼容、Anthropic 兼容和 DashScope 原生三种接口风格，均支持工具调用，开发者可按已有技术栈选择。
+如果模型判断无需调用任何函数，则直接生成文本回复，不触发调用流程。
 
-### 智能体应用中的工具调用
+## 支持的模型
 
-在智能体（Agent）应用中，工具调用是核心能力之一。新版智能体（Agent 2.0）将知识库、MCP 服务、插件等统一抽象为"工具"，由模型自主规划调用顺序，形成完整的"规划-执行-反思"链路。可通过 `ReAct 最大轮次`（1-50）限制单次会话中的工具调用次数。
+百炼平台中支持 Function Calling 的主要模型包括：
 
-### 插件系统
+| 模型 | 文本生成 | 视觉理解 | 备注 |
+|------|---------|---------|------|
+| qwen3.7-max | 支持 | -- | 旗舰模型，1M 上下文 |
+| qwen3.7-plus | 支持 | 支持 | 均衡之选，同时支持视觉 Function Calling |
+| qwen3.6-flash | 支持 | 支持 | 低成本，效果接近旗舰 |
+| qwen3.5-omni-plus | -- | 支持 | 全模态模型 |
+| deepseek-v4-pro | 支持 | -- | 第三方模型 |
+| deepseek-v4-flash | 支持 | -- | 第三方模型 |
 
-百炼的插件本质上就是工具的封装。每个插件包含一个或多个工具（API），模型根据工具名称和描述自动判断是否调用。平台提供官方插件（如代码解释器、夸克搜索、计算器等）、第三方插件和自定义插件三种类型。自定义插件还支持发布为 MCP 服务，提供更灵活的集成方式。
+> 各模型对 Function Calling 的兼容性可能随版本更新变化，以百炼控制台实际执行结果为准。
 
-### MCP 协议中的工具调用
+## 支持的 API 接口
 
-MCP（模型上下文协议）为工具调用提供了标准化的协议层。通过 MCP，智能体可以接入官方预部署的 MCP 服务或自定义部署的外部工具，无需为每个工具编写专用接口。MCP 服务在智能体中最多同时添加 5 个。
+| 接口协议 | Function Calling 支持 | 典型场景 |
+|---------|----------------------|---------|
+| OpenAI 兼容 Chat Completions | 支持 | 从 OpenAI 生态迁移，标准 function call |
+| OpenAI 兼容 Responses | 支持（含内置工具） | 需要联网搜索、代码执行等内置工具 |
+| Anthropic 兼容 Messages | 支持（tool use） | 从 Anthropic 生态迁移 |
+| DashScope 原生接口 | 支持 | 需要完整功能集和平台特有参数 |
 
-### 实时多模态接口中的工具调用
-
-Qwen3.5-Omni-Realtime 系列模型在 WebSocket 实时交互中也支持工具调用。通过 `session.update` 事件配置 `tools`，模型在语音对话过程中可触发函数调用。调用结果通过 `conversation.item.create`（type 为 `function_call_output`）回传，再发送 `response.create` 让模型继续生成响应。
+所有接口均通过百炼平台统一鉴权，使用百炼 API Key 访问。
 
 ## 关键参数与配置
 
-- **tools**：工具定义数组，每个工具包含 `type`（通常为 `function`）、`function.name`、`function.description` 和 `function.parameters`（JSON Schema 格式）。
-- **tool_choice**：控制模型的工具调用策略，可设为 `auto`（模型自行判断）、`none`（禁止调用）或指定具体函数名。
-- **工具描述质量**：描述应使用自然语言清晰说明功能和使用场景，直接影响模型的调用准确率。描述不佳可能导致漏召回或误召回。
-- **输入参数传参方式**（自定义插件）：分为"大模型识别"（从用户输入中提取）和"业务透传"（外部直接传递）两种。
+- **`tools`**：定义可用函数列表，每个函数包含 `name`（函数名）、`description`（功能描述）和 `parameters`（参数 JSON Schema）。
+- **`tool_choice`**：控制模型的函数调用行为，可选值通常包括 `auto`（模型自主决定）、`none`（禁止调用）或指定特定函数名（强制调用）。
+- 每个智能体应用最多支持添加 10 个工具。
 
-## 最佳实践
+## 与插件系统的关系
 
-1. **函数命名和描述要清晰**：使用具有语义的名称，描述中说明功能、适用场景和参数含义，帮助模型准确判断何时调用。
-2. **选择合适的模型**：工具调用效果与模型能力相关，复杂场景建议使用 qwen3.7-plus 及以上模型。
-3. **控制工具数量**：智能体应用最多添加 10 个插件工具、5 个 MCP 服务，工具过多会影响模型决策质量。
-4. **提供调用示例**：在自定义插件的高级配置中提供调用示例，可有效减少漏召回和误召回。
-5. **结合结构化输出**：当需要从工具返回中提取特定字段时，可配合结构化输出（JSON Mode）获取规范化结果。
+百炼平台的插件系统是 Function Calling 在应用层的封装。插件下的每个"工具"本质上对应一个可调用的函数：
+
+- **官方插件**（如 Python 代码解释器、夸克搜索、计算器等）预置了函数定义，无需额外配置。
+- **自定义插件**允许开发者定义自己的 API 端点作为可调用函数，支持鉴权配置和参数透传。
+- 插件还可发布为 MCP 服务，在智能体应用中以更灵活的方式集成。
+
+调用方式包括智能体应用（模型自主规划）、工作流应用（按编排执行）和 Assistant API（通过 `tools` 参数指定）。
+
+## 开发建议
+
+1. **函数描述要精确**：模型依据函数名和描述来决策是否调用，描述越清晰，调用准确率越高。
+2. **参数 schema 要完备**：为每个参数提供类型、描述和约束（如枚举值、必填项），帮助模型生成正确参数。
+3. **接口选择**：从 OpenAI 生态迁移优先选 Chat Completions；需要内置工具选 Responses API；需要最完整功能集选 DashScope 原生接口。
+4. **思考模式配合**：Qwen3 及以上模型支持思考模式（`enable_thinking`），在复杂的多步函数调用场景中可提升推理质量。
+
+## 来源文档
+
+- [model inference](../guides/model-inference.md)
+- [qwen api reference](../api/qwen-api-reference.md)
+- [plug in](../guides/plug-in.md)
+- toolkits and [frameworks](../api/frameworks.md)
+- [more](../api/more.md) about models
 
 ## 关联主题页
 
 - [model inference](../guides/model-inference.md)
-- [plug in](../guides/plug-in.md)
-- [model context protocol](../guides/model-context-protocol.md)
-- [llm application](../guides/llm-application.md)
-- [omni realtime api](../api/omni-realtime-api.md)
 - [qwen api reference](../api/qwen-api-reference.md)
+- [plug in](../guides/plug-in.md)
+- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
+- [more about models](../api/more-about-models.md)
 
 

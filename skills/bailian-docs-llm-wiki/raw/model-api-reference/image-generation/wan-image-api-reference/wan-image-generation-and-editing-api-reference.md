@@ -32,11 +32,13 @@ wan2.7-image
 
 **重要**
 
-北京和新加坡地域拥有独立的 **API Key** 与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错。
+华北2（北京）和新加坡地域拥有独立的 **API Key** 与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错。
 
 **重要**
 
-新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 ## **HTTP同步调用**
 
@@ -1245,7 +1247,7 @@ SDK 参数命名与HTTP接口基本一致。
 
 各地域的`base_url`和API Key 不通用，以下示例以北京地域为例进行调用：
 
-### 北京
+### 华北2（北京）
 
 `https://dashscope.aliyuncs.com/api/v1`
 
@@ -1903,7 +1905,7 @@ SDK 参数命名与HTTP接口基本一致。
 
 请确保 DashScope Java SDK版本不低于 `2.22.13`，否则可能不支持本文所用的部分参数。
 
-### 北京
+### 华北2（北京）
 
 `https://dashscope.aliyuncs.com/api/v1`
 

@@ -16,7 +16,6 @@
       "openSource": true,
       "description": "Step 3.7 Flash 是阶跃星辰最新推出的生产级 Agent 高效率 Flash 模型，专为 Agent、Coding、Search 与多模态工作流打造，在速度、成本、执行可靠性与复杂任务完成能力之间实现了更优平衡。具备多模态感知与执行、视觉搜索与工具增强、高可靠工具调用与编排，以及 Agent 生态兼容优化等核心能力。",
       "features": [
-        "model-experience",
         "function-calling",
         "structured-outputs",
         "cache",
@@ -70,6 +69,7 @@
       "latestOnlineAt": "2026-05-25T06:20:45.000+00:00",
       "contextWindow": 262144,
       "maxInputTokens": 262144,
+      "offlineInfo": {},
       "inferenceProvider": "stepfun",
       "name": "stepfun/step-3.7-flash",
       "docUrl": "https://help.aliyun.com/document_detail/3036697.html",
@@ -108,10 +108,11 @@
       ],
       "samples": {
         "openai": {
-          "default": {
+          "completionsAPI": {
             "curl": "curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n  \"model\": \"stepfun/step-3.7-flash\",\n  \"messages\": [\n  {\n    \"role\": \"user\",\n    \"content\": [\n      {\"type\": \"image_url\", \"image_url\": {\"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"}},\n      {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"}\n    ]\n  }]\n}'",
             "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"stepfun/step-3.7-flash\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\n                    \"type\": \"image_url\",\n                    \"image_url\": {\n                        \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n                    },\n                },\n                {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"},\n            ],\n        },\n    ],\n)\nprint(completion.choices[0].message.content)",
-            "nodejs": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI({\n  // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: \"sk-xxx\"\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: \"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n});\n\nasync function main() {\n  const response = await openai.chat.completions.create({\n    model: \"stepfun/step-3.7-flash\",\n    messages: [\n      {\n        role: \"user\",\n        content: [{\n            type: \"image_url\",\n            image_url: {\n              \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n            }\n          },\n          {\n            type: \"text\",\n            text: \"请仅输出图像中的文本内容。\"\n          }\n        ]\n      }\n    ]\n  });\n  console.log(response.choices[0].message.content);\n}\nmain()"
+            "nodejs": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI({\n  // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: \"sk-xxx\"\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: \"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n});\n\nasync function main() {\n  const response = await openai.chat.completions.create({\n    model: \"stepfun/step-3.7-flash\",\n    messages: [\n      {\n        role: \"user\",\n        content: [{\n            type: \"image_url\",\n            image_url: {\n              \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n            }\n          },\n          {\n            type: \"text\",\n            text: \"请仅输出图像中的文本内容。\"\n          }\n        ]\n      }\n    ]\n  });\n  console.log(response.choices[0].message.content);\n}\nmain()",
+            "docUrl": "https://help.aliyun.com/document_detail/3036697.html"
           }
         }
       }

@@ -1,14 +1,12 @@
 # preparations
 
-调用阿里云百炼平台的模型 API 前，需要完成三项准备工作：获取 API Key、将 API Key 配置到环境变量、安装 SDK。本文汇总了这些准备步骤的要点，并整理了常见错误码及其解决方案，帮助开发者快速上手。
+本页汇总使用阿里云百炼 API 前的准备工作，包括获取 API Key、配置环境变量、安装 SDK 以及常见错误码的排查。完成这些步骤后即可开始调用百炼平台上的各类大模型。
 
 ## 获取 API Key
 
-API Key 是调用百炼大模型和应用的鉴权凭证。创建 API Key 需要使用主账号，或具备`管理员`或`API-Key`页面权限的子账号。详细操作请参见 [获取API Key](../../raw/model-api-reference/preparations/get-api-key.md)。
+API Key 是调用百炼模型和应用的鉴权凭证。在[百炼控制台](https://bailian.console.aliyun.com/)的 **API Key** 页面创建，需使用主账号或具备相应权限的子账号操作。详细流程参见[获取API Key](../../raw/model-api-reference/preparations/get-api-key.md)。
 
-### 地域与 Base URL
-
-百炼支持多个地域，不同地域的控制台入口和 Base URL 不同：
+### 支持的地域
 
 | 地域 | Base URL |
 |------|----------|
@@ -16,118 +14,101 @@ API Key 是调用百炼大模型和应用的鉴权凭证。创建 API Key 需要
 | 新加坡 | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1` |
 | 美国（弗吉尼亚） | `https://dashscope-us.aliyuncs.com/compatible-mode/v1` |
 | 德国（法兰克福） | `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1` |
+| 日本（东京） | `https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1` |
 
-其中新加坡和德国地域需将 `{WorkspaceId}` 替换为实际的[业务空间](../concepts/workspace.md) ID。
+> **注意**：新加坡、日本（东京）、德国（法兰克福）地域的 Base URL 中需要将 `{WorkspaceId}` 替换为实际的[业务空间](../concepts/workspace.md) ID。
 
-### 权限与[业务空间](../concepts/workspace.md)
+### 权限与时效
 
-- API Key 的调用权限由其**归属[业务空间](../concepts/workspace.md)**决定，同一空间内的 API Key 权限相同，无需为不同模型类型（文生文、文生图、语音合成等）分别创建。
-- 默认业务空间下的 API Key 可调用所有标准模型及该空间内的应用；子业务空间下的 API Key 仅可调用已授权的模型。
-- 目前仅华北2（北京）地域支持为 API Key 配置 IP 访问白名单等精细权限控制。
-
-### 时效性与安全
-
-- API Key 创建后无失效日期，手动删除后即失效。
-- 如需临时访问权限，可生成有效期 60 秒的临时 API Key。
-- RAM 用户被禁用或删除后，其创建的所有 API Key 均将失效。
-- 每个主账号在华北2（北京）、新加坡、德国（法兰克福）地域各最多可创建 50 个 API Key；美国（弗吉尼亚）地域每个归属账号最多 20 个。
-
-> **注意**：Coding Plan 使用专属 API Key（格式 `sk-sp-xxxxx`），与百炼通用 API Key（格式 `sk-xxxxx`）不同，请勿混用。
+- API Key 的调用权限由其**归属[业务空间](../concepts/workspace.md)**决定，同一空间内的 API Key 权限相同，无需为不同模型类型分别创建。
+- 默认[业务空间](../concepts/workspace.md)的 API Key 可调用所有标准模型；子业务空间的 API Key 仅可调用已授权的模型。
+- API Key 创建后永久有效，手动删除即失效。如需临时授权可生成有效期 60 秒的临时 API Key。
+- 华北2（北京）和新加坡地域已完成安全升级，新建 API Key 仅在创建时展示一次明文，关闭弹窗后无法再次查看。
+- 每个主账号在华北2（北京）、新加坡、日本（东京）、德国（法兰克福）地域最多可创建 50 个 API Key；美国（弗吉尼亚）地域每个归属账号最多 20 个。
 
 ## 配置环境变量
 
-为避免在代码中硬编码 API Key 导致泄漏风险，建议将 API Key 配置到环境变量 `DASHSCOPE_API_KEY`。详细的分平台操作步骤请参见 [将API Key配置到环境变量](../../raw/model-api-reference/preparations/configure-api-key-through-environment-variables.md)。
+建议将 API Key 配置到环境变量 `DASHSCOPE_API_KEY`，避免硬编码导致泄漏风险。详细步骤参见[将API Key配置到环境变量](../../raw/model-api-reference/preparations/configure-api-key-through-environment-variables.md)。
 
-### 各平台快速配置
+### Linux / macOS
 
-**Linux（永久生效）**：
+**永久生效**（推荐）：将 `export DASHSCOPE_API_KEY="YOUR_KEY"` 追加到 Shell 配置文件（Linux 用 `~/.bashrc`，macOS Zsh 用 `~/.zshrc`，macOS Bash 用 `~/.bash_profile`），然后 `source` 使其生效。
 
-```bash
-echo "export DASHSCOPE_API_KEY='YOUR_DASHSCOPE_API_KEY'" >> ~/.bashrc
-source ~/.bashrc
-```
+**临时生效**：直接在终端执行 `export DASHSCOPE_API_KEY="YOUR_KEY"`，仅当前会话有效。
 
-**macOS（Zsh，永久生效）**：
+### Windows
 
-```bash
-echo "export DASHSCOPE_API_KEY='YOUR_DASHSCOPE_API_KEY'" >> ~/.zshrc
-source ~/.zshrc
-```
+- **系统属性**（永久）：通过"编辑系统环境变量"新建变量 `DASHSCOPE_API_KEY`，需重启 IDE 或命令行窗口生效。
+- **CMD**（永久）：`setx DASHSCOPE_API_KEY "YOUR_KEY"`，需打开新窗口生效。
+- **PowerShell**（永久）：`[Environment]::SetEnvironmentVariable("DASHSCOPE_API_KEY", "YOUR_KEY", [EnvironmentVariableTarget]::User)`。
+- 临时变量分别使用 `set`（CMD）或 `$env:DASHSCOPE_API_KEY = "YOUR_KEY"`（PowerShell）。
 
-**Windows（CMD，永久生效）**：
-
-```cmd
-setx DASHSCOPE_API_KEY "YOUR_DASHSCOPE_API_KEY"
-```
-
-**Windows（PowerShell，永久生效）**：
-
-```powershell
-[Environment]::SetEnvironmentVariable("DASHSCOPE_API_KEY", "YOUR_DASHSCOPE_API_KEY", [EnvironmentVariableTarget]::User)
-```
-
-### 常见问题
-
-设置环境变量后代码仍提示找不到 API Key，常见原因包括：
-
-- 仅设置了临时环境变量，未设置永久性环境变量
-- 未重启 IDE、命令行工具或应用程序
-- 使用 `sudo` 运行脚本时未加 `-E` 参数传递环境变量
-- 应用通过服务管理器（如 systemd）启动，需在其配置文件中添加环境变量
+> **注意**：如果 `echo` 确认环境变量已设置但代码仍提示找不到 API Key，常见原因包括：仅设置了临时变量、未重启 IDE/应用、使用 `sudo` 时未加 `-E` 参数。
 
 ## 安装 SDK
 
-百炼支持两套 SDK 体系：阿里云官方的 DashScope SDK（Python、Java）和 OpenAI 官方的多语言 SDK（Python、Node.js、Java、Go）。完整安装指南请参见 [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)。
+百炼支持多种 SDK 接入方式，详见[安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)。
 
-### SDK 安装速查
+### OpenAI 兼容 SDK（推荐）
 
-| 语言 | DashScope SDK | OpenAI SDK | 最低版本要求 |
-|------|---------------|------------|-------------|
-| Python | `pip install -U dashscope` | `pip install -U openai` | Python >= 3.8 |
-| Java | Maven/Gradle: `com.alibaba:dashscope-sdk-java` | Maven/Gradle: `com.openai:openai-java`（推荐 3.5.0） | Java 8+ |
-| Node.js | — | `npm install --save openai` | — |
-| Go | — | `go get github.com/openai/openai-go/v3` | Go 1.22+ |
+通过 OpenAI 官方 SDK 调用百炼的 [OpenAI 兼容接口](../concepts/openai-compatible.md)，支持多语言：
 
-安装完成后即可使用对应 SDK 调用文本生成、图像生成、视频生成、语音合成、语音识别、向量模型、排序模型等各类模型。
+| 语言 | 安装命令 | 最低版本要求 |
+|------|---------|------------|
+| Python | `pip install -U openai` | Python >= 3.8 |
+| Node.js | `npm install --save openai` | - |
+| Java | Maven/Gradle 添加 `com.openai:openai-java` | Java 8+ |
+| Go | `go get 'github.com/openai/openai-go/v3'` | Go 1.22+ |
+
+### [DashScope SDK](../concepts/dashscope-sdk.md)
+
+百炼官方 SDK，支持 Python 和 Java：
+
+- **Python**：`pip install -U dashscope`（Python >= 3.8）
+- **Java**：Maven/Gradle 添加 `com.alibaba:dashscope-sdk-java`
 
 ## 常见错误码
 
-调用模型 API 失败时，可根据返回的错误码排查问题。完整列表请参见 [错误码](../../raw/model-api-reference/preparations/error-code.md)。以下列出最常见的几类。
+调用百炼 API 时可能遇到的错误及解决方案，完整列表参见[错误码](../../raw/model-api-reference/preparations/error-code.md)。以下列出高频错误：
 
-### 参数校验类（400 InvalidParameter）
+### 参数相关（400-InvalidParameter）
 
-| 错误信息关键词 | 原因 | 解决方案 |
-|---------------|------|---------|
-| `Model not exist.` | 模型名称错误或格式不正确 | 核对模型列表中的名称，注意大小写和空格，勿混用开源社区模型名与百炼模型 ID |
-| `Range of input length should be [1, xxx]` | 输入 Token 超过模型上限 | 缩短 messages 内容或开启新对话 |
-| `Range of max_tokens should be [1, xxx]` | `max_tokens` 超出模型最大输出 Token 数 | 参考模型列表调整取值 |
-| `Temperature should be in [0.0, 2.0)` | temperature 参数越界 | 设置为 [0.0, 2.0) 范围内的数字 |
-| `Required body invalid` | 请求体 JSON 格式错误 | 检查 JSON 结构是否完整（多余逗号、括号未闭合等） |
+| 错误信息 | 原因 | 解决方案 |
+|---------|------|---------|
+| `Model not exist.` | 模型名称不存在或格式不正确 | 检查大小写、空格，对照模型列表确认名称 |
+| `Range of input length should be [1, xxx]` | 输入内容超过模型 Token 上限 | 控制 messages 数组 Token 数，或开启新对话 |
+| `Range of max_tokens should be [1, xxx]` | `max_tokens` 超出范围 | 参照模型列表中的最大输出 Token 数设置 |
+| `Temperature should be in [0.0, 2.0)` | temperature 参数越界 | 设置为 [0.0, 2.0) 范围内的值 |
+| `Required body invalid` | 请求体 JSON 格式错误 | 检查 JSON 结构（多余逗号、括号未闭合等） |
 
 ### 流式与思考模式
 
-| 错误信息关键词 | 原因 | 解决方案 |
-|---------------|------|---------|
-| `enable_thinking must be set to false for non-streaming calls` | 思考模式仅支持[流式输出](../concepts/streaming-output.md) | 启用 `stream` 或将 `enable_thinking` 设为 `false` |
-| `incremental_output parameter must be "true"` | 思考模式要求增量[流式输出](../concepts/streaming-output.md) | 设置 `incremental_output=true` |
-| `Json mode response is not supported when enable_thinking is true` | 结构化输出与思考模式不兼容 | 关闭 `enable_thinking` |
-| `This model only support stream mode` | 模型仅支持流式调用 | 启用 `stream` 参数 |
+| 错误信息 | 原因 | 解决方案 |
+|---------|------|---------|
+| `enable_thinking must be set to false for non-streaming calls` | 非流式调用启用了思考模式 | 设置 `enable_thinking=false` 或改用[流式输出](../concepts/streaming.md) |
+| `incremental_output parameter must be "true" when enable_thinking is true` | 思考模式要求增量[流式输出](../concepts/streaming.md) | 设置 `incremental_output=true` |
+| `This model only support stream mode` | 模型仅支持[流式输出](../concepts/streaming.md) | 启用 `stream=true` |
 
 ### 文件与多模态
 
-| 错误信息关键词 | 原因 | 解决方案 |
-|---------------|------|---------|
-| `Invalid file [id:file-fe-xxx]` | file-id 无效或不属于当前账号 | 确认 file-id 有效，或重新上传文件获取新 ID |
-| `File format is not supported` | Qwen-Long 仅支持纯文本格式 | 使用 TXT/DOCX/PDF/EPUB/MOBI/MD 格式 |
-| `File exceeds size limit` | 文件超过 150 MB | 压缩文件至 150 MB 以内 |
-| `Exceeded limit on max bytes per data-uri item` | 本地文件 Base64 编码后超过 10 MB | 压缩文件或改用 URL 方式传入 |
-| `image length and width do not meet the model restrictions` | 图像尺寸不符合要求 | 确保宽高均 >= 10px，宽高比不超过 200:1 |
-| `The provided URL does not appear to be valid` | URL 格式不正确 | URL 需以 `http://`、`https://` 或 `data:` 开头；本地路径需以 `file://` 开头 |
+| 错误信息 | 原因 | 解决方案 |
+|---------|------|---------|
+| `File [id:file-fe-xxx] format is not supported.` | Qwen-Long 不支持该文件格式 | 仅支持 TXT/DOCX/PDF/EPUB/MOBI/MD |
+| `Exceeded limit on max bytes per data-uri item` | 本地文件 Base64 编码后超过 10 MB | 压缩文件或改用 URL 传入 |
+| `The provided URL does not appear to be valid` | URL 或本地路径格式不正确 | URL 以 `http://`/`https://`/`data:` 开头，本地路径以 `file://` 开头 |
+
+### 工具调用
+
+| 错误信息 | 原因 | 解决方案 |
+|---------|------|---------|
+| `messages with role "tool" must be a response to a preceeding message with "tool_calls"` | 缺少 Assistant Message | 先将模型返回的 Assistant Message 添加到 messages 数组 |
+| `The tool call is not supported.` | 模型不支持 Function Calling | 更换为支持该功能的 Qwen 或 DeepSeek 模型 |
+| `Json mode response is not supported when enable_thinking is true` | 结构化输出与思考模式冲突 | 使用结构化输出时关闭思考模式 |
 
 ## 来源文档
 
-- [获取API Key](../../raw/model-api-reference/preparations/get-api-key.md)
 - [将API Key配置到环境变量](../../raw/model-api-reference/preparations/configure-api-key-through-environment-variables.md)
+- [获取API Key](../../raw/model-api-reference/preparations/get-api-key.md)
 - [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)
 - [错误码](../../raw/model-api-reference/preparations/error-code.md)
 

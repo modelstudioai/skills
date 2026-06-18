@@ -74,7 +74,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generation' \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"fun-music-preview\",\n    \"input\": {\n        \"prompt\": \"夏日清新民谣，木吉他与口琴伴奏，轻快节奏，适合旅行Vlog背景音乐\",\n        \"gender\": \"female\"\n    }\n}'",
+            "curl": "curl -X POST 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"fun-music-preview\",\n    \"input\": {\n        \"prompt\": \"夏日清新民谣，木吉他与口琴伴奏，轻快节奏，适合旅行Vlog背景音乐\",\n        \"gender\": \"female\"\n    }\n}'",
             "docUrl": "https://help.aliyun.com/document_detail/3030448.html"
           }
         }
@@ -153,7 +153,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generation' \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"fun-music-v1\",\n    \"input\": {\n        \"prompt\": \"夏日清新民谣，木吉他与口琴伴奏，轻快节奏，适合旅行Vlog背景音乐\",\n        \"gender\": \"female\"\n    }\n}'",
+            "curl": "curl -X POST 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"fun-music-v1\",\n    \"input\": {\n        \"prompt\": \"夏日清新民谣，木吉他与口琴伴奏，轻快节奏，适合旅行Vlog背景音乐\",\n        \"gender\": \"female\"\n    }\n}'",
             "docUrl": "https://help.aliyun.com/document_detail/3030448.html"
           }
         }

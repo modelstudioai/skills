@@ -16,7 +16,7 @@
 3.  推理结果回到接入地域存储，再响应给应用（用户静态数据始终存于所选地域）。
     
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9698061871/CAEQbxiBgICHvaa58hkiIDlkZWFlMzZlYTEyOTQ3MmM5YzQ5ZTkyYTRkNGVkNzU47466796_20260515102254.505.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0856771871/CAEQbxiBgICHvaa58hkiIDlkZWFlMzZlYTEyOTQ3MmM5YzQ5ZTkyYTRkNGVkNzU47466796_20260515102254.505.svg)
 
 ## 选择地域和服务部署范围
 
@@ -37,6 +37,12 @@
 无数据驻留限制，追求更大推理资源池（跨多地域调度推理，自行确保跨境合法）
 
 德国（法兰克福）
+
+全球（任意可用节点，含中国境内及海外）
+
+无数据驻留限制，追求更大推理资源池（跨多地域调度推理，自行确保跨境合法）
+
+日本（东京）
 
 全球（任意可用节点，含中国境内及海外）
 
@@ -64,13 +70,19 @@
 
 欧盟（限境内推理）
 
+要求数据不出日本
+
+日本（东京）
+
+日本（限境内推理）
+
 ## 各地域接入信息
 
 每个地域有独立的 Base URL、API Key 和模型列表，**不能跨地域混用**。
 
 **重要**
 
-百炼为华北2（北京）、新加坡地域推出了新版域名 `{WorkspaceId}.{region}.maas.aliyuncs.com`，`{WorkspaceId}` 为业务空间 ID（可前往各地域的[业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)页面获取），`{region}` 取值为 `cn-beijing`、`ap-southeast-1`。**新版专属域名能够为推理请求提供更加卓越的性能和更高的稳定性，建议迁移至新域名**：
+百炼为华北2（北京）、新加坡地域推出了新版域名 `{WorkspaceId}.{region}.maas.aliyuncs.com`，`{WorkspaceId}` 为业务空间 ID（可前往各地域的[业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)页面获取），`{region}` 取值为 `cn-beijing`、`ap-southeast-1`。**新版专属域名能够为推理请求提供更加卓越的性能和更高的稳定性，建议迁移至新域名**。现有域名仍可正常使用：
 
 -   华北2（北京）：建议从 `dashscope.aliyuncs.com` 替换为 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
     
@@ -138,6 +150,26 @@
 -   模型列表：[可用模型（法兰克福）](https://help.aliyun.com/zh/model-studio/getting-started/models)
     
 
+### 日本（东京）
+
+东京通过**业务空间（Workspace）**区分部署范围，不同空间的 API Key 相互隔离。开始调用前先创建业务空间：
+
+1.  前往[业务空间管理（东京）](https://modelstudio.console.aliyun.com/ap-northeast-1?tab=globalset#/efm/business_management)，创建业务空间并选择部署模式（全球或日本）。
+    
+2.  [获取业务空间 ID（东京）](https://modelstudio.console.aliyun.com/ap-northeast-1?tab=globalset#/efm/business_management)，替换下方 Base URL 中的 `{WorkspaceId}`。
+    
+
+-   Base URL（OpenAI 兼容）：`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1`
+    
+-   Base URL（Anthropic 兼容）：`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/apps/anthropic`
+    
+-   Base URL（DashScope）：`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1`
+    
+-   API Key：[密钥管理（东京）](https://modelstudio.console.aliyun.com/ap-northeast-1?tab=dashboard#/api-key)
+    
+-   模型列表：[可用模型（东京）](https://modelstudio.console.alibabacloud.com/ap-northeast-1?tab=doc#/doc/?type=model&url=2840914)
+    
+
 ## 各地域功能支持
 
 **功能**
@@ -150,7 +182,11 @@
 
 **德国（法兰克福）**
 
+**日本（东京）**
+
 实时推理
+
+支持
 
 支持
 
@@ -170,7 +206,11 @@
 
 不支持
 
+不支持
+
 模型体验
+
+支持
 
 支持
 
@@ -190,6 +230,8 @@
 
 支持
 
+支持
+
 模型告警
 
 支持
@@ -200,7 +242,11 @@
 
 不支持
 
+不支持
+
 传输安全
+
+支持
 
 支持
 
@@ -220,6 +266,8 @@
 
 支持
 
+支持
+
 模型调优
 
 支持
@@ -230,14 +278,16 @@
 
 不支持
 
+不支持
+
 ## 相关文档
 
--   [通义千问 API 参考](https://help.aliyun.com/zh/model-studio/developer-reference/api-reference)
+-   [通义千问 API 参考](https://help.aliyun.com/zh/model-studio/qwen-api-reference/)
     
--   [选择模型](https://help.aliyun.com/zh/model-studio/getting-started/models) — 各地域模型及上下文长度
+-   [选择模型](https://help.aliyun.com/zh/model-studio/models) — 各地域模型及上下文长度
     
--   [模型调用计费](https://help.aliyun.com/zh/model-studio/billing/billing-of-model-calling) — 各地域价格
+-   [模型调用计费](https://help.aliyun.com/zh/model-studio/model-pricing) — 各地域价格
     
--   [限流](https://help.aliyun.com/zh/model-studio/developer-reference/rate-limiting) — RPM、TPM 限制
+-   [限流](https://help.aliyun.com/zh/model-studio/rate-limit)— RPM、TPM 限制
     
--   [获取 API Key](https://help.aliyun.com/zh/model-studio/developer-reference/get-api-key) — 创建和管理 Key
+-   [获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key) — 创建和管理 Key

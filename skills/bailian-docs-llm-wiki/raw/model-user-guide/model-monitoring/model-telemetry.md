@@ -4,14 +4,14 @@
 
 -   查看调用记录
     
--   指标监控与告警，如Token延时、调用时长、RPM（每分钟调用次数）、TPM（每分钟消耗Token数）和失败率
+-   指标监控与告警，如Token延时、调用时长、RPM（每分钟请求数）、TPM（每分钟Token数）和失败率
     
 -   统计Token消耗
     
 
 ## 支持的模型
 
--   **监控：普通监控**支持[模型列表](https://help.aliyun.com/zh/model-studio/models)中的所有模型，，包括基于它们调优后的[自定义模型](https://help.aliyun.com/zh/model-studio/model-deployment-introduction#f17bf700c06k5)；**高级监控**支持北京、新加坡、弗吉尼亚地域下的所有模型**。**
+-   **监控：普通监控**支持[选择模型](https://help.aliyun.com/zh/model-studio/models)中的所有模型，，包括基于它们调优后的[自定义模型](https://help.aliyun.com/zh/model-studio/model-deployment-introduction#f17bf700c06k5)；**高级监控**支持北京、新加坡、弗吉尼亚地域下的所有模型**。**
     
 -   **告警功能：**支持北京、新加坡地域下的所有模型。
     
@@ -21,13 +21,13 @@
     
     -   qwen3-max、qwen3-max-2025-09-23、qwen3-max-2026-01-23、qwen3-max-preview
         
-    -   qwen-max、qwen-max-0919、qwen-max-2025-01-25、qwen-max-latest
+    -   qwen-max
         
     -   qwen-plus、qwen-plus-2025-04-28、qwen-plus-2025-07-14、qwen-plus-2025-07-28、qwen-plus-2025-09-11、qwen-plus-2025-12-01、qwen-plus-latest
         
     -   qwen-flash、qwen-flash-2025-07-28
         
-    -   qwen-turbo、qwen-turbo-2025-07-15、qwen-turbo-2025-04-28、qwen-turbo-latest
+    -   qwen-turbo
         
     -   deepseek-v3.1、deepseek-v3.2、deepseek-v3.2-exp
         
@@ -40,13 +40,13 @@
     
     -   qwen3-max、qwen3-max-2025-09-23、qwen3-max-2026-01-23、qwen3-max-preview
         
-    -   qwen-max、qwen-max-2025-01-25、qwen-max-latest
+    -   qwen-max
         
     -   qwen-plus、qwen-plus-2025-04-28、qwen-plus-2025-07-14、qwen-plus-2025-07-28、qwen-plus-2025-09-11、qwen-plus-2025-12-01、qwen-plus-latest
         
     -   qwen-flash、qwen-flash-2025-07-28
         
-    -   qwen-turbo、qwen-turbo-2025-04-28、qwen-turbo-latest
+    -   qwen-turbo
         
     -   qwen3-235b-a22b、qwen3-235b-a22b-instruct-2507、qwen3-235b-a22b-thinking-2507、qwen3-30b-a3b、qwen3-30b-a3b-instruct-2507、qwen3-30b-a3b-thinking-2507、qwen3-next-80b-a3b-instruct、qwen3-next-80b-a3b-thinking
         
@@ -59,6 +59,10 @@
 系统会自动采集主账号下所有业务空间内的模型调用数据。当有[直接或间接](#0806932be6woi)模型调用发生时，系统会自动收集并同步相关数据至目标业务空间的[模型监控](https://bailian.console.aliyun.com/?tab=model#/model-telemetry)列表中。
 
 > 列表记录按“模型 + 业务空间”维度生成。新模型在首次数据同步完成后自动加入列表（普通监控的延迟通常为小时级，请耐心等待；如需分钟级的数据洞察，请使用[高级监控](#2e5f2f0dffijg)）。
+
+列表顶部「监控数据看板」以卡片形式汇总**模型总量**、**总调用次数**、**总失败次数**、**平均调用时长**、**平均首包时长**。
+
+「模型监控」表格列出各模型的**模型 Code**、**业务空间**、**调用总量**、**调用失败量**、**失败率**、**平均调用时长**、**平均首包时长**（除模型 Code、业务空间外均可排序），操作列提供**监控**、**日志**入口。
 
 > 默认业务空间成员可查看所有业务空间的模型调用情况；子业务空间成员仅能查看当前空间的数据，无法切换查看其他业务空间数据。
 
@@ -75,18 +79,20 @@
 
 您可基于上述指标创建[告警](#b8fcd646d5avf)，以便及时发现和处理异常。
 
-**调用统计**
+点击操作列「监控」进入模型详情页，详情页含**监控**、**日志**两个页签。监控页签下分为**调用统计**与**性能指标**两类。
 
-此页签可查看**安全、成本、错误**相关指标（如调用次数、失败次数等）。支持按[API-KEY](https://help.aliyun.com/zh/model-studio/apikey)、[推理类型](#f131611173sdx)，以及时间范围进行筛选。
+此页签可查看**安全、成本、错误**相关指标（如调用次数、失败次数等）。支持按[API-KEY](https://help.aliyun.com/zh/model-studio/apikey)、[推理类型](#f131611173sdx)、时间范围以及时间精度（按分钟/按小时）进行筛选。
 
 -   **限流错误次数：**指因[429状态码](https://help.aliyun.com/zh/model-studio/error-code#5ed5532c85ckv)导致的调用失败。
     
 -   **内容安全错误次数：**指输入或输出包含疑似敏感或高风险内容（例如涉黄、涉政和广告等）被[内容安全服务](https://www.aliyun.com/product/content-moderation/guardrail)拦截。
     
 
+调用统计页签的失败次数图表支持点击**失败详情**查看失败明细，便于定位调用失败原因。
+
 **性能指标**
 
-此页签可查看RPM、TPM、调用时长以及首Token延时等**性能**相关指标。
+此页签可查看RPM、TPM、调用时长、首Token延时以及非首Token延时等**性能**相关指标。
 
 ## **查看 Token 消耗**
 
@@ -99,7 +105,7 @@
 -   **告警：**设置Token消耗阈值，当指定模型出现异常消耗时，系统立即告警。
     
 
-#### **查看模型历史 Token 消耗**
+### **查看模型历史 Token 消耗**
 
 -   查看最近**30**天的Token消耗：
     
@@ -110,7 +116,7 @@
 -   查看更早的用量：在[费用与成本](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail-by-instance?month=2025-02&statisticItem=DEFAULT_CHARGE_ITEM&commodityCode%5BfilterMode%5D=IN&commodityCode%5Bvalues%5D=sfm_deployment_public_cn%26sfm_inference_public_cn%26sfm_training_public_cn&statisticCycle=MONTHLY_SUMMARY)页面查询。
     
 
-#### **查看某次调用的 Token 消耗**
+### **查看某次调用的 Token 消耗**
 
 > 该功能目前仅适用于**华北2（北京）**地域的[部分模型](#7f2491defbdpt)。
 
@@ -123,7 +129,7 @@
 3.  **日志**页签展示该模型的[实时推理](#f131611173sdx)调用记录，**用量**字段即为本次调用的Token消耗。
     
 
-#### **创建异常消耗告警**
+### **创建异常消耗告警**
 
 -   请参见[建立主动告警](#b8fcd646d5avf)。
     
@@ -136,7 +142,7 @@
 
 模型监控支持查看模型的每一次对话，包括输入、输出及耗时，是故障排查和内容审计的关键工具。
 
-#### **步骤一：开通日志**
+### **步骤一：开通日志**
 
 使用主账号（[或拥有足够权限的子账号](#f9d06146c0xe0)）登录，在目标业务空间的[模型监控（北京）](https://bailian.console.aliyun.com/?tab=model#/model-telemetry)页面，点击右上角的**模型监控配置**，按照指引依次开通审计日志和推理日志。
 
@@ -144,7 +150,7 @@
 
 > 如需停止记录，只需在模型监控配置中关闭推理日志即可。
 
-#### **步骤二：查看历史对话**
+### **步骤二：查看历史对话**
 
 1.  在模型监控列表中找到目标模型，点击其右侧**操作**列的**日志**。
     
@@ -159,14 +165,14 @@
 
 模型的静默失败（如超时、Token消耗突增），传统应用日志难以发现。模型监控支持对监控指标（如成本、失败率、响应延迟）设置告警。一旦指标出现异常，系统立即告警。
 
-#### **步骤一：开启高级监控**
+### **步骤一：开启高级监控**
 
 1.  使用主账号（[或拥有足够权限的子账号](#54ea9ba526ovz)）登录，在目标业务空间的模型监控（[北京](https://bailian.console.aliyun.com/?tab=model#/model-telemetry) 或 [新加坡](https://modelstudio.console.aliyun.com/?tab=dashboard#/model-telemetry)）页面，点击右上角的**模型监控配置**。
     
 2.  在高级监控区域，手动开启**性能和用量指标监控**。
     
 
-#### **步骤二：创建告警规则**
+### **步骤二：创建告警规则**
 
 1.  在模型告警（[北京](https://bailian.console.aliyun.com/?tab=model#/model-alert) 或[新加坡](https://modelstudio.console.aliyun.com/?tab=dashboard#/model-alert)）页面，点击右上角的**创建告警规则**。
     
@@ -189,7 +195,7 @@
 
 模型监控的监控指标数据存储在您的私有Prometheus实例中，并支持标准的Prometheus HTTP API，可用于接入 Grafana 或您的自建应用进行可视化分析。
 
-#### **步骤一：获取数据源HTTP API地址**
+### **步骤一：获取数据源HTTP API地址**
 
 1.  确保已[开启高级监控](#c6d515ccdeunl)。
     
@@ -200,7 +206,7 @@
     ![1](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4023704671/p1028669.jpg)
     
 
-#### **步骤二：接入 Grafana 或自建应用**
+### **步骤二：接入 Grafana 或自建应用**
 
 ## 接入自建应用
 
@@ -822,7 +828,7 @@
 
 ## **附录**
 
-#### **名词解释**
+### **名词解释**
 
 **名词**
 
@@ -838,7 +844,7 @@
     
 -   [阿里云百炼应用](https://help.aliyun.com/zh/model-studio/application-introduction)（智能体/工作流/智能体编排应用，以及涉及到模型调用的节点，如大模型节点、意图分类节点以及智能体群组节点等）的测试态和发布态
     
--   [Assistant API](https://help.aliyun.com/zh/model-studio/assistant-api/)调用
+-   [Assistant API（下线中）](https://help.aliyun.com/zh/model-studio/assistant-api/)调用
     
 -   [应用调用](https://help.aliyun.com/zh/model-studio/application-calling-guide)
     

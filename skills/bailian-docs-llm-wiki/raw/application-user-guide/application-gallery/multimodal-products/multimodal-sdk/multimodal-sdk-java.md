@@ -331,7 +331,7 @@ public abstract class MultiModalDialogCallback {
 
 #### **Start建联请求参数**
 
-[Start - Input Message](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#b5d943046av48)
+[Start - Input Message](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#b5d943046av48)
 
 一级参数
 

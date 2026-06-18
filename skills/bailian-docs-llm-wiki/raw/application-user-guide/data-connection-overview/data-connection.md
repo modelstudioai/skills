@@ -376,7 +376,7 @@ OSS
         
     -   如果下拉列表中没有显示Bucket,请确认已创建OSS Bucket,且当前账号拥有该Bucket的访问权限。
         
-    -   使用OSS连接器需要开通[向量检索服务](https://help.aliyun.com/zh/oss/user-guide/vector-retrieval/)。如果未开通，调用工具时会返回相应的错误提示信息。
+    -   使用OSS连接器需要开通[向量检索服务](https://help.aliyun.com/zh/oss/user-guide/vector-retrieval/)。如果未开通，则无法使用**searchOSSFile**工具查询包含相关内容的文件及**searchOSSFileByFileName**工具根据文件名查询相关的文件。
         
     
     > 不支持归档、冷归档或深度冷归档存储类型的 Bucket。
@@ -1073,7 +1073,7 @@ VSwitch ID
         
     -   对象路径列表需包含 Bucket 名称，例如：`my-bucket/docs/` 或 `my-bucket/docs/foo.md`。
         
-    -   当前账号需具备目标 Bucket 的读取权限，且需要为目标 Bucket 添加`bailian-connector-access`标签（值为`ReadAndWrite`）以供阿里云百炼访问。参见[管理存储空间标签](https://help.aliyun.com/zh/oss/user-guide/manage-bucket-tags)。
+    -   当前账号需具备目标 Bucket 的读取权限，且需要为目标 Bucket 添加`bailian-datahub-access`标签（值为`read`）以供阿里云百炼访问。参见[管理存储空间标签](https://help.aliyun.com/zh/oss/user-guide/manage-bucket-tags)。
         
     
     填写以下 OSS 对象信息：
@@ -1179,8 +1179,6 @@ VSwitch ID
     
     **重要**
     
-    -   通过飞书的"事件通知"功能搭配DTS"消息队列"功能实现对飞书数据变更的感知。**使用DTS会产生相应费用。详见**[DTS计费说明](https://help.aliyun.com/zh/dts/product-overview/billing-overview)。
-        
     -   飞书需要设置导出权限。
         
     -   飞书不支持mindnote文档的导出。

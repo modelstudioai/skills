@@ -20,8 +20,9 @@
 - [model compression](guides/model-compression.md) — 1 篇源文档
 - [model context protocol](guides/model-context-protocol.md) — 5 篇源文档
 - [model data overview](guides/model-data-overview.md) — 2 篇源文档
-- [model deployment 1](guides/model-deployment-1.md) — 3 篇源文档
+- [model deployment 1](guides/model-deployment-1.md) — 4 篇源文档
 - [model evaluation introduction](guides/model-evaluation-introduction.md) — 1 篇源文档
+- [model high speed inference](guides/model-high-speed-inference.md) — 1 篇源文档
 - [model inference](guides/model-inference.md) — 11 篇源文档
 - [model monitoring](guides/model-monitoring.md) — 2 篇源文档
 - [plug in](guides/plug-in.md) — 3 篇源文档
@@ -40,48 +41,40 @@
 - [3d generation](api/3d-generation.md) — 1 篇源文档
 - [application call](api/application-call.md) — 5 篇源文档
 - [application component api reference](api/application-component-api-reference.md) — 57 篇源文档
-- [audio api references](api/audio-api-references.md) — 20 篇源文档
-- [deployments api](api/deployments-api.md) — 1 篇源文档
 - [file management api](api/file-management-api.md) — 1 篇源文档
-- [fine tuning jobs api](api/fine-tuning-jobs-api.md) — 1 篇源文档
 - [frameworks](api/frameworks.md) — 3 篇源文档
-- [general text embedding](api/general-text-embedding.md) — 2 篇源文档
 - [image generation](api/image-generation.md) — 25 篇源文档
 - [long term memory new](api/long-term-memory-new.md) — 1 篇源文档
+- [model production](api/model-production.md) — 3 篇源文档
 - [more](api/more.md) — 3 篇源文档
 - [more about models](api/more-about-models.md) — 6 篇源文档
 - [more models](api/more-models.md) — 6 篇源文档
-- [music generation references](api/music-generation-references.md) — 1 篇源文档
 - [omni realtime api](api/omni-realtime-api.md) — 6 篇源文档
 - [preparations](api/preparations.md) — 4 篇源文档
 - [qwen api reference](api/qwen-api-reference.md) — 1 篇源文档
-- [specialized model](api/specialized-model.md) — 1 篇源文档
-- [speech recognition api reference](api/speech-recognition-api-reference.md) — 27 篇源文档
-- [speech synthesis api reference](api/speech-synthesis-api-reference.md) — 17 篇源文档
-- [speech translation api reference](api/speech-translation-api-reference.md) — 3 篇源文档
 - [toolkits and frameworks](api/toolkits-and-frameworks.md) — 10 篇源文档
-- [vector and sort](api/vector-and-sort.md) — 1 篇源文档
+- [vector and sort](api/vector-and-sort.md) — 4 篇源文档
 - [video generation api](api/video-generation-api.md) — 31 篇源文档
 
 ## 横切概念
 
-- [函数调用与工具调用](concepts/function-calling.md) — 关联 6 个主题
-- [检索增强生成](concepts/rag.md) — 关联 6 个主题
-- [流式输出](concepts/streaming-output.md) — 关联 6 个主题
-- [业务空间](concepts/workspace.md) — 关联 5 个主题
-- [异步任务](concepts/async-task.md) — 关联 5 个主题
-- [API Key 管理](concepts/api-key-management.md) — 关联 6 个主题
-- [DashScope 接口](concepts/dashscope-api.md) — 关联 7 个主题
-- [OpenAI 兼容接口](concepts/openai-compatible-api.md) — 关联 9 个主题
+- [API Key 鉴权与安全](concepts/api-key.md) — 关联 6 个主题
+- [DashScope SDK](concepts/dashscope-sdk.md) — 关联 7 个主题
+- [OpenAI 兼容接口](concepts/openai-compatible.md) — 关联 6 个主题
 - [Prompt 工程](concepts/prompt-engineering.md) — 关联 5 个主题
-- [Token 与计费](concepts/token-and-billing.md) — 关联 6 个主题
+- [Token（令牌）](concepts/token.md) — 关联 6 个主题
+- [业务空间](concepts/workspace.md) — 关联 5 个主题
+- [函数调用（Function Calling）](concepts/function-calling.md) — 关联 5 个主题
+- [异步任务调用](concepts/async-task.md) — 关联 5 个主题
+- [检索增强生成（RAG）](concepts/rag.md) — 关联 6 个主题
+- [流式输出](concepts/streaming.md) — 关联 5 个主题
 
 ## 对比分析
 
-- [模型监控与应用监控对比](comparisons/model-vs-app-monitoring.md) — 对比 2 个主题
-- [模型评测与应用评测对比](comparisons/model-vs-app-evaluation.md) — 对比 2 个主题
-- [模型微调、压缩与部署对比](comparisons/finetune-compress-deploy.md) — 对比 3 个主题
-- [图像、视频与 3D 生成对比](comparisons/image-video-3d-generation.md) — 对比 3 个主题
-- [语音合成、识别与翻译 API 对比](comparisons/speech-api-comparison.md) — 对比 3 个主题
-- [知识库与记忆库对比](comparisons/knowledge-vs-memory.md) — 对比 2 个主题
+- [图像生成 vs 视频生成 vs 3D 生成](comparisons/image-video-3d-generation.md) — 对比 3 个主题
+- [标准推理 vs 高速推理](comparisons/model-inference-vs-high-speed.md) — 对比 2 个主题
+- [模型压缩 vs 微调 vs 部署](comparisons/compression-vs-finetuning-vs-deployment.md) — 对比 3 个主题
+- [模型监控 vs 应用监控](comparisons/model-monitor-vs-app-monitor.md) — 对比 2 个主题
+- [模型评测 vs 应用评测](comparisons/model-eval-vs-app-eval.md) — 对比 2 个主题
+- [知识库 vs 记忆库 vs 数据连接](comparisons/knowledge-vs-memory-vs-data.md) — 对比 3 个主题
 

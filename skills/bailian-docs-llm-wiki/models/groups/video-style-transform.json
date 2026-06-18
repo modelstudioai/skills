@@ -68,7 +68,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"video-style-transform\",\n    \"input\": {\n        \"video_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250704/viwndw/%E5%8E%9F%E8%A7%86%E9%A2%91.mp4\"\n    },\n    \"parameters\": {\n        \"style\": 0,\n        \"video_fps\": 15,\n        \"min_len\": 540\n    }\n}'\n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/<YOUR_TASK_ID> \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" "
+            "curl": "curl --location --request POST 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"video-style-transform\",\n    \"input\": {\n        \"video_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250704/viwndw/%E5%8E%9F%E8%A7%86%E9%A2%91.mp4\"\n    },\n    \"parameters\": {\n        \"style\": 0,\n        \"video_fps\": 15,\n        \"min_len\": 540\n    }\n}'\n\ncurl -X GET https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/tasks/<YOUR_TASK_ID> \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" "
           }
         }
       }

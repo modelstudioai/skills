@@ -1,83 +1,63 @@
-# Token 与计量
+# Token（令牌）
 
-Token 是大语言模型处理文本的基本单位，也是百炼平台衡量模型用量和计算费用的核心度量。在百炼平台中，Token 贯穿模型推理、训练、部署、监控和成本管理的全流程。
+Token 是大语言模型处理文本的基本计量单位，模型将输入文本拆分为 Token 序列进行理解和生成。在百炼平台中，Token 既是模型推理的计算单元，也是计费、监控和容量规划的核心度量。
 
-## Token 的含义
+## 基本概念
 
-Token 并非直接等同于字符或单词，而是模型分词器（Tokenizer）对文本切分后的最小片段。在百炼平台中，经验换算关系为：
+Token 并非直接等同于字符或词语。对于中文，一个汉字通常对应 1-2 个 Token；对于英文，一个常见单词通常为 1 个 Token。百炼平台的 100 万 Token 上下文约相当于 70 万汉字或 10 本小说。模型的输入和输出都以 Token 计量，分别称为输入 Token 和输出 Token。
 
-- 1 个汉字约对应 1.5–2 个 Token
-- 1 个英文单词约对应 1.3 个 Token
+## 计费中的 Token
 
-不同模态的用量统计单位有所不同：
+百炼平台的模型推理按量付费以 Token 为核心计费单位，不同模型和场景的 Token 单价差异显著：
 
-| 模型类型 | 统计单位 |
-|---------|---------|
-| 大语言模型（文本生成、深度思考、视觉理解） | Token |
-| 图像生成 | 张 |
-| 视频生成 | 秒 |
-| 语音模型 | 秒/字符/Token |
-| 向量模型 | Token |
+- **文本生成模型**：按输入/输出 Token 数量分别计价。例如 qwen3.7-max 输入 12 元/百万 Token、输出 36 元/百万 Token；qwen3.6-flash 等轻量模型单价更低。
+- **阶梯计费**：部分模型根据单次请求的输入 Token 总量实行阶梯定价，输入越长单价越高。例如 qwen3-max 在 0-32K 范围为 2.5 元/百万 Token，128K-256K 范围升至 7 元/百万 Token。
+- **模型训练**：训练费用按训练 Token 计算，公式为（训练数据 Token + 混合训练数据 Token）x 循环次数 x 训练单价。
+- **Batch 调用**：支持 Batch 的模型，批量推理价格为实时推理的 50%。
+- **上下文缓存**：缓存命中的输入 Token 可享受折扣（如 Qwen 系列按 20% 折算，deepseek-v4-pro 按 8% 折算），与 Batch 调用不可同时生效。
 
-对于视觉理解场景，图片的 Token 数按分辨率计算：`Token 数 = h × w / (32 × 32) + 2`。
+## 用量监控中的 Token
 
-## 推理计费中的 Token
+百炼的模型监控体系围绕 Token 提供多维度的可观测能力：
 
-百炼模型推理按输入/输出 Token 数量分别计费，部分模型实行阶梯计费——单价取决于单次请求的输入 Token 总量，该请求所有 Token 均按对应阶梯单价结算。
+- **用量统计**：按[业务空间](workspace.md)维度统计各模型的 Token 消耗，支持按模型类型和时间范围筛选，数据延迟约 1 小时。
+- **性能指标**：包括首 Token 延时（TTFT）、每 Token 生成耗时、每分钟 Token 吞吐量（TPM）等关键指标。
+- **告警机制**：可对 Token 消耗突增等异常设置主动告警，通过短信、邮件、钉钉等渠道通知。
+- **Prometheus 集成**：高级监控数据支持通过标准 Prometheus API 接入 Grafana 等外部系统，核心指标包括 `model_usage`（Token 用量总和）等。
 
-关键定价参考（每百万 Token，华北2北京/中国内地）：
+不同模态的模型使用不同计量单位：文本生成、视觉理解、向量模型按 Token 计量；图像按张、视频按秒、语音按秒/字符/Token 计量。视觉模型的图像 Token 消耗公式为 `h x w / (32 x 32) + 2`。
 
-| 模型 | 输入单价 | 输出单价 |
-|------|---------|---------|
-| qwen3.7-max | 12 元 | 36 元 |
-| qwen3-max（0~32K） | 2.5 元 | 10 元 |
-| qwen-plus（0~128K） | 0.8 元 | 2–8 元 |
+## 容量规划中的 Token
 
-Batch 调用可享半价，上下文缓存支持折扣。不同地域定价存在差异。
+TPM（Tokens Per Minute）是百炼容量规划的关键参数：
 
-## 训练与部署中的 Token
+- **TPM 预留**：为指定模型锁定专属 TPM 吞吐量，按 kTPM 预付费，确保业务高峰不受公共资源限流。超出预留容量的请求自动降级为按量计费。
+- **容量计算**：控制台提供容量计算器，根据 RPM、平均输入/输出 Token 长度和缓存命中率估算所需 TPM。
+- **RPM/TPM 限流**：按量付费模式下共享公共资源池，存在 RPM 和 TPM 上限，高峰期可能被限流。
 
-模型训练同样按 Token 计费，公式为：
+## Token Plan 套餐
 
-```
-费用 = (训练数据 Token 总数 + 混合训练数据 Token 总数) × 循环次数 × 训练单价
-```
+百炼提供基于 Token 的订阅制套餐：
 
-[模型部署](model-deployment.md)场景中，预置吞吐按 TPM（每分钟 Token 数）和使用时长计费。当输入超过最长输入 Token 或超出购买的 TPM 量时，调用自动切换为按量付费模式。
+- **Token Plan 团队版**：以 Credits 统一计量 Token 消耗，支持多模型灵活切换，提供标准/高级/尊享三档坐席（25,000-250,000 Credits/月）。
+- **Coding Plan**：面向个人开发者，按调用次数计费，有频次上限（每 5 小时 6,000 次）。
 
-## Token 监控与管理
+## 开发者实践建议
 
-百炼平台提供三个层次的 Token 消耗管理：
-
-- **汇总**：按[业务空间](workspace.md)维度汇总各模型的历史 Token 消耗，支持按时间范围和 API Key 筛选
-- **追踪**：开通推理日志后，可记录每一次调用的 Token 消耗明细
-- **告警**：支持设置 Token 消耗阈值，异常时立即通知
-
-核心监控指标包括 `model_usage`（模型用量总和）、RPM（每分钟请求数）、TPM（每分钟 Token 数）等，支持接入 Prometheus/Grafana 进行可视化分析。
-
-## 成本优化
-
-费用抵扣顺序为：**免费额度 > 资源包 > 其他模型节省计划 > AI 通用型节省计划 > 按量付费**。
-
-- **免费额度**：首次开通时自动发放，仅抵扣实时推理，不支持 Batch 调用和训练
-- **资源包**：预购固定 Token 数量，仅抵扣特定模型的实时推理用量
-- **节省计划**：通过承诺月消费金额换取折扣，AI 通用型最高 5.3 折
-
-## Token Plan 订阅模式
-
-除按量付费外，百炼还提供 Token Plan 团队版和 Coding Plan 两种包月订阅：
-
-- **Token Plan 团队版**：按 Token 消耗抵扣 Credits，无频次限额，适合团队/企业场景
-- **Coding Plan**：按模型调用次数计费，适合个人开发者
-
-两种订阅的 API Key 和 Base URL 与按量付费体系互不相通，不可混用。
+- **控制输出长度**：合理设置 `max_tokens` 参数限制单次生成的 Token 数量，控制成本。
+- **优化 Prompt**：简洁清晰的提示词可减少不必要的输入 Token 消耗。
+- **选择合适模型**：简单任务优先使用轻量模型（如 Flash/Turbo 系列），避免过度使用高价模型。
+- **利用缓存**：对重复前缀的请求启用上下文缓存，降低输入 Token 的有效计费量。
+- **批量处理**：非实时场景使用 Batch 调用，Token 单价降低 50%。
+- **监控用量**：配置 Token 消耗告警，及时发现异常消耗并优化。
 
 ## 关联主题页
 
 - [test 1](../guides/test-1.md)
-- [token plan guide](../guides/token-plan-guide.md)
-- [model monitoring](../guides/model-monitoring.md)
 - [model inference](../guides/model-inference.md)
-- [support](../guides/support.md)
+- [model monitoring](../guides/model-monitoring.md)
+- [model high speed inference](../guides/model-high-speed-inference.md)
+- [token plan guide](../guides/token-plan-guide.md)
+- [more about models](../api/more-about-models.md)
 
 

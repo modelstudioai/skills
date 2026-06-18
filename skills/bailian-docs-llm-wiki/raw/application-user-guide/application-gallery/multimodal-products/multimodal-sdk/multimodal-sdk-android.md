@@ -838,9 +838,9 @@ VAD检测方
 
 打断方式
 
-[RequestToSpeak](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#8f987c58ddg2i)消息打断
+[RequestToSpeak](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#8f987c58ddg2i)消息打断
 
-[RequestToSpeak](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#8f987c58ddg2i)消息打断
+[RequestToSpeak](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#8f987c58ddg2i)消息打断
 
 语音打断
 

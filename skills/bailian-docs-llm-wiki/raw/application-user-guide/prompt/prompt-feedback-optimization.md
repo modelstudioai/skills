@@ -8,17 +8,17 @@
 
 **优化后Prompt**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2390056371/p903132.png)
+优化前的Prompt内容为：将汽车相关文章分类为**产品解析**、**车商卖车**、**经典怀旧**、**质量投诉**、**销量表现**、**其他**六个类别，并以`{"type":"<类别结果>"}`的JSON格式输出分类结果。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2390056371/p903254.png)
+优化后的Prompt由三部分组成：第一部分为**原始Prompt**（原始分类指令）；第二部分为**添加样例**（few-shot示例），包含三组输入输出映射——"ID3卖车文章→车商卖车"等；第三部分为**内容提示**（对分类边界的补充说明）
 
 推理结果错误：
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2390056371/p901106.png)
+输入一段关于某汽车品牌质量投诉与销量关系的文本，模型输出分类结果为 `{"type":"质量投诉"}`，执行完成，输入token为265，输出token为6。
 
 **推理结果正确：**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2390056371/p901107.png)
+模型对输入的汽车品牌相关文本进行分类，输出结果为 `{"type": "销量表现"}`，状态显示**执行完成**，统计信息为字数 16、输入 token 1152、输出 token 7。
 
 ## 功能介绍
 
@@ -39,7 +39,7 @@ Prompt反馈优化功能将做以下工作：
 
 阿里云百炼将基于Prompt在评测数据集与推理模型上的表现，建议至少包含20条数据，数据越多，Prompt优化效果越好。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9714413771/CAEQURiBgICCqMmqohkiIDdlNjhiMjg3NTMxYTQ4ZjRhOWNiYmUwY2RkYmFiMGI54829019_20241218164154.775.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5017661871/CAEQURiBgICCqMmqohkiIDdlNjhiMjg3NTMxYTQ4ZjRhOWNiYmUwY2RkYmFiMGI54829019_20241218164154.775.svg)
 
 ## 案例实践
 
@@ -59,8 +59,6 @@ Prompt反馈优化功能将做以下工作：
 ```
 
 当您把以上提示信息作为Prompt输入后，发现应用并不能准确地按照您的想法进行分类，比如以下这篇文章应该分类为“销售表现”：
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2390056371/p901106.png)
 
 经过一段时间的学习，您发现进行Prompt工程是最合适的选择。因此为了让应用更加准确地分类，您手动对典型文章进行了分类。以下为数据样例：
 
@@ -126,14 +124,6 @@ Prompt反馈优化功能将做以下工作：
 
 **步骤一：选择****推理模型**，阿里云百炼将在该模型上进行多轮Prompt评测。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2390056371/p901286.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2390056371/p901287.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2390056371/p901288.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2390056371/p901290.png)
-
 **步骤二**：输入需要优化的**初始Prompt**。
 
 > 只需要描述任务目标
@@ -157,5 +147,3 @@ Prompt反馈优化功能将做以下工作：
 ### **优化后使用Prompt**
 
 -   支持将优化后的Prompt**保存为Prompt模板**或直接基于该Prompt**创建智能体应用**。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0081053471/p935846.png)

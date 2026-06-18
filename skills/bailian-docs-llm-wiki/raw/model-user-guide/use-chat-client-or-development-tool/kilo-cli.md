@@ -111,6 +111,15 @@ Kilo CLI 是 Kilo Code 的命令行客户端，可以通过按量计费、Coding
             }
           }
         },
+        "glm-5.2": {
+          "name": "GLM-5.2",
+          "options": {
+            "thinking": {
+              "type": "enabled",
+              "budgetTokens": 8192
+            }
+          }
+        },
         "glm-5.1": {
           "name": "GLM-5.1",
           "options": {

@@ -62,7 +62,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/wordart/semantic' \\\n--header 'X-DashScope-Async: enable' \\\n--header 'Content-Type: application/json' \\\n--header 'Accept: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--data-raw '{\n    \"model\": \"wordart-semantic\",\n    \"input\": {\n        \"text\": \"文字创意\",\n        \"prompt\": \"水果，蔬菜，温暖的色彩空间\"\n    },\n    \"parameters\": {\n        \"steps\": 80,\n        \"n\": 2,\n        \"output_image_ratio\": \"1024x1024\",\n        \"font_name\": \"dongfangdakai\"\n    }\n}'"
+            "curl": "curl --location --request POST 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/wordart/semantic' \\\n--header 'X-DashScope-Async: enable' \\\n--header 'Content-Type: application/json' \\\n--header 'Accept: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--data-raw '{\n    \"model\": \"wordart-semantic\",\n    \"input\": {\n        \"text\": \"文字创意\",\n        \"prompt\": \"水果，蔬菜，温暖的色彩空间\"\n    },\n    \"parameters\": {\n        \"steps\": 80,\n        \"n\": 2,\n        \"output_image_ratio\": \"1024x1024\",\n        \"font_name\": \"dongfangdakai\"\n    }\n}'"
           }
         }
       }

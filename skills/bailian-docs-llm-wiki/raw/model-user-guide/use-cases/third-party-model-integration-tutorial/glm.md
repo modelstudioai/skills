@@ -8,11 +8,111 @@ glm-4.6、glm-4.7 将于**2026年7月9日**下架。推荐转用：[qwen3.7-plus
 
 **重要**
 
-新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+
+## **服务接入地址**
+
+不同地域的服务接入地址不同，请根据您选择的地域配置对应的 Base URL。
+
+## OpenAI兼容
+
+## 华北2（北京）
+
+SDK 调用配置的`base_url`：`https://dashscope.aliyuncs.com/compatible-mode/v1`
+
+HTTP 请求地址：`POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions`
+
+## 美国（弗吉尼亚）
+
+SDK 调用配置的`base_url`：`https://dashscope-us.aliyuncs.com/compatible-mode/v1`
+
+HTTP 请求地址：`POST https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions`
+
+## 德国（法兰克福）
+
+SDK 调用配置的`base_url`：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1`
+
+HTTP 请求地址：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+## DashScope
+
+## 华北2（北京）
+
+HTTP 请求地址：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+
+SDK 调用无需配置 `base_url`。
+
+## 美国（弗吉尼亚）
+
+HTTP 请求地址：`POST https://dashscope-us.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+
+SDK 调用配置的`base_url`：
+
+## **Python**
+
+```
+dashscope.base_http_api_url = 'https://dashscope-us.aliyuncs.com/api/v1'
+```
+
+## **Java**
+
+-   **方式一：**
+    
+    ```
+    import com.alibaba.dashscope.protocol.Protocol;
+    Generation gen = new Generation(Protocol.HTTP.getValue(), "https://dashscope-us.aliyuncs.com/api/v1");
+    ```
+    
+-   **方式二：**
+    
+    ```
+    import com.alibaba.dashscope.utils.Constants;
+    Constants.baseHttpApiUrl="https://dashscope-us.aliyuncs.com/api/v1";
+    ```
+    
+
+## 德国（法兰克福）
+
+HTTP 请求地址：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+SDK 调用配置的`base_url`：
+
+## **Python**
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+```
+dashscope.base_http_api_url = 'https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1'
+```
+
+## **Java**
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+-   **方式一：**
+    
+    ```
+    import com.alibaba.dashscope.protocol.Protocol;
+    Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1");
+    ```
+    
+-   **方式二：**
+    
+    ```
+    import com.alibaba.dashscope.utils.Constants;
+    Constants.baseHttpApiUrl="https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1";
+    ```
+    
 
 ## **快速开始**
 
-glm-5.1 是 GLM 系列最新模型，支持通过`enable_thinking`参数设置思考与非思考模式。运行以下代码快速调用思考模式的 glm-5.1 模型。
+glm-5.2 是 GLM 系列最新模型，上下文长度 1M，支持通过`enable_thinking`参数设置思考与非思考模式。运行以下代码快速调用思考模式的 glm-5.2 模型。
 
 需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装 OpenAI 或 DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk#8833b9274f4v8)。
 
@@ -39,7 +139,7 @@ client = OpenAI(
 
 messages = [{"role": "user", "content": "你是谁"}]
 completion = client.chat.completions.create(
-    model="glm-5.1",
+    model="glm-5.2",
     messages=messages,
     # 通过 extra_body 设置 enable_thinking 开启思考模式
     extra_body={"enable_thinking": True},
@@ -135,7 +235,7 @@ async function main() {
         const messages = [{ role: 'user', content: '你是谁' }];
         
         const stream = await openai.chat.completions.create({
-            model: 'glm-5.1',
+            model: 'glm-5.2',
             messages,
             // 注意：在 Node.js SDK，enable_thinking 这样的非标准参数作为顶层属性传递，无需放在 extra_body 中
             enable_thinking: true,
@@ -219,7 +319,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "glm-5.1",
+    "model": "glm-5.2",
     "messages": [
         {
             "role": "user", 
@@ -250,7 +350,7 @@ messages = [{"role": "user", "content": "你是谁？"}]
 completion = Generation.call(
     # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    model="glm-5.1",
+    model="glm-5.2",
     messages=messages,
     result_format="message",  # 设置结果格式为 message
     enable_thinking=True,     # 开启思考模式
@@ -360,7 +460,7 @@ public class Main {
         return GenerationParam.builder()
                 // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .model("glm-5.1")
+                .model("glm-5.2")
                 .incrementalOutput(true)
                 .resultFormat("message")
                 .messages(Arrays.asList(userMsg))
@@ -420,9 +520,9 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generatio
 -H "Content-Type: application/json" \
 -H "X-DashScope-SSE: enable" \
 -d '{
-    "model": "glm-5.1",
+    "model": "glm-5.2",
     "input":{
-        "messages":[      
+        "messages":[
             {
                 "role": "user",
                 "content": "你是谁？"
@@ -437,9 +537,65 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generatio
 }'
 ```
 
+## Anthropic兼容
+
+## Python
+
+### **示例代码**
+
+```
+import anthropic
+import os
+
+client = anthropic.Anthropic(
+    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url="https://dashscope.aliyuncs.com/apps/anthropic",
+)
+
+message = client.messages.create(
+    model="glm-5.2",
+    max_tokens=1024,
+    messages=[
+        {"role": "user", "content": "你是谁"}
+    ],
+    stream=True,
+)
+
+for event in message:
+    if event.type == "content_block_delta":
+        if hasattr(event.delta, "thinking"):
+            print(event.delta.thinking, end="", flush=True)
+        if hasattr(event.delta, "text"):
+            print(event.delta.text, end="", flush=True)
+```
+
+## HTTP
+
+### **示例代码**
+
+## curl
+
+```
+curl -X POST https://dashscope.aliyuncs.com/apps/anthropic/v1/messages \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-H "anthropic-version: 2023-06-01" \
+-d '{
+    "model": "glm-5.2",
+    "max_tokens": 1024,
+    "messages": [
+        {
+            "role": "user",
+            "content": "你是谁"
+        }
+    ]
+}'
+```
+
 ## **流式工具调用**
 
-glm-5.1、glm-5、glm-4.7、glm-4.6 支持`tool_stream`参数（boolean，默认`false`），仅在`stream`为`true`时生效。开启后，Function Calling 返回的 tool\_call 参数（arguments）会以流式增量方式逐步返回，而非等待完整生成后一次性返回。
+glm-5.2、glm-5.1、glm-5、glm-4.7、glm-4.6 支持`tool_stream`参数（boolean，默认`false`），仅在`stream`为`true`时生效。开启后，Function Calling 返回的 tool\_call 参数（arguments）会以流式增量方式逐步返回，而非等待完整生成后一次性返回。
 
 `stream`与`tool_stream`的组合行为如下：
 
@@ -502,7 +658,7 @@ tools = [
 messages = [{"role": "user", "content": "北京天气怎么样"}]
 
 completion = client.chat.completions.create(
-    model="glm-5.1",
+    model="glm-5.2",
     tools=tools,
     messages=messages,
     extra_body={
@@ -559,7 +715,7 @@ const tools = [
 async function main() {
     try {
         const stream = await openai.chat.completions.create({
-            model: 'glm-5.1',
+            model: 'glm-5.2',
             messages: [{ role: 'user', content: '北京天气怎么样' }],
             tools: tools,
             tool_stream: true,
@@ -612,7 +768,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "glm-5.1",
+    "model": "glm-5.2",
     "messages": [
         {
             "role": "user",
@@ -672,7 +828,7 @@ messages = [{"role": "user", "content": "北京天气怎么样"}]
 
 completion = Generation.call(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    model="glm-5.1",
+    model="glm-5.2",
     messages=messages,
     tools=tools,
     result_format="message",
@@ -706,7 +862,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generatio
 -H "Content-Type: application/json" \
 -H "X-DashScope-SSE: enable" \
 -d '{
-    "model": "glm-5.1",
+    "model": "glm-5.2",
     "input": {
         "messages": [
             {
@@ -754,6 +910,24 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generatio
 [前缀续写](https://help.aliyun.com/zh/model-studio/partial-mode)
 
 [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)
+
+glm-5.2
+
+支持
+
+支持
+
+支持
+
+> 仅非思考模式
+
+不支持
+
+不支持
+
+支持
+
+> 仅支持隐式缓存
 
 glm-5.1
 
@@ -869,6 +1043,18 @@ glm-4.5-air
 
 **repetition\_penalty**
 
+glm-5.2
+
+true
+
+1.0
+
+0.95
+
+20
+
+1.0
+
 glm-5.1
 
 true
@@ -946,6 +1132,9 @@ true
 ## **模型列表与计费**
 
 GLM 系列模型是智谱AI专为智能体设计的混合推理模型，提供思考与非思考两种模式。
+
+-   glm-5.2：GLM 最新模型，上下文长度 1M，支持 Function Calling、结构化输出及隐式缓存。支持 OpenAI 兼容、DashScope 及 Anthropic 兼容接口调用。
+    
 
 模型上下文长度与价格信息请参见百炼控制台。
 

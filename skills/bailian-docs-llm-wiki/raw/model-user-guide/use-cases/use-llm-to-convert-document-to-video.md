@@ -4,7 +4,7 @@
 
 ## 效果演示
 
-通过本实践教程及[完整代码](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250610/yjtueq/doc2video.zip)，您可以借助大模型将文档转为视频。所生成的视频包含完整的图文、语音、字幕等内容。下面是一个示例，输入文档为[阿里云大模型工程师ACA认证](https://edu.aliyun.com/certification/aca13?spm=5176.28426678.J_HeJR_wZokYt378dwP-lLl.141.28395181aYl81d&scm=20140722.S_card%40%40活动%40%403399626.S_card0.ID_card%40%40活动%40%403399626-RL_ACA大模型-LOC_search%7EUND%7Ecard%7EUND%7Eitem-OR_ser-V_3-RE_cardOld-P0_1)课程第一章第一课时[认识大模型](https://edu.aliyun.com/course/3126500/lesson/342500628?spm=a2cwt.28196072.ACA13.6.61336e7bR7gFki)，输出的视频效果演示如下：
+通过本实践教程及[完整代码](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250610/yjtueq/doc2video.zip)，您可以借助大模型将文档转为视频。所生成的视频包含完整的图文、语音、字幕等内容。下面是一个示例，输入文档为阿里云大模型工程师ACA认证课程第一章第一课时认识大模型，输出的视频效果演示如下：
 
 > 阿里云大模型工程ACA认证课程第一章第一课时：认识大模型。
 
@@ -318,7 +318,7 @@ python main.py
 
 我们借助API调用阿里云百炼提供的千问系列大模型**千问-Plus**，为输入文档生成一个文档标题并划分段落。
 
-> 千问-Plus是千问超大规模语言模型的增强版，支持中文英文等不同语言输入。能力均衡，推理效果和速度介于千问-Max和千问-Flash之间，适合中等复杂任务。您也可以根据实际应用需求来选择合适的大模型，详见[模型列表](https://help.aliyun.com/zh/model-studio/models)。
+> 千问-Plus是千问超大规模语言模型的增强版，支持中文英文等不同语言输入。能力均衡，推理效果和速度介于千问-Max和千问-Flash之间，适合中等复杂任务。您也可以根据实际应用需求来选择合适的大模型，详见模型列表。
 
 > 千问-Plus的输入和输出成本分别为0.004元/千Token和0.012元/千Token，新用户在开通百炼服务后的30天内拥有100万Token的免费额度。
 
@@ -1717,7 +1717,7 @@ merge_video_and_subtitle(args.srt_and_video_path, input_base_name)
 
 ## 步骤六（可选）：生成长文档视频
 
-通过以上步骤，相信您已经成功地构建了完整的文档生成视频项目工程，并且能够成功地将我们提供的示例文档**section\_1.md**转化为视频。在实际应用中，您可能会有将更长篇幅的文档转化为视频的需求，例如[阿里云大模型工程师ACA认证](https://edu.aliyun.com/certification/aca13?spm=5176.28426678.J_HeJR_wZokYt378dwP-lLl.141.28395181aYl81d&scm=20140722.S_card%40%40活动%40%403399626.S_card0.ID_card%40%40活动%40%403399626-RL_ACA大模型-LOC_search%7EUND%7Ecard%7EUND%7Eitem-OR_ser-V_3-RE_cardOld-P0_1)课程第一章第一课时[认识大模型](https://edu.aliyun.com/course/3126500/lesson/342500628?spm=a2cwt.28196072.ACA13.6.61336e7bR7gFki)。我们建议您将长篇幅文档划分为若干短文档，并生成所有短文档对应的视频，最终将所有视频整合为一个完整的视频。
+通过以上步骤，相信您已经成功地构建了完整的文档生成视频项目工程，并且能够成功地将我们提供的示例文档**section\_1.md**转化为视频。在实际应用中，您可能会有将更长篇幅的文档转化为视频的需求，例如阿里云大模型工程师ACA认证课程第一章第一课时认识大模型。我们建议您将长篇幅文档划分为若干短文档，并生成所有短文档对应的视频，最终将所有视频整合为一个完整的视频。
 
 ### **划分文档**
 

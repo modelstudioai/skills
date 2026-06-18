@@ -11,7 +11,9 @@
       },
       "openSource": false,
       "description": "是通义实验室基于Qwen3训练的多语言文本统一向量模型，相较V3版本在文本检索、聚类、分类性能大幅提升；在MTEB多语言、中英、Code检索等评测任务上效果提升15%~40%；支持64~2048维用户自定义向量维度。",
-      "features": [],
+      "features": [
+        "model-experience"
+      ],
       "provider": "qwen-domain-model",
       "model": "text-embedding-v4",
       "prices": [
@@ -51,40 +53,19 @@
       ],
       "versionTag": "SNAPSHOT",
       "latestOnlineAt": "2025-06-05T03:07:20.000+00:00",
+      "offlineInfo": {},
       "inferenceProvider": "aliyun-bailian",
       "name": "通用文本向量-v4",
       "docUrl": "https://help.aliyun.com/document_detail/2842587.html",
       "predictConfig": [
         {
-          "name": "system",
-          "key": "systemMessage",
-          "tip": "系统人设，例如“你是一个AI助手”。"
-        },
-        {
-          "name": "top_p",
-          "key": "top_p",
-          "default": 0.8,
-          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
-          "range": [
-            0.0001,
-            1
-          ]
-        },
-        {
-          "name": "temperature",
-          "key": "temperature",
-          "default": 0.7,
-          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
-          "range": [
-            0,
-            1.9999
-          ]
+          "name": "topK"
         }
       ],
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-v4\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-v4\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
             "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-v4\",\ninput=input_texts\n)\nprint(resp)",
             "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-v4\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}"
           }
@@ -178,7 +159,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-v3\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-v3\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
             "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-v3\",\ninput=input_texts\n)\nprint(resp)",
             "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-v3\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}"
           }
@@ -248,7 +229,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-async-v1\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-async-v1\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
             "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-async-v1\",\ninput=input_texts\n)\nprint(resp)",
             "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-async-v1\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}"
           }
@@ -318,7 +299,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-async-v2\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-async-v2\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
             "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-async-v2\",\ninput=input_texts\n)\nprint(resp)",
             "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-async-v2\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}"
           }
@@ -412,7 +393,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-v1\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-v1\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
             "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-v1\",\ninput=input_texts\n)\nprint(resp)",
             "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-v1\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}"
           }
@@ -506,7 +487,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-v2\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-v2\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
             "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-v2\",\ninput=input_texts\n)\nprint(resp)",
             "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-v2\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}"
           }

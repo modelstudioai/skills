@@ -80,7 +80,7 @@
 
 无
 
-注意，强烈建议在[Start](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#5b2363d40585y)消息中传入：`parameters.client_info.device.uuid`，用来区分同一个多模应用下不同的硬件设备，否则同一个多模应用下多个硬件设备提取的槽位将无法区分，带来使用体验问题。
+注意，强烈建议在[Start](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#5b2363d40585y)消息中传入：`parameters.client_info.device.uuid`，用来区分同一个多模应用下不同的硬件设备，否则同一个多模应用下多个硬件设备提取的槽位将无法区分，带来使用体验问题。
 
 ## **集成协议**
 
@@ -115,9 +115,9 @@
 
 该状态维护在：多模态交互的`user_defined_params.tingwu_meeting.clientRecordingStatus`中，可以通过以下两种方式设置这个状态：
 
--   [Start消息](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#5b2363d40585y)
+-   [Start消息](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#5b2363d40585y)
     
--   [客户端更新事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#39b223a2f6y9y)
+-   [客户端更新事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#39b223a2f6y9y)
     
 
 名称
@@ -140,7 +140,7 @@ string
 
 多模对话中输入当时用户自己配置的开启录音短语即可触发。
 
-触发后将会在多模的[文本下发事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#3b421d978fco5)收到的开启录音指令，在该事件payload里的`output.extra_info.commands`字段里，以json格式字符串返回相关指令，示例如下：
+触发后将会在多模的[文本下发事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#3b421d978fco5)收到的开启录音指令，在该事件payload里的`output.extra_info.commands`字段里，以json格式字符串返回相关指令，示例如下：
 
 ```
 {
@@ -163,18 +163,18 @@ commands是一个jsonArray的字符串，这个字符串反序列化后，关注
 ]
 ```
 
-若要复用该ws链接，则需要调用[客户端更新事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#39b223a2f6y9y)来更新端侧的录音状态，将`user_defined_params.tingwu_meeting.clientRecordingStatus`更新为`1`，即表示端侧录音状态为录音中。
+若要复用该ws链接，则需要调用[客户端更新事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#39b223a2f6y9y)来更新端侧的录音状态，将`user_defined_params.tingwu_meeting.clientRecordingStatus`更新为`1`，即表示端侧录音状态为录音中。
 
 ### **暂停录音触发**
 
 多模对话中输入当时用户自己配置的暂停录音短语即可触发，但需要注意该指令触发时`user_defined_params.tingwu_meeting.clientRecordingStatus`的值应该为`1`。
 
--   若是在新建的ws链接中，则可以在[Start消息](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#5b2363d40585y)中来设置`user_defined_params.tingwu_meeting.clientRecordingStatus`为`1`。
+-   若是在新建的ws链接中，则可以在[Start消息](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#5b2363d40585y)中来设置`user_defined_params.tingwu_meeting.clientRecordingStatus`为`1`。
     
--   若是在某个已经存在的ws链接中，需要确保`user_defined_params.tingwu_meeting.clientRecordingStatus`为`1`，通过调用[客户端更新事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#39b223a2f6y9y)可以实现更新；
+-   若是在某个已经存在的ws链接中，需要确保`user_defined_params.tingwu_meeting.clientRecordingStatus`为`1`，通过调用[客户端更新事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#39b223a2f6y9y)可以实现更新；
     
 
-触发后将会在多模的[文本下发事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#3b421d978fco5)收到的暂停录音指令，在该事件`payload`里的`output.extra_info.commands`字段里，以json格式字符串返回相关指令，示例如下：
+触发后将会在多模的[文本下发事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#3b421d978fco5)收到的暂停录音指令，在该事件`payload`里的`output.extra_info.commands`字段里，以json格式字符串返回相关指令，示例如下：
 
 ```
 {
@@ -188,21 +188,21 @@ commands是一个jsonArray的字符串，这个字符串反序列化后，关注
 
 将commands是一个jsonArray的字符串，这个字符串反序列化后，关注到该指令列表中的指令的name字段为`pause_local_recording`则表示暂停录音成功。
 
-若要复用该ws链接，则需要调用[客户端更新事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#39b223a2f6y9y)来更新端侧的录音状态，将`user_defined_params.tingwu_meeting.clientRecordingStatus`更新为`2`，即表示端侧录音状态为暂停中。
+若要复用该ws链接，则需要调用[客户端更新事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#39b223a2f6y9y)来更新端侧的录音状态，将`user_defined_params.tingwu_meeting.clientRecordingStatus`更新为`2`，即表示端侧录音状态为暂停中。
 
 ### **恢复录音触发**
 
 多模对话中输入当时用户自己配置的恢复录音短语即可触发，同时注意触发该指令时，`user_defined_params.tingwu_meeting.clientRecordingStatus`的值应该为`2`。
 
-触发后将会在多模的[文本下发事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#3b421d978fco5)收到的恢复录音指令，同时注意指令列表中的指令的name字段为`resume_local_recording`则表示恢复录音指令。
+触发后将会在多模的[文本下发事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#3b421d978fco5)收到的恢复录音指令，同时注意指令列表中的指令的name字段为`resume_local_recording`则表示恢复录音指令。
 
-若要复用该ws链接，则需要调用[客户端更新事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#39b223a2f6y9y)来更新端侧的录音状态，将`user_defined_params.tingwu_meeting.clientRecordingStatus`更新为`1`，即表示端侧录音状态为录音中。
+若要复用该ws链接，则需要调用[客户端更新事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#39b223a2f6y9y)来更新端侧的录音状态，将`user_defined_params.tingwu_meeting.clientRecordingStatus`更新为`1`，即表示端侧录音状态为录音中。
 
 ### **结束录音触发**
 
 多模对话中输入当时用户自己配置的结束录音短语即可触发，同时注意触发该指令时，`user_defined_params.tingwu_meeting.clientRecordingStatus`的值应该为`1 或者 2`。
 
-触发后将会在多模的[文本下发事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#3b421d978fco5)收到的结束录音指令，`payloa.output.extra_info.commands`是一个jsonArray的字符串，注意指令列表中的指令的name字段为`end_local_recording`则表示收到结束录音指令，如下是`commands`返回的一个示例。
+触发后将会在多模的[文本下发事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#3b421d978fco5)收到的结束录音指令，`payloa.output.extra_info.commands`是一个jsonArray的字符串，注意指令列表中的指令的name字段为`end_local_recording`则表示收到结束录音指令，如下是`commands`返回的一个示例。
 
 ```
 [
@@ -217,11 +217,11 @@ commands是一个jsonArray的字符串，这个字符串反序列化后，关注
 ]
 ```
 
-若要复用该ws链接，则需要调用[客户端更新事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#39b223a2f6y9y)来更新端侧的录音状态，将`user_defined_params.tingwu_meeting.clientRecordingStatus`更新为`0`，即表示端侧录音状态为录音中。
+若要复用该ws链接，则需要调用[客户端更新事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#39b223a2f6y9y)来更新端侧的录音状态，将`user_defined_params.tingwu_meeting.clientRecordingStatus`更新为`0`，即表示端侧录音状态为录音中。
 
 ### **提交结束录音执行结果**
 
-在[结束录音触发](#df0154d97cbs0)章节里：`commands`反序列化后，`end_local_recording`指令会返回一个`command_request_id`，该id是提交端侧录音文件的一个凭证。利用多模的[RequestToRespond指令](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#ea3b4279e717m)提交录音文件的ossUrl，提交协议如下：
+在[结束录音触发](#df0154d97cbs0)章节里：`commands`反序列化后，`end_local_recording`指令会返回一个`command_request_id`，该id是提交端侧录音文件的一个凭证。利用多模的[RequestToRespond指令](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#ea3b4279e717m)提交录音文件的ossUrl，提交协议如下：
 
 名称
 
@@ -270,7 +270,7 @@ jsonObject中仅有一个key为：fileUrl，代表上传的音频文件的ossUrl
 }
 ```
 
-提交后将会在多模的[文本下发事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#3b421d978fco5)收到的**提交结束录音执行结果**的返回，返回中包含一个dataId，该dataId就是智能纪要中[CreateTask](https://help.aliyun.com/zh/model-studio/tingwu-meeting-offline-api-create-task#5827c2ab596ko)接口返回的dataId。具体返回协议为，在事件的`payloa.output.extra_info.commands`中，是一个jsonArray的字符串，如下：
+提交后将会在多模的[文本下发事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#3b421d978fco5)收到的**提交结束录音执行结果**的返回，返回中包含一个dataId，该dataId就是智能纪要中[CreateTask](https://help.aliyun.com/zh/model-studio/tingwu-meeting-offline-api-create-task#5827c2ab596ko)接口返回的dataId。具体返回协议为，在事件的`payloa.output.extra_info.commands`中，是一个jsonArray的字符串，如下：
 
 ```
 {

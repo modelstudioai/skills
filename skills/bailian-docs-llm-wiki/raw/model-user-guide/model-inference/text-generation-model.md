@@ -24,7 +24,7 @@ GPT-5.5、Claude Opus 4.7、Gemini 3.1 Pro
 
 GPT-5.4、Claude Sonnet 4.6、Gemini 3 Pro
 
-`qwen3.7-plus`、`deepseek-v4-pro`、`glm-5.1`
+`qwen3.7-plus`、`deepseek-v4-pro`、`glm-5.2`
 
 轻量低成本
 
@@ -166,9 +166,9 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-`glm-5.1`
+`glm-5.2`
 
-198k
+1M
 
 支持
 
@@ -258,22 +258,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-`qwen3.7-max-2026-06-08`
-
-1M
-
-64k
-
-256k
-
-支持
-
-支持
-
-不支持
-
-不支持
-
 `qwen3.7-max-2026-05-20`
 
 1M
@@ -306,22 +290,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-`qwen3.7-max-2026-05-17`
-
-1M
-
-64k
-
-256k
-
-支持
-
-支持
-
-不支持
-
-不支持
-
 `qwen3.7-plus`
 
 1M
@@ -337,22 +305,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 支持
-
-`qwen3.7-plus-2026-05-26`
-
-1M
-
-64k
-
-256k
-
-支持
-
-支持
-
-支持
-
-不支持
 
 ### Qwen3.6
 
@@ -404,22 +356,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-`qwen3.6-plus-2026-04-02`
-
-1M
-
-64k
-
-80k
-
-支持
-
-支持
-
-支持
-
-不支持
-
 `qwen3.6-flash`
 
 1M
@@ -435,22 +371,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 支持
-
-`qwen3.6-flash-2026-04-16`
-
-1M
-
-64k
-
-128k
-
-支持
-
-支持
-
-支持
-
-不支持
 
 ### Qwen3.5
 
@@ -486,22 +406,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-`qwen3.5-plus-2026-02-15`
-
-1M
-
-64k
-
-80k
-
-支持
-
-支持
-
-支持
-
-不支持
-
 `qwen3.5-flash`
 
 1M
@@ -517,22 +421,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 支持
-
-`qwen3.5-flash-2026-02-23`
-
-1M
-
-64k
-
-80k
-
-支持
-
-支持
-
-支持
-
-不支持
 
 `qwen3.5-397b-a17b`
 
@@ -644,13 +532,13 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-`glm-5.1`
+`glm-5.2`
 
-198k
+1M
 
-128k
+131k
 
-128k
+131k
 
 支持
 
@@ -701,6 +589,138 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 不支持
+
+支持
+
+不支持
+
+### 历史快照
+
+以下为各代模型带日期的历史快照版本，供需要锁定特定版本的用户参考。当代版本请见上方各模型表格。
+
+**模型ID**
+
+**上下文**
+
+**最大输出**
+
+**思考预算**
+
+**Function Calling**
+
+**内置工具**
+
+**结构化输出**
+
+**批量调用**
+
+`qwen3.7-max-2026-06-08`
+
+1M
+
+64k
+
+256k
+
+支持
+
+支持
+
+不支持
+
+不支持
+
+`qwen3.7-max-2026-05-17`
+
+1M
+
+64k
+
+256k
+
+支持
+
+支持
+
+不支持
+
+不支持
+
+`qwen3.7-plus-2026-05-26`
+
+1M
+
+64k
+
+256k
+
+支持
+
+支持
+
+支持
+
+不支持
+
+`qwen3.6-plus-2026-04-02`
+
+1M
+
+64k
+
+80k
+
+支持
+
+支持
+
+支持
+
+不支持
+
+`qwen3.6-flash-2026-04-16`
+
+1M
+
+64k
+
+128k
+
+支持
+
+支持
+
+支持
+
+不支持
+
+`qwen3.5-plus-2026-02-15`
+
+1M
+
+64k
+
+80k
+
+支持
+
+支持
+
+支持
+
+不支持
+
+`qwen3.5-flash-2026-02-23`
+
+1M
+
+64k
+
+80k
+
+支持
+
+支持
 
 支持
 
@@ -1399,6 +1419,20 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 **结构化输出**
 
 **批量调用**
+
+`glm-5.1`
+
+198k
+
+支持
+
+支持
+
+不支持
+
+支持
+
+不支持
 
 `glm-5`
 

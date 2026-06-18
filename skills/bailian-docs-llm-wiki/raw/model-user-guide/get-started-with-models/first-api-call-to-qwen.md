@@ -30,7 +30,7 @@
     
 3.  **获取API Key：**前往[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)页面，单击**创建API Key****，**即可通过API KEY调用大模型。
     
-4.  **获取业务空间ID：**使用**华北2（北京）**、**新加坡**或**德国（法兰克福）**地域的模型时，需在Base URL中填入业务空间ID（WorkspaceId），可在[业务空间管理](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=globalset#/efm/business_management)页面中查看。
+4.  **获取业务空间ID：**使用**华北2（北京）**、**新加坡**、**日本（东京）**或**德国（法兰克福）**地域的模型时，需在Base URL中填入业务空间ID（WorkspaceId），可在[业务空间管理](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=globalset#/efm/business_management)页面中查看。
     
 
 ## **配置API Key到环境变量**
@@ -1194,7 +1194,7 @@ A：请根据您的使用情况参考以下步骤：
 
 1.  单击左下角的设置按钮，在**模型服务**栏中找到**阿里云百炼**，**API 密钥**输入您的 API Key，获取方法请参见：[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)；**API 地址**填入`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/`（请将WorkspaceId替换为业务空间ID）；单击**添加**。
     
-    ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3274214671/p920483.png)
+    ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3274214671/p920483.png)![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3274214671/p920483.png)
     
 2.  在**模型 ID**填入您需要使用的千问模型，此处以 qwen-max-latest 为例（更多可用的模型请参考[选择模型](https://help.aliyun.com/zh/model-studio/models)中的千问模型）； **模型名称**与**分组名称**会自动生成。
     
@@ -1225,7 +1225,7 @@ A：请根据您的使用情况参考以下步骤：
 
 **在线体验大模型**
 
-如果您想像[千问官网](https://tongyi.aliyun.com/qianwen/)一样，通过**对话框**与大模型互动，请访问模型体验（[北京](https://bailian.console.aliyun.com/?tab=model#/efm/model_experience_center/text)或[新加坡](https://modelstudio.console.aliyun.com/?tab=dashboard#/efm/model_experience_center/text)）。
+如果您想像[千问官网](https://tongyi.aliyun.com/qianwen/)一样，通过**对话框**与大模型互动，请访问[模型体验](https://bailian.console.aliyun.com/?tab=model#/efm/model_experience_center/text)。
 
 > 千问官网将千问 API 与联网搜索、网页解析等工具进行了集成，与直接调用千问 API 效果略有差异。
 

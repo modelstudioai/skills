@@ -40,11 +40,11 @@
 
 [AliyunServiceRoleForSFMAccessSLS](#4fdbab8ea2tp9)
 
-[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry/)通过此服务关联角色访问您在[SLS](https://help.aliyun.com/zh/sls/what-is-log-service)中的资源。
+[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)通过此服务关联角色访问您在[SLS](https://help.aliyun.com/zh/sls/what-is-log-service)中的资源。
 
 [AliyunServiceRoleForSFMAccessCMS](#0cf6db69c5z5n)
 
-[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry/)通过此服务关联角色访问您在[CMS](https://help.aliyun.com/zh/cms/cloudmonitor-2-0/what-is-cloud-monitor-2-0)中的资源。
+[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)通过此服务关联角色访问您在[CMS](https://help.aliyun.com/zh/cms/cloudmonitor-2-0/what-is-cloud-monitor-2-0)中的资源。
 
 [AliyunServiceRoleForAccessCusOss](#21281ba873vnj)
 
@@ -514,7 +514,7 @@
 
 ### 应用场景
 
-百炼[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry/)通过此服务关联角色访问您在[SLS](https://help.aliyun.com/zh/sls/what-is-log-service)中的资源。
+百炼[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)通过此服务关联角色访问您在[SLS](https://help.aliyun.com/zh/sls/what-is-log-service)中的资源。
 
 ### **角色及权限说明**
 
@@ -595,7 +595,7 @@
 
 ### 应用场景
 
-百炼[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry/)通过此服务关联角色访问您在[CMS](https://help.aliyun.com/zh/cms/cloudmonitor-2-0/what-is-cloud-monitor-2-0)中的资源。
+百炼[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)通过此服务关联角色访问您在[CMS](https://help.aliyun.com/zh/cms/cloudmonitor-2-0/what-is-cloud-monitor-2-0)中的资源。
 
 ### **角色及权限说明**
 

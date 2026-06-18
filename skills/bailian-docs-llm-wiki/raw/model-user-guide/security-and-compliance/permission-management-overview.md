@@ -113,7 +113,7 @@ API Key 管理
 
 **说明**
 
-如需开通 [AI 安全护栏服务](https://help.aliyun.com/zh/document_detail/2923687.html)、[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry/#54ea9ba526ovz)、[应用观测](https://help.aliyun.com/zh/model-studio/application-observation#8b8e3a09a3wj3)等功能，建议使用**阿里云主账号**在控制台进行一次性授权和开通。
+如需开通 [AI 安全护栏服务](https://help.aliyun.com/zh/document_detail/2923687.html)、[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry#54ea9ba526ovz)、[应用观测](https://help.aliyun.com/zh/model-studio/application-observation#8b8e3a09a3wj3)等功能，建议使用**阿里云主账号**在控制台进行一次性授权和开通。
 
 ### **业务空间管理员**
 

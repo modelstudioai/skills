@@ -150,6 +150,14 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 取值范围：\[200, 6000\]，默认值为 800。
 
+**idle\_timeout\_ms** `_integer_`（可选）
+
+**仅在使用 `qwen3.5-omni-plus-realtime` 或 `qwen3.5-omni-flash-realtime` 模型且 VAD 类型为 `server_vad` 时生效。**
+
+静默超时时间（毫秒）。服务端完成音频播报且用户持续静默超过该时间（未触发 `speech.started`）后，模型将主动触发一轮响应，基于当前上下文引导用户继续对话。超时计时从上一条模型响应的音频播放完毕后开始。
+
+取值范围：\[5000, 30000\]。
+
 **enable\_search** `_boolean_`（可选）
 
 **仅在使用 Qwen3.5-Omni-Realtime 模型时生效。**

@@ -68,7 +68,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2video/face-detect' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data-raw '{\n  \"model\": \"emo-detect-v1\",\n  \"input\": {\n      \"image_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250911/yhdvfg/emo-%E5%9B%BE%E7%89%87.png\"\n  },\n  \"parameters\": {\n      \"ratio\": \"1:1\"\n  }\n}'"
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/face-detect' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data-raw '{\n  \"model\": \"emo-detect-v1\",\n  \"input\": {\n      \"image_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250911/yhdvfg/emo-%E5%9B%BE%E7%89%87.png\"\n  },\n  \"parameters\": {\n      \"ratio\": \"1:1\"\n  }\n}'"
           }
         }
       }

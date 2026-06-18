@@ -1,0 +1,84 @@
+{
+  "name": "Fun-ASR-Flash",
+  "description": "百聆2026年6月更新的大模型ASR版本，全面支持汉语传统七大方言体系（官话/吴/湘/赣/客/闽/粤），并适配 20+ 地区口音官话。针对中文古诗词的韵律、节奏与文言表达特点进行专项优化，提升对古诗词内容的识别准确率，适用于文化传承、教育讲解、有声读物等场景。优化标点预测与文本归一化能力，使输出文本更符合书面表达习惯，数字、日期、金额等信息自动转换为标准格式，增强内容的可读性与专业性。同时语种扩展至英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚、保加利亚语、克罗地亚语、斯洛伐克语等，共计30个语种。支持context上下文能力，可转写5分钟以内的音频。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Audio"
+        ]
+      },
+      "openSource": false,
+      "description": "百聆2026年6月更新的大模型ASR版本，全面支持汉语传统七大方言体系（官话/吴/湘/赣/客/闽/粤），并适配 20+ 地区口音官话。针对中文古诗词的韵律、节奏与文言表达特点进行专项优化，提升对古诗词内容的识别准确率，适用于文化传承、教育讲解、有声读物等场景。优化标点预测与文本归一化能力，使输出文本更符合书面表达习惯，数字、日期、金额等信息自动转换为标准格式，增强内容的可读性与专业性。同时语种扩展至英语、日语、韩语、越南语、泰语、印尼语、马来语、菲律宾语、印地语、阿拉伯语、法语、德语、西班牙语、葡萄牙语、俄语、意大利语、荷兰语、瑞典语、丹麦语、芬兰语、挪威语、希腊语、波兰语、捷克语、匈牙利语、罗马尼亚、保加利亚语、克罗地亚语、斯洛伐克语等，共计30个语种。支持context上下文能力，可转写5分钟以内的音频。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "fun-asr-flash-2026-06-15",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.00022",
+          "type": "content_duration",
+          "priceName": "音频时长"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        }
+      },
+      "capabilities": [
+        "ASR"
+      ],
+      "versionTag": "SNAPSHOT",
+      "latestOnlineAt": "2026-06-17T08:56:52.839+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Fun-ASR-Flash-2026-06-15",
+      "docUrl": "https://help.aliyun.com/document_detail/2979031.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location --request POST 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \\\n     --header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n     --header \"Content-Type: application/json\" \\\n     --header \"X-DashScope-SSE: enable\" \\\n     --data '{\n    \"model\": \"fun-asr-flash-2026-06-15\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"type\": \"input_audio\",\n                        \"input_audio\": {\n                            \"data\": \"https://xxx.wav\"\n                        }\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"format\": \"wav\",\n        \"sample_rate\": \"16000\"\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/2869541.html"
+          }
+        }
+      }
+    }
+  ]
+}

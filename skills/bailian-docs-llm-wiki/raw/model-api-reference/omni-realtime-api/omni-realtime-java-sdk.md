@@ -56,7 +56,9 @@ String
 
 **重要**
 
-新加坡地域的旧版域名 `wss://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+百炼为新加坡地域推出了业务空间专属域名 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `wss://dashscope-intl.aliyuncs.com` 迁移至新域名。
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 下述请求参数可以通过`OmniRealtimeConfig`对象的链式方法或setter配置、之后作为参数传入updateSession接口完成配置。
 

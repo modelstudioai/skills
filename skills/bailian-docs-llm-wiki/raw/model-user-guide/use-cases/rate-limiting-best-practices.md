@@ -17,7 +17,7 @@
 
 ## 平台限流机制
 
-限流按**主账号**维度、**模型**独立计算，触发后通常 1 分钟内恢复。各模型的限流条件和当前用量参见[模型限流条件](https://help.aliyun.com/zh/model-studio/rate-limit)和[模型用量监控](https://help.aliyun.com/zh/model-studio/model-telemetry/)。百炼 API 有以下三种限流规则：
+限流按**主账号**维度、**模型**独立计算，触发后通常 1 分钟内恢复。各模型的限流条件和当前用量参见[模型限流条件](https://help.aliyun.com/zh/model-studio/rate-limit)和[模型用量监控](https://help.aliyun.com/zh/model-studio/model-telemetry)。百炼 API 有以下三种限流规则：
 
 -   **分钟级配额限制（RPM / TPM）**：每分钟允许的最大请求数（Requests Per Minute，RPM）和最大 Token 用量（Tokens Per Minute，TPM）。
     

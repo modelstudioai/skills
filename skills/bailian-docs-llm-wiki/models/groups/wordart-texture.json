@@ -63,7 +63,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/wordart/texture' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--header 'Accept: application/json' \\\n--data '{\n    \"model\": \"wordart-texture\",\n    \"input\": {\n        \"image\": \n        {\n            \"image_url\": \"https://dmshared-new.oss-cn-hangzhou.aliyuncs.com/junyan.hjy/wordart/lcy/example.png\"\n        },\n        \"prompt\": \"水果，蔬菜，温暖的色彩空间\",\n        \"texture_style\": \"material\"\n    },\n    \"parameters\": \n    {\n        \"image_short_size\": 704,\n        \"n\": 2,\n        \"alpha_channel\": false\n    }\n}'"
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/wordart/texture' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--header 'Accept: application/json' \\\n--data '{\n    \"model\": \"wordart-texture\",\n    \"input\": {\n        \"image\": \n        {\n            \"image_url\": \"https://dmshared-new.oss-cn-hangzhou.aliyuncs.com/junyan.hjy/wordart/lcy/example.png\"\n        },\n        \"prompt\": \"水果，蔬菜，温暖的色彩空间\",\n        \"texture_style\": \"material\"\n    },\n    \"parameters\": \n    {\n        \"image_short_size\": 704,\n        \"n\": 2,\n        \"alpha_channel\": false\n    }\n}'"
           }
         }
       }

@@ -455,7 +455,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 支持查看模型推理日志
 
-支持查看用户与模型的历史对话内容，为提示词优化、故障排查等场景提供依据。[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry/)
+支持查看用户与模型的历史对话内容，为提示词优化、故障排查等场景提供依据。[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)
 
 **10月**
 
@@ -564,7 +564,7 @@ DPO 偏好训练通过引入负反馈，从而降低幻觉，使得模型输出�
 
 新增告警与通知
 
--   当您设定的监控指标（如调用统计或性能指标）出现异常时，系统将通知您或您的运维团队。[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry/)
+-   当您设定的监控指标（如调用统计或性能指标）出现异常时，系统将通知您或您的运维团队。[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)
     
 
 **4月**
@@ -583,7 +583,7 @@ DPO 偏好训练通过引入负反馈，从而降低幻觉，使得模型输出�
 
 新增高级监控模式
 
--   高级监控模式支持分钟级低延时数据刷新，并可记录更详细的模型调用失败信息（如4xx、5xx分别出现次数等）。使用方法请参见[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry/)。
+-   高级监控模式支持分钟级低延时数据刷新，并可记录更详细的模型调用失败信息（如4xx、5xx分别出现次数等）。使用方法请参见[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)。
     
 
 **2月**
@@ -657,7 +657,7 @@ qwen-max模型降价
 
 新增模型观测能力
 
--   模型观测可以帮助您监测模型的使用情况和性能变化，从而更有效地进行问题定位、故障排除和性能优化。使用方法请参见[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry/)。
+-   模型观测可以帮助您监测模型的使用情况和性能变化，从而更有效地进行问题定位、故障排除和性能优化。使用方法请参见[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)。
     
 
 ## 2024年
@@ -953,7 +953,7 @@ OpenAI接口兼容
 
 调用统计数据查询能力更新
 
--   子业务空间支持仅查看自身业务数据详情。[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry/)
+-   子业务空间支持仅查看自身业务数据详情。[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)
     
 
 7月19日

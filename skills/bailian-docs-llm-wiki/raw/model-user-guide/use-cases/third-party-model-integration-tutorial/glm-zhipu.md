@@ -2,15 +2,13 @@
 
 本文档介绍如何在阿里云百炼平台调用智谱直供的模型推理服务。
 
-> 阿里云百炼提供两个推理服务供应商的GLM模型服务，智谱供应商支持更长回复长度；[阿里云百炼](bailian.aliyun.com)供应商提供免费额度，且采取阶梯计费策略。
-
 **重要**
 
 本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
 
 ## **服务开通**
 
-1.  前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/all)，搜索 ZHIPU/GLM-5，找到智谱GLM系列文本模型卡片，单击立即开通；
+1.  前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/all)，搜索 ZHIPU/GLM，找到智谱GLM系列文本模型卡片，单击立即开通；
     
 2.  在弹窗内确认开通及授权。
     
@@ -19,7 +17,7 @@
 
 ## **快速开始**
 
-glm-5.1 是 GLM 系列最新模型，支持通过`enable_thinking`参数设置思考与非思考模式。运行以下代码快速调用思考模式的 glm-5.1 模型。
+glm-5.2 是 GLM 系列最新模型，支持真正可用的 1M 上下文。运行以下代码快速调用思考模式的 glm-5.2 模型。
 
 需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk#8833b9274f4v8)。
 
@@ -46,10 +44,11 @@ client = OpenAI(
 
 messages = [{"role": "user", "content": "你是谁"}]
 completion = client.chat.completions.create(
-    model="ZHIPU/GLM-5.1",
+    model="ZHIPU/GLM-5.2",
     messages=messages,
     # 通过 extra_body 设置 enable_thinking 开启思考模式
-    extra_body={"enable_thinking": True},
+    # reasoning_effort 控制思考深度，可选值：max（默认）、high、none
+    extra_body={"enable_thinking": True, "reasoning_effort": "max"},
     stream=True,
     stream_options={
         "include_usage": True
@@ -142,10 +141,12 @@ async function main() {
         const messages = [{ role: 'user', content: '你是谁' }];
         
         const stream = await openai.chat.completions.create({
-            model: 'ZHIPU/GLM-5.1',
+            model: 'ZHIPU/GLM-5.2',
             messages,
             // 注意：在 Node.js SDK，enable_thinking 这样的非标准参数作为顶层属性传递，无需放在 extra_body 中
             enable_thinking: true,
+            // reasoning_effort 控制思考深度，可选值：max（默认）、high、none
+            reasoning_effort: 'max',
             stream: true,
             stream_options: {
                 include_usage: true
@@ -226,10 +227,10 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "ZHIPU/GLM-5.1",
+    "model": "ZHIPU/GLM-5.2",
     "messages": [
         {
-            "role": "user", 
+            "role": "user",
             "content": "你是谁"
         }
     ],
@@ -237,13 +238,14 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
     "stream_options": {
         "include_usage": true
     },
-    "enable_thinking": true
+    "enable_thinking": true,
+    "reasoning_effort": "max"
 }'
 ```
 
 ## **流式工具调用**
 
-glm-5.1、glm-5支持`tool_stream`参数（boolean，默认`false`），仅在`stream`为`true`时生效。开启后，Function Calling 返回的 tool\_call 参数（arguments）会以流式增量方式逐步返回。
+glm-5.2、glm-5.1、glm-5支持`tool_stream`参数（boolean，默认`false`），仅在`stream`为`true`时生效。开启后，Function Calling 返回的 tool\_call 参数（arguments）会以流式增量方式逐步返回。
 
 `stream`与`tool_stream`的组合行为如下：
 
@@ -306,7 +308,7 @@ tools = [
 messages = [{"role": "user", "content": "北京天气怎么样"}]
 
 completion = client.chat.completions.create(
-    model="ZHIPU/GLM-5.1",
+    model="ZHIPU/GLM-5.2",
     tools=tools,
     messages=messages,
     extra_body={
@@ -363,7 +365,7 @@ const tools = [
 async function main() {
     try {
         const stream = await openai.chat.completions.create({
-            model: 'ZHIPU/GLM-5.1',
+            model: 'ZHIPU/GLM-5.2',
             messages: [{ role: 'user', content: '北京天气怎么样' }],
             tools: tools,
             tool_stream: true,
@@ -412,7 +414,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "ZHIPU/GLM-5.1",
+    "model": "ZHIPU/GLM-5.2",
     "messages": [
         {
             "role": "user",
@@ -457,6 +459,28 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 
 [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)
 
+[**思考深度控制**](https://docs.bigmodel.cn/cn/guide/start/concept-param#reasoning_effort)
+
+ZHIPU/GLM-5.2
+
+支持
+
+支持
+
+支持
+
+> 仅非思考模式
+
+不支持
+
+支持
+
+支持
+
+支持
+
+> reasoning\_effort
+
 ZHIPU/GLM-5.1
 
 支持
@@ -469,9 +493,11 @@ ZHIPU/GLM-5.1
 
 不支持
 
-不支持
+支持
 
 支持
+
+不支持
 
 ZHIPU/GLM-5
 
@@ -485,14 +511,14 @@ ZHIPU/GLM-5
 
 不支持
 
-不支持
+支持
 
 支持
 
+不支持
+
 上下文缓存类型为隐式缓存，自动开启，与阿里云百炼的[隐式缓存](https://help.aliyun.com/zh/model-studio/context-cache)服务有以下不同：
 
--   命中缓存的输入 Token 折扣为 25%（百炼为 20%）；
-    
 -   缓存最少 Token 数为 512（百炼为 256）。
     
 
@@ -509,6 +535,18 @@ ZHIPU/GLM-5
 **top\_k**
 
 **repetition\_penalty**
+
+ZHIPU/GLM-5.2
+
+true
+
+1.0
+
+0.95
+
+\-
+
+\-
 
 ZHIPU/GLM-5.1
 

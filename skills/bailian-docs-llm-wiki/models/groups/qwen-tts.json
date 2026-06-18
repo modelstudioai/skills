@@ -56,6 +56,12 @@
       "latestOnlineAt": "2025-04-20T08:27:59.000+00:00",
       "contextWindow": 8192,
       "maxInputTokens": 512,
+      "offlineInfo": {
+        "inference": {
+          "announceUrl": "https://www.aliyun.com/notice/118331",
+          "offlineTime": "2026-09-07 00:00:00"
+        }
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-TTS",
       "docUrl": "https://help.aliyun.com/document_detail/2881635.html#dc02de8e5earc",
@@ -123,6 +129,12 @@
       "latestOnlineAt": "2025-06-25T16:00:00.000+00:00",
       "contextWindow": 8192,
       "maxInputTokens": 512,
+      "offlineInfo": {
+        "inference": {
+          "announceUrl": "https://www.aliyun.com/notice/118332",
+          "offlineTime": "2026-07-06 00:00:00"
+        }
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-TTS-Latest",
       "docUrl": "https://help.aliyun.com/document_detail/2881635.html#dc02de8e5earc",

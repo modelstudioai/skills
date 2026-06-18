@@ -29,7 +29,9 @@ Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.ap-southeast-1.maas.aliyunc
 
 **重要**
 
-新加坡地域的旧版域名 `https://dashscope-intl.aliyuncs.com` 即将下线，请及时迁移到新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`。
+百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 ## **SpeechSynthesizer**
 
@@ -336,7 +338,7 @@ boolean
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
 
 `seed(int)`
 
@@ -829,7 +831,7 @@ SDK提供了语音合成的关键接口，支持以下几种调用方式：
 
 ### **非流式调用**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0514090871/CAEQURiBgIDHpsn4phkiIDQ0ZGE2OTk3NmY5NTRhNDVhZDQwNWE3ZGZiMzk4Yjk54709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8805661871/CAEQURiBgIDHpsn4phkiIDQ0ZGE2OTk3NmY5NTRhNDVhZDQwNWE3ZGZiMzk4Yjk54709861_20241015153444.149.svg)
 
 发送的文本长度不得超过20000字符。
 
@@ -904,7 +906,7 @@ public class Main {
 
 ### **单向流式调用**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0514090871/CAEQVRiBgMCfo..hrBkiIGEyMjNkZjVlMWZiYzRhZDU4ZjEyZjdjMmMzYjM1YzMz4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8805661871/CAEQVRiBgMCfo..hrBkiIGEyMjNkZjVlMWZiYzRhZDU4ZjEyZjdjMmMzYjM1YzMz4709861_20241015153444.149.svg)
 
 发送的文本长度不得超过20000字符。
 
@@ -1011,7 +1013,7 @@ public class Main {
 
 ### 双向流式调用
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0514090871/CAEQVRiBgICHxPGhrBkiIGE3ZTVmMzY0YzI3NzQxYTFiYWE2MmU2NTBhMDgzZGM14709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9805661871/CAEQVRiBgICHxPGhrBkiIGE3ZTVmMzY0YzI3NzQxYTFiYWE2MmU2NTBhMDgzZGM14709861_20241015153444.149.svg)
 
 单次发送文本长度不得超过 20000 字符，且累计发送文本总长度不得超过 20 万字符。
 

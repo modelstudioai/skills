@@ -138,7 +138,6 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
         "val_img_size": "2k",
         "generation_type": "t2i",
         "lora_rank": 32,
-        "lora_alpha": 32,
         "save_total_limit": 10
     }
 }'

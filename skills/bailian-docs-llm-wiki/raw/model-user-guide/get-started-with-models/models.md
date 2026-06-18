@@ -44,9 +44,9 @@ kimi-k2.7-code
 
 ](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/kimi-k2.7-code)[
 
-glm-5.1
+glm-5.2
 
-](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/glm-5.1)[
+](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/glm-5.2)[
 
 MiniMax-M2.7
 
