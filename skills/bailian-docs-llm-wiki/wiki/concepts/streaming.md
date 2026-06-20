@@ -1,43 +1,22 @@
 # 流式输出
 
-流式输出（Streaming）是指模型在生成过程中将结果逐步返回给客户端的技术，而非等待全部生成完毕后一次性返回。通过流式输出，开发者可以显著降低首字延迟（Time to First Token），提升用户的交互体验。
+流式输出（Streaming）是指服务端在生成结果的过程中，将内容以增量方式逐步推送给客户端，而非等待全部生成完毕后一次性返回。在大模型推理场景中，流式输出可以显著降低用户感知的首 Token 延迟，提升交互体验。
 
-## 工作原理
+## 适用场景
 
-流式输出基于 Server-Sent Events（SSE）协议实现。服务端在生成每个 Token 后立即将其推送到客户端，客户端可以实时渲染已接收的内容，而无需等待完整响应。这对于长文本生成、对话式交互等场景尤为重要。
+流式输出在百炼平台的多个场景中均可使用：
 
-## 在百炼平台中的使用场景
+- **文本生成模型调用**：通过 OpenAI 兼容 Chat Completions、Responses、Anthropic 兼容 Messages 或 DashScope 原生接口调用 Qwen 系列及第三方文本模型时，均支持流式输出。适用于聊天机器人、代码生成、文档处理等需要实时反馈的场景。
+- **应用调用**：调用智能体或工作流应用时，DashScope API 和 Responses API 均支持流式输出（Responses API 的异步模式除外）。适用于同步交互场景下需要逐步展示回答的情况。
+- **实时多模态交互**：Qwen-Omni-Realtime API 基于 WebSocket 协议天然支持流式通信，音频、文本转录、工具调用结果均以增量事件（delta）形式推送。
 
-### 文本生成模型调用
+## 开启方式
 
-百炼平台的文本生成模型（如 Qwen 系列）通过 [OpenAI 兼容接口](openai-compatible.md)或 DashScope 原生接口均支持流式输出。开发者在调用时设置 `stream=True` 即可启用。
+### HTTP 接口（Chat Completions / DashScope）
 
-### 应用调用（DashScope API）
+在请求参数中设置 `stream` 为 `true`，服务端将以 Server-Sent Events（SSE）格式逐步返回生成内容。
 
-通过 DashScope API 调用智能体或工作流应用时，流式输出通过以下参数控制：
-
-- **Python SDK**：设置 `stream=True` 和 `incremental_output=True`，其中 `incremental_output=True` 表示每次仅返回增量内容而非累积内容。
-- **Java SDK**：使用 `streamCall()` 方法替代 `call()` 方法。
-- **HTTP 调用**：在请求 Header 中添加 `X-DashScope-SSE: enable`。
-
-```python
-from dashscope import Application
-import os
-
-responses = Application.call(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    app_id='YOUR_APP_ID',
-    prompt='你的问题',
-    stream=True,
-    incremental_output=True)
-
-for response in responses:
-    print(response.output.text, end='')
-```
-
-### 应用调用（Responses API）
-
-通过 OpenAI 兼容的 Responses API 调用应用时，设置 `stream=True` 即可启用流式输出。需要注意，工作流应用需在结束节点启用流式输出开关才能生效。
+**[OpenAI 兼容接口](openai-compatible-interface.md)示例（Python）：**
 
 ```python
 from openai import OpenAI
@@ -45,47 +24,73 @@ import os
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/api/v2/apps/agent/YOUR_APP_ID/compatible-mode/v1/")
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
+)
 
-stream = client.responses.create(
-    input="你的问题",
-    stream=True)
+stream = client.chat.completions.create(
+    model="qwen-plus",
+    messages=[{"role": "user", "content": "你好"}],
+    stream=True
+)
 
-for event in stream:
-    print(event)
+for chunk in stream:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="", flush=True)
 ```
 
-### 实时多模态交互（Omni Realtime API）
+**[DashScope SDK](dashscope-sdk.md) 示例（Python）：**
 
-Qwen-Omni-Realtime API 基于 WebSocket 协议实现双向流式通信，天然支持流式输出。服务端通过以下事件增量推送生成内容：
+```python
+from dashscope import Application
 
-- `response.audio.delta`：增量音频数据
-- `response.audio_transcript.delta`：增量文本转录
-- `response.function_call_arguments.delta`：工具调用参数的增量输出
+responses = Application.call(
+    app_id="APP_ID",
+    prompt="你好",
+    stream=True
+)
 
-这种模式适用于实时语音对话、音视频交互等低延迟场景。
+for response in responses:
+    print(response.output.text, end="", flush=True)
+```
+
+### WebSocket 接口（Realtime API）
+
+Qwen-Omni-Realtime API 通过 WebSocket 事件天然实现流式交互，无需额外设置。服务端通过以下事件推送增量内容：
+
+- `response.audio.delta`：音频增量数据
+- `response.audio_transcript.delta`：音频转录文本增量
+- `response.text.delta`：文本增量
+- `response.function_call_arguments.delta`：工具调用参数增量
 
 ## 关键参数
 
-| 参数 | 适用接口 | 说明 |
-|------|---------|------|
-| `stream` | DashScope API / Responses API / [OpenAI 兼容接口](openai-compatible.md) | 设为 `True` 启用流式输出 |
-| `incremental_output` | DashScope API | 设为 `True` 时每次仅返回增量内容；设为 `False` 时返回累积内容 |
-| `X-DashScope-SSE: enable` | DashScope HTTP API | HTTP 调用时通过 Header 启用流式输出 |
+| 参数 | 接口 | 说明 |
+|------|------|------|
+| `stream` | Chat Completions / DashScope | 设为 `true` 开启流式输出 |
+| `stream_options.include_usage` | Chat Completions | 设为 `true` 时在最后一个 chunk 中返回 Token 用量统计 |
+| `incremental_output` | DashScope 原生接口 | 设为 `true` 时每次仅返回增量内容，否则返回累积内容 |
 
 ## 注意事项
 
-- **异步调用不支持流式输出**：Responses API 的异步模式（`background=True`）暂不支持流式输出，需通过轮询获取结果。
-- **工作流应用需额外配置**：通过 Responses API 调用工作流应用时，需在工作流的结束节点启用流式输出开关。
-- **增量与累积模式**：DashScope API 的 `incremental_output` 参数控制返回内容是增量还是累积。增量模式适合逐字渲染，累积模式适合需要完整上下文的场景。
-- **首字延迟优化**：流式输出的核心价值在于降低首字延迟，建议在面向用户的交互场景中默认开启。
+- 流式模式下，每个返回的 chunk 包含一个 `delta` 对象（而非完整的 `message`），客户端需自行拼接完整响应。
+- 应用调用中，Responses API 的异步模式（`background=true`）不支持流式输出，需通过轮询获取结果。
+- 使用流式输出时，错误信息也会以流式事件形式返回，客户端应做好异常处理。
+- 流式输出不影响计费方式，Token 消耗与非流式调用相同。
+
+## 来源文档
+
+- 文本生成模型API参考（qwen-api-reference）
+- 应用调用（application-call）
+- 实时多模态交互 API（omni-realtime-api）
+- 模型推理（model-inference）
+- 工具与框架兼容性（toolkits-and-[frameworks](../api/frameworks.md)）
 
 ## 关联主题页
 
+- [qwen api reference](../api/qwen-api-reference.md)
 - [application call](../api/application-call.md)
 - [omni realtime api](../api/omni-realtime-api.md)
-- [qwen api reference](../api/qwen-api-reference.md)
 - [model inference](../guides/model-inference.md)
-- [bailian application calling](../guides/bailian-application-calling.md)
+- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
 
 

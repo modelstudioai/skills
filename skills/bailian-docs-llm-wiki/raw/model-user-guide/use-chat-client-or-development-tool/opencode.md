@@ -112,6 +112,19 @@ OpenCode 是一款终端 AI 编程工具，可以通过按量计费、Coding Pla
         "deepseek-v3.2": {
           "name": "DeepSeek V3.2"
         },
+        "kimi-k2.7-code": {
+          "name": "Kimi K2.7 Code",
+          "modalities": {
+            "input": ["text", "image"],
+            "output": ["text"]
+          },
+          "options": {
+            "thinking": {
+              "type": "enabled",
+              "budgetTokens": 8192
+            }
+          }
+        },
         "kimi-k2.6": {
           "name": "Kimi K2.6",
           "modalities": {

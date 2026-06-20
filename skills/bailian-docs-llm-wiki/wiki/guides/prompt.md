@@ -1,102 +1,99 @@
 # prompt
 
-阿里云百炼平台提供了一套完整的 Prompt 管理与优化工具链，帮助开发者高效创建、管理和优化提示词。通过 Prompt 模板实现结构化复用，通过样例库引导模型输出风格，通过自动优化和反馈优化持续提升 Prompt 质量。
-
-## 核心功能
-
-百炼平台围绕 Prompt 提供四项核心能力：
-
-| 功能 | 说明 | 适用场景 |
-| --- | --- | --- |
-| Prompt 模板 | 将固定结构与动态变量分离，创建可复用模板 | 统一管理、团队协作、跨应用复用 |
-| Prompt 样例库 | 通过 Few-shot 样例引导模型输出 | 智能客服、领域问答、格式化内容生成 |
-| Prompt 自动优化 | 大模型自动重构 Prompt，提升结构和清晰度 | 快速优化手写 Prompt |
-| Prompt 反馈优化 | 基于输入输出样例的多轮自动评估优化 | 分类、提取等需精准匹配期望输出的任务 |
-
-> **注意**：Prompt 样例库功能已不再维护，推荐将样例库数据迁移到 RAG 表格库中。详见[使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)。
+阿里云百炼平台提供了一套完整的 [Prompt 工程](../concepts/prompt-engineering.md)工具链，涵盖 Prompt 模板管理、自动优化、基于样例的反馈优化以及样例库引导等功能。开发者可以通过控制台或 API 创建、管理和优化 Prompt，提升大模型应用的输出质量和一致性。
 
 ## Prompt 模板
 
-### 模板类型
+Prompt 模板将固定结构与动态变量分离，支持创建可复用的模板以统一管理和高效生成 Prompt。模板分为两类：
 
-百炼提供两类模板：
+- **预置模板**：由百炼平台提供，覆盖营销文案、摘要抽取、文案润色等通用场景，已经过优化，效果稳定，可直接调用。
+- **自定义模板**：开发者通过控制台或 API 自行创建，适用于金融风控、医疗咨询等特定业务场景，支持文本生成和图片生成两种类型。
 
-- **预置 Prompt 模板**：由阿里云百炼提供，涵盖营销文案、摘要抽取、文案润色等通用场景，效果已优化，开箱即用，不支持修改。
-- **自定义 Prompt 模板**：用户通过控制台或 API 自行创建，适用于复杂业务需求（如金融风控、医疗咨询）或对输出格式有严格要求的场景。
+模板的基本工作流程为：创建模板并获取模板 ID → 通过 API（`GetPromptTemplate`）拉取模板内容 → 将业务数据填入模板变量生成最终 Prompt → 发送给目标模型。使用 API 管理模板的核心优势在于**逻辑与内容分离**——更新 Prompt 无需修改应用代码。详见 [Prompt模板概述](../../raw/application-user-guide/prompt/prompt-template.md)。
 
-### 创建自定义模板
+### 自定义创建模板
 
-自定义模板支持**文本生成**和**图片生成**两种类型。
+创建文本生成模板时支持两种输入模式：
 
-**文本生成模板**有两种输入模式：
+1. **自定义创建**：直接输入已有 Prompt，系统提供一键优化。
+2. **基于 [Prompt 工程](../concepts/prompt-engineering.md)创建**：选择内置框架（ICIO、CRISPE、RASCEF）进行结构化设计，适合复杂任务。
 
-1. **自定义创建**：直接输入已有 Prompt，系统可自动优化。适合已有现成 Prompt 的情况。
-2. **基于 [Prompt 工程](../concepts/prompt-engineering.md)创建**：选择框架（ICIO / CRISPE / RASCEF）进行结构化设计，适合构建高质量复杂任务的 Prompt。详见[自定义Prompt模板](../../raw/application-user-guide/prompt/prompt-custom-template.md)。
+其中三种框架的适用场景：
 
-**图片生成模板**支持分别定义正向 Prompt（应包含内容）和负向 Prompt（应排除内容），精确控制生成画面。
+| 框架 | 适用场景 |
+|------|----------|
+| ICIO | 简单明确的任务执行（数据分析、内容生成、文本摘要） |
+| CRISPE | 需要 AI 扮演特定角色的交互（客服、创意写作） |
+| RASCEF | 涉及多步骤的复杂业务流程（项目规划、战略分析） |
 
-### 使用方式
+图片生成模板支持分别定义正向和负向 Prompt 来控制画面内容与风格。详见 [自定义Prompt模板](../../raw/application-user-guide/prompt/prompt-custom-template.md)。
 
-模板可通过以下方式使用：
+## Prompt 自动优化
 
-- **控制台**：单击"创建应用"，模板内容自动填充到智能体应用的提示词编辑框中。
-- **API**：通过 `GetPromptTemplate` 接口，传入 `workspaceId` 和 `promptTemplateId` 获取模板内容，再将业务数据填入模板变量生成最终 Prompt。
-- **SDK**：支持 Java、Python 等语言，可在线运行示例或下载完整工程。
+百炼提供两种 Prompt 自动优化方式，帮助开发者在不具备丰富 [Prompt 工程](../concepts/prompt-engineering.md)经验时也能获得高质量的 Prompt。
 
-使用 API 管理 Prompt 的优势在于：逻辑与内容分离（无需重部署即可更新 Prompt）、集中管理便于团队协作、跨服务版本一致性保障。详见[Prompt模板概述](../../raw/application-user-guide/prompt/prompt-template.md)。
+### 基础自动优化
 
-## Prompt 优化
+在控制台的**提示词 > 自动优化**页面提交原始 Prompt，系统通过大模型进行结构重组、角色扮演引导、指令增强和安全边界注入等策略自动重写。优化后的 Prompt 可直接复制或保存为模板。
 
-### 自动优化
+关键信息：
 
-Prompt 自动优化通过大模型对原始 Prompt 进行分析和重写，优化策略包括：
+- **免费**：Prompt 自动优化功能不计费。
+- **数据安全**：提交的数据不会被存储或用于模型训练。
+- 优化失败通常由输入过长、触发内容审核或网络问题导致。
 
-- **结构重组**：调整整体结构使其更符合逻辑
-- **角色扮演引导**：为模型设定明确的专家角色
-- **指令增强**：将模糊指令具体化、步骤化
-- **安全与边界注入**：增加输出格式、内容限制等边界条件
+详见 [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)。
 
-该功能**不计费**，且用户数据不会被存储或用于模型训练。详见[Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)。
+### 基于样例的反馈优化
 
-### 反馈优化
-
-相比自动优化仅重构 Prompt 文本，反馈优化引入了用户提供的**样例数据**和**评测数据**作为优化标准，通过多轮自动化评估、反思和优化生成更精准的 Prompt。
+当基础优化无法满足特定业务场景需求时，可使用反馈优化。该功能根据开发者提供的输入输出样例，通过多轮自动化评估、反思和优化，生成更贴合实际场景的 Prompt。
 
 操作流程：
 
 1. 选择推理模型（推荐千问-max）
 2. 输入初始 Prompt
-3. 上传样例数据（建议 5~10 条，每种场景至少 1 条）
-4. 上传评测数据（建议至少 20 条，越多效果越好）
+3. 上传样例数据（建议 5-10 条，每种场景至少 1 条）
+4. 上传评测数据（建议至少 20 条）
 5. 启动优化
 
-优化后可保存为模板或直接创建智能体应用。详见[基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)。
+优化结果包含三部分：原始 Prompt、基于样例的 few-shot 示例、以及系统总结的内容提示。优化后可保存为模板或直接创建智能体应用。详见 [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)。
 
-## [Prompt 工程](../concepts/prompt-engineering.md)框架
+## Prompt 样例库（已停止维护）
 
-百炼内置三种 [Prompt 工程](../concepts/prompt-engineering.md)框架，适用于不同复杂度的任务：
+> **注意**：Prompt 样例库功能已不再维护，推荐将样例库数据迁移到 RAG 表格库中。
 
-| 框架 | 组成要素 | 适用场景 |
-| --- | --- | --- |
-| **ICIO** | 指令 + 背景信息 + 补充数据 + 输出格式 | 简单明确的任务（数据分析、内容生成、文本摘要） |
-| **CRISPE** | 角色与能力 + 背景信息 + 任务 + 输出风格 + 输出范围 | 需要 AI 扮演特定角色的交互（客服、创意写作） |
-| **RASCEF** | 角色 + 行动 + 步骤 + 上下文 + 示例 + 格式 | 多步骤复杂业务流程（项目规划、战略分析） |
+样例库通过 Few-shot learning 思路，从预定义的高质量问答对中检索相关样例作为模型参考，引导其生成更准确、风格更一致的回复。适用于智能客服、特定领域知识问答和格式化内容生成等场景。
 
-## 使用限制
+使用方式：创建样例库 → 在智能体应用中关联样例库（最多 5 个） → 配置召回片段数（默认 5，最多 10）→ 发布应用。
 
-- Prompt 模板变量最大支持 6144 个字符
-- 样例库每库最多 300 条样例，每个应用最多关联 5 个样例库
-- 单次请求最多召回 10 个样例片段
-- 批量导入支持 20MB 以内的 Excel 文件，单次最多 100 条
-- 样例库启用会增加输入 Token 消耗（总输入 Token ≈ 用户查询 + 召回样例 + 系统指令）
-- 本文档仅适用于中国大陆版（北京地域）
+主要限制：
+
+| 限制项 | 上限 |
+|--------|------|
+| 单个样例库容量 | 300 条样例 |
+| 应用关联样例库数 | 5 个 |
+| 单次召回片段数 | 10 个 |
+| 批量导入文件大小 | 20 MB（Excel），单次 100 条 |
+
+样例库本身不收费，但召回的样例会增加输入 Token 消耗。详见 [使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)。
+
+## 选择建议
+
+| 场景 | 推荐工具 |
+|------|----------|
+| 快速优化已有 Prompt | Prompt 自动优化 |
+| 特定业务场景精准优化 | 基于样例的反馈优化 |
+| 团队共享、版本管理 Prompt | Prompt 模板（API 管理） |
+| 复杂任务结构化设计 | 自定义模板 + Prompt 工程框架 |
+
+> **注意**：自定义 Prompt 模板功能和 Prompt 样例库功能仅适用于中国大陆版（北京地域）。
 
 ## 来源文档
 
-- [Prompt模板概述](../../raw/application-user-guide/prompt/prompt-template.md)
-- [自定义Prompt模板](../../raw/application-user-guide/prompt/prompt-custom-template.md)
 - [使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)
-- [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)
+- [自定义Prompt模板](../../raw/application-user-guide/prompt/prompt-custom-template.md)
 - [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)
+- [Prompt模板概述](../../raw/application-user-guide/prompt/prompt-template.md)
+- [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)
 
 

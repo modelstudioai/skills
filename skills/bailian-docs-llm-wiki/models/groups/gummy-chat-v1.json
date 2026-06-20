@@ -11,7 +11,6 @@
           "Audio"
         ]
       },
-      "openSource": false,
       "description": "多语言语音转写及翻译的多模态大模型。本模型支持60秒以内的实时语音识别，适用于语音搜索、设备指令等场景。提供10个混合语种的高准确率识别服务，同时支持中英日韩互译，以其他6个语种翻译成中文或英文。",
       "features": [
         "model-experience"
@@ -45,7 +44,10 @@
       "latestOnlineAt": "2025-03-04T04:07:25.000+00:00",
       "offlineInfo": {
         "inference": {
-          "announceUrl": "https://www.aliyun.com/notice/118331",
+          "announceUrl": {
+            "ap_southeast_1": "https://www.alibabacloud.com/zh/notice/detail?id=1938",
+            "cn_hangzhou": "https://www.aliyun.com/notice/118331"
+          },
           "offlineTime": "2026-09-07 00:00:00"
         }
       },

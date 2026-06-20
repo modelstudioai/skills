@@ -12,7 +12,6 @@
           "Text"
         ]
       },
-      "openSource": true,
       "description": "Z-Image-Turbo是在Artificial Analysis评测中荣登文生图开源模型世界第一的高效图像生成模型,仅用60亿参数和8步推理就能生成媲美大规模商业模型的照片级真实感图像,并在中英双语文本渲染、复杂语义理解和多样化主题生成上表现卓越。",
       "features": [
         "model-experience"

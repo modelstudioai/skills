@@ -12,7 +12,6 @@
           "Audio"
         ]
       },
-      "openSource": false,
       "description": "VideoRetalk是一个人物视频生成模型，可基于人物视频和人声音频，生成人物讲话口型与输入音频相匹配的新视频。",
       "features": [],
       "provider": "qwen",

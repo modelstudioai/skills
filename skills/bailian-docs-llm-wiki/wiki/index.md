@@ -58,23 +58,22 @@
 
 ## 横切概念
 
-- [API Key 鉴权与安全](concepts/api-key.md) — 关联 6 个主题
+- [API Key 鉴权](concepts/api-key-authentication.md) — 关联 6 个主题
 - [DashScope SDK](concepts/dashscope-sdk.md) — 关联 7 个主题
-- [OpenAI 兼容接口](concepts/openai-compatible.md) — 关联 6 个主题
+- [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 7 个主题
 - [Prompt 工程](concepts/prompt-engineering.md) — 关联 5 个主题
-- [Token（令牌）](concepts/token.md) — 关联 6 个主题
-- [业务空间](concepts/workspace.md) — 关联 5 个主题
-- [函数调用（Function Calling）](concepts/function-calling.md) — 关联 5 个主题
-- [异步任务调用](concepts/async-task.md) — 关联 5 个主题
-- [检索增强生成（RAG）](concepts/rag.md) — 关联 6 个主题
+- [Token 计量与计费](concepts/token-billing.md) — 关联 6 个主题
+- [函数调用](concepts/function-calling.md) — 关联 6 个主题
+- [异步任务模式](concepts/async-task-pattern.md) — 关联 5 个主题
+- [检索增强生成](concepts/rag.md) — 关联 6 个主题
+- [模型微调](concepts/fine-tuning.md) — 关联 6 个主题
 - [流式输出](concepts/streaming.md) — 关联 5 个主题
 
 ## 对比分析
 
-- [图像生成 vs 视频生成 vs 3D 生成](comparisons/image-video-3d-generation.md) — 对比 3 个主题
-- [标准推理 vs 高速推理](comparisons/model-inference-vs-high-speed.md) — 对比 2 个主题
-- [模型压缩 vs 微调 vs 部署](comparisons/compression-vs-finetuning-vs-deployment.md) — 对比 3 个主题
-- [模型监控 vs 应用监控](comparisons/model-monitor-vs-app-monitor.md) — 对比 2 个主题
-- [模型评测 vs 应用评测](comparisons/model-eval-vs-app-eval.md) — 对比 2 个主题
-- [知识库 vs 记忆库 vs 数据连接](comparisons/knowledge-vs-memory-vs-data.md) — 对比 3 个主题
+- [图像生成 vs 视频生成 vs 3D生成 API 对比](comparisons/content-generation-comparison.md) — 对比 3 个主题
+- [应用评测 vs 应用监控对比](comparisons/app-quality-comparison.md) — 对比 2 个主题
+- [模型微调 vs 模型压缩 vs 模型部署对比](comparisons/model-optimization-comparison.md) — 对比 3 个主题
+- [模型评测 vs 模型监控对比](comparisons/model-quality-comparison.md) — 对比 2 个主题
+- [知识库 vs 记忆库 vs 数据接入对比](comparisons/knowledge-data-management-comparison.md) — 对比 3 个主题
 

@@ -13,11 +13,7 @@
           "Video"
         ]
       },
-      "openSource": false,
       "description": "千问VL-Max（qwen-vl-max），即千问超大规模视觉语言模型。相比增强版，再次提升视觉推理能力和指令遵循能力，提供更高的视觉感知和认知水平。在更多复杂任务上提供最佳的性能。",
-      "offlineExtendInfo": {
-        "announceUrl": "https://www.aliyun.com/notice/118177"
-      },
       "offlineAt": "2026-07-13T15:59:59.000+00:00",
       "features": [
         "model-experience",
@@ -94,7 +90,10 @@
       "maxInputTokens": 129024,
       "offlineInfo": {
         "inference": {
-          "announceUrl": "https://www.aliyun.com/notice/118177",
+          "announceUrl": {
+            "ap_southeast_1": "https://www.alibabacloud.com/notice/detail?id=1841",
+            "cn_hangzhou": "https://www.aliyun.com/notice/118177"
+          },
           "offlineTime": "2026-07-13 23:59:59"
         }
       },

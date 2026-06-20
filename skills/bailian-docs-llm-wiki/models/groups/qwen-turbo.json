@@ -11,11 +11,7 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "Qwen3系列Turbo模型，实现思考模式和非思考模式的有效融合，可在对话中切换模式。推理能力以更小参数规模比肩QwQ-32B、通用能力显著超过Qwen2.5-Turbo，达到同规模业界SOTA水平。",
-      "offlineExtendInfo": {
-        "announceUrl": "https://www.aliyun.com/notice/118177"
-      },
       "offlineAt": "2026-07-13T15:59:59.000+00:00",
       "collectionTag": "qwen3",
       "features": [
@@ -122,7 +118,10 @@
       "maxInputTokens": 98304,
       "offlineInfo": {
         "inference": {
-          "announceUrl": "https://www.aliyun.com/notice/118177",
+          "announceUrl": {
+            "ap_southeast_1": "https://www.alibabacloud.com/notice/detail?id=1841",
+            "cn_hangzhou": "https://www.aliyun.com/notice/118177"
+          },
           "offlineTime": "2026-07-13 23:59:59"
         }
       },

@@ -1,33 +1,33 @@
 # bailian [application call](../api/application-call.md)ing
 
-百炼平台支持通过 [DashScope SDK](../concepts/dashscope-sdk.md) 或 HTTP API 将智能体应用和工作流应用集成到业务系统中。本页汇总了两类应用的调用方式、多轮对话管理以及自定义插件参数传递的核心要点。
+阿里云百炼平台支持通过 [DashScope SDK](../concepts/dashscope-sdk.md) 或 HTTP API 将已创建的应用集成到业务系统中。本页汇总了工作流应用和智能体应用的调用方式，以及自定义参数传递的用法，帮助开发者快速完成应用集成。
 
 ## 前提条件
 
-调用百炼应用前需完成以下准备：
+无论调用哪种类型的应用，都需要先完成以下准备工作：
 
-1. **获取 API Key** 并配置到环境变量 `DASHSCOPE_API_KEY`（推荐，避免硬编码）。
-2. **创建应用** 并获取 `APP_ID`——在百炼控制台的应用管理页面，应用卡片上可复制。
-3. **安装 SDK**（若使用 SDK 调用）：Python 需 `dashscope` 包，Java 需 Maven/Gradle 引入 `dashscope-sdk-java`。HTTP 调用无需安装。
+1. **获取 API Key** — 在百炼控制台的密钥管理页面创建并获取 `DASHSCOPE_API_KEY`，建议配置到环境变量中，避免硬编码。
+2. **创建应用并获取 APP_ID** — 在应用管理页面创建工作流应用或智能体应用，复制应用卡片上的 APP_ID。
+3. **安装 SDK（可选）** — 若使用 [DashScope SDK](../concepts/dashscope-sdk.md) 调用，需安装对应语言的 SDK；若使用 HTTP 接口则可跳过。
 
-> **注意**：工作流应用调用目前仅适用于中国大陆版（北京地域），详见[调用工作流应用](../../raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md)。
+> **注意**：当前应用调用接口仅适用于中国大陆版（北京地域）。详见 [调用工作流应用](../../raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md) 的前提条件说明。
 
 ## 支持的应用类型
 
-| 应用类型 | 说明 | 详细文档 |
-|---------|------|---------|
-| 智能体应用 | 单 Agent 应用，支持插件挂载与自定义参数传递 | [调用智能体应用](../../raw/application-user-guide/bailian-application-calling/call-single-agent-application.md) |
-| 工作流应用 | 基于工作流编排的应用（已替代原智能体编排应用） | [调用工作流应用](../../raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md) |
+百炼平台当前支持两种应用的 API 调用：
 
-两类应用的调用端点相同：
+- **工作流应用** — 通过可视化编排节点构建的应用，适合复杂业务流程。详细调用方式参见 [调用工作流应用](../../raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md)。
+- **智能体应用** — 基于大模型的单智能体应用，可关联插件和知识库。详细调用方式参见 [调用智能体应用](../../raw/application-user-guide/bailian-application-calling/call-single-agent-application.md)。
 
-```
-POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion
-```
+两种应用的调用接口基本一致，均使用 `Application.call()` 方法（SDK）或 `POST /api/v1/apps/{APP_ID}/completion` 端点（HTTP），核心区别在于创建应用的方式和可选参数不同。
 
-## 基础调用方式
+## 调用方式
 
-支持多种语言：Python、Java、curl、PHP、Node.js、C#、Go。以 Python 为例：
+### [DashScope SDK](../concepts/dashscope-sdk.md)
+
+支持 Python 和 Java 两种语言：
+
+**Python 示例：**
 
 ```python
 import os
@@ -45,48 +45,70 @@ else:
     print(response.output.text)
 ```
 
-Java SDK 建议使用 `dashscope-sdk-java` 2.12.0 及以上版本。HTTP 调用需在 Header 中传入 `Authorization: Bearer $DASHSCOPE_API_KEY`。
+**Java 示例：**
+
+```java
+// 建议 dashscope SDK >= 2.12.0
+ApplicationParam param = ApplicationParam.builder()
+    .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+    .appId("YOUR_APP_ID")
+    .prompt("你的问题")
+    .build();
+
+Application application = new Application();
+ApplicationResult result = application.call(param);
+System.out.println(result.getOutput().getText());
+```
+
+### HTTP API
+
+使用 `POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion`，请求体结构如下：
+
+```json
+{
+    "input": {
+        "prompt": "你的问题"
+    },
+    "parameters": {},
+    "debug": {}
+}
+```
+
+需要在请求头中设置 `Authorization: Bearer $DASHSCOPE_API_KEY`。支持 curl、PHP、Node.js、C#、Go 等多种语言，具体示例请参考 [调用工作流应用](../../raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md) 和 [调用智能体应用](../../raw/application-user-guide/bailian-application-calling/call-single-agent-application.md)。
 
 ## 多轮对话
 
-两种方式管理对话上下文：
+应用调用支持两种多轮对话方式：
 
-### 方式一：`session_id`（云端存储）
+| 方式 | 说明 | 适用场景 |
+|------|------|----------|
+| `session_id` | 系统自动从云端加载对话历史，无需开发者维护 | 简单场景，快速接入 |
+| `messages` 数组 | 开发者自行维护对话历史并逐轮传递 | 需要精细控制上下文 |
 
-首次调用返回的 `session_id` 传入后续请求，系统自动加载历史对话。
+> **注意**：`session_id` 有效期为 1 小时，最多支持 50 轮对话。若请求中同时包含 `session_id` 和 `messages`，系统将优先使用 `messages`。
 
-- 有效期：1 小时
-- 最多支持：50 轮对话
-- 优点：实现简单，无需本地维护历史
+使用 `messages` 方式时，工作流应用需要在大模型节点中配置提示词变量 `historyList` 并重新发布应用。
 
-### 方式二：`messages` 数组（推荐）
+## 自定义参数传递
 
-自行维护 `messages` 数组，手动记录并传递每轮对话历史。无需传递 `prompt`。
+通过 `biz_params` 字段可以向应用中的自定义插件或自定义节点传递业务参数，详见 [应用的自定义参数传递](../../raw/application-user-guide/bailian-application-calling/pass-through-of-application-parameters.md)。
 
-- 优点：完全控制上下文，更灵活
-- 适合需要精细管理对话历史的场景
+### 自定义插件参数
 
-> **注意**：若请求中同时包含 `session_id` 和 `messages`，系统将优先使用 `messages`。工作流应用使用 `messages` 前，需在大模型节点配置提示词变量 `historyList` 并重新发布应用。
+自定义插件的参数通过 `biz_params.user_defined_params` 传递，适用于智能体应用关联的自定义插件或工作流应用中的插件节点。关键步骤：
 
-## 自定义插件参数传递
-
-智能体应用可关联自定义插件，通过 API 调用时使用 `biz_params` 字段传递插件参数。详细流程参见[应用的自定义参数传递](../../raw/application-user-guide/bailian-application-calling/pass-through-of-application-parameters.md)。
-
-### 关键步骤
-
-1. **创建自定义插件**：在百炼控制台创建插件，配置输入参数时将传参方式设为"业务透传"。
-2. **关联智能体应用**：插件与同一[业务空间](../concepts/workspace.md)内的智能体应用关联后发布。
-3. **API 调用时传参**：通过 `biz_params.user_defined_params` 传递插件 ID 和参数。
+1. **创建自定义插件** — 在百炼控制台的插件管理页面创建插件，配置输入参数时将传参方式设为「业务透传」。
+2. **关联应用** — 将插件关联到智能体应用或工作流应用，然后发布。
+3. **API 调用时传参** — 在 `biz_params` 中指定插件 ID 和参数键值对。
 
 ```python
 biz_params = {
     "user_defined_params": {
         "your_plugin_code": {   # 替换为实际的插件 ID
-            "article_index": 2  # 替换为实际的插件参数
+            "article_index": 2  # 插件的输入参数
         }
     }
 }
-
 response = Application.call(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
     app_id='YOUR_APP_ID',
@@ -96,24 +118,45 @@ response = Application.call(
 
 ### 插件鉴权
 
-创建插件时可开启鉴权，支持用户级鉴权，位置可选 Header，类型支持 basic 等。
+当自定义插件启用了用户级鉴权（如 Basic Auth）时，需要在调用时通过 `biz_params.user_defined_tokens` 传入用户的鉴权凭证：
 
-### 注意事项
+```python
+biz_params = {
+    "user_defined_params": {
+        "your_plugin_code": {"article_index": 2}
+    },
+    "user_defined_tokens": {
+        "your_plugin_code": {
+            "user_token": "实际的用户凭证"
+        }
+    }
+}
+```
 
-- 插件描述和工具描述应使用自然语言，帮助大模型判断何时调用插件。
-- 参数名称应具有语义，参数描述要简练准确。
-- 输入参数的传参方式务必选择"业务透传"。
-- 插件 ID 可在控制台插件卡片上获取。
-- 自定义插件参数也可通过工作流应用中的插件节点传递。
+### 工作流自定义节点参数
 
-## 错误处理
+工作流应用中的自定义节点参数也通过 `biz_params` 传递，使用 `customStartNode` 指定起始节点的输入变量：
 
-调用失败时，响应中包含 `status_code` 和 `message` 字段。建议参考 [错误码文档](https://help.aliyun.com/zh/model-studio/developer-reference/error-code) 排查问题。
+```python
+biz_params = {
+    "customStartNode": {
+        "variable_name": "variable_value"
+    }
+}
+```
+
+## 关键注意事项
+
+- API Key 应通过环境变量传递，不要硬编码到代码中。
+- `APP_ID` 需替换为实际创建的应用 ID，可在应用管理页面的应用卡片上获取。
+- Python SDK 建议版本 >= 1.14.0（使用 `biz_params` 时），Java SDK 建议版本 >= 2.12.0。
+- 插件 ID 可在百炼控制台的插件卡片上获取。
+- 插件参数描述要清晰准确，有助于大模型正确理解和调用插件。
 
 ## 来源文档
 
-- [应用的自定义参数传递](../../raw/application-user-guide/bailian-application-calling/pass-through-of-application-parameters.md)
 - [调用工作流应用](../../raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md)
 - [调用智能体应用](../../raw/application-user-guide/bailian-application-calling/call-single-agent-application.md)
+- [应用的自定义参数传递](../../raw/application-user-guide/bailian-application-calling/pass-through-of-application-parameters.md)
 
 

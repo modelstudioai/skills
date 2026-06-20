@@ -11,7 +11,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "千问系列首个语音合成模型，支持中文、英文、中英混合输入。自适应根据输入文本调整输出语气，音色真实自然，支持流式输出。",
       "features": [],
       "provider": "qwen",
@@ -58,7 +57,10 @@
       "maxInputTokens": 512,
       "offlineInfo": {
         "inference": {
-          "announceUrl": "https://www.aliyun.com/notice/118331",
+          "announceUrl": {
+            "ap_southeast_1": "https://www.alibabacloud.com/zh/notice/detail?id=1938",
+            "cn_hangzhou": "https://www.aliyun.com/notice/118331"
+          },
           "offlineTime": "2026-09-07 00:00:00"
         }
       },
@@ -84,7 +86,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "模型是动态更新版本，等同于最新版本快照模型，模型更新时不会提前通知。",
       "features": [],
       "provider": "qwen",
@@ -131,7 +132,10 @@
       "maxInputTokens": 512,
       "offlineInfo": {
         "inference": {
-          "announceUrl": "https://www.aliyun.com/notice/118332",
+          "announceUrl": {
+            "ap_southeast_1": "https://www.alibabacloud.com/zh/notice/detail?id=1934",
+            "cn_hangzhou": "https://www.aliyun.com/notice/118332"
+          },
           "offlineTime": "2026-07-06 00:00:00"
         }
       },

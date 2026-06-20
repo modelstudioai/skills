@@ -11,7 +11,6 @@
           "Image"
         ]
       },
-      "openSource": false,
       "description": "图片精修是对AI试衣生成的效果图进行二次生成，输出还原度更高的精修试衣效果图。",
       "features": [],
       "provider": "qwen",

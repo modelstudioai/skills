@@ -97,13 +97,9 @@ description: >-
 | `TTS` | 语音合成 |
 | `ASR` | 语音识别 |
 | `Realtime-ASR` | 实时语音识别 |
-| `Realtime-Text-to-Speech` | 实时语音合成 |
 | `Realtime-Audio-Translate` | 实时音频翻译 |
 | `Realtime-Omni` | 实时全模态 |
 | `Multimodal-Omni` | 全模态 |
-| `ME` | 多模态嵌入 |
-| `TR` | 翻译 |
-| `3D-generation` | 3D 生成 |
 
 一个模型常常带多个 capability，`index.md` 中按 `capabilities[0]`（主能力）归类，
 查找时按中文标签即可定位章节。
@@ -147,22 +143,21 @@ description: >-
 | **按家族筛选**：按 primaryCapability / providers / itemCount / maxContextWindow 找家族 | `models/families.jsonl`（一行一家族，含 items[] 摘要） |
 | 模型家族总览 / 按能力分桶浏览         | `models/index.md`                                        |
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
-| Token（令牌） | `wiki/concepts/token.md` |
-| 检索增强生成（RAG） | `wiki/concepts/rag.md` |
-| 函数调用（Function Calling） | `wiki/concepts/function-calling.md` |
+| 函数调用 | `wiki/concepts/function-calling.md` |
+| 检索增强生成 | `wiki/concepts/rag.md` |
+| Token 计量与计费 | `wiki/concepts/token-billing.md` |
 | 流式输出 | `wiki/concepts/streaming.md` |
-| API Key 鉴权与安全 | `wiki/concepts/api-key.md` |
-| 异步任务调用 | `wiki/concepts/async-task.md` |
-| OpenAI 兼容接口 | `wiki/concepts/openai-compatible.md` |
-| 业务空间 | `wiki/concepts/workspace.md` |
+| OpenAI 兼容接口 | `wiki/concepts/openai-compatible-interface.md` |
+| API Key 鉴权 | `wiki/concepts/api-key-authentication.md` |
+| 异步任务模式 | `wiki/concepts/async-task-pattern.md` |
 | DashScope SDK | `wiki/concepts/dashscope-sdk.md` |
+| 模型微调 | `wiki/concepts/fine-tuning.md` |
 | Prompt 工程 | `wiki/concepts/prompt-engineering.md` |
-| 图像生成 vs 视频生成 vs 3D 生成 | `wiki/comparisons/image-video-3d-generation.md` |
-| 标准推理 vs 高速推理 | `wiki/comparisons/model-inference-vs-high-speed.md` |
-| 模型评测 vs 应用评测 | `wiki/comparisons/model-eval-vs-app-eval.md` |
-| 模型监控 vs 应用监控 | `wiki/comparisons/model-monitor-vs-app-monitor.md` |
-| 知识库 vs 记忆库 vs 数据连接 | `wiki/comparisons/knowledge-vs-memory-vs-data.md` |
-| 模型压缩 vs 微调 vs 部署 | `wiki/comparisons/compression-vs-finetuning-vs-deployment.md` |
+| 图像生成 vs 视频生成 vs 3D生成 API 对比 | `wiki/comparisons/content-generation-comparison.md` |
+| 模型微调 vs 模型压缩 vs 模型部署对比 | `wiki/comparisons/model-optimization-comparison.md` |
+| 知识库 vs 记忆库 vs 数据接入对比 | `wiki/comparisons/knowledge-data-management-comparison.md` |
+| 应用评测 vs 应用监控对比 | `wiki/comparisons/app-quality-comparison.md` |
+| 模型评测 vs 模型监控对比 | `wiki/comparisons/model-quality-comparison.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 
