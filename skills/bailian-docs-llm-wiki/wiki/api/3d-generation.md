@@ -100,3 +100,4 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id} \
 - [Tripo-3D模型生成](../../raw/model-api-reference/3d-generation/tripo-3d-generation-api-reference.md)
 
 
+

@@ -203,12 +203,22 @@ Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/to
                 "compat": { "thinkingFormat": "openai" }
               },
               {
+                "id": "kimi-k2.7-code",
+                "name": "kimi-k2.7-code",
+                "reasoning": false,
+                "input": ["text", "image"],
+                "contextWindow": 262144,
+                "maxTokens": 32768,
+                "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+                "compat": { "thinkingFormat": "openai" }
+              },
+              {
                 "id": "kimi-k2.6",
                 "name": "kimi-k2.6",
                 "reasoning": false,
                 "input": ["text", "image"],
                 "contextWindow": 262144,
-                "maxTokens": 32768,
+                "maxTokens": 16384,
                 "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
                 "compat": { "thinkingFormat": "openai" }
               },
@@ -278,6 +288,7 @@ Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/to
             "bailian-token-plan/deepseek-v4-pro": {},
             "bailian-token-plan/deepseek-v4-flash": {},
             "bailian-token-plan/deepseek-v3.2": {},
+            "bailian-token-plan/kimi-k2.7-code": {},
             "bailian-token-plan/kimi-k2.6": {},
             "bailian-token-plan/kimi-k2.5": {},
             "bailian-token-plan/glm-5.2": {},
@@ -412,12 +423,22 @@ Web UI 方式仅在 OpenClaw **≤ 2026.3.28** 可用，更高版本请使用方
                 "compat": { "thinkingFormat": "openai" }
               },
               {
+                "id": "kimi-k2.7-code",
+                "name": "kimi-k2.7-code",
+                "reasoning": false,
+                "input": ["text", "image"],
+                "contextWindow": 262144,
+                "maxTokens": 32768,
+                "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+                "compat": { "thinkingFormat": "openai" }
+              },
+              {
                 "id": "kimi-k2.6",
                 "name": "kimi-k2.6",
                 "reasoning": false,
                 "input": ["text", "image"],
                 "contextWindow": 262144,
-                "maxTokens": 32768,
+                "maxTokens": 16384,
                 "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
                 "compat": { "thinkingFormat": "openai" }
               },
@@ -487,6 +508,7 @@ Web UI 方式仅在 OpenClaw **≤ 2026.3.28** 可用，更高版本请使用方
             "bailian-token-plan/deepseek-v4-pro": {},
             "bailian-token-plan/deepseek-v4-flash": {},
             "bailian-token-plan/deepseek-v3.2": {},
+            "bailian-token-plan/kimi-k2.7-code": {},
             "bailian-token-plan/kimi-k2.6": {},
             "bailian-token-plan/kimi-k2.5": {},
             "bailian-token-plan/glm-5.2": {},

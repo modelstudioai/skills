@@ -8,9 +8,13 @@
         
     -   新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1，调用时请将{WorkspaceId}替换为真实的业务空间ID
         
+    -   日本（东京）：https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1，调用时请将{WorkspaceId}替换为真实的业务空间ID
+        
     -   美国（弗吉尼亚）：https://dashscope-us.aliyuncs.com/compatible-mode/v1
         
     -   新加坡：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1，调用时请将{WorkspaceId}替换为真实的业务空间ID
+        
+    -   日本（东京）：https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1，调用时请将{WorkspaceId}替换为真实的业务空间ID
         
 -   api\_key：替换为[阿里云百炼API Key](https://help.aliyun.com/zh/model-studio/get-api-key)
     
@@ -294,6 +298,7 @@ if __name__ == "__main__":
 ```
 北京：POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
 新加坡：POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
+日本（东京）：POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 弗吉尼亚：POST https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions
 ```
 

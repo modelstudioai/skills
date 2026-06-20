@@ -147,22 +147,22 @@ description: >-
 | **按家族筛选**：按 primaryCapability / providers / itemCount / maxContextWindow 找家族 | `models/families.jsonl`（一行一家族，含 items[] 摘要） |
 | 模型家族总览 / 按能力分桶浏览         | `models/index.md`                                        |
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
-| Token（令牌） | `wiki/concepts/token.md` |
-| 检索增强生成（RAG） | `wiki/concepts/rag.md` |
-| 函数调用（Function Calling） | `wiki/concepts/function-calling.md` |
-| 流式输出 | `wiki/concepts/streaming.md` |
-| API Key 鉴权与安全 | `wiki/concepts/api-key.md` |
-| 异步任务调用 | `wiki/concepts/async-task.md` |
 | OpenAI 兼容接口 | `wiki/concepts/openai-compatible.md` |
+| Token 计量与计费 | `wiki/concepts/token.md` |
+| RAG 检索增强生成 | `wiki/concepts/rag.md` |
+| 流式输出 | `wiki/concepts/streaming.md` |
 | 业务空间 | `wiki/concepts/workspace.md` |
+| 函数调用 | `wiki/concepts/function-calling.md` |
 | DashScope SDK | `wiki/concepts/dashscope-sdk.md` |
+| 异步任务模式 | `wiki/concepts/async-task-pattern.md` |
 | Prompt 工程 | `wiki/concepts/prompt-engineering.md` |
-| 图像生成 vs 视频生成 vs 3D 生成 | `wiki/comparisons/image-video-3d-generation.md` |
-| 标准推理 vs 高速推理 | `wiki/comparisons/model-inference-vs-high-speed.md` |
-| 模型评测 vs 应用评测 | `wiki/comparisons/model-eval-vs-app-eval.md` |
-| 模型监控 vs 应用监控 | `wiki/comparisons/model-monitor-vs-app-monitor.md` |
-| 知识库 vs 记忆库 vs 数据连接 | `wiki/comparisons/knowledge-vs-memory-vs-data.md` |
-| 模型压缩 vs 微调 vs 部署 | `wiki/comparisons/compression-vs-finetuning-vs-deployment.md` |
+| API Key 管理与安全 | `wiki/concepts/api-key-management.md` |
+| 图像生成、视频生成与 3D 生成对比 | `wiki/comparisons/media-generation-comparison.md` |
+| 模型微调、压缩与部署对比 | `wiki/comparisons/model-customization-comparison.md` |
+| 应用评测与模型评测对比 | `wiki/comparisons/evaluation-comparison.md` |
+| 应用监控与模型监控对比 | `wiki/comparisons/monitoring-comparison.md` |
+| 知识库与长期记忆对比 | `wiki/comparisons/knowledge-vs-memory.md` |
+| 标准推理与高速推理对比 | `wiki/comparisons/inference-speed-comparison.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 

@@ -1,114 +1,91 @@
 # DashScope SDK
 
-DashScope SDK 是阿里云百炼平台的官方开发工具包，提供对百炼模型服务的原生接入能力。开发者可通过 DashScope SDK 调用文本生成、图像生成、视频生成、向量化、应用集成等全系列 API，是除 [OpenAI 兼容接口](openai-compatible.md)外的另一种主要接入方式。
+DashScope SDK 是阿里云百炼平台的官方原生 SDK，提供 Python 和 Java 两种语言版本，用于调用百炼平台上的大模型和智能体应用。相比 [OpenAI 兼容接口](openai-compatible.md)，DashScope SDK 提供最完整的平台功能集和参数支持。
 
-## 支持的语言与安装
+## 安装方式
 
-DashScope SDK 目前支持 Python 和 Java 两种语言：
-
-| 语言 | 安装方式 | 环境要求 |
+| 语言 | 安装命令 | 最低要求 |
 |------|---------|---------|
 | Python | `pip install -U dashscope` | Python >= 3.8 |
-| Java | Maven/Gradle 添加 `com.alibaba:dashscope-sdk-java` | Java 8+ |
+| Java | Maven/Gradle 添加 `com.alibaba:dashscope-sdk-java` | — |
 
-> 如果项目更倾向于使用 OpenAI 生态工具链，百炼也提供 [OpenAI 兼容接口](openai-compatible.md)，可通过 `openai` 官方 SDK（Python/Node.js/Java/Go）接入，两种方式功能上大部分等价。
+安装完成后，需将 API Key 配置到环境变量 `DASHSCOPE_API_KEY`，避免在代码中硬编码。
 
-## 鉴权与环境配置
+## 鉴权配置
 
-DashScope SDK 通过 API Key 进行鉴权。推荐将 API Key 配置到环境变量 `DASHSCOPE_API_KEY`，避免硬编码泄漏风险：
+DashScope SDK 默认从环境变量 `DASHSCOPE_API_KEY` 读取密钥，也支持在调用时通过 `api_key` 参数显式传入。API Key 在百炼控制台的 API Key 管理页面创建，其权限由归属的[业务空间](workspace.md)决定：
 
-```bash
-# Linux / macOS（永久生效）
-echo 'export DASHSCOPE_API_KEY="YOUR_KEY"' >> ~/.zshrc
-source ~/.zshrc
+- 默认[业务空间](workspace.md)的 API Key 可调用所有标准模型
+- 子[业务空间](workspace.md)的 API Key 仅可调用已授权的模型
 
-# Windows CMD（永久生效）
-setx DASHSCOPE_API_KEY "YOUR_KEY"
-```
+## 主要使用场景
 
-SDK 会自动读取该环境变量，也可在调用时通过 `api_key` 参数显式传入。
+### 模型调用
 
-## 典型使用场景
-
-### 应用调用
-
-通过 `dashscope.Application.call()` 调用百炼平台上的智能体应用和工作流应用：
-
-```python
-from dashscope import Application
-
-response = Application.call(
-    app_id='YOUR_APP_ID',
-    prompt='你的问题')
-print(response.output.text)
-```
-
-支持通过 `session_id` 实现多轮对话（云端存储，有效期 1 小时，最多 50 轮），也可通过 `messages` 数组自行管理对话历史。
-
-### 文本生成
-
-通过 `dashscope.Generation.call()` 调用文本生成模型（如通义千问、通义法睿等）：
+DashScope SDK 支持调用百炼平台上的各类模型，包括通义千问系列和专用模型。以 Python 为例，通过 `Generation.call` 接口完成文本生成：
 
 ```python
 from dashscope import Generation
 
 response = Generation.call(
-    model='qwen3.7-plus',
-    messages=[{'role': 'user', 'content': '你好'}])
+    model="qwen-plus",
+    prompt="你的问题"
+)
 ```
 
-### 向量化
+部分模型仅支持 DashScope SDK 调用，不支持 [OpenAI 兼容接口](openai-compatible.md)，例如：
 
-通过 DashScope 原生接口调用文本向量模型（text-embedding-v1 至 v4）和多模态向量模型，将文本、图像、视频转换为数值向量，用于语义搜索、RAG、聚类等场景。
+- **通义法睿**（`farui-plus`）：法律行业专用模型，通过 `Generation.call` 调用
+- **Qwen-Deep-Research**：深度研究模型，当前仅支持 Python DashScope SDK 和 curl
+- **调优后的模型**：经过微调并部署的模型仅支持 DashScope 方式调用
 
-### 图像与视频生成
+### 应用调用
 
-图像生成和视频生成 API 均采用异步调用模式。SDK 封装了"创建任务 + 轮询结果"的流程，请求时需设置异步标志。支持万相、千问图像、Z-Image、HappyHorse 等多个模型系列。
+通过 `Application.call` 接口调用百炼平台上的智能体应用和工作流应用：
 
-### 深度研究
+```python
+from dashscope import Application
 
-`qwen-deep-research` 模型目前仅支持通过 DashScope Python SDK 和 curl 调用（暂不支持 Java SDK 和 [OpenAI 兼容接口](openai-compatible.md)），采用两阶段交互流程：先反问确认研究方向，再深入搜索生成报告。
+response = Application.call(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    app_id="YOUR_APP_ID",
+    prompt="你的问题"
+)
+```
 
-## DashScope SDK 与 OpenAI 兼容接口的选择
+支持通过 `session_id` 或 `messages` 数组管理多轮对话上下文，也支持通过 `biz_params` 传递自定义插件参数。
+
+### [流式输出](streaming.md)
+
+DashScope SDK 支持[流式输出](streaming.md)（streaming），适用于需要实时展示生成内容的场景。在调用时启用流式模式即可逐步接收模型输出。
+
+## 与 [OpenAI 兼容接口](openai-compatible.md)的对比
 
 | 维度 | DashScope SDK | OpenAI 兼容接口 |
 |------|--------------|----------------|
-| 语言支持 | Python、Java | Python、Node.js、Java、Go |
-| 功能覆盖 | 全部百炼能力（含应用调用、部分专用模型） | 大部分模型推理能力 |
-| 生态兼容 | 百炼原生 | 可复用 OpenAI 生态工具和代码 |
-| 推荐场景 | 需要调用百炼应用、使用百炼专有功能 | 已有 OpenAI 代码需迁移、多语言统一接入 |
+| 功能覆盖 | 最完整，支持全部平台能力 | 覆盖主流功能，部分高级参数不支持 |
+| 迁移成本 | 需学习 DashScope API | 可复用 OpenAI SDK 代码 |
+| 语言支持 | Python、Java | Python、Node.js、Java、Go 等 |
+| 适用场景 | 需要完整功能集和最大灵活性 | 从 OpenAI 生态迁移 |
 
-部分模型（如 `qwen-deep-research`）仅支持 DashScope SDK，而结构化输出等新特性在 OpenAI 兼容接口上支持更好，实际选择时应结合具体模型和功能需求。
+## 多地域支持
 
-## 关键配置参数
+DashScope SDK 支持多地域部署，不同地域使用不同的 Base URL：
 
-| 参数 | 说明 |
+| 地域 | 说明 |
 |------|------|
-| `api_key` | API Key，优先从环境变量 `DASHSCOPE_API_KEY` 读取 |
-| `model` | 模型名称，如 `qwen3.7-plus`、`farui-plus`、`text-embedding-v4` 等 |
-| `base_url` | 服务端点，不同地域使用不同 URL（北京、新加坡、美国弗吉尼亚等） |
-| `X-DashScope-Async: enable` | 异步任务标志（图像/视频生成必须设置） |
+| 华北2（北京） | 默认地域，功能最全 |
+| 新加坡 | Base URL 需包含 WorkspaceId |
+| 美国（弗吉尼亚） | 独立的 API Key 体系 |
 
-## 地域与端点
-
-| 地域 | Base URL |
-|------|----------|
-| 华北2（北京） | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
-| 新加坡 | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1` |
-| 美国（弗吉尼亚） | `https://dashscope-us.aliyuncs.com/compatible-mode/v1` |
-| 德国（法兰克福） | `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1` |
-| 日本（东京） | `https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1` |
-
-新加坡、日本、德国地域的 URL 中需将 `{WorkspaceId}` 替换为实际的[业务空间](workspace.md) ID。
+> **注意**：新加坡地域使用子业务空间调用时，`base_url` 需包含 `{WorkspaceId}` 前缀。部分模型（如 Qwen-Deep-Research）仅支持华北2（北京）地域。
 
 ## 关联主题页
 
-- [preparations](../api/preparations.md)
-- [bailian application calling](../guides/bailian-application-calling.md)
 - [more models](../api/more-models.md)
-- [vector and sort](../api/vector-and-sort.md)
-- [model inference](../guides/model-inference.md)
-- [image generation](../api/image-generation.md)
-- [video generation api](../api/video-generation-api.md)
+- [bailian application calling](../guides/bailian-application-calling.md)
+- [qwen api reference](../api/qwen-api-reference.md)
+- [more about models](../api/more-about-models.md)
+- [preparations](../api/preparations.md)
 
 

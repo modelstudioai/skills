@@ -60,7 +60,7 @@ response = client.responses.create(input="你是谁？")
 两套 API 均支持[流式输出](../concepts/streaming.md)，推荐开启以降低首字延迟：
 
 - **DashScope API**：设置 `stream=True` 和 `incremental_output=True`。HTTP 调用需添加 Header `X-DashScope-SSE: enable`。Java SDK 使用 `streamCall()` 方法。
-- **Responses API**：设置 `stream=True`，工作流应用需在结束节点启用流式输出开关。
+- **Responses API**：设置 `stream=True`，工作流应用需在结束节点启用[流式输出](../concepts/streaming.md)开关。
 
 ### 异步调用
 
@@ -70,7 +70,7 @@ response = client.responses.create(input="你是谁？")
 2. 轮询状态：调用 `retrieve` 方法查询任务状态（`queued` / `running` / `completed` / `failed` / `cancelled`）。
 3. 管理任务：支持 `cancel`（取消）和 `delete`（删除记录）操作。
 
-> **注意**：异步调用暂不支持流式输出。
+> **注意**：异步调用暂不支持[流式输出](../concepts/streaming.md)。
 
 ## 多模态输入
 
@@ -89,7 +89,7 @@ response = client.responses.create(input="你是谁？")
 | `app_id` | string | 是 | 应用 ID，从应用管理页面获取 |
 | `prompt` / `input` | string/array | 是 | 用户输入（DashScope 用 `prompt`，Responses 用 `input`） |
 | `session_id` | string | 否 | 多轮对话标识，仅 DashScope API |
-| `stream` | boolean | 否 | 是否流式输出，默认 `false` |
+| `stream` | boolean | 否 | 是否[流式输出](../concepts/streaming.md)，默认 `false` |
 | `incremental_output` | boolean | 否 | 流式模式下是否增量输出，默认 `false` |
 | `workspace` | string | 否 | 子[业务空间](../concepts/workspace.md) ID |
 | `enable_thinking` | boolean | 否 | 深度思考模式开关 |
@@ -129,5 +129,6 @@ response = client.responses.create(input="你是谁？")
 - [同步调用 API 参考](../../raw/application-api-reference/application-call/openai-responses-api/synchronous-call-api-reference.md)
 - [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)
 - [工作流与旧版智能体应用 API](../../raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)
+
 
 

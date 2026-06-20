@@ -125,6 +125,17 @@ Qwen Code 是一款终端 AI 编程工具，可以通过按量计费、Coding Pl
         "envKey": "BAILIAN_TOKEN_PLAN_API_KEY"
       },
       {
+        "id": "kimi-k2.7-code",
+        "name": "[Token Plan 团队版] kimi-k2.7-code",
+        "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "extra_body": {
+            "enable_thinking": true
+          }
+        }
+      },
+      {
         "id": "kimi-k2.6",
         "name": "[Token Plan 团队版] kimi-k2.6",
         "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",

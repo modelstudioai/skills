@@ -93,6 +93,15 @@ Kilo CLI 是 Kilo Code 的命令行客户端，可以通过按量计费、Coding
         "deepseek-v3.2": {
           "name": "DeepSeek V3.2"
         },
+        "kimi-k2.7-code": {
+          "name": "Kimi K2.7 Code",
+          "options": {
+            "thinking": {
+              "type": "enabled",
+              "budgetTokens": 8192
+            }
+          }
+        },
         "kimi-k2.6": {
           "name": "Kimi K2.6",
           "options": {

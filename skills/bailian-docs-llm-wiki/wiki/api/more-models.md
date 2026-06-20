@@ -9,9 +9,9 @@
 | farui-plus | 法律行业大模型 | 12k | [DashScope SDK](../concepts/dashscope-sdk.md) (Python/Java) |
 | tongyi-intent-detect-v3 | 意图理解 | 8,192 | OpenAI 兼容 / [DashScope SDK](../concepts/dashscope-sdk.md) |
 | qwen-deep-research | 深度研究 | - | DashScope Python SDK / curl |
-| qwen-mt-plus / qwen-mt-turbo | 机器翻译 | - | OpenAI 兼容 / DashScope SDK |
-| gui-plus-2026-02-26 | GUI 界面交互 | - | OpenAI 兼容 / DashScope SDK |
-| qwen3.5-ocr | OCR 文字提取 | - | OpenAI 兼容 / DashScope SDK |
+| qwen-mt-plus / qwen-mt-turbo | 机器翻译 | - | OpenAI 兼容 / [DashScope SDK](../concepts/dashscope-sdk.md) |
+| gui-plus-2026-02-26 | GUI 界面交互 | - | OpenAI 兼容 / [DashScope SDK](../concepts/dashscope-sdk.md) |
+| qwen3.5-ocr | OCR 文字提取 | - | OpenAI 兼容 / [DashScope SDK](../concepts/dashscope-sdk.md) |
 
 ## 法律行业模型（通义法睿）
 
@@ -25,9 +25,9 @@
 
 该模型支持三种工作模式：
 
-- **意图 + 函数调用**：在 System Message 中声明工具列表并加上 `Response in INTENT_MODE.`，模型返回包含 `<tags>`、`<tool_call>`、`<content>` 三段结构化输出，需使用正则解析。
+- **意图 + [函数调用](../concepts/function-calling.md)**：在 System Message 中声明工具列表并加上 `Response in INTENT_MODE.`，模型返回包含 `<tags>`、`<tool_call>`、`<content>` 三段结构化输出，需使用正则解析。
 - **仅意图分类**：在 System Message 中提供意图标签列表，模型直接返回匹配的标签。可用大写字母映射意图以将输出控制在 1 个 Token，进一步降低延迟。
-- **仅函数调用**：仅声明工具信息，不添加 `INTENT_MODE` 指令。
+- **仅[函数调用](../concepts/function-calling.md)**：仅声明工具信息，不添加 `INTENT_MODE` 指令。
 
 ## 深度研究模型（Qwen-Deep-Research）
 
@@ -84,5 +84,6 @@
 - [Qwen-MT API参考](../../raw/model-api-reference/more-models/qwen-mt-api.md)
 - [GUI-Plus API参考](../../raw/model-api-reference/more-models/gui-plus-interface-interaction-model.md)
 - [Qwen-OCR API参考](../../raw/model-api-reference/more-models/qwen-vl-ocr-api-reference.md)
+
 
 

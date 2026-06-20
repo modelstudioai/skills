@@ -152,7 +152,7 @@ finally:
 
 - 不可信环境使用临时 API Key，避免永久 Key 泄露
 - 高并发异步任务优先使用 EventBridge 通知而非轮询（轮询限流 20 QPS）
-- 多业务场景使用子业务空间隔离权限和费用
+- 多业务场景使用子[业务空间](../concepts/workspace.md)隔离权限和费用
 - 生产环境文件存储使用 OSS，临时 URL 仅用于开发测试
 - Java SDK 根据并发量合理配置 `connectionPoolSize` 和 `maximumAsyncRequests`
 - 所有接口调用失败时，参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)排查
@@ -165,5 +165,6 @@ finally:
 - [子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)
 - [上传本地文件获取临时URL](../../raw/model-api-reference/more-about-models/get-temporary-file-url.md)
 - [DashScope SDK连接复用配置](../../raw/model-api-reference/more-about-models/connection-multiplexing-configuration.md)
+
 
 

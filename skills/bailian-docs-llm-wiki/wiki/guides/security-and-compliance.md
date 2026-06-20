@@ -18,7 +18,7 @@
 
 ### [业务空间](../concepts/workspace.md)权限
 
-单个业务空间不能跨地域存在，每个地域的默认业务空间也是独立的空间。超级管理员可在空间内执行以下管控操作：
+单个[业务空间](../concepts/workspace.md)不能跨地域存在，每个地域的默认[业务空间](../concepts/workspace.md)也是独立的空间。超级管理员可在空间内执行以下管控操作：
 
 - **限制模型调用**：控制特定模型的调用权限，并设置请求数和 Token 限流（默认空间不支持此限制）
 - **限制模型训练与部署**：管理模型的调优和部署权限
@@ -26,7 +26,7 @@
 
 ### API Key 权限
 
-API Key 归属于特定地域内的一个业务空间和一个用户，不能转移。其可调用的功能和模型限流与归属业务空间一致，不受用户控制台权限的影响。
+API Key 归属于特定地域内的一个[业务空间](../concepts/workspace.md)和一个用户，不能转移。其可调用的功能和模型限流与归属业务空间一致，不受用户控制台权限的影响。
 
 > **注意**：自 2026 年 3 月 25 日起，华北2（北京）地域新创建的 API Key 均归属主账号。
 
@@ -157,5 +157,6 @@ GenerationParam param = GenerationParam.builder()
 - [配置终端节点并发起连接](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-an-endpoint-and-initiate-a-connection.md)
 - [配置私有网络中的资源](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)
 - [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md)
+
 
 

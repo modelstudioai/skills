@@ -21,7 +21,7 @@ API Key 是调用百炼模型和应用的鉴权凭证。在[百炼控制台](htt
 ### 权限与时效
 
 - API Key 的调用权限由其**归属[业务空间](../concepts/workspace.md)**决定，同一空间内的 API Key 权限相同，无需为不同模型类型分别创建。
-- 默认[业务空间](../concepts/workspace.md)的 API Key 可调用所有标准模型；子业务空间的 API Key 仅可调用已授权的模型。
+- 默认[业务空间](../concepts/workspace.md)的 API Key 可调用所有标准模型；子[业务空间](../concepts/workspace.md)的 API Key 仅可调用已授权的模型。
 - API Key 创建后永久有效，手动删除即失效。如需临时授权可生成有效期 60 秒的临时 API Key。
 - 华北2（北京）和新加坡地域已完成安全升级，新建 API Key 仅在创建时展示一次明文，关闭弹窗后无法再次查看。
 - 每个主账号在华北2（北京）、新加坡、日本（东京）、德国（法兰克福）地域最多可创建 50 个 API Key；美国（弗吉尼亚）地域每个归属账号最多 20 个。
@@ -111,5 +111,6 @@ API Key 是调用百炼模型和应用的鉴权凭证。在[百炼控制台](htt
 - [获取API Key](../../raw/model-api-reference/preparations/get-api-key.md)
 - [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)
 - [错误码](../../raw/model-api-reference/preparations/error-code.md)
+
 
 

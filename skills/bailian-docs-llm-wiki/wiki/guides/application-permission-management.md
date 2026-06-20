@@ -9,12 +9,12 @@
 | 角色 | 说明 | 典型账号 |
 |------|------|----------|
 | **超级管理员** | 可跨空间统一管理用户权限、模型、限流和 API Key | 阿里云主账号，或拥有 `AliyunBailianFullAccess` 系统策略的 RAM 用户 |
-| **[业务空间](../concepts/workspace.md)管理员** | 仅管理特定[业务空间](../concepts/workspace.md)内的用户权限和资源 | 拥有某业务空间"权限管理"页面访问权的 RAM 用户 |
+| **[业务空间](../concepts/workspace.md)管理员** | 仅管理特定[业务空间](../concepts/workspace.md)内的用户权限和资源 | 拥有某[业务空间](../concepts/workspace.md)"权限管理"页面访问权的 RAM 用户 |
 | **普通用户** | 根据分配的权限使用资源 | 被授权的 RAM 用户 |
 
 各角色的权限对比：
 
-| 权限项 | 超级管理员 | 业务空间管理员 | 普通用户 |
+| 权限项 | 超级管理员 | [业务空间](../concepts/workspace.md)管理员 | 普通用户 |
 |--------|-----------|---------------|---------|
 | 模型调用 & 限流管理 | 支持 | 不支持 | 不支持 |
 | 模型调优管理 | 支持 | 不支持 | 不支持 |
@@ -25,7 +25,7 @@
 | 访问已授权资源 | 支持 | 支持 | 支持 |
 | OpenAPI 接口权限 | 需额外授权 | 需额外授权 | 需额外授权 |
 
-## 业务空间与权限管理
+## [业务空间](../concepts/workspace.md)与权限管理
 
 业务空间是百炼进行精细化权限管理的最小单元。需要注意以下关键点：
 
@@ -118,5 +118,6 @@ RAM 用户默认无权查看账单或购买预付费产品，需在 RAM 控制�
 ## 来源文档
 
 - [权限管理](../../raw/application-user-guide/application-permission-management/application-permission-management-overview.md)
+
 
 
