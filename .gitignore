@@ -7,3 +7,4 @@ node_modules/
 .agents/
 .skills.json
 skills-lock.json
+.claude/
