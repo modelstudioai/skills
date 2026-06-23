@@ -1,140 +1,106 @@
 # video generation api
 
-阿里云百炼平台提供多种视频生成模型的 API，覆盖文生视频、图生视频、参考生视频、视频编辑、人像动画等场景。所有视频生成 API 均采用异步调用模式，通过"创建任务 -> 轮询获取结果"两步完成调用，任务耗时通常为 1-5 分钟。
+百炼视频生成 API 将文本、图像、视频、音频等多模态输入加工为视频，覆盖文生视频、图生视频、参考生视频、视频编辑、数字人/人像动画等场景。所有视频任务均为异步调用，统一遵循"创建任务 → 轮询获取结果"两步流程；不同模型族（万相、HappyHorse、可灵、爱诗、Vidu 等）在 endpoint、协议版本、参数命名上存在差异。
 
-## 支持的模型与功能概览
+## 调用模型
 
-百炼平台的视频生成能力按模型厂商可分为以下几大系列：
+视频生成任务耗时较长（通常 1–5 分钟），API 采用异步方式，所有模型都遵循同一交互模式：
 
-### 万相（Wan）系列
+1. **创建任务**：向 `POST /api/v1/services/aigc/video-generation/video-synthesis`（或部分人像动画模型的 `/api/v1/services/aigc/image2video/video-synthesis`）发送请求，请求头必须包含 `X-DashScope-Async: enable`、`Authorization: Bearer $DASHSCOPE_API_KEY`、`Content-Type: application/json`，响应返回 `task_id`。
+2. **轮询获取**：使用 `GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}` 查询结果。`task_id` 有效期 24 小时，过期后任务状态返回 `UNKNOWN`。请勿重复创建任务，轮询即可。
 
-万相是阿里自研的视频生成模型，当前最新版本为 **wan2.7**，推荐优先使用。主要功能包括：
+任务状态包含 `PENDING`、`SUCCEEDED`、`FAILED` 等；新手指引可参考 [Postman 快速调用](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。完整创建/查询示例见 [万相-数字人](../../raw/model-api-reference/video-generation-api/wan-api-reference/wan-s2v-overview.md)。
 
-- **文生视频**：通过文本提示词生成视频，支持多镜头叙事，模型名称为 `wan2.7-t2v`。详见 [万相2.7-文生视频API参考](../../raw/model-api-reference/video-generation-api/wan-api-reference/text-to-video-api-reference.md)。
-- **图生视频**：支持首帧生视频、首尾帧生视频、视频续写三大任务，模型名称如 `wan2.7-i2v-2026-04-25`。详见 [万相2.7-图生视频API参考](../../raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)。
-- **参考生视频**：支持多模态输入（图片、视频、音频），生成保持角色形象和音色一致性的视频，模型名称为 `wan2.7-r2v`。详见 [万相2.7-参考生视频API参考](../../raw/model-api-reference/video-generation-api/wan-api-reference/wan-video-to-video-api-reference.md)。
-- **视频编辑**：支持指令编辑和视频迁移，模型名称为 `wan2.7-videoedit`。
-- **图生动作**：将参考视频中的动作迁移到人物图片，模型名称为 `wan2.2-animate-move`，提供标准模式 `wan-std` 和专业模式 `wan-pro`。
-- **视频换人**：将视频中的角色替换为指定图片中的人物，模型名称为 `wan2.2-animate-mix`。
-- **数字人**：基于单张图片和音频生成说话/唱歌视频，模型名称为 `wan2.2-s2v`，需先调用 `wan2.2-s2v-detect` 进行图像检测。
+## 地域与域名
 
-> **注意**：万相 2.7 系列使用新版协议，与 wan2.6 及更早版本的旧版协议不兼容。旧版模型（wan2.1-2.6）的 API 文档仍然可用，但建议迁移到 2.7 版本以获得更好的效果。
+模型、Endpoint URL、API Key 必须属于**同一地域**，跨地域调用将失败。各模型族支持的域名略有不同：
 
-### HappyHorse 系列
+- **华北2（北京）**：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`（HappyHorse 等 maas 域名）或 `https://dashscope.aliyuncs.com`（wan2.7 新版协议、可灵、爱诗、Vidu 等）。
+- **新加坡**：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，官方建议从旧域名 `https://dashscope-intl.aliyuncs.com` 迁移至该[业务空间](../concepts/workspace.md)专属域名以获得更佳性能与稳定性。
+- **美国（弗吉尼亚）**：`https://dashscope-us.aliyuncs.com`。
+- **德国（法兰克福）**：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com`。
 
-HappyHorse 提供四种视频生成能力：
+`{WorkspaceId}` 为[业务空间](../concepts/workspace.md) ID，可在百炼控制台"[业务空间](../concepts/workspace.md)详情"页查看，详见 [HappyHorse-图生视频-基于首帧API参考](../../raw/model-api-reference/video-generation-api/happyhorse-api-reference/happyhorse-image-to-video-api-reference.md)。
 
-- **文生视频**：模型名称 `happyhorse-1.0-t2v`
-- **图生视频（基于首帧）**：模型名称 `happyhorse-1.0-i2v`
-- **视频编辑**：模型名称 `happyhorse-1.0-video-edit`，支持风格变换和局部替换
-- **参考生视频**：模型名称 `happyhorse-1.0-r2v`，支持传入多张参考图像
+> **注意**：可灵、视频风格重绘等模型仅适用于"中国内地（北京）"地域，必须使用该地域的 API Key。
 
-### 可灵（Kling）系列
+## 模型族与能力
 
-可灵模型支持文生视频、图生视频（首帧/首尾帧）、参考生视频和视频编辑。需在百炼控制台搜索"kling"并开通服务后使用。主要模型包括：
+| 模型族 | 代表 model 值 | 主要能力 |
+| --- | --- | --- |
+| 万相 2.7（新版协议） | `wan2.7-i2v-2026-04-25`、`wan2.7-t2v`、`wan2.7-r2v`、`wan2.7-videoedit` | 多模态输入，首帧/首尾帧生视频、视频续写、参考生视频、指令编辑、视频迁移 |
+| 万相 2.1–2.6（legacy） | `wan2.6-i2v-flash`、`wan2.6-r2v-flash`、`wan2.2-kf2v-flash`、`wan2.6-t2v`、`wanx2.1-vace-plus` | 仅支持首帧生视频等单一任务，老协议 |
+| 万相人像 | `wan2.2-animate-move`（图生动作）、`wan2.2-s2v`（数字人）、`wan2.2-animate-mix`（视频换人） | 人物图片 + 参考视频/音频，生成动作/说话/换人视频 |
+| HappyHorse | `happyhorse-1.1-t2v`、`happyhorse-1.1-i2v`、`happyhorse-1.1-r2v`、`happyhorse-1.0-video-edit` | 文生/图生/参考生/视频编辑，物理真实、运动流畅 |
+| 可灵 | `kling/kling-v3-video-generation`、`kling/kling-v3-omni-video-generation` | 文生视频、图生视频、首尾帧、参考生视频、视频编辑，支持智能分镜 |
+| 爱诗 PixVerse | `pixverse/pixverse-c1-t2v`、`pixverse-c1-it2v`、`pixverse-c1-kf2v`、`pixverse-c1-r2v` | 文生、图生首帧、图生首尾帧、参考生视频 |
+| Vidu | `vidu/viduq3-turbo_text2video`、`viduq3-turbo_start-end2video`、`viduq3-pro_img2video`、`viduq3-mix_reference2video` | 文生、首尾帧、图生首帧、参考生视频 |
+| 人像动画类 | `emo`、`animateanyone`、`liveportrait`、`videoretalk`、`emoji`、`video-style-transform` | 唱演、舞蹈、播报、口型替换、表情包、风格重绘 |
 
-- `kling/kling-v3-video-generation`
-- `kling/kling-v3-omni-video-generation`
+万相 2.7 是当前推荐的新版协议，[万相2.7-图生视频API参考](../../raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md) 明确指出新版接口仅支持 wan2.7 模型，原 wan2.6 及早期模型走 legacy 协议。HappyHorse 系列的 endpoint 走 maas 域名并支持北京、新加坡、美国、德国四地域。
 
-支持智能分镜（`multi_shot` + `shot_type`）和标准/专业模式（`mode: std/pro`）。详见 [可灵-视频生成API文档](../../raw/model-api-reference/video-generation-api/kling-api-reference/kling-video-generation-api-reference.md)。
+## 请求结构
 
-### 爱诗（PixVerse）系列
+请求体统一为 `{"model", "input", "parameters"}` 三段式，但字段命名因模型族而异：
 
-PixVerse 提供文生视频、图生视频、首尾帧生视频和参考生视频能力，需开通后使用。主要模型版本包括 `pixverse-c1`、`pixverse-v6`、`pixverse-v5.6`，模型名称格式为 `pixverse/pixverse-{version}-{task}`。
+- **万相 2.7 / HappyHorse**：`input.prompt` + `input.media`（数组，元素含 `type` 如 `first_frame`/`last_frame`/`reference_image`/`reference_video`/`video` 与 `url`，部分还支持 `reference_voice`）；`parameters` 含 `resolution`（如 `720P`）、`ratio`（如 `16:9`）、`duration`（秒）、`prompt_extend`、`watermark`。
+- **万相人像（animate-move / animate-mix）**：使用 `input.image_url`、`input.video_url`、`input.watermark`，`parameters.mode` 取 `wan-std` 或 `wan-pro`，endpoint 为 `image2video/video-synthesis`。
+- **万相数字人 s2v**：`input.image_url` + `input.audio_url`，`parameters.style`（如 `speech`）。
+- **可灵**：`parameters` 用 `mode`（`std`/`pro`）、`aspect_ratio`、`duration`、`audio`、`watermark`；智能分镜通过 `input.multi_shot=true`、`shot_type="customize"`、`input.multi_prompt` 数组配置。
+- **爱诗 / Vidu**：参数命名接近万相（`resolution`、`duration`、`watermark`），具体取值范围以各文档为准。
 
-### Vidu 系列
+> **注意**：万相 2.7 文生视频的镜头结构通过 `prompt` 自然语言控制（如"第1个镜头[0-3秒] 全景：…"），**不要**配置 `shot_type` 参数，配置也不会生效。可灵则相反，分镜通过 `shot_type`/`multi_prompt` 显式配置。
 
-Vidu 提供文生视频、图生视频、首尾帧生视频和参考生视频能力。模型分为 `pro` 和 `turbo` 两个档次，命名格式为 `vidu/viduq3-{tier}_{task}`（如 `vidu/viduq3-pro_text2video`）。
+## 典型示例
 
-### 人像动画模型
+万相 2.7 文生视频（多镜头叙事）：
 
-百炼还提供一系列专注于人像动画的模型：
-
-- **悦动人像 EMO**：基于人物肖像图片和音频生成唱演视频，模型名称 `emo-v1`，需先用 `emo-detect-v1` 检测图片。详见 [图生唱演视频-悦动人像EMO](../../raw/model-api-reference/video-generation-api/portrait-animation-api-reference/emo-quick-start.md)。
-- **舞动人像 AnimateAnyone**：基于人物图片和动作模板生成舞蹈视频，需依次调用 detect -> template -> 生成三个模型。
-- **灵动人像 LivePortrait**：基于人物肖像和音频快速生成播报视频。
-- **声动人像 VideoRetalk**：替换视频中人物的口型，使其匹配新的音频。
-- **表情包 Emoji**：基于人物肖像和预设模板生成表情包视频。
-- **视频风格重绘**：将视频转换为 8 种预设艺术风格（日式漫画、3D 卡通等），模型名称 `video-style-transform`。
-
-## 统一调用方式
-
-所有视频生成 API 采用相同的异步调用模式：
-
-### 步骤 1：创建任务
-
-```
-POST https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis
-```
-
-必须设置以下请求头：
-
-| 请求头 | 值 | 说明 |
-|--------|------|------|
-| `Content-Type` | `application/json` | 固定值 |
-| `Authorization` | `Bearer $DASHSCOPE_API_KEY` | API Key 认证 |
-| `X-DashScope-Async` | `enable` | 必须设置，否则报错 |
-
-请求体基本结构：
-
-```json
-{
-  "model": "模型名称",
-  "input": {
-    "prompt": "文本提示词",
-    "media": [...]
-  },
-  "parameters": {
-    "resolution": "720P",
-    "duration": 5
-  }
-}
+```bash
+curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+    -H 'X-DashScope-Async: enable' \
+    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "model": "wan2.7-t2v",
+    "input": {
+        "prompt": "第1个镜头[0-3秒] 全景：雨夜街头。第2个镜头[3-6秒] 中景：人物进入建筑。"
+    },
+    "parameters": {
+        "resolution": "720P",
+        "ratio": "16:9",
+        "prompt_extend": true,
+        "watermark": true,
+        "duration": 15
+    }
+}'
 ```
 
-### 步骤 2：轮询获取结果
+HappyHorse 图生视频（首帧），完整地域/参数说明见 [HappyHorse-图生视频-基于首帧API参考](../../raw/model-api-reference/video-generation-api/happyhorse-api-reference/happyhorse-image-to-video-api-reference.md)：
 
+```bash
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+    -H 'X-DashScope-Async: enable' \
+    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "model": "happyhorse-1.1-i2v",
+    "input": {
+        "prompt": "一只猫在草地上奔跑",
+        "media": [{"type": "first_frame", "url": "https://example.com/first.png"}]
+    },
+    "parameters": {"resolution": "720P"}
+}'
 ```
-GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}
-```
 
-使用步骤 1 返回的 `task_id` 查询任务状态，`task_id` 有效期为 24 小时。
+## 限制与注意事项
 
-> **注意**：部分旧版模型（如 `wan2.2-animate-move`、`wan2.2-animate-mix`、`wan2.2-kf2v-flash`）使用 `/api/v1/services/aigc/image2video/video-synthesis` 端点，与主流的 `/video-generation/video-synthesis` 端点不同，调用时需注意区分。
-
-## 多地域支持
-
-视频生成 API 在以下地域可用（不同模型支持的地域不同）：
-
-| 地域 | Endpoint |
-|------|----------|
-| 华北2（北京） | `https://dashscope.aliyuncs.com` |
-| 新加坡 | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com` |
-| 美国（弗吉尼亚） | `https://dashscope-us.aliyuncs.com` |
-| 德国（法兰克福） | `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com` |
-
-**必须确保模型、Endpoint URL 和 API Key 属于同一地域**，跨地域调用将失败。万相 2.7 和 HappyHorse 系列支持多地域，而可灵、PixVerse、Vidu 及人像动画模型目前仅支持北京地域。
-
-## 关键参数说明
-
-| 参数 | 说明 | 常见值 |
-|------|------|--------|
-| `resolution` | 视频分辨率 | `480P`、`540P`、`720P`、`1080P` |
-| `duration` | 视频时长（秒） | `5`、`10`、`15`（因模型而异） |
-| `ratio` / `size` | 画面比例或尺寸 | `16:9`、`9:16`、`1:1`、`1280*720` |
-| `prompt_extend` | 是否开启提示词智能扩写 | `true` / `false` |
-| `watermark` | 是否添加水印 | `true` / `false` |
-| `mode` | 生成模式 | `std`（标准）、`pro`（专业） |
-| `shot_type` | 镜头类型 | `single`、`multi`、`customize` |
-
-> **注意**：不同模型对参数的支持范围不同。例如 `resolution` 和 `size` 参数在不同模型中可能不共存，部分模型使用 `ratio` 控制画面比例，部分模型使用 `size` 指定像素尺寸。具体请参阅各模型的 API 文档。
-
-## 注意事项
-
-1. **请勿重复创建任务**：创建任务后使用 `task_id` 轮询获取结果即可。
-2. **API Key 配置**：建议将 API Key 配置到环境变量 `DASHSCOPE_API_KEY`，避免硬编码。
-3. **第三方模型需开通**：可灵、PixVerse、Vidu 等第三方模型需在百炼控制台搜索并开通服务后才能调用。
-4. **人像动画类模型需先检测**：EMO、AnimateAnyone、LivePortrait、Emoji 等模型在生成视频前需先调用对应的 detect 模型检测图片合规性。
-5. **新加坡地域迁移**：新加坡地域推荐使用[业务空间](../concepts/workspace.md)专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，以获得更好的性能和稳定性。
+- **异步必选头**：缺少 `X-DashScope-Async: enable` 会报错 `current user api does not support synchronous`。
+- **任务有效期**：`task_id` 仅 24 小时有效，过期查询返回 `UNKNOWN`；请勿重复创建任务，直接轮询。
+- **地域隔离**：北京与新加坡拥有独立 API Key 与请求地址，不可混用；跨地域调用导致鉴权失败。
+- **协议版本**：wan2.7 新版协议接口与 legacy（2.1–2.6）协议不互通，模型与接口必须匹配，详见 [万相-图生视频-基于首帧API参考（2.1-2.6）](../../raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-api-reference.md)。
+- **服务开通**：可灵、视频风格重绘等模型需在百炼控制台模型卡片单击"立即开通"并完成授权后才能调用。
+- **人像画幅**：数字人 `wan2.2-s2v` 不限画幅，支持肖像、半身、全身及卡通形象；悦动人像 EMO 更适合人物特写/肖像。如需全身或大半身视频，推荐 s2v；追求性价比可选 EMO，对比见 [万相-数字人](../../raw/model-api-reference/video-generation-api/wan-api-reference/wan-s2v-overview.md)。
+- **计费模式**：`wan2.2-animate-move`、`wan2.2-animate-mix` 提供 `wan-std`（标准）与 `wan-pro`（专业）两种模式，画质与计费不同。
 
 ## 来源文档
 
@@ -169,6 +135,5 @@ GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}
 - [万相-首尾帧生视频API参考（2.2）](../../raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-by-first-and-last-frame-api-reference.md)
 - [万相-文生视频API参考（2.1-2.6）](../../raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-wan-text-to-video-api-reference.md)
 - [万相-视频编辑API参考（2.1）](../../raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-wanx-vace-api-reference.md)
-
 
 

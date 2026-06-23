@@ -9,7 +9,6 @@
           "Image"
         ]
       },
-      "openSource": true,
       "description": "对用户上传的人物图像进行检测，判断其中所包含的人脸是否符合facechain微调所需的标准，检测维度包括人脸数量、大小、角度、光照、清晰度等多维度，支持图像组输入，并返回每张图像对应的检测结果。",
       "features": [],
       "provider": "qwen",

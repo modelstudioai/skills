@@ -12,7 +12,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "智能分镜可读懂剧本场景流转，自动调度机位和景别。原生多模态框架支持音画一致性。打破时长限制，多镜头故事创作更自由。",
       "features": [],
       "provider": "kling",
@@ -111,7 +110,6 @@
           "Video"
         ]
       },
-      "openSource": false,
       "description": "新增“全能参考”，支持3-8秒视频或多图锚定角色元素。可匹配原声及口型驱动，实现角色本色呈现。视频一致性更强，表现更灵动。支持音画同步、智能分镜。",
       "features": [],
       "provider": "kling",
@@ -221,7 +219,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "支持最多10张参考图，可锁定主体、元素和色调，保证风格一致。融合风格转绘、人像/角色参考、多图融合及局部重绘，操作灵活。人像细节真实，整体画面细腻丰富，色彩氛围兼具影视感。",
       "features": [],
       "provider": "kling",
@@ -304,7 +301,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "解锁影视级叙事画面，新增系列组图及2K/4K直出。深度解析提示词视听元素，精确响应创作指令。支持自由多参考图及全面效果升级，适合分镜、剧情概念图及场景设定。",
       "features": [],
       "provider": "kling",

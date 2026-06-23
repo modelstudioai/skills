@@ -6,6 +6,29 @@
 
 **在线体验：**暂不支持。
 
+## **服务端点**
+
+SDK的服务端点需在初始化前设置为下方地址（包含WorkspaceId）。请修改 `Constants.baseWebsocketApiUrl`为对应地域的URL。
+
+Sambert仅支持在北京地域使用。
+
+`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`，调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+**设置方式**：
+
+```
+import com.alibaba.dashscope.utils.Constants;
+
+// 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID
+Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
+```
+
+**null**
+
+百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+
 ## **前提条件**
 
 -   已开通服务并[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
@@ -26,18 +49,19 @@
 
 提交单个语音合成任务，无需调用回调方法，进行语音合成（无流式输出中间结果），最终一次性获取完整结果。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9703540871/CAEQURiBgIDHpsn4phkiIDQ0ZGE2OTk3NmY5NTRhNDVhZDQwNWE3ZGZiMzk4Yjk54709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6849012871/CAEQURiBgIDHpsn4phkiIDQ0ZGE2OTk3NmY5NTRhNDVhZDQwNWE3ZGZiMzk4Yjk54709861_20241015153444.149.svg)
 
 实例化[SpeechSynthesizer类](#adcb5e9bddbyq)，调用`call`方法绑定[请求参数](#a96bfa6340jdd)，进行合成并获取二进制音频数据。
 
 点击查看完整示例
 
-以下示例展示了如何使用同步接口调用发音人模型知厨（sambert-zhichu-v1），将文案“今天天气怎么样”合成采样率为48kHz，音频格式为wav的音频，并保存到名为output.wav的文件中。
+以下示例展示了如何使用同步接口调用发音人模型知厨（sambert-zhichu-v1），将文案”今天天气怎么样”合成采样率为48kHz，音频格式为wav的音频，并保存到名为output.wav的文件中。
 
 ```
 import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;
 import com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;
 import com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;
+import com.alibaba.dashscope.utils.Constants;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -66,6 +90,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID
+        Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         syncAudioDataToFile();
         System.exit(0);
     }
@@ -76,7 +102,7 @@ public class Main {
 
 提交单个语音合成任务，通过回调的方式流式输出中间结果，合成结果通过`ResultCallback`中的回调方法流式进行获取。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9703540871/CAEQVRiBgMDN2_qhrBkiIGJlMTQ5MDY4YWJlZTQxYWY5ZWEzOTZiNTVjOGEwZjZh4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6849012871/CAEQVRiBgMDN2_qhrBkiIGJlMTQ5MDY4YWJlZTQxYWY5ZWEzOTZiNTVjOGEwZjZh4709861_20241015153444.149.svg)
 
 实例化[SpeechSynthesizer类](#adcb5e9bddbyq)，调用`call`方法绑定[请求参数](#a96bfa6340jdd)和[回调接口（ResultCallback）](#3639e1cb40mxi)并开始语音合成，通过[回调接口（ResultCallback）](#3639e1cb40mxi)的`onEvent`方法实时获取合成结果。
 
@@ -84,18 +110,21 @@ public class Main {
 
 点击查看完整示例
 
-以下示例展示了如何使用流式接口调用发音人模型知厨（sambert-zhichu-v1）将文案“今天天气怎么样”合成采样率为48kHz，默认音频格式（wav）的流式音频，并获取对应时间戳。
+以下示例展示了如何使用流式接口调用发音人模型知厨（sambert-zhichu-v1）将文案”今天天气怎么样”合成采样率为48kHz，默认音频格式（wav）的流式音频，并获取对应时间戳。
 
 ```
 import com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;
 import com.alibaba.dashscope.audio.tts.SpeechSynthesisResult;
 import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;
 import com.alibaba.dashscope.common.ResultCallback;
+import com.alibaba.dashscope.utils.Constants;
 
 import java.util.concurrent.CountDownLatch;
 
 public class Main {
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID
+        Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         CountDownLatch latch = new CountDownLatch(1);
         SpeechSynthesizer synthesizer = new SpeechSynthesizer();
         SpeechSynthesisParam param = SpeechSynthesisParam.builder()
@@ -161,10 +190,13 @@ Flowable是一个用于工作流和业务流程管理的开源框架，它基于
 import com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;
 import com.alibaba.dashscope.audio.tts.SpeechSynthesisResult;
 import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;
+import com.alibaba.dashscope.utils.Constants;
 import io.reactivex.Flowable;
 
 public class Main {
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID
+        Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         SpeechSynthesizer synthesizer = new SpeechSynthesizer();
         SpeechSynthesisParam param = SpeechSynthesisParam.builder()
                 // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key

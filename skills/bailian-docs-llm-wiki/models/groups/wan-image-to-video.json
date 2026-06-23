@@ -13,7 +13,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "万相2.7-图生视频，演绎能力全面升级，文戏情感细腻自然，动作戏激烈拳拳到肉，搭配更富有戏剧性和节奏感的镜头切换，实现更强表演能力。",
       "collectionTag": "wan2.7",
       "features": [
@@ -113,7 +112,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "万相2.6-图生视频-Flash，生成更快更高性价比。智能分镜调度支持多镜头叙事，多人稳定对话，更自然真实音色，最高支持15秒时长生成",
       "collectionTag": "Wan2.6",
       "features": [
@@ -231,7 +229,6 @@
           "Audio"
         ]
       },
-      "openSource": false,
       "description": "万相2.6-图生视频，智能分镜调度支持多镜头叙事，更高品质的声音生成，多人稳定对话，更自然真实音色，最高支持15秒时长生成",
       "collectionTag": "wan2.6",
       "features": [
@@ -239,11 +236,6 @@
       ],
       "provider": "wan",
       "model": "wan2.6-i2v",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",
@@ -355,7 +347,6 @@
           "Audio"
         ]
       },
-      "openSource": false,
       "description": "万相2.5-图生视频-Preview，全新升级技术架构，支持与画面同步的声音生成，支持10秒长视频生成，更强的指令遵循能力，运动能力、画面质感进一步提升。",
       "collectionTag": "wan2.5",
       "features": [
@@ -364,11 +355,6 @@
       ],
       "provider": "wan",
       "model": "wan2.5-i2v-preview",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",
@@ -470,17 +456,11 @@
           "Image"
         ]
       },
-      "openSource": true,
       "description": "全新升级的万相2.2图生视频，视频品质更高。优化视频生成稳定性与成功率，更强大的指令遵循能力，稳定保持图片文字、人像和商品一致性，精准运镜控制。",
       "collectionTag": "wan2.2",
       "features": [],
       "provider": "wan",
       "model": "wan2.2-i2v-plus",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",
@@ -565,17 +545,11 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "全新升级的万相2.2-首尾帧生视频，生成速度更快。优化视频动态稳定性与成功率，更强大的指令遵循能力，两张图片生成丝滑过度视频。",
       "collectionTag": "wan2.2",
       "features": [],
       "provider": "wan",
       "model": "wan2.2-kf2v-flash",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",
@@ -672,98 +646,6 @@
           "Image"
         ]
       },
-      "openSource": true,
-      "description": "wan2.2-animate-mix视频换人是一款角色替换的模型产品，上传一张角色照片与一段表演视频，即可将原视频中的角色精准替换为照片中的角色，完整保留原始视频的场景、光照和色调等环境细节。",
-      "collectionTag": "wan2.2",
-      "features": [],
-      "provider": "wan",
-      "model": "wan2.2-animate-mix",
-      "prices": [
-        {
-          "priceUnit": "每秒",
-          "price": "0.6",
-          "type": "video_ratio",
-          "priceName": "视频生成（std）"
-        },
-        {
-          "priceUnit": "每秒",
-          "price": "0.9",
-          "type": "video_ratio_pro",
-          "priceName": "视频生成（pro）"
-        }
-      ],
-      "qpmInfo": {
-        "model-default-actual": {
-          "count_limit_period": 1,
-          "async_user_queue_limit": 500,
-          "count_limit": 5,
-          "async_task_timeout": 180,
-          "type": "model-default",
-          "async_user_concurrency_limit": 1
-        },
-        "model-default": {
-          "count_limit_period": 1,
-          "async_user_queue_limit": 500,
-          "count_limit": 5,
-          "async_task_timeout": 180,
-          "type": "model-default",
-          "async_user_concurrency_limit": 1
-        }
-      },
-      "capabilities": [
-        "VG"
-      ],
-      "versionTag": "MAJOR",
-      "latestOnlineAt": "2025-09-19T04:02:28.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
-      "name": "Wan2.2-Animate-Mix",
-      "docUrl": "https://help.aliyun.com/document_detail/2982219.html",
-      "predictConfig": [
-        {
-          "name": "system",
-          "key": "systemMessage",
-          "tip": "系统人设，例如“你是一个AI助手”。"
-        },
-        {
-          "name": "top_p",
-          "key": "top_p",
-          "default": 0.8,
-          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
-          "range": [
-            0.0001,
-            1
-          ]
-        },
-        {
-          "name": "temperature",
-          "key": "temperature",
-          "default": 0.7,
-          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
-          "range": [
-            0,
-            1.9999
-          ]
-        }
-      ],
-      "samples": {
-        "dashscope": {
-          "default": {
-            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis/' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"wan2.2-animate-mix\",\n\"input\": {\n\"image_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/bhkfor/mix_input_image.jpeg\",\n\"video_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/wqefue/mix_input_video.mp4\"\n},\n\"parameters\": {\n\"check_image\": true,\n\"mode\": \"wan-std\"\n}\n}'\n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/13b1848b-5493-4c0e-8c44-xxxxxxxxxxxx \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\""
-          }
-        }
-      }
-    },
-    {
-      "inferenceMetadata": {
-        "response_modality": [
-          "Video"
-        ],
-        "request_modality": [
-          "Video",
-          "Image"
-        ]
-      },
-      "openSource": true,
       "description": "wan2.2-animate-move图生动作是一款角色动画生成模型，用户只需上传一张角色照片和一段参考表演视频，即可将视频中的表情和动作迁移到图片角色上，生成高保真的动画视频。",
       "collectionTag": "wan2.2",
       "features": [],
@@ -851,37 +733,55 @@
           "Video"
         ],
         "request_modality": [
+          "Video",
           "Image"
         ]
       },
-      "openSource": false,
-      "description": "wan2.2-s2v 是一款视频生成模型，可基于人物图片和人声音频文件，生成高质量的人物说话/唱歌/表演动态视频。",
+      "description": "wan2.2-animate-mix视频换人是一款角色替换的模型产品，上传一张角色照片与一段表演视频，即可将原视频中的角色精准替换为照片中的角色，完整保留原始视频的场景、光照和色调等环境细节。",
       "collectionTag": "wan2.2",
       "features": [],
       "provider": "wan",
-      "model": "wan2.2-s2v",
+      "model": "wan2.2-animate-mix",
       "prices": [
         {
           "priceUnit": "每秒",
-          "price": "0.5",
-          "type": "video_ratio_480p",
-          "priceName": "视频生成（480P）"
+          "price": "0.6",
+          "type": "video_ratio",
+          "priceName": "视频生成（std）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.9",
-          "type": "video_ratio_720p",
-          "priceName": "视频生成（720P）"
+          "type": "video_ratio_pro",
+          "priceName": "视频生成（pro）"
         }
       ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 1
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 1
+        }
+      },
       "capabilities": [
         "VG"
       ],
       "versionTag": "MAJOR",
-      "latestOnlineAt": "2025-08-25T11:54:37.000+00:00",
+      "latestOnlineAt": "2025-09-19T04:02:28.000+00:00",
       "inferenceProvider": "aliyun-bailian",
-      "name": "通义万相2.2-数字人-S2V",
-      "docUrl": "https://help.aliyun.com/zh/document_detail/2978215.html",
+      "name": "Wan2.2-Animate-Mix",
+      "docUrl": "https://help.aliyun.com/document_detail/2982219.html",
       "predictConfig": [
         {
           "name": "system",
@@ -912,7 +812,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis/' \\\n --header 'X-DashScope-Async: enable' \\\n --header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n --header 'Content-Type: application/json' \\\n --data '{\n     \"model\": \"wan2.2-s2v\",\n     \"input\": {\n            \"image_url\": \"https://img.alicdn.com/imgextra/i3/O1CN011FObkp1T7Ttowoq4F_!!6000000002335-0-tps-1440-1797.jpg\",\n            \"audio_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250825/iaqpio/input_audio.MP3\"\n        },\n        \"parameters\": {\n            \"resolution\": \"480P\"\n        }\n    }'"
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis/' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"wan2.2-animate-mix\",\n\"input\": {\n\"image_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/bhkfor/mix_input_image.jpeg\",\n\"video_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/wqefue/mix_input_video.mp4\"\n},\n\"parameters\": {\n\"check_image\": true,\n\"mode\": \"wan-std\"\n}\n}'\n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/13b1848b-5493-4c0e-8c44-xxxxxxxxxxxx \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\""
           }
         }
       }
@@ -924,7 +824,6 @@
           "Image"
         ]
       },
-      "openSource": false,
       "description": "wan2.2-s2v-detect 是 wan2.2-s2v 的辅助模型，用于确认输入的人物肖像图片是否符合 wan2.2-s2v 模型所需的人物肖像图片规范。wan2.2-s2v 模型基于 wan2.2-s2v-detect 检测通过的图片和人声音频文件进行视频生成。",
       "collectionTag": "wan2.2",
       "features": [],
@@ -990,17 +889,82 @@
           "Image"
         ]
       },
-      "openSource": false,
+      "description": "wan2.2-s2v 是一款视频生成模型，可基于人物图片和人声音频文件，生成高质量的人物说话/唱歌/表演动态视频。",
+      "collectionTag": "wan2.2",
+      "features": [],
+      "provider": "wan",
+      "model": "wan2.2-s2v",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.5",
+          "type": "video_ratio_480p",
+          "priceName": "视频生成（480P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.9",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        }
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-08-25T11:54:37.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "通义万相2.2-数字人-S2V",
+      "docUrl": "https://help.aliyun.com/zh/document_detail/2978215.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis/' \\\n --header 'X-DashScope-Async: enable' \\\n --header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n --header 'Content-Type: application/json' \\\n --data '{\n     \"model\": \"wan2.2-s2v\",\n     \"input\": {\n            \"image_url\": \"https://img.alicdn.com/imgextra/i3/O1CN011FObkp1T7Ttowoq4F_!!6000000002335-0-tps-1440-1797.jpg\",\n            \"audio_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250825/iaqpio/input_audio.MP3\"\n        },\n        \"parameters\": {\n            \"resolution\": \"480P\"\n        }\n    }'"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Image"
+        ]
+      },
       "description": "全新升级的万相2.2图生视频，生成速度更快。优化视频生成稳定性与成功率，更强大的指令遵循能力，稳定保持图片文字、人像和商品一致性，精准运镜控制。",
       "collectionTag": "wan2.2",
       "features": [],
       "provider": "wan",
       "model": "wan2.2-i2v-flash",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",
@@ -1097,16 +1061,10 @@
           "Image"
         ]
       },
-      "openSource": false,
       "description": "万相2.1-首尾帧-Plus，两张图片生成丝滑过度视频。支持大幅度复杂运动、物理规律遵循、丰富艺术风格和影视级画面质感，指令遵循能力进一步提升，生成画面细节更丰富。",
       "features": [],
       "provider": "wan",
       "model": "wanx2.1-kf2v-plus",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",
@@ -1183,16 +1141,10 @@
           "Image"
         ]
       },
-      "openSource": false,
       "description": "万相2.1-图生视频-Plus，让图片变为动态视频。支持大幅度复杂运动、物理规律遵循、丰富艺术风格和影视级画面质感，指令遵循能力进一步提升，视频质量更高。",
       "features": [],
       "provider": "wan",
       "model": "wanx2.1-i2v-plus",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",
@@ -1270,16 +1222,10 @@
           "Image"
         ]
       },
-      "openSource": false,
       "description": "万相2.1-图生视频-Turbo，让图片变为动态视频。支持大幅度复杂运动、物理规律遵循、丰富艺术风格和影视级画面质感，指令遵循能力进一步提升，生成速度更快。",
       "features": [],
       "provider": "wan",
       "model": "wanx2.1-i2v-turbo",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",

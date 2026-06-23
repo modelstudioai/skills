@@ -13,7 +13,6 @@
           "Video"
         ]
       },
-      "openSource": true,
       "description": "Step 3.7 Flash 是阶跃星辰最新推出的生产级 Agent 高效率 Flash 模型，专为 Agent、Coding、Search 与多模态工作流打造，在速度、成本、执行可靠性与复杂任务完成能力之间实现了更优平衡。具备多模态感知与执行、视觉搜索与工具增强、高可靠工具调用与编排，以及 Agent 生态兼容优化等核心能力。",
       "features": [
         "function-calling",

@@ -11,7 +11,6 @@
           "Text"
         ]
       },
-      "openSource": true,
       "description": "智谱原厂直供，最新旗舰模型。GLM-5.2 是智谱迄今能力最强的开源模型，支持真正可用的 1M 上下文，并在长程任务中继续保持领先。",
       "features": [
         "function-calling",
@@ -117,7 +116,6 @@
           "Text"
         ]
       },
-      "openSource": true,
       "description": "GLM-5.1 是智谱最新旗舰模型，代码能力大大增强，长程任务显著提升，能够在单次任务中持续、自主地工作长达 8 小时，完成从规划、执行到迭代优化的完整闭环，交付工程级成果。\n在综合能力与 Coding 能力上，GLM-5.1 整体表现对齐 Claude Opus 4.6，并在长程自主执行、复杂工程优化与真实开发场景中展现出更强的持续工作能力，是构建 Autonomous Agent 与长程 Coding Agent 的理想基座。",
       "features": [
         "function-calling",
@@ -219,7 +217,6 @@
           "Text"
         ]
       },
-      "openSource": true,
       "description": "智谱新一代旗舰基座,面向AgenticEngineering,实现从代码到工程的范式跃迁,擅长复杂系统工程与长程Agent任务。",
       "features": [
         "function-calling",

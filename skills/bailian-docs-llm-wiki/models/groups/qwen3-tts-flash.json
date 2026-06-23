@@ -11,7 +11,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "Qwen3-TTS-Flash模型是通义实验室最新推出的离线语音合成大模型，不仅拥有17种高表现力的拟人音色，且能低延迟高稳定地合成音频；同时支持多种语言，方言，支持同一音色多语言输出。该模型经过海量数据训练，合成音频可以根据文本自适应调节语气，对复杂文本合成也有较好的处理能力。",
       "collectionTag": "qwen3",
       "features": [
@@ -19,11 +18,6 @@
       ],
       "provider": "qwen",
       "model": "qwen3-tts-flash",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VoiceModel_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每万字符",

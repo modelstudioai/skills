@@ -11,7 +11,6 @@
           "Image"
         ]
       },
-      "openSource": false,
       "description": "表情包emoji是一款人脸动效视频生成模型，可基于人脸图片和预设的人脸动态模板，生成人脸动效视频。",
       "features": [],
       "provider": "qwen",

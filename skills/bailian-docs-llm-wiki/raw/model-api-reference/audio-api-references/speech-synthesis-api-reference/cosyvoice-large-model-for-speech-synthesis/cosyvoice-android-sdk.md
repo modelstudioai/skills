@@ -137,7 +137,7 @@ JSON字符串，包含语音合成的具体效果参数。详见下方 parameter
 
 ```
 {
-    "url": "wss://dashscope.aliyuncs.com/api-ws/v1/inference",
+    "url": "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference",
     "apikey": "sk-****",
     "device_id": "my_device_id"
 }
@@ -159,7 +159,9 @@ JSON字符串，包含语音合成的具体效果参数。详见下方 parameter
 
 是
 
-服务地址，固定为 `wss://dashscope.aliyuncs.com/api-ws/v1/inference`。
+服务地址，固定为 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`。
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 `apikey`
 
@@ -827,7 +829,8 @@ STREAM\_INPUT\_TTS\_EVENT\_TASK\_FAILED
     -   [下载最新SDK整合包](https://help.aliyun.com/zh/isi/sdk-selection-and-download)。
         
     -   解压 ZIP 包。在 `app/libs` 目录中获取 AAR 格式 SDK，并添加到项目依赖。  
-        需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。
+        需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。  
+          
         
     -   用 Android Studio 打开工程。示例代码位于`DashCosyVoiceStreamTtsActivity.java`，替换 API Key 后体验功能。
         

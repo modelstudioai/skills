@@ -9,7 +9,6 @@
           "Image"
         ]
       },
-      "openSource": false,
       "description": "LivePortrait-detect是辅助LivePortrait的图像检测模型，用于检测图片中的人物形象是否符合视频生成要求。",
       "features": [],
       "provider": "qwen",

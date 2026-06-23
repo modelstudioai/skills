@@ -12,7 +12,6 @@
           "Video"
         ]
       },
-      "openSource": false,
       "description": "HappyHorse-1.0-Video-Edit支持视频编辑，自然语言指令编辑视频，可参考最多5张图片局部或全局编辑视频元素，能够精准复刻视频动态过程，实现更强表现能力。",
       "features": [],
       "provider": "happyhorse",

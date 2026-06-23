@@ -11,7 +11,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "万相2.6-文生图，画面质感、美学表现、指令遵循升级，在艺术风格精准控制、真实感人像、长文本生图及广泛历史文化IP覆盖上均表现出卓越能力，可生成高质量且富有表现力的视觉内容。",
       "collectionTag": "wan2.6",
       "features": [
@@ -19,11 +18,6 @@
       ],
       "provider": "wan",
       "model": "wan2.6-t2i",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每张",
@@ -105,7 +99,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "万相2.5-文生图-Preview，全新升级模型架构。画面美学、设计感、真实质感显著提升，精准指令遵循，擅长中英文和小语种文字生成，支持复杂结构化长文本和图表、架构图等内容生成。",
       "collectionTag": "wan2.5",
       "features": [
@@ -113,11 +106,6 @@
       ],
       "provider": "wan",
       "model": "wan2.5-t2i-preview",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每张",
@@ -199,7 +187,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "全新升级的万相2.2文生图，更丰富的画面细节。在生成图像创意性、稳定性、写实质感方面全面升级，指令遵循更强，原生支持多种风格。支持最大200万像素生成，支持智能提示词改写等。",
       "collectionTag": "wan2.2",
       "features": [
@@ -207,11 +194,6 @@
       ],
       "provider": "wan",
       "model": "wan2.2-t2i-plus",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每张",
@@ -291,7 +273,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "全新升级的万相2.2文生图，更快的生成速度。在生成图像创意性、稳定性、写实质感方面全面升级，指令遵循更强，原生支持多种风格。支持最大200万像素生成，支持智能提示词改写等。",
       "collectionTag": "wan2.2",
       "features": [
@@ -299,11 +280,6 @@
       ],
       "provider": "wan",
       "model": "wan2.2-t2i-flash",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每张",
@@ -383,18 +359,12 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "万相2.1-文生图-Plus，更丰富的画面细节，在图像美观度、真实感、艺术性上全面升级，更强的语义理解能力、丰富的风格泛化性、支持最大200万像素生成，支持智能提示词改写等。",
       "features": [
         "model-experience"
       ],
       "provider": "wan",
       "model": "wanx2.1-t2i-plus",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每张",
@@ -474,18 +444,12 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "万相2.1-文生图-Turbo，更快的生成速度，在图像美观度、真实感、艺术性上全面升级，更强的语义理解能力、丰富的风格泛化性、支持最大200万像素生成，支持智能提示词改写等。",
       "features": [
         "model-experience"
       ],
       "provider": "wan",
       "model": "wanx2.1-t2i-turbo",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每张",
@@ -565,7 +529,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "万相-文本生成图像大模型，支持中英文双语输入，重点风格包括但不限于水彩、油画、中国画、素描、扁平插画、二次元、3D卡通",
       "features": [
         "model-experience"
@@ -640,18 +603,12 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "Wan2.0-T2I-Turbo，更擅长质感人像和创意设计画作生成，在图像美观度、真实感、艺术性上全面升级，支持最大200万像素生成，支持智能提示词改写等。",
       "features": [
         "model-experience"
       ],
       "provider": "wan",
       "model": "wanx2.0-t2i-turbo",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每张",
@@ -731,7 +688,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "万相-文本生成图像大模型，支持中英文双语输入，重点风格包括但不限于水彩、油画、中国画、素描、扁平插画、二次元、3D卡通，本模型为通义万相的2024年5月21号的历史快照。",
       "features": [],
       "provider": "wan",

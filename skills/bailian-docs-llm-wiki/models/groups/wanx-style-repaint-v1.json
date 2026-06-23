@@ -11,7 +11,6 @@
           "Image"
         ]
       },
-      "openSource": false,
       "description": "人像风格重绘可以将输入的人物图像进行多种风格化的重绘生成，使新生成的图像在兼顾原始人物相貌的同时，带来不同风格的绘画效果。",
       "features": [],
       "provider": "wan",

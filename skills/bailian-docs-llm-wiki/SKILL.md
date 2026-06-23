@@ -148,21 +148,19 @@ description: >-
 | 模型家族总览 / 按能力分桶浏览         | `models/index.md`                                        |
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
 | OpenAI 兼容接口 | `wiki/concepts/openai-compatible.md` |
-| Token 计量与计费 | `wiki/concepts/token.md` |
-| RAG 检索增强生成 | `wiki/concepts/rag.md` |
-| 流式输出 | `wiki/concepts/streaming.md` |
-| 业务空间 | `wiki/concepts/workspace.md` |
-| 函数调用 | `wiki/concepts/function-calling.md` |
 | DashScope SDK | `wiki/concepts/dashscope-sdk.md` |
-| 异步任务模式 | `wiki/concepts/async-task-pattern.md` |
-| Prompt 工程 | `wiki/concepts/prompt-engineering.md` |
-| API Key 管理与安全 | `wiki/concepts/api-key-management.md` |
-| 图像生成、视频生成与 3D 生成对比 | `wiki/comparisons/media-generation-comparison.md` |
-| 模型微调、压缩与部署对比 | `wiki/comparisons/model-customization-comparison.md` |
-| 应用评测与模型评测对比 | `wiki/comparisons/evaluation-comparison.md` |
+| 检索增强生成 | `wiki/concepts/rag.md` |
+| 业务空间 | `wiki/concepts/workspace.md` |
+| 异步任务调用 | `wiki/concepts/async-task.md` |
+| 流式输出 | `wiki/concepts/streaming-output.md` |
+| Token 与计费 | `wiki/concepts/token-billing.md` |
+| 模型上下文协议 | `wiki/concepts/mcp.md` |
 | 应用监控与模型监控对比 | `wiki/comparisons/monitoring-comparison.md` |
-| 知识库与长期记忆对比 | `wiki/comparisons/knowledge-vs-memory.md` |
-| 标准推理与高速推理对比 | `wiki/comparisons/inference-speed-comparison.md` |
+| 应用评估与模型评估对比 | `wiki/comparisons/evaluation-comparison.md` |
+| 模型优化方式对比：微调、压缩与部署 | `wiki/comparisons/model-optimization-comparison.md` |
+| 多模态生成 API 对比：图像、视频与 3D | `wiki/comparisons/generation-api-comparison.md` |
+| 通用支持与应用支持对比 | `wiki/comparisons/support-comparison.md` |
+| 通用用例与应用用例对比 | `wiki/comparisons/use-cases-comparison.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 

@@ -15,7 +15,6 @@
           "Audio"
         ]
       },
-      "openSource": false,
       "description": "千问全新多模态理解生成大模型实时版，适合实时音频交互场景。支持音频伴随文本、图像、视频混合输入理解，具备语音和文本同时流式生成能力，提供了4种自然对话音色。",
       "features": [],
       "provider": "qwen",
@@ -137,7 +136,6 @@
           "Audio"
         ]
       },
-      "openSource": false,
       "description": "千问全新多模态理解生成大模型实时版，此版本为动态更新版本。",
       "features": [],
       "provider": "qwen",

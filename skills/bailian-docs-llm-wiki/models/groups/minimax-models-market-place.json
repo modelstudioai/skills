@@ -13,7 +13,6 @@
           "Video"
         ]
       },
-      "openSource": false,
       "description": "MiniMax M3 凭借业界领先的 Coding 与 Agentic 能力、1M 超长上下文窗口以及原生多模态特性，可出色胜任企业级长文档理解、高质量内容生成、代码编写、Bug 修复及原生应用构建等任务；强大的 Agentic 能力端到端贯通工作流，原生多模态更带来流畅自然的图文混合交互体验。",
       "features": [
         "function-calling",
@@ -102,8 +101,8 @@
       "samples": {
         "openai": {
           "completionsAPI": {
-            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"MiniMax/MiniMax-M3\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\n                    \"type\": \"image_url\",\n                    \"image_url\": {\n                        \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n                    },\n                },\n                {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"},\n            ],\n        },\n    ],\n)\nprint(completion.choices[0].message.content)",
             "curl": "curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n  \"model\": \"MiniMax/MiniMax-M3\",\n  \"messages\": [\n  {\n    \"role\": \"user\",\n    \"content\": [\n      {\"type\": \"image_url\", \"image_url\": {\"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"}},\n      {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"}\n    ]\n  }]\n}'",
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"MiniMax/MiniMax-M3\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\n                    \"type\": \"image_url\",\n                    \"image_url\": {\n                        \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n                    },\n                },\n                {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"},\n            ],\n        },\n    ],\n)\nprint(completion.choices[0].message.content)",
             "nodejs": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI({\n  // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: \"sk-xxx\"\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: \"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n});\n\nasync function main() {\n  const response = await openai.chat.completions.create({\n    model: \"MiniMax/MiniMax-M3\",\n    messages: [\n      {\n        role: \"user\",\n        content: [{\n            type: \"image_url\",\n            image_url: {\n              \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n            }\n          },\n          {\n            type: \"text\",\n            text: \"请仅输出图像中的文本内容。\"\n          }\n        ]\n      }\n    ]\n  });\n  console.log(response.choices[0].message.content);\n}\nmain()",
             "docUrl": "https://help.aliyun.com/document_detail/3021620.html"
           }
@@ -119,7 +118,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "M2.7 能够自行构建复杂 Agent Harness，并基于 Agent Teams、复杂 Skills、Tool Search tool 等能力，完成高度复杂的生产力任务。",
       "features": [
         "function-calling",
@@ -224,7 +222,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "智能体世界的SOTA，专为智能体2.0设计，将编码扩展到现实世界包括工作空间、娱乐和个人助理。模型亮点：全球SOTA开源编码与智能体模型；SWE-bench Pro和SWE-bench Verified得分高于Opus 4.6；在Excel、搜索与研究以及文档摘要方面的全球SOTA；未来工作空间的完美主力模型；闪电般快速：优化思维效率，100+ TPS，实现比 Opus 快 3 倍的速度；极致性价比，以支持始终在线的智能体。",
       "features": [
         "function-calling",
@@ -329,7 +326,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "M2.1 的设计初衷在于打破“最顶级的 Agent 能力仅存在于闭源模型”的壁垒。我们在模型层面进行了针对性优化，显著提升了模型在代码生成、工具调用、复杂指令遵循及长程规划任务中的性能。从自动化进行多语言的软件开发，到执行多步骤的复杂办公工作流，MiniMax-M2.1 均表现出卓越的稳定性。我们致力于为开发者提供一个完全透明、可控且高可用的基础模型，以构建下一代自主智能体应用。",
       "features": [
         "function-calling",

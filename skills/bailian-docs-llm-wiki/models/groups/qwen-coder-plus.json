@@ -11,11 +11,7 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "千问系列代码及编程模型是专门用于编程和代码生成的语言模型，性能出色，效果突出。",
-      "offlineExtendInfo": {
-        "announceUrl": "https://www.aliyun.com/notice/118177"
-      },
       "offlineAt": "2026-07-13T15:59:59.000+00:00",
       "features": [
         "model-experience"

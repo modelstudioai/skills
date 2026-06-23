@@ -11,7 +11,6 @@
           "Audio"
         ]
       },
-      "openSource": false,
       "description": "千问voice-enrollment模型是千问语音模型的声音复刻系列模型，仅需5s以上的音频，即可迅速复刻高相似度声音。结合qwen3-tts-vc-realtime模型使用，可将一个人的声音高保真复刻，输出10个语种的语音。且合成音频可以根据文本自适应调节语气，对复杂文本合成也有较好的处理能力。",
       "features": [],
       "provider": "qwen",

@@ -11,7 +11,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "输入文字描述，秒级生成与语义精准匹配的高质量视频，支持多种风格。PixVerse V5.6 是爱诗科技自研的视频生成大模型，在文生视频与图生视频能力上实现全面升级。模型在画面清晰度、复杂运动稳定性与音画协同方面显著提升，多角色对话场景下嘴型与台词同步更准确，情绪表达更自然。同时优化构图、光影与质感一致性，整体生成质量进一步提升。PixVerse V5.6 在 Artificial Analysis 文生视频与图生视频榜单中位列全球第一梯队。",
       "features": [],
       "provider": "pixverse",
@@ -137,7 +136,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "输入2–7张图像，智能融合不同主体，保持风格统一与动作协调，轻松构建丰富叙事场景，提升内容可控性与创意自由度。PixVerse V5.6 是爱诗科技自研的视频生成大模型，在文生视频与图生视频能力上实现全面升级。模型在画面清晰度、复杂运动稳定性与音画协同方面显著提升，多角色对话场景下嘴型与台词同步更准确，情绪表达更自然。同时优化构图、光影与质感一致性，整体生成质量进一步提升。PixVerse V5.6 在 Artificial Analysis 文生视频与图生视频榜单中位列全球第一梯队。",
       "features": [],
       "provider": "pixverse",
@@ -263,7 +261,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "在任意两张图片之间实现无缝转换，实现更流畅自然的场景过渡，打造视觉冲击力强的画面效果。PixVerse V5.6 是爱诗科技自研的视频生成大模型，在文生视频与图生视频能力上实现全面升级。模型在画面清晰度、复杂运动稳定性与音画协同方面显著提升，多角色对话场景下嘴型与台词同步更准确，情绪表达更自然。同时优化构图、光影与质感一致性，整体生成质量进一步提升。PixVerse V5.6 在 Artificial Analysis 文生视频与图生视频榜单中位列全球第一梯队。",
       "features": [],
       "provider": "pixverse",
@@ -389,7 +386,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "上传任意图片，自由定制剧情、节奏与风格，生成生动连贯的视频。PixVerse V5.6 是爱诗科技自研的视频生成大模型，在文生视频与图生视频能力上实现全面升级。模型在画面清晰度、复杂运动稳定性与音画协同方面显著提升，多角色对话场景下嘴型与台词同步更准确，情绪表达更自然。同时优化构图、光影与质感一致性，整体生成质量进一步提升。PixVerse V5.6 在 Artificial Analysis 文生视频与图生视频榜单中位列全球第一梯队。",
       "features": [],
       "provider": "pixverse",
@@ -469,33 +465,6 @@
       "latestOnlineAt": "2026-03-19T06:59:33.000+00:00",
       "inferenceProvider": "pixverse",
       "name": "PixVerse-V5.6-it2v",
-      "predictConfig": [
-        {
-          "name": "清晰度",
-          "key": "resolution",
-          "default": "540P"
-        },
-        {
-          "name": "视频时长",
-          "key": "duration",
-          "default": 5
-        },
-        {
-          "name": "随机种子",
-          "key": "seed",
-          "default": 1234,
-          "tip": "随机数种子，用于控制模型生成内容的随机性",
-          "range": [
-            1,
-            2147483647
-          ]
-        },
-        {
-          "name": "生成音频",
-          "key": "audio",
-          "default": true
-        }
-      ],
       "samples": {
         "dashscope": {
           "default": {

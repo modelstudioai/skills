@@ -12,7 +12,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "Wan2.7-T2V，演绎能力全面升级，文戏情感细腻自然，动作戏激烈拳拳到肉，搭配更富有戏剧性和节奏感的镜头切换，实现更强表演能力。",
       "collectionTag": "wan2.7",
       "features": [
@@ -116,7 +115,6 @@
           "Audio"
         ]
       },
-      "openSource": false,
       "description": "万相2.6-文生视频，智能分镜调度支持多镜头叙事，能够生成主体、场景和氛围一致的多镜头叙事视频，最高支持15秒时长，更高品质的声音生成，更好的指令遵循和视觉质量",
       "collectionTag": "wan2.6",
       "features": [
@@ -124,11 +122,6 @@
       ],
       "provider": "wan",
       "model": "wan2.6-t2v",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",
@@ -239,7 +232,6 @@
           "Audio"
         ]
       },
-      "openSource": false,
       "description": "万相2.5-文生视频-Preview，全新升级模型架构，支持与画面同步的声音生成，支持10秒长视频生成，更强的指令遵循能力，运动能力、画面质感进一步提升。",
       "collectionTag": "wan2.5",
       "features": [
@@ -247,11 +239,6 @@
       ],
       "provider": "wan",
       "model": "wan2.5-t2v-preview",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",
@@ -348,17 +335,11 @@
           "Text"
         ]
       },
-      "openSource": true,
       "description": "全新升级的万相2.2文生视频，视频品质更高。可稳定生成大幅度复杂运动，支持影视级画面表现与控制，更强大的指令遵循能力，实现物理世界还原。",
       "collectionTag": "wan2.2",
       "features": [],
       "provider": "wan",
       "model": "wan2.2-t2v-plus",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",
@@ -442,16 +423,10 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "万相2.1-文生视频-Plus，一句话生成视频。视频品质更高，支持大幅度复杂运动、现实物理规律还原、丰富艺术风格和影视级画面质感，指令遵循能力进一步提升。",
       "features": [],
       "provider": "wan",
       "model": "wanx2.1-t2v-plus",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",
@@ -529,16 +504,10 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "万相2.1-文生视频-Turbo，一句话生成视频。生成速度更快，支持大幅度复杂运动、现实物理规律还原、丰富的艺术风格和影视级画面质感，指令遵循能力进一步提升。",
       "features": [],
       "provider": "wan",
       "model": "wanx2.1-t2v-turbo",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",

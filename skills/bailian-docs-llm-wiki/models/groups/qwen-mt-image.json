@@ -11,7 +11,6 @@
           "Image"
         ]
       },
-      "openSource": false,
       "description": "专注做图片翻译的模型服务，能将中、英、日等11个语言的图片翻译到指定的语言，精准还原图片排版和内容信息，支持术语定义、敏感词过滤、商品主体检测等自定义功能，提供灵活、准确、高效的图像本地化服务。",
       "features": [],
       "provider": "qwen-domain-model",

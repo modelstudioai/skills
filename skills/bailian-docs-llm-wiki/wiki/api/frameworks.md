@@ -8,7 +8,7 @@ LlamaIndex 提供了基于 Python 的 RAG 应用构建框架，百炼通过 `Das
 
 ### 适用场景
 
-- 私域知识问答、客户支持等需要检索增强生成的场景
+- 私域知识问答、客户支持等需要[检索增强生成](../concepts/rag.md)的场景
 - 已熟悉 LlamaIndex API 的 Python 开发者
 
 ### 前提条件
@@ -116,6 +116,7 @@ Maven 依赖：
 - [通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)
 - [通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)
 - [使用Spring AI Alibaba集成阿里云百炼大模型应用](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-llm-application.md)
+
 
 
 

@@ -10,7 +10,6 @@
           "Image"
         ]
       },
-      "openSource": false,
       "description": "基于Qwen3-VL底座训练的统一多模态向量模型，支持文本、图片、视频单模态/混合模态输入，输出统一表征向量，适用于跨模态检索、图搜、视频检索、图像聚类、复杂多模态信息检索、打标等场景",
       "features": [
         "model-experience"
@@ -82,16 +81,10 @@
           "Image"
         ]
       },
-      "openSource": false,
       "description": "基于Qwen2.5-VL底座训练的统一多模态向量模型，支持文本、图片、视频单模态/混合模态输入，输出统一表征向量，适用于跨模态检索、图搜、视频检索、图像聚类、复杂多模态信息检索、打标等场景",
       "features": [],
       "provider": "qwen",
       "model": "qwen2.5-vl-embedding",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_embeddingrerank_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每百万tokens",

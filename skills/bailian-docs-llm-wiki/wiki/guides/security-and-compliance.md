@@ -26,7 +26,7 @@
 
 ### API Key 权限
 
-API Key 归属于特定地域内的一个[业务空间](../concepts/workspace.md)和一个用户，不能转移。其可调用的功能和模型限流与归属业务空间一致，不受用户控制台权限的影响。
+API Key 归属于特定地域内的一个[业务空间](../concepts/workspace.md)和一个用户，不能转移。其可调用的功能和模型限流与归属[业务空间](../concepts/workspace.md)一致，不受用户控制台权限的影响。
 
 > **注意**：自 2026 年 3 月 25 日起，华北2（北京）地域新创建的 API Key 均归属主账号。
 
@@ -38,7 +38,7 @@ RAM 用户默认无权调用百炼应用的 Open API（知识库、[Prompt 工�
 
 ### 生产环境最佳实践
 
-- **空间规划**：建议按环境（dev/test/prod）或按业务线划分业务空间，实现隔离
+- **空间规划**：建议按环境（dev/test/prod）或按业务线划分[业务空间](../concepts/workspace.md)，实现隔离
 - **限流策略**：将主账号总配额按比例分配给各空间，并预留缓冲应对突发流量
 
 ## 传输安全
@@ -112,7 +112,7 @@ GenerationParam param = GenerationParam.builder()
 
 ## 安全存储
 
-百炼提供**安全存储业务空间**，面向对数据隔离有严格要求的企业用户。安全存储空间通过私网终端节点将百炼平台与用户自有的云资源（OSS、AnalyticDB、ElasticSearch）连通，确保数据在用户控制的环境中存储和处理。
+百炼提供**安全存储[业务空间](../concepts/workspace.md)**，面向对数据隔离有严格要求的企业用户。安全存储空间通过私网终端节点将百炼平台与用户自有的云资源（OSS、AnalyticDB、ElasticSearch）连通，确保数据在用户控制的环境中存储和处理。
 
 配置流程：
 
@@ -157,6 +157,7 @@ GenerationParam param = GenerationParam.builder()
 - [配置终端节点并发起连接](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-an-endpoint-and-initiate-a-connection.md)
 - [配置私有网络中的资源](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)
 - [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md)
+
 
 
 

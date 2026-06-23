@@ -11,7 +11,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "千问voice-design模型是千问语音模型的声音设计系列模型，仅需输入简单的文字描述，即可迅速设计出符合要求的相关声音。结合qwen3-tts-vd-realtime模型使用，可设计输出10个语种的语音。且合成音频可以根据文本自适应调节语气，对复杂文本合成也有较好的处理能力。",
       "features": [],
       "provider": "qwen",

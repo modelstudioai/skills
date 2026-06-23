@@ -11,139 +11,6 @@
           "Text"
         ]
       },
-      "openSource": false,
-      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
-      "features": [],
-      "provider": "qwen",
-      "model": "sambert-zhinan-v1",
-      "prices": [
-        {
-          "priceUnit": "每万字符",
-          "price": "1",
-          "type": "tts_text_number",
-          "priceName": "Sambert 语音合成"
-        }
-      ],
-      "capabilities": [
-        "TTS"
-      ],
-      "versionTag": "MAJOR",
-      "latestOnlineAt": "2025-03-18T08:10:47.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
-      "name": "Sambert语音合成-知楠",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
-      "predictConfig": [
-        {
-          "name": "system",
-          "key": "systemMessage",
-          "tip": "系统人设，例如“你是一个AI助手”。"
-        },
-        {
-          "name": "top_p",
-          "key": "top_p",
-          "default": 0.8,
-          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
-          "range": [
-            0.0001,
-            1
-          ]
-        },
-        {
-          "name": "temperature",
-          "key": "temperature",
-          "default": 0.7,
-          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
-          "range": [
-            0,
-            1.9999
-          ]
-        }
-      ],
-      "samples": {
-        "dashscope": {
-          "default": {
-            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhinan-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
-            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhinan-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
-          }
-        }
-      }
-    },
-    {
-      "inferenceMetadata": {
-        "response_modality": [
-          "Audio"
-        ],
-        "request_modality": [
-          "Text"
-        ]
-      },
-      "openSource": false,
-      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
-      "features": [],
-      "provider": "qwen",
-      "model": "sambert-betty-v1",
-      "prices": [
-        {
-          "priceUnit": "每万字符",
-          "price": "1",
-          "type": "tts_text_number",
-          "priceName": "Sambert 语音合成"
-        }
-      ],
-      "capabilities": [
-        "TTS"
-      ],
-      "versionTag": "MAJOR",
-      "latestOnlineAt": "2025-03-18T02:16:48.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
-      "name": "Sambert语音合成-Betty",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
-      "predictConfig": [
-        {
-          "name": "system",
-          "key": "systemMessage",
-          "tip": "系统人设，例如“你是一个AI助手”。"
-        },
-        {
-          "name": "top_p",
-          "key": "top_p",
-          "default": 0.8,
-          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
-          "range": [
-            0.0001,
-            1
-          ]
-        },
-        {
-          "name": "temperature",
-          "key": "temperature",
-          "default": 0.7,
-          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
-          "range": [
-            0,
-            1.9999
-          ]
-        }
-      ],
-      "samples": {
-        "dashscope": {
-          "default": {
-            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-betty-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
-            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-betty-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
-          }
-        }
-      }
-    },
-    {
-      "inferenceMetadata": {
-        "response_modality": [
-          "Audio"
-        ],
-        "request_modality": [
-          "Text"
-        ]
-      },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -209,7 +76,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -275,7 +141,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -341,7 +206,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -407,7 +271,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -473,7 +336,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -539,7 +401,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -605,7 +466,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -671,7 +531,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -737,7 +596,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -803,7 +661,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -869,7 +726,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -935,7 +791,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -1001,7 +856,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -1067,7 +921,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -1133,7 +986,71 @@
           "Text"
         ]
       },
-      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-zhinan-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": [
+        "TTS"
+      ],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T08:10:47.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-知楠",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-zhinan-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-zhinan-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Audio"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -1199,7 +1116,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -1265,7 +1181,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -1331,7 +1246,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -1397,7 +1311,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -1463,7 +1376,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -1529,7 +1441,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -1595,7 +1506,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -1661,7 +1571,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -1727,7 +1636,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -1793,7 +1701,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -1859,7 +1766,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -1925,7 +1831,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -1991,7 +1896,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -2057,7 +1961,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -2123,7 +2026,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -2189,7 +2091,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -2255,7 +2156,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -2321,7 +2221,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -2387,7 +2286,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -2453,7 +2351,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -2519,7 +2416,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -2585,7 +2481,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -2651,7 +2546,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -2717,7 +2611,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",
@@ -2783,7 +2676,71 @@
           "Text"
         ]
       },
-      "openSource": false,
+      "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
+      "features": [],
+      "provider": "qwen",
+      "model": "sambert-betty-v1",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "tts_text_number",
+          "priceName": "Sambert 语音合成"
+        }
+      ],
+      "capabilities": [
+        "TTS"
+      ],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2025-03-18T02:16:48.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Sambert语音合成-Betty",
+      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\nimport sys\nfrom dashscope.audio.tts import SpeechSynthesizer\n# 若没有将API Key配置到环境变量中，需将apiKey替换为自己的API Key\n# import dashscope\n# dashscope.api_key = \"apiKey\"\nresult = SpeechSynthesizer.call(model='sambert-betty-v1',\n                                text='今天天气怎么样',\n                                sample_rate=48000,\n                                format='wav')\nif result.get_audio_data() is not None:\n    with open('output.wav', 'wb') as f:\n        f.write(result.get_audio_data())\n    print('SUCCESS: get audio data: %dbytes in output.wav' %\n          (sys.getsizeof(result.get_audio_data())))\nelse:\n    print('ERROR: response is %s' % (result.get_response()))",
+            "java": "import com.alibaba.dashscope.audio.tts.SpeechSynthesizer;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;\nimport com.alibaba.dashscope.audio.tts.SpeechSynthesisAudioFormat;\n\nimport java.io.*;\nimport java.nio.ByteBuffer;\n\npublic class Main {\n    public static void syncAudioDataToFile() {\n        SpeechSynthesizer synthesizer = new SpeechSynthesizer();\n        SpeechSynthesisParam param = SpeechSynthesisParam.builder()\n                // 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key\n                // .apiKey(\"yourApikey\")\n                .model(\"sambert-betty-v1\")\n                .text(\"今天天气怎么样\")\n                .sampleRate(48000)\n                .format(SpeechSynthesisAudioFormat.WAV)\n                .build();\n\n        File file = new File(\"output.wav\");\n        // 提交同步合成任务，获取完整的音频数据\n        ByteBuffer audio = synthesizer.call(param);\n        try (FileOutputStream fos = new FileOutputStream(file)) {\n            fos.write(audio.array());\n            System.out.println(\"synthesis done!\");\n        } catch (IOException e) {\n            throw new RuntimeException(e);\n        }\n    }\n\n    public static void main(String[] args) {\n        syncAudioDataToFile();\n        System.exit(0);\n    }\n}"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Audio"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
       "description": "提供SAMBERT+NSFGAN深度神经网络算法与传统领域知识深度结合的文字转语音服务，兼具读音准确，韵律自然，声音还原度高，表现力强的特点。",
       "features": [],
       "provider": "qwen",

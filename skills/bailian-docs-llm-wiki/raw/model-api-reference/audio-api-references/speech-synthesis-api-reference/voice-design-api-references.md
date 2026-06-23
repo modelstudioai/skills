@@ -8,7 +8,9 @@
 
 ## 华北2（北京）
 
-`POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization`
+`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 新加坡
 
@@ -57,7 +59,7 @@ string
 ## CosyVoice声音设计
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -80,7 +82,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customizat
 ## Qwen声音设计
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -343,7 +345,7 @@ CosyVoice返回`voice_id`字段，Qwen返回`voice`字段。
 ## CosyVoice
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -360,7 +362,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customizat
 ## Qwen声音设计
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -563,7 +565,7 @@ CosyVoice固定为1。Qwen固定为0。
 ## CosyVoice
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -578,7 +580,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customizat
 ## Qwen声音设计
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -744,7 +746,7 @@ CosyVoice声音设计返回`voice_id`、`voice_prompt`等字段。Qwen声音设�
 ## CosyVoice
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -759,7 +761,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customizat
 ## Qwen声音设计
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{

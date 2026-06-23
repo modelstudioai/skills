@@ -1,6 +1,6 @@
 # model context protocol
 
-模型上下文协议（Model Context Protocol, MCP）是一种开源标准协议，用于在大模型与外部工具之间建立统一的信息传递通道。在阿里云百炼平台中，开发者无需为每个外部工具编写专用接口，即可通过 MCP 让智能体和工作流应用接入海量第三方工具。百炼同时提供官方预部署的 MCP 服务和自定义部署能力，并支持通过外部调用将 MCP 服务集成至第三方应用。
+[模型上下文协议](../concepts/mcp.md)（Model Context Protocol, MCP）是一种开源标准协议，用于在大模型与外部工具之间建立统一的信息传递通道。在阿里云百炼平台中，开发者无需为每个外部工具编写专用接口，即可通过 MCP 让智能体和工作流应用接入海量第三方工具。百炼同时提供官方预部署的 MCP 服务和自定义部署能力，并支持通过外部调用将 MCP 服务集成至第三方应用。
 
 ## 核心概念
 
@@ -95,6 +95,7 @@ MCP 在百炼平台中分为两类服务：
 - [自定义 MCP 服务](../../raw/application-user-guide/model-context-protocol/custom-mcp.md)
 - [外部调用](../../raw/application-user-guide/model-context-protocol/mcp-external-calls.md)
 - [MCP 常见问题](../../raw/application-user-guide/model-context-protocol/mcp-faq.md)
+
 
 
 

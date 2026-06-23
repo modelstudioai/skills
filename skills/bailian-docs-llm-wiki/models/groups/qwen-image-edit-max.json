@@ -12,7 +12,6 @@
           "Image"
         ]
       },
-      "openSource": true,
       "description": "千问图像编辑模型Max系列，提供更稳定、更丰富的编辑能力：提升工业设计与几何推理能力；提升角色一致性；减轻偏移问题；集成Lora能力，可以进行更多功能的图像编辑。",
       "features": [
         "model-experience"

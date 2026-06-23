@@ -13,11 +13,7 @@
           "Video"
         ]
       },
-      "openSource": false,
       "description": "千问QVQ视觉推理模型，支持视觉输入及思维链输出，在数学、编程、视觉分析、创作以及通用任务上都表现了更强的能力。",
-      "offlineExtendInfo": {
-        "announceUrl": "https://www.aliyun.com/notice/118177"
-      },
       "offlineAt": "2026-07-13T15:59:59.000+00:00",
       "features": [
         "model-experience"
