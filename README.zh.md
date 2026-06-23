@@ -68,6 +68,7 @@ npx skills add modelstudioai/skills
 | [`financial-expert`](./skills/financial-expert/) | **金融数据分析**：基于 `bl mcp`（`market-cmapi00073529`），覆盖中国 A 股、基金、债券。支持选股 / 基金 / 基金经理筛选、财务数据（净利润 / 营收 / ROE）、宏观与行业时序（GDP / CPI）、券商研报、上市公司公告检索。 |
 | [`happyhorse-prompt-studio`](./skills/happyhorse-prompt-studio/) | **HappyHorse 1.0 视频提示词工作室**：用生动示例引导用户发现场景，再组装出 日/中/英 三语的成片级 Prompt。覆盖漫剧、角色 PV、漫画运动、虚拟偶像 MV 及自由创作场景。 |
 | [`spark-video`](./skills/spark-video/) | **端到端短片制作**：编剧 ↔ 导演（逐场景）→ 并行渲染 DAG → 逐 clip 审片 → 拼接。适合"帮我做一集短剧/产品广告"一句话出片。入口技能注册为 **`spark-video-episode`**（见 [`SKILL.md`](./skills/spark-video/SKILL.md)）。 |
+| [`novel-game`](./skills/novel-game/) | **小说改编互动小说网页游戏（React SPA）**：分支剧情引擎 + AI 生成角色立绘/过场（视频或图片）+ 可选 TTS 旁白 + 程序化 Web Audio 音频 + localStorage 存档 + 多种 UI 风格（像素 / 赛博朋克 / 水墨 / 简约）。命中"互动小说 / 文字冒险 / 视觉小说 / 小说改编游戏"时激活，全程通过 `bl video / image / speech` 离线生成素材后本地运行。 |
 
 ---
 
