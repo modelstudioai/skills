@@ -11,7 +11,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "快速对文档进行精准信息抽取，打标分类，内容审核及摘要总结。",
       "features": [
         "cache"

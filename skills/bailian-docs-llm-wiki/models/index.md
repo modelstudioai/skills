@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 164 个模型家族 · 367 个主干模型 · 更新于 2026-06-20
+> 自动生成 · 共 164 个模型家族 · 370 个主干模型 · 更新于 2026-06-23
 
 **机器查询走结构化文件**：
 
@@ -144,11 +144,11 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 ## 视频生成 `VG` — 25 个家族
 
 - [HappyHorse-I2V](groups/happyhorse-i2v.json) — HappyHorse系列最新图生视频模型，具备高度还原的动态画面生成能力，能够稳定保持与图像一致性，输出流畅自然、细节丰富的高质量视频。
-  - 模型：`happyhorse-1.0-i2v`
+  - 模型：`happyhorse-1.0-i2v`, `happyhorse-1.1-i2v`
 - [HappyHorse-R2V](groups/happyhorse-r2v.json) — HappyHorse-R2V支持参考生视频，更加稳定的主体与场景参考，支持最多9张图片参考，能够精准保持创作意图，实现更强表现能力。
-  - 模型：`happyhorse-1.0-r2v`
+  - 模型：`happyhorse-1.0-r2v`, `happyhorse-1.1-r2v`
 - [HappyHorse-T2V](groups/happyhorse-t2v.json) — HappyHorse系列最新文生视频模型，具备高度还原的动态画面生成能力，能够精准理解文本语义，输出流畅自然、细节丰富的高质量视频。
-  - 模型：`happyhorse-1.0-t2v`
+  - 模型：`happyhorse-1.0-t2v`, `happyhorse-1.1-t2v`
 - [HappyHorse-Video-Edit](groups/happyhorse-video-edit.json) — HappyHorse-Video-Edit支持视频编辑，自然语言指令编辑视频，可参考最多5张图片局部或全局编辑视频元素，能够精准复刻视频动态过程，实现更强表现能力。
   - 模型：`happyhorse-1.0-video-edit`
 - [PixVerse C1](groups/pixverse-c1-market-place.json) — 由爱诗科技提供的PixVerse C系列视频大模型API服务。

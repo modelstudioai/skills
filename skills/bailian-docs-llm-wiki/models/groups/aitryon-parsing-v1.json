@@ -11,7 +11,6 @@
           "Image"
         ]
       },
-      "openSource": false,
       "description": "图片分割模型是AI试衣OutfitAnyone的辅助模型，可对模特图、服饰图进行分割，用于试衣图片的前后处理。",
       "features": [],
       "provider": "qwen",

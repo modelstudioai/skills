@@ -27,9 +27,9 @@
 
 ## [业务空间](../concepts/workspace.md)与权限管理
 
-业务空间是百炼进行精细化权限管理的最小单元。需要注意以下关键点：
+[业务空间](../concepts/workspace.md)是百炼进行精细化权限管理的最小单元。需要注意以下关键点：
 
-- **地域隔离**：单个业务空间不能跨地域存在，即使各地域的默认业务空间也是独立的空间。
+- **地域隔离**：单个[业务空间](../concepts/workspace.md)不能跨地域存在，即使各地域的默认[业务空间](../concepts/workspace.md)也是独立的空间。
 - **默认空间限制**：默认业务空间无法限制模型调用、调优和部署，所有模型均可使用且无法设置限流。
 
 业务空间可管理的权限维度包括：
@@ -118,6 +118,7 @@ RAM 用户默认无权查看账单或购买预付费产品，需在 RAM 控制�
 ## 来源文档
 
 - [权限管理](../../raw/application-user-guide/application-permission-management/application-permission-management-overview.md)
+
 
 
 

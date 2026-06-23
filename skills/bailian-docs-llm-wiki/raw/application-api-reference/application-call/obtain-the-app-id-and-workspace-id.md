@@ -2,9 +2,9 @@
 
 通过 API 调用阿里云百炼的应用（**智能体**、**工作流**）时，需提供凭证来指定目标应用及其所属的业务空间：
 
--   应用位于**默认业务空间**，仅需提供 APP ID。
+-   应用位于**默认业务空间**，仅需提供 APP ID。
     
--   应用位于**子业务空间**，需同时提供 APP ID 和 Workspace ID。
+-   应用位于**子业务空间**，需同时提供 APP ID 和 Workspace ID。
     
 
 本文介绍如何在控制台中快速获取这些凭证。更多业务空间相关内容请参考：[业务空间权限管理](https://help.aliyun.com/zh/model-studio/permission-management-overview#dac6676deelh2)。
@@ -24,7 +24,7 @@
 
 ## **获取Workspace ID**
 
-`Workspace ID`是业务空间的唯一标识。在调用**子业务空间**下的应用或德国（法兰克福）地域下的模型时，API 请求中才必须包含`Workspace ID`。
+`Workspace ID`是业务空间的唯一标识。在调用子业务空间下的应用，或德国（法兰克福）、华北2（北京）、新加坡、日本（东京）地域下的模型时，API 请求中才必须包含`Workspace ID`，Workspace ID 是这些地域 [Base URL](https://help.aliyun.com/zh/model-studio/regions/) 的组成部分。
 
 ### **获取当前业务空间 ID**
 
@@ -45,7 +45,7 @@
 
 1.  使用**主账号**或**授权子账号**登录阿里云百炼控制台；
     
-2.  单击右上角的**![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3646850671/p1005980.png)**图标，前往[业务空间管理](https://bailian.console.aliyun.com/?tab=globalset#/efm/business_management)界面；
+2.  单击右上角的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3646850671/p1005980.png)图标，前往[业务空间管理](https://bailian.console.aliyun.com/?tab=globalset#/efm/business_management)界面；
     
 3.  在**Workspace ID**列，查看并复制所需业务空间的 ID。
     

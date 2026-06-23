@@ -17,7 +17,7 @@
 
 [通义法睿大语言模型](../../raw/model-api-reference/more-models/tongyi-farui-api.md)是以千问为基座、经法律行业数据训练的专用模型，具备法律问答、案情分析、法律文书生成、合同审查等能力。模型名称为 `farui-plus`，上下文长度 12k、最大输出 2k，输入成本 20 元/百万 Token。
 
-调用方式与标准千问模型一致，通过 DashScope SDK 的 `Generation.call` 接口，将 `model` 参数设为 `"farui-plus"` 即可。支持单轮对话、多轮对话和[流式输出](../concepts/streaming.md)。
+调用方式与标准千问模型一致，通过 [DashScope SDK](../concepts/dashscope-sdk.md) 的 `Generation.call` 接口，将 `model` 参数设为 `"farui-plus"` 即可。支持单轮对话、多轮对话和[流式输出](../concepts/streaming.md)。
 
 ## 意图理解模型
 
@@ -36,7 +36,7 @@
 1. **反问确认阶段**：发送初始研究主题，模型返回澄清式问题，帮助聚焦方向。
 2. **深入研究阶段**：将反问内容和用户回答拼入 messages，模型进行网络搜索并生成研究报告。
 
-> **注意**：Qwen-Deep-Research 仅支持华北2（北京）地域，需使用该地域的 API Key。当前仅支持 Python DashScope SDK 和 curl，暂不支持 Java SDK 与 [OpenAI 兼容接口](../concepts/openai-compatible.md)。
+> **注意**：Qwen-Deep-Research 仅支持华北2（北京）地域，需使用该地域的 API Key。当前仅支持 Python [DashScope SDK](../concepts/dashscope-sdk.md) 和 curl，暂不支持 Java SDK 与 [OpenAI 兼容接口](../concepts/openai-compatible.md)。
 
 响应中包含多个阶段标识（`ResearchPlanning` → `WebResearch` → `KeepAlive` → `answer`），`answer` 阶段的 `extra.deep_research.references` 提供引用来源。通过 `output_format` 参数可选择详细报告（约 6000 Token）或摘要报告（约 1500-2000 Token）。
 
@@ -73,7 +73,7 @@
 所有模型均需完成以下准备：
 
 1. [获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key) 并 [配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-2. 如使用 SDK 调用，需先 [安装对应 SDK](https://help.aliyun.com/zh/model-studio/install-sdk)（OpenAI SDK 或 DashScope SDK）。
+2. 如使用 SDK 调用，需先 [安装对应 SDK](https://help.aliyun.com/zh/model-studio/install-sdk)（OpenAI SDK 或 [DashScope SDK](../concepts/dashscope-sdk.md)）。
 3. 注意各模型的地域限制和 SDK 支持情况，选择匹配的 `base_url`。
 
 ## 来源文档
@@ -84,6 +84,7 @@
 - [Qwen-MT API参考](../../raw/model-api-reference/more-models/qwen-mt-api.md)
 - [GUI-Plus API参考](../../raw/model-api-reference/more-models/gui-plus-interface-interaction-model.md)
 - [Qwen-OCR API参考](../../raw/model-api-reference/more-models/qwen-vl-ocr-api-reference.md)
+
 
 
 

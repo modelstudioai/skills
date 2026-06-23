@@ -1,10 +1,90 @@
-# DeepSeek大语言模型
+# DeepSeek-阿里云
 
 本文档介绍如何在阿里云百炼平台通过OpenAI兼容接口或DashScope SDK调用DeepSeek系列模型。
 
 **重要**
 
 deepseek-v3、deepseek-v3.1、deepseek-v3.2、deepseek-v3.2-exp、deepseek-r1、deepseek-r1-0528、deepseek-r1-distill-qwen-7b/14b/32b 将于**2026年7月9日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-plus)、[qwen3.7-max](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-max)、[qwen3.6-flash](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.6-flash)。
+
+## **服务接入地址**
+
+不同地域的服务接入地址不同，请根据您选择的地域配置对应的 Base URL。各地域可调用的模型及限流不同，请参见[限流](https://help.aliyun.com/zh/model-studio/rate-limit)文档。
+
+## **OpenAI兼容**
+
+## 华北2（北京）
+
+SDK 调用配置的`base_url`：`https://dashscope.aliyuncs.com/compatible-mode/v1`
+
+HTTP 请求地址：`POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions`
+
+## 美国（弗吉尼亚）
+
+SDK 调用配置的`base_url`：`https://dashscope-us.aliyuncs.com/compatible-mode/v1`
+
+HTTP 请求地址：`POST https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions`
+
+## 新加坡
+
+SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
+
+HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+
+调用时请将`WorkspaceId`替换为真实的 Workspace ID。
+
+## 德国（法兰克福）
+
+SDK 调用配置的`base_url`：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1`
+
+HTTP 请求地址：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+
+调用时请将`WorkspaceId`替换为真实的 Workspace ID。
+
+## 日本（东京）
+
+SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1`
+
+HTTP 请求地址：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+
+调用时请将`WorkspaceId`替换为真实的 Workspace ID。
+
+## **DashScope**
+
+## 华北2（北京）
+
+HTTP 请求地址为`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+
+SDK 调用无需配置 `base_url`。
+
+## 美国（弗吉尼亚）
+
+HTTP 请求地址为`POST https://dashscope-us.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+
+SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://dashscope-us.aliyuncs.com/api/v1"`
+
+## 新加坡
+
+HTTP 请求地址为`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+
+SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1"`
+
+调用时请将`WorkspaceId`替换为真实的 Workspace ID。
+
+## 德国（法兰克福）
+
+HTTP 请求地址为`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+
+SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1"`
+
+调用时请将`WorkspaceId`替换为真实的 Workspace ID。
+
+## 日本（东京）
+
+HTTP 请求地址为`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+
+SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1"`
+
+调用时请将`WorkspaceId`替换为真实的 Workspace ID。
 
 ## **快速开始**
 
@@ -29,7 +109,7 @@ import os
 client = OpenAI(
     # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 messages = [{"role": "user", "content": "你是谁"}]
 completion = client.chat.completions.create(
@@ -94,7 +174,7 @@ import process from 'process';
 const openai = new OpenAI({
     // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: "sk-xxx"
     apiKey: process.env.DASHSCOPE_API_KEY, 
-    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+    baseURL: 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1'
 });
 let reasoningContent = ''; // 完整思考过程
 let answerContent = ''; // 完整回复
@@ -173,7 +253,7 @@ Request ID: chatcmpl-a1b2c3d4-e5f6-7890-abcd-ef1234567890
 ## **curl**
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -201,6 +281,8 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 ```
 import os
 from dashscope import Generation
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 # 初始化请求参数
 messages = [{"role": "user", "content": "你是谁？"}]
 completion = Generation.call(
@@ -270,10 +352,13 @@ import com.alibaba.dashscope.common.Role;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.utils.Constants;
 import io.reactivex.Flowable;
 import java.lang.System;
 import java.util.Arrays;
 public class Main {
+        // 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     private static StringBuilder reasoningContent = new StringBuilder();
     private static StringBuilder finalContent = new StringBuilder();
     private static boolean isFirstPrint = true;
@@ -349,7 +434,7 @@ public class Main {
 ## **curl**
 
 ```
-curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -H "X-DashScope-SSE: enable" \
@@ -388,7 +473,7 @@ from openai import OpenAI
 import os
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
     model="deepseek-v4-pro",
@@ -404,7 +489,7 @@ print(completion.choices[0].message.content)
 import OpenAI from "openai";
 const openai = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 const completion = await openai.chat.completions.create({
     model: "deepseek-v4-pro",
@@ -417,7 +502,7 @@ console.log(completion.choices[0].message.content);
 ## **curl**
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -432,6 +517,8 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 ```
 import os
 from dashscope import Generation
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 response = Generation.call(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
     model="deepseek-v4-pro",
@@ -473,6 +560,20 @@ deepseek-v4-pro
 不支持
 
 deepseek-v4-flash
+
+支持
+
+支持
+
+支持
+
+支持
+
+支持
+
+不支持
+
+deepseek-v4-flash-us
 
 支持
 

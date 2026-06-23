@@ -22,8 +22,9 @@
 - [model data overview](guides/model-data-overview.md) — 2 篇源文档
 - [model deployment 1](guides/model-deployment-1.md) — 4 篇源文档
 - [model evaluation introduction](guides/model-evaluation-introduction.md) — 1 篇源文档
+- [model experience](guides/model-experience.md) — 3 篇源文档
 - [model high speed inference](guides/model-high-speed-inference.md) — 1 篇源文档
-- [model inference](guides/model-inference.md) — 11 篇源文档
+- [model inference](guides/model-inference.md) — 8 篇源文档
 - [model monitoring](guides/model-monitoring.md) — 2 篇源文档
 - [plug in](guides/plug-in.md) — 3 篇源文档
 - [prompt](guides/prompt.md) — 5 篇源文档
@@ -58,23 +59,21 @@
 
 ## 横切概念
 
-- [API Key 管理与安全](concepts/api-key-management.md) — 关联 6 个主题
 - [DashScope SDK](concepts/dashscope-sdk.md) — 关联 5 个主题
-- [OpenAI 兼容接口](concepts/openai-compatible.md) — 关联 8 个主题
-- [Prompt 工程](concepts/prompt-engineering.md) — 关联 4 个主题
-- [RAG 检索增强生成](concepts/rag.md) — 关联 5 个主题
-- [Token 计量与计费](concepts/token.md) — 关联 6 个主题
-- [业务空间](concepts/workspace.md) — 关联 6 个主题
-- [函数调用](concepts/function-calling.md) — 关联 5 个主题
-- [异步任务模式](concepts/async-task-pattern.md) — 关联 4 个主题
-- [流式输出](concepts/streaming.md) — 关联 4 个主题
+- [OpenAI 兼容接口](concepts/openai-compatible.md) — 关联 5 个主题
+- [Token 与计费](concepts/token-billing.md) — 关联 5 个主题
+- [业务空间](concepts/workspace.md) — 关联 5 个主题
+- [异步任务调用](concepts/async-task.md) — 关联 4 个主题
+- [检索增强生成](concepts/rag.md) — 关联 5 个主题
+- [模型上下文协议](concepts/mcp.md) — 关联 4 个主题
+- [流式输出](concepts/streaming-output.md) — 关联 4 个主题
 
 ## 对比分析
 
-- [图像生成、视频生成与 3D 生成对比](comparisons/media-generation-comparison.md) — 对比 3 个主题
+- [多模态生成 API 对比：图像、视频与 3D](comparisons/generation-api-comparison.md) — 对比 3 个主题
 - [应用监控与模型监控对比](comparisons/monitoring-comparison.md) — 对比 2 个主题
-- [应用评测与模型评测对比](comparisons/evaluation-comparison.md) — 对比 2 个主题
-- [标准推理与高速推理对比](comparisons/inference-speed-comparison.md) — 对比 2 个主题
-- [模型微调、压缩与部署对比](comparisons/model-customization-comparison.md) — 对比 3 个主题
-- [知识库与长期记忆对比](comparisons/knowledge-vs-memory.md) — 对比 2 个主题
+- [应用评估与模型评估对比](comparisons/evaluation-comparison.md) — 对比 2 个主题
+- [模型优化方式对比：微调、压缩与部署](comparisons/model-optimization-comparison.md) — 对比 3 个主题
+- [通用支持与应用支持对比](comparisons/support-comparison.md) — 对比 2 个主题
+- [通用用例与应用用例对比](comparisons/use-cases-comparison.md) — 对比 2 个主题
 

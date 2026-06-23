@@ -14,7 +14,6 @@
           "Video"
         ]
       },
-      "openSource": false,
       "description": "Wan2.7-R2V，更加稳定的角色、道具与场景参考，支持最大5个图/视频混合参考，支持音频音色参考，搭配基础能力升级实现更强表演能力。",
       "collectionTag": "wan2.7",
       "features": [],
@@ -117,7 +116,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "万相2.6-参考生视频-Flash，生成更快性价比更高。支持指定人物或任意物品进行参考，精准保持形象和声音的一致性，支持多角色参考合拍",
       "features": [],
       "provider": "wan",
@@ -225,17 +223,11 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "万相2.6-参考生视频，支持指定人物或任意物品进行参考，精准保持形象和声音的一致性，支持多角色参考合拍。提醒：当使用视频进行参考时，输入视频也会计入费用，详见模型计费文档。",
       "collectionTag": "wan2.6",
       "features": [],
       "provider": "wan",
       "model": "wan2.6-r2v",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VideoAndImage_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",

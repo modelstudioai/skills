@@ -68,6 +68,7 @@ These skills ship with this repository and are maintained by the ModelStudio tea
 | [`financial-expert`](./skills/financial-expert/) | **Financial data analysis** over China A-shares, funds, and bonds via `bl mcp` (`market-cmapi00073529`): stock/fund/fund-manager screening, financials (net profit / revenue / ROE), macro & industry time series (GDP / CPI), broker research reports, and listed-company filings. |
 | [`happyhorse-prompt-studio`](./skills/happyhorse-prompt-studio/) | **Interactive prompt studio for HappyHorse 1.0 video**: guides scenario discovery with vivid examples, then assembles production-ready prompts in JP/CN/EN. Covers manga drama, character PV, manga motion, virtual idol MV, and free-form scenarios. |
 | [`spark-video`](./skills/spark-video/) | **End-to-end short-film production**: screenwriter ↔ director (per scene) → parallel render DAG → per-clip QA → stitch. Best for “make me an episode / a product ad in one go.” The entry skill registers as **`spark-video-episode`** (see [`SKILL.md`](./skills/spark-video/SKILL.md)). |
+| [`novel-game`](./skills/novel-game/) | **Novel-to-interactive-fiction game (React SPA)**: branching story engine + AI-generated character portraits & cutscenes (video or image) + optional TTS narration + procedural Web Audio music & SFX + localStorage save slots + multiple UI themes (pixel / cyberpunk / ink / minimalist). Activates on "interactive fiction / text adventure / visual novel / novel-to-game". Assets are generated offline via `bl video / image / speech`; runtime is fully local. |
 
 ---
 

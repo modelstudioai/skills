@@ -6,7 +6,12 @@
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+
+-   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
@@ -96,7 +101,7 @@ if __name__  == '__main__':
         model='qwen3-tts-flash-realtime',
         callback=callback, 
         # 以下为华北2（北京）地域的URL，各地域的URL不同。
-        url='wss://dashscope.aliyuncs.com/api-ws/v1/realtime'
+        url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime'
         )
 
     qwen_tts_realtime.connect()
@@ -204,7 +209,7 @@ if __name__  == '__main__':
         model='qwen3-tts-flash-realtime',
         callback=callback,
         # 以下为华北2（北京）地域的URL，各地域的URL不同。
-        url='wss://dashscope.aliyuncs.com/api-ws/v1/realtime'
+        url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime'
         )
 
     qwen_tts_realtime.connect()
@@ -268,7 +273,7 @@ str
 
 是
 
-华北2（北京）地域：`wss://dashscope.aliyuncs.com/api-ws/v1/realtime`
+华北2（北京）地域：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`
 
 新加坡地域：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`
 

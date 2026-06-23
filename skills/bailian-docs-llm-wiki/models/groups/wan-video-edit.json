@@ -13,7 +13,6 @@
           "Video"
         ]
       },
-      "openSource": false,
       "description": "Wan2.7-VideoEdit，自然语言指令编辑视频，支持局部或全局编辑，可参考图像替换视频元素，支持复刻视频动作、特效、运镜等动态过程。",
       "collectionTag": "wan2.7",
       "features": [

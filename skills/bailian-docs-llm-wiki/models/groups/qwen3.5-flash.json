@@ -80,9 +80,7 @@
           ]
         }
       ],
-      "openSource": false,
       "description": "Qwen3.5原生视觉语言系列Flash模型，基于混合架构设计，融合了线性注意力机制与稀疏混合专家模型，实现了更高的推理效率。模型效果在纯文本与多模态方面相较3系列均实现飞跃式进步；响应速度快，兼具推理速度和性能。",
-      "maxOutputTokensThinking": 65536,
       "collectionTag": "qwen3.5",
       "features": [
         "model-experience",
@@ -298,8 +296,6 @@
       "latestOnlineAt": "2026-02-23T03:28:01.000+00:00",
       "contextWindow": 1000000,
       "maxInputTokens": 991808,
-      "maxInputTokensThinking": 983616,
-      "contextWindowThinking": 1000000,
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen3.5-Flash",
       "docUrl": "https://help.aliyun.com/document_detail/2712576.html",
@@ -379,8 +375,8 @@
         },
         "dashscope": {
           "default": {
-            "python": "import os\nimport dashscope\ndashscope.base_http_api_url = \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1\"\n\nmessages = [\n    {\n        \"role\": \"user\",\n        \"content\": [\n            {\"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg\"},\n            {\"text\": \"图中描绘的是什么景象?\"}]\n    }]\nresponse = dashscope.MultiModalConversation.call(\n    api_key=os.getenv('DASHSCOPE_API_KEY'),\n    model='qwen3.5-flash',\n    messages=messages\n)\nprint(response.output.choices[0].message.content[0][\"text\"])\n",
             "curl": "curl -X POST https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H 'Content-Type: application/json' \\\n-d '{\n    \"model\": \"qwen3.5-flash\",\n    \"input\":{\n        \"messages\":[\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg\"},\n                    {\"text\": \"图中描绘的是什么景象?\"}\n                ]\n            }\n        ]\n    }\n}'",
+            "python": "import os\nimport dashscope\ndashscope.base_http_api_url = \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1\"\n\nmessages = [\n    {\n        \"role\": \"user\",\n        \"content\": [\n            {\"image\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg\"},\n            {\"text\": \"图中描绘的是什么景象?\"}]\n    }]\nresponse = dashscope.MultiModalConversation.call(\n    api_key=os.getenv('DASHSCOPE_API_KEY'),\n    model='qwen3.5-flash',\n    messages=messages\n)\nprint(response.output.choices[0].message.content[0][\"text\"])\n",
             "java": "import java.util.Arrays;\nimport java.util.Collections;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;\nimport com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;\nimport com.alibaba.dashscope.common.MultiModalMessage;\nimport com.alibaba.dashscope.common.Role;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Main {\n    \n    static {Constants.baseHttpApiUrl=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1\";}\n\n    public static void simpleMultiModalConversationCall()\n            throws ApiException, NoApiKeyException, UploadFileException {\n        MultiModalConversation conv = new MultiModalConversation();\n        MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())\n                .content(Arrays.asList(\n                        Collections.singletonMap(\"image\", \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241022/emyrja/dog_and_girl.jpeg\"),\n                        Collections.singletonMap(\"text\", \"图中描绘的是什么景象?\"))).build();\n        MultiModalConversationParam param = MultiModalConversationParam.builder()\n                .apiKey(System.getenv(\"DASHSCOPE_API_KEY\"))\n                .model(\"qwen3.5-flash\")\n                .messages(Arrays.asList(userMessage))\n                .build();\n        MultiModalConversationResult result = conv.call(param);\n        System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get(\"text\"));\n    }\n    public static void main(String[] args) {\n        try {\n            simpleMultiModalConversationCall();\n        } catch (ApiException | NoApiKeyException | UploadFileException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}",
             "docUrl": "https://help.aliyun.com/document_detail/3016807.html"
           }

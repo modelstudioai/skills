@@ -89,7 +89,7 @@
 
 1.  **如何开通阿里云百炼服务？**
     
-    使用**阿里云主账号**前往阿里云百炼控制台（[北京](https://bailian.console.aliyun.com/?tab=model#/model-market)或[新加坡](https://modelstudio.console.aliyun.com/?tab=home)），阅读并同意协议后，将自动开通阿里云百炼，如果未弹出服务协议，则表示您已经开通。
+    阿里云百炼服务需要分地域开通。使用**阿里云主账号**前往[阿里云百炼控制台](https://bailian.console.aliyun.com/?tab=model#/model-market)，请在控制台右上角切换目标地域，阅读并同意协议后，将自动开通阿里云百炼。如果未弹出服务协议，则表示您已开通该地域的服务。
     
     > 如果开通服务时提示“您尚未进行实名认证”，请先进行[实名认证](https://help.aliyun.com/zh/account/verify-your-identity-individual-account)。
     
@@ -129,6 +129,10 @@
     
     不支持。
     
+10.  **百炼是否有手机端应用？**
+     
+     百炼目前没有提供官方的独立手机应用，主要通过Web控制台访问。
+     
 
 ## **模型中心**
 

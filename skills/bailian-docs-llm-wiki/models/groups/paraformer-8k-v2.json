@@ -11,16 +11,10 @@
           "Audio"
         ]
       },
-      "openSource": false,
       "description": "Paraformer最新中文语音识别模型，模型结构升级，具有更好的识别效果,支持8kHz电话语音识别，仅支持中文热词。",
       "features": [],
       "provider": "qwen",
       "model": "paraformer-8k-v2",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VoiceModel_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",

@@ -11,9 +11,7 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "基于Qwen3全面升级的轻量级文本翻译大模型，支持92个语种互译，模型性能和翻译效果全面升级，并提供更稳定的术语定制、格式还原度、领域提示能力，让译文更精准、自然。",
-      "maxOutputTokensThinking": 0,
       "features": [
         "model-experience"
       ],
@@ -60,8 +58,6 @@
       "latestOnlineAt": "2025-11-06T08:07:15.000+00:00",
       "contextWindow": 16384,
       "maxInputTokens": 8192,
-      "maxInputTokensThinking": 0,
-      "contextWindowThinking": 0,
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-MT-Flash",
       "docUrl": "https://help.aliyun.com/document_detail/2860790.html",

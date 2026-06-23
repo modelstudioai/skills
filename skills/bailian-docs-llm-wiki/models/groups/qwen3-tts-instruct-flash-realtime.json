@@ -11,7 +11,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "千问3-TTS-Flash模型是通义实验室最新推出的实时语音合成大模型，Instruct模型可通过自然语言进行合成效果的处理，确保在不同语境下，合成情感、表达高度贴合的语音。目前支持25个音色的中英文Instruct调节。该模型等同于2026年01月22日快照版本模型。",
       "collectionTag": "qwen3",
       "features": [],

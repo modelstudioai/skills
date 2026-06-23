@@ -11,7 +11,6 @@
           "Text"
         ]
       },
-      "openSource": false,
       "description": "意图识别和槽位填充是对话系统中的基础任务。本模型实现了一个基于 API的意图（intent）和槽位参数（slots）联合预测。在一次模型输出中，同时完成多个指令API的返回和槽位参数的填充。返回的结果为标准json格式。",
       "features": [],
       "provider": "qwen",

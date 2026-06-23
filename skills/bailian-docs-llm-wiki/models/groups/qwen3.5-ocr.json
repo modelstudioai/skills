@@ -11,7 +11,6 @@
           "Image"
         ]
       },
-      "openSource": false,
       "description": "Qwen3.5系列OCR模型，在文档解析、文本定位、关键信息提取等方面全面升级，在真实场景的业务卡证（如国内国际身份证、驾驶证等业务场景中）抽取上效果显著提升。",
       "collectionTag": "qwen3.5",
       "features": [

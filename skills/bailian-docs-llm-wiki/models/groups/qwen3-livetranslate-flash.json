@@ -13,7 +13,6 @@
           "Video"
         ]
       },
-      "openSource": false,
       "description": "Qwen3-LiveTranslate-Flash，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen3-Omni强大的基座能力、海量多模态数据、跨语言跨模态对齐和视觉增强等技术，Qwen3-LiveTranslate-Flash 实现了离线和实时两种音视频翻译能力，能听懂19种语言，会说10种语言以及8种中文方言。",
       "features": [],
       "provider": "qwen-domain-model",

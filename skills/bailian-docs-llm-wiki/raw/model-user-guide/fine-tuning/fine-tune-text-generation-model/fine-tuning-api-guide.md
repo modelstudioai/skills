@@ -4,7 +4,7 @@
 
 **重要**
 
-本文档仅适用于中国大陆版（北京地域）。
+本文档仅适用于华北2（北京）地域。
 
 ## **前提条件**
 
@@ -94,6 +94,10 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-
 
 > 如需传入 `system` 消息，对应的 `content` 必须使用数组格式 `[{"text":"..."}]`，不能使用字符串格式 `"content":"字符串"`。
 
+**说明**
+
+如果训练思考模型（Thinking），也需要遵循[SFT 思考模型（thinking）](#f5454632ef4yo)的数据格式要求。
+
 ```
 # 一行训练数据（json 格式），展开后典型结构如下：
 {"messages": [
@@ -108,7 +112,7 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-
 ]}
 ```
 
-点击此处查看更多支持的参数
+**点击此处查看更多支持的参数**
 
 **字段**
 
@@ -230,9 +234,12 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-
 
 图片帧缩放高度（像素）
 
-**说明**
+##### 训练物体定位建议：
 
-如果训练思考模型（Thinking），也需要遵循[SFT 思考模型（thinking）](#f5454632ef4yo)的数据格式要求。
+-   Qwen2.5-VL：训练的坐标相对于缩放后的图像左上角的绝对值，单位为像素。
+    
+-   Qwen3-VL：训练坐标为相对坐标，坐标值会缩放到`[0, 999]`范围内。
+    
 
 ##### **压缩包要求：**
 
@@ -555,7 +562,9 @@ Body
 
 #### **支持的基础模型ID（**`**model**`**）列表与训练类型（**`**training_type**`**）支持情况：**
 
-> 如果调优的模型不支持`sft`方法，调优任务将会失败。
+##### **支持的模型**
+
+###### 文本生成
 
 **模型服务**
 
@@ -565,7 +574,7 @@ Body
 
 **SFT全参训练（sft）**
 
-**SFT高效训练（sft\_efficient）**
+**SFT高效训练（efficient\_sft）**
 
 **DPO全参训练（dpo\_full）**
 
@@ -683,6 +692,20 @@ qwen3-8b
 
 支持
 
+Qwen3-4B-Instruct-2507
+
+qwen3-4b-instruct-2507
+
+支持
+
+支持
+
+支持
+
+支持
+
+支持
+
 Qwen3-1.7B
 
 qwen3-1.7b
@@ -780,6 +803,188 @@ qwen-plus-character-2025-11-06
 支持
 
 支持
+
+> `-Base`表示该模型只完成了预训练，虽然模型内已经存储了海量的知识，但无法正常进行对话。
+
+###### 视觉理解（千问VL）
+
+**模型服务**
+
+**模型代码**
+
+**CPT全参训练（cpt）**
+
+**SFT全参训练（sft）**
+
+**SFT高效训练（efficient\_sft）**
+
+**DPO全参训练（dpo\_full）**
+
+**DPO高效训练（dpo\_lora）**
+
+Qwen3-VL-8B-Instruct
+
+qwen3-vl-8b-instruct
+
+×
+
+支持
+
+支持
+
+×
+
+×
+
+Qwen3-VL-8B-Thinking
+
+qwen3-vl-8b-thinking
+
+×
+
+支持
+
+支持
+
+×
+
+×
+
+Qwen3-VL-4B-Instruct
+
+qwen3-vl-4b-instruct
+
+×
+
+支持
+
+支持
+
+×
+
+×
+
+Qwen2.5-VL-72B-Instruct
+
+qwen2.5-vl-72b-instruct
+
+×
+
+支持
+
+支持
+
+×
+
+×
+
+Qwen2.5-VL-32B-Instruct
+
+qwen2.5-vl-32b-instruct
+
+×
+
+支持
+
+支持
+
+×
+
+×
+
+Qwen2.5-VL-7B-Instruct
+
+qwen2.5-vl-7b-instruct
+
+×
+
+支持
+
+支持
+
+×
+
+×
+
+> `-Base`表示该模型只完成了预训练，虽然模型内已经存储了海量的知识，但无法正常进行对话。
+
+###### **调优方法对比**
+
+**特性**
+
+**CPT（持续预训练）**
+
+**SFT （监督微调）**
+
+**DPO （直接偏好优化）**
+
+一句话总结
+
+补知识**（**注入领域知识**）**
+
+学做事**（**学会遵循指令**）**
+
+做得更好**（**对齐人类偏好**）**
+
+输入数据
+
+1000万+ Token
+
+无标签的领域文本
+
+1000+ 条
+
+高质量的“问-答”对
+
+100+ 组
+
+同一指令下的“更好-更差”回答对
+
+核心目标
+
+领域适应，学习专业词汇和事实
+
+教会模型对话格式和任务执行能力
+
+使模型输出更符合人类价值观和偏好
+
+学习方式
+
+自监督学习（预测下一个词**）**
+
+监督学习**（**模仿标准答案**）**
+
+直接偏好学习**（**增大好答案概率，降低坏答案概率**）**
+
+模型阶段
+
+通常在 SFT 之前
+
+CPT 之后，DPO 之前
+
+通常在 SFT 之后，作为对齐的最后一步
+
+###### **训练模式对比**
+
+**全参训练**
+
+**高效训练 （LoRA，推荐）**
+
+**适用场景**
+
+• 需要模型学习新能力
+
+• 追求全局效果最优
+
+• 优化模型特定场景下的效果
+
+• 对训练时间和成本敏感的场景
+
+**训练时间**
+
+较长，收敛速度较慢。
+
+较短，收敛速度快。
 
 #### `hyper_parameters`内**支持的设置**
 
@@ -1467,7 +1672,7 @@ DashScope命令行调用参考已包含在本篇内容中，详细API调用请�
 curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
---data '{        
+--data '{
     "model_name": "qwen3-8b-ft-202511132025-0260",
     "plan": "lora",
     "capacity": 1,
@@ -1482,7 +1687,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-    "name": "my_qwen_plus",  
+    "name": "my_qwen_plus",
     "model_name": "qwen-plus-2025-12-01",
     "plan": "mu",
     "deploy_spec": "MU1",

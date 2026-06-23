@@ -23,9 +23,9 @@ Package
 
 Version
 
-[bailian-multi-modal-android-sdk-1.0.6.5.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260513/soazyy/bailian-multi-modal-android-sdk-1.0.6.5.zip)
+[bailian-multimodal-android-sdk-1.0.6.6.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260618/ecncnb/bailian-multi-modal-android-sdk-1.0.6.6.zip)
 
-1.0.6.5
+1.0.6.6
 
 ## **SDK接入**
 
@@ -423,7 +423,7 @@ string
 
 是
 
-客户在阿里云百炼业务空间ID（[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)），可在**多模态交互开发套件控制**台，点击左下角业务空间名称，“业务空间详情”中查看，目前仅支持主账号默认工作空间。
+客户在阿里云百炼业务空间ID（[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)），可在**多模态交互开发套件控制台**，点击左下角业务空间名称，"业务空间详情"中查看，目前仅支持主账号默认业务空间。
 
 app\_id
 
@@ -431,7 +431,7 @@ string
 
 是
 
-客户创建的应用ID（[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)），可在**多模态交互开发套件**控制台的“我的应用”页面查看
+客户创建的应用ID（[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)），可在**多模态交互开发套件**控制台的"我的应用"页面查看。
 
 dialog\_id
 
@@ -547,7 +547,7 @@ string
 
 否
 
-热词id，设置该参数时会覆盖管控台热词配置。当管控台提供的热词不能满足客户需求时，可以考虑用Open API程序化管理热词，参见[热词API文档](https://next.api.aliyun.com/document/MultimodalDialog/2025-09-03/Vocabulary)
+热词id，设置该参数时会覆盖管控台热词配置。当管控台提供的热词不能满足客户需求时，可以考虑用Open API程序化管理热词，参见[热词API文档](https://next.api.aliyun.com/document/MultimodalDialog/2025-09-03/Vocabulary)。
 
 **parameters.downstream**的参数说明如下：
 
@@ -672,6 +672,18 @@ string
 
 可以设置多种，以逗号分隔，默认为transcript
 
+word\_timestamp\_enabled
+
+boolean
+
+否
+
+是否下发tts合成音频对应的时间戳。如果设置为true，会在RespondingContent.extra\_info下返回时间戳信息，用于客户端显示字幕等，默认为false。
+
+必须在intermediate\_text有指定dialog的情况下才会返回；
+
+只有[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list#undefined)中表明支持时间戳的音色和复刻音色才会返回。
+
 transmit\_rate\_limit
 
 int
@@ -694,9 +706,9 @@ string
 
 否
 
-设置指令，用于控制方言、情感等合成效果。该功能仅适用于cosyvoice-v3-flash模型的复刻音色，以及[音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持Instruct的系统音色。
+设置指令，用于控制方言、情感等合成效果。该功能适用于qwen3-tts-instruct-flash-realtime、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash。
 
-instruction有固定格式要求，具体格式参考此文档里的“instruction”参数说明。[Java SDK](https://help.aliyun.com/zh/model-studio/cosyvoice-java-sdk)
+instruction有固定格式要求，具体格式参考[Java SDK](https://help.aliyun.com/zh/model-studio/cosyvoice-java-sdk)里的"instruction"参数说明。
 
 **parameters.client\_info**的参数说明如下：
 
@@ -780,7 +792,7 @@ json object
 
 否
 
-需要透传给agent的参数，各类agent传递的参数参考[调用官方Agent](https://help.aliyun.com/zh/model-studio/official-agent)文档说明
+设置需要透传给agent的参数，各类agent传递的参数参考[调用官方Agent](https://help.aliyun.com/zh/model-studio/official-agent)文档说明。可以在extra\_config子节点中设置对话扩展参数，目前支持enable\_web\_search，表示是否开启联网搜索。这里的设置优先级更高，会覆盖管控台配置。
 
 user\_prompt\_params
 
@@ -894,6 +906,9 @@ VAD检测方
           },
           "biz_params":{
             "user_defined_params": {
+                "extra_config": {
+                    "enable_web_search": false
+                },
                 "agent_id_xxxxx": {
                     "name": "value"
                 }

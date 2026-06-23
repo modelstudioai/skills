@@ -31,7 +31,9 @@ HappyHorse图生视频模型，以首帧图片为基础，支持通过文本描�
 
 ## **华北2（北京）**
 
-`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## **新加坡**
 
@@ -61,12 +63,12 @@ HappyHorse图生视频模型，以首帧图片为基础，支持通过文本描�
 ## 图生视频-基于首帧
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
     -d '{
-    "model": "happyhorse-1.0-i2v",
+    "model": "happyhorse-1.1-i2v",
     "input": {
         "prompt": "一只猫在草地上奔跑",
         "media": [
@@ -107,6 +109,8 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 可选值：
 
+-   `happyhorse-1.1-i2v`
+    
 -   `happyhorse-1.0-i2v`
     
 
@@ -315,7 +319,9 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 ## **华北2（北京）**
 
-`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## **新加坡**
 

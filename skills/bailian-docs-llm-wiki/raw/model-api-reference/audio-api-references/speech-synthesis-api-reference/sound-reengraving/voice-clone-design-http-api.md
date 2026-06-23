@@ -8,7 +8,9 @@
 
 ## 华北2（北京）
 
-`POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization`
+`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 新加坡
 
@@ -18,7 +20,12 @@
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+
+-   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
@@ -27,6 +34,8 @@
 HTTP请求地址：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的base\_url：`https://dashscope.aliyuncs.com/api/v1`
+
+> 第三方模型（MiniMax）目前仅支持通过`dashscope.aliyuncs.com`域名调用，暂不支持专属域名。
 
 ## **请求头**
 
@@ -63,7 +72,7 @@ string
 ## CosyVoice声音复刻
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -81,7 +90,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customizat
 ## Qwen声音复刻
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -366,6 +375,7 @@ CosyVoice返回`voice_id`字段，Qwen返回`voice`字段。Qwen声音复刻还�
 ### **请求体**
 
 ```
+# 第三方模型（MiniMax）目前仅支持通过dashscope.aliyuncs.com域名调用，暂不支持专属域名
 curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
   -H "Authorization: Bearer ${DASH_APIKEY}" \
   -H 'Content-Type: application/json; charset=utf-8' \
@@ -590,7 +600,7 @@ MiniMax不支持该功能。
 ## CosyVoice
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -607,7 +617,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customizat
 ## Qwen声音复刻
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -798,7 +808,7 @@ CosyVoice固定为1。Qwen固定为0。
 ## CosyVoice
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -897,7 +907,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customizat
 以下为华北2（北京）地域的URL，各地域的URL不同。
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -975,7 +985,7 @@ MiniMax不支持该功能。
 ## CosyVoice
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -990,7 +1000,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customizat
 ## Qwen声音复刻
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{

@@ -1,167 +1,202 @@
 # use cases
 
-阿里云百炼平台提供了丰富的使用场景和最佳实践，覆盖 [Prompt 工程](../concepts/prompt-engineering.md)、多模态内容生成、RAG 应用构建、自定义模型训练、API 调用优化以及第三方模型集成等方面。本文汇总了各类典型用例，帮助开发者快速找到适合自身业务的实践路径。
+本页汇总阿里云百炼平台的常见使用场景与最佳实践，覆盖 Prompt 工程、多模态生成、RAG 应用、自定义模型调优、限流与缓存优化，以及 DeepSeek、Kimi、GLM、MiniMax、MiMo、Stepfun 等第三方模型的接入。文档按"调优与生成—架构与性能—模型接入"三个层次组织，帮助开发者快速定位所需能力。
 
-## [Prompt 工程](../concepts/prompt-engineering.md)指南
+## Prompt 工程
 
-### 文生文 Prompt 设计
+### 文生文 Prompt
 
-设计高质量的 Prompt 是充分发挥大模型能力的关键一步。核心原则包括：
+设计 Prompt 是发挥 LLM 能力的最重要一步。描述越清晰、具体、无歧义，模型表现越贴近预期。推荐使用 Prompt 框架规范化结构，详见 [文生文Prompt指南](../../raw/model-user-guide/use-cases/prompt-engineering-guide.md)。
 
-- **清晰具体**：任务描述越清晰、无歧义，模型表现越能符合预期。
-- **使用 Prompt 框架**：按照"背景 + 目的 + 风格 + 语气 + 受众 + 输出"六要素组织 Prompt，可显著提升模型输出的有效性。
-- **Few-shot 示例**：提供少量示例让模型理解期望的输出格式和风格。
-- **链式思考（CoT）**：引导模型逐步推理，在复杂逻辑任务中表现更优。
+框架包含六个要素：
 
-百炼还提供了 [Prompt 一键优化工具](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt)，可对输入的 Prompt 进行自动扩写和细节添加。详见 [文生文Prompt指南](../../raw/model-user-guide/use-cases/prompt-engineering-guide.md)。
+- **背景**：任务相关的背景信息，保证生成内容与话题高度相关。
+- **目的**：期望 LLM 完成的具体任务，设定清晰精确的目标指令。
+- **风格**：指定写作风格，如某类专家或具体名人的风格。
+- **语气**：正式、诙谐、温馨、关怀等，适配不同场景。
+- **受众**：面向的读者群体（专业人士、入门学习者等），调整语言与内容深度。
+- **输出**：规定输出形式，如列表、JSON、专业分析报告等。
 
-### 文生图 Prompt 设计
+百炼控制台提供 **Prompt 自动优化工具**，可对输入提示进行自动扩写和细节添加，建议先经优化工具改进后再应用其他技巧。该功能按模型推理费用计费。
 
-文生图模型通过 `prompt`（正向提示词）和 `negative_prompt`（反向提示词）控制生成内容。适用于万相-文生图 V1/V2 模型。
+### 文生图 Prompt
 
-- **基础公式**：`主体 + 场景 + 风格`，适合初次使用的新用户。
-- **进阶公式**：`主体描述 + 场景描述 + 定义风格 + 镜头语言 + 氛围词 + 细节修饰`，可有效提升画面质感。
-- **提示词词典**：涵盖景别（特写/近景/中景/远景）、视角（平视/俯视/仰视）、风格和光线等维度。
+文生图模型（万相-文生图 V1/V2）有两个与提示词相关的参数：
 
-文生图 V2 还支持通过 `prompt_extend` 参数开启大模型智能改写，默认开启。详见 [文生图Prompt指南](../../raw/model-user-guide/use-cases/text-to-image-prompt.md)。
+- `prompt`：正向提示词，描述所需生成的图片，支持中英文。
+- `negative_prompt`：反向提示词，描述不希望出现的内容。
 
-### 文生视频与图生视频 Prompt 设计
+文生图 V2 还支持 `prompt_extend`（默认 `true`），开启大模型智能改写 [prompt](prompt.md)。详见 [文生图Prompt指南](../../raw/model-user-guide/use-cases/text-to-image-prompt.md)。
 
-适用于万相系列视频生成模型，包括文生视频、图生视频和参考生视频等模式。
+两种提示词公式：
 
-- **基础公式**：`主体 + 场景 + 运动`。
-- **进阶公式**：`主体描述 + 场景描述 + 运动描述 + 美学控制 + 风格化`。
-- **图生视频公式**：`运动 + 运镜`，因为图像已经确定了主体和风格。
-- **声音公式（wan2.7/wan2.6/wan2.5）**：支持人声、音效和背景音乐描述，实现声画同步。
-- **多镜头公式（wan2.7/wan2.6）**：支持 `总体描述 + 镜头序号 + 时间戳 + 分镜内容` 生成连贯叙事视频。
+- **基础公式**（面向新用户）：`提示词 = 主体 + 场景 + 风格`。
+- **进阶公式**（面向有经验用户）：`提示词 = 主体（主体描述）+ 场景（场景描述）+ 风格（定义风格）+ 镜头语言 + 氛围词 + 细节修饰`。
 
-详见 [文生视频/图生视频Prompt指南](../../raw/model-user-guide/use-cases/text-to-video-prompt.md) 和 [Vidu视频生成Prompt指南](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/vidu-video-generation-prompt-guide.md)。
+提示词词典覆盖五大要素：景别（特写/近景/中景/远景）、视角（平视/俯视/仰视）、镜头拍摄类型、风格（写实/水彩/漫画等）、光线。
 
-## RAG 应用构建
+### 文生视频 / 图生视频 Prompt
 
-基于 LlamaIndex 框架，开发者可以快速接入百炼的检索增强服务来构建 RAG 应用。核心流程包括：
+万相视频生成提供多种提示词公式，适用范围包括文生视频、图生视频-首帧生视频、图生视频-首尾帧生视频、参考生视频 API。
 
-1. **文件解析**：使用 `DashScopeParse` 解析 .doc、.docx、.pdf 文件（单文件 100M/1000 页以内）。
-2. **创建知识库**：通过 `DashScopeCloudIndex.from_documents()` 创建知识库。
-3. **检索与查询**：通过 `index.as_retriever()` 获取检索器，通过 `index.as_query_engine()` 获取查询引擎。
-4. **文档管理**：支持向知识库新增或删除文档。
+- **基础公式**：`提示词 = 主体 + 场景 + 运动`。
+- **进阶公式**：`提示词 = 主体（主体描述）+ 场景（场景描述）+ 运动（运动描述）+ 美学控制 + 风格化`。
+- **图生视频公式**：图像已确定主体、场景与风格，提示词主要描述 `运动 + 运镜`。
 
-需要安装 `llama-index-core`、`llama-index-llms-dashscope`、`llama-index-indices-managed-dashscope` 等包。详见 [基于LlamaIndex构建RAG应用](../../raw/model-user-guide/use-cases/build-rag-applications-based-on-llamaindex.md)。
+万相 2.7/2.6/2.5 基于原生音频能力新增 **声音公式**，可描述人声（角色说话内容 + 情绪 + 语调 + 语速 + 音色 + 口音）、音效（音源材质 + 行为 + 环境音）、背景音乐（配乐 + 风格）。万相 2.7/2.6 支持 **多镜头公式**（总体描述 + 镜头序号 + 时间戳 + 分镜内容）和 **参考生视频公式**（参考指代 + 动作 + 场景 + 台词 + 背景音乐）。
 
-## 自定义模型调优、部署与评测
+### Vidu 视频生成 Prompt
 
-当通用模型无法满足特定业务需求时，可通过自定义模型来提升领域准确性。完整流程为：
+Vidu 提示词遵循 `主体/场景 + 场景描述 + 环境描述 + 艺术风格/媒介` 结构。调优原则：避免主体过多/复杂、避免模糊术语、使用口语化措辞、保持描述丰富准确完整。详见 [Vidu视频生成Prompt指南](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/vidu-video-generation-prompt-guide.md)。
 
-1. **训练数据准备**：收集业务数据并编排为 Prompt-Completion 格式，建议至少 500 条训练数据。
-2. **模型调优**：在百炼控制台配置训练超参数，平台自动完成训练。
-3. **模型部署**：将训练好的模型部署到独占实例上。
-4. **模型评测**：配置评测任务验证模型效果。如不满意可调整训练策略重复整个流程。
+提示词词典覆盖：主体动态（大/中/小动态）、运镜控制（左移/右移/升/降/推/拉/固定、延时/微距/第一人称/航拍）、景别、视角、构图、画面风格（2D 动漫/3D 渲染/写实/水墨/线稿/像素/油画）、导演风格、特效（爆炸/旋涡/粉碎/扭曲/融化/石化）、氛围（快乐/悲伤/宁静/紧张/温馨浪漫）。
 
-> **注意**：完成调优的模型必须部署后才能调用和评测。
+进阶能力包括参考生视频（保持角色与物体多视角一致性，支持多主体交互与特征融合）和 AI 漫剧提示词案例（风格/景别/机位/构图/运镜 + 画面描述 + 图片强调三段式结构）。
 
-详见 [自定义模型调优、部署与评测](../../raw/model-user-guide/use-cases/model-training-best-practices.md)。
+## 多模态与 RAG
 
-## 大模型文档转视频
+### 基于 LlamaIndex 构建 RAG 应用
 
-百炼支持借助大模型将文档自动转换为包含图文、语音、字幕的视频。方案流程为：
+通过 DashScopeCloudIndex 在 LlamaIndex 中使用百炼检索增强服务。前提条件：获取并配置 API Key、开通知识库服务、（可选）获取[业务空间](../concepts/workspace.md) ID；Python 版本要求 ≥3.8 且 ≤3.12。
 
-1. **文档切片**：利用大模型总结标题并划分段落。
-2. **生成演示文稿**：整合标题、正文、图片等生成演示文稿图片。
-3. **生成讲解语音与字幕**：通过多模态大模型将文字转换为音频并生成字幕。
-4. **生成视频**：将演示文稿剪辑为视频，嵌入音频和字幕。
+安装依赖：
 
-依赖工具包括 FFmpeg 和 Marp CLI。详见 [借助大模型将文档转换为视频](../../raw/model-user-guide/use-cases/use-llm-to-convert-document-to-video.md)。
+```
+pip install llama-index-core
+pip install llama-index-llms-dashscope
+pip install llama-index-indices-managed-dashscope
+```
 
-## API 调用优化
+核心流程：
 
-### 限流应对
+1. **文件解析**：使用 `DashScopeParse`（支持在线解析 .doc/.docx/.pdf，单文件 ≤100M、页数 ≤1000）解析一个或多个文件，或配合 `SimpleDirectoryReader` 解析文件夹。
+2. **创建知识库**：`DashScopeCloudIndex.from_documents(documents, "my_first_index")`。
+3. **读取知识库**：`DashScopeCloudIndex("my_first_index")` 初始化已创建的知识库。
+4. **获得 retriever**：`index.as_retriever()` 或 `DashScopeCloudRetriever("my_first_index")`。
+5. **获得 query engine**：配合 `DashScope` LLM（如 `DashScopeGenerationModels.QWEN_MAX`）调用 `index.as_query_engine(llm=dashscope_llm)`。
+6. **增删文档**：`index._insert(documents)` 新增、`index.delete_ref_doc([doc_id])` 删除。
 
-百炼 API 按请求数（RPM/RPS）和 Token 用量（TPM/TPS）限流，还有增速限制（Traffic Burst）。按改动成本从低到高的应对方案：
+### 借助大模型将文档转换为视频
 
-**平台配置方案（低成本）**：
-- **服务端排队等待**（推荐首选）：在请求头添加 `X-DashScope-Wait-Timeout`，服务端在指定时间内排队重试，仅适用于 Traffic Burst 限流。
-- **提升限流额度**：在控制台直接提升临时限流额度，立即生效。
-- **PTU（预置吞吐单元）**：提供独立预留的专享算力，保障实时高吞吐。
-- **Batch API**：适用于无实时性要求的离线任务。
+依托 LLM 与多模态技术将文档自动转换为视频（包含图文、语音、字幕）。方案流程为：文档切片（总结标题并分段）→ 生成演示文稿（整合标题/正文/图片）→ 生成讲解语音与字幕（文字转音频并按时长生成字幕）→ 生成视频（剪辑图片并嵌入音频与字幕）。详见 [借助大模型将文档转换为视频](../../raw/model-user-guide/use-cases/use-llm-to-convert-document-to-video.md)。
 
-**客户端流控策略**：从基础重试到令牌桶、平滑限速器、自适应拥塞控制，按工程复杂度递进。
+准备工作依赖 FFmpeg、Marp（演示文稿制作）和浏览器引擎渲染。提供完整代码包可快速体验。
 
-**架构兜底方案**：包括模型降级（Fallback）和基于消息队列的削峰填谷。
+## 自定义模型调优
 
-详见 [限流应对最佳实践](../../raw/model-user-guide/use-cases/rate-limiting-best-practices.md)。
+自定义大模型基于通用 LLM，通过微调和训练适应特定领域或任务。价值在于：提高特定领域准确性、增强模型适用性、节约开发时间和成本、增强品牌与用户体验。详见 [自定义模型调优、部署与评测](../../raw/model-user-guide/use-cases/model-training-best-practices.md)。
 
-### 显式缓存
+### 创建流程
 
-通过在请求中添加 `cache_control` 标记，确保相同输入确定性命中缓存，首次写入缓存仅产生标准价格 25% 的额外开销，后续命中可节省 90% 成本。
+涉及三个主要步骤与三个辅助步骤：
 
-适用场景包括高频复用相同 Prompt、工业级 Agent 长上下文管理等。多种 Agent 和 Coding 工具（Claude Code、Open Code、OpenClaw、Hermes）已原生支持通过 Anthropic 兼容端点接入百炼并自动使用显式缓存。详见 [显式缓存最佳实践](../../raw/model-user-guide/use-cases/explicit-cache-best-practice.md)。
+1. **模型调优阶段**：模型学习训练数据的语言特征。前置训练数据准备（数据收集、清洗、数据集划分）。按"训练新模型"向导配置超参数（学习率、迭代次数等），平台自动训练。
+2. **模型部署阶段**：将自定义模型部署到独占实例后才能调用或评测。按"部署新模型"向导配置规格与资源，确认预估价格后自动部署。
+3. **模型评测阶段**：按"创建评测任务"向导配置评测方式、数据和维度，平台自动完成评测。
 
-## 第三方模型集成
+> **注意**：完成调优的模型**必须部署后才能调用和评测**，需先完成部署再评测。若评测结果不满意，可调整训练策略（换基础模型、扩充数据样本、调超参数）重复整个流程。
 
-百炼平台通过模型市场汇聚了多个第三方模型供应商，开发者可通过统一的 [OpenAI 兼容接口](../concepts/openai-compatible.md)或 [DashScope SDK](../concepts/dashscope-sdk.md) 调用这些模型。所有第三方模型的调用方式一致：获取 API Key、配置环境变量、使用统一的 `base_url`（`https://dashscope.aliyuncs.com/compatible-mode/v1`）即可。
+### 训练数据准备
 
-### DeepSeek 系列
+- **数据收集**：来源多样化、质量控制、平衡性考量。编排成 `Prompt-Completion` 格式，建议至少 500 条训练数据。注意文本分割（聚焦单一主题）与脱敏处理。
+- **数据上传**：在"数据管理"页面新增数据集（训练集由 Prompt+Completion 组成，评测集仅含 Prompt；支持多版本管理）。单次最多导入 10 个文件。
 
-百炼提供多个供应商的 DeepSeek 模型：
+## 架构与性能
 
-| 供应商 | 模型示例 | 特点 |
-|--------|----------|------|
-| 阿里云百炼 | deepseek-v4-pro | 限流更宽松，支持联网搜索与上下文缓存 |
-| 硅基流动 | siliconflow/deepseek-v3.2 | 支持更长上下文 |
-| 快手万擎 | vanchin/deepseek-v4-pro | 第三方直供 |
+### 限流应对最佳实践
 
-所有 DeepSeek 模型均支持通过 `enable_thinking` 参数在思考与非思考模式之间切换。
+百炼 API 按主账号维度、模型独立计算限流，触发后通常 1 分钟内恢复。三种限流规则：分钟级配额（RPM/TPM）、瞬时频率（RPS/TPS）、增速限制（Traffic Burst）。详见 [限流应对最佳实践](../../raw/model-user-guide/use-cases/rate-limiting-best-practices.md)。
 
-> **注意**：部分旧版 DeepSeek 模型（deepseek-v3、deepseek-r1 等）将于 2026 年 7 月 9 日下架，推荐转用 qwen3.7-plus、qwen3.7-max 或 qwen3.6-flash。
+错误码与推荐策略：
 
-详见 [DeepSeek大语言模型](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/deepseek-api.md)、[DeepSeek-硅基流动](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/siliconflow-deepseek-api.md)、[DeepSeek（快手万擎）](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/deepseek-api-by-vanchin.md)。
+| 错误码（DashScope / OpenAI） | 触发维度 | 推荐策略 |
+| --- | --- | --- |
+| `Throttling.RateQuota` / `limit_requests` | RPM 超限 | 令牌桶控制请求配额 |
+| 同上 | RPS 超限 | 并发信号量或平滑限速器 |
+| `Throttling.AllocationQuota` / `insufficient_quota` | TPM 超限 | 双重令牌桶（同时限制 RPM 和 TPM） |
+| 同上 | TPS 超限 | 并发信号量或平滑限速器 |
+| `Throttling.BurstRate` / `limit_burst_rate` | Traffic Burst | 服务端排队等待（首选）；或令牌桶设 `initial_tokens=0`；或平滑限速器 |
 
-### Kimi 系列
+三类方案（按改动成本从低到高）：
 
-百炼提供两种 Kimi 接入方式：
+- **平台配置方案**：
+  - **服务端排队等待**（推荐首选，仅适用 BurstRate）：请求头添加 `X-DashScope-Wait-Timeout`（建议 3~120 秒；值为 0 不排队）。非流式请求超时 = 原超时 + Wait-Timeout；流式请求超时 > Wait-Timeout。
+  - **提升限流额度**：控制台临时提升额度，立即生效（支持华北2北京和新加坡地域）。
+  - **PTU**：预置吞吐单元提供独立预留专享算力，避免公共池竞争；未满负荷也持续计费。
+  - **Batch API**：异步批处理，适用于无实时性要求的数据清洗、离线分析任务。
+- **客户端流控策略**：基础重试 → 令牌桶/并发信号量 → 平滑限速器/双重令牌桶 → 自适应拥塞控制。
+- **架构兜底方案**：模型降级（Fallback）、基于消息队列（MQ）的削峰填谷。
 
-- **月之暗面直供**（`kimi/kimi-k2.6` 等）：支持文本、图像、视频输入，kimi-k2.7-code 系列为仅思考模型。
-- **百炼部署**（`kimi-k2-thinking` 等）：支持多地域（华北2、美国、德国）。
+### 显式缓存最佳实践
 
-> **注意**：百炼部署的 Moonshot-Kimi-K2-Instruct、kimi-k2-thinking 将于 2026 年 7 月 9 日下架。
+显式缓存通过在请求中添加缓存标记，确保相同输入确定性命中缓存（100% 命中，不受后端调度影响），显著降低成本和延迟。首次写入缓存产生标准价格 25% 的额外开销，后续命中节省 90% 成本；只要发生至少一次命中，总体成本即低于不使用缓存的方案。详见 [显式缓存最佳实践](../../raw/model-user-guide/use-cases/explicit-cache-best-practice.md)。
 
-详见 [Kimi-月之暗面](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api-by-moonshot-ai.md)、[Kimi](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api.md)。
+适用场景：需要稳定命中缓存的业务、高频复用相同 Prompt、工业级 Agent 的长上下文管理（对关键上下文片段标记并固定复用）。
 
-### GLM 系列
+常用 Agent 和 Coding 工具可通过 Anthropic 协议接入百炼，原生支持显式缓存：
 
-- **百炼部署**（`glm-5.2`）：上下文长度 1M，支持思考模式。
-- **智谱直供**（`ZHIPU/GLM-5.2`）：支持 `reasoning_effort` 参数控制思考深度（max/high/none）。
+- **Claude Code**：v2.x 起默认在 system、env、最近 user message 三处携带 `cache_control`。接入端点：按量计费 `https://dashscope.aliyuncs.com/apps/anthropic`；Token Plan 团队版 `https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic`；Coding Plan `https://coding.dashscope.aliyuncs.com/apps/anthropic`。可用 `--exclude-dynamic-system-prompt-sections` 提升跨会话命中率，`DISABLE_PROMPT_CACHING=1` 关闭。
+- **OpenCode**：通过 `@ai-sdk/anthropic` 接入，默认对 system 与最近非 system 消息注入 `cache_control`（`baseURL` 末尾需带 `/v1`）。
+- **OpenClaw**：走 Anthropic 兼容端点默认对每次请求注入 `cache_control`，可用 `<!-- OPENCLAW_CACHE_BOUNDARY -->` 标记自定义缓存边界。
+- **Hermes**：通过 `hermes config set` 配置 base URL。
 
-> **注意**：glm-4.6、glm-4.7 将于 2026 年 7 月 9 日下架。
+## 第三方模型接入
 
-详见 [GLM](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/glm.md)、[GLM-智谱](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/glm-zhipu.md)。
+百炼支持通过 [OpenAI 兼容接口](../concepts/openai-compatible.md)或 [DashScope SDK](../concepts/dashscope-sdk.md) 调用多家第三方模型。各模型统一通过 `DASHSCOPE_API_KEY` 鉴权，OpenAI 兼容 Base URL 通常为 `https://dashscope.aliyuncs.com/compatible-mode/v1`。多数模型支持 `enable_thinking` 参数切换思考/非思考模式（非 OpenAI 标准参数，Python SDK 走 `extra_body`，Node.js SDK 作为顶层参数）；思考模式下推理过程通过 `reasoning_content` 字段返回。
 
-### MiniMax 系列
+### 模型总览
 
-- **百炼部署**（`MiniMax-M2.5`）：支持思考模式。
-- **MiniMax 直供**（`MiniMax/MiniMax-M2.7`）：华北2 地域可用。
+| 模型族 | 供应商 | 模型示例 | 特性 |
+| --- | --- | --- | --- |
+| DeepSeek | 硅基流动 | `siliconflow/deepseek-v3.2` | 支持更长上下文；仅华北2（北京） |
+| DeepSeek | 阿里云百炼 | `deepseek-v4-pro` | 限流更宽松，支持联网搜索与上下文缓存；多地域 |
+| DeepSeek | 快手万擎 | `vanchin/deepseek-v4-pro` | 仅华北2（北京） |
+| Kimi | 月之暗面 | `kimi/kimi-k2.7-code-highspeed`、`kimi/kimi-k2.7-code`、`kimi/kimi-k2.6`、`kimi/kimi-k2.5` | 支持文本/图像/视频；k2.7-code 为仅思考模型；k2.6/k2.5 可控思考模式；支持 `preserve_thinking` 多轮传递 |
+| Kimi | 百炼部署 | `kimi-k2-thinking` 等 | 多地域；部分模型 2026/7/9 下架 |
+| GLM | 智谱直供 | `ZHIPU/GLM-5.2` | 支持 1M 上下文；`reasoning_effort` 控制思考深度（max/high/none） |
+| GLM | 百炼部署 | `glm-4.6`、`glm-4.7` | 多地域；2026/7/9 下架 |
+| MiniMax | 稀宇科技直供 | `MiniMax/MiniMax-M2.7` | 仅华北2（北京） |
+| MiniMax | 百炼部署 | `MiniMax-M2.5` | 仅中国内地地域；MiniMax-M2.1 于 2026/7/9 下架 |
+| MiMo | 小米直供 | `xiaomi/mimo-v2.5-pro` | 混合推理模型，默认开启思考模式；仅华北2（北京） |
+| Step | 阶跃星辰直供 | `stepfun/step-3.7-flash` | 多模态推理模型，默认关闭思考模式；`reasoning_effort`（low/medium/high） |
 
-> **注意**：MiniMax-M2.1 将于 2026 年 7 月 9 日下架。
+> **注意**：DeepSeek（deepseek-v3/v3.1/v3.2/v3.2-exp/r1/r1-0528/distill 系列）、Moonshot-Kimi-K2-Instruct、kimi-k2-thinking、glm-4.6、glm-4.7、MiniMax-M2.1 将于 **2026 年 7 月 9 日下架**。官方推荐转用 `qwen3.7-plus`、`qwen3.7-max`、`qwen3.6-flash`。
 
-详见 [MiniMax](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/minimax-api.md)。
+### 地域与服务接入
 
-### 其他第三方模型
+- **仅华北2（北京）**：硅基流动 DeepSeek、快手万擎 DeepSeek、月之暗面 Kimi、智谱直供 GLM、稀宇 MiniMax、小米 MiMo、阶跃星辰 Step。
+- **多地域**（华北2北京、美国弗吉尼亚、德国法兰克福、新加坡、日本东京）：百炼部署的 DeepSeek、Kimi、GLM。新加坡/德国/日本等地域部分接入地址需替换 `{WorkspaceId}` 为真实[业务空间](../concepts/workspace.md) ID。
+- **新加坡专属域名**：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，性能与稳定性更优，建议从 `https://dashscope-intl.aliyuncs.com` 迁移。
 
-| 模型 | 供应商 | 模型标识 | 说明 |
-|------|--------|----------|------|
-| MiMo | 小米 | xiaomi/mimo-v2.5-pro | 混合推理模型，默认开启思考模式 |
-| Step | 阶跃星辰 | stepfun/step-3.7-flash | 多模态推理模型，默认关闭思考模式 |
+### 接入示例
 
-详见 [MiMo-小米](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/mimo.md)、[Stepfun-阶跃星辰](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/stepfun.md)。
+以 `xiaomi/mimo-v2.5-pro`（默认开启思考模式）为例：
 
-## 统一调用方式
+```python
+from openai import OpenAI
+import os
 
-无论使用哪个模型，百炼平台提供了统一的调用体验：
+client = OpenAI(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+)
+completion = client.chat.completions.create(
+    model="xiaomi/mimo-v2.5-pro",
+    messages=[{"role": "user", "content": "1+1 等于多少？"}],
+    stream=True,
+    stream_options={"include_usage": True},
+)
+```
 
-1. [获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key) 并配置到环境变量。
-2. 使用 [OpenAI 兼容接口](../concepts/openai-compatible.md)，`base_url` 设为 `https://dashscope.aliyuncs.com/compatible-mode/v1`。
-3. 通过 `model` 参数指定模型名称即可切换不同模型。
-4. 支持思考模式的模型可通过 `enable_thinking` 参数控制。
+如需关闭思考模式，显式传入 `extra_body={"enable_thinking": False}`。各模型的开通步骤均为：百炼控制台模型广场搜索对应模型卡片 → 单击立即开通 → 确认授权。
+
+## 注意事项
+
+- 第三方直供模型（硅基流动、快手万擎、月之暗面、智谱、稀宇、小米、阶跃星辰）地域受限，需使用对应地域的 API Key。
+- `enable_thinking` 为非 OpenAI 标准参数，调用方式因 SDK 而异：Python SDK 走 `extra_body`，Node.js SDK 作为顶层参数。`reasoning_effort` 是 OpenAI 标准参数，可直接作为顶层参数传入。
+- DeepSeek 硅基流动供应商支持更长上下文；阿里云百炼供应商限流更宽松且支持联网搜索与上下文缓存——两者按业务需求选择。
+- Kimi 多模态模型走 DashScope 协议时使用 `multimodal-generation/generation` 端点，纯文本模型走 `text-generation/generation` 端点。
+- 限流问题应优先评估平台配置方案（服务端排队等待仅需加一个请求头），再考虑客户端流控或架构兜底。
 
 ## 来源文档
 
@@ -174,7 +209,7 @@
 - [借助大模型将文档转换为视频](../../raw/model-user-guide/use-cases/use-llm-to-convert-document-to-video.md)
 - [显式缓存最佳实践](../../raw/model-user-guide/use-cases/explicit-cache-best-practice.md)
 - [DeepSeek-硅基流动](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/siliconflow-deepseek-api.md)
-- [DeepSeek大语言模型](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/deepseek-api.md)
+- [DeepSeek-阿里云](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/deepseek-api.md)
 - [DeepSeek](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/deepseek-api-by-vanchin.md)
 - [Kimi-月之暗面](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api-by-moonshot-ai.md)
 - [Kimi](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api.md)
@@ -185,6 +220,5 @@
 - [Vidu视频生成Prompt指南](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/vidu-video-generation-prompt-guide.md)
 - [MiMo-小米](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/mimo.md)
 - [Stepfun-阶跃星辰](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/stepfun.md)
-
 
 

@@ -94,17 +94,17 @@ qwen-image-2.0-pro
 
 ](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen-image-2.0-pro)[
 
-happyhorse-1.0-t2v
+happyhorse-1.1-t2v
 
-](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/happyhorse-1.0-t2v)[
+](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/happyhorse-1.1-t2v)[
 
-happyhorse-1.0-i2v
+happyhorse-1.1-i2v
 
-](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/happyhorse-1.0-i2v)[
+](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/happyhorse-1.1-i2v)[
 
-happyhorse-1.0-r2v
+happyhorse-1.1-r2v
 
-](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/happyhorse-1.0-r2v)[
+](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/happyhorse-1.1-r2v)[
 
 happyhorse-1.0-video-edit
 

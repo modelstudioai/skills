@@ -11,18 +11,12 @@
           "Audio"
         ]
       },
-      "openSource": false,
       "description": "推荐使用 Paraformer最新语音识别模型，支持多个语种的语音识别。可以通过language_hints参数选择语种获得更准确的识别效果，支持任意采样率。 支持的语言包括：中文（含粤语等各种方言）、英文、日语、韩语。可支持热词。",
       "features": [
         "model-experience"
       ],
       "provider": "qwen",
       "model": "paraformer-v2",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_VoiceModel_spn_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每秒",

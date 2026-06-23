@@ -11,7 +11,6 @@
           "Audio"
         ]
       },
-      "openSource": false,
       "description": "Paraformer中文实时语音识别模型，支持16kHz及以上采样率的视频直播、会议等实时场景下的语音识别。",
       "features": [
         "model-experience"

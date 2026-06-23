@@ -11,18 +11,12 @@
           "Image"
         ]
       },
-      "openSource": true,
       "description": "千问系列图像编辑Plus模型，在首版Edit模型基础上进一步优化了推理性能与系统稳定性，大幅缩短图像生成与编辑的响应时间；支持单次请求返回多张图片，显著提升用户体验。",
       "features": [
         "model-experience"
       ],
       "provider": "qwen",
       "model": "qwen-image-edit-plus",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_qwenimageplus_dp_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每张",
@@ -78,18 +72,12 @@
           "Image"
         ]
       },
-      "openSource": true,
       "description": "千问系列首个图像编辑模型，成功将Qwen-Image的文本渲染能力拓展到编辑任务上。支持精准的中英双语文字编辑、视觉外观与语义双重编辑、具备强大的跨基准性能表现。",
       "features": [
         "model-experience"
       ],
       "provider": "qwen",
       "model": "qwen-image-edit",
-      "resourcePackages": [
-        {
-          "url": "https://common-buy.aliyun.com/?commodityCode=sfm_qwenimage_dp_cn"
-        }
-      ],
       "prices": [
         {
           "priceUnit": "每张",

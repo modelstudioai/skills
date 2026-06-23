@@ -1,88 +1,95 @@
 # 异步任务调用
 
-异步任务调用是百炼平台中一种通用的 API 交互模式，适用于耗时较长的生成类任务。调用方提交请求后立即获得任务标识，随后通过轮询查询任务状态与结果，避免长时间阻塞连接。
-
-## 工作原理
-
-异步任务调用遵循"创建任务 -> 轮询结果"两步模式：
-
-1. **创建任务**：向对应 API 端点发送 POST 请求，服务端立即返回 `task_id`，不等待任务完成。
-2. **轮询结果**：使用 `task_id` 调用查询接口，获取任务状态和最终结果。任务状态通常按 `PENDING` -> `RUNNING` -> `SUCCEEDED` / `FAILED` 流转。
-
-这一模式的核心优势在于：调用方无需维持长连接等待生成完成，可以并行提交多个任务，按各自节奏获取结果。
+异步任务调用是百炼平台为图像生成、视频生成、3D 模型生成等长耗时模型提供的一种调用机制，采用"创建任务 → 轮询获取结果"两步式交互，避免长时间阻塞 HTTP 连接，支持高并发场景下的任务管理与状态追踪。
 
 ## 适用场景
 
-异步任务调用在百炼平台中广泛应用于以下场景：
+百炼平台中以下能力均采用异步调用方式：
 
-- **图像生成**：所有图像生成 API（千问图像、万相、Z-Image、可灵等）均采用异步调用，文生图、图像编辑、风格迁移等任务通常在数秒到数十秒内完成。
-- **视频生成**：文生视频、图生视频、参考生视频、视频编辑、人像动画等视频生成任务耗时通常为 1-5 分钟，异步模式可避免超时。
-- **3D 模型生成**：通过 Tripo 模型进行文生 3D、单图生 3D、多图生 3D，建议轮询间隔 15 秒。
-- **应用调用**：Responses API 支持通过 `background=true` 参数开启异步模式，适用于耗时较长的智能体任务（如生成报告、多步骤工具调用）。
-- **模型生产**：模型调优（微调训练）、模型压缩和模型部署均为异步操作，需轮询或回调获取任务状态。
+- **图像生成与编辑**：千问（Qwen-Image）、万相（Wan/Wanx）、Z-Image、可灵（Kling）等模型系列，覆盖文生图、图像编辑、风格迁移、虚拟试衣等。
+- **视频生成**：万相、HappyHorse、可灵、爱诗 PixVerse、Vidu 等模型族，覆盖文生视频、图生视频、参考生视频、视频编辑、数字人/人像动画等场景。
+- **3D 模型生成**：Tripo 系列（`Tripo/Tripo-H3.1`、`Tripo/Tripo-P1.0`），支持文生 3D、单图生 3D、多图生 3D。
+- **异步任务管理 API**：提供查询、批量查询、取消等通用操作。
 
-## 关键参数与配置
+## 调用流程
 
-### 请求头
+### 步骤 1：创建任务
 
-对于 DashScope 原生 API，异步调用需要设置以下请求头：
+发送 POST 请求到对应模型的 endpoint，必须设置以下请求头：
 
-| 请求头 | 值 | 说明 |
-|--------|------|------|
-| `X-DashScope-Async` | `enable` | 启用异步模式，必须设置，否则报错 |
-| `Authorization` | `Bearer $DASHSCOPE_API_KEY` | API Key 认证 |
-| `Content-Type` | `application/json` | 固定值 |
+- `Content-Type: application/json`
+- `Authorization: Bearer $DASHSCOPE_API_KEY`
+- `X-DashScope-Async: enable`（必须，未设置将报错 "current user api does not [support](../guides/support.md) synchronous calls"）
 
-> 对于 Responses API（OpenAI 兼容协议），异步模式通过请求体中的 `background=true` 参数开启，无需设置 `X-DashScope-Async` 请求头。
+成功响应返回 `task_id`，有效期 24 小时，请勿重复创建任务。
 
-### task_id
+示例（以 Tripo 文生 3D 为例）：
 
-- 创建任务成功后返回，是后续查询、取消任务的唯一标识。
-- 有效期为 **24 小时**，超时后无法查询结果，状态返回 `UNKNOWN`。
-- 请勿对同一请求重复创建任务，应复用已有的 `task_id`。
+```bash
+curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation' \
+    -H 'X-DashScope-Async: enable' \
+    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "model": "Tripo/Tripo-P1.0",
+    "input": {
+        "prompt": "一只可爱的猫"
+    },
+    "parameters": {
+        "texture_quality": "standard"
+    }
+}'
+```
 
-### 任务状态
+### 步骤 2：轮询查询结果
 
-| 状态 | 含义 |
-|------|------|
-| `PENDING` | 任务已提交，排队等待执行 |
-| `RUNNING` | 任务正在执行中 |
-| `SUCCEEDED` | 任务执行成功，可获取结果 |
-| `FAILED` | 任务执行失败，可查看错误信息 |
-
-> Responses API 的异步任务状态略有不同，使用 `queued`、`running`、`completed`、`failed`、`cancelled`。
-
-### 查询接口
+使用 GET 请求查询任务状态：
 
 ```
 GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}
 ```
 
-建议轮询间隔根据任务类型调整：图像生成 3-5 秒，视频和 3D 生成 10-15 秒。查询接口默认 RPS 为 20。
+任务状态流转：`PENDING` → `RUNNING` → `SUCCEEDED` / `FAILED`。此外还可能出现 `CANCELED`、`UNKNOWN`（`task_id` 过期后返回）。建议轮询间隔 15 秒，查询接口默认 RPS 限制为 20。
 
-## 与同步调用的对比
+## 关键参数与配置
 
-| 维度 | 同步调用 | 异步调用 |
-|------|----------|----------|
-| 响应方式 | 等待任务完成后返回结果 | 立即返回 task_id |
-| 适用场景 | 实时对话、快速推理 | 图像/视频/3D 生成、模型训练等耗时任务 |
-| 超时风险 | 任务耗时过长可能超时 | 无超时风险 |
-| 并发控制 | 受连接数限制 | 可并行提交多个任务 |
-| [流式输出](streaming.md) | 支持 | 部分场景不支持（如 Responses API 异步模式） |
+| 配置项 | 说明 |
+|--------|------|
+| `X-DashScope-Async: enable` | 创建任务时必须携带的请求头，启用异步模式 |
+| `task_id` | 创建任务返回的任务标识，有效期 24 小时 |
+| 轮询间隔 | 建议 15 秒，避免触发限流（查询接口 20 QPS）|
+| 结果下载链接有效期 | 通常 2 小时，请及时下载 |
 
-## 注意事项
+## 通用任务管理 API
 
-- 异步任务的结果（如图片 URL、3D 模型下载链接）通常有时效性，需在有效期内下载保存。例如 3D 模型下载链接有效期仅 2 小时。
-- 不同模型的异步任务请求路径可能不同，请参考对应模型的 API 文档确认端点地址。
-- Responses API 的异步模式暂不支持[流式输出](streaming.md)。
-- 模型部署产生的在线服务会持续占用资源，不再使用时应及时下线。
+百炼提供一组通用的异步任务管理接口，适用于当前 API Key 所属主账号下的所有任务：
+
+- **查询单个任务结果**：`GET /api/v1/tasks/{task_id}`，返回任务状态及结果，限流 20 QPS。
+- **批量查询任务状态**：`GET /api/v1/tasks/`，支持按 `task_id`、`start_time`/`end_time`（格式 `YYYYMMDDhhmmss`）、`model_name`、`status` 等条件组合筛选，分页返回。时间范围不超过 24 小时。
+- **取消排队中的任务**：`POST /api/v1/tasks/{task_id}/cancel`，仅支持取消状态为 `PENDING` 的任务，已进入 `RUNNING` 的任务无法取消。
+
+> **注意**：异步任务完成后通常保留 24 小时，超时后系统自动清理，无法再查询。
+
+## 异步任务完成通知
+
+频繁轮询会消耗资源并可能触发限流。百炼已接入阿里云事件总线 EventBridge，支持任务完成后主动推送通知，提供两种接收方案：
+
+| 方案 | 适用场景 | 特点 |
+|------|---------|------|
+| HTTP 回调 URL | 通用场景 | 需公网或 VPC 可达的 HTTP POST 端点 |
+| RocketMQ | 对消息可靠性要求高 | 支持失败重试，消息无丢失 |
+
+事件源为 `acs.dashscope`，事件类型为 `dashscope:System:AsyncTaskFinish`，事件 `data` 中包含 `task_id`、`task_status`、`region` 等字段，可据此调用查询接口一次获取最终结果。可通过事件模式按 `user_api_unique_key` 的模型后缀过滤特定事件。
+
+## 地域约束
+
+模型、Endpoint URL、API Key 必须属于同一地域，跨地域调用将失败。部分模型（如 Tripo 3D、可灵图像/视频生成等）仅适用于"中国内地（北京）"地域，必须使用该地域的 API Key。
 
 ## 关联主题页
 
+- [3d generation](../api/3d-generation.md)
 - [image generation](../api/image-generation.md)
 - [video generation api](../api/video-generation-api.md)
-- [3d generation](../api/3d-generation.md)
-- [application call](../api/application-call.md)
-- [model production](../api/model-production.md)
+- [more about models](../api/more-about-models.md)
 
 

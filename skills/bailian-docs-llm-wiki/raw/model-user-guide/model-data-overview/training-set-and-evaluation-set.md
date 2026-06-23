@@ -4,7 +4,7 @@
 
 **重要**
 
-本文档仅适用于中国大陆版（北京地域）。
+本文档仅适用于华北2（北京）地域。
 
 ## **支持的数据集**
 
@@ -98,6 +98,10 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-s
 system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-studio/text-generation#51574d7e93su4)。ChatML 格式训练数据样例：
 
 > 如需传入 `system` 消息，对应的 `content` 必须使用数组格式 `[{"text":"..."}]`，不能使用字符串格式 `"content":"字符串"`。
+
+**说明**
+
+如果训练思考模型（Thinking），也需要遵循[SFT 思考模型（thinking）](#f5454632ef4yo)的数据格式要求。
 
 ```
 # 一行训练数据（json 格式），展开后典型结构如下：
@@ -235,9 +239,12 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-
 
 图片帧缩放高度（像素）
 
-**说明**
+#### 训练物体定位建议：
 
-如果训练思考模型（Thinking），也需要遵循[SFT 思考模型（thinking）](#f5454632ef4yo)的数据格式要求。
+-   Qwen2.5-VL：训练的坐标相对于缩放后的图像左上角的绝对值，单位为像素。
+    
+-   Qwen3-VL：训练坐标为相对坐标，坐标值会缩放到`[0, 999]`范围内。
+    
 
 #### **压缩包要求：**
 

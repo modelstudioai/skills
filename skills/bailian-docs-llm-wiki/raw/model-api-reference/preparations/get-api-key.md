@@ -2,15 +2,15 @@
 
 使用阿里云百炼的大模型或应用前，请先获取API Key作为鉴权凭证。
 
+**说明**
+
+本文介绍的是百炼按量付费的 API Key。如果您使用的是 Token Plan 或 Coding Plan，请使用对应的专属 API Key（以`sk-sp-`开头），获取方式请参见[Token Plan API Key](https://help.aliyun.com/zh/model-studio/token-plan-quickstart#tp04-h-step2)和[Coding Plan 的 API Key](https://help.aliyun.com/zh/model-studio/coding-plan#2531c37fd64f9)。
+
 ## **一、获取API Key**
 
 **重要**
 
 需使用[主账号](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)，或具备`管理员`或`API-Key`[页面权限](https://help.aliyun.com/zh/model-studio/member-management#febd776ce5lbx)的[子账号](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)操作。
-
-**重要**
-
-百炼已对华北2（北京）、新加坡地域的 API Key 生成和存储机制进行安全升级，新建的 API Key 仅在创建时展示一次明文。升级前已创建的 API Key 可继续正常使用，功能不受影响；建议您创建新密钥替换旧密钥，以获得更完善的权限管理和安全保障。
 
 ## 华北2（北京）地域
 
@@ -90,10 +90,6 @@
 
 ## **二、使用API Key**
 
-**说明**
-
-[Coding Plan](https://help.aliyun.com/zh/model-studio/coding-plan)应使用专属 API Key（格式：`sk-sp-xxxxx`），而非本文介绍的百炼通用 API Key（格式：`sk-xxxxx`）。获取 Coding Plan 专属 API Key 请参见[获取套餐专属 API Key 和 Base URL](https://help.aliyun.com/zh/model-studio/coding-plan-quickstart#2782cf93b1w8h)。
-
 -   **方式一：在**[**第三方工具**](https://help.aliyun.com/zh/model-studio/use-chat-client-or-development-tool/)**中调用模型**
     
     如果在Chatbox等工具或平台中调用模型，您可能需要输入三个信息：
@@ -102,15 +98,15 @@
         
     -   API Key所属地域的Base URL：
         
-        -   **华北2（北京）**：`https://dashscope.aliyuncs.com/compatible-mode/v1`
+        -   **华北2（北京）**：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`，调用时请将`WorkspaceId`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)
             
-        -   **新加坡**：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`，调用时请将`WorkspaceId`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+        -   **新加坡**：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
+            
+        -   **德国（法兰克福）**：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1`
+            
+        -   **日本（东京）**：`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1`
             
         -   **美国（弗吉尼亚）**：`https://dashscope-us.aliyuncs.com/compatible-mode/v1`
-            
-        -   **德国（法兰克福）**：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1`，调用时请将`WorkspaceId`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
-            
-        -   **日本（东京）**：`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1`，调用时请将`WorkspaceId`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
             
     -   模型名称，如qwen-plus
         
@@ -123,6 +119,40 @@
     
 
 请勿以任何方式公开API Key，避免因未经授权的使用导致安全风险或资金损失。
+
+## **API Key 安全升级说明**
+
+百炼已对按量付费 API Key 生成和存储机制进行安全升级（美国（弗吉尼亚）地域除外），下表列出了升级前后 API Key 的主要差异。
+
+**对比项**
+
+**升级前创建的 API Key**
+
+**升级后创建的 API Key**
+
+**Key 格式**
+
+以 `sk-` 开头，长度较短（约 32 位）
+
+以 `sk-ws` 开头，长度较长
+
+**明文查看**
+
+可在控制台随时复制完整明文
+
+仅在创建时展示一次明文，关闭弹窗后无法再次查看。如果丢失，请进行重置或重新创建
+
+**调用能力**
+
+可正常调用模型，功能不受影响
+
+可正常调用模型，与升级前功能完全一致
+
+**建议操作**
+
+建议创建新密钥替换旧密钥，以获得更完善的安全保障
+
+创建后请立即复制保存，妥善保管
 
 ## API Key权限说明
 

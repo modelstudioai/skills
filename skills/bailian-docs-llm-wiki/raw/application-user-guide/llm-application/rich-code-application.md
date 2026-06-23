@@ -129,7 +129,7 @@
 
 当**应用测试稳定、性能满足预期**后，建议开启**网关**功能，通过自定义域名和网关路由在生产环境访问云上服务。
 
-1.  在高代码应用详情页的**网关** Tab 中，按照控制台引导，根据需求创建阿里云的[云原生API网关](https://help.aliyun.com/zh/api-gateway/cloud-native-api-gateway/product-overview/what-is-cloud-native-api-gateway)。（将会产生少量的使用费用，具体价格表请参考[计费概述](https://help.aliyun.com/zh/api-gateway/cloud-native-api-gateway/product-overview/billing-overview)）
+1.  在高代码应用详情页的**网关** Tab 中，按照控制台引导，根据需求创建阿里云的[云原生API网关](https://help.aliyun.com/zh/api-gateway/cloud-native-api-gateway/product-overview/what-is-cloud-native-api-gateway)。（将会产生少量的使用费用，具体价格表请参考[专享实例计费概述](https://help.aliyun.com/zh/api-gateway/cloud-native-api-gateway/product-overview/billing-overview)）
     
     > 应用**部署**地域应与应用**网关**所在地域**相同**。
     

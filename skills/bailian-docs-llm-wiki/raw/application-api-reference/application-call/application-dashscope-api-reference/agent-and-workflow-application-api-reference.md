@@ -4253,11 +4253,11 @@ Assistant Message `_object_`（可选）
     
     客户端处理规则：文本类节点（OUTPUT / END text 模式）的`message.content`为增量 delta，需追加拼接；JSON 类节点（LLM / Component / AgentGroup 等）的`message.content`为完整 JSON 快照，需整体替换。当`node_is_completed=true`时标记该节点执行完毕。
     
-    **子画布节点推流**：循环节点（Iterator）和批量节点（Parallel）的子画布内节点也会流式推送，通过响应字段`parent_node_id`标识所属父节点。
+    **子画布节点推流**：循环节点和批处理节点的子画布内节点也会流式推送，通过响应字段`parent_node_id`标识所属父节点。
     
     **重要**
     
-    暂不支持嵌套子画布：循环/批量节点的子画布内不能再放置循环或批量节点。
+    暂不支持嵌套子画布：循环/批处理节点的子画布内不能再放置循环或批处理节点。
     
     > Java SDK 中为`FlowStreamMode.MESSAGE_FORMAT_PLUS`。
     
@@ -4287,7 +4287,7 @@ Assistant Message `_object_`（可选）
     > Java SDK 中为`FlowStreamMode.FULL_THOUGHTS`。
     
 
-> Python SDK 版本至少为1.24.0，Java SDK 版本至少为2.21.0。通过HTTP调用时，请将**flow\_stream\_mode**放入**parameters**对象中。
+> Python SDK 版本至少为1.24.0，Java SDK 版本至少为2.22.23。通过HTTP调用时，请将**flow\_stream\_mode**放入**parameters**对象中。
 
 **biz\_params** `_object_` （可选）
 
@@ -4564,6 +4564,12 @@ API 调用时，通过 `user_defined_params` 以 `mcp_id` 为 key 传入对应�
 组合逻辑：  
 不同键之间为“与”(AND) 逻辑。例如，`"author": "John.Doe", "source": ["internal_wiki", "public_docs"]` 表示筛选出作者是 "John.Doe" 并且来源是 "internal\_wiki" 或 "public\_docs" 的文档。  
   
+  
+  
+  
+  
+  
+  
 
 > Java SDK 中为 **metadataFilter**。
 
@@ -4606,6 +4612,12 @@ API 调用时，通过 `user_defined_params` 以 `mcp_id` 为 key 传入对应�
 
 组合逻辑：  
 不同键之间为“与”(AND) 逻辑。例如，`"year": 2024, "department": ["技术部", "产品部"]` 表示筛选出年份是 2024 并且 部门是 "技术部" 或 "产品部" 的文档切片。  
+  
+  
+  
+  
+  
+  
   
 
 > Java SDK 中为 **structuredFilter**。
@@ -5032,11 +5044,11 @@ message=Invalid API-key provided.
 
 **parent\_node\_id** `_string_`
 
-当前节点所属父节点（循环节点 / 批量节点）的 ID。
+当前节点所属父节点（循环节点 / 批处理节点）的 ID。
 
 -   主画布节点：返回 null。
     
--   子画布节点：返回所属循环节点或批量节点的`node_id`。
+-   子画布节点：返回所属循环节点或批处理节点的`node_id`。
     
 
 仅`message_format_plus`模式下子画布节点会返回非空值。
@@ -5077,7 +5089,7 @@ message=Invalid API-key provided.
 
 **parentNodeId** `_string_`
 
-父节点（循环节点 / 批量节点）ID。
+父节点（循环节点 / 批处理节点）ID。
 
 **nodeExecTime** `_string_`
 
