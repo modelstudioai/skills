@@ -14,21 +14,10 @@
       "description": "Qwen-TTS实时模型是通义实验室“qwen系列”模型中的语音合成模型。具备双向上下文感知能力，可以低延迟高保真完成多音色、方言及长文本的双向流式生成。",
       "features": [],
       "provider": "qwen",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "qwen-tts-realtime",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "2.4",
-          "type": "input_token",
-          "priceName": "输入"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "12",
-          "type": "output_token",
-          "priceName": "输出"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
@@ -57,13 +46,40 @@
       "maxInputTokens": 512,
       "offlineInfo": {
         "inference": {
-          "announceUrl": "https://www.aliyun.com/notice/118331",
+          "announceUrl": "https://www.alibabacloud.com/zh/notice/detail?id=1938",
           "offlineTime": "2026-09-07 00:00:00"
         }
       },
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Qwen-TTS-Realtime",
       "docUrl": "https://help.aliyun.com/document_detail/2938790.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
+        }
+      ],
       "samples": {
         "dashscope": {
           "default": {
@@ -85,21 +101,10 @@
       "description": "Qwen-TTS实时模型是通义实验室千问模型中语音合成利器，始终与最新快照版能力相同。具备双向上下文感知能力，可以低延迟高保真完成多音色、方言及长文本的双向流式生成。本模型是动态更新版本，模型更新不会提前通知。",
       "features": [],
       "provider": "qwen",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "qwen-tts-realtime-latest",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "2.4",
-          "type": "input_token",
-          "priceName": "输入"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "12",
-          "type": "output_token",
-          "priceName": "输出"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
@@ -128,11 +133,11 @@
       "maxInputTokens": 512,
       "offlineInfo": {
         "inference": {
-          "announceUrl": "https://www.aliyun.com/notice/118332",
+          "announceUrl": "https://www.alibabacloud.com/zh/notice/detail?id=1934",
           "offlineTime": "2026-07-06 00:00:00"
         }
       },
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Qwen-TTS-Realtime-Latest",
       "docUrl": "https://help.aliyun.com/document_detail/2938790.html",
       "predictConfig": [

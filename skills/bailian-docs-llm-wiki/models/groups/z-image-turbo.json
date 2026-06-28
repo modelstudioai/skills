@@ -17,21 +17,10 @@
         "model-experience"
       ],
       "provider": "qwen-domain-model",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "z-image-turbo",
-      "prices": [
-        {
-          "priceUnit": "每张",
-          "price": "0.1",
-          "type": "image_standard",
-          "priceName": "图片生成（标准）"
-        },
-        {
-          "priceUnit": "每张",
-          "price": "0.2",
-          "type": "image_thinking",
-          "priceName": "图片生成（思考）"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 1,
@@ -49,7 +38,7 @@
       ],
       "versionTag": "SNAPSHOT",
       "latestOnlineAt": "2025-12-18T06:43:39.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Z-Image-Turbo",
       "docUrl": "https://help.aliyun.com/document_detail/3002354.html",
       "predictConfig": [

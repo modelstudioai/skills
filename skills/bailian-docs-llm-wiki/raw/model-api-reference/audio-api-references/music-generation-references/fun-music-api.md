@@ -2,11 +2,11 @@
 
 本文介绍音乐生成 Fun-Music 模型的 API 参数详情。
 
-**用户指南**：关于模型介绍和选型建议请参见[音乐生成](https://help.aliyun.com/zh/model-studio/fun-music)。
+**用户指南**：关于模型介绍和选型建议请参见[音乐生成](https://help.aliyun.com/zh/model-studio/fun-music/)。
 
 **重要**
 
-该模型目前处于邀测阶段，您需要前往[模型广场](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/fun-music-v1)申请开通后方可使用。该功能仅在[中国内地部署范围](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)（北京地域）下可用。
+该模型目前处于邀测阶段，您需要前往[模型广场](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/fun-music-v1)申请开通后方可使用。该模型服务仅在华北2（北京）地域下可用。
 
 ## **前提条件**
 

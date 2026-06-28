@@ -36,7 +36,9 @@ qwen-image-2.0-pro `**推荐**`
 
 图像张数：1-6张
 
-qwen-image-2.0-pro-2026-04-22 `**推荐**`
+qwen-image-2.0-pro-2026-06-22 `**推荐**`
+
+qwen-image-2.0-pro-2026-04-22
 
 qwen-image-2.0-pro-2026-03-03
 
@@ -86,7 +88,12 @@ qwen-image
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+
+-   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
@@ -96,7 +103,7 @@ qwen-image
 
 千问图像模型支持同步接口，一次请求即可获得结果，调用流程简单，推荐用于多数场景。
 
-**北京地域**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+**北京地域**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 **新加坡地域**：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
@@ -107,7 +114,7 @@ qwen-image
 ## **文生图**
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
 --header 'Content-Type: application/json' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --data '{
@@ -409,7 +416,7 @@ import dashscope
 from dashscope import MultiModalConversation
 
 # 以下为华北2（北京）地域的URL，各地域的URL不同。
-dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 messages = [
     {
@@ -512,7 +519,7 @@ public class QwenImage {
 
     static {
         // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     }
 
     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -603,7 +610,7 @@ public class QwenImage {
 
 #### **步骤1：创建任务获取任务ID**
 
-**北京地域**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
+**北京地域**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
 
 **新加坡地域**：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
 
@@ -621,7 +628,7 @@ public class QwenImage {
 当前仅`qwen-image-plus`、`qwen-image`模型支持异步接口调用。
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
@@ -830,7 +837,9 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
 
 ##### **华北2（北京）**
 
-`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ##### 新加坡
 
@@ -858,7 +867,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
 将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时。
 
 ```
-curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id} \
+curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
@@ -1036,7 +1045,7 @@ import os
 import dashscope
 
 # 以下为华北2（北京）地域的URL，各地域的URL不同。
-dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 prompt = "一副典雅庄重的对联悬挂于厅堂之中，房间是个安静古典的中式布置，桌子上放着一些青花瓷，对联上左书“义本生知人机同道善思新”，右书“通云赋智乾坤启数高志远”， 横批“智启千问”，字体飘逸，在中间挂着一幅中国风的画作，内容是岳阳楼。"
 
@@ -1109,7 +1118,7 @@ import dashscope
 import time
 
 # 以下为华北2（北京）地域的URL，各地域的URL不同。
-dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 prompt = "一副典雅庄重的对联悬挂于厅堂之中，房间是个安静古典的中式布置，桌子上放着一些青花瓷，对联上左书“义本生知人机同道善思新”，右书“通云赋智乾坤启数高志远”， 横批“智启千问”，字体飘逸，在中间挂着一幅中国风的画作，内容是岳阳楼。"
 
@@ -1272,7 +1281,7 @@ import java.util.Map;
 public class Text2Image {
     static {
         // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     }
 
     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -1362,7 +1371,7 @@ public class Text2Image {
 
     static {
         // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     }
 
     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -1538,6 +1547,7 @@ A：
         
 -   **图像编辑模型**：  
     `qwen-image-edit`：根据输入的图像和文本指令，执行图生图、局部修改等操作，详情请参见[千问-图像编辑](https://help.aliyun.com/zh/model-studio/qwen-image-edit-api)。  
+      
     
 
 ### **Q：如何获取图像存储的访问域名白名单？**

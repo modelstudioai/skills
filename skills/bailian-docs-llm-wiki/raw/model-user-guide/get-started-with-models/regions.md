@@ -1,22 +1,24 @@
-# 选择地域和服务部署范围
+# 选择地域、服务部署范围和接入域名
 
-调用百炼前先选择**地域**和**服务部署范围：**
+调用百炼前先选择**地域**、**服务部署范围、接入域名：**
 
 -   地域：决定**接入点和数据存储位置**，就近选择可降低延迟；
     
--   服务部署范围：决定**推理执行位置**，有数据合规需求选择特定地理边界的部署范围，无合规需求选择全球部署范围（推理资源池更大）。
+-   服务部署范围：决定**推理执行位置**，有数据合规需求选择特定地理边界的部署范围，无合规需求选择全球部署范围（推理资源池更大）；
+    
+-   接入域名：影响**并发上限、超时等服务保障**，各地域具有独立的接入域名。
     
 
 一次完整的模型调用流程如下：
 
-1.  应用经 Base URL 将请求发送到所选**地域**（如华北2-北京），请求数据存于该地域；
+1.  应用经接入域名将请求发送到所选**地域**（如华北2-北京），请求数据存于该地域；
     
 2.  接入地域将请求转发至**服务部署范围**内的推理节点完成计算（过程数据不持久化，传输全程加密）；
     
 3.  推理结果回到接入地域存储，再响应给应用（用户静态数据始终存于所选地域）。
     
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0856771871/CAEQbxiBgICHvaa58hkiIDlkZWFlMzZlYTEyOTQ3MmM5YzQ5ZTkyYTRkNGVkNzU47466796_20260515102254.505.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2631442871/CAEQchiBgIDPq_PR9xkiIDJhZDdiNzAxMGFiODRhNmRiMDYxYjNjNGU2NTJkMDYw7466796_20260515102254.505.svg)
 
 ## 选择地域和服务部署范围
 
@@ -76,99 +78,189 @@
 
 日本（限境内推理）
 
+## 选择接入域名
+
+百炼为模型推理 API 提供专属、共享和试用三种接入域名，适用于从试用体验到企业级生产的不同场景。推荐使用**专属域名**，各域名的核心差异如下：
+
+**对比项**
+
+**专属域名（推荐）**
+
+**共享域名（现有域名）**
+
+**试用域名**
+
+**域名格式**
+
+`{WorkspaceId}.{region}.maas.aliyuncs.com`
+
+`dashscope.aliyuncs.com`
+
+> 以华北2（北京）地域为例
+
+`trial.{region}.maas.aliyuncs.com`
+
+**适用场景**
+
+推荐在生产环境中使用，具备更高并发承载能力与网络隔离性，保障大流量场景下的稳定、低延迟访问体验。
+
+存量业务兼容，建议[迁移至专属域名](#section-migrate-domain)。
+
+快速体验、功能验证，不建议用于生产环境。
+
+**鉴权方式**
+
+仅访问当前业务空间
+
+可访问所有业务空间
+
+可访问所有业务空间
+
+**限流额度**
+
+RPM、TPM 按模型区分
+
+RPM、TPM 按模型区分
+
+RPM 为1000，TPM 按模型区分
+
+**请求超时**
+
+3600 秒
+
+600 秒
+
+600 秒
+
+**协议支持**
+
+HTTP、SSE、WebSocket、WebRTC
+
+HTTP、SSE、WebSocket
+
+HTTP、SSE
+
+**SLA**
+
+99.9%
+
+99.9%
+
+不提供
+
 ## 各地域接入信息
 
-每个地域有独立的 Base URL、API Key 和模型列表，**不能跨地域混用**。
+每个地域有独立的接入域名、API Key 和模型列表，**不能跨地域混用**。
 
-**重要**
+**地域**
 
-百炼为华北2（北京）、新加坡地域推出了新版域名 `{WorkspaceId}.{region}.maas.aliyuncs.com`，`{WorkspaceId}` 为业务空间 ID（可前往各地域的[业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)页面获取），`{region}` 取值为 `cn-beijing`、`ap-southeast-1`。**新版专属域名能够为推理请求提供更加卓越的性能和更高的稳定性，建议迁移至新域名**。现有域名仍可正常使用：
+**地域ID**
 
--   华北2（北京）：建议从 `dashscope.aliyuncs.com` 替换为 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+**专属域名**
+
+**共享域名**
+
+**试用域名**
+
+**API Key**
+
+**模型列表**
+
+华北2（北京）
+
+`cn-beijing`
+
+`{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+
+`dashscope.aliyuncs.com`
+
+`trial.cn-beijing.maas.aliyuncs.com`
+
+[密钥管理](https://bailian.console.aliyun.com/?apiKey=1#/api-key)
+
+[可用模型](https://bailian.console.aliyun.com/cn-beijing?apiKey=1&tab=model#/model-market)
+
+新加坡
+
+`ap-southeast-1`
+
+`{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+
+`dashscope-intl.aliyuncs.com`
+
+`trial.ap-southeast-1.maas.aliyuncs.com`
+
+[密钥管理](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=doc#/doc/?type=model&url=2840914)
+
+[可用模型](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=doc#/doc/?type=model&url=2840914)
+
+德国（法兰克福）
+
+`eu-central-1`
+
+`{WorkspaceId}.eu-central-1.maas.aliyuncs.com`
+
+不支持
+
+暂不支持
+
+[密钥管理](https://bailian.console.alibabacloud.com/?apiKey=1#/api-key)
+
+[可用模型](https://help.aliyun.com/zh/model-studio/getting-started/models)
+
+日本（东京）
+
+`ap-northeast-1`
+
+`{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com`
+
+不支持
+
+暂不支持
+
+[密钥管理](https://modelstudio.console.aliyun.com/ap-northeast-1?tab=dashboard#/api-key)
+
+[可用模型](https://modelstudio.console.alibabacloud.com/ap-northeast-1?tab=doc#/doc/?type=model&url=2840914)
+
+美国（弗吉尼亚）
+
+\-
+
+暂不支持
+
+`dashscope-us.aliyuncs.com`
+
+暂不支持
+
+[密钥管理](https://modelstudio.console.aliyun.com/us-east-1?tab=dashboard#/api-key)
+
+[可用模型](https://modelstudio.console.aliyun.com/us-east-1?tab=doc#/doc/?type=model&url=2840914)
+
+-   **德国（法兰克福）、日本（东京）**地域通过**业务空间（Workspace）**区分服务部署范围，开始调用前需前往业务空间管理页面创建业务空间并选择服务部署范围：[德国（法兰克福）](https://modelstudio.console.aliyun.com/eu-central-1?tab=globalset#/efm/business_management)（全球/欧盟）、[日本（东京）](https://modelstudio.console.aliyun.com/ap-northeast-1?tab=globalset#/efm/business_management)（全球/日本）。
     
--   新加坡：建议从 `dashscope-intl.aliyuncs.com` 替换为 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+-   **美国（弗吉尼亚）**地域使用带 `-us` 后缀的模型名称（如 `qwen-plus-us`）可限定美国境内推理，不带后缀的默认**全球**推理。
+    
+-   **华北2（北京）**和**新加坡地域**各仅支持一种服务部署范围（分别为中国内地和国际），无需选择。
     
 
-### 华北2（北京）
+## 迁移至专属域名
 
--   Base URL（OpenAI 兼容）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`，调用时请从`WorkspaceId`替换为真实的[业务空间 ID](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)。
-    
--   Base URL（Anthropic 兼容）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic`
-    
--   Base URL（DashScope）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
-    
--   API Key：[密钥管理（北京）](https://bailian.console.aliyun.com/?apiKey=1#/api-key)
-    
--   模型列表：[可用模型（北京）](https://bailian.console.aliyun.com/cn-beijing?apiKey=1&tab=model#/model-market)
-    
+从共享或试用域名迁移到专属域名只需两步，无需修改业务逻辑代码：
 
-### 新加坡
-
--   Base URL（OpenAI 兼容）：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`，调用时请从`WorkspaceId`替换为真实的[业务空间 ID](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=globalset#/efm/business_management)。
+1.  **获取专属域名**：
     
--   Base URL（Anthropic 兼容）：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic`
+    -   方式一：在[创建API Key](https://bailian.console.aliyun.com/cn-beijing#/api-key)成功后的弹窗中，复制 **API Host** 下方的内容。
+        
+    -   方式二：在[业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)页面，复制 **API Host** 列的内容。
+        
+2.  **替换 Base URL 中的域名**：将原域名替换为专属域名。以华北2（北京）地域为例，`llm-xxx` 为业务空间 ID：
     
--   Base URL（DashScope）：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
-    
--   API Key：[密钥管理（新加坡）](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=doc#/doc/?type=model&url=2840914)
-    
--   模型列表：[可用模型（新加坡）](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=doc#/doc/?type=model&url=2840914)
-    
-
-### 美国（弗吉尼亚）
-
--   Base URL（OpenAI 兼容）：`https://dashscope-us.aliyuncs.com/compatible-mode/v1`
-    
--   Base URL（Anthropic 兼容）：`https://dashscope-us.aliyuncs.com/apps/anthropic`
-    
--   Base URL（DashScope）：`https://dashscope-us.aliyuncs.com/api/v1`
-    
--   API Key：[密钥管理（弗吉尼亚）](https://modelstudio.console.aliyun.com/us-east-1?tab=dashboard#/api-key)
-    
--   模型列表：[可用模型（弗吉尼亚）](https://modelstudio.console.aliyun.com/us-east-1?tab=doc#/doc/?type=model&url=2840914)
-    
-
-**限定美国境内推理**：使用带 `-us` 后缀的模型名称，如 `qwen-plus-us`；不带后缀时默认使用**全球**推理。
-
-### 德国（法兰克福）
-
-法兰克福通过**业务空间（Workspace）**区分部署范围，不同空间的 API Key 相互隔离。开始调用前先创建业务空间：
-
-1.  前往[业务空间管理（法兰克福）](https://modelstudio.console.aliyun.com/eu-central-1?tab=globalset#/efm/business_management)，创建业务空间并选择部署模式（全球或欧盟）。
-    
-2.  [获取业务空间 ID（法兰克福）](https://modelstudio.console.aliyun.com/eu-central-1?tab=globalset#/efm/business_management)，替换下方 Base URL 中的 `{WorkspaceId}`。
-    
-
--   Base URL（OpenAI 兼容）：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1`
-    
--   Base URL（Anthropic 兼容）：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/apps/anthropic`
-    
--   Base URL（DashScope）：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1`
-    
--   API Key：[密钥管理（法兰克福）](https://bailian.console.alibabacloud.com/?apiKey=1#/api-key)
-    
--   模型列表：[可用模型（法兰克福）](https://help.aliyun.com/zh/model-studio/getting-started/models)
-    
-
-### 日本（东京）
-
-东京通过**业务空间（Workspace）**区分部署范围，不同空间的 API Key 相互隔离。开始调用前先创建业务空间：
-
-1.  前往[业务空间管理（东京）](https://modelstudio.console.aliyun.com/ap-northeast-1?tab=globalset#/efm/business_management)，创建业务空间并选择部署模式（全球或日本）。
-    
-2.  [获取业务空间 ID（东京）](https://modelstudio.console.aliyun.com/ap-northeast-1?tab=globalset#/efm/business_management)，替换下方 Base URL 中的 `{WorkspaceId}`。
-    
-
--   Base URL（OpenAI 兼容）：`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1`
-    
--   Base URL（Anthropic 兼容）：`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/apps/anthropic`
-    
--   Base URL（DashScope）：`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1`
-    
--   API Key：[密钥管理（东京）](https://modelstudio.console.aliyun.com/ap-northeast-1?tab=dashboard#/api-key)
-    
--   模型列表：[可用模型（东京）](https://modelstudio.console.alibabacloud.com/ap-northeast-1?tab=doc#/doc/?type=model&url=2840914)
-    
+    -   OpenAI 兼容接口：从 `https://dashscope.aliyuncs.com/compatible-mode/v1` 替换为 `https://llm-xxx.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
+        
+    -   DashScope 接口：从 `https://dashscope.aliyuncs.com/api/v1` 替换为 `https://llm-xxx.cn-beijing.maas.aliyuncs.com/api/v1`
+        
+    -   Anthropic 兼容接口：从 `https://dashscope.aliyuncs.com/apps/anthropic` 替换为 `https://llm-xxx.cn-beijing.maas.aliyuncs.com/apps/anthropic`
+        
 
 ## 各地域功能支持
 

@@ -25,7 +25,7 @@ Codex 是 OpenAI 推出的终端 AI 编程助手。可通过 Token Plan 团队�
 
 ### Token Plan 团队版
 
-`model`请选择[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)。将`OPENAI_API_KEY`环境变量设置为 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)。
+`model`请选择[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)。将`OPENAI_API_KEY`环境变量设置为 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)。
 
 #### Responses API（qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash）
 

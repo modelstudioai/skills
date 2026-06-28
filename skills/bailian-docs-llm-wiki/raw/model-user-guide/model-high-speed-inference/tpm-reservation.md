@@ -261,7 +261,7 @@ Qwen 系列
 
 ## 创建 TPM 预留
 
-前提条件：已开通百炼模型服务，已创建业务空间。登录[百炼控制台](https://bailian.console.aliyun.com/#/efm/tpm_reservation)[百炼控制台](https://bailian.console.alibabacloud.com/#/efm/tpm_reservation)，单击**创建 TPM 预留**。
+前提条件：已开通百炼模型服务，已创建业务空间。登录[百炼控制台](https://bailian.console.aliyun.com/#/efm/tpm_reservation)，单击**创建 TPM 预留**。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3935961871/p1081896.png)
 
@@ -419,7 +419,7 @@ RPM 越大，建议购买的输入和输出 TPM 同比增大。
 
 ## 查看与管理
 
-前往[百炼控制台](https://bailian.console.aliyun.com/#/efm/tpm_reservation)[百炼控制台](https://bailian.console.alibabacloud.com/#/efm/tpm_reservation)，在预留列表页。列表以模型卡片形式展示所有预留实例，支持按模型、时间、状态筛选。
+前往[百炼控制台](https://bailian.console.aliyun.com/#/efm/tpm_reservation)，在预留列表页。列表以模型卡片形式展示所有预留实例，支持按模型、时间、状态筛选。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3935961871/p1081916.png)
 

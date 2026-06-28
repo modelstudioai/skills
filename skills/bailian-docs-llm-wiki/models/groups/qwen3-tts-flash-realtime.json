@@ -15,15 +15,10 @@
       "collectionTag": "qwen3",
       "features": [],
       "provider": "qwen",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "qwen3-tts-flash-realtime",
-      "prices": [
-        {
-          "priceUnit": "每万字符",
-          "price": "1",
-          "type": "cosy_tts_number",
-          "priceName": "语音合成"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 1,
@@ -43,7 +38,7 @@
       "versionTag": "MAJOR",
       "equivalentSnapshot": "qwen3-tts-flash-realtime-2025-11-27",
       "latestOnlineAt": "2025-11-26T16:00:00.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Qwen3-TTS-Flash-Realtime",
       "docUrl": "https://help.aliyun.com/document_detail/2938790.html",
       "predictConfig": [

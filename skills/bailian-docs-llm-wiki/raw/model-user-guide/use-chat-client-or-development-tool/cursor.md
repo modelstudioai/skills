@@ -23,7 +23,7 @@ Cursor 是一款 AI 编程 IDE，可以通过按量计费、Coding Plan 或 Toke
 
 **API Key**
 
-Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)
+Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)
 
 **Base URL**
 
@@ -71,6 +71,8 @@ Coding Plan [支持的模型](https://help.aliyun.com/zh/model-studio/coding-pla
 **可用模型**
 
 填入[支持的模型](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#7f9c78ae99pwz)。
+
+部分模型名称需调整：kimi-k2.6 写为 **kimi-k2-6**，kimi-k2.5 写为 **kimi-k2-5**，glm-5.2 写为 **glm-5-2**，glm-5.1 写为 **glm-5-1**，glm-5 写为 **glm-5-0**。
 
 ## **使用案例：接入百炼 CLI**
 

@@ -16,15 +16,10 @@
         "model-experience"
       ],
       "provider": "qwen",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "gummy-chat-v1",
-      "prices": [
-        {
-          "priceUnit": "每秒",
-          "price": "0.00015",
-          "type": "content_duration",
-          "priceName": "音频时长"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 1,
@@ -48,7 +43,7 @@
           "offlineTime": "2026-09-07 00:00:00"
         }
       },
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "一句话识别及翻译V1.0",
       "docUrl": "https://help.aliyun.com/document_detail/2866122.html",
       "predictConfig": [],

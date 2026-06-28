@@ -2,7 +2,7 @@
 
 阿里云百炼的Embedding模型兼容OpenAI接口规范。将原有 OpenAI 应用迁移至阿里云百炼只需调整三个参数：
 
--   base\_url：替换为`https://dashscope.aliyuncs.com/compatible-mode/v1`
+-   base\_url：替换为`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
     
 -   api\_key：替换为[阿里云百炼 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)
     
@@ -11,8 +11,10 @@
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
+-   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
     
 
@@ -100,7 +102,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),  # 如果您没有配置环境变量，请在此处用您的API Key进行替换
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"  # 百炼服务的base_url
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"  # 百炼服务的base_url
 )
 
 completion = client.embeddings.create(
@@ -118,13 +120,13 @@ print(completion.model_dump_json())
 ### **提交接口调用**
 
 ```
-POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings
+POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/embeddings
 ```
 
 ### **命令行调用**
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/embeddings' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{

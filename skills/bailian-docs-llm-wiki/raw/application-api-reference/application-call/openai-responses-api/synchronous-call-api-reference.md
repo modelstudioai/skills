@@ -6,12 +6,12 @@
 
 -   **异步调用**：对于**耗时较长**的任务（如生成报告、多步骤工具调用），为避免请求超时，请参阅[异步调用 API 参考](https://help.aliyun.com/zh/model-studio/asynchronous-call-api-reference)。
     
--   **DashScope API**：如需获取更全面的功能与更高的性能，请参阅[DashScope API 参考](https://help.aliyun.com/zh/model-studio/agent-and-workflow-application-api-reference)。
+-   **DashScope API**：如需获取更全面的功能与更高的性能，请参阅[工作流与旧版智能体应用 API](https://help.aliyun.com/zh/model-studio/agent-and-workflow-application-api-reference)。
     
 
 **重要**
 
-本文档仅适用于中国大陆版（北京地域）。
+本文档仅适用于华北2（北京）地域。
 
 ## 前提条件
 
@@ -1001,4 +1001,4 @@ id:33 | event:response.completed | :HTTP_STATUS/200 | data:{"sequence_number":32
 
 ## 错误码
 
-如果应用调用失败并返回报错信息，请参阅[错误信息](https://help.aliyun.com/zh/model-studio/error-code)解决。
+如果应用调用失败并返回报错信息，请参阅[错误码](https://help.aliyun.com/zh/model-studio/error-code)解决。

@@ -14,21 +14,16 @@
       "description": "AnimateAnyone-Template是辅助AnimateAnyone的动作模板生成模型，可基于视频提取人物动作并制作模板。",
       "features": [],
       "provider": "qwen",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "animate-anyone-template-gen2",
-      "prices": [
-        {
-          "priceUnit": "每秒",
-          "price": "0.08",
-          "type": "video_ratio",
-          "priceName": "视频生成（std）"
-        }
-      ],
       "capabilities": [
         "VG"
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2024-12-10T06:27:17.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "舞动人像AnimateAnyone-template",
       "docUrl": "https://help.aliyun.com/document_detail/2807955.html",
       "predictConfig": [
@@ -61,7 +56,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/aa-template-generation/' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"animate-anyone-template-gen2\",\n    \"input\": {\n        \"video_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241210/cwjmsz/1.mp4\"\n    },\n    \"parameters\": {}\n  }'\n"
+            "curl": "curl --location 'https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/aa-template-generation/' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"animate-anyone-template-gen2\",\n    \"input\": {\n        \"video_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241210/cwjmsz/1.mp4\"\n    },\n    \"parameters\": {}\n  }'\n"
           }
         }
       }

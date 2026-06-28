@@ -12,43 +12,16 @@
           "Text"
         ]
       },
-      "builtInToolMultiPrices": [
-        {
-          "supportedApi": "Responses API",
-          "name": "web_search",
-          "docUrl": "https://help.aliyun.com/document_detail/2867560.html",
-          "type": "web_search",
-          "prices": [
-            {
-              "priceUnit": "千次调用",
-              "price": "4",
-              "currency": "CNY"
-            }
-          ]
-        }
-      ],
+      "builtInToolMultiPrices": [],
       "description": "HappyHorse-1.1-I2V支持图生视频，进一步提升画面质感、动态表现与跨片段一致性。模型能够更精准地理解输入图像并延续创作意图，在人物皮肤质感、ID跨片段保持、动作流畅度、文字渲染稳定性以及音画同步上带来显著改善，输出更真实自然、细节丰富且一致性更高的高质量视频。",
       "features": [
         "model-experience"
       ],
       "provider": "happyhorse",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "happyhorse-1.1-i2v",
-      "prices": [
-        {
-          "priceUnit": "每秒",
-          "price": "0.9",
-          "discount": 0.6,
-          "type": "video_ratio_720p",
-          "priceName": "视频生成（720P）"
-        },
-        {
-          "priceUnit": "每秒",
-          "price": "1.2",
-          "discount": 0.6,
-          "type": "video_ratio_1080p",
-          "priceName": "视频生成（1080P）"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 1,
@@ -72,7 +45,7 @@
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2026-06-16T03:16:14.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "HappyHorse-1.1-I2V",
       "docUrl": "https://help.aliyun.com/document_detail/3029821.html",
       "category": "Visual",
@@ -105,7 +78,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"happyhorse-1.1-i2v\",\n    \"input\": {\n        \"prompt\": \"一只猫在草地上奔跑\",\n        \"media\": [\n            {\n                \"type\": \"first_frame\",\n                \"url\": \"https://cdn.translate.alibaba.com/r/wanx-demo-1.png\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"duration\": 5\n    }\n}'",
+            "curl": "curl --location 'https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"happyhorse-1.1-i2v\",\n    \"input\": {\n        \"prompt\": \"一只猫在草地上奔跑\",\n        \"media\": [\n            {\n                \"type\": \"first_frame\",\n                \"url\": \"https://cdn.translate.alibaba.com/r/wanx-demo-1.png\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"duration\": 5\n    }\n}'",
             "docUrl": "https://help.aliyun.com/document_detail/3029821.html"
           }
         }
@@ -126,23 +99,10 @@
         "model-experience"
       ],
       "provider": "happyhorse",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "happyhorse-1.0-i2v",
-      "prices": [
-        {
-          "priceUnit": "每秒",
-          "price": "0.9",
-          "discount": 0.8,
-          "type": "video_ratio_720p",
-          "priceName": "视频生成（720P）"
-        },
-        {
-          "priceUnit": "每秒",
-          "price": "1.6",
-          "discount": 0.8,
-          "type": "video_ratio_1080p",
-          "priceName": "视频生成（1080P）"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 1,
@@ -167,7 +127,7 @@
       "modelAlias": "",
       "versionTag": "MAJOR",
       "latestOnlineAt": "2026-04-21T17:07:07.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "HappyHorse-1.0-I2V",
       "docUrl": "https://help.aliyun.com/document_detail/3029821.html",
       "predictConfig": [
@@ -199,7 +159,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"happyhorse-1.0-i2v\",\n    \"input\": {\n        \"prompt\": \"一只猫在草地上奔跑\",\n        \"media\": [\n            {\n                \"type\": \"first_frame\",\n                \"url\": \"https://cdn.translate.alibaba.com/r/wanx-demo-1.png\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"duration\": 5\n    }\n}'",
+            "curl": "curl --location 'https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"happyhorse-1.0-i2v\",\n    \"input\": {\n        \"prompt\": \"一只猫在草地上奔跑\",\n        \"media\": [\n            {\n                \"type\": \"first_frame\",\n                \"url\": \"https://cdn.translate.alibaba.com/r/wanx-demo-1.png\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"duration\": 5\n    }\n}'",
             "docUrl": "https://help.aliyun.com/document_detail/3029821.html"
           }
         }

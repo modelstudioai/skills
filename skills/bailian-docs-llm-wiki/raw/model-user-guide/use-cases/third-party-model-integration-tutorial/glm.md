@@ -8,7 +8,7 @@ glm-4.6、glm-4.7 将于**2026年7月9日**下架。推荐转用：[qwen3.7-plus
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
@@ -37,6 +37,14 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.eu-central-1.maas.aliyunc
 HTTP 请求地址：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
 调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+## 新加坡
+
+SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
+
+HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+
+调用时请将`WorkspaceId`替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## DashScope
 
@@ -109,6 +117,14 @@ dashscope.base_http_api_url = 'https://{WorkspaceId}.eu-central-1.maas.aliyuncs.
     Constants.baseHttpApiUrl="https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1";
     ```
     
+
+## 新加坡
+
+HTTP 请求地址为`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+
+SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1"`
+
+调用时请将`WorkspaceId`替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## **快速开始**
 
@@ -893,6 +909,97 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generatio
         "result_format": "message"
     }
 }'
+```
+
+## **推理强度（reasoning\_effort）**
+
+glm-5.2 和 glm-5.1 默认开启思考模式，模型会先输出思考过程（`reasoning_content`），再给出最终回答。通过 `reasoning_effort` 参数可以调整推理强度，取值越高思考越充分。**不同模型支持的可选取值不同**，传入不支持的取值会返回 `invalid_parameter_error` 错误，请按下表选择。
+
+**模型**
+
+**reasoning\_effort 可选取值**
+
+glm-5.2
+
+`low`、`medium`、`high`、`xhigh`、`max`（最高）
+
+glm-5.1
+
+`none`、`minimal`、`low`、`medium`、`high`、`xhigh`（最高，不支持 max）
+
+glm-5
+
+`none`、`minimal`、`low`、`medium`、`high`、`xhigh`（最高，不支持 max）
+
+**说明**
+
+如需关闭思考，可在 OpenAI 兼容与 DashScope 方式中传入 `enable_thinking`\=`false`，该参数优先级高于 `reasoning_effort`。
+
+**说明**
+
+Anthropic 兼容方式不支持 `reasoning_effort` 参数。如需获取思考内容，请使用 Anthropic 原生 `thinking` 参数：`{"thinking":{"type":"enabled","budget_tokens":1024}}`，开启后响应 `content` 中会返回 `type` 为 `thinking` 的思考块。
+
+## **OpenAI兼容**
+
+## **Python**
+
+```
+from openai import OpenAI
+import os
+client = OpenAI(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+)
+completion = client.chat.completions.create(
+    model="glm-5.2",
+    messages=[{"role": "user", "content": "9.9和9.11哪个大"}],
+    reasoning_effort="high",
+)
+print(completion.choices[0].message.content)
+```
+
+## **Node.js**
+
+```
+import OpenAI from "openai";
+const openai = new OpenAI({
+    apiKey: process.env.DASHSCOPE_API_KEY,
+    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+});
+const completion = await openai.chat.completions.create({
+    model: "glm-5.2",
+    messages: [{ role: "user", content: "9.9和9.11哪个大" }],
+    reasoning_effort: "high",
+});
+console.log(completion.choices[0].message.content);
+```
+
+## **curl**
+
+```
+curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "glm-5.2",
+    "messages": [{"role": "user", "content": "9.9和9.11哪个大"}],
+    "reasoning_effort": "high"
+}'
+```
+
+## **DashScope**
+
+```
+import os
+from dashscope import Generation
+response = Generation.call(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    model="glm-5.2",
+    messages=[{"role": "user", "content": "9.9和9.11哪个大"}],
+    reasoning_effort="high",
+    result_format="message",
+)
+print(response.output.choices[0].message.content)
 ```
 
 ## **其它功能**

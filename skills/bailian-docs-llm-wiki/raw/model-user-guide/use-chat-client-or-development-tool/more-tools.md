@@ -18,7 +18,7 @@ OpenAI
 
 `https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
-Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)
+Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)
 
 [支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)（仅文本生成类）
 

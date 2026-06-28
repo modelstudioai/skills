@@ -14,15 +14,10 @@
       "description": "通义实验室新一代端到端语音识别大模型的实时版，基于领先的自研语音技术，具备卓越的上下文感知和高精度语音转写能力。基于端到端架构，Fun-ASR 集成了创新的 RAG 技术，支持大规模热词自定义、敏感/语气词自动过滤、ITN 规范化、标点预测等多维功能，显著提升了整体识别准确率和语境贴合度。同时，Fun-ASR 支持中英文自由切换，多地区方言覆盖，具备更强的噪声鲁棒性，适应多样复杂环境。",
       "features": [],
       "provider": "qwen-domain-model",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "fun-asr-realtime",
-      "prices": [
-        {
-          "priceUnit": "每秒",
-          "price": "0.00033",
-          "type": "content_duration",
-          "priceName": "音频时长"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 1,
@@ -40,7 +35,7 @@
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2025-09-23T11:05:02.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Fun-ASR实时语音识别",
       "docUrl": "https://help.aliyun.com/document_detail/2842554.html",
       "predictConfig": [
@@ -82,15 +77,10 @@
       "description": "通义百聆推出的新一代轻量级实时语音识别模型，依托自研的先进语音技术架构，具备强大的上下文理解能力。专为中文电话客服场景设计：覆盖多地区方言口音，在低采样率、低信噪比环境下实现低延迟、高准确率的流式转写，满足高效部署需求。",
       "features": [],
       "provider": "qwen-domain-model",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "fun-asr-flash-8k-realtime",
-      "prices": [
-        {
-          "priceUnit": "每秒",
-          "price": "0.00022",
-          "type": "content_duration",
-          "priceName": "音频时长"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 1,
@@ -110,7 +100,7 @@
       "versionTag": "MAJOR",
       "equivalentSnapshot": "fun-asr-flash-8k-realtime-2026-01-28",
       "latestOnlineAt": "2026-02-12T11:34:14.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Fun-ASR-Flash-8k实时语音识别",
       "docUrl": "https://help.aliyun.com/document_detail/2842554.html",
       "category": "Audio",

@@ -559,6 +559,20 @@ deepseek-v4-pro
 
 不支持
 
+deepseek-v4-pro-us
+
+支持
+
+支持
+
+支持
+
+支持
+
+支持
+
+不支持
+
 deepseek-v4-flash
 
 支持
@@ -706,6 +720,30 @@ deepseek-v3
 **thinking\_budget**
 
 deepseek-v4-pro
+
+1.0
+
+1.0
+
+\-
+
+\-
+
+共393,216
+
+deepseek-v4-pro-us
+
+1.0
+
+1.0
+
+\-
+
+\-
+
+共393,216
+
+deepseek-v4-flash
 
 1.0
 

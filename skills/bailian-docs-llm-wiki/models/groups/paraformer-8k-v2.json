@@ -14,21 +14,16 @@
       "description": "Paraformer最新中文语音识别模型，模型结构升级，具有更好的识别效果,支持8kHz电话语音识别，仅支持中文热词。",
       "features": [],
       "provider": "qwen",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "paraformer-8k-v2",
-      "prices": [
-        {
-          "priceUnit": "每秒",
-          "price": "0.00008",
-          "type": "content_duration",
-          "priceName": "音频时长"
-        }
-      ],
       "capabilities": [
         "ASR"
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2024-12-19T11:29:28.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Paraformer语音识别-8k-v2",
       "docUrl": "https://help.aliyun.com/document_detail/2712535.html",
       "predictConfig": [

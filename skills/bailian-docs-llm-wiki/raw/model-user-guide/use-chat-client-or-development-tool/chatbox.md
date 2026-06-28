@@ -27,7 +27,7 @@ Chatbox 是一款跨平台 AI 客户端应用，可以通过Token Plan 团队版
 
 **API 密钥**
 
-填入 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)。
+填入 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)。
 
 **API 主机**
 

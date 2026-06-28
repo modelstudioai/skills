@@ -16,21 +16,16 @@
         "model-experience"
       ],
       "provider": "qwen",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "aitryon",
-      "prices": [
-        {
-          "priceUnit": "每张",
-          "price": "0.2",
-          "type": "image_number",
-          "priceName": "图片生成"
-        }
-      ],
       "capabilities": [
         "IG"
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2024-05-24T10:29:05.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "AI试衣-基础版",
       "docUrl": "https://help.aliyun.com/document_detail/2796626.html",
       "predictConfig": [
@@ -50,7 +45,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis/' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"aitryon\",\n    \"input\": {\n        \"person_image_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250626/ubznva/model_person.png\",\n        \"top_garment_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250626/epousa/short_sleeve.jpeg\",\n        \"bottom_garment_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250626/rchumi/pants.jpeg\" \n    },\n    \"parameters\": {\n        \"resolution\": -1,\n        \"restore_face\": true\n    }\n}'\n\ncurl -X GET https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\""
+            "curl": "curl --location 'https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis/' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"aitryon\",\n    \"input\": {\n        \"person_image_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250626/ubznva/model_person.png\",\n        \"top_garment_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250626/epousa/short_sleeve.jpeg\",\n        \"bottom_garment_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250626/rchumi/pants.jpeg\" \n    },\n    \"parameters\": {\n        \"resolution\": -1,\n        \"restore_face\": true\n    }\n}'\n\ncurl -X GET https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\""
           }
         }
       }

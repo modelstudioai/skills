@@ -27,9 +27,9 @@
 
 ## 华北2（北京）
 
-提交任务接口：`POST https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription`
+提交任务接口：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription`
 
-查询任务接口：`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+查询任务接口：`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 ## 新加坡
 
@@ -41,7 +41,12 @@
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+
+-   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
@@ -92,7 +97,7 @@ string
 以下为华北2（北京）地域的URL，各地域的URL不同。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription' \
      --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
      --header "Content-Type: application/json" \
      --header "X-DashScope-Async: enable" \
@@ -134,7 +139,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transc
 
 **file\_urls** `_array[string]_` **（必选）**
 
-音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。
+音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model/#asr-audio-spec02)。
 
 若录音文件存储在阿里云OSS，使用RESTful API方式支持使用以`oss://`为前缀的临时 URL。
 
@@ -321,7 +326,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transc
 以下为华北2（北京）地域的URL，各地域的URL不同。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}' \
      --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
@@ -641,7 +646,7 @@ string
 
 ## 华北2（北京）
 
-`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 ## 新加坡
 
@@ -690,7 +695,7 @@ string
 ## 非流式
 
 ```
-curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
      --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
      --header "Content-Type: application/json" \
      --header "X-DashScope-SSE: disable" \
@@ -721,7 +726,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 ## 流式
 
 ```
-curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
      --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
      --header "Content-Type: application/json" \
      --header "X-DashScope-SSE: enable" \
@@ -752,7 +757,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 ## 携带上下文-非流式
 
 ```
-curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
      --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
      --header "Content-Type: application/json" \
      --header "X-DashScope-SSE: disable" \
@@ -801,7 +806,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 ## 携带上下文-流式
 
 ```
-curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
      --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
      --header "Content-Type: application/json" \
      --header "X-DashScope-SSE: enable" \
@@ -911,7 +916,7 @@ file_path = pathlib.Path("input.wav")
 base64_str = base64.b64encode(file_path.read_bytes()).decode()
 data_uri = f"data:audio/wav;base64,{base64_str}"
 
-url = "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation"
+url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation"
 
 headers = {
     "Authorization": f"Bearer {os.environ['DASHSCOPE_API_KEY']}",
@@ -1001,7 +1006,7 @@ print(response.json())
 
 **data** `_string_` **（必选）**
 
-待识别音频数据。支持以下两种方式：
+待识别音频数据。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model/#asr-audio-spec02)。支持以下两种方式：
 
 -   **音频文件URL**：直接传入可公开访问的音频文件地址。
     
@@ -1184,7 +1189,7 @@ data:{"output":{"sentence":{"sentence_id":1,"sentence_end":true,"end_time":3800,
 
 ### **服务端点**
 
-`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 ### **请求头**
 
@@ -1225,7 +1230,7 @@ string
 ## 非流式
 
 ```
-curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
      --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
      --header "Content-Type: application/json" \
      --header "X-DashScope-SSE: disable" \
@@ -1245,7 +1250,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 ## 流式
 
 ```
-curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
      --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
      --header "Content-Type: application/json" \
      --header "X-DashScope-SSE: enable" \
@@ -1293,7 +1298,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 
 **audio** `_string_` **（必选）**
 
-待识别音频，采用Data URI格式传入Base64编码的音频数据。
+待识别音频，采用Data URI格式传入Base64编码的音频数据。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model/#asr-audio-spec02)。
 
 使用Base64方式上传音频时需要填写。
 
@@ -1313,7 +1318,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 
 **audio\_address** `_string_` **（条件必选）**
 
-音频文件URL地址。与Base64方式（通过`input.messages`传入）二选一，使用URL方式时必填。需为可公开访问的地址。
+音频文件URL地址。与Base64方式（通过`input.messages`传入）二选一，使用URL方式时必填。需为可公开访问的地址。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model/#asr-audio-spec02)。
 
 **format** `_string_` **（必选）**
 
@@ -1402,7 +1407,12 @@ data:{"output":{"sentence":{"sentence_id":1,"sentence_end":true,"end_time":1680,
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+
+-   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 

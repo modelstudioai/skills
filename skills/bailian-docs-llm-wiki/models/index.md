@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 164 个模型家族 · 370 个主干模型 · 更新于 2026-06-23
+> 自动生成 · 共 169 个模型家族 · 378 个主干模型 · 更新于 2026-06-28
 
 **机器查询走结构化文件**：
 
@@ -11,10 +11,14 @@
 
 join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].slug`。
 
-## 文本生成 `TG` — 33 个家族
+## 文本生成 `TG` — 35 个家族
 
+- [Baichuan2-Turbo](groups/baichuan2-turbo.json) — Baichuan2-Turbo系列模型是百川智能推出的大语言模型，采用搜索增强技术实现大模型与领域知识、全网知识的全面链接。
+  - 模型：`baichuan2-turbo`
 - [GLM](groups/glm-4.5.json) — GLM是由智谱提供的开源模型。
   - 模型：`glm-4.5`, `glm-4.5-air`, `glm-4.6`, `glm-4.7`, `glm-5`, `glm-5.1`, `glm-5.2`
+- [Kimi](groups/Kimi-K2.json) — Kimi是由月之暗面提供的开源模型，包含k2.7-code、k2.6、k2.5、k2-thinking、k2-instruct等多模态和大语言模型。
+  - 模型：`kimi-k2-thinking`, `kimi-k2.5`, `kimi-k2.6`, `kimi-k2.7-code`, `Moonshot-Kimi-K2-Instruct`
 - [Kimi](groups/kimi-models-market-place.json) — 由月之暗面提供的Kimi系列模型的API服务。
   - 模型：`kimi/kimi-k2.5`, `kimi/kimi-k2.6`, `kimi/kimi-k2.7-code`, `kimi/kimi-k2.7-code-highspeed`
 - [MiMo文本模型](groups/xiaomi-models-market-place.json) — 由小米MiMo提供的MiMo文本模型API服务
@@ -68,7 +72,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [StepFun推理模型](groups/stepfun-models-market-place.json) — 由阶跃星辰StepFun提供的Step系列推理模型API服务
   - 模型：`stepfun/step-3.7-flash`
 - [Vanchin DeepSeek](groups/vanchin-models-market-place.json) — 由快手万擎提供的DeepSeek系列模型API服务。
-  - 模型：`vanchin/deepseek-ocr`, `vanchin/deepseek-r1`, `vanchin/deepseek-v3`, `vanchin/deepseek-v3.1-terminus`, `vanchin/deepseek-v3.2-think`, `vanchin/deepseek-v4-pro`
+  - 模型：`vanchin/deepseek-ocr`, `vanchin/deepseek-r1`, `vanchin/deepseek-v3`, `vanchin/deepseek-v3.1-terminus`, `vanchin/deepseek-v3.2-speciale`, `vanchin/deepseek-v3.2-think`, `vanchin/deepseek-v4-pro`
 - [意图分类模型](groups/tongyi-intent-detect-v3.json) — 意图识别和槽位填充是对话系统中的基础任务。本模型实现了一个基于 API的意图（intent）和槽位参数（slots）联合预测。在一次模型输出中，同时完成多个指令API的返回和槽位参数的填充。返回的结果…
   - 模型：`tongyi-intent-detect-v3`
 - [智谱GLM系列文本模型](groups/zhipu-models-market-place.json) — 由智谱提供的GLM系列文本模型API服务
@@ -80,7 +84,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [通义法睿-Plus-32K](groups/farui-plus.json) — 通义法睿是以通义千问为基座经法律行业数据和知识专门训练的法律行业大模型产品，综合运用了模型精调、强化学习、 RAG检索增强、法律Agent技术，具有回答法律问题、推理法律适用、推荐裁判类案、辅助案情分…
   - 模型：`farui-plus`
 
-## 图像生成 `IG` — 29 个家族
+## 图像生成 `IG` — 30 个家族
 
 - [AI试衣-Plus版](groups/aitryon-plus.json) — aitryon-plus是一款效果出众的虚拟试衣图片生成模型，可基于服饰平拍图片以及人物正面全身照，输出服饰的人物试衣效果图片。 相较于aitryon模型，aitryon-plus模型在图片清晰度、服…
   - 模型：`aitryon-plus`
@@ -108,6 +112,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen-image`, `qwen-image-plus`
 - [Qwen-MT-Image](groups/qwen-mt-image.json) — 专注做图片翻译的模型服务，能将中、英、日等11个语言的图片翻译到指定的语言，精准还原图片排版和内容信息，支持术语定义、敏感词过滤、商品主体检测等自定义功能，提供灵活、准确、高效的图像本地化服务。
   - 模型：`qwen-mt-image`
+- [StableDiffusion文生图模型-v1.5](groups/stable-diffusion-v1.5.json) — stable-diffusion-v1.5是用stable-diffusion-v1.2 检查点的权重初始化的，并随后在 "laion-aesthetics v2 5+" 上以 512x512 的分辨…
+  - 模型：`stable-diffusion-v1.5`
 - [Wan-Image](groups/wan-image-edit.json) — 指令编辑图片内容，轻松实现局部修改、风格变化、一致性保持等
   - 模型：`wan2.5-i2i-preview`, `wan2.6-image`, `wan2.7-image`, `wan2.7-image-pro`, `wanx2.1-imageedit`
 - [Wan-T2I](groups/wan-text-to-image.json) — 文字生成图片，写实质感细腻画面，文字内容生成，艺术风格表现
@@ -157,7 +163,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`pixverse/pixverse-v5.6-it2v`, `pixverse/pixverse-v5.6-kf2v`, `pixverse/pixverse-v5.6-r2v`, `pixverse/pixverse-v5.6-t2v`
 - [PixVerse V6](groups/pixverse-v6-market-place.json) — 由爱诗科技提供的PixVerse V系列视频大模型API服务。
   - 模型：`pixverse/pixverse-v6-it2v`, `pixverse/pixverse-v6-kf2v`, `pixverse/pixverse-v6-r2v`, `pixverse/pixverse-v6-t2v`
-- [Vidu](groups/vidu-models-market-place.json) — 由生数科技提供Vidu系列视频生成API服务，电影级画质、一致性保持、精准可控。
+- [Vidu AI生视频](groups/vidu-models-market-place.json) — 由生数科技提供Vidu系列视频生成API服务，电影级画质、一致性保持、精准可控。
   - 模型：`vidu/viduq2_reference2video`, `vidu/viduq2_text2video`, `vidu/viduq2-pro_img2video`, `vidu/viduq2-pro_reference2video`, `vidu/viduq2-pro_start-end2video`, `vidu/viduq2-pro-fast_img2video`, `vidu/viduq2-turbo_img2video`, `vidu/viduq2-turbo_start-end2video`, `vidu/viduq3_reference2video`, `vidu/viduq3-mix_reference2video`, `vidu/viduq3-pro_img2video`, `vidu/viduq3-pro_start-end2video`, `vidu/viduq3-pro_text2video`, `vidu/viduq3-turbo_img2video`, `vidu/viduq3-turbo_reference2video`, `vidu/viduq3-turbo_start-end2video`, `vidu/viduq3-turbo_text2video`
 - [Wan-I2V](groups/wan-image-to-video.json) — 图片生成视频内容，稳定保持图像主体、风格和文字等细节信息
   - 模型：`wan2.2-animate-mix`, `wan2.2-animate-move`, `wan2.2-i2v-flash`, `wan2.2-i2v-plus`, `wan2.2-kf2v-flash`, `wan2.2-s2v`, `wan2.2-s2v-detect`, `wan2.5-i2v-preview`, `wan2.6-i2v`, `wan2.6-i2v-flash`, `wan2.7-i2v`, `wanx2.1-i2v-plus`, `wanx2.1-i2v-turbo`, `wanx2.1-kf2v-plus`
@@ -232,7 +238,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 ## 推理 `Reasoning` — 14 个家族
 
 - [DeepSeek](groups/deepseek.json) — DeepSeek是由深度求索提供的开源模型，包含 V3.1、V3、R1以及基于Qwen2.5系列蒸馏的大语言模型。
-  - 模型：`deepseek-r1`, `deepseek-r1-0528`, `deepseek-r1-distill-qwen-1.5b`, `deepseek-r1-distill-qwen-14b`, `deepseek-r1-distill-qwen-32b`, `deepseek-r1-distill-qwen-7b`, `deepseek-v3`, `deepseek-v3.1`, `deepseek-v3.2`, `deepseek-v3.2-exp`, `deepseek-v4-flash`, `deepseek-v4-pro`
+  - 模型：`deepseek-r1`, `deepseek-r1-0528`, `deepseek-r1-distill-llama-70b`, `deepseek-r1-distill-llama-8b`, `deepseek-r1-distill-qwen-1.5b`, `deepseek-r1-distill-qwen-14b`, `deepseek-r1-distill-qwen-32b`, `deepseek-r1-distill-qwen-7b`, `deepseek-v3`, `deepseek-v3.1`, `deepseek-v3.2`, `deepseek-v3.2-exp`, `deepseek-v4-flash`, `deepseek-v4-pro`
 - [MiniMax](groups/MiniMax-M2.1.json) — MiniMax推出的旗舰级开源大模型，聚焦真实世界复杂任务，包含MiniMax-M2.1、MiniMax-M2.5等开源模型。
   - 模型：`MiniMax-M2.1`, `MiniMax-M2.5`
 - [QVQ-Max](groups/qvq-max.json) — 千问QVQ视觉推理模型，支持视觉输入及思维链输出，在数学、编程、视觉分析、创作以及通用任务上都表现了更强的能力。
@@ -287,12 +293,14 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [语音识别热词](groups/speech-biasing.json) — 热词是指用户可以预先定义的一组特定词汇或短语，这些词汇或短语在识别、翻译过程中会被赋予更高的优先级。针对您的特定业务领域，如果有部分词汇的语音识别、翻译效果不够好，可以将这些关键词或短语添加为热词进行…
   - 模型：`speech-biasing`
 
-## 视觉理解 `VU` — 10 个家族
+## 视觉理解 `VU` — 11 个家族
 
 - [GUI-Plus](groups/gui-plus.json) — GUI系列图形界面交互基础模型，针对手机端与电脑端图形界面理解与交互任务，性能优于开源版同类GUI模型。全面升级跨平台界面理解与多步任务规划，支持跨应用复杂任务；具备精细化动作执行与多角色多智能体协作…
   - 模型：`gui-plus`
-- [Kimi](groups/Kimi-K2.json) — Kimi是由月之暗面提供的开源模型，包含k2.7-code、k2.6、k2.5、k2-thinking、k2-instruct等多模态和大语言模型。
-  - 模型：`kimi-k2-thinking`, `kimi-k2.5`, `kimi-k2.6`, `kimi-k2.7-code`, `Moonshot-Kimi-K2-Instruct`
+- [Llama-4-Maverick-17B-128E-Instruct](groups/llama-4-maverick-17b-128e-instruct.json) — Llama 4 Maverick，一个拥有170亿参数和128个专家的模型。利用了专家混合架构，以提供业界领先的文本和图像理解性能
+  - 模型：`llama-4-maverick-17b-128e-instruct`
+- [Llama-4-Scout-17B-16E-Instruct](groups/llama-4-scout-17b-16e-instruct.json) — Llama 4 Scout，一个拥有170亿参数和16个专家的模型。利用了专家混合架构，以提供业界领先的文本和图像理解性能
+  - 模型：`llama-4-scout-17b-16e-instruct`
 - [Qwen-VL-Max](groups/qwen-vl-max.json) — Qwen-VL-Max，即千问超大规模视觉语言模型。相比增强版，再次提升视觉推理能力和指令遵循能力，提供更高的视觉感知和认知水平。在更多复杂任务上提供最佳的性能。
   - 模型：`qwen-vl-max`
 - [Qwen-VL-OCR](groups/qwen-vl-ocr.json) — Qwen-VL-OCR，即基于Qwen-VL训练的OCR识别大模型。通过统一模型的方式聚合多种图文识别、解析、处理类任务，提供强大的图文识别能力。
@@ -378,6 +386,11 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 
 - [Qwen-TTS-Realtime](groups/qwen-tts-realtime.json) — Qwen-TTS实时模型是通义实验室“qwen系列”模型中的语音合成利器。具备双向上下文感知能力，可以低延迟高保真完成多音色、方言及长文本的双向流式生成。
   - 模型：`qwen-tts-realtime`, `qwen-tts-realtime-latest`
+
+## Realtime-Voice-Replication `Realtime-Voice-Replication` — 1 个家族
+
+- [通义千问-TTS-VC-Realtime-2025-08-20](groups/qwen-tts-vc-realtime-2025-08-20.json) — qwen-tts-vc-realtime-2025-08-20是一个基于通义千问大模型的零样本语音克隆（Zero-Shot Voice Cloning）服务，具备强大的音色学习与个性化语音合成能力，支…
+  - 模型：`qwen-tts-vc-realtime-2025-08-20`
 
 ## 3D 生成 `3D-generation` — 1 个家族
 

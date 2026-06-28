@@ -2,6 +2,10 @@
 
 模型调用默认**按量计费**，涵盖各类模型的计费规则与价格。
 
+**说明**
+
+本文仅展示模型调用**原价**，不包含限时优惠等活动信息，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)查看活动优惠。
+
 ## **阶梯计费规则**
 
 百炼部分模型实行阶梯计费。单价取决于单次请求的输入 Token 总量。该请求的所有 Token 均按对应阶梯的单价结算。
@@ -8672,7 +8676,7 @@ deepseek-r1-distill-llama-70b
 
 目前仅供免费体验
 
-> 免费额度用完后不可调用，推荐使用[深度思考](https://help.aliyun.com/zh/model-studio/deep-thinking)、[DeepSeek -阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)、[Kimi-阿里云](https://help.aliyun.com/zh/model-studio/kimi-api)作为替代模型
+> 免费额度用完后不可调用，推荐使用[深度思考](https://help.aliyun.com/zh/model-studio/deep-thinking)、[DeepSeek-阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)、[Kimi-阿里云](https://help.aliyun.com/zh/model-studio/kimi-api)作为替代模型
 
 100万Token
 
@@ -9140,6 +9144,28 @@ kimi-k2.5
 
 21元
 
+#### 新加坡
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**模式**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+kimi-k2.7-code
+
+国际
+
+仅思考模式
+
+7.119元
+
+29.977元
+
 ### **Kimi-月之暗面**
 
 计费规则：按输入Token和输出Token计费。
@@ -9427,6 +9453,20 @@ glm-5.1
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：阿里云百炼开通后90天内
+
+glm-5.2
+
+全球
+
+非思考和思考模式
+
+不区分阶梯
+
+8元
+
+28元
+
+100万Token
 
 glm-5.1
 
@@ -9808,6 +9848,14 @@ qwen-image-2.0-pro
 
 100张
 
+qwen-image-2.0-pro-2026-06-22
+
+中国内地
+
+0.5元/张
+
+100张
+
 qwen-image-2.0-pro-2026-04-22
 
 中国内地
@@ -9898,6 +9946,12 @@ qwen-image-2.0-pro
 
 0.550443元/张
 
+qwen-image-2.0-pro-2026-06-22
+
+国际
+
+0.550443元/张
+
 qwen-image-2.0-pro-2026-04-22
 
 国际
@@ -9977,6 +10031,14 @@ qwen-image
 有效期：阿里云百炼开通后90天内
 
 qwen-image-2.0-pro
+
+中国内地
+
+0.5元/张
+
+100张
+
+qwen-image-2.0-pro-2026-06-22
 
 中国内地
 
@@ -10077,6 +10139,12 @@ qwen-image-edit
 **输出单价**
 
 qwen-image-2.0-pro
+
+国际
+
+0.550443元/张
+
+qwen-image-2.0-pro-2026-06-22
 
 国际
 

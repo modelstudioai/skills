@@ -27,7 +27,7 @@ Cherry Studio 是一款开源 AI 桌面客户端，可以通过 Token Plan 团�
 
 **API 密钥**
 
-填入 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)。
+填入 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)。
 
 **API 地址**
 

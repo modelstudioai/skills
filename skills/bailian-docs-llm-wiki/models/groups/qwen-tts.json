@@ -14,21 +14,10 @@
       "description": "千问系列首个语音合成模型，支持中文、英文、中英混合输入。自适应根据输入文本调整输出语气，音色真实自然，支持流式输出。",
       "features": [],
       "provider": "qwen",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "qwen-tts",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "1.6",
-          "type": "text_input_token",
-          "priceName": "输入：文本"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "10",
-          "type": "qwen_tts_multi_output_token",
-          "priceName": "输出：音频"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
@@ -57,11 +46,11 @@
       "maxInputTokens": 512,
       "offlineInfo": {
         "inference": {
-          "announceUrl": "https://www.aliyun.com/notice/118331",
+          "announceUrl": "https://www.alibabacloud.com/zh/notice/detail?id=1938",
           "offlineTime": "2026-09-07 00:00:00"
         }
       },
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Qwen-TTS",
       "docUrl": "https://help.aliyun.com/document_detail/2881635.html#dc02de8e5earc",
       "predictConfig": [],
@@ -86,21 +75,10 @@
       "description": "模型是动态更新版本，等同于最新版本快照模型，模型更新时不会提前通知。",
       "features": [],
       "provider": "qwen",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "qwen-tts-latest",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "1.6",
-          "type": "text_input_token",
-          "priceName": "输入：文本"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "10",
-          "type": "qwen_tts_multi_output_token",
-          "priceName": "输出：音频"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
@@ -129,11 +107,11 @@
       "maxInputTokens": 512,
       "offlineInfo": {
         "inference": {
-          "announceUrl": "https://www.aliyun.com/notice/118332",
+          "announceUrl": "https://www.alibabacloud.com/zh/notice/detail?id=1934",
           "offlineTime": "2026-07-06 00:00:00"
         }
       },
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Qwen-TTS-Latest",
       "docUrl": "https://help.aliyun.com/document_detail/2881635.html#dc02de8e5earc",
       "predictConfig": [],

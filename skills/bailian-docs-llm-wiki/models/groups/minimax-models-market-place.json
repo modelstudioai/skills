@@ -19,27 +19,10 @@
         "cache"
       ],
       "provider": "mini-max",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "MiniMax/MiniMax-M3",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "4.2",
-          "type": "input_token",
-          "priceName": "输入"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "16.8",
-          "type": "output_token",
-          "priceName": "输出"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "0.84",
-          "type": "input_token_cache",
-          "priceName": "输入（缓存命中）"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
@@ -124,27 +107,10 @@
         "cache"
       ],
       "provider": "mini-max",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "MiniMax/MiniMax-M2.7",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "2.1",
-          "type": "input_token",
-          "priceName": "输入"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "8.4",
-          "type": "output_token",
-          "priceName": "输出"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "0.42",
-          "type": "input_token_cache",
-          "priceName": "输入（缓存命中）"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
@@ -207,7 +173,7 @@
       "samples": {
         "openai": {
           "completionsAPI": {
-            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"MiniMax/MiniMax-M2.7\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"MiniMax/MiniMax-M2.7\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
             "docUrl": "https://help.aliyun.com/document_detail/3021647.html"
           }
         }
@@ -228,28 +194,11 @@
         "cache"
       ],
       "provider": "mini-max",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "MiniMax/MiniMax-M2.5",
       "iconUrl": "https://img.alicdn.com/imgextra/i1/O1CN01EFGi131NqT95FPDqc_!!6000000001621-2-tps-56-56.png",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "2.1",
-          "type": "input_token",
-          "priceName": "输入"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "8.4",
-          "type": "output_token",
-          "priceName": "输出"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "0.21",
-          "type": "input_token_cache",
-          "priceName": "输入（缓存命中）"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 6,
@@ -311,7 +260,7 @@
       "samples": {
         "openai": {
           "completionsAPI": {
-            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"MiniMax/MiniMax-M2.5\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"MiniMax/MiniMax-M2.5\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
             "docUrl": "https://help.aliyun.com/document_detail/3021647.html"
           }
         }
@@ -332,28 +281,11 @@
         "cache"
       ],
       "provider": "mini-max",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "MiniMax/MiniMax-M2.1",
       "iconUrl": "https://img.alicdn.com/imgextra/i1/O1CN01EFGi131NqT95FPDqc_!!6000000001621-2-tps-56-56.png",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "2.1",
-          "type": "input_token",
-          "priceName": "输入"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "8.4",
-          "type": "output_token",
-          "priceName": "输出"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "0.21",
-          "type": "input_token_cache",
-          "priceName": "输入（缓存命中）"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 6,
@@ -415,7 +347,7 @@
       "samples": {
         "openai": {
           "completionsAPI": {
-            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"MiniMax/MiniMax-M2.1\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"MiniMax/MiniMax-M2.1\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
             "docUrl": "https://help.aliyun.com/document_detail/3021647.html"
           }
         }

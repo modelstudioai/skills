@@ -4,7 +4,7 @@
 
 **重要**
 
-本文档仅适用于“中国内地（北京）”地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
+本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
 
 开发者可以通过以下链接，了解如何通过大模型服务平台调用FaceChain人物写真API。
 

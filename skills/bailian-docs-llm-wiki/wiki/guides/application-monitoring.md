@@ -1,117 +1,109 @@
 # application monitoring
 
-应用观测是阿里云百炼平台提供的端到端应用调用链路追踪与性能监控功能。通过该功能，开发者可以查看[业务空间](../concepts/workspace.md)内百炼应用的完整处理流程（包括向量生成、向量检索和大模型调用等环节），并获取延时、Token 用量等关键指标。该功能基于可观测链路 OpenTelemetry 服务，数据更新频率为分钟级。
+阿里云百炼提供**应用观测**功能，用于端到端查看[业务空间](../concepts/workspace.md)内应用（[智能体应用](../concepts/agent-application.md)、工作流应用、高代码应用）的处理流程，并获取延时、[Token](../concepts/token.md) 量等关键指标，指标更新频率为分钟级。该功能可帮助开发者追踪应用内部调用链路、查看模型响应延时与思考过程，进而优化运营效果与成本。详见 [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md)。
 
-## 支持的应用类型
+## 支持的应用范围
 
-应用观测支持以下三种应用类型：
+应用观测支持以下三类应用：
 
-- **智能体应用**
-- **工作流应用**
-- **高代码应用**
+- **[智能体应用](../concepts/agent-application.md)**（AgentApp）
+- **工作流应用**（WorkflowApp）
+- **高代码应用**（FullCodeApp）
 
-> **注意**：通过 Assistant API 创建的智能体应用暂不支持应用观测。
+> **注意**：应用观测暂不支持通过 Assistant API 创建的[智能体应用](../concepts/agent-application.md)；对高代码应用，目前不支持追踪其内部调用链路，仅能观测到入口 CHAIN 节点。应用观测本身也没有 API，只能通过控制台操作。
 
-详见 [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md) 原始文档。
+## 前提条件与开通
 
-## 前提条件
+首次使用需在应用观测页面右上角完成**应用观测配置**，依次执行：授权可观测链路 OpenTelemetry 服务角色权限 → 开通 OpenTelemetry 服务 → 初始化 LogStore。
 
-首次使用应用观测前，需要完成以下初始化步骤：
+- 推荐使用**主账号**操作，开通后通常分钟级生效，高峰期可能略有延迟。
+- 如需**子账号**开通，主账号需为其配置 `AliyunBailianFullAccess` 全局权限、`应用观测-操作`（或 `管理员`）页面权限，并额外授予 `ram:CreateServiceLinkedRole` 系统策略（用于创建服务关联角色）。
 
-1. 授权可观测链路 OpenTelemetry 服务角色权限
-2. 开通可观测链路 OpenTelemetry 服务
-3. 初始化可观测链路 OpenTelemetry 存储 LogStore
+> 子账号权限若未配置完整，开启应用观测时会失败。配置完成后需返回应用观测界面再次尝试开启。
 
-> **注意**：建议使用主账号操作。开通后通常分钟级生效，高峰期可能稍有延迟。子账号开通需主账号预先配置必要权限（包括 `AliyunBailianFullAccess` 权限、页面权限和创建服务关联角色的系统策略）。
-
-## 使用流程
+## 使用方式
 
 ### 1. 选择被观测的应用
 
-访问应用观测页面，点击"选择被观测的应用"并添加目标应用。如果列表中找不到已创建的应用，可能原因包括：
+在应用观测页面单击「选择被观测的应用」>「添加」。若列表中看不到已创建的应用，通常是因为该应用尚未发布，或应用不属于当前[业务空间](../concepts/workspace.md)。
 
-- 应用尚未发布
-- 应用不属于当前[业务空间](../concepts/workspace.md)
+### 2. 开始观测
 
-### 2. 查看观测数据
+添加完成后，应用会出现在观测列表中。此后所有输入该应用的 Prompt 及相关数据、指标会被自动追踪并以分钟级频率同步。单击「关闭观测」可停止同步，重新添加后仅同步新增数据。
 
-添加应用后，所有在该应用中输入的 Prompt 及相应数据将被自动追踪，并同步至应用观测。可查看的信息包括：
+在「查看详情」中可查看最长 30 天内的调用记录，包括 Prompt 内容、输出、延时、调用时间和 [Token](../concepts/token.md) 量，并支持按 Request ID / Trace ID / Span ID 检索和按时间范围筛选。单击节点名称可查看详情、原始数据和标注记录。
 
-- **Prompt 内容与输出**
-- **延时与调用时间**
-- **Token 用量**
-
-支持通过 Request ID、Trace ID 或 Span ID 进行搜索，以及按时间范围筛选。关闭观测后数据停止同步，重新添加后仅同步新增数据。
+> 列表中的 **CHAIN** 节点表示一次完整的应用内部调用追踪，支持展开。状态分为「正常」与「错误」两类。
 
 ### 3. 导出数据
 
-在应用详情页的 Trace 列表中，可将当前筛选条件下的数据导出为 JSONL 或 EXCEL 格式。
+在应用详情页的 Trace 列表页签右上角单击「导出数据」，可将当前筛选条件下的数据导出为 **JSONL** 或 **EXCEL** 格式。
 
-### 4. 监控统计
+### 4. 查看监控统计
 
-监控统计页签提供以下性能指标：
+「监控统计」页签提供性能监控图表：调用次数（含失败次数与失败率）、[Token](../concepts/token.md) 总量（全部/输入/输出）、平均单次请求 Token 量、平均首 Token 耗时（流式场景）、平均调用时长。支持按时间范围（最长 30 天）和聚合粒度（分钟/小时/天）查看，每个图表可放大、下载、复制。
 
-| 指标 | 说明 |
-|------|------|
-| 调用次数 | 应用调用次数趋势 |
-| 失败次数与失败率 | 调用失败统计 |
-| Token 总量 | 全部、输入和输出 Token 总量趋势 |
-| 平均单次请求 Token 量 | 每次请求的平均输入和输出 Token 量 |
-| 平均首 Token 耗时 | 流式调用场景下的首 Token 响应时间 |
-| 平均调用时长 | 应用调用的平均延时 |
+## 数据筛选与标注
 
-支持按时间范围（最长 30 天）和聚合粒度（按分钟/小时/天）查看数据。
+### Span 筛选模式
 
-## Span 筛选与过滤
-
-应用观测提供三种 Span 筛选模式：
-
-- **Root Span**：仅显示根节点（默认模式）
-- **All Span**：显示所有 Span，平铺展示
+- **Root Span**：仅显示根节点（默认）
+- **All Span**：平铺展示所有 Span
 - **Model Span**：仅显示包含模型调用的 Span
 
-还可通过过滤器添加筛选条件，支持按状态、Span Name、输入/输出关键词、延时、Token 总量、输入/输出 Token、标签等维度过滤。具体用法参见 [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md) 文档。
+### 过滤器
+
+支持按状态（正常/错误，可按错误类型细分）、Span Name、输入、输出、延时、Token 总量、输入 Token、输出 Token、标签等字段添加多个筛选条件，条件之间组合应用。
+
+### 数据标注
+
+支持对 Span 数据添加标签（布尔值/分类/数字/文本四种类型），标签与应用评测的标签管理共享、统一管理。标注内容自动保存，并可在 Span 列表页「标签」列查看。
+
+### 添加到评测集
+
+应用观测支持将 Span 数据直接加入评测集，将真实线上调用作为评测样本。配置时需选择目标评测集、导入方式（追加数据或全量覆盖）并完成字段映射。每个评测集最多支持 50 个字段映射。
 
 ## 节点类型
 
-应用观测中的"节点"是被追踪的操作单元，节点之间可形成嵌套关系。主要节点类型包括：
+被观测应用在调用过程中会按操作单元生成不同类型的**节点**，节点之间可形成嵌套关系。仅在被触发或调用时才展示对应节点。完整节点类型与说明见 [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md)。
 
-**通用节点**：
+### 智能体应用节点
 
 | 节点 | 说明 |
-|------|------|
-| CHAIN | 将大模型节点与其他节点相连接，实现复杂任务处理。根节点时名称为 AgentApp 或 WorkflowApp |
-| LLM | 调用大模型进行推理或文本生成，Token 量 = 输入 + 输出 |
-| RETRIEVER | 执行检索操作，包括 TextRetriever（BM25 文本检索）和 VectorRetriever（向量检索） |
-| EMBEDDING | 将输入 Prompt 转化为数值化向量 |
-| RERANKER | 按相似度分数对文本切片降序排列 |
-| REWRITER | 基于上下文调整 Prompt 以提升检索效果 |
-| GUARDRAIL | 调用阿里绿网进行内容安全检测 |
-| TOOL | 调用插件（官方或自定义） |
+| --- | --- |
+| CHAIN | 连接大模型节点与其他节点，处理复杂任务；作为根节点时名称为 AgentApp 或 WorkflowApp |
+| AGENT | 对智能体的调用 |
+| RETRIEVER | 检索操作；KnowledgeRetriever 表示在[知识库](../concepts/knowledge-base.md)中检索。子节点名称含 TextRetriever（改进 BM25，默认返回 100 个切片）、VectorRetriever（向量检索，默认返回 100 个切片） |
+| REWRITER | 基于会话上下文调整原始 Prompt 以提升检索效果 |
+| EMBEDDING | 将 Prompt 转为向量，Token 量为本次向量化的 Token 数 |
+| RERANKER | 计算文本切片相似度分数并降序排列 |
+| LLM | 大模型推理/文本生成，Token 量 = 输入 + 输出；延时包含输出回复过程 |
+| TOOL | 插件调用（官方或自定义） |
+| GUARDRAIL | 阿里绿网调用；ManualIntervention 为用户干预规则，SystemIntervention 为系统干预规则 |
 
-**工作流专有节点**：START、END、API、CLASSIFIER、TEXT_CONVERTER、SCRIPT、CONDITION、FUNCTION_COMPUTE、APP_FLOW 等。
+> 目前暂不支持观测长期记忆中的检索过程；TextRetriever 与 VectorRetriever 默认返回 100 个切片，暂不支持调整数量。
 
-**高代码应用**：目前仅支持追踪到 FullCodeApp 级别，不支持其内部调用链路追踪。高代码应用需在代码中使用 AgentScope-AI 的 Tracing 模块定义上报信息，并在部署时添加 `--telemetry enable` 参数。
+### 工作流应用节点
 
-## 数据标注与评测集
+除上述 CHAIN、RETRIEVER、REWRITER、EMBEDDING、RERANKER、LLM、GUARDRAIL 外，还包含工作流专属节点：START（开始）、END（结束）、API、CLASSIFIER（意图分类）、TEXT_CONVERTER（文本转换）、SCRIPT（脚本转换）、CONDITION（条件判断）、FUNCTION_COMPUTE（函数计算）、APP_FLOW。
 
-应用观测支持两项数据管理功能：
+### 高代码应用节点
 
-- **数据标注**：对 Span 数据添加自定义标签（布尔值、分类、数字、文本），与应用评测的标签管理功能共享
-- **添加到评测集**：将线上调用的 Span 数据批量导入评测集，支持追加或全量覆盖，可自定义字段映射（最多 50 个字段）
-
-详细操作步骤参见 [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md) 原始文档。
+仅有 CHAIN（FullCodeApp）作为入口节点，目前不支持追踪其内部调用链路。若已开启观测却看不到调用量等统计数据，需排查：代码中是否使用 AgentScope-AI 的 Tracing 模块定义上报信息，以及部署时是否添加 `--telemetry enable` 参数。
 
 ## 计费说明
 
-应用观测功能本身不收费。但观测数据存储在可观测链路 OpenTelemetry 服务中，需支付该服务的存储费用。
+应用观测功能本身**不收费**，但观测数据需存储在可观测链路 OpenTelemetry 服务中，相关存储费用由 OpenTelemetry 服务收取。
 
-> **注意**：应用观测目前暂无 API 接口，仅支持控制台操作。
+## 关键指标说明
+
+- **延时（调用时长）**：对 LLM 节点，包含输出回复的完整过程。
+- **Token 量**：Embedding 节点为本次向量化 Token 数；LLM 节点为输入 Token + 输出 Token。
+- **数据时效**：指标更新频率为分钟级，调用记录最长可查 30 天。
+- **应用总量 / 平均延时**：用于评估应用运营效果与成本，详见 [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md)。
 
 ## 来源文档
 
 - [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md)
-
-
 
 

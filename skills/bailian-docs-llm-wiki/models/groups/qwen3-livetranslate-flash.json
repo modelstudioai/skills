@@ -16,33 +16,10 @@
       "description": "Qwen3-LiveTranslate-Flash，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen3-Omni强大的基座能力、海量多模态数据、跨语言跨模态对齐和视觉增强等技术，Qwen3-LiveTranslate-Flash 实现了离线和实时两种音视频翻译能力，能听懂19种语言，会说10种语言以及8种中文方言。",
       "features": [],
       "provider": "qwen-domain-model",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "qwen3-livetranslate-flash",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "10",
-          "type": "translate_audio_input_token",
-          "priceName": "输入：音频"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "4",
-          "type": "translate_vision_input_token",
-          "priceName": "输入：图片"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "10",
-          "type": "translate_multi_text_output_token",
-          "priceName": "输出：文本"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "40",
-          "type": "translate_multi_output_token",
-          "priceName": "输出：音频"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
@@ -69,7 +46,7 @@
       "latestOnlineAt": "2025-12-04T12:21:57.000+00:00",
       "contextWindow": 53248,
       "maxInputTokens": 49152,
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Qwen3-LiveTranslate-Flash",
       "docUrl": "https://help.aliyun.com/document_detail/2999748.html",
       "predictConfig": [

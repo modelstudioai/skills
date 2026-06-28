@@ -78,51 +78,9 @@
 
 **关联操作**
 
-sfm:ChunkList
+sfm:ChangeParseSetting
 
-[ListChunks](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listchunks)
-
-list
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:ApplyTempStorageLease
-
-[ApplyTempStorageLease](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-applytempstoragelease)
-
-none
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:DescribeFile
-
-[DescribeFile](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-describefile)
-
-none
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:UpdateIndex
-
-[UpdateIndex](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updateindex)
+[ChangeParseSetting](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-changeparsesetting)
 
 update
 
@@ -134,9 +92,51 @@ update
 
 无
 
-sfm:SubmitIndexAddDocumentsJob
+sfm:UpdateFileTag
 
-[SubmitIndexAddDocumentsJob](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-submitindexadddocumentsjob)
+[UpdateFileTag](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatefiletag)
+
+update
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:DeleteCategory
+
+[DeleteCategory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletecategory)
+
+delete
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:UpdatePromptTemplate
+
+[UpdatePromptTemplate](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updateprompttemplate)
+
+update
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:SubmitIndexJob
+
+[SubmitIndexJob](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-submitindexjob)
 
 create
 
@@ -148,11 +148,11 @@ create
 
 无
 
-sfm:UpdateTableFromAuthorizedOss
+sfm:GetParseSettings
 
-[UpdateTableFromAuthorizedOss](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatetablefromauthorizedoss)
+[GetParseSettings](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getparsesettings)
 
-update
+get
 
 \*全部资源
 
@@ -162,9 +162,37 @@ update
 
 无
 
-sfm:DeleteFiles
+sfm:DeleteChunk
 
-[DeleteFiles](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletefiles)
+[DeleteChunk](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletechunk)
+
+delete
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:GetAlipayTransferStatus
+
+[GetAlipayTransferStatus](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getalipaytransferstatus)
+
+none
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:DeletePromptTemplate
+
+[DeletePromptTemplate](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deleteprompttemplate)
 
 delete
 
@@ -190,6 +218,146 @@ list
 
 无
 
+sfm:CreateMemoryNode
+
+[CreateMemoryNode](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-creatememorynode)
+
+create
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:UpdateMemory
+
+[UpdateMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatememory)
+
+update
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:ChunkList
+
+[ListChunks](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listchunks)
+
+list
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:ListIndexFileDetails
+
+[ListIndexFileDetails](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listindexfiledetails)
+
+list
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:SubmitIndexAddDocumentsJob
+
+[SubmitIndexAddDocumentsJob](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-submitindexadddocumentsjob)
+
+create
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:UpdateIndex
+
+[UpdateIndex](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updateindex)
+
+update
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:ListFile
+
+[ListFile](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listfile)
+
+list
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:Retrieve
+
+[Retrieve](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve)
+
+none
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:AddConnector
+
+[AddConnector](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addconnector)
+
+create
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:ListMemories
+
+[ListMemories](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listmemories)
+
+list
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
 sfm:AddFile
 
 [AddFile](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addfile)
@@ -204,23 +372,9 @@ create
 
 无
 
-sfm:DeleteCategory
+sfm:UpdateConnector
 
-[DeleteCategory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletecategory)
-
-delete
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:UpdateFileTag
-
-[UpdateFileTag](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatefiletag)
+[UpdateConnector](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updateconnector)
 
 update
 
@@ -232,11 +386,11 @@ update
 
 无
 
-sfm:ApplyFileUploadLease
+sfm:DeleteFile
 
-[ApplyFileUploadLease](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-applyfileuploadlease)
+[DeleteFile](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletefile)
 
-none
+delete
 
 \*全部资源
 
@@ -251,6 +405,20 @@ sfm:AddCategory
 [AddCategory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addcategory)
 
 create
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:BatchUpdateFileTag
+
+[BatchUpdateFileTag](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-batchupdatefiletag)
+
+update
 
 \*全部资源
 
@@ -288,9 +456,9 @@ list
 
 无
 
-sfm:Retrieve
+sfm:DescribeFile
 
-[Retrieve](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve)
+[DescribeFile](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-describefile)
 
 none
 
@@ -302,25 +470,11 @@ none
 
 无
 
-sfm:UpdateConnector
+sfm:CreateIndex
 
-[UpdateConnector](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updateconnector)
+[CreateIndex](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-createindex)
 
-update
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:BatchUpdateFileTag
-
-[BatchUpdateFileTag](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-batchupdatefiletag)
-
-update
+create
 
 \*全部资源
 
@@ -330,11 +484,39 @@ update
 
 无
 
-sfm:ListFile
+sfm:ListCategory
 
-[ListFile](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listfile)
+[ListCategory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listcategory)
 
 list
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:AddTable
+
+[AddTable](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addtable)
+
+create
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:UpdateMemoryNode
+
+[UpdateMemoryNode](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatememorynode)
+
+update
 
 \*全部资源
 
@@ -358,25 +540,11 @@ get
 
 无
 
-sfm:UpdateMemory
+sfm:DeleteMemory
 
-[UpdateMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatememory)
+[DeleteMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletememory)
 
-update
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:ChangeParseSetting
-
-[ChangeParseSetting](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-changeparsesetting)
-
-update
+delete
 
 \*全部资源
 
@@ -400,11 +568,11 @@ delete
 
 无
 
-sfm:GetIndexMonitor
+sfm:UpdateTableFromAuthorizedOss
 
-[GetIndexMonitor](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getindexmonitor)
+[UpdateTableFromAuthorizedOss](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatetablefromauthorizedoss)
 
-get
+update
 
 \*全部资源
 
@@ -414,25 +582,11 @@ get
 
 无
 
-sfm:GetAlipayTransferStatus
+sfm:ApplyTempStorageLease
 
-[GetAlipayTransferStatus](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getalipaytransferstatus)
+[ApplyTempStorageLease](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-applytempstoragelease)
 
 none
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:GetIndexJobStatus
-
-[GetIndexJobStatus](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getindexjobstatus)
-
-get
 
 \*全部资源
 
@@ -456,39 +610,53 @@ get
 
 无
 
-sfm:DeleteChunk
-
-[DeleteChunk](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletechunk)
-
-delete
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:UpdatePromptTemplate
-
-[UpdatePromptTemplate](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updateprompttemplate)
-
-update
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
 sfm:DeleteMemoryNode
 
 [DeleteMemoryNode](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletememorynode)
 
 delete
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:GetMemory
+
+[GetMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getmemory)
+
+get
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:DeleteIndex
+
+[DeleteIndex](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deleteindex)
+
+none
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:UpdateChunk
+
+[UpdateChunk](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatechunk)
+
+update
 
 \*全部资源
 
@@ -526,37 +694,9 @@ get
 
 无
 
-sfm:ListIndexFileDetails
+sfm:GetIndexJobStatus
 
-[ListIndexFileDetails](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listindexfiledetails)
-
-list
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:CreateMemory
-
-[CreateMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-creatememory)
-
-create
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:GetParseSettings
-
-[GetParseSettings](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getparsesettings)
+[GetIndexJobStatus](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getindexjobstatus)
 
 get
 
@@ -568,53 +708,11 @@ get
 
 无
 
-sfm:UpdateChunk
+sfm:ApplyFileUploadLease
 
-[UpdateChunk](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatechunk)
+[ApplyFileUploadLease](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-applyfileuploadlease)
 
-update
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:CreateIndex
-
-[CreateIndex](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-createindex)
-
-create
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:DeleteFile
-
-[DeleteFile](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletefile)
-
-delete
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:AddTable
-
-[AddTable](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addtable)
-
-create
+none
 
 \*全部资源
 
@@ -638,25 +736,11 @@ get
 
 无
 
-sfm:ListCategory
+sfm:CreateMemory
 
-[ListCategory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listcategory)
+[CreateMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-creatememory)
 
-list
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:DeletePromptTemplate
-
-[DeletePromptTemplate](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deleteprompttemplate)
-
-delete
+create
 
 \*全部资源
 
@@ -669,104 +753,6 @@ delete
 sfm:GetAlipayUrl
 
 [GetAlipayUrl](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getalipayurl)
-
-none
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:CreateMemoryNode
-
-[CreateMemoryNode](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-creatememorynode)
-
-create
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:ListPromptTemplates
-
-[ListPromptTemplates](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listprompttemplates)
-
-list
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:SubmitIndexJob
-
-[SubmitIndexJob](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-submitindexjob)
-
-create
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:ListMemories
-
-[ListMemories](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listmemories)
-
-list
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:AddFilesFromAuthorizedOss
-
-[AddFilesFromAuthorizedOss](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addfilesfromauthorizedoss)
-
-create
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:UpdateMemoryNode
-
-[UpdateMemoryNode](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatememorynode)
-
-update
-
-\*全部资源
-
-`*****`
-
-无
-
-无
-
-sfm:DeleteIndex
-
-[DeleteIndex](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deleteindex)
 
 none
 
@@ -792,9 +778,23 @@ create
 
 无
 
-sfm:DeleteMemory
+sfm:GetIndexMonitor
 
-[DeleteMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletememory)
+[GetIndexMonitor](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getindexmonitor)
+
+get
+
+\*全部资源
+
+`*****`
+
+无
+
+无
+
+sfm:DeleteFiles
+
+[DeleteFiles](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletefiles)
 
 delete
 
@@ -806,9 +806,9 @@ delete
 
 无
 
-sfm:AddConnector
+sfm:AddFilesFromAuthorizedOss
 
-[AddConnector](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addconnector)
+[AddFilesFromAuthorizedOss](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addfilesfromauthorizedoss)
 
 create
 
@@ -820,11 +820,11 @@ create
 
 无
 
-sfm:GetMemory
+sfm:ListPromptTemplates
 
-[GetMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getmemory)
+[ListPromptTemplates](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listprompttemplates)
 
-get
+list
 
 \*全部资源
 

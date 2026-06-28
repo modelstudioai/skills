@@ -148,7 +148,7 @@ MiniMax/speech-2.8-hd
 
 根据提示词或歌词生成音乐
 
-[查看更多 →](https://help.aliyun.com/zh/model-studio/fun-music)
+[查看更多 →](https://help.aliyun.com/zh/model-studio/fun-music/)
 
 [
 

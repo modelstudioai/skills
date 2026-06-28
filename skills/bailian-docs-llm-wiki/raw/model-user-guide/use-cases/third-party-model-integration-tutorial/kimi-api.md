@@ -6,7 +6,7 @@
 
 Moonshot-Kimi-K2-Instruct、kimi-k2-thinking 将于**2026年7月9日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-plus)、[qwen3.7-max](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-max)、[qwen3.6-flash](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.6-flash)。
 
-**支持的地域：**华北2（北京）、美国（弗吉尼亚）、德国（法兰克福）。
+**支持的地域：**华北2（北京）、新加坡、日本（东京）、美国（弗吉尼亚）、德国（法兰克福）。
 
 **模型体验：**您可以前往[模型体验中心](https://bailian.console.aliyun.com/cn-beijing?tab=model#/efm/model_experience_center/text)体验 Kimi 模型效果。
 
@@ -16,9 +16,9 @@ Moonshot-Kimi-K2-Instruct、kimi-k2-thinking 将于**2026年7月9日**下架。�
 
 ## 华北2（北京）
 
-SDK 调用配置的`base_url`：`https://dashscope.aliyuncs.com/compatible-mode/v1`
+SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
-HTTP 请求地址：`POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions`
+HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
 ## 美国（弗吉尼亚）
 
@@ -32,17 +32,54 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.eu-central-1.maas.aliyunc
 
 HTTP 请求地址：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+## 新加坡
+
+SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
+
+HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+## 日本（东京）
+
+SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1`
+
+HTTP 请求地址：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
 ## DashScope
 
 ## 华北2（北京）
 
-纯文本模型（如 kimi-k2-thinking）的 HTTP 请求地址为`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+纯文本模型（如 kimi-k2-thinking）的 HTTP 请求地址为`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
-多模态模型（如 kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+多模态模型（如 kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-SDK 调用无需配置 `base_url`。
+SDK调用配置的`base_url`：
+
+## **Python代码**
+
+```
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+```
+
+## **Java代码**
+
+-   **方式一：**
+    
+    ```
+    import com.alibaba.dashscope.protocol.Protocol;
+    Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1");
+    ```
+    
+-   **方式二：**
+    
+    ```
+    import com.alibaba.dashscope.utils.Constants;
+    Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
+    ```
+    
 
 ## 美国（弗吉尼亚）
 
@@ -81,21 +118,15 @@ dashscope.base_http_api_url = 'https://dashscope-us.aliyuncs.com/api/v1'
 
 多模态模型（如 kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
-
 SDK调用配置的`base_url`：
 
 ## **Python代码**
-
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ```
 dashscope.base_http_api_url = 'https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1'
 ```
 
 ## **Java代码**
-
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 -   **方式一：**
     
@@ -112,7 +143,71 @@ dashscope.base_http_api_url = 'https://{WorkspaceId}.eu-central-1.maas.aliyuncs.
     ```
     
 
-> 你需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk#8833b9274f4v8)。
+## 新加坡
+
+纯文本模型（如 kimi-k2-thinking）的 HTTP 请求地址为`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+
+多模态模型（如 kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+
+SDK调用配置的`base_url`：
+
+## **Python代码**
+
+```
+dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
+```
+
+## **Java代码**
+
+-   **方式一：**
+    
+    ```
+    import com.alibaba.dashscope.protocol.Protocol;
+    Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1");
+    ```
+    
+-   **方式二：**
+    
+    ```
+    import com.alibaba.dashscope.utils.Constants;
+    Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
+    ```
+    
+
+## 日本（东京）
+
+纯文本模型（如 kimi-k2-thinking）的 HTTP 请求地址为`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+
+多模态模型（如 kimi-k2.7-code、kimi-k2.6、kimi-k2.5）的 HTTP 请求地址为`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+
+SDK调用配置的`base_url`：
+
+## **Python代码**
+
+```
+dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1'
+```
+
+## **Java代码**
+
+-   **方式一：**
+    
+    ```
+    import com.alibaba.dashscope.protocol.Protocol;
+    Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1");
+    ```
+    
+-   **方式二：**
+    
+    ```
+    import com.alibaba.dashscope.utils.Constants;
+    Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1";
+    ```
+    
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+你需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk#8833b9274f4v8)。
 
 ## **快速开始**
 
@@ -128,7 +223,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
@@ -195,7 +290,7 @@ import process from 'process';
 const openai = new OpenAI({
     // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: "sk-xxx"
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+    baseURL: 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1'
 });
 
 let reasoningContent = ''; // 完整思考过程
@@ -278,7 +373,7 @@ main();
 ## curl
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -329,7 +424,10 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 
 ```
 import os
+import dashscope
 from dashscope import MultiModalConversation
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 # 初始化请求参数
 messages = [{"role": "user", "content": "你是谁？"}]
@@ -409,13 +507,16 @@ import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationR
 import com.alibaba.dashscope.common.MultiModalMessage;
 import com.alibaba.dashscope.common.Role;
 import com.alibaba.dashscope.exception.ApiException;
-import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
 import java.util.Arrays;
 import java.util.Collections;
 
 public class Main {
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         try {
             MultiModalConversation conv = new MultiModalConversation();
 
@@ -433,9 +534,9 @@ public class Main {
 
             MultiModalConversationResult result = conv.call(param);
 
-            String content = result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text");
+            String content = (String) result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text");
             System.out.println("回复: " + content);
-        } catch (ApiException | NoApiKeyException | InputRequiredException e) {
+        } catch (ApiException | NoApiKeyException | UploadFileException e) {
             System.err.println("An exception occurred: " + e.getMessage());
         }
         System.exit(0);
@@ -467,7 +568,7 @@ public class Main {
 ## curl
 
 ```
-curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -540,7 +641,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 # 单图传入示例（开启思考模式）
@@ -608,7 +709,7 @@ import process from 'process';
 
 const openai = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+    baseURL: 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1'
 });
 
 // 单图传入示例（开启思考模式）
@@ -673,7 +774,7 @@ console.log(completion.choices[0].message.content);
 ## curl
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -699,7 +800,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 }'
 
 # 多图输入示例（取消注释使用）
-# curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+# curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 # -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 # -H "Content-Type: application/json" \
 # -d '{
@@ -738,7 +839,10 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 
 ```
 import os
+import dashscope
 from dashscope import MultiModalConversation
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 # 单图传入示例（开启思考模式）
 response = MultiModalConversation.call(
@@ -798,15 +902,18 @@ import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationR
 import com.alibaba.dashscope.common.MultiModalMessage;
 import com.alibaba.dashscope.common.Role;
 import com.alibaba.dashscope.exception.ApiException;
-import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
 import com.alibaba.dashscope.utils.JsonUtils;
+import com.alibaba.dashscope.utils.Constants;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class KimiK26MultiModalExample {
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         try {
             // 单图输入示例（开启思考模式）
             MultiModalConversation conv = new MultiModalConversation();
@@ -836,7 +943,7 @@ public class KimiK26MultiModalExample {
             MultiModalConversationResult result = conv.call(param);
 
             // 输出结果
-            String content = result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text");
+            String content = (String) result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text");
             System.out.println("回复内容: " + content);
 
             // 如果开启了思考模式，输出思考过程
@@ -869,7 +976,7 @@ public class KimiK26MultiModalExample {
             // MultiModalConversationResult multiResult = conv.call(multiParam);
             // System.out.println(multiResult.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text"));
 
-        } catch (ApiException | NoApiKeyException | InputRequiredException e) {
+        } catch (ApiException | NoApiKeyException | UploadFileException e) {
             System.err.println("调用失败: " + e.getMessage());
         }
     }
@@ -879,7 +986,7 @@ public class KimiK26MultiModalExample {
 ## curl
 
 ```
-curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -905,7 +1012,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 }'
 
 # 多图输入示例（取消注释使用）
-# curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
+# curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
 # -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 # -H "Content-Type: application/json" \
 # -d '{
@@ -963,7 +1070,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
@@ -999,7 +1106,7 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 async function main() {
@@ -1035,7 +1142,7 @@ main();
 ## curl
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H 'Content-Type: application/json' \
   -d '{
@@ -1069,7 +1176,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 import dashscope
 import os
 
-dashscope.base_http_api_url = "https://dashscope.aliyuncs.com/api/v1"
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 messages = [
     {"role": "user",
@@ -1111,8 +1218,6 @@ import com.alibaba.dashscope.utils.JsonUtils;
 import com.alibaba.dashscope.utils.Constants;
 
 public class Main {
-    static {Constants.baseHttpApiUrl="https://dashscope.aliyuncs.com/api/v1";}
-    
     public static void simpleMultiModalConversationCall()
             throws ApiException, NoApiKeyException, UploadFileException {
         MultiModalConversation conv = new MultiModalConversation();
@@ -1133,6 +1238,8 @@ public class Main {
         System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text"));
     }
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         try {
             simpleMultiModalConversationCall();
         } catch (ApiException | NoApiKeyException | UploadFileException e) {
@@ -1146,7 +1253,7 @@ public class Main {
 ## curl
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
@@ -1174,7 +1281,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
@@ -1201,7 +1308,7 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 async function main() {
@@ -1236,7 +1343,7 @@ main();
 ## curl
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
@@ -1259,7 +1366,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 import os
 import dashscope
 
-dashscope.base_http_api_url = "https://dashscope.aliyuncs.com/api/v1"
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 messages = [{"role": "user",
              "content": [
@@ -1298,7 +1405,7 @@ import com.alibaba.dashscope.exception.UploadFileException;
 import com.alibaba.dashscope.utils.Constants;
 
 public class Main {
-    static {Constants.baseHttpApiUrl="https://dashscope.aliyuncs.com/api/v1";}
+    static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
 
     private static final String MODEL_NAME = "kimi-k2.6"; 
     public static void videoImageListSample() throws ApiException, NoApiKeyException, UploadFileException {
@@ -1336,7 +1443,7 @@ public class Main {
 ## curl
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
@@ -1391,7 +1498,7 @@ base64_image = encode_image("xxx/eagle.png")
 
 client = OpenAI(
     api_key=os.getenv('DASHSCOPE_API_KEY'),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
     model="kimi-k2.6",
@@ -1434,7 +1541,7 @@ import { readFileSync } from 'fs';
 const openai = new OpenAI(
     {
         apiKey: process.env.DASHSCOPE_API_KEY,
-        baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+        baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     }
 );
 
@@ -1487,7 +1594,7 @@ import os
 import dashscope 
 from dashscope import MultiModalConversation
 
-dashscope.base_http_api_url = "https://dashscope.aliyuncs.com/api/v1"
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 #  编码函数： 将本地文件转换为 Base64 编码的字符串
 def encode_image(image_path):
@@ -1547,7 +1654,7 @@ import com.alibaba.dashscope.utils.Constants;
 
 public class Main {
 
-   static {Constants.baseHttpApiUrl="https://dashscope.aliyuncs.com/api/v1";}
+   static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
 
     private static String encodeToBase64(String imagePath) throws IOException {
         Path path = Paths.get(imagePath);
@@ -1589,24 +1696,24 @@ public class Main {
     
     // 以下为传入本地视频文件、本地图像列表示例
     // 【本地视频文件】
-    // String base64Image = encodeToBase64(localPath);
+    // String base64Video = encodeToBase64(localPath);
     // MultiModalConversation conv = new MultiModalConversation();
    //  MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())
    //             .content(Arrays.asList(
-   //                     new HashMap<String, Object>() {{ put("video", "data:video/mp4;base64," + base64Video;}},
+   //                     new HashMap<String, Object>() {{ put("video", "data:video/mp4;base64," + base64Video); }},
    //                     new HashMap<String, Object>() {{ put("text", "这段视频描绘的是什么景象？"); }}
    //             )).build();
 
     // 【本地图像列表】
     // List<String> urls = Arrays.asList(
-    //                                   "data:image/jpeg;base64,"+encodeToBase64(path/f1.jpg),
-    //                                   "data:image/jpeg;base64,"+encodeToBase64(path/f2.jpg),
-    //                                   "data:image/jpeg;base64,"+encodeToBase64(path/f3.jpg),
-    //                                   "data:image/jpeg;base64,"+encodeToBase64(path/f4.jpg)); 
+    //                                   "data:image/jpeg;base64,"+encodeToBase64("path/f1.jpg"),
+    //                                   "data:image/jpeg;base64,"+encodeToBase64("path/f2.jpg"),
+    //                                   "data:image/jpeg;base64,"+encodeToBase64("path/f3.jpg"),
+    //                                   "data:image/jpeg;base64,"+encodeToBase64("path/f4.jpg"));
    //  MultiModalConversation conv = new MultiModalConversation();
    //  MultiModalMessage userMessage = MultiModalMessage.builder().role(Role.USER.getValue())
    //             .content(Arrays.asList(
-   //                     new HashMap<String, Object>() {{ put("video", urls;}},
+   //                     new HashMap<String, Object>() {{ put("video", urls); }},
    //                     new HashMap<String, Object>() {{ put("text", "这段视频描绘的是什么景象？"); }}
    //             )).build();
 
@@ -1658,7 +1765,7 @@ import os
 from dashscope import MultiModalConversation
 import dashscope 
 
-dashscope.base_http_api_url = "https://dashscope.aliyuncs.com/api/v1"
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 # 将xxx/eagle.png替换为你本地图像的绝对路径
 local_path = "xxx/eagle.png"
@@ -1702,9 +1809,6 @@ import com.alibaba.dashscope.exception.UploadFileException;
 import com.alibaba.dashscope.utils.Constants;
 
 public class Main {
-
-    static {Constants.baseHttpApiUrl="https://dashscope.aliyuncs.com/api/v1";}
-    
     public static void callWithLocalFile(String localPath)
             throws ApiException, NoApiKeyException, UploadFileException {
         String filePath = "file://"+localPath;
@@ -1721,6 +1825,8 @@ public class Main {
         System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text"));}
 
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         try {
             // 将xxx/eagle.png替换为你本地图像的绝对路径
             callWithLocalFile("xxx/eagle.png");

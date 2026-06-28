@@ -2,7 +2,7 @@
 
 通过HTTP API管理定制热词列表，包括创建、查询、更新和删除热词列表。
 
-**用户指南：**[自定义热词](https://help.aliyun.com/zh/model-studio/custom-hot-words-user-guide)。热词列表数量上限等使用限制详见[限制与计费](https://help.aliyun.com/zh/model-studio/custom-hot-words-user-guide#hw10-limit-sec)。
+**用户指南：**[自定义热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。热词列表数量上限等使用限制详见[限制与计费](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw10-limit-sec)。
 
 **重要**
 

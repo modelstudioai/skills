@@ -57,9 +57,15 @@ array
 
 否
 
+可选字段列表
+
 string
 
 否
+
+可选字段值
+
+asr\_result
 
 ## **返回参数**
 
@@ -101,6 +107,10 @@ taskErrorMessage
 
 string
 
+任务失败信息
+
+异常
+
 taskStatus
 
 string
@@ -113,91 +123,175 @@ asrResult
 
 array<object>
 
+ASR 识别结果列表
+
 object
+
+ASR 识别结果
 
 begin
 
 integer
 
+该句的起始时间偏移，单位为毫秒。
+
+80
+
 emotionValue
 
 integer
+
+情绪能量值，取值为音量分贝值/10。取值范围：\[1,10\]。值越高情绪越强烈。
+
+5
 
 end
 
 integer
 
+该句的结束时间偏移，单位为毫秒。
+
+8480
+
 role
 
 string
+
+该句所属音轨 ID。
+
+0
 
 speechRate
 
 integer
 
+本句的平均语速。
+
+若识别语言为中文，则单位为：字数/分钟。
+
+若识别语言为英文，则单位为：单词数/分钟。
+
+342
+
 words
 
 string
+
+该句的识别文本结果。
+
+Hello
 
 roleName
 
 string
 
+角色名称
+
+客户
+
 extra
 
 string
+
+可选的补充内容
+
+{"roleConfig":{"role1Name":"客户","role2Name":"客服"}}
 
 ragStatus
 
 string
 
+rag 执行状态
+
+SUCCESS
+
 ragResult
 
 string
+
+rag 召回结果
+
+召回内容
 
 usage
 
 object
 
+使用量
+
 rag
 
 object
+
+rag 使用详情
 
 dialogSummary
 
 object
 
+会话摘要
+
 inputTokens
 
 integer
+
+输入 Token 数量
+
+520
 
 outputTokens
 
 integer
 
+输出 Token 数量
+
+664
+
 invokeCount
 
 integer
+
+调用次数
+
+1
 
 adaptive
 
 object
 
+rag 智能调用
+
 inputTokens
 
 integer
+
+输入 Token 数量
+
+482
 
 outputTokens
 
 integer
 
+输出 Token 数量
+
+789
+
 invokeCount
 
 integer
 
+调用次数
+
+1
+
 ragErrorMessage
 
 string
+
+rag 执行错误异常 message
+
+非法参数:\[无有效知识库\]
 
 requestId
 
@@ -226,37 +320,37 @@ True
   "data": {
     "taskId": "20240905-********-93E9-5D45-B4EF-045743A34071\n",
     "text": "对话中没有发现客服故意套取客户隐私信息的行为",
-    "taskErrorMessage": "",
+    "taskErrorMessage": "异常",
     "taskStatus": "FINISH",
     "asrResult": [
       {
-        "begin": 0,
-        "emotionValue": 0,
-        "end": 0,
-        "role": "",
-        "speechRate": 0,
-        "words": "",
-        "roleName": ""
+        "begin": 80,
+        "emotionValue": 5,
+        "end": 8480,
+        "role": "0",
+        "speechRate": 342,
+        "words": "Hello",
+        "roleName": "客户"
       }
     ],
-    "extra": "",
-    "ragStatus": "",
-    "ragResult": "",
+    "extra": "{\"roleConfig\":{\"role1Name\":\"客户\",\"role2Name\":\"客服\"}}",
+    "ragStatus": "SUCCESS",
+    "ragResult": "召回内容",
     "usage": {
       "rag": {
         "dialogSummary": {
-          "inputTokens": 0,
-          "outputTokens": 0,
-          "invokeCount": 0
+          "inputTokens": 520,
+          "outputTokens": 664,
+          "invokeCount": 1
         },
         "adaptive": {
-          "inputTokens": 0,
-          "outputTokens": 0,
-          "invokeCount": 0
+          "inputTokens": 482,
+          "outputTokens": 789,
+          "invokeCount": 1
         }
       }
     },
-    "ragErrorMessage": ""
+    "ragErrorMessage": "非法参数:[无有效知识库]"
   },
   "requestId": "968A8634-FA2C-5381-9B3E-C552DED7E8BF",
   "success": "True"

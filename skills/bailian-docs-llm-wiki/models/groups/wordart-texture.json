@@ -15,21 +15,16 @@
       "description": "WordArt锦书-文字纹理生成可以对输入的文字内容或文字图片进行创意设计，根据提示词内容对文字添加材质和纹理，实现立体凸显或场景融合的效果，生成效果精美、风格多样的艺术字，结合背景可以直接作为文字海报使用。",
       "features": [],
       "provider": "qwen",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "wordart-texture",
-      "prices": [
-        {
-          "priceUnit": "每张",
-          "price": "0.08",
-          "type": "image_number",
-          "priceName": "图片生成"
-        }
-      ],
       "capabilities": [
         "IG"
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2024-04-09T08:29:05.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "WordArt锦书-文字纹理生成",
       "docUrl": "https://help.aliyun.com/document_detail/2712510.html",
       "predictConfig": [
@@ -62,7 +57,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/wordart/texture' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--header 'Accept: application/json' \\\n--data '{\n    \"model\": \"wordart-texture\",\n    \"input\": {\n        \"image\": \n        {\n            \"image_url\": \"https://dmshared-new.oss-cn-hangzhou.aliyuncs.com/junyan.hjy/wordart/lcy/example.png\"\n        },\n        \"prompt\": \"水果，蔬菜，温暖的色彩空间\",\n        \"texture_style\": \"material\"\n    },\n    \"parameters\": \n    {\n        \"image_short_size\": 704,\n        \"n\": 2,\n        \"alpha_channel\": false\n    }\n}'"
+            "curl": "curl --location 'https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/wordart/texture' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--header 'Accept: application/json' \\\n--data '{\n    \"model\": \"wordart-texture\",\n    \"input\": {\n        \"image\": \n        {\n            \"image_url\": \"https://dmshared-new.oss-cn-hangzhou.aliyuncs.com/junyan.hjy/wordart/lcy/example.png\"\n        },\n        \"prompt\": \"水果，蔬菜，温暖的色彩空间\",\n        \"texture_style\": \"material\"\n    },\n    \"parameters\": \n    {\n        \"image_short_size\": 704,\n        \"n\": 2,\n        \"alpha_channel\": false\n    }\n}'"
           }
         }
       }

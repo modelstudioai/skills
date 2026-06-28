@@ -976,7 +976,9 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
     -   训练结束后，在[查询微调任务状态](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#a242dac535nqt)接口 `usage` 字段查看训练消耗的总 Token 数。
         
     
-    下表列出了文生图（t2i）训练中常见训练步数（Step）及预估费用。该数据仅供参考，实际训练效果请以最终交付为准，费用请以正式账单为准。详细计费公式请参见[模型训练计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing)。
+    下表列出了wan2.7-image、wan2.7-image-pro不同生成类型训练中常见训练步数及预估费用。该数据仅供参考，实际训练效果请以最终交付为准，费用请以正式账单为准。详细计费公式请参见[模型训练计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing)。
+    
+    **generation\_type**
     
     **图片分辨率**
     
@@ -985,6 +987,8 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
     **Token消耗预估**
     
     **费用预估（元）**
+    
+    t2i（文生图）
     
     1K
     
@@ -1025,6 +1029,48 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
     464,400,000
     
     37,152
+    
+    i2i（图生图）
+    
+    1K
+    
+    500
+    
+    116,100,000
+    
+    9,288
+    
+    1000
+    
+    232,200,000
+    
+    18,576
+    
+    2000
+    
+    464,400,000
+    
+    37,152
+    
+    2K
+    
+    500
+    
+    160,000,000
+    
+    12,800
+    
+    1000
+    
+    320,000,000
+    
+    25,600
+    
+    2000
+    
+    640,000,000
+    
+    51,200
     
 -   **模型部署与调用**：部署免费，调用按微调的基础模型的标准调用价格计费。
     

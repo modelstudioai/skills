@@ -8,9 +8,9 @@
 
 ## **北京地域**
 
-SDK 调用配置的`base_url`为：`https://dashscope.aliyuncs.com/compatible-mode/v1`
+SDK 调用配置的`base_url`为：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
-HTTP 请求地址：`POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions`
+HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
 ## **新加坡地域**
 
@@ -38,9 +38,20 @@ HTTP 请求地址：`POST https://dashscope-us.aliyuncs.com/compatible-mode/v1/c
 
 ## **北京地域**
 
-SDK 调用配置的`base_url`为：`https://dashscope.aliyuncs.com/compatible-mode/v1`
+SDK 调用配置的`base_url`为：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
-HTTP 请求地址：`POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions`
+HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+
+**重要**
+
+百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+
+-   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 > 您需要已 [获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key) 并 [配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables) 。若通过OpenAI SDK进行调用，需要 [安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk) 。
 
@@ -59,7 +70,7 @@ client = OpenAI(
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
     # 以下是北京地域的base_url
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 messages = [
     {
@@ -93,7 +104,7 @@ const openai = new OpenAI(
         // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
         apiKey: process.env.DASHSCOPE_API_KEY,
         // 以下是北京地域的base_url
-        baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+        baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     }
 );
 const completion = await openai.chat.completions.create({
@@ -114,7 +125,7 @@ console.log(JSON.stringify(completion));
 各地域的[请求地址](#0092fe7c67ocl)和API Key不同，以下是北京地域的请求地址。
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -139,7 +150,7 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
     # 以下是北京地域的base_url
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 messages = [
     {
@@ -191,7 +202,7 @@ const openai = new OpenAI(
         // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
         apiKey: process.env.DASHSCOPE_API_KEY,
         // 以下是北京地域的base_url
-        baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+        baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     }
 );
 const completion = await openai.chat.completions.create({
@@ -230,7 +241,7 @@ console.log(JSON.stringify(completion));
 各地域的[请求地址](#0092fe7c67ocl)和API Key不同，以下是北京地域的请求地址。
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -278,7 +289,7 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
     # 以下是北京地域的base_url
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 messages = [
     {
@@ -326,7 +337,7 @@ const openai = new OpenAI(
         // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
         apiKey: process.env.DASHSCOPE_API_KEY,
         // 以下是北京地域的base_url
-        baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+        baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     }
 );
 const completion = await openai.chat.completions.create({
@@ -361,7 +372,7 @@ console.log(JSON.stringify(completion));
 各地域的[请求地址](#0092fe7c67ocl)和API Key不同，以下是北京地域的请求地址。
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -396,7 +407,7 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
     # 以下是北京地域的base_url
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 messages = [
     {
@@ -431,7 +442,7 @@ const openai = new OpenAI(
         // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
         apiKey: process.env.DASHSCOPE_API_KEY,
         // 以下是北京地域的base_url
-        baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+        baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     }
 );
 const completion = await openai.chat.completions.create({
@@ -453,7 +464,7 @@ console.log(JSON.stringify(completion));
 各地域的[请求地址](#0092fe7c67ocl)和API Key不同，以下是北京地域的请求地址。
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -908,9 +919,9 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 
 ## **北京地域**
 
-HTTP 请求地址：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
-SDK 调用无需配置 `base_url`，其默认值为`https://dashscope.aliyuncs.com/api/v1`。
+SDK 调用无需配置 `base_url`，其默认值为`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`。
 
 ## **新加坡地域**
 
@@ -1030,9 +1041,9 @@ dashscope.base_http_api_url = 'https://dashscope-us.aliyuncs.com/api/v1'
 
 ## **北京地域**
 
-HTTP 请求地址：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
+HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
-SDK 调用无需配置 `base_url`，其默认值为`https://dashscope.aliyuncs.com/api/v1`。
+SDK 调用无需配置 `base_url`，其默认值为`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`。
 
 > 您需要已 [获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key) 并 [配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables) 。若通过DashScope SDK进行调用，需要 [安装DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk#f3e80b21069aa) 。
 
@@ -1111,6 +1122,8 @@ public class Main {
         return gen.call(param);
     }
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         try {
             GenerationResult result = callWithMessage();
             System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());
@@ -1129,7 +1142,7 @@ public class Main {
 各地域的[请求地址](#8d897eab3467e)和API Key不同，以下是北京地域的请求地址。
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -1268,7 +1281,7 @@ public class Main {
 各地域的[请求地址](#8d897eab3467e)和API Key不同，以下是北京地域的请求地址。
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
@@ -1415,7 +1428,7 @@ public class Main {
 各地域的[请求地址](#8d897eab3467e)和API Key不同，以下是北京地域的请求地址。
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
@@ -1532,7 +1545,7 @@ public class Main {
 各地域的[请求地址](#8d897eab3467e)和API Key不同，以下是北京地域的请求地址。
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{

@@ -271,6 +271,10 @@ ParseErrorMessage
 
 string
 
+解析失败原因
+
+Error Message
+
 Message
 
 string
@@ -330,7 +334,7 @@ true
       "产品介绍"
     ],
     "ParseResultDownloadUrl": "",
-    "ParseErrorMessage": ""
+    "ParseErrorMessage": "Error Message"
   },
   "Message": "Requests throttling triggered.",
   "RequestId": "17204B98-xxxx-4F9A-8464-2446A84821CA",

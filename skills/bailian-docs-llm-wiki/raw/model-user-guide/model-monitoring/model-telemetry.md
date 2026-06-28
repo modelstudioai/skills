@@ -15,44 +15,6 @@
     
 -   **告警功能：**支持北京、新加坡地域下的所有模型。
     
--   **日志功能：**目前支持的部分模型列表如下：
-    
-    ## 北京
-    
-    -   qwen3-max、qwen3-max-2025-09-23、qwen3-max-2026-01-23、qwen3-max-preview
-        
-    -   qwen-max
-        
-    -   qwen-plus、qwen-plus-2025-04-28、qwen-plus-2025-07-14、qwen-plus-2025-07-28、qwen-plus-2025-09-11、qwen-plus-2025-12-01、qwen-plus-latest
-        
-    -   qwen-flash、qwen-flash-2025-07-28
-        
-    -   qwen-turbo
-        
-    -   deepseek-v3.1、deepseek-v3.2、deepseek-v3.2-exp
-        
-    -   qwen3-235b-a22b、qwen3-235b-a22b-instruct-2507、qwen3-235b-a22b-thinking-2507、qwen3-30b-a3b、qwen3-30b-a3b-instruct-2507、qwen3-30b-a3b-thinking-2507、qwen3-next-80b-a3b-instruct、qwen3-next-80b-a3b-thinking
-        
-    -   qwen3-coder-480b-a35b-instruct、qwen3-coder-flash、qwen3-coder-flash-2025-07-28、qwen3-coder-plus、qwen3-coder-plus-2025-07-22、qwen3-coder-plus-2025-09-23
-        
-    
-    ## 新加坡
-    
-    -   qwen3-max、qwen3-max-2025-09-23、qwen3-max-2026-01-23、qwen3-max-preview
-        
-    -   qwen-max
-        
-    -   qwen-plus、qwen-plus-2025-04-28、qwen-plus-2025-07-14、qwen-plus-2025-07-28、qwen-plus-2025-09-11、qwen-plus-2025-12-01、qwen-plus-latest
-        
-    -   qwen-flash、qwen-flash-2025-07-28
-        
-    -   qwen-turbo
-        
-    -   qwen3-235b-a22b、qwen3-235b-a22b-instruct-2507、qwen3-235b-a22b-thinking-2507、qwen3-30b-a3b、qwen3-30b-a3b-instruct-2507、qwen3-30b-a3b-thinking-2507、qwen3-next-80b-a3b-instruct、qwen3-next-80b-a3b-thinking
-        
-    -   qwen3-coder-480b-a35b-instruct、qwen3-coder-flash、qwen3-coder-flash-2025-07-28、qwen3-coder-plus、qwen3-coder-plus-2025-07-22、qwen3-coder-plus-2025-09-23
-        
-    
 
 ## **监控模型运行**
 
@@ -118,7 +80,7 @@
 
 ### **查看某次调用的 Token 消耗**
 
-> 该功能目前仅适用于**华北2（北京）**地域的[部分模型](#7f2491defbdpt)。
+> 该功能目前仅适用于**华北2（北京）**地域的部分模型。
 
 1.  使用主账号（[或拥有足够权限的子账号](#f9d06146c0xe0)）登录，在目标业务空间的[模型监控（北京）](https://bailian.console.aliyun.com/?tab=model#/model-telemetry)页面，点击右上角的**模型监控配置**，按照指引依次开通审计日志和推理日志。
     
@@ -138,7 +100,7 @@
 
 **重要**
 
-该功能目前仅适用于**华北2（北京）**地域的[部分模型](#7f2491defbdpt)。
+该功能目前仅适用于**华北2（北京）**地域的部分模型。
 
 模型监控支持查看模型的每一次对话，包括输入、输出及耗时，是故障排查和内容审计的关键工具。
 
@@ -155,6 +117,39 @@
 1.  在模型监控列表中找到目标模型，点击其右侧**操作**列的**日志**。
     
 2.  **日志**页签展示该模型的[实时推理](#f131611173sdx)调用记录，**请求和响应**字段分别对应本次调用的输入与输出。
+    
+
+**支持请求和响应的模型**
+
+-   千问Max
+    
+    -   qwen3-max、qwen3-max-preview、qwen3-max-2025-09-23及之后的快照版本
+        
+    -   qwen-max
+        
+-   千问Plus
+    
+    -   qwen3.7-plus、qwen3.7-plus-2026-05-26及之后的快照版本
+        
+    -   qwen3.6-plus、qwen3.6-plus-2026-04-02及之后的快照版本
+        
+    -   qwen3.5-plus、qwen3.5-plus-2026-02-15及之后的快照版本
+        
+    -   qwen-plus、qwen-plus-latest、qwen-plus-2025-12-01及之后的快照版本
+        
+-   千问Flash
+    
+    -   qwen3.5-flash、qwen3.5-flash-2026-02-23
+        
+    -   qwen-flash、qwen-flash-2025-07-28
+        
+-   千问Turbo：qwen-turbo
+    
+-   千问Coder：qwen3-coder-flash、qwen3-coder-flash-2025-07-28、qwen3-coder-plus、qwen3-coder-plus-2025-07-22、qwen3-coder-plus-2025-09-23
+    
+-   开源模型：qwen3-235b-a22b、qwen3-235b-a22b-instruct-2507、qwen3-235b-a22b-thinking-2507、qwen3-30b-a3b、qwen3-30b-a3b-instruct-2507、qwen3-30b-a3b-thinking-2507、qwen3-next-80b-a3b-instruct、qwen3-next-80b-a3b-thinking、qwen3-coder-480b-a35b-instruct
+    
+-   三方模型：deepseek-v3.1、deepseek-v3.2、deepseek-v3.2-exp
     
 
 ## **建立主动告警**

@@ -37,7 +37,7 @@ Qoder 是面向软件开发的 Agentic 编码平台，支持桌面 IDE、CLI 和
     
     填写对应方案的专属 API Key：
     
-    -   Token Plan 团队版：[获取 API Key](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)
+    -   Token Plan 团队版：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)
         
     -   Coding Plan：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)
         
@@ -145,7 +145,7 @@ Qoder 是面向软件开发的 Agentic 编码平台，支持桌面 IDE、CLI 和
     
     填写对应方案的专属 API Key：
     
-    -   Token Plan 团队版：[获取 API Key](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)
+    -   Token Plan 团队版：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)
         
     -   Coding Plan：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)
         

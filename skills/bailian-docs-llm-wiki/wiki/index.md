@@ -22,9 +22,8 @@
 - [model data overview](guides/model-data-overview.md) — 2 篇源文档
 - [model deployment 1](guides/model-deployment-1.md) — 4 篇源文档
 - [model evaluation introduction](guides/model-evaluation-introduction.md) — 1 篇源文档
-- [model experience](guides/model-experience.md) — 3 篇源文档
+- [model experience](guides/model-experience.md) — 11 篇源文档
 - [model high speed inference](guides/model-high-speed-inference.md) — 1 篇源文档
-- [model inference](guides/model-inference.md) — 8 篇源文档
 - [model monitoring](guides/model-monitoring.md) — 2 篇源文档
 - [plug in](guides/plug-in.md) — 3 篇源文档
 - [prompt](guides/prompt.md) — 5 篇源文档
@@ -59,21 +58,23 @@
 
 ## 横切概念
 
-- [DashScope SDK](concepts/dashscope-sdk.md) — 关联 5 个主题
-- [OpenAI 兼容接口](concepts/openai-compatible.md) — 关联 5 个主题
-- [Token 与计费](concepts/token-billing.md) — 关联 5 个主题
+- [API Key](concepts/api-key.md) — 关联 7 个主题
+- [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 6 个主题
+- [Token](concepts/token.md) — 关联 6 个主题
 - [业务空间](concepts/workspace.md) — 关联 5 个主题
-- [异步任务调用](concepts/async-task.md) — 关联 4 个主题
-- [检索增强生成](concepts/rag.md) — 关联 5 个主题
-- [模型上下文协议](concepts/mcp.md) — 关联 4 个主题
-- [流式输出](concepts/streaming-output.md) — 关联 4 个主题
+- [函数调用](concepts/function-calling.md) — 关联 6 个主题
+- [异步调用](concepts/async-invocation.md) — 关联 5 个主题
+- [智能体应用](concepts/agent-application.md) — 关联 7 个主题
+- [检索增强生成](concepts/rag.md) — 关联 7 个主题
+- [流式输出](concepts/streaming-output.md) — 关联 5 个主题
+- [知识库](concepts/knowledge-base.md) — 关联 6 个主题
 
 ## 对比分析
 
-- [多模态生成 API 对比：图像、视频与 3D](comparisons/generation-api-comparison.md) — 对比 3 个主题
-- [应用监控与模型监控对比](comparisons/monitoring-comparison.md) — 对比 2 个主题
-- [应用评估与模型评估对比](comparisons/evaluation-comparison.md) — 对比 2 个主题
-- [模型优化方式对比：微调、压缩与部署](comparisons/model-optimization-comparison.md) — 对比 3 个主题
-- [通用支持与应用支持对比](comparisons/support-comparison.md) — 对比 2 个主题
-- [通用用例与应用用例对比](comparisons/use-cases-comparison.md) — 对比 2 个主题
+- [图像、视频与 3D 生成对比](comparisons/multimodal-generation-comparison.md) — 对比 3 个主题
+- [应用监控与应用评测对比](comparisons/application-observation-vs-evaluation.md) — 对比 2 个主题
+- [微调、压缩与部署方案对比](comparisons/model-customization-options.md) — 对比 3 个主题
+- [框架、工具包与 MCP 对比](comparisons/extension-framework-comparison.md) — 对比 3 个主题
+- [模型直调与应用调用对比](comparisons/model-call-vs-application-call.md) — 对比 3 个主题
+- [长期记忆、记忆库与知识库对比](comparisons/memory-and-knowledge-solutions.md) — 对比 3 个主题
 

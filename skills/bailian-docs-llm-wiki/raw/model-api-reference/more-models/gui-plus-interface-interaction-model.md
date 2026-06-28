@@ -6,9 +6,20 @@
 
 ## OpenAI 兼容
 
-SDK 调用配置的`base_url`为：`https://dashscope.aliyuncs.com/compatible-mode/v1`
+SDK 调用配置的`base_url`为：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
-HTTP 调用配置的`endpoint`：`POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions`
+HTTP 调用配置的`endpoint`：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+
+**重要**
+
+百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+
+-   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 > 您需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。若通过OpenAI SDK进行调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
 
@@ -65,7 +76,7 @@ messages = [
 client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
@@ -110,7 +121,7 @@ Rules:
 
 const client = new OpenAI({
   apiKey: process.env.DASHSCOPE_API_KEY,
-  baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 
 const messages = [
@@ -144,7 +155,7 @@ console.log(completion.choices[0].message.content);
 ## curl
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -260,7 +271,7 @@ messages = [
 client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
@@ -306,7 +317,7 @@ Rules:
 
 const client = new OpenAI({
   apiKey: process.env.DASHSCOPE_API_KEY,
-  baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 
 const messages = [
@@ -331,7 +342,7 @@ const messages = [
 const openai = new OpenAI({
   // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: "sk-xxx"
   apiKey: process.env.DASHSCOPE_API_KEY,
-  baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+  baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 async function main() {
@@ -356,7 +367,7 @@ main()
 ## curl
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -520,7 +531,7 @@ Assistant Message `_object_` （可选）
 
 用于限制模型输出的最大 Token 数。若生成内容超过此值，响应将被截断。
 
-默认值与最大值均为模型的最大输出长度，请参见[适用范围](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#f4299b0a1ace4)。
+默认值与最大值均为模型的最大输出长度，请参见[模型选型](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#f4299b0a1ace4)。
 
 **vl\_high\_resolution\_images** `_boolean_` （可选）默认值为`false`
 
@@ -953,7 +964,7 @@ ChatCompletionChunk(id='chatcmpl-bdb03054-42a2-459b-8a7e-5b94b39626f2', choices=
 
 ## DashScope
 
--   HTTP 请求地址：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+-   HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
     
 -   SDK 调用：无需配置 `base_url`
     
@@ -969,6 +980,8 @@ ChatCompletionChunk(id='chatcmpl-bdb03054-42a2-459b-8a7e-5b94b39626f2', choices=
 ```
 import os
 import dashscope
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 system_prompt = """# Tools
 
@@ -1032,8 +1045,11 @@ import com.alibaba.dashscope.common.Role;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
 
 public class Main {
+        // 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     public static void simpleMultiModalConversationCall()
             throws ApiException, NoApiKeyException, UploadFileException {
         String systemPrompt = "# Tools\n\n" +
@@ -1087,7 +1103,7 @@ public class Main {
 ## curl
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -1189,9 +1205,12 @@ import com.alibaba.dashscope.common.Role;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
 import io.reactivex.Flowable;
 
 public class Main {
+        // 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
 
     public static void streamCall()
             throws ApiException, NoApiKeyException, UploadFileException {
@@ -1257,7 +1276,7 @@ public class Main {
 ## curl
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -H "X-DashScope-SSE: enable" \
@@ -1704,4 +1723,4 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 
 ## **错误码**
 
-如果模型调用失败并返回报错信息，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。

@@ -16,21 +16,16 @@
         "model-experience"
       ],
       "provider": "qwen",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "paraformer-v2",
-      "prices": [
-        {
-          "priceUnit": "每秒",
-          "price": "0.00008",
-          "type": "content_duration",
-          "priceName": "音频时长"
-        }
-      ],
       "capabilities": [
         "ASR"
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2024-09-05T16:00:06.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Paraformer语音识别-v2",
       "docUrl": "https://help.aliyun.com/document_detail/2712535.html",
       "predictConfig": [

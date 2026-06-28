@@ -15,15 +15,10 @@
       "collectionTag": "qwen3",
       "features": [],
       "provider": "qwen",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "qwen3-asr-flash-realtime",
-      "prices": [
-        {
-          "priceUnit": "每秒",
-          "price": "0.00033",
-          "type": "content_duration",
-          "priceName": "音频时长"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 1,
@@ -41,7 +36,7 @@
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2025-10-27T10:00:46.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Qwen3-ASR-Flash-Realtime",
       "docUrl": "https://help.aliyun.com/document_detail/2989727.html",
       "predictConfig": [

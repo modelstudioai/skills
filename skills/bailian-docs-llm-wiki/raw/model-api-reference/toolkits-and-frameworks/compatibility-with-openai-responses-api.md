@@ -29,8 +29,10 @@ OpenAI 兼容接口 Responses API 的旧版路径 `/api/v2/apps/protocols/compat
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
+-   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
     
 
@@ -38,9 +40,11 @@ OpenAI 兼容接口 Responses API 的旧版路径 `/api/v2/apps/protocols/compat
 
 ## **华北2（北京）**
 
-SDK 调用配置的`base_url`：`https://dashscope.aliyuncs.com/compatible-mode/v1`
+SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
-HTTP 请求地址：`POST https://dashscope.aliyuncs.com/compatible-mode/v1/responses`
+HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses`
+
+调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## **新加坡**
 
@@ -87,7 +91,7 @@ from openai import OpenAI
 client = OpenAI(
     # 若没有配置环境变量，请用百炼 API Key 将下行替换为：api_key="sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 response = client.responses.create(
@@ -108,7 +112,7 @@ import OpenAI from "openai";
 const openai = new OpenAI({
     // 若没有配置环境变量，请用百炼 API Key 将下行替换为：apiKey: "sk-xxx"
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 async function main() {
@@ -127,7 +131,7 @@ main();
 ## curl
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/responses \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -214,7 +218,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 # 第一轮对话
@@ -240,7 +244,7 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 async function main() {
@@ -267,7 +271,7 @@ main();
 
 ```
 # 第一轮对话
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/responses \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -276,7 +280,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/responses \
 }'
 
 # 第二轮对话 - 使用上一轮返回的 id 作为 previous_response_id
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/responses \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -351,7 +355,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 response = client.responses.create(
@@ -381,7 +385,7 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 async function main() {
@@ -413,7 +417,7 @@ main();
 ## curl
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/responses \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -497,7 +501,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 stream = client.responses.create(
@@ -524,7 +528,7 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 async function main() {
@@ -552,7 +556,7 @@ main();
 ## curl
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/responses \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -595,7 +599,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 response = client.responses.create(
@@ -622,7 +626,7 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 });
 
 async function main() {
@@ -656,7 +660,7 @@ main();
 ## curl
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/responses \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -779,7 +783,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
     # 通过 default_headers 开启 Session 缓存
     default_headers={"x-dashscope-session-cache": "enable"}
 )
@@ -815,7 +819,7 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
     // 通过 defaultHeaders 开启 Session 缓存
     defaultHeaders: {"x-dashscope-session-cache": "enable"}
 });
@@ -852,7 +856,7 @@ main();
 ```
 # 第一轮对话
 # 请将 input 替换为超过 1024 Token 的长文本，以确保触发缓存创建
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/responses \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -H "x-dashscope-session-cache: enable" \
@@ -862,7 +866,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/responses \
 }'
 
 # 第二轮对话 - 使用上一轮返回的 id 作为 previous_response_id
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/responses \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -H "x-dashscope-session-cache: enable" \
@@ -947,7 +951,7 @@ console.log(response2.output_text);
 
 ```
 # Chat Completions API
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -959,7 +963,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 }'
 
 # Responses API - 使用更简洁的格式
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/responses \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -1213,7 +1217,7 @@ curl https://api.example.com/search \
 
 ```
 # Responses API - 直接使用内置工具
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/responses \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{

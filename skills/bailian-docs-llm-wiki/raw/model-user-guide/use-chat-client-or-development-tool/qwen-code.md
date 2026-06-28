@@ -44,7 +44,7 @@ Qwen Code 是一款终端 AI 编程工具，可以通过按量计费、Coding Pl
 
 ### Token Plan 团队版
 
-启动 Qwen Code 后输入 `/auth`，依次选择 **订阅计划** > **阿里云百炼 Token Plan**，输入 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview) 即可完成配置。可用模型请参考 Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)。
+启动 Qwen Code 后输入 `/auth`，依次选择 **订阅计划** > **阿里云百炼 Token Plan**，输入 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list) 即可完成配置。可用模型请参考 Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)。
 
 高级配置：通过 settings.json 配置文件
 

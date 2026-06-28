@@ -104,6 +104,7 @@ description: >-
 | `ME` | 多模态嵌入 |
 | `TR` | 翻译 |
 | `3D-generation` | 3D 生成 |
+| `Realtime-Voice-Replication` | Realtime-Voice-Replication |
 
 一个模型常常带多个 capability，`index.md` 中按 `capabilities[0]`（主能力）归类，
 查找时按中文标签即可定位章节。
@@ -147,20 +148,22 @@ description: >-
 | **按家族筛选**：按 primaryCapability / providers / itemCount / maxContextWindow 找家族 | `models/families.jsonl`（一行一家族，含 items[] 摘要） |
 | 模型家族总览 / 按能力分桶浏览         | `models/index.md`                                        |
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
-| OpenAI 兼容接口 | `wiki/concepts/openai-compatible.md` |
-| DashScope SDK | `wiki/concepts/dashscope-sdk.md` |
 | 检索增强生成 | `wiki/concepts/rag.md` |
-| 业务空间 | `wiki/concepts/workspace.md` |
-| 异步任务调用 | `wiki/concepts/async-task.md` |
+| 函数调用 | `wiki/concepts/function-calling.md` |
+| API Key | `wiki/concepts/api-key.md` |
 | 流式输出 | `wiki/concepts/streaming-output.md` |
-| Token 与计费 | `wiki/concepts/token-billing.md` |
-| 模型上下文协议 | `wiki/concepts/mcp.md` |
-| 应用监控与模型监控对比 | `wiki/comparisons/monitoring-comparison.md` |
-| 应用评估与模型评估对比 | `wiki/comparisons/evaluation-comparison.md` |
-| 模型优化方式对比：微调、压缩与部署 | `wiki/comparisons/model-optimization-comparison.md` |
-| 多模态生成 API 对比：图像、视频与 3D | `wiki/comparisons/generation-api-comparison.md` |
-| 通用支持与应用支持对比 | `wiki/comparisons/support-comparison.md` |
-| 通用用例与应用用例对比 | `wiki/comparisons/use-cases-comparison.md` |
+| OpenAI 兼容接口 | `wiki/concepts/openai-compatible-interface.md` |
+| Token | `wiki/concepts/token.md` |
+| 异步调用 | `wiki/concepts/async-invocation.md` |
+| 智能体应用 | `wiki/concepts/agent-application.md` |
+| 业务空间 | `wiki/concepts/workspace.md` |
+| 知识库 | `wiki/concepts/knowledge-base.md` |
+| 模型直调与应用调用对比 | `wiki/comparisons/model-call-vs-application-call.md` |
+| 图像、视频与 3D 生成对比 | `wiki/comparisons/multimodal-generation-comparison.md` |
+| 微调、压缩与部署方案对比 | `wiki/comparisons/model-customization-options.md` |
+| 应用监控与应用评测对比 | `wiki/comparisons/application-observation-vs-evaluation.md` |
+| 长期记忆、记忆库与知识库对比 | `wiki/comparisons/memory-and-knowledge-solutions.md` |
+| 框架、工具包与 MCP 对比 | `wiki/comparisons/extension-framework-comparison.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 

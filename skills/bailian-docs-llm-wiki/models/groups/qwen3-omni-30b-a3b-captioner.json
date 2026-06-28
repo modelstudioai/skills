@@ -15,21 +15,10 @@
       "collectionTag": "qwen3",
       "features": [],
       "provider": "qwen",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "qwen3-omni-30b-a3b-captioner",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "15.8",
-          "type": "audio_input_token",
-          "priceName": "输入：音频"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "12.7",
-          "type": "multiin_text_output_token",
-          "priceName": "输出：文本（输入包含图片/音频/视频时）"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
@@ -56,7 +45,7 @@
       "latestOnlineAt": "2025-09-16T16:38:17.000+00:00",
       "contextWindow": 65536,
       "maxInputTokens": 32768,
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Qwen3-Omni-30b-a3b-Captioner",
       "docUrl": "https://help.aliyun.com/document_detail/2980468.html",
       "predictConfig": [

@@ -14,21 +14,16 @@
       "description": "基于人物形象训练已经得到的形象，可以继续通过人物生成写真模型完成该形象的写真生成，支持多种预设风格，包括证件照、商务写真等。",
       "features": [],
       "provider": "qwen",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "facechain-generation",
-      "prices": [
-        {
-          "priceUnit": "每张",
-          "price": "0.18",
-          "type": "image_number",
-          "priceName": "图片生成"
-        }
-      ],
       "capabilities": [
         "IG"
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2024-04-09T08:12:23.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "FaceChain人物写真生成",
       "docUrl": "https://help.aliyun.com/document_detail/2712501.html",
       "predictConfig": [

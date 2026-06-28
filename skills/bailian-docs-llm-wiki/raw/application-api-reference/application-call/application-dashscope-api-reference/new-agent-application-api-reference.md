@@ -6,7 +6,7 @@
 
 **重要**
 
-本文档仅适用于中国大陆版（北京地域）。
+本文档仅适用于华北2（北京）地域。
 
 ## **前置准备**
 
@@ -2740,4 +2740,4 @@ message=Invalid API-key provided.
 
 ## 错误码
 
-如果调用失败并返回报错信息，请参阅[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果调用失败并返回报错信息，请参阅[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。

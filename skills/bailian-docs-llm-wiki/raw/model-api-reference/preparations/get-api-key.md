@@ -12,15 +12,17 @@
 
 需使用[主账号](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)，或具备`管理员`或`API-Key`[页面权限](https://help.aliyun.com/zh/model-studio/member-management#febd776ce5lbx)的[子账号](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)操作。
 
-## 华北2（北京）地域
+## 华北2（北京）、新加坡等地域
 
-1.  前往[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market)首页，在页面右上角选择**华北2（北京）**地域，进入[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)页面，单击**创建API Key**。
+1.  前往[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market)首页，在页面右上角选择**华北2（北京）**、 **新加坡**、**日本（东京）**、**德国（法兰克福）**地域，进入[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)页面，单击**创建API Key**。
     
 2.  在弹窗中配置以下信息，并单击**确定**：
     
     -   **归属业务空间**：建议选择默认业务空间。
         
-    -   **权限**：建议选择**全部**，若有更精细的权限控制需求，可以选择**自定义**来控制使用 API Key 的 IP 白名单。
+    -   **描述**（可选，最多200字符）：输入描述信息，方便后续识别该 API Key 的用途。
+        
+    -   **权限**：建议选择**全部**，若有更精细的权限控制需求，可以选择**自定义**来控制可访问 IP 和 可访问模型。
         
     
     **如何选择 API Key 的权限配置？**
@@ -29,54 +31,50 @@
     
     -   **全部**：授予该 API Key 调用所有模型与应用的权限。
         
-    -   **自定义**：可配置**IP 访问白名单**。该配置不能为空。
+    -   **自定义**：可配置访问 **IP 白名单**和可访问**模型范围**。
         
-        > 默认设置为：IPv4 （`0.0.0.0/0`）和 IPv6 （`::/0`）全部放通。
+        > IP 白名单默认设置：IPv4 （`0.0.0.0/0`）和 IPv6 （仅北京地域支持）全部放通。
         
-        仅允许名单内的 IP 使用该 API Key 发起调用。支持设置最多 **20** 个 IPv4、IPv6 的地址或网段。
+        > IP 白名单支持设置最多 **20** 个 IPv4、IPv6 的地址或网段。
         
     
-3.  创建成功后，弹窗会显示完整的API Key。请立即复制或下载保存，注意妥善保管，任何获取到该密钥的人都能以您的身份发起服务请求并产生费用。关闭弹窗后将**无法再次查看或复制**明文API Key。如果丢失，请重置或创建新的密钥。
+    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9729022871/p1083262.png)
+    
+3.  创建成功后，弹窗会显示完整的 API Key 和 API Host（服务端点地址）。请立即复制或下载保存，注意妥善保管，任何获取到该密钥的人都能以您的身份发起服务请求并产生费用。关闭弹窗后将**无法再次查看或复制**明文 API Key。如果丢失，请重置或创建新的密钥。
     
     > 主账号可以查看全部API Key，子账号仅能查看自己创建的API Key。
-    
-    在**API Key**管理页面，单击右上角**\+ 创建API Key**创建密钥。对已有 API Key，可在操作列执行**禁用**、**编辑**或**删除**操作。
-    
-
-## 新加坡、日本（东京）、德国（法兰克福）地域
-
-1.  前往[阿里云百炼控制台](https://bailian.console.aliyun.com/ap-southeast-1)首页，在页面右上角切换到目标地域（如**新加坡**、**日本（东京）**、**德国（法兰克福）**），进入**工作台**页签，在左侧导航栏中选择**API Key**进入API Key管理页面，单击**创建API Key**。
-    
-2.  在弹窗中配置以下信息，并单击**确定**：
-    
-    -   **归属业务空间**：建议选择默认业务空间。
-        
-    -   **描述**：输入描述信息，方便后续识别该API Key的用途。
-        
-3.  创建成功后，弹窗会显示完整的API Key。请立即复制或下载保存，注意妥善保管，任何获取到该密钥的人都能以您的身份发起服务请求并产生费用。关闭弹窗后将**无法再次查看或复制**明文API Key。如果丢失，请重置或创建新的密钥。
-    
-    > 主账号可以查看全部API Key，子账号仅能查看自己创建的API Key。
-    
-    在**API Key**管理页面，单击右上角**\+ 创建API Key**创建密钥。对已有 API Key，可在操作列执行**禁用**、**编辑**或**删除**操作。
     
 
 ## 美国（弗吉尼亚）地域
 
-1.  前往[阿里云百炼控制台](https://bailian.console.aliyun.com/us-east-1)首页，在页面右上角切换到**美国（弗吉尼亚）**地域，进入**工作台**页签，在左侧导航栏中选择**API Key**进入API Key管理页面，单击**创建API Key**。
+1.  前往[阿里云百炼控制台](https://modelstudio.console.aliyun.com/us-east-1)首页，在页面右上角切换到**美国（弗吉尼亚）**地域，进入**API Key**管理页面，单击**创建API Key**。
     
 2.  在弹窗中配置以下信息，并单击**确定**：
     
     -   **归属业务空间**：建议选择默认业务空间。
         
-    -   **描述**：输入描述信息，方便后续识别该API Key的用途。
+    -   **归属账号**：选择该 API Key 归属的账号。
         
-3.  创建成功后，弹窗会显示完整的API Key。请立即复制并妥善保存，关闭弹窗后将无法再次查看完整的API Key。
+    -   **描述**（可选，最多200字符）：输入描述信息，方便后续识别该 API Key 的用途。
+        
+3.  创建成功后，弹窗会显示完整的 API Key。请立即复制并妥善保存，关闭弹窗后将无法再次查看完整的 API Key。
     
 4.  在API Key列表中，点击API Key旁的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8412544571/p994217.png)图标可复制脱敏后的API Key。
     
     > 主账号可以查看全部API Key，子账号仅能查看自己创建的API Key。
     
-    单击右上角**\+ 创建 API Key**按钮可新建 API Key。
+
+**API Key 管理操作**
+
+在 API Key 列表中，您可以对已有 API Key 执行以下操作：
+
+-   **编辑**：修改 API Key 的描述和权限配置。
+    
+-   **删除**：永久删除该 API Key，删除后不可恢复。
+    
+-   **禁用**（美国（弗吉尼亚）地域除外）：暂停该 API Key 的使用，不影响密钥保存，可随时重新启用。
+    
+-   **重置**（美国（弗吉尼亚）地域除外）：生成新的密钥值，旧密钥立即失效。
     
 
 **何时选择其他归属账号或业务空间？**
@@ -92,27 +90,8 @@
 
 -   **方式一：在**[**第三方工具**](https://help.aliyun.com/zh/model-studio/use-chat-client-or-development-tool/)**中调用模型**
     
-    如果在Chatbox等工具或平台中调用模型，您可能需要输入三个信息：
+    常用工具配置：[Chatbox](https://help.aliyun.com/zh/model-studio/chatbox)、[Cline](https://help.aliyun.com/zh/model-studio/cline)、[Claude Code](https://help.aliyun.com/zh/model-studio/claude-code)、[Dify](https://help.aliyun.com/zh/model-studio/dify)、[OpenClaw](https://help.aliyun.com/zh/model-studio/openclaw)、[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)、[Qwen Code](https://help.aliyun.com/zh/model-studio/qwen-code)。
     
-    -   本文获取的API Key
-        
-    -   API Key所属地域的Base URL：
-        
-        -   **华北2（北京）**：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`，调用时请将`WorkspaceId`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)
-            
-        -   **新加坡**：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
-            
-        -   **德国（法兰克福）**：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1`
-            
-        -   **日本（东京）**：`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1`
-            
-        -   **美国（弗吉尼亚）**：`https://dashscope-us.aliyuncs.com/compatible-mode/v1`
-            
-    -   模型名称，如qwen-plus
-        
-
-常用工具配置：[Chatbox](https://help.aliyun.com/zh/model-studio/chatbox)、[Cline](https://help.aliyun.com/zh/model-studio/cline)、[Claude Code](https://help.aliyun.com/zh/model-studio/claude-code)、[Dify](https://help.aliyun.com/zh/model-studio/dify)、[OpenClaw](https://help.aliyun.com/zh/model-studio/openclaw)、[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)、[Qwen Code](https://help.aliyun.com/zh/model-studio/qwen-code)。
-
 -   **方式二：通过代码调用模型**
     
     通过代码[首次调用千问API](https://help.aliyun.com/zh/model-studio/first-api-call-to-qwen)，建议[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，以避免硬编码在代码中导致泄露风险。
@@ -122,7 +101,9 @@
 
 ## **API Key 安全升级说明**
 
-百炼已对按量付费 API Key 生成和存储机制进行安全升级（美国（弗吉尼亚）地域除外），下表列出了升级前后 API Key 的主要差异。
+百炼已对按量付费 API Key 生成和存储机制进行安全升级（美国（弗吉尼亚）地域除外）。升级前已创建的`sk-`开头的 API Key 可继续正常使用，不受影响。升级后新创建的 API Key 统一以`sk-ws`开头。
+
+下表列出了升级前后 API Key 的主要差异。
 
 **对比项**
 
@@ -167,11 +148,13 @@ API Key的调用权限完全由其**归属业务空间**决定。**同一空间�
 
 **说明**
 
-目前仅[华北2（北京）地域](https://bailian.console.aliyun.com/cn-beijing?tab=model#/api-key)支持为 API Key 配置更精细的[权限控制](https://help.aliyun.com/zh/model-studio/permission-management-overview#c036858be2tpo)。
-
 您可以在**创建API Key** 或点击已有 API Key 操作列的**编辑**时，将**权限**切换为**自定义**，即可配置：
 
+> 仅 美国（弗吉尼亚）地域 不支持以下配置
+
 -   **IP 访问白名单**：仅允许名单内的 IP 使用该 API Key 发起调用（支持 IPv4、IPv6 与网段）。
+    
+-   **访问权限范围**：为该API Key 勾选可访问的模型或应用；未勾选的资源无法通过此API Key 调用。
     
 
 ## **API Key时效性说明**

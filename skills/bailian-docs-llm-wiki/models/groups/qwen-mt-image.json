@@ -14,15 +14,10 @@
       "description": "专注做图片翻译的模型服务，能将中、英、日等11个语言的图片翻译到指定的语言，精准还原图片排版和内容信息，支持术语定义、敏感词过滤、商品主体检测等自定义功能，提供灵活、准确、高效的图像本地化服务。",
       "features": [],
       "provider": "qwen-domain-model",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "qwen-mt-image",
-      "prices": [
-        {
-          "priceUnit": "每张",
-          "price": "0.003",
-          "type": "image_number",
-          "priceName": "图片生成"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 1,
@@ -44,7 +39,7 @@
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2025-08-22T09:53:46.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Qwen-MT-Image",
       "docUrl": "https://help.aliyun.com/document_detail/2977163.html",
       "predictConfig": [
@@ -77,7 +72,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"qwen-mt-image\",\n    \"input\": {\n        \"image_url\": \"https://img.alicdn.com/imgextra/i2/O1CN01XsvEqj1fNlMqLNBHR_!!6000000003995-0-tps-5933-2930.jpg\",\n        \"source_lang\": \"en\",\n        \"target_lang\": \"ja\"\n    }\n}'"
+            "curl": "curl --location 'https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"qwen-mt-image\",\n    \"input\": {\n        \"image_url\": \"https://img.alicdn.com/imgextra/i2/O1CN01XsvEqj1fNlMqLNBHR_!!6000000003995-0-tps-5933-2930.jpg\",\n        \"source_lang\": \"en\",\n        \"target_lang\": \"ja\"\n    }\n}'"
           }
         }
       }

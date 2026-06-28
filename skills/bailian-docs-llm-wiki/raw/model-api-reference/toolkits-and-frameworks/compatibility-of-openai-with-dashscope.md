@@ -11,7 +11,7 @@ BASE\_URL表示模型服务的网络访问点或地址。通过该地址，您�
 -   当您通过OpenAI SDK或其他OpenAI兼容的SDK调用时，需要配置的BASE\_URL如下：
     
     ```
-    北京：https://dashscope.aliyuncs.com/compatible-mode/v1
+    北京：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
     弗吉尼亚：https://dashscope-us.aliyuncs.com/compatible-mode/v1
     新加坡：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
     日本（东京）：https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1
@@ -20,7 +20,7 @@ BASE\_URL表示模型服务的网络访问点或地址。通过该地址，您�
 -   当您通过HTTP请求调用时，需要配置的完整访问endpoint如下：
     
     ```
-    北京：POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+    北京：POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions
     弗吉尼亚：POST https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions
     新加坡：POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
     日本（东京）：POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
@@ -29,8 +29,10 @@ BASE\_URL表示模型服务的网络访问点或地址。通过该地址，您�
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
+-   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
     
 
@@ -82,7 +84,7 @@ def get_response():
         # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
         api_key=os.getenv("DASHSCOPE_API_KEY"),
         # 以下是北京地域base_url
-        base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+        base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
     )
     completion = client.chat.completions.create(
         model="qwen-plus",  # 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
@@ -137,7 +139,7 @@ def get_response():
         # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
         api_key=os.getenv("DASHSCOPE_API_KEY"),
         # 以下是北京地域base_url
-        base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+        base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
     )
     completion = client.chat.completions.create(
         model="qwen-plus",  # 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
@@ -182,7 +184,7 @@ client = OpenAI(
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
     # 以下是北京地域base_url
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",  # 填写DashScope SDK的base_url
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",  # 填写DashScope SDK的base_url
 )
 
 # 定义工具列表，模型在选择使用哪个工具时会参考工具的name和description
@@ -654,7 +656,7 @@ def get_response():
         # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
         api_key=os.getenv("DASHSCOPE_API_KEY"),
         # 以下是北京地域base_url
-        base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+        base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
         model="qwen-plus"    # 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         )
     messages = [
@@ -708,7 +710,7 @@ def get_response():
         # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
         api_key=os.getenv("DASHSCOPE_API_KEY"),
         # 以下是北京地域base_url
-        base_url="https://dashscope.aliyuncs.com/compatible-mode/v1", 
+        base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1", 
         model="qwen-plus",  # 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
         stream_usage=True
         )
@@ -755,7 +757,7 @@ if __name__ == "__main__":
 ### **提交接口调用**
 
 ```
-北京：POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+北京：POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 美国（弗吉尼亚）：POST https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions
 新加坡：POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 ```
@@ -777,7 +779,7 @@ curl
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下是北京地域base_url
 # === 执行时请删除该注释 ===
-curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
@@ -832,7 +834,7 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completi
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 以下是北京地域base_url
 # === 执行时请删除该注释 ===
-curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{

@@ -157,6 +157,8 @@ Python
 
 ```
 from dashscope import Generation
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 messages = [{'role': 'system',
                 'content': 'You are a helpful assistant.'},
@@ -191,8 +193,11 @@ import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.utils.JsonUtils;
+import com.alibaba.dashscope.utils.Constants;
 
 public class Main {
+        // 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     public static GenerationParam createGenerationParam(List<Message> messages) {
         return GenerationParam.builder()
                 .model("farui-plus")
@@ -205,6 +210,8 @@ public class Main {
         return gen.call(param);
     }
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         try {
             List<Message> messages = new ArrayList<>();
             messages.add(createMessage(Role.SYSTEM, "You are a helpful assistant."));
@@ -297,6 +304,8 @@ Python
 ```
 import os
 import dashscope
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 messages = [
     {'role':'system','content':'you are a helpful assistant'},
@@ -330,10 +339,13 @@ import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.utils.JsonUtils;
+import com.alibaba.dashscope.utils.Constants;
 import io.reactivex.Flowable;
 import java.lang.System;
 
 public class Main {
+        // 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
     private static void handleGenerationResult(GenerationResult message) {
         System.out.println(JsonUtils.toJson(message));
@@ -355,6 +367,8 @@ public class Main {
                 .build();
     }
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         try {
             Generation gen = new Generation();
             Message userMsg = Message.builder().role(Role.USER.getValue()).content("你是谁？").build();
@@ -524,7 +538,7 @@ text
 ### 提交接口调用
 
 ```
-POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation
+POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation
 ```
 
 ### 入参描述
@@ -777,7 +791,7 @@ string
 以下示例展示通过CURL命令来调用通义法睿大模型的脚本（SSE 关闭）。
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 --data '{
@@ -829,7 +843,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
 以下示例展示通过CURL命令来调用通义法睿模型的脚本（SSE 开启）。
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --header 'X-DashScope-SSE: enable' \

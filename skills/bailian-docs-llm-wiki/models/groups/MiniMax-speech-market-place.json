@@ -14,22 +14,11 @@
       "description": "MiniMax 语音大模型能够根据上下文，智能预测文本的情绪、语调等信息，并生成超自然、高保真、个性化的语音。在社交、播客、有声书、新闻资讯、教育、数字人等多种场景中展现出强大的实力。",
       "features": [],
       "provider": "mini-max",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "MiniMax/speech-2.8-turbo",
       "iconUrl": "",
-      "prices": [
-        {
-          "priceUnit": "每次",
-          "price": "9.9",
-          "type": "tts_vc_model",
-          "priceName": "声音复刻及声音设计"
-        },
-        {
-          "priceUnit": "每万字符",
-          "price": "2",
-          "type": "cosy_tts_number",
-          "priceName": "语音合成"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
@@ -79,22 +68,11 @@
       "description": "MiniMax 语音大模型能够根据上下文，智能预测文本的情绪、语调等信息，并生成超自然、高保真、个性化的语音。在社交、播客、有声书、新闻资讯、教育、数字人等多种场景中展现出强大的实力。",
       "features": [],
       "provider": "mini-max",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "MiniMax/speech-2.8-hd",
       "iconUrl": "",
-      "prices": [
-        {
-          "priceUnit": "每次",
-          "price": "9.9",
-          "type": "tts_vc_model",
-          "priceName": "声音复刻及声音设计"
-        },
-        {
-          "priceUnit": "每万字符",
-          "price": "3.5",
-          "type": "cosy_tts_number",
-          "priceName": "语音合成"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
@@ -144,22 +122,11 @@
       "description": "MiniMax 语音大模型能够根据上下文，智能预测文本的情绪、语调等信息，并生成超自然、高保真、个性化的语音。在社交、播客、有声书、新闻资讯、教育、数字人等多种场景中展现出强大的实力。",
       "features": [],
       "provider": "mini-max",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "MiniMax/speech-02-turbo",
       "iconUrl": "",
-      "prices": [
-        {
-          "priceUnit": "每次",
-          "price": "9.9",
-          "type": "tts_vc_model",
-          "priceName": "声音复刻及声音设计"
-        },
-        {
-          "priceUnit": "每万字符",
-          "price": "2",
-          "type": "cosy_tts_number",
-          "priceName": "语音合成"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
@@ -209,22 +176,11 @@
       "description": "MiniMax 语音大模型能够根据上下文，智能预测文本的情绪、语调等信息，并生成超自然、高保真、个性化的语音。在社交、播客、有声书、新闻资讯、教育、数字人等多种场景中展现出强大的实力。",
       "features": [],
       "provider": "mini-max",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "MiniMax/speech-02-hd",
       "iconUrl": "",
-      "prices": [
-        {
-          "priceUnit": "每次",
-          "price": "9.9",
-          "type": "tts_vc_model",
-          "priceName": "声音复刻及声音设计"
-        },
-        {
-          "priceUnit": "每万字符",
-          "price": "3.5",
-          "type": "cosy_tts_number",
-          "priceName": "语音合成"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,

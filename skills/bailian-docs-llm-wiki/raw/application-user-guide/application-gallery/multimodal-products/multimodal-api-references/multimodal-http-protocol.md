@@ -21,7 +21,7 @@
 
 **说明**
 
-对于客户端调用的场景，在客户端处理API Key有安全风险，建议从服务端用API Key获取临时鉴权Token，再把Token下发给客户端使用。具体方法请参考：[生成临时 API Key](https://help.aliyun.com/zh/model-studio/generate-temporary-api-key)。
+对于客户端调用的场景，在客户端处理API Key有安全风险，建议从服务端用API Key获取临时鉴权Token，再把Token下发给客户端使用。具体方法请参考：[生成临时API Key](https://help.aliyun.com/zh/model-studio/generate-temporary-api-key)。
 
 ## **服务地址**
 

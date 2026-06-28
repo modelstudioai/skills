@@ -14,6 +14,16 @@
 
 **功能说明**
 
+图像生成
+
+2026-06-25
+
+中国内地
+
+qwen-image-2.0-pro-2026-06-22
+
+Qwen-Image-2.0系列模型最新快照，融合图片生成与编辑能力。相较于4月22日快照，文字渲染能力进一步增强，支持最长1k token的指令输入；真实质感与写实场景细节刻画更加细腻；语义遵循能力更强。[千问-文生图](https://help.aliyun.com/zh/model-studio/qwen-image-api)、[千问-图像编辑](https://help.aliyun.com/zh/model-studio/qwen-image-edit-api)
+
 文生视频
 
 2026-06-22
@@ -182,7 +192,7 @@ ZHIPU/GLM-5.1、ZHIPU/GLM-5
 
 fun-music-v1
 
-百聆音乐生成大模型（Fun音乐大模型）支持输入开放性歌曲的创作要求或歌词，生成整首男/女声演唱的中文或英文歌曲。歌曲通俗易懂，情绪由浅入深，是人类灵感与大模型能力的完美结合。[音乐生成](https://help.aliyun.com/zh/model-studio/fun-music)
+百聆音乐生成大模型（Fun音乐大模型）支持输入开放性歌曲的创作要求或歌词，生成整首男/女声演唱的中文或英文歌曲。歌曲通俗易懂，情绪由浅入深，是人类灵感与大模型能力的完美结合。[音乐生成](https://help.aliyun.com/zh/model-studio/fun-music/)
 
 推理模型
 
@@ -312,7 +322,7 @@ kimi/kimi-k2.6 是 Kimi 最新最智能的模型，月之暗面直供，在通�
 
 deepseek-v4-pro、deepseek-v4-flash
 
-DeepSeek-V4系列模型，阿里直供。deepseek-v4-pro为旗舰模型，deepseek-v4-flash为轻量级高速模型。[DeepSeek -阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)
+DeepSeek-V4系列模型，阿里直供。deepseek-v4-pro为旗舰模型，deepseek-v4-flash为轻量级高速模型。[DeepSeek-阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)
 
 图像生成
 
@@ -1230,7 +1240,7 @@ deepseek-v3.2
 
 DeepSeek-V3.2是引入DeepSeek Sparse Attention（一种稀疏注意力机制）的正式版模型，也是DeepSeek推出的首个将思考融入工具使用的模型，同时支持思考模式与非思考模式的工具调用。
 
-[DeepSeek -阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)
+[DeepSeek-阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)
 
 多语言翻译
 
@@ -1450,7 +1460,7 @@ qwen3-vl-30b-a3b-thinking、qwen3-vl-30b-a3b-instruct
 
 deepseek-v3.2-exp
 
-混合推理架构模型，同时支持思考模式与非思考模式，引入稀疏注意力机制，旨在提升处理长文本时的训练与推理效率，价格低于 deepseek-v3.1。详情参见[DeepSeek -阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)。
+混合推理架构模型，同时支持思考模式与非思考模式，引入稀疏注意力机制，旨在提升处理长文本时的训练与推理效率，价格低于 deepseek-v3.1。详情参见[DeepSeek-阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)。
 
 图生视频
 
@@ -1732,7 +1742,7 @@ qwen-mt-image
 
 deepseek-v3.1
 
-混合推理架构模型，同时支持思考模式与非思考模式。详情参见[DeepSeek -阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)。
+混合推理架构模型，同时支持思考模式与非思考模式。详情参见[DeepSeek-阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)。
 
 深入研究
 
@@ -1966,7 +1976,7 @@ text-embedding-v4为text-embedding-v3的升级版模型，属于[Qwen3-Embedding
 
 deepseek-r1-0528
 
-deepseek-r1-0528为deepseek-r1的升级版模型，相较于上一版模型，新版模型在复杂推理任务中的表现有了显著提升。在数学、编程与通用逻辑等多个基准测评中取得了优异成绩。[DeepSeek -阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)
+deepseek-r1-0528为deepseek-r1的升级版模型，相较于上一版模型，新版模型在复杂推理任务中的表现有了显著提升。在数学、编程与通用逻辑等多个基准测评中取得了优异成绩。[DeepSeek-阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)
 
 视觉推理
 
@@ -2249,7 +2259,7 @@ DeepSeek系列模型是由深度求索（DeepSeek）公司推出的大语言模�
     
 -   DeepSeek-R1 在后训练阶段大规模使用了强化学习技术，在仅有极少标注数据的情况下，极大提升了模型推理能力，尤其在数学、代码、自然语言推理等任务上。
     
--   具体请参见[DeepSeek -阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)。
+-   具体请参见[DeepSeek-阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)。
     
 
 视觉理解
@@ -2818,6 +2828,28 @@ qwen1.5-110b-chat
 
 **功能说明**
 
+推理模型
+
+2026-06-26
+
+国际
+
+kimi-k2.7-code
+
+Kimi K2.7 Code 模型新加坡地域上线。以编码为中心的智能体模型，专为长程软件工程任务优化，仅支持思考模式。[](#)
+
+图像生成
+
+2026-06-25
+
+国际
+
+qwen-image-2.0-pro-2026-06-22
+
+Qwen-Image-2.0系列模型最新快照，融合图片生成与编辑能力。相较于4月22日快照，文字渲染能力进一步增强，支持最长1k token的指令输入；真实质感与写实场景细节刻画更加细腻；语义遵循能力更强。
+
+[千问-文生图](https://help.aliyun.com/zh/model-studio/qwen-image-api)、[千问-图像编辑](https://help.aliyun.com/zh/model-studio/qwen-image-edit-api)
+
 文生视频
 
 2026-06-22
@@ -3123,7 +3155,7 @@ deepseek-v3.2
 
 DeepSeek-V3.2是引入DeepSeek Sparse Attention（一种稀疏注意力机制）的正式版模型，也是DeepSeek推出的首个将思考融入工具使用的模型，同时支持思考模式与非思考模式的工具调用。
 
-[DeepSeek -阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)
+[DeepSeek-阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)
 
 图像生成与编辑
 
@@ -3690,6 +3722,36 @@ qwen3-asr-flash-realtime、qwen3-asr-flash-realtime-2025-10-27
 
 **功能说明**
 
+文生视频
+
+2026-06-26
+
+全球
+
+happyhorse-1.1-t2v
+
+HappyHorse 1.1系列文生视频模型，支持有声视频生成，可生成3~15秒、720P/1080P视频。[HappyHorse-文生视频](https://help.aliyun.com/zh/model-studio/happyhorse-text-to-video-api-reference)
+
+图生视频
+
+2026-06-26
+
+全球
+
+happyhorse-1.1-i2v
+
+HappyHorse 1.1系列图生视频模型，支持有声视频生成，可生成3~15秒、720P/1080P视频。[HappyHorse-图生视频-基于首帧](https://help.aliyun.com/zh/model-studio/happyhorse-image-to-video-api-reference)
+
+参考生视频
+
+2026-06-26
+
+全球
+
+happyhorse-1.1-r2v
+
+HappyHorse 1.1系列参考生视频模型，支持多参考图输入生成有声视频，可生成3~15秒、720P/1080P视频。[HappyHorse-参考生视频](https://help.aliyun.com/zh/model-studio/happyhorse-reference-to-video-api-reference)
+
 推理模型
 
 2026-06-10
@@ -4195,6 +4257,36 @@ qwen-flash、qwen-flash-2025-07-28
 
 **功能说明**
 
+文生视频
+
+2026-06-26
+
+全球
+
+happyhorse-1.1-t2v
+
+HappyHorse 1.1系列文生视频模型，支持有声视频生成，可生成3~15秒、720P/1080P视频。[HappyHorse-文生视频](https://help.aliyun.com/zh/model-studio/happyhorse-text-to-video-api-reference)
+
+图生视频
+
+2026-06-26
+
+全球
+
+happyhorse-1.1-i2v
+
+HappyHorse 1.1系列图生视频模型，支持有声视频生成，可生成3~15秒、720P/1080P视频。[HappyHorse-图生视频-基于首帧](https://help.aliyun.com/zh/model-studio/happyhorse-image-to-video-api-reference)
+
+参考生视频
+
+2026-06-26
+
+全球
+
+happyhorse-1.1-r2v
+
+HappyHorse 1.1系列参考生视频模型，支持多参考图输入生成有声视频，可生成3~15秒、720P/1080P视频。[HappyHorse-参考生视频](https://help.aliyun.com/zh/model-studio/happyhorse-reference-to-video-api-reference)
+
 推理模型
 
 2026-06-10
@@ -4688,7 +4780,7 @@ qwen3.7-plus、qwen3.7-plus-2026-05-26
 
 deepseek-v4-pro、deepseek-v4-flash
 
-DeepSeek-V4系列模型，阿里直供。deepseek-v4-pro为旗舰模型，deepseek-v4-flash为轻量级高速模型。[DeepSeek -阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)
+DeepSeek-V4系列模型，阿里直供。deepseek-v4-pro为旗舰模型，deepseek-v4-flash为轻量级高速模型。[DeepSeek-阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)
 
 推理模型
 
@@ -4738,7 +4830,7 @@ kimi-k2.5
 
 deepseek-v4-pro、deepseek-v4-flash
 
-DeepSeek-V4系列模型，阿里直供。deepseek-v4-pro为旗舰模型，deepseek-v4-flash为轻量级高速模型。[DeepSeek -阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)
+DeepSeek-V4系列模型，阿里直供。deepseek-v4-pro为旗舰模型，deepseek-v4-flash为轻量级高速模型。[DeepSeek-阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)
 
 推理模型
 

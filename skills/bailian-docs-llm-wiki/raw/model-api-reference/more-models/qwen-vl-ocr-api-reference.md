@@ -8,9 +8,9 @@
 
 ## 华北2（北京）地域
 
-SDK 调用配置的`base_url`为：`https://dashscope.aliyuncs.com/compatible-mode/v1`
+SDK 调用配置的`base_url`为：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
-HTTP 调用配置的`endpoint`：`POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions`
+HTTP 调用配置的`endpoint`：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
 ## 新加坡地域
 
@@ -26,7 +26,14 @@ HTTP 调用配置的`endpoint`：`POST https://dashscope-us.aliyuncs.com/compati
 
 **重要**
 
-百炼为新加坡地域推出了新版域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**新版专属域名能够为推理请求提供更加卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+
+-   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 > 您需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。若通过OpenAI SDK进行调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
 
@@ -53,7 +60,7 @@ try:
         api_key=os.getenv("DASHSCOPE_API_KEY"),
         # 以下为北京地域的 base_url，若使用弗吉尼亚地域模型，需要将base_url换成https://dashscope-us.aliyuncs.com/compatible-mode/v1
         # 若使用新加坡地域的模型，需将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
-        base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+        base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
     )
     completion = client.chat.completions.create(
         model="qwen3.5-ocr",
@@ -99,7 +106,7 @@ const client = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
    // 以下为北京地域的 base_url，若使用弗吉尼亚地域模型，需要将base_url换成https://dashscope-us.aliyuncs.com/compatible-mode/v1
    // 若使用新加坡地域的模型，需将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 
 async function main() {
@@ -148,7 +155,7 @@ main();
 # 如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 # === 执行时请删除该注释 ===
 
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -189,7 +196,7 @@ client = OpenAI(
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
     # 以下是北京地域base-url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 completion = client.chat.completions.create(
     model="qwen3.5-ocr",
@@ -235,7 +242,7 @@ const openai = new OpenAI({
   // 以下是北京地域base-url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
   apiKey: process.env.DASHSCOPE_API_KEY,
    // 以下是北京地域base-url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
-  baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+  baseURL: 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1',
 });
 
 async function main() {
@@ -286,7 +293,7 @@ main();
 # 如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 # === 执行时请删除该注释 ===
 
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -899,7 +906,7 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 
 ## 华北2（北京）地域
 
-HTTP 调用配置的`endpoint`：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+HTTP 调用配置的`endpoint`：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK 调用无需配置 `base_url`。
 
@@ -2014,7 +2021,7 @@ import dashscope
 
 # 以下为北京地域base_url，若使用弗吉尼亚地域模型，需要将base_url换成 https://dashscope-us.aliyuncs.com/api/v1
 # 若使用新加坡地域的模型，需将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1
-dashscope.base_http_api_url = "https://dashscope.aliyuncs.com/api/v1"
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 PROMPT_TICKET_EXTRACTION = """
 请提取车票图像中的发票号码、车次、起始站、终点站、发车日期和时间点、座位号、席别类型、票价、身份证号码、购票人姓名。
@@ -2084,7 +2091,7 @@ public class Main {
     
     // 以下为北京地域 base_url，若使用弗吉尼亚地域模型，需要将base_url换成 https://dashscope-us.aliyuncs.com/api/v1
     // 若使用新加坡地域的模型，需将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1
-    static {Constants.baseHttpApiUrl="https://dashscope.aliyuncs.com/api/v1";}
+    static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
     
     public static void simpleMultiModalConversationCall()
             throws ApiException, NoApiKeyException, UploadFileException {
@@ -2143,7 +2150,7 @@ public class Main {
 # 若使用新加坡地域的模型，需要将base_url换成：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
 # === 执行时请删除该注释 ===
 
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 -H 'X-DashScope-SSE: enable' \

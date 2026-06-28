@@ -18,27 +18,10 @@
         "cache"
       ],
       "provider": "xiaomi",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "xiaomi/mimo-v2.5-pro",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "7",
-          "type": "input_token",
-          "priceName": "输入"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "21",
-          "type": "output_token",
-          "priceName": "输出"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "1.4",
-          "type": "input_token_cache",
-          "priceName": "输入（缓存命中）"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
@@ -96,7 +79,7 @@
       "samples": {
         "openai": {
           "completionsAPI": {
-            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"xiaomi/mimo-v2.5-pro\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"xiaomi/mimo-v2.5-pro\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
             "docUrl": "https://help.aliyun.com/document_detail/3021647.html"
           }
         }

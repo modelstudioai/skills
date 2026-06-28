@@ -23,6 +23,8 @@ Qwen-Deep-Research模型仅支持华北2（北京）地域，如需使用模型�
 ```
 import os
 import dashscope
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 # 第一步：模型反问确认
 messages = [{'role': 'user', 'content': '研究一下人工智能在教育中的应用'}]
@@ -70,7 +72,7 @@ for response in responses:
 
 ```
 echo "第一步：模型反问确认"
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation' \
 --header 'X-DashScope-SSE: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -88,7 +90,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-genera
 
 echo -e "\n\n" 
 echo "第二步：深入研究"
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation' \
 --header 'X-DashScope-SSE: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \

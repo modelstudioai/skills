@@ -114,6 +114,10 @@ string
 
 否
 
+表格描述
+
+table description
+
 ConnectorId
 
 string

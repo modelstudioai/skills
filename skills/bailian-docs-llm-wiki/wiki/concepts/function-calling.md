@@ -1,66 +1,57 @@
 # 函数调用
 
-函数调用（Function Calling）是大模型在对话过程中根据用户意图自动识别并调用外部工具或 API 的能力，使模型能够突破纯文本生成的限制，获取实时数据、执行计算或操作外部系统。
+函数调用（Function Calling）是大模型根据用户输入与工具描述，自主判断是否调用外部工具、选择合适工具并生成结构化调用参数的能力，用于弥补模型在获取实时信息、精确计算、调用业务接口等方面的不足。
 
-## 工作原理
+## 在百炼平台的使用场景
 
-函数调用的核心流程为：开发者在请求中声明可用的函数（工具）定义，包括函数名称、描述和参数 schema；大模型根据用户输入判断是否需要调用某个函数；若需要，模型输出结构化的函数调用请求（包含函数名和参数）；应用侧执行实际调用并将结果返回给模型；模型结合函数返回结果生成最终回答。
+百炼平台上，函数调用以多种形态贯穿不同协议与产品：
 
-## 在百炼平台中的使用场景
-
-### 模型 API 直接调用
-
-在通过 API 调用文本生成模型时，可通过 `tools` 参数声明可用函数。百炼支持多种接口协议：
-
-- **OpenAI 兼容 Chat Completions**：通过 `tools` 参数传入函数定义，兼容 OpenAI 生态的工具调用规范，迁移成本最低。
-- **OpenAI 兼容 Responses**：在 Chat Completions 基础上扩展，内置联网搜索、代码解释器等工具，并自动管理对话历史。
-- **Anthropic 兼容 Messages**：支持工具调用（tool use）功能，适合从 Anthropic 生态迁移。
-- **DashScope 原生接口**：提供最完整的函数调用参数支持。
-
-### 智能体应用中的插件调用
-
-在百炼智能体应用中，插件本质上就是通过函数调用机制工作的。大模型根据用户输入、工具名称和描述自动判断是否需要调用插件，选择合适的工具执行调用，再将结果整合为最终回答。每个智能体应用最多支持添加 10 个工具。
-
-### MCP 服务集成
-
-模型上下文协议（MCP）为函数调用提供了标准化的工具接入方式。在智能体中，大模型根据对话上下文自动选择并调用 MCP 服务提供的工具，支持单 MCP 和多 MCP 协同调用。每个智能体最多可同时添加 5 个 MCP 服务。
-
-### 工作流应用
-
-在工作流中，函数调用以节点形式出现，由编排逻辑而非大模型主动规划来决定执行。插件节点和 MCP 节点需手动指定输入参数，并将输出传递到下游节点。
-
-## 支持的模型
-
-并非所有模型都支持函数调用。以下是主要支持 Function Calling 的模型：
-
-| 模型 | Function Calling | 备注 |
-|------|-----------------|------|
-| `qwen3.7-max` | 支持 | 旗舰模型，1M 上下文 |
-| `qwen3.7-plus` | 支持 | 均衡场景，支持文本与视觉 |
-| `qwen3.6-flash` | 支持 | 低成本，效果接近旗舰 |
-| `deepseek-v4-pro` | 支持 | 第三方模型 |
-| `deepseek-v4-flash` | 支持 | 第三方模型 |
-| `qwen3.5-omni-plus` | 支持 | 多模态全能模型 |
+- **OpenAI 兼容 Chat Completions**：通过 `tools` 参数声明函数，模型在响应中返回 `tool_calls`，开发者执行后把结果回传给模型继续生成。这是迁移已有 OpenAI 代码最常用的路径，Qwen 大语言模型、Qwen-VL、Qwen-Coder、Qwen-Omni 等系列均支持。
+- **Responses 接口**：作为 Chat 的演进版本，提供智能体原生能力，内置联网搜索、网页抓取、代码解释器、文搜图、图搜图等工具，并通过 `previous_response_id` 关联上下文，免去手动维护消息历史。
+- **专用意图模型 `tongyi-intent-detect-v3`**：同时输出意图分类与函数调用信息，适合需要把意图识别与工具选择合并为一步的场景。
+- **实时多模态 `Qwen-Omni-Realtime`**：在 WebSocket 会话中支持 Function Calling，客户端通过 `session.update` 配置工具，模型判断需要调用时返回工具调用事件，客户端执行后通过 `response.create` 回传结果继续对话。
+- **[智能体应用](agent-application.md)与 Assistant API**：模型根据用户输入、工具名称与工具描述自动决策是否调用以及调用哪个工具；应用内部完成调用后把结果与用户内容合并再次输入模型，由模型生成最终输出。
+- **工作流应用**：工具作为工作流中的一个节点，按用户编排的方式执行特定任务，而非由模型主动规划调用。
+- **插件机制**：官方插件、三方插件、自定义插件本质上都是工具集合，调用插件即调用其下的工具 API。
+- **MCP（模型上下文协议）**：基于开源标准协议统一接入外部工具，单个智能体最多可同时添加 5 个 MCP 服务，常用于多工具协同。
 
 ## 关键参数与配置
 
-- **`tools`**：函数定义数组，每个元素包含 `type`（固定为 `"function"`）、`function`（含 `name`、`description`、`parameters`）。
-- **`tool_choice`**：控制模型的工具调用行为，可设为 `"auto"`（模型自动决定）、`"none"`（禁止调用）或指定某个函数名（强制调用）。
-- **参数传递方式**：支持"大模型识别"（从用户输入中自动提取参数值）和"业务透传"（通过 `biz_params` 和 `user_defined_params` 从外部主动传入，不经过大模型处理）两种模式。
+### 工具声明
 
-## 注意事项
+- `tools`（array）：工具列表，每个元素描述一个可调用函数，包含 `type`、`function`（含 `name`、`description`、`parameters`）等字段。
+- `tool_choice`（string/object）：控制模型是否调用工具。可设为 `auto`（默认，模型自主决策）、`none`（强制不调用）、`required`（强制调用），或指定具体函数。
 
-- 函数调用会增加模型的输入和输出 Token 消耗，因为函数定义和调用结果都会计入上下文。
-- 使用结构化输出（Structured Output）时需注意与函数调用的兼容性，部分模型在思考模式下不支持结构化输出。
-- 自定义插件支持发布为 MCP 服务，提供更灵活的函数调用集成方式。
-- MCP 服务不能在直接调用千问 API 时接入，必须通过智能体或工作流应用使用。
+### 调用与回传流程
+
+1. 请求中携带 `tools`，模型判断需要调用时在响应里返回 `tool_calls`（含 `id`、函数名、参数 JSON）。
+2. 开发者本地执行对应函数，得到结果。
+3. 把以 `tool` 角色的消息（含 `tool_call_id` 与函数返回内容）追加到 `messages`，再次发起请求。
+4. 模型结合工具结果生成最终回复。
+
+### 实时会话中的配置
+
+Qwen-Omni-Realtime 通过 `session.update` 事件在 WebSocket 建连后更新会话默认配置，工具相关字段与标准 Chat 接口一致。VAD 模式下模型自动触发响应，工具调用结果回传后需手动发送 `response.create` 以驱动模型继续生成。
+
+### 插件与 MCP 的鉴权配置
+
+- **自定义插件**：鉴权信息可放在 Header（默认参数名 `Authorization`）或 Query 中，`type` 支持 `basic`、`bearer`（[Token](token.md) 前加 `Bearer`）、`appcode`（[Token](token.md) 前加 `APPCODE`）。
+- **MCP 服务**：配置遵循 `mcpServers` 结构，`type` 可选 `stdio`（本地托管）、`sse` 或 `streamableHttp`（远程连接）；远程连接通过带 `Authorization` 头的 `url` 鉴权。
+
+## 开发者要点
+
+- 工具的 `description` 与参数描述直接影响模型决策准确性，建议用自然语言清晰写明工具能力与使用场景，必要时在提示词中明确工具名称。
+- 三方直供模型仅在中国内地地域可用，调用前需先在百炼控制台开通对应服务；各地域 [API Key](api-key.md) 不互通，切换地域需同步更换 [API Key](api-key.md) 与 `base_url`。
+- MCP 调用会把工具返回内容作为上下文传入模型，导致输入 [Token](token.md) 增加，并可能间接增加输出 Token；调用准确性依赖提示词，若模型未准确调用可更换更强的推理模型（如千问 3 系列）。
+- [业务空间](workspace.md)专属域名（`https://{WorkspaceId}.<region>.maas.aliyuncs.com/compatible-mode/v1`）相比旧域名有更好的推理性能与稳定性，建议迁移。
 
 ## 关联主题页
 
-- [model inference](../guides/model-inference.md)
-- [plug in](../guides/plug-in.md)
-- [qwen api reference](../api/qwen-api-reference.md)
-- [model context protocol](../guides/model-context-protocol.md)
+- [omni realtime api](../api/omni-realtime-api.md)
 - [more about models](../api/more-about-models.md)
+- [more models](../api/more-models.md)
+- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
+- [plug in](../guides/plug-in.md)
+- [model context protocol](../guides/model-context-protocol.md)
 
 

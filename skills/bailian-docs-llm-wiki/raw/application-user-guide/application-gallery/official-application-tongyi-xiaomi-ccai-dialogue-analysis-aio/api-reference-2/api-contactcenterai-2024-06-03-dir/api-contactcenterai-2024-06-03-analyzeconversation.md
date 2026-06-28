@@ -9,15 +9,17 @@
 前提条件
 
 1.  已开通通义晓蜜 CCAI-对话分析 AIO 服务。
+    
 2.  已创建应用：应用中心完成通义晓蜜 CCAI-对话分析 AIO 应用创建，并获取到 APP-ID 和 WORKSPACE-ID：获取[APP-ID 和 WORKSPACE-ID](https://help.aliyun.com/zh/model-studio/developer-reference/get-app-id-and-workspace?spm=openapi-amp.newDocPublishment.0.0.41df281fWNMfrx)。
+    
 
 ## 调试
 
 [您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/AnalyzeConversation)
 
-[![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png)调试](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/AnalyzeConversation)
+ [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/AnalyzeConversation)
 
-## 授权信息
+## **授权信息**
 
 当前API暂无授权信息透出。
 
@@ -27,17 +29,17 @@
 POST /{workspaceId}/ccai/app/{appId}/analyze_conversation HTTP/1.1
 ```
 
-## 请求参数
+## 路径参数
 
-名称
+**名称**
 
-类型
+**类型**
 
-必填
+**必填**
 
-描述
+**描述**
 
-示例值
+**示例值**
 
 workspaceId
 
@@ -58,6 +60,18 @@ string
 应用 id。
 
 a070a49c681f4a95a0f0\*\*\*\*\*\*\*\*\*35c
+
+## 请求参数
+
+**名称**
+
+**类型**
+
+**必填**
+
+**描述**
+
+**示例值**
 
 body
 
@@ -164,7 +178,7 @@ array<object>
 
 指令示例列表
 
-object
+array<object>
 
 是
 
@@ -239,7 +253,7 @@ array<object>
 
 信息抽取时，需要抽取的字段列表
 
-object
+array<object>
 
 是
 
@@ -329,7 +343,7 @@ string
 
 是
 
-summary-对话摘要，title-标题生成、fields-字段信息抽取、keywords -关键字抽取，service\_inspection-服务质检、question\_solution-问题和解决方案、actions-代办事项、satisfaction-满意度、emotion\_detection-情绪检测、questions\_and\_answer-QA 抽取、user\_profile-用户画像、category\_tag-标签分类
+summary-对话摘要，title-标题生成、fields-字段信息抽取、keywords -关键字抽取，service\_inspection-服务质检、question\_solution-问题和解决方案、actions-代办事项、satisfaction-满意度、emotion\_detection-情绪检测、questions\_and\_answer-QA 抽取、user\_profile-用户画像、category\_tag-标签分类、custom\_prompt-自定义指令
 
 summary
 
@@ -447,15 +461,61 @@ string
 
 表示客户的性别，从列表\[“男”, “女”\]中选择一个值
 
-## 返回参数
+timeConstraintList
 
-名称
+array
 
-类型
+否
 
-描述
+时间约束，用于告诉大模型在做分析时，需要关注或限定在哪些时间范围内
 
-示例值
+string
+
+否
+
+时间信息
+
+2026年1月
+
+sourceCallerUid
+
+string
+
+否
+
+不用填
+
+null
+
+customPrompt
+
+string
+
+否
+
+自定义指令，指令中必须包含${dialogue}
+
+对通话内容进行总结${dialogue}
+
+responseFormatType
+
+string
+
+否
+
+输出结果格式化类型，jsonObject-json 结构，text-原始字符串
+
+jsonObject
+
+## **返回参数**
+
+**名称**
+
+**类型**
+
+**描述**
+
+**示例值**
 
 object
 
@@ -509,6 +569,30 @@ string
 
 这段对话似乎是客服与客户之间关于一个服务或产品的讨论，但具体内容难以明确理解，因为对话中的言语比较零散和抽象。
 
+inputTokens
+
+string
+
+输入 Token 数量
+
+238
+
+outputTokens
+
+string
+
+输出 Token 数量
+
+458
+
+totalTokens
+
+string
+
+Tokens 总量
+
+696
+
 ## 示例
 
 正常返回示例
@@ -523,21 +607,23 @@ string
   "requestId": "968A8634-FA2C-5381-9B3E-C552DED7E8BF",
   "success": true,
   "text": "这段对话似乎是客服与客户之间关于一个服务或产品的讨论，但具体内容难以明确理解，因为对话中的言语比较零散和抽象。",
-  "inputTokens": "",
-  "outputTokens": "",
-  "totalTokens": ""
+  "inputTokens": "238",
+  "outputTokens": "458",
+  "totalTokens": "696"
 }
 ```
 
 ## 错误码
 
-HTTP status code
+   
 
-错误码
+**HTTP status code**
 
-错误信息
+**错误码**
 
-描述
+**错误信息**
+
+**描述**
 
 400
 
@@ -571,6 +657,14 @@ The parameter value of the request API is illegal %s.
 
 请求API的参数不合法
 
+500
+
+CCAI.InternalError
+
+The request processing has failed due to some unknown error, exception or failure.
+
+系统内部错误，请稍后重试
+
 403
 
 CCAI.TenantPermission.NoAuth
@@ -595,12 +689,8 @@ User not authorized to operate on the specified resource %s .
 
 该用户未被授权可操作指定资源
 
-500
+访问[错误中心](https://api.aliyun.com/document/ContactCenterAI/2024-06-03/errorCode)查看更多错误码。
 
-CCAI.InternalError
+## **变更历史**
 
-The request processing has failed due to some unknown error, exception or failure.
-
-系统内部错误，请稍后重试
-
-访问[错误中心](< https://api.aliyun.com/document/ContactCenterAI/2024-06-03/errorCode>)查看更多错误码。
+更多信息，参考[变更详情](https://api.aliyun.com/document/ContactCenterAI/2024-06-03/AnalyzeConversation#workbench-doc-change-demo)。

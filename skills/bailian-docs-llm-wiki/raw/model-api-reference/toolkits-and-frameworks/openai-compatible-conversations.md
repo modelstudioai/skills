@@ -6,7 +6,7 @@
 
 创建一个新会话，可同时添加初始消息项。
 
-**华北2（北京）：POST** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations`
+**华北2（北京）：POST** `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations`
 
 **新加坡：POST** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations`
 
@@ -16,7 +16,12 @@
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+
+-   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
@@ -46,7 +51,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 conversation = client.conversations.create(
@@ -65,7 +70,7 @@ import OpenAI from "openai";
 
 const client = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 
 const conversation = await client.conversations.create({
@@ -84,7 +89,7 @@ console.log(conversation);
 ## cURL
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer $DASHSCOPE_API_KEY' \
 --data '{
@@ -138,7 +143,7 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations
 
 获取指定会话的信息。
 
-**华北2（北京）：GET** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
+**华北2（北京）：GET** `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
 
 **新加坡：GET** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
 
@@ -154,7 +159,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 conversation = client.conversations.retrieve("conv_xxx")
@@ -168,7 +173,7 @@ import OpenAI from "openai";
 
 const client = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 
 const conversation = await client.conversations.retrieve(
@@ -180,7 +185,7 @@ console.log(conversation);
 ## cURL
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx' \
 --header 'Authorization: Bearer $DASHSCOPE_API_KEY'
 ```
 
@@ -217,7 +222,7 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations
 
 更新会话的元数据信息。
 
-**华北2（北京）：POST** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
+**华北2（北京）：POST** `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
 
 **新加坡：POST** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
 
@@ -233,7 +238,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 updated = client.conversations.update(
@@ -250,7 +255,7 @@ import OpenAI from "openai";
 
 const client = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 
 const updated = await client.conversations.update(
@@ -263,7 +268,7 @@ console.log(updated);
 ## cURL
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer $DASHSCOPE_API_KEY' \
 --data '{
@@ -310,7 +315,7 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations
 
 删除指定会话。会话中的消息项不会被删除。
 
-**华北2（北京）：DELETE** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
+**华北2（北京）：DELETE** `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
 
 **新加坡：DELETE** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
 
@@ -326,7 +331,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 result = client.conversations.delete("conv_xxx")
@@ -340,7 +345,7 @@ import OpenAI from "openai";
 
 const client = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 
 const result = await client.conversations.del(
@@ -352,7 +357,7 @@ console.log(result);
 ## cURL
 
 ```
-curl --location --request DELETE 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx' \
+curl --location --request DELETE 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx' \
 --header 'Authorization: Bearer $DASHSCOPE_API_KEY'
 ```
 
@@ -382,7 +387,7 @@ curl --location --request DELETE 'https://dashscope.aliyuncs.com/compatible-mode
 
 向指定会话添加消息项。
 
-**华北2（北京）：POST** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items`
+**华北2（北京）：POST** `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items`
 
 **新加坡：POST** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items`
 
@@ -398,7 +403,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 items = client.conversations.items.create(
@@ -421,7 +426,7 @@ import OpenAI from "openai";
 
 const client = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 
 const items = await client.conversations.items.create(
@@ -442,7 +447,7 @@ console.log(items.data);
 ## cURL
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx/items' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx/items' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer $DASHSCOPE_API_KEY' \
 --data '{
@@ -543,7 +548,7 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations
 
 列出会话中的所有消息项。
 
-**华北2（北京）：GET** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items`
+**华北2（北京）：GET** `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items`
 
 **新加坡：GET** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items`
 
@@ -559,7 +564,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 items = client.conversations.items.list("conv_xxx")
@@ -573,7 +578,7 @@ import OpenAI from "openai";
 
 const client = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 
 const items = await client.conversations.items.list(
@@ -585,7 +590,7 @@ console.log(items.data);
 ## cURL
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx/items?limit=10&order=asc' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx/items?limit=10&order=asc' \
 --header 'Authorization: Bearer $DASHSCOPE_API_KEY'
 ```
 
@@ -684,7 +689,7 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations
 
 获取指定消息项的详情。
 
-**华北2（北京）：GET** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items/{item_id}`
+**华北2（北京）：GET** `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items/{item_id}`
 
 **新加坡：GET** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items/{item_id}`
 
@@ -700,7 +705,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 item = client.conversations.items.retrieve(
@@ -717,7 +722,7 @@ import OpenAI from "openai";
 
 const client = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 
 const item = await client.conversations.items.retrieve(
@@ -730,7 +735,7 @@ console.log(item);
 ## cURL
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx/items/msg_xxx' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx/items/msg_xxx' \
 --header 'Authorization: Bearer $DASHSCOPE_API_KEY'
 ```
 
@@ -789,7 +794,7 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations
 
 删除指定的消息项。
 
-**华北2（北京）：DELETE** `https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items/{item_id}`
+**华北2（北京）：DELETE** `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items/{item_id}`
 
 **新加坡：DELETE** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items/{item_id}`
 
@@ -805,7 +810,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 result = client.conversations.items.delete(
@@ -822,7 +827,7 @@ import OpenAI from "openai";
 
 const client = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 
 const result = await client.conversations.items.del(
@@ -835,7 +840,7 @@ console.log(result);
 ## cURL
 
 ```
-curl --location --request DELETE 'https://dashscope.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx/items/msg_xxx' \
+curl --location --request DELETE 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx/items/msg_xxx' \
 --header 'Authorization: Bearer $DASHSCOPE_API_KEY'
 ```
 
@@ -879,7 +884,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 conversation = client.conversations.create(
@@ -910,7 +915,7 @@ import OpenAI from "openai";
 
 const client = new OpenAI({
   apiKey: process.env.DASHSCOPE_API_KEY,
-  baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 
 const conversation = await client.conversations.create({

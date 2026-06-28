@@ -17,15 +17,10 @@
         "model-experience"
       ],
       "provider": "wan",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "wan2.6-t2i",
-      "prices": [
-        {
-          "priceUnit": "每张",
-          "price": "0.2",
-          "type": "image_number",
-          "priceName": "图片生成"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 1,
@@ -49,7 +44,7 @@
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2025-12-15T08:05:15.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Wan2.6-T2I",
       "docUrl": "https://help.aliyun.com/document_detail/2862677.html",
       "predictConfig": [
@@ -105,15 +100,10 @@
         "model-experience"
       ],
       "provider": "wan",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "wan2.5-t2i-preview",
-      "prices": [
-        {
-          "priceUnit": "每张",
-          "price": "0.2",
-          "type": "image_number",
-          "priceName": "图片生成"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 1,
@@ -137,7 +127,7 @@
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2025-09-19T08:44:37.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Wan2.5-T2I-Preview",
       "docUrl": "https://help.aliyun.com/document_detail/2862677.html",
       "predictConfig": [
@@ -173,7 +163,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wan2.5-t2i-preview\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wan2.5-t2i-preview\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
           }
         }
       }
@@ -193,15 +183,10 @@
         "model-experience"
       ],
       "provider": "wan",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "wan2.2-t2i-plus",
-      "prices": [
-        {
-          "priceUnit": "每张",
-          "price": "0.2",
-          "type": "image_number",
-          "priceName": "图片生成"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 1,
@@ -223,7 +208,7 @@
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2025-07-27T16:00:00.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Wan2.2-T2I-Plus",
       "docUrl": "https://help.aliyun.com/document_detail/2862677.html",
       "predictConfig": [
@@ -259,7 +244,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wan2.2-t2i-plus\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wan2.2-t2i-plus\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
           }
         }
       }
@@ -279,15 +264,10 @@
         "model-experience"
       ],
       "provider": "wan",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "wan2.2-t2i-flash",
-      "prices": [
-        {
-          "priceUnit": "每张",
-          "price": "0.14",
-          "type": "image_number",
-          "priceName": "图片生成"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 1,
@@ -309,7 +289,7 @@
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2025-07-27T16:00:00.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Wan2.2-T2I-Flash",
       "docUrl": "https://help.aliyun.com/document_detail/2862677.html",
       "predictConfig": [
@@ -345,7 +325,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wan2.2-t2i-flash\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wan2.2-t2i-flash\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
           }
         }
       }
@@ -364,15 +344,10 @@
         "model-experience"
       ],
       "provider": "wan",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "wanx2.1-t2i-plus",
-      "prices": [
-        {
-          "priceUnit": "每张",
-          "price": "0.2",
-          "type": "image_number",
-          "priceName": "图片生成"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 1,
@@ -394,7 +369,7 @@
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2025-01-08T16:09:10.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Wan2.1-T2I-Plus",
       "docUrl": "https://help.aliyun.com/document_detail/2862677.html",
       "predictConfig": [
@@ -430,7 +405,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wanx2.1-t2i-plus\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wanx2.1-t2i-plus\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
           }
         }
       }
@@ -449,15 +424,10 @@
         "model-experience"
       ],
       "provider": "wan",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "wanx2.1-t2i-turbo",
-      "prices": [
-        {
-          "priceUnit": "每张",
-          "price": "0.14",
-          "type": "image_number",
-          "priceName": "图片生成"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 1,
@@ -479,7 +449,7 @@
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2025-01-08T16:12:34.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Wan2.1-T2I-Turbo",
       "docUrl": "https://help.aliyun.com/document_detail/2862677.html",
       "predictConfig": [
@@ -515,7 +485,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wanx2.1-t2i-turbo\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wanx2.1-t2i-turbo\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
           }
         }
       }
@@ -534,21 +504,16 @@
         "model-experience"
       ],
       "provider": "wan",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "wanx-v1",
-      "prices": [
-        {
-          "priceUnit": "每张",
-          "price": "0.16",
-          "type": "image_number",
-          "priceName": "图片生成"
-        }
-      ],
       "capabilities": [
         "IG"
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2024-01-05T08:26:20.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "wanx-t2i",
       "docUrl": "https://help.aliyun.com/document_detail/2712483.html",
       "predictConfig": [
@@ -589,7 +554,66 @@
       "samples": {
         "dashscope": {
           "default": {
-            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wanx-v1\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wanx-v1\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Image"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
+      "description": "万相-文本生成图像大模型，支持中英文双语输入，重点风格包括但不限于水彩、油画、中国画、素描、扁平插画、二次元、3D卡通，本模型为通义万相的2024年5月21号的历史快照。",
+      "features": [],
+      "provider": "wan",
+      "limit": {
+        "message": "model not exist"
+      },
+      "model": "wanx-v1-0521",
+      "capabilities": [
+        "IG"
+      ],
+      "versionTag": "SNAPSHOT",
+      "latestOnlineAt": "2024-05-22T13:57:26.000+00:00",
+      "inferenceProvider": "bailian",
+      "name": "万相-文本生成图像-2024-05-21",
+      "docUrl": "https://help.aliyun.com/document_detail/2712483.html",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wanx-v1-0521\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
           }
         }
       }
@@ -608,15 +632,10 @@
         "model-experience"
       ],
       "provider": "wan",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "wanx2.0-t2i-turbo",
-      "prices": [
-        {
-          "priceUnit": "每张",
-          "price": "0.04",
-          "type": "image_number",
-          "priceName": "图片生成"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 1,
@@ -638,7 +657,7 @@
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2025-01-20T03:29:28.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "Wan2.0-T2I-Turbo",
       "docUrl": "https://help.aliyun.com/document_detail/2862677.html",
       "predictConfig": [
@@ -674,63 +693,7 @@
       "samples": {
         "dashscope": {
           "default": {
-            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wanx2.0-t2i-turbo\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
-          }
-        }
-      }
-    },
-    {
-      "inferenceMetadata": {
-        "response_modality": [
-          "Image"
-        ],
-        "request_modality": [
-          "Text"
-        ]
-      },
-      "description": "万相-文本生成图像大模型，支持中英文双语输入，重点风格包括但不限于水彩、油画、中国画、素描、扁平插画、二次元、3D卡通，本模型为通义万相的2024年5月21号的历史快照。",
-      "features": [],
-      "provider": "wan",
-      "model": "wanx-v1-0521",
-      "capabilities": [
-        "IG"
-      ],
-      "versionTag": "SNAPSHOT",
-      "latestOnlineAt": "2024-05-22T13:57:26.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
-      "name": "万相-文本生成图像-2024-05-21",
-      "docUrl": "https://help.aliyun.com/document_detail/2712483.html",
-      "predictConfig": [
-        {
-          "name": "system",
-          "key": "systemMessage",
-          "tip": "系统人设，例如“你是一个AI助手”。"
-        },
-        {
-          "name": "top_p",
-          "key": "top_p",
-          "default": 0.8,
-          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
-          "range": [
-            0.0001,
-            1
-          ]
-        },
-        {
-          "name": "temperature",
-          "key": "temperature",
-          "default": 0.7,
-          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
-          "range": [
-            0,
-            1.9999
-          ]
-        }
-      ],
-      "samples": {
-        "dashscope": {
-          "default": {
-            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wanx-v1-0521\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
+            "python": "from http import HTTPStatus\nfrom urllib.parse import urlparse, unquote\nfrom pathlib import PurePosixPath\nimport requests\nfrom dashscope import ImageSynthesis\nimport os\nimport dashscope\n\ndashscope.base_http_api_url = 'https://ws-nckitja1d28cec5v.cn-beijing.maas.aliyuncs.com/api/v1'\nprompt = \"一间有着精致窗户的花店，漂亮的木质门，摆放着花朵\"\n\nprint('----sync call, please wait a moment----')\nrsp = ImageSynthesis.call(api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n                          model=\"wanx2.0-t2i-turbo\",\n                          prompt=prompt,\n                          n=1,\n                          size='1280*1280')\nprint('response: %s' % rsp)\nif rsp.status_code == HTTPStatus.OK:\n    # 在当前目录下保存图片\n    for result in rsp.output.results:\n        file_name = PurePosixPath(unquote(urlparse(result.url).path)).parts[-1]\n        with open('./%s' % file_name, 'wb+') as f:\n            f.write(requests.get(result.url).content)\nelse:\n    print('sync_call Failed, status_code: %s, code: %s, message: %s' %\n          (rsp.status_code, rsp.code, rsp.message))"
           }
         }
       }

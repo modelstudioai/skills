@@ -41,7 +41,7 @@ Qoder CN 个人社区版和个人专业版均支持接入百炼，企业版不�
     
     填写对应方案的专属 API Key：
     
-    -   Token Plan 团队版：[获取 API Key](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)
+    -   Token Plan 团队版：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)
         
     -   Coding Plan：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)
         
@@ -77,6 +77,17 @@ Qoder CN 个人社区版和个人专业版均支持接入百炼，企业版不�
 -   **未完成登录**：需要先完成登录，才能进行对话和配置模型。
     
 -   **当前版本不支持**：接入百炼需要 Qoder CN 个人社区版或个人专业版，企业版不支持。
+    
+
+### 对话报错"自定义模型服务异常，请稍后重试或切换其他模型。Unknown Custom model Exception"
+
+该报错是 Qoder CN 在收到无法识别的后端响应时的通用提示，常见触发原因如下：
+
+-   **提供商或类型与实际套餐不一致**：在 Qoder CN 模型配置中，**提供商**与**类型**需与所购套餐保持一致。例如使用 Token Plan 团队版的 API Key，但**类型**选成了 Coding Plan。
+    
+-   **选用了套餐不支持的模型**：仅支持当前套餐覆盖的文本生成模型。例如，Token Plan 团队版的支持模型列表可在[Token Plan 团队版页面](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)查看。
+    
+-   **临时网络或服务波动**：稍后重试。
     
 
 ### API Key 认证失败（HTTP 401）

@@ -14,13 +14,16 @@
       "description": "人物实例分割运用了检测和分割技术，不仅能够在图像中识别出不同的对象，而且还能准确地画出每一个对象边界的像素级掩码（mask）。",
       "features": [],
       "provider": "qwen",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "image-instance-segmentation",
       "capabilities": [
         "IG"
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2024-08-19T01:17:00.000+00:00",
-      "inferenceProvider": "aliyun-bailian",
+      "inferenceProvider": "bailian",
       "name": "人物实例分割",
       "docUrl": "https://help.aliyun.com/document_detail/2840906.html",
       "predictConfig": [

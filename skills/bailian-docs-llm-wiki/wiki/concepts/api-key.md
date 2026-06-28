@@ -1,96 +1,83 @@
-# API Key 鉴权与安全
+# API Key
 
-API Key 是调用阿里云百炼平台模型和应用的核心鉴权凭证，用于标识调用者身份并控制资源访问权限。每个 API Key 归属于特定地域内的一个[业务空间](workspace.md)和一个用户，其调用范围由所属[业务空间](workspace.md)的权限配置决定。
+API Key 是调用阿里云百炼大模型与应用服务的鉴权凭证，由主账号或具备 `管理员`/`API-Key` 页面权限的子账号在百炼控制台创建。它贯穿模型调用、应用集成、框架接入、[知识库](knowledge-base.md)检索等所有百炼 API 场景，是接入百炼服务的前置条件。
 
-## 获取与管理
+## 在百炼平台中的使用场景
 
-在百炼控制台的 **API Key** 页面创建 API Key，需使用主账号或具备相应权限的子账号操作。关键规则：
+API Key 在百炼的不同场景中都承担鉴权职责，但调用方式略有差异：
 
-- API Key 创建后永久有效，手动删除即失效，不可恢复。
-- 华北2（北京）和新加坡地域已完成安全升级，新建 API Key 仅在创建时展示一次明文，关闭弹窗后无法再次查看。
-- 每个主账号在华北2（北京）、新加坡、日本（东京）、德国（法兰克福）地域最多可创建 50 个 API Key；美国（弗吉尼亚）地域每个归属账号最多 20 个。
-- 自 2026 年 3 月 25 日起，华北2（北京）地域新创建的 API Key 均归属主账号。
+- **模型调用**：通过 [OpenAI 兼容接口](openai-compatible-interface.md)或 DashScope SDK 调用千问及第三方模型时，API Key 作为 `Authorization: Bearer <API_KEY>` 请求头或 SDK 的 `api_key` 参数传入。各地域有独立的接入域名与模型列表，API Key 不能跨地域混用。
+- **应用调用**：调用[智能体应用](agent-application.md)、工作流应用、新版智能体（Agent 2.0）时，API Key 与应用 ID（APP ID）共同作为凭证。应用位于子[业务空间](workspace.md)时还需提供 Workspace ID。
+- **框架集成**：LlamaIndex 构建 RAG 应用、Spring AI Alibaba 集成百炼智能体或检索[知识库](knowledge-base.md)时，均以 API Key 鉴权，并复用百炼的数据管理与模型推理能力。
+- **临时访问**：在浏览器、移动 App 等不可信环境中，通过后端调用令牌接口生成临时 API Key 下发到客户端，避免暴露永久密钥。
 
-## 权限与[业务空间](workspace.md)
+## 关键参数与配置
 
-API Key 的权限体系以业务空间为最小管理单元：
+### 创建入口与地域
 
-| 场景 | 权限范围 |
-|------|---------|
-| 默认业务空间 | 可调用所有标准模型，无法设置模型级限流 |
-| 子业务空间 | 仅可调用已授权的模型，支持 QPM 和 Token 限流 |
+不同地域的创建入口略有差异：
 
-- 同一业务空间内的 API Key 权限相同，无需为不同模型类型（文生文、文生图、语音合成等）分别创建。
-- API Key 的可调用功能和模型限流与归属业务空间一致，不受用户控制台权限影响。
-- 华北2（北京）地域的 API Key 支持设置 IP 访问白名单。
+- **华北2（北京）、新加坡、日本（东京）、德国（法兰克福）**：在百炼控制台右上角选择对应地域后创建。
+- **美国（弗吉尼亚）**：前往 modelstudio 控制台创建，且需额外选择"归属账号"，不支持自定义权限配置。
 
-### API Key 状态与账号操作
+### 权限配置
 
-| 操作 | 影响 |
-|------|------|
-| 删除 API Key | 永久失效，不可恢复 |
-| 将账号移出业务空间 | 对应 RAM 账号的 API Key 失效，重新加入后恢复 |
-| 在 RAM 控制台删除账号/角色 | 对应 API Key 永久失效，不可恢复 |
+创建 API Key 时可选两种权限：
 
-## 环境变量配置
+- **全部**：可调用所有模型与应用。
+- **自定义**：可配置 IP 白名单（最多 20 个 IPv4/IPv6 地址或网段）和可访问模型范围。
 
-建议将 API Key 配置到环境变量 `DASHSCOPE_API_KEY`，避免硬编码导致泄漏风险：
+### 格式与类型
 
-- **Linux / macOS**：将 `export DASHSCOPE_API_KEY="YOUR_KEY"` 追加到 Shell 配置文件（`~/.bashrc` 或 `~/.zshrc`），然后 `source` 使其生效。
-- **Windows**：通过系统属性或 `setx` 命令设置永久环境变量，需重启命令行窗口生效。
+- **按量付费 API Key**：安全升级后新建的 Key 统一以 `sk-ws` 开头，仅在创建时展示一次明文；升级前以 `sk-` 开头的旧 Key 可继续使用，建议逐步替换。
+- **[Token](token.md) Plan 与 Coding Plan**：使用以 `sk-sp-` 开头的专属 API Key，不使用按量付费 API Key。
+- **临时 API Key**：通过令牌接口生成，以 `st-` 开头，继承生成它的永久 API Key 的全部权限，无法进一步收窄。
 
-> **提示**：如果环境变量已设置但代码仍提示找不到 API Key，常见原因包括：仅设置了临时变量、未重启 IDE/应用、使用 `sudo` 时未加 `-E` 参数。
+### 环境变量配置
 
-## 临时 API Key
+为避免硬编码泄露，建议将 API Key 配置到环境变量 `DASHSCOPE_API_KEY`，SDK 会自动读取。各系统配置方式：
 
-在浏览器、移动 App 等不可信环境中，直接暴露永久 API Key 存在安全风险。百炼支持通过后端服务生成临时 API Key：
+- **Linux/macOS**：永久生效追加到 `~/.bashrc`（Bash）或 `~/.zshrc`（Zsh）后 `source`；临时生效用 `export DASHSCOPE_API_KEY="YOUR_KEY"`。
+- **Windows**：永久用系统属性界面、CMD `setx` 或 PowerShell `[Environment]::SetEnvironmentVariable`；临时用 CMD `set` 或 PowerShell `$env:`。
 
-- 有效期可自定义（1 至 1800 秒，默认 60 秒），到期后自动失效，无法手动删除。
-- 临时 API Key（以 `st-` 开头）继承生成它的永久 API Key 的全部权限。
-- 各地域的 API Key 不通用，需使用对应地域的 Endpoint。
+若 `echo` 能读到环境变量但代码仍报找不到 API Key，常见原因：临时变量未重启 IDE/应用、systemd/supervisord 服务需在配置文件中显式添加、`sudo` 运行时不继承用户环境变量（改用 `sudo -E`）。
 
-```bash
+### 临时 API Key 生成
+
+通过令牌接口生成临时 API Key：
+
+| 参数 | 说明 |
+| --- | --- |
+| `expire_in_seconds` | 临时 Key 有效期，单位秒，范围 `[1, 1800]`，默认 60 秒 |
+
+请求示例：
+
+```
 curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=1800" \
-  -H "Authorization: Bearer $DASHSCOPE_API_KEY"
+-H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-## 多地域支持
+正常响应返回 `token`（临时 Key）与 `expires_at`（UNIX 时间戳，秒），到期自动失效，不能提前删除。
 
-不同地域使用不同的 Base URL：
+## 时效性与配额
 
-| 地域 | Base URL |
-|------|----------|
-| 华北2（北京） | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
-| 新加坡 | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1` |
-| 美国（弗吉尼亚） | `https://dashscope-us.aliyuncs.com/compatible-mode/v1` |
-| 德国（法兰克福） | `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1` |
-| 日本（东京） | `https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1` |
+- API Key 无失效日期，手动删除后即失效。
+- 单个主账号在华北2/新加坡/日本/德国地域每个地域最多 50 个 API Key；美国（弗吉尼亚）地域每个归属账号最多 20 个。
+- RAM 用户被禁用或删除后，其创建的 API Key 全部失效。
+- 各地域（北京、新加坡、弗吉尼亚等）的 API Key 不互通，临时 Key 与生成它的永久 Key 必须属于同一地域。
 
-> **注意**：新加坡、日本（东京）、德国（法兰克福）地域的 Base URL 中需要将 `{WorkspaceId}` 替换为实际的业务空间 ID。
+## 子[业务空间](workspace.md)的 API Key
 
-## 套餐场景下的 API Key
-
-百炼的 Token Plan 团队版和 Coding Plan 使用专属 API Key 和 Base URL，与标准 API Key 独立：
-
-- **Token Plan 团队版**：在管理后台创建成员并分配席位后，系统自动生成 API Key，Base URL 为 `https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`。
-- **Coding Plan**：面向个人开发者，Base URL 为 `https://coding.dashscope.aliyuncs.com/v1`。
-
-## 安全最佳实践
-
-1. **避免硬编码**：始终通过环境变量或密钥管理服务传递 API Key，不要将其写入代码或配置文件。
-2. **最小权限原则**：为不同环境（开发、测试、生产）创建独立的子业务空间，各自使用独立的 API Key。
-3. **前端场景用临时 Key**：浏览器和移动端不要使用永久 API Key，改用临时 API Key 并控制有效期。
-4. **定期轮换**：定期删除旧 API Key 并创建新的，降低泄漏后的影响范围。
-5. **IP 白名单**：在华北2（北京）地域为生产环境的 API Key 设置 IP 访问白名单。
-6. **加密传输**：对包含敏感信息的请求启用加密调用（[DashScope SDK](dashscope-sdk.md) 的 `enable_encryption=True`），或通过 PrivateLink 实现私网访问。
+默认[业务空间](workspace.md)的 API Key 可调用所有模型，权限过大且费用难以分账。可将 RAM 用户归入子业务空间，仅授权必要模型，并要求使用该子空间的 API Key 调用。调用方式与默认空间基本一致，区别在于必须使用该子业务空间的 API Key。适用场景包括模型调用权限管控（限制某类用户只能调用被授权的模型）与费用分账（为不同业务创建独立子空间各自出账）。
 
 ## 关联主题页
 
 - [preparations](../api/preparations.md)
+- [application call](../api/application-call.md)
+- [frameworks](../api/frameworks.md)
+- [bailian application calling](../guides/bailian-application-calling.md)
 - [more about models](../api/more-about-models.md)
-- [security and compliance](../guides/security-and-compliance.md)
-- [application permission management](../guides/application-permission-management.md)
-- [token plan guide](../guides/token-plan-guide.md)
 - [more](../api/more.md)
+- [get started with models](../guides/get-started-with-models.md)
 
 

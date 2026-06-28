@@ -276,6 +276,10 @@ ParseErrorMessage
 
 string
 
+解析失败原因
+
+Error Message
+
 Tags
 
 array
@@ -382,7 +386,7 @@ true
         "Parser": "DASHSCOPE_DOCMIND",
         "SizeInBytes": 512,
         "Status": "PARSE_SUCCESS",
-        "ParseErrorMessage": "",
+        "ParseErrorMessage": "Error Message",
         "Tags": [
           "tag-A"
         ]

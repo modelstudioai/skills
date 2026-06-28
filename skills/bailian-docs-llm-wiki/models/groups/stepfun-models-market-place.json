@@ -21,27 +21,10 @@
         "batch"
       ],
       "provider": "stepfun",
+      "limit": {
+        "message": "model not exist"
+      },
       "model": "stepfun/step-3.7-flash",
-      "prices": [
-        {
-          "priceUnit": "每百万tokens",
-          "price": "1.35",
-          "type": "input_token",
-          "priceName": "输入"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "8.1",
-          "type": "output_token",
-          "priceName": "输出"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "0.27",
-          "type": "input_token_cache",
-          "priceName": "输入（缓存命中）"
-        }
-      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 6,

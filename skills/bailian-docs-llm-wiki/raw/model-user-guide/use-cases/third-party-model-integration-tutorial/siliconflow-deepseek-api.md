@@ -6,7 +6,7 @@
 
 **重要**
 
-本文档仅适用于“中国内地（北京）”地域。如需使用模型，需使用“中国内地（北京）”地域的[API Key](https://bailian.console.alibabacloud.com/?tab=model#/api-key)。
+本文档仅适用于华北2（北京）地域。如需使用模型，需使用华北2（北京）地域的[API Key](https://bailian.console.alibabacloud.com/?tab=model#/api-key)。
 
 ## **服务开通**
 

@@ -451,45 +451,81 @@ usage
 
 object
 
+使用量
+
 rag
 
 object
+
+rag 使用详情
 
 dialogSummary
 
 object
 
+会话摘要
+
 inputTokens
 
 integer
+
+输入 Token 数量
+
+4672
 
 outputTokens
 
 integer
 
+输出 Token 数量
+
+621
+
 invokeCount
 
 integer
+
+调用次数
+
+3
 
 adaptive
 
 object
 
+rag 智能调用
+
 inputTokens
 
 integer
+
+输入 Token 数量
+
+4672
 
 outputTokens
 
 integer
 
+输出 Token 数量
+
+621
+
 invokeCount
 
 integer
 
+调用次数
+
+3
+
 ragStatus
 
 string
+
+rag 执行状态
+
+SUCCESS
 
 ## 示例
 
@@ -508,18 +544,18 @@ string
   "usage": {
     "rag": {
       "dialogSummary": {
-        "inputTokens": 0,
-        "outputTokens": 0,
-        "invokeCount": 0
+        "inputTokens": 4672,
+        "outputTokens": 621,
+        "invokeCount": 3
       },
       "adaptive": {
-        "inputTokens": 0,
-        "outputTokens": 0,
-        "invokeCount": 0
+        "inputTokens": 4672,
+        "outputTokens": 621,
+        "invokeCount": 3
       }
     }
   },
-  "ragStatus": ""
+  "ragStatus": "SUCCESS"
 }
 ```
 

@@ -2,6 +2,10 @@
 
 知识库用于为大模型补充私有数据和最新信息。基于 RAG（检索增强生成）技术，大模型在生成回答前会先从知识库中检索相关内容，从而提升回答的准确性。
 
+**重要**
+
+知识库功能仅能在中国站**华北2（北京）**地域开通和使用，其他地域如新加坡、德国（法兰克福）等均不支持知识库功能。
+
 **无专属知识库的应用**
 
 无专属知识库时，大模型无法准确回答特定领域的问题。
@@ -1393,10 +1397,10 @@
 
 -   [在网站上增加一个AI助手](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-website-in-10-minutes)
     
--   [10分钟在钉钉创建AI机器人](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-dingtalk)
+-   [在钉钉创建AI机器人](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-dingtalk)
     
 -   [10分钟实现微信公众号智能客服](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-wechat-in-10-minutes)
     
--   [10分钟在企业微信集成AI助手](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-work-wechat)
+-   [在企业微信集成AI助手](https://help.aliyun.com/zh/model-studio/add-an-ai-assistant-to-your-work-wechat)
     
 -   [10分钟构建主动提问的智能导购](https://help.aliyun.com/zh/model-studio/create-an-ai-shopping-assistant)

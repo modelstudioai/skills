@@ -49,7 +49,7 @@ npm install -g @anthropic-ai/claude-code
 
 ### Token Plan 团队版
 
-将 YOUR\_API\_KEY 替换为 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)。可用模型参见 Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)。
+将 YOUR\_API\_KEY 替换为 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)。可用模型参见 Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)。
 
 ```
 {
@@ -135,7 +135,7 @@ npm install -g @anthropic-ai/claude-code
     
     供应商名称：百炼-Token Plan
     
-    API Key：[控制台获取](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)
+    API Key：[控制台获取](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)
     
     请求地址：`https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic`
     

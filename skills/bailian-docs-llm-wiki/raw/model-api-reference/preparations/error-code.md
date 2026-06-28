@@ -261,6 +261,19 @@ AI 助理准确分析出原因，并给出解决方案：
 
 **解决方案：** 请更换为支持Function Calling的Qwen或DeepSeek模型。
 
+### **Repetitive tool calls detected in the conversation history. The same tool call with identical name and arguments has been repeated across multiple consecutive rounds. Please modify your request or adjust the tool call arguments to avoid infinite loops.**
+
+**原因：** 在对话历史中检测到重复的工具调用：名称和参数完全相同的工具调用在多个连续轮次中重复出现，模型可能已陷入循环。该错误对应的 HTTP 状态码为 400，错误码为`InternalError.Algo.InvalidParameter`。
+
+**解决方案：**
+
+-   在每轮工具调用后，将工具的执行结果以 Tool Message 形式追加到`messages`数组中，再发起下一轮请求，便于模型据此推进而非重复发起相同调用。
+    
+-   检查工具是否正常返回结果；若工具持续返回相同或无效结果，建议在应用侧增加工具调用次数上限或终止逻辑，避免无限循环。
+    
+-   必要时优化提示词，明确任务完成的条件，避免模型反复发起同一工具调用。
+    
+
 ### **Required parameter(xxx) missing or invalid, please check the request parameters.**
 
 **原因：** 接口调用参数不合法。
@@ -1737,7 +1750,12 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
     
     **重要**
     
-    百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+    百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+    
+    -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+        
+    -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+        
     
     其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
     
