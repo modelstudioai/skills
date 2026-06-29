@@ -1,6 +1,6 @@
 # support
 
-本页汇总阿里云百炼平台的使用支持信息，覆盖计费规则、API/SDK 调用常见报错、模型训练与微调最佳实践、模型幻觉治理以及相关服务协议。开发者可据此快速定位开通、调用、训练、合规等环节的关键约束与处置方式，详见 [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 与 [相关协议](../../raw/model-user-guide/support/related-agreements.md)。
+本页汇总阿里云百炼平台的使用支持信息，覆盖[计费](../concepts/billing.md)规则、API/SDK 调用常见报错、模型训练与微调最佳实践、模型幻觉治理以及相关服务协议。开发者可据此快速定位开通、调用、训练、合规等环节的关键约束与处置方式，详见 [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 与 [相关协议](../../raw/model-user-guide/support/related-agreements.md)。
 
 ## 服务开通与关闭
 
@@ -8,9 +8,9 @@
 - 开通后暂不支持关闭。若仅需停止调用，可在 [API-Key（北京）](https://bailian.console.aliyun.com/?apiKey=1&tab=globalset#/efm/api_key) 或 [API-Key（新加坡）](https://modelstudio.console.aliyun.com/?tab=globalset#/efm/api_key) 页面删除已创建的 API-Key。
 - 开通时若提示"账户可用额度小于0"，需保证阿里云账户余额不小于 0 元。
 
-## 计费与发票
+## [计费](../concepts/billing.md)与发票
 
-- 模型调用单价见 [模型调用计费](https://help.aliyun.com/zh/model-studio/model-pricing)；部署与训练计费见 [模型部署计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing)。
+- 模型调用单价见 [模型调用计费](https://help.aliyun.com/zh/model-studio/model-pricing)；部署与训练[计费](../concepts/billing.md)见 [模型部署计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing)。
 - 后付费按分钟级出账、按月结算；扣款明细可在 [费用与成本](https://usercenter2.aliyun.com/finance/expense-report/expense-detail) 查看。
 - 部分模型支持预付费，见 [节省计划与资源包](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package)。
 - 开票：登录费用与成本控制台，进入 [发票管理](https://usercenter2.aliyun.com/invoice/list/aliyun?pageIndex=1&pageSize=20&ownerId=1990699401005016&invoiceType=aliyun&1990699401005016%23ownerId=1990699401005016) 页面，在"开具发票"页签申请。
@@ -76,5 +76,6 @@
 
 - [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)
 - [相关协议](../../raw/model-user-guide/support/related-agreements.md)
+
 
 

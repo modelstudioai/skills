@@ -74,7 +74,7 @@
 4. **部署模型**：`POST /api/v1/deployments`，将 `finetuned_output` 部署为在线服务，轮询 `GET /api/v1/deployments/{deployed_model}` 直到 `status` 变为 `RUNNING`。
 5. **调用模型**：使用 `deployed_model` 名称像调用基础模型一样发起请求。
 
-> **注意**：通过 API 创建的训练任务**仅支持按 [Token](../concepts/token.md) 计费，暂不支持使用模型训练单元（预付费或后付费）**；如需使用训练单元，请通过控制台创建任务。
+> **注意**：通过 API 创建的训练任务**仅支持按 [Token](../concepts/token.md) [计费](../concepts/billing.md)，暂不支持使用模型训练单元（预付费或后付费）**；如需使用训练单元，请通过控制台创建任务。
 
 ### 万相图像/视频微调的统一流程
 
@@ -93,9 +93,9 @@
 - **CPT**：纯文本格式，每行 `{"text":"文本内容"}`。
 - **CosyVoice**：`data.jsonl` 每行 `{"wav_fn":"train/xxx.wav","text":"..."}`，音频为 `.wav`、采样率 ≥16 kHz、单条 1–30 秒，训练数据须为同一发音人。
 
-## 计费说明
+## [计费](../concepts/billing.md)说明
 
-文本/视觉模型按训练数据量计费：`训练费用 = (训练数据 Token 总数 + 混合训练数据 Token 总数) × 循环次数 × 训练单价`，最小计费单位为 1 [Token](../concepts/token.md)。预置模型训练单价随规模变化，例如 qwen3-8b 为 ¥0.006/千 Token、qwen2.5-72b-instruct 为 ¥0.15/千 Token，自定义模型单价与对应预置模型相同。视觉模型的图像/视频 Token 按像素与抽帧数估算。
+文本/视觉模型按训练数据量[计费](../concepts/billing.md)：`训练费用 = (训练数据 Token 总数 + 混合训练数据 Token 总数) × 循环次数 × 训练单价`，最小计费单位为 1 [Token](../concepts/token.md)。预置模型训练单价随规模变化，例如 qwen3-8b 为 ¥0.006/千 Token、qwen2.5-72b-instruct 为 ¥0.15/千 Token，自定义模型单价与对应预置模型相同。视觉模型的图像/视频 Token 按像素与抽帧数估算。
 
 万相图像/视频微调按训练消耗的 Token 计费（响应 `usage` 字段）；CosyVoice 训练单价为 0.2 元/千 Tokens，部署费用按模型单元使用时长计费。
 
@@ -117,5 +117,6 @@
 - [使用 API 或命令行进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)
 - [0 代码强化大模型安全合规能力](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/enhance-the-security-compliance-of-large-models.md)
 - [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)
+
 
 

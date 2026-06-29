@@ -6,10 +6,10 @@
 
 ## 核心能力一览
 
-| 能力 | 入口 | 是否计费 | 关键用途 |
+| 能力 | 入口 | 是否[计费](../concepts/billing.md) | 关键用途 |
 | --- | --- | --- | --- |
-| Prompt 模板（预置 + 自定义） | 提示词页面 | 模板管理不额外计费 | 把 Prompt 结构与变量分离，统一管理、复用 |
-| Prompt 自动优化 | 提示词 > 自动优化 | 不计费 | 用大模型重写原始 Prompt，结构更优、指令更清晰 |
+| Prompt 模板（预置 + 自定义） | 提示词页面 | 模板管理不额外[计费](../concepts/billing.md) | 把 Prompt 结构与变量分离，统一管理、复用 |
+| Prompt 自动优化 | 提示词 > 自动优化 | 不[计费](../concepts/billing.md) | 用大模型重写原始 Prompt，结构更优、指令更清晰 |
 | Prompt 样例库 | 样例库页面 | 不收存储费，但增加调用 [Token](../concepts/token.md) | Few-shot 检索样例注入上下文，提升特定领域输出一致性 |
 | Prompt 反馈优化 | 提示词 > 反馈优化 | 涉及推理调用 | 基于输入输出样例 + 评测数据多轮自动评估、反思、优化 |
 
@@ -112,5 +112,6 @@ Prompt 模板将 Prompt 的固定结构与动态变量分离，分为预置模�
 - [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)
 - [使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)
 - [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)
+
 
 

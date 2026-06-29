@@ -1,57 +1,54 @@
 # 函数调用
 
-函数调用（Function Calling）是大模型根据用户输入与工具描述，自主判断是否调用外部工具、选择合适工具并生成结构化调用参数的能力，用于弥补模型在获取实时信息、精确计算、调用业务接口等方面的不足。
+函数调用（Function Calling）是大模型根据用户输入和工具描述，自主判断是否调用外部工具、选择合适工具并将工具返回结果合并回上下文以生成最终回答的能力。它是智能体应用扩展模型能力边界、获取最新信息、精确计算与操作外部系统的核心机制。
 
-## 在百炼平台的使用场景
+## 在百炼平台中的使用方式
 
-百炼平台上，函数调用以多种形态贯穿不同协议与产品：
+百炼平台的函数调用并非单一接口，而是分布在多个层面：
 
-- **OpenAI 兼容 Chat Completions**：通过 `tools` 参数声明函数，模型在响应中返回 `tool_calls`，开发者执行后把结果回传给模型继续生成。这是迁移已有 OpenAI 代码最常用的路径，Qwen 大语言模型、Qwen-VL、Qwen-Coder、Qwen-Omni 等系列均支持。
-- **Responses 接口**：作为 Chat 的演进版本，提供智能体原生能力，内置联网搜索、网页抓取、代码解释器、文搜图、图搜图等工具，并通过 `previous_response_id` 关联上下文，免去手动维护消息历史。
-- **专用意图模型 `tongyi-intent-detect-v3`**：同时输出意图分类与函数调用信息，适合需要把意图识别与工具选择合并为一步的场景。
-- **实时多模态 `Qwen-Omni-Realtime`**：在 WebSocket 会话中支持 Function Calling，客户端通过 `session.update` 配置工具，模型判断需要调用时返回工具调用事件，客户端执行后通过 `response.create` 回传结果继续对话。
-- **[智能体应用](agent-application.md)与 Assistant API**：模型根据用户输入、工具名称与工具描述自动决策是否调用以及调用哪个工具；应用内部完成调用后把结果与用户内容合并再次输入模型，由模型生成最终输出。
-- **工作流应用**：工具作为工作流中的一个节点，按用户编排的方式执行特定任务，而非由模型主动规划调用。
-- **插件机制**：官方插件、三方插件、自定义插件本质上都是工具集合，调用插件即调用其下的工具 API。
-- **MCP（模型上下文协议）**：基于开源标准协议统一接入外部工具，单个智能体最多可同时添加 5 个 MCP 服务，常用于多工具协同。
+- **OpenAI 兼容 Chat Completions**：支持标准 function call 流程，开发者按 OpenAI 协议定义 `tools`，模型在响应中返回工具调用参数，调用方执行后回传结果。适合接入第三方 OpenAI 生态工具。
+- **OpenAI 兼容 Responses 接口**：内置联网搜索、代码解释器、网页内容提取等工具，开箱即用，无需自行定义；同时通过 `previous_response_id` 自动维护上下文。
+- **Anthropic 兼容 Messages 接口**：支持思考（thinking）与工具调用，按 Anthropic 协议定义工具。
+- **DashScope 原生接口**：功能集最完整，参数支持最丰富，适合需要最全采样参数与业务字段的场景。
+- **Omni Realtime API**：基于 WebSocket 的实时[多模态](multimodal.md)交互同样支持 Function Calling，通过 `response.create` 事件触发；Manual 模式下工具调用回传结果后需手动发送 `response.create` 触发下一轮响应。
+- **智能体应用 / Assistant API**：模型依据用户输入、工具名称与描述判断是否调用工具，应用内部完成调用并将结果与用户内容合并再次输入模型，无需调用时直接生成输出。
+- **工作流应用**：插件作为工作流节点按编排顺序执行，而非模型主动规划调用。
+
+> 注意：联网搜索、代码解释器、网页内容提取为 Responses 接口专属内置能力；OpenAI Chat Completions 与 Anthropic Messages 接口不内置这些工具，需通过工具调用协议自行接入。
 
 ## 关键参数与配置
 
-### 工具声明
+- **model**：通过请求体的 `model` 字段指定具体模型名。智能体应用推荐选用具备强工具调用能力的模型，如 `qwen-max` 系列。
+- **tools**：在 OpenAI/Anthropic 兼容接口中按对应协议定义工具名称、描述与参数 schema；描述应使用自然语言，帮助模型判断是否调用。
+- **工具 ID**：通过 Assistant API 调用插件工具时需正确传递工具 ID（在插件详情页"插件工具"下获取，例如 `calculator`）。
+- **ReAct 最大轮次**：智能体应用取值范围 1–50，限制单次会话中工具调用的最大次数，超出后自动退出工具调用链路并由模型生成最终回复。
+- **turn_detection**：Omni Realtime API 中，Manual 模式（设为 `null`）下工具调用回传结果后需手动发送 `response.create`；VAD 模式由服务端自动生成响应。
+- **base_url / api_key**：迁移到百炼时替换为业务空间专属域名与百炼 API Key，即可复用现有 OpenAI 代码。
 
-- `tools`（array）：工具列表，每个元素描述一个可调用函数，包含 `type`、`function`（含 `name`、`description`、`parameters`）等字段。
-- `tool_choice`（string/object）：控制模型是否调用工具。可设为 `auto`（默认，模型自主决策）、`none`（强制不调用）、`required`（强制调用），或指定具体函数。
+## 插件与工具集成
 
-### 调用与回传流程
+百炼插件是工具集合的载体，一个插件可包含多个工具（API）。插件分三类：
 
-1. 请求中携带 `tools`，模型判断需要调用时在响应里返回 `tool_calls`（含 `id`、函数名、参数 JSON）。
-2. 开发者本地执行对应函数，得到结果。
-3. 把以 `tool` 角色的消息（含 `tool_call_id` 与函数返回内容）追加到 `messages`，再次发起请求。
-4. 模型结合工具结果生成最终回复。
+- **官方插件**：组件广场预置，如 Python 代码解释器（`code_interpreter`）、计算器（`calculator`）、夸克搜索（`quark_search`）等，无需配置输入输出参数。
+- **三方插件**：涵盖商业服务、图像视频、学习教育等领域，开通后直接调用。
+- **自定义插件**：通过配置 API 路径、请求参数与返回数据创建，或从云市场导入；只有已发布的工具才能在应用中被调用。
 
-### 实时会话中的配置
+子业务空间调用官方插件前，需先在插件详情页为子业务空间授权；每个智能体应用最多添加 10 个工具。
 
-Qwen-Omni-Realtime 通过 `session.update` 事件在 WebSocket 建连后更新会话默认配置，工具相关字段与标准 Chat 接口一致。VAD 模式下模型自动触发响应，工具调用结果回传后需手动发送 `response.create` 以驱动模型继续生成。
+## 注意事项
 
-### 插件与 MCP 的鉴权配置
-
-- **自定义插件**：鉴权信息可放在 Header（默认参数名 `Authorization`）或 Query 中，`type` 支持 `basic`、`bearer`（[Token](token.md) 前加 `Bearer`）、`appcode`（[Token](token.md) 前加 `APPCODE`）。
-- **MCP 服务**：配置遵循 `mcpServers` 结构，`type` 可选 `stdio`（本地托管）、`sse` 或 `streamableHttp`（远程连接）；远程连接通过带 `Authorization` 头的 `url` 鉴权。
-
-## 开发者要点
-
-- 工具的 `description` 与参数描述直接影响模型决策准确性，建议用自然语言清晰写明工具能力与使用场景，必要时在提示词中明确工具名称。
-- 三方直供模型仅在中国内地地域可用，调用前需先在百炼控制台开通对应服务；各地域 [API Key](api-key.md) 不互通，切换地域需同步更换 [API Key](api-key.md) 与 `base_url`。
-- MCP 调用会把工具返回内容作为上下文传入模型，导致输入 [Token](token.md) 增加，并可能间接增加输出 Token；调用准确性依赖提示词，若模型未准确调用可更换更强的推理模型（如千问 3 系列）。
-- [业务空间](workspace.md)专属域名（`https://{WorkspaceId}.<region>.maas.aliyuncs.com/compatible-mode/v1`）相比旧域名有更好的推理性能与稳定性，建议迁移。
+- 各模型对插件/工具调用的兼容性可能有差异，最新状态以控制台实际执行结果为准。
+- 从 OpenAI / Anthropic 迁移时，应先确认目标 Qwen 模型在对应兼容接口下是否支持 `tools`、`stream` 等所需参数。
+- 兼容接口为保证协议一致性，可能不暴露百炼原生全部参数；如需最全能力建议改用 DashScope 原生接口。
+- 首次访问插件页面需授权服务关联角色 `AliyunServiceRoleForSFMAccessCloudAPI`；RAM 子账号缺少创建服务关联角色权限会报错（错误码 140052），需先由主账号授予相应自定义策略。
 
 ## 关联主题页
 
+- [qwen api reference](../api/qwen-api-reference.md)
 - [omni realtime api](../api/omni-realtime-api.md)
 - [more about models](../api/more-about-models.md)
-- [more models](../api/more-models.md)
-- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
 - [plug in](../guides/plug-in.md)
-- [model context protocol](../guides/model-context-protocol.md)
+- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
+- [llm application](../guides/llm-application.md)
 
 

@@ -1,6 +1,6 @@
 # model monitoring
 
-百炼平台围绕"模型调用量与运行状态"提供两套互补能力：**模型用量**按[业务空间](../concepts/workspace.md)汇总计费用量（[Token](../concepts/token.md)/张/秒），用于成本核算；**模型监控**提供分钟级运行指标、调用日志、[Token](../concepts/token.md) 追踪与主动告警，用于稳定性保障。前者数据延迟约 1 小时且统计口径偏账单，后者普通监控同样为小时级、高级监控可达分钟级。详见[模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)与[模型监控](../../raw/model-user-guide/model-monitoring/model-telemetry.md)。
+百炼平台围绕"模型调用量与运行状态"提供两套互补能力：**模型用量**按[业务空间](../concepts/workspace.md)汇总[计费](../concepts/billing.md)用量（[Token](../concepts/token.md)/张/秒），用于成本核算；**模型监控**提供分钟级运行指标、调用日志、[Token](../concepts/token.md) 追踪与主动告警，用于稳定性保障。前者数据延迟约 1 小时且统计口径偏账单，后者普通监控同样为小时级、高级监控可达分钟级。详见[模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)与[模型监控](../../raw/model-user-guide/model-monitoring/model-telemetry.md)。
 
 ## 适用范围与支持的模型
 
@@ -13,9 +13,9 @@
 
 ## 用量统计单位
 
-不同模型的用量统计口径与计费维度如下（详见[模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)）：
+不同模型的用量统计口径与[计费](../concepts/billing.md)维度如下（详见[模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)）：
 
-| 模型类型 | 统计单位 | 计费说明 |
+| 模型类型 | 统计单位 | [计费](../concepts/billing.md)说明 |
 | --- | --- | --- |
 | 大语言模型（文本生成/深度思考/视觉理解） | [Token](../concepts/token.md) | 按输入和输出对应的 Token 数计费 |
 | 视觉模型·图像生成 | 张 | 按成功生成的图像张数计费 |
@@ -152,5 +152,6 @@ Authorization: Basic base64Encode(AccessKey:AccessKeySecret)
 
 - [模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)
 - [模型监控](../../raw/model-user-guide/model-monitoring/model-telemetry.md)
+
 
 

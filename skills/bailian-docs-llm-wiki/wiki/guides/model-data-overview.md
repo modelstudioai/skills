@@ -10,7 +10,7 @@
 
 | 类型 | 用途 | 支持的子类型 |
 | --- | --- | --- |
-| 训练集 | 用于模型调优，通过在特定任务上进行有监督训练提升模型表现 | 文本生成、多模态理解、图生视频（首帧）、图生视频（首尾帧） |
+| 训练集 | 用于模型调优，通过在特定任务上进行有监督训练提升模型表现 | 文本生成、[多模态](../concepts/multimodal.md)理解、图生视频（首帧）、图生视频（首尾帧） |
 | 评测集 | 用于评估模型在未见过数据上的泛化能力 | 文本生成 |
 
 ## 训练集格式
@@ -150,5 +150,6 @@ Few-Shot 策略示例：训练集 1000 条、指令生成依赖样本数 5、生
 
 - [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)
 - [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)
+
 
 

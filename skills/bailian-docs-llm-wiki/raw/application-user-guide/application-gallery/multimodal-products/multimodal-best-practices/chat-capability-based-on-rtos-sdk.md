@@ -523,7 +523,7 @@ int dummy_aliyun_sdk_init(void)
 
 -   如采用半托管模式，http 通信的参数根据开发者`**自行开发的服务端**`设备登录（getToken）进行配置
     
--   如采用全托管模式，http 通信参数由阿里云提供，，接入信息如下：
+-   如采用全托管模式，http 通信参数由阿里云提供，接入信息如下：
     
     Host: bailian.multimodalagent.aliyuncs.com
     
@@ -653,16 +653,16 @@ int dummy_wss_init(void)
 }
 ```
 
-注意，本 SDK 与云端的 websocket 通信需要建立 TLS 隧道，需要做如下配置：
+**重要**
+
+本 SDK 与云端的 websocket 通信需要建立 TLS 隧道，需要做如下配置：
 
 -   TLS 版本要求 TLS1.2 或以上
     
 -   开启 SNI（SERVER NAME INDICATION）
     
--   配置 CA 证书（[GlobalSign Root CA - R3](https://secure.globalsign.net/cacert/Root-R3.crt)）（也可至GlobalSign官网下载）
+-   配置 CA 证书（[GlobalSign Root CA - R46](https://secure.globalsign.com/cacert/rootr46.crt)）（也可至[GlobalSign官网](https://support.globalsign.com/ca-certificates/globalsign-root-certificates)下载）
     
-
-* * *
 
 websocket建立连接时upgrade请求报文示例
 

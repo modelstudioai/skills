@@ -35,7 +35,7 @@ Qwen-MT 通过 `translation_options`（OpenAI SDK 中放入 `extra_body`）控�
 
 ### Qwen-OCR 专属参数
 
-Qwen-OCR 的 `messages.content` 为多模态数组，图像元素支持：
+Qwen-OCR 的 `messages.content` 为[多模态](../concepts/multimodal.md)数组，图像元素支持：
 
 - `min_pixels`（int）：图像最小像素阈值，小于该值会放大，示例 `32 * 32 * 3`（即 3072）。
 - `max_pixels`（int）：图像最大像素阈值，超过该值会缩小，示例 `32 * 32 * 8192`（即 8388608）。
@@ -106,7 +106,7 @@ completion = client.chat.completions.create(
 ## 限制和注意事项
 
 - **限流**：各模型有独立的限流条件，`farui-plus` 等模型限流详见[限流](https://help.aliyun.com/zh/model-studio/rate-limit)。
-- **上下文与计费**：`farui-plus` 上下文 12k、最大输入 12k、最大输出 2k，输入成本 20 元/百万 [Token](../concepts/token.md)；`tongyi-intent-detect-v3` 上下文 8,192、最大输入 8,192、最大输出 1,024，输入 0.4 元、输出 1 元/百万 [Token](../concepts/token.md)，开通后 90 天内赠送 100 万 [Token](../concepts/token.md) 免费额度。
+- **上下文与[计费](../concepts/billing.md)**：`farui-plus` 上下文 12k、最大输入 12k、最大输出 2k，输入成本 20 元/百万 [Token](../concepts/token.md)；`tongyi-intent-detect-v3` 上下文 8,192、最大输入 8,192、最大输出 1,024，输入 0.4 元、输出 1 元/百万 [Token](../concepts/token.md)，开通后 90 天内赠送 100 万 [Token](../concepts/token.md) 免费额度。
 - **协议限制**：`qwen-deep-research` 仅支持 Python DashScope SDK；`gui-plus-2026-02-26` 仅在华北2（北京）地域提供。
 - **SDK 线程安全**：DashScope Java SDK 的 `Generation` 等对象非线程安全，需自行管理同步机制或及时关闭进程。
 - **图像像素阈值**：Qwen-OCR 的 `min_pixels`/`max_pixels` 影响识别精度与耗时，过小会放大、过大会缩小，建议按示例值设置。
@@ -120,5 +120,6 @@ completion = client.chat.completions.create(
 - [Qwen-MT API参考](../../raw/model-api-reference/more-models/qwen-mt-api.md)
 - [Qwen-OCR API参考](../../raw/model-api-reference/more-models/qwen-vl-ocr-api-reference.md)
 - [GUI-Plus API参考](../../raw/model-api-reference/more-models/gui-plus-interface-interaction-model.md)
+
 
 

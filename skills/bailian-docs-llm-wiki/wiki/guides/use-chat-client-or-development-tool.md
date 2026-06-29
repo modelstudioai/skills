@@ -1,8 +1,8 @@
 # use chat client or development tool
 
-阿里云百炼支持通过各类终端 AI 编程工具、桌面客户端、IDE 插件、低代码平台及 HTTP 工具接入其模型服务。所有客户端共享同一套计费与鉴权模型：按量计费、Coding Plan、[Token](../concepts/token.md) Plan 团队版，区别仅在于配置入口和 Base URL。本文汇总各工具的接入方式、关键参数与限制。
+阿里云百炼支持通过各类终端 AI 编程工具、桌面客户端、IDE 插件、低代码平台及 HTTP 工具接入其模型服务。所有客户端共享同一套[计费](../concepts/billing.md)与鉴权模型：按量[计费](../concepts/billing.md)、Coding Plan、[Token](../concepts/token.md) Plan 团队版，区别仅在于配置入口和 Base URL。本文汇总各工具的接入方式、关键参数与限制。
 
-## 计费方案与通用接入参数
+## [计费](../concepts/billing.md)方案与通用接入参数
 
 百炼为客户端接入提供三种计费方案，任何工具的配置都围绕这三组参数展开：
 
@@ -103,7 +103,7 @@ Cursor、Cline、Qoder 等支持通过对话调用百炼能力：全局安装 `b
 - Coding Plan：[支持的模型](https://help.aliyun.com/zh/model-studio/coding-plan)
 - Token Plan 团队版：[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)（仅文本生成类）
 
-部分工具（如 OpenCode、Kilo CLI、Qwen Code）在配置文件中显式列出 `qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash`、`deepseek-v4-pro/flash`、`kimi-k2.7-code/2.6/2.5`、`glm-5.2/5.1/5`、`MiniMax-M2.5` 等，支持开启 `thinking` 思考模式（`budgetTokens` 一般设 8192，Coding Plan 下 Kilo CLI 设 1024）。Qoder / Qoder CN 仅支持文本生成模型，不支持多模态。
+部分工具（如 OpenCode、Kilo CLI、Qwen Code）在配置文件中显式列出 `qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash`、`deepseek-v4-pro/flash`、`kimi-k2.7-code/2.6/2.5`、`glm-5.2/5.1/5`、`MiniMax-M2.5` 等，支持开启 `thinking` 思考模式（`budgetTokens` 一般设 8192，Coding Plan 下 Kilo CLI 设 1024）。Qoder / Qoder CN 仅支持文本生成模型，不支持[多模态](../concepts/multimodal.md)。
 
 ## 限制与注意事项
 
@@ -134,5 +134,6 @@ Cursor、Cline、Qoder 等支持通过对话调用百炼能力：全局安装 `b
 - [使用Postman或cURL调用图像/视频生成API](../../raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)
 - [Dify](../../raw/model-user-guide/use-chat-client-or-development-tool/dify.md)
 - [更多工具](../../raw/model-user-guide/use-chat-client-or-development-tool/more-tools.md)
+
 
 

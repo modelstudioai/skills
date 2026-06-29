@@ -69,7 +69,7 @@ AppFlow 连接流可在百炼步骤后添加 SLS 日志云服务节点，将对�
 
 ## 限制和注意事项
 
-- 新用户免费额度可覆盖教程资源消耗，超额后按 token 计费。
+- 新用户免费额度可覆盖教程资源消耗，超额后按 token [计费](../concepts/billing.md)。
 - 百炼文件导入支持 pdf、doc、docx、txt、md、pptx、ppt、png、jpg、jpeg、bmp、gif、xls、xlsx，单文档最大 100MB 或 1000 页，单图片最大 20MB，最多 200 个文件；文件存储在新加坡区域，解析通常 1–6 分钟。
 - 钉钉应用需开通 `Card.Streaming.Write` 与 `Card.Instance.Write` 权限以发送卡片消息；应用供企业内其他用户使用需发布版本并设置可见范围。
 - 企业微信可信 IP 一个 IP 仅能用于一个企业，多企业共用会被识别为服务商导致通讯录 / 身份校验接口不可用。
@@ -84,5 +84,6 @@ AppFlow 连接流可在百炼步骤后添加 SLS 日志云服务节点，将对�
 - [10分钟让微信公众号成为智能客服](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-wechat-in-10-minutes.md)
 - [在钉钉上增加一个AI机器人](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-dingtalk.md)
 - [基于本地知识库构建RAG应用](../../raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)
+
 
 

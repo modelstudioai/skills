@@ -129,7 +129,7 @@ go get 'github.com/openai/openai-go/v3'
 - **`The result_format parameter must be "message" when enable_thinking is true`**：思考模式须 `result_format="message"`。
 - **`The incremental_output parameter must be "true" when enable_thinking is true`**：开启思考模式时须同时开启增量输出。
 
-### 多模态与文件类
+### [多模态](../concepts/multimodal.md)与文件类
 
 - **`The provided URL does not appear to be valid.`**：URL 须以 `http://`、`https://`、`data:` 开头；本地路径须以 `file://` 开头；临时 URL 通过 HTTP 调用需在 Header 加 `X-DashScope-OssResourceResolve: enable`，且仅 DashScope SDK 支持。
 - **`Exceeded limit on max bytes per data-uri item: 10485760`**：Base64 编码后单文件不超过 10 MB；图像 URL 不超过 10 MB，视频按模型分别为 2GB/1GB/150MB。
@@ -155,5 +155,6 @@ go get 'github.com/openai/openai-go/v3'
 - [将API Key配置到环境变量](../../raw/model-api-reference/preparations/configure-api-key-through-environment-variables.md)
 - [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)
 - [错误码](../../raw/model-api-reference/preparations/error-code.md)
+
 
 

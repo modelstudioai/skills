@@ -58,23 +58,21 @@
 
 ## 横切概念
 
-- [API Key](concepts/api-key.md) — 关联 7 个主题
-- [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 6 个主题
-- [Token](concepts/token.md) — 关联 6 个主题
-- [业务空间](concepts/workspace.md) — 关联 5 个主题
+- [SDK 接入](concepts/sdk.md) — 关联 7 个主题
 - [函数调用](concepts/function-calling.md) — 关联 6 个主题
-- [异步调用](concepts/async-invocation.md) — 关联 5 个主题
-- [智能体应用](concepts/agent-application.md) — 关联 7 个主题
-- [检索增强生成](concepts/rag.md) — 关联 7 个主题
-- [流式输出](concepts/streaming-output.md) — 关联 5 个主题
-- [知识库](concepts/knowledge-base.md) — 关联 6 个主题
+- [地域与可用区](concepts/region.md) — 关联 6 个主题
+- [多模态](concepts/multimodal.md) — 关联 6 个主题
+- [模型选型](concepts/model-selection.md) — 关联 4 个主题
+- [流式输出](concepts/streaming-output.md) — 关联 4 个主题
+- [计费](concepts/billing.md) — 关联 6 个主题
+- [限流与吞吐](concepts/rate-limiting.md) — 关联 4 个主题
 
 ## 对比分析
 
-- [图像、视频与 3D 生成对比](comparisons/multimodal-generation-comparison.md) — 对比 3 个主题
-- [应用监控与应用评测对比](comparisons/application-observation-vs-evaluation.md) — 对比 2 个主题
-- [微调、压缩与部署方案对比](comparisons/model-customization-options.md) — 对比 3 个主题
-- [框架、工具包与 MCP 对比](comparisons/extension-framework-comparison.md) — 对比 3 个主题
-- [模型直调与应用调用对比](comparisons/model-call-vs-application-call.md) — 对比 3 个主题
-- [长期记忆、记忆库与知识库对比](comparisons/memory-and-knowledge-solutions.md) — 对比 3 个主题
+- [多模态生成 API 对比（图像/视频/3D）](comparisons/multimodal-generation-api-comparison.md) — 对比 3 个主题
+- [应用调用方式对比（API 调用 vs 百炼应用调用）](comparisons/application-calling-comparison.md) — 对比 2 个主题
+- [模型优化方式对比（微调/压缩/高速推理）](comparisons/model-optimization-methods-comparison.md) — 对比 3 个主题
+- [监控体系对比（应用监控 vs 模型监控）](comparisons/monitoring-comparison.md) — 对比 2 个主题
+- [记忆能力对比（长期记忆 vs 记忆库）](comparisons/memory-feature-comparison.md) — 对比 2 个主题
+- [评测体系对比（应用评测 vs 模型评测）](comparisons/evaluation-comparison.md) — 对比 2 个主题
 

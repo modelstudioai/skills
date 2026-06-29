@@ -91,7 +91,7 @@
 
 仅有 CHAIN（FullCodeApp）作为入口节点，目前不支持追踪其内部调用链路。若已开启观测却看不到调用量等统计数据，需排查：代码中是否使用 AgentScope-AI 的 Tracing 模块定义上报信息，以及部署时是否添加 `--telemetry enable` 参数。
 
-## 计费说明
+## [计费](../concepts/billing.md)说明
 
 应用观测功能本身**不收费**，但观测数据需存储在可观测链路 OpenTelemetry 服务中，相关存储费用由 OpenTelemetry 服务收取。
 
@@ -105,5 +105,6 @@
 ## 来源文档
 
 - [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md)
+
 
 

@@ -1,6 +1,6 @@
 # get started with models
 
-阿里云百炼是一站式大模型开发与应用平台，集成千问及主流第三方模型，提供兼容 OpenAI 的 API 和全链路模型服务。本页汇总从模型选型、地域/接入域名选择、首次 API 调用到限流管理的核心步骤，帮助开发者快速跑通第一次模型调用并了解生产环境的注意事项。
+阿里云百炼是一站式大模型开发与应用平台，集成千问及主流第三方模型，提供兼容 OpenAI 的 API 和全链路模型服务。本页汇总从[模型选型](../concepts/model-selection.md)、地域/接入域名选择、首次 API 调用到限流管理的核心步骤，帮助开发者快速跑通第一次模型调用并了解生产环境的注意事项。
 
 ## 支持的模型与能力
 
@@ -11,7 +11,7 @@
   - qwen3.7-plus：效果、速度和成本均衡，是多数场景的推荐选择。
   - qwen3.6-flash：高性价比、低延迟，适合需要快速响应的简单任务。
 - **第三方模型**：deepseek-v4-pro、deepseek-v4-flash、kimi-k2.7-code、glm-5.2、MiniMax-M2.7、mimo-v2.5-pro 等，API 格式与千问模型一致。
-- **多模态覆盖**：文本生成、视觉理解（qwen3.7-plus、qwen3.5-omni-plus）、图像生成（wan2.7-image-pro、qwen-image-2.0-pro）、视频生成（happyhorse-1.1-t2v/i2v/r2v）、3D 生成（Tripo-H3.1/P1.0）、语音合成（cosyvoice-v3.5-plus、speech-2.8-hd）、音乐生成（fun-music-v1）、语音识别（fun-asr-realtime、fun-asr）、语音转语音（qwen3.5-omni-plus-realtime）、全模态、向量与重排序（text-embedding-v4、qwen3-rerank）。
+- **[多模态](../concepts/multimodal.md)覆盖**：文本生成、视觉理解（qwen3.7-plus、qwen3.5-omni-plus）、图像生成（wan2.7-image-pro、qwen-image-2.0-pro）、视频生成（happyhorse-1.1-t2v/i2v/r2v）、3D 生成（Tripo-H3.1/P1.0）、语音合成（cosyvoice-v3.5-plus、speech-2.8-hd）、音乐生成（fun-music-v1）、语音识别（fun-asr-realtime、fun-asr）、语音转语音（qwen3.5-omni-plus-realtime）、全模态、向量与重排序（text-embedding-v4、qwen3-rerank）。
 
 除开箱即用模型外，百炼还支持模型调优（SFT/CPT/DPO）、模型部署（将预置或自定义模型部署为资源专享的推理服务）和模型评测（人工/自动/基线评测）。
 
@@ -151,5 +151,6 @@ asyncio.run(main())
 - [首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md)
 - [选择地域、服务部署范围和接入域名](../../raw/model-user-guide/get-started-with-models/regions.md)
 - [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)
+
 
 

@@ -113,7 +113,7 @@ this.chatClient = builder
 
 详情参见[通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)。
 
-## 计费与错误处理
+## [计费](../concepts/billing.md)与错误处理
 
 - 百炼应用本身不收费，但通过应用调用模型会产生模型推理（调用）费用。
 - 通用错误码参见百炼[错误信息](https://help.aliyun.com/zh/model-studio/error-code)文档。
@@ -131,5 +131,6 @@ this.chatClient = builder
 - [通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)
 - [使用Spring AI Alibaba集成阿里云百炼大模型应用](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-llm-application.md)
 - [通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)
+
 
 

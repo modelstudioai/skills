@@ -1,12 +1,12 @@
 # model high speed inference
 
-TPM 预留是百炼平台提供的推理容量保障能力，通过为指定模型锁定专属吞吐量，确保业务高峰期不受公共限流影响。预留容量内的调用为业务专属、不与其他用户共享，超出部分自动降级为按量计费且不中断服务，详见 [TPM 预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
+TPM 预留是百炼平台提供的推理容量保障能力，通过为指定模型锁定专属吞吐量，确保业务高峰期不受公共限流影响。预留容量内的调用为业务专属、不与其他用户共享，超出部分自动降级为按量[计费](../concepts/billing.md)且不中断服务，详见 [TPM 预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
 
 ## 方案选型
 
-百炼提供多种推理容量与计费方案，TPM 预留适用于"流量可预估、不能接受限流"的场景：
+百炼提供多种推理容量与[计费](../concepts/billing.md)方案，TPM 预留适用于"流量可预估、不能接受限流"的场景：
 
-- **按量付费**：按 token 计费，共享公共池，无容量保障，超额受公共限流影响，无需改动代码。
+- **按量付费**：按 token [计费](../concepts/billing.md)，共享公共池，无容量保障，超额受公共限流影响，无需改动代码。
 - **资源包/节省计划**：预付费额度折扣，非专属容量，超出转按量。
 - **TPM 预留**：按 kTPM 预付费，专属容量刚性兑付，超额自动降级公共池按量不中断，仅需替换 `model` 参数。
 - **PTU 专属部署**：按 kTPM 预付费，专属部署实例，适用于高吞吐高性能场景，超出转按量，需替换 `model` 参数。
@@ -144,5 +144,6 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 ## 来源文档
 
 - [TPM 预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)
+
 
 

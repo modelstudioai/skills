@@ -1,49 +1,49 @@
 # 流式输出
 
-流式输出（Streaming Output）是指模型在生成过程中，将结果以增量数据块（chunk）的形式逐步返回给调用方，而非等待完整生成后一次性返回。百炼平台的文本生成、实时多模态交互、应用调用等场景均支持流式输出，可显著降低首字延迟、提升交互体验。
+流式输出（Streaming Output）指模型在生成响应过程中，将内容按增量片段持续返回给客户端，而非等整段结果生成完毕再一次性返回。百炼平台在文本生成、应用调用、实时[多模态](multimodal.md)交互等多种场景下均支持流式输出，用于降低首字延迟、提升交互体验，并支撑需要边生成边消费的业务（如实时语音对话、深度研究的反问确认阶段）。
 
-## 在百炼平台中的使用场景
+## 在百炼平台的不同场景
 
 ### 文本生成模型（Qwen 系列）
 
-在 OpenAI 兼容 Chat Completions、Responses、Anthropic 兼容 Messages 以及 DashScope 原生接口中，均可通过设置 `stream` 参数启用流式输出。调用方按 OpenAI/Anthropic 协议约定的 SSE（Server-Sent Events）格式逐块读取 `delta` 内容，拼接后得到完整文本。
+百炼为 Qwen 系列提供 OpenAI 兼容 Chat Completions、OpenAI 兼容 Responses、Anthropic 兼容 Messages 与 DashScope 原生四种接口，均通过请求中的 `stream` 参数控制是否流式输出。迁移评估时应先确认目标 Qwen 模型在对应兼容接口下是否支持 `stream` 等所需参数。兼容接口为保证协议一致性可能不暴露原生全部参数，如需最全的采样参数与插件能力，建议改用 DashScope 原生接口。
 
-- 兼容接口的流式响应字段与对应官方客户端保持一致，可直接复用现有 SDK 与示例代码。
-- 仅 Responses 接口由平台自动管理对话历史，其余接口需调用方自行维护上下文。
-- 迁移评估时应先确认目标 Qwen 模型在对应兼容接口下是否支持 `stream` 等参数。
+### 应用调用（智能体 / 工作流 / Agent 2.0）
 
-### 实时多模态交互（Qwen-Omni-Realtime）
+百炼应用提供两套 API，均支持流式：
 
-Qwen-Omni-Realtime 基于 WebSocket 长连接实现低延迟的语音/视频/图像对话，本身就是一种流式交互模型：客户端通过 `input_audio_buffer.append` 流式追加音频，服务端通过 `response.delta` 等事件流式返回生成的音频与文本。
+- **OpenAI 兼容 Responses API**：`POST https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/v1/responses`，通过 `stream`（boolean，默认 `false`）开启，适合复用 OpenAI 生态代码库与工具链，支持同步/异步、流式、[多模态](multimodal.md)。
+- **DashScope 原生 API**：`POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion`，功能更全、性能更高，新版智能体、工作流、旧版智能体均支持。
 
-- 在 VAD 模式下，服务端自动检测语音起止并触发响应生成；在 Manual 模式下，需客户端显式 `input_audio_buffer.commit` 后 `response.create` 触发生成。
-- 流式发送较小数据块可让 VAD 响应更迅速；关闭 `turn_detection` 时每个事件最多放置 15 MiB 音频。
-- 可通过 `response.cancel` 取消正在进行的流式响应。
+调用前需先在控制台获取应用 ID（及子业务空间的 Workspace ID）与 API Key。
 
-### 应用调用（[智能体应用](agent-application.md) / 工作流应用）
+### 实时[多模态](multimodal.md)交互（Qwen-Omni-Realtime）
 
-通过 `Application.call` 或 `POST /apps/{app_id}/completion` 调用百炼应用时，同样支持流式返回中间过程与最终结果。开发者可在请求参数中开启流式模式，逐步接收应用编排过程中各节点的输出与最终 `output.text`，适用于对话式 UI、逐字渲染等场景。
+实时多模态交互基于 WebSocket 长连接，本质上即流式：通过客户端事件与服务端事件的双向消息流驱动会话。客户端用 `input_audio_buffer.append` 持续追加 Base64 音频片段，服务端在 VAD 模式下自动检测语音起止并触发响应，在 Manual 模式下由客户端用 `input_audio_buffer.commit` + `response.create` 显式触发。流式发送较小数据块可让 VAD 响应更迅速；Manual 模式下关闭 `turn_detection` 时，每个事件最多放置 15 MiB 音频。相关事件包括 `response.create`（触发生成）、`response.cancel`（取消正在进行的响应）、`session.updated` 等。
+
+### 专用模型（[more](../api/more.md)-models）
+
+`farui-plus`、`tongyi-intent-detect-v3`、`qwen-mt-plus`、`qwen3.5-ocr`、`gui-plus` 等专用模型同样通过 `stream`（bool，可选）控制流式输出。其中 `qwen-deep-research` 采用两阶段流程，**第一步反问确认阶段必须将 `stream` 设为 `true`**，以便客户端实时读取反问内容并回传确认；该模型当前仅支持 Python DashScope SDK、仅华北2（北京）地域。
 
 ## 关键参数与配置
 
-- **`stream`**：布尔型，设为 `true` 启用流式输出，适用于 Chat Completions、Responses、应用调用等接口。
-- **`stream_options`**：OpenAI 兼容 Chat Completions 接口下，可在流式输出的最后一行通过 `stream_options={"include_usage": true}` 获取本次请求的 token 用量。
-- **`response.create` / `response.cancel`**：实时多模态交互中触发与取消流式响应的客户端事件。
-- **`input_audio_buffer.append`**：实时多模态交互中流式追加输入音频，建议分块发送以提升 VAD 响应速度。
-- **协议差异**：OpenAI/Anthropic 兼容接口为协议一致性可能不暴露百炼原生全部参数；如需最全的流式相关采样与插件参数，建议改用 DashScope 原生接口。
+- **`stream`**（文本/应用/专用模型，boolean，默认 `false`）：是否启用流式输出。开启后响应以增量片段（SSE 或 WebSocket 消息）形式返回，客户端需按对应协议逐片段解析。
+- **`response.create` / `response.cancel`**（Omni Realtime）：在 WebSocket 会话中显式触发或取消流式响应；VAD 模式下响应由服务端自动生成，Manual 模式或工具调用回传结果后需手动发送 `response.create`。
+- **`input_audio_buffer.append`**：向实时会话的输入音频缓冲区流式追加音频片段，是实时流式输入的核心事件。
+- **地域与域名**：流式接口的地域与 Base URL 与非流式一致，例如华北2（北京）推荐使用业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`，新加坡为 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`；Omni Realtime 走 WebSocket，北京为 `wss://dashscope.aliyuncs.com/api-ws/v1/realtime`。
 
 ## 注意事项
 
-- 流式输出需要调用方正确处理增量拼接与连接中断，建议在客户端实现断线重连与异常回退逻辑。
-- 实时多模态交互对网络抖动敏感，建议使用[业务空间](workspace.md)专属域名（如 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`）以获得更好性能与稳定性。
-- 异步任务（如图像/视频生成）不适用流式输出，应通过任务查询或事件总线 EventBridge 通知获取结果，避免高频轮询触发 20 QPS 限流。
+- 流式响应需客户端按 SSE 或 WebSocket 协议逐片段解析并拼接，错误处理（断连、超时、部分片段失败）需在业务侧实现。
+- 不同接口对流式的支持字段存在差异：兼容接口可能不暴露原生全部参数，需最全流式控制能力时优先选 DashScope 原生接口。
+- 实时多模态场景下，音频片段大小与发送节奏直接影响 VAD 灵敏度与首响应延迟，建议流式发送较小数据块。
+- `qwen-deep-research` 反问阶段强制 `stream=true`，是少见的"必须流式"场景，集成时需特别处理。
 
 ## 关联主题页
 
 - [qwen api reference](../api/qwen-api-reference.md)
 - [omni realtime api](../api/omni-realtime-api.md)
-- [more about models](../api/more-about-models.md)
-- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
-- [bailian application calling](../guides/bailian-application-calling.md)
+- [application call](../api/application-call.md)
+- [more models](../api/more-models.md)
 
 

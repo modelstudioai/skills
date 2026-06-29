@@ -1,10 +1,10 @@
 # omni realtime api
 
-Qwen-Omni-Realtime API 是百炼平台提供的实时多模态交互接口，基于 WebSocket 长连接实现低延迟的语音（以及视频/图像）对话。它通过客户端事件与服务端事件的双向消息流驱动会话，支持 VAD 自动检测与 Manual 手动控制两种交互模式，并提供声音复刻、工具调用（Function Calling）、联网搜索等能力。本文汇总客户端事件、服务端事件、Python/Java SDK、交互流程与声音复刻 API 的关键参考信息。
+Qwen-Omni-Realtime API 是百炼平台提供的实时[多模态](../concepts/multimodal.md)交互接口，基于 WebSocket 长连接实现低延迟的语音（以及视频/图像）对话。它通过客户端事件与服务端事件的双向消息流驱动会话，支持 VAD 自动检测与 Manual 手动控制两种交互模式，并提供声音复刻、工具调用（Function Calling）、联网搜索等能力。本文汇总客户端事件、服务端事件、Python/Java SDK、交互流程与声音复刻 API 的关键参考信息。
 
 ## 支持的模型
 
-实时多模态交互涉及以下 Qwen-Omni-Realtime 系列模型，默认音色与部分参数默认值因模型而异：
+实时[多模态](../concepts/multimodal.md)交互涉及以下 Qwen-Omni-Realtime 系列模型，默认音色与部分参数默认值因模型而异：
 
 | 模型系列 | 默认音色 | 备注 |
 | --- | --- | --- |
@@ -215,5 +215,6 @@ Qwen-Omni-Realtime API 是百炼平台提供的实时多模态交互接口，基
 - [Java SDK](../../raw/model-api-reference/omni-realtime-api/omni-realtime-java-sdk.md)
 - [实时多模态交互流程](../../raw/model-api-reference/omni-realtime-api/omni-realtime-interaction-process.md)
 - [声音复刻API参考](../../raw/model-api-reference/omni-realtime-api/qwen-omni-voice-cloning.md)
+
 
 

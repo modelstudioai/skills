@@ -1,6 +1,6 @@
 # vector and sort
 
-百炼平台提供向量化（Embedding）与排序（Rerank）两类模型 API，用于把文本、图片、视频转换为数值向量并完成语义检索的召回与精排。向量模型覆盖通用文本、多模态（文本+图片+视频）以及批处理三种调用形态；排序模型则对召回结果做二次精排，支持纯文本与跨模态查询。本文汇总四类 API 的模型清单、关键参数、调用方式与限制。
+百炼平台提供向量化（Embedding）与排序（Rerank）两类模型 API，用于把文本、图片、视频转换为数值向量并完成语义检索的召回与精排。向量模型覆盖通用文本、[多模态](../concepts/multimodal.md)（文本+图片+视频）以及批处理三种调用形态；排序模型则对召回结果做二次精排，支持纯文本与跨模态查询。本文汇总四类 API 的模型清单、关键参数、调用方式与限制。
 
 ## 能力概览
 
@@ -8,7 +8,7 @@
 | --- | --- | --- | --- |
 | 通用文本向量（同步） | text-embedding-v4 / v3 / v2 / v1 | OpenAI 兼容 / DashScope | `POST /compatible-mode/v1/embeddings` |
 | 通用文本向量（批量） | text-embedding-async-v2 / v1 | 异步任务（创建+查询） | `POST /api/v1/services/embeddings/text-embedding/text-embedding` |
-| 多模态向量 | qwen3-vl-embedding、tongyi-embedding-vision-*、multimodal-embedding-v1 | 同步 HTTP | `POST /api/v1/services/embeddings/multimodal-embedding/multimodal-embedding` |
+| [多模态](../concepts/multimodal.md)向量 | qwen3-vl-embedding、tongyi-embedding-vision-*、multimodal-embedding-v1 | 同步 HTTP | `POST /api/v1/services/embeddings/multimodal-embedding/multimodal-embedding` |
 | 文本/跨模态排序 | qwen3-rerank、qwen3-vl-rerank、gte-rerank-v2 | 同步 HTTP / SDK | `/compatible-api/v1/reranks` 或 `/api/v1/services/rerank/text-rerank/text-rerank` |
 
 调用前需[获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key) 并配置到环境变量 `DASHSCOPE_API_KEY`；通过 SDK 调用还需[安装 DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。详见[同步接口API详情](../../raw/model-api-reference/vector-and-sort/general-text-vector/text-embedding-synchronous-api.md)。
@@ -102,7 +102,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-emb
 
 创建成功返回 `task_id` 与 `task_status: PENDING`。随后通过 `GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}` 查询，状态枚举：PENDING / RUNNING / SUCCEEDED / FAILED / CANCELED / UNKNOWN。任务数据（结果 URL 等）仅保留 24 小时，需及时保存。SDK（`BatchTextEmbedding`）封装了 `call`（同步等待）、`async_call` + `fetch`/`wait`/`cancel` 等方法，`cancel` 仅对 PENDING 状态任务有效。
 
-## 多模态向量
+## [多模态](../concepts/multimodal.md)向量
 
 多模态向量模型把文本、图片、视频编码到同一语义空间，支持以文搜图、以图搜视频、跨模态相似度计算与内容聚类。详见[Multimodal-Embedding API详情](../../raw/model-api-reference/vector-and-sort/multimodal-vector/multimodal-embedding-api-reference.md)。
 
@@ -252,5 +252,6 @@ qwen3-rerank 响应中 `results` 直接位于顶层；qwen3-vl-rerank / gte-rera
 - [文本排序](../../raw/model-api-reference/vector-and-sort/rerank-model/text-rerank-api.md)
 - [Multimodal-Embedding API详情](../../raw/model-api-reference/vector-and-sort/multimodal-vector/multimodal-embedding-api-reference.md)
 - [批处理接口API详情](../../raw/model-api-reference/vector-and-sort/general-text-vector/text-embedding-batch-api.md)
+
 
 

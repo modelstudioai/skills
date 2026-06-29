@@ -602,7 +602,7 @@ DPO 偏好训练通过引入负反馈，从而降低幻觉，使得模型输出�
 
 DeepSeek系列模型计费调整
 
--   部分模型由免费体验转为计费，具体请参见[DeepSeek -阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)。
+-   部分模型由免费体验转为计费，具体请参见[DeepSeek-阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)。
     
 
 2月7日

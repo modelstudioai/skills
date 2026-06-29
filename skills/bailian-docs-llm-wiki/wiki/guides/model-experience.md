@@ -7,7 +7,7 @@
 | 模态 | 推荐入口模型 | 主要接入方式 |
 | --- | --- | --- |
 | 文本生成 | `qwen3.7-plus` / `qwen3.7-max` / `qwen3.6-flash` | OpenAI 兼容 / Responses API |
-| 视觉理解 | `qwen3.7-plus` / `qwen3.6-flash` / `qwen-vl-ocr` | 多模态消息接口 |
+| 视觉理解 | `qwen3.7-plus` / `qwen3.6-flash` / `qwen-vl-ocr` | [多模态](../concepts/multimodal.md)消息接口 |
 | 视频生成与编辑 | `happyhorse-1.1-t2v` / `wan2.7-i2v-2026-04-25` | 异步任务（DashScope） |
 | 图片生成与编辑 | `wan2.7-image-pro` / `z-image-turbo` / `qwen-image-2.0-pro` | 异步任务 |
 | 3D 模型生成 | `Tripo/Tripo-P1.0` / `Tripo/Tripo-H3.1` | 异步任务（仅北京地域） |
@@ -129,8 +129,8 @@
 详见 [向量与重排序](../../raw/model-user-guide/model-experience/embedding-rerank-model.md)。
 
 - **文本 Embedding**：推荐 `text-embedding-v4`（64–2048 维，默认 1024，最大 8192 [Token](../concepts/token.md)）。迁移已有 v3 索引用 `text-embedding-v3`（512–1024 维，与 v3 兼容）。维度选择：大规模+存储受限选 256/512；通用选 1024；高精度选 1536/2048。
-- **多模态 Embedding**：图文混合检索（融合向量）用 `qwen3-vl-embedding`（256–2560 维，默认 2560，最大 32000 [Token](../concepts/token.md)）或 `qwen2.5-vl-embedding`（仅融合向量）；跨模态搜索（文搜图/图搜图，独立向量）用 `tongyi-embedding-vision-plus`（仅独立向量）或其 flash 版本（注重成本）。
-- **重排序**：纯文本用 `qwen3-rerank`（100+ 语言，最多 500 文档，4000 Token/条）；多模态用 `qwen3-vl-rerank`（文本/图片/视频混合，8000 Token/条）。另有 `gte-rerank-v2` 用于文本语义检索。
+- **[多模态](../concepts/multimodal.md) Embedding**：图文混合检索（融合向量）用 `qwen3-vl-embedding`（256–2560 维，默认 2560，最大 32000 [Token](../concepts/token.md)）或 `qwen2.5-vl-embedding`（仅融合向量）；跨模态搜索（文搜图/图搜图，独立向量）用 `tongyi-embedding-vision-plus`（仅独立向量）或其 flash 版本（注重成本）。
+- **重排序**：纯文本用 `qwen3-rerank`（100+ 语言，最多 500 文档，4000 Token/条）；[多模态](../concepts/multimodal.md)用 `qwen3-vl-rerank`（文本/图片/视频混合，8000 Token/条）。另有 `gte-rerank-v2` 用于文本语义检索。
 
 ## 全模态
 
@@ -153,7 +153,7 @@
 - **异步任务**：视频/图片/3D/音乐生成均为异步，通过 `X-DashScope-Async: enable` 创建任务后轮询结果；部分产物 URL（如 3D 的 `pbr_model_url`）有效期仅 2 小时，需及时下载。
 - **实时 vs 文件**：语音类能力普遍区分实时（WebSocket，`-realtime` 后缀，流式低延迟）与非实时（HTTP，整段提交，可换取更好效果）。
 - **版本管理**：文本/视觉等系列提供带日期的历史快照版本，供需要锁定特定版本的场景使用；新项目应优先使用当代主线版本。
-- **计费**：旧版 Qwen-TTS（`qwen-tts` 等）按 Token 计费；音乐生成、3D 生成等邀测/地域受限服务需先开通。
+- **[计费](../concepts/billing.md)**：旧版 Qwen-TTS（`qwen-tts` 等）按 Token [计费](../concepts/billing.md)；音乐生成、3D 生成等邀测/地域受限服务需先开通。
 - **SDK**：Fun-ASR、CosyVoice 等支持 DashScope Java/Python SDK，CosyVoice 与 Fun-ASR 还支持 Android/iOS SDK；其他模型按对应 WebSocket/HTTP 协议直接调用。
 
 ## 来源文档
@@ -169,5 +169,6 @@
 - [音乐生成](../../raw/model-user-guide/model-experience/fun-music.md)
 - [向量与重排序](../../raw/model-user-guide/model-experience/embedding-rerank-model.md)
 - [全模态](../../raw/model-user-guide/model-experience/omni.md)
+
 
 

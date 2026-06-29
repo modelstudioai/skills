@@ -84,7 +84,7 @@
 
 > QVQ 模型仅支持[流式输出](../concepts/streaming-output.md)。
 
-可通过 OpenAI SDK 或 `langchain_openai` SDK 调用，`langchain_openai` 使用 `invoke` 方法实现非流式输出。详情参见 [OpenAI Vision接口兼容](../../raw/model-api-reference/toolkits-and-frameworks/qwen-vl-compatible-with-openai.md)。
+可通过 OpenAI SDK 或 `langchain_openai` SDK 调用，`langchain_openai` 使用 `invoke` 方法实现非[流式输出](../concepts/streaming-output.md)。详情参见 [OpenAI Vision接口兼容](../../raw/model-api-reference/toolkits-and-frameworks/qwen-vl-compatible-with-openai.md)。
 
 ## Embedding 接口
 
@@ -94,7 +94,7 @@
 - `text-embedding-v3` 支持 1,024（默认）/768/512/256/128/64 维度，50+ 语种。
 - `text-embedding-v2` 固定 1,536 维，最大 25 行，单行 2,048 token。
 
-> 多模态 Embedding 模型（如 `qwen3-vl-embedding`、`tongyi-embedding-vision` 系列）不支持 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)。
+> [多模态](../concepts/multimodal.md) Embedding 模型（如 `qwen3-vl-embedding`、`tongyi-embedding-vision` 系列）不支持 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)。
 > `dimensions` 参数仅 `text-embedding-v3` 及 `text-embedding-v4` 支持。
 
 各模型享有百炼开通后 90 天内的免费 token 额度，Batch 调用价格约为实时调用的 50%。调用示例与异常响应参见 [OpenAI Embedding接口兼容](../../raw/model-api-reference/toolkits-and-frameworks/embedding-interfaces-compatible-with-openai.md)。
@@ -123,7 +123,7 @@
 
 服务端点：中国内地 `https://dashscope.aliyuncs.com/compatible-mode/v1`；国际（新加坡）`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`。
 
-北京地域支持文本生成模型（千问 Max/Plus/Flash/Long 稳定版本及部分 `latest` 版本，deepseek-r1、deepseek-v3.2、deepseek-v3）、多模态模型（千问 VL Plus/Flash/OCR）、文本向量模型（text-embedding-v1~v4）。新加坡地域支持 qwen-max、qwen-plus、qwen-turbo。
+北京地域支持文本生成模型（千问 Max/Plus/Flash/Long 稳定版本及部分 `latest` 版本，deepseek-r1、deepseek-v3.2、deepseek-v3）、[多模态](../concepts/multimodal.md)模型（千问 VL Plus/Flash/OCR）、文本向量模型（text-embedding-v1~v4）。新加坡地域支持 qwen-max、qwen-plus、qwen-turbo。
 
 工作流程：准备 jsonl 输入文件 → 上传得到 file_id → 创建 Batch 任务得到 batch_id → 轮询状态 → 下载输出/错误文件。文件上传返回的 file_id 可重复使用，输入内容不变时无需重新上传。
 
@@ -182,7 +182,7 @@
 - **Batch 思考模式**：qwen3.7/3.6/3.5 系列默认开启思考模式会增加成本，须显式设置 `enable_thinking` 且为 body 顶层参数。
 - **超时控制**：Batch Chat 同步连接最长 3600 秒，超时自动断开返回错误。
 - **Completions 地域**：Completions 接口仅适用于中国内地（北京），需北京地域 API Key。
-- **多模态 Embedding**：`qwen3-vl-embedding`、`tongyi-embedding-vision` 等多模态向量模型不支持 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)，需走多模态向量接口。
+- **[多模态](../concepts/multimodal.md) Embedding**：`qwen3-vl-embedding`、`tongyi-embedding-vision` 等多模态向量模型不支持 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)，需走多模态向量接口。
 - **API Key 安全**：推荐通过环境变量 `DASHSCOPE_API_KEY` 注入，避免在代码中硬编码。
 - **模型调用失败**：如返回报错信息，参见百炼错误码文档排查。
 
@@ -198,5 +198,6 @@
 - [OpenAI兼容-Batch Chat](../../raw/model-api-reference/toolkits-and-frameworks/openai-compatible-batch-chat.md)
 - [OpenAI Conversations接口兼容](../../raw/model-api-reference/toolkits-and-frameworks/openai-compatible-conversations.md)
 - [在LangChain中使用阿里云百炼](../../raw/model-api-reference/toolkits-and-frameworks/use-bailian-in-langchain.md)
+
 
 

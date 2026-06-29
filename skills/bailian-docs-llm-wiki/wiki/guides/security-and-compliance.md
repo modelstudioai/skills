@@ -54,7 +54,7 @@ RAM 用户默认无权调用百炼应用的数据、[知识库](../concepts/know
 {"X-DashScope-DataInspection": {"input": "cip", "output": "cip"}}
 ```
 
-目前支持文本和图片类型的模型，模型与护栏服务的对应关系及计费请参见官方说明。命中护栏时返回 `data_inspection_failed`（DashScope 为 `DataInspectionFailed`，HTTP 400），提示输入可能包含不当内容。
+目前支持文本和图片类型的模型，模型与护栏服务的对应关系及[计费](../concepts/billing.md)请参见官方说明。命中护栏时返回 `data_inspection_failed`（DashScope 为 `DataInspectionFailed`，HTTP 400），提示输入可能包含不当内容。
 
 ## 合规资质与备案
 
@@ -165,7 +165,7 @@ SDK 自动完成加解密，响应为明文，无需手动处理。
 - 专有网络地域须为华北2（北京），可用区须在 G/H/L（或 ADB 的 G/H/I）中按要求选择，每个可用区至少一个交换机；反向终端节点的安全组不要放入其他云组件、无需配置出入网规则。
 - 阿里云百炼只能访问客户授权过且带特定标签（标签名 `bailian-safe-workspace-oss-access`，标签值 `ReadAndWrite`）的 OSS Bucket。
 - ADB 配置需授权服务关联角色 `AliyunServiceRoleForSFMAccessADB`（策略 `AliyunServiceRolePolicyForSFMAccessADB`）。
-- **资源不可中断**：OSS Bucket 停止服务会导致安全存储空间、[知识库](../concepts/knowledge-base.md)、审计日志、历史记录等模块不可用，恢复 Bucket 后可恢复；但 Bucket 被释放会造成安全存储空间不可用且**无法恢复**，需重建。ES 停止计费/被释放的后果与 OSS 相同。
+- **资源不可中断**：OSS Bucket 停止服务会导致安全存储空间、[知识库](../concepts/knowledge-base.md)、审计日志、历史记录等模块不可用，恢复 Bucket 后可恢复；但 Bucket 被释放会造成安全存储空间不可用且**无法恢复**，需重建。ES 停止[计费](../concepts/billing.md)/被释放的后果与 OSS 相同。
 - 激活前安全存储空间不可用，激活成功后才可用。
 
 ## 限制与注意事项汇总
@@ -192,5 +192,6 @@ SDK 自动完成加解密，响应为明文，无需手动处理。
 - [配置可用区IP](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-zone-ip.md)
 - [配置私有网络中的资源](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)
 - [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md)
+
 
 

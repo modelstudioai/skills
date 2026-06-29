@@ -1,6 +1,6 @@
 # knowledge base
 
-阿里云百炼知识库基于 RAG（[检索增强生成](../concepts/rag.md)）技术，为大模型补充私有数据与最新信息，使应用能够准确回答特定领域问题。知识库仅能在中国站华北2（北京）地域开通和使用，提供标准版与旗舰版两种规格，并配套日志监控、API、效果优化与计费体系。
+阿里云百炼知识库基于 RAG（[检索增强生成](../concepts/rag.md)）技术，为大模型补充私有数据与最新信息，使应用能够准确回答特定领域问题。知识库仅能在中国站华北2（北京）地域开通和使用，提供标准版与旗舰版两种规格，并配套日志监控、API、效果优化与[计费](../concepts/billing.md)体系。
 
 ## 支持的模型与功能
 
@@ -22,7 +22,7 @@
 | 标准版 | 1 QPS（固定，不可调） | ≤ 100 GB | 0.03 元/知识库/小时 |
 | 旗舰版 | 50–10,000 QPS（可调，对应 1–200 RCU） | ≤ 9,999 GB | 0.2 元/RCU/小时 |
 
-RCU（Retrieval Compute Unit）是检索并发能力度量单位，1 RCU 约支撑最高 50 QPS。所需 RCU = 向上取整（检索峰值 QPS ÷ 50）。变配按发生时间分段计费，同一知识库 1 个自然日内最多变配 1 次。
+RCU（Retrieval Compute Unit）是检索并发能力度量单位，1 RCU 约支撑最高 50 QPS。所需 RCU = 向上取整（检索峰值 QPS ÷ 50）。变配按发生时间分段[计费](../concepts/billing.md)，同一知识库 1 个自然日内最多变配 1 次。
 
 ### 向量与切片
 
@@ -97,7 +97,7 @@ RCU（Retrieval Compute Unit）是检索并发能力度量单位，1 RCU 约支�
 
 完整配额与限制参见 [知识库配额与限制](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-specifications.md)。
 
-### 计费
+### [计费](../concepts/billing.md)
 
 知识库自 2026 年 1 月 4 日起正式计费，费用由规格费用与模型调用费用两部分构成。扣费顺序为免费额度 > 资源包 > 按量付费。
 
@@ -116,5 +116,6 @@ RCU（Retrieval Compute Unit）是检索并发能力度量单位，1 RCU 约支�
 - [知识库配额与限制](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-specifications.md)
 - [知识库API指南](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)
 - [知识库计费说明](../../raw/application-user-guide/knowledge-base/billing-for-knowledge-base.md)
+
 
 

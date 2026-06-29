@@ -23,14 +23,14 @@
 
 ### 万相系列（HappyHorse / Wan / wanx）
 
-HappyHorse 是万相新一代视频生成模型，支持多模态输入，覆盖文生、图生（首帧）、参考生、视频编辑，详见 [HappyHorse-图生视频-基于首帧API参考](../../raw/model-api-reference/video-generation-api/happyhorse-api-reference/happyhorse-image-to-video-api-reference.md) 与 [HappyHorse-视频编辑API参考](../../raw/model-api-reference/video-generation-api/happyhorse-api-reference/happyhorse-video-edit-api-reference.md)。
+HappyHorse 是万相新一代视频生成模型，支持[多模态](../concepts/multimodal.md)输入，覆盖文生、图生（首帧）、参考生、视频编辑，详见 [HappyHorse-图生视频-基于首帧API参考](../../raw/model-api-reference/video-generation-api/happyhorse-api-reference/happyhorse-image-to-video-api-reference.md) 与 [HappyHorse-视频编辑API参考](../../raw/model-api-reference/video-generation-api/happyhorse-api-reference/happyhorse-video-edit-api-reference.md)。
 
 - `happyhorse-1.1-t2v` 文生视频
 - `happyhorse-1.1-i2v` 图生视频（基于首帧）
 - `happyhorse-1.1-r2v` 参考生视频（多图像，支持 `[Image N]` 标记描述主体）
 - `happyhorse-1.0-video-edit` 视频编辑（指令 + 参考图）
 
-万相2.7 系列为**新版协议**，接口 `model` 字段示例：`wan2.7-t2v`、`wan2.7-i2v-2026-04-25`、`wan2.7-r2v`、`wan2.7-videoedit`。图生视频支持首帧生视频、首尾帧生视频、视频续写三大任务，支持文本/图像/音频/视频多模态输入，参考生视频可保持角色形象与音色一致性，详见 [万相2.7-图生视频API参考](../../raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md) 与 [万相2.7-参考生视频API参考](../../raw/model-api-reference/video-generation-api/wan-api-reference/wan-video-to-video-api-reference.md)。
+万相2.7 系列为**新版协议**，接口 `model` 字段示例：`wan2.7-t2v`、`wan2.7-i2v-2026-04-25`、`wan2.7-r2v`、`wan2.7-videoedit`。图生视频支持首帧生视频、首尾帧生视频、视频续写三大任务，支持文本/图像/音频/视频[多模态](../concepts/multimodal.md)输入，参考生视频可保持角色形象与音色一致性，详见 [万相2.7-图生视频API参考](../../raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md) 与 [万相2.7-参考生视频API参考](../../raw/model-api-reference/video-generation-api/wan-api-reference/wan-video-to-video-api-reference.md)。
 
 旧版协议模型（wan2.6/2.5/2.2/wanx2.1）仍可用但**推荐优先选用 wan2.7**：
 
@@ -74,7 +74,7 @@ HappyHorse 是万相新一代视频生成模型，支持多模态输入，覆盖
 人物肖像类模型通常需先调用 `-detect` 检测图像合规再生成视频，仅支持华北2（北京）：
 
 - **舞动人像 AnimateAnyone**：`animate-anyone-detect-gen2` → `animate-anyone-template-gen2`（动作模板）→ `animate-anyone-gen2`（生成）。支持后付费与独立部署。
-- **悦动人像 EMO**：`emo-detect-v1` → `emo-v1`，图生唱演视频，按画幅计费（1:1 0.08元/秒，3:4 0.16元/秒）。
+- **悦动人像 EMO**：`emo-detect-v1` → `emo-v1`，图生唱演视频，按画幅[计费](../concepts/billing.md)（1:1 0.08元/秒，3:4 0.16元/秒）。
 - **灵动人像 LivePortrait**：`liveportrait-detect` → `liveportrait`，轻量快速播报视频，0.02元/秒。
 - **声动人像 VideoRetalk**：`videoretalk`，视频口型替换，0.08元/秒。
 - **表情包 Emoji**：先检测后生成，传入预设模板 `driven_id`（如 `mengwa_kaixin`）。
@@ -86,7 +86,7 @@ HappyHorse 是万相新一代视频生成模型，支持多模态输入，覆盖
 
 - `model`（必选）：模型名称，注意新版/旧版协议不混用（如 `wan2.7-*` 仅走新版接口，`wan2.6-*`/`wanx2.1-*` 走旧版）。
 - `input.prompt`（必选/可选）：文本提示词，多数模型支持中英文，字符上限约 5000，超出自动截断。万相2.7 文生视频通过自然语言描述控制单/多镜头，`shot_type` 不生效；旧版需显式 `shot_type: "multi"` + `prompt_extend: true`。
-- `input.media`：多模态素材数组，每项 `{type, url}`。常见 `type`：`first_frame`、`last_frame`、`image`、`image_url`、`video`、`reference_image`、`reference_video`。万相2.7 参考生可附加 `reference_voice` 指定音色。
+- `input.media`：[多模态](../concepts/multimodal.md)素材数组，每项 `{type, url}`。常见 `type`：`first_frame`、`last_frame`、`image`、`image_url`、`video`、`reference_image`、`reference_video`。万相2.7 参考生可附加 `reference_voice` 指定音色。
 - `input.reference_urls`（旧版万相参考生）：直接传图像/视频 URL 列表。
 - `input.first_frame_url` / `last_frame_url`（万相2.2 旧版首尾帧）：支持 Base64 字符串。
 - `input.function`（wanx2.1-vace-plus）：切换任务类型，如 `image_reference`、`video_repainting`。
@@ -154,7 +154,7 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id} \
 ## 限制与注意事项
 
 - **地域与限流**：人物肖像类模型（EMO/LivePortrait/VideoRetalk/Emoji/AnimateAnyone/wan2.2-s2v）多数仅支持华北2（北京），且「同时处理中任务数量」普遍为 1，任务会排队。任务下发接口 QPS 限制通常为 5。
-- **计费**：多数模型按生成视频时长（秒）计费。万相图生动作/视频换人区分 `wan-std`/`wan-pro` 两档；EMO 按画幅分价；VideoRetalk 0.08元/秒；LivePortrait 0.02元/秒。独立部署模型（如 `animate-anyone-deployment`、`emo-deployment`）按算力单元预付费，调用仅收部署费用。
+- **[计费](../concepts/billing.md)**：多数模型按生成视频时长（秒）[计费](../concepts/billing.md)。万相图生动作/视频换人区分 `wan-std`/`wan-pro` 两档；EMO 按画幅分价；VideoRetalk 0.08元/秒；LivePortrait 0.02元/秒。独立部署模型（如 `animate-anyone-deployment`、`emo-deployment`）按算力单元预付费，调用仅收部署费用。
 - **免费额度**：各模型提供有限免费额度（如检测模型 200 张、生成模型 1800 秒等），详见[免费额度说明](https://help.aliyun.com/zh/model-studio/new-free-quota)。
 - **新旧协议不兼容**：万相2.7 接口为**新版协议**，仅支持 wan2.7 模型；旧版接口支持 wan2.6 及早期模型，二者 `model` 不可混用。
 - **多镜头**：万相2.7 通过 [prompt](../guides/prompt.md) 自然语言控制分镜，无需 `shot_type`；旧版万相需 `shot_type: "multi"` + `prompt_extend: true`；PixVerse c1 在 [prompt](../guides/prompt.md) 中描述多镜头，不支持 `shot_type`；可灵用 `multi_shot: true` + `multi_prompt`。
@@ -197,5 +197,6 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id} \
 - [万相-参考生视频API参考（2.6）](../../raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-wan-reference-to-video-api-reference.md)
 - [万相-首尾帧生视频API参考（2.2）](../../raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-by-first-and-last-frame-api-reference.md)
 - [万相-视频编辑API参考（2.1）](../../raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-wanx-vace-api-reference.md)
+
 
 

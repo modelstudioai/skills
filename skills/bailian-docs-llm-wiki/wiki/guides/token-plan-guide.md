@@ -1,6 +1,6 @@
 # token plan guide
 
-阿里云百炼提供两类面向 AI 编程与智能体工具的订阅式套餐：**[Token](../concepts/token.md) Plan（团队版）** 与 **Coding Plan（个人版）**。两者均整合千问、GLM、Kimi、MiniMax 等模型，兼容 Claude Code、OpenCode、Cursor、Qwen Code 等主流编程工具，但计量方式、使用范围和管理粒度不同。本文汇总订阅、接入、团队管理、工具调用、多模态与常见报错的核心信息。
+阿里云百炼提供两类面向 AI 编程与智能体工具的订阅式套餐：**[Token](../concepts/token.md) Plan（团队版）** 与 **Coding Plan（个人版）**。两者均整合千问、GLM、Kimi、MiniMax 等模型，兼容 Claude Code、OpenCode、Cursor、Qwen Code 等主流编程工具，但计量方式、使用范围和管理粒度不同。本文汇总订阅、接入、团队管理、工具调用、[多模态](../concepts/multimodal.md)与常见报错的核心信息。
 
 ## 两类套餐对比
 
@@ -10,14 +10,14 @@
 | --- | --- | --- |
 | 适用场景 | 团队/企业日常办公 | 个人开发场景 |
 | 支持模型 | 文本生成 + 图像生成模型 | 仅文本生成模型 |
-| 计费方式 | 按 Token 消耗抵扣 Credits | 按模型调用次数 |
+| [计费](../concepts/billing.md)方式 | 按 Token 消耗抵扣 Credits | 按模型调用次数 |
 | 使用频次 | 无每 5 小时/每周限额 | 每 5 小时/每周/每月限额 |
 | 高峰期性能 | 多租户隔离，不排队 | 高峰期间可能排队 |
 | 数据安全 | 承诺不使用对话数据训练模型 | 使用期间数据用于服务改进与模型优化 |
 | [API Key](../concepts/api-key.md) 格式 | `sk-sp-xxx`（专属） | `sk-sp-xxx`（专属） |
 | 服务地域 | 仅华北2（北京） | 不限制地域，海外可用国际站 |
 
-> **注意**：Token Plan 团队版、Coding Plan 与百炼按量计费三者的 [API Key](../concepts/api-key.md) 和 Base URL 互不相通，混用会导致额度不抵扣或额外扣费。
+> **注意**：Token Plan 团队版、Coding Plan 与百炼按量[计费](../concepts/billing.md)三者的 [API Key](../concepts/api-key.md) 和 Base URL 互不相通，混用会导致额度不抵扣或额外扣费。
 
 ## 支持的模型
 
@@ -58,7 +58,7 @@ Pro 高级套餐 ¥200/月，用量限制为每 5 小时 6,000 次请求、每�
 
 > **注意**：Coding Plan 服务**不支持退款**，订阅前务必知悉使用范围与数据授权条款。
 
-## Credits 计费与额度（Token Plan 团队版）
+## Credits [计费](../concepts/billing.md)与额度（Token Plan 团队版）
 
 单次消耗的 Credits 由模型类型、Token 用量、思考模式及工具调用动态决定，实际以账单为准。抵扣顺序为：坐席月度额度 → 共享用量包 → 全部用尽则暂停至下一计费周期。
 
@@ -123,7 +123,7 @@ Token Plan 团队版提供两种工具接入方式，详见 [工具调用](../..
 
 接入后在对话框执行 `/mcp` 或 `/mcps` 确认状态为 connected/Enabled，再提问 `用 websearch MCP 搜索阿里云的新闻` 验证。Cursor 等已内置联网搜索的工具无需额外添加。
 
-## 多模态能力
+## [多模态](../concepts/multimodal.md)能力
 
 ### 图像生成（Token Plan 团队版）
 
@@ -185,5 +185,6 @@ Coding Plan 中支持深度思考的模型多为默认支持。各工具开启�
 - [联网搜索](../../raw/model-user-guide/token-plan-guide/coding-plan-guide/web-search-for-coding-plan.md)
 - [添加视觉理解能力](../../raw/model-user-guide/token-plan-guide/coding-plan-guide/add-vision-skill.md)
 - [常见问题](../../raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan-faq.md)
+
 
 

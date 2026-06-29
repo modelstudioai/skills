@@ -10,7 +10,7 @@
 
 ## 官方插件列表
 
-| 插件名称 | 工具 ID | 说明 | 计费方案 |
+| 插件名称 | 工具 ID | 说明 | [计费](../concepts/billing.md)方案 |
 | --- | --- | --- | --- |
 | Python 代码解释器 | `code_interpreter` | 执行 Python 代码片段，如数学计算、数据分析与可视化、数据处理 | 免费 |
 | 计算器 | `calculator` | 进行复杂数学计算，例如计算 `12313x13232` | 免费 |
@@ -135,5 +135,6 @@ Python 代码解释器可用依赖包括：matplotlib、pandas、scipy、seaborn
 - [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)
 - [插件概述](../../raw/application-user-guide/plug-in/plug-in-overview.md)
 - [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)
+
 
 

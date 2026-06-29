@@ -18,7 +18,7 @@
 
 | API 模式 | Endpoint | 适用场景 | 文档 |
 | --- | --- | --- | --- |
-| **OpenAI 兼容 Responses API** | `POST https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/v1/responses` | 复用现有 OpenAI 代码库与工具链；支持同步/异步、流式、多模态 | [同步调用 API 参考](../../raw/application-api-reference/application-call/openai-responses-api/synchronous-call-api-reference.md) / [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md) |
+| **OpenAI 兼容 Responses API** | `POST https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/v1/responses` | 复用现有 OpenAI 代码库与工具链；支持同步/异步、流式、[多模态](../concepts/multimodal.md) | [同步调用 API 参考](../../raw/application-api-reference/application-call/openai-responses-api/synchronous-call-api-reference.md) / [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md) |
 | **DashScope 原生 API** | `POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion` | 更全面的功能与更高的性能；新版智能体（Agent 2.0）、工作流、旧版智能体均支持 | [新版智能体应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md) / [工作流与旧版智能体应用 API](../../raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md) |
 
 > **注意**：上述 Endpoint 仅适用于华北2（北京）地域。德国（法兰克福）、新加坡、日本（东京）等地域，或调用子业务空间下的应用时，请求中必须包含 Workspace ID，该 ID 是对应地域 Base URL 的组成部分。
@@ -40,9 +40,9 @@ POST https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/v
 ### 关键参数
 
 - **app_id**（必选，string）：应用标识。HTTP 调用时放入 URL 中替换 `{APP_ID}`。
-- **input**（必选，string 或 array）：核心输入。简单字符串用于单轮文本对话；消息数组用于多轮对话或多模态输入。
+- **input**（必选，string 或 array）：核心输入。简单字符串用于单轮文本对话；消息数组用于多轮对话或[多模态](../concepts/multimodal.md)输入。
   - 消息 `role` 取值：`system`（可选，设定角色/约束）、`user`（必选）、`assistant`（可选，模型回复）。
-  - 多模态 `content` 为数组，子对象 `type`：`input_text`（文本）、`input_image`（图像，需配 `image_url`）、`input_file`（文件，需配 `file_url`，仅[智能体应用](../concepts/agent-application.md)支持）。
+  - [多模态](../concepts/multimodal.md) `content` 为数组，子对象 `type`：`input_text`（文本）、`input_image`（图像，需配 `image_url`）、`input_file`（文件，需配 `file_url`，仅[智能体应用](../concepts/agent-application.md)支持）。
 - **stream**（可选，boolean）：是否[流式输出](../concepts/streaming-output.md)，默认 `false`。
 - **background**（可选，boolean）：是否异步执行，默认 `false`。
 
@@ -72,7 +72,7 @@ response = client.responses.create(
 print(response.model_dump_json(indent=2))
 ```
 
-[流式输出](../concepts/streaming-output.md)只需设置 `stream=True`。**工作流应用**需在结束节点或流程输出节点启用「流式输出」开关并重新发布；**[智能体应用](../concepts/agent-application.md)**做图像输入需选用通义千问 VL 系列模型并将文件处理方式设为「自定义处理」后重新发布。
+[流式输出](../concepts/streaming-output.md)只需设置 `stream=True`。**工作流应用**需在结束节点或流程输出节点启用「[流式输出](../concepts/streaming-output.md)」开关并重新发布；**[智能体应用](../concepts/agent-application.md)**做图像输入需选用通义千问 VL 系列模型并将文件处理方式设为「自定义处理」后重新发布。
 
 ### [异步调用](../concepts/async-invocation.md)
 
@@ -182,7 +182,7 @@ print(responseNext.output.text)
 - **异步不支持流式**：异步任务（`background=true`）暂不支持 `stream=true`。
 - **多轮上下文**：Responses API 目前不支持基于 `pre_response_id`/`conversation_id` 的上下文，每次请求需传完整历史；DashScope 原生 API 用 `session_id`（有效期 1 小时）或 `messages` 维持多轮。
 - **文件输入仅智能体支持**：`input_file` 仅智能体应用可用，且应用内文件处理方式需选「全文引用」或「切片检索」。
-- **应用配置须重新发布**：流式输出、图像输入、插件/自定义参数等能力都需要先在应用内正确配置并**重新发布**后才能生效。
+- **应用配置须重新发布**：[流式输出](../concepts/streaming-output.md)、图像输入、插件/自定义参数等能力都需要先在应用内正确配置并**重新发布**后才能生效。
 - **权限**：查询全部业务空间需主账号或被授予权限的 RAM 子账号；普通 RAM 子账号只能查看其已加入的业务空间。
 
 ## 来源文档
@@ -192,5 +192,6 @@ print(responseNext.output.text)
 - [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)
 - [新版智能体应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md)
 - [工作流与旧版智能体应用 API](../../raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)
+
 
 

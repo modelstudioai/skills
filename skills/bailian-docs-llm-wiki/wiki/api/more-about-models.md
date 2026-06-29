@@ -83,7 +83,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=180
 
 ## 上传本地文件获取临时 URL
 
-调用多模态、图像、视频、音频模型时通常需要传入文件 URL。阿里云百炼提供**免费**临时存储空间，可上传本地文件得到以 `oss://` 为前缀的临时 URL，参见 [上传本地文件获取临时URL](../../raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+调用[多模态](../concepts/multimodal.md)、图像、视频、音频模型时通常需要传入文件 URL。阿里云百炼提供**免费**临时存储空间，可上传本地文件得到以 `oss://` 为前缀的临时 URL，参见 [上传本地文件获取临时URL](../../raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
 
 使用流程：
 
@@ -147,5 +147,6 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=180
 - [子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)
 - [上传本地文件获取临时URL](../../raw/model-api-reference/more-about-models/get-temporary-file-url.md)
 - [DashScope SDK连接复用配置](../../raw/model-api-reference/more-about-models/connection-multiplexing-configuration.md)
+
 
 

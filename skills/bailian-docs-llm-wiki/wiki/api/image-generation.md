@@ -81,7 +81,7 @@ qwen-mt-image 支持中/英文与日、韩、西、法等语种互译（不支�
 - `parameters`：分辨率 `size`（如 `1024*1024`、`2K`、`1K`）、张数 `n`、风格 `style`、水印 `watermark`、智能思考 `prompt_extend`/`thinking_mode`、负向提示 `negative_prompt`、宽高比 `aspect_ratio`、组图 `series_amount`、`ref_strength`/`ref_mode` 等。各模型支持的字段不同，以对应 API 文档为准。
 - 图像 URL 需公网可访问，支持 HTTP/HTTPS；多数模型不支持 Base64（部分如人像风格重绘、擦除补全支持 Base64）。本地文件可上传获取临时 URL。URL 中不能含中文字符。
 
-## 计费与限流
+## [计费](../concepts/billing.md)与限流
 
 - 免费额度：开通百炼服务后自动发放，有效期 90 天，主账号与 RAM 子账号共享。额度按成功输出的图片张数计算，输入图与失败任务不占用。
 - 限时免费（公测阶段）：额度用尽后不可使用；明确单价的模型额度用尽或过期后按张付费（如 wanx-v1 0.16 元/张、wanx2.1-imageedit 0.14 元/张、wanx-style-repaint-v1 0.12 元/张、image-out-painting 0.18 元/张、wanx-background-generation-v2 0.08 元/张、wanx-sketch-to-image-lite 0.06 元/张）。
@@ -123,5 +123,6 @@ qwen-mt-image 支持中/英文与日、韩、西、法等语种互译（不支�
 - [图像擦除补全API参考](../../raw/model-api-reference/image-generation/image-creative-tools-api-reference/image-erase-completion-api-reference.md)
 - [人物写真生成FaceChain](../../raw/model-api-reference/image-generation/image-creative-tools-api-reference/facechain-portrait-generation.md)
 - [创意文字WordArt锦书](../../raw/model-api-reference/image-generation/image-creative-tools-api-reference/wordart-quick-start.md)
+
 
 

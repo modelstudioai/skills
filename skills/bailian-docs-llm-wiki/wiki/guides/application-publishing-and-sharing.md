@@ -15,10 +15,10 @@
 
 > **注意**：官方网页版分享当前只支持[智能体应用](../concepts/agent-application.md)，不支持工作流应用；音视频实时互动同样仅支持图文对话类应用。
 
-## 访问权限与计费
+## 访问权限与[计费](../concepts/billing.md)
 
 - **谁能访问**：应用创建者（主账号）、RAM 用户以及持有链接的其他阿里云用户。UI 应用默认持有链接的阿里云用户均可访问，也可配置匿名访问权限组。
-- **计费归属**：所有通过分享链接产生的模型调用费用，由应用创建者 UID 账号承担。
+- **[计费](../concepts/billing.md)归属**：所有通过分享链接产生的模型调用费用，由应用创建者 UID 账号承担。
 - **[API Key](../concepts/api-key.md) 要求**：钉钉、微信、音视频互动等渠道在发布时均需选择目标 [API Key](../concepts/api-key.md)；若无可选项，可在「我的 API-KEY」页面创建或管理。首次创建钉钉或微信渠道应用时，需授权计算巢 AppFlow（关联 SLR 并允许 API-KEY 加密传输）。
 - **[业务空间](../concepts/workspace.md)一致性**：UI 设计器场景下，百炼应用、[API Key](../concepts/api-key.md) 与 UI 设计必须归属于同一[业务空间](../concepts/workspace.md)，否则无法选择应用或密钥。
 
@@ -40,7 +40,7 @@ UI 设计器集成阿里云魔笔低代码能力，支持拖放组件、配置�
 
 UI 设计器提供四种预置模板（智能出行助手、智能体门户、AI 基础对话、企业 AI [知识库](../concepts/knowledge-base.md) Lite）及空白模板，支持 PC 与部分 H5 终端。发布环境对比：
 
-| 环境 | 用途 | 访问方式 | 有效期 | 计费 |
+| 环境 | 用途 | 访问方式 | 有效期 | [计费](../concepts/billing.md) |
 | --- | --- | --- | --- | --- |
 | 开发环境 | 开发调试 | 平台域名 | 24 小时后失效，需重新发布 | 免费 |
 | 生产环境 | 终端用户使用 | 平台域名或自定义域名 | 长期有效 | 需订阅付费套餐并配置域名 |
@@ -109,5 +109,6 @@ UI 设计器功能本身不计费，但使用过程中可能涉及：模型调�
 - [分享智能体应用](../../raw/application-user-guide/application-publishing-and-sharing/share-an-application.md)
 - [使用智能体或工作流作为组件](../../raw/application-user-guide/application-publishing-and-sharing/use-agent-or-workflow-as-component.md)
 - [UI设计器](../../raw/application-user-guide/application-publishing-and-sharing/ui-designer.md)
+
 
 

@@ -33,13 +33,13 @@ MCP 服务可集成至第三方应用（Cherry Studio、Cursor）或个人项目
 
 > **注意**：百炼 MCP 服务已从旧版 SSE 协议升级为新版 Streamable HTTP 协议。已开通用户需在 MCP 广场「取消开通」后重新「立即开通」以完成升级。详见 [外部调用](../../raw/application-user-guide/model-context-protocol/mcp-external-calls.md)。
 
-## 计费说明
+## [计费](../concepts/billing.md)说明
 
 ### 云部署 MCP 服务
 
 - **部署费用**：限时免部署费用。
 - **调用费用**：部分 MCP 服务涉及第三方 API 调用，费用由第三方收取，百炼不收取。
-- **联网搜索 MCP**：免费额度 2000 次，额度用尽后按 29 元/千次计费，限流 15 QPS（主账号与 RAM 子账号共享）。
+- **联网搜索 MCP**：免费额度 2000 次，额度用尽后按 29 元/千次[计费](../concepts/billing.md)，限流 15 QPS（主账号与 RAM 子账号共享）。
 
 ### 自定义部署 MCP 服务
 
@@ -93,5 +93,6 @@ MCP 服务可集成至第三方应用（Cherry Studio、Cursor）或个人项目
 - [自定义 MCP 服务](../../raw/application-user-guide/model-context-protocol/custom-mcp.md)
 - [外部调用](../../raw/application-user-guide/model-context-protocol/mcp-external-calls.md)
 - [MCP 常见问题](../../raw/application-user-guide/model-context-protocol/mcp-faq.md)
+
 
 
