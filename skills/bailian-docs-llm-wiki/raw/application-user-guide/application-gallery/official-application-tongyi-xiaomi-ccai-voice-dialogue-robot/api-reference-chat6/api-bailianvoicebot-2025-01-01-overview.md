@@ -1,16 +1,18 @@
 # API概览
 
-## API标准及多语言预置SDK
+## **API标准及多语言预置SDK**
 
-本产品（`晓蜜客服语音对话机器人/2025-01-01`）的 OpenAPI 采用 RPC 签名机制，具体签名方式请参见[签名机制说明](https://help.aliyun.com/zh/sdk/product-overview/v3-request-structure-and-signature)。我们已为开发者封装了主流编程语言的 SDK，您可通过 [下载 SDK](https://api.aliyun.com/api-tools/sdk/BailianVoiceBot?version=2025-01-01) 快速调用 API，无需关注签名等底层实现细节，显著降低开发门槛与集成复杂度。
+本产品（`BailianVoiceBot/2025-01-01`）的OpenAPI采用[RPC](https://help.aliyun.com/zh/sdk/product-overview/v3-request-structure-and-signature)签名风格。我们已经为开发者封装了常见编程语言的SDK，开发者可通过[下载SDK](https://api.aliyun.com/api-tools/sdk/BailianVoiceBot?version=2025-01-01)直接调用本产品OpenAPI而无需关心技术细节。如果现有SDK不能满足使用需求，可通过签名机制进行自签名对接。由于自签名细节非常复杂，需花费 5个工作日左右。因此建议加入我们的服务钉钉群（147535001692），在专家指导下进行签名对接。
 
-## 自定义签名场景
+在使用API前，您需要准备好身份账号及访问密钥（AccessKey），才能有效通过客户端工具（SDK、CLI等）访问API。细节请参见[获取AccessKey](https://help.aliyun.com/zh/ram/user-guide/create-an-accesskey-pair)。
+
+## **自定义签名场景**
 
 若您的业务场景有特殊需求，需通过自签名方式对接 API，建议优先咨询我们的技术支持团队（服务钉钉群：147535001692），获取专业指导以确保高效接入。
 
-## 账号与安全准备
+## **账号与安全准备**
 
-阿里云账号具备对所有资源的完全管理权限。一旦 AccessKey 泄露，所有相关资源都将面临未经授权访问的风险。为确保安全，建议创建一个仅具备 API 访问权限的 [RAM 用户](https://help.aliyun.com/zh/ram/user-guide/create-a-ram-user)并配置其 AccessKey，同时基于最小权限原则 (PoLP) 配置 RAM 策略。仅在明确需要阿里云账号权限的特定场景下，才使用阿里云账号。
+阿里云账号具备对所有资源的完全管理权限。一旦 AccessKey 泄露，所有相关资源都将面临未经授权访问的风险。为确保安全，建议创建一个仅具备 API 访问权限的[RAM用户](https://help.aliyun.com/zh/ram/user-guide/create-a-ram-user)并配置其 AccessKey，同时基于最小权限原则 (PoLP) 配置 RAM 策略。仅在明确需要阿里云账号权限的特定场景下，才使用阿里云账号。
 
 ## API目录
 
@@ -36,6 +38,8 @@ API概述
 
 获取文件上传参数
 
+获取文件上传信息
+
 ## MQ消息订阅配置
 
 API
@@ -48,13 +52,19 @@ API概述
 
 更新订阅信息
 
+创建或更新MQ配置
+
 [GetSubscription](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-getsubscription)
 
 获取消息订阅配置信息
 
+获取MQ配置
+
 [DisableSubscription](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-disablesubscription)
 
 关闭消息订阅
+
+禁用消息订阅
 
 ## 变量管理
 
@@ -68,7 +78,11 @@ API概述
 
 删除变量
 
+删除变量
+
 [ListVariable](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-listvariable)
+
+获取变量列表
 
 获取变量列表
 
@@ -76,7 +90,11 @@ API概述
 
 更新变量
 
+更新变量
+
 [CreateVariable](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-createvariable)
+
+创建变量
 
 创建变量
 
@@ -92,7 +110,11 @@ API概述
 
 获取三方语音引擎列表
 
+获取引擎列表
+
 [UpdateVoiceAccessProfile](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-updatevoiceaccessprofile)
+
+更新三方语音配置
 
 更新三方语音配置
 
@@ -100,13 +122,19 @@ API概述
 
 获取三方语音配置列表
 
+获取三方语音配置列表
+
 [DeleteVoiceAccessProfile](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-deletevoiceaccessprofile)
+
+删除三方语音配置
 
 删除三方语音配置
 
 [CreateVoiceAccessProfile](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-createvoiceaccessprofile)
 
 创建三方语音配置
+
+创建实例
 
 ## 热词管理
 
@@ -120,11 +148,17 @@ API概述
 
 更新热词
 
+更新实例
+
 [ListVocabulary](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-listvocabulary)
 
 获取热词列表
 
+获取实例详情
+
 [ImportVocabulary](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-importvocabulary)
+
+导入热词
 
 导入热词
 
@@ -132,7 +166,11 @@ API概述
 
 获取热词信息
 
+获取实例详情
+
 [ExportVocabulary](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-exportvocabulary)
+
+导出热词
 
 导出热词
 
@@ -140,9 +178,13 @@ API概述
 
 删除热词
 
+删除场景
+
 [CreateVocabulary](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-createvocabulary)
 
 创建热词
+
+创建实例
 
 ## 克隆音管理
 
@@ -156,19 +198,29 @@ API概述
 
 获取克隆音模型列表
 
+获取克隆音色可用模型列表
+
 [DeleteCloneVoice](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-deleteclonevoice)
 
 删除克隆音
+
+删除场景
 
 [ListCloneVoice](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-listclonevoice)
 
 获取克隆音列表
 
+获取实例详情
+
 [UpdateCloneVoice](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-updateclonevoice)
 
 更新克隆音
 
+更新实例
+
 [CreateCloneVoice](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-createclonevoice)
+
+创建克隆音
 
 创建克隆音
 
@@ -190,15 +242,23 @@ API概述
 
 获取对话大模型列表
 
+获取对话模型列表
+
 [PreviewVoice](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-previewvoice)
 
 TTS合成试听
+
+试听
 
 [ListBackgroundMusics](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-listbackgroundmusics)
 
 获取背景音列表
 
+获取背景音列表
+
 [ListVoices](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-listvoices)
+
+获取音色列表
 
 获取音色列表
 

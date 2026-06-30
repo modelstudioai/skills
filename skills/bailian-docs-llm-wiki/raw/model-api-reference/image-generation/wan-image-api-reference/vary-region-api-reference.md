@@ -11,6 +11,12 @@
 -   wanx-x-painting 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费，推荐参考[图像编辑-千问](https://help.aliyun.com/zh/model-studio/qwen-image-edit-guide)或[图像编辑-万相2.1](https://help.aliyun.com/zh/model-studio/wanx-image-edit)获取替代方案。
     
 
+**重要**
+
+百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+
 ## **模型概览**
 
 **模型效果示意**
@@ -78,14 +84,14 @@ wanx-x-painting
 
 ### **步骤1：创建任务获取任务ID**
 
-`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis`
+`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis`
 
 #### **请求参数**
 
 ## 图像局部重绘
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -296,7 +302,7 @@ RGB颜色数值列表，用于指定掩码图片中表示涂改区域的颜色�
 
 ### 步骤2：根据任务ID查询结果
 
-`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 #### 请求参数
 
@@ -307,7 +313,7 @@ RGB颜色数值列表，用于指定掩码图片中表示涂改区域的颜色�
 > 若使用新加坡地域的模型，需将base\_url替换为https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx，其中WorkspaceId需替换为真实的业务空间ID。
 
 ```
-curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \
+curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
@@ -519,6 +525,9 @@ from pathlib import PurePosixPath
 import requests
 from dashscope import ImageSynthesis
 
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+
 prompt = "一只狗戴着红色眼镜"
 model = "wanx-x-painting"
 task = "image2image"
@@ -585,6 +594,9 @@ from urllib.parse import urlparse, unquote
 from pathlib import PurePosixPath
 import requests
 from dashscope import ImageSynthesis
+
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 prompt = "一只狗戴着红色眼镜"
 model = "wanx-x-painting"
@@ -700,8 +712,10 @@ import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.utils.JsonUtils;
 
 import java.util.HashMap;
+import com.alibaba.dashscope.utils.Constants;
 
 public class Main {
+    static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
 
     public void syncCall() {
         String task = "image2image";
@@ -778,8 +792,10 @@ import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.utils.JsonUtils;
 
 import java.util.HashMap;
+import com.alibaba.dashscope.utils.Constants;
 
 public class Main {
+    static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
 
     public void asyncCall() {
         System.out.println("---create task----");

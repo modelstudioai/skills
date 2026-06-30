@@ -29,6 +29,7 @@
 - [prompt](guides/prompt.md) — 5 篇源文档
 - [release notes](guides/release-notes.md) — 2 篇源文档
 - [security and compliance](guides/security-and-compliance.md) — 12 篇源文档
+- [skill](guides/skill.md) — 1 篇源文档
 - [start using](guides/start-using.md) — 2 篇源文档
 - [support](guides/support.md) — 2 篇源文档
 - [test 1](guides/test-1.md) — 5 篇源文档
@@ -45,6 +46,7 @@
 - [frameworks](api/frameworks.md) — 3 篇源文档
 - [image generation](api/image-generation.md) — 25 篇源文档
 - [long term memory new](api/long-term-memory-new.md) — 1 篇源文档
+- [managed agents api](api/managed-agents-api.md) — 6 篇源文档
 - [model production](api/model-production.md) — 3 篇源文档
 - [more](api/more.md) — 3 篇源文档
 - [more about models](api/more-about-models.md) — 6 篇源文档
@@ -58,21 +60,21 @@
 
 ## 横切概念
 
-- [SDK 接入](concepts/sdk.md) — 关联 7 个主题
-- [函数调用](concepts/function-calling.md) — 关联 6 个主题
+- [函数调用](concepts/function-calling.md) — 关联 7 个主题
 - [地域与可用区](concepts/region.md) — 关联 6 个主题
-- [多模态](concepts/multimodal.md) — 关联 6 个主题
-- [模型选型](concepts/model-selection.md) — 关联 4 个主题
-- [流式输出](concepts/streaming-output.md) — 关联 4 个主题
-- [计费](concepts/billing.md) — 关联 6 个主题
-- [限流与吞吐](concepts/rate-limiting.md) — 关联 4 个主题
+- [模型部署](concepts/model-deployment.md) — 关联 4 个主题
+- [流式输出](concepts/streaming-output.md) — 关联 5 个主题
+- [私网访问](concepts/vpc-private-access.md) — 关联 3 个主题
+- [评测](concepts/evaluation.md) — 关联 4 个主题
+- [软件开发工具包](concepts/sdk.md) — 关联 6 个主题
+- [限流与配额](concepts/rate-limiting.md) — 关联 5 个主题
 
 ## 对比分析
 
-- [多模态生成 API 对比（图像/视频/3D）](comparisons/multimodal-generation-api-comparison.md) — 对比 3 个主题
-- [应用调用方式对比（API 调用 vs 百炼应用调用）](comparisons/application-calling-comparison.md) — 对比 2 个主题
-- [模型优化方式对比（微调/压缩/高速推理）](comparisons/model-optimization-methods-comparison.md) — 对比 3 个主题
-- [监控体系对比（应用监控 vs 模型监控）](comparisons/monitoring-comparison.md) — 对比 2 个主题
-- [记忆能力对比（长期记忆 vs 记忆库）](comparisons/memory-feature-comparison.md) — 对比 2 个主题
-- [评测体系对比（应用评测 vs 模型评测）](comparisons/evaluation-comparison.md) — 对比 2 个主题
+- [图像、视频与3D生成对比](comparisons/generation-modalities-comparison.md) — 对比 3 个主题
+- [应用监控与模型监控对比](comparisons/monitoring-app-vs-model-comparison.md) — 对比 2 个主题
+- [应用评测与模型评测对比](comparisons/evaluation-app-vs-model-comparison.md) — 对比 2 个主题
+- [模型微调、压缩与部署对比](comparisons/model-customization-methods-comparison.md) — 对比 3 个主题
+- [知识库与数据连接对比](comparisons/data-sources-for-rag-comparison.md) — 对比 2 个主题
+- [记忆库与长期记忆对比](comparisons/memory-approaches-comparison.md) — 对比 2 个主题
 

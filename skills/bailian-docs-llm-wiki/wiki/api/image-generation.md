@@ -1,100 +1,109 @@
 # image generation
 
-百炼平台提供一系列图像生成与编辑模型 API，覆盖文生图、图生图、图像编辑、图像翻译、风格重绘、虚拟模特、试衣、海报、背景生成、擦除补全、画面扩展、实例分割、人物写真、创意文字等场景。所有 API 通过 DashScope HTTP 接口调用，部分模型同时支持 DashScope SDK（Python/Java），统一使用百炼 [API Key](../concepts/api-key.md) 鉴权。
+百炼平台图像生成类 API 汇总了通义千问、万相、Z-Image、可灵等自研模型，以及一批面向电商、营销、人像场景的创意图像工具。所有接口均通过百炼模型推理网关以 OpenAI 兼容或 DashScope 原生协议调用，统一使用 `Authorization: Bearer <API_KEY>` 鉴权，输入输出以 JSON 承载，部分能力支持流式与异步轮询。
 
-## 调用模式与端点
+## 能力全景
 
-图像 API 分为同步调用与[异步调用](../concepts/async-invocation.md)两种模式：
+按模型族与用途可分为四组：
 
-- **同步调用（推荐）**：一次请求即返回结果，流程简单。千问图像系列（qwen-image-2.0-pro/max/plus）、万相 2.6/2.7 文生图与编辑、Z-Image 等新版模型支持同步调用，走 `POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`（新加坡地域使用[业务空间](../concepts/workspace.md)专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/...`）。详见 [万相-文生图V2版API参考](../../raw/model-api-reference/image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md) 与 [万相-图像生成与编辑2.7 API参考](../../raw/model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-and-editing-api-reference.md)。
-- **[异步调用](../concepts/async-invocation.md)**：图像处理耗时较长（通常 1-2 分钟），V1 版模型及部分编辑/创意类模型仅支持异步，分两步：① 创建任务获取 `task_id`；② 用 `task_id` 轮询 `GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}` 直到 `SUCCEEDED`。异步请求必须带请求头 `X-DashScope-Async: enable`，缺少该头会报错 "current user api does not [support](../guides/support.md) synchronous calls"。`task_id` 有效期 24 小时，请勿重复创建任务，轮询即可。详见 [常见问题](../../raw/model-api-reference/image-generation/image-faq.md)。
+| 分组 | 代表接口 | 主要能力 |
+| --- | --- | --- |
+| 通义千问图像 | 千问-文生图、千问-图像编辑、千问-图像翻译 | 文生图、图像编辑、图文翻译 |
+| 万相图像 | 万相-文生图 V1/V2、万相-图像生成与编辑 2.6/2.7、万相-通用图像编辑 2.5、万相-通用图像编辑、万相-涂鸦作画、万相-图像局部重绘 | 通用文生图、多模态编辑、局部重绘、涂鸦生图 |
+| 第三方/自研大模型 | Z-Image、可灵-图像生成 | 高质量文生图、艺术风格 |
+| 创意工具 | 人像风格重绘、虚拟模特、鞋靴模特、图像画面扩展、创意海报、人物实例分割、AI 试衣 OutfitAnyone、图像背景生成、图像擦除补全、人物写真 FaceChain、创意文字 WordArt 锦书 | 垂类业务化图像处理 |
 
-> **注意**：华北2（北京）、新加坡、美国（弗吉尼亚）等地域拥有独立的 [API Key](../concepts/api-key.md) 与请求地址，不可混用，跨地域调用将导致鉴权失败。千问-图像翻译（qwen-mt-image）仅在华北2（北京）地域可用。百炼为北京/新加坡/弗吉尼亚推出[业务空间](../concepts/workspace.md)专属域名，建议迁移以获得更好性能与稳定性。
+## 通义千问图像
 
-## 前提条件
+通义千问图像能力由 Qwen-Image 系列模型提供，统一在 `qwen-image` 模型族下，按任务区分模型名：
 
-1. [获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key) 并[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-2. 如需 SDK 调用，[安装 DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)（Python/Java）。
-3. 可灵（kling）系列需先在百炼控制台搜索"可灵"并单击"立即开通"完成授权。
-4. RAM 子账号 [API Key](../concepts/api-key.md) 调用时需带 `X-DashScope-WorkSpace` 指定[业务空间](../concepts/workspace.md)。
+- **千问-文生图**：输入中文/英文 [prompt](../guides/prompt.md) + 可选参考图，输出 1024×1024 等多尺寸图像，支持中文原生理解、双语 [prompt](../guides/prompt.md)、长宽比与风格控制。
+- **千问-图像编辑**：在保留原图主体与构图的前提下，按自然语言指令做局部修改（换背景、改服饰、增减物体等），支持蒙版与参考图。
+- **千问-图像翻译**：面向漫画/图文场景，识别图中文字并翻译为目标语言，同时重绘文字区域以保持视觉一致性。
 
-## 核心模型与功能
+调用入口通常为 `https://dashscope.aliyuncs.com/compatible-mode/v1/images/generations`（OpenAI 兼容）或 DashScope 原生 `services/aigc/text2image/image-synthesis` 路径，`model` 字段填具体模型名（如 `qwen-image-edit`）。
+
+## 万相图像
+
+万相（Wan）是百炼自研的图像与视频生成模型族，迭代到 2.7 版本，是接口数量最多的一组：
 
 ### 文生图
 
-| 模型 | 系列 | 输出规格 | 调用模式 |
-| --- | --- | --- | --- |
-| qwen-image-2.0-pro / -2026-06-22 / -2026-04-22 / -2026-03-03 | 千问 Pro（推荐） | 自由宽高，总像素 512*512~2048*2048，默认 2048*2048，1-6 张，png | 同步 |
-| qwen-image-2.0 / -2026-03-03 | 千问加速版（推荐） | 同上 | 同步 |
-| qwen-image-max / -2025-12-30 | 千问 Max，真实感更强 | 固定 1 张，png | 同步 |
-| qwen-image-plus / qwen-image | 千问 Plus，艺术风格 | — | 同步 |
-| wan2.7-image-pro / wan2.7-image | 万相 2.7，文生图支持 4K | PNG | 同步 |
-| wan2.6-t2i / wan2.6-image | 万相 2.6，图文混排输出 | 总像素 1280*1280~1440*1440，宽高比 1:4~4:1，png | 同步 |
-| wan2.5-t2i-preview | 万相 2.5 preview，自由选尺寸 | 同 wan2.6 | 仅异步 |
-| wan2.2-t2i-flash/plus、wanx2.1-t2i-turbo/plus、wanx2.0-t2i-turbo | 万相 2.2/2.1/2.0 | 宽高均 512~1440，png | 仅异步 |
-| wanx-v1 | 万相 V1，支持参考图内容/风格迁移 | 1024*1024 等 | 仅异步 |
-| z-image-turbo | Z-Image 轻量快速 | 总像素 512*512~2048*2048，固定 1 张，png | 同步 |
-| kling/kling-v3-image-generation、kling/kling-v3-omni-image-generation | 可灵，文生图+参考图生图 | 1k/2k/4k，1~9 张或组图 2~9 | 异步 |
+- **万相-文生图 V1**：经典版，支持中文 [prompt](../guides/prompt.md)、尺寸、风格、负面词。
+- **万相-文生图 V2**：升级版，画质与中文语义理解提升，支持更多长宽比与参考图引导。
 
-千问图像系列擅长复杂文字渲染，详见 [千问-文生图API参考](../../raw/model-api-reference/image-generation/qwen-image-api-reference/qwen-image-api.md)。万相 2.6 图文混排需开启 `enable_interleave=true` 且同时设置 `X-DashScope-Sse: enable` 与 `parameters.stream=true`，仅支持[流式输出](../concepts/streaming-output.md)。
+### 生成与编辑一体
 
-### 图像编辑
+- **万相-图像生成与编辑 2.6 / 2.7**：同一接口兼顾文生图与图像编辑，2.7 在编辑自然度、文字渲染、多图融合上进一步优化，是当前推荐的通用版本。
+- **万相-通用图像编辑 2.5 / 通用图像编辑**：聚焦"按指令改图"的编辑专用版本，2.5 为较新迭代。
 
-| 模型 | 系列 | 关键能力 |
+### 局部与创意编辑
+
+- **万相-图像局部重绘（Vary Region）**：指定区域 + prompt 做局部重绘，常用于换物、修复。
+- **万相-涂鸦作画**：以用户涂鸦/草图 + prompt 引导生成结构化图像。
+- **万相-通用图像编辑（旧）**：早期版本，建议迁移到 2.5+。
+
+万相接口大多走 DashScope 原生异步协议：`POST /services/aigc/text2image/image-synthesis` 返回 `task_id`，再轮询 `GET /tasks/{task_id}` 取结果；文生图 V2 等也提供兼容模式同步调用。
+
+## Z-Image 与可灵
+
+- **Z-Image**：自研高质量文生图大模型，擅长艺术风格、复杂构图与中文语义，适合营销与设计场景。
+- **可灵-图像生成**：由可灵团队提供的高美感文生图能力，接入百炼网关统一调用。
+
+二者均以文生图为主，参数聚焦于 prompt、负面词、尺寸与采样控制。
+
+## 创意图像工具
+
+这一组把图像模型封装成业务化接口，输入通常是商品图/人像图 + 简单参数，输出业务可用成图：
+
+| 接口 | 典型用法 |
+| --- | --- |
+| 人像风格重绘 | 把人像转为指定风格（油画、动漫、3D 等） |
+| 虚拟模特 | 商品图 + 模特参数生成虚拟模特穿着图 |
+| 鞋靴模特 | 鞋类商品上脚/上模特展示图 |
+| 图像画面扩展（Image Scaling） | 扩展画幅、补全边缘 |
+| 创意海报生成 | 文案 + 主体图生成营销海报 |
+| 人物实例分割 | 抠取人物前景，供后续合成 |
+| AI 试衣 OutfitAnyone | 人像 + 服装图生成试穿图 |
+| 图像背景生成 | 商品/主体 + 描述生成新背景 |
+| 图像擦除补全 | 擦除指定区域并智能补全 |
+| 人物写真 FaceChain | 多张人像生成个性化写真集 |
+| 创意文字 WordArt 锦书 | 艺术字、文字排版生成 |
+
+这些接口多走 DashScope 原生协议，部分需要先开通对应模型，再以 `model` 字段区分。
+
+## 调用约定
+
+1. **鉴权**：所有接口在请求头携带 `Authorization: Bearer ${API_KEY}`，API_KEY 在百炼控制台"API-KEY 管理"获取。
+2. **协议选择**：
+   - OpenAI 兼容模式：`https://dashscope.aliyuncs.com/compatible-mode/v1/...`，适合千问文生图等。
+   - DashScope 原生模式：`https://dashscope.aliyuncs.com/api/v1/services/aigc/...`，适合万相异步任务、创意工具。
+3. **同步 vs 异步**：创意工具与万相多数为异步——提交任务得 `task_id`，按建议间隔轮询 `GET /api/v1/tasks/{task_id}`，状态为 `SUCCEEDED` 后取 `output.results`。
+4. **图片传输**：输入图支持公网 URL 或 Base64（需 `data:image/...;base64,` 前缀），输出图一般为临时 URL，需及时下载或转存到 OSS。
+5. **尺寸与长宽比**：各模型支持的尺寸集合不同，超范围会报错；万相 V2、千问等支持按 `size` 或 `parameters.size` 指定。
+6. **内容安全**：所有接口内置内容安全审核，违规 prompt 或图片会被拒绝并在响应中返回对应错误码。
+
+## 通用错误码
+
+| HTTP / 错误码 | 含义 | 处理建议 |
 | --- | --- | --- |
-| qwen-image-2.0-pro / qwen-image-2.0 | 千问图像编辑（推荐） | 多图输入/输出，精确修改文字、增删移动物体、改主体动作、迁移风格 |
-| qwen-image-edit-max | 千问编辑 Max | 工业设计、几何推理、角色一致性 |
-| qwen-image-edit-plus / qwen-image-edit | 千问编辑 Plus/基础 | 多图输出、自定义分辨率；edit 仅固定 1 张 |
-| wan2.7-image-pro | 万相 2.7 | 图像编辑、交互式编辑，最高 2K |
-| wan2.6-image | 万相 2.6 | 图像编辑、图文混排 |
-| wan2.5-i2i-preview | 万相 2.5 通用编辑 | 单图编辑、多图融合 |
-| wanx2.1-imageedit | 万相 2.1 通用编辑 | 风格化、指令编辑、局部重绘、去水印、扩图、超分、上色、线稿生图、参考卡通生图 |
+| 400 InvalidParameter | 参数缺失或非法 | 校验 `model`、`input`、`parameters` 结构 |
+| 401 AccessDenied | API_KEY 无效或无权限 | 重新获取 KEY 并确认已开通对应模型 |
+| 429 Throttling | QPS/并发超限 | 退避重试或申请提配额 |
+| 409 DataInspectionFailed | 内容安全拦截 | 修改 prompt/图片后重试 |
+| 任务状态 `FAILED` | 异步任务失败 | 查看 `output.message` 定位原因 |
 
-千问图像编辑支持可指定分辨率（宽高范围 [512,2048]），默认总像素接近 1024*1024 且宽高比贴近最后一张输入图。详见 [千问-图像编辑API参考](../../raw/model-api-reference/image-generation/qwen-image-api-reference/qwen-image-edit-api.md) 与 [万相-通用图像编辑API参考](../../raw/model-api-reference/image-generation/wan-image-api-reference/wanx-image-edit-api-reference.md)。
+## 选型建议
 
-> **注意**：wanx-x-painting（图像局部重绘）、wanx-virtualmodel、virtualmodel-v2、shoemodel-v1、wanx-poster-generation-v1、image-instance-segmentation、image-erase-completion 等模型当前仅提供**免费体验**，额度用尽后不可调用且不支持付费，官方推荐改用千问图像编辑或万相 2.1 图像编辑。
+- **纯中文文生图、追求语义准确**：优先千问-文生图或万相-文生图 V2。
+- **按指令改图（编辑）**：万相-图像生成与编辑 2.7 > 通用图像编辑 2.5；细粒度局部改图用图像局部重绘。
+- **高美感/艺术风格**：Z-Image、可灵-图像生成。
+- **电商/营销垂类**：虚拟模特、鞋靴模特、AI 试衣、创意海报、图像背景生成。
+- **人像玩法**：人像风格重绘、人物写真 FaceChain。
+- **图像后处理**：画面扩展、擦除补全、人物实例分割。
+- **艺术文字**：创意文字 WordArt 锦书。
 
-### 图像翻译
-
-qwen-mt-image 支持中/英文与日、韩、西、法等语种互译（不支持非中/英语种间直接翻译），保留原始排版，支持领域提示、敏感词过滤、术语干预。仅在华北2（北京）可用，[异步调用](../concepts/async-invocation.md)。详见 [千问-图像翻译API参考](../../raw/model-api-reference/image-generation/qwen-image-api-reference/qwen-mt-image-api.md)。
-
-### 垂直场景与创意工具
-
-- **涂鸦作画**：wanx-sketch-to-image-lite，手绘草图+文字生成涂鸦作品，[prompt](../guides/prompt.md)≤75 字符。
-- **图像局部重绘**：wanx-x-painting，输入原图+涂抹 mask+[prompt](../guides/prompt.md) 重绘指定区域。
-- **人像风格重绘**：wanx-style-repaint-v1，预置风格或自定义风格参考图，仅 HTTP 异步。
-- **虚拟模特**：wanx-virtualmodel（V1）、virtualmodel-v2（V2 支持人台、改分辨率、背景参考权重）。
-- **鞋靴模特**：shoemodel-v1，多视角鞋靴图对模板模特图试穿。
-- **图像画面扩展（扩图）**：image-out-painting，支持按宽高比、按比例、指定方向、结合旋转。
-- **创意海报**：wanx-poster-generation-v1，支持 generate/sr/hrf 三种模式，可二次提升分辨率。
-- **人物实例分割**：image-instance-segmentation，像素级 mask，可作为擦除掩码输入。
-- **AI 试衣**：aitryon（基础版，快速）、aitryon-plus（推荐，细节更好）、aitryon-refiner（精修）、aitryon-parsing-v1（服饰分割），可组合实现基础/精修/局部试衣/获取服饰坐标。
-- **图像背景生成**：wanx-background-generation-v2，文本/图像/边缘引导，电商与海报场景。
-- **图像擦除补全**：image-erase-completion，按 mask 移除人物/物体/文字/水印，保留背景。
-- **人物写真**：FaceChain，2 张照片训练专属形象，批量生成多风格写真，含检测/训练/生成三个 API。
-- **创意文字**：WordArt 锦书，文字变形（边缘轮廓创意变形）与文字纹理生成（自定义 3 种+预设 18 种风格）。
-
-## 关键参数
-
-- `model`（必选）：模型名称。
-- `input`（必选）：提示词 `prompt`、图像 URL（`image_url`/`base_image_url`/`sketch_image_url`/`template_image_url` 等）、参考图等。万相 2.6/2.7 与千问、Z-Image 同步接口用 `input.messages[].content[]` 的 `text`/`image` 数组结构。
-- `parameters`：分辨率 `size`（如 `1024*1024`、`2K`、`1K`）、张数 `n`、风格 `style`、水印 `watermark`、智能思考 `prompt_extend`/`thinking_mode`、负向提示 `negative_prompt`、宽高比 `aspect_ratio`、组图 `series_amount`、`ref_strength`/`ref_mode` 等。各模型支持的字段不同，以对应 API 文档为准。
-- 图像 URL 需公网可访问，支持 HTTP/HTTPS；多数模型不支持 Base64（部分如人像风格重绘、擦除补全支持 Base64）。本地文件可上传获取临时 URL。URL 中不能含中文字符。
-
-## [计费](../concepts/billing.md)与限流
-
-- 免费额度：开通百炼服务后自动发放，有效期 90 天，主账号与 RAM 子账号共享。额度按成功输出的图片张数计算，输入图与失败任务不占用。
-- 限时免费（公测阶段）：额度用尽后不可使用；明确单价的模型额度用尽或过期后按张付费（如 wanx-v1 0.16 元/张、wanx2.1-imageedit 0.14 元/张、wanx-style-repaint-v1 0.12 元/张、image-out-painting 0.18 元/张、wanx-background-generation-v2 0.08 元/张、wanx-sketch-to-image-lite 0.06 元/张）。
-- 限流：主账号与 RAM 子账号共享，常见为任务下发 QPS 限制 2、同时处理中任务数 1（部分模型如 image-out-painting 同时处理 5）。详细单价与限流以 [百炼模型价格](https://help.aliyun.com/zh/model-studio/model-pricing) 与各模型文档为准。
-
-## 常见报错
-
-- `BadRequest.InputDownloadFailed`（下载图片失败）：输入图片 URL 不可访问或权限受限。确保 URL 完整且公网可访问，可上传至 OSS 等云存储。
-- `current user api does not support synchronous calls`：异步请求缺少 `X-DashScope-Async: enable` 请求头。
-- `InvalidApiKey`：API Key 无效或跨地域混用。
-- 任务状态：`PENDING`（排队）→ `RUNNING`（处理）→ `SUCCEEDED`/`FAILED`，`SUSPENDED` 为挂起。结果图片 URL 有效期 24 小时。
-
-> **注意**：使用 Postman/Apifox 等平台调试时，需将 curl 中的 `$DASHSCOPE_API_KEY` 替换为真实 API Key（如 `Bearer sk-xxxx`）。macOS/Linux 可直接执行 curl，Windows 建议用接口平台。
+新接入建议直接使用最新版本（万相 2.7、通用图像编辑 2.5 等），旧版接口保留兼容但不再增强。
 
 ## 来源文档
 
@@ -123,6 +132,5 @@ qwen-mt-image 支持中/英文与日、韩、西、法等语种互译（不支�
 - [图像擦除补全API参考](../../raw/model-api-reference/image-generation/image-creative-tools-api-reference/image-erase-completion-api-reference.md)
 - [人物写真生成FaceChain](../../raw/model-api-reference/image-generation/image-creative-tools-api-reference/facechain-portrait-generation.md)
 - [创意文字WordArt锦书](../../raw/model-api-reference/image-generation/image-creative-tools-api-reference/wordart-quick-start.md)
-
 
 

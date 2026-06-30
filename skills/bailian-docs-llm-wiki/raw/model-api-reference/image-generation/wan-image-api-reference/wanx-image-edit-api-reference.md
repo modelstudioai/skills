@@ -6,6 +6,12 @@
 
 本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
 
+**重要**
+
+百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+
 该模型通过简单的指令即可实现多样化的图像编辑，适用于扩图、去水印、风格迁移、图像修复、图像美化等场景。 当前支持以下功能：
 
 -   **图像风格化**：全局风格化、局部风格化。
@@ -182,14 +188,14 @@ wanx2.1-imageedit
 
 ### 步骤1：创建任务获取任务ID
 
-`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis`
+`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis`
 
 #### 请求参数
 
 ## **全局风格化**
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -215,7 +221,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image
 数据格式详见[传值方式](#c92c9077cbebb)。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -235,7 +241,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image
 ## 局部风格化
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -257,7 +263,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image
 无需指定区域，通过指令即可增加/修改图片内容。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -279,7 +285,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image
 针对指定区域,可增加/删除/修改图片内容。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -302,7 +308,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image
 可去除中英文文字水印。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -324,7 +330,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image
 支持在上下左右四个方向按比例扩图。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -350,7 +356,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image
 支持将模糊图像进行高清放大。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -373,7 +379,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image
 支持将黑白或灰度图像转为彩色图像。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -395,7 +401,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image
 先提取输入图像的线稿，再参考该线稿生成图像。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -417,7 +423,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image
 支持参考卡通形象生成图像。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -742,7 +748,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image
 
 ### 步骤2：根据任务ID查询结果
 
-`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 #### 请求参数
 
@@ -751,7 +757,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image
 请将`86ecf553-d340-4e21-xxxxxxxxx`替换为真实的task\_id。
 
 ```
-curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \
+curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
@@ -1018,6 +1024,7 @@ import base64
 import os
 from http import HTTPStatus
 from dashscope import ImageSynthesis
+import dashscope
 import mimetypes
 
 """
@@ -1029,6 +1036,8 @@ import mimetypes
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 # --- 辅助函数：用于 Base64 编码 ---
 # 格式为 data:{MIME_type};base64,{base64_data}
@@ -1133,6 +1142,7 @@ if __name__ == '__main__':
 import os
 from http import HTTPStatus
 from dashscope import ImageSynthesis
+import dashscope
 
 """
 环境要求：
@@ -1143,6 +1153,8 @@ from dashscope import ImageSynthesis
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 api_key = os.getenv("DASHSCOPE_API_KEY")
+# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 # 使用公网图片 URL
 mask_image_url = "http://wanx.alicdn.com/material/20250318/description_edit_with_mask_3_mask.png"
@@ -1290,6 +1302,7 @@ import com.alibaba.dashscope.aigc.imagesynthesis.ImageSynthesisResult;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.utils.JsonUtils;
+import com.alibaba.dashscope.utils.Constants;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -1307,6 +1320,7 @@ import java.util.Map;
  */
  
 public class ImageEditSync {
+    static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
 
     // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey="sk-xxx"
     static String apiKey = System.getenv("DASHSCOPE_API_KEY");
@@ -1442,6 +1456,7 @@ import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.task.AsyncTaskListParam;
 import com.alibaba.dashscope.utils.JsonUtils;
+import com.alibaba.dashscope.utils.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -1454,6 +1469,7 @@ import java.util.Map;
  */
  
 public class ImageEditAsync {
+    static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
 
     // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey="sk-xxx"
     static String apiKey = System.getenv("DASHSCOPE_API_KEY");

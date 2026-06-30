@@ -25,7 +25,7 @@
   - 文件/表格连接器：准备好上传的文件，或已创建 OSS Bucket。
   - MySQL 连接器：已有 RDS 或自建实例，并保证网络可达。
   - PostgreSQL 连接器：已有实例，且 `wal_level` 参数已设置为 `logical`。
-  - PolarDB-X 2.0 连接器：已有阿里云 PolarDB-X 2.0 实例，且实例所在地域支持私网访问。
+  - PolarDB-X 2.0 连接器：已有阿里云 PolarDB-X 2.0 实例，且实例所在地域支持[私网访问](../concepts/vpc-private-access.md)。
   - 语雀连接器：已有语雀[知识库](../concepts/knowledge-base.md)（仅支持公网版本），并获取了个人访问 [Token](../concepts/token.md)。
   - OSS 连接器：已创建 OSS Bucket，并开通了向量检索服务。
 
@@ -109,6 +109,7 @@
 ## 来源文档
 
 - [数据连接](../../raw/application-user-guide/data-connection-overview/data-connection.md)
+
 
 
 

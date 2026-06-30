@@ -81,7 +81,7 @@
 图像与视频生成模型的微调流程与文本类一致，但数据集格式与部署参数不同：
 
 - **数据集**：打包为 `.zip`，内含 `data.jsonl`（标注文件）与训练图像/视频；文生图需训练目标图像与 [prompt](prompt.md)，图生图还需参考输入图像；图生视频基于首帧或首尾帧组织样本。
-- **部署**：万相视频模型部署时需在 `aigc_config` 中配置 `use_input_prompt`、`prompt`（预置模板）与 `lora_prompt_default`，以在推理时自动激活 LoRA 特效。
+- **部署**：万相视频[模型部署](../concepts/model-deployment.md)时需在 `aigc_config` 中配置 `use_input_prompt`、`prompt`（预置模板）与 `lora_prompt_default`，以在推理时自动激活 LoRA 特效。
 - **调用**：图像生成走 `image-generation/generation` 异步接口，视频生成走 `video-synthesis` 异步接口，均通过 `task_id` 轮询结果（图像 URL 有效期 24 小时）。
 
 ## 数据集格式
@@ -104,7 +104,7 @@
 - **地域限制**：所有调优功能**仅适用于华北2（北京）地域**，必须使用该地域的 [API Key](../concepts/api-key.md)；万相图像/视频微调同样仅在该地域可用。
 - **权限要求**：使用 RAM 子账号需授予模型调用、训练和部署权限。
 - **文件限制**：单个文件最大 300MB，有效文件总配额 5GB / 100 个，文件存储无时间限制。
-- **训练耗时参考**：万相文生图约 77 分钟、图生图约 110 分钟（2K、300 步）；万相视频微调需数小时；CosyVoice 高效训练约 15–30 分钟；模型部署通常 3–10 分钟。
+- **训练耗时参考**：万相文生图约 77 分钟、图生图约 110 分钟（2K、300 步）；万相视频微调需数小时；CosyVoice 高效训练约 15–30 分钟；[模型部署](../concepts/model-deployment.md)通常 3–10 分钟。
 - **安全合规**：如需让模型主动拒绝敏感/诱导性请求，可通过零代码 SFT 微调（如基于 Qwen3-8B）将安全对齐目标写入模型参数，覆盖政治、历史、社会、网络安全等多维度，详见 [0 代码强化大模型安全合规能力](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/enhance-the-security-compliance-of-large-models.md)。训练前应观察 Training Loss 与 Validation Loss 曲线判断欠拟合/过拟合，并相应调整 `n_epochs` 与 `lora_rank`。
 - **CosyVoice 能力边界**：调优产物为单音色独立模型，不再提供声音复刻、声音设计、指令控制能力；语种支持由基础模型决定，无法通过调优扩展；训练音频中的语速、情感、错读等统计特性会直接反映到调优产物的默认合成风格上。
 
@@ -117,6 +117,7 @@
 - [使用 API 或命令行进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)
 - [0 代码强化大模型安全合规能力](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/enhance-the-security-compliance-of-large-models.md)
 - [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)
+
 
 
 

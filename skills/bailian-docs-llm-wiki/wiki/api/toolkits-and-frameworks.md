@@ -119,7 +119,7 @@
 
 ### 文件输入（异步）
 
-通过文件批量提交请求，系统异步处理，全部完成或达到最长等待时间后返回结果，费用为实时调用的 50%。适用于数据分析、模型评测等时效性要求不高但需大批量处理的场景。
+通过文件批量提交请求，系统异步处理，全部完成或达到最长等待时间后返回结果，费用为实时调用的 50%。适用于数据分析、模型[评测](../concepts/evaluation.md)等时效性要求不高但需大批量处理的场景。
 
 服务端点：中国内地 `https://dashscope.aliyuncs.com/compatible-mode/v1`；国际（新加坡）`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`。
 
@@ -198,6 +198,7 @@
 - [OpenAI兼容-Batch Chat](../../raw/model-api-reference/toolkits-and-frameworks/openai-compatible-batch-chat.md)
 - [OpenAI Conversations接口兼容](../../raw/model-api-reference/toolkits-and-frameworks/openai-compatible-conversations.md)
 - [在LangChain中使用阿里云百炼](../../raw/model-api-reference/toolkits-and-frameworks/use-bailian-in-langchain.md)
+
 
 
 

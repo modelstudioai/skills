@@ -145,13 +145,14 @@ Authorization: Basic base64Encode(AccessKey:AccessKeySecret)
 ## Token 与推理类型说明
 
 - **Token**：大模型处理输入输出的单位。经验值：1 个汉字约 1.5-2 个 Token，1 个英文字母约 0.25 个 Token，1 个英文单词约 1.3 个 Token。每个模型都有最大输入/输出 Token 限制，超出会请求失败。
-- **实时推理**：对模型的所有直接和间接调用，包括 API 调用、模型广场、百炼应用（智能体/工作流）的测试态和发布态、Assistant API、应用调用、Prompt 反馈优化、模型评测等。
+- **实时推理**：对模型的所有直接和间接调用，包括 API 调用、模型广场、百炼应用（智能体/工作流）的测试态和发布态、Assistant API、应用调用、Prompt 反馈优化、模型[评测](../concepts/evaluation.md)等。
 - **批量推理**：通过 OpenAI 兼容-Batch（文件输入）接口以离线方式进行的大规模数据处理。
 
 ## 来源文档
 
 - [模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)
 - [模型监控](../../raw/model-user-guide/model-monitoring/model-telemetry.md)
+
 
 
 

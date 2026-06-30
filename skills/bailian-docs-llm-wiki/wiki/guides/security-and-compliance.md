@@ -1,6 +1,6 @@
 # security and compliance
 
-阿里云百炼围绕"身份权限、内容安全、合规备案、传输加密、私网与安全存储"五个维度构建安全合规体系，覆盖从控制台到 API 调用、从公网到 VPC 私网的完整链路。本文面向开发者，按"权限与身份—内容安全—合规备案—传输加密—私网访问—安全存储"的顺序梳理关键能力、参数与注意事项。
+阿里云百炼围绕"身份权限、内容安全、合规备案、传输加密、私网与安全存储"五个维度构建安全合规体系，覆盖从控制台到 API 调用、从公网到 VPC 私网的完整链路。本文面向开发者，按"权限与身份—内容安全—合规备案—传输加密—[私网访问](../concepts/vpc-private-access.md)—安全存储"的顺序梳理关键能力、参数与注意事项。
 
 ## 身份与权限管理
 
@@ -22,7 +22,7 @@
 | --- | --- | --- |
 | 限制模型调用 | 是否可调用（控制台 & API）+ 请求数限流 + [Token](../concepts/token.md) 限流 | 模型列表 → 模型调用列开关 + 当前空间限流列 |
 | 限制模型训练 | 是否可调优（控制台 & API）及调优后部署 | 模型列表 → 模型授权 → 模型训练列 |
-| 限制模型部署 | 是否可直接部署 | 模型列表 → 模型授权 → 模型部署列 |
+| 限制[模型部署](../concepts/model-deployment.md) | 是否可直接部署 | 模型列表 → 模型授权 → [模型部署](../concepts/model-deployment.md)列 |
 
 单个 [API Key](../concepts/api-key.md) 只能归属一个地域内的一个业务空间和一个用户，且不能转移。API Key 的可调用功能与模型限流与**归属业务空间**的权限保持一致，不受用户控制台权限影响，也无需为不同模型（文生文、文生图、语音合成）创建不同 API Key。自 2026 年 3 月 25 日起，华北2（北京）地域所有新创建的 API Key 均归属主账号，并支持设置 IP 访问白名单。
 
@@ -126,13 +126,13 @@ SDK 自动完成加解密，响应为明文，无需手动处理。
 - 返回：`request_id`、`data.public_key`（RSA 公钥值）、`data.public_key_id`（公钥 ID）
 - 前提：已开通百炼服务并获得 API-KEY，建议配置到环境变量以降低泄漏风险。
 
-## 私网访问：通过 PrivateLink 终端节点访问 API
+## [私网访问](../concepts/vpc-private-access.md)：通过 PrivateLink 终端节点访问 API
 
 为在 VPC 内直接调用百炼模型/应用 API 且流量不经公网，可创建私网终端节点（PrivateLink），将通信限制在阿里云内网，详见 [通过终端节点私网访问阿里云百炼模型或应用 API](../../raw/model-user-guide/security-and-compliance/transmission-security/access-model-studio-through-privatelink.md)。
 
 ### 工作原理与地域
 
-终端节点连接为**单向设计**，仅允许 VPC 内资源主动访问百炼，百炼无法反向访问 VPC 内资源。百炼公共云服务所在地域：华北2（北京）、新加坡。**美国（弗吉尼亚）地域暂不支持私网访问**。
+终端节点连接为**单向设计**，仅允许 VPC 内资源主动访问百炼，百炼无法反向访问 VPC 内资源。百炼公共云服务所在地域：华北2（北京）、新加坡。**美国（弗吉尼亚）地域暂不支持[私网访问](../concepts/vpc-private-access.md)**。
 
 ### 配置步骤
 
@@ -192,6 +192,7 @@ SDK 自动完成加解密，响应为明文，无需手动处理。
 - [配置可用区IP](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-zone-ip.md)
 - [配置私有网络中的资源](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)
 - [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md)
+
 
 
 

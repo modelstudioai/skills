@@ -1,6 +1,6 @@
 # model data overview
 
-百炼平台的数据管理功能用于在模型调优和评测前创建、清洗、增强训练集与评测集。它统一管理[业务空间](../concepts/workspace.md)下的大模型相关数据集，分为训练集（用于模型调优）和评测集（用于模型评测）两类，并支持基于数据流的可视化数据处理能力。本文汇总训练集与评测集的格式规范、关键参数以及数据清洗与增强的使用方式。
+百炼平台的数据管理功能用于在模型调优和[评测](../concepts/evaluation.md)前创建、清洗、增强训练集与[评测](../concepts/evaluation.md)集。它统一管理[业务空间](../concepts/workspace.md)下的大模型相关数据集，分为训练集（用于模型调优）和[评测](../concepts/evaluation.md)集（用于模型评测）两类，并支持基于数据流的可视化数据处理能力。本文汇总训练集与评测集的格式规范、关键参数以及数据清洗与增强的使用方式。
 
 > **注意**：本文涉及的数据管理与数据处理能力**仅适用于华北2（北京）地域**。此外，阿里云百炼目前暂未提供可用的数据处理 API，所有数据处理操作需在控制台完成。
 
@@ -150,6 +150,7 @@ Few-Shot 策略示例：训练集 1000 条、指令生成依赖样本数 5、生
 
 - [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)
 - [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)
+
 
 
 

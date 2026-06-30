@@ -18,7 +18,7 @@
 3.  推理结果回到接入地域存储，再响应给应用（用户静态数据始终存于所选地域）。
     
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2631442871/CAEQchiBgIDPq_PR9xkiIDJhZDdiNzAxMGFiODRhNmRiMDYxYjNjNGU2NTJkMDYw7466796_20260515102254.505.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1502072871/CAEQchiBgIDPq_PR9xkiIDJhZDdiNzAxMGFiODRhNmRiMDYxYjNjNGU2NTJkMDYw7466796_20260515102254.505.svg)
 
 ## 选择地域和服务部署范围
 
@@ -361,6 +361,18 @@ HTTP、SSE
 支持
 
 模型调优
+
+支持
+
+不支持
+
+不支持
+
+不支持
+
+不支持
+
+应用开发
 
 支持
 

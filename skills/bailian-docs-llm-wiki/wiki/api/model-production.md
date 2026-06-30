@@ -1,6 +1,6 @@
 # model production
 
-百炼平台提供模型生产（model production）相关的 API，覆盖从模型调优、模型压缩到模型部署的完整链路。开发者可以通过这些接口对基础模型进行微调定制、压缩优化以及部署上线，形成端到端的模型生产能力。
+百炼平台提供模型生产（model production）相关的 API，覆盖从模型调优、模型压缩到[模型部署](../concepts/model-deployment.md)的完整链路。开发者可以通过这些接口对基础模型进行微调定制、压缩优化以及部署上线，形成端到端的模型生产能力。
 
 ## 能力概览
 
@@ -8,7 +8,7 @@
 
 1. **模型调优（Fine-tuning）**：通过微调训练在基础模型上注入领域知识或特定任务能力，定制出专属模型。
 2. **模型压缩（Compression）**：通过量化等手段压缩模型体积，降低推理时的资源占用与调用成本。
-3. **模型部署（Deployment）**：将微调或导入的模型部署为在线推理服务，供应用调用。
+3. **[模型部署](../concepts/model-deployment.md)（Deployment）**：将微调或导入的[模型部署](../concepts/model-deployment.md)为在线推理服务，供应用调用。
 
 三者构成典型的「调优 → 压缩 → 部署」流水线，详见 [模型调优](../../raw/model-api-reference/model-production/fine-tuning-jobs-api.md) 与 [模型部署](../../raw/model-api-reference/model-production/deployments-api.md)。
 
@@ -39,6 +39,7 @@
 - [模型调优](../../raw/model-api-reference/model-production/fine-tuning-jobs-api.md)
 - [模型压缩](../../raw/model-api-reference/model-production/model-compression-api.md)
 - [模型部署](../../raw/model-api-reference/model-production/deployments-api.md)
+
 
 
 

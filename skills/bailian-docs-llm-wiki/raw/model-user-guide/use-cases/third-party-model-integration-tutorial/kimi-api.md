@@ -230,6 +230,7 @@ completion = client.chat.completions.create(
     model="kimi-k2.6",
     messages=[{"role": "user", "content": "你是谁"}],
     stream=True,
+    extra_body={"enable_thinking": True},
 )
 
 reasoning_content = ""  # 完整思考过程
@@ -304,6 +305,7 @@ async function main() {
         model: 'kimi-k2.6',
         messages,
         stream: true,
+        enable_thinking: true,
     });
 
     console.log('\n' + '='.repeat(20) + '思考过程' + '='.repeat(20) + '\n');
@@ -383,7 +385,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
             "role": "user",
             "content": "你是谁"
         }
-    ]
+    ],
+    "enable_thinking": true
 }'
 ```
 
@@ -440,6 +443,7 @@ completion = MultiModalConversation.call(
     result_format="message",  # 设置结果格式为 message
     stream=True,              # 开启流式输出
     incremental_output=True,  # 开启增量输出
+    enable_thinking=True,     # 开启思考模式
 )
 
 reasoning_content = ""  # 完整思考过程
@@ -574,7 +578,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 -d '{
     "model": "kimi-k2.6",
     "input":{
-        "messages":[      
+        "messages":[
             {
                 "role": "user",
                 "content": "你是谁？"
@@ -582,7 +586,8 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
         ]
     },
     "parameters": {
-        "result_format": "message"
+        "result_format": "message",
+        "enable_thinking": true
     }
 }'
 ```

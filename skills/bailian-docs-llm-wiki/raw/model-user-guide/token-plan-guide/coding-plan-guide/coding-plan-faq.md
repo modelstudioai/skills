@@ -10,9 +10,7 @@
 使用coding plan时，报错model 'xxx' is not supported是什么原因
 ```
 
-阿里云 AI 助理会分析原因并给出解决方案：
-
-错误原因包括三类：模型名称不正确或拼写错误；使用了 Coding Plan 不支持的模型（Lite 套餐和 Pro 套餐均支持套餐内全部模型，包括千问、GLM、Kimi、MiniMax 等，使用套餐支持列表以外的模型会触发该报错）；API Key 或 Base URL 配置错误。
+阿里云 AI 助理会分析原因并给出解决方案，常见原因包括：模型名称不正确或拼写错误；使用了 Coding Plan 不支持的模型；API Key 或 Base URL 配置错误。
 
 ## **接入与配置相关问题**
 
@@ -46,11 +44,11 @@
 
 1.  [使用套餐专属 API Key](https://help.aliyun.com/zh/model-studio/coding-plan-quickstart#2782cf93b1w8h)
     
-2.  前往[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan 页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=globalset#/efm/coding_plan)确认订阅是否过期
+2.  前往[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)确认订阅是否过期
     
-3.  前往[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan 页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=globalset#/efm/coding_plan)重新复制 API Key，确保完整且无空格
+3.  前往[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)重新复制 API Key，确保完整且无空格
     
-4.  如以上均正常仍报错，可在 [Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan 页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=globalset#/efm/coding_plan)重置 API Key，重置后请使用新 API Key 进行配置
+4.  如以上均正常仍报错，可在 [Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)重置 API Key，重置后请使用新 API Key 进行配置
     
 
 **model 'xxx' is not supported**
@@ -70,10 +68,6 @@ Anthropic 兼容端点：`https://coding.dashscope.aliyuncs.com/apps/anthropic`
 
 OpenAI 兼容端点：`https://coding.dashscope.aliyuncs.com/v1`
 
-Anthropic 兼容端点：`https://coding-intl.dashscope.aliyuncs.com/apps/anthropic`
-
-OpenAI 兼容端点：`https://coding-intl.dashscope.aliyuncs.com/v1`
-
 **404 status code (no body)**
 
 Base URL 路径错误。例如：在 Claude Code 中错误地将 Base URL 配置为`https://coding.dashscope.aliyuncs.com/v1`，正确的配置应该是`https://coding.dashscope.aliyuncs.com/apps/anthropic`。
@@ -81,10 +75,6 @@ Base URL 路径错误。例如：在 Claude Code 中错误地将 Base URL 配置
 Anthropic 兼容端点：`https://coding.dashscope.aliyuncs.com/apps/anthropic`
 
 OpenAI 兼容端点：`https://coding.dashscope.aliyuncs.com/v1`
-
-Anthropic 兼容端点：`https://coding-intl.dashscope.aliyuncs.com/apps/anthropic`
-
-OpenAI 兼容端点：`https://coding-intl.dashscope.aliyuncs.com/v1`
 
 **Connection error**
 
@@ -120,11 +110,11 @@ Base URL 拼写错误或网络问题
 
 阿里云中国站的百炼 Coding Plan 不限制使用地域，海外用户可以正常使用。如果您在使用过程中遇到网络延迟或账号问题，可以选择使用[国际站 Coding Plan](https://www.alibabacloud.com/help/zh/model-studio/coding-plan-quickstart)。
 
-### **Claude Code 提示 “Claude Code has switched from npm to native installer”怎么办？**
+### **Claude Code 提示** `**Claude Code has switched from npm to native installer**` **怎么办？**
 
-不影响 Claude Code 的正常使用。你可以选择在终端执行`claude install` 将 Claude Code 迁移到官方原生安装版本，并参照终端中返回的命令完成配置迁移。
+不影响 Claude Code 的正常使用。您可以在终端执行 `claude install` 将 Claude Code 迁移到官方原生安装版本，并参照终端中返回的命令完成配置迁移。
 
-### **Claude Code 报错 “Unable to connect to Anthropic services. Failed to connect to api.anthropic.com: ERR\_BAD\_REQUEST”怎么办**
+### **Claude Code 报错** `**Unable to connect to Anthropic services. Failed to connect to api.anthropic.com: ERR_BAD_REQUEST**` **怎么办？**
 
 ```
 Unable to connect to Anthropic services
@@ -155,16 +145,16 @@ countries at https://anthropic.com/supported-countries
     ```
     
 
-### **OpenCode 报错 "Request Entity Too Large" 怎么办？**
+### **OpenCode 报错** `**Request Entity Too Large**` **怎么办？**
 
 该报错表示请求内容（如代码上下文、对话历史）过大，超出最大输入限制。请按以下方式处理：
 
-1.  执行 `/new` 新建对话，或执行 `/compact` 压缩上下文。更多缓解上下文超限的方法，请参见。
+1.  执行 `/new` 新建对话，或执行 `/compact` 压缩上下文。
     
 2.  若以上方法无法解决，请将 OpenCode 更新至 1.2.16 或以上版本，该版本修复了相关问题。
     
 
-### **OpenCode 报错 "The thinking\_budget parameter must be a positive integer and not greater than 38912" 怎么办？**
+### **OpenCode 报错** `**The thinking_budget parameter must be a positive integer and not greater than 38912**` **怎么办？**
 
 **原因**： 配置文件`opencode.json`中 `budgetTokens` 的值超过了当前模型支持的最大 `thinking_budget`。不同模型的上限不同，请参照下表调整配置。
 
@@ -214,7 +204,7 @@ qwen3-coder-plus
 
 **解决方案**：打开 OpenCode 配置文件 `opencode.json`，将对应模型的 `options.thinking.budgetTokens` 值调整为不超过该模型的上限值。对于不支持思考模式的模型（qwen3-coder-next、qwen3-coder-plus），需要移除 `options.thinking` 配置项。详情请参见[OpenCode](https://help.aliyun.com/zh/model-studio/opencode)。
 
-### **OpenCode报错“InternalError.Algo.InvalidParameter: Range of max\_tokens should be \[1, xxxx\]”怎么办？**
+### **OpenCode 报错** `**InternalError.Algo.InvalidParameter: Range of max_tokens should be [1, xxxx]**` **怎么办？**
 
 **原因**：配置文件`opencode.json`中 `limit.output` 的值超过了当前模型支持的最大输出Token数（`max_tokens`）。
 
@@ -443,7 +433,7 @@ OpenClaw 开启思考模式的步骤如下：
 2.  删除`~/.openclaw/agents/main/agent/models.json`缓存文件并重启 OpenClaw，重启后缓存文件会根据`~/.openclaw/openclaw.json`中的配置自动重建。
     
 
-### OpenClaw中报错 "Agent failed before reply: OAuth token refresh failed" 怎么办？
+### OpenClaw 中报错 `Agent failed before reply: OAuth token refresh failed` 怎么办？
 
 此报错表明当前接入的是第三方 OAuth 服务，而非 Coding Plan。
 
@@ -462,7 +452,7 @@ OpenClaw 开启思考模式的步骤如下：
     ```
     
 
-### OpenClaw报错“Agent failed before reply: Unknown model”怎么办？
+### OpenClaw 报错 `Agent failed before reply: Unknown model` 怎么办？
 
 该报错表示 OpenClaw 在配置文件中找不到指定的模型。请按以下顺序逐一排查：
 
@@ -487,7 +477,7 @@ OpenClaw 开启思考模式的步骤如下：
 
 `qwen-portal/coder-model` 是 Qwen Chat 网页版提供的免费模型，并不属于百炼平台。如果您在百炼平台或 Coding Plan 中尝试使用该模型，将会遇到模型不存在的报错。请使用百炼平台支持的模型。
 
-### OpenClaw报错"No API key found for provider "xxxxx"."怎么办？
+### OpenClaw 报错 `No API key found for provider "xxxxx"` 怎么办？
 
 该报错表示 OpenClaw 无法找到报错信息中所指 provider（xxxx）对应的 API Key。请按以下步骤逐一排查：
 
@@ -505,7 +495,7 @@ OpenClaw 开启思考模式的步骤如下：
         
     -   若使用 Coding Plan，请确保使用的是专属 Key（`sk-sp-xxx`）。
         
-    -   若 Web UI 中显示的是 “\_\_OPENCLAW\_REDACTED\_\_”，表示API Key 已保存，无需重填；若显示为空或YOUR\_API\_KEY，则需重新填写。
+    -   若 Web UI 中显示的是 `__OPENCLAW_REDACTED__`，表示 API Key 已保存，无需重填；若显示为空或 `YOUR_API_KEY`，则需重新填写。
         
 3.  本地凭证缓存未更新，导致配置未生效
     
@@ -520,7 +510,7 @@ OpenClaw 开启思考模式的步骤如下：
     ```
     
 
-### OpenClaw报错“API rate limit reached”怎么办？
+### OpenClaw 报错 `API rate limit reached` 怎么办？
 
 请按以下顺序排查：
 
@@ -532,12 +522,12 @@ OpenClaw 开启思考模式的步骤如下：
         
     -   若当前未使用 Coding Plan 套餐，建议切换至 Coding Plan 以获取专属额度。
         
-2.  超出套餐限额：在[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=dashboard#/efm/coding_plan)查看套餐用量情况。
+2.  超出套餐限额：在[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)查看套餐用量情况。
     
-3.  尝试重置 API Key**：**若完成上述排查后问题仍未解决，请前往[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=dashboard#/efm/coding_plan)重置 API Key。
+3.  **尝试重置 API Key**：若完成上述排查后问题仍未解决，请前往[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)重置 API Key。
     
 
-### **OpenClaw 启动时报错 "Failed to discover Alibaba Cloud models" 怎么办？**
+### **OpenClaw 启动时报错** `**Failed to discover Alibaba Cloud models**` **怎么办？**
 
 OpenClaw 启动时出现以下报错信息：
 
@@ -569,7 +559,7 @@ OpenClaw 启动时出现以下报错信息：
     修改为 `"profiles": {}` 后提示就不会再出现。
     
 
-### OpenClaw 报错 "auth.profiles.xxx" 怎么办？
+### OpenClaw 报错 `auth.profiles.xxx` 怎么办？
 
 使用 OpenClaw 时出现类似以下报错：
 
@@ -587,11 +577,11 @@ OpenClaw 启动时出现以下报错信息：
 2.  确认 Coding Plan 的 API Key 配置在 `models.providers.bailian.apiKey`，详情请参见[OpenClaw](https://help.aliyun.com/zh/model-studio/openclaw)。
     
 
-### **为什么报错“HTTP 401: Incorrect API key provided.”？**
+### **为什么报错** `**HTTP 401: Incorrect API key provided**`**？**
 
 可能原因：
 
--   **API Key 格式错误：**API Key 填写为空、格式不正确、复制不完整，或在复制时误带了多余的空格。请确认API Key 为Coding Plan 专属 [API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[API Key](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=globalset#/efm/coding_plan)（以 `sk-sp-` 开头），复制完整且无空格。
+-   **API Key 格式错误**：API Key 填写为空、格式不正确、复制不完整，或在复制时误带了多余的空格。请确认 API Key 为 Coding Plan 专属 [API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)（以 `sk-sp-` 开头），复制完整且无空格。
     
 -   **Coding Plan 订阅状态已过期或失效：** Coding Plan 专属 API Key依赖于套餐的订阅状态。如果 Coding Plan 套餐已到期或失效，对应的专属 Key 将无法继续使用。请确保Coding Plan 订阅状态是否仍然有效。
     
@@ -639,23 +629,23 @@ OpenClaw 启动时出现以下报错信息：
     
     https://coding\-intl.dashscope.aliyuncs.com/v1
     
--   **使用了错误的API Key**：配置了 Coding Plan 的专属 Base URL，但 API Key 误填了阿里云百炼的通用 API Key（以 `sk-` 开头）。请将API Key更新为Coding Plan 专属 [API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[API Key](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=globalset#/efm/coding_plan)。
+-   **使用了错误的 API Key**：配置了 Coding Plan 的专属 Base URL，但 API Key 误填了阿里云百炼的通用 API Key（以 `sk-` 开头）。请将 API Key 更新为 Coding Plan 专属 [API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)。
     
 -   **OpenClaw历史配置缓存导致配置错误：**请删除`~/.openclaw/agents/main/agent/models.json`文件中的`providers.bailian`配置项，并重启OpenClaw。
     
 
-### **为什么报错“Authentication failed, please make sure that a valid ModelScope token is supplied.”？**
+### **为什么报错** `**Authentication failed, please make sure that a valid ModelScope token is supplied**`**？**
 
 此报错表明当前接入的是第三方 ModelScope 服务，而非 Coding Plan。如需接入Coding Plan，请参考[接入客户端/开发工具](https://help.aliyun.com/zh/model-studio/use-chat-client-or-development-tool/)。
 
 报错信息表示身份验证失败。通常是在调用 ModelScope（魔搭社区）API 服务时，填写的访问凭证有误。请按以下顺序排查：
 
-1.  填错了平台的访问凭证：ModelScope 的 Token格式为`ms-xxx` ，阿里云百炼的通用 API Key格式为`sk-xxx`。两者为独立平台，访问凭证互不通用。请前往[ModelScope](https://www.modelscope.cn/my/access/token)获取。
+1.  填错了平台的访问凭证：ModelScope 的 Token 格式为 `ms-xxx`，阿里云百炼的通用 API Key 格式为 `sk-xxx`。两者为独立平台，访问凭证互不通用。请前往 [ModelScope](https://www.modelscope.cn/my/access/token)获取。
     
 2.  格式有误：确认复制ModelScope Token 时，无多余空格或换行符。
     
 
-### **为什么报错“Coding Plan is currently only available for Coding Agents”？**
+### **为什么报错** `**Coding Plan is currently only available for Coding Agents**`**？**
 
 此报错表明使用了Coding Plan 不支持的工具或环境发起调用。
 
@@ -671,7 +661,7 @@ Coding Plan 仅限在编程工具（如 Claude Code、Qwen Code 等）中使用�
     
     -   原因：如果在 AI 工具中配置的是通用 API Key（格式为`sk-xxx`）和通用 Base URL（不含 coding 关键字），系统会将其识别为按量计费调用，产生按量计费的账单。
         
-    -   解决方案：请务必使用Coding Plan专属配置。**API Key** 的格式必须为`sk-sp-xxx`，**Base URL** 必须包含 `coding` 关键字（如 `https://coding<!--XW-S id="W1226ac62" tag="span" attrs='data-tag=ph;id=d90ad999b3a0u;props=intl' v="1"-->-intl<!--XW-E id="W1226ac62"-->.dashscope.aliyuncs.com/xxx`）。详情请参见[获取套餐专属 API Key 和 Base URL](https://help.aliyun.com/zh/model-studio/coding-plan-quickstart#2782cf93b1w8h)。
+    -   解决方案：请务必使用 Coding Plan 专属配置。**API Key** 的格式必须为 `sk-sp-xxx`，**Base URL** 必须包含 `coding` 关键字（如 `https://coding.dashscope.aliyuncs.com/xxx`）。详情请参见[获取套餐专属 API Key 和 Base URL](https://help.aliyun.com/zh/model-studio/coding-plan-quickstart#2782cf93b1w8h)。
         
 2.  **账单结算延时导致欠费（费用产生于开通Coding Plan套餐前）**
     
@@ -681,9 +671,9 @@ Coding Plan 仅限在编程工具（如 Claude Code、Qwen Code 等）中使用�
         
 3.  **同时配置了 Coding Plan和通用API调用凭证，但误用了通用API调用**
     
-    -   原因：若工具中同时保留了“通用”和“专属”两套配置，部分工具（如 OpenClaw）会自动路由到通用凭证进行请求，从而产生扣费。
+    -   原因：若工具中同时保留了通用和专属两套配置，部分工具（如 OpenClaw）会自动路由到通用凭证进行请求，从而产生扣费。
         
-    -   解决方案：建议在工具中移除通用 API 配置，并确保选用[Coding Plan支持的模型](https://help.aliyun.com/zh/model-studio/coding-plan#2bbc4faf2ej0e)。例如在 OpenCode 中，请选择供应商标为“Model Studio Coding Plan”的模型。
+    -   解决方案：建议在工具中移除通用 API 配置，并确保选用[Coding Plan 支持的模型](https://help.aliyun.com/zh/model-studio/coding-plan#2bbc4faf2ej0e)。例如在 OpenCode 中，请选择供应商标为 **Model Studio Coding Plan** 的模型。
         
 4.  **客户端缓存未清理**
     
@@ -715,11 +705,11 @@ Coding Plan 是一个独立的订阅产品，其计费和配额系统**不参与
 
 ### **如何查看 Token 消耗信息？**
 
-暂无法查看。Coding Plan的额度消耗与 Token 消耗无关，只与模型调用次数有关。可在[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=dashboard#/efm/coding_plan)查看用量信息。
+暂无法查看。Coding Plan 的额度消耗与 Token 消耗无关，只与模型调用次数有关。可在[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)查看用量信息。
 
 ### 可以查询 Coding Plan 套餐内特定模型（如qwen3.6-plus）的使用量吗？
 
-不支持。[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=dashboard#/efm/coding_plan)仅展示套餐总额度的整体消耗和剩余情况。
+不支持。[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)仅展示套餐总额度的整体消耗和剩余情况。
 
 ### **Coding Plan 有年付套餐吗？**
 
@@ -740,7 +730,7 @@ Coding Plan 是一个独立的订阅产品，其计费和配额系统**不参与
 
 到期后不支持续费操作。
 
-### 续费报错“当前已经存在待生效续费，不允许重复续费”怎么办?
+### 续费报错**当前已经存在待生效续费，不允许重复续费**怎么办？
 
 **原因**：当前账号已经续费到下个月，不支持手动续费到更多月份。
 
@@ -761,7 +751,7 @@ Coding Plan 是一个独立的订阅产品，其计费和配额系统**不参与
 
 ### **续费入口在哪里？**
 
-Pro 套餐可以在[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=dashboard#/efm/coding_plan)或[资源续订页面](https://billing-cost.console.aliyun.com/renew/manual)进行续费。Lite 基础套餐停止续费通知请参见[公告](https://www.aliyun.com/notice/118175)。
+Pro 套餐可以在[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)或[资源续订页面](https://billing-cost.console.aliyun.com/renew/manual)进行续费。Lite 基础套餐停止续费通知请参见[公告](https://www.aliyun.com/notice/118175)。
 
 ## **产品功能相关问题**
 
@@ -873,7 +863,7 @@ glm-4.7
 
 ### Coding Plan 如何重置 API Key？
 
-在[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=dashboard#/efm/coding_plan)，点击Coding Plan 的 API Key旁边的**重置**按钮即可。
+在[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)，点击 Coding Plan 的 API Key 旁边的**重置**按钮即可。
 
 **说明**
 
@@ -897,7 +887,7 @@ glm-4.7
 
 ### **Coding Plan 支持设置使用的IP白名单吗？**
 
-不支持。如果API Key泄露，请在[Coding Plan页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)[Coding Plan页面](https://modelstudio.console.alibabacloud.com/ap-southeast-1/?tab=dashboard#/efm/coding_plan)重置API Key。
+不支持。如果 API Key 泄露，请在[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)重置 API Key。
 
 ### **子账号如何查看获取 Coding Plan API Key？**
 

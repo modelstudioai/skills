@@ -149,18 +149,18 @@ description: >-
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
 | 函数调用 | `wiki/concepts/function-calling.md` |
 | 流式输出 | `wiki/concepts/streaming-output.md` |
-| 多模态 | `wiki/concepts/multimodal.md` |
-| 限流与吞吐 | `wiki/concepts/rate-limiting.md` |
-| 计费 | `wiki/concepts/billing.md` |
-| SDK 接入 | `wiki/concepts/sdk.md` |
-| 模型选型 | `wiki/concepts/model-selection.md` |
+| 软件开发工具包 | `wiki/concepts/sdk.md` |
+| 限流与配额 | `wiki/concepts/rate-limiting.md` |
 | 地域与可用区 | `wiki/concepts/region.md` |
-| 多模态生成 API 对比（图像/视频/3D） | `wiki/comparisons/multimodal-generation-api-comparison.md` |
-| 模型优化方式对比（微调/压缩/高速推理） | `wiki/comparisons/model-optimization-methods-comparison.md` |
-| 评测体系对比（应用评测 vs 模型评测） | `wiki/comparisons/evaluation-comparison.md` |
-| 监控体系对比（应用监控 vs 模型监控） | `wiki/comparisons/monitoring-comparison.md` |
-| 记忆能力对比（长期记忆 vs 记忆库） | `wiki/comparisons/memory-feature-comparison.md` |
-| 应用调用方式对比（API 调用 vs 百炼应用调用） | `wiki/comparisons/application-calling-comparison.md` |
+| 评测 | `wiki/concepts/evaluation.md` |
+| 模型部署 | `wiki/concepts/model-deployment.md` |
+| 私网访问 | `wiki/concepts/vpc-private-access.md` |
+| 图像、视频与3D生成对比 | `wiki/comparisons/generation-modalities-comparison.md` |
+| 模型微调、压缩与部署对比 | `wiki/comparisons/model-customization-methods-comparison.md` |
+| 应用评测与模型评测对比 | `wiki/comparisons/evaluation-app-vs-model-comparison.md` |
+| 应用监控与模型监控对比 | `wiki/comparisons/monitoring-app-vs-model-comparison.md` |
+| 记忆库与长期记忆对比 | `wiki/comparisons/memory-approaches-comparison.md` |
+| 知识库与数据连接对比 | `wiki/comparisons/data-sources-for-rag-comparison.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 

@@ -62,7 +62,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 
 **适用地域**
 
-华北2（北京）、美国（弗吉尼亚）、新加坡、德国（法兰克福）
+华北2（北京）、美国（弗吉尼亚）、新加坡、德国（法兰克福）、日本（东京）
 
 **支持的抵扣范围**
 
@@ -755,7 +755,7 @@ ASR模型按秒计费，TTS模型按字符计费，请前往[百炼控制台](ht
 
 **退订说明**：
 
--   根据[退订规则](https://help.aliyun.com/zh/user-center/cancel-subscription/)，预付费商品未发生使用的部分，可按未使用额度费用[申请退款](https://billing-cost.console.aliyun.com/refund/refund?commodityType=RESOURCE_PLANS&refundType=NOREASON_REFUND)；已使用的部分则无法退款。
+-   根据[退订规则说明](https://help.aliyun.com/zh/user-center/cancel-subscription/)，预付费商品未发生使用的部分，可按未使用额度费用[申请退款](https://billing-cost.console.aliyun.com/refund/refund?commodityType=RESOURCE_PLANS&refundType=NOREASON_REFUND)；已使用的部分则无法退款。
     
 
 ### **大语言模型推理资源包**

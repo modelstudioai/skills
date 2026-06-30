@@ -100,7 +100,7 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
     
     ```
     {
-        "url": "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference",
+        "url": "wss://dashscope.aliyuncs.com/api-ws/v1/inference",
         "apikey": "st-****",
         "device_id": "my_device_id"
     }
@@ -122,9 +122,7 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
     
     是
     
-    服务地址，固定为 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`。
-    
-    调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+    服务地址，固定为 `wss://dashscope.aliyuncs.com/api-ws/v1/inference`。
     
     `apikey`
     

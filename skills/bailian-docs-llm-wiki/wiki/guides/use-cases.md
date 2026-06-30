@@ -1,124 +1,81 @@
 # use cases
 
-百炼模型计算服务（Model Studio）不仅提供统一的模型推理 API，还围绕"如何把大模型真正用起来"提供了一整套使用范式与最佳实践。本主题页把官方使用指南中分散的场景化文档归纳为六类典型用法，帮助开发者快速定位与自己需求最接近的范式，再深入对应专题文档落地。
+百炼平台围绕大模型提供了一整套使用场景与最佳实践，覆盖文生文/文生图/文生视频的 Prompt 设计、RAG 应用搭建、自定义模型调优部署、第三方模型集成、限流应对与显式缓存等。本页汇总各类场景的关键能力、参数与注意事项，帮助开发者快速选型并避开常见坑。
 
-## 总览：六类典型用法
+## 文生文 Prompt 设计
 
-| 类别 | 解决的问题 | 关键文档 |
+提示（Prompt）是输入给大模型的文本信息，越清晰、具体、无歧义，模型表现越符合预期。构建 Prompt 时建议给出明确目的、思考方向与执行策略，而非一句话模糊需求。百炼控制台提供 [Prompt 一键优化](../../raw/model-user-guide/use-cases/prompt-engineering-guide.md) 工具，可对输入提示自动扩写和细节添加，建议先优化再调试其他技巧。
+
+常用技巧：
+- 角色设定：让模型扮演特定领域专家（如"你是一位资深 PHP 编程专家"）。
+- 结构化输出：要求分步骤、列要点，便于后续解析。
+- 少样本（Few-shot）：在 Prompt 中给出示例输入/输出，引导格式与风格。
+- 边界与错误处理：显式要求模型考虑边界条件、异常处理与安全考量。
+- 迭代调试：通过对比模糊 vs. 清晰 Prompt 的输出差异逐步收敛。
+
+> **注意**：Prompt 优化功能本身调用大模型实现，会消耗 Token；优化结果仍需人工校验事实性。
+
+## 文生图与文生视频 Prompt
+
+文生图、文生视频/图生视频对 Prompt 的描述粒度要求更高，通常需包含主体、风格、构图、镜头、时长等要素。详见 [文生图 Prompt 指南](../../raw/model-user-guide/use-cases/text-to-image-prompt.md) 与 [文生视频/图生视频 Prompt 指南](../../raw/model-user-guide/use-cases/text-to-video-prompt.md)；Vidu 等视频生成模型可参考 [Vidu 视频生成 Prompt 指南](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/vidu-video-generation-prompt-guide.md)。
+
+视频类要点：
+- 明确镜头运动（推、拉、摇、移）与转场。
+- 控制时长与关键帧描述，避免一次性要求过多情节。
+- 图生视频时，首帧图片质量直接决定成片稳定性。
+
+## 基于 LlamaIndex 构建 RAG 应用
+
+百炼支持基于 LlamaIndex 搭建检索增强生成（RAG）应用，将企业私有知识库与 LLM 结合，降低幻觉并支持事实溯源。典型流程包括文档加载切分、向量化（Embedding）、存入向量库、检索召回、拼接到 Prompt 后交给 LLM 生成。详见 [基于 LlamaIndex 构建 RAG 应用](../../raw/model-user-guide/use-cases/build-rag-applications-based-on-llamaindex.md)。
+
+关键参数：
+- `chunk_size` / `chunk_overlap`：切分粒度，影响召回精度与上下文长度。
+- `top_k`：召回数量，过大会引入噪声，过小易漏答。
+- Embedding 模型选择：中英文场景选对应模型，注意维度与最大输入长度。
+
+## 自定义模型调优、部署与[评测](../concepts/evaluation.md)
+
+百炼支持在预训练基座上做自定义模型调优（SFT/持续训练），完成后部署为专属服务并[评测](../concepts/evaluation.md)效果。调优数据建议覆盖目标业务的真实分布，并做去重、脱敏与质量标注。部署后建议用业务[评测](../concepts/evaluation.md)集做回归，关注准确率、拒答率与稳定性指标。详见 [自定义模型调优、部署与评测](../../raw/model-user-guide/use-cases/model-training-best-practices.md)。
+
+> **注意**：调优数据质量比数量更重要；脏数据会显著拉低线上表现。部署前务必做安全合规审核。
+
+## 借助大模型将文档转换为视频
+
+可通过 LLM 把结构化文档（产品说明、教程等）转换为视频脚本，再配合文生图/文生视频模型生成分镜画面，最终合成视频。关键在于让模型先产出分镜大纲（镜头、旁白、画面描述），再逐镜头生成素材，避免一次性生成导致内容失控。详见 [借助大模型将文档转换为视频](../../raw/model-user-guide/use-cases/use-llm-to-convert-document-to-video.md)。
+
+## 第三方模型集成
+
+百炼模型广场集成了多家第三方模型，可通过统一 OpenAI 兼容接口调用，无需自建代理。支持厂商包括：
+
+| 厂商 | 模型 | 来源 |
 | --- | --- | --- |
-| 文本生成与 Prompt 工程 | 用通义/第三方大模型做对话、抽取、改写等文本任务 | 文生文 Prompt 指南 |
-| [多模态](../concepts/multimodal.md)生成 | 文生图、文生视频、图生视频、文档转视频 | 文生图/文生视频 Prompt 指南、文档转视频 |
-| 检索增强生成（RAG） | 让模型基于私有知识回答，降低幻觉 | 基于 LlamaIndex 构建 RAG 应用 |
-| 模型调优与评测 | 用自有数据微调、部署、评测自定义模型 | 自定义模型调优、部署与评测 |
-| 第三方模型 API 接入 | 在百炼统一调用 DeepSeek、Kimi、GLM、MiniMax 等第三方模型 | DeepSeek / Kimi / GLM / MiniMax / MiMo / Vidu / Stepfun 接入指南 |
-| 工程化与稳定性 | 控成本、控流量、提吞吐 | 限流应对最佳实践、显式缓存最佳实践 |
+| DeepSeek | DeepSeek 系列 | [阿里云](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/deepseek-api.md)、[硅基流动](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/siliconflow-deepseek-api.md)、[Vanchin](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/deepseek-api-by-vanchin.md) |
+| Moonshot | Kimi | [Kimi](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api.md)、[月之暗面](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api-by-moonshot-ai.md) |
+| 智谱 | GLM | [GLM](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/glm.md)、[智谱](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/glm-zhipu.md) |
+| MiniMax | MiniMax | [MiniMax](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/minimax-api.md)、[MiniMax 官方](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/minimax-api-by-minimax.md) |
+| 小米 | MiMo | [MiMo](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/mimo.md) |
+| 阶跃星辰 | Stepfun | [Stepfun](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/stepfun.md) |
 
-## 文本生成与 Prompt 工程
+调用方式：将 `base_url` 指向百炼网关，`model` 字段填模型广场中的模型标识，使用百炼 API-Key 鉴权，请求/响应格式与 OpenAI Chat Completions 一致，可复用现有 SDK。
 
-文生文是大模型最基础也最灵活的用法。百炼将通义千问系列及多家第三方大模型统一封装为 OpenAI 兼容的 Chat Completions 接口，开发者只需更换 `model` 参数即可在不同模型间切换，无需改动业务代码。
+> **注意**：同一模型（如 DeepSeek、Kimi、GLM、MiniMax）可能由多个供应商提供，定价、可用区与限流策略不同，请按业务所在地域与成本选择对应供应商。
 
-Prompt 工程是提升文本任务质量的核心手段，官方指南主要给出以下方向：
+## 限流应对最佳实践
 
-- **角色与任务定义**：用系统消息（system）明确模型身份、任务目标与输出格式，降低跑题概率。
-- **少样本示例（few-shot）**：在请求中提供 1–3 条符合期望格式的输入/输出样例，让模型模仿风格与结构。
-- **结构化输出**：要求模型返回 JSON、Markdown 表格等可解析结构，便于下游程序消费；可结合 `response_format` 参数强制 JSON。
-- **思维链（CoT）**：对推理类任务，显式要求"先思考再回答"，并把推理过程放在可折叠或可丢弃的字段中。
-- **约束与否定**：用正向约束描述"应当做什么"，比单纯罗列"不要做什么"更有效；必要时再用否定约束兜底。
-- **上下文长度管理**：长上下文场景下注意将最关键指令放在末尾，并对超长文档做分块/摘要后再喂入。
+百炼对 API 调用按模型维度做限流（RPM/TPM）。超限时返回 429，建议采取：客户端指数退避重试、请求限速（令牌桶）、错峰调用、按租户/Key 分流、对非实时任务改异步队列。重试时务必带上 `Retry-After` 头的等待时间，避免雪崩。详见 [限流应对最佳实践](../../raw/model-user-guide/use-cases/rate-limiting-best-practices.md)。
 
-> 实践建议：先在百炼控制台"模型体验"中迭代 Prompt，确认效果稳定后再固化到代码；同一 Prompt 在不同模型上效果差异较大，切换模型后应回归测试。
+## 显式缓存最佳实践
 
-## [多模态](../concepts/multimodal.md)生成
+对于 Prompt 中固定不变的前缀（系统指令、Few-shot 示例、长上下文文档），可启用显式缓存（Explicit Cache），将前缀缓存命中后只计费增量 Token，显著降低成本与首 Token 延迟。使用时需保证前缀字节级稳定（包括空格、换行），并按文档要求在指定位置插入缓存标记。详见 [显式缓存最佳实践](../../raw/model-user-guide/use-cases/explicit-cache-guide.md)。
 
-### 文生图
+> **注意**：缓存命中要求前缀完全一致；任何微小改动都会导致缓存失效。动态内容（用户输入、时间戳）必须放在缓存边界之后。
 
-文生图 Prompt 指南面向通义万相等图像生成模型。要点包括：
+## 限制与注意事项
 
-- 用"主体 + 风格 + 构图 + 光照 + 画质修饰"的结构化描述提升可控性。
-- 明确画幅比例、镜头视角、艺术风格（写实/插画/油画等）。
-- 负面提示词（negative [prompt](prompt.md)）用于排除不想要的元素。
-- 复杂场景拆分为多轮生成或使用图像编辑接口做局部修改。
-
-### 文生视频 / 图生视频
-
-文生视频与图生视频 Prompt 指南（含 Vidu 等模型）强调：
-
-- 描述要包含"镜头运动 + 主体动作 + 场景变化 + 时长"。
-- 图生视频时首帧图的质量与构图直接决定成片质量。
-- 避免在一条 Prompt 中塞入过多动作，必要时分段生成再拼接。
-- 注意各模型对分辨率、时长、帧率的限制。
-
-### 文档转视频
-
-"借助大模型将文档转换为视频"展示了一条端到端链路：先用大模型把文档内容拆解为讲解脚本与分镜，再调用文生图/文生视频接口生成画面素材，最后合成带配音与字幕的视频。适合快速把技术文档、产品介绍转化为可传播的视听内容。
-
-## 检索增强生成（RAG）
-
-当模型需要基于企业私有知识回答时，直接把知识塞进 Prompt 受上下文长度与成本限制，且易产生幻觉。RAG（Retrieval-Augmented Generation）的典型流程为：
-
-1. **知识准备**：把文档、网页、数据库等知识源切分为语义块（chunk）。
-2. **向量化**：调用百炼的 Embedding 模型生成向量。
-3. **入库检索**：写入向量数据库，按用户 query 召回 top-K 相关块。
-4. **拼装上下文**：把召回块与用户问题一起作为上下文送入大模型。
-5. **生成回答**：模型基于上下文生成带来源引用的回答。
-
-百炼提供"数据管理"模块托管上述流程，也支持通过 LlamaIndex 等开源框架自建 RAG 应用——官方《基于 LlamaIndex 构建 RAG 应用》指南演示了如何用 LlamaIndex 接入百炼的 Embedding 与 Chat 模型，快速搭建一个可问答的知识库应用。
-
-## 模型调优、部署与评测
-
-当通用大模型在特定领域效果不足时，可在百炼上做自定义模型调优：
-
-- **训练数据准备**：按 SFT/DPO 等范式准备指令对或偏好对数据，注意去重、脱敏与类别均衡。
-- **训练任务**：基于通义千问等基座发起微调任务，监控 loss 与评估指标。
-- **部署**：训练完成后部署为独占 API 端点，获得稳定 QPS 与隔离资源。
-- **评测**：用内置评测集或自定义评测集对调优前后模型打分，确认增益后再上线。
-
-调优前应先穷尽 Prompt 工程与 RAG 方案——只有当这些手段都无法满足时再投入训练成本，性价比最高。
-
-## 第三方模型 API 接入
-
-百炼模型广场聚合了多家第三方大模型，统一通过百炼网关调用，免自建鉴权与配额管理。覆盖范围（按厂商）：
-
-- **DeepSeek**：DeepSeek-V3/R1 等推理模型，支持深度思考模式；可通过百炼默认入口或 SiliconFlow、Vanchin 等渠道接入。
-- **Kimi（Moonshot AI）**：超长上下文对话，适合长文档处理。
-- **GLM（智谱 AI）**：通用对话与[多模态](../concepts/multimodal.md)能力。
-- **MiniMax**：对话与语音/视频生成。
-- **MiMo（小米）**：推理与通用任务。
-- **Vidu**：视频生成。
-- **Stepfun（阶跃星辰）**：多模态通用模型。
-
-接入方式高度一致：在控制台开通对应模型后，将 `model` 参数替换为该模型标识，其余请求结构、鉴权方式与通义模型相同。切换模型前应关注各模型在上下文长度、[函数调用](../concepts/function-calling.md)、[流式输出](../concepts/streaming-output.md)、[计费](../concepts/billing.md)方式上的差异。
-
-## 工程化与稳定性
-
-### 限流应对
-
-百炼对每个模型/账号施加 QPS 与 TPM 限制以保证服务稳定。当遇到 429 限流时，最佳实践为：
-
-- **指数退避重试**：对 429 响应按指数退避 + 抖动重试，避免雪崩。
-- **错峰与排队**：在客户端用令牌桶/漏桶控制发送速率，平滑突发流量。
-- **分级降级**：高峰期降级到更轻量模型或关闭非核心调用。
-- **批量与流式**：能合并的请求用批量接口；长输出用流式降低单次超时风险。
-- **配额监控**：监控剩余配额，临近上限时主动限速。
-
-### 显式缓存
-
-显式缓存（Explicit Cache）通过复用前缀的计算结果，显著降低重复上下文的延迟与成本。适用场景：
-
-- 多轮对话中系统提示词与历史消息较长且稳定。
-- RAG 中同一知识库 chunk 被多次复用。
-- 固定指令模板 + 变量后缀的批量请求。
-
-使用时需按接口要求显式标记缓存边界，并注意缓存的 TTL 与命中条件；变更前缀内容会使缓存失效，应把稳定部分放在最前。
-
-## 选型建议
-
-- 先用 **Prompt 工程** 验证需求是否可被通用模型满足。
-- 涉及私有知识时优先 **RAG**，而非把知识塞进上下文。
-- 需要图像/视频产出时走 **多模态生成** 链路。
-- 效果瓶颈确属模型能力不足时再投入 **模型调优**。
-- 对延迟与成本敏感的长前缀场景开启 **显式缓存**。
-- 高并发线上服务必须前置 **限流应对** 策略。
+- 第三方模型可用性与配额受供应商影响，跨可用区调用可能产生额外延迟或失败，建议生产环境配置失败回退。
+- 调优与部署会占用专属资源配额，计费独立于按量调用，请提前评估成本。
+- 文生图/视频模型对敏感内容有审核策略，Prompt 中含违规要素会被拒绝，需在业务侧做前置过滤。
+- 显式缓存与限流策略可能随版本调整，上线前以控制台与官方文档为准。
 
 ## 来源文档
 

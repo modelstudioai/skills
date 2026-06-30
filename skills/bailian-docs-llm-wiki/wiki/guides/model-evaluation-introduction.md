@@ -1,6 +1,6 @@
 # model evaluation introduction
 
-模型评测是百炼平台提供的模型质量验证工具，用于基于数据集对大语言模型进行多维度量化评估。它支持自动评测和人工评测两种模式，最终生成综合得分、通过率和分数分布等评测报告，帮助开发者在[模型选型](../concepts/model-selection.md)、调优验证、能力量化与持续监控等场景中以数据驱动决策。详细介绍可参考[模型评测](../../raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)。
+模型[评测](../concepts/evaluation.md)是百炼平台提供的模型质量验证工具，用于基于数据集对大语言模型进行多维度量化评估。它支持自动[评测](../concepts/evaluation.md)和人工[评测](../concepts/evaluation.md)两种模式，最终生成综合得分、通过率和分数分布等评测报告，帮助开发者在[模型选型](../concepts/model-selection.md)、调优验证、能力量化与持续监控等场景中以数据驱动决策。详细介绍可参考[模型评测](../../raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)。
 
 ## 支持的评测类型
 
@@ -107,6 +107,7 @@
 ## 来源文档
 
 - [模型评测](../../raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)
+
 
 
 

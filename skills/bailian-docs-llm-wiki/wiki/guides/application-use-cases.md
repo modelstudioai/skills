@@ -75,7 +75,7 @@ AppFlow 连接流可在百炼步骤后添加 SLS 日志云服务节点，将对�
 - 企业微信可信 IP 一个 IP 仅能用于一个企业，多企业共用会被识别为服务商导致通讯录 / 身份校验接口不可用。
 - 公众号开启服务器配置后自定义菜单会冲突关闭；未认证无法同时开启二者，已认证可通过接口重建菜单。
 - 本地 RAG Windows 系统若缺少 Microsoft Visual C++ Redistributable 需另行安装；报 `DLL load failed while importing _cext:` 时运行 `pip install msvc-runtime`。
-- 上线前建议组织业务人员参与应用评测，结合优化提示词、补充私有知识、调整切分策略改进效果。
+- 上线前建议组织业务人员参与应用[评测](../concepts/evaluation.md)，结合优化提示词、补充私有知识、调整切分策略改进效果。
 
 ## 来源文档
 
@@ -84,6 +84,7 @@ AppFlow 连接流可在百炼步骤后添加 SLS 日志云服务节点，将对�
 - [10分钟让微信公众号成为智能客服](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-wechat-in-10-minutes.md)
 - [在钉钉上增加一个AI机器人](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-dingtalk.md)
 - [基于本地知识库构建RAG应用](../../raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)
+
 
 
 

@@ -7,7 +7,7 @@
 借助百炼的[智能体应用](../concepts/agent-application.md)构建能力，可在约 5 分钟内零代码完成一个能回答私有领域问题的大模型问答应用，完整流程见 [0代码构建私有知识问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)。整体分为三步：
 
 1. **构建第一个[智能体应用](../concepts/agent-application.md)（约 1 分钟）**：在应用管理页面创建空白智能体应用，选择大语言模型（建议千问-Max），编写 System Prompt 定义角色与任务，并配置欢迎语和预设问题。此阶段由于缺少私有知识，回答较为笼统甚至可能无中生有。
-2. **构建[知识库](../concepts/knowledge-base.md)（约 3 分钟）**：在数据连接页面创建文件类型连接器并上传知识文档（如 docx），等待 1~6 分钟解析完成；随后在[知识库](../concepts/knowledge-base.md)页面创建标准版知识库，选择默认类目与智能切分策略，等待 1~2 分钟完成解析。智能切分为系统预置策略，经评测对多数文档可获得最佳检索效果。
+2. **构建[知识库](../concepts/knowledge-base.md)（约 3 分钟）**：在数据连接页面创建文件类型连接器并上传知识文档（如 docx），等待 1~6 分钟解析完成；随后在[知识库](../concepts/knowledge-base.md)页面创建标准版知识库，选择默认类目与智能切分策略，等待 1~2 分钟完成解析。智能切分为系统预置策略，经[评测](../concepts/evaluation.md)对多数文档可获得最佳检索效果。
 3. **添加知识库并发布应用（约 1 分钟）**：进入应用配置界面，通过「技能 > 知识库」旁的「+」按钮为应用挂载知识库，验证检索增强效果后点击「发布」。
 
 > **注意**：使用大模型会产生[计费](../concepts/billing.md)，百炼提供限时免费额度，可在模型广场查看；知识库服务自 2026 年 1 月 4 日起正式[计费](../concepts/billing.md)，费用由规格费用和模型调用费用两部分组成。
@@ -42,7 +42,7 @@
 
 - **API 调用**：2025 年 11 月 3 日起支持通过 Responses API 调用百炼应用，提供同步调用 API（实时交互，可复用 OpenAI 代码库）与[异步调用](../concepts/async-invocation.md) API（设置 `background=true` 立即返回任务 ID）。调用工作流和智能体编排应用时需传入自定义参数。
 - **发布渠道**：支持微信、钉钉分享渠道（创建钉钉 AI 机器人或微信公众号 AI 机器人）；支持音视频实时互动（将图文对话应用转为音视频实时互动应用，提供 H5/APP 调试窗口，通过音视频 SDK 发布到 WEB/iOS/Android）。
-- **应用观测**：2024 年 10 月 24 日新增应用观测能力，支持端到端查看应用处理流程；2026 年 2 月 6 日上线新版应用评测，支持智能体、工作流和自定义三种类型评测集。
+- **应用观测**：2024 年 10 月 24 日新增应用观测能力，支持端到端查看应用处理流程；2026 年 2 月 6 日上线新版应用[评测](../concepts/evaluation.md)，支持智能体、工作流和自定义三种类型[评测](../concepts/evaluation.md)集。
 - **长期记忆**：2026 年 1 月 31 日上线新版长期记忆与用户画像管理 API，支持多应用共享同一记忆库、自动提取关键信息、语义检索优化及完整用户画像管理。
 
 ## 限制与注意事项
@@ -58,6 +58,7 @@
 
 - [0代码构建私有知识问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)
 - [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)
+
 
 
 

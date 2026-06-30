@@ -1,6 +1,6 @@
 # release notes
 
-本页汇总阿里云百炼模型平台的发布动态，包含模型上下架与更新、平台功能更新、[计费](../concepts/billing.md)调整等内容。开发者可据此了解新增模型规格、调优/部署能力、API 接口与 SDK、观测与评测能力等最新进展，便于选型与对接。详细条目以官方 [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md) 与 [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md) 为准。
+本页汇总阿里云百炼模型平台的发布动态，包含模型上下架与更新、平台功能更新、[计费](../concepts/billing.md)调整等内容。开发者可据此了解新增模型规格、调优/部署能力、API 接口与 SDK、观测与[评测](../concepts/evaluation.md)能力等最新进展，便于选型与对接。详细条目以官方 [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md) 与 [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md) 为准。
 
 ## 模型上下架
 
@@ -20,13 +20,13 @@
 
 ## 平台功能更新
 
-[模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md) 按月发布功能动态，覆盖模型调优、部署、评测、API、应用、SDK、观测等模块。重点能力如下。
+[模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md) 按月发布功能动态，覆盖模型调优、部署、[评测](../concepts/evaluation.md)、API、应用、SDK、观测等模块。重点能力如下。
 
 ### 模型调优与部署
 
 - 模型调优支持文本生成、视觉理解（VL）、图像生成（Wan/Wanx）、视频生成（万相）等多种模型类型；新增 0 代码安全合规强化训练流程、强化学习训练（RL，邀约制）。
 - SFT 支持全参微调与 LoRA 高效微调；DPO 偏好训练覆盖千问 3-32B/14B/8B、千问 2.5-72B/32B/14B/8B。
-- 模型部署新增按模型单元（MU）时长[计费](../concepts/billing.md)与按调用量计费两种方式，预置 `qwen-flash`/`qwen-plus` 等模型可一键部署；模型压缩模块上线，使用量化算法将全精度微调模型转为低精度版本以降低部署成本。
+- [模型部署](../concepts/model-deployment.md)新增按模型单元（MU）时长[计费](../concepts/billing.md)与按调用量计费两种方式，预置 `qwen-flash`/`qwen-plus` 等模型可一键部署；模型压缩模块上线，使用量化算法将全精度微调模型转为低精度版本以降低部署成本。
 - 模型导入功能国际站上线（OSS 导入 LoRA 微调模型），并新增模型导入 API 目录。
 
 ### 模型 API 与应用调用
@@ -44,7 +44,7 @@
 - 通义[多模态](../concepts/multimodal.md)翻译 API 与网页翻译 JSSDK 上线，覆盖文本/图片/文档/网页翻译。
 - UI 设计器上线（集成魔笔低代码，可视化拖放构建网页 UI）；记忆库 Memory 2.0 上线（自动提取记忆片段与用户画像，多应用共享）；联网检索 Agent 官方应用上线；官方 MCP 服务上线；Spring AI Alibaba 调用百炼应用文档上线。
 
-### 评测与观测
+### [评测](../concepts/evaluation.md)与观测
 
 - 模型评测新增排行榜（Leaderboard）与综合评测，支持 BLEU_4、ROUGE 等评分方法；新增多种评估器（字符串匹配、文本相似度、模型分类、模型打分、人工分类）。
 - 模型观测支持查看推理日志、告警与通知、高级监控模式（分钟级低延时刷新、4xx/5xx 失败细分）。
@@ -84,5 +84,6 @@
 
 - [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)
 - [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)
+
 
 

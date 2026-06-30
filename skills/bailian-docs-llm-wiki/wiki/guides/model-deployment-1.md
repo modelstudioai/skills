@@ -1,10 +1,10 @@
 # model deployment 1
 
-百炼平台提供独立的、资源专享的模型部署能力，将平台预置模型或您调优后的模型部署为推理服务，满足高并发、低延迟等业务需求。部署支持预置吞吐（PTU）、模型单元、按 [Token](../concepts/token.md) 用量三种[计费](../concepts/billing.md)方式，可通过控制台或 API/命令行完成部署、查询、推理和删除全流程操作。本文相关能力仅适用于华北二（北京）地域。
+百炼平台提供独立的、资源专享的[模型部署](../concepts/model-deployment.md)能力，将平台预置模型或您调优后的[模型部署](../concepts/model-deployment.md)为推理服务，满足高并发、低延迟等业务需求。部署支持预置吞吐（PTU）、模型单元、按 [Token](../concepts/token.md) 用量三种[计费](../concepts/billing.md)方式，可通过控制台或 API/命令行完成部署、查询、推理和删除全流程操作。本文相关能力仅适用于华北二（北京）地域。
 
 ## [计费](../concepts/billing.md)方式
 
-部署前可在模型部署控制台（北京）查看不同模型的预估每小时费用。[计费](../concepts/billing.md)方式在服务创建后无法更改，如需切换必须下线已部署模型后重新部署。三种计费方式对比：
+部署前可在[模型部署](../concepts/model-deployment.md)控制台（北京）查看不同模型的预估每小时费用。[计费](../concepts/billing.md)方式在服务创建后无法更改，如需切换必须下线已部署模型后重新部署。三种计费方式对比：
 
 | 计费方式 | 适用场景 | 计费依据 | 扩缩容 | 关键约束 |
 | --- | --- | --- | --- | --- |
@@ -91,6 +91,7 @@ API 响应通过以下字段标识计费方式和额度消耗：
 - [预置吞吐长输入与缓存](../../raw/model-user-guide/model-deployment-1/ptu-long-input-and-cache.md)
 - [模型导入](../../raw/model-user-guide/model-deployment-1/model-import.md)
 - [使用 API或命令行进行模型部署](../../raw/model-user-guide/model-deployment-1/model-deployment-quick-start.md)
+
 
 
 

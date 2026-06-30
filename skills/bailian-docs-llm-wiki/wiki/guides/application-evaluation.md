@@ -1,6 +1,6 @@
 # application evaluation
 
-阿里云百炼的应用评测能力用于系统化评估[智能体应用](../concepts/agent-application.md)、工作流应用的输出质量。覆盖评测集管理、评测任务编排、自动评估器评分、人工标签标注、评测报告分析等全流程，支持自动评测与手动评测两种范式，并区分"旧版"与"新版"两套界面。
+阿里云百炼的应用[评测](../concepts/evaluation.md)能力用于系统化评估[智能体应用](../concepts/agent-application.md)、工作流应用的输出质量。覆盖[评测](../concepts/evaluation.md)集管理、[评测](../concepts/evaluation.md)任务编排、自动评估器评分、人工标签标注、评测报告分析等全流程，支持自动评测与手动评测两种范式，并区分"旧版"与"新版"两套界面。
 
 ## 评测范式
 
@@ -136,6 +136,7 @@
 - [标签管理](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/label-management.md)
 - [评测任务](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/evaluation-task.md)
 - [评估器](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/grader.md)
+
 
 
 

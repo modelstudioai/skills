@@ -11,7 +11,7 @@
 | Prompt 模板（预置 + 自定义） | 提示词页面 | 模板管理不额外[计费](../concepts/billing.md) | 把 Prompt 结构与变量分离，统一管理、复用 |
 | Prompt 自动优化 | 提示词 > 自动优化 | 不[计费](../concepts/billing.md) | 用大模型重写原始 Prompt，结构更优、指令更清晰 |
 | Prompt 样例库 | 样例库页面 | 不收存储费，但增加调用 [Token](../concepts/token.md) | Few-shot 检索样例注入上下文，提升特定领域输出一致性 |
-| Prompt 反馈优化 | 提示词 > 反馈优化 | 涉及推理调用 | 基于输入输出样例 + 评测数据多轮自动评估、反思、优化 |
+| Prompt 反馈优化 | 提示词 > 反馈优化 | 涉及推理调用 | 基于输入输出样例 + [评测](../concepts/evaluation.md)数据多轮自动评估、反思、优化 |
 
 ## Prompt 模板
 
@@ -80,13 +80,13 @@ Prompt 模板将 Prompt 的固定结构与动态变量分离，分为预置模�
 
 ## Prompt 反馈优化
 
-相较于纯重写式的自动优化，反馈优化把用户提供的输入输出样例和评测数据作为评估标准，对 Prompt 在推理模型上的表现进行多轮自动化评估、反思和优化，最终生成包含原始指令、few-shot 样例和内容提示三部分的优化 Prompt，在用户实际场景中回复质量更高。详见 [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)。
+相较于纯重写式的自动优化，反馈优化把用户提供的输入输出样例和[评测](../concepts/evaluation.md)数据作为评估标准，对 Prompt 在推理模型上的表现进行多轮自动化评估、反思和优化，最终生成包含原始指令、few-shot 样例和内容提示三部分的优化 Prompt，在用户实际场景中回复质量更高。详见 [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)。
 
 ### 操作步骤
 
 在「提示词 > 反馈优化」页面单击「新增优化任务」：
 
-1. **选择推理模型**：在该模型上进行多轮 Prompt 评测，推荐选择千问-max。
+1. **选择推理模型**：在该模型上进行多轮 Prompt [评测](../concepts/evaluation.md)，推荐选择千问-max。
 2. **输入初始 Prompt**：只需描述任务目标。
 3. **样例选择（可选）**：支持直接上传或从样例库选择；建议 5~10 条数据，且每种场景至少一条。样例会被添加到优化后的 Prompt 中。
 4. **上传评测数据**：作为评估最优 Prompt 的标准，建议至少 20 条，数据越多效果越好。
@@ -112,6 +112,7 @@ Prompt 模板将 Prompt 的固定结构与动态变量分离，分为预置模�
 - [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)
 - [使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)
 - [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)
+
 
 
 

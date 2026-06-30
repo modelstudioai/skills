@@ -66,7 +66,7 @@ RCU（Retrieval Compute Unit）是检索并发能力度量单位，1 RCU 约支�
 
 ## 效果优化
 
-当出现知识召回不完整或内容不准确时，建议先建立评测基线（至少 100 组问题，覆盖事实型/比较型/教程型/分析型），再按失败用例诊断改进。优化策略围绕 RAG 三阶段展开：
+当出现知识召回不完整或内容不准确时，建议先建立[评测](../concepts/evaluation.md)基线（至少 100 组问题，覆盖事实型/比较型/教程型/分析型），再按失败用例诊断改进。优化策略围绕 RAG 三阶段展开：
 
 1. 建立索引：优化源文件排版（优先 Markdown、移除水印、避免复杂表格）、统一实体表述、启用多轮对话改写（创建时开启，后续无法补开）。
 2. 检索召回：为文件添加标签过滤、配置元数据做结构化搜索、采用智能切分保留语义完整性、调整相似度阈值与召回片段数。
@@ -116,6 +116,7 @@ RCU（Retrieval Compute Unit）是检索并发能力度量单位，1 RCU 约支�
 - [知识库配额与限制](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-specifications.md)
 - [知识库API指南](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)
 - [知识库计费说明](../../raw/application-user-guide/knowledge-base/billing-for-knowledge-base.md)
+
 
 
 
