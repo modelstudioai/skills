@@ -121,12 +121,12 @@
 
 ## [计费](../concepts/billing.md)说明
 
-各类应用的计费构成：
+各类应用的[计费](../concepts/billing.md)构成：
 
-- **模型调用**：按所选模型类型与输入/输出 [Token](../concepts/token.md) 数量计费。文件问答的全文引用模式输入 [Token](../concepts/token.md) 消耗较大，切片检索模式通常远小于全文引用，自定义处理模式取决于模型与工具交互复杂性。
-- **知识库**：按量付费；从知识库召回的文本切片会增加模型输入 Token 数量，可能导致模型调用费用增加。
-- **MCP**：部分官方 MCP（如文生图、文生视频、语音合成）按模型调用计费；部分 MCP 涉及第三方 API 调用，费用由第三方收取，百炼不另行收费。
-- **长期记忆**（旧版智能体）：数据存储不收费；记忆体内容合并到 Prompt 中传递给大模型增加 Token 消耗，**记忆体内容占用的 Token 暂不计费**。
+- **模型调用**：按所选模型类型与输入/输出 [Token](../concepts/token.md) 数量[计费](../concepts/billing.md)。文件问答的全文引用模式输入 [Token](../concepts/token.md) 消耗较大，切片检索模式通常远小于全文引用，自定义处理模式取决于模型与工具交互复杂性。
+- **知识库**：按量付费；从知识库召回的文本切片会增加模型输入 [Token](../concepts/token.md) 数量，可能导致模型调用费用增加。
+- **MCP**：部分官方 MCP（如文生图、文生视频、语音合成）按模型调用[计费](../concepts/billing.md)；部分 MCP 涉及第三方 API 调用，费用由第三方收取，百炼不另行收费。
+- **长期记忆**（旧版智能体）：数据存储不收费；记忆体内容合并到 Prompt 中传递给大模型增加 [Token](../concepts/token.md) 消耗，**记忆体内容占用的 [Token](../concepts/token.md) 暂不计费**。
 - **文件上传**：文件上传操作本身不收费。
 
 > **注意**：仅创建应用不收费，调用应用进行问答时才根据所用模型收取模型调用费用。
@@ -147,6 +147,7 @@
 - [高代码应用](../../raw/application-user-guide/llm-application/rich-code-application.md)
 - [工作流应用](../../raw/application-user-guide/llm-application/workflow-application.md)
 - [文件问答](../../raw/application-user-guide/llm-application/file-q-a.md)
+
 
 
 

@@ -1,14 +1,14 @@
 # [more](more.md) models
 
-本页汇总百炼平台上除通义千问主对话模型之外的一组专用模型的 API 参考，涵盖法律、意图理解、深度研究、翻译、OCR、界面交互等场景。这些模型大多通过 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)或 DashScope SDK 调用，但各模型在地域、协议、请求参数和调用流程上存在差异，使用前需对照本文确认。
+本页汇总百炼平台上除通义千问主对话模型之外的一组专用模型的 API 参考，涵盖法律、意图理解、深度研究、翻译、OCR、界面交互等场景。这些模型大多通过 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)或 [DashScope SDK](../concepts/dashscope-sdk.md) 调用，但各模型在地域、协议、请求参数和调用流程上存在差异，使用前需对照本文确认。
 
 ## 支持的模型与功能
 
 | 模型名称 | 用途 | 调用方式 | 地域 |
 | --- | --- | --- | --- |
-| `farui-plus` | 法律行业大模型，支持法律咨询、文书生成、案情分析 | DashScope SDK（Python/Java） | 默认地域 |
+| `farui-plus` | 法律行业大模型，支持法律咨询、文书生成、案情分析 | [DashScope SDK](../concepts/dashscope-sdk.md)（Python/Java） | 默认地域 |
 | `tongyi-intent-detect-v3` | 意图理解，同时输出意图与[函数调用](../concepts/function-calling.md)信息 | OpenAI 兼容 / DashScope | 默认地域 |
-| `qwen-deep-research` | 深度研究，两阶段（反问确认 + 深入研究） | 仅 Python DashScope SDK，仅华北2（北京） | 华北2（北京） |
+| `qwen-deep-research` | 深度研究，两阶段（反问确认 + 深入研究） | 仅 Python [DashScope SDK](../concepts/dashscope-sdk.md)，仅华北2（北京） | 华北2（北京） |
 | `qwen-mt-plus` | 翻译，支持术语干预、翻译记忆、领域提示 | OpenAI 兼容 / DashScope | 北京 / 新加坡 / 美国（弗吉尼亚） |
 | `qwen3.5-ocr` | 图像文字提取（OCR）与结构化字段抽取 | OpenAI 兼容 / DashScope | 北京 / 新加坡 / 美国（弗吉尼亚） |
 | `gui-plus-2026-02-26` | 界面交互专用模型，通过 `computer_use` 工具操控桌面 GUI | OpenAI 兼容 | 华北2（北京） |
@@ -120,6 +120,7 @@ completion = client.chat.completions.create(
 - [Qwen-MT API参考](../../raw/model-api-reference/more-models/qwen-mt-api.md)
 - [Qwen-OCR API参考](../../raw/model-api-reference/more-models/qwen-vl-ocr-api-reference.md)
 - [GUI-Plus API参考](../../raw/model-api-reference/more-models/gui-plus-interface-interaction-model.md)
+
 
 
 

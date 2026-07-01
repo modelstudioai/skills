@@ -147,20 +147,21 @@ description: >-
 | **按家族筛选**：按 primaryCapability / providers / itemCount / maxContextWindow 找家族 | `models/families.jsonl`（一行一家族，含 items[] 摘要） |
 | 模型家族总览 / 按能力分桶浏览         | `models/index.md`                                        |
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
+| Token | `wiki/concepts/token.md` |
+| 检索增强生成 | `wiki/concepts/rag.md` |
+| OpenAI 兼容接口 | `wiki/concepts/openai-compatible-interface.md` |
+| API Key | `wiki/concepts/api-key.md` |
+| 异步调用 | `wiki/concepts/async-invocation.md` |
 | 函数调用 | `wiki/concepts/function-calling.md` |
-| 流式输出 | `wiki/concepts/streaming-output.md` |
-| 软件开发工具包 | `wiki/concepts/sdk.md` |
-| 限流与配额 | `wiki/concepts/rate-limiting.md` |
-| 地域与可用区 | `wiki/concepts/region.md` |
-| 评测 | `wiki/concepts/evaluation.md` |
-| 模型部署 | `wiki/concepts/model-deployment.md` |
-| 私网访问 | `wiki/concepts/vpc-private-access.md` |
-| 图像、视频与3D生成对比 | `wiki/comparisons/generation-modalities-comparison.md` |
-| 模型微调、压缩与部署对比 | `wiki/comparisons/model-customization-methods-comparison.md` |
-| 应用评测与模型评测对比 | `wiki/comparisons/evaluation-app-vs-model-comparison.md` |
-| 应用监控与模型监控对比 | `wiki/comparisons/monitoring-app-vs-model-comparison.md` |
-| 记忆库与长期记忆对比 | `wiki/comparisons/memory-approaches-comparison.md` |
-| 知识库与数据连接对比 | `wiki/comparisons/data-sources-for-rag-comparison.md` |
+| 多模态 | `wiki/concepts/multimodal.md` |
+| 业务空间 | `wiki/concepts/workspace.md` |
+| DashScope SDK | `wiki/concepts/dashscope-sdk.md` |
+| 计费 | `wiki/concepts/billing.md` |
+| 图像生成 vs 视频生成 vs 3D生成对比 | `wiki/comparisons/media-generation-comparison.md` |
+| 模型微调 vs 模型压缩 vs 模型部署对比 | `wiki/comparisons/model-optimization-comparison.md` |
+| 模型评测 vs 模型监控 vs 模型生产对比 | `wiki/comparisons/model-lifecycle-comparison.md` |
+| 知识库 vs 记忆库 vs 数据接入对比 | `wiki/comparisons/knowledge-memory-comparison.md` |
+| Qwen API vs 应用调用 vs 托管智能体API对比 | `wiki/comparisons/api-invocation-comparison.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 

@@ -12,7 +12,7 @@
 - **[业务空间](../concepts/workspace.md)管理员**：拥有访问某个[业务空间](../concepts/workspace.md)"权限管理"页面的 RAM 用户，可管理该空间内的用户与资源，"管理员"权限包含该空间所有页面的访问权限。
 - **普通用户**：根据分配的权限使用资源，不能管理用户或模型授权。
 
-业务空间按地理区域划分，**单个业务空间不能跨地域存在**，各地域的默认业务空间也是不同的空间。
+[业务空间](../concepts/workspace.md)按地理区域划分，**单个[业务空间](../concepts/workspace.md)不能跨地域存在**，各地域的默认[业务空间](../concepts/workspace.md)也是不同的空间。
 
 ### 模型与 [API Key](../concepts/api-key.md) 权限
 
@@ -24,7 +24,7 @@
 | 限制模型训练 | 是否可调优（控制台 & API）及调优后部署 | 模型列表 → 模型授权 → 模型训练列 |
 | 限制[模型部署](../concepts/model-deployment.md) | 是否可直接部署 | 模型列表 → 模型授权 → [模型部署](../concepts/model-deployment.md)列 |
 
-单个 [API Key](../concepts/api-key.md) 只能归属一个地域内的一个业务空间和一个用户，且不能转移。API Key 的可调用功能与模型限流与**归属业务空间**的权限保持一致，不受用户控制台权限影响，也无需为不同模型（文生文、文生图、语音合成）创建不同 API Key。自 2026 年 3 月 25 日起，华北2（北京）地域所有新创建的 API Key 均归属主账号，并支持设置 IP 访问白名单。
+单个 [API Key](../concepts/api-key.md) 只能归属一个地域内的一个业务空间和一个用户，且不能转移。[API Key](../concepts/api-key.md) 的可调用功能与模型限流与**归属业务空间**的权限保持一致，不受用户控制台权限影响，也无需为不同模型（文生文、文生图、语音合成）创建不同 [API Key](../concepts/api-key.md)。自 2026 年 3 月 25 日起，华北2（北京）地域所有新创建的 [API Key](../concepts/api-key.md) 均归属主账号，并支持设置 IP 访问白名单。
 
 > **注意**：API Key 的有效性受账号操作影响——将 RAM 账号移出业务空间会使其 API Key 失效（重新加入后恢复），而在 RAM 控制台删除账号/角色则会使 API Key 永久失效、不可恢复。
 
@@ -102,7 +102,7 @@ RAM 用户默认无权调用百炼应用的数据、[知识库](../concepts/know
 
 ### 两种接入方式
 
-**1. DashScope SDK（自动加密·开箱即用）**
+**1. [DashScope SDK](../concepts/dashscope-sdk.md)（自动加密·开箱即用）**
 
 仅支持 Java 和 Python，不支持自定义密钥：
 
@@ -173,7 +173,7 @@ SDK 自动完成加解密，响应为明文，无需手动处理。
 - 默认业务空间无法设置模型调用/训练/部署限制，所有模型均可调用、调优、部署，且无法限流。
 - API Key 不可跨地域、跨业务空间、跨用户转移；账号移出空间会使其 API Key 失效（重新加入恢复），删除账号/角色则永久失效。
 - AI 安全护栏目前仅支持文本和图片类型模型。
-- DashScope SDK 自动加密仅支持 Java/Python 且不支持自定义密钥；HTTP 手动加密仅适用于 DashScope Endpoint，OpenAI 兼容 Endpoint 不支持。
+- [DashScope SDK](../concepts/dashscope-sdk.md) 自动加密仅支持 Java/Python 且不支持自定义密钥；HTTP 手动加密仅适用于 DashScope Endpoint，OpenAI 兼容 Endpoint 不支持。
 - PrivateLink 私网访问美国（弗吉尼亚）地域暂不支持；跨地域访问需区分同境内/同境外与跨境两种方式。
 - 安全存储业务空间的 OSS/ES 等底层资源一旦释放，安全存储空间不可恢复，需重建。
 - 模型与应用的合规备案信息应以算法备案系统实时查询结果为准，建议定期核验；开发者作为"服务提供者"需独立承担全部法律责任。
@@ -192,6 +192,7 @@ SDK 自动完成加解密，响应为明文，无需手动处理。
 - [配置可用区IP](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-zone-ip.md)
 - [配置私有网络中的资源](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)
 - [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md)
+
 
 
 

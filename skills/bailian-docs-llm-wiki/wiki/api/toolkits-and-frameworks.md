@@ -10,7 +10,7 @@
 - **base_url**：使用[业务空间](../concepts/workspace.md)专属域名，格式为 `https://{WorkspaceId}.<region>.maas.aliyuncs.com/compatible-mode/v1`。`{WorkspaceId}` 为[业务空间](../concepts/workspace.md) ID，可在百炼控制台「[业务空间](../concepts/workspace.md)详情」页面查看。
 - **model**：替换为下文各接口支持的模型名称清单中的值。
 
-百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，建议从旧域名 `https://dashscope.aliyuncs.com`（北京）和 `https://dashscope-intl.aliyuncs.com`（新加坡）迁移至新域名，以获得更好的推理性能与稳定性。现有旧域名仍可正常使用，详情参见 [OpenAI Chat接口兼容](../../raw/model-api-reference/toolkits-and-frameworks/compatibility-of-openai-with-dashscope.md)。
+百炼为华北2（北京）、新加坡地域推出了[业务空间](../concepts/workspace.md)专属域名，建议从旧域名 `https://dashscope.aliyuncs.com`（北京）和 `https://dashscope-intl.aliyuncs.com`（新加坡）迁移至新域名，以获得更好的推理性能与稳定性。现有旧域名仍可正常使用，详情参见 [OpenAI Chat接口兼容](../../raw/model-api-reference/toolkits-and-frameworks/compatibility-of-openai-with-dashscope.md)。
 
 各地域 base_url 速查：
 
@@ -22,7 +22,7 @@
 | 美国（弗吉尼亚） | `https://dashscope-us.aliyuncs.com/compatible-mode/v1` |
 | 德国（法兰克福） | `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1`（Responses 接口） |
 
-> **注意**：弗吉尼亚地域使用固定域名 `dashscope-us.aliyuncs.com`，不带 `{WorkspaceId}`；其余地域均需替换为真实业务空间 ID。
+> **注意**：弗吉尼亚地域使用固定域名 `dashscope-us.aliyuncs.com`，不带 `{WorkspaceId}`；其余地域均需替换为真实[业务空间](../concepts/workspace.md) ID。
 
 ## 兼容接口一览
 
@@ -178,12 +178,12 @@
 ## 限制与注意事项
 
 - **地域与模型差异**：各地域支持的模型范围不同，以百炼控制台模型市场为准；三方直供模型仅中国内地可用，调用前需在控制台开通。
-- **域名迁移**：北京、新加坡地域建议迁移至业务空间专属域名以提升性能与稳定性，旧域名仍可用但弗吉尼亚等地域使用固定域名。
+- **域名迁移**：北京、新加坡地域建议迁移至[业务空间](../concepts/workspace.md)专属域名以提升性能与稳定性，旧域名仍可用但弗吉尼亚等地域使用固定域名。
 - **Batch 思考模式**：qwen3.7/3.6/3.5 系列默认开启思考模式会增加成本，须显式设置 `enable_thinking` 且为 body 顶层参数。
 - **超时控制**：Batch Chat 同步连接最长 3600 秒，超时自动断开返回错误。
-- **Completions 地域**：Completions 接口仅适用于中国内地（北京），需北京地域 API Key。
-- **[多模态](../concepts/multimodal.md) Embedding**：`qwen3-vl-embedding`、`tongyi-embedding-vision` 等多模态向量模型不支持 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)，需走多模态向量接口。
-- **API Key 安全**：推荐通过环境变量 `DASHSCOPE_API_KEY` 注入，避免在代码中硬编码。
+- **Completions 地域**：Completions 接口仅适用于中国内地（北京），需北京地域 [API Key](../concepts/api-key.md)。
+- **[多模态](../concepts/multimodal.md) Embedding**：`qwen3-vl-embedding`、`tongyi-embedding-vision` 等[多模态](../concepts/multimodal.md)向量模型不支持 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)，需走[多模态](../concepts/multimodal.md)向量接口。
+- **[API Key](../concepts/api-key.md) 安全**：推荐通过环境变量 `DASHSCOPE_API_KEY` 注入，避免在代码中硬编码。
 - **模型调用失败**：如返回报错信息，参见百炼错误码文档排查。
 
 ## 来源文档
@@ -198,6 +198,7 @@
 - [OpenAI兼容-Batch Chat](../../raw/model-api-reference/toolkits-and-frameworks/openai-compatible-batch-chat.md)
 - [OpenAI Conversations接口兼容](../../raw/model-api-reference/toolkits-and-frameworks/openai-compatible-conversations.md)
 - [在LangChain中使用阿里云百炼](../../raw/model-api-reference/toolkits-and-frameworks/use-bailian-in-langchain.md)
+
 
 
 

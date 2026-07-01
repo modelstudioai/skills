@@ -89,10 +89,12 @@ MP4, AVI, MOV（仅支持URL）
 
 不同模型使用不同的API接口：
 
--   **qwen3-rerank**：`POST https://dashscope.aliyuncs.com/compatible-api/v1/reranks`
+-   **qwen3-rerank**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-api/v1/reranks`
     
--   **qwen3-vl-rerank / gte-rerank-v2**：`POST https://dashscope.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank`
+-   **qwen3-vl-rerank / gte-rerank-v2**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank`
     
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 > 两种接口的请求体结构和响应格式不同，请参考对应模型的请求示例和响应示例。
 
@@ -102,7 +104,7 @@ MP4, AVI, MOV（仅支持URL）
 
 ```
 curl --request POST \
-  --url https://dashscope.aliyuncs.com/compatible-api/v1/reranks \
+  --url https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-api/v1/reranks \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json" \
   --data '{
@@ -123,7 +125,7 @@ curl --request POST \
 文本查询
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
@@ -147,7 +149,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/rerank/text-rera
 图片查询
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
@@ -171,7 +173,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/rerank/text-rera
 ## gte-rerank-v2
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
@@ -415,6 +417,8 @@ Python
 ```
 import dashscope
 from http import HTTPStatus
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 def text_rerank():
     resp = dashscope.TextReRank.call(
@@ -446,6 +450,8 @@ Python
 import dashscope
 from http import HTTPStatus
 import json
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 def vl_rerank():
     resp = dashscope.TextReRank.call(

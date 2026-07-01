@@ -4,9 +4,9 @@
 
 ## 临时 [API Key](../concepts/api-key.md)
 
-在浏览器、移动 App 等不可信环境中直接持有永久 [API Key](../concepts/api-key.md) 存在泄露风险。可通过后端服务调用令牌接口生成临时 API Key，将其下发到客户端使用，详见 [生成临时API Key](../../raw/model-api-reference/more-about-models/generate-temporary-api-key.md)。
+在浏览器、移动 App 等不可信环境中直接持有永久 [API Key](../concepts/api-key.md) 存在泄露风险。可通过后端服务调用令牌接口生成临时 [API Key](../concepts/api-key.md)，将其下发到客户端使用，详见 [生成临时API Key](../../raw/model-api-reference/more-about-models/generate-temporary-api-key.md)。
 
-- 临时 API Key 继承生成它的永久 API Key 的全部权限（含模型、[知识库](../concepts/knowledge-base.md)的访问限制），无法进一步收窄权限。
+- 临时 [API Key](../concepts/api-key.md) 继承生成它的永久 [API Key](../concepts/api-key.md) 的全部权限（含模型、[知识库](../concepts/knowledge-base.md)的访问限制），无法进一步收窄权限。
 - 默认有效期 60 秒，可通过 `expire_in_seconds` 参数设置，范围为 [1, 1800] 秒；到期自动失效，不能提前删除。
 
 请求示例：
@@ -61,16 +61,16 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=180
 
 ## 子[业务空间](../concepts/workspace.md)的模型调用
 
-默认[业务空间](../concepts/workspace.md)的 API Key 可调用所有模型，权限过大且费用难以分账。可将 RAM 用户归入子业务空间，仅授权必要模型，并要求使用该子空间的 API Key 调用，参见 [子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)。
+默认[业务空间](../concepts/workspace.md)的 API Key 可调用所有模型，权限过大且费用难以分账。可将 RAM 用户归入子[业务空间](../concepts/workspace.md)，仅授权必要模型，并要求使用该子空间的 API Key 调用，参见 [子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)。
 
 适用场景：
 
 - **模型调用权限管控**：限制某类用户只能调用被授权的模型。
 - **费用分账**：为不同业务/场景创建独立子空间，各自独立出账。
 
-调用方式与默认空间基本一致，区别在于**必须使用该子业务空间的 API Key**。支持 OpenAI 兼容与 DashScope 两种协议：
+调用方式与默认空间基本一致，区别在于**必须使用该子[业务空间](../concepts/workspace.md)的 API Key**。支持 OpenAI 兼容与 DashScope 两种协议：
 
-- **OpenAI 兼容**：北京地域 `base_url` 为 `https://dashscope.aliyuncs.com/compatible-mode/v1`；新加坡地域为 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`，需把 `WorkspaceId` 替换为真实业务空间 ID。
+- **OpenAI 兼容**：北京地域 `base_url` 为 `https://dashscope.aliyuncs.com/compatible-mode/v1`；新加坡地域为 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`，需把 `WorkspaceId` 替换为真实[业务空间](../concepts/workspace.md) ID。
 - **DashScope**：北京地域千问大语言模型 HTTP 地址为 `POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`；新加坡地域需在 SDK 中设置 `base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'`。
 
 准备工作要点：
@@ -104,7 +104,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=180
 
 ## SDK 连接复用配置
 
-高并发场景下频繁建连会导致请求超时、资源消耗大。DashScope SDK 支持连接复用以降低开销，参见 [DashScope SDK连接复用配置](../../raw/model-api-reference/more-about-models/connection-multiplexing-configuration.md)。
+高并发场景下频繁建连会导致请求超时、资源消耗大。[DashScope SDK](../concepts/dashscope-sdk.md) 支持连接复用以降低开销，参见 [DashScope SDK连接复用配置](../../raw/model-api-reference/more-about-models/connection-multiplexing-configuration.md)。
 
 ### Java SDK
 
@@ -147,6 +147,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=180
 - [子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)
 - [上传本地文件获取临时URL](../../raw/model-api-reference/more-about-models/get-temporary-file-url.md)
 - [DashScope SDK连接复用配置](../../raw/model-api-reference/more-about-models/connection-multiplexing-configuration.md)
+
 
 
 

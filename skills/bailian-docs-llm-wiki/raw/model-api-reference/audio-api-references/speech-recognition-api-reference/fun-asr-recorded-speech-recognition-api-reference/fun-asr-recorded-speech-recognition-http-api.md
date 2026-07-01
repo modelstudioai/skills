@@ -766,20 +766,20 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
     "input": {
         "messages": [
             {
-                "role": "assistant",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": "你好啊，我是通义千问，有什么可以帮助你的？"
-                    }
-                ]
-            },
-            {
                 "role": "user",
                 "content": [
                     {
                         "type": "input_text",
                         "text": "你好啊"
+                    }
+                ]
+            },
+            {
+                "role": "assistant",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "你好啊，我是通义千问，有什么可以帮助你的？"
                     }
                 ]
             },
@@ -815,20 +815,20 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
     "input": {
         "messages": [
             {
-                "role": "assistant",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": "你好啊，我是通义千问，有什么可以帮助你的？"
-                    }
-                ]
-            },
-            {
                 "role": "user",
                 "content": [
                     {
                         "type": "input_text",
                         "text": "你好啊"
+                    }
+                ]
+            },
+            {
+                "role": "assistant",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "你好啊，我是通义千问，有什么可以帮助你的？"
                     }
                 ]
             },
@@ -968,7 +968,7 @@ print(response.json())
 
 **重要**
 
-上下文功能适用于ASR与大语言模型（LLM）结合的场景：将前几轮LLM的回复内容（assistant）和用户语音识别结果（user）作为上下文传入，可显著提升当前轮次的识别准确率。`user`和`assistant`消息需成对出现，且role不能设错，否则会影响识别效果。
+上下文功能用于提升专有词汇的识别准确率，使用方法详见[快速开始](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#ctx-quickstart-sec)。约束：上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度（`user` 和 `assistant` 的 `text` 字段长度之和）不超过 400 个字符（按字符数计算，每个字符计为 1），超出部分从末尾截断。
 
 **属性**
 
@@ -976,9 +976,9 @@ print(response.json())
 
 消息角色。取值范围：
 
--   `user`（必选）：用户消息。type为`input_audio`时表示当前待识别的音频；type为`input_text`时表示前几轮的识别结果（可选，上下文）。
+-   `user`（必选）：用户消息。type为`input_audio`时表示当前待识别的音频；type为`input_text`时表示前几轮的识别结果或领域相关的词表（可选，上下文）。
     
--   `assistant`（可选，上下文）：前几轮大语言模型的回复内容，需与`user`（input\_text）成对出现。
+-   `assistant`（可选，上下文）：前几轮大语言模型的回复内容。
     
 
 **content** `_array(object)_` **（必选）**
@@ -993,7 +993,7 @@ print(response.json())
 
 -   `input_audio`（必选）：当前待识别的音频输入（role为user），需同时传入`input_audio`对象。
     
--   `input_text`（可选，上下文）：前几轮用户语音的识别结果（role为user），需同时传入`text`字段。
+-   `input_text`（可选，上下文）：前几轮用户语音的识别结果或领域相关的词表（role为user），需同时传入`text`字段。
     
 -   `text`（可选，上下文）：前几轮大语言模型的回复内容（role为assistant），需同时传入`text`字段。
     
@@ -1019,7 +1019,7 @@ print(response.json())
 
 **text** `_string_` **（条件必选）**
 
-当`type`为`input_text`时，填入前几轮用户语音的识别结果；当`type`为`text`时，填入前几轮大语言模型的回复内容。
+当`type`为`input_text`时，填入前几轮用户语音的识别结果或领域相关的词表；当`type`为`text`时，填入前几轮大语言模型的回复内容。文本按字符数计算，每个字符计为 1。每轮上下文中所有消息的 `text` 字段长度之和不超过 400 个字符，超出部分从末尾截断。
 
 **parameters** `_object_` **（必选）**
 

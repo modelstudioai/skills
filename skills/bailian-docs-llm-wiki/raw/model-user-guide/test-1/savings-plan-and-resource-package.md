@@ -748,7 +748,7 @@ ASR模型按秒计费，TTS模型按字符计费，请前往[百炼控制台](ht
 
 **余量监控与预警：**
 
--   **查看余量**：点击[资源包](https://billing-cost.console.aliyun.com/ri/summary?commodityCode=fr)查看剩余量情况，点击**统计**查看使用信息。具体请参见[资源包介绍与选购](https://help.aliyun.com/zh/user-center/resource-package-instance-management)。
+-   **查看余量**：点击[资源包](https://billing-cost.console.aliyun.com/ri/summary?commodityCode=fr)查看剩余量情况，点击**使用明细**查看使用信息。具体请参见[资源包介绍与选购](https://help.aliyun.com/zh/user-center/resource-package-instance-management)。
     
 -   **设置预警**：建议[设置资源包余量预警](https://help.aliyun.com/zh/user-center/configure-balance-alerts)。当资源包使用量低于预设阈值时，系统将通过短信、邮件及站内信自动触发通知。
     
@@ -920,7 +920,7 @@ qwen-turbo的实时推理服务（[非思考模式](https://help.aliyun.com/zh/m
 
 ### **购买节省计划后如何使用？**
 
-节省计划在生效后无需手动激活或绑定。您通过百炼控制台模型体验、API 代码调用或接入第三方工具调用模型时，产生的费用会按[抵扣顺序](#59b7ecf08fiac)自动抵扣。您可以在[节省计划总览页面](”https://usercenter2.aliyun.com/resource/spn/overview”)查看抵扣明细。
+节省计划在生效后无需手动激活或绑定。您通过百炼控制台模型体验、API 代码调用或接入第三方工具调用模型时，产生的费用会按[抵扣顺序](#59b7ecf08fiac)自动抵扣。您可以在[节省计划总览页面](https://usercenter2.aliyun.com/resource/spn/overview)查看抵扣明细。
 
 ### **为什么购买了资源包，但没有抵扣？**
 

@@ -18,7 +18,7 @@
 3.  推理结果回到接入地域存储，再响应给应用（用户静态数据始终存于所选地域）。
     
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1502072871/CAEQchiBgIDPq_PR9xkiIDJhZDdiNzAxMGFiODRhNmRiMDYxYjNjNGU2NTJkMDYw7466796_20260515102254.505.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7478182871/CAEQchiBgIDPq_PR9xkiIDJhZDdiNzAxMGFiODRhNmRiMDYxYjNjNGU2NTJkMDYw7466796_20260515102254.505.svg)
 
 ## 选择地域和服务部署范围
 
@@ -80,13 +80,13 @@
 
 ## 选择接入域名
 
-百炼为模型推理 API 提供专属、共享和试用三种接入域名，适用于从试用体验到企业级生产的不同场景。推荐使用**专属域名**，各域名的核心差异如下：
+百炼为模型推理 API 提供业务空间专属、Dashscope 和试用三种接入域名，适用于从试用体验到企业级生产的不同场景。推荐使用**业务空间专属域名**，各域名的核心差异如下：
 
 **对比项**
 
-**专属域名（推荐）**
+**业务空间专属域名（推荐）**
 
-**共享域名（现有域名）**
+**Dashscope 域名（现有域名）**
 
 **试用域名**
 
@@ -104,7 +104,7 @@
 
 推荐在生产环境中使用，具备更高并发承载能力与网络隔离性，保障大流量场景下的稳定、低延迟访问体验。
 
-存量业务兼容，建议[迁移至专属域名](#section-migrate-domain)。
+存量业务兼容，建议[迁移至业务空间专属域名](#section-migrate-domain)。
 
 快速体验、功能验证，不建议用于生产环境。
 
@@ -156,9 +156,9 @@ HTTP、SSE
 
 **地域ID**
 
-**专属域名**
+**业务空间专属域名**
 
-**共享域名**
+**Dashscope 域名**
 
 **试用域名**
 
@@ -170,7 +170,7 @@ HTTP、SSE
 
 `cn-beijing`
 
-`{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+`[{WorkspaceId}](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management).cn-beijing.maas.aliyuncs.com`
 
 `dashscope.aliyuncs.com`
 
@@ -184,13 +184,13 @@ HTTP、SSE
 
 `ap-southeast-1`
 
-`{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+`[{WorkspaceId}](https://modelstudio.console.aliyun.com/ap-southeast-1).ap-southeast-1.maas.aliyuncs.com`
 
 `dashscope-intl.aliyuncs.com`
 
 `trial.ap-southeast-1.maas.aliyuncs.com`
 
-[密钥管理](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=doc#/doc/?type=model&url=2840914)
+[密钥管理](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=dashboard#/api-key)
 
 [可用模型](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=doc#/doc/?type=model&url=2840914)
 
@@ -198,7 +198,7 @@ HTTP、SSE
 
 `eu-central-1`
 
-`{WorkspaceId}.eu-central-1.maas.aliyuncs.com`
+`[{WorkspaceId}](https://modelstudio.console.aliyun.com/eu-central-1?tab=globalset#/efm/business_management).eu-central-1.maas.aliyuncs.com`
 
 不支持
 
@@ -206,13 +206,13 @@ HTTP、SSE
 
 [密钥管理](https://bailian.console.alibabacloud.com/?apiKey=1#/api-key)
 
-[可用模型](https://help.aliyun.com/zh/model-studio/getting-started/models)
+[可用模型](https://modelstudio.console.aliyun.com/eu-central-1?tab=doc#/doc/?type=model&url=2840914)
 
 日本（东京）
 
 `ap-northeast-1`
 
-`{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com`
+`[{WorkspaceId}](https://modelstudio.console.aliyun.com/ap-northeast-1?tab=globalset#/efm/business_management).ap-northeast-1.maas.aliyuncs.com`
 
 不支持
 
@@ -224,7 +224,7 @@ HTTP、SSE
 
 美国（弗吉尼亚）
 
-\-
+`us-east-1`
 
 暂不支持
 
@@ -243,17 +243,17 @@ HTTP、SSE
 -   **华北2（北京）**和**新加坡地域**各仅支持一种服务部署范围（分别为中国内地和国际），无需选择。
     
 
-## 迁移至专属域名
+## 迁移至业务空间专属域名
 
-从共享或试用域名迁移到专属域名只需两步，无需修改业务逻辑代码：
+从 Dashscope 域名或试用域名迁移到业务空间专属域名只需两步，无需修改业务逻辑代码：
 
-1.  **获取专属域名**：
+1.  **获取业务空间专属域名**：
     
-    -   方式一：在[创建API Key](https://bailian.console.aliyun.com/cn-beijing#/api-key)成功后的弹窗中，复制 **API Host** 下方的内容。
+    -   方式一：在[API Key 创建](https://bailian.console.aliyun.com/cn-beijing#/api-key)后的弹窗中，复制 **API Host** 。
         
     -   方式二：在[业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)页面，复制 **API Host** 列的内容。
         
-2.  **替换 Base URL 中的域名**：将原域名替换为专属域名。以华北2（北京）地域为例，`llm-xxx` 为业务空间 ID：
+2.  **替换 Base URL 中的域名**：将原域名替换为业务空间专属域名。以华北2（北京）地域为例，`llm-xxx` 为业务空间 ID：
     
     -   OpenAI 兼容接口：从 `https://dashscope.aliyuncs.com/compatible-mode/v1` 替换为 `https://llm-xxx.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
         
@@ -395,3 +395,5 @@ HTTP、SSE
 -   [限流](https://help.aliyun.com/zh/model-studio/rate-limit)— RPM、TPM 限制
     
 -   [获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key) — 创建和管理 Key
+    
+-   [Base URL总览](https://help.aliyun.com/zh/model-studio/base-url) — 模型服务调用地址

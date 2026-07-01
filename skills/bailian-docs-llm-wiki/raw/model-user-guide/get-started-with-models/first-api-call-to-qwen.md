@@ -8,6 +8,8 @@
     
 -   若您不熟悉编程，可参考[Chatbox](https://help.aliyun.com/zh/model-studio/chatbox)，通过图形化界面与千问模型对话。
     
+-   API调用与操作系统版本无关，只要网络能连通即可正常使用。
+    
 
 本文以千问为例，引导您完成大模型API调用。您将了解到：
 
@@ -30,7 +32,7 @@
     
 3.  **获取API Key：**前往[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)页面，单击**创建API Key****，**即可通过API KEY调用大模型。
     
-4.  **获取业务空间ID：**使用**华北2（北京）**、**新加坡**、**日本（东京）**或**德国（法兰克福）**地域的模型时，需在Base URL中填入业务空间ID（WorkspaceId），可在[业务空间管理](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=globalset#/efm/business_management)页面中查看。
+4.  **获取业务空间ID：**使用**华北2（北京）**、**新加坡**、**日本（东京）**或**德国（法兰克福）**地域的模型时，需在Base URL中填入业务空间ID（WorkspaceId），可在[业务空间管理](https://modelstudio.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)页面中查看。
     
 
 ## **配置API Key到环境变量**

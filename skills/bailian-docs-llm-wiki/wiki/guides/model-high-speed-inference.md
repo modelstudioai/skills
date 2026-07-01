@@ -13,7 +13,7 @@ TPM 预留是百炼平台提供的推理容量保障能力，通过为指定模�
 
 选型依据可参考 [TPM 预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md) 中的方案对比表。
 
-## 支持的模型与计费
+## 支持的模型与[计费](../concepts/billing.md)
 
 TPM 预留按区域、按模型开放，预付费周期为按天，输入与输出 TPM 分别计价（Per 1000 TPM）。
 
@@ -40,9 +40,9 @@ TPM 预留按区域、按模型开放，预付费周期为按天，输入与输�
 - **deepseek-v4-pro**：输入上限 256K；缓存命中部分按 8% 折算；无阶梯系数。
 - **Qwen 系列**：输入上限 256K；缓存命中部分按 20% 折算；无阶梯系数。
 
-## 计费与使用说明
+## [计费](../concepts/billing.md)与使用说明
 
-- 部署成功即开始计费，预留容量内的调用不额外收费。
+- 部署成功即开始[计费](../concepts/billing.md)，预留容量内的调用不额外收费。
 - 预付费一次性支付，从购买成功起连续生效；详细费用以控制台为准。
 - 缩容与退订退费按 1.5 倍系数结算：`退款 = 降量部分预付费 - (降量部分预付费 × 已用时长/购买时长 × 1.5)`。
 - 超出保障额度自动降级为按量计费，可在详情页**超额降级统计**中查看降级次数。
@@ -144,6 +144,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 ## 来源文档
 
 - [TPM 预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)
+
 
 
 

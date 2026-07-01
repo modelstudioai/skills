@@ -54,7 +54,7 @@ Prompt 模板将 Prompt 的固定结构与动态变量分离，分为预置模�
 
 当手动编写高质量 Prompt 耗时或缺乏经验时，可让大模型对原始 Prompt 进行结构重组、角色扮演引导、指令增强、安全与边界注入等重写，生成结构更优、效果更稳定的新版本。详见 [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)。
 
-操作步骤：进入「提示词 > 自动优化」页面 → 在「原始 prompt」框输入内容 → 单击「优化」查看「优化后 prompt」 → 复制使用或「保存为模板」。该功能不计费，提交的数据不会被存储或用于模型训练。优化失败常见原因包括输入超长超出 [Token](../concepts/token.md) 限制、触发内容审核、网络或服务临时不可用。
+操作步骤：进入「提示词 > 自动优化」页面 → 在「原始 prompt」框输入内容 → 单击「优化」查看「优化后 prompt」 → 复制使用或「保存为模板」。该功能不[计费](../concepts/billing.md)，提交的数据不会被存储或用于模型训练。优化失败常见原因包括输入超长超出 [Token](../concepts/token.md) 限制、触发内容审核、网络或服务临时不可用。
 
 ## Prompt 样例库（Few-shot 检索）
 
@@ -74,9 +74,9 @@ Prompt 模板将 Prompt 的固定结构与动态变量分离，分为预置模�
 - 单应用最多关联 5 个样例库；单次请求最多召回 10 个片段注入上下文。
 - 批量导入支持 20MB 以内 Excel，单次最多 100 条。
 
-### 计费
+### [计费](../concepts/billing.md)
 
-样例库本身不收存储或管理费用，但召回样例会增加大模型调用 [Token](../concepts/token.md) 消耗。总输入 Token ≈ 用户查询 Token + 所有召回样例总 Token + 系统指令 Token。
+样例库本身不收存储或管理费用，但召回样例会增加大模型调用 [Token](../concepts/token.md) 消耗。总输入 [Token](../concepts/token.md) ≈ 用户查询 [Token](../concepts/token.md) + 所有召回样例总 [Token](../concepts/token.md) + 系统指令 Token。
 
 ## Prompt 反馈优化
 
@@ -102,7 +102,7 @@ Prompt 模板将 Prompt 的固定结构与动态变量分离，分为预置模�
 - **字符与 Token**：智能体应用提示词输入框最大支持 6144 字符；自动优化输入过长会因超出 Token 限制而失败。
 - **数据安全**：自动优化提交的数据不会被存储或用于模型训练。
 - **功能维护状态**：Prompt 样例库已不再维护，建议迁移至 RAG 表格库；反馈优化仍为推荐路径。
-- **计费影响**：模板管理与自动优化不额外计费；样例库本身免费但增加调用 Token；反馈优化涉及推理模型多轮调用，会产生相应 Token 费用。
+- **[计费](../concepts/billing.md)影响**：模板管理与自动优化不额外计费；样例库本身免费但增加调用 Token；反馈优化涉及推理模型多轮调用，会产生相应 Token 费用。
 - **调用失败排查**：若 API 调用返回错误码，参见平台错误码文档定位。
 
 ## 来源文档
@@ -112,6 +112,7 @@ Prompt 模板将 Prompt 的固定结构与动态变量分离，分为预置模�
 - [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)
 - [使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)
 - [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)
+
 
 
 

@@ -26,16 +26,16 @@
 
 - 模型调优支持文本生成、视觉理解（VL）、图像生成（Wan/Wanx）、视频生成（万相）等多种模型类型；新增 0 代码安全合规强化训练流程、强化学习训练（RL，邀约制）。
 - SFT 支持全参微调与 LoRA 高效微调；DPO 偏好训练覆盖千问 3-32B/14B/8B、千问 2.5-72B/32B/14B/8B。
-- [模型部署](../concepts/model-deployment.md)新增按模型单元（MU）时长[计费](../concepts/billing.md)与按调用量计费两种方式，预置 `qwen-flash`/`qwen-plus` 等模型可一键部署；模型压缩模块上线，使用量化算法将全精度微调模型转为低精度版本以降低部署成本。
+- [模型部署](../concepts/model-deployment.md)新增按模型单元（MU）时长[计费](../concepts/billing.md)与按调用量[计费](../concepts/billing.md)两种方式，预置 `qwen-flash`/`qwen-plus` 等模型可一键部署；模型压缩模块上线，使用量化算法将全精度微调模型转为低精度版本以降低部署成本。
 - 模型导入功能国际站上线（OSS 导入 LoRA 微调模型），并新增模型导入 API 目录。
 
 ### 模型 API 与应用调用
 
-- 文本生成 API 入口聚合 OpenAI Responses 与 Anthropic Messages 两类兼容接口；Responses API 新增异步调用（`background=true` 提交长耗时任务并轮询）。
+- 文本生成 API 入口聚合 OpenAI Responses 与 Anthropic Messages 两类兼容接口；Responses API 新增[异步调用](../concepts/async-invocation.md)（`background=true` 提交长耗时任务并轮询）。
 - 异步任务支持事件总线 EventBridge HTTP 回调与 RocketMQ 主动推送，无需轮询。
 - 新版智能体应用 DashScope API 首发，支持单轮/多轮、流式、文件问答、视觉理解。
 - 应用组件新增 Prompt 工程 API、数据连接 `ListCategory` / `ChangeParseSetting` 接口；知识库 Retrieve 接口新增排序模型选项与指令干预模式。
-- 新增生成临时 API Key 文档，用于不可信环境下避免永久 API Key 泄露。
+- 新增生成临时 [API Key](../concepts/api-key.md) 文档，用于不可信环境下避免永久 [API Key](../concepts/api-key.md) 泄露。
 
 ### 应用与 SDK
 
@@ -51,11 +51,11 @@
 - 知识库 RAG 新增日志与监控，检索调用全量投递至 SLS 日志服务。
 - 模型用量新增免费额度与用量统计看板。
 
-## 计费调整
+## [计费](../concepts/billing.md)调整
 
-近一年计费调整主要方向为降价与转计费：
+近一年[计费](../concepts/billing.md)调整主要方向为降价与转计费：
 
-- `qwen-max` 输入价格降低 88%、输出价格降低 84%（实时调用输入 0.0024 元/千 Token，输出 0.0096 元/千 Token）。
+- `qwen-max` 输入价格降低 88%、输出价格降低 84%（实时调用输入 0.0024 元/千 [Token](../concepts/token.md)，输出 0.0096 元/千 [Token](../concepts/token.md)）。
 - `qwen2.5-14b-instruct` / `qwen2.5-7b-instruct` 降价 50%；`qwen2.5-3b-instruct`、`qwen-vl-72b-instruct` 由免费体验转为计费。
 - 千问 VL 系列模型降价，降幅最高 85%。
 - DeepSeek 系列部分模型由免费体验转为计费；`deepseek-v4-pro` 的 `cached_token` 单价调整为 1 元/百万 token，标准 `input_token` 单价不变。
@@ -65,7 +65,7 @@
 
 ## 关键参数与限制
 
-- **上下文长度**：`qwen3.5-ocr` 128K；`glm-5.1` 200K，最大输出 128K Token；全模态 `qwen3.5-omni` 可处理 3 小时音频 / 1 小时视频输入。
+- **上下文长度**：`qwen3.5-ocr` 128K；`glm-5.1` 200K，最大输出 128K [Token](../concepts/token.md)；全模态 `qwen3.5-omni` 可处理 3 小时音频 / 1 小时视频输入。
 - **思考模式**：`qwen3.7-max`、`qwen3.6-max-preview` 默认开启思考模式；`kimi/kimi-k2.7-code` 仅支持思考模式；`qwen3.7-max-preview` / `qwen3.7-max-2026-05-17` 仅支持思考模式且仅纯文本。
 - **[多模态](../concepts/multimodal.md)限制**：`qwen3.6-max-preview`、`qwen3.7-max-preview` / `qwen3.7-max-2026-05-17` 不支持图像与视频输入。
 - **视频生成规格**：HappyHorse 1.1 支持 3~15 秒、720P/1080P 有声视频；万相 2.7 文生视频支持分辨率档位与宽高比自定义。
@@ -76,14 +76,15 @@
 ## 使用建议
 
 - 选型优先参考 [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md) 中最新上架条目与控制台模型市场，避免使用已下线版本。
-- 长耗时任务使用 Responses API 异步调用或异步任务 + EventBridge 回调，减少轮询开销。
-- 不可信环境调用使用临时 API Key；生产环境配合模型观测的告警与高级监控进行故障定位。
+- 长耗时任务使用 Responses API [异步调用](../concepts/async-invocation.md)或异步任务 + EventBridge 回调，减少轮询开销。
+- 不可信环境调用使用临时 [API Key](../concepts/api-key.md)；生产环境配合模型观测的告警与高级监控进行故障定位。
 - 调优后模型可通过模型压缩降低部署成本，再以模型单元或按调用量方式部署。
 
 ## 来源文档
 
 - [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)
 - [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)
+
 
 
 

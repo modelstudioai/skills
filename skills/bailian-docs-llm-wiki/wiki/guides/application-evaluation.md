@@ -114,7 +114,7 @@
 - 自动评测仅支持 `qwen-max` 和 `qwen-plus` 模型（评测集生成与评测打分均限）。
 - 自动评测仅面向已发布、配置知识库的[智能体应用](../concepts/agent-application.md)；多应用横向评测时所有应用须关联至少一个相同知识库；横向评测最多 8 个应用，追加评测后总数同样不超过 8。
 - 评测期间请勿关闭应用观测，否则可能导致任务失败、数据丢失或报告不准确。
-- 评测任务分步执行，每个成功步骤都会消耗 [Token](../concepts/token.md) 并[计费](../concepts/billing.md)，后续步骤失败不影响已消耗 Token 的[计费](../concepts/billing.md)。
+- 评测任务分步执行，每个成功步骤都会消耗 [Token](../concepts/token.md) 并[计费](../concepts/billing.md)，后续步骤失败不影响已消耗 [Token](../concepts/token.md) 的[计费](../concepts/billing.md)。
 - 评测报告只显示成功完成的用例，失败用例不计入正确率。
 - 评测集生成与评测均为离线任务，需后台排队，排队期间进度保持 0%。
 - 评估器删除后无法恢复；被评测任务引用的评估器不可删除。
@@ -136,6 +136,7 @@
 - [标签管理](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/label-management.md)
 - [评测任务](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/evaluation-task.md)
 - [评估器](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/grader.md)
+
 
 
 

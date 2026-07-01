@@ -164,7 +164,7 @@
 - **幂等性**：文件上传、知识库任务提交等为异步接口，务必通过 `DescribeFile` / `GetIndexJobStatus` 轮询最终状态，不要仅依赖提交返回。
 - **批量操作**：优先使用批量接口（`BatchUpdateFileTag`、`DeleteFiles`、`SubmitIndexAddDocumentsJob`）以减少请求次数与鉴权开销。
 - **OSS 授权导入**：使用 `AddFilesFromAuthorizedOss` / `UpdateTableFromAuthorizedOss` 前，需先在百炼控制台完成 OSS Bucket 授权，避免因权限不足导致导入失败。
-- **资源清理顺序**：删除类目、知识库、记忆体等父资源前，先清理其下子资源（文件、切片、记忆片段），防止残留与计费。
+- **资源清理顺序**：删除类目、知识库、记忆体等父资源前，先清理其下子资源（文件、切片、记忆片段），防止残留与[计费](../concepts/billing.md)。
 - **监控观测**：知识库上线后定期调用 `GetIndexMonitor` 关注检索量与命中率，结合 `ListChunks` 抽检切片质量，持续优化 RAG 效果。
 
 ## 来源文档
@@ -226,5 +226,6 @@
 - [UpdateMemoryNode - 更新记忆片段](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-updatememorynode.md)
 - [DeleteMemoryNode - 删除记忆片段](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-deletememorynode.md)
 - [ListMemoryNodes - 获取记忆片段列表](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-listmemorynodes.md)
+
 
 

@@ -1,43 +1,57 @@
 # 多模态
 
-多模态指模型能够同时接收、理解或生成多种数据形态（文本、图像、音频、视频、3D 等）的能力。在百炼平台中，多模态既体现为"输入多模态"（一张图或一段视频加文本提问），也体现为"输出多模态"（生成图像、视频、3D 资产、语音），并通过统一的 DashScope HTTP / WebSocket 接口与 API Key 鉴权对外提供。
+多模态（Multimodal）是指模型同时处理和生成多种信息形态（如文本、图像、音频、视频、3D）的能力。在百炼平台中，多模态贯穿从输入理解到内容生成的各类 API 和模型服务。
 
-## 平台中的多模态场景
+## 在百炼平台中的应用场景
 
-百炼把多模态能力按"理解"与"生成"两条主线组织：
+### 实时多模态交互（Omni Realtime）
 
-- **多模态理解（输入侧）**：视觉理解模型（如 `qwen3.7-plus`、`qwen3.6-flash`、`qwen-vl-ocr`）接收图像或视频并输出文本回答，支持 OCR、视频理解、最长 2 小时视频；多模态向量模型（`qwen3-vl-embedding`、`multimodal-embedding-v1`）把文本、图片、视频统一编码为向量用于语义检索；跨模态排序模型（`qwen3-vl-rerank`）对图文混合召回结果做精排。
-- **多模态生成（输出侧）**：图像生成（千问 `qwen-image-2.0-pro`、万相 `wan2.7-image-pro`、`z-image-turbo` 等）、视频生成（`happyhorse-1.1` 系列、`wan2.7` 系列、PixVerse、Vidu、可灵等）、3D 生成（`Tripo/Tripo-H3.1`、`Tripo/Tripo-P1.0`）、语音合成与语音转语音（`cosyvoice-v3.5-plus`、`qwen3.5-omni-plus-realtime`）。
-- **全模态实时交互**：Qwen-Omni-Realtime 系列（`qwen3.5-omni-plus-realtime` / `qwen3.5-omni-flash-realtime` / `qwen3-omni-flash-realtime` / `qwen-omni-turbo-realtime`）通过 WebSocket 长连接实现语音、视频、图像的低延迟对话，支持 VAD 自动检测与 Manual 手动控制两种交互模式，并叠加声音复刻、Function Calling、联网搜索等能力。
+Qwen-Omni-Realtime 系列模型通过 WebSocket 长连接实现低延迟的语音、视频、图像实时对话。支持 VAD 自动检测与 Manual 手动控制两种交互模式，适用于语音助手、客服、同声传译等场景。代表模型包括 `qwen3.5-omni-plus-realtime` 和 `qwen3.5-omni-flash-realtime`。
 
-## 调用方式
+### 图像生成与编辑
 
-| 形态 | 协议 | 典型接口 |
-| --- | --- | --- |
-| 同步多模态理解 / 文生图 | HTTP | `POST /api/v1/services/aigc/multimodal-generation/generation`、OpenAI 兼容 `/compatible-mode/v1/chat/completions` |
-| 异步生成（图像/视频/3D） | HTTP | 创建任务 `POST /api/v1/services/aigc/...` 获取 `task_id`，再 `GET /api/v1/tasks/{task_id}` 轮询 |
-| 实时全模态对话 | WebSocket | `wss://dashscope.aliyuncs.com/api-ws/v1/realtime`（北京）|
-| 多模态向量 / 排序 | HTTP | `POST /api/v1/services/embeddings/multimodal-embedding/multimodal-embedding`、`/compatible-api/v1/reranks` |
+百炼提供通义千问、万相、Z-Image、可灵等多个图像生成模型族，覆盖文生图、图像编辑、局部重绘、涂鸦作画等能力。推荐使用 `wan2.7-image-pro` 进行全功能图像生成与编辑，支持文字渲染、品牌色控制和多图生成。
+
+### 视频生成与编辑
+
+支持文生视频、图生视频（首帧/首尾帧）、参考生视频、视频编辑等任务。万相2.7 和 HappyHorse 1.1 系列支持文本、图像、音频、视频等多模态输入，可保持角色形象与音色一致性。所有视频生成接口采用[异步调用](async-invocation.md)模式。
+
+### 视觉理解
+
+Qwen3.7/3.6/3.5 系列视觉理解模型支持图像分析、视频理解和 OCR，最长支持 2 小时视频输入，每张图像最高 1600 万像素。
+
+### 3D 模型生成
+
+基于 Tripo 模型实现文生 3D、单图生 3D 和多图生 3D，产出 GLB 格式的 PBR 材质模型，适用于游戏、AR 和影视场景。
+
+### 模型调优
+
+百炼支持对视觉理解（Qwen-VL 系列）、图像生成（wan2.7-image）、视频生成（wan2.5/2.2）和语音合成（CosyVoice）等多模态模型进行微调，开发者可用自有数据定制特定场景的生成效果。
 
 ## 关键参数与配置
 
-- **鉴权与地域**：统一使用 API Key，通过 `Authorization: Bearer $DASHSCOPE_API_KEY` 传递。模型、Endpoint URL、API Key 必须属于同一地域，跨地域调用会鉴权失败；3D 生成（Tripo）仅限华北2（北京）。北京/新加坡建议迁移到业务空间专属域名以获得更好性能。
-- **异步任务头**：图像、视频、3D 等耗时生成接口必须带 `X-DashScope-Async: enable`，否则报错 `current user api does not support synchronous calls`。`task_id` 有效期 24 小时，请勿重复创建任务，轮询即可；产物下载链接通常有效期 2 小时。
-- **多模态消息**：视觉理解通过多模态消息接口传入图片 URL 或 Base64；单张图片上限 1600 万像素，Token 计算公式 `h × w / (32 × 32) + 2`，分辨率越高消耗越大。
-- **实时会话配置**：通过 `session.update` 设置 `turn_detection`（`server_vad` / `semantic_vad` / `null`）、音色、`threshold`、`silence_duration_ms`、`idle_timeout_ms` 等；声音复刻时 `target_model` 必须与后续 Omni 调用指定的模型一致。
-- **向量维度**：`text-embedding-v4` 支持自定义 `dimensions`（64–2048），`multimodal-embedding-v1` 等多模态向量模型用于跨模态检索。
+| 参数/配置 | 场景 | 说明 |
+|-----------|------|------|
+| `modalities` | Omni Realtime | 指定会话支持的模态类型（audio、video、text） |
+| `turn_detection.type` | Omni Realtime | 交互模式：`server_vad`（自动检测）/ `semantic_vad` / `null`（手动） |
+| `X-DashScope-Async: enable` | 视频/3D 生成 | 异步任务必须携带此请求头 |
+| `size` / `resolution` | 图像/视频生成 | 输出分辨率控制，各模型支持的尺寸集合不同 |
+| `prompt` + `image`/`video` | 视觉理解/编辑 | 同时传入文本指令与视觉输入实现多模态理解或编辑 |
 
-## 使用建议
+## 开发建议
 
-需要"看图/看视频回答问题"选视觉理解模型；需要"从文本/图像生成视觉内容"走异步生成任务并轮询；需要"实时语音+视觉对话"用 Qwen-Omni-Realtime 的 WebSocket 接口；需要"图文统一检索"用多模态向量 + 跨模态排序。所有路径共用同一套 API Key 与 DashScope 域名，差别仅在接口路径、协议（HTTP/WebSocket）和调用模式（同步/异步）。
+1. **模型选型**：文本+视觉理解优先选 `qwen3.7-plus`；实时语音交互选 Omni Realtime 系列；图像生成选 `wan2.7-image-pro`；视频生成选 HappyHorse 1.1 或 wan2.7 系列。
+2. **协议选择**：图像/视频/3D 生成多为异步任务，需通过 task_id 轮询结果；实时交互使用 WebSocket 长连接。
+3. **地域一致性**：模型、Endpoint URL、[API Key](api-key.md) 必须属于同一地域，跨地域调用会失败。
+4. **内容安全**：所有多模态接口内置内容安全审核，违规输入会被拒绝。
 
 ## 关联主题页
 
 - [omni realtime api](../api/omni-realtime-api.md)
-- [model experience](../guides/model-experience.md)
 - [image generation](../api/image-generation.md)
 - [video generation api](../api/video-generation-api.md)
+- [model experience](../guides/model-experience.md)
+- [fine tuning](../guides/fine-tuning.md)
 - [3d generation](../api/3d-generation.md)
-- [vector and sort](../api/vector-and-sort.md)
 
 

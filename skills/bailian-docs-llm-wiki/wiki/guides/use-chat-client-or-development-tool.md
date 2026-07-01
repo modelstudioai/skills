@@ -4,11 +4,11 @@
 
 ## [计费](../concepts/billing.md)方案与通用接入参数
 
-百炼为客户端接入提供三种计费方案，任何工具的配置都围绕这三组参数展开：
+百炼为客户端接入提供三种[计费](../concepts/billing.md)方案，任何工具的配置都围绕这三组参数展开：
 
-| 方案 | 计费方式 | [API Key](../concepts/api-key.md) 来源 | 适用范围 |
+| 方案 | [计费](../concepts/billing.md)方式 | [API Key](../concepts/api-key.md) 来源 | 适用范围 |
 | --- | --- | --- | --- |
-| 按量计费 | 按实际调用量后付费 | [阿里云百炼 API Key](https://help.aliyun.com/zh/model-studio/get-api-key) | 所有工具类型 |
+| 按量[计费](../concepts/billing.md) | 按实际调用量后付费 | [阿里云百炼 API Key](https://help.aliyun.com/zh/model-studio/get-api-key) | 所有工具类型 |
 | Coding Plan | 固定月费，按模型调用次数计量 | Coding Plan 专属 [API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan) | 仅 AI 编程工具与 OpenClaw |
 | [Token](../concepts/token.md) Plan 团队版 | 按坐席订阅，按 token 抵扣 Credits | [Token](../concepts/token.md) Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list) | 仅 AI 编程工具与 OpenClaw |
 
@@ -22,7 +22,7 @@
 | 按量计费（新加坡） | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1` | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic` |
 | 按量计费（美国-弗吉尼亚） | `https://dashscope-us.aliyuncs.com/compatible-mode/v1` | （文档未列出 Anthropic 端点） |
 | Coding Plan | `https://coding.dashscope.aliyuncs.com/v1` | `https://coding.dashscope.aliyuncs.com/apps/anthropic` |
-| Token Plan 团队版 | `https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` | `https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic` |
+| [Token](../concepts/token.md) Plan 团队版 | `https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` | `https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic` |
 
 > **注意**：三种方案的 [API Key](../concepts/api-key.md) 互不通用，且必须与 Base URL 同一方案、同一地域。按量计费的 [API Key](../concepts/api-key.md) 还需与 Base URL 地域一致，否则会报 `401 Incorrect API key provided`。新加坡地域需将 `{WorkspaceId}` 替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
@@ -41,7 +41,7 @@
 
 ### Codex 的 API 形态差异
 
-Codex 较为特殊：Token Plan 团队版下，`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash` 支持 Responses API（`wire_api = "responses"`），可使用最新版 Codex；其他模型（如 `glm-5`）只能走 Chat/Completions API（`wire_api = "chat"`），需降级安装旧版本（如 `npm install -g @openai/codex@0.80.0`）。Coding Plan 仅支持 Chat/Completions API，必须使用旧版本 Codex。
+Codex 较为特殊：[Token](../concepts/token.md) Plan 团队版下，`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash` 支持 Responses API（`wire_api = "responses"`），可使用最新版 Codex；其他模型（如 `glm-5`）只能走 Chat/Completions API（`wire_api = "chat"`），需降级安装旧版本（如 `npm install -g @openai/codex@0.80.0`）。Coding Plan 仅支持 Chat/Completions API，必须使用旧版本 Codex。
 
 ### Hermes Agent 接入要点
 
@@ -53,7 +53,7 @@ Claude Code 默认要求 Anthropic 官方登录。接入百炼时需编辑 `~/.c
 
 ## 桌面客户端与 IDE 插件
 
-桌面 / IDE 类工具通过图形界面配置，提供商类型多选 **OpenAI Compatible** 或 **OpenAI API 兼容**，再填入 Base URL、API Key、Model ID。
+桌面 / IDE 类工具通过图形界面配置，提供商类型多选 **OpenAI Compatible** 或 **OpenAI API 兼容**，再填入 Base URL、[API Key](../concepts/api-key.md)、Model ID。
 
 | 工具 | 形态 | 安装来源 | 备注 |
 | --- | --- | --- | --- |
@@ -72,11 +72,11 @@ Cursor 与部分内置模型名冲突，需使用别名：`kimi-k2.6` → `kimi-
 
 ### Qoder / Qoder CN 的提供商与类型一致性
 
-Qoder 系列在模型配置中需同时选对**提供商**（阿里云百炼 - 国内）与**类型**（Token Plan / Coding Plan / 按量付费）。若类型与实际套餐不一致（如用 Token Plan 的 Key 但类型选 Coding Plan），会报 `Unknown Custom model Exception`。
+Qoder 系列在模型配置中需同时选对**提供商**（阿里云百炼 - 国内）与**类型**（[Token](../concepts/token.md) Plan / Coding Plan / 按量付费）。若类型与实际套餐不一致（如用 Token Plan 的 Key 但类型选 Coding Plan），会报 `Unknown Custom model Exception`。
 
 ## 百炼 CLI 集成
 
-Cursor、Cline、Qoder 等支持通过对话调用百炼能力：全局安装 `bailian-cli` 后，安装过程会向 `~/.<工具>/skills/bailian-cli/` 注册 Skill，工具即可通过自然语言调用百炼能力（如生成电商主图、产品演示视频）。前置要求 Node.js 18+，API Key 通过对话告知工具即可。
+Cursor、Cline、Qoder 等支持通过对话调用百炼能力：全局安装 `bailian-cli` 后，安装过程会向 `~/.<工具>/skills/bailian-cli/` 注册 Skill，工具即可通过自然语言调用百炼能力（如生成电商主图、产品演示视频）。前置要求 Node.js 18+，[API Key](../concepts/api-key.md) 通过对话告知工具即可。
 
 ## 低代码与 HTTP 工具
 
@@ -84,7 +84,7 @@ Cursor、Cline、Qoder 等支持通过对话调用百炼能力：全局安装 `b
 
 [Dify](../../raw/model-user-guide/use-chat-client-or-development-tool/dify.md) 是开源大模型应用开发平台，通过**通义千问插件**接入百炼（DeepSeek 模型也走该插件）。配置要点：
 
-- 在 Dify 市场安装**通义千问**插件，于模型供应商设置中填入对应地域 API Key；华北2（北京）设**使用国际端点**为**否**，新加坡设为**是**。
+- 在 Dify 市场安装**通义千问**插件，于模型供应商设置中填入对应地域 [API Key](../concepts/api-key.md)；华北2（北京）设**使用国际端点**为**否**，新加坡设为**是**。
 - 插件非阿里云官方维护，最新版可能不稳定，报错 `Invalid API-key provided` 时可降级安装较早版本。
 - Qwen-Omni / Qwen-Audio / Qwen-OCR 不支持直接配置，需通过 Chatflow / 工作流的 HTTP 节点接入，建议[流式输出](../concepts/streaming-output.md)以降低超时风险。
 - 万相文生图 / 视频：Dify 无内置插件，需导入官方工作流模板（`万相-文生图 Demo.yml` 等），并把 `DASHSCOPE_API_KEY` 环境变量改为自己的 Key。
@@ -134,6 +134,7 @@ Cursor、Cline、Qoder 等支持通过对话调用百炼能力：全局安装 `b
 - [使用Postman或cURL调用图像/视频生成API](../../raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)
 - [Dify](../../raw/model-user-guide/use-chat-client-or-development-tool/dify.md)
 - [更多工具](../../raw/model-user-guide/use-chat-client-or-development-tool/more-tools.md)
+
 
 
 

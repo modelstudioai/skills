@@ -47,8 +47,8 @@
 
 ## 限制与注意事项
 
-- 知识库自 2026 年 1 月 4 日起正式[计费](../concepts/billing.md)，提供后付费（按量付费）和资源包两种方式，总费用由规格费用与模型调用费用组成，详情参见 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md) 中的计费公告。
-- 大模型调用产生计费，平台提供限时免费额度，可在模型广场查看各模型系列详情。
+- 知识库自 2026 年 1 月 4 日起正式[计费](../concepts/billing.md)，提供后付费（按量付费）和资源包两种方式，总费用由规格费用与模型调用费用组成，详情参见 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md) 中的[计费](../concepts/billing.md)公告。
+- 大模型调用产生[计费](../concepts/billing.md)，平台提供限时免费额度，可在模型广场查看各模型系列详情。
 - QwQ 系列模型在智能体应用中不支持插件、流程、音视频交互能力。
 - 文档解析耗时与文档大小相关，知识文档导入通常 1~6 分钟，知识库解析通常 1~2 分钟，需耐心等待。
 - 智能体编排应用已于 2025 年 8 月 12 日随工作流应用界面升级而下线，相关需求请使用新版智能体应用或工作流应用。
@@ -58,6 +58,7 @@
 
 - [0代码构建私有知识问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)
 - [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)
+
 
 
 

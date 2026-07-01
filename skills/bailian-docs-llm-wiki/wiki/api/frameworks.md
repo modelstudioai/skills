@@ -19,7 +19,7 @@
    - LlamaIndex：按百炼通用约定配置。
    - Spring AI Alibaba 应用集成：推荐变量名 `DASHSCOPE_API_KEY`，应用 ID 用 `APP_ID`，子[业务空间](../concepts/workspace.md)用 `WORKSPACE_ID`。
    - Spring AI Alibaba 知识库检索：推荐变量名 `AI_DASHSCOPE_API_KEY`，子[业务空间](../concepts/workspace.md)用 `AI_DASHSCOPE_WORKSPACE_ID`。
-3. 若应用或知识库创建在子[业务空间](../concepts/workspace.md)，需额外获取业务空间 ID 并配置对应环境变量。
+3. 若应用或知识库创建在子[业务空间](../concepts/workspace.md)，需额外获取[业务空间](../concepts/workspace.md) ID 并配置对应环境变量。
 
 > **注意**：Spring AI Alibaba 两篇文档对 [API Key](../concepts/api-key.md) 环境变量名约定不一致（应用集成用 `DASHSCOPE_API_KEY`，知识库检索用 `AI_DASHSCOPE_API_KEY`）。两者均为约定俗成，可按工程实际统一，关键是 `application.yml` 中 `${...}` 占位符与实际变量名一致。
 
@@ -122,15 +122,16 @@ this.chatClient = builder
 
 - LlamaIndex 云端方案不支持自定义文档切分与嵌入模型；本地需可访问公网，文件上传与生成回答均需等待。
 - Spring AI Alibaba 应用集成仅支持[智能体应用](../concepts/agent-application.md)与工作流应用，其他应用类型不在支持范围。
-- 知识库检索需提前创建好知识库并获取其名称；检索默认业务空间知识库无需配置 `workspace-id`。
-- 子业务空间场景必须配置对应的业务空间 ID 环境变量，否则会鉴权或定位失败。
-- API Key 一律通过环境变量注入，切勿硬编码到源码或配置文件中。
+- 知识库检索需提前创建好知识库并获取其名称；检索默认[业务空间](../concepts/workspace.md)知识库无需配置 `workspace-id`。
+- 子[业务空间](../concepts/workspace.md)场景必须配置对应的业务空间 ID 环境变量，否则会鉴权或定位失败。
+- [API Key](../concepts/api-key.md) 一律通过环境变量注入，切勿硬编码到源码或配置文件中。
 
 ## 来源文档
 
 - [通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)
 - [使用Spring AI Alibaba集成阿里云百炼大模型应用](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-llm-application.md)
 - [通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)
+
 
 
 

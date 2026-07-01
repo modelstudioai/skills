@@ -4,7 +4,7 @@ Managed Agents API 是百炼提供的智能体托管运行时，由平台托管�
 
 ## 接入前提
 
-1. 开通百炼并创建 API Key，[配置 API Key 到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+1. 开通百炼并创建 [API Key](../concepts/api-key.md)，[配置 API Key 到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 2. 在百炼控制台右上角下拉菜单获取工作空间 ID，形如 `ws_xxxxxxxxxxxx`。
 
 基地址按工作空间与地域拼装：
@@ -16,7 +16,7 @@ https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/agentstudio
 - `workspace_id`：工作空间 ID。
 - `region`：地域 ID，当前仅支持 `cn-beijing`。
 
-全部请求通过 HTTP Header 携带 API Key，一个 Key 可访问其归属工作空间下的全部资源：
+全部请求通过 HTTP Header 携带 [API Key](../concepts/api-key.md)，一个 Key 可访问其归属工作空间下的全部资源：
 
 ```
 Authorization: Bearer <your-api-key>
@@ -138,5 +138,6 @@ Session 是智能体的一次运行实例，绑定智能体与环境快照，由
 - [Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md)
 - [Skill](../../raw/application-api-reference/managed-agents-api/skills-api.md)
 - [File](../../raw/application-api-reference/managed-agents-api/files-api.md)
+
 
 

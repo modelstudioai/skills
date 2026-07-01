@@ -4,7 +4,7 @@
 
 ## 生成临时 [API Key](../concepts/api-key.md)
 
-在浏览器、移动 App 等不可信环境中调用模型服务时，应通过后端服务生成临时 [API Key](../concepts/api-key.md)，避免永久 API Key 泄露。临时 API Key 继承生成它的永久 API Key 的全部权限（包括对特定模型或[知识库](../concepts/knowledge-base.md)的访问限制），到期后自动失效，无法提前删除。
+在浏览器、移动 App 等不可信环境中调用模型服务时，应通过后端服务生成临时 [API Key](../concepts/api-key.md)，避免永久 [API Key](../concepts/api-key.md) 泄露。临时 [API Key](../concepts/api-key.md) 继承生成它的永久 [API Key](../concepts/api-key.md) 的全部权限（包括对特定模型或[知识库](../concepts/knowledge-base.md)的访问限制），到期后自动失效，无法提前删除。
 
 **前提条件**：在百炼密钥管理页面（北京 / 新加坡 / 弗吉尼亚）创建永久 API Key，并将其配置为环境变量 `DASHSCOPE_API_KEY`。
 
@@ -106,13 +106,14 @@ resp = client.retrieve('请传入实际的业务空间ID', retrieve_request)
 - 临时 API Key 无法手动删除，只能等 TTL 到期自动失效；各地域 API Key 不互通。
 - 服务关联角色由百炼自动创建并绑定固定系统策略，不可修改、不可授予其他 RAM 身份；删除前必须先解除对应功能的依赖资源，否则相关功能将不可用。
 - SearchFilters 子分组之间为 AND 语义且不可更改；多值 / 范围 / 模糊 / 标签查询的值需通过 `json.dumps` 序列化为字符串后传入；标签查询仅支持文档搜索与音视频搜索类知识库。
-- 子账号只能操作已加入业务空间中的知识库，主账号可操作所有业务空间。
+- 子账号只能操作已加入[业务空间](../concepts/workspace.md)中的知识库，主账号可操作所有[业务空间](../concepts/workspace.md)。
 
 ## 来源文档
 
 - [生成临时API Key](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md)
 - [服务关联角色](../../raw/application-api-reference/more/bailian-service-linked-role.md)
 - [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md)
+
 
 
 

@@ -2,13 +2,9 @@
 
 无论是平台的预置模型还是您[调优](https://help.aliyun.com/zh/model-studio/model-training-overview)后的模型，您可通过部署获得独立的、资源专享的推理服务，以满足您对高并发、低延迟等不同性能的业务需求。
 
-**重要**
-
-本文档仅适用于“华北二（北京）”地域。
-
 ## 计费方式
 
-> 部署前可以在[模型部署控制台（北京）](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_deploy/create)查看不同模型的预估每小时费用。
+> 部署前可以在[模型部署控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_deploy/create)查看不同模型的预估每小时费用。
 
 **说明**
 
@@ -122,7 +118,7 @@
 2.  一个月内不使用将自动释放。
     
 
-如需查看单次调用的 Token 使用量及调用次数历史统计，请前往：[模型监控（北京）](https://bailian.console.aliyun.com/?tab=model#/model-telemetry)。
+如需查看单次调用的 Token 使用量及调用次数历史统计，请前往：[模型监控](https://bailian.console.aliyun.com/?tab=model#/model-telemetry)。
 
 ## **计费详情**
 
@@ -201,20 +197,6 @@ qwen3.7-plus-2026-05-26
 ¥57.6
 
 ¥23.04
-
-千问3.6-Flash-2026-04-16
-
-qwen3.6-flash-2026-04-16
-
-128K
-
-¥2.88
-
-¥1.73
-
-¥34.56
-
-¥20.74
 
 千问3.6-Plus-2026-04-02
 
@@ -979,6 +961,34 @@ MU1 x 4
 
 **最小计费：天**
 
+GLM-5.1
+
+glm-5.1
+
+MU2 x 8
+
+MU2 x 16（PD分离模式）
+
+¥504
+
+PD分离模式：¥1,008
+
+¥240,288
+
+PD分离模式：¥480,576
+
+MU3 x 16（PD分离模式）
+
+PD分离模式：¥2,192
+
+PD分离模式：¥1,055,504
+
+MU6 x 16
+
+¥400
+
+¥193,424
+
 GLM-5
 
 glm-5
@@ -1425,7 +1435,7 @@ qwen2.5-vl-7b-instruct
 
 > 如果提示权限不足，请参考：[部署时提示权限不足怎么办？](#5c1c099745drz)
 
-1.  前往[模型部署控制台（北京）](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_deploy/create)。
+1.  前往[模型部署控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_deploy/create)。
     
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8117463771/p1059807.png)
@@ -1590,7 +1600,7 @@ print(completion)
 
 ## **部署服务下线**
 
-前往[模型部署控制台（北京）](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_deploy/create)，找到要停止的部署服务，根据计费类型点击对应操作：
+前往[模型部署控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_deploy/create)，找到要停止的部署服务，根据计费类型点击对应操作：
 
 -   模型单元预付费：点击**下线**并确认。
     

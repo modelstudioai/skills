@@ -13,8 +13,8 @@
 - [bailian application calling](guides/bailian-application-calling.md) — 3 篇源文档
 - [data connection overview](guides/data-connection-overview.md) — 1 篇源文档
 - [fine tuning](guides/fine-tuning.md) — 7 篇源文档
-- [get started with models](guides/get-started-with-models.md) — 5 篇源文档
-- [knowledge base](guides/knowledge-base.md) — 6 篇源文档
+- [get started with models](guides/get-started-with-models.md) — 6 篇源文档
+- [knowledge base](guides/knowledge-base.md) — 8 篇源文档
 - [llm application](guides/llm-application.md) — 6 篇源文档
 - [memory library overview](guides/memory-library-overview.md) — 3 篇源文档
 - [model compression](guides/model-compression.md) — 1 篇源文档
@@ -52,7 +52,7 @@
 - [more about models](api/more-about-models.md) — 6 篇源文档
 - [more models](api/more-models.md) — 6 篇源文档
 - [omni realtime api](api/omni-realtime-api.md) — 6 篇源文档
-- [preparations](api/preparations.md) — 4 篇源文档
+- [preparations](api/preparations.md) — 3 篇源文档
 - [qwen api reference](api/qwen-api-reference.md) — 1 篇源文档
 - [toolkits and frameworks](api/toolkits-and-frameworks.md) — 10 篇源文档
 - [vector and sort](api/vector-and-sort.md) — 4 篇源文档
@@ -60,21 +60,22 @@
 
 ## 横切概念
 
-- [函数调用](concepts/function-calling.md) — 关联 7 个主题
-- [地域与可用区](concepts/region.md) — 关联 6 个主题
-- [模型部署](concepts/model-deployment.md) — 关联 4 个主题
-- [流式输出](concepts/streaming-output.md) — 关联 5 个主题
-- [私网访问](concepts/vpc-private-access.md) — 关联 3 个主题
-- [评测](concepts/evaluation.md) — 关联 4 个主题
-- [软件开发工具包](concepts/sdk.md) — 关联 6 个主题
-- [限流与配额](concepts/rate-limiting.md) — 关联 5 个主题
+- [API Key](concepts/api-key.md) — 关联 8 个主题
+- [DashScope SDK](concepts/dashscope-sdk.md) — 关联 6 个主题
+- [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 7 个主题
+- [Token](concepts/token.md) — 关联 7 个主题
+- [业务空间](concepts/workspace.md) — 关联 6 个主题
+- [函数调用](concepts/function-calling.md) — 关联 6 个主题
+- [多模态](concepts/multimodal.md) — 关联 6 个主题
+- [异步调用](concepts/async-invocation.md) — 关联 4 个主题
+- [检索增强生成](concepts/rag.md) — 关联 7 个主题
+- [计费](concepts/billing.md) — 关联 7 个主题
 
 ## 对比分析
 
-- [图像、视频与3D生成对比](comparisons/generation-modalities-comparison.md) — 对比 3 个主题
-- [应用监控与模型监控对比](comparisons/monitoring-app-vs-model-comparison.md) — 对比 2 个主题
-- [应用评测与模型评测对比](comparisons/evaluation-app-vs-model-comparison.md) — 对比 2 个主题
-- [模型微调、压缩与部署对比](comparisons/model-customization-methods-comparison.md) — 对比 3 个主题
-- [知识库与数据连接对比](comparisons/data-sources-for-rag-comparison.md) — 对比 2 个主题
-- [记忆库与长期记忆对比](comparisons/memory-approaches-comparison.md) — 对比 2 个主题
+- [Qwen API vs 应用调用 vs 托管智能体API对比](comparisons/api-invocation-comparison.md) — 对比 3 个主题
+- [图像生成 vs 视频生成 vs 3D生成对比](comparisons/media-generation-comparison.md) — 对比 3 个主题
+- [模型微调 vs 模型压缩 vs 模型部署对比](comparisons/model-optimization-comparison.md) — 对比 3 个主题
+- [模型评测 vs 模型监控 vs 模型生产对比](comparisons/model-lifecycle-comparison.md) — 对比 3 个主题
+- [知识库 vs 记忆库 vs 数据接入对比](comparisons/knowledge-memory-comparison.md) — 对比 3 个主题
 

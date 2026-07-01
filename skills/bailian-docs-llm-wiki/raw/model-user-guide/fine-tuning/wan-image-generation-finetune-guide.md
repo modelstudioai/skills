@@ -41,29 +41,25 @@
 
 ## 图生图
 
-**微调目标：训练一个"末日废土红黑机甲"LoRA模型**。
+**微调目标：训练一个"末日废土红黑机甲+骨架姿势"LoRA模型**。
 
-预期效果：输入一张人物图像，无需提示词，模型自动生成人物“**末日废土红黑机甲**”风格的图像。
+预期效果：输入一张人物图像，一张骨架图像，无需提示词，模型自动生成人物“**末日废土红黑机甲**”风格的图像。
 
 **输入图像**
 
-![29\_0](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9433450871/p1075797.jpg)
+![29\_0-combine](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6448182871/p1084644.webp)
 
 **输出图像（微调前）**
 
-![output\_0\_0](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9433450871/p1075799.png)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6448182871/p1084667.png)
 
 > 无法通过提示词每次生成固定风格的“末日废土红黑机甲”特效。
 
 **输出图像（微调后）**
 
-![29\_1](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9433450871/p1075798.jpg)
+![29\_1](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6448182871/p1084647.jpg)
 
 > 微调后的模型无需提示词即能复现训练集中的特定“末日废土红黑机甲”特效。
-
-**微调目标：训练一个"IP角色风格化"LoRA模型**。
-
-预期效果：输入一段文本描述或一张参考图像，模型自动生成符合特定IP角色风格的图像。
 
 运行下述代码前，请[开通百炼服务](https://help.aliyun.com/zh/model-studio/get-api-key)，并[配置API Key](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
@@ -75,7 +71,7 @@
 
 -   图像生成-文生图：[wan-image-t2i-training-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260601/iszvtr/wan-image-t2i-training.zip)
     
--   图像生成-图生图：[wan-image-i2i-training-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260610/yynsck/wan-image-i2i-training.zip)
+-   图像生成-图生图：[wan-image-i2i-training-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260630/iqjtin/wan-image-i2i-training-dataset.zip)
     
 
 **请求示例**
@@ -125,7 +121,12 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 --header 'Content-Type: application/json' \
 --data '{
     "model": "wan2.7-image-pro",
-    "training_file_ids": ["<替换为训练数据集的文件id>"],
+    "training_datasets": [
+        {
+            "data_source_type": "file_id",
+            "file_id": "<替换为训练数据集的文件id>"
+        }
+    ],
     "training_type": "efficient_sft",
     "hyper_parameters": {
         "learning_rate": 3e-5,
@@ -292,6 +293,10 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/deployments/<替换为dep
 ### **步骤4：**调用模型生成图像
 
 模型部署成功后（即部署状态`status`为 **RUNNING** ），即可发起调用。
+
+**说明**
+
+当前部署后的图像模型仅支持**异步调用**，且返回响应的`message.content`中无`type`字段。
 
 **步骤4.1：创建图像生成任务，并获取task\_id**
 
@@ -512,7 +517,7 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxx
 
 训练集包括**训练目标图像和标注文件（data.jsonl）**。
 
--   训练集样例：wan-image-t2i-training.zip。
+-   训练集样例：[wan-image-t2i-training-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260601/iszvtr/wan-image-t2i-training.zip)
     
 -   zip包目录结构：
     
@@ -534,11 +539,11 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxx
     ```
     
 
-## 图生图
+## 单图生图
 
 训练集包括**参考图像（输入）、训练目标图像（输出）和标注文件（data.jsonl）**。
 
--   训练集样例：wan-image-i2i-training.zip。
+-   训练集样例：[wan-image-i2i-training-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260610/yynsck/wan-image-i2i-training.zip)
     
 -   zip包目录结构：
     
@@ -562,6 +567,43 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxx
     ```
     
 
+## 多图生图
+
+训练集包括**多张参考图像（输入）、训练目标图像（输出）和标注文件（data.jsonl）**。与单图生图不同，多图生图支持同时输入多张参考图像（如人物照片+姿态图，最多支持**9张**参考图），模型基于多张参考图的综合信息生成目标图像。
+
+**说明**
+
+-   多图生图使用`input_imgs`（数组），单图生图使用`input_img`（字符串），请注意区分。
+    
+-   `input_imgs`数组中的图像顺序应与训练意图一致（如第一张为人物参考，第二张为姿态参考）。
+    
+
+-   训练集样例：[wan-image-i2i-training-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260630/iqjtin/wan-image-i2i-training-dataset.zip)
+    
+-   zip包目录结构：
+    
+    ```
+    wan-image-multi-i2i-training-dataset.zip
+    ├── data.jsonl      # 必须固定命名为data.jsonl，最大支持 20MB
+    ├── 1_0.jpg         # 训练目标图像（输出）
+    ├── 1_ref.jpg       # 参考图像1（如人物照片）
+    ├── 1_pose.jpg      # 参考图像2（如姿态图）
+    ├── 2_0.jpg         # 训练目标图像（输出）
+    ├── 2_ref.jpg       # 参考图像1
+    └── 2_pose.jpg      # 参考图像2
+    ```
+    
+-   标注文件（data.jsonl）：每一行代表一条训练数据，必须为 JSON 对象。使用`input_imgs`字段传入多张参考图像路径。
+    
+    ```
+    {
+      "prompt": "s86b5p, Change the background to an elevator with red lighting, featuring large floor-to-ceiling windows. Outside the windows, there is a post-apocalyptic scene with red mist. Change the character's clothing to red tight-fitting mech armor with black stripe decorations. Standing with both arms stretched horizontally to form a T-shape.",
+      "input_imgs": ["./1_ref.jpg", "./1_pose.jpg"],
+      "img_path": "./1_0.jpg"
+    }
+    ```
+    
+
 **说明**
 
 -   data.jsonl 必须为 Line-delimited JSONL 格式（每行一个独立 JSON 对象），**禁止**使用 JSON 数组格式（即文件首字符不能是 `[`）。
@@ -577,7 +619,7 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxx
     
     -   **文生图：**[wan-image-t2i-valid-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260601/ulrlhp/wan-image-t2i-valid-dataset.zip)
         
-    -   **图生图：**[wan-image-i2i-valid-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260610/jrggzt/wan-image-i2i-valid-dataset.zip)
+    -   **图生图：**[wan-image-i2i-vaild-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260630/wndcac/wan-image-i2i-vaild-dataset.zip)
         
 -   zip包目录结构：
     
@@ -604,6 +646,17 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxx
     {
         "prompt": "s86b5p, Change the background to an elevator with red lighting, featuring large floor-to-ceiling windows. Change the character's clothing to red tight-fitting mech armor with black stripe decorations.",
         "input_img": "./input_001.png"
+    }
+    ```
+    
+    ## 多图生图
+    
+    多图生图验证集使用`input_imgs`（数组）传入多张参考图像路径，最多支持**9张**。
+    
+    ```
+    {
+        "prompt": "s86b5p, Change the background to an elevator with red lighting, featuring large floor-to-ceiling windows. Outside the windows, there is a post-apocalyptic scene with red mist. Change the character's clothing to red tight-fitting mech armor with black stripe decorations. Standing with both arms stretched horizontally to form a T-shape.",
+        "input_imgs": ["./input_001.png", "./input_002.png"]
     }
     ```
     
@@ -964,7 +1017,9 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
 
 -   [模型部署](#0ad4c110b58ui)：在输入参数 `model_name`，填入导出后获取到的具体值。
     
--   [模型调用](#543cc07530gl2)：参照接口说明，调用已部署模型。
+-   [模型调用](#543cc07530gl2)：参照接口说明，调用已部署模型，详情请参见[万相-图像生成与编辑2.7](https://help.aliyun.com/zh/model-studio/wan-image-generation-and-editing-api-reference)。
+    
+    > 当前部署后的图像模型**仅支持异步调用**，且返回响应的`message.content`中无`type`字段。
     
 
 ## **计费说明**

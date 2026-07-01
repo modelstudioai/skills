@@ -17,10 +17,10 @@
 
 | 模型类型 | 统计单位 | [计费](../concepts/billing.md)说明 |
 | --- | --- | --- |
-| 大语言模型（文本生成/深度思考/视觉理解） | [Token](../concepts/token.md) | 按输入和输出对应的 Token 数计费 |
-| 视觉模型·图像生成 | 张 | 按成功生成的图像张数计费 |
-| 视觉模型·视频生成 | 秒 | 按成功生成的视频秒数计费 |
-| 语音模型（TTS/ASR/音视频翻译等） | 秒、字符或 Token | 视模型而定，可能按时长、字符数或 Token 数 |
+| 大语言模型（文本生成/深度思考/视觉理解） | [Token](../concepts/token.md) | 按输入和输出对应的 [Token](../concepts/token.md) 数[计费](../concepts/billing.md) |
+| 视觉模型·图像生成 | 张 | 按成功生成的图像张数[计费](../concepts/billing.md) |
+| 视觉模型·视频生成 | 秒 | 按成功生成的视频秒数[计费](../concepts/billing.md) |
+| 语音模型（TTS/ASR/音视频翻译等） | 秒、字符或 [Token](../concepts/token.md) | 视模型而定，可能按时长、字符数或 [Token](../concepts/token.md) 数 |
 | 全模态模型 | Token | 文本与其他模态均按 Token 数计费 |
 | 向量模型 | Token | 按输入文本的 Token 数计费 |
 
@@ -51,11 +51,11 @@
 
 ## 监控模型运行
 
-系统自动采集主账号下所有[业务空间](../concepts/workspace.md)内的模型调用数据，列表按"模型 + 业务空间"维度生成，新模型在首次数据同步完成后自动加入列表（普通监控延迟通常为小时级，高级监控为分钟级）。
+系统自动采集主账号下所有[业务空间](../concepts/workspace.md)内的模型调用数据，列表按"模型 + [业务空间](../concepts/workspace.md)"维度生成，新模型在首次数据同步完成后自动加入列表（普通监控延迟通常为小时级，高级监控为分钟级）。
 
 **监控数据看板**汇总：模型总量、总调用次数、总失败次数、平均调用时长、平均首包时长。
 
-**模型监控表格**列出各模型的模型 Code、业务空间、调用总量、调用失败量、失败率、平均调用时长、平均首包时长（除模型 Code、业务空间外均可排序），操作列提供**监控**、**日志**入口。
+**模型监控表格**列出各模型的模型 Code、[业务空间](../concepts/workspace.md)、调用总量、调用失败量、失败率、平均调用时长、平均首包时长（除模型 Code、[业务空间](../concepts/workspace.md)外均可排序），操作列提供**监控**、**日志**入口。
 
 > 默认业务空间成员可查看所有业务空间的模型调用情况；子业务空间成员仅能查看当前空间数据，无法切换查看其他业务空间。
 
@@ -152,6 +152,7 @@ Authorization: Basic base64Encode(AccessKey:AccessKeySecret)
 
 - [模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)
 - [模型监控](../../raw/model-user-guide/model-monitoring/model-telemetry.md)
+
 
 
 

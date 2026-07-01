@@ -82,6 +82,17 @@ Base URL 拼写错误或网络问题
 
 检查 Base URL 域名拼写及网络连接。
 
+**Connection closed mid-response**（通常伴随 `API error · Retrying in 0s · attempt x/10`）
+
+流式响应在传输过程中连接中断，响应未完整返回。常见于网络波动，或本地代理（VPN/HTTP Proxy）不稳定，中断了与 `coding.dashscope.aliyuncs.com` 的长连接。
+
+1.  客户端通常会自动重试（attempt x/10），多数情况下重试后即可恢复。
+    
+2.  若频繁出现，请检查本地网络稳定性，关闭或排查本地代理（VPN/HTTP Proxy），确保可正常、稳定地访问 `coding.dashscope.aliyuncs.com`。
+    
+3.  仍未解决时，可新建会话或稍后重试。
+    
+
 **hour allocated quota exceeded**
 
 每 5 小时请求额度已用完

@@ -7,7 +7,7 @@
 百炼的身份管理基于以下三种角色，权限范围自上而下递减：
 
 - **超级管理员**：可跨空间统一管理用户权限、空间可用模型、空间模型限流和 [API Key](../concepts/api-key.md)。包含两类账号：阿里云主账号，以及拥有 `AliyunBailianFullAccess`（百炼管理员）系统策略的 RAM 用户。超级管理员可通过百炼全局管理菜单（北京 / 新加坡 / 弗吉尼亚）为任意 RAM 用户授权任意地域、任意空间的几乎所有权限，仅 OpenAPI 接口权限需阿里云主账号添加。
-- **[业务空间](../concepts/workspace.md)管理员**：拥有访问某个业务空间「权限管理」页面的 RAM 用户，只负责该特定业务空间内的用户权限和资源管理。管理员权限包含可访问该业务空间下所有页面的权限。
+- **[业务空间](../concepts/workspace.md)管理员**：拥有访问某个[业务空间](../concepts/workspace.md)「权限管理」页面的 RAM 用户，只负责该特定[业务空间](../concepts/workspace.md)内的用户权限和资源管理。管理员权限包含可访问该[业务空间](../concepts/workspace.md)下所有页面的权限。
 - **普通用户**：根据分配的权限使用资源，可访问/使用被授权的空间、页面、资源。
 
 ### 权限矩阵
@@ -38,7 +38,7 @@
 
 ## API-Key 权限
 
-单个 API Key 只能归属一个地域内的一个业务空间和一个用户，且不能转移。API Key 可调用的功能和模型限流与**归属业务空间**的权限保持一致，不受用户控制台权限管理的影响，也无需为不同模型（如文生文、文生图、语音合成）创建不同的 API Key。
+单个 [API Key](../concepts/api-key.md) 只能归属一个地域内的一个业务空间和一个用户，且不能转移。[API Key](../concepts/api-key.md) 可调用的功能和模型限流与**归属业务空间**的权限保持一致，不受用户控制台权限管理的影响，也无需为不同模型（如文生文、文生图、语音合成）创建不同的 [API Key](../concepts/api-key.md)。
 
 API Key 的状态随归属用户操作变化：
 
@@ -114,6 +114,7 @@ RAM 用户默认无权查看阿里云账单和购买预付费产品，需在 RAM
 ## 来源文档
 
 - [权限管理](../../raw/application-user-guide/application-permission-management/application-permission-management-overview.md)
+
 
 
 

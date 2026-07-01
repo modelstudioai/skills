@@ -9,7 +9,7 @@
 | 分组 | 代表接口 | 主要能力 |
 | --- | --- | --- |
 | 通义千问图像 | 千问-文生图、千问-图像编辑、千问-图像翻译 | 文生图、图像编辑、图文翻译 |
-| 万相图像 | 万相-文生图 V1/V2、万相-图像生成与编辑 2.6/2.7、万相-通用图像编辑 2.5、万相-通用图像编辑、万相-涂鸦作画、万相-图像局部重绘 | 通用文生图、多模态编辑、局部重绘、涂鸦生图 |
+| 万相图像 | 万相-文生图 V1/V2、万相-图像生成与编辑 2.6/2.7、万相-通用图像编辑 2.5、万相-通用图像编辑、万相-涂鸦作画、万相-图像局部重绘 | 通用文生图、[多模态](../concepts/multimodal.md)编辑、局部重绘、涂鸦生图 |
 | 第三方/自研大模型 | Z-Image、可灵-图像生成 | 高质量文生图、艺术风格 |
 | 创意工具 | 人像风格重绘、虚拟模特、鞋靴模特、图像画面扩展、创意海报、人物实例分割、AI 试衣 OutfitAnyone、图像背景生成、图像擦除补全、人物写真 FaceChain、创意文字 WordArt 锦书 | 垂类业务化图像处理 |
 
@@ -39,8 +39,8 @@
 
 ### 局部与创意编辑
 
-- **万相-图像局部重绘（Vary Region）**：指定区域 + prompt 做局部重绘，常用于换物、修复。
-- **万相-涂鸦作画**：以用户涂鸦/草图 + prompt 引导生成结构化图像。
+- **万相-图像局部重绘（Vary Region）**：指定区域 + [prompt](../guides/prompt.md) 做局部重绘，常用于换物、修复。
+- **万相-涂鸦作画**：以用户涂鸦/草图 + [prompt](../guides/prompt.md) 引导生成结构化图像。
 - **万相-通用图像编辑（旧）**：早期版本，建议迁移到 2.5+。
 
 万相接口大多走 DashScope 原生异步协议：`POST /services/aigc/text2image/image-synthesis` 返回 `task_id`，再轮询 `GET /tasks/{task_id}` 取结果；文生图 V2 等也提供兼容模式同步调用。
@@ -50,7 +50,7 @@
 - **Z-Image**：自研高质量文生图大模型，擅长艺术风格、复杂构图与中文语义，适合营销与设计场景。
 - **可灵-图像生成**：由可灵团队提供的高美感文生图能力，接入百炼网关统一调用。
 
-二者均以文生图为主，参数聚焦于 prompt、负面词、尺寸与采样控制。
+二者均以文生图为主，参数聚焦于 [prompt](../guides/prompt.md)、负面词、尺寸与采样控制。
 
 ## 创意图像工具
 
@@ -132,5 +132,6 @@
 - [图像擦除补全API参考](../../raw/model-api-reference/image-generation/image-creative-tools-api-reference/image-erase-completion-api-reference.md)
 - [人物写真生成FaceChain](../../raw/model-api-reference/image-generation/image-creative-tools-api-reference/facechain-portrait-generation.md)
 - [创意文字WordArt锦书](../../raw/model-api-reference/image-generation/image-creative-tools-api-reference/wordart-quick-start.md)
+
 
 

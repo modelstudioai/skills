@@ -8,9 +8,9 @@
 
 1. **应用 ID（APP ID）**：在[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面，从应用卡片上复制其 ID。若应用位于子[业务空间](../concepts/workspace.md)，还需同时提供 **Workspace ID**；位于默认[业务空间](../concepts/workspace.md)则仅需 APP ID。详细获取步骤见[获取APP ID和Workspace ID](../../raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)。
 2. **[API Key](../concepts/api-key.md)**：通过[密钥管理](https://bailian.console.aliyun.com/?tab=app#/api-key)获取，并[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)（推荐 `DASHSCOPE_API_KEY`）。不建议在生产环境硬编码。
-3. **SDK（可选）**：OpenAI 兼容模式用 [OpenAI SDK](https://help.aliyun.com/zh/model-studio/install-sdk)；DashScope 原生模式用对应语言的 DashScope SDK。
+3. **SDK（可选）**：OpenAI 兼容模式用 [OpenAI SDK](https://help.aliyun.com/zh/model-studio/install-sdk)；DashScope 原生模式用对应语言的 [DashScope SDK](../concepts/dashscope-sdk.md)。
 
-> **注意**：目前只能在控制台手动获取 APP ID 和 Workspace ID，不支持通过 API 或 CLI 查询。RAM 子账号默认只能查看其已加入的[业务空间](../concepts/workspace.md)的 ID；查询主账号下全部业务空间需主账号或被授予 `AliyunBailianFullAccess`/`AliyunBailianControlFullAccess` 权限。
+> **注意**：目前只能在控制台手动获取 APP ID 和 Workspace ID，不支持通过 API 或 CLI 查询。RAM 子账号默认只能查看其已加入的[业务空间](../concepts/workspace.md)的 ID；查询主账号下全部[业务空间](../concepts/workspace.md)需主账号或被授予 `AliyunBailianFullAccess`/`AliyunBailianControlFullAccess` 权限。
 
 ## 两套调用 API
 
@@ -21,7 +21,7 @@
 | **OpenAI 兼容 Responses API** | `POST https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/v1/responses` | 复用现有 OpenAI 代码库与工具链；支持同步/异步、流式、[多模态](../concepts/multimodal.md) | [同步调用 API 参考](../../raw/application-api-reference/application-call/openai-responses-api/synchronous-call-api-reference.md) / [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md) |
 | **DashScope 原生 API** | `POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion` | 更全面的功能与更高的性能；新版智能体（Agent 2.0）、工作流、旧版智能体均支持 | [新版智能体应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md) / [工作流与旧版智能体应用 API](../../raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md) |
 
-> **注意**：上述 Endpoint 仅适用于华北2（北京）地域。德国（法兰克福）、新加坡、日本（东京）等地域，或调用子业务空间下的应用时，请求中必须包含 Workspace ID，该 ID 是对应地域 Base URL 的组成部分。
+> **注意**：上述 Endpoint 仅适用于华北2（北京）地域。德国（法兰克福）、新加坡、日本（东京）等地域，或调用子[业务空间](../concepts/workspace.md)下的应用时，请求中必须包含 Workspace ID，该 ID 是对应地域 Base URL 的组成部分。
 
 ## OpenAI 兼容模式（Responses API）
 
@@ -137,7 +137,7 @@ POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion
 
 ### 单轮对话
 
-Python（DashScope SDK）：
+Python（[DashScope SDK](../concepts/dashscope-sdk.md)）：
 
 ```python
 import os
@@ -183,7 +183,7 @@ print(responseNext.output.text)
 - **多轮上下文**：Responses API 目前不支持基于 `pre_response_id`/`conversation_id` 的上下文，每次请求需传完整历史；DashScope 原生 API 用 `session_id`（有效期 1 小时）或 `messages` 维持多轮。
 - **文件输入仅智能体支持**：`input_file` 仅智能体应用可用，且应用内文件处理方式需选「全文引用」或「切片检索」。
 - **应用配置须重新发布**：[流式输出](../concepts/streaming-output.md)、图像输入、插件/自定义参数等能力都需要先在应用内正确配置并**重新发布**后才能生效。
-- **权限**：查询全部业务空间需主账号或被授予权限的 RAM 子账号；普通 RAM 子账号只能查看其已加入的业务空间。
+- **权限**：查询全部[业务空间](../concepts/workspace.md)需主账号或被授予权限的 RAM 子账号；普通 RAM 子账号只能查看其已加入的业务空间。
 
 ## 来源文档
 
@@ -192,6 +192,7 @@ print(responseNext.output.text)
 - [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)
 - [新版智能体应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md)
 - [工作流与旧版智能体应用 API](../../raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)
+
 
 
 
