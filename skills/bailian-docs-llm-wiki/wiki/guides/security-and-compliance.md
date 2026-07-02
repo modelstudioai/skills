@@ -16,7 +16,7 @@
 
 ### 模型与 [API Key](../concepts/api-key.md) 权限
 
-业务空间内可对模型进行三类精细化授权，**默认业务空间无法设置这些限制**（所有模型均可调用、调优、部署）：
+[业务空间](../concepts/workspace.md)内可对模型进行三类精细化授权，**默认[业务空间](../concepts/workspace.md)无法设置这些限制**（所有模型均可调用、调优、部署）：
 
 | 权限项 | 控制范围 | 配置入口 |
 | --- | --- | --- |
@@ -24,9 +24,9 @@
 | 限制模型训练 | 是否可调优（控制台 & API）及调优后部署 | 模型列表 → 模型授权 → 模型训练列 |
 | 限制[模型部署](../concepts/model-deployment.md) | 是否可直接部署 | 模型列表 → 模型授权 → [模型部署](../concepts/model-deployment.md)列 |
 
-单个 [API Key](../concepts/api-key.md) 只能归属一个地域内的一个业务空间和一个用户，且不能转移。[API Key](../concepts/api-key.md) 的可调用功能与模型限流与**归属业务空间**的权限保持一致，不受用户控制台权限影响，也无需为不同模型（文生文、文生图、语音合成）创建不同 [API Key](../concepts/api-key.md)。自 2026 年 3 月 25 日起，华北2（北京）地域所有新创建的 [API Key](../concepts/api-key.md) 均归属主账号，并支持设置 IP 访问白名单。
+单个 [API Key](../concepts/api-key.md) 只能归属一个地域内的一个[业务空间](../concepts/workspace.md)和一个用户，且不能转移。[API Key](../concepts/api-key.md) 的可调用功能与模型限流与**归属业务空间**的权限保持一致，不受用户控制台权限影响，也无需为不同模型（文生文、文生图、语音合成）创建不同 [API Key](../concepts/api-key.md)。自 2026 年 3 月 25 日起，华北2（北京）地域所有新创建的 [API Key](../concepts/api-key.md) 均归属主账号，并支持设置 IP 访问白名单。
 
-> **注意**：API Key 的有效性受账号操作影响——将 RAM 账号移出业务空间会使其 API Key 失效（重新加入后恢复），而在 RAM 控制台删除账号/角色则会使 API Key 永久失效、不可恢复。
+> **注意**：[API Key](../concepts/api-key.md) 的有效性受账号操作影响——将 RAM 账号移出业务空间会使其 [API Key](../concepts/api-key.md) 失效（重新加入后恢复），而在 RAM 控制台删除账号/角色则会使 [API Key](../concepts/api-key.md) 永久失效、不可恢复。
 
 ### OpenAPI 接口权限
 
@@ -192,6 +192,7 @@ SDK 自动完成加解密，响应为明文，无需手动处理。
 - [配置可用区IP](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-zone-ip.md)
 - [配置私有网络中的资源](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)
 - [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md)
+
 
 
 

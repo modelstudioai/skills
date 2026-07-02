@@ -82,7 +82,7 @@ UI 设计器提供四种预置模板（智能出行助手、智能体门户、AI
 
 ### 接入组件
 
-- **[智能体应用](../concepts/agent-application.md)**：创建智能体应用时在「技能」中选择已发布的智能体组件，智能体根据用户问题自动调用组件。若组件含需业务透传的参数，可在测试时手动填入「入参变量配置」，或在 API 调用时通过 `biz_param` 参数传入。
+- **[智能体应用](../concepts/agent-application.md)**：创建[智能体应用](../concepts/agent-application.md)时在「技能」中选择已发布的智能体组件，智能体根据用户问题自动调用组件。若组件含需业务透传的参数，可在测试时手动填入「入参变量配置」，或在 API 调用时通过 `biz_param` 参数传入。
 - **工作流应用**：将「组件」节点拖入画布并选择已发布的智能体或工作流组件，手动为组件传入符合要求的参数，并将组件输出结果传递到下一个节点；可开启「[流式输出](../concepts/streaming-output.md)」使组件内容流式返回。
 
 ### 注意事项
@@ -93,14 +93,14 @@ UI 设计器提供四种预置模板（智能出行助手、智能体门户、AI
 
 ## 音视频实时互动发布
 
-仅支持百炼图文对话类应用（含智能体与工作流）。在智能体应用的「AI 实时互动」页签单击「语音互动/视频互动」→「去配置」，选择 [API Key](../concepts/api-key.md) 后可生成临时体验二维码（有效期 24 小时，也可复制链接分享）。测试完毕后单击「发布」→「确认发布」，进入「发布渠道」完成智能媒体服务开通和 SLR 授权后创建互动智能体。发布渠道包括：
+仅支持百炼图文对话类应用（含智能体与工作流）。在[智能体应用](../concepts/agent-application.md)的「AI 实时互动」页签单击「语音互动/视频互动」→「去配置」，选择 [API Key](../concepts/api-key.md) 后可生成临时体验二维码（有效期 24 小时，也可复制链接分享）。测试完毕后单击「发布」→「确认发布」，进入「发布渠道」完成智能媒体服务开通和 SLR 授权后创建互动智能体。发布渠道包括：
 
 - **H5/APP 扫码**：单击「生成分享链接」并设置 [Token](../concepts/token.md) 有效时间。H5 体验支持微信/钉钉扫码或手机浏览器打开；APP 体验需在「AI 智能体」→「自定义智能体」→「授权 [Token](../concepts/token.md)」中扫码（iOS 端需在「设置」→「通用」→「VPN 与设备管理」中信任 Taobao 描述文件）。
 - **SDK 集成**：可选择「快速集成」（支持 WEB、iOS、安卓，提供分享 ID，将安装代码加入网页 `<body>` 并填入分享 ID 即可免 AppServer 调试运行，仅限测试）或「开发集成」（基于 AICallKit SDK，提供含 UI 与不含 UI 两种方案）。
 
 ## UI 设计器[计费](../concepts/billing.md)与常见问题
 
-UI 设计器功能本身不[计费](../concepts/billing.md)，但使用过程中可能涉及：模型调用费用（按 [Token](../concepts/token.md) [计费](../concepts/billing.md)，含新人免费额度）、UI 应用数据费用（默认 1GB 免费文件存储和 0.3GB 免费数据库容量，超出按量计费）、生产环境订阅套餐费用（需订阅团队版或更高级别套餐）。
+UI 设计器功能本身不[计费](../concepts/billing.md)，但使用过程中可能涉及：模型调用费用（按 [Token](../concepts/token.md) [计费](../concepts/billing.md)，含新人免费额度）、UI 应用数据费用（默认 1GB 免费文件存储和 0.3GB 免费数据库容量，超出按量[计费](../concepts/billing.md)）、生产环境订阅套餐费用（需订阅团队版或更高级别套餐）。
 
 若在 UI 设计器页面编辑时提示「当前应用正在编辑中」，通常是因为该 UI 已在其他窗口打开，关闭后即可重新编辑，或单击「获取编辑权限」强制关闭其他已打开窗口。
 
@@ -109,6 +109,7 @@ UI 设计器功能本身不[计费](../concepts/billing.md)，但使用过程中
 - [分享智能体应用](../../raw/application-user-guide/application-publishing-and-sharing/share-an-application.md)
 - [使用智能体或工作流作为组件](../../raw/application-user-guide/application-publishing-and-sharing/use-agent-or-workflow-as-component.md)
 - [UI设计器](../../raw/application-user-guide/application-publishing-and-sharing/ui-designer.md)
+
 
 
 

@@ -123,7 +123,7 @@ this.chatClient = builder
 - LlamaIndex 云端方案不支持自定义文档切分与嵌入模型；本地需可访问公网，文件上传与生成回答均需等待。
 - Spring AI Alibaba 应用集成仅支持[智能体应用](../concepts/agent-application.md)与工作流应用，其他应用类型不在支持范围。
 - 知识库检索需提前创建好知识库并获取其名称；检索默认[业务空间](../concepts/workspace.md)知识库无需配置 `workspace-id`。
-- 子[业务空间](../concepts/workspace.md)场景必须配置对应的业务空间 ID 环境变量，否则会鉴权或定位失败。
+- 子[业务空间](../concepts/workspace.md)场景必须配置对应的[业务空间](../concepts/workspace.md) ID 环境变量，否则会鉴权或定位失败。
 - [API Key](../concepts/api-key.md) 一律通过环境变量注入，切勿硬编码到源码或配置文件中。
 
 ## 来源文档
@@ -131,6 +131,7 @@ this.chatClient = builder
 - [通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)
 - [使用Spring AI Alibaba集成阿里云百炼大模型应用](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-llm-application.md)
 - [通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)
+
 
 
 

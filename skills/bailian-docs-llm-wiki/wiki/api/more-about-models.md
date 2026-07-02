@@ -18,7 +18,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=180
 
 正常响应返回 `token`（生成的临时 Key，前缀 `st-`）与 `expires_at`（UNIX 时间戳，秒）。失败时返回 `code`/`message`/`request_id`，常见错误如 `InvalidApiKey`。
 
-> **注意**：各地域（北京、新加坡、弗吉尼亚）的 API Key 不互通，临时 Key 与生成它的永久 Key 必须属于同一地域。
+> **注意**：各地域（北京、新加坡、弗吉尼亚）的 [API Key](../concepts/api-key.md) 不互通，临时 Key 与生成它的永久 Key 必须属于同一地域。
 
 ## 异步任务管理
 
@@ -34,7 +34,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=180
 
 关键约束：
 
-- 接口可查询/取消当前 API Key 所属主账号下的所有任务（含该主账号下任意 API Key 提交的任务），但无法跨主账号操作。
+- 接口可查询/取消当前 [API Key](../concepts/api-key.md) 所属主账号下的所有任务（含该主账号下任意 [API Key](../concepts/api-key.md) 提交的任务），但无法跨主账号操作。
 - 异步任务完成后通常保留 24 小时（以对应模型 API 文档为准），超时自动清理，届时无法再查询。
 - 取消接口**仅支持 `PENDING` 状态**的任务，其他状态会返回 `UnsupportedOperation`（HTTP 400）。
 - 含多个子任务的任务，只要有一个子任务成功，整体状态即为 `SUCCEEDED`，失败子任务的错误信息在 `output.results` 中单独展示；`task_metrics` 给出 `TOTAL`/`SUCCEEDED`/`FAILED` 统计。
@@ -75,11 +75,11 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=180
 
 准备工作要点：
 
-1. 在子业务空间创建 API Key 并配置到环境变量 `DASHSCOPE_API_KEY`。
+1. 在子[业务空间](../concepts/workspace.md)创建 API Key 并配置到环境变量 `DASHSCOPE_API_KEY`。
 2. 调用标准模型（如 `qwen-plus`）前，需为该子空间设置模型调用权限。
-3. 在阿里云百炼调优并部署的模型**无需模型调用授权**，但只能由其所在业务空间的 API Key 调用，且**仅支持 DashScope 协议**，不支持 OpenAI 兼容方式。
+3. 在阿里云百炼调优并部署的模型**无需模型调用授权**，但只能由其所在[业务空间](../concepts/workspace.md)的 API Key 调用，且**仅支持 DashScope 协议**，不支持 OpenAI 兼容方式。
 
-> **注意**：北京与新加坡地域的 API Key 不同，切换地域必须更换对应 Key；新加坡地域的 OpenAI 兼容与 DashScope 地址都需要把 `WorkspaceId` 替换为真实业务空间 ID。
+> **注意**：北京与新加坡地域的 API Key 不同，切换地域必须更换对应 Key；新加坡地域的 OpenAI 兼容与 DashScope 地址都需要把 `WorkspaceId` 替换为真实[业务空间](../concepts/workspace.md) ID。
 
 ## 上传本地文件获取临时 URL
 
@@ -147,6 +147,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=180
 - [子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)
 - [上传本地文件获取临时URL](../../raw/model-api-reference/more-about-models/get-temporary-file-url.md)
 - [DashScope SDK连接复用配置](../../raw/model-api-reference/more-about-models/connection-multiplexing-configuration.md)
+
 
 
 

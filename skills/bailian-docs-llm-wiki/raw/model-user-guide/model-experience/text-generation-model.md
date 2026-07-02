@@ -98,6 +98,10 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3.7-max`
 
+查看快照版本
+
+`qwen3.7-max-preview` `qwen3.7-max-2026-06-08` `qwen3.7-max-2026-05-20` `qwen3.7-max-2026-05-17`
+
 1M
 
 支持
@@ -112,6 +116,10 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3.7-plus`
 
+查看快照版本
+
+`qwen3.7-plus-2026-05-26`
+
 1M
 
 支持
@@ -125,6 +133,10 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 `qwen3.6-flash`
+
+查看快照版本
+
+`qwen3.6-flash-2026-04-16`
 
 1M
 
@@ -222,394 +234,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-## 快照模型
-
-以下为各模型的历史快照版本（带日期）。生产环境建议固定到具体快照版本，以保证输出稳定。
-
-#### qwen3.7-max
-
-**模型ID**
-
-**上下文**
-
-**思考模式**
-
-**Function Calling**
-
-**内置工具**
-
-**结构化输出**
-
-**批量调用**
-
-`qwen3.7-max-preview`
-
-1M
-
-支持
-
-支持
-
-支持
-
-不支持
-
-支持
-
-`qwen3.7-max-2026-06-08`
-
-1M
-
-支持
-
-支持
-
-支持
-
-不支持
-
-支持
-
-`qwen3.7-max-2026-05-20`
-
-1M
-
-支持
-
-支持
-
-支持
-
-不支持
-
-支持
-
-`qwen3.7-max-2026-05-17`
-
-1M
-
-支持
-
-支持
-
-支持
-
-不支持
-
-支持
-
-#### qwen3.7-plus
-
-**模型ID**
-
-**上下文**
-
-**思考模式**
-
-**Function Calling**
-
-**内置工具**
-
-**结构化输出**
-
-**批量调用**
-
-`qwen3.7-plus-2026-05-26`
-
-1M
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-#### qwen3.6-flash
-
-**模型ID**
-
-**上下文**
-
-**思考模式**
-
-**Function Calling**
-
-**内置工具**
-
-**结构化输出**
-
-**批量调用**
-
-`qwen3.6-flash-2026-04-16`
-
-1M
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-#### qwen3.6-plus
-
-**模型ID**
-
-**上下文**
-
-**思考模式**
-
-**Function Calling**
-
-**内置工具**
-
-**结构化输出**
-
-**批量调用**
-
-`qwen3.6-plus-2026-04-02`
-
-1M
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-#### qwen3.5-plus
-
-**模型ID**
-
-**上下文**
-
-**思考模式**
-
-**Function Calling**
-
-**内置工具**
-
-**结构化输出**
-
-**批量调用**
-
-`qwen3.5-plus-2026-02-15`
-
-1M
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-#### qwen3.5-flash
-
-**模型ID**
-
-**上下文**
-
-**思考模式**
-
-**Function Calling**
-
-**内置工具**
-
-**结构化输出**
-
-**批量调用**
-
-`qwen3.5-flash-2026-02-23`
-
-1M
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-#### qwen3-max
-
-**模型ID**
-
-**上下文**
-
-**思考模式**
-
-**Function Calling**
-
-**内置工具**
-
-**结构化输出**
-
-**批量调用**
-
-`qwen3-max-2026-01-23`
-
-256k
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-`qwen3-max-preview`
-
-256k
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-`qwen3-max-2025-09-23`
-
-256k
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-#### qwen3-coder-plus
-
-**模型ID**
-
-**上下文**
-
-**思考模式**
-
-**Function Calling**
-
-**内置工具**
-
-**结构化输出**
-
-**批量调用**
-
-`qwen3-coder-plus-2025-09-23`
-
-1M
-
-支持
-
-支持
-
-不支持
-
-支持
-
-不支持
-
-`qwen3-coder-plus-2025-07-22`
-
-1M
-
-支持
-
-支持
-
-不支持
-
-支持
-
-不支持
-
-#### qwen3-coder-flash
-
-**模型ID**
-
-**上下文**
-
-**思考模式**
-
-**Function Calling**
-
-**内置工具**
-
-**结构化输出**
-
-**批量调用**
-
-`qwen3-coder-flash-2025-07-28`
-
-1M
-
-支持
-
-支持
-
-不支持
-
-支持
-
-不支持
-
-#### qwen-long
-
-**模型ID**
-
-**上下文**
-
-**思考模式**
-
-**Function Calling**
-
-**内置工具**
-
-**结构化输出**
-
-**批量调用**
-
-`qwen-long-2025-01-25`
-
-10M
-
-不支持
-
-不支持
-
-不支持
-
-支持
-
-支持
-
 ## 旧版模型
 
 以下模型不再作为首选推荐。新项目建议使用Qwen3.6或Qwen3.5系列。如需查看模型详细参数（上下文窗口、计费等），请前往模型广场。
@@ -646,6 +270,10 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3.6-plus`
 
+查看快照版本
+
+`qwen3.6-plus-2026-04-02`
+
 1M
 
 支持
@@ -676,6 +304,10 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3.5-plus`
 
+查看快照版本
+
+`qwen3.5-plus-2026-02-15`
+
 1M
 
 支持
@@ -689,6 +321,10 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 `qwen3.5-flash`
+
+查看快照版本
+
+`qwen3.5-flash-2026-02-23`
 
 1M
 
@@ -775,6 +411,10 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 **批量调用**
 
 `qwen3-max`
+
+查看快照版本
+
+`qwen3-max-2026-01-23` `qwen3-max-preview` `qwen3-max-2025-09-23`
 
 256k
 
@@ -960,6 +600,10 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 `qwen3-coder-plus`
 
+查看快照版本
+
+`qwen3-coder-plus-2025-09-23` `qwen3-coder-plus-2025-07-22`
+
 1M
 
 支持
@@ -973,6 +617,10 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 不支持
 
 `qwen3-coder-flash`
+
+查看快照版本
+
+`qwen3-coder-flash-2025-07-28`
 
 1M
 
@@ -1117,6 +765,10 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 **批量调用**
 
 `qwen-long`
+
+查看快照版本
+
+`qwen-long-2025-01-25`
 
 10M
 

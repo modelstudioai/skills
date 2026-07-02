@@ -6,7 +6,7 @@
 
 借助百炼的[智能体应用](../concepts/agent-application.md)构建能力，可在约 5 分钟内零代码完成一个能回答私有领域问题的大模型问答应用，完整流程见 [0代码构建私有知识问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)。整体分为三步：
 
-1. **构建第一个[智能体应用](../concepts/agent-application.md)（约 1 分钟）**：在应用管理页面创建空白智能体应用，选择大语言模型（建议千问-Max），编写 System Prompt 定义角色与任务，并配置欢迎语和预设问题。此阶段由于缺少私有知识，回答较为笼统甚至可能无中生有。
+1. **构建第一个[智能体应用](../concepts/agent-application.md)（约 1 分钟）**：在应用管理页面创建空白[智能体应用](../concepts/agent-application.md)，选择大语言模型（建议千问-Max），编写 System Prompt 定义角色与任务，并配置欢迎语和预设问题。此阶段由于缺少私有知识，回答较为笼统甚至可能无中生有。
 2. **构建[知识库](../concepts/knowledge-base.md)（约 3 分钟）**：在数据连接页面创建文件类型连接器并上传知识文档（如 docx），等待 1~6 分钟解析完成；随后在[知识库](../concepts/knowledge-base.md)页面创建标准版知识库，选择默认类目与智能切分策略，等待 1~2 分钟完成解析。智能切分为系统预置策略，经[评测](../concepts/evaluation.md)对多数文档可获得最佳检索效果。
 3. **添加知识库并发布应用（约 1 分钟）**：进入应用配置界面，通过「技能 > 知识库」旁的「+」按钮为应用挂载知识库，验证检索增强效果后点击「发布」。
 
@@ -16,8 +16,8 @@
 
 百炼应用支持多种模型系列，详见 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)：
 
-- **千问系列**：千问-Max 为构建问答应用的推荐模型；智能体应用与工作流应用均支持 QwQ 系列（具备强推理能力，先输出思考过程再输出回答，数学/代码能力达 DeepSeek-R1 满血版水平，但不包括插件、流程、音视频交互能力）；视觉模型支持 qwen-vl-plus-latest、qwen-vl-plus-0125（Qwen2.5-VL 系列，128k 上下文）以及 qwen-vl-max/plus 用于图片解析。
-- **DeepSeek 系列**：智能体应用与工作流应用均可集成 DeepSeek 系列模型，结合知识库、长期记忆和 Prompt 模板构建私有知识问答应用。
+- **千问系列**：千问-Max 为构建问答应用的推荐模型；[智能体应用](../concepts/agent-application.md)与工作流应用均支持 QwQ 系列（具备强推理能力，先输出思考过程再输出回答，数学/代码能力达 DeepSeek-R1 满血版水平，但不包括插件、流程、音视频交互能力）；视觉模型支持 qwen-vl-plus-latest、qwen-vl-plus-0125（Qwen2.5-VL 系列，128k 上下文）以及 qwen-vl-max/plus 用于图片解析。
+- **DeepSeek 系列**：[智能体应用](../concepts/agent-application.md)与工作流应用均可集成 DeepSeek 系列模型，结合知识库、长期记忆和 Prompt 模板构建私有知识问答应用。
 - **嵌入模型**：知识库支持 text-embedding-v3、v4 模型，v4 在语种支持、代码片段向量化效果和向量维度选择上较 v3 全面升级。
 
 ## 应用类型与关键能力
@@ -58,6 +58,7 @@
 
 - [0代码构建私有知识问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)
 - [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)
+
 
 
 

@@ -14,6 +14,16 @@
 
 **功能说明**
 
+参考生视频
+
+2026-07-01
+
+中国内地
+
+wan2.7-r2v-2026-06-12
+
+万相2.7参考生视频模型快照版本，支持主体参考和音色定制，并可输入单张多宫格故事板直接生成剧本化视频。[万相2.7-参考生视频](https://help.aliyun.com/zh/model-studio/wan-video-to-video-api-reference)
+
 图像生成
 
 2026-06-25
@@ -283,6 +293,16 @@ HappyHorse系列参考生视频模型，支持多参考图输入生成有声视�
 happyhorse-1.0-video-edit
 
 HappyHorse系列视频编辑模型，支持对视频进行编辑处理。[HappyHorse-视频编辑](https://help.aliyun.com/zh/model-studio/happyhorse-video-edit-api-reference)
+
+文生视频
+
+2026-07-01
+
+中国内地
+
+wan2.7-t2v-2026-06-12
+
+万相2.7-文生视频模型快照版本，模型能力与wan2.7-t2v一致。[万相2.7-文生视频](https://help.aliyun.com/zh/model-studio/text-to-video-api-reference)
 
 文生视频
 
@@ -2828,6 +2848,16 @@ qwen1.5-110b-chat
 
 **功能说明**
 
+参考生视频
+
+2026-07-01
+
+国际
+
+wan2.7-r2v-2026-06-12
+
+万相2.7参考生视频模型快照版本，支持主体参考和音色定制，并可输入单张多宫格故事板直接生成剧本化视频。[万相2.7-参考生视频](https://help.aliyun.com/zh/model-studio/wan-video-to-video-api-reference)
+
 推理模型
 
 2026-06-26
@@ -2969,6 +2999,16 @@ HappyHorse系列参考生视频模型，支持多参考图输入生成有声视�
 happyhorse-1.0-video-edit
 
 HappyHorse系列视频编辑模型，支持对视频进行编辑处理。[HappyHorse-视频编辑](https://help.aliyun.com/zh/model-studio/happyhorse-video-edit-api-reference)
+
+文生视频
+
+2026-07-01
+
+国际
+
+wan2.7-t2v-2026-06-12
+
+万相2.7-文生视频模型快照版本，模型能力与wan2.7-t2v一致。[万相2.7-文生视频](https://help.aliyun.com/zh/model-studio/text-to-video-api-reference)
 
 文生视频
 

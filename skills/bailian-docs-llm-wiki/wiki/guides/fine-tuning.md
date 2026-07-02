@@ -132,13 +132,13 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/deployments' \
 
 ## [计费](../concepts/billing.md)说明
 
-训练费用按 [Token](../concepts/token.md) 用量[计费](../concepts/billing.md)：`费用 = 训练数据 Token 总数 x 循环次数 x 训练单价`。不同模型单价不同，从 0.003 元/千[Token](../concepts/token.md)（qwen3-0.6b）到 0.15 元/千Token（qwen2.5-72b-instruct）不等。可在控制台查看预估费用。
+训练费用按 [Token](../concepts/token.md) 用量[计费](../concepts/billing.md)：`费用 = 训练数据 Token 总数 x 循环次数 x 训练单价`。不同模型单价不同，从 0.003 元/千[Token](../concepts/token.md)（qwen3-0.6b）到 0.15 元/千[Token](../concepts/token.md)（qwen2.5-72b-instruct）不等。可在控制台查看预估费用。
 
 ## 限制和注意事项
 
 - 模型调优功能**仅在华北2（北京）地域可用**，必须使用该地域的 [API Key](../concepts/api-key.md)
 - 子账号需要单独授予模型调用、训练和部署权限
-- 通过 API 创建的训练任务仅支持按 Token [计费](../concepts/billing.md)，暂不支持训练单元
+- 通过 API 创建的训练任务仅支持按 [Token](../concepts/token.md) [计费](../concepts/billing.md)，暂不支持训练单元
 - 单个文件最大 300MB，有效文件总空间配额 5GB，总数量 100 个
 - 图像/视频生成模型微调后仅支持[异步调用](../concepts/async-invocation.md)
 - CosyVoice 调优产物为单音色模型，voice 参数必须固定为 `default`
@@ -156,5 +156,6 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/deployments' \
 - [使用 API 或命令行进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)
 - [0 代码强化大模型安全合规能力](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/enhance-the-security-compliance-of-large-models.md)
 - [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)
+
 
 

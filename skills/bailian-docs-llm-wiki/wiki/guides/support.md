@@ -8,10 +8,10 @@
 
 - 模型调用价格与模型部署/训练[计费](../concepts/billing.md)分开计算，具体单价参见百炼控制台模型市场
 - 开通服务要求阿里云账户余额不小于 0 元
-- 万相会员与百炼 API 计费体系相互独立，会员权益不适用于 API 调用
+- 万相会员与百炼 API [计费](../concepts/billing.md)体系相互独立，会员权益不适用于 API 调用
 - 费用明细与发票申请通过阿里云费用与成本控制台操作
 
-详细计费说明参见[常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)中的计费相关章节。
+详细[计费](../concepts/billing.md)说明参见[常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)中的[计费](../concepts/billing.md)相关章节。
 
 ## API/SDK 使用
 
@@ -86,5 +86,6 @@
 
 - [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)
 - [相关协议](../../raw/model-user-guide/support/related-agreements.md)
+
 
 

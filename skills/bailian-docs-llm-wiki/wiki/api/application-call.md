@@ -159,8 +159,8 @@ else:
 
 ### 多轮对话
 
-- **新版智能体应用**：通过 `session_id` 维护上下文。首次请求无需传入，响应中返回新生成的 `session_id`；后续请求携带上一轮的 `session_id` 即可延续对话，有效期 1 小时。
-- **工作流与旧版智能体应用**：通过 `session_id` 或 `messages` 启用多轮对话。
+- **新版[智能体应用](../concepts/agent-application.md)**：通过 `session_id` 维护上下文。首次请求无需传入，响应中返回新生成的 `session_id`；后续请求携带上一轮的 `session_id` 即可延续对话，有效期 1 小时。
+- **工作流与旧版[智能体应用](../concepts/agent-application.md)**：通过 `session_id` 或 `messages` 启用多轮对话。
 
 ```python
 response = Application.call(
@@ -181,9 +181,9 @@ print(responseNext.output.text)
 - **地域限制**：本文档涉及的 Responses API 与 DashScope `/completion` 接口均仅适用于华北2（北京）地域。
 - **异步不支持流式**：异步任务（`background=true`）暂不支持 `stream=true`。
 - **多轮上下文**：Responses API 目前不支持基于 `pre_response_id`/`conversation_id` 的上下文，每次请求需传完整历史；DashScope 原生 API 用 `session_id`（有效期 1 小时）或 `messages` 维持多轮。
-- **文件输入仅智能体支持**：`input_file` 仅智能体应用可用，且应用内文件处理方式需选「全文引用」或「切片检索」。
+- **文件输入仅智能体支持**：`input_file` 仅[智能体应用](../concepts/agent-application.md)可用，且应用内文件处理方式需选「全文引用」或「切片检索」。
 - **应用配置须重新发布**：[流式输出](../concepts/streaming-output.md)、图像输入、插件/自定义参数等能力都需要先在应用内正确配置并**重新发布**后才能生效。
-- **权限**：查询全部[业务空间](../concepts/workspace.md)需主账号或被授予权限的 RAM 子账号；普通 RAM 子账号只能查看其已加入的业务空间。
+- **权限**：查询全部[业务空间](../concepts/workspace.md)需主账号或被授予权限的 RAM 子账号；普通 RAM 子账号只能查看其已加入的[业务空间](../concepts/workspace.md)。
 
 ## 来源文档
 
@@ -192,6 +192,7 @@ print(responseNext.output.text)
 - [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)
 - [新版智能体应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md)
 - [工作流与旧版智能体应用 API](../../raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)
+
 
 
 

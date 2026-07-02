@@ -12,7 +12,7 @@
 
 ### 权限矩阵
 
-| 业务空间权限 | 超级管理员 | 业务空间管理员 | 普通用户 |
+| [业务空间](../concepts/workspace.md)权限 | 超级管理员 | [业务空间](../concepts/workspace.md)管理员 | 普通用户 |
 | --- | --- | --- | --- |
 | 允许特定模型调用 & 限流 | 支持 | 不支持 | 不支持 |
 | 允许特定模型调优 | 支持 | 不支持 | 不支持 |
@@ -23,7 +23,7 @@
 | 访问/使用被授权的空间、页面、资源 | 支持 | 支持 | 支持 |
 | OpenAPI 接口权限 | 不支持 | 不支持 | 不支持 |
 
-> **注意**：OpenAPI 接口权限不通过业务空间角色授予，必须由阿里云主账号在 RAM 控制台为 RAM 用户添加专用系统策略。
+> **注意**：OpenAPI 接口权限不通过[业务空间](../concepts/workspace.md)角色授予，必须由阿里云主账号在 RAM 控制台为 RAM 用户添加专用系统策略。
 
 ## 业务空间权限管理
 
@@ -40,9 +40,9 @@
 
 单个 [API Key](../concepts/api-key.md) 只能归属一个地域内的一个业务空间和一个用户，且不能转移。[API Key](../concepts/api-key.md) 可调用的功能和模型限流与**归属业务空间**的权限保持一致，不受用户控制台权限管理的影响，也无需为不同模型（如文生文、文生图、语音合成）创建不同的 [API Key](../concepts/api-key.md)。
 
-API Key 的状态随归属用户操作变化：
+[API Key](../concepts/api-key.md) 的状态随归属用户操作变化：
 
-| 触发操作 | 主账号的 API Key | RAM 账号的 API Key |
+| 触发操作 | 主账号的 [API Key](../concepts/api-key.md) | RAM 账号的 [API Key](../concepts/api-key.md) |
 | --- | --- | --- |
 | 主动删除 API Key | 失效，不可恢复 | 失效，不可恢复 |
 | 将账号移出业务空间 | — | 失效（重新加入后恢复生效） |
@@ -114,6 +114,7 @@ RAM 用户默认无权查看阿里云账单和购买预付费产品，需在 RAM
 ## 来源文档
 
 - [权限管理](../../raw/application-user-guide/application-permission-management/application-permission-management-overview.md)
+
 
 
 

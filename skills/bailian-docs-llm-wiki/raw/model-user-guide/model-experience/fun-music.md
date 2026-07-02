@@ -1,45 +1,85 @@
 # 音乐生成
 
-百聆音乐生成大模型（Fun音乐大模型）支持输入开放性歌曲的创作要求或歌词，生成整首男/女声演唱的中文或英文歌曲。歌曲通俗易懂，情绪由浅入深，是人类灵感与大模型能力的完美结合。
+Fun-Music 支持通过提示词描述音乐风格和场景，或提供自定义歌词，生成带有男声或女声的中文/英文完整歌曲，也支持生成纯音乐。
 
 **重要**
 
 该模型目前处于邀测阶段，您需要前往[模型广场](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/fun-music-v1)申请开通后方可使用。该模型服务仅在华北2（北京）地域下可用。
 
-## **核心功能**
+## **概述**
 
--   根据提示词（prompt）自动创作歌词并生成完整歌曲
+Fun-Music 是端到端音乐生成模型，输入自然语言描述或自定义歌词即可生成完整歌曲或纯音乐：
+
+-   通过提示词（`prompt`）描述音乐风格、场景、情绪和乐器偏好，模型自动创作歌词并生成歌曲
     
--   根据自定义歌词（lyrics）生成歌曲
+-   通过歌词（`lyrics`）提供自定义歌词内容，模型据此谱曲并演唱
     
--   支持男声（male）和女声（female）演唱
+-   通过声音性别（`gender`）选择男声或女声（仅 `fun-music-v1` 模型）
     
--   支持中文和英文歌词与提示词
+-   通过纯音乐模式（`is_instrumental`\=true）生成无人声的纯音乐
     
 -   支持流式和非流式两种输出模式
     
--   支持 MP3 和 WAV 音频格式输出
+-   支持 MP3 和 WAV 两种音频格式输出
     
 
-## **支持的模型**
+### **两个模型的区别**
 
-**音乐生成模型：**
+Fun-Music 提供两个模型，主要区别如下：
 
--   `fun-music-preview`
-    
--   `fun-music-v1`
-    
+**特性**
 
-**支持的语言：**
+**fun-music-v1**
 
--   歌词语言：中文、英文
-    
--   提示词语言：中文、英文
-    
+**fun-music-preview**
 
-## **快速开始**
+prompt
 
-**前提条件**
+与 lyrics 至少传入其中之一
+
+必选
+
+lyrics
+
+与 prompt 至少传入其中之一；同时传入时仅 lyrics 生效
+
+可选；传入后优先作为歌词内容（此时 prompt 不生效）
+
+纯音乐
+
+支持（is\_instrumental=true）
+
+支持（is\_instrumental=true）
+
+gender
+
+支持
+
+不支持
+
+### **音频输出格式**
+
+通过 `format` 参数指定输出格式：
+
+**格式**
+
+**特点**
+
+**适用场景**
+
+`mp3`
+
+有损压缩，文件体积小
+
+网络传输、在线播放、存储
+
+`wav`
+
+无损格式，文件体积较大
+
+后期处理、高质量播放
+
+## **前提条件**
 
 -   已获取 API Key。获取方式请参见[获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
     
@@ -50,18 +90,22 @@
     ```
     
 
-**重要**
+**说明**
 
-`lyrics` 和 `prompt` 参数必须至少提供一个，不可同时为空。当同时传入两个参数时，仅 `lyrics` 生效，`prompt` 将被忽略。
+以下示例代码中的 `{WorkspaceId}` 需要替换为您的业务空间ID。获取方式请参见[业务空间管理](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)。
 
-## 通过提示词生成音乐
+## **快速开始**
+
+以下示例展示三种典型用法。
+
+## 通过提示词生成歌曲
 
 传入 `prompt` 参数描述音乐风格和场景，模型将自动创作歌词并生成歌曲。
 
 ## curl
 
 ```
-curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generation' \
+curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -81,7 +125,7 @@ import os
 import json
 
 api_key = os.getenv("DASHSCOPE_API_KEY")
-url = "https://dashscope.aliyuncs.com/api/v1/services/audio/music/generation"
+url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation"
 
 response = requests.post(url,
     headers={
@@ -112,7 +156,7 @@ import java.net.URL;
 public class FunMusicDemo {
     public static void main(String[] args) throws Exception {
         String apiKey = System.getenv("DASHSCOPE_API_KEY");
-        String endpoint = "https://dashscope.aliyuncs.com/api/v1/services/audio/music/generation";
+        String endpoint = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation";
 
         HttpURLConnection conn = (HttpURLConnection) new URL(endpoint).openConnection();
         conn.setRequestMethod("POST");
@@ -141,14 +185,14 @@ public class FunMusicDemo {
 }
 ```
 
-## 通过歌词生成音乐
+## 通过歌词生成歌曲
 
-传入 `lyrics` 参数提供自定义歌词，模型将根据歌词谱曲并演唱。
+传入 `lyrics` 参数提供自定义歌词，模型将根据歌词谱曲并生成歌曲。
 
 ## curl
 
 ```
-curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generation' \
+curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -168,7 +212,7 @@ import os
 import json
 
 api_key = os.getenv("DASHSCOPE_API_KEY")
-url = "https://dashscope.aliyuncs.com/api/v1/services/audio/music/generation"
+url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation"
 
 lyrics = """[verse]
 清晨的阳光穿过窗帘,
@@ -211,7 +255,7 @@ import java.net.URL;
 public class FunMusicLyricsDemo {
     public static void main(String[] args) throws Exception {
         String apiKey = System.getenv("DASHSCOPE_API_KEY");
-        String endpoint = "https://dashscope.aliyuncs.com/api/v1/services/audio/music/generation";
+        String endpoint = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation";
 
         HttpURLConnection conn = (HttpURLConnection) new URL(endpoint).openConnection();
         conn.setRequestMethod("POST");
@@ -249,31 +293,21 @@ public class FunMusicLyricsDemo {
 }
 ```
 
-## **流式调用**
+## 生成纯音乐
 
-流式模式支持边生成边返回音频数据，适用于实时播放等场景。启用流式输出需要在请求头中添加 `X-DashScope-SSE: enable`。
-
-**说明**
-
-流式模式与非流式模式的输入参数字符数限制不同，请注意区分：
-
--   非流式模式：`lyrics` 支持中文 5~350 字符、英文 5~2000 字符，`prompt` 支持 1~2000 字符。
-    
--   流式模式：`lyrics` 支持中文 300~350 字、英文 200~250 词，`prompt` 支持 5~1000 个中文汉字或英文单词。
-    
+将 `is_instrumental` 设为 `true`，可生成无人声的纯音乐。当 `is_instrumental` 设为 `true` 时，`lyrics` 和 `gender` 参数将被忽略。
 
 ## curl
 
 ```
-curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generation' \
+curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
--H "X-DashScope-SSE: enable" \
 -d '{
-    "model": "fun-music-v1",
+    "model": "fun-music-preview",
     "input": {
-        "prompt": "节奏感强的电子舞曲，合成器音效，充满能量，适合健身运动场景",
-        "gender": "male"
+        "prompt": "宁静的钢琴曲，适合深夜阅读的背景音乐，舒缓优美",
+        "is_instrumental": true
     }
 }'
 ```
@@ -284,42 +318,27 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generat
 import requests
 import os
 import json
-import base64
 
 api_key = os.getenv("DASHSCOPE_API_KEY")
-url = "https://dashscope.aliyuncs.com/api/v1/services/audio/music/generation"
+url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation"
 
 response = requests.post(url,
     headers={
         "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-        "X-DashScope-SSE": "enable"
+        "Content-Type": "application/json"
     },
     json={
-        "model": "fun-music-v1",
+        "model": "fun-music-preview",
         "input": {
-            "prompt": "节奏感强的电子舞曲，合成器音效，充满能量，适合健身运动场景",
-            "gender": "male"
+            "prompt": "宁静的钢琴曲，适合深夜阅读的背景音乐，舒缓优美",
+            "is_instrumental": True
         }
-    },
-    stream=True
+    }
 )
 
-output_file = "output.mp3"
-with open(output_file, "wb") as f:
-    for line in response.iter_lines():
-        if not line:
-            continue
-        decoded = line.decode("utf-8")
-        if decoded.startswith("data:"):
-            data = json.loads(decoded[5:])
-            finish_reason = data.get("output", {}).get("finish_reason")
-            if finish_reason == "null":
-                audio_data = data["output"]["audio"].get("data", "")
-                if audio_data:
-                    f.write(base64.b64decode(audio_data))
-            elif finish_reason == "stop":
-                print(f"音乐生成完成！已保存到 {output_file}")
+result = response.json()
+audio_url = result["output"]["audio"]["url"]
+print(f"纯音乐生成成功！下载地址：{audio_url}")
 ```
 
 ## Java
@@ -328,61 +347,91 @@ with open(output_file, "wb") as f:
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Base64;
 
-public class FunMusicStreamDemo {
+public class FunMusicInstrumentalDemo {
     public static void main(String[] args) throws Exception {
         String apiKey = System.getenv("DASHSCOPE_API_KEY");
-        String endpoint = "https://dashscope.aliyuncs.com/api/v1/services/audio/music/generation";
+        String endpoint = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation";
 
         HttpURLConnection conn = (HttpURLConnection) new URL(endpoint).openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Authorization", "Bearer " + apiKey);
         conn.setRequestProperty("Content-Type", "application/json");
-        conn.setRequestProperty("X-DashScope-SSE", "enable");
         conn.setDoOutput(true);
 
-        String jsonBody = "{\"model\":\"fun-music-v1\","
-            + "\"input\":{\"prompt\":\"节奏感强的电子舞曲，合成器音效，充满能量，适合健身运动场景\","
-            + "\"gender\":\"male\"}}";
+        String jsonBody = "{\"model\":\"fun-music-preview\","
+            + "\"input\":{\"prompt\":\"宁静的钢琴曲，适合深夜阅读的背景音乐，舒缓优美\","
+            + "\"is_instrumental\":true}}";
 
         try (OutputStream os = conn.getOutputStream()) {
             os.write(jsonBody.getBytes("UTF-8"));
         }
 
-        String outputFile = "output.mp3";
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(conn.getInputStream(), "UTF-8"));
-             FileOutputStream fos = new FileOutputStream(outputFile)) {
+                new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
+            StringBuilder sb = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith("data:")) {
-                    String data = line.substring(5);
-                    if (data.contains("\"finish_reason\":\"null\"")) {
-                        int start = data.indexOf("\"data\":\"") + 8;
-                        int end = data.indexOf("\"", start);
-                        if (start > 8 && end > start) {
-                            byte[] chunk = Base64.getDecoder().decode(
-                                data.substring(start, end));
-                            fos.write(chunk);
-                        }
-                    } else if (data.contains("\"finish_reason\":\"stop\"")) {
-                        System.out.println("音乐生成完成！已保存到 " + outputFile);
-                    }
-                }
+                sb.append(line);
             }
+            System.out.println(sb.toString());
         }
     }
 }
 ```
 
-## **歌词创作规范**
+## **创作指南**
 
-Fun-Music 内置专业歌词创作模型。当您选择自行提供歌词时，遵循以下规范可生成更高质量的音乐。
+### **提示词（prompt）**
 
-### **结构标签**
+`prompt` 是描述音乐创作意图的核心参数。模型会根据您的描述自动创作歌词、编曲并生成歌曲。
 
-标准歌词结构应包含以下标签：
+**撰写建议**：具体描述情绪、场景、乐器偏好，能生成更贴合需求的音乐。
+
+-   推荐：`悲伤钢琴曲，雨夜思念`
+    
+-   不推荐：`悲伤音乐`（过于笼统）
+    
+
+**说明**
+
+您可以在提示词中直接指定乐器（如“钢琴伴奏”“萨克斯独奏”“古筝与竹笛”）、节奏（如“轻快节奏”“慢节拍”“密集鼓点”）和情感基调（如“温暖”“伤感”“热血”“慵懒”），模型会尽可能遵循这些描述进行创作。描述越具体，生成效果越贴合预期。
+
+**不同风格的提示词示例**
+
+**风格**
+
+**提示词示例**
+
+民谣
+
+温暖治愈的民谣歌曲，木吉他伴奏，讲述午后咖啡馆里的慵懒时光
+
+古风
+
+古风歌曲，古筝与竹笛伴奏，水墨山水般的悠远意境，诉说江湖离别
+
+摇滚
+
+热血摇滚，电吉他失真音墙，密集鼓点，唱出青春的叛逆与自由
+
+抒情
+
+抒情慢歌，钢琴伴奏，安静深沉，带有淡淡忧伤，适合表达思念与回忆
+
+说唱
+
+节拍鲜明的嘻哈说唱，808低音鼓，充满街头活力，讲述城市生活故事
+
+儿歌
+
+欢快可爱的儿童歌曲，木琴与手鼓伴奏，节奏简单明快，教小朋友认识大自然
+
+### **歌词（lyrics）**
+
+`lyrics` 参数用于传入您自己编写的歌词，模型将严格根据歌词内容谱曲并生成歌曲。在歌词中使用结构标签可以控制歌曲的段落编排。
+
+**结构标签**
 
 **标签**
 
@@ -442,7 +491,7 @@ Fun-Music 内置专业歌词创作模型。当您选择自行提供歌词时，�
 故事未完，下一页仍热烈.
 ```
 
-### **创作要求**
+**创作要求**
 
 -   **原创性原则**：严禁抄袭已发表歌曲的歌词，不得模仿知名歌曲的押韵模式或标志性句式。
     
@@ -451,52 +500,157 @@ Fun-Music 内置专业歌词创作模型。当您选择自行提供歌词时，�
 -   **语言要求**：仅支持中文或英文，不支持日文、韩文等其他语言。
     
 
-## **最佳实践**
+### **声音性别（gender）**
 
-### **提示词撰写**
+通过 `gender` 参数选择演唱声音的性别，默认为女声。仅 `fun-music-v1` 模型支持该参数。
 
-具体描述情绪、场景、乐器偏好，能生成更贴合需求的音乐。
-
--   推荐：`悲伤钢琴曲，雨夜思念`
+-   `female`：女声（默认）
     
--   不推荐：`悲伤音乐`（过于笼统）
+-   `male`：男声
     
 
-**不同风格的提示词示例**
+### **纯音乐模式（is\_instrumental）**
 
-**风格**
+将 `is_instrumental` 参数设为 `true` 可生成无人声的纯音乐。此时 `lyrics` 和 `gender` 参数将被忽略。默认值为 `false`（生成歌曲）。
 
-**提示词示例**
+## **进阶功能**
 
-民谣
+### **流式输出**
 
-温暖治愈的民谣歌曲，木吉他伴奏，讲述午后咖啡馆里的慵懒时光
+流式模式支持边生成边返回音频数据，适用于实时播放等场景，`fun-music-v1` 和 `fun-music-preview` 均支持该模式。启用流式输出需要在请求头中添加 `X-DashScope-SSE: enable`。
 
-古风
+**说明**
 
-古风歌曲，古筝与竹笛伴奏，水墨山水般的悠远意境，诉说江湖离别
+流式模式与非流式模式的输入参数字符数限制不同，请注意区分：
 
-摇滚
-
-热血摇滚，电吉他失真音墙，密集鼓点，唱出青春的叛逆与自由
-
-抒情
-
-抒情慢歌，钢琴伴奏，安静深沉，带有淡淡忧伤，适合表达思念与回忆
-
-说唱
-
-节拍鲜明的嘻哈说唱，808低音鼓，充满街头活力，讲述城市生活故事
-
-儿歌
-
-欢快可爱的儿童歌曲，木琴与手鼓伴奏，节奏简单明快，教小朋友认识大自然
-
-### **音频格式选择**
-
--   `mp3`：适合网络传输和存储，为默认格式。
+-   非流式模式：`lyrics` 支持中文 5~350 字符、英文 5~2000 字符，`prompt` 支持 1~2000 字符。
     
--   `wav`：适合后期处理和高质量播放。
+-   流式模式：`lyrics` 支持中文 300~350 字、英文 200~250 词，`prompt` 支持 5~1000 个中文汉字或英文单词。
+    
+
+## curl
+
+```
+curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-H "X-DashScope-SSE: enable" \
+-d '{
+    "model": "fun-music-v1",
+    "input": {
+        "prompt": "节奏感强的电子舞曲，合成器音效，充满能量，适合健身运动场景",
+        "gender": "male"
+    }
+}'
+```
+
+## Python
+
+```
+import requests
+import os
+import json
+import base64
+
+api_key = os.getenv("DASHSCOPE_API_KEY")
+url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation"
+
+response = requests.post(url,
+    headers={
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "X-DashScope-SSE": "enable"
+    },
+    json={
+        "model": "fun-music-v1",
+        "input": {
+            "prompt": "节奏感强的电子舞曲，合成器音效，充满能量，适合健身运动场景",
+            "gender": "male"
+        }
+    },
+    stream=True
+)
+
+output_file = "output.mp3"
+with open(output_file, "wb") as f:
+    for line in response.iter_lines():
+        if not line:
+            continue
+        decoded = line.decode("utf-8")
+        if decoded.startswith("data:"):
+            data = json.loads(decoded[5:])
+            finish_reason = data.get("output", {}).get("finish_reason")
+            if finish_reason == "null":
+                audio_data = data["output"]["audio"].get("data", "")
+                if audio_data:
+                    f.write(base64.b64decode(audio_data))
+            elif finish_reason == "stop":
+                print(f"音乐生成完成！已保存到 {output_file}")
+```
+
+## Java
+
+```
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Base64;
+
+public class FunMusicStreamDemo {
+    public static void main(String[] args) throws Exception {
+        String apiKey = System.getenv("DASHSCOPE_API_KEY");
+        String endpoint = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation";
+
+        HttpURLConnection conn = (HttpURLConnection) new URL(endpoint).openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Authorization", "Bearer " + apiKey);
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("X-DashScope-SSE", "enable");
+        conn.setDoOutput(true);
+
+        String jsonBody = "{\"model\":\"fun-music-v1\","
+            + "\"input\":{\"prompt\":\"节奏感强的电子舞曲，合成器音效，充满能量，适合健身运动场景\","
+            + "\"gender\":\"male\"}}";
+
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(jsonBody.getBytes("UTF-8"));
+        }
+
+        String outputFile = "output.mp3";
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(conn.getInputStream(), "UTF-8"));
+             FileOutputStream fos = new FileOutputStream(outputFile)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("data:")) {
+                    String data = line.substring(5);
+                    if (data.contains("\"finish_reason\":\"null\"")) {
+                        int start = data.indexOf("\"data\":\"") + 8;
+                        int end = data.indexOf("\"", start);
+                        if (start > 8 && end > start) {
+                            byte[] chunk = Base64.getDecoder().decode(
+                                data.substring(start, end));
+                            fos.write(chunk);
+                        }
+                    } else if (data.contains("\"finish_reason\":\"stop\"")) {
+                        System.out.println("音乐生成完成！已保存到 " + outputFile);
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+## **支持的模型与地域**
+
+## 华北2（北京）
+
+调用以下模型时，请选择北京地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)：
+
+-   fun-music-v1
+    
+-   fun-music-preview
     
 
 ## **API参考**
@@ -505,17 +659,25 @@ Fun-Music 内置专业歌词创作模型。当您选择自行提供歌词时，�
 
 ## **常见问题**
 
-### **lyrics 和 prompt 有什么区别？**
+### **能否指定乐器、节奏或情感？**
 
-`lyrics` 参数用于传入您自己编写的歌词，模型将严格根据歌词内容进行谱曲和演唱。`prompt` 参数用于传入对音乐风格、场景的自然语言描述，模型将自动创作歌词并生成对应的音乐。两个参数至少传入一个。如果同时传入，仅 `lyrics` 生效。
+可以。在 `prompt` 中直接描述即可，例如“钢琴伴奏，慢节拍，伤感”。模型会尽可能遵循这些描述进行创作。描述越具体，生成效果越贴合预期。详细的提示词撰写建议请参见[提示词（prompt）](#rv94p4q5r6s7t)。
 
-### **流式和非流式模式如何选择？**
+### **两个模型怎么选？**
 
-如果只需获取最终的完整音频文件，推荐使用非流式模式，接口调用更简单。如果需要在音乐生成过程中逐步获取音频数据（如边生成边播放），建议使用流式模式。
+`fun-music-v1` 支持通过 `gender` 参数选择男声或女声，且支持 `prompt` 和 `lyrics` 二选一。`fun-music-preview` 必须传入 `prompt`，不支持 `gender` 参数。两个模型的详细差异请参见[两个模型的区别](#rv22v4w5x6y7z)。
 
 ### **生成的音频 URL 有效期是多久？**
 
 音频文件下载 URL 的有效期为 24 小时，请在此时间内完成下载。超过有效期后 URL 将失效，需要重新调用接口生成。
+
+### **lyrics 和 prompt 有什么区别？**
+
+`lyrics` 参数用于传入您自己编写的歌词，模型将严格根据歌词内容谱曲并生成歌曲。`prompt` 参数用于传入对音乐风格、场景的自然语言描述，模型将自动创作并生成音乐。两个参数的必选性因模型而异：`fun-music-v1` 至少传入其中之一，若同时传入仅 `lyrics` 生效；`fun-music-preview` 必须传入 `prompt`，`lyrics` 为可选参数，传入后将优先作为歌词内容。
+
+### **流式和非流式模式如何选择？**
+
+如果只需获取最终的完整音频文件，推荐使用非流式模式，接口调用更简单。如果需要在音乐生成过程中逐步获取音频数据（如边生成边播放），建议使用流式模式。
 
 ### **流式和非流式模式的参数限制有何不同？**
 

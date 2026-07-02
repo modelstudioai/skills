@@ -6,13 +6,13 @@
 
 平台提供三种[计费](../concepts/billing.md)方式，创建后不可更改，需下线重建才能切换：
 
-| 计费方式 | 适用场景 | 核心优势 |
+| [计费](../concepts/billing.md)方式 | 适用场景 | 核心优势 |
 |---------|---------|---------|
 | 预置吞吐（PTU） | 流量稳定的高负载生产环境 | 保障 TPM 吞吐，TPS 提升约 1.5~2.0 倍 |
 | 模型单元 | 需自定义性能指标、资源隔离的场景 | 性能可调，支持 PD 分离模式 |
-| [Token](../concepts/token.md) 用量 | 调优后模型效果验证 | 不使用不计费 |
+| [Token](../concepts/token.md) 用量 | 调优后模型效果验证 | 不使用不[计费](../concepts/billing.md) |
 
-详细计费规则和支持模型列表参见 [模型部署](../../raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)。
+详细[计费](../concepts/billing.md)规则和支持模型列表参见 [模型部署](../../raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)。
 
 ## 预置吞吐（PTU）部署
 
@@ -84,7 +84,7 @@ PTU 部署支持长输入请求和前缀缓存，关键规则如下：
 }
 ```
 
-**Token 用量模式**（仅限调优后模型）：
+**[Token](../concepts/token.md) 用量模式**（仅限调优后模型）：
 ```json
 {
   "model_name": "qwen3-8b-ft-xxx",
@@ -105,7 +105,7 @@ PTU 部署支持长输入请求和前缀缓存，关键规则如下：
 
 - 部署成功后即开始计费，即使尚未调用模型
 - 后付费欠费后资源保留 24 小时，超时底层资源被删除（任务保留，补费后可恢复）
-- Token 用量模式一个月内不使用将自动释放
+- [Token](../concepts/token.md) 用量模式一个月内不使用将自动释放
 - 模型导入后推理效果可能与本地 vLLM/SGLang 不一致，需调整 temperature、top_p 等参数对齐
 - [API Key](../concepts/api-key.md) 的归属[业务空间](../concepts/workspace.md)需拥有目标模型的部署权限
 
@@ -115,5 +115,6 @@ PTU 部署支持长输入请求和前缀缓存，关键规则如下：
 - [预置吞吐长输入与缓存](../../raw/model-user-guide/model-deployment-1/ptu-long-input-and-cache.md)
 - [模型导入](../../raw/model-user-guide/model-deployment-1/model-import.md)
 - [使用 API或命令行进行模型部署](../../raw/model-user-guide/model-deployment-1/model-deployment-quick-start.md)
+
 
 

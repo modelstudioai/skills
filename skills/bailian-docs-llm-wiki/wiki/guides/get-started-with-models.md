@@ -1,58 +1,68 @@
 # get started with models
 
-阿里云百炼是一站式大模型开发平台，兼容 OpenAI 接口规范，提供千问（Qwen）全系列及 DeepSeek、Kimi 等第三方模型的即开即用服务。开发者只需获取 [API Key](../concepts/api-key.md)、配置 Base URL，即可通过几行代码完成模型调用。
+阿里云百炼提供开箱即用的大模型服务，兼容 OpenAI 接口规范，覆盖文本生成、视觉理解、图像/视频生成、语音、嵌入等多种模态。开发者只需获取 [API Key](../concepts/api-key.md)、选择地域和模型，即可通过几行代码完成首次调用。本文汇总了从账号开通到生产接入所需的核心信息。
 
 ## 平台概览
 
-百炼面向开发者提供模型 API 调用、模型调优与部署、应用构建三大核心能力。详细介绍参见[什么是阿里云百炼](../../raw/model-user-guide/get-started-with-models/what-is-model-studio.md)。
+百炼是一站式大模型开发与应用平台，集成自研千问（Qwen）全系列及 DeepSeek、Kimi、GLM 等第三方模型。面向开发者提供兼容 OpenAI 的 API 和全链路模型服务（调优、部署、评测）；面向业务人员提供可视化智能体和工作流构建能力。详见[什么是阿里云百炼](../../raw/model-user-guide/get-started-with-models/what-is-model-studio.md)。
 
-主要功能包括：
+## 可用模型
 
-- **模型调用**：兼容 OpenAI / Anthropic / DashScope 三种接口协议，覆盖文本生成、视觉理解、图像生成、语音识别与合成、嵌入向量等多种模态
-- **应用构建**：可视化创建智能体、工作流应用，或通过高代码模式部署 Python 后端服务
-- **模型调优与部署**：支持 SFT、CPT、DPO 微调，以及资源专享的推理服务部署
+百炼按能力和成本分为三档核心文本模型，并提供丰富的[多模态](../concepts/multimodal.md)和领域模型。完整列表见[选择模型](../../raw/model-user-guide/get-started-with-models/models.md)。
 
-## 模型选择
+### 文本生成（千问系列）
 
-百炼提供多层级的千问模型，按需选择（详见[选择模型](../../raw/model-user-guide/get-started-with-models/models.md)）：
+| 模型 | 定位 | 适用场景 |
+|------|------|----------|
+| qwen3.7-max | 效果最强 | 复杂、多步骤推理任务 |
+| qwen3.7-plus | 效果/速度/成本均衡 | 多数生产场景（推荐） |
+| qwen3.6-flash | 高性价比、低延迟 | 简单任务、快速响应 |
 
-| 模型层级 | 推荐模型 | 适用场景 |
-|---------|---------|---------|
-| Max（最强） | qwen3.7-max | 复杂、多步骤推理任务 |
-| Plus（均衡） | qwen3.7-plus | 多数场景的推荐选择，效果/速度/成本均衡 |
-| Flash（高性价比） | qwen3.6-flash | 快速响应的简单任务，低延迟 |
+### 第三方模型
 
-此外还提供长文本处理、翻译、数据挖掘等细分领域模型，以及 DeepSeek（仅北京地域）等第三方模型。
+deepseek-v4-pro、deepseek-v4-flash、kimi-k2.7-code、glm-5.2、MiniMax-M2.7 等，API 格式与千问一致。
 
-## 快速开始
+### [多模态](../concepts/multimodal.md)与领域模型
+
+- **视觉理解**：qwen3.7-plus、qwen3.5-omni-plus
+- **图像生成**：wan2.7-image-pro、qwen-image-2.0-pro
+- **视频生成**：happyhorse-1.1-t2v / i2v / r2v
+- **3D 生成**：Tripo-H3.1、Tripo-P1.0
+- **语音识别/合成**：qwen3.5-omni-plus、cosyvoice-v2 等
+- **Embedding/Rerank**：text-embedding-v4、qwen3-rerank
+
+## 首次调用
+
+完整步骤见[首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md)，核心流程如下：
 
 ### 1. 账号准备
 
-1. 注册阿里云账号并完成实名认证
-2. 前往百炼控制台开通服务（自动开通，无需额外费用）
-3. 创建 [API Key](../concepts/api-key.md)
-4. 获取[业务空间](../concepts/workspace.md) ID（使用北京、新加坡、东京、法兰克福地域时需要）
+1. 注册阿里云账号并完成实名认证。
+2. 用主账号访问百炼控制台，阅读并同意协议即可开通。
+3. 在 [API Key](../concepts/api-key.md) 页面创建 Key。
+4. 使用北京、新加坡、东京、法兰克福地域时，还需在[业务空间](../concepts/workspace.md)管理页面获取 WorkspaceId。
 
-### 2. 配置环境变量
+### 2. 配置 [API Key](../concepts/api-key.md)
 
-将 [API Key](../concepts/api-key.md) 配置到 `DASHSCOPE_API_KEY` 环境变量，避免硬编码泄露风险：
+建议将 API Key 配置到环境变量 `DASHSCOPE_API_KEY`，避免硬编码泄露：
 
 ```bash
-# macOS/Linux
-export DASHSCOPE_API_KEY="YOUR_DASHSCOPE_API_KEY"
-
-# 永久生效（zsh）
-echo 'export DASHSCOPE_API_KEY="YOUR_DASHSCOPE_API_KEY"' >> ~/.zshrc
-source ~/.zshrc
+# Linux / macOS (Zsh)
+echo 'export DASHSCOPE_API_KEY="sk-xxx"' >> ~/.zshrc && source ~/.zshrc
 ```
 
-### 3. 发起第一次调用
+```powershell
+# Windows PowerShell
+[Environment]::SetEnvironmentVariable("DASHSCOPE_API_KEY", "sk-xxx", "User")
+```
 
-使用 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)（Python）：
+### 3. 发起请求
+
+百炼兼容 OpenAI SDK，迁移成本极低：
 
 ```python
-import os
 from openai import OpenAI
+import os
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
@@ -60,63 +70,73 @@ client = OpenAI(
 )
 completion = client.chat.completions.create(
     model="qwen3.7-plus",
-    messages=[{'role': 'user', 'content': '你是谁？'}]
+    messages=[{"role": "user", "content": "你是谁？"}]
 )
 print(completion.choices[0].message.content)
 ```
 
-完整的环境配置与多语言示例参见[首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md)。
+也支持 DashScope SDK 和 curl 调用，详见原文。
 
 ## 地域与接入域名
 
-百炼在多个地域提供服务，每个地域有独立的接入域名、API Key 和模型列表，不能跨地域混用。详细信息参见[选择地域、服务部署范围和接入域名](../../raw/model-user-guide/get-started-with-models/regions.md)。
+百炼在 5 个地域提供服务，地域决定数据存储位置和接入点，服务部署范围决定推理执行位置。详见[选择地域、服务部署范围和接入域名](../../raw/model-user-guide/get-started-with-models/regions.md)。
 
-| 地域 | 地域 ID | 服务部署范围 | 推荐场景 |
-|------|--------|------------|---------|
-| 华北2（北京） | cn-beijing | 中国内地 | 数据不出中国内地 |
-| 新加坡 | ap-southeast-1 | 国际（除中国内地外） | 数据不经过中国内地 |
-| 美国（弗吉尼亚） | us-east-1 | 全球 / 美国 | 无驻留限制或限美国境内 |
-| 德国（法兰克福） | eu-central-1 | 全球 / 欧盟 | 无驻留限制或限欧盟境内 |
-| 日本（东京） | ap-northeast-1 | 全球 / 日本 | 无驻留限制或限日本境内 |
+| 地域 | 服务部署范围 | 特点 |
+|------|-------------|------|
+| 华北2（北京） | 中国内地 | 功能最全：支持应用开发、模型调优、批量推理 |
+| 新加坡 | 国际 | 支持批量推理，不支持调优和应用开发 |
+| 美国（弗吉尼亚） | 全球/美国 | 用 `-us` 后缀模型名限定美国境内推理 |
+| 德国（法兰克福） | 全球/欧盟 | 通过[业务空间](../concepts/workspace.md)选择部署范围 |
+| 日本（东京） | 全球/日本 | 通过[业务空间](../concepts/workspace.md)选择部署范围 |
 
-### 接入域名类型
+> **注意**：各地域的 API Key 相互独立、不能跨地域使用。Base URL 必须与同一地域的 API Key 配套，否则会报 401 错误。
 
-百炼提供三种接入域名（详见[Base URL总览](../../raw/model-user-guide/get-started-with-models/base-url.md)）：
+## Base URL 选择
 
-- **[业务空间](../concepts/workspace.md)专属域名**（推荐）：`{WorkspaceId}.{region}.maas.aliyuncs.com`，生产环境使用，高并发、低延迟、SLA 99.9%、请求超时 3600 秒
-- **Dashscope 域名**：`dashscope.aliyuncs.com`，存量兼容，建议迁移至专属域名
-- **试用域名**：`trial.{region}.maas.aliyuncs.com`，快速验证用，RPM 限制为 1000
+百炼提供三类按量付费域名和两类套餐域名，详见[Base URL总览](../../raw/model-user-guide/get-started-with-models/base-url.md)。
 
-> **注意**：Base URL 必须与同一[计费](../concepts/billing.md)方案的 API Key 配套使用，否则会报错 401。Coding Plan 和 [Token](../concepts/token.md) Plan 有各自专属的 Base URL 和 API Key，不能混用。
+| 域名类型 | 格式示例（北京，OpenAI 兼容） | 说明 |
+|----------|-------------------------------|------|
+| 业务空间专属域名（推荐） | `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` | 更高吞吐、更低时延、业务空间级隔离 |
+| Dashscope 域名 | `https://dashscope.aliyuncs.com/compatible-mode/v1` | 中心化共享域名，建议迁移到专属域名 |
+| 试用域名 | `https://trial.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` | 限流值较小，适合临时测试 |
+| [Token](../concepts/token.md) Plan 专属 | `https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` | 仅限 Claude Code 等 AI 工具交互式使用 |
+| Coding Plan 专属 | `https://coding-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` | 固定月费套餐，仅限 AI 工具交互式使用 |
+
+百炼同时支持 Anthropic 兼容接口，将路径中 `/compatible-mode/v1` 替换为 `/apps/anthropic` 即可。
 
 ## 限流
 
-百炼按主账号维度对模型调用设置限流（RPM 和 TPM），超出限制时请求被拒绝，通常一分钟内恢复。详见[限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)。
+百炼按主账号维度对模型调用设置 RPM（每分钟请求数）和 TPM（每分钟 [Token](../concepts/token.md) 数）限流，账号下所有 RAM 子账号、业务空间和 API Key 的调用量合并计算。详见[限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)。
 
-主要模型的限流额度（北京地域）：
+### 主要模型限流参考（北京/中国内地）
 
 | 模型 | RPM | TPM |
 |------|-----|-----|
 | qwen3.7-max | 30,000 | 5,000,000 |
 | qwen3.7-plus | 30,000 | 5,000,000 |
 | qwen3.6-flash | 30,000 | 10,000,000 |
+| qwen-plus | 30,000 | 5,000,000 |
+| qwq-plus | 600 | 1,000,000 |
 
-避免限流的策略：
-1. 优先使用稳定版模型（限流更宽松）
-2. 平滑请求速率，避免瞬时高峰
-3. 添加备选模型做 fallback
-4. 无实时需求时使用 Batch API（不受限流限制）
-5. 在控制台申请临时提额（立即生效，有效期 30 天）
+> **注意**：限流策略可能按秒级 RPS（RPM/60）和 TPS（TPM/60）执行，即使每分钟总量未超限，瞬时高峰也可能触发限流。稳定版/最新版比带日期的快照版本限流更宽松。
 
-## [计费](../concepts/billing.md)
+### 应对限流的建议
 
-开通百炼无费用，调用模型按量付费。新用户可获得北京地域免费额度。
+1. **选用高限流模型**：优先使用 qwen-plus 等限流额度更高的稳定版模型。
+2. **平滑请求速率**：采用匀速调度或指数退避，避免瞬时请求爆发。
+3. **添加备选模型**：触发限流后自动切换到备用模型继续生成。
+4. **使用 Batch API**：批量推理场景不受限流限制。
 
-控制费用的关键措施：
-- 删除不用的 API Key 从源头阻断调用
-- 开启「免费额度用完即停」避免意外扣费
-- 设置高额消费预警
-- 订阅 Coding Plan（固定月费，月度请求额度）
+## 费用控制
+
+百炼按量付费，本身没有自动扣费开关。控制费用的关键措施：
+
+- **删除 API Key** 从源头阻断调用。
+- **停止所有调用** 并排查定时任务和后台进程。
+- **清理[计费](../concepts/billing.md)资源**：删除不用的知识库，下线按时长[计费](../concepts/billing.md)的部署实例。
+- **新用户可开启"免费额度用完即停"**：额度耗尽后服务自动停止，不转为付费（仅限北京地域、免费额度有效期内）。
+- **设置费用预警**：在账单详情和模型监控中配置高额消费预警。
 
 ## 来源文档
 

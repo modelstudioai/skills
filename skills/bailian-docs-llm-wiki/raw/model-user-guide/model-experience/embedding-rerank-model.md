@@ -2,6 +2,32 @@
 
 选择适合语义搜索、RAG（Retrieval-Augmented Generation）检索、跨模态匹配和重排序场景的模型。
 
+## 从闭源模型迁移到百炼?
+
+如果你正在使用 OpenAI、Cohere 或 Voyage 的向量与重排序模型，可参考下表选择百炼对位模型。
+
+**闭源模型代表**
+
+**百炼推荐**
+
+文本 Embedding
+
+OpenAI text-embedding-3-large、Voyage-3-large、Cohere embed-v4、Google Gemini Embedding 2
+
+`text-embedding-v4`
+
+多模态 Embedding
+
+Cohere embed-v4、Voyage multimodal、Google Gemini Embedding 2
+
+`qwen3-vl-embedding`、`tongyi-embedding-vision-plus`
+
+重排序
+
+Cohere Rerank 3.5、Voyage rerank-2.5
+
+`qwen3-rerank`、`gte-rerank-v2`
+
 ## 文本Embedding
 
 纯文本搜索、RAG或聚类场景，推荐使用`text-embedding-v4`。如果需要迁移已有的v3索引，可使用`text-embedding-v3`（维度兼容）。

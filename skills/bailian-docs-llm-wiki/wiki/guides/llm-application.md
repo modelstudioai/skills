@@ -58,7 +58,7 @@
 
 ## 文件问答
 
-文件问答是智能体应用的子能力，上传文件后可与文件内容进行智能问答。详见 [文件问答](../../raw/application-user-guide/llm-application/file-q-a.md)。三种处理模式：
+文件问答是[智能体应用](../concepts/agent-application.md)的子能力，上传文件后可与文件内容进行智能问答。详见 [文件问答](../../raw/application-user-guide/llm-application/file-q-a.md)。三种处理模式：
 
 | 模式 | 机制 | 适用场景 | [Token](../concepts/token.md) 消耗 |
 | --- | --- | --- | --- |
@@ -93,8 +93,8 @@
 
 ### API 调用
 
-- 调用前应用须已发布；处理模式按智能体应用中保存的配置执行，API 调用时**无法动态切换**。
-- 调用频率遵循所属智能体应用统一限流策略，默认 100 次/分钟，与其他 API 请求共享配额。
+- 调用前应用须已发布；处理模式按[智能体应用](../concepts/agent-application.md)中保存的配置执行，API 调用时**无法动态切换**。
+- 调用频率遵循所属[智能体应用](../concepts/agent-application.md)统一限流策略，默认 100 次/分钟，与其他 API 请求共享配额。
 - 文件传递方式：`image_list`（图片 URL，限 10MB）、`file_list`（通用文件 URL，限 10MB）、`session_file_id`（生产环境推荐，先调文件上传 API 获取 ID 再传入对话 API）。
 
 ## 工作流应用
@@ -126,7 +126,7 @@
 - **模型调用**：按所选模型类型与输入/输出 [Token](../concepts/token.md) 数量[计费](../concepts/billing.md)。文件问答的全文引用模式输入 [Token](../concepts/token.md) 消耗较大，切片检索模式通常远小于全文引用，自定义处理模式取决于模型与工具交互复杂性。
 - **知识库**：按量付费；从知识库召回的文本切片会增加模型输入 [Token](../concepts/token.md) 数量，可能导致模型调用费用增加。
 - **MCP**：部分官方 MCP（如文生图、文生视频、语音合成）按模型调用[计费](../concepts/billing.md)；部分 MCP 涉及第三方 API 调用，费用由第三方收取，百炼不另行收费。
-- **长期记忆**（旧版智能体）：数据存储不收费；记忆体内容合并到 Prompt 中传递给大模型增加 [Token](../concepts/token.md) 消耗，**记忆体内容占用的 [Token](../concepts/token.md) 暂不计费**。
+- **长期记忆**（旧版智能体）：数据存储不收费；记忆体内容合并到 Prompt 中传递给大模型增加 [Token](../concepts/token.md) 消耗，**记忆体内容占用的 [Token](../concepts/token.md) 暂不[计费](../concepts/billing.md)**。
 - **文件上传**：文件上传操作本身不收费。
 
 > **注意**：仅创建应用不收费，调用应用进行问答时才根据所用模型收取模型调用费用。
@@ -147,6 +147,7 @@
 - [高代码应用](../../raw/application-user-guide/llm-application/rich-code-application.md)
 - [工作流应用](../../raw/application-user-guide/llm-application/workflow-application.md)
 - [文件问答](../../raw/application-user-guide/llm-application/file-q-a.md)
+
 
 
 

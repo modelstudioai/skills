@@ -18,9 +18,9 @@
 
 | 方案 | OpenAI 兼容 Base URL | Anthropic 兼容 Base URL |
 | --- | --- | --- |
-| 按量计费（华北2-北京） | `https://dashscope.aliyuncs.com/compatible-mode/v1` | `https://dashscope.aliyuncs.com/apps/anthropic` |
-| 按量计费（新加坡） | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1` | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic` |
-| 按量计费（美国-弗吉尼亚） | `https://dashscope-us.aliyuncs.com/compatible-mode/v1` | （文档未列出 Anthropic 端点） |
+| 按量[计费](../concepts/billing.md)（华北2-北京） | `https://dashscope.aliyuncs.com/compatible-mode/v1` | `https://dashscope.aliyuncs.com/apps/anthropic` |
+| 按量[计费](../concepts/billing.md)（新加坡） | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1` | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic` |
+| 按量[计费](../concepts/billing.md)（美国-弗吉尼亚） | `https://dashscope-us.aliyuncs.com/compatible-mode/v1` | （文档未列出 Anthropic 端点） |
 | Coding Plan | `https://coding.dashscope.aliyuncs.com/v1` | `https://coding.dashscope.aliyuncs.com/apps/anthropic` |
 | [Token](../concepts/token.md) Plan 团队版 | `https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` | `https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic` |
 
@@ -72,7 +72,7 @@ Cursor 与部分内置模型名冲突，需使用别名：`kimi-k2.6` → `kimi-
 
 ### Qoder / Qoder CN 的提供商与类型一致性
 
-Qoder 系列在模型配置中需同时选对**提供商**（阿里云百炼 - 国内）与**类型**（[Token](../concepts/token.md) Plan / Coding Plan / 按量付费）。若类型与实际套餐不一致（如用 Token Plan 的 Key 但类型选 Coding Plan），会报 `Unknown Custom model Exception`。
+Qoder 系列在模型配置中需同时选对**提供商**（阿里云百炼 - 国内）与**类型**（[Token](../concepts/token.md) Plan / Coding Plan / 按量付费）。若类型与实际套餐不一致（如用 [Token](../concepts/token.md) Plan 的 Key 但类型选 Coding Plan），会报 `Unknown Custom model Exception`。
 
 ## 百炼 CLI 集成
 
@@ -93,7 +93,7 @@ Cursor、Cline、Qoder 等支持通过对话调用百炼能力：全局安装 `b
 
 图像 / 视频生成 API 采用**[异步调用](../concepts/async-invocation.md)机制**：先 POST 创建任务拿到 `task_id`，再 GET 轮询 `/api/v1/tasks/{task_id}` 直到 `task_status` 为 `SUCCEEDED`。请求头需带 `X-DashScope-Async: enable`、`Authorization: Bearer <api-key>`、`Content-Type: application/json`。`task_id` 与最终图像 / 视频 URL 有效期均为 24 小时。该方式仅适用于快速测试与功能验证，生产环境应使用官方 SDK。
 
-> **注意**：Postman / cURL / Dify 这类工作流、API 测试、自定义应用工具**仅能使用按量计费**接入。Token Plan 团队版和 Coding Plan 明确不支持此类工具，将套餐 Key 用于允许范围之外的调用可能被判定为违规滥用，导致订阅暂停或 Key 封禁。
+> **注意**：Postman / cURL / Dify 这类工作流、API 测试、自定义应用工具**仅能使用按量计费**接入。[Token](../concepts/token.md) Plan 团队版和 Coding Plan 明确不支持此类工具，将套餐 Key 用于允许范围之外的调用可能被判定为违规滥用，导致订阅暂停或 Key 封禁。
 
 ## 支持的模型
 
@@ -101,14 +101,14 @@ Cursor、Cline、Qoder 等支持通过对话调用百炼能力：全局安装 `b
 
 - 按量计费：[OpenAI 兼容支持的模型](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#7f9c78ae99pwz) / [Anthropic 兼容支持的模型](https://help.aliyun.com/zh/model-studio/anthropic-api-messages#ae1b2c3d4e5f6)
 - Coding Plan：[支持的模型](https://help.aliyun.com/zh/model-studio/coding-plan)
-- Token Plan 团队版：[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)（仅文本生成类）
+- [Token](../concepts/token.md) Plan 团队版：[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)（仅文本生成类）
 
 部分工具（如 OpenCode、Kilo CLI、Qwen Code）在配置文件中显式列出 `qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash`、`deepseek-v4-pro/flash`、`kimi-k2.7-code/2.6/2.5`、`glm-5.2/5.1/5`、`MiniMax-M2.5` 等，支持开启 `thinking` 思考模式（`budgetTokens` 一般设 8192，Coding Plan 下 Kilo CLI 设 1024）。Qoder / Qoder CN 仅支持文本生成模型，不支持[多模态](../concepts/multimodal.md)。
 
 ## 限制与注意事项
 
 - **方案与工具匹配**：Token Plan 团队版、Coding Plan 仅限 AI 编程工具与 OpenClaw 使用；Dify、n8n、Coze、Postman、Insomnia、自定义应用后端等只能用按量计费。
-- **API Key 不可混用**：三种方案 Key 互不通；按量计费 Key 还需与地域一致。报 `401 Incorrect API key provided` 时优先排查此项。
+- **[API Key](../concepts/api-key.md) 不可混用**：三种方案 Key 互不通；按量计费 Key 还需与地域一致。报 `401 Incorrect API key provided` 时优先排查此项。
 - **思考模式开关**：思考型模型（Qwen3 思考模式、QwQ）在部分客户端需手动开启思考模式或勾选 R1 messages format，否则会报 `The value of the enable_thinking parameter is restricted to True` 或 `400 InternalError.Algo.InvalidParameter`。
 - **免费额度限制**：按量计费免费额度仅适用华北2（北京）地域模型，各模型额度独立、不可跨模型共享，控制台数据每小时更新可能滞后。
 - **Windows 安装**：Hermes Agent、Claude Code 等在 Windows 上需先装 WSL2 或 Git Bash，再在 WSL / Git Bash 中执行安装命令。
@@ -134,6 +134,7 @@ Cursor、Cline、Qoder 等支持通过对话调用百炼能力：全局安装 `b
 - [使用Postman或cURL调用图像/视频生成API](../../raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)
 - [Dify](../../raw/model-user-guide/use-chat-client-or-development-tool/dify.md)
 - [更多工具](../../raw/model-user-guide/use-chat-client-or-development-tool/more-tools.md)
+
 
 
 

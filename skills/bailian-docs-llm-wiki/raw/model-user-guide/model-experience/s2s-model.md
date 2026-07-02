@@ -2,6 +2,32 @@
 
 为“语音输入 → 语音输出”场景（语音对话、语音翻译、同声传译等）选择模型。
 
+## 从闭源模型迁移到百炼?
+
+如果你正在使用 OpenAI Realtime 或 Gemini Live，可参考下表选择百炼对位模型。
+
+**闭源模型代表**
+
+**百炼推荐**
+
+高能力实时对话
+
+OpenAI GPT Realtime、Gemini 3.1 Live
+
+`qwen3.5-omni-plus-realtime`
+
+成本敏感对话
+
+OpenAI gpt-4o-mini Realtime
+
+`qwen3.5-omni-flash-realtime`
+
+实时翻译 / 同传
+
+Gemini 3.1 Live
+
+`qwen3.5-livetranslate-flash-realtime`
+
 **说明**
 
 本文档面向“语音 → 语音”场景。如需视觉理解、音视频分析、内容审核等更广泛的多模态能力，请参考[全模态](https://help.aliyun.com/zh/model-studio/omni/)。

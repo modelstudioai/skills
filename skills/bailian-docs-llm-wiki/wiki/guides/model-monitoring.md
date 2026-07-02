@@ -21,8 +21,8 @@
 | 视觉模型·图像生成 | 张 | 按成功生成的图像张数[计费](../concepts/billing.md) |
 | 视觉模型·视频生成 | 秒 | 按成功生成的视频秒数[计费](../concepts/billing.md) |
 | 语音模型（TTS/ASR/音视频翻译等） | 秒、字符或 [Token](../concepts/token.md) | 视模型而定，可能按时长、字符数或 [Token](../concepts/token.md) 数 |
-| 全模态模型 | Token | 文本与其他模态均按 Token 数计费 |
-| 向量模型 | Token | 按输入文本的 Token 数计费 |
+| 全模态模型 | [Token](../concepts/token.md) | 文本与其他模态均按 [Token](../concepts/token.md) 数[计费](../concepts/billing.md) |
+| 向量模型 | [Token](../concepts/token.md) | 按输入文本的 Token 数[计费](../concepts/billing.md) |
 
 > **注意**：用量数据按**[业务空间](../concepts/workspace.md)**维度统计，**不支持按阿里云账号维度统计**。如需账号级 Token 总量，需用主账号在费用与成本页面导出账单查看。
 
@@ -57,7 +57,7 @@
 
 **模型监控表格**列出各模型的模型 Code、[业务空间](../concepts/workspace.md)、调用总量、调用失败量、失败率、平均调用时长、平均首包时长（除模型 Code、[业务空间](../concepts/workspace.md)外均可排序），操作列提供**监控**、**日志**入口。
 
-> 默认业务空间成员可查看所有业务空间的模型调用情况；子业务空间成员仅能查看当前空间数据，无法切换查看其他业务空间。
+> 默认[业务空间](../concepts/workspace.md)成员可查看所有[业务空间](../concepts/workspace.md)的模型调用情况；子[业务空间](../concepts/workspace.md)成员仅能查看当前空间数据，无法切换查看其他业务空间。
 
 进入目标模型的**监控**详情页后，可查看 4 类监控指标：
 
@@ -152,6 +152,7 @@ Authorization: Basic base64Encode(AccessKey:AccessKeySecret)
 
 - [模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)
 - [模型监控](../../raw/model-user-guide/model-monitoring/model-telemetry.md)
+
 
 
 

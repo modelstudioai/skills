@@ -53,7 +53,7 @@
 
 ### 过滤器
 
-支持按状态（正常/错误，可按错误类型细分）、Span Name、输入、输出、延时、[Token](../concepts/token.md) 总量、输入 Token、输出 Token、标签等字段添加多个筛选条件，条件之间组合应用。
+支持按状态（正常/错误，可按错误类型细分）、Span Name、输入、输出、延时、[Token](../concepts/token.md) 总量、输入 [Token](../concepts/token.md)、输出 [Token](../concepts/token.md)、标签等字段添加多个筛选条件，条件之间组合应用。
 
 ### 数据标注
 
@@ -67,7 +67,7 @@
 
 被观测应用在调用过程中会按操作单元生成不同类型的**节点**，节点之间可形成嵌套关系。仅在被触发或调用时才展示对应节点。完整节点类型与说明见 [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md)。
 
-### 智能体应用节点
+### [智能体应用](../concepts/agent-application.md)节点
 
 | 节点 | 说明 |
 | --- | --- |
@@ -75,7 +75,7 @@
 | AGENT | 对智能体的调用 |
 | RETRIEVER | 检索操作；KnowledgeRetriever 表示在[知识库](../concepts/knowledge-base.md)中检索。子节点名称含 TextRetriever（改进 BM25，默认返回 100 个切片）、VectorRetriever（向量检索，默认返回 100 个切片） |
 | REWRITER | 基于会话上下文调整原始 Prompt 以提升检索效果 |
-| EMBEDDING | 将 Prompt 转为向量，Token 量为本次向量化的 Token 数 |
+| EMBEDDING | 将 Prompt 转为向量，[Token](../concepts/token.md) 量为本次向量化的 Token 数 |
 | RERANKER | 计算文本切片相似度分数并降序排列 |
 | LLM | 大模型推理/文本生成，Token 量 = 输入 + 输出；延时包含输出回复过程 |
 | TOOL | 插件调用（官方或自定义） |
@@ -105,6 +105,7 @@
 ## 来源文档
 
 - [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md)
+
 
 
 

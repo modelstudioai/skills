@@ -57,12 +57,12 @@
 
 ## [多模态](../concepts/multimodal.md)向量模型
 
-多模态向量模型将文本、图像和视频转换为同一语义空间中的向量，支持跨模态检索（以文搜图、以图搜视频等）。详细 API 参见 [Multimodal-Embedding API详情](../../raw/model-api-reference/vector-and-sort/multimodal-vector/multimodal-embedding-api-reference.md)。
+[多模态](../concepts/multimodal.md)向量模型将文本、图像和视频转换为同一语义空间中的向量，支持跨模态检索（以文搜图、以图搜视频等）。详细 API 参见 [Multimodal-Embedding API详情](../../raw/model-api-reference/vector-and-sort/multimodal-vector/multimodal-embedding-api-reference.md)。
 
 **向量类型：**
 
 - **独立向量**：为每个输入分别生成向量，适用于逐项对比
-- **融合向量**：将所有输入融合为 1 个向量，适用于综合理解多模态内容
+- **融合向量**：将所有输入融合为 1 个向量，适用于综合理解[多模态](../concepts/multimodal.md)内容
 
 | 模型 | 默认维度 | 向量类型 | 说明 |
 |------|---------|---------|------|
@@ -88,5 +88,6 @@
 - [文本排序](../../raw/model-api-reference/vector-and-sort/rerank-model/text-rerank-api.md)
 - [Multimodal-Embedding API详情](../../raw/model-api-reference/vector-and-sort/multimodal-vector/multimodal-embedding-api-reference.md)
 - [批处理接口API详情](../../raw/model-api-reference/vector-and-sort/general-text-vector/text-embedding-batch-api.md)
+
 
 

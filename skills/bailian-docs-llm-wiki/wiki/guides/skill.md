@@ -1,6 +1,6 @@
 # skill
 
-Skill 是百炼平台智能体应用的可扩展能力包，让智能体在对话中自动识别并处理特定类型的任务，如文件处理、数据分析等，无需额外编码或接入外部工具。详见 [Skill](../../raw/application-user-guide/skill/introduction-to-skill.md)。
+Skill 是百炼平台[智能体应用](../concepts/agent-application.md)的可扩展能力包，让智能体在对话中自动识别并处理特定类型的任务，如文件处理、数据分析等，无需额外编码或接入外部工具。详见 [Skill](../../raw/application-user-guide/skill/introduction-to-skill.md)。
 
 ## Skill 类型
 
@@ -58,7 +58,7 @@ description: "Use this skill any time a spreadsheet file is the primary input or
 3. 在弹窗中点击上传区域选择 ZIP 文件，或直接将文件拖拽到上传区域。
 4. 点击 **确认** 提交。
 
-提交后系统自动审查 Skill 内容，预计耗时约 2 分钟。审查通过后 Skill 出现在 **自定义 Skill** 标签页中，可添加到智能体应用；未通过则根据提示修改 SKILL.md 后重新上传。
+提交后系统自动审查 Skill 内容，预计耗时约 2 分钟。审查通过后 Skill 出现在 **自定义 Skill** 标签页中，可添加到[智能体应用](../concepts/agent-application.md)；未通过则根据提示修改 SKILL.md 后重新上传。
 
 ### 更新自定义 Skill
 
@@ -80,7 +80,7 @@ description: "Use this skill any time a spreadsheet file is the primary input or
 
 **方式二：在应用配置中添加**
 
-1. 进入目标智能体应用的 **应用配置** 页面。
+1. 进入目标[智能体应用](../concepts/agent-application.md)的 **应用配置** 页面。
 2. 在左侧配置面板找到 **技能** 区域，点击 Skill 右侧的加号。
 3. 从 Skill 列表中选择需要的 Skill，确认添加。
 
@@ -114,6 +114,7 @@ description: "Use this skill any time a spreadsheet file is the primary input or
 ## 来源文档
 
 - [Skill](../../raw/application-user-guide/skill/introduction-to-skill.md)
+
 
 
 

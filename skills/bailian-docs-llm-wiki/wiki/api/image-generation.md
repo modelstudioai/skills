@@ -81,7 +81,7 @@
 3. **同步 vs 异步**：创意工具与万相多数为异步——提交任务得 `task_id`，按建议间隔轮询 `GET /api/v1/tasks/{task_id}`，状态为 `SUCCEEDED` 后取 `output.results`。
 4. **图片传输**：输入图支持公网 URL 或 Base64（需 `data:image/...;base64,` 前缀），输出图一般为临时 URL，需及时下载或转存到 OSS。
 5. **尺寸与长宽比**：各模型支持的尺寸集合不同，超范围会报错；万相 V2、千问等支持按 `size` 或 `parameters.size` 指定。
-6. **内容安全**：所有接口内置内容安全审核，违规 prompt 或图片会被拒绝并在响应中返回对应错误码。
+6. **内容安全**：所有接口内置内容安全审核，违规 [prompt](../guides/prompt.md) 或图片会被拒绝并在响应中返回对应错误码。
 
 ## 通用错误码
 
@@ -90,7 +90,7 @@
 | 400 InvalidParameter | 参数缺失或非法 | 校验 `model`、`input`、`parameters` 结构 |
 | 401 AccessDenied | API_KEY 无效或无权限 | 重新获取 KEY 并确认已开通对应模型 |
 | 429 Throttling | QPS/并发超限 | 退避重试或申请提配额 |
-| 409 DataInspectionFailed | 内容安全拦截 | 修改 prompt/图片后重试 |
+| 409 DataInspectionFailed | 内容安全拦截 | 修改 [prompt](../guides/prompt.md)/图片后重试 |
 | 任务状态 `FAILED` | 异步任务失败 | 查看 `output.message` 定位原因 |
 
 ## 选型建议
@@ -132,6 +132,7 @@
 - [图像擦除补全API参考](../../raw/model-api-reference/image-generation/image-creative-tools-api-reference/image-erase-completion-api-reference.md)
 - [人物写真生成FaceChain](../../raw/model-api-reference/image-generation/image-creative-tools-api-reference/facechain-portrait-generation.md)
 - [创意文字WordArt锦书](../../raw/model-api-reference/image-generation/image-creative-tools-api-reference/wordart-quick-start.md)
+
 
 
 

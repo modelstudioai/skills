@@ -14,9 +14,20 @@
 
 ## **服务端点**
 
-POST `https://dashscope.aliyuncs.com/api/v1/services/audio/music/generation`
+POST `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation`，调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 通信协议：HTTPS。流式输出支持 SSE（Server-Sent Events）。
+
+**重要**
+
+百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+
+-   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 ## **请求头**
 
@@ -57,7 +68,7 @@ string
 ## 非流式输出
 
 ```
-curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generation' \
+curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -72,7 +83,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generat
 ## 流式输出
 
 ```
-curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generation' \
+curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -H "X-DashScope-SSE: enable" \
@@ -89,9 +100,9 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generat
 
 模型名称。可选值：
 
--   `fun-music-preview`
-    
 -   `fun-music-v1`
+    
+-   `fun-music-preview`
     
 
 **input** `_object_` **（必选）**
@@ -100,9 +111,34 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generat
 
 **属性**
 
+**prompt** `_string_` **（条件必选）**
+
+提示词内容，模型将根据提示词自动创作并生成音乐。
+
+-   `fun-music-v1`：与 `lyrics` 二选一，至少传入其中之一。
+    
+-   `fun-music-preview`：必选。
+    
+
+字符限制：
+
+-   非流式模式：1~2000 字符
+    
+-   流式模式：5~1000 个中文汉字或英文单词
+    
+
+**说明**
+
+当同时传入 `prompt` 和 `lyrics` 时，仅 `lyrics` 生效，`prompt` 将被忽略。
+
 **lyrics** `_string_` **（条件必选）**
 
-歌词内容。与 `prompt` 二选一，至少传入其中之一。
+歌词内容。
+
+-   `fun-music-v1`：与 `prompt` 二选一，至少传入其中之一。
+    
+-   `fun-music-preview`：可选。
+    
 
 字符限制：
 
@@ -115,20 +151,17 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/music/generat
 
 当同时传入 `lyrics` 和 `prompt` 时，仅 `lyrics` 生效，`prompt` 将被忽略。
 
-**prompt** `_string_` **（条件必选）**
+**is\_instrumental** `_boolean_` （可选） 默认值为 `false`
 
-提示词内容，模型将根据提示词自动创作歌词并生成歌曲。与 `lyrics` 二选一。
+是否生成纯音乐。设为 `true` 时生成纯音乐（无人声演唱），设为 `false` 时生成歌曲。
 
-字符限制：
+**说明**
 
--   非流式模式：1~2000 字符
-    
--   流式模式：5~1000 个中文汉字或英文单词
-    
+当 `is_instrumental` 为 `true` 时，`lyrics` 和 `gender` 参数无效。
 
 **gender** `_string_` （可选） 默认值为 `female`
 
-演唱声音的性别。可选值：
+演唱声音的性别。仅 `fun-music-v1` 模型支持该参数。可选值：
 
 -   `male`：男声
     

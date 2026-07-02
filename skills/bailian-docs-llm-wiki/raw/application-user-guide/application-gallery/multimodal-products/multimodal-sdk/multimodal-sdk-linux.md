@@ -18,27 +18,27 @@
 
 **MD5**
 
-[V1.4.6-02E-20260228\_Linux.tar.gz](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260228/fmduvb/V1.4.6-02E-20260228_Linux.tar.gz)
+[V1.4.9-02E-20260623\_Linux.tar.gz](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260629/qoxuwi/V1.4.9-02E-20260623_Linux.tar.gz)
 
 Linux x86\_64
 
-e6b1bddd498019b1d29024a1808d1656
+a2f1935e29d7db70021e2c5c7e5c3db8
 
-[V1.4.6-02E-20260227\_Linux\_aarch64\_10.tar.gz](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260227/obivkx/V1.4.6-02E-20260227_Linux_aarch64_10.tar.gz)
+[V1.4.9-02E-20260623\_Linux\_aarch64\_10.tar.gz](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260629/jrjcxt/V1.4.9-02E-20260623_Linux_aarch64_10.tar.gz)
 
 Linux aarch64
 
 (gcc-arm-10.2)
 
-a3b3b5cb72b11757b251c7b3d289e242
+efeb135230fc36f2aa51afa64ab97e6b
 
-[V1.4.6-02E-20260227\_Linux\_aarch64\_11.tar.gz](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260227/qkxjaj/V1.4.6-02E-20260227_Linux_aarch64_11.tar.gz)
+[V1.4.9-02E-20260623\_Linux\_aarch64\_11.tar.gz](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260629/tebtjw/V1.4.9-02E-20260623_Linux_aarch64_11.tar.gz)
 
 Linux aarch64
 
 (gcc-arm-11.2)
 
-2136652ccea57c2202d0873f286b2ade
+fd01741ce3c285e3a8bd602dc30bed67
 
 ## **音频格式说明**
 

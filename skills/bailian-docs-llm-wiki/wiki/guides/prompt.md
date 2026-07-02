@@ -76,7 +76,7 @@ Prompt 模板将 Prompt 的固定结构与动态变量分离，分为预置模�
 
 ### [计费](../concepts/billing.md)
 
-样例库本身不收存储或管理费用，但召回样例会增加大模型调用 [Token](../concepts/token.md) 消耗。总输入 [Token](../concepts/token.md) ≈ 用户查询 [Token](../concepts/token.md) + 所有召回样例总 [Token](../concepts/token.md) + 系统指令 Token。
+样例库本身不收存储或管理费用，但召回样例会增加大模型调用 [Token](../concepts/token.md) 消耗。总输入 [Token](../concepts/token.md) ≈ 用户查询 [Token](../concepts/token.md) + 所有召回样例总 [Token](../concepts/token.md) + 系统指令 [Token](../concepts/token.md)。
 
 ## Prompt 反馈优化
 
@@ -99,10 +99,10 @@ Prompt 模板将 Prompt 的固定结构与动态变量分离，分为预置模�
 ## 限制与注意事项
 
 - **地域限制**：Prompt 模板（预置/自定义）相关功能仅适用于华北2（北京）地域。
-- **字符与 Token**：智能体应用提示词输入框最大支持 6144 字符；自动优化输入过长会因超出 Token 限制而失败。
+- **字符与 [Token](../concepts/token.md)**：[智能体应用](../concepts/agent-application.md)提示词输入框最大支持 6144 字符；自动优化输入过长会因超出 [Token](../concepts/token.md) 限制而失败。
 - **数据安全**：自动优化提交的数据不会被存储或用于模型训练。
 - **功能维护状态**：Prompt 样例库已不再维护，建议迁移至 RAG 表格库；反馈优化仍为推荐路径。
-- **[计费](../concepts/billing.md)影响**：模板管理与自动优化不额外计费；样例库本身免费但增加调用 Token；反馈优化涉及推理模型多轮调用，会产生相应 Token 费用。
+- **[计费](../concepts/billing.md)影响**：模板管理与自动优化不额外[计费](../concepts/billing.md)；样例库本身免费但增加调用 Token；反馈优化涉及推理模型多轮调用，会产生相应 Token 费用。
 - **调用失败排查**：若 API 调用返回错误码，参见平台错误码文档定位。
 
 ## 来源文档
@@ -112,6 +112,7 @@ Prompt 模板将 Prompt 的固定结构与动态变量分离，分为预置模�
 - [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)
 - [使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)
 - [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)
+
 
 
 

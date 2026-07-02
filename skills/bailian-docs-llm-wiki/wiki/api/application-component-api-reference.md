@@ -1,171 +1,153 @@
 # application component api reference
 
-百炼（Model Studio）「应用组件」API 参考，对应接口版本 `2023-12-29`。该版本 API 围绕百炼应用组件的数据接入、Prompt 工程、知识库（RAG）、长期记忆等能力提供一组 RESTful 接口，供开发者以编程方式管理百炼应用所需的数据与配置资源。本文按功能模块梳理各接口的用途、调用要点与典型流程，便于快速定位。
+百炼平台应用组件 API（`bailian/2023-12-29`）提供数据连接、知识库、Prompt 模板等应用构建能力的编程接口。API 采用 ROA 签名风格，覆盖文件管理、知识库全生命周期、Prompt 工程等核心场景，支持通过多语言 SDK 或自签名方式接入。
 
-## 概述与版本
+## 接入准备
 
-- **接口版本**：`2023-12-29`，所有接口的 `Version` 公共参数取值为 `2023-12-29`。
-- **服务入口**：通过百炼统一接入点调用，详见「服务接入点」。调用时需携带阿里云鉴权信息（AccessKey + 安全凭证），并按 RAM 授权策略授予对应接口权限。
-- **风格**：RPC 风格（POP），请求通过 HTTP/HTTPS 发起，参数以 Query 或 Body 形式传递，返回值为 JSON。
-- **版本说明**：该版本为应用组件 API 的基线版本，后续迭代以变更集（changeset）形式记录新增、变更与废弃接口。
+### 服务接入点
 
-## 鉴权与接入
+百炼应用组件 API 目前支持以下区域，详见[服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)：
 
-- 调用方需持有有效的阿里云 AccessKey，并通过 RAM 子账号或角色授权对应接口的调用权限（`ram` 接口说明中列出各接口所需的 Action 与 Resource）。
-- 接入点域名、Region 选择参见「服务接入点」文档；建议生产环境使用 HTTPS 并按Region就近接入。
-- 公共参数包含 `AccessKeyId`、`Signature`、`Timestamp`、`Version` 等，签名规则遵循阿里云 POP 通用签名算法。
+| 地域 | 地域 ID | 公网接入地址 | VPC 接入地址 |
+| --- | --- | --- | --- |
+| 华北2（北京） | cn-beijing | bailian.cn-beijing.aliyuncs.com | bailian-vpc.cn-beijing.aliyuncs.com |
+| 新加坡 | ap-southeast-1 | bailian.ap-southeast-1.aliyuncs.com | bailian-vpc.ap-southeast-1.aliyuncs.com |
 
-## 数据接入
+### SDK 与认证
 
-数据接入是应用组件 API 的核心，覆盖「类目 → 文件 → 解析 → 结构化数据」的完整链路，并支持通过连接器从外部数据源拉取数据。
+推荐使用官方 SDK 调用，避免手动签名。SDK 下载地址：`https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29`。
+
+调用前需准备：
+
+1. **AccessKey**：通过阿里云控制台获取，建议为 RAM 用户创建独立 AccessKey
+2. **RAM 授权**：RAM 用户需获取 `AliyunBailianDataFullAccess` 或 `AliyunBailianDataReadOnlyAccess` 策略，并加入目标[业务空间](../concepts/workspace.md)
+3. **[业务空间](../concepts/workspace.md) ID（WorkspaceId）**：大部分接口都需要此参数作为路径参数
+
+> **注意**：阿里云账号（主账号）拥有全部权限，无需额外授权，但出于安全考虑建议使用 RAM 用户调用。RAM 权限体系的代码为 `sfm`，授权粒度为操作级，详见[授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)。
+
+## 数据连接（原应用数据）
+
+数据连接模块负责文件和数据的导入、管理与解析配置，是知识库构建的数据基础。
 
 ### 类目管理
 
-类目（Category）用于对导入百炼的文件进行分组管理，是组织知识库与数据源的逻辑容器。
+类目用于分类管理文件，每个[业务空间](../concepts/workspace.md)最多 500 个类目。
 
-| 接口 | 说明 |
-| --- | --- |
-| ListCategory | 查询类目列表。 |
-| AddCategory | 新增类目。 |
-| DeleteCategory | 删除类目。 |
-
-调用要点：删除类目前应确认其下文件已清理或迁移，避免悬挂引用。
+| API | 说明 | HTTP 方法 |
+| --- | --- | --- |
+| AddCategory | 新增类目 | POST |
+| ListCategory | 获取类目列表 | POST |
+| DeleteCategory | 永久删除类目 | POST |
 
 ### 文件管理
 
-支持本地文件上传与从已授权 OSS Bucket 导入两种方式，并提供文件生命周期与标签管理。
+文件上传采用两步流程：先通过 `ApplyFileUploadLease` 获取上传租约，上传文件到临时存储后，再通过 `AddFile` 将文件导入数据连接。也可通过 `AddFilesFromAuthorizedOss` 直接从已授权的 OSS Bucket 导入。
 
-| 接口 | 说明 |
+| API | 说明 |
 | --- | --- |
-| ApplyFileUploadLease | 申请文件上传租约，获取上传凭证与目标地址后再上传文件流。 |
-| AddFile | 添加文件，将已上传的文件登记到指定类目。 |
-| AddFilesFromAuthorizedOss | 从已授权 OSS Bucket 中批量导入文件。 |
-| DescribeFile | 查询单个文件的处理状态（解析/索引进度等）。 |
-| ListFile | 查询文件列表，支持按类目、标签等过滤。 |
-| UpdateFileTag | 更新单个文件标签。 |
-| BatchUpdateFileTag | 批量更新文档标签，适用于大批量元数据修正。 |
-| DeleteFile | 删除单个文件。 |
-| DeleteFiles | 批量删除文件。 |
-
-典型流程：`ApplyFileUploadLease` → 上传文件流到租约地址 → `AddFile` 登记 → 轮询 `DescribeFile` 等待解析完成 → 按需 `UpdateFileTag`/`BatchUpdateFileTag`。
+| ApplyFileUploadLease | 申请文件上传租约（用于知识库文件或会话交互文件） |
+| AddFile | 从临时存储导入文件到数据连接 |
+| AddFilesFromAuthorizedOss | 从已授权 OSS Bucket 批量导入文件 |
+| DescribeFile | 查询单个文件的名称、类型、状态等信息 |
+| ListFile | 获取指定类目下的文件列表 |
+| UpdateFileTag | 更新单个文件标签 |
+| BatchUpdateFileTag | 批量更新文件标签 |
+| DeleteFile | 删除单个文件 |
+| DeleteFiles | 批量删除文件 |
 
 ### 解析设置
 
-控制文件被解析为知识库可消费文本的方式。
+控制文件在知识库中的解析方式。
 
-| 接口 | 说明 |
+| API | 说明 |
 | --- | --- |
-| GetParseSettings | 获取类目的解析设置。 |
-| GetAvailableParserTypes | 获取指定文件支持的解析器类型。 |
-| ChangeParseSetting | 修改类目解析设置。 |
-
-调用要点：解析器类型与文件格式相关，先调用 `GetAvailableParserTypes` 确认可选项，再通过 `ChangeParseSetting` 落地配置。
+| GetParseSettings | 获取类目的解析设置 |
+| GetAvailableParserTypes | 获取文件支持的解析器类型列表 |
+| ChangeParseSetting | 修改类目的解析设置 |
 
 ### 表格与连接器
 
-支持将结构化表格与外部数据源接入百炼。
-
-| 接口 | 说明 |
+| API | 说明 |
 | --- | --- |
-| AddTable | 添加表格。 |
-| UpdateTableFromAuthorizedOss | 从已授权 OSS Bucket 中选择文件更新表格内容。 |
-| AddConnector | 新增连接器，配置外部数据源连接。 |
-| GetConnector | 获取连接器信息。 |
-| UpdateConnector | 编辑连接器配置。 |
+| AddTable | 添加表格数据 |
+| UpdateTableFromAuthorizedOss | 从已授权 OSS Bucket 更新表格 |
+| AddConnector | 新增连接器（当前仅支持文件类型），限流 5 次/秒 |
+| GetConnector | 获取连接器信息 |
+| UpdateConnector | 编辑连接器配置 |
 
-## Prompt 工程
+## 知识库管理
 
-提供 Prompt 模板的 CRUD 能力，便于复用与版本管理。
+知识库是百炼 RAG 能力的核心组件，支持非结构化（文档/音视频）和结构化（数据查询/图片问答）两类知识库。完整的知识库 API 使用指南请参考[API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)。
 
-| 接口 | 说明 |
+### 创建流程
+
+知识库创建是异步流程，需要按以下步骤操作：
+
+1. **CreateIndex** — 初始化知识库，指定名称、类型、切片策略等配置。此接口不具备幂等性，重复调用会创建多个同名知识库
+2. **SubmitIndexJob** — 提交创建任务，开始实际的文档解析和索引构建。高峰期可能耗时数小时
+3. **GetIndexJobStatus** — 轮询任务状态（建议间隔 5 秒以上）
+
+### 文档追加
+
+对已有知识库追加文件使用 `SubmitIndexAddDocumentsJob`，需先通过 `AddFile` 上传文件。该接口不支持数据查询/图片问答类知识库。
+
+### 检索
+
+`Retrieve` 接口用于在指定知识库中检索信息，支持通过百炼 SDK（配合 AccessKey）或 Spring AI Alibaba（配合 API-Key）两种方式调用。该接口响应时间可能较长，建议合理设置超时与重试策略。
+
+### 知识库配置与管理
+
+| API | 说明 |
 | --- | --- |
-| CreatePromptTemplate | 创建 Prompt 模板。 |
-| GetPromptTemplate | 获取 Prompt 模板详情。 |
-| UpdatePromptTemplate | 更新 Prompt 模板。 |
-| DeletePromptTemplate | 删除 Prompt 模板。 |
-| ListPromptTemplates | 获取 Prompt 模板列表。 |
+| UpdateIndex | 更新知识库配置（名称、描述、检索参数、规格类型等） |
+| ListIndices | 获取业务空间下的知识库列表 |
+| DeleteIndex | 永久删除知识库（不可逆，需先解除应用关联） |
+| ListIndexFileDetails | 查询知识库下的文件详情 |
+| ListIndexDocuments | 查询知识库下的文件列表 |
+| DeleteIndexDocument | 删除知识库中的指定文件 |
+| GetIndexMonitor | 获取知识库监控数据 |
 
-调用要点：模板中可使用变量占位符，调用方在推理时填充变量；更新模板不会自动影响已基于旧版本生成的应用，需重新发布或绑定。
+### 切片管理
 
-## 知识库（RAG）
-
-知识库（Index）是百炼 RAG 检索的核心资源，提供创建、追加、检索、切片管理与监控等能力。
-
-### 知识库与任务
-
-| 接口 | 说明 |
+| API | 说明 |
 | --- | --- |
-| CreateIndex | 创建知识库。 |
-| SubmitIndexJob | 提交知识库创建任务（异步）。 |
-| SubmitIndexAddDocumentsJob | 提交知识库追加文档任务，向已有知识库增量入库。 |
-| GetIndexJobStatus | 查询知识库创建/追加任务状态。 |
-| UpdateIndex | 更新知识库配置。 |
-| ListIndices | 查询知识库列表。 |
-| DeleteIndex | 删除知识库。 |
+| ListChunks | 查询文本切片列表（文档搜索类按文件查询，数据查询类获取全部） |
+| UpdateChunk | 修改切片内容和标题（仅支持文档搜索类知识库） |
+| DeleteChunk | 删除指定切片 |
 
-典型流程：`CreateIndex` 创建空库 → `SubmitIndexJob` 或 `SubmitIndexAddDocumentsJob` 触发异步入库 → `GetIndexJobStatus` 轮询至完成 → 检索可用后按需 `UpdateIndex` 调整配置。
+知识库检索的关键参数包括：
+- **DenseSimilarityTopK**：向量检索 Top K，范围 0-100，默认 100
+- **SparseSimilarityTopK**：关键词检索 Top K，范围 0-100，默认 100
+- 两者之和不超过 200
+- **RerankMinScore**：排序最低分数，范围 0-1
 
-### 检索与文件
+## Prompt 模板管理
 
-| 接口 | 说明 |
+Prompt 模板支持创建、查询、更新、删除和列表操作，用于管理和复用 Prompt 工程成果。
+
+| API | 说明 |
 | --- | --- |
-| Retrieve | 检索知识库，返回命中的切片内容，是 RAG 推理的关键调用。 |
-| ListIndexFileDetails | 查询知识库下的文件详情。 |
-| ListIndexDocuments | 查询知识库下的文件列表。 |
-| DeleteIndexDocument | 删除知识库下的文件。 |
+| CreatePromptTemplate | 创建 Prompt 模板（暂不支持文生图类型） |
+| GetPromptTemplate | 获取指定 Prompt 模板详情 |
+| UpdatePromptTemplate | 更新 Prompt 模板内容 |
+| DeletePromptTemplate | 删除指定 Prompt 模板 |
+| ListPromptTemplates | 获取 Prompt 模板列表 |
 
-### 切片与监控
+## 其他接口
 
-| 接口 | 说明 |
+| API | 说明 |
 | --- | --- |
-| ListChunks | 查询索引下的分片（切片）列表。 |
-| UpdateChunk | 修改切片内容或元数据。 |
-| DeleteChunk | 删除切片。 |
-| GetIndexMonitor | 获取知识库监控数据（检索量、命中率等）。 |
+| ApplyTempStorageLease | 申请临时文件上传许可 |
+| GetAlipayTransferStatus | 查询支付宝打赏状态 |
+| GetAlipayUrl | 获取支付宝打赏 URL |
 
-调用要点：`Retrieve` 的检索质量依赖入库时的解析与切片策略；当检索结果不理想时，可通过 `ListChunks` + `UpdateChunk` 人工修正关键切片，或 `DeleteChunk` 清理低质内容。
+## 通用限制与注意事项
 
-## 长期记忆
-
-长期记忆体（Memory）用于持久化 Agent 跨会话的记忆，记忆体下可挂载多个记忆片段（MemoryNode）。
-
-### 记忆体
-
-| 接口 | 说明 |
-| --- | --- |
-| CreateMemory | 创建长期记忆体。 |
-| GetMemory | 获取长期记忆体。 |
-| UpdateMemory | 更新长期记忆体。 |
-| DeleteMemory | 删除长期记忆体。 |
-| ListMemories | 获取长期记忆体列表。 |
-
-### 记忆片段
-
-| 接口 | 说明 |
-| --- | --- |
-| CreateMemoryNode | 创建记忆片段。 |
-| GetMemoryNode | 获取记忆片段。 |
-| UpdateMemoryNode | 更新记忆片段。 |
-| DeleteMemoryNode | 删除记忆片段。 |
-| ListMemoryNodes | 获取记忆片段列表。 |
-
-调用要点：记忆片段是记忆体的子资源，删除记忆体时应同步清理其下片段，或依赖服务端级联删除策略。
-
-## 其他
-
-| 接口 | 说明 |
-| --- | --- |
-| ApplyTempStorageLease | 申请临时文件上传许可，用于短期临时存储场景。 |
-| GetAlipayUrl | 获取支付宝打赏 URL。 |
-| GetAlipayTransferStatus | 查询支付宝打赏状态。 |
-
-## 调用约定与最佳实践
-
-- **幂等性**：文件上传、知识库任务提交等为异步接口，务必通过 `DescribeFile` / `GetIndexJobStatus` 轮询最终状态，不要仅依赖提交返回。
-- **批量操作**：优先使用批量接口（`BatchUpdateFileTag`、`DeleteFiles`、`SubmitIndexAddDocumentsJob`）以减少请求次数与鉴权开销。
-- **OSS 授权导入**：使用 `AddFilesFromAuthorizedOss` / `UpdateTableFromAuthorizedOss` 前，需先在百炼控制台完成 OSS Bucket 授权，避免因权限不足导致导入失败。
-- **资源清理顺序**：删除类目、知识库、记忆体等父资源前，先清理其下子资源（文件、切片、记忆片段），防止残留与[计费](../concepts/billing.md)。
-- **监控观测**：知识库上线后定期调用 `GetIndexMonitor` 关注检索量与命中率，结合 `ListChunks` 抽检切片质量，持续优化 RAG 效果。
+- **限流**：大部分接口限流为 10 次/秒，连接器相关接口为 5 次/秒。遇到限流请稍后重试
+- **幂等性**：查询类接口（如 GetIndexJobStatus、Retrieve、ListIndices）通常具有幂等性；创建类接口（如 CreateIndex、SubmitIndexJob）不具备幂等性，需注意避免重复调用
+- **异步操作**：知识库创建和追加文档为异步操作，通过 GetIndexJobStatus 轮询状态，GetIndexJobStatus 限流 20 次/分钟
+- **版本演进**：API 持续迭代中，最新变更包括 CreateIndex 入参调整（2026-03-30）、UpdateIndex 新增（2026-01-19）等，详见[版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md)
+- **删除操作不可逆**：DeleteIndex、DeleteCategory 等删除操作为永久性删除，请谨慎操作
 
 ## 来源文档
 
@@ -226,6 +208,5 @@
 - [UpdateMemoryNode - 更新记忆片段](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-updatememorynode.md)
 - [DeleteMemoryNode - 删除记忆片段](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-deletememorynode.md)
 - [ListMemoryNodes - 获取记忆片段列表](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-listmemorynodes.md)
-
 
 

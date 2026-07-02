@@ -2,6 +2,28 @@
 
 选择适合实时语音识别、录音文件识别等场景的模型。
 
+## 从闭源模型迁移到百炼?
+
+如果你正在使用 Whisper、Deepgram 或 Google 的语音识别服务，可参考下表选择对应的百炼模型。
+
+**使用场景**
+
+**闭源模型代表**
+
+**百炼推荐**
+
+实时识别
+
+Deepgram Nova-3、Google Chirp 3
+
+`fun-asr-realtime`、`qwen3.5-omni-plus-realtime`
+
+非实时 / 文件转写
+
+OpenAI gpt-4o-transcribe、Whisper
+
+`fun-asr`、`qwen3.5-omni-plus`
+
 本文按“先选维度、再看模型”的顺序帮助您完成选型：先从“[选型决策维度](#asr-decide02)”（实时/非实时、专业术语、说话人分离、情感识别）确认场景；再到“[推荐模型](#asr-rec02)”查看针对各场景的首选；如需更多版本可在“[所有模型](#asr-all02)”按系列展开；最后到“[音频规格](#asr-audio-spec02)”核对输入文件约束。各模型支持的语言（含方言）随附在“[所有模型](#asr-all02)”的各系列子节内。
 
 ## 选型决策维度

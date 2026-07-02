@@ -42,7 +42,7 @@
     
 3.  创建成功后，弹窗会显示完整的 API Key 和 API Host（服务端点地址）。请立即复制或下载保存，注意妥善保管，任何获取到该密钥的人都能以您的身份发起服务请求并产生费用。关闭弹窗后将**无法再次查看或复制**明文 API Key。如果丢失，请重置或创建新的密钥。
     
-    > 主账号可以查看全部API Key，子账号仅能查看自己创建的API Key。
+    > 主账号可查看所有业务空间下的 API Key；子账号只能查看已加入业务空间中的 API Key。
     
 
 ## 美国（弗吉尼亚）地域
@@ -61,7 +61,7 @@
     
 4.  在API Key列表中，点击API Key旁的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8412544571/p994217.png)图标可复制脱敏后的API Key。
     
-    > 主账号可以查看全部API Key，子账号仅能查看自己创建的API Key。
+    > 主账号可查看所有业务空间下的 API Key；子账号只能查看已加入业务空间中的 API Key。
     
 
 **API Key 管理操作**

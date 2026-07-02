@@ -6,7 +6,7 @@
 
 在浏览器、移动 App 等不可信环境中调用模型服务时，应通过后端服务生成临时 [API Key](../concepts/api-key.md)，避免永久 [API Key](../concepts/api-key.md) 泄露。临时 [API Key](../concepts/api-key.md) 继承生成它的永久 [API Key](../concepts/api-key.md) 的全部权限（包括对特定模型或[知识库](../concepts/knowledge-base.md)的访问限制），到期后自动失效，无法提前删除。
 
-**前提条件**：在百炼密钥管理页面（北京 / 新加坡 / 弗吉尼亚）创建永久 API Key，并将其配置为环境变量 `DASHSCOPE_API_KEY`。
+**前提条件**：在百炼密钥管理页面（北京 / 新加坡 / 弗吉尼亚）创建永久 [API Key](../concepts/api-key.md)，并将其配置为环境变量 `DASHSCOPE_API_KEY`。
 
 **请求**：
 
@@ -30,9 +30,9 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=180
 }
 ```
 
-`token` 为生成的临时 API Key，`expires_at` 为过期 UNIX 时间戳（秒）。错误响应包含 `code`、`message`、`request_id` 三段，常见如 `InvalidApiKey`。
+`token` 为生成的临时 [API Key](../concepts/api-key.md)，`expires_at` 为过期 UNIX 时间戳（秒）。错误响应包含 `code`、`message`、`request_id` 三段，常见如 `InvalidApiKey`。
 
-> **注意**：各地域（北京 / 新加坡 / 弗吉尼亚）的 API Key 不互通，请求时需使用对应地域的 Endpoint 与永久 Key。
+> **注意**：各地域（北京 / 新加坡 / 弗吉尼亚）的 [API Key](../concepts/api-key.md) 不互通，请求时需使用对应地域的 Endpoint 与永久 Key。
 
 ## 服务关联角色（SLR）
 
@@ -113,6 +113,7 @@ resp = client.retrieve('请传入实际的业务空间ID', retrieve_request)
 - [生成临时API Key](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md)
 - [服务关联角色](../../raw/application-api-reference/more/bailian-service-linked-role.md)
 - [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md)
+
 
 
 

@@ -89,23 +89,11 @@ PTU（[模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-in
 
 **输出（Per 1,000 TPM）**
 
-qwen3.6-plus-2026-04-02
-
-¥2.02
-
-¥12.10
-
 qwen3.6-flash-2026-04-16
 
 ¥1.21
 
 ¥7.26
-
-qwen3.5-plus-2026-04-20
-
-¥0.81
-
-¥4.84
 
 qwen3.7-max-2026-05-20
 
@@ -159,23 +147,11 @@ glm-5.2
 
 **输出（Per 1,000 TPM）**
 
-qwen3.6-plus-2026-04-02
-
-¥3.78
-
-¥22.66
-
 qwen3.6-flash-2026-04-16
 
 ¥1.89
 
 ¥11.33
-
-qwen3.5-plus-2026-04-20
-
-¥3.02
-
-¥18.13
 
 qwen3.7-max-2026-05-20
 

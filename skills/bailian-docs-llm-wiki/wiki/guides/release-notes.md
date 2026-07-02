@@ -1,90 +1,127 @@
 # release notes
 
-本页汇总阿里云百炼模型平台的发布动态，包含模型上下架与更新、平台功能更新、[计费](../concepts/billing.md)调整等内容。开发者可据此了解新增模型规格、调优/部署能力、API 接口与 SDK、观测与[评测](../concepts/evaluation.md)能力等最新进展，便于选型与对接。详细条目以官方 [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md) 与 [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md) 为准。
+百炼平台持续迭代模型能力与平台功能，涵盖推理模型上新、[多模态](../concepts/multimodal.md)生成、模型调优与部署、API 接口扩展、[计费](../concepts/billing.md)调整等多个维度。本页汇总了[模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)和[模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)两份原始文档中的关键变更，帮助开发者快速了解平台最新动态。
 
-## 模型上下架
+## 模型上新与迭代
 
-百炼持续上架新模型规格并按规则下线旧版本，下线规则参见模型下线机制说明。近期重点上架模型（华北2-北京、中国内地部署范围）：
+百炼模型广场持续引入新模型，覆盖推理、[多模态](../concepts/multimodal.md)、视频生成、图像生成、语音等类型。模型下线规则及清单请参考[模型下线机制说明](https://help.aliyun.com/zh/model-studio/model-depreciation)。
 
-- **推理模型**
-  - `qwen3.7-max` / `qwen3.7-max-2026-05-20`：Qwen Max 新一代旗舰，仅纯文本输入，默认开启思考模式，支持显式缓存，编程、办公与生产力、长周期自主执行表现突出。
-  - `qwen3.7-plus` / `qwen3.7-plus-2026-05-26`：在文本能力基础上全面升级视觉-语言能力，可读取屏幕并操作 GUI、基于视觉参考生成代码、端到端导航移动应用。
-  - `qwen3.6-max-preview` / `qwen3.6-plus` / `qwen3.6-flash` / `qwen3.6-35b-a3b`：Qwen3.6 系列，Coding 与 Agent 执行能力提升，Flash 系列为原生视觉语言模型，空间智能、物体定位与检测增强。
-  - `deepseek-v4-pro` / `deepseek-v4-flash`（阿里直供）、`vanchin/deepseek-v4-pro`（快手万擎直供）、`stepfun/step-3.7-flash`、`xiaomi/mimo-v2.5-pro`、`ZHIPU/glm-5.1` / `ZHIPU/glm-5`、`kimi/kimi-k2.7-code` / `kimi/kimi-k2.7-code-highspeed` 等第三方模型陆续上架。
-- **文生文与视觉理解**：`kimi/kimi-k2.6`、`qwen3.5-ocr`（文字提取，128K 上下文，多轮对话，覆盖多种国内外卡证）。
-- **图像生成与编辑**：`qwen-image-2.0-pro-2026-06-22`（融合图片生成与编辑，文字渲染增强，支持最长 1k token 指令）、`wan2.7-image-pro` / `wan2.7-image`（文生图、组图、图像编辑、交互式编辑，Pro 支持 4K）。
-- **视频生成**：万相 2.7（t2v/i2v/r2v/videoedit）、HappyHorse 1.0/1.1（有声视频，3~15 秒、720P/1080P）、爱诗 PixVerse V6/C1（文生/图生/首尾帧/参考生视频）、Vidu ViduQ2/Q3 系列、Tripo 3D 生成等。
-- **全模态与音视频**：`qwen3.5-omni-plus` / `qwen3.5-omni-flash`（113 种语言识别、36 种语言音频生成，3 小时音频/1 小时视频输入）、`qwen3.5-livetranslate-flash-realtime`（多语言音视频实时翻译）、`fun-asr`（方言、30 语种、古诗词优化）、`fun-music-v1`（音乐生成）。
+### 推理模型
 
-模型下线规则与清单详见 [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)。第三方直供模型（如 `vanchin/`、`stepfun/`、`xiaomi/`、`ZHIPU/` 前缀）与阿里直供同名模型（如 `deepseek-v4-pro`）在[计费](../concepts/billing.md)、可用区与稳定性策略上可能不同，选型时请以控制台模型市场为准。
+近期上架的主要推理模型：
+
+| 模型 | 上架时间 | 说明 |
+|------|----------|------|
+| qwen3.7-max | 2026-05-21 | Qwen Max 新一代旗舰，默认开启思考模式，支持显式缓存 |
+| qwen3.7-plus | 2026-06-01 | 视觉-语言能力全面升级，支持[多模态](../concepts/multimodal.md)交互混合智能体 |
+| qwen3.6-plus | 2026-04-02 | 代码开发能力重点升级（Agentic Coding），泛化推理增强 |
+| qwen3.6-flash | 2026-04-16 | Flash 系列，智能体编程、数学推理和空间智能显著提升 |
+| deepseek-v4-pro / v4-flash | 2026-04-24 | DeepSeek-V4 系列，阿里直供 |
+| kimi/kimi-k2.7-code | 2026-06-15 | 月之暗面直供，专为长程软件工程任务优化 |
+| kimi-k2.6 | 2026-04-21 | 支持文本/图片/视频输入，思考与非思考模式 |
+| glm-5.1 | 2026-04-14 | 智谱模型，200K 上下文，最大输出 128K [Token](../concepts/token.md) |
+| xiaomi/mimo-v2.5-pro | 2026-05-19 | 小米直供，通用智能体与长程任务能力提升 |
+| stepfun/step-3.7-flash | 2026-05-29 | 阶跃星辰直供，搜索/Agent/编码/多模态全面升级 |
+
+### 多模态与全模态模型
+
+- **qwen3.5-omni-plus / flash**（2026-03-30）：全模态大模型，支持 113 种语言识别、36 种语言音频生成，可处理 3 小时音频及 1 小时视频输入
+- **qwen3.5-omni-plus-realtime / flash-realtime**（2026-03-30）：实时多模态模型，原生支持联网搜索、语音打断
+- **qwen3.5-livetranslate-flash-realtime**（2026-05-19）：音视频实时翻译，识别 60 种语言，翻译为 29 种语言音频
+
+### 视频生成模型
+
+平台提供多家视频生成模型，按任务类型分为文生视频、图生视频、参考生视频和视频编辑：
+
+- **万相 2.7 系列**（2026-04-03 起）：`wan2.7-t2v`（文生视频）、`wan2.7-i2v`（图生视频，支持首帧/首尾帧/续写）、`wan2.7-r2v`（参考生视频，支持主体参考和音色定制）、`wan2.7-videoedit`（视频编辑）
+- **HappyHorse 1.0/1.1 系列**（2026-04-27 / 06-22）：支持有声视频生成，3~15 秒，720P/1080P
+- **爱诗 PixVerse v6/C1 系列**（2026-03-29 / 04-13）：支持提示词智能分镜，打斗与特效强化
+- **Vidu 系列**（2026-04-29）：参考生视频和首帧生视频
+
+### 图像生成与 3D 模型
+
+- **qwen-image-2.0-pro**：持续迭代快照，文字渲染和写实质感不断增强
+- **wan2.7-image-pro / wan2.7-image**（2026-04-01）：支持文生图、图像编辑、多图参考生成，Pro 系列支持 4K 输出
+- **Tripo-H3.1 / P1.0**（2026-04-29）：3D 生成模型，支持文生 3D、单图/多图生 3D
+
+### 其他模型
+
+- **qwen3.5-ocr**（2026-06-16）：文字提取模型，128K 上下文，多轮对话，覆盖多种国内外卡证
+- **fun-music-v1**（2026-05-06）：音乐生成大模型，支持根据创作要求或歌词生成整首歌曲
+- **fun-asr**（2026-04-16）：语音识别升级，覆盖汉语七大方言，支持 30 个语种
 
 ## 平台功能更新
 
-[模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md) 按月发布功能动态，覆盖模型调优、部署、[评测](../concepts/evaluation.md)、API、应用、SDK、观测等模块。重点能力如下。
+### 模型调优
 
-### 模型调优与部署
+模型调优持续扩展支持的模型类型和训练方式，详见[模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)：
 
-- 模型调优支持文本生成、视觉理解（VL）、图像生成（Wan/Wanx）、视频生成（万相）等多种模型类型；新增 0 代码安全合规强化训练流程、强化学习训练（RL，邀约制）。
-- SFT 支持全参微调与 LoRA 高效微调；DPO 偏好训练覆盖千问 3-32B/14B/8B、千问 2.5-72B/32B/14B/8B。
-- [模型部署](../concepts/model-deployment.md)新增按模型单元（MU）时长[计费](../concepts/billing.md)与按调用量[计费](../concepts/billing.md)两种方式，预置 `qwen-flash`/`qwen-plus` 等模型可一键部署；模型压缩模块上线，使用量化算法将全精度微调模型转为低精度版本以降低部署成本。
-- 模型导入功能国际站上线（OSS 导入 LoRA 微调模型），并新增模型导入 API 目录。
+- **强化学习训练**（2026-05 邀约制）：支持基于奖励信号优化模型策略
+- **图像生成模型调优**（2026-05）：支持 Wan/Wanx 系列定制训练
+- **0 代码安全合规强化**（2026-05）：无需编码即可强化大模型安全合规能力
+- **DPO 偏好训练**（2025-09）：千问 2.5/3 系列支持，通过负反馈降低幻觉
+- **视觉理解 / 视频生成模型调优**（2026-01）：支持 VL 和万相系列模型定制训练
+- **模型压缩**（2026-05）：使用量化算法将全精度模型转为低精度版本，降低部署成本
 
-### 模型 API 与应用调用
+### 模型部署
 
-- 文本生成 API 入口聚合 OpenAI Responses 与 Anthropic Messages 两类兼容接口；Responses API 新增[异步调用](../concepts/async-invocation.md)（`background=true` 提交长耗时任务并轮询）。
-- 异步任务支持事件总线 EventBridge HTTP 回调与 RocketMQ 主动推送，无需轮询。
-- 新版智能体应用 DashScope API 首发，支持单轮/多轮、流式、文件问答、视觉理解。
-- 应用组件新增 Prompt 工程 API、数据连接 `ListCategory` / `ChangeParseSetting` 接口；知识库 Retrieve 接口新增排序模型选项与指令干预模式。
-- 新增生成临时 [API Key](../concepts/api-key.md) 文档，用于不可信环境下避免永久 [API Key](../concepts/api-key.md) 泄露。
+- **模型单元（MU）部署**（2025-10）：按时间[计费](../concepts/billing.md)，灵活调整性能，成本可预测
+- **按调用量[计费](../concepts/billing.md)部署**（2024-12）：支持 qwen2.5-7B/14B/32B/72B 等调优后模型
+- **API 部署预置模型**（2026-01）：支持 qwen-flash/qwen-plus 等预置模型部署
 
-### 应用与 SDK
+### API 与接口
 
-- [多模态](../concepts/multimodal.md)交互开发套件陆续上线服务端 Java SDK、移动端 Android SDK、Android/iOS Lite SDK、Linux C++ SDK、RTOS C SDK（含 License 模式）。
-- 通义听悟 Agent 新增工业生产指令转写 WebSocket 协议与特惠 ASR 资源包。
-- 通义[多模态](../concepts/multimodal.md)翻译 API 与网页翻译 JSSDK 上线，覆盖文本/图片/文档/网页翻译。
-- UI 设计器上线（集成魔笔低代码，可视化拖放构建网页 UI）；记忆库 Memory 2.0 上线（自动提取记忆片段与用户画像，多应用共享）；联网检索 Agent 官方应用上线；官方 MCP 服务上线；Spring AI Alibaba 调用百炼应用文档上线。
+- **Responses API 异步调用**（2026-06）：通过 `background=true` 提交长耗时任务
+- **临时 [API Key](../concepts/api-key.md)**（2026-06）：避免不可信环境下永久 Key 泄露
+- **模型导入 API**（2026-06）：涵盖导入任务与自定义模型对象的完整接口
+- **文本生成 API 聚合**（2026-05）：入口新增 OpenAI Responses 与 Anthropic Messages 接口分类
+- **异步任务 EventBridge 回调**（2026-04）：支持 HTTP 回调与 RocketMQ，无需轮询
+- **Batch 任务通知**（2024-12）：支持 Callback 回调和 EventBridge 消息
+- **Context Cache**（2024-12）：推理时减少重复运算，降低使用成本
 
-### [评测](../concepts/evaluation.md)与观测
+### 模型观测与评测
 
-- 模型评测新增排行榜（Leaderboard）与综合评测，支持 BLEU_4、ROUGE 等评分方法；新增多种评估器（字符串匹配、文本相似度、模型分类、模型打分、人工分类）。
-- 模型观测支持查看推理日志、告警与通知、高级监控模式（分钟级低延时刷新、4xx/5xx 失败细分）。
-- 知识库 RAG 新增日志与监控，检索调用全量投递至 SLS 日志服务。
-- 模型用量新增免费额度与用量统计看板。
+- **模型观测**（2025-01 起）：监测模型使用与性能，支持推理日志查看、告警通知、高级监控模式（分钟级刷新）
+- **模型评测**（2025-12 起）：排行榜功能、综合评测（BLEU、ROUGE 等）、多种评估器
+- **模型用量看板**（2025-12）：集中展示免费额度与调用量统计
 
-## [计费](../concepts/billing.md)调整
+### 应用与组件
 
-近一年[计费](../concepts/billing.md)调整主要方向为降价与转计费：
+- **记忆库 Memory 2.0**（2026-03）：自动从对话提取记忆片段与用户画像，支持多应用共享
+- **知识库 RAG 日志与监控**（2026-04）：检索调用全量投递至 SLS，支持审计/排查/告警
+- **Prompt 工程 API**（2026-04）：提供 Prompt 模板管理能力
+- **UI 设计器**（2026-04）：集成魔笔低代码，可视化拖放构建网页 UI
+- **MCP 服务**（2026-02）：官方 MCP 服务，支持平台内集成与第三方接入
+- **多模态交互开发套件**：已上线 Java / Android / iOS / Linux C++ / RTOS SDK
 
-- `qwen-max` 输入价格降低 88%、输出价格降低 84%（实时调用输入 0.0024 元/千 [Token](../concepts/token.md)，输出 0.0096 元/千 [Token](../concepts/token.md)）。
-- `qwen2.5-14b-instruct` / `qwen2.5-7b-instruct` 降价 50%；`qwen2.5-3b-instruct`、`qwen-vl-72b-instruct` 由免费体验转为计费。
-- 千问 VL 系列模型降价，降幅最高 85%。
-- DeepSeek 系列部分模型由免费体验转为计费；`deepseek-v4-pro` 的 `cached_token` 单价调整为 1 元/百万 token，标准 `input_token` 单价不变。
-- 上下文缓存（Context Cache）降价通知发布；当前支持 `qwen-plus` 等模型。
+### 开发者工具
 
-> **注意**：免费额度有效期与新人免费额度策略存在调整，启用「免费额度用完即停」后额度耗尽将返回 `AllocationQuota.FreeTierOnly` 错误；最新计费请以百炼控制台模型市场为准。
+- **Spring AI Alibaba 集成**（2026-06）：使用 Spring AI Alibaba 框架调用百炼智能体和工作流
+- **Kilo CLI**（2026-02）：支持 [Token](../concepts/token.md) Plan / Coding Plan / 按量计费三种方式接入
+- **[Token](../concepts/token.md) Plan 团队版**（2026-05）：支持 SSO/钉钉登录、席位分配、Credits 用量监控
 
-## 关键参数与限制
+## 计费变更
 
-- **上下文长度**：`qwen3.5-ocr` 128K；`glm-5.1` 200K，最大输出 128K [Token](../concepts/token.md)；全模态 `qwen3.5-omni` 可处理 3 小时音频 / 1 小时视频输入。
-- **思考模式**：`qwen3.7-max`、`qwen3.6-max-preview` 默认开启思考模式；`kimi/kimi-k2.7-code` 仅支持思考模式；`qwen3.7-max-preview` / `qwen3.7-max-2026-05-17` 仅支持思考模式且仅纯文本。
-- **[多模态](../concepts/multimodal.md)限制**：`qwen3.6-max-preview`、`qwen3.7-max-preview` / `qwen3.7-max-2026-05-17` 不支持图像与视频输入。
-- **视频生成规格**：HappyHorse 1.1 支持 3~15 秒、720P/1080P 有声视频；万相 2.7 文生视频支持分辨率档位与宽高比自定义。
-- **部署计费**：模型单元（MU）部署提供可调性能、固定成本、高稳定性；按调用量计费支持部署 qwen2.5-7B/14B/32B/72B、qwen2-7B 调优后模型。
+百炼平台多次调整模型定价，整体趋势为降价：
 
-> **注意**：模型规格名带日期快照（如 `qwen3.7-max-2026-05-20`、`qwen-image-2.0-pro-2026-06-22`）与不带日期的别名通常能力一致，快照版本用于锁定特定时间点的模型行为；不同快照间能力可能存在差异（如 `qwen3.7-max-2026-06-08` 较 5 月 20 日快照新增视觉模态）。
+- **qwen-max 降价 84%~88%**（2025-02）：输入降至 0.0024 元/千 Token，输出降至 0.0096 元/千 Token
+- **千问 VL 系列降价最高 85%**（2024-12）
+- **qwen2.5-14b/7b-instruct 降价 50%**（2025-01）
+- **部分模型由免费转计费**：qwen2.5-3b-instruct、DeepSeek 系列等陆续转为计费
 
-## 使用建议
+> **注意**：计费信息可能随时调整，最新价格以[百炼控制台模型广场](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)为准。
 
-- 选型优先参考 [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md) 中最新上架条目与控制台模型市场，避免使用已下线版本。
-- 长耗时任务使用 Responses API [异步调用](../concepts/async-invocation.md)或异步任务 + EventBridge 回调，减少轮询开销。
-- 不可信环境调用使用临时 [API Key](../concepts/api-key.md)；生产环境配合模型观测的告警与高级监控进行故障定位。
-- 调优后模型可通过模型压缩降低部署成本，再以模型单元或按调用量方式部署。
+## 注意事项
+
+- 模型快照版本（如 `qwen3.7-max-2026-06-08`）固定模型能力，适用于需要稳定版本的生产环境
+- 不带日期后缀的模型名（如 `qwen3.7-max`）会指向最新版本，行为可能随迭代变化
+- 部分模型仅支持纯文本输入（如 qwen3.6-max-preview），使用前请确认模态支持情况
+- 新人免费额度有有效期限制，可启用"用完即停"功能避免超额计费（返回错误码 `AllocationQuota.FreeTierOnly`）
+- 第三方直供模型（如 Kimi、DeepSeek-快手万擎、智谱 GLM、小米 MiMo）的计费和 SLA 可能与阿里直供模型不同
 
 ## 来源文档
 
 - [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)
 - [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)
-
-
 
 

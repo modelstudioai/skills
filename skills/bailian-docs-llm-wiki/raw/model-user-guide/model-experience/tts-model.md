@@ -2,6 +2,28 @@
 
 选择适合语音合成、声音复刻和声音设计场景的模型。
 
+## 从闭源模型迁移到百炼?
+
+如果你正在使用 ElevenLabs、OpenAI 或 Google 的语音合成服务，可参考下表选择对应的百炼模型。
+
+**使用场景**
+
+**闭源模型代表**
+
+**百炼推荐**
+
+内置音色 / 标准合成
+
+OpenAI gpt-4o-tts、Google Chirp 3
+
+`cosyvoice-v3-plus`、`MiniMax/speech-2.8-hd`
+
+自定义音色 / 声音复刻
+
+ElevenLabs Multilingual v3
+
+`cosyvoice-v3.5-plus`、`MiniMax/speech-2.8-hd`
+
 ## 标准语音合成还是自定义音色？
 
 语音合成模型可将文本转换为自然语音。首先确定您需要使用内置音色还是自定义音色：
