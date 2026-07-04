@@ -2,7 +2,13 @@
 
 本文介绍Paraformer录音文件识别RESTful API的参数和接口细节。
 
-**用户指南：**关于模型介绍和选型建议请参见[录音文件识别-Fun-ASR/Paraformer](https://help.aliyun.com/zh/model-studio/recording-file-recognition)。
+**重要**
+
+阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+
+**用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)
 
 目前提供了[提交任务接口](#418f2ac8ecxm4)和[查询任务接口](#480630e0582sb)，通常情况下，您可以先调用提交任务接口上传识别任务，然后循环调用查询任务接口，直至任务完成。
 
@@ -29,7 +35,7 @@
 **URL**
 
 ```
-https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription
+https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription
 ```
 
 **请求方法**
@@ -80,7 +86,7 @@ X-DashScope-Async: enable // 请勿遗漏该请求头，否则无法提交任务
 以下为调用提交任务接口的cURL示例：
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription' \
      --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
      --header "Content-Type: application/json" \
      --header "X-DashScope-Async: enable" \
@@ -380,7 +386,7 @@ string
 **URL**
 
 ```
-https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}
+https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}
 ```
 
 **请求方法**
@@ -402,7 +408,7 @@ Authorization: Bearer {api-key} // 需替换为您自己的API Key
 **点击查看请求示例**
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}' --header "Authorization: Bearer $DASHSCOPE_API_KEY"
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}' --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
 **参数**
@@ -720,7 +726,7 @@ def submit_task(apikey, file_urls) -> str:
     }
     # 录音文件转写服务url
     service_url = (
-        "https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription"
+        "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription"
     )
     response = requests.post(
         service_url, headers=headers, data=json.dumps(data)
@@ -745,7 +751,7 @@ def wait_for_complete(task_id):
     pending = True
     while pending:
         # 查询任务状态服务url
-        service_url = f"https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}"
+        service_url = f"https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}"
         response = requests.post(
             service_url, headers=headers
         )
@@ -791,11 +797,6 @@ print("transcription result: ", result)
     "end_time": "2024-12-16 16:31:02.375",
     "results": [
         {
-            "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/long_audio_demo_cn.mp3",
-            "transcription_url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20241216/xxxx",
-            "subtask_status": "SUCCEEDED"
-        },
-        {
             "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/rich_text_exaple_1.wav",
             "code": "InvalidFile.DownloadFailed",
             "message": "The audio file cannot be downloaded.",
@@ -803,8 +804,8 @@ print("transcription result: ", result)
         }
     ],
     "task_metrics": {
-        "TOTAL": 2,
-        "SUCCEEDED": 1,
+        "TOTAL": 1,
+        "SUCCEEDED": 0,
         "FAILED": 1
     }
 }

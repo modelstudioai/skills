@@ -2,6 +2,12 @@
 
 本文介绍Paraformer实时语音识别Java SDK的参数和接口细节。
 
+**重要**
+
+阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+
 **用户指南：**关于模型介绍和选型建议请参见[实时语音识别-Fun-ASR/Paraformer](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition)。
 
 **在线体验**：仅paraformer-realtime-v2、paraformer-realtime-8k-v2和paraformer-realtime-v1支持[在线体验](https://bailian.console.aliyun.com/?tab=model#/efm/model_experience_center/voice)。
@@ -137,7 +143,7 @@
 
 提交单个语音实时转写任务，通过传入本地文件的方式同步阻塞地拿到转写结果。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4081261871/CAEQURiBgMDS0c2RpxkiIDNmYjBlMTE3ODQxYTQ3Nzk4MGMxNTc5MjY3OWVjZjlj4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9365892871/CAEQURiBgMDS0c2RpxkiIDNmYjBlMTE3ODQxYTQ3Nzk4MGMxNTc5MjY3OWVjZjlj4709861_20241015153444.149.svg)
 
 实例化[Recognition类](#adcb5e9bddbyq)，调用`call`方法绑定[请求参数](#d72d661a1brzp)和待识别文件，进行识别并最终获取识别结果。
 
@@ -148,11 +154,14 @@
 ```
 import com.alibaba.dashscope.audio.asr.recognition.Recognition;
 import com.alibaba.dashscope.audio.asr.recognition.RecognitionParam;
+import com.alibaba.dashscope.utils.Constants;
 
 import java.io.File;
 
 public class Main {
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseWebsocketApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         // 创建Recognition实例
         Recognition recognizer = new Recognition();
         // 创建RecognitionParam
@@ -191,7 +200,7 @@ public class Main {
 
 提交单个语音实时转写任务，通过实现回调接口的方式流式输出实时识别结果。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4081261871/CAEQURiBgID1ooWUpxkiIDcyOTEyYjZiZmUxNzRkZjVhMTNhYmNkYjI2NzYzYTMy4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9365892871/CAEQURiBgID1ooWUpxkiIDcyOTEyYjZiZmUxNzRkZjVhMTNhYmNkYjI2NzYzYTMy4709861_20241015153444.149.svg)
 
 1.  启动流式语音识别
     
@@ -221,6 +230,7 @@ import com.alibaba.dashscope.audio.asr.recognition.Recognition;
 import com.alibaba.dashscope.audio.asr.recognition.RecognitionParam;
 import com.alibaba.dashscope.audio.asr.recognition.RecognitionResult;
 import com.alibaba.dashscope.common.ResultCallback;
+import com.alibaba.dashscope.utils.Constants;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -233,6 +243,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseWebsocketApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.submit(new RealtimeRecognitionTask());
         executorService.shutdown();
@@ -327,6 +339,7 @@ import com.alibaba.dashscope.audio.asr.recognition.Recognition;
 import com.alibaba.dashscope.audio.asr.recognition.RecognitionParam;
 import com.alibaba.dashscope.audio.asr.recognition.RecognitionResult;
 import com.alibaba.dashscope.common.ResultCallback;
+import com.alibaba.dashscope.utils.Constants;
 
 import java.io.FileInputStream;
 import java.nio.ByteBuffer;
@@ -350,6 +363,8 @@ class TimeUtils {
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseWebsocketApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.submit(new RealtimeRecognitionTask(Paths.get(System.getProperty("user.dir"), "asr_example.wav")));
         executorService.shutdown();
@@ -476,6 +491,7 @@ Flowable 是一个用于工作流和业务流程管理的开源框架，它基�
 import com.alibaba.dashscope.audio.asr.recognition.Recognition;
 import com.alibaba.dashscope.audio.asr.recognition.RecognitionParam;
 import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.utils.Constants;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 
@@ -486,6 +502,8 @@ import java.nio.ByteBuffer;
 
 public class Main {
     public static void main(String[] args) throws NoApiKeyException {
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseWebsocketApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         // 创建一个Flowable<ByteBuffer>
         Flowable<ByteBuffer> audioSource =
                 Flowable.create(

@@ -2,6 +2,12 @@
 
 本文介绍Paraformer录音文件识别Java SDK的参数和接口细节。
 
+**重要**
+
+阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+
 **用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)
 
 ## **前提条件**
@@ -30,7 +36,7 @@
 
 ### **异步提交任务+同步等待任务结束**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8501040871/CAEQURiBgMCO2_fRpxkiIDBlNzI4YmMyNTU3ODRlM2Y4NjUxZWU4YmUxNjliMmFl4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7695892871/CAEQURiBgMCO2_fRpxkiIDBlNzI4YmMyNTU3ODRlM2Y4NjUxZWU4YmUxNjliMmFl4709861_20241015153444.149.svg)
 
 1.  配置[请求参数](#48ea212b1d08r)。
     
@@ -62,6 +68,8 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         // 创建转写请求参数
         TranscriptionParam param =
                 TranscriptionParam.builder()
@@ -94,7 +102,7 @@ public class Main {
 
 ### **异步提交任务+异步查询任务执行结果**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8501040871/CAEQURiBgIDnxvjRpxkiIGI1NjJjOTgyNTVhMTRiMjM4OWVjYzFmZTExNGZjYzE14709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7695892871/CAEQURiBgIDnxvjRpxkiIGI1NjJjOTgyNTVhMTRiMjM4OWVjYzFmZTExNGZjYzE14709861_20241015153444.149.svg)
 
 1.  配置[请求参数](#48ea212b1d08r)。
     
@@ -127,6 +135,8 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         // 创建转写请求参数
         TranscriptionParam param =
                 TranscriptionParam.builder()

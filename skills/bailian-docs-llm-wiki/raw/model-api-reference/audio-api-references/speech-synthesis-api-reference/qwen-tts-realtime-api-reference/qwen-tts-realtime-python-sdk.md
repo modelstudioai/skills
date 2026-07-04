@@ -4,17 +4,6 @@
 
 **用户指南**：关于模型介绍和选型建议请参见[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)或[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)。
 
-**重要**
-
-百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
-
--   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
--   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
-
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
-
 ## **前期准备**
 
 DashScope Python SDK 版本需要不低于1.25.11。
@@ -100,7 +89,7 @@ if __name__  == '__main__':
         # 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash-realtime
         model='qwen3-tts-flash-realtime',
         callback=callback, 
-        # 以下为华北2（北京）地域的URL，各地域的URL不同。
+        # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
         url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime'
         )
 
@@ -208,7 +197,7 @@ if __name__  == '__main__':
         # 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash-realtime
         model='qwen3-tts-flash-realtime',
         callback=callback,
-        # 以下为华北2（北京）地域的URL，各地域的URL不同。
+        # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
         url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime'
         )
 
@@ -245,6 +234,17 @@ if __name__  == '__main__':
                     ))
 ```
 
+**重要**
+
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+
+-   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+
 访问[github](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/omni)下载更多示例代码。
 
 ## **请求参数**
@@ -277,7 +277,7 @@ str
 
 新加坡地域：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 下述请求参数可以通过update\_session接口配置。
 

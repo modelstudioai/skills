@@ -30,47 +30,15 @@
 
 能够完成从简单问答到复杂规划的各类任务。
 
-## 示例对比
-
-**旧版**
-
-**新版**
-
-1.  **知识库检索先行，再决策是否调用后续工具**
-    
-
-![20251226183243](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1039482.jpg)
-
-1.  **知识库与 MCP 统一作为工具，由智能体自主规划调用**
-    
-
-![20251226183204](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1039483.jpg)
-
-2.  **缺乏任务规划，无法完成复杂研究任务**
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1039475.png)
-    
-
-2.  **自主规划并拆解复杂任务，生成完整回复**
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1039473.png)
-    
-
 ## 快速开始：创建一个基础智能体
 
 1.  访问阿里云百炼控制台[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)，单击**创建应用**，选择**智能体应用** > **Agent 2.0**。
     
 2.  填写应用名称，单击**立即创建**。创建完毕后自动跳转至应用配置界面。
     
-    ![截屏2025-12-25 13](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1038483.png)
-    
 3.  在模型选择器的下拉菜单中选择模型，例如`千问-Plus-Latest`。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1038599.png)
-    
 4.  在右侧对话框中输入问题：`你是谁？`。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1036624.png)
     
 
 ## 能力配置
@@ -89,9 +57,6 @@
         
     -   **enable\_thinking**：是否开启思考模式。开启思考模式有助于提升智能体的反思效果。不支持思考模式的模型无法配置 enable\_thinking 参数。
         
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1036629.png)
-    
 
 ### 系统提示词
 
@@ -103,11 +68,7 @@
     
     -   无系统提示词：
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1039068.png)
-        
     -   配置系统提示词：
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1039066.png)
         
 2.  **在系统提示词中使用自定义变量（可选）**
     
@@ -115,11 +76,7 @@
     
     1.  单击系统提示词右上方的**新建变量**，设置自定义变量，单击**确定**保存。
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1036638.png)
-        
     2.  输入`/`，使用已配置的变量。
-        
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1038792.png)
         
 
 ### 预解析文件
@@ -128,38 +85,72 @@
 
 -   **关闭预解析**：关闭后，系统不会主动解析文件。文件的 URL 会作为上下文信息传递给智能体，智能体可在后续步骤中决策是否调用工具，并将该 URL 作为参数传入。
     
-    ![截屏2025-12-25 20](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1038795.png)
-    
 -   **开启预解析**：开启后，系统将使用预置解析器处理上传的文档、图像、视频、音频等文件，并返回解析后的文本内容给模型作为参考。
-    
-    ![截屏2025-12-26 09](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1038832.png)
     
 
 > 千问-VL 系列模型由于具备多模态能力，即使关闭预解析文件，也能够直接解析图片和视频文件。
 
 > 在其他所有情况下（例如，使用不具备多模态能力的文本模型，或使用千问-VL 系列模型处理非图像/视频文件时），智能体的文件处理能力则严格遵循上述“开启”或“关闭”的逻辑。
 
+### 内置工具
+
+内置工具在隔离的沙箱环境中运行，提供代码执行和文件操作能力。全部工具默认关闭，按需开启。
+
+**工具**
+
+**说明**
+
+`bash`
+
+执行 shell 命令，支持 bash、python3、pip 等命令行操作。
+
+`write`
+
+创建或覆盖文件，自动创建父目录。
+
+`read`
+
+读取文件内容，支持按行范围读取大文件。
+
+`edit`
+
+在文件中做精确文本替换（find and replace）。
+
+`glob`
+
+按模式搜索文件，返回匹配的文件路径列表。
+
+`grep`
+
+在文件中搜索内容，支持正则表达式。
+
+`download_file`
+
+将执行过程中生成的文件导出为可下载链接。
+
 ### **知识库**
 
-知识库使智能体能够查询外部信息，并将检索到的内容作为生成答案的依据。在新版智能体中，知识库作为智能体的一项技能，作为工具由智能体自主规划调用。这种主动获取知识的方式，在处理私有知识或垂直领域问答时，能提升回答的准确率并有效减少内容幻觉。详情请参考[知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)。
+知识库使智能体能够查询外部信息，并将检索到的内容作为生成答案的依据。在新版智能体中，知识库作为智能体的一项技能，作为工具由智能体自主规划调用。这种主动获取知识的方式，在处理私有知识或垂直领域问答时，能提升回答的准确率并有效减少内容幻觉。详情请参见[知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)。
 
 > 在[回复](#ed4f2ba20av9d)中开启**展示回答来源**可以展示知识来源和源文件地址。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1036709.png)
-
-新版智能体支持通过标签来限定知识库的查询范围。通过为知识库文件设置标签，并在系统提示词（Prompt）中定义使用规则，可以引导智能体根据用户意图，在更小的、更精准的文件范围内进行检索，从而显著提升回答的准确性和相关性。详情请参考[新版智能体知识库标签过滤](https://help.aliyun.com/zh/model-studio/rag-optimization#3c8a459e854md)。
+新版智能体支持通过标签来限定知识库的查询范围。通过为知识库文件设置标签，并在系统提示词（Prompt）中定义使用规则，可以引导智能体根据用户意图，在更小的、更精准的文件范围内进行检索，从而显著提升回答的准确性和相关性。详情请参见[新版智能体知识库标签过滤](https://help.aliyun.com/zh/model-studio/rag-optimization#3c8a459e854md)。
 
 ### **MCP**
 
 在新版智能体中，外部工具均以 MCP 协议接入智能体，并纳入调度体系，包括来自[MCP 广场](https://bailian.console.aliyun.com/?&tab=app&scm=20140722.S_%E7%99%BE%E7%82%BCprompt._.RL_%E7%99%BE%E7%82%BCprompt-LOC_aillm-OR_chat-V_3-RC_llm#/mcp-market)的官方 MCP 和自定义 MCP 服务。智能体能够在多步推理中，对 MCP 进行动态的、非固定顺序的调用，以解决更复杂的任务。此外，插件也支持一键转换为 MCP 服务。
 
-![截屏2025-12-26 12](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1039012.png)
+### 数据连接器
+
+数据连接器是百炼平台上智能体、工作流、知识库等访问外部数据的桥梁。通过配置数据连接器，智能体可以直接查询和操作外部数据源中的数据。
 
 ### 应用组件
 
 将已创建的智能体或工作流作为工具接入。需要先将智能体或工作流应用[发布为组件](https://help.aliyun.com/zh/model-studio/use-agent-or-workflow-as-component)。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5461060771/p1050786.png)
+### 技能
+
+技能（Skill）是可添加到智能体的能力包，用于让智能体在对话中自动处理特定类型的任务。添加技能后，智能体可在对话中自动识别匹配的任务并调用对应技能进行处理，无需额外编写代码。详情请参见[Skill](https://help.aliyun.com/zh/model-studio/introduction-to-skill)。
 
 ### 记忆
 
@@ -168,13 +159,13 @@
 -   **长期记忆**：该功能计划在未来的迭代中支持。
     
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1037574.png)
+### 环境
+
+环境用于配置技能调用所需的鉴权密钥和环境变量。配置后，智能体在调用技能时会自动注入对应的凭证和参数，无需在技能代码中硬编码敏感信息。
 
 ### 回复
 
 回复支持展示回答来源。开启后，将以角标形式展示知识来源和源文件/源网页地址。该功能推荐与知识库和联网搜索 MCP 组合使用。
-
-![20251223150244](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1037577.jpg)
 
 ## 运行与结果分析
 
@@ -184,12 +175,8 @@
     
 2.  **工具调用**：此步骤记录了模型执行的具体工具调用入参及其返回的结果。
     
-    ![截屏2025-12-23 15](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1037618.png)
-    
 
-通过配置 **ReAct 最大轮次**（取值范围 1-50），用于限制智能体在单次会话中可以调用工具的最大次数，当超出此限制后将会自动退出工具调用链路，并由智能体生成最终回复。
-
-![截屏2025-12-24 17](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1038333.png)
+**ReAct 最大轮次**（取值范围 1-50）用于限制智能体在单次会话中可以调用工具的最大次数。当超出此限制后，智能体将自动退出工具调用链路并生成最终回复。
 
 ## 应用发布与集成
 
@@ -201,13 +188,9 @@
 
 在应用配置页面的右上角，单击**发布**按钮，在弹出窗口中会展示自上次发布以来的配置变更差异。确认发布信息无误后，单击**确认发布**，即可完成应用发布。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1037673.png)
-
 ### **通过 API 调用**
 
-您可以在智能体应用**发布渠道**页签，单击**API调用**右侧的**查看API**，查看通过 API 调用新版智能体应用的方法。详情参考[新版智能体应用 API 参考](https://help.aliyun.com/zh/model-studio/new-agent-application-api-reference)。
-
-![20251226183929](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1039484.jpg)
+您可以在智能体应用**发布渠道**页签，单击**API调用**右侧的**查看API**，查看通过 API 调用新版智能体应用的方法。详情请参见[新版智能体应用 API](https://help.aliyun.com/zh/model-studio/new-agent-application-api-reference)。
 
 ## 应用管理
 
@@ -217,18 +200,8 @@
 
 1.  在应用配置页，单击顶部导航栏右侧的**版本管理**。
     
-    ![截屏2025-12-25 17](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1038625.png)
-    
 2.  选中需要回滚的历史版本，将鼠标悬浮至卡片上，单击右上角编辑图标，在**编辑版本描述**对话框中按需完成修改后，单击**确定**，即可修改历史版本描述信息。单击**覆盖当前草稿**，即可回滚至该版本。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5823576671/p1038630.png)
-    
-
-## 安全与合规
-
-### 应用合规备案
-
-若应用对外提供服务，必须遵守国家网信办《生成式人工智能服务管理暂行办法》等法规，完成必要的[应用合规备案](https://help.aliyun.com/zh/model-studio/compliance-and-launch-filing-guide-for-ai-apps-powered-by-the-tongyi-model)。
 
 ## 计费说明
 
@@ -238,7 +211,7 @@
     
     -   智能体会产生模型调用费用，具体费用取决于模型类型、输入和输出 Token 数量。
         
-    -   具体的模型类型和对应的计费规则请参考[模型列表](https://help.aliyun.com/zh/model-studio/models)。
+    -   具体的模型类型和对应的计费规则请参见[选择模型](https://help.aliyun.com/zh/model-studio/models)。
         
 2.  **知识库**
     

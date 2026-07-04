@@ -2,6 +2,12 @@
 
 本文介绍通过 WebSocket 连接访问 Paraformer 实时语音识别服务的服务端点、请求头和交互流程。
 
+**重要**
+
+阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+
 **用户指南：**关于模型介绍和选型建议请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model/)，示例代码请参见[实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)。
 
 DashScope SDK 目前仅支持 Java 和 Python。使用其他编程语言时，可通过 WebSocket 连接与服务进行通信。
@@ -10,7 +16,9 @@ DashScope SDK 目前仅支持 Java 和 Python。使用其他编程语言时，�
 
 Paraformer仅支持在华北2（北京）地域使用。WebSocket URL 固定如下：
 
-`wss://dashscope.aliyuncs.com/api-ws/v1/inference`
+`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
+
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **重要**
 
@@ -68,7 +76,7 @@ Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或�
 
 客户端事件和服务端事件的详细说明，请参见[客户端事件](https://help.aliyun.com/zh/model-studio/paraformer-client-events)和[服务端事件](https://help.aliyun.com/zh/model-studio/paraformer-server-events)。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6671261871/CAEQURiBgMCczta5pxkiIGY0N2Q2YjIwZTM1MTQyNTY4ZmFkY2MwN2JmOTllODFl4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1213892871/CAEQURiBgMCczta5pxkiIGY0N2Q2YjIwZTM1MTQyNTY4ZmFkY2MwN2JmOTllODFl4709861_20241015153444.149.svg)
 
 按时间顺序，客户端与服务端的交互流程如下：
 

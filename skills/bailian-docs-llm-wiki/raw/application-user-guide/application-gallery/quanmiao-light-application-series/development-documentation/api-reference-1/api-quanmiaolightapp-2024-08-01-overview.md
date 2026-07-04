@@ -354,7 +354,7 @@ API概述
 
 批量取消任务
 
-BatchQueryTaskStatus
+[BatchQueryTaskStatus](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-batchquerytaskstatus)
 
 批量查询异步任务状态
 

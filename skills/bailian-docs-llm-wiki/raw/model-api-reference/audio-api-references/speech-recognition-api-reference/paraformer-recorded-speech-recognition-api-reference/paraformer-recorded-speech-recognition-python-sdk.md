@@ -2,6 +2,12 @@
 
 本文介绍Paraformer录音文件识别Python SDK的参数和接口细节。
 
+**重要**
+
+阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+
 **用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)
 
 ## **前提条件**
@@ -30,7 +36,7 @@
 
 ### **异步提交任务+同步等待任务结束**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7311040871/CAEQURiBgMCvo5zjpxkiIDQyNzUwZjVjMWM3MjQ5Nzg4ODBjNDRjNzE1ZGFiOGFj4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2057892871/CAEQURiBgMCvo5zjpxkiIDQyNzUwZjVjMWM3MjQ5Nzg4ODBjNDRjNzE1ZGFiOGFj4709861_20241015153444.149.svg)
 
 1.  调用[核心类（Transcription）](#adcb5e9bddbyq)的`async_call`方法并设置[请求参数](#340f6879fci7d)。
     
@@ -53,11 +59,13 @@
 ```
 from http import HTTPStatus
 from dashscope.audio.asr import Transcription
+import dashscope
 import json
 
 # 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key
-# import dashscope
 # dashscope.api_key = "apiKey"
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 task_response = Transcription.async_call(
     model='paraformer-v2',
@@ -73,7 +81,7 @@ if transcribe_response.status_code == HTTPStatus.OK:
 
 ### **异步提交任务+异步查询任务执行结果**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7311040871/CAEQURiBgMCN3qzkpxkiIGE0YmU4YTdjMWNiNzRmYjJhMjFlMWZkZmFmOWQ1NmEx4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2057892871/CAEQURiBgMCN3qzkpxkiIGE0YmU4YTdjMWNiNzRmYjJhMjFlMWZkZmFmOWQ1NmEx4709861_20241015153444.149.svg)
 
 1.  调用[核心类（Transcription）](#adcb5e9bddbyq)的`async_call`方法并设置[请求参数](#340f6879fci7d)。
     
@@ -97,6 +105,8 @@ if transcribe_response.status_code == HTTPStatus.OK:
 from http import HTTPStatus
 from dashscope.audio.asr import Transcription
 import json
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 # 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key
 # import dashscope

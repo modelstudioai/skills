@@ -8,6 +8,12 @@
 
 本文描述的功能仅在华北2（北京）地域可用。
 
+**重要**
+
+阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+
 ## **前提条件**
 
 -   已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)
@@ -811,6 +817,10 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class CosyVoiceSyncExample {
+    static {
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
+    }
 
     /**
      * 非流式调用示例一：返回音频数据（ByteBuffer）
@@ -912,6 +922,10 @@ import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
 public class CosyVoiceStreamExample {
+    static {
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
+    }
 
     public static void streamCallWithCallback() {
         HttpSpeechSynthesizer synthesizer = new HttpSpeechSynthesizer();

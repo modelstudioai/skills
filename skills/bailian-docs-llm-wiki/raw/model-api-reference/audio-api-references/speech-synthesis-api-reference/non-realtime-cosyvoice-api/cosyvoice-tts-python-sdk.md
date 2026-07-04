@@ -8,6 +8,12 @@
 
 本文描述的功能仅在华北2（北京）地域可用。
 
+**重要**
+
+阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+
 ## **前提条件**
 
 -   已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)
@@ -421,10 +427,13 @@ API Key。如果未指定，SDK会自动从环境变量`DASHSCOPE_API_KEY`中读
 ```
 # -*- coding: utf-8 -*-
 import os
+import dashscope
 from dashscope.audio.http_tts.http_speech_synthesizer import HttpSpeechSynthesizer
 
 # 未配置环境变量时，将下行替换为：api_key = "sk-xxx"，即替换为实际的API Key
 api_key = os.getenv("DASHSCOPE_API_KEY")
+# 调用时请将"{WorkspaceId}"替换为真实的业务空间ID
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 # 非流式调用，返回音频URL
 result = HttpSpeechSynthesizer.call(
@@ -453,10 +462,13 @@ print(f"过期时间: {result.expires_at}")
 ```
 # -*- coding: utf-8 -*-
 import os
+import dashscope
 from dashscope.audio.http_tts.http_speech_synthesizer import HttpSpeechSynthesizer
 
 # 未配置环境变量时，将下行替换为：api_key = "sk-xxx"，即替换为实际的API Key
 api_key = os.getenv("DASHSCOPE_API_KEY")
+# 调用时请将"{WorkspaceId}"替换为真实的业务空间ID
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 # 流式调用，逐段返回音频数据
 stream_result = HttpSpeechSynthesizer.call(

@@ -34,7 +34,7 @@ Token Plan 团队版常见问题汇总，涵盖购买、使用、计量和性能
 
 API Key 和 Base URL
 
-在[管理后台](https://tokenplan-enterprise.bailian.console.aliyun.com)生成专属 API Key，Base URL 详见[快速开始](https://help.aliyun.com/zh/model-studio/token-plan-quickstart)
+在[管理后台](https://tokenplan-enterprise.bailian.aliyunportal.com)生成专属 API Key，Base URL 详见[快速开始](https://help.aliyun.com/zh/model-studio/token-plan-quickstart)
 
 在[Coding Plan 页面](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/coding-plan)获取专属 API Key 和专属 Base URL
 
@@ -161,9 +161,15 @@ Base URL 路径与协议不匹配。例如把 OpenAI 兼容路径配在 Anthropi
 
 **insufficient\_quota: You exceeded your current quota, please check your plan and billing details.**
 
-套餐 Token 已用完，坐席额度和共享用量包均已耗尽。
+该报错可能由以下两种原因触发：
 
-可加购坐席（加购后需将新坐席分配给成员后再使用）、加购共享用量包，或等待下一计费周期额度自动重置。
+**套餐额度已用尽**：坐席额度和共享用量包均已耗尽。
+
+**触发模型调用限流**：即使套餐额度充足，每秒或每分钟消耗的 Token 数（TPS/TPM）超过模型限流阈值也会触发。限流按主账号维度计算，账号下所有 RAM 子账号、业务空间和 API Key 的调用量合并计算；即使每分钟总调用量未超限，短时间内的请求激增也可能触发。
+
+**额度已用尽**：可加购坐席（加购后需将新坐席分配给成员后再使用）、加购共享用量包，或等待下一计费周期额度自动重置。
+
+**触发限流**：等待约一分钟后重试，并采用平滑请求策略（如匀速调度、指数退避或请求队列缓冲）避免瞬时高峰；如默认限流额度无法满足业务需求，可前往百炼控制台的[限流提额](https://help.aliyun.com/zh/model-studio/rate-limit#h2-temp-limit-raise)提升模型的临时 TPM 额度。更多限流条件与规避方法，请参见[限流](https://help.aliyun.com/zh/model-studio/rate-limit)。
 
 **Connection error**
 
@@ -187,7 +193,7 @@ Base URL 域名拼写错误或网络连接异常
 
 ### **团队管理入口在哪里？**
 
-阿里云主账号或 RAM 用户登录[Token Plan 控制台](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/token-plan)后，在左侧菜单使用**我的订阅**、**成员**、**设置**等功能；也可点击**进入管理平台**跳转独立管理平台。通过 SSO 或钉钉加入的成员，通过管理员分发的**管理平台地址**登录管理平台。详见[访问入口](https://help.aliyun.com/zh/model-studio/token-plan-team#tp05-enter)。
+阿里云主账号或 RAM 用户登录[Token Plan 控制台](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/token-plan)后，在左侧菜单进入**我的订阅**，通过订阅卡片的**设置**、**用量分析**、**分配座席**入口进入成员管理与设置面板；也可点击**进入管理平台**跳转独立管理平台。通过 SSO 或钉钉加入的成员，通过管理员分发的**管理平台地址**（形如 tokenplan-enterprise.bailian.aliyunportal.com）登录管理平台。详见[访问入口](https://help.aliyun.com/zh/model-studio/token-plan-team#tp05-enter)。
 
 ### **成员如何获取 API Key？**
 
@@ -205,11 +211,19 @@ Base URL 域名拼写错误或网络连接异常
 
 ### **套餐是否支持退订？**
 
-支持按席位退订。在控制台**我的订阅**页面点击席位的**退订**，已有用量消耗的席位不可退订。退款原路退回支付账户，预计 1-3 个工作日到账。详见[订阅管理](https://help.aliyun.com/zh/model-studio/token-plan-overview#tp01-sub-mgmt)。
+支持按席位退订。在控制台**Token Plan 订阅详情页**的订阅明细中，点击对应席位的**退订**，已有用量消耗的席位不可退订。也可勾选多个席位后点击**批量退订**。退款原路退回支付账户，预计 1-3 个工作日到账。详见[订阅管理](https://help.aliyun.com/zh/model-studio/token-plan-overview#tp01-sub-mgmt)。
 
 ### **阿里云账号欠费是否影响 Token Plan 团队版的使用？**
 
 Token Plan 团队版为预付费订阅产品，只要套餐额度未用尽且订阅仍在有效期内，阿里云账号欠费不影响 Token Plan 团队版的正常使用。
+
+### **如何加购坐席？**
+
+在 Token Plan 订阅详情页的订阅明细中，点击**加购座席**，选择坐席类型和数量后提交订单。加购后需将新坐席分配给成员才能使用。详见[团队管理](https://help.aliyun.com/zh/model-studio/token-plan-team)。
+
+### **如何关闭或开启自动续费？**
+
+在 Token Plan 订阅详情页的订阅明细中，点击**关闭自动续费**或**开启自动续费**。关闭后订阅到期不自动续费，需手动续费。
 
 ## **计量相关**
 
@@ -219,11 +233,11 @@ Token Plan 团队版实际消耗取决于每次请求中输入 Token、缓存 To
 
 ### **如何查看用量？**
 
-在[Token Plan 团队版页面](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)可查看套餐和共享用量包的用量详情。管理员还可在[管理后台](https://tokenplan-enterprise.bailian.console.aliyun.com)的用量分析页面查看全部成员的消耗明细。
+在[Token Plan 订阅详情页](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/token-plan)可查看套餐和共享用量包的用量详情。管理员还可在[管理后台](https://tokenplan-enterprise.bailian.aliyunportal.com)的用量分析页面查看全部成员的消耗明细。
 
 ### **用量如何重置？**
 
-坐席额度在每个订阅月到期时重置，未用完的额度不累积到下月。共享用量包的额度同样按月重置。
+坐席额度在每个订阅月到期时重置，未用完的额度不累积到下月。共享用量包额度购买后有效期为 1 个月，到期后需重新购买，不随座席额度按月重置。
 
 ### **超出限额之后怎么办？**
 

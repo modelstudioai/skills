@@ -147,19 +147,20 @@ description: >-
 | **按家族筛选**：按 primaryCapability / providers / itemCount / maxContextWindow 找家族 | `models/families.jsonl`（一行一家族，含 items[] 摘要） |
 | 模型家族总览 / 按能力分桶浏览         | `models/index.md`                                        |
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
-| API Key | `wiki/concepts/api-key.md` |
-| Token | `wiki/concepts/token.md` |
-| OpenAI 兼容接口 | `wiki/concepts/openai-compatible-interface.md` |
-| 检索增强生成（RAG） | `wiki/concepts/rag.md` |
-| 业务空间 | `wiki/concepts/workspace.md` |
-| 多模态 | `wiki/concepts/multimodal.md` |
-| 计费 | `wiki/concepts/billing.md` |
-| 智能体应用 | `wiki/concepts/agent-application.md` |
-| 图像、视频与3D生成API对比 | `wiki/comparisons/multimodal-generation-comparison.md` |
-| 模型微调、压缩与高速推理对比 | `wiki/comparisons/model-optimization-comparison.md` |
-| 知识库、记忆库与数据接入对比 | `wiki/comparisons/knowledge-data-management-comparison.md` |
-| 模型评测与应用评测对比 | `wiki/comparisons/evaluation-comparison.md` |
-| 模型监控与应用监控对比 | `wiki/comparisons/monitoring-comparison.md` |
+| 函数调用 | `wiki/concepts/function-calling.md` |
+| 流式输出 | `wiki/concepts/streaming-output.md` |
+| 长上下文 | `wiki/concepts/long-context.md` |
+| 限流与吞吐 | `wiki/concepts/rate-limiting.md` |
+| 上下文缓存 | `wiki/concepts/prompt-caching.md` |
+| 向量与嵌入 | `wiki/concepts/vector-embedding.md` |
+| 智能体编排 | `wiki/concepts/agent-orchestration.md` |
+| 跨会话记忆 | `wiki/concepts/cross-session-memory.md` |
+| 多模态生成能力对比：图像 / 3D / 视频 | `wiki/comparisons/multimodal-generation-comparison.md` |
+| 模型优化方式对比：微调 / 压缩 / 高速推理 | `wiki/comparisons/model-optimization-comparison.md` |
+| 应用监控与模型监控对比 | `wiki/comparisons/monitoring-comparison.md` |
+| 应用评测与模型评测对比 | `wiki/comparisons/evaluation-comparison.md` |
+| 应用调用方式对比：API 直调与百炼应用调用 | `wiki/comparisons/application-calling-comparison.md` |
+| 入门路径对比：开始使用与模型快速上手 | `wiki/comparisons/getting-started-comparison.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 

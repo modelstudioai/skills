@@ -33,6 +33,22 @@
 
 **功能说明**
 
+6月29日
+
+平台功能
+
+API Key 加密存储与业务空间专属推理 API 域名升级公告
+
+API Key 加密存储与业务空间专属推理 API 域名升级公告[了解详情](https://www.aliyun.com/notice/118406)
+
+6月28日
+
+平台功能
+
+qwen-turbo 资源包启动退市通知
+
+qwen-turbo 资源包启动退市通知[了解详情](https://www.aliyun.com/notice/118392)
+
 6月9日
 
 模型评测

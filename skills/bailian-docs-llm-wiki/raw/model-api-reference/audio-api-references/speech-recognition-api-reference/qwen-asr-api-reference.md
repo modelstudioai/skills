@@ -30,9 +30,11 @@
 
 ## 华北2（北京）
 
-HTTP请求地址：`POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions`
+HTTP请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-SDK调用配置的base\_url：`https://dashscope.aliyuncs.com/compatible-mode/v1`
+SDK调用配置的base\_url：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
+
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 新加坡
 
@@ -40,13 +42,18 @@ HTTP请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/
 
 SDK调用配置的base\_url：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+-   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
 ### **请求体**
 
@@ -61,10 +68,10 @@ import os
 try:
     client = OpenAI(
         # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-        # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = "sk-xxx",
+        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
         api_key=os.getenv("DASHSCOPE_API_KEY"),
-        # 以下为华北2（北京）地域的URL，各地域的URL不同。
-        base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+        # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
+        base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
     )
     
 
@@ -121,10 +128,10 @@ import OpenAI from "openai";
 
 const client = new OpenAI({
   // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-  // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: "sk-xxx",
+  // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
   apiKey: process.env.DASHSCOPE_API_KEY,
-  // 以下为华北2（北京）地域的URL，各地域的URL不同。
-  baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1", 
+  // 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
+  baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1", 
 });
 
 async function main() {
@@ -184,10 +191,10 @@ main();
 
 #### cURL
 
-以下为华北2（北京）地域的URL，各地域的URL不同。
+以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
 
 ```
-curl -X POST 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions' \
+curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -292,10 +299,10 @@ try:
 
     client = OpenAI(
         # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-        # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = "sk-xxx",
+        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
         api_key=os.getenv("DASHSCOPE_API_KEY"),
-        # 以下为华北2（北京）地域的URL，各地域的URL不同。
-        base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+        # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
+        base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
     )
     
 
@@ -355,10 +362,10 @@ import { readFileSync } from 'fs';
 
 const client = new OpenAI({
   // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-  // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: "sk-xxx",
+  // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
   apiKey: process.env.DASHSCOPE_API_KEY,
-  // 以下为华北2（北京）地域的URL，各地域的URL不同。
-  baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1", 
+  // 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
+  baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1", 
 });
 
 const encodeAudioFile = (audioFilePath) => {
@@ -857,9 +864,11 @@ data: [DONE]
 
 ## 华北2（北京）
 
-HTTP请求地址：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+HTTP请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-SDK调用配置的base\_url：`https://dashscope.aliyuncs.com/api/v1`
+SDK调用配置的base\_url：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
+
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 新加坡
 
@@ -867,13 +876,24 @@ HTTP请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/
 
 SDK调用配置的base\_url：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 美国（弗吉尼亚）
 
 HTTP请求地址：`POST https://dashscope-us.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的base\_url：`https://dashscope-us.aliyuncs.com/api/v1`
+
+**重要**
+
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+
+-   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
 ### **请求体**
 
@@ -882,7 +902,7 @@ SDK调用配置的base\_url：`https://dashscope-us.aliyuncs.com/api/v1`
 ## cURL
 
 ```
-curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -949,7 +969,7 @@ public class Main {
         // asrOptions.put("language", "zh"); // 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率
         MultiModalConversationParam param = MultiModalConversationParam.builder()
                 // 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-                // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
+                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
                 // 若使用美国地域的模型，需在模型后面加上“-us”后缀，例如qwen3-asr-flash-us
                 .model("qwen3-asr-flash")
@@ -961,8 +981,8 @@ public class Main {
     }
     public static void main(String[] args) {
         try {
-            // 以下为华北2（北京）地域的URL，各地域的URL不同。
-            Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+            // 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
+            Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
             simpleMultiModalConversationCall();
         } catch (ApiException | NoApiKeyException | UploadFileException e) {
             System.out.println(e.getMessage());
@@ -978,8 +998,8 @@ public class Main {
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，各地域的URL不同。
-dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 messages = [
     {"role": "user", "content": [{"audio": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3"}]}
@@ -987,7 +1007,7 @@ messages = [
 
 response = dashscope.MultiModalConversation.call(
     # 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = "sk-xxx"
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
     # 若使用美国地域的模型，需在模型后面加上“-us”后缀，例如qwen3-asr-flash-us
     model="qwen3-asr-flash",
@@ -1398,9 +1418,11 @@ User Message `_object_`**（必选）**
 
 ## 华北2（北京）
 
-HTTP请求地址：`POST https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription`
+HTTP请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription`
 
-SDK调用配置的base\_url：`https://dashscope.aliyuncs.com/api/v1`
+SDK调用配置的base\_url：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
+
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 新加坡
 
@@ -1408,7 +1430,18 @@ HTTP请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/
 
 SDK调用配置的base\_url：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+**重要**
+
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+
+-   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
 #### **请求体**
 
@@ -1416,11 +1449,11 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.ap-southeast-1.maas.aliyunc
 
 ```
 # ======= 重要提示 =======
-# 以下为华北2（北京）地域的URL，各地域的URL不同。
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
 # 新加坡地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # === 执行时请删除该注释 ===
 
-curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription' \
+curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json" \
 --header "X-DashScope-Async: enable" \
@@ -1450,8 +1483,8 @@ import okhttp3.*;
 import java.io.IOException;
 
 public class Main {
-    // 以下为华北2（北京）地域的URL，各地域的URL不同。
-    private static final String API_URL = "https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription";
+    // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    private static final String API_URL = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription";
 
     public static void main(String[] args) {
         // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -1546,8 +1579,8 @@ import requests
 import json
 import os
 
-# 以下为华北2（北京）地域的URL，各地域的URL不同。
-url = "https://dashscope.aliyuncs.com/api/v1/services/audio/asr/transcription"
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription"
 
 # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 若没有配置环境变量，请用百炼API Key将下行替换为：DASHSCOPE_API_KEY = "sk-xxx"
@@ -1762,9 +1795,11 @@ else:
 
 ## 华北2（北京）
 
-HTTP请求地址：`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+HTTP请求地址：`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-SDK调用配置的base\_url：`https://dashscope.aliyuncs.com/api/v1`
+SDK调用配置的base\_url：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
+
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 新加坡
 
@@ -1772,7 +1807,18 @@ HTTP请求地址：`GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/a
 
 SDK调用配置的base\_url：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+**重要**
+
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+
+-   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
 #### **请求体**
 
@@ -1780,11 +1826,11 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.ap-southeast-1.maas.aliyunc
 
 ```
 # ======= 重要提示 =======
-# 以下为华北2（北京）地域的URL，各地域的URL不同。
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
 # 新加坡地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # === 执行时请删除该注释 ===
 
-curl --location --request GET 'https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}' \
+curl --location --request GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header "Content-Type: application/json"
 ```
@@ -1806,8 +1852,8 @@ public class Main {
         // 若没有配置环境变量，请用百炼API Key将下行替换为：String apiKey = "sk-xxx"
         String apiKey = System.getenv("DASHSCOPE_API_KEY");
 
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        String apiUrl = "https://dashscope.aliyuncs.com/api/v1/tasks/" + taskId;
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        String apiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/" + taskId;
 
         OkHttpClient client = new OkHttpClient();
 
@@ -1843,8 +1889,8 @@ DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY")
 
 # 替换为实际的task_id
 task_id = "xxx"
-# 以下为华北2（北京）地域的URL，各地域的URL不同。
-url = f"https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}"
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+url = f"https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}"
 
 headers = {
     "Authorization": f"Bearer {DASHSCOPE_API_KEY}",

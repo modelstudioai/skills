@@ -40,7 +40,7 @@
 
 ## 应用调用与发布
 
-- **API 调用**：2025 年 11 月 3 日起支持通过 Responses API 调用百炼应用，提供同步调用 API（实时交互，可复用 OpenAI 代码库）与[异步调用](../concepts/async-invocation.md) API（设置 `background=true` 立即返回任务 ID）。调用工作流和智能体编排应用时需传入自定义参数。
+- **API 调用**：2025 年 11 月 3 日起支持通过 Responses API 调用百炼应用，提供同步调用 API（实时交互，可复用 OpenAI 代码库）与[异步调用](../concepts/async-invocation.md) API（设置 `background=true` 立即返回任务 ID）。调用工作流和[智能体编排](../concepts/agent-orchestration.md)应用时需传入自定义参数。
 - **发布渠道**：支持微信、钉钉分享渠道（创建钉钉 AI 机器人或微信公众号 AI 机器人）；支持音视频实时互动（将图文对话应用转为音视频实时互动应用，提供 H5/APP 调试窗口，通过音视频 SDK 发布到 WEB/iOS/Android）。
 - **应用观测**：2024 年 10 月 24 日新增应用观测能力，支持端到端查看应用处理流程；2026 年 2 月 6 日上线新版应用[评测](../concepts/evaluation.md)，支持智能体、工作流和自定义三种类型[评测](../concepts/evaluation.md)集。
 - **长期记忆**：2026 年 1 月 31 日上线新版长期记忆与用户画像管理 API，支持多应用共享同一记忆库、自动提取关键信息、语义检索优化及完整用户画像管理。
@@ -51,13 +51,15 @@
 - 大模型调用产生[计费](../concepts/billing.md)，平台提供限时免费额度，可在模型广场查看各模型系列详情。
 - QwQ 系列模型在智能体应用中不支持插件、流程、音视频交互能力。
 - 文档解析耗时与文档大小相关，知识文档导入通常 1~6 分钟，知识库解析通常 1~2 分钟，需耐心等待。
-- 智能体编排应用已于 2025 年 8 月 12 日随工作流应用界面升级而下线，相关需求请使用新版智能体应用或工作流应用。
+- [智能体编排](../concepts/agent-orchestration.md)应用已于 2025 年 8 月 12 日随工作流应用界面升级而下线，相关需求请使用新版智能体应用或工作流应用。
 - Assistant API 处于下线中状态，如需全代码开发高度定制化 RAG 应用请关注官方公告。
 
 ## 来源文档
 
 - [0代码构建私有知识问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)
 - [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)
+
+
 
 
 

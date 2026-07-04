@@ -1,56 +1,49 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台模型推理与应用调用的一种返回模式：服务端在生成过程中按增量块（chunk）逐步把结果推送给客户端，而不是等整个响应生成完毕再一次性返回。它能显著降低首字延迟、改善交互体验，并允许开发者在长任务进行中实时处理与中断。
+流式输出（Streaming）是指模型在生成过程中逐段返回内容，而非等待完整结果一次性返回的调用方式。在百炼平台中，流式输出广泛用于文本生成、实时多模态交互、应用调用与图像生成等场景，以降低首字延迟、提升用户体验。
 
-## 在百炼平台的使用场景
-
-百炼的多类接口都支持流式输出，但启用方式和事件结构因协议族而异：
+## 在百炼平台中的使用场景
 
 ### 文本生成模型（Qwen 系列）
 
-无论是 OpenAI 兼容 Chat Completions、Anthropic 兼容 Messages，还是 DashScope 原生接口，均通过请求体中的 `stream` 参数（布尔值）开启流式。开启后服务端按增量返回文本片段，调用方可逐块拼装最终回答。在选型迁移时需注意：兼容接口为保持协议一致可能不暴露全部原生采样参数，但 `stream`、`temperature`、`tools` 等核心参数在三种协议下均可使用。
-
-### 专用模型（翻译、深度研究、OCR、GUI 等）
-
-- **qwen-mt-plus（翻译）**：通过 `stream` 控制是否流式返回译文。
-- **qwen-deep-research（深度研究）**：两阶段流程，第一步「反问确认」阶段必须将 `stream` 设为 `true`，以流式获取模型的澄清问题。
-- **qwen3.5-ocr / gui-plus**：同样支持 OpenAI 兼容或 DashScope 协议下的流式输出。
-
-### 应用调用（智能体 / 工作流）
-
-通过 OpenAI 兼容 Responses API 调用百炼应用时，`stream` 参数可选，开启后响应以 SSE（Server-Sent Events）方式增量推送，包含文本增量、工具调用增量与状态事件。DashScope 原生 `/completion` 接口同样支持流式返回，便于在工作流长链路中实时展示中间步骤。
+Qwen 系列模型支持通过 OpenAI 兼容 Chat Completions、Anthropic 兼容 Messages、DashScope 原生接口调用，均可启用流式输出。OpenAI 兼容 Responses 接口同样支持流式。开发者只需在请求中将 `stream` 参数设为 `true`，响应即以 Server-Sent Events（SSE）增量片段形式逐块返回。
 
 ### 实时多模态交互（Qwen-Omni-Realtime）
 
-实时 API 基于 WebSocket 长连接，本质上就是一种流式交互：音频通过 `input_audio_buffer.append` 增量上行，模型响应通过 `response.delta`、`response.output_audio.delta` 等事件增量下行。这里「流式」不再是请求级开关，而是会话级协议——VAD 模式下语音结束即自动触发流式响应，Manual 模式下由 `response.create` 显式触发。
+Qwen-Omni-Realtime API 基于 WebSocket 长连接，本质即为流式双向通信。会话由客户端事件与服务端事件驱动：
+
+- 客户端通过 `input_audio_buffer.append` 流式追加音频字节到缓冲区，建议以较小数据块发送以提升 VAD 响应速度。
+- 服务端在生成响应时通过 `response.delta` 等事件增量输出文本与音频片段，客户端实时渲染。
+- Manual 模式下，关闭 `turn_detection` 时每个事件最多放置 15 MiB 音频；通过 SDK 的 `append_audio` 流式发送较小块可让 VAD 更迅速。
+
+### 应用调用
+
+百炼应用（智能体、工作流、Agent 2.0）通过 OpenAI 兼容 Responses API 或 DashScope 原生 `/completion` 接口调用时，均支持流式返回。 Responses API 在 `stream` 为 `true` 时按 SSE 增量推送应用输出与中间步骤；DashScope 原生接口在 `stream` 为 `true` 时通过 `X-DashScope-Streaming` 头声明，并以增量方式返回对话与工具调用结果。
+
+### 图像生成
+
+图像生成类接口以异步任务为主：提交请求获得 `task_id`，再轮询 `GET /api/v1/tasks/{task_id}` 取结果。部分接口（如千问-文生图、文生图 V2 兼容模式）提供同步调用，少数能力支持流式。流式与异步的差异在于：流式为增量推送生成过程，异步为提交-轮询模型，二者不应混淆。
 
 ## 关键参数与配置
 
-| 参数 | 类型 | 适用接口 | 说明 |
-| --- | --- | --- | --- |
-| `stream` | bool | Qwen 文本 / 专用模型 / 应用 Responses | 是否开启流式输出，默认 `false` |
-| `stream_options.include_usage` | object | OpenAI 兼容接口 | 流式末块附带 token 用量统计 |
-| 增量事件 | SSE/WebSocket | Responses API / Omni Realtime | 通过事件类型区分文本增量、音频增量、工具调用增量与终止事件 |
+- **`stream`**：是否启用流式输出，布尔值，默认 `false`。文本生成与应用调用接口通用。
+- **SSE 格式**：OpenAI 兼容接口遵循 `data: {...}\n\n` 格式，结尾以 `data: [DONE]` 标记完成；DashScope 原生接口的增量结构以 `output` 字段逐步累加。
+- **`X-DashScope-Streaming`**：DashScope 原生接口启用流式时需在请求头声明 `enable`。
+- **WebSocket 事件流**：实时多模态接口中，音频与文本以事件为粒度流式传输，无需显式 `stream` 参数。
+- **流式与工具调用**：当响应包含工具调用（Function Calling）时，流式输出会将工具参数以增量片段返回，开发者需在事件回调中累积拼接。
 
-注意事项：
+## 注意事项
 
-- **拼装顺序**：流式块按服务端发送顺序到达，需按 `delta` 顺序累加文本与工具调用参数；丢弃或乱序处理会导致内容错乱。
-- **终止判定**：收到 `finish_reason`（HTTP SSE）或 `response.done`（WebSocket）后才视为响应结束，不应依赖连接关闭判断。
-- **中断与取消**：Omni Realtime 用 `response.cancel` 取消进行中的流式响应；HTTP 流式可由客户端主动断开连接，但服务端可能继续计费直至生成完成，建议优先用协议级取消。
-- **工具调用**：流式返回工具调用时，函数名与参数也是增量拼接的，需在终止事件后整体执行，避免对半截 JSON 解析。
-- **错误处理**：流式中途出错通常以 `error` 事件或异常 HTTP 状态返回，调用方应保留已收到的增量并据此决定重试策略。
-- **token 用量**：OpenAI 兼容接口需显式设置 `stream_options.include_usage`，否则流式响应不会附带 usage 统计。
-
-## 选型建议
-
-面向终端用户的对话、实时问答、长文本生成场景应默认开启流式以优化体验；后台批处理、需要完整结构化结果再处理的场景可关闭流式以简化拼装逻辑。实时多模态场景则必须使用 WebSocket 流式协议。
+- 流式输出要求客户端正确处理增量片段的累积与拼接，避免漏字段或顺序错乱。
+- 实时多模态场景下，音频流式块的发送速率与大小会影响 VAD 灵敏度与首字延迟，建议按 SDK 推荐块大小发送。
+- 异步图像生成接口不等于流式，需通过轮询获取最终结果；只有显式声明 `stream` 的接口才提供增量推送。
+- 迁移自 OpenAI / Anthropic 客户端时，应先确认目标 Qwen 模型在对应兼容接口下对 `stream` 参数的支持情况。
 
 ## 关联主题页
 
 - [qwen api reference](../api/qwen-api-reference.md)
-- [image generation](../api/image-generation.md)
 - [omni realtime api](../api/omni-realtime-api.md)
 - [application call](../api/application-call.md)
-- [more models](../api/more-models.md)
+- [image generation](../api/image-generation.md)
 
 

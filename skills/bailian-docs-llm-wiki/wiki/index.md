@@ -45,8 +45,9 @@
 - [file management api](api/file-management-api.md) — 1 篇源文档
 - [frameworks](api/frameworks.md) — 3 篇源文档
 - [image generation](api/image-generation.md) — 25 篇源文档
+- [knowledge](api/knowledge.md) — 1 篇源文档
 - [long term memory new](api/long-term-memory-new.md) — 1 篇源文档
-- [managed agents api](api/managed-agents-api.md) — 6 篇源文档
+- [managed agents api](api/managed-agents-api.md) — 7 篇源文档
 - [model production](api/model-production.md) — 3 篇源文档
 - [more](api/more.md) — 3 篇源文档
 - [more about models](api/more-about-models.md) — 6 篇源文档
@@ -60,20 +61,21 @@
 
 ## 横切概念
 
-- [API Key](concepts/api-key.md) — 关联 10 个主题
-- [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 6 个主题
-- [Token](concepts/token.md) — 关联 7 个主题
-- [业务空间](concepts/workspace.md) — 关联 7 个主题
-- [多模态](concepts/multimodal.md) — 关联 6 个主题
-- [智能体应用](concepts/agent-application.md) — 关联 8 个主题
-- [检索增强生成（RAG）](concepts/rag.md) — 关联 6 个主题
-- [计费](concepts/billing.md) — 关联 8 个主题
+- [上下文缓存](concepts/prompt-caching.md) — 关联 3 个主题
+- [函数调用](concepts/function-calling.md) — 关联 5 个主题
+- [向量与嵌入](concepts/vector-embedding.md) — 关联 5 个主题
+- [智能体编排](concepts/agent-orchestration.md) — 关联 4 个主题
+- [流式输出](concepts/streaming-output.md) — 关联 4 个主题
+- [跨会话记忆](concepts/cross-session-memory.md) — 关联 3 个主题
+- [长上下文](concepts/long-context.md) — 关联 4 个主题
+- [限流与吞吐](concepts/rate-limiting.md) — 关联 4 个主题
 
 ## 对比分析
 
-- [图像、视频与3D生成API对比](comparisons/multimodal-generation-comparison.md) — 对比 3 个主题
-- [模型微调、压缩与高速推理对比](comparisons/model-optimization-comparison.md) — 对比 3 个主题
-- [模型监控与应用监控对比](comparisons/monitoring-comparison.md) — 对比 2 个主题
-- [模型评测与应用评测对比](comparisons/evaluation-comparison.md) — 对比 2 个主题
-- [知识库、记忆库与数据接入对比](comparisons/knowledge-data-management-comparison.md) — 对比 3 个主题
+- [入门路径对比：开始使用与模型快速上手](comparisons/getting-started-comparison.md) — 对比 2 个主题
+- [多模态生成能力对比：图像 / 3D / 视频](comparisons/multimodal-generation-comparison.md) — 对比 3 个主题
+- [应用监控与模型监控对比](comparisons/monitoring-comparison.md) — 对比 2 个主题
+- [应用评测与模型评测对比](comparisons/evaluation-comparison.md) — 对比 2 个主题
+- [应用调用方式对比：API 直调与百炼应用调用](comparisons/application-calling-comparison.md) — 对比 2 个主题
+- [模型优化方式对比：微调 / 压缩 / 高速推理](comparisons/model-optimization-comparison.md) — 对比 3 个主题
 

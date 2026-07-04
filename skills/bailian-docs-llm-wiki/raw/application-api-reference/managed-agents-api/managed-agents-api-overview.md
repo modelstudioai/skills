@@ -30,6 +30,25 @@ https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/agentstudio
 Authorization: Bearer <your-api-key>
 ```
 
+## SDK
+
+除直接调用 REST 接口外，还可通过 Python 或 Java SDK 接入。Managed Agents 模块要求 Python SDK v1.26.2 及以上、Java SDK v2.22.24 及以上。若已安装旧版本，请重新执行安装命令以升级。
+
+Python
+
+```
+pip install dashscope
+```
+
+Java
+
+```
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>dashscope-sdk-java</artifactId>
+</dependency>
+```
+
 ## 请求与响应
 
 -   请求体为 JSON，`Content-Type: application/json`

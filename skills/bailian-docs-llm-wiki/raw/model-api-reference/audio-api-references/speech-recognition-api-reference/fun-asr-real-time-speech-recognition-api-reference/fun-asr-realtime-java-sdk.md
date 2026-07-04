@@ -4,9 +4,14 @@
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `wss://dashscope-intl.aliyuncs.com` 迁移至新域名。
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+-   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
 **用户指南：**关于模型介绍和选型建议请参见[实时语音识别-Fun-ASR/Paraformer](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition)。
 
@@ -45,8 +50,8 @@ import java.io.File;
 
 public class Main {
     public static void main(String[] args) {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        Constants.baseWebsocketApiUrl = "wss://dashscope.aliyuncs.com/api-ws/v1/inference";
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         // 创建Recognition实例
         Recognition recognizer = new Recognition();
         // 创建RecognitionParam
@@ -126,8 +131,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        Constants.baseWebsocketApiUrl = "wss://dashscope.aliyuncs.com/api-ws/v1/inference";
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.submit(new RealtimeRecognitionTask());
         executorService.shutdown();
@@ -251,8 +256,8 @@ class TimeUtils {
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        Constants.baseWebsocketApiUrl = "wss://dashscope.aliyuncs.com/api-ws/v1/inference";
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         // 实际应用中，该方法仅在程序最开始执行一次即可，不必多次执行该方法。
         warmUp();
 
@@ -405,8 +410,8 @@ import java.nio.ByteBuffer;
 
 public class Main {
     public static void main(String[] args) throws NoApiKeyException {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        Constants.baseWebsocketApiUrl = "wss://dashscope.aliyuncs.com/api-ws/v1/inference";
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         // 创建一个Flowable<ByteBuffer>
         Flowable<ByteBuffer> audioSource =
                 Flowable.create(
@@ -533,7 +538,7 @@ Integer
 
 设置待识别音频采样率（单位Hz）。
 
-fun-asr-realtime支持16000Hz采样。
+8k模型仅支持 8000 Hz，其他模型支持任意采样率。
 
 format
 

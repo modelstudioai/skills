@@ -12,33 +12,33 @@ SDK的服务端点需在初始化前设置为下方地址（包含WorkspaceId）
 
 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 新加坡
 
 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **切换到新加坡地域**：
 
 ```
 import com.alibaba.dashscope.utils.Constants;
 
-// 调用时请将WorkspaceId替换为真实的业务空间ID
+// 调用时请将"{WorkspaceId}"替换为真实的业务空间ID
 Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference";
 ```
 
 **重要**
 
-百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
--   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+-   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
     
--   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+-   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
     
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
 ## **SpeechSynthesizer**
 
@@ -838,7 +838,7 @@ SDK提供了语音合成的关键接口，支持以下几种调用方式：
 
 ### **非流式调用**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6261312871/CAEQURiBgIDHpsn4phkiIDQ0ZGE2OTk3NmY5NTRhNDVhZDQwNWE3ZGZiMzk4Yjk54709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5476892871/CAEQURiBgIDHpsn4phkiIDQ0ZGE2OTk3NmY5NTRhNDVhZDQwNWE3ZGZiMzk4Yjk54709861_20241015153444.149.svg)
 
 发送的文本长度不得超过20000字符。
 
@@ -903,7 +903,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
         Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         streamAudioDataToSpeaker();
         System.exit(0);
@@ -913,7 +913,7 @@ public class Main {
 
 ### **单向流式调用**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6261312871/CAEQVRiBgMCfo..hrBkiIGEyMjNkZjVlMWZiYzRhZDU4ZjEyZjdjMmMzYjM1YzMz4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5476892871/CAEQVRiBgMCfo..hrBkiIGEyMjNkZjVlMWZiYzRhZDU4ZjEyZjdjMmMzYjM1YzMz4709861_20241015153444.149.svg)
 
 发送的文本长度不得超过20000字符。
 
@@ -1010,7 +1010,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
         Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         streamAudioDataToSpeaker();
         System.exit(0);
@@ -1020,7 +1020,7 @@ public class Main {
 
 ### 双向流式调用
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6261312871/CAEQVRiBgICHxPGhrBkiIGE3ZTVmMzY0YzI3NzQxYTFiYWE2MmU2NTBhMDgzZGM14709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6476892871/CAEQVRiBgICHxPGhrBkiIGE3ZTVmMzY0YzI3NzQxYTFiYWE2MmU2NTBhMDgzZGM14709861_20241015153444.149.svg)
 
 单次发送文本长度不得超过 20000 字符，且累计发送文本总长度不得超过 20 万字符。
 
@@ -1133,7 +1133,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
         Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         streamAudioDataToSpeaker();
         System.exit(0);
@@ -1208,7 +1208,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws NoApiKeyException {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
         Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         streamAudioDataToSpeaker();
         System.exit(0);
@@ -1299,7 +1299,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws NoApiKeyException {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
         Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         streamAudioDataToSpeaker();
         System.exit(0);

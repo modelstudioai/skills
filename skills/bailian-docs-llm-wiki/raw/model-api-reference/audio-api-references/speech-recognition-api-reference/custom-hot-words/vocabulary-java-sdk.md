@@ -2,7 +2,7 @@
 
 通过Java SDK管理定制热词列表，包括VocabularyService类的方法说明与示例代码。
 
-**用户指南：**[自定义热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。热词列表数量上限等使用限制详见[限制与计费](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw10-limit-sec)。
+**用户指南：**[提升识别准确率](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。热词列表数量上限等使用限制详见[限制与计费](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw10-limit-sec)。
 
 **重要**
 
@@ -14,19 +14,26 @@ SDK 默认使用**北京地域**的服务端点。如需切换到其他地域，
 
 ## 华北2（北京）
 
-`https://dashscope.aliyuncs.com/api/v1`
+`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
+
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 新加坡
 
 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
-调用时请将`WorkspaceId`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+-   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
 **切换到新加坡地域**：
 
@@ -585,8 +592,8 @@ public class Main {
     public static String apiKey = System.getenv("DASHSCOPE_API_KEY");
 
     public static void main(String[] args) throws NoApiKeyException, InputRequiredException {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         String targetModel = "fun-asr";
 
         JsonArray vocabularyJson = new JsonArray();
@@ -635,8 +642,8 @@ public class Main {
     public static String apiKey = System.getenv("DASHSCOPE_API_KEY");
 
     public static void main(String[] args) throws NoApiKeyException, InputRequiredException {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
 
         VocabularyService service = new VocabularyService(apiKey);
         Vocabulary[] vocabularies = service.listVocabulary("testpfx");
@@ -665,8 +672,8 @@ public class Main {
     public static String apiKey = System.getenv("DASHSCOPE_API_KEY");
 
     public static void main(String[] args) throws NoApiKeyException, InputRequiredException {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
 
         VocabularyService service = new VocabularyService(apiKey);
         // 查询时替换为实际的热词列表ID
@@ -698,8 +705,8 @@ public class Main {
     public static String apiKey = System.getenv("DASHSCOPE_API_KEY");
 
     public static void main(String[] args) throws NoApiKeyException, InputRequiredException {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
 
         JsonArray vocabularyJson = new JsonArray();
         List<Hotword> wordList = new ArrayList<>();
@@ -747,8 +754,8 @@ public class Main {
     public static String apiKey = System.getenv("DASHSCOPE_API_KEY");
 
     public static void main(String[] args) throws NoApiKeyException, InputRequiredException {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
 
         VocabularyService service = new VocabularyService(apiKey);
         // 删除时替换为实际的热词列表ID

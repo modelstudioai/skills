@@ -6,7 +6,7 @@
 
 **事件交互流程**：如需了解事件交互时序，请参见[WebSocket API](https://help.aliyun.com/zh/model-studio/websocket-for-paraformer-real-time-service)。
 
-### **task-started**
+## **task-started**
 
 **说明**：任务启动成功，客户端可开始发送音频数据。
 
@@ -41,7 +41,7 @@
 
 固定为`{}`。
 
-### **result-generated**
+## **result-generated**
 
 **说明**：识别结果，包含中间结果（sentence\_end=false）和最终结果（sentence\_end=true）。
 
@@ -208,7 +208,7 @@
 
 标点符号。
 
-### **task-finished**
+## **task-finished**
 
 **说明**：任务正常结束，可关闭连接或复用连接。
 
@@ -246,7 +246,7 @@
 
 无需关注其中内容，通常为`{}`。
 
-### **task-failed**
+## **task-failed**
 
 **说明**：任务失败，连接会被关闭，无法复用。
 

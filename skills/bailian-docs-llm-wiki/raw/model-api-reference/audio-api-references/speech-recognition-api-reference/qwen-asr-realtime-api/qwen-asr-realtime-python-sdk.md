@@ -4,9 +4,14 @@
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `wss://dashscope-intl.aliyuncs.com` 迁移至新域名。
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+-   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
 **用户指南：**模型介绍、功能特性和完整示例代码请参见[实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)
 
@@ -63,8 +68,8 @@
     
     conversation = OmniRealtimeConversation(
             model='qwen3-asr-flash-realtime',
-            # 以下为华北2（北京）地域的URL，各地域的URL不同。
-            url='wss://dashscope.aliyuncs.com/api-ws/v1/realtime',
+            # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+            url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime',
             callback=MyCallback(conversation=None)  # 暂时传None，稍后注入
         )
     # 注入自身到回调
@@ -103,9 +108,9 @@
     
     语音识别服务地址：
     
-    -   华北2（北京）地域：`wss://dashscope.aliyuncs.com/api-ws/v1/realtime`
+    -   华北2（北京）地域：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`。调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
         
-    -   新加坡地域：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`。调用时请将`WorkspaceId`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+    -   新加坡地域：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`。调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
         
     
 -   以下参数通过`OmniRealtimeConversation`的`update_session`方法设置。

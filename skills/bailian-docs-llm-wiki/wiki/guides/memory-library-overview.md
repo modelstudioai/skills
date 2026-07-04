@@ -45,7 +45,7 @@ Python 用户可安装 `agentscope-runtime`，使用 `AddMemory`、`SearchMemory
 
 ### 方式二：OpenClaw 记忆插件
 
-OpenClaw Agent 可通过插件实现零侵入的跨会话记忆。插件在 Gateway 内通过 `before_agent_start`（自动召回）和 `agent_end`（自动捕获）两个生命周期钩子与长期记忆 API 交互，所有读写均由百炼服务端完成提炼、向量化和语义检索。
+OpenClaw Agent 可通过插件实现零侵入的[跨会话记忆](../concepts/cross-session-memory.md)。插件在 Gateway 内通过 `before_agent_start`（自动召回）和 `agent_end`（自动捕获）两个生命周期钩子与长期记忆 API 交互，所有读写均由百炼服务端完成提炼、向量化和语义检索。
 
 ```bash
 # 安装
@@ -143,6 +143,8 @@ CLI 等效：`openclaw modelstudio-memory search|list|stats`。
 - [为 OpenClaw 配置长期记忆插件](../../raw/application-user-guide/memory-library-overview/modelstudio-memory-for-openclaw.md)
 - [记忆库](../../raw/application-user-guide/memory-library-overview/memory-library.md)
 - [长期记忆 API](../../raw/application-user-guide/memory-library-overview/long-term-memory-2-0.md)
+
+
 
 
 

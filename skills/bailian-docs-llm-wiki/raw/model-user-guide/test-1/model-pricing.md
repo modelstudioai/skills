@@ -10,6 +10,8 @@
 
 百炼部分模型实行阶梯计费。单价取决于单次请求的输入 Token 总量。该请求的所有 Token 均按对应阶梯的单价结算。
 
+计费区间中的 K 表示 1,000，M 表示 1,000,000。例如，128K 即 128,000 Token，256K 即 256,000 Token，1M 即 1,000,000 Token。
+
 例如，某模型设有两档计费区间：0 < Token ≤ 32K 和 32K < Token ≤ 128K。若输入 100K Token，因数值落在第二区间（32K < 100K ≤ 128K），所有 Token 均按第二档单价结算。
 
 ## **文本生成-千问**
@@ -321,6 +323,20 @@ qwen3.7-max
 12元
 
 36元
+
+qwen3.7-max-us
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+美国
+
+非思考和思考模式
+
+0<Token≤1M
+
+18.736元
+
+56.207元
 
 qwen3.7-max-2026-06-08
 
@@ -11880,25 +11896,17 @@ cosyvoice-v1
 
 **输入单价（每万字符）**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
-
-有效期：阿里云百炼开通后90天内
-
 cosyvoice-v3-plus
 
 国际
 
 1.9082元
 
-1万字符
-
 cosyvoice-v3-flash
 
 国际
 
 0.9541元
-
-100万Token
 
 ### **Sambert**
 

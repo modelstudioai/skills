@@ -6,7 +6,7 @@
 
 **事件交互流程**：如需了解事件交互时序，请参见[WebSocket API](https://help.aliyun.com/zh/model-studio/websocket-for-paraformer-real-time-service)。
 
-### **run-task**
+## **run-task**
 
 **说明**：启动语音识别任务，设置模型、音频格式、采样率等参数。
 
@@ -253,7 +253,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 默认值：true。
 
-### **finish-task**
+## **finish-task**
 
 **说明**：通知服务端音频发送完毕，请求结束任务。
 

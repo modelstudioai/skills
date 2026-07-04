@@ -2,7 +2,13 @@
 
 本文介绍Paraformer实时语音识别Python SDK的参数和接口细节。
 
-**用户指南：**关于模型介绍和选型建议请参见[实时语音识别-Fun-ASR/Gummy/Paraformer](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition)。
+**重要**
+
+阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+
+**用户指南：**关于模型介绍和选型建议请参见[实时语音识别-Fun-ASR/Paraformer](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition)。
 
 **在线体验**：仅paraformer-realtime-v2、paraformer-realtime-8k-v2和paraformer-realtime-v1支持[在线体验](https://bailian.console.aliyun.com/?tab=model#/efm/model_experience_center/voice)。
 
@@ -137,7 +143,7 @@
 
 提交单个语音实时转写任务，通过传入本地文件的方式同步阻塞地拿到转写结果。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7413285771/CAEQURiBgMDS0c2RpxkiIDNmYjBlMTE3ODQxYTQ3Nzk4MGMxNTc5MjY3OWVjZjlj4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6455892871/CAEQURiBgMDS0c2RpxkiIDNmYjBlMTE3ODQxYTQ3Nzk4MGMxNTc5MjY3OWVjZjlj4709861_20241015153444.149.svg)
 
 实例化[Recognition类](#d6bc1f133f871)绑定[请求参数](#555007db2033f)，调用`call`进行识别/翻译并最终获取[识别结果（RecognitionResult）](#bc3e1a43d6hhy)。
 
@@ -148,6 +154,8 @@
 ```
 from http import HTTPStatus
 from dashscope.audio.asr import Recognition
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_websocket_api_url = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 # 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key
 # import dashscope
@@ -179,7 +187,7 @@ print(
 
 提交单个语音实时转写任务，通过实现回调接口的方式流式输出实时识别结果。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7413285771/CAEQURiBgIDvi..2pxkiIGE4NTc3Njg4ZGM2YzQ2NzVhZGI3MzE2YWUwYTA3OGEy4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6455892871/CAEQURiBgIDvi..2pxkiIGE4NTc3Njg4ZGM2YzQ2NzVhZGI3MzE2YWUwYTA3OGEy4709861_20241015153444.149.svg)
 
 1.  启动流式语音识别
     
@@ -212,6 +220,8 @@ import sys
 import dashscope
 import pyaudio
 from dashscope.audio.asr import *
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_websocket_api_url = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 mic = None
 stream = None
@@ -338,6 +348,8 @@ if __name__ == '__main__':
 import os
 import time
 from dashscope.audio.asr import *
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_websocket_api_url = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 # 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key
 # import dashscope
@@ -962,7 +974,7 @@ str
 
 ## **错误码**
 
-如遇报错问题，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行排查。
+如遇报错问题，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行排查。
 
 若问题仍未解决，请加入[开发者群](https://github.com/aliyun/alibabacloud-bailian-speech-demo)反馈遇到的问题，并提供Request ID，以便进一步排查问题。
 
@@ -1044,3 +1056,29 @@ ffmpeg -i input.flac -c:a libopus -b:a 128k -vbr on output.opus
     例如：音频实际为中文，但`language_hints`设置为`en`（英文）。
     
 3.  若以上检查均无问题，可通过定制热词提升对特定词语的识别效果。
+    
+
+#### **Q：音频文件扩展名与实际编码格式不一致导致无识别结果，如何处理？**
+
+当音频文件的扩展名与实际编码格式不一致时（例如文件扩展名为`.wav`但实际编码为 MP3），请求参数`format`必须与音频的**实际编码格式**一致，而非文件扩展名。
+
+您可以按以下步骤排查和解决：
+
+1.  **检查音频实际格式**：使用`ffprobe`工具查看音频文件的实际编码格式。
+    
+    ```
+    ffprobe -v error -show_entries format=format_name -show_entries stream=codec_name,sample_rate,channels -of default=noprint_wrappers=1 your_audio_file
+    ```
+    
+2.  **转换音频格式**：如果音频的实际编码格式与目标格式不一致，可使用`ffmpeg`工具将音频转换为标准 WAV 格式（PCM 编码）。
+    
+    ```
+    ffmpeg -i input_file -c:a pcm_s16le -ar 16000 -ac 1 output.wav
+    ```
+    
+3.  **修改请求参数**：将`format`参数设置为与转换后音频一致的格式（如`wav`），并确保`sample_rate`参数与音频的实际采样率一致。
+    
+
+**重要**
+
+`format`参数设置为`wav`时，音频必须为 PCM 编码。如果音频文件扩展名为`.wav`但实际编码不是 PCM（例如 MP3），需要先使用上述`ffmpeg`命令进行格式转换。

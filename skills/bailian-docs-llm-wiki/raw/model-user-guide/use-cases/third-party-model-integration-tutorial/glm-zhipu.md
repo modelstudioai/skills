@@ -443,6 +443,78 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 }'
 ```
 
+## **清除历史思考（clear\_thinking）**
+
+`clear_thinking` 参数用于控制多轮对话中是否将历史轮次的 `reasoning_content`（思考过程）作为上下文输入给模型。仅 GLM 系列模型支持。
+
+-   `true`：忽略历史轮次的 `reasoning_content`，仅使用可见文本、工具调用与结果等非推理内容作为上下文输入，可降低上下文长度与成本。
+    
+-   `false`（默认）：保留历史轮次的 `reasoning_content` 并随上下文一同提供给模型。若希望启用 Preserved Thinking，必须在 messages 中完整、未修改、按原顺序透传历史 `reasoning_content`，缺失、裁剪、改写或重排会导致效果下降或无法生效。
+    
+
+**说明**
+
+该参数只影响跨轮次的历史思考内容，不改变模型在当前轮次内是否产生/输出思考。
+
+以下示例使用同一组多轮 messages（`assistant` 消息中携带 `reasoning_content`）。设置 `clear_thinking`\=`true` 后，历史思考内容不会被计入上下文，因此 `prompt_tokens` 少于 `false`（默认）的情况，实际数值取决于历史 `reasoning_content` 的长度。
+
+## **OpenAI兼容**
+
+## **Python**
+
+```
+from openai import OpenAI
+import os
+
+client = OpenAI(
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+)
+
+# 多轮对话，assistant 消息中携带 reasoning_content（历史思考过程）
+messages = [
+    {"role": "user", "content": "请计算 15 * 23 是多少？"},
+    {"role": "assistant", "content": "15 乘以 23 等于 345。", "reasoning_content": "15 * 23 = 345"},
+    {"role": "user", "content": "那再加上 55 呢？"},
+    {"role": "assistant", "content": "345 加上 55 等于 400。", "reasoning_content": "345 + 55 = 400"},
+    {"role": "user", "content": "刚才的中间结果是多少？"},
+]
+
+completion = client.chat.completions.create(
+    model="ZHIPU/GLM-5.2",
+    messages=messages,
+    extra_body={
+    "thinking": {
+        "type": "enabled",
+        "clear_thinking": False  # False = 保留思考内容
+      }
+  }
+)
+print(completion.usage.prompt_tokens)  # true 时少于 false
+```
+
+## **curl**
+
+```
+curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "glm-5.2",
+    "messages": [
+        {"role": "user", "content": "请计算 15 * 23 是多少？"},
+        {"role": "assistant", "content": "15 乘以 23 等于 345。", "reasoning_content": "15 * 23 = 345"},
+        {"role": "user", "content": "那再加上 55 呢？"},
+        {"role": "assistant", "content": "345 加上 55 等于 400。", "reasoning_content": "345 + 55 = 400"},
+        {"role": "user", "content": "刚才的中间结果是多少？"}
+    ],
+    "thinking": {
+        "type": "enabled",
+        "clear_thinking": false
+    }
+}'
+```
+
 ## **其它功能**
 
 **模型**

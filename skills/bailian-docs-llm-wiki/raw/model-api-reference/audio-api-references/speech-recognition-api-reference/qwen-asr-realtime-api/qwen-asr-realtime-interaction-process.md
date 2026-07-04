@@ -10,19 +10,26 @@ WebSocket URL 固定如下，通过查询参数 `model` 指定要调用的模型
 
 ## 华北2（北京）
 
-`wss://dashscope.aliyuncs.com/api-ws/v1/realtime?model=<model_name>`
+`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=<model_name>`
+
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 新加坡
 
 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime?model=<model_name>`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `wss://dashscope-intl.aliyuncs.com` 迁移至新域名。
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+-   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
 **重要**
 
@@ -93,7 +100,7 @@ Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或�
 
 **启用方式：**配置客户端`[session.update](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#af43722339yva)`事件的`session.turn_detection`参数。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2961261871/CAEQaxiBgICW9b6H3RkiIGM5MDgwMTNkMjBjMDRlNTNiOGZlODNjZGJhNDQ3NGJm5812623_20251022102739.334.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1592892871/CAEQaxiBgICW9b6H3RkiIGM5MDgwMTNkMjBjMDRlNTNiOGZlODNjZGJhNDQ3NGJm5812623_20251022102739.334.svg)
 
 -   客户端通过发送`[input_audio_buffer.append](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#a42f8e9111n72)`事件将音频追加到缓冲区。
     
@@ -124,7 +131,7 @@ Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或�
 
 **启用方式：**将客户端`[session.update](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#af43722339yva)`事件的`session.turn_detection`设为null。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2961261871/CAEQaxiBgMDUp8qH3RkiIGEyYTc0NTI1ZmQ1OTQ5NjliNWE0OTYwYTAwMDBlMjBm5812623_20251022102739.334.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1592892871/CAEQaxiBgMDUp8qH3RkiIGEyYTc0NTI1ZmQ1OTQ5NjliNWE0OTYwYTAwMDBlMjBm5812623_20251022102739.334.svg)
 
 -   客户端通过发送`[input_audio_buffer.append](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#a42f8e9111n72)`事件将音频追加到缓冲区。
     
