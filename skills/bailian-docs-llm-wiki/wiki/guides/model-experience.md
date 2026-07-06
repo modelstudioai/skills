@@ -4,7 +4,7 @@
 
 ## 文本生成
 
-文本生成模型适用于聊天机器人、内容生成、摘要总结、文档处理、AI Agent 等场景。推荐从 `qwen3.7-plus` 入手，能力与成本均衡，拥有 1M 上下文窗口和完整内置工具支持。如需最强推理能力，可选择 `qwen3.7-max`；追求低成本则可用 `qwen3.6-flash`，效果接近旗舰模型。
+文本生成模型适用于聊天机器人、内容生成、摘要总结、文档处理、AI Agent 等场景。推荐从 `qwen3.7-plus` 入手，能力与成本均衡，拥有 1M [上下文窗口](../concepts/context-window.md)和完整内置工具支持。如需最强推理能力，可选择 `qwen3.7-max`；追求低成本则可用 `qwen3.6-flash`，效果接近旗舰模型。
 
 ### 核心能力
 
@@ -140,9 +140,9 @@ Fun-Music 支持通过提示词描述或自定义歌词生成完整歌曲（含�
 
 详细 API 调用示例参见[音乐生成](../../raw/model-user-guide/model-experience/fun-music.md)。
 
-## 向量与重排序
+## 向量与[重排序](../concepts/rerank.md)
 
-向量（Embedding）和重排序（Rerank）模型用于语义搜索、RAG 检索和跨模态匹配。
+向量（Embedding）和[重排序](../concepts/rerank.md)（Rerank）模型用于语义搜索、RAG 检索和跨模态匹配。
 
 ### 文本 Embedding
 
@@ -153,7 +153,7 @@ Fun-Music 支持通过提示词描述或自定义歌词生成完整歌曲（含�
 - **融合向量**（图文混合检索）：`qwen3-vl-embedding`
 - **独立向量**（跨模态搜索）：`tongyi-embedding-vision-plus`
 
-### 重排序
+### [重排序](../concepts/rerank.md)
 
 - **纯文本**：`qwen3-rerank`，支持 100+ 语言，最多 500 个文档
 - **[多模态](../concepts/multimodal.md)**：`qwen3-vl-rerank`，支持文本、图片和视频混合排序
@@ -172,7 +172,7 @@ Fun-Music 支持通过提示词描述或自定义歌词生成完整歌曲（含�
 
 ## 通用注意事项
 
-- **上下文窗口**：100 万 [Token](../concepts/token.md) 约相当于 70 万个汉字。`qwen3.7-plus` 和 `qwen3.6-flash` 均支持 1M 上下文，常规任务 128k-256k 已足够
+- **[上下文窗口](../concepts/context-window.md)**：100 万 [Token](../concepts/token.md) 约相当于 70 万个汉字。`qwen3.7-plus` 和 `qwen3.6-flash` 均支持 1M 上下文，常规任务 128k-256k 已足够
 - **API 兼容性**：Qwen3.5-Omni 和 Qwen-ASR 等模型支持 OpenAI 兼容的 HTTP API，可降低迁移成本
 - **模型版本锁定**：生产环境建议使用带日期后缀的快照版本（如 `qwen3.7-plus-2026-05-26`）以获得确定性行为
 - **区域限制**：部分服务（如 Tripo 3D、Fun-Music）仅在华北2（北京）地域可用
@@ -190,6 +190,9 @@ Fun-Music 支持通过提示词描述或自定义歌词生成完整歌曲（含�
 - [音乐生成](../../raw/model-user-guide/model-experience/fun-music.md)
 - [向量与重排序](../../raw/model-user-guide/model-experience/embedding-rerank-model.md)
 - [全模态](../../raw/model-user-guide/model-experience/omni.md)
+
+
+
 
 
 

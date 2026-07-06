@@ -29,11 +29,11 @@
 
 按月份组织的关键功能更新（摘自 [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)），按模块归类：
 
-### 模型调优与训练
+### [模型调优](../concepts/fine-tuning.md)与训练
 
 - **强化学习训练（邀约制）**：2026-05-31 上线，基于奖励信号优化模型策略。
-- **图像生成模型调优**：2026-05-28 支持 Wan/Wanx 系列定制训练。
-- **视觉理解模型调优**：2026-01-22 新增 VL 模型 SFT 支持。
+- **图像生成[模型调优](../concepts/fine-tuning.md)**：2026-05-28 支持 Wan/Wanx 系列定制训练。
+- **视觉理解[模型调优](../concepts/fine-tuning.md)**：2026-01-22 新增 VL 模型 SFT 支持。
 - **视频生成模型调优**：2026-01-21 新增万相系列视频模型定制训练。
 - **0 代码安全合规强化**：2026-05-04 上线文本生成模型安全合规训练流程。
 - **模型压缩**：2026-05-25 上线，量化全精度微调模型为低精度版本以降低部署成本。
@@ -53,7 +53,7 @@
 - **多模态交互开发套件**：陆续上线服务端 Java SDK（4-28）、移动端 Android SDK（4-14）、Linux C++ SDK（2-28）、Android/iOS Lite SDK（2-06）、RTOS C SDK License 模式（4-09）。
 - **通义听悟 Agent**：2026-06-01 新增特惠 ASR 资源包；2026-05-21 工业生产指令转写 WebSocket 协议上线。
 - **通义多模态翻译**：2026-05-26 API 目录上线，覆盖文本/图片/文档/网页翻译；2026-02-06 网页翻译 JSSDK 上线。
-- **Spring AI Alibaba**：2026-06-01 调用百炼智能体、工作流应用文档上线。
+- **Spring AI Alibaba**：2026-06-01 调用百炼智能体、[工作流](../concepts/workflow.md)应用文档上线。
 
 ### 平台能力
 
@@ -102,6 +102,9 @@
 
 - [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)
 - [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)
+
+
+
 
 
 

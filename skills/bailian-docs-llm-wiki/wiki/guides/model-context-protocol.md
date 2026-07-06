@@ -1,12 +1,12 @@
 # model context protocol
 
-模型上下文协议（Model Context Protocol, MCP）是 Anthropic 提出的开源标准协议，用于在大模型与外部工具之间搭建统一的信息传递通道。阿里云百炼基于 MCP 协议提供官方与自定义两类 MCP 服务，使智能体和工作流应用能够接入海量第三方工具，无需为每个工具单独编写接口。详见 [模型上下文协议（MCP）](../../raw/application-user-guide/model-context-protocol/mcp-introduction.md)。
+模型上下文协议（Model Context Protocol, MCP）是 Anthropic 提出的开源标准协议，用于在大模型与外部工具之间搭建统一的信息传递通道。阿里云百炼基于 MCP 协议提供官方与自定义两类 MCP 服务，使智能体和[工作流](../concepts/workflow.md)应用能够接入海量第三方工具，无需为每个工具单独编写接口。详见 [模型上下文协议（MCP）](../../raw/application-user-guide/model-context-protocol/mcp-introduction.md)。
 
 ## 支持的服务类型
 
 阿里云百炼支持两类 MCP 服务：
 
-- **官方 MCP 服务**：由百炼官方部署，开通后即可使用。既可在平台内部（智能体、工作流）直接集成，也支持通过外部调用集成至第三方应用。当前 Amap Maps 等服务限时免费。详见 [官方 MCP 服务](../../raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)。
+- **官方 MCP 服务**：由百炼官方部署，开通后即可使用。既可在平台内部（智能体、[工作流](../concepts/workflow.md)）直接集成，也支持通过外部调用集成至第三方应用。当前 Amap Maps 等服务限时免费。详见 [官方 MCP 服务](../../raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)。
 - **自定义 MCP 服务**：用户自行部署，提供三种方式：
   1. **使用脚本部署**：面向代码包，托管于函数计算 FC。支持 `npx`（Node.js）、`uvx`（Python）启动本地 stdio 服务，或通过 `http` 连接远程 MCP 服务器。
   2. **从 AI 网关导入**：面向已有 RESTful API，将非 MCP 规范的业务接口封装为 MCP 服务。
@@ -20,7 +20,7 @@
 
 智能体根据输入对话自动判断是否调用 MCP 服务。单个智能体最多可同时添加 5 个 MCP 服务，常用于路径规划、逐步推理、图表绘制等多工具协同场景。
 
-### 在工作流中配置
+### 在[工作流](../concepts/workflow.md)中配置
 
 工作流中每个 MCP 节点只能使用一个工具，需手动指定输入参数并把输出传递到下一个节点。典型流程为：开始节点 → 大模型节点（将自然语言解析为 MCP 输入参数）→ MCP 节点（调用工具）→ 大模型节点（整理输出）→ 结束节点。
 
@@ -93,6 +93,9 @@ MCP 服务可集成至第三方应用（Cherry Studio、Cursor）或个人项目
 - [自定义 MCP 服务](../../raw/application-user-guide/model-context-protocol/custom-mcp.md)
 - [外部调用](../../raw/application-user-guide/model-context-protocol/mcp-external-calls.md)
 - [MCP 常见问题](../../raw/application-user-guide/model-context-protocol/mcp-faq.md)
+
+
+
 
 
 

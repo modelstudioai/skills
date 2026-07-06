@@ -15,7 +15,7 @@
 
 ## Prompt 模板
 
-Prompt 模板将 Prompt 的固定结构与动态变量分离，分为预置模板和自定义模板两类，工作流程统一为：创建模板 → 通过模板 ID 获取模板 → 用业务数据填充变量生成最终 Prompt → 发送给目标模型。详见 [Prompt模板概述](../../raw/application-user-guide/prompt/prompt-template.md)。
+Prompt 模板将 Prompt 的固定结构与动态变量分离，分为预置模板和自定义模板两类，[工作流](../concepts/workflow.md)程统一为：创建模板 → 通过模板 ID 获取模板 → 用业务数据填充变量生成最终 Prompt → 发送给目标模型。详见 [Prompt模板概述](../../raw/application-user-guide/prompt/prompt-template.md)。
 
 ### 预置与自定义对比
 
@@ -112,6 +112,9 @@ Prompt 模板将 Prompt 的固定结构与动态变量分离，分为预置模�
 - [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)
 - [使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)
 - [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)
+
+
+
 
 
 

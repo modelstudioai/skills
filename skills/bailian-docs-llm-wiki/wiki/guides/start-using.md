@@ -1,6 +1,6 @@
 # start using
 
-阿里云百炼提供零代码方式快速构建基于私有知识的问答应用，同时持续迭代应用、[知识库](../concepts/knowledge-base.md)、工作流等核心能力。本页汇总从创建第一个[智能体应用](../concepts/agent-application.md)到跟踪功能动态所需的关键信息，帮助开发者快速上手并了解平台最新能力。
+阿里云百炼提供零代码方式快速构建基于私有知识的问答应用，同时持续迭代应用、[知识库](../concepts/knowledge-base.md)、[工作流](../concepts/workflow.md)等核心能力。本页汇总从创建第一个[智能体应用](../concepts/agent-application.md)到跟踪功能动态所需的关键信息，帮助开发者快速上手并了解平台最新能力。
 
 ## 快速构建私有知识问答应用
 
@@ -16,8 +16,8 @@
 
 百炼应用支持多种模型系列，详见 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)：
 
-- **千问系列**：千问-Max 为构建问答应用的推荐模型；[智能体应用](../concepts/agent-application.md)与工作流应用均支持 QwQ 系列（具备强推理能力，先输出思考过程再输出回答，数学/代码能力达 DeepSeek-R1 满血版水平，但不包括插件、流程、音视频交互能力）；视觉模型支持 qwen-vl-plus-latest、qwen-vl-plus-0125（Qwen2.5-VL 系列，128k 上下文）以及 qwen-vl-max/plus 用于图片解析。
-- **DeepSeek 系列**：[智能体应用](../concepts/agent-application.md)与工作流应用均可集成 DeepSeek 系列模型，结合知识库、长期记忆和 Prompt 模板构建私有知识问答应用。
+- **千问系列**：千问-Max 为构建问答应用的推荐模型；[智能体应用](../concepts/agent-application.md)与[工作流](../concepts/workflow.md)应用均支持 QwQ 系列（具备强推理能力，先输出思考过程再输出回答，数学/代码能力达 DeepSeek-R1 满血版水平，但不包括插件、流程、音视频交互能力）；视觉模型支持 qwen-vl-plus-latest、qwen-vl-plus-0125（Qwen2.5-VL 系列，128k 上下文）以及 qwen-vl-max/plus 用于图片解析。
+- **DeepSeek 系列**：[智能体应用](../concepts/agent-application.md)与[工作流](../concepts/workflow.md)应用均可集成 DeepSeek 系列模型，结合知识库、长期记忆和 Prompt 模板构建私有知识问答应用。
 - **嵌入模型**：知识库支持 text-embedding-v3、v4 模型，v4 在语种支持、代码片段向量化效果和向量维度选择上较 v3 全面升级。
 
 ## 应用类型与关键能力
@@ -58,6 +58,9 @@
 
 - [0代码构建私有知识问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)
 - [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)
+
+
+
 
 
 

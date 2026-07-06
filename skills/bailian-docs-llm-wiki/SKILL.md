@@ -149,18 +149,19 @@ description: >-
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
 | 函数调用 | `wiki/concepts/function-calling.md` |
 | 流式输出 | `wiki/concepts/streaming-output.md` |
-| 长上下文 | `wiki/concepts/long-context.md` |
-| 限流与吞吐 | `wiki/concepts/rate-limiting.md` |
-| 上下文缓存 | `wiki/concepts/prompt-caching.md` |
-| 向量与嵌入 | `wiki/concepts/vector-embedding.md` |
-| 智能体编排 | `wiki/concepts/agent-orchestration.md` |
-| 跨会话记忆 | `wiki/concepts/cross-session-memory.md` |
-| 多模态生成能力对比：图像 / 3D / 视频 | `wiki/comparisons/multimodal-generation-comparison.md` |
-| 模型优化方式对比：微调 / 压缩 / 高速推理 | `wiki/comparisons/model-optimization-comparison.md` |
-| 应用监控与模型监控对比 | `wiki/comparisons/monitoring-comparison.md` |
-| 应用评测与模型评测对比 | `wiki/comparisons/evaluation-comparison.md` |
-| 应用调用方式对比：API 直调与百炼应用调用 | `wiki/comparisons/application-calling-comparison.md` |
-| 入门路径对比：开始使用与模型快速上手 | `wiki/comparisons/getting-started-comparison.md` |
+| 模型调优 | `wiki/concepts/fine-tuning.md` |
+| 向量嵌入 | `wiki/concepts/embedding.md` |
+| 重排序 | `wiki/concepts/rerank.md` |
+| 提示词工程 | `wiki/concepts/prompt-engineering.md` |
+| 上下文窗口 | `wiki/concepts/context-window.md` |
+| 限流与配额 | `wiki/concepts/rate-limiting.md` |
+| 工作流 | `wiki/concepts/workflow.md` |
+| 微调与模型压缩对比 | `wiki/comparisons/fine-tuning-vs-compression.md` |
+| 模型部署与高速推理对比 | `wiki/comparisons/model-deployment-vs-inference.md` |
+| 模型评测与模型监控对比 | `wiki/comparisons/model-evaluation-vs-monitoring.md` |
+| 应用评测与应用监控对比 | `wiki/comparisons/application-evaluation-vs-monitoring.md` |
+| 知识库与记忆库对比 | `wiki/comparisons/knowledge-base-vs-memory-library.md` |
+| 应用调用方式对比 | `wiki/comparisons/application-call-vs-bailian-calling.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 

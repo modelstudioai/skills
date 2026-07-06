@@ -1,6 +1,6 @@
 # bailian [application call](../api/application-call.md)ing
 
-阿里云百炼支持通过 [DashScope SDK](../concepts/dashscope-sdk.md) 或 HTTP API 将已创建的应用集成到业务系统中。可调用的应用类型包括**[智能体应用](../concepts/agent-application.md)**和**工作流应用**（[智能体编排](../concepts/agent-orchestration.md)应用已被工作流应用替代），二者调用方式一致，均通过 `Application.call` / `POST /apps/{app_id}/completion` 触发，区别仅在于应用内部编排逻辑和可附加的扩展能力（如自定义参数传递）。
+阿里云百炼支持通过 [DashScope SDK](../concepts/dashscope-sdk.md) 或 HTTP API 将已创建的应用集成到业务系统中。可调用的应用类型包括**[智能体应用](../concepts/agent-application.md)**和**[工作流](../concepts/workflow.md)应用**（[智能体编排](../concepts/agent-orchestration.md)应用已被[工作流](../concepts/workflow.md)应用替代），二者调用方式一致，均通过 `Application.call` / `POST /apps/{app_id}/completion` 触发，区别仅在于应用内部编排逻辑和可附加的扩展能力（如自定义参数传递）。
 
 ## 前提条件
 
@@ -8,7 +8,7 @@
 
 1. **获取 [API Key](../concepts/api-key.md)**：在百炼控制台密钥管理页面创建 [API Key](../concepts/api-key.md)。
 2. **配置环境变量（推荐）**：将 [API Key](../concepts/api-key.md) 写入 `DASHSCOPE_API_KEY` 环境变量，避免在代码中硬编码。SDK 会自动读取该变量。
-3. **获取应用 ID**：在应用管理页面创建对应应用（[智能体应用](../concepts/agent-application.md) / 工作流应用），并从应用卡片复制 `APP_ID`。
+3. **获取应用 ID**：在应用管理页面创建对应应用（[智能体应用](../concepts/agent-application.md) / [工作流](../concepts/workflow.md)应用），并从应用卡片复制 `APP_ID`。
 4. **安装 [DashScope SDK](../concepts/dashscope-sdk.md)**（HTTP 调用可跳过）：Python 通过 `python3 -m pip install -U dashscope`；Java 通过 Maven/Gradle 添加 `com.alibaba:dashscope-sdk-java` 依赖（建议版本 >= 2.12.0）；Node.js 安装 `axios`。
 
 ## 基本调用方式
@@ -172,6 +172,9 @@ Java SDK 通过 `JsonUtils.parse(...)` 将 JSON 字符串转为对象传入 `App
 - [应用的自定义参数传递](../../raw/application-user-guide/bailian-application-calling/pass-through-of-application-parameters.md)
 - [调用工作流应用](../../raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md)
 - [调用智能体应用](../../raw/application-user-guide/bailian-application-calling/call-single-agent-application.md)
+
+
+
 
 
 

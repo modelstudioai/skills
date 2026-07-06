@@ -1,12 +1,12 @@
 # llm application
 
-百炼提供智能体（Agent）、工作流（Workflow）和高代码应用三种核心应用构建模式，配合知识库、MCP、插件等能力，帮助开发者快速构建可解决真实业务问题的 LLM 应用。三种模式在开发方式、可控性和适用人群上互补，可单独使用或组合集成。
+百炼提供智能体（Agent）、[工作流](../concepts/workflow.md)（Workflow）和高代码应用三种核心应用构建模式，配合知识库、MCP、插件等能力，帮助开发者快速构建可解决真实业务问题的 LLM 应用。三种模式在开发方式、可控性和适用人群上互补，可单独使用或组合集成。
 
 ## 应用类型与选型
 
 百炼应用分为三类，详细对比见 [应用类型介绍](../../raw/application-user-guide/llm-application/application-introduction.md)。
 
-| 维度 | 智能体（Agent） | 工作流（Workflow） | 高代码应用 |
+| 维度 | 智能体（Agent） | [工作流](../concepts/workflow.md)（Workflow） | 高代码应用 |
 | --- | --- | --- | --- |
 | 开发方式 | 自然语言配置（零代码） | 可视化节点编排（低代码） | Python 编码（专业代码） |
 | 核心特点 | 由大模型根据提示词自主规划 | 由预定义节点精确控制流程 | 完全由代码定义逻辑 |
@@ -14,7 +14,7 @@
 | 适用场景 | 智能客服、知识问答、任务助理 | 报告生成、订单处理、审批流 | 私有算法部署、深度定制 |
 
 - **智能体**适合需要 AI 自主决策、动态规划的场景。
-- **工作流**适合流程固定、要求稳定可复现的场景。
+- **[工作流](../concepts/workflow.md)**适合流程固定、要求稳定可复现的场景。
 - **高代码应用**适合需要深度定制、部署私有算法的场景。
 
 ## 智能体应用
@@ -124,6 +124,9 @@
 - [高代码应用](../../raw/application-user-guide/llm-application/rich-code-application.md)
 - [工作流应用](../../raw/application-user-guide/llm-application/workflow-application.md)
 - [文件问答](../../raw/application-user-guide/llm-application/file-q-a.md)
+
+
+
 
 
 

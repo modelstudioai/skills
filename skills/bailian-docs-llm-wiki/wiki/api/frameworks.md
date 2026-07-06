@@ -1,16 +1,16 @@
 # frameworks
 
-阿里云百炼支持通过主流开源框架集成其大模型应用与云端[知识库](../concepts/knowledge-base.md)能力。当前官方文档覆盖两类框架：基于 Python 的 LlamaIndex，用于构建 RAG 应用；以及基于 Java 的 Spring AI Alibaba，用于集成百炼智能体/工作流应用并检索百炼[知识库](../concepts/knowledge-base.md)。两者均以 [API Key](../concepts/api-key.md) 鉴权，复用百炼的数据管理与模型推理能力。
+阿里云百炼支持通过主流开源框架集成其大模型应用与云端[知识库](../concepts/knowledge-base.md)能力。当前官方文档覆盖两类框架：基于 Python 的 LlamaIndex，用于构建 RAG 应用；以及基于 Java 的 Spring AI Alibaba，用于集成百炼智能体/[工作流](../concepts/workflow.md)应用并检索百炼[知识库](../concepts/knowledge-base.md)。两者均以 [API Key](../concepts/api-key.md) 鉴权，复用百炼的数据管理与模型推理能力。
 
 ## 支持的框架与功能
 
 | 框架 | 语言 | 主要能力 |
 | --- | --- | --- |
 | LlamaIndex | Python 3.9+ | 读取本地文件上传到百炼应用数据、构建云端[知识库](../concepts/knowledge-base.md)、构建检索引擎与 RAG 应用 |
-| Spring AI Alibaba | Java（Spring Boot 3.x，JDK 17+） | 调用百炼[智能体应用](../concepts/agent-application.md)/工作流应用（流式与非流式）、检索百炼知识库 |
+| Spring AI Alibaba | Java（Spring Boot 3.x，JDK 17+） | 调用百炼[智能体应用](../concepts/agent-application.md)/[工作流](../concepts/workflow.md)应用（流式与非流式）、检索百炼知识库 |
 
 - LlamaIndex 路线将知识库部署在云端，使用默认的智能文档切分与官方向量模型，**不支持**自定义文档切分方式或自定义嵌入模型。如需本地知识库或灵活切分，应改用本地知识库方案，详见[通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)。
-- Spring AI Alibaba 的应用集成**仅支持**[智能体应用](../concepts/agent-application.md)与工作流应用两类，需提前在百炼控制台创建并获取应用 ID。
+- Spring AI Alibaba 的应用集成**仅支持**[智能体应用](../concepts/agent-application.md)与[工作流](../concepts/workflow.md)应用两类，需提前在百炼控制台创建并获取应用 ID。
 
 ## 前提条件
 
@@ -131,6 +131,9 @@ this.chatClient = builder
 - [通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)
 - [使用Spring AI Alibaba集成阿里云百炼大模型应用](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-llm-application.md)
 - [通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)
+
+
+
 
 
 

@@ -101,7 +101,7 @@
 
 ## 文件接口
 
-文件上传接口用于在 Qwen-Long、Qwen-Doc-Turbo 中进行文档问答与数据提取，或作为批量推理、模型调优任务的输入文件。支持上传、查询、删除操作，可通过 OpenAI SDK（Python、Java）或 HTTP API 调用。
+文件上传接口用于在 Qwen-Long、Qwen-Doc-Turbo 中进行文档问答与数据提取，或作为批量推理、[模型调优](../concepts/fine-tuning.md)任务的输入文件。支持上传、查询、删除操作，可通过 OpenAI SDK（Python、Java）或 HTTP API 调用。
 
 存储配额：最大文件数 10,000 个，总大小 100 GB，无有效期限制。达到上限时新上传会失败，需删除旧文件释放配额。
 
@@ -111,7 +111,7 @@
 | --- | --- | --- |
 | `file-extract` | 文档分析（Qwen-Long / Qwen-Doc-Turbo） | TXT/DOCX/PDF/XLSX/EPUB/MOBI/MD/CSV/JSON 及图片，单文件 ≤ 150 MB |
 | `batch` | 批量推理输入 | jsonl，单文件 ≤ 500 MB |
-| `fine-tune` | 模型调优数据集/训练集 | jsonl，单文件 ≤ 300 MB |
+| `fine-tune` | [模型调优](../concepts/fine-tuning.md)数据集/训练集 | jsonl，单文件 ≤ 300 MB |
 
 详情参见 [OpenAI文件接口兼容](../../raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)。
 
@@ -125,7 +125,7 @@
 
 北京地域支持文本生成模型（千问 Max/Plus/Flash/Long 稳定版本及部分 `latest` 版本，deepseek-r1、deepseek-v3.2、deepseek-v3）、[多模态](../concepts/multimodal.md)模型（千问 VL Plus/Flash/OCR）、文本向量模型（text-embedding-v1~v4）。新加坡地域支持 qwen-max、qwen-plus、qwen-turbo。
 
-工作流程：准备 jsonl 输入文件 → 上传得到 file_id → 创建 Batch 任务得到 batch_id → 轮询状态 → 下载输出/错误文件。文件上传返回的 file_id 可重复使用，输入内容不变时无需重新上传。
+[工作流](../concepts/workflow.md)程：准备 jsonl 输入文件 → 上传得到 file_id → 创建 Batch 任务得到 batch_id → 轮询状态 → 下载输出/错误文件。文件上传返回的 file_id 可重复使用，输入内容不变时无需重新上传。
 
 > 在 Batch 场景下，`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash` 单次请求上下文 [Token](../concepts/token.md) 数最大支持 256K。
 > `qwen3.7`、`qwen3.6`、`qwen3.5` 系列默认开启思考模式，会产生思考 tokens 增加成本，建议显式设置 `enable_thinking`（`true`/`false`）。
@@ -198,6 +198,9 @@
 - [OpenAI兼容-Batch Chat](../../raw/model-api-reference/toolkits-and-frameworks/openai-compatible-batch-chat.md)
 - [OpenAI Conversations接口兼容](../../raw/model-api-reference/toolkits-and-frameworks/openai-compatible-conversations.md)
 - [在LangChain中使用阿里云百炼](../../raw/model-api-reference/toolkits-and-frameworks/use-bailian-in-langchain.md)
+
+
+
 
 
 

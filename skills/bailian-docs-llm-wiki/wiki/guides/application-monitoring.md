@@ -1,13 +1,13 @@
 # application monitoring
 
-阿里云百炼提供**应用观测**功能，用于端到端查看[业务空间](../concepts/workspace.md)内应用（[智能体应用](../concepts/agent-application.md)、工作流应用、高代码应用）的处理流程，并获取延时、[Token](../concepts/token.md) 量等关键指标，指标更新频率为分钟级。该功能可帮助开发者追踪应用内部调用链路、查看模型响应延时与思考过程，进而优化运营效果与成本。详见 [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md)。
+阿里云百炼提供**应用观测**功能，用于端到端查看[业务空间](../concepts/workspace.md)内应用（[智能体应用](../concepts/agent-application.md)、[工作流](../concepts/workflow.md)应用、高代码应用）的处理流程，并获取延时、[Token](../concepts/token.md) 量等关键指标，指标更新频率为分钟级。该功能可帮助开发者追踪应用内部调用链路、查看模型响应延时与思考过程，进而优化运营效果与成本。详见 [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md)。
 
 ## 支持的应用范围
 
 应用观测支持以下三类应用：
 
 - **[智能体应用](../concepts/agent-application.md)**（AgentApp）
-- **工作流应用**（WorkflowApp）
+- **[工作流](../concepts/workflow.md)应用**（WorkflowApp）
 - **高代码应用**（FullCodeApp）
 
 > **注意**：应用观测暂不支持通过 Assistant API 创建的[智能体应用](../concepts/agent-application.md)；对高代码应用，目前不支持追踪其内部调用链路，仅能观测到入口 CHAIN 节点。应用观测本身也没有 API，只能通过控制台操作。
@@ -83,7 +83,7 @@
 
 > 目前暂不支持观测长期记忆中的检索过程；TextRetriever 与 VectorRetriever 默认返回 100 个切片，暂不支持调整数量。
 
-### 工作流应用节点
+### [工作流](../concepts/workflow.md)应用节点
 
 除上述 CHAIN、RETRIEVER、REWRITER、EMBEDDING、RERANKER、LLM、GUARDRAIL 外，还包含工作流专属节点：START（开始）、END（结束）、API、CLASSIFIER（意图分类）、TEXT_CONVERTER（文本转换）、SCRIPT（脚本转换）、CONDITION（条件判断）、FUNCTION_COMPUTE（函数计算）、APP_FLOW。
 
@@ -105,6 +105,9 @@
 ## 来源文档
 
 - [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md)
+
+
+
 
 
 

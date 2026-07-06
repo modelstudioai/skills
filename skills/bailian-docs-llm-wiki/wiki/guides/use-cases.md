@@ -1,6 +1,6 @@
 # use cases
 
-本页汇总阿里云百炼平台上常见使用场景的开发实践，覆盖 Prompt 设计、多模态生成（文生图/文生视频）、RAG 应用构建、自定义模型调优、第三方模型调用、限流应对与显式缓存等。所有场景均通过 OpenAI 兼容接口或 DashScope SDK 调用，统一使用 `DASHSCOPE_API_KEY` 鉴权。
+本页汇总阿里云百炼平台上常见使用场景的开发实践，覆盖 Prompt 设计、多模态生成（文生图/文生视频）、RAG 应用构建、自定义[模型调优](../concepts/fine-tuning.md)、第三方模型调用、限流应对与显式缓存等。所有场景均通过 OpenAI 兼容接口或 DashScope SDK 调用，统一使用 `DASHSCOPE_API_KEY` 鉴权。
 
 ## 调用入口与鉴权
 
@@ -60,9 +60,9 @@ Vidu 视频生成提示词公式为「主体/场景 + 场景描述 + 环境描�
 
 详见 [基于LlamaIndex构建RAG应用](../../raw/model-user-guide/use-cases/build-rag-applications-based-on-llamaindex.md)。
 
-## 自定义模型调优
+## 自定义[模型调优](../concepts/fine-tuning.md)
 
-流程为「模型调优 → 模型部署 → 模型评测」三步，外加训练数据准备、评测模板设计、训练策略调整三个辅助环节。**完成调优的模型必须部署后才能调用和评测**。
+流程为「[模型调优](../concepts/fine-tuning.md) → 模型部署 → 模型评测」三步，外加训练数据准备、评测模板设计、训练策略调整三个辅助环节。**完成调优的模型必须部署后才能调用和评测**。
 
 - **数据**：编排成 `Prompt-Completion` 格式，建议 ≥500 条；注意来源多样化、质量控制和分布平衡，并做脱敏。
 - **数据集**：在数据管理页面创建训练集（Prompt+Completion）与评测集（仅 Prompt），支持版本管理与发布。
@@ -146,6 +146,9 @@ Vidu 视频生成提示词公式为「主体/场景 + 场景描述 + 环境描�
 - [Vidu视频生成Prompt指南](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/vidu-video-generation-prompt-guide.md)
 - [Stepfun-阶跃星辰](../../raw/model-user-guide/use-cases/third-party-model-integration-tutorial/stepfun.md)
 - [显式缓存最佳实践](../../raw/model-user-guide/use-cases/explicit-cache-guide.md)
+
+
+
 
 
 

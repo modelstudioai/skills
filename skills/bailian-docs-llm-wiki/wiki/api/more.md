@@ -42,7 +42,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=180
 
 | 服务关联角色 | 用途 |
 | --- | --- |
-| `AliyunServiceRoleForSFMAccessFC` | 工作流应用 / 流程编排访问函数计算（FC）资源 |
+| `AliyunServiceRoleForSFMAccessFC` | [工作流](../concepts/workflow.md)应用 / 流程编排访问函数计算（FC）资源 |
 | `AliyunServiceRoleForSFMDataHubOSSImport` | 数据管理从 OSS 导入数据 |
 | `AliyunServiceRoleForAccessOSS` | 安全存储空间访问 OSS |
 | `AliyunServiceRoleForSFMAccessADB` | [知识库](../concepts/knowledge-base.md) / 安全存储空间访问 ADB-PG 实例 |
@@ -53,11 +53,11 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=180
 | `AliyunServiceRoleForSFMAccessCMS` | 模型监控访问 CMS 资源 |
 | `AliyunServiceRoleForAccessCusOss` | 百炼平台托管操作用户 OSS 文件 |
 | `AliyunServiceRoleForSFMConnectorAccessDTS` | 创建和管理 DTS 任务，从数据源接入数据 |
-| `AliyunServiceRoleForSFMFineTuning` | 模型调优 / 数据管理访问 CPFS 与 OSS |
+| `AliyunServiceRoleForSFMFineTuning` | [模型调优](../concepts/fine-tuning.md) / 数据管理访问 CPFS 与 OSS |
 
 每个 SLR 关联一个固定的系统策略（如 `AliyunServiceRolePolicyForSFMAccessFC`），策略中通过 RAM 条件（`ram:ServiceName`）限定只能由百炼服务使用，请勿修改或授予其他 RAM 身份。
 
-**删除前注意事项**：删除 SLR 会导致对应功能不可用，须先清理依赖资源。例如删除 `AliyunServiceRoleForSFMAccessFC` 前须先删除所有已发布工作流应用和流程中的函数计算节点并重新发布；删除 `AliyunServiceRoleForAccessOSS` 前须在安全存储空间中断开所有 OSS 连接；删除 `AliyunServiceRoleForSFMDataHubOSSImport` 前须确保没有进行中的 OSS 数据导入任务。具体删除步骤参见 [服务关联角色](https://help.aliyun.com/zh/ram/user-guide/service-linked-roles)。
+**删除前注意事项**：删除 SLR 会导致对应功能不可用，须先清理依赖资源。例如删除 `AliyunServiceRoleForSFMAccessFC` 前须先删除所有已发布[工作流](../concepts/workflow.md)应用和流程中的函数计算节点并重新发布；删除 `AliyunServiceRoleForAccessOSS` 前须在安全存储空间中断开所有 OSS 连接；删除 `AliyunServiceRoleForSFMDataHubOSSImport` 前须确保没有进行中的 OSS 数据导入任务。具体删除步骤参见 [服务关联角色](https://help.aliyun.com/zh/ram/user-guide/service-linked-roles)。
 
 ## 知识库 SearchFilters
 
@@ -113,6 +113,9 @@ resp = client.retrieve('请传入实际的业务空间ID', retrieve_request)
 - [生成临时API Key](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md)
 - [服务关联角色](../../raw/application-api-reference/more/bailian-service-linked-role.md)
 - [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md)
+
+
+
 
 
 

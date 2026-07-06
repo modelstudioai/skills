@@ -61,21 +61,22 @@
 
 ## 横切概念
 
-- [上下文缓存](concepts/prompt-caching.md) — 关联 3 个主题
-- [函数调用](concepts/function-calling.md) — 关联 5 个主题
-- [向量与嵌入](concepts/vector-embedding.md) — 关联 5 个主题
-- [智能体编排](concepts/agent-orchestration.md) — 关联 4 个主题
-- [流式输出](concepts/streaming-output.md) — 关联 4 个主题
-- [跨会话记忆](concepts/cross-session-memory.md) — 关联 3 个主题
-- [长上下文](concepts/long-context.md) — 关联 4 个主题
-- [限流与吞吐](concepts/rate-limiting.md) — 关联 4 个主题
+- [上下文窗口](concepts/context-window.md) — 关联 4 个主题
+- [函数调用](concepts/function-calling.md) — 关联 6 个主题
+- [向量嵌入](concepts/embedding.md) — 关联 5 个主题
+- [工作流](concepts/workflow.md) — 关联 5 个主题
+- [提示词工程](concepts/prompt-engineering.md) — 关联 5 个主题
+- [模型调优](concepts/fine-tuning.md) — 关联 5 个主题
+- [流式输出](concepts/streaming-output.md) — 关联 5 个主题
+- [重排序](concepts/rerank.md) — 关联 3 个主题
+- [限流与配额](concepts/rate-limiting.md) — 关联 5 个主题
 
 ## 对比分析
 
-- [入门路径对比：开始使用与模型快速上手](comparisons/getting-started-comparison.md) — 对比 2 个主题
-- [多模态生成能力对比：图像 / 3D / 视频](comparisons/multimodal-generation-comparison.md) — 对比 3 个主题
-- [应用监控与模型监控对比](comparisons/monitoring-comparison.md) — 对比 2 个主题
-- [应用评测与模型评测对比](comparisons/evaluation-comparison.md) — 对比 2 个主题
-- [应用调用方式对比：API 直调与百炼应用调用](comparisons/application-calling-comparison.md) — 对比 2 个主题
-- [模型优化方式对比：微调 / 压缩 / 高速推理](comparisons/model-optimization-comparison.md) — 对比 3 个主题
+- [应用评测与应用监控对比](comparisons/application-evaluation-vs-monitoring.md) — 对比 2 个主题
+- [应用调用方式对比](comparisons/application-call-vs-bailian-calling.md) — 对比 2 个主题
+- [微调与模型压缩对比](comparisons/fine-tuning-vs-compression.md) — 对比 2 个主题
+- [模型评测与模型监控对比](comparisons/model-evaluation-vs-monitoring.md) — 对比 2 个主题
+- [模型部署与高速推理对比](comparisons/model-deployment-vs-inference.md) — 对比 2 个主题
+- [知识库与记忆库对比](comparisons/knowledge-base-vs-memory-library.md) — 对比 2 个主题
 

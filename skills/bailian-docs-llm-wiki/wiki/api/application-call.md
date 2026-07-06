@@ -1,6 +1,6 @@
 # application call
 
-阿里云百炼应用（智能体、工作流、新版智能体 Agent 2.0）支持通过 API 调用，将你在控制台编排好的应用集成到业务系统中。调用前需先在控制台获取应用 ID 和 [API Key](../concepts/api-key.md)，再依据是否需要即时返回结果，选择 OpenAI 兼容模式的 Responses API（同步/异步）或 DashScope 原生 API（`/completion`）发起请求。
+阿里云百炼应用（智能体、[工作流](../concepts/workflow.md)、新版智能体 Agent 2.0）支持通过 API 调用，将你在控制台编排好的应用集成到业务系统中。调用前需先在控制台获取应用 ID 和 [API Key](../concepts/api-key.md)，再依据是否需要即时返回结果，选择 OpenAI 兼容模式的 Responses API（同步/异步）或 DashScope 原生 API（`/completion`）发起请求。
 
 ## 前置准备
 
@@ -19,7 +19,7 @@
 | API 模式 | Endpoint | 适用场景 | 文档 |
 | --- | --- | --- | --- |
 | **OpenAI 兼容 Responses API** | `POST https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/v1/responses` | 复用现有 OpenAI 代码库与工具链；支持同步/异步、流式、[多模态](../concepts/multimodal.md) | [同步调用 API 参考](../../raw/application-api-reference/application-call/openai-responses-api/synchronous-call-api-reference.md) / [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md) |
-| **DashScope 原生 API** | `POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion` | 更全面的功能与更高的性能；新版智能体（Agent 2.0）、工作流、旧版智能体均支持 | [新版智能体应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md) / [工作流与旧版智能体应用 API](../../raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md) |
+| **DashScope 原生 API** | `POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion` | 更全面的功能与更高的性能；新版智能体（Agent 2.0）、[工作流](../concepts/workflow.md)、旧版智能体均支持 | [新版智能体应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md) / [工作流与旧版智能体应用 API](../../raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md) |
 
 > **注意**：上述 Endpoint 仅适用于华北2（北京）地域。德国（法兰克福）、新加坡、日本（东京）等地域，或调用子[业务空间](../concepts/workspace.md)下的应用时，请求中必须包含 Workspace ID，该 ID 是对应地域 Base URL 的组成部分。
 
@@ -72,7 +72,7 @@ response = client.responses.create(
 print(response.model_dump_json(indent=2))
 ```
 
-[流式输出](../concepts/streaming-output.md)只需设置 `stream=True`。**工作流应用**需在结束节点或流程输出节点启用「[流式输出](../concepts/streaming-output.md)」开关并重新发布；**[智能体应用](../concepts/agent-application.md)**做图像输入需选用通义千问 VL 系列模型并将文件处理方式设为「自定义处理」后重新发布。
+[流式输出](../concepts/streaming-output.md)只需设置 `stream=True`。**[工作流](../concepts/workflow.md)应用**需在结束节点或流程输出节点启用「[流式输出](../concepts/streaming-output.md)」开关并重新发布；**[智能体应用](../concepts/agent-application.md)**做图像输入需选用通义千问 VL 系列模型并将文件处理方式设为「自定义处理」后重新发布。
 
 ### [异步调用](../concepts/async-invocation.md)
 
@@ -192,6 +192,9 @@ print(responseNext.output.text)
 - [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)
 - [新版智能体应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md)
 - [工作流与旧版智能体应用 API](../../raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)
+
+
+
 
 
 

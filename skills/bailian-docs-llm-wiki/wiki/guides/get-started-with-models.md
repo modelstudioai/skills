@@ -4,20 +4,20 @@
 
 ## 平台定位与核心能力
 
-百炼同时面向开发者与业务人员：开发者可通过兼容 OpenAI 的 API 在几行代码内调用大模型；业务人员可通过可视化工具搭建智能体、工作流与 RAG 知识库应用。平台还提供模型调优（SFT/CPT/DPO）、模型部署（资源专享推理服务）与模型评测能力，详见 [什么是阿里云百炼](../../raw/model-user-guide/get-started-with-models/what-is-model-studio.md)。
+百炼同时面向开发者与业务人员：开发者可通过兼容 OpenAI 的 API 在几行代码内调用大模型；业务人员可通过可视化工具搭建智能体、[工作流](../concepts/workflow.md)与 RAG 知识库应用。平台还提供[模型调优](../concepts/fine-tuning.md)（SFT/CPT/DPO）、模型部署（资源专享推理服务）与模型评测能力，详见 [什么是阿里云百炼](../../raw/model-user-guide/get-started-with-models/what-is-model-studio.md)。
 
 百炼不会将您的业务数据用于模型训练，传输过程全程加密。
 
 ## 支持的模型
 
-百炼模型覆盖文本、图像、音频、视频、3D、全模态与向量/重排序等多种能力，按模态归类如下，完整列表以模型广场为准：
+百炼模型覆盖文本、图像、音频、视频、3D、全模态与向量/[重排序](../concepts/rerank.md)等多种能力，按模态归类如下，完整列表以模型广场为准：
 
 - **文本生成**：千问系列由强到成本最低包括 `qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-flash`；第三方模型包括 `deepseek-v4-pro`、`deepseek-v4-flash`、`kimi-k2.7-code`、`glm-5.2`、`MiniMax-M2.7`、`mimo-v2.5-pro`，API 格式与千问一致。
 - **图像与视频**：理解模型（`qwen3.7-plus`、`qwen3.5-omni-plus`、`kimi-k2.7-code`）和生成模型（`wan2.7-image-pro`、`qwen-image-2.0-pro`、`happyhorse-1.1-t2v/i2v/r2v`、`happyhorse-1.0-video-edit`）。
 - **3D 生成**：`Tripo/Tripo-H3.1`、`Tripo/Tripo-P1.0`。
 - **音频与语音**：语音合成 `cosyvoice-v3.5-plus`、`MiniMax/speech-2.8-hd`；音乐生成 `fun-music-v1`；语音识别 `fun-asr-realtime`、`fun-asr`、`qwen3.5-omni-plus-realtime`；端到端语音对话 `qwen3.5-omni-plus-realtime`。
 - **全模态**：`qwen3.5-omni-plus-realtime`、`qwen3.5-omni-plus`。
-- **向量与重排序**：`text-embedding-v4`、`tongyi-embedding-vision-plus`、`qwen3-rerank`。
+- **向量与[重排序](../concepts/rerank.md)**：`text-embedding-v4`、`tongyi-embedding-vision-plus`、`qwen3-rerank`。
 
 千问系列选型建议：Max 适合复杂多步骤任务，Plus 在效果/速度/成本上均衡（多数场景推荐），Flash 适合低延迟简单任务。详见 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md)。
 
@@ -31,7 +31,7 @@
 
 > **注意**：各地域的 API Key、模型列表、接入域名**不能跨地域混用**。美国（弗吉尼亚）暂不支持业务空间专属域名，需使用 `dashscope-us.aliyuncs.com`；德国、日本地域通过业务空间区分服务部署范围，调用前需先在业务空间管理页创建并选择部署范围。美国地域使用带 `-us` 后缀的模型名（如 `qwen-plus-us`）可限定美国境内推理，不带后缀默认全球推理。
 
-功能支持也存在地域差异：批量推理、模型调优、应用开发仅在华北2（北京）与新加坡支持；模型告警仅北京与新加坡支持。
+功能支持也存在地域差异：批量推理、[模型调优](../concepts/fine-tuning.md)、应用开发仅在华北2（北京）与新加坡支持；模型告警仅北京与新加坡支持。
 
 ## Base URL 与计费方案
 
@@ -141,6 +141,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 - [选择地域、服务部署范围和接入域名](../../raw/model-user-guide/get-started-with-models/regions.md)
 - [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)
 - [Base URL总览](../../raw/model-user-guide/get-started-with-models/base-url.md)
+
+
+
 
 
 

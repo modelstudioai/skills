@@ -47,7 +47,7 @@
 降低幻觉的主要手段（按实施难度排序）：
 
 1. **选择更强模型**：Max > Plus > Turbo
-2. **提示词工程**：限定回答范围、要求引用来源、分步骤引导
+2. **[提示词工程](../concepts/prompt-engineering.md)**：限定回答范围、要求引用来源、分步骤引导
 3. **RAG（[检索增强生成](../concepts/rag.md)）**：让模型基于检索到的知识回答，严格限制范围
 4. **插件/MCP**：数值计算等任务通过工具完成，避免模型直接处理
 5. **参数调优**：降低 temperature/top_k/top_p，降低 max_tokens 防止过度生成
@@ -86,6 +86,9 @@
 
 - [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md)
 - [相关协议](../../raw/model-user-guide/support/related-agreements.md)
+
+
+
 
 
 

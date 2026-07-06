@@ -52,7 +52,7 @@
 AppFlow 连接流：
 
 - 钉钉消息接收模式必须选 **HTTP 模式**，Stream 模式会导致无法返回消息。
-- 公众号需区分已认证 / 未认证两条工作流；未认证只能被动回复，5 秒超时。
+- 公众号需区分已认证 / 未认证两条[工作流](../concepts/workflow.md)；未认证只能被动回复，5 秒超时。
 - 企业微信需配置企业可信 IP；若报“域名主体校验未通过”，需配置企业自有域名或通过 ECS / 托管实例 / 计算巢 Nginx 代理转发。
 
 ## 使用方式
@@ -84,6 +84,9 @@ AppFlow 连接流可在百炼步骤后添加 SLS 日志云服务节点，将对�
 - [10分钟让微信公众号成为智能客服](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-wechat-in-10-minutes.md)
 - [在钉钉上增加一个AI机器人](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-dingtalk.md)
 - [基于本地知识库构建RAG应用](../../raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)
+
+
+
 
 
 

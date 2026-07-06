@@ -86,14 +86,14 @@ Cursor、Cline、Qoder 等支持通过对话调用百炼能力：全局安装 `b
 
 - 在 Dify 市场安装**通义千问**插件，于模型供应商设置中填入对应地域 [API Key](../concepts/api-key.md)；华北2（北京）设**使用国际端点**为**否**，新加坡设为**是**。
 - 插件非阿里云官方维护，最新版可能不稳定，报错 `Invalid API-key provided` 时可降级安装较早版本。
-- Qwen-Omni / Qwen-Audio / Qwen-OCR 不支持直接配置，需通过 Chatflow / 工作流的 HTTP 节点接入，建议[流式输出](../concepts/streaming-output.md)以降低超时风险。
-- 万相文生图 / 视频：Dify 无内置插件，需导入官方工作流模板（`万相-文生图 Demo.yml` 等），并把 `DASHSCOPE_API_KEY` 环境变量改为自己的 Key。
+- Qwen-Omni / Qwen-Audio / Qwen-OCR 不支持直接配置，需通过 Chatflow / [工作流](../concepts/workflow.md)的 HTTP 节点接入，建议[流式输出](../concepts/streaming-output.md)以降低超时风险。
+- 万相文生图 / 视频：Dify 无内置插件，需导入官方[工作流](../concepts/workflow.md)模板（`万相-文生图 Demo.yml` 等），并把 `DASHSCOPE_API_KEY` 环境变量改为自己的 Key。
 
 ### Postman / cURL 调用图像视频 API
 
 图像 / 视频生成 API 采用**[异步调用](../concepts/async-invocation.md)机制**：先 POST 创建任务拿到 `task_id`，再 GET 轮询 `/api/v1/tasks/{task_id}` 直到 `task_status` 为 `SUCCEEDED`。请求头需带 `X-DashScope-Async: enable`、`Authorization: Bearer <api-key>`、`Content-Type: application/json`。`task_id` 与最终图像 / 视频 URL 有效期均为 24 小时。该方式仅适用于快速测试与功能验证，生产环境应使用官方 SDK。
 
-> **注意**：Postman / cURL / Dify 这类工作流、API 测试、自定义应用工具**仅能使用按量计费**接入。[Token](../concepts/token.md) Plan 团队版和 Coding Plan 明确不支持此类工具，将套餐 Key 用于允许范围之外的调用可能被判定为违规滥用，导致订阅暂停或 Key 封禁。
+> **注意**：Postman / cURL / Dify 这类[工作流](../concepts/workflow.md)、API 测试、自定义应用工具**仅能使用按量计费**接入。[Token](../concepts/token.md) Plan 团队版和 Coding Plan 明确不支持此类工具，将套餐 Key 用于允许范围之外的调用可能被判定为违规滥用，导致订阅暂停或 Key 封禁。
 
 ## 支持的模型
 
@@ -134,6 +134,9 @@ Cursor、Cline、Qoder 等支持通过对话调用百炼能力：全局安装 `b
 - [使用Postman或cURL调用图像/视频生成API](../../raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)
 - [Dify](../../raw/model-user-guide/use-chat-client-or-development-tool/dify.md)
 - [更多工具](../../raw/model-user-guide/use-chat-client-or-development-tool/more-tools.md)
+
+
+
 
 
 

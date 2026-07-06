@@ -39,10 +39,10 @@ Python 代码解释器可用依赖包括：matplotlib、pandas、scipy、seaborn
 
 ## 插件调用机制
 
-调用插件的本质是调用插件下的工具。百炼支持通过[智能体应用](../concepts/agent-application.md)、工作流应用以及 Assistant API 调用插件。
+调用插件的本质是调用插件下的工具。百炼支持通过[智能体应用](../concepts/agent-application.md)、[工作流](../concepts/workflow.md)应用以及 Assistant API 调用插件。
 
 - **[智能体应用](../concepts/agent-application.md) / Assistant API**：大模型根据用户输入内容、工具名称和工具描述判断是否调用工具。需要调用时，模型选择合适工具，应用内部完成调用后将工具返回结果与用户内容合并再次输入模型，由模型生成最终结果；无需调用时直接生成结果输出。
-- **工作流应用**：插件作为工作流的一个节点，按用户编排的方式执行特定任务，而非由模型主动规划和调用。
+- **[工作流](../concepts/workflow.md)应用**：插件作为[工作流](../concepts/workflow.md)的一个节点，按用户编排的方式执行特定任务，而非由模型主动规划和调用。
 
 ## 使用方式
 
@@ -135,6 +135,9 @@ Python 代码解释器可用依赖包括：matplotlib、pandas、scipy、seaborn
 - [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)
 - [插件概述](../../raw/application-user-guide/plug-in/plug-in-overview.md)
 - [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)
+
+
+
 
 
 

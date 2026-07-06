@@ -24,12 +24,15 @@
 
 - **功能完整度**：兼容接口为保证协议一致性，可能不暴露百炼原生的全部参数；如需使用最全的采样参数、插件或业务字段，建议改用 [文本生成模型API参考](../../raw/model-api-reference/qwen-api-reference.md) 中介绍的 DashScope 原生接口。
 - **工具能力差异**：联网搜索、代码解释器、网页内容提取为 Responses 接口专属内置能力，OpenAI Chat Completions 与 Anthropic Messages 接口不内置这些工具，需自行实现或通过工具调用协议接入。
-- **对话历史管理**：仅 Responses 接口自动维护历史，迁移到其他接口时需自行管理上下文长度与轮次，避免超出模型上下文窗口。
+- **对话历史管理**：仅 Responses 接口自动维护历史，迁移到其他接口时需自行管理上下文长度与轮次，避免超出模型[上下文窗口](../concepts/context-window.md)。
 - **迁移评估**：从 OpenAI / Anthropic 迁移时，应先确认目标 Qwen 模型在对应兼容接口下是否支持所需参数（如 `temperature`、`tools`、`stream` 等），再决定接口选型。
 
 ## 来源文档
 
 - [文本生成模型API参考](../../raw/model-api-reference/qwen-api-reference.md)
+
+
+
 
 
 

@@ -1,6 +1,6 @@
 # application publishing and sharing
 
-阿里云百炼支持将已构建并发布的智能体或工作流应用通过多种渠道分享或发布，便于将 AI 能力快速集成到具体业务场景中。本文汇总了官方网页版、UI 设计器、钉钉、微信、组件化复用以及音视频实时互动六种主流发布与分享方式，并说明各方式的关键参数、使用流程与限制。详细的分享入口与各渠道适用场景可参见[分享智能体应用](../../raw/application-user-guide/application-publishing-and-sharing/share-an-application.md)。
+阿里云百炼支持将已构建并发布的智能体或[工作流](../concepts/workflow.md)应用通过多种渠道分享或发布，便于将 AI 能力快速集成到具体业务场景中。本文汇总了官方网页版、UI 设计器、钉钉、微信、组件化复用以及音视频实时互动六种主流发布与分享方式，并说明各方式的关键参数、使用流程与限制。详细的分享入口与各渠道适用场景可参见[分享智能体应用](../../raw/application-user-guide/application-publishing-and-sharing/share-an-application.md)。
 
 ## 支持的发布与分享方式
 
@@ -10,8 +10,8 @@
 - UI 应用（魔笔分享渠道）：通过 UI 设计器构建自定义界面后发布，详见 [UI设计器](../../raw/application-user-guide/application-publishing-and-sharing/ui-designer.md)。
 - 钉钉机器人：发布为钉钉应用内的机器人，支持群聊 @ 触发与流式卡片回复。
 - 微信公众号：发布为微信客服二维码，扫码即可体验 AI 客服。
-- 组件：将应用发布为可复用组件，供其他智能体或工作流引用，详见 [使用智能体或工作流作为组件](../../raw/application-user-guide/application-publishing-and-sharing/use-agent-or-workflow-as-component.md)。
-- 音视频实时互动：仅支持图文对话类应用（含智能体与工作流），提供 H5/APP 扫码与 SDK 集成两种渠道。
+- 组件：将应用发布为可复用组件，供其他智能体或[工作流](../concepts/workflow.md)引用，详见 [使用智能体或工作流作为组件](../../raw/application-user-guide/application-publishing-and-sharing/use-agent-or-workflow-as-component.md)。
+- 音视频实时互动：仅支持图文对话类应用（含智能体与[工作流](../concepts/workflow.md)），提供 H5/APP 扫码与 SDK 集成两种渠道。
 
 > **注意**：官方网页版分享当前只支持[智能体应用](../concepts/agent-application.md)，不支持工作流应用；音视频实时互动同样仅支持图文对话类应用。
 
@@ -109,6 +109,9 @@ UI 设计器功能本身不[计费](../concepts/billing.md)，但使用过程中
 - [分享智能体应用](../../raw/application-user-guide/application-publishing-and-sharing/share-an-application.md)
 - [使用智能体或工作流作为组件](../../raw/application-user-guide/application-publishing-and-sharing/use-agent-or-workflow-as-component.md)
 - [UI设计器](../../raw/application-user-guide/application-publishing-and-sharing/ui-designer.md)
+
+
+
 
 
 

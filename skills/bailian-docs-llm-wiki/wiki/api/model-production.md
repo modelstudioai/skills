@@ -1,12 +1,12 @@
 # model production
 
-百炼平台提供模型生产（model production）相关的 API，覆盖从模型调优、模型压缩到[模型部署](../concepts/model-deployment.md)的完整链路。开发者可以通过这些接口对基础模型进行微调定制、压缩优化以及部署上线，形成端到端的模型生产能力。
+百炼平台提供模型生产（model production）相关的 API，覆盖从[模型调优](../concepts/fine-tuning.md)、模型压缩到[模型部署](../concepts/model-deployment.md)的完整链路。开发者可以通过这些接口对基础模型进行微调定制、压缩优化以及部署上线，形成端到端的模型生产能力。
 
 ## 能力概览
 
 模型生产链路由三个相互衔接的环节组成：
 
-1. **模型调优（Fine-tuning）**：通过微调训练在基础模型上注入领域知识或特定任务能力，定制出专属模型。
+1. **[模型调优](../concepts/fine-tuning.md)（Fine-tuning）**：通过微调训练在基础模型上注入领域知识或特定任务能力，定制出专属模型。
 2. **模型压缩（Compression）**：通过量化等手段压缩模型体积，降低推理时的资源占用与调用成本。
 3. **[模型部署](../concepts/model-deployment.md)（Deployment）**：将微调或导入的[模型部署](../concepts/model-deployment.md)为在线推理服务，供应用调用。
 
@@ -22,7 +22,7 @@
 
 典型的模型生产流程如下：
 
-1. 选定基础模型，调用模型调优 API 创建 fine-tuning 任务，等待训练完成获得定制模型。
+1. 选定基础模型，调用[模型调优](../concepts/fine-tuning.md) API 创建 fine-tuning 任务，等待训练完成获得定制模型。
 2. 如需降低成本，对定制模型调用模型压缩 API 执行量化压缩。
 3. 调用模型部署 API，将最终模型部署为在线推理服务，获取可调用的接入点。
 
@@ -39,6 +39,9 @@
 - [模型调优](../../raw/model-api-reference/model-production/fine-tuning-jobs-api.md)
 - [模型压缩](../../raw/model-api-reference/model-production/model-compression-api.md)
 - [模型部署](../../raw/model-api-reference/model-production/deployments-api.md)
+
+
+
 
 
 

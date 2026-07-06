@@ -100,7 +100,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/add \
 | `project_ids` | list | 否 | 记忆片段规则 ID 数组，可传入多个进行混合检索 |
 | `top_k` | integer | 否 | 最大召回个数，取值 1~100（默认 10） |
 | `min_score` | double | 否 | 最小相似度分数阈值，值域 [0,1]（默认 0.3） |
-| `enable_rerank` | boolean | 否 | 是否开启搜索结果重排序（默认 false） |
+| `enable_rerank` | boolean | 否 | 是否开启搜索结果[重排序](../concepts/rerank.md)（默认 false） |
 | `enable_judge` | boolean | 否 | 是否开启意图判别回调（默认 false） |
 | `enable_rewrite` | boolean | 否 | 是否开启 query 重写（默认 false） |
 
@@ -209,6 +209,9 @@ asyncio.run(add_memory_example())
 ## 来源文档
 
 - [长期记忆（新）API 参考](../../raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md)
+
+
+
 
 
 

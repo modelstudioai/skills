@@ -1,6 +1,6 @@
 # application evaluation
 
-阿里云百炼的应用[评测](../concepts/evaluation.md)能力用于系统化评估[智能体应用](../concepts/agent-application.md)、工作流应用的输出质量。覆盖[评测](../concepts/evaluation.md)集管理、[评测](../concepts/evaluation.md)任务编排、自动评估器评分、人工标签标注、评测报告分析等全流程，支持自动评测与手动评测两种范式，并区分"旧版"与"新版"两套界面。
+阿里云百炼的应用[评测](../concepts/evaluation.md)能力用于系统化评估[智能体应用](../concepts/agent-application.md)、[工作流](../concepts/workflow.md)应用的输出质量。覆盖[评测](../concepts/evaluation.md)集管理、[评测](../concepts/evaluation.md)任务编排、自动评估器评分、人工标签标注、评测报告分析等全流程，支持自动评测与手动评测两种范式，并区分"旧版"与"新版"两套界面。
 
 ## 评测范式
 
@@ -22,7 +22,7 @@
 
 ### 新版评测集类型
 
-新版评测集支持 **智能体**、**工作流**、**自定义** 三种类型，按所选应用的出入参形式自动生成数据模板，自定义类型可任意定义表结构。手动上传支持 `.xls`/`.xlsx`，单文件不超过 20MB，单次最多 10 个文件；存储位置固定为平台存储；创建后类型不可修改。详见 [新版评测集](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/new-version-of-evaluation-set.md)。
+新版评测集支持 **智能体**、**[工作流](../concepts/workflow.md)**、**自定义** 三种类型，按所选应用的出入参形式自动生成数据模板，自定义类型可任意定义表结构。手动上传支持 `.xls`/`.xlsx`，单文件不超过 20MB，单次最多 10 个文件；存储位置固定为平台存储；创建后类型不可修改。详见 [新版评测集](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/new-version-of-evaluation-set.md)。
 
 ### 创建与管理
 
@@ -38,7 +38,7 @@
 
 - **任务名称**：最多 50 字符；**任务描述**：最多 200 字符。
 - **选择评测集**：从已发布评测集中选择集合与版本。
-- **选择应用**：支持三种关联方式——不关联应用（纯人工标注）、工作流、智能体。
+- **选择应用**：支持三种关联方式——不关联应用（纯人工标注）、[工作流](../concepts/workflow.md)、智能体。
 - **评估器**：每个评测任务最多添加 10 个评估器，建议组合 3-5 个覆盖不同维度（如 LLM + Code 组合）。所有变量必须完成参数映射后才能保存。
 - **标签**：可选，用于人工标注。
 
@@ -136,6 +136,9 @@
 - [标签管理](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/label-management.md)
 - [评测任务](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/evaluation-task.md)
 - [评估器](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/grader.md)
+
+
+
 
 
 
