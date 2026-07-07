@@ -2,6 +2,34 @@
 
 选择适合图像分析、视频理解、OCR等场景的模型。
 
+## 从闭源模型迁移到百炼?
+
+如果你正在使用 GPT、Claude 或 Gemini，可参考下表按能力档位选择对应的百炼模型。
+
+**能力档位**
+
+**闭源模型代表**
+
+**百炼推荐**
+
+高能力
+
+GPT-5.5、Claude Opus 4.7、Gemini 3.1 Pro
+
+`qwen3.7-plus`
+
+平衡
+
+GPT-5.4、Claude Sonnet 4.6、Gemini 3 Pro
+
+`qwen3.6-plus`
+
+轻量低成本
+
+GPT-5.4-mini、Gemini 3.1 Flash
+
+`qwen3.6-flash`
+
 ## 图像与视频理解
 
 推荐从`qwen3.7-plus`开始，它是千问旗舰模型，支持1M上下文、最长2小时视频、Function Calling和内置工具等完整功能。当您的场景稳定后，可以尝试`qwen3.6-flash`来降低成本，它提供接近旗舰的效果，并支持相同的上下文长度和功能集。
@@ -36,11 +64,11 @@ Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能
 
 ## OCR与文档提取
 
-`qwen-vl-ocr`专为文档、表格、试卷和手写内容的文字提取而优化。您也可以使用`qwen3.7-plus`或`qwen3.6-flash`进行通用图片文字提取。
+`qwen3.5-ocr` 专为文档、表格、试卷和手写内容的文字提取而优化。您也可以使用`qwen3.7-plus`或`qwen3.6-flash`进行通用图片文字提取。
 
 ## 推荐模型
 
-**模型ID**
+**模型 ID（Model ID）**
 
 **上下文**
 
@@ -124,7 +152,7 @@ Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能
 
 ### Qwen3.7
 
-**模型ID**
+**模型 ID（Model ID）**
 
 **输入**
 
@@ -206,7 +234,7 @@ Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能
 
 ### Qwen3.6
 
-**模型ID**
+**模型 ID（Model ID）**
 
 **输入**
 
@@ -328,7 +356,7 @@ Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能
 
 ### Qwen3.5
 
-**模型ID**
+**模型 ID（Model ID）**
 
 **输入**
 
@@ -532,6 +560,10 @@ Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能
 -   `qwen2.5-vl-72b-instruct`
     
 -   `qwen2.5-vl-32b-instruct`
+    
+-   `qwen2.5-vl-7b-instruct`
+    
+-   `qwen2.5-vl-3b-instruct`
     
 
 #### Qwen-Omni

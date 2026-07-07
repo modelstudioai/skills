@@ -147,21 +147,21 @@ description: >-
 | **按家族筛选**：按 primaryCapability / providers / itemCount / maxContextWindow 找家族 | `models/families.jsonl`（一行一家族，含 items[] 摘要） |
 | 模型家族总览 / 按能力分桶浏览         | `models/index.md`                                        |
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
-| 函数调用 | `wiki/concepts/function-calling.md` |
-| 流式输出 | `wiki/concepts/streaming-output.md` |
-| 模型调优 | `wiki/concepts/fine-tuning.md` |
-| 向量嵌入 | `wiki/concepts/embedding.md` |
-| 重排序 | `wiki/concepts/rerank.md` |
-| 提示词工程 | `wiki/concepts/prompt-engineering.md` |
-| 上下文窗口 | `wiki/concepts/context-window.md` |
-| 限流与配额 | `wiki/concepts/rate-limiting.md` |
-| 工作流 | `wiki/concepts/workflow.md` |
-| 微调与模型压缩对比 | `wiki/comparisons/fine-tuning-vs-compression.md` |
-| 模型部署与高速推理对比 | `wiki/comparisons/model-deployment-vs-inference.md` |
-| 模型评测与模型监控对比 | `wiki/comparisons/model-evaluation-vs-monitoring.md` |
-| 应用评测与应用监控对比 | `wiki/comparisons/application-evaluation-vs-monitoring.md` |
-| 知识库与记忆库对比 | `wiki/comparisons/knowledge-base-vs-memory-library.md` |
-| 应用调用方式对比 | `wiki/comparisons/application-call-vs-bailian-calling.md` |
+| API Key 鉴权 | `wiki/concepts/api-key.md` |
+| Token 计量 | `wiki/concepts/token.md` |
+| OpenAI 兼容接口 | `wiki/concepts/openai-compatible-interface.md` |
+| 检索增强生成（RAG） | `wiki/concepts/rag.md` |
+| 函数调用（Function Calling） | `wiki/concepts/function-calling.md` |
+| 流式输出 | `wiki/concepts/streaming.md` |
+| 异步调用 | `wiki/concepts/async-invocation.md` |
+| 业务空间 | `wiki/concepts/workspace.md` |
+| 多模态 | `wiki/concepts/multimodal.md` |
+| DashScope SDK | `wiki/concepts/dashscope-sdk.md` |
+| 多模态内容生成 API 对比 | `wiki/comparisons/multimodal-generation-comparison.md` |
+| 模型优化方案对比：微调、压缩与高速推理 | `wiki/comparisons/model-optimization-comparison.md` |
+| 应用评测与模型评测对比 | `wiki/comparisons/app-vs-model-evaluation.md` |
+| 应用监控与模型监控对比 | `wiki/comparisons/app-vs-model-monitoring.md` |
+| 知识库与记忆库对比 | `wiki/comparisons/knowledge-vs-memory.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 

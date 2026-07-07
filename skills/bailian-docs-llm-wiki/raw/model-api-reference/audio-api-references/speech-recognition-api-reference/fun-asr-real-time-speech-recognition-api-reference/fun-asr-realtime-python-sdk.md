@@ -484,11 +484,77 @@ list\[str\]
         
     -   ja: 日语
         
+    -   ko：韩语
+        
+    -   vi：越南语
+        
+    -   th：泰语
+        
+    -   id：印尼语
+        
+    -   ms：马来语
+        
+    -   tl：菲律宾语
+        
+    -   hi：印地语
+        
+    -   ar：阿拉伯语
+        
+    -   fr：法语
+        
+    -   de：德语
+        
+    -   es：西班牙语
+        
+    -   pt：葡萄牙语
+        
+    -   ru：俄语
+        
+    -   it：意大利语
+        
+    -   nl：荷兰语
+        
+    -   sv：瑞典语
+        
+    -   da：丹麦语
+        
+    -   fi：芬兰语
+        
+    -   no：挪威语
+        
+    -   el：希腊语
+        
+    -   pl：波兰语
+        
+    -   cs：捷克语
+        
+    -   hu：匈牙利语
+        
+    -   ro：罗马尼亚语
+        
+    -   bg：保加利亚语
+        
+    -   hr：克罗地亚语
+        
+    -   sk：斯洛伐克语
+        
+-   fun-asr-realtime-2026-02-28：
+    
+    -   zh: 中文
+        
+    -   en: 英文
+        
+    -   ja: 日语
+        
 -   fun-asr-realtime-2025-09-15：
     
     -   zh: 中文
         
     -   en: 英文
+        
+-   fun-asr-flash-8k-realtime、fun-asr-flash-8k-realtime-2026-01-28：
+    
+    -   zh: 中文
         
 
 speech\_noise\_threshold
@@ -528,6 +594,84 @@ RecognitionCallback
 否
 
 [回调接口（RecognitionCallback）](#cec6e96138swr)。
+
+以下参数通过`Recognition`实例的`call`或`start`方法的关键字参数传入。
+
+**参数**
+
+**类型**
+
+**默认值**
+
+**是否必须**
+
+**说明**
+
+raw\_input
+
+dict
+
+\-
+
+否
+
+输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见[快速开始](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#ctx-quickstart-sec)。
+
+**重要**
+
+仅 `fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持 context 参数。
+
+dict 中需包含 `context` 键，值为消息列表（list\[dict\]），每条消息包含以下字段：
+
+-   `role`（str，必选）：消息角色。`user` 表示前几轮用户语音的识别结果或领域相关的词表；`assistant` 表示前几轮大语言模型的回复内容。
+    
+-   `content`（list\[dict\]，必选）：消息内容列表。每个元素包含 `type`（str，role 为 user 时填 `input_text`，role 为 assistant 时填 `text`）和 `text`（str，文本内容）。
+    
+
+**重要**
+
+约束：上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度不超过 400 个字符，超出部分从末尾截断。
+
+**重要**
+
+携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
+
+**说明**
+
+使用该字段时，SDK版本不能低于1.25.23。
+
+`raw_input`通过`Recognition`实例的`start`或`call`方法传入：
+
+```
+# 构建 input 传入数据
+input_context = {
+    "context": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "input_text",
+                    "text": "你好啊"
+                }
+            ]
+        },
+        {
+            "role": "assistant",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "你好啊，我是通义千问，有什么可以帮助你的？"
+                }
+            ]
+        }
+    ]
+}
+
+# 通过 raw_input 参数传入
+recognition.start(raw_input=input_context)
+# 或者
+recognition.call(raw_input=input_context)
+```
 
 ## **关键接口**
 

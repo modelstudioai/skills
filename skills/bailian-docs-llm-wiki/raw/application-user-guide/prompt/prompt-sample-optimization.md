@@ -63,7 +63,7 @@ Prompt样例库功能已不再维护，推荐您将样例库数据迁移到 RAG 
 
 将Prompt样例库与位于相同的业务空间里的智能体应用关联，使其生效。
 
-1.  确保你已有一个[智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)。
+1.  确保你已有一个[智能体应用（Agent 1.0）](https://help.aliyun.com/zh/model-studio/single-agent-application)。
     
 2.  前往[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面，找到目标智能体应用，单击应用卡片上的**配置**。
     

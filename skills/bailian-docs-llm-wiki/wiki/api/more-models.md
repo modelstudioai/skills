@@ -13,7 +13,7 @@
 | `qwen3.5-ocr` | 图像文字提取（OCR）与结构化字段抽取 | OpenAI 兼容 / DashScope | 北京 / 新加坡 / 美国（弗吉尼亚） |
 | `gui-plus-2026-02-26` | 界面交互专用模型，通过 `computer_use` 工具操控桌面 GUI | OpenAI 兼容 | 华北2（北京） |
 
-> **注意**：`qwen-deep-research` 当前**仅支持通过 Python DashScope SDK 调用，暂不支持 Java SDK 与 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)**，且仅支持华北2（北京）地域。如需使用，必须使用该地域的 [API Key](../concepts/api-key.md)。详见 [Qwen-Deep-Research API 参考](../../raw/model-api-reference/more-models/qwen-deep-research-api.md)。
+> **注意**：`qwen-deep-research` 当前**仅支持通过 Python [DashScope SDK](../concepts/dashscope-sdk.md) 调用，暂不支持 Java SDK 与 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)**，且仅支持华北2（北京）地域。如需使用，必须使用该地域的 [API Key](../concepts/api-key.md)。详见 [Qwen-Deep-Research API 参考](../../raw/model-api-reference/more-models/qwen-deep-research-api.md)。
 
 ## 关键参数
 
@@ -107,7 +107,7 @@ completion = client.chat.completions.create(
 
 - **限流**：各模型有独立的限流条件，`farui-plus` 等模型限流详见[限流](https://help.aliyun.com/zh/model-studio/rate-limit)。
 - **上下文与[计费](../concepts/billing.md)**：`farui-plus` 上下文 12k、最大输入 12k、最大输出 2k，输入成本 20 元/百万 [Token](../concepts/token.md)；`tongyi-intent-detect-v3` 上下文 8,192、最大输入 8,192、最大输出 1,024，输入 0.4 元、输出 1 元/百万 [Token](../concepts/token.md)，开通后 90 天内赠送 100 万 [Token](../concepts/token.md) 免费额度。
-- **协议限制**：`qwen-deep-research` 仅支持 Python DashScope SDK；`gui-plus-2026-02-26` 仅在华北2（北京）地域提供。
+- **协议限制**：`qwen-deep-research` 仅支持 Python [DashScope SDK](../concepts/dashscope-sdk.md)；`gui-plus-2026-02-26` 仅在华北2（北京）地域提供。
 - **SDK 线程安全**：DashScope Java SDK 的 `Generation` 等对象非线程安全，需自行管理同步机制或及时关闭进程。
 - **图像像素阈值**：Qwen-OCR 的 `min_pixels`/`max_pixels` 影响识别精度与耗时，过小会放大、过大会缩小，建议按示例值设置。
 - **翻译记忆与术语**：Qwen-MT 的 `terms` 强制覆盖译法，`tm_list` 仅作参考；两者可叠加使用以提升专业领域一致性。
@@ -120,6 +120,7 @@ completion = client.chat.completions.create(
 - [Qwen-MT API参考](../../raw/model-api-reference/more-models/qwen-mt-api.md)
 - [Qwen-OCR API参考](../../raw/model-api-reference/more-models/qwen-vl-ocr-api-reference.md)
 - [GUI-Plus API参考](../../raw/model-api-reference/more-models/gui-plus-interface-interaction-model.md)
+
 
 
 

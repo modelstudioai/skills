@@ -1,83 +1,74 @@
 # 异步调用
 
-异步调用是百炼平台针对耗时较长的生成类任务（如图像生成、视频生成、3D 模型生成）所采用的统一调用模式。其核心流程为「创建任务获取 task_id → 轮询或回调获取结果」，避免长时间阻塞 HTTP 连接。
-
-## 适用场景
-
-异步调用适用于所有处理时间超出常规 HTTP 超时的模型服务，包括但不限于：
-
-- **3D 模型生成**：文生 3D、图生 3D、多图生 3D（Tripo 系列）
-- **视频生成**：文生视频、图生视频、视频编辑、数字人等（万相、可灵、PixVerse、Vidu 系列）
-- **图像生成**：万相文生图、图像编辑、创意工具等（部分接口支持同步，大多数走异步）
+异步调用是百炼平台针对耗时较长的生成类任务所采用的标准调用模式，流程为「创建任务 → 轮询获取结果」，适用于视频生成、3D 模型生成、部分图像生成等场景。
 
 ## 调用流程
 
-### 1. 创建任务
+异步调用统一分为两步：
 
-向对应模型的 API 端点发送 POST 请求，必须携带请求头：
+1. **创建任务**：向对应能力的 API 端点发送 POST 请求，请求头中必须携带 `X-DashScope-Async: enable`，否则会报错 `current user api does not support synchronous calls`。请求成功后返回 `task_id`。
+2. **轮询查询结果**：使用返回的 `task_id`，向 `GET /api/v1/tasks/{task_id}` 发送查询请求，根据 `output.task_status` 判断任务状态。
 
-```
-X-DashScope-Async: enable
-```
+## 任务状态流转
 
-缺少此请求头会报错 `current user api does not support synchronous calls`。
-
-成功后响应中返回 `task_id`，该 ID 是后续查询结果的唯一凭证。
-
-### 2. 查询结果
-
-通过通用查询接口轮询任务状态：
-
-```
-GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}
-```
-
-建议轮询间隔约 15 秒，直到状态变为终态。
-
-## 任务状态
+异步任务的状态枚举如下：
 
 | 状态 | 含义 |
 | --- | --- |
-| `PENDING` | 排队中，等待处理 |
-| `RUNNING` | 正在处理 |
-| `SUCCEEDED` | 任务成功，可获取结果 |
-| `FAILED` | 任务失败，查看错误信息 |
-| `CANCELED` | 已被取消 |
-| `UNKNOWN` | 任务不存在或超过有效期 |
+| `PENDING` | 排队中，任务已提交但尚未开始处理 |
+| `RUNNING` | 处理中 |
+| `SUCCEEDED` | 任务成功完成，可从响应中获取产物 |
+| `FAILED` | 任务失败，响应中包含错误码和错误信息 |
+| `CANCELED` | 任务已取消 |
+| `UNKNOWN` | 任务不存在或已超过有效期 |
 
-## 异步任务管理接口
+正常流转路径为 `PENDING` → `RUNNING` → `SUCCEEDED` 或 `FAILED`。
 
-百炼提供三个通用的任务管理接口（限流均为 20 QPS）：
+## 适用场景
 
-| 接口 | 方法与路径 | 用途 |
+百炼平台以下能力采用异步调用模式：
+
+- **视频生成**：万相（Wan）系列、HappyHorse、Pixverse、Vidu、Kling 等所有视频生成接口，单次生成耗时通常 1-5 分钟。
+- **3D 模型生成**：Tripo 系列模型的文生 3D、图生 3D、多图生 3D 接口。
+- **图像生成**：部分图像生成与编辑接口（如万相文生图 V1 版、涂鸦作画等）。
+- **模型调优**：微调训练任务通过轮询或监听方式获取训练进度和结果。
+
+## 关键参数与配置
+
+### 请求头
+
+| 参数 | 必填 | 说明 |
 | --- | --- | --- |
-| 查询单个任务 | `GET /api/v1/tasks/{task_id}` | 根据 task_id 查询状态与结果 |
-| 批量查询 | `GET /api/v1/tasks/` | 按时间/状态/模型等条件分页查询 |
-| 取消任务 | `POST /api/v1/tasks/{task_id}/cancel` | 取消排队中（PENDING）的任务 |
+| `X-DashScope-Async` | 是 | 固定值 `enable`，开启异步模式 |
+| `Authorization` | 是 | `Bearer $DASHSCOPE_API_KEY`，鉴权令牌 |
 
-## 避免轮询：任务完成通知
+### 轮询策略
 
-频繁轮询会浪费资源并可能触发限流。百炼已接入阿里云事件总线 EventBridge，任务完成后主动推送通知，支持两种接收方式：
+- 建议轮询间隔约 **15 秒**，避免过于频繁触发限流。
+- 查询接口默认 RPS 限制为 **20**，如需更高频率可配置异步任务回调通知。
+- `task_id` 有效期为 **24 小时**，超时后查询返回 `UNKNOWN` 状态。
 
-- **HTTP 回调 URL**：事件总线直接向公网接口 POST 推送，接入简单
-- **RocketMQ 消息队列**：消息投递到 MQ 供业务消费，支持失败重试，可靠性更高
+### 地域与域名
 
-事件关键字段：事件源 `acs.dashscope`，事件类型 `dashscope:System:AsyncTaskFinish`，事件数据包含 `task_id`、`task_status`、`region` 等。
+调用异步接口时需确保模型、Endpoint URL、API Key 属于同一地域。推荐使用[业务空间](workspace.md)专属域名：
 
-## 关键约束与注意事项
+- 华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+- 新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
-- **task_id 有效期 24 小时**：超时后无法再查询，状态返回 `UNKNOWN`
-- **请勿重复创建任务**：拿到 task_id 后直接轮询即可
-- **同地域要求**：模型端点、[API Key](api-key.md) 必须属于同一地域
-- **产物链接时效**：生成结果的下载 URL 通常有效期 2 小时，需及时下载或转存
-- **取消限制**：仅支持取消 `PENDING` 状态的任务
-- **子任务机制**：含多个子任务的请求，只要有一个子任务成功，整体即为 `SUCCEEDED`；失败子任务的错误在 `output.results` 中单独展示
+旧域名 `dashscope.aliyuncs.com` 仍可使用。
+
+## 最佳实践
+
+1. **避免重复创建任务**：创建成功后保存 `task_id`，通过轮询获取结果即可，不要对同一请求重复提交。
+2. **及时下载产物**：生成产物（视频、3D 模型等）的下载链接通常有时效限制（如 2 小时），请及时保存。
+3. **使用回调替代轮询**：对于高频调用场景，建议配置异步任务回调通知，减少轮询请求开销。
+4. **处理失败状态**：任务失败时响应中包含 `code` 和 `message` 字段，可参照百炼错误码文档排查问题。
 
 ## 关联主题页
 
 - [3d generation](../api/3d-generation.md)
 - [video generation api](../api/video-generation-api.md)
-- [more about models](../api/more-about-models.md)
 - [image generation](../api/image-generation.md)
+- [model production](../api/model-production.md)
 
 

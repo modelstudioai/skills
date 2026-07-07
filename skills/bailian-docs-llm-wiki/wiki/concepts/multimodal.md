@@ -1,71 +1,74 @@
 # 多模态
 
-多模态是指模型同时处理和生成文本、图像、音频、视频、3D 等多种信息形态的能力。百炼平台围绕多模态提供了从理解到生成的完整模型矩阵和 API 体系，开发者可按业务场景灵活组合不同模态的能力。
+多模态（Multimodal）指模型同时处理和生成多种信息形态（文本、图像、音频、视频、3D 等）的能力。百炼平台围绕多模态提供了从理解、生成到检索排序的完整模型矩阵，开发者可按场景选择对应的模型和 API。
 
-## 多模态能力矩阵
+## 百炼平台的多模态能力谱
 
-百炼平台的多模态能力按输入/输出模态可分为以下几类：
+百炼平台的多模态能力覆盖以下维度：
 
-| 能力方向 | 输入模态 | 输出模态 | 代表模型/接口 |
-|---------|---------|---------|-------------|
-| 视觉理解 | 图像/视频 + 文本 | 文本 | qwen3.7-plus（支持图像分析、最长 2 小时视频理解） |
-| 实时多模态交互 | 语音/视频/图像 | 语音 + 文本 | Qwen-Omni-Realtime 系列 |
-| 图像生成与编辑 | 文本/图像 | 图像 | 万相 2.7、Z-Image、千问-文生图 |
-| 视频生成与编辑 | 文本/图像/音频/视频 | 视频 | 万相 2.7、HappyHorse、PixVerse、Vidu、可灵 |
-| 3D 模型生成 | 文本/图像 | GLB 模型 | Tripo-H3.1、Tripo-P1.0 |
-| 语音合成 | 文本 | 音频 | CosyVoice、MiniMax-speech |
-| 数字人/人像动画 | 图像 + 音频 | 视频 | wan2.2-s2v、AnimateAnyone、EMO |
+| 维度 | 典型场景 | 代表模型 |
+|------|----------|----------|
+| 多模态理解 | 图像分析、视频理解、OCR | qwen3.7-plus、qwen3.6-flash、qwen3.5-ocr |
+| 实时多模态交互 | 语音+视频实时对话 | qwen3.5-omni-realtime 系列 |
+| 图像生成与编辑 | 文生图、图像编辑、文字渲染 | wan2.7-image-pro、qwen-image-2.0-pro、z-image-turbo |
+| 视频生成与编辑 | 文生视频、图生视频、视频编辑 | happyhorse-1.1 系列、wan2.7 系列 |
+| 3D 生成 | 文生 3D、图生 3D | Tripo/Tripo-H3.1、Tripo/Tripo-P1.0 |
+| 多模态向量 | 跨模态检索（以文搜图、以图搜视频） | qwen3-vl-embedding |
+| 多模态排序 | 图文视频混合 Rerank | qwen3-vl-rerank |
+
+## 多模态理解
+
+视觉理解模型接受图像或视频作为输入，与文本提示配合完成分析、问答、OCR 等任务。推荐从 qwen3.7-plus 开始——它支持 1M 上下文、最长 2 小时视频输入、每张图片最高 1600 万像素，同时具备 Function Calling 和结构化输出能力。图像 Token 计算公式为 `h x w / (32 x 32) + 2`。
 
 ## 实时多模态交互
 
-Qwen-Omni-Realtime 系列通过 WebSocket 长连接实现低延迟的语音、视频、图像实时对话，是百炼平台最具代表性的多模态能力之一。
+Qwen-Omni-Realtime API 基于 WebSocket 长连接实现低延迟的语音、视频、图像实时对话。支持 VAD 自动检测与 Manual 手动控制两种交互模式，并可配合声音复刻、工具调用、联网搜索等能力。关键配置包括：
 
-**核心模型**：
-- `qwen3.5-omni-realtime`：最新版本，支持语义 VAD、联网搜索、静默超时主动引导
-- `qwen3-omni-flash-realtime`：支持回复风格控制
-- `qwen-omni-turbo-realtime`：轻量版，部分参数不可调
+- **交互模式**：`turn_detection.type` 设为 `server_vad`（自动检测）或 `null`（手动控制）
+- **VAD 灵敏度**：`threshold` 范围 [-1.0, 1.0]，默认 0.5
+- **静音时长**：`silence_duration_ms` 范围 [200, 6000]，默认 800
+- **静默超时**：`idle_timeout_ms` 范围 [5000, 30000]，超时后模型主动引导对话
 
-**交互模式**：
-- **VAD 模式**（默认）：服务端自动检测语音起止，适合自然对话。关键参数包括 `threshold`（灵敏度，默认 0.5）、`silence_duration_ms`（静音判定，默认 800ms）、`idle_timeout_ms`（静默超时，5000-30000ms）
-- **Manual 模式**：客户端显式控制音频提交与响应触发，适合按下即说场景
+## 多模态生成
 
-**接入地址**：`wss://dashscope.aliyuncs.com/api-ws/v1/realtime`（北京），新加坡使用[业务空间](workspace.md)专属域名。
+### 图像生成
 
-## 图像生成与编辑
+百炼提供千问（Qwen-Image）、万相（Wan/Wanx）、Z-Image 等多个图像生成模型系列。wan2.7-image-pro 支持文生图最高 4K 输出、文字渲染和角色一致性；z-image-turbo 速度快且成本低，适合只需生成不需编辑的场景；qwen-image-2.0-pro 支持负向提示词和多张变体。
 
-百炼提供多层次的图像多模态能力：
+### 视频生成
 
-- **通用文生图**：万相 2.7（推荐）、Z-Image、千问-文生图，支持中文语义、多尺寸、风格控制
-- **图像编辑**：万相-通用图像编辑 2.5/2.7，支持按自然语言指令局部修改
-- **创意工具**：虚拟模特、AI 试衣、创意海报、图像背景生成等垂类接口
+视频生成 API 覆盖文生视频、图生视频、参考生视频、视频编辑、数字人等场景，底层模型包括万相（Wan）、HappyHorse、Pixverse、Vidu、Kling 等。所有接口采用[异步调用](async-invocation.md)模式（创建任务 → 轮询获取），单次生成通常耗时 1-5 分钟。
 
-调用协议分两种：OpenAI 兼容模式（同步）和 DashScope 原生异步模式（提交任务 → 轮询结果）。
+### 3D 生成
 
-## 视频生成
+基于 Tripo 模型实现文生 3D、单图生 3D 和多图生 3D，产出带 PBR 材质贴图的 GLB 模型。同样采用[异步调用](async-invocation.md)模式，仅限北京地域使用。
 
-视频生成全部采用异步调用模式，统一流程为创建任务后轮询 `task_id` 获取结果，处理时间通常 1-5 分钟。
+## 多模态检索与排序
 
-**主要能力**：文生视频、图生视频（首帧/首尾帧）、参考生视频（保持角色一致性）、视频编辑、动作迁移、数字人。万相 2.7 是当前推荐版本，支持多模态输入（文本、图像、音频、视频混合）和多镜头叙事。
+多模态向量模型（qwen3-vl-embedding）将文本、图像和视频映射到同一语义空间，支持跨模态检索。向量类型分为独立向量（逐项对比）和融合向量（综合理解多模态内容）。
 
-## 3D 生成
+多模态排序模型（qwen3-vl-rerank）可对文本、图片、视频混合的候选文档进行相关性排序，最多支持 100 条文本、40 张图片或 4 段视频的单次排序请求，适用于 RAG 流程中的精排阶段。
 
-基于 Tripo 模型，支持文生 3D、单图生 3D、多图生 3D，输出 GLB 格式 PBR 材质模型。同样采用异步调用，建议轮询间隔 15 秒。仅限华北2（北京）地域。
+## 调用方式差异
 
-## 关键开发要点
+不同多模态能力的调用方式有所不同：
 
-1. **协议选择**：实时交互走 WebSocket；图像/视频/3D 生成多为异步 REST（`X-DashScope-Async: enable`）；部分图像接口支持 OpenAI 兼容同步调用
-2. **鉴权统一**：所有接口使用 `Authorization: Bearer <API_KEY>`，[API Key](api-key.md) 在百炼控制台获取
-3. **图片传输**：输入支持公网 URL 或 Base64，输出为临时 URL（需及时下载）
-4. **Prompt 技巧**：不同模态的 Prompt 设计有各自最佳实践——文生图侧重「主体 + 场景 + 风格」，文生视频增加「运动 + 运镜」，万相 2.7 还支持多镜头分镜描述
-5. **地域限制**：3D 生成、部分第三方视频模型（PixVerse、Vidu、可灵）仅限北京地域
+| 能力类型 | 调用方式 | 响应模式 |
+|----------|----------|----------|
+| 多模态理解（视觉） | [OpenAI 兼容接口](openai-compatible-interface.md) / [DashScope SDK](dashscope-sdk.md) | 同步流式 |
+| 实时交互 | WebSocket 长连接 | 双向实时 |
+| 图像/视频/3D 生成 | HTTP REST + 异步头 | 异步轮询 |
+| 向量与排序 | [OpenAI 兼容接口](openai-compatible-interface.md) / [DashScope SDK](dashscope-sdk.md) | 同步 |
+
+开发者在接入多模态能力时需注意：模型、Endpoint URL 与 API Key 必须属于同一地域，跨地域调用会失败。推荐使用[业务空间](workspace.md)专属域名（`{WorkspaceId}.cn-beijing.maas.aliyuncs.com`）以获得更好的性能与稳定性。
 
 ## 关联主题页
 
 - [omni realtime api](../api/omni-realtime-api.md)
 - [model experience](../guides/model-experience.md)
-- [image generation](../api/image-generation.md)
 - [video generation api](../api/video-generation-api.md)
-- [use cases](../guides/use-cases.md)
+- [image generation](../api/image-generation.md)
 - [3d generation](../api/3d-generation.md)
+- [vector and sort](../api/vector-and-sort.md)
 
 

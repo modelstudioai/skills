@@ -1372,6 +1372,28 @@ qwen3.7-plus
 
 24元
 
+qwen3.7-plus-us
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+美国
+
+0<Token≤256K
+
+2.998元
+
+11.991元
+
+11.991元
+
+256K<Token≤1M
+
+8.993元
+
+35.972元
+
+35.972元
+
 qwen3.7-plus-2026-05-26
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣

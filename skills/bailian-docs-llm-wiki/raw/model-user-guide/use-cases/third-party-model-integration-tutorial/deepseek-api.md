@@ -456,6 +456,62 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
+## Anthropic兼容
+
+## Python
+
+### **示例代码**
+
+```
+import anthropic
+import os
+
+client = anthropic.Anthropic(
+    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
+)
+
+message = client.messages.create(
+    model="deepseek-v4-pro",
+    max_tokens=1024,
+    messages=[
+        {"role": "user", "content": "你是谁"}
+    ],
+    stream=True,
+)
+
+for event in message:
+    if event.type == "content_block_delta":
+        if hasattr(event.delta, "thinking"):
+            print(event.delta.thinking, end="", flush=True)
+        if hasattr(event.delta, "text"):
+            print(event.delta.text, end="", flush=True)
+```
+
+## HTTP
+
+### **示例代码**
+
+## curl
+
+```
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-H "anthropic-version: 2023-06-01" \
+-d '{
+    "model": "deepseek-v4-pro",
+    "max_tokens": 1024,
+    "messages": [
+        {
+            "role": "user",
+            "content": "你是谁"
+        }
+    ]
+}'
+```
+
 ## **推理强度（reasoning\_effort）**
 
 deepseek-v4-pro 和 deepseek-v4-flash 默认开启思考模式。通过`reasoning_effort`参数可以调整推理强度，可选值为`high`和`max`，默认为`high`。
@@ -931,7 +987,7 @@ DeepSeek 模型仅支持文本输入，不支持图片或文档输入。如需�
     
 2.  通过API或客户端（如Chatbox）调用模型：请参考本文内容。
     
-3.  0代码构建大模型应用：请参考[智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)或[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)。
+3.  0代码构建大模型应用：请参考[智能体应用（Agent 1.0）](https://help.aliyun.com/zh/model-studio/single-agent-application)或[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)。
     
 
 如需自行部署DeepSeek，请参考[技术解决方案](https://www.aliyun.com/solution/tech-solution/deepseek-r1-for-platforms)。

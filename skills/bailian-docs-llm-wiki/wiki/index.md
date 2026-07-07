@@ -48,7 +48,7 @@
 - [knowledge](api/knowledge.md) — 1 篇源文档
 - [long term memory new](api/long-term-memory-new.md) — 1 篇源文档
 - [managed agents api](api/managed-agents-api.md) — 7 篇源文档
-- [model production](api/model-production.md) — 3 篇源文档
+- [model production](api/model-production.md) — 2 篇源文档
 - [more](api/more.md) — 3 篇源文档
 - [more about models](api/more-about-models.md) — 6 篇源文档
 - [more models](api/more-models.md) — 6 篇源文档
@@ -61,22 +61,22 @@
 
 ## 横切概念
 
-- [上下文窗口](concepts/context-window.md) — 关联 4 个主题
-- [函数调用](concepts/function-calling.md) — 关联 6 个主题
-- [向量嵌入](concepts/embedding.md) — 关联 5 个主题
-- [工作流](concepts/workflow.md) — 关联 5 个主题
-- [提示词工程](concepts/prompt-engineering.md) — 关联 5 个主题
-- [模型调优](concepts/fine-tuning.md) — 关联 5 个主题
-- [流式输出](concepts/streaming-output.md) — 关联 5 个主题
-- [重排序](concepts/rerank.md) — 关联 3 个主题
-- [限流与配额](concepts/rate-limiting.md) — 关联 5 个主题
+- [API Key 鉴权](concepts/api-key.md) — 关联 8 个主题
+- [DashScope SDK](concepts/dashscope-sdk.md) — 关联 6 个主题
+- [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 7 个主题
+- [Token 计量](concepts/token.md) — 关联 6 个主题
+- [业务空间](concepts/workspace.md) — 关联 6 个主题
+- [函数调用（Function Calling）](concepts/function-calling.md) — 关联 6 个主题
+- [多模态](concepts/multimodal.md) — 关联 6 个主题
+- [异步调用](concepts/async-invocation.md) — 关联 4 个主题
+- [检索增强生成（RAG）](concepts/rag.md) — 关联 6 个主题
+- [流式输出](concepts/streaming.md) — 关联 5 个主题
 
 ## 对比分析
 
-- [应用评测与应用监控对比](comparisons/application-evaluation-vs-monitoring.md) — 对比 2 个主题
-- [应用调用方式对比](comparisons/application-call-vs-bailian-calling.md) — 对比 2 个主题
-- [微调与模型压缩对比](comparisons/fine-tuning-vs-compression.md) — 对比 2 个主题
-- [模型评测与模型监控对比](comparisons/model-evaluation-vs-monitoring.md) — 对比 2 个主题
-- [模型部署与高速推理对比](comparisons/model-deployment-vs-inference.md) — 对比 2 个主题
-- [知识库与记忆库对比](comparisons/knowledge-base-vs-memory-library.md) — 对比 2 个主题
+- [多模态内容生成 API 对比](comparisons/multimodal-generation-comparison.md) — 对比 3 个主题
+- [应用监控与模型监控对比](comparisons/app-vs-model-monitoring.md) — 对比 2 个主题
+- [应用评测与模型评测对比](comparisons/app-vs-model-evaluation.md) — 对比 2 个主题
+- [模型优化方案对比：微调、压缩与高速推理](comparisons/model-optimization-comparison.md) — 对比 3 个主题
+- [知识库与记忆库对比](comparisons/knowledge-vs-memory.md) — 对比 2 个主题
 

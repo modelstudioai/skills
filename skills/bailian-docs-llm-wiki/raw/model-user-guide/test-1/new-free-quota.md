@@ -45,9 +45,9 @@
 
 可通过以下两种方式查看模型的免费额度。
 
-#### 方式一：通过模型用量查看
+#### 方式一：通过免费额度页面查看
 
-在控制台的[模型用量](https://bailian.console.aliyun.com/?tab=model#/model-usage/free-quota)页面，点击**免费额度**页签，查看所有模型的免费额度余量及过期时间。
+在控制台的[免费额度](https://bailian.console.aliyun.com/?tab=costing-balance#/costing-balance/free-quota)页面，查看所有模型的免费额度余量及过期时间。可按模型类型筛选或搜索模型。
 
 #### 方式二：通过模型广场查看
 
@@ -80,18 +80,18 @@
 
 #### 如何开启
 
-##### 方式一：在模型用量页面开启
+##### 方式一：在免费额度页面开启
 
 **为单个模型开启：**
 
-1.  在控制台的[模型用量](https://bailian.console.aliyun.com/?tab=model#/model-usage/free-quota)页面，点击**免费额度**页签。
+1.  在控制台的[免费额度](https://bailian.console.aliyun.com/?tab=costing-balance#/costing-balance/free-quota)页面。
     
 2.  在列表中找到目标模型，在其右侧操作列开启**免费额度用完即停**开关（无免费额度的模型无法开启）。
     
 
 **批量开启：**
 
-1.  在控制台的[模型用量](https://bailian.console.aliyun.com/?tab=model#/model-usage/free-quota)页面，点击**免费额度**页签。
+1.  在控制台的[免费额度](https://bailian.console.aliyun.com/?tab=costing-balance#/costing-balance/free-quota)页面。
     
 2.  点击**批量操作免费额度用完即停**，在下拉菜单中选择**批量开启**。
     
@@ -108,9 +108,7 @@
 
 #### 如何关闭
 
-该功能默认关闭。若已启用**免费额度用完即停**，需等到控制台显示**免费额度用完**后才可关闭。
-
-> 控制台显示的免费额度为分钟级更新（需手动刷新页面）。
+该功能默认关闭。开启后可随时关闭，无需等到免费额度用完。可在免费额度页面操作列关闭单个模型的**免费额度用完即停**开关，或经批量操作下拉菜单选择**批量关闭**。
 
 ## 常见问题
 
@@ -118,7 +116,7 @@
 
 有通知。余量降至 20% 或完全耗尽时，系统通过短信、站内信、邮件发送通知。
 
-如需开启或关闭预警、修改预警比例，请前往[我的试用](https://billing-cost.console.aliyun.com/home/myfreetier)进行设置。找到试用规格描述为**百炼大模型推理免费试用**，单击**查看试用详情**，再单击右上角**配置余量到期预警规则**即可修改。
+如需开启或关闭预警、修改预警比例，请前往[我的试用](https://billing-cost.console.aliyun.com/home/myfreetier)进行设置。找到试用规格描述为**百炼大模型推理免费试用**，单击**查看试用详情**，再配置余量到期预警规则即可修改。
 
 ### 免费额度用完会有什么影响？
 
@@ -126,26 +124,26 @@
 
 **对于已认证用户：**
 
--   若已开启[免费额度用完即停](https://bailian.console.aliyun.com/?tab=model#/model-usage/free-quota)，免费额度用完后无法继续调用，需要关闭[免费额度用完即停](https://bailian.console.aliyun.com/?tab=model#/model-usage/free-quota)方可继续按量付费。
+-   若已开启[免费额度用完即停](https://bailian.console.aliyun.com/?tab=costing-balance#/costing-balance/free-quota)，免费额度用完后无法继续调用，需要关闭[免费额度用完即停](https://bailian.console.aliyun.com/?tab=costing-balance#/costing-balance/free-quota)方可继续按量付费。
     
--   若未开启[免费额度用完即停](https://bailian.console.aliyun.com/?tab=model#/model-usage/free-quota)，正在进行的调用不会中断，超出额度的Token将按控制台中的输入/输出价格计费，费用以按量后付费方式从阿里云账户扣除，可能导致账户欠费。
+-   若未开启[免费额度用完即停](https://bailian.console.aliyun.com/?tab=costing-balance#/costing-balance/free-quota)，正在进行的调用不会中断，超出额度的Token将按控制台中的输入/输出价格计费，费用以按量后付费方式从阿里云账户扣除，可能导致账户欠费。
     
 
 账户欠费时，即使其他模型仍有免费额度也无法调用。
 
-调用前建议查询该模型剩余额度，并配置[预算管理](https://help.aliyun.com/zh/user-center/how-to-manage-a-budget)或[账号余额预警](https://help.aliyun.com/zh/user-center/monitor-account-balances)，确保账户有充足[余额](https://usercenter2.aliyun.com/home)，未使用的余额支持[余额提现](https://help.aliyun.com/zh/user-center/balance-withdrawal)。
+调用前建议查询该模型剩余额度，并配置[预算管理](https://help.aliyun.com/zh/user-center/how-to-manage-a-budget)或[账号余额预警](https://help.aliyun.com/zh/user-center/monitor-account-balances)，确保账户有充足[余额](https://billing-cost.console.aliyun.com/home)，未使用的余额支持[余额提现](https://help.aliyun.com/zh/user-center/balance-withdrawal)。
 
 ### 免费额度用完后如何充值？
 
 阿里云支持支付宝、银联在线支付、网银等多种充值方式，具体可用方式以账号[充值界面](https://billing-cost.console.aliyun.com/fortune/fund-management/recharge)展示为准。更多信息请参考[充值方式介绍](https://help.aliyun.com/zh/user-center/use-alipay-online-banking-to-recharge-online#8e4f4cdcf42rl)。
 
-充值完成后，账户余额可能有几分钟的更新延迟，请稍后前往[费用与成本](https://usercenter2.aliyun.com/home)查看可用余额。余额到账且无欠费时即可正常调用模型。
+充值完成后，账户余额可能有几分钟的更新延迟，请稍后前往[费用与成本](https://billing-cost.console.aliyun.com/home)查看可用余额。余额到账且无欠费时即可正常调用模型。
 
 ### 如何查看免费额度消耗记录或账单？
 
 调用结束**几分钟**后即可生成消耗记录。查询步骤：
 
-1.  在[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)页面，选择账单月份，**产品名称**选择**大模型服务平台百炼**，单击**搜索**。
+1.  在[账单详情](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail)页面，选择账单月份，**产品名称**选择**大模型服务平台百炼**，单击**搜索**。
     
 2.  单击账单列表右上角的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1247144771/p1062109.png)图标，找到**用量信息**，勾选**抵扣用量**，单击**确定**。
     
@@ -167,7 +165,7 @@
 
 ### 如何查看产生费用的模型？
 
-调用结束**几分钟后**，在[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)页面，选择账单月份，**商品名称**选择**阿里云百炼大模型推理**，单击**搜索**。在资产/资源实例ID 列查看产生费用的模型。
+调用结束**几分钟后**，在[账单详情](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail)页面，选择账单月份，**商品名称**选择**阿里云百炼大模型推理**，单击**搜索**。在资产/资源实例ID （出账粒度）列查看产生费用的模型。
 
 ### 如何查看模型调用记录？
 
@@ -183,14 +181,14 @@
 
 -   删除已创建的 API-Key：进入阿里云百炼的[API-Key（北京）](https://bailian.console.aliyun.com/?apiKey=1&tab=globalset#/efm/api_key)或[API-Key（新加坡）](https://modelstudio.console.aliyun.com/?tab=globalset#/efm/api_key)页面，删除已创建的 API-Key。删除后将无法通过API调用模型，不再产生调用费用。
     
--   设置[高额消费预警](https://usercenter2.aliyun.com/home/alarm-threshold)：当产品日账单超过预警阈值时，每天短信提醒一次（统计截止昨日24点）。
+-   设置[高额消费预警](https://billing-cost.console.aliyun.com/home/alarm-threshold)：当产品日账单超过预警阈值时，每天短信提醒一次（统计截止昨日24点）。
     
     在**预警产品**下拉框中选择具体产品（如**百炼大模型部署**、**百炼大模型推理**、**百炼大模型训练**），在**预警阈值**输入框中填写金额（如`0.01`），然后单击**增加**即可添加预警规则。
     
 
 ### 还有剩余额度，为何调用失败？
 
-请检查[阿里云账户](https://usercenter2.aliyun.com/home?spm=a2c4g.11186623.nav-v2-dropdown-my-aliyun.9.f6683048dWvpGu)是否欠费。账户欠费时，即使模型仍有免费额度也无法调用。
+请检查[阿里云账户](https://billing-cost.console.aliyun.com/home?spm=a2c4g.11186623.nav-v2-dropdown-my-aliyun.9.f6683048dWvpGu)是否欠费。账户欠费时，即使模型仍有免费额度也无法调用。
 
 ### 为什么看不到免费额度与有效期？
 

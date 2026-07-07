@@ -1,10 +1,10 @@
 # video generation api
 
-百炼平台提供多套视频生成异步 API，覆盖文生视频、图生视频、参考生视频、视频编辑、关键帧生视频、数字人、动作生成、风格转换等场景。底层模型包括万相（Wan）系列、HappyHorse、Pixverse、Vidu、Kling、AnimateAnyone、LivePortrait、EMO、Emoji 等。所有接口均采用「创建任务 → 轮询获取」的异步调用模式，单次请求耗时通常在 1–5 分钟。
+百炼平台提供多套视频生成异步 API，覆盖文生视频、图生视频、参考生视频、视频编辑、关键帧生视频、数字人、动作生成、风格转换等场景。底层模型包括万相（Wan）系列、HappyHorse、Pixverse、Vidu、Kling、AnimateAnyone、LivePortrait、EMO、Emoji 等。所有接口均采用「创建任务 → 轮询获取」的[异步调用](../concepts/async-invocation.md)模式，单次请求耗时通常在 1–5 分钟。
 
 ## 调用模式
 
-视频生成任务耗时较长，API 统一采用异步调用，流程分两步：
+视频生成任务耗时较长，API 统一采用[异步调用](../concepts/async-invocation.md)，流程分两步：
 
 1. **创建任务**：`POST /api/v1/services/aigc/video-generation/video-synthesis`（不同模型 endpoint 路径略有差异），携带 `X-DashScope-Async: enable` 头，返回 `task_id`。
 2. **轮询获取**：`GET /api/v1/tasks/{task_id}`，根据 `output.task_status`（`PENDING` / `RUNNING` / `SUCCEEDED` / `FAILED` / `CANCELED`）判断结果，成功后从 `output.video_url` 取视频地址。
@@ -12,10 +12,10 @@
 ### 地域与域名
 
 - 必须保证模型、Endpoint URL、API Key 属于**同一地域**，跨地域调用会失败。
-- 华北2（北京）、新加坡地域推荐使用业务空间专属域名以获得更好性能与稳定性：
+- 华北2（北京）、新加坡地域推荐使用[业务空间](../concepts/workspace.md)专属域名以获得更好性能与稳定性：
   - 北京：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
   - 新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-- `{WorkspaceId}` 在百炼控制台「业务空间详情」页查看，旧域名 `dashscope.aliyuncs.com` / `dashscope-intl.aliyuncs.com` 仍可用。
+- `{WorkspaceId}` 在百炼控制台「[业务空间](../concepts/workspace.md)详情」页查看，旧域名 `dashscope.aliyuncs.com` / `dashscope-intl.aliyuncs.com` 仍可用。
 
 ### 鉴权
 
@@ -172,6 +172,7 @@ curl -X GET "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 - [万相-参考生视频API参考（2.6）](../../raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-wan-reference-to-video-api-reference.md)
 - [万相-首尾帧生视频API参考（2.2）](../../raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-by-first-and-last-frame-api-reference.md)
 - [万相-视频编辑API参考（2.1）](../../raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-wanx-vace-api-reference.md)
+
 
 
 

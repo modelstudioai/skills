@@ -15,6 +15,10 @@
 4.  License模式[产品计费](https://help.aliyun.com/zh/model-studio/product-billing)
     
 
+**说明**
+
+当前最新SDK版本：v1.3.0
+
 -   已适配的硬件列表
     
 
@@ -28,17 +32,13 @@
 
 **芯片平台**
 
-**发布版本**
-
 1
 
 安凯
 
 V500
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/mravan/qwen_sdk_core_anykav500_v1.2.1_7793d6e_800260.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/yswomu/qwen_sdk_core_anykav500_v1.3.0_22bcf3f_830783.tar.gz)
 
 2
 
@@ -46,9 +46,7 @@ v1.2.1
 
 AiW626X
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/vwldcs/qwen_sdk_core_aiw626x_v1.2.1_7793d6e_800260.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/sjneed/qwen_sdk_core_aiw626x_v1.3.0_22bcf3f_830783.tar.gz)
 
 3
 
@@ -56,9 +54,7 @@ v1.2.1
 
 ASR1606
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/zqvxcr/qwen_sdk_core_asr1606_v1.2.1_0d0164d_800452.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/guivxo/qwen_sdk_core_asr1606_v1.3.0_22bcf3f_830776.tar.gz)
 
 4
 
@@ -66,21 +62,15 @@ v1.2.1
 
 BL616CL
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/qplevj/qwen_sdk_core_bl616cl_v1.2.1_7793d6e_800260.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/gwcgji/qwen_sdk_core_bl616cl_v1.3.0_22bcf3f_830783.tar.gz)
 
 BK7252
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/ngkxlk/qwen_sdk_core_bk7252_v1.2.1_7793d6e_800260.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/rvauch/qwen_sdk_core_bk7252_v1.3.0_22bcf3f_830783.tar.gz)
 
 BK7258
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/kobqxp/qwen_sdk_core_bk7258_v1.2.1_7793d6e_800260.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/fwewrl/qwen_sdk_core_bk7258_v1.3.0_22bcf3f_830783.tar.gz)
 
 5
 
@@ -88,15 +78,11 @@ v1.2.1
 
 LM600
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/hfxjmh/qwen_sdk_core_lm600_v1.2.1_7793d6e_800260.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/dqvuce/qwen_sdk_core_lm600_v1.3.0_22bcf3f_830783.tar.gz)
 
 LM620
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/rpxvnp/qwen_sdk_core_lm620_v1.2.1_7793d6e_800260.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/bsfrap/qwen_sdk_core_lm620_v1.3.0_22bcf3f_830783.tar.gz)
 
 6
 
@@ -104,21 +90,23 @@ v1.2.1
 
 AV100
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/onkjhn/qwen_sdk_core_av100_v1.2.1_7793d6e_800260.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/rxcore/qwen_sdk_core_av100_v1.3.0_22bcf3f_830783.tar.gz)
 
 AV200
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/vtfqwa/qwen_sdk_core_av200_v1.2.1_7793d6e_800260.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/yftpur/qwen_sdk_core_av200_v1.3.0_22bcf3f_830784.tar.gz)
 
 Hi3516CV610
 
-v1.2.1
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/dxezrf/qwen_sdk_core_hi3516cv610_v1.3.0_22bcf3f_830784.tar.gz)
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/vzizzs/qwen_sdk_core_hi3516cv610_v1.2.1_7793d6e_800260.tar.gz)
+7
+
+恒玄
+
+WS53
+
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/fwonme/qwen_sdk_core_ws53_v1.3.0_22bcf3f_830784.tar.gz)
 
 6
 
@@ -126,21 +114,15 @@ v1.2.1
 
 AC7911
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/ofpbmy/qwen_sdk_core_ac7911_v1.2.1_7793d6e_800260.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/occlwd/qwen_sdk_core_ac7911_v1.3.0_22bcf3f_830784.tar.gz)
 
 AC792X
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/mvttvk/qwen_sdk_core_ac792x_v1.2.1_7793d6e_800260.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/oehxov/qwen_sdk_core_ac792x_v1.3.0_22bcf3f_830784.tar.gz)
 
 JL7014
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/szveox/qwen_sdk_core_jl7014_v1.2.1_7793d6e_800260.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/nxmvis/qwen_sdk_core_jl7014_v1.3.0_22bcf3f_830784.tar.gz)
 
 7
 
@@ -148,21 +130,15 @@ v1.2.1
 
 G32S10M
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/lqhlbh/qwen_sdk_core_g32s10m_v1.2.1_7793d6e_800261.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/ryzfbc/qwen_sdk_core_g32s10m_v1.3.0_22bcf3f_830784.tar.gz)
 
 T23
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/zaypmp/qwen_sdk_core_t23_v1.2.1_7793d6e_800261.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/yuphho/qwen_sdk_core_t23_v1.3.0_22bcf3f_830784.tar.gz)
 
 T41
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/vrcfwp/qwen_sdk_core_t41_v1.2.1_7793d6e_800261.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/qiwwdq/qwen_sdk_core_t41_v1.3.0_22bcf3f_830784.tar.gz)
 
 8
 
@@ -170,15 +146,11 @@ v1.2.1
 
 ESP32
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260609/mrxfsv/qwen_sdk_core_esp32_v1.2.1_0d0164d_809947.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/qahtbd/qwen_sdk_core_esp32_v1.3.0_22bcf3f_833235.tar.gz)
 
 ESP32S3
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260609/uljqro/qwen_sdk_core_esp32s3_v1.2.1_0d0164d_809943.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/wjeblr/qwen_sdk_core_esp32s3_v1.3.0_22bcf3f_833235.tar.gz)
 
 9
 
@@ -186,33 +158,23 @@ v1.2.1
 
 F133
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/mcxzgb/qwen_sdk_core_f133_v1.2.1_7793d6e_800261.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/bkskvs/qwen_sdk_core_f133_v1.3.0_22bcf3f_830784.tar.gz)
 
 R128
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/mravan/qwen_sdk_core_anykav500_v1.2.1_7793d6e_800260.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/zzjedt/qwen_sdk_core_r128_v1.3.0_22bcf3f_830784.tar.gz)
 
 V821
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/hbndtu/qwen_sdk_core_v821_v1.2.1_7793d6e_800261.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/soaatk/qwen_sdk_core_v821_v1.3.0_22bcf3f_830784.tar.gz)
 
 V853
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/ahztms/qwen_sdk_core_v853_v1.2.1_7793d6e_800261.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/lmfflv/qwen_sdk_core_v853_v1.3.0_22bcf3f_830785.tar.gz)
 
 XR872
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/jescgy/qwen_sdk_core_xr872_v1.2.1_7793d6e_800261.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/rovsjq/qwen_sdk_core_xr872_v1.3.0_22bcf3f_830785.tar.gz)
 
 10
 
@@ -220,21 +182,15 @@ v1.2.1
 
 RK3506
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/zcznyv/qwen_sdk_core_rk3506_v1.2.1_7793d6e_800261.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/qogizw/qwen_sdk_core_rk3506_v1.3.0_22bcf3f_830785.tar.gz)
 
 RK3588
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/akjauh/qwen_sdk_core_rk3588_v1.2.1_7793d6e_800261.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/ahmkbd/qwen_sdk_core_rk3588_v1.3.0_22bcf3f_830785.tar.gz)
 
 RV1103
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/wlxxwp/qwen_sdk_core_rv1103_v1.2.1_7793d6e_800261.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/nljzny/qwen_sdk_core_rv1103_v1.3.0_22bcf3f_830785.tar.gz)
 
 11
 
@@ -242,15 +198,11 @@ v1.2.1
 
 RTL8711
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/ojeulx/qwen_sdk_core_rtl8711_v1.2.1_7793d6e_800261.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/vplboh/qwen_sdk_core_rtl8711_v1.3.0_22bcf3f_830785.tar.gz)
 
 RTL8721
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/evfkxy/qwen_sdk_core_rtl8721_v1.2.1_7793d6e_800261.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/xwyrct/qwen_sdk_core_rtl8721_v1.3.0_22bcf3f_830785.tar.gz)
 
 12
 
@@ -258,15 +210,11 @@ v1.2.1
 
 VELA\_V7A
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/nthifs/qwen_sdk_core_vela_v7a_v1.2.1_7793d6e_800261.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/psjnsu/qwen_sdk_core_vela_v7a_v1.3.0_22bcf3f_830785.tar.gz)
 
 VELA\_V8A
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/vedrcq/qwen_sdk_core_vela_v8a_v1.2.1_7793d6e_800261.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/khbmch/qwen_sdk_core_vela_v8a_v1.3.0_22bcf3f_830785.tar.gz)
 
 13
 
@@ -274,9 +222,7 @@ v1.2.1
 
 XMW718
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/tdvtuj/qwen_sdk_core_xmw718_v1.2.1_7793d6e_800261.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/psfwlw/qwen_sdk_core_xmw718_v1.3.0_22bcf3f_830785.tar.gz)
 
 14
 
@@ -284,15 +230,11 @@ v1.2.1
 
 SSC305DE
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/anvrdl/qwen_sdk_core_ssc305de_v1.2.1_7793d6e_800262.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/clyiun/qwen_sdk_core_ssc305de_v1.3.0_22bcf3f_830785.tar.gz)
 
 SSC309QL
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/wijiks/qwen_sdk_core_ssc309ql_v1.2.1_7793d6e_800262.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/zfuiix/qwen_sdk_core_ssc309ql_v1.3.0_22bcf3f_830785.tar.gz)
 
 15
 
@@ -300,9 +242,7 @@ v1.2.1
 
 XY4100LC
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/nstjza/qwen_sdk_core_xy4100lc_v1.2.1_0d0164d_800454.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/nsxavi/qwen_sdk_core_xy4100lc_v1.3.0_22bcf3f_830778.tar.gz)
 
 16
 
@@ -310,41 +250,39 @@ v1.2.1
 
 EC718PM
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/zqnasv/qwen_sdk_core_ec718pm_v1.2.1_0d0164d_800458.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/pqjitg/qwen_sdk_core_ec718pm_v1.3.0_22bcf3f_830782.tar.gz)
 
 17
 
 中国移动
 
+ML307H
+
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/varhsw/qwen_sdk_core_ml307h_v1.3.0_22bcf3f_830786.tar.gz)
+
 ML307N
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/drahpc/qwen_sdk_core_ml307n_v1.2.1_0d0164d_800456.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/afqoaw/qwen_sdk_core_ml307n_v1.3.0_22bcf3f_830780.tar.gz)
 
 18
 
 紫光展锐
 
-UIS8910
+UIS8910(ARMCC)
 
-v1.2.1
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/rjdxqr/qwen_sdk_core_uis8910_v1.3.0_22bcf3f_830783.tar.gz)
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/luondz/qwen_sdk_core_uis8910_v1.2.1_0d0164d_800460.tar.gz)
+UIS8910(GCC)
+
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/wbqgdm/qwen_sdk_core_uis8910_bn_v1.3.0_22bcf3f_830786.tar.gz)
 
 UMS9117
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/mvwwrz/qwen_sdk_core_ums9117_v1.2.1_0d0164d_800464.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/yqkscr/qwen_sdk_core_ums9117_v1.3.0_22bcf3f_830784.tar.gz)
 
 W217
 
-v1.2.1
-
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260529/tlktzs/qwen_sdk_core_W217_v1.2.1_0d0164d_800470.tar.gz)
+[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/medzgn/qwen_sdk_core_w217_v1.3.0_22bcf3f_830786.tar.gz)
 
 ## 1\. 接入模式说明
 
@@ -1645,10 +1583,9 @@ c_mmi_storage_set_api_key("Your ApiKey");
  * 
  * @param buffer 用于存储生成的注册字符串的缓冲区
  * @param buffer_size 缓冲区大小
- * @param time_ms_str 时间戳字符串，单位为毫秒
  * @return int32_t 返回操作结果，0表示成功，非0表示失败
  */
-int32_t c_license_gen_register_str(char *buffer, uint32_t buffer_size, char *time_ms_str);
+int32_t c_license_gen_register_str_v2(char *buffer, uint32_t buffer_size);
 
 /**
  * @brief 解析云端的设备注册响应信息。
@@ -1667,12 +1604,10 @@ int32_t c_license_analyze_register_rsp(char *rsp_str);
 #define REQ_BUFFER_SIZE  (1024)
 
 char req[REQ_BUFFER_SIZE];
-char time_ms_str[14];
 
 if (c_license_device_is_registered() == 0) {
-    snprintf(time_ms_str, sizeof(time_ms_str), "%" PRId64, util_get_timestamp());
     // 根据时间戳timestamp，生成注册信息字串req
-    c_license_gen_register_str(req, sizeof(req), time_ms_str);
+    c_license_gen_register_str_v2(req, sizeof(req));
     // 获取设备注册信息，http接口需客户自行实现
     char *rsp = dummy_http_request(req);
     // 解析并完成注册
@@ -1740,7 +1675,7 @@ if (c_license_device_is_registered() == 0) {
  * 
  * @return uint8_t 返回1表示token有效，0表示token已过期。
  */
-uint8_t c_license_is_token_expire(void);
+uint8_t c_license_is_token_expire_v2(void);
 
 /**
  * @brief 生成获取token的请求数据。
@@ -1749,11 +1684,10 @@ uint8_t c_license_is_token_expire(void);
  *
  * @param buffer 用于存储生成的请求字符串的缓冲区
  * @param buffer_size 缓冲区的大小
- * @param time_ms_str 时间戳字符串，单位为毫秒
  * @param api_key API密钥字符串，半托管模式api_key设置为NULL
  * @return int32_t 返回操作结果，0表示成功，非0表示失败
  */
-int32_t c_license_gen_get_token_str(char *buffer, uint32_t buffer_size, char *time_ms_str, char *api_key);
+int32_t c_license_gen_get_token_str_v2(char *buffer, uint32_t buffer_size, char *api_key);
 
 /**
  * @brief 解析登录响应数据。
@@ -1776,16 +1710,14 @@ int32_t c_license_analyze_get_token_rsp(char *rsp_str);
 #define REQ_BUFFER_SIZE  (1024)
 
 char req[REQ_BUFFER_SIZE];
-char time_ms_str[14];
 char api_key[36] = { 0 };
 
-snprintf(time_ms_str, sizeof(time_ms_str), "%" PRId64, util_get_timestamp());
 c_mmi_storage_get_api_key(api_key);
 // 根据服务端下发时间戳timestamp，生成注册信息字串req
 // 使用全托管模式必须要有api_key
-c_license_gen_get_token_str(req, sizeof(req), time_ms_str, api_key);
+c_license_gen_get_token_str_v2(req, sizeof(req), api_key);
 // 使用半托管模式可以传入NULL
-// c_license_gen_get_token_str(req, sizeof(req), time_ms_str, NULL);
+// c_license_gen_get_token_str_v2(req, sizeof(req), NULL);
 // 获取服务端返回设备信息，该接口需客户自行实现
 char *rsp = dummy_http_request(req);
 // 解析交互令牌

@@ -2,6 +2,34 @@
 
 选择适合文生图、图片编辑等场景的模型。
 
+## 从闭源模型迁移到百炼?
+
+如果你正在使用 Nano Banana、GPT Image、Midjourney 或 Seedream，可参考下表选择对应的百炼模型。
+
+**能力档位**
+
+**闭源模型代表**
+
+**百炼推荐**
+
+高质量
+
+Nano Banana Pro、GPT Image、Seedream 4.0
+
+`wan2.7-image-pro`、`qwen-image-2.0-pro`
+
+平衡
+
+Imagen 4 Ultra、Midjourney v7
+
+`wan2.7-image`、`qwen-image-2.0`
+
+快速低成本
+
+FLUX.2
+
+`z-image-turbo`
+
 ## 文生图
 
 推荐使用`wan2.7-image-pro`，它在一个模型中集成了文字渲染、品牌色控制、角色一致性多图生成以及图片编辑功能。文生图最高支持4096x4096分辨率，图片编辑最高支持2048x2048分辨率。详细使用方法请参见[文本生成图像](https://help.aliyun.com/zh/model-studio/text-to-image)。
@@ -32,7 +60,7 @@
 
 ## 推荐模型
 
-**模型ID**
+**模型 ID（Model ID）**
 
 **适用场景**
 
@@ -108,7 +136,7 @@ qwen-image-2.0-pro的快速版本
 
 ### Wan
 
-**模型ID**
+**模型 ID（Model ID）**
 
 **文生图**
 
@@ -234,7 +262,7 @@ qwen-image-2.0-pro的快速版本
 
 ### Qwen Image
 
-**模型ID**
+**模型 ID（Model ID）**
 
 **文生图**
 
@@ -245,6 +273,16 @@ qwen-image-2.0-pro的快速版本
 **最大分辨率**
 
 `qwen-image-2.0-pro`
+
+支持
+
+支持
+
+6
+
+2048x2048
+
+`qwen-image-2.0-pro-2026-06-22`
 
 支持
 
@@ -406,7 +444,7 @@ qwen-image-2.0-pro的快速版本
 
 ### Z-Image
 
-**模型ID**
+**模型 ID（Model ID）**
 
 **文生图**
 

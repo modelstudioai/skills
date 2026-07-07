@@ -803,11 +803,77 @@ String\[\]
         
     -   ja: 日语
         
+    -   ko：韩语
+        
+    -   vi：越南语
+        
+    -   th：泰语
+        
+    -   id：印尼语
+        
+    -   ms：马来语
+        
+    -   tl：菲律宾语
+        
+    -   hi：印地语
+        
+    -   ar：阿拉伯语
+        
+    -   fr：法语
+        
+    -   de：德语
+        
+    -   es：西班牙语
+        
+    -   pt：葡萄牙语
+        
+    -   ru：俄语
+        
+    -   it：意大利语
+        
+    -   nl：荷兰语
+        
+    -   sv：瑞典语
+        
+    -   da：丹麦语
+        
+    -   fi：芬兰语
+        
+    -   no：挪威语
+        
+    -   el：希腊语
+        
+    -   pl：波兰语
+        
+    -   cs：捷克语
+        
+    -   hu：匈牙利语
+        
+    -   ro：罗马尼亚语
+        
+    -   bg：保加利亚语
+        
+    -   hr：克罗地亚语
+        
+    -   sk：斯洛伐克语
+        
+-   fun-asr-realtime-2026-02-28：
+    
+    -   zh: 中文
+        
+    -   en: 英文
+        
+    -   ja: 日语
+        
 -   fun-asr-realtime-2025-09-15：
     
     -   zh: 中文
         
     -   en: 英文
+        
+-   fun-asr-flash-8k-realtime、fun-asr-flash-8k-realtime-2026-01-28：
+    
+    -   zh: 中文
         
 
 **说明**
@@ -887,6 +953,71 @@ RecognitionParam param = RecognitionParam.builder()
  .format("pcm")
  .sampleRate(16000)
  .parameters(Collections.singletonMap("speech_noise_threshold", -0.5))
+ .build();
+```
+
+input
+
+Map<String, Object>
+
+\-
+
+否
+
+输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见[快速开始](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#ctx-quickstart-sec)。
+
+**重要**
+
+仅 `fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持 context 参数。
+
+Map 中需包含 `context` 键，值为 `List<Map<String, Object>>` 类型的消息数组，每条消息包含以下字段：
+
+-   `role`（String，必选）：消息角色。`user` 表示前几轮用户语音的识别结果或领域相关的词表；`assistant` 表示前几轮大语言模型的回复内容。
+    
+-   `content`（List<Map>，必选）：消息内容列表。每个元素包含 `type`（String，role 为 user 时填 `input_text`，role 为 assistant 时填 `text`）和 `text`（String，文本内容）。
+    
+
+**重要**
+
+约束：上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度不超过 400 个字符，超出部分从末尾截断。
+
+**重要**
+
+携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
+
+**说明**
+
+使用该字段时，SDK版本不能低于2.22.23。
+
+`input`通过`RecognitionParam`实例的`input`方法进行设置：
+
+```
+// 1. 构建 input 结构体
+Map<String, Object> userContent = new HashMap<>();
+userContent.put("type", "input_text");
+userContent.put("text", "你好啊");
+
+Map<String, Object> assistantContent = new HashMap<>();
+assistantContent.put("type", "text");
+assistantContent.put("text", "你好啊，我是通义千问，有什么可以帮助你的？");
+
+Map<String, Object> userMessage = new HashMap<>();
+userMessage.put("role", "user");
+userMessage.put("content", Arrays.asList(userContent));
+
+Map<String, Object> assistantMessage = new HashMap<>();
+assistantMessage.put("role", "assistant");
+assistantMessage.put("content", Arrays.asList(assistantContent));
+
+Map<String, Object> input = new HashMap<>();
+input.put("context", Arrays.asList(userMessage, assistantMessage));
+
+// 2. 通过 input 方法传入
+RecognitionParam param = RecognitionParam.builder()
+ .model("fun-asr-realtime")
+ .format("pcm")
+ .sampleRate(16000)
+ .input(input)
  .build();
 ```
 

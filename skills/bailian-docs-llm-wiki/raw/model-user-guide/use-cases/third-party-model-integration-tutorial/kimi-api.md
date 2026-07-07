@@ -617,6 +617,62 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }
 ```
 
+## Anthropic兼容
+
+## Python
+
+### **示例代码**
+
+```
+import anthropic
+import os
+
+client = anthropic.Anthropic(
+    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
+)
+
+message = client.messages.create(
+    model="kimi-k2.6",
+    max_tokens=1024,
+    messages=[
+        {"role": "user", "content": "你是谁"}
+    ],
+    stream=True,
+)
+
+for event in message:
+    if event.type == "content_block_delta":
+        if hasattr(event.delta, "thinking"):
+            print(event.delta.thinking, end="", flush=True)
+        if hasattr(event.delta, "text"):
+            print(event.delta.text, end="", flush=True)
+```
+
+## HTTP
+
+### **示例代码**
+
+## curl
+
+```
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-H "anthropic-version: 2023-06-01" \
+-d '{
+    "model": "kimi-k2.6",
+    "max_tokens": 1024,
+    "messages": [
+        {
+            "role": "user",
+            "content": "你是谁"
+        }
+    ]
+}'
+```
+
 ## **多模态调用示例**
 
 kimi-k2.7-code、kimi-k2.6、kimi-k2.5 支持同时处理文本、图像或视频输入，并可通过 `enable_thinking` 参数开启思考模式。以下示例展示如何调用多模态能力。

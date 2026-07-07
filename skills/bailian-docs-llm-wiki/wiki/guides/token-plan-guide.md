@@ -1,6 +1,6 @@
 # token plan guide
 
-阿里云百炼提供两类面向 AI 编程与智能体场景的订阅型套餐——**Token Plan 团队版**与 **Coding Plan**。两者均以专属 API Key + 专属 Base URL 的方式接入主流 AI 编程工具（Claude Code、Qwen Code、OpenClaw、OpenCode、Cursor、Codex、Cline、Kilo CLI 等），通过预付费订阅锁定预算、避免按量计费欠费风险。本主题汇总两款套餐的产品定位、订阅流程、接入方式、团队与用量管理、工具扩展（联网搜索 / 多模态生成 / 视觉理解）以及高频报错排查。
+阿里云百炼提供两类面向 AI 编程与智能体场景的订阅型套餐——**Token Plan 团队版**与 **Coding Plan**。两者均以专属 API Key + 专属 Base URL 的方式接入主流 AI 编程工具（Claude Code、Qwen Code、OpenClaw、OpenCode、Cursor、Codex、Cline、Kilo CLI 等），通过预付费订阅锁定预算、避免按量计费欠费风险。本主题汇总两款套餐的产品定位、订阅流程、接入方式、团队与用量管理、工具扩展（联网搜索 / [多模态](../concepts/multimodal.md)生成 / 视觉理解）以及高频报错排查。
 
 ## 套餐总览与对比
 
@@ -171,7 +171,7 @@ Token Plan 团队版提供两种工具接入方式：
 
 > 提问时建议明确提及 `websearch MCP` 以避免与其他工具混淆。旧版 SSE 协议（`/sse` 结尾）需取消开通后重新开通以升级到 Streamable HTTP。
 
-### 接入多模态生成模型（图像生成）
+### 接入[多模态](../concepts/multimodal.md)生成模型（图像生成）
 
 Token Plan 团队版支持 `qwen-image-2.0`、`qwen-image-2.0-pro`、`wan2.7-image`、`wan2.7-image-pro` 等图像生成模型，但需通过工具的扩展机制（Skill / Slash Command / Agent）接入，无法通过文本模型 Base URL 直接调用。
 
@@ -275,6 +275,7 @@ Coding Plan 中 `qwen3.6-plus`、`qwen3.5-plus`、`kimi-k2.5` 原生支持视觉
 - [联网搜索](../../raw/model-user-guide/token-plan-guide/coding-plan-guide/web-search-for-coding-plan.md)
 - [添加视觉理解能力](../../raw/model-user-guide/token-plan-guide/coding-plan-guide/add-vision-skill.md)
 - [常见问题](../../raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan-faq.md)
+
 
 
 

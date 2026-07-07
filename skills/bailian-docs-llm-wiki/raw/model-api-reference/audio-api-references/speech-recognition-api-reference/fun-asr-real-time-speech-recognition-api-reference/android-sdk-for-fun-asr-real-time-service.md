@@ -4,6 +4,12 @@
 
 **用户指南：**关于模型介绍和选型建议请参见[实时语音识别-Fun-ASR/Paraformer](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition)
 
+**重要**
+
+阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+
 ## **快速开始**
 
 1.  [获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)
@@ -13,7 +19,8 @@
     -   [下载最新SDK整合包](https://help.aliyun.com/zh/isi/sdk-selection-and-download)。
         
     -   解压 ZIP 包。在 `app/libs` 目录中获取 AAR 格式 SDK，并添加到项目依赖。  
-        需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。
+        需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。  
+          
         
     -   用 Android Studio 打开工程。示例代码位于`DashFunAsrSpeechTranscriberActivity.java`，替换 API Key 后体验功能。
         
@@ -47,7 +54,7 @@
     
     ```
     {
-        "url": "wss://dashscope.aliyuncs.com/api-ws/v1/inference",
+        "url": "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference",
         "apikey": "st-****",
         "device_id": "my_device_id",
         "service_mode": "1"
@@ -70,7 +77,7 @@
     
     是
     
-    服务地址，固定为 `wss://dashscope.aliyuncs.com/api-ws/v1/inference`。
+    服务地址，固定为 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`。调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
     
     `apikey`
     
@@ -246,7 +253,7 @@
     
     待识别音频采样率（单位Hz）。
     
-    仅支持16000Hz。
+    8k模型仅支持 8000 Hz，其他模型支持任意采样率。
     
     `nls_config.semantic_punctuation_enabled`
     
@@ -347,11 +354,77 @@
             
         -   ja: 日语
             
+        -   ko：韩语
+            
+        -   vi：越南语
+            
+        -   th：泰语
+            
+        -   id：印尼语
+            
+        -   ms：马来语
+            
+        -   tl：菲律宾语
+            
+        -   hi：印地语
+            
+        -   ar：阿拉伯语
+            
+        -   fr：法语
+            
+        -   de：德语
+            
+        -   es：西班牙语
+            
+        -   pt：葡萄牙语
+            
+        -   ru：俄语
+            
+        -   it：意大利语
+            
+        -   nl：荷兰语
+            
+        -   sv：瑞典语
+            
+        -   da：丹麦语
+            
+        -   fi：芬兰语
+            
+        -   no：挪威语
+            
+        -   el：希腊语
+            
+        -   pl：波兰语
+            
+        -   cs：捷克语
+            
+        -   hu：匈牙利语
+            
+        -   ro：罗马尼亚语
+            
+        -   bg：保加利亚语
+            
+        -   hr：克罗地亚语
+            
+        -   sk：斯洛伐克语
+            
+    -   fun-asr-realtime-2026-02-28：
+        
+        -   zh: 中文
+            
+        -   en: 英文
+            
+        -   ja: 日语
+            
     -   fun-asr-realtime-2025-09-15：
         
         -   zh: 中文
             
         -   en: 英文
+            
+    -   fun-asr-flash-8k-realtime、fun-asr-flash-8k-realtime-2026-01-28：
+        
+        -   zh: 中文
             
     
     `nls_config.parameters`

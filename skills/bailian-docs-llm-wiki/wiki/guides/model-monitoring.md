@@ -57,7 +57,7 @@
 
 **模型监控表格**列出各模型的模型 Code、[业务空间](../concepts/workspace.md)、调用总量、调用失败量、失败率、平均调用时长、平均首包时长（除模型 Code、[业务空间](../concepts/workspace.md)外均可排序），操作列提供**监控**、**日志**入口。
 
-> 默认[业务空间](../concepts/workspace.md)成员可查看所有[业务空间](../concepts/workspace.md)的模型调用情况；子[业务空间](../concepts/workspace.md)成员仅能查看当前空间数据，无法切换查看其他业务空间。
+> 默认[业务空间](../concepts/workspace.md)成员可查看所有[业务空间](../concepts/workspace.md)的模型调用情况；子[业务空间](../concepts/workspace.md)成员仅能查看当前空间数据，无法切换查看其他[业务空间](../concepts/workspace.md)。
 
 进入目标模型的**监控**详情页后，可查看 4 类监控指标：
 
@@ -72,7 +72,7 @@
 
 模型监控提供三个层次的成本管理能力（详见[模型监控](../../raw/model-user-guide/model-monitoring/model-telemetry.md)）：
 
-- **汇总**：按业务空间维度汇总历史 Token 消耗，可按时间范围和 [API Key](../concepts/api-key.md) 筛选；调用统计页签的"调用量"区域可查看最近 30 天的 Token 消耗。
+- **汇总**：按[业务空间](../concepts/workspace.md)维度汇总历史 Token 消耗，可按时间范围和 [API Key](../concepts/api-key.md) 筛选；调用统计页签的"调用量"区域可查看最近 30 天的 Token 消耗。
 - **追踪**：记录每一次模型调用的 Token 消耗（需开通推理日志，仅北京地域部分模型）。
 - **告警**：设置 Token 消耗阈值，异常消耗时立即告警。
 
@@ -152,6 +152,7 @@ Authorization: Basic base64Encode(AccessKey:AccessKeySecret)
 
 - [模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)
 - [模型监控](../../raw/model-user-guide/model-monitoring/model-telemetry.md)
+
 
 
 

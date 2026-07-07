@@ -429,7 +429,7 @@ OSS
     
 4.  为文件**配置标签**（可选）。
     
-    > [通过API调用应用](https://help.aliyun.com/zh/model-studio/application-calling-guide#4100253b7chc3)时，可以在请求参数`tags`中指定标签。应用在检索知识库时，会先根据标签筛选相关文件，从而提高检索效率。对于[智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)，可在控制台调试知识库时设置标签。
+    > [通过API调用应用](https://help.aliyun.com/zh/model-studio/application-calling-guide#4100253b7chc3)时，可以在请求参数`tags`中指定标签。应用在检索知识库时，会先根据标签筛选相关文件，从而提高检索效率。对于[智能体应用（Agent 1.0）](https://help.aliyun.com/zh/model-studio/single-agent-application)，可在控制台调试知识库时设置标签。
     
 5.  点击**确认**，系统将开始解析和导入，可在页面查看任务进度。
     
@@ -548,7 +548,7 @@ OSS
         
     4.  为文件**配置标签**（可选）。
         
-        > [通过API调用应用](https://help.aliyun.com/zh/model-studio/application-calling-guide#4100253b7chc3)时，可以在请求参数`tags`中指定标签。应用在检索知识库时，会先根据标签筛选相关文件，从而提高检索效率。对于[智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)，可在控制台编辑应用时直接设置标签（启用**知识库** > **+知识库** > **知识库高级配置** > **标签过滤**）。
+        > [通过API调用应用](https://help.aliyun.com/zh/model-studio/application-calling-guide#4100253b7chc3)时，可以在请求参数`tags`中指定标签。应用在检索知识库时，会先根据标签筛选相关文件，从而提高检索效率。对于[智能体应用（Agent 1.0）](https://help.aliyun.com/zh/model-studio/single-agent-application)，可在控制台编辑应用时直接设置标签（启用**知识库** > **+知识库** > **知识库高级配置** > **标签过滤**）。
         
     5.  点击**确认**，系统将开始解析和导入，可在页面查看任务进度。
         
@@ -1586,11 +1586,13 @@ VSwitch ID
     
 -   **导入OSS文件遇到“10041495”报错，应如何处理？**
     
-    通常是主账号未开通OSS服务，处理步骤：
+    该报错由以下原因引起，按顺序排查：
     
-    1.  需主账号前往[OSS管理控制台](https://oss.console.aliyun.com/)，按界面指引开通 OSS。
+    1.  主账号未开通OSS服务。需主账号前往[OSS管理控制台](https://oss.console.aliyun.com/)，按界面指引开通OSS。
         
-    2.  返回阿里云百炼页面，再尝试授权。
+    2.  目标OSS Bucket未添加`bailian-datahub-access`标签（值为`read`）。未添加该标签的Bucket阿里云百炼无法访问。前往[OSS管理控制台](https://oss.console.aliyun.com/bucket)Bucket标签页面，为目标Bucket添加标签。
+        
+    3.  完成上述操作后，返回阿里云百炼页面重新授权。
         
     
 

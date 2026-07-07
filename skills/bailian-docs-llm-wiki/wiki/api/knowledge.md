@@ -11,13 +11,13 @@
 
 ## 鉴权与 Base URL
 
-所有请求须在请求头携带 `Authorization: Bearer <API-Key>`，并使用业务空间 ID 拼接的 Base URL：
+所有请求须在请求头携带 `Authorization: Bearer <API-Key>`，并使用[业务空间](../concepts/workspace.md) ID 拼接的 Base URL：
 
 ```
 https://{workspaceId}.cn-beijing.maas.aliyuncs.com
 ```
 
-其中 `{workspaceId}` 为业务空间 ID。API Key 在控制台 [API Key 页面](https://rag.console.aliyun.com/settings/apikey) 获取，业务空间 ID 在控制台 [业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management) 获取。
+其中 `{workspaceId}` 为[业务空间](../concepts/workspace.md) ID。API Key 在控制台 [API Key 页面](https://rag.console.aliyun.com/settings/apikey) 获取，[业务空间](../concepts/workspace.md) ID 在控制台 [业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management) 获取。
 
 ## 限流
 
@@ -40,6 +40,7 @@ https://{workspaceId}.cn-beijing.maas.aliyuncs.com
 ## 来源文档
 
 - [知识检索与问答](../../raw/application-api-reference/knowledge.md)
+
 
 
 

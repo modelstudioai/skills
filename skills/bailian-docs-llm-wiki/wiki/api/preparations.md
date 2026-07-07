@@ -16,7 +16,7 @@
 ### 权限与时效
 
 - API Key 的调用权限由其归属[业务空间](../concepts/workspace.md)决定，同一空间内的 API Key 权限相同，无需为不同模型类型分别创建。
-- 默认[业务空间](../concepts/workspace.md)的 API Key 可调用所有标准模型；子业务空间的 API Key 仅可调用已授权的模型。
+- 默认[业务空间](../concepts/workspace.md)的 API Key 可调用所有标准模型；子[业务空间](../concepts/workspace.md)的 API Key 仅可调用已授权的模型。
 - API Key 没有失效日期，手动删除后即失效。如需临时授权，可生成有效期 60 秒的临时 API Key。
 
 ### 配置环境变量
@@ -32,7 +32,7 @@
 
 百炼支持两类 SDK 接入方式，具体安装方法参见[安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)。
 
-### DashScope SDK（官方 SDK）
+### [DashScope SDK](../concepts/dashscope-sdk.md)（官方 SDK）
 
 | 语言 | 安装方式 | 版本要求 |
 |------|---------|---------|
@@ -92,7 +92,7 @@
 ## 快速上手清单
 
 1. 在百炼控制台创建 API Key 并保存到环境变量 `DASHSCOPE_API_KEY`
-2. 根据使用语言安装 DashScope SDK 或 OpenAI 兼容 SDK
+2. 根据使用语言安装 [DashScope SDK](../concepts/dashscope-sdk.md) 或 OpenAI 兼容 SDK
 3. 选择目标模型，参考对应 API 文档发起首次调用
 4. 遇到调用报错时，根据错误码对照排查
 
@@ -101,6 +101,7 @@
 - [获取API Key](../../raw/model-api-reference/preparations/get-api-key.md)
 - [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)
 - [错误码](../../raw/model-api-reference/preparations/error-code.md)
+
 
 
 

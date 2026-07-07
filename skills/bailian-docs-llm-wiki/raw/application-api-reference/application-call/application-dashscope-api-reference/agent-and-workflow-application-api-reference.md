@@ -1,4 +1,4 @@
-# 工作流与旧版智能体应用 API
+# 应用 DashScope API 参考
 
 本文介绍 DashScope API 调用阿里云百炼应用（**智能体**、**工作流**）的输入与输出参数，并提供典型场景下的调用示例。
 
@@ -4563,13 +4563,6 @@ API 调用时，通过 `user_defined_params` 以 `mcp_id` 为 key 传入对应�
 
 组合逻辑：  
 不同键之间为“与”(AND) 逻辑。例如，`"author": "John.Doe", "source": ["internal_wiki", "public_docs"]` 表示筛选出作者是 "John.Doe" 并且来源是 "internal\_wiki" 或 "public\_docs" 的文档。  
-  
-  
-  
-  
-  
-  
-  
 
 > Java SDK 中为 **metadataFilter**。
 
@@ -4612,13 +4605,6 @@ API 调用时，通过 `user_defined_params` 以 `mcp_id` 为 key 传入对应�
 
 组合逻辑：  
 不同键之间为“与”(AND) 逻辑。例如，`"year": 2024, "department": ["技术部", "产品部"]` 表示筛选出年份是 2024 并且 部门是 "技术部" 或 "产品部" 的文档切片。  
-  
-  
-  
-  
-  
-  
-  
 
 > Java SDK 中为 **structuredFilter**。
 
@@ -4959,6 +4945,10 @@ message=Invalid API-key provided.
 **doc\_name** `_string_`
 
 模型引用的文档名。
+
+**doc\_url** `_string_`
+
+模型引用的文档链接，若文档保存于阿里云百炼平台的安全存储空间中时为`null`。
 
 **text** `_string_`
 

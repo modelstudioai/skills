@@ -1,12 +1,12 @@
 # 实时语音识别（Fun-ASR）客户端事件
 
-本文介绍 Fun-ASR 实时语音识别服务中客户端通过 WebSocket 发送给服务端的客户端事件，包括 run-task（启动任务）和 finish-task（结束任务）两类指令的数据结构与字段含义。
+本文介绍 Fun-ASR 实时语音识别服务中客户端通过 WebSocket 发送给服务端的客户端事件，包括 run-task（启动任务）、continue-task（更新上下文）、finish-task（结束任务）等指令的数据结构与字段含义。
 
 **用户指南：**关于模型介绍和选型建议请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model/)。
 
 **事件交互流程**：如需了解事件交互时序，请参见[WebSocket API](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-websocket-api)。
 
-### **run-task**
+## **run-task**
 
 **说明**：启动语音识别任务，设置模型、音频格式、采样率等参数。
 
@@ -30,6 +30,8 @@
 
 固定为 `duplex`。
 
+## 基本请求
+
 ```
 {
     "header": {
@@ -47,6 +49,50 @@
             "sample_rate": 16000
         },
         "input": {}
+    }
+}
+```
+
+## 携带上下文
+
+```
+{
+    "header": {
+        "action": "run-task",
+        "task_id": "2bf83b9a-baeb-4fda-8d9a-xxxxxxxxxxxx",
+        "streaming": "duplex"
+    },
+    "payload": {
+        "task_group": "audio",
+        "task": "asr",
+        "function": "recognition",
+        "model": "fun-asr-realtime",
+        "parameters": {
+            "format": "pcm",
+            "sample_rate": 16000
+        },
+        "input": {
+            "context": [
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "input_text",
+                            "text": "你好啊"
+                        }
+                    ]
+                },
+                {
+                    "role": "assistant",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "你好啊，我是通义千问，有什么可以帮助你的？"
+                        }
+                    ]
+                }
+            ]
+        }
     }
 }
 ```
@@ -73,7 +119,55 @@
 
 **input** `_object_` **（必选）**
 
-固定为`{}`。
+输入对象。不携带上下文时传入`{}`。
+
+**重要**
+
+仅 `fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持 context 参数。
+
+**属性**
+
+**context** `_array(object)_` （可选）
+
+对话上下文，用于辅助识别、提升专有词汇的识别准确率。使用方法详见[快速开始](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#ctx-quickstart-sec)。
+
+**重要**
+
+约束：上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度（`user` 和 `assistant` 的 `text` 字段长度之和）不超过 400 个字符（按字符数计算，每个字符计为 1），超出部分从末尾截断。
+
+**重要**
+
+携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
+
+**属性**
+
+**role** `_string_` **（必选）**
+
+消息角色。取值范围：
+
+-   `user`：前几轮用户语音的识别结果或领域相关的词表。
+    
+-   `assistant`：前几轮大语言模型的回复内容。
+    
+
+**content** `_array(object)_` **（必选）**
+
+消息内容列表。
+
+**属性**
+
+**type** `_string_` **（必选）**
+
+内容类型。取值范围：
+
+-   `input_text`：前几轮用户语音的识别结果或领域相关的词表（role 为 user 时使用），需同时传入 `text` 字段。
+    
+-   `text`：前几轮大语言模型的回复内容（role 为 assistant 时使用），需同时传入 `text` 字段。
+    
+
+**text** `_string_` **（必选）**
+
+文本内容。当 `type` 为 `input_text` 时，填入前几轮用户语音的识别结果或领域相关的词表；当 `type` 为 `text` 时，填入前几轮大语言模型的回复内容。
 
 **parameters** `_object_` **（必选）**
 
@@ -121,14 +215,88 @@
 
 系统仅读取数组中的首个值，多余值将被忽略。
 
-取值范围：
+不同模型支持的语言代码如下：
 
--   zh: 中文
+-   fun-asr-realtime、fun-asr-realtime-2025-11-07：
     
--   en: 英文
+    -   zh: 中文
+        
+    -   en: 英文
+        
+    -   ja: 日语
+        
+    -   ko：韩语
+        
+    -   vi：越南语
+        
+    -   th：泰语
+        
+    -   id：印尼语
+        
+    -   ms：马来语
+        
+    -   tl：菲律宾语
+        
+    -   hi：印地语
+        
+    -   ar：阿拉伯语
+        
+    -   fr：法语
+        
+    -   de：德语
+        
+    -   es：西班牙语
+        
+    -   pt：葡萄牙语
+        
+    -   ru：俄语
+        
+    -   it：意大利语
+        
+    -   nl：荷兰语
+        
+    -   sv：瑞典语
+        
+    -   da：丹麦语
+        
+    -   fi：芬兰语
+        
+    -   no：挪威语
+        
+    -   el：希腊语
+        
+    -   pl：波兰语
+        
+    -   cs：捷克语
+        
+    -   hu：匈牙利语
+        
+    -   ro：罗马尼亚语
+        
+    -   bg：保加利亚语
+        
+    -   hr：克罗地亚语
+        
+    -   sk：斯洛伐克语
+        
+-   fun-asr-realtime-2026-02-28：
     
--   ja: 日语
+    -   zh: 中文
+        
+    -   en: 英文
+        
+    -   ja: 日语
+        
+-   fun-asr-realtime-2025-09-15：
     
+    -   zh: 中文
+        
+    -   en: 英文
+        
+-   fun-asr-flash-8k-realtime、fun-asr-flash-8k-realtime-2026-01-28：
+    
+    -   zh: 中文
+        
 
 **semantic\_punctuation\_enabled** `_boolean_` （可选）
 
@@ -202,7 +370,119 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 -   根据实际音频环境小幅度调整（建议步长 0.1）
     
 
-### **finish-task**
+## **continue-task**
+
+**说明**：在任务执行过程中更新对话上下文信息，用于辅助识别。
+
+**发送时机**：任务运行中，需要更新对话上下文时发送。
+
+**重要**
+
+仅 `fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持该事件。
+
+**header** `_object_` **（必选）**
+
+**属性**
+
+**action** `_string_` **（必选）**
+
+指令类型，固定为 `continue-task`。
+
+**task\_id** `_string_` **（必选）**
+
+客户端生成的任务 ID（UUID 格式），需与[run-task](#9cae7e7b85ebm)事件中的 task\_id 保持一致。
+
+**streaming** `_string_` **（必选）**
+
+固定为 `duplex`。
+
+```
+{
+    "header": {
+        "action": "continue-task",
+        "task_id": "2bf83b9a-baeb-4fda-8d9a-xxxxxxxxxxxx",
+        "streaming": "duplex"
+    },
+    "payload": {
+        "input": {
+            "context": [
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "input_text",
+                            "text": "你好啊"
+                        }
+                    ]
+                },
+                {
+                    "role": "assistant",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "你好啊，我是通义千问，有什么可以帮助你的？"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
+```
+
+**payload** `_object_` **（必选）**
+
+**属性**
+
+**input** `_object_` **（必选）**
+
+输入对象。
+
+**属性**
+
+**context** `_array(object)_` （可选）
+
+对话上下文，用于辅助识别、提升专有词汇的识别准确率。使用方法详见[快速开始](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#ctx-quickstart-sec)。
+
+**重要**
+
+约束：上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度（`user` 和 `assistant` 的 `text` 字段长度之和）不超过 400 个字符（按字符数计算，每个字符计为 1），超出部分从末尾截断。
+
+**重要**
+
+携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
+
+**属性**
+
+**role** `_string_` **（必选）**
+
+消息角色。取值范围：
+
+-   `user`：前几轮用户语音的识别结果或领域相关的词表。
+    
+-   `assistant`：前几轮大语言模型的回复内容。
+    
+
+**content** `_array(object)_` **（必选）**
+
+消息内容列表。
+
+**属性**
+
+**type** `_string_` **（必选）**
+
+内容类型。取值范围：
+
+-   `input_text`：前几轮用户语音的识别结果或领域相关的词表（role 为 user 时使用），需同时传入 `text` 字段。
+    
+-   `text`：前几轮大语言模型的回复内容（role 为 assistant 时使用），需同时传入 `text` 字段。
+    
+
+**text** `_string_` **（必选）**
+
+文本内容。当 `type` 为 `input_text` 时，填入前几轮用户语音的识别结果或领域相关的词表；当 `type` 为 `text` 时，填入前几轮大语言模型的回复内容。
+
+## **finish-task**
 
 **说明**：通知服务端音频发送完毕，请求结束任务。
 

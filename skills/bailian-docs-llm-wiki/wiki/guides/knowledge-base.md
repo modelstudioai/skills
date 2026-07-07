@@ -1,6 +1,6 @@
 # [knowledge](../api/knowledge.md) base
 
-阿里云百炼知识库基于 RAG（检索增强生成）技术，为大模型补充私有数据与最新信息，提升特定领域问答的准确性。它覆盖知识库创建、数据导入、检索召回、问答生成、日志监控与计费计量的完整链路，支持文档搜索、数据查询、图片问答、音视频搜索等多模态场景，并可经控制台或开放 API 接入业务系统。
+阿里云百炼知识库基于 RAG（检索增强生成）技术，为大模型补充私有数据与最新信息，提升特定领域问答的准确性。它覆盖知识库创建、数据导入、检索召回、问答生成、日志监控与计费计量的完整链路，支持文档搜索、数据查询、图片问答、音视频搜索等[多模态](../concepts/multimodal.md)场景，并可经控制台或开放 API 接入业务系统。
 
 ## 支持的模型与知识库类型
 
@@ -15,7 +15,7 @@
 - **图片问答类**：仅支持 `multimodal-embedding-v1`（1024 维）向量模型。
 - **音视频搜索类**：对语音做识别、对视频做帧提取与剧情解析，按时间轴结构化对齐。
 
-向量模型方面，文档搜索、数据查询、音视频搜索类支持 `text-embedding-v4` 或 `text-embedding-v3`（均为 512 维），维度不可更改；视觉理解场景会自动切换为 `qwen3-vl-embedding`（qwen3 多模态向量）。详见 [知识库配额与限制](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-specifications.md)。
+向量模型方面，文档搜索、数据查询、音视频搜索类支持 `text-embedding-v4` 或 `text-embedding-v3`（均为 512 维），维度不可更改；视觉理解场景会自动切换为 `qwen3-vl-embedding`（qwen3 [多模态](../concepts/multimodal.md)向量）。详见 [知识库配额与限制](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-specifications.md)。
 
 ## 创建与数据导入
 
@@ -50,7 +50,7 @@
 | --- | --- | --- |
 | 初步向量检索 TopK | 1–100（默认 50） | 向量语义召回切片数 |
 | 初步关键词检索 TopK | 1–100（默认 50） | 关键词匹配召回切片数 |
-| 排序模型 | qwen3-rerank / qwen3-rerank(hybrid) / qwen3-vl-rerank | 多模态库只能选 vl-rerank |
+| 排序模型 | qwen3-rerank / qwen3-rerank(hybrid) / qwen3-vl-rerank | [多模态](../concepts/multimodal.md)库只能选 vl-rerank |
 | 排序模式 | 问答 / 相似 / 自定义高级 | 问答模式按 QA 匹配度，相似模式按语义相似度 |
 | 相似度阈值 | 0.01–1.0 | 过滤排序后低分切片，过高会丢弃全部结果 |
 | 最大召回数量 | 1–20 | 最终返回切片数 |
@@ -73,7 +73,7 @@
 
 知识库提供开放 API，便于自动化操作与外部接入。注意 **API 指南仅适用于文档搜索类知识库**。
 
-前置步骤：子账号需获取 `AliyunBailianDataFullAccess` 策略并加入业务空间；安装阿里云百炼 SDK（`alibabacloud_bailian20231229`）；配置 `ALIBABA_CLOUD_ACCESS_KEY_ID`、`ALIBABA_CLOUD_ACCESS_KEY_SECRET`、`WORKSPACE_ID` 环境变量。接入地址示例：`bailian.cn-beijing.aliyuncs.com`。
+前置步骤：子账号需获取 `AliyunBailianDataFullAccess` 策略并加入[业务空间](../concepts/workspace.md)；安装阿里云百炼 SDK（`alibabacloud_bailian20231229`）；配置 `ALIBABA_CLOUD_ACCESS_KEY_ID`、`ALIBABA_CLOUD_ACCESS_KEY_SECRET`、`WORKSPACE_ID` 环境变量。接入地址示例：`bailian.cn-beijing.aliyuncs.com`。
 
 典型流程：申请上传租约（ApplyFileUploadLease）→ 上传文件到预签名 URL → 添加文件（AddFile）→ 查询解析状态（DescribeFile）→ 创建索引（CreateIndex）→ 提交索引任务（SubmitIndexJob）→ 查询任务状态（GetIndexJobStatus）→ 检索（Retrieve）。详见 [知识库API指南](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)。
 
@@ -92,8 +92,8 @@
 | 知识库数量（RDS 数据源） | 100 |
 | 知识库数量（其他数据源） | 无限制 |
 | 平台存储容量 | 标准版 100 GB / 旗舰版 9,999 GB |
-| 类目数量（每业务空间） | 500 |
-| 文件数量（每业务空间） | 100,000 |
+| 类目数量（每[业务空间](../concepts/workspace.md)） | 500 |
+| 文件数量（每[业务空间](../concepts/workspace.md)） | 100,000 |
 | 单知识库文件数 | 非结构化无硬性上限 / 结构化 1 篇 |
 | 数据表数量 | 1,000 |
 | ADB-PG 单表行数 / 单行大小 | 10,000,000 / 100 KB |
@@ -141,6 +141,7 @@
 - [知识库计费说明](../../raw/application-user-guide/knowledge-base/billing-for-knowledge-base.md)
 - [知识检索](../../raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)
 - [知识问答](../../raw/application-user-guide/knowledge-base/rag-knowledge-qa.md)
+
 
 
 

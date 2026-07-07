@@ -100,7 +100,7 @@
 | API | 说明 |
 | --- | --- |
 | UpdateIndex | 更新知识库配置（名称、描述、检索参数、规格类型等） |
-| ListIndices | 获取业务空间下的知识库列表 |
+| ListIndices | 获取[业务空间](../concepts/workspace.md)下的知识库列表 |
 | DeleteIndex | 永久删除知识库（不可逆，需先解除应用关联） |
 | ListIndexFileDetails | 查询知识库下的文件详情 |
 | ListIndexDocuments | 查询知识库下的文件列表 |
@@ -208,6 +208,7 @@ Prompt 模板支持创建、查询、更新、删除和列表操作，用于管�
 - [UpdateMemoryNode - 更新记忆片段](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-updatememorynode.md)
 - [DeleteMemoryNode - 删除记忆片段](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-deletememorynode.md)
 - [ListMemoryNodes - 获取记忆片段列表](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-listmemorynodes.md)
+
 
 
 
