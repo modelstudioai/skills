@@ -75,9 +75,9 @@
 | AGENT | 对智能体的调用 |
 | RETRIEVER | 检索操作；KnowledgeRetriever 表示在[知识库](../concepts/knowledge-base.md)中检索。子节点名称含 TextRetriever（改进 BM25，默认返回 100 个切片）、VectorRetriever（向量检索，默认返回 100 个切片） |
 | REWRITER | 基于会话上下文调整原始 Prompt 以提升检索效果 |
-| EMBEDDING | 将 Prompt 转为向量，[Token](../concepts/token.md) 量为本次向量化的 Token 数 |
+| EMBEDDING | 将 Prompt 转为向量，[Token](../concepts/token.md) 量为本次向量化的 [Token](../concepts/token.md) 数 |
 | RERANKER | 计算文本切片相似度分数并降序排列 |
-| LLM | 大模型推理/文本生成，Token 量 = 输入 + 输出；延时包含输出回复过程 |
+| LLM | 大模型推理/文本生成，[Token](../concepts/token.md) 量 = 输入 + 输出；延时包含输出回复过程 |
 | TOOL | 插件调用（官方或自定义） |
 | GUARDRAIL | 阿里绿网调用；ManualIntervention 为用户干预规则，SystemIntervention 为系统干预规则 |
 
@@ -98,13 +98,14 @@
 ## 关键指标说明
 
 - **延时（调用时长）**：对 LLM 节点，包含输出回复的完整过程。
-- **Token 量**：Embedding 节点为本次向量化 Token 数；LLM 节点为输入 Token + 输出 Token。
+- **[Token](../concepts/token.md) 量**：Embedding 节点为本次向量化 Token 数；LLM 节点为输入 Token + 输出 Token。
 - **数据时效**：指标更新频率为分钟级，调用记录最长可查 30 天。
 - **应用总量 / 平均延时**：用于评估应用运营效果与成本，详见 [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md)。
 
 ## 来源文档
 
 - [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md)
+
 
 
 

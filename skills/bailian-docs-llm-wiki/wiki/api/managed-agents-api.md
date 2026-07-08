@@ -27,7 +27,7 @@ https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/agentstudio
 Authorization: Bearer <your-api-key>
 ```
 
-API Key 通过百炼控制台获取，一个 Key 可访问其归属工作空间下的全部资源。每次响应携带 `x-request-id` 头，提工单时附上此 ID 可加速定位。
+[API Key](../concepts/api-key.md) 通过百炼控制台获取，一个 Key 可访问其归属工作空间下的全部资源。每次响应携带 `x-request-id` 头，提工单时附上此 ID 可加速定位。
 
 ## 主要 API 端点
 
@@ -131,5 +131,6 @@ Managed Agents 模块通过 [DashScope SDK](../concepts/dashscope-sdk.md) 接入
 - [Skill](../../raw/application-api-reference/managed-agents-api/skills-api.md)
 - [File](../../raw/application-api-reference/managed-agents-api/files-api.md)
 - [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)
+
 
 

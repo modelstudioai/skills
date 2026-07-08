@@ -61,22 +61,23 @@
 
 ## 横切概念
 
-- [API Key 鉴权](concepts/api-key.md) — 关联 8 个主题
-- [DashScope SDK](concepts/dashscope-sdk.md) — 关联 6 个主题
-- [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 7 个主题
-- [Token 计量](concepts/token.md) — 关联 6 个主题
-- [业务空间](concepts/workspace.md) — 关联 6 个主题
-- [函数调用（Function Calling）](concepts/function-calling.md) — 关联 6 个主题
-- [多模态](concepts/multimodal.md) — 关联 6 个主题
-- [异步调用](concepts/async-invocation.md) — 关联 4 个主题
-- [检索增强生成（RAG）](concepts/rag.md) — 关联 6 个主题
+- [API Key](concepts/api-key.md) — 关联 7 个主题
+- [DashScope SDK](concepts/dashscope-sdk.md) — 关联 7 个主题
+- [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 8 个主题
+- [Token](concepts/token.md) — 关联 8 个主题
+- [业务空间](concepts/workspace.md) — 关联 8 个主题
+- [函数调用](concepts/function-calling.md) — 关联 6 个主题
+- [多模态](concepts/multimodal.md) — 关联 7 个主题
+- [异步调用](concepts/async-invocation.md) — 关联 5 个主题
+- [检索增强生成](concepts/rag.md) — 关联 6 个主题
 - [流式输出](concepts/streaming.md) — 关联 5 个主题
 
 ## 对比分析
 
-- [多模态内容生成 API 对比](comparisons/multimodal-generation-comparison.md) — 对比 3 个主题
-- [应用监控与模型监控对比](comparisons/app-vs-model-monitoring.md) — 对比 2 个主题
-- [应用评测与模型评测对比](comparisons/app-vs-model-evaluation.md) — 对比 2 个主题
-- [模型优化方案对比：微调、压缩与高速推理](comparisons/model-optimization-comparison.md) — 对比 3 个主题
-- [知识库与记忆库对比](comparisons/knowledge-vs-memory.md) — 对比 2 个主题
+- [Qwen API、应用调用与托管智能体 API 对比](comparisons/qwen-api-vs-app-call-vs-agents-api.md) — 对比 3 个主题
+- [图像生成、视频生成与 3D 生成对比](comparisons/multimodal-generation-comparison.md) — 对比 3 个主题
+- [应用监控与模型监控对比](comparisons/app-monitoring-vs-model-monitoring.md) — 对比 2 个主题
+- [应用评测与模型评测对比](comparisons/app-eval-vs-model-eval.md) — 对比 2 个主题
+- [模型微调、压缩与部署对比](comparisons/fine-tuning-vs-compression-vs-deployment.md) — 对比 3 个主题
+- [知识库与记忆库对比](comparisons/knowledge-base-vs-memory-library.md) — 对比 2 个主题
 

@@ -36,7 +36,7 @@
 
 在阿里云百炼，**完成调优的模型必须部署后才能调用和评测**。因此，您需要首先完成模型部署，方可继续评测模型。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1050972771/CAEQSBiBgICa8texgxkiIGU5OGM2ZmE4ZjJjNDRhMWY5MmMwYmQwZmIzZWIyODM04430647_20240626141408.264.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3946933871/CAEQSBiBgICa8texgxkiIGU5OGM2ZmE4ZjJjNDRhMWY5MmMwYmQwZmIzZWIyODM04430647_20240626141408.264.svg)
 
 ## **前提条件**
 

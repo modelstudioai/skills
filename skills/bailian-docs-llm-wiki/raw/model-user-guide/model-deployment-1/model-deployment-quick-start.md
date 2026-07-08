@@ -21,7 +21,7 @@
 
 使用**模型 ID** 作为输入的`model_name`参数，即可使用 API 部署该模型。
 
-## 按预置吞吐（PTU）计费
+### 按预置吞吐（PTU）计费
 
 **说明**
 
@@ -44,7 +44,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 }'
 ```
 
-#### 按模型单元的使用时长计费
+### 按模型单元的使用时长计费
 
 **说明**
 
@@ -297,8 +297,12 @@ curl --request DELETE 'https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8
     
     在**模型列表**中找到目标模型，查看**模型部署**列的授权状态。若显示**未授权**，单击**操作**列的**编辑**进行授权。
     
+    如果提示权限不足，请联系您的组织或 IT 管理员添加相关权限或代为操作。
+    
 2.  API Key 的**归属账号**在**归属业务空间**中拥有操作权限。请前往[百炼控制台](https://bailian.console.aliyun.com/?tab=model#/model-market)，点击左下角的业务空间，切换到对应业务空间，再点击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1816324671/p1030217.png)检查对应业务空间的模型部署权限设置。
     
     > API 调用报错：`Workspace access denied`。
     
     在左侧导航栏点击**权限管理**，确认用户列表中包含 API Key 的归属账号（类型为**主账号**）。
+    
+    如果提示权限不足，请联系您的组织或 IT 管理员添加相关权限或代为操作。

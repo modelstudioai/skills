@@ -2,9 +2,9 @@
 
 阿里云百炼在模型调用的核心流程之外，提供了一系列辅助能力，涵盖安全认证、异步任务管理、文件上传、子[业务空间](../concepts/workspace.md)隔离以及高并发场景下的连接优化。本文汇总这些进阶用法的关键要点，帮助开发者在生产环境中安全、高效地使用模型服务。
 
-## 临时 API Key
+## 临时 [API Key](../concepts/api-key.md)
 
-在浏览器或移动端等不可信环境中，直接暴露永久 API Key 存在安全风险。百炼提供了[生成临时API Key](../../raw/model-api-reference/more-about-models/generate-temporary-api-key.md)的接口，通过后端服务生成有限时效的临时凭证。
+在浏览器或移动端等不可信环境中，直接暴露永久 [API Key](../concepts/api-key.md) 存在安全风险。百炼提供了[生成临时API Key](../../raw/model-api-reference/more-about-models/generate-temporary-api-key.md)的接口，通过后端服务生成有限时效的临时凭证。
 
 **请求方式**：
 
@@ -13,7 +13,7 @@ POST https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=<TTL>
 ```
 
 - `expire_in_seconds`：有效期，范围 [1, 1800] 秒，默认 60 秒。
-- 返回的 `token` 字段即为临时 API Key，`expires_at` 为 UNIX 过期时间戳。
+- 返回的 `token` 字段即为临时 [API Key](../concepts/api-key.md)，`expires_at` 为 UNIX 过期时间戳。
 - 临时 API Key 继承生成它的永久 API Key 的全部权限，到期后自动失效，无法手动删除。
 
 > **注意**：各地域的 API Key 不同，新加坡地域需将 Endpoint 中的 WorkspaceId 替换为实际值。
@@ -67,7 +67,7 @@ POST https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}/cancel
 
 **使用要点**：
 
-- 必须使用子业务空间自身的 API Key 进行调用。
+- 必须使用子[业务空间](../concepts/workspace.md)自身的 API Key 进行调用。
 - 调用标准模型（如 `qwen-plus`）前，需为该空间设置模型调用权限。
 - 调用在百炼上调优并部署的模型无需额外授权，但仅能由其所在空间的 API Key 调用。
 - 支持 OpenAI 兼容方式和 DashScope 方式调用，但调优后模型仅支持 DashScope 方式。
@@ -115,5 +115,6 @@ POST https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}/cancel
 - [子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)
 - [上传本地文件获取临时URL](../../raw/model-api-reference/more-about-models/get-temporary-file-url.md)
 - [DashScope SDK连接复用配置](../../raw/model-api-reference/more-about-models/connection-multiplexing-configuration.md)
+
 
 

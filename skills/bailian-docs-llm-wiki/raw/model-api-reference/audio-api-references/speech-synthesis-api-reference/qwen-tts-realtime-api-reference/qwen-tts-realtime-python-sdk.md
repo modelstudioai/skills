@@ -89,8 +89,8 @@ if __name__  == '__main__':
         # 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash-realtime
         model='qwen3-tts-flash-realtime',
         callback=callback, 
-        # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-        url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime'
+        # 以下为华北2（北京）地域的配置。
+        url='wss://dashscope.aliyuncs.com/api-ws/v1/realtime'
         )
 
     qwen_tts_realtime.connect()
@@ -197,8 +197,8 @@ if __name__  == '__main__':
         # 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash-realtime
         model='qwen3-tts-flash-realtime',
         callback=callback,
-        # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-        url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime'
+        # 以下为华北2（北京）地域的配置。
+        url='wss://dashscope.aliyuncs.com/api-ws/v1/realtime'
         )
 
     qwen_tts_realtime.connect()
@@ -234,17 +234,6 @@ if __name__  == '__main__':
                     ))
 ```
 
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
-
--   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
--   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
-
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
-
 访问[github](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/omni)下载更多示例代码。
 
 ## **请求参数**
@@ -273,11 +262,9 @@ str
 
 是
 
-华北2（北京）地域：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`
+华北2（北京）地域：`wss://dashscope.aliyuncs.com/api-ws/v1/realtime`
 
-新加坡地域：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`
-
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+新加坡地域：`wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime`
 
 下述请求参数可以通过update\_session接口配置。
 

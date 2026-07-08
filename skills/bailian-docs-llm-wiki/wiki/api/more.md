@@ -103,7 +103,7 @@ resp = client.retrieve('请传入实际的业务空间ID', retrieve_request)
 
 ## 限制与注意事项
 
-- 临时 API Key 无法手动删除，只能等 TTL 到期自动失效；各地域 API Key 不互通。
+- 临时 [API Key](../concepts/api-key.md) 无法手动删除，只能等 TTL 到期自动失效；各地域 [API Key](../concepts/api-key.md) 不互通。
 - 服务关联角色由百炼自动创建并绑定固定系统策略，不可修改、不可授予其他 RAM 身份；删除前必须先解除对应功能的依赖资源，否则相关功能将不可用。
 - SearchFilters 子分组之间为 AND 语义且不可更改；多值 / 范围 / 模糊 / 标签查询的值需通过 `json.dumps` 序列化为字符串后传入；标签查询仅支持文档搜索与音视频搜索类知识库。
 - 子账号只能操作已加入[业务空间](../concepts/workspace.md)中的知识库，主账号可操作所有[业务空间](../concepts/workspace.md)。
@@ -113,6 +113,7 @@ resp = client.retrieve('请传入实际的业务空间ID', retrieve_request)
 - [生成临时API Key](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md)
 - [服务关联角色](../../raw/application-api-reference/more/bailian-service-linked-role.md)
 - [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md)
+
 
 
 

@@ -165,6 +165,8 @@ string
     
 -   DASH\_QWEN\_VL\_PARSER （Qwen VL 解析）
     
+-   DOCMIND\_LLM\_VERSION\_MEDIA（音视频解析）
+    
 
 **枚举值：**
 

@@ -35,7 +35,7 @@
   - **MySQL**：已有数据库实例（阿里云 RDS 或自建），网络可达。
   - **PostgreSQL**：已有实例且 `wal_level` 参数设置为 `logical`；自建实例还需配置 `listen_addresses` 允许 `100.64.0.0/16` 网段访问。
   - **PolarDB-X 2.0**：已有阿里云 PolarDB-X 2.0 实例，所在地域支持私网访问。
-  - **语雀**：已有语雀知识库（仅公网版本），并获取个人访问 Token。
+  - **语雀**：已有语雀知识库（仅公网版本），并获取个人访问 [Token](../concepts/token.md)。
   - **OSS**：已创建 OSS Bucket 并开通向量检索服务。
 
 ## 创建连接器
@@ -66,7 +66,7 @@
 
 ### 语雀连接器
 
-填写连接器名称和描述后，需到语雀开放 API 页面获取 Tenant access token 并填入，点击"连接检测"验证 Token 有效性。
+填写连接器名称和描述后，需到语雀开放 API 页面获取 Tenant access token 并填入，点击"连接检测"验证 [Token](../concepts/token.md) 有效性。
 
 ### OSS 连接器
 
@@ -112,5 +112,6 @@
 ## 来源文档
 
 - [数据连接](../../raw/application-user-guide/data-connection-overview/data-connection.md)
+
 
 

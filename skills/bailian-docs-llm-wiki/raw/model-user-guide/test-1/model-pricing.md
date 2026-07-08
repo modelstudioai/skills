@@ -3926,6 +3926,8 @@ qwen-omni-turbo-2025-03-26
 
 qwen3.5-omni-plus-realtime
 
+> 当前能力等同于qwen3.5-omni-plus-realtime-2026-03-15
+
 中国内地
 
 10元
@@ -3953,6 +3955,8 @@ qwen3.5-omni-plus-realtime-2026-03-15
 100万Token
 
 qwen3.5-omni-flash-realtime
+
+> 当前能力等同于qwen3.5-omni-flash-realtime-2026-03-15
 
 中国内地
 
@@ -4014,6 +4018,8 @@ qwen3.5-omni-flash-realtime-2026-03-15
 
 qwen3-omni-flash-realtime
 
+> 当前能力等同于qwen3-omni-flash-realtime-2025-12-01
+
 中国内地
 
 2.2元
@@ -4067,6 +4073,8 @@ qwen3-omni-flash-realtime-2025-09-15
 100万Token
 
 qwen-omni-turbo-realtime
+
+> 当前能力等同于qwen-omni-turbo-realtime-2025-05-08
 
 中国内地
 
@@ -4144,6 +4152,8 @@ qwen-omni-turbo-realtime-2025-05-08
 
 qwen3.5-omni-plus-realtime
 
+> 当前能力等同于qwen3.5-omni-plus-realtime-2026-03-15
+
 国际
 
 15.74元
@@ -4167,6 +4177,8 @@ qwen3.5-omni-plus-realtime-2026-03-15
 464.64元
 
 qwen3.5-omni-flash-realtime
+
+> 当前能力等同于qwen3.5-omni-flash-realtime-2026-03-15
 
 国际
 
@@ -4220,6 +4232,8 @@ qwen3.5-omni-flash-realtime-2026-03-15
 
 qwen3-omni-flash-realtime
 
+> 当前能力等同于qwen3-omni-flash-realtime-2025-12-01
+
 国际
 
 3.816元
@@ -4267,6 +4281,8 @@ qwen3-omni-flash-realtime-2025-09-15
 133.06元
 
 qwen-omni-turbo-realtime
+
+> 当前能力等同于qwen-omni-turbo-realtime-2025-05-08
 
 国际
 
@@ -5294,6 +5310,8 @@ qwen3.5-ocr
 
 qwen-vl-ocr
 
+> 当前能力等同于qwen-vl-ocr-2025-11-20
+
 > [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 中国内地
@@ -5368,6 +5386,8 @@ qwen-vl-ocr-2024-10-28
 
 qwen-vl-ocr
 
+> 当前能力等同于qwen-vl-ocr-2025-11-20
+
 全球
 
 0.3元
@@ -5394,6 +5414,8 @@ qwen-vl-ocr-2025-11-20
 
 qwen-vl-ocr
 
+> 当前能力等同于qwen-vl-ocr-2025-11-20
+
 国际
 
 0.514元
@@ -5419,6 +5441,8 @@ qwen-vl-ocr-2025-11-20
 **输出单价（每百万Token）**
 
 qwen-vl-ocr
+
+> 当前能力等同于qwen-vl-ocr-2025-11-20
 
 全球
 
@@ -9880,6 +9904,8 @@ stepfun/step-3.7-flash
 
 qwen-image-2.0-pro
 
+> 当前能力等同于qwen-image-2.0-pro-2026-04-22
+
 中国内地
 
 0.5元/张
@@ -9911,6 +9937,8 @@ qwen-image-2.0-pro-2026-03-03
 100张
 
 qwen-image-2.0
+
+> 当前能力等同于qwen-image-2.0-2026-03-03
 
 中国内地
 
@@ -9980,6 +10008,8 @@ qwen-image
 
 qwen-image-2.0-pro
 
+> 当前能力等同于qwen-image-2.0-pro-2026-04-22
+
 国际
 
 0.550443元/张
@@ -10003,6 +10033,8 @@ qwen-image-2.0-pro-2026-03-03
 0.550443元/张
 
 qwen-image-2.0
+
+> 当前能力等同于qwen-image-2.0-2026-03-03
 
 国际
 
@@ -10070,6 +10102,8 @@ qwen-image
 
 qwen-image-2.0-pro
 
+> 当前能力等同于qwen-image-2.0-pro-2026-04-22
+
 中国内地
 
 0.5元/张
@@ -10101,6 +10135,8 @@ qwen-image-2.0-pro-2026-03-03
 100张
 
 qwen-image-2.0
+
+> 当前能力等同于qwen-image-2.0-2026-03-03
 
 中国内地
 
@@ -10178,6 +10214,8 @@ qwen-image-edit
 
 qwen-image-2.0-pro
 
+> 当前能力等同于qwen-image-2.0-pro-2026-04-22
+
 国际
 
 0.550443元/张
@@ -10201,6 +10239,8 @@ qwen-image-2.0-pro-2026-03-03
 0.550443元/张
 
 qwen-image-2.0
+
+> 当前能力等同于qwen-image-2.0-2026-03-03
 
 国际
 
@@ -11198,6 +11238,8 @@ fun-music-v1
 
 qwen3-tts-instruct-flash
 
+> 当前能力等同于qwen3-tts-instruct-flash-2026-01-26
+
 中国内地
 
 0.8元
@@ -11386,6 +11428,8 @@ qwen-tts-2025-04-10
 
 qwen3-tts-instruct-flash
 
+> 当前能力等同于qwen3-tts-instruct-flash-2026-01-26
+
 国际
 
 0.8元
@@ -11483,6 +11527,8 @@ qwen3-tts-flash-2025-09-18
 有效期：阿里云百炼开通后90天内
 
 qwen3-tts-instruct-flash-realtime
+
+> 当前能力等同于qwen3-tts-instruct-flash-realtime-2026-01-22
 
 中国内地
 
@@ -11676,6 +11722,8 @@ qwen-tts-realtime-2025-07-15
 
 qwen3-tts-instruct-flash-realtime
 
+> 当前能力等同于qwen3-tts-instruct-flash-realtime-2026-01-22
+
 国际
 
 1元
@@ -11739,6 +11787,8 @@ qwen3-tts-vc-realtime-2025-11-27
 **输入单价（每万字符）**
 
 qwen3-tts-flash-realtime
+
+> 当前能力等同于qwen3-tts-flash-realtime-2025-11-27
 
 国际
 
@@ -12060,6 +12110,8 @@ qwen3.5-livetranslate-flash-realtime-2026-05-19
 
 qwen3-livetranslate-flash-realtime
 
+> 当前能力等同于qwen3-livetranslate-flash-realtime-2025-09-22
+
 中国内地
 
 64元
@@ -12129,6 +12181,8 @@ qwen3.5-livetranslate-flash-realtime-2026-05-19
 224.826元
 
 qwen3-livetranslate-flash-realtime
+
+> 当前能力等同于qwen3-livetranslate-flash-realtime-2025-09-22
 
 国际
 
@@ -12404,6 +12458,8 @@ qwen3-asr-flash-2025-09-08
 
 qwen3-asr-flash-realtime
 
+> 当前能力等同于qwen3-asr-flash-realtime-2025-10-27
+
 中国内地
 
 0.00033元/秒
@@ -12431,6 +12487,8 @@ qwen3-asr-flash-realtime-2025-10-27
 **输入单价**
 
 qwen3-asr-flash-realtime
+
+> 当前能力等同于qwen3-asr-flash-realtime-2025-10-27
 
 国际
 
@@ -12467,6 +12525,8 @@ qwen3-asr-flash-realtime-2025-10-27
 有效期：阿里云百炼开通后90天内
 
 fun-asr
+
+> 当前能力等同于fun-asr-2025-11-07
 
 中国内地
 
@@ -12515,6 +12575,8 @@ fun-asr-flash-2026-06-15
 **输入单价**
 
 fun-asr
+
+> 当前能力等同于fun-asr-2025-11-07
 
 国际
 
@@ -12597,6 +12659,8 @@ fun-asr-mtl-realtime-2025-12-10
 36,000秒（10小时）
 
 fun-asr-flash-8k-realtime
+
+> 当前能力等同于fun-asr-flash-8k-realtime-2026-01-28
 
 中国内地
 

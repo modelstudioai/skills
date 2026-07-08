@@ -1,6 +1,6 @@
 # application call
 
-阿里云百炼平台提供两套 API 来调用智能体和工作流应用：**OpenAI 兼容的 Responses API** 和 **DashScope API**。两者均支持同步/[异步调用](../concepts/async-invocation.md)、多轮对话、[流式输出](../concepts/streaming.md)等核心能力，开发者可根据生态兼容性和功能需求选择合适的接入方式。调用前需先获取 APP ID（以及子[业务空间](../concepts/workspace.md)场景下的 Workspace ID）和 API Key。
+阿里云百炼平台提供两套 API 来调用智能体和工作流应用：**OpenAI 兼容的 Responses API** 和 **DashScope API**。两者均支持同步/[异步调用](../concepts/async-invocation.md)、多轮对话、[流式输出](../concepts/streaming.md)等核心能力，开发者可根据生态兼容性和功能需求选择合适的接入方式。调用前需先获取 APP ID（以及子[业务空间](../concepts/workspace.md)场景下的 Workspace ID）和 [API Key](../concepts/api-key.md)。
 
 ## 前置准备
 
@@ -15,7 +15,7 @@
 
 ### 其他前提
 
-- 已获取 API Key 并配置到环境变量 `DASHSCOPE_API_KEY`。
+- 已获取 [API Key](../concepts/api-key.md) 并配置到环境变量 `DASHSCOPE_API_KEY`。
 - 已创建并发布百炼应用（智能体或工作流）。
 - 如使用 SDK 调用，需安装对应的 SDK（OpenAI SDK 或 [DashScope SDK](../concepts/dashscope-sdk.md)）。
 
@@ -79,9 +79,9 @@ Responses API 支持在 `content` 数组中混合多种输入类型：
 
 > **注意**：异步任务暂不支持[流式输出](../concepts/streaming.md)（`stream=true`）。
 
-### 流式输出
+### [流式输出](../concepts/streaming.md)
 
-设置 `stream=true` 可边生成边输出，适用于需要实时展示生成内容的场景。若应用类型为工作流，需在结束节点或流程输出节点中启用「流式输出」开关并重新发布。
+设置 `stream=true` 可边生成边输出，适用于需要实时展示生成内容的场景。若应用类型为工作流，需在结束节点或流程输出节点中启用「[流式输出](../concepts/streaming.md)」开关并重新发布。
 
 ## DashScope API
 
@@ -127,9 +127,9 @@ response = await client.responses.create(
 
 - 两套 API 目前均**仅适用于华北2（北京）地域**。
 - Responses API 的多轮对话暂不支持基于 `pre_response_id` 或 `conversation_id` 的上下文功能，需每次传递完整对话历史。
-- 异步调用仅 Responses API 支持，且不能与流式输出同时使用。
-- RAM 子账号查看业务空间管理页面需要超级管理员权限（`AliyunBailianFullAccess` 或 `AliyunBailianControlFullAccess`）。
-- API Key 不建议硬编码到代码中，应通过环境变量配置以降低泄露风险。
+- [异步调用](../concepts/async-invocation.md)仅 Responses API 支持，且不能与[流式输出](../concepts/streaming.md)同时使用。
+- RAM 子账号查看[业务空间](../concepts/workspace.md)管理页面需要超级管理员权限（`AliyunBailianFullAccess` 或 `AliyunBailianControlFullAccess`）。
+- [API Key](../concepts/api-key.md) 不建议硬编码到代码中，应通过环境变量配置以降低泄露风险。
 
 ## 来源文档
 
@@ -138,5 +138,6 @@ response = await client.responses.create(
 - [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)
 - [新版智能体应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md)
 - [应用 DashScope API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)
+
 
 

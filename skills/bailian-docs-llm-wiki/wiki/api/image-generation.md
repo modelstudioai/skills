@@ -140,7 +140,7 @@ GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}
 - **新加坡**：支持部分模型（千问、万相文生图V2、Z-Image等）。域名：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 - **美国（弗吉尼亚）**：支持部分模型。域名：`https://dashscope-us.aliyuncs.com`
 
-> **注意**：不同地域拥有独立的API Key与请求地址，不可混用，跨地域调用将导致鉴权失败。创意工具类模型（人像风格重绘、虚拟模特、AI试衣等）大多仅在华北2（北京）地域可用。
+> **注意**：不同地域拥有独立的[API Key](../concepts/api-key.md)与请求地址，不可混用，跨地域调用将导致鉴权失败。创意工具类模型（人像风格重绘、虚拟模特、AI试衣等）大多仅在华北2（北京）地域可用。
 
 ## 计费与限流
 
@@ -154,7 +154,7 @@ GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}
 
 - **图片下载失败**（`BadRequest.InputDownloadFailed`）：输入图片URL无法访问，需确保URL完整且支持公网访问，建议上传至OSS等云存储。
 - **任务创建curl执行失败**：Windows环境下`curl`转义规则与Linux/macOS不同，建议使用Postman等工具或按Windows语法调整命令。
-- **鉴权失败**：检查是否使用了正确地域的API Key，不同地域的Key不可混用。
+- **鉴权失败**：检查是否使用了正确地域的[API Key](../concepts/api-key.md)，不同地域的Key不可混用。
 - **余额不足**：免费额度用尽后需在阿里云控制台充值，或检查模型是否为"仅免费体验"状态。
 
 ## 来源文档
@@ -184,5 +184,6 @@ GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}
 - [图像擦除补全API参考](../../raw/model-api-reference/image-generation/image-creative-tools-api-reference/image-erase-completion-api-reference.md)
 - [人物写真生成FaceChain](../../raw/model-api-reference/image-generation/image-creative-tools-api-reference/facechain-portrait-generation.md)
 - [创意文字WordArt锦书](../../raw/model-api-reference/image-generation/image-creative-tools-api-reference/wordart-quick-start.md)
+
 
 

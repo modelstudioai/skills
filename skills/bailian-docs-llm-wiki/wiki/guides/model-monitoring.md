@@ -22,9 +22,9 @@
 | 视觉模型·视频生成 | 秒 | 按成功生成的视频秒数[计费](../concepts/billing.md) |
 | 语音模型（TTS/ASR/音视频翻译等） | 秒、字符或 [Token](../concepts/token.md) | 视模型而定，可能按时长、字符数或 [Token](../concepts/token.md) 数 |
 | 全模态模型 | [Token](../concepts/token.md) | 文本与其他模态均按 [Token](../concepts/token.md) 数[计费](../concepts/billing.md) |
-| 向量模型 | [Token](../concepts/token.md) | 按输入文本的 Token 数[计费](../concepts/billing.md) |
+| 向量模型 | [Token](../concepts/token.md) | 按输入文本的 [Token](../concepts/token.md) 数[计费](../concepts/billing.md) |
 
-> **注意**：用量数据按**[业务空间](../concepts/workspace.md)**维度统计，**不支持按阿里云账号维度统计**。如需账号级 Token 总量，需用主账号在费用与成本页面导出账单查看。
+> **注意**：用量数据按**[业务空间](../concepts/workspace.md)**维度统计，**不支持按阿里云账号维度统计**。如需账号级 [Token](../concepts/token.md) 总量，需用主账号在费用与成本页面导出账单查看。
 
 ## 查看用量与费用概览
 
@@ -63,7 +63,7 @@
 
 - **安全**：识别违规内容，如内容安全错误次数。
 - **成本**：评估成本效益，如平均单次请求调用量。
-- **性能**：观察性能变化，如调用时长、首 Token 延时、RPM、TPM、非首 Token 延时。
+- **性能**：观察性能变化，如调用时长、首 [Token](../concepts/token.md) 延时、RPM、TPM、非首 Token 延时。
 - **错误**：判断稳定性，如失败次数、失败率、限流错误次数（429）、内容安全错误次数。
 
 调用统计页签支持按 API-KEY、推理类型、时间范围、时间精度（分钟/小时）筛选；失败次数图表可点击"失败详情"查看失败明细。
@@ -152,6 +152,7 @@ Authorization: Basic base64Encode(AccessKey:AccessKeySecret)
 
 - [模型用量](../../raw/model-user-guide/model-monitoring/model-usage-statistics.md)
 - [模型监控](../../raw/model-user-guide/model-monitoring/model-telemetry.md)
+
 
 
 

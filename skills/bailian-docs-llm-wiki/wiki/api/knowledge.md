@@ -1,6 +1,6 @@
 # knowledge
 
-百炼平台「知识检索与问答」相关的 HTTP REST API 概览，提供跨知识库语义检索与基于知识库的智能问答两个接口。这两个接口属于 DashScope 应用网关体系，通过 API Key Bearer 鉴权调用，与 `CreateIndex`、`Retrieve` 等 OpenAPI RPC 接口不同。详见 [知识检索与问答](../../raw/application-api-reference/knowledge.md)。
+百炼平台「知识检索与问答」相关的 HTTP REST API 概览，提供跨知识库语义检索与基于知识库的智能问答两个接口。这两个接口属于 DashScope 应用网关体系，通过 [API Key](../concepts/api-key.md) Bearer 鉴权调用，与 `CreateIndex`、`Retrieve` 等 OpenAPI RPC 接口不同。详见 [知识检索与问答](../../raw/application-api-reference/knowledge.md)。
 
 ## 接口列表
 
@@ -17,7 +17,7 @@
 https://{workspaceId}.cn-beijing.maas.aliyuncs.com
 ```
 
-其中 `{workspaceId}` 为[业务空间](../concepts/workspace.md) ID。API Key 在控制台 [API Key 页面](https://rag.console.aliyun.com/settings/apikey) 获取，[业务空间](../concepts/workspace.md) ID 在控制台 [业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management) 获取。
+其中 `{workspaceId}` 为[业务空间](../concepts/workspace.md) ID。[API Key](../concepts/api-key.md) 在控制台 [API Key 页面](https://rag.console.aliyun.com/settings/apikey) 获取，[业务空间](../concepts/workspace.md) ID 在控制台 [业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management) 获取。
 
 ## 限流
 
@@ -28,18 +28,19 @@ https://{workspaceId}.cn-beijing.maas.aliyuncs.com
 知识检索与问答接口属于 **DashScope 应用网关** 体系，与 OpenAPI（如 `CreateIndex`、`ListIndices`、`Retrieve` 等 RPC 接口）不同：
 
 - 调用方式：HTTP REST，而非 RPC 风格
-- 鉴权方式：API Key Bearer
-- Base URL：使用业务空间 ID 拼接的专属域名
+- 鉴权方式：[API Key](../concepts/api-key.md) Bearer
+- Base URL：使用[业务空间](../concepts/workspace.md) ID 拼接的专属域名
 
 ## 使用建议
 
 - 知识检索接口适合需要自定义生成流程的场景：拿到排序后的切片后，自行拼接 [prompt](../guides/prompt.md) 调用大模型。
 - 知识问答接口适合开箱即用的问答场景：服务端自动完成规划、检索、生成，通过 SSE 流式返回三个阶段的结果。
-- 调用前确认 API Key 与业务空间 ID 已正确配置，详见 [知识检索与问答](../../raw/application-api-reference/knowledge.md)。
+- 调用前确认 API Key 与[业务空间](../concepts/workspace.md) ID 已正确配置，详见 [知识检索与问答](../../raw/application-api-reference/knowledge.md)。
 
 ## 来源文档
 
 - [知识检索与问答](../../raw/application-api-reference/knowledge.md)
+
 
 
 

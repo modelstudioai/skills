@@ -38,7 +38,7 @@ RAM 用户默认无权调用百炼应用的数据、[知识库](../concepts/know
 ### 生产环境实践
 
 - **空间规划**：推荐按环境（dev/test/prod）划分[业务空间](../concepts/workspace.md)实现隔离，或按业务线划分便于权限与成本管理。
-- **限流策略**：将主账号总配额按比例分配给各业务空间并预留缓冲。例如总配额 1000 QPM，可分配 prod 600 / test 200 / dev 100，预留 100。
+- **限流策略**：将主账号总配额按比例分配给各[业务空间](../concepts/workspace.md)并预留缓冲。例如总配额 1000 QPM，可分配 prod 600 / test 200 / dev 100，预留 100。
 
 ## 内容安全：AI 安全护栏
 
@@ -145,9 +145,9 @@ SDK 自动完成加解密，响应为明文，无需手动处理。
 - **同境内或同境外跨地域**（如华东1杭州 VPC → 华北2北京百炼）：推荐启用跨地域端点。
 - **跨境跨地域**（中国内地与境外之间，如华北2北京 VPC → 新加坡百炼）：通过 CEN 跨地域 VPC 互通。
 
-## 安全存储业务空间
+## 安全存储[业务空间](../concepts/workspace.md)
 
-安全存储业务空间通过反向终端节点与 VPC 私网连接，让部署其中的应用访问同 VPC 下的 ElasticSearch、AnalyticDB（ADB）、OSS 等云组件，避免公网访问风险。该能力需联系商务人员申请开通。
+安全存储[业务空间](../concepts/workspace.md)通过反向终端节点与 VPC 私网连接，让部署其中的应用访问同 VPC 下的 ElasticSearch、AnalyticDB（ADB）、OSS 等云组件，避免公网访问风险。该能力需联系商务人员申请开通。
 
 ### 配置流程总览
 
@@ -171,7 +171,7 @@ SDK 自动完成加解密，响应为明文，无需手动处理。
 ## 限制与注意事项汇总
 
 - 默认业务空间无法设置模型调用/训练/部署限制，所有模型均可调用、调优、部署，且无法限流。
-- API Key 不可跨地域、跨业务空间、跨用户转移；账号移出空间会使其 API Key 失效（重新加入恢复），删除账号/角色则永久失效。
+- [API Key](../concepts/api-key.md) 不可跨地域、跨业务空间、跨用户转移；账号移出空间会使其 [API Key](../concepts/api-key.md) 失效（重新加入恢复），删除账号/角色则永久失效。
 - AI 安全护栏目前仅支持文本和图片类型模型。
 - [DashScope SDK](../concepts/dashscope-sdk.md) 自动加密仅支持 Java/Python 且不支持自定义密钥；HTTP 手动加密仅适用于 DashScope Endpoint，OpenAI 兼容 Endpoint 不支持。
 - PrivateLink 私网访问美国（弗吉尼亚）地域暂不支持；跨地域访问需区分同境内/同境外与跨境两种方式。
@@ -192,6 +192,7 @@ SDK 自动完成加解密，响应为明文，无需手动处理。
 - [配置可用区IP](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-zone-ip.md)
 - [配置私有网络中的资源](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)
 - [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md)
+
 
 
 

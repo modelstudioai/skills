@@ -17,8 +17,8 @@
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的配置。
+dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
 text = "那我来给大家推荐一款T恤，这款呢真的是超级好看，这个颜色呢很显气质，而且呢也是搭配的绝佳单品，大家可以闭眼入，真的是非常好看，对身材的包容性也很好，不管啥身材的宝宝呢，穿上去都是很好看的。推荐宝宝们下单哦。"
 # SpeechSynthesizer接口使用方法：dashscope.audio.qwen_tts.SpeechSynthesizer.call(...)
@@ -72,8 +72,8 @@ public class Main {
         System.out.println(JsonUtils.toJson(result));
     }
     public static void main(String[] args) {
-        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
+        // 以下为华北2（北京）地域的配置。
+        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
         try {
             call();
         } catch (ApiException | NoApiKeyException | UploadFileException e) {
@@ -88,12 +88,12 @@ public class Main {
 
 ```
 # ======= 重要提示 =======
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+# 以下为华北2（北京）地域的配置。
 # 新加坡地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 若没有配置环境变量，请用阿里云百炼API Key将$DASHSCOPE_API_KEY替换为：sk-xxx。
 # === 执行时请删除该注释 ===
 
-curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -d '{
@@ -117,8 +117,8 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
     import os
     import dashscope
 
-    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-    dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+    # 以下为华北2（北京）地域的配置。
+    dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
 
     text = "那我来给大家推荐一款T恤，这款呢真的是超级好看，这个颜色呢很显气质，而且呢也是搭配的绝佳单品，大家可以闭眼入，真的是非常好看，对身材的包容性也很好，不管啥身材的宝宝呢，穿上去都是很好看的。推荐宝宝们下单哦。"
     # SpeechSynthesizer接口使用方法：dashscope.audio.qwen_tts.SpeechSynthesizer.call(...)
@@ -176,8 +176,8 @@ public class Main {
         });
     }
     public static void main(String[] args) {
-        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
+        // 以下为华北2（北京）地域的配置。
+        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
         try {
             streamCall();
         } catch (ApiException | NoApiKeyException | UploadFileException e) {
@@ -192,12 +192,12 @@ public class Main {
 
 ```
 # ======= 重要提示 =======
-# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+# 以下为华北2（北京）地域的配置。
 # 新加坡地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
 # 若没有配置环境变量，请用阿里云百炼API Key将$DASHSCOPE_API_KEY替换为：sk-xxx。
 # === 执行时请删除该注释 ===
 
-curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
+curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H 'Content-Type: application/json' \
 -H 'X-DashScope-SSE: enable' \
@@ -425,6 +425,78 @@ HTTP状态码。遵循 [RFC 9110](https://www.rfc-editor.org/rfc/rfc9110.html#n
   
   
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
 **request\_id** `_string_`
 
@@ -471,9 +543,13 @@ HTTP状态码。遵循 [RFC 9110](https://www.rfc-editor.org/rfc/rfc9110.html#n
 
 完整音频文件的 URL，有效期 24 小时。
 
+**说明**
+
+流式输出说明：流式模式下，API 返回多个 chunk。中间 chunk 的 audio.data 包含 Base64 编码的音频片段，audio.url 为空；最后一个 chunk 的 audio.data 为空字符串，audio.url 包含完整音频文件的 **OSS** 地址。开发者可在最后一个 chunk 中通过 url 字段下载完整音频。非流式模式下，该字段直接返回完整音频文件 URL。
+
 **data** `_string_`
 
-流式输出时的Base64 音频数据。
+Base64 编码的音频数据。非流式输出和流式输出的中间 chunk 中返回 Base64 编码的音频片段；流式输出的最后一个 chunk 中该字段为空字符串，音频通过同级的 url 字段获取。
 
 **id** `_string_`
 

@@ -27,7 +27,7 @@
 
 ## [业务空间](../concepts/workspace.md)权限管理
 
-百炼按地理区域划分资源和[业务空间](../concepts/workspace.md)，**单个[业务空间](../concepts/workspace.md)不能跨地域存在**，即使是各地域的默认业务空间，也是不同的空间。业务空间是精细化权限管理的最小单元，可管理以下维度（默认业务空间无法设置这些限制）：
+百炼按地理区域划分资源和[业务空间](../concepts/workspace.md)，**单个[业务空间](../concepts/workspace.md)不能跨地域存在**，即使是各地域的默认[业务空间](../concepts/workspace.md)，也是不同的空间。[业务空间](../concepts/workspace.md)是精细化权限管理的最小单元，可管理以下维度（默认[业务空间](../concepts/workspace.md)无法设置这些限制）：
 
 - **限制模型调用**：管理某个模型可否在该业务空间调用（控制台 & API），并设置该模型的请求数限流和 [Token](../concepts/token.md) 限流。默认业务空间所有模型均可调用且无法限流。
 - **限制模型训练**：管理某个模型可否在该业务空间进行调优和调优后部署。默认业务空间所有支持调优的模型均可调优及部署。
@@ -44,12 +44,12 @@
 
 | 触发操作 | 主账号的 [API Key](../concepts/api-key.md) | RAM 账号的 [API Key](../concepts/api-key.md) |
 | --- | --- | --- |
-| 主动删除 API Key | 失效，不可恢复 | 失效，不可恢复 |
+| 主动删除 [API Key](../concepts/api-key.md) | 失效，不可恢复 | 失效，不可恢复 |
 | 将账号移出业务空间 | — | 失效（重新加入后恢复生效） |
 | 在 RAM 控制台删除账号/角色 | — | 失效，不可恢复 |
-| 为 API Key 设置 IP 访问白名单 | 华北2（北京）地域支持 | 华北2（北京）地域支持 |
+| 为 [API Key](../concepts/api-key.md) 设置 IP 访问白名单 | 华北2（北京）地域支持 | 华北2（北京）地域支持 |
 
-> **注意**：自 2026 年 3 月 25 日起，华北2（北京）地域的所有新创建的 API Key 均归属主账号。
+> **注意**：自 2026 年 3 月 25 日起，华北2（北京）地域的所有新创建的 [API Key](../concepts/api-key.md) 均归属主账号。
 
 可通过百炼控制台左侧导航栏「权限管理」页签为 RAM 用户添加 API-Key 权限，赋予其创建、删除、查看该空间下所有 API-Key 的权限。
 
@@ -114,6 +114,7 @@ RAM 用户默认无权查看阿里云账单和购买预付费产品，需在 RAM
 ## 来源文档
 
 - [权限管理](../../raw/application-user-guide/application-permission-management/application-permission-management-overview.md)
+
 
 
 

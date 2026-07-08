@@ -4,14 +4,14 @@
 
 ## 获取与配置 [API Key](../concepts/api-key.md)
 
-[API Key](../concepts/api-key.md) 是调用百炼服务的唯一鉴权凭证。您需要通过百炼控制台创建 API Key，详细步骤参见[获取API Key](../../raw/model-api-reference/preparations/get-api-key.md)。
+[API Key](../concepts/api-key.md) 是调用百炼服务的唯一鉴权凭证。您需要通过百炼控制台创建 [API Key](../concepts/api-key.md)，详细步骤参见[获取API Key](../../raw/model-api-reference/preparations/get-api-key.md)。
 
-### 创建 API Key
+### 创建 [API Key](../concepts/api-key.md)
 
 - 操作权限要求：需使用主账号，或具备`管理员`或`API-Key`页面权限的子账号。
 - 不同地域的控制台入口不同：华北2（北京）、新加坡、日本（东京）、德国（法兰克福）使用 `bailian.console.aliyun.com`；美国（弗吉尼亚）使用 `modelstudio.console.aliyun.com`。
 - 创建时可选择归属[业务空间](../concepts/workspace.md)（建议选默认空间），并配置权限（全部或自定义 IP 白名单 + 模型范围）。
-- 升级后新创建的 API Key 以 `sk-ws` 开头，仅在创建时展示一次明文，关闭弹窗后无法再次查看。请立即复制保存。
+- 升级后新创建的 [API Key](../concepts/api-key.md) 以 `sk-ws` 开头，仅在创建时展示一次明文，关闭弹窗后无法再次查看。请立即复制保存。
 
 ### 权限与时效
 
@@ -101,6 +101,7 @@
 - [获取API Key](../../raw/model-api-reference/preparations/get-api-key.md)
 - [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)
 - [错误码](../../raw/model-api-reference/preparations/error-code.md)
+
 
 
 

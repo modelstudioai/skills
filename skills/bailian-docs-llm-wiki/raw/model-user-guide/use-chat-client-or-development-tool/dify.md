@@ -128,7 +128,7 @@ A：Dify 没有提供万相模型相关的插件，通过Dify的Chatflow/工作�
 
 1.  **下载并导入工作流模板**
     
-    下载我们写好的模板：_万相-文生图Demo.yml（ICMS 附件，file\_id=135184，需在线下载）\*\*Wanx - Text-to-Image Demo.yml（ICMS 附件，file\_id=148265，需在线下载）_或 _万相-文生视频Demo.yml（ICMS 附件，file\_id=135439，需在线下载）\*\*Wanx - Text-to-Video Demo.yml（ICMS 附件，file\_id=148266，需在线下载）_，在[工作室](https://cloud.dify.ai/apps)单击**导入DSL文件**并选择下载的模板文件。
+    下载我们写好的模板：[万相-文生图Demo.yml](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250520/uuxncy/%E9%80%9A%E4%B9%89%E4%B8%87%E7%9B%B8-%E6%96%87%E7%94%9F%E5%9B%BEDemo.yml)或 [万相-文生视频Demo.yml](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250522/ksblgi/%E9%80%9A%E4%B9%89%E4%B8%87%E7%9B%B8-%E6%96%87%E7%94%9F%E8%A7%86%E9%A2%91Demo.yml)，在[工作室](https://cloud.dify.ai/apps)单击**导入DSL文件**并选择下载的模板文件。
     
 2.  **配置环境变量**
     

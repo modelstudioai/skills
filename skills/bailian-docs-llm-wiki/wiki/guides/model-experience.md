@@ -37,7 +37,7 @@
 
 ### 关键参数
 
-- **图像分辨率**：大多数模型支持每张图片最高 1600 万像素，Token 计算公式为 `h x w / (32 x 32) + 2`。
+- **图像分辨率**：大多数模型支持每张图片最高 1600 万像素，[Token](../concepts/token.md) 计算公式为 `h x w / (32 x 32) + 2`。
 - **视频支持**：`qwen3.7-plus`、`qwen3.6-flash` 等支持最长 2 小时 / 2GB 视频输入。
 - **OCR**：`qwen3.5-ocr` 专为文档、表格、手写内容优化。
 
@@ -92,7 +92,7 @@
 | `Tripo/Tripo-H3.1` | 200 万面 | 较慢 | 影视级渲染、高精度数字资产 |
 | `Tripo/Tripo-P1.0` | 2 万面 | 更快 | 快速预览、游戏/AR、实时应用 |
 
-> **注意**：Tripo 3D 模型生成仅适用于华北2（北京）地域，必须使用该地域的 API Key。
+> **注意**：Tripo 3D 模型生成仅适用于华北2（北京）地域，必须使用该地域的 [API Key](../concepts/api-key.md)。
 
 ### 使用方式
 
@@ -178,7 +178,7 @@ Fun-Music 模型支持通过提示词或自定义歌词生成完整歌曲或纯�
 
 ### 推荐模型
 
-| 模型 | 类型 | 维度 | 最大 Token | 场景 |
+| 模型 | 类型 | 维度 | 最大 [Token](../concepts/token.md) | 场景 |
 |------|------|------|-----------|------|
 | `text-embedding-v4` | 文本 Embedding | 64~2048 | 8,192 | 文本搜索、RAG、聚类 |
 | `qwen3-vl-embedding` | [多模态](../concepts/multimodal.md) Embedding | 256~2560 | 32,000 | 图文混合检索 |
@@ -231,5 +231,6 @@ Fun-Music 模型支持通过提示词或自定义歌词生成完整歌曲或纯�
 - [音乐生成](../../raw/model-user-guide/model-experience/fun-music.md)
 - [向量与重排序](../../raw/model-user-guide/model-experience/embedding-rerank-model.md)
 - [全模态](../../raw/model-user-guide/model-experience/omni.md)
+
 
 

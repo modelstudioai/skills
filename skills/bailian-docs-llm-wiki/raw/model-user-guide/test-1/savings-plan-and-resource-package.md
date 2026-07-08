@@ -793,7 +793,7 @@ ASR模型按秒计费，TTS模型按字符计费，请前往[百炼控制台](ht
 
 **退订说明**：
 
--   根据[退订规则说明](https://help.aliyun.com/zh/user-center/cancel-subscription/)，预付费商品未发生使用的部分，可按未使用额度费用[申请退款](https://billing-cost.console.aliyun.com/refund/refund?commodityType=RESOURCE_PLANS&refundType=NOREASON_REFUND)；已使用的部分则无法退款。
+-   根据[退订规则](https://help.aliyun.com/zh/user-center/cancel-subscription/)，预付费商品未发生使用的部分，可按未使用额度费用[申请退款](https://billing-cost.console.aliyun.com/refund/refund?commodityType=RESOURCE_PLANS&refundType=NOREASON_REFUND)；已使用的部分则无法退款。
     
 
 ### **大语言模型推理资源包**
@@ -980,3 +980,39 @@ qwen-turbo的实时推理服务（[非思考模式](https://help.aliyun.com/zh/m
 ### **购买了大语言模型节省计划，能抵扣向量模型（embedding）和排序模型（rerank）吗？**
 
 不能。大语言模型推理节省计划仅适用于文本生成模型，不支持抵扣向量模型和排序模型。如果您的业务同时涉及大语言模型与向量、排序模型（例如 RAG 场景），建议选择[AI 通用型节省计划](#bi9fizb4qqi7x)，或单独购买[向量及排序模型节省计划](#1a5d3540e3749)。
+
+### **入门型AI通用节省计划和 AI 通用型节省计划有什么区别？**
+
+两者的主要区别如下：
+
+**对比项**
+
+**AI 通用型节省计划**
+
+**入门型AI通用节省计划**
+
+**购买入口**
+
+通过[AI通用型节省计划购买页](https://common-buy.aliyun.com/?commodityCode=sfm_GenAI_spn_cn)购买
+
+通过[AI优惠活动页](https://www.aliyun.com/benefit/scene/ai-discount)的"全模型通享"模块购买
+
+**活动限制**
+
+无首购限制
+
+活动价格仅限**首购**
+
+**适用模型**
+
+详见[购买指引](#nqdi1bsux4qx0)中的抵扣范围
+
+与 AI 通用型节省计划支持的模型范围相同，详见[购买指引](#nqdi1bsux4qx0)中的抵扣范围
+
+**折扣方式**
+
+不同档位对应不同按量付费折扣，档位越高折扣越大
+
+按量计费，无按量付费折扣；仅首次购买时有优惠（如原价 20 元只需支付 10 元，具体以购买页为准）
+
+节省计划账单请参见[节省账单使用明细](https://billing-cost.console.aliyun.com/resource/spn/detail)。

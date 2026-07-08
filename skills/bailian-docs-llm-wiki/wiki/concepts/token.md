@@ -1,74 +1,75 @@
-# Token 计量
+# Token
 
-Token 是百炼平台中衡量文本处理量的基本单位，用于模型推理计费、用量统计、吞吐量管理等核心场景。一个 Token 大致对应一个中文字或一个英文单词片段，实际切分由模型的分词器决定。
+Token 是大语言模型处理文本的最小单位，模型将输入和输出的自然语言文本拆分为 Token 序列进行理解与生成。在百炼平台中，Token 既是模型能力的度量基础，也是计费、监控和容量规划的核心计量单元。
 
-## 计费中的 Token
+## 基本概念
 
-百炼平台的模型推理默认按量付费，核心计费维度就是输入 Token 和输出 Token：
+大语言模型不直接处理原始文本，而是先通过分词器（Tokenizer）将文本切分为 Token。一个 Token 可能对应一个汉字、一个英文单词、一个子词片段或一个标点符号，具体粒度取决于模型所使用的分词算法。因此，同一段文本在不同模型下的 Token 数量可能不同。
 
-- **输入 Token**：发送给模型的 [prompt](../guides/prompt.md)、上下文、系统指令等文本经分词后的 Token 总量。
-- **输出 Token**：模型生成的回复文本对应的 Token 总量。
-- **思考 Token**：部分模型（如开启深度思考模式）会产生额外的思考过程 Token，可能按独立单价计费。
+在百炼平台中，Token 分为以下几类：
 
-不同模型的输入/输出单价差异较大。以千问系列为例，qwen3-max 在 32K 以内输入单价为 2.5 元/百万 Token，输出为 10 元/百万 Token；超过 32K 后阶梯上升。部分模型还支持 Batch 调用（输入输出均半价）和上下文缓存（输入 Token 享折扣），两者不可同时生效。
+- **输入 Token**：用户发送给模型的 Prompt 及上下文所消耗的 Token 数量。
+- **输出 Token**：模型生成的回复文本所消耗的 Token 数量。
+- **缓存 Token**：命中上下文缓存的输入 Token，通常享有费用折扣。
+- **训练 Token**：模型调优（微调）过程中消耗的 Token 总量。
 
-模型训练同样按 Token 计费，费用等于训练数据 Token 总量乘以循环次数再乘以训练单价。
+## 计费场景
 
-## Token 与用量统计
+Token 是百炼平台按量付费的核心计量维度。不同场景的计费方式如下：
 
-百炼按[业务空间](workspace.md)维度统计 Token 消耗，开发者可在控制台的**模型用量**页面查看各模型的 Token 用量汇总，数据延迟约 1 小时。不同模型类型的统计单位有所不同：
+| 场景 | 计费方式 |
+|------|---------|
+| 模型推理（文本生成） | 按输入/输出 Token 数量分别计费，部分模型支持阶梯计费 |
+| 模型训练 | 费用 = Token 总量 x 循环次数 x 训练单价 |
+| 向量模型 | 按输入文本的 Token 数计费 |
+| 全模态模型 | 文本与其他模态均按 Token 数计费 |
 
-| 模型类型 | 统计单位 |
-|---------|---------|
-| 大语言模型（文本生成/深度思考/视觉理解） | Token |
-| 全模态模型 | Token |
-| 向量模型 | Token（按输入文本） |
-| 语音模型 | 秒、字符或 Token（视模型而定） |
-| 图像生成模型 | 张 |
-| 视频生成模型 | 秒 |
+部分模型实行阶梯计费，单价取决于单次请求的输入 Token 总量。例如 qwen3-max 在输入 0\~32K Token 时为基础价，32K\~128K 时单价提升，128K\~256K 时进一步提升。
 
-如需账号级 Token 总量，需在费用与成本页面导出账单查看。
+降低 Token 成本的常用手段包括：Batch 调用（输入/输出单价按实时推理的 50% 计费）、上下文缓存（输入 Token 享有折扣）、节省计划与资源包。
 
-## 应用观测中的 Token 追踪
+## 监控与观测
 
-在应用观测功能中，每次调用的 Token 消耗会被自动采集并展示，包括：
+百炼平台在模型监控和应用观测两个层面提供 Token 相关指标：
 
-- Token 总量（全部/输入/输出）
-- 平均单次请求 Token 量
-- 平均首 Token 耗时（流式场景下衡量响应速度的关键指标）
+- **模型监控**：按[业务空间](workspace.md)维度统计各模型的 Token 用量，支持按输入/输出分别查看。监控详情页提供 TPM（Tokens Per Minute）、平均单次请求 Token 量等性能指标。
+- **应用观测**：追踪应用内部每个节点的 Token 消耗，包括 Token 总量、输入/输出 Token、平均单次请求 Token 量，以及平均首 Token 耗时（流式场景下的关键性能指标）。
 
-开发者可按 Token 总量、输入 Token、输出 Token 等字段筛选调用记录，快速定位高消耗请求。
+用量数据按[业务空间](workspace.md)维度统计，数据延迟约 1 小时（普通监控）或分钟级（高级监控）。
 
-## 模型监控中的 Token 管理
+## 容量规划：TPM 预留
 
-模型监控提供分钟级的 Token 追踪能力，在成本类监控指标中可查看平均单次请求调用量。结合 TPM（Tokens Per Minute）指标，开发者能评估模型的吞吐消耗趋势，及时发现异常用量。
+TPM（Tokens Per Minute）是衡量模型推理吞吐能力的关键指标。百炼提供 TPM 预留功能，允许开发者为指定模型锁定专属推理容量。创建 TPM 预留时需要评估以下参数：
 
-## TPM 预留与吞吐管理
+- **每分钟请求数（RPM）**
+- **平均输入/输出 Token 长度**
+- **预估缓存命中率**
 
-TPM（Tokens Per Minute）是衡量模型推理吞吐量的核心指标。百炼支持 TPM 预留功能，开发者可为指定模型锁定专属吞吐量。影响实际 Token 容量消耗的关键参数包括：
+预留容量内的调用不额外收费，超出部分自动降级为按量计费，服务不中断。
 
-- **缓存折扣**：命中缓存的输入 Token 按折扣系数消耗容量，不同模型折扣率不同（如千问系列 20%、DeepSeek-v4-Pro 8%）。
-- **长输入阶梯系数**：部分模型在输入超过一定长度后，Token 容量消耗系数会提升。
+## 订阅套餐中的 Token
 
-## Token Plan 订阅套餐
+百炼提供 Token Plan 团队版和 Coding Plan 两类订阅套餐。Token Plan 以 Credits 统一计量，Credits 消耗由模型类型、Token 用量、思考模式等因素决定。两类套餐均使用专属 [API Key](api-key.md)（`sk-sp-xxx`）和专属 Base URL，与按量计费的通用 [API Key](api-key.md) 互不相通。
 
-百炼提供 Token Plan 团队版和 Coding Plan 两类订阅套餐，以 Credits 或调用次数统一计量。Token Plan 中，Credits 消耗由模型类型、Token 用量、思考模式及工具调用等因素共同决定。套餐的抵扣顺序为：坐席月度额度 > 共享用量包 > 服务暂停。
+## 数据集规模参考
 
-## 成本优化建议
+在模型调优场景中，训练数据的 Token 规模直接影响调优效果：
 
-- **善用免费额度**：开通百炼时自动发放的免费额度可抵扣模型实时推理的 Token 费用，有效期 30~90 天。
-- **选择合适的节省计划**：AI 通用型节省计划通过承诺月消费金额换取 Token 单价折扣，最高 5.3 折。
-- **利用上下文缓存**：重复的系统提示或长上下文可通过缓存降低输入 Token 费用。
-- **关注阶梯计费**：输入 Token 超过一定阈值后单价上升，合理控制上下文长度有助于降低成本。
-- **开启用完即停**：避免免费额度耗尽后产生意外的 Token 扣费。
+| 调优方式 | 最低数据规模 |
+|---------|------------|
+| CPT（继续预训练） | 一千万 Token 优质预训练数据 |
+| SFT（监督微调） | 上千条优质微调数据 |
+| DPO（偏好对齐） | 上百条人类偏好数据 |
 
 ## 关联主题页
 
 - [test 1](../guides/test-1.md)
-- [application monitoring](../guides/application-monitoring.md)
 - [model monitoring](../guides/model-monitoring.md)
 - [token plan guide](../guides/token-plan-guide.md)
-- [model high speed inference](../guides/model-high-speed-inference.md)
+- [application monitoring](../guides/application-monitoring.md)
 - [qwen api reference](../api/qwen-api-reference.md)
+- [get started with models](../guides/get-started-with-models.md)
+- [model data overview](../guides/model-data-overview.md)
+- [model high speed inference](../guides/model-high-speed-inference.md)
 
 

@@ -68,7 +68,7 @@ Prompt 样例库采用少样本学习（Few-shot learning）思路，从预定�
 
 ### 计费说明
 
-样例库功能本身不收费，但启用后会增加大模型调用的 Token 消耗。总输入 Token 约等于：用户查询 Token + 所有召回样例的总 Token + 系统指令 Token。
+样例库功能本身不收费，但启用后会增加大模型调用的 [Token](../concepts/token.md) 消耗。总输入 [Token](../concepts/token.md) 约等于：用户查询 [Token](../concepts/token.md) + 所有召回样例的总 Token + 系统指令 Token。
 
 详见 [使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)。
 
@@ -99,5 +99,6 @@ Prompt 样例库采用少样本学习（Few-shot learning）思路，从预定�
 - [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)
 - [使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)
 - [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)
+
 
 

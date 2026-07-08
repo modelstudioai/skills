@@ -108,7 +108,7 @@ WS53
 
 [SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/fwonme/qwen_sdk_core_ws53_v1.3.0_22bcf3f_830784.tar.gz)
 
-6
+8
 
 杰理
 
@@ -124,7 +124,7 @@ JL7014
 
 [SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/nxmvis/qwen_sdk_core_jl7014_v1.3.0_22bcf3f_830784.tar.gz)
 
-7
+9
 
 君正
 
@@ -140,7 +140,7 @@ T41
 
 [SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/qiwwdq/qwen_sdk_core_t41_v1.3.0_22bcf3f_830784.tar.gz)
 
-8
+10
 
 乐鑫
 
@@ -152,7 +152,7 @@ ESP32S3
 
 [SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/wjeblr/qwen_sdk_core_esp32s3_v1.3.0_22bcf3f_833235.tar.gz)
 
-9
+11
 
 全志
 
@@ -176,7 +176,7 @@ XR872
 
 [SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/rovsjq/qwen_sdk_core_xr872_v1.3.0_22bcf3f_830785.tar.gz)
 
-10
+12
 
 瑞芯微
 
@@ -192,7 +192,7 @@ RV1103
 
 [SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/nljzny/qwen_sdk_core_rv1103_v1.3.0_22bcf3f_830785.tar.gz)
 
-11
+13
 
 瑞昱
 
@@ -204,7 +204,7 @@ RTL8721
 
 [SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/xwyrct/qwen_sdk_core_rtl8721_v1.3.0_22bcf3f_830785.tar.gz)
 
-12
+14
 
 小米
 
@@ -216,7 +216,7 @@ VELA\_V8A
 
 [SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/khbmch/qwen_sdk_core_vela_v8a_v1.3.0_22bcf3f_830785.tar.gz)
 
-13
+15
 
 芯迈微
 
@@ -224,7 +224,7 @@ XMW718
 
 [SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/psfwlw/qwen_sdk_core_xmw718_v1.3.0_22bcf3f_830785.tar.gz)
 
-14
+16
 
 星宸科技
 
@@ -236,7 +236,7 @@ SSC309QL
 
 [SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/zfuiix/qwen_sdk_core_ssc309ql_v1.3.0_22bcf3f_830785.tar.gz)
 
-15
+17
 
 星翼科技
 
@@ -244,7 +244,7 @@ XY4100LC
 
 [SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/nsxavi/qwen_sdk_core_xy4100lc_v1.3.0_22bcf3f_830778.tar.gz)
 
-16
+18
 
 移芯
 
@@ -252,7 +252,7 @@ EC718PM
 
 [SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/pqjitg/qwen_sdk_core_ec718pm_v1.3.0_22bcf3f_830782.tar.gz)
 
-17
+19
 
 中国移动
 
@@ -264,7 +264,7 @@ ML307N
 
 [SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/afqoaw/qwen_sdk_core_ml307n_v1.3.0_22bcf3f_830780.tar.gz)
 
-18
+20
 
 紫光展锐
 

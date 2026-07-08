@@ -23,6 +23,24 @@
 
 ## 2026年
 
+**7月**
+
+**日期**
+
+**功能模块**
+
+**功能点**
+
+**功能说明**
+
+7月6日
+
+平台功能
+
+部分老旧模型延期下线通知
+
+部分老旧模型延期下线通知[了解详情](https://www.aliyun.com/notice/118420)
+
 **6月**
 
 **日期**
@@ -32,6 +50,30 @@
 **功能点**
 
 **功能说明**
+
+6月30日
+
+团队版计费
+
+团队版新增共享用量包
+
+跨坐席共享 Credits 弹性用量包，可抵扣超额用量，[了解详情](https://help.aliyun.com/zh/model-studio/token-plan-overview)
+
+6月29日
+
+Coding Plan
+
+Pro套餐新客首月特惠
+
+Coding Plan Pro 套餐首次订阅可享首月 ¥39.90，[了解详情](https://help.aliyun.com/zh/model-studio/coding-plan)
+
+6月29日
+
+智能体托管
+
+智能体托管运行时上线
+
+新增智能体托管运行时 API，平台托管会话与工具执行，[了解详情](https://help.aliyun.com/zh/model-studio/managed-agents-api-overview)
 
 6月29日
 
@@ -48,6 +90,70 @@ API Key 加密存储与业务空间专属推理 API 域名升级公告[了解详
 qwen-turbo 资源包启动退市通知
 
 qwen-turbo 资源包启动退市通知[了解详情](https://www.aliyun.com/notice/118392)
+
+6月24日
+
+接入工具
+
+新增 Codex 客户端接入
+
+新增 Codex 终端 AI 编程助手接入百炼，[了解详情](https://help.aliyun.com/zh/model-studio/codex)
+
+6月23日
+
+知识库RAG
+
+知识检索服务上线
+
+新增知识检索服务，支持多知识库联合检索与混合排序，[了解详情](https://help.aliyun.com/zh/model-studio/rag-knowledge-retrieval)
+
+6月23日
+
+知识库RAG
+
+知识问答服务上线
+
+新增知识问答服务，基于大模型结合检索生成回答，[了解详情](https://help.aliyun.com/zh/model-studio/rag-knowledge-qa)
+
+6月15日
+
+模型部署
+
+PTU 长输入与缓存
+
+预置吞吐部署新增长输入与前缀缓存能力，[了解详情](https://help.aliyun.com/zh/model-studio/ptu-long-input-and-cache)
+
+6月12日
+
+地域接入
+
+新增地域与部署范围
+
+新增美国、德国、日本地域与服务部署范围，[了解详情](https://help.aliyun.com/zh/model-studio/regions/)
+
+6月11日
+
+Coding Plan
+
+Coding Plan 联网搜索 MCP 升级
+
+Coding Plan 联网搜索 MCP 升级 Streamable HTTP 协议，前 2000 次免费，[了解详情](https://help.aliyun.com/zh/model-studio/web-search-for-coding-plan)
+
+6月10日
+
+Skill技能
+
+Skill 能力包上线
+
+新增 Skill 能力包，智能体可添加官方或自定义技能，[了解详情](https://help.aliyun.com/zh/model-studio/introduction-to-skill)
+
+6月10日
+
+数据连接
+
+数据连接模块上线
+
+新增数据连接模块，支持 MySQL/语雀/OSS 等数据源，[了解详情](https://help.aliyun.com/zh/model-studio/data-connection)
 
 6月9日
 
@@ -71,7 +177,7 @@ qwen-turbo 资源包启动退市通知[了解详情](https://www.aliyun.com/noti
 
 模型导入 API 上线
 
-API 参考新增模型导入目录, 涵盖导入任务与自定义模型对象的完整 API 接口，[了解详情](https://help.aliyun.com/zh/model-studio/custom-models-api/)
+API 参考新增模型导入目录, 涵盖导入任务与自定义模型对象的完整 API 接口，[了解详情](https://help.aliyun.com/zh/model-studio/custom-models-api)
 
 6月3日
 
@@ -145,7 +251,7 @@ Spring AI Alibaba 调用百炼应用文档上线
 
 模型压缩模块上线
 
-新增模型压缩模块，使用量化算法将全精度微调模型转为低精度版本，降低部署成本，[了解详情](https://help.aliyun.com/zh/model-studio/model-compression-introduction#6w2ox667clm6i)
+新增模型压缩模块，使用量化算法将全精度微调模型转为低精度版本，降低部署成本，[了解详情](https://help.aliyun.com/zh/model-studio/model-compression-introduction)
 
 5月21日
 
@@ -563,6 +669,14 @@ DPO 偏好训练通过引入负反馈，从而降低幻觉，使得模型输出�
 新增免费额度用完即停功能
 
 启用[免费额度用完即停](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)功能后，新人免费额度耗尽将无法继续调用（返回错误 code：AllocationQuota.FreeTierOnly），避免产生额外费用。
+
+7月2日
+
+知识检索问答
+
+知识检索与问答 API 上线
+
+新增知识检索与问答 API，SSE 流式返回三阶段，[了解详情](https://help.aliyun.com/zh/model-studio/knowledge/)
 
 **6月**
 

@@ -1,6 +1,6 @@
 # model high speed inference
 
-百炼平台提供 TPM（Tokens Per Minute）预留功能，允许开发者为指定模型锁定专属推理吞吐量，确保业务高峰期不受公共资源限流影响。预留容量内的调用不额外收费，超出部分自动降级为按量计费，服务不中断。
+百炼平台提供 TPM（[Token](../concepts/token.md)s Per Minute）预留功能，允许开发者为指定模型锁定专属推理吞吐量，确保业务高峰期不受公共资源限流影响。预留容量内的调用不额外收费，超出部分自动降级为按量计费，服务不中断。
 
 ## 方案选型
 
@@ -105,5 +105,6 @@ response = dashscope.Generation.call(
 ## 来源文档
 
 - [TPM 预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)
+
 
 
