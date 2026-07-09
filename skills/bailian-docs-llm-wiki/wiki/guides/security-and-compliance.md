@@ -153,7 +153,7 @@ SDK 自动完成加解密，响应为明文，无需手动处理。
 
 | 步骤 | 说明 | 参考 |
 | --- | --- | --- |
-| 1. 创建安全存储业务空间 | 业务空间管理 → 新增业务空间，空间类型选"安全存储空间" | [配置终端节点并发起连接](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-an-endpoint-and-initiate-a-connection.md) |
+| 1. 创建安全存储[业务空间](../concepts/workspace.md) | [业务空间](../concepts/workspace.md)管理 → 新增[业务空间](../concepts/workspace.md)，空间类型选"安全存储空间" | [配置终端节点并发起连接](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-an-endpoint-and-initiate-a-connection.md) |
 | 2. 创建反向终端节点 | 终端节点控制台创建反向终端节点，终端节点服务选描述为"百炼公共云生产环境-北京站点-安全存储空间专网通道接入点"的服务（VPC NAT 网关、反向、IPv4），配置 VPC/安全组/可用区与交换机 | 同上 |
 | 3. 在百炼确认连接 | 业务空间管理 → 管理安全存储空间 → 选择终端节点 → 连接，等待状态变为"已连接" | 同上 |
 | 4. 配置可用区 IP | 创建 MSE 云原生网关（2核4G、2 节点、启用 TLS 硬件加速、私网、至少两可用区），获取 NLB 各可用区 VIP 与交换机网段，在百炼配置对应可用区 IP，并将 VIP 加入反向终端节点安全组入方向（全部端口） | [配置可用区IP](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-zone-ip.md) |
@@ -192,6 +192,7 @@ SDK 自动完成加解密，响应为明文，无需手动处理。
 - [配置可用区IP](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-zone-ip.md)
 - [配置私有网络中的资源](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)
 - [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md)
+
 
 
 

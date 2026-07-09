@@ -29,8 +29,8 @@
 
 百炼按地理区域划分资源和[业务空间](../concepts/workspace.md)，**单个[业务空间](../concepts/workspace.md)不能跨地域存在**，即使是各地域的默认[业务空间](../concepts/workspace.md)，也是不同的空间。[业务空间](../concepts/workspace.md)是精细化权限管理的最小单元，可管理以下维度（默认[业务空间](../concepts/workspace.md)无法设置这些限制）：
 
-- **限制模型调用**：管理某个模型可否在该业务空间调用（控制台 & API），并设置该模型的请求数限流和 [Token](../concepts/token.md) 限流。默认业务空间所有模型均可调用且无法限流。
-- **限制模型训练**：管理某个模型可否在该业务空间进行调优和调优后部署。默认业务空间所有支持调优的模型均可调优及部署。
+- **限制模型调用**：管理某个模型可否在该[业务空间](../concepts/workspace.md)调用（控制台 & API），并设置该模型的请求数限流和 [Token](../concepts/token.md) 限流。默认[业务空间](../concepts/workspace.md)所有模型均可调用且无法限流。
+- **限制模型训练**：管理某个模型可否在该[业务空间](../concepts/workspace.md)进行调优和调优后部署。默认业务空间所有支持调优的模型均可调优及部署。
 - **限制[模型部署](../concepts/model-deployment.md)**：管理某个模型可否在该业务空间直接部署。默认业务空间所有支持部署的模型均可部署。
 - **用户控制台权限管理**：管理某个 RAM 用户是否能使用该业务空间控制台的功能及能使用哪些功能，但无法限制归属该用户的 [API Key](../concepts/api-key.md) 的调用。阿里云主账号无须设置，可访问所有业务空间的所有页面。
 
@@ -114,6 +114,7 @@ RAM 用户默认无权查看阿里云账单和购买预付费产品，需在 RAM
 ## 来源文档
 
 - [权限管理](../../raw/application-user-guide/application-permission-management/application-permission-management-overview.md)
+
 
 
 

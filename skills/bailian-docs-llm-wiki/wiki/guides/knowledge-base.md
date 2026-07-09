@@ -115,8 +115,8 @@
 
 **模型调用费用**：独立计费项，按输入 [Token](../concepts/token.md) 计费，遵循模型广场定价。
 
-- 创建/更新：按新增内容 Token 数计费，删除文件不产生费用。
-- 检索：Query 向量化按输入 Token 计费；Rerank 费用 = **初步召回总切片数 × 平均切片 Token × 模型单价**，与最终返回切片数无关。
+- 创建/更新：按新增内容 [Token](../concepts/token.md) 数计费，删除文件不产生费用。
+- 检索：Query 向量化按输入 [Token](../concepts/token.md) 计费；Rerank 费用 = **初步召回总切片数 × 平均切片 [Token](../concepts/token.md) × 模型单价**，与最终返回切片数无关。
 - 多知识库：N 个知识库 Token 消耗 × N。
 
 **优化建议**：对精度要求不高的场景可关闭排序（消除 Rerank 费用，但降低相关性）；或调低初步向量/关键词检索 TopK（取值 10–100）减少送入 Rerank 的 Token 量。详见 [知识库计费说明](../../raw/application-user-guide/knowledge-base/billing-for-knowledge-base.md)。
@@ -141,6 +141,7 @@
 - [知识库计费说明](../../raw/application-user-guide/knowledge-base/billing-for-knowledge-base.md)
 - [知识检索](../../raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)
 - [知识问答](../../raw/application-user-guide/knowledge-base/rag-knowledge-qa.md)
+
 
 
 

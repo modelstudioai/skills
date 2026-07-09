@@ -1306,10 +1306,10 @@ WebSocket
 
 选定模型后，参考对应的调用文档：
 
--   Qwen3.5-Omni / Qwen3-Omni（WebSocket，实时）→ 实时Qwen-Omni-Realtime
+-   Qwen3.5-Omni / Qwen3-Omni（WebSocket，实时）→ [实时（Qwen-Omni-Realtime）](https://help.aliyun.com/zh/model-studio/realtime)
     
--   Qwen3.5-Omni / Qwen3-Omni（HTTP，文件）→ 非实时Qwen-Omni
+-   Qwen3.5-Omni / Qwen3-Omni（HTTP，文件）→ [非实时（Qwen-Omni）](https://help.aliyun.com/zh/model-studio/qwen-omni)
     
--   Qwen3.5-Livetranslate（WebSocket，实时）→ 实时语音音视频翻译-千问
+-   Qwen3.5-Livetranslate（WebSocket，实时）→ [实时语音/音视频翻译-千问](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime)
     
--   Qwen3-Livetranslate（HTTP，文件）→ 音视频文件翻译-千问
+-   Qwen3-Livetranslate（HTTP，文件）→ [音视频文件翻译-千问](https://help.aliyun.com/zh/model-studio/qwen3-livetranslate-flash)

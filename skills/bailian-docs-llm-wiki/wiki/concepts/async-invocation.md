@@ -1,75 +1,75 @@
 # 异步调用
 
-异步调用是百炼平台为耗时较长的 AI 任务提供的非阻塞执行模式。客户端提交任务后立即获得任务 ID，随后通过轮询或回调获取最终结果，避免因长时间等待导致请求超时。
-
-## 核心流程
-
-百炼平台的异步调用遵循统一的「创建任务 → 轮询获取结果」两步模式：
-
-1. **创建任务**：向对应的 API 端点发送 POST 请求，服务端立即返回 `task_id`。
-2. **轮询查询**：使用 `GET /api/v1/tasks/{task_id}` 定期查询任务状态，直到任务完成或失败。
-
-任务状态流转通常为：`PENDING`（排队中）→ `RUNNING`（处理中）→ `SUCCEEDED`（成功）/ `FAILED`（失败）。部分接口还支持 `CANCELED`（已取消）和 `UNKNOWN`（任务不存在或已过期）状态。
+异步调用是百炼平台针对耗时较长的 AI 生成任务所采用的统一调用模式，核心流程为「创建任务 → 轮询获取结果」，避免客户端因等待超时而失败。
 
 ## 适用场景
 
-异步调用广泛应用于百炼平台中以下耗时任务：
+百炼平台中以下类型的 API 采用异步调用模式：
 
-- **视频生成**：文生视频、图生视频、数字人等任务通常需要 1-5 分钟，所有视频生成 API 均强制使用异步调用。
-- **3D 资产生成**：基于 Tripo 模型的文生 3D、图生 3D 任务，仅支持异步调用。
-- **图像生成**：部分图像生成任务（如高分辨率文生图、批量图像编辑）可通过异步模式提升稳定性。
-- **应用调用**：智能体和工作流应用在执行多步骤工具调用或生成长报告时，可开启异步模式。
-- **模型生产**：模型微调训练任务属于长时间运行的后台作业，通过轮询监控训练进度。
+- **3D 生成**：文生 3D、图生 3D、多图生 3D（Tripo 系列模型）
+- **视频生成**：文生视频、图生视频、参考生视频、视频编辑、数字人等（万相、HappyHorse、Pixverse、Vidu、Kling 等模型）
+- **应用调用**：智能体和工作流中的长时间任务（Responses API 的 background 模式）
+- **图像生成**：部分图像生成与编辑接口
 
-## 触发方式
+这些场景的共同特点是单次生成耗时通常在数十秒到数分钟，不适合同步阻塞等待。
 
-百炼平台提供两种方式开启异步调用，具体取决于所使用的 API 体系：
+## 调用流程
 
-### DashScope API
+### 步骤一：创建任务
 
-在 HTTP 请求头中添加：
+向对应的业务 Endpoint 发送 POST 请求，携带异步标识，服务端立即返回 `task_id`。
 
 ```
-X-DashScope-Async: enable
+POST https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/...
+Header: X-DashScope-Async: enable
 ```
 
-视频生成和 3D 生成等接口**必须**携带此请求头，否则会报错 `current user api does not support synchronous calls`。
+### 步骤二：轮询查询结果
 
-### OpenAI 兼容 Responses API
+使用返回的 `task_id` 定期查询任务状态：
 
-在请求体中设置参数：
-
-```json
-{
-  "background": true
-}
+```
+GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}
 ```
 
-任务创建后通过 `client.responses.retrieve(task_id)` 查询状态，完成状态为 `completed`、`failed` 或 `cancelled`。
+任务状态流转为：`PENDING`（排队中）→ `RUNNING`（处理中）→ `SUCCEEDED`（成功）/ `FAILED`（失败）/ `CANCELED`（已取消）。
+
+## 两种异步模式
+
+百炼平台存在两种异步调用方式，适用于不同的 API 体系：
+
+| 方式 | 触发方式 | 适用 API |
+| --- | --- | --- |
+| DashScope 异步 | 请求头 `X-DashScope-Async: enable` | 3D 生成、视频生成、图像生成等模型 API |
+| Responses API 异步 | 请求体 `background: true` | 应用调用（OpenAI 兼容模式） |
+
+两者本质相同，都是提交任务后通过任务 ID 轮询获取结果，区别仅在于触发参数和查询接口的形式。
 
 ## 关键参数与配置
 
-| 参数 | 说明 |
-|------|------|
-| `task_id` | 创建任务后返回的唯一标识符，用于后续状态查询。有效期通常为 24 小时，过期后返回 `UNKNOWN`。 |
-| `task_status` | 当前任务状态，可选值：`PENDING`、`RUNNING`、`SUCCEEDED`、`FAILED`、`CANCELED`、`UNKNOWN`。 |
-| 轮询间隔 | 建议 10-15 秒轮询一次。查询接口默认 RPS 限制为 20。 |
-| 异步回调 | 如需更高频通知，可配置异步任务回调替代轮询，减少不必要的查询请求。 |
+| 参数/配置 | 说明 |
+| --- | --- |
+| `X-DashScope-Async: enable` | 请求头，开启 DashScope 异步模式（3D/视频/图像类必须携带） |
+| `background: true` | 请求体参数，开启 Responses API 异步模式 |
+| `task_id` | 创建任务后返回的唯一标识，用于后续轮询 |
+| 轮询间隔 | 建议 10-15 秒，查询接口默认 RPS 限制为 20 |
+| 任务有效期 | task_id 查询有效期通常为 24 小时，超时后返回 UNKNOWN |
+| 产物链接有效期 | 生成结果的下载 URL 通常有效 2 小时，需及时下载 |
 
-## 开发最佳实践
+## 开发建议
 
-1. **避免重复创建任务**：获得 `task_id` 后应持续轮询，不要因为未立即获取结果而重复提交相同请求。
-2. **合理设置轮询间隔**：建议 10-15 秒轮询一次，过于频繁的轮询可能触发限流。
-3. **及时处理产物**：部分异步任务的产物下载链接有时效限制（如 3D 模型产物链接有效期仅 2 小时），需在有效期内完成下载。
-4. **处理失败状态**：轮询时应同时检查 `FAILED` 状态，读取响应中的 `code` 和 `message` 字段进行错误排查。
-5. **注意地域一致性**：确保模型、Endpoint URL 和 [API Key](api-key.md) 属于同一地域，跨地域调用会导致异步任务创建失败。
+1. **不要重复创建任务**：同一请求只需创建一次任务，之后通过轮询获取结果即可。
+2. **合理设置轮询间隔**：建议 10-15 秒查询一次，避免触发 RPS 限制。
+3. **处理所有终态**：除 SUCCEEDED 外，还需处理 FAILED、CANCELED、UNKNOWN 等状态。
+4. **及时保存产物**：下载链接有时效限制，任务成功后应立即下载结果文件。
+5. **考虑回调机制**：如需更高频的状态通知，可配置异步任务回调替代主动轮询。
+6. **地域一致性**：确保模型、Endpoint URL 和 API Key 属于同一地域，跨地域调用会失败。
 
 ## 关联主题页
 
 - [3d generation](../api/3d-generation.md)
 - [video generation api](../api/video-generation-api.md)
 - [application call](../api/application-call.md)
-- [model production](../api/model-production.md)
 - [image generation](../api/image-generation.md)
 
 

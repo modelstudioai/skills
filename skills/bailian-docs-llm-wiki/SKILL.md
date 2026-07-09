@@ -148,21 +148,20 @@ description: >-
 | 模型家族总览 / 按能力分桶浏览         | `models/index.md`                                        |
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
 | Token | `wiki/concepts/token.md` |
-| OpenAI 兼容接口 | `wiki/concepts/openai-compatible-interface.md` |
-| 流式输出 | `wiki/concepts/streaming.md` |
-| DashScope SDK | `wiki/concepts/dashscope-sdk.md` |
-| 异步调用 | `wiki/concepts/async-invocation.md` |
-| 业务空间 | `wiki/concepts/workspace.md` |
-| API Key | `wiki/concepts/api-key.md` |
-| 检索增强生成 | `wiki/concepts/rag.md` |
-| 多模态 | `wiki/concepts/multimodal.md` |
 | 函数调用 | `wiki/concepts/function-calling.md` |
-| 图像生成、视频生成与 3D 生成对比 | `wiki/comparisons/multimodal-generation-comparison.md` |
-| 应用评测与模型评测对比 | `wiki/comparisons/app-eval-vs-model-eval.md` |
-| 应用监控与模型监控对比 | `wiki/comparisons/app-monitoring-vs-model-monitoring.md` |
-| 知识库与记忆库对比 | `wiki/comparisons/knowledge-base-vs-memory-library.md` |
-| 模型微调、压缩与部署对比 | `wiki/comparisons/fine-tuning-vs-compression-vs-deployment.md` |
-| Qwen API、应用调用与托管智能体 API 对比 | `wiki/comparisons/qwen-api-vs-app-call-vs-agents-api.md` |
+| 检索增强生成 | `wiki/concepts/rag.md` |
+| 流式输出 | `wiki/concepts/streaming.md` |
+| OpenAI 兼容接口 | `wiki/concepts/openai-compatible-interface.md` |
+| API Key 鉴权 | `wiki/concepts/api-key.md` |
+| 业务空间 | `wiki/concepts/workspace.md` |
+| 异步调用 | `wiki/concepts/async-invocation.md` |
+| DashScope SDK | `wiki/concepts/dashscope-sdk.md` |
+| 图像生成 vs 视频生成 vs 3D生成 | `wiki/comparisons/image-video-3d-generation-comparison.md` |
+| 知识库 vs 长期记忆库 | `wiki/comparisons/knowledge-base-vs-memory-library.md` |
+| 模型评估 vs 应用评估 | `wiki/comparisons/model-evaluation-vs-application-evaluation.md` |
+| 模型监控 vs 应用监控 | `wiki/comparisons/model-monitoring-vs-application-monitoring.md` |
+| 模型微调 vs 模型压缩 vs 模型部署 | `wiki/comparisons/fine-tuning-vs-compression-vs-deployment.md` |
+| Qwen API vs 全双工实时API vs 托管智能体API | `wiki/comparisons/qwen-api-vs-omni-realtime-vs-managed-agents.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 

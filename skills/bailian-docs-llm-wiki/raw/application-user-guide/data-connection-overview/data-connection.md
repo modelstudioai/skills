@@ -1800,3 +1800,75 @@ VSwitch ID
                 ```
                 SHOW VARIABLES LIKE 'wait_timeout';
                 ```
+                
+    
+
+-   **创建数据源时遇到CHECK\_BINLOG\_FORMAT、CHECK\_ENFORCE\_GTID\_MODE或CHECK\_GTID\_CONSISTENCY报错，应如何处理？**
+    
+    这些报错表示您的MySQL数据库配置不满足数据连接器的前置要求。系统在创建数据源时会自动校验以下配置项：
+    
+    **报错代码**
+    
+    **含义**
+    
+    **期望值**
+    
+    `CHECK_BINLOG_FORMAT`
+    
+    Binlog格式需要为ROW模式
+    
+    `binlog_format=ROW`
+    
+    `CHECK_ENFORCE_GTID_MODE`
+    
+    需要开启GTID模式
+    
+    `gtid_mode=ON`
+    
+    `CHECK_GTID_CONSISTENCY`
+    
+    需要开启GTID一致性约束
+    
+    `enforce_gtid_consistency=ON`
+    
+    **解决方法：**
+    
+    ## 阿里云RDS MySQL
+    
+    1.  前往[RDS控制台](https://rdsnext.console.aliyun.com/)，点击左侧导航栏中的**实例列表**，然后点击目标RDS实例。
+        
+    2.  点击左侧导航栏中的**参数设置**，在**可修改参数**选项卡中，将以下参数修改为对应的期望值：
+        
+        -   `binlog_format`设为`ROW`
+            
+        -   `gtid_mode`设为`ON`
+            
+        -   `enforce_gtid_consistency`设为`ON`
+            
+    3.  提交参数修改后，根据提示重启RDS实例使配置生效。
+        
+    
+    > 修改`gtid_mode`和`enforce_gtid_consistency`需要重启实例。请在业务低峰期操作，避免影响在线业务。
+    
+    ## 自建MySQL
+    
+    修改MySQL配置文件（以Linux系统为例，一般位于：/etc/my.cnf 或 /etc/mysql/my.cnf），在`[mysqld]`段中添加或修改以下配置项：
+    
+    ```
+    [mysqld]
+    binlog_format=ROW
+    gtid_mode=ON
+    enforce_gtid_consistency=ON
+    ```
+    
+    保存配置文件后，重启MySQL服务使配置生效：
+    
+    ```
+    sudo systemctl restart mysqld
+    ```
+    
+    重启后，可通过以下命令验证配置是否已生效：
+    
+    ```
+    SHOW VARIABLES WHERE Variable_name IN ('binlog_format', 'gtid_mode', 'enforce_gtid_consistency');
+    ```

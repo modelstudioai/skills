@@ -4,7 +4,7 @@ OpenClaw 是一个开源的个人 AI 助手平台，支持通过多种消息渠�
 
 ## **安装 OpenClaw**
 
-OpenClaw 需要 Node.js 22 或更高版本。可通过以下命令检查 Node.js 版本：
+OpenClaw 需要 Node.js 22.19.0 或更高版本。可通过以下命令检查 Node.js 版本：
 
 ```
 node --version
@@ -319,10 +319,6 @@ Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/to
     
 
 ## 方式二：Web UI 方式
-
-**说明**
-
-Web UI 方式仅在 OpenClaw **≤ 2026.3.28** 可用，更高版本请使用方式一：终端方式。
 
 1.  **启动 Web UI**
     
@@ -721,10 +717,6 @@ Coding Plan [支持的模型](https://help.aliyun.com/zh/model-studio/coding-pla
 
 ## 方式二：Web UI 方式
 
-**说明**
-
-Web UI 方式仅在 OpenClaw **≤ 2026.3.28** 可用，更高版本请使用[方式一：终端方式](#speru1gqcpccc)。
-
 1.  **启动 Web UI**
     
     在终端运行以下命令启动 Web UI：
@@ -1020,10 +1012,6 @@ Web UI 方式仅在 OpenClaw **≤ 2026.3.28** 可用，更高版本请使用[�
     
 
 ## 方式二：Web UI 方式
-
-**说明**
-
-Web UI 方式仅在 OpenClaw **≤ 2026.3.28** 可用，更高版本请使用[方式一：终端方式](#hx6cgckzxwnoc)。
 
 1.  **启动 Web UI**
     
@@ -1810,13 +1798,15 @@ OpenClaw 支持通过 MCP（Model Context Protocol）插件扩展 Agent 的工�
 
 在终端输入`openclaw tui`，进入 OpenClaw 终端命令行，接着输入`/model`查看模型列表。按回车键选中模型，按Esc键退出模型列表。
 
-为什么报错"HTTP 401: Incorrect API key provided."或"No API key found for provider xxx"？
+为什么报错"HTTP 401: Incorrect API key provided."、"No API key found for provider xxx"或"HTTP 401: invalid\_iam\_token"？
 
 可能原因：
 
 1.  API Key 无效、过期、为空、格式错误，或与端点环境不匹配。请检查 API Key 是否与所使用的付费方式匹配，并确保复制完整且无空格；确认订阅状态有效。
     
 2.  OpenClaw 的历史配置缓存导致配置错误，请删除`~/.openclaw/agents/main/agent/models.json`文件中的`providers`配置项，并重启 OpenClaw。
+    
+3.  `invalid_iam_token` 表示 API Key 经 IAM 鉴权校验失败。常见场景：API Key 已被吊销或禁用、API Key 归属的地域与 Base URL 所指地域不一致（例如 API Key 在华北2（北京），但 Base URL 指向新加坡）、使用 STS 临时凭证且已过期。请核对 API Key 与 Base URL 归属同一地域，并确认 API Key 状态正常。
     
 
 我已经配置过钉钉等其他渠道，如何安全地添加新套餐模型（防止原有配置丢失）？

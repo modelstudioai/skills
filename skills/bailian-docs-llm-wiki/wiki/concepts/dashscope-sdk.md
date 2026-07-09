@@ -1,113 +1,82 @@
 # DashScope SDK
 
-DashScope SDK 是阿里云百炼平台的官方客户端开发工具包，为开发者提供对平台各类大模型和应用服务的编程访问能力。SDK 封装了鉴权、请求构造、响应解析等底层细节，是除 HTTP 直接调用和 [OpenAI 兼容接口](openai-compatible-interface.md)之外的主要接入方式。
+DashScope SDK 是阿里云百炼平台提供的官方客户端开发工具包，开发者通过它可以在 Python 和 Java 应用中直接调用百炼平台上的模型服务和应用能力，无需手动拼装 HTTP 请求。
 
-## 支持的语言与安装
+## 支持语言与安装
 
-| 语言 | 安装方式 | 版本要求 |
-|------|---------|---------|
-| Python | `pip install -U dashscope` | Python >= 3.8 |
-| Java | Maven/Gradle 引入 `com.alibaba:dashscope-sdk-java`（建议 >= 2.12.0） | - |
+| 语言 | 安装方式 | 最低建议版本 |
+|------|---------|-------------|
+| Python | `pip install -U dashscope` | 最新版 |
+| Java | Maven/Gradle 引入 `com.alibaba:dashscope-sdk-java` | >= 2.12.0 |
 
-> Node.js 目前没有官方 DashScope SDK，可通过 HTTP 直接调用或使用 OpenAI 兼容 SDK 接入。
+Node.js 场景目前无官方 SDK 封装，推荐使用 `axios` 直接调用 HTTP API 或通过 [OpenAI 兼容接口](openai-compatible-interface.md)接入。
 
-## 鉴权配置
+## 认证配置
 
-DashScope SDK 统一使用 [API Key](api-key.md) 进行鉴权。推荐将 [API Key](api-key.md) 配置到环境变量 `DASHSCOPE_API_KEY`，SDK 会自动读取该变量，避免在代码中硬编码：
+SDK 统一通过 API Key 进行身份认证，推荐将密钥写入环境变量：
 
-- **Linux/macOS**：在 `~/.bashrc` 或 `~/.zshrc` 中追加 `export DASHSCOPE_API_KEY="your-key"`，然后 `source` 使其生效。
-- **Windows**：通过系统属性设置系统变量，或使用 `setx` / PowerShell 命令设置永久变量。
+```bash
+export DASHSCOPE_API_KEY="your-api-key"
+```
 
-也可在调用时通过参数显式传入 `api_key`。
+SDK 会自动读取 `DASHSCOPE_API_KEY` 环境变量，无需在代码中硬编码。也可在调用时通过 `api_key` 参数显式传入。
 
-## 覆盖的能力场景
+## 使用场景
 
-DashScope SDK 覆盖百炼平台的大部分模型和应用调用场景：
+### 模型调用
 
-### 文本生成
+DashScope SDK 可调用百炼平台上的各类模型，包括：
 
-通过 DashScope 原生接口调用 Qwen 系列文本生成模型，功能集最完整，支持全部采样参数和业务字段。适合需要使用百炼平台特有能力（如插件、扩展参数）的场景。
+- **文本生成**：Qwen 系列对话模型，通过 DashScope 原生接口获得最完整的参数支持
+- **图像生成与编辑**：千问图像、万相系列等模型的文生图、图像编辑、图像翻译能力
+- **专用模型**：法律大模型（farui-plus）、意图理解（tongyi-intent-detect-v3）、深度研究（qwen-deep-research）、翻译（qwen-mt-plus）、OCR（qwen3.5-ocr）等
 
-### 图像生成与编辑
-
-图像模型（千问-图像、万相系列、Z-Image 等）均可通过 DashScope SDK 调用，涵盖文生图、图像编辑、图像翻译、风格迁移等能力。
-
-### 视频生成
-
-视频生成接口采用[异步调用](async-invocation.md)模式（创建任务 + 轮询获取），DashScope SDK 对任务提交和状态查询提供了封装支持。
-
-### 向量与排序
-
-文本向量（Embedding）和文本排序（Rerank）模型同时支持 [OpenAI 兼容接口](openai-compatible-interface.md)和 DashScope SDK。对于大规模向量化场景，可通过 SDK 使用异步批处理接口。
+> 注意：部分模型仅支持通过 DashScope SDK 调用（如 `qwen-deep-research` 当前仅支持 Python SDK），使用前需确认模型的接口兼容性。
 
 ### 应用调用
 
-通过 `Application.call`（Python）或 `ApplicationParam`（Java）调用百炼控制台中已创建的智能体应用和工作流应用。SDK 封装了请求构造和多轮对话的 `session_id` 管理。
-
-### 专用模型
-
-部分专用模型仅通过 DashScope SDK 可用。例如 `qwen-deep-research`（深度研究模型）当前仅支持 Python DashScope SDK，暂不支持 Java SDK 和 [OpenAI 兼容接口](openai-compatible-interface.md)。
-
-## 调用示例
-
-### Python — 调用应用
+通过 `Application.call` 方法可调用百炼平台上已创建的智能体应用和工作流应用：
 
 ```python
-import os
-from http import HTTPStatus
 from dashscope import Application
 
 response = Application.call(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
     app_id='YOUR_APP_ID',
-    prompt='你是谁？'
+    prompt='你的问题'
 )
-
-if response.status_code == HTTPStatus.OK:
-    print(response.output.text)
+print(response.output.text)
 ```
 
-### Java — 调用应用
+Java 中使用 `ApplicationParam.builder()` 构建参数后调用。智能体应用与工作流应用的调用接口完全一致。
 
-```java
-import com.alibaba.dashscope.app.*;
+### 多轮对话
 
-ApplicationParam param = ApplicationParam.builder()
-    .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-    .appId("YOUR_APP_ID")
-    .prompt("你是谁？")
-    .build();
+应用调用支持多轮对话，通过 `session_id` 参数让平台自动管理对话历史，无需手动维护上下文。
 
-Application application = new Application();
-ApplicationResult result = application.call(param);
-System.out.printf("text: %s%n", result.getOutput().getText());
-```
+## 与其他接口的关系
 
-## 与 OpenAI 兼容接口的对比
+百炼平台提供多种调用方式，DashScope SDK 属于百炼原生接口：
 
-| 维度 | DashScope SDK | OpenAI 兼容接口 |
-|------|--------------|----------------|
-| 功能覆盖 | 最完整，支持百炼原生全部参数 | 为保证协议一致性，可能不暴露部分平台特有参数 |
-| 迁移成本 | 需学习百炼原生 API | 可直接复用 OpenAI SDK 和现有代码 |
-| 语言支持 | Python、Java | Python、Java、Node.js、Go |
-| 内置工具 | 无内置工具，需自行定义 | Responses 接口内置联网搜索、代码解释器等 |
+| 接口 | 适用场景 |
+|------|---------|
+| DashScope SDK/API | 功能最完整，参数支持最丰富，百炼专属能力首选 |
+| [OpenAI 兼容接口](openai-compatible-interface.md) | 从 OpenAI 迁移成本最低，兼容现有工具链 |
+| HTTP API | 语言无关，适合无官方 SDK 的运行环境 |
 
-选择建议：如需使用百炼平台的全部能力或仅支持 DashScope SDK 的模型，使用 DashScope SDK；如从 OpenAI 生态迁移或需要 Node.js/Go 支持，使用 OpenAI 兼容接口。
+当需要使用百炼平台全部参数和插件能力时，建议优先选择 DashScope SDK。
 
-## 注意事项
+## 关键注意事项
 
-- 设置环境变量后，已打开的 IDE 或终端不会自动加载新变量，需要重启相关程序。
-- 使用 `sudo` 运行脚本时，默认不继承用户环境变量，需加 `-E` 参数。
-- 调用不同地域的模型时，需保证 [API Key](api-key.md) 与模型属于同一地域。华北2（北京）和新加坡地域推荐使用[业务空间](workspace.md)专属域名以获得更好性能。
+- 不同模型可能仅在特定地域可用，调用前需确认地域限制
+- Java SDK 建议使用 2.12.0 及以上版本以获得完整功能支持
+- [流式输出](streaming.md)通过 `stream=True`（Python）或对应参数开启
+- SDK 调用与 HTTP API 的请求/响应结构一致，可按需切换
 
 ## 关联主题页
 
 - [image generation](../api/image-generation.md)
 - [more models](../api/more-models.md)
 - [bailian application calling](../guides/bailian-application-calling.md)
-- [video generation api](../api/video-generation-api.md)
-- [vector and sort](../api/vector-and-sort.md)
-- [preparations](../api/preparations.md)
 - [qwen api reference](../api/qwen-api-reference.md)
 
 

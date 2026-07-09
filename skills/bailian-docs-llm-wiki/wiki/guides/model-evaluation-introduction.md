@@ -90,12 +90,13 @@
 - 当前仅支持文本生成类模型评测。
 - 基线评测仅北京地域可用。
 - 维度类型创建后不可修改，选错需删除重建。
-- 评测任务提交后不可更换被评测模型，需删除重建（已消耗 Token 费用不可追回）。
+- 评测任务提交后不可更换被评测模型，需删除重建（已消耗 [Token](../concepts/token.md) 费用不可追回）。
 - 模型评测当前仅支持控制台操作，不提供公开 API/SDK。如需编程化评测能力，可参考 PAI Judge Model API 作为替代方案。
 - LLM 评分器存在位置偏差和自我偏好偏差，建议定期人工抽查校准。
 
 ## 来源文档
 
 - [模型评测](../../raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)
+
 
 

@@ -6,7 +6,7 @@
 
 ## **工作流程**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0536542871/CAEQaxiBgIDB5qWk4BkiIDViYzQ0MWUwNTYyNDQ3NDM5NzM0ZTc4N2Y3NTU2NjA56318723_20260129171731.699.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1249943871/CAEQaxiBgIDB5qWk4BkiIDViYzQ0MWUwNTYyNDQ3NDM5NzM0ZTc4N2Y3NTU2NjA56318723_20260129171731.699.svg)
 
 ## **前提条件**
 
@@ -31,16 +31,7 @@
 
 ### 华北2（北京）
 
-**支持的模型**
-
--   **文本生成模型**：千问 Max、Plus、Flash、Long 的稳定版本及其部分 `latest` 版本，以及部分第三方模型（deepseek-r1、deepseek-v3.2、deepseek-v3）。
-    
--   **多模态模型**：千问 VL Plus、Flash、OCR的稳定版本及其部分 `latest` 版本。
-    
--   **文本向量模型**：所有版本的 text-embedding 模型。
-    
-
-支持的模型名称清单
+**支持的模型：**
 
 -   **文本生成模型**
     
@@ -59,6 +50,8 @@
     -   [图像与视频理解](https://help.aliyun.com/zh/model-studio/vision)：qwen3.7-plus、qwen3.6-plus、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus、qwen3-vl-flash
         
     -   [文字提取](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr)：qwen-vl-ocr、qwen-vl-ocr-latest
+        
+    -   [全模态](https://help.aliyun.com/zh/model-studio/qwen-omni)：qwen3.5-omni-plus
         
 -   [**文本向量模型**](https://help.aliyun.com/zh/model-studio/user-guide/embedding)**：**text-embedding-v1、text-embedding-v2、text-embedding-v3、text-embedding-v4
     

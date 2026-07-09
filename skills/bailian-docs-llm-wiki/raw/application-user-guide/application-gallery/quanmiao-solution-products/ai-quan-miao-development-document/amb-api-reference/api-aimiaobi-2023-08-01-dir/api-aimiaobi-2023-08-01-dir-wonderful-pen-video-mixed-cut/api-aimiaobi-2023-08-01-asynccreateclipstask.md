@@ -249,6 +249,8 @@ boolean
 
 关闭口播
 
+false
+
 CloseMusic
 
 boolean
@@ -256,6 +258,8 @@ boolean
 否
 
 关闭背景音乐
+
+true
 
 CloseSubtitle
 
@@ -482,6 +486,30 @@ string
 视频 URL
 
 http://fotor-cn-cutout.oss-cn-shanghai.aliyuncs.com/cutout\_tmp/01ba219486f043b4b339e7080e5cf11d.mp4
+
+Alignment
+
+string
+
+否
+
+支持设置： TopLeft：视频左上角 TopCenter：视频竖直中轴线上侧 TopRight：视频右上角 CenterLeft：视频水平中轴线左侧 CenterCenter：视频中心位置 CenterRight：视频水平中轴线右侧 BottomLeft：视频左下角 BottomCenter：视频竖直中轴线下侧 BottomRight：视频右下角 若需要在不同对齐方式下准确定位字幕位置，建议设置以下对齐方式： Left，左对齐，X、Y传入字幕左上角顶点相对于视频左上角的坐标 Center，居中对齐，X、Y传入字幕中轴线上边界交点相对于视频左上角的坐标 Right，右对齐，X、Y传入字幕右上角顶点相对于视频左上角的坐标
+
+AdaptMode
+
+string
+
+否
+
+AutoWrap：自动换行 AutoScale：自动缩放 AutoWrapAtSpaces：只在空格位置自动换行（适用于纯英文字幕自动换行场景）
+
+TextWidth
+
+string
+
+否
+
+将按照该值设置文本框宽度进行自动换行或缩放。不填写时，会按照视频宽度进行自动换行或缩放。当值大于0小于等于1时，表示相对输出视频的宽度，当值大于1时，表示绝对像素值。
 
 ## **返回参数**
 

@@ -25,9 +25,9 @@
 - 支持 PD 分离计算模式（将 Prefill 和 Decode 拆到不同节点，降低首 [Token](../concepts/token.md) 延迟、提高吞吐）
 - 后付费方式的算力资源先买到先得，购买不成功全额退款
 
-### Token 用量
+### [Token](../concepts/token.md) 用量
 
-按调用产生的输入/输出 Token 计费，仅支持部分经过 LoRA 调优后的模型。
+按调用产生的输入/输出 [Token](../concepts/token.md) 计费，仅支持部分经过 LoRA 调优后的模型。
 
 - 计费公式：`费用 = 输入 Token 数 × 输入单价 + 输出 Token 数 × 输出单价`
 - 不使用不计费，一个月内不使用将自动释放
@@ -70,7 +70,7 @@ PTU 部署支持长输入请求和前缀缓存功能，详见[预置吞吐长输
 
 模型单元支持更广泛的模型，包括文本生成（千问、DeepSeek、GLM 等）、[多模态](../concepts/multimodal.md)（千问 VL、千问 Omni）、语音合成（CosyVoice）等。部署时可选择 Instruct（非思考模式）或 Thinking（思考模式）推理模式。
 
-### Token 用量支持的基础模型
+### [Token](../concepts/token.md) 用量支持的基础模型
 
 仅支持部分千问系列和千问 VL 系列基础模型经 SFT 高效训练后的自定义模型，包括 qwen3-32b、qwen3-8b、qwen2.5-72b-instruct 等。
 
@@ -169,5 +169,6 @@ PTU 部署的 API 响应包含额度相关字段，在不同 API 格式（OpenAI
 - [预置吞吐长输入与缓存](../../raw/model-user-guide/model-deployment-1/ptu-long-input-and-cache.md)
 - [模型导入](../../raw/model-user-guide/model-deployment-1/model-import.md)
 - [使用 API或命令行进行模型部署](../../raw/model-user-guide/model-deployment-1/model-deployment-quick-start.md)
+
 
 

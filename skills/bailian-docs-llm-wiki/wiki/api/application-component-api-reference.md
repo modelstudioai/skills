@@ -98,7 +98,7 @@ Prompt 模板 API 支持对 Prompt 模板的完整 CRUD 操作。模板内容支
 | SubmitIndexAddDocumentsJob | 向已有知识库追加文件（不支持数据查询/图片问答类） | 10 次/秒 |
 | GetIndexJobStatus | 查询任务状态，调用间隔建议 5 秒以上 | - |
 | UpdateIndex | 更新知识库配置（名称、描述、检索参数等） | - |
-| ListIndices | 分页查询业务空间下的知识库列表 | 10 次/秒 |
+| ListIndices | 分页查询[业务空间](../concepts/workspace.md)下的知识库列表 | 10 次/秒 |
 | DeleteIndex | 永久删除知识库（不可逆，不删除源文件） | 10 次/秒 |
 | GetIndexMonitor | 获取知识库监控数据 | - |
 
@@ -155,7 +155,7 @@ Retrieve 接口用于在指定知识库中检索信息，支持通过百炼 SDK�
 
 ## 通用注意事项
 
-- 所有接口均需 `WorkspaceId` 路径参数，获取方式参见业务空间文档
+- 所有接口均需 `WorkspaceId` 路径参数，获取方式参见[业务空间](../concepts/workspace.md)文档
 - 建议使用官方 SDK 调用而非自签名，自签名对接复杂度高（约需 5 个工作日）
 - 分页查询使用 `NextToken` / `MaxResults` 模式（部分接口使用 `PageNumber` / `PageSize`）
 - 各接口限流频率为 5-15 次/秒不等，触发限流后需等待后重试
@@ -220,5 +220,6 @@ Retrieve 接口用于在指定知识库中检索信息，支持通过百炼 SDK�
 - [UpdateMemoryNode - 更新记忆片段](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-updatememorynode.md)
 - [DeleteMemoryNode - 删除记忆片段](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-deletememorynode.md)
 - [ListMemoryNodes - 获取记忆片段列表](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-listmemorynodes.md)
+
 
 

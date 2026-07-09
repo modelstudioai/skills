@@ -109,17 +109,3 @@ API概述
 文档翻译结果获取
 
 通义多模态翻译获取文档翻译结果
-
-## 其他
-
-API
-
-标题
-
-API概述
-
-[BatchTranslateForHtml](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-batchtranslateforhtml)
-
-网页批量翻译
-
-通义多模态翻译批量翻译(供js sdk使用)

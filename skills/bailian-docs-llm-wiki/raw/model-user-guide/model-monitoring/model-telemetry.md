@@ -11,7 +11,7 @@
 
 ## 支持的模型
 
--   **监控：普通监控**支持[选择模型](https://help.aliyun.com/zh/model-studio/models)中的所有模型，，包括基于它们调优后的[自定义模型](https://help.aliyun.com/zh/model-studio/model-deployment-introduction#f17bf700c06k5)；**高级监控**支持北京、新加坡、弗吉尼亚地域下的所有模型**。**
+-   **监控：普通监控**支持[选择模型](https://help.aliyun.com/zh/model-studio/models)中的所有模型，包括基于它们调优后的[自定义模型](https://help.aliyun.com/zh/model-studio/model-deployment-introduction#f17bf700c06k5)；**高级监控**支持北京、新加坡、弗吉尼亚地域下的所有模型**。**
     
 -   **告警功能：**支持北京、新加坡地域下的所有模型。
     

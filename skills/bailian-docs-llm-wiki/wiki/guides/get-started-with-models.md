@@ -104,11 +104,11 @@ print(completion.choices[0].message.content)
 
 此外，Coding Plan 和 [Token](../concepts/token.md) Plan 有各自的专属域名和 API Key，仅限 AI 编码工具交互式使用，不能用于后端服务。
 
-> **注意**：美国（弗吉尼亚）地域目前不支持[业务空间](../concepts/workspace.md)专属域名，仅能使用 Dashscope 域名 `dashscope-us.aliyuncs.com`。德国（法兰克福）和日本（东京）地域不支持 Dashscope 域名和试用域名，仅支持业务空间专属域名。
+> **注意**：美国（弗吉尼亚）地域目前不支持[业务空间](../concepts/workspace.md)专属域名，仅能使用 Dashscope 域名 `dashscope-us.aliyuncs.com`。德国（法兰克福）和日本（东京）地域不支持 Dashscope 域名和试用域名，仅支持[业务空间](../concepts/workspace.md)专属域名。
 
 ## 限流
 
-百炼按主账号维度对模型调用设置限流，账号下所有 RAM 子账号、业务空间和 API Key 的调用量合并计算。详见[限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)。
+百炼按主账号维度对模型调用设置限流，账号下所有 RAM 子账号、[业务空间](../concepts/workspace.md)和 API Key 的调用量合并计算。详见[限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)。
 
 ### 限流指标
 
@@ -163,5 +163,6 @@ print(completion.choices[0].message.content)
 - [选择地域、服务部署范围和接入域名](../../raw/model-user-guide/get-started-with-models/regions.md)
 - [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)
 - [Base URL总览](../../raw/model-user-guide/get-started-with-models/base-url.md)
+
 
 

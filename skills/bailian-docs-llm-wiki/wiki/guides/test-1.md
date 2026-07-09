@@ -7,14 +7,14 @@
 百炼平台的费用主要由以下部分构成：
 
 - **模型推理（按量付费）**：按输入/输出 [Token](../concepts/token.md) 数量计费，部分模型支持阶梯计费（单价取决于单次请求的输入 [Token](../concepts/token.md) 总量）。详见[模型调用价格](../../raw/model-user-guide/test-1/model-pricing.md)。
-- **模型训练**：按训练 [Token](../concepts/token.md) 计费，费用 = Token 总量 x 循环次数 x 训练单价。支持千问文本、万相图像、万相视频三类模型的微调训练。
+- **模型训练**：按训练 [Token](../concepts/token.md) 计费，费用 = [Token](../concepts/token.md) 总量 x 循环次数 x 训练单价。支持千问文本、万相图像、万相视频三类模型的微调训练。
 - **模型部署**：支持按使用时长计费（预置吞吐）和按模型单元计费两种方式，可选后付费（按小时）或预付费（按天/月）。
 
 费用抵扣优先级为：**免费额度 > 资源包 > 其他模型节省计划 > AI 通用型节省计划 > 按量付费**。
 
 ## 新人免费额度
 
-首次开通百炼时，平台自动发放各模型的免费推理额度（通常每个模型 100 万 Token），有效期 90 天。关键规则如下：
+首次开通百炼时，平台自动发放各模型的免费推理额度（通常每个模型 100 万 [Token](../concepts/token.md)），有效期 90 天。关键规则如下：
 
 - 仅限华北2（北京）地域且服务部署范围为中国内地的模型
 - 仅抵扣实时推理费用，不支持 Batch 调用、模型调优、模型部署
@@ -23,7 +23,7 @@
 
 已认证用户免费额度耗尽后会直接按量扣费。可开启**免费额度用完即停**功能防止意外费用。详见[新人免费额度](../../raw/model-user-guide/test-1/new-free-quota.md)。
 
-> **注意**：Token Plan / Coding Plan 专属 [API Key](../concepts/api-key.md) 不消耗免费额度，使用专属 [API Key](../concepts/api-key.md) 调用模型将直接按量付费。如需使用免费额度，请改用通用 [API Key](../concepts/api-key.md)。
+> **注意**：[Token](../concepts/token.md) Plan / Coding Plan 专属 [API Key](../concepts/api-key.md) 不消耗免费额度，使用专属 [API Key](../concepts/api-key.md) 调用模型将直接按量付费。如需使用免费额度，请改用通用 [API Key](../concepts/api-key.md)。
 
 ## 模型调用价格要点
 
@@ -134,5 +134,6 @@
 - [账单查询与成本管理](../../raw/model-user-guide/test-1/bill-query-and-cost-management.md)
 - [节省计划与资源包](../../raw/model-user-guide/test-1/savings-plan-and-resource-package.md)
 - [模型调用价格](../../raw/model-user-guide/test-1/model-pricing.md)
+
 
 

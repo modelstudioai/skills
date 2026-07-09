@@ -53,7 +53,7 @@
 - [more about models](api/more-about-models.md) — 6 篇源文档
 - [more models](api/more-models.md) — 6 篇源文档
 - [omni realtime api](api/omni-realtime-api.md) — 6 篇源文档
-- [preparations](api/preparations.md) — 3 篇源文档
+- [preparations](api/preparations.md) — 4 篇源文档
 - [qwen api reference](api/qwen-api-reference.md) — 1 篇源文档
 - [toolkits and frameworks](api/toolkits-and-frameworks.md) — 10 篇源文档
 - [vector and sort](api/vector-and-sort.md) — 4 篇源文档
@@ -61,23 +61,22 @@
 
 ## 横切概念
 
-- [API Key](concepts/api-key.md) — 关联 7 个主题
-- [DashScope SDK](concepts/dashscope-sdk.md) — 关联 7 个主题
-- [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 8 个主题
-- [Token](concepts/token.md) — 关联 8 个主题
-- [业务空间](concepts/workspace.md) — 关联 8 个主题
-- [函数调用](concepts/function-calling.md) — 关联 6 个主题
-- [多模态](concepts/multimodal.md) — 关联 7 个主题
-- [异步调用](concepts/async-invocation.md) — 关联 5 个主题
-- [检索增强生成](concepts/rag.md) — 关联 6 个主题
-- [流式输出](concepts/streaming.md) — 关联 5 个主题
+- [API Key 鉴权](concepts/api-key.md) — 关联 7 个主题
+- [DashScope SDK](concepts/dashscope-sdk.md) — 关联 4 个主题
+- [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 6 个主题
+- [Token](concepts/token.md) — 关联 6 个主题
+- [业务空间](concepts/workspace.md) — 关联 7 个主题
+- [函数调用](concepts/function-calling.md) — 关联 5 个主题
+- [异步调用](concepts/async-invocation.md) — 关联 4 个主题
+- [检索增强生成](concepts/rag.md) — 关联 5 个主题
+- [流式输出](concepts/streaming.md) — 关联 4 个主题
 
 ## 对比分析
 
-- [Qwen API、应用调用与托管智能体 API 对比](comparisons/qwen-api-vs-app-call-vs-agents-api.md) — 对比 3 个主题
-- [图像生成、视频生成与 3D 生成对比](comparisons/multimodal-generation-comparison.md) — 对比 3 个主题
-- [应用监控与模型监控对比](comparisons/app-monitoring-vs-model-monitoring.md) — 对比 2 个主题
-- [应用评测与模型评测对比](comparisons/app-eval-vs-model-eval.md) — 对比 2 个主题
-- [模型微调、压缩与部署对比](comparisons/fine-tuning-vs-compression-vs-deployment.md) — 对比 3 个主题
-- [知识库与记忆库对比](comparisons/knowledge-base-vs-memory-library.md) — 对比 2 个主题
+- [Qwen API vs 全双工实时API vs 托管智能体API](comparisons/qwen-api-vs-omni-realtime-vs-managed-agents.md) — 对比 3 个主题
+- [图像生成 vs 视频生成 vs 3D生成](comparisons/image-video-3d-generation-comparison.md) — 对比 3 个主题
+- [模型微调 vs 模型压缩 vs 模型部署](comparisons/fine-tuning-vs-compression-vs-deployment.md) — 对比 3 个主题
+- [模型监控 vs 应用监控](comparisons/model-monitoring-vs-application-monitoring.md) — 对比 2 个主题
+- [模型评估 vs 应用评估](comparisons/model-evaluation-vs-application-evaluation.md) — 对比 2 个主题
+- [知识库 vs 长期记忆库](comparisons/knowledge-base-vs-memory-library.md) — 对比 3 个主题
 

@@ -21,7 +21,7 @@
 
 -   **文本生成模型：**qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-max、qwen-plus、qwen-flash、deepseek-v3.2
     
--   **图像与视频理解模型：**qwen3.7-plus、qwen3.6-plus、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus、qwen3-vl-flash
+-   **图像与视频理解模型：**qwen3.7-plus、qwen3.6-plus、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3.5-omni-plus、qwen3-vl-plus、qwen3-vl-flash
     
 
 **重要**

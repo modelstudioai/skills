@@ -978,36 +978,6 @@ API
 
 API概述
 
-[CreateDataset](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-createdataset)
-
-数据源-创建
-
-数据源管理-创建。
-
-[GetDataset](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdataset)
-
-数据源-详情
-
-数据源管理-详情。
-
-[UpdateDataset](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-updatedataset)
-
-数据源-修改
-
-数据源管理-更新。
-
-[ListDatasets](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listdatasets)
-
-数据源-列表
-
-数据源管理-查询。
-
-[DeleteDataset](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletedataset)
-
-数据源-删除
-
-数据源管理-删除。
-
 [AddDatasetDocument](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-adddatasetdocument)
 
 数据源-添加文档到数据集
@@ -1590,11 +1560,29 @@ AI生成视频剪辑脚本
 
 生成选题视角。
 
+[CreateDataset](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-createdataset)
+
+数据源-创建
+
+数据源管理-创建。
+
+[DeleteDataset](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletedataset)
+
+数据源-删除
+
+数据源管理-删除。
+
 [FetchParseDocumentLayoutTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-fetchparsedocumentlayouttask)
 
 获取排版任务结果
 
 获取排版任务结果
+
+[GetDataset](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdataset)
+
+数据源-详情
+
+数据源管理-详情。
 
 [GetPptInfo](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getpptinfo)
 
@@ -1602,8 +1590,20 @@ AI生成视频剪辑脚本
 
 查询PPT任务信息
 
+[ListDatasets](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listdatasets)
+
+数据源-列表
+
+数据源管理-查询。
+
 SubmitParseDocumentLayoutTask
 
 提交排版任务
 
 提交版本任务
+
+[UpdateDataset](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-updatedataset)
+
+数据源-修改
+
+数据源管理-更新。

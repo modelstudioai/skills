@@ -49,16 +49,23 @@ String
 
 调用地址：
 
--   新加坡地域：wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime，请将{WorkspaceId}替换为您的业务空间ID。
+-   新加坡地域：wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime
     
--   北京地域：wss://dashscope.aliyuncs.com/api-ws/v1/realtime
+-   北京地域：wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime
     
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `wss://dashscope-intl.aliyuncs.com` 迁移至新域名。
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+-   华北2（北京）地域：从 `wss://dashscope.aliyuncs.com` 迁移至 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `wss://dashscope-intl.aliyuncs.com` 迁移至 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 下述请求参数可以通过`OmniRealtimeConfig`对象的链式方法或setter配置、之后作为参数传入updateSession接口完成配置。
 
@@ -195,7 +202,7 @@ turnDetectionParam
 
 Map
 
-VAD 扩展参数，用于传入 `turn_detection` 的额外配置项。当前支持传入 `idle_timeout_ms`（Integer）：静默超时时间（毫秒）。**仅在使用 `qwen3.5-omni-plus-realtime` 或 `qwen3.5-omni-flash-realtime` 模型且 VAD 类型为 `server_vad` 时生效。**服务端完成音频播报且用户持续静默超过该时间（未触发 `speech.started`）后，模型将主动触发一轮响应，基于当前上下文引导用户继续对话。取值范围：\[5000, 30000\]。
+VAD 扩展参数，用于传入 `turn_detection` 的额外配置项。当前支持传入 `idle_timeout_ms`（Integer）：静默超时时间（毫秒）。**仅在使用** `**qwen3.5-omni-plus-realtime**` **或** `**qwen3.5-omni-flash-realtime**` **模型且 VAD 类型为** `**server_vad**` **时生效。**服务端完成音频播报且用户持续静默超过该时间（未触发 `speech.started`）后，模型将主动触发一轮响应，基于当前上下文引导用户继续对话。取值范围：\[5000, 30000\]。
 
 示例：`turnDetectionParam(Map.of("idle_timeout_ms", 5000))`
 

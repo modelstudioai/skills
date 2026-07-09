@@ -1,127 +1,115 @@
 # use chat client or development tool
 
-阿里云百炼平台兼容 OpenAI 和 Anthropic API 协议，支持通过多种第三方聊天客户端和开发工具接入模型服务。开发者可根据使用场景选择终端 CLI 工具、桌面客户端、IDE 插件或开发平台，配合按量计费、Coding Plan 或 [Token](../concepts/token.md) Plan 团队版三种计费方案完成接入。本文汇总了各类工具的接入方式、配置要点和常见问题。
+阿里云百炼支持通过多种第三方聊天客户端和开发工具接入模型服务。这些工具覆盖终端 AI 编程助手、桌面客户端、IDE 插件和开发平台等类型，均通过兼容 OpenAI 或 Anthropic API 协议实现接入。用户根据自身计费方案配置对应的 API Key 和 Base URL 即可使用。
 
-## 支持的工具概览
+## 支持的工具分类
 
-百炼支持的工具按使用形态可分为以下几类：
+### 终端 AI 编程工具
 
-| 类型 | 工具 | 简介 |
-|------|------|------|
-| 终端 CLI | [Claude Code](../../raw/model-user-guide/use-chat-client-or-development-tool/claude-code.md)、[Codex](../../raw/model-user-guide/use-chat-client-or-development-tool/codex.md)、[Hermes Agent](../../raw/model-user-guide/use-chat-client-or-development-tool/hermes-agent.md)、[OpenCode](../../raw/model-user-guide/use-chat-client-or-development-tool/opencode.md)、[Qwen Code](../../raw/model-user-guide/use-chat-client-or-development-tool/qwen-code.md)、[Kilo CLI](../../raw/model-user-guide/use-chat-client-or-development-tool/kilo-cli.md)、[OpenClaw](../../raw/model-user-guide/use-chat-client-or-development-tool/openclaw.md) | 命令行 AI 编程助手，直接在终端中交互 |
-| 桌面客户端 | [Cherry Studio](../../raw/model-user-guide/use-chat-client-or-development-tool/cherry-studio.md)、[Chatbox](../../raw/model-user-guide/use-chat-client-or-development-tool/chatbox.md)、[QwenPaw](../../raw/model-user-guide/use-chat-client-or-development-tool/qwenpaw.md) | GUI 聊天界面，适合日常对话和多模型管理 |
-| IDE 插件/编辑器 | [Cursor](../../raw/model-user-guide/use-chat-client-or-development-tool/cursor.md)、[Cline](../../raw/model-user-guide/use-chat-client-or-development-tool/cline.md)、[Qoder](../../raw/model-user-guide/use-chat-client-or-development-tool/qoder-agent.md)、[Qoder CN（原 Lingma）](../../raw/model-user-guide/use-chat-client-or-development-tool/lingma-agent.md) | 集成到 IDE 中的 AI 编程辅助 |
-| 开发平台 | [Dify](../../raw/model-user-guide/use-chat-client-or-development-tool/dify.md) | 大模型应用开发平台，支持工作流和知识库 |
-| API 测试工具 | [Postman/cURL](../../raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md) | 快速验证 API 调用（仅适用于按量计费） |
+适合习惯命令行操作的开发者，包括：
 
-## 三种计费方案
+- [Claude Code](../../raw/model-user-guide/use-chat-client-or-development-tool/claude-code.md) — Anthropic 推出的命令行 AI 编程助手，通过 `~/.claude/settings.json` 配置环境变量接入
+- [Codex](../../raw/model-user-guide/use-chat-client-or-development-tool/codex.md) — OpenAI 推出的终端编程助手，通过 `~/.codex/config.toml` 配置
+- [Hermes Agent](../../raw/model-user-guide/use-chat-client-or-development-tool/hermes-agent.md) — 通过 `hermes config set` 命令或 `~/.hermes/config.yaml` 配置
+- [OpenCode](../../raw/model-user-guide/use-chat-client-or-development-tool/opencode.md) — 通过 `~/.config/opencode/opencode.json` 配置
+- [Qwen Code](../../raw/model-user-guide/use-chat-client-or-development-tool/qwen-code.md) — 支持 `/auth` 可视化配置或 `~/.qwen/settings.json` 手动配置
+- [Kilo CLI](../../raw/model-user-guide/use-chat-client-or-development-tool/kilo-cli.md) — 通过 `~/.config/kilo/config.json` 配置
+- [OpenClaw](../../raw/model-user-guide/use-chat-client-or-development-tool/openclaw.md) — 开源个人 AI 助手平台，通过 `~/.openclaw/openclaw.json` 配置
+- Qoder CLI — Qoder 的命令行版本，通过 `/model` 命令配置
 
-所有工具均支持以下三种计费方案，但各方案的 [API Key](../concepts/api-key.md) 和 Base URL 互不通用：
+### IDE 插件与桌面 IDE
 
-- **[Token](../concepts/token.md) Plan 团队版**：按坐席订阅，按 token 消耗抵扣 Credits。[API Key](../concepts/api-key.md) 在 [Token Plan 管理页面](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list) 获取。
-- **Coding Plan**：固定月费订阅，按模型调用次数计量。[API Key](../concepts/api-key.md) 在 [Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan) 获取。
-- **按量计费**：按实际调用量后付费。API Key 通过 [百炼控制台](https://help.aliyun.com/zh/model-studio/get-api-key) 获取。
+适合需要在编辑器中直接使用 AI 的开发者：
 
-> **注意**：[Token](../concepts/token.md) Plan 团队版和 Coding Plan 仅限在 AI 编程工具和 OpenClaw 类型 Agent 中使用。Dify、Postman 等工作流/自动化平台和 API 测试工具不支持使用这两种套餐的 API Key，违规使用可能导致订阅被暂停。详见 [更多工具](../../raw/model-user-guide/use-chat-client-or-development-tool/more-tools.md)。
+- [Cursor](../../raw/model-user-guide/use-chat-client-or-development-tool/cursor.md) — AI 编程 IDE，在 Settings > Models 中配置 OpenAI API Key 和 Base URL
+- [Cline](../../raw/model-user-guide/use-chat-client-or-development-tool/cline.md) — VSCode 插件，选择 OpenAI Compatible 作为 API Provider
+- [Qoder](../../raw/model-user-guide/use-chat-client-or-development-tool/qoder-agent.md) — 支持桌面 IDE、CLI 和 JetBrains 插件，内置阿里云百炼提供商
+- [Qoder CN（原 Lingma）](../../raw/model-user-guide/use-chat-client-or-development-tool/lingma-agent.md) — 阿里云智能编码助手，内置百炼提供商选项
 
-## API 协议与 Base URL
+### 桌面聊天客户端
 
-百炼提供两种 API 协议，不同工具使用不同协议：
+适合非编程场景的对话交互：
 
-### OpenAI 兼容协议
+- [Cherry Studio](../../raw/model-user-guide/use-chat-client-or-development-tool/cherry-studio.md) — 开源 AI 桌面客户端，提供商类型选择 OpenAI
+- [Chatbox](../../raw/model-user-guide/use-chat-client-or-development-tool/chatbox.md) — 跨平台 AI 客户端，API 模式选择 OpenAI API 兼容
+- [QwenPaw](../../raw/model-user-guide/use-chat-client-or-development-tool/qwenpaw.md) — AgentScope 团队开源的个人 AI 助手，提供 Web Console 配置界面
 
-大部分工具使用此协议（Cursor、Cline、Cherry Studio、Chatbox、Codex、OpenCode、Kilo CLI、Qwen Code、Qoder/Qoder CN 等）。
+### 开发平台与 API 测试
 
-| 计费方案 | Base URL |
-|----------|----------|
-| Token Plan 团队版 | `https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` |
-| Coding Plan | `https://coding.dashscope.aliyuncs.com/v1` |
-| 按量计费（北京） | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
-| 按量计费（新加坡） | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1` |
-| 按量计费（弗吉尼亚） | `https://dashscope-us.aliyuncs.com/compatible-mode/v1` |
+- [Dify](../../raw/model-user-guide/use-chat-client-or-development-tool/dify.md) — 开源大模型应用开发平台，通过安装通义千问插件接入
+- [使用Postman或cURL调用图像/视频生成API](../../raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md) — 适用于图像/视频异步 API 的快速测试
 
-### Anthropic 兼容协议
+## 计费方案与接入地址
 
-Claude Code、Hermes Agent、OpenClaw 等使用此协议。
+所有工具均支持以下三种计费方案，每种方案使用独立的 API Key 和 Base URL：
 
-| 计费方案 | Base URL |
-|----------|----------|
-| Token Plan 团队版 | `https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic` |
-| Coding Plan | `https://coding.dashscope.aliyuncs.com/apps/anthropic` |
-| 按量计费（北京） | `https://dashscope.aliyuncs.com/apps/anthropic` |
-| 按量计费（新加坡） | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic` |
+| 计费方案 | OpenAI 兼容 Base URL | Anthropic 兼容 Base URL |
+|---------|---------------------|------------------------|
+| [Token](../concepts/token.md) Plan 团队版 | `https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` | `https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic` |
+| Coding Plan | `https://coding.dashscope.aliyuncs.com/v1` | `https://coding.dashscope.aliyuncs.com/apps/anthropic` |
+| 按量计费（北京） | `https://dashscope.aliyuncs.com/compatible-mode/v1` | `https://dashscope.aliyuncs.com/apps/anthropic` |
+| 按量计费（新加坡） | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1` | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic` |
+| 按量计费（弗吉尼亚） | `https://dashscope-us.aliyuncs.com/compatible-mode/v1` | — |
 
-> **注意**：按量计费的 API Key 必须与所选地域对应，跨地域使用会导致认证失败（HTTP 401）。
+> **注意**：三种计费方案的 API Key 互不通用。[Token](../concepts/token.md) Plan 团队版和 Coding Plan 的 API Key 分别在各自管理页面获取，按量计费使用百炼标准 API Key。混用会导致 401 认证错误。
 
-## 各工具配置要点
+## 常用模型
 
-### Claude Code
+各工具可通过配置使用以下模型（具体可用模型取决于所选计费方案）：
 
-通过环境变量配置，编辑 `~/.claude/settings.json`，设置 `ANTHROPIC_AUTH_TOKEN`、`ANTHROPIC_BASE_URL`、`ANTHROPIC_MODEL` 等。需先在 `~/.claude.json` 中设置 `"hasCompletedOnboarding": true` 跳过官方登录验证。社区工具 [CC Switch](https://github.com/farion1231/cc-switch) 支持在多套餐间一键切换。详见 [Claude Code](../../raw/model-user-guide/use-chat-client-or-development-tool/claude-code.md)。
+- **Qwen 系列**：qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash
+- **DeepSeek 系列**：deepseek-v4-pro、deepseek-v4-flash、deepseek-v3.2
+- **Kimi 系列**：kimi-k2.7-code、kimi-k2.6、kimi-k2.5
+- **GLM 系列**：glm-5.2、glm-5.1、glm-5
+- **其他**：MiniMax-M2.5
 
-### Codex
+> **注意**：在 Cursor 中部分模型名称需要调整，例如 kimi-k2.6 需写为 kimi-k2-6，glm-5.2 需写为 glm-5-2，glm-5 需写为 glm-5-0。这是因为 Cursor 内置模型名可能产生冲突。
 
-编辑 `~/.codex/config.toml` 配置 `model_provider`、`base_url` 和 `wire_api`，同时通过环境变量 `OPENAI_API_KEY` 设置密钥。qwen3.7-max 等模型支持 Responses API（最新版 Codex），其他模型需通过 Chat/Completions API 接入（需安装 Codex 0.80.0 旧版本）。详见 [Codex](../../raw/model-user-guide/use-chat-client-or-development-tool/codex.md)。
+## 配置要点
 
-### Cursor
+### API 协议选择
 
-在 Cursor Settings > Models 中开启 OpenAI API Key 和 Override OpenAI Base URL，填入对应凭证。需要 Cursor Pro 及以上套餐才能使用自定义模型（免费版仅支持 Auto 模式）。部分模型名称需调整，如 `kimi-k2.6` 写为 `kimi-k2-6`、`glm-5` 写为 `glm-5-0`。
+- 使用 Anthropic 协议的工具：Claude Code、Hermes Agent、OpenClaw、Kilo CLI（Coding Plan 模式）
+- 使用 OpenAI 兼容协议的工具：Cursor、Cline、Cherry Studio、Chatbox、Codex、OpenCode、Qwen Code、Qoder、Qoder CN、QwenPaw
 
-### Cline
+### 思考模式
 
-在 VSCode 侧边栏的 Cline 配置界面选择 OpenAI Compatible 作为 API Provider。使用 Qwen3 思考模式或 QwQ 模型时，需在 MODEL CONFIGURATION 中勾选 Enable R1 messages format。
+部分模型（如 Qwen3 系列、QwQ）支持思考模式。不同工具启用方式不同：
 
-### Hermes Agent / OpenCode / Kilo CLI
+- OpenCode / Kilo CLI：在 JSON 配置中设置 `"thinking": {"type": "enabled", "budgetTokens": 8192}`
+- Qwen Code：通过 `"extra_body": {"enable_thinking": true}` 开启
+- Cline：在 MODEL CONFIGURATION 中勾选 Enable R1 messages format
+- Codex（Responses API）：qwen3.7-max 等模型支持最新版 Codex 的 Responses API
 
-均通过配置文件设置 Base URL 和 API Key。Hermes Agent 使用 `~/.hermes/config.yaml`，OpenCode 使用 `~/.config/opencode/opencode.json`，Kilo CLI 使用 `~/.config/kilo/config.json`。Hermes Agent 默认使用 OpenRouter，接入百炼时 `model.provider` 必须设置为 `custom`。
+### Codex 版本兼容性
 
-### Qwen Code
+Codex 分为两种 API 模式：
 
-安装后通过 `/auth` 命令可视化配置，也可直接编辑 `~/.qwen/settings.json`。安装时指定 `--source bailian` 参数可预设百炼配置。
+- **Responses API**（最新版）：仅 qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash 支持
+- **Chat/Completions API**：需安装旧版 Codex（如 `npm install -g @openai/codex@0.80.0`），其他模型使用此模式
 
-### Qoder / Qoder CN（原 Lingma）
+> **注意**：Coding Plan 仅支持 Chat/Completions API，需使用旧版 Codex。
 
-[Qoder](../../raw/model-user-guide/use-chat-client-or-development-tool/qoder-agent.md) 支持桌面 IDE、CLI 和 JetBrains 插件三种形态，在设置中选择"阿里云百炼 - 国内"作为提供商即可。[Qoder CN](../../raw/model-user-guide/use-chat-client-or-development-tool/lingma-agent.md) 仅个人社区版和个人专业版支持接入百炼，企业版不支持。
+## 使用限制
 
-### Cherry Studio / Chatbox / QwenPaw
-
-桌面客户端均在设置界面添加供应商，选择 OpenAI 兼容模式，填入 API Key 和 Base URL。QwenPaw 内置了百炼各套餐的提供商配置模板，在 Console 设置页面直接填入 API Key 即可。
-
-### Dify
-
-安装"通义千问"插件（非阿里云官方维护，由 Dify 官方维护），在模型供应商设置中填入 API Key。使用 DeepSeek 模型也需通过"通义千问"插件接入。Qwen-Omni、Qwen-Audio、Qwen-OCR 不支持直接在 Dify 配置，需通过 HTTP 节点接入。万相模型需导入工作流模板使用。
-
-### Postman / cURL
-
-适用于图像/视频生成等异步 API 的快速验证。调用分为两步：先创建任务获取 `task_id`，再轮询查询结果。仅支持按量计费方案。
+- **Cursor 免费版**不支持调用自定义模型，需升级至 Pro 及以上套餐
+- **[Token](../concepts/token.md) Plan 团队版和 Coding Plan** 仅限在 AI 编程工具和 OpenClaw 类型 Agent 中使用，不支持接入工作流平台（如 Dify、n8n）、API 测试工具（如 Postman）或自定义应用程序
+- **按量计费**的免费额度仅适用于华北2（北京）地域，且各模型额度独立计算
+- Qoder CN 企业版不支持接入百炼，需使用个人社区版或个人专业版
 
 ## 百炼 CLI 集成
 
-Cursor、Cline、Qoder 等工具支持通过安装百炼 CLI（`npm install -g bailian-cli`）注册 Skill，从而在对话中直接调用百炼的图像生成、视频生成等扩展能力。安装后 CLI 会自动向对应工具的 [skill](skill.md)s 目录注册，无需额外配置。
+部分工具（Cursor、Cline、Qoder）支持通过安装百炼 CLI（`npm install -g bailian-cli`）注册 Skill，使 AI 工具可调用百炼的图像生成、视频生成等扩展能力。安装后工具可通过自然语言指令调用，如生成电商主图或产品演示视频。
 
-## 常见问题
+## 常见错误排查
 
-### API Key 认证失败（HTTP 401）
-
-- 三种计费方案的 API Key 不通用，确认 API Key 与 Base URL 来自同一方案。
-- 按量计费的 API Key 必须与 Base URL 地域一致。
-- 检查 API Key 是否完整复制、无多余空格。
-
-### 模型名称冲突
-
-在 Cursor 中，部分模型名称与内置模型冲突，需使用别名（如 `glm-5` 写为 `glm-5-0`）。如果配置完成后找不到模型，需关闭 Auto 模式再手动选择。
-
-### 思考模式报错
-
-部分模型仅支持思考模式运行。在 Cline 中需勾选 Enable R1 messages format；在 Cherry Studio 中需开启思考模式开关；在 Dify 中需将思考模式设置为 True。报错 `The value of the enable_thinking parameter is restricted to True` 即为此问题。
-
-### 按量计费免费额度产生费用
-
-免费额度仅适用于华北2（北京）地域，各模型额度独立计算不可共享，且控制台数据每小时更新存在延迟。
-
-### 上下文超限
-
-长对话或工具调用时可能触发上下文超限，需在对应工具中调整 `max_tokens` 参数或缩短对话历史。
+| 错误 | 可能原因 | 解决方案 |
+|------|---------|---------|
+| 401 Incorrect API key | API Key 与 Base URL 不匹配或地域不一致 | 确认 API Key 和 Base URL 来自同一计费方案和地域 |
+| The model xxx does not work with your current plan | Cursor 免费版限制 | 升级至 Cursor Pro |
+| InternalError.Algo.InvalidParameter | 思考模式未正确启用 | 在工具中启用对应的思考模式选项 |
+| enable_thinking parameter restricted to True | 模型要求思考模式 | 在客户端中开启思考模式 |
+| 上下文超限 | 长对话或工具调用累积 token 过多 | 在模型配置中调整 max_tokens 参数 |
 
 ## 来源文档
 

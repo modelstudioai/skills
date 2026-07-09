@@ -98,13 +98,14 @@
 ## 关键指标说明
 
 - **延时（调用时长）**：对 LLM 节点，包含输出回复的完整过程。
-- **[Token](../concepts/token.md) 量**：Embedding 节点为本次向量化 Token 数；LLM 节点为输入 Token + 输出 Token。
+- **[Token](../concepts/token.md) 量**：Embedding 节点为本次向量化 [Token](../concepts/token.md) 数；LLM 节点为输入 [Token](../concepts/token.md) + 输出 [Token](../concepts/token.md)。
 - **数据时效**：指标更新频率为分钟级，调用记录最长可查 30 天。
 - **应用总量 / 平均延时**：用于评估应用运营效果与成本，详见 [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md)。
 
 ## 来源文档
 
 - [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md)
+
 
 
 

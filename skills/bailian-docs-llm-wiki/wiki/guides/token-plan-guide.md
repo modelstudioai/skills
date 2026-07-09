@@ -15,13 +15,13 @@
 | [API Key](../concepts/api-key.md) 格式 | `sk-sp-xxx`（专属） | `sk-sp-xxx`（专属） |
 | 服务地域 | 仅支持华北2（北京） | 不限制使用地域 |
 
-> 三类 [API Key](../concepts/api-key.md) 与 Base URL 互不相通：百炼按量计费（`sk-xxx` + `dashscope.aliyuncs.com`）、Token Plan 团队版（`sk-sp-xxx` + `token-plan.cn-beijing.maas.aliyuncs.com`）、Coding Plan（`sk-sp-xxx` + `coding.dashscope.aliyuncs.com`）。误用会导致按量计费扣费或 401/403 报错。
+> 三类 [API Key](../concepts/api-key.md) 与 Base URL 互不相通：百炼按量计费（`sk-xxx` + `dashscope.aliyuncs.com`）、[Token](../concepts/token.md) Plan 团队版（`sk-sp-xxx` + `token-plan.cn-beijing.maas.aliyuncs.com`）、Coding Plan（`sk-sp-xxx` + `coding.dashscope.aliyuncs.com`）。误用会导致按量计费扣费或 401/403 报错。
 
-## Token Plan 团队版
+## [Token](../concepts/token.md) Plan 团队版
 
 ### 产品简介
 
-Token Plan 团队版整合千问、万相、DeepSeek、月之暗面、智谱 AI、MiniMax 等厂商模型，支持文本生成与图像生成，以 Credits 统一计量。提供标准坐席、高级坐席、尊享坐席三档套餐，配套团队管理后台（席位分配 / 用量分析 / SSO / 钉钉登录），并承诺不使用对话数据训练模型。目前仅支持**华北2（北京）**地域。
+[Token](../concepts/token.md) Plan 团队版整合千问、万相、DeepSeek、月之暗面、智谱 AI、MiniMax 等厂商模型，支持文本生成与图像生成，以 Credits 统一计量。提供标准坐席、高级坐席、尊享坐席三档套餐，配套团队管理后台（席位分配 / 用量分析 / SSO / 钉钉登录），并承诺不使用对话数据训练模型。目前仅支持**华北2（北京）**地域。
 
 ### 支持的模型
 
@@ -275,6 +275,7 @@ Coding Plan 中 `qwen3.6-plus`、`qwen3.5-plus`、`kimi-k2.5` 原生支持视觉
 - [联网搜索](../../raw/model-user-guide/token-plan-guide/coding-plan-guide/web-search-for-coding-plan.md)
 - [添加视觉理解能力](../../raw/model-user-guide/token-plan-guide/coding-plan-guide/add-vision-skill.md)
 - [常见问题](../../raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan-faq.md)
+
 
 
 

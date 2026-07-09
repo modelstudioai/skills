@@ -1,222 +1,224 @@
 # model experience
 
-百炼平台模型体验中心提供覆盖文本、视觉、音频、视频、图片、3D、向量等全模态的模型服务。开发者可通过模型广场快速试用和接入各类模型，支持 OpenAI 兼容 API、WebSocket 实时流式、HTTP 异步任务等多种调用方式。本文按模态分类梳理各场景的推荐模型、核心能力与关键参数，帮助开发者快速选型。
+百炼平台模型体验中心提供覆盖文本、视觉、语音、视频、图片、3D、音乐及向量检索等全模态的模型能力。开发者可根据应用场景，从模型广场选择合适的模型，通过 OpenAI 兼容 API 或专用协议快速接入。
 
 ## 文本生成
 
-文本生成是最常用的模型能力，覆盖聊天机器人、内容生成、摘要总结、AI 编程、Agent 开发等场景。详细信息参见[文本生成](../../raw/model-user-guide/model-experience/text-generation-model.md)。
+文本生成是最基础的模型能力，覆盖聊天机器人、Agent 开发、内容生成、文档处理等场景。详细选型指南参见[文本生成](../../raw/model-user-guide/model-experience/text-generation-model.md)。
 
 ### 推荐模型
 
-- `qwen3.7-max`：旗舰推理模型，1M 上下文，最强推理能力，成本较高。
-- `qwen3.7-plus`：能力与成本均衡的首选，1M 上下文，完整工具调用和内置工具支持。
-- `qwen3.6-flash`：效果接近旗舰、成本更低，1M 上下文，适合确认效果后降本。
-- `deepseek-v4-pro` / `deepseek-v4-flash`：第三方模型，1M 上下文，支持思考模式和 Function Calling。
+| 模型 ID | 上下文 | 思考模式 | Function Calling | 内置工具 | 结构化输出 |
+|---------|--------|---------|-----------------|---------|-----------|
+| `qwen3.7-max` | 1M | 支持 | 支持 | 支持 | 不支持 |
+| `qwen3.7-plus` | 1M | 支持 | 支持 | 支持 | 支持 |
+| `qwen3.6-flash` | 1M | 支持 | 支持 | 支持 | 支持 |
+| `deepseek-v4-pro` | 1M | 支持 | 支持 | 不支持 | 不支持 |
+| `deepseek-v4-flash` | 1M | 支持 | 支持 | 不支持 | 不支持 |
 
-### 核心能力
+### 选型建议
 
-| 能力 | 说明 |
-|------|------|
-| 思考模式 | 通过 `enable_thinking` 参数开启，所有 Qwen3 及以上模型均支持 |
-| Function Calling | 自定义工具调用，所有通用模型均支持 |
-| 内置工具 | 联网搜索、代码解释器、网页抓取等，无需额外配置 |
-| 结构化输出 | 获取有效 JSON 返回 |
-| 批量推理 | 大量请求且对延迟要求不高时降低成本 |
+- **Agent/编程**：`qwen3.7-plus`（能力与成本均衡，完整工具调用，1M 上下文）
+- **最强推理**：`qwen3.7-max`
+- **低成本**：`qwen3.6-flash`（效果接近旗舰，价格更低）
+- **代码专用**：`qwen3-coder-plus`（1M 上下文，支持思考模式）
 
-### 闭源模型迁移参考
+### 关键功能
 
-| 能力档位 | 闭源代表 | 百炼推荐 |
-|----------|----------|----------|
-| 高能力 | GPT-5.5、Claude Opus 4.7 | `qwen3.7-max` |
-| 平衡 | GPT-5.4、Claude Sonnet 4.6 | `qwen3.7-plus`、`deepseek-v4-pro` |
-| 轻量低成本 | GPT-5.4-mini、Claude Haiku 4.5 | `qwen3.6-flash`、`deepseek-v4-flash` |
+- **思考模式**：通过 `enable_thinking` 参数开启逐步推理，所有 Qwen3 及以上模型支持
+- **Function Calling**：所有通用模型均支持自定义工具调用
+- **内置工具**：联网搜索、代码解释器、网页抓取等（仅部分模型支持）
+- **结构化输出**：获取有效 JSON 返回
+- **批量推理**：大量请求且对延迟要求不高时可降低成本
 
 ## 视觉理解
 
-视觉理解模型支持图像分析、视频理解、OCR 等场景。推荐从 `qwen3.7-plus` 开始，它支持 1M 上下文、最长 2 小时视频、每张图片最高 1600 万像素。详细信息参见[视觉理解](../../raw/model-user-guide/model-experience/vision-model.md)。
+支持图像分析、视频理解、OCR 等场景。详细信息参见[视觉理解](../../raw/model-user-guide/model-experience/vision-model.md)。
+
+### 推荐模型
+
+| 模型 ID | 上下文 | 最大视频时长 | 最大图片数 | Function Calling |
+|---------|--------|------------|-----------|-----------------|
+| `qwen3.7-plus` | 1M | 2小时 | 2048 | 支持 |
+| `qwen3.6-flash` | 1M | 2小时 | 256 | 支持 |
+| `qwen3.5-omni-plus` | 64k | 1小时 | 2048 | 支持 |
 
 ### 关键参数
 
-- **图像分辨率**：大多数模型支持每张图片最高 1600 万像素，[Token](../concepts/token.md) 计算公式为 `h x w / (32 x 32) + 2`。
-- **视频支持**：`qwen3.7-plus`、`qwen3.6-flash` 等支持最长 2 小时 / 2GB 视频输入。
-- **OCR**：`qwen3.5-ocr` 专为文档、表格、手写内容优化。
-
-### 推荐模型
-
-| 模型 | 上下文 | 最大视频时长 | Function Calling | 结构化输出 |
-|------|--------|-------------|------------------|-----------|
-| `qwen3.7-plus` | 1M | 2 小时 | 支持 | 支持 |
-| `qwen3.6-flash` | 1M | 2 小时 | 支持 | 支持 |
-| `qwen3.5-ocr` | -- | -- | -- | -- |
+- **图像分辨率**：大多数模型支持每张图片最高 1600 万像素
+- **[Token](../concepts/token.md) 计算**：每张图片 [Token](../concepts/token.md) 数 = `h x w / (32 x 32) + 2`
+- **OCR**：`qwen3.5-ocr` 专为文档、表格、手写内容文字提取而优化
 
 ## 视频生成与编辑
 
-视频生成模型支持文生视频、图生视频、参考生视频、视频编辑和角色动画等场景。详细信息参见[视频生成与编辑](../../raw/model-user-guide/model-experience/video-generate-edit-model.md)。
+覆盖文生视频、图生视频、参考生视频、视频编辑和角色动画等场景。详细信息参见[视频生成与编辑](../../raw/model-user-guide/model-experience/video-generate-edit-model.md)。
 
 ### 推荐模型
 
-| 场景 | 推荐模型 | 最大分辨率 | 最大时长 |
-|------|----------|-----------|----------|
-| 文生视频 | `happyhorse-1.1-t2v` | 1080P | 3-15 秒 |
-| 首帧生视频 | `happyhorse-1.1-i2v` | 1080P | 3-15 秒 |
-| 首尾帧生视频 | `wan2.7-i2v-2026-04-25` | 1080P | 2-15 秒 |
-| 参考生视频 | `happyhorse-1.1-r2v` | 1080P | 3-15 秒 |
-| 视频编辑 | `happyhorse-1.0-video-edit` | 1080P | 3-15 秒 |
-| 动作迁移 | `wan2.2-animate-move` | 720P | 2-30 秒 |
+| 模型 ID | 场景 | 最大分辨率 | 最大时长 |
+|---------|------|-----------|---------|
+| `happyhorse-1.1-t2v` | 文生视频（有声） | 1080P | 3-15秒 |
+| `happyhorse-1.1-i2v` | 首帧生视频 | 1080P | 3-15秒 |
+| `happyhorse-1.1-r2v` | 参考生视频 | 1080P | 3-15秒 |
+| `wan2.7-t2v-2026-06-12` | 文生视频（自定义音频） | 1080P | 2-15秒 |
+| `wan2.7-i2v-2026-04-25` | 首尾帧生视频 | 1080P | 2-15秒 |
+| `happyhorse-1.0-video-edit` | 视频编辑 | 1080P | 3-15秒 |
 
-如需传入自定义音频文件，推荐使用 `wan2.7-t2v-2026-06-12`（文生视频）或 `wan2.7-i2v-2026-04-25`（图生视频）。首尾帧模型可串联多个片段实现长视频叙事。
+### 使用要点
+
+- HappyHorse 1.1 系列默认生成有声视频，支持 1080P
+- 首尾帧生视频可通过串联多片段构建长视频
+- 角色动画使用 `wan2.2-animate-move`（动作迁移）和 `wan2.2-animate-mix`（人物替换）
 
 ## 图片生成与编辑
 
-图片生成模型支持文生图、图片编辑、文字渲染、角色一致性多图生成等场景。详细信息参见[图片生成与编辑](../../raw/model-user-guide/model-experience/image-model.md)。
+覆盖文生图、图片编辑、角色一致性多图生成等场景。详细信息参见[图片生成与编辑](../../raw/model-user-guide/model-experience/image-model.md)。
 
 ### 推荐模型
 
-| 模型 | 场景 | 文生图 | 编辑 | 最大分辨率 |
-|------|------|--------|------|-----------|
-| `wan2.7-image-pro` | 文字渲染、品牌色、角色一致性 | 支持 | 支持 | 4096x4096 |
-| `z-image-turbo` | 快速生成、低成本、写实人像 | 支持 | 不支持 | 2048x2048 |
-| `qwen-image-2.0-pro` | 负向提示词、最多 6 张变体 | 支持 | 支持 | 2048x2048 |
+| 模型 ID | 场景 | 编辑 | 最大分辨率 |
+|---------|------|------|-----------|
+| `wan2.7-image-pro` | 文字渲染、品牌色、角色一致性 | 支持 | 4096x4096 |
+| `z-image-turbo` | 快速生成、写实人像 | 不支持 | 2048x2048 |
+| `qwen-image-2.0-pro` | 负向提示词、最多6张变体 | 支持 | 2048x2048 |
 
-- `z-image-turbo` 生成速度快 10 倍、价格约为 `wan2.7-image-pro` 的 1/5，适合只需生成不需编辑的场景。
-- 需要负向提示词时使用 `qwen-image-2.0-pro`。
+### 选型建议
+
+- 默认选 `wan2.7-image-pro`：集成文字渲染、品牌色、编辑等功能
+- 速度优先选 `z-image-turbo`：生成速度快 10 倍，价格约 1/5
+- 需要负向提示词选 `qwen-image-2.0-pro`
 
 ## 3D 模型生成
 
 通过 Tripo 模型支持文生 3D、单图生 3D 和多图生 3D 三种模式。详细信息参见[Tripo 3D模型生成](../../raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)。
 
-### 模型选型
-
-| 模型 | 最高面数 | 速度 | 适用场景 |
-|------|---------|------|----------|
+| 模型名称 | 产物最高面数 | 速度 | 适用场景 |
+|---------|------------|------|---------|
 | `Tripo/Tripo-H3.1` | 200 万面 | 较慢 | 影视级渲染、高精度数字资产 |
-| `Tripo/Tripo-P1.0` | 2 万面 | 更快 | 快速预览、游戏/AR、实时应用 |
+| `Tripo/Tripo-P1.0` | 2 万面 | 更快 | 快速预览、游戏/AR 场景 |
 
-> **注意**：Tripo 3D 模型生成仅适用于华北2（北京）地域，必须使用该地域的 [API Key](../concepts/api-key.md)。
+> **注意**：Tripo 模型仅适用于华北2（北京）地域，必须使用该地域的 API Key。
 
-### 使用方式
+### 关键参数
 
-调用为异步任务模式：先 POST 创建任务获取 `task_id`，再轮询 GET 获取结果。轮询间隔建议 15 秒。输出产物为 GLB 格式的 3D 模型文件，可直接导入 Blender、Unity 等工具。通过 `texture_quality` 参数控制贴图质量（`standard` / `detailed`），`Tripo-H3.1` 还支持 `geometry_quality` 控制几何精度。
+- `texture_quality`：`standard`（默认标清）/ `detailed`（高清贴图）
+- `geometry_quality`：`standard`（默认 150 万面）/ `ultra`（200 万面），仅 Tripo-H3.1 支持
+- 产物为 GLB 格式，可直接导入 Blender、Unity
 
-## 语音合成
+## 语音合成（TTS）
 
-语音合成模型将文本转换为自然语音，支持标准合成、声音复刻和声音设计。详细信息参见[语音合成](../../raw/model-user-guide/model-experience/tts-model.md)。
+覆盖标准合成、声音复刻、声音设计和指令控制等场景。详细信息参见[语音合成](../../raw/model-user-guide/model-experience/tts-model.md)。
 
 ### 推荐模型
 
-| 模型 | 接入方式 | 声音复刻 | 声音设计 | 指令控制 |
-|------|---------|---------|---------|---------|
+| 模型 ID | 接入方式 | 声音复刻 | 声音设计 | 指令控制 |
+|---------|---------|---------|---------|---------|
 | `cosyvoice-v3.5-plus` | WebSocket / HTTP | 支持 | 支持 | 支持 |
 | `cosyvoice-v3-plus` | WebSocket / HTTP | 支持 | 支持 | 不支持 |
 | `MiniMax/speech-2.8-hd` | HTTP | 支持 | 不支持 | 不支持 |
 
-### 关键决策
+### 选型维度
 
-- **WebSocket vs HTTP**：WebSocket 支持流式输入输出、延迟最低，适合实时对话；HTTP 适合有声阅读等非实时场景。
-- **声音复刻**：已有目标人物录音时使用，合成语音与原始说话人高度相似。
-- **声音设计**：无录音素材时使用，通过文字描述创建全新音色。
-- **指令控制**：用自然语言动态控制语速、情绪和风格，CosyVoice 系列和 Qwen3-TTS-Instruct 系列支持。
+- **标准合成**（内置音色）：`cosyvoice-v3-plus` 或 `MiniMax/speech-2.8-hd`
+- **自定义音色**：`cosyvoice-v3.5-plus`（声音复刻 + 声音设计）
+- **低延迟实时**：WebSocket 接入（音频边合成边返回）
+- **指令控制**：通过自然语言动态控制语速、情绪和风格
 
 ## 语音转语音（S2S）
 
-S2S 模型支持语音对话、语音翻译、同声传译等"语音输入到语音输出"场景。详细信息参见[语音转语音](../../raw/model-user-guide/model-experience/s2s-model.md)。
+端到端语音交互，无需 ASR + LLM + TTS 三段拼接，延迟更低。详细信息参见[语音转语音](../../raw/model-user-guide/model-experience/s2s-model.md)。
 
-### S2S vs Pipeline
+### 推荐模型
 
-| 维度 | S2S 单模型 | Pipeline（ASR + LLM + TTS） |
-|------|-----------|---------------------------|
-| 延迟 | 低（单模型流式处理） | 较高（3 阶段串行） |
-| 音频理解 | 端到端，能感知语调和情绪 | 先转文本，音频细微信息丢失 |
-| 音色定制 | 预设音色 | 支持声音克隆和声音设计 |
-
-### 按场景选模型
-
-| 场景 | 推荐模型 | API |
-|------|---------|-----|
+| 场景 | 推荐模型 | 接口 |
+|------|---------|------|
 | 语音助手/客服对话 | `qwen3.5-omni-plus-realtime` | WebSocket |
 | 成本敏感对话 | `qwen3.5-omni-flash-realtime` | WebSocket |
 | 同声传译/直播翻译 | `qwen3.5-livetranslate-flash-realtime` | WebSocket |
 | 视频配音/播客翻译 | `qwen3-livetranslate-flash` | HTTP |
 
-翻译语言覆盖方面，Qwen3.5-Livetranslate 支持 60 种语言，Qwen3.5-Omni 支持 29 种输出语言，Qwen3-Omni-Flash 支持 11 种。
+### S2S vs Pipeline 选型
+
+- **S2S**：低延迟、端到端音频感知、通过系统提示词选择预设音色
+- **Pipeline（ASR + LLM + TTS）**：支持声音克隆/设计，可分别选择最优组件
 
 ## 语音识别（ASR）
 
-语音识别模型支持实时语音识别和录音文件转写。详细信息参见[语音识别](../../raw/model-user-guide/model-experience/asr-model.md)。
+覆盖实时语音识别和录音文件转写场景。详细信息参见[语音识别](../../raw/model-user-guide/model-experience/asr-model.md)。
 
 ### 推荐模型
 
-| 模型 | 模式 | 精度增强 | 情感识别 | 说话人分离 |
-|------|------|---------|---------|-----------|
+| 模型 ID | 模式 | 精度增强 | 说话人分离 | 情感识别 |
+|---------|------|---------|-----------|---------|
 | `fun-asr-realtime` | 实时 | 热词 | 不支持 | 不支持 |
-| `fun-asr` | 非实时 | 热词 | 不支持 | 支持 |
-| `qwen3.5-omni-plus-realtime` | 实时 | Prompt 上下文 | 支持 | 不支持 |
-| `qwen3.5-omni-plus` | 非实时 | Prompt 上下文 | 支持 | 不支持 |
+| `fun-asr` | 非实时 | 热词 | 支持 | 不支持 |
+| `qwen3.5-omni-plus-realtime` | 实时 | Prompt 上下文 | 不支持 | 支持 |
+| `qwen3-asr-flash-realtime` | 实时 | 不支持 | 不支持 | 支持 |
 
-### 选型要点
+### 选型维度
 
-- **热词 vs Prompt 上下文**：热词适合稳定术语表（Fun-ASR），Prompt 上下文无需预配置、模型自适应（Qwen3.5-Omni）。
-- **说话人分离**：仅 Fun-ASR 非实时模型支持。
-- **情感识别**：Qwen-ASR 和 Qwen3.5-Omni 系列支持。
+- **实时 vs 非实时**：实时基于 WebSocket 流式，非实时基于 HTTP 提交文件
+- **专业术语处理**：Prompt 上下文注入（Qwen3.5-Omni）或热词表（Fun-ASR）
+- **说话人分离**：仅 Fun-ASR 系列非实时模型支持
 
 ## 音乐生成
 
-Fun-Music 模型支持通过提示词或自定义歌词生成完整歌曲或纯音乐。详细信息参见[音乐生成](../../raw/model-user-guide/model-experience/fun-music.md)。
+Fun-Music 支持通过提示词或自定义歌词生成完整歌曲或纯音乐。详细信息参见[音乐生成](../../raw/model-user-guide/model-experience/fun-music.md)。
 
-| 模型 | 特点 |
-|------|------|
-| `fun-music-v1` | 支持 `prompt` 和 `lyrics`（至少传一个），支持性别选择 |
-| `fun-music-preview` | `prompt` 必选，`lyrics` 可选，不支持性别选择 |
+| 模型 ID | [prompt](prompt.md) | lyrics | 纯音乐 | 性别选择 |
+|---------|--------|--------|--------|---------|
+| `fun-music-v1` | 与 lyrics 至少传一个 | 与 [prompt](prompt.md) 至少传一个 | 支持 | 支持 |
+| `fun-music-preview` | 必选 | 可选 | 支持 | 不支持 |
 
-> **注意**：Fun-Music 目前处于邀测阶段，需在模型广场申请开通，且仅在华北2（北京）地域可用。
-
-支持 MP3 和 WAV 两种输出格式，可通过 `is_instrumental=true` 生成纯音乐。
+> **注意**：Fun-Music 目前处于邀测阶段，仅在华北2（北京）地域可用。
 
 ## 向量与重排序
 
-向量和重排序模型支持语义搜索、RAG 检索、跨模态匹配等场景。详细信息参见[向量与重排序](../../raw/model-user-guide/model-experience/embedding-rerank-model.md)。
+覆盖语义搜索、RAG 检索、跨模态匹配和重排序场景。详细信息参见[向量与重排序](../../raw/model-user-guide/model-experience/embedding-rerank-model.md)。
 
 ### 推荐模型
 
-| 模型 | 类型 | 维度 | 最大 [Token](../concepts/token.md) | 场景 |
-|------|------|------|-----------|------|
-| `text-embedding-v4` | 文本 Embedding | 64~2048 | 8,192 | 文本搜索、RAG、聚类 |
-| `qwen3-vl-embedding` | [多模态](../concepts/multimodal.md) Embedding | 256~2560 | 32,000 | 图文混合检索 |
-| `qwen3-rerank` | 重排序 | - | 4,000/条 | 文本搜索结果重排序 |
-| `qwen3-vl-rerank` | 重排序 | - | 8,000/条 | [多模态](../concepts/multimodal.md)搜索结果重排序 |
+| 模型 ID | 类型 | 向量维度 | 最大 [Token](../concepts/token.md) |
+|---------|------|---------|-----------|
+| `text-embedding-v4` | 文本 Embedding | 64~2048（默认 1024） | 8,192 |
+| `qwen3-vl-embedding` | 多模态 Embedding | 256~2560（默认 2560） | 32,000 |
+| `qwen3-rerank` | 文本重排序 | - | 4,000/条 |
+| `qwen3-vl-rerank` | 多模态重排序 | - | 8,000/条 |
 
-维度选择建议：大规模搜索选 256 或 512 维，通用场景选 1024 维（默认），高精度需求选 1536 或 2048 维。
+### 选型建议
 
-## 全模态
+- **纯文本搜索/RAG**：`text-embedding-v4`（速度快、维度灵活）
+- **图文混合检索**：`qwen3-vl-embedding`（融合向量 + 独立向量）
+- **跨模态搜索**：`tongyi-embedding-vision-plus`（独立向量，文搜图/图搜图）
+- **重排序提升精度**：在 Embedding 检索后使用 `qwen3-rerank` 对 Top-N 重排
 
-全模态模型能同时理解文本、音频、图片和视频，并输出文本和语音。详细信息参见[全模态](../../raw/model-user-guide/model-experience/omni.md)。
+## 全模态（Omni）
 
-### 三大系列
+Qwen3.5-Omni 系列同时理解文本、音频、图片和视频，并输出文本和语音。详细信息参见[全模态](../../raw/model-user-guide/model-experience/omni.md)。
 
-| 系列 | 定位 | 输入 |
-|------|------|------|
-| Qwen3.5-Omni | 旗舰，能力最全，支持 Function Calling 和联网搜索 | 文本、音频、图片、视频 |
-| Qwen3-Omni-Flash | 轻量低成本，支持思考模式 | 文本、音频、图片、视频 |
-| Qwen3.5-Livetranslate | 专业翻译，60 种语言，约 3 秒延迟 | 音频 |
+### 使用场景
 
-### 按场景选型
+| 场景 | 推荐模型 | 接口 |
+|------|---------|------|
+| 实时语音/视频对话 | `qwen3.5-omni-plus-realtime` | WebSocket |
+| 音视频内容分析 | `qwen3.5-omni-plus` | HTTP |
+| 轻量分析（支持思考模式） | `qwen3-omni-flash` | HTTP |
+| 实时语音翻译（60种语言） | `qwen3.5-livetranslate-flash-realtime` | WebSocket |
 
-| 场景 | 推荐模型 |
-|------|---------|
-| 实时语音/视频对话 | `qwen3.5-omni-plus-realtime`（WebSocket） |
-| 音视频内容分析 | `qwen3.5-omni-plus`（HTTP） |
-| 轻量音视频分析 | `qwen3-omni-flash`（HTTP） |
-| 实时语音翻译 | `qwen3.5-livetranslate-flash-realtime`（WebSocket） |
-| 声音复刻 | `qwen3.5-omni-plus`（HTTP / WebSocket） |
+### 附带能力
 
-> **注意**：联网搜索与 Function Calling 不可同时开启。Qwen3-Omni-Flash 的思考模式下不支持生成语音。
+- **Function Calling**：Qwen3.5-Omni（WebSocket + HTTP）、Qwen3-Omni-Flash（仅 HTTP）
+- **联网搜索**：仅 Qwen3.5-Omni 支持（与 Function Calling 不可同时开启）
+- **思考模式**：Qwen3-Omni-Flash HTTP 模式支持（思考模式下不生成语音）
+- **声音复刻**：Qwen3.5-Omni Plus/Flash 均支持
 
-## 限制和注意事项
+## 通用注意事项
 
-- 各模型的上下文窗口、输入限制和计费信息请前往模型广场查看。
-- 部分模型和功能存在地域限制（如 Tripo 仅限北京、Fun-Music 仅限北京）。
-- 旧版模型（如 Qwen2.5 系列、Wan 2.1 系列等）不再作为首选推荐，新项目建议使用最新版本。
-- 第三方模型（DeepSeek、GLM、MiniMax、Kimi 等）的功能支持范围与 Qwen 系列有差异，选型时需对照功能矩阵确认。
+- 所有模型通过 DashScope API 接入，主要端点为 `dashscope.aliyuncs.com`
+- 旧版模型（Qwen2.x、Wan2.1 等）仍可使用但不再作为首选推荐，新项目建议使用最新系列
+- 部分模型有地域限制（如 Tripo 仅限北京、Fun-Music 仅限北京）
+- 异步任务（视频生成、3D 生成等）建议轮询间隔 15 秒，或配置回调通知
+- 模型的详细定价和限流信息请前往模型广场查看
 
 ## 来源文档
 
@@ -231,6 +233,5 @@ Fun-Music 模型支持通过提示词或自定义歌词生成完整歌曲或纯�
 - [音乐生成](../../raw/model-user-guide/model-experience/fun-music.md)
 - [向量与重排序](../../raw/model-user-guide/model-experience/embedding-rerank-model.md)
 - [全模态](../../raw/model-user-guide/model-experience/omni.md)
-
 
 
