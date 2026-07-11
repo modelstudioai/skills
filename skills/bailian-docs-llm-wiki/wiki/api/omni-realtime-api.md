@@ -1,6 +1,6 @@
 # omni realtime api
 
-Qwen-Omni-Realtime API 是阿里云百炼平台提供的实时多模态交互接口，基于 WebSocket 协议实现低延迟的音视频对话。该 API 支持语音输入/输出、图像输入、语音活动检测（VAD）、工具调用（Function Calling）、联网搜索及声音复刻等功能，适用于智能客服、语音助手等实时对话场景。
+Qwen-Omni-Realtime API 是阿里云百炼平台提供的实时[多模态](../concepts/multimodal.md)交互接口，基于 WebSocket 协议实现低延迟的音视频对话。该 API 支持语音输入/输出、图像输入、语音活动检测（VAD）、工具调用（Function Calling）、联网搜索及声音复刻等功能，适用于智能客服、语音助手等实时对话场景。
 
 ## 支持的模型
 
@@ -168,5 +168,7 @@ conversation.updateSession(OmniRealtimeConfig.builder()
 - [Java SDK](../../raw/model-api-reference/omni-realtime-api/omni-realtime-java-sdk.md)
 - [实时多模态交互流程](../../raw/model-api-reference/omni-realtime-api/omni-realtime-interaction-process.md)
 - [声音复刻API参考](../../raw/model-api-reference/omni-realtime-api/qwen-omni-voice-cloning.md)
+
+
 
 

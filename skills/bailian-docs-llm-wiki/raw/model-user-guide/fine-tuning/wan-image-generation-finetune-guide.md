@@ -144,6 +144,45 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 }'
 ```
 
+除使用步骤 1 获取的文件 ID 外，您还可以通过 OSS 挂载方式加载训练数据集，请求示例如下：
+
+```
+curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
+--header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header 'Content-Type: application/json' \
+--data '{
+    "model": "wan2.7-image-pro",
+    "training_datasets": [
+        {
+            "data_source_type": "oss_mount",
+            "mount_storage": {
+                "region": "cn-beijing",
+                "bucket": "example_bucket",
+                "file_path": "dataset/data.jsonl"
+            }
+        }
+    ],
+    "training_type": "efficient_sft",
+    "hyper_parameters": {
+        "learning_rate": 3e-5,
+        "max_steps": 800,
+        "eval_steps": 200,
+        "max_token_length": "1k",
+        "gradient_clip": 0.5,
+        "weight_decay": 0.02,
+        "max_pixels": "1k",
+        "val_img_size": "1k",
+        "generation_type": "t2i",
+        "lora_rank": 32,
+        "save_total_limit": 10
+    }
+}'
+```
+
+**说明**
+
+使用 OSS 挂载方式加载数据集时，需将未经压缩的数据集文件夹整体上传到 OSS Bucket（如 dataset 文件夹下包含 data.jsonl 及对应的图片文件），不支持 zip 文件；挂载时指定 data.jsonl 的文件路径即可，无需单独指定图片文件。OSS Bucket 所属地域支持北京（cn-beijing）和新加坡（ap-southeast-1）。
+
 **说明**
 
 **训练耗时**（仅供参考）：
@@ -831,9 +870,9 @@ s86b5p 或 m01aa
 
 ##### **方式一：未上传验证集（系统自动划分）**
 
-在[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#e702c9786b40q)时，如果没有单独上传验证集（即未传入`validation_file_ids`参数），系统将根据`split`从训练集划分验证集，默认 0.9。即 90% 用于训练，10% 用作验证。
+在[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#e702c9786b40q)时，如果没有单独上传验证集（即未传入`validation_datasets`参数），系统将根据`split`从训练集划分验证集，默认 0.9。即 90% 用于训练，10% 用作验证。
 
-##### **方式二：主动上传验证集（通过 validation\_file\_ids 指定）**
+##### **方式二：主动上传验证集（通过 validation\_datasets 指定）**
 
 如果您希望使用一套自己准备的数据来评估Checkpoint，而不是依赖系统随机划分，可以上传自定义验证集。
 
@@ -845,13 +884,13 @@ s86b5p 或 m01aa
     
 2.  **上传验证集**：调用[上传数据集](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#Kv4zB)接口，上传这个验证集 `.zip` 文件，获得一个专属的文件ID。
     
-3.  **创建任务时指定验证集**：在调用[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#e702c9786b40q)接口时，将这个文件ID填入 `validation_file_ids` 参数中。
+3.  **创建任务时指定验证集**：在调用[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#e702c9786b40q)接口时，将这个文件ID填入 `validation_datasets` 参数中。
     
     ```
     {
         "model":"wan2.7-image-pro",
-        "training_file_ids":[ "<训练集的文件id>" ],
-        "validation_file_ids": [ "<自定义验证集的文件id>" ],
+        "training_datasets":[ {"data_source_type":"file_id", "file_id":"<训练集的文件id>"} ],
+        "validation_datasets": [ {"data_source_type":"file_id", "file_id":"<自定义验证集的文件id>"} ],
         ...
     }
     ```
@@ -1049,41 +1088,41 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
     
     500
     
-    64,000,000
+    6,400,000
     
-    5,120
+    512
     
     1000
     
-    128,000,000
+    12,800,000
     
-    10,240
+    1,024
     
     2000
     
-    256,000,000
+    25,600,000
     
-    20,480
+    2,048
     
     2K
     
     500
     
-    116,100,000
+    11,610,000
     
-    9,288
+    928.8
     
     1000
     
-    232,200,000
+    23,220,000
     
-    18,576
+    1,857.6
     
     2000
     
-    464,400,000
+    46,440,000
     
-    37,152
+    3,715.2
     
     i2i（图生图）
     
@@ -1091,41 +1130,41 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
     
     500
     
-    116,100,000
+    11,610,000
     
-    9,288
+    928.8
     
     1000
     
-    232,200,000
+    23,220,000
     
-    18,576
+    1,857.6
     
     2000
     
-    464,400,000
+    46,440,000
     
-    37,152
+    3,715.2
     
     2K
     
     500
     
-    160,000,000
+    16,000,000
     
-    12,800
+    1,280
     
     1000
     
-    320,000,000
+    32,000,000
     
-    25,600
+    2,560
     
     2000
     
-    640,000,000
+    64,000,000
     
-    51,200
+    5,120
     
 -   **模型部署与调用**：部署免费，调用按微调的基础模型的标准调用价格计费。
     

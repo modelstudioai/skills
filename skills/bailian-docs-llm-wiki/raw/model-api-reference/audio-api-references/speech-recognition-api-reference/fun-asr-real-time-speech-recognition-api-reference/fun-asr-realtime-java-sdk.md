@@ -526,7 +526,7 @@ String
 
 是
 
-用于实时语音识别的模型。详情请参见[模型列表](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-java-sdk#1e173d999c1th)。
+用于实时语音识别的模型。详情请参见[支持的模型](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
 
 sampleRate
 

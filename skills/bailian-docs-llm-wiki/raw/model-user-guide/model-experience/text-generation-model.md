@@ -902,7 +902,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 32k
 
-支持
+不支持
 
 支持
 

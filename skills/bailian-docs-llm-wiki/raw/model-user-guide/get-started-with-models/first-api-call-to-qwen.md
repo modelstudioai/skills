@@ -495,7 +495,7 @@ pip install -U dashscope
         client = OpenAI(
             # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为: api_key="sk-xxx",
             api_key=os.getenv("DASHSCOPE_API_KEY"),
-            # 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将WorkspaceId替换为真实的业务空间ID。
+            # 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将{WorkspaceId}替换为真实的业务空间ID。
             base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
         )
     
@@ -538,7 +538,7 @@ pip install -U dashscope
     from dashscope import Generation
     import dashscope
     
-    # 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将WorkspaceId替换为真实的业务空间ID。
+    # 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将{WorkspaceId}替换为真实的业务空间ID。
     dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
     messages = [
         {'role': 'system', 'content': 'You are a helpful assistant.'},
@@ -633,7 +633,7 @@ npm config set registry https://registry.npmmirror.com/
             {
                 // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为: apiKey: "sk-xxx",
                 apiKey: process.env.DASHSCOPE_API_KEY,
-                // 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将WorkspaceId替换为真实的业务空间ID。
+                // 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将{WorkspaceId}替换为真实的业务空间ID。
                 baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
             }
         );
@@ -766,7 +766,7 @@ import com.alibaba.dashscope.protocol.Protocol;
 
 public class Main {
     public static GenerationResult callWithMessage() throws ApiException, NoApiKeyException, InputRequiredException {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将WorkspaceId替换为真实的业务空间ID。
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将{WorkspaceId}替换为真实的业务空间ID。
         Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1");
         Message systemMsg = Message.builder()
                 .role(Role.SYSTEM.getValue())
@@ -1018,7 +1018,7 @@ func main() {
 		log.Fatal(err)
 	}
 	// 创建 POST 请求
-	// 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将WorkspaceId替换为真实的业务空间ID。
+	// 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将{WorkspaceId}替换为真实的业务空间ID。
 	req, err := http.NewRequest("POST", "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions", bytes.NewBuffer(jsonData))
 	if err != nil {
 		log.Fatal(err)
@@ -1049,7 +1049,7 @@ PHP
 ```
 <?php
 // 设置请求的URL
-// 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将WorkspaceId替换为真实的业务空间ID。
+// 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将{WorkspaceId}替换为真实的业务空间ID。
 $url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions';
 // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：$apiKey = "sk-xxx";
 $apiKey = getenv('DASHSCOPE_API_KEY');
@@ -1114,7 +1114,7 @@ class Program
             Console.WriteLine("API Key 未设置。请确保环境变量 'DASHSCOPE_API_KEY' 已设置。");
             return;
         }
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将WorkspaceId替换为真实的业务空间ID。
+        // 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将{WorkspaceId}替换为真实的业务空间ID。
         string url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions";
         // 模型列表：https://help.aliyun.com/model-studio/getting-started/models
         string jsonContent = @"{

@@ -6,7 +6,7 @@
 
 ## **工作流程**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1249943871/CAEQaxiBgIDB5qWk4BkiIDViYzQ0MWUwNTYyNDQ3NDM5NzM0ZTc4N2Y3NTU2NjA56318723_20260129171731.699.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2515653871/CAEQaxiBgIDB5qWk4BkiIDViYzQ0MWUwNTYyNDQ3NDM5NzM0ZTc4N2Y3NTU2NjA56318723_20260129171731.699.svg)
 
 ## **前提条件**
 
@@ -58,7 +58,7 @@
 
 **重要**
 
--   在Batch 场景下，`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`和`qwen3.5-flash`单次请求的上下文 Token 数最大支持 256K。
+-   在Batch 场景下，`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`和`qwen3.5-omni-plus`单次请求的上下文 Token 数最大支持 256K，`qwen3.5-omni-plus`不支持语音输出。
     
 -   部分模型支持思考模式，开启后会产生思考`tokens`导致成本增加。
     

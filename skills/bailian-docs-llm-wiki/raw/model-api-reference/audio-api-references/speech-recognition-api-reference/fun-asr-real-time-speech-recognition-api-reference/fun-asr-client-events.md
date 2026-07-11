@@ -115,7 +115,7 @@
 
 **model** `_string_` **（必选）**
 
-模型名称。
+[支持的模型](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)名称。
 
 **input** `_object_` **（必选）**
 

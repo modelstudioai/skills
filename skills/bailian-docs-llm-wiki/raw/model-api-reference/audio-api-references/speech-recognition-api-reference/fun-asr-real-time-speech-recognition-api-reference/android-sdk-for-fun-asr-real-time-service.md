@@ -21,6 +21,8 @@
     -   解压 ZIP 包。在 `app/libs` 目录中获取 AAR 格式 SDK，并添加到项目依赖。  
         需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。  
           
+          
+          
         
     -   用 Android Studio 打开工程。示例代码位于`DashFunAsrSpeechTranscriberActivity.java`，替换 API Key 后体验功能。
         
@@ -226,7 +228,7 @@
     
     是
     
-    语音识别[模型](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#fc6d62a1d4qjm)。
+    语音识别[支持的模型](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
     
     `nls_config.sr_format`
     

@@ -1,68 +1,55 @@
 # 多模态
 
-多模态（Multimodal）是指模型同时处理和生成多种信息形态（文本、图像、音频、视频、3D 等）的能力。在百炼平台中，多模态贯穿模型调用、知识库检索、向量化与排序等核心环节，是实现跨媒体理解与生成的基础技术概念。
+多模态（Multimodal）指在同一模型或服务中同时处理文本、图像、音频、视频等多种类型数据的能力。在百炼平台上，多模态既体现为模型的输入/输出能力（如视觉理解、语音对话、图文视频生成），也体现为向量与检索层面的跨模态语义对齐。
 
-## 多模态理解
+## 在百炼平台中的典型场景
 
-百炼平台提供多种模型用于理解不同模态的输入内容：
+### 实时音视频交互（Omni-Realtime）
 
-- **视觉理解**：`qwen3.7-plus`、`qwen3.6-flash` 等模型支持图像分析和视频理解，单张图片最高 1600 万像素，视频最长 2 小时。[Token](token.md) 计算公式为 `h x w / (32 x 32) + 2`。`qwen3.5-ocr` 专为文档、表格、手写内容的 OCR 场景优化。
-- **实时多模态交互**：Qwen-Omni-Realtime 系列模型通过 WebSocket 长连接实现低延迟的语音、视频、图像实时对话，支持 VAD 自动检测与 Manual 手动控制两种交互模式，并提供声音复刻、工具调用、联网搜索等能力。
+Qwen-Omni-Realtime 系列基于 WebSocket 提供低延迟的实时多模态对话，支持语音输入/输出、图像输入、语音活动检测（VAD）、工具调用与联网搜索，适用于语音助手、智能客服等场景。图像通过 `input_image_buffer.append`（JPG/JPEG，Base64 编码）随音频流一起输入，输出模态由 `modalities` 控制（`["text"]` 或 `["text","audio"]`）。
 
-## 多模态生成
+### 视觉理解
 
-平台覆盖图像、视频、3D 等生成场景：
+视觉理解模型支持图像分析、视频理解和 OCR。旗舰模型 `qwen3.7-plus` 支持 1M 上下文、最长约 2 小时视频；`qwen3.5-ocr` 专为文档、表格、手写内容优化。图像按 `h x w / (32 x 32) + 2` 计算 Token，单张最高约 1600 万像素。
 
-- **图像生成与编辑**：千问（Qwen-Image）系列擅长文字渲染与图文混合布局；万相（Wan）系列覆盖文生图、图像编辑、多图参考生成；Z-Image 提供轻量快速的文生图能力。
-- **视频生成**：万相 2.7 系列为主力模型，支持文生视频、图生视频、参考生视频、视频编辑、风格转换等。HappyHorse、Pixverse、Vidu、Kling 等第三方模型提供补充能力。所有视频生成 API 均采用[异步调用](async-invocation.md)模式（创建任务 → 轮询获取）。
-- **3D 模型生成**：通过 Tripo 模型支持文生 3D、单图生 3D 和多图生 3D。
+### 图像生成与编辑
 
-## 多模态向量与排序
+涵盖文生图、图像编辑、图像翻译、风格迁移等，主要模型族为千问（Qwen-Image）、万相（Wan/Wanx）、Z-Image 与可灵（Kling），通过 HTTP 或 [DashScope SDK](dashscope-sdk.md) 调用。图像编辑与图文混排本质上是文本 + 图像的多模态输入输出。
 
-向量化和排序模型将多模态内容统一到同一语义空间，是 RAG 检索和跨模态搜索的基础：
+### 视频生成
 
-- **多模态向量模型**：`qwen3-vl-embedding`（2560 维）可将文本、图像、视频转换为同一语义空间的向量，支持独立向量（逐项对比）和融合向量（综合理解）两种类型，适用于以文搜图、以图搜视频等跨模态检索场景。`multimodal-embedding-v1`（1024 维）用于图片问答类知识库。
-- **多模态排序模型**：`qwen3-vl-rerank` 支持对文本、图片、视频混合文档进行相关性排序，最大支持 100 条文本 / 40 张图片 / 4 个视频，单条最大 8,000 [Token](token.md)。多模态知识库的排序必须选用此模型。
+文生视频、图生视频、参考生视频、视频编辑与人像动画均采用异步调用（创建任务 -> 轮询结果）。其中"参考生视频"（如 `wan2.7-r2v`）接受图片/视频/音频的多模态输入，可实现多角色互动与音色一致性；数字人（`wan2.2-s2v`）基于单图 + 音频生成说话/唱歌视频。
 
-## 多模态知识库
+### 知识库（RAG）多模态检索
 
-百炼知识库支持多种多模态场景：
+知识库支持文档搜索、图片问答、音视频搜索等多模态场景。图片问答类知识库使用 `multimodal-embedding-v1`（1024 维）向量模型；视觉理解场景自动切换为 `qwen3-vl-embedding`（qwen3 多模态向量）；多模态知识库的排序只能选 `qwen3-vl-rerank`。音视频解析会做语音识别、视频帧提取与剧情解析，并按时间轴结构化对齐。
 
-| 知识库类型 | 多模态能力 | 说明 |
-|-----------|-----------|------|
-| 图片问答 | 图像理解 + 检索 | 仅支持 `multimodal-embedding-v1` 向量模型 |
-| 音视频搜索 | 语音识别 + 视频帧提取 + 剧情解析 | 按时间轴结构化对齐 |
-| 视觉理解文档搜索 | 富文本文档的图文并茂回复 | 自动切换为 `qwen3-vl-embedding` 向量模型 |
+### 多模态向量与排序
 
-知识库创建时需选定类型且不可更改。多模态知识库的排序模型只能使用 `qwen3-vl-rerank`。
+多模态向量模型（如 `qwen3-vl-embedding`）将文本、图像、视频映射到同一语义空间，支持以文搜图、以图搜视频等跨模态检索，可生成"独立向量"（逐项对比）或"融合向量"（综合理解）。排序侧的 `qwen3-vl-rerank` 支持对文本、图片、视频候选做统一重排（文本 100 条 / 图片 40 张 / 视频 4 段）。
 
-## 关键参数速查
+## 关键参数与配置
 
-| 场景 | 参数 / 配置 | 说明 |
-|------|------------|------|
-| 视觉理解 | 图片像素上限 1600 万 | [Token](token.md) = `h x w / (32 x 32) + 2` |
-| 实时交互 | `session.turn_detection.type` | `server_vad` / `semantic_vad` / `null`（Manual） |
-| 多模态向量 | `dimensions` | `qwen3-vl-embedding` 默认 2560 维 |
-| 多模态排序 | `qwen3-vl-rerank` | 文本 100 条 / 图片 40 张 / 视频 4 个 |
-| 视频生成 | [异步调用](async-invocation.md) | `X-DashScope-Async: enable`，轮询 task_id |
-| 图像生成 | 模型选择 | 文字渲染用千问系列，通用生成用万相系列 |
+- **输出模态（`modalities`）**：Omni-Realtime 中决定返回纯文本还是文本 + 音频，默认 `["text","audio"]`。
+- **图像输入**：Realtime 通过 `input_image_buffer.append` 传入 Base64 编码的 JPG/JPEG；生成/理解类通过请求体中的图像 URL 或 Base64 传入。
+- **视频参数**：视觉理解支持最长约 2 小时 / 2GB 视频；视频生成为异步任务，需轮询 `task_id`。
+- **向量维度与类型**：多模态向量按模型固定或可选维度（如 `qwen3-vl-embedding` 默认 2560），并可选择独立或融合向量类型。
+- **多模态重排**：`qwen3-vl-rerank` 的 `query` 支持文本和图片两种查询模态，`top_n` 控制返回数量。
+- **知识库多模态解析**：创建知识库时选择解析方式（大模型文档解析 / Qwen VL 解析 / 音视频解析），部分配置（如 Meta 抽取、多轮对话改写）创建后不可更改。
 
-## 开发者注意事项
+## 开发者提示
 
-- 多模态模型、Endpoint URL、[API Key](api-key.md) 必须属于同一地域，跨地域调用会失败。
-- 知识库功能仅在华北2（北京）地域可用。
-- 视频生成为异步接口，单次请求耗时通常 1-5 分钟，需通过 task_id 轮询结果。
-- Token Plan 团队版支持多模态生成模型（图像生成），Coding Plan 仅支持文本生成模型。
-- 实时多模态交互（Omni Realtime）通过 WebSocket 接入，北京与新加坡地域使用不同的接入地址。
+- 实时语音图像交互优先走 WebSocket 的 Omni-Realtime API，非实时的视频生成走异步任务模式。
+- 需要跨模态检索时，向量与重排要成对选用多模态模型（`qwen3-vl-embedding` + `qwen3-vl-rerank`），避免与纯文本模型混用导致语义空间不一致。
+- 图片问答类知识库的向量模型（`multimodal-embedding-v1`）在创建时锁定，选型前需确认维度与场景匹配。
 
 ## 关联主题页
 
 - [omni realtime api](../api/omni-realtime-api.md)
-- [token plan guide](../guides/token-plan-guide.md)
-- [model experience](../guides/model-experience.md)
-- [knowledge base](../guides/knowledge-base.md)
 - [image generation](../api/image-generation.md)
 - [video generation api](../api/video-generation-api.md)
+- [knowledge base](../guides/knowledge-base.md)
+- [model experience](../guides/model-experience.md)
 - [vector and sort](../api/vector-and-sort.md)
 
 

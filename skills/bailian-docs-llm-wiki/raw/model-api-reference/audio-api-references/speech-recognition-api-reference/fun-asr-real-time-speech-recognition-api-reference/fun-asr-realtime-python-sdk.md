@@ -337,7 +337,7 @@ str
 
 是
 
-用于实时语音识别的模型
+用于实时语音识别的[支持的模型](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)
 
 sample\_rate
 

@@ -155,10 +155,10 @@ SDK 自动完成加解密，响应为明文，无需手动处理。
 | --- | --- | --- |
 | 1. 创建安全存储[业务空间](../concepts/workspace.md) | [业务空间](../concepts/workspace.md)管理 → 新增[业务空间](../concepts/workspace.md)，空间类型选"安全存储空间" | [配置终端节点并发起连接](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-an-endpoint-and-initiate-a-connection.md) |
 | 2. 创建反向终端节点 | 终端节点控制台创建反向终端节点，终端节点服务选描述为"百炼公共云生产环境-北京站点-安全存储空间专网通道接入点"的服务（VPC NAT 网关、反向、IPv4），配置 VPC/安全组/可用区与交换机 | 同上 |
-| 3. 在百炼确认连接 | 业务空间管理 → 管理安全存储空间 → 选择终端节点 → 连接，等待状态变为"已连接" | 同上 |
+| 3. 在百炼确认连接 | [业务空间](../concepts/workspace.md)管理 → 管理安全存储空间 → 选择终端节点 → 连接，等待状态变为"已连接" | 同上 |
 | 4. 配置可用区 IP | 创建 MSE 云原生网关（2核4G、2 节点、启用 TLS 硬件加速、私网、至少两可用区），获取 NLB 各可用区 VIP 与交换机网段，在百炼配置对应可用区 IP，并将 VIP 加入反向终端节点安全组入方向（全部端口） | [配置可用区IP](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-zone-ip.md) |
 | 5. 配置私有网络资源 | 配置 OSS（Bucket 名 `bailian-safe-workspace-oss-access`、特定标签、CORS 来源 `*bailian.console.aliyun.com`）、ADB（6.0 标准版、高可用版、开启向量引擎优化）、ElasticSearch（7.10、内核增强版、两可用区，交换机网段加入 VPC 私网访问白名单） | [配置私有网络中的资源](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md) |
-| 6. 配置 MSE 云原生网关 | 在网关创建 DNS 域名服务（指向 ES 私网地址/端口，TLS 关闭）、创建路由（域名为 ES 域名、路径 `/`、单服务），然后回百炼"资源配置"页激活安全存储业务空间 | [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md) |
+| 6. 配置 MSE 云原生网关 | 在网关创建 DNS 域名服务（指向 ES 私网地址/端口，TLS 关闭）、创建路由（域名为 ES 域名、路径 `/`、单服务），然后回百炼"资源配置"页激活安全存储[业务空间](../concepts/workspace.md) | [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md) |
 
 ### 关键约束与注意事项
 
@@ -170,7 +170,7 @@ SDK 自动完成加解密，响应为明文，无需手动处理。
 
 ## 限制与注意事项汇总
 
-- 默认业务空间无法设置模型调用/训练/部署限制，所有模型均可调用、调优、部署，且无法限流。
+- 默认[业务空间](../concepts/workspace.md)无法设置模型调用/训练/部署限制，所有模型均可调用、调优、部署，且无法限流。
 - [API Key](../concepts/api-key.md) 不可跨地域、跨业务空间、跨用户转移；账号移出空间会使其 [API Key](../concepts/api-key.md) 失效（重新加入恢复），删除账号/角色则永久失效。
 - AI 安全护栏目前仅支持文本和图片类型模型。
 - [DashScope SDK](../concepts/dashscope-sdk.md) 自动加密仅支持 Java/Python 且不支持自定义密钥；HTTP 手动加密仅适用于 DashScope Endpoint，OpenAI 兼容 Endpoint 不支持。
@@ -192,6 +192,8 @@ SDK 自动完成加解密，响应为明文，无需手动处理。
 - [配置可用区IP](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-zone-ip.md)
 - [配置私有网络中的资源](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)
 - [配置MSE云原生网关](../../raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md)
+
+
 
 
 

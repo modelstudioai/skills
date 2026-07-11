@@ -1,73 +1,52 @@
 # 流式输出
 
-流式输出（Streaming）是指模型在生成过程中逐步返回部分结果，而非等待全部生成完毕后一次性返回。这种方式显著降低了用户感知的首字延迟，适用于对话交互、长文本生成等需要实时反馈的场景。
+流式输出（Streaming）是指服务端在生成内容的过程中，将结果以增量（delta）方式分片实时返回给客户端，而非等待全部内容生成完毕后一次性返回。它能显著降低首字延迟、提升长文本和实时交互场景的体验。
 
-## 适用场景
+## 在百炼平台的使用场景
 
-在百炼平台中，流式输出贯穿多个 API 接口和交互模式：
+百炼平台的多类接口都支持流式输出，但触发方式和传输协议因场景而异：
 
-- **Chat Completions 接口**：最常用的文本对话场景，通过设置 `stream=True` 开启流式输出，模型逐 token 返回生成内容。
-- **Responses API（OpenAI 兼容）**：智能体应用调用时，在请求参数中设置 `stream=true` 即可获得增量响应。
-- **实时多模态接口（Omni Realtime API）**：基于 WebSocket 协议，服务端通过 `response.audio.delta` 和 `response.audio_transcript.delta` 等事件持续推送音频和文本增量数据，实现低延迟的实时语音对话。
+### 应用调用（智能体 / 工作流）
+
+无论是 OpenAI 兼容的 Responses API 还是 DashScope API，调用智能体和工作流应用时都支持流式输出。在 Responses API 中，通过在请求体中设置 `stream=true` 开启，服务端会以 SSE（Server-Sent Events）形式持续推送增量结果，适用于对话类实时交互场景。
+
+### 文本生成模型（Qwen 系列）
+
+Qwen 系列文本生成模型的各类接口（OpenAI 兼容 Chat Completions / Responses、Anthropic 兼容 Messages、DashScope 原生）普遍支持 `stream` 参数。从 OpenAI / Anthropic 迁移时，应先确认目标模型在对应兼容接口下是否支持 `stream` 等参数，再决定接口选型。兼容接口的流式字段与官方客户端保持一致，可直接复用现有 SDK 与示例代码。
+
+### 实时[多模态](multimodal.md)交互（Omni-Realtime API）
+
+Qwen-Omni-Realtime API 基于 WebSocket 协议，本身就是全程流式的低延迟音视频对话接口。它不通过一次性的 `stream` 开关，而是通过一系列增量事件持续收发数据：
+
+- 客户端事件：`input_audio_buffer.append`（追加音频）、`response.create`（触发生成）等。
+- 服务端事件：`response.audio.delta`（增量音频输出）、`response.audio_transcript.delta`（增量文本转录）、`conversation.item.input_audio_transcription.delta`（实时语音识别中间结果），最终以 `response.done` 标记响应完成。
 
 ## 关键参数与配置
 
-### HTTP 接口（Chat Completions / Responses API）
+| 场景 | 开启 / 控制方式 | 传输协议 |
+|------|----------------|----------|
+| Responses API（应用/模型） | 请求体 `stream=true`（默认 `false`） | SSE |
+| DashScope API | 设置流式参数 / 使用 SDK 的流式调用方法 | SSE |
+| OpenAI / Anthropic 兼容接口 | 请求体 `stream=true` | SSE |
+| Omni-Realtime API | 无开关，通过 `response.*.delta` 事件流持续推送 | WebSocket |
 
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| `stream` | boolean | 是否开启流式输出，默认 `false` |
-| `stream_options.include_usage` | boolean | 流式模式下是否在最后一个 chunk 中返回 token 用量统计 |
+补充说明：
 
-### WebSocket 接口（Omni Realtime API）
+- **默认关闭**：文本类接口的 `stream` 默认为 `false`，需显式开启才会分片返回。
+- **增量拼接**：流式响应返回的是增量片段，客户端需按到达顺序拼接为完整内容。
+- **结束标志**：SSE 场景通常以结束标记（如 `[DONE]`）收尾；Realtime 场景以 `response.done` 事件表示单轮响应结束。
+- **与异步调用的区别**：流式输出是"边生成边返回"的实时推送；异步调用（`background=true`）是先返回任务 ID 再轮询结果，二者面向不同的时延与任务类型，不要混淆。
 
-实时接口天然采用流式传输，服务端通过以下事件逐步推送结果：
+## 面向开发者的实用建议
 
-| 事件 | 含义 |
-|------|------|
-| `response.audio.delta` | 增量音频数据（Base64 编码的 PCM） |
-| `response.audio_transcript.delta` | 增量文本转录 |
-| `response.done` | 响应生成完毕 |
-
-## 使用示例
-
-使用 OpenAI Python SDK 开启流式输出：
-
-```python
-from openai import OpenAI
-import os
-
-client = OpenAI(
-    api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-)
-
-stream = client.chat.completions.create(
-    model="qwen-plus",
-    messages=[{"role": "user", "content": "你好"}],
-    stream=True,
-    stream_options={"include_usage": True},
-)
-
-for chunk in stream:
-    if chunk.choices:
-        delta = chunk.choices[0].delta
-        if delta.content:
-            print(delta.content, end="", flush=True)
-```
-
-## 注意事项
-
-- 流式模式下，每个 chunk 仅包含增量内容（delta），客户端需自行拼接完整响应。
-- 设置 `stream_options={"include_usage": True}` 可在流结束时获取本次请求的 token 消耗，便于计费统计。
-- [异步调用](async-invocation.md)（`background=true`）与流式输出互斥——异步任务通过轮询获取最终结果，不支持流式返回。
-- 实时语音场景建议直接使用 WebSocket 接口，HTTP 流式输出不适用于音频数据的实时传输。
+- 实时对话、长文本生成优先使用流式输出以降低首字延迟。
+- 使用 SDK 时优先调用其封装好的流式迭代接口，避免手动解析 SSE 分片。
+- 音视频等实时交互场景直接采用 Omni-Realtime 的 WebSocket 事件流，并处理好语音打断（VAD）与增量音频的实时播放。
 
 ## 关联主题页
 
 - [application call](../api/application-call.md)
-- [qwen api reference](../api/qwen-api-reference.md)
-- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
 - [omni realtime api](../api/omni-realtime-api.md)
+- [qwen api reference](../api/qwen-api-reference.md)
 
 

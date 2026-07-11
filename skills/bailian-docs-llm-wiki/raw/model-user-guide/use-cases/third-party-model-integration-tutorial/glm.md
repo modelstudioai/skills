@@ -6,12 +6,6 @@
 
 glm-4.6、glm-4.7 将于**2026年7月9日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-plus)、[qwen3.7-max](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-max)、[qwen3.6-flash](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.6-flash)。
 
-**重要**
-
-百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
-
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
-
 ## **服务接入地址**
 
 不同地域的服务接入地址不同，请根据您选择的地域配置对应的 Base URL。
@@ -128,7 +122,7 @@ SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{Workspa
 
 ## **快速开始**
 
-glm-5.2 是 GLM 系列最新模型，上下文长度 1M，支持通过`enable_thinking`参数设置思考与非思考模式。运行以下代码快速调用思考模式的 glm-5.2 模型。
+glm-5.2 和 glm-5.2-fast-preview 是 GLM 系列最新模型，上下文长度 1M，支持通过`enable_thinking`参数设置思考与非思考模式。运行以下代码快速调用思考模式的 glm-5.2 模型。
 
 需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装 OpenAI 或 DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk#8833b9274f4v8)。
 
@@ -611,7 +605,7 @@ curl -X POST https://dashscope.aliyuncs.com/apps/anthropic/v1/messages \
 
 ## **流式工具调用**
 
-glm-5.2、glm-5.1、glm-5、glm-4.7、glm-4.6 支持`tool_stream`参数（boolean，默认`false`），仅在`stream`为`true`时生效。开启后，Function Calling 返回的 tool\_call 参数（arguments）会以流式增量方式逐步返回，而非等待完整生成后一次性返回。
+glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5、glm-4.7、glm-4.6 支持`tool_stream`参数（boolean，默认`false`），仅在`stream`为`true`时生效。开启后，Function Calling 返回的 tool\_call 参数（arguments）会以流式增量方式逐步返回，而非等待完整生成后一次性返回。
 
 `stream`与`tool_stream`的组合行为如下：
 
@@ -913,13 +907,17 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generatio
 
 ## **推理强度（reasoning\_effort）**
 
-glm-5.2 和 glm-5.1 默认开启思考模式，模型会先输出思考过程（`reasoning_content`），再给出最终回答。通过 `reasoning_effort` 参数可以调整推理强度，取值越高思考越充分。**不同模型支持的可选取值不同**，传入不支持的取值会返回 `invalid_parameter_error` 错误，请按下表选择。
+glm-5.2、glm-5.2-fast-preview 和 glm-5.1 默认开启思考模式，模型会先输出思考过程（`reasoning_content`），再给出最终回答。通过 `reasoning_effort` 参数可以调整推理强度，取值越高思考越充分。**不同模型支持的可选取值不同**，传入不支持的取值会返回 `invalid_parameter_error` 错误，请按下表选择。
 
 **模型**
 
 **reasoning\_effort 可选取值**
 
 glm-5.2
+
+`none`（不进行推理，`reasoning_tokens`\=`0`）、`minimal`、`low`、`medium`、`high`、`xhigh`、`max`（最高）
+
+glm-5.2-fast-preview
 
 `none`（不进行推理，`reasoning_tokens`\=`0`）、`minimal`、`low`、`medium`、`high`、`xhigh`、`max`（最高）
 
@@ -1134,6 +1132,24 @@ glm-5.2
 
 > 仅支持隐式缓存
 
+glm-5.2-fast-preview
+
+支持
+
+支持
+
+支持
+
+> 仅非思考模式
+
+不支持
+
+不支持
+
+支持
+
+> 仅支持隐式缓存
+
 glm-5.1
 
 支持
@@ -1260,6 +1276,18 @@ true
 
 1.0
 
+glm-5.2-fast-preview
+
+true
+
+1.0
+
+0.95
+
+20
+
+1.0
+
 glm-5.1
 
 true
@@ -1339,6 +1367,8 @@ true
 GLM 系列模型是智谱AI专为智能体设计的混合推理模型，提供思考与非思考两种模式。
 
 -   glm-5.2：GLM 最新模型，上下文长度 1M，支持 Function Calling、结构化输出及隐式缓存。支持 OpenAI 兼容、DashScope 及 Anthropic 兼容接口调用。
+    
+-   glm-5.2-fast-preview：glm-5.2模型的快速模式，详情请参考[快速模式（Fast mode）](https://help.aliyun.com/zh/model-studio/fast-mode)。
     
 
 模型上下文长度与价格信息请参见百炼控制台。

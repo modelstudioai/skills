@@ -17,7 +17,7 @@ import os
 from openai import OpenAI
 
 # 注意: 不同地域的base_url不通用（下方示例使用北京地域的 base_url）
-# - 华北2（北京）: https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，请将WorkspaceId替换为业务空间ID
+# - 华北2（北京）: https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，请将{WorkspaceId}替换为业务空间ID
 # - 新加坡: https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
 # - 德国（法兰克福）: https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1
 # - 日本（东京）: https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1
@@ -39,11 +39,11 @@ print(completion.choices[0].message.content)
 import OpenAI from "openai";
 
 // 注意: 不同地域的base_url不通用（下方示例使用北京地域的base_url）
-// - 华北2（北京）: https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，请将WorkspaceId替换为业务空间ID
+// - 华北2（北京）: https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1，请将{WorkspaceId}替换为业务空间ID
 // - 美国（弗吉尼亚）: https://dashscope-us.aliyuncs.com/compatible-mode/v1
-// - 新加坡: https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1，请将WorkspaceId替换为业务空间ID
-// - 德国（法兰克福）: https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1，请将WorkspaceId替换为业务空间ID
-// - 日本（东京）: https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1，请将WorkspaceId替换为业务空间ID
+// - 新加坡: https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1，请将{WorkspaceId}替换为业务空间ID
+// - 德国（法兰克福）: https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1，请将{WorkspaceId}替换为业务空间ID
+// - 日本（东京）: https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1，请将{WorkspaceId}替换为业务空间ID
 const openai = new OpenAI(
     {
         apiKey: process.env.DASHSCOPE_API_KEY,
@@ -66,15 +66,15 @@ main()
 
 不同地域的 Base URL不通用（以下示例是北京地域 Base URL）
 
--   华北2（北京）： `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`，请将WorkspaceId替换为业务空间ID
+-   华北2（北京）： `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`，请将{WorkspaceId}替换为业务空间ID
     
 -   美国（弗吉尼亚）： `https://dashscope-us.aliyuncs.com/compatible-mode/v1/chat/completions`
     
--   新加坡： `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`，请将WorkspaceId替换为业务空间ID
+-   新加坡： `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`，请将{WorkspaceId}替换为业务空间ID
     
--   德国（法兰克福）： `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`，请将WorkspaceId替换为业务空间ID
+-   德国（法兰克福）： `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`，请将{WorkspaceId}替换为业务空间ID
     
--   日本（东京）： `https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`，请将WorkspaceId替换为业务空间ID
+-   日本（东京）： `https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`，请将{WorkspaceId}替换为业务空间ID
     
 
 ```
@@ -142,7 +142,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ## **应用构建**
 
--   **应用类型：**提供可视化和高代码两种开发模式。可视化模式可快速创建[智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)和[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)；[高代码应用](https://help.aliyun.com/zh/model-studio/rich-code-application/)则支持将 Python 项目部署为后端服务，具备自动化运维、可观测、日志服务等能力。
+-   **应用类型：**提供可视化和高代码两种开发模式。可视化模式可快速创建[智能体应用（Agent 1.0）](https://help.aliyun.com/zh/model-studio/single-agent-application)和[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)；[高代码应用](https://help.aliyun.com/zh/model-studio/rich-code-application/)则支持将 Python 项目部署为后端服务，具备自动化运维、可观测、日志服务等能力。
     
 -   **功能拓展：**通过[知识库（RAG）](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)接入私有数据和专业领域知识；通过[插件](https://help.aliyun.com/zh/model-studio/plug-in-overview)和[模型上下文协议（MCP）](https://help.aliyun.com/zh/model-studio/mcp-introduction)调用外部服务。
     
@@ -231,4 +231,4 @@ A：
     
 3.  **通过开发工具（如 Claude Code）调用：**请参考[接入客户端/开发工具](https://help.aliyun.com/zh/model-studio/use-chat-client-or-development-tool/)。
     
-4.  **通过可视化界面构建大模型应用：**请参考[智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)或[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)。
+4.  **通过可视化界面构建大模型应用：**请参考[智能体应用（Agent 1.0）](https://help.aliyun.com/zh/model-studio/single-agent-application)或[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)。

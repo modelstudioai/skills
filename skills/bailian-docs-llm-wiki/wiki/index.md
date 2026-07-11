@@ -16,14 +16,15 @@
 - [get started with models](guides/get-started-with-models.md) — 6 篇源文档
 - [knowledge base](guides/knowledge-base.md) — 8 篇源文档
 - [llm application](guides/llm-application.md) — 6 篇源文档
+- [managed agents](guides/managed-agents.md) — 6 篇源文档
 - [memory library overview](guides/memory-library-overview.md) — 3 篇源文档
 - [model compression](guides/model-compression.md) — 1 篇源文档
 - [model context protocol](guides/model-context-protocol.md) — 5 篇源文档
 - [model data overview](guides/model-data-overview.md) — 2 篇源文档
 - [model deployment 1](guides/model-deployment-1.md) — 4 篇源文档
-- [model evaluation introduction](guides/model-evaluation-introduction.md) — 1 篇源文档
+- [model evaluation introduction](guides/model-evaluation-introduction.md) — 2 篇源文档
 - [model experience](guides/model-experience.md) — 11 篇源文档
-- [model high speed inference](guides/model-high-speed-inference.md) — 1 篇源文档
+- [model high speed inference](guides/model-high-speed-inference.md) — 2 篇源文档
 - [model monitoring](guides/model-monitoring.md) — 2 篇源文档
 - [plug in](guides/plug-in.md) — 3 篇源文档
 - [prompt](guides/prompt.md) — 5 篇源文档
@@ -34,7 +35,7 @@
 - [support](guides/support.md) — 2 篇源文档
 - [test 1](guides/test-1.md) — 5 篇源文档
 - [token plan guide](guides/token-plan-guide.md) — 10 篇源文档
-- [use cases](guides/use-cases.md) — 20 篇源文档
+- [use cases](guides/use-cases.md) — 24 篇源文档
 - [use chat client or development tool](guides/use-chat-client-or-development-tool.md) — 17 篇源文档
 
 ## API 参考
@@ -62,21 +63,22 @@
 ## 横切概念
 
 - [API Key 鉴权](concepts/api-key.md) — 关联 7 个主题
-- [DashScope SDK](concepts/dashscope-sdk.md) — 关联 4 个主题
-- [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 6 个主题
-- [Token](concepts/token.md) — 关联 6 个主题
-- [业务空间](concepts/workspace.md) — 关联 7 个主题
-- [函数调用](concepts/function-calling.md) — 关联 5 个主题
-- [异步调用](concepts/async-invocation.md) — 关联 4 个主题
-- [检索增强生成](concepts/rag.md) — 关联 5 个主题
-- [流式输出](concepts/streaming.md) — 关联 4 个主题
+- [DashScope SDK](concepts/dashscope-sdk.md) — 关联 5 个主题
+- [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 7 个主题
+- [Token 与计费](concepts/token-billing.md) — 关联 6 个主题
+- [业务空间（Workspace）](concepts/workspace.md) — 关联 7 个主题
+- [函数调用（Function Calling / 工具调用）](concepts/function-calling.md) — 关联 7 个主题
+- [多模态](concepts/multimodal.md) — 关联 6 个主题
+- [异步调用与任务轮询](concepts/async-invocation.md) — 关联 5 个主题
+- [检索增强生成（RAG）](concepts/rag.md) — 关联 7 个主题
+- [流式输出](concepts/streaming.md) — 关联 3 个主题
 
 ## 对比分析
 
-- [Qwen API vs 全双工实时API vs 托管智能体API](comparisons/qwen-api-vs-omni-realtime-vs-managed-agents.md) — 对比 3 个主题
-- [图像生成 vs 视频生成 vs 3D生成](comparisons/image-video-3d-generation-comparison.md) — 对比 3 个主题
-- [模型微调 vs 模型压缩 vs 模型部署](comparisons/fine-tuning-vs-compression-vs-deployment.md) — 对比 3 个主题
-- [模型监控 vs 应用监控](comparisons/model-monitoring-vs-application-monitoring.md) — 对比 2 个主题
-- [模型评估 vs 应用评估](comparisons/model-evaluation-vs-application-evaluation.md) — 对比 2 个主题
-- [知识库 vs 长期记忆库](comparisons/knowledge-base-vs-memory-library.md) — 对比 3 个主题
+- [图像、视频与 3D 生成对比](comparisons/image-vs-video-vs-3d-generation.md) — 对比 3 个主题
+- [托管智能体与 LLM 应用对比](comparisons/managed-agents-vs-llm-application.md) — 对比 2 个主题
+- [模型微调与模型压缩对比](comparisons/fine-tuning-vs-model-compression.md) — 对比 2 个主题
+- [模型评估与应用评估对比](comparisons/model-evaluation-vs-application-evaluation.md) — 对比 2 个主题
+- [模型部署与高速推理对比](comparisons/model-deployment-vs-high-speed-inference.md) — 对比 2 个主题
+- [知识库与记忆库对比](comparisons/knowledge-base-vs-memory-library.md) — 对比 2 个主题
 

@@ -1,52 +1,33 @@
 # model high speed inference
 
-百炼平台提供 TPM（[Token](../concepts/token.md)s Per Minute）预留功能，允许开发者为指定模型锁定专属推理吞吐量，确保业务高峰期不受公共资源限流影响。预留容量内的调用不额外收费，超出部分自动降级为按量计费，服务不中断。
+百炼平台针对推理调用的容量保障与输出速度提供了两类高速推理能力：**TPM 预留**为指定模型锁定专属吞吐量、抵御公共限流；**快速模式（Fast mode）**则在按 token 计费不变的前提下把输出速度（TPS）提升至标准 API 的 1.5~2 倍。两者定位不同，可根据业务是"要容量刚性兑付"还是"要更快出字"分别选用。
 
-## 方案选型
+## TPM 预留：锁定专属推理容量
 
-百炼平台提供多种推理容量方案，开发者应根据业务特点选择合适的方式。详细对比参见 [TPM 预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md) 中的方案对比表。核心区别如下：
+通过 TPM（Tokens Per Minute）预留，可为指定模型锁定专属推理吞吐量，预留容量内的调用不受公共资源限流影响，容量为业务专属、不与其他用户共享。详见 [TPM 预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
 
-| 方案 | 容量保障 | 适用场景 | 代码改动 |
-|------|---------|---------|---------|
-| 按量付费 | 无（共享公共池） | 流量波动大/短期使用 | 无需改动 |
-| 资源包/节省计划 | 承诺用量折扣（非专属） | 费用优化 | 无需改动 |
-| TPM 预留 | 专属容量刚性兑付 | 流量可预估、不能接受限流 | 替换 model 参数 |
-| PTU 专属部署 | 专属部署实例 | 高吞吐高性能 | 替换 model 参数 |
+核心机制：
 
-TPM 预留的核心优势在于：容量专属不共享、超额自动降级不中断、只需替换 `model` 参数即可接入。
+- **专属模型 code**：创建预留后系统自动生成专属 `model` code，需将 API 请求中的 `model` 参数替换为该 code 才能命中预留容量。
+- **超额不中断**：超出预留容量的请求自动降级为按量计费处理，无需修改代码，可在详情页**超额降级统计**中查看降级次数。
+- **计费**：按 kTPM（1 kTPM = 1,000 Tokens/分钟）预付费，部署成功即开始计费，预留容量内调用不额外收费。
 
-## 支持的模型
+### 方案选型
 
-TPM 预留目前支持华北2（北京）和新加坡两个区域，覆盖以下模型（价格为 Per 10,000 TPM）：
+[TPM 预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md) 文档给出了四种容量方案对比，便于选型：
 
-**华北2（北京）**：千问3.7-Max、千问3.7-Plus、千问3.6-Flash、GLM-5.2、GLM-5.1、DeepSeek-v4-Flash、DeepSeek-v4-Pro、Kimi-K2.6。
+| 方案 | 计费单位 | 容量保障 | 适用场景 | 超额处理 | 代码改动 |
+| --- | --- | --- | --- | --- | --- |
+| 按量付费 | 按 token | 无（共享公共池） | 流量波动大/短期 | 受公共限流 | 无需改动 |
+| 资源包/节省计划 | 预付费额度 | 承诺用量折扣（非专属） | 费用优化 | 超出转按量 | 无需改动 |
+| TPM 预留 | 按 kTPM 预付费 | 专属容量刚性兑付 | 流量可预估、不能接受限流 | 自动降级公共池按量，不中断 | 替换 model 参数 |
+| PTU 专属部署 | 按 kTPM 预付费 | 专属部署实例 | 高吞吐高性能 | 超出转按量 | 替换 model 参数 |
 
-**新加坡**：与北京区域模型相同，价格略高。
+### 创建与接入
 
-具体价格以 [TPM 预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md) 中的价目表或百炼控制台实际展示为准。
+在[百炼控制台](https://bailian.console.aliyun.com/#/efm/tpm_reservation)单击**创建 TPM 预留**，填写预留名称、模型、付费周期（按天）、输入/输出 TPM（起步与步长因模型而异）、购买时长等参数并支付。创建页右侧的 **TPM 容量计算器**可根据 RPM、平均输入/输出长度、预估缓存命中率估算所需额度。
 
-## 容量换算参数
-
-不同模型在缓存折扣和长输入阶梯系数上存在差异，影响实际容量消耗：
-
-- **缓存折扣**：GLM-5.2（25%）、GLM-5.1（20%）、DeepSeek-v4-Pro（8%）、Qwen 系列（20%）。DeepSeek-v4-Flash 和 Kimi-K2.6 不支持缓存。
-- **长输入阶梯系数**：GLM-5.1 在 32K 以上输入时系数提升（输入 1.33/输出 1.17），其余模型无阶梯。
-
-创建预留时，控制台右侧的 TPM 容量计算器会自动应用这些参数，帮助估算所需额度。
-
-## 创建与接入
-
-### 创建 TPM 预留
-
-1. 登录百炼控制台，进入 TPM 预留页面，点击**创建 TPM 预留**。
-2. 填写预留名称、选择模型、设置输入/输出 TPM（单位 kTPM）、购买时长等参数。
-3. 确认费用后提交支付。创建成功后系统自动生成**专属模型 code**。
-
-> **注意**：创建 TPM 预留需一次性支付预付费用。建议先使用容量计算器估算所需 TPM 并确认费用。
-
-### 接入专属模型 code
-
-将 API 请求中的 `model` 参数替换为专属模型 code 即可使用预留容量：
+接入时将 `model` 替换为专属模型 code 即可（其余请求结构不变）：
 
 ```python
 import dashscope
@@ -56,56 +37,69 @@ response = dashscope.Generation.call(
     model="your-dedicated-model-code",   # 替换为专属模型 code
     messages=[{"role": "user", "content": "你好"}],
 )
+print(response.output.text)
 ```
 
-短时间内请求量快速拉升时，系统需要短暂预热，期间部分请求可能出现延迟波动，建议做好请求排队或重试机制。
+> **注意**：短时间内请求量快速拉升时，系统需要短暂预热以匹配算力，预热期间部分请求可能出现延迟波动，请做好请求排队或重试机制。
 
-### TPM 容量计算器
+### 生命周期与管理
 
-创建页面右侧提供容量计算器，输入以下参数后自动输出推荐的输入/输出 TPM：
+- **扩缩容**：详情页可随时调整输入/输出 TPM，变配期间服务不中断。
+- **续费/退订**：支持到期自动续费（到期前一天 08:00 扣款）；退订不可恢复，退订后专属 code 失效、请求回退公共资源。缩容/退订退费按已用部分 1.5 倍系数结算：`退款 = 降量部分预付费 - (降量部分预付费 × 已用时长/购买时长 × 1.5)`。
+- **到期状态**：到期后 2 小时内仍运行中可调用；2~14 小时转为已停止（不可调用、可续费）；14 小时后实例删除，不可恢复。
+- **监控**：详情页提供利用率、配额内/外调用次数、缓存命中量等；利用率持续接近 100% 或频繁降级时应扩容。
 
-- **每分钟请求数（RPM）**：业务高峰期每分钟请求数
-- **平均输入/输出长度（token）**：每条请求的平均 token 数
-- **预估缓存命中率（%）**：命中率越高，输入容量消耗越低
+## 快速模式（Fast mode）：更高的输出速度
 
-## 管理与运维
+[快速模式](../../raw/model-user-guide/model-high-speed-inference/fast-mode.md) 面向对输出速度敏感的场景（AI 编程助手、Agent 多步推理、实时对话等），当前处于 **preview 阶段**，能力与规格可能随版本调整。
 
-### 查看监控
+关键特性：
 
-在预留详情页可查看使用率趋势、配额用量、超额降级统计等监控数据。频繁降级时建议扩容。详见 [TPM 预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md) 中的管理操作说明。
+- **高速输出**：TPS 提升至标准 API 的 1.5~2 倍，达 80~100 TPS。
+- **按 token 计费**：计费逻辑与标准 API 一致，按输入/输出 token 计费。
+- **特殊限流**：超出 TPM 额度不会立即限流，请求进入排队队列（与 TPM 预留"超额降级按量"的处理方式不同）。
 
-### 扩缩容
+### 使用方式
 
-在详情页点击**扩缩容**，调整输入/输出 TPM。变配期间服务不中断。
+将 `model` 指定为支持快速模式的 model ID（如 `glm-5.2-fast-preview`）即可开启，无需额外参数。接入域名格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`，其中 `workspace_id` 可在[业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)页面切换到对应地域后查看。
 
-### 续费与退订
+`glm-5.2` 默认返回 `reasoning_content` 思考字段；[流式输出](../concepts/streaming.md)时思考内容与回答内容分别通过 `delta.reasoning_content` 与 `delta.content` 推送：
 
-- **续费**：支持手动续订和到期自动续费（到期前一天 08:00 自动扣款）。
-- **退订**：退订不可恢复，专属模型 code 失效，请求回退至公共资源。已使用部分按 1.5 倍系数结算：`退款 = 降量部分预付费 - (降量部分预付费 × 已用时长/购买时长 × 1.5)`。
+```python
+from openai import OpenAI
+import os
 
-### 实例状态
+client = OpenAI(
+    api_key=os.environ.get("API_KEY"),
+    base_url=os.environ.get("BASE_URL"),
+)
 
-| 状态 | 说明 |
-|------|------|
-| 运行中 | 正常运行，可调用 |
-| 待生效 | 已创建，等待生效 |
-| 变配中 | 扩缩容中，服务不中断 |
-| 已停止 | 到期后 2~14 小时，续费可恢复 |
-| 已过期 | 到期 14 小时后，资源已释放 |
-| 已取消 | 退订完成，不可恢复 |
+completion = client.chat.completions.create(
+    model="glm-5.2-fast-preview",
+    messages=[{"role": "user", "content": "你是谁"}],
+    stream=True,
+)
 
-## 常见问题
+for chunk in completion:
+    if not chunk.choices:
+        continue
+    delta = chunk.choices[0].delta
+    if hasattr(delta, "reasoning_content") and delta.reasoning_content:
+        print(delta.reasoning_content, end="", flush=True)
+    if hasattr(delta, "content") and delta.content:
+        print(delta.content, end="", flush=True)
+```
 
-**超出预留容量时会怎样？** 超出部分自动降级为按量计费，服务不中断。可在详情页的超额降级统计中查看降级情况。
+## 限制与注意事项
 
-**如何判断是否需要扩容？** 查看 TPM 用量趋势图和超额降级统计，利用率持续接近 100% 或频繁降级时建议扩容。
-
-**预留到期后会怎样？** 专属模型 code 失效，请求回退到公共资源按量计费。建议提前开启到期自动续费。
+- **TPM 预留支持的模型**以控制台展示为准（当前覆盖千问 3.x、GLM-5.x、DeepSeek-v4、Kimi-K2.6 等），部分模型支持长输入阶梯系数与缓存折扣，容量计算器会自动应用；详见 [TPM 预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
+- **快速模式当前仅 preview**，支持的模型有限（如 `glm-5.2-fast-preview`），且接入域名与标准 dashscope 域名不同，迁移时需注意 base_url。
+- **超额行为差异**：TPM 预留超额自动降级为按量计费、服务不中断；快速模式超额则进入排队队列。二者机制不同，选型时需区分。
+- 具体价格、容量起步值、支持模型均**以百炼控制台为准**，文档中的价格表可能随版本变动。
 
 ## 来源文档
 
 - [TPM 预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)
-
-
+- [快速模式](../../raw/model-user-guide/model-high-speed-inference/fast-mode.md)
 
 

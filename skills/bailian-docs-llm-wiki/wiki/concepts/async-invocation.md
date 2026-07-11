@@ -1,75 +1,69 @@
-# 异步调用
+# 异步调用与任务轮询
 
-异步调用是百炼平台针对耗时较长的 AI 生成任务所采用的统一调用模式，核心流程为「创建任务 → 轮询获取结果」，避免客户端因等待超时而失败。
+异步调用是百炼平台针对耗时较长的模型能力（如视频生成、3D 生成、部分图像生成、长任务应用调用）提供的一种调用模式：客户端先提交任务拿到 `task_id`，再通过轮询或事件通知获取最终结果，从而避免同步请求超时。
 
 ## 适用场景
 
-百炼平台中以下类型的 API 采用异步调用模式：
+异步调用主要用于生成过程需要数十秒到数分钟的能力，在百炼平台的多个场景中被采用：
 
-- **3D 生成**：文生 3D、图生 3D、多图生 3D（Tripo 系列模型）
-- **视频生成**：文生视频、图生视频、参考生视频、视频编辑、数字人等（万相、HappyHorse、Pixverse、Vidu、Kling 等模型）
-- **应用调用**：智能体和工作流中的长时间任务（Responses API 的 background 模式）
-- **图像生成**：部分图像生成与编辑接口
-
-这些场景的共同特点是单次生成耗时通常在数十秒到数分钟，不适合同步阻塞等待。
+- **视频生成**：万相（Wan）、HappyHorse、爱诗（PixVerse）、Vidu、可灵（Kling）等所有视频生成 API 均为异步模式（创建任务 → 轮询获取结果）。
+- **3D 资产生成**：基于 Tripo 模型的文生 3D、单图生 3D、多图生 3D 全部走异步流程，且仅在华北2（北京）地域可用。
+- **图像生成**：部分耗时较长的图像生成/编辑任务采用异步机制。
+- **应用调用（智能体/工作流）**：OpenAI 兼容的 Responses API 支持异步执行；DashScope API 目前暂不支持异步，仅 Responses API 提供。
 
 ## 调用流程
 
-### 步骤一：创建任务
+异步调用通常包含两个步骤：
 
-向对应的业务 Endpoint 发送 POST 请求，携带异步标识，服务端立即返回 `task_id`。
+1. **创建任务**：向业务接口发起 `POST` 请求，成功后返回 `task_id`。以 3D 生成为例，需在请求头携带 `X-DashScope-Async: enable`，否则会报错 `current user api does not support synchronous calls`。应用调用（Responses API）则通过在请求体中设置 `background=true` 开启异步模式。
+2. **轮询查询结果**：使用返回的 `task_id` 定期查询任务状态，直到任务结束。
 
-```
-POST https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/...
-Header: X-DashScope-Async: enable
-```
+### 通用异步任务管理 API
 
-### 步骤二：轮询查询结果
+百炼提供了一组通用的任务管理接口（主账号维度限流均为 20 QPS）：
 
-使用返回的 `task_id` 定期查询任务状态：
+- **查询单个任务**：`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+- **批量查询任务状态**：`GET https://dashscope.aliyuncs.com/api/v1/tasks/?start_time=xxx&end_time=xxx&status=xxx`，单次时间跨度不超过 24 小时。
+- **取消任务**：`POST https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}/cancel`，仅能取消 `PENDING` 状态的任务，已开始处理的任务无法取消。
 
-```
-GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}
-```
+应用调用场景下，可用 SDK 方法轮询，例如 Responses API 的 `client.responses.retrieve(task_id)`。
 
-任务状态流转为：`PENDING`（排队中）→ `RUNNING`（处理中）→ `SUCCEEDED`（成功）/ `FAILED`（失败）/ `CANCELED`（已取消）。
+## 任务状态
 
-## 两种异步模式
+查询接口返回 `output.task_status`，其状态流转与枚举值为：
 
-百炼平台存在两种异步调用方式，适用于不同的 API 体系：
+- `PENDING`：排队中
+- `RUNNING`：处理中
+- `SUCCEEDED`：成功，此时 `output.results` 才会返回产物
+- `FAILED`：失败，响应中通常带 `code` 与 `message`
+- `CANCELED`：已取消
+- `UNKNOWN`：任务不存在或超过 24 小时有效期
 
-| 方式 | 触发方式 | 适用 API |
-| --- | --- | --- |
-| DashScope 异步 | 请求头 `X-DashScope-Async: enable` | 3D 生成、视频生成、图像生成等模型 API |
-| Responses API 异步 | 请求体 `background: true` | 应用调用（OpenAI 兼容模式） |
+应用调用（Responses API）的终态则表现为 `completed`、`failed` 等。
 
-两者本质相同，都是提交任务后通过任务 ID 轮询获取结果，区别仅在于触发参数和查询接口的形式。
+## 关键要点与配置
 
-## 关键参数与配置
+- **异步请求头/开关**：模型 API 需 `X-DashScope-Async: enable`；应用 Responses API 需 `background=true`。
+- **task_id 有效期**：一般为 24 小时，已完成任务保留约 24 小时后自动清理，超时查询返回 `UNKNOWN`。
+- **不要重复创建任务**：创建成功后应仅轮询，重复创建会浪费额度。
+- **轮询间隔**：建议按任务耗时设置合理间隔（如 3D 生成建议约 15 秒），查询接口默认 RPS/QPS 约为 20，避免高频轮询触发限流。
+- **产物下载时效**：生成类产物下载链接有效期较短（如 3D 模型链接仅 2 小时），需及时下载。
 
-| 参数/配置 | 说明 |
-| --- | --- |
-| `X-DashScope-Async: enable` | 请求头，开启 DashScope 异步模式（3D/视频/图像类必须携带） |
-| `background: true` | 请求体参数，开启 Responses API 异步模式 |
-| `task_id` | 创建任务后返回的唯一标识，用于后续轮询 |
-| 轮询间隔 | 建议 10-15 秒，查询接口默认 RPS 限制为 20 |
-| 任务有效期 | task_id 查询有效期通常为 24 小时，超时后返回 UNKNOWN |
-| 产物链接有效期 | 生成结果的下载 URL 通常有效 2 小时，需及时下载 |
+## 异步任务完成通知
 
-## 开发建议
+频繁轮询会浪费资源并可能触发限流。百炼已接入阿里云事件总线 EventBridge，支持任务完成后主动推送通知，替代或补充轮询：
 
-1. **不要重复创建任务**：同一请求只需创建一次任务，之后通过轮询获取结果即可。
-2. **合理设置轮询间隔**：建议 10-15 秒查询一次，避免触发 RPS 限制。
-3. **处理所有终态**：除 SUCCEEDED 外，还需处理 FAILED、CANCELED、UNKNOWN 等状态。
-4. **及时保存产物**：下载链接有时效限制，任务成功后应立即下载结果文件。
-5. **考虑回调机制**：如需更高频的状态通知，可配置异步任务回调替代主动轮询。
-6. **地域一致性**：确保模型、Endpoint URL 和 API Key 属于同一地域，跨地域调用会失败。
+- **HTTP 回调 URL**：接入简单，需公网或 VPC 可达的 HTTP 接口，适用于通用场景。
+- **RocketMQ**：保证消息无丢失、支持失败重试，适用于可靠性要求高的场景，需额外开通 RocketMQ 实例。
+
+事件源为 `acs.dashscope`，事件类型为 `dashscope:System:AsyncTaskFinish`，事件体中的 `data.task_status` 与 `data.task_id` 为关键字段。收到通知后只需调用一次查询接口即可获取结果，从而显著降低轮询开销。
 
 ## 关联主题页
 
 - [3d generation](../api/3d-generation.md)
 - [video generation api](../api/video-generation-api.md)
-- [application call](../api/application-call.md)
 - [image generation](../api/image-generation.md)
+- [application call](../api/application-call.md)
+- [more about models](../api/more-about-models.md)
 
 

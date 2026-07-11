@@ -35,7 +35,7 @@
 | 模型 | 上架时间 | 说明 |
 |------|----------|------|
 | qwen3.5-omni-plus/flash | 2026-03 | 全模态，支持长视频分析、113 语种识别 |
-| qwen3.5-omni-*-realtime | 2026-03 | 实时多模态，原生联网搜索与语音打断 |
+| qwen3.5-omni-*-realtime | 2026-03 | 实时[多模态](../concepts/multimodal.md)，原生联网搜索与语音打断 |
 | qwen3.5-ocr | 2026-06 | 128K 上下文，多轮对话，多卡证信息抽取 |
 | qwen-image-2.0-pro | 多快照 | 图片生成与编辑融合，支持多语言图内文字 |
 
@@ -108,6 +108,8 @@
 
 - [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)
 - [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)
+
+
 
 
 

@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026-07-09",
-  "totalFamilies": 164,
-  "totalModels": 370,
+  "updatedAt": "2026-07-11",
+  "totalFamilies": 170,
+  "totalModels": 379,
   "capabilityDistribution": {
-    "TG": 34,
-    "IG": 29,
+    "TG": 36,
+    "IG": 30,
     "VG": 25,
     "TTS": 16,
     "Reasoning": 14,
     "ASR": 12,
-    "VU": 9,
+    "VU": 11,
     "Realtime-ASR": 7,
     "Multimodal-Omni": 5,
     "Realtime-Omni": 4,
@@ -17,19 +17,23 @@
     "ME": 2,
     "TR": 2,
     "Realtime-Text-to-Speech": 1,
+    "Realtime-Voice-Replication": 1,
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 97,
+    "qwen": 98,
     "qwen-domain-model": 34,
     "wan": 13,
     "happyhorse": 4,
     "mini-max": 3,
     "deepseek": 3,
+    "zhipu-ai": 3,
     "pixverse": 3,
     "moonshot-ai": 2,
-    "zhipu-ai": 2,
+    "meta": 2,
+    "baichuan-ai": 1,
     "kling": 1,
+    "stability-ai": 1,
     "stepfun": 1,
     "tripo": 1,
     "vidu": 1,
@@ -200,6 +204,22 @@
       ]
     },
     {
+      "slug": "baichuan2-turbo",
+      "name": "Baichuan2-Turbo",
+      "primaryCapability": "TG",
+      "capabilities": [
+        "TG"
+      ],
+      "providers": [
+        "baichuan-ai"
+      ],
+      "itemCount": 1,
+      "items": [
+        "baichuan2-turbo"
+      ],
+      "maxContextWindow": 32000
+    },
+    {
       "slug": "cosyvoice",
       "name": "CosyVoice大模型",
       "primaryCapability": "TTS",
@@ -232,10 +252,12 @@
       "providers": [
         "deepseek"
       ],
-      "itemCount": 12,
+      "itemCount": 14,
       "items": [
         "deepseek-r1",
         "deepseek-r1-0528",
+        "deepseek-r1-distill-llama-70b",
+        "deepseek-r1-distill-llama-8b",
         "deepseek-r1-distill-qwen-1.5b",
         "deepseek-r1-distill-qwen-14b",
         "deepseek-r1-distill-qwen-32b",
@@ -455,6 +477,22 @@
         "glm-5",
         "glm-5.1",
         "glm-5.2"
+      ],
+      "maxContextWindow": 1048576
+    },
+    {
+      "slug": "glm-fast",
+      "name": "GLM-5.2-Fast",
+      "primaryCapability": "TG",
+      "capabilities": [
+        "TG"
+      ],
+      "providers": [
+        "zhipu-ai"
+      ],
+      "itemCount": 1,
+      "items": [
+        "glm-5.2-fast-preview"
       ],
       "maxContextWindow": 1048576
     },
@@ -681,6 +719,40 @@
       "items": [
         "liveportrait"
       ]
+    },
+    {
+      "slug": "llama-4-maverick-17b-128e-instruct",
+      "name": "Llama-4-Maverick-17B-128E-Instruct",
+      "primaryCapability": "VU",
+      "capabilities": [
+        "VU",
+        "TG"
+      ],
+      "providers": [
+        "meta"
+      ],
+      "itemCount": 1,
+      "items": [
+        "llama-4-maverick-17b-128e-instruct"
+      ],
+      "maxContextWindow": 430000
+    },
+    {
+      "slug": "llama-4-scout-17b-16e-instruct",
+      "name": "Llama-4-Scout-17B-16E-Instruct",
+      "primaryCapability": "VU",
+      "capabilities": [
+        "VU",
+        "TG"
+      ],
+      "providers": [
+        "meta"
+      ],
+      "itemCount": 1,
+      "items": [
+        "llama-4-scout-17b-16e-instruct"
+      ],
+      "maxContextWindow": 1000000
     },
     {
       "slug": "minimax-models-market-place",
@@ -1385,6 +1457,22 @@
       "items": [
         "qwen-tts-realtime",
         "qwen-tts-realtime-latest"
+      ],
+      "maxContextWindow": 8192
+    },
+    {
+      "slug": "qwen-tts-vc-realtime-2025-08-20",
+      "name": "通义千问-TTS-VC-Realtime-2025-08-20",
+      "primaryCapability": "Realtime-Voice-Replication",
+      "capabilities": [
+        "Realtime-Voice-Replication"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen-tts-vc-realtime-2025-08-20"
       ],
       "maxContextWindow": 8192
     },
@@ -2317,6 +2405,21 @@
       ]
     },
     {
+      "slug": "stable-diffusion-v1.5",
+      "name": "StableDiffusion文生图模型-v1.5",
+      "primaryCapability": "IG",
+      "capabilities": [
+        "IG"
+      ],
+      "providers": [
+        "stability-ai"
+      ],
+      "itemCount": 1,
+      "items": [
+        "stable-diffusion-v1.5"
+      ]
+    },
+    {
       "slug": "stepfun-models-market-place",
       "name": "StepFun推理模型",
       "primaryCapability": "TG",
@@ -2408,12 +2511,13 @@
       "providers": [
         "deepseek"
       ],
-      "itemCount": 6,
+      "itemCount": 7,
       "items": [
         "vanchin/deepseek-ocr",
         "vanchin/deepseek-r1",
         "vanchin/deepseek-v3",
         "vanchin/deepseek-v3.1-terminus",
+        "vanchin/deepseek-v3.2-speciale",
         "vanchin/deepseek-v3.2-think",
         "vanchin/deepseek-v4-pro"
       ],

@@ -104,6 +104,7 @@ description: >-
 | `ME` | 多模态嵌入 |
 | `TR` | 翻译 |
 | `3D-generation` | 3D 生成 |
+| `Realtime-Voice-Replication` | Realtime-Voice-Replication |
 
 一个模型常常带多个 capability，`index.md` 中按 `capabilities[0]`（主能力）归类，
 查找时按中文标签即可定位章节。
@@ -147,21 +148,22 @@ description: >-
 | **按家族筛选**：按 primaryCapability / providers / itemCount / maxContextWindow 找家族 | `models/families.jsonl`（一行一家族，含 items[] 摘要） |
 | 模型家族总览 / 按能力分桶浏览         | `models/index.md`                                        |
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
-| Token | `wiki/concepts/token.md` |
-| 函数调用 | `wiki/concepts/function-calling.md` |
-| 检索增强生成 | `wiki/concepts/rag.md` |
-| 流式输出 | `wiki/concepts/streaming.md` |
+| 函数调用（Function Calling / 工具调用） | `wiki/concepts/function-calling.md` |
+| 检索增强生成（RAG） | `wiki/concepts/rag.md` |
 | OpenAI 兼容接口 | `wiki/concepts/openai-compatible-interface.md` |
 | API Key 鉴权 | `wiki/concepts/api-key.md` |
-| 业务空间 | `wiki/concepts/workspace.md` |
-| 异步调用 | `wiki/concepts/async-invocation.md` |
+| 异步调用与任务轮询 | `wiki/concepts/async-invocation.md` |
+| Token 与计费 | `wiki/concepts/token-billing.md` |
+| 业务空间（Workspace） | `wiki/concepts/workspace.md` |
+| 流式输出 | `wiki/concepts/streaming.md` |
 | DashScope SDK | `wiki/concepts/dashscope-sdk.md` |
-| 图像生成 vs 视频生成 vs 3D生成 | `wiki/comparisons/image-video-3d-generation-comparison.md` |
-| 知识库 vs 长期记忆库 | `wiki/comparisons/knowledge-base-vs-memory-library.md` |
-| 模型评估 vs 应用评估 | `wiki/comparisons/model-evaluation-vs-application-evaluation.md` |
-| 模型监控 vs 应用监控 | `wiki/comparisons/model-monitoring-vs-application-monitoring.md` |
-| 模型微调 vs 模型压缩 vs 模型部署 | `wiki/comparisons/fine-tuning-vs-compression-vs-deployment.md` |
-| Qwen API vs 全双工实时API vs 托管智能体API | `wiki/comparisons/qwen-api-vs-omni-realtime-vs-managed-agents.md` |
+| 多模态 | `wiki/concepts/multimodal.md` |
+| 模型微调与模型压缩对比 | `wiki/comparisons/fine-tuning-vs-model-compression.md` |
+| 模型部署与高速推理对比 | `wiki/comparisons/model-deployment-vs-high-speed-inference.md` |
+| 知识库与记忆库对比 | `wiki/comparisons/knowledge-base-vs-memory-library.md` |
+| 图像、视频与 3D 生成对比 | `wiki/comparisons/image-vs-video-vs-3d-generation.md` |
+| 托管智能体与 LLM 应用对比 | `wiki/comparisons/managed-agents-vs-llm-application.md` |
+| 模型评估与应用评估对比 | `wiki/comparisons/model-evaluation-vs-application-evaluation.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 
