@@ -104,7 +104,6 @@ description: >-
 | `ME` | 多模态嵌入 |
 | `TR` | 翻译 |
 | `3D-generation` | 3D 生成 |
-| `Realtime-Voice-Replication` | Realtime-Voice-Replication |
 
 一个模型常常带多个 capability，`index.md` 中按 `capabilities[0]`（主能力）归类，
 查找时按中文标签即可定位章节。
