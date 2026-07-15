@@ -1,4 +1,4 @@
-# CosyVoice客户端事件
+# Qwen-Audio-TTS/CosyVoice客户端事件
 
 **用户指南：**关于模型介绍和选型建议请参见[语音合成](https://help.aliyun.com/zh/model-studio/tts-model/)。
 
@@ -37,10 +37,10 @@
         "task_group": "audio",
         "task": "tts",
         "function": "SpeechSynthesizer",
-        "model": "cosyvoice-v3-flash",
+        "model": "qwen-audio-3.0-tts-flash",
         "parameters": {
             "text_type": "PlainText",
-            "voice": "longanyang",
+            "voice": "longanlingxi",
             "format": "mp3",
             "sample_rate": 22050,
             "volume": 50,
@@ -165,13 +165,15 @@
 
 设为 true 后，仅允许发送一次 continue-task 指令。
 
+SSML 的使用限制（支持的模型、音色和接口），请参见[使用限制](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide#sl01-constraint-h3)。
+
 **word\_timestamp\_enabled** `_boolean_` （可选）
 
 是否开启字级别时间戳。
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
 
 **seed** `_integer_` （可选）
 
@@ -227,88 +229,14 @@ cosyvoice-v1不支持该参数。
     
 -   vi：越南语
     
+-   it：意大利语
+    
+-   ms：马来语
+    
 
 **instruction** `_string_` （可选）
 
-设置指令，用于控制方言、情感或角色等合成效果。该功能仅适用于cosyvoice-v3.5-flash、cosyvoice-v3.5-plus和cosyvoice-v3-flash模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持Instruct的系统音色。
-
-**长度限制**：100字符。
-
-> 汉字（包括简/繁体汉字、日文汉字和韩文汉字）按2个字符计算，其他所有字符（如标点符号、字母、数字、日韩文假名/谚文等）均按 1个字符计算
-
-**使用要求**（因模型而异）：
-
--   cosyvoice-v3.5-flash和cosyvoice-v3.5-plus：可以输入任意指令控制合成效果（如情感、语速等）
-    
-    **重要**
-    
-    cosyvoice-v3.5-flash和cosyvoice-v3.5-plus无系统音色，仅支持使用声音设计/复刻音色。
-    
-    指令示例：
-    
-    ```
-    请用非常激昂且高亢的语气说话，表现出获得重大成功后的狂喜与激动。
-    语速请保持中等偏慢，语气要显得优雅、知性，给人以从容不迫的安心感。
-    语气要充满哀伤与怀念，带有轻微的鼻音，仿佛正在诉说一段令人心碎的往事。
-    请尝试用气声说话，音量极轻，营造出一种在耳边亲密低语的神秘感。
-    语气要显得非常急躁且不耐烦，语速加快，句子之间的停顿要尽量缩短。
-    请模拟一位慈祥、温和的长辈，语速平稳，声音中要透出满满的关怀与爱意。
-    语气要充满讽刺和不屑，在关键词上加重读音，句尾语调略微上扬。
-    请用一种极度恐惧且颤抖的声音说话。
-    语气要像专业的新闻播音员一样，冷静、客观且字正腔圆，情绪保持中立。
-    语气要显得活泼俏皮，带着明显的笑意，让声音听起来充满朝气与阳光。
-    ```
-    
--   cosyvoice-v3-flash：需遵照如下要求
-    
-    -   复刻音色：可使用任意自然语言控制语音合成效果。
-        
-        指令示例：
-        
-        ```
-        请用广东话表达。（支持的方言：广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话。）
-        请尽可能非常大声地说一句话。
-        请用尽可能慢地语速说一句话。
-        请用尽可能快地语速说一句话。
-        请非常轻声地说一句话。
-        你可以慢一点说吗
-        你可以非常快一点说吗
-        你可以非常慢一点说吗
-        你可以快一点说吗
-        请非常生气地说一句话。
-        请非常开心地说一句话。
-        请非常恐惧地说一句话。
-        请非常伤心地说一句话。
-        请非常惊讶地说一句话。
-        请尽可能表现出坚定的感觉。
-        请尽可能表现出愤怒的感觉。
-        请尝试一下亲和的语调。
-        请用冷酷的语调讲话。
-        请用威严的语调讲话。
-        我想体验一下自然的语气。
-        我想看看你如何表达威胁。
-        我想看看你怎么表现智慧。
-        我想看看你怎么表现诱惑。
-        我想听听用活泼的方式说话。
-        我想听听你用激昂的感觉说话。
-        我想听听用沉稳的方式说话的样子。
-        我想听听你用自信的感觉说话。
-        你能用兴奋的感觉和我交流吗？
-        你能否展示狂傲的情绪表达？
-        你能展现一下优雅的情绪吗？
-        你可以用幸福的方式回答问题吗？
-        你可以做一个温柔的情感演示吗？
-        能用冷静的语调和我谈谈吗？
-        能用深沉的方法回答我吗？
-        能用粗犷的情绪态度和我对话吗？
-        用阴森的声音告诉我这个答案。
-        用坚韧的声音告诉我这个答案。
-        用自然亲切的闲聊风格叙述。
-        用广播剧博客主的语气讲话。
-        ```
-        
-    -   系统音色：指令必须使用固定格式和内容，详情请参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
-        
+设置指令，用于控制方言、情感或角色等合成效果。具体使用说明请参见[指令控制](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#12884a10929p9)。
 
 **enable\_aigc\_tag** `_boolean_` （可选）
 
@@ -316,7 +244,7 @@ cosyvoice-v1不支持该参数。
 
 默认值：false。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 **aigc\_propagator** `_string_` （可选）
 
@@ -324,7 +252,7 @@ cosyvoice-v1不支持该参数。
 
 默认值：阿里云UID。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 **aigc\_propagate\_id** `_string_` （可选）
 
@@ -332,13 +260,13 @@ cosyvoice-v1不支持该参数。
 
 默认值：本次语音合成请求Request ID。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 **hot\_fix** `_object_` （可选）
 
 文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
 
-cosyvoice-v2、cosyvoice-v1不支持该功能。
+qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v2、cosyvoice-v1不支持该功能。
 
 参数介绍：
 

@@ -13,7 +13,7 @@
 
 详细的类型介绍参见 [应用类型介绍](../../raw/application-user-guide/llm-application/application-introduction.md)。
 
-## 智能体应用
+## [智能体应用](../concepts/agent-application.md)
 
 ### 新版智能体（Agent 2.0）
 
@@ -73,7 +73,7 @@
 
 ## 文件问答
 
-智能体应用支持上传文件进行智能问答，提供三种处理模式：
+[智能体应用](../concepts/agent-application.md)支持上传文件进行智能问答，提供三种处理模式：
 
 | 模式 | 适用场景 | 特点 |
 |------|---------|------|
@@ -93,7 +93,7 @@
 
 1. 在应用配置页点击"发布"，确认变更后完成发布
 2. 在"发布渠道"页签查看 API 调用方式
-3. 智能体应用还支持发布到钉钉、微信公众号等第三方平台
+3. [智能体应用](../concepts/agent-application.md)还支持发布到钉钉、微信公众号等第三方平台
 
 RAM 账号发布前需确认拥有 `ram:CreateServiceLinkedRole` 权限。
 
@@ -113,6 +113,9 @@ RAM 账号发布前需确认拥有 `ram:CreateServiceLinkedRole` 权限。
 - [高代码应用](../../raw/application-user-guide/llm-application/rich-code-application.md)
 - [工作流应用](../../raw/application-user-guide/llm-application/workflow-application.md)
 - [文件问答](../../raw/application-user-guide/llm-application/file-q-a.md)
+
+
+
 
 
 

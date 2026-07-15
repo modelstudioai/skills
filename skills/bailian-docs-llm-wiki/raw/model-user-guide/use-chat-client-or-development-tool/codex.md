@@ -374,19 +374,20 @@ codex
 
 **解决方案**：建议参照上文配置接入凭证，直接在`~/.codex/config.toml`中完成配置，无需依赖第三方工具的健康检查结果；配置完成后参照[验证配置](#cdx-verify)启动 Codex，若能正常进入对话界面即表示可正常使用国内模型。
 
-### **报错 wire\_api = chat is no longer supported 怎么办？**
+### **报错 wire\_api 配置问题怎么办？**
 
-**原因**：Codex 新版本使用 Responses API，不支持`wire_api = "chat"`配置。
+**原因**：Codex 新版本不再支持 `wire_api = "chat"` 配置。根据版本不同，可能出现以下报错：
+
+-   `wire_api = "chat" is no longer supported`
+    
+-   `unknown configuration field wire_api`
+    
 
 **解决方案**：
 
--   Token Plan 团队版或按量计费：将`wire_api`改为`responses`，并确认`base_url`配置正确。
+-   报错 `wire_api = "chat" is no longer supported`：将配置文件中的 `wire_api` 改为 `responses`，并确认 `base_url` 配置正确。详见上文[配置接入凭证](#cdx-config)中对应方案的配置示例。
     
--   Coding Plan：执行以下命令降级到旧版本：
-    
-    ```
-    npm install -g @openai/codex@0.80.0
-    ```
+-   报错 `unknown configuration field wire_api`：从配置文件 `~/.codex/config.toml` 的对应 provider 节中删除 `wire_api` 字段。
     
 
 ### 报错 **unexpected status 401 Unauthorized 怎么办？**
@@ -416,3 +417,22 @@ codex
 **原因**：配置文件中的`base_url`或`wire_api`填写错误。
 
 **解决方案**：确认`base_url`和`wire_api`与所选方案的配置一致。参见上文[配置接入凭证](#cdx-config)中对应方案的配置示例。
+
+### **报错 stream disconnected before completion: stream closed before response.completed 怎么办？**
+
+**原因**：Codex 与服务端的流式连接在响应完成前断开。常见于以下场景：
+
+-   对话线程过长，Codex 触发上下文压缩时请求失败
+    
+-   网络不稳定，SSE 或 WebSocket 连接中途断开
+    
+-   服务端过载或触发限流，提前终止连接
+    
+
+**解决方案**：
+
+-   开启新的对话线程，避免单个线程积累过多上下文。
+    
+-   检查网络连接是否稳定，关闭 VPN 或代理后重试。
+    
+-   等待一段时间后重试，Codex 内置了自动重试机制，多数情况下重试可恢复。

@@ -1333,7 +1333,7 @@ import dashscope
 from dashscope.aigc.image_generation import ImageGeneration
 from dashscope.api_entities.dashscope_response import Message
 
-# 以下为华北2（北京）地域的URL，各地域的URL不同。
+# 以下为华北2（北京）地域的URL。请将{WorkspaceId}替换为您的百炼业务空间ID，各地域的URL不同。
 dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
@@ -1423,7 +1423,7 @@ from dashscope.aigc.image_generation import ImageGeneration
 from dashscope.api_entities.dashscope_response import Message
 from http import HTTPStatus
 
-# 以下为华北2（北京）地域的URL，各地域的URL不同。
+# 以下为华北2（北京）地域的URL。请将{WorkspaceId}替换为您的百炼业务空间ID，各地域的URL不同。
 dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
@@ -1581,7 +1581,7 @@ import dashscope
 from dashscope.aigc.image_generation import ImageGeneration
 from dashscope.api_entities.dashscope_response import Message
 
-# 以下为华北2（北京）地域的URL，各地域的URL不同。
+# 以下为华北2（北京）地域的URL。请将{WorkspaceId}替换为您的百炼业务空间ID，各地域的URL不同。
 dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
@@ -1647,7 +1647,7 @@ from dashscope.aigc.image_generation import ImageGeneration
 from dashscope.api_entities.dashscope_response import Message
 from http import HTTPStatus
 
-# 以下为华北2（北京）地域的URL，各地域的URL不同。
+# 以下为华北2（北京）地域的URL。请将{WorkspaceId}替换为您的百炼业务空间ID，各地域的URL不同。
 dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"

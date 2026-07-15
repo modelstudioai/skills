@@ -53,8 +53,6 @@
     
     -   **归属业务空间**：建议选择默认业务空间。
         
-    -   **归属账号**：选择该 API Key 归属的账号。
-        
     -   **描述**（可选，最多200字符）：输入描述信息，方便后续识别该 API Key 的用途。
         
 3.  创建成功后，弹窗会显示完整的 API Key。请立即复制并妥善保存，关闭弹窗后将无法再次查看完整的 API Key。
@@ -406,6 +404,15 @@ echo $env:DASHSCOPE_API_KEY
     通过代码[首次调用千问API](https://help.aliyun.com/zh/model-studio/first-api-call-to-qwen)，建议[配置API Key到环境变量](#section-env-var-config)，以避免硬编码在代码中导致泄露风险。
     
 
+**说明**
+
+通过代码或第三方工具调用模型时，除 API Key 外还需指定**服务端点**（即创建成功弹窗中显示的 **API Host**，对应 SDK 或 HTTP 请求中的 `base_url`）。百炼同时提供 **OpenAI 兼容**与 **Anthropic 兼容**两种协议的接口，两种协议的 `base_url` 不同，且会随地域变化，请以对应接口文档中的说明为准：
+
+-   OpenAI 兼容协议：[OpenAI兼容-Chat](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope)
+    
+-   Anthropic 兼容协议：[Anthropic兼容-Messages](https://help.aliyun.com/zh/model-studio/anthropic-api-messages)
+    
+
 请勿以任何方式公开API Key，避免因未经授权的使用导致安全风险或资金损失。
 
 ## **API Key 安全升级说明**
@@ -443,6 +450,50 @@ echo $env:DASHSCOPE_API_KEY
 建议创建新密钥替换旧密钥，以获得更完善的安全保障
 
 创建后请立即复制保存，妥善保管
+
+## **通过 API 管理 API Key**
+
+除在控制台操作外，阿里云百炼还提供 OpenAPI，支持以编程方式创建、查询、编辑、删除、启用、禁用和重置 API Key，便于将 API Key 的管理集成到自动化运维流程中。
+
+**说明**
+
+调用以下接口需使用阿里云账号的 AccessKey 进行签名认证（而非 API Key 本身），并具备相应的 RAM 权限。您可以在各接口的 OpenAPI 开发者门户页面在线调试，也可以通过各语言的阿里云 SDK 调用。
+
+**接口**
+
+**说明**
+
+[CreateApiKey](https://api.aliyun.com/api/ModelStudio/2026-02-10/CreateApiKey)
+
+创建 API Key。
+
+[GetApiKey](https://api.aliyun.com/api/ModelStudio/2026-02-10/GetApiKey)
+
+查询指定 API Key 的信息。
+
+[ListApiKeys](https://api.aliyun.com/api/ModelStudio/2026-02-10/ListApiKeys)
+
+查询 API Key 列表。
+
+[UpdateApiKey](https://api.aliyun.com/api/ModelStudio/2026-02-10/UpdateApiKey)
+
+编辑 API Key，如修改描述与权限配置。
+
+[DeleteApiKey](https://api.aliyun.com/api/ModelStudio/2026-02-10/DeleteApiKey)
+
+删除 API Key，删除后不可恢复。
+
+[EnableApiKey](https://api.aliyun.com/api/ModelStudio/2026-02-10/EnableApiKey)
+
+启用 API Key（美国（弗吉尼亚）地域除外）。
+
+[DisableApiKey](https://api.aliyun.com/api/ModelStudio/2026-02-10/DisableApiKey)
+
+禁用 API Key，不影响密钥保存，可随时重新启用（美国（弗吉尼亚）地域除外）。
+
+[ResetApiKey](https://api.aliyun.com/api/ModelStudio/2026-02-10/ResetApiKey)
+
+重置 API Key，生成新的密钥值，旧密钥立即失效（美国（弗吉尼亚）地域除外）。
 
 ## API Key权限说明
 

@@ -36,6 +36,18 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 聊天机器人、内容生成、摘要总结、文档处理等场景，推荐使用 `qwen3.7-plus`，能力与成本均衡，拥有100万上下文窗口和完整的内置工具。确认效果满足需求后，可以尝试 `qwen3.6-flash` 来降低成本，效果接近旗舰模型，且拥有相同的上下文长度和功能支持。如需最强推理能力，可选择 `qwen3.7-max`（百万 token 上下文），但成本较高。
 
+### 办公场景（非编程）
+
+处理日常办公任务（文档撰写、邮件处理、会议纪要整理、数据分析等）时，推荐 `qwen3.7-plus`——能力与成本均衡，拥有 100 万上下文窗口，支持 Function Calling 和内置工具，适合文档摘要、内容生成等办公类任务。
+
+确认效果满足需求后，可尝试 `qwen3.6-flash` 降低成本，效果接近旗舰模型，且拥有相同的上下文长度和功能支持。
+
+如需最强推理能力（如复杂数据分析、多步逻辑推演），可选择 `qwen3.7-max`，但成本较高。
+
+处理超长文档（如同时审阅多份合同、大规模文献梳理）时，推荐 `qwen-long`——上下文窗口达 1000 万 Token，可完整处理大体量文档。
+
+通义灵码和 Qoder 是已封装的 AI 编程工具，主要面向编程开发场景，不适合非编程办公场景的日常使用。
+
 ### 上下文窗口
 
 100万Token约相当于70万个汉字或10本小说。
@@ -94,8 +106,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 **结构化输出**
 
-**批量调用**
-
 `qwen3.7-max`
 
 查看快照版本
@@ -112,8 +122,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-支持
-
 `qwen3.7-plus`
 
 查看快照版本
@@ -121,8 +129,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 `qwen3.7-plus-2026-05-26`
 
 1M
-
-支持
 
 支持
 
@@ -148,8 +154,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-支持
-
 `deepseek-v4-pro`
 
 1M
@@ -157,8 +161,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 支持
-
-不支持
 
 不支持
 
@@ -176,8 +178,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-不支持
-
 `glm-5.2`
 
 1M
@@ -190,8 +190,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `kimi-k2.7-code`
 
 256k
@@ -199,8 +197,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 支持
-
-不支持
 
 不支持
 
@@ -218,8 +214,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-不支持
-
 `mimo-v2.5-pro`
 
 1M
@@ -231,8 +225,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 不支持
 
 支持
-
-不支持
 
 ## 旧版模型
 
@@ -252,8 +244,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 **结构化输出**
 
-**批量调用**
-
 `qwen3.6-max-preview`
 
 256k
@@ -266,8 +256,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `qwen3.6-plus`
 
 查看快照版本
@@ -275,8 +263,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 `qwen3.6-plus-2026-04-02`
 
 1M
-
-支持
 
 支持
 
@@ -300,8 +286,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 **结构化输出**
 
-**批量调用**
-
 `qwen3.5-plus`
 
 查看快照版本
@@ -309,8 +293,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 `qwen3.5-plus-2026-02-15`
 
 1M
-
-支持
 
 支持
 
@@ -336,8 +318,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-支持
-
 `qwen3.5-397b-a17b`
 
 256k
@@ -349,8 +329,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 支持
-
-不支持
 
 `qwen3.5-122b-a10b`
 
@@ -364,8 +342,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `qwen3.5-27b`
 
 256k
@@ -378,8 +354,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `qwen3.5-35b-a3b`
 
 256k
@@ -391,8 +365,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 支持
-
-不支持
 
 #### Qwen3
 
@@ -408,8 +380,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 **结构化输出**
 
-**批量调用**
-
 `qwen3-max`
 
 查看快照版本
@@ -417,8 +387,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 `qwen3-max-2026-01-23` `qwen3-max-preview` `qwen3-max-2025-09-23`
 
 256k
-
-支持
 
 支持
 
@@ -440,8 +408,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `qwen3-235b-a22b-thinking-2507`
 
 128k
@@ -449,8 +415,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 支持
-
-不支持
 
 不支持
 
@@ -468,8 +432,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `qwen3-next-80b-a3b-thinking`
 
 128k
@@ -477,8 +439,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 支持
-
-不支持
 
 不支持
 
@@ -496,8 +456,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `qwen3-32b`
 
 128k
@@ -509,8 +467,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 不支持
 
 支持
-
-不支持
 
 `qwen3-30b-a3b`
 
@@ -524,8 +480,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `qwen3-30b-a3b-thinking-2507`
 
 80k
@@ -533,8 +487,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 支持
-
-不支持
 
 不支持
 
@@ -552,8 +504,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `qwen3-14b`
 
 128k
@@ -566,8 +516,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `qwen3-8b`
 
 128k
@@ -579,8 +527,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 不支持
 
 支持
-
-不支持
 
 #### Qwen3-Coder
 
@@ -595,8 +541,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 **内置工具**
 
 **结构化输出**
-
-**批量调用**
 
 `qwen3-coder-plus`
 
@@ -614,8 +558,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `qwen3-coder-flash`
 
 查看快照版本
@@ -632,8 +574,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `qwen3-coder-next`
 
 256k
@@ -645,8 +585,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 不支持
 
 支持
-
-不支持
 
 `qwen3-coder-480b-a35b-instruct`
 
@@ -660,8 +598,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `qwen3-coder-30b-a3b-instruct`
 
 256k
@@ -673,8 +609,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 不支持
 
 支持
-
-不支持
 
 #### 翻译
 
@@ -690,13 +624,9 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 **结构化输出**
 
-**批量调用**
-
 `qwen-mt-plus`
 
 16k
-
-不支持
 
 不支持
 
@@ -718,8 +648,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-不支持
-
 `qwen-mt-flash`
 
 16k
@@ -732,13 +660,9 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-不支持
-
 `qwen-mt-lite`
 
 16k
-
-不支持
 
 不支持
 
@@ -762,8 +686,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 **结构化输出**
 
-**批量调用**
-
 `qwen-long`
 
 查看快照版本
@@ -780,8 +702,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-支持
-
 `qwen-long-latest`
 
 10M
@@ -791,8 +711,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 不支持
 
 不支持
-
-支持
 
 支持
 
@@ -810,13 +728,9 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 **结构化输出**
 
-**批量调用**
-
 `qwen-plus-character`
 
 32k
-
-不支持
 
 不支持
 
@@ -838,13 +752,9 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-不支持
-
 `qwen-flash-character`
 
 8k
-
-不支持
 
 不支持
 
@@ -868,13 +778,9 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 **结构化输出**
 
-**批量调用**
-
 `qwen2.5-omni-7b`
 
 32k
-
-不支持
 
 不支持
 
@@ -896,8 +802,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-支持（仅主线版本）
-
 `qwen-max`
 
 32k
@@ -909,8 +813,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 支持
-
-支持（仅主线版本）
 
 `qwen-flash`及其快照版本
 
@@ -924,8 +826,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-支持（仅主线版本）
-
 `qwen-turbo`及其快照版本
 
 128k
@@ -937,8 +837,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 支持
-
-支持（仅主线版本）
 
 `qwq-plus`
 
@@ -952,15 +850,11 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-支持
-
 `qvq-max`及其快照版本
 
 128k
 
 支持
-
-不支持
 
 不支持
 
@@ -980,8 +874,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-支持（仅主线版本）
-
 #### **三方模型**
 
 **模型ID**
@@ -996,8 +888,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 **结构化输出**
 
-**批量调用**
-
 `glm-5.1`
 
 198k
@@ -1009,8 +899,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 不支持
 
 支持
-
-不支持
 
 `glm-5`
 
@@ -1024,8 +912,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `glm-4.7`
 
 198k
@@ -1037,8 +923,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 不支持
 
 支持
-
-不支持
 
 `glm-4.5`
 
@@ -1052,8 +936,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `glm-4.5-air`
 
 128k
@@ -1066,8 +948,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `MiniMax-M2.7`
 
 192k
@@ -1075,8 +955,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 支持
-
-不支持
 
 不支持
 
@@ -1094,8 +972,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-不支持
-
 `MiniMax-M2.1`
 
 200k
@@ -1103,8 +979,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 支持
-
-不支持
 
 不支持
 
@@ -1122,8 +996,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-不支持
-
 `kimi-k2-thinking`
 
 256k
@@ -1136,8 +1008,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 支持
 
-不支持
-
 `Moonshot-Kimi-K2-Instruct`
 
 128k
@@ -1145,8 +1015,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 不支持
 
 支持
-
-不支持
 
 不支持
 
@@ -1164,8 +1032,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-支持
-
 `deepseek-v3.2-exp`
 
 128k
@@ -1173,8 +1039,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 支持
 
 支持
-
-不支持
 
 不支持
 
@@ -1192,8 +1056,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-不支持
-
 `deepseek-v3`
 
 128k
@@ -1205,8 +1067,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 不支持
 
 不支持
-
-支持
 
 `deepseek-r1`
 
@@ -1220,8 +1080,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-支持
-
 `deepseek-r1-0528`
 
 128k
@@ -1234,15 +1092,11 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-不支持
-
 `deepseek-r1-distill-llama-70b`
 
 128k
 
 支持
-
-不支持
 
 不支持
 
@@ -1262,15 +1116,11 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-不支持
-
 `deepseek-r1-distill-qwen-14b`
 
 128k
 
 支持
-
-不支持
 
 不支持
 
@@ -1290,8 +1140,6 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-不支持
-
 `deepseek-r1-distill-qwen-1.5b`
 
 128k
@@ -1304,15 +1152,11 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-不支持
-
 `deepseek-r1-distill-llama-8b`
 
 128k
 
 支持
-
-不支持
 
 不支持
 

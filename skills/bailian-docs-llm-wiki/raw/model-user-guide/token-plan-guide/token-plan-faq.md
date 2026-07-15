@@ -54,7 +54,7 @@ API Key 和 Base URL
 
 ### **如何在编程工具中使用图像生成模型？**
 
-图像生成模型使用独立的接口，无法通过文本模型的 Base URL 直接调用。需要通过工具的 Skill 或扩展机制接入，具体配置方法请参见各工具的[接入文档](https://help.aliyun.com/zh/model-studio/use-chat-client-or-development-tool/)中的接入图像生成模型章节。
+图像生成模型使用独立的接口，无法通过文本模型的 Base URL 直接调用。需要通过工具的 Skill 或扩展机制接入，具体配置方法请参见[接入多模态生成模型](https://help.aliyun.com/zh/model-studio/token-plan-multimodal-gen)。
 
 ### **常见报错及解决方案**
 

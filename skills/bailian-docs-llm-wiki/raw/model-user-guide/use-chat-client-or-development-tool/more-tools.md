@@ -78,6 +78,23 @@ Anthropic
 
 [支持的模型](https://help.aliyun.com/zh/model-studio/anthropic-api-messages#ae1b2c3d4e5f6)
 
+### 配置示例：Trae
+
+Trae 支持接入自定义模型，无需安装插件即可直接配置上述任一方案的服务端点接入阿里云百炼。以下以 Trae 为例说明配置步骤：
+
+1.  在 Trae 中前往**设置** > **模型**，单击**添加**，选择**自定义配置**。
+    
+2.  **API 格式**：根据所选服务端点的协议，选择**兼容 OpenAI**或**兼容 Anthropic**。
+    
+3.  **请求地址**：填写上表中对应方案的 Base URL。
+    
+4.  **模型 ID**：填写对应方案支持的模型名称。
+    
+5.  **API 密钥**：填写对应方案的专属 API Key。
+    
+6.  保存后，在对话框右下角的模型列表中即可选择并使用该模型。
+    
+
 ## **不支持的工具类型**
 
 Token Plan 团队版和 Coding Plan 仅限在 AI 编程工具和 OpenClaw 类型 Agent 中使用，以下类型的工具**不支持**接入：

@@ -1,6 +1,6 @@
-# 非实时语音合成CosyVoice Java SDK参考
+# 非实时语音合成Qwen-Audio-TTS/CosyVoice Java SDK参考
 
-本文介绍非实时语音合成CosyVoice的Java SDK调用方法，支持非流式和流式两种调用模式。
+本文介绍非实时语音合成Qwen-Audio-TTS/CosyVoice的Java SDK调用方法，支持非流式和流式两种调用模式。
 
 **用户指南**：参见[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)。
 
@@ -167,6 +167,10 @@ String
 
 取值范围：
 
+-   qwen-audio-3.0-tts-plus
+    
+-   qwen-audio-3.0-tts-flash
+    
 -   cosyvoice-v3.5-plus
     
 -   cosyvoice-v3.5-flash
@@ -188,7 +192,7 @@ String
 
 支持 SSML 和 LaTeX 格式输入。将待合成文本替换为对应格式即可。
 
--   使用 SSML 时，需同时将 `enable_ssml` 设置为 `true`。支持的 SSML 标签及用法，请参见[SSML标记语言介绍](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language)。
+-   使用 SSML 时，需同时将 `enable_ssml` 设置为 `true`。支持的 SSML 标签及用法，请参见[SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
     
 -   使用 LaTeX 时，将待合成文本替换为 LaTeX 格式即可，无需额外配置。支持的 LaTeX 语法及用法，请参见[LaTeX 公式转语音](https://help.aliyun.com/zh/model-studio/latex-capability-support-description)。
     
@@ -283,7 +287,7 @@ boolean
 
 否
 
-是否开启SSML功能。设置为`true`时，`text`参数需传入SSML格式文本。支持的SSML标签及用法，请参见[SSML标记语言介绍](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language)。
+是否开启SSML功能。设置为`true`时，`text`参数需传入SSML格式文本。支持的SSML标签及用法，请参见[SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。SSML 的使用限制（支持的模型、音色和接口），请参见[使用限制](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide#sl01-constraint-h3)。
 
 默认值：false。
 
@@ -295,9 +299,9 @@ boolean
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("<speak>你好</speak>")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameter("enable_ssml", true)
     .build();
 ```
@@ -306,9 +310,9 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("<speak>你好</speak>")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameters(Collections.singletonMap("enable_ssml", true))
     .build();
 ```
@@ -323,7 +327,7 @@ boolean
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
 
 **说明**
 
@@ -333,9 +337,9 @@ boolean
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("我家的后面有一个很大的花园。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameter("word_timestamp_enabled", true)
     .build();
 ```
@@ -344,9 +348,9 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("我家的后面有一个很大的花园。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameters(Collections.singletonMap("word_timestamp_enabled", true))
     .build();
 ```
@@ -371,9 +375,9 @@ int
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("我家的后面有一个很大的花园。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameter("seed", 1234)
     .build();
 ```
@@ -382,9 +386,9 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("我家的后面有一个很大的花园。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameters(Collections.singletonMap("seed", 1234))
     .build();
 ```
@@ -446,9 +450,9 @@ List
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("我家的后面有一个很大的花园。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameter("language_hints", Arrays.asList("zh"))
     .build();
 ```
@@ -457,9 +461,9 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("我家的后面有一个很大的花园。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameters(Collections.singletonMap("language_hints", Arrays.asList("zh")))
     .build();
 ```
@@ -482,9 +486,9 @@ String
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("我家的后面有一个很大的花园。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameter("instruction", "请用非常开心的语气说话。")
     .build();
 ```
@@ -493,9 +497,9 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("我家的后面有一个很大的花园。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameters(Collections.singletonMap("instruction", "请用非常开心的语气说话。"))
     .build();
 ```
@@ -524,9 +528,9 @@ int
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("我家的后面有一个很大的花园。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .format("opus")
     .parameter("bit_rate", 32)
     .build();
@@ -536,9 +540,9 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("我家的后面有一个很大的花园。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .format("opus")
     .parameters(Collections.singletonMap("bit_rate", 32))
     .build();
@@ -554,7 +558,7 @@ boolean
 
 默认值：false。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 **说明**
 
@@ -564,9 +568,9 @@ boolean
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("我家的后面有一个很大的花园。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameter("enable_aigc_tag", true)
     .build();
 ```
@@ -575,9 +579,9 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("我家的后面有一个很大的花园。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameters(Collections.singletonMap("enable_aigc_tag", true))
     .build();
 ```
@@ -592,7 +596,7 @@ String
 
 默认值：阿里云UID。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 **说明**
 
@@ -602,9 +606,9 @@ String
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("我家的后面有一个很大的花园。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameter("enable_aigc_tag", true)
     .parameter("aigc_propagator", "xxxx")
     .build();
@@ -618,9 +622,9 @@ map.put("enable_aigc_tag", true);
 map.put("aigc_propagator", "xxxx");
 
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("我家的后面有一个很大的花园。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameters(map)
     .build();
 ```
@@ -635,7 +639,7 @@ String
 
 默认值：本次语音合成请求Request ID。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 **说明**
 
@@ -645,9 +649,9 @@ String
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("我家的后面有一个很大的花园。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameter("enable_aigc_tag", true)
     .parameter("aigc_propagate_id", "xxxx")
     .build();
@@ -661,9 +665,9 @@ map.put("enable_aigc_tag", true);
 map.put("aigc_propagate_id", "xxxx");
 
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("我家的后面有一个很大的花园。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameters(map)
     .build();
 ```
@@ -676,7 +680,7 @@ Map
 
 文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
 
-cosyvoice-v2不支持该功能。
+qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v2不支持该功能。
 
 参数介绍：
 
@@ -720,9 +724,9 @@ replace.add(replaceItem);
 hotFix.put("replace", replace);
 
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("今天天气真好。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameter("hot_fix", hotFix)
     .build();
 ```
@@ -732,9 +736,9 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
 ```
 // 构建hotFix对象同上
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("今天天气真好。")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameters(Collections.singletonMap("hot_fix", hotFix))
     .build();
 ```
@@ -768,9 +772,9 @@ boolean
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("# 标题\n正文内容")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameter("enable_markdown_filter", true)
     .build();
 ```
@@ -779,16 +783,16 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash")
+    .model("qwen-audio-3.0-tts-flash")
     .text("# 标题\n正文内容")
-    .voice("longanyang")
+    .voice("longanlingxi")
     .parameters(Collections.singletonMap("enable_markdown_filter", true))
     .build();
 ```
 
 ## **示例代码**
 
-以下示例展示CosyVoice语音合成的非流式和流式调用方式。运行前请确保已设置环境变量`DASHSCOPE_API_KEY`。
+以下示例展示Qwen-Audio-TTS/CosyVoice语音合成的非流式和流式调用方式。运行前请确保已设置环境变量`DASHSCOPE_API_KEY`。
 
 **重要**
 
@@ -831,9 +835,9 @@ public class CosyVoiceSyncExample {
 
         HttpSpeechSynthesisParam param =
             HttpSpeechSynthesisParam.builder()
-                .model("cosyvoice-v3-flash")  // 更换模型时，需同步更换为对应版本的音色
+                .model("qwen-audio-3.0-tts-flash")  // 更换模型时，需同步更换为对应版本的音色
                 .text("我家的后面有一个很大的花园。")
-                .voice("longanyang")  // 该音色适用于cosyvoice-v3系列，cosyvoice-v2请使用longxiaochun_v2等v2音色
+                .voice("longanlingxi")  // 该音色适用于qwen-audio-3.0-tts系列，cosyvoice-v3请使用longanyang等v3音色，cosyvoice-v2请使用longxiaochun_v2等v2音色
                 .format("wav")
                 .sampleRate(24000)
                 // 未配置环境变量时，将下行替换为：apiKey("sk-xxx")，即替换为实际的API Key
@@ -871,9 +875,9 @@ public class CosyVoiceSyncExample {
 
         HttpSpeechSynthesisParam param =
             HttpSpeechSynthesisParam.builder()
-                .model("cosyvoice-v3-flash")  // 更换模型时，需同步更换为对应版本的音色
+                .model("qwen-audio-3.0-tts-flash")  // 更换模型时，需同步更换为对应版本的音色
                 .text("我家的后面有一个很大的花园。")
-                .voice("longanyang")  // 该音色适用于cosyvoice-v3系列，cosyvoice-v2请使用longxiaochun_v2等v2音色
+                .voice("longanlingxi")  // 该音色适用于qwen-audio-3.0-tts系列，cosyvoice-v3请使用longanyang等v3音色，cosyvoice-v2请使用longxiaochun_v2等v2音色
                 .format("wav")
                 .sampleRate(24000)
                 // 未配置环境变量时，将下行替换为：apiKey("sk-xxx")，即替换为实际的API Key
@@ -932,9 +936,9 @@ public class CosyVoiceStreamExample {
 
         HttpSpeechSynthesisParam param =
                 HttpSpeechSynthesisParam.builder()
-                        .model("cosyvoice-v3-flash")  // 更换模型时，需同步更换为对应版本的音色
+                        .model("qwen-audio-3.0-tts-flash")  // 更换模型时，需同步更换为对应版本的音色
                         .text("今天天气真好，适合出去玩。")
-                        .voice("longanyang")  // 该音色适用于cosyvoice-v3系列，cosyvoice-v2请使用longxiaochun_v2等v2音色
+                        .voice("longanlingxi")  // 该音色适用于qwen-audio-3.0-tts系列，cosyvoice-v3请使用longanyang等v3音色，cosyvoice-v2请使用longxiaochun_v2等v2音色
                         .format("wav")
                         .sampleRate(24000)
                         // 未配置环境变量时，将下行替换为：apiKey("sk-xxx")，即替换为实际的API Key

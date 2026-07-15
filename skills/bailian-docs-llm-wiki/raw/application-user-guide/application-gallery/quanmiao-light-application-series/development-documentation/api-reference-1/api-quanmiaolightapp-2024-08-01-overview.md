@@ -318,6 +318,18 @@ API概述
 
 获取文件内容
 
+[BatchCancelTasks](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-batchcanceltasks)
+
+批量取消异步任务
+
+批量取消任务
+
+[BatchQueryTaskStatus](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-batchquerytaskstatus)
+
+批量查询异步任务状态
+
+批量查询任务状态
+
 [CancelAsyncTask](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-cancelasynctask)
 
 根据任务ID取消异步任务的执行
@@ -336,6 +348,12 @@ API概述
 
 获取企业VOC分析任务结果
 
+[GetTaskExecutionStatistics](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-gettaskexecutionstatistics)
+
+查询任务执行情况统计
+
+查询任务执行情况统计
+
 [ListAnalysisTagDetailByTaskId](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-listanalysistagdetailbytaskid)
 
 获取挖掘结果明细列表
@@ -347,21 +365,3 @@ API概述
 提交企业VOC挖掘异步任务
 
 提交企业VOC异步任务
-
-[BatchCancelTasks](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-batchcanceltasks)
-
-批量取消异步任务
-
-批量取消任务
-
-[BatchQueryTaskStatus](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-batchquerytaskstatus)
-
-批量查询异步任务状态
-
-批量查询任务状态
-
-[GetTaskExecutionStatistics](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-gettaskexecutionstatistics)
-
-查询任务执行情况统计
-
-查询任务执行情况统计

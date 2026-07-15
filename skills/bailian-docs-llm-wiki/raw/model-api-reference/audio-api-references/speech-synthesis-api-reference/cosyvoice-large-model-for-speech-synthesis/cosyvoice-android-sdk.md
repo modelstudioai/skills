@@ -1,6 +1,6 @@
-# 语音合成CosyVoice Android SDK
+# 语音合成Qwen-Audio-TTS/CosyVoice Android SDK
 
-本文档提供了语音合成CosyVoice Android SDK的详细使用指南，帮助您将文本转换为高质量、富有表现力的语音。
+本文档提供了语音合成Qwen-Audio-TTS/CosyVoice Android SDK的详细使用指南，帮助您将文本转换为高质量、富有表现力的语音。
 
 **用户指南：**关于模型介绍和选型建议请参见[语音合成](https://help.aliyun.com/zh/model-studio/tts-model/)。
 
@@ -27,7 +27,7 @@
 
 ### **使用流程**
 
-CosyVoice 支持一次性输入和流式输入两种调用方式。
+Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式。
 
 **一次性输入**：适用于短文本合成、需要使用 SSML 标记语言的场景。
 
@@ -242,8 +242,8 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](https://h
 
 ```
 {
-    "model": "cosyvoice-v2",
-    "voice": "longxiaochun",
+    "model": "qwen-audio-3.0-tts-flash",
+    "voice": "longanlingxi",
     "format": "mp3",
     "volume": 50,
     "rate": 1.0,
@@ -382,6 +382,8 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](https://h
 -   false：关闭。
     
 
+SSML 的使用限制（支持的模型、音色和接口），请参见[使用限制](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide#sl01-constraint-h3)。
+
 `word_timestamp_enabled`
 
 `boolean`
@@ -392,7 +394,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](https://h
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
 
 > 时间戳结果在[INativeStreamInputTtsCallback](#secstreamcallback)的all\_response中。
 
@@ -458,6 +460,10 @@ cosyvoice-v1不支持该参数。
     
 -   vi：越南语
     
+-   it：意大利语
+    
+-   ms：马来语
+    
 
 `instruction`
 
@@ -479,7 +485,7 @@ cosyvoice-v1不支持该参数。
 
 默认值：false。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `aigc_propagator`
 
@@ -491,7 +497,7 @@ cosyvoice-v1不支持该参数。
 
 默认值：阿里云UID。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `aigc_propagate_id`
 
@@ -503,7 +509,7 @@ cosyvoice-v1不支持该参数。
 
 默认值：本次语音合成请求Request ID。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 ### **sendStreamInputTts**
 
@@ -531,7 +537,7 @@ public synchronized int sendStreamInputTts(String text)
 
 `String`
 
-待合成文本。不支持[SSML](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language)。如果传入的文本包含SSML标签，这些标签将被当作普通文本读出，不会被解析。
+待合成文本。不支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。如果传入的文本包含SSML标签，这些标签将被当作普通文本读出，不会被解析。
 
 **返回值说明：**
 
@@ -617,7 +623,7 @@ callback、ticket等参数与[startStreamInputTts](#secstartstreamtts)接口中�
 
 `String`
 
-待合成文本。支持[SSML](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language)。
+待合成文本。支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
 
 **返回值说明：**
 
@@ -655,7 +661,7 @@ callback、ticket等参数与[startStreamInputTts](#secstartstreamtts)接口中�
 
 `String`
 
-待合成文本。支持[SSML](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language)。
+待合成文本。支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
 
 **返回值说明：**
 
@@ -663,7 +669,7 @@ callback、ticket等参数与[startStreamInputTts](#secstartstreamtts)接口中�
 
 ## **INativeStreamInputTtsCallback**
 
-CosyVoice 流式语音合成回调接口，用于接收合成事件、音频数据和日志。
+Qwen-Audio-TTS/CosyVoice 流式语音合成回调接口，用于接收合成事件、音频数据和日志。
 
 ### **onStreamInputTtsEventCallback：监听事件**
 
@@ -779,7 +785,7 @@ default void onStreamInputTtsLogTrackCallback(Constants.LogLevel level, String l
 
 ## **StreamInputTtsEvent**
 
-CosyVoice 流式语音合成事件类型枚举。
+Qwen-Audio-TTS/CosyVoice 流式语音合成事件类型枚举。
 
 **事件**
 
@@ -827,7 +833,7 @@ STREAM\_INPUT\_TTS\_EVENT\_TASK\_FAILED
     -   [下载最新SDK整合包](https://help.aliyun.com/zh/isi/sdk-selection-and-download)。
         
     -   解压 ZIP 包。在 `app/libs` 目录中获取 AAR 格式 SDK，并添加到项目依赖。  
-        需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。
+        需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。  
         
     -   用 Android Studio 打开工程。示例代码位于`DashCosyVoiceStreamTtsActivity.java`，替换 API Key 后体验功能。
         
@@ -894,7 +900,7 @@ STREAM\_INPUT\_TTS\_EVENT\_TASK\_FAILED
 
 **使用方法**：调用 `[playStreamInputTts](#be00eb5c18hnz)`或`[asyncPlayStreamInputTts](#2d43b13c45u3g)`接口时，SDK 会自动启用 SSML，此时直接在 `text` 参数中传入包含 SSML 标签的文本即可。
 
-更多说明请参见 [SSML标记语言介绍](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language)。
+更多说明请参见 [SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
 
 ### **数学表达式**
 

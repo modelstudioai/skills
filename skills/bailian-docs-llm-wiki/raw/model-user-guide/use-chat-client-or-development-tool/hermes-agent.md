@@ -38,6 +38,12 @@ Hermes Agent 是一款终端 AI 编程工具，可以通过按量计费、Coding
 -   **按量计费**：按实际调用量后付费。
     
 
+**说明**
+
+本文示例均使用 **Anthropic 兼容协议**：Base URL 以 `/apps/anthropic` 结尾，并将 `api_mode` 设为 `anthropic_messages`。Hermes Agent 同样支持 **OpenAI 兼容协议**：将 Base URL 结尾的 `/apps/anthropic` 替换为 `/compatible-mode/v1`，并删除 `api_mode` 配置项即可。例如按量计费（华北2·北京）的 OpenAI 兼容 Base URL 为 `https://dashscope.aliyuncs.com/compatible-mode/v1`。
+
+除命令行版外，Hermes Agent 还提供桌面版（Hermes Desktop）。可从 [Hermes 官网](https://hermes-agent.nousresearch.com/) 下载安装包，或在命令行版安装完成后运行 `hermes desktop` 启动。桌面版与命令行版共用同一份 `~/.hermes/config.yaml` 配置文件，接入参数与本文一致；在桌面版中以自定义端点（Custom Endpoint）方式接入时，请使用上述 OpenAI 兼容 Base URL。
+
 ### Token Plan 团队版
 
 将 `YOUR_API_KEY` 替换为 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)。可用模型请参考 Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)。
@@ -100,7 +106,7 @@ model:
     
 
 ```
-hermes config set model.provider custom
+hermes config set model.provider alibaba
 hermes config set model.base_url https://dashscope.aliyuncs.com/apps/anthropic
 hermes config set model.api_mode anthropic_messages
 hermes config set model.api_key YOUR_API_KEY
@@ -114,7 +120,7 @@ config.yaml 配置示例
 ```
 model:
   default: qwen3.7-max
-  provider: custom
+  provider: alibaba
   base_url: https://dashscope.aliyuncs.com/apps/anthropic
   api_mode: anthropic_messages
   api_key: YOUR_API_KEY
@@ -145,12 +151,3 @@ hermes chat -m qwen3.7-max
 -   Coding Plan：[Coding Plan 常见问题](https://help.aliyun.com/zh/model-studio/coding-plan-faq)
     
 -   Token Plan 团队版：[Token Plan 团队版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-faq)
-    
-
-### 配置后仍连接到 OpenRouter
-
-Hermes Agent 默认使用 OpenRouter 作为推理提供商。接入阿里云百炼时，`model.provider` 必须设置为 `custom`。请执行以下命令确认：
-
-```
-hermes config set model.provider custom
-```

@@ -1,6 +1,6 @@
-# 非实时语音合成CosyVoice HTTP API参考
+# 非实时语音合成Qwen-Audio-TTS/CosyVoice HTTP API参考
 
-本文介绍非实时语音合成CosyVoice的HTTP调用方法，支持非流式和流式两种调用模式。
+本文介绍非实时语音合成Qwen-Audio-TTS/CosyVoice的HTTP调用方法，支持非流式和流式两种调用模式。
 
 **用户指南**：参见[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)。
 
@@ -63,10 +63,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "cosyvoice-v3-flash",
+    "model": "qwen-audio-3.0-tts-flash",
     "input": {
       "text": "我家的后面有一个很大的花园。",
-      "voice": "longanyang",
+      "voice": "longanlingxi",
       "format": "wav",
       "sample_rate": 24000
     }
@@ -81,10 +81,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -H "Content-Type: application/json" \
 -H "X-DashScope-SSE: enable" \
 -d '{
-    "model": "cosyvoice-v3-flash",
+    "model": "qwen-audio-3.0-tts-flash",
     "input": {
       "text": "我家的后面有一个很大的花园。",
-      "voice": "longanyang",
+      "voice": "longanlingxi",
       "format": "wav",
       "sample_rate": 24000
     }
@@ -97,6 +97,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 取值范围：
 
+-   qwen-audio-3.0-tts-plus
+    
+-   qwen-audio-3.0-tts-flash
+    
 -   cosyvoice-v3.5-plus
     
 -   cosyvoice-v3.5-flash
@@ -120,7 +124,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 支持 SSML 和 LaTeX 格式输入。将待合成文本替换为对应格式即可。
 
--   使用 SSML 时，需同时将 `enable_ssml` 设置为 `true`。支持的 SSML 标签及用法，请参见[SSML标记语言介绍](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language)。
+-   使用 SSML 时，需同时将 `enable_ssml` 设置为 `true`。支持的 SSML 标签及用法，请参见[SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
     
 -   使用 LaTeX 时，将待合成文本替换为 LaTeX 格式即可，无需额外配置。支持的 LaTeX 语法及用法，请参见[LaTeX 公式转语音](https://help.aliyun.com/zh/model-studio/latex-capability-support-description)。
     
@@ -199,7 +203,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 **enable\_ssml** `_boolean_` （可选）
 
-是否开启SSML功能。
+是否开启SSML功能。SSML 的使用限制（支持的模型、音色和接口），请参见[使用限制](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide#sl01-constraint-h3)。
 
 **word\_timestamp\_enabled** `_boolean_` （可选）
 
@@ -207,7 +211,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
 
 **seed** `_integer_` （可选）
 
@@ -274,7 +278,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 默认值：false。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 **aigc\_propagator** `_string_` （可选）
 
@@ -282,7 +286,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 默认值：阿里云UID。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 **aigc\_propagate\_id** `_string_` （可选）
 
@@ -290,13 +294,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 默认值：本次语音合成请求Request ID。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 **hot\_fix** `_object_` （可选）
 
 文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
 
-cosyvoice-v2不支持该功能。
+qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v2不支持该功能。
 
 参数介绍：
 

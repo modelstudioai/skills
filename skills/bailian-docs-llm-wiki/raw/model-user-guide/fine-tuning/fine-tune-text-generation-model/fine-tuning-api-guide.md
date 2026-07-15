@@ -2,10 +2,6 @@
 
 本文档以千问模型的调优操作为例进行说明，通过 API （HTTP）和 命令行（Shell）两种方式，使用阿里云百炼提供的模型调优功能。模型调优包含模型微调（SFT）、继续预训练（CPT）、模型偏好训练（DPO）三种模型训练方式。
 
-**重要**
-
-本文档仅适用于华北2（北京）地域。
-
 ## **前提条件**
 
 -   已经完整阅读了[模型调优简介](https://help.aliyun.com/zh/model-studio/model-training-overview)，了解模型调优的基本概念、流程及数据格式要求。
@@ -93,10 +89,6 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-s
 system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-studio/text-generation#51574d7e93su4)。ChatML 格式训练数据样例：
 
 > 如需传入 `system` 消息，对应的 `content` 必须使用数组格式 `[{"text":"..."}]`，不能使用字符串格式 `"content":"字符串"`。
-
-**说明**
-
-如果训练思考模型（Thinking），也需要遵循[SFT 思考模型（thinking）](#f5454632ef4yo)的数据格式要求。
 
 ```
 # 一行训练数据（json 格式），展开后典型结构如下：
@@ -234,12 +226,9 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-
 
 图片帧缩放高度（像素）
 
-##### 训练物体定位建议：
+**说明**
 
--   Qwen2.5-VL：训练的坐标相对于缩放后的图像左上角的绝对值，单位为像素。
-    
--   Qwen3-VL：训练坐标为相对坐标，坐标值会缩放到`[0, 999]`范围内。
-    
+如果训练思考模型（Thinking），也需要遵循[SFT 思考模型（thinking）](#f5454632ef4yo)的数据格式要求。
 
 ##### **压缩包要求：**
 
@@ -336,7 +325,7 @@ CPT 纯文本格式训练数据，**一行训练数据展开后结构如下**：
 
 也可以前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/efm/model_data/createDataAss)下载数据模板。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4636231471/p878841.png)
+在**新增数据集**页面的上传文件区域下方，可找到**数据模板**下载链接。
 
 ### **将调优**文件**上传至阿里云百炼**
 
@@ -359,14 +348,16 @@ curl --request POST \
 
 -   单个文件大小最大为300MB
     
--   所有的有效文件（未删除）总使用空间配额为5GB
+-   所有的有效文件（未删除）总使用空间配额为100GB
     
--   所有的有效文件（未删除）总数量配额为100个
+-   所有的有效文件（未删除）总数量配额为10000个
     
 -   文件存储没有时间限制
     
 
-更多详细信息请参见[模型微调文件管理服务](https://help.aliyun.com/zh/model-studio/model-customization-file-management-service)。
+通过 API 上传的调优文件，在百炼控制台模型调优页面与 API 调用中均可见可用。
+
+更多详细信息请参见[上传文件](https://help.aliyun.com/zh/model-studio/upload-file-api#t6612629.html)。
 
 返回结果：
 
@@ -395,9 +386,13 @@ curl --location "https://dashscope.aliyuncs.com/api/v1/fine-tunes" \
 --header 'Content-Type: application/json' \
 --data '{
     "model":"qwen3-8b",
-    "training_file_ids":[
-        "<替换为训练数据集的file_id1>",
-        "<替换为训练数据集的file_id2>"
+    "training_datasets":[
+        {"data_source_type":"file_id","file_id":"<替换为训练数据集的file_id1>"},
+        {"data_source_type":"oss_mount","mount_storage":{"region":"cn-beijing","bucket":"example_bucket","file_path":"dataset/data.jsonl"}}
+    ],
+    "validation_datasets":[
+        {"data_source_type":"file_id","file_id":"<替换为测试数据集的file_id>"},
+        {"data_source_type":"oss_mount","mount_storage":{"region":"cn-beijing","bucket":"example_bucket","file_path":"dataset/val.jsonl"}}
     ],
     "hyper_parameters":
     {
@@ -419,6 +414,10 @@ curl --location "https://dashscope.aliyuncs.com/api/v1/fine-tunes" \
 }'
 ```
 
+**说明**
+
+使用 OSS 挂载方式加载数据集时，需将未经压缩的数据集文件夹整体上传到 OSS Bucket，不支持 zip 文件。MountStorage 的 file\_path 指定数据集的 data.jsonl 文件路径；对包含多个文件的数据集（如 data.jsonl 和图片/视频文件同目录），只需指定 data.jsonl 的路径，无需指定其他文件。挂载前需授权百炼服务访问您的 OSS 数据。OSS Bucket 所属地域支持北京（cn-beijing）和新加坡（ap-southeast-1）。
+
 ### **输入参数**
 
 **字段**
@@ -431,25 +430,25 @@ curl --location "https://dashscope.aliyuncs.com/api/v1/fine-tunes" \
 
 **描述**
 
-training\_file\_ids
+training\_datasets
 
 是
 
-Array
+Array of Dataset
 
 Body
 
-训练集文件列表。
+训练数据集列表。
 
-validation\_file\_ids
+validation\_datasets
 
 否
 
-Array
+Array of Dataset
 
 Body
 
-验证集文件列表。
+测试数据集列表。
 
 model
 
@@ -526,12 +525,12 @@ Body
         "finetuned_output": "qwen3-8b-ft-202511272033-8ae7",
         "model": "qwen3-8b",
         "base_model": "qwen3-8b",
-        "training_file_ids":
-        [
-            "9e9ffdfa-c3bf-436e-9613-6f053c66aa6e"
+        "training_file_ids": [],
+        "validation_file_ids": [],
+        "training_datasets": [
+            {"data_source_type": "file_id", "file_id": "9e9ffdfa-c3bf-436e-9613-6f053c66aa6e"}
         ],
-        "validation_file_ids":
-        [],
+        "validation_datasets": [],
         "hyper_parameters":
         {
             "n_epochs": 3,
@@ -580,9 +579,37 @@ Body
 
 **DPO高效训练（dpo\_lora）**
 
+Qwen3.7-Plus-2026-05-26
+
+qwen3.7-plus-2026-05-26
+
+×
+
+支持
+
+×
+
+×
+
+×
+
 Qwen3.6-Flash-2026-04-16
 
 qwen3.6-flash-2026-04-16
+
+×
+
+支持
+
+×
+
+×
+
+×
+
+Qwen3.6-Plus-2026-04-02
+
+qwen3.6-plus-2026-04-02
 
 ×
 
@@ -625,6 +652,20 @@ qwen3.5-9b
 Qwen3.5-Flash-2026-02-23
 
 qwen3.5-flash-2026-02-23
+
+×
+
+支持
+
+×
+
+×
+
+×
+
+Qwen3.5-Plus-2026-02-15
+
+qwen3.5-plus-2026-02-15
 
 ×
 
@@ -1105,9 +1146,9 @@ Integer
 
 Integer
 
-当不设置`"validation_file_ids"`时，阿里云百炼自动分割的验证集最多只有1000条。
+当不设置`"validation_datasets"`时，阿里云百炼自动分割的验证集最多只有1000条。
 
-当设置了`"validation_file_ids"`时，该参数无效。
+当设置了`"validation_datasets"`时，该参数无效。
 
 `split`
 
@@ -1117,9 +1158,9 @@ Integer
 
 Float
 
-当不设置`"validation_file_ids"`时，阿里云百炼会自动把训练文件中的80%作为训练集，20%作为验证集。
+当不设置`"validation_datasets"`时，阿里云百炼会自动把训练文件中的80%作为训练集，20%作为验证集。
 
-当设置了`"validation_file_ids"`时，该参数无效。
+当设置了`"validation_datasets"`时，该参数无效。
 
 `warmup_ratio`
 
@@ -1376,12 +1417,12 @@ Path Parameter
         "finetuned_output": "qwen3-8b-ft-202511272033-8ae7",
         "model": "qwen3-8b",
         "base_model": "qwen3-8b",
-        "training_file_ids":
-        [
-            "9e9ffdfa-c3bf-436e-9613-6f053c66aa6e"
+        "training_file_ids": [],
+        "validation_file_ids": [],
+        "training_datasets": [
+            {"data_source_type": "file_id", "file_id": "9e9ffdfa-c3bf-436e-9613-6f053c66aa6e"}
         ],
-        "validation_file_ids":
-        [],
+        "validation_datasets": [],
         "hyper_parameters":
         {
             "n_epochs": 3,

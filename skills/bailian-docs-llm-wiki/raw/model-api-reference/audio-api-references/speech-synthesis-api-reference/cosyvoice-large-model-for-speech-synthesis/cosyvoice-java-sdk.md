@@ -1,6 +1,6 @@
-# 实时语音合成CosyVoice Java SDK
+# 实时语音合成Qwen-Audio-TTS/CosyVoice Java SDK
 
-通过DashScope Java SDK进行CosyVoice语音合成。
+通过DashScope Java SDK进行Qwen-Audio-TTS/CosyVoice语音合成。
 
 **用户指南：**关于模型介绍和选型建议请参见[语音合成](https://help.aliyun.com/zh/model-studio/tts-model/)。
 
@@ -241,8 +241,8 @@ public long getFirstPackageDelay()
 
 ```
 SpeechSynthesisParam param = SpeechSynthesisParam.builder()
-    .model("cosyvoice-v3-flash") // 模型
-    .voice("longanyang") // 音色
+    .model("qwen-audio-3.0-tts-flash") // 模型
+    .voice("longanlingxi") // 音色
     .format(SpeechSynthesisAudioFormat.WAV_8000HZ_MONO_16BIT) // 音频编码格式、采样率
     .volume(50) // 音量，取值范围：[0, 100]
     .speechRate(1.0f) // 语速，取值范围：[0.5, 2]
@@ -345,7 +345,7 @@ boolean
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
 
 `seed(int)`
 
@@ -411,6 +411,10 @@ List<String>
     
 -   vi：越南语
     
+-   it：意大利语
+    
+-   ms：马来语
+    
 
 `instruction(String)`
 
@@ -430,7 +434,7 @@ ParamHotFix
 
 文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
 
-cosyvoice-v2、cosyvoice-v1不支持该功能。
+qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v2、cosyvoice-v1不支持该功能。
 
 参数介绍：
 
@@ -453,8 +457,8 @@ paramHotFix.setPronunciation(pronunciationItems);
 paramHotFix.setReplace(replaceItems);
 
 SpeechSynthesisParam param = SpeechSynthesisParam.builder()
-                        .model("cosyvoice-v3-flash") // 模型
-                        .voice("your_voice") // 替换成cosyvoice-v3-flash复刻音色
+                        .model("qwen-audio-3.0-tts-flash") // 模型
+                        .voice("your_voice") // 替换成qwen-audio-3.0-tts-flash复刻音色
                         .hotFix(paramHotFix)
                         .build();
 ```
@@ -483,8 +487,8 @@ Map
 
 ```
 SpeechSynthesisParam param = SpeechSynthesisParam.builder()
-  .model("cosyvoice-v3-flash")
-  .voice("longanyang")
+  .model("qwen-audio-3.0-tts-flash")
+  .voice("longanlingxi")
   .parameter("enable_markdown_filter", true)
   .build();
 ```
@@ -521,7 +525,7 @@ boolean
 
 默认值：false。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `aigc_propagator`
 
@@ -533,7 +537,7 @@ String
 
 默认值：阿里云UID。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `aigc_propagate_id`
 
@@ -545,7 +549,7 @@ String
 
 默认值：本次语音合成请求Request ID。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `enable_markdown_filter`
 
@@ -838,7 +842,7 @@ SDK提供了语音合成的关键接口，支持以下几种调用方式：
 
 ### **非流式调用**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5476892871/CAEQURiBgIDHpsn4phkiIDQ0ZGE2OTk3NmY5NTRhNDVhZDQwNWE3ZGZiMzk4Yjk54709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1094204871/CAEQURiBgIDHpsn4phkiIDQ0ZGE2OTk3NmY5NTRhNDVhZDQwNWE3ZGZiMzk4Yjk54709861_20241015153444.149.svg)
 
 发送的文本长度不得超过20000字符。
 
@@ -858,9 +862,9 @@ import java.nio.ByteBuffer;
 
 public class Main {
     // 模型
-    private static String model = "cosyvoice-v3-flash";
+    private static String model = "qwen-audio-3.0-tts-flash";
     // 音色
-    private static String voice = "longanyang";
+    private static String voice = "longanlingxi";
 
     public static void streamAudioDataToSpeaker() {
         // 请求参数
@@ -913,7 +917,7 @@ public class Main {
 
 ### **单向流式调用**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5476892871/CAEQVRiBgMCfo..hrBkiIGEyMjNkZjVlMWZiYzRhZDU4ZjEyZjdjMmMzYjM1YzMz4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1094204871/CAEQVRiBgMCfo..hrBkiIGEyMjNkZjVlMWZiYzRhZDU4ZjEyZjdjMmMzYjM1YzMz4709861_20241015153444.149.svg)
 
 发送的文本长度不得超过20000字符。
 
@@ -943,9 +947,9 @@ class TimeUtils {
 
 public class Main {
     // 模型
-    private static String model = "cosyvoice-v3-flash";
+    private static String model = "qwen-audio-3.0-tts-flash";
     // 音色
-    private static String voice = "longanyang";
+    private static String voice = "longanlingxi";
 
     public static void streamAudioDataToSpeaker() {
         CountDownLatch latch = new CountDownLatch(1);
@@ -1020,7 +1024,7 @@ public class Main {
 
 ### 双向流式调用
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6476892871/CAEQVRiBgICHxPGhrBkiIGE3ZTVmMzY0YzI3NzQxYTFiYWE2MmU2NTBhMDgzZGM14709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1094204871/CAEQVRiBgICHxPGhrBkiIGE3ZTVmMzY0YzI3NzQxYTFiYWE2MmU2NTBhMDgzZGM14709861_20241015153444.149.svg)
 
 单次发送文本长度不得超过 20000 字符，且累计发送文本总长度不得超过 20 万字符。
 
@@ -1071,8 +1075,8 @@ public class Main {
             "可以听到接近同步的语音输出，", "极大地提升了交互体验，",
             "减少了用户等待时间。", "适用于调用大规模", "语言模型（LLM），以",
             "流式输入文本的方式", "进行语音合成的场景。"};
-    private static String model = "cosyvoice-v3-flash"; // 模型
-    private static String voice = "longanyang"; // 音色
+    private static String model = "qwen-audio-3.0-tts-flash"; // 模型
+    private static String voice = "longanlingxi"; // 音色
 
     public static void streamAudioDataToSpeaker() {
         // 配置回调函数
@@ -1172,8 +1176,8 @@ class TimeUtils {
 }
 
 public class Main {
-    private static String model = "cosyvoice-v3-flash"; // 模型
-    private static String voice = "longanyang"; // 音色
+    private static String model = "qwen-audio-3.0-tts-flash"; // 模型
+    private static String voice = "longanlingxi"; // 音色
 
     public static void streamAudioDataToSpeaker() throws NoApiKeyException {
         // 请求参数
@@ -1247,8 +1251,8 @@ public class Main {
             "可以听到接近同步的语音输出，", "极大地提升了交互体验，",
             "减少了用户等待时间。", "适用于调用大规模", "语言模型（LLM），以",
             "流式输入文本的方式", "进行语音合成的场景。"};
-    private static String model = "cosyvoice-v3-flash";
-    private static String voice = "longanyang";
+    private static String model = "qwen-audio-3.0-tts-flash";
+    private static String voice = "longanlingxi";
 
     public static void streamAudioDataToSpeaker() throws NoApiKeyException {
         // 模拟流式输入

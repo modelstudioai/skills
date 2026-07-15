@@ -14,6 +14,56 @@
 
 **功能说明**
 
+实时多模态
+
+2026-07-14
+
+中国内地
+
+qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
+
+Qwen-Audio端到端实时语音大模型兼顾语音推理能力与双工对话节奏，在保持流畅、自然的实时交互体验的同时，通过并行推理、全向流式等工程优化，有效控制端到端响应时延。[实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides)
+
+语音合成
+
+2026-07-14
+
+中国内地
+
+qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
+
+Qwen-Audio-TTS语音合成模型上线，新增更多小语种和中文方言支持，增强了指令遵循与细粒度标签控制能力，音质和表现力全面提升。其中 Plus 版本面向高品质专业场景，Flash 版本面向低延迟实时交互场景，首包延时控制在 200ms 以内。[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)
+
+文生图/参考生图
+
+2026-07-13
+
+中国内地
+
+vidu/vidu-image\_reference2image、vidu/viduq3-fast\_reference2image、vidu/viduq2-pro\_reference2image、vidu/viduq2-fast\_reference2image
+
+由生数科技提供Vidu系列图片生成API服务，多图参考，精准还原，高速高质。 [Vidu-图像生成](https://help.aliyun.com/zh/model-studio/vidu-image-generation-api-reference)
+
+参考生视频
+
+2026-07-13
+
+中国内地
+
+vidu/viduq3-ad\_reference2video、vidu/viduq3-drama\_reference2video
+
+Vidu-参考生视频系列模型（广告、短剧方向），支持传入参考图片和视频，生成对应场景的视频内容。[Vidu-参考生视频](https://help.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference)
+
+图生视频
+
+2026-07-13
+
+中国内地
+
+vidu/viduq3-pro-fast\_img2video
+
+Vidu-图生视频模型，根据输入图像和文本提示词快速生成视频。[Vidu-图生视频-基于首帧](https://help.aliyun.com/zh/model-studio/vidu-image-to-video-api-reference)
+
 参考生视频
 
 2026-07-01
@@ -2848,6 +2898,16 @@ qwen1.5-110b-chat
 
 **功能说明**
 
+语音合成
+
+2026-07-14
+
+国际
+
+qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash
+
+Qwen-Audio-TTS语音合成模型上线，新增更多小语种和中文方言支持，增强了指令遵循与细粒度标签控制能力，音质和表现力全面提升。其中 Plus 版本面向高品质专业场景，Flash 版本面向低延迟实时交互场景，首包延时控制在 200ms 以内。[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)
+
 参考生视频
 
 2026-07-01
@@ -3762,6 +3822,26 @@ qwen3-asr-flash-realtime、qwen3-asr-flash-realtime-2025-10-27
 
 **功能说明**
 
+文生文
+
+2026-07-14
+
+全球
+
+qwen-plus-character
+
+千问系列角色扮演模型，适合拟人化的角色扮演，同时优化了限定人设指令遵循、话题推进、倾听共情等能力，支持个性化角色的深度还原。[角色扮演（Qwen-Character）](https://help.aliyun.com/zh/model-studio/role-play)
+
+推理模型
+
+2026-07-13
+
+美国
+
+glm-5.2-us
+
+GLM-5.2是智谱AI推出的面向长程任务（Long Horizon Task）设计的最新旗舰模型，支持1M超长上下文。拥有强大逻辑推理、长文本理解与代码生成能力、兼顾性能与推理效率；在多任务基准中表现优异，适用于智能交互、企业应用、开发辅助等场景。
+
 推理模型
 
 2026-07-06
@@ -4317,6 +4397,16 @@ qwen-flash、qwen-flash-2025-07-28
 
 **功能说明**
 
+文生文
+
+2026-07-14
+
+全球
+
+qwen-plus-character
+
+千问系列角色扮演模型，适合拟人化的角色扮演，同时优化了限定人设指令遵循、话题推进、倾听共情等能力，支持个性化角色的深度还原。[角色扮演（Qwen-Character）](https://help.aliyun.com/zh/model-studio/role-play)
+
 文生视频
 
 2026-06-26
@@ -4821,6 +4911,16 @@ qwen-flash、qwen-flash-2025-07-28
 **模型规格**
 
 **功能说明**
+
+文生文
+
+2026-07-14
+
+全球
+
+qwen-plus-character
+
+千问系列角色扮演模型，适合拟人化的角色扮演，同时优化了限定人设指令遵循、话题推进、倾听共情等能力，支持个性化角色的深度还原。[角色扮演（Qwen-Character）](https://help.aliyun.com/zh/model-studio/role-play)
 
 推理模型
 

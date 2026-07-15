@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-07-12",
-  "totalFamilies": 165,
-  "totalModels": 371,
+  "updatedAt": "2026-07-15",
+  "totalFamilies": 169,
+  "totalModels": 382,
   "capabilityDistribution": {
     "TG": 35,
-    "IG": 29,
+    "IG": 30,
     "VG": 25,
     "TTS": 16,
     "Reasoning": 14,
@@ -15,12 +15,13 @@
     "Realtime-Omni": 4,
     "Realtime-Audio-Translate": 3,
     "ME": 2,
+    "Realtime-Chatting": 2,
+    "Realtime-Text-to-Speech": 2,
     "TR": 2,
-    "Realtime-Text-to-Speech": 1,
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 97,
+    "qwen": 100,
     "qwen-domain-model": 34,
     "wan": 13,
     "happyhorse": 4,
@@ -29,10 +30,10 @@
     "zhipu-ai": 3,
     "pixverse": 3,
     "moonshot-ai": 2,
+    "vidu": 2,
     "kling": 1,
     "stepfun": 1,
     "tripo": 1,
-    "vidu": 1,
     "xiaomi": 1
   },
   "families": [
@@ -941,6 +942,54 @@
         "qvq-plus"
       ],
       "maxContextWindow": 131072
+    },
+    {
+      "slug": "qwen-audio-realtime-flash",
+      "name": "Qwen-Audio-Realtime-Flash",
+      "primaryCapability": "Realtime-Chatting",
+      "capabilities": [
+        "Realtime-Chatting"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen-audio-3.0-realtime-flash"
+      ],
+      "maxContextWindow": 8192
+    },
+    {
+      "slug": "qwen-audio-realtime-plus",
+      "name": "Qwen-Audio-Realtime-Plus",
+      "primaryCapability": "Realtime-Chatting",
+      "capabilities": [
+        "Realtime-Chatting"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen-audio-3.0-realtime-plus"
+      ],
+      "maxContextWindow": 8192
+    },
+    {
+      "slug": "qwen-audio-tts",
+      "name": "Qwen-Audio-TTS",
+      "primaryCapability": "Realtime-Text-to-Speech",
+      "capabilities": [
+        "Realtime-Text-to-Speech"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 2,
+      "items": [
+        "qwen-audio-3.0-tts-flash",
+        "qwen-audio-3.0-tts-plus"
+      ]
     },
     {
       "slug": "qwen-coder-plus",
@@ -2466,6 +2515,24 @@
       ]
     },
     {
+      "slug": "vidu-image-models-market-place",
+      "name": "Vidu AI生图",
+      "primaryCapability": "IG",
+      "capabilities": [
+        "IG"
+      ],
+      "providers": [
+        "vidu"
+      ],
+      "itemCount": 4,
+      "items": [
+        "vidu/vidu-image_reference2image",
+        "vidu/viduq2-fast_reference2image",
+        "vidu/viduq2-pro_reference2image",
+        "vidu/viduq3-fast_reference2image"
+      ]
+    },
+    {
       "slug": "vidu-models-market-place",
       "name": "Vidu AI生视频",
       "primaryCapability": "VG",
@@ -2475,7 +2542,7 @@
       "providers": [
         "vidu"
       ],
-      "itemCount": 17,
+      "itemCount": 20,
       "items": [
         "vidu/viduq2_reference2video",
         "vidu/viduq2_text2video",
@@ -2486,10 +2553,13 @@
         "vidu/viduq2-turbo_img2video",
         "vidu/viduq2-turbo_start-end2video",
         "vidu/viduq3_reference2video",
+        "vidu/viduq3-ad_reference2video",
+        "vidu/viduq3-drama_reference2video",
         "vidu/viduq3-mix_reference2video",
         "vidu/viduq3-pro_img2video",
         "vidu/viduq3-pro_start-end2video",
         "vidu/viduq3-pro_text2video",
+        "vidu/viduq3-pro-fast_img2video",
         "vidu/viduq3-turbo_img2video",
         "vidu/viduq3-turbo_reference2video",
         "vidu/viduq3-turbo_start-end2video",

@@ -1,62 +1,57 @@
 # 异步调用与任务轮询
 
-异步调用是百炼平台针对耗时较长的模型能力（如视频生成、3D 生成、部分图像生成、长任务应用调用）提供的一种调用模式：客户端先提交任务拿到 `task_id`，再通过轮询或事件通知获取最终结果，从而避免同步请求超时。
+异步调用是百炼平台为耗时较长的模型任务（图像生成、视频生成、3D 生成、复杂智能体应用等）提供的调用模式：客户端先「创建任务」拿到一个 `task_id`，随后通过「轮询查询」或事件回调获取最终结果，从而避免长请求超时。
 
 ## 适用场景
 
-异步调用主要用于生成过程需要数十秒到数分钟的能力，在百炼平台的多个场景中被采用：
+在百炼平台上，凡是单次处理通常需要数十秒到数分钟的能力，基本都以异步为主：
 
-- **视频生成**：万相（Wan）、HappyHorse、爱诗（PixVerse）、Vidu、可灵（Kling）等所有视频生成 API 均为异步模式（创建任务 → 轮询获取结果）。
-- **3D 资产生成**：基于 Tripo 模型的文生 3D、单图生 3D、多图生 3D 全部走异步流程，且仅在华北2（北京）地域可用。
-- **图像生成**：部分耗时较长的图像生成/编辑任务采用异步机制。
-- **应用调用（智能体/工作流）**：OpenAI 兼容的 Responses API 支持异步执行；DashScope API 目前暂不支持异步，仅 Responses API 提供。
+- **图像生成**：文生图、图像编辑、扩图、虚拟模特等（通常 1-2 分钟）。部分新一代模型（如 `wan2.6-image`、`wan2.7-image`、`z-image-turbo`）额外提供 HTTP 同步调用。
+- **视频生成**：万相、PixVerse、Vidu、Kling 及人像驱动等模型（通常 1-5 分钟），统一走 `video-synthesis` 接口，全部为异步。
+- **3D 生成**：基于 Tripo 的文生 3D / 图生 3D，仅支持异步。
+- **智能体 / 工作流应用**：Responses API 通过 `background=true` 开启异步，用于生成报告、多步骤工具调用等耗时任务（DashScope API 暂不支持异步）。
 
 ## 调用流程
 
-异步调用通常包含两个步骤：
+异步调用统一分为两步：
 
-1. **创建任务**：向业务接口发起 `POST` 请求，成功后返回 `task_id`。以 3D 生成为例，需在请求头携带 `X-DashScope-Async: enable`，否则会报错 `current user api does not support synchronous calls`。应用调用（Responses API）则通过在请求体中设置 `background=true` 开启异步模式。
-2. **轮询查询结果**：使用返回的 `task_id` 定期查询任务状态，直到任务结束。
+1. **创建任务**：向对应模型的下发接口发送 `POST` 请求，成功后立即返回 `task_id`。
+   - 大多数生成类接口必须携带请求头 `X-DashScope-Async: enable`，否则报错 `current user api does not support synchronous calls`。
+   - 智能体应用（Responses API）则通过请求体参数 `background=true` 开启异步。
+   - `task_id` 有效期为 **24 小时**，**请勿重复创建任务**，创建成功后轮询即可。
 
-### 通用异步任务管理 API
+2. **轮询查询结果**：
+   ```
+   GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}
+   ```
+   返回体中 `output.task_status` 标识当前状态，流转过程通常为 `PENDING`（排队中）→ `RUNNING`（处理中）→ `SUCCEEDED` / `FAILED`。仅当状态为 `SUCCEEDED` 时才返回结果内容（如图像 / 视频 / 模型下载 URL）。
 
-百炼提供了一组通用的任务管理接口（主账号维度限流均为 20 QPS）：
+## 任务状态枚举
 
-- **查询单个任务**：`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
-- **批量查询任务状态**：`GET https://dashscope.aliyuncs.com/api/v1/tasks/?start_time=xxx&end_time=xxx&status=xxx`，单次时间跨度不超过 24 小时。
-- **取消任务**：`POST https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}/cancel`，仅能取消 `PENDING` 状态的任务，已开始处理的任务无法取消。
+| 状态 | 含义 |
+| --- | --- |
+| `PENDING` | 任务排队中 |
+| `RUNNING` | 任务处理中 |
+| `SUCCEEDED` | 任务成功，返回结果 |
+| `FAILED` | 任务失败，返回 `code` / `message` |
+| `CANCELED` | 任务已取消（仅 `PENDING` 状态可取消） |
+| `UNKNOWN` | 任务不存在，或超过 24 小时有效期被清理 |
 
-应用调用场景下，可用 SDK 方法轮询，例如 Responses API 的 `client.responses.retrieve(task_id)`。
+## 通用任务管理接口
 
-## 任务状态
+除单任务查询外，百炼提供三个通用异步任务管理接口，流量限制均为 **20 QPS**（主账号维度）：
 
-查询接口返回 `output.task_status`，其状态流转与枚举值为：
+- **查询单个任务**：`GET .../api/v1/tasks/{task_id}`
+- **批量查询任务状态**：`GET .../api/v1/tasks/?start_time=xxx&end_time=xxx&status=xxx`，可按时间范围、模型名、状态过滤，单次时间跨度不超过 24 小时。
+- **取消任务**：`POST .../api/v1/tasks/{task_id}/cancel`，仅能取消尚在 `PENDING` 状态的任务，已开始处理的无法取消。
 
-- `PENDING`：排队中
-- `RUNNING`：处理中
-- `SUCCEEDED`：成功，此时 `output.results` 才会返回产物
-- `FAILED`：失败，响应中通常带 `code` 与 `message`
-- `CANCELED`：已取消
-- `UNKNOWN`：任务不存在或超过 24 小时有效期
+## 关键要点与最佳实践
 
-应用调用（Responses API）的终态则表现为 `completed`、`failed` 等。
-
-## 关键要点与配置
-
-- **异步请求头/开关**：模型 API 需 `X-DashScope-Async: enable`；应用 Responses API 需 `background=true`。
-- **task_id 有效期**：一般为 24 小时，已完成任务保留约 24 小时后自动清理，超时查询返回 `UNKNOWN`。
-- **不要重复创建任务**：创建成功后应仅轮询，重复创建会浪费额度。
-- **轮询间隔**：建议按任务耗时设置合理间隔（如 3D 生成建议约 15 秒），查询接口默认 RPS/QPS 约为 20，避免高频轮询触发限流。
-- **产物下载时效**：生成类产物下载链接有效期较短（如 3D 模型链接仅 2 小时），需及时下载。
-
-## 异步任务完成通知
-
-频繁轮询会浪费资源并可能触发限流。百炼已接入阿里云事件总线 EventBridge，支持任务完成后主动推送通知，替代或补充轮询：
-
-- **HTTP 回调 URL**：接入简单，需公网或 VPC 可达的 HTTP 接口，适用于通用场景。
-- **RocketMQ**：保证消息无丢失、支持失败重试，适用于可靠性要求高的场景，需额外开通 RocketMQ 实例。
-
-事件源为 `acs.dashscope`，事件类型为 `dashscope:System:AsyncTaskFinish`，事件体中的 `data.task_status` 与 `data.task_id` 为关键字段。收到通知后只需调用一次查询接口即可获取结果，从而显著降低轮询开销。
+- **轮询间隔**：建议约 15 秒查询一次，避免过于频繁触发限流（查询接口默认 20 RPS）。
+- **事件通知替代轮询**：频繁轮询浪费资源且易触发限流。百炼已接入阿里云 EventBridge，支持任务完成后主动推送通知（HTTP 回调 URL 或 RocketMQ）。事件源为 `acs.dashscope`，事件类型为 `dashscope:System:AsyncTaskFinish`，关键字段为 `data.task_status` 与 `data.task_id`；收到通知后只需查询一次即可拿到结果。
+- **结果时效**：任务结果（如图像/视频 URL）与 `task_id` 有效期一般为 24 小时；3D 生成的模型下载链接有效期更短，仅 **2 小时**，需及时下载。
+- **地域一致性**：模型、Endpoint、API Key 必须属于同一地域（如华北2·北京、新加坡等），跨地域调用会失败。3D 生成目前仅支持华北2（北京）。
+- **接口路径差异**：不同模型的下发路径并不统一（如 `.../aigc/video-generation/video-synthesis`、`.../aigc/image2video/video-synthesis`、`.../text2image/image-synthesis` 等），接入前请以对应模型文档为准。
 
 ## 关联主题页
 
@@ -65,6 +60,5 @@
 - [image generation](../api/image-generation.md)
 - [application call](../api/application-call.md)
 - [more about models](../api/more-about-models.md)
-
 
 

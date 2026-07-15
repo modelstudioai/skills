@@ -1,4 +1,4 @@
-# CosyVoice服务端事件
+# Qwen-Audio-TTS/CosyVoice服务端事件
 
 **用户指南：**关于模型介绍和选型建议请参见[语音合成](https://help.aliyun.com/zh/model-studio/tts-model/)。
 

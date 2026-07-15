@@ -1,153 +1,73 @@
 # preparations
 
-在调用阿里云百炼平台的模型 API 之前，需要完成 API Key 获取、SDK 安装和环境配置等准备工作。本文汇总了开发者接入百炼平台前的必要步骤，以及调用过程中常见错误的排查方法。
+本页汇总在阿里云百炼平台调用模型 API 前的准备工作，涵盖获取鉴权凭证（API Key）、安装官方或兼容 SDK、使用百炼 CLI 快速集成，以及常见错误码的排查思路。面向开发者，帮助你从零完成环境搭建并稳定发起第一次调用。
 
-## 获取与配置 API Key
+## 获取并配置 API Key
 
-API Key 是调用百炼模型和应用的鉴权凭证。前往百炼控制台的 API Key 页面，使用主账号或具备相应权限的子账号创建 API Key。详细步骤参见 [获取API Key](../../raw/model-api-reference/preparations/get-api-key.md)。
+调用模型或应用前，需先获取 API Key 作为鉴权凭证。需使用主账号，或具备 `管理员` / `API-Key` 页面权限的子账号，在[阿里云百炼控制台](https://bailian.console.aliyun.com/)对应地域的 **API Key** 页面创建。详见 [获取API Key](../../raw/model-api-reference/preparations/get-api-key.md)。
 
-### 创建 API Key
+创建时的关键选项：
 
-不同地域的创建流程略有差异：
+- **归属业务空间**：决定该 Key 的调用权限。同一空间内的 Key 权限相同，无需为不同模态（文生文、文生图、语音等）分别创建。默认业务空间的 Key 可调用所有标准模型及默认空间内的应用；子业务空间的 Key 只能调用已授权的模型及本空间应用。
+- **权限**：可选 **全部**（调用所有模型与应用），或 **自定义**（配置 IP 白名单最多 20 个 IPv4/IPv6 地址或网段，以及可访问的模型/应用范围）。
 
-- **华北2（北京）、新加坡、日本（东京）、德国（法兰克福）**：支持配置归属[业务空间](../concepts/workspace.md)、描述和权限（全部或自定义）。自定义权限可设置 IP 白名单（最多 20 个 IPv4/IPv6 地址或网段）和可访问模型范围。
-- **美国（弗吉尼亚）**：需额外选择归属账号，不支持禁用、重置和自定义权限配置。
+> **注意**：百炼已对按量付费 API Key 做安全升级（美国（弗吉尼亚）地域除外）。升级后新建的 Key 以 `sk-ws` 开头，且**仅在创建时展示一次明文**，关闭弹窗后无法再次查看，务必立即复制保存；升级前 `sk-` 开头的旧 Key 仍可正常使用。此外，Token Plan / Coding Plan 使用以 `sk-sp-` 开头的专属 Key，不同于本文的按量付费 Key。
 
-创建成功后，新版 API Key 以 `sk-ws` 开头，**仅在创建时展示一次明文**，关闭弹窗后无法再次查看。请立即复制保存。
+推荐将 API Key 配置到环境变量 `DASHSCOPE_API_KEY`，避免硬编码泄漏。各系统配置方式（`~/.bashrc`、`~/.zshrc`、`~/.bash_profile`、Windows 系统属性 / `setx` / PowerShell）参见原文。调用时除 API Key 外，还需指定**服务端点** `base_url`（即创建弹窗中的 API Host），且 OpenAI 兼容协议与 Anthropic 兼容协议的 `base_url` 不同、随地域变化，请以对应接口文档为准。
 
-### API Key 数量限制
-
-- 华北2（北京）等地域：每个主账号每个地域最多 50 个。
-- 美国（弗吉尼亚）：每个归属账号最多 20 个。
-
-### 权限与作用域
-
-API Key 的调用权限由其归属[业务空间](../concepts/workspace.md)决定，同一空间内的 API Key 权限相同，无需为不同模型类型分别创建。默认[业务空间](../concepts/workspace.md)的 Key 可调用所有标准模型；子业务空间的 Key 仅可调用已授权的模型。
-
-### 配置到环境变量
-
-建议将 API Key 配置为环境变量 `DASHSCOPE_API_KEY`，避免在代码中硬编码：
-
-```bash
-# Linux / macOS (Bash)
-echo "export DASHSCOPE_API_KEY='your-api-key'" >> ~/.bashrc
-source ~/.bashrc
-
-# macOS (Zsh)
-echo "export DASHSCOPE_API_KEY='your-api-key'" >> ~/.zshrc
-source ~/.zshrc
-
-# Windows CMD（永久）
-setx DASHSCOPE_API_KEY "your-api-key"
-
-# Windows PowerShell（永久）
-[Environment]::SetEnvironmentVariable("DASHSCOPE_API_KEY", "your-api-key", [EnvironmentVariableTarget]::User)
-```
-
-> **注意**：设置环境变量后，已打开的 IDE、终端或应用程序需要重启才能加载新值。使用 `sudo` 运行脚本时，需加 `-E` 参数以继承当前用户的环境变量。
+除控制台外，百炼还提供 OpenAPI（`CreateApiKey` / `GetApiKey` / `ListApiKeys` / `UpdateApiKey` / `DeleteApiKey` / `EnableApiKey` / `DisableApiKey` / `ResetApiKey`）以编程方式管理 Key，调用需使用阿里云账号 AccessKey 签名认证并具备相应 RAM 权限。
 
 ## 安装 SDK
 
-百炼支持两套 SDK 体系：DashScope 官方 SDK 和 OpenAI 兼容 SDK。具体安装方式参见 [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)。
+百炼同时支持官方 **DashScope SDK**（Python、Java）与通过 **[OpenAI 兼容接口](../concepts/openai-compatible-interface.md)**调用的多语言 SDK。详见 [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)。
 
-### Python
+- **Python**（需 `python >= 3.8`）：`pip install -U openai` 或 `pip install -U dashscope`
+- **Java**：DashScope 用 `com.alibaba:dashscope-sdk-java`；OpenAI 用 `com.openai:openai-java`（需 Java 8+，推荐 `3.5.0`），均通过 Maven / Gradle 引入。
+- **Node.js**：`npm install --save openai`（或 `yarn add openai`）；安装失败可配置镜像源 `npm config set registry https://registry.npmmirror.com/`。
+- **Go**（需 `Go 1.22+`）：`go get 'github.com/openai/openai-go/v3'`；超时可设 `go env -w GOPROXY=https://mirrors.aliyun.com/goproxy/,direct`。
 
-```bash
-# OpenAI SDK
-pip install -U openai
-
-# DashScope SDK
-pip install -U dashscope
-```
-
-要求 Python >= 3.8。
-
-### Java
-
-- **[DashScope SDK](../concepts/dashscope-sdk.md)**：Maven 坐标 `com.alibaba:dashscope-sdk-java`
-- **OpenAI SDK**：Maven 坐标 `com.openai:openai-java`（推荐 3.5.0+，需 Java 8+）
-
-### Node.js
-
-```bash
-npm install --save openai
-```
-
-如遇网络问题，可先配置镜像源：`npm config set registry https://registry.npmmirror.com/`
-
-### Go
-
-```bash
-go get 'github.com/openai/openai-go/v3'
-```
-
-需要 Go 1.22+。如访问超时，可设置阿里云镜像代理。
+安装后即可调用文本生成、图像生成、视频生成、语音合成/识别、向量、排序等模型。
 
 ## 使用百炼 CLI
 
-百炼 CLI（`bailian-cli`）是面向 AI Agent 的命令行工具，可通过一行命令集成百炼平台的文本、图像、视频、语音等 AI 能力。详细用法参见 [使用百炼 CLI](../../raw/model-api-reference/preparations/use-model-studio-cli.md)。
-
-### 安装
+百炼 CLI（npm 包 `bailian-cli`，命令 `bl` / `bailian`）是面向 AI Agent 的命令行工具，可将平台能力集成到各类 AI 工具中。安装前置要求 **Node.js ≥ 22.12.0**，且**仅支持 npm 安装**（勿用 pnpm / yarn 安装该包）。详见 [使用百炼 CLI](../../raw/model-api-reference/preparations/use-model-studio-cli.md)。
 
 ```bash
-# 安装 CLI（需 Node.js >= 22.12.0，仅支持 npm）
+# 1. 安装 CLI
 npm install -g bailian-cli
-
-# 安装 Skills
+# 2. 安装 Skills（注册能力描述文件到各 Agent）
 npx skills add modelstudioai/cli --all -g
-
-# 验证
+# 3. 验证
 bl --version
 ```
 
-### 认证
+**认证方式**（可组合使用，互不覆盖）：
 
 | 方式 | 命令 | 适用场景 |
-|------|------|----------|
-| 控制台登录（推荐） | `bl auth login --console` | 交互式环境，模型调用 + 应用管理 |
-| API Key | `bl auth login --api-key sk-xxx` | 模型调用 |
+| --- | --- | --- |
+| 控制台登录（推荐） | `bl auth login --console` | 模型调用 + 应用管理（浏览器 OAuth） |
+| API Key | `bl auth login --api-key sk-xxx` | 模型调用；会先校验 Key 有效性 |
 | 环境变量 | 配置 API Key 环境变量 | CI/CD、无界面环境 |
+| 配置文件 | `bl config set --key api_key --value sk-xxx` | 持久化，**不校验** Key 有效性 |
+| 临时传入 | `bl text chat --api-key sk-xxx ...` | 单次调用，不落盘 |
 
-### 常用命令
+常用全局参数：`--region <cn|us|intl>`（默认 cn）、`--base-url`、`--output <text|json>`、`--non-interactive`（Agent/CI）、`--dry-run`、`--concurrent <n>` 等。子命令覆盖文本对话（`bl text chat`）、全模态（`bl omni`）、图像（`bl image generate/edit`）、视频（`bl video generate/edit/ref`）、视觉理解（`bl vision describe`）、语音合成（`bl speech synthesize`）等。
 
-- `bl text chat --message "你好"`：文本对话
-- `bl image generate --prompt "描述"`：文字生成图像
-- `bl video generate --prompt "描述"`：文字生成视频
-- `bl speech synthesize --text "文本"`：语音合成
-- `bl vision describe --image <path>`：图像理解
+> **注意**：CLI 文档中示例默认模型（如 `qwen3.7-max`、`qwen3.5-omni-plus`、`qwen-image-2.0`、`happyhorse-1.0-t2v` 等）为工具内置默认值，可能随版本变化；实际可用模型请以模型列表 / 控制台为准。安全约束上，禁止将真实 API Key 写入仓库、日志、Skill 或聊天记录的可公开部分。
 
-支持 `--model` 指定模型、`--output json` 输出 JSON 格式、`--non-interactive` 非交互模式等全局参数。
+## 常见错误码与排查
 
-## 常见错误码
+调用过程中的报错多为 **400-InvalidParameter** 类的参数问题，可对照错误信息定位。完整清单见 [错误码](../../raw/model-api-reference/preparations/error-code.md)，以下为高频场景：
 
-调用模型 API 时可能遇到的典型错误及处理方式，完整列表参见 [错误码](../../raw/model-api-reference/preparations/error-code.md)。
+- **思考模式相关**：思考模式模型需 `enable_thinking=true` 时配合[流式输出](../concepts/streaming.md)，并设 `incremental_output=true`、`result_format="message"`；部分模型（如 `qwen3-235b-a22b-thinking-2507`）不允许将 `enable_thinking` 设为 `false`。
+- **参数取值范围**：`temperature` ∈ [0.0, 2.0)、`top_p` ∈ (0.0, 1.0]、`top_k` ≥ 0、`presence_penalty` ∈ [-2.0, 2.0]、`n` ∈ [1, 4]；`max_tokens` 与输入长度上限以模型列表为准。
+- **模型不存在（Model not exist）**：核对 `model` 名称大小写与空格，勿混用开源社区名与百炼模型 ID（用 `qwen3-235b-a22b-instruct-2507` 而非 `Qwen/Qwen3-235B-A22B-Instruct-2507`）。
+- **content 类型错误**：纯文本模型的 `content` 必须为字符串，不能传数组或图片等多模态元素；需要图片输入请改用 Qwen-VL / Qwen3-VL 等多模态模型。
+- **结构化输出**：使用 `response_format` 的 `json_object` 时，提示词须包含 `json` 关键词，且不能同时开启思考模式。
+- **文件类（Qwen-Long）**：仅支持纯文本格式（TXT/DOCX/PDF/EPUB/MOBI/MD），单文件 < 150 MB、< 15000 页，file-id 数量 < 100。
+- **账号状态（Arrearage）**：账号欠费会导致访问被拒绝，需在费用与成本页面充值后等待系统更新。
 
-### 参数类错误（400）
-
-| 错误信息 | 原因 | 解决方案 |
-|----------|------|----------|
-| `Model not exist` | 模型名称拼写或大小写错误 | 对照模型列表，使用百炼模型 ID（如 `qwen3-235b-a22b-instruct-2507`） |
-| `Range of input length should be [1, xxx]` | 输入 Token 超过模型上限 | 缩减 messages 长度或开启新对话 |
-| `Range of max_tokens should be [1, xxx]` | `max_tokens` 超出模型限制 | 参考模型列表中的最大输出 Token 数 |
-| `enable_thinking must be set to false for non-streaming calls` | 思考模式仅支持流式调用 | 设置 `enable_thinking=false` 或启用[流式输出](../concepts/streaming.md) |
-| `Required body invalid` | 请求体 JSON 格式错误 | 检查 JSON 是否有多余逗号、括号未闭合等问题 |
-
-### 认证与权限类错误
-
-| 错误信息 | 原因 | 解决方案 |
-|----------|------|----------|
-| `Arrearage` | 账号欠费 | 登录阿里云控制台充值 |
-| `InvalidApiKey` | API Key 无效或已删除 | 重新创建或重置 API Key |
-
-### 文件相关错误
-
-| 错误信息 | 原因 | 解决方案 |
-|----------|------|----------|
-| `File format is not supported` | Qwen-Long 不支持该文件格式 | 使用 TXT、DOCX、PDF、EPUB、MOBI、MD 格式 |
-| `File exceeds size limit` | 文件超过 150 MB | 压缩或拆分文件 |
-| `Multimodal file size is too large` | [多模态](../concepts/multimodal.md)文件超限 | 本地文件 Base64 后不超过 10 MB；URL 图像不超过 10 MB |
-
-> **注意**：遇到错误时，也可使用阿里云 AI 助理输入报错信息获取自动诊断和解决方案。
+排障时可借助[阿里云 AI 助理](https://www.aliyun.com/ai-assistant/)，直接粘贴报错信息即可获得原因与解决方案。
 
 ## 来源文档
 
@@ -155,7 +75,5 @@ bl --version
 - [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)
 - [错误码](../../raw/model-api-reference/preparations/error-code.md)
 - [使用百炼 CLI](../../raw/model-api-reference/preparations/use-model-studio-cli.md)
-
-
 
 

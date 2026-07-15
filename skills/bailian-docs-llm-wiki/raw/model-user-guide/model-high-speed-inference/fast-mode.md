@@ -15,12 +15,12 @@
 -   **preview 阶段**：当前为预览阶段，能力与规格可能随版本调整。
     
 
-调用时将 model 参数指定为[支持的模型](#fast-models-h2)的model ID 即可开启，无需额外参数。接入域名格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`，其中 `workspace_id` 可在[业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)页面切换到对应地域后查看。
+调用时将 model 参数指定为[支持的模型](#fast-models-h2)的model ID 即可开启，无需额外参数。接入域名格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`，其中 `{workspace_id}`可在 [业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management) 页面切换到对应地域后查看。
 
 基础调用示例：
 
 ```
-curl -X POST https://llm-{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
+curl -X POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -46,11 +46,11 @@ curl -X POST https://llm-{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-
 
 glm-5.2-fast-preview
 
-20元
+16元
 
-70元
+56元
 
-5元
+4元
 
 ## 新加坡
 
@@ -66,11 +66,11 @@ glm-5.2-fast-preview
 
 glm-5.2-fast-preview
 
-26.23元
+20.98元
 
-82.44元
+65.95元
 
-5.25元
+4.20元
 
 ## **使用示例**
 

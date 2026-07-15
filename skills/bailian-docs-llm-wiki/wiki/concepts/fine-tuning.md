@@ -1,101 +1,89 @@
-# 模型调优
+# 模型微调与生产链路
 
-模型调优（Fine-tuning）是百炼平台基于开发者自有数据对基础模型进行定制化训练的能力，用于提升模型在特定行业或业务场景下的表现、降低输出延迟、抑制幻觉并对齐人类偏好。它处于「调优 → 压缩 → 部署」模型生产链路的起点，产出的自定义微调模型可作为模型压缩、模型部署和基线评测的输入。
+模型微调（Fine-tuning）是在 Prompt 工程、插件调用等手段仍无法满足效果时，把领域知识、任务能力、人类偏好或特定音色/风格直接写入模型参数的深度定制手段。它是百炼平台「数据准备 → 模型调优 → 模型压缩（可选）→ 模型部署」这条模型生产链路的核心环节。
 
-## 调优方法
+> **注意**：微调、压缩、部署与调用能力**仅在华北2（北京）地域可用**，且必须使用该地域的 API Key；子账号（RAM 用户）需预先被授予调用、训练和部署权限。
 
-百炼提供三种递进式调优方法，推荐按 `CPT（可选）→ SFT → DPO（可选）` 的顺序使用：
+## 完整生产链路
 
-| 方法 | 目标 | 数据要求 | 典型场景 |
+一条典型的自定义模型生产链路包含四个阶段，前后衔接：
+
+1. **数据准备**：创建、清洗、增强训练集与评测集（仅控制台，暂无数据处理 API）。
+2. **模型调优**：指定基础模型、训练集/验证集与超参数，提交微调任务，训练完成后得到自定义模型。
+3. **模型压缩（可选）**：对全精度微调模型做量化，降低部署所需 MU 规格、减少推理成本。
+4. **模型部署**：把微调或导入的模型发布为独立、资源专享的在线推理服务，再通过标准 API 调用。
+
+## 场景一：模型调优
+
+按模态划分，不同模型支持的训练方式差异明显：
+
+- **文本生成（千问系列）**：支持 CPT、SFT（全参 `sft` / 高效 `efficient_sft`）、DPO（全参 `dpo_full` / 高效 `dpo_lora`）。是否支持某种方式因模型而异（如 Qwen3-32B、Qwen2.5 系列支持全部 5 种，部分新模型仅支持 `sft`）。
+- **视觉理解（千问 VL）**：支持 SFT 全参与高效训练，不支持 CPT/DPO。
+- **图像/视频生成（万相）**：仅支持 SFT-LoRA 高效微调。
+- **语音合成（CosyVoice）**：仅支持 `efficient_sft`，且当前只能通过 API 发起，控制台暂不支持。
+
+文本生成推荐按递进顺序组合：`CPT（可选）→ SFT → DPO（可选）`。
+
+| 方式 | 目标 | 数据量 | 数据形态 |
 | --- | --- | --- | --- |
-| CPT（继续预训练） | 注入领域知识 | 1000 万+ Token 无标签文本 | 金融/医疗/法律等垂直领域适配 |
-| SFT（监督微调） | 学会遵循指令 | 1000+ 条高质量问答对 | 客服、代码助手、Agent 工具调用 |
-| DPO（直接偏好优化） | 对齐人类偏好 | 100+ 组正负样本对 | 安全合规强化、降低幻觉 |
+| CPT（持续预训练） | 补领域知识 | 1000 万+ Token | 无标签领域文本 `{"text":"..."}` |
+| SFT（监督微调） | 学会遵循指令 | 1000+ 条 | ChatML「问-答」对 |
+| DPO（直接偏好优化） | 对齐人类偏好 | 100+ 组 | 同指令下 `chosen` / `rejected` 回答对 |
 
-每种方法又区分**全参训练**和**高效训练（LoRA）**两种模式：全参训练效果更好但耗时更长；高效训练收敛快、成本低，适合快速验证和时间敏感的场景。
+训练模式分**全参训练**与**高效训练（LoRA）**，两者费用相同；官方建议模型支持全参时优先全参（效果更好、性价比更高），LoRA 适合训练时间/成本敏感或数据集较小的场景。
 
-## 支持的模态与模型
+## 场景二：模型压缩（量化）
 
-- **文本生成**：Qwen3.6/3.5/3/2.5 系列多个规格，覆盖全参训练与 LoRA 高效训练。
-- **视觉理解（千问 VL）**：Qwen3-VL-8B/4B-Instruct、Qwen2.5-VL-72B/32B/7B-Instruct 等，支持 SFT 全参和高效训练。
-- **图像生成**：wan2.7-image-pro、wan2.7-image（SFT-LoRA），支持文生图与图生图微调。
-- **视频生成**：wan2.5-i2v-preview、wan2.2-i2v-flash、wan2.2-kf2v-flash（SFT-LoRA）。
-- **语音合成**：cosyvoice-v3-flash（SFT 高效微调），用于高还原度专属音色定制。
+百炼的模型压缩特指**量化**，不涉及剪枝或蒸馏。它把全精度微调模型转为低精度版本，在保持能力前提下降低部署 MU 规格。以 qwen3.5-flash-2026-02-23 为例，压缩前 MU1*2（108 元/小时）、压缩后 MU8*1（47 元/小时），成本节省约 56%。
 
-具体支持模型清单以百炼控制台「模型调优」页面的实时列表为准。
+> **注意**：压缩不可逆，压缩后模型不支持继续微调或二次压缩；仅支持百炼平台微调产出的自定义模型。
 
-## 使用方式
+## 场景三：模型部署
 
-### 控制台操作
+部署提供三种互斥的计费方式，创建后无法更改：
 
-1. 在「数据管理」页面上传训练数据集并发布。
-2. 在「模型调优」页面创建训练任务，选择模型、训练方式和超参数。
-3. 观察 Training Loss / Validation Loss 曲线判断训练状态。
-4. 训练完成后在「模型部署」页面一键部署，或进入「模型压缩」进行量化降本。
+- **预置吞吐（PTU）**：预留资源保障特定 TPM，额度内不限速，TPS 通常提升约 1.5～2.0 倍，适合流量可预估的高负载生产。支持 PTU 长输入（部分模型最高 200K token）与前缀缓存折扣，超额自动转按量计费。
+- **模型单元（MU）**：按时长 × 单元数计费，资源独占，支持部分预置模型与所有调优后模型。
+- **按 Token 使用量**：不使用不计费，仅支持 SFT 高效训练后的自定义模型，主要用于效果验证。
 
-### API 操作
+此外可通过**我的模型**从 OSS 导入本地训练的 **LoRA** 模型（不支持全参微调模型），rank 须为 8/16/32/64 之一，必需 `adapter_model.safetensors` 与 `adapter_config.json`，且不得修改 vocab 或 chat_template。
 
-通过 DashScope API 完成全流程：
+## 关键参数与配置
 
-```bash
-# 1. 上传训练文件
-curl --request POST 'https://dashscope.aliyuncs.com/api/v1/files' \
-  --header 'Authorization: Bearer '${DASHSCOPE_API_KEY} \
-  --form 'files=@"/path/to/file.jsonl"' \
-  --form 'purpose="fine-tune"'
+文本生成调优的常用超参：
 
-# 2. 创建调优任务
-curl --location "https://dashscope.aliyuncs.com/api/v1/fine-tunes" \
-  --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
-  --header 'Content-Type: application/json' \
-  --data '{"model":"qwen3-8b","training_file_ids":["<file_id>"],"training_type":"sft"}'
+- `learning_rate`：高效训练建议 `1e-4` 量级，全参/CPT 建议 `1e-5` 量级。
+- `n_epochs`：默认 `3`，范围 `[1, 200]`；数据量 <10000 建议 3~5，>10000 建议 1~2。
+- `batch_size`：一般 16/32。
+- `max_length`：建议设为模型最大值；SFT **丢弃**超长数据，DPO **截断**后仍训练。
+- `lora_rank` / `lora_alpha` / `lora_dropout`：LoRA 专用，秩越大效果略好但更慢、更易过拟合。
+- 通过 API 创建任务时，`n_epochs`、`batch_size`、`max_length` 因影响计费而**必填**。
 
-# 3. 查询任务状态（轮询直到 SUCCEEDED）
-curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<job_id>' \
-  --header "Authorization: Bearer ${DASHSCOPE_API_KEY}"
-```
+> **注意**：不同文档默认学习率取值不一致（控制台面板显示 `3e-4`、API SFT 全参示例为 `1.6e-5`）。请以实际训练方式对应的量级为准，切勿照搬。
 
-## 训练数据格式
+万相图像/视频、CosyVoice 各有独立超参集（如万相 `max_steps`/`generation_type`，CosyVoice 分 `lm_*` 韵律与 `fm_*` 音色两组网络的参数，8 个子字段全部必填）。
 
-- **SFT 文本生成**：ChatML 格式的 JSONL，每行一个 `messages` 数组，支持 system/user/assistant 多轮对话；不支持 OpenAI 的 `name`、`weight` 参数；assistant 行可选 `loss_weight`（0.0~1.0，邀测参数）。
-- **SFT 思考模型（Thinking）**：只能针对最后一条 assistant 输出训练，思考内容须用 `<think>...</think>` 标签包裹，标签前后的换行需保留。
-- **SFT 视觉理解（千问 VL）**：在 ChatML 基础上 user content 使用数组格式，支持 `image`、`video`（路径或帧列表）、`resized_width/height`、`fps/sample_fps`、`video_start/end` 等字段；训练数据与图片/视频打包为 ZIP 上传。
-- **DPO 数据集**：在 `messages` 之外增加 `chosen` 与 `rejected` 字段，对最后一条用户输入训练正负偏好；`chosen` 支持 `loss_weight`（邀测）。
-- **CPT 训练集**：纯文本格式，每行 `{"text":"文本内容"}`。
-- **图生视频训练集**：标注文件固定命名 `data.jsonl`（≤20MB），含 `prompt`、`first_frame_path`、`last_frame_path`（首尾帧）、`video_path`（仅训练集）；图像最大 4096×4096，支持 BMP/JPEG/PNG/WEBP，视频支持 MP4/MOV。
+## 数据格式要点
 
-## 关键参数
+- **SFT（文本）**：ChatML，每行一个 `{"messages":[...]}`，所有 assistant 输出都会被训练；不支持 OpenAI 的 `name`/`weight`。
+- **SFT 思考模型**：仅训练最后的 assistant 输出，思考内容用 `<think>` 标签包裹并保留前后换行。
+- **DPO**：ChatML 加 `chosen` / `rejected` 字段。
+- **CPT**：纯文本 `{"text":"..."}`。
+- **视觉理解/图生视频**：需按字段规范提供图片、视频路径或帧列表。
 
-| 参数 | 说明 |
-| --- | --- |
-| `model` | 选择的基础模型名称，须在支持调优的模型清单内 |
-| `training_file_ids` | 已上传的训练文件 ID 列表 |
-| `training_type` | 调优类型：`sft` / `dpo` / `cpt` |
-| 训练方式 | 全参训练 或 高效训练（LoRA） |
-| `loss_weight` | assistant/chosen 行可选，控制样本重要性（0.0~1.0，邀测） |
-| `custom_calibration_file_ids` | 用于模型压缩阶段的校准数据（压缩任务用） |
+## 面向开发者的使用方式
 
-## 下游衔接
+- **控制台（推荐入门）**：模型调优页面创建任务 → 选训练方式与模型 → 配置训练集/验证集与 Checkpoint → 训练 → 部署 → 评测。
+- **API / 命令行**：统一四步流程——上传数据集（`POST /api/v1/files`）→ 创建调优任务 → 轮询任务状态与训练指标 → 部署为在线服务并调用推理端点。
 
-- **模型压缩**：对全参微调产出的模型执行量化，进一步降低部署成本；已量化的模型不支持二次压缩或继续训练。
-- **模型部署**：将微调或压缩后的模型发布为在线推理服务。
-- **基线评测**：仅支持调优后的模型，用于验证通用能力（学科、数学、推理）。
-- **数据管理**：训练集与评测集统一在「数据管理」中创建、清洗与增强，仅「内部上传」类型且「已发布」状态的数据集可用于校准。
-
-## 限制和注意事项
-
-- 调优任务为异步执行，需通过 API 或控制台轮询任务状态（待开始 / 排队中 / 运行中 / 成功 / 失败 / 已取消）。
-- 训练数据须符合对应方法的最低规模要求；若评测结果不佳，最直接的改进方式是收集更多高质量数据。
-- 视觉理解训练中如需传入 `system` 消息，content 必须使用数组格式 `[{\"text\":\"...\"}]`。
-- 数据管理能力当前仅适用于华北2（北京）地域，且暂无可用的数据处理 API，需在控制台完成。
-- 思考模型训练后若在样本中关闭了思考标签，部署后不建议再开启思考模式调用。
+若调优后评测效果不佳，最简单的改进办法是收集更多高质量数据继续训练；压缩免费期内可对同一模型尝试多个量化模板，用业务测试集验证后再上线。
 
 ## 关联主题页
 
-- [model production](../api/model-production.md)
 - [fine tuning](../guides/fine-tuning.md)
+- [model production](../api/model-production.md)
 - [model compression](../guides/model-compression.md)
+- [model deployment 1](../guides/model-deployment-1.md)
 - [model data overview](../guides/model-data-overview.md)
-- [model evaluation introduction](../guides/model-evaluation-introduction.md)
 
 

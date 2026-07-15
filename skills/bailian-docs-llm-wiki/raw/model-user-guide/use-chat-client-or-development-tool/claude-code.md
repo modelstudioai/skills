@@ -110,6 +110,44 @@ npm install -g @anthropic-ai/claude-code
 
 配置保存后，新开一个终端窗口执行 `claude "你好"`。若模型正常返回响应，配置成功。如需进一步确认，在 Claude Code 中执行 `/status`，检查 `ANTHROPIC_BASE_URL` 和 `ANTHROPIC_AUTH_TOKEN` 是否正确指向百炼地址。
 
+### 配置上下文窗口大小
+
+Claude Code 默认使用 200K 上下文窗口。如果需要处理大型代码仓库或长对话，可以将上下文窗口扩展到 1M（1,000,000 tokens），前提是所用模型支持该上下文长度。有两种配置方式：
+
+**方式一：通过环境变量设置**
+
+在 `~/.claude/settings.json` 的 `env` 字段中添加 `CLAUDE_CODE_MAX_CONTEXT_TOKENS`：
+
+```
+{
+    "env": {
+        "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY",
+        "ANTHROPIC_BASE_URL": "https://dashscope.aliyuncs.com/apps/anthropic",
+        "ANTHROPIC_MODEL": "qwen3.7-plus",
+        "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "1000000"
+    }
+}
+```
+
+**方式二：通过模型名称后缀**
+
+在模型名称后添加 `[1m]` 后缀，适用于百炼支持 1M 上下文的模型：
+
+```
+{
+    "env": {
+        "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY",
+        "ANTHROPIC_BASE_URL": "https://dashscope.aliyuncs.com/apps/anthropic",
+        "ANTHROPIC_MODEL": "qwen3.7-plus[1m]",
+        "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3.7-plus[1m]",
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.7-plus[1m]",
+        "CLAUDE_CODE_SUBAGENT_MODEL": "qwen3.7-plus[1m]"
+    }
+}
+```
+
+修改配置后，需新开终端窗口重新启动 Claude Code 使配置生效。更多环境变量说明参见 [Claude Code 官方环境变量文档](https://code.claude.com/docs/zh-CN/env-vars)。
+
 ## **使用 CC Switch**
 
 [CC Switch](https://github.com/farion1231/cc-switch) 是社区开源的桌面 GUI，支持在多个API Key 或计费套餐之间一键切换，无需手动修改 `settings.json`。
@@ -270,7 +308,17 @@ npm install -g @anthropic-ai/claude-code
     
 3.  **重新打开终端。**修改配置文件后，需要新开一个终端窗口再执行 `claude`，配置才会生效。
     
+4.  **更新 Claude Code。**若以上步骤均无效，可能是 Claude Code 版本过旧导致。执行 `npm install -g @anthropic-ai/claude-code@latest` 更新到最新版本后重试。
+    
 
 ### 使用旧版接口，切换模型不生效
 
 旧版兼容接口 `https://dashscope.aliyuncs.com/api/v2/apps/claude-code-proxy` 仅支持 `qwen3-coder-plus` 模型，指定其他模型不会生效。如需调用其他模型，按本文配置迁移至新版接口。
+
+### 使用 CC Switch 添加供应商时提示"未找到可用的模型列表端点，请检查 Base URL 或确认供应商是否开放端口"
+
+该提示来自 CC Switch 保存供应商时的连通性检查——它会向配置的请求地址探测模型列表端点（如 `/v1/models`）。百炼的 Anthropic 兼容接入端点（以 `/apps/anthropic` 结尾）仅提供对话端点 `/v1/messages`，不提供模型列表端点，该探测因此返回 404，CC Switch 据此提示"未找到可用的模型列表端点"。
+
+**该提示不影响 Claude Code 正常使用，可忽略。**Claude Code 通过 `/v1/messages` 发起对话，所用模型由 CC Switch **高级选项**中的模型映射直接指定，不依赖模型列表端点的自动发现。请求地址与 API Key 配置正确时，直接点击**启用**并新开一个 Claude Code 会话即可正常对话。
+
+若确实无法对话，请确认：请求地址以 `/apps/anthropic` 结尾、勿额外添加 `/v1`，并已在[高级选项的模型映射](#ccswitch-add-li2)中填入对应套餐支持的模型。

@@ -103,14 +103,14 @@ Python 代码解释器可用依赖包括：matplotlib、pandas、scipy、seaborn
 
 ### 使用自定义插件
 
-控制台内可将插件发布为 MCP 服务，再在[智能体应用](../concepts/agent-application.md)编排页面的 MCP 区块添加该服务；也可直接在应用管理页面的智能体应用编排中添加 MCP 服务。无鉴权插件可直接对话测试；用户级/服务级鉴权需在对话前配置鉴权 [Token](../concepts/token.md)；业务透传参数需配置变量值。从云市场导入的插件无需在对话页输入鉴权 [Token](../concepts/token.md)。
+控制台内可将插件发布为 MCP 服务，再在[智能体应用](../concepts/agent-application.md)编排页面的 MCP 区块添加该服务；也可直接在应用管理页面的[智能体应用](../concepts/agent-application.md)编排中添加 MCP 服务。无鉴权插件可直接对话测试；用户级/服务级鉴权需在对话前配置鉴权 [Token](../concepts/token.md)；业务透传参数需配置变量值。从云市场导入的插件无需在对话页输入鉴权 [Token](../concepts/token.md)。
 
 通过 API 调用时，若应用关联的插件存在业务透传参数或开启了用户级鉴权，需通过 `biz_params` 传递鉴权信息或透传参数。
 
 ## 限制和注意事项
 
-- 官方插件只能与位于相同[业务空间](../concepts/workspace.md)的智能体应用关联。
-- 每个智能体应用最多添加 10 个工具。
+- 官方插件只能与位于相同[业务空间](../concepts/workspace.md)的[智能体应用](../concepts/agent-application.md)关联。
+- 每个[智能体应用](../concepts/agent-application.md)最多添加 10 个工具。
 - 只有已发布且启用状态、调试状态为成功的工具才能用于调用。
 - 删除插件会删除其下所有工具，调用该插件的应用会失效，操作不可撤回。
 - 编辑插件信息后立即生效；修改 URL、Header、鉴权信息可能影响工具调用，需重新测试并发布工具。
@@ -135,6 +135,9 @@ Python 代码解释器可用依赖包括：matplotlib、pandas、scipy、seaborn
 - [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)
 - [插件概述](../../raw/application-user-guide/plug-in/plug-in-overview.md)
 - [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)
+
+
+
 
 
 

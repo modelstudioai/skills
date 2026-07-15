@@ -1,77 +1,64 @@
 # 检索增强生成（RAG）
 
-检索增强生成（Retrieval-Augmented Generation, RAG）是一种在大模型生成回答前，先从外部知识源检索相关内容并注入 Prompt 的技术，用于为大模型补充私有数据与最新信息，提升特定领域问答的准确性、降低幻觉。
+检索增强生成（Retrieval-Augmented Generation，RAG）是指大模型在生成回答前，先从外部知识库检索相关内容并拼接进上下文，从而补充私有数据、最新信息，提升回答的准确性并降低幻觉。它是阿里云百炼平台知识库、智能问答与多种应用场景的核心底层能力。
 
 ## 在百炼平台的使用场景
 
-百炼把 RAG 能力拆成"检索"与"生成"两段，围绕这两段提供了从托管到自建、从控制台到 API 的多层方案：
+百炼围绕 RAG 提供从建库到问答、从控制台到 API、从云端到本地的多条落地路径：
 
-- **云端知识库（托管 RAG）**：在控制台创建知识库，完成数据导入、切片、向量化、检索召回、问答生成的完整链路。适合无需自定义切分/嵌入模型、希望开箱即用的场景。知识库功能仅在中国站**华北2（北京）**地域开通使用。
-- **智能体应用挂载知识库**：为百炼智能体应用绑定私有知识库（最多 15 个），让问答覆盖私域问题，并可接入网站、企业微信、微信公众号、钉钉等渠道。
-- **知识检索 / 知识问答 API**：通过 DashScope 应用网关的 HTTP REST 接口调用。知识检索接口只返回排序后的切片，供你自行拼 Prompt 调用大模型；知识问答接口通过 SSE 流式返回"规划 → 检索 → 生成"三个阶段，开箱即用。
-- **本地知识库 RAG**：检索环节在本地执行、生成环节调用通义千问 API，适合需要灵活控制文档切分与嵌入模型的场景。
-- **框架集成**：Python 侧用 LlamaIndex 构建云端或本地 RAG 应用；Java 侧用 Spring AI Alibaba 检索百炼知识库。均以 [API Key 鉴权](api-key.md)。
-- **底层能力**：向量（Embedding）模型负责语义召回，排序（Rerank）模型负责二次精排，二者是 RAG 检索质量的基础。
+- **云端知识库（控制台）**：基于百炼知识库能力构建 RAG，先创建知识库（选类型、配数据源与索引参数），再关联到智能体或工作流应用。工作流应用中把「知识库」节点接在开始节点后，用内置变量 `query` 作输入，输出 `result` 传给大模型节点。知识库功能仅在中国站 **华北2（北京）** 地域开通使用。
+- **知识检索与知识问答服务**：平台在知识库之上提供两类独立服务。知识检索支持多知识库联合检索（最多 15 个），流水线为 Query 改写 → 向量+关键词混合检索 → Rerank 精排 → 加权返回；知识问答基于大模型结合检索生成自然语言回答，提供极速（单轮）与多轮智能（Agentic 规划搜索）两种模式，支持拒答、防泄漏、引用来源展示。
+- **HTTP REST API（DashScope 应用网关）**：知识检索接口 `POST /api/v1/indices/knowledge/search` 适合自定义生成流程（拿到排序切片后自行拼 [prompt](../guides/prompt.md) 调模型）；知识问答接口 `POST /api/v2/apps/knowledge/chat` 通过 SSE 流式返回规划、工具调用、生成三阶段，适合开箱即用。二者用 API Key Bearer 鉴权，Base URL 为 `https://{workspaceId}.cn-beijing.maas.aliyuncs.com`，默认 25 QPS。
+- **开源框架集成**：LlamaIndex（Python）用于读取本地文件上传建云端知识库并构建 RAG 应用；Spring AI Alibaba（Java）用于集成智能体/工作流应用并检索百炼知识库。均以 [API Key 鉴权](api-key.md)。
+- **本地知识库 RAG**：检索在本地执行、生成调用通义千问 API，适合需要灵活切分与自选嵌入模型的场景。
+- **应用接入渠道**：RAG 应用可通过 AppFlow 接入网站、企业微信、微信公众号、钉钉等渠道，为回答覆盖私域问题。
 
-## 检索链路与关键参数
+## RAG 流水线与底层模型
 
-标准检索流程为：Query 改写 → 向量 + 关键词混合检索 → Rerank 重排 → 相似度过滤 → 返回切片。
+一次典型 RAG 调用可拆为三阶段，每阶段对应可优化的环节与模型：
 
-云端知识库检索侧的核心参数：
+1. **建立索引**：文档切分（智能切分）、Meta 信息抽取、生成向量。文本向量推荐 text-embedding-v4（Qwen3-Embedding 系列），支持 2048/1536/1024/768/512 等多种维度；多模态检索用 qwen3-vl-embedding / multimodal-embedding-v1。
+2. **检索召回**：向量检索 + 关键词检索混合，再经 Rerank 精排。排序模型推荐 qwen3-rerank（文本，支持 100+ 语种）与 qwen3-vl-rerank（多模态），`gte-rerank` 将于 2026-05-30 下线。
+3. **生成答案**：将召回切片与用户提问一并送入大模型（如 qwen-max、qwen3.6-plus/qwen3.7-plus 等）生成回答。
 
-| 参数 | 取值 | 说明 |
-| --- | --- | --- |
-| 初步向量检索 TopK | 1–100（默认 50） | 向量语义召回切片数 |
-| 初步关键词检索 TopK | 1–100（默认 50） | 关键词匹配召回切片数 |
-| 排序模型 | qwen3-rerank / qwen3-rerank(hybrid) / qwen3-vl-rerank | [多模态](multimodal.md)库只能选 vl-rerank |
-| 排序模式 | 问答 / 相似 / 自定义高级 | 问答模式按 QA 匹配度，相似模式按语义相似度 |
-| 相似度阈值 | 0.01–1.0 | 过滤低分切片，过高会丢弃全部结果 |
-| 最大召回数量 | 1–20 | 最终返回切片数 |
+## 关键参数与配置
 
-框架侧（LlamaIndex）常用参数：
+云端知识库侧：
 
-- `similarity_top_k`：相似度最高的检索结果数（示例 5）。
+- **相似度阈值**：仅语义相似度高于阈值的切片才被召回，阈值过高会导致全部被过滤（如调到 0.60 可能无召回）。
+- **召回片段数 / 最大召回数量（TopK/K）**：取值 1–20，复杂问题可适当增大以补全答案，但会增加 Token 消耗，推荐「按拼装长度」策略。
+- **权重**：多知识库召回时按信息源重要性分配，**仅在同类型知识库之间生效**。
+- **Meta 信息抽取**：以 key-value 附加到切片，提升检索准确性并降低 Token 消耗；支持常量、变量、大模型、正则、关键词五种取值方式。**知识库创建后无法再配置 metadata 抽取**。
+- **智能切分 / 多轮对话改写**：均在创建知识库时配置，创建时未开启则后续无法补开（除非重建）。
+- 检索服务全局参数：知识库路由、混排模型（qwen3-rerank / qwen3-rerank(hybrid) / qwen3-vl-rerank）、混排模式（问答/相似/自定义）；每库可独立配置向量/关键词 TopK（1–100）、排序模型、相似度阈值、标签过滤。
+
+LlamaIndex 侧关键参数：
+
+- `Settings.llm = DashScope(model_name="qwen-max")`：生成回答调用的大模型。
+- `similarity_top_k`：返回相似度最高的检索结果数（示例 5）。
 - `similarity_cutoff`：过滤检索结果的最低相似度阈值（示例 0.4）。
-- `top_n`：Rerank 后返回的结果数（示例 1）。
-- `node_postprocessors`：可挂 `SimilarityPostprocessor`（阈值过滤）、`DashScopeRerank`（重排）等后处理器。
+- `top_n`：重排后返回的结果数（示例 1）。
+- 后处理 `node_postprocessors`：`SimilarityPostprocessor`（按阈值过滤）、`DashScopeRerank(model="gte-rerank")`（重排）、`response_mode="tree_summarize"`（响应聚合方式）。
 
-本地 RAG 应用侧的 RAG 参数：召回片段数（越大参考越多但噪声可能增加）、相似度阈值（越大参考越少、为 0 不剔除）、携带上下文轮数、模型温度等。
+本地 RAG 侧关键参数：模型选择、温度、最大回复长度、携带上下文轮数；召回片段数、相似度阈值（为 0 时不剔除）；嵌入模型默认用百炼 embedding API，也可换本地 GTE 向量模型；受限流约束，单文件建议不超过 100 MB。
 
-## 向量与排序模型
+## 效果优化建议
 
-- **文本向量**：推荐 `text-embedding-v4`（Qwen3-Embedding 系列，支持 100+ 语种，维度可选 2048/1536/1024 默认/768/512 等），云端知识库多用 512 维；大规模向量化可用异步批处理接口。
-- **排序（Rerank）**：推荐 `qwen3-rerank`（文本）与 `qwen3-vl-rerank`（[多模态](multimodal.md)）；`gte-rerank` 系列将于 2026 年下线，建议迁移。
-- **[多模态](multimodal.md)向量**：`qwen3-vl-embedding` 支持文本/图像/视频映射到同一语义空间，用于跨模态检索；图片问答类知识库使用 `multimodal-embedding-v1`（1024 维）。
+RAG 效果由建立索引、检索召回、生成答案三阶段共同决定。建议先建立至少 100 组问题的评估基线（覆盖事实型/比较型/教程型/分析型），再针对失败用例（大模型打分 < 4）逐项诊断：
 
-## 知识库配置要点
-
-- **类型不可改**：创建时选定文档搜索 / 数据查询 / 图片问答 / 音视频搜索类，后续不可更改。
-- **一次性配置项**：Meta 信息抽取、多轮对话改写与知识库绑定，创建时未设好则后续无法开启（除非重建）。
-- **切片**：推荐"智能切分"，按语义自适应选择切片点，单切片 Token 上限 6,000。
-- **规格**：标准版（0.03 元/小时、1 QPS）与旗舰版（按 RCU 计费、50–10,000 QPS）；RCU 按"向上取整（峰值 QPS ÷ 50）"估算。
-
-## 效果优化与诊断
-
-优化建议先建立评估基线（至少 100 组覆盖事实 / 比较 / 教程 / 分析型的评测用例），再按失败类型针对性改进：
-
-- **没有相关知识**：补充知识库内容，优化源文件排版（去水印、避免合并/跨页单元格、优先 Markdown），统一实体表述，启用多轮对话改写。
-- **召回不相关**：为文件加标签做前置过滤，或配置 Meta 元数据做结构化筛选。
-- **切片不完整**：改用智能切分，人工检查并修正异常切片。
-- **重排不佳**：通过命中测试反复调整相似度阈值与召回片段数（K 值 1–20）。
-
-## 鉴权与调用约定
-
-知识检索与问答接口属于 DashScope 应用网关体系（HTTP REST），使用 API Key Bearer 鉴权，Base URL 由业务空间 ID 拼接：`https://{workspaceId}.cn-beijing.maas.aliyuncs.com`。默认用户维度限流 25 QPS。这与 `CreateIndex`、`Retrieve` 等 OpenAPI RPC 接口不同。
+- 检索无效 → 补充知识、优化排版、统一实体、开启多轮对话改写；
+- 召回不相关 → 标签过滤、元数据结构化搜索；
+- 切片不完整 → 智能切分 + 人工修正；
+- 重排不佳 → 调整相似度阈值与召回片段数；
+- 模型理解有误 → 更换为参数更多的商业模型。
 
 ## 关联主题页
 
 - [knowledge base](../guides/knowledge-base.md)
-- [knowledge](../api/knowledge.md)
 - [frameworks](../api/frameworks.md)
+- [knowledge](../api/knowledge.md)
 - [application use cases](../guides/application-use-cases.md)
-- [vector and sort](../api/vector-and-sort.md)
 - [use cases](../guides/use-cases.md)
-- [data connection overview](../guides/data-connection-overview.md)
-
+- [vector and sort](../api/vector-and-sort.md)
 
 

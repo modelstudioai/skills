@@ -7,63 +7,17 @@
 -   集成至个人项目：通过 MCP SDK 调用，实现灵活编码和深度定制。
     
 
-## 效果展示
-
-在 Cherry Studio 中调用阿里云百炼提供的 Amap Maps MCP 服务，搭建一个路线规划智能体应用。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9558605571/p996589.png)
-
-## 前提条件
-
-### 1\. 开通阿里云百炼
-
-1.  **注册账号**：若无阿里云账号，需首先[注册](https://account.aliyun.com/register/qr_register.htm)。
-    
-    > 如遇问题，请参见[注册阿里云账号](https://help.aliyun.com/zh/account/step-1-register-an-alibaba-cloud-account)。
-    
-2.  **开通阿里云百炼：**使用**阿里云主账号**前往[阿里云百炼大模型服务平台](https://bailian.console.aliyun.com/?tab=model#/model-market)，阅读并同意协议后，将自动开通阿里云百炼，如果未弹出服务协议，则表示您已经开通。
-    
-    > 如果开通服务时提示"您尚未进行实名认证"，请先进行[实名认证](https://help.aliyun.com/zh/account/verify-your-identity-individual-account)。
-    
-
-> 首次开通百炼后，您可领取新人免费额度（有效期：百炼开通后90天内），用于模型推理服务。免费额度领取方法和详情，请查看[新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota)页面。
-
-**说明**
-
-超出额度或期限将产生费用，开启[消费限额](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)功能将避免此情况下产生费用，具体费用请以控制台的实际报价和最终账单为准。
-
-### **2\. 获取百炼 API Key**
-
-1.  前往[API Key（北京）](https://bailian.console.aliyun.com/?tab=model#/api-key)、[API Key（新加坡）](https://modelstudio.console.aliyun.com/?tab=model#/api-key)或[API Key（弗吉尼亚）](https://modelstudio.console.aliyun.com/us-east-1?tab=model#/api-key)页面，单击**创建API KEY**。
-    
-2.  在弹窗中配置以下信息，并单击**确定**：
-    
-    -   **归属账号**：建议选择主账号（**账号**列内容为纯数字账号ID）。
-        
-    -   **归属业务空间**：建议选择默认业务空间。
-        
-3.  点击API Key旁的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8412544571/p994217.png)图标获取该API Key。
-    
-    > 主账号可以查看全部API Key，子账号仅能查看自己创建的API Key。
-    
-    ![2026-02-11\_11-56-27](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0009970771/p1054137.jpg)
-    
-
 ## 开通 MCP 服务
 
 **说明**
 
-百炼 MCP 服务已从旧版 SSE 协议升级为新版 Streamable HTTP 协议。请根据您的情况选择对应的操作步骤：
+百炼 MCP 服务已从旧版 SSE 协议升级为新版 Streamable HTTP 协议。请根据您的情况选择对应的操作步骤。
 
 ## **首次开通（新用户）**
 
 1.  前往[阿里云百炼 MCP 广场](https://bailian.console.aliyun.com/cn-beijing/?spm=5176.21213303.aillm.1.1a232f3dAFihmQ&tab=app&scm=20140722.S_%E7%99%BE%E7%82%BCprompt._.RL_%E7%99%BE%E7%82%BCprompt-LOC_aillm-OR_chat-V_3-RC_llm#/mcp-market)选择 MCP 服务。以 Amap Maps 服务为例，点击卡片。
     
-    ![截屏2026-03-16 15](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9768463771/p1060094.png)
-    
 2.  点击**立即开通**，点击**确认开通**后即可开通 Amap Maps MCP 服务。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9558605571/p996657.png)
     
     **说明**
     
@@ -71,14 +25,10 @@
     
     如果涉及输入敏感信息，需通过创建 KMS 凭据进行加密。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9558605571/p995653.png)
-    
 
 ## **升级协议（已开通用户）**
 
 1.  前往[阿里云百炼 MCP 广场](https://bailian.console.aliyun.com/cn-beijing/?spm=5176.21213303.aillm.1.1a232f3dAFihmQ&tab=app&scm=20140722.S_%E7%99%BE%E7%82%BCprompt._.RL_%E7%99%BE%E7%82%BCprompt-LOC_aillm-OR_chat-V_3-RC_llm#/mcp-market)选择 MCP 服务。以 Amap Maps 服务为例，点击卡片。
-    
-    ![截屏2026-03-16 15](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9768463771/p1060094.png)
     
 2.  单击右侧**取消开通**，再单击**立即开通**，**确认开通**后即可更新 Amap Maps MCP 服务。
     
@@ -95,23 +45,21 @@
     
 2.  进入 [Amap Maps MCP](https://bailian.console.aliyun.com/?tab=mcp&scm=20140722.S_%E7%99%BE%E7%82%BCprompt._.RL_%E7%99%BE%E7%82%BCprompt-LOC_aillm-OR_chat-V_3-RC_llm#/mcp-market/detail/amap-maps) 服务界面，在**外部调用**界面中选择 **Cherry Studio**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9768463771/p1060096.png)
+    页面显示两种配置方式：**方法1 自动配置**，点击**一键配置至 Cherry Studio** 按钮；**方法2 手动配置**，获取 DASHSCOPE\_API\_KEY 并替换配置文件中的对应变量。
     
 3.  点击**一键配置至 Cherry Studio**，选择 API Key，点击**确定**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9558605571/p996572.png)可以在弹出的 Cherry Studio 界面中看到所配置的 MCP 服务的详细信息。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9558605571/p996573.png)
+    弹出**选择 API Key 并配置至 Cherry Studio** 对话框，在列表中选择要使用的 API Key，点击**确定**。可以在弹出的 Cherry Studio 界面中看到所配置的 MCP 服务的详细信息。其中显示服务名称为 **AliyunBailianMCP\_amap-maps**，类型为**服务器发送事件 (sse)**，URL 为 MCP 服务地址，开关已开启。
     
-4.  也可以手动配置 MCP 服务。点击右上角![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9558605571/p996575.png)，在弹出界面选择 API Key 并复制配置文件。在 Cherry Studio 的 **MCP 设置**页面点击**添加服务器**\>**从JSON导入**，粘贴配置信息，点击**确定**。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9558605571/p996576.png)
+4.  也可以手动配置 MCP 服务。在**外部调用**界面获取 DASHSCOPE\_API\_KEY 并复制配置文件。在 Cherry Studio 的 **MCP 设置**页面点击**添加服务器**\>**从JSON导入**，粘贴配置信息，点击**确定**。可以看到已配置的 MCP 服务列表，其中 **AliyunBailianMCP\_amap-maps** 已成功添加并启用。
     
-5.  在 Cherry Studio中使用 MCP 服务。新建话题，在下方点击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9558605571/p995669.png)，选择**AliyunBailianMCP\_amap-maps** 服务。
+5.  在 Cherry Studio 中使用 MCP 服务。新建话题，在下方选择**AliyunBailianMCP\_amap-maps** 服务。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9558605571/p996571.png)
+    在弹出的 MCP 服务列表中，勾选 **AliyunBailianMCP\_amap-maps** 服务并确认。
     
 6.  在对话框中输入`现在出发，从杭州萧山国际机场到杭州西湖景区。请你提供三种公共交通出行方案`，可以看到大模型成功调用了 MCP 工具来规划路线。
     
     > 若模型无法调用 MCP，请参考[常见问题](#a7dddab168yub)。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9558605571/p996570.png)
     
 
 ## Cursor
@@ -120,120 +68,115 @@
     
 2.  进入 [Amap Maps MCP](https://bailian.console.aliyun.com/?tab=mcp&scm=20140722.S_%E7%99%BE%E7%82%BCprompt._.RL_%E7%99%BE%E7%82%BCprompt-LOC_aillm-OR_chat-V_3-RC_llm#/mcp-market/detail/amap-maps) 服务界面，在**外部调用**界面中选择 **Cursor**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9768463771/p1060096.png)
+    页面显示两种配置方式：**方法1 自动配置**，点击**一键配置至 Cursor** 按钮；**方法2 手动配置**，获取 DASHSCOPE\_API\_KEY 并替换配置文件中的对应变量。
     
 3.  点击**一键配置至Cursor**，选择 API Key，点击**确定**。在弹出的 Cursor 界面中点击 **Install**。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9558605571/p996580.png)
+    界面显示 MCP Server 配置信息，包括名称 **AliyunBailianMCP\_amap-maps**、类型 **stdio**、命令 **npx** 等，确认无误后点击 **Install**。
     
     头像右下角状态显示为绿色即为安装成功。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9558605571/p996581.png)
     
 
 ### 通过 SDK 进行开发集成
 
 通过 MCP SDK 调用阿里云百炼 MCP 服务，编码更加灵活。
 
-以下是一个基于 [Qwen Agent](https://github.com/QwenLM/Qwen-Agent) 框架、调用 Amap Maps MCP 服务的智能体应用实例，支持查询杭州市天气。
+以下示例使用 OpenAI SDK 与 MCP SDK 调用百炼联网搜索（WebSearch）MCP 服务，实现联网搜索。
 
-1.  安装 Qwen Agent 框架。
+1.  安装依赖。
     
     ```
-    pip install -U "qwen-agent[gui,rag,code_interpreter,mcp]"
+    pip install openai mcp
     ```
     
 2.  [配置百炼 API Key 到环境变量](https://help.aliyun.com/zh/model-studio/first-api-call-to-qwen#688de734136xo) 。
     
-3.  新建文件`hangzhou_weather.py`，代码示例如下：
+3.  代码示例如下：
     
     ## Python
     
     ```
     # -*- coding: utf-8 -*-
-    # 使用amap-maps工具查询杭州天气
-    
+    # 使用 OpenAI SDK + MCP SDK 调用百炼联网搜索（WebSearch）MCP 服务
     import os
-    from qwen_agent.agents import Assistant
+    import asyncio
+    import json
+    from openai import OpenAI
+    from mcp.client.streamable_http import streamablehttp_client
+    from mcp import ClientSession
     
-    
-    def query_hangzhou_weather():
-        """查询杭州今日天气"""
-        # 检查环境变量
-        api_key = os.getenv('DASHSCOPE_API_KEY')
+    async def main():
+        api_key = os.getenv("DASHSCOPE_API_KEY")
         if not api_key:
             print("错误：请设置环境变量 DASHSCOPE_API_KEY")
-            print("例如：export DASHSCOPE_API_KEY=your_api_key")
             return
-        
-        llm_cfg = {'model': 'qwen-max'}
-        system = (
-            '你是一个天气查询智能体。你将调用名为 amap-maps 的 MCP 服务来查询天气信息。'
-            '请优先调用工具获取结构化的天气数据，并对天气情况做简明解释。'
-        )
-        
-        # 配置MCP工具 (Streamable HTTP 协议)
-        tools = [{
-            "mcpServers": {
-                "amap-maps": {
-                    "type": "streamable-http",
-                    "url": "https://dashscope.aliyuncs.com/api/v1/mcps/amap-maps/mcp",
-                    "headers": {
-                        "Authorization": f"Bearer {api_key}"
-                    }
-                }
-            }
-        }]
-        
-        # 创建智能体
-        bot = Assistant(
-            llm=llm_cfg,
-            name='天气查询智能体',
-            description='天气信息查询',
-            system_message=system,
-            function_list=tools,
-        )
+        mcp_url = "https://dashscope.aliyuncs.com/api/v1/mcps/WebSearch/mcp"
+        headers = {"Authorization": f"Bearer {api_key}"}
+        # 1. 连接 MCP Server，获取可用工具列表
+        async with streamablehttp_client(mcp_url, headers=headers) as (read, write, _):
+            async with ClientSession(read, write) as session:
+                await session.initialize()
+                tools_result = await session.list_tools()
+                # 转换为 OpenAI function calling 格式
+                openai_tools = []
+                for tool in tools_result.tools:
+                    openai_tools.append({
+                        "type": "function",
+                        "function": {
+                            "name": tool.name,
+                            "description": tool.description or "",
+                            "parameters": tool.inputSchema or {"type": "object", "properties": {}},
+                        },
+                    })
+                # 2. 调用 DashScope（OpenAI 兼容接口）
+                client = OpenAI(
+                    api_key=api_key,
+                    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+                )
+                messages = [{"role": "user", "content": "搜索一下阿里云百炼MCP的最新进展"}]
+                print("正在联网搜索...")
+                print("=" * 50)
+                # 3. 多轮工具调用循环
+                while True:
+                    response = client.chat.completions.create(
+                        model="qwen-max",
+                        messages=messages,
+                        tools=openai_tools or None,
+                    )
+                    choice = response.choices[0]
+                    msg = choice.message
+                    if not msg.tool_calls:
+                        print(msg.content)
+                        break
+                    messages.append(msg)
+                    for tc in msg.tool_calls:
+                        args = json.loads(tc.function.arguments)
+                        result = await session.call_tool(tc.function.name, args)
+                        tool_content = ""
+                        for block in result.content:
+                            if hasattr(block, "text"):
+                                tool_content += block.text
+                        messages.append({
+                            "role": "tool",
+                            "tool_call_id": tc.id,
+                            "content": tool_content,
+                        })
     
-        # 查询杭州天气
-        messages = []
-        query = "今天是几号？查询杭州今日的天气情况"
-        messages.append({'role': 'user', 'content': query})
-    
-        print("正在查询杭州今日天气...")
-        print("=" * 50)
-        
-        # 执行查询并收集所有响应
-        all_responses = []
-        for response in bot.run(messages):
-            all_responses.append(response)
-        
-        # 提取最终的assistant回复内容
-        final_content = ""
-        if all_responses:
-            last_response = all_responses[-1]
-            if isinstance(last_response, list):
-                for item in last_response:
-                    if isinstance(item, dict) and item.get('role') == 'assistant' and 'content' in item:
-                        final_content = item['content']
-            elif isinstance(last_response, dict) and 'content' in last_response:
-                final_content = last_response['content']
-        
-        # 输出最终结果
-        if final_content:
-            print(final_content)
-        else:
-            print("未能获取到天气信息")
-    
-    
-    if __name__ == '__main__':
-        query_hangzhou_weather()
+    if __name__ == "__main__":
+        asyncio.run(main())
     ```
     
 4.  运行代码，结果如下：
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9768463771/p1060102.png)
-    
-    > 运行代码时，若提示`npx`不是内部或外部命令，请先安装`[Node.js](https://nodejs.org/zh-cn)`。
+    ```
+    正在联网搜索...
+    ==================================================
+    阿里云百炼 MCP（Model Context Protocol）是一项新推出的服务，允许用户在百炼平台上统一接入和管理 MCP 服务。最新进展包括：
+    1. 支持通过 MCP 广场一键开通多种 MCP 服务（如 Amap Maps、联网搜索等）。
+    2. 提供 Streamable HTTP 协议，支持外部应用通过标准 HTTP 调用。
+    3. 已与 Cherry Studio、Cursor 等主流工具集成，支持自动配置。
+    4. 开发者可通过 MCP SDK 灵活编码集成至自有项目。
+    ```
     
 
 ## 常见问题

@@ -119,6 +119,12 @@ HTTP
 
 HTTP
 
+语义 VAD 语音助手 / 智能客服（支持 Function Calling）
+
+`qwen-audio-3.0-realtime-plus`
+
+WebSocket
+
 ## S2S 单模型的附带能力
 
 以下能力由 Qwen3.5-Omni / Qwen3-Omni 模型在 S2S 单模型路线下直接提供。Pipeline 路线中，对应能力需要由其中的 LLM 等组件分别支持。
@@ -129,7 +135,7 @@ HTTP
 
 **说明**
 
-实时模型和Livetranslate模型不支持此功能。
+Qwen3.5-Omni/Qwen3-Omni实时（WebSocket）模式和Livetranslate模型不支持此功能。Qwen-Audio Realtime（WebSocket）支持Function Calling。
 
 ### 联网搜索
 
@@ -872,33 +878,33 @@ Qwen3.5-Livetranslate支持60种语言（29种音频+文本，31种仅文本）�
 
 **翻译**
 
-`qwen3.5-omni-plus-realtime`
+`qwen-audio-3.0-realtime-plus`
 
 WebSocket
 
-文本、音频、图片
-
-支持
-
-支持
-
-\--
-
-29种
-
-`qwen3.5-omni-plus`
-
-HTTP
-
-文本、音频、图片、视频
-
-支持
+音频、文本
 
 支持
 
 \--
 
-29种
+\--
+
+\--
+
+`qwen-audio-3.0-realtime-flash`
+
+WebSocket
+
+音频、文本
+
+支持
+
+\--
+
+\--
+
+\--
 
 `qwen3.5-omni-flash-realtime`
 
@@ -1250,6 +1256,50 @@ HTTP
 
 18
 
+### Qwen-Audio
+
+**模型**
+
+**API**
+
+**输入**
+
+**Function Calling**
+
+**联网搜索**
+
+**思考模式**
+
+**翻译**
+
+`qwen-audio-3.0-realtime-plus`
+
+WebSocket
+
+音频、文本
+
+支持
+
+\--
+
+\--
+
+\--
+
+`qwen-audio-3.0-realtime-flash`
+
+WebSocket
+
+音频、文本
+
+支持
+
+\--
+
+\--
+
+\--
+
 ### 旧版模型
 
 以下模型不再更新，新项目建议使用Qwen3.5-Omni。
@@ -1313,3 +1363,5 @@ WebSocket
 -   Qwen3.5-Livetranslate（WebSocket，实时）→ [实时语音/音视频翻译-千问](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime)
     
 -   Qwen3-Livetranslate（HTTP，文件）→ [音视频文件翻译-千问](https://help.aliyun.com/zh/model-studio/qwen3-livetranslate-flash)
+    
+-   Qwen-Audio Realtime（WebSocket，实时语音对话）→ [实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides)

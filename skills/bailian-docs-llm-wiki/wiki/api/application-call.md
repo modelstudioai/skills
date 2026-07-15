@@ -64,8 +64,8 @@ print(response.model_dump_json(indent=2))
 
 Responses API 支持在 `content` 数组中混合多种输入类型：
 
-- **图像输入**：通过 `input_image` 类型传入图片 URL。智能体应用需选用通义千问 VL 系列模型并将文件处理方式设为「自定义处理」。
-- **文件输入**：通过 `input_file` 类型传入文件 URL。仅智能体应用支持，需配置「全文引用」或「切片检索」处理方式。
+- **图像输入**：通过 `input_image` 类型传入图片 URL。[智能体应用](../concepts/agent-application.md)需选用通义千问 VL 系列模型并将文件处理方式设为「自定义处理」。
+- **文件输入**：通过 `input_file` 类型传入文件 URL。仅[智能体应用](../concepts/agent-application.md)支持，需配置「全文引用」或「切片检索」处理方式。
 
 ### [异步调用](../concepts/async-invocation.md)
 
@@ -103,7 +103,7 @@ print(response.output.text)
 
 **多轮对话**通过 `session_id` 维护上下文：首次请求无需传入，响应中会返回 `session_id`；后续请求携带该值即可延续对话。`session_id` 在最后一次请求后 1 小时内有效。
 
-新版智能体应用（Agent 2.0）的调用方式与上述基本一致，参见 [新版智能体应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md)。
+新版[智能体应用](../concepts/agent-application.md)（Agent 2.0）的调用方式与上述基本一致，参见 [新版智能体应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md)。
 
 ## 参数传递
 
@@ -138,6 +138,9 @@ response = await client.responses.create(
 - [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)
 - [新版智能体应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md)
 - [应用 DashScope API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)
+
+
+
 
 
 

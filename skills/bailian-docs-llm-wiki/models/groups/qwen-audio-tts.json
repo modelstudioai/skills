@@ -1,0 +1,164 @@
+{
+  "name": "Qwen-Audio-TTS",
+  "description": "Qwen-Audio-TTS是一款面向实时交互场景和高质量语音生成场景的语音合成大模型。模型支持多种小语种和中文方言，并具有Free-style 指令遵循能力、Context能力和细粒度标签控制能力，可更灵活地控制情绪、语气、角色、语速、音量等表达方式。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Audio"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
+      "description": "qwen-audio-3.0-tts-plus是面向高质量语音生成场景打造的高性能语音合成大模型。相比前一版本，模型支持更多小语种和中文方言，显著提升方言发音的正宗程度，并增强了 free-style 指令遵循能力和细粒度标签控制能力，可更准确地控制情绪、语气、角色、语速、音量和合成风格。同时，模型在噪声、混响等复杂声学条件下具备更强鲁棒性，进一步提升了音质、清晰度、分辨率和整体表现力。Plus 版本更强调合成效果和细节表现，适用于有更高音质、自然度和表现力要求的专业场景，如内容创作、有声书、影视配音、品牌声音设计和高品质语音服务。",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen-audio-3.0-tts-plus",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1.4",
+          "type": "cosy_tts_number",
+          "priceName": "语音合成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        }
+      },
+      "capabilities": [
+        "Realtime-Text-to-Speech"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-07-14T09:19:15.113+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "qwen-audio-3.0-tts-plus",
+      "docUrl": "https://help.aliyun.com/document_detail/2938790.html",
+      "category": "Audio",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\n\nimport dashscope\nfrom dashscope.audio.tts_v2 import *\n\n# If the API Key is not configured in the environment variable, your-api-key needs to be replaced with your own API Key\n# dashscope.api_key = \"your-api-key\"\n\ndashscope.base_websocket_api_url='wss://[workspace-id].cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'\n\nmodel = \"qwen-audio-3.0-tts-plus\"\nvoice = \"longanfengyue\"\n\nsynthesizer = SpeechSynthesizer(model=model, voice=voice)\naudio = synthesizer.call(\"How is the weather today?\")\n\nwith open('output.mp3', 'wb') as f:\n    f.write(audio)",
+            "docUrl": "https://help.aliyun.com/document_detail/2938790.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Audio"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
+      "description": "qwen-audio-3.0-tts-flash是面向实时交互场景优化的高性能语音合成大模型。相比前一版本，模型支持更多小语种和中文方言，提升了方言发音的正宗程度，并增强了 free-style 指令遵循能力和细粒度标签控制能力，可更灵活地控制情绪、语气、角色、语速、音量等表达方式。同时，模型在噪声、混响等复杂声学条件下具备更强鲁棒性，提升了音质、清晰度和整体表现力。Flash 版本重点优化实时合成体验，首包延时控制在 200ms 以内，适用于语音助手、实时对话、智能客服等低延迟交互场景。",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen-audio-3.0-tts-flash",
+      "prices": [
+        {
+          "priceUnit": "每万字符",
+          "price": "1",
+          "type": "cosy_tts_number",
+          "priceName": "语音合成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        }
+      },
+      "capabilities": [
+        "Realtime-Text-to-Speech"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-07-14T09:47:36.084+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "qwen-audio-3.0-tts-flash",
+      "docUrl": "https://help.aliyun.com/document_detail/2938790.html",
+      "category": "Audio",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\n\nimport dashscope\nfrom dashscope.audio.tts_v2 import *\n\n# If the API Key is not configured in the environment variable, your-api-key needs to be replaced with your own API Key\n# dashscope.api_key = \"your-api-key\"\n\ndashscope.base_websocket_api_url='wss://[workspace-id].cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'\n\nmodel = \"qwen-audio-3.0-tts-flash\"\nvoice = \"longanfengyue\"\n\nsynthesizer = SpeechSynthesizer(model=model, voice=voice)\naudio = synthesizer.call(\"How is the weather today?\")\n\nwith open('output.mp3', 'wb') as f:\n    f.write(audio)",
+            "docUrl": "https://help.aliyun.com/document_detail/2938790.html"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -44,6 +44,12 @@ Qwen3.5-Omni Realtime（WebSocket）
 
 [实时（Qwen-Omni-Realtime）](https://help.aliyun.com/zh/model-studio/realtime)
 
+**实时语音对话（语义 VAD）**：端到端语音交互，支持语义轮次检测（smart\_turn），无意义附和声不会打断，支持 Function Calling（语音助手、智能客服）
+
+Qwen-Audio（WebSocket）
+
+[实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides)
+
 **音视频内容分析**：上传音频或视频文件，AI分析内容并生成文本或语音回复（视频审核、会议纪要、字幕生成）
 
 Qwen3.5-Omni（HTTP）
@@ -76,7 +82,7 @@ Qwen3.5-Omni Plus / Flash（HTTP / WebSocket）
 
 -   内容分析场景中，Qwen3.5-Omni支持音频最长3小时、视频最长1小时。
     
--   支持工具调用（Function Calling）：Qwen3.5-Omni（WebSocket + HTTP）、Qwen3-Omni-Flash（仅HTTP）。
+-   支持工具调用（Function Calling）：Qwen3.5-Omni（WebSocket + HTTP）、Qwen3-Omni-Flash（仅HTTP）、Qwen-Audio Realtime（WebSocket）。
     
 -   支持联网搜索：仅Qwen3.5-Omni（HTTP / WebSocket）。联网搜索与Function Calling不可同时开启。
     
@@ -889,6 +895,30 @@ HTTP
 
 不支持
 
+`qwen-audio-3.0-realtime-plus`
+
+WebSocket
+
+音频、文本
+
+支持
+
+不支持
+
+不支持
+
+`qwen-audio-3.0-realtime-flash`
+
+WebSocket
+
+音频、文本
+
+支持
+
+不支持
+
+不支持
+
 ## 所有模型
 
 ### Qwen3.5-Omni
@@ -1154,6 +1184,44 @@ HTTP
 音频、视频
 
 18
+
+### Qwen-Audio
+
+**模型ID**
+
+**API**
+
+**输入**
+
+**Function Calling**
+
+**联网搜索**
+
+**思考模式**
+
+`qwen-audio-3.0-realtime-plus`
+
+WebSocket
+
+音频、文本
+
+支持
+
+不支持
+
+不支持
+
+`qwen-audio-3.0-realtime-flash`
+
+WebSocket
+
+音频、文本
+
+支持
+
+不支持
+
+不支持
 
 ### 旧版模型
 

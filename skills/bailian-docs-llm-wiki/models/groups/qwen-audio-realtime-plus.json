@@ -1,0 +1,116 @@
+{
+  "name": "Qwen-Audio-Realtime-Plus",
+  "description": "Qwen-Audio-Realtime 是一款登顶全球权威评测的下一代实时双工语音大模型，模型兼顾了模型智商与双工对话节奏,在保持流畅、自然的实时交互体验的同时,语音推理能力不打折扣;并通过并行推理和全向流式等工程优化,将端到端响应时延控制在低水平,实现\"又快又聪明\"的对话体验。Plus版本更注重高质量的回复结果。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Audio",
+          "Text"
+        ],
+        "request_modality": [
+          "Audio",
+          "Text"
+        ]
+      },
+      "description": "千问实时语音大模型  是一款登顶全球权威评测的下一代实时双工语音大模型，它在全球权威第三方评测平台 Artificial Analysis Speech-to-Speech子项中取得综合排名第一。千问实时语音大模型 兼顾了模型智商与双工对话节奏,在保持流畅、自然的实时交互体验的同时,语音推理能力不打折扣;并通过并行推理和全向流式等工程优化,将端到端响应时延控制在低水平,实现\"又快又聪明\"的对话体验。标准版更注重高质量的回复结果。",
+      "features": [
+        "function-calling"
+      ],
+      "provider": "qwen",
+      "model": "qwen-audio-3.0-realtime-plus",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "40",
+          "type": "audio_input_token",
+          "priceName": "输入：音频"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "5",
+          "type": "audio_text_input_token",
+          "priceName": "输入：文本"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "40",
+          "type": "audio_text_output_token",
+          "priceName": "输出：文本"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "150",
+          "type": "audio_output_token",
+          "priceName": "输出：文本+音频（输出的文本不计费）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 10000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 6,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 10000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 6,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "capabilities": [
+        "Realtime-Chatting"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 4096,
+      "latestOnlineAt": "2026-07-14T06:59:43.526+00:00",
+      "contextWindow": 8192,
+      "maxInputTokens": 4096,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "千问实时语音大模型 （标准版）",
+      "docUrl": "https://help.aliyun.com/document_detail/3041584.html",
+      "category": "Audio",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "import asyncio\nimport base64\nimport json\nimport os\nimport pyaudio\nimport websockets\n\nAPI_KEY = os.environ[\"DASHSCOPE_API_KEY\"]\nURL = \"wss://[workspace-id].cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen-audio-3.0-realtime-plus\"\n\npya = pyaudio.PyAudio()\nmic = pya.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True)\nspk = pya.open(format=pyaudio.paInt16, channels=1, rate=24000, output=True)\n\nasync def main():\n    headers = {\"Authorization\": f\"Bearer {API_KEY}\"}\n    async with websockets.connect(URL, additional_headers=headers) as ws:\n        await ws.send(json.dumps({\n            \"type\": \"session.update\",\n            \"session\": {\n                \"modalities\": [\"text\", \"audio\"],\n                \"voice\": \"longanqian\",\n                \"turn_detection\": {\n                    \"type\": \"server_vad\",\n                    \"threshold\": 0.5,\n                    \"silence_duration_ms\": 500\n                }\n            }\n        }))\n\n        async def send_audio():\n            while True:\n                data = await asyncio.to_thread(mic.read, 3200, False)\n                await ws.send(json.dumps({\n                    \"type\": \"input_audio_buffer.append\",\n                    \"audio\": base64.b64encode(data).decode()\n                }))\n                await asyncio.sleep(0.02)\n\n        async def recv_events():\n            async for msg in ws:\n                event = json.loads(msg)\n                t = event[\"type\"]\n                if t == \"response.audio.delta\":\n                    audio = base64.b64decode(event[\"delta\"])\n                    await asyncio.to_thread(spk.write, audio)\n                elif t == \"conversation.item.input_audio_transcription.completed\":\n                    print(f\"[You] {event['transcript']}\")\n                elif t == \"response.audio_transcript.done\":\n                    print(f\"[AI] {event['transcript']}\")\n                elif t == \"error\":\n                    print(f\"[Error] {event['error']['message']}\")\n\n        await asyncio.gather(send_audio(), recv_events())\n\nif __name__ == \"__main__\":\n    try:\n        asyncio.run(main())\n    except KeyboardInterrupt:\n        mic.close()\n        spk.close()\n        pya.terminate()\n        print(\"\\nSession ended.\")",
+            "docUrl": "https://help.aliyun.com/document_detail/3041584.html"
+          }
+        }
+      }
+    }
+  ]
+}

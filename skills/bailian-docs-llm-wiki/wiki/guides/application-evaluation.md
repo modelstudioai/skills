@@ -1,6 +1,6 @@
 # application evaluation
 
-阿里云百炼提供完整的应用评测体系，支持对智能体应用和工作流应用的输出质量进行系统化评估。平台同时提供自动评测与手动评测两种模式，并通过评测集、评估器和标签三大组件构建多维度的评测闭环。当前平台存在新旧两套评测系统，新版在评测任务管理、评估器和标签体系上做了较大升级。
+阿里云百炼提供完整的应用[评测体系](../concepts/evaluation.md)，支持对[智能体应用](../concepts/agent-application.md)和工作流应用的输出质量进行系统化评估。平台同时提供自动评测与手动评测两种模式，并通过评测集、评估器和标签三大组件构建多维度的评测闭环。当前平台存在新旧两套评测系统，新版在评测任务管理、评估器和标签体系上做了较大升级。
 
 ## 评测模式
 
@@ -10,12 +10,12 @@
 
 [自动评测](../../raw/application-user-guide/application-evaluation/application-auto-evaluation.md)利用大模型基于应用关联的知识库自动生成评测集，并对智能体的回答进行自动评分，生成评测报告与调优建议。支持两种子模式：
 
-- **单应用评测**：深度评估单个智能体应用的表现，生成包含评分、错误分析和优化建议的详细报告。
+- **单应用评测**：深度评估单个[智能体应用](../concepts/agent-application.md)的表现，生成包含评分、错误分析和优化建议的详细报告。
 - **多应用横向评测**：在同一评测基准下对比最多 8 个应用（或同一应用的不同版本），用于选型决策或版本迭代效果验证。
 
 前提条件：
 
-1. 仅面向**已发布**的智能体应用，且应用须已配置知识库。
+1. 仅面向**已发布**的[智能体应用](../concepts/agent-application.md)，且应用须已配置知识库。
 2. 须开通**应用观测**功能，并将待评测应用添加到观测列表。
 3. 子账号需获取`管理员`或`应用评测-操作`权限。
 4. 多应用横向评测时，所有被选应用必须关联至少一个相同的知识库。
@@ -59,7 +59,7 @@
 
 ## 评估器
 
-[评估器](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/grader.md)是新版评测体系的核心组件，用于自动评估应用输出质量。支持三种创建方式：
+[评估器](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/grader.md)是新版[评测体系](../concepts/evaluation.md)的核心组件，用于自动评估应用输出质量。支持三种创建方式：
 
 ### 基于预置模板
 
@@ -157,6 +157,9 @@
 - [标签管理](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/label-management.md)
 - [评测任务](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/evaluation-task.md)
 - [评估器](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/grader.md)
+
+
+
 
 
 

@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 165 个模型家族 · 371 个主干模型 · 更新于 2026-07-12
+> 自动生成 · 共 169 个模型家族 · 382 个主干模型 · 更新于 2026-07-15
 
 **机器查询走结构化文件**：
 
@@ -84,7 +84,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [通义法睿-Plus-32K](groups/farui-plus.json) — 通义法睿是以通义千问为基座经法律行业数据和知识专门训练的法律行业大模型产品，综合运用了模型精调、强化学习、 RAG检索增强、法律Agent技术，具有回答法律问题、推理法律适用、推荐裁判类案、辅助案情分…
   - 模型：`farui-plus`
 
-## 图像生成 `IG` — 29 个家族
+## 图像生成 `IG` — 30 个家族
 
 - [AI试衣-Plus版](groups/aitryon-plus.json) — aitryon-plus是一款效果出众的虚拟试衣图片生成模型，可基于服饰平拍图片以及人物正面全身照，输出服饰的人物试衣效果图片。 相较于aitryon模型，aitryon-plus模型在图片清晰度、服…
   - 模型：`aitryon-plus`
@@ -112,6 +112,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen-image`, `qwen-image-plus`
 - [Qwen-MT-Image](groups/qwen-mt-image.json) — 专注做图片翻译的模型服务，能将中、英、日等11个语言的图片翻译到指定的语言，精准还原图片排版和内容信息，支持术语定义、敏感词过滤、商品主体检测等自定义功能，提供灵活、准确、高效的图像本地化服务。
   - 模型：`qwen-mt-image`
+- [Vidu AI生图](groups/vidu-image-models-market-place.json) — 由生数科技提供Vidu系列图片生成API服务，多图参考，精准还原，高速高质。
+  - 模型：`vidu/vidu-image_reference2image`, `vidu/viduq2-fast_reference2image`, `vidu/viduq2-pro_reference2image`, `vidu/viduq3-fast_reference2image`
 - [Wan-Image](groups/wan-image-edit.json) — 指令编辑图片内容，轻松实现局部修改、风格变化、一致性保持等
   - 模型：`wan2.5-i2i-preview`, `wan2.6-image`, `wan2.7-image`, `wan2.7-image-pro`, `wanx2.1-imageedit`
 - [Wan-T2I](groups/wan-text-to-image.json) — 文字生成图片，写实质感细腻画面，文字内容生成，艺术风格表现
@@ -162,7 +164,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [PixVerse V6](groups/pixverse-v6-market-place.json) — 由爱诗科技提供的PixVerse V系列视频大模型API服务。
   - 模型：`pixverse/pixverse-v6-it2v`, `pixverse/pixverse-v6-kf2v`, `pixverse/pixverse-v6-r2v`, `pixverse/pixverse-v6-t2v`
 - [Vidu AI生视频](groups/vidu-models-market-place.json) — 由生数科技提供Vidu系列视频生成API服务，电影级画质、一致性保持、精准可控。
-  - 模型：`vidu/viduq2_reference2video`, `vidu/viduq2_text2video`, `vidu/viduq2-pro_img2video`, `vidu/viduq2-pro_reference2video`, `vidu/viduq2-pro_start-end2video`, `vidu/viduq2-pro-fast_img2video`, `vidu/viduq2-turbo_img2video`, `vidu/viduq2-turbo_start-end2video`, `vidu/viduq3_reference2video`, `vidu/viduq3-mix_reference2video`, `vidu/viduq3-pro_img2video`, `vidu/viduq3-pro_start-end2video`, `vidu/viduq3-pro_text2video`, `vidu/viduq3-turbo_img2video`, `vidu/viduq3-turbo_reference2video`, `vidu/viduq3-turbo_start-end2video`, `vidu/viduq3-turbo_text2video`
+  - 模型：`vidu/viduq2_reference2video`, `vidu/viduq2_text2video`, `vidu/viduq2-pro_img2video`, `vidu/viduq2-pro_reference2video`, `vidu/viduq2-pro_start-end2video`, `vidu/viduq2-pro-fast_img2video`, `vidu/viduq2-turbo_img2video`, `vidu/viduq2-turbo_start-end2video`, `vidu/viduq3_reference2video`, `vidu/viduq3-ad_reference2video`, `vidu/viduq3-drama_reference2video`, `vidu/viduq3-mix_reference2video`, `vidu/viduq3-pro_img2video`, `vidu/viduq3-pro_start-end2video`, `vidu/viduq3-pro_text2video`, `vidu/viduq3-pro-fast_img2video`, `vidu/viduq3-turbo_img2video`, `vidu/viduq3-turbo_reference2video`, `vidu/viduq3-turbo_start-end2video`, `vidu/viduq3-turbo_text2video`
 - [Wan-I2V](groups/wan-image-to-video.json) — 图片生成视频内容，稳定保持图像主体、风格和文字等细节信息
   - 模型：`wan2.2-animate-mix`, `wan2.2-animate-move`, `wan2.2-i2v-flash`, `wan2.2-i2v-plus`, `wan2.2-kf2v-flash`, `wan2.2-s2v`, `wan2.2-s2v-detect`, `wan2.5-i2v-preview`, `wan2.6-i2v`, `wan2.6-i2v-flash`, `wan2.7-i2v`, `wanx2.1-i2v-plus`, `wanx2.1-i2v-turbo`, `wanx2.1-kf2v-plus`
 - [Wan-R2V](groups/wan-reference-to-video.json) — 参考视频中的人或物，精准保持形象和声音，支持多参考合拍
@@ -369,17 +371,26 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [通义多模态向量](groups/embedding.json) — 基于LLM底座的通用多模态表征模型，支持文本、图像、视频3种模态，具有以视觉为中心、全场景性能优异、高性价比的特点，适用于以图搜图、以文搜图、以文搜视频、以视频搜视频、以文搜文等下游多样化任务场景。
   - 模型：`multimodal-embedding-v1`, `tongyi-embedding-vision-flash`, `tongyi-embedding-vision-plus`
 
+## Realtime-Chatting `Realtime-Chatting` — 2 个家族
+
+- [Qwen-Audio-Realtime-Flash](groups/qwen-audio-realtime-flash.json) — Qwen-Audio-Realtime 是一款登顶全球权威评测的下一代实时双工语音大模型，模型兼顾了模型智商与双工对话节奏,在保持流畅、自然的实时交互体验的同时,语音推理能力不打折扣;并通过并行推理和…
+  - 模型：`qwen-audio-3.0-realtime-flash`
+- [Qwen-Audio-Realtime-Plus](groups/qwen-audio-realtime-plus.json) — Qwen-Audio-Realtime 是一款登顶全球权威评测的下一代实时双工语音大模型，模型兼顾了模型智商与双工对话节奏,在保持流畅、自然的实时交互体验的同时,语音推理能力不打折扣;并通过并行推理和…
+  - 模型：`qwen-audio-3.0-realtime-plus`
+
+## 实时语音合成 `Realtime-Text-to-Speech` — 2 个家族
+
+- [Qwen-Audio-TTS](groups/qwen-audio-tts.json) — Qwen-Audio-TTS是一款面向实时交互场景和高质量语音生成场景的语音合成大模型。模型支持多种小语种和中文方言，并具有Free-style 指令遵循能力、Context能力和细粒度标签控制能力，…
+  - 模型：`qwen-audio-3.0-tts-flash`, `qwen-audio-3.0-tts-plus`
+- [Qwen-TTS-Realtime](groups/qwen-tts-realtime.json) — Qwen-TTS实时模型是通义实验室“qwen系列”模型中的语音合成利器。具备双向上下文感知能力，可以低延迟高保真完成多音色、方言及长文本的双向流式生成。
+  - 模型：`qwen-tts-realtime`, `qwen-tts-realtime-latest`
+
 ## 翻译 `TR` — 2 个家族
 
 - [Qwen-Embedding](groups/qwen-embedding.json) — 基于Qwen模型基座训练的多语言文本统一向量模型，文本检索、聚类、分类性能大幅提升，多语言支持，适用于向量检索、向量化等等场景，可搭配检索增强、文档处理场景使用，支持64~2048维用户自定义向量维度…
   - 模型：`text-embedding-async-v1`, `text-embedding-async-v2`, `text-embedding-v1`, `text-embedding-v2`, `text-embedding-v3`, `text-embedding-v4`
 - [Qwen-Rerank](groups/qwen-rerank.json) — 基于Qwen LLM底座训练的文本排序模型，对输入的Query和候选Docs进行相关性排序，支持100+语种和长文本输入，适用于文本检索、RAG等场景，效果对齐Qwen家族开源Rerank系列模型。
   - 模型：`gte-rerank-v2`, `qwen3-rerank`, `qwen3-vl-rerank`
-
-## 实时语音合成 `Realtime-Text-to-Speech` — 1 个家族
-
-- [Qwen-TTS-Realtime](groups/qwen-tts-realtime.json) — Qwen-TTS实时模型是通义实验室“qwen系列”模型中的语音合成利器。具备双向上下文感知能力，可以低延迟高保真完成多音色、方言及长文本的双向流式生成。
-  - 模型：`qwen-tts-realtime`, `qwen-tts-realtime-latest`
 
 ## 3D 生成 `3D-generation` — 1 个家族
 

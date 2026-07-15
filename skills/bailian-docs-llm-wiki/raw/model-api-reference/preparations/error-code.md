@@ -274,6 +274,19 @@ AI 助理准确分析出原因，并给出解决方案：
 -   必要时优化提示词，明确任务完成的条件，避免模型反复发起同一工具调用。
     
 
+### **The provided messages input is invalid. The error info is \[Unexpected item type in content\] / Input should be a valid string / Input should be a valid dictionary or instance of ... (input.messages.x.content...)**
+
+**原因：** `messages` 数组中某条消息的 `content` 字段包含了不受支持的元素类型。当 `content` 为数组时，其中每个元素必须是字符串，或符合规范的对象（如 `{"type": "text", "text": "..."}`、`{"type": "image_url", ...}` 等）；若数组中混入了数字、布尔值、嵌套数组，或 `type` 取值不受支持的对象，则会触发该错误。该错误对应的 HTTP 状态码为 400，错误码为 `InternalError.Algo.InvalidParameter`。
+
+**常见场景：**使用纯文本模型（如 Qwen-Max 文本系列，包括 `qwen3-max`）时，若 `messages`（尤其是多轮对话历史）中包含图片（`image_url`）等多模态 `content` 元素时，由于纯文本模型不支持图片等模态输入，同样会触发该错误（在部分接入工具/智能体中，该报错可能被转述为「模型服务商返回空内容」等提示）。
+
+**解决方案：**
+
+-   **纯文本模型：**请将 `content` 设置为字符串，不要传入数组或其他类型。若业务需要图片等多模态输入，请改用多模态模型（如 Qwen-VL、Qwen3-VL 系列）；若需继续使用纯文本模型，请在调用前从 `messages` 及对话历史中移除图片（`image_url`）等多模态元素。
+    
+-   **多模态模型：**`content` 数组中的每个元素都需为合法对象，`type` 仅支持 `text`、`image_url`、`video_url`、`video` 等模型支持的模态类型，请勿混入数字、布尔值、嵌套数组，或缺少 `type`、`type` 取值非法的元素。
+    
+
 ### **Required parameter(xxx) missing or invalid, please check the request parameters.**
 
 **原因：** 接口调用参数不合法。
@@ -1022,6 +1035,12 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 -   Batch调用、上下文缓存、模型调优、模型部署产生的费用。
     
 
+### **API provider returned a billing error — your API key has run out of credits or has an insufficient balance. Check your provider's billing dashboard and top up or switch to a different API key.**
+
+**原因：** 通过 OpenClaw 等第三方客户端调用百炼时，若底层账号欠费或余额不足，客户端会将服务端返回的计费类错误聚合为此英文提示。其底层对应的百炼服务端错误码为 Arrearage（即上文 **Access denied, please make sure your account is in good standing.**），并非客户端本身的计费问题。
+
+**解决方案：** 前往[费用与成本](https://usercenter2.aliyun.com/home)查看账号是否欠费：欠费请及时充值（充值后系统余额可能存在延迟，请稍候后重试）；未欠费请确认调用所用的 API Key 是否属于当前账号。
+
 ## **400-**DataInspectionFailed/data\_inspection\_failed
 
 ### **Input or output data may contain inappropriate content. / Input data may contain inappropriate content. / Output data may contain inappropriate content.**
@@ -1033,6 +1052,12 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 ### **Input xxx data may contain inappropriate content.**
 
 **原因：** 输入数据（如提示词或图像）可能包含敏感内容。 **解决方案：** 内容合规检查，请修改输入后重试。
+
+### **Qwen rejected the input image before model inference; no actual ad/porn/OCR result was produced.**
+
+**原因：** 输入图片在进入模型推理前，被内容安全前置检测（绿网）判定为疑似包含敏感或违规内容而拦截。模型未对该图片进行推理，因此不会返回任何识别、OCR 或分析结果。此为对多模态输入图片的安全合规前置校验，与上文输入内容被绿网拦截属同一内容安全机制。
+
+**解决方案：** 请更换或修改输入图片后重试；若确认图片内容合规仍被持续拦截，可提交工单进一步核实。
 
 ## **400-APIConnectionError**
 
@@ -1720,7 +1745,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
             
 -   **填写错误**：阿里云百炼的 API Key 以 `sk-` 开头，请确认未误填其他模型提供商的密钥，且复制时未包含多余空格或换行符。
     
--   **Coding Plan 专属 API Key**：Coding Plan 套餐提供专属 API Key（以 `sk-sp-` 开头），**必须配合专属 API 地址使用**（如 https://coding.dashscope.aliyuncs.com/v1），与通用 API Key 的使用方式不同。请确认同时更新了 API Key 和 Base URL，具体配置方法请参见[接入AI工具](https://help.aliyun.com/zh/model-studio/use-coding-plan-in-ai-tools/)。
+-   **套餐专属 API Key（Coding Plan / Token Plan 团队版）**：Coding Plan 与 Token Plan 团队版均提供以 `sk-sp-` 开头的专属 API Key，**必须配合各自的专属 Base URL 使用**，不可与通用 API Key/Base URL 混用（混用会返回本鉴权错误）。其中 Coding Plan 的专属地址为 https://coding.dashscope.aliyuncs.com/v1；Token Plan 团队版的专属 Base URL 可在控制台**我的订阅**的 API Key 区域查看。请确认同时更新了 API Key 和 Base URL，具体配置方法请分别参见[接入AI工具](https://help.aliyun.com/zh/model-studio/use-coding-plan-in-ai-tools/)与[快速开始](https://help.aliyun.com/zh/model-studio/token-plan-quickstart)。
     
 -   **地域不匹配**：API Key 和 Base URL 属于不同的地域，例如使用了华北2（北京）地域的 API Key 和新加坡地域的 Base URL。请确认您使用的 API Key 位于[北京](https://bailian.console.aliyun.com/?tab=globalset#/efm/api_key)地域页面或[新加坡](https://modelstudio.console.aliyun.com/?tab=globalset#/efm/api_key)地域页面，或[美国](https://modelstudio.console.aliyun.com/us-east-1)地域页面。各地域对应的 Base URL 如下：
     
@@ -1910,7 +1935,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案**：
 
--   如需付费调用，请等待控制台显示免费额度用完后，关闭[免费额度用完即停](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)按钮。
+-   如需继续以付费方式调用，可随时关闭[免费额度用完即停](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)开关，无需等到免费额度用完；关闭后即可按量付费继续调用。
     
 -   若在使用 Coding Plan 时遇到此问题，通常是配置错误所致。Coding Plan 需要配置专属的 Base URL 和 [API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)，详情请参见[Coding Plan快速开始](https://help.aliyun.com/zh/model-studio/coding-plan-quickstart)。
     
@@ -1999,6 +2024,19 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 **原因**：请求过多触发限流。
 
 **解决方案**：请稍后重试。
+
+### **All models are temporarily rate-limited. Please try again in a few minutes.**
+
+**原因：** 当使用 Coding Plan 等通过客户端（如 Claude Code）调用多个模型的场景时，若所有可用模型均触发 429 限流，客户端会聚合返回此提示。底层对应的百炼服务端错误码为 Throttling.RateQuota 或 Throttling.AllocationQuota。
+
+**解决方案：**
+
+-   等待数分钟后重试，限流会自动解除。
+    
+-   降低请求并发数，避免短时间内发送过多请求。
+    
+-   如需更高调用频率，可参考[限流](https://help.aliyun.com/zh/model-studio/rate-limit)申请提额。
+    
 
 ## **429-**Throttling.RateQuota/LimitRequests/limit\_requests
 
@@ -2632,6 +2670,12 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 **原因：**此报错可能由以下原因导致：（1）访问 URL 中包含了特殊字符或非标准格式，导致工作空间授权验证失败。（2）RAM 子账号操作没有权限的业务空间。
 
 **解决方案：**（1）请重新访问百炼控制台首页，再导航到目标页面。（2）需要主账号或具有管理员权限的 RAM 账号为该子账号开通对应业务空间的权限。
+
+## **200-** BailianGateway.Team.NotAuthorised
+
+**原因：**当前 RAM 子账号没有所访问团队（组织）的权限。当 RAM 子账号访问其未被授权的团队（组织）资源时，网关的团队级授权校验未通过，返回此报错。
+
+**解决方案：**请主账号或具有管理员权限的 RAM 账号在权限管理中，将该 RAM 子账号添加至对应团队（组织）并授予相应权限。
 
 ## **Coding Plan**
 

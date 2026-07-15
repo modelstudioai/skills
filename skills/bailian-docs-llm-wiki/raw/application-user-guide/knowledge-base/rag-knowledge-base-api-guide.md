@@ -6,6 +6,10 @@
 
 本文档仅适用于文档搜索类知识库。
 
+**重要**
+
+知识库相关功能仅能在中国站**华北2（北京）**地域开通和使用，其他地域如新加坡、德国（法兰克福）等均不支持知识库功能。
+
 ## **前置步骤**
 
 1.  [子账号](https://help.aliyun.com/zh/model-studio/application-permission-management-overview#24ca2dad7djzs)（主账号不需要）需获取[API权限](https://help.aliyun.com/zh/model-studio/member-management#a2e8c1d6246s2)（AliyunBailianDataFullAccess策略），并[加入一个业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)，然后才能通过阿里云API操作知识库。
@@ -6106,6 +6110,680 @@ func main() {
 }
 ```
 
+## 切片管理
+
+**重要**
+
+-   在调用本示例之前，请务必完成上述所有[前置步骤](#a4a15bd543can)。子账号调用本示例前需[获取AliyunBailianDataFullAccess策略](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)。
+    
+-   若您使用了 IDE 或其他辅助开发插件，需将`ALIBABA_CLOUD_ACCESS_KEY_ID`、`ALIBABA_CLOUD_ACCESS_KEY_SECRET`和`WORKSPACE_ID`变量配置到相应的开发环境中。
+    
+
+## Python
+
+```
+# 示例代码仅供参考，请勿在生产环境中直接使用
+import os
+from alibabacloud_bailian20231229.client import Client as bailian20231229Client
+from alibabacloud_bailian20231229 import models as bailian_models
+from alibabacloud_tea_openapi.models import Config
+from alibabacloud_tea_util.models import RuntimeOptions
+
+def create_client():
+    config = Config(
+        access_key_id=os.environ.get("ALIBABA_CLOUD_ACCESS_KEY_ID"),
+        access_key_secret=os.environ.get("ALIBABA_CLOUD_ACCESS_KEY_SECRET"),
+        endpoint="bailian.cn-beijing.aliyuncs.com"
+    )
+    return bailian20231229Client(config)
+
+def list_chunks(client, workspace_id, index_id, page_num=1, page_size=10):
+    """列出切片"""
+    request = bailian_models.ListChunksRequest(
+        index_id=index_id,
+        page_num=page_num,
+        page_size=page_size,
+    )
+    runtime = RuntimeOptions()
+    response = client.list_chunks_with_options(workspace_id, request, {}, runtime)
+    return response.body
+
+def update_chunk(client, workspace_id, pipeline_id, data_id, chunk_id, content, title=None):
+    """更新切片内容"""
+    request = bailian_models.UpdateChunkRequest(
+        pipeline_id=pipeline_id,
+        data_id=data_id,
+        chunk_id=chunk_id,
+        is_displayed_chunk_content=True,
+        content=content,
+    )
+    if title:
+        request.title = title
+    runtime = RuntimeOptions()
+    response = client.update_chunk_with_options(workspace_id, request, {}, runtime)
+    return response.body
+
+def delete_chunk(client, workspace_id, pipeline_id, chunk_ids):
+    """删除切片"""
+    request = bailian_models.DeleteChunkRequest(
+        pipeline_id=pipeline_id,
+        chunk_ids=chunk_ids,
+    )
+    runtime = RuntimeOptions()
+    response = client.delete_chunk_with_options(workspace_id, request, {}, runtime)
+    return response.body
+
+def main():
+    workspace_id = os.environ.get("WORKSPACE_ID")
+    index_id = "YOUR_INDEX_ID"
+    pipeline_id = "YOUR_INDEX_ID"
+
+    client = create_client()
+
+    # 列出切片
+    result = list_chunks(client, workspace_id, index_id)
+    print(f"Total chunks: {result.data.total}")
+    nodes = result.data.nodes or []
+    for i, node in enumerate(nodes):
+        meta = node.metadata
+        chunk_id = meta.get("_id", "")
+        doc_id = meta.get("doc_id", "")
+        print(f"  [{i}] chunk_id={chunk_id}, doc_id={doc_id}")
+
+    if not nodes:
+        print("No chunks found.")
+        return
+
+    # 更新切片
+    target = nodes[0]
+    target_meta = target.metadata
+    target_chunk_id = target_meta.get("_id")
+    target_data_id = target_meta.get("doc_id")
+    update_result = update_chunk(
+        client, workspace_id, pipeline_id,
+        data_id=target_data_id,
+        chunk_id=target_chunk_id,
+        content="更新后的切片内容",
+    )
+    print(f"Update success: {update_result.success}")
+
+    # 删除切片
+    last_chunk_id = nodes[-1].metadata.get("_id")
+    delete_result = delete_chunk(
+        client, workspace_id, pipeline_id,
+        chunk_ids=[last_chunk_id],
+    )
+    print(f"Delete success: {delete_result.success}")
+
+if __name__ == "__main__":
+    main()
+```
+
+## Java
+
+```
+// 示例代码仅供参考，请勿在生产环境中直接使用
+package com.example;
+
+import com.aliyun.bailian20231229.Client;
+import com.aliyun.bailian20231229.models.*;
+import com.aliyun.teaopenapi.models.Config;
+import com.aliyun.teautil.models.RuntimeOptions;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+public class ChunkManagement {
+
+    public static Client createClient() throws Exception {
+        Config config = new Config()
+                .setAccessKeyId(System.getenv("ALIBABA_CLOUD_ACCESS_KEY_ID"))
+                .setAccessKeySecret(System.getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET"))
+                .setEndpoint("bailian.cn-beijing.aliyuncs.com");
+        return new Client(config);
+    }
+
+    /**
+     * 列出切片
+     */
+    public static ListChunksResponse listChunks(Client client, String workspaceId,
+                                                 String indexId, Integer pageNum, Integer pageSize) throws Exception {
+        ListChunksRequest request = new ListChunksRequest()
+                .setIndexId(indexId)
+                .setPageNum(pageNum)
+                .setPageSize(pageSize);
+        RuntimeOptions runtime = new RuntimeOptions();
+        return client.listChunksWithOptions(workspaceId, request, new java.util.HashMap<>(), runtime);
+    }
+
+    /**
+     * 更新切片
+     */
+    public static UpdateChunkResponse updateChunk(Client client, String workspaceId,
+                                                   String pipelineId, String dataId,
+                                                   String chunkId, String content) throws Exception {
+        UpdateChunkRequest request = new UpdateChunkRequest()
+                .setPipelineId(pipelineId)
+                .setDataId(dataId)
+                .setChunkId(chunkId)
+                .setIsDisplayedChunkContent(true)
+                .setContent(content);
+        RuntimeOptions runtime = new RuntimeOptions();
+        return client.updateChunkWithOptions(workspaceId, request, new java.util.HashMap<>(), runtime);
+    }
+
+    /**
+     * 删除切片
+     */
+    public static DeleteChunkResponse deleteChunk(Client client, String workspaceId,
+                                                   String pipelineId, List<String> chunkIds) throws Exception {
+        DeleteChunkRequest request = new DeleteChunkRequest()
+                .setPipelineId(pipelineId)
+                .setChunkIds(chunkIds);
+        RuntimeOptions runtime = new RuntimeOptions();
+        return client.deleteChunkWithOptions(workspaceId, request, new java.util.HashMap<>(), runtime);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void main(String[] args) throws Exception {
+        String workspaceId = System.getenv("WORKSPACE_ID");
+        String indexId = "YOUR_INDEX_ID";
+        String pipelineId = "YOUR_INDEX_ID";
+
+        Client client = createClient();
+
+        // 列出切片
+        ListChunksResponse listResp = listChunks(client, workspaceId, indexId, 1, 10);
+        ListChunksResponseBody body = listResp.getBody();
+        ListChunksResponseBody.ListChunksResponseBodyData data = body.getData();
+        System.out.println("Total chunks: " + data.getTotal());
+
+        List<ListChunksResponseBody.ListChunksResponseBodyDataNodes> nodes = data.getNodes();
+        if (nodes == null || nodes.isEmpty()) {
+            System.out.println("No chunks found.");
+            return;
+        }
+
+        for (int i = 0; i < nodes.size(); i++) {
+            ListChunksResponseBody.ListChunksResponseBodyDataNodes node = nodes.get(i);
+            Map<String, Object> metadata = (Map<String, Object>) node.getMetadata();
+            String chunkId = metadata != null ? String.valueOf(metadata.get("_id")) : "";
+            String docId = metadata != null ? String.valueOf(metadata.get("doc_id")) : "";
+            System.out.printf("  [%d] chunk_id=%s, doc_id=%s%n", i, chunkId, docId);
+        }
+
+        // 更新切片
+        ListChunksResponseBody.ListChunksResponseBodyDataNodes target = nodes.get(0);
+        Map<String, Object> targetMeta = (Map<String, Object>) target.getMetadata();
+        String targetChunkId = String.valueOf(targetMeta.get("_id"));
+        String targetDataId = String.valueOf(targetMeta.get("doc_id"));
+
+        UpdateChunkResponse updateResp = updateChunk(client, workspaceId, pipelineId,
+                targetDataId, targetChunkId, "更新后的切片内容");
+        System.out.println("Update success: " + updateResp.getBody().getSuccess());
+
+        // 删除切片
+        ListChunksResponseBody.ListChunksResponseBodyDataNodes lastNode = nodes.get(nodes.size() - 1);
+        Map<String, Object> lastMeta = (Map<String, Object>) lastNode.getMetadata();
+        String lastChunkId = String.valueOf(lastMeta.get("_id"));
+
+        DeleteChunkResponse deleteResp = deleteChunk(client, workspaceId, pipelineId,
+                Arrays.asList(lastChunkId));
+        System.out.println("Delete success: " + deleteResp.getBody().getSuccess());
+    }
+}
+```
+
+## PHP
+
+```
+<?php
+// 示例代码仅供参考，请勿在生产环境中直接使用
+require_once __DIR__ . '/vendor/autoload.php';
+
+use AlibabaCloud\SDK\Bailian\V20231229\Bailian;
+use AlibabaCloud\SDK\Bailian\V20231229\Models\ListChunksRequest;
+use AlibabaCloud\SDK\Bailian\V20231229\Models\UpdateChunkRequest;
+use AlibabaCloud\SDK\Bailian\V20231229\Models\DeleteChunkRequest;
+use Darabonba\OpenApi\Models\Config;
+use AlibabaCloud\Dara\Models\RuntimeOptions;
+
+$accessKeyId = getenv('ALIBABA_CLOUD_ACCESS_KEY_ID');
+$accessKeySecret = getenv('ALIBABA_CLOUD_ACCESS_KEY_SECRET');
+$workspaceId = getenv('WORKSPACE_ID');
+$indexId = 'YOUR_INDEX_ID';
+
+// 初始化客户端
+$config = new Config([
+    'accessKeyId' => $accessKeyId,
+    'accessKeySecret' => $accessKeySecret,
+    'endpoint' => 'bailian.cn-beijing.aliyuncs.com'
+]);
+$client = new Bailian($config);
+$runtime = new RuntimeOptions([]);
+$headers = [];
+
+// 列出切片
+$request = new ListChunksRequest([
+    'indexId' => $indexId,
+    'pageNum' => 1,
+    'pageSize' => 10
+]);
+$response = $client->listChunksWithOptions($workspaceId, $request, $headers, $runtime);
+$body = $response->body;
+echo "Total: " . $body->data->total . "\n";
+
+if ($body->data->nodes && count($body->data->nodes) > 0) {
+    $firstNode = $body->data->nodes[0];
+    $metadata = $firstNode->metadata;
+    $docId = $metadata['doc_id'] ?? '';
+    $chunkFullId = $metadata['_id'] ?? '';
+    echo "First chunk _id: $chunkFullId\n";
+
+    // 更新切片
+    $updateReq = new UpdateChunkRequest([
+        'pipelineId' => $indexId,
+        'dataId' => $docId,
+        'chunkId' => $chunkFullId,
+        'isDisplayedChunkContent' => true,
+        'content' => '更新后的切片内容'
+    ]);
+    $updateResp = $client->updateChunkWithOptions($workspaceId, $updateReq, $headers, $runtime);
+    echo "Update success: " . ($updateResp->body->success ? 'true' : 'false') . "\n";
+
+    // 删除切片
+    $lastNode = $body->data->nodes[count($body->data->nodes) - 1];
+    $lastId = $lastNode->metadata['_id'] ?? '';
+    $delReq = new DeleteChunkRequest([
+        'pipelineId' => $indexId,
+        'chunkIds' => [$lastId]
+    ]);
+    $delResp = $client->deleteChunkWithOptions($workspaceId, $delReq, $headers, $runtime);
+    echo "Delete success: " . ($delResp->body->success ? 'true' : 'false') . "\n";
+}
+```
+
+## Node.js
+
+```
+// 示例代码仅供参考，请勿在生产环境中直接使用
+const bailian20231229 = require('@alicloud/bailian20231229');
+const OpenApi = require('@alicloud/openapi-client');
+const Util = require('@alicloud/tea-util');
+
+const WORKSPACE_ID = process.env.WORKSPACE_ID;
+const INDEX_ID = 'YOUR_INDEX_ID';
+
+function createClient() {
+    const config = new OpenApi.Config({
+        accessKeyId: process.env.ALIBABA_CLOUD_ACCESS_KEY_ID,
+        accessKeySecret: process.env.ALIBABA_CLOUD_ACCESS_KEY_SECRET,
+        endpoint: 'bailian.cn-beijing.aliyuncs.com'
+    });
+    return new bailian20231229.default(config);
+}
+
+async function listChunks(client) {
+    const request = new bailian20231229.ListChunksRequest({
+        indexId: INDEX_ID,
+        pageNum: 1,
+        pageSize: 10
+    });
+    const runtime = new Util.RuntimeOptions({});
+    const response = await client.listChunksWithOptions(WORKSPACE_ID, request, {}, runtime);
+    return response.body;
+}
+
+async function updateChunk(client, chunkId, dataId, content) {
+    const request = new bailian20231229.UpdateChunkRequest({
+        pipelineId: INDEX_ID,
+        dataId: dataId,
+        chunkId: chunkId,
+        isDisplayedChunkContent: true,
+        content: content
+    });
+    const runtime = new Util.RuntimeOptions({});
+    const response = await client.updateChunkWithOptions(WORKSPACE_ID, request, {}, runtime);
+    return response.body;
+}
+
+async function deleteChunk(client, chunkId) {
+    const request = new bailian20231229.DeleteChunkRequest({
+        pipelineId: INDEX_ID,
+        chunkIds: [chunkId]
+    });
+    const runtime = new Util.RuntimeOptions({});
+    const response = await client.deleteChunkWithOptions(WORKSPACE_ID, request, {}, runtime);
+    return response.body;
+}
+
+async function main() {
+    const client = createClient();
+
+    // 列出切片
+    const listBody = await listChunks(client);
+    console.log('Total:', listBody.data?.total);
+    const nodes = listBody.data?.nodes || [];
+
+    if (nodes.length === 0) {
+        console.log('No chunks found.');
+        return;
+    }
+
+    for (let i = 0; i < nodes.length; i++) {
+        const metadata = nodes[i].metadata || {};
+        console.log(`  [${i}] chunk_id=${metadata._id}, doc_id=${metadata.doc_id}`);
+    }
+
+    // 更新切片
+    const firstMeta = nodes[0].metadata || {};
+    const updateResult = await updateChunk(client, firstMeta._id, firstMeta.doc_id, '更新后的切片内容');
+    console.log('Update success:', updateResult.success);
+
+    // 删除切片
+    const lastMeta = nodes[nodes.length - 1].metadata || {};
+    const deleteResult = await deleteChunk(client, lastMeta._id);
+    console.log('Delete success:', deleteResult.success);
+}
+
+main().catch(err => {
+    console.error('Error:', err.message);
+    process.exit(1);
+});
+```
+
+## C#
+
+```
+// 示例代码仅供参考，请勿在生产环境中直接使用
+using System;
+using System.Collections.Generic;
+using AlibabaCloud.SDK.Bailian20231229;
+using AlibabaCloud.SDK.Bailian20231229.Models;
+using AlibabaCloud.OpenApiClient.Models;
+using AlibabaCloud.TeaUtil.Models;
+
+class Program
+{
+    static Client CreateClient()
+    {
+        var config = new Config
+        {
+            AccessKeyId = Environment.GetEnvironmentVariable("ALIBABA_CLOUD_ACCESS_KEY_ID"),
+            AccessKeySecret = Environment.GetEnvironmentVariable("ALIBABA_CLOUD_ACCESS_KEY_SECRET"),
+            Endpoint = "bailian.cn-beijing.aliyuncs.com"
+        };
+        return new Client(config);
+    }
+
+    static void Main(string[] args)
+    {
+        var client = CreateClient();
+        var workspaceId = Environment.GetEnvironmentVariable("WORKSPACE_ID");
+        var indexId = "YOUR_INDEX_ID";
+        var headers = new Dictionary<string, string>();
+        var runtime = new RuntimeOptions();
+
+        // 列出切片
+        var listReq = new ListChunksRequest
+        {
+            IndexId = indexId,
+            PageNum = 1,
+            PageSize = 10
+        };
+        var listResp = client.ListChunksWithOptions(workspaceId, listReq, headers, runtime);
+        Console.WriteLine($"Total: {listResp.Body.Data?.Total}");
+
+        if (listResp.Body.Data?.Nodes == null || listResp.Body.Data.Nodes.Count == 0)
+        {
+            Console.WriteLine("No chunks found.");
+            return;
+        }
+
+        for (int i = 0; i < listResp.Body.Data.Nodes.Count; i++)
+        {
+            var node = listResp.Body.Data.Nodes[i];
+            var metadata = node.Metadata as Dictionary<string, object>;
+            var chunkId = metadata?.ContainsKey("_id") == true ? metadata["_id"]?.ToString() : "";
+            var docId = metadata?.ContainsKey("doc_id") == true ? metadata["doc_id"]?.ToString() : "";
+            Console.WriteLine($"  [{i}] chunk_id={chunkId}, doc_id={docId}");
+        }
+
+        // 更新切片
+        var firstNode = listResp.Body.Data.Nodes[0];
+        var firstMeta = firstNode.Metadata as Dictionary<string, object>;
+        var targetChunkId = firstMeta?["_id"]?.ToString() ?? "";
+        var targetDataId = firstMeta?["doc_id"]?.ToString() ?? "";
+
+        var updateReq = new UpdateChunkRequest
+        {
+            PipelineId = indexId,
+            DataId = targetDataId,
+            ChunkId = targetChunkId,
+            IsDisplayedChunkContent = true,
+            Content = "更新后的切片内容"
+        };
+        var updateResp = client.UpdateChunkWithOptions(workspaceId, updateReq, headers, runtime);
+        Console.WriteLine($"Update success: {updateResp.Body.Success}");
+
+        // 删除切片
+        var lastNode = listResp.Body.Data.Nodes[listResp.Body.Data.Nodes.Count - 1];
+        var lastMeta = lastNode.Metadata as Dictionary<string, object>;
+        var lastChunkId = lastMeta?["_id"]?.ToString() ?? "";
+
+        var delReq = new DeleteChunkRequest
+        {
+            PipelineId = indexId,
+            ChunkIds = new List<string> { lastChunkId }
+        };
+        var delResp = client.DeleteChunkWithOptions(workspaceId, delReq, headers, runtime);
+        Console.WriteLine($"Delete success: {delResp.Body.Success}");
+    }
+}
+```
+
+## Go
+
+```
+// 示例代码仅供参考，请勿在生产环境中直接使用
+package main
+
+import (
+	"fmt"
+	"os"
+
+	openapi "github.com/alibabacloud-go/darabonba-openapi/v2/client"
+	bailian20231229 "github.com/alibabacloud-go/bailian-20231229/v2/client"
+	util "github.com/alibabacloud-go/tea-utils/v2/service"
+	"github.com/alibabacloud-go/tea/tea"
+)
+
+func CreateClient() (*bailian20231229.Client, error) {
+	config := &openapi.Config{
+		AccessKeyId:     tea.String(os.Getenv("ALIBABA_CLOUD_ACCESS_KEY_ID")),
+		AccessKeySecret: tea.String(os.Getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET")),
+		Endpoint:        tea.String("bailian.cn-beijing.aliyuncs.com"),
+	}
+	return bailian20231229.NewClient(config)
+}
+
+func ListChunks(client *bailian20231229.Client, workspaceId string, indexId string) (*bailian20231229.ListChunksResponseBody, error) {
+	req := &bailian20231229.ListChunksRequest{
+		IndexId:  tea.String(indexId),
+		PageNum:  tea.Int32(1),
+		PageSize: tea.Int32(10),
+	}
+	headers := make(map[string]*string)
+	runtime := &util.RuntimeOptions{}
+	resp, err := client.ListChunksWithOptions(tea.String(workspaceId), req, headers, runtime)
+	if err != nil {
+		return nil, err
+	}
+	return resp.Body, nil
+}
+
+func UpdateChunk(client *bailian20231229.Client, workspaceId string, pipelineId string, chunkId string, dataId string, content string) error {
+	req := &bailian20231229.UpdateChunkRequest{
+		PipelineId:              tea.String(pipelineId),
+		DataId:                  tea.String(dataId),
+		ChunkId:                 tea.String(chunkId),
+		IsDisplayedChunkContent: tea.Bool(true),
+		Content:                 tea.String(content),
+	}
+	headers := make(map[string]*string)
+	runtime := &util.RuntimeOptions{}
+	resp, err := client.UpdateChunkWithOptions(tea.String(workspaceId), req, headers, runtime)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Update success: %v\n", tea.BoolValue(resp.Body.Success))
+	return nil
+}
+
+func DeleteChunk(client *bailian20231229.Client, workspaceId string, pipelineId string, chunkIds []*string) error {
+	req := &bailian20231229.DeleteChunkRequest{
+		PipelineId: tea.String(pipelineId),
+		ChunkIds:   chunkIds,
+	}
+	headers := make(map[string]*string)
+	runtime := &util.RuntimeOptions{}
+	resp, err := client.DeleteChunkWithOptions(tea.String(workspaceId), req, headers, runtime)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Delete success: %v\n", tea.BoolValue(resp.Body.Success))
+	return nil
+}
+
+func main() {
+	client, err := CreateClient()
+	if err != nil {
+		fmt.Printf("Error creating client: %v\n", err)
+		os.Exit(1)
+	}
+	workspaceId := os.Getenv("WORKSPACE_ID")
+	indexId := "YOUR_INDEX_ID"
+
+	// 列出切片
+	body, err := ListChunks(client, workspaceId, indexId)
+	if err != nil {
+		fmt.Printf("Error listing chunks: %v\n", err)
+		os.Exit(1)
+	}
+	fmt.Printf("Total chunks: %d\n", tea.Int64Value(body.Data.Total))
+
+	// 更新切片
+	err = UpdateChunk(client, workspaceId, indexId, "YOUR_CHUNK_ID", "YOUR_DOC_ID", "更新后的切片内容")
+	if err != nil {
+		fmt.Printf("Error updating chunk: %v\n", err)
+	}
+
+	// 删除切片
+	err = DeleteChunk(client, workspaceId, indexId, []*string{tea.String("YOUR_CHUNK_ID")})
+	if err != nil {
+		fmt.Printf("Error deleting chunk: %v\n", err)
+	}
+package main
+
+import (
+	"fmt"
+	"os"
+
+	openapi "github.com/alibabacloud-go/darabonba-openapi/v2/client"
+	bailian20231229 "github.com/alibabacloud-go/bailian-20231229/v2/client"
+	util "github.com/alibabacloud-go/tea-utils/v2/service"
+	"github.com/alibabacloud-go/tea/tea"
+)
+
+func CreateClient() (*bailian20231229.Client, error) {
+	config := &openapi.Config{
+		AccessKeyId:     tea.String(os.Getenv("ALIBABA_CLOUD_ACCESS_KEY_ID")),
+		AccessKeySecret: tea.String(os.Getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET")),
+		Endpoint:        tea.String("bailian.ap-southeast-1.aliyuncs.com"),
+	}
+	return bailian20231229.NewClient(config)
+}
+
+func ListChunks(client *bailian20231229.Client, workspaceId string, indexId string) (*bailian20231229.ListChunksResponseBody, error) {
+	req := &bailian20231229.ListChunksRequest{
+		IndexId:  tea.String(indexId),
+		PageNum:  tea.Int32(1),
+		PageSize: tea.Int32(10),
+	}
+	headers := make(map[string]*string)
+	runtime := &util.RuntimeOptions{}
+	resp, err := client.ListChunksWithOptions(tea.String(workspaceId), req, headers, runtime)
+	if err != nil {
+		return nil, err
+	}
+	return resp.Body, nil
+}
+
+func UpdateChunk(client *bailian20231229.Client, workspaceId string, pipelineId string, chunkId string, dataId string, content string) error {
+	req := &bailian20231229.UpdateChunkRequest{
+		PipelineId:              tea.String(pipelineId),
+		DataId:                  tea.String(dataId),
+		ChunkId:                 tea.String(chunkId),
+		IsDisplayedChunkContent: tea.Bool(true),
+		Content:                 tea.String(content),
+	}
+	headers := make(map[string]*string)
+	runtime := &util.RuntimeOptions{}
+	resp, err := client.UpdateChunkWithOptions(tea.String(workspaceId), req, headers, runtime)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Update success: %v\n", tea.BoolValue(resp.Body.Success))
+	return nil
+}
+
+func DeleteChunk(client *bailian20231229.Client, workspaceId string, pipelineId string, chunkIds []*string) error {
+	req := &bailian20231229.DeleteChunkRequest{
+		PipelineId: tea.String(pipelineId),
+		ChunkIds:   chunkIds,
+	}
+	headers := make(map[string]*string)
+	runtime := &util.RuntimeOptions{}
+	resp, err := client.DeleteChunkWithOptions(tea.String(workspaceId), req, headers, runtime)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Delete success: %v\n", tea.BoolValue(resp.Body.Success))
+	return nil
+}
+
+func main() {
+	client, err := CreateClient()
+	if err != nil {
+		fmt.Printf("Error creating client: %v\n", err)
+		os.Exit(1)
+	}
+	workspaceId := os.Getenv("WORKSPACE_ID")
+	indexId := "YOUR_INDEX_ID"
+
+	// 列出切片
+	body, err := ListChunks(client, workspaceId, indexId)
+	if err != nil {
+		fmt.Printf("Error listing chunks: %v\n", err)
+		os.Exit(1)
+	}
+	fmt.Printf("Total chunks: %d\n", tea.Int64Value(body.Data.Total))
+
+	// 更新切片
+	err = UpdateChunk(client, workspaceId, indexId, "YOUR_CHUNK_ID", "YOUR_DOC_ID", "更新后的切片内容")
+	if err != nil {
+		fmt.Printf("Error updating chunk: %v\n", err)
+	}
+
+	// 删除切片
+	err = DeleteChunk(client, workspaceId, indexId, []*string{tea.String("YOUR_CHUNK_ID")})
+	if err != nil {
+		fmt.Printf("Error deleting chunk: %v\n", err)
+	}
+}
+```
+
 ## **创建知识库**
 
 接下来通过示例，引导您在给定的业务空间下创建一个文档搜索类知识库。
@@ -9696,6 +10374,320 @@ func deleteIndex(client *bailian20231229.Client, workspaceId, indexId string) (_
 }
 ```
 
+## **管理切片**
+
+对知识库中的切片进行查询、编辑和删除操作。编辑切片所有类型知识库均支持；新增和删除方面，文档搜索类、数据查询类、图片问答类知识库均支持，音视频搜索类知识库仅支持删除。
+
+### **查询切片列表**
+
+调用ListChunks接口查询知识库的切片列表。
+
+-   **client：**[如何获取client](#52ff2774f0pq9)
+    
+-   **workspace\_id：**[如何获取业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace#c5222ec081sbo)
+    
+-   **index\_id：**知识库ID，即创建知识库时返回的`Data.Id`。
+    
+-   **page\_num：**页码，从1开始（可选，默认1）。
+    
+-   **page\_size：**每页数量（可选，默认10）。
+    
+-   **file\_id：**文档ID（可选，不传时返回整个知识库的切片）。
+    
+
+## Python
+
+```
+def list_chunks(client, workspace_id, index_id, page_num=1, page_size=10, file_id=None):
+    """查询切片列表"""
+    headers = {}
+    request = bailian_20231229_models.ListChunksRequest(
+        index_id=index_id,
+        page_num=page_num,
+        page_size=page_size,
+        file_id=file_id
+    )
+    runtime = util_models.RuntimeOptions()
+    return client.list_chunks_with_options(workspace_id, request, headers, runtime)
+```
+
+## Java
+
+```
+public static ListChunksResponse listChunks(Client client, String workspaceId, String indexId, Integer pageNum, Integer pageSize) throws Exception {
+    Map<String, String> headers = new HashMap<>();
+    ListChunksRequest request = new ListChunksRequest()
+        .setIndexId(indexId)
+        .setPageNum(pageNum)
+        .setPageSize(pageSize);
+    RuntimeOptions runtime = new RuntimeOptions();
+    return client.listChunksWithOptions(workspaceId, request, headers, runtime);
+}
+```
+
+## PHP
+
+```
+function listChunks($client, $workspaceId, $indexId, $pageNum = 1, $pageSize = 10) {
+    $request = new ListChunksRequest([
+        "indexId" => $indexId,
+        "pageNum" => $pageNum,
+        "pageSize" => $pageSize
+    ]);
+    $runtime = new RuntimeOptions([]);
+    return $client->listChunksWithOptions($workspaceId, $request, [], $runtime);
+}
+```
+
+## Node.js
+
+```
+async function listChunks(client, workspaceId, indexId, pageNum = 1, pageSize = 10) {
+    const request = new bailian20231229.ListChunksRequest({ indexId, pageNum, pageSize });
+    const runtime = new Util.RuntimeOptions({});
+    return await client.listChunksWithOptions(workspaceId, request, {}, runtime);
+}
+```
+
+## C#
+
+```
+public static ListChunksResponse ListChunks(Client client, string workspaceId, string indexId, int pageNum = 1, int pageSize = 10)
+{
+    var headers = new Dictionary<string, string>();
+    var request = new ListChunksRequest
+    {
+        IndexId = indexId,
+        PageNum = pageNum,
+        PageSize = pageSize
+    };
+    var runtime = new RuntimeOptions();
+    return client.ListChunksWithOptions(workspaceId, request, headers, runtime);
+}
+```
+
+## Go
+
+```
+func listChunks(client *bailian20231229.Client, workspaceId, indexId string, pageNum, pageSize int32) (*bailian20231229.ListChunksResponse, error) {
+	headers := make(map[string]*string)
+	request := &bailian20231229.ListChunksRequest{
+		IndexId:  tea.String(indexId),
+		PageNum:  tea.Int32(pageNum),
+		PageSize: tea.Int32(pageSize),
+	}
+	runtime := &util.RuntimeOptions{}
+	return client.ListChunksWithOptions(tea.String(workspaceId), request, headers, runtime)
+}
+```
+
+### **编辑切片**
+
+调用UpdateChunk接口修改指定切片的内容。所有类型的知识库均支持此操作。
+
+-   **client：**[如何获取client](#52ff2774f0pq9)
+    
+-   **workspace\_id：**[如何获取业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace#c5222ec081sbo)
+    
+-   **pipeline\_id：**知识库ID，即创建知识库时返回的`Data.Id`。
+    
+-   **data\_id：**文档ID（切片所属文档，可从ListChunks响应的`metadata.doc_id`获取）。
+    
+-   **chunk\_id：**切片的完整\_id值（可从ListChunks响应的`metadata._id`获取）。
+    
+-   **content：**新的切片内容（10-6000字符）。
+    
+-   **is\_displayed\_chunk\_content：**是否展示切片内容（设为true）。
+    
+
+## Python
+
+```
+def update_chunk(client, workspace_id, pipeline_id, data_id, chunk_id, content):
+    """编辑切片"""
+    headers = {}
+    request = bailian_20231229_models.UpdateChunkRequest(
+        pipeline_id=pipeline_id,
+        data_id=data_id,
+        chunk_id=chunk_id,
+        is_displayed_chunk_content=True,
+        content=content
+    )
+    runtime = util_models.RuntimeOptions()
+    return client.update_chunk_with_options(workspace_id, request, headers, runtime)
+```
+
+## Java
+
+```
+public static UpdateChunkResponse updateChunk(Client client, String workspaceId, String pipelineId, String dataId, String chunkId, String content) throws Exception {
+    Map<String, String> headers = new HashMap<>();
+    UpdateChunkRequest request = new UpdateChunkRequest()
+        .setPipelineId(pipelineId)
+        .setDataId(dataId)
+        .setChunkId(chunkId)
+        .setIsDisplayedChunkContent(true)
+        .setContent(content);
+    RuntimeOptions runtime = new RuntimeOptions();
+    return client.updateChunkWithOptions(workspaceId, request, headers, runtime);
+}
+```
+
+## PHP
+
+```
+function updateChunk($client, $workspaceId, $pipelineId, $dataId, $chunkId, $content) {
+    $request = new UpdateChunkRequest([
+        "pipelineId" => $pipelineId,
+        "dataId" => $dataId,
+        "chunkId" => $chunkId,
+        "isDisplayedChunkContent" => true,
+        "content" => $content
+    ]);
+    $runtime = new RuntimeOptions([]);
+    return $client->updateChunkWithOptions($workspaceId, $request, [], $runtime);
+}
+```
+
+## Node.js
+
+```
+async function updateChunk(client, workspaceId, pipelineId, dataId, chunkId, content) {
+    const request = new bailian20231229.UpdateChunkRequest({ pipelineId, dataId, chunkId, isDisplayedChunkContent: true, content });
+    const runtime = new Util.RuntimeOptions({});
+    return await client.updateChunkWithOptions(workspaceId, request, {}, runtime);
+}
+```
+
+## C#
+
+```
+public static UpdateChunkResponse UpdateChunk(Client client, string workspaceId, string pipelineId, string dataId, string chunkId, string content)
+{
+    var headers = new Dictionary<string, string>();
+    var request = new UpdateChunkRequest
+    {
+        PipelineId = pipelineId,
+        DataId = dataId,
+        ChunkId = chunkId,
+        IsDisplayedChunkContent = true,
+        Content = content
+    };
+    var runtime = new RuntimeOptions();
+    return client.UpdateChunkWithOptions(workspaceId, request, headers, runtime);
+}
+```
+
+## Go
+
+```
+func updateChunk(client *bailian20231229.Client, workspaceId, pipelineId, dataId, chunkId, content string) (*bailian20231229.UpdateChunkResponse, error) {
+	headers := make(map[string]*string)
+	request := &bailian20231229.UpdateChunkRequest{
+		PipelineId:              tea.String(pipelineId),
+		DataId:                  tea.String(dataId),
+		ChunkId:                 tea.String(chunkId),
+		IsDisplayedChunkContent: tea.Bool(true),
+		Content:                 tea.String(content),
+	}
+	runtime := &util.RuntimeOptions{}
+	return client.UpdateChunkWithOptions(tea.String(workspaceId), request, headers, runtime)
+}
+```
+
+### **删除切片**
+
+调用DeleteChunk接口删除一个或多个切片。单次最多删除10个。
+
+-   **client：**[如何获取client](#52ff2774f0pq9)
+    
+-   **workspace\_id：**[如何获取业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace#c5222ec081sbo)
+    
+-   **pipeline\_id：**知识库ID，即创建知识库时返回的`Data.Id`。
+    
+-   **chunk\_ids：**要删除的切片\_id列表（从ListChunks响应的`metadata._id`获取）。
+    
+
+## Python
+
+```
+def delete_chunk(client, workspace_id, pipeline_id, chunk_ids):
+    """删除切片"""
+    headers = {}
+    request = bailian_20231229_models.DeleteChunkRequest(
+        pipeline_id=pipeline_id,
+        chunk_ids=chunk_ids
+    )
+    runtime = util_models.RuntimeOptions()
+    return client.delete_chunk_with_options(workspace_id, request, headers, runtime)
+```
+
+## Java
+
+```
+public static DeleteChunkResponse deleteChunk(Client client, String workspaceId, String pipelineId, java.util.List<String> chunkIds) throws Exception {
+    Map<String, String> headers = new HashMap<>();
+    DeleteChunkRequest request = new DeleteChunkRequest()
+        .setPipelineId(pipelineId)
+        .setChunkIds(chunkIds);
+    RuntimeOptions runtime = new RuntimeOptions();
+    return client.deleteChunkWithOptions(workspaceId, request, headers, runtime);
+}
+```
+
+## PHP
+
+```
+function deleteChunk($client, $workspaceId, $pipelineId, $chunkIds) {
+    $request = new DeleteChunkRequest([
+        "pipelineId" => $pipelineId,
+        "chunkIds" => $chunkIds
+    ]);
+    $runtime = new RuntimeOptions([]);
+    return $client->deleteChunkWithOptions($workspaceId, $request, [], $runtime);
+}
+```
+
+## Node.js
+
+```
+async function deleteChunk(client, workspaceId, pipelineId, chunkIds) {
+    const request = new bailian20231229.DeleteChunkRequest({ pipelineId, chunkIds });
+    const runtime = new Util.RuntimeOptions({});
+    return await client.deleteChunkWithOptions(workspaceId, request, {}, runtime);
+}
+```
+
+## C#
+
+```
+public static DeleteChunkResponse DeleteChunk(Client client, string workspaceId, string pipelineId, List<string> chunkIds)
+{
+    var headers = new Dictionary<string, string>();
+    var request = new DeleteChunkRequest
+    {
+        PipelineId = pipelineId,
+        ChunkIds = chunkIds
+    };
+    var runtime = new RuntimeOptions();
+    return client.DeleteChunkWithOptions(workspaceId, request, headers, runtime);
+}
+```
+
+## Go
+
+```
+func deleteChunk(client *bailian20231229.Client, workspaceId, pipelineId string, chunkIds []*string) (*bailian20231229.DeleteChunkResponse, error) {
+	headers := make(map[string]*string)
+	request := &bailian20231229.DeleteChunkRequest{
+		PipelineId: tea.String(pipelineId),
+		ChunkIds:   chunkIds,
+	}
+	runtime := &util.RuntimeOptions{}
+	return client.DeleteChunkWithOptions(tea.String(workspaceId), request, headers, runtime)
+}
+```
+
 ## API参考
 
 请参阅[API目录（知识库）](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-dir-knowledge-base/)获取最新完整的知识库API列表及输入输出参数。
@@ -9752,7 +10744,7 @@ func deleteIndex(client *bailian20231229.Client, workspaceId, indexId string) (_
 
 ## 计费说明
 
-知识库采用**按量付费（后付费）**，按**小时**统计下方计费项的用量，并从您的阿里云账户自动扣费。请确保账户余额充足（可前往[费用与成本](https://usercenter2.aliyun.com/home)充值），以免因[欠费](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base#ece89cd5852lm)导致服务中断。
+知识库采用**按量付费（后付费）**模式，按**小时**统计各计费项用量并自动扣费。请保持阿里云账户余额充足（可前往[费用与成本](https://usercenter2.aliyun.com/home)充值），避免因[欠费](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base#ece89cd5852lm)导致服务中断。
 
 **计费项**
 
@@ -9760,11 +10752,11 @@ func deleteIndex(client *bailian20231229.Client, workspaceId, indexId string) (_
 
 **规格费用**
 
-`标准版` 或 `旗舰版` 知识库的实际运行时长费用，价格详见[知识库计费说明](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base)。变更配置按变更时间点[分段计费](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base#d90304901atdb)。
+`标准版` 或 `旗舰版` 知识库的实际运行时长费用，价格详见[知识库计费说明](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base)。变更配置时，按变更时间点[分段计费](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base#d90304901atdb)。
 
 **向量、排序模型调用费用**
 
-创建、更新或检索知识库时会调用向量（embedding）、排序（rerank）模型，会产生费用。按输入 Token 用量计费，价格以[模型调用计费](https://help.aliyun.com/zh/model-studio/model-pricing)页为准。
+创建、更新或检索知识库时会调用向量（embedding）和排序（rerank）模型，按输入 Token 用量计费，价格以[模型调用计费](https://help.aliyun.com/zh/model-studio/model-pricing)页为准。
 
 **账单查询：**[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)
 

@@ -1358,6 +1358,14 @@ string
 
 parameters
 
+history
+
+list\[\]
+
+否
+
+客户自己组织的问答历史，会覆盖服务内默认维护的问答历史，影响后续所有问答。
+
 images
 
 list\[\]
@@ -1373,6 +1381,65 @@ object
 否
 
 参数说明参考下方 [parameters.biz\_params的参数说明](#b5975e73ab3s0)表格
+
+**parameters.history**内每条记录的参数说明如下：
+
+**一级参数**
+
+**类型**
+
+**是否必选**
+
+**说明**
+
+role
+
+string
+
+是
+
+本记录是哪个角色说的，只支持user, assistant两种。
+
+注意：不支持设为system
+
+content
+
+string
+
+是
+
+具体文本内容
+
+**parameters.images**内每个图片的参数说明如下：
+
+**一级参数**
+
+**类型**
+
+**是否必选**
+
+**说明**
+
+type
+
+string
+
+是
+
+图片类型，支持两种：base64/url
+
+value
+
+string
+
+是
+
+图片内容。
+
+-   当type为base64时，这里是图片的base64字符串。
+    
+-   当type为url时，这里是图片的url地址。
+    
 
 **parameters.biz\_params**的参数说明如下：
 

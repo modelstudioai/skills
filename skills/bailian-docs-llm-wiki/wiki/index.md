@@ -45,7 +45,7 @@
 - [application component api reference](api/application-component-api-reference.md) — 57 篇源文档
 - [file management api](api/file-management-api.md) — 1 篇源文档
 - [frameworks](api/frameworks.md) — 3 篇源文档
-- [image generation](api/image-generation.md) — 25 篇源文档
+- [image generation](api/image-generation.md) — 26 篇源文档
 - [knowledge](api/knowledge.md) — 1 篇源文档
 - [long term memory new](api/long-term-memory-new.md) — 1 篇源文档
 - [managed agents api](api/managed-agents-api.md) — 7 篇源文档
@@ -62,23 +62,23 @@
 
 ## 横切概念
 
-- [API Key 鉴权](concepts/api-key.md) — 关联 7 个主题
-- [DashScope SDK](concepts/dashscope-sdk.md) — 关联 5 个主题
-- [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 7 个主题
-- [Token 与计费](concepts/token-billing.md) — 关联 6 个主题
-- [业务空间（Workspace）](concepts/workspace.md) — 关联 7 个主题
-- [函数调用（Function Calling / 工具调用）](concepts/function-calling.md) — 关联 7 个主题
-- [多模态](concepts/multimodal.md) — 关联 6 个主题
+- [API Key 鉴权](concepts/api-key.md) — 关联 6 个主题
+- [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 5 个主题
+- [Token 与计量计费](concepts/token.md) — 关联 5 个主题
+- [业务空间（Workspace）](concepts/workspace.md) — 关联 5 个主题
+- [函数调用（Function Calling）](concepts/function-calling.md) — 关联 5 个主题
+- [多模态能力](concepts/multimodal.md) — 关联 5 个主题
 - [异步调用与任务轮询](concepts/async-invocation.md) — 关联 5 个主题
-- [检索增强生成（RAG）](concepts/rag.md) — 关联 7 个主题
+- [检索增强生成（RAG）](concepts/rag.md) — 关联 6 个主题
+- [模型微调与生产链路](concepts/fine-tuning.md) — 关联 5 个主题
 - [流式输出](concepts/streaming.md) — 关联 3 个主题
+- [评测体系](concepts/evaluation.md) — 关联 3 个主题
 
 ## 对比分析
 
-- [图像、视频与 3D 生成对比](comparisons/image-vs-video-vs-3d-generation.md) — 对比 3 个主题
-- [托管智能体与 LLM 应用对比](comparisons/managed-agents-vs-llm-application.md) — 对比 2 个主题
-- [模型微调与模型压缩对比](comparisons/fine-tuning-vs-model-compression.md) — 对比 2 个主题
-- [模型评估与应用评估对比](comparisons/model-evaluation-vs-application-evaluation.md) — 对比 2 个主题
-- [模型部署与高速推理对比](comparisons/model-deployment-vs-high-speed-inference.md) — 对比 2 个主题
-- [知识库与记忆库对比](comparisons/knowledge-base-vs-memory-library.md) — 对比 2 个主题
+- [图像、视频与3D生成对比](comparisons/media-generation-compare.md) — 对比 3 个主题
+- [应用监控与模型监控对比](comparisons/monitoring-compare.md) — 对比 2 个主题
+- [应用评测与模型评测对比](comparisons/evaluation-compare.md) — 对比 2 个主题
+- [模型微调、压缩与高速推理对比](comparisons/model-optimization-compare.md) — 对比 3 个主题
+- [知识库与长期记忆对比](comparisons/knowledge-memory-compare.md) — 对比 3 个主题
 

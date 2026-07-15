@@ -1,6 +1,6 @@
-# 语音合成CosyVoice iOS SDK
+# 语音合成Qwen-Audio-TTS/CosyVoice iOS SDK
 
-本文档提供了语音合成CosyVoice iOS SDK的详细使用指南，帮助您将文本转换为高质量、富有表现力的语音。
+本文档提供了语音合成Qwen-Audio-TTS/CosyVoice iOS SDK的详细使用指南，帮助您将文本转换为高质量、富有表现力的语音。
 
 **用户指南：**关于模型介绍和选型建议请参见[语音合成](https://help.aliyun.com/zh/model-studio/tts-model/)。
 
@@ -17,9 +17,9 @@
 
 ### **使用流程**
 
-CosyVoice 支持一次性输入和流式输入两种调用方式。
+Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式。
 
-**一次性输入**：适用于短文本合成、需要使用 [SSML](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language) 标记语言的场景。
+**一次性输入**：适用于短文本合成、需要使用 [SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide) 标记语言的场景。
 
 1.  [`startStreamInputTts()`](#secstartstreamtts) - 初始化SDK，设置回调接口和连接参数
     
@@ -30,7 +30,7 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
 4.  [`TTS_EVENT_SYNTHESIS_COMPLETE`](#secstreamevent) - 语音合成结束
     
 
-**流式输入**：适用于实时对话、长文本"边说边合"的场景。此方式不支持 [SSML](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language) 标记语言。
+**流式输入**：适用于实时对话、长文本"边说边合"的场景。此方式不支持 [SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide) 标记语言。
 
 1.  [`startStreamInputTts()`](#secstartstreamtts) - 初始化SDK，设置回调接口和连接参数
     
@@ -205,8 +205,8 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
     
     ```
     {
-        "model": "cosyvoice-v2",
-        "voice": "longxiaochun_v2",
+        "model": "qwen-audio-3.0-tts-flash",
+        "voice": "longanlingxi",
         "format": "mp3",
         "sample_rate": 24000,
         "volume": 50,
@@ -348,6 +348,8 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
     -   false：关闭。
         
     
+    SSML 的使用限制（支持的模型、音色和接口），请参见[使用限制](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide#sl01-constraint-h3)。
+    
     `word_timestamp_enabled`
     
     `boolean`
@@ -358,7 +360,7 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
     
     默认值：false。
     
-    仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+    仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
     
     > 时间戳结果在[onStreamInputTtsEventCallback](#bea29bbafcosq)的all\_response中。
     
@@ -424,6 +426,10 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
         
     -   vi：越南语
         
+    -   it：意大利语
+        
+    -   ms：马来语
+        
     
     `instruction`
     
@@ -445,7 +451,7 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
     
     默认值：false。
     
-    仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+    仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
     
     aigc\_propagator
     
@@ -457,7 +463,7 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
     
     默认值：阿里云UID。
     
-    仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+    仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
     
     aigc\_propagate\_id
     
@@ -469,7 +475,7 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
     
     默认值：本次语音合成请求Request ID。
     
-    仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+    仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
     
 
 ### **sendStreamInputTts**
@@ -498,7 +504,7 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
     
     `char*`
     
-    待合成文本。不支持[SSML](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language)。如果传入的文本包含SSML标签，这些标签将被当作普通文本读出，不会被解析。
+    待合成文本。不支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。如果传入的文本包含SSML标签，这些标签将被当作普通文本读出，不会被解析。
     
 -   **返回值说明**
     
@@ -558,7 +564,7 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
 
 异步执行的一次性合成接口。调用后立即返回，合成任务在后台进行，结果通过回调返回。无需再调用[stopStreamInputTts](#secstopstreamtts)接口。
 
-该接口默认启用[SSML](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language)，可通过parameters中的[`enable_ssml`](#listartstreamparamdesc)参数关闭。
+该接口默认启用[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)，可通过parameters中的[`enable_ssml`](#listartstreamparamdesc)参数关闭。
 
 -   **方法签名**
     
@@ -580,7 +586,7 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
     
     `char*`
     
-    待合成文本。支持[SSML](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language)。
+    待合成文本。支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
     
 -   **返回值说明**
     
@@ -591,7 +597,7 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
 
 此接口异步发送全部待合成文本。调用后立即返回，不等待合成数据。无需再调用[stopStreamInputTts](#secstopstreamtts)接口。
 
-该接口默认启用[SSML](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language)，可通过parameters中的[`enable_ssml`](#listartstreamparamdesc)参数关闭。
+该接口默认启用[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)，可通过parameters中的[`enable_ssml`](#listartstreamparamdesc)参数关闭。
 
 -   **方法签名**
     
@@ -613,7 +619,7 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
     
     `char*`
     
-    待合成文本。支持[SSML](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language)。
+    待合成文本。支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
     
 -   **返回值说明**
     
@@ -622,7 +628,7 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
 
 ## **StreamInputTtsDelegate**
 
-[CosyVoice](#seccosyvoicemethods) 流式语音合成回调协议，用于接收合成事件、音频数据和日志。
+[Qwen-Audio-TTS/CosyVoice](#seccosyvoicemethods) 流式语音合成回调协议，用于接收合成事件、音频数据和日志。
 
 ### **onStreamInputTtsEventCallback：监听事件**
 
@@ -762,7 +768,7 @@ CosyVoice 支持一次性输入和流式输入两种调用方式。
 
 ## **StreamInputTtsCallbackEvent**
 
-CosyVoice 流式语音合成事件类型枚举。
+Qwen-Audio-TTS/CosyVoice 流式语音合成事件类型枚举。
 
 **事件**
 
@@ -912,7 +918,7 @@ SDK 日志级别枚举，用于控制日志输出。
 
 **使用方法**：调用 `[playStreamInputTts](#be00eb5c18hnz)` 或 `[asyncPlayStreamInputTts](#2d43b13c45u3g)` 接口时，SDK 会自动启用 SSML，此时直接在 `text` 参数中传入包含 SSML 标签的文本即可。
 
-更多说明请参见 [SSML标记语言介绍](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language)。
+更多说明请参见 [SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
 
 ### **数学表达式**
 

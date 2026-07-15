@@ -4,12 +4,6 @@
 
 **用户指南：**关于模型介绍和选型建议请参见[实时语音识别-Fun-ASR/Paraformer](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition)
 
-**重要**
-
-阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
-
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
-
 ## **快速开始**
 
 1.  [获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)
@@ -19,10 +13,7 @@
     -   [下载最新SDK整合包](https://help.aliyun.com/zh/isi/sdk-selection-and-download)。
         
     -   解压 ZIP 包。在 `app/libs` 目录中获取 AAR 格式 SDK，并添加到项目依赖。  
-        需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。  
-          
-          
-          
+        需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。
         
     -   用 Android Studio 打开工程。示例代码位于`DashFunAsrSpeechTranscriberActivity.java`，替换 API Key 后体验功能。
         
@@ -56,7 +47,7 @@
     
     ```
     {
-        "url": "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference",
+        "url": "wss://dashscope.aliyuncs.com/api-ws/v1/inference",
         "apikey": "st-****",
         "device_id": "my_device_id",
         "service_mode": "1"
@@ -79,7 +70,7 @@
     
     是
     
-    服务地址，固定为 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`。调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+    服务地址，固定为 `wss://dashscope.aliyuncs.com/api-ws/v1/inference`。
     
     `apikey`
     
@@ -228,7 +219,7 @@
     
     是
     
-    语音识别[支持的模型](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
+    语音识别[模型](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#fc6d62a1d4qjm)。
     
     `nls_config.sr_format`
     
@@ -255,7 +246,7 @@
     
     待识别音频采样率（单位Hz）。
     
-    8k模型仅支持 8000 Hz，其他模型支持任意采样率。
+    仅支持16000Hz。
     
     `nls_config.semantic_punctuation_enabled`
     

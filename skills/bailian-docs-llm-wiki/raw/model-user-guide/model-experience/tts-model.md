@@ -16,13 +16,13 @@
 
 OpenAI gpt-4o-tts、Google Chirp 3
 
-`cosyvoice-v3-plus`、`MiniMax/speech-2.8-hd`
+`qwen-audio-3.0-tts-plus`、`MiniMax/speech-2.8-hd`
 
 自定义音色 / 声音复刻
 
 ElevenLabs Multilingual v3
 
-`cosyvoice-v3.5-plus`、`MiniMax/speech-2.8-hd`
+`qwen-audio-3.0-tts-plus`（声音复刻）、`cosyvoice-v3.5-plus`（声音设计）、`MiniMax/speech-2.8-hd`（声音复刻）
 
 ## 标准语音合成还是自定义音色？
 
@@ -52,9 +52,9 @@ ElevenLabs Multilingual v3
 
 推荐模型
 
-`cosyvoice-v3-plus`、`MiniMax/speech-2.8-hd`
+`qwen-audio-3.0-tts-plus`、`MiniMax/speech-2.8-hd`
 
-`cosyvoice-v3.5-plus`（声音复刻+声音设计）、`MiniMax/speech-2.8-hd`（声音复刻）
+`qwen-audio-3.0-tts-plus`（声音复刻）、`cosyvoice-v3.5-plus`（声音设计）、`MiniMax/speech-2.8-hd`（声音复刻）
 
 -   **使用标准语音合成**：当内置音色库能满足需求，希望快速上手、无需额外配置时。
     
@@ -73,7 +73,7 @@ ElevenLabs Multilingual v3
 
 提供一段音频样本
 
-用文字描述期望的音色（如"温暖的低音女声"）
+用文字描述期望的音色（如“温暖的低音女声”）
 
 效果
 
@@ -89,7 +89,7 @@ ElevenLabs Multilingual v3
 
 推荐模型
 
-`cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`、`MiniMax/speech-2.8-hd`
+`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`、`MiniMax/speech-2.8-hd`
 
 `cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`
 
@@ -111,9 +111,9 @@ ElevenLabs Multilingual v3
 -   **HTTP**：发送完整文本，支持流式返回音频（逐段输出）。适用于有声阅读、音频内容制作等场景。
     
 
-CosyVoice 系列模型使用同一模型名称同时支持 WebSocket 和 HTTP 两种接入方式；Qwen 系列模型通过模型名称区分，带 `-realtime` 后缀的为 WebSocket 接入，不带后缀的为 HTTP 接入。
+Qwen-Audio-TTS/CosyVoice 系列模型使用同一模型名称同时支持 WebSocket 和 HTTP 两种接入方式；Qwen 系列模型通过模型名称区分，带 `-realtime` 后缀的为 WebSocket 接入，不带后缀的为 HTTP 接入。
 
-CosyVoice 和 Qwen 系列的 WebSocket 模型支持通过 DashScope SDK（Java、Python）接入。CosyVoice 的 WebSocket 模型还支持Android、iOS SDK接入。其他模型需根据对应的 WebSocket 或 HTTP 协议直接调用。
+Qwen-Audio-TTS/CosyVoice 和 Qwen 系列的 WebSocket 模型支持通过 DashScope SDK（Java、Python）接入。Qwen-Audio-TTS/CosyVoice 的 WebSocket 模型还支持Android、iOS SDK接入。其他模型需根据对应的 WebSocket 或 HTTP 协议直接调用。
 
 选择 WebSocket 接入请参考**实时语音合成**，选择 HTTP 接入请参考**非实时语音合成**。
 
@@ -121,7 +121,7 @@ CosyVoice 和 Qwen 系列的 WebSocket 模型支持通过 DashScope SDK（Java�
 
 用自然语言描述期望的表达方式，可按请求动态控制语速、情绪和风格。例如“用温柔的语气，语速稍慢”或“用激动的播报风格”。适用于情感化内容制作、专业播报、有声读物等需要丰富表现力的场景。
 
-支持指令控制的模型：CosyVoice 系列（`cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`、`cosyvoice-v3-flash`）和 Qwen-TTS 系列（`qwen3-tts-instruct-flash-realtime`、`qwen3-tts-instruct-flash`）。详细使用方式请参见[实时语音合成 > 指令控制](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#d815caea76zx8)。
+支持指令控制的模型：Qwen-Audio-TTS 系列（`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`）、CosyVoice 系列（`cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`、`cosyvoice-v3-flash`）和 Qwen-TTS 系列（`qwen3-tts-instruct-flash-realtime`、`qwen3-tts-instruct-flash`）。详细使用方式请参见[实时语音合成 > 指令控制](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#d815caea76zx8)。
 
 ## 推荐模型
 
@@ -138,6 +138,18 @@ CosyVoice 和 Qwen 系列的 WebSocket 模型支持通过 DashScope SDK（Java�
 **声音设计**
 
 **指令控制**
+
+`qwen-audio-3.0-tts-plus`
+
+Qwen-Audio-TTS
+
+WebSocket / HTTP
+
+支持
+
+不支持
+
+支持
 
 `cosyvoice-v3.5-plus`
 
@@ -176,6 +188,45 @@ HTTP
 不支持
 
 ## 所有模型
+
+### Qwen-Audio-TTS
+
+**模型ID**
+
+**API**
+
+**声音复刻**
+
+**声音设计**
+
+**指令控制**
+
+`qwen-audio-3.0-tts-plus`
+
+WebSocket / HTTP
+
+支持
+
+不支持
+
+支持
+
+`qwen-audio-3.0-tts-flash`
+
+WebSocket / HTTP
+
+支持
+
+不支持
+
+支持
+
+**支持的语言**：
+
+-   系统音色（因音色而异）：中文（普通话）、英文
+    
+-   声音复刻音色（方言通过指令控制功能进行设置）：中文（普通话、广东话、重庆话、东北话、甘肃话、贵州话、浙江话、河北话、河南话、湖北话、湖南话、江西话、宁波话、宁夏话、青岛话、陕西话、山西话、山东话、上海话、四川话、云南话）、英文、日语、韩语、德语、法语、意大利语、俄语、葡萄牙语、泰语、印尼语、马来语、越南语
+    
 
 ### CosyVoice
 

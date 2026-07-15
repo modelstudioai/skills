@@ -12,7 +12,7 @@
     
 -   **支持微调的模型**：
     
-    -   图生视频-基于首帧：wan2.5-i2v-preview、wan2.2-i2v-flash。
+    -   图生视频-基于首帧：wan2.7-i2v、wan2.5-i2v-preview、wan2.2-i2v-flash。
         
     -   图生视频-基于首尾帧：wan2.2-kf2v-flash。
         
@@ -124,19 +124,19 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
-    "model": "wan2.5-i2v-preview",
+    "model": "wan2.7-i2v",
     "training_file_ids": [
         "<替换为训练数据集的文件id>"
     ],
     "training_type": "efficient_sft",
     "hyper_parameters": {
         "n_epochs": 400,
-        "batch_size": 2,
+        "batch_size": 1,
         "learning_rate": 2e-5,
         "split": 0.9,
         "max_split_val_dataset_sample": 5,
         "eval_epochs": 50,
-        "max_pixels": 36864,
+        "max_pixels": 102400,
         "save_total_limit": 10,
         "lora_rank": 32,
         "lora_alpha": 32
@@ -349,7 +349,33 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/deployments/<替换为dep
 
 ## 图生视频-基于首帧
 
-**预期效果**：输入一张首帧图像，无需提示词，模型自动根据图像生成一段带有“金钱雨特效”的视频。
+**预期效果**：输入一张首帧图像，无需提示词，模型自动根据图像生成一段带有”金钱雨特效”的视频。
+
+**Wan2.7模型调用**
+
+```
+curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis' \
+--header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header 'Content-Type: application/json' \
+--header 'X-DashScope-Async: enable' \
+--data '{
+    "model": "<替换为部署名称deployed_model>",
+    "input": {
+        "media": [
+            {
+                "type": "first_frame",
+                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/en-US/20251219/xmvyqn/lora.webp"
+            }
+        ]
+    },
+    "parameters": {
+        "resolution": "720P",
+        "prompt_extend": false
+    }
+}'
+```
+
+**Wan2.5/Wan2.2模型调用**
 
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
@@ -386,7 +412,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 **说明**
 
-调用微调后的 LoRA 模型时，输入参数用法基本与[万相-图生视频-基于首帧（2.1-2.6）](https://help.aliyun.com/zh/model-studio/legacy-image-to-video-api-reference/)保持一致。
+调用微调后的 LoRA 模型时，wan2.7输入参数用法基本与[万相2.7-图生视频](https://help.aliyun.com/zh/model-studio/image-to-video-general-api-reference)一致，wan2.5/wan2.2请参见[万相-图生视频-基于首帧（2.1-2.6）](https://help.aliyun.com/zh/model-studio/legacy-image-to-video-api-reference/)。
 
 下表仅列出 LoRA 模型**特有的参数用法或特定限制**。对于未在下表中提及的通用参数（例如 `duration`），请参照 API 文档进行设置。
 
@@ -438,6 +464,8 @@ string
 生成的视频分辨率档位。
 
 wan2.2和wan2.5模型：480P、720P。默认值为720P。
+
+wan2.7模型：720P、1080P。默认值为1080P。
 
 720P
 
@@ -766,7 +794,7 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxx
         
     -   单个视频文件大小无硬性限制（系统将自动预处理）。
         
-    -   单个视频时长：wan2.2模型建议2~5秒；wan2.5模型建议2~10秒。
+    -   单个视频时长：wan2.2模型建议2~5秒；wan2.5模型建议2~10秒；wan2.7模型建议2~10秒。
         
 
 ### **数据收集和清洗**
@@ -1019,7 +1047,7 @@ s86b5p 或 m01aa
 
 ##### **方式一：未上传验证集（系统自动划分）**
 
-在[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#e702c9786b40q)时，如果没有单独上传验证集，即未传入`validation_file_ids`参数，系统将根据以下两个[超参数](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#5f391e4b3cezf)，自动从**训练集**中划分出一部分作为验证集：
+在[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#e702c9786b40q)时，如果没有单独上传验证集，即未传入`validation_datasets`参数，系统将根据以下两个[超参数](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#5f391e4b3cezf)，自动从**训练集**中划分出一部分作为验证集：
 
 -   `split`：训练集划分比例。例如，0.9 表示将90%的数据用于训练，剩余的10%用作验证。
     
@@ -1035,7 +1063,7 @@ s86b5p 或 m01aa
     -   实际切分：min(10, 5)=5，所以系统**只取 5 条**作为验证集。
         
 
-##### **方式二：主动上传验证集（通过 validation\_file\_ids 指定）**
+##### **方式二：主动上传验证集（通过 validation\_datasets 指定）**
 
 如果您希望使用一套自己准备的数据来评估Checkpoint，而不是依赖系统随机划分，可以上传自定义验证集。
 
@@ -1047,16 +1075,26 @@ s86b5p 或 m01aa
     
 2.  **上传验证集**：调用[上传数据集](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#Kv4zB)接口，上传这个验证集 `.zip` 文件，获得一个专属的文件ID。
     
-3.  **创建任务时指定验证集**：在调用[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#e702c9786b40q)接口时，将这个文件ID填入 `validation_file_ids` 参数中。
+3.  **创建任务时指定验证集**：在调用[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#e702c9786b40q)接口时，将这个文件ID填入 `validation_datasets` 参数中。
     
     ```
     {
         "model":"wan2.5-i2v-preview",
-        "training_file_ids":[ "<训练集的文件id>" ],
-        "validation_file_ids": [ "<自定义验证集的文件id>" ],
+        "training_datasets":[
+            {"data_source_type":"file_id","file_id":"<训练集的文件id>"},
+            {"data_source_type":"oss_mount","mount_storage":{"region":"cn-beijing","bucket":"example_bucket","file_path":"dataset/data.jsonl"}}
+        ],
+        "validation_datasets":[
+            {"data_source_type":"file_id","file_id":"<自定义验证集的文件id>"},
+            {"data_source_type":"oss_mount","mount_storage":{"region":"cn-beijing","bucket":"example_bucket","file_path":"dataset/val.jsonl"}}
+        ],
         ...
     }
     ```
+    
+    **说明**
+    
+    使用 OSS 挂载方式加载视频数据集时，需将未经压缩的数据集文件夹整体上传到 OSS Bucket，不支持 zip 文件。MountStorage 的 file\_path 指定数据集的 data.jsonl 文件路径；视频数据集通常包含 data.jsonl 和视频文件在同一文件夹下，挂载时只需指定 data.jsonl 的路径，无需单独指定视频文件。挂载前需授权百炼服务访问您的 OSS 数据。
     
 
 ### **挑选最佳Checkpoint进行部署**

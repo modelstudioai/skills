@@ -46,7 +46,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
     -d '{
-    "model": "vidu/viduq3-pro_img2video",
+    "model": "vidu/viduq3-pro-fast_img2video",
     "input": {
         "media": [
             {
@@ -88,6 +88,8 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 模型名称。可选值为：
 
+-   `vidu/viduq3-pro-fast_img2video`
+    
 -   `vidu/viduq3-pro_img2video`
     
 -   `vidu/viduq3-turbo_img2video`
@@ -164,6 +166,8 @@ resolution直接影响费用，请在调用前确认[模型价格](https://help.
 
 模型根据选择的分辨率档位，自动缩放至相近总像素，视频宽高比将尽量接近输入图像的宽高比。
 
+-   vidu/viduq3-pro-fast\_img2video：可选值：720P、1080P。默认值为`720P`。
+    
 -   vidu/viduq3-pro\_img2video：可选值：540P、720P、1080P。默认值为`720P`。
     
 -   vidu/viduq3-turbo\_img2video：可选值：540P、720P、1080P。默认值为`720P`。
@@ -183,6 +187,8 @@ duration直接影响费用，按秒计费，时间越长费用越高，请在调
 
 生成视频的时长，单位为秒。
 
+-   vidu/viduq3-pro-fast\_img2video：取值为\[1, 16\]之间的整数，默认值为5。
+    
 -   vidu/viduq3-pro\_img2video：取值为\[1, 16\]之间的整数，默认值为5。
     
 -   vidu/viduq3-turbo\_img2video：取值为\[1, 16\]之间的整数，默认值为5。
@@ -196,7 +202,7 @@ duration直接影响费用，按秒计费，时间越长费用越高，请在调
 
 **audio** `_boolean_` （可选）
 
-**支持模型**：vidu/viduq3-pro\_img2video、vidu/viduq3-turbo\_img2video。
+**支持模型**：vidu/viduq3-pro-fast\_img2video、vidu/viduq3-pro\_img2video、vidu/viduq3-turbo\_img2video。
 
 是否生成有声视频。开启后模型将根据视频内容自动生成匹配的背景音乐或音效。
 

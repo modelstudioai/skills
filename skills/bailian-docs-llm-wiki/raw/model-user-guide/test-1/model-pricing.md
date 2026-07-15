@@ -6,6 +6,10 @@
 
 本文仅展示模型调用**原价**，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)查看活动优惠。
 
+**说明**
+
+部分模型支持**上下文缓存**（显式缓存、隐式缓存）。缓存命中的输入 Token 及创建显式缓存的 Token 采用与标准输入不同的计费单价（例如显式缓存创建按标准输入单价的 125% 计费、命中按 10% 计费），本文价格表中的输入单价**不含**缓存单价。缓存的计费规则、单价折扣及支持的模型请参见[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)。
+
 ## **阶梯计费规则**
 
 百炼部分模型实行阶梯计费。单价取决于单次请求的输入 Token 总量。该请求的所有 Token 均按对应阶梯的单价结算。
@@ -278,8 +282,6 @@ qwen3-max-preview
 
 qwen-max
 
-> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
-
 中国内地
 
 仅非思考模式
@@ -334,9 +336,9 @@ qwen3.7-max-us
 
 0<Token≤1M
 
-18.736元
+原价18.736元 限时5折
 
-56.207元
+原价56.207元 限时5折
 
 qwen3.7-max-2026-06-08
 
@@ -1380,19 +1382,19 @@ qwen3.7-plus-us
 
 0<Token≤256K
 
-2.998元
+原价2.998元 限时8折
 
-11.991元
+原价11.991元 限时8折
 
-11.991元
+原价11.991元 限时8折
 
 256K<Token≤1M
 
-8.993元
+原价8.993元 限时8折
 
-35.972元
+原价35.972元 限时8折
 
-35.972元
+原价35.972元 限时8折
 
 qwen3.7-plus-2026-05-26
 
@@ -2792,6 +2794,8 @@ qwen-flash-us
 
 美国
 
+非思考和思考模式
+
 0<Token≤256K
 
 0.367元
@@ -2831,6 +2835,8 @@ qwen-flash-2025-07-28
 qwen-flash-2025-07-28-us
 
 美国
+
+非思考和思考模式
 
 0<Token≤256K
 
@@ -3244,8 +3250,6 @@ qwen3.6-flash-2026-04-16
 
 qwen-turbo
 
-> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
-
 中国内地
 
 非思考和思考模式
@@ -3315,8 +3319,6 @@ qwen-turbo
 有效期：阿里云百炼开通后90天内
 
 qwq-plus
-
-> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 中国内地
 
@@ -4606,8 +4608,6 @@ qwen3-vl-flash-2025-10-15
 
 qwen-vl-max
 
-> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
-
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
 中国内地
@@ -4621,8 +4621,6 @@ qwen-vl-max
 100万Token
 
 qwen-vl-plus
-
-> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
@@ -8730,7 +8728,9 @@ deepseek-r1-distill-llama-8b
 
 中国内地
 
-限时免费
+已下线
+
+> 该模型已下线，推荐使用[深度思考](https://help.aliyun.com/zh/model-studio/deep-thinking)、[DeepSeek-阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)、[Kimi-阿里云](https://help.aliyun.com/zh/model-studio/kimi-api)作为替代模型。
 
 deepseek-r1-distill-llama-70b
 
@@ -9338,9 +9338,9 @@ glm-5.2-fast-preview
 
 不区分阶梯
 
-20元
+16元
 
-70元
+56元
 
 无
 
@@ -9492,6 +9492,18 @@ glm-5.2
 
 28元
 
+glm-5.2-us
+
+国际
+
+非思考和思考模式
+
+不区分阶梯
+
+10.492元
+
+32.974元
+
 glm-5.1
 
 全球
@@ -9552,9 +9564,9 @@ glm-5.2-fast-preview
 
 不区分阶梯
 
-26.23元
+20.98元
 
-82.44元
+65.95元
 
 无
 
@@ -11208,6 +11220,80 @@ kling/kling-v3-omni-image-generation
 
 0.4元/张
 
+### **Vidu-图像生成**
+
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输出图像分辨率**
+
+**输出单价**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+vidu/vidu-image\_reference2image
+
+中国内地
+
+1K
+
+0.625元/张
+
+无免费额度
+
+2K
+
+1元/张
+
+4K
+
+1.46875元/张
+
+vidu/viduq3-fast\_reference2image
+
+中国内地
+
+1K
+
+0.46875元/张
+
+2K
+
+0.78125元/张
+
+4K
+
+1.09375元/张
+
+vidu/viduq2-pro\_reference2image
+
+中国内地
+
+1K
+
+0.9375元/张
+
+2K
+
+0.9375元/张
+
+4K
+
+1.71875元/张
+
+vidu/viduq2-fast\_reference2image
+
+中国内地
+
+1K
+
+0.28125元/张
+
 ## **音乐生成**
 
 计费规则：按输出音频的秒数计费，输入不计费。
@@ -11239,6 +11325,62 @@ fun-music-v1
 0.002元
 
 ## **语音合成（文本转语音）**
+
+### **Qwen-Audio-TTS**
+
+计费规则：按输入文本的字符数计费，输出不计费。
+
+**说明**
+
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每万字符）**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
+
+qwen-audio-3.0-tts-plus
+
+中国内地
+
+1.4元
+
+1万字符
+
+qwen-audio-3.0-tts-flash
+
+中国内地
+
+1元
+
+1万字符
+
+#### 新加坡
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每万字符）**
+
+qwen-audio-3.0-tts-plus
+
+国际
+
+1.49884元
+
+qwen-audio-3.0-tts-flash
+
+国际
+
+1.12413元
 
 ### **Qwen-TTS**
 
@@ -12801,6 +12943,79 @@ paraformer-realtime-8k-v2
 paraformer-realtime-8k-v1
 
 中国内地
+
+## **语音对话**
+
+### **实时语音对话**
+
+实时语音对话模型支持文本和音频的输入与输出，按输入 Token 和输出 Token 分别计费。音频 Token 按时长折算：`总 Token 数 = 音频时长（单位：秒）* 12.5`，不足 1 秒按 1 秒计算。
+
+在多轮对话场景中，与文本大模型一致，模型会维护完整的对话上下文以保持连贯的对话能力。历史对话内容会作为后续轮次的输入处理和计费，因此每轮的输入 Token 数会随对话轮次增加而逐步增长。各类内容的具体计费方式如下：
+
+-   **用户输入的音频和文本**：计入上下文，在后续每轮对话中作为输入计费。其中音频按音频 Token 计费，文本按文本 Token 计费。
+    
+-   **用户设置的 instructions**：按文本 Token 每轮计费一次。
+    
+-   **模型输出的文本**：按文本 Token 计入上下文，在后续每轮对话中作为输入计费。
+    
+-   **模型输出的音频**：按音频 Token 仅在输出时计费一次，不计入上下文。
+    
+
+> 随着对话轮次增加，上下文累积的 Token 数量会逐步增长。建议合理控制单次会话的对话轮数，或在适当时机开启新会话，以优化使用成本。
+
+**说明**
+
+以下模型仅在中国内地服务部署范围下有免费额度，其他服务部署范围下均无免费额度。
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+有效期：阿里云百炼开通后90天内
+
+**文本**
+
+**音频**
+
+**文本**
+
+**音频**
+
+qwen-audio-3.0-realtime-plus
+
+中国内地
+
+5元
+
+40元
+
+40元
+
+150元
+
+100万Token
+
+qwen-audio-3.0-realtime-flash
+
+中国内地
+
+3元
+
+30元
+
+30元
+
+100元
+
+100万Token
 
 ## **视频生成**
 
@@ -15693,6 +15908,20 @@ vidu/viduq2\_text2video
 
 **免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+vidu/viduq3-pro-fast\_img2video
+
+中国内地
+
+720P
+
+0.375元/秒
+
+无免费额度
+
+1080P
+
+0.46875元/秒
+
 vidu/viduq3-pro\_img2video
 
 中国内地
@@ -15882,6 +16111,30 @@ vidu/viduq2-turbo\_start-end2video
 **输出单价**
 
 **免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+vidu/viduq3-ad\_reference2video
+
+中国内地
+
+720P
+
+0.75元/秒
+
+无免费额度
+
+1080P
+
+0.90625元/秒
+
+vidu/viduq3-drama\_reference2video
+
+中国内地
+
+1080P
+
+0.875元/秒
+
+无免费额度
 
 vidu/viduq3-mix\_reference2video
 
@@ -16448,6 +16701,60 @@ qwen-plus-character-ja
 3.67元
 
 10.275元
+
+#### 美国（弗吉尼亚）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价 （每百万Token）**
+
+**输出单价 （每百万Token）**
+
+qwen-plus-character
+
+全球
+
+0.8元
+
+2元
+
+#### 德国（法兰克福）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价 （每百万Token）**
+
+**输出单价 （每百万Token）**
+
+qwen-plus-character
+
+全球
+
+0.8元
+
+2元
+
+#### 日本（东京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输入单价 （每百万Token）**
+
+**输出单价 （每百万Token）**
+
+qwen-plus-character
+
+全球
+
+0.8元
+
+2元
 
 ### **界面交互**
 

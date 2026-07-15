@@ -38,6 +38,84 @@ Vidu-参考生视频模型支持传入**参考图片**和**文本提示词**，�
 
 #### 请求参数
 
+## 参考生视频-广告（仅参考图像）
+
+支持模型：vidu/viduq3-ad\_reference2video。
+
+```
+curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+    -H 'X-DashScope-Async: enable' \
+    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "model": "vidu/viduq3-ad_reference2video",
+    "input": {
+        "media": [
+            {
+                "type": "image",
+                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260713/dtnctw/ad-1.png"
+            },
+            {
+                "type": "image",
+                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260713/bspdpd/ad-2.png"
+            },
+            {
+                "type": "image",
+                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260713/mhsjyy/ad-3.png"
+            }
+        ],
+        "prompt": "一个瑜伽裤的广告。商品是一条左右各有一个口袋的黑色高腰瑜伽裤。亚洲模特开心地说"我现在再也不穿没有口袋的瑜伽裤了"。画面保持清晰、稳定、容易理解。"
+    },
+    "parameters": {
+        "duration": 8,
+        "size": "1080*1920",
+        "resolution": "1080P",
+        "watermark": true
+    }
+}'
+```
+
+## 参考生视频-短剧（仅参考图像）
+
+支持模型：vidu/viduq3-drama\_reference2video。
+
+```
+curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+    -H 'X-DashScope-Async: enable' \
+    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "model": "vidu/viduq3-drama_reference2video",
+       "input": {
+        "media": [
+            {
+                "type": "image",
+                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260713/eelcsu/daram-1.png"
+            },
+            {
+                "type": "image",
+                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260713/adglrn/drama-2.png"
+            },
+            {
+                "type": "image",
+                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260713/fmofkp/drama-3.png"
+            },
+            {
+                "type": "image",
+                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260713/mktdht/drama-4.png"
+            }
+        ],
+        "prompt": "酒店宴会厅，王桂兰（图3）（在画面右侧，坐在席位上）苏文博（图1）、许向暖（图2）（在画面左侧远处，敬酒中）。婚礼现场座无虚席，坐满宾客。苏文博的母亲王桂兰坐在席位上，眉头紧紧皱起，面露不满。镜头固定，捕捉她皱眉的表情。镜头推进王桂兰面部，她眼神阴沉，嘴角下撇，带着嫌弃和不满。强调她的不悦。"
+    },
+    "parameters": {
+        "duration": 9,
+        "size": "1080*1920",
+        "resolution": "1080P",
+        "watermark": true
+    }
+}'
+```
+
 ## 参考生视频（仅参考图像）
 
 ```
@@ -134,6 +212,10 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 模型名称。可选值为：
 
+-   `vidu/viduq3-ad_reference2video`
+    
+-   `vidu/viduq3-drama_reference2video`
+    
 -   `vidu/viduq3-mix_reference2video`
     
 -   `vidu/viduq3_reference2video`
@@ -143,6 +225,17 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 -   `vidu/viduq2-pro_reference2video`
     
 -   `vidu/viduq2_reference2video`
+    
+
+**模型选型**
+
+-   **广告视频**：推荐 **viduq3-ad**，面向广告行业，支持营销级智能切镜、运镜和音效直出，上传商品图即可生成广告视频。
+    
+-   **精品剧 / AI 漫剧**：推荐 **viduq3-drama**，角色一致性强、动效细腻、情绪表达真实，适合剧情向内容生产。
+    
+-   **通用场景**：推荐 **viduq3-mix**，画面质感与动态效果均衡，适合大多数参考生视频需求。
+    
+-   **追求速度与性价比**：推荐 **viduq3-turbo**，生成速度最快。
     
 
 **input** `_object_` **（必选）**
@@ -175,7 +268,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 仅传入参考图像
 
-支持模型：vidu/viduq3-mix\_reference2video、vidu/viduq3\_reference2video、vidu/viduq3-turbo\_reference2video、vidu/viduq2\_reference2video
+支持模型：vidu/viduq3-ad\_reference2video、vidu/viduq3-drama\_reference2video、vidu/viduq3-mix\_reference2video、vidu/viduq3\_reference2video、vidu/viduq3-turbo\_reference2video、vidu/viduq2\_reference2video
 
 固定为：
 
@@ -264,6 +357,10 @@ resolution直接影响费用，请在调用前确认[模型价格](https://help.
 
 生成视频的分辨率。可选值与模型有关：
 
+-   vidu/viduq3-ad\_reference2video：可选720P、1080P。默认值为720P。
+    
+-   vidu/viduq3-drama\_reference2video：固定为1080P。
+    
 -   vidu/viduq3-mix\_reference2video：可选720P、1080P。默认值为720P。
     
 -   vidu/viduq3\_reference2video：可选540P、720P、1080P。默认值为720P。
@@ -368,6 +465,10 @@ duration直接影响费用，按秒计费，请在调用前确认[模型价格](
 
 生成视频的时长，单位为秒。
 
+-   vidu/viduq3-ad\_reference2video：取值为\[3, 15\]之间的整数。默认值为`5`。
+    
+-   vidu/viduq3-drama\_reference2video：取值为\[2, 15\]之间的整数。默认值为`5`。
+    
 -   vidu/viduq3-mix\_reference2video：取值为\[1, 16\]之间的整数。默认值为`5`。
     
 -   vidu/viduq3\_reference2video：取值为\[1, 16\]之间的整数。默认值为`5`。
@@ -387,14 +488,18 @@ duration直接影响费用，按秒计费，请在调用前确认[模型价格](
 
 **audio** `_boolean_` （可选）
 
-**支持模型**：vidu/viduq3-mix\_reference2video、vidu/viduq3\_reference2video、vidu/viduq3-turbo\_reference2video。
+**支持模型**：vidu/viduq3-ad\_reference2video、vidu/viduq3-mix\_reference2video、vidu/viduq3\_reference2video、vidu/viduq3-turbo\_reference2video。
 
 是否生成有声视频。开启后模型将根据视频内容自动生成匹配的背景音乐或音效。
 
 -   `false`：默认值，输出无声视频。
     
--   `true`：输出无声视频。
+-   `true`：输出有声视频。
     
+
+**说明**
+
+vidu/viduq3-drama\_reference2video 不支持该参数，默认输出有声视频。
 
 **watermark** `_boolean_` （可选）
 

@@ -1,10 +1,10 @@
 # managed agents
 
-Managed Agents 是百炼提供的智能体托管运行时，面向多步工具调用、代码执行、文件处理等长时运行任务。与无状态的智能体应用不同，它由平台在服务端托管会话状态、沙箱环境与工具执行，智能体在独立云端容器中自主执行命令、读写文件、安装依赖，事件历史在服务端持久化并支持中断与续接。
+Managed Agents 是百炼提供的智能体托管运行时，面向多步工具调用、代码执行、文件处理等长时运行任务。与无状态的[智能体应用](../concepts/agent-application.md)不同，它由平台在服务端托管会话状态、沙箱环境与工具执行，智能体在独立云端容器中自主执行命令、读写文件、安装依赖，事件历史在服务端持久化并支持中断与续接。
 
-## 与智能体应用的区别
+## 与[智能体应用](../concepts/agent-application.md)的区别
 
-| 维度 | 智能体应用 | Managed Agents |
+| 维度 | [智能体应用](../concepts/agent-application.md) | Managed Agents |
 | --- | --- | --- |
 | 运行模式 | 无状态调用，应用侧维护上下文 | 服务端维护会话状态，支持中断与续接 |
 | 执行环境 | 共享运行时 | 独立沙箱，云端容器 |
@@ -66,6 +66,9 @@ Managed Agents 是百炼提供的智能体托管运行时，面向多步工具�
 - [配置 Agent 环境](../../raw/application-user-guide/managed-agents/managed-agents-environment.md)
 - [Agent 上下文管理](../../raw/application-user-guide/managed-agents/managed-agents-context.md)
 - [委派任务给 Agent](../../raw/application-user-guide/managed-agents/managed-agents-session.md)
+
+
+
 
 
 

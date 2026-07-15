@@ -24,7 +24,7 @@
 
 百炼提供多种应用类型以适配不同场景：
 
-- **智能体应用**：2025 年 12 月 26 日上线新版智能体应用（Agent 2.0），将知识库、MCP 统一为工具，由智能体自主规划调用时机与顺序，并完整展示模型思考与工具调用全过程。文件问答支持全文引用、切片检索和自定义处理三种模式。
+- **[智能体应用](../concepts/agent-application.md)**：2025 年 12 月 26 日上线新版[智能体应用](../concepts/agent-application.md)（Agent 2.0），将知识库、MCP 统一为工具，由智能体自主规划调用时机与顺序，并完整展示模型思考与工具调用全过程。文件问答支持全文引用、切片检索和自定义处理三种模式。
 - **工作流应用**：支持批量节点、[多模态](../concepts/multimodal.md)生成节点（生成图像/视频/音频）、异步运行模式（文本生成模式下后台执行并返回 Task ID）、Dify 工作流一键导入、[多模态](../concepts/multimodal.md)数据节点（文档/图片/视频/音频解析）等。
 - **高代码应用**：2025 年 9 月 24 日上线，支持基于 Python 项目结构部署 AI 后端服务，内置自动化运维、可观测性及日志服务等企业级能力。
 - **MCP 服务**：2025 年 4 月 9 日新增 MCP 市场与 MCP 管理功能，可开通预置 MCP 服务或部署自定义 MCP 服务；8 月 13 日新增外部调用功能，支持一键配置到第三方应用或通过 MCP SDK 调用。
@@ -49,7 +49,7 @@
 
 - 知识库自 2026 年 1 月 4 日起正式[计费](../concepts/billing.md)，提供后付费（按量付费）和资源包两种方式，总费用由规格费用与模型调用费用组成，详情参见 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md) 中的[计费](../concepts/billing.md)公告。
 - 大模型调用产生[计费](../concepts/billing.md)，平台提供限时免费额度，可在模型广场查看各模型系列详情。
-- QwQ 系列模型在智能体应用中不支持插件、流程、音视频交互能力。
+- QwQ 系列模型在[智能体应用](../concepts/agent-application.md)中不支持插件、流程、音视频交互能力。
 - 文档解析耗时与文档大小相关，知识文档导入通常 1~6 分钟，知识库解析通常 1~2 分钟，需耐心等待。
 - [智能体编排](../concepts/agent-orchestration.md)应用已于 2025 年 8 月 12 日随工作流应用界面升级而下线，相关需求请使用新版智能体应用或工作流应用。
 - Assistant API 处于下线中状态，如需全代码开发高度定制化 RAG 应用请关注官方公告。
@@ -58,6 +58,9 @@
 
 - [0代码构建私有知识问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)
 - [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)
+
+
+
 
 
 

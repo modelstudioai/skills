@@ -2,19 +2,15 @@
 
 本文介绍如何在控制台进行模型调优任务，并帮助您选择正确的调优方式与参数。模型调优包含模型微调（SFT）、继续预训练（CPT）、模型偏好训练（DPO）三种模型训练方式。
 
-**重要**
-
-本文档仅适用于华北2（北京）地域。
-
 ## **模型调优流程**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9785312871/CAEQZhiBgMDg9PGS2hkiIDNlZDFiMGRlMTJhOTQ1YzJhMmNjNDM3NzQ1ZjNiOGZk4608430_20240830103738.564.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8010204871/CAEQZhiBgMDg9PGS2hkiIDNlZDFiMGRlMTJhOTQ1YzJhMmNjNDM3NzQ1ZjNiOGZk4608430_20240830103738.564.svg)
 
 ## **步骤一：选择调优方式**
 
 前往[模型调优](https://bailian.console.aliyun.com/?tab=model#/efm/model_manager)页面，点击“**创建训练任务**”按钮。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6609399771/p1075286.png)
+进入创建训练任务页面后，在**训练配置**区域可选择**训练方法**为**高效训练**或**全参训练**。页面右侧**训练任务摘要**面板实时显示当前任务的模型、优先级、计费方式等配置概览。
 
 在**基础信息**区域，可以设置**任务名称**和**任务优先级**。任务优先级分为 L0、L1、L2、L3 四级，优先级从高到低排列，影响训练任务的调度顺序。优先级越高，训练任务越早被调度执行。
 
@@ -125,10 +121,6 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-s
 system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-studio/text-generation#51574d7e93su4)。ChatML 格式训练数据样例：
 
 > 如需传入 `system` 消息，对应的 `content` 必须使用数组格式 `[{"text":"..."}]`，不能使用字符串格式 `"content":"字符串"`。
-
-**说明**
-
-如果训练思考模型（Thinking），也需要遵循[SFT 思考模型（thinking）](#f5454632ef4yo)的数据格式要求。
 
 ```
 # 一行训练数据（json 格式），展开后典型结构如下：
@@ -266,12 +258,9 @@ system/user/assistant 区别请参见[概述](https://help.aliyun.com/zh/model-
 
 图片帧缩放高度（像素）
 
-#### 训练物体定位建议：
+**说明**
 
--   Qwen2.5-VL：训练的坐标相对于缩放后的图像左上角的绝对值，单位为像素。
-    
--   Qwen3-VL：训练坐标为相对坐标，坐标值会缩放到`[0, 999]`范围内。
-    
+如果训练思考模型（Thinking），也需要遵循[SFT 思考模型（thinking）](#f5454632ef4yo)的数据格式要求。
 
 #### **压缩包要求：**
 
@@ -400,6 +389,29 @@ CPT 纯文本格式训练数据，**一行训练数据展开后结构如下**：
 
 > 并不是所有模型都支持所有参数的调节，请以控制台显示为准
 
+参数配置面板中，除批次大小外，还包含以下训练参数及默认值：
+
+-   **learning\_rate**（学习率）：默认值 `3e-4`
+    
+-   **n\_epochs**（循环次数）：默认值 `3`，范围 \[1, 200\]
+    
+-   **eval\_steps**（评估步数）：默认值 `50`
+    
+-   **lora\_alpha**（LoRA 缩放因子）：默认值 `16`
+    
+-   **lora\_dropout**：默认值 `0.1`，范围 \[0, 0.2\]
+    
+-   **lora\_rank**（LoRA 秩值）：默认值 `8`
+    
+-   **lr\_scheduler\_type**（学习率调度器类型）：默认值 `linear`
+    
+-   **max\_length**（最大长度）：默认值 `8192`，范围 \[500, 131072\]
+    
+-   **warmup\_ratio**（预热比例）：默认值 `0.05`，范围 \[0, 1\]
+    
+-   **weight\_decay**（权重衰减）：默认值 `0.01`，范围 \[0, 0.2\]
+    
+
 **参数名称**
 
 **推荐设置**
@@ -411,8 +423,6 @@ CPT 纯文本格式训练数据，**一行训练数据展开后结构如下**：
 使用默认值
 
 批次大小，代表模型训练过程中，模型更新模型参数的数据步长，可理解为模型每看多少数据即更新一次模型参数，一般建议的批次大小为16/32，表示模型每看16或32条数据即更新一次参数。具体取值范围因模型和训练方式不同而异，请以控制台显示为准。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1689372671/p1024792.png)
 
 **学习率 (learning\_rate)**
 
@@ -593,13 +603,15 @@ reduce\_lr\_on\_plateau：当监控的指标（验证损失或验证准确率）
 
 ## **步骤三：选择训练数据**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6609399771/p1075287.png)
-
 数据集构建技巧请参考[数据集构建技巧](https://help.aliyun.com/zh/model-studio/model-training-overview#aebd25a7f1g2v)。上传调优数据集请前往[数据管理](https://bailian.console.aliyun.com/?tab=model#/efm/model_data)页面。
 
 在**数据配置**区域，可以设置以下内容：
 
 -   **训练集**：支持**数据集选择**和**数据集挂载**两种方式。数据集选择用于选择已上传的调优数据集作为训练数据；数据集挂载用于直接挂载 OSS 中的数据文件。
+    
+    **说明**
+    
+    如果使用**数据集挂载**的方式加载数据集，需要先授权百炼服务访问您的数据。操作方法为：前往**模型调优**页面，点击**创建训练任务**，然后点击**数据配置**中的**数据集挂载**，按提示进行授权。如果您能在该界面上看到您的文件列表，说明已经成功授权。
     
 -   **混合训练**：开启后，可以额外添加混合训练数据集。混合训练数据用于在微调过程中保持模型的通用能力，避免模型因过度适应特定任务数据而丧失原有的通用对话能力。如果您有多个业务场景的数据，建议开启混合训练。
     
@@ -644,7 +656,7 @@ reduce\_lr\_on\_plateau：当监控的指标（验证损失或验证准确率）
 
 > 如遇权限不足，请参考：[模型调优时报权限不足怎么办？](#7aa5abac6e3pm)
 
-模型训练时点击”**日志**”按钮可以查询模型训练过程中实时产生的日志，也可以前往指标的标签页查看训练损失（Training Loss）、验证损失（Validation Loss）、验证准确率（Validation Token Accuracy）。
+模型训练时点击”日志”按钮可以查询模型训练过程中实时产生的日志，也可以前往指标的标签页查看训练损失（Training Loss）、验证损失（Validation Loss）、验证准确率（Validation Token Accuracy）。
 
 **训练完成后**，请确认训练损失（Training Loss）与验证损失（Validation Loss）的差异变化趋势。
 
@@ -720,13 +732,11 @@ Checkpoint 有保存时长限制，超过保存时长后将被自动清理，届
     
     相关介绍请参考：[账户权限管理](https://help.aliyun.com/zh/model-studio/permission-management-overview#1d8ad43a66nch)。控制台链接：[百炼-账号管理](https://bailian.console.aliyun.com/tab=globalset#/user_management/user_management)。
     
-    ![PixPin\_2025-11-13\_20-34-22](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1609363671/p1026621.png)
-    
 2.  需要发起调优任务所在的业务空间拥有对**特定模型**进行**模型训练**（调优）的权限。
     
     相关介绍请参考：[授权子业务空间模型调用、训练和部署](https://help.aliyun.com/zh/model-studio/use-workspace#895b613347th4)。控制台链接：[百炼-业务空间管理](https://bailian.console.aliyun.com/tab=globalset#/efm/business_management)。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7796981671/p1022425.png)
+    在**业务空间管理**的**模型列表**页面中，确认目标模型（如通义千问 3-8B）的**模型训练**列显示为**已授权**状态。
     
 
 ### **如果模型调优后，评测的效果不好怎么办？**

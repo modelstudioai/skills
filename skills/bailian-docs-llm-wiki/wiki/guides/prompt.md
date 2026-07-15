@@ -21,7 +21,7 @@ Prompt 模板将提示词的固定结构与动态变量分离，实现可复用�
 
 ### 模板使用方式
 
-**控制台**：在模板卡片上点击"创建应用"，模板内容自动填充到智能体应用的提示词编辑框中。提示词最大支持 6144 个字符。
+**控制台**：在模板卡片上点击"创建应用"，模板内容自动填充到[智能体应用](../concepts/agent-application.md)的提示词编辑框中。提示词最大支持 6144 个字符。
 
 **API/SDK**：通过 `GetPromptTemplate` 接口拉取模板内容（需 `workspaceId` 和 `promptTemplateId`），将业务数据填入模板变量后生成最终 Prompt，再发送给目标模型。返回内容包含 `variables`（变量列表）、`content`（模板内容）等字段。
 
@@ -48,7 +48,7 @@ Prompt 模板将提示词的固定结构与动态变量分离，实现可复用�
 4. 上传评测数据（建议至少 20 条，数据越多效果越好）
 5. 系统自动进行多轮评测与优化
 
-优化后的 Prompt 包含三部分：原始 Prompt、添加的样例（few-shot）、以及自动生成的内容提示（对分类边界等的补充说明）。优化结果可保存为模板或直接创建智能体应用。详见 [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)。
+优化后的 Prompt 包含三部分：原始 Prompt、添加的样例（few-shot）、以及自动生成的内容提示（对分类边界等的补充说明）。优化结果可保存为模板或直接创建[智能体应用](../concepts/agent-application.md)。详见 [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)。
 
 ## Prompt 样例库
 
@@ -99,6 +99,9 @@ Prompt 样例库采用少样本学习（Few-shot learning）思路，从预定�
 - [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)
 - [使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)
 - [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)
+
+
+
 
 
 

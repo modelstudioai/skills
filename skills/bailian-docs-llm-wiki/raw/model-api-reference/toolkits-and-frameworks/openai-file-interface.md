@@ -13,17 +13,6 @@
 -   使用OpenAI SDK调用服务，您还需安装[OpenAI SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
     
 
-**重要**
-
-百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
-
--   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
--   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
-
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
-
 ## 支持的模型
 
 文件ID可用于以下场景：
@@ -59,7 +48,7 @@ from openai import OpenAI
 client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
 
 # test.txt 是一个本地示例文件
@@ -83,7 +72,7 @@ public class Main {
         // 创建客户端，使用环境变量中的API密钥
         OpenAIClient client = OpenAIOkHttpClient.builder()
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
+                .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
                 .build();
         // 设置文件路径,请根据实际需求修改路径与文件名
         Path filePath = Paths.get("src/main/java/org/example/test.txt");
@@ -103,7 +92,7 @@ public class Main {
 curl
 
 ```
-curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/files \
+curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --form 'file=@"test.txt"' \
 --form 'purpose="file-extract"'
@@ -142,7 +131,7 @@ from openai import OpenAI
 client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
 
 # test.jsonl 是一个本地示例文件
@@ -166,7 +155,7 @@ public class Main {
         // 创建客户端，使用环境变量中的API密钥
         OpenAIClient client = OpenAIOkHttpClient.builder()
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
+                .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
                 .build();
         // 设置文件路径,请根据实际需求修改路径与文件名
         Path filePath = Paths.get("src/main/java/org/example/test.txt");
@@ -186,7 +175,7 @@ public class Main {
 curl
 
 ```
-curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/files \
+curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --form 'file=@"test.jsonl"' \
 --form 'purpose="batch"'
@@ -225,7 +214,7 @@ from openai import OpenAI
 client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
 
 # file.jsonl 是一个本地示例文件
@@ -249,7 +238,7 @@ public class Main {
         // 创建客户端，使用环境变量中的API密钥
         OpenAIClient client = OpenAIOkHttpClient.builder()
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
+                .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
                 .build();
         // 设置文件路径,请根据实际需求修改路径与文件名
         Path filePath = Paths.get("src/main/java/org/example/file.jsonl");
@@ -269,7 +258,7 @@ public class Main {
 curl
 
 ```
-curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/files \
+curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --form 'file=@"file.jsonl"' \
 --form 'purpose="fine-tune"'
@@ -289,7 +278,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
 
 file = client.files.retrieve(file_id="file-batch-xxx")
@@ -325,7 +314,7 @@ public class Main {
         // 创建客户端，使用环境变量中的API密钥
         OpenAIClient client = OpenAIOkHttpClient.builder()
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
+                .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
                 .build();
         // 创建文件查询参数,请根据实际需求替换相应的fileId
         FileRetrieveParams params= FileRetrieveParams.builder()
@@ -343,13 +332,13 @@ public class Main {
 #### 需要配置的endpoint
 
 ```
-GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/files/{file_id}
+GET https://dashscope-intl.aliyuncs.com/compatible-mode/v1/files/{file_id}
 ```
 
 #### **请求示例**
 
 ```
-curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/files/file-batch-xxx \
+curl -X GET https://dashscope.aliyuncs.com/compatible-mode/v1/files/file-batch-xxx \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
@@ -385,7 +374,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
 
 file_stk = client.files.list(after="file-batch-xxx",limit=20)
@@ -436,7 +425,7 @@ public class Main {
         // 创建客户端，使用环境变量中的API密钥
         OpenAIClient client = OpenAIOkHttpClient.builder()
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
+                .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
                 .build();
         // 创建文件列表查询参数
         FileListParams params = FileListParams.builder()
@@ -455,13 +444,13 @@ public class Main {
 #### 需要配置的endpoint
 
 ```
-GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/files
+GET https://dashscope-intl.aliyuncs.com/compatible-mode/v1/files
 ```
 
 #### **请求示例**
 
 ```
-curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/files \
+curl -X GET https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
@@ -508,7 +497,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
 
 file_object = client.files.delete("file-batch-xxx")
@@ -536,7 +525,7 @@ public class Main {
     public static void main(String[] args) {
         OpenAIClient client = OpenAIOkHttpClient.builder()
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
+                .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
                 .build();
         FileDeleteParams params = FileDeleteParams.builder()
                 .fileId("file-batch-xxx")
@@ -552,13 +541,13 @@ public class Main {
 #### 需要配置的endpoint
 
 ```
-DELETE https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/files/{file_id}
+DELETE https://dashscope-intl.aliyuncs.com/compatible-mode/v1/files/{file_id}
 ```
 
 #### **请求示例**
 
 ```
-curl -X  DELETE https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/files/file-batch-xxx \
+curl -X  DELETE https://dashscope.aliyuncs.com/compatible-mode/v1/files/file-batch-xxx \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
@@ -814,7 +803,7 @@ status
 
 _String_
 
-文件的当前状态。可能的状态有：`uploaded`（已上传）, `processed`（处理中）, `error`（异常）。
+文件的当前状态。可能的状态有：`uploaded`（已上传，等待解析）, `processing`（解析中，需等待解析完成后再引用）, `processed`（解析完成，可正常引用调用）, `error`（解析失败）。
 
 "processed"
 

@@ -4817,6 +4817,14 @@ glm-5.2
 
 1,000,000
 
+glm-5.2-us
+
+国际
+
+500
+
+1,000,000
+
 glm-5.1
 
 全球
@@ -5945,6 +5953,42 @@ kling/kling-v3-image-generation
 
 中国内地
 
+### **Vidu系列**
+
+## **华北2（北京）**
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+**每分钟请求数RPM限制**
+
+**同时处理中任务数量（并发数）**
+
+vidu/vidu-image\_reference2image
+
+中国内地
+
+300
+
+5
+
+> 同一个阿里云百炼API Key 下，Vidu参考生图系列的 4 个模型共享 5 个并发数。即这 4 个模型处于运行状态的任务总数加起来不能超过 5 个。
+
+vidu/viduq3-fast\_reference2image
+
+中国内地
+
+vidu/viduq2-pro\_reference2image
+
+中国内地
+
+vidu/viduq2-fast\_reference2image
+
+中国内地
+
 ## **音乐生成**
 
 ## **华北2（北京）**
@@ -5967,7 +6011,85 @@ fun-music-v1
 
 180
 
+## **语音对话**
+
+### **实时语音对话**
+
+## **华北2（北京）**
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+qwen-audio-3.0-realtime-plus
+
+中国内地
+
+60
+
+100,000
+
+qwen-audio-3.0-realtime-flash
+
+中国内地
+
+60
+
+100,000
+
 ## **语音合成（文本转语音）**
+
+### **Qwen-Audio-TTS语音合成**
+
+#### 华北2（北京）
+
+**模型名称**
+
+**服务部署范围**
+
+**提交作业接口RPS限制**
+
+qwen-audio-3.0-tts-plus
+
+中国内地
+
+3
+
+qwen-audio-3.0-tts-flash
+
+中国内地
+
+3
+
+#### 新加坡
+
+**模型名称**
+
+**服务部署范围**
+
+**提交作业接口RPS限制**
+
+qwen-audio-3.0-tts-plus
+
+国际
+
+3
+
+qwen-audio-3.0-tts-flash
+
+国际
+
+3
 
 ### **千问语音合成**
 
@@ -6475,9 +6597,9 @@ cosyvoice-v3-flash
 
 国际
 
-### **CosyVoice声音复刻/设计**
+### **Qwen-Audio-TTS/CosyVoice声音复刻/设计**
 
-CosyVoice声音复刻共用一个模型，共用限流额度。
+Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额度。
 
 #### 华北2（北京）
 
@@ -8217,7 +8339,7 @@ kling/kling-v3-video-generation
 
 **同时处理中任务数量（并发数）**
 
-vidu/viduq3-turbo\_text2video
+vidu/viduq3-ad\_reference2video
 
 中国内地
 
@@ -8225,7 +8347,25 @@ vidu/viduq3-turbo\_text2video
 
 5
 
-> 同一个阿里云百炼API Key 在 17 个模型间共享并发额度。即这 17 个模型处于运行状态的任务总数加起来不能超过 5 个。
+> 同一个阿里云百炼API Key 在 20 个模型间共享并发额度。即这 20 个模型处于运行状态的任务总数加起来不能超过 5 个。
+
+vidu/viduq3-drama\_reference2video
+
+中国内地
+
+5
+
+vidu/viduq3-pro-fast\_img2video
+
+中国内地
+
+5
+
+vidu/viduq3-turbo\_text2video
+
+中国内地
+
+5
 
 vidu/viduq3-pro\_text2video
 
@@ -8746,6 +8886,78 @@ qwen-flash-character
 qwen-plus-character-ja
 
 国际
+
+120
+
+500,000
+
+## **美国（弗吉尼亚）**
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+qwen-plus-character
+
+全球
+
+120
+
+500,000
+
+## **德国（法兰克福）**
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+qwen-plus-character
+
+全球
+
+120
+
+500,000
+
+## **日本（东京）**
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+qwen-plus-character
+
+全球
 
 120
 

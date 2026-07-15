@@ -1,6 +1,6 @@
-# 非实时语音合成CosyVoice Python SDK参考
+# 非实时语音合成Qwen-Audio-TTS/CosyVoice Python SDK参考
 
-本文介绍非实时语音合成CosyVoice的Python SDK调用方法，支持非流式和流式两种调用模式。
+本文介绍非实时语音合成Qwen-Audio-TTS/CosyVoice的Python SDK调用方法，支持非流式和流式两种调用模式。
 
 **用户指南**：参见[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)。
 
@@ -69,6 +69,10 @@ str
 
 取值范围：
 
+-   qwen-audio-3.0-tts-plus
+    
+-   qwen-audio-3.0-tts-flash
+    
 -   cosyvoice-v3.5-plus
     
 -   cosyvoice-v3.5-flash
@@ -90,7 +94,7 @@ str
 
 支持 SSML 和 LaTeX 格式输入。将待合成文本替换为对应格式即可。
 
--   使用 SSML 时，需同时将 `enable_ssml` 设置为 `True`。支持的 SSML 标签及用法，请参见[SSML标记语言介绍](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language)。
+-   使用 SSML 时，需同时将 `enable_ssml` 设置为 `True`。支持的 SSML 标签及用法，请参见[SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
     
 -   使用 LaTeX 时，将待合成文本替换为 LaTeX 格式即可，无需额外配置。支持的 LaTeX 语法及用法，请参见[LaTeX 公式转语音](https://help.aliyun.com/zh/model-studio/latex-capability-support-description)。
     
@@ -201,7 +205,7 @@ bool
 
 否
 
-是否开启SSML功能。当`text`使用SSML格式时，需设为`True`。默认为`False`。支持的SSML标签及用法，请参考[SSML标签](https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language)。
+是否开启SSML功能。当`text`使用SSML格式时，需设为`True`。默认为`False`。支持的SSML标签及用法，请参考[SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。SSML 的使用限制（支持的模型、音色和接口），请参见[使用限制](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide#sl01-constraint-h3)。
 
 word\_timestamp\_enabled
 
@@ -218,7 +222,7 @@ bool
 -   False：关闭。
     
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
 
 seed
 
@@ -301,7 +305,7 @@ bool
 
 默认值：false。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 aigc\_propagator
 
@@ -313,7 +317,7 @@ str
 
 默认值：阿里云UID。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 aigc\_propagate\_id
 
@@ -325,7 +329,7 @@ str
 
 默认值：本次语音合成请求Request ID。
 
-仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 hot\_fix
 
@@ -335,7 +339,7 @@ dict
 
 文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
 
-cosyvoice-v2不支持该功能。
+qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v2不支持该功能。
 
 参数介绍：
 
@@ -414,7 +418,7 @@ API Key。如果未指定，SDK会自动从环境变量`DASHSCOPE_API_KEY`中读
 
 ## **示例代码**
 
-以下示例展示CosyVoice语音合成的非流式和流式调用方式。运行前请确保已设置环境变量`DASHSCOPE_API_KEY`。
+以下示例展示Qwen-Audio-TTS/CosyVoice语音合成的非流式和流式调用方式。运行前请确保已设置环境变量`DASHSCOPE_API_KEY`。
 
 **重要**
 
@@ -437,7 +441,7 @@ dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.co
 
 # 非流式调用，返回音频URL
 result = HttpSpeechSynthesizer.call(
-    model="cosyvoice-v3-flash",  # 更换模型时，需同步更换为对应版本的音色
+    model="qwen-audio-3.0-tts-flash",  # 更换模型时，需同步更换为对应版本的音色
     text="今天是个好日子，适合构建人们喜爱的产品！",
     voice="longanhuan",  # 该音色适用于cosyvoice-v3系列，cosyvoice-v2请使用longxiaochun_v2等v2音色
     format="wav",
@@ -472,7 +476,7 @@ dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.co
 
 # 流式调用，逐段返回音频数据
 stream_result = HttpSpeechSynthesizer.call(
-    model="cosyvoice-v3-flash",  # 更换模型时，需同步更换为对应版本的音色
+    model="qwen-audio-3.0-tts-flash",  # 更换模型时，需同步更换为对应版本的音色
     text="今天是个好日子，适合构建人们喜爱的产品！",
     voice="longanhuan",  # 该音色适用于cosyvoice-v3系列，cosyvoice-v2请使用longxiaochun_v2等v2音色
     format="wav",

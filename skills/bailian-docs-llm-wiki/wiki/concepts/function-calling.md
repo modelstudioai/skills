@@ -1,71 +1,45 @@
-# 函数调用（Function Calling / 工具调用）
+# 函数调用（Function Calling）
 
-函数调用（Function Calling，又称工具调用）是指大模型在生成回复的过程中，根据用户输入和工具描述自主判断是否需要调用外部工具（函数/API），并生成结构化的调用参数；应用执行工具后，将结果回传给模型，由模型合并结果生成最终答案。它是弥补大模型在实时信息获取、精确计算、图像处理、外部系统操作等原生局限的核心机制。
+函数调用（Function Calling）是指大模型在推理过程中，根据用户输入、工具名称与工具描述判断是否需要调用外部工具（函数/API），并生成结构化的调用参数，再将工具返回结果并入上下文以生成最终回复的能力。它是弥补大模型在实时信息获取、精确计算、外部系统操作等原生局限的核心机制。
 
 ## 在百炼平台的使用场景
 
-函数调用贯穿百炼的多种应用与接口，不同场景下的调用形态和控制粒度有所差异：
+百炼平台在多个层面暴露和使用函数调用能力：
 
-### [OpenAI 兼容接口](openai-compatible-interface.md)（Chat Completions / Responses）
-
-- **Chat Completions** 标准对话接口支持 `function call`，模型可返回工具调用请求，适用于通用对话中的工具触发。
-- **Responses** 接口是 Chat Completions 的演进版，内置联网搜索等工具，简化了上下文与工具管理，适合智能体场景。
-- 迁移自 OpenAI 应用时，通常只需修改 `base_url`、`api_key`、`model` 三个参数即可复用原有的 function call 代码。
-
-### 智能体应用（Agent）
-
-- **新版智能体（Agent 2.0）**：将知识库、MCP、插件等能力统一抽象为工具，由智能体自主规划调用顺序，支持完整的「规划-执行-反思」链路。推荐使用具备强工具调用能力的模型（如千问-Max / 千问 3 系列）。通过「ReAct 最大轮次」（取值 1-50）限制单次会话中的工具调用次数。
-- **旧版智能体（Agent 1.0）**：通过知识库（RAG）和插件扩展能力，先检索再决策是否调用工具；自定义插件有 5 秒超时限制。
-
-### 工作流应用（Workflow）
-
-在工作流中，插件 / MCP 以**节点**形式出现，按用户编排的顺序执行，需手动指定输入参数并把输出传递到下一节点，而非由模型主动规划调用。
-
-### 插件（Plug-in）
-
-插件是工具集合，一个插件可含多个工具（每个工具有唯一的工具 ID，如 `calculator`、`code_interpreter`、`quark_search`）。在智能体应用 / Assistant API 中，模型依据工具名称与描述判断是否调用；通过 API 调用时需正确传递工具 ID。单个智能体应用最多添加 10 个工具。
-
-### MCP（Model Context Protocol）
-
-MCP 是大模型与外部工具之间的统一信息通道，让智能体和工作流无需为每个工具单独编写接口即可接入海量第三方工具。单个智能体最多同时添加 5 个 MCP 服务。调用准确性高度依赖提示词，建议在提示词中写明工具名称与能力。
-
-### Managed Agents（托管运行时）
-
-平台在服务端托管会话状态与沙箱，智能体可自主调用内置工具（`bash`、`read`、`write`、`edit`、`glob`、`grep`、`download_file` 等 7 个内置工具）、MCP 服务和 Skill。工具调用过程与结果通过会话级 SSE 事件流实时推送，事件历史持久化，支持中断与续接。
-
-### 实时[多模态](multimodal.md)（Omni-Realtime API）
-
-基于 WebSocket 的实时音视频对话接口同样支持工具调用：模型通过服务端事件 `response.function_call_arguments.done` 返回工具调用参数，客户端执行工具后通过 `conversation.item.create` 事件回传结果。
+- **文本生成模型**：所有通用文本模型（如 `qwen3.7-plus`、`qwen3.6-flash`、`qwen3.7-max`）均支持 Function Calling。此外平台还提供免复杂配置的内置工具（联网搜索、代码解释器、网页抓取），开箱即用。
+- **API 接口层**：函数调用通过不同接口协议暴露，字段约定各有差异：
+  - **OpenAI 兼容 Chat Completions**：以 OpenAI 的 `tools` / `tool_calls` 字段约定描述工具与调用结果，迁移成本最低。
+  - **OpenAI 兼容 Responses**：内置联网搜索、代码解释器、网页内容提取等工具，并自动管理对话历史，无需手动维护上下文。
+  - **Anthropic 兼容 Messages**：以 tool use 形式支持工具调用，适合 Anthropic 生态应用。
+  - **DashScope 原生接口**：功能与参数最完整，是使用平台全部工具能力时的首选。
+- **实时多模态（Qwen-Omni-Realtime）**：基于 WebSocket 的实时 API 同样支持工具调用（Function Calling）。模型触发调用后通过 `response.function_call_arguments.done` 服务端事件返回调用参数，客户端执行工具后再用 `conversation.item.create` 事件将结果回传给模型。
+- **应用构建（智能体 / 工作流）**：
+  - **智能体应用（Agent）/ Assistant API**：模型根据输入、工具名称与描述自主判断是否调用，动态选择并规划调用顺序；新版智能体（Agent 2.0）把知识库、MCP、插件统一为“工具”交由模型自主编排。
+  - **工作流应用**：工具作为编排节点按预定义流程执行，调用顺序由用户编排而非模型规划。
+- **插件（Plug-in）**：调用插件的本质就是通过函数调用触发插件下的工具（如 `code_interpreter`、`calculator`、`quark_search` 等）。模型依据工具描述决定调用哪个工具。
 
 ## 关键参数与配置
 
-| 场景 | 关键配置 | 说明 |
-| --- | --- | --- |
-| Chat Completions | `tools` / `function` | 声明可调用的工具及其参数 schema |
-| 新版智能体 | ReAct 最大轮次（1-50） | 限制单次会话工具调用最大次数 |
-| 智能体应用 | 工具数上限 10 | 应用会根据输入选择调用一个或多个工具 |
-| MCP（智能体） | MCP 服务数上限 5 | 模型自动判断是否调用 |
-| Managed Agents | `resources` 挂载 + SSE 事件流 | 沙箱路径约定 `/mnt/session/uploads` |
-| Omni-Realtime | `session.update` 配置工具；`response.function_call_arguments.done` / `conversation.item.create` | 通过事件回传调用结果 |
-| Managed Agents API | `POST /sessions/{session_id}/events` | 注入函数结果、工具审批等事件 |
+- **工具定义**：需为每个工具提供名称、功能描述与参数 Schema。工具描述质量直接影响模型判断是否/如何调用。
+- **模型能力要求**：应选用具备强工具调用能力的模型。插件调用目前支持 `qwen-turbo`、`qwen-plus`、`qwen-max`、`qwen-vl-max`、`qwen-vl-plus` 等；智能体推荐千问-Max 系列。
+- **思考模式**：可通过 `enable_thinking` 开启（Responses API 用 `reasoning.effort` 控制），配合工具调用完成“规划-执行-反思”链路。
+- **ReAct 最大轮次**：智能体中取值 1-50，限制单次会话内工具调用的最大次数。
+- **实时 API 事件**：VAD/Manual 模式下通过 `session.update` 配置工具；调用参数由 `response.function_call_arguments.done` 返回，结果经 `conversation.item.create` 回传。
+- **调用约束**：每个智能体应用最多可添加 10 个工具；旧版智能体的自定义插件有 5 秒超时限制。
 
-## 面向开发者的实用建议
+## 开发者实践建议
 
-- **选强工具模型**：优先选用工具调用能力强的模型（千问-Max、千问 3 系列），弱模型易漏调或错调。
-- **写清工具描述与提示词**：模型依据工具名称和描述决策，描述越明确，调用越准；MCP / 插件尤其依赖提示词中明确指令。
-- **注意 Token 消耗**：工具返回内容会作为上下文回传模型，增加输入（并可能间接增加输出）Token。
-- **控制调用轮次**：通过 ReAct 最大轮次等参数避免工具调用死循环。
-- **区分自主调用与编排**：智能体 / Assistant API 由模型自主规划调用，工作流则由用户显式编排节点顺序。
+- 迁移已有 OpenAI/Anthropic 应用时，优先选用对应生态的兼容接口，注意核对不同接口的工具字段映射差异。
+- 需要联网搜索、代码解释器等内置工具时，使用 Responses 接口而非普通 Chat Completions。
+- 需要最完整的工具能力与参数控制时，使用 DashScope 原生接口。
+- 编写清晰、无歧义的工具描述，是提升模型正确触发函数调用的关键。
 
 ## 关联主题页
 
 - [omni realtime api](../api/omni-realtime-api.md)
-- [managed agents api](../api/managed-agents-api.md)
+- [model experience](../guides/model-experience.md)
+- [qwen api reference](../api/qwen-api-reference.md)
 - [llm application](../guides/llm-application.md)
 - [plug in](../guides/plug-in.md)
-- [model context protocol](../guides/model-context-protocol.md)
-- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
-- [managed agents](../guides/managed-agents.md)
-
 
 

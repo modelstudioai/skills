@@ -116,6 +116,14 @@ object
 
 参数说明参考下方 [parameters.client\_info的参数说明](#8639a70e4bsn1)表格
 
+history
+
+list\[\]
+
+否
+
+客户自己组织的问答历史，会覆盖服务内默认维护的问答历史，影响后续所有问答。
+
 images
 
 list\[\]
@@ -198,7 +206,35 @@ string
 
 调用方所在城市，指明客户端粗略位置
 
-**parameters.images**的参数说明如下：
+**parameters.history**内每条记录的参数说明如下：
+
+**一级参数**
+
+**类型**
+
+**是否必选**
+
+**说明**
+
+role
+
+string
+
+是
+
+本记录是哪个角色说的，只支持user, assistant两种。
+
+注意：不支持设为system
+
+content
+
+string
+
+是
+
+具体文本内容
+
+**parameters.images**内每个图片的参数说明如下：
 
 **一级参数**
 
