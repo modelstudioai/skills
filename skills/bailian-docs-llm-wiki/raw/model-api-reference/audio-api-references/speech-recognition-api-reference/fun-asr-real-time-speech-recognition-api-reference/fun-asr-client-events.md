@@ -348,10 +348,6 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 **speech\_noise\_threshold** `_float_` （可选）
 
-**重要**
-
-仅Fun-ASR支持该参数。
-
 语音与噪音的判定阈值，用于调整语音活动检测（VAD）的灵敏度。
 
 取值范围：\[-1.0, 1.0\]。
@@ -369,6 +365,10 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
     
 -   根据实际音频环境小幅度调整（建议步长 0.1）
     
+
+**special\_word\_filter** `_string_` （可选）
+
+指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#rt03-sensitive-h3)。
 
 ## **continue-task**
 

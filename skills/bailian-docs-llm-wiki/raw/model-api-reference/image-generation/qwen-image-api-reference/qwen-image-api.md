@@ -88,14 +88,14 @@ qwen-image
 
 **重要**
 
-百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
     
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
     
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 ## **同步接口（推荐）**
 
@@ -107,7 +107,7 @@ qwen-image
 
 **新加坡地域**：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 #### 请求参数
 
@@ -415,7 +415,7 @@ import os
 import dashscope
 from dashscope import MultiModalConversation
 
-# 以下为华北2（北京）地域的URL，各地域的URL不同。
+# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 messages = [
@@ -518,7 +518,7 @@ import java.util.Map;
 public class QwenImage {
 
     static {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
+        // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
         Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     }
 
@@ -839,13 +839,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ##### 新加坡
 
 `GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -864,7 +864,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 ## 查询任务结果
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ```
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
@@ -1044,7 +1044,7 @@ from dashscope import ImageSynthesis
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，各地域的URL不同。
+# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 prompt = "一副典雅庄重的对联悬挂于厅堂之中，房间是个安静古典的中式布置，桌子上放着一些青花瓷，对联上左书“义本生知人机同道善思新”，右书“通云赋智乾坤启数高志远”， 横批“智启千问”，字体飘逸，在中间挂着一幅中国风的画作，内容是岳阳楼。"
@@ -1117,7 +1117,7 @@ import os
 import dashscope
 import time
 
-# 以下为华北2（北京）地域的URL，各地域的URL不同。
+# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 prompt = "一副典雅庄重的对联悬挂于厅堂之中，房间是个安静古典的中式布置，桌子上放着一些青花瓷，对联上左书“义本生知人机同道善思新”，右书“通云赋智乾坤启数高志远”， 横批“智启千问”，字体飘逸，在中间挂着一幅中国风的画作，内容是岳阳楼。"
@@ -1280,7 +1280,7 @@ import java.util.Map;
 
 public class Text2Image {
     static {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
+        // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
         Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     }
 
@@ -1370,7 +1370,7 @@ import java.util.Map;
 public class Text2Image {
 
     static {
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
+        // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
         Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     }
 
@@ -1508,6 +1508,59 @@ public class Text2Image {
 }
 ```
 
+## 结合 OpenAI Agents SDK 使用
+
+千问-文生图（Qwen-Image）等图像生成模型通过 DashScope 原生接口调用，不支持 OpenAI 兼容（compatible-mode）模式，因此无法直接作为 OpenAI Agents SDK 中 Agent 的推理模型。
+
+在 OpenAI Agents SDK 等智能体框架中，可将图像生成能力封装为工具（function tool），由支持 OpenAI 兼容模式的文本对话模型（如 qwen-plus）作为 Agent 的推理核心进行调度。示例如下：
+
+运行前请先安装依赖：`pip install openai-agents dashscope`。
+
+```
+import os
+import asyncio
+import dashscope
+from openai import AsyncOpenAI
+from dashscope import MultiModalConversation
+from agents import Agent, Runner, function_tool, OpenAIChatCompletionsModel
+
+# 从环境变量读取百炼 API Key（若未配置，可直接替换为 api_key="sk-xxx"）
+API_KEY = os.getenv("DASHSCOPE_API_KEY")
+
+# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+# 文本对话模型（Agent 推理核心）通过 OpenAI 兼容模式接入
+client = AsyncOpenAI(api_key=API_KEY, base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
+
+# 将图像生成封装为工具（function tool），供 Agent 调用
+@function_tool
+def generate_image(prompt: str) -> str:
+    """根据文本描述生成一张图片并返回图片 URL。prompt：图片内容的文字描述。"""
+    rsp = MultiModalConversation.call(
+        api_key=API_KEY,
+        model="qwen-image",
+        messages=[{"role": "user", "content": [{"text": prompt}]}],
+        result_format="message",
+    )
+    if rsp.status_code != 200:
+        return f"生成失败：{rsp.code} {rsp.message}"
+    return rsp.output.choices[0].message.content[0]["image"]
+
+agent = Agent(
+    name="图像生成助手",
+    instructions="你是图像生成助手。当用户想要图片时，调用 generate_image 工具，并把返回的图片 URL 告诉用户。",
+    model=OpenAIChatCompletionsModel(model="qwen-plus", openai_client=client),
+    tools=[generate_image],
+)
+
+async def main():
+    result = await Runner.run(agent, "帮我画一只在草地上奔跑的柯基犬")
+    print(result.final_output)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
 ## **计费与限流**
 
 -   模型免费额度和计费单价请参见[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#11a4ac6ea62wt)。
@@ -1547,6 +1600,20 @@ A：
         
 -   **图像编辑模型**：  
     `qwen-image-edit`：根据输入的图像和文本指令，执行图生图、局部修改等操作，详情请参见[千问-图像编辑](https://help.aliyun.com/zh/model-studio/qwen-image-edit-api)。  
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
     
 

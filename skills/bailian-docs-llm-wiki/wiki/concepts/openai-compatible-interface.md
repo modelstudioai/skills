@@ -1,47 +1,40 @@
 # OpenAI 兼容接口
 
-OpenAI 兼容接口是百炼平台提供的一套与 OpenAI 官方 API 高度对齐的调用方式：开发者可直接复用官方 OpenAI 客户端库（Python/Node SDK）或 HTTP 请求，仅需替换 `api_key`、`base_url` 与 `model` 三项，即可将现有 OpenAI 应用平滑迁移到百炼，无需改动业务逻辑。
+OpenAI 兼容接口是百炼平台提供的一套遵循 OpenAI API 规范的服务入口，让已有 OpenAI 应用只需替换 `api_key`、`base_url` 和 `model` 三项即可迁移到百炼，无需改动业务逻辑，是接入成本最低的调用方式。
 
 ## 在百炼平台的使用场景
 
-OpenAI 兼容接口是百炼最主流的接入入口，覆盖多种典型场景：
+OpenAI 兼容接口贯穿百炼的多类使用场景：
 
-- **迁移已有 OpenAI 应用**：追求最低迁移成本时的首选。已基于 OpenAI SDK 构建的应用，改动量极小。
-- **调用通义千问及三方模型**：支持 Qwen 商业版/开源版、Qwen-VL、Qwen-Coder、Qwen-Omni、Qwen-Math，以及 DeepSeek、Kimi、GLM、MiniMax 等三方模型（三方直供模型仅在中国内地地域可用，需先在控制台开通）。
-- **调用专用模型**：意图理解（`tongyi-intent-detect-v3`）、翻译（`qwen-mt-plus`）、OCR（`qwen3.5-ocr`）、界面交互（`gui-plus`）等多数专用模型均可通过 OpenAI 兼容接口调用。
-- **接入第三方工具**：Cursor、Cline、Cherry Studio、Chatbox、Dify 等聊天客户端与开发工具，统一以「Base URL + API Key + 模型 ID」的形式通过 OpenAI 兼容协议接入百炼网关。
-
-> 注意：并非所有模型都支持。例如 Qwen-Audio、`qwen-deep-research` 仅支持 DashScope 协议（后者仅 Python SDK、仅北京地域）。使用前请对照具体模型的 API 参考确认。
-
-## 接口家族
-
-OpenAI 兼容体系不止 Chat Completions，还包含多个能力接口：
-
-- **Chat Completions（对话补全）**：最常用的接口，支持非流式、流式（`stream=True`，配合 `stream_options={"include_usage": True}` 返回 Token 统计）与 function call 工具调用。
-- **Responses（智能体原生接口）**：Chat Completions 的演进版本，内置联网搜索、网页抓取、代码解释器、文搜图/图搜图等工具；输入更灵活（可直接传字符串），并通过 `previous_response_id` 自动管理多轮上下文，无需手动拼接消息历史。
-- **Conversations（会话管理）**：提供会话的创建、查询、更新、删除及消息项管理，配合 Responses 可自动注入历史上下文。
-- **Completions（文本补全）**：面向代码补全/内容续写，当前仅支持 `qwen-coder-turbo`，且仅适用于中国内地（北京）地域，使用 `<|fim_prefix|>...<|fim_suffix|>...<|fim_middle|>` 模板。
-- **Embedding、文件、Batch** 等能力也提供对应的兼容接口，并可直接接入 LangChain / LangChain4j 等主流框架。
+- **文本生成模型调用**：作为四类接口（OpenAI 兼容 Chat Completions、OpenAI 兼容 Responses、Anthropic 兼容 Messages、DashScope 原生）中迁移成本最低的一类，适合已基于 OpenAI SDK 构建的应用平滑迁移。其中 Chat Completions 为最常用入口，支持非流式、流式与工具调用（function call）；Responses 为其演进版本，内置联网搜索、代码解释器、网页抓取等工具，并通过 `previous_response_id` 自动管理多轮上下文。
+- **接入第三方客户端与开发工具**：Cherry Studio、Chatbox、Cursor、Cline、Dify 等聊天客户端和编程工具，统一通过「Base URL + API Key + 模型 ID」以 OpenAI 兼容协议接入百炼网关。
+- **专用模型调用**：`tongyi-intent-detect-v3`（意图理解）、`qwen-mt-plus`（翻译）、`qwen3.5-ocr`（OCR）、`gui-plus`（界面交互）等专用模型多数支持 OpenAI 兼容接口调用（注意 `qwen-deep-research` 仅支持 Python DashScope SDK，Qwen-Audio 仅支持 DashScope 协议）。
+- **智能体与工作流应用调用**：应用可通过 OpenAI 兼容的 Responses API 调用，支持同步/异步、多轮对话与[流式输出](streaming-output.md)。
 
 ## 关键参数与配置
 
-迁移的核心是配置以下三项：
+迁移与调用的核心是配置以下三要素：
 
-- **`api_key`**：替换为百炼 API Key。各地域的 API Key 相互独立、不能跨地域混用，切换地域时需同步更换。建议写入环境变量 `DASHSCOPE_API_KEY`，避免硬编码泄露。
-- **`base_url`**：OpenAI SDK 统一使用以 `/compatible-mode/v1`（部分方案为 `/v1`）结尾的路径；HTTP 调用在其后追加资源路径（如 `/chat/completions`、`/responses`、`/embeddings`、`/files`）。
-- **`model`**：替换为百炼支持的模型名称。
+- **`api_key`**：使用百炼 API Key。各地域、各计费方案的 API Key **相互独立、不能混用**，建议配置到环境变量 `DASHSCOPE_API_KEY`，避免硬编码泄露。若 Base URL 与 API Key 不配套会返回 401。
+- **`base_url`**：OpenAI SDK 调用统一以 `/compatible-mode/v1`（部分方案为 `/v1`）结尾；HTTP 调用需在其后追加具体资源路径（如 `/chat/completions`、`/responses`、`/embeddings`、`/files`）。各地域 SDK Base URL 示例：
+  - 华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
+  - 新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
+  - 日本（东京）：`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1`
+  - 德国（法兰克福）：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1`
+  - 美国（弗吉尼亚）：`https://dashscope-us.aliyuncs.com/compatible-mode/v1`
 
-各地域 SDK `base_url`（`{WorkspaceId}` 为业务空间 ID，可在控制台业务空间详情页查看）：
+  其中 `{WorkspaceId}` 为业务空间 ID，可在控制台业务空间详情页查看。北京、新加坡地域推荐使用业务空间专属域名以获得更好的性能与稳定性。
+- **`model`**：替换为百炼支持的模型名称（如 `qwen-plus`、`qwen3-max` 等）。
 
-| 地域 | base_url |
-| --- | --- |
-| 华北2（北京） | `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` |
-| 新加坡 | `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1` |
-| 日本（东京） | `https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1` |
-| 德国（法兰克福） | `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1` |
-| 美国（弗吉尼亚） | `https://dashscope-us.aliyuncs.com/compatible-mode/v1` |
+常用请求参数：
 
-最小调用示例（北京地域）：
+- `messages`（array，必选）：对话消息列表，每条含 `role`（system/user/assistant）与 `content`。
+- `stream`（bool，可选）：是否[流式输出](streaming-output.md)；流式统计 Token 需配合 `stream_options={"include_usage": True}`。
+- 部分专用模型的特有参数（如 Qwen-MT 的 `translation_options`、Qwen-OCR 的 `min_pixels`/`max_pixels`）在 OpenAI SDK 中通过 `extra_body` 传入。
+
+## 调用示例
+
+以北京地域业务空间专属域名为例（Python）：
 
 ```python
 import os
@@ -53,27 +46,30 @@ client = OpenAI(
 )
 completion = client.chat.completions.create(
     model="qwen-plus",
-    messages=[{"role": "user", "content": "你是谁？"}],
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "你是谁？"},
+    ],
 )
 print(completion.choices[0].message.content)
 ```
 
-部分模型的专属参数需通过 OpenAI SDK 的 `extra_body` 传入，例如 Qwen-MT 的 `translation_options`（`source_lang` / `target_lang` / `terms` / `tm_list` / `domain_prompt`）、Qwen-OCR 的 `min_pixels` / `max_pixels`、GUI-Plus 的 `vl_high_resolution_images`。
+OpenAI Python SDK 要求 Python ≥ 3.8。
 
 ## 注意事项
 
-- **Base URL 与 API Key 必须同地域、同计费方案配套**，否则会报 401 或跨地域错误。
-- **推荐使用业务空间专属域名**（`{WorkspaceId}.{region}.maas.aliyuncs.com`）用于生产环境，具备更高并发、更低时延与流量隔离，请求超时 3600 秒；旧版 `dashscope.aliyuncs.com` 等域名仍可用但建议迁移，超时 600 秒。
-- **旧版路径将停止维护**：Responses 与 Conversations 的旧路径 `/api/v2/apps/protocols/compatible-mode/v1/...` 即将下线，请迁移到新版 `/compatible-mode/v1/...`。
-- **依赖内置工具（联网搜索、代码解释器等）时须用 Responses 接口**，而非普通 Chat Completions。
-- 跨接口迁移时需核对参数映射：DashScope 原生接口参数最全，OpenAI/Anthropic 兼容接口以各自生态的字段约定为准。
+- **协议路径区分**：OpenAI 协议 Base URL 以 `/compatible-mode/v1`（或 `/v1`）结尾，Anthropic 协议以 `/apps/anthropic` 结尾；部分工具还要求在 Anthropic 端点后追加 `/v1`，以各工具原文为准。
+- **接口能力差异**：DashScope 原生接口参数最全；若依赖联网搜索、代码解释器等内置工具，需使用 Responses 而非普通 Chat Completions。跨接口迁移时需核对参数映射。
+- **旧路径迁移**：Responses、Conversations 接口的旧版路径 `/api/v2/apps/protocols/compatible-mode/v1/...` 即将停止维护，请迁移至新版 `/compatible-mode/v1/...`。
+- **地域约束**：Base URL、API Key 和模型列表均不能跨地域混用；限流按主账号维度合并计算。
 
 ## 关联主题页
 
 - [qwen api reference](../api/qwen-api-reference.md)
 - [toolkits and frameworks](../api/toolkits-and-frameworks.md)
-- [get started with models](../guides/get-started-with-models.md)
 - [use chat client or development tool](../guides/use-chat-client-or-development-tool.md)
+- [get started with models](../guides/get-started-with-models.md)
 - [more models](../api/more-models.md)
+- [application call](../api/application-call.md)
 
 

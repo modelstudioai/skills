@@ -1,0 +1,268 @@
+{
+  "name": "PixVerse Capabilities",
+  "description": "由爱诗科技提供的视频原子能力大模型API服务。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Video"
+        ]
+      },
+      "description": "Upscale 支持将不同分辨率的视频超分至 4K，提升画面清晰度与细节表现，适合高质量展示与二次分发。",
+      "features": [],
+      "provider": "pixverse",
+      "model": "pixverse/pixverse-upscale",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.15",
+          "type": "video_generation",
+          "priceName": "视频生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-07-14T06:19:37.000+00:00",
+      "inferenceProvider": "pixverse",
+      "name": "pixverse/pixverse-upscale",
+      "category": "Third-party",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-upscale\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"video_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/wqefue/mix_input_video.mp4\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"seed\": 12345,\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3046323.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Image",
+          "Video"
+        ]
+      },
+      "description": "Motion Control 支持从参考视频中提取动作，并迁移到目标人物图片上，生成角色复现相同动作的新视频。",
+      "features": [],
+      "provider": "pixverse",
+      "model": "pixverse/pixverse-motioncontrol",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.27",
+          "type": "video_ratio_360p",
+          "priceName": "视频生成（360P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.3",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.36",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-07-14T06:19:44.000+00:00",
+      "inferenceProvider": "pixverse",
+      "name": "pixverse/pixverse-motioncontrol",
+      "category": "Third-party",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-motioncontrol\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/adsyrp/move_input_image.jpeg\"\n            },\n            {\n                \"type\": \"video_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/kaakcn/move_input_video.mp4\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3046322.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Text",
+          "Image",
+          "Video",
+          "Audio"
+        ]
+      },
+      "description": "对口型能力可将视频中人物的嘴部动作与输入音频或 TTS 精准同步，让角色说话更自然，提升视频表现力与叙事感染力。",
+      "features": [],
+      "provider": "pixverse",
+      "model": "pixverse/pixverse-lipsync",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.12",
+          "type": "video_generation",
+          "priceName": "视频生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-07-14T06:19:32.000+00:00",
+      "inferenceProvider": "pixverse",
+      "name": "pixverse/pixverse-lipsync",
+      "category": "Third-party",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-lipsync\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"video_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250717/pvegot/input_video_01.mp4\"\n            },\n            {\n                \"type\": \"audio_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250717/aumwir/stella2-%E6%9C%89%E5%A3%B0%E4%B9%A67.wav\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3046321.html"
+          }
+        }
+      }
+    }
+  ]
+}

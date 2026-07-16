@@ -1,66 +1,90 @@
 # token plan guide
 
-百炼平台面向 AI 编程与智能体场景提供两类订阅制套餐：**Token Plan 团队版**（按 Token 消耗抵扣 Credits、面向团队/企业、支持文本与图像生成）和 **Coding Plan**（按模型调用次数计费、面向个人开发者、纯文本模型）。两者的 API Key（均以 `sk-sp-` 开头）与 Base URL 完全隔离、互不相通，配套使用才能正确抵扣额度。本文汇总两套套餐的支持模型、接入方式、计费机制及常见限制。
+Token Plan 团队版与 Coding Plan 是百炼面向 AI 编程/智能体工具的两类订阅服务：Token Plan 团队版以 Credits 统一计量、按 Token 消耗抵扣，支持文本与图像生成模型并提供团队管理后台；Coding Plan 面向个人开发场景，按模型调用次数计费并设有请求限额。两者的 API Key 与 Base URL 完全隔离、互不相通，接入前需先明确使用的是哪种套餐。
 
 ## 两种套餐对比
 
 | 维度 | Token Plan 团队版 | Coding Plan |
 | --- | --- | --- |
-| 适用场景 | 一人公司 / 团队 / 企业日常办公 | 个人开发场景 |
-| 支持模型 | 文本生成 + 图像生成 | 文本生成 |
+| 适用场景 | 一人公司/团队/企业日常办公 | 个人开发场景 |
+| 支持模型 | 文本生成 + 图像生成 | 文本生成模型 |
 | 计费方式 | 按 Token 消耗抵扣 Credits | 按模型调用次数 |
-| 使用频次 | 无每 5 小时 / 每周限额 | 有每 5 小时 / 每周 / 每月限额 |
-| 高峰性能 | 多租户隔离，不排队 | 高峰期间可能排队 |
-| 数据安全 | 承诺不使用对话数据训练模型 | 用户数据授权用于服务改进 |
+| 使用频次 | 无每 5 小时/每周限额 | 有每 5 小时/每周/每月限额 |
+| 高峰期性能 | 多租户隔离，不排队 | 高峰期可能排队 |
+| 数据安全 | 承诺不使用数据训练模型 | 用户数据授权用于服务改进 |
 
-> **注意**：两个套餐互不转换，即使补差价也不支持将 Token Plan 团队版换成 Coding Plan（或反之），但可同时订阅、各自独立计费。详见 [常见问题](../../raw/model-user-guide/token-plan-guide/token-plan-faq.md)。
+> **注意**：两个计划互相独立，不支持互转（即使补差价也不行），可同时订阅、各自计费。详见 [Token Plan（团队版）概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md) 与 [Coding Plan概述](../../raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan.md)。
 
 ## 支持的模型
 
-**模型清单为精确字符串白名单**，必须逐字符完全匹配，版本号/子型号任何差异均视为不支持，禁止做版本兼容推理。
+Token Plan 团队版的模型清单为**精确字符串白名单**，必须逐字符完全匹配，版本号/子型号任何差异均视为不支持，禁止版本兼容推理。
 
-- **Token Plan 团队版**：千问（qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash、qwen-image-2.0、qwen-image-2.0-pro）、万相（wan2.7-image、wan2.7-image-pro）、DeepSeek（deepseek-v4-pro、deepseek-v4-flash、deepseek-v3.2）、月之暗面（kimi-k2.7-code、kimi-k2.6、kimi-k2.5）、智谱（glm-5.2、glm-5.1、glm-5）、MiniMax（MiniMax-M2.5）。完整能力标注见 [Token Plan（团队版）概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md)。
-- **Coding Plan（Pro 套餐）**：推荐 qwen3.7-plus、qwen3.6-plus、kimi-k2.5、glm-5、MiniMax-M2.5；更多包含 qwen3.5-plus、qwen3-max-2026-01-23、qwen3-coder-next、qwen3-coder-plus、glm-4.7。详见 [Coding Plan概述](../../raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan.md)。
+- **千问**：qwen3.7-max（限时活动）、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash、qwen-image-2.0、qwen-image-2.0-pro
+- **万相**：wan2.7-image、wan2.7-image-pro
+- **DeepSeek**：deepseek-v4-pro、deepseek-v4-flash、deepseek-v3.2
+- **月之暗面**：kimi-k2.7-code、kimi-k2.6、kimi-k2.5
+- **智谱 AI**：glm-5.2、glm-5.1、glm-5
+- **MiniMax**：MiniMax-M2.5
 
-> **注意**：Coding Plan Lite 基础套餐已于 2026-03-20 起停止新购、2026-04-13 起停止续费与升级，已购用户可继续使用至到期。
+Coding Plan Pro 套餐的推荐模型为 qwen3.7-plus、qwen3.6-plus、kimi-k2.5（均支持图片理解）、glm-5、MiniMax-M2.5，更多模型见 [Coding Plan概述](../../raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan.md)。
 
-## 接入方式
+> **注意**：两套清单的白名单不完全一致，且 Coding Plan Lite 套餐已于 2026 年 3 月 20 日停止新购、4 月 13 日停止续费与升级。调用时务必以对应套餐控制台的实时清单为准。
 
-两套套餐均兼容主流 AI 编程/智能体工具（Claude Code、Qwen Code、OpenClaw、OpenCode、Cursor、Codex、Cline、Qoder、Kilo CLI 等），核心是「专属 API Key + 匹配协议的 Base URL」。
+## 快速接入（三步）
 
-**Token Plan 团队版 Base URL**（华北2 北京地域，见 [快速开始](../../raw/model-user-guide/token-plan-guide/token-plan-quickstart.md)）：
+以 Token Plan 团队版为例，详见 [快速开始](../../raw/model-user-guide/token-plan-guide/token-plan-quickstart.md)：
 
-- OpenAI 兼容：`https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
-- Anthropic 兼容：`https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic`
+1. **订阅**：在购买页选择坐席类型、数量和订阅周期。RAM 子账号订阅前需主账号授予 `AliyunBailianFullAccess` 权限。
+2. **获取 API Key 和 Base URL**：分配席位后为成员生成专属 API Key（Token Plan 以 `sk-sp-` 开头，与通用 `sk-` 不可混用；仅首次显示一次，需立即保存）。
+3. **接入 AI 工具**：支持 Claude Code、Qwen Code、OpenCode、OpenClaw、Cursor、Codex、Qoder、Cline、Kilo CLI 等。
 
-**Coding Plan Base URL**：
+### Base URL 对照
 
-- OpenAI 兼容：`https://coding.dashscope.aliyuncs.com/v1`
-- Anthropic 兼容：`https://coding.dashscope.aliyuncs.com/apps/anthropic`
+| 套餐 / 协议 | Base URL |
+| --- | --- |
+| Token Plan · OpenAI 兼容 | `https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` |
+| Token Plan · Anthropic 兼容 | `https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic` |
+| Coding Plan · OpenAI 兼容 | `https://coding.dashscope.aliyuncs.com/v1` |
+| Coding Plan · Anthropic 兼容 | `https://coding.dashscope.aliyuncs.com/apps/anthropic` |
+| 按量付费 · OpenAI 兼容 | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
 
-三步接入 Token Plan：订阅套餐 → 分配席位并获取专属 API Key（`sk-sp-` 开头，仅创建/重置时完整显示一次）→ 按工具协议配置 Base URL。RAM 子账号订阅前需主账号授予 `AliyunBailianFullAccess` 权限。
+> **注意**：Token Plan、Coding Plan、按量付费三者的 API Key 与 Base URL 必须配套使用。混用会导致走按量计费通道产生意外扣费，或返回 401/403 鉴权失败。
 
-> **注意**：Token Plan 专属 API Key（`sk-sp-`）、Coding Plan 专属 API Key 与百炼通用 API Key（`sk-`）格式不同且完全隔离。误用通用 Key 或错误 Base URL 会走按量计费通道产生意外扣费，或返回 401/403 鉴权失败。
+## 工具调用与扩展能力
 
-## 扩展能力
+- **模型内置工具**：qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash 通过 Responses API 内置联网搜索、代码解释器、网页抓取、以图搜图、文搜图 5 个工具，不额外收费，token 消耗统一从套餐 Credits 抵扣。
+- **MCP 服务**：其他模型（如 deepseek-v3.2、glm-5）通过百炼 MCP 广场接入工具。联网搜索 MCP 前 2000 次调用免费，之后按 29 元/千次计费。接入 MCP 用的是**百炼通用 API Key（`sk-xxx`）**，而非套餐专属 Key。
+- **图像生成模型**：不在文本模型清单展示，需通过工具的 Skill / Slash Command / Agent 机制调用 `multimodal-generation` API，详见 [接入多模态生成模型](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-multimodal-gen.md)。
+- **视觉理解**：qwen3.6-plus、qwen3.5-plus、kimi-k2.5 原生支持视觉；glm-5、MiniMax-M2.5 等纯文本模型可通过 Skill/Agent 辅助获得视觉能力。OpenCode/OpenClaw 需在配置中显式声明 `modalities`/`input` 为 `["text","image"]`。
 
-- **工具调用（Token Plan）**：qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash 的 Responses API 内置联网搜索、代码解释器、网页抓取、以图搜图、文搜图 5 种工具，自动调用、不额外收费（token 从套餐 Credits 抵扣）。其他模型通过百炼 MCP 广场的 MCP 服务接入。
-- **联网搜索 MCP**：Endpoint 为 `https://dashscope.aliyuncs.com/api/v1/mcps/WebSearch/mcp`，鉴权用**百炼通用 API Key（`sk-xxx`，非套餐 Key）**。全部用户前 2000 次调用免费，超出按 29 元/千次计费。协议已从旧版 SSE 升级为 Streamable HTTP。
-- **图像生成模型（Token Plan）**：qwen-image-2.0、wan2.7-image 等使用独立的 `multimodal-generation` API，不在文本模型 Base URL 上调用，需通过工具的 Skill / Slash Command / Agent 扩展机制接入，详见 [接入多模态生成模型](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-multimodal-gen.md)。
-- **视觉理解（Coding Plan）**：qwen3.6-plus、qwen3.5-plus、kimi-k2.5 原生支持视觉，直接切换即可；glm-5、MiniMax-M2.5 等纯文本模型可通过 Skill/Agent 转发到视觉模型获得图像理解能力。
+## Credits 计费与额度
 
-## 团队管理（Token Plan 团队版）
+Token Plan 团队版单次请求消耗的 Credits **并非固定值**，由模型类型、Token 用量、思考模式及工具调用动态决定。多轮对话中上下文持续累积，消耗会随之上升；部分模型按上下文长度阶梯计费，长上下文可能进入更高价位档。
 
-角色分为**所有者 / 管理员 / 成员**。所有者与管理员可添加/移除成员、分配或回收席位、修改角色、查看用量。席位是最小订阅单位，一席绑定一个成员与一个 API Key，不可共享。成员支持手动添加（仅供 API 调用）或通过 **SAML 2.0（SSO）/ 钉钉**登录管理平台自助加入。用量分析可查看近 1/7/30 天的 Credits 趋势、各模型与各成员消耗明细。
+抵扣顺序：坐席套餐月度额度 → 共享用量包（多个时优先扣最近到期的）→ 全部用尽后服务暂停至下一计费周期。
 
-## 计费、额度与限制
+> **注意**：续费/续订只延长有效期或预定下期额度，**不会叠加补充到当前计费周期**。当期额度用尽需立即恢复时，应购买共享用量包、升级坐席或加购坐席（加购后需分配给成员才能使用）。
 
-- **Token Plan 计费**：单次消耗由模型类型、输入/缓存/输出 Token、思考模式、工具调用动态决定。抵扣顺序为「坐席月度额度 → 共享用量包（多个时优先最近到期）→ 用尽则暂停至下一周期」。坐席额度按订阅月到期重置、不累积；共享用量包有效期 1 个月。**续费不叠加到当前周期额度**，需立即恢复可加购共享用量包/坐席或升级坐席。
-- **Coding Plan 限制**：Pro 套餐每 5 小时 6,000 次、每周 45,000 次、每月 90,000 次。每 5 小时额度滚动恢复，每周一 00:00（UTC+8）重置周额度，每月按订阅日重置。
-- **使用范围**：两套套餐均**仅限在兼容 AI 编程/智能体工具中交互式使用**，禁止用于自动化脚本或应用后端，违规可能导致订阅暂停或 API Key 封禁。
-- **退订**：Token Plan 团队版支持按席位退订（已消耗用量的席位不可退订，退款 1-3 个工作日原路退回）；**Coding Plan 不支持退款**。
+控制消耗建议：任务切换时及时开启新会话、清理无关历史；对长文档/大代码库按需拆分输入；在控制台订阅页用量明细关注实时消耗趋势。
 
-调用失败时可对照文档排查常见报错（401/403 鉴权、404 模型不存在、400 参数超限、429 限流/额度用尽等），详见 [Coding Plan 常见问题](../../raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan-faq.md)。
+## 常见报错速查
+
+- **401 Invalid API-key / invalid access token**：误用了通用 Key 或其他套餐的 Key/Base URL、订阅过期、或 Key 复制不完整含空格。核对套餐专属 Key 与配套 Base URL，必要时重置。
+- **404 model not found / model not [support](support.md)ed**：模型名拼写或大小写错误，或不在套餐白名单内。
+- **400 url error / Range of input length**：Base URL 路径与协议不匹配（Anthropic 端点以 `/apps/anthropic` 结尾，OpenAI 端点以 `/compatible-mode/v1` 或 `/v1` 结尾），或输入超出上下文长度（新建会话或切换更长上下文模型）。
+- **429 quota exceeded**：套餐额度用尽（加购/等待重置）或触发 TPS/TPM 限流（限流按主账号维度合并计算，等待约一分钟后平滑重试）。
+- **Coding Plan 限额类**：`hour/week/month allocated quota exceeded` 分别对应每 5 小时（滚动恢复）、每周一 00:00 重置、每月订阅日重置。
+
+完整报错表见 [Token Plan 常见问题](../../raw/model-user-guide/token-plan-guide/token-plan-faq.md) 与 [Coding Plan 常见问题](../../raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan-faq.md)。
+
+## 团队管理与使用限制
+
+- **角色**：所有者、管理员（权限同所有者，可被移除/降级）、成员（仅使用分配的 Key 调用）。
+- **成员接入**：支持手动添加（仅供 API 调用）、SAML 2.0（SSO）、钉钉登录三种方式。
+- **席位操作**：分配后自动生成 API Key；回收后席位释放、原 Key 失效；加购/升级按剩余时长折算费用；退订按席位维度，已消耗用量的席位不可退订。
+- **使用范围**：仅限在兼容的 AI 编程和智能体工具中**交互式**使用，禁止用于自动化脚本或应用后端，违规可能导致订阅暂停或 API Key 封禁。
+
+> **注意**：Token Plan 团队版目前仅支持**华北2（北京）**地域；每个阿里云账号限购一个订阅，共享用量包需先订阅坐席套餐后才能购买、有效期 1 个月且到期清零。
 
 ## 来源文档
 

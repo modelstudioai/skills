@@ -6,6 +6,12 @@
 
 本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
 
+**null**
+
+阿里云百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+
 **快速入口：**[使用指南](https://help.aliyun.com/zh/model-studio/style-repaint) **｜** [HTTP调用新手指南](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api) **｜** [新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota) **｜** [计费与限流](https://help.aliyun.com/zh/model-studio/style-repaint#d34d4c23aew5n)
 
 ## **模型概览**
@@ -56,7 +62,9 @@ wanx-style-repaint-v1
 
 ### **步骤1：创建任务获取任务ID**
 
-`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/image-generation/generation`
+`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 #### **请求头（Headers）**
 
@@ -65,7 +73,7 @@ wanx-style-repaint-v1
 设置style\_index（不能设为-1）。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -83,7 +91,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image-gener
 设置style\_ref\_url（风格参考图），并将 style\_index 设为 -1。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -305,7 +313,9 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image-gener
 
 ### 步骤2：根据任务ID查询结果
 
-`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -324,10 +334,10 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image-gener
 
 ## 查询任务结果
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ```
-curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id} \
+curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 

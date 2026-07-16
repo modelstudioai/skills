@@ -15742,6 +15742,84 @@ pixverse/pixverse-v5.6-r2v
 
 0.44元/秒
 
+**爱诗-视频对口型**
+
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输出单价**
+
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+pixverse/pixverse-lipsync
+
+中国内地
+
+0.12元/秒
+
+无免费额度
+
+**爱诗-视频动作模仿**
+
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输出视频分辨率**
+
+**输出单价**
+
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+pixverse/pixverse-motioncontrol
+
+中国内地
+
+360P
+
+0.27元/秒
+
+无免费额度
+
+540P
+
+0.30元/秒
+
+720P
+
+0.36元/秒
+
+**爱诗-视频超清**
+
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输出单价**
+
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+
+pixverse/pixverse-upscale
+
+中国内地
+
+0.15元/秒
+
+无免费额度
+
 **可灵-视频生成**
 
 > 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
@@ -16345,6 +16423,14 @@ Tripo/Tripo-P1.0
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：阿里云百炼开通后90天内
+
+qwen3.7-text-embedding
+
+中国内地
+
+0.5元
+
+100万Token
 
 text-embedding-v4
 

@@ -956,6 +956,86 @@ RecognitionParam param = RecognitionParam.builder()
  .build();
 ```
 
+special\_word\_filter
+
+String
+
+\-
+
+否
+
+**special\_word\_filter** `_string_` （可选）
+
+指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#rt03-sensitive-h3)。
+
+**说明**
+
+`special_word_filter`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
+
+## 通过parameter设置
+
+```
+// 1. 构建最外层对象
+JSONObject root = new JSONObject();
+root.put("system_reserved_filter", true);
+
+// 2. 构建“从结果中完全移除”的配置
+JSONObject root1 = new JSONObject();
+JSONArray array1 = new JSONArray();
+array1.put("开始");
+array1.put("进行");
+root1.put("word_list", array1);
+
+// 3. 构建“替换为等长 *”的配置
+JSONObject root2 = new JSONObject();
+JSONArray array2 = new JSONArray();
+array2.put("测试");
+root2.put("word_list", array2);
+
+// 4. 组装
+root.put("filter_with_empty", root1);
+root.put("filter_with_signed", root2);
+
+RecognitionParam param = RecognitionParam.builder()
+ .model("fun-asr-realtime")
+ .format("pcm")
+ .sampleRate(16000)
+ .parameter("special_word_filter", root.toString())
+ .build();
+```
+
+## 通过parameters设置
+
+```
+// 1. 构建最外层对象
+JSONObject root = new JSONObject();
+root.put("system_reserved_filter", true);
+
+// 2. 构建“从结果中完全移除”的配置
+JSONObject root1 = new JSONObject();
+JSONArray array1 = new JSONArray();
+array1.put("开始");
+array1.put("进行");
+root1.put("word_list", array1);
+
+// 3. 构建“替换为等长 *”的配置
+JSONObject root2 = new JSONObject();
+JSONArray array2 = new JSONArray();
+array2.put("测试");
+root2.put("word_list", array2);
+
+// 4. 组装
+root.put("filter_with_empty", root1);
+root.put("filter_with_signed", root2);
+
+RecognitionParam param = RecognitionParam.builder()
+ .model("fun-asr-realtime")
+ .format("pcm")
+ .sampleRate(16000)
+ .parameters(Collections.singletonMap("special_word_filter", root.toString()))
+ .build();
+```
+
 input
 
 Map<String, Object>

@@ -40,6 +40,12 @@ API概述
 
 获取对话摘要、标题生成、关键词、字段信息抽取、问题及解决方案、服务质检、代办事项、满意度、情绪检测、QA抽取、用户画像、标签分类等对话分析结果，应用调用支持 HTTP 调用来完成客户的响应。
 
+[CreateTask](https://help.aliyun.com/zh/model-studio/api-contactcenterai-2024-06-03-createtask)
+
+通过上传离线任务数据进行通义晓蜜CCAI-对话分析
+
+通过创建离线异步任务，进行对话分析。应用调用支持 HTTP 调用来完成客户的响应。
+
 [GetTaskResult](https://help.aliyun.com/zh/model-studio/api-contactcenterai-2024-06-03-gettaskresult)
 
 通过任务ID获取离线任务分析结果
@@ -109,17 +115,3 @@ API概述
 语音文件实时分析
 
 对进行语音文件进行实时对话分析。应用调用支持 HTTPS 调用来完成客户的响应。
-
-## 其他
-
-API
-
-标题
-
-API概述
-
-[CreateTask](https://help.aliyun.com/zh/model-studio/api-contactcenterai-2024-06-03-createtask)
-
-通过上传离线任务数据进行通义晓蜜CCAI-对话分析
-
-通过创建离线异步任务，进行对话分析。应用调用支持 HTTP 调用来完成客户的响应。

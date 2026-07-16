@@ -129,11 +129,11 @@ RAG（Retrieval Augmented Generation，检索增强生成）是一种结合了�
     -   **在数据管理页面编辑标签**：对于已上传的文件，可单击右侧的**标签**进行编辑，相关API是[UpdateFileTag](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatefiletag)。
         
     
-    目前阿里云百炼支持以下两种方式使用标签：
+    目前阿里云百炼支持以下方式使用标签：
     
     -   [通过API调用阿里云百炼应用](https://help.aliyun.com/zh/model-studio/application-calling-guide#4100253b7chc3)时，可以在请求参数`tags`中指定标签。
         
-    -   在调试应用时设置标签（本方式仅适用于[智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)）。
+    -   在调试应用时设置标签（本方式仅适用于[智能体应用（Agent 1.0）](https://help.aliyun.com/zh/model-studio/single-agent-application)）。
         
         > 此处设置仅应用于该智能体后续的用户问答。
         
@@ -141,6 +141,42 @@ RAG（Retrieval Augmented Generation，检索增强生成）是一种结合了�
         
         切换至**召回策略**页签，在**标签过滤**中选择需要应用的标签（如示例中的『硬件』『智能手机』）即可。
         
+    -   在新版智能体中，通过系统提示词引导智能体按标签进行过滤。
+        
+        1.  **为知识库文档设置标签**：在管理知识库时，为各文件添加标签。
+            
+            例如，百炼电脑的标签为`bailian_pc`，百炼系列手机产品介绍的标签为`bailian_mobile`，百炼电脑服务及优惠政策的标签为`bailian_service`和`bailian_pc`。
+            
+        2.  **在系统提示词中引导智能体**：在智能体的系统提示词中，清晰地说明各标签的含义与使用规则。例如：
+            
+            ```
+            你是阿里云百炼产品的智能客服，请回答与阿里云百炼产品相关的问题。
+            
+            当问题比较宽泛时，检索整个知识库。
+            当问题比较明确时，使用知识库标签进行定向检索。标签映射关系如下：
+            1. 与百炼手机相关：bailian_mobile
+            2. 与百炼电脑相关：bailian_pc
+            3. 与百炼产品相关：bailian_mobile 或 bailian_pc
+            4. 与百炼电脑服务及优惠政策相关：bailian_service 和 bailian_pc
+            ```
+            
+        3.  智能体会识别用户意图，匹配对应的标签，并仅从带有这些标签的文件中检索内容。匹配逻辑包含以下几种模式：
+            
+            -   **单标签匹配**：对于问题“百炼有哪些手机产品？”，智能体会检索所有带有`bailian_mobile`标签的文件。
+                
+            -   **多标签“或”逻辑**：对于问题“百炼有哪些产品？”，智能体会检索所有带有`bailian_mobile`或`bailian_pc`标签的文件。
+                
+            -   **多标签“与”逻辑**：对于问题“百炼电脑的服务政策是什么？”，智能体仅检索同时带有`bailian_pc`和`bailian_service`标签的文件。
+                
+            
+            您可以在知识库交互卡片中查看标签匹配逻辑，并通过调整提示词来优化匹配效果。匹配逻辑的格式如下：
+            
+            -   **单标签匹配**：`[{"tags":["bailian_mobile"]}]`
+                
+            -   **多标签“或”逻辑**：`[{"tags":["bailian_mobile","bailian_pc"]}]`
+                
+            -   **多标签“与”逻辑：**`[{"tags":["bailian_service"]},{"tags":["bailian_pc"]}]`
+                
     
 2.  **典型问题****：**知识库中含多个结构内容相同/相近的文件，如文件A和文件B的内容都包含“功能概述”章节，只希望在A文件的“功能概述”中检索。
     
@@ -302,7 +338,7 @@ RAG（Retrieval Augmented Generation，检索增强生成）是一种结合了�
     
     从下方示意图可以看到，目标知识库中实际与用户提示词相关，需要返回的文本切片总共有7个（下图左侧，已用绿色标出），但由于已经超出了当前设定的最大召回片段数K，因此包含优势5（超长待机）和优势6（拍照清晰）的文本切片被舍弃，没有提供给大模型。
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8526439771/CAEQURiBgMCatMinohkiIDY3YTVhOWY2MjNjMjRkYzc5NTU1ZmVhNGQ2MGQ5ODc24762899_20250109142407.621.svg)
+    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6954804871/CAEQURiBgMCatMinohkiIDY3YTVhOWY2MjNjMjRkYzc5NTU1ZmVhNGQ2MGQ5ODc24762899_20250109142407.621.svg)
     
     由于 RAG 本身无法判断需要多少个文本切片才能给出“完整”的答案，因此即使最终提供的文本切片有遗漏，随后大模型仍然会基于缺失的文本切片生成不完整的回答。
     

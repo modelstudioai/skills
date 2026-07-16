@@ -469,6 +469,10 @@ duration直接影响费用，按秒计费，请在调用前确认[模型价格](
     
 -   vidu/viduq3-drama\_reference2video：取值为\[2, 15\]之间的整数。默认值为`5`。
     
+    -   当分镜数量过多或明显少于duration时，模型可能自动调整时长以保障故事完整性，实际视频时长可能多于或少于duration设定值。
+        
+    -   计费按实际输出时长计算。
+        
 -   vidu/viduq3-mix\_reference2video：取值为\[1, 16\]之间的整数。默认值为`5`。
     
 -   vidu/viduq3\_reference2video：取值为\[1, 16\]之间的整数。默认值为`5`。

@@ -1262,19 +1262,13 @@ cosyvoice-v3.5-plus
 
 ](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/cosyvoice-v3.5-plus)
 
-华北2（北京）新加坡
+华北2（北京）
 
 模型 ID`cosyvoice-v3.5-plus`
 
 Request URL`wss://[{WorkspaceId}](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management).cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
 
 API Key[获取↗](https://bailian.console.aliyun.com/cn-beijing?tab=model#/api-key)
-
-模型 ID`cosyvoice-v3.5-plus`
-
-Request URL`wss://[{WorkspaceId}](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=globalset#/efm/business_management).ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
-
-API Key[获取↗](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=model#/api-key)
 
 [
 
@@ -1428,7 +1422,7 @@ API Key[获取↗](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=mod
 
 端到端语音对话，无需分别调用 ASR 和 TTS
 
-[查看更多 →](https://help.aliyun.com/zh/model-studio/s2s-model)
+[查看更多 →](https://help.aliyun.com/zh/model-studio/s2s-model/)
 
 [
 

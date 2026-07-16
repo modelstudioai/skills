@@ -18,6 +18,22 @@
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
+qwen3.7-text-embedding
+
+2560、2,048、1,536、1,024（默认）、768、512、256
+
+20
+
+128,000
+
+0.0005元
+
+中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等201种主流语种与方言
+
+各100万Token
+
+有效期：百炼开通后90天内
+
 text-embedding-v4
 
 > 属于[Qwen3-Embedding](https://qwenlm.github.io/zh/blog/qwen3-embedding/)系列
@@ -33,10 +49,6 @@ text-embedding-v4
 [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)：0.00025元
 
 中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等100+主流语种及多种编程语言
-
-各100万Token
-
-有效期：百炼开通后90天内
 
 text-embedding-v3
 
@@ -78,9 +90,11 @@ text-embedding-v1
 
 ## 公共云
 
-**使用SDK调用时需配置的base\_url：**`https://dashscope.aliyuncs.com/compatible-mode/v1`
+**使用SDK调用时需配置的base\_url：**`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
-**使用HTTP方式调用时需配置的endpoint：**`POST https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings`
+**使用HTTP方式调用时需配置的endpoint：**`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/embeddings`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ### **请求体**
 
@@ -94,7 +108,8 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),  # 如果您没有配置环境变量，请在此处用您的API Key进行替换
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"  # 百炼服务的base_url
+    # 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 )
 
 completion = client.embeddings.create(
@@ -120,7 +135,8 @@ public class Main {
         // 创建客户端，使用环境变量中的API密钥
         OpenAIClient client = OpenAIOkHttpClient.builder()
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
+                // 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
+                .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
                 .build();
 
         // 创建向量化请求参数
@@ -148,7 +164,7 @@ public class Main {
 ## curl
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/embeddings' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
@@ -169,7 +185,8 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),  # 如果您没有配置环境变量，请在此处用您的API Key进行替换
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"  # 百炼服务的base_url
+    # 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 )
 
 completion = client.embeddings.create(
@@ -199,7 +216,8 @@ public class Main {
         // 创建客户端，使用环境变量中的API密钥
         OpenAIClient client = OpenAIOkHttpClient.builder()
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
+                // 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
+                .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
                 .build();
 
         // 创建输入字符串列表
@@ -246,7 +264,7 @@ public class Main {
 ## curl
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/embeddings' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
@@ -272,7 +290,8 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),  # 如果您没有配置环境变量，请在此处用您的API Key进行替换
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"  # 百炼服务的base_url
+    # 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 )
 # 确保将 'texts_to_embedding.txt' 替换为您自己的文件名或路径
 with open('texts_to_embedding.txt', 'r', encoding='utf-8') as f:
@@ -303,7 +322,8 @@ public class Main {
         // 创建客户端，使用环境变量中的API密钥
         OpenAIClient client = OpenAIOkHttpClient.builder()
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
+                // 以下为华北2（北京）地域的URL，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的URL不同。
+                .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
                 .build();
 
         // 确保将 'texts_to_embedding.txt' 替换为您自己的文件名或绝对路径
@@ -350,7 +370,7 @@ public class Main {
 
 ```
 FILE_CONTENT=$(cat texts_to_embedding.txt | jq -Rs .)
-curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/embeddings' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
@@ -369,6 +389,12 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings' \
 
 输入待处理的文本。可以是字符串（string）、字符串列表（array）或文件（file）。不同模型版本支持的文本长度和批量大小不同，具体如下：
 
+-   **qwen3.7-text-embedding 模型：**
+    
+    -   **输入为字符串**：最长支持 **128,000** Token。
+        
+    -   **输入为字符串列表或文件**：最多支持 **20** 条（行），每条（行）最长支持 **128,000** Token。
+        
 -   **text-embedding-v3 / v4 模型：**
     
     -   **输入为字符串**：最长支持 **8,192** Token。
@@ -384,7 +410,7 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings' \
 
 **dimensions** `_integer_` **可选**
 
-指定的向量维度，必须为以下值之一：2048（仅适用于`text-embedding-v4`）、1536（仅适用于`text-embedding-v4`）1024、768、512、256、128 或 64，默认值为1024。
+指定的向量维度，必须为以下值之一：`2560（仅适用于qwen3.7-text-embedding）、`2048（仅适用于`text-embedding-v4`）、1536（仅适用于`text-embedding-v4`）1024、768、512、256、128 或 64，默认值为1024。
 
 **encoding\_format** `_string_` **可选**
 
@@ -482,9 +508,11 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings' \
 
 ## 公共云
 
-**使用SDK调用时需配置的base\_url：**https://dashscope.aliyuncs.com/api/v1
+**使用SDK调用时需配置的base\_url：**https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1
 
-**使用HTTP方式调用时需配置的endpoint：**POST https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding
+**使用HTTP方式调用时需配置的endpoint：**POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ### **请求体**
 
@@ -495,6 +523,8 @@ curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings' \
 ```
 import dashscope
 from http import HTTPStatus
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 resp = dashscope.TextEmbedding.call(
     model="text-embedding-v4",
@@ -515,12 +545,15 @@ import com.alibaba.dashscope.embeddings.TextEmbeddingParam;
 import com.alibaba.dashscope.embeddings.TextEmbeddingResult;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.utils.Constants;
 
 /**
  * 千问文本向量模型调用示例
  */
 public final class Main {
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         try {
             // 构建请求参数
             TextEmbeddingParam param = TextEmbeddingParam
@@ -547,7 +580,7 @@ public final class Main {
 ## curl
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
@@ -571,6 +604,8 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-
 ```
 import dashscope
 from http import HTTPStatus
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 DASHSCOPE_MAX_BATCH_SIZE = 10
 
@@ -611,11 +646,14 @@ import com.alibaba.dashscope.embeddings.TextEmbeddingResult;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.embeddings.TextEmbeddingResultItem;
+import com.alibaba.dashscope.utils.Constants;
 
 public final class Main {
     private static final int DASHSCOPE_MAX_BATCH_SIZE = 10;
 
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         List<String> inputs = Arrays.asList(
                 "风急天高猿啸哀",
                 "渚清沙白鸟飞回",
@@ -664,7 +702,7 @@ public final class Main {
 ## curl
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
@@ -691,6 +729,8 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-
 ```
 from http import HTTPStatus
 from dashscope import TextEmbedding
+# 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 with open('texts_to_embedding.txt', 'r', encoding='utf-8') as f:
     resp = TextEmbedding.call(
@@ -716,9 +756,12 @@ import com.alibaba.dashscope.embeddings.TextEmbeddingParam;
 import com.alibaba.dashscope.embeddings.TextEmbeddingResult;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.utils.Constants;
 
 public final class Main {
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的配置，调用时请将{WorkspaceId}替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         try (BufferedReader reader = new BufferedReader(new FileReader("<文件所来自的内容根的路径>"))) {
             StringBuilder content = new StringBuilder();
             String line;
@@ -753,7 +796,7 @@ public final class Main {
 
 ```
 FILE_CONTENT=$(cat texts_to_embedding.txt | jq -Rs .)
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
@@ -776,6 +819,12 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-
 
 输入待处理的文本。可以是字符串（string）、字符串列表（array）或文件（file）。不同模型版本支持的文本长度和批量大小不同，具体如下：
 
+-   **qwen3.7-text-embedding 模型：**
+    
+    -   **输入为字符串**：最长支持 **128,000** Token。
+        
+    -   **输入为字符串列表或文件**：最多支持 **20** 条（行），每条（行）最长支持 **128,000** Token。
+        
 -   **text-embedding-v3 / v4 模型：**
     
     -   **输入为字符串**：最长支持 **8,192** Token。
@@ -799,13 +848,13 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-
 
 > 通过 HTTP 调用时，请将 **dimension** 放入parameters对象中。
 
-指定的向量维度，必须为以下值之一：2048（仅适用于`text-embedding-v4`）、1536（仅适用于`text-embedding-v4`）1024、768、512、256、128 或 64，默认值为1024。
+指定的向量维度，必须为以下值之一：`2560（仅适用于qwen3.7-text-embedding）、`2048（仅适用于`text-embedding-v4`）、1536（仅适用于`text-embedding-v4`）1024、768、512、256、128 或 64，默认值为1024。
 
 **output\_type** `_string_` **可选**
 
 > 通过 HTTP 调用时，请将 **output\_type** 放入parameters对象中。
 
-用户指定输出离散向量表示只适用于`text-embedding-v3`与`text-embedding-v4`模型，取值在dense、sparse、dense&sparse之间，默认取dense，只输出连续向量。
+用户指定输出离散向量表示只适用于`qwen3.7-text-embedding、``text-embedding-v3`与`text-embedding-v4`模型，取值在dense、sparse、dense&sparse之间，默认取dense，只输出连续向量。
 
 **instruct** `_string_` **可选**
 

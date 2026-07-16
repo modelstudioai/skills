@@ -22,7 +22,7 @@ OpenAI gpt-4o-tts、Google Chirp 3
 
 ElevenLabs Multilingual v3
 
-`qwen-audio-3.0-tts-plus`（声音复刻）、`cosyvoice-v3.5-plus`（声音设计）、`MiniMax/speech-2.8-hd`（声音复刻）
+`qwen-audio-3.0-tts-flash`（声音复刻）、`cosyvoice-v3.5-plus`（声音设计）、`MiniMax/speech-2.8-hd`（声音复刻）
 
 ## 标准语音合成还是自定义音色？
 
@@ -54,7 +54,7 @@ ElevenLabs Multilingual v3
 
 `qwen-audio-3.0-tts-plus`、`MiniMax/speech-2.8-hd`
 
-`qwen-audio-3.0-tts-plus`（声音复刻）、`cosyvoice-v3.5-plus`（声音设计）、`MiniMax/speech-2.8-hd`（声音复刻）
+`qwen-audio-3.0-tts-flash`（声音复刻）、`cosyvoice-v3.5-plus`（声音设计）、`MiniMax/speech-2.8-hd`（声音复刻）
 
 -   **使用标准语音合成**：当内置音色库能满足需求，希望快速上手、无需额外配置时。
     
@@ -89,7 +89,7 @@ ElevenLabs Multilingual v3
 
 推荐模型
 
-`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`、`MiniMax/speech-2.8-hd`
+`qwen-audio-3.0-tts-flash`、`MiniMax/speech-2.8-hd`
 
 `cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`
 
@@ -145,7 +145,7 @@ Qwen-Audio-TTS
 
 WebSocket / HTTP
 
-支持
+不支持
 
 不支持
 
@@ -205,7 +205,7 @@ HTTP
 
 WebSocket / HTTP
 
-支持
+不支持
 
 不支持
 

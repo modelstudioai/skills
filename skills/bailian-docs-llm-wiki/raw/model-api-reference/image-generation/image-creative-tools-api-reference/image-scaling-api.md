@@ -8,6 +8,12 @@
 
 本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
 
+**重要**
+
+阿里云百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+
 ## **模型概览**
 
 **模型名称**
@@ -47,14 +53,17 @@ image-out-painting
 
 ### **步骤1：创建任务获取任务ID**
 
-`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/out-painting`
+`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/out-painting`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 #### **请求头（Headers）**
 
 ## 旋转图像
 
 ```
-curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/out-painting' \
+# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
+curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/out-painting' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'X-DashScope-Async: enable' \
 --header 'Content-Type: application/json' \
@@ -74,7 +83,8 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 ## 等比例扩图
 
 ```
-curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/out-painting' \
+# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
+curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/out-painting' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'X-DashScope-Async: enable' \
 --header 'Content-Type: application/json' \
@@ -95,7 +105,8 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 ## 指定方向扩图
 
 ```
-curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/out-painting' \
+# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
+curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/out-painting' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'X-DashScope-Async: enable' \
 --header 'Content-Type: application/json' \
@@ -116,7 +127,8 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 ## 指定宽高比扩图
 
 ```
-curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/out-painting' \
+# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
+curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/out-painting' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'X-DashScope-Async: enable' \
 --header 'Content-Type: application/json' \
@@ -358,7 +370,9 @@ URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可
 
 ### **步骤2：根据任务ID查询结果**
 
-`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 #### **请求头（Headers）**
 
@@ -366,10 +380,10 @@ URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可
 
 请将`86ecf553-d340-4e21-xxxxxxxxx`替换为真实的task\_id。
 
-> 若使用新加坡地域的模型，需将base\_url替换为https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx，其中WorkspaceId需替换为真实的业务空间ID。
+> 若使用新加坡地域的模型，需将base\_url替换为https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx，其中{WorkspaceId}需替换为真实的业务空间ID。
 
 ```
-curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \
+curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
@@ -694,7 +708,7 @@ oss upload error
 
 **Q：创建任务接口响应成功，但没有返回图像URL？**
 
-**A：**在图像模型处理中，HTTP请求需要经过两步才能获取结果：创建任务、根据任务ID查询结果。创建任务接口仅提交任务，不返回图像结果。您需要查询 `GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}` 接口获得模型生成的图像URL。
+**A：**在图像模型处理中，HTTP请求需要经过两步才能获取结果：创建任务、根据任务ID查询结果。创建任务接口仅提交任务，不返回图像结果。您需要查询 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}` 接口获得模型生成的图像URL。
 
 **Q：设置输出比例** `**output_ratio**` **后，为什么模型没有根据** `**x_scale**` **或** `**y_scale**` **自动计算另一个方向的比例？**
 

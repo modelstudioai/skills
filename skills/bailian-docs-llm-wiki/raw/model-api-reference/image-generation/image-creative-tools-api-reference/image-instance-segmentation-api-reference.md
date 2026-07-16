@@ -52,14 +52,17 @@ image-instance-segmentation
 
 ### **步骤1：创建任务获取任务ID**
 
-`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis`
+`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 #### **请求头（Headers）**
 
 ## 人物实例分割
 
 ```
-curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
+# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
+curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -179,16 +182,19 @@ URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可
 
 ### **步骤2：根据任务ID查询结果**
 
-`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 #### **请求头（Headers）**
 
 ## 获取任务结果
 
 ```
+# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
 curl -X GET \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
-https://dashscope.aliyuncs.com/api/v1/tasks/53950fb7-281a-4e60-xxxxxxxxxxxx
+https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/53950fb7-281a-4e60-xxxxxxxxxxxx
 ```
 
 **Authorization** _string_ **必选**

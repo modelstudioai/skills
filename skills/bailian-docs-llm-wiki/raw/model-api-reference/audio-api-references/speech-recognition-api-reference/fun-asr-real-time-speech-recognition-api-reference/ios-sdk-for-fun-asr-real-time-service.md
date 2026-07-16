@@ -222,7 +222,7 @@
     
     是
     
-    语音识别[模型](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#fc6d62a1d4qjm)。
+    语音识别[支持的模型](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
     
     `nls_config.sr_format`
     
@@ -249,7 +249,7 @@
     
     待识别音频采样率（单位Hz）。
     
-    仅支持16000Hz。
+    8k模型仅支持 8000 Hz，其他模型支持任意采样率。
     
     `nls_config.semantic_punctuation_enabled`
     
@@ -456,6 +456,16 @@
         
     -   根据实际音频环境小幅度调整（建议步长 0.1）
         
+    
+    `nls_config.parameters.special_word_filter`
+    
+    `object`
+    
+    否
+    
+    **special\_word\_filter** `_string_` （可选）
+    
+    指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#rt03-sensitive-h3)。
     
 
 ## **关键接口**

@@ -68,7 +68,9 @@ kling/kling-v3-omni-image-generation
 
 ### 步骤一：提交图像生成任务
 
-**北京地域**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/image-generation/generation`
+**北京地域**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 #### 请求参数
 
@@ -77,7 +79,7 @@ kling/kling-v3-omni-image-generation
 支持模型：`kling/kling-v3-omni-image-generation`、`kling/kling-v3-image-generation`。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -115,7 +117,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image-gener
     
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -387,7 +389,9 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image-gener
 
 ### 步骤二：查询任务结果
 
-**北京地域**：`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+**北京地域**：`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 

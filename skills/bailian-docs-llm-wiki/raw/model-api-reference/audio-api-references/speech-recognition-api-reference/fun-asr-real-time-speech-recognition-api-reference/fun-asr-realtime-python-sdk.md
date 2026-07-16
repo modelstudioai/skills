@@ -585,6 +585,18 @@ float
 -   根据实际音频环境小幅度调整（建议步长 0.1）
     
 
+special\_word\_filter
+
+str
+
+\-
+
+否
+
+**special\_word\_filter** `_string_` （可选）
+
+指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#rt03-sensitive-h3)。
+
 callback
 
 RecognitionCallback
@@ -876,7 +888,7 @@ is\_sentence\_end
 def is_sentence_end(sentence: Dict[str, Any]) -> bool
 ```
 
-判断给定句子是否已经结束。
+判断给定句子是否已经结束。该方法通过检查 `sentence` 中 `end_time` 字段是否为 `None` 来判定——`end_time` 不为 `None` 时表示句子已结束。调用方式为 `RecognitionResult.is_sentence_end(sentence)`，其中 `sentence` 为 `get_sentence()` 返回的单句信息 dict，而非 `Sentence` 实例的布尔字段。
 
 ### 单句信息（`Sentence`）
 

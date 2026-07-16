@@ -52,14 +52,16 @@ shoemodel-v1
 
 ### **步骤1：创建任务获取任务ID**
 
-`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/virtualmodel/generation/`
+`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/virtualmodel/generation`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 #### **请求头（Headers）**
 
 ## 鞋靴模特试穿
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/virtualmodel/generation/' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/virtualmodel/generation' \
 --header 'X-DashScope-Async: enable' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
@@ -203,14 +205,16 @@ URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可
 
 ### **步骤2：根据任务ID查询结果**
 
-`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 #### **请求头（Headers）**
 
 ## 获取任务结果
 
 ```
-curl --location --request GET 'https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}' \
+curl --location --request GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 

@@ -1,62 +1,36 @@
 # 流式输出
 
-流式输出（Streaming Output）指模型在生成过程中将结果以分块方式逐步返回给客户端，而非等待整体生成完成后一次性返回。开发者可在首 token 产出时即开始处理，从而显著降低首字延迟、改善交互体验，并支持边生成边消费的实时场景。
+流式输出（streaming）是指服务端将模型生成的结果分多次增量返回，而非等全部内容生成完毕后一次性下发。它能显著降低首字延迟、提升实时交互体验，适用于对话、语音等对响应速度敏感的场景。
 
-## 在百炼平台的使用方式
+## 在百炼平台的使用场景
 
-百炼的流式输出按接入协议与生成任务类型分为三种形态：
+百炼平台在多类接口中都提供了流式输出能力，具体开启方式因协议而异：
 
-### 1. 文本生成流式（SSE）
-
-Qwen 系列文本模型通过 OpenAI 兼容、Anthropic 兼容或 DashScope 原生接口调用时，统一以 **Server-Sent Events (SSE)** 形式增量返回。在请求体中将 `stream` 设为 `true`，响应体按 `data: {chunk}\n\n` 逐 chunk 推送 `delta` 内容，最后一个 chunk 携带 `finish_reason` 与 usage 统计。
-
-- OpenAI 兼容接口：`POST /compatible-mode/v1/chat/completions`，字段与 OpenAI 客户端一致，可直接复用 SDK 的 stream 读取逻辑。
-- Anthropic 兼容接口：`POST /compatible-mode/v1/messages`，沿用 Anthropic `message_delta` / `content_block_delta` 事件结构，支持 thinking 与工具调用增量。
-- DashScope 原生接口：使用 `X-DashScope-SSE` 请求头启用，输出体为 SSE 流，参数集最完整。
-
-### 2. 实时多模态流式（WebSocket 双向消息）
-
-Qwen-Omni-Realtime 通过 WebSocket 长连接实现低延迟语音/视频对话，与文本 SSE 不同，它是双向事件流：
-
-- 客户端通过 `input_audio_buffer.append` 持续推送 Base64 音频片段；
-- 服务端流式返回 `response.audio.delta`、`response.audio_transcript.delta` 等增量事件，实现"边听边说"。
-- 配合 VAD 模式可自动检测语音起止，配合 Manual 模式则由客户端显式 `response.create` 触发生成。
-
-声音复刻、工具调用、联网搜索等能力均在该流式通道内完成，无需额外端点。
-
-### 3. Managed Agents 事件流（SSE）
-
-托管智能体在 Session 写入用户消息后，通过 SSE 端点 `GET /sessions/{session_id}/events/stream` 持续接收 Agent 的运行事件（思考、工具调用、回复文本等），直至 Session 回到 `idle`。该流式通道承载整个 Agent 执行生命周期，适合构建交互式 Agent UI。
-
-### 4. 异步任务的非流式约定
-
-注意：图像、视频生成类接口（万相、HappyHorse、Kling 等）**不支持流式输出**，统一采用「创建任务得 `task_id` → 轮询 `GET /tasks/{task_id}`」的异步模式。视频任务通常耗时 1–5 分钟，需按建议间隔轮询，不应将其与流式输出混淆。
+- **应用调用（智能体/工作流）**：无论是 OpenAI 兼容的 Responses API 还是 DashScope API，都支持流式输出。以 Responses API 为例，通过在请求中设置 `stream=true` 即可开启，服务端会以增量方式持续返回生成内容。
+- **文本生成模型 API**：OpenAI 兼容 Chat Completions、OpenAI 兼容 Responses、Anthropic 兼容 Messages 以及 DashScope 原生接口均支持流式返回。使用 OpenAI 客户端库时，通常只需替换 base URL 和 API Key，并按对应生态的字段约定开启流式参数。
+- **实时多模态交互（Qwen-Omni-Realtime API）**：基于 WebSocket 协议实现天然的流式交互。服务端通过一系列增量事件持续推送结果，例如 `response.audio.delta`（增量音频输出）、`response.audio_transcript.delta`（增量文本转录）、`conversation.item.input_audio_transcription.delta`（实时语音识别中间结果），最终以 `response.done` 表示本轮响应完成。
 
 ## 关键参数与配置
 
-| 参数 / 头部 | 适用接口 | 作用 |
-| --- | --- | --- |
-| `"stream": true` | OpenAI / Anthropic 兼容、DashScope 原生 Chat | 启用 SSE 流式返回 |
-| `X-DashScope-SSE: enable` | DashScope 原生接口 | 启用流式（部分原生接口必需） |
-| `stream_options.include_usage` | OpenAI 兼容 | 在末尾 chunk 携带 token usage 统计 |
-| WebSocket `session.update` | Omni Realtime | 配置 VAD、音色、工具等会话级参数 |
-| `idle_timeout_ms` | `qwen3.5-omni-plus-realtime` 等 | 静默超时后模型主动引导对话 |
-| `Accept: text/event-stream` | Managed Agents events/stream | 声明接收 SSE 事件流 |
+| 场景 | 参数/事件 | 说明 |
+|------|-----------|------|
+| Responses API / Chat Completions | `stream` | 布尔值，是否流式输出，默认 `false`；设为 `true` 开启 |
+| DashScope API | 流式开关 | 通过 SDK 的流式调用方式或对应参数开启 |
+| Omni-Realtime API | `response.*.delta` 系列服务端事件 | WebSocket 连接下增量推送音频、文本转录等结果 |
+| Omni-Realtime API | `response.done` | 标记单轮响应生成结束 |
+| Qwen3-Omni-Flash-Realtime | `smooth_output` | 控制输出平滑度的可选参数 |
 
-## 开发者注意事项
+## 使用建议
 
-- **首字延迟 vs 总延迟**：流式不缩短总生成时间，但显著缩短首 token 等待，适合聊天、Agent 回复等交互场景。
-- **断连与重试**：SSE 与 WebSocket 均为长连接，网络抖动会中断流；建议记录已消费的 chunk 序号以便续接，或降级为非流式重试。
-- **工具调用**：流式下工具调用参数也是分块到达，需按 `tool_call_delta` 累积拼接后再执行。
-- **地域一致性**：实时多模态与托管 Agent 必须使用与 API Key 同地域的专属域名（如 `ws_xxx.cn-beijing.maas.aliyuncs.com`），跨地域会失败。
-- **[上下文窗口](context-window.md)**：流式不改变上下文限制，长对话仍需调用方截断或依赖 Responses 接口的自动历史管理。
+- 需要即时反馈、逐字/逐段展示的实时交互（如聊天界面、语音助手）优先启用流式输出。
+- 流式模式下需在客户端持续读取并拼接增量片段，直到收到结束标志（HTTP 流的结束或 `response.done` 事件）。
+- 流式与异步调用（`background=true`）面向不同需求：流式关注实时增量返回，异步关注长耗时任务的非阻塞执行，二者不要混淆。
+- 跨接口迁移时需核对各生态对流式参数的字段约定差异，DashScope 参数最全，OpenAI/Anthropic 兼容接口以对应生态约定为准。
 
 ## 关联主题页
 
-- [qwen api reference](../api/qwen-api-reference.md)
-- [image generation](../api/image-generation.md)
+- [application call](../api/application-call.md)
 - [omni realtime api](../api/omni-realtime-api.md)
-- [video generation api](../api/video-generation-api.md)
-- [managed agents api](../api/managed-agents-api.md)
+- [qwen api reference](../api/qwen-api-reference.md)
 
 

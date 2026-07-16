@@ -289,7 +289,7 @@ List<String>
 
 **重要**
 
-仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash、v3-plus和v3-flash模型支持。
+仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash、v3-plus和v3-flash模型支持。
 
 辅助模型识别样本音频的语种，从而更准确地提取音色特征，提升复刻效果。若设置的语种与实际音频语种不符（例如为中文音频设置 `en`），系统将忽略该设置并自动检测语种。
 
@@ -297,7 +297,7 @@ List<String>
 
 取值范围（因模型而异）：
 
--   qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash：
+-   qwen-audio-3.0-tts-flash：
     
     -   zh：中文
         
@@ -374,7 +374,7 @@ Float
 
 **重要**
 
-仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash和v3-flash模型支持。
+仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash和v3-flash模型支持。
 
 音频预处理后用于声音复刻的参考音频最大时长（秒）。取值范围：\[3.0, 30.0\]。时间越长效果越好。
 
@@ -404,7 +404,7 @@ boolean
 
 **重要**
 
-仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash和v3-flash模型支持。
+仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash和v3-flash模型支持。
 
 是否开启音频预处理（降噪、音频增强、音量规整）。有背景噪音时建议开启；安静环境建议关闭以最大程度还原音色。
 
@@ -431,7 +431,7 @@ public class Main {
         // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
         Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         String apiKey = System.getenv("DASHSCOPE_API_KEY");
-        String targetModel = "qwen-audio-3.0-tts-plus";
+        String targetModel = "qwen-audio-3.0-tts-flash";
         String prefix = "myvoice";
         String fileUrl = "https://your-audio-file-url";
         String cloneModelName = "voice-enrollment";
@@ -506,7 +506,7 @@ import org.slf4j.LoggerFactory;
 
 public class Main {
     public static String apiKey = System.getenv("DASHSCOPE_API_KEY");  // 如果您没有配置环境变量，请在此处用您的API-KEY进行替换
-    private static String voiceId = "qwen-audio-3.0-tts-plus-myvoice-xxx"; // 请按实际情况进行替换
+    private static String voiceId = "qwen-audio-3.0-tts-flash-myvoice-xxx"; // 请按实际情况进行替换
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args)
@@ -535,7 +535,7 @@ import org.slf4j.LoggerFactory;
 public class Main {
     public static String apiKey = System.getenv("DASHSCOPE_API_KEY");  // 如果您没有配置环境变量，请在此处用您的API-KEY进行替换
     private static String fileUrl = "https://your-audio-file-url";  // 请按实际情况进行替换
-    private static String voiceId = "qwen-audio-3.0-tts-plus-myvoice-xxx"; // 请按实际情况进行替换
+    private static String voiceId = "qwen-audio-3.0-tts-flash-myvoice-xxx"; // 请按实际情况进行替换
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args)
@@ -562,7 +562,7 @@ import org.slf4j.LoggerFactory;
 
 public class Main {
     public static String apiKey = System.getenv("DASHSCOPE_API_KEY");  // 如果您没有配置环境变量，请在此处用您的API-KEY进行替换
-    private static String voiceId = "qwen-audio-3.0-tts-plus-myvoice-xxx"; // 请按实际情况进行替换
+    private static String voiceId = "qwen-audio-3.0-tts-flash-myvoice-xxx"; // 请按实际情况进行替换
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args)

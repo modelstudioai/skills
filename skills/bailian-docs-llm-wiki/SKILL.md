@@ -148,22 +148,22 @@ description: >-
 | **按家族筛选**：按 primaryCapability / providers / itemCount / maxContextWindow 找家族 | `models/families.jsonl`（一行一家族，含 items[] 摘要） |
 | 模型家族总览 / 按能力分桶浏览         | `models/index.md`                                        |
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
-| 函数调用（Function Calling） | `wiki/concepts/function-calling.md` |
-| 检索增强生成（RAG） | `wiki/concepts/rag.md` |
-| Token 与计量计费 | `wiki/concepts/token.md` |
-| 流式输出 | `wiki/concepts/streaming.md` |
 | OpenAI 兼容接口 | `wiki/concepts/openai-compatible-interface.md` |
 | API Key 鉴权 | `wiki/concepts/api-key.md` |
+| 函数调用（Function Calling） | `wiki/concepts/function-calling.md` |
+| 检索增强生成（RAG） | `wiki/concepts/rag.md` |
 | 异步调用与任务轮询 | `wiki/concepts/async-invocation.md` |
+| Token 与计费 | `wiki/concepts/token-and-billing.md` |
+| 流式输出 | `wiki/concepts/streaming-output.md` |
 | 业务空间（Workspace） | `wiki/concepts/workspace.md` |
-| 模型微调与生产链路 | `wiki/concepts/fine-tuning.md` |
-| 评测体系 | `wiki/concepts/evaluation.md` |
-| 多模态能力 | `wiki/concepts/multimodal.md` |
-| 图像、视频与3D生成对比 | `wiki/comparisons/media-generation-compare.md` |
-| 模型微调、压缩与高速推理对比 | `wiki/comparisons/model-optimization-compare.md` |
-| 知识库与长期记忆对比 | `wiki/comparisons/knowledge-memory-compare.md` |
-| 应用监控与模型监控对比 | `wiki/comparisons/monitoring-compare.md` |
-| 应用评测与模型评测对比 | `wiki/comparisons/evaluation-compare.md` |
+| 模型调优与部署 | `wiki/concepts/fine-tuning-and-deployment.md` |
+| MCP 与工具扩展 | `wiki/concepts/mcp-and-tools.md` |
+| 模型微调、压缩与部署对比 | `wiki/comparisons/fine-tuning-vs-compression-vs-deployment.md` |
+| 模型评估与模型监控对比 | `wiki/comparisons/model-evaluation-vs-monitoring.md` |
+| 图像、视频与 3D 生成对比 | `wiki/comparisons/image-vs-video-vs-3d-generation.md` |
+| 应用评估与应用监控对比 | `wiki/comparisons/app-evaluation-vs-monitoring.md` |
+| 知识库与记忆库对比 | `wiki/comparisons/knowledge-base-vs-memory-library.md` |
+| 托管智能体：指南与 API 对比 | `wiki/comparisons/managed-agents-guide-vs-api.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 

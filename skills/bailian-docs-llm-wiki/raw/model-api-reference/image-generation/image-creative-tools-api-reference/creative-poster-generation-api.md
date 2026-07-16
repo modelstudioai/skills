@@ -52,14 +52,16 @@ wanx-poster-generation-v1
 
 ### **步骤1：创建任务获取任务ID**
 
-`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
+`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
 
 #### **请求头（Headers）**
 
 ## 春节快乐海报
 
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
 ```
-curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis' \
+curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis' \
 --header 'X-DashScope-Async: enable' \
 --header 'Content-Type: application/json' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -352,14 +354,16 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/a
 
 ### **步骤2：根据任务ID查询结果**
 
-`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 #### **请求头（Headers）**
 
 ## 获取任务结果
 
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
 ```
-curl --location --request GET 'https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}' \
+curl --location --request GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
@@ -579,8 +583,10 @@ inference error
     
     提升已生成海报分辨率的方法为：将上次生成海报时的输入参数`"generate_mode"`的值修改为`sr`或`hrf`，并在输入参数中新增`"auxiliary_parameters"`，其值为上次生成海报时返回的完整参数集，其它参数保持不变。
     
+    调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+    
     ```
-    curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis' \
+    curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis' \
     --header 'X-DashScope-Async: enable' \
     --header 'Content-Type: application/json' \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \

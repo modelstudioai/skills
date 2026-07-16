@@ -96,8 +96,6 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 通过可视化工具快速搭建 AI 助手，处理客户咨询。
 
-![客服3](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p823451.gif)
-
 ![process](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824091.png) [编排流程](https://help.aliyun.com/zh/model-studio/workflow-application/)
 
 可视化流程编排，无代码基础的业务人员也能独立完成工作流设计。
@@ -177,6 +175,17 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -   **Coding Plan 用量：**如已订阅 Coding Plan（AI 编码套餐），可在[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)查看当前套餐的请求消耗情况。Coding Plan 采用固定月费，提供月度请求额度，支持在 AI 编码工具中使用，详情请参见[Coding Plan概述](https://help.aliyun.com/zh/model-studio/coding-plan)。
     
 
+### 模型推理与知识库的计费区分
+
+百炼平台各功能按不同维度独立计费：
+
+-   **模型推理**（如 deepseek-v3.2-exp 等大语言模型）：按文本生成 Token 用量计费，可使用 AI 通用节省计划抵扣。
+    
+-   **知识库（RAG）**：是独立的数据检索增强功能，按规格时长和模型调用计费，不支持节省计划或资源包等预付费形式。
+    
+
+两者是百炼平台的不同功能，计费相互独立。
+
 ## **开始使用阿里云百炼**
 
 -   在线体验大模型：
@@ -208,7 +217,7 @@ A：目前提供以下地域的模型服务：
 
 A：百炼采用按量付费，本身**没有"自动扣费"开关**。以下措施可有效控制费用：
 
--   **删除API Key**：前往[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing?spm=5176.29619931.J__Z58Z6CX7MY__Ll8p1ZOR.1.7dd7521cmX1pAh&tab=model#/model-market)，选择目标地域，进入[API-KEY](https://bailian.console.aliyun.com/?apiKey=1&tab=globalset#/efm/api_key)页面，删除所有API Key，从源头阻断调用。
+-   **删除API Key**：前往[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing?spm=5176.29619931.J__Z58Z6CX7MY__Ll8p1ZOR.1.7dd7521cmX1pAh&tab=model#/model-market)，选择目标地域，进入[**API Key**](https://bailian.console.aliyun.com/?apiKey=1&tab=globalset#/efm/api_key)页面，删除所有API Key，从源头阻断调用。
     
 -   **停止所有调用：**停止应用程序、智能体、工作流中的模型调用，并排查定时任务和后台进程。
     
