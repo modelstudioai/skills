@@ -1,0 +1,4 @@
+interface:
+  display_name: "Media Utils"
+  short_description: "Process media with exact or AI meeting cleanup"
+  default_prompt: "Use $media-utils to semantically clean this meeting recording, identify speakers, and export matching subtitles."
