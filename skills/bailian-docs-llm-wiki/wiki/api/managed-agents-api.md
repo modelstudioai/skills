@@ -1,6 +1,6 @@
 # [managed agents](../guides/managed-agents.md) api
 
-Managed Agents API 是百炼平台提供的智能体托管运行时，由平台负责会话管理、沙箱执行、工具调用与事件流推送。开发者通过 REST API 或 SDK 完成 Agent 定义、Environment 配置、Session 创建与事件交互，五分钟即可跑通端到端流程。详细的认证方式与 SDK 版本要求见 [API 总览与认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。
+Managed Agents API 是百炼平台提供的智能体托管运行时，由平台负责会话管理、沙箱执行、工具调用与[事件流](../concepts/event-stream.md)推送。开发者通过 REST API 或 SDK 完成 Agent 定义、Environment 配置、Session 创建与事件交互，五分钟即可跑通端到端流程。详细的认证方式与 SDK 版本要求见 [API 总览与认证](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。
 
 ## 核心概念与资源模型
 
@@ -131,6 +131,19 @@ Managed Agents 模块通过 [DashScope SDK](../concepts/dashscope-sdk.md) 接入
 - [Skill](../../raw/application-api-reference/managed-agents-api/skills-api.md)
 - [File](../../raw/application-api-reference/managed-agents-api/files-api.md)
 - [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

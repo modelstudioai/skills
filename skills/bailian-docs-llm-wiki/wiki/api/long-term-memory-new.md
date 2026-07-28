@@ -1,6 +1,6 @@
 # long term memory new
 
-百炼平台的「长期记忆（新）」提供一组 RESTful API，用于存储、检索、更新和删除用户记忆片段，并支持通过画像模板（profile schema）维护用户画像。记忆片段会从对话中自动提取关键信息，可在后续对话中通过语义检索召回，从而实现跨会话的个性化上下文。完整接口参考见 [长期记忆（新）API 参考](../../raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md)。
+百炼平台的「[长期记忆](../concepts/long-term-memory.md)（新）」提供一组 RESTful API，用于存储、检索、更新和删除用户记忆片段，并支持通过画像模板（profile schema）维护用户画像。记忆片段会从对话中自动提取关键信息，可在后续对话中通过语义检索召回，从而实现跨会话的个性化上下文。完整接口参考见 [长期记忆（新）API 参考](../../raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md)。
 
 ## 公共请求信息
 
@@ -12,7 +12,7 @@
 
 ## 接口概览
 
-长期记忆（新）提供以下 API 接口：
+[长期记忆](../concepts/long-term-memory.md)（新）提供以下 API 接口：
 
 | 接口名称 | HTTP 方法 | 路径 | 说明 |
 | --- | --- | --- | --- |
@@ -30,7 +30,7 @@
 
 ## 使用限制
 
-| API 接口 | 限流（阿里云账号级别） |
+| API 接口 | [限流](../concepts/rate-limit.md)（阿里云账号级别） |
 | --- | --- |
 | 全部接口 | 总计不超过 3000 QPM |
 | 记忆片段 add 接口 | 120 QPM |
@@ -199,7 +199,7 @@ asyncio.run(add_memory_example())
 
 ## 限制和注意事项
 
-- **限流**：全部接口合计 3000 QPM；`add` 单独 120 QPM，`search` 单独 300 QPM。
+- **[限流](../concepts/rate-limit.md)**：全部接口合计 3000 QPM；`add` 单独 120 QPM，`search` 单独 300 QPM。
 - **消息上限**：AddMemory 的 `messages` 最多 50 条对话记录（一问一答算 2 条）。
 - **内容长度**：`custom_content` 与 UpdateMemory 的 `custom_content` 均限制 512 个字符。
 - **互斥参数**：AddMemory 中 `messages` 与 `custom_content` 互斥，传 `custom_content` 会忽略 `messages`。
@@ -209,6 +209,19 @@ asyncio.run(add_memory_example())
 ## 来源文档
 
 - [长期记忆（新）API 参考](../../raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

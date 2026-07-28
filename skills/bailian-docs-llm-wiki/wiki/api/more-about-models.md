@@ -14,9 +14,9 @@ POST https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=<TTL>
 
 - `expire_in_seconds`：有效期，范围 [1, 1800] 秒，默认 60 秒。
 - 返回的 `token` 字段即为临时 [API Key](../concepts/api-key.md)，`expires_at` 为 UNIX 过期时间戳。
-- 临时 API Key 继承生成它的永久 API Key 的全部权限，到期后自动失效，无法手动删除。
+- 临时 [API Key](../concepts/api-key.md) 继承生成它的永久 [API Key](../concepts/api-key.md) 的全部权限，到期后自动失效，无法手动删除。
 
-> **注意**：各地域的 API Key 不同，新加坡地域需将 Endpoint 中的 WorkspaceId 替换为实际值。
+> **注意**：各地域的 [API Key](../concepts/api-key.md) 不同，新加坡地域需将 Endpoint 中的 WorkspaceId 替换为实际值。
 
 ## 异步任务管理
 
@@ -50,7 +50,7 @@ POST https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}/cancel
 
 ## 异步任务完成通知
 
-频繁轮询任务结果接口会浪费资源且可能触发限流。百炼已接入阿里云事件总线 EventBridge，支持在任务完成后主动推送通知。详见[通过HTTP回调URL或MQ接收异步任务完成通知](../../raw/model-api-reference/more-about-models/async-task-api.md)。
+频繁轮询任务结果接口会浪费资源且可能触发[限流](../concepts/rate-limit.md)。百炼已接入阿里云事件总线 EventBridge，支持在任务完成后主动推送通知。详见[通过HTTP回调URL或MQ接收异步任务完成通知](../../raw/model-api-reference/more-about-models/async-task-api.md)。
 
 两种接入方案：
 
@@ -63,13 +63,13 @@ POST https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}/cancel
 
 ## 子[业务空间](../concepts/workspace.md)的模型调用
 
-默认[业务空间](../concepts/workspace.md)的 API Key 拥有所有模型的调用权限。如需按业务线隔离权限或分账，可使用[子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)。
+默认[业务空间](../concepts/workspace.md)的 [API Key](../concepts/api-key.md) 拥有所有模型的调用权限。如需按业务线隔离权限或分账，可使用[子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)。
 
 **使用要点**：
 
-- 必须使用子[业务空间](../concepts/workspace.md)自身的 API Key 进行调用。
+- 必须使用子[业务空间](../concepts/workspace.md)自身的 [API Key](../concepts/api-key.md) 进行调用。
 - 调用标准模型（如 `qwen-plus`）前，需为该空间设置模型调用权限。
-- 调用在百炼上调优并部署的模型无需额外授权，但仅能由其所在空间的 API Key 调用。
+- 调用在百炼上调优并部署的模型无需额外授权，但仅能由其所在空间的 [API Key](../concepts/api-key.md) 调用。
 - 支持 OpenAI 兼容方式和 DashScope 方式调用，但调优后模型仅支持 DashScope 方式。
 
 ## 上传本地文件获取临时 URL
@@ -80,8 +80,8 @@ POST https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}/cancel
 
 - 文件有效期 48 小时，过期自动清理。
 - 上传时必须指定模型名称，且与后续调用的模型一致，不同模型无法共享文件。
-- 上传与调用的 API Key 必须属于同一阿里云主账号。
-- 单文件不超过 1GB，上传凭证接口限流 100 QPS。
+- 上传与调用的 [API Key](../concepts/api-key.md) 必须属于同一阿里云主账号。
+- 单文件不超过 1GB，上传凭证接口[限流](../concepts/rate-limit.md) 100 QPS。
 - 使用 `oss://` 形式的 URL 调用模型时，HTTP 请求头中必须添加 `X-DashScope-OssResourceResolve: enable`。
 
 > **注意**：临时 URL 不适用于生产环境。生产环境建议使用阿里云 OSS 等稳定存储方案。
@@ -115,6 +115,19 @@ POST https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}/cancel
 - [子业务空间的模型调用](../../raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)
 - [上传本地文件获取临时URL](../../raw/model-api-reference/more-about-models/get-temporary-file-url.md)
 - [DashScope SDK连接复用配置](../../raw/model-api-reference/more-about-models/connection-multiplexing-configuration.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

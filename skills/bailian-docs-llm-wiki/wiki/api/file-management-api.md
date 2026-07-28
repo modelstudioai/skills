@@ -1,6 +1,6 @@
 # file management api
 
-文件管理 API 用于管理上传至百炼平台的文件，覆盖上传、查询、列举和删除等基础操作。它是使用需要文件输入的模型能力（如文档解析、多模态理解、批量任务等）的前置步骤，开发者需先将文件上传到平台并获取文件标识，再在后续调用中引用。详见 [文件管理](../../raw/model-api-reference/file-management-api.md)。
+文件管理 API 用于管理上传至百炼平台的文件，覆盖上传、查询、列举和删除等基础操作。它是使用需要文件输入的模型能力（如文档解析、[多模态](../concepts/multimodal.md)理解、批量任务等）的前置步骤，开发者需先将文件上传到平台并获取文件标识，再在后续调用中引用。详见 [文件管理](../../raw/model-api-reference/file-management-api.md)。
 
 ## 核心功能
 
@@ -32,6 +32,19 @@
 ## 来源文档
 
 - [文件管理](../../raw/model-api-reference/file-management-api.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

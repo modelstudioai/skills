@@ -54,7 +54,7 @@ ElevenLabs Multilingual v3
 
 `qwen-audio-3.0-tts-plus`、`MiniMax/speech-2.8-hd`
 
-`qwen-audio-3.0-tts-flash`（声音复刻）、`cosyvoice-v3.5-plus`（声音设计）、`MiniMax/speech-2.8-hd`（声音复刻）
+`qwen-audio-3.0-tts-plus`（声音复刻）、`cosyvoice-v3.5-plus`（声音设计）、`MiniMax/speech-2.8-hd`（声音复刻）
 
 -   **使用标准语音合成**：当内置音色库能满足需求，希望快速上手、无需额外配置时。
     
@@ -89,7 +89,7 @@ ElevenLabs Multilingual v3
 
 推荐模型
 
-`qwen-audio-3.0-tts-flash`、`MiniMax/speech-2.8-hd`
+`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`、`MiniMax/speech-2.8-hd`
 
 `cosyvoice-v3.5-plus`、`cosyvoice-v3.5-flash`
 
@@ -145,7 +145,7 @@ Qwen-Audio-TTS
 
 WebSocket / HTTP
 
-不支持
+支持
 
 不支持
 
@@ -205,7 +205,7 @@ HTTP
 
 WebSocket / HTTP
 
-不支持
+支持
 
 不支持
 
@@ -225,7 +225,7 @@ WebSocket / HTTP
 
 -   系统音色（因音色而异）：中文（普通话）、英文
     
--   声音复刻音色（方言通过指令控制功能进行设置）：中文（普通话、广东话、重庆话、东北话、甘肃话、贵州话、浙江话、河北话、河南话、湖北话、湖南话、江西话、宁波话、宁夏话、青岛话、陕西话、山西话、山东话、上海话、四川话、云南话）、英文、日语、韩语、德语、法语、意大利语、俄语、葡萄牙语、泰语、印尼语、马来语、越南语
+-   声音复刻音色（方言通过指令控制功能进行设置）：中文（普通话、广东话、重庆话、东北话、甘肃话、贵州话、浙江话、河北话、河南话、湖北话、湖南话、江西话、宁波话、宁夏话、青岛话、陕西话、山西话、山东话、上海话、四川话、云南话）、英语、日语、韩语、俄语、法语、德语、葡萄牙语、泰语、印尼语、越南语、西班牙语、意大利语、马来西亚语、菲律宾语、阿拉伯语
     
 
 ### CosyVoice

@@ -100,7 +100,7 @@ Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或�
 
 **启用方式：**配置客户端`[session.update](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#af43722339yva)`事件的`session.turn_detection`参数。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1592892871/CAEQaxiBgICW9b6H3RkiIGM5MDgwMTNkMjBjMDRlNTNiOGZlODNjZGJhNDQ3NGJm5812623_20251022102739.334.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7151064871/CAEQaxiBgICW9b6H3RkiIGM5MDgwMTNkMjBjMDRlNTNiOGZlODNjZGJhNDQ3NGJm5812623_20251022102739.334.svg)
 
 -   客户端通过发送`[input_audio_buffer.append](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#a42f8e9111n72)`事件将音频追加到缓冲区。
     
@@ -111,6 +111,10 @@ Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或�
 -   客户端继续发送`[input_audio_buffer.append](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#a42f8e9111n72)`事件提交音频。
     
 -   客户端在音频提交完后，发送`[session.finish](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#147ce70052d4z)`事件通知服务端结束当前会话。
+    
+    **警告**
+    
+    在 VAD 模式下，推完音频后必须先发送`[session.finish](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#147ce70052d4z)`事件再关闭连接。如果客户端直接关闭 WebSocket 连接而未发送该事件，服务端将丢弃当前 in\_progress item，`conversation.item.input_audio_transcription.completed` 等事件将不会到达。建议在调用 `ws.Close()` 之前，先发送 `{"type":"session.finish"}`，并等待收到`[session.finished](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-server-events#6eaa77339djdv)`事件后再关闭连接。
     
 -   服务端在检测到语音结束时返回`[input_audio_buffer.speech_stopped](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-server-events#3d73b074cak7k)`事件。
     
@@ -131,7 +135,7 @@ Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或�
 
 **启用方式：**将客户端`[session.update](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#af43722339yva)`事件的`session.turn_detection`设为null。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1592892871/CAEQaxiBgMDUp8qH3RkiIGEyYTc0NTI1ZmQ1OTQ5NjliNWE0OTYwYTAwMDBlMjBm5812623_20251022102739.334.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8151064871/CAEQaxiBgMDUp8qH3RkiIGEyYTc0NTI1ZmQ1OTQ5NjliNWE0OTYwYTAwMDBlMjBm5812623_20251022102739.334.svg)
 
 -   客户端通过发送`[input_audio_buffer.append](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#a42f8e9111n72)`事件将音频追加到缓冲区。
     

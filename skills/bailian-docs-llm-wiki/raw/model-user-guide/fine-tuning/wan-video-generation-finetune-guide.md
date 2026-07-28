@@ -109,10 +109,6 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/files' \
 
 使用步骤1中的文件ID启动训练任务。
 
-**说明**
-
-不同模型的微调参数的值有所差异，超参数设置请参见[超参数](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#5f391e4b3cezf)，更多调用示例请参见[请求示例](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#1a9196bd16o9h)。
-
 **请求示例**
 
 请将`<替换为训练数据集的文件id>`完整替换为上一步获取的`file_id`。
@@ -130,12 +126,12 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
     ],
     "training_type": "efficient_sft",
     "hyper_parameters": {
-        "n_epochs": 400,
+        "n_epochs": 50,
         "batch_size": 1,
         "learning_rate": 2e-5,
         "split": 0.9,
         "max_split_val_dataset_sample": 5,
-        "eval_epochs": 50,
+        "eval_epochs": 20,
         "max_pixels": 102400,
         "save_total_limit": 10,
         "lora_rank": 32,
@@ -157,12 +153,12 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
     ],
     "training_type": "efficient_sft",
     "hyper_parameters": {
-        "n_epochs": 400,
+        "n_epochs": 50,
         "batch_size": 4,
         "learning_rate": 2e-5,
         "split": 0.9,
         "max_split_val_dataset_sample": 5,
-        "eval_epochs": 50,
+        "eval_epochs": 20,
         "max_pixels": 262144,
         "save_total_limit": 10,
         "lora_rank": 32,
@@ -170,6 +166,140 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
     }
 }'
 ```
+
+**超参数（hyper\_parameters）**
+
+**字段**
+
+**类型**
+
+**必选**
+
+**描述**
+
+**推荐值**
+
+batch\_size
+
+int
+
+是
+
+**批次大小**。一次性送入模型进行训练的数据条数。
+
+-   wan2.7-i2v：推荐为 1。
+    
+-   wan2.5-i2v-preview：推荐为 4。
+    
+-   wan2.2-i2v-flash：推荐为 4。
+    
+-   wan2.2-kf2v-flash：推荐为 4。
+    
+
+以模型为准
+
+n\_epochs
+
+int
+
+是
+
+**训练循环次数**。steps = n\_epochs × ⌈数据集大小 / batch\_size⌉。建议总步数 ≥ 800。
+
+> 例如：数据集 5 条，batch\_size=2，每轮步数=⌈5/2⌉=3，最小 n\_epochs = 800/3 ≈ 267。
+
+> 推荐训练轮数会根据数据量自动调整。数据越少，需要更多轮数来充分学习；数据越多，每轮包含的样本越多，因此所需轮数会减少。50 epochs 主要适用于 2 条左右的小数据集；当数据量达到 50-60 条视频时，通常建议训练约 3000-5000 steps 即可。
+
+50
+
+learning\_rate
+
+float
+
+是
+
+**学习率**。控制模型权重更新幅度。过高可能导致模型变差，过低则变化不明显。
+
+2e-5
+
+eval\_epochs
+
+int
+
+是
+
+**验证间隔**。取值需 ≥ `n_epochs/10`。每隔多少个 epoch 进行一次验证评估并保存 Checkpoint。
+
+20
+
+max\_pixels
+
+int
+
+是
+
+**训练视频的最大分辨率**（像素总数 = 宽×高）。系统仅对超过该值的视频进行缩放处理。
+
+-   wan2.7-i2v：推荐 102400。范围 36864～123904。
+    
+-   wan2.5-i2v-preview：推荐 36864。范围 16384～36864。
+    
+-   wan2.2-i2v-flash：推荐 262144。范围 65536～262144。
+    
+-   wan2.2-kf2v-flash：推荐 262144。范围 65536～262144。
+    
+
+以模型为准
+
+split
+
+float
+
+否
+
+**训练集划分比例**。取值 (0,1)，仅在未指定 validation\_datasets 时生效。
+
+0.9
+
+max\_split\_val\_dataset\_sample
+
+int
+
+否
+
+**自动划分验证集的最大样本数**。验证集数量 = min(总数×(1−split), 此值)。
+
+5
+
+save\_total\_limit
+
+int
+
+否
+
+**Checkpoint 保存数量上限**。系统只保存最后 N 个 Checkpoint。
+
+10
+
+lora\_rank
+
+int
+
+否
+
+**LoRA 低秩矩阵维数**。取值须为 2n（16/32/64）。
+
+32
+
+lora\_alpha
+
+int
+
+否
+
+**LoRA 权重缩放系数**。取值须为 2n（16/32/64）。
+
+32
 
 **响应示例**
 
@@ -1276,7 +1406,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
 
 -   **n\_epochs (训练轮数)**
     
-    -   默认值：**400**，推荐使用默认值。若需调整，请遵循 **“总训练步数 (Steps) ≥ 800”** 的原则。
+    -   默认值：**50**，推荐使用默认值。若需调整，请遵循 **”总训练步数 (Steps) ≥ 800”** 的原则。
         
     -   总步数计算公式： `steps = n_epochs × 向上取整（训练集大小 / batch_size）。`
         

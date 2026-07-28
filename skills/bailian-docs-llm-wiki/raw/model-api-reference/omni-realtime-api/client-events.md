@@ -89,7 +89,7 @@ Qwen-Omni-Realtime API的客户端事件参考。
 
 默认音色：
 
--   Qwen3.5-Omni-Realtime 系列：`Tina`
+-   Qwen3.5-Omni-Realtime 系列模型：`Tina`
     
 -   Qwen3-Omni-Flash-Realtime：`Cherry`
     
@@ -135,7 +135,7 @@ VAD 类型，可选值：
 
 -   `server_vad`（默认值）：基于声学特征检测语音结束。
     
--   `semantic_vad`：基于语义有效性检测语音结束，可过滤回应语、背景音等无意义声音。仅 `qwen3.5-omni-realtime` 模型支持。
+-   `semantic_vad`：基于语义有效性检测语音结束，可过滤回应语、背景音等无意义声音。仅 `qwen3.5-omni-realtime` 系列模型支持。
     
 
 **threshold** `_float_`（可选）
@@ -160,7 +160,7 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 **enable\_search** `_boolean_`（可选）
 
-**仅在使用 Qwen3.5-Omni-Realtime 模型时生效。**
+**仅在使用 Qwen3.5-Omni-Realtime 系列模型时生效。**
 
 是否启用联网搜索。设为 `true` 启用，默认为 `false`。启用后，模型可自主判断是否需要联网搜索来回答用户问题。
 

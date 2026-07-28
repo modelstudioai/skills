@@ -33,6 +33,30 @@
 
 **功能说明**
 
+7月21日
+
+平台功能
+
+记忆库商业化通知
+
+记忆库商业化通知[了解详情](https://www.aliyun.com/notice/118464)
+
+7月16日
+
+平台功能
+
+企业知识库（旧）下线通知
+
+企业知识库（旧）下线通知[了解详情](https://www.aliyun.com/notice/118448)
+
+7月16日
+
+平台功能
+
+Managed Agent商业化通知
+
+Managed Agent商业化通知[了解详情](https://www.aliyun.com/notice/118456)
+
 7月14日
 
 平台功能
@@ -177,7 +201,7 @@ Coding Plan
 
 Coding Plan 联网搜索 MCP 升级
 
-Coding Plan 联网搜索 MCP 升级 Streamable HTTP 协议，前 2000 次免费，[了解详情](https://help.aliyun.com/zh/model-studio/web-search-for-coding-plan)
+Coding Plan 联网搜索 MCP 升级 Streamable HTTP 协议，前 2000 次免费，[了解详情](https://help.aliyun.com/zh/model-studio/web-search-mcp)
 
 6月10日
 

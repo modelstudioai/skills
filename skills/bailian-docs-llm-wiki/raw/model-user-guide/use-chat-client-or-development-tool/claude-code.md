@@ -1,6 +1,6 @@
 # Claude Code
 
-Claude Code 是 Anthropic 推出的命令行 AI 编程助手。通过阿里云百炼，可以使用按量计费、Coding Plan 或 Token Plan 团队版接入 Claude Code。
+Claude Code 是 Anthropic 推出的命令行 AI 编程助手。通过阿里云百炼，可以使用按量计费、Coding Plan、Token Plan 个人版或 Token Plan 团队版接入 Claude Code。
 
 ## **安装 Claude Code**
 
@@ -47,6 +47,36 @@ npm install -g @anthropic-ai/claude-code
 
 新建 `~/.claude/settings.json`（Windows 路径：`C:\Users\<用户名>\.claude\settings.json`），写入对应套餐的配置。
 
+### Token Plan 个人版
+
+将 YOUR\_API\_KEY 替换为 Token Plan 个人版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/overview)。可用模型：qwen3.8-max-preview、qwen3.7-max、qwen3.7-plus、qwen3.6-flash、glm-5.2、deepseek-v4-pro。完整说明参见 Token Plan 个人版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)。
+
+```
+{
+    "env": {
+        "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY",
+        "ANTHROPIC_BASE_URL": "https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic",
+        "ANTHROPIC_MODEL": "qwen3.8-max-preview",
+        "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3.6-flash",
+        "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3.8-max-preview",
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.8-max-preview",
+        "CLAUDE_CODE_SUBAGENT_MODEL": "qwen3.7-max",
+        "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "983616"
+    }
+}
+```
+
+**重要**
+
+**qwen3.8-max-preview 思考模式说明**：
+
+-   **thinking**：始终开启，不支持关闭。
+    
+-   **temperature**：思考模式下默认值为 0.6；传入值小于 0.6 时自动调整为 0.6。
+    
+-   **reasoning\_effort**：控制推理深度，可选 xhigh、medium、low，默认 xhigh。
+    
+
 ### Token Plan 团队版
 
 将 YOUR\_API\_KEY 替换为 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)。可用模型参见 Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)。
@@ -56,14 +86,26 @@ npm install -g @anthropic-ai/claude-code
     "env": {
         "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY",
         "ANTHROPIC_BASE_URL": "https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic",
-        "ANTHROPIC_MODEL": "qwen3.7-max",
+        "ANTHROPIC_MODEL": "qwen3.8-max-preview",
         "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3.6-flash",
-        "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3.7-max",
-        "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.7-max",
-        "CLAUDE_CODE_SUBAGENT_MODEL": "qwen3.7-max"
+        "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3.8-max-preview",
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.8-max-preview",
+        "CLAUDE_CODE_SUBAGENT_MODEL": "qwen3.7-max",
+        "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "983616"
     }
 }
 ```
+
+**重要**
+
+**qwen3.8-max-preview 思考模式说明**：
+
+-   **thinking**：始终开启，不支持关闭。
+    
+-   **temperature**：思考模式下默认值为 0.6；传入值小于 0.6 时自动调整为 0.6。
+    
+-   **reasoning\_effort**：控制推理深度，可选 xhigh、medium、low，默认 xhigh。
+    
 
 ### Coding Plan
 
@@ -87,18 +129,18 @@ npm install -g @anthropic-ai/claude-code
 
 将 YOUR\_API\_KEY 替换为[阿里云百炼API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。可用模型参见[Anthropic 兼容 API](https://help.aliyun.com/zh/model-studio/anthropic-api-messages#07833dedefft7)。
 
-`ANTHROPIC_BASE_URL` 按地域设置，API Key 需与所选地域对应：
+`ANTHROPIC_BASE_URL` 按地域设置，API Key 需与所选地域对应，并将`WorkspaceId`替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)：
 
--   华北2（北京）：`https://dashscope.aliyuncs.com/apps/anthropic`
+-   华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic`
     
--   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic`，请将`WorkspaceId`替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)
+-   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic`
     
 
 ```
 {
     "env": {
         "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY",
-        "ANTHROPIC_BASE_URL": "https://dashscope.aliyuncs.com/apps/anthropic",
+        "ANTHROPIC_BASE_URL": "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
         "ANTHROPIC_MODEL": "qwen3.7-max",
         "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3.6-flash",
         "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3.7-max",
@@ -122,7 +164,7 @@ Claude Code 默认使用 200K 上下文窗口。如果需要处理大型代码�
 {
     "env": {
         "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY",
-        "ANTHROPIC_BASE_URL": "https://dashscope.aliyuncs.com/apps/anthropic",
+        "ANTHROPIC_BASE_URL": "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
         "ANTHROPIC_MODEL": "qwen3.7-plus",
         "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "1000000"
     }
@@ -137,7 +179,7 @@ Claude Code 默认使用 200K 上下文窗口。如果需要处理大型代码�
 {
     "env": {
         "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY",
-        "ANTHROPIC_BASE_URL": "https://dashscope.aliyuncs.com/apps/anthropic",
+        "ANTHROPIC_BASE_URL": "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
         "ANTHROPIC_MODEL": "qwen3.7-plus[1m]",
         "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3.7-plus[1m]",
         "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.7-plus[1m]",
@@ -169,6 +211,14 @@ Claude Code 默认使用 200K 上下文窗口。如果需要处理大型代码�
     
     **配置信息**
     
+    Token Plan 个人版
+    
+    供应商名称：百炼-Token Plan 个人版
+    
+    API Key：[控制台获取](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/overview)
+    
+    请求地址：`https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic`
+    
     Token Plan 团队版
     
     供应商名称：百炼-Token Plan
@@ -191,7 +241,7 @@ Claude Code 默认使用 200K 上下文窗口。如果需要处理大型代码�
     
     API Key：[百炼API Key](https://help.aliyun.com/zh/model-studio/get-api-key)
     
-    请求地址：`https://dashscope.aliyuncs.com/apps/anthropic`
+    请求地址：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic`
     
 2.  展开**高级选项**配置模型映射，将主模型与 Haiku、Sonnet、Opus 默认模型设置为对应套餐[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)。映射关系按需选择，示例如下：
     
@@ -208,35 +258,23 @@ Claude Code 默认使用 200K 上下文窗口。如果需要处理大型代码�
 
 ### 接入 Claude Code 桌面版
 
+Claude Code 桌面版（Claude Desktop）与 Claude Code CLI 是两个独立入口，在 CC Switch 中分别对应 **Claude Code** 与 **Claude Desktop** 面板。桌面版通过 CC Switch 本地网关访问百炼：网关地址与鉴权令牌均由 CC Switch 自动写入桌面版配置，**无需在桌面版中手动填写百炼 API Key**——百炼 API Key 只在 CC Switch 供应商配置中填写，由本地路由转发时自动注入。
+
+**重要**
+
+请勿在桌面版的第三方推理配置中手动填写百炼 API Key。桌面版对 CC Switch 本地网关（地址 `http://127.0.0.1:15721/claude-desktop`）的鉴权令牌由 CC Switch 自动生成并写入，手动填入百炼 API Key 会因令牌不匹配导致鉴权失败。桌面版第三方配置写入目前仅支持 macOS、Windows。
+
 1.  从 [Claude 下载页](https://claude.ai/download)安装 Claude Code 桌面版。
     
-2.  顶部菜单 **Help** → **Troubleshooting** → **Enable Developer Mode**，重启后顶部出现 **Developer** 菜单。
+2.  在 CC Switch 左侧应用切换器切换到 **Claude Desktop** 面板。若未显示该入口，前往**设置 → 通用 → 应用可见性**确认 Claude Desktop 未被隐藏。
     
-3.  **Developer** → **Configure Third-Party Inference**，**Connection** 选 **Gateway**，按下表填写后点击 **Apply locally**：
+3.  添加百炼供应商：若已在 **Claude Code** 面板配置过百炼供应商，可点击**将 Claude Code 中已有的供应商导入**一键复用；也可点击右上角 **+** 新增。由于百炼模型 ID（如 `qwen3.7-max`）不是 Claude Desktop 识别的 `claude-sonnet-* / claude-opus-* / claude-haiku-*` 三档角色 ID，需开启**需要模型映射**，为 Sonnet、Opus、Haiku 三档分别填写实际请求的百炼模型（如 Sonnet → qwen3.7-max）。
     
-    **字段**
+4.  开启本地路由：前往**设置 → 路由 → 本地路由**，打开**在主页面显示本地路由开关**；回到 Claude Desktop 面板，打开 **Claude Desktop 本地路由**开关，监听地址默认 `127.0.0.1:15721`。
     
-    **填写**
+5.  在供应商卡片点击**启用**，CC Switch 会自动将第三方推理配置写入 Claude Code 桌面版。
     
-    Gateway base URL
-    
-    CC Switch 路由监听地址，默认 `http://127.0.0.1:15721`，如已修改则与下一步保持一致。
-    
-    Gateway API key
-    
-    百炼API Key
-    
-    Gateway auth scheme
-    
-    bearer
-    
-    Model list
-    
-    Model ID须为 Anthropic 风格，如 `claude-opus-4.7`。实际调用模型由 CC Switch 路由决定，对应关系即供应商[高级选项中的模型映射](#ccswitch-add-li2)。Display name 仅影响下拉显示。
-    
-4.  CC Switch 左上角设置 → **路由**，开启**路由总开关**，监听地址默认 `127.0.0.1:15721`，如需修改请同步上一步。
-    
-5.  在桌面版模型下拉中选择已配置的模型ID即可使用。
+6.  保持 CC Switch 运行，**完全退出并重启** Claude Code 桌面版后生效，在模型菜单中选择已配置的模型即可使用。
     
 
 ## **Claude Code IDE 插件**
@@ -295,7 +333,9 @@ Claude Code 默认使用 200K 上下文窗口。如果需要处理大型代码�
     
 -   Coding Plan：[Coding Plan 常见问题](https://help.aliyun.com/zh/model-studio/coding-plan-faq)
     
--   Token Plan 团队版：[Token Plan 团队版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-faq)
+-   Token Plan 个人版：[Token Plan 常见问题](https://help.aliyun.com/zh/model-studio/token-plan-team-faq)
+    
+-   Token Plan 团队版：[Token Plan 团队版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-team-faq)
     
 
 ### 启动 Claude Code 后，界面显示"Unable to connect to Anthropic services. Failed to connect to api.anthropic.com: ERR\_BAD\_REQUEST"

@@ -13,6 +13,117 @@
           "Video"
         ]
       },
+      "description": "Kimi K3 是 Kimi 迄今能力最强的旗舰模型，拥有 2.8 万亿参数，基于 KDA 混合线性注意力机制（Kimi Delta Attention）和注意力残差（Attention Residuals）技术构建，原生支持视觉理解，并拥有 100 万 token 上下文窗口。它是全球首个开源的 3 万亿级别模型，面向长程编程、知识工作和推理等前沿智能场景而设计。",
+      "features": [
+        "function-calling",
+        "structured-outputs",
+        "cache",
+        "prefix-completion"
+      ],
+      "provider": "moonshot-ai",
+      "model": "kimi/kimi-k3",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "20",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "100",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 3000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 500,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 3000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 500,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "capabilities": [
+        "TG",
+        "VU",
+        "Reasoning"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 1048576,
+      "latestOnlineAt": "2026-07-17T08:23:12.000+00:00",
+      "contextWindow": 1048576,
+      "maxInputTokens": 1048576,
+      "inferenceProvider": "moonshot-ai",
+      "name": "kimi/kimi-k3",
+      "docUrl": "https://bailian.console.aliyun.com/cn-beijing?tab=doc#/doc/?type=model&url=3021620",
+      "category": "Third-party",
+      "predictConfig": [
+        {
+          "name": "system",
+          "key": "systemMessage",
+          "tip": "系统人设，例如“你是一个AI助手”。"
+        },
+        {
+          "name": "top_p",
+          "key": "top_p",
+          "default": 0.8,
+          "tip": "控制核采样方法的概率阈值，取值越大，生成的随机性越高。",
+          "range": [
+            0.0001,
+            1
+          ]
+        },
+        {
+          "name": "temperature",
+          "key": "temperature",
+          "default": 0.7,
+          "tip": "控制生成随机性和多样性，数值越高多样性越强，数值越低一致性越强，范围(0,2)。建议该参数和top_p只设置1个。",
+          "range": [
+            0,
+            1.9999
+          ]
+        }
+      ],
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "curl": "curl --location 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n  \"model\": \"kimi/kimi-k3\",\n  \"messages\": [\n  {\n    \"role\": \"user\",\n    \"content\": [\n      {\"type\": \"image_url\", \"image_url\": {\"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"}},\n      {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"}\n    ]\n  }]\n}'",
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"kimi/kimi-k3\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\n                    \"type\": \"image_url\",\n                    \"image_url\": {\n                        \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n                    },\n                },\n                {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"},\n            ],\n        },\n    ],\n)\nprint(completion.choices[0].message.content)",
+            "nodejs": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI({\n  // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: \"sk-xxx\"\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: \"https://dashscope.aliyuncs.com/compatible-mode/v1\"\n});\n\nasync function main() {\n  const response = await openai.chat.completions.create({\n    model: \"kimi/kimi-k3\",\n    messages: [\n      {\n        role: \"user\",\n        content: [{\n            type: \"image_url\",\n            image_url: {\n              \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n            }\n          },\n          {\n            type: \"text\",\n            text: \"请仅输出图像中的文本内容。\"\n          }\n        ]\n      }\n    ]\n  });\n  console.log(response.choices[0].message.content);\n}\nmain()",
+            "docUrl": "https://help.aliyun.com/document_detail/3021620.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Text",
+          "Image",
+          "Video"
+        ]
+      },
       "description": "K2.7 Code高速版与普通版是同一个模型，但输出速度约为普通版的 5-6 倍，常规编程场景下（取输入长度中位数）输出速度约 180 Token/s，短上下文场景可达 260 Token/s ，带来更极致的编程体验。",
       "features": [
         "function-calling",
@@ -21,10 +132,27 @@
         "cache"
       ],
       "provider": "moonshot-ai",
-      "limit": {
-        "message": "model not exist"
-      },
       "model": "kimi/kimi-k2.7-code-highspeed",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "13",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "54",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2.6",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
@@ -114,10 +242,27 @@
         "cache"
       ],
       "provider": "moonshot-ai",
-      "limit": {
-        "message": "model not exist"
-      },
       "model": "kimi/kimi-k2.7-code",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "6.5",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "27",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.3",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
@@ -207,10 +352,27 @@
         "cache"
       ],
       "provider": "moonshot-ai",
-      "limit": {
-        "message": "model not exist"
-      },
       "model": "kimi/kimi-k2.6",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "6.5",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "27",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.1",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 6,
@@ -287,11 +449,28 @@
         "cache"
       ],
       "provider": "moonshot-ai",
-      "limit": {
-        "message": "model not exist"
-      },
       "model": "kimi/kimi-k2.5",
       "iconUrl": "https://img.alicdn.com/imgextra/i4/O1CN01KzHLBW1LISVEUaotl_!!6000000001276-2-tps-56-56.png",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "4",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "21",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.7",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 6,

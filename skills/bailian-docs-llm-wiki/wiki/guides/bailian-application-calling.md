@@ -13,7 +13,7 @@
 
 ## 基本调用方式
 
-[智能体应用](../concepts/agent-application.md)与工作流应用的调用接口完全相同，详见[调用智能体应用](../../raw/application-user-guide/bailian-application-calling/call-single-agent-application.md)与[调用工作流应用](../../raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md)。核心请求结构如下：
+[智能体应用](../concepts/agent-application.md)与[工作流](../concepts/workflow.md)应用的调用接口完全相同，详见[调用智能体应用](../../raw/application-user-guide/bailian-application-calling/call-single-agent-application.md)与[调用工作流应用](../../raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md)。核心请求结构如下：
 
 ```
 POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion
@@ -84,14 +84,14 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/YOUR_APP_ID/completion \
 
 ## 多轮对话
 
-工作流应用支持多轮对话，详见[调用工作流应用](../../raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md)。两种实现方式：
+[工作流](../concepts/workflow.md)应用支持多轮对话，详见[调用工作流应用](../../raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md)。两种实现方式：
 
 - **使用 `session_id`**：系统自动从云端加载历史对话，实现简单。`session_id` 有效期 1 小时，最多支持 50 轮对话。
 - **自行管理 `messages`（推荐）**：手动维护 `messages` 数组传递每轮历史，无需传 `prompt`，控制更灵活。
 
 > **注意**：若请求中同时包含 `session_id` 和 `messages`，系统将优先使用 `messages`。
 
-使用 `messages` 时，需先在工作流的大模型节点中配置提示词变量 `historyList` 并发布应用，再发起调用。
+使用 `messages` 时，需先在[工作流](../concepts/workflow.md)的大模型节点中配置提示词变量 `historyList` 并发布应用，再发起调用。
 
 ## 自定义参数传递
 
@@ -172,6 +172,19 @@ Java SDK 通过 `JsonUtils.parse(...)` 将 JSON 字符串转为对象传入 `App
 - [应用的自定义参数传递](../../raw/application-user-guide/bailian-application-calling/pass-through-of-application-parameters.md)
 - [调用工作流应用](../../raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md)
 - [调用智能体应用](../../raw/application-user-guide/bailian-application-calling/call-single-agent-application.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

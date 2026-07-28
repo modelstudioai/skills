@@ -1,6 +1,6 @@
 # QwenPaw
 
-QwenPaw（原 CoPaw）是 AgentScope 团队开源的个人 AI 助手，支持本地或云端部署，可通过 Token Plan 团队版、Coding Plan 或按量计费接入阿里云百炼。
+QwenPaw（原 CoPaw）是 AgentScope 团队开源的个人 AI 助手，支持本地或云端部署，可通过 Token Plan 个人版、Token Plan 团队版、Coding Plan 或按量计费接入阿里云百炼。
 
 ## **安装 QwenPaw**
 
@@ -52,6 +52,22 @@ qwenpaw app
 
 在 Console 点击 **设置** > **模型**，根据计费方案配置对应的提供商。
 
+### Token Plan 个人版
+
+进入内置的 **Aliyun Token Plan** 提供商**设置**页面，填入 API Key。
+
+**配置项**
+
+**说明**
+
+**API 密钥**
+
+填入 Token Plan 个人版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/token-plan/personal)。
+
+**模型**
+
+已预设常用模型。新增模型点击**添加模型**，**模型 ID**填入 Token Plan 个人版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)。
+
 ### Token Plan 团队版
 
 进入内置的 **Aliyun Token Plan** 提供商**设置**页面，填入 API Key。
@@ -62,7 +78,7 @@ qwenpaw app
 
 **API 密钥**
 
-填入 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)。
+填入 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/token-plan/enterprise)。
 
 **模型**
 
@@ -98,9 +114,9 @@ qwenpaw app
 
 **基础 URL**
 
-根据模型部署地域，在下拉菜单选择对应 URL：
+根据模型部署地域，在下拉菜单选择对应 URL（请将 URL 中的 `{WorkspaceId}` 替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)）：
 
--   China (Beijing)：`https://dashscope.aliyuncs.com/compatible-mode/v1`
+-   China (Beijing)：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
     
 -   International (Singapore)：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`，将 `WorkspaceId` 替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
     
@@ -125,7 +141,9 @@ qwenpaw app
     
 -   Coding Plan：[Coding Plan 常见问题](https://help.aliyun.com/zh/model-studio/coding-plan-faq)
     
--   Token Plan 团队版：[Token Plan 团队版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-faq)
+-   Token Plan 个人版：[Token Plan 个人版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-team-faq)
+    
+-   Token Plan 团队版：[Token Plan 团队版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-team-faq)
     
 
 ### 报错 401 Incorrect API key provided

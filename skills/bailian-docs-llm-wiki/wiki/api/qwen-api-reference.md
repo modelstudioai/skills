@@ -22,7 +22,7 @@
 
 ## 使用方式与注意事项
 
-- [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)可直接复用官方 OpenAI 客户端库，仅需替换 base URL 和 API Key，改动量小。
+- [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)可直接复用官方 OpenAI 客户端库，仅需替换 base URL 和 [API Key](../concepts/api-key.md)，改动量小。
 - 若依赖联网搜索、代码解释器等内置工具，需使用 Responses 接口，而非普通的 Chat Completions。
 - 不同接口在参数集合和功能覆盖上存在差异：DashScope 参数最全，OpenAI/Anthropic 兼容接口以对应生态的字段约定为准，跨接口迁移时需核对参数映射。
 
@@ -31,6 +31,19 @@
 ## 来源文档
 
 - [文本生成模型API参考](../../raw/model-api-reference/qwen-api-reference.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,6 +1,6 @@
 # Qoder CN（原 Lingma）
 
-Qoder CN（原 Lingma）是阿里云智能编码助手，提供独立 IDE，可以通过 Token Plan、Coding Plan 或按量付费接入阿里云百炼。
+Qoder CN（原 Lingma）是阿里云智能编码助手，提供独立 IDE，可以通过 Token Plan 个人版、Token Plan 团队版、Coding Plan 或按量付费接入阿里云百炼。
 
 **说明**
 
@@ -31,7 +31,7 @@ Qoder CN 个人社区版和个人专业版均支持接入百炼，企业版不�
     
     类型
     
-    根据计费方案选择 **Token Plan**、**Coding Plan** 或 **按量付费**
+    根据计费方案选择 **Token Plan**（个人版或团队版）、**Coding Plan** 或 **按量付费**
     
     模型
     
@@ -41,7 +41,9 @@ Qoder CN 个人社区版和个人专业版均支持接入百炼，企业版不�
     
     填写对应方案的专属 API Key：
     
-    -   Token Plan 团队版：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)
+    -   Token Plan 个人版：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/token-plan/personal)
+        
+    -   Token Plan 团队版：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/token-plan/enterprise)
         
     -   Coding Plan：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)
         
@@ -55,7 +57,7 @@ Qoder CN 个人社区版和个人专业版均支持接入百炼，企业版不�
 
 ## 了解更多
 
-如需进一步了解 Qoder CN 的智能体、MCP、Skills 等扩展能力，请参考 [Qoder CN 官方文档](https://help.aliyun.com/zh/lingma/product-overview/introduction-of-lingma)。
+如需进一步了解 Qoder CN 的智能体、MCP、Skills 等扩展能力，请参考 [Qoder CN 官方文档](https://help.aliyun.com/zh/lingma/introduction-of-lingma)。
 
 ## 常见问题
 
@@ -64,6 +66,8 @@ Qoder CN 个人社区版和个人专业版均支持接入百炼，企业版不�
 配置过程中遇到报错，请参考对应计费方案的常见问题文档：
 
 -   Coding Plan：[Coding Plan 常见问题](https://help.aliyun.com/zh/model-studio/coding-plan-faq)
+    
+-   Token Plan 个人版：[Token Plan 常见问题](https://help.aliyun.com/zh/model-studio/token-plan-faq)
     
 -   Token Plan 团队版：[Token Plan 团队版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-faq)
     
@@ -85,7 +89,7 @@ Qoder CN 个人社区版和个人专业版均支持接入百炼，企业版不�
 
 -   **提供商或类型与实际套餐不一致**：在 Qoder CN 模型配置中，**提供商**与**类型**需与所购套餐保持一致。例如使用 Token Plan 团队版的 API Key，但**类型**选成了 Coding Plan。
     
--   **选用了套餐不支持的模型**：仅支持当前套餐覆盖的文本生成模型。例如，Token Plan 团队版的支持模型列表可在[Token Plan 团队版页面](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)查看。
+-   **选用了套餐不支持的模型**：仅支持当前套餐覆盖的文本生成模型。例如，Token Plan 团队版的支持模型列表可在[Token Plan 团队版页面](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/token-plan/enterprise)查看。
     
 -   **临时网络或服务波动**：稍后重试。
     

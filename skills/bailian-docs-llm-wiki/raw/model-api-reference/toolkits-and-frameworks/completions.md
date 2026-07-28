@@ -4,7 +4,7 @@ Completions 接口专为文本补全场景设计，适合代码补全、内容�
 
 **说明**
 
-本文档仅适用于中国内地（北京地域），需使用中国（北京）地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
+本文档仅适用于华北2（北京）地域，需使用华北2（北京）地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
 
 ## **支持的模型**
 
@@ -46,7 +46,7 @@ import os
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
     api_key=os.getenv("DASHSCOPE_API_KEY")
 )
 
@@ -67,7 +67,7 @@ const openai = new OpenAI(
     {
         // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
         apiKey: process.env.DASHSCOPE_API_KEY,
-        baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
+        baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1"
     }
 );
 
@@ -85,7 +85,7 @@ main();
 curl
 
 ```
-curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/completions \
+curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -113,7 +113,7 @@ import os
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
     api_key=os.getenv("DASHSCOPE_API_KEY")
 )
 
@@ -145,7 +145,7 @@ Node.js
 import OpenAI from 'openai';
 
 const client = new OpenAI({
-  baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+  baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
   apiKey: process.env.DASHSCOPE_API_KEY
 });
 
@@ -178,7 +178,7 @@ main();
 curl
 
 ```
-curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/completions \
+curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{

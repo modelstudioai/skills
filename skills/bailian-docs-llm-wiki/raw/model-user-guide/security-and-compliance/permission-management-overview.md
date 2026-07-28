@@ -125,7 +125,7 @@ API Key 管理
 
 ## **业务空间权限管理**
 
-百炼按地理区域划分资源和业务空间，**单个业务空间不能跨地域存在。即使各个地域的默认业务空间，也是不同的空间**。点击前往全局管理菜单（[北京](https://bailian.console.aliyun.com/?tab=globalset#/efm/business_management) | [新加坡](https://modelstudio.console.aliyun.com/?tab=globalset#/efm/business_management) | [弗吉尼亚](https://modelstudio.console.aliyun.com/us-east-1?tab=globalset#/efm/business_management) | [法兰克福](https://modelstudio.console.aliyun.com/eu-central-1?tab=globalset#/efm/business_management)）。
+百炼按地理区域划分资源和业务空间，**单个业务空间不能跨地域存在。即使各个地域的默认业务空间，也是不同的空间**。单击前往全局管理菜单（[北京](https://bailian.console.aliyun.com/?tab=globalset#/efm/business_management) | [新加坡](https://modelstudio.console.aliyun.com/?tab=globalset#/efm/business_management) | [弗吉尼亚](https://modelstudio.console.aliyun.com/us-east-1?tab=globalset#/efm/business_management) | [法兰克福](https://modelstudio.console.aliyun.com/eu-central-1?tab=globalset#/efm/business_management)）。
 
 同时百炼的业务空间是进行**精细化权限管理**的**最小**管理单元，它可管理：
 
@@ -205,7 +205,7 @@ API Key 管理
     
     > 默认业务空间无法设置此限制，所有模型均可调用，且无法限流。
     
-    在**模型列表**中，通过**模型调用**列的开关控制模型授权状态，并在**当前空间限流**列分别设置请求数限流值与Token限流值及对应的时间单位。
+    在**模型列表**中，通过**模型调用**列的开关控制模型授权状态，并在**当前空间限流**列分别设置请求数限流值与Token限流值及对应的时间单位（支持 1 秒、2 秒、3 秒、5 秒、10 秒、30 秒、60 秒）。未设置限流时，该空间将共享账号级别的总限流配额。
     
 -   **限制模型训练**：管理某个模型可否在该业务空间进行调优（通过控制台和API）和调优后部署**。**
     
@@ -219,14 +219,14 @@ API Key 管理
     
     在**模型列表**页签中，**模型授权**区域的**模型部署**列显示各模型的部署授权状态，通过 toggle 开关可将状态切换为**已授权**或**未授权**。
     
--   **用户（账号）控制台权限管理**：管理某个 RAM 用户是否能使用该业务空间**控制台**的功能以及能使用该业务空间控制台的哪些功能。但无法限制归属该用户的 API Key 的调用。
+-   **用户（账号）控制台权限管理**：管理某个 RAM 用户是否能使用该业务空间**控制台**的功能以及能使用该业务空间控制台的哪些功能。控制台页面权限不影响该用户通过 API Key 调用模型（API Key 的权限由所属业务空间的模型授权决定）。
     
     > 阿里云主账号无须设置，可以访问所有业务空间的所有页面。
     
     在**编辑权限**弹窗中，选择**模型**页签，在权限列表中找到并勾选**模型体验-操作**权限项。左侧导航菜单中的**模型体验**与权限列表中的**模型体验-操作**相对应。
     
 
-### **API-Key 权限**
+### **API Key 权限**
 
 单个 API Key 只能归属一个地域内的一个业务空间和一个用户，且不能转移给其他业务空间或其他用户。API Key 的可调用的功能和模型限流与**归属业务空间**的权限保持一致**，**不受**用户（账号）控制台权限管理**的影响，也无需为不同模型（如文生文、文生图、语音合成）创建不同的API Key。
 
@@ -268,9 +268,9 @@ API Key 的状态随归属用户（账号）操作的变化：
 
 **华北2（北京）**地域的 API Key 支持设置。
 
-**管理 API-Key**：可以通过百炼控制台**左侧导航栏**中的**权限管理**页签内，为 RAM 用户添加 API-Key 权限。赋予对应 RAM 用户**创建、删除、查看该空间下所有 API-Key** 的权限。
+**管理 API Key**：可以通过百炼控制台**左侧导航栏**中的**权限管理**页签内，为 RAM 用户添加 API Key 权限。赋予对应 RAM 用户**创建、删除、查看该空间下所有 API Key** 的权限。
 
-在**编辑权限**弹窗中，切换到**其他**页签，勾选**API-Key**即可。
+在**编辑权限**弹窗中，切换到**其他**页签，勾选**API Key**即可。
 
 ### **OpenAPI 接口权限**
 
@@ -280,7 +280,7 @@ RAM 用户默认无权调用百炼**应用**的数据、知识库、Prompt工程
 
 -   [AliyunBailianDataFullAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailiandatafullaccess)：可调用百炼应用 [API目录](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-dir/)下的所有API。
     
--   [AliyunBailianDataReadOnlyAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailiandatareadonlyaccess)：可调用百炼应用 [API目录](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-dir/)下的**只读类**API，例如[DescribeFile - 查询文件状态](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-describefile)、[GetIndexJobStatus - 查询知识库创建任务状态](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getindexjobstatus)等。
+-   [AliyunBailianDataReadOnlyAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailiandatareadonlyaccess)：可调用百炼应用 [API目录](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-dir/)下的**只读类**API，例如[查询文件状态](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-describefile)、[查询知识库创建任务状态](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getindexjobstatus)等。
     
 
 ### **应用于生产环境**
@@ -305,7 +305,7 @@ RAM 用户默认无权调用百炼**应用**的数据、知识库、Prompt工程
     
     -   将主账号总配额按比例分配给各业务空间，并预留一部分作为缓冲，以应对突发流量。
         
-        **示例：**账号总配额为 1000 QPM，分配方案如下：
+        **示例：**账号总配额为 1000 QPM，分配方案。
         
         -   `project-prod-workspace`: 600 QPM (60%)
             
@@ -673,9 +673,9 @@ AliyunBSSOrderAccess
         
     2.  **批量推理-操作** 权限，用于支持 [批量推理](https://help.aliyun.com/zh/model-studio/batch-inference)功能。
         
-    3.  **模型观测-操作** 权限，用于查看模型调用、评测的 Token 消耗量。
+    3.  **模型监控-操作** 权限，用于查看模型调用、评测的 Token 消耗量。
         
-3.  **若需要通过百炼的 API 调用，**需要为 RAM 用户在对应业务空间创建或分配 API Key，更多细节请参考本文的：[API-Key 权限](#f2704153a055r)。（需要超级管理员或业务空间管理员操作）
+3.  **若需要通过百炼的 API 调用，**需要为 RAM 用户在对应业务空间创建或分配 API Key，更多细节请参考本文的：[API Key 权限](#f2704153a055r)。（需要超级管理员或业务空间管理员操作）
     
 
 ### **设置控制台模型调优权限**
@@ -696,14 +696,14 @@ AliyunBSSOrderAccess
         
     6.  **数据管理-操作** 权限，用于管理调优数据集。
         
-    7.  **模型观测-操作** 权限，用于查看模型调用、评测的 Token 消耗量。
+    7.  **模型监控-操作** 权限，用于查看模型调用、评测的 Token 消耗量。
         
 
 ### **设置 API 模型调优权限**
 
 1.  若不使用**默认业务空间**，需保证业务空间为特定模型开通了[模型调优（训练）](#c180b853793v3)权限。（需要超级管理员操作）
     
-2.  为 RAM 用户在对应业务空间创建或分配 API Key，更多细节请参考本文的：[API-Key 权限](#f2704153a055r)。（需要超级管理员或业务空间管理员操作）
+2.  为 RAM 用户在对应业务空间创建或分配 API Key，更多细节请参考本文的：[API Key 权限](#f2704153a055r)。（需要超级管理员或业务空间管理员操作）
     
 
 ## **常见问题**
@@ -714,8 +714,27 @@ AliyunBSSOrderAccess
 
 ### **2\. 如何使用子业务空间调用模型？**
 
-无需特殊设置，使用子业务空间的 API-Key 即可。
+无需特殊设置，使用子业务空间的 API Key 即可。
 
 ### **3\. 如何使用特定业务空间的应用？**
 
 使用 API 管理、调用特定业务空间的应用需要同时设置 [APP ID 和 Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)。
+
+### **4\. 已配置 AliyunBailianFullAccess 但仍无法管理业务空间怎么办？**
+
+RAM 权限（如 AliyunBailianFullAccess）与百炼平台内部的业务空间级别权限是两套独立的权限体系。RAM 权限仅控制对百炼控制台的访问权限，而业务空间内的管理权限（如编辑空间、管理成员等）需要由主账号或超级管理员在百炼控制台中单独授权。
+
+如果子账号已拥有 AliyunBailianFullAccess 权限但仍提示无权限操作业务空间，请按以下步骤处理：
+
+1.  使用主账号登录百炼控制台。
+    
+2.  单击右上角设置图标，在左侧导航栏中选择**账号管理**。
+    
+3.  找到需要授权的子账号，单击**权限管理**。
+    
+4.  为该子账号添加对应业务空间的管理权限。
+    
+
+### **5\. 如何删除业务空间？**
+
+访问[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing?spm=5176.29619931.J__Z58Z6CX7MY__Ll8p1ZOR.1.7dd7521cmX1pAh&tab=model#/model-market)，在页面右上角选择目标地域，进入[业务空间管理](https://bailian.console.aliyun.com/?tab=globalset#/efm/business_management)页面，在操作列选择删除，**删除后不可恢复**。

@@ -80,7 +80,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
     
 -   C 类：qwen3.6-max-preview、DeepSeek、Kimi、GLM、MiniMax、HappyHorse
     
-    > 三方直供模型不支持抵扣，详情参见[三方直供模型支持抵扣 AI 通用型节省计划吗？](#85a29cab67489)
+    > 三方直供模型不支持抵扣，其中 DeepSeek、Kimi、GLM 已有阿里云直供版本可抵扣，MiniMax 暂无阿里云直供版本。详情参见[三方直供模型支持抵扣 AI 通用型节省计划吗？](#85a29cab67489)
     
 
 **每月承诺消费金额范围**
@@ -802,7 +802,7 @@ ASR模型按秒计费，TTS模型按字符计费，请前往[百炼控制台](ht
 -   根据[退订规则](https://help.aliyun.com/zh/user-center/cancel-subscription/)，预付费商品未发生使用的部分，可按未使用额度费用[申请退款](https://billing-cost.console.aliyun.com/refund/refund?commodityType=RESOURCE_PLANS&refundType=NOREASON_REFUND)；已使用的部分则无法退款。
     
 
-**使用限制**：资源包按模型名称严格匹配，**跨版本或子型号不通用**，请以资源包购买页标注的适用模型为准。例如，qwen-plus 资源包不支持抵扣 qwen-max 或 qwen-turbo 的调用费用；若需要同时覆盖多个模型版本的调用费用，建议选择 AI 通用型节省计划。
+**使用限制**：资源包按模型名称严格匹配，**跨版本或子型号不通用**，请以资源包购买页标注的适用模型为准。例如，qwen-plus 资源包不支持抵扣 qwen-max 的调用费用；若需要同时覆盖多个模型版本的调用费用，建议选择 AI 通用型节省计划。
 
 ### **大语言模型推理资源包**
 
@@ -812,11 +812,7 @@ ASR模型按秒计费，TTS模型按字符计费，请前往[百炼控制台](ht
 
 [大语言模型推理资源包 qwen-max](https://common-buy.aliyun.com/?commodityCode=sfm_llminference2_dp_cn#/buy)
 
-[大语言模型推理资源包 qwen-turbo](https://common-buy.aliyun.com/?commodityCode=sfm_llminference3_dp_cn#/buy)
-
 **适用地域**
-
-华北2（北京）
 
 华北2（北京）
 
@@ -828,15 +824,11 @@ qwen-plus 及 qwen-plus-latest的实时推理服务（[非思考模式](https://
 
 qwen-max的实时推理服务（[非思考模式](https://help.aliyun.com/zh/model-studio/deep-thinking)）
 
-qwen-turbo的实时推理服务（[非思考模式](https://help.aliyun.com/zh/model-studio/deep-thinking)）
-
 **包含输入和输出总Tokens**
 
 1,200万/1.1亿
 
 1,800万/3,900万/3.9亿/11.7亿/19.5亿
-
-3,500万/3.5亿/17.5亿/35亿
 
 **价格（元）**
 
@@ -844,13 +836,9 @@ qwen-turbo的实时推理服务（[非思考模式](https://help.aliyun.com/zh/m
 
 57.6/125/1250/3750/6250
 
-11.45/114.45/572.25/1144.5
-
 **有效期**
 
 自购买日起生效，有效期可选 3 个月、6 个月或 1 年。
-
-自购买之日起有效期为 1 年。
 
 自购买之日起有效期为 1 年。
 
@@ -866,7 +854,7 @@ qwen-turbo的实时推理服务（[非思考模式](https://help.aliyun.com/zh/m
             
         -   [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)、[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)、[模型调优](https://help.aliyun.com/zh/model-studio/model-training-overview)、[模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)产生的费用。
             
--   **qwen-max**、**qwen-turbo**
+-   **qwen-max**
     
     -   仅支持抵扣实时推理产生的费用（[非思考模式](https://help.aliyun.com/zh/model-studio/deep-thinking)，包含输入和输出），不支持抵扣[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)、[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)、[模型调优](https://help.aliyun.com/zh/model-studio/model-training-overview)、[模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)产生的费用。
         
@@ -895,7 +883,7 @@ qwen-turbo的实时推理服务（[非思考模式](https://help.aliyun.com/zh/m
 
 **图像编辑**：qwen-image-edit-plus
 
-**资源包容量 (生成图片张数)**
+**资源包容量（生成图片张数）**
 
 80/400
 
@@ -962,7 +950,7 @@ qwen-turbo的实时推理服务（[非思考模式](https://help.aliyun.com/zh/m
 
 ### **三方直供模型支持抵扣 AI 通用型节省计划吗？**
 
-[C 类模型](#ho1f5x10wuun0)中，阿里直供的模型支持抵扣，三方直供的模型不支持抵扣。可以在[百炼模型广场](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)中通过模型卡片右上角标识（如"阿里直供"或"三方直供"标签）判断。
+[C 类模型](#ho1f5x10wuun0)中，阿里直供的模型支持抵扣，三方直供的模型不支持抵扣。目前，DeepSeek、Kimi、GLM 有阿里云直供版本，可通过 AI 通用型节省计划抵扣；MiniMax 暂无阿里云直供版本，暂不支持通过节省计划抵扣。可以在[百炼模型广场](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)中通过模型卡片右上角标识（如"阿里直供"或"三方直供"标签）查看最新的直供模型列表。
 
 ### **购买节省计划后如何使用？**
 

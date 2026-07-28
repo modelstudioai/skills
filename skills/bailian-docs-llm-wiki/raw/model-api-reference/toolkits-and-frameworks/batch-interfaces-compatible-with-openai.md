@@ -6,7 +6,7 @@
 
 ## **工作流程**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2515653871/CAEQaxiBgIDB5qWk4BkiIDViYzQ0MWUwNTYyNDQ3NDM5NzM0ZTc4N2Y3NTU2NjA56318723_20260129171731.699.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3199194871/CAEQaxiBgIDB5qWk4BkiIDViYzQ0MWUwNTYyNDQ3NDM5NzM0ZTc4N2Y3NTU2NjA56318723_20260129171731.699.svg)
 
 ## **前提条件**
 
@@ -18,9 +18,9 @@
     
 -   **服务端点**
     
-    -   **中国内地：**`https://dashscope.aliyuncs.com/compatible-mode/v1`
+    -   **华北2（北京）：**`https://dashscope.aliyuncs.com/compatible-mode/v1`
         
-    -   **国际：**`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
+    -   **新加坡：**`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
         
 
 **重要**
@@ -39,7 +39,7 @@
         
     -   千问 Plus：qwen3.7-plus、qwen3.6-plus、qwen3.5-plus、qwen-plus、qwen-plus-latest
         
-    -   千问 Flash：qwen3.6-flash、qwen3.5-flash、qwen-flash
+    -   千问 Flash：qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.5-flash、qwen-flash
         
     -   千问 Long：qwen-long、qwen-long-latest
         
@@ -47,7 +47,7 @@
         
 -   **多模态模型**
     
-    -   [图像与视频理解](https://help.aliyun.com/zh/model-studio/vision)：qwen3.7-plus、qwen3.6-plus、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus、qwen3-vl-flash
+    -   [图像与视频理解](https://help.aliyun.com/zh/model-studio/vision)：qwen3.7-plus、qwen3.6-plus、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus、qwen3-vl-flash
         
     -   [文字提取](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr)：qwen-vl-ocr、qwen-vl-ocr-latest
         
@@ -58,7 +58,7 @@
 
 **重要**
 
--   在Batch 场景下，`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`和`qwen3.5-omni-plus`单次请求的上下文 Token 数最大支持 256K，`qwen3.5-omni-plus`不支持语音输出。
+-   在Batch 场景下，`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`和`qwen3.5-omni-plus`单次请求的上下文 Token 数最大支持 256K，`qwen3.5-omni-plus`不支持语音输出。
     
 -   部分模型支持思考模式，开启后会产生思考`tokens`导致成本增加。
     
@@ -771,9 +771,9 @@ fi
 
  JSONL 批量生成工具
 
-**请选择模式：**
+**请选择地域：**
 
-中国内地 国际
+华北2（北京） 新加坡
 
 **选择模型系列:** 文本生成模型 多模态模型 通用文本向量模型
 
@@ -785,9 +785,9 @@ fi
 
 生成
 
-**请选择模式：**
+**请选择地域：**
 
-中国内地 国际
+华北2（北京） 新加坡
 
 **选择模型系列:** 文本生成模型
 
@@ -878,7 +878,7 @@ client = OpenAI(
     # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     # 新加坡和北京地域的API Key不同。
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
     # 注意：切换地域时，API Key也需要对应更换
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
@@ -909,7 +909,7 @@ const fs = require('fs');
 // 北京地域配置（默认）
 const BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-// const BASE_URL = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1';
+// const BASE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
 // 注意：切换地域时，API Key也需要对应更换
 
 const apiKey = process.env.DASHSCOPE_API_KEY;
@@ -955,7 +955,7 @@ import java.util.regex.Matcher;
  * 
  * 地域配置：
  * - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
- * - 新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+ * - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
  * 注意：切换地域时，API Key也需要对应更换
  */
 public class BatchAPIUploadFile {
@@ -963,7 +963,7 @@ public class BatchAPIUploadFile {
     // 北京地域配置（默认）
     private static final String BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
     // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-    // private static final String BASE_URL = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1";
+    // private static final String BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1";
     // 注意：切换地域时，API Key也需要对应更换
     
     private static String API_KEY;
@@ -1035,7 +1035,7 @@ String fileId = uploadFile("test.jsonl");
 ```
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
-# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/files
+# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/files
 # === 执行时请删除该注释 ===
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -2469,7 +2469,7 @@ System.out.println(content);
 ```
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
-# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/files/file-batch_output-xxx/content
+# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/files/file-batch_output-xxx/content
 # === 执行时请删除该注释 ===
 curl -X GET https://dashscope.aliyuncs.com/compatible-mode/v1/files/file-batch_output-xxx/content \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" > result.jsonl

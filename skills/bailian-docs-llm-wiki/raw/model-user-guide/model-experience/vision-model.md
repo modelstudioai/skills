@@ -28,11 +28,11 @@ GPT-5.4、Claude Sonnet 4.6、Gemini 3 Pro
 
 GPT-5.4-mini、Gemini 3.1 Flash
 
-`qwen3.6-flash`
+`qwen3.7-flash`
 
 ## 图像与视频理解
 
-推荐从`qwen3.7-plus`开始，它是千问旗舰模型，支持1M上下文、最长2小时视频、Function Calling和内置工具等完整功能。当您的场景稳定后，可以尝试`qwen3.6-flash`来降低成本，它提供接近旗舰的效果，并支持相同的上下文长度和功能集。
+推荐从`qwen3.7-plus`开始，它是千问旗舰模型，支持1M上下文、最长2小时视频、Function Calling和内置工具等完整功能。当您的场景稳定后，可以尝试`qwen3.7-flash`来降低成本，它提供接近旗舰的效果，并支持相同的上下文长度和功能集。
 
 ### 图像分辨率
 
@@ -40,7 +40,7 @@ GPT-5.4-mini、Gemini 3.1 Flash
 
 ### 视频支持
 
--   最长2小时 / 2GB：`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
+-   最长2小时 / 2GB：`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
     
 -   最长1小时 / 2GB：`qwen3-vl-plus`、`qwen3-vl-flash`
     
@@ -53,7 +53,7 @@ GPT-5.4-mini、Gemini 3.1 Flash
 
 -   Function Calling：Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列模型均支持
     
--   内置工具（联网搜索、代码执行，无需额外配置）：仅`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
+-   内置工具（联网搜索、代码执行，无需额外配置）：仅`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
     
 
 ### 结构化输出
@@ -64,7 +64,7 @@ Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能
 
 ## OCR与文档提取
 
-`qwen3.5-ocr` 专为文档、表格、试卷和手写内容的文字提取而优化。您也可以使用`qwen3.7-plus`或`qwen3.6-flash`进行通用图片文字提取。
+`qwen3.5-ocr`专为文档、表格、试卷和手写内容的文字提取而优化。您也可以使用`qwen3.7-plus`或`qwen3.7-flash`进行通用图片文字提取。
 
 ## 推荐模型
 
@@ -108,7 +108,7 @@ Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能
 
 支持
 
-`qwen3.6-flash`
+`qwen3.7-flash`
 
 1M
 
@@ -147,8 +147,6 @@ Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能
 \--
 
 支持
-
-## 所有模型
 
 ### Qwen3.7
 
@@ -223,6 +221,46 @@ Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能
 64k
 
 2048
+
+64
+
+支持
+
+支持
+
+支持
+
+`qwen3.7-flash`
+
+文本、图像、视频
+
+文本
+
+1M
+
+64k
+
+256
+
+64
+
+支持
+
+支持
+
+支持
+
+`qwen3.7-flash-2026-07-15`
+
+文本、图像、视频
+
+文本
+
+1M
+
+64k
+
+256
 
 64
 
@@ -353,6 +391,8 @@ Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能
 支持
 
 支持
+
+## 旧版模型
 
 ### Qwen3.5
 
@@ -546,57 +586,34 @@ Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列在非思考模式下支持此功能
 
 #### Qwen3-VL
 
--   `qwen3-vl-plus`
+-   `qwen3-vl-plus`及其快照版本
     
--   `qwen3-vl-plus-2026-01-25`
-    
--   `qwen3-vl-flash`
-    
--   `qwen3-vl-flash-2026-01-25`
-    
-
-#### Qwen2.5-VL
-
--   `qwen2.5-vl-72b-instruct`
-    
--   `qwen2.5-vl-32b-instruct`
-    
--   `qwen2.5-vl-7b-instruct`
-    
--   `qwen2.5-vl-3b-instruct`
+-   `qwen3-vl-flash`及其快照版本
     
 
 #### Qwen-Omni
 
--   `qwen3-omni-flash`
-    
--   `qwen3-omni-flash-2025-10-22`
+-   `qwen3-omni-flash`及其快照版本
     
 -   `qwen-omni-turbo`及其快照版本
     
 
 #### Qwen-OCR
 
--   `qwen-vl-ocr`
+-   `qwen-vl-ocr`及其快照版本
     
 -   `qwen-vl-ocr-latest`
-    
--   `qwen-vl-ocr-2025-07-14`
     
 
 #### QVQ
 
 -   `qvq-max`
     
--   `qvq-max-2025-08-28`
-    
 -   `qvq-plus`
-    
--   `qvq-plus-2025-08-27`
     
 
 #### 旧版Qwen-VL
 
--   `qwen-vl-max`及其快照版本
+-   `qwen-vl-max`
     
--   `qwen-vl-plus`及其快照版本
+-   `qwen-vl-plus`

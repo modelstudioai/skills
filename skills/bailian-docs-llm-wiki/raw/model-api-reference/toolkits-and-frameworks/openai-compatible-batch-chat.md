@@ -19,14 +19,14 @@
 
 ### **华北2（北京）**
 
--   **文本生成模型：**qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-max、qwen-plus、qwen-flash、deepseek-v3.2
+-   **文本生成模型：**qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-max、qwen-plus、qwen-flash、deepseek-v3.2
     
--   **图像与视频理解模型：**qwen3.7-plus、qwen3.6-plus、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3.5-omni-plus、qwen3-vl-plus、qwen3-vl-flash
+-   **图像与视频理解模型：**qwen3.7-plus、qwen3.6-plus、qwen3.7-flash、qwen3.7-flash-2026-07-15、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3.5-omni-plus、qwen3-vl-plus、qwen3-vl-flash
     
 
 **重要**
 
--   在Batch 场景下，`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`和`qwen3.5-omni-plus`单次请求的上下文 Token 数最大支持 256K，`qwen3.5-omni-plus`不支持语音输出。
+-   在Batch 场景下，`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`和`qwen3.5-omni-plus`单次请求的上下文 Token 数最大支持 256K，`qwen3.5-omni-plus`不支持语音输出。
     
 -   部分模型支持思考模式，开启后会产生思考`tokens`导致成本增加。
     

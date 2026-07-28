@@ -1,12 +1,12 @@
 # memory library overview
 
-百炼记忆库（Memory Library）通过长期记忆 API 解决大模型跨会话上下文丢失的问题：自动从对话中提取关键信息并持久化存储，再在后续对话中基于语义检索召回相关记忆注入 Prompt，使智能体能够持续理解用户偏好与历史信息。该能力既可在百炼控制台可视化管理，也提供开放的 HTTP API 接入任意应用，并支持通过 OpenClaw 插件以"自动捕获 / 自动召回"的方式零侵入接入 Agent。详见 [记忆库](../../raw/application-user-guide/memory-library-overview/memory-library.md)、[长期记忆 API](../../raw/application-user-guide/memory-library-overview/long-term-memory-2-0.md) 与 [为 OpenClaw 配置长期记忆插件](../../raw/application-user-guide/memory-library-overview/modelstudio-memory-for-openclaw.md)。
+百炼记忆库（Memory Library）通过[长期记忆](../concepts/long-term-memory.md) API 解决大模型跨会话上下文丢失的问题：自动从对话中提取关键信息并持久化存储，再在后续对话中基于语义检索召回相关记忆注入 Prompt，使智能体能够持续理解用户偏好与历史信息。该能力既可在百炼控制台可视化管理，也提供开放的 HTTP API 接入任意应用，并支持通过 OpenClaw 插件以"自动捕获 / 自动召回"的方式零侵入接入 Agent。详见 [记忆库](../../raw/application-user-guide/memory-library-overview/memory-library.md)、[长期记忆 API](../../raw/application-user-guide/memory-library-overview/long-term-memory-2-0.md) 与 [为 OpenClaw 配置长期记忆插件](../../raw/application-user-guide/memory-library-overview/modelstudio-memory-for-openclaw.md)。
 
 ## 核心能力
 
 记忆库提供两类持久化记忆内容，二者可独立或组合使用：
 
-- **记忆片段**：从对话中自动提取的关键事件和信息（如"用户每天上午9点需要喝水提醒"），适用于大多数长期记忆场景。支持自动去重、动态更新，也可通过 `custom_content` 直接写入指定内容。
+- **记忆片段**：从对话中自动提取的关键事件和信息（如"用户每天上午9点需要喝水提醒"），适用于大多数[长期记忆](../concepts/long-term-memory.md)场景。支持自动去重、动态更新，也可通过 `custom_content` 直接写入指定内容。
 - **用户画像**：基于自定义画像模板从对话中提取的结构化属性（如年龄、职业、偏好等），适用于需要固定属性持久化存储的场景。属性字段及描述应清晰具体，避免"姓名/名称/名字"等同义字段并存，且不应期望一次对话就提取全部信息。
 
 > **注意**：记忆有效期在不同入口存在差异。[长期记忆 API](../../raw/application-user-guide/memory-library-overview/long-term-memory-2-0.md) 文档指出"生成的记忆片段与用户画像暂无失效日期"，而 [记忆库](../../raw/application-user-guide/memory-library-overview/memory-library.md) 控制台的默认记忆片段规则预置了"默认有效期 180 天"，并支持按规则配置 7/30/180 天或永不过期。以控制台记忆规则配置为准；通过 API 直写且不指定 `project_id` 时使用默认规则。
@@ -45,7 +45,7 @@ Python 用户可安装 `agentscope-runtime`，使用 `AddMemory`、`SearchMemory
 
 ### 方式二：OpenClaw 记忆插件
 
-OpenClaw Agent 可通过插件实现零侵入的[跨会话记忆](../concepts/cross-session-memory.md)。插件在 Gateway 内通过 `before_agent_start`（自动召回）和 `agent_end`（自动捕获）两个生命周期钩子与长期记忆 API 交互，所有读写均由百炼服务端完成提炼、向量化和语义检索。
+OpenClaw Agent 可通过插件实现零侵入的[跨会话记忆](../concepts/cross-session-memory.md)。插件在 Gateway 内通过 `before_agent_start`（自动召回）和 `agent_end`（自动捕获）两个生命周期钩子与[长期记忆](../concepts/long-term-memory.md) API 交互，所有读写均由百炼服务端完成提炼、[向量化](../concepts/embedding.md)和语义检索。
 
 ```bash
 # 安装
@@ -143,6 +143,19 @@ CLI 等效：`openclaw modelstudio-memory search|list|stats`。
 - [为 OpenClaw 配置长期记忆插件](../../raw/application-user-guide/memory-library-overview/modelstudio-memory-for-openclaw.md)
 - [记忆库](../../raw/application-user-guide/memory-library-overview/memory-library.md)
 - [长期记忆 API](../../raw/application-user-guide/memory-library-overview/long-term-memory-2-0.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

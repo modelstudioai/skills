@@ -125,6 +125,47 @@ def streaming_complete(self) -> None
 
 **说明**：通知服务端所有文本已发送完毕，阻塞当前线程直到剩余文本合成完成并返回所有音频数据。未调用此方法可能导致尾部文本无法转换为语音。
 
+### **streaming\_cancel() - 取消流式合成**
+
+**方法签名**：
+
+```
+def streaming_cancel(self, complete_timeout_millis: int = 10000) -> None
+```
+
+**参数说明**：
+
+**参数**
+
+**类型**
+
+**必填**
+
+**说明**
+
+complete\_timeout\_millis
+
+int
+
+否
+
+等待服务端返回 task-finished 事件的超时时间，单位毫秒。默认值：10000。
+
+**说明**：取消当前轮次的流式语音合成任务。调用后，SDK 会立即结束当前任务。取消后可在当前连接上继续发起新的合成任务，无需重新初始化 `SpeechSynthesizer` 实例。
+
+**重要**
+
+**版本要求**：使用该功能需要 Python SDK 版本不低于 1.26.4。
+
+**重要**
+
+**模型限制**：
+
+-   华北2（北京）地域：Qwen-Audio-TTS 系列模型的所有模型都支持该功能；CosyVoice 系列模型仅 v2 及以上版本支持该功能。
+    
+-   新加坡地域：Qwen-Audio-TTS 系列模型的所有模型都支持该功能；CosyVoice 系列模型不支持该功能。
+    
+
 ### **get\_last\_request\_id() - 获取请求ID**
 
 **方法签名**：
@@ -185,7 +226,7 @@ str
 
 语音合成所使用的音色。
 
--   **系统音色**：参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
+-   **系统音色**：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
     
 -   **复刻音色**：通过声音复刻功能定制
     
@@ -263,7 +304,7 @@ int
 ```
 synthesizer = SpeechSynthesizer(
     model="qwen-audio-3.0-tts-flash",
-    voice="longanlingxi",
+    voice="longanhuan_v3.6",
     additional_params={"bit_rate": 128000}
 )
 ```
@@ -278,7 +319,7 @@ bool
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
 
 **说明**
 
@@ -287,7 +328,7 @@ bool
 ```
 synthesizer = SpeechSynthesizer(
     model="qwen-audio-3.0-tts-flash",
-    voice="your_voice",
+    voice="longanhuan_v3.6",
     additional_params={"word_timestamp_enabled": True}
 )
 ```
@@ -334,7 +375,7 @@ list\[str\]
 
 -   zh：中文
     
--   en：英文
+-   en：英语
     
 -   fr：法语
     
@@ -354,9 +395,15 @@ list\[str\]
     
 -   vi：越南语
     
+-   es：西班牙语
+    
 -   it：意大利语
     
--   ms：马来语
+-   ms：马来西亚语
+    
+-   fil：菲律宾语
+    
+-   ar：阿拉伯语
     
 
 instruction
@@ -388,7 +435,7 @@ bool
 ```
 synthesizer = SpeechSynthesizer(
     model="qwen-audio-3.0-tts-flash",
-    voice="longanlingxi",
+    voice="longanhuan_v3.6",
     additional_params={
         "enable_aigc_tag": True,
         "aigc_propagator": "your_propagator",
@@ -447,7 +494,7 @@ qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v2、cosyvoice-v1
 ```
 synthesizer = SpeechSynthesizer(
     model="qwen-audio-3.0-tts-flash",
-    voice="your_voice", # 替换成qwen-audio-3.0-tts-flash复刻音色
+    voice="longanhuan_v3.6", # 音色
     hot_fix={
         "pronunciation": [{"天气": "tian1 qi4"}],
         "replace": [{"今天": "金天"}]
@@ -483,7 +530,7 @@ bool
 ```
 synthesizer = SpeechSynthesizer(
     model="qwen-audio-3.0-tts-flash",
-    voice="your_voice", # 替换成qwen-audio-3.0-tts-flash复刻音色
+    voice="longanhuan_v3.6", # 音色
     additional_params={"enable_markdown_filter": True}
 )
 ```
@@ -693,7 +740,7 @@ SDK提供了语音合成的关键接口，支持以下几种调用方式：
 
 ### **非流式调用**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1194204871/CAEQURiBgMDRr9T4phkiIGNmYzBiZjFkZjQ4MDQzZGU4NDIyZDU2NWJjYjkyZTQ04709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0658354871/CAEQURiBgMDRr9T4phkiIGNmYzBiZjFkZjQ4MDQzZGU4NDIyZDU2NWJjYjkyZTQ04709861_20241015153444.149.svg)
 
 单次调用发送的文本长度不得超过20000字符，超出限制将返回错误。
 
@@ -718,7 +765,7 @@ dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 # 模型
 model = "qwen-audio-3.0-tts-flash"
 # 音色
-voice = "longanlingxi"
+voice = "longanhuan_v3.6"
 
 # 实例化SpeechSynthesizer，并在构造方法中传入模型（model）、音色（voice）等请求参数
 synthesizer = SpeechSynthesizer(model=model, voice=voice)
@@ -736,7 +783,7 @@ with open('output.mp3', 'wb') as f:
 
 ### **单向流式调用**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1194204871/CAEQVRiBgIDv9fShrBkiIDhmNTk5YmQ1ZDgwNzRjZjRiN2VlMTU5YzI1ZGMwMTlm4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0658354871/CAEQVRiBgIDv9fShrBkiIDhmNTk5YmQ1ZDgwNzRjZjRiN2VlMTU5YzI1ZGMwMTlm4709861_20241015153444.149.svg)
 
 单次调用发送的文本长度不得超过20000字符，超出限制将返回错误。
 
@@ -769,7 +816,7 @@ dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 # 模型
 model = "qwen-audio-3.0-tts-flash"
 # 音色
-voice = "longanlingxi"
+voice = "longanhuan_v3.6"
 
 # 定义回调接口
 class Callback(ResultCallback):
@@ -823,7 +870,7 @@ synthesizer.call("今天天气怎么样？")
 
 ### **双向流式调用**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1194204871/CAEQVRiBgMDb7PahrBkiIDVkNjEwOTMxYjEwOTRmOWFhMmI1OTRiY2Q3ZDgzZmE54709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0658354871/CAEQVRiBgMDb7PahrBkiIDVkNjEwOTMxYjEwOTRmOWFhMmI1OTRiY2Q3ZDgzZmE54709861_20241015153444.149.svg)
 
 单次发送文本长度不得超过 20000 字符，且累计发送文本总长度不得超过 20 万字符。
 
@@ -888,7 +935,7 @@ dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 # 模型
 model = "qwen-audio-3.0-tts-flash"
 # 音色
-voice = "longanlingxi"
+voice = "longanhuan_v3.6"
 
 # 定义回调接口
 class Callback(ResultCallback):

@@ -1,6 +1,6 @@
 # 添加视觉理解能力
 
-百炼 Coding Plan 中的部分模型（qwen3.6-plus、qwen3.5-plus、kimi-k2.5）原生支持视觉理解，可直接处理图片输入。对于 glm-5、MiniMax-M2.5 等纯文本模型，可通过添加本地 Skill 使其获得视觉能力。
+百炼 Coding Plan 中的部分模型（qwen3.7-plus、qwen3.6-plus、qwen3.5-plus、kimi-k2.5）原生支持视觉理解，可直接处理图片输入。对于 glm-5、MiniMax-M2.5 等纯文本模型，可通过添加本地 Skill 使其获得视觉能力。
 
 **说明**
 
@@ -21,6 +21,8 @@
 
 **说明**
 
+-   qwen3.7-plus
+    
 -   qwen3.6-plus
     
 -   qwen3.5-plus
@@ -51,7 +53,7 @@
 
 ## 方法 1：直接使用视觉模型（推荐）
 
-qwen3.6-plus、qwen3.5-plus 和 kimi-k2.5 具备视觉理解能力。如果经常需要处理图片，直接切换到这些模型是最简单、推荐的做法。
+qwen3.7-plus、qwen3.6-plus、qwen3.5-plus 和 kimi-k2.5 具备视觉理解能力。如果经常需要处理图片，直接切换到这些模型是最简单、推荐的做法。
 
 **工具**
 
@@ -59,15 +61,15 @@ qwen3.6-plus、qwen3.5-plus 和 kimi-k2.5 具备视觉理解能力。如果经�
 
 Claude Code
 
-`/model qwen3.6-plus`或`/model qwen3.5-plus`或 `/model kimi-k2.5`
+`/model qwen3.7-plus`或`/model qwen3.6-plus`或`/model qwen3.5-plus`或 `/model kimi-k2.5`
 
 OpenCode
 
-`/models`→ 搜索并选择`qwen3.6-plus`或`qwen3.5-plus`或`kimi-k2.5`
+`/models`→ 搜索并选择`qwen3.7-plus`或`qwen3.6-plus`或`qwen3.5-plus`或`kimi-k2.5`
 
 Qwen Code
 
-`/model`→ 选择`qwen3.6-plus`或`qwen3.5-plus`或`kimi-k2.5`
+`/model`→ 选择`qwen3.7-plus`或`qwen3.6-plus`或`qwen3.5-plus`或`kimi-k2.5`
 
 更多编程工具中的模型切换方式请参考[接入客户端/开发工具](https://help.aliyun.com/zh/model-studio/use-chat-client-or-development-tool/)。切换后可直接在对话中引用图片路径，或拖拽/粘贴图片。
 
@@ -91,9 +93,9 @@ Qwen Code
     ---
     name: image-analyzer
     description: 帮助没有视觉能力的模型进行图像理解。当需要分析图像内容、提取图片中的信息、文字、界面元素，或理解截图、图表、架构图等任何视觉内容时，使用此技能，传入图片路径即可获得描述信息。
-    model: qwen3.6-plus
+    model: qwen3.7-plus
     ---
-    qwen3.6-plus具有视觉理解能力，请直接使用qwen3.6-plus模型进行图片理解。
+    qwen3.7-plus具有视觉理解能力，请直接使用qwen3.7-plus模型进行图片理解。
     ```
     
     创建完成后的目录结构如下：
@@ -111,7 +113,7 @@ Qwen Code
         
     2.  下载[aliyun.png](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260225/hxwnny/aliyun.png)到项目目录下，并提问：`请加载image-analyzer skill，描述一下 aliyun.png banner位置是什么信息。`可收到如下回复：
         
-        ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5928202771/p1054884.png)
+        aliyun.png 为阿里云官网首页截图，banner 区域标题为 **Coding Plan 已支持 Qwen3.5**，正文介绍阿里云百炼支持 Qwen3.5、Kimi-k2.5、GLM-4.7 等模型，新客首月仅 7.9 元，页面提供**立即订阅**和**在线咨询**入口。
         
 
 ### OpenCode
@@ -128,13 +130,13 @@ Qwen Code
     
     **说明**
     
-    model 字段必须使用 OpenCode 配置文件中定义的 provider 和模型名称。参考 [OpenCode](https://help.aliyun.com/zh/model-studio/opencode) 文档的配置示例，应为`bailian-coding-plan/qwen3.6-plus`。
+    model 字段必须使用 OpenCode 配置文件中定义的 provider 和模型名称。参考 [OpenCode](https://help.aliyun.com/zh/model-studio/opencode) 文档的配置示例，应为`bailian-coding-plan/qwen3.7-plus`。
     
     ```
     ---
     description: Analyzes images using a vision-capable model. Use this agent when the user needs to understand image content, extract information from screenshots, diagrams, UI mockups, or any visual content. Invoke with @image-analyzer followed by the image path and your question.
     mode: subagent
-    model: bailian-coding-plan/qwen3.6-plus
+    model: bailian-coding-plan/qwen3.7-plus
     tools:
       write: false
       edit: false
@@ -156,7 +158,18 @@ Qwen Code
         
     2.  下载[aliyun.png](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260225/hxwnny/aliyun.png)到项目目录下，通过`@`唤起`image-analyzer`并提问：`@image-analyzer，描述一下 aliyun.png banner位置是什么信息。`可收到如下回复：
         
-        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6472262771/p1055847.png)
+        ```
+        Banner位置包含：
+        左侧：
+        - 汉堡菜单图标
+        - 阿里云橙色logo和"阿里云"文字
+        - 导航菜单：大模型、产品、解决方案、权益、定价、云市场、伙伴、服务、了解阿里云
+        右侧：
+        - 搜索框(显示"大模型")
+        - 图标：蓝色圆圈、地球、耳机
+        - 链接：文档、备案、控制台
+        Build · glm-5 · 37.0s
+        ```
         
 
 ## **常见问题**
@@ -181,6 +194,24 @@ Qwen Code
         "apiKey": "sk-sp-xxx"
       },
       "models": {
+        "qwen3.7-plus": {
+          "name": "Qwen3.7 Plus",
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "options": {
+            "thinking": {
+              "type": "enabled",
+              "budgetTokens": 1024
+            }
+          }
+        },
         "qwen3.6-plus": {
           "name": "Qwen3.6 Plus",
           "modalities": {
@@ -260,6 +291,15 @@ Qwen Code
             "api": "openai-completions",
             "models": [
               {
+                "id": "qwen3.7-plus",
+                "name": "qwen3.7-plus",
+                "reasoning": false,
+                "input": ["text", "image"],
+                "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+                "contextWindow": 1000000,
+                "maxTokens": 65536
+              },
+              {
                 "id": "qwen3.6-plus",
                 "name": "qwen3.6-plus",
                 "reasoning": false,
@@ -296,6 +336,7 @@ Qwen Code
             "primary": "bailian/qwen3.6-plus"
           },
           "models": {
+            "bailian/qwen3.7-plus": {},
             "bailian/qwen3.6-plus": {},
             "bailian/qwen3.5-plus": {},
             "bailian/kimi-k2.5": {}

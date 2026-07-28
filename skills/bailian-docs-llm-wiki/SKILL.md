@@ -149,21 +149,20 @@ description: >-
 | 模型家族总览 / 按能力分桶浏览         | `models/index.md`                                        |
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
 | OpenAI 兼容接口 | `wiki/concepts/openai-compatible-interface.md` |
-| API Key 鉴权 | `wiki/concepts/api-key.md` |
-| 函数调用（Function Calling） | `wiki/concepts/function-calling.md` |
+| 异步调用 | `wiki/concepts/async-invocation.md` |
+| 流式输出 | `wiki/concepts/streaming.md` |
 | 检索增强生成（RAG） | `wiki/concepts/rag.md` |
-| 异步调用与任务轮询 | `wiki/concepts/async-invocation.md` |
-| Token 与计费 | `wiki/concepts/token-and-billing.md` |
-| 流式输出 | `wiki/concepts/streaming-output.md` |
-| 业务空间（Workspace） | `wiki/concepts/workspace.md` |
-| 模型调优与部署 | `wiki/concepts/fine-tuning-and-deployment.md` |
-| MCP 与工具扩展 | `wiki/concepts/mcp-and-tools.md` |
-| 模型微调、压缩与部署对比 | `wiki/comparisons/fine-tuning-vs-compression-vs-deployment.md` |
-| 模型评估与模型监控对比 | `wiki/comparisons/model-evaluation-vs-monitoring.md` |
-| 图像、视频与 3D 生成对比 | `wiki/comparisons/image-vs-video-vs-3d-generation.md` |
-| 应用评估与应用监控对比 | `wiki/comparisons/app-evaluation-vs-monitoring.md` |
-| 知识库与记忆库对比 | `wiki/comparisons/knowledge-base-vs-memory-library.md` |
-| 托管智能体：指南与 API 对比 | `wiki/comparisons/managed-agents-guide-vs-api.md` |
+| API Key 鉴权 | `wiki/concepts/api-key.md` |
+| 业务空间 | `wiki/concepts/workspace.md` |
+| Token 计费 | `wiki/concepts/token-billing.md` |
+| 多模态 | `wiki/concepts/multimodal.md` |
+| 限流 | `wiki/concepts/rate-limit.md` |
+| 地域与接入点 | `wiki/concepts/region.md` |
+| 图像、视频与3D生成对比 | `wiki/comparisons/multimodal-generation-comparison.md` |
+| 模型微调、压缩与高速推理对比 | `wiki/comparisons/model-optimization-comparison.md` |
+| 知识库与记忆体系对比 | `wiki/comparisons/knowledge-vs-memory-comparison.md` |
+| 模型评测与应用评测对比 | `wiki/comparisons/model-vs-application-evaluation.md` |
+| 模型监控与应用监控对比 | `wiki/comparisons/model-vs-application-monitoring.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 

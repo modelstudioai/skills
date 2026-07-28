@@ -1,6 +1,6 @@
 # Codex
 
-Codex 是 OpenAI 推出的终端 AI 编程助手。可通过 Token Plan 团队版、Coding Plan 或按量计费接入阿里云百炼。
+Codex 是 OpenAI 推出的终端 AI 编程助手。可通过 Token Plan 个人版、Token Plan 团队版、Coding Plan 或按量计费接入阿里云百炼。
 
 ## **安装 Codex**
 
@@ -21,19 +21,199 @@ Codex 是 OpenAI 推出的终端 AI 编程助手。可通过 Token Plan 团队�
 
 ## **配置接入凭证**
 
-接入需要编辑配置文件`~/.codex/config.toml`并配置环境变量`OPENAI_API_KEY`。根据所选计费方案替换对应值，阿里云百炼提供三种计费方案：
+接入需要编辑配置文件`~/.codex/config.toml`并配置环境变量`OPENAI_API_KEY`。根据所选计费方案替换对应值，阿里云百炼提供以下计费方案：
+
+### 配置模型元数据
+
+使用自定义模型（如 qwen3.8-max-preview）时，需要配置模型元数据文件，使 Codex 正确识别模型的上下文窗口、推理深度等参数。
+
+1.  新建文件 `~/.codex/model-catalog.local.json`，写入以下内容：
+    
+    ```
+    {
+      "models": [
+        {
+          "slug": "qwen3.8-max-preview",
+          "display_name": "qwen3.8-max-preview",
+          "description": "DashScope model: qwen3.8-max-preview",
+          "default_reasoning_level": "xhigh",
+          "supported_reasoning_levels": [
+            {
+              "effort": "low",
+              "description": "Fast responses with lighter reasoning"
+            },
+            {
+              "effort": "medium",
+              "description": "Greater reasoning depth for complex problems"
+            },
+            {
+              "effort": "xhigh",
+              "description": "Extra high reasoning depth for complex problems"
+            }
+          ],
+          "context_window": 983616,
+          "effective_context_window_percent": 95,
+          "supports_parallel_tool_calls": false,
+          "supports_image_detail_original": true,
+          "input_modalities": ["text", "image"],
+          "shell_type": "default",
+          "visibility": "list",
+          "supported_in_api": true,
+          "priority": 1,
+          "base_instructions": "",
+          "support_verbosity": false,
+          "supports_reasoning_summaries": false,
+          "experimental_supported_tools": [],
+          "truncation_policy": {
+            "mode": "bytes",
+            "limit": 10000
+          }
+        }
+      ]
+    }
+    ```
+    
+2.  在 `~/.codex/config.toml` 中添加以下配置，指向元数据文件：
+    
+    ```
+    model_catalog_json = "~/.codex/model-catalog.local.json"
+    ```
+    
+
+### Token Plan 个人版
+
+`model`请选择[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)，可用模型包括 qwen3.8-max-preview、qwen3.7-max、qwen3.7-plus、qwen3.6-flash、glm-5.2、deepseek-v4-pro。将`OPENAI_API_KEY`环境变量设置为 Token Plan 个人版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/overview)。
+
+#### Responses API（qwen3.8-max-preview、qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash）
+
+qwen3.8-max-preview、qwen3.7-max、qwen3.7-plus、qwen3.6-plus 和 qwen3.6-flash 支持 Responses API，可使用最新版 Codex。
+
+```
+model_provider = "Model_Studio_Token_Plan_Personal"
+model = "qwen3.8-max-preview"
+[model_providers.Model_Studio_Token_Plan_Personal]
+name = "Model_Studio_Token_Plan_Personal"
+base_url = "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
+env_key = "OPENAI_API_KEY"
+wire_api = "responses"
+```
+
+#### Chat/Completions API（其他模型）
+
+其他模型需通过 Chat/Completions API 接入，需安装旧版本 Codex，如 0.80.0：
+
+```
+npm install -g @openai/codex@0.80.0
+```
+```
+model_provider = "Model_Studio_Token_Plan_Personal"
+model = "glm-5"
+[model_providers.Model_Studio_Token_Plan_Personal]
+name = "Model_Studio_Token_Plan_Personal"
+base_url = "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
+env_key = "OPENAI_API_KEY"
+wire_api = "chat"
+```
+
+#### 配置环境变量
+
+将`OPENAI_API_KEY`环境变量设置为 Token Plan 个人版专属 API Key。
+
+## macOS
+
+1.  在终端中执行以下命令，查看默认 Shell 类型。
+    
+    ```
+    echo $SHELL
+    ```
+    
+2.  根据 Shell 类型设置环境变量：
+    
+    ## Zsh
+    
+    ```
+    # 将 YOUR_API_KEY 替换为 Token Plan 个人版 API Key
+    echo 'export OPENAI_API_KEY="YOUR_API_KEY"' >> ~/.zshrc
+    ```
+    
+    ## Bash
+    
+    ```
+    # 将 YOUR_API_KEY 替换为 Token Plan 个人版 API Key
+    echo 'export OPENAI_API_KEY="YOUR_API_KEY"' >> ~/.bash_profile
+    ```
+    
+3.  执行以下命令使环境变量生效。
+    
+    ## Zsh
+    
+    ```
+    source ~/.zshrc
+    ```
+    
+    ## Bash
+    
+    ```
+    source ~/.bash_profile
+    ```
+    
+
+## Windows
+
+## CMD
+
+1.  在 CMD 中运行以下命令，设置环境变量。
+    
+    ```
+    REM 将 YOUR_API_KEY 替换为 Token Plan 个人版 API Key
+    setx OPENAI_API_KEY "YOUR_API_KEY"
+    ```
+    
+2.  打开一个新的 CMD 窗口，运行以下命令检查环境变量是否生效。
+    
+    ```
+    echo %OPENAI_API_KEY%
+    ```
+    
+
+## PowerShell
+
+1.  在 PowerShell 中运行以下命令，设置环境变量。
+    
+    ```
+    # 将 YOUR_API_KEY 替换为 Token Plan 个人版 API Key
+    [Environment]::SetEnvironmentVariable("OPENAI_API_KEY", "YOUR_API_KEY", [EnvironmentVariableTarget]::User)
+    ```
+    
+2.  打开一个新的 PowerShell 窗口，运行以下命令检查环境变量是否生效。
+    
+    ```
+    echo $env:OPENAI_API_KEY
+    ```
+    
+
+**重要**
+
+**qwen3.8-max-preview 思考模式说明**：
+
+-   thinking：始终开启，不支持关闭。
+    
+-   temperature：思考模式下默认值为 0.6；传入值小于 0.6 时自动调整为 0.6。
+    
+-   reasoning\_effort：控制推理深度，可选 xhigh、medium、low，默认 xhigh。
+    
 
 ### Token Plan 团队版
 
 `model`请选择[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)。将`OPENAI_API_KEY`环境变量设置为 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)。
 
-#### Responses API（qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash）
+#### Responses API（qwen3.8-max-preview、qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash）
 
-qwen3.7-max、qwen3.7-plus、qwen3.6-plus 和 qwen3.6-flash 支持 Responses API，可使用最新版 Codex。
+qwen3.8-max-preview、qwen3.7-max、qwen3.7-plus、qwen3.6-plus 和 qwen3.6-flash 支持 Responses API，可使用最新版 Codex。
 
 ```
 model_provider = "Model_Studio_Token_Plan"
-model = "qwen3.7-max"
+model = "qwen3.8-max-preview"
 [model_providers.Model_Studio_Token_Plan]
 name = "Model_Studio_Token_Plan"
 base_url = "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
@@ -133,6 +313,17 @@ wire_api = "chat"
     ```
     echo $env:OPENAI_API_KEY
     ```
+    
+
+**重要**
+
+**qwen3.8-max-preview 思考模式说明**：
+
+-   thinking：始终开启，不支持关闭。
+    
+-   temperature：思考模式下默认值为 0.6；传入值小于 0.6 时自动调整为 0.6。
+    
+-   reasoning\_effort：控制推理深度，可选 xhigh、medium、low，默认 xhigh。
     
 
 ### Coding Plan
@@ -237,11 +428,11 @@ wire_api = "chat"
 
 将`OPENAI_API_KEY`环境变量设置为[百炼 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。可用模型参见[支持的模型](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#7f9c78ae99pwz)。
 
-根据地域设置`base_url`，API Key 须与所选地域对应：
+根据地域设置`base_url`，API Key 须与所选地域对应，请将 URL 中的 `{WorkspaceId}` 替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)：
 
--   华北2（北京）：`https://dashscope.aliyuncs.com/compatible-mode/v1`
+-   华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
     
--   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`，请将`WorkspaceId`替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)
+-   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
     
 
 按量计费支持 Responses API 和 Chat/Completions API 两种接入方式，请根据使用的模型选择：
@@ -255,7 +446,7 @@ model_provider = "Model_Studio"
 model = "qwen3.7-max"
 [model_providers.Model_Studio]
 name = "Model_Studio"
-base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+base_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 env_key = "OPENAI_API_KEY"
 wire_api = "responses"
 ```
@@ -272,7 +463,7 @@ model_provider = "Model_Studio"
 model = "qwen3.6-plus"
 [model_providers.Model_Studio]
 name = "Model_Studio"
-base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+base_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
 env_key = "OPENAI_API_KEY"
 wire_api = "chat"
 ```
@@ -368,11 +559,11 @@ codex
 
 ### **第三方工具提示“不支持国内模型”或“检查被拒 / Bad request (400)”怎么办？**
 
-**原因**：部分第三方管理工具（如 CC-Switch）在切换供应商时会发起“健康检查/连接测试”探测请求，该探测请求的格式与 Codex 实际调用的请求格式不同，百炼网关可能因此返回 400 Bad request 并提示“检查被拒”，工具据此显示“不支持国内模型”。此提示仅代表健康检查探测未通过，**并不代表百炼不支持国内模型，也不影响 Codex 的实际使用。**
+**原因**：部分第三方管理工具（如 CC-Switch）在切换供应商时会发起“健康检查/连接测试”探测请求，该探测请求的格式与 Codex 实际调用的请求格式不同，百炼网关可能因此返回 400 Bad request 并提示“检查被拒”，工具据此显示“不支持国内模型”。此提示仅代表健康检查探测未通过，**并不代表百炼不支持中国内地模型，也不影响 Codex 的实际使用。**
 
-**说明**：百炼支持通过 Codex 使用 qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash、glm-5 等国内模型，配置方式详见上文[配置接入凭证](#cdx-config)。
+**说明**：百炼支持通过 Codex 使用 qwen3.7-max、qwen3.7-plus、qwen3.6-plus、qwen3.6-flash、glm-5 等中国内地模型，配置方式详见上文[配置接入凭证](#cdx-config)。
 
-**解决方案**：建议参照上文配置接入凭证，直接在`~/.codex/config.toml`中完成配置，无需依赖第三方工具的健康检查结果；配置完成后参照[验证配置](#cdx-verify)启动 Codex，若能正常进入对话界面即表示可正常使用国内模型。
+**解决方案**：建议参照上文配置接入凭证，直接在`~/.codex/config.toml`中完成配置，无需依赖第三方工具的健康检查结果；配置完成后参照[验证配置](#cdx-verify)启动 Codex，若能正常进入对话界面即表示可正常使用中国内地模型。
 
 ### **报错 wire\_api 配置问题怎么办？**
 
@@ -394,7 +585,7 @@ codex
 
 **原因**：
 
--   误用了其他方案的 API Key（Token Plan 团队版、Coding Plan 和按量计费的 API Key 互不相通）
+-   误用了其他方案的 API Key（Token Plan 个人版、Token Plan 团队版、Coding Plan 和按量计费的 API Key 互不相通）
     
 -   订阅过期
     

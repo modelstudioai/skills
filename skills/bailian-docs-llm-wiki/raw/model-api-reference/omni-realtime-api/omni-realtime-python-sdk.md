@@ -95,7 +95,7 @@ str
 
 默认音色：
 
--   `Qwen3.5-Omni-Realtime`: `"Tina"`
+-   `Qwen3.5-Omni-Realtime`系列模型: `"Tina"`
     
 -   `Qwen3-Omni-Flash-Realtime`: `"Cherry"`
     
@@ -157,7 +157,7 @@ VAD类型，取值如下：
 
 -   `server_vad`（默认值）：基于声学特征检测用户语音结束。
     
--   `semantic_vad`：基于语义有效性检测用户语音结束，可过滤无意义语音（如回应语、背景音）。仅`Qwen3.5-Omni-Realtime`模型支持。
+-   `semantic_vad`：基于语义有效性检测用户语音结束，可过滤无意义语音（如回应语、背景音）。仅`Qwen3.5-Omni-Realtime`系列模型支持。
     
 
 turn\_detection\_threshold
@@ -191,7 +191,7 @@ enable\_search
 
 bool
 
-**仅在使用 Qwen3.5-Omni-Realtime 模型时生效。**
+**仅在使用 Qwen3.5-Omni-Realtime 系列模型时生效。**
 
 是否启用联网搜索功能。设置为 `true` 启用，默认为 `false`。启用后，模型可自主判断是否需要搜索来回应用户的即时问题。
 
@@ -209,7 +209,7 @@ tools
 
 list\[dict\]
 
-**仅在使用 Qwen3.5-Omni-Realtime 模型时生效。**
+**仅在使用 Qwen3.5-Omni-Realtime 系列模型时生效。**
 
 工具定义列表。启用后，模型可自主判断是否需要调用外部工具来回应用户的问题。命中工具调用时，模型不生成音频，仅返回工具调用参数。
 
@@ -244,7 +244,7 @@ temperature越高，生成的内容更多样，反之，生成的内容更确定
 
 由于temperature与top\_p均可以控制生成内容的多样性，因此建议只设置其中一个值。
 
--   `Qwen3.5-Omni-Realtime`系列：0.7
+-   `Qwen3.5-Omni-Realtime`系列模型：0.7
     
 -   `Qwen3-Omni-Flash-Realtime`系列：0.9
     
@@ -267,7 +267,7 @@ top\_p越高，生成的内容更多样。反之，生成的内容更确定。
 
 top\_p默认值：
 
--   `Qwen3.5-Omni-Realtime`系列：0.8
+-   `Qwen3.5-Omni-Realtime`系列模型：0.8
     
 -   `Qwen3-Omni-Flash-Realtime`系列：1.0
     
@@ -286,7 +286,7 @@ integer
 
 top\_k默认值：
 
--   `Qwen3.5-Omni-Realtime`系列：20
+-   `Qwen3.5-Omni-Realtime`系列模型：20
     
 -   `Qwen3-Omni-Flash-Realtime`系列：50
     
@@ -317,7 +317,7 @@ float
 
 repetition\_penalty默认值：
 
--   `Qwen3.5-Omni-Realtime`系列：1.0
+-   `Qwen3.5-Omni-Realtime`系列模型：1.0
     
 -   其他模型：1.05
     
@@ -334,7 +334,7 @@ float
 
 presence\_penalty默认值：
 
--   `Qwen3.5-Omni-Realtime`系列：1.5
+-   `Qwen3.5-Omni-Realtime`系列模型：1.5
     
 -   其他模型：0.0
     

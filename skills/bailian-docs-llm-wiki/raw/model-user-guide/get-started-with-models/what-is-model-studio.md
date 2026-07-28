@@ -223,7 +223,7 @@ A：百炼采用按量付费，本身**没有"自动扣费"开关**。以下措�
     
 -   **清理计费资源：**删除不再使用的知识库；前往[模型部署](https://bailian.console.aliyun.com/?tab=model#/efm/model_deploy)页面，下线按算力时长计费的部署实例。
     
--   **开启"**[免费额度用完即停](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)**"（仅限新用户且在免费额度有效期内）：**在模型详情页开启此开关，免费额度耗尽后服务自动停止，不会转为付费。仅适用于华北2（北京）地域（[中国内地服务部署范围](https://help.aliyun.com/zh/model-studio/regions/#080da663a75xh)），且须在免费额度有效期内。
+-   **开启"**[免费额度用完即停](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)**"（仅限新用户且在免费额度有效期内）：**在模型详情页开启此开关，免费额度耗尽后服务自动停止，不会转为付费。仅适用于华北2（北京）地域，且须在免费额度有效期内。
     
 -   **设置费用监控和预警：**查看 [账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)和[模型监控](https://bailian.console.aliyun.com/?tab=model#/model-telemetry)，并设置[高额消费预警](https://usercenter2.aliyun.com/home/alarm-threshold)，及时发现异常消费。
     

@@ -565,6 +565,10 @@ Body
 
 ###### 文本生成
 
+**说明**
+
+Qwen3.7-Plus-2026-05-26 调优后部署请联系商务经理。
+
 **模型服务**
 
 **模型代码**
@@ -1602,6 +1606,10 @@ FAILED
 
 导出的参数快照保存在云存储中，暂不支持访问或下载。
 
+**说明**
+
+URL 中的 `<checkpoint_id>` 取值来自上一步查询快照列表接口返回的 `checkpoint` 字段（如 `checkpoint-20`），而非 `full_name` 或其他含 job\_id 前缀的字段值。
+
 ```
 curl --request GET 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<job_id>/export/<checkpoint_id>?model_name=<model_name>' \
 --header 'Authorization: Bearer '${DASHSCOPE_API_KEY} \
@@ -1638,7 +1646,7 @@ Path Parameter
 
 是
 
-要发布的 Checkpoint ID。
+要发布的 Checkpoint ID。取值为查询快照列表接口返回的 `checkpoint` 字段值（如 `checkpoint-20`），不含 job\_id 前缀。
 
 model\_name
 

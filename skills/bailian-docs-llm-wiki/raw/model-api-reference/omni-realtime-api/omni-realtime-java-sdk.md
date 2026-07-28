@@ -176,7 +176,7 @@ VAD类型，取值如下：
 
 -   `server_vad`（默认值）：基于声学特征检测用户语音结束。
     
--   `semantic_vad`：基于语义有效性检测用户语音结束，可过滤无意义语音（如回应语、背景音）。仅`qwen3.5-omni-realtime`模型支持。
+-   `semantic_vad`：基于语义有效性检测用户语音结束，可过滤无意义语音（如回应语、背景音）。仅`qwen3.5-omni-realtime`系列模型支持。
     
 
 turnDetectionThreshold
@@ -210,7 +210,7 @@ enable\_search
 
 Boolean
 
-**仅在使用 Qwen3.5-Omni-Realtime 模型时生效。**
+**仅在使用 Qwen3.5-Omni-Realtime 系列模型时生效。**
 
 是否启用联网搜索功能。设置为 `true` 启用，默认为 `false`。启用后，模型可自主判断是否需要搜索来回应用户的即时问题。
 
@@ -230,7 +230,7 @@ tools
 
 List<Map<String, Object>>
 
-**仅在使用 Qwen3.5-Omni-Realtime 模型时生效。**
+**仅在使用 Qwen3.5-Omni-Realtime 系列模型时生效。**
 
 工具定义列表。启用后，模型可自主判断是否需要调用外部工具来回应用户的问题。命中工具调用时，模型不生成音频，仅返回工具调用参数。
 

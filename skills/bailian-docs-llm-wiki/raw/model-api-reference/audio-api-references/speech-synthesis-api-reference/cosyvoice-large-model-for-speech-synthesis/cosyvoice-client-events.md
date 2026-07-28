@@ -91,7 +91,7 @@
 
 语音合成所使用的音色。
 
--   **系统音色**：参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
+-   **系统音色**：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
     
 -   **复刻音色**：通过声音复刻功能定制
     
@@ -173,7 +173,7 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
 
 **seed** `_integer_` （可选）
 
@@ -209,7 +209,7 @@ cosyvoice-v1不支持该参数。
 
 -   zh：中文
     
--   en：英文
+-   en：英语
     
 -   fr：法语
     
@@ -229,9 +229,15 @@ cosyvoice-v1不支持该参数。
     
 -   vi：越南语
     
+-   es：西班牙语
+    
 -   it：意大利语
     
--   ms：马来语
+-   ms：马来西亚语
+    
+-   fil：菲律宾语
+    
+-   ar：阿拉伯语
     
 
 **instruction** `_string_` （可选）
@@ -365,7 +371,7 @@ qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v2、cosyvoice-v1
 
 ## **finish-task**
 
-**说明**：通知服务端文本发送完毕，请求结束任务。
+**说明**：通知服务端文本发送完毕，请求结束任务。如需取消当前轮次的语音合成任务，可在 `input` 中设置 `directive` 为 `cancel`。
 
 **发送时机**：所有文本发送完毕后立即发送。
 
@@ -400,10 +406,41 @@ qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v2、cosyvoice-v1
 }
 ```
 
+**取消任务示例**：
+
+```
+{
+    "header": {
+        "action": "finish-task",
+        "task_id": "2bf83b9a-baeb-4fda-8d9a-xxxxxxxxxxxx",
+        "streaming": "duplex"
+    },
+    "payload": {
+        "input": {
+            "directive": "cancel"
+        }
+    }
+}
+```
+
 **payload** `_object_` **（必选）**
 
 **属性**
 
 **input** `_object_` **（必选）**
 
-固定为 `{}`。
+任务输入。为空对象 `{}` 时表示正常结束任务；包含 `directive` 时可用于取消当前轮次的语音合成任务。
+
+**directive** `_string_` （可选）
+
+控制任务结束行为。当前仅支持取值为 `cancel`，表示取消当前轮次的语音合成任务，服务端会立即返回 `task-finished` 事件，且不会输出后续音频。
+
+取消后，可在当前 WebSocket 连接上重新发起语音合成任务（发送新的 `run-task` 事件），无需重新建立连接。
+
+**重要**
+
+**模型限制**：
+
+-   华北2（北京）地域：Qwen-Audio-TTS 系列模型的所有模型都支持该功能；CosyVoice 系列模型仅 v2 及以上版本支持该功能。
+    
+-   新加坡地域：Qwen-Audio-TTS 系列模型的所有模型都支持该功能；CosyVoice 系列模型不支持该功能。

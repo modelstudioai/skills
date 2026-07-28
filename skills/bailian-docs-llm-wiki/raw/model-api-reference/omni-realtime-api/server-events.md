@@ -162,7 +162,7 @@ VAD检测阈值。
 
 **enable\_search** `_boolean_`
 
-是否启用联网搜索功能。仅 Qwen3.5-Omni-Realtime 模型支持。
+是否启用联网搜索功能。仅 Qwen3.5-Omni-Realtime 系列模型支持。
 
 **search\_options** `_object_`
 
@@ -308,7 +308,7 @@ VAD检测阈值。
 
 **enable\_search** `_boolean_`（可选）
 
-是否启用联网搜索功能。仅 Qwen3.5-Omni-Realtime 模型支持。
+是否启用联网搜索功能。仅 Qwen3.5-Omni-Realtime 系列模型支持。
 
 **search\_options** `_object_`（可选）
 

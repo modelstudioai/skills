@@ -59,9 +59,9 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=180
 
 **删除前注意事项**：删除 SLR 会导致对应功能不可用，须先清理依赖资源。例如删除 `AliyunServiceRoleForSFMAccessFC` 前须先删除所有已发布[工作流](../concepts/workflow.md)应用和流程中的函数计算节点并重新发布；删除 `AliyunServiceRoleForAccessOSS` 前须在安全存储空间中断开所有 OSS 连接；删除 `AliyunServiceRoleForSFMDataHubOSSImport` 前须确保没有进行中的 OSS 数据导入任务。具体删除步骤参见 [服务关联角色](https://help.aliyun.com/zh/ram/user-guide/service-linked-roles)。
 
-## 知识库 SearchFilters
+## [知识库](../concepts/[knowledge](knowledge.md)-base.md) SearchFilters
 
-在调用知识库 [Retrieve](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve) 接口时，若返回结果包含较多与 Query 无关的干扰信息（尤其适合结构化数据场景），可在请求体中传入 `searchFilters` 对语义检索结果做进一步过滤。
+在调用[知识库](../concepts/[knowledge](knowledge.md)-base.md) [Retrieve](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve) 接口时，若返回结果包含较多与 Query 无关的干扰信息（尤其适合结构化数据场景），可在请求体中传入 `searchFilters` 对语义检索结果做进一步过滤。
 
 **效果对比**：未传入 `searchFilters` 时，Retrieve 可能返回多条低相关切片（如查询「张三」却返回李四、王五）；传入后可仅保留命中过滤条件的切片。
 
@@ -85,7 +85,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=180
 | 范围查询-等值 | 数值、字符串 | 支持 `eq`（等于）、`neq`（不等于）；一个字段不可配多个值 |
 | 范围查询-区间 | 数值（long/double） | 支持 `gt`/`gte`/`lt`/`lte` |
 | 模糊查询 | 字符串 | 支持 `like` 属性，`%` 匹配任意字符（含零个） |
-| 标签（Tag）查询 | 仅文档搜索、音视频搜索类知识库 | `tags` 字段，多个标签之间为 OR 关系 |
+| 标签（Tag）查询 | 仅文档搜索、音视频搜索类[知识库](../concepts/[knowledge](knowledge.md)-base.md) | `tags` 字段，多个标签之间为 OR 关系 |
 
 **前置条件**：子账号需获取 `AliyunBailianDataFullAccess` 策略并加入[业务空间](../concepts/workspace.md)（主账号可操作所有[业务空间](../concepts/workspace.md)），获取[业务空间](../concepts/workspace.md) ID，安装百炼 SDK（2023-12-29 版本）并配置 `ALIBABA_CLOUD_ACCESS_KEY_ID` / `ALIBABA_CLOUD_ACCESS_KEY_SECRET` 环境变量。
 
@@ -113,6 +113,19 @@ resp = client.retrieve('请传入实际的业务空间ID', retrieve_request)
 - [生成临时API Key](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md)
 - [服务关联角色](../../raw/application-api-reference/more/bailian-service-linked-role.md)
 - [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

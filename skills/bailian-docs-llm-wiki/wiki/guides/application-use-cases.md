@@ -38,7 +38,7 @@
 百炼应用侧：
 
 - Prompt：可设置角色人设引导回答，如“你叫小助，可以帮助用户解答产品选购、使用等方面的问题。”
-- 知识库调用方式：可选**必定调用**；知识文档支持配置相似度阈值与权重。
+- [知识库](../concepts/[knowledge](../api/knowledge.md)-base.md)调用方式：可选**必定调用**；知识文档支持配置相似度阈值与权重。
 - 文件处理：可选全文引用、切片检索或自定义处理。
 - 向量存储：标准版默认即可；如需集中管理多应用向量数据可选 ADB-PG。
 
@@ -47,7 +47,7 @@
 - 模型参数：模型选择、温度（越高随机性越高）、最大回复长度、携带上下文轮数（设为 1 时不参考历史）。
 - RAG 参数：召回片段数（越大参考越多但噪声可能增加）、相似度阈值（越大参考越少但噪声减少，为 0 不剔除）。
 - 嵌入模型：默认用百炼 embedding API；可改用本地部署的 GTE 文本向量模型（如 `iic/nlp_gte_sentence-embedding_chinese-large`）。
-- 文件限制：受 embedding API 限流，不建议传入超过 100 MB 的文件。
+- 文件限制：受 embedding API [限流](../concepts/rate-limit.md)，不建议传入超过 100 MB 的文件。
 
 AppFlow 连接流：
 
@@ -61,7 +61,7 @@ AppFlow 连接流：
 
 企业微信 / 公众号 / 钉钉：发布连接流后，在目标平台配置 API 接收消息（URL 填 WebhookUrl，[Token](../concepts/token.md) / EncodingAESKey 填 AppFlow 凭证生成的值），配置可信 IP，即在聊天中 @机器人 或直接对话使用。
 
-本地 RAG：解压 `local_rag.zip`，Python 3.8–3.12 环境安装依赖，配置百炼 [API Key](../concepts/api-key.md) 环境变量，运行 `uvicorn main:app --port 7866`，访问 `http://127.0.0.1:7866`。支持临时性文件上传（对话框直接传 pdf/docx/txt/xlsx/csv，刷新后失效）与长期知识库创建（上传到 File/Unstructured 或 File/Structured 后在界面创建知识库存于 VectorStore）。通过 Gradio 界面下方的“通过 API 使用”可获取 API 文档集成到业务。
+本地 RAG：解压 `local_rag.zip`，Python 3.8–3.12 环境安装依赖，配置百炼 [API Key](../concepts/api-key.md) 环境变量，运行 `uvicorn main:app --port 7866`，访问 `http://127.0.0.1:7866`。支持临时性文件上传（对话框直接传 pdf/docx/txt/xlsx/csv，刷新后失效）与长期[知识库](../concepts/[knowledge](../api/knowledge.md)-base.md)创建（上传到 File/Unstructured 或 File/Structured 后在界面创建[知识库](../concepts/[knowledge](../api/knowledge.md)-base.md)存于 VectorStore）。通过 Gradio 界面下方的“通过 API 使用”可获取 API 文档集成到业务。
 
 ## 日志与扩展
 
@@ -84,6 +84,19 @@ AppFlow 连接流可在百炼步骤后添加 SLS 日志云服务节点，将对�
 - [10分钟让微信公众号成为智能客服](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-wechat-in-10-minutes.md)
 - [在钉钉上增加一个AI机器人](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-dingtalk.md)
 - [基于本地知识库构建RAG应用](../../raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

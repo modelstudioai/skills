@@ -171,7 +171,7 @@ Fun-ASR、通义千问3-ASR-Flash-Realtime
 
 语音合成
 
-CosyVoice-v3-Plus、通义千问3-TTS 系列
+Qwen-Audio-3.0-TTS-Plus、Qwen-Audio-3.0-TTS-Flash、CosyVoice-v3.5-Plus、CosyVoice-v3.5-Flash、CosyVoice-v3-Plus、通义千问3-TTS 系列
 
 3x
 

@@ -121,7 +121,7 @@ customParam
 
 否
 
-自定义参数，可指定languageHints、maxPromptAudioLength等。
+自定义参数，可通过 parameter() 方法指定 language\_hints、max\_prompt\_audio\_length 等参数。
 
 **返回值**：`Voice` 对象，通过 `getVoiceId()` 方法获取音色ID。
 
@@ -283,108 +283,11 @@ String
 
 声音复刻模型，固定为"voice-enrollment"。
 
-languageHints(List<String>)
-
-List<String>
-
-**重要**
-
-仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash、v3-plus和v3-flash模型支持。
-
-辅助模型识别样本音频的语种，从而更准确地提取音色特征，提升复刻效果。若设置的语种与实际音频语种不符（例如为中文音频设置 `en`），系统将忽略该设置并自动检测语种。
-
-此参数为数组，但当前版本仅处理第一个元素。
-
-取值范围（因模型而异）：
-
--   qwen-audio-3.0-tts-flash：
-    
-    -   zh：中文
-        
-    -   en：英文
-        
-    -   fr：法语
-        
-    -   de：德语
-        
-    -   ja：日语
-        
-    -   ko：韩语
-        
-    -   ru：俄语
-        
-    -   pt：葡萄牙语
-        
-    -   th：泰语
-        
-    -   id：印尼语
-        
-    -   vi：越南语
-        
-    -   it：意大利语
-        
-    -   ms：马来语
-        
--   cosyvoice-v3-plus：
-    
-    -   zh：中文
-        
-    -   en：英文
-        
-    -   fr：法语
-        
-    -   de：德语
-        
-    -   ja：日语
-        
-    -   ko：韩语
-        
-    -   ru：俄语
-        
--   cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash：
-    
-    -   zh：中文
-        
-    -   en：英文
-        
-    -   fr：法语
-        
-    -   de：德语
-        
-    -   ja：日语
-        
-    -   ko：韩语
-        
-    -   ru：俄语
-        
-    -   pt：葡萄牙语
-        
-    -   th：泰语
-        
-    -   id：印尼语
-        
-    -   vi：越南语
-        
-
-默认值：\["zh"\]。
-
-maxPromptAudioLength(Float)
-
-Float
-
-**重要**
-
-仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash和v3-flash模型支持。
-
-音频预处理后用于声音复刻的参考音频最大时长（秒）。取值范围：\[3.0, 30.0\]。时间越长效果越好。
-
-默认值：10.0。
-
 parameter(String, Object)
 
 Object
 
-设置[扩展参数](#a18b66cba924j)，如 parameter("enable\_preprocess", false)。
+设置自定义参数，如 parameter("language\_hints", Arrays.asList("zh"))、parameter("max\_prompt\_audio\_length", 10.0f)、parameter("enable\_preprocess", false)。
 
 ### **扩展参数**
 
@@ -404,7 +307,7 @@ boolean
 
 **重要**
 
-仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash和v3-flash模型支持。
+仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash和v3-flash模型支持。
 
 是否开启音频预处理（降噪、音频增强、音量规整）。有背景噪音时建议开启；安静环境建议关闭以最大程度还原音色。
 
@@ -422,7 +325,7 @@ import com.alibaba.dashscope.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
@@ -444,8 +347,8 @@ public class Main {
                     fileUrl,
                     VoiceEnrollmentParam.builder()
                             .model(cloneModelName)
-                            .languageHints(Collections.singletonList("zh"))
-                            // .maxPromptAudioLength(10.0f)
+                            .parameter("language_hints", Arrays.asList("zh"))
+                            // .parameter("max_prompt_audio_length", 10.0f)
                             // .parameter("enable_preprocess", false)
                             .build());
 

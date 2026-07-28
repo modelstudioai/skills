@@ -143,13 +143,11 @@
 
 提交单个语音实时转写任务，通过传入本地文件的方式同步阻塞地拿到转写结果。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9365892871/CAEQURiBgMDS0c2RpxkiIDNmYjBlMTE3ODQxYTQ3Nzk4MGMxNTc5MjY3OWVjZjlj4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3558074871/CAEQURiBgMDS0c2RpxkiIDNmYjBlMTE3ODQxYTQ3Nzk4MGMxNTc5MjY3OWVjZjlj4709861_20241015153444.149.svg)
 
 实例化[Recognition类](#adcb5e9bddbyq)，调用`call`方法绑定[请求参数](#d72d661a1brzp)和待识别文件，进行识别并最终获取识别结果。
 
 点击查看完整示例
-
-示例中用到的音频为：[asr\_example.wav](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250210/elouas/asr_example.wav)。
 
 ```
 import com.alibaba.dashscope.audio.asr.recognition.Recognition;
@@ -161,7 +159,7 @@ import java.io.File;
 public class Main {
     public static void main(String[] args) {
         // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-        Constants.baseWebsocketApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
+        Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         // 创建Recognition实例
         Recognition recognizer = new Recognition();
         // 创建RecognitionParam
@@ -177,7 +175,7 @@ public class Main {
                         .build();
 
         try {
-            System.out.println("识别结果：" + recognizer.call(param, new File("asr_example.wav")));
+            System.out.println("识别结果：" + recognizer.call(param, new File("{YOUR_AUDIO_FILE}")));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -200,7 +198,7 @@ public class Main {
 
 提交单个语音实时转写任务，通过实现回调接口的方式流式输出实时识别结果。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9365892871/CAEQURiBgID1ooWUpxkiIDcyOTEyYjZiZmUxNzRkZjVhMTNhYmNkYjI2NzYzYTMy4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3558074871/CAEQURiBgID1ooWUpxkiIDcyOTEyYjZiZmUxNzRkZjVhMTNhYmNkYjI2NzYzYTMy4709861_20241015153444.149.svg)
 
 1.  启动流式语音识别
     
@@ -244,7 +242,7 @@ import java.util.concurrent.TimeUnit;
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-        Constants.baseWebsocketApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
+        Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.submit(new RealtimeRecognitionTask());
         executorService.shutdown();
@@ -332,8 +330,6 @@ class RealtimeRecognitionTask implements Runnable {
 
 ## 识别本地语音文件
 
-示例中用到的音频为：[asr\_example.wav](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250210/oiydrd/asr_example.wav)。
-
 ```
 import com.alibaba.dashscope.audio.asr.recognition.Recognition;
 import com.alibaba.dashscope.audio.asr.recognition.RecognitionParam;
@@ -364,9 +360,9 @@ class TimeUtils {
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-        Constants.baseWebsocketApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
+        Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.submit(new RealtimeRecognitionTask(Paths.get(System.getProperty("user.dir"), "asr_example.wav")));
+        executorService.submit(new RealtimeRecognitionTask(Paths.get(System.getProperty("user.dir"), "{YOUR_AUDIO_FILE}")));
         executorService.shutdown();
 
         // wait for all tasks to complete
@@ -503,7 +499,7 @@ import java.nio.ByteBuffer;
 public class Main {
     public static void main(String[] args) throws NoApiKeyException {
         // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-        Constants.baseWebsocketApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
+        Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
         // 创建一个Flowable<ByteBuffer>
         Flowable<ByteBuffer> audioSource =
                 Flowable.create(

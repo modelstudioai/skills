@@ -243,7 +243,7 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     
     语音合成所使用的音色。
     
-    -   **系统音色**：参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
+    -   **系统音色**：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
         
     -   **复刻音色**：通过声音复刻功能定制
         
@@ -360,7 +360,7 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     
     默认值：false。
     
-    仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
+    仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
     
     > 时间戳结果在[onStreamInputTtsEventCallback](#bea29bbafcosq)的all\_response中。
     
@@ -406,7 +406,7 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     
     -   zh：中文
         
-    -   en：英文
+    -   en：英语
         
     -   fr：法语
         
@@ -426,9 +426,15 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
         
     -   vi：越南语
         
+    -   es：西班牙语
+        
     -   it：意大利语
         
-    -   ms：马来语
+    -   ms：马来西亚语
+        
+    -   fil：菲律宾语
+        
+    -   ar：阿拉伯语
         
     
     `instruction`

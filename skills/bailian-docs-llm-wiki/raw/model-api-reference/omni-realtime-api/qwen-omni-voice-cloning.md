@@ -10,9 +10,14 @@
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+-   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 ## **音频要求**
 
@@ -54,7 +59,7 @@ WAV (16bit)、MP3、M4A
 
 ## 快速开始：复刻与使用音色
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1397661871/CAEQbxiBgICd6_Do8BkiIDM3NjYwZDQxMGIyMTQzMDdhOGMyY2YwNWFhMmM2NjVi5899512_20251120114927.389.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2365984871/CAEQbxiBgICd6_Do8BkiIDM3NjYwZDQxMGIyMTQzMDdhOGMyY2YwNWFhMmM2NjVi5899512_20251120114927.389.svg)
 
 ### 1\. 工作流程
 
@@ -134,6 +139,7 @@ DEFAULT_AUDIO_MIME_TYPE = "audio/mpeg"
 VOICE_FILE_PATH = "voice.mp3"  # 用于声音复刻的本地音频文件的相对路径
 
 def create_voice(file_path: str,
+                 url: str,
                  target_model: str = DEFAULT_TARGET_MODEL,
                  preferred_name: str = DEFAULT_PREFERRED_NAME,
                  audio_mime_type: str = DEFAULT_AUDIO_MIME_TYPE) -> str:
@@ -150,9 +156,6 @@ def create_voice(file_path: str,
 
     base64_str = base64.b64encode(file_path_obj.read_bytes()).decode()
     data_uri = f"data:{audio_mime_type};base64,{base64_str}"
-
-    # 以下为华北2（北京）地域的URL，各地域的URL不同。
-    url = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization"
     payload = {
         "model": "qwen-voice-enrollment",
         "input": {
@@ -198,17 +201,18 @@ class SimpleCallback(OmniRealtimeCallback):
 if __name__ == '__main__':
     # 若没有配置环境变量，请用百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
     dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
-    # 以下为华北2（北京）地域的URL，各地域的URL不同。
-    url = "wss://dashscope.aliyuncs.com/api-ws/v1/realtime"
+    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    base_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com"
+    ws_url = base_url.replace("https://", "wss://") + "/api-ws/v1/realtime"
 
     # 1. 声音复刻：创建专属音色
-    voice = create_voice(VOICE_FILE_PATH)
+    voice = create_voice(VOICE_FILE_PATH, url=f"{base_url}/api/v1/services/audio/tts/customization")
     print(f"声音复刻完成，音色: {voice}")
 
     # 2. 使用复刻音色进行实时对话
     pya = pyaudio.PyAudio()
     callback = SimpleCallback(pya)
-    conv = OmniRealtimeConversation(model=DEFAULT_TARGET_MODEL, callback=callback, url=url)
+    conv = OmniRealtimeConversation(model=DEFAULT_TARGET_MODEL, callback=callback, url=ws_url)
     conv.connect()
     conv.update_session(
         output_modalities=[MultiModality.AUDIO, MultiModality.TEXT],
@@ -234,6 +238,7 @@ if __name__ == '__main__':
 ```
 import com.alibaba.dashscope.audio.omni.*;
 import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.utils.Constants;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -258,6 +263,8 @@ public class Main {
     // 用于声音复刻的本地音频文件的相对路径
     private static final String AUDIO_FILE = "voice.mp3";
     private static final String AUDIO_MIME_TYPE = "audio/mpeg";
+    // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    private static final String BASE_URL = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com";
 
     // 生成 data URI
     public static String toDataUrl(String filePath) throws IOException {
@@ -285,8 +292,7 @@ public class Main {
                         + "}"
                         + "}";
 
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        String url = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization";
+        String url = BASE_URL + "/api/v1/services/audio/tts/customization";
         HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
         con.setRequestMethod("POST");
         con.setRequestProperty("Authorization", "Bearer " + apiKey);
@@ -366,8 +372,7 @@ public class Main {
                     // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                     // 若没有配置环境变量，请用百炼API Key将下行替换为：.apikey("sk-xxx")
                     .apikey(System.getenv("DASHSCOPE_API_KEY"))
-                    // 以下为华北2（北京）地域的URL，各地域的URL不同。
-                    .url("wss://dashscope.aliyuncs.com/api-ws/v1/realtime")
+                    .url(BASE_URL.replace("https://", "wss://") + "/api-ws/v1/realtime")
                     .build();
 
             OmniRealtimeConversation conversation = new OmniRealtimeConversation(param, new OmniRealtimeCallback() {
@@ -466,8 +471,7 @@ def create_voice(file_path: str,
     base64_str = base64.b64encode(file_path_obj.read_bytes()).decode()
     data_uri = f"data:{audio_mime_type};base64,{base64_str}"
 
-    # 以下为华北2（北京）地域的URL，各地域的URL不同。
-    url = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization"
+    url = dashscope.base_http_api_url + "/services/audio/tts/customization"
     payload = {
         "model": "qwen-voice-enrollment",
         "input": {
@@ -492,8 +496,8 @@ def create_voice(file_path: str,
         raise RuntimeError(f"解析 voice 响应失败: {e}")
 
 if __name__ == '__main__':
-    # 以下为华北2（北京）地域的URL，各地域的URL不同。
-    dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
     # 1. 声音复刻：创建专属音色
     voice = create_voice(VOICE_FILE_PATH)
@@ -556,6 +560,8 @@ public class Main {
     // 用于声音复刻的本地音频文件的相对路径
     private static final String AUDIO_FILE = "voice.mp3";
     private static final String AUDIO_MIME_TYPE = "audio/mpeg";
+    // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    private static final String BASE_URL = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com";
 
     // 将 PCM 数据写入标准 WAV 文件
     public static void writeWav(String path, byte[] pcmData, int sampleRate) throws IOException {
@@ -601,8 +607,7 @@ public class Main {
                         + "}"
                         + "}";
 
-        // 以下为华北2（北京）地域的URL，各地域的URL不同。
-        String url = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization";
+        String url = BASE_URL + "/api/v1/services/audio/tts/customization";
         HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
         con.setRequestMethod("POST");
         con.setRequestProperty("Authorization", "Bearer " + apiKey);
@@ -650,8 +655,7 @@ public class Main {
                     + "\"stream_options\": {\"include_usage\": true}"
                     + "}";
 
-            // 以下为华北2（北京）地域的URL，各地域的URL不同。
-            String url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions";
+            String url = BASE_URL + "/compatible-mode/v1/chat/completions";
             HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
             con.setRequestMethod("POST");
             con.setRequestProperty("Authorization", "Bearer " + apiKey);
@@ -712,13 +716,13 @@ public class Main {
 
 -   **URL**
     
-    中国内地：
+    华北2（北京）：
     
     ```
-    POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization
+    POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization
     ```
     
-    国际：
+    新加坡：
     
     ```
     POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization
@@ -1024,11 +1028,11 @@ public class Main {
     
     ```
     # ======= 重要提示 =======
-    # 以下为华北2（北京）地域的URL，各地域的URL不同。
+    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
     # 新加坡地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # === 执行时请删除该注释 ===
     
-    curl -X POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization \
+    curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H "Content-Type: application/json" \
     -d '{
@@ -1062,8 +1066,8 @@ public class Main {
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = "sk-xxx"
     api_key = os.getenv("DASHSCOPE_API_KEY")
-    # 以下为华北2（北京）地域的URL，各地域的URL不同。
-    url = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization"
+    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization"
     
     payload = {
         "model": "qwen-voice-enrollment", # 不要修改这个值
@@ -1121,8 +1125,8 @@ public class Main {
             // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
             // 若没有配置环境变量，请用百炼API Key将下行替换为：String apiKey = "sk-xxx"
             String apiKey = System.getenv("DASHSCOPE_API_KEY");
-            // 以下为华北2（北京）地域的URL，各地域的URL不同。
-            String apiUrl = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization";
+            // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+            String apiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization";
     
             try {
                 // 构造 JSON 请求体（注意内部的引号需转义）
@@ -1188,13 +1192,13 @@ public class Main {
 
 -   **URL**
     
-    中国内地：
+    华北2（北京）：
     
     ```
-    POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization
+    POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization
     ```
     
-    国际：
+    新加坡：
     
     ```
     POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization
@@ -1387,11 +1391,11 @@ public class Main {
     
     ```
     # ======= 重要提示 =======
-    # 以下为华北2（北京）地域的URL，各地域的URL不同。
+    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
     # 新加坡地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # === 执行时请删除该注释 ===
     
-    curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization' \
+    curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization' \
     --header 'Authorization: Bearer $DASHSCOPE_API_KEY' \
     --header 'Content-Type: application/json' \
     --data '{
@@ -1413,8 +1417,8 @@ public class Main {
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = "sk-xxx"
     api_key = os.getenv("DASHSCOPE_API_KEY")
-    # 以下为华北2（北京）地域的URL，各地域的URL不同。
-    url = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization"
+    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization"
     
     payload = {
         "model": "qwen-voice-enrollment", # 不要修改该值
@@ -1463,8 +1467,8 @@ public class Main {
             // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
             // 若没有配置环境变量，请用百炼API Key将下行替换为：String apiKey = "sk-xxx"
             String apiKey = System.getenv("DASHSCOPE_API_KEY");
-            // 以下为华北2（北京）地域的URL，各地域的URL不同。
-            String apiUrl = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization";
+            // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+            String apiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization";
     
             // JSON 请求体（旧版本 Java 无 """ 多行字符串）
             String jsonPayload =
@@ -1533,13 +1537,13 @@ public class Main {
 
 -   **URL**
     
-    中国内地：
+    华北2（北京）：
     
     ```
-    POST https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization
+    POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization
     ```
     
-    国际：
+    新加坡：
     
     ```
     POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization
@@ -1678,11 +1682,11 @@ public class Main {
     
     ```
     # ======= 重要提示 =======
-    # 以下为华北2（北京）地域的URL，各地域的URL不同。
+    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
     # 新加坡地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # === 执行时请删除该注释 ===
     
-    curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization' \
+    curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization' \
     --header 'Authorization: Bearer $DASHSCOPE_API_KEY' \
     --header 'Content-Type: application/json' \
     --data '{
@@ -1703,8 +1707,8 @@ public class Main {
     # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key = "sk-xxx"
     api_key = os.getenv("DASHSCOPE_API_KEY")
-    # 以下为华北2（北京）地域的URL，各地域的URL不同。
-    url = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization"
+    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization"
     
     voice_to_delete = "yourVoice"  # 要删除的音色（替换为真实值）
     
@@ -1752,8 +1756,8 @@ public class Main {
             // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
             // 若没有配置环境变量，请用百炼API Key将下行替换为：String apiKey = "sk-xxx"
             String apiKey = System.getenv("DASHSCOPE_API_KEY");
-            // 以下为华北2（北京）地域的URL，各地域的URL不同。
-            String apiUrl = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization";
+            // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+            String apiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization";
             String voiceToDelete = "yourVoice"; // 要删除的音色（替换为真实值）
     
             // 构造 JSON 请求体（字符串拼接，兼容 Java 8）

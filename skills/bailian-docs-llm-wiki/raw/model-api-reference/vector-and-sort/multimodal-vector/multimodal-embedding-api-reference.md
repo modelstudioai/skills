@@ -68,7 +68,7 @@ qwen3-vl-embedding
 
 100万Token
 
-有效期：百炼开通后90天内
+有效期：自开通百炼/模型发布/申请通过之日起90天（以较晚者为准）
 
 qwen2.5-vl-embedding
 
@@ -178,15 +178,23 @@ qwen3-vl-embedding
 
 支持中、英、日、韩、法、德等33种主流语言
 
+**所有支持语言**
+
+中文、日语、韩语、印尼语、越南语、泰语、英语、法语、德语、俄语、葡萄牙语、西班牙语、意大利语、瑞典语、丹麦语、捷克语、挪威语、荷兰语、芬兰语、土耳其语、波兰语、斯瓦希里语、罗马尼亚语、塞尔维亚语、希腊语、哈萨克语、乌兹别克语、宿务语、阿拉伯语、乌尔都语、波斯语、印地语 / 天城语、希伯来语。
+
 JPEG, PNG, WEBP, BMP, TIFF, ICO, DIB, ICNS, SGI（支持URL或Base64）
 
 MP4, AVI, MOV（仅支持URL）
 
-一次请求中传入内容元素总数不超过 20。图片数量不超过5，视频数量不超过1。
+一次请求中传入内容元素总数不超过 20。图片数量不超过10，视频数量不超过1。
 
 qwen2.5-vl-embedding
 
 支持中、英、日、韩、法、德等11种主流语言
+
+**所有支持语言**
+
+中文、英语、日语、韩语、法语、德语、俄语、葡萄牙语、西班牙语、意大利语、印尼语
 
 一次请求内，图片、文本、视频、融合对象每种类型最多出现 1 次。
 
@@ -205,6 +213,10 @@ qwen2.5-vl-embedding
 tongyi-embedding-vision-plus-2026-03-06
 
 支持中、英、日、韩等超30种主流语言
+
+**所有支持语言**
+
+中文、日语、韩语、印尼语、越南语、泰语、英语、法语、德语、俄语、葡萄牙语、西班牙语、意大利语、瑞典语、丹麦语、捷克语、挪威语、荷兰语、芬兰语、土耳其语、波兰语、斯瓦希里语、罗马尼亚语、塞尔维亚语、希腊语、哈萨克语、乌兹别克语、宿务语、阿拉伯语、乌尔都语、波斯语、印地语 / 天城语、希伯来语。
 
 JPEG, PNG, WEBP, BMP, TIFF, ICO, DIB, ICNS, SGI（支持URL或Base64）
 
@@ -542,7 +554,7 @@ contents `_array_`**（必选）**
         ]
     },
     "usage": {
-        "input_tokens": 10,
+        "input_tokens": 903,
         "input_tokens_details": {
             "image_tokens": 896,
             "text_tokens": 7
@@ -644,11 +656,11 @@ contents `_array_`**（必选）**
 
 **image\_tokens** `_int_`
 
-输入的图片或视频的 Token 数量。
+输入内容中图片或视频等**视觉部分**消耗的 Token 数量，**不包含文本**（文本部分见 `text_tokens`）。图片消耗的 Token 数量与输入图片的分辨率有关，分辨率越高消耗的 Token 越多；若输入为视频，系统会先对视频抽帧，再基于抽帧结果计算 Token。
 
 **text\_tokens** `_int_`
 
-输入的文本的 Token 数量。
+输入内容中**文本部分**消耗的 Token 数量（不包含图片或视频等视觉部分）。
 
 **output\_tokens** `_int_`
 
@@ -660,7 +672,7 @@ contents `_array_`**（必选）**
 
 **image\_tokens** `_int_`
 
-本次请求输入的图片或视频的 Token 数量。系统会对输入视频进行抽帧处理，帧数上限受系统配置控制，随后基于处理结果计算 Token。仅 `qwen3-vl-embedding`、`qwen2.5-vl-embedding` 和 `multimodal-embedding-v1` 返回此字段（作为顶层字段），`tongyi-embedding-vision-*` 系列模型的图片 Token 包含在 `input_tokens_details.image_tokens` 中。
+本次请求输入的图片或视频等**视觉部分**消耗的 Token 数量（**不包含文本**）。图片消耗的 Token 数量与输入图片的分辨率有关；系统会对输入视频进行抽帧处理，帧数上限受系统配置控制，随后基于处理结果计算 Token。仅 `qwen3-vl-embedding`、`qwen2.5-vl-embedding` 和 `multimodal-embedding-v1` 返回此字段（作为顶层字段），`tongyi-embedding-vision-*` 系列模型的图片 Token 包含在 `input_tokens_details.image_tokens` 中。
 
 **image\_count** `_int_`
 

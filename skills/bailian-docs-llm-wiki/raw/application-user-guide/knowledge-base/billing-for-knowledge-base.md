@@ -271,7 +271,45 @@
 
 ### **2.2 模型调用费用**
 
-在创建、更新、检索、命中测试知识库时，会调用向量模型（用于内容向量化）和排序模型（Rerank，用于重排序），这些调用会产生费用。
+在创建、更新、检索知识库以及使用知识问答服务时，会调用以下模型，这些调用会产生独立于规格费用之外的模型调用费用：
+
+**模型类别**
+
+**模型名称**
+
+**用途**
+
+**向量模型**
+
+[text-embedding-v4](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/text-embedding-v4)等
+
+文档类知识库的文本向量化
+
+[qwen3-vl-embedding](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/qwen3-vl-embedding)
+
+图片问答类、音视频搜索类知识库的多模态向量化
+
+**排序模型**
+
+[qwen3-rerank](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/qwen3-rerank)
+
+文档类知识库检索结果的二次排序（可选）
+
+[qwen3-vl-rerank](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/qwen3-vl-rerank)
+
+图片问答类、音视频搜索类知识库检索结果的二次排序（可选）
+
+**路由模型**
+
+[qwen-plus](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/qwen-plus-latest)
+
+开启知识库路由时，系统调用 qwen-plus 判断查询应路由至哪些知识库
+
+**问答模型**
+
+[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/qwen3.7-plus?serviceSite=asia-pacific-china) 等
+
+知识问答服务中生成回答的大语言模型，由用户在应用中自行选择
 
 **重要**
 
@@ -281,20 +319,28 @@
 
 **多个知识库计费规则：**阿里云百炼应用挂载了多个知识库时，会在多个知识库内执行检索，Token 消耗量（Query 向量化和 Rerank 排序）**按知识库数量倍数增加**（N 个知识库则消耗量 × N）。
 
-#### **2.2.1 创建/更新知识库**
+#### **2.2.1 知识管理（创建与更新知识库）**
 
 -   **调用场景：**上传新文件或增量更新时，调用向量模型对文本内容进行向量化处理。
     
 -   **计费说明：按新增内容的 Token 数量计费。**删除文件不产生模型调用费用。
     
+-   **调用的模型：**
+    
+    -   文档搜索类知识库：[text-embedding-v4](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/text-embedding-v4) 或 [text-embedding-v3](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/text-embedding-v3)（文本向量模型）。
+        
+    -   图片问答类、音视频搜索类知识库：[qwen3-vl-embedding](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/qwen3-vl-embedding)（多模态向量模型）。
+        
 
-#### **2.2.2 检索知识库**
+#### **2.2.2 知识检索**
 
 -   **调用场景**
     
-    1.  调用向量模型，对用户的查询（Query）进行向量化。
+    1.  **向量化：**调用向量模型，对用户的查询（Query）进行向量化。
         
-    2.  调用排序模型（Rerank），对初步检索到的结果进行重新排序，以提升最终答案的精准度。
+    2.  **知识库路由（可选）：**若应用关联了多个知识库并开启了知识库路由功能，系统会调用 [qwen-plus](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/qwen-plus-latest) 判断用户查询应路由至哪些知识库，该调用按 qwen-plus 的 Token 用量计费。
+        
+    3.  **排序（可选）：**调用排序模型对初步检索到的结果进行重新排序，以提升最终答案的精准度。文档搜索类知识库使用 [qwen3-rerank](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/qwen3-rerank)，图片问答类和音视频搜索类知识库使用 [qwen3-vl-rerank](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/qwen3-vl-rerank)。
         
 -   **计费说明**
     
@@ -304,7 +350,7 @@
         
 -   **检索流程与计费关系详解**
     
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0647879771/CAEQaxiBgMCFrtjd3BkiIDA2ZWRiNzYxYzZiNzRkNGM5Mzg4NGQ5ZjhlODBlOWZj6139615_20260107153729.136.svg)
+    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6004524871/CAEQaxiBgMCFrtjd3BkiIDA2ZWRiNzYxYzZiNzRkNGM5Mzg4NGQ5ZjhlODBlOWZj6139615_20260107153729.136.svg)
     1.  **初步召回**
         
         系统根据以下参数从知识库中召回文本切片：
@@ -328,7 +374,22 @@
         Rerank 模型排序后，系统会根据**最终召回最大数量**参数（例如 5）返回相应数量的切片。
         
 
-#### **2.2.3 费用优化建议**
+#### **2.2.3 知识问答**
+
+通过百炼应用（智能体应用、工作流应用）使用知识库进行问答时，除了检索阶段的模型费用外，还会产生以下模型调用费用：
+
+-   **问答生成模型：**系统根据您在应用中选择的问答模型（如 qwen-plus 等）生成回答，按该模型的 Token 用量计费。具体价格以[模型计费标准](https://help.aliyun.com/zh/model-studio/model-pricing)为准。
+    
+-   **预文件解析（可选）：**当用户在对话中上传文件并开启预文件解析功能时，系统会调用 [qwen3-rerank](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/qwen3-rerank) 对文件内容进行排序处理，按排序模型的 Token 用量计费。
+    
+-   **知识库路由（可选）：**若应用关联了多个知识库并开启了路由功能，系统会调用 [qwen-plus](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/qwen-plus-latest) 进行路由判断（详见 [2.2.2 知识检索](#c868ef3a653qx)）。
+    
+
+**重要**
+
+知识问答服务的完整费用 = **规格费用**（知识库运行时长）+ **检索阶段的模型费用**（向量化 + 排序 + 路由）+ **问答阶段的模型费用**（问答生成 + 预文件解析）。各模型费用按实际 Token 消耗量独立计算，请关注[模型计费标准](https://help.aliyun.com/zh/model-studio/model-pricing)了解各模型的单价。
+
+#### **2.2.4 费用优化建议**
 
 有以下两种方式：
 
@@ -366,6 +427,19 @@
 
 点击知识库卡片上的**命中测试**，进入配置调试页面进行测试，会产生相应的模型（向量模型、排序模型）调用计费。
 
+#### **2.2.5 节省计划抵扣说明**
+
+知识库使用的向量模型（如 text-embedding-v4）和排序模型（如 qwen3-rerank）属于百炼平台 A 类模型，其调用费用支持通过以下节省计划抵扣：
+
+-   **AI 通用型节省计划**（推荐）：覆盖 A 类全部模型（含文本向量、多模态向量、排序模型），按月承诺消费享阶梯折扣。详情请参见[节省计划与资源包](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package)。
+    
+-   **向量及排序模型节省计划**：专门针对向量和排序模型的节省计划，一次性购买固定金额。详情请参见[节省计划与资源包 > 向量及排序模型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package)。
+    
+
+**说明**
+
+节省计划仅可抵扣模型调用费用，不可抵扣知识库的规格费用（运行时长费用）。规格费用的优化请参见[资源包](#a06c023507qq3)。
+
 ## 3\. 计费示例
 
 ### 3.1 连续运行 1 天
@@ -396,7 +470,7 @@
 
 ### 3.2 创建、更新与检索知识库
 
-基于 **text-embedding-v4**（向量模型）与 **qwen3-rerank**（排序模型），价格均为 **0.0005 元/千 Token**。
+以下示例基于文档搜索类知识库，使用 [**text-embedding-v4**](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/text-embedding-v4)（向量模型）与 [**qwen3-rerank**](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/qwen3-rerank)（排序模型），价格均为 **0.0005 元/千 Token**。图片问答类和音视频搜索类知识库使用的多模态模型（[qwen3-vl-embedding](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/qwen3-vl-embedding)、[qwen3-vl-rerank](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/detail/qwen3-vl-rerank)）价格请参见对应模型详情页。
 
 **计费逻辑**：费用 = Token 消耗量（以“千 Token”为单位） × 模型单价
 
@@ -550,7 +624,7 @@
     
 5.  **为什么我的排序（Rerank）费用特别高？如何降低模型调用费用？**
     
-    排序（Rerank）模型的费用与您最终返回的结果数量无关，而是由**初步召回**的文本切片总数决定的。降低模型调用费用详见本文[2.2.3 费用优化建议](#9a9e30ecc3pbe)内容。
+    排序（Rerank）模型的费用与您最终返回的结果数量无关，而是由**初步召回**的文本切片总数决定的。降低模型调用费用详见本文[2.2.4 费用优化建议](#9a9e30ecc3pbe)内容。
     
 6.  **如何彻底停止知识库的计费？删除库内文件可以吗？**
     

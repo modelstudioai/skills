@@ -1,6 +1,6 @@
 # OpenClaw
 
-OpenClaw 是一个开源的个人 AI 助手平台，支持通过多种消息渠道与 AI 交互。通过配置可接入阿里云百炼平台上的 AI 模型，支持按量付费、Coding Plan、Token Plan 团队版三种接入方式。
+OpenClaw 是一个开源的个人 AI 助手平台，支持通过多种消息渠道与 AI 交互。通过配置可接入阿里云百炼平台上的 AI 模型，支持按量付费、Coding Plan、Token Plan 个人版、Token Plan 团队版四种接入方式。
 
 ## **安装 OpenClaw**
 
@@ -84,6 +84,142 @@ How do you want to hatch your bot?
 
 ## **配置接入凭证**
 
+### **Token Plan 个人版**
+
+将 `YOUR_API_KEY` 替换为 Token Plan 个人版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/overview)。可用模型包括 qwen3.8-max-preview、qwen3.7-max、qwen3.7-plus、qwen3.6-flash、glm-5.2、deepseek-v4-pro，完整列表请参考 Token Plan 个人版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)。
+
+**API Key**
+
+Token Plan 个人版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/overview)
+
+**Base URL**
+
+`https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic`
+
+**可用模型**
+
+Token Plan 个人版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)
+
+配置文件位于 `~/.openclaw/openclaw.json`，OpenClaw 启动时会自动读取。
+
+**说明**
+
+示例禁用了网关鉴权（`auth.mode: none`），仅适合单机本地使用。如需共享或远程访问，请运行 `openclaw doctor --fix` 启用 token 鉴权。
+
+**首次配置**：复制以下内容到配置文件，将 `YOUR_API_KEY` 替换为 Token Plan 个人版 API Key。
+
+**已有配置**：若需保留已有配置，请勿直接全量替换，详见[已有配置如何安全修改](#cp-openclaw-faq-safe-modify)。
+
+```
+{
+  "meta": {
+    "lastTouchedVersion": "2026.2.1",
+    "lastTouchedAt": "2026-02-03T08:20:00.000Z"
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "bailian-token-plan": {
+        "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic",
+        "apiKey": "YOUR_API_KEY",
+        "api": "anthropic-messages",
+        "models": [
+          {
+            "id": "qwen3.8-max-preview",
+            "name": "qwen3.8-max-preview",
+            "reasoning": true,
+            "input": ["text", "image"],
+            "contextWindow": 983616,
+            "maxTokens": 131072,
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "compat": { "thinkingFormat": "openai" }
+          },
+          {
+            "id": "qwen3.7-max",
+            "name": "qwen3.7-max",
+            "reasoning": false,
+            "input": ["text"],
+            "contextWindow": 1000000,
+            "maxTokens": 65536,
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "compat": { "thinkingFormat": "openai" }
+          },
+          {
+            "id": "qwen3.7-plus",
+            "name": "qwen3.7-plus",
+            "reasoning": false,
+            "input": ["text", "image"],
+            "contextWindow": 1000000,
+            "maxTokens": 65536,
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "compat": { "thinkingFormat": "openai" }
+          },
+          {
+            "id": "qwen3.6-flash",
+            "name": "qwen3.6-flash",
+            "reasoning": false,
+            "input": ["text", "image"],
+            "contextWindow": 1000000,
+            "maxTokens": 32768,
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "compat": { "thinkingFormat": "openai" }
+          },
+          {
+            "id": "glm-5.2",
+            "name": "glm-5.2",
+            "reasoning": false,
+            "input": ["text"],
+            "contextWindow": 1000000,
+            "maxTokens": 16384,
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "compat": { "thinkingFormat": "openai" }
+          },
+          {
+            "id": "deepseek-v4-pro",
+            "name": "deepseek-v4-pro",
+            "reasoning": false,
+            "input": ["text"],
+            "contextWindow": 163840,
+            "maxTokens": 32768,
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+          }
+        ]
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "bailian-token-plan/qwen3.8-max-preview"
+      },
+      "models": {
+        "bailian-token-plan/qwen3.8-max-preview": {},
+        "bailian-token-plan/qwen3.7-max": {},
+        "bailian-token-plan/qwen3.7-plus": {},
+        "bailian-token-plan/qwen3.6-flash": {},
+        "bailian-token-plan/glm-5.2": {},
+        "bailian-token-plan/deepseek-v4-pro": {}
+      }
+    }
+  },
+  "gateway": {
+    "mode": "local",
+    "auth": { "mode": "none" }
+  }
+}
+```
+
+**重要**
+
+**qwen3.8-max-preview 思考模式说明**：
+
+-   thinking：始终开启，不支持关闭。
+    
+-   temperature：思考模式下默认值为 0.6；传入值小于 0.6 时自动调整为 0.6。
+    
+-   reasoning\_effort：控制推理深度，可选 xhigh、medium、low，默认 xhigh。
+    
+
 ### **Token Plan 团队版**
 
 将 `YOUR_API_KEY` 替换为 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)。可用模型请参考 Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)。
@@ -134,6 +270,16 @@ Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/to
             "apiKey": "YOUR_API_KEY",
             "api": "anthropic-messages",
             "models": [
+              {
+                "id": "qwen3.8-max-preview",
+                "name": "qwen3.8-max-preview",
+                "reasoning": true,
+                "input": ["text", "image"],
+                "contextWindow": 983616,
+                "maxTokens": 131072,
+                "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+                "compat": { "thinkingFormat": "openai" }
+              },
               {
                 "id": "qwen3.7-max",
                 "name": "qwen3.7-max",
@@ -278,9 +424,10 @@ Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/to
       "agents": {
         "defaults": {
           "model": {
-            "primary": "bailian-token-plan/qwen3.7-plus"
+            "primary": "bailian-token-plan/qwen3.8-max-preview"
           },
           "models": {
+            "bailian-token-plan/qwen3.8-max-preview": {},
             "bailian-token-plan/qwen3.7-max": {},
             "bailian-token-plan/qwen3.7-plus": {},
             "bailian-token-plan/qwen3.6-plus": {},
@@ -351,6 +498,16 @@ Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/to
             "api": "anthropic-messages",
             "models": [
               {
+                "id": "qwen3.8-max-preview",
+                "name": "qwen3.8-max-preview",
+                "reasoning": true,
+                "input": ["text", "image"],
+                "contextWindow": 983616,
+                "maxTokens": 131072,
+                "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+                "compat": { "thinkingFormat": "openai" }
+              },
+              {
                 "id": "qwen3.7-max",
                 "name": "qwen3.7-max",
                 "reasoning": false,
@@ -494,9 +651,10 @@ Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/to
       "agents": {
         "defaults": {
           "model": {
-            "primary": "bailian-token-plan/qwen3.7-plus"
+            "primary": "bailian-token-plan/qwen3.8-max-preview"
           },
           "models": {
+            "bailian-token-plan/qwen3.8-max-preview": {},
             "bailian-token-plan/qwen3.7-max": {},
             "bailian-token-plan/qwen3.7-plus": {},
             "bailian-token-plan/qwen3.6-plus": {},
@@ -524,6 +682,17 @@ Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/to
 3.  **保存并应用**
     
     先单击 **Save** 按钮将配置写入磁盘，再单击 **Apply** 按钮重启网关使配置生效。
+    
+
+**重要**
+
+**qwen3.8-max-preview 思考模式说明**：
+
+-   thinking：始终开启，不支持关闭。
+    
+-   temperature：思考模式下默认值为 0.6；传入值小于 0.6 时自动调整为 0.6。
+    
+-   reasoning\_effort：控制推理深度，可选 xhigh、medium、low，默认 xhigh。
     
 
 ### **Coding Plan**
@@ -888,11 +1057,11 @@ Coding Plan [支持的模型](https://help.aliyun.com/zh/model-studio/coding-pla
 
 **Base URL**
 
-请确保 Base URL、API Key 和模型归属同一地域：
+请确保 Base URL、API Key 和模型归属同一地域，并将 `WorkspaceId`替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)
 
--   华北2（北京）：`https://dashscope.aliyuncs.com/apps/anthropic`
+-   华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic`
     
--   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic`，请将`WorkspaceId`替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)
+-   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic`
     
 
 **可用模型**
@@ -931,7 +1100,7 @@ Coding Plan [支持的模型](https://help.aliyun.com/zh/model-studio/coding-pla
         "mode": "merge",
         "providers": {
           "bailian": {
-            "baseUrl": "https://dashscope.aliyuncs.com/apps/anthropic",
+            "baseUrl": "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
             "apiKey": "YOUR_API_KEY",
             "api": "anthropic-messages",
             "models": [
@@ -1039,7 +1208,7 @@ Coding Plan [支持的模型](https://help.aliyun.com/zh/model-studio/coding-pla
         "mode": "merge",
         "providers": {
           "bailian": {
-            "baseUrl": "https://dashscope.aliyuncs.com/apps/anthropic",
+            "baseUrl": "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
             "apiKey": "YOUR_API_KEY",
             "api": "anthropic-messages",
             "models": [
@@ -1214,6 +1383,14 @@ Coding Plan [支持的模型](https://help.aliyun.com/zh/model-studio/coding-pla
 ```
 
 以上配置中 `dmPolicy` 和 `groupPolicy` 均设为 `open`，适用于测试或个人使用场景。生产环境中建议设为 `allowlist`，通过白名单限制可访问的用户和群组，降低安全风险。
+
+切换到 `allowlist` 模式时，将 `dmPolicy` 和 `groupPolicy` 改为 `"allowlist"`，并添加 `allowFrom` 字段，填入允许访问的工号和群 ID。示例：
+
+```
+"dmPolicy": "allowlist",
+"groupPolicy": "allowlist",
+"allowFrom": ["你的工号", "群ID"]
+```
 
 #### 步骤四：测试
 
@@ -1790,7 +1967,7 @@ Skill 是可扩展的能力模块，Agent 会根据请求自动匹配并加载�
 
 ### 接入 MCP 服务
 
-OpenClaw 支持通过 MCP（Model Context Protocol）插件扩展 Agent 的工具调用能力，例如联网搜索、网页抓取等。具体案例可以参考[添加联网搜索MCP](https://help.aliyun.com/zh/model-studio/web-search-for-coding-plan)。
+OpenClaw 支持通过 MCP（Model Context Protocol）插件扩展 Agent 的工具调用能力，例如联网搜索、网页抓取等。具体案例可以参考[添加联网搜索MCP](https://help.aliyun.com/zh/model-studio/web-search-mcp)。
 
 ## 常见问题
 

@@ -39,8 +39,6 @@
 
 点击查看完整示例
 
-示例中用到的音频为：[asr\_example.wav](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250210/iwaouc/asr_example.wav)。
-
 ```
 from http import HTTPStatus
 import dashscope
@@ -58,7 +56,7 @@ recognition = Recognition(model='fun-asr-realtime',
                           format='wav',
                           sample_rate=16000,
                           callback=None)
-result = recognition.call('asr_example.wav')
+result = recognition.call('{YOUR_AUDIO_FILE}')
 if result.status_code == HTTPStatus.OK:
     print('识别结果：')
     print(result.get_sentence())
@@ -221,8 +219,6 @@ if __name__ == '__main__':
 
 ## 识别本地语音文件
 
-示例中用到的音频为：[asr\_example.wav](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250210/acoict/asr_example.wav)。
-
 ```
 import os
 import time
@@ -270,8 +266,8 @@ recognition = Recognition(model='fun-asr-realtime',
 
 try:
     audio_data: bytes = None
-    f = open("asr_example.wav", 'rb')
-    if os.path.getsize("asr_example.wav"):
+    f = open("{YOUR_AUDIO_FILE}", 'rb')
+    if os.path.getsize("{YOUR_AUDIO_FILE}"):
         # 一次性将文件数据全部读入buffer
         file_buffer = f.read()
         f.close()

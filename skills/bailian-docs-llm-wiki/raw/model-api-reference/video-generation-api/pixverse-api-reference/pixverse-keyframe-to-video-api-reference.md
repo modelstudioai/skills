@@ -17,12 +17,16 @@
 
 为确保调用成功，请务必保证**模型、Endpoint URL 和 API Key 均属于同一地域**。跨地域调用将会失败。
 
--   [**选择模型**](https://help.aliyun.com/zh/model-studio/use-video-generation#f32f686472enw)：确认模型所属的地域。
+-   [**选择模型**](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/all)：确认模型所属的地域。
     
 -   **选择 URL**：选择对应的地域 Endpoint URL，支持HTTP URL或 DashScope SDK URL。
     
 -   **配置 API Key**：选择地域并[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
     
+
+**说明**
+
+本文的示例代码适用于**华北2（北京）地域**。
 
 ## HTTP调用
 
@@ -30,7 +34,9 @@
 
 ### **步骤1：创建任务获取任务ID**
 
-**北京地域**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+**北京地域**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -46,7 +52,8 @@
 支持模型：pixverse/pixverse-c1-kf2v、pixverse/pixverse-v6-kf2v、pixverse/pixverse-v5.6-kf2v。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+# 调用时请将 {WorkspaceId} 替换为真实的业务空间ID。
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
@@ -95,7 +102,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 **model** `_string_` **（必选）**
 
-模型名称。模型输出规格请参见[模型列表](https://help.aliyun.com/zh/model-studio/use-video-generation#f32f686472enw)。
+模型名称。
 
 可选值：
 
@@ -310,7 +317,7 @@ audio直接影响费用，请在调用前确认[模型价格](https://help.aliyu
 
 ### **步骤2：根据任务ID查询结果**
 
-**北京地域**：`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+**北京地域**：`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 **说明**
 
@@ -329,7 +336,7 @@ audio直接影响费用，请在调用前确认[模型价格](https://help.aliyu
 
 ## 查询任务结果
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ```
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \

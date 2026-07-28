@@ -1,6 +1,6 @@
 # Qoder
 
-Qoder 是面向软件开发的 Agentic 编码平台，支持桌面 IDE、CLI 和 JetBrains 插件，可以通过按量付费、Coding Plan 或 Token Plan 团队版接入阿里云百炼。
+Qoder 是面向软件开发的 Agentic 编码平台，支持桌面 IDE、CLI 和 JetBrains 插件，可以通过按量付费、Coding Plan、Token Plan 个人版或 Token Plan 团队版接入阿里云百炼。
 
 ## Qoder IDE
 
@@ -27,7 +27,7 @@ Qoder 是面向软件开发的 Agentic 编码平台，支持桌面 IDE、CLI 和
     
     类型
     
-    根据计费方案选择 **Token Plan**、**Coding Plan** 或 **按量付费**
+    根据计费方案选择 **Token Plan**（个人版或团队版）、**Coding Plan** 或 **按量付费**
     
     模型
     
@@ -37,7 +37,9 @@ Qoder 是面向软件开发的 Agentic 编码平台，支持桌面 IDE、CLI 和
     
     填写对应方案的专属 API Key：
     
-    -   Token Plan 团队版：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)
+    -   Token Plan 个人版：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/token-plan/personal)
+        
+    -   Token Plan 团队版：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/token-plan/enterprise)
         
     -   Coding Plan：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)
         
@@ -99,7 +101,7 @@ Qoder 是面向软件开发的 Agentic 编码平台，支持桌面 IDE、CLI 和
 
 1.  在对话框中输入 `/model`，通过 Tab 键切换至 `Custom`。
     
-2.  回车选择 Add custom model，提供商选择 Alibaba Cloud Model Studio - China，类型根据计费方案选择 **Token Plan**、**Coding Plan** 或 **按量付费**。
+2.  回车选择 Add custom model，提供商选择 Alibaba Cloud Model Studio - China，类型根据计费方案选择 **Token Plan**（个人版或团队版）、**Coding Plan** 或 **按量付费**。
     
 3.  选择模型后输入对应方案的专属 API Key，确认后等待配置生效。
     
@@ -135,7 +137,7 @@ Qoder 是面向软件开发的 Agentic 编码平台，支持桌面 IDE、CLI 和
     
     类型
     
-    根据计费方案选择 **Token Plan**、**Coding Plan** 或 **按量付费**
+    根据计费方案选择 **Token Plan**（个人版或团队版）、**Coding Plan** 或 **按量付费**
     
     模型
     
@@ -145,7 +147,9 @@ Qoder 是面向软件开发的 Agentic 编码平台，支持桌面 IDE、CLI 和
     
     填写对应方案的专属 API Key：
     
-    -   Token Plan 团队版：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)
+    -   Token Plan 个人版：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/token-plan/personal)
+        
+    -   Token Plan 团队版：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/token-plan/enterprise)
         
     -   Coding Plan：[获取 API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)
         
@@ -195,7 +199,11 @@ Qoder 是面向软件开发的 Agentic 编码平台，支持桌面 IDE、CLI 和
 
 -   Coding Plan：[Coding Plan 常见问题](https://help.aliyun.com/zh/model-studio/coding-plan-faq)
     
+-   Token Plan 个人版：[Token Plan 个人版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-faq)
+    
 -   Token Plan 团队版：[Token Plan 团队版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-faq)
+    
+-   按量计费：[错误码](https://help.aliyun.com/zh/model-studio/error-code)
     
 
 ### 为什么在 Qoder 设置中找不到模型选项？

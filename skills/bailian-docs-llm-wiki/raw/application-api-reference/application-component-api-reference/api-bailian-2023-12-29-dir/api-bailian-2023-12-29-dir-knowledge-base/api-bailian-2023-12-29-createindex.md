@@ -163,6 +163,8 @@ string
 
 默认值为空，此时使用 text-embedding-v2 模型。
 
+text-embedding-v4
+
 RerankModelName
 
 string
@@ -322,7 +324,7 @@ array
 
 否
 
-创建知识库时可同步导入文件。此处通过指定类目 ID，可导入对应类目下的所有文件（建议导入不超过 10000 个。如有剩余文件，后续可调用 **SubmitIndexAddDocumentsJob** 接口继续导入）。
+创建知识库时可同步导入文件。此处通过指定类目 ID，可导入对应类目下的所有文件（建议导入不超过 500 个。如有剩余文件，后续可调用 **SubmitIndexAddDocumentsJob** 接口继续导入）。
 
 string
 

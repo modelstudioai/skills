@@ -43,20 +43,22 @@ FLUX.2
 -   写实人像和产品照片
     
 
-### 何时使用qwen-image-2.0-pro
+### 何时使用Qwen Image
 
 -   需要使用负向提示词排除输出中的特定元素
     
 -   需要每次调用生成最多6张图片变体（Wan标准模式最多支持4张）
+    
+-   需要复杂版面生成、小字精准渲染或多语言字体支持 → 选择 qwen-image-3.0-pro（邀测中）
     
 
 ## 图片编辑
 
 推荐使用`wan2.7-image-pro`，它支持多图参考（最多9张输入图片）、边界框交互式编辑以及角色一致性多图生成。详细使用方法请参见[图像编辑-千问](https://help.aliyun.com/zh/model-studio/qwen-image-edit-guide)和[图像编辑-万相2.7/2.6/2.5](https://help.aliyun.com/zh/model-studio/wan-image-edit)。
 
-### 何时使用qwen-image-2.0-pro
+### 何时使用Qwen Image
 
-如果编辑时需要使用负向提示词，请使用`qwen-image-2.0-pro`（生成和编辑使用同一个模型ID）。
+如果编辑时需要使用负向提示词，请使用`qwen-image-3.0-pro`（邀测中）或`qwen-image-2.0-pro`（生成和编辑使用同一个模型ID）。
 
 ## 推荐模型
 
@@ -108,9 +110,9 @@ FLUX.2
 
 2048x2048
 
-`qwen-image-2.0-pro`
+`qwen-image-3.0-pro`
 
-负向提示词、最多6张图片变体
+复杂版面生成、小字渲染、多语言字体
 
 支持
 
@@ -271,6 +273,16 @@ qwen-image-2.0-pro的快速版本
 **最大输出数**
 
 **最大分辨率**
+
+`qwen-image-3.0-pro`
+
+支持
+
+支持
+
+6
+
+2048x2048
 
 `qwen-image-2.0-pro`
 

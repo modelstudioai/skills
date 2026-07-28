@@ -10,218 +10,633 @@
 
 ## 接入JSSDK
 
-#### **步骤一：在HTML插入脚本**
+## 当前版本
 
-```
-<html>
-  <head></head>
-  <body>
-    <!-- 在文档的末尾插入翻译脚本 -->
-    <script src="https://g.alicdn.com/translate-js-sdk/translate-js-sdk-stable/2.0.6/light.js"></script>
-  </body>
-</html>
-```
+项目
 
-#### **步骤二：配置JSSDK**
+值
 
-```
-interface ITokenResponseData {
-  code: 200;
-  data: {
-    url: string,
-    host: string,
-    method: "POST",
-    headers: {
-      "host": string,
-      "x-acs-action": "BatchTranslateForHtml",
-      "x-acs-version": string,
-      "x-acs-date": string;
-      "x-acs-signature-nonce": string;
-      "content-type": "application/json",
-      "x-acs-content-sha256": string;
-      Authorization: string;
-    };
-    body: string;
-  };
-}
-interface ITokenRequestData {
-  sourceLanguage: string;
-  targetLanguage: string;
-  streaming: false,
-  text: {[index: number]: string}
-  scene: 'mt-turbo',
-  fallbackTimeoutMs: number;
-}
-interface ISetupConfig {
-  getToken: (data: ITokenRequestData) => Promise<ITokenResponseData>;
-}
-// 只用初始化一次，不需要每次翻译都初始化
-__AliTranslate.setup({
-  getToken: async (data) => {
-    const res = await fetch('YOUR_GET_TOEKN_URL', { method: 'post', body: JSON.stringify(data) });
-    return (await res.json()).data;
-  }
-});
-```
+**版本号**
 
-#### **步骤三：调用页面翻译**
+`3.0.0`
 
-**仅展示译文**
+CDN 根路径
 
-```
-interface IPageTranslate {
-  srcLanguage?: string; // 默认语种，默认为auto
-  tgtLanguage?: string; // 目标语种，默认为en
-  lazyload?: boolean; // 是否只翻译可视区域，默认为false
-  lazyOffset?: number; // 可视区域的扩展
-  target?: HTMLElement; // 要翻译的目标区域，默认为body
-  except?: string; // 要排除翻译的区域，默认为空
-}
-const instance = __AliTranslate.pageTranslate({
-  // 详细参数见PageTranslate参数
-  lazyload: true,
-  lazyOffset: 500
-});
-```
+`https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/`
 
-**双语对照翻译**
+下文示例中的版本号均以 `3.0.0` 为准，升级时请同步替换 CDN 链接中的版本号。
 
-```
-interface IParagraphTranslate {
-  srcLanguage?: string; // 默认语种，默认为auto
-  tgtLanguage?: string; // 目标语种，默认为en
-  target?: HTMLElement; // 要翻译的目标区域，默认为body
-  dynamic?: boolean; // 是否支持动态翻译，默认为false
-}
-const instance = __AliTranslate.paragraphTranslate({
-  // 详细参数见ParagrapthTranslate参数
-  srcLanguage: 'zh',
-  tgtLanguage: 'en'
-});
-```
+* * *
 
-#### **步骤四：取消翻译**
+SDK 提供两种翻译模式：
 
-```
-// 触发取消翻译后，页面将回到原始文案
-instance.destroy();
-```
+-   页面翻译（`pageTranslate`）：直接替换页面原文为译文，适合“单语展示”场景。
+    
+-   段落对照翻译（`paragraphTranslate`）：在原文后插入译文，适合“原文+译文对照阅读”场景。
+    
 
-### **PageTranslate参数**
+同时支持：
 
-参数
+-   懒加载翻译（只翻译可视区域）
+    
+-   动态内容翻译（DOM 变化后自动翻译）
+    
+-   术语表与翻译记忆
+    
+-   细粒度 hooks（翻译前/后插入自定义逻辑）
+    
+
+* * *
+
+## 引入方式
+
+通过 Script 标签从 CDN 引入，支持两种方式：
+
+### 方式一：全量引入（推荐上手）
+
+一次引入 `index.js`（已包含核心 + 全部插件），即可同时使用页面翻译与段落对照：
+
+文件
 
 说明
 
-类型
+地址
 
-默认值
+`index.js`
 
-srcLanguage
+全量包（核心 + 插件）
 
-默认的原语种
+[https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/index.js](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/index.js)
 
-String
+```
+<script src="https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/index.js"></script>
+```
 
-auto（会根据页面文案自动选择）
+### 方式二：按需拆包引入
 
-tgtLanguage
+先加载 `core.js`，再按需加载对应插件脚本：
 
-默认的目标语种
-
-String
-
-en
-
-lazyload
-
-是否只翻译可视区域
-
-Boolean
-
-false
-
-lazyOffset
-
-当lazyload为true时，可视区域扩展
-
-Number
-
-\-1 (-1表示不做任何offset)
-
-target
-
-要翻译的目标区域
-
-HTMLElement | HTMLElement\[\]
-
-body
-
-except
-
-不翻译的区域
-
-Selector(String)
-
-空
-
-### **ParagraphTranslate参数**
-
-参数
+文件
 
 说明
 
+地址
+
+`core.js`
+
+核心 SDK
+
+[https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/core.js](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/core.js)
+
+`page.js`
+
+页面翻译插件
+
+[https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/page.js](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/page.js)
+
+`paragraph.js`
+
+段落对照插件
+
+[https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/paragraph.js](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/paragraph.js)
+
+```
+<!-- 页面翻译 -->
+<script src="https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/core.js"></script>
+<script src="https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/page.js"></script>
+
+<!-- 段落对照：将 page.js 换成 paragraph.js -->
+<!-- 两种模式都要用：同时引入 page.js 与 paragraph.js -->
+```
+
+说明：
+
+-   全量引入只需一个文件；拆包引入必须先加载 `core.js`，再加载插件。
+    
+-   全局对象为 `window.AliTranslate`，同时提供别名 `window.__AliTranslate`（两者指向同一实例）。
+    
+
+* * *
+
+## 快速开始
+
+### 页面翻译（Pure Page）
+
+```
+<script src="https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/index.js"></script>
+<script>
+  AliTranslate.pageTranslate({
+    getToken: async (params) => {
+      const res = await fetch('https://your-sign-api.example.com/signature', {
+        method: 'POST',
+        body: JSON.stringify(params),
+      });
+      return (await res.json()).data;
+    },
+    srcLanguage: 'auto',
+    tgtLanguage: 'en',
+    targetSelectors: ['#app'],
+    excludeSelectors: ['.no-translate', 'code', 'pre'],
+    lazyload: true,
+    dynamic: true,
+  });
+</script>
+```
+
+### 段落对照翻译（Paragraph Compare）
+
+```
+<script src="https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/index.js"></script>
+<script>
+  AliTranslate.paragraphTranslate({
+    getToken: async (params) => {
+      const res = await fetch('https://your-sign-api.example.com/signature', {
+        method: 'POST',
+        body: JSON.stringify(params),
+      });
+      return (await res.json()).data;
+    },
+    srcLanguage: 'auto',
+    tgtLanguage: 'en',
+    targetSelectors: ['#article'],
+    excludeSelectors: ['.no-translate', 'code', 'pre'],
+    lazyload: true,
+    dynamic: true,
+    extraBlockSelectors: ['.article-title', 'h1', 'h2', 'h3'],
+    extraInlineSelectors: ['.breadcrumb', '.tag-inline'],
+  });
+</script>
+```
+
+* * *
+
+## 初始化参数（SDKConfig）
+
+`AliTranslate.pageTranslate` / `AliTranslate.paragraphTranslate` 中共用的 SDK 级参数如下：
+
+参数
+
 类型
 
-默认值
+必填
 
-srcLanguage
+说明
 
-默认的原语种
+`getToken`
 
-String
+`(params) => Promise<SignedRequest>`
 
-auto（会根据页面文案自动选择）
+是
 
-tgtLanguage
+鉴权签名函数，返回可直接请求翻译服务的签名请求
 
-默认的目标语种
+`terminologies`
 
-String
+`Array<{ src, tgt }>`
 
-en
+否
 
-target
+术语表，提升领域词一致性
 
-要翻译的目标区域
+`examples`
 
-HTMLElement | HTMLElement\[\]
+`Array<{ src, tgt }>`
 
-body
+否
 
-dynamic
+翻译记忆
 
-是否动态翻译。如果开启，如果页面发生变化，会自动翻译。如果不开启，则只翻译一次
+`domainHint`
 
-Boolean
+`string`
 
-false
+否
 
-lazyload
+业务领域（透传至翻译请求）
 
-是否只翻译可视区域
+`chunkSize`
 
-Boolean
+`number`
 
-false
+否
 
-lazyOffset
+分块阈值（影响请求合并与吞吐）
 
-当lazyload为true时，可视区域扩展
+`maxRetries`
 
-Number
+`number`
 
-300
+否
+
+翻译失败最大重试次数
+
+`afterTranslate`
+
+`(result) => void`
+
+否
+
+翻译完成回调
+
+* * *
+
+## 页面翻译参数（PageTranslateConfig）
+
+参数
+
+类型
+
+必填
+
+说明
+
+`tgtLanguage`
+
+`LANGUAGE`
+
+是
+
+目标语种
+
+`srcLanguage`
+
+`LANGUAGE`
+
+否
+
+源语种，不传默认自动检测
+
+`targetSelectors`
+
+`string | string[]`
+
+否
+
+翻译根节点，默认 `body`
+
+`excludeSelectors`
+
+`string | string[]`
+
+否
+
+排除节点（命中后整棵子树不翻译）
+
+`lazyload`
+
+`boolean`
+
+否
+
+是否启用懒加载翻译
+
+`lazyOffset`
+
+`number`
+
+否
+
+懒加载视口偏移（px）
+
+`lazySelectors`
+
+`string | string[]`
+
+否
+
+懒翻译选择器（当前版本为预留字段，建议优先使用 `targetSelectors`）
+
+`dynamic`
+
+`boolean`
+
+否
+
+是否监听 DOM 变化并自动翻译
+
+`translateDelay`
+
+`number`
+
+否
+
+初始化等待/动态翻译节流延迟（ms）
+
+`rules`
+
+`Array<{ selector; style?; className? }>`
+
+否
+
+页面翻译规则（作用于原文容器）
+
+`onBeforeInsertTrans`
+
+`(ctx) => void | HTMLElement | Promise<...>`
+
+否
+
+插入译文前回调
+
+`onTranslatingStart`
+
+`(ctx) => void | Promise<void>`
+
+否
+
+单节点翻译开始回调
+
+`onTranslatingEnd`
+
+`(ctx) => void | Promise<void>`
+
+否
+
+单节点翻译结束回调
+
+* * *
+
+## 段落对照参数（ParagraphTranslateConfig）
+
+参数
+
+类型
+
+必填
+
+说明
+
+`tgtLanguage`
+
+`LANGUAGE`
+
+是
+
+目标语种
+
+`srcLanguage`
+
+`LANGUAGE`
+
+否
+
+源语种，不传默认自动检测
+
+`targetSelectors`
+
+`string | string[]`
+
+否
+
+翻译根节点，默认 `body`
+
+`excludeSelectors`
+
+`string | string[]`
+
+否
+
+排除节点（命中后不参与段落提取）
+
+`lazyload`
+
+`boolean`
+
+否
+
+是否启用懒加载翻译
+
+`lazyOffset`
+
+`number`
+
+否
+
+懒加载视口偏移（px）
+
+`lazySelectors`
+
+`string | string[]`
+
+否
+
+懒翻译选择器（当前版本为预留字段，建议优先使用 `targetSelectors`）
+
+`dynamic`
+
+`boolean`
+
+否
+
+是否监听 DOM 变化并自动翻译
+
+`translateDelay`
+
+`number`
+
+否
+
+初始化等待/动态翻译节流延迟（ms）
+
+`extraBlockSelectors`
+
+`string | string[]`
+
+否
+
+强制按 block 方式插入译文（独占一行）
+
+`extraInlineSelectors`
+
+`string | string[]`
+
+否
+
+强制按 inline 方式插入译文（同行展示）
+
+`rules`
+
+`TransStyleRule[]`
+
+否
+
+对照翻译样式规则
+
+`onBeforeInsertTrans`
+
+`(ctx) => void | HTMLElement | Promise<...>`
+
+否
+
+插入 `<trans>` 之前回调
+
+`onTranslatingStart`
+
+`(ctx) => void | Promise<void>`
+
+否
+
+单段落翻译开始回调
+
+`onTranslatingEnd`
+
+`(ctx) => void | Promise<void>`
+
+否
+
+单段落翻译结束回调
+
+### `TransStyleRule` 说明
+
+```
+interface TransStyleRule {
+  selector: string
+  transStyle?: Record<string, string> // 作用于译文节点 <trans>
+  style?: Record<string, string>      // 作用于命中 selector 的父容器
+  className?: string                  // 作用于命中 selector 的父容器
+}
+```
+
+* * *
+
+## Hooks 与可回滚 DOM 变更
+
+SDK 提供了 `mutator`（可回滚变更操作器），支持在 hooks 中做安全 DOM 操作，并在 `removeTranslations()` 时自动回滚。
+
+```
+<script src="https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/index.js"></script>
+<script>
+  AliTranslate.paragraphTranslate({
+    getToken: async (params) => {
+      const res = await fetch('https://your-sign-api.example.com/signature', {
+        method: 'POST',
+        body: JSON.stringify(params),
+      });
+      return (await res.json()).data;
+    },
+    tgtLanguage: 'en',
+    onTranslatingStart: (ctx) => {
+      const loading = document.createElement('span');
+      loading.className = 'loading';
+      loading.textContent = '翻译中...';
+      loading.setAttribute('data-source-hash', ctx.sourceHash);
+      ctx.mutator.appendNode(ctx.paragraph.commonAncestor, loading);
+    },
+    onTranslatingEnd: (ctx) => {
+      const loading = ctx.paragraph.commonAncestor.querySelector(
+        `.loading[data-source-hash="${ctx.sourceHash}"]`,
+      );
+      if (loading) ctx.mutator.removeNode(loading);
+    },
+    onBeforeInsertTrans: (ctx) => {
+      ctx.transNode.style.color = '#4f46e5';
+      return ctx.transNode;
+    },
+  });
+</script>
+```
+
+`mutator` 可用能力：
+
+-   `setStyle(el, prop, value, priority?)`
+    
+-   `addClass(el, className)`
+    
+-   `removeClass(el, className)`
+    
+-   `appendNode(parent, node)`
+    
+-   `removeNode(node)`
+    
+
+* * *
+
+## 语种与枚举值
+
+常用语种值示例：
+
+-   `auto`（自动检测）
+    
+-   `zh`、`en`、`ja`、`ko`、`fr`、`de`、`es`、`ru`、`ar`、`th`、`vi`
+    
+
+完整语言枚举请参考 SDK 类型定义 `LANGUAGE`。
+
+* * *
+
+## 常用 API
+
+```
+// 移除翻译结果（保留 SDK 实例）
+AliTranslate.removeTranslations()
+
+// 销毁 SDK（释放资源，插件与事件解绑）
+AliTranslate.destroy()
+```
+
+* * *
+
+## 完整示例（段落对照 + rules + hooks）
+
+```
+<script src="https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/index.js"></script>
+<script>
+  AliTranslate.paragraphTranslate({
+    getToken: async (params) => {
+      const res = await fetch('https://your-sign-api.example.com/signature', {
+        method: 'POST',
+        body: JSON.stringify(params),
+      });
+      return (await res.json()).data;
+    },
+    srcLanguage: 'auto',
+    tgtLanguage: 'en',
+    targetSelectors: ['#article'],
+    excludeSelectors: ['.no-translate', 'code', 'pre'],
+    lazyload: true,
+    lazyOffset: 120,
+    dynamic: true,
+    translateDelay: 200,
+    extraBlockSelectors: ['.title', 'h1', 'h2'],
+    extraInlineSelectors: ['.breadcrumb'],
+    rules: [
+      {
+        selector: '.highlight',
+        transStyle: { color: '#4f46e5' },
+        style: { background: '#eef2ff' },
+        className: 'translated-highlight',
+      },
+    ],
+    onBeforeInsertTrans: (ctx) => {
+      // 自定义译文节点样式，给所有翻译前(排除h1, h2, h3)添加一个border
+      if (ctx.paragraph.commonAncestor.matches('h1, h2, h3')) {
+        return ctx.transNode;
+      }
+      ctx.transNode.style.borderLeft = '2px solid #e94560';
+      ctx.transNode.style.paddingLeft = '0.75rem';
+      ctx.transNode.style.marginTop = '0.5rem';
+    },
+    onTranslatingStart: (ctx) => {
+      // 为翻译中的节点添加 loading
+      const loading = document.createElement('span');
+      loading.className = 'loading';
+      loading.setAttribute('data-source-hash', ctx.sourceHash);
+      loading.textContent = '翻译中...';
+      ctx.mutator.appendNode(ctx.paragraph.commonAncestor, loading);
+    },
+    onTranslatingEnd: (ctx) => {
+      // 移除自定义添加的 loading
+      const root = ctx.paragraph.commonAncestor;
+      const loading = root.querySelector(`.loading[data-source-hash="${ctx.sourceHash}"]`);
+      if (loading) ctx.mutator.removeNode(loading);
+    },
+  });
+</script>
+```
+
+* * *
+
+如需同时支持“页面翻译”和“段落对照翻译”，推荐直接使用全量包 `index.js`，并在业务 UI 中明确区分两种模式的切换与清理流程。
 
 ## **获取Token服务**
 
@@ -859,21 +1274,70 @@ public class NodeSignature {
 }
 ```
 
-## **常见问题**
+## 注意事项（生产接入建议）
 
-#### **1\. AK/SK在哪里获取？**
+-   **必须配置** `**getToken**`：由业务侧完成鉴权签名后再发起翻译请求。
+    
+-   **引入方式二选一**：全量引入 `index.js` 即可；若按需拆包，页面翻译需引入 `page.js`，段落对照需引入 `paragraph.js`。
+    
+-   **重复翻译建议先清理**：多次切换参数/语言前建议先执行 `removeTranslations()`，避免旧状态干扰新配置验证。
+    
+-   **目标与排除选择器要收敛**：`targetSelectors` 建议限定业务容器，`excludeSelectors` 排除导航、代码块、编辑区等。
+    
+-   **避免翻译敏感区域**：如输入框、编辑器、业务脚本节点、模板容器。
+    
+-   **Hook 里避免重逻辑**：`onTranslatingStart/End` 触发频率高，避免耗时操作阻塞主线程。
+    
+-   **动态内容场景建议开启** `**dynamic**`：适配懒渲染和流式加载页面。
+    
 
-在[阿里云](https://ram.console.aliyun.com/profile/access-keys)平台的AccessKey模块中获取
+## 常见问题
 
-#### **2\. 获取Token服务中的workspaceId从哪里获取？**
+### 调用无效果
 
-登录AK/SK对应的阿里云账号后，在[百炼](https://bailian.console.aliyun.com/)左下角的业务空间详情中获取
+-   检查是否已正确引入脚本（全量 `index.js`，或 `core.js` + 对应插件）。
+    
+-   检查 `targetSelectors` 是否命中。
+    
+-   检查 `excludeSelectors` 是否误伤目标区域。
+    
+-   检查签名接口是否返回合法请求结构。
+    
 
-弹窗中的**业务空间id**即对应所需的workspaceId，单击字段右侧的复制图标可直接复制。
+### rules / hooks 未生效
 
-#### **3\. 网络接口调用报没有权限**
+-   确认传参写在 `pageTranslate` / `paragraphTranslate` 的同一层级。
+    
+-   重复执行前先 `removeTranslations()` 再重新翻译。
+    
+-   检查 `selector` 是否可命中段落 `commonAncestor` 或其祖先。
+    
 
-未开通通义多模态翻译产品：需要使用AK所属的阿里云主账号，在百炼通义多模态翻译上进行开通
+### loading 看不到
+
+-   翻译速度很快时会瞬时消失，建议在业务侧设置最小可见时长（如 300-500ms）。
+    
+-   用 `data-source-hash` 做唯一标识，避免并发段落相互覆盖。
+    
+
+### **AK/SK在哪里获取？**
+
+-   在[阿里云](https://ram.console.aliyun.com/profile/access-keys)平台的AccessKey模块中获取
+    
+
+### **获取Token服务中的workspaceId从哪里获取？**
+
+-   登录AK/SK对应的阿里云账号后，在[百炼](https://bailian.console.aliyun.com/)左下角的业务空间详情中获取
+    
+-   弹窗中的**业务空间id**即对应所需的workspaceId，单击字段右侧的复制图标可直接复制。
+    
+
+### **网络接口调用报没有权限**
+
+-   未开通 通义多模态翻译 产品：需要使用AK所属的阿里云主账号，在百炼通义多模态翻译上进行开通
+    
+
+* * *
 
 ## **变更记录**
 
@@ -884,6 +1348,12 @@ public class NodeSignature {
 发布时间
 
 发布内容
+
+3.0.0
+
+2026年7月16日
+
+大版本升级，增加按需引入、术语/语料/domain配置、样式干预、更多的配置参数
 
 2.0.6
 

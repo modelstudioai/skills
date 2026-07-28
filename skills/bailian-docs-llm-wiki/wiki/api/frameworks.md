@@ -7,9 +7,9 @@
 | 框架 | 语言 | 主要能力 |
 | --- | --- | --- |
 | LlamaIndex | Python 3.9+ | 读取本地文件上传到百炼应用数据、构建云端[知识库](../concepts/knowledge-base.md)、构建检索引擎与 RAG 应用 |
-| Spring AI Alibaba | Java（Spring Boot 3.x，JDK 17+） | 调用百炼[智能体应用](../concepts/agent-application.md)/[工作流](../concepts/workflow.md)应用（流式与非流式）、检索百炼知识库 |
+| Spring AI Alibaba | Java（Spring Boot 3.x，JDK 17+） | 调用百炼[智能体应用](../concepts/agent-application.md)/[工作流](../concepts/workflow.md)应用（流式与非流式）、检索百炼[知识库](../concepts/[knowledge](knowledge.md)-base.md) |
 
-- LlamaIndex 路线将知识库部署在云端，使用默认的智能文档切分与官方向量模型，**不支持**自定义文档切分方式或自定义嵌入模型。如需本地知识库或灵活切分，应改用本地知识库方案，详见[通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)。
+- LlamaIndex 路线将[知识库](../concepts/[knowledge](knowledge.md)-base.md)部署在云端，使用默认的智能文档切分与官方向量模型，**不支持**自定义文档切分方式或自定义嵌入模型。如需本地[知识库](../concepts/[knowledge](knowledge.md)-base.md)或灵活切分，应改用本地知识库方案，详见[通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)。
 - Spring AI Alibaba 的应用集成**仅支持**[智能体应用](../concepts/agent-application.md)与[工作流](../concepts/workflow.md)应用两类，需提前在百炼控制台创建并获取应用 ID。
 
 ## 前提条件
@@ -121,7 +121,7 @@ this.chatClient = builder
 ## 限制与注意事项
 
 - LlamaIndex 云端方案不支持自定义文档切分与嵌入模型；本地需可访问公网，文件上传与生成回答均需等待。
-- Spring AI Alibaba 应用集成仅支持[智能体应用](../concepts/agent-application.md)与工作流应用，其他应用类型不在支持范围。
+- Spring AI Alibaba 应用集成仅支持[智能体应用](../concepts/agent-application.md)与[工作流](../concepts/workflow.md)应用，其他应用类型不在支持范围。
 - 知识库检索需提前创建好知识库并获取其名称；检索默认[业务空间](../concepts/workspace.md)知识库无需配置 `workspace-id`。
 - 子[业务空间](../concepts/workspace.md)场景必须配置对应的[业务空间](../concepts/workspace.md) ID 环境变量，否则会鉴权或定位失败。
 - [API Key](../concepts/api-key.md) 一律通过环境变量注入，切勿硬编码到源码或配置文件中。
@@ -131,6 +131,19 @@ this.chatClient = builder
 - [通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)
 - [使用Spring AI Alibaba集成阿里云百炼大模型应用](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-llm-application.md)
 - [通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
