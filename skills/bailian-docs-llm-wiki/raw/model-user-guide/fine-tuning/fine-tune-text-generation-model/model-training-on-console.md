@@ -4,7 +4,7 @@
 
 ## **模型调优流程**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8010204871/CAEQZhiBgMDg9PGS2hkiIDNlZDFiMGRlMTJhOTQ1YzJhMmNjNDM3NzQ1ZjNiOGZk4608430_20240830103738.564.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3743415871/CAEQZhiBgMDg9PGS2hkiIDNlZDFiMGRlMTJhOTQ1YzJhMmNjNDM3NzQ1ZjNiOGZk4608430_20240830103738.564.svg)
 
 ## **步骤一：选择调优方式**
 
@@ -776,3 +776,21 @@ Checkpoint 有保存时长限制，超过保存时长后将被自动清理，届
 **说明**
 
 您可以在模型调优任务列表中，点击训练失败任务右侧的**日志**，查看具体的训练失败原因。
+
+### **微调后模型体验仍回答基座模型身份怎么办？**
+
+**原因说明**
+
+控制台**模型体验**页面不支持设置 system prompt，导致微调后的身份设定无法生效。
+
+**解决方案**
+
+可以通过以下方式验证微调模型的身份设定效果：
+
+-   **方案一：通过 API 调用传入 system prompt**
+    
+    调用 API 时，在请求的 `system` 字段中填写身份设定内容，即可让模型按照微调后的设定进行回答。
+    
+-   **方案二：在百炼控制台模型调试页面测试**
+    
+    前往百炼控制台**模型调试**页面，在系统提示词输入框中填写身份设定内容，再进行测试。

@@ -1,46 +1,37 @@
 # model production
 
-百炼平台提供模型生产相关的 API，覆盖从模型微调训练到部署上线的完整流程。开发者可以通过[模型调优](../../raw/model-api-reference/model-production/fine-tuning-jobs-api.md)接口定制专属模型，再通过[模型部署](../../raw/model-api-reference/model-production/deployments-api.md)接口将其发布为在线推理服务。
+模型生产（model production）涵盖百炼平台上从定制模型到上线服务的完整链路：先通过微调训练得到专属模型，再将其部署为在线推理服务。本页汇总 [模型调优](../../raw/model-api-reference/model-production/fine-tuning-jobs-api.md) 与 [模型部署](../../raw/model-api-reference/model-production/deployments-api.md) 两个 API 的核心信息，帮助开发者快速打通"调优 → 部署 → 调用"的流程。
 
-## 模型调优
+## 能力概览
 
-模型调优（Fine-tuning）允许开发者通过微调训练定制专属模型，以适配特定业务场景。调优流程通常包括：
+| 环节 | 能力 | 对应文档 |
+| --- | --- | --- |
+| 模型调优 | 通过微调（fine-tuning）训练定制专属模型 | [模型调优](../../raw/model-api-reference/model-production/fine-tuning-jobs-api.md) |
+| 模型部署 | 将微调产出的模型或外部导入的模型部署为在线推理服务 | [模型部署](../../raw/model-api-reference/model-production/deployments-api.md) |
 
-- **创建调优任务**：指定基础模型、训练数据集和超参数，提交微调训练任务
-- **查询任务状态**：轮询或监听训练任务进度，获取训练指标
-- **管理调优产物**：训练完成后获取调优模型，用于后续部署或评估
+## 典型使用流程
 
-详细的接口定义和参数说明请参考[模型调优](../../raw/model-api-reference/model-production/fine-tuning-jobs-api.md)文档。
+1. **准备并提交微调任务**：按照 [模型调优](../../raw/model-api-reference/model-production/fine-tuning-jobs-api.md) 中的接口创建微调训练任务，产出定制模型。
+2. **部署为在线服务**：微调完成后（或已有导入的模型），按 [模型部署](../../raw/model-api-reference/model-production/deployments-api.md) 中的接口将模型部署为在线推理服务。
+3. **调用推理服务**：部署成功后，即可通过在线推理接口以部署得到的模型/服务标识发起调用。
 
-## 模型部署
+## 支持的模型来源
 
-模型部署将微调或导入的模型发布为在线推理服务，使其可通过 API 调用进行推理。部署流程通常包括：
+部署环节支持两类模型来源：
 
-- **创建部署**：选择调优完成的模型或外部导入的模型，配置推理资源和服务参数
-- **管理部署实例**：查看部署状态、调整资源配置、启停服务
-- **调用推理服务**：部署成功后，通过标准 API 端点发送推理请求
+- **微调产出的模型**：由模型调优（fine-tuning）任务训练得到的专属模型。
+- **导入的模型**：从外部导入到平台的模型。
 
-详细的接口定义和参数说明请参考[模型部署](../../raw/model-api-reference/model-production/deployments-api.md)文档。
+## 限制和注意事项
 
-## 典型工作流
+- 微调与部署是两个独立步骤：微调完成不代表模型可直接调用，必须先完成部署才能提供在线推理服务。
+- 部署会占用推理资源，实际的计费方式、算力规格与配额请以对应 API 文档和控制台展示为准。
 
-1. 准备训练数据集
-2. 通过调优 API 提交微调训务，等待训练完成
-3. 通过部署 API 将调优产物部署为在线服务
-4. 调用部署后的模型端点进行推理
+> **注意**：当前两篇原始文档内容较为简略，仅给出能力定位，未包含具体的请求参数、返回结构与错误码。集成前请以最新版 API 参考为准，避免依赖过时字段。
 
 ## 来源文档
 
 - [模型调优](../../raw/model-api-reference/model-production/fine-tuning-jobs-api.md)
 - [模型部署](../../raw/model-api-reference/model-production/deployments-api.md)
-
-
-
-
-
-
-
-
-
 
 

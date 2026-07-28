@@ -45,12 +45,15 @@ Python 编码（专业代码）
 
 AI 自主决策、动态规划  
 由大模型根据提示词自主规划任务步骤  
+  
 
 由预定义流程精确控制  
 每一步都由预设的节点定义，逻辑确定  
+  
 
 完全由代码控制  
 所有逻辑和执行路径由代码定义  
+  
 
 适合人群
 
@@ -74,9 +77,9 @@ AI 工程师、开发者
 
 -   **智能体应用**
     
-    -   如何创建和配置？请参考：[新版智能体应用](https://help.aliyun.com/zh/model-studio/new-single-agent-application)（推荐）、[智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)。
+    -   如何创建和配置？请参考：[新版智能体应用（Agent 2.0）](https://help.aliyun.com/zh/model-studio/new-single-agent-application)（推荐）、[智能体应用（Agent 1.0）](https://help.aliyun.com/zh/model-studio/single-agent-application)。
         
-    -   如何快速上手实际案例？请参考：[创建智能问答 AI 电商客服助手](https://help.aliyun.com/zh/document_detail/2878136.html#0a9fbaf6a71q7)、[集成高德 MCP 的旅行规划智能体](https://help.aliyun.com/zh/document_detail/2880695.html)。
+    -   如何快速上手实际案例？请参考：[创建智能问答 AI 电商客服助手](https://help.aliyun.com/zh/document_detail/2878136.html#0a9fbaf6a71q7)、[集成高德 MCP 的旅行规划智能体](https://help.aliyun.com/zh/model-studio/use-cases/integrate-amap-mcp-travel-planning-agent)。
         
     -   如何通过 API 调用？请参考：[新版智能体应用 API](https://help.aliyun.com/zh/model-studio/new-agent-application-api-reference)、[调用智能体应用](https://help.aliyun.com/zh/model-studio/call-single-agent-application/)。
         

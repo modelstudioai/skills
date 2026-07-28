@@ -11,7 +11,7 @@
   - **表格**：导入并查询结构化表格数据（CSV、Excel 等）。
 - **流处理**：数据保留在原数据源，实时访问。
   - **MySQL / PostgreSQL / PolarDB-X 2.0**：连接对应数据库，支持执行 SQL 查询（仅 DMS 导入方式支持）。
-  - **语雀**：访问语雀文档和知识库（仅公网版本）。
+  - **语雀**：访问语雀文档和[知识库](../concepts/[knowledge](../api/knowledge.md)-base.md)（仅公网版本）。
   - **OSS**：访问对象存储中的文件。
 
 各类型的适用场景与存储方式详见 [数据连接](../../raw/application-user-guide/data-connection-overview/data-connection.md) 的连接器类型表。
@@ -24,7 +24,7 @@
   - MySQL：已有 MySQL 实例（RDS 或自建），网络可达（公网或私网）。
   - PostgreSQL：账号具备高权限（Superuser 或 REPLICATION），且 `wal_level` 设置为 `logical`；自建实例还需配置 `listen_addresses` 允许 `100.64.0.0/16` 网段访问。
   - PolarDB-X 2.0：已有阿里云 PolarDB-X 2.0 实例且所在地域支持私网访问；DMS 导入方式需先在 DMS 录入实例。
-  - 语雀：已有公网版语雀知识库并获取访问 Token。
+  - 语雀：已有公网版语雀[知识库](../concepts/[knowledge](../api/knowledge.md)-base.md)并获取访问 [Token](../concepts/token.md)。
   - OSS：已创建 Bucket 并开通向量检索服务。
 
 ## 数据库连接器关键差异
@@ -63,7 +63,7 @@
 
 - 数据库连接器执行 SQL 的限制见上文注意框（仅 DMS 导入方式支持）。
 - **OSS 连接器**：使用需开通[向量检索服务](https://help.aliyun.com/zh/oss/user-guide/vector-retrieval/)，否则无法使用 `searchOSSFile` / `searchOSSFileByFileName` 工具；不支持归档/冷归档/深度冷归档类型的 Bucket；支持内容加密与私有 Bucket；开启 Referer 防盗链时需将 `*.console.aliyun.com` 加入白名单。
-- **文件导入**：文件作为独立副本存储在平台免费空间（当前无容量限制），仅支持查看最近 **90** 天内导入的文件（超期不可查看但不删除），且仅供当前业务空间使用。请求高峰期解析可能耗时数小时甚至偶现超时，需耐心等待或重试。
+- **文件导入**：文件作为独立副本存储在平台免费空间（当前无容量限制），仅支持查看最近 **90** 天内导入的文件（超期不可查看但不删除），且仅供当前[业务空间](../concepts/workspace.md)使用。请求高峰期解析可能耗时数小时甚至偶现超时，需耐心等待或重试。
 - **语雀连接器**：仅支持公网版本语雀，需提供有效的 Tenant access token。
 
 以上流程、字段和限制的完整细节，请以原文 [数据连接](../../raw/application-user-guide/data-connection-overview/data-connection.md) 为准。
@@ -71,6 +71,19 @@
 ## 来源文档
 
 - [数据连接](../../raw/application-user-guide/data-connection-overview/data-connection.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

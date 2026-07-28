@@ -1,6 +1,6 @@
 # Dify
 
-Dify 是一个开源的大模型应用开发平台，您可以基于阿里云百炼提供的模型 API 来构建大模型应用。
+Dify 是一个开源的大模型应用开发平台，您可以基于阿里云百炼提供的模型 API（按量付费或 Token Plan 个人版）来构建大模型应用。
 
 ## **前提条件**
 
@@ -36,7 +36,7 @@ Dify 是一个开源的大模型应用开发平台，您可以基于阿里云百
 
 单击**通义千问**卡片中的显示模型，打开您需要使用的模型开关。
 
-> 若插件内暂未包含最新版千问模型，可尝试安装 **OpenAI-API-compatible** 插件，在插件设置中的 **API endpoint URL** 填入`https://dashscope.aliyuncs.com/compatible-mode/v1`（华北2（北京）地域）或`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`（新加坡地域）。其中`WorkspaceId`需替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+> 若插件内暂未包含最新版千问模型，可尝试安装 **OpenAI-API-compatible** 插件，在插件设置中的 **API endpoint URL** 填入`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`（华北2（北京）地域）或`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`（新加坡地域）。其中`WorkspaceId`需替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## **2\. 开始使用**
 
@@ -100,6 +100,23 @@ Dify 具有多种大模型应用类型，请选择您使用的类型进行参考
 > gte-rerank-v2仅支持。
 
 > Embedding 模型暂时无法选择multimodal-embedding-v1模型，敬请关注后续动态。
+
+## **Token Plan 个人版**
+
+如果您已订阅 Token Plan 个人版，可通过 OpenAI-API-compatible 插件接入，无需使用千问插件。
+
+1.  在 [Dify 市场](https://cloud.dify.ai/plugins?category=discover)安装 **OpenAI-API-compatible** 插件。
+    
+2.  在插件设置中配置以下信息：
+    
+    -   **API endpoint URL**：`https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
+        
+    -   **API Key**：填入 Token Plan 个人版专属 API Key。[获取 API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/overview)
+        
+3.  在模型列表中选择 Token Plan 个人版支持的模型，即可开始使用。支持的模型请参考[Token Plan 个人版支持模型](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)。
+    
+
+常见问题请参考[Token Plan 常见问题](https://help.aliyun.com/zh/model-studio/token-plan-team-faq)。
 
 ## **常见问题**
 

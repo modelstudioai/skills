@@ -171,8 +171,6 @@
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -187,15 +185,11 @@ qwen3.7-max
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 30,000
 
 5,000,000
 
 qwen3.7-max-2026-06-08
-
-中国内地
 
 600
 
@@ -203,15 +197,11 @@ qwen3.7-max-2026-06-08
 
 qwen3.7-max-2026-05-20
 
-中国内地
-
 600
 
 1,000,000
 
 qwen3.7-max-preview
-
-中国内地
 
 60
 
@@ -219,15 +209,11 @@ qwen3.7-max-preview
 
 qwen3.7-max-2026-05-17
 
-中国内地
-
 60
 
 500,000
 
 qwen3.6-max-preview
-
-中国内地
 
 600
 
@@ -237,15 +223,11 @@ qwen3-max
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 30,000
 
 5,000,000
 
 qwen3-max-2026-01-23
-
-中国内地
 
 600
 
@@ -253,15 +235,11 @@ qwen3-max-2026-01-23
 
 qwen3-max-2025-09-23
 
-中国内地
-
 60
 
 100,000
 
 qwen3-max-preview
-
-中国内地
 
 600
 
@@ -271,23 +249,17 @@ qwen-max
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 1,200
 
 1,000,000
 
 qwen3.7-plus
 
-中国内地
-
 30,000
 
 5,000,000
 
 qwen3.7-plus-2026-05-26
-
-中国内地
 
 600
 
@@ -297,15 +269,25 @@ qwen3.6-plus
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 30,000
 
 5,000,000
 
 qwen3.6-plus-2026-04-02
 
-中国内地
+600
+
+1,000,000
+
+qwen3.7-flash
+
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
+
+30,000
+
+5,000,000
+
+qwen3.7-flash-2026-07-15
 
 600
 
@@ -315,15 +297,11 @@ qwen3.6-flash
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 30,000
 
 10,000,000
 
 qwen3.6-flash-2026-04-16
-
-中国内地
 
 600
 
@@ -333,23 +311,17 @@ qwen3.5-plus
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 30,000
 
 5,000,000
 
 qwen3.5-plus-2026-04-20
 
-中国内地
-
 600
 
 1,000,000
 
 qwen3.5-plus-2026-02-15
-
-中国内地
 
 600
 
@@ -359,8 +331,6 @@ qwen-plus
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 30,000
 
 5,000,000
@@ -369,23 +339,17 @@ qwen-plus-latest
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 15,000
 
 1,200,000
 
 qwen-plus-2025-12-01
 
-中国内地
-
 120
 
 1,000,000
 
 qwen-plus-2025-09-11
-
-中国内地
 
 60
 
@@ -395,8 +359,6 @@ qwen-plus-2025-07-28
 
 （qwen-plus-0728）
 
-中国内地
-
 60
 
 1,000,000
@@ -404,8 +366,6 @@ qwen-plus-2025-07-28
 qwen-plus-2025-07-14
 
 （qwen-plus-0714）
-
-中国内地
 
 60
 
@@ -415,8 +375,6 @@ qwen-plus-2025-04-28
 
 （qwen-plus-0428）
 
-中国内地
-
 60
 
 1,000,000
@@ -424,8 +382,6 @@ qwen-plus-2025-04-28
 qwen-plus-2025-01-25
 
 （qwen-plus-0125）
-
-中国内地
 
 60
 
@@ -435,8 +391,6 @@ qwen-plus-2025-01-12
 
 （qwen-plus-0112）
 
-中国内地
-
 60
 
 150,000
@@ -444,8 +398,6 @@ qwen-plus-2025-01-12
 qwen-plus-2024-12-20
 
 （qwen-plus-1220）
-
-中国内地
 
 60
 
@@ -455,15 +407,11 @@ qwen3.5-flash
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 30,000
 
 10,000,000
 
 qwen3.5-flash-2026-02-23
-
-中国内地
 
 600
 
@@ -473,15 +421,11 @@ qwen-flash
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 30,000
 
 10,000,000
 
 qwen-flash-2025-07-28
-
-中国内地
 
 60
 
@@ -491,8 +435,6 @@ qwen-turbo
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 1,200
 
 5,000,000
@@ -500,8 +442,6 @@ qwen-turbo
 qwq-plus
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
-
-中国内地
 
 600
 
@@ -511,8 +451,6 @@ qwen-long
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 1,200
 
 3,000,000
@@ -521,8 +459,6 @@ qwen-long-latest
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 1,200
 
 60,000
@@ -530,8 +466,6 @@ qwen-long-latest
 qwen-long-2025-01-25
 
 (qwen-long-0125)
-
-中国内地
 
 3
 
@@ -664,6 +598,14 @@ qwen3.6-flash-2026-04-16
 60
 
 1,000,000
+
+qwen3.6-flash-us
+
+美国
+
+15,000
+
+5,000,000
 
 qwen3.5-plus
 
@@ -892,6 +834,22 @@ qwen3.6-plus
 5,000,000
 
 qwen3.6-plus-2026-04-02
+
+国际
+
+60
+
+1,000,000
+
+qwen3.7-flash
+
+国际
+
+15,000
+
+5,000,000
+
+qwen3.7-flash-2026-07-15
 
 国际
 
@@ -1393,8 +1351,6 @@ qwen3.6-flash-2026-04-16
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -1409,23 +1365,17 @@ qwen3-vl-plus
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 3,000
 
 5,000,000
 
 qwen3-vl-plus-2025-12-19
 
-中国内地
-
 60
 
 100,000
 
 qwen3-vl-plus-2025-09-23
-
-中国内地
 
 60
 
@@ -1435,23 +1385,17 @@ qwen3-vl-flash
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 3,000
 
 5,000,000
 
 qwen3-vl-flash-2026-01-22
 
-中国内地
-
 60
 
 100,000
 
 qwen3-vl-flash-2025-10-15
-
-中国内地
 
 60
 
@@ -1461,8 +1405,6 @@ qwen-vl-max
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 1,200
 
 1,000,000
@@ -1471,23 +1413,17 @@ qwen-vl-plus
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 1,200
 
 1,000,000
 
 qvq-max
 
-中国内地
-
 60
 
 100,000
 
 qvq-plus
-
-中国内地
 
 60
 
@@ -1731,8 +1667,6 @@ qwen3-vl-flash-2025-10-15
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -1745,15 +1679,11 @@ qwen3-vl-flash-2025-10-15
 
 qwen3.5-omni-plus
 
-中国内地
-
 60
 
 100,000
 
 qwen3.5-omni-plus-2026-03-15
-
-中国内地
 
 60
 
@@ -1761,15 +1691,11 @@ qwen3.5-omni-plus-2026-03-15
 
 qwen3.5-omni-flash
 
-中国内地
-
 60
 
 100,000
 
 qwen3.5-omni-flash-2026-03-15
-
-中国内地
 
 60
 
@@ -1777,23 +1703,17 @@ qwen3.5-omni-flash-2026-03-15
 
 qwen3-omni-flash
 
-中国内地
-
 60
 
 100,000
 
 qwen3-omni-flash-2025-12-01
 
-中国内地
-
 60
 
 100,000
 
 qwen3-omni-flash-2025-09-15
-
-中国内地
 
 60
 
@@ -1803,15 +1723,11 @@ qwen-omni-turbo
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 60
 
 100,000
 
 qwen-omni-turbo-latest
-
-中国内地
 
 60
 
@@ -1821,8 +1737,6 @@ qwen-omni-turbo-2025-03-26
 
 （qwen-omni-turbo-0326）
 
-中国内地
-
 60
 
 100,000
@@ -1830,8 +1744,6 @@ qwen-omni-turbo-2025-03-26
 qwen-omni-turbo-2025-01-19
 
 （qwen-omni-turbo-0119）
-
-中国内地
 
 60
 
@@ -1939,8 +1851,6 @@ qwen-omni-turbo-2025-03-26
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -1953,15 +1863,11 @@ qwen-omni-turbo-2025-03-26
 
 qwen3.5-omni-plus-realtime
 
-中国内地
-
 60
 
 100,000
 
 qwen3.5-omni-plus-realtime-2026-03-15
-
-中国内地
 
 60
 
@@ -1969,15 +1875,11 @@ qwen3.5-omni-plus-realtime-2026-03-15
 
 qwen3.5-omni-flash-realtime
 
-中国内地
-
 60
 
 100,000
 
 qwen3.5-omni-flash-realtime-2026-03-15
-
-中国内地
 
 60
 
@@ -1985,15 +1887,11 @@ qwen3.5-omni-flash-realtime-2026-03-15
 
 qwen3-omni-flash-realtime
 
-中国内地
-
 60
 
 100,000
 
 qwen3-omni-flash-realtime-2025-12-01
-
-中国内地
 
 60
 
@@ -2001,23 +1899,17 @@ qwen3-omni-flash-realtime-2025-12-01
 
 qwen3-omni-flash-realtime-2025-09-15
 
-中国内地
-
 60
 
 100,000
 
 qwen-omni-turbo-realtime-latest
 
-中国内地
-
 60
 
 100,000
 
 qwen-omni-turbo-realtime-2025-05-08
-
-中国内地
 
 60
 
@@ -2125,8 +2017,6 @@ qwen-omni-turbo-realtime**\-**2025-05-08
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -2139,8 +2029,6 @@ qwen-omni-turbo-realtime**\-**2025-05-08
 
 qwen3.5-ocr
 
-中国内地
-
 6,000
 
 30,000,000
@@ -2148,8 +2036,6 @@ qwen3.5-ocr
 qwen-vl-ocr
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
-
-中国内地
 
 600
 
@@ -2159,23 +2045,17 @@ qwen-vl-ocr-latest
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
+6,000
 
-1,200
-
-6,000,000
+30,000,000
 
 qwen-vl-ocr-2025-11-20
 
-中国内地
+6,000
 
-1,200
-
-6,000,000
+30,000,000
 
 qwen-vl-ocr-2025-08-28
-
-中国内地
 
 600
 
@@ -2183,15 +2063,11 @@ qwen-vl-ocr-2025-08-28
 
 qwen-vl-ocr-2025-04-13
 
-中国内地
-
 600
 
 6,000,000
 
 qwen-vl-ocr-2024-10-28
-
-中国内地
 
 600
 
@@ -2299,8 +2175,6 @@ qwen-vl-ocr-2025-11-20
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -2313,15 +2187,11 @@ qwen-vl-ocr-2025-11-20
 
 qwen-audio-turbo
 
-中国内地
-
 120
 
 100,000
 
 qwen-audio-turbo-latest
-
-中国内地
 
 60
 
@@ -2332,8 +2202,6 @@ qwen-audio-turbo-latest
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -2347,15 +2215,11 @@ qwen-audio-turbo-latest
 
 qwen-math-plus
 
-中国内地
-
 1,200
 
 1,000,000
 
 qwen-math-plus-latest
-
-中国内地
 
 1,200
 
@@ -2365,8 +2229,6 @@ qwen-math-plus-2024-09-19
 
 （qwen-math-plus-0919）
 
-中国内地
-
 60
 
 100,000
@@ -2375,15 +2237,11 @@ qwen-math-plus-2024-08-16
 
 （qwen-math-plus-0816）
 
-中国内地
-
 10
 
 20,000
 
 qwen-math-turbo
-
-中国内地
 
 1200
 
@@ -2394,8 +2252,6 @@ qwen-math-turbo
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -2409,15 +2265,11 @@ qwen-math-turbo
 
 qwen3-coder-plus
 
-中国内地
-
 5,000
 
 5,000,000
 
 qwen3-coder-plus-2025-09-23
-
-中国内地
 
 60
 
@@ -2425,15 +2277,11 @@ qwen3-coder-plus-2025-09-23
 
 qwen3-coder-plus-2025-07-22
 
-中国内地
-
 60
 
 1,000,000
 
 qwen3-coder-flash
-
-中国内地
 
 5,000
 
@@ -2441,23 +2289,17 @@ qwen3-coder-flash
 
 qwen3-coder-flash-2025-07-28
 
-中国内地
-
 60
 
 1,000,000
 
 qwen-coder-plus
 
-中国内地
-
 1,200
 
 1,000,000
 
 qwen-coder-turbo
-
-中国内地
 
 1,200
 
@@ -2637,8 +2479,6 @@ qwen3-coder-flash-2025-07-28
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -2651,15 +2491,11 @@ qwen3-coder-flash-2025-07-28
 
 qwen-mt-plus
 
-中国内地
-
 60
 
 25,000
 
 qwen-mt-flash
-
-中国内地
 
 60
 
@@ -2667,15 +2503,11 @@ qwen-mt-flash
 
 qwen-mt-lite
 
-中国内地
-
 60
 
 100,000
 
 qwen-mt-turbo
-
-中国内地
 
 60
 
@@ -2823,8 +2655,6 @@ qwen-mt-lite
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -2837,8 +2667,6 @@ qwen-mt-lite
 
 qwen-doc-turbo
 
-中国内地
-
 600
 
 3,000,000
@@ -2848,8 +2676,6 @@ qwen-doc-turbo
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -2863,8 +2689,6 @@ qwen-doc-turbo
 
 qwen-deep-research
 
-中国内地
-
 120
 
 1,200,000
@@ -2874,8 +2698,6 @@ qwen-deep-research
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -2889,15 +2711,11 @@ qwen-deep-research
 
 tongyi-xiaomi-analysis-flash
 
-中国内地
-
 600
 
 1,000,000
 
 tongyi-xiaomi-analysis-pro
-
-中国内地
 
 600
 
@@ -2911,8 +2729,6 @@ tongyi-xiaomi-analysis-pro
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -2925,15 +2741,11 @@ tongyi-xiaomi-analysis-pro
 
 qwen3.6-35b-a3b
 
-中国内地
-
 600
 
 1,000,000
 
 qwen3.6-27b
-
-中国内地
 
 600
 
@@ -2941,15 +2753,11 @@ qwen3.6-27b
 
 qwen3.5-397b-a17b
 
-中国内地
-
 600
 
 1,000,000
 
 qwen3.5-122b-a10b
-
-中国内地
 
 600
 
@@ -2957,15 +2765,11 @@ qwen3.5-122b-a10b
 
 qwen3.5-27b
 
-中国内地
-
 600
 
 1,000,000
 
 qwen3.5-35b-a3b
-
-中国内地
 
 600
 
@@ -2973,15 +2777,11 @@ qwen3.5-35b-a3b
 
 qwen3-next-80b-a3b-thinking
 
-中国内地
-
 600
 
 1,000,000
 
 qwen3-next-80b-a3b-instruct
-
-中国内地
 
 600
 
@@ -2989,15 +2789,11 @@ qwen3-next-80b-a3b-instruct
 
 qwen3-235b-a22b-thinking-2507
 
-中国内地
-
 600
 
 1,000,000
 
 qwen3-235b-a22b-instruct-2507
-
-中国内地
 
 600
 
@@ -3005,15 +2801,11 @@ qwen3-235b-a22b-instruct-2507
 
 qwen3-30b-a3b-thinking-2507
 
-中国内地
-
 600
 
 1,000,000
 
 qwen3-30b-a3b-instruct-2507
-
-中国内地
 
 600
 
@@ -3021,15 +2813,11 @@ qwen3-30b-a3b-instruct-2507
 
 qwen3-235b-a22b
 
-中国内地
-
 600
 
 1,000,000
 
 qwen3-30b-a3b
-
-中国内地
 
 600
 
@@ -3037,23 +2825,17 @@ qwen3-30b-a3b
 
 qwen3-32b
 
-中国内地
-
 2400
 
 1,000,000
 
 qwen3-14b
 
-中国内地
-
 600
 
 1,000,000
 
 qwen3-8b
-
-中国内地
 
 600
 
@@ -3505,8 +3287,6 @@ qwen3-8b
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -3519,15 +3299,11 @@ qwen3-8b
 
 qwen3-vl-32b-thinking
 
-中国内地
-
 600
 
 1,000,000
 
 qwen3-vl-32b-instruct
-
-中国内地
 
 600
 
@@ -3535,15 +3311,11 @@ qwen3-vl-32b-instruct
 
 qwen3-vl-30b-a3b-thinking
 
-中国内地
-
 600
 
 1,000,000
 
 qwen3-vl-30b-a3b-instruct
-
-中国内地
 
 600
 
@@ -3551,15 +3323,11 @@ qwen3-vl-30b-a3b-instruct
 
 qwen3-vl-8b-thinking
 
-中国内地
-
 600
 
 1,000,000
 
 qwen3-vl-8b-instruct
-
-中国内地
 
 600
 
@@ -3567,15 +3335,11 @@ qwen3-vl-8b-instruct
 
 qwen3-vl-235b-a22b-thinking
 
-中国内地
-
 60
 
 100,000
 
 qwen3-vl-235b-a22b-instruct
-
-中国内地
 
 60
 
@@ -3827,8 +3591,6 @@ qwen3-vl-8b-instruct
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -3840,8 +3602,6 @@ qwen3-vl-8b-instruct
 > **含输入与输出Token**
 
 qwen2.5-omni-7b
-
-中国内地
 
 60
 
@@ -3877,8 +3637,6 @@ qwen2.5-omni-7b
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -3890,8 +3648,6 @@ qwen2.5-omni-7b
 > **含输入与输出Token**
 
 qwen3-omni-30b-a3b-captioner
-
-中国内地
 
 60
 
@@ -3927,8 +3683,6 @@ qwen3-omni-30b-a3b-captioner
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -3945,8 +3699,6 @@ qwen3-omni-30b-a3b-captioner
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -3959,23 +3711,17 @@ qwen3-omni-30b-a3b-captioner
 
 qwen3-coder-next
 
-中国内地
-
 600
 
 1,000,000
 
 qwen3-coder-480b-a35b-instruct
 
-中国内地
-
 600
 
 1,000,000
 
 qwen3-coder-30b-a3b-instruct
-
-中国内地
 
 600
 
@@ -4101,8 +3847,6 @@ qwen3-coder-next
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -4115,15 +3859,11 @@ qwen3-coder-next
 
 deepseek-v4-pro
 
-中国内地
-
 15,000
 
 1,200,000
 
 deepseek-v4-flash
-
-中国内地
 
 15,000
 
@@ -4133,15 +3873,11 @@ deepseek-v3.2
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 15,000
 
 1,200,000
 
 deepseek-v3.2-exp
-
-中国内地
 
 15,000
 
@@ -4149,15 +3885,11 @@ deepseek-v3.2-exp
 
 deepseek-v3.1
 
-中国内地
-
 15,000
 
 1,200,000
 
 deepseek-r1-0528
-
-中国内地
 
 60
 
@@ -4167,8 +3899,6 @@ deepseek-r1
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 15,000
 
 1,200,000
@@ -4177,15 +3907,11 @@ deepseek-v3
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 15,000
 
 1,200,000
 
 deepseek-r1-distill-qwen-7b
-
-中国内地
 
 15,000
 
@@ -4193,15 +3919,11 @@ deepseek-r1-distill-qwen-7b
 
 deepseek-r1-distill-qwen-14b
 
-中国内地
-
 15,000
 
 1,200,000
 
 deepseek-r1-distill-qwen-32b
-
-中国内地
 
 15,000
 
@@ -4209,23 +3931,17 @@ deepseek-r1-distill-qwen-32b
 
 deepseek-r1-distill-qwen-1.5b
 
-中国内地
-
 60
 
 100,000
 
 deepseek-r1-distill-llama-8b
 
-中国内地
-
 60
 
 100,000
 
 deepseek-r1-distill-llama-70b
-
-中国内地
 
 60
 
@@ -4405,8 +4121,6 @@ deepseek-v4-flash
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -4419,15 +4133,11 @@ deepseek-v4-flash
 
 siliconflow/deepseek-v3.2
 
-中国内地
-
 500
 
 500,000
 
 siliconflow/deepseek-v3.1-terminus
-
-中国内地
 
 500
 
@@ -4435,15 +4145,11 @@ siliconflow/deepseek-v3.1-terminus
 
 siliconflow/deepseek-r1-0528
 
-中国内地
-
 500
 
 500,000
 
 siliconflow/deepseek-v3-0324
-
-中国内地
 
 500
 
@@ -4454,8 +4160,6 @@ siliconflow/deepseek-v3-0324
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -4469,15 +4173,11 @@ siliconflow/deepseek-v3-0324
 
 vanchin/deepseek-v3.2-think
 
-中国内地
-
 30
 
 600,000
 
 vanchin/deepseek-v3.1-terminus
-
-中国内地
 
 500
 
@@ -4485,23 +4185,17 @@ vanchin/deepseek-v3.1-terminus
 
 vanchin/deepseek-r1
 
-中国内地
-
 500
 
 1,000,000
 
 vanchin/deepseek-v3
 
-中国内地
-
 500
 
 1,000,000
 
 vanchin/deepseek-ocr
-
-中国内地
 
 500
 
@@ -4512,8 +4206,6 @@ vanchin/deepseek-ocr
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -4527,15 +4219,11 @@ vanchin/deepseek-ocr
 
 kimi-k2.7-code
 
-中国内地
-
 500
 
 1,000,000
 
 kimi-k2.6
-
-中国内地
 
 500
 
@@ -4543,23 +4231,17 @@ kimi-k2.6
 
 kimi-k2.5
 
-中国内地
-
 500
 
 1,000,000
 
 kimi-k2-thinking
 
-中国内地
-
 500
 
 1,000,000
 
 Moonshot-Kimi-K2-Instruct
-
-中国内地
 
 500
 
@@ -4683,8 +4365,6 @@ kimi-k2.7-code
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -4695,37 +4375,29 @@ kimi-k2.7-code
 
 > **含输入与输出Token**
 
-kimi/kimi-k2.7-code-highspeed
-
-中国内地
+kimi/kimi-k3
 
 500
 
-> 同一个阿里云百炼API Key 下，在 4 个模型中共享 500 RPM 限流配额。即这 4 个模型的每分钟请求总数加起来不能超过 500。
+> 同一个阿里云百炼API Key 下，在 5 个模型中共享 500 RPM 限流配额。即这 5 个模型的每分钟请求总数加起来不能超过 500。
 
 3,000,000
 
-> 同一个阿里云百炼API Key 下，在 4 个模型中共享 3000000 TPM 限流配额。即这 4 个模型的每分钟 Token 消耗总数加起来不能超过 3000000。
+> 同一个阿里云百炼API Key 下，在 5 个模型中共享 3000000 TPM 限流配额。即这 5 个模型的每分钟 Token 消耗总数加起来不能超过 3000000。
+
+kimi/kimi-k2.7-code-highspeed
 
 kimi/kimi-k2.7-code
 
-中国内地
-
 kimi/kimi-k2.6
 
-中国内地
-
 kimi/kimi-k2.5
-
-中国内地
 
 ### **GLM**
 
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -4739,15 +4411,11 @@ kimi/kimi-k2.5
 
 glm-5.2
 
-中国内地
-
 500
 
 2,000,000
 
 glm-5.1
-
-中国内地
 
 500
 
@@ -4755,15 +4423,11 @@ glm-5.1
 
 glm-5
 
-中国内地
-
 500
 
 1,000,000
 
 glm-4.7
-
-中国内地
 
 500
 
@@ -4771,23 +4435,17 @@ glm-4.7
 
 glm-4.6
 
-中国内地
-
 60
 
 1,000,000
 
 glm-4.5
 
-中国内地
-
 60
 
 1,000,000
 
 glm-4.5-air
-
-中国内地
 
 60
 
@@ -4907,7 +4565,15 @@ glm-5.1
 
 glm-5.2
 
-全球
+国际
+
+500
+
+1,000,000
+
+glm-5.1
+
+国际
 
 500
 
@@ -4918,8 +4584,6 @@ glm-5.2
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -4933,23 +4597,17 @@ glm-5.2
 
 ZHIPU/GLM-5.2
 
-中国内地
-
 200
 
 3,000,000
 
 ZHIPU/GLM-5.1
 
-中国内地
-
 200
 
-10,000,000
+3,000,000
 
 ZHIPU/GLM-5
-
-中国内地
 
 200
 
@@ -4960,8 +4618,6 @@ ZHIPU/GLM-5
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -4975,15 +4631,11 @@ ZHIPU/GLM-5
 
 MiniMax-M2.5
 
-中国内地
-
 500
 
 1,000,000
 
 MiniMax-M2.1
-
-中国内地
 
 500
 
@@ -4994,8 +4646,6 @@ MiniMax-M2.1
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -5009,15 +4659,11 @@ MiniMax-M2.1
 
 MiniMax/MiniMax-M3
 
-中国内地
-
 500
 
 20,000,000
 
 MiniMax/MiniMax-M2.7
-
-中国内地
 
 500
 
@@ -5025,15 +4671,11 @@ MiniMax/MiniMax-M2.7
 
 MiniMax/MiniMax-M2.5
 
-中国内地
-
 500
 
 20,000,000
 
 MiniMax/MiniMax-M2.1
-
-中国内地
 
 500
 
@@ -5044,8 +4686,6 @@ MiniMax/MiniMax-M2.1
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -5059,8 +4699,6 @@ MiniMax/MiniMax-M2.1
 
 xiaomi/mimo-v2.5-pro
 
-中国内地
-
 100
 
 10,000,000
@@ -5070,8 +4708,6 @@ xiaomi/mimo-v2.5-pro
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -5085,8 +4721,6 @@ xiaomi/mimo-v2.5-pro
 
 stepfun/step-3.7-flash
 
-中国内地
-
 500
 
 20,000,000
@@ -5099,17 +4733,19 @@ stepfun/step-3.7-flash
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 **任务下发接口调用限制**
 
 **同时处理中任务数量（并发数）**
 
-qwen-image-2.0-pro
+qwen-image-3.0-pro
 
-中国内地
+1 次/分钟
+
+同步接口无限制
+
+qwen-image-2.0-pro
 
 2 次/分钟
 
@@ -5117,15 +4753,11 @@ qwen-image-2.0-pro
 
 qwen-image-2.0-pro-2026-06-22
 
-中国内地
-
 2 次/分钟
 
 同步接口无限制
 
 qwen-image-2.0-pro-2026-04-22
-
-中国内地
 
 2 次/分钟
 
@@ -5133,15 +4765,11 @@ qwen-image-2.0-pro-2026-04-22
 
 qwen-image-2.0-pro-2026-03-03
 
-中国内地
-
 2 次/分钟
 
 同步接口无限制
 
 qwen-image-2.0
-
-中国内地
 
 2 次/秒
 
@@ -5149,15 +4777,11 @@ qwen-image-2.0
 
 qwen-image-2.0-2026-03-03
 
-中国内地
-
 2 次/秒
 
 同步接口无限制
 
 qwen-image-max
-
-中国内地
 
 2 次/分钟
 
@@ -5165,15 +4789,11 @@ qwen-image-max
 
 qwen-image-max-2025-12-30
 
-中国内地
-
 2 次/分钟
 
 同步接口无限制
 
 qwen-image-plus
-
-中国内地
 
 2 次/秒
 
@@ -5181,15 +4801,11 @@ qwen-image-plus
 
 qwen-image-plus-2026-01-09
 
-中国内地
-
 2 次/秒
 
 同步接口无限制
 
 qwen-image
-
-中国内地
 
 2 次/秒
 
@@ -5197,15 +4813,11 @@ qwen-image
 
 qwen-image-edit-max
 
-中国内地
-
 2 次/分钟
 
 同步接口无限制
 
 qwen-image-edit-max-2026-01-16
-
-中国内地
 
 2 次/分钟
 
@@ -5213,15 +4825,11 @@ qwen-image-edit-max-2026-01-16
 
 qwen-image-edit-plus
 
-中国内地
-
 2 次/秒
 
 同步接口无限制
 
 qwen-image-edit-plus-2025-12-15
-
-中国内地
 
 2 次/秒
 
@@ -5229,23 +4837,17 @@ qwen-image-edit-plus-2025-12-15
 
 qwen-image-edit-plus-2025-10-30
 
-中国内地
-
 2 次/秒
 
 同步接口无限制
 
 qwen-image-edit
 
-中国内地
-
 2 次/秒
 
 同步接口无限制
 
 qwen-mt-image
-
-中国内地
 
 1 次/秒
 
@@ -5263,6 +4865,14 @@ qwen-mt-image
 
 **同时处理中任务数量（并发数）**
 
+qwen-image-3.0-pro
+
+国际
+
+1 次/分钟
+
+同步接口无限制
+
 qwen-image-2.0-pro
 
 国际
@@ -5273,7 +4883,7 @@ qwen-image-2.0-pro
 
 qwen-image-2.0-pro-2026-06-22
 
-中国内地
+国际
 
 2 次/分钟
 
@@ -5405,8 +5015,6 @@ qwen-image-edit
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 **每秒钟任务下发接口RPS限制**
@@ -5414,8 +5022,6 @@ qwen-image-edit
 **同时处理中任务数量（并发数）**
 
 z-image-turbo
-
-中国内地
 
 2
 
@@ -5447,8 +5053,6 @@ z-image-turbo
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 **每秒钟任务下发接口RPS限制**
@@ -5457,15 +5061,11 @@ z-image-turbo
 
 wan2.7-image-pro
 
-中国内地
-
 5
 
 5
 
 wan2.7-image
-
-中国内地
 
 5
 
@@ -5473,15 +5073,11 @@ wan2.7-image
 
 wan2.6-image
 
-中国内地
-
 5
 
 5
 
 wan2.6-t2i
-
-中国内地
 
 1
 
@@ -5489,15 +5085,11 @@ wan2.6-t2i
 
 wan2.5-t2i-preview
 
-中国内地
-
 5
 
 5
 
 wan2.2-t2i-plus
-
-中国内地
 
 2
 
@@ -5505,15 +5097,11 @@ wan2.2-t2i-plus
 
 wan2.2-t2i-flash
 
-中国内地
-
 2
 
 2
 
 wanx2.1-t2i-plus
-
-中国内地
 
 2
 
@@ -5521,15 +5109,11 @@ wanx2.1-t2i-plus
 
 wanx2.1-t2i-turbo
 
-中国内地
-
 2
 
 2
 
 wanx2.0-t2i-turbo
-
-中国内地
 
 2
 
@@ -5537,15 +5121,11 @@ wanx2.0-t2i-turbo
 
 wan2.5-i2i-preview
 
-中国内地
-
 5
 
 5
 
 wanx2.1-imageedit
-
-中国内地
 
 2
 
@@ -5553,23 +5133,17 @@ wanx2.1-imageedit
 
 wanx-v1
 
-中国内地
-
 2
 
 1
 
 wanx-x-painting
 
-中国内地
-
 2
 
 1
 
 wanx-sketch-to-image-lite
-
-中国内地
 
 2
 
@@ -5729,8 +5303,6 @@ wan2.6-image
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 **每秒钟任务下发接口RPS限制**
@@ -5739,15 +5311,11 @@ wan2.6-image
 
 shoemodel-v1
 
-中国内地
-
 2
 
 1
 
 wanx-virtualmodel
-
-中国内地
 
 2
 
@@ -5755,15 +5323,11 @@ wanx-virtualmodel
 
 wanx-style-repaint-v1
 
-中国内地
-
 2
 
 2
 
 wanx-poster-generation-v1
-
-中国内地
 
 2
 
@@ -5771,15 +5335,11 @@ wanx-poster-generation-v1
 
 virtualmodel-v2
 
-中国内地
-
 2
 
 1
 
 wanx-background-generation-v2
-
-中国内地
 
 2
 
@@ -5787,23 +5347,17 @@ wanx-background-generation-v2
 
 image-instance-segmentation
 
-中国内地
-
 2
 
 1
 
 image-erase-completion
 
-中国内地
-
 2
 
 1
 
 image-out-painting
-
-中国内地
 
 2
 
@@ -5815,8 +5369,6 @@ image-out-painting
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 **作业提交接口RPS限制**
@@ -5825,23 +5377,17 @@ image-out-painting
 
 facechain-facedetect
 
-中国内地
-
 5
 
 同步接口无限制
 
 facechain-finetune
 
-中国内地
-
 1
 
 1
 
 facechain-generation
-
-中国内地
 
 2
 
@@ -5853,8 +5399,6 @@ facechain-generation
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 **作业提交接口RPS限制**
@@ -5863,15 +5407,11 @@ facechain-generation
 
 wordart-texture
 
-中国内地
-
 2
 
 1
 
 wordart-semantic
-
-中国内地
 
 2
 
@@ -5883,8 +5423,6 @@ wordart-semantic
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 **作业提交接口RPS限制**
@@ -5893,15 +5431,11 @@ wordart-semantic
 
 aitryon
 
-中国内地
-
 10
 
 5
 
 aitryon-plus
-
-中国内地
 
 10
 
@@ -5909,15 +5443,11 @@ aitryon-plus
 
 aitryon-parsing-v1
 
-中国内地
-
 10
 
 同步接口无限制
 
 aitryon-refiner
-
-中国内地
 
 10
 
@@ -5931,8 +5461,6 @@ aitryon-refiner
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 **每秒钟任务下发接口RPS限制**
@@ -5940,8 +5468,6 @@ aitryon-refiner
 **同时处理中任务数量（并发数）**
 
 kling/kling-v3-omni-image-generation
-
-中国内地
 
 5
 
@@ -5951,15 +5477,11 @@ kling/kling-v3-omni-image-generation
 
 kling/kling-v3-image-generation
 
-中国内地
-
 ### **Vidu系列**
 
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -5969,8 +5491,6 @@ kling/kling-v3-image-generation
 
 vidu/vidu-image\_reference2image
 
-中国内地
-
 300
 
 5
@@ -5979,15 +5499,9 @@ vidu/vidu-image\_reference2image
 
 vidu/viduq3-fast\_reference2image
 
-中国内地
-
 vidu/viduq2-pro\_reference2image
 
-中国内地
-
 vidu/viduq2-fast\_reference2image
-
-中国内地
 
 ## **音乐生成**
 
@@ -5995,19 +5509,13 @@ vidu/viduq2-fast\_reference2image
 
 **模型名称**
 
-**服务部署范围**
-
 **每分钟调用次数（RPM）**
 
 fun-music-preview
 
-中国内地
-
 180
 
 fun-music-v1
-
-中国内地
 
 180
 
@@ -6018,8 +5526,6 @@ fun-music-v1
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -6033,15 +5539,11 @@ fun-music-v1
 
 qwen-audio-3.0-realtime-plus
 
-中国内地
-
 60
 
 100,000
 
 qwen-audio-3.0-realtime-flash
-
-中国内地
 
 60
 
@@ -6055,19 +5557,13 @@ qwen-audio-3.0-realtime-flash
 
 **模型名称**
 
-**服务部署范围**
-
 **提交作业接口RPS限制**
 
 qwen-audio-3.0-tts-plus
 
-中国内地
-
 3
 
 qwen-audio-3.0-tts-flash
-
-中国内地
 
 3
 
@@ -6099,19 +5595,13 @@ qwen-audio-3.0-tts-flash
 
 **模型名称**
 
-**服务部署范围**
-
 **每分钟调用次数（RPM）**
 
 qwen3-tts-instruct-flash
 
-中国内地
-
 180
 
 qwen3-tts-instruct-flash-2026-01-26
-
-中国内地
 
 180
 
@@ -6119,13 +5609,9 @@ qwen3-tts-instruct-flash-2026-01-26
 
 **模型名称**
 
-**服务部署范围**
-
 **每分钟调用次数（RPM）**
 
 qwen3-tts-vd-2026-01-26
-
-中国内地
 
 180
 
@@ -6133,13 +5619,9 @@ qwen3-tts-vd-2026-01-26
 
 **模型名称**
 
-**服务部署范围**
-
 **每分钟调用次数（RPM）**
 
 qwen3-tts-vc-2026-01-22
-
-中国内地
 
 180
 
@@ -6147,33 +5629,23 @@ qwen3-tts-vc-2026-01-22
 
 **模型名称**
 
-**服务部署范围**
-
 **每分钟调用次数（RPM）**
 
 qwen3-tts-flash
-
-中国内地
 
 180
 
 qwen3-tts-flash-2025-11-27
 
-中国内地
-
 180
 
 qwen3-tts-flash-2025-09-18
-
-中国内地
 
 10
 
 ##### 千问-TTS
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -6187,23 +5659,15 @@ qwen3-tts-flash-2025-09-18
 
 qwen-tts
 
-中国内地
-
 10
 
 100,000
 
 qwen-tts-latest
 
-中国内地
-
 qwen-tts-2025-05-22
 
-中国内地
-
 qwen-tts-2025-04-10
-
-中国内地
 
 #### 新加坡
 
@@ -6289,19 +5753,13 @@ qwen3-tts-flash-2025-09-18
 
 **模型名称**
 
-**服务部署范围**
-
 **每分钟调用次数（RPM）**
 
 qwen3-tts-instruct-flash-realtime
 
-中国内地
-
 180
 
 qwen3-tts-instruct-flash-realtime-2026-01-22
-
-中国内地
 
 180
 
@@ -6309,69 +5767,47 @@ qwen3-tts-instruct-flash-realtime-2026-01-22
 
 **模型名称**
 
-**服务部署范围**
-
 **每分钟调用次数（RPM）**
 
 qwen3-tts-vd-realtime-2026-01-15
-
-中国内地
 
 180
 
 qwen3-tts-vd-realtime-2025-12-16
 
-中国内地
-
 ##### 千问3-TTS-VC-Realtime
 
 **模型名称**
-
-**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
 qwen3-tts-vc-realtime-2026-01-15
 
-中国内地
-
 180
 
 qwen3-tts-vc-realtime-2025-11-27
-
-中国内地
 
 ##### 千问3-TTS-Flash-Realtime
 
 **模型名称**
 
-**服务部署范围**
-
 **每分钟调用次数（RPM）**
 
 qwen3-tts-flash-realtime
-
-中国内地
 
 180
 
 qwen3-tts-flash-realtime-2025-11-27
 
-中国内地
-
 180
 
 qwen3-tts-flash-realtime-2025-09-18
-
-中国内地
 
 10
 
 ##### 千问-TTS-Realtime
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -6385,19 +5821,13 @@ qwen3-tts-flash-realtime-2025-09-18
 
 qwen-tts-realtime
 
-中国内地
-
 10
 
 100,000
 
 qwen-tts-realtime-latest
 
-中国内地
-
 qwen-tts-realtime-2025-07-15
-
-中国内地
 
 #### 新加坡
 
@@ -6489,13 +5919,9 @@ qwen3-tts-flash-realtime-2025-09-18
 
 **模型名称**
 
-**服务部署范围**
-
 **每分钟调用次数（RPM）**
 
 qwen-voice-enrollment
-
-中国内地
 
 180
 
@@ -6519,13 +5945,9 @@ qwen-voice-enrollment
 
 **模型名称**
 
-**服务部署范围**
-
 **每分钟调用次数（RPM）**
 
 qwen-voice-design
-
-中国内地
 
 180
 
@@ -6549,35 +5971,21 @@ qwen-voice-design
 
 **模型名称**
 
-**服务部署范围**
-
 **提交作业接口RPS限制**
 
 cosyvoice-v3.5-plus
-
-中国内地
 
 3
 
 cosyvoice-v3.5-flash
 
-中国内地
-
 cosyvoice-v3-plus
-
-中国内地
 
 cosyvoice-v3-flash
 
-中国内地
-
 cosyvoice-v2
 
-中国内地
-
 cosyvoice-v1
-
-中国内地
 
 #### 新加坡
 
@@ -6605,13 +6013,9 @@ Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额�
 
 **模型名称**
 
-**服务部署范围**
-
 **提交作业接口RPS限制**
 
 voice-enrollment
-
-中国内地
 
 10
 
@@ -6635,13 +6039,9 @@ voice-enrollment
 
 **模型服务**
 
-**服务部署范围**
-
 **提交作业接口RPS限制**
 
 Sambert系列模型
-
-中国内地
 
 20
 
@@ -6653,8 +6053,6 @@ Sambert系列模型
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 **每分钟调用次数（RPM）**
@@ -6665,15 +6063,11 @@ Sambert系列模型
 
 MiniMax/speech-2.8-hd
 
-中国内地
-
 20
 
 20,000
 
 MiniMax/speech-02-hd
-
-中国内地
 
 20
 
@@ -6681,15 +6075,11 @@ MiniMax/speech-02-hd
 
 MiniMax/speech-2.8-turbo
 
-中国内地
-
 20
 
 20,000
 
 MiniMax/speech-02-turbo
-
-中国内地
 
 20
 
@@ -6703,8 +6093,6 @@ MiniMax/speech-02-turbo
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -6717,15 +6105,11 @@ MiniMax/speech-02-turbo
 
 qwen3-livetranslate-flash
 
-中国内地
-
 100
 
 100,000
 
 qwen3-livetranslate-flash-2025-12-01
-
-中国内地
 
 #### 新加坡
 
@@ -6761,8 +6145,6 @@ qwen3-livetranslate-flash-2025-12-01
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -6775,23 +6157,15 @@ qwen3-livetranslate-flash-2025-12-01
 
 qwen3.5-livetranslate-flash-realtime
 
-中国内地
-
 10
 
 100,000
 
 qwen3.5-livetranslate-flash-realtime-2026-05-19
 
-中国内地
-
 qwen3-livetranslate-flash-realtime
 
-中国内地
-
 qwen3-livetranslate-flash-realtime-2025-09-22
-
-中国内地
 
 #### 新加坡
 
@@ -6837,41 +6211,27 @@ qwen3-livetranslate-flash-realtime-2025-09-22
 
 **模型名称**
 
-**服务部署范围**
-
 **每分钟调用次数（RPM）**
 
 qwen3-asr-flash-filetrans
-
-中国内地
 
 100
 
 qwen3-asr-flash-filetrans-2025-11-17
 
-中国内地
-
 ##### **千问3-ASR-Flash**
 
 **模型名称**
-
-**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
 qwen3-asr-flash
 
-中国内地
-
 100
 
 qwen3-asr-flash-2026-02-10
 
-中国内地
-
 qwen3-asr-flash-2025-09-08
-
-中国内地
 
 #### 新加坡
 
@@ -6939,23 +6299,15 @@ qwen3-asr-flash-2025-09-08-us
 
 **模型名称**
 
-**服务部署范围**
-
 **每秒钟调用次数（RPS）**
 
 qwen3-asr-flash-realtime
-
-中国内地
 
 20
 
 qwen3-asr-flash-realtime-2026-02-10
 
-中国内地
-
 qwen3-asr-flash-realtime-2025-10-27
-
-中国内地
 
 #### 新加坡
 
@@ -6985,35 +6337,21 @@ qwen3-asr-flash-realtime-2025-10-27
 
 **模型名称**
 
-**服务部署范围**
-
 **每分钟调用次数（RPM）**
 
 fun-asr
-
-中国内地
 
 600
 
 fun-asr-2025-11-07
 
-中国内地
-
 fun-asr-2025-08-25
-
-中国内地
 
 fun-asr-mtl
 
-中国内地
-
 fun-asr-mtl-2025-08-25
 
-中国内地
-
 fun-asr-flash-2026-06-15
-
-中国内地
 
 #### 新加坡
 
@@ -7065,35 +6403,21 @@ fun-asr-flash-2026-06-15
 
 **模型名称**
 
-**服务部署范围**
-
 **提交作业接口RPS限制**
 
 fun-asr-realtime
-
-中国内地
 
 20
 
 fun-asr-realtime-2026-02-28
 
-中国内地
-
 fun-asr-realtime-2025-11-07
-
-中国内地
 
 fun-asr-realtime-2025-09-15
 
-中国内地
-
 fun-asr-flash-8k-realtime
 
-中国内地
-
 fun-asr-flash-8k-realtime-2026-01-28
-
-中国内地
 
 #### 新加坡
 
@@ -7119,43 +6443,27 @@ fun-asr-realtime-2025-11-07
 
 **模型名称**
 
-**服务部署范围**
-
 **提交作业接口RPS限制**
 
 paraformer-realtime-v2
-
-中国内地
 
 20
 
 paraformer-realtime-v1
 
-中国内地
-
 paraformer-realtime-8k-v2
-
-中国内地
 
 paraformer-realtime-8k-v1
 
-中国内地
-
 **模型名称**
-
-**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
 paraformer-v2
 
-中国内地
-
 1,200
 
 **模型名称**
-
-**服务部署范围**
 
 **每分钟调用次数（RPM）**
 
@@ -7165,15 +6473,11 @@ paraformer-v2
 
 paraformer-v1
 
-中国内地
-
 600
 
 6,000,000
 
 paraformer-mtl-v1
-
-中国内地
 
 600
 
@@ -7181,23 +6485,17 @@ paraformer-mtl-v1
 
 **模型名称**
 
-**服务部署范围**
-
 **提交作业接口RPS限制**
 
 **同时处理中任务数量（并发数）**
 
 paraformer-8k-v2
 
-中国内地
-
 20
 
 100
 
 paraformer-8k-v1
-
-中国内地
 
 10
 
@@ -7211,8 +6509,6 @@ paraformer-8k-v1
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 **每秒钟任务下发接口RPS限制**
@@ -7221,57 +6517,43 @@ paraformer-8k-v1
 
 happyhorse-1.1-t2v
 
-中国内地
-
-10
+5
 
 5
 
 happyhorse-1.1-i2v
 
-中国内地
-
-10
+5
 
 5
 
 happyhorse-1.1-r2v
 
-中国内地
-
-10
+5
 
 5
 
 happyhorse-1.0-t2v
 
-中国内地
-
-10
+5
 
 5
 
 happyhorse-1.0-i2v
 
-中国内地
-
-10
+5
 
 5
 
 happyhorse-1.0-r2v
 
-中国内地
-
-10
+5
 
 5
 
 happyhorse-1.0-video-edit
 
-中国内地
-
-10
+5
 
 5
 
@@ -7291,7 +6573,7 @@ happyhorse-1.1-t2v
 
 全球
 
-10
+5
 
 5
 
@@ -7299,7 +6581,7 @@ happyhorse-1.1-i2v
 
 全球
 
-10
+5
 
 5
 
@@ -7307,7 +6589,7 @@ happyhorse-1.1-r2v
 
 全球
 
-10
+5
 
 5
 
@@ -7315,7 +6597,7 @@ happyhorse-1.0-t2v
 
 全球
 
-10
+5
 
 5
 
@@ -7323,7 +6605,7 @@ happyhorse-1.0-i2v
 
 全球
 
-10
+5
 
 5
 
@@ -7331,7 +6613,7 @@ happyhorse-1.0-r2v
 
 全球
 
-10
+5
 
 5
 
@@ -7339,7 +6621,7 @@ happyhorse-1.0-video-edit
 
 全球
 
-10
+5
 
 5
 
@@ -7359,7 +6641,7 @@ happyhorse-1.1-t2v
 
 国际
 
-10
+5
 
 5
 
@@ -7367,7 +6649,7 @@ happyhorse-1.1-i2v
 
 国际
 
-10
+5
 
 5
 
@@ -7375,7 +6657,7 @@ happyhorse-1.1-r2v
 
 国际
 
-10
+5
 
 5
 
@@ -7383,7 +6665,7 @@ happyhorse-1.0-t2v
 
 国际
 
-10
+5
 
 5
 
@@ -7391,7 +6673,7 @@ happyhorse-1.0-i2v
 
 国际
 
-10
+5
 
 5
 
@@ -7399,7 +6681,7 @@ happyhorse-1.0-r2v
 
 国际
 
-10
+5
 
 5
 
@@ -7407,7 +6689,7 @@ happyhorse-1.0-video-edit
 
 国际
 
-10
+5
 
 5
 
@@ -7427,7 +6709,7 @@ happyhorse-1.1-t2v
 
 全球
 
-10
+5
 
 5
 
@@ -7435,7 +6717,7 @@ happyhorse-1.1-i2v
 
 全球
 
-10
+5
 
 5
 
@@ -7443,7 +6725,7 @@ happyhorse-1.1-r2v
 
 全球
 
-10
+5
 
 5
 
@@ -7451,7 +6733,7 @@ happyhorse-1.0-t2v
 
 全球
 
-10
+5
 
 5
 
@@ -7459,7 +6741,7 @@ happyhorse-1.0-i2v
 
 全球
 
-10
+5
 
 5
 
@@ -7467,7 +6749,7 @@ happyhorse-1.0-r2v
 
 全球
 
-10
+5
 
 5
 
@@ -7475,7 +6757,51 @@ happyhorse-1.0-video-edit
 
 全球
 
-10
+5
+
+5
+
+## **日本（东京）**
+
+**模型名称**
+
+**服务部署范围**
+
+**限流值（任何一个值超出即触发限流）**
+
+**任务提交接口RPS限制**
+
+**正在处理中的任务数（并发）**
+
+happyhorse-1.1-t2v
+
+全球
+
+5
+
+5
+
+happyhorse-1.1-i2v
+
+全球
+
+5
+
+5
+
+happyhorse-1.1-r2v
+
+全球
+
+5
+
+5
+
+happyhorse-1.0-video-edit
+
+全球
+
+5
 
 5
 
@@ -7485,8 +6811,6 @@ happyhorse-1.0-video-edit
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 **每秒钟任务下发接口RPS限制**
@@ -7495,15 +6819,11 @@ happyhorse-1.0-video-edit
 
 wan2.7-r2v-2026-06-12
 
-中国内地
-
 5
 
 5
 
 wan2.7-t2v-2026-06-12
-
-中国内地
 
 5
 
@@ -7511,15 +6831,11 @@ wan2.7-t2v-2026-06-12
 
 wan2.7-t2v-2026-04-25
 
-中国内地
-
 5
 
 5
 
 wan2.7-t2v
-
-中国内地
 
 5
 
@@ -7527,15 +6843,11 @@ wan2.7-t2v
 
 wan2.6-t2v
 
-中国内地
-
 5
 
 5
 
 wan2.5-t2v-preview
-
-中国内地
 
 5
 
@@ -7543,15 +6855,11 @@ wan2.5-t2v-preview
 
 wan2.2-t2v-plus
 
-中国内地
-
 2
 
 2
 
 wanx2.1-t2v-turbo
-
-中国内地
 
 2
 
@@ -7559,15 +6867,11 @@ wanx2.1-t2v-turbo
 
 wanx2.1-t2v-plus
 
-中国内地
-
 2
 
 2
 
 wan2.7-i2v-2026-04-25
-
-中国内地
 
 5
 
@@ -7575,15 +6879,11 @@ wan2.7-i2v-2026-04-25
 
 wan2.7-i2v
 
-中国内地
-
 5
 
 5
 
 wan2.6-i2v-flash
-
-中国内地
 
 5
 
@@ -7591,15 +6891,11 @@ wan2.6-i2v-flash
 
 wan2.6-i2v
 
-中国内地
-
 5
 
 5
 
 wan2.5-i2v-preview
-
-中国内地
 
 5
 
@@ -7607,15 +6903,11 @@ wan2.5-i2v-preview
 
 wan2.2-i2v-flash
 
-中国内地
-
 2
 
 2
 
 wan2.2-i2v-plus
-
-中国内地
 
 2
 
@@ -7623,15 +6915,11 @@ wan2.2-i2v-plus
 
 wanx2.1-i2v-turbo
 
-中国内地
-
 2
 
 2
 
 wanx2.1-i2v-plus
-
-中国内地
 
 2
 
@@ -7639,15 +6927,11 @@ wanx2.1-i2v-plus
 
 wan2.2-kf2v-flash
 
-中国内地
-
 2
 
 2
 
 wanx2.1-kf2v-plus
-
-中国内地
 
 2
 
@@ -7655,15 +6939,11 @@ wanx2.1-kf2v-plus
 
 wanx2.1-vace-plus
 
-中国内地
-
 2
 
 2
 
 wan2.7-videoedit
-
-中国内地
 
 5
 
@@ -7671,15 +6951,11 @@ wan2.7-videoedit
 
 wan2.7-r2v
 
-中国内地
-
 5
 
 5
 
 wan2.6-r2v-flash
-
-中国内地
 
 5
 
@@ -7687,15 +6963,11 @@ wan2.6-r2v-flash
 
 wan2.6-r2v
 
-中国内地
-
 5
 
 5
 
 wan2.2-s2v-detect
-
-中国内地
 
 5
 
@@ -7703,23 +6975,17 @@ wan2.2-s2v-detect
 
 wan2.2-s2v
 
-中国内地
-
 5
 
 1
 
 wan2.2-animate-move
 
-中国内地
-
 5
 
 1
 
 wan2.2-animate-mix
-
-中国内地
 
 5
 
@@ -8031,23 +7297,17 @@ wan2.6-r2v
 
 **模型名称**
 
-**服务部署范围**
-
 **任务下发接口RPS限制**
 
 **同时处理中任务数量**
 
 animate-anyone-detect-gen2
 
-中国内地
-
 5
 
 同步接口无限制
 
 animate-anyone-template-gen2
-
-中国内地
 
 5
 
@@ -8057,8 +7317,6 @@ animate-anyone-template-gen2
 
 animate-anyone-gen2
 
-中国内地
-
 5
 
 1
@@ -8067,15 +7325,11 @@ animate-anyone-gen2
 
 animate-anyone-detect
 
-中国内地
-
 5
 
 1算力单元支持2并发
 
 animate-anyone
-
-中国内地
 
 5
 
@@ -8087,23 +7341,17 @@ animate-anyone
 
 **模型名称**
 
-**服务部署范围**
-
 **任务下发接口RPS限制**
 
 **同时处理中任务数量**
 
 emo-detect-v1
 
-中国内地
-
 5
 
 同步接口无限制
 
 emo-v1
-
-中国内地
 
 5
 
@@ -8117,23 +7365,17 @@ emo-v1
 
 **模型名称**
 
-**服务部署范围**
-
 **任务下发接口RPS限制**
 
 **同时处理中任务数量**
 
 liveportrait-detect
 
-中国内地
-
 5
 
 同步接口无限制
 
 liveportrait
-
-中国内地
 
 5
 
@@ -8147,15 +7389,11 @@ liveportrait
 
 **模型名称**
 
-**服务部署范围**
-
 **任务下发接口RPS限制**
 
 **同时处理中任务数量**
 
 videoretalk
-
-中国内地
 
 1
 
@@ -8169,23 +7407,17 @@ videoretalk
 
 **模型名称**
 
-**服务部署范围**
-
 **任务下发接口RPS限制**
 
 **同时处理中任务数量**
 
 emoji-detect-v1
 
-中国内地
-
 1
 
 同步接口无限制
 
 emoji-v1
-
-中国内地
 
 1
 
@@ -8199,15 +7431,11 @@ emoji-v1
 
 **模型名称**
 
-**服务部署范围**
-
 **任务下发接口RPS限制**
 
 **同时处理中任务数量**
 
 video-style-transform
-
-中国内地
 
 20
 
@@ -8223,8 +7451,6 @@ video-style-transform
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 **每分钟任务下发接口RPM限制**
@@ -8232,8 +7458,6 @@ video-style-transform
 **同时处理中任务数量（并发数）**
 
 pixverse/pixverse-lipsync
-
-中国内地
 
 300
 
@@ -8243,19 +7467,13 @@ pixverse/pixverse-lipsync
 
 pixverse/pixverse-motioncontrol
 
-中国内地
-
 300
 
 pixverse/pixverse-upscale
 
-中国内地
-
 300
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -8265,8 +7483,6 @@ pixverse/pixverse-upscale
 
 pixverse/pixverse-c1-t2v
 
-中国内地
-
 5
 
 5
@@ -8275,19 +7491,11 @@ pixverse/pixverse-c1-t2v
 
 pixverse/pixverse-c1-it2v
 
-中国内地
-
 pixverse/pixverse-c1-kf2v
-
-中国内地
 
 pixverse/pixverse-c1-r2v
 
-中国内地
-
 pixverse/pixverse-v6-t2v
-
-中国内地
 
 5
 
@@ -8297,19 +7505,11 @@ pixverse/pixverse-v6-t2v
 
 pixverse/pixverse-v6-it2v
 
-中国内地
-
 pixverse/pixverse-v6-kf2v
-
-中国内地
 
 pixverse/pixverse-v6-r2v
 
-中国内地
-
 pixverse/pixverse-v5.6-t2v
-
-中国内地
 
 5
 
@@ -8319,23 +7519,15 @@ pixverse/pixverse-v5.6-t2v
 
 pixverse/pixverse-v5.6-it2v
 
-中国内地
-
 pixverse/pixverse-v5.6-kf2v
 
-中国内地
-
 pixverse/pixverse-v5.6-r2v
-
-中国内地
 
 ### **可灵系列**
 
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -8345,8 +7537,6 @@ pixverse/pixverse-v5.6-r2v
 
 kling/kling-v3-omni-video-generation
 
-中国内地
-
 5
 
 10
@@ -8355,15 +7545,11 @@ kling/kling-v3-omni-video-generation
 
 kling/kling-v3-video-generation
 
-中国内地
-
 ### **Vidu系列**
 
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -8373,8 +7559,6 @@ kling/kling-v3-video-generation
 
 vidu/viduq3-ad\_reference2video
 
-中国内地
-
 5
 
 5
@@ -8383,115 +7567,77 @@ vidu/viduq3-ad\_reference2video
 
 vidu/viduq3-drama\_reference2video
 
-中国内地
-
 5
 
 vidu/viduq3-pro-fast\_img2video
-
-中国内地
 
 5
 
 vidu/viduq3-turbo\_text2video
 
-中国内地
-
 5
 
 vidu/viduq3-pro\_text2video
-
-中国内地
 
 5
 
 vidu/viduq2\_text2video
 
-中国内地
-
 5
 
 vidu/viduq3-turbo\_img2video
-
-中国内地
 
 5
 
 vidu/viduq3-pro\_img2video
 
-中国内地
-
 5
 
 vidu/viduq2-turbo\_img2video
-
-中国内地
 
 5
 
 vidu/viduq2-pro\_img2video
 
-中国内地
-
 5
 
 vidu/viduq2-pro-fast\_img2video
-
-中国内地
 
 5
 
 vidu/viduq3-turbo\_start-end2video
 
-中国内地
-
 5
 
 vidu/viduq3-pro\_start-end2video
-
-中国内地
 
 5
 
 vidu/viduq2-turbo\_start-end2video
 
-中国内地
-
 5
 
 vidu/viduq2-pro\_start-end2video
-
-中国内地
 
 5
 
 vidu/viduq3-mix\_reference2video
 
-中国内地
-
 5
 
 vidu/viduq3\_reference2video
-
-中国内地
 
 5
 
 vidu/viduq3-turbo\_reference2video
 
-中国内地
-
 5
 
 vidu/viduq2-pro\_reference2video
 
-中国内地
-
 5
 
 vidu/viduq2\_reference2video
-
-中国内地
 
 5
 
@@ -8503,17 +7649,13 @@ vidu/viduq2\_reference2video
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
-**每秒钟任务下发接口RPS限制**
+**每分钟任务下发接口RPM限制**
 
 **同时处理中任务数量（并发数）**
 
 Tripo/Tripo-H3.1
-
-中国内地
 
 5
 
@@ -8522,8 +7664,6 @@ Tripo/Tripo-H3.1
 > 同一个阿里云百炼API Key 在 2 个模型间共享额度。即这 2 个模型处于运行状态的任务总数加起来不能超过 10 个。
 
 Tripo/Tripo-P1.0
-
-中国内地
 
 5
 
@@ -8535,8 +7675,6 @@ Tripo/Tripo-P1.0
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 **每分钟调用次数（RPM）**
@@ -8547,8 +7685,6 @@ Tripo/Tripo-P1.0
 
 qwen3.7-text-embedding
 
-中国内地
-
 1,800
 
 1,000,000
@@ -8556,8 +7692,6 @@ qwen3.7-text-embedding
 text-embedding-v1
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
-
-中国内地
 
 1,800
 
@@ -8567,8 +7701,6 @@ text-embedding-v2
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 1,800
 
 1,200,000
@@ -8576,8 +7708,6 @@ text-embedding-v2
 text-embedding-v3
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
-
-中国内地
 
 1,800
 
@@ -8587,15 +7717,11 @@ text-embedding-v4
 
 > 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
-中国内地
-
 1,800
 
 1,200,000
 
 text-embedding-async-v1
-
-中国内地
 
 60
 
@@ -8604,8 +7730,6 @@ text-embedding-async-v1
 另外，为了避免大量突发的作业占据太多资源，限制并发的作业数为3个，即任意时间，单个用户最多只有3个通用文本向量的异步作业在并发运行，其他的作业只能在队列中等待。
 
 text-embedding-async-v2
-
-中国内地
 
 60
 
@@ -8651,8 +7775,6 @@ text-embedding-v3
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -8665,15 +7787,11 @@ text-embedding-v3
 
 qwen3-vl-embedding
 
-中国内地
-
 2,400
 
 1,200,000
 
 qwen2.5-vl-embedding
-
-中国内地
 
 1,200
 
@@ -8681,15 +7799,11 @@ qwen2.5-vl-embedding
 
 tongyi-embedding-vision-plus
 
-中国内地
-
 600
 
 200,000
 
 tongyi-embedding-vision-flash
-
-中国内地
 
 600
 
@@ -8697,23 +7811,17 @@ tongyi-embedding-vision-flash
 
 tongyi-embedding-vision-flash-2026-03-06
 
-中国内地
-
 1,200
 
 9,600,000
 
 tongyi-embedding-vision-plus-2026-03-06
 
-中国内地
-
 1,200
 
 9,600,000
 
 multimodal-embedding-v1
-
-中国内地
 
 120
 
@@ -8727,8 +7835,6 @@ multimodal-embedding-v1
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -8741,23 +7847,17 @@ multimodal-embedding-v1
 
 qwen3-rerank
 
-中国内地
-
 5,400
 
 5,000,000,000
 
 qwen3-vl-rerank
 
-中国内地
-
 600
 
 9,000,000
 
 gte-rerank-v2
-
-中国内地
 
 5,040
 
@@ -8803,8 +7903,6 @@ gte-rerank-v2
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -8817,8 +7915,6 @@ gte-rerank-v2
 
 farui-plus
 
-中国内地
-
 240
 
 1,000,000
@@ -8828,8 +7924,6 @@ farui-plus
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -8843,8 +7937,6 @@ farui-plus
 
 tongyi-intent-detect-v3
 
-中国内地
-
 1,200
 
 1,000,000
@@ -8854,8 +7946,6 @@ tongyi-intent-detect-v3
 ## **华北2（北京）**
 
 **模型名称**
-
-**服务部署范围**
 
 **限流条件（超出任一数值时触发限流）**
 
@@ -8869,23 +7959,17 @@ tongyi-intent-detect-v3
 
 qwen-plus-character
 
-中国内地
-
 120
 
 500,000
 
 qwen-flash-character
 
-中国内地
-
 120
 
 500,000
 
 qwen-flash-character-2026-02-26
-
-中国内地
 
 120
 
@@ -9009,8 +8093,6 @@ qwen-plus-character
 
 **模型名称**
 
-**服务部署范围**
-
 **限流条件（超出任一数值时触发限流）**
 
 > **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
@@ -9023,15 +8105,11 @@ qwen-plus-character
 
 gui-plus
 
-中国内地
-
 80
 
 540,000
 
 gui-plus-2026-02-26
-
-中国内地
 
 100
 

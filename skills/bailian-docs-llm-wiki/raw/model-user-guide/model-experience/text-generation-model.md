@@ -4,7 +4,7 @@
 
 ## 做 AI 编程或 Agent 开发（OpenClaw、Claude Code、Hermes 等）该选哪个模型？
 
-推荐 `qwen3.7-plus`——能力与成本均衡，完整工具调用支持，1M 上下文适合大型代码库。如需最强推理能力，可选择 `qwen3.7-max`。
+推荐 `qwen3.7-plus`——能力与成本均衡，完整工具调用支持，1M 上下文适合大型代码库。如需最强推理能力，可选择`qwen3.8-max-preview`（ Token Plan 可用），或 `qwen3.7-max`。
 
 ## 从闭源模型迁移到百炼?
 
@@ -18,7 +18,7 @@
 
 GPT-5.5、Claude Opus 4.7、Gemini 3.1 Pro
 
-`qwen3.7-max`
+`qwen3.7-max`、`qwen3.8-max-preview`（仅 Token Plan 可用）
 
 平衡
 
@@ -30,19 +30,19 @@ GPT-5.4、Claude Sonnet 4.6、Gemini 3 Pro
 
 GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
-`qwen3.6-flash`、`deepseek-v4-flash`、`MiniMax-M2.5`
+`qwen3.7-flash`、`deepseek-v4-flash`、`MiniMax-M2.5`
 
 ## 应用场景
 
-聊天机器人、内容生成、摘要总结、文档处理等场景，推荐使用 `qwen3.7-plus`，能力与成本均衡，拥有100万上下文窗口和完整的内置工具。确认效果满足需求后，可以尝试 `qwen3.6-flash` 来降低成本，效果接近旗舰模型，且拥有相同的上下文长度和功能支持。如需最强推理能力，可选择 `qwen3.7-max`（百万 token 上下文），但成本较高。
+聊天机器人、内容生成、摘要总结、文档处理等场景，推荐使用 `qwen3.7-plus`，能力与成本均衡，拥有100万上下文窗口和完整的内置工具。确认效果满足需求后，可以尝试 `qwen3.7-flash` 来降低成本，效果接近旗舰模型，且拥有相同的上下文长度和功能支持。如需最强推理能力，可选择 `qwen3.7-max`（百万 token 上下文）；也可选择 `qwen3.8-max-preview`（ Token Plan 可用）。
 
 ### 办公场景（非编程）
 
 处理日常办公任务（文档撰写、邮件处理、会议纪要整理、数据分析等）时，推荐 `qwen3.7-plus`——能力与成本均衡，拥有 100 万上下文窗口，支持 Function Calling 和内置工具，适合文档摘要、内容生成等办公类任务。
 
-确认效果满足需求后，可尝试 `qwen3.6-flash` 降低成本，效果接近旗舰模型，且拥有相同的上下文长度和功能支持。
+确认效果满足需求后，可尝试 `qwen3.7-flash` 降低成本，效果接近旗舰模型，且拥有相同的上下文长度和功能支持。
 
-如需最强推理能力（如复杂数据分析、多步逻辑推演），可选择 `qwen3.7-max`，但成本较高。
+如需最强推理能力（如复杂数据分析、多步逻辑推演），可选择 `qwen3.7-max`，但成本较高；也可选择 `qwen3.8-max-preview`（仅 Token Plan 可用）。
 
 处理超长文档（如同时审阅多份合同、大规模文献梳理）时，推荐 `qwen-long`——上下文窗口达 1000 万 Token，可完整处理大体量文档。
 
@@ -52,7 +52,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 100万Token约相当于70万个汉字或10本小说。
 
--   长文档或大型代码库：`qwen3.7-plus` / `qwen3.6-flash`（100万）。
+-   长文档或大型代码库：`qwen3.7-plus` / `qwen3.7-flash` （100万）。
     
 -   常规任务：128k-256k已足够。
     
@@ -127,6 +127,22 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 查看快照版本
 
 `qwen3.7-plus-2026-05-26`
+
+1M
+
+支持
+
+支持
+
+支持
+
+支持
+
+`qwen3.7-flash`
+
+查看快照版本
+
+`qwen3.7-flash-2026-07-15`
 
 1M
 

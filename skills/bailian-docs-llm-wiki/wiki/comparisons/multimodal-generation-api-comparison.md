@@ -1,76 +1,88 @@
-# [多模态](../concepts/multimodal.md)生成 API 对比（图像/视频/3D）
+# [多模态](../concepts/multimodal.md)生成 API 对比
 
-百炼平台提供图像、视频、3D 三类[多模态](../concepts/multimodal.md)生成 API，分别面向不同的内容产出形态。三者都通过 DashScope HTTP 接口调用，统一使用 API Key 鉴权，并遵循"创建任务 → 轮询结果"的异步任务模式（部分图像模型支持同步调用）。本页从输入格式、输出格式、支持模型、API 端点、调用模式、[计费](../concepts/billing.md)与典型场景等维度做横向对比，帮助开发者根据产出目标与技术约束做选型。
+百炼平台提供三大类[多模态](../concepts/multimodal.md)生成能力：图像生成、3D 资产生成和视频生成。三者均通过 DashScope 网关以 REST / SDK 方式调用，且由于生成耗时较长，大多采用 `X-DashScope-Async: enable` 异步"创建任务 → 轮询 task_id"的两步流程。本文从输入格式、输出格式、支持模型、API 端点、调用模式、计费与典型场景等维度对三者进行对比，帮助开发者根据业务需求做技术选型。
 
 ## 关键维度对比
 
-| 维度 | 图像生成 | 视频生成 | 3D 生成 |
+| 维度 | 图像生成 | 3D 生成 | 视频生成 |
 | --- | --- | --- | --- |
-| 产出形态 | 静态图片（PNG） | 视频文件 | GLB 模型 + 预览渲染图 |
-| 输入格式 | 文本、图像（图生图/编辑）、参考图 | 文本、图像（首帧/首尾帧）、参考图、视频、音频 | 文本、单图、多图（前/左/后/右 4 视角，固定数组长度 4） |
-| 输出格式 | PNG，1–6 张或多图组图 | 视频 URL | PBR 材质 GLB（`pbr_model_url`）或无贴图基础模型（`base_model_url`），含 1 张预览渲染图 |
-| 调用模式 | 同步（千问/万相2.6+/Z-Image 等新版）或异步（V1 及部分编辑/创意类） | 仅异步 | 仅异步 |
-| API 端点 | 同步：`POST /api/v1/services/aigc/multimodal-generation/generation`；异步轮询：`GET /api/v1/tasks/{task_id}` | `POST /api/v1/services/aigc/video-generation/video-synthesis`（部分走 `image2video/video-synthesis`）；轮询：`GET /api/v1/tasks/{task_id}` | `POST /api/v1/services/aigc/video-generation/3d-generation`；轮询：`GET /api/v1/tasks/{task_id}` |
-| 必需请求头 | `Authorization`；异步需 `X-DashScope-Async: enable` | `Content-Type`、`Authorization`、`X-DashScope-Async: enable` | `X-DashScope-Async: enable`（缺少报 `current user api does not support synchronous calls`） |
-| 典型耗时 | 同步秒级返回；异步 1–2 分钟 | 1–5 分钟，万相2.1 视频编辑 5–10 分钟 | 较长，轮询建议间隔约 15 秒 |
-| task_id 有效期 | 24 小时 | 24 小时 | 24 小时，超时返回 `UNKNOWN` |
-| 产物下载链接有效期 | 随接口返回 | 随接口返回 | 2 小时，需及时下载 |
-| 支持模型系列 | 千问图像、万相（Wan/wanx）、Z-Image、可灵 | 万相（HappyHorse/Wan/wanx）、爱诗 PixVerse、Vidu、可灵 | Tripo（`Tripo/Tripo-H3.1` 高精度、`Tripo/Tripo-P1.0` 专业快速） |
-| 地域可用性 | 北京/新加坡/弗吉尼亚等多地域，地域独立鉴权不可混用；千问-图像翻译仅北京 | 同地域约束，模型/Endpoint/API Key 必须同地域；PixVerse、Vidu 仅北京 | 仅华北2（北京） |
-| 业务空间专属域名 | 支持（`{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com` 等） | 支持（北京 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 等） | 走默认 dashscope 域名 |
-| SDK 支持 | 部分模型支持 DashScope SDK（Python/Java） | HTTP 为主 | HTTP |
-| [计费](../concepts/billing.md)方式 | 按张数/模型[计费](../concepts/billing.md) | 按任务/时长计费 | 按任务计费（`usage` 记录任务类型与生成数量） |
-| 典型场景 | 文生图、图生图、图像编辑、虚拟模特、试衣、海报、背景生成、擦除补全、画面扩展、人物写真 | 文生视频、图生视频、参考生视频、视频编辑、视频换人、数字人、肖像动态视频 | 文生 3D、单图生 3D、多图生 3D，游戏/电商/工业设计资产 |
+| **输入格式** | 文本 [prompt](../guides/prompt.md)（文生图）；参考图 URL + [prompt](../guides/prompt.md)（图生图 / 图像编辑）；多图参考（部分模型支持） | 三选一：文本 [prompt](../guides/prompt.md)（文生 3D）；单图 URL（单图生 3D）；4 视角图片数组（多图生 3D） | 文本 prompt（文生视频）；首帧/首尾帧图像 URL（图生视频）；参考图 + prompt（参考生视频）；视频 URL（视频编辑/超分等） |
+| **输出格式** | 静态图像（JPEG/PNG），支持 1~6 张 | GLB 格式 3D 模型（带 PBR 材质或无贴图）+ 预览渲染图 | 视频文件（MP4 等），含分辨率、时长、可选音频 |
+| **支持模型** | Qwen-Image / Qwen-Image-Edit、万相 wan2.7/2.6/2.5/2.2/v1、Z-Image、Kling、Vidu、创意工具系列 | Tripo/Tripo-H3.1（高精度）、Tripo/Tripo-P1.0（专业快速） | 万相 wan2.7/2.6/2.2、HappyHorse、PixVerse、Vidu、Kling、人像动画系列 |
+| **API 端点** | 文生图/编辑：`/api/v1/services/aigc/text2image/image-synthesis`（异步）或 HTTP 同步（wan2.7/2.6/z-image/qwen-image）；查询：`/api/v1/tasks/{task_id}` | 创建：`/api/v1/services/aigc/video-generation/3d-generation`；查询：`/api/v1/tasks/{task_id}` | 创建：`/api/v1/services/aigc/video-generation/video-synthesis`；查询：`/api/v1/tasks/{task_id}` |
+| **调用模式** | 异步为主（`X-DashScope-Async: enable`）；wan2.7/2.6/z-image/qwen-image 支持同步 | 仅异步（`X-DashScope-Async: enable` 必选） | 仅异步（`X-DashScope-Async: enable` 必选） |
+| **地域限制** | 部分模型仅北京地域（wanx-v1、创意工具系列） | 仅华北2（北京） | 需模型、Endpoint、[API Key](../concepts/api-key.md) 同一地域（北京/新加坡/美国/德国） |
+| **输出分辨率** | 512×512 ~ 2048×2048（部分 4K） | 面数最高 200 万（H3.1）/2 万（P1.0） | 480P ~ 1080P，部分支持 4K |
+| **产物有效期** | — | GLB 下载链接 2 小时 | task_id 有效期 24 小时 |
+| **task_id 有效期** | 24 小时 | 24 小时 | 24 小时 |
+| **典型计费** | 按张计费（如 wanx-v1 0.16 元/张）；部分创意工具免费体验 | 按任务类型计费 | 按视频时长/分辨率计费 |
+| **典型耗时** | 秒级（同步）至数十秒（异步） | 分钟级 | 分钟级 |
 
-## 调用模式差异
+## 调用流程对比
 
-三类 API 在调用流程上高度一致，均采用"创建任务 → 轮询查询"模式，但图像 API 额外提供**同步调用**能力：
+三者均遵循异步两步流程，但端点路径和请求头要求有所不同：
 
-- **图像生成**：千问图像系列（qwen-image-2.0-pro/max/plus）、万相 2.6/2.7 文生图与编辑、Z-Image 等新版模型支持一次请求即返回结果的同步调用，走 `multimodal-generation/generation` 端点；V1 版及部分编辑/创意类模型仍需异步。同步模式流程更简单，适合交互式场景。
-- **视频生成 / 3D 生成**：因耗时较长（视频 1–10 分钟，3D 资产更久），统一仅支持异步。请求必须携带 `X-DashScope-Async: enable`，缺少该头会报错 `current user api does not support synchronous calls`。
-
-三者都强调"请勿重复创建任务"，`task_id` 有效期 24 小时，直接轮询即可。
-
-## 输入能力对比
-
-| 输入方式 | 图像 | 视频 | 3D |
+| 步骤 | 图像生成 | 3D 生成 | 视频生成 |
 | --- | --- | --- | --- |
-| 纯文本 | 支持，复杂文字渲染能力强（千问系列） | 支持（文生视频） | 支持，中英文等多语言，最大 1024 字符 |
-| 单图输入 | 支持（图生图、图像编辑） | 支持（首帧生视频） | 支持，JPEG/PNG，宽高 [20,6000]，≤20MB |
-| 多图输入 | 部分编辑模型支持多图输入/输出 | 支持（参考生、首尾帧） | 支持，固定 4 视角（前/左/后/右），有效 2–4 张 |
-| 视频输入 | 不适用 | 支持（视频编辑、参考生视频） | 不适用 |
-| 音频输入 | 不适用 | 万相2.7 支持[多模态](../concepts/multimodal.md)输入含音频 | 不适用 |
+| 创建任务 | POST 图像合成端点 | POST `/api/v1/services/aigc/video-generation/3d-generation` | POST `/api/v1/services/aigc/video-generation/video-synthesis` |
+| 异步头 | 大多数需要 `X-DashScope-Async: enable` | **必选** | **必选** |
+| 轮询查询 | GET `/api/v1/tasks/{task_id}` | GET `/api/v1/tasks/{task_id}` | GET `/api/v1/tasks/{task_id}` |
+| 轮询建议 | — | 约 15 秒间隔 | — |
+| 查询 RPS | — | 默认 20 | — |
+| 状态枚举 | PENDING/RUNNING/SUCCEEDED/FAILED | PENDING/RUNNING/SUCCEEDED/FAILED/CANCELED/UNKNOWN | PENDING/RUNNING/SUCCEEDED/FAILED/UNKNOWN |
 
-3D 生成的多图输入有严格的视角顺序约束（前/左/后/右），不需要的视角传空对象 `{}`，这与图像/视频的"多图作为参考"语义不同。
+## 输入参数对比
 
-## 产物与质量参数
-
-| 项 | 图像 | 视频 | 3D |
+| 参数类型 | 图像生成 | 3D 生成 | 视频生成 |
 | --- | --- | --- | --- |
-| 输出规格 | 总像素 512×512~2048×2048，宽高比 1:4~4:1，1–6 张；万相2.7 支持 4K | 视频文件 URL | 面数：H3.1 最高 200 万面，P1.0 最高 2 万面 |
-| 质量参数 | 分辨率、张数、宽高比 | 分辨率、时长、镜头叙事（`shot_type: multi`） | `texture_quality`（标清/高清）、`geometry_quality`（standard/ultra）、`pbr`、`texture` |
-| 一致性能力 | 千问编辑支持角色一致性 | 万相2.7 参考生支持角色形象与音色一致性 | 多图视角约束保证几何一致性 |
-| 预览能力 | 直接返回图片 | 直接返回视频 | 额外返回 `rendered_image_url` 预览渲染图 |
+| **prompt** | 支持，中英文文本 | 支持，最大 1024 字符 | 支持，中英文 |
+| **图像输入** | 参考图 URL（图生图/编辑） | 单图 URL 或 4 视角图片数组 | 首帧/尾帧 URL（图生视频）；参考图（参考生视频） |
+| **[多模态](../concepts/multimodal.md)数组** | 部分模型支持多图参考 | images 数组（固定 4 元素，视角顺序前/左/后/右） | media 数组（first_frame/last_frame/image_url/video/audio_url/reference_image） |
+| **分辨率参数** | 宽高自由设置 | texture_quality / geometry_quality | resolution / size（480P~4K） |
+| **数量参数** | 1~6 张 | count 固定 1 | duration（秒）、seed、watermark 等 |
 
 ## 适用场景建议
 
-- **选图像生成 API**：需要静态视觉产出，强调文字渲染、风格化、精确编辑（增删移动物体、改动作）、虚拟模特/试衣/海报等电商与营销场景。优先用同步调用模型（千问图像、万相2.6+/2.7、Z-Image）以简化流程；批量或创意类任务再用异步。
-- **选视频生成 API**：需要动态叙事、数字人、肖像动态视频、视频编辑/换人。文生视频、图生视频（首帧/首尾帧）、参考生视频均可，万相2.7 是推荐的新版协议，支持多模态输入与角色/音色一致性。注意 PixVerse、Vidu 仅北京地域可用且需单独开通。
-- **选 3D 生成 API**：需要可直接导入引擎/3D 软件的 GLB 资产，适用于游戏、电商商品 3D 展示、工业设计。仅北京地域可用，需开通 Tripo。高精度选 `Tripo/Tripo-H3.1`（最高 200 万面），追求速度选 `Tripo/Tripo-P1.0`。
+### 图像生成
 
-## 技术选型参考
+- **需要高文本渲染质量**（海报、配图含文字排版）→ 优先选择 Qwen-Image 系列。
+- **追求高性价比的通用文生图** → Z-Image-Turbo 或万相 wan2.6 系列。
+- **图像编辑需求**（改字、增删物体、风格迁移）→ Qwen-Image-Edit 或万相 wan2.7-image 编辑能力。
+- **创意工具场景**（虚拟模特、涂鸦作画、创意海报）→ 对应专项工具模型，但注意部分仅北京地域或免费体验。
+- **需要 HTTP 同步调用简化集成** → 选择 wan2.7 / wan2.6 / z-image / qwen-image 等支持同步的模型。
 
-1. **产出形态决定大类**：图片→图像 API；视频→视频 API；3D 模型→3D API。三者端点不同，不可混用。
-2. **延迟敏感优先同步**：仅图像 API 提供同步调用，适合交互式产品；视频与 3D 必须异步，需在业务侧实现轮询或配置异步任务回调（3D 查询接口默认 RPS 20）。
-3. **地域与鉴权**：三类均要求模型、Endpoint、API Key 同地域。3D 仅北京可用；千问-图像翻译、PixVerse、Vidu 也仅北京。建议迁移到业务空间专属域名以获得更好性能与稳定性。
-4. **任务复用**：`task_id` 24 小时有效，三类都要求轮询而非重复创建任务；3D 产物下载链接仅 2 小时，需及时落盘。
-5. **输入约束**：3D 多图必须按前/左/后/右 4 视角顺序；图像图文混排需开启 `enable_interleave=true` 并配合 SSE 流式；视频首尾帧、参考生有专属模型变体。
-6. **模型开通**：可灵、PixVerse、Vidu、Tripo 均需先在控制台搜索并开通授权，再调用 API。
+### 3D 生成
+
+- **游戏/影视高精度 3D 资产** → Tripo/Tripo-H3.1，最高 200 万面，支持 PBR 材质。
+- **快速原型/预览** → Tripo/Tripo-P1.0，面数较低但速度更快。
+- **无贴图基础模型需求** → 同时将 `texture` 和 `pbr` 设为 `false`，获取 `base_model_url`。
+- **注意**：仅限北京地域 [API Key](../concepts/api-key.md)，开通前需在控制台模型市场搜索 Tripo 并完成授权。
+
+### 视频生成
+
+- **最新推荐体验** → 万相 wan2.7（新版协议），支持图生视频首帧/首尾帧/续写、文生视频、参考生视频及视频编辑。
+- **旧版项目兼容** → wan2.6 及早期模型走旧版协议（图生视频仅首帧）。
+- **需要 4K 超清或对口型/动作模仿** → PixVerse 系列（pixverse-c1/v6/upscale/lipsync/motioncontrol）。
+- **智能分镜、多主体参考** → 可灵 Kling（kling-v3 / kling-v3-omni）。
+- **人像动画/数字人** → animate-anyone / emo / liveportrait / wan2.2-s2v 等系列。
+- **注意路径差异**：万相图生动作（wan2.2-animate-move）、视频换人（wan2.2-animate-mix）、数字人（wan2.2-s2v）使用 `image2video/video-synthesis` 路径，而非 `video-generation/video-synthesis`。
+
+## 技术选型总结
+
+| 选型场景 | 推荐方案 | 关键考量 |
+| --- | --- | --- |
+| 静态营销素材 / 产品配图 | 图像生成（Qwen-Image / Z-Image） | 文本渲染质量、输出张数、同步调用可用性 |
+| 电商虚拟模特 / 创意海报 | 图像生成创意工具（wanx-virtualmodel / wanx-poster） | 地域限制、部分免费体验 |
+| 游戏/影视 3D 资产 | 3D 生成（Tripo-H3.1） | 面数精度、PBR 材质、仅北京地域 |
+| 快速 3D 原型验证 | 3D 生成（Tripo-P1.0） | 速度优先、面数较低 |
+| 短视频/广告素材 | 视频生成（wan2.7 / Kling） | 分辨率、时长、多镜头分镜 |
+| 人像动画 / 数字人 | 视频生成（animate-anyone / wan2.2-s2v） | 口型同步、动作模仿、路径差异 |
+| 超清/对口型视频 | 视频生成（PixVerse upscale / lipsync） | 4K 超分、对口型能力 |
 
 ## 被对比主题页
 
 - [image generation](../api/image-generation.md)
-- [video generation api](../api/video-generation-api.md)
 - [3d generation](../api/3d-generation.md)
+- [video generation api](../api/video-generation-api.md)
 
 

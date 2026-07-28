@@ -143,19 +143,17 @@
 
 提交单个语音实时转写任务，通过传入本地文件的方式同步阻塞地拿到转写结果。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6455892871/CAEQURiBgMDS0c2RpxkiIDNmYjBlMTE3ODQxYTQ3Nzk4MGMxNTc5MjY3OWVjZjlj4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4858074871/CAEQURiBgMDS0c2RpxkiIDNmYjBlMTE3ODQxYTQ3Nzk4MGMxNTc5MjY3OWVjZjlj4709861_20241015153444.149.svg)
 
 实例化[Recognition类](#d6bc1f133f871)绑定[请求参数](#555007db2033f)，调用`call`进行识别/翻译并最终获取[识别结果（RecognitionResult）](#bc3e1a43d6hhy)。
 
 点击查看完整示例
 
-示例中用到的音频为：[asr\_example.wav](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250210/iwaouc/asr_example.wav)。
-
 ```
 from http import HTTPStatus
 from dashscope.audio.asr import Recognition
 # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_websocket_api_url = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+dashscope.base_websocket_api_url = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference"
 
 # 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key
 # import dashscope
@@ -167,13 +165,15 @@ recognition = Recognition(model='paraformer-realtime-v2',
                           # “language_hints”只支持paraformer-realtime-v2模型
                           language_hints=['zh', 'en'],
                           callback=None)
-result = recognition.call('asr_example.wav')
+result = recognition.call('{YOUR_AUDIO_FILE}')
 if result.status_code == HTTPStatus.OK:
     print('识别结果：')
-    print(result.get_sentence())
+    sentences = result.get_sentence()
+    for sentence in sentences:
+        print(sentence['text'])
 else:
     print('Error: ', result.message)
-    
+
 print(
     '[Metric] requestId: {}, first package delay ms: {}, last package delay ms: {}'
     .format(
@@ -183,11 +183,15 @@ print(
     ))
 ```
 
+`result.get_sentence()`在非流式调用（`call`）中返回**句子列表**（`List[Dict]`），每个元素为`Dict[str, Any]`，包含`text`（识别文本）、`begin_time` / `end_time`（时间戳）、`words`（字时间戳）等字段。如需获取识别文本，需遍历列表并通过`sentence['text']`提取。
+
+在流式回调（`on_event`）中，`result.get_sentence()`返回**单句信息**（`Dict[str, Any]`），可直接使用`sentence['text']`获取识别文本。两种调用模式的返回值类型不同，详见[识别结果（RecognitionResult）](#bc3e1a43d6hhy)中的`get_sentence`方法说明。
+
 ### **双向流式调用**
 
 提交单个语音实时转写任务，通过实现回调接口的方式流式输出实时识别结果。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6455892871/CAEQURiBgIDvi..2pxkiIGE4NTc3Njg4ZGM2YzQ2NzVhZGI3MzE2YWUwYTA3OGEy4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4858074871/CAEQURiBgIDvi..2pxkiIGE4NTc3Njg4ZGM2YzQ2NzVhZGI3MzE2YWUwYTA3OGEy4709861_20241015153444.149.svg)
 
 1.  启动流式语音识别
     
@@ -221,7 +225,7 @@ import dashscope
 import pyaudio
 from dashscope.audio.asr import *
 # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_websocket_api_url = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+dashscope.base_websocket_api_url = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference"
 
 mic = None
 stream = None
@@ -342,14 +346,12 @@ if __name__ == '__main__':
 
 ## 识别本地语音文件
 
-示例中用到的音频为：[asr\_example.wav](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250210/acoict/asr_example.wav)。
-
 ```
 import os
 import time
 from dashscope.audio.asr import *
 # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_websocket_api_url = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
+dashscope.base_websocket_api_url = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference"
 
 # 若没有将API Key配置到环境变量中，需将下面这行代码注释放开，并将apiKey替换为自己的API Key
 # import dashscope
@@ -393,8 +395,8 @@ recognition.start()
 
 try:
     audio_data: bytes = None
-    f = open("asr_example.wav", 'rb')
-    if os.path.getsize("asr_example.wav"):
+    f = open("{YOUR_AUDIO_FILE}", 'rb')
+    if os.path.getsize("{YOUR_AUDIO_FILE}"):
         while True:
             audio_data = f.read(3200)
             if not audio_data:

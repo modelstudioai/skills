@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-07-16",
-  "totalFamilies": 170,
-  "totalModels": 385,
+  "updatedAt": "2026-07-28",
+  "totalFamilies": 172,
+  "totalModels": 389,
   "capabilityDistribution": {
-    "TG": 35,
-    "IG": 30,
+    "TG": 36,
+    "IG": 31,
     "VG": 26,
     "TTS": 16,
     "Reasoning": 14,
@@ -21,7 +21,7 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 100,
+    "qwen": 103,
     "qwen-domain-model": 34,
     "wan": 13,
     "happyhorse": 4,
@@ -635,20 +635,21 @@
       "primaryCapability": "TG",
       "capabilities": [
         "TG",
-        "Reasoning",
-        "VU"
+        "VU",
+        "Reasoning"
       ],
       "providers": [
         "moonshot-ai"
       ],
-      "itemCount": 4,
+      "itemCount": 5,
       "items": [
         "kimi/kimi-k2.5",
         "kimi/kimi-k2.6",
         "kimi/kimi-k2.7-code",
-        "kimi/kimi-k2.7-code-highspeed"
+        "kimi/kimi-k2.7-code-highspeed",
+        "kimi/kimi-k3"
       ],
-      "maxContextWindow": 262144
+      "maxContextWindow": 1048576
     },
     {
       "slug": "kling-models-market-place",
@@ -974,7 +975,7 @@
       "items": [
         "qwen-audio-3.0-realtime-flash"
       ],
-      "maxContextWindow": 8192
+      "maxContextWindow": 40960
     },
     {
       "slug": "qwen-audio-realtime-plus",
@@ -990,7 +991,7 @@
       "items": [
         "qwen-audio-3.0-realtime-plus"
       ],
-      "maxContextWindow": 8192
+      "maxContextWindow": 40960
     },
     {
       "slug": "qwen-audio-tts",
@@ -1080,17 +1081,20 @@
         "TR"
       ],
       "providers": [
+        "qwen",
         "qwen-domain-model"
       ],
-      "itemCount": 6,
+      "itemCount": 7,
       "items": [
+        "qwen3.7-text-embedding",
         "text-embedding-async-v1",
         "text-embedding-async-v2",
         "text-embedding-v1",
         "text-embedding-v2",
         "text-embedding-v3",
         "text-embedding-v4"
-      ]
+      ],
+      "maxContextWindow": 131072
     },
     {
       "slug": "qwen-flash-character",
@@ -1153,6 +1157,21 @@
       "itemCount": 1,
       "items": [
         "qwen-image-2.0"
+      ]
+    },
+    {
+      "slug": "qwen-image-3.0-pro",
+      "name": "Qwen-Image-3.0-Pro",
+      "primaryCapability": "IG",
+      "capabilities": [
+        "IG"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen-image-3.0-pro"
       ]
     },
     {
@@ -2201,6 +2220,24 @@
         "qwen3.6-35b-a3b"
       ],
       "maxContextWindow": 262144
+    },
+    {
+      "slug": "qwen3.7-flash",
+      "name": "Qwen3.7-Flash",
+      "primaryCapability": "TG",
+      "capabilities": [
+        "TG",
+        "VU",
+        "Reasoning"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen3.7-flash"
+      ],
+      "maxContextWindow": 1000000
     },
     {
       "slug": "qwen3.7-max",

@@ -115,6 +115,144 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/files' \
 
 请将`<替换为训练数据集的文件id>`完整替换为上一步获取的`file_id`。完整参数说明与格式约束请参见[超参数](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#5f391e4b3cezf)。
 
+**超参数**
+
+**字段**
+
+**类型**
+
+**必选**
+
+**描述**
+
+**推荐值**
+
+max\_steps
+
+int
+
+是
+
+**训练总步数**。控制训练时长的核心参数。max\_steps 决定训练迭代次数，max\_token\_length 决定每步处理的数据量。建议不少于 500 步以确保模型充分收敛；大数据集可适当增加步数。
+
+800
+
+eval\_steps
+
+int
+
+是
+
+**验证间隔**。取值需≥0。训练期间每隔多少个 steps 进行一次验证评估，用于阶段性评估模型训练效果。同时保存当前 step 的模型文件。
+
+200
+
+learning\_rate
+
+float
+
+是
+
+**学习率**。控制模型权重更新的幅度。过高可能导致模型变差，过低则变化不明显。推荐使用默认值。
+
+3e-5
+
+generation\_type
+
+string
+
+是
+
+**生成模式**。`"t2i"`：文生图模式；`"i2i"`：图生图模式。决定训练数据格式和推理方式。
+
+t2i
+
+max\_pixels
+
+string
+
+是
+
+**训练图片的最大分辨率**。例如 "1k"、"2k"（1K 即 1024×1024，2K 即 2048×2048）。设置训练集中图片分辨率的像素总数（宽×高）上限，系统仅对超过该值的图片进行缩放处理，未超限的图片保持原样。建议三个分辨率参数（max\_pixels、max\_token\_length、val\_img\_size）保持一致。
+
+文生图："2k"  
+图生图："1k"  
+  
+
+val\_img\_size
+
+string
+
+是
+
+**验证图生成分辨率**。例如 "1k"、"2k"（1K 即 1024×1024，2K 即 2048×2048）。训练过程中验证评估时生成图片的目标分辨率。
+
+文生图："2k"  
+图生图："1k"  
+  
+
+max\_token\_length
+
+string
+
+是
+
+**每步训练的最大 Token 长度**。例如 "1k"、"2k"。与 max\_steps 共同控制训练过程：max\_steps 决定迭代次数，max\_token\_length 决定每步处理的数据量。
+
+文生图："2k"  
+图生图："1k"  
+  
+
+gradient\_clip
+
+float
+
+是
+
+**梯度裁剪**。对所有可训练参数做全局梯度范数裁剪的阈值，防止梯度爆炸。设为 -1 表示不裁剪。
+
+0.5
+
+weight\_decay
+
+float
+
+是
+
+**权重衰减**。AdamW 解耦式权重衰减系数，对所有可训练参数生效，用于正则化防止过拟合。
+
+0.02
+
+lora\_rank
+
+int
+
+是
+
+**LoRA 低秩矩阵的维数**。该值决定了微调参数量的大小。数值越大，模型拟合能力越强，但训练速度会变慢。取值必须为 2n（如 16、32、64）。
+
+32
+
+save\_total\_limit
+
+int
+
+否
+
+**Checkpoint 保存数量上限**。限制最多保存的模型数量。系统将始终只保存训练生成的最后 N 个 Checkpoint（N 为该参数值）。
+
+10
+
+split
+
+float
+
+否
+
+**训练集划分比例**。取值范围为 (0, 1)。仅在未指定 `validation_datasets` 时生效。此参数用于从训练集中自动按比例拆分出验证集。例如，0.9 表示 90% 训练集，10% 验证集。
+
+0.9
+
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \

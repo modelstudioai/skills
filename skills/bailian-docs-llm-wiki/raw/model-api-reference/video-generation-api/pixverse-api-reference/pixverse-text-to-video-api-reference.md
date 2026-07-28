@@ -17,7 +17,7 @@
 
 为确保调用成功，请务必保证**模型、Endpoint URL 和 API Key 均属于同一地域**。跨地域调用将会失败。
 
--   [**选择模型**](https://help.aliyun.com/zh/model-studio/use-video-generation#3ad2d09509ldb)：确认模型所属的地域。
+-   [**选择模型**](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/all)：确认模型所属的地域。
     
 -   **选择 URL**：选择对应的地域 Endpoint URL，支持HTTP URL或 DashScope SDK URL。
     
@@ -26,13 +26,19 @@
 -   **安装 SDK**：如需通过SDK进行调用，请[安装DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
     
 
+**说明**
+
+本文的示例代码适用于**华北2（北京）地域**。
+
 ## HTTP调用
 
 由于文生视频任务耗时较长（通常为1-5分钟），API采用异步调用。整个流程包含 **"创建任务 -> 轮询获取"** 两个核心步骤，具体如下：
 
 ### **步骤1：创建任务获取任务ID**
 
-**北京地域**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+**北京地域**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -48,7 +54,8 @@
 支持模型：pixverse/pixverse-c1-t2v、pixverse/pixverse-v6-t2v、pixverse/pixverse-v5.6-t2v。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+# 调用时请将 {WorkspaceId} 替换为真实的业务空间ID。
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
@@ -74,7 +81,8 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 在`prompt`中描述多镜头场景即可，不支持设置 `shot_type`参数。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+# 调用时请将 {WorkspaceId} 替换为真实的业务空间ID。
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
@@ -99,7 +107,8 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 在`prompt`中描述多镜头场景，并设置 `shot_type` 为`multi`， 即可生成有声多镜头视频。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+# 调用时请将 {WorkspaceId} 替换为真实的业务空间ID。
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
@@ -140,7 +149,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 **model** `_string_` **（必选）**
 
-模型名称。模型输出规格请参见[模型列表](https://help.aliyun.com/zh/model-studio/use-video-generation#3ad2d09509ldb)。
+模型名称。
 
 可选值：
 
@@ -574,7 +583,7 @@ audio直接影响费用，请在调用前确认[模型价格](https://help.aliyu
 
 ### **步骤2：根据任务ID查询结果**
 
-**北京地域**：`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+**北京地域**：`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 **说明**
 
@@ -593,7 +602,7 @@ audio直接影响费用，请在调用前确认[模型价格](https://help.aliyu
 
 ## 查询任务结果
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ```
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
@@ -798,7 +807,9 @@ SDK 的参数命名与[HTTP接口](#pv101a0h2http)基本一致，参数结构根
 
 若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)进行更新。
 
-**北京地域**：`dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'`
+**北京地域**：`dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 同步调用
 
@@ -811,7 +822,7 @@ import dashscope
 import os
 
 # 以下为北京地域URL
-dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -881,7 +892,7 @@ import dashscope
 import os
 
 # 以下为北京地域URL
-dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -984,13 +995,16 @@ if __name__ == '__main__':
 
 若版本过低，可能会触发 “url error, please check url!” 等错误。请参考[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)进行更新。
 
-**北京地域**：`Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";`
+**北京地域**：`Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 同步调用
 
 ##### 请求示例
 
 ```
+// 调用时请将 {WorkspaceId} 替换为真实的业务空间ID。
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -1006,7 +1020,7 @@ public class Text2Video {
 
     static {
         // 以下为北京地域url
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     }
 
     // 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
@@ -1080,6 +1094,7 @@ public class Text2Video {
 ##### 请求示例
 
 ```
+// 调用时请将 {WorkspaceId} 替换为真实的业务空间ID。
 // Copyright (c) Alibaba, Inc. and its affiliates.
 
 import com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;
@@ -1097,7 +1112,7 @@ public class Text2Video {
 
     static {
         // 以下为北京地域url
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     }
 
     // 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"

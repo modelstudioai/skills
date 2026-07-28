@@ -1,6 +1,6 @@
 # application call
 
-阿里云百炼平台提供两套 API 来调用智能体和工作流应用：**OpenAI 兼容的 Responses API** 和 **DashScope API**。两者均支持同步/[异步调用](../concepts/async-invocation.md)、多轮对话、[流式输出](../concepts/streaming.md)等核心能力，开发者可根据生态兼容性和功能需求选择合适的接入方式。调用前需先获取 APP ID（以及子[业务空间](../concepts/workspace.md)场景下的 Workspace ID）和 [API Key](../concepts/api-key.md)。
+阿里云百炼平台提供两套 API 来调用智能体和[工作流](../concepts/workflow.md)应用：**OpenAI 兼容的 Responses API** 和 **DashScope API**。两者均支持同步/[异步调用](../concepts/async-invocation.md)、多轮对话、[流式输出](../concepts/streaming.md)等核心能力，开发者可根据生态兼容性和功能需求选择合适的接入方式。调用前需先获取 APP ID（以及子[业务空间](../concepts/workspace.md)场景下的 Workspace ID）和 [API Key](../concepts/api-key.md)。
 
 ## 前置准备
 
@@ -16,7 +16,7 @@
 ### 其他前提
 
 - 已获取 [API Key](../concepts/api-key.md) 并配置到环境变量 `DASHSCOPE_API_KEY`。
-- 已创建并发布百炼应用（智能体或工作流）。
+- 已创建并发布百炼应用（智能体或[工作流](../concepts/workflow.md)）。
 - 如使用 SDK 调用，需安装对应的 SDK（OpenAI SDK 或 [DashScope SDK](../concepts/dashscope-sdk.md)）。
 
 ## 两套 API 对比
@@ -81,7 +81,7 @@ Responses API 支持在 `content` 数组中混合多种输入类型：
 
 ### [流式输出](../concepts/streaming.md)
 
-设置 `stream=true` 可边生成边输出，适用于需要实时展示生成内容的场景。若应用类型为工作流，需在结束节点或流程输出节点中启用「[流式输出](../concepts/streaming.md)」开关并重新发布。
+设置 `stream=true` 可边生成边输出，适用于需要实时展示生成内容的场景。若应用类型为[工作流](../concepts/workflow.md)，需在结束节点或流程输出节点中启用「[流式输出](../concepts/streaming.md)」开关并重新发布。
 
 ## DashScope API
 
@@ -138,6 +138,19 @@ response = await client.responses.create(
 - [异步调用API参考](../../raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)
 - [新版智能体应用 API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md)
 - [应用 DashScope API 参考](../../raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

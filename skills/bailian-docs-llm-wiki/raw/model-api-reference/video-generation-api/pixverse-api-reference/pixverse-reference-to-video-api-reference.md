@@ -30,7 +30,9 @@
 
 ### **步骤1：创建任务获取任务ID**
 
-**北京地域**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+**北京地域**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -46,7 +48,8 @@
 通过 `media` 传入参考图像，设置 `size` 和 `duration` 控制视频分辨率和时长。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+# 调用时请将 {WorkspaceId} 替换为真实的业务空间ID。
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
@@ -83,7 +86,8 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 在 `media` 传入参考图像，并传入`ref_name`用于设置参考图像的主体名称。
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+# 调用时请将 {WorkspaceId} 替换为真实的业务空间ID。
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
@@ -759,7 +763,7 @@ audio直接影响费用，请在调用前确认[爱诗-参考生视频](https://
 
 ### **步骤2：根据任务ID查询结果**
 
-**北京地域**：`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+**北京地域**：`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 **说明**
 
@@ -778,7 +782,7 @@ audio直接影响费用，请在调用前确认[爱诗-参考生视频](https://
 
 ## 查询任务结果
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ```
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \

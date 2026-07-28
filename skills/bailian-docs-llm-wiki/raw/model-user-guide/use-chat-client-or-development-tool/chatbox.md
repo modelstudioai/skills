@@ -1,6 +1,6 @@
 # Chatbox
 
-Chatbox 是一款跨平台 AI 客户端应用，可以通过Token Plan 团队版、Coding Plan或按量计费接入阿里云百炼。
+Chatbox 是一款跨平台 AI 客户端应用，可以通过 Token Plan 个人版、Token Plan 团队版、Coding Plan 或按量计费接入阿里云百炼。
 
 ## **下载安装 Chatbox**
 
@@ -12,12 +12,32 @@ Chatbox 是一款跨平台 AI 客户端应用，可以通过Token Plan 团队版
 
 百炼提供三种计费方案，根据需要选择：
 
+-   **Token Plan 个人版**：按 token 消耗抵扣个人 Credits。
+    
 -   **Token Plan 团队版**：按坐席订阅，按 token 消耗抵扣 Credits。
     
 -   **Coding Plan**：固定月费订阅，按模型调用次数计量。
     
 -   **按量计费**：按实际调用量后付费。
     
+
+### Token Plan 个人版
+
+**配置项**
+
+**说明**
+
+**API 密钥**
+
+填入 Token Plan 个人版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/token-plan/personal)。
+
+**API 主机**
+
+`https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
+
+**模型**
+
+填入 Token Plan 个人版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)，如 `qwen3.8-max-preview`。
 
 ### Token Plan 团队版
 
@@ -27,7 +47,7 @@ Chatbox 是一款跨平台 AI 客户端应用，可以通过Token Plan 团队版
 
 **API 密钥**
 
-填入 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)。
+填入 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/token-plan/enterprise)。
 
 **API 主机**
 
@@ -71,11 +91,11 @@ Chatbox 是一款跨平台 AI 客户端应用，可以通过Token Plan 团队版
 
 **API 主机**
 
-根据模型部署地域，填入对应 URL：
+根据模型部署地域，填入对应 URL（请将 URL 中的 `{WorkspaceId}` 替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)）：
 
--   华北2（北京）：`https://dashscope.aliyuncs.com/compatible-mode/v1`
+-   华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
     
--   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`，请将`WorkspaceId`替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)
+-   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
     
 -   美国（弗吉尼亚）：`https://dashscope-us.aliyuncs.com/compatible-mode/v1`
     
@@ -100,4 +120,6 @@ Chatbox 是一款跨平台 AI 客户端应用，可以通过Token Plan 团队版
     
 -   Coding Plan：[Coding Plan 常见问题](https://help.aliyun.com/zh/model-studio/coding-plan-faq)
     
--   Token Plan 团队版：[Token Plan 团队版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-faq)
+-   Token Plan 个人版：[Token Plan 常见问题](https://help.aliyun.com/zh/model-studio/token-plan-team-faq)
+    
+-   Token Plan 团队版：[Token Plan 团队版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-team-faq)

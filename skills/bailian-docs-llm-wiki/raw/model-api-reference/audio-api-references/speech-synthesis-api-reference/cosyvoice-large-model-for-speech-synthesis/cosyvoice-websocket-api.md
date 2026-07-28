@@ -87,7 +87,7 @@ Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或�
 
 ## 交互流程
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8684204871/CAEQaxiBgID50pCW3hkiIDVlOWNkODdhOGYyYjQ2ZDFiMzgyYjNmMmUzOGZkNGVh4709861_20241015153444.149.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9336814871/CAEQaxiBgID50pCW3hkiIDVlOWNkODdhOGYyYjQ2ZDFiMzgyYjNmMmUzOGZkNGVh4709861_20241015153444.149.svg)
 
 客户端事件和服务端事件的详细说明，请参见[客户端事件](https://help.aliyun.com/zh/model-studio/cosyvoice-client-events)和[服务端事件](https://help.aliyun.com/zh/model-studio/cosyvoice-server-events)。
 

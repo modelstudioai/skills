@@ -64,9 +64,7 @@ text-embedding-async-v1
 
 通用文本向量批处理接口API支持通过HTTP和DashScope SDK进行调用。
 
-在调用前，您需要[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-
-如需通过SDK进行调用，请[安装DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。目前，该SDK已支持Python和Java。
+在调用前，先[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如需通过SDK进行调用，请[安装DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
 
 ## HTTP调用
 
@@ -79,14 +77,16 @@ HTTP调用仅支持异步模式，需通过两步完成：
 
 **通过HTTP调用时需配置的endpoint：**
 
-`POST https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding`
+`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ### 创建任务
 
 ##### **请求参数**
 
 ```
-curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \
+curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
     -H 'X-DashScope-Async: enable' \
@@ -232,7 +232,7 @@ url `_string_` **（必选）**
 
 ### **根据任务ID查询结果**
 
-`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 ##### **请求参数**
 
@@ -240,10 +240,10 @@ url `_string_` **（必选）**
 
 请将`86ecf553-d340-4e21-xxxxxxxxx`替换为真实的task\_id。
 
-> 若使用新加坡地域的模型，需将base\_url替换为https://dashscope-intl.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx
+> 若使用新加坡地域的模型，需将base\_url替换为https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx，其中{WorkspaceId}需替换为真实的业务空间ID。
 
 ```
-curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \
+curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
@@ -398,6 +398,9 @@ SDK与HTTP接口的参数名基本一致，参数结构根据不同语言的SDK�
 
 ```
 from dashscope import BatchTextEmbedding
+import dashscope
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 result = BatchTextEmbedding.call(BatchTextEmbedding.Models.text_embedding_async_v1,
                                  url="https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241016/nigwvr/text_embedding_file.txt",
@@ -416,8 +419,11 @@ import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.task.AsyncTaskListParam;
 import com.alibaba.dashscope.task.AsyncTaskListResult;
 import com.alibaba.dashscope.utils.JsonUtils;
+import com.alibaba.dashscope.utils.Constants;
 
 public class Main {
+        // 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     public static void basicCall() throws ApiException, NoApiKeyException {
         BatchTextEmbeddingParam param = BatchTextEmbeddingParam.builder()
                 .model(BatchTextEmbedding.Models.TEXT_EMBEDDING_ASYNC_V1)
@@ -430,6 +436,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        // 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
         try {
             basicCall();
         } catch (ApiException | NoApiKeyException e) {
@@ -446,7 +454,10 @@ public class Main {
 
 ```
 from dashscope import BatchTextEmbedding
+import dashscope
 from http import HTTPStatus
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 # 创建异步任务
 def create_async_task():
@@ -508,8 +519,11 @@ import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.alibaba.dashscope.task.AsyncTaskListParam;
 import com.alibaba.dashscope.task.AsyncTaskListResult;
 import com.alibaba.dashscope.utils.JsonUtils;
+import com.alibaba.dashscope.utils.Constants;
 
 public class Main {
+        // 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
 
     /**创建批处理任务*/
     public static BatchTextEmbeddingResult createTask() throws ApiException, NoApiKeyException {
@@ -738,7 +752,7 @@ url `_string_` **（必选）**
 
 任务状态
 
--   SUCCESSED: 任务执行成功
+-   SUCCEEDED: 任务执行成功
     
 -   FAILED: 任务执行失败
     

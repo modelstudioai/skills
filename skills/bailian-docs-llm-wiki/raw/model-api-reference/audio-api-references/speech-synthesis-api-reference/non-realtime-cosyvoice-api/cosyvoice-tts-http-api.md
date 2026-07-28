@@ -66,7 +66,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     "model": "qwen-audio-3.0-tts-flash",
     "input": {
       "text": "我家的后面有一个很大的花园。",
-      "voice": "longanlingxi",
+      "voice": "longanhuan_v3.6",
       "format": "wav",
       "sample_rate": 24000
     }
@@ -84,7 +84,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     "model": "qwen-audio-3.0-tts-flash",
     "input": {
       "text": "我家的后面有一个很大的花园。",
-      "voice": "longanlingxi",
+      "voice": "longanhuan_v3.6",
       "format": "wav",
       "sample_rate": 24000
     }
@@ -135,7 +135,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 取值范围：
 
--   系统音色：参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
+-   系统音色：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
     
 -   声音复刻音色：如何创建音色请参见[CosyVoice声音复刻/设计API](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)
     
@@ -211,7 +211,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
 
 **seed** `_integer_` （可选）
 
@@ -245,7 +245,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 -   zh：中文
     
--   en：英文
+-   en：英语
     
 -   fr：法语
     
@@ -264,6 +264,16 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -   id：印尼语
     
 -   vi：越南语
+    
+-   es：西班牙语
+    
+-   it：意大利语
+    
+-   ms：马来西亚语
+    
+-   fil：菲律宾语
+    
+-   ar：阿拉伯语
     
 
 **instruction** `_string_` （可选）

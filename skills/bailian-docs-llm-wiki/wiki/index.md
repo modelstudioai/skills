@@ -8,11 +8,11 @@
 - [application monitoring](guides/application-monitoring.md) — 1 篇源文档
 - [application permission management](guides/application-permission-management.md) — 1 篇源文档
 - [application publishing and sharing](guides/application-publishing-and-sharing.md) — 3 篇源文档
-- [application support](guides/application-support.md) — 2 篇源文档
+- [application support](guides/application-support.md) — 3 篇源文档
 - [application use cases](guides/application-use-cases.md) — 5 篇源文档
 - [bailian application calling](guides/bailian-application-calling.md) — 3 篇源文档
 - [data connection overview](guides/data-connection-overview.md) — 1 篇源文档
-- [fine tuning](guides/fine-tuning.md) — 7 篇源文档
+- [fine tuning](guides/fine-tuning.md) — 8 篇源文档
 - [get started with models](guides/get-started-with-models.md) — 6 篇源文档
 - [knowledge base](guides/knowledge-base.md) — 8 篇源文档
 - [llm application](guides/llm-application.md) — 6 篇源文档
@@ -20,7 +20,7 @@
 - [memory library overview](guides/memory-library-overview.md) — 3 篇源文档
 - [model compression](guides/model-compression.md) — 1 篇源文档
 - [model context protocol](guides/model-context-protocol.md) — 5 篇源文档
-- [model data overview](guides/model-data-overview.md) — 2 篇源文档
+- [model data overview](guides/model-data-overview.md) — 3 篇源文档
 - [model deployment 1](guides/model-deployment-1.md) — 4 篇源文档
 - [model evaluation introduction](guides/model-evaluation-introduction.md) — 2 篇源文档
 - [model experience](guides/model-experience.md) — 11 篇源文档
@@ -28,13 +28,13 @@
 - [model monitoring](guides/model-monitoring.md) — 2 篇源文档
 - [plug in](guides/plug-in.md) — 3 篇源文档
 - [prompt](guides/prompt.md) — 5 篇源文档
+- [realtime api user guide](guides/realtime-api-user-guide.md) — 15 篇源文档
 - [release notes](guides/release-notes.md) — 2 篇源文档
 - [security and compliance](guides/security-and-compliance.md) — 12 篇源文档
 - [skill](guides/skill.md) — 1 篇源文档
 - [start using](guides/start-using.md) — 2 篇源文档
-- [support](guides/support.md) — 2 篇源文档
 - [test 1](guides/test-1.md) — 5 篇源文档
-- [token plan guide](guides/token-plan-guide.md) — 10 篇源文档
+- [token plan guide](guides/token-plan-guide.md) — 14 篇源文档
 - [use cases](guides/use-cases.md) — 24 篇源文档
 - [use chat client or development tool](guides/use-chat-client-or-development-tool.md) — 17 篇源文档
 
@@ -42,10 +42,10 @@
 
 - [3d generation](api/3d-generation.md) — 1 篇源文档
 - [application call](api/application-call.md) — 5 篇源文档
-- [application component api reference](api/application-component-api-reference.md) — 57 篇源文档
+- [application component api reference](api/application-component-api-reference.md) — 58 篇源文档
 - [file management api](api/file-management-api.md) — 1 篇源文档
 - [frameworks](api/frameworks.md) — 3 篇源文档
-- [image generation](api/image-generation.md) — 26 篇源文档
+- [image generation](api/image-generation.md) — 27 篇源文档
 - [knowledge](api/knowledge.md) — 1 篇源文档
 - [long term memory new](api/long-term-memory-new.md) — 1 篇源文档
 - [managed agents api](api/managed-agents-api.md) — 7 篇源文档
@@ -63,22 +63,21 @@
 ## 横切概念
 
 - [API Key 鉴权](concepts/api-key.md) — 关联 6 个主题
-- [MCP 与工具扩展](concepts/mcp-and-tools.md) — 关联 5 个主题
 - [OpenAI 兼容接口](concepts/openai-compatible-interface.md) — 关联 6 个主题
-- [Token 与计费](concepts/token-and-billing.md) — 关联 6 个主题
-- [业务空间（Workspace）](concepts/workspace.md) — 关联 5 个主题
-- [函数调用（Function Calling）](concepts/function-calling.md) — 关联 4 个主题
-- [异步调用与任务轮询](concepts/async-invocation.md) — 关联 5 个主题
+- [Token 计费](concepts/token-billing.md) — 关联 5 个主题
+- [业务空间](concepts/workspace.md) — 关联 6 个主题
+- [地域与接入点](concepts/region.md) — 关联 5 个主题
+- [多模态](concepts/multimodal.md) — 关联 6 个主题
+- [异步调用](concepts/async-invocation.md) — 关联 5 个主题
 - [检索增强生成（RAG）](concepts/rag.md) — 关联 6 个主题
-- [模型调优与部署](concepts/fine-tuning-and-deployment.md) — 关联 5 个主题
-- [流式输出](concepts/streaming-output.md) — 关联 3 个主题
+- [流式输出](concepts/streaming.md) — 关联 5 个主题
+- [限流](concepts/rate-limit.md) — 关联 4 个主题
 
 ## 对比分析
 
-- [图像、视频与 3D 生成对比](comparisons/image-vs-video-vs-3d-generation.md) — 对比 3 个主题
-- [应用评估与应用监控对比](comparisons/app-evaluation-vs-monitoring.md) — 对比 2 个主题
-- [托管智能体：指南与 API 对比](comparisons/managed-agents-guide-vs-api.md) — 对比 2 个主题
-- [模型微调、压缩与部署对比](comparisons/fine-tuning-vs-compression-vs-deployment.md) — 对比 3 个主题
-- [模型评估与模型监控对比](comparisons/model-evaluation-vs-monitoring.md) — 对比 2 个主题
-- [知识库与记忆库对比](comparisons/knowledge-base-vs-memory-library.md) — 对比 2 个主题
+- [图像、视频与3D生成对比](comparisons/multimodal-generation-comparison.md) — 对比 3 个主题
+- [模型微调、压缩与高速推理对比](comparisons/model-optimization-comparison.md) — 对比 3 个主题
+- [模型监控与应用监控对比](comparisons/model-vs-application-monitoring.md) — 对比 2 个主题
+- [模型评测与应用评测对比](comparisons/model-vs-application-evaluation.md) — 对比 2 个主题
+- [知识库与记忆体系对比](comparisons/knowledge-vs-memory-comparison.md) — 对比 3 个主题
 

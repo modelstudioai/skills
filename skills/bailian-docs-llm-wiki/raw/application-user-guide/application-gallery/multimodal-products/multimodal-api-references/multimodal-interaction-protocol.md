@@ -60,11 +60,11 @@ wss://dashscope.aliyuncs.com/api-ws/v1/inference
 
 语音识别支持的模型包括：[Paraformer实时语音识别](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-api-reference/)（Paraformer），[FUN-ASR实时语音识别](https://help.aliyun.com/zh/model-studio/fun-asr-real-time-speech-recognition-api-reference/)（FunASR），[千问3-ASR-Flash-Realtime](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)（qwen3-asr-flash-realtime），多模态交互轻量版语音识别（AppSpecificASR-Realtime）。
 
-语音合成支持的模型包括：[语音合成CosyVoice-v2大模型](https://help.aliyun.com/zh/model-studio/cosyvoice-large-model-for-speech-synthesis/)（cosyvoice-v2），[语音合成CosyVoice-v3-Flash大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3-flash），[语音合成CosyVoice-v3-plus大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3-plus），[语音合成CosyVoice-v3.5-Flash大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3.5-flash），[语音合成CosyVoice-v3.5-Plus大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3.5-plus），[千问3-TTS-Flash-Realtime](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)（qwen3-tts），[千问3-TTS-Instruct-Flash-Realtime](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)（qwen3-tts-instruct），[千问3-声音设计](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-design)（qwen3-tts-vd），[千问3-声音复刻](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-cloning)（qwen3-tts-vc），[Sambert语音合成](https://help.aliyun.com/zh/model-studio/sambert-speech-synthesis/)（sambert），多模态交互轻量版语音合成（AppSpecificTTS）。
+语音合成支持的模型包括：[语音合成CosyVoice-v2大模型](https://help.aliyun.com/zh/model-studio/cosyvoice-large-model-for-speech-synthesis/)（cosyvoice-v2），[语音合成CosyVoice-v3-Flash大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3-flash），[语音合成CosyVoice-v3-plus大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3-plus），[语音合成CosyVoice-v3.5-Flash大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3.5-flash），[语音合成CosyVoice-v3.5-Plus大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3.5-plus），[Qwen-Audio-3.0-TTS-Plus](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)（qwen-audio-3.0-tts-plus）、[Qwen-Audio-3.0-TTS-Flash](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)（qwen-audio-3.0-tts-flash），[千问3-TTS-Flash-Realtime](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)（qwen3-tts），[千问3-TTS-Instruct-Flash-Realtime](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)（qwen3-tts-instruct），[千问3-声音设计](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-design)（qwen3-tts-vd），[千问3-声音复刻](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-cloning)（qwen3-tts-vc），[Sambert语音合成](https://help.aliyun.com/zh/model-studio/sambert-speech-synthesis/)（sambert），多模态交互轻量版语音合成（AppSpecificTTS）。
 
 语音合成支持的音色，可以在控制台上选择了模型后，点击右侧语音交互体验区域的右上角查看音色列表。
 
-官方音色也可以参考官方文档：cosyvoice-v2 / cosyvoice-v3-plus / cosyvoice-v3-flash 支持的官方音色参考[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)，qwen3-tts 支持的官方音色参考[支持的音色](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#422789c49bqqx)，sambert支持的音色参考[模型列表](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#74cedcb97el0b)（去掉开头的"sambert-"和末尾的"-v1"后就是voice的取值）。
+官方音色也可以参考官方文档：[支持的音色](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#bac280ddf5a1u)，sambert支持的音色参考[Sambert音色列表](https://help.aliyun.com/zh/model-studio/sambert-java-sdk)（去掉开头的"sambert-"和末尾的"-v1"后就是voice的取值）。
 
 使用复刻音色时，确认复刻音色状态为"OK"后才能使用。查询方法参考[查询特定音色](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api#34490e5a2by7z)。
 
@@ -363,6 +363,14 @@ string
 
 热词id，设置该参数时会覆盖管控台热词配置。当管控台提供的热词不能满足客户需求时，可以考虑用Open API程序化管理热词，参见[热词API文档](https://next.api.aliyun.com/document/MultimodalDialog/2025-09-03/Vocabulary)。
 
+language
+
+string
+
+否
+
+语音识别语种，默认和控制台选择的语言保持一致。
+
 **parameters.downstream**的参数说明如下：
 
 **一级参数**
@@ -520,9 +528,15 @@ string
 
 否
 
-设置指令，用于控制方言、情感等合成效果。该功能适用于qwen3-tts-instruct-flash-realtime、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、cosyvoice-v3-flash。
+设置指令，用于控制方言、情感等合成效果。该功能适用的模型以及在不同模型的格式要求请参见[指令控制](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#12884a10929p9)。
 
-instruction有固定格式要求，具体格式参考[Java SDK](https://help.aliyun.com/zh/model-studio/cosyvoice-java-sdk)里的"instruction"参数说明。
+language
+
+string
+
+否
+
+语音合成语种，默认和控制台选择的语言保持一致。
 
 **parameters.client\_info**的参数说明如下：
 
@@ -1965,6 +1979,26 @@ object
 否
 
 与Start消息中biz\_params相同，传递对话系统自定义参数。UpdateInfo指令中biz\_params下面每个子项会全量替换Start指令中biz\_params下面的同名项，并在本次连接后续所有对话中生效。
+
+upstream
+
+language
+
+String
+
+否
+
+语音识别语种更新，不配置则语种不变。
+
+downstream
+
+language
+
+String
+
+否
+
+语音合成语种更新，不配置则语种不变。
 
 示例如下：
 

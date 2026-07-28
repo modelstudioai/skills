@@ -133,7 +133,7 @@ code
 
 string
 
-状态码
+状态码：仅代表 http 请求状态
 
 successful
 
@@ -179,7 +179,7 @@ string
 
 异常错误码
 
-success
+ERR-00000000
 
 errorMessage
 
@@ -187,15 +187,22 @@ string
 
 异常错误信息
 
-Deduct task already success,Please do not resubmit.token '369e8f2c-d283-424a-96c4-c83efe08c89e'
+url download error: http://xx
 
 event
 
 string
 
-事件类型
+事件类型：任务执行状态
 
-TIMEOUT\_CLOSE\_ORDER
+-   task-finished：任务结束（成功）
+    
+-   task-failed：任务结束（失败）
+    
+-   task-xxx：中间态，可以不关注
+    
+
+task-finshed
 
 eventInfo
 
@@ -203,7 +210,7 @@ string
 
 事件描述
 
-xxx
+url download error: http://xx
 
 sessionId
 
@@ -1025,7 +1032,7 @@ taskStatus
 
 string
 
-任务状态。
+任务状态：代表任务调度执行状态，如果任务状态 SUCCESSED，请查看 event 字段取真实业务状态。
 
 -   PENDING：待执行
     
@@ -1073,10 +1080,10 @@ Access was denied, message: No such namespace namespaces/mjp-test-default.
   "success": true,
   "data": {
     "header": {
-      "errorCode": "success",
-      "errorMessage": "Deduct task already success,Please do not resubmit.token '369e8f2c-d283-424a-96c4-c83efe08c89e'",
-      "event": "TIMEOUT_CLOSE_ORDER",
-      "eventInfo": "xxx",
+      "errorCode": "ERR-00000000",
+      "errorMessage": "url download error: http://xx",
+      "event": "task-finshed",
+      "eventInfo": "url download error: http://xx",
       "sessionId": "d5c38cf6-a4bf-4a57-a697-9f449926f0c9",
       "taskId": "6e223291-729b-4e84-9271-c13ada1a776b",
       "traceId": "215045f817272303448235204efdef"

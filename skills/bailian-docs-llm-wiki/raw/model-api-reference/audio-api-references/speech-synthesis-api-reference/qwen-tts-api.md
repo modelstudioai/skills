@@ -63,7 +63,7 @@ public class Main {
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
                 .text("Today is a wonderful day to build something people love!")
                 .voice(AudioParameters.Voice.CHERRY)
-                .languageType("English")
+                .parameter("language_type", "English")
                 // 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash
                 // .parameter("instructions","语速较快，带有明显的上扬语调，适合介绍时尚产品。")
                 // .parameter("optimize_instructions",true)
@@ -166,7 +166,7 @@ public class Main {
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
                 .text("Today is a wonderful day to build something people love!")
                 .voice(AudioParameters.Voice.CHERRY)
-                .languageType("English")
+                .parameter("language_type", "English")
                 // 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash
                 // .parameter("instructions","语速较快，带有明显的上扬语调，适合介绍时尚产品。")
                 // .parameter("optimize_instructions",true)
@@ -270,7 +270,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 
 支持语言：仅支持中文和英文。
 
-适用范围：该功能仅适用于千问3-TTS-Instruct-Flash-Realtime系列模型。
+适用范围：该功能仅适用于千问3-TTS-Instruct-Flash系列模型。
 
 **optimize\_instructions** `_boolean_` （可选）
 
@@ -358,140 +358,6 @@ HTTP状态码。遵循 [RFC 9110](https://www.rfc-editor.org/rfc/rfc9110.html#n
 • `401`：未授权访问  
 • `404`：资源未找到  
 • `500`：服务器内部错误。  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   
   

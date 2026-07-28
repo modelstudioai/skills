@@ -80,7 +80,6 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
         "generate_mode":"generate",
         "generate_num":1
     },
-    "auxiliary_parameters": "WMq4SC4......",
     "parameters":{}
 }'
 ```

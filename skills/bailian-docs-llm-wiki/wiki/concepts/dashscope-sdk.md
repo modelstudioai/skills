@@ -1,67 +1,36 @@
 # DashScope SDK
 
-DashScope SDK 是阿里云百炼平台官方提供的软件开发工具包，封装了模型与应用调用的原生（DashScope）接口，让开发者用少量代码即可接入通义千问、万相、Qwen-MT、Qwen-OCR 等模型能力以及智能体/工作流应用。相比 HTTP 直连和 [OpenAI 兼容接口](openai-compatible-interface.md)，DashScope 原生接口暴露的参数最完整、功能集最丰富。
+DashScope SDK 是阿里云百炼平台的原生官方 SDK，提供 Python 和 Java 两种语言实现，用于调用百炼平台的全部模型能力与应用调用接口。它是百炼功能覆盖最完整的接入方式，当 [OpenAI 兼容接口](openai-compatible-interface.md)无法满足需求时（如特定模型仅支持 DashScope 协议），DashScope SDK 是唯一选择。
 
-## 适用语言与安装
+## 安装
 
-DashScope SDK 主要提供 Python 与 Java 两种官方实现，部分场景也可用 HTTP（如 Node.js 借助 `axios`）替代：
+| 语言 | 安装方式 | 版本要求 |
+|------|----------|----------|
+| Python | `pip install -U dashscope` | Python >= 3.8 |
+| Java | Maven/Gradle 添加 `com.alibaba:dashscope-sdk-java` | 建议 >= 2.12.0 |
 
-- **Python**：`python3 -m pip install -U dashscope`
-- **Java**：通过 Maven / Gradle 引入 `com.alibaba:dashscope-sdk-java`，建议版本 `>= 2.12.0`
-- **Node.js / 其他语言**：目前无官方 SDK，直接走 HTTP API（发起 POST 请求）
+> **注意**：Node.js 没有官方 DashScope SDK，Node.js 开发者可通过 [OpenAI 兼容接口](openai-compatible-interface.md)或 HTTP 直接调用。
 
-> 注意：不同能力对 SDK 语言与地域的支持存在差异。例如 `qwen-deep-research` **仅支持 Python DashScope SDK，且仅限华北2（北京）地域**，暂不支持 Java SDK 与 [OpenAI 兼容接口](openai-compatible-interface.md)。
+## 认证配置
 
-## 在不同场景中的使用
+SDK 通过 [API Key](api-key.md) 鉴权，推荐将 [API Key](api-key.md) 配置到环境变量 `DASHSCOPE_API_KEY`，SDK 会自动读取该变量，避免在代码中硬编码：
 
-### 1. 调用文本生成模型（Qwen 系列）
+```bash
+# Linux / macOS
+export DASHSCOPE_API_KEY="YOUR_DASHSCOPE_API_KEY"
+```
 
-Qwen 系列可通过 OpenAI 兼容、Anthropic 兼容或 DashScope 原生三类接口调用。其中 DashScope 是百炼原生接口，**功能集最完整、参数支持最丰富**；当需要使用最全的采样参数、插件或业务字段而兼容接口未暴露时，应改用 DashScope 原生接口。
+也可在调用时通过 `api_key` 参数显式传入。
 
-### 2. 调用专用模型（[more](../api/more.md) models）
+## 使用场景
 
-法律、意图理解、翻译、OCR 等专用模型大多支持 OpenAI 兼容或 DashScope 两种方式调用：
+### 调用文本生成模型
 
-- `farui-plus`（法律大模型）：通过 DashScope SDK（Python / Java）调用
-- `tongyi-intent-detect-v3` / `qwen-mt-plus` / `qwen3.5-ocr`：OpenAI 兼容或 DashScope 均可
-- `qwen-deep-research`（深度研究）：仅 Python DashScope SDK
+DashScope 原生接口提供百炼平台最完整的参数集和功能支持。适合需要使用平台全部能力的场景，如特殊参数配置、平台独有功能等。若仅需标准对话能力且已有 OpenAI 生态代码，可优先考虑 [OpenAI 兼容接口](openai-compatible-interface.md)以降低迁移成本。
 
-### 3. 调用图像生成与编辑模型
+### 调用百炼应用（智能体 / 工作流）
 
-千问-图像（Qwen-Image）、万相（Wan/Wanx）、Z-Image 等图像模型均可通过 HTTP 或 DashScope SDK 调用，覆盖文生图、图像编辑、图像翻译、风格迁移等能力。
-
-### 4. 调用智能体应用与工作流应用
-
-已创建并发布的智能体应用、工作流应用可通过 DashScope SDK 集成到业务系统，二者调用方式一致：
-
-- Python：`from dashscope import Application`，调用 `Application.call(...)`
-- Java：构造 `ApplicationParam` 后调用 `application.call(param)`
-- HTTP 等价接口：`POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion`
-
-响应统一为 `{"output": {...}, "usage": {...}, "request_id": "..."}` 结构，业务侧主要消费 `output.text`。
-
-## 关键参数与配置
-
-### 鉴权（API Key）
-
-- SDK 通过 [API Key 鉴权](api-key.md)，**推荐将密钥写入环境变量 `DASHSCOPE_API_KEY`**，SDK 会自动读取，避免在代码中硬编码。
-- 调用特定地域（如华北2/北京）或子业务空间下的模型/应用时，需使用对应地域的 API Key，并按需提供 Workspace ID。
-
-### 通用请求参数
-
-- `model`（string，必选）：目标模型名称。
-- `messages`（array）：对话消息列表，按顺序排列，需由调用方维护上下文。
-- `app_id`（应用调用）：目标应用 ID，从控制台应用卡片复制。
-- `prompt` / `input`：用户输入内容。
-- `stream`（bool，可选）：是否[流式输出](streaming.md)；如 `qwen-deep-research` 的反问阶段需设为 `true`。
-- `session_id`（应用多轮对话）：由云端维护上下文，免去手动拼接历史。
-
-### 模型专属参数示例
-
-- **Qwen-MT（翻译）**：通过 `translation_options`（OpenAI SDK 中放入 `extra_body`）控制 `source_lang`、`target_lang`、`terms`（术语干预）、`tm_list`（翻译记忆）、`domain_prompt`（领域提示）。
-- **Qwen-OCR**：`messages.content` 为[多模态](multimodal.md)数组，可设 `min_pixels` / `max_pixels` 控制图像像素阈值。
-
-## Python 快速示例（应用调用）
+通过 `Application.call`（Python）或 `ApplicationParam` + `Application`（Java）调用已发布的智能体应用和工作流应用：
 
 ```python
 import os
@@ -80,20 +49,74 @@ else:
     print(response.output.text)
 ```
 
-## 使用建议
+```java
+import com.alibaba.dashscope.app.*;
 
-- 优先使用环境变量管理 API Key，区分不同地域的密钥。
-- 需要最完整功能与参数时选 DashScope 原生接口；追求生态兼容、迁移成本最低时可选 [OpenAI 兼容接口](openai-compatible-interface.md)。
-- 接入前先对照具体模型的 API 参考，确认其支持的 SDK 语言、协议与地域。
+ApplicationParam param = ApplicationParam.builder()
+    .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+    .appId("YOUR_APP_ID")
+    .prompt("你是谁？")
+    .build();
+
+Application application = new Application();
+ApplicationResult result = application.call(param);
+System.out.printf("text: %s%n", result.getOutput().getText());
+```
+
+对应的 HTTP 端点为 `POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion`。
+
+### 调用仅支持 DashScope 的专用模型
+
+部分模型只能通过 DashScope SDK 调用，不支持 [OpenAI 兼容接口](openai-compatible-interface.md)：
+
+- `farui-plus`（法律大模型）：支持 Python/Java DashScope SDK。
+- `qwen-deep-research`（深度研究）：**仅支持 Python DashScope SDK**，不支持 Java SDK 和 [OpenAI 兼容接口](openai-compatible-interface.md)，且仅限华北2（北京）地域。
+
+其他模型如 `tongyi-intent-detect-v3`、`qwen-mt-plus`、`qwen3.5-ocr` 同时支持 OpenAI 兼容和 DashScope 两种调用方式。
+
+## 关键参数
+
+### 模型调用通用参数
+
+- `model`（string，必选）：模型名称。
+- `messages`（array，必选）：对话消息列表。
+- `stream`（bool，可选）：是否启用[流式输出](streaming.md)。
+
+### 应用调用参数
+
+- `app_id`（string，必选）：应用 ID，从控制台应用卡片获取。
+- `prompt`（string）：用户输入。
+- `session_id`（string，可选）：多轮对话时传入上一次响应返回的 session_id 以维护上下文。
+- `biz_params`（dict，可选）：自定义参数，透传到应用内部。
+
+### 响应结构
+
+应用调用响应统一为 `{"output": {"finish_reason", "session_id", "text"}, "usage": {...}, "request_id": "..."}` 结构，业务侧主要消费 `output.text`。
+
+## 与 [OpenAI 兼容接口](openai-compatible-interface.md)的选择建议
+
+| 场景 | 推荐方式 |
+|------|----------|
+| 已有 OpenAI 生态代码，追求最低迁移成本 | OpenAI 兼容接口 |
+| 需要平台最完整的参数和功能 | DashScope SDK |
+| 调用百炼应用（智能体/工作流） | DashScope SDK 或 Responses API |
+| 模型仅支持 DashScope 协议（如 qwen-deep-research） | DashScope SDK（唯一选择） |
+| Node.js / Go 项目 | OpenAI 兼容接口或 HTTP 调用 |
+
+## 注意事项
+
+- DashScope 域名（`dashscope.aliyuncs.com`）为存量兼容域名，请求超时 600 秒；生产环境建议迁移至[业务空间](workspace.md)专属域名（`{WorkspaceId}.{region}.maas.aliyuncs.com`），超时 3600 秒且提供 99.9% SLA。
+- [API Key](api-key.md) 必须与 Base URL 所属地域匹配，不同地域的 Key 和端点不能混用，否则报 401 错误。
+- 跨接口迁移时（DashScope 与 OpenAI 兼容之间），需核对参数映射差异，两者参数集合并不完全一致。
 
 ## 关联主题页
 
-- [image generation](../api/image-generation.md)
+- [qwen api reference](../api/qwen-api-reference.md)
 - [more models](../api/more-models.md)
 - [bailian application calling](../guides/bailian-application-calling.md)
-- [qwen api reference](../api/qwen-api-reference.md)
+- [get started with models](../guides/get-started-with-models.md)
+- [preparations](../api/preparations.md)
 - [application call](../api/application-call.md)
-
 
 
 

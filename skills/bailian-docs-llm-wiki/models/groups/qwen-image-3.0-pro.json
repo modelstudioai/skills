@@ -1,0 +1,78 @@
+{
+  "name": "Qwen-Image-3.0-Pro",
+  "description": "内容丰实：支持最大 4.5k token 输入，支持图中图密集信息排版，让报纸、分镜、菜单、试卷等复杂版面一次生成。\n细节真实：支持 10px 小字精准渲染，微表情、毛孔、发丝等细节生动还原，逼近真实摄影的质感。\n知识厚实：支持 12 国语言、20+ 字体原生渲染，主流网页、游戏、直播等界面仿真，外部知识全纳入。\nQwen-Image-3.0-Pro 不只是在追求\"好看\"，更在追求**“好用”**——让图像生成真正成为可落地的生产力工具。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Image"
+        ],
+        "request_modality": [
+          "Image",
+          "Text"
+        ]
+      },
+      "description": "内容丰实：支持最大 4.5k token 输入，支持图中图密集信息排版，让报纸、分镜、菜单、试卷等复杂版面一次生成。\n细节真实：支持 10px 小字精准渲染，微表情、毛孔、发丝等细节生动还原，逼近真实摄影的质感。\n知识厚实：支持 12 国语言、20+ 字体原生渲染，主流网页、游戏、直播等界面仿真，外部知识全纳入。\nQwen-Image-3.0-Pro 不只是在追求\"好看\"，更在追求**“好用”**——让图像生成真正成为可落地的生产力工具。",
+      "features": [
+        "model-experience"
+      ],
+      "provider": "qwen",
+      "model": "qwen-image-3.0-pro",
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "count_limit": 1,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "count_limit": 1,
+          "type": "model-default"
+        }
+      },
+      "capabilities": [
+        "IG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-07-20T14:02:23.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Image-3.0-Pro",
+      "docUrl": "https://help.aliyun.com/document_detail/3047054.html",
+      "category": "Visual",
+      "predictConfig": [
+        {
+          "name": "negative_prompt",
+          "key": "negativePrompt",
+          "tip": "通过指定用户不想看到的内容来优化模型输出，使模型产生更有针对性和理想的结果。"
+        },
+        {
+          "name": "size",
+          "key": "size",
+          "default": "2048*2048",
+          "tip": "输出分辨率"
+        },
+        {
+          "name": "n",
+          "key": "n",
+          "default": 1,
+          "tip": "本次请求生成的图片数量"
+        },
+        {
+          "name": "智能改写",
+          "key": "prompt_extend",
+          "default": false,
+          "tip": "开启后会使用大模型对输入prompt进行智能改写，仅对正向提示词有效。对于较短的输prompt生成效果提升明显，但会增加3-4秒耗时。"
+        }
+      ],
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \\\n--header 'Content-Type: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--data '{\n    \"model\": \"qwen-image-3.0-pro\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"画面是一张竖幅户外人像摄影，整体从上到下呈现温暖的午后街景氛围。顶部左侧到上方大面积被深绿色藤蔓和橙色小花覆盖，花叶从建筑檐口自然垂落，受阳光照射的叶片呈黄绿色高光，阴影处则偏深绿，形成浓密而柔和的背景层次。左上至中上区域是一块深蓝色横向招牌，招牌表面较暗、略带磨砂质感，上面以白色哥特体大字写着 Il Messaggero，文字位于画面左侧偏上，部分被前景花叶轻微遮挡，字体高对比、带装饰性尖角和粗细变化。招牌下方是报刊亭或书报摊的玻璃展示窗，黑色金属框架将橱窗分隔成多个矩形区域，内部陈列着许多报纸、杂志和书刊封面，但大多因景深虚化和光线反射而难以辨读，形成浅色纸张与深色边框交错的背景纹理。画面右上方是强烈的逆光区域，阳光从街道尽头照入，背景建筑被虚化成米灰色块面，边缘柔和，呈现明显的浅景深效果。画面中部偏右是一名年轻成年女性的半身至膝上人像，她回头面向镜头微笑，身体略向右转，肩背朝向观者，姿态自然放松。她有长而浓密的黑色波浪卷发，发丝被逆光勾勒出金色轮廓光，发梢在右侧向外散开，显得轻盈蓬松。她肤色白皙，脸型柔和偏鹅蛋形，眉形细致，眼睛明亮，眼妆清透，睫毛明显，面部带有自然高光，唇部为柔和珊瑚红色，笑容露齿，表情亲切明朗。她佩戴小巧耳饰，身穿黑色细肩带露背连衣裙，面料颜色深黑、轮廓简洁，细肩带从肩部向背部延伸，背部线条清晰。画面下部偏左到中部，她双手抱着一束玫瑰花，花束体积较大，主要由橙色、杏色、粉色和浅桃色玫瑰组成，花瓣层层卷曲，边缘被阳光照亮，绿色叶片和长花茎从花束下方垂出，花束与黑色裙装形成鲜明色彩对比。右侧背景是一条被阳光照亮的城市街道，地面呈暖灰与金黄色调，远处建筑、街边设施和一个模糊的红色圆形交通标志位于右下远景，均因焦外虚化而只保留色块和轮廓。整张照片采用暖色胶片感处理，带有细腻颗粒、柔和对比和明显逆光边缘光，人物位于视觉焦点，背景报刊亭、花藤、街道和阳光共同营造出浪漫、明亮、都市漫步式的氛围。\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"prompt_extend\": true\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3047054.html"
+          }
+        }
+      }
+    }
+  ]
+}

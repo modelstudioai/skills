@@ -8,7 +8,7 @@ MiniMax-M2.1 将于**2026年7月9日**下架。推荐转用：[qwen3.7-plus](htt
 
 **重要**
 
-本文档仅适用于中国内地地域。如需使用模型，需从中国内地地域[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
 
 ## **快速开始**
 
@@ -26,7 +26,8 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
 completion = client.chat.completions.create(
@@ -83,7 +84,8 @@ import process from 'process';
 const openai = new OpenAI({
     // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: "sk-xxx"
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+    // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    baseURL: 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1'
 });
 
 let reasoningContent = ''; // 完整思考过程
@@ -148,7 +150,8 @@ main();
 ## curl
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -205,7 +208,10 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 
 ```
 import os
+import dashscope
 from dashscope import Generation
+# 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 # 初始化请求参数
 messages = [{"role": "user", "content": "你是谁？"}]
@@ -276,6 +282,7 @@ import com.alibaba.dashscope.common.Role;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.utils.Constants;
 import io.reactivex.Flowable;
 import java.lang.System;
 import java.util.Arrays;
@@ -283,6 +290,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Main {
+    static {
+        // 以下为华北2（北京）地域的配置，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
+    }
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
     private static StringBuilder reasoningContent = new StringBuilder();
     private static StringBuilder finalContent = new StringBuilder();
@@ -365,7 +376,8 @@ public class Main {
 ## curl
 
 ```
-curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
+# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -413,6 +425,64 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generatio
     },
     "request_id": "1bbd770e-564a-4601-83fc-3bf639423xxx"
 }
+```
+
+## Anthropic兼容
+
+## Python
+
+### **示例代码**
+
+```
+import anthropic
+import os
+
+client = anthropic.Anthropic(
+    # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic",
+)
+
+message = client.messages.create(
+    model="MiniMax-M2.5",
+    max_tokens=1024,
+    messages=[
+        {"role": "user", "content": "你是谁"}
+    ],
+    stream=True,
+)
+
+for event in message:
+    if event.type == "content_block_delta":
+        if hasattr(event.delta, "thinking"):
+            print(event.delta.thinking, end="", flush=True)
+        if hasattr(event.delta, "text"):
+            print(event.delta.text, end="", flush=True)
+```
+
+## HTTP
+
+### **示例代码**
+
+## curl
+
+```
+# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1/messages \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-H "anthropic-version: 2023-06-01" \
+-d '{
+    "model": "MiniMax-M2.5",
+    "max_tokens": 1024,
+    "messages": [
+        {
+            "role": "user",
+            "content": "你是谁"
+        }
+    ]
+}'
 ```
 
 ## **其它功能**

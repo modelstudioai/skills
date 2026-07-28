@@ -1,14 +1,6 @@
 # 接入多模态生成模型
 
-图像生成模型需通过工具的扩展机制（Skill、Slash Command 或 Agent）接入。
-
-## **前提：获取套餐专属凭证**
-
-在控制台「我的订阅」打开 Token Plan 套餐详情页，接入信息卡片展示套餐专属 API Key（以 `sk-sp-` 为前缀，掩码显示），支持生成、重置与复制 API Key。
-
-**说明**
-
-套餐详情页「可使用模型」以文本、编程模型为主；图像生成模型不在该列表展示，需通过 `multimodal-generation` API 调用。
+Token Plan 中的图像生成、视频生成模型需通过工具的扩展机制（Skill、Slash Command 或 Agent）接入。
 
 ## **示例：在 Claude Code 中接入图像生成模型**
 
@@ -27,7 +19,7 @@
 
 ## 步骤
 
-1. 从用户需求中提取 prompt（图片描述）、model、size（默认 1024*1024）。若用户明确指定了模型（如“模型=wan2.7-image”或“用 wan2.7-image 画”），必须严格使用用户指定的模型名，不要回退到默认模型；仅当用户未指定模型时才使用默认 qwen-image-2.0。常用图像生成模型有 qwen-image-2.0、qwen-image-2.0-pro、wan2.7-image、wan2.7-image-pro、z-image-turbo 等，完整列表以百炼模型列表为准。
+1. 从用户需求中提取 prompt（图片描述）、model、size（默认 1024*1024）。若用户明确指定了模型（如“模型=wan2.7-image”或“用 wan2.7-image 画”），必须严格使用用户指定的模型名，不要回退到默认模型；仅当用户未指定模型时才使用默认 qwen-image-2.0。常用图像生成模型有 qwen-image-2.0、qwen-image-2.0-pro、wan2.7-image、wan2.7-image-pro 等，完整列表以百炼模型列表为准。
 
 2. 调用 API 生成图片（使用 Bash 工具执行 curl）：
 
@@ -55,9 +47,73 @@ curl -s -X POST "https://token-plan.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 在 Claude Code 中输入 `/text-to-image 画一只猫`。如需使用默认模型以外的图像生成模型，在指令中写明模型名即可，例如 `/text-to-image 用 wan2.7-image 画一只猫`。
 
+## **示例：在 Claude Code 中接入视频生成模型**
+
+以 Claude Code 为例，通过 Slash Command 接入视频生成模型。视频生成为异步接口，流程为"提交任务 → 轮询状态 → 下载视频"。
+
+### **步骤一：创建 Slash Command**
+
+将套餐专属 API Key（以 `sk-sp-` 为前缀）配置为环境变量 `$ANTHROPIC_AUTH_TOKEN`，供后续 curl 鉴权使用。
+
+在项目根目录创建 `.claude/commands/text-to-video.md`，写入以下内容：
+
+```
+调用 Token Plan 文生视频 API，根据描述生成视频并自动下载到本地。
+
+用户需求：$ARGUMENTS
+
+## 步骤
+
+1. 从用户需求中提取 prompt（视频描述）、model（默认 happyhorse-1.1-t2v）、resolution（默认 720P）、ratio（默认 16:9）、duration（默认 5 秒）。若用户明确指定了模型（如"模型=happyhorse-1.0-t2v"），必须严格使用用户指定的模型名。
+
+2. 使用 Bash 工具执行以下脚本，一次性完成提交任务、等待完成、下载视频：
+
+```bash
+#!/bin/bash
+set -e
+
+TASK_RESPONSE=$(curl -s -X POST "https://token-plan.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis" \
+  -H "X-DashScope-Async: enable" \
+  -H "Authorization: Bearer $ANTHROPIC_AUTH_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "<model>",
+    "input": {"prompt": "<prompt>"},
+    "parameters": {"resolution": "<resolution>", "ratio": "<ratio>", "duration": <duration>}
+  }')
+
+TASK_ID=$(echo "$TASK_RESPONSE" | grep -o '"task_id":"[^"]*"' | head -1 | cut -d'"' -f4)
+if [ -z "$TASK_ID" ]; then echo "提交失败: $TASK_RESPONSE"; exit 1; fi
+echo "任务已提交，ID: $TASK_ID，等待生成..."
+
+while true; do
+  sleep 15
+  STATUS_RESPONSE=$(curl -s "https://token-plan.cn-beijing.maas.aliyuncs.com/api/v1/tasks/$TASK_ID" \
+    -H "Authorization: Bearer $ANTHROPIC_AUTH_TOKEN")
+  STATUS=$(echo "$STATUS_RESPONSE" | grep -o '"task_status":"[^"]*"' | cut -d'"' -f4)
+  if [ "$STATUS" = "SUCCEEDED" ]; then
+    VIDEO_URL=$(echo "$STATUS_RESPONSE" | grep -o '"video_url":"[^"]*"' | cut -d'"' -f4)
+    OUTPUT="generated_$(date +%Y%m%d_%H%M%S).mp4"
+    curl -s -o "$OUTPUT" "$VIDEO_URL"
+    echo "视频已下载: $(pwd)/$OUTPUT"
+    exit 0
+  elif [ "$STATUS" = "FAILED" ]; then
+    echo "生成失败: $STATUS_RESPONSE"; exit 1
+  fi
+  echo "生成中..."
+done
+```
+
+3. 向用户展示生成的视频文件路径。
+```
+
+### **步骤二：生成视频**
+
+在 Claude Code 中输入 `/text-to-video 一只白色的猫在阳台上晒太阳`。如需使用其他视频生成模型，在指令中写明模型名即可，例如 `/text-to-video 用 happyhorse-1.1-r2v 生成一只猫跳跃的视频`。
+
 ## **其他工具**
 
-控制台套餐详情页「快速接入 AI 编程工具」入口提供 Qwen Code、Qoder、OpenClaw、Claude Code、OpenCode 等工具的接入文档。不同工具的扩展机制和配置文件路径如下表所示，该表为支持扩展机制的主流 AI 编程工具示例。将上述 Claude Code 示例中的配置内容保存到对应路径即可。
+不同工具的扩展机制和配置文件路径如下表所示，该表为支持扩展机制的主流 AI 编程工具示例。将上述 Claude Code 示例中的配置内容保存到对应路径即可。
 
 工具
 

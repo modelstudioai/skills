@@ -29,7 +29,9 @@ Vidu-文生视频模型基于**文本提示词**，生成一段流畅的视频�
 
 ### **步骤1：创建任务获取任务ID**
 
-**北京地域**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+**北京地域**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -42,8 +44,10 @@ Vidu-文生视频模型基于**文本提示词**，生成一段流畅的视频�
 
 ## 文生视频
 
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
@@ -322,7 +326,7 @@ duration直接影响费用，按秒计费，时间越长费用越高，请在调
 
 ### **步骤2：根据任务ID查询结果**
 
-**北京地域**：`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+**北京地域**：`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 **说明**
 
@@ -341,7 +345,7 @@ duration直接影响费用，按秒计费，时间越长费用越高，请在调
 
 ## 查询任务结果
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ```
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
@@ -546,7 +550,7 @@ SDK 的参数命名与[HTTP接口](#vd101a0h2http)基本一致，参数结构根
 
 请确保 DashScope Python SDK 版本**不低于** `**1.25.8**`，再运行以下代码。
 
-**北京地域**：`dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'`
+**北京地域**：`dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'`
 
 ## 同步调用
 
@@ -558,8 +562,8 @@ from dashscope import VideoSynthesis
 import dashscope
 import os
 
-# 以下为北京地域URL
-dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+# 以下为北京地域URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 api_key = os.getenv("DASHSCOPE_API_KEY")
@@ -628,8 +632,8 @@ from dashscope import VideoSynthesis
 import dashscope
 import os
 
-# 以下为北京地域URL
-dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+# 以下为北京地域URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 api_key = os.getenv("DASHSCOPE_API_KEY")
@@ -728,7 +732,7 @@ if __name__ == '__main__':
 
 请确保 DashScope Java SDK 版本**不低于** `**2.22.6**`，再运行以下代码。
 
-**北京地域**：`Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";`
+**北京地域**：`Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";`
 
 ## 同步调用
 
@@ -749,8 +753,8 @@ import com.alibaba.dashscope.utils.Constants;
 public class Text2Video {
 
     static {
-        // 以下为北京地域url
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        // 以下为北京地域URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     }
 
     // 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
@@ -836,8 +840,8 @@ import com.alibaba.dashscope.utils.Constants;
 public class Text2Video {
 
     static {
-        // 以下为北京地域url
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        // 以下为北京地域URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     }
 
     // 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"

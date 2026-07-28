@@ -1,87 +1,106 @@
 # application [support](support.md)
 
-本页汇总阿里云百炼平台应用与[知识库](../concepts/knowledge-base.md)使用过程中的常见问题、关键限制以及相关协议入口，帮助开发者在接入应用、调用插件、管理数据与合规备案时快速定位答案。内容主要参考 [常见问题](../../raw/application-user-guide/application-support/application-faq.md) 与 [相关协议](../../raw/application-user-guide/application-support/application-related-agreements.md)。
+阿里云百炼平台为开发者提供多层次的售后支持体系，涵盖 7×24 基础咨询、标准工单、付费增值服务等渠道，同时明确了平台自身与第三方工具之间的支持边界。本页汇总应用开发中的常见问题解答、相关服务协议及售后服务范围，帮助开发者快速定位支持资源。
 
-## 应用中心
+## 应用中心常见问题
 
-### 插件能力
+以下问题摘自 [常见问题](../../raw/application-user-guide/application-support/application-faq.md)，覆盖插件、RAG 检索、API 调用等高频场景。
 
-百炼应用中心官方提供六款插件：Python 代码解释器、计算器、图片生成、夸克搜索、生成二维码、GitHub 搜索，其中部分插件需申请通过后方可使用。自定义插件服务本身暂不收费，但配置智能体 API 时若涉及 [prompt](prompt.md) 优化、应用调用及测试窗测试，则会产生费用。
+**官方插件类型**
 
-- **插件理解机制**：自定义 API 插件遵循协议传给大模型理解；自定义函数则由大模型学习传入的参数信息并返回完整结果。
-- **header 透传**：百炼调用自定义插件时**不支持自定义 header**，仅支持 `authorization`。若业务场景需要透传 header，需在服务端侧另行处理。
+目前系统提供六款内置插件：Python 代码解释器、计算器、图片生成、夸克搜索、生成二维码、GitHub 搜索。部分插件需申请审批后方可使用。自定义插件服务暂不收费，但涉及 [prompt](prompt.md) 优化、应用调用及测试窗测试时会产生费用。
 
-### Agent 与 Assistant API 的区别
+**自定义插件与 Assistant API**
 
-Agent 偏重于调整插件模型与基于上下文的理解，由用户自行开发；Assistant API 则提供各类能力以方便调优。两者面向不同定制粒度，可根据应用复杂度选择。
+- 自定义 API 插件遵循协议传给大模型理解，[函数调用](../concepts/function-calling.md)会返回完整结果。
+- 不支持透传自定义 header，仅支持 `authorization`。
+- Agent 与 Assistant API 的核心区别：Agent 允许开发者自行调整插件模型和上下文理解逻辑；Assistant API 提供多种类以方便调优。
 
-### 输出控制
+**RAG 检索增强**
 
-- **流式与增量输出**：默认为全量回复，若需增量输出，可设置 `stream=True`（[流式输出](../concepts/streaming-output.md)）与 `incremental_output=True`（增量式[流式输出](../concepts/streaming-output.md)）。
-- **Markdown 加粗**：模型输出中的 `**xxxxx**` 是 Markdown 加粗标识，需在前端渲染时解析 md 语法即可正常显示。
+- 多[知识库](../concepts/[knowledge](../api/knowledge.md)-base.md)检索采用**并行**方式，各[知识库](../concepts/[knowledge](../api/knowledge.md)-base.md)按用户配置独立检索，最终按得分取 topN。
+- 模型回复不准确时，可点击回复下方的问题反馈按钮提交，或复制 RequestId 后提交阿里云工单。
 
-## 知识检索（RAG）
+**流式/增量输出**
 
-RAG（[检索增强生成](../concepts/rag.md)）在问答系统、对话系统、文本摘要、知识图谱构建与推理、教育与培训、客户服务、新闻与内容创作、智能搜索与推荐等多个领域均有应用。
+若需增量[流式输出](../concepts/streaming.md)，在 SDK 调用时设置：
 
-- **检索顺序**：RAG 检索为**并行**方式，依据每个[知识库](../concepts/knowledge-base.md)的用户配置进行检索，再根据得分选取 topN 结果。
-- **回复不准确优化**：可点击模型回复下方的问题反馈按钮，勾选问题类型提交；也可复制 RequestId 通过阿里云工单反馈。详见 [常见问题](../../raw/application-user-guide/application-support/application-faq.md)。
+```python
+stream=True            # 开启流式输出
+incremental_output=True  # 增量式流式输出
+```
 
-## 数据管理
+**Markdown 渲染**
 
-### 文件上传
+AI 输出中的 `**text**` 为标准 Markdown 加粗语法，需在前端渲染时解析 Markdown 并做对应展示。
 
-- **格式限制**：上传 PDF 文件时后缀必须为小写 `pdf`，否则会触发错误码 `140010`（"上传文件仅支持 pdf/doc/docx 文件"）。
-- **MD5 参数**：上传文件接口的必填 MD5 参数用于校验上传文件的完整性。
-- **容量上限**：每个[业务空间](../concepts/workspace.md)最多上传 10 万个文档，超出需提交阿里云工单申请扩容。
+## 数据管理常见问题
 
-### 结构化数据导入
+**文件上传**
 
-结构化数据导入后若出现条数缺失（如 100 条仅导入 20 条），通常是因为表格中存在空行。产品策略规定：遇到空行后续数据不再识别；若第一行为空行，则整表视为空文件。
+- PDF 文件后缀必须为小写 `pdf`，否则报错码 `140010`。
+- 每个[业务空间](../concepts/workspace.md)最多上传 10 万个文档；如需扩容，提交阿里云工单申请。
+- 上传接口中的 MD5 参数用于校验文件完整性。
 
-## 应用与小程序备案
+**结构化数据导入**
 
-产品接入通义千问大模型后，若需上架应用市场或小程序平台，需完成备案并申请合作协议：
+若结构化数据导入后条数少于预期，请检查表格中是否含空行——空行之后的数据不会被识别；若第一行为空行，文件将被视为空文件。
 
-1. 参考[应用合规备案](https://help.aliyun.com/zh/model-studio/compliance-and-launch-filing-guide-for-ai-apps-powered-by-the-tongyi-model)进行备案。
-2. [提交工单](https://smartservice.console.aliyun.com/service/create-ticket)申请通义千问系列模型的合作协议。
+## 应用/小程序备案
+
+接入通义千问大模型并准备上架应用市场或小程序平台时：
+
+1. 参考[应用合规备案](https://help.aliyun.com/zh/model-studio/compliance-and-launch-filing-guide-for-ai-apps-powered-by-the-tongyi-model)完成备案。
+2. 提交阿里云工单申请通义千问系列模型的合作协议。
+
+## 售后服务范围
+
+详细说明见 [阿里云百炼平台售后服务范围说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md)。
+
+### 基础支持（免费，服务期内）
+
+通过官网、电话（95187、400）及阿里云 APP 提供 7×24 咨询，支持范围：
+
+- 模型服务与产品功能、架构咨询
+- 使用与配置最佳实践
+- API 及官方 SDK 故障诊断
+- 管理控制台相关问题
+- 账号、财务、合同及计费咨询
+
+### 付费增值服务
+
+阿里云提供付费版售后增值服务（含支持计划），需在阿里云官网订购后生效。如项目需要更深度的技术支持（业务代码编写指导、定制化集成方案等），建议联系阿里云商务经理沟通定制化方案。
+
+### 第三方工具对接的支持边界
+
+**支持范围（方向性建议）**：
+- 确认百炼 API 接口及服务端可用状态
+- 官方 API 调用示例及 SDK 使用说明参考
+- 协助核查服务端调用明细和计费记录
+- 基本连通性测试建议（如 curl 测试）
+
+**不在支持范围内**：
+- 第三方工具（Cursor、Windsurf、Cline 等）的安装、配置、升级及使用指导
+- 第三方工具内部功能、交互逻辑问题排查
+- 用户业务代码的编写、调试与实现
+- 用户本地环境（内网、代理、VPN、防火墙等）导致的连通性或兼容性问题
+- 第三方工具显示的 [Token](../concepts/token.md) 数/费用预估与阿里云计费数据之间的差异解释
+
+> **注意**：第三方工具不构成阿里云的代理或联合服务主体，阿里云不对外部第三方工具的任何陈述、承诺或行为承担责任。第三方工具的运行维护责任由用户及相应工具提供方承担。
 
 ## 相关协议
 
-接入百炼前请阅读以下协议条款：
+以下协议文本详见 [相关协议](../../raw/application-user-guide/application-support/application-related-agreements.md)：
 
 - [阿里云百炼服务协议](https://terms.alicdn.com/legal-agreement/terms/common_platform_service/20230728213935489/20230728213935489.html)
-- [阿里云百炼服务特别说明](https://help.aliyun.com/zh/model-studio/bailian-service-notes)
+- [阿里云百炼体验功能特别说明](https://terms.alicdn.com/legal-agreement/terms/common_platform_service/20260716114753386/20260716114753386.html)
 - [开源模型协议条款说明](https://help.aliyun.com/zh/model-studio/open-source-model-terms)
-
-协议入口同时收录在 [相关协议](../../raw/application-user-guide/application-support/application-related-agreements.md) 中，建议在正式接入前逐项确认。
-
-## 常见限制与注意事项
-
-- 自定义 header 不被支持，仅 `authorization` 可透传。
-- PDF 后缀必须为小写，避免触发 `140010` 错误码。
-- 结构化数据表格中的空行会导致后续数据被截断识别。
-- [业务空间](../concepts/workspace.md)文档数上限为 10 万，超额需工单申请。
-- 自定义插件本身免费，但 [prompt](prompt.md) 优化、应用调用与测试窗测试会收费。
 
 ## 来源文档
 
 - [常见问题](../../raw/application-user-guide/application-support/application-faq.md)
 - [相关协议](../../raw/application-user-guide/application-support/application-related-agreements.md)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- [阿里云百炼平台售后服务范围说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md)
 
 
 

@@ -36,7 +36,7 @@
 
 在阿里云百炼，**完成调优的模型必须部署后才能调用和评测**。因此，您需要首先完成模型部署，方可继续评测模型。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3946933871/CAEQSBiBgICa8texgxkiIGU5OGM2ZmE4ZjJjNDRhMWY5MmMwYmQwZmIzZWIyODM04430647_20240626141408.264.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6543415871/CAEQSBiBgICa8texgxkiIGU5OGM2ZmE4ZjJjNDRhMWY5MmMwYmQwZmIzZWIyODM04430647_20240626141408.264.svg)
 
 ## **前提条件**
 
@@ -149,7 +149,7 @@
         
     2.  **数据集类型**：包含**训练集**和**评测集**。每次新增数据集时，您只能选择一种类型的数据集。**训练集**由一轮或多轮的Prompt+Completion数据组成，而**评测集**仅包含Prompt数据。您需要分别创建这两种数据集。
         
-    3.  **存储位置**：默认为**平台存储**。
+    3.  **存储位置**：默认为**平台OSS存储**。
         
     4.  **导入方式**：默认为**本地上传**。
         
@@ -241,11 +241,11 @@
 
 ### **新建训练任务**
 
-在[模型调优](https://bailian.console.aliyun.com/#/efm/model_manager)页面，点击**训练新模型**，即可设置训练参数。具体操作如下：
+在[模型调优](https://bailian.console.aliyun.com/#/efm/model_manager)页面，点击**创建训练任务**，即可设置训练参数。具体操作如下：
 
 1.  前往**[模型调优](https://bailian.console.aliyun.com/#/efm/model_manager)**页面。这里展示了所有调优任务。
     
-2.  点击**训练新模型**，阿里云百炼将会引导您配置训练参数：
+2.  点击**创建训练任务**，阿里云百炼将会引导您配置训练参数：
     
     1.  **选择模型训练方式**：阿里云百炼支持**SFT微调训练**、**DPO偏好训练**和**CPT继续预训练**三种方式，以下是选择建议：
         

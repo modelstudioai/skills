@@ -61,7 +61,7 @@
 
 ### 添加到[评测](../concepts/evaluation.md)集
 
-应用观测支持将 Span 数据直接加入[评测](../concepts/evaluation.md)集，将真实线上调用作为评测样本。配置时需选择目标评测集、导入方式（追加数据或全量覆盖）并完成字段映射。每个评测集最多支持 50 个字段映射。
+应用观测支持将 Span 数据直接加入[评测](../concepts/evaluation.md)集，将真实线上调用作为[评测](../concepts/evaluation.md)样本。配置时需选择目标[评测](../concepts/evaluation.md)集、导入方式（追加数据或全量覆盖）并完成字段映射。每个[评测](../concepts/evaluation.md)集最多支持 50 个字段映射。
 
 ## 节点类型
 
@@ -75,17 +75,17 @@
 | AGENT | 对智能体的调用 |
 | RETRIEVER | 检索操作；KnowledgeRetriever 表示在[知识库](../concepts/knowledge-base.md)中检索。子节点名称含 TextRetriever（改进 BM25，默认返回 100 个切片）、VectorRetriever（向量检索，默认返回 100 个切片） |
 | REWRITER | 基于会话上下文调整原始 Prompt 以提升检索效果 |
-| EMBEDDING | 将 Prompt 转为向量，[Token](../concepts/token.md) 量为本次向量化的 [Token](../concepts/token.md) 数 |
+| EMBEDDING | 将 Prompt 转为向量，[Token](../concepts/token.md) 量为本次[向量化](../concepts/embedding.md)的 [Token](../concepts/token.md) 数 |
 | RERANKER | 计算文本切片相似度分数并降序排列 |
 | LLM | 大模型推理/文本生成，[Token](../concepts/token.md) 量 = 输入 + 输出；延时包含输出回复过程 |
 | TOOL | 插件调用（官方或自定义） |
 | GUARDRAIL | 阿里绿网调用；ManualIntervention 为用户干预规则，SystemIntervention 为系统干预规则 |
 
-> 目前暂不支持观测长期记忆中的检索过程；TextRetriever 与 VectorRetriever 默认返回 100 个切片，暂不支持调整数量。
+> 目前暂不支持观测[长期记忆](../concepts/long-term-memory.md)中的检索过程；TextRetriever 与 VectorRetriever 默认返回 100 个切片，暂不支持调整数量。
 
 ### [工作流](../concepts/workflow.md)应用节点
 
-除上述 CHAIN、RETRIEVER、REWRITER、EMBEDDING、RERANKER、LLM、GUARDRAIL 外，还包含工作流专属节点：START（开始）、END（结束）、API、CLASSIFIER（意图分类）、TEXT_CONVERTER（文本转换）、SCRIPT（脚本转换）、CONDITION（条件判断）、FUNCTION_COMPUTE（函数计算）、APP_FLOW。
+除上述 CHAIN、RETRIEVER、REWRITER、EMBEDDING、RERANKER、LLM、GUARDRAIL 外，还包含[工作流](../concepts/workflow.md)专属节点：START（开始）、END（结束）、API、CLASSIFIER（意图分类）、TEXT_CONVERTER（文本转换）、SCRIPT（脚本转换）、CONDITION（条件判断）、FUNCTION_COMPUTE（函数计算）、APP_FLOW。
 
 ### 高代码应用节点
 
@@ -98,13 +98,26 @@
 ## 关键指标说明
 
 - **延时（调用时长）**：对 LLM 节点，包含输出回复的完整过程。
-- **[Token](../concepts/token.md) 量**：Embedding 节点为本次向量化 [Token](../concepts/token.md) 数；LLM 节点为输入 [Token](../concepts/token.md) + 输出 [Token](../concepts/token.md)。
+- **[Token](../concepts/token.md) 量**：Embedding 节点为本次[向量化](../concepts/embedding.md) [Token](../concepts/token.md) 数；LLM 节点为输入 [Token](../concepts/token.md) + 输出 [Token](../concepts/token.md)。
 - **数据时效**：指标更新频率为分钟级，调用记录最长可查 30 天。
 - **应用总量 / 平均延时**：用于评估应用运营效果与成本，详见 [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md)。
 
 ## 来源文档
 
 - [应用观测](../../raw/application-user-guide/application-monitoring/application-observation.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

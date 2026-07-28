@@ -1,4 +1,4 @@
-# 录音文件识别（Qwen-ASR）API参考
+# 非实时语音识别（Qwen-ASR）API参考
 
 本文介绍 Qwen-ASR 模型的输入与输出参数。可通过OpenAI 兼容或DashScope协议调用 API。
 
@@ -70,7 +70,7 @@ try:
         # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
         # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
         api_key=os.getenv("DASHSCOPE_API_KEY"),
-        # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
+        # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
         base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
     )
     
@@ -84,7 +84,7 @@ try:
                     {
                         "type": "input_audio",
                         "input_audio": {
-                            "data": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3"
+                            "data": "{YOUR_AUDIO_URL}"
                         }
                     }
                 ],
@@ -130,7 +130,7 @@ const client = new OpenAI({
   // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
   // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
   apiKey: process.env.DASHSCOPE_API_KEY,
-  // 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
+  // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
   baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1", 
 });
 
@@ -146,7 +146,7 @@ async function main() {
             {
               type: "input_audio",
               input_audio: {
-                data: "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3"
+                data: "{YOUR_AUDIO_URL}"
               }
             }
           ]
@@ -157,11 +157,9 @@ async function main() {
       // stream_options: {
       //   "include_usage": true
       // },
-      extra_body: {
-        asr_options: {
-          // language: "zh",
-          enable_itn: false
-        }
+      asr_options: {
+        // language: "zh",
+        enable_itn: false
       }
     });
 
@@ -191,7 +189,7 @@ main();
 
 #### cURL
 
-以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
+以下为华北2（北京）地域的配置，调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)，各地域的配置不同。
 
 ```
 curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
@@ -205,7 +203,7 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
                 {
                     "type": "input_audio",
                     "input_audio": {
-                        "data": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3"
+                        "data": "{YOUR_AUDIO_URL}"
                     }
                 }
             ],
@@ -245,7 +243,7 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
     import base64, pathlib
     
     # input.mp3为用于声音复刻的本地音频文件，请替换为自己的音频文件路径，确保其符合音频要求
-    file_path = pathlib.Path("input.mp3")
+    file_path = pathlib.Path("{YOUR_AUDIO_FILE}")
     base64_str = base64.b64encode(file_path.read_bytes()).decode()
     data_uri = f"data:audio/mpeg;base64,{base64_str}"
     ```
@@ -268,15 +266,13 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
     
         // 使用示例
         public static void main(String[] args) throws Exception {
-            System.out.println(toDataUrl("input.mp3"));
+            System.out.println(toDataUrl("{YOUR_AUDIO_FILE}"));
         }
     }
     ```
     
 
 #### Python SDK
-
-示例中用到的音频文件为：[welcome.mp3](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260105/wotsae/welcome.mp3)。
 
 ```
 import base64
@@ -286,7 +282,7 @@ import pathlib
 
 try:
     # 请替换为实际的音频文件路径
-    file_path = "welcome.mp3"
+    file_path = "{YOUR_AUDIO_FILE}"
     # 请替换为实际的音频文件MIME类型
     audio_mime_type = "audio/mpeg"
 
@@ -301,7 +297,7 @@ try:
         # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
         # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
         api_key=os.getenv("DASHSCOPE_API_KEY"),
-        # 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
+        # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
         base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
     )
     
@@ -349,8 +345,6 @@ except Exception as e:
 
 #### Node.js SDK
 
-示例中用到的音频文件为：[welcome.mp3](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260105/wotsae/welcome.mp3)。
-
 ```
 // 运行前的准备工作:
 // Windows/Mac/Linux 通用:
@@ -364,8 +358,8 @@ const client = new OpenAI({
   // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
   // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
   apiKey: process.env.DASHSCOPE_API_KEY,
-  // 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
-  baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1", 
+  // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+  baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 
 const encodeAudioFile = (audioFilePath) => {
@@ -374,7 +368,7 @@ const encodeAudioFile = (audioFilePath) => {
 };
 
 // 请替换为实际的音频文件路径
-const dataUri = `data:audio/mpeg;base64,${encodeAudioFile("welcome.mp3")}`;
+const dataUri = `data:audio/mpeg;base64,${encodeAudioFile("{YOUR_AUDIO_FILE}")}`;
 
 async function main() {
   try {
@@ -399,11 +393,9 @@ async function main() {
       // stream_options: {
       //   "include_usage": true
       // },
-      extra_body: {
-        asr_options: {
-          // language: "zh",
-          enable_itn: false
-        }
+      asr_options: {
+        // language: "zh",
+        enable_itn: false
       }
     });
 
@@ -443,7 +435,7 @@ main();
 
 System Message `_object_`（可选）
 
-模型的目标或角色。如果设置系统消息，请放在messages列表的第一位。
+用于为语音识别提供上下文（Context），如背景文本和实体词表等参考信息，不支持设置模型角色等传统系统提示词。如果设置系统消息，请放在messages列表的第一位。
 
 **属性**
 
@@ -912,15 +904,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
             {
                 "content": [
                     {
-                        "text": ""
-                    }
-                ],
-                "role": "system"
-            },
-            {
-                "content": [
-                    {
-                        "audio": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3"
+                        "audio": "{YOUR_AUDIO_URL}"
                     }
                 ],
                 "role": "user"
@@ -961,7 +945,7 @@ public class Main {
         MultiModalMessage userMessage = MultiModalMessage.builder()
                 .role(Role.USER.getValue())
                 .content(Arrays.asList(
-                        Collections.singletonMap("audio", "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3")))
+                        Collections.singletonMap("audio", "{YOUR_AUDIO_URL}")))
                 .build();
 
         Map<String, Object> asrOptions = new HashMap<>();
@@ -981,7 +965,7 @@ public class Main {
     }
     public static void main(String[] args) {
         try {
-            // 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
+            // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
             Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
             simpleMultiModalConversationCall();
         } catch (ApiException | NoApiKeyException | UploadFileException e) {
@@ -998,11 +982,11 @@ public class Main {
 import os
 import dashscope
 
-# 以下为华北2（北京）地域的URL，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的URL不同。
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
 dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 messages = [
-    {"role": "user", "content": [{"audio": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3"}]}
+    {"role": "user", "content": [{"audio": "{YOUR_AUDIO_URL}"}]}
 ]
 
 response = dashscope.MultiModalConversation.call(
@@ -1035,7 +1019,7 @@ print(response)
 
 System Message `_object_`（可选）
 
-模型的目标或角色。如果设置系统消息，请放在messages列表的第一位。
+用于为语音识别提供上下文（Context），如背景文本和实体词表等参考信息，不支持设置模型角色等传统系统提示词。如果设置系统消息，请放在messages列表的第一位。
 
 仅千问3-ASR-Flash支持该参数。
 
@@ -1460,7 +1444,7 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 --data '{
     "model": "qwen3-asr-flash-filetrans",
     "input": {
-        "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3"
+        "file_url": "{YOUR_AUDIO_URL}"
     },
     "parameters": {
         "channel_id":[
@@ -1498,7 +1482,7 @@ public class Main {
                 {
                     "model": "qwen3-asr-flash-filetrans",
                     "input": {
-                        "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3"
+                        "file_url": "{YOUR_AUDIO_URL}"
                     },
                     "parameters": {
                         "channel_id": [0],
@@ -1514,7 +1498,7 @@ public class Main {
                 {
                     "model": "qwen3-asr-flash-filetrans",
                     "input": {
-                        "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3"
+                        "file_url": "{YOUR_AUDIO_URL}"
                     },
                     "parameters": {
                         "channel_id": [0],
@@ -1595,7 +1579,7 @@ headers = {
 payload = {
     "model": "qwen3-asr-flash-filetrans",
     "input": {
-        "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3"
+        "file_url": "{YOUR_AUDIO_URL}"
     },
     "parameters": {
         "channel_id": [0],
@@ -2003,6 +1987,14 @@ print(response.json())
 
 识别结果文件的下载 URL，链接有效期为 24 小时。过期后无法查询任务，也无法通过先前的 URL 下载结果。  
 识别结果以 JSON 文件保存，可通过该链接下载文件，或直接使用 HTTP 请求读取文件内容。  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   

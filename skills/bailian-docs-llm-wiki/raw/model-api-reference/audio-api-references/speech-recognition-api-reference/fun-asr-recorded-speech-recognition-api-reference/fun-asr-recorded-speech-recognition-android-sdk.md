@@ -1,6 +1,6 @@
-# Fun-ASR录音文件识别Android SDK
+# Fun-ASR非实时语音识别Android SDK
 
-本文档提供了Fun-ASR录音文件识别Android SDK的详细使用指南，帮助您将语音转换为文本。
+本文档提供了Fun-ASR非实时语音识别Android SDK的详细使用指南，帮助您将语音转换为文本。
 
 **用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model/#asr-audio-spec02)。
 
@@ -13,7 +13,7 @@
     -   [下载最新SDK整合包](https://help.aliyun.com/zh/isi/sdk-selection-and-download)。
         
     -   解压 ZIP 包。在 `app/libs` 目录中获取 AAR 格式 SDK，并添加到项目依赖。  
-        需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。
+        需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。  
         
     -   用 Android Studio 打开工程。示例代码位于`DashFunAsrFileTranscriberActivity.java`，替换 API Key 后体验功能。
         
@@ -99,7 +99,7 @@
     
     是
     
-    运行模式。录音文件识别固定为 `"1"`。
+    运行模式。非实时语音识别固定为 `"1"`。
     
     `device_id`
     
@@ -170,7 +170,7 @@
     ```
     {
         "file_urls": [
-            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav"
+            "{YOUR_AUDIO_URL}"
         ],
         "async_request": false,
         "nls_config": {
@@ -596,7 +596,7 @@
     ```
     {
         "file_urls": [
-            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav"
+            "{YOUR_AUDIO_URL}"
         ],
         "async_request": false,
         "nls_config": {

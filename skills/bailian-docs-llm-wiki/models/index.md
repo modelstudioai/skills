@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 170 个模型家族 · 385 个主干模型 · 更新于 2026-07-16
+> 自动生成 · 共 172 个模型家族 · 389 个主干模型 · 更新于 2026-07-28
 
 **机器查询走结构化文件**：
 
@@ -11,7 +11,7 @@
 
 join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].slug`。
 
-## 文本生成 `TG` — 35 个家族
+## 文本生成 `TG` — 36 个家族
 
 - [GLM](groups/glm-4.5.json) — GLM是由智谱提供的开源模型。
   - 模型：`glm-4.5`, `glm-4.5-air`, `glm-4.6`, `glm-4.7`, `glm-5`, `glm-5.1`, `glm-5.2`
@@ -20,7 +20,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Kimi](groups/Kimi-K2.json) — Kimi是由月之暗面提供的开源模型，包含k2.7-code、k2.6、k2.5、k2-thinking、k2-instruct等多模态和大语言模型。
   - 模型：`kimi-k2-thinking`, `kimi-k2.5`, `kimi-k2.6`, `kimi-k2.7-code`, `Moonshot-Kimi-K2-Instruct`
 - [Kimi](groups/kimi-models-market-place.json) — 由月之暗面提供的Kimi系列模型的API服务。
-  - 模型：`kimi/kimi-k2.5`, `kimi/kimi-k2.6`, `kimi/kimi-k2.7-code`, `kimi/kimi-k2.7-code-highspeed`
+  - 模型：`kimi/kimi-k2.5`, `kimi/kimi-k2.6`, `kimi/kimi-k2.7-code`, `kimi/kimi-k2.7-code-highspeed`, `kimi/kimi-k3`
 - [MiMo文本模型](groups/xiaomi-models-market-place.json) — 由小米MiMo提供的MiMo文本模型API服务
   - 模型：`xiaomi/mimo-v2.5-pro`
 - [MiniMax文本模型](groups/minimax-models-market-place.json) — 由MiniMax提供的MiniMax-M系列文本模型API服务。
@@ -65,6 +65,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen3-max`, `qwen3-max-preview`
 - [Qwen3.5-Plus](groups/qwen3.5-plus.json) — Qwen3.5原生视觉语言系列Plus模型，展现出与当前顶尖前沿模型相媲美的卓越性能，模型效果在纯文本与多模态方面相较3系列均实现飞跃式进步。
   - 模型：`qwen3.5-plus`
+- [Qwen3.7-Flash](groups/qwen3.7-flash.json) — Qwen3.7原生视觉语言系列Flash模型，相较3.6-Flash全面提升多模态理解与Agent执行能力。重点强化多模态基础能力、万物识别能力更强，真实世界感知与空间智能进一步提升，Search A…
+  - 模型：`qwen3.7-flash`
 - [Qwen3.7-Plus](groups/qwen3.7-plus.json) — Qwen3.7系列中高性价比Plus模型，在强大文本能力的基础上全面升级了视觉-语言能力，同时保持了在编码、工具使用和生产力工作流方面的完整智能体能力。其核心特色为多模态交互混合智能体能力，能够感知真…
   - 模型：`qwen3.7-plus`
 - [SiliconFlow DeepSeek](groups/siliconflow-models.json) — 由硅基流动提供的DeepSeek系列模型API服务。
@@ -84,7 +86,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [通义法睿-Plus-32K](groups/farui-plus.json) — 通义法睿是以通义千问为基座经法律行业数据和知识专门训练的法律行业大模型产品，综合运用了模型精调、强化学习、 RAG检索增强、法律Agent技术，具有回答法律问题、推理法律适用、推荐裁判类案、辅助案情分…
   - 模型：`farui-plus`
 
-## 图像生成 `IG` — 30 个家族
+## 图像生成 `IG` — 31 个家族
 
 - [AI试衣-Plus版](groups/aitryon-plus.json) — aitryon-plus是一款效果出众的虚拟试衣图片生成模型，可基于服饰平拍图片以及人物正面全身照，输出服饰的人物试衣效果图片。 相较于aitryon模型，aitryon-plus模型在图片清晰度、服…
   - 模型：`aitryon-plus`
@@ -102,6 +104,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen-image-2.0`
 - [Qwen-Image-2.0-Pro](groups/qwen-image-2.0-pro.json) — Qwen-Image-2.0系列满血版模型，实现了图片生成和图片编辑的融合；具备更专业的文字渲染1k token指令支持能力、更细腻的真实质感，细腻刻画写实场景、更强的语义遵循能力。满血版具备2.0系…
   - 模型：`qwen-image-2.0-pro`
+- [Qwen-Image-3.0-Pro](groups/qwen-image-3.0-pro.json) — 内容丰实：支持最大 4.5k token 输入，支持图中图密集信息排版，让报纸、分镜、菜单、试卷等复杂版面一次生成。 细节真实：支持 10px 小字精准渲染，微表情、毛孔、发丝等细节生动还原，逼近真实…
+  - 模型：`qwen-image-3.0-pro`
 - [Qwen-Image-Edit-Max](groups/qwen-image-edit-max.json) — 千问图像编辑模型Max系列，提供更稳定、更丰富的编辑能力：提升工业设计与几何推理能力；提升角色一致性；减轻偏移问题；集成Lora能力，可以进行更多功能的图像编辑。此版本为2026年1月16日快照。
   - 模型：`qwen-image-edit-max`
 - [Qwen-Image-Edit-Plus](groups/qwen-image-edit.json) — 千问系列图像编辑Plus模型，在首版Edit模型基础上进一步优化了推理性能与系统稳定性，大幅缩短图像生成与编辑的响应时间；支持单次请求返回多张图片，显著提升用户体验。
@@ -390,7 +394,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 ## 翻译 `TR` — 2 个家族
 
 - [Qwen-Embedding](groups/qwen-embedding.json) — 基于Qwen模型基座训练的多语言文本统一向量模型，文本检索、聚类、分类性能大幅提升，多语言支持，适用于向量检索、向量化等等场景，可搭配检索增强、文档处理场景使用，支持64~2048维用户自定义向量维度…
-  - 模型：`text-embedding-async-v1`, `text-embedding-async-v2`, `text-embedding-v1`, `text-embedding-v2`, `text-embedding-v3`, `text-embedding-v4`
+  - 模型：`qwen3.7-text-embedding`, `text-embedding-async-v1`, `text-embedding-async-v2`, `text-embedding-v1`, `text-embedding-v2`, `text-embedding-v3`, `text-embedding-v4`
 - [Qwen-Rerank](groups/qwen-rerank.json) — 基于Qwen LLM底座训练的文本排序模型，对输入的Query和候选Docs进行相关性排序，支持100+语种和长文本输入，适用于文本检索、RAG等场景，效果对齐Qwen家族开源Rerank系列模型。
   - 模型：`gte-rerank-v2`, `qwen3-rerank`, `qwen3-vl-rerank`
 

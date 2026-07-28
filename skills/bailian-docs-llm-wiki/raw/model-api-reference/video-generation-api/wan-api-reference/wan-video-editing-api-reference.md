@@ -21,9 +21,14 @@
 
 **重要**
 
-百炼为新加坡地域推出了业务空间专属域名 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope-intl.aliyuncs.com` 迁移至新域名。
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+-   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
+-   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
+
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 ## HTTP调用
 
@@ -33,13 +38,13 @@
 
 ## **北京**
 
-`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
 
 ## **新加坡**
 
 `POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -53,7 +58,7 @@
 ## 纯指令编辑（修改视频风格）
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
@@ -79,7 +84,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 ## **指令+参考图编辑（局部替换）**
 
 ```
-curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
+curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \
     -H 'X-DashScope-Async: enable' \
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
@@ -499,13 +504,13 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 ## **北京**
 
-`GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 ## **新加坡**
 
 `GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -526,10 +531,10 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 
 ## 查询任务结果
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ```
-curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id} \
+curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
@@ -729,13 +734,13 @@ SDK 的参数命名与[HTTP接口](#e9e21dd3a6945)基本一致，参数结构根
 
 ## **北京**
 
-`dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'`
+`dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'`
 
 ## **新加坡**
 
 `dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 同步调用
 
@@ -749,8 +754,8 @@ from dashscope import VideoSynthesis
 import dashscope
 import os
 
-# 以下为北京地域URL，各地域的URL不同
-dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -855,8 +860,8 @@ from dashscope import VideoSynthesis
 import dashscope
 import os
 
-# 以下为北京地域URL，各地域的URL不同
-dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+# 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 
 # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
 # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -997,13 +1002,13 @@ if __name__ == '__main__':
 
 ## **北京**
 
-`Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";`
+`Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";`
 
 ## **新加坡**
 
 `Constants.baseHttpApiUrl = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";`
 
-调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 ## 同步调用
 
@@ -1034,8 +1039,8 @@ import java.util.Base64;
 public class VideoEdit {
 
     static {
-        // 以下为北京地域url，各地域的url不同
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     }
 
     // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey="sk-xxx"
@@ -1184,8 +1189,8 @@ import java.util.Base64;
 public class VideoEdit {
 
     static {
-        // 以下为北京地域url，各地域的url不同
-        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
     }
 
     // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey="sk-xxx"

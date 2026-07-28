@@ -30,7 +30,7 @@
     -   **命令行创建**：在控制台创建空白应用后，通过 AgentScope-AI 命令行工具上传本地代码包部署。适合已有项目代码的开发者，详细流程请参考[API 开发指南](https://help.aliyun.com/zh/model-studio/rich-code-app-develop-guide)。
         
     
-    填写**应用名称**后，单击**确认**。
+    填写**应用名称**后，单击**立即创建**。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2506686771/p1070627.png)
     
@@ -49,14 +49,14 @@
     
     **提交代码**
     
-    -   **使用模板代码**（默认）：选择一个预置的应用模板快速开始。
+    -   **使用模版代码**（默认）：选择一个预置的应用模版快速开始。
         
     -   **上传代码包**：上传本地开发的 .whl 格式代码包。代码包制作方式请参考[API 开发指南](https://help.aliyun.com/zh/model-studio/rich-code-app-develop-guide)。
         
     
-    平台提供以下应用模板：
+    平台提供以下应用模版：
     
-    **模板**
+    **模版**
     
     **说明**
     
@@ -76,7 +76,7 @@
     
     根据需要配置**规格方案**（vCPU、内存、磁盘大小）、**最小实例数**、**单实例并发度**和**部署地域**。初次体验保持默认即可。
     
-    > 时延敏感业务建议最小实例数 ≥ 1，可实现毫秒级热启动、保障服务不中断。详见[实例类型和规格](https://help.aliyun.com/zh/functioncompute/fc/product-overview/instance-types-and-specifications#section-mfv-5fb-ehw)。
+    > 时延敏感业务建议最小实例数 ≥ 1，可实现毫秒级热启动、保障服务不中断。详见[实例类型和规格](https://help.aliyun.com/zh/functioncompute/instance-types-and-specifications#section-mfv-5fb-ehw)。
     
     配置完成后，单击**立即部署**开始部署。
     

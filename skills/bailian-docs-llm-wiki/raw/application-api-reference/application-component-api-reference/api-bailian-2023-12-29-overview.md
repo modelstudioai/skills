@@ -373,3 +373,9 @@ API概述
 申请临时文件上传许可
 
 该接口用于高代码部署，其他场景暂不支持。用于申请临时文件上传许可，之后需要自己完成文件上传动作。
+
+[AddChunk](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addchunk)
+
+新增切片
+
+使用此API可为文档搜索类（document）、数据查询类（table）、图片问答类（image）知识库添加切片。

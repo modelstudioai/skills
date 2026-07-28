@@ -462,24 +462,6 @@ API
 
 API概述
 
-[QueryAuditTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-queryaudittask)
-
-查询审核结果
-
-查询审核结果。
-
-[SubmitAuditTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitaudittask)
-
-提交审核任务
-
-提交审核任务
-
-[CancelAuditTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-cancelaudittask)
-
-取消审核任务
-
-取消审核任务
-
 [SubmitSmartAudit](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitsmartaudit)
 
 提交智能审校任务
@@ -1607,3 +1589,21 @@ SubmitParseDocumentLayoutTask
 获取排版任务结果
 
 获取排版任务结果
+
+[CancelAuditTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-cancelaudittask)
+
+取消审核任务
+
+取消审核任务
+
+[QueryAuditTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-queryaudittask)
+
+查询审核结果
+
+查询审核结果。
+
+[SubmitAuditTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitaudittask)
+
+提交审核任务
+
+提交审核任务

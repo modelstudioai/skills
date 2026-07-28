@@ -1,6 +1,6 @@
 # application evaluation
 
-阿里云百炼提供完整的应用[评测体系](../concepts/evaluation.md)，支持对[智能体应用](../concepts/agent-application.md)和工作流应用的输出质量进行系统化评估。平台同时提供自动评测与手动评测两种模式，并通过评测集、评估器和标签三大组件构建多维度的评测闭环。当前平台存在新旧两套评测系统，新版在评测任务管理、评估器和标签体系上做了较大升级。
+阿里云百炼提供完整的应用[评测体系](../concepts/evaluation.md)，支持对[智能体应用](../concepts/agent-application.md)和[工作流](../concepts/workflow.md)应用的输出质量进行系统化评估。平台同时提供自动[评测](../concepts/evaluation.md)与手动[评测](../concepts/evaluation.md)两种模式，并通过[评测](../concepts/evaluation.md)集、评估器和标签三大组件构建多维度的[评测](../concepts/evaluation.md)闭环。当前平台存在新旧两套[评测](../concepts/evaluation.md)系统，新版在[评测](../concepts/evaluation.md)任务管理、评估器和标签体系上做了较大升级。
 
 ## 评测模式
 
@@ -8,17 +8,17 @@
 
 ### 自动评测
 
-[自动评测](../../raw/application-user-guide/application-evaluation/application-auto-evaluation.md)利用大模型基于应用关联的知识库自动生成评测集，并对智能体的回答进行自动评分，生成评测报告与调优建议。支持两种子模式：
+[自动评测](../../raw/application-user-guide/application-evaluation/application-auto-evaluation.md)利用大模型基于应用关联的[知识库](../concepts/[knowledge](../api/knowledge.md)-base.md)自动生成评测集，并对智能体的回答进行自动评分，生成评测报告与调优建议。支持两种子模式：
 
 - **单应用评测**：深度评估单个[智能体应用](../concepts/agent-application.md)的表现，生成包含评分、错误分析和优化建议的详细报告。
 - **多应用横向评测**：在同一评测基准下对比最多 8 个应用（或同一应用的不同版本），用于选型决策或版本迭代效果验证。
 
 前提条件：
 
-1. 仅面向**已发布**的[智能体应用](../concepts/agent-application.md)，且应用须已配置知识库。
+1. 仅面向**已发布**的[智能体应用](../concepts/agent-application.md)，且应用须已配置[知识库](../concepts/[knowledge](../api/knowledge.md)-base.md)。
 2. 须开通**应用观测**功能，并将待评测应用添加到观测列表。
 3. 子账号需获取`管理员`或`应用评测-操作`权限。
-4. 多应用横向评测时，所有被选应用必须关联至少一个相同的知识库。
+4. 多应用横向评测时，所有被选应用必须关联至少一个相同的[知识库](../concepts/[knowledge](../api/knowledge.md)-base.md)。
 
 自动评测流程分四步：创建评测任务 → 设置评测集 → 配置评测规则 → 执行评测。评测集生成和评估模型当前仅支持 `qwen-max` 和 `qwen-plus`。
 
@@ -51,8 +51,8 @@
 
 | 类型 | 说明 |
 |------|------|
-| 智能体 | 根据选中智能体应用的出入参形式定义评测集 |
-| 工作流 | 根据选中工作流应用的出入参形式定义评测集 |
+| 智能体 | 根据选中[智能体应用](../concepts/agent-application.md)的出入参形式定义评测集 |
+| [工作流](../concepts/workflow.md) | 根据选中[工作流](../concepts/workflow.md)应用的出入参形式定义评测集 |
 | 自定义 | 任意定义评测集表结构，适用于特殊评测场景 |
 
 新版评测集支持手动上传和从应用观测导入两种创建方式，并具备版本管理能力，每次发布生成新版本。创建后类型不可修改。
@@ -66,7 +66,7 @@
 百炼提供多种预置评估器模板，覆盖以下分类：
 
 - **通用质量**：评估回答的基本质量指标
-- **智能体**：专门用于评测智能体应用
+- **智能体**：专门用于评测[智能体应用](../concepts/agent-application.md)
 - **文本匹配**：精确规则文本匹配
 - **文本相似度**：计算文本相似度得分
 - **格式校验**：验证输出格式规范性
@@ -137,9 +137,9 @@
 
 识别 BadCase → 分析归因定位问题 → 实施针对性优化 → 发布新版本再次评测 → 对比结果确认改进。若效果未达预期则继续迭代。
 
-## 计费说明
+## [计费](../concepts/billing.md)说明
 
-评测任务调用大模型产生的 [Token](../concepts/token.md) 费用正常计费。自动评测的评测集生成和评估均会消耗 [Token](../concepts/token.md)，预估平均消耗仅为参考值，最终以实际账单为准。评估器模型当前限时免费。
+评测任务调用大模型产生的 [Token](../concepts/token.md) 费用正常[计费](../concepts/billing.md)。自动评测的评测集生成和评估均会消耗 [Token](../concepts/token.md)，预估平均消耗仅为参考值，最终以实际账单为准。评估器模型当前限时免费。
 
 ## 常见问题
 
@@ -157,6 +157,19 @@
 - [标签管理](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/label-management.md)
 - [评测任务](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/evaluation-task.md)
 - [评估器](../../raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/grader.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

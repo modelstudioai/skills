@@ -283,14 +283,6 @@ Excel 文件表头是否支持拼装。
 
 true
 
-OverlapSize
-
-string
-
-分段重叠长度。
-
-100
-
 Message
 
 string
@@ -315,14 +307,6 @@ string
 
 cate\_21a407a3372c4ba7aedc649709143f0cxxxxxxxx
 
-GmtModified
-
-integer
-
-文件导入知识库的时间，采用 Unix timestamp 格式。
-
-1744856423000
-
 DocumentType
 
 string
@@ -331,13 +315,13 @@ string
 
 pdf
 
-ChunkMode
+Id
 
 string
 
-自定义切分。
+文件 ID。
 
-DashSplitter
+doc\_c134aa2073204a5d936d870bf960f56axxxxxxxx
 
 Code
 
@@ -346,14 +330,6 @@ string
 文件导入错误状态码。
 
 110002
-
-separator
-
-string
-
-分句标识符。
-
-" "
 
 Name
 
@@ -371,13 +347,41 @@ string
 
 600
 
-Id
+OverlapSize
 
 string
 
-文件 ID。
+分段重叠长度。
 
-doc\_c134aa2073204a5d936d870bf960f56axxxxxxxx
+100
+
+ChunkMode
+
+string
+
+自定义切分。
+
+DashSplitter
+
+GmtModified
+
+integer
+
+文件导入知识库的时间，采用 Unix timestamp 格式。
+
+1744856423000
+
+separator
+
+string
+
+分句标识符。
+
+" "
+
+MetaExtractInfo
+
+string
 
 IndexId
 
@@ -436,18 +440,19 @@ string
       {
         "Status": "RUNNING",
         "EnableHeaders": "true",
-        "OverlapSize": "100",
         "Message": "check fileUrlKey[file_path] / fileNameKey[null] / fileExtensionKey[file_extension] is invalid",
         "Size": 996764,
         "SourceId": "cate_21a407a3372c4ba7aedc649709143f0cxxxxxxxx\n",
-        "GmtModified": 1744856423000,
         "DocumentType": "pdf",
-        "ChunkMode": "DashSplitter",
+        "Id": "doc_c134aa2073204a5d936d870bf960f56axxxxxxxx\n",
         "Code": "110002",
-        "separator": "\" \"",
         "Name": "翻译平台运维文档\n",
         "ChunkSize": "600",
-        "Id": "doc_c134aa2073204a5d936d870bf960f56axxxxxxxx\n"
+        "OverlapSize": "100",
+        "ChunkMode": "DashSplitter",
+        "GmtModified": 1744856423000,
+        "separator": "\" \"",
+        "MetaExtractInfo": ""
       }
     ],
     "IndexId": "79c0alxxxx",

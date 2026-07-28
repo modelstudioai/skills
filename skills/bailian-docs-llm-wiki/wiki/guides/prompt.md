@@ -36,17 +36,17 @@ Prompt 模板将提示词的固定结构与动态变量分离，实现可复用�
 - **指令增强**：将模糊指令具体化、步骤化
 - **安全与边界注入**：增加输出格式、内容限制等边界条件
 
-操作路径：**应用开发 > 组件管理 > 提示词 > 自动优化**。优化结果可直接复制使用或保存为模板。该功能**不计费**，且提交的数据不会被存储或用于模型训练。详见 [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)。
+操作路径：**应用开发 > 组件管理 > 提示词 > 自动优化**。优化结果可直接复制使用或保存为模板。该功能**不[计费](../concepts/billing.md)**，且提交的数据不会被存储或用于模型训练。详见 [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)。
 
 ## Prompt 反馈优化
 
-相比普通自动优化，Prompt 反馈优化基于用户提供的**输入输出样例**进行多轮自动化评估和迭代，生成更贴合实际业务场景的 Prompt。其工作流程为：
+相比普通自动优化，Prompt 反馈优化基于用户提供的**输入输出样例**进行多轮自动化评估和迭代，生成更贴合实际业务场景的 Prompt。其[工作流](../concepts/workflow.md)程为：
 
 1. 选择推理模型（推荐千问-max）
 2. 输入初始 Prompt（描述任务目标）
 3. 上传样例数据（建议 5-10 条，每种场景至少 1 条）
-4. 上传评测数据（建议至少 20 条，数据越多效果越好）
-5. 系统自动进行多轮评测与优化
+4. 上传[评测](../concepts/evaluation.md)数据（建议至少 20 条，数据越多效果越好）
+5. 系统自动进行多轮[评测](../concepts/evaluation.md)与优化
 
 优化后的 Prompt 包含三部分：原始 Prompt、添加的样例（few-shot）、以及自动生成的内容提示（对分类边界等的补充说明）。优化结果可保存为模板或直接创建[智能体应用](../concepts/agent-application.md)。详见 [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)。
 
@@ -66,7 +66,7 @@ Prompt 样例库采用少样本学习（Few-shot learning）思路，从预定�
 | 批量导入文件大小 | 20MB（Excel） |
 | 单次导入条数 | 100 条 |
 
-### 计费说明
+### [计费](../concepts/billing.md)说明
 
 样例库功能本身不收费，但启用后会增加大模型调用的 [Token](../concepts/token.md) 消耗。总输入 [Token](../concepts/token.md) 约等于：用户查询 [Token](../concepts/token.md) + 所有召回样例的总 [Token](../concepts/token.md) + 系统指令 [Token](../concepts/token.md)。
 
@@ -99,6 +99,19 @@ Prompt 样例库采用少样本学习（Few-shot learning）思路，从预定�
 - [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)
 - [使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)
 - [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

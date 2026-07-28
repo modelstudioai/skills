@@ -1,6 +1,6 @@
-# Paraformer录音文件识别iOS SDK
+# Paraformer非实时语音识别iOS SDK
 
-本文档提供了Paraformer录音文件识别iOS SDK的详细使用指南，帮助您将语音转换为文本。
+本文档提供了Paraformer非实时语音识别iOS SDK的详细使用指南，帮助您将语音转换为文本。
 
 **用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)
 
@@ -106,7 +106,7 @@
     
     是
     
-    运行模式。录音文件识别固定为 `"1"`。
+    运行模式。非实时语音识别固定为 `"1"`。
     
     `device_id`
     
@@ -177,7 +177,7 @@
     ```
     {
         "file_urls": [
-            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav"
+            "{YOUR_AUDIO_URL}"
         ],
         "async_request": false,
         "nls_config": {
@@ -611,7 +611,7 @@
     ```
     {
         "file_urls": [
-            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav"
+            "{YOUR_AUDIO_URL}"
         ],
         "async_request": false,
         "nls_config": {

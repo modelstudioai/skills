@@ -277,7 +277,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](https://h
 
 语音合成所使用的音色。
 
--   **系统音色**：参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
+-   **系统音色**：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
     
 -   **复刻音色**：通过声音复刻功能定制
     
@@ -394,7 +394,7 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
 
 > 时间戳结果在[INativeStreamInputTtsCallback](#secstreamcallback)的all\_response中。
 
@@ -440,7 +440,7 @@ cosyvoice-v1不支持该参数。
 
 -   zh：中文
     
--   en：英文
+-   en：英语
     
 -   fr：法语
     
@@ -460,9 +460,15 @@ cosyvoice-v1不支持该参数。
     
 -   vi：越南语
     
+-   es：西班牙语
+    
 -   it：意大利语
     
--   ms：马来语
+-   ms：马来西亚语
+    
+-   fil：菲律宾语
+    
+-   ar：阿拉伯语
     
 
 `instruction`
@@ -834,6 +840,7 @@ STREAM\_INPUT\_TTS\_EVENT\_TASK\_FAILED
         
     -   解压 ZIP 包。在 `app/libs` 目录中获取 AAR 格式 SDK，并添加到项目依赖。  
         需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。  
+          
         
     -   用 Android Studio 打开工程。示例代码位于`DashCosyVoiceStreamTtsActivity.java`，替换 API Key 后体验功能。
         

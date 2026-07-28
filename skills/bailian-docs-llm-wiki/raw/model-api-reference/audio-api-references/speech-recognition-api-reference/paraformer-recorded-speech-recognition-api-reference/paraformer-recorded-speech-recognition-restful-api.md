@@ -1,6 +1,6 @@
-# Paraformer录音文件识别RESTful API
+# Paraformer非实时语音识别HTTP API
 
-本文介绍Paraformer录音文件识别RESTful API的参数和接口细节。
+本文介绍Paraformer非实时语音识别HTTP API的参数和接口细节。
 
 **重要**
 
@@ -59,7 +59,7 @@ X-DashScope-Async: enable // 请勿遗漏该请求头，否则无法提交任务
     "model":"paraformer-v2", //模型名，必选
     "input":{
         "file_urls":[
-            "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav"
+            "{YOUR_AUDIO_URL}"
         ] //待识别文件，必选
     }
     "parameters":{
@@ -90,7 +90,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
      --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
      --header "Content-Type: application/json" \
      --header "X-DashScope-Async: enable" \
-     --data '{"model":"paraformer-v2","input":{"file_urls":["https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav"]},"parameters":{"channel_id":[0]}}'
+     --data '{"model":"paraformer-v2","input":{"file_urls":["{YOUR_AUDIO_URL}"]},"parameters":{"channel_id":[0]}}'
 ```
 
 **参数**
@@ -450,7 +450,7 @@ string
     "end_time": "2024-09-12 15:11:40.903",
     "results": [
       {
-        "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
+        "file_url": "{YOUR_AUDIO_URL}",
         "transcription_url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/pre/filetrans-16k/20240912/15%3A11/409a4b92-445b-4dd8-8c1d-f110954d82d8-1.json?Expires=1726211500&OSSAccessKeyId=yourOSSAccessKeyId&Signature=v5Owy5qoAfT7mzGmQgH0g8C****%3D",
         "subtask_status": "SUCCEEDED"
       }
@@ -480,7 +480,7 @@ string
     "end_time": "2024-12-16 16:31:02.375",
     "results": [
         {
-            "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/rich_text_exaple_1.wav",
+            "file_url": "{YOUR_AUDIO_URL}",
             "code": "InvalidFile.DownloadFailed",
             "message": "The audio file cannot be downloaded.",
             "subtask_status": "FAILED"
@@ -546,7 +546,7 @@ JSON数据中各字段含义请参见[识别结果说明](#a9021178ccl7s)。
 
 ```
 {
-    "file_url":"https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
+    "file_url":"{YOUR_AUDIO_URL}",
     "properties":{
         "audio_format":"pcm_s16le",
         "channels":[
@@ -689,7 +689,7 @@ string
 
 ## **其他接口：批量查询任务状态/取消任务**
 
-详情请参见[管理异步任务](https://help.aliyun.com/zh/model-studio/manage-asynchronous-tasks)：支持批量查询24小时内提交的录音文件识别任务，同时支持取消`PENDING`（排队）状态的任务。
+详情请参见[管理异步任务](https://help.aliyun.com/zh/model-studio/manage-asynchronous-tasks)：支持批量查询24小时内提交的非实时语音识别任务，同时支持取消`PENDING`（排队）状态的任务。
 
 ## **完整示例**
 
@@ -704,7 +704,7 @@ import time
 
 api_key = "your-dashscope-api-key"  # 在此处替换为您的API Key
 file_urls = [
-    "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/hello_world_female2.wav",
+    "{YOUR_AUDIO_URL}",
 ]
 language_hints = ["zh", "en"]
 
@@ -797,7 +797,7 @@ print("transcription result: ", result)
     "end_time": "2024-12-16 16:31:02.375",
     "results": [
         {
-            "file_url": "https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/sensevoice/rich_text_exaple_1.wav",
+            "file_url": "{YOUR_AUDIO_URL}",
             "code": "InvalidFile.DownloadFailed",
             "message": "The audio file cannot be downloaded.",
             "subtask_status": "FAILED"

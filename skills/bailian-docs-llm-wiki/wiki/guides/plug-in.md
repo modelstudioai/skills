@@ -56,7 +56,7 @@ Python 代码解释器可用依赖包括：matplotlib、pandas、scipy、seaborn
 ### 调用插件
 
 - **方式一（插件页面）**：在插件页面将工具添加至[智能体应用](../concepts/agent-application.md)。官方插件只能与位于相同[业务空间](../concepts/workspace.md)里的[智能体应用](../concepts/agent-application.md)关联。每个[智能体应用](../concepts/agent-application.md)最多支持添加 10 个工具，应用会根据输入选择调用一个或多个工具。
-- **方式二（应用管理页面）**：在指定智能体或工作流应用内添加插件，测试效果并发布应用。
+- **方式二（应用管理页面）**：在指定智能体或[工作流](../concepts/workflow.md)应用内添加插件，测试效果并发布应用。
 - **方式三（Assistant API）**：通过 Assistant API 调用工具，需正确传递工具 ID。
 
 子[业务空间](../concepts/workspace.md)调用官方插件前，需先在插件详情页为子[业务空间](../concepts/workspace.md)授权；默认[业务空间](../concepts/workspace.md)无需此步骤。
@@ -69,7 +69,7 @@ Python 代码解释器可用依赖包括：matplotlib、pandas、scipy、seaborn
 
 当官方和三方插件无法满足业务需求时，可创建自定义插件。详见[自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)。
 
-### 工作流程
+### [工作流](../concepts/workflow.md)程
 
 1. **创建/导入插件**：定义插件基础信息，或直接从云市场导入。
 2. **添加工具**（导入插件无需此步）：配置 API 路径、请求参数和返回数据。
@@ -135,6 +135,19 @@ Python 代码解释器可用依赖包括：matplotlib、pandas、scipy、seaborn
 - [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)
 - [插件概述](../../raw/application-user-guide/plug-in/plug-in-overview.md)
 - [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

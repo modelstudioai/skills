@@ -109,7 +109,7 @@ str
 
 取值范围：
 
--   系统音色：参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
+-   系统音色：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
     
 -   声音复刻音色：如何创建音色请参见[CosyVoice声音复刻/设计API](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)
     
@@ -222,7 +222,7 @@ bool
 -   False：关闭。
     
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
 
 seed
 
@@ -264,7 +264,7 @@ list
 
 -   zh：中文
     
--   en：英文
+-   en：英语
     
 -   fr：法语
     
@@ -283,6 +283,16 @@ list
 -   id：印尼语
     
 -   vi：越南语
+    
+-   es：西班牙语
+    
+-   it：意大利语
+    
+-   ms：马来西亚语
+    
+-   fil：菲律宾语
+    
+-   ar：阿拉伯语
     
 
 instruction
@@ -443,7 +453,7 @@ dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.co
 result = HttpSpeechSynthesizer.call(
     model="qwen-audio-3.0-tts-flash",  # 更换模型时，需同步更换为对应版本的音色
     text="今天是个好日子，适合构建人们喜爱的产品！",
-    voice="longanhuan",  # 该音色适用于cosyvoice-v3系列，cosyvoice-v2请使用longxiaochun_v2等v2音色
+    voice="longanhuan_v3.6",  # 该音色适用于cosyvoice-v3系列，cosyvoice-v2请使用longxiaochun_v2等v2音色
     format="wav",
     sample_rate=24000,
     stream=False,
@@ -478,7 +488,7 @@ dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.co
 stream_result = HttpSpeechSynthesizer.call(
     model="qwen-audio-3.0-tts-flash",  # 更换模型时，需同步更换为对应版本的音色
     text="今天是个好日子，适合构建人们喜爱的产品！",
-    voice="longanhuan",  # 该音色适用于cosyvoice-v3系列，cosyvoice-v2请使用longxiaochun_v2等v2音色
+    voice="longanhuan_v3.6",  # 该音色适用于cosyvoice-v3系列，cosyvoice-v2请使用longxiaochun_v2等v2音色
     format="wav",
     sample_rate=24000,
     stream=True,

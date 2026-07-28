@@ -50,11 +50,11 @@ Coding Plan 整合了千问、GLM、Kimi 、MiniMax顶级模型，并兼容主�
 -   每月**90,000** 次请求
     
 
--   **限时优惠：**活动已结束，当前价格以下单页为准。
+-   **限时优惠**：活动已结束，当前价格以下单页为准。
     
 -   **限量抢购**：名额有限、先到先得。每日 09:30:00（UTC+08:00）补充，可前往[Coding Plan 页面](https://www.aliyun.com/benefit/scene/codingplan)抢购。
     
--   **额度消耗：**单次提问将按实际“模型调用次数”扣除额度。简单任务约消耗 5-10 次，复杂任务约 10-30+ 次，实际消耗受任务难度、上下文及工具使用影响。在[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)可以查看用量。
+-   **额度消耗：**单次提问将按实际“模型调用次数”扣除额度。简单任务约消耗 5-10 次，复杂任务约 10-30+ 次，实际消耗受任务难度、上下文及工具使用影响。在[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=plan#/efm/subscription/coding-plan)可以查看用量。
     
 -   **额度恢复**：
     
@@ -84,7 +84,7 @@ Coding Plan 整合了千问、GLM、Kimi 、MiniMax顶级模型，并兼容主�
 
 您需要获取并配置套餐专属的 API Key 和 Base URL，才能正确使用并抵扣套餐额度。
 
--   **API Key**：在[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)，获取Coding Plan 专属 API Key（格式为`sk-sp-xxxxx`）。
+-   **API Key**：在[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/?tab=plan#/efm/subscription/coding-plan)，获取Coding Plan 专属 API Key（格式为`sk-sp-xxxxx`）。
     
 -   **Base URL**：后续需在 AI 工具中配置以下其中一个Base URL（因工具而异），具体操作请参见对应的AI工具文档。
     
@@ -99,33 +99,33 @@ Coding Plan 专属的 API Key 和 Base URL 与百炼按量计费的 API Key（`s
 
 ### **步骤三：接入AI工具**
 
- [**OpenClaw**开源、自托管个人 AI 助手](https://help.aliyun.com/zh/model-studio/openclaw)
+[**OpenClaw**开源、自托管个人 AI 助手](https://help.aliyun.com/zh/model-studio/openclaw)
 
- [**Hermes Agent**开源 AI 代理框架，内置自学习循环](https://help.aliyun.com/zh/model-studio/hermes-agent)
+[**Hermes Agent**开源 AI 代理框架，内置自学习循环](https://help.aliyun.com/zh/model-studio/hermes-agent)
 
- [**Claude Code**AI 终端编码助手，支持自然语言编程](https://help.aliyun.com/zh/model-studio/claude-code)
+[**Claude Code**AI 终端编码助手，支持自然语言编程](https://help.aliyun.com/zh/model-studio/claude-code)
 
- [**OpenCode**开源 AI 编程代理工具](https://help.aliyun.com/zh/model-studio/opencode)
+[**OpenCode**开源 AI 编程代理工具](https://help.aliyun.com/zh/model-studio/opencode)
 
- [**Cursor**AI 原生代码编辑器](https://help.aliyun.com/zh/model-studio/cursor)
+[**Cursor**AI 原生代码编辑器](https://help.aliyun.com/zh/model-studio/cursor)
 
- [**Codex**OpenAI 推出的命令行编程工具](https://help.aliyun.com/zh/model-studio/codex)
+[**Codex**OpenAI 推出的命令行编程工具](https://help.aliyun.com/zh/model-studio/codex)
 
- [**Qwen Code**开源命令行 AI 编码工具](https://help.aliyun.com/zh/model-studio/qwen-code)
+[**Qwen Code**开源命令行 AI 编码工具](https://help.aliyun.com/zh/model-studio/qwen-code)
 
- [**QwenPaw**开源个人 AI 助手，支持本地与云端部署](https://help.aliyun.com/zh/model-studio/qwenpaw)
+[**QwenPaw**开源个人 AI 助手，支持本地与云端部署](https://help.aliyun.com/zh/model-studio/qwenpaw)
 
- [**Cherry Studio**多模型桌面客户端](https://help.aliyun.com/zh/model-studio/cherry-studio)
+[**Cherry Studio**多模型桌面客户端](https://help.aliyun.com/zh/model-studio/cherry-studio)
 
- [**Chatbox**跨平台 AI 桌面客户端](https://help.aliyun.com/zh/model-studio/chatbox)
+[**Chatbox**跨平台 AI 桌面客户端](https://help.aliyun.com/zh/model-studio/chatbox)
 
- [**Cline**VS Code 扩展，智能代码补全和调试](https://help.aliyun.com/zh/model-studio/cline)
+[**Cline**VS Code 扩展，智能代码补全和调试](https://help.aliyun.com/zh/model-studio/cline)
 
- [**Qoder**面向真实软件开发的 Agentic 编码平台](https://help.aliyun.com/zh/model-studio/qoder-agent)
+[**Qoder**面向真实软件开发的 Agentic 编码平台](https://help.aliyun.com/zh/model-studio/qoder-agent)
 
- [**Lingma**阿里云推出的智能编码辅助工具](https://help.aliyun.com/zh/model-studio/lingma-agent)
+[**Lingma**阿里云智能编码助手，提供独立 IDE](https://help.aliyun.com/zh/model-studio/lingma-agent)
 
- [**Kilo CLI**轻量高性能命令行编程工具](https://help.aliyun.com/zh/model-studio/kilo-cli)
+[**Kilo CLI**轻量高性能命令行编程工具](https://help.aliyun.com/zh/model-studio/kilo-cli)
 
 [··· **更多工具**其他编程工具](https://help.aliyun.com/zh/model-studio/more-tools)
 

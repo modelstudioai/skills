@@ -22,7 +22,7 @@ Postman 和 cURL仅适用于快速测试与功能验证。对于生产环境�
 
 **HTTP调用示例（文生图）**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4178421871/CAEQZRiBgICJ0seH1xkiIDgzYWE2MTBkZjkzODRkNDA5NzczNTE0NjBiMGE1Y2Nm5274221_20250627113930.173.svg)
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4507315871/CAEQZRiBgICJ0seH1xkiIDgzYWE2MTBkZjkzODRkNDA5NzczNTE0NjBiMGE1Y2Nm5274221_20250627113930.173.svg)
 
 ## **方式一：使用Postman发送请求（推荐）**
 
@@ -147,7 +147,6 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
         
     -   （可选）点击页面右侧的 `**Beautify**`，可以格式化JSON格式，使其更易阅读。
         
-    
 5.  点击**Send**发送请求，并获取 `task_id`。有效期 24 小时，过期后无法查询，请及时获取结果。
     
     ```
@@ -189,7 +188,6 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id} \
         
     5.  点击**Send**发送请求。
         
-    
 2.  检查返回结果。重复发送此请求（轮询），直到 task\_status 变为 SUCCEEDED，获取图像的URL。图像URL有效期为**24小时**，请及时下载。
     
     ```

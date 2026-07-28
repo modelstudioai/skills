@@ -45,6 +45,7 @@ import os
 client = OpenAI(
     # 如果没有配置环境变量，请用阿里云百炼API Key替换：api_key="sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -135,6 +136,7 @@ import process from 'process';
 const openai = new OpenAI({
     // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: "sk-xxx"
     apiKey: process.env.DASHSCOPE_API_KEY, 
+    // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
     baseURL: 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1'
 });
 
@@ -229,6 +231,7 @@ main();
 ## curl
 
 ```
+# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -291,6 +294,7 @@ import os
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -348,7 +352,8 @@ import process from 'process';
 
 const openai = new OpenAI({
     apiKey: process.env.DASHSCOPE_API_KEY,
-    baseURL: 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v'
+    // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
+    baseURL: 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1'
 });
 
 const tools = [
@@ -416,6 +421,7 @@ main();
 ## curl
 
 ```
+# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
@@ -474,6 +480,7 @@ import os
 
 client = OpenAI(
     api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
     base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 )
 
@@ -502,11 +509,12 @@ print(completion.usage.prompt_tokens)  # true 时少于 false
 ## **curl**
 
 ```
+# 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "glm-5.2",
+    "model": "ZHIPU/GLM-5.2",
     "messages": [
         {"role": "user", "content": "请计算 15 * 23 是多少？"},
         {"role": "assistant", "content": "15 乘以 23 等于 345。", "reasoning_content": "15 * 23 = 345"},
