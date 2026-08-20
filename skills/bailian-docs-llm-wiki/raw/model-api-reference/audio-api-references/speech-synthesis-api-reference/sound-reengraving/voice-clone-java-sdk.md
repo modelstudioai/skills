@@ -4,17 +4,17 @@
 
 **用户指南：**[声音复刻](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide)。
 
-## **接口地址**
+## 接口地址
 
 SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）。如需切换到其他地域，请修改 `Constants.baseHttpApiUrl`为对应地域的URL。
 
-## 华北2（北京）
+#### 华北2（北京）
 
 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-## 新加坡
+#### 新加坡
 
 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
@@ -32,28 +32,22 @@ Constants.baseHttpApiUrl = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.c
 **注意**：
 
 -   不同地域的 API Key 不同，请确保使用对应地域的 API Key
-    
 -   地域配置为全局设置，影响所有 DashScope SDK 的 API 调用
-    
 
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
 `{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
-## **VoiceEnrollmentService 类**
+## VoiceEnrollmentService 类
 
 **包路径**：`com.alibaba.dashscope.audio.ttsv2.enrollment.VoiceEnrollmentService`
 
 **功能**：管理Qwen-Audio-TTS/CosyVoice复刻音色的生命周期（创建、查询、更新、删除）
 
-### **构造方法**
+### 构造方法
 
 ```
 public VoiceEnrollmentService(String apiKey)
@@ -73,7 +67,7 @@ String
 
 API Key
 
-### **createVoice() - 创建音色**
+### createVoice() - 创建音色
 
 **方法签名**：
 
@@ -117,7 +111,7 @@ String
 
 customParam
 
-[VoiceEnrollmentParam](#h3-vj1s7t3u)
+[VoiceEnrollmentParam](https://help.aliyun.com/zh/model-studio/voice-clone-java-sdk#h3-vj1s7t3u)
 
 否
 
@@ -125,7 +119,7 @@ customParam
 
 **返回值**：`Voice` 对象，通过 `getVoiceId()` 方法获取音色ID。
 
-### **listVoice() - 查询音色列表**
+### listVoice() - 查询音色列表
 
 **方法签名**：
 
@@ -169,7 +163,7 @@ int
 
 **返回值**：`Voice[]` 音色数组。
 
-### **queryVoice() - 查询音色详情**
+### queryVoice() - 查询音色详情
 
 **方法签名**：
 
@@ -197,7 +191,7 @@ String
 
 **返回值**：`Voice` 对象。
 
-### **updateVoice() - 更新音色**
+### updateVoice() - 更新音色
 
 **方法签名**：
 
@@ -240,7 +234,7 @@ VoiceEnrollmentParam
 
 自定义参数。
 
-### **deleteVoice() - 删除音色**
+### deleteVoice() - 删除音色
 
 **方法签名**：
 
@@ -266,7 +260,7 @@ String
 
 要删除的音色ID。
 
-## **VoiceEnrollmentParam 类**
+## VoiceEnrollmentParam 类
 
 **包路径**：`com.alibaba.dashscope.audio.ttsv2.enrollment.VoiceEnrollmentParam`
 
@@ -290,7 +284,7 @@ Object
 
 设置自定义参数，如 parameter("language\_hints", Arrays.asList("zh"))、parameter("max\_prompt\_audio\_length", 10.0f)、parameter("enable\_preprocess", false)、parameter("enable\_volume\_normalization", "false")。
 
-### **扩展参数**
+### 扩展参数
 
 **参数名**
 
@@ -306,8 +300,6 @@ boolean
 
 否
 
-**重要**
-
 仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash和v3-flash模型支持。
 
 是否开启音频预处理（降噪、音频增强、音量规整）。有背景噪音时建议开启；安静环境建议关闭以最大程度还原音色。
@@ -322,9 +314,9 @@ String
 
 是否对用于声音复刻的样本音频进行音量归一化。取值为`"true"`或`"false"`。开启后，使用所创建音色合成的音频，其音量可能与关闭该参数时创建的音色不同。默认值：`"false"`。
 
-## **示例代码**
+## 示例代码
 
-### **创建音色**
+### 创建音色
 
 ```
 import com.alibaba.dashscope.audio.ttsv2.enrollment.Voice;
@@ -371,7 +363,7 @@ public class Main {
 }
 ```
 
-### **查询音色列表**
+### 查询音色列表
 
 需要引入第三方库`com.google.gson.Gson`。
 
@@ -403,7 +395,7 @@ public class Main {
 }
 ```
 
-### **查询特定音色**
+### 查询特定音色
 
 需要引入第三方库`com.google.gson.Gson`。
 
@@ -435,7 +427,7 @@ public class Main {
 }
 ```
 
-### **更新音色**
+### 更新音色
 
 ```
 import com.alibaba.dashscope.audio.ttsv2.enrollment.VoiceEnrollmentService;
@@ -463,7 +455,7 @@ public class Main {
 }
 ```
 
-### **删除音色**
+### 删除音色
 
 ```
 import com.alibaba.dashscope.audio.ttsv2.enrollment.VoiceEnrollmentService;

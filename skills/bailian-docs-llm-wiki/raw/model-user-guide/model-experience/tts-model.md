@@ -57,9 +57,7 @@ ElevenLabs Multilingual v3
 `qwen-audio-3.0-tts-plus`（声音复刻）、`qwen-audio-3.0-tts-plus`、`qwen-audio-3.0-tts-flash`（声音设计）、`cosyvoice-v3.5-plus`（声音设计）、`MiniMax/speech-2.8-hd`（声音复刻）
 
 -   **使用标准语音合成**：当内置音色库能满足需求，希望快速上手、无需额外配置时。
-    
 -   **使用自定义音色**：当需要品牌专属声音、复刻特定人物音色，或创建全新角色音色时。
-    
 
 ## 声音复刻还是声音设计？
 
@@ -100,16 +98,12 @@ ElevenLabs Multilingual v3
 `voice-enrollment`（注册和管理音色）
 
 -   **使用声音复刻**：当已有目标人物的录音素材，希望在合成中还原该音色时。
-    
 -   **使用声音设计**：当没有录音素材，希望根据文字描述从零创建全新音色时。
-    
 
 ## WebSocket还是HTTP？
 
 -   **WebSocket**：双向流式通信，支持流式输入和流式输出，音频边合成边返回，延迟最低。适用于智能客服、语音助手、呼叫中心等实时交互场景。
-    
 -   **HTTP**：发送完整文本，支持流式返回音频（逐段输出）。适用于有声阅读、音频内容制作等场景。
-    
 
 Qwen-Audio-TTS/CosyVoice 系列模型使用同一模型名称同时支持 WebSocket 和 HTTP 两种接入方式；Qwen 系列模型通过模型名称区分，带 `-realtime` 后缀的为 WebSocket 接入，不带后缀的为 HTTP 接入。
 
@@ -145,7 +139,7 @@ CosyVoice 系列模型还支持通过 AOQ 协议接入；如果是客户端对�
 
 Qwen-Audio-TTS
 
-WebSocket / HTTP
+WebSocket/ HTTP
 
 支持
 
@@ -157,7 +151,7 @@ WebSocket / HTTP
 
 CosyVoice
 
-WebSocket / HTTP
+WebSocket/ HTTP
 
 支持
 
@@ -169,7 +163,7 @@ WebSocket / HTTP
 
 CosyVoice
 
-WebSocket / HTTP
+WebSocket/ HTTP
 
 支持
 
@@ -205,7 +199,7 @@ HTTP
 
 `qwen-audio-3.0-tts-plus`
 
-WebSocket / HTTP
+WebSocket/ HTTP
 
 支持
 
@@ -215,7 +209,7 @@ WebSocket / HTTP
 
 `qwen-audio-3.0-tts-flash`
 
-WebSocket / HTTP
+WebSocket/ HTTP
 
 支持
 
@@ -226,9 +220,7 @@ WebSocket / HTTP
 **支持的语言**：
 
 -   系统音色（因音色而异）：中文（普通话）、英文
-    
 -   声音复刻音色（方言通过指令控制功能进行设置）：中文（普通话、广东话、重庆话、东北话、甘肃话、贵州话、浙江话、河北话、河南话、湖北话、湖南话、江西话、宁波话、宁夏话、青岛话、陕西话、山西话、山东话、上海话、四川话、云南话）、英语、日语、韩语、俄语、法语、德语、葡萄牙语、泰语、印尼语、越南语、西班牙语、意大利语、马来西亚语、菲律宾语、阿拉伯语
-    
 
 ### CosyVoice
 
@@ -246,7 +238,7 @@ WebSocket / HTTP
 
 `cosyvoice-v3.5-plus`
 
-WebSocket / HTTP
+WebSocket/ HTTP
 
 支持
 
@@ -256,7 +248,7 @@ WebSocket / HTTP
 
 `cosyvoice-v3.5-flash`
 
-WebSocket / HTTP
+WebSocket/ HTTP
 
 支持
 
@@ -266,7 +258,7 @@ WebSocket / HTTP
 
 `cosyvoice-v3-plus`
 
-WebSocket / HTTP
+WebSocket/ HTTP
 
 支持
 
@@ -276,7 +268,7 @@ WebSocket / HTTP
 
 `cosyvoice-v3-flash`
 
-WebSocket / HTTP
+WebSocket/ HTTP
 
 支持
 
@@ -286,7 +278,7 @@ WebSocket / HTTP
 
 `cosyvoice-v2`
 
-WebSocket / HTTP
+WebSocket/ HTTP
 
 支持
 
@@ -306,40 +298,28 @@ WebSocket
 
 **支持的语言（按版本）**：
 
--   `**cosyvoice-v3.5-plus**`**、**`**cosyvoice-v3.5-flash**`（不支持系统音色）：
+-   `cosyvoice-v3.5-plus`**、**`cosyvoice-v3.5-flash`（不支持系统音色）：
     
     -   声音复刻音色（方言通过指令控制功能进行设置）：中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语
-        
     -   声音设计音色：中文（普通话）、英文
-        
--   `**cosyvoice-v3-plus**`：
+-   `cosyvoice-v3-plus`：
     
     -   系统音色（因音色而异）：中文（普通话）、英文
-        
     -   声音复刻音色（方言通过指令控制功能进行设置）：中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语
-        
     -   声音设计音色：中文（普通话）、英文
-        
--   `**cosyvoice-v3-flash**`：
+-   `cosyvoice-v3-flash`：
     
     -   系统音色（因音色而异，部分方言由系统音色直接支持，部分通过指令控制功能设置）：中文（普通话、广东话、东北话、河南话、湖南话、陕西话、山东话、四川话、安徽话、闽南话）、英文、日语、韩语、印尼语
-        
     -   声音复刻音色（方言通过指令控制功能进行设置）：中文（普通话、广东话、东北话、甘肃话、贵州话、河南话、湖北话、江西话、闽南话、宁夏话、山西话、陕西话、山东话、上海话、四川话、天津话、云南话）、英文、法语、德语、日语、韩语、俄语、葡萄牙语、泰语、印尼语、越南语
-        
     -   声音设计音色：中文（普通话）、英文
-        
--   `**cosyvoice-v2**`（不支持声音设计音色）：
+-   `cosyvoice-v2`（不支持声音设计音色）：
     
     -   系统音色（因音色而异）：中文（普通话、粤语、东北话、闽南话、陕西话）、英文、日语、韩语
-        
     -   声音复刻音色：中文（普通话）、英文
-        
--   `**cosyvoice-v1**`（不支持声音设计音色）：
+-   `cosyvoice-v1`（不支持声音设计音色）：
     
     -   系统音色（因音色而异）：中文（普通话）、英文
-        
     -   声音复刻音色：中文（普通话）、英文
-        
 
 ### Qwen3-TTS
 
@@ -516,13 +496,9 @@ WebSocket
 **支持的语言（按版本）**：
 
 -   **Qwen3-TTS-Flash 系列**（系统音色）（`qwen3-tts-flash`、`qwen3-tts-flash-2025-11-27`、`qwen3-tts-flash-2025-09-18`、`qwen3-tts-flash-realtime`、`qwen3-tts-flash-realtime-2025-11-27`、`qwen3-tts-flash-realtime-2025-09-18`）：中文（普通话、北京话、上海话、四川话、南京话、陕西话、闽南话、天津话、粤语，因音色而异）、英文、德语、意大利语、葡萄牙语、西班牙语、日语、韩语、法语、俄语
-    
 -   **Qwen3-TTS-Instruct-Flash 系列**（系统音色）（`qwen3-tts-instruct-flash`、`qwen3-tts-instruct-flash-2026-01-26`、`qwen3-tts-instruct-flash-realtime`、`qwen3-tts-instruct-flash-realtime-2026-01-22`）：中文（普通话）、英文、德语、意大利语、葡萄牙语、西班牙语、日语、韩语、法语、俄语
-    
 -   **Qwen3-TTS-VC 系列**（声音复刻）（`qwen3-tts-vc-2026-01-22`、`qwen3-tts-vc-realtime-2026-01-15`、`qwen3-tts-vc-realtime-2025-11-27`）：中文（普通话）、英文、德语、意大利语、葡萄牙语、西班牙语、日语、韩语、法语、俄语
-    
 -   **Qwen3-TTS-VD 系列**（声音设计）（`qwen3-tts-vd-2026-01-26`、`qwen3-tts-vd-realtime-2026-01-15`、`qwen3-tts-vd-realtime-2025-12-16`）：中文（普通话）、英文、德语、意大利语、葡萄牙语、西班牙语、日语、韩语、法语、俄语
-    
 
 ### MiniMax
 
@@ -631,5 +607,4 @@ WebSocket
 **支持的语言（按版本）**：
 
 -   **Qwen-TTS 系列**（系统音色）（`qwen-tts`、`qwen-tts-latest`、`qwen-tts-2025-05-22`、`qwen-tts-2025-04-10`）：中文（普通话、北京话、上海话、四川话，因音色而异）、英文、德语、意大利语、葡萄牙语、西班牙语、日语、韩语、法语、俄语
-    
 -   **Qwen-TTS-Realtime 系列**（系统音色）（`qwen-tts-realtime`、`qwen-tts-realtime-latest`、`qwen-tts-realtime-2025-07-15`）：中文（普通话）、英文、德语、意大利语、葡萄牙语、西班牙语、日语、韩语、法语、俄语

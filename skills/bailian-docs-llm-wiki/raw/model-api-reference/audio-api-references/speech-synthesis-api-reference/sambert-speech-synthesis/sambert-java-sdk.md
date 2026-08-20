@@ -2,11 +2,11 @@
 
 本文介绍语音合成Sambert Java SDK的参数和接口细节。
 
-**用户指南：**关于模型介绍和选型建议请参见[实时语音合成-CosyVoice /Sambert](https://help.aliyun.com/zh/model-studio/text-to-speech)。
+**用户指南：**关于模型介绍和选型建议请参见[实时语音合成-CosyVoice /Sambert](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)。
 
 **在线体验：**暂不支持。
 
-## **接口地址**
+## 接口地址
 
 SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）。请修改 `Constants.baseWebsocketApiUrl`为对应地域的URL。
 
@@ -23,35 +23,28 @@ import com.alibaba.dashscope.utils.Constants;
 Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference";
 ```
 
-**重要**
-
-阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+**重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
 
 `{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
-## **前提条件**
+## 前提条件
 
--   已开通服务并[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
-    
--   [安装最新版DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
-    
+已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
 
-## **快速开始**
+-   [安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-[SpeechSynthesizer类](#adcb5e9bddbyq)提供了非流式调用和单向流式调用的接口。请根据业务场景选择合适的调用方式：
+## 快速开始
+
+[SpeechSynthesizer类](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#adcb5e9bddbyq)提供了非流式调用和单向流式调用的接口。请根据业务场景选择合适的调用方式：
 
 -   非流式调用：提交文本后，服务端立即处理并返回完整的语音合成结果。整个过程是阻塞式的，客户端需要等待服务端完成处理后才能继续下一步操作。适合短文本合成场景。
-    
 -   单向流式调用：将文本一次发送至服务端并实时接收语音合成结果，不允许将文本分段发送。适用于对实时性要求高的场景。
-    
 
-### **非流式调用**
+### 非流式调用
 
 提交单个语音合成任务，无需调用回调方法，进行语音合成（无流式输出中间结果），最终一次性获取完整结果。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6772835871/CAEQURiBgIDHpsn4phkiIDQ0ZGE2OTk3NmY5NTRhNDVhZDQwNWE3ZGZiMzk4Yjk54709861_20241015153444.149.svg)
-
-实例化[SpeechSynthesizer类](#adcb5e9bddbyq)，调用`call`方法绑定[请求参数](#a96bfa6340jdd)，进行合成并获取二进制音频数据。
+实例化[SpeechSynthesizer类](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#adcb5e9bddbyq)，调用`call`方法绑定[请求参数](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#a96bfa6340jdd)，进行合成并获取二进制音频数据。
 
 点击查看完整示例
 
@@ -98,15 +91,13 @@ public class Main {
 }
 ```
 
-### **单向流式调用**
+### 单向流式调用
 
 提交单个语音合成任务，通过回调的方式流式输出中间结果，合成结果通过`ResultCallback`中的回调方法流式进行获取。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6772835871/CAEQVRiBgMDN2_qhrBkiIGJlMTQ5MDY4YWJlZTQxYWY5ZWEzOTZiNTVjOGEwZjZh4709861_20241015153444.149.svg)
+实例化[SpeechSynthesizer类](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#adcb5e9bddbyq)，调用`call`方法绑定[请求参数](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#a96bfa6340jdd)和[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#3639e1cb40mxi)并开始语音合成，通过[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#3639e1cb40mxi)的`onEvent`方法实时获取合成结果。
 
-实例化[SpeechSynthesizer类](#adcb5e9bddbyq)，调用`call`方法绑定[请求参数](#a96bfa6340jdd)和[回调接口（ResultCallback）](#3639e1cb40mxi)并开始语音合成，通过[回调接口（ResultCallback）](#3639e1cb40mxi)的`onEvent`方法实时获取合成结果。
-
-语音合成完成后（[回调接口（ResultCallback）](#3639e1cb40mxi)的`onComplete`方法被回调之后），还可以调用[SpeechSynthesizer类](#adcb5e9bddbyq)的`getAudioData`和`getTimestamps`方法，一次性获取完整的音频和时间戳结果。
+语音合成完成后（[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#3639e1cb40mxi)的`onComplete`方法被回调之后），还可以调用[SpeechSynthesizer类](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#adcb5e9bddbyq)的`getAudioData`和`getTimestamps`方法，一次性获取完整的音频和时间戳结果。
 
 点击查看完整示例
 
@@ -176,15 +167,15 @@ public class Main {
 }
 ```
 
-### **通过Flowable调用**
+### 通过Flowable调用
 
 Flowable是一个用于工作流和业务流程管理的开源框架，它基于Apache 2.0许可证发布。关于Flowable的使用，请参见[Flowable API详情](http://reactivex.io/RxJava/2.x/javadoc/)。
 
 点击查看完整示例
 
-以下示例展示了通过`Flowable`对象的`blockingForEach`接口，阻塞式地获取每次流式返回的[音频数据和时间戳信息（SpeechSynthesisResult）](#a727da82951p6)。
+以下示例展示了通过`Flowable`对象的`blockingForEach`接口，阻塞式地获取每次流式返回的[音频数据和时间戳信息（SpeechSynthesisResult）](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#a727da82951p6)。
 
-您也可以在Flowable的所有流式数据返回完成后，通过[SpeechSynthesizer类](#adcb5e9bddbyq)的`getAudioData`和`getTimestamps`方法分别获取完整的合成结果和完整的时间戳。
+您也可以在Flowable的所有流式数据返回完成后，通过[SpeechSynthesizer类](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#adcb5e9bddbyq)的`getAudioData`和`getTimestamps`方法分别获取完整的合成结果和完整的时间戳。
 
 ```
 import com.alibaba.dashscope.audio.tts.SpeechSynthesisParam;
@@ -225,13 +216,13 @@ public class Main {
 }
 ```
 
-### **高并发调用**
+### 高并发调用
 
-在DashScope Java SDK中，采用了OkHttp3的连接池技术，以减少重复建立连接的开销。详情请参见[高并发场景](https://help.aliyun.com/zh/model-studio/sambert-in-high-concurrency-scenarios)。
+在DashScope Java SDK中，采用了OkHttp3的连接池技术，以减少重复建立连接的开销。详情请参见[高并发场景](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)。
 
-## **请求参数**
+## 请求参数
 
-通过`SpeechSynthesisParam`的链式方法配置模型、待合成文本等参数。配置完成的对象传入[SpeechSynthesizer类](#adcb5e9bddbyq)的`call`方法中使用。
+通过`SpeechSynthesisParam`的链式方法配置模型、待合成文本等参数。配置完成的对象传入[SpeechSynthesizer类](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#adcb5e9bddbyq)的`call`方法中使用。
 
 点击查看示例
 
@@ -262,7 +253,7 @@ String
 
 是
 
-指定用于语音合成的音色模型名，完整列表请参见[模型列表](#57d33631f7doi)。
+指定用于语音合成的音色模型名，完整列表请参见[模型列表](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#57d33631f7doi)。
 
 text
 
@@ -307,7 +298,7 @@ int
 
 否
 
-指定合成音频的采样率（单位：Hz），建议使用模型默认采样率（参见[模型列表](#57d33631f7doi)），如果不匹配，服务会进行必要的升降采样处理。
+指定合成音频的采样率（单位：Hz），建议使用模型默认采样率（参见[模型列表](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#57d33631f7doi)），如果不匹配，服务会进行必要的升降采样处理。
 
 volume
 
@@ -376,7 +367,7 @@ String
 
 用户API Key。
 
-## **关键接口**
+## 关键接口
 
 ### `SpeechSynthesizer`类
 
@@ -394,7 +385,7 @@ String
 public ByteBuffer call(SpeechSynthesisParam param)
 ```
 
-`param`：[请求参数](#a96bfa6340jdd)
+`param`：[请求参数](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#a96bfa6340jdd)
 
 二进制音频
 
@@ -404,10 +395,8 @@ public ByteBuffer call(SpeechSynthesisParam param)
 public void call(SpeechSynthesisParam param, ResultCallback<SpeechSynthesisResult> callback)
 ```
 
--   `param`：[请求参数](#a96bfa6340jdd)
-    
--   `callback`：[回调接口（ResultCallback）](#3639e1cb40mxi)
-    
+-   `param`：[请求参数](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#a96bfa6340jdd)
+-   `callback`：[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#3639e1cb40mxi)
 
 无
 
@@ -433,9 +422,9 @@ public List<Sentence> getTimestamps()
 
 无
 
-[句子级别时间戳信息（Sentence）](#6a6d7363490w6)的`List`集合
+[句子级别时间戳信息（Sentence）](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#6a6d7363490w6)的`List`集合
 
-获取完整的[句子级别时间戳信息（Sentence）](#6a6d7363490w6)。
+获取完整的[句子级别时间戳信息（Sentence）](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#6a6d7363490w6)。
 
 单向流式调用时，完成回调后（`ResultCallback`的`onComplete`方法被调用之后）可以使用该方法一次性获取完整的时间戳。
 
@@ -459,9 +448,9 @@ public long getFirstPackageDelay()
 
 获取当前任务的首包延迟，任务结束后使用。
 
-### **回调接口（**`ResultCallback`）
+### 回调接口（`ResultCallback`）
 
-[单向流式调用](#ba023aacfbr84)时，通过回调接口`ResultCallback`获取合成结果。
+[单向流式调用](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#ba023aacfbr84)时，通过回调接口`ResultCallback`获取合成结果。
 
 点击查看示例
 
@@ -497,7 +486,7 @@ ResultCallback<SpeechSynthesisResult> callback = new ResultCallback<SpeechSynthe
 public void onEvent(SpeechSynthesisResult result)
 ```
 
-`result`：[音频数据和时间戳信息（SpeechSynthesisResult）](#a727da82951p6)
+`result`：[音频数据和时间戳信息（SpeechSynthesisResult）](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#a727da82951p6)
 
 无
 
@@ -523,13 +512,13 @@ public void onError(Exception e)
 
 当调用过程出现异常以及服务返回错误后被回调。
 
-## **响应结果**
+## 响应结果
 
-[非流式调用](#8341058094tc3)：响应结果为二进制音频数据。
+[非流式调用](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#8341058094tc3)：响应结果为二进制音频数据。
 
-[单向流式调用](#ba023aacfbr84)：响应结果为[音频数据和时间戳信息（SpeechSynthesisResult）](#a727da82951p6)。
+[单向流式调用](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#ba023aacfbr84)：响应结果为[音频数据和时间戳信息（SpeechSynthesisResult）](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#a727da82951p6)。
 
-### **音频数据和时间戳信息（**`**SpeechSynthesisResult**`**）**
+### 音频数据和时间戳信息（`SpeechSynthesisResult`）
 
 `SpeechSynthesisResult`封装了语音合成结果，常用的接口为`getAudioFrame`和`getTimestamp`。
 
@@ -557,7 +546,7 @@ public List<Sentence> getTimestamp()
 
 无
 
-[句子级别时间戳信息（Sentence）](#6a6d7363490w6)的`List`集合
+[句子级别时间戳信息（Sentence）](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#6a6d7363490w6)的`List`集合
 
 批量获取句子级别时间戳信息，可能为空。
 
@@ -599,7 +588,7 @@ public List<Word> getWords()
 
 无
 
-[字级别时间戳信息（Word）](#216af8dfafag2)的`List`集合
+[字级别时间戳信息（Word）](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#216af8dfafag2)的`List`集合
 
 批量获取字级别时间戳信息，可能为空。
 
@@ -651,7 +640,7 @@ public List<Phoneme> getPhonemes()
 
 无
 
-[音素级别时间戳信息（Phoneme）](#05e7893c08and)的`List`集合
+[音素级别时间戳信息（Phoneme）](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#05e7893c08and)的`List`集合
 
 批量获取音素级别时间戳信息，可能为空。
 
@@ -708,27 +697,23 @@ public String getTone()
 返回音调。
 
 -   英文中，0、1、2分别代表轻音、重音和次重音。
-    
 -   拼音中，1、2、3、4、5分别代表一声、二声、三声、四声和轻声。
-    
 
-## **错误码**
+## 错误码
 
-在使用API过程中，如果调用失败并返回错误信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+在使用API过程中，如果调用失败并返回错误信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
-## **更多示例**
+## 更多示例
 
 更多示例，请参见[GitHub](https://github.com/aliyun/alibabacloud-bailian-speech-demo)。
 
-## **常见问题**
+## 常见问题
 
 请参见GitHub [QA](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/docs/QA)。
 
-## **模型列表**
+## 模型列表
 
-**说明**
-
-默认采样率代表当前模型的最佳采样率，缺省条件下默认按照该采样率输出，同时支持降采样或升采样。如知妙音色，默认采样率16 kHz，使用时可以降采样到8 kHz，但升采样到48 kHz时不会有额外效果提升。
+**说明**默认采样率代表当前模型的最佳采样率，缺省条件下默认按照该采样率输出，同时支持降采样或升采样。如知妙音色，默认采样率16 kHz，使用时可以降采样到8 kHz，但升采样到48 kHz时不会有额外效果提升。
 
 **音色**
 

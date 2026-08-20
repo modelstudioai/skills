@@ -2,71 +2,55 @@
 
 本文档提供了Qwen-Audio-3.0-ASR-Flash-Filetrans/Fun-ASR非实时语音识别Android SDK的详细使用指南，帮助您将语音转换为文本。
 
-**用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model/#asr-audio-spec02)。
+**用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
 
-## **快速开始**
+## 快速开始
 
-1.  **获取API Key：**[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，为安全起见，推荐将API Key配置到环境变量。
+1.  **获取API Key：**[获取API Key](raw/model-api-reference/preparations/get-api-key.md)，为安全起见，推荐将API Key配置到环境变量。
     
 2.  **下载SDK并运行示例代码：**
-    
     -   [下载最新SDK整合包](https://help.aliyun.com/zh/isi/sdk-selection-and-download)。
-        
-    -   解压 ZIP 包。在 `app/libs` 目录中获取 AAR 格式 SDK，并添加到项目依赖。  
-        需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。  
-        
+    -   解压 ZIP 包。在 `app/libs` 目录中获取 AAR 格式 SDK，并添加到项目依赖。  
+        需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。
     -   用 Android Studio 打开工程。示例代码位于`DashFunAsrFileTranscriberActivity.java`，替换 API Key 后体验功能。
-        
 
-### **调用步骤**
+### 调用步骤
 
-## 同步模式
-
-1.  初始化 SDK
-    
-2.  按业务需求配置相关参数
-    
-3.  调用 `[startFileTranscriber](#7d33691bdb32v)` 启动识别任务（`async_request`设为`false`）
-    
-4.  在`[onFileTransEventCallback](#163c1ef871tqt)`接口中监听`EVENT_FILE_TRANS_RESULT` 事件，获取最终识别结果
-    
-5.  调用 `[release](#44bf12ed9a4g9)` 释放 SDK 资源
-    
-
-## 异步模式
+#### 同步模式
 
 1.  初始化 SDK
-    
 2.  按业务需求配置相关参数
-    
-3.  调用 `[startFileTranscriber](#7d33691bdb32v)` 启动识别任务（`async_request`设为`true`）
-    
-4.  调用 `[queryFileTranscriber](#047417083bahi)` 主动查询识别进度/结果
-    
-5.  在`[onFileTransEventCallback](#163c1ef871tqt)`接口中监听`EVENT_FILE_TRANS_QUERY_RESULT`事件，获取当前查询结果
-    
-6.  在`[onFileTransEventCallback](#163c1ef871tqt)`接口中监听 `EVENT_FILE_TRANS_RESULT` 事件，获取最终识别结果
-    
-7.  调用 `[release](#44bf12ed9a4g9)` 释放 SDK 资源
-    
+3.  调用 `startFileTranscriber` 启动识别任务（`async_request`设为`false`）
+4.  在`onFileTransEventCallback`接口中监听`EVENT_FILE_TRANS_RESULT` 事件，获取最终识别结果
+5.  调用 `release` 释放 SDK 资源
 
-## **请求参数**
+#### 异步模式
+
+1.  初始化 SDK
+2.  按业务需求配置相关参数
+3.  调用 `startFileTranscriber` 启动识别任务（`async_request`设为`true`）
+4.  调用 `queryFileTranscriber` 主动查询识别进度/结果
+5.  在`onFileTransEventCallback`接口中监听`EVENT_FILE_TRANS_QUERY_RESULT`事件，获取当前查询结果
+6.  在`onFileTransEventCallback`接口中监听 `EVENT_FILE_TRANS_RESULT` 事件，获取最终识别结果
+7.  调用 `release` 释放 SDK 资源
+
+## 请求参数
 
 ### 连接与控制参数
 
-通过在[initialize](#ae6d7dd9cfad3)接口的`parameters`参数中传入一个JSON字符串来配置。
+通过在[initialize](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-android-sdk#ae6d7dd9cfad3)接口的`parameters`参数中传入一个JSON字符串来配置。
 
 -   **参数示例：**以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
-    
-    ```
-    {
-        "url": "wss://dashscope.aliyuncs.com/api-ws/v1/inference",
-        "apikey": "st-****",
-        "device_id": "my_device_id",
-        "service_mode": "1"
-    }
-    ```
-    
+
+```
+{
+    "url": "wss://dashscope.aliyuncs.com/api-ws/v1/inference",
+    "apikey": "st-****",
+    "device_id": "my_device_id",
+    "service_mode": "1"
+}
+```
+
 -   **参数说明**
     
     **参数**
@@ -83,7 +67,7 @@
     
     是
     
-    服务地址，固定为 `wss://dashscope.aliyuncs.com/api-ws/v1/inference`。
+    服务地址，固定为 `wss://dashscope.aliyuncs.com/api-ws/v1/inference`。
     
     `apikey`
     
@@ -99,7 +83,7 @@
     
     是
     
-    运行模式。非实时语音识别固定为 `"1"`。
+    运行模式。非实时语音识别固定为 `"1"`。
     
     `device_id`
     
@@ -117,7 +101,7 @@
     
     日志文件的存储路径。
     
-    此参数仅在调用[initialize](#ae6d7dd9cfad3)接口时将`save_log`设为true时生效。此时必须设置日志文件路径，否则将报错。
+    此参数仅在调用[initialize](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-android-sdk#ae6d7dd9cfad3)接口时将`save_log`设为true时生效。此时必须设置日志文件路径，否则将报错。
     
     本地最多保留两个日志文件。
     
@@ -129,7 +113,7 @@
     
     设定日志文件的最大字节数。
     
-    此参数仅在调用[initialize](#ae6d7dd9cfad3)接口时将`save_log`设为true时生效。
+    此参数仅在调用[initialize](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-android-sdk#ae6d7dd9cfad3)接口时将`save_log`设为true时生效。
     
     默认值：104857600（100 \* 1024 \* 1024 字节, 即 100MiB）。
     
@@ -139,7 +123,7 @@
     
     否
     
-    控制通过日志回调（`[onFileTransLogTrackCallback](#9c10968457gc6)`）对外发送的日志内容的过滤级别。
+    控制通过日志回调（`onFileTransLogTrackCallback`）对外发送的日志内容的过滤级别。
     
     默认值：2。
     
@@ -158,31 +142,31 @@
     -   5：LOG\_LEVEL\_NONE（表示关闭此功能）
         
     
-    注意：`log_track_level`与`level`（通过[initialize](#ae6d7dd9cfad3)接口设置）共同决定最终回调的日志。一条日志的级别数值必须同时大于或等于`log_track_level`和`level`的值，才会被回调。例如，`log_track_level`设为2 (INFO)，`level`设为3 (WARNING)，则只有WARNING及以上级别（数值>=3）的日志才会被回调。
+    注意：`log_track_level`与`level`（通过[initialize](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-android-sdk#ae6d7dd9cfad3)接口设置）共同决定最终回调的日志。一条日志的级别数值必须同时大于或等于`log_track_level`和`level`的值，才会被回调。例如，`log_track_level`设为2 (INFO)，`level`设为3 (WARNING)，则只有WARNING及以上级别（数值>=3）的日志才会被回调。
     
 
-### **语音识别效果参数**
+### 语音识别效果参数
 
-通过[setParams](#a23e0d85d7ymt)接口配置nl\_config参数，或者通过[startFileTranscriber](#7d33691bdb32v)接口配置所有语音识别效果参数。
+通过[setParams](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-android-sdk#a23e0d85d7ymt)接口配置nl\_config参数，或者通过[startFileTranscriber](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-android-sdk#7d33691bdb32v)接口配置所有语音识别效果参数。
 
 -   **参数示例：**以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
-    
-    ```
-    {
-        "file_urls": [
-            "{YOUR_AUDIO_URL}"
-        ],
-        "async_request": false,
-        "nls_config": {
-            "model":"qwen-audio-3.0-asr-flash-filetrans",
-            "diarization_enabled": false,
-            "parameters": {
-                "speech_noise_threshold": 0.0
-            }
+
+```
+{
+    "file_urls": [
+        "{YOUR_AUDIO_URL}"
+    ],
+    "async_request": false,
+    "nls_config": {
+        "model":"qwen-audio-3.0-asr-flash-filetrans",
+        "diarization_enabled": false,
+        "parameters": {
+            "speech_noise_threshold": 0.0
         }
     }
-    ```
-    
+}
+```
+
 -   **参数说明**
     
     **参数**
@@ -199,7 +183,7 @@
     
     是
     
-    音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model/#asr-audio-spec02)。
+    音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
     
     若录音文件存储在阿里云OSS，使用RESTful API方式支持使用以`oss://`为前缀的临时 URL，使用SDK方式不支持使用以 oss://为前缀的临时 URL。
     
@@ -229,9 +213,7 @@
     取值范围：
     
     -   true：异步请求
-        
     -   false：同步请求
-        
     
     `apikey`
     
@@ -239,7 +221,7 @@
     
     否
     
-    如果[连接与控制参数](#57acf5ecc1w8j)的`apikey`使用的是[临时API Key](https://help.aliyun.com/zh/model-studio/generate-temporary-api-key)，可在此处进行更新，以免超时失效。
+    如果[连接与控制参数](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-android-sdk#57acf5ecc1w8j)的`apikey`使用的是[临时API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，可在此处进行更新，以免超时失效。
     
     `nls_config`
     
@@ -263,7 +245,7 @@
     
     否
     
-    指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03-sensitive-h3)。
+    指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03_sensitive_h3)。
     
     `nls_config.channel_id`
     
@@ -273,9 +255,7 @@
     
     指定在多音轨音频文件中需要识别的音轨索引，索引从 0 开始。例如，\[0\] 表示识别第一个音轨，\[0, 1\] 表示同时识别第一和第二个音轨。如果省略此参数，则默认处理第一个音轨。
     
-    **重要**
-    
-    指定的每一个音轨都将独立计费。例如，为单个文件请求 \[0, 1\] 会产生两笔独立的费用。
+    **重要**指定的每一个音轨都将独立计费。例如，为单个文件请求 \[0, 1\] 会产生两笔独立的费用。
     
     默认值：\[0\]。
     
@@ -291,9 +271,7 @@
     
     启用该功能后，识别结果中将显示`speaker_id`字段，用于区分不同说话人。
     
-    **说明**
-    
-    如果启用说话人分离功能，建议音频时长不超过2小时，否则可能导致识别失败或超时。
+    **说明**如果启用说话人分离功能，建议音频时长不超过2小时，否则可能导致识别失败或超时。
     
     默认值：false。
     
@@ -305,9 +283,7 @@
     
     否
     
-    **重要**
-    
-    仅在开启说话人分离功能（`diarization_enabled`设置为`true`）时生效。
+    **重要**仅在开启说话人分离功能（`diarization_enabled`设置为`true`）时生效。
     
     说话人数量参考值。取值范围为2至100的整数（包含2和100）。
     
@@ -327,7 +303,7 @@
     
     适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。
     
-    使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw-precompiled-h3)。
+    使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
     
     `nls_config.language_hints`
     
@@ -344,71 +320,39 @@
     -   qwen-audio-3.0-asr-flash-filetrans、fun-asr、fun-asr-2025-11-07、fun-asr-mtl、fun-asr-mtl-2025-08-25：
         
         -   zh: 中文
-            
         -   en: 英文
-            
         -   ja: 日语
-            
         -   ko：韩语
-            
         -   vi：越南语
-            
         -   th：泰语
-            
         -   id：印尼语
-            
         -   ms：马来语
-            
         -   tl：菲律宾语
-            
         -   hi：印地语
-            
         -   ar：阿拉伯语
-            
         -   fr：法语
-            
         -   de：德语
-            
         -   es：西班牙语
-            
         -   pt：葡萄牙语
-            
         -   ru：俄语
-            
         -   it：意大利语
-            
         -   nl：荷兰语
-            
         -   sv：瑞典语
-            
         -   da：丹麦语
-            
         -   fi：芬兰语
-            
         -   no：挪威语
-            
         -   el：希腊语
-            
         -   pl：波兰语
-            
         -   cs：捷克语
-            
         -   hu：匈牙利语
-            
         -   ro：罗马尼亚语
-            
         -   bg：保加利亚语
-            
         -   hr：克罗地亚语
-            
         -   sk：斯洛伐克语
-            
     -   fun-asr-2025-08-25：
         
         -   zh: 中文
-            
         -   en: 英文
-            
     
     `nls_config.parameters`
     
@@ -419,25 +363,25 @@
     配置其他参数，内容为JSON Object格式。
     
 
-## **关键接口**
+## 关键接口
 
-### **NativeNui**
+### NativeNui
 
 #### initialize
 
-初始化语音识别SDK实例。SDK为单例模式，在调用[release](#44bf12ed9a4g9)前禁止重复初始化。
+初始化语音识别SDK实例。SDK为单例模式，在调用[release](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-android-sdk#44bf12ed9a4g9)前禁止重复初始化。
 
 此接口会引起阻塞，应在非UI线程调用。
 
 -   **方法签名**
-    
-    ```
-    public synchronized int initialize(final INativeFileTransCallback callback,
-                                       String parameters,
-                                       final Constants.LogLevel level,
-                                       final boolean save_log)
-    ```
-    
+
+```
+public synchronized int initialize(final INativeFileTransCallback callback,
+                                   String parameters,
+                                   final Constants.LogLevel level,
+                                   final boolean save_log)
+```
+
 -   **参数说明**
     
     **参数**
@@ -456,7 +400,7 @@
     
     `String`
     
-    JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参数](#57acf5ecc1w8j)。
+    JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参数](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-android-sdk#57acf5ecc1w8j)。
     
     `level`
     
@@ -468,23 +412,23 @@
     
     `boolean`
     
-    是否保存本地日志。若为`true`，须在[连接与控制参数](#57acf5ecc1w8j)中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
+    是否保存本地日志。若为`true`，须在[连接与控制参数](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-android-sdk#57acf5ecc1w8j)中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
     
 -   **返回值说明**
     
     返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
     
 
-#### **setParams**
+#### setParams
 
-此接口用于独立设置或更新 `nls_config` 参数。如果所有参数都在[startFileTranscriber](#7d33691bdb32v)中一次性提供，则无需调用此方法。
+此接口用于独立设置或更新 `nls_config` 参数。如果所有参数都在[startFileTranscriber](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-android-sdk#7d33691bdb32v)中一次性提供，则无需调用此方法。
 
 -   **方法签名**
-    
-    ```
-    public synchronized int setParams(String params);
-    ```
-    
+
+```
+public synchronized int setParams(String params);
+```
+
 -   **参数说明**
     
     **参数**
@@ -497,7 +441,7 @@
     
     `String`
     
-    [语音识别效果参数](#d20cce9518kla)中的`nls_config`参数，`nls_config`之外的参数不支持通过该方法进行设置。
+    [语音识别效果参数](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-android-sdk#d20cce9518kla)中的`nls_config`参数，`nls_config`之外的参数不支持通过该方法进行设置。
     
     示例：
     
@@ -520,11 +464,11 @@
 开始识别。
 
 -   **方法签名**
-    
-    ```
-    public synchronized int startFileTranscriber(String params, byte[] task_id)
-    ```
-    
+
+```
+public synchronized int startFileTranscriber(String params, byte[] task_id)
+```
+
 -   **参数说明**
     
     **参数**
@@ -537,7 +481,7 @@
     
     `String`
     
-    [语音识别效果参数](#d20cce9518kla)。
+    [语音识别效果参数](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-android-sdk#d20cce9518kla)。
     
     示例：
     
@@ -567,14 +511,14 @@
 
 #### queryFileTranscriber
 
-此接口用于主动查询一个异步任务的当前状态和结果。调用成功后，结果将通过`[onFileTransEventCallback](#163c1ef871tqt)`回调中的 `EVENT_FILE_TRANS_QUERY_RESULT` 事件返回。
+此接口用于主动查询一个异步任务的当前状态和结果。调用成功后，结果将通过`onFileTransEventCallback`回调中的 `EVENT_FILE_TRANS_QUERY_RESULT` 事件返回。
 
 -   **方法签名**
-    
-    ```
-    public synchronized int queryFileTranscriber(String task_id)
-    ```
-    
+
+```
+public synchronized int queryFileTranscriber(String task_id)
+```
+
 -   **参数说明**
     
     **参数**
@@ -599,11 +543,11 @@
 立即取消当前任务。
 
 -   **方法签名**
-    
-    ```
-    public synchronized int cancelFileTranscriber(String task_id)
-    ```
-    
+
+```
+public synchronized int cancelFileTranscriber(String task_id)
+```
+
 -   **参数说明**
     
     **参数**
@@ -623,16 +567,16 @@
     返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
     
 
-#### **release**
+#### release
 
-释放SDK所有内部资源。此方法调用后，SDK实例将变为不可用状态，如需再次使用，必须重新调用[initialize](#ae6d7dd9cfad3)进行初始化。
+释放SDK所有内部资源。此方法调用后，SDK实例将变为不可用状态，如需再次使用，必须重新调用[initialize](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-android-sdk#ae6d7dd9cfad3)进行初始化。
 
 -   **方法签名**
-    
-    ```
-    public synchronized int release();
-    ```
-    
+
+```
+public synchronized int release();
+```
+
 -   **返回值说明**
     
     返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
@@ -643,26 +587,26 @@
 获得当前SDK版本信息。
 
 -   **方法签名**
-    
-    ```
-    public synchronized String GetVersion();
-    ```
-    
+
+```
+public synchronized String GetVersion();
+```
+
 -   **返回值说明**
     
     当前SDK版本信息。
     
 
-### INativeFileTransCallback**：监听回调**
+### INativeFileTransCallback：监听回调
 
-#### onFileTransEventCallback**：监听事件和语音识别结果**
+#### onFileTransEventCallback：监听事件和语音识别结果
 
 -   **方法签名**
-    
-    ```
-    void onFileTransEventCallback(NuiEvent event, final int resultCode, final int arg2, AsrResult asrResult, String taskId);
-    ```
-    
+
+```
+void onFileTransEventCallback(NuiEvent event, final int resultCode, final int arg2, AsrResult asrResult, String taskId);
+```
+
 -   **参数说明**
     
     **参数**
@@ -673,7 +617,7 @@
     
     `event`
     
-    `[NuiEvent](#981ff433acpmr)`
+    `NuiEvent`
     
     回调事件。
     
@@ -702,7 +646,7 @@
     保留参数。
     
 
-#### onFileTransLogTrackCallback**：监听追踪日志**
+#### onFileTransLogTrackCallback：监听追踪日志
 
 此回调用于接收 SDK 内部的详细日志，方便进行问题定位和调试。
 
@@ -710,7 +654,7 @@
 default void onFileTransLogTrackCallback(Constants.LogLevel level, String log)
 ```
 
-### `NuiEvent`**：事件类型**
+### `NuiEvent`：事件类型
 
 **事件**
 

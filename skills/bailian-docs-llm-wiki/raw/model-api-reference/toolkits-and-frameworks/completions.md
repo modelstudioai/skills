@@ -2,32 +2,28 @@
 
 Completions 接口专为文本补全场景设计，适合代码补全、内容续写等场景。
 
-**说明**
+**说明**本文档仅适用于华北2（北京）地域，需使用华北2（北京）地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
 
-本文档仅适用于华北2（北京）地域，需使用华北2（北京）地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
-
-## **支持的模型**
+## 支持的模型
 
 当前支持 [Qwen Coder](https://help.aliyun.com/zh/model-studio/qwen-coder) 部分模型：
 
 qwen-coder-turbo
 
-## **前提条件**
+## 前提条件
 
-您需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过 OpenAI SDK 调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。如果通过 OpenAI SDK 调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-## **开始使用**
+## 开始使用
 
 您可以通过 Completions 接口实现文本补全，当前支持以下两种文本补全场景：
 
 1.  通过给定的前缀生成后续内容；
-    
 2.  通过给定的前缀与后缀生成中间内容；
-    
 
 > 暂不支持通过给定的后缀生成前缀内容。
 
-### **快速开始**
+### 快速开始
 
 您可以在前缀中传入函数的名称、输入参数、使用说明等信息，Completions 接口将返回生成的代码。
 
@@ -39,7 +35,7 @@ qwen-coder-turbo
 
 其中`{prefix_content}`是您需要传入的前缀信息。
 
-Python
+python
 
 ```
 import os
@@ -58,7 +54,7 @@ completion = client.completions.create(
 print(completion.choices[0].text)
 ```
 
-Node.js
+javascript
 
 ```
 import OpenAI from "openai";
@@ -82,7 +78,7 @@ async function main() {
 main();
 ```
 
-curl
+bash
 
 ```
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/completions \
@@ -94,7 +90,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/completions \
 }'
 ```
 
-### **根据前缀和后缀生成中间内容**
+### 根据前缀和后缀生成中间内容
 
 Completions 接口支持通过您给定的前缀与后缀生成中间内容，您可以在前缀中传入函数的名称、输入参数、使用说明等信息，在后缀中传入函数的返回参数等信息，Completions 接口将返回生成的代码。
 
@@ -106,7 +102,7 @@ Completions 接口支持通过您给定的前缀与后缀生成中间内容，�
 
 其中`{prefix_content}`是您需要传入的前缀信息，`{suffix_content}`为您需要传入的后缀信息。
 
-Python
+python
 
 ```
 import os
@@ -139,7 +135,7 @@ completion = client.completions.create(
 print(completion.choices[0].text)
 ```
 
-Node.js
+javascript
 
 ```
 import OpenAI from 'openai';
@@ -175,7 +171,7 @@ async function main() {
 main();
 ```
 
-curl
+bash
 
 ```
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/completions \
@@ -187,9 +183,9 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/completions \
 }'
 ```
 
-## **输入与输出参数**
+## 输入与输出参数
 
-### **输入参数**
+### 输入参数
 
 **参数**
 
@@ -306,7 +302,7 @@ float
 
 取值范围：\[-2.0, 2.0\]。正数会减少重复度，负数会增加重复度。
 
-### **输出参数**
+### 输出参数
 
 **参数**
 
@@ -400,4 +396,4 @@ integer
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。

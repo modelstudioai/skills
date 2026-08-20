@@ -2,25 +2,21 @@
 
 本文档介绍如何在阿里云百炼平台调用小米直供的 MiMo 系列模型推理服务。
 
-**重要**
+**重要**本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
-本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
-
-## **快速开始**
+## 快速开始
 
 mimo-v2.5-pro 是小米直供的混合推理模型，默认开启思考模式（`enable_thinking`默认为`true`），如需直接输出结果可显式传入`enable_thinking: false`。运行以下代码快速调用思考模式的 mimo-v2.5-pro 模型。
 
-需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk#8833b9274f4v8)。
+需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-## OpenAI兼容
+#### OpenAI兼容
 
-**说明**
+**说明**`enable_thinking`非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body`传入，Node.js SDK 作为顶层参数传入。
 
-`enable_thinking`非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body`传入，Node.js SDK 作为顶层参数传入。
+#### Python
 
-## Python
-
-### **示例代码**
+### 示例代码
 
 ```
 from openai import OpenAI
@@ -73,7 +69,7 @@ for chunk in completion:
         answer_content += delta.content
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -88,9 +84,9 @@ for chunk in completion:
 CompletionUsage(completion_tokens=42, prompt_tokens=9, total_tokens=51, prompt_tokens_details={'cached_tokens': 0})
 ```
 
-## Node.js
+#### Node.js
 
-### **示例代码**
+### 示例代码
 
 ```
 import OpenAI from "openai";
@@ -99,7 +95,7 @@ import process from 'process';
 // 初始化OpenAI客户端
 const openai = new OpenAI({
     // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: "sk-xxx"
-    apiKey: process.env.DASHSCOPE_API_KEY, 
+    apiKey: process.env.DASHSCOPE_API_KEY,
     // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
     baseURL: 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1'
 });
@@ -132,7 +128,7 @@ async function main() {
             }
 
             const delta = chunk.choices[0].delta;
-            
+
             // 只收集思考内容
             if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {
                 if (!isAnswering) {
@@ -159,7 +155,7 @@ async function main() {
 main();
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -174,11 +170,11 @@ main();
 { prompt_tokens: 9, completion_tokens: 42, total_tokens: 51, prompt_tokens_details: { cached_tokens: 0 } }
 ```
 
-## HTTP
+#### HTTP
 
-### **示例代码**
+### 示例代码
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -200,7 +196,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-## **其它功能**
+## 其它功能
 
 **功能**
 
@@ -290,7 +286,7 @@ mimo-v2.5-pro 不支持以下参数：`top_k`、`reasoning_effort`、`thinking_b
 
 限制模型的输出和思维链长度
 
-## **模型列表与计费**
+## 模型列表与计费
 
 MiMo 系列模型是小米直供的混合推理模型，提供思考与非思考两种模式。
 
@@ -300,7 +296,7 @@ MiMo 系列模型是小米直供的混合推理模型，提供思考与非思考
 
 > 思考模式下，思维链按照输出 Token 计费。
 
-## **错误码**
+## 错误码
 
 MiMo 系列模型由小米直供，其错误码与百炼平台标准错误码存在差异。调用 MiMo 模型时，请以下表为准。
 

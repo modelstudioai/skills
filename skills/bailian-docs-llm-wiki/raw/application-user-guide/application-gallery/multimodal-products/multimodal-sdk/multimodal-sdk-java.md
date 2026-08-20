@@ -2,15 +2,13 @@
 
 本文介绍了如何使用阿里云百炼大模型服务提供的实时多模交互服务端 Java SDK，包括SDK下载安装、关键接口及代码示例。
 
-## **多模态实时交互服务架构**
+## 多模态实时交互服务架构
 
-![多模态实时交互服务接入架构-通用-流程图](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7227370571/p976841.jpg)
+## 前提条件
 
-## **前提条件**
+开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
-开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
-
-## **环境和安装**
+## 环境和安装
 
 您可以通过maven或者gradle集成阿里云Dashscope官方SDK（版本号 >= 2.21.16）。
 
@@ -22,31 +20,26 @@
 </dependency>
 ```
 
-## **交互模式说明**
+## 交互模式说明
 
 SDK支持 **Push2Talk**、 **Tap2Talk**和**Duplex**（全双工）三种交互模式。
 
 -   Push2Talk: 长按说话，抬起结束（或者点击开始，点击结束 ）的收音方式。
-    
 -   Tap2Talk: 点击开始说话，自动判断用户说话结束的收音方式。
-    
 -   Duplex: 全双工交互，连接后支持在任意时刻说话，支持语音打断。视频交互建议使用duplex模式。
-    
 
-## **音频格式说明**
+## 音频格式说明
 
 服务端接入方式只支持 websocket 传输协议。
 
 -   音频格式说明：
     
     -   上行：支持 pcm 和 opus 格式音频进行语音识别。
-        
     -   下行：支持 pcm 和 mp3 音频流。
-        
 
-## **接口说明**
+## 接口说明
 
-### **MultiModalDialog**
+### MultiModalDialog
 
 服务入口类
 
@@ -64,7 +57,7 @@ SDK支持 **Push2Talk**、 **Tap2Talk**和**Duplex**（全双工）三种交互�
 public MultiModalDialog(MultiModalRequestParam param, MultiModalDialogCallback callback)
 ```
 
-#### **2**、**start**
+#### 2、start
 
 启动对话服务，返回onStarted回调。注意onStarted会回调dialogId。
 
@@ -75,7 +68,7 @@ public MultiModalDialog(MultiModalRequestParam param, MultiModalDialogCallback c
 public void start()
 ```
 
-#### **3**、startSpeech
+#### 3、startSpeech
 
 通知服务端开始上传音频，注意需要在Listening状态才可以调用。只需要在Push2Talk模式下调用。
 
@@ -86,7 +79,7 @@ public void start()
 public void startSpeech()
 ```
 
-#### **4**、sendAudioData
+#### 4、sendAudioData
 
 通知服务端上传音频。
 
@@ -99,7 +92,7 @@ public void startSpeech()
 public void sendAudioData(ByteBuffer audioFrame)
 ```
 
-#### **5**、stopSpeech
+#### 5、stopSpeech
 
 通知服务端结束上传音频。只需要在 Push2Talk(按键说) 模式下调用。
 
@@ -110,7 +103,7 @@ public void sendAudioData(ByteBuffer audioFrame)
 public void stopSpeech()
 ```
 
-#### **6**、**interrupt**
+#### 6、interrupt
 
 通知服务端，客户端需要打断当前交互，开始说话。会返回RequestAccepted。
 
@@ -121,7 +114,7 @@ public void stopSpeech()
 public void interrupt()
 ```
 
-#### **7**、localRespondingStarted
+#### 7、localRespondingStarted
 
 通知服务端，客户端开始播放tts音频。
 
@@ -132,7 +125,7 @@ public void interrupt()
 public void localRespondingStarted()
 ```
 
-#### **8**、localRespondingEnded
+#### 8、localRespondingEnded
 
 通知服务端，客户端结束播放tts音频。
 
@@ -143,18 +136,18 @@ public void localRespondingStarted()
 public void localRespondingEnded()
 ```
 
-#### **9**、**stop**
+#### 9、stop
 
 结束当前轮次对话。
 
 ```
 /**
  * Stops the conversation.
- */ 
+ */
 public void stop()
 ```
 
-#### **10**、getDialogState
+#### 10、getDialogState
 
 获得当前对话服务状态。DialogState枚举。
 
@@ -167,7 +160,7 @@ public void stop()
 public State.DialogState getDialogState()
 ```
 
-#### **11**、requestToRespond
+#### 11、requestToRespond
 
 端侧主动通过文本直接发起tts语音合成，或者向服务端发起图片等其他请求。
 
@@ -182,7 +175,7 @@ public State.DialogState getDialogState()
 public void requestToRespond(String type, String text, MultiModalRequestParam.updateParams updateParams)
 ```
 
-#### **12**、updateInfo
+#### 12、updateInfo
 
 更新参数信息等操作。
 
@@ -195,7 +188,7 @@ public void requestToRespond(String type, String text, MultiModalRequestParam.up
 public void updateInfo(MultiModalRequestParam.updateParams updateParams)
 ```
 
-#### **13 sendHeartBeat**
+#### 13 sendHeartBeat
 
 发送心跳信息，否则存在60秒超时报错。需要保持长连接场景使用，请每20秒调用一次发送接口。
 
@@ -329,9 +322,9 @@ public abstract class MultiModalDialogCallback {
 
 请求参数均支持builder模式设置参数，参数的值和说明参考如下。
 
-#### **Start建联请求参数**
+#### Start建联请求参数
 
-[Start - Input Message](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#b5d943046av48)
+[Start - Input Message](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#b5d943046av48)
 
 一级参数
 
@@ -578,7 +571,7 @@ object
 
 透传用户prompt自定义参数
 
-#### **RequestToRespond 请求参数**
+#### RequestToRespond 请求参数
 
 一级参数
 
@@ -649,7 +642,7 @@ object
 
 与Start消息中biz\_params相同，传递对话系统自定义参数。RequestToRespond的biz\_params参数只在本次请求中生效。
 
-#### **UpdateInfo 请求参数**
+#### UpdateInfo 请求参数
 
 一级参数
 
@@ -709,7 +702,7 @@ object
 
 与Start消息中biz\_params相同，传递对话系统自定义参数
 
-### **对话状态说明（**DialogState**）**
+### 对话状态说明（DialogState）
 
 voicechat服务有LISTENING、THINKING、RESPONDING三个状态，分别代表：
 
@@ -720,7 +713,7 @@ THINKING("Thinking"),表示机器人正在思考。
 RESPONDING("Responding")表示机器人正在生成语音或语音回复中。
 ```
 
-### **对话LLM输出结果**
+### 对话LLM输出结果
 
 onRespondingContent
 
@@ -813,13 +806,11 @@ object
 -   timestamps: 链路中各节点时间戳
     
 
-## **调用交互时序图**
+## 调用交互时序图
 
-![image.svg](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6421377471/p957898.svg)
+## 调用示例
 
-## **调用示例**
-
-### **1、初始化对话参数**
+### 1、初始化对话参数
 
 调用MultiModalRequestParam类中的各子类的builder方法构建参数。
 
@@ -851,7 +842,7 @@ MultiModalRequestParam params =
             .build();
 ```
 
-### **2、实例化回调函数**
+### 2、实例化回调函数
 
 ```
 public static MultiModalDialogCallback getCallback() {
@@ -863,19 +854,19 @@ public static MultiModalDialogCallback getCallback() {
   }
 ```
 
-### **3、创建**MultiModalDialog对象
+### 3、创建MultiModalDialog对象
 
 `conversation = new MultiModalDialog(params, getCallback());`
 
-### **完整调用示例**
+### 完整调用示例
 
 建议使用 Maven 或 Gradle 构建工具运行代码示例，并在相应的配置文件（Maven 的 pom.xml 或 Gradle 的 build.gradle）中添加所需的依赖项，包括 Gson、OkHttp、RxJava、Apache Log4j、Lombok 和 JUnit。
 
-## 配置文件
+#### 配置文件
 
 具体配置可能因所使用的 Maven 或 Gradle 版本而异，以下内容仅供参考，请根据实际环境进行相应调整。
 
-## Maven
+Maven
 
 ```
 <?xml version="1.0" encoding="UTF-8"?>
@@ -992,7 +983,7 @@ public static MultiModalDialogCallback getCallback() {
 </project>
 ```
 
-## Gradle
+Gradle
 
 ```
 plugins {
@@ -1047,9 +1038,9 @@ test {
 }
 ```
 
-## Java代码
+#### Java代码
 
-## MultiModalDialogTestCases.java
+MultiModalDialogTestCases.java
 
 ```
 package org.alibaba.speech.examples.speech_plus;
@@ -1082,7 +1073,7 @@ import static java.lang.Thread.sleep;
  * Multi-modal dialog test cases for demonstrating various interaction modes
  * including push-to-talk, tap-to-talk, duplex communication, text synthesis,
  * visual Q&A, and agent DJ functionality.
- * 
+ *
  * @author songsong.shao
  * @date 2025/4/28
  */
@@ -1103,7 +1094,7 @@ public class MultiModalDialogTestCases {
     private static boolean vqaUseUrl = false;
     private volatile boolean isVideoStreamingActive = false;
     private Thread videoStreamingThread;
-    
+
     // Configuration parameters - should be set before running tests
     public static String workspaceId = "";
     public static String appId = "";
@@ -1117,7 +1108,7 @@ public class MultiModalDialogTestCases {
      */
     public void testMultimodalPush2Talk() {
         log.info("############ Starting Push2Talk Test ############");
-        
+
         try {
             // Build request parameters for push-to-talk mode
             MultiModalRequestParam params = buildBaseRequestParams("push2talk");
@@ -1129,22 +1120,22 @@ public class MultiModalDialogTestCases {
 
             // Wait for the system to enter listening state
             waitForListeningState();
-            
+
             // Start speech recognition
             conversation.startSpeech();
-            
+
             // Send audio data from file
             sendAudioFromFile("../../../../sample-data/1_plus_1.wav");
-            
+
             // Stop speech recognition
             conversation.stopSpeech();
 
             // Wait for conversation completion
             waitForConversationCompletion(2);
-            
+
             // Clean up
             stopConversation();
-            
+
         } catch (Exception e) {
             log.error("Error in push2talk test: ", e);
         } finally {
@@ -1158,7 +1149,7 @@ public class MultiModalDialogTestCases {
      */
     public void testMultimodalTap2Talk() {
         log.info("############ Starting Tap2Talk Test ############");
-        
+
         try {
             // Build request parameters for tap-to-talk mode
             MultiModalRequestParam params = buildBaseRequestParams("tap2talk");
@@ -1170,19 +1161,19 @@ public class MultiModalDialogTestCases {
 
             // Wait for listening state
             waitForListeningState();
-            
+
             // Manually start speech (required for tap2talk mode)
             conversation.startSpeech();
-            
+
             // Send audio data
             sendAudioFromFile("../../../../sample-data/1_plus_1.wav");
 
             // Wait for conversation completion
             waitForConversationCompletion(2);
-            
+
             // Clean up
             stopConversation();
-            
+
         } catch (Exception e) {
             log.error("Error in tap2talk test: ", e);
         } finally {
@@ -1196,7 +1187,7 @@ public class MultiModalDialogTestCases {
      */
     public void testMultimodalDuplex() {
         log.info("############ Starting Duplex Test ############");
-        
+
         try {
             // Build request parameters for duplex mode
             MultiModalRequestParam params = buildBaseRequestParams("duplex");
@@ -1208,16 +1199,16 @@ public class MultiModalDialogTestCases {
 
             // Wait for listening state
             waitForListeningState();
-            
+
             // Send audio data directly (no manual start needed for duplex)
             sendAudioFromFile("../../../../sample-data/1_plus_1.wav");
 
             // Wait for conversation completion
             waitForConversationCompletion(2);
-            
+
             // Clean up
             stopConversation();
-            
+
         } catch (Exception e) {
             log.error("Error in duplex test: ", e);
         } finally {
@@ -1231,11 +1222,11 @@ public class MultiModalDialogTestCases {
      */
     public void testMultimodalTextSynthesizer() {
         log.info("############ Starting Text Synthesizer Test ############");
-        
+
         try {
             // Initialize file writer for audio output
             fileWriterUtil = new FileWriterUtil();
-            
+
             // Build request parameters
             MultiModalRequestParam params = buildBaseRequestParams("push2talk");
             log.debug("Request parameters: {}", JsonUtils.toJson(params));
@@ -1246,23 +1237,23 @@ public class MultiModalDialogTestCases {
 
             // Wait for listening state
             waitForListeningState();
-            
+
             // Create output file for synthesized audio
             fileWriterUtil.createFile("./test.pcm");
-            
+
             // Request text synthesis
             String textToSynthesize = "幸福是一种技能，是你摒弃了外在多余欲望后的内心平和。";
             conversation.requestToRespond("transcript", textToSynthesize, null);
 
             // Wait for synthesis completion
             waitForConversationCompletion(2);
-            
+
             // Finalize audio file
             fileWriterUtil.finishWriting();
-            
+
             // Clean up
             conversation.stop();
-            
+
         } catch (IOException e) {
             log.error("File operation error in text synthesizer test: ", e);
         } catch (Exception e) {
@@ -1278,10 +1269,10 @@ public class MultiModalDialogTestCases {
      */
     public void testMultimodalVQA() {
         log.info("############ Starting VQA Test (URL-based) ############");
-        
+
         try {
             vqaUseUrl = true;
-            
+
             // Build request parameters
             MultiModalRequestParam params = buildBaseRequestParams("push2talk");
             log.debug("Request parameters: {}", JsonUtils.toJson(params));
@@ -1292,16 +1283,16 @@ public class MultiModalDialogTestCases {
 
             // Wait for listening state
             waitForListeningState();
-            
+
             // Send VQA request
             conversation.requestToRespond("prompt", "拍照看看前面有什么东西", null);
-            
+
             // Wait for VQA processing completion
             waitForConversationCompletion(3);
-            
+
             // Clean up
             stopConversation();
-            
+
         } catch (Exception e) {
             log.error("Error in VQA test: ", e);
         } finally {
@@ -1315,10 +1306,10 @@ public class MultiModalDialogTestCases {
      */
     public void testMultimodalVQABase64() {
         log.info("############ Starting VQA Test (Base64-based) ############");
-        
+
         try {
             vqaUseUrl = false;
-            
+
             // Build request parameters
             MultiModalRequestParam params = buildBaseRequestParams("push2talk");
             log.debug("Request parameters: {}", JsonUtils.toJson(params));
@@ -1329,16 +1320,16 @@ public class MultiModalDialogTestCases {
 
             // Wait for listening state
             waitForListeningState();
-            
+
             // Send VQA request
             conversation.requestToRespond("prompt", "拍照看看前面有什么东西", null);
-            
+
             // Wait for VQA processing completion
             waitForConversationCompletion(3);
-            
+
             // Clean up
             stopConversation();
-            
+
         } catch (Exception e) {
             log.error("Error in VQA Base64 test: ", e);
         } finally {
@@ -1352,10 +1343,10 @@ public class MultiModalDialogTestCases {
      */
     public void testMultimodalAdjustBrightness() {
         log.info("############ Starting Brightness Adjustment Test ############");
-        
+
         try {
             vqaUseUrl = true;
-            
+
             // Build request parameters
             MultiModalRequestParam params = buildBaseRequestParams("push2talk");
             log.debug("Request parameters: {}", JsonUtils.toJson(params));
@@ -1366,7 +1357,7 @@ public class MultiModalDialogTestCases {
 
             // Wait for listening state
             waitForListeningState();
-            
+
             // Send brightness adjustment request
             conversation.requestToRespond("prompt", "调高亮度到10", null);
 
@@ -1384,12 +1375,12 @@ public class MultiModalDialogTestCases {
 
             // Wait for processing completion
             waitForConversationCompletion(2);
-            
+
             log.info("############ Before stopping conversation ############");
-            
+
             // Clean up
             stopConversation();
-            
+
         } catch (Exception e) {
             log.error("Error in brightness adjustment test: ", e);
         } finally {
@@ -1403,10 +1394,10 @@ public class MultiModalDialogTestCases {
      */
     public void testMultimodalAgentDJ() {
         log.info("############ Starting Agent DJ Test ############");
-        
+
         try {
             vqaUseUrl = false;
-            
+
             // Build request parameters
             MultiModalRequestParam params = buildBaseRequestParams("push2talk");
             log.debug("Request parameters: {}", JsonUtils.toJson(params));
@@ -1417,16 +1408,16 @@ public class MultiModalDialogTestCases {
 
             // Wait for listening state
             waitForListeningState();
-            
+
             // Send DJ request
             conversation.requestToRespond("prompt", "打开新闻电台", null);
-            
+
             // Wait for DJ processing completion
             waitForConversationCompletion(3);
-            
+
             // Clean up
             stopConversation();
-            
+
         } catch (Exception e) {
             log.error("Error in Agent DJ test: ", e);
         } finally {
@@ -1560,32 +1551,32 @@ public class MultiModalDialogTestCases {
      */
     private void sendAudioFromFile(String filePath) {
         File audioFile = new File(filePath);
-        
+
         if (!audioFile.exists()) {
             log.error("Audio file not found: {}", filePath);
             return;
         }
-        
+
         try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile)) {
             byte[] audioBuffer = new byte[AUDIO_CHUNK_SIZE];
             int bytesRead;
             int totalBytesRead = 0;
-            
+
             log.info("Starting to send audio data from: {}", filePath);
-            
+
             // Read and send audio data in chunks
             while ((bytesRead = audioInputStream.read(audioBuffer)) != -1) {
                 totalBytesRead += bytesRead;
-                
+
                 // Send audio chunk to conversation
                 conversation.sendAudioData(ByteBuffer.wrap(audioBuffer, 0, bytesRead));
-                
+
                 // Add small delay to simulate real-time audio streaming
                 Thread.sleep(SLEEP_INTERVAL_MS);
             }
-            
+
             log.info("Finished sending audio data. Total bytes sent: {}", totalBytesRead);
-            
+
         } catch (Exception e) {
             log.error("Error sending audio from file: {}", filePath, e);
         }
@@ -1634,7 +1625,7 @@ public class MultiModalDialogTestCases {
      * Implementation of MultiModalDialogCallback for handling various conversation events
      */
     public static class MultiModalDialogCallbackImpl extends MultiModalDialogCallback {
-        
+
         @Override
         public void onConnected() {
             log.info("WebSocket connection established");
@@ -1659,7 +1650,7 @@ public class MultiModalDialogTestCases {
         public void onSpeechEnded(String dialogId) {
             log.info("Speech recognition ended for dialog: {}", dialogId);
         }
-        
+
         @Override
         public void onError(String dialogId, String errorCode, String errorMsg) {
             log.error("Error occurred - Dialog: {}, Code: {}, Message: {}", dialogId, errorCode, errorMsg);
@@ -1670,7 +1661,7 @@ public class MultiModalDialogTestCases {
         public void onStateChanged(State.DialogState state) {
             log.info("Dialog state changed to: {}", state);
             currentState = state;
-            
+
             if (currentState == State.DialogState.LISTENING) {
                 enterListeningTimes++;
                 log.info("Entered listening state {} times", enterListeningTimes);
@@ -1709,7 +1700,7 @@ public class MultiModalDialogTestCases {
         @Override
         public void onRespondingContent(String dialogId, JsonObject content) {
             log.info("Response content received - Dialog: {}, Content: {}", dialogId, content);
-            
+
             // Handle visual Q&A commands
             handleVisualQACommands(content);
         }
@@ -1738,33 +1729,33 @@ public class MultiModalDialogTestCases {
             if (!content.has("extra_info")) {
                 return;
             }
-            
+
             JsonObject extraInfo = content.getAsJsonObject("extra_info");
             if (!extraInfo.has("commands")) {
                 return;
             }
-            
+
             try {
                 String commandsStr = extraInfo.get("commands").getAsString();
                 log.info("Processing commands: {}", commandsStr);
-                
+
                 JsonArray commands = new Gson().fromJson(commandsStr, JsonArray.class);
-                
+
                 for (JsonElement command : commands) {
                     JsonObject commandObj = command.getAsJsonObject();
-                    
+
                     if (commandObj.has("name")) {
                         String commandName = commandObj.get("name").getAsString();
-                        
+
                         if ("visual_qa".equals(commandName)) {
                             log.info("Visual Q&A command detected - triggering image capture");
-                            
+
                             // Send mock image data for visual Q&A
-                            MultiModalRequestParam.UpdateParams updateParams = 
+                            MultiModalRequestParam.UpdateParams updateParams =
                                     MultiModalRequestParam.UpdateParams.builder()
                                             .images(getMockImageRequest())
                                             .build();
-                            
+
                             if (conversation != null) {
                                 conversation.requestToRespond("prompt", "", updateParams);
                             }
@@ -1783,10 +1774,10 @@ public class MultiModalDialogTestCases {
      */
     public static List<Object> getMockImageRequest() {
         List<Object> images = new ArrayList<>();
-        
+
         try {
             JsonObject imageObject = new JsonObject();
-            
+
             if (vqaUseUrl) {
                 // Use URL-based image
                 imageObject.addProperty("type", "url");
@@ -1798,14 +1789,14 @@ public class MultiModalDialogTestCases {
                 imageObject.addProperty("type", "base64");
                 imageObject.addProperty("value", getLocalImageBase64());
             }
-            
+
             images.add(imageObject);
 //            log.info("Created mock image data with type: {}", vqaUseUrl ? "URL" : "Base64");
-            
+
         } catch (Exception e) {
             log.error("Error creating mock image data: ", e);
         }
-        
+
         return images;
     }
 
@@ -1815,16 +1806,16 @@ public class MultiModalDialogTestCases {
      */
     public static String getLocalImageBase64() {
         String imagePath = "./src/main/resources/jpeg-bridge.jpg";
-        
+
         try (FileInputStream fileInputStream = new FileInputStream(new File(imagePath))) {
             byte[] imageBytes = new byte[fileInputStream.available()];
             fileInputStream.read(imageBytes);
-            
+
             String base64Image = Base64.getEncoder().encodeToString(imageBytes);
             log.info("Successfully converted image to Base64, size: {} bytes", imageBytes.length);
-            
+
             return base64Image;
-            
+
         } catch (IOException e) {
             log.error("Error converting image to Base64: {}", imagePath, e);
             return null;
@@ -1878,7 +1869,7 @@ public class MultiModalDialogTestCases {
      */
     public static void main(String[] args) {
         log.info("############ Initializing Multi-modal Dialog Tests ############");
-        
+
         // Configure WebSocket API URL
         Constants.baseWebsocketApiUrl = "wss://dashscope.aliyuncs.com/api-ws/v1/inference";
         log.info("WebSocket API URL: {}", Constants.baseWebsocketApiUrl);
@@ -1891,7 +1882,7 @@ public class MultiModalDialogTestCases {
         MultiModalDialogTestCases.appId = "";
         MultiModalDialogTestCases.apiKey = "";
         MultiModalDialogTestCases.model = "multimodal-dialog";
-        
+
         // Validate configuration
         if (apiKey.isEmpty() || workspaceId.isEmpty() || appId.isEmpty()) {
             log.error("Please configure workspaceId, appId, and apiKey before running tests");
@@ -1900,11 +1891,11 @@ public class MultiModalDialogTestCases {
 
         // Create test instance and run specific test
         MultiModalDialogTestCases testCases = new MultiModalDialogTestCases();
-        
+
         try {
             // Run the desired test case
             testCases.testMultimodalPush2Talk();
-            
+
             // Uncomment other test cases as needed:
             // testCases.testMultimodalTap2Talk();
             // testCases.testMultimodalDuplex();
@@ -1914,17 +1905,17 @@ public class MultiModalDialogTestCases {
             // testCases.testMultimodalAdjustBrightness();
             // testCases.testMultimodalAgentDJ();
             // testCases.testMultimodalLiveAI();
-            
+
         } catch (Exception e) {
             log.error("Error running test cases: ", e);
         }
-        
+
         log.info("############ Multi-modal Dialog Tests Completed ############");
     }
 }
 ```
 
-## FileWriterUtil.java
+FileWriterUtil.java
 
 ```
 import java.io.File;
@@ -1984,9 +1975,9 @@ public class FileWriterUtil {
 }
 ```
 
-## **更多SDK接口使用说明**
+## 更多SDK接口使用说明
 
-### **VQA交互**
+### VQA交互
 
 VQA 是对话过程中通过发送图片实现图片+语音的多模交互的功能。
 
@@ -1995,7 +1986,6 @@ VQA 是对话过程中通过发送图片实现图片+语音的多模交互的功
 当收到拍照指令后， 发送图片链接或者base64数据（支持图片大小<180KB）。
 
 -   建联后发起拍照请求。
-    
 
 ```
 @Test
@@ -2040,7 +2030,6 @@ VQA 是对话过程中通过发送图片实现图片+语音的多模交互的功
 ```
 
 -   处理"visual\_qa" command和上传拍照。
-    
 
 ```
 @Override
@@ -2094,7 +2083,7 @@ public static List<Object> getMockOSSImage() {
   }
 ```
 
-### **文本合成TTS**
+### 文本合成TTS
 
 SDK支持通过文本直接请求服务端合成音频。
 
@@ -2149,19 +2138,17 @@ SDK支持通过文本直接请求服务端合成音频。
   }
 ```
 
-### **通过Websocket请求LiveAI**
+### 通过Websocket请求LiveAI
 
 LiveAI （视频通话）是百炼多模交互提供的官方Agent。通过Java SDK发送图片序列的方式，可以实现视频通话的功能。 我们推荐您的服务端和客户端（网页或者APP）通过RTC传输视频和音频，然后将服务端采集到的视频帧以 500ms/张 的速度发送给SDK，同时保持实时的音频输入。
 
 注意：LiveAI发送图片只支持base64编码，每张图片的大小在180K以下。
 
 -   LiveAI调用时序
-    
 
-#### ![截屏2025-06-20 11](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975541.png)
+#### 
 
 -   关键代码示例
-    
 
 完整代码请参考 [Github示例代码](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/multimodal_dialog)。
 
@@ -2271,17 +2258,15 @@ public void testMultimodalLiveAI() {
     }
 ```
 
-### **自定义提示词变量和传值**
+### 自定义提示词变量和传值
 
 -   在管控台项目【提示词】配置自定义变量。
-    
 
 如下示例，定义了一个`user_name`字段代表用户昵称。并将变量`user_name`以占位符形式${user\_name} 插入到Prompt 中。
 
 其中**自定义变量**按钮位于提示词配置页面顶部的**可引入变量**区域。
 
 -   在代码中设置变量。
-    
 
 如下示例，设置`"user_name" = "大米"`。
 
@@ -2294,7 +2279,7 @@ MultiModalRequestParam.builder()
                         .build())
         .apiKey(apiKey)
         .model(model)
-        .build();   
+        .build();
 private HashMap<String, String> setUserPromptParams() {
         HashMap<String, String> promptSettings = new HashMap<>();
         promptSettings.put("user_name", "大米");
@@ -2303,16 +2288,14 @@ private HashMap<String, String> setUserPromptParams() {
 ```
 
 -   请求回复
-    
 
 智能体在响应中使用**亲爱的大米**称呼用户，例如："亲爱的大米，今天你哪里的天气让你关心呢？"，表明 `user_name` 变量已成功传入并在 Prompt 中生效。
 
-### **ASR结果即时纠错**
+### ASR结果即时纠错
 
 在对话过程中，ASR 识别结果有可能出现错误或者非预期的结果。 除了配置热词之外，您也可以通过即时纠错功能接口上传词表进行实时干预。
 
 -   参数说明。
-    
 
 通过配置UpStream的AsrPostProcessing 参数来配置纠错词表。
 
@@ -2360,13 +2343,11 @@ String
 
 **partial**：部分匹配，文本中部分字符与source相同即匹配成功
 
-**说明**
-
-注意：使用本功能 Java SDK 版本需>=2.21.14。
+**说明**注意：使用本功能 Java SDK 版本需>=2.21.14。
 
 ```
 //构建AsrPostProcessing对象
-MultiModalRequestParam.UpStream.AsrPostProcessing asrPostProcessing = 
+MultiModalRequestParam.UpStream.AsrPostProcessing asrPostProcessing =
 MultiModalRequestParam.UpStream.AsrPostProcessing
 .builder()
 .replaceWords(Collections.singletonList(
@@ -2380,6 +2361,6 @@ MultiModalRequestParam.UpStream.AsrPostProcessing
 // 在创建对话请求时将asrPostProcessing 传入UpStream.AsrPostProcessing
 ```
 
-### **更多使用示例**
+### 更多使用示例
 
 请参考 [Github示例代码](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/multimodal_dialog)。

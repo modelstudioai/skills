@@ -25,25 +25,19 @@
 Prompt反馈优化功能将做以下工作：
 
 1.  将**样例数据**添加到Prompt中。
-    
 2.  对prompt在**评测数据**上的结果（由推理模型生成）进行多轮自动化评估、反思和优化，总结生成内容提示。
-    
 
-相较于[Prompt自动优化](https://help.aliyun.com/zh/model-studio/optimize-prompt)，由于Prompt反馈优化将用户提供的**数据**作为优化的评估标准，使得prompt在用户实际场景中的回复质量更高。
+相较于[Prompt自动优化](raw/application-user-guide/prompt/optimize-prompt.md)，由于Prompt反馈优化将用户提供的**数据**作为优化的评估标准，使得prompt在用户实际场景中的回复质量更高。
 
-**说明**
-
-推理模型推荐选择千问-max。
+**说明**推理模型推荐选择千问-max。
 
 阿里云百炼将自动选取样例数据集的部分数据添加到Prompt中，建议包含5~10条数据，且每种场景至少包含一条数据。
 
 阿里云百炼将基于Prompt在评测数据集与推理模型上的表现，建议至少包含20条数据，数据越多，Prompt优化效果越好。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5017661871/CAEQURiBgICCqMmqohkiIDdlNjhiMjg3NTMxYTQ4ZjRhOWNiYmUwY2RkYmFiMGI54829019_20241218164154.775.svg)
-
 ## 案例实践
 
-### **案例背景**
+### 案例背景
 
 为了提高一家汽车论坛的内容管理效率，计划使用大模型进行文章的类型分类。分类标准如下：
 
@@ -62,9 +56,9 @@ Prompt反馈优化功能将做以下工作：
 
 经过一段时间的学习，您发现进行Prompt工程是最合适的选择。因此为了让应用更加准确地分类，您手动对典型文章进行了分类。以下为数据样例：
 
-### **手动分类数据**
+手动分类数据
 
-#### **案例样例数据：**
+#### 案例样例数据：
 
 **query**
 
@@ -90,7 +84,7 @@ Prompt反馈优化功能将做以下工作：
 
 {"type": "经典怀旧"}
 
-#### **案例评测数据：**
+#### 案例评测数据：
 
 **query**
 
@@ -118,9 +112,9 @@ Prompt反馈优化功能将做以下工作：
 
 阿里云百炼提供了Prompt反馈优化功能，您决定使用该功能，结合手动分类数据，生成符合您期望的应用Prompt。
 
-### **操作步骤**
+### 操作步骤
 
-在阿里云百炼的****[提示词](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt)**** > **反馈优化**页面，单击**新增优化任务**。
+在阿里云百炼的****[提示词](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt)**反馈优化**页面，单击**新增优化任务**。
 
 **步骤一：选择****推理模型**，阿里云百炼将在该模型上进行多轮Prompt评测。
 
@@ -144,6 +138,6 @@ Prompt反馈优化功能将做以下工作：
 
 **步骤五：开始优化**
 
-### **优化后使用Prompt**
+### 优化后使用Prompt
 
 -   支持将优化后的Prompt**保存为Prompt模板**或直接基于该Prompt**创建智能体应用**。

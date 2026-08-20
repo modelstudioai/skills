@@ -1,14 +1,14 @@
-# ListDataPermissions - 权限-列表
+# ListDataPermissions
 
 权限-列表 - 数据集
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListDataPermissions)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
- [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListDataPermissions)
+[调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListDataPermissions)
 
-## **授权信息**
+## 授权信息
 
 当前API暂无授权信息透出。
 
@@ -30,7 +30,7 @@ string
 
 是
 
-百炼业务空间唯一标识：[获取 workspaceId](https://help.aliyun.com/zh/model-studio/use-workspace)
+百炼业务空间唯一标识：获取 workspaceId
 
 llm-xx
 
@@ -80,7 +80,7 @@ integer
 
 1
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -273,6 +273,6 @@ integer
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
 
-## **变更历史**
+## 变更历史
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/ListDataPermissions#workbench-doc-change-demo)。

@@ -1,4 +1,4 @@
-# RunSearchGeneration - 妙搜-智能搜索
+# RunSearchGeneration
 
 AI妙搜-智能搜索生成：对应妙搜首页的搜索生成能力。此接口支持通用搜索和媒资搜索。支持用户问题澄清、多模态知识搜索、多agent生成等能力。 - 通用搜索：可以对数据集中知识进行语义检索，并对搜索结果进行多agent后处理，包括总结生成、摘编、时间线总结等。 - 媒资搜索：应搜尽搜，全文检索，召回更多相关知识，并可进行多agent后处理，包括聚类、新闻抽取等。
 
@@ -7,33 +7,24 @@ AI妙搜-智能搜索生成：对应妙搜首页的搜索生成能力。此接�
 ### 接入说明：
 
 -   当前接口为 http-sse 协议。
-    
 -   由于 OpenAPI 门户目前对 SSE 推理协议不兼容（无法直接调试），接口 SDK 方式调用示例（支持**java、python**版本的 **sdk**）请参考[妙搜最佳实践](https://help.aliyun.com/zh/model-studio/user-guide/best-practices-for-miaosou-api/?spm=a2c4g.11186623.help-menu-2400256.d_1_3_3_2_1_2.42a64a34eIyBhn)文档。
-    
 -   其中获取 Java 异步 SDK 的最新版本：请点击[链接](https://api.aliyun.com/api-tools/sdk/AiMiaoBi?version=2023-08-01&language=java-async-tea&tab=primer-doc)获取。
-    
 
 ### 搜索数据来源：
 
 支持三种类型数据集：详见[妙搜最佳实践](https://help.aliyun.com/zh/model-studio/user-guide/best-practices-for-miaosou-api/?spm=a2c4g.11186623.help-menu-2400256.d_1_3_3_2_1_2.42a64a34eIyBhn)
 
 -   内置”互联网检索“数据集：支持互联网开放域文本、图片、视频（暂未开放）的搜索；
-    
 -   语义（RAG）数据集：可以管理企业私域知识库，支持文本、图片、视频、语音（暂未开放）；
-    
 -   三方 api 数据集：可以直接集成企业自己的搜索 api。
-    
 
 ## 权限说明
 
 ### 前置条件
 
 -   登录阿里云百炼控制台，确认阿里云百炼是开通可用状态。
-    
 -   主账号调用：默认有所有 API 调用权限。
-    
 -   子账号调用：子账号默认无权限（AccessForbid）调用当前 API，需要同时在 **RAM 控制台**和**阿里云百炼控制台**中做授权。
-    
 
 ### RAM 控制台授权说明
 
@@ -49,11 +40,9 @@ AI妙搜-智能搜索生成：对应妙搜首页的搜索生成能力。此接�
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/RunSearchGeneration)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
- [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/RunSearchGeneration)
-
-## **授权信息**
+## 授权信息
 
 下表是API对应的授权信息，可以在RAM权限策略语句的`Action`元素中使用，用来给RAM用户或RAM角色授予调用此API的权限。具体说明如下：
 
@@ -63,10 +52,8 @@ AI妙搜-智能搜索生成：对应妙搜首页的搜索生成能力。此接�
     
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
     
-    -   对于必选的资源类型，用前面加 \* 表示。
-        
+    -   对于必选的资源类型，用前面加 \* 表示。
     -   对于不支持资源级授权的操作，用`全部资源`表示。
-        
 -   条件关键字：是指云产品自身定义的条件关键字。
     
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
@@ -130,9 +117,7 @@ string
 
 会话任务唯一标识
 
-**说明**
-
-TaskId 默认无需填写，系统将自动生成。当后续任务填写的 TaskId 相同时，表示这些任务属于同一组对话。
+**说明**TaskId 默认无需填写，系统将自动生成。当后续任务填写的 TaskId 相同时，表示这些任务属于同一组对话。
 
 7AA2AE16-D873-5C5F-9708-15396C382EB1
 
@@ -175,9 +160,7 @@ string
 生成技术：
 
 -   copilotReference：问答式搜索
-    
 -   copilotPrecise：纯搜索
-    
 
 **枚举值：**
 
@@ -239,9 +222,7 @@ Code、DatasetName 两个字段必传，来唯一标识一个搜索源。
 内置互联网搜索对应：
 
 -   Code=SystemSearch
-    
 -   DatasetName=QuarkCommonNews
-    
 
 Code
 
@@ -252,11 +233,8 @@ string
 搜索源类型：
 
 -   SystemSearch：系统内置搜索
-    
 -   CustomSemanticSearch：自建语义索引搜索
-    
 -   ThirdSearch：三方 API 搜索
-    
 
 **枚举值：**
 
@@ -300,13 +278,9 @@ string
 搜索范围：
 
 -   text：文档
-    
 -   image：图片
-    
 -   audio：音频
-    
 -   video：视频
-    
 
 **枚举值：**
 
@@ -494,17 +468,11 @@ string
 搜索类型：
 
 -   TextGenerate：总结生成答案（默认）
-    
 -   ExcerptGenerate：用原文语句回答
-    
 -   TimelineGenerate：按时间线总结
-    
 -   PreciseSearch：纯搜索（追问）
-    
 -   ClusterGenerate：聚类
-    
 -   ExtractNewsElementGenerate：抽取新闻要素
-    
 
 **枚举值：**
 
@@ -540,13 +508,9 @@ string
 回答的详细程度：
 
 -   concise：简洁（默认）
-    
 -   enhance：增强
-    
 -   free：自由
-    
 -   deepResearch：研究
-    
 
 **枚举值：**
 
@@ -586,11 +550,8 @@ string
 跳过的生成选项
 
 -   think(query 改写)
-    
 -   multimodalSearchThink（多模态搜索思考）
-    
 -   queryRecommend（query 推荐）
-    
 
 think
 
@@ -623,7 +584,29 @@ string
 {content}
 ```
 
-\# 角色 你是一个专业的文章检索和问答专家，擅长文章检索和回答用户问题。 # 任务目标 请你根据检索到的相关文章，回答或表述用户问题“{query}”。 # 任务限制 - 如果用户问题中提到具体日期，请考虑知识日期做筛选。 - 生成内容结构条理。 - 生成内容尽量精简。 - 不要使用其他数据，不要杜撰。 - 如果不能回答用户问题，请输出对应语言的拒识文案: - 中文："根据已知信息无法回答。" - 英文："Unable to answer based on the known information." # 输入数据 ## 检索到的相关文章 {content}
+# 角色
+
+你是一个专业的文章检索和问答专家，擅长文章检索和回答用户问题。
+
+# 任务目标
+
+请你根据检索到的相关文章，回答或表述用户问题“{query}”。
+
+# 任务限制
+
+-   如果用户问题中提到具体日期，请考虑知识日期做筛选。
+-   生成内容结构条理。
+-   生成内容尽量精简。
+-   不要使用其他数据，不要杜撰。
+-   如果不能回答用户问题，请输出对应语言的拒识文案:
+    -   中文："根据已知信息无法回答。"
+    -   英文："Unable to answer based on the known information."
+
+# 输入数据
+
+## 检索到的相关文章
+
+{content}
 
 ModelCustomVlPromptTemplate
 
@@ -655,7 +638,30 @@ string
 {content}
 ```
 
-\# 角色 你是一个专业的文章检索和问答专家，擅长文章检索和回答用户问题。 # 任务目标 请你根据检索到的相关文章和图片，回答或表述用户问题“{query}”。 # 任务限制 - 如果用户问题中提到具体日期，请考虑知识日期做筛选。 - 生成内容结构条理。 - 生成内容尽量精简。 - 如果图片内容可以回答，可以忽略文章内容。 - 不要使用其他数据，不要杜撰。 - 如果不能回答用户问题，请输出对应语言的拒识文案: - 中文："根据已知信息无法回答。" - 英文："Unable to answer based on the known information." # 输入数据 ## 检索到的相关文章 {content}
+# 角色
+
+你是一个专业的文章检索和问答专家，擅长文章检索和回答用户问题。
+
+# 任务目标
+
+请你根据检索到的相关文章和图片，回答或表述用户问题“{query}”。
+
+# 任务限制
+
+-   如果用户问题中提到具体日期，请考虑知识日期做筛选。
+-   生成内容结构条理。
+-   生成内容尽量精简。
+-   如果图片内容可以回答，可以忽略文章内容。
+-   不要使用其他数据，不要杜撰。
+-   如果不能回答用户问题，请输出对应语言的拒识文案:
+    -   中文："根据已知信息无法回答。"
+    -   英文："Unable to answer based on the known information."
+
+# 输入数据
+
+## 检索到的相关文章
+
+{content}
 
 AgentContext
 
@@ -831,7 +837,7 @@ string
 
 文章 URL
 
-https://www.example.com/aaa.docx
+[https://www.example.com/aaa.docx](https://www.example.com/aaa.docx)
 
 Summary
 
@@ -1000,9 +1006,7 @@ string
 模型 id：
 
 -   quanmiao-max：全妙-Max
-    
 -   quanmiao-plus：全妙-Plus
-    
 
 quanmiao-max
 
@@ -1014,9 +1018,9 @@ string
 
 图片 url：适用于图搜、图文（prompt）混合搜索生成等场景
 
-http://xxxx
+[http://xxxx](http://xxxx)
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -5524,8 +5528,6 @@ xx
 
 ## 错误码
 
-   
-
 **HTTP status code**
 
 **错误码**
@@ -5544,6 +5546,6 @@ You are not authorized to perform this action.
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
 
-## **变更历史**
+## 变更历史
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/RunSearchGeneration#workbench-doc-change-demo)。

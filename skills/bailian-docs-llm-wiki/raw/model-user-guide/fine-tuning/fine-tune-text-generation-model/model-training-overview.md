@@ -1,43 +1,30 @@
 # 模型调优简介
 
-当您在尝试如 Prompt 工程、插件调用等优化方法后，模型表现仍然不及预期时，请使用阿里云百炼的模型调优。模型调优作为改进模型表现的核心策略，可以很好地提升模型在特定行业/业务的表现，对齐人类偏好，降低输出延迟。模型调优包含模型微调（SFT）、继续预训练（CPT）、模型偏好训练（DPO）三种模型训练方式。
+**重要**本文档仅适用于华北2（北京）地域。
 
-**重要**
-
-本文档仅适用于华北2（北京）地域。
-
-## **模型调优介绍**
+## 模型调优介绍
 
 模型调优作为重要的模型效果优化方式，可以：
 
 -   **提升模型在特定行业/业务表现**
-    
 -   **降低模型输出延迟**
-    
 -   **抑制模型幻觉**
-    
 -   **对齐人类的价值观或偏好**
-    
 -   **使用调优后的轻量级模型替代规模更大的模型**
-    
 
 模型在调优过程中，会学习训练数据中的知识、语气、表达习惯、自我认知等业务/场景特征。也由于已经在训练过程中学习到了大量特定行业/场景的样例，训练后模型 One-Shot 或者 Zero-Shot 的 Prompt 效果会比训练前 Few-Shot 效果更好，这样可以节省大量输入 token，从而降低模型输出延迟。
 
-### **模型调优流程**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2119107871/CAEQZhiBgMDg9PGS2hkiIDNlZDFiMGRlMTJhOTQ1YzJhMmNjNDM3NzQ1ZjNiOGZk4608430_20240830103738.564.svg)
+### 模型调优流程
 
 详情参见：
 
-**支持的模型**
+支持的模型
 
-#### **支持的模型**
+#### 支持的模型
 
 #### 文本生成
 
-**说明**
-
-Qwen3.7-Plus-2026-05-26 调优后部署请联系商务经理。
+**说明**Qwen3.7-Plus-2026-05-26 调优后部署请联系商务经理。
 
 **模型服务**
 
@@ -319,6 +306,8 @@ qwen-plus-character-2025-11-06
 
 支持
 
+> `-Base`表示该模型只完成了预训练，虽然模型内已经存储了海量的知识，但无法正常进行对话。
+
 #### 视觉理解（千问VL）
 
 **模型服务**
@@ -419,7 +408,9 @@ qwen2.5-vl-7b-instruct
 
 ×
 
-#### **调优方法对比**
+> `-Base`表示该模型只完成了预训练，虽然模型内已经存储了海量的知识，但无法正常进行对话。
+
+#### 调优方法对比
 
 **特性**
 
@@ -475,7 +466,7 @@ CPT 之后，DPO 之前
 
 通常在 SFT 之后，作为对齐的最后一步
 
-#### **训练模式对比**
+#### 训练模式对比
 
 **全参训练**
 
@@ -509,7 +500,7 @@ CPT 之后，DPO 之前
 
 > 您可以查看[模型调优控制台](https://bailian.console.aliyun.com/#/efm/model_manager/create)底部的预估训练费用，并单击**计算详情**，查看训练 Token 总数、循环次数和训练单价**。**
 
-**训练单价**
+训练单价
 
 以下为预置模型的训练单价，自定义模型的训练单价与对应的预置模型单价相同。
 
@@ -679,30 +670,24 @@ qwen-plus-character-2025-11-06
 
 ¥0.15/千Token
 
-**点击此处查看更多千问 VL 模型使用限制**
+千问 VL 模型使用限制
 
-##### **使用限制**
+###### 输入文件限制
 
-###### **输入文件限制**
-
-**图像限制**
+#### 图像限制
 
 -   **图像分辨率：**
-    
     -   最小尺寸：图像的宽度和高度均须大于`10`像素。
         
     -   宽高比：原图及缩放后的图像，长边与短边的比值不得超过 `200:1`。
         
-        > 图像缩放逻辑请参见 [计算图像的Token](https://help.aliyun.com/zh/model-studio/vision#ea146aaca47ng) 中 `smart_resize` 函数。
+        > 图像缩放逻辑请参见 [计算图像的Token](https://help.aliyun.com/zh/model-studio/vision) 中 `smart_resize` 函数。
         
     -   像素上限：
         
         -   推荐将图像分辨率控制在`8K(7680x4320)`以内。超过此分辨率的图像可能因文件过大、网络传输耗时过长而导致API调用超时。
-            
         -   自动缩放机制：模型可通过`max_pixels`和`min_pixels`调整图像大小；因此，提供超高分辨率的图像并不会提升识别精度，反而会增加调用失败的风险，建议在客户端提前将图像缩放至合理大小。
-            
 -   **支持的图像格式**
-    
     -   分辨率在4K `(3840x2160)`以下，支持的图像格式如下：
         
         **图像格式**
@@ -752,77 +737,54 @@ qwen-plus-character-2025-11-06
 -   **图像大小：**
     
     -   以公网URL传入时：Qwen3.8系列、Qwen3.7系列、Qwen3.6系列、Qwen3.5系列、Qwen3-VL系列单个图像不超过 `20MB`，其他模型单个图像不超过`10MB`
-        
     -   以本地路径传入时：单个图像不超过`10MB`
-        
     -   以 Base64 编码传入时（OpenAI 兼容接口或DashScope）：Qwen3.8系列、Qwen3.7系列、Qwen3.6系列、Qwen3.5、Qwen3-VL系列编码前的原始图像文件不超过 `20MB`，其他模型不超过`10MB`；且编码后的 Data URI 字符串不超过 `20MB`。
-        
-    -   以 Base64 编码传入时（Anthropic 兼容接口）：受**请求体整体不超过** `**6MB**` 的限制，**多张图像**时需共享此额度。
-        
+    -   以 Base64 编码传入时（Anthropic 兼容接口）：受**请求体整体不超过**`6MB` 的限制，**多张图像**时需共享此额度。
     
-    上述限制取决于所选模型，不支持通过购买高级套餐或升级模型版本提升。
-    
-    > 如需压缩文件体积请参见 [如何将图像或视频压缩到满足要求的大小](https://help.aliyun.com/zh/model-studio/vision#ec8e0a8e03moe) 。
+    > 如需压缩文件体积请参见 [如何将图像或视频压缩到满足要求的大小](https://help.aliyun.com/zh/model-studio/vision) 。
     
 -   **图片数量限制：**多图输入时根据传入方式不同，支持的图片数量上限有所区别：
     
     -   以公网URL或本地路径传入时：
         
         -   Qwen3.8-Max、Qwen3.7-Plus：最多 2048 张
-            
         -   Qwen3.7-Flash、Qwen3.6-Plus、Qwen3.6-Flash、Qwen3.5-Plus、Qwen3.5-Flash、Qwen3-VL、Qwen-VL、QVQ系列：最多 256 张
-            
     -   以 Base64 编码传入时：最多 250 张
         
     
-    Qwen-Omni系列模型请参考[全模态](https://help.aliyun.com/zh/model-studio/omni/)。
+    Qwen-Omni系列模型请参考[全模态](raw/model-user-guide/model-experience/omni.md)。
     
 
 > 同时受模型图文总 Token 上限（即最大输入）的限制，所有图片的总 Token 数必须小于模型的最大输入。
 
-**视频限制**
+#### 视频限制
 
 -   **以图像列表传入，图像列表的数量有如下限制：**
-    
     -   `qwen3.8`系列、`qwen3.7`系列、`qwen3.6`系列、`qwen3.5` 系列：最少传入 4 张图片，最多 8000 张图片
-        
     -   `qwen3-vl-plus` 系列、`qwen3-vl-flash` 系列、`qwen3-vl-235b-a22b-thinking`、`qwen3-vl-235b-a22b-instruct`：最少传入 4 张图片，最多 2000 张图片
-        
     -   其他`Qwen3-VL`开源、`Qwen2.5-VL`（包括商业版和开源版）和`QVQ`系列模型：最少传入 4 张图片，最多 512 张图片
-        
     -   其他模型：最少传入 4 张图片，最多 80 张图片
-        
 -   **以视频文件传入时：**
-    
     -   **视频大小：**
         
         -   以公网URL传入时：
             
             -   `qwen3.8`系列、`qwen3.7`系列、`qwen3.6`系列、`qwen3.5` 系列、`Qwen3-VL`系列、`qwen-vl-max` ：不超过 2GB；
-                
             -   `qwen-vl-plus` 系列、其他`qwen-vl-max`模型、`Qwen2.5-VL`开源系列及`QVQ`系列模型：不超过 1GB；
-                
             -   其他模型不超过 150MB
-                
         -   以 Base64 编码传入时：编码后的字符串小于 10MB；
             
         -   以本地文件路径传入时：视频本身不超过 100MB。
             
         
-        > 如需压缩文件体积请参见 [如何将图像或视频压缩到满足要求的大小](https://help.aliyun.com/zh/model-studio/vision#ec8e0a8e03moe) 。
+        > 如需压缩文件体积请参见 [如何将图像或视频压缩到满足要求的大小](https://help.aliyun.com/zh/model-studio/vision) 。
         
     -   **视频时长：**
-        
         -   `qwen3.8`系列、`qwen3.7`系列、`qwen3.6`系列、`qwen3.5` 系列：2秒至2小时；
-            
         -   `qwen3-vl-plus`系列、`qwen3-vl-flash`系列、`qwen3-vl-235b-a22b-thinking`、`qwen3-vl-235b-a22b-instruct`：2 秒至 1 小时；
-            
         -   其他`Qwen3-VL`开源系列、`qwen-vl-max` ：2 秒至 20 分钟；
-            
         -   `qwen-vl-plus`系列、 其他`qwen-vl-max`模型、`Qwen2.5-VL`开源系列及`QVQ`系列模型：2 秒至 10 分钟；
-            
         -   其他模型：2 秒至 40 秒。
-            
     -   **视频格式：** MP4、AVI、MKV、MOV、FLV、WMV 等。
         
     -   **视频尺寸：**无特定限制，模型可通过`max_pixels`和`min_pixels`自动调整视频尺寸，更大尺寸的视频文件不会有更好的理解效果。
@@ -832,24 +794,22 @@ qwen-plus-character-2025-11-06
     -   **音频理解：**不支持对视频文件的音频进行理解。
         
 
-###### **文件传入方式**
+###### 文件传入方式
 
--   **公网URL**：提供一个公网可访问的文件地址，支持HTTP或HTTPS协议。为获得最佳稳定性和性能，可将文件[上传至OSS](https://help.aliyun.com/zh/oss/user-guide/console-quick-start)或[上传文件获取临时URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)，获取公网 URL。**百炼**服务无法访问 OSS 内网地址（endpoint 中带 `-internal`，如 `https://<bucket>.oss-cn-hangzhou-internal.aliyuncs.com/image.jpg`），传入内网地址会导致文件下载失败，返回 `InvalidParameter`，message 为 `Failed to download multimodal content`。请改用 OSS 公网域名（如 `https://<bucket>.oss-cn-hangzhou.aliyuncs.com/image.jpg`）或 OSS 临时签名 URL 传入文件。
+-   **公网URL**：提供一个公网可访问的文件地址，支持HTTP或HTTPS协议。为获得最佳稳定性和性能，可将文件[上传至OSS](https://help.aliyun.com/zh/oss/user-guide/console-quick-start)或[上传文件获取临时URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)，获取公网 URL。
     
-    **重要**
-    
-    为确保模型能成功下载文件，提供的公网URL的响应头中**必须**包含 Content-Length（文件大小）和 Content-Type（媒体类型，如 image/jpeg）。任一字段缺失或者错误将会导致文件下载失败。
+    **重要**为确保模型能成功下载文件，提供的公网URL的响应头中**必须**包含 Content-Length（文件大小）和 Content-Type（媒体类型，如 image/jpeg）。任一字段缺失或者错误将会导致文件下载失败。
     
 -   **Base64编码传入：**将文件转换为 Base64 编码字符串再传入。
     
 -   **本地文件路径传入（仅限 DashScope SDK）：**传入本地文件的路径。
     
 
-> 关于文件传入方式的建议，请参见 [如何选择文件上传方式？](https://help.aliyun.com/zh/model-studio/vision#dc4e7260aauuo)
+> 关于文件传入方式的建议，请参见 [如何选择文件上传方式？](https://help.aliyun.com/zh/model-studio/vision)
 
-**计算图像与视频的Token**
+计算图像与视频的Token
 
-## **图像**
+#### 图像
 
 计算公式：`图像 Token = h_bar * w_bar / token_pixels + 2`
 
@@ -858,13 +818,11 @@ qwen-plus-character-2025-11-06
 -   `token_pixels`：每视觉`Token`对应的像素值，不同模型情况不同：
     
     -   `qwen3.7系列`、`qwen3.6系列`、`qwen3.5系列`、`Qwen3-VL`、`qwen-vl-max`、`qwen-vl-plus`**：**每个`Token`对应 `32x32`像素
-        
     -   `QVQ`及其他`Qwen2.5-VL`模型**：**每个Token对应`28x28`像素
-        
 
 以下代码演示了模型内部对图像的大致缩放逻辑，可用于估算一张图像的Token，实际计费请以API响应为准。
 
-**点此查看图像 token 估算示例**
+点此查看图像 token 估算示例
 
 ```
 import math
@@ -875,7 +833,7 @@ def smart_size(image_path, max_pixels, vl_high_resolution_images):
     image = Image.open(image_path)
     height, width = image.height, image.width
 
-    # Qwen3.6、Qwen3.5、Qwen3-VL 等模型的缩放因子为 32；使用其他模型时，请将 factor 改为 28
+    # Qwen3.6、Qwen3.5、Qwen3-VL 等模型的缩放因子为 32；其他模型为 28
     factor = 32
     h_bar = round(height / factor) * factor
     w_bar = round(width / factor) * factor
@@ -909,352 +867,336 @@ if __name__ == "__main__":
     print(f"图像的 Token 数：{token}")
 ```
 
-## **视频**
+#### 视频
 
--   **视频文件：**
-    
-    模型处理视频文件时，会先进行抽帧，然后计算所有视频帧的总 Token 数。由于该计算过程较为复杂，可使用以下代码，通过传入视频路径来估算视频消耗的总 Token 数：
-    
-    ```
-    # 使用前安装：pip install opencv-python
-    import math
-    import os
-    import logging
-    import cv2
-    
-    logger = logging.getLogger(__name__)
-    
-    FRAME_FACTOR = 2
-    
-    # Qwen3.6、Qwen3.5、Qwen3-VL、qwen-vl-max-0813、qwen-vl-plus-0815、qwen-vl-plus-0710等模型，图像缩放因子为32
-    IMAGE_FACTOR = 32
-    
-    #  其他模型，图像缩放因子为28
-    # IMAGE_FACTOR = 28
-    
-    # 视频帧的最大长宽比
-    MAX_RATIO = 200
-    # 视频帧的像素下限
-    VIDEO_MIN_PIXELS = 4 * 32 * 32
-    # 视频帧的像素上限，使用Qwen3-VL-Plus模型，VIDEO_MAX_PIXELS为640 * 32 * 32，其他模型为768 * 32 * 32
-    VIDEO_MAX_PIXELS = 640 * 32 * 32
-    
-    # 用户未传入FPS参数，则fps使用默认值
-    FPS = 2.0
-    # 最少抽取帧数
-    FPS_MIN_FRAMES = 4
-    # 最大抽取帧数（根据模型选择设置值）
-    FPS_MAX_FRAMES = 2000
-    
-    # 视频输入的最大像素值，使用Qwen3-VL-Plus模型，请将VIDEO_TOTAL_PIXELS设置为131072 * 32 * 32，其他模型设置为65536 * 32 * 32
-    VIDEO_TOTAL_PIXELS = int(float(os.environ.get('VIDEO_TOTAL_PIXELS', 131072 * 32 * 32)))
-    
-    def round_by_factor(number: int, factor: int) -> int:
-        """返回与”number“最接近的整数，该整数可被”factor“整除。"""
-        return round(number / factor) * factor
-    
-    def ceil_by_factor(number: int, factor: int) -> int:
-        """返回大于或等于“number”且可被“factor”整除的最小整数。"""
-        return math.ceil(number / factor) * factor
-    
-    def floor_by_factor(number: int, factor: int) -> int:
-        """返回小于或等于“number”且可被“factor”整除的最大整数。"""
-        return math.floor(number / factor) * factor
-    
-    def extract_vision_info(conversations):
-        vision_infos = []
-        if isinstance(conversations[0], dict):
-            conversations = [conversations]
-        for conversation in conversations:
-            for message in conversation:
-                if isinstance(message["content"], list):
-                    for ele in message["content"]:
-                        if (
-                            "image" in ele
-                            or "image_url" in ele
-                            or "video" in ele
-                            or ele.get("type","") in ("image", "image_url", "video")
-                        ):
-                            vision_infos.append(ele)
-        return vision_infos
-    
-    def smart_nframes(ele,total_frames,video_fps):
-        """用于计算抽取的视频帧数。
-    
-        Args:
-            ele (dict): 包含视频配置的字典格式
-                - fps: fps用于控制提取模型输入帧的数量。
-            total_frames (int): 视频的原始总帧数。
-            video_fps (int | float): 视频的原始帧率
-    
-        Raises:
-            nframes应该在[FRAME_FACTOR，total_frames]间隔内，否则会报错
-    
-        Returns:
-            用于模型输入的视频帧数。
-        """
-        assert not ("fps" in ele and "nframes" in ele), "Only accept either `fps` or `nframes`"
-        fps = ele.get("fps", FPS)
-        min_frames = ceil_by_factor(ele.get("min_frames", FPS_MIN_FRAMES), FRAME_FACTOR)
-        max_frames = floor_by_factor(ele.get("max_frames", min(FPS_MAX_FRAMES, total_frames)), FRAME_FACTOR)
-        duration = total_frames / video_fps if video_fps != 0 else 0
-        if duration-int(duration)>(1/fps):
-            total_frames = math.ceil(duration * video_fps)
-        else:
-            total_frames = math.ceil(int(duration)*video_fps)
-        nframes = total_frames / video_fps * fps
-        if nframes > total_frames:
-            logger.warning(f"smart_nframes: nframes[{nframes}] > total_frames[{total_frames}]")
-        nframes = int(min(min(max(nframes, min_frames), max_frames), total_frames))
-        if not (FRAME_FACTOR <= nframes and nframes <= total_frames):
-            raise ValueError(f"nframes should in interval [{FRAME_FACTOR}, {total_frames}], but got {nframes}.")
-    
-        return nframes
-    
-    def get_video(video_path):
-        # 获取视频信息
-        cap = cv2.VideoCapture(video_path)
-    
-        frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        # 获取视频高度
-        frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    
-        video_fps = cap.get(cv2.CAP_PROP_FPS)
-        return frame_height, frame_width, total_frames, video_fps
-    
-    def smart_resize(ele, path, factor=IMAGE_FACTOR):
-        # 获取原视频的宽和高
-        height, width, total_frames, video_fps = get_video(path)
-        # 视频帧的Token下限
-        min_pixels = VIDEO_MIN_PIXELS
-        total_pixels = VIDEO_TOTAL_PIXELS
-        # 抽取的视频帧数
-        nframes = smart_nframes(ele, total_frames, video_fps)
-        max_pixels = max(min(VIDEO_MAX_PIXELS, total_pixels / nframes * FRAME_FACTOR),int(min_pixels * 1.05))
-    
-        # 视频的长宽比不应超过200:1或1:200
-        if max(height, width) / min(height, width) > MAX_RATIO:
-            raise ValueError(
-                f"absolute aspect ratio must be smaller than {MAX_RATIO}, got {max(height, width) / min(height, width)}"
-            )
-    
-        h_bar = max(factor, round_by_factor(height, factor))
-        w_bar = max(factor, round_by_factor(width, factor))
-        if h_bar * w_bar > max_pixels:
-            beta = math.sqrt((height * width) / max_pixels)
-            h_bar = floor_by_factor(height / beta, factor)
-            w_bar = floor_by_factor(width / beta, factor)
-        elif h_bar * w_bar < min_pixels:
-            beta = math.sqrt(min_pixels / (height * width))
-            h_bar = ceil_by_factor(height * beta, factor)
-            w_bar = ceil_by_factor(width * beta, factor)
-        return h_bar, w_bar
-    
-    def token_calculate(video_path, fps):
-        # 传入视频路径和fps抽帧参数
-        messages = [{"content": [{"video": video_path, "fps": fps}]}]
-        vision_infos = extract_vision_info(messages)[0]
-    
-        resized_height, resized_width = smart_resize(vision_infos, video_path)
-    
-        height, width, total_frames, video_fps = get_video(video_path)
-        num_frames = smart_nframes(vision_infos, total_frames, video_fps)
-        print(f"原视频尺寸：{height}*{width}， 输入模型的尺寸：{resized_height}*{resized_width}，视频总帧数:{total_frames}，fps等于{fps}时，抽取的总帧数：{num_frames}", end="，")
-        video_token = int(math.ceil(num_frames / 2) * resized_height / 32 * resized_width / 32)
-        video_token += 2   # 系统会自动添加<|vision_bos|>和<|vision_eos|>视觉标记（各计1个Token）
-        return video_token
-    
-    video_token = token_calculate("xxx/test.mp4", 1)
-    print("视频tokens:", video_token)
-    ```
-    
--   **图像列表：**
-    
-    当以图像列表形式传入视频时，表示已预先完成视频抽帧，可使用以下代码，通过传入图像的路径和数量来计算传入图像列表时消耗的Token数：
-    
-    ```
-    # 使用前安装：pip install Pillow
-    import math
-    import os
-    import logging
-    from typing import Tuple
-    from PIL import Image
-    
-    logger = logging.getLogger(__name__)
-    
-    # ==================== 常量定义 ====================
-    FRAME_FACTOR = 2
-    # Qwen3-VL、qwen-vl-max-0813、qwen-vl-plus-0815、qwen-vl-plus-0710模型，缩放因子为32
-    IMAGE_FACTOR = 32
-    
-    #  其他模型，缩放因子为28
-    # IMAGE_FACTOR = 28
-    
-    # Token计算相关常量
-    TOKEN_DIVISOR = 32  # token计算时的除数
-    VISION_SPECIAL_TOKENS = 2  # <|vision_bos|>和<|vision_eos|>标记
-    
-    # 视频帧的最大长宽比
-    MAX_RATIO = 200
-    # 视频帧的像素下限
-    VIDEO_MIN_PIXELS = 4 * 32 * 32
-    # 视频帧的像素上限，使用Qwen3-VL-Plus模型，VIDEO_MAX_PIXELS为640 * 32 * 32，其他模型为768 * 32 * 32
-    VIDEO_MAX_PIXELS = 640 * 32 * 32
-    
-    # 视频输入的最大像素值，使用Qwen3-VL-Plus模型，请将VIDEO_TOTAL_PIXELS设置为131072 * 32 * 32，其他模型设置为65536 * 32 * 32
-    VIDEO_TOTAL_PIXELS = int(float(os.environ.get('VIDEO_TOTAL_PIXELS', 131072 * 32 * 32)))
-    
-    def round_by_factor(number: int, factor: int) -> int:
-        """返回与”number“最接近的整数，该整数可被”factor“整除。"""
-        return round(number / factor) * factor
-    
-    def ceil_by_factor(number: int, factor: int) -> int:
-        """返回大于或等于“number”且可被“factor”整除的最小整数。"""
-        return math.ceil(number / factor) * factor
-    
-    def floor_by_factor(number: int, factor: int) -> int:
-        """返回小于或等于“number”且可被“factor”整除的最大整数。"""
-        return math.floor(number / factor) * factor
-    
-    def get_image_size(image_path: str) -> Tuple[int, int]:
-        if not os.path.exists(image_path):
-            raise FileNotFoundError(f"图像文件不存在: {image_path}")
-    
-        try:
-            image = Image.open(image_path)
-            height = image.height
-            width = image.width
-            image.close()  # 及时关闭文件
-            return height, width
-        except Exception as e:
-            raise ValueError(f"无法读取图像文件 {image_path}: {str(e)}")
-    
-    def smart_resize(height: int, width: int, nframes: int, factor: int = IMAGE_FACTOR) -> Tuple[int, int]:
-        """
-        计算图像缩放后的尺寸
-    
-        Args:
-            height: 原始图像高度
-            width: 原始图像宽度
-            nframes: 视频帧数
-            factor: 缩放因子，默认为IMAGE_FACTOR
-    
-        Returns:
-            (resized_height, resized_width) 缩放后的高度和宽度
-    
-        Raises:
-            ValueError: 长宽比超过限制
-        """
-        # 视频帧的Token下限
-        min_pixels = VIDEO_MIN_PIXELS
-        total_pixels = VIDEO_TOTAL_PIXELS
-        # 抽取的视频帧数
-        max_pixels = max(min(VIDEO_MAX_PIXELS, total_pixels / nframes * FRAME_FACTOR), int(min_pixels * 1.05))
-    
-        # 视频的长宽比不应超过200:1或1:200
-        aspect_ratio = max(height, width) / min(height, width)
-        if aspect_ratio > MAX_RATIO:
-            raise ValueError(
-                f"图像长宽比必须小于 {MAX_RATIO}:1，当前为 {aspect_ratio:.2f}:1"
-            )
-    
-        h_bar = max(factor, round_by_factor(height, factor))
-        w_bar = max(factor, round_by_factor(width, factor))
-        if h_bar * w_bar > max_pixels:
-            beta = math.sqrt((height * width) / max_pixels)
-            h_bar = floor_by_factor(height / beta, factor)
-            w_bar = floor_by_factor(width / beta, factor)
-        elif h_bar * w_bar < min_pixels:
-            beta = math.sqrt(min_pixels / (height * width))
-            h_bar = ceil_by_factor(height * beta, factor)
-            w_bar = ceil_by_factor(width * beta, factor)
-        return h_bar, w_bar
-    
-    def calculate_video_tokens(image_path: str, nframes: int = 1, factor: int = IMAGE_FACTOR, verbose: bool = True) -> int:
-        """
-    
-        Args:
-            image_path: 视频帧文件路径
-            nframes: 视频帧数，
-            factor: 缩放因子，默认为IMAGE_FACTOR
-            verbose: 是否打印详细信息
-    
-        Returns:
-            所消耗的token数量
-    
-        Raises:
-            FileNotFoundError: 文件不存在
-            ValueError: 文件格式无效或长宽比超限
-        """
-        # 获取原始图像尺寸（只读取一次）
-        height, width = get_image_size(image_path)
-    
-        # 计算缩放后的尺寸
-        resized_height, resized_width = smart_resize(height, width, nframes, factor)
-    
-        # 计算token数量
-        # 公式：⌈帧数/2⌉ × (高度/TOKEN_DIVISOR) × (宽度/TOKEN_DIVISOR) + VISION_SPECIAL_TOKENS
-        video_token = int(
-            math.ceil(nframes / 2) *
-            (resized_height / TOKEN_DIVISOR) *
-            (resized_width / TOKEN_DIVISOR)
+-   **视频文件：** 模型处理视频文件时，会先进行抽帧，然后计算所有视频帧的总 Token 数。由于该计算过程较为复杂，可使用以下代码，通过传入视频路径来估算视频消耗的总 Token 数：
+
+```
+# 使用前安装：pip install opencv-python
+import math
+import os
+import logging
+import cv2
+
+logger = logging.getLogger(__name__)
+
+FRAME_FACTOR = 2
+
+# Qwen3.6、Qwen3.5、Qwen3-VL、qwen-vl-max-0813、qwen-vl-plus-0815、qwen-vl-plus-0710等模型，图像缩放因子为32
+IMAGE_FACTOR = 32
+
+#  其他模型，图像缩放因子为28
+# IMAGE_FACTOR = 28
+
+# 视频帧的最大长宽比
+MAX_RATIO = 200
+# 视频帧的像素下限
+VIDEO_MIN_PIXELS = 4 * 32 * 32
+# 视频帧的像素上限，使用Qwen3-VL-Plus模型，VIDEO_MAX_PIXELS为640 * 32 * 32，其他模型为768 * 32 * 32
+VIDEO_MAX_PIXELS = 640 * 32 * 32
+
+# 用户未传入FPS参数，则fps使用默认值
+FPS = 2.0
+# 最少抽取帧数
+FPS_MIN_FRAMES = 4
+# 最大抽取帧数（根据模型选择设置值）
+FPS_MAX_FRAMES = 2000
+
+# 视频输入的最大像素值，使用Qwen3-VL-Plus模型，请将VIDEO_TOTAL_PIXELS设置为131072 * 32 * 32，其他模型设置为65536 * 32 * 32
+VIDEO_TOTAL_PIXELS = int(float(os.environ.get('VIDEO_MAX_PIXELS', 131072 * 32 * 32)))
+
+def round_by_factor(number: int, factor: int) -> int:
+    """返回与”number“最接近的整数，该整数可被”factor“整除。"""
+    return round(number / factor) * factor
+
+def ceil_by_factor(number: int, factor: int) -> int:
+    """返回大于或等于“number”且可被“factor”整除的最小整数。"""
+    return math.ceil(number / factor) * factor
+
+def floor_by_factor(number: int, factor: int) -> int:
+    """返回小于或等于“number”且可被“factor”整除的最大整数。"""
+    return math.floor(number / factor) * factor
+
+def extract_vision_info(conversations):
+    vision_infos = []
+    if isinstance(conversations[0], dict):
+        conversations = [conversations]
+    for conversation in conversations:
+        for message in conversation:
+            if isinstance(message["content"], list):
+                for ele in message["content"]:
+                    if (
+                        "image" in ele
+                        or "image_url" in ele
+                        or "video" in ele
+                        or ele.get("type","") in ("image", "image_url", "video")
+                    ):
+                        vision_infos.append(ele)
+    return vision_infos
+
+def smart_nframes(ele,total_frames,video_fps):
+    """用于计算抽取的视频帧数。
+
+    Args:
+        ele (dict): 包含视频配置的字典格式
+            - fps: fps用于控制提取模型输入帧的数量。
+        total_frames (int): 视频的原始总帧数。
+        video_fps (int | float): 视频的原始帧率
+
+    Raises:
+        nframes应该在[FRAME_FACTOR，total_frames]间隔内，否则会报错
+
+    Returns:
+        用于模型输入的视频帧数。
+    """
+    assert not ("fps" in ele and "nframes" in ele), "Only accept either `fps` or `nframes`"
+    fps = ele.get("fps", FPS)
+    min_frames = ceil_by_factor(ele.get("min_frames", FPS_MIN_FRAMES), FRAME_FACTOR)
+    max_frames = floor_by_factor(ele.get("max_frames", min(FPS_MAX_FRAMES, total_frames)), FRAME_FACTOR)
+    duration = total_frames / video_fps if video_fps != 0 else 0
+    if duration-int(duration)>(1/fps):
+        total_frames = math.ceil(duration * video_fps)
+    else:
+        total_frames = math.ceil(int(duration)*video_fps)
+    nframes = total_frames / video_fps * fps
+    if nframes > total_frames:
+        logger.warning(f"smart_nframes: nframes[{nframes}] > total_frames[{total_frames}]")
+    nframes = int(min(min(max(nframes, min_frames), max_frames), total_frames))
+    if not (FRAME_FACTOR <= nframes and nframes <= total_frames):
+        raise ValueError(f"nframes should in interval [{FRAME_FACTOR}, {total_frames}], but got {nframes}.")
+
+    return nframes
+
+def get_video(video_path):
+    # 获取视频信息
+    cap = cv2.VideoCapture(video_path)
+
+    frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    # 获取视频高度
+    frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
+    video_fps = cap.get(cv2.CAP_PROP_FPS)
+    return frame_height, frame_width, total_frames, video_fps
+
+def smart_resize(ele, path, factor=IMAGE_FACTOR):
+    # 获取原视频的宽和高
+    height, width, total_frames, video_fps = get_video(path)
+    # 视频帧的Token下限
+    min_pixels = VIDEO_MIN_PIXELS
+    total_pixels = VIDEO_TOTAL_PIXELS
+    # 抽取的视频帧数
+    nframes = smart_nframes(ele, total_frames, video_fps)
+    max_pixels = max(min(VIDEO_MAX_PIXELS, total_pixels / nframes * FRAME_FACTOR),int(min_pixels * 1.05))
+
+    # 视频的长宽比不应超过200:1或1:200
+    if max(height, width) / min(height, width) > MAX_RATIO:
+        raise ValueError(
+            f"absolute aspect ratio must be smaller than {MAX_RATIO}, got {max(height, width) / min(height, width)}"
         )
-        # 添加视觉标记token（<|vision_bos|>和<|vision_eos|>）
-        video_token += VISION_SPECIAL_TOKENS
-    
-        if verbose:
-            print(f"原视频帧尺寸：{height}×{width}，输入模型的尺寸：{resized_height}×{resized_width}，", end="")
-    
-        return video_token
-    
-    if __name__ == "__main__":
-        try:
-            video_token = calculate_video_tokens("xxx/test.jpg", nframes=30)
-            print(f"视频tokens: {video_token}\n")
-        except Exception as e:
-            print(f"错误: {str(e)}\n")
-    ```
-    
 
-## **模型调优前必读**
+    h_bar = max(factor, round_by_factor(height, factor))
+    w_bar = max(factor, round_by_factor(width, factor))
+    if h_bar * w_bar > max_pixels:
+        beta = math.sqrt((height * width) / max_pixels)
+        h_bar = floor_by_factor(height / beta, factor)
+        w_bar = floor_by_factor(width / beta, factor)
+    elif h_bar * w_bar < min_pixels:
+        beta = math.sqrt(min_pixels / (height * width))
+        h_bar = ceil_by_factor(height * beta, factor)
+        w_bar = ceil_by_factor(width * beta, factor)
+    return h_bar, w_bar
+
+def token_calculate(video_path, fps):
+    # 传入视频路径和fps抽帧参数
+    messages = [{"content": [{"video": video_path, "fps": fps}]}]
+    vision_infos = extract_vision_info(messages)[0]
+
+    resized_height, resized_width = smart_resize(vision_infos, video_path)
+
+    height, width, total_frames, video_fps = get_video(video_path)
+    num_frames = smart_nframes(vision_infos, total_frames, video_fps)
+    print(f"原视频尺寸：{height}*{width}， 输入模型的尺寸：{resized_height}*{resized_width}，视频总帧数:{total_frames}，fps等于{fps}时，抽取的总帧数：{num_frames}", end="，")
+    video_token = int(math.ceil(num_frames / 2) * resized_height / 32 * resized_width / 32)
+    video_token += 2   # 系统会自动添加<|vision_bos|>和<|vision_eos|>视觉标记（各计1个Token）
+    return video_token
+
+video_token = token_calculate("xxx/test.mp4", 1)
+print("视频tokens:", video_token)
+```
+
+-   **图像列表：** 当以图像列表形式传入视频时，表示已预先完成视频抽帧，可使用以下代码，通过传入图像的路径和数量来计算传入图像列表时消耗的Token数：
+
+```
+# 使用前安装：pip install Pillow
+import math
+import os
+import logging
+from typing import Tuple
+from PIL import Image
+
+logger = logging.getLogger(__name__)
+
+# ==================== 常量定义 ====================
+FRAME_FACTOR = 2
+# Qwen3-VL、qwen-vl-max-0813、qwen-vl-plus-0815、qwen-vl-plus-0710模型，缩放因子为32
+IMAGE_FACTOR = 32
+
+#  其他模型，缩放因子为28
+# IMAGE_FACTOR = 28
+
+# Token计算相关常量
+TOKEN_DIVISOR = 32  # token计算时的除数
+VISION_SPECIAL_TOKENS = 2  # <|vision_bos|>和<|vision_eos|>标记
+
+# 视频帧的最大长宽比
+MAX_RATIO = 200
+# 视频帧的像素下限
+VIDEO_MIN_PIXELS = 4 * 32 * 32
+# 视频帧的像素上限，使用Qwen3-VL-Plus模型，VIDEO_MAX_PIXELS为640 * 32 * 32，其他模型为768 * 32 * 32
+VIDEO_MAX_PIXELS = 640 * 32 * 32
+
+# 视频输入的最大像素值，使用Qwen3-VL-Plus模型，请将VIDEO_TOTAL_PIXELS设置为131072 * 32 * 32，其他模型设置为65536 * 32 * 32
+VIDEO_TOTAL_PIXELS = int(float(os.environ.get('VIDEO_MAX_PIXELS', 131072 * 32 * 32)))
+
+def round_by_factor(number: int, factor: int) -> int:
+    """返回与”number“最接近的整数，该整数可被”factor“整除。"""
+    return round(number / factor) * factor
+
+def ceil_by_factor(number: int, factor: int) -> int:
+    """返回大于或等于“number”且可被“factor”整除的最小整数。"""
+    return math.ceil(number / factor) * factor
+
+def floor_by_factor(number: int, factor: int) -> int:
+    """返回小于或等于“number”且可被“factor”整除的最大整数。"""
+    return math.floor(number / factor) * factor
+
+def get_image_size(image_path: str) -> Tuple[int, int]:
+    if not os.path.exists(image_path):
+        raise FileNotFoundError(f"图像文件不存在: {image_path}")
+
+    try:
+        image = Image.open(image_path)
+        height = image.height
+        width = image.width
+        image.close()  # 及时关闭文件
+        return height, width
+    except Exception as e:
+        raise ValueError(f"无法读取图像文件 {image_path}: {str(e)}")
+
+def smart_resize(height: int, width: int, nframes: int, factor: int = IMAGE_FACTOR) -> Tuple[int, int]:
+    """
+    计算图像缩放后的尺寸
+
+    Args:
+        height: 原始图像高度
+        width: 原始图像宽度
+        nframes: 视频帧数
+        factor: 缩放因子，默认为IMAGE_FACTOR
+
+    Returns:
+        (resized_height, resized_width) 缩放后的高度和宽度
+
+    Raises:
+        ValueError: 长宽比超过限制
+    """
+    # 视频帧的Token下限
+    min_pixels = VIDEO_MIN_PIXELS
+    total_pixels = VIDEO_TOTAL_PIXELS
+    # 抽取的视频帧数
+    max_pixels = max(min(VIDEO_MAX_PIXELS, total_pixels / nframes * FRAME_FACTOR), int(min_pixels * 1.05))
+
+    # 视频的长宽比不应超过200:1或1:200
+    aspect_ratio = max(height, width) / min(height, width)
+    if aspect_ratio > MAX_RATIO:
+        raise ValueError(
+            f"图像长宽比必须小于 {MAX_RATIO}:1，当前为 {aspect_ratio:.2f}:1"
+        )
+
+    h_bar = max(factor, round_by_factor(height, factor))
+    w_bar = max(factor, round_by_factor(width, factor))
+    if h_bar * w_bar > max_pixels:
+        beta = math.sqrt((height * width) / max_pixels)
+        h_bar = floor_by_factor(height / beta, factor)
+        w_bar = floor_by_factor(width / beta, factor)
+    elif h_bar * w_bar < min_pixels:
+        beta = math.sqrt(min_pixels / (height * width))
+        h_bar = ceil_by_factor(height * beta, factor)
+        w_bar = ceil_by_factor(width * beta, factor)
+    return h_bar, w_bar
+
+def calculate_video_tokens(image_path: str, nframes: int = 1, factor: int = IMAGE_FACTOR, verbose: bool = True) -> int:
+    """
+
+    Args:
+        image_path: 视频帧文件路径
+        nframes: 视频帧数，
+        factor: 缩放因子，默认为IMAGE_FACTOR
+        verbose: 是否打印详细信息
+
+    Returns:
+        所消耗的token数量
+
+    Raises:
+        FileNotFoundError: 文件不存在
+        ValueError: 文件格式无效或长宽比超限
+    """
+    # 获取原始图像尺寸（只读取一次）
+    height, width = get_image_size(image_path)
+
+    # 计算缩放后的尺寸
+    resized_height, resized_width = smart_resize(height, width, nframes, factor)
+
+    # 计算token数量
+    # 公式：⌈帧数/2⌉ × (高度/TOKEN_DIVISOR) × (宽度/TOKEN_DIVISOR) + VISION_SPECIAL_TOKENS
+    video_token = int(
+        math.ceil(nframes / 2) *
+        (resized_height / TOKEN_DIVISOR) *
+        (resized_width / TOKEN_DIVISOR)
+    )
+    # 添加视觉标记token（<|vision_bos|>和<|vision_eos|>）
+    video_token += VISION_SPECIAL_TOKENS
+
+    if verbose:
+        print(f"原视频帧尺寸：{height}×{width}，输入模型的尺寸：{resized_height}×{resized_width}，", end="")
+
+    return video_token
+
+if __name__ == "__main__":
+    try:
+        video_token = calculate_video_tokens("xxx/test.jpg", nframes=30)
+        print(f"视频tokens: {video_token}\n")
+    except Exception as e:
+        print(f"错误: {str(e)}\n")
+```
+
+## 模型调优前必读
 
 -   文本生成模型调优虽然能在特定业务/场景取得非常好的效果，但有以下限制：
     
-    -   **耗时较长**，包括：拥有一个大规模（最少 0.5亿 token）CPT 数据集、构建一个有效（1000+）SFT 数据集、收集足够的（100+）Bad Case 构建有效 DPO 数据集、模型优化迭代速度慢等。
-        
+    -   **耗时较长**，包括：拥有一个大规模（最少 0.5亿 token）CPT 数据集、构建一个有效（1000+）SFT 数据集、收集足够的（100+）Bad Case 构建[模型部署计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing#2083766ef99p1)有效 DPO 数据集、模型优化迭代速度慢等。
     -   **费用较高，**调优后的模型部署后才能使用，[模型部署计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing#2083766ef99p1)较高。
-        
--   阿里云百炼推荐您在考虑使用文本生成模型调优前**先尝试使用**的 [Prompt 工程](https://help.aliyun.com/zh/model-studio/prompt-engineering-guide)**（****_Prompt Engineering_****）或**[插件调用](https://help.aliyun.com/zh/model-studio/plug-in-overview)**（****_Function Calling_****）**定制化您的应用，**模型调优也通常作为改进模型表现“最后的手段”**。因为：
+-   阿里云百炼推荐您在考虑使用文本生成模型调优前**先尝试使用**的 [Prompt 工程](raw/model-user-guide/use-cases/prompt-engineering-guide.md)**（_Prompt Engineering_）或**[插件调用](raw/application-user-guide/plug-in/plug-in-overview.md)**（_Function Calling_）**定制化您的应用，**模型调优也通常作为改进模型表现“最后的手段”**。因为：
     
     1.  在许多任务中，模型最初可能表现不佳，但通过应用正确的 Prompt 技巧可以改进结果，不一定需要使用模型调优。
-        
     2.  迭代优化 Prompt、插件，比模型调优的迭代更敏捷、成本更低，因为模型调优的迭代可能需要重新收集数据、清洗优化数据、收集 bad case、发起客户调研等。
-        
     3.  即使最后一定要进行模型调优，最初的 Prompt 工程、插件迭代优化相关工作也不会浪费。您的这些前期工作可以充分地在构建调优数据集时复用（用于构建数据集的输入）。
-        
 
-### **调优效果展示**
+### 调优效果展示
 
 #### [**角色扮演**](https://www.aliyun.com/solution/tech-solution-deploy/2978350)
 
-![gungun](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7339071671/p1019093.gif)
-
 #### [**目标检测**](https://www.aliyun.com/solution/tech-solution-deploy/2978352)
-
-![converted-1761653885465](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7339071671/p1020451.gif)
 
 ## 快速开始
 
-### **使用控制台进行模型调优**
+### 使用控制台进行模型调优
 
 **调优步骤**
 
 **控制台截图**
 
 **步骤一**：在[模型调优](https://bailian.console.aliyun.com/?tab=model#/efm/model_manager)页面点击**创建训练任务**。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6609399771/p1075286.png)
 
 **步骤二：训练配置**
 
@@ -1280,8 +1222,6 @@ if __name__ == "__main__":
 -   **验证集**：设置为**自动切分**，分割 10% 作为验证集
     
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6609399771/p1075287.png)
-
 **步骤四：配置模型参数快照（Checkpoint）保存参数**
 
 -   **模型名称**：保持默认即可
@@ -1291,21 +1231,17 @@ if __name__ == "__main__":
 -   **Checkpoint保存间隔**：保持默认即可
     
 
-**说明**
-
 在百炼平台上，模型调优完成后可以导出参数快照，导出后才能基于此版本的参数快照在百炼上进行模型部署。
 
 导出的参数快照保存在云存储中，暂不支持访问或下载。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3889372671/p1024332.png)
-
 **步骤五**：点击“开始训练”后，等待模型训练完毕。
 
-**步骤六**：使用阿里云百炼的[模型部署](https://bailian.console.aliyun.com/?tab=model#/efm/model_deploy)功能部署训练好的自定义模型，部署好后就可以对调优好的模型进行评测。模型部署相关信息请参见[模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)。
+**步骤六**：使用阿里云百炼的[模型部署](https://bailian.console.aliyun.com/?tab=model#/efm/model_deploy)功能部署训练好的自定义模型，部署好后就可以对调优好的模型进行评测。模型部署相关信息请参见[模型部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)。
 
-**步骤七**：使用阿里云百炼[模型评测](https://bailian.console.aliyun.com/?tab=model#/efm/model_evaluate)功能评估自定义模型的训练效果，相关信息请参见[模型评测](https://help.aliyun.com/zh/model-studio/model-evaluation-overview)。
+**步骤七**：使用阿里云百炼[模型评测](https://bailian.console.aliyun.com/?tab=model#/efm/model_evaluate)功能评估自定义模型的训练效果，相关信息请参见[模型评测](raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)。
 
-#### **典型的调优流程**
+#### 典型的调优流程
 
 百炼提供的三种调优方式并不互斥，而是递进的、相辅相成的。
 
@@ -1313,30 +1249,21 @@ if __name__ == "__main__":
 
 1.  CPT (持续预训练）- 补知识 （通用模型知识的“广度”和“浅度”，无法满足专业领域的“深度”和“精度”要求）
     
-    -   金融模型： `学金融术语`
-        
-    -   医疗模型： `记药品病理`
-        
-    -   法律模型： `懂法条判例`
-        
+    -   金融模型： `学金融术语`
+    -   医疗模型： `记药品病理`
+    -   法律模型： `懂法条判例`
 2.  SFT (监督微调）- 学做事
     
-    -   客服机器人： `学客服流程`
-        
-    -   代码助手： `学编程范式`
-        
-    -   工具调用 (Agent)： `学使用 MCP`
-        
+    -   客服机器人： `学客服流程`
+    -   代码助手： `学编程范式`
+    -   工具调用 (Agent)： `学使用 MCP`
 3.  DPO (直接偏好优化）- 做得更好
     
-    -   安全与责任感： `拒有害建议`
-        
-    -   简洁与有效性： `答干脆利落`
-        
-    -   客观与中立： `评公正客观`
-        
+    -   安全与责任感： `拒有害建议`
+    -   简洁与有效性： `答干脆利落`
+    -   客观与中立： `评公正客观`
 
-## **调优数据格式**
+## 调优数据格式
 
 SFT/DPO/CPT 各训练方式的数据格式规格、打包规则、大小与数量限制、API 上传配额详见[调优数据上传规则](https://help.aliyun.com/zh/model-studio/text-generation-tuning-data-upload-rules#sec-support-matrix)。各训练方式支持的文件格式概览：
 
@@ -1364,13 +1291,13 @@ jsonl（纯文本 {text}）
 
 xlsx
 
-## **数据集构建技巧**
+## 数据集构建技巧
 
-### **数据集的规模要求**
+### 数据集的规模要求
 
 对于CPT来说，数据集最少需要**五千万Token优质预训练数据**；对于 SFT 来说，数据集最少需要**上千条优质调优数据**；对于 DPO 来说，数据集一般需要**上百条人类偏好数据**。如果数据调优后的模型评测结果不佳，最简单的改进方法是收集更多数据进行训练。
 
-如果您缺乏数据，建议构建[智能体应用（Agent 1.0）](https://help.aliyun.com/zh/model-studio/single-agent-application)，使用知识库索引来增强模型能力。当然在很多复杂的业务场景，可以综合采用模型调优和知识库检索结合的技术方案。
+如果您缺乏数据，建议构建[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)，使用知识库索引来增强模型能力。当然在很多复杂的业务场景，可以综合采用模型调优和知识库检索结合的技术方案。
 
 以客服场景为例，可以借助模型调优解决客服回答的语气、表达习惯、自我认知等问题，场景涉及的专业知识可以结合知识库，动态引入到模型上下文中。
 
@@ -1379,13 +1306,10 @@ xlsx
 您也可以采用以下策略扩充数据集：
 
 1.  让大模型模拟生成特定业务/场景的相关内容，辅助您生成更多用于调优数据。（生成模型建议选取表现优异、规模更大的模型）
-    
 2.  使用阿里云百炼的[数据处理](https://bailian.console.aliyun.com/?tab=model#/efm/model_data)功能，对您的数据集进行数据清洗、数据增强。
-    
 3.  通过应用场景收集、网络爬虫、社交媒体和在线论坛、公开数据集、合作伙伴与行业资源、用户贡献等各种方式，人工获取更多数据。
-    
 
-### **数据的多样性与均衡性**
+### 数据的多样性与均衡性
 
 模型调优有不同场景，针对具体业务场景时，专业性更重要；而针对问答场景时通用性更重要。您需要根据模型负责的业务模块或使用场景进行数据用例设计。因此训练效果好坏并不是仅取决于数据量，更需要考虑针对场景的专业性和多样性。
 
@@ -1421,21 +1345,17 @@ IT 信息、行政信息、HR 信息、员工福利解答、公司日历查询�
 
 还请特别注意的是各个场景/业务的数据数量应**相对均衡，数据比例符合实际场景比例**，避免某一类数据过多导致模型偏向于学习该类特征，影响模型的泛化能力。
 
-### **训练集与验证集拆分**
+### 训练集与验证集拆分
 
 当您使用控制台进行模型调优时，支持
 
 -   自动将一个完整训练数据集拆分，随机抽取少量数据组成验证集。
-    
 -   选择独立上传数据集。
-    
 
 控制台可以在训练时及时方便地显示验证集 Loss 和 Token Accuracy。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3889372671/p1024312.png)
+## 常见问题
 
-## **常见问题**
+### 是否支持调优自己的模型呢？
 
-### **是否支持调优自己的模型呢？**
-
-百炼不支持调优自己的模型，但可以通过[我的模型（北京地域）](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_center)导入safetensor 格式的千问系列开源模型，详情请参考[模型导入](https://help.aliyun.com/zh/model-studio/model-import)。模型导入后可以在百炼平台上部署使用。
+百炼不支持调优自己的模型，但可以通过[我的模型（北京地域）](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_center)导入safetensor 格式的千问系列开源模型，详情请参考[模型导入](raw/model-user-guide/model-deployment-1/model-import.md)。模型导入后可以在百炼平台上部署使用。

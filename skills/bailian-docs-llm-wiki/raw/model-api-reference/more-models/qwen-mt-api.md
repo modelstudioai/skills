@@ -1,65 +1,61 @@
 # Qwen-MT API参考
 
-本文介绍通过OpenAI兼容接口 或 DashScopeAPI 调用 Qwen-MT 模型的输入与输出参数。
+本文介绍通过OpenAI兼容接口 或 DashScopeAPI 调用 Qwen-MT 模型的输入与输出参数。
 
 > 相关文档： [翻译能力（Qwen-MT）](https://help.aliyun.com/zh/model-studio/machine-translation)
 
 ## OpenAI 兼容
 
-## **北京地域**
+#### 北京地域
 
 SDK 调用配置的`base_url`为：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-## **新加坡地域**
+#### 新加坡地域
 
 SDK 调用配置的`base_url`为：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-## **美国（弗吉尼亚）地域**
+#### 美国（弗吉尼亚）地域
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-## **新加坡地域**
+#### 新加坡地域
 
 SDK 调用配置的`base_url`为：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-## **美国（弗吉尼亚）地域**
+#### 美国（弗吉尼亚）地域
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-## **北京地域**
+#### 北京地域
 
 SDK 调用配置的`base_url`为：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-> 您需要已 [获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key) 并 [配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables) 。若通过OpenAI SDK进行调用，需要 [安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk) 。
+> 您需要已 [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md) 并 [配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md) 。若通过OpenAI SDK进行调用，需要 [安装SDK](raw/model-api-reference/preparations/install-sdk.md) 。
 
 ### 请求体
 
-## 基础使用
+#### 基础使用
 
-## Python
+#### Python
 
 ```
 import os
@@ -93,7 +89,7 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
-## Node.js
+#### Node.js
 
 ```
 // 需要 Node.js v18+，需在 ES Module 环境下运行
@@ -108,7 +104,7 @@ const openai = new OpenAI(
     }
 );
 const completion = await openai.chat.completions.create({
-    model: "qwen-mt-plus", 
+    model: "qwen-mt-plus",
     messages: [
         { role: "user", content: "我看到这个视频后没有笑" }
     ],
@@ -120,9 +116,9 @@ const completion = await openai.chat.completions.create({
 console.log(JSON.stringify(completion));
 ```
 
-## curl
+#### curl
 
-各地域的[请求地址](#0092fe7c67ocl)和API Key不同，以下是北京地域的请求地址。
+各地域的[请求地址](raw/model-api-reference/more-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
@@ -138,9 +134,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-## 术语干预
+#### 术语干预
 
-## Python
+#### Python
 
 ```
 import os
@@ -191,7 +187,7 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
-## Node.js
+#### Node.js
 
 ```
 // 需要 Node.js v18+，需在 ES Module 环境下运行
@@ -236,9 +232,9 @@ const completion = await openai.chat.completions.create({
 console.log(JSON.stringify(completion));
 ```
 
-## curl
+#### curl
 
-各地域的[请求地址](#0092fe7c67ocl)和API Key不同，以下是北京地域的请求地址。
+各地域的[请求地址](raw/model-api-reference/more-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
@@ -277,9 +273,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-## 翻译记忆
+#### 翻译记忆
 
-## Python
+#### Python
 
 ```
 import os
@@ -326,7 +322,7 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
-## Node.js
+#### Node.js
 
 ```
 // 需要 Node.js v18+，需在 ES Module 环境下运行
@@ -367,9 +363,9 @@ const completion = await openai.chat.completions.create({
 console.log(JSON.stringify(completion));
 ```
 
-## curl
+#### curl
 
-各地域的[请求地址](#0092fe7c67ocl)和API Key不同，以下是北京地域的请求地址。
+各地域的[请求地址](raw/model-api-reference/more-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
@@ -395,9 +391,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-## 领域提示
+#### 领域提示
 
-## Python
+#### Python
 
 ```
 import os
@@ -431,7 +427,7 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
-## Node.js
+#### Node.js
 
 ```
 // 需要 Node.js v18+，需在 ES Module 环境下运行
@@ -459,9 +455,9 @@ const completion = await openai.chat.completions.create({
 console.log(JSON.stringify(completion));
 ```
 
-## curl
+#### curl
 
-各地域的[请求地址](#0092fe7c67ocl)和API Key不同，以下是北京地域的请求地址。
+各地域的[请求地址](raw/model-api-reference/more-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
@@ -483,44 +479,40 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-**model** `_string_` **（必选）**
+**model**`string`**（必选）**
 
 模型名称。支持的模型：qwen-mt-plus、qwen-mt-flash、qwen-mt-lite、qwen-mt-turbo。
 
-**messages** `_array_` **（必选）**
+**messages**`array`**（必选）**
 
 消息数组，用于向大模型传递上下文。仅支持传入 User Message。
 
-**消息类型**
+消息类型
 
-User Message `_object_` **（必选）**
+User Message`object`**（必选）**
 
 用户消息，用于传递待翻译的句子。
 
-**属性**
+属性
 
-**content** `_string_`**（必选）**
+**content**`string`**（必选）**
 
 待翻译的句子。
 
-**role** `_string_` **（必选）**
+**role**`string`**（必选）**
 
 用户消息的角色，必须设为`user`。
 
-**stream** `_boolean_` （可选） 默认值为 `false`
+**stream**`boolean`（可选） 默认值为 `false`
 
 是否以流式方式输出回复。
 
 可选值：
 
 -   `false`：等待模型生成完整回复后一次性返回。
-    
 -   `true`：模型边生成边返回数据块。客户端需逐块读取，以还原完整回复。
-    
 
-**说明**
-
-当前仅qwen-mt-flash、qwen-mt-lite模型支持以增量形式返回数据，每次返回仅包含新生成的内容。qwen-mt-plus和qwen-mt-turbo模型以非增量形式返回数据，每次返回当前已经生成的整个序列，暂时无法修改。如：
+**说明**当前仅qwen-mt-flash、qwen-mt-lite模型支持以增量形式返回数据，每次返回仅包含新生成的内容。qwen-mt-plus和qwen-mt-turbo模型以非增量形式返回数据，每次返回当前已经生成的整个序列，暂时无法修改。如：
 
 I
 
@@ -534,36 +526,34 @@ I didn't laugh after
 
 ...
 
-**stream\_options** `_object_` （可选）
+**stream\_options**`object`（可选）
 
 流式输出的配置项，仅在 `stream` 为 `true` 时生效。
 
-**属性**
+属性
 
-**include\_usage** `_boolean_` （可选）默认值为 `false`
+**include\_usage**`boolean`（可选）默认值为 `false`
 
 是否在**最后一个数据块**包含Token消耗信息。
 
 可选值：
 
 -   `true`：包含；
-    
 -   `false`：不包含。
-    
 
-**max\_tokens** `_integer_` （可选）
+**max\_tokens**`integer`（可选）
 
 用于限制模型输出的最大 Token 数。若生成内容超过此值，响应将被截断。
 
 默认值与最大值均为模型的最大输出长度，请参见[模型选型](https://help.aliyun.com/zh/model-studio/machine-translation#efd59c2b9eosx)。
 
-**seed** `_integer_` （可选）
+**seed**`integer`（可选）
 
 随机数种子。用于确保在相同输入和参数下生成结果可复现。若调用时传入相同的 `seed` 且其他参数不变，模型将尽可能返回相同结果。
 
-取值范围：`[0,231−1]`。
+取值范围：`[0,2 31 −1]`。
 
-**temperature** `_float_` （可选） 默认值为0.65
+**temperature**`float`（可选）默认值为0.65
 
 采样温度，控制模型生成文本的多样性。
 
@@ -573,7 +563,7 @@ temperature越高，生成的文本更多样，反之，生成的文本更确定
 
 temperature与top\_p均可以控制生成文本的多样性，建议只设置其中一个值。
 
-**top\_p** `_float_` （可选）默认值为0.8
+**top\_p**`float`（可选）默认值为0.8
 
 核采样的概率阈值，控制模型生成文本的多样性。
 
@@ -583,7 +573,7 @@ top\_p越高，生成的文本更多样。反之，生成的文本更确定。
 
 temperature与top\_p均可以控制生成文本的多样性，建议只设置其中一个值。
 
-**top\_k** `_integer_` （可选）默认值为1
+**top\_k**`integer`（可选）默认值为1
 
 生成过程中采样候选集的大小。例如，取值为50时，仅将单次生成中得分最高的50个Token组成随机采样的候选集。取值越大，生成的随机性越高；取值越小，生成的确定性越高。取值为None或当top\_k大于100时，表示不启用top\_k策略，此时仅有top\_p策略生效。
 
@@ -591,55 +581,55 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 
 该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中，配置方式为：`extra_body={"top_k": xxx}`；通过 Node.js SDK或HTTP方式调用时，请作为顶层参数传递。
 
-**repetition\_penalty** `_float_` （可选）默认值为1.0
+**repetition\_penalty**`float`（可选）默认值为1.0
 
 模型生成时连续序列中的重复度。提高repetition\_penalty时可以降低模型生成的重复度，1.0表示不做惩罚。没有严格的取值范围，只要大于0即可。
 
 该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中，配置方式为：`extra_body={"repetition_penalty": xxx}`；通过 Node.js SDK或HTTP方式调用时，请作为顶层参数传递。
 
-**translation\_options** `_object_` **（必选）**
+**translation\_options**`object`**（必选）**
 
 需配置的翻译参数。
 
-**属性**
+属性
 
-**source\_lang** `_string_` （必选）
+**source\_lang** `string` （必选）
 
 源语言的英文全称，详情请参见[支持的语言](https://help.aliyun.com/zh/model-studio/machine-translation#038d2865bbydc)。若设为`auto`，模型会自动识别输入的语种。
 
-**target\_lang** `_string_` （必选）
+**target\_lang** `string` （必选）
 
 目标语言的英文全称，详情请参见[支持的语言](https://help.aliyun.com/zh/model-studio/machine-translation#038d2865bbydc)。
 
-**terms** `_arrays_` （可选）
+**terms** `arrays` （可选）
 
 使用[术语干预](https://help.aliyun.com/zh/model-studio/machine-translation#2bf54a5ab5voe)功能时需设置的术语数组。
 
-**属性**
+属性
 
-**source** `_string_` （必选）
+**source** `string` （必选）
 
 源语言的术语。
 
-**target** `_string_` （必选）
+**target** `string` （必选）
 
 目标语言的术语。
 
-**tm\_list** `_arrays_` （可选）
+**tm\_list** `arrays` （可选）
 
 使用[翻译记忆](https://help.aliyun.com/zh/model-studio/machine-translation#17e15234e7gfp)功能时需设置的翻译记忆数组。
 
-**属性**
+属性
 
-**source** `_string_` （必选）
+**source** `string` （必选）
 
 源语言的语句。
 
-**target** `_string_` （必选）
+**target** `string` （必选）
 
 目标语言的语句。
 
-**domains** `_string_` （可选）
+**domains** `string` （可选）
 
 使用[领域提示](https://help.aliyun.com/zh/model-studio/machine-translation#4af23a31db7lf)功能时需设置的领域提示语句。
 
@@ -683,110 +673,108 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 }
 ```
 
-**id** `_string_`
+**id**`string`
 
 本次请求的唯一标识符。
 
-**choices** `_array_`
+**choices**`array`
 
 模型生成内容的数组。
 
-**属性**
+属性
 
-**finish\_reason** `_string_`
+**finish\_reason**`string`
 
 模型停止生成的原因。
 
 有两种情况：
 
 -   自然停止输出时为`stop`；
-    
 -   生成长度过长而结束为`length`。
-    
 
-**index** `_integer_`
+**index**`integer`
 
 当前对象在`choices`数组中的索引。
 
-**message** `_object_`
+**message**`object`
 
 模型输出的消息。
 
-**属性**
+属性
 
-**content** `_string_`
+**content** `string`
 
 模型翻译结果。
 
-**refusal** `_string_`
+**refusal** `string`
 
 该参数当前固定为`null`。
 
-**role** `_string_`
+**role** `string`
 
 消息的角色，固定为`assistant`。
 
-**audio** `_object_`
+**audio** `object`
 
 该参数当前固定为`null`。
 
-**function\_call** `_object_`
+**function\_call** `object`
 
 该参数当前固定为`null`。
 
-**tool\_calls** `_array_`
+**tool\_calls** `array`
 
 该参数当前固定为`null`。
 
-**created** `_integer_`
+**created**`integer`
 
 本次请求被创建时的时间戳。
 
-**model** `_string_`
+**model**`string`
 
 本次请求使用的模型。
 
-**object** `_string_`
+**object** `string`
 
 始终为`chat.completion`。
 
-**service\_tier** `_string_`
+**service\_tier** `string`
 
 该参数当前固定为`null`。
 
-**system\_fingerprint** `_string_`
+**system\_fingerprint**`string`
 
 该参数当前固定为`null`。
 
-**usage** `_object_`
+**usage** `object`
 
 本次请求的 Token 消耗信息。
 
-**属性**
+属性
 
-**completion\_tokens** `_integer_`
+**completion\_tokens** `integer`
 
 模型输出的 Token 数。
 
-**prompt\_tokens** `_integer_`
+**prompt\_tokens** `integer`
 
 输入的 Token 数。
 
-**total\_tokens** `_integer_`
+**total\_tokens** `integer`
 
 消耗的总 Token 数，为`prompt_tokens`与`completion_tokens`的总和。
 
-**completion\_tokens\_details** `_object_`
+**completion\_tokens\_details** `object`
 
 该参数当前固定为`null`。
 
-**prompt\_tokens\_details** `_object_`
+**prompt\_tokens\_details** `object`
 
 该参数当前固定为`null`。
 
 ### chat响应chunk对象（流式输出）
 
-## 增量输出
+增量输出
 
 ```
 {"id": "chatcmpl-d8aa6596-b366-4ed0-9f6d-2e89247f554e", "choices": [{"delta": {"content": "", "function_call": null, "refusal": null, "role": "assistant", "tool_calls": null}, "finish_reason": null, "index": 0, "logprobs": null}], "created": 1762504029, "model": "qwen-mt-flash", "object": "chat.completion.chunk", "service_tier": null, "system_fingerprint": null, "usage": null}
@@ -804,7 +792,7 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 {"id": "chatcmpl-d8aa6596-b366-4ed0-9f6d-2e89247f554e", "choices": [], "created": 1762504029, "model": "qwen-mt-flash", "object": "chat.completion.chunk", "service_tier": null, "system_fingerprint": null, "usage": {"completion_tokens": 9, "prompt_tokens": 56, "total_tokens": 65, "completion_tokens_details": null, "prompt_tokens_details": null}}
 ```
 
-## 非增量输出
+非增量输出
 
 ```
 {"id":"chatcmpl-478e183e-cbdc-4ea0-aeae-4c2ba1d03e4d","choices":[{"delta":{"content":"","function_call":null,"refusal":null,"role":"assistant","tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1762346453,"model":"qwen-mt-plus","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":null}
@@ -822,236 +810,229 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 {"id":"chatcmpl-478e183e-cbdc-4ea0-aeae-4c2ba1d03e4d","choices":[],"created":1762346453,"model":"qwen-mt-plus","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":{"completion_tokens":9,"prompt_tokens":56,"total_tokens":65,"completion_tokens_details":null,"prompt_tokens_details":null}}
 ```
 
-**id** `_string_`
+**id**`string`
 
 本次调用的唯一标识符。每个chunk对象有相同的 id。
 
-**choices** `_array_`
+**choices**`array`
 
 模型生成内容的数组。若设置`include_usage`参数为`true`，则在最后一个chunk中为空。
 
-**属性**
+属性
 
-**delta** `_object_`
+**delta** `object`
 
 流式返回的输出内容。
 
-**属性**
+属性
 
-**content** `_string_`
+**content** `string`
 
 翻译结果，qwen-mt-flash和qwen-mt-lite为增量式更新，qwen-mt-plus和qwen-mt-turbo为非增量式更新。
 
-**function\_call** `_object_`
+**function\_call** `object`
 
 该参数当前固定为`null`。
 
-**refusal** `_object_`
+**refusal** `object`
 
 该参数当前固定为`null`。
 
-**role** `_string_`
+**role** `string`
 
 消息对象的角色，只在第一个chunk中有值。
 
-**finish\_reason** `_string_`
+**finish\_reason** `string`
 
 模型停止生成的原因。有三种情况：
 
 -   自然停止输出时为`stop`；
-    
 -   生成未结束时为`null`；
-    
 -   生成长度过长而结束为`length`。
-    
 
-**index** `_integer_`
+**index** `integer`
 
 当前响应在`choices`数组中的索引。
 
-**created** `_integer_`
+**created**`integer`
 
 本次请求被创建时的时间戳。每个chunk有相同的时间戳。
 
-**model** `_string_`
+**model**`string`
 
 本次请求使用的模型。
 
-**object** `_string_`
+**object** `string`
 
 始终为`chat.completion.chunk`。
 
-**service\_tier** `_string_`
+**service\_tier** `string`
 
 该参数当前固定为`null`。
 
-**system\_fingerprint**`_string_`
+**system\_fingerprint**`string`
 
 该参数当前固定为`null`。
 
-**usage** `_object_`
+**usage** `object`
 
 本次请求消耗的Token。只在`include_usage`为`true`时，在最后一个chunk返回。
 
-**属性**
+属性
 
-**completion\_tokens** `_integer_`
+**completion\_tokens** `integer`
 
 模型输出的 Token 数。
 
-**prompt\_tokens** `_integer_`
+**prompt\_tokens** `integer`
 
 输入 Token 数。
 
-**total\_tokens** `_integer_`
+**total\_tokens** `integer`
 
 总 Token 数，为`prompt_tokens`与`completion_tokens`的总和。
 
-**completion\_tokens\_details** `_object_`
+**completion\_tokens\_details** `object`
 
 该参数当前固定为`null`。
 
-**prompt\_tokens\_details** `_object_`
+**prompt\_tokens\_details** `object`
 
 该参数当前固定为`null`。
 
 ## DashScope
 
-## **北京地域**
+#### 北京地域
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 SDK 调用无需配置 `base_url`，其默认值为`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`。
 
-## **新加坡地域**
+#### 新加坡地域
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 SDK调用配置的`base_url`：
 
-## **Python代码**
+#### Python代码
 
 ```
 dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
 ```
 
-## **Java代码**
+#### Java代码
 
 -   **方式一：**
-    
-    ```
-    import com.alibaba.dashscope.protocol.Protocol;
-    Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1");
-    ```
-    
--   **方式二：**
-    
-    ```
-    import com.alibaba.dashscope.utils.Constants;
-    Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
-    ```
-    
 
-## **美国（弗吉尼亚）地域**
+```
+import com.alibaba.dashscope.protocol.Protocol;
+Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1");
+```
+
+-   **方式二：**
+
+```
+import com.alibaba.dashscope.utils.Constants;
+Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
+```
+
+#### 美国（弗吉尼亚）地域
 
 HTTP 请求地址：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 SDK调用配置的`base_url`：
 
-## **Python代码**
+#### Python代码
 
 ```
 dashscope.base_http_api_url = 'https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1'
 ```
 
-## **Java代码**
+#### Java代码
 
 -   **方式一：**
-    
-    ```
-    import com.alibaba.dashscope.protocol.Protocol;
-    Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1");
-    ```
-    
--   **方式二：**
-    
-    ```
-    import com.alibaba.dashscope.utils.Constants;
-    Constants.baseHttpApiUrl="https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1";
-    ```
-    
 
-## **新加坡地域**
+```
+import com.alibaba.dashscope.protocol.Protocol;
+Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1");
+```
+
+-   **方式二：**
+
+```
+import com.alibaba.dashscope.utils.Constants;
+Constants.baseHttpApiUrl="https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1";
+```
+
+#### 新加坡地域
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 SDK调用配置的`base_url`：
 
-## **Python代码**
+#### Python代码
 
 ```
 dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
 ```
 
-## **Java代码**
+#### Java代码
 
 -   **方式一：**
-    
-    ```
-    import com.alibaba.dashscope.protocol.Protocol;
-    Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1");
-    ```
-    
--   **方式二：**
-    
-    ```
-    import com.alibaba.dashscope.utils.Constants;
-    Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
-    ```
-    
 
-## **美国（弗吉尼亚）地域**
+```
+import com.alibaba.dashscope.protocol.Protocol;
+Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1");
+```
+
+-   **方式二：**
+
+```
+import com.alibaba.dashscope.utils.Constants;
+Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
+```
+
+#### 美国（弗吉尼亚）地域
 
 HTTP 请求地址：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 SDK调用配置的`base_url`：
 
-## **Python代码**
+#### Python代码
 
 ```
 dashscope.base_http_api_url = 'https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1'
 ```
 
-## **Java代码**
+#### Java代码
 
 -   **方式一：**
-    
-    ```
-    import com.alibaba.dashscope.protocol.Protocol;
-    Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1");
-    ```
-    
--   **方式二：**
-    
-    ```
-    import com.alibaba.dashscope.utils.Constants;
-    Constants.baseHttpApiUrl="https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1";
-    ```
-    
 
-## **北京地域**
+```
+import com.alibaba.dashscope.protocol.Protocol;
+Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1");
+```
+
+-   **方式二：**
+
+```
+import com.alibaba.dashscope.utils.Constants;
+Constants.baseHttpApiUrl="https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1";
+```
+
+#### 北京地域
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 SDK 调用无需配置 `base_url`，其默认值为`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`。
 
-> 您需要已 [获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key) 并 [配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables) 。若通过DashScope SDK进行调用，需要 [安装DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk#f3e80b21069aa) 。
+> 您需要已 [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md) 并 [配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md) 。若通过DashScope SDK进行调用，需要 [安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md) 。
 
 ### 请求体
 
-## 基础使用
+#### 基础使用
 
-## Python
+#### Python
 
 ```
 import os
@@ -1081,7 +1062,7 @@ response = dashscope.Generation.call(
 print(response.output.choices[0].message.content)
 ```
 
-## Java
+#### Java
 
 ```
 // DashScope SDK 版本需要不低于 2.20.6
@@ -1137,9 +1118,9 @@ public class Main {
 }
 ```
 
-## curl
+#### curl
 
-各地域的[请求地址](#8d897eab3467e)和API Key不同，以下是北京地域的请求地址。
+各地域的[请求地址](raw/model-api-reference/more-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
@@ -1164,9 +1145,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
-## 术语干预
+#### 术语干预
 
-## Python
+#### Python
 
 ```
 import os
@@ -1213,7 +1194,7 @@ response = dashscope.Generation.call(
 print(response.output.choices[0].message.content)
 ```
 
-## Java
+#### Java
 
 ```
 // DashScope SDK 版本需要不低于 2.20.6
@@ -1276,9 +1257,9 @@ public class Main {
 }
 ```
 
-## curl
+#### curl
 
-各地域的[请求地址](#8d897eab3467e)和API Key不同，以下是北京地域的请求地址。
+各地域的[请求地址](raw/model-api-reference/more-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
@@ -1312,9 +1293,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
-## 翻译记忆
+#### 翻译记忆
 
-## Python
+#### Python
 
 ```
 import os
@@ -1356,7 +1337,7 @@ response = dashscope.Generation.call(
 print(response.output.choices[0].message.content)
 ```
 
-## Java
+#### Java
 
 ```
 // DashScope SDK 版本需要不低于 2.20.6
@@ -1423,9 +1404,9 @@ public class Main {
 }
 ```
 
-## curl
+#### curl
 
-各地域的[请求地址](#8d897eab3467e)和API Key不同，以下是北京地域的请求地址。
+各地域的[请求地址](raw/model-api-reference/more-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
@@ -1454,9 +1435,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
-## 领域提示
+#### 领域提示
 
-## Python
+#### Python
 
 ```
 import os
@@ -1487,7 +1468,7 @@ response = dashscope.Generation.call(
 print(response.output.choices[0].message.content)
 ```
 
-## Java
+#### Java
 
 ```
 // DashScope SDK 版本需要不低于 2.20.6
@@ -1540,9 +1521,9 @@ public class Main {
 }
 ```
 
-## curl
+#### curl
 
-各地域的[请求地址](#8d897eab3467e)和API Key不同，以下是北京地域的请求地址。
+各地域的[请求地址](raw/model-api-reference/more-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
@@ -1567,47 +1548,47 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
-**model** `_string_` **（必选）**
+**model**`string`**（必选）**
 
 模型名称。支持的模型：qwen-mt-plus、qwen-mt-flash、qwen-mt-lite、qwen-mt-turbo。
 
-**messages** `_array_` **（必选）**
+**messages**`array`**（必选）**
 
 消息数组，用于向大模型传递上下文。仅支持传入 User Message。
 
-**消息类型**
+消息类型
 
-User Message `_object_` **（必选）**
+User Message`object`**（必选）**
 
 用户消息，用于传递待翻译的句子。
 
-**属性**
+属性
 
-**content** `_string_`**（必选）**
+**content**`string`**（必选）**
 
 待翻译的句子。
 
-**role** `_string_` **（必选）**
+**role**`string`**（必选）**
 
 用户消息的角色，必须设为`user`。
 
-**max\_tokens** `_integer_` （可选）
+**max\_tokens**`integer`（可选）
 
 用于限制模型输出的最大 Token 数。若生成内容超过此值，响应将被截断。
 
 默认值与最大值均为模型的最大输出长度，请参见[模型选型](https://help.aliyun.com/zh/model-studio/machine-translation#efd59c2b9eosx)。
 
-> Java SDK中为**maxTokens**_。_通过HTTP调用时，请将 **max\_tokens** 放入 **parameters** 对象中。
+> Java SDK中为**maxTokens**\*。\*通过HTTP调用时，请将 **max\_tokens**放入 **parameters** 对象中。
 
-**seed** `_integer_` （可选）
+**seed**`integer`（可选）
 
 随机数种子。用于确保在相同输入和参数下生成结果可复现。若调用时传入相同的 `seed` 且其他参数不变，模型将尽可能返回相同结果。
 
-取值范围：`[0,231−1]`。
+取值范围：`[0,2 31 −1]`。
 
-> 通过HTTP调用时，请将 **seed** 放入 **parameters** 对象中。
+> 通过HTTP调用时，请将 **seed**放入 **parameters** 对象中。
 
-**temperature** `_float_` （可选） 默认值为0.65
+**temperature**`float`（可选）默认值为0.65
 
 采样温度，控制模型生成文本的多样性。
 
@@ -1617,9 +1598,9 @@ temperature越高，生成的文本更多样，反之，生成的文本更确定
 
 temperature与top\_p均可以控制生成文本的多样性，建议只设置其中一个值。
 
-> 通过HTTP调用时，请将 **temperature** 放入 **parameters** 对象中。
+> 通过HTTP调用时，请将 **temperature**放入 **parameters** 对象中。
 
-**top\_p** `_float_` （可选）默认值为0.8
+**top\_p**`float`（可选）默认值为0.8
 
 核采样的概率阈值，控制模型生成文本的多样性。
 
@@ -1629,36 +1610,32 @@ top\_p越高，生成的文本更多样。反之，生成的文本更确定。
 
 temperature与top\_p均可以控制生成文本的多样性，建议只设置其中一个值。
 
-> Java SDK中为**topP**_。_通过HTTP调用时，请将 **top\_p** 放入 **parameters** 对象中。
+> Java SDK中为**topP**\*。\*通过HTTP调用时，请将 **top\_p**放入 **parameters** 对象中。
 
-**repetition\_penalty** `_float_` （可选）默认值为1.0
+**repetition\_penalty**`float`（可选）默认值为1.0
 
 模型生成时连续序列中的重复度。提高repetition\_penalty时可以降低模型生成的重复度，1.0表示不做惩罚。没有严格的取值范围，只要大于0即可。
 
-> Java SDK中为**repetitionPenalty**_。_通过HTTP调用时，请将 **repetition\_penalty** 放入 **parameters** 对象中。
+> Java SDK中为**repetitionPenalty**\*。\*通过HTTP调用时，请将 **repetition\_penalty**放入 **parameters** 对象中。
 
-**top\_k** `_integer_` （可选）默认值为1
+**top\_k**`integer`（可选）默认值为1
 
 生成过程中采样候选集的大小。例如，取值为50时，仅将单次生成中得分最高的50个Token组成随机采样的候选集。取值越大，生成的随机性越高；取值越小，生成的确定性越高。取值为None或当top\_k大于100时，表示不启用top\_k策略，此时仅有top\_p策略生效。
 
 取值需要大于或等于0。
 
-> Java SDK中为**topK**_。_通过HTTP调用时，请将 **top\_k** 放入 **parameters** 对象中。
+> Java SDK中为**topK**\*。\*通过HTTP调用时，请将 **top\_k**放入 **parameters** 对象中。
 
-**stream** `_boolean_` （可选）
+**stream**`boolean`（可选）
 
 是否以流式方式输出回复。
 
 可选值：
 
 -   `false`：等待模型生成完整回复后一次性返回。
-    
 -   `true`：模型边生成边返回数据块。客户端需逐块读取，以还原完整回复。
-    
 
-**说明**
-
-当前仅qwen-mt-flash、qwen-mt-lite模型支持以增量形式返回数据，每次返回仅包含新生成的内容。qwen-mt-plus和qwen-mt-turbo模型以非增量形式返回数据，每次返回当前已经生成的整个序列，暂时无法修改。如：
+**说明**当前仅qwen-mt-flash、qwen-mt-lite模型支持以增量形式返回数据，每次返回仅包含新生成的内容。qwen-mt-plus和qwen-mt-turbo模型以非增量形式返回数据，每次返回当前已经生成的整个序列，暂时无法修改。如：
 
 I
 
@@ -1674,55 +1651,55 @@ I didn't laugh after
 
 > 该参数仅支持Python SDK。通过Java SDK实现流式输出请通过`streamCall`接口调用；通过HTTP实现流式输出请在Header中指定`X-DashScope-SSE`为`enable`。
 
-**translation\_options** `_object_` **（必选）**
+**translation\_options**`object`**（必选）**
 
 需配置的翻译参数。
 
-**属性**
+属性
 
-**source\_lang** `_string_` （必选）
+**source\_lang** `string` （必选）
 
 源语言的英文全称，详情请参见[支持的语言](https://help.aliyun.com/zh/model-studio/machine-translation#038d2865bbydc)。若设为`auto`，模型会自动识别输入的语种。
 
-**target\_lang** `_string_` （必选）
+**target\_lang** `string` （必选）
 
 目标语言的英文全称，详情请参见[支持的语言](https://help.aliyun.com/zh/model-studio/machine-translation#038d2865bbydc)。
 
-**terms** `_arrays_` （可选）
+**terms** `arrays` （可选）
 
 使用[术语干预](https://help.aliyun.com/zh/model-studio/machine-translation#2bf54a5ab5voe)功能时需设置的术语数组。
 
-**属性**
+属性
 
-**source** `_string_` （必选）
+**source** `string` （必选）
 
 源语言的术语。
 
-**target** `_string_` （必选）
+**target** `string` （必选）
 
 目标语言的术语。
 
-**tm\_list** `_arrays_` （可选）
+**tm\_list** `arrays` （可选）
 
 使用[翻译记忆](https://help.aliyun.com/zh/model-studio/machine-translation#17e15234e7gfp)功能时需设置的翻译记忆数组。
 
-**属性**
+属性
 
-**source** `_string_` （必选）
+**source** `string` （必选）
 
 源语言的语句。
 
-**target** `_string_` （必选）
+**target** `string` （必选）
 
 目标语言的语句。
 
-**domains** `_string_` （可选）
+**domains** `string` （可选）
 
 使用[领域提示](https://help.aliyun.com/zh/model-studio/machine-translation#4af23a31db7lf)功能时需设置的领域提示语句。
 
 > 领域提示语句暂时只支持英文。
 
-> Java SDK中为`translationOptions`。通过HTTP调用时，请将 **translation\_options** 放入 **parameters** 对象中。
+> Java SDK中为`translationOptions`。通过HTTP调用时，请将 **translation\_options**放入 **parameters** 对象中。
 
 ### chat响应对象（流式与非流式输出格式一致）
 
@@ -1754,101 +1731,95 @@ I didn't laugh after
 }
 ```
 
-**status\_code** `_string_`
+**status\_code**`string`
 
 本次请求的状态码。200 表示请求成功，否则表示请求失败。
 
 > Java SDK 通过`GenerationResult.getStatusCode()`返回该参数（成功时为 200）。调用失败会抛出异常，可通过`ApiException.getStatus().getStatusCode()`获取错误状态码。
 
-**request\_id** `_string_`
+**request\_id**`string`
 
 本次调用的唯一标识符。
 
 > Java SDK返回参数为**requestId。**
 
-**code** `_string_`
+**code**`string`
 
 错误码，调用成功时为空值。
 
 > 只有Python SDK返回该参数。
 
-**output** `_object_`
+**output**`object`
 
 调用结果信息。
 
-**属性**
+属性
 
-**text** `_string_`
+**text**`string`
 
 该参数当前固定为`null`。
 
-**finish\_reason** `_string_`
+**finish\_reason**`string`
 
 模型结束生成的原因。有以下情况：
 
 -   正在生成时为`null`；
-    
 -   模型输出自然结束为`stop`；
-    
 -   因生成长度过长而结束为`length`；
-    
 
-**choices** `_array_`
+**choices**`array`
 
 模型的输出信息。
 
-**属性**
+属性
 
-**finish\_reason** `_string_`
+**finish\_reason**`string`
 
 有以下情况：
 
 -   正在生成时为`null`；
-    
 -   因模型输出自然结束为`stop`；
-    
 -   因生成长度过长而结束为`length`；
-    
 
-**message** `_object_`
+**message**`object`
 
 模型输出的消息对象。
 
-**属性**
+属性
 
-**role** `_string_`
+**role**`string`
 
 输出消息的角色，固定为`assistant`。
 
-**content** `_string_`
+**content**`string`
 
 翻译的结果。
 
-**model\_name** `_string_`
+**model\_name**`string`
 
 本次请求使用的模型名称。
 
-**usage** `_object_`
+**usage**`object`
 
 本次请求使用的Token信息。
 
-**属性**
+属性
 
-**input\_tokens** `_integer_`
+**input\_tokens** `integer`
 
 输入 Token 数。
 
-**output\_tokens** `_integer_`
+**output\_tokens** `integer`
 
 输出 Token 数。
 
-**total\_tokens** `_integer_`
+**total\_tokens** `integer`
 
 总 Token 数，为**input\_tokens**与**output\_tokens**之和**。**
 
-## **错误码**
+## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 .aliyun-docs-content .one-codeblocks pre {
 
@@ -1860,7 +1831,7 @@ height: auto;
 
 .tab-item {
 
-font-size: 12px !important; / _你可以根据需要调整字体大小_ /
+font-size: 12px !important; /_你可以根据需要调整字体大小_/
 
 padding: 0px 5px !important;
 

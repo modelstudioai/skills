@@ -4,24 +4,22 @@
 
 ## HTTP接口调用
 
-### **功能描述**
+### 功能描述
 
 在对input字段值加密前，需要通过此接口获取当前支持的最新公钥ID及其对应的值。
 
-### **前提条件**
+### 前提条件
 
--   已开通百炼服务并获得API-KEY：[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
-    
--   我们推荐您将API-KEY配置到环境变量中以降低API-KEY的泄漏风险，配置方法可参考[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。您也可以在代码中配置API-KEY，但是泄漏风险会提高。
-    
+-   已开通百炼服务并获得API-KEY：[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+-   我们推荐您将API-KEY配置到环境变量中以降低API-KEY的泄漏风险，配置方法可参考[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。您也可以在代码中配置API-KEY，但是泄漏风险会提高。
 
-### **接口调用**
+### 接口调用
 
 ```
 GET /api/v1/public-keys/latest
 ```
 
-### **入参描述**
+### 入参描述
 
 **传参方式**
 
@@ -47,7 +45,7 @@ String
 
 "Authorization":"Bearer d1\*\*2a"
 
-### **出参描述**
+### 出参描述
 
 **字段**
 
@@ -81,7 +79,7 @@ String
 
 RSA公钥的ID
 
-### **异常返回参数描述**
+### 异常返回参数描述
 
 **名称**
 
@@ -105,7 +103,7 @@ String
 
 否
 
-错误码及错误信息，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)
+错误码及错误信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)
 
 message
 
@@ -113,14 +111,14 @@ String
 
 否
 
-### **请求示例**
+### 请求示例
 
 ```
 curl -X GET 'https://dashscope.aliyuncs.com/api/v1/public-keys/latest' \
 --header 'Authorization: Bearer xxx'
 ```
 
-### **正常响应示例**
+### 正常响应示例
 
 ```
 {
@@ -132,7 +130,7 @@ curl -X GET 'https://dashscope.aliyuncs.com/api/v1/public-keys/latest' \
 }
 ```
 
-### **异常响应示例**
+### 异常响应示例
 
 ```
 {
@@ -142,6 +140,6 @@ curl -X GET 'https://dashscope.aliyuncs.com/api/v1/public-keys/latest' \
 }
 ```
 
-## **错误码**
+## 错误码
 
-更多错误码详情，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)。
+更多错误码详情，请参见[错误码](raw/model-api-reference/preparations/error-code.md)。

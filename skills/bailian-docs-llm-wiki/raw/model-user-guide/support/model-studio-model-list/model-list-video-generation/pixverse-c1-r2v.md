@@ -18,7 +18,7 @@ C1是PixVerse在26年3月底推出的影视行业大模型，r2v（多主体参�
 
 输入模态
 
-**Image**　**Text**
+**Image** **Text**
 
 输出模态
 
@@ -82,7 +82,7 @@ Function Calling
 
 本文仅展示模型调用原价，不包含限时优惠等活动信息，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)查看活动优惠。
 
-## 华北2（北京）
+#### 华北2（北京）
 
 计费项
 
@@ -140,7 +140,7 @@ Function Calling
 
 ## 限流
 
-## 华北2（北京）
+#### 华北2（北京）
 
 参数
 

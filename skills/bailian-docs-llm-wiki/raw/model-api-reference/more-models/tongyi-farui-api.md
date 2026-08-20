@@ -2,7 +2,7 @@
 
 通义法睿是以千问为基座经法律行业数据和知识专门训练的法律行业大模型产品，综合运用了模型精调、强化学习、RAG检索增强、法律Agent及司法专属小模型等技术，具有回答法律问题、推理法律适用、辅助案情分析、生成法律文书、检索法律知识、审查合同条款等功能。
 
-## **模型概览**
+## 模型概览
 
 **模型名称**
 
@@ -30,31 +30,28 @@ farui-plus
 
 20元
 
-关于模型的限流条件，请参见[限流](https://help.aliyun.com/zh/model-studio/rate-limit)。
+关于模型的限流条件，请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
 
-## **SDK使用**
+## SDK使用
 
 您可以通过SDK实现单轮对话、多轮对话、流式输出等多种功能。
 
 ### 前提条件
 
--   DashScope SDK提供了Python和Java两个版本，请确保您已安装最新版SDK：[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+-   DashScope SDK提供了Python和Java两个版本，请确保您已安装最新版SDK：[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+    
+-   已开通服务并获得API-KEY：[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+    
+-   推荐您将API-KEY配置到环境变量中以降低API-KEY的泄露风险，详情请参见[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。您也可以在代码中配置API-KEY，但是泄露风险会提高。
     
 
--   已开通服务并获得API-KEY：[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
-    
--   推荐您将API-KEY配置到环境变量中以降低API-KEY的泄露风险，详情请参见[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。您也可以在代码中配置API-KEY，但是泄露风险会提高。
-    
+**说明**当您使用DashScope Java SDK时，为了效率您应该尽可能复用Generation以及其他请求对象，但对象（如Generation）不是线程安全的，您应该采取一定的措施，如及时关闭进程、管理同步机制等，来确保对象安全。
 
-**说明**
-
-当您使用DashScope Java SDK时，为了效率您应该尽可能复用Generation以及其他请求对象，但对象（如Generation）不是线程安全的，您应该采取一定的措施，如及时关闭进程、管理同步机制等，来确保对象安全。
-
-### **单轮对话**
+### 单轮对话
 
 您可以将通义法睿应用在法律咨询、文书生成、争议焦点识别等场景。您可以运行以下示例代码，体验通义法睿大模型的单轮对话能力。
 
-Python
+python
 
 ```
 # coding=utf-8
@@ -71,7 +68,7 @@ response = dashscope.Generation.call(
 print(response)
 ```
 
-Java
+java
 
 ```
 // 建议dashscope SDK的版本 >= 2.12.0
@@ -149,11 +146,11 @@ public class Main {
 }
 ```
 
-### **多轮对话**
+### 多轮对话
 
 您可以运行以下示例代码，体验通义法睿大模型的多轮对话能力。
 
-Python
+python
 
 ```
 from dashscope import Generation
@@ -179,7 +176,7 @@ response = Generation.call(model="farui-plus",
 print(response)
 ```
 
-Java
+java
 
 ```
 import java.util.ArrayList;
@@ -295,11 +292,11 @@ public class Main {
 }
 ```
 
-### **流式输出**
+### 流式输出
 
 大模型并不是一次性生成最终结果，而是逐步地生成中间结果，最终结果由中间结果拼接而成。非流式输出方式等待模型生成结束后再将生成的中间结果拼接后返回，而流式输出可以实时地将中间结果返回，您可以在模型进行输出的同时进行阅读，减少等待模型回复的时间。使用流式输出需要您进行一些配置，DashScope Python SDK中需要设置stream为True，DashScope Java SDK中需要使用streamCall接口调用。
 
-Python
+python
 
 ```
 import os
@@ -324,7 +321,7 @@ for response in responses:
     print(response)
 ```
 
-Java
+java
 
 ```
 import java.util.Arrays;
@@ -405,7 +402,7 @@ public class Main {
 {"status_code": 200, "request_id": "f741ea2e-e997-9d33-ae8d-da3c56b26a4e", "code": "", "message": "", "output": {"text": null, "finish_reason": null, "choices": [{"finish_reason": "stop", "message": {"role": "assistant", "content": ""}}]}, "usage": {"input_tokens": 21, "output_tokens": 59, "total_tokens": 80}}
 ```
 
-### **输入参数配置**
+### 输入参数配置
 
 **参数**
 
@@ -439,8 +436,6 @@ array
 
 -   prompt：用户当前输入的期望模型执行指令，用于指导模型生成回复。
     
-
-**说明**
 
 messages和prompt任选一个参数使用即可，仅依赖prompt指令会限制模型进行有记忆的对话能力。
 
@@ -494,7 +489,7 @@ text
 
 \[text|message\]，默认为text，当设置为message时，输出格式请参考返回结果。推荐优先使用message格式。
 
-### **返回结果**
+### 返回结果
 
 当您将result\_format设置为`message`时的结果示例：
 
@@ -533,7 +528,7 @@ text
 
 ### 前提条件
 
-已开通服务并获得API-KEY：[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+已开通服务并获得API-KEY：[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
 ### 提交接口调用
 
@@ -907,4 +902,4 @@ data:{"output":{"choices":[{"message":{"content":"【民事起诉状】\n\n原�
 
 ## 状态码说明
 
-大模型服务平台通用状态码详情，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+大模型服务平台通用状态码详情，请参见[错误码](raw/model-api-reference/preparations/error-code.md)。

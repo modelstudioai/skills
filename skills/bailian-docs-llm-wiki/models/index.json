@@ -1,16 +1,16 @@
 {
-  "updatedAt": "2026-08-20",
-  "totalFamilies": 179,
-  "totalModels": 401,
+  "updatedAt": "2026-08-21",
+  "totalFamilies": 178,
+  "totalModels": 400,
   "profileCoverage": {
     "full": 0,
     "partial": 0,
-    "structured-only": 401,
+    "structured-only": 400,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 37,
-    "IG": 32,
+    "IG": 31,
     "VG": 27,
     "TTS": 16,
     "Reasoning": 15,
@@ -27,7 +27,7 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 109,
+    "qwen": 108,
     "qwen-domain-model": 34,
     "wan": 14,
     "happyhorse": 4,
@@ -1273,21 +1273,6 @@
       "items": [
         "qwen-image-edit",
         "qwen-image-edit-plus"
-      ]
-    },
-    {
-      "slug": "qwen-image-max",
-      "name": "Qwen-Image-Max",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-image-max"
       ]
     },
     {

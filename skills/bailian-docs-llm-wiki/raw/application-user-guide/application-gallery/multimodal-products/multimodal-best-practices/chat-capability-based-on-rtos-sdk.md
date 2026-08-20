@@ -4,17 +4,15 @@
 
 ## 1\. 开发准备
 
-根据[应用创建](https://help.aliyun.com/zh/model-studio/multimodal-app-creation)的文档，创建应用，购买 license，获取 [APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和 AppSecret。
+根据[应用创建](raw/application-user-guide/application-gallery/multimodal-products/multimodal-guidelines/multimodal-app-creation.md)的文档，创建应用，购买 license，获取 [APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和 AppSecret。
 
-参考[RTOS C SDK（License模式）](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk)，根据芯片型号，下载相应的 SDK 包。
+参考[RTOS C SDK（License模式）](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/mmi-rtos-sdk.md)，根据芯片型号，下载相应的 SDK 包。
 
-如采用半托管模式，需要根据[RTOS C SDK（License模式）](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk)，完成服务端相关接口对接。
+如采用半托管模式，需要根据[RTOS C SDK（License模式）](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/mmi-rtos-sdk.md)，完成服务端相关接口对接。
 
 ## 2\. SDK 适配
 
-**说明**
-
-**本文档示例和日志中所有形如**`**<ID>**`**中的**`**ID**` **均为数据，文档中展示的为脱敏数据。**
+**说明****本文档示例和日志中所有形如**`<ID>`**中的**`ID`**均为数据，文档中展示的为脱敏数据。**
 
 不同芯片平台需要使用对应平台的toolchain进行编译，目前百炼已经支持的芯片清单，可直接下载SDK。
 
@@ -22,7 +20,7 @@
 
 `aliyun_sdk_<PLATFORM>_<SDK_VERSION>.tar.xz`
 
-### **2.1. SDK 目录结构说明**
+### 2.1. SDK 目录结构说明
 
 获取的 SDK 目录结构如下
 
@@ -54,25 +52,17 @@
         │   └── ...
         └── libtinycrypt.a
 ```
-
 **说明：**
 
 -   include目录下包含使用SDK所需要的头文件，需要将该目录添加至工程头文件目录下。
-    
 -   libqwen\_sdk.a包含SDK核心代码，必须加载。
-    
 -   libc\_license.a包含license模式相关代码，如使用license模式接入必须加载，如使用后付费模式接入不能加载该库。
-    
 -   libhal\_dummy.a包含dummy hal代码，用于SDK未适配前检查编译环境用，在完成hal移植后建议删除该库。
-    
 -   libqwen\_test.a包含测试代码，自动化测试过程需要加载该库，正式生产需要去除。
-    
 -   libtinycrypt.a包含加解密依赖接口，如果平台未集成该三方库则必须加载。
-    
 -   libcjson.a包含SDK相关依赖接口，如果平台未集成该三方库则必须加载。
-    
 
-### **2.2. SDK HAL 层适配**
+### 2.2. SDK HAL 层适配
 
 SDK 包中如下列出的五个头文件中的函数声明，开发者必须根据自己的开发平台实现相关函数。
 
@@ -90,24 +80,21 @@ aliyun_sdk/include/c_utils/
 
 需要实现的函数列表如下，具体函数说明请参考 SDK 包中对应头文件：
 
--   **内存模块（**`**aliyun_sdk/include/c_utils/hal_util_mem.h**`**）**
-    
+-   **内存模块（**`aliyun_sdk/include/c_utils/hal_util_mem.h`**）**
 
 ```
 void * util_malloc(int32_t size);
 void util_free(void *ptr);
 ```
 
--   **随机数模块（**`**aliyun_sdk/include/c_utils/hal_util_random.h**`**）**
-    
+-   **随机数模块（**`aliyun_sdk/include/c_utils/hal_util_random.h`**）**
 
 ```
 int32_t util_random_init(uint32_t seed);
 uint32_t util_random(void);
 ```
 
--   **存储模块（**`**aliyun_sdk/include/c_utils/hal_util_storage.h**`**）**
-    
+-   **存储模块（**`aliyun_sdk/include/c_utils/hal_util_storage.h`**）**
 
 ```
 int32_t util_storage_erase(void);
@@ -115,8 +102,7 @@ int32_t util_storage_storage(uint8_t *data, uint32_t size);
 int32_t util_storage_load(uint8_t *data, uint32_t size);
 ```
 
--   **时间模块（**`**aliyun_sdk/include/c_utils/hal_util_time.h**`**）**
-    
+-   **时间模块（**`aliyun_sdk/include/c_utils/hal_util_time.h`**）**
 
 ```
 void util_msleep(uint32_t ms);
@@ -124,8 +110,7 @@ int64_t util_get_timestamp_ms(void);
 uint8_t util_timestamp_inited(void);
 ```
 
--   **互斥锁模块（**`**aliyun_sdk/include/c_utils/hal_util_mutex.h**`**）**
-    
+-   **互斥锁模块（**`aliyun_sdk/include/c_utils/hal_util_mutex.h`**）**
 
 ```
 /* 互斥锁结构体定义 */
@@ -139,7 +124,7 @@ int32_t util_mutex_lock(util_mutex_t *mutex, int32_t timeout);
 int32_t util_mutex_unlock(util_mutex_t *mutex);
 ```
 
-### **2.3. HAL 层移植验收标准**
+### 2.3. HAL 层移植验收标准
 
 在实现以上各模块之后，加载`libsdk_test.a`，在主程序中直接调用函数`aliyun_sdk_test()`，就会对以上工作模块进行测试，输出日志可查看测试结果。
 
@@ -163,7 +148,6 @@ int32_t util_mutex_unlock(util_mutex_t *mutex);
 在使用 SDK 前，需要通过阿里云百炼平台——[多模态控制台](https://bailian.console.aliyun.com/?tab=app#/app/app-market/multi-modal-app)，创建应用并获取 AppId 、API Key
 
 -   license模式，还需要通过购买 license 获得对应的 AppSecret
-    
 
 初始化示例代码如下：（以 license全托管模式为例）
 
@@ -206,7 +190,7 @@ int dummy_aliyun_sdk_init(void)
     mmi_config.player_rb_size = 8 * 1024;
 
     c_mmi_config(&mmi_config);
-    
+
     //... 其他代码
 }
 ```
@@ -227,7 +211,7 @@ int dummy_aliyun_sdk_init(void)
 [LICENSE][I][c_license_set_app_secret_str]app_secret    [00000000000000000000000000000000]
 [LICENSE][I][c_license_set_device_name]device_name      [Your DeviceName]
 [UT][I][c_mmi_set_device_name]device_name [Your DeviceName]
-[UT][D][_get_storage_path]path [/Users/lancelot/Desktop/code/esp32_v3/qwen_sdk/build_mac/device_data.bin]
+[UT][D][_get_storage_path]path [/Users/<username>/Desktop/code/esp32_v3/qwen_sdk/build_mac/device_data.bin]
 [UT][I][c_mmi_storage_save]stroage [176]
 [UT][I][c_mmi_storage_save]ver[0x00010100][1.1.0] done
 [UT][I][c_mmi_storage_set_api_key]app_id    [Your ApiKey]
@@ -263,7 +247,7 @@ int dummy_aliyun_sdk_init(void)
 
 SDK使用中需要使用`HTTP`和`WEBSOCKET`协议，需要开发者实现相应收发流程，SDK 仅负责发送数据的封装和接收数据的解析。
 
-### **4.1. HTTP 通信**
+### 4.1. HTTP 通信
 
 文档中将 http 通信相关功能简化为接收和发送两个函数，具体不同平台实现需要开发者自行适配，以下示例代码仅用于说明交互流程。
 
@@ -279,7 +263,7 @@ int dummy_http_response_for_register(char* rsp_data, int rsp_len);
 int dummy_http_response_for_token(char* rsp_data, int rsp_len);
 ```
 
-#### **4.1.1. 设备注册**
+#### 4.1.1. 设备注册
 
 设备注册示例代码如下：
 
@@ -294,7 +278,7 @@ int dummy_http_response_for_register(int status, char* rsp_data, int rsp_len)
     // SDK中的解析函数只需要报文中的data字段，如下http接收报文所示
     err = c_license_analyze_register_rsp(rsp_body_data);
     c_mmi_storage_save();
-    
+
     // ... 客户其他业务逻辑
 
     return err;
@@ -335,7 +319,7 @@ int dummy_aliyun_sdk_init(void)
     mmi_config.player_rb_size = 8 * 1024;
 
     c_mmi_config(&mmi_config);
-    
+
     // 设备注册
     if (c_license_device_is_registered() == 0) {
         char time_ms_str[C_UTIL_TIMESTAMP_MS_LEN + 1];
@@ -352,7 +336,7 @@ int dummy_aliyun_sdk_init(void)
 
 上述代码中：
 
--   如采用半托管模式，http 通信的参数根据开发者`**自行开发的服务端**`注册接口进行配置
+-   如采用半托管模式，http 通信的参数根据开发者`自行开发的服务端`注册接口进行配置
     
 -   如采用全托管模式，http 通信参数由阿里云提供，接入信息如下：
     
@@ -374,7 +358,7 @@ int dummy_aliyun_sdk_init(void)
     "nonce": "Nonce",
     "requestTime": "Time",
     "sdkVersion": "1.1.0",
-    "signature": "Signature"
+    "signature": "YOUR_SIGNATURE"
 }
 ```
 
@@ -387,17 +371,16 @@ int dummy_aliyun_sdk_init(void)
     "nonce": "Nonce",
     "requestTime": "Time",
     "sdkVersion": "1.1.0",
-    "signature": "Signature"
+    "signature": "YOUR_SIGNATURE"
 }
 ```
-
 **注意：调用c\_license\_analyze\_register\_rsp时，入参数据必须与示例数据格式保持一致**
 
 调试日志如下：
 
 ```
-[LICENSE][I][c_license_gen_register_str]req_str [356][{"appId":"mm_Your AppId","deviceName":"Your DeviceName","nonce":"Nonce","requestTime":"Time","sdkVersion":"1.1.0","signature":"Signature"}]
-[LICENSE][I][c_license_analyze_register_rsp]rsp_str [376][{"nonce":"Nonce","responseTime":"Time","appId":"mm_Your AppId","deviceName":"Your DeviceName","signature":"Signature"}]
+[LICENSE][I][c_license_gen_register_str]req_str [356][{"appId":"mm_Your AppId","deviceName":"Your DeviceName","nonce":"Nonce","requestTime":"Time","sdkVersion":"1.1.0","signature":"YOUR_SIGNATURE"}]
+[LICENSE][I][c_license_analyze_register_rsp]rsp_str [376][{"nonce":"Nonce","responseTime":"Time","appId":"mm_Your AppId","deviceName":"Your DeviceName","signature":"YOUR_SIGNATURE"}]
 [LICENSE][I][c_license_analyze_register_rsp]nonce       [Nonce]
 ```
 
@@ -410,7 +393,7 @@ Accept: */*
 Content-Type: application/json
 Content-Length: 356
 
-{"appId":"Your AppId","deviceName":"Your DeviceName","nonce":"Nonce","requestTime":"Time","sdkVersion":"1.1.0","signature":"Signature"}
+{"appId":"Your AppId","deviceName":"Your DeviceName","nonce":"Nonce","requestTime":"Time","sdkVersion":"1.1.0","signature":"YOUR_SIGNATURE"}
 ```
 
 完整的 http 接收报文如下所示：
@@ -428,11 +411,11 @@ x-request-id: efa2b37a-4acc-473d-8d86-bfc87ad52821
 transfer-encoding: chunked
 
 1ea
-{"code":200,"success":true,"message":"success","localizedMsg":null,"data":{"nonce":"Nonce","responseTime":"Time","appId":"Your AppId","deviceName":"Your DeviceName","signature":"Signature"}
+{"code":200,"success":true,"message":"success","localizedMsg":null,"data":{"nonce":"Nonce","responseTime":"Time","appId":"Your AppId","deviceName":"Your DeviceName","signature":"YOUR_SIGNATURE"}
 0
 ```
 
-#### **4.1.2. 设备登录**
+#### 4.1.2. 设备登录
 
 设备**每次**在连接阿里云多模态交互 AI 应用前，需要先获取 token 才能进行连接，获取 token示例代码如下：
 
@@ -445,7 +428,7 @@ int dummy_http_response_for_token(int status, char* rsp_data, int rsp_len)
 
     // 解析并获取token，数据要求同上
     err = c_license_analyze_get_token_rsp(rsp_data);
-    
+
     // ... 客户其他业务逻辑
 
     return err;
@@ -486,7 +469,7 @@ int dummy_aliyun_sdk_init(void)
     mmi_config.player_rb_size = 8 * 1024;
 
     c_mmi_config(&mmi_config);
-    
+
     // 设备注册
     if (c_license_device_is_registered() == 0) {
         char time_ms_str[C_UTIL_TIMESTAMP_MS_LEN + 1];
@@ -521,7 +504,7 @@ int dummy_aliyun_sdk_init(void)
 
 上述代码中：
 
--   如采用半托管模式，http 通信的参数根据开发者`**自行开发的服务端**`设备登录（getToken）进行配置
+-   如采用半托管模式，http 通信的参数根据开发者`自行开发的服务端`设备登录（getToken）进行配置
     
 -   如采用全托管模式，http 通信参数由阿里云提供，接入信息如下：
     
@@ -532,7 +515,7 @@ int dummy_aliyun_sdk_init(void)
 
 * * *
 
-#### **4.1.3. 示例数据**
+#### 4.1.3. 示例数据
 
 设备端SDK生成的请求数据包示例，如下是http请求报文中body字段
 
@@ -544,7 +527,7 @@ int dummy_aliyun_sdk_init(void)
     "requestTime": "Time",
     "sdkVersion": "1.1.0",
     "tokenType": "MMI",
-    "signature": "Signature"
+    "signature": "YOUR_SIGNATURE"
 }
 ```
 
@@ -557,18 +540,17 @@ int dummy_aliyun_sdk_init(void)
     "appId": "Your AppId",
     "deviceName": "Your DeviceName",
     "requestIp": "Your IP",
-    "signature": "Signature"
+    "signature": "YOUR_SIGNATURE"
 }
 ```
-
 **注意：调用c\_license\_analyze\_get\_token\_rsp时，入参数据必须与示例数据格式保持一致。**
 
 调试日志如下：
 
 ```
 [LICENSE][I][_gen_get_token_str]plaintext [201][{"apiKey":"Your ApiKey","appId":"Your AppId","deviceName":"Your DeviceName","payMode":"LICENSE","requestTime":"Time","sdkVersion":"1.1.0","tokenType":"MMI"}]
-[LICENSE][I][_gen_get_token_str]req_str [462][{"appId":"Your AppId","deviceName":"Your DeviceName","nonce":"Nonce","requestTime":"Time","sdkVersion":"1.1.0","tokenType":"MMI","signature":"Signature"}]
-[LICENSE][I][c_license_analyze_get_token_rsp]rsp_str [603][{"nonce":"Nonce","responseTime":"Time","appId":"Your AppId","deviceName":"Your DeviceName","requestIp":"Your IP","signature":"Signature"}]
+[LICENSE][I][_gen_get_token_str]req_str [462][{"appId":"Your AppId","deviceName":"Your DeviceName","nonce":"Nonce","requestTime":"Time","sdkVersion":"1.1.0","tokenType":"MMI","signature":"YOUR_SIGNATURE"}]
+[LICENSE][I][c_license_analyze_get_token_rsp]rsp_str [603][{"nonce":"Nonce","responseTime":"Time","appId":"Your AppId","deviceName":"Your DeviceName","requestIp":"Your IP","signature":"YOUR_SIGNATURE"}]
 [LICENSE][I][c_license_analyze_get_token_rsp]nonce      [Nonce]
 ```
 
@@ -581,7 +563,7 @@ Accept: */*
 Content-Type: application/json
 Content-Length: 462
 
-{"appId":"Your AppId","deviceName":"Your DeviceName","nonce":"Nonce","requestTime":"Time","sdkVersion":"1.1.0","tokenType":"MMI","signature":"Signature"}
+{"appId":"Your AppId","deviceName":"Your DeviceName","nonce":"Nonce","requestTime":"Time","sdkVersion":"1.1.0","tokenType":"MMI","signature":"YOUR_SIGNATURE"}
 ```
 
 完整的 http 接收报文如下所示：
@@ -599,11 +581,11 @@ x-request-id: da621d59-5911-44ac-a7be-0e5977de40a3
 transfer-encoding: chunked
 
 2cd
-{"code":200,"success":true,"message":"success","localizedMsg":null,"data":{"nonce":"Nonce","responseTime":"Time","appId":"Your AppId","deviceName":"Your DeviceName","requestIp":"Your IP","signature":"Signature"},"requestId":"RequestId"}
+{"code":200,"success":true,"message":"success","localizedMsg":null,"data":{"nonce":"Nonce","responseTime":"Time","appId":"Your AppId","deviceName":"Your DeviceName","requestIp":"Your IP","signature":"YOUR_SIGNATURE"},"requestId":"RequestId"}
 0
 ```
 
-### **4.2. WEBSOCKET 通信**
+### 4.2. WEBSOCKET 通信
 
 在完成设备登录功能对接后，开始进行 websocket 通信调试。
 
@@ -631,13 +613,13 @@ int dummy_wss_task_send(void);
 int dummy_wss_task_recv(void);
 ```
 
-#### **4.2.1. 建立 websocket 连接**
+#### 4.2.1. 建立 websocket 连接
 
 以下示例代码描述了如何建立 websocket连接，SDK会提供host、port、api以及header字段，其余字段需要开发者自己填充打包并完成发送流程。
 
 ```
 int dummy_wss_init(void)
-{ 
+{
     // 建立websocket连接，获取连接字段
     char *wss_host = c_mmi_get_wss_host();
     char *wss_port = c_mmi_get_wss_port();
@@ -647,22 +629,17 @@ int dummy_wss_init(void)
     UTIL_LOG_I("work");
     // 建立wss连接
     int ret = dummy_wss_connect(wss_host, wss_port, wss_api, wss_header);
-    
+
     return ret;
 
 }
 ```
 
-**重要**
-
-本 SDK 与云端的 websocket 通信需要建立 TLS 隧道，需要做如下配置：
+**重要**本 SDK 与云端的 websocket 通信需要建立 TLS 隧道，需要做如下配置：
 
 -   TLS 版本要求 TLS1.2 或以上
-    
 -   开启 SNI（SERVER NAME INDICATION）
-    
 -   配置 CA 证书（[GlobalSign Root CA - R46](https://secure.globalsign.com/cacert/rootr46.crt)）（也可至[GlobalSign官网](https://support.globalsign.com/ca-certificates/globalsign-root-certificates)下载）
-    
 
 websocket建立连接时upgrade请求报文示例
 
@@ -671,7 +648,7 @@ GET <WSS API> HTTP/1.1
 Host: <WSS HOST>
 Upgrade: websocket
 Connection: Upgrade
-Sec-WebSocket-Key: FhVlQeR4S1N06+1/SU79XA== 
+Sec-WebSocket-Key: FhVlQeR4S1N06+1/SU79XA==
 Sec-WebSocket-Version: 13
 <WSS HEADER>
 ```
@@ -686,9 +663,7 @@ sec-websocket-accept: sqchBdVDX8kKBgi90/PFl5+/4VI=
 date: Thu, 24 Jul 2025 08:25:24 GMT
 server: istio-envoy
 ```
-
 **日志示例**
-
 ```
 [UT][I][dummy_wss_init]work
 [UT][I][dummy_wss_connect]wss update
@@ -712,10 +687,9 @@ server: istio-envoy
 ]
 [UT][I][dummy_wss_connect][MMI]done
 ```
-
 **正确建立 websocket 后，可以观察平台相应的日志，正确场景下该连接会保持 1 分钟，后被服务端主动断开。**
 
-#### **4.2.2. websocket 数据交互**
+#### 4.2.2. websocket 数据交互
 
 **使用阿里云百炼多模态交互 SDK 时 ，所有通过 websocket 进行交互的数据均需通过 SDK 进行处理，否则可能导致不可预知的问题。**
 
@@ -766,11 +740,8 @@ int dummy_wss_task_send(void)
 -   websocket 接收的**data** 大小根据下行的数据格式不同，建议值如下：
     
     -   下行 PCM 格式数据时，建议**data** 大小设置为 8K 及以上。
-        
     -   下行 MP3 格式数据时，建议**data** 大小设置为 8K 及以上。
-        
     -   下行 opus 格式数据时，建议**data** 大小设置为 4K 及以上。
-        
 -   websocket 发送的**data** 大小不得低于 1.5K
     
 -   调用`c_mmi_analyze_recv_data`或`c_mmi_get_send_data`函数时，`opcode` 为`WS_DATA_TYPE_TEXT` 或`WS_DATA_TYPE_BINARY` ，该值在 SDK 头文件中定义；开发者需要参考具体平台的定义实现及 websocket 协议，理解该值。
@@ -793,7 +764,7 @@ int dummy_wss_task_send(void)
 
 ## 5\. 语音交互流程开发
 
-### **5.1. 音频数据接口**
+### 5.1. 音频数据接口
 
 音频数据接口主要包含麦克风和播放器的实现函数，需要开发者自行实现。
 
@@ -841,7 +812,7 @@ void dummy_recorder_task(void)
             } else {
                 util_msleep(10);
             }
-        
+
         } else {
             util_msleep(10);
         }
@@ -870,7 +841,7 @@ void dummy_player_task(void)
 }
 ```
 
-### **5.2. 按键接口**
+### 5.2. 按键接口
 
 本文档示例为 PUSH TO TALK，因此需要有按键按下和按键抬起两个事件的捕捉，本文档采用事件回调形式实现，此处只给出回调函数，具体逻辑与实现需要开发者自行实现。
 
@@ -907,7 +878,7 @@ int dummy_button_down(void)
 }
 ```
 
-### **5.3. 事件回调**
+### 5.3. 事件回调
 
 阿里云百炼多模态交互 SDK 语音交互相关的事件回调如下：
 
@@ -1032,7 +1003,7 @@ int _mmi_event_callback(uint32_t event, void *param)
 
 ## 6\. SDK 完整构建流程
 
-### **6.1. 完整示例代码**
+### 6.1. 完整示例代码
 
 示例代码如下
 
@@ -1053,7 +1024,7 @@ int dummy_http_response_for_register(int status, char* rsp_data, int rsp_len)
     // SDK中的解析函数只需要报文中的data字段，如下http接收报文所示
     err = c_license_analyze_register_rsp(rsp_body_data);
     c_mmi_storage_save();
-    
+
     // ... 客户其他业务逻辑
 
     return err;
@@ -1067,7 +1038,7 @@ int dummy_http_response_for_token(int status, char* rsp_data, int rsp_len)
 
     // 解析并获取token，数据要求同上
     err = c_license_analyze_get_token_rsp(rsp_data);
-    
+
     // ... 客户其他业务逻辑
 
     return err;
@@ -1108,7 +1079,7 @@ int dummy_aliyun_sdk_init(void)
     mmi_config.player_rb_size = 8 * 1024;
 
     c_mmi_config(&mmi_config);
-    
+
     // 设备注册
     if (c_license_device_is_registered() == 0) {
         char time_ms_str[C_UTIL_TIMESTAMP_MS_LEN + 1];
@@ -1141,16 +1112,16 @@ int dummy_aliyun_sdk_init(void)
 }
 
 int dummy_wss_init(void)
-{ 
+{
     // 建立websocket连接，获取连接字段
     char *wss_host = c_mmi_get_wss_host();
     char *wss_port = c_mmi_get_wss_port();
     char *wss_api = c_mmi_get_wss_api();
     char *wss_header = c_mmi_get_wss_header();
-    
+
     // 建立wss连接
     int ret = dummy_wss_connect(wss_host, wss_port, wss_api, wss_header);
-    
+
     return ret;
 }
 
@@ -1170,7 +1141,7 @@ void dummy_recorder_task(void)
             else{
                 util_msleep(10);
             }
-        
+
         } else {
             util_msleep(10);
         }
@@ -1192,7 +1163,7 @@ void dummy_player_task(void)
             } else {
                 util_msleep(10);
             }
-        
+
         } else {
             util_msleep(10);
         }
@@ -1317,14 +1288,14 @@ int _mmi_event_callback(uint32_t event, void *param)
 int main(void)
 {
     int ret = dummy_aliyun_sdk_init();
-    
+
     // 开启websocket收发线程，由开发者自己实现
     dummy_wss_thread_start();
     return ret;
 }
 ```
 
-### **6.2. 完整示例日志**
+### 6.2. 完整示例日志
 
 完整示例日志如下：
 
@@ -1347,12 +1318,12 @@ int main(void)
 [UT][I][c_mmi_config]device_name [<DEVICE NAME>]
 [UT][I][c_mmi_config]load dialog_id [<DIALOG ID>]
 [UT][I][c_mmi_config]done
-[UT][I][c_device_gen_register_req]req_str [383][{"appId":"<YOUR APPID>","deviceName":"<YOUR DEVICE NAME>","nonce":"<YOUR NONCE>","requestTime":"1753326620619","sdkVersion":"0.3.2","signature":"<Signature>"}]
-[UT][I][c_device_analyze_register_rsp]rsp_str [403][{"nonce":"<YOUR NONCE>","responseTime":"1753326621269","appId":"<YOUR APPID>","deviceName":"<YOUR DEVICE NAME>","signature":"<Signature>"}]
+[UT][I][c_device_gen_register_req]req_str [383][{"appId":"<YOUR APPID>","deviceName":"<YOUR DEVICE NAME>","nonce":"<YOUR NONCE>","requestTime":"1753326620619","sdkVersion":"0.3.2","signature":"YOUR_SIGNATURE"}]
+[UT][I][c_device_analyze_register_rsp]rsp_str [403][{"nonce":"<YOUR NONCE>","responseTime":"1753326621269","appId":"<YOUR APPID>","deviceName":"<YOUR DEVICE NAME>","signature":"YOUR_SIGNATURE"}]
 [UT][I][c_device_analyze_register_rsp]nonce  [<NONCE>]
 [UT][I][c_dev_gen_get_token_req]plaintext [164][{"appId":"<YOUR APP ID>","deviceName":"<YOUR DEVICE NAME>","payMode":"LICENSE","requestTime":"1753327457730","sdkVersion":"0.3.2","tokenType":"MMI"}]
-[UT][I][c_dev_gen_get_token_req]req_str [420][{"appId":"<YOUR APP ID>","deviceName":"<YOUR DEVICE NAME>","nonce":"<NONCE>","requestTime":"1753327457730","sdkVersion":"0.3.2","tokenType":"MMI","signature":"<SIGNTURE>"}]
-[UT][I][c_mmi_analyze_get_token_rsp]rsp_str [589][{"nonce":"<NONCE>","responseTime":"1753327458081","appId":"<YOUR APP ID>","deviceName":"<YOUR DEVICE NAME>","requestIp":"YOUR IP","signature":"<SIGNATURE>"}]
+[UT][I][c_dev_gen_get_token_req]req_str [420][{"appId":"<YOUR APP ID>","deviceName":"<YOUR DEVICE NAME>","nonce":"<NONCE>","requestTime":"1753327457730","sdkVersion":"0.3.2","tokenType":"MMI","signature":"YOUR_SIGNATURE"}]
+[UT][I][c_mmi_analyze_get_token_rsp]rsp_str [589][{"nonce":"<NONCE>","responseTime":"1753327458081","appId":"<YOUR APP ID>","deviceName":"<YOUR DEVICE NAME>","requestIp":"YOUR IP","signature":"YOUR_SIGNATURE"}]
 [UT][I][c_mmi_analyze_get_token_rsp]nonce    [<NONCE>]
 [UT][I][_mmi_event_callback]C_MMI_EVENT_DATA_INIT
 [UT][I][dummy_wss_init]work

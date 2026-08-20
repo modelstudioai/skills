@@ -2,30 +2,22 @@
 
 本文档说明如何在浏览器端通过 WebRTC + JavaScript 接入百炼 Realtime API，实现与 qwen3.5-omni-plus-realtime 模型的实时音视频通话。
 
-**说明**
+**说明**WebRTC 适合浏览器端、低延迟语音场景，音频通过 UDP 直接传输，内置回声消除和降噪。WebRTC 仅支持服务端 VAD 模式（`server_vad` 或 `semantic_vad`），不支持手动模式。
 
-WebRTC 适合浏览器端、低延迟语音场景，音频通过 UDP 直接传输，内置回声消除和降噪。WebRTC 仅支持服务端 VAD 模式（`server_vad` 或 `semantic_vad`），不支持手动模式。
+## 前提条件及注意事项
 
-## **前提条件及注意事项**
-
-1.  已[配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并将其[设置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-    
+1.  已[配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并将其[设置到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
 2.  使用支持 WebRTC 的现代浏览器（Chrome、Edge、Firefox、Safari 等）。
-    
 3.  浏览器需要麦克风权限；如需视频通话，还需摄像头权限。
-    
 4.  浏览器无法直接向服务端发起 SDP 交换请求（受 CORS 限制），Demo 中通过终端执行 curl 命令完成连接建立；正式使用时由业务 AppServer 代理完成，无此限制。
-    
 
-## **实现 AI 音视频通话**
+## 实现 AI 音视频通话
 
 以下时序图展示了整个 WebRTC 音视频通话的完整流程：
 
 WebRTC 音视频通话流程时序图
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5665914871/p1088079.png)
-
-### **创建 RTCPeerConnection**
+### 创建 RTCPeerConnection
 
 调用浏览器原生 `RTCPeerConnection` 创建连接实例，无需配置 ICE 服务器（服务端会处理 NAT 穿透）。
 
@@ -56,7 +48,7 @@ pc.ontrack = async (e) => {
 };
 ```
 
-### **获取本地媒体流**
+### 获取本地媒体流
 
 通过一次 `getUserMedia` 调用获取所需的音频（必须）和视频（可选）。是否开启视频由用户勾选"开启视频"复选框决定。
 
@@ -78,21 +70,17 @@ const constraints = wantVideo
 localStream = await navigator.mediaDevices.getUserMedia(constraints);
 ```
 
-**说明**
+**说明**音频和视频通过**同一次** `getUserMedia` 调用获取，而非分开请求。视频预览帧率为 30fps（本地流畅预览），发送帧率会通过 Canvas 降至 2fps。
 
-音频和视频通过**同一次** `getUserMedia` 调用获取，而非分开请求。视频预览帧率为 30fps（本地流畅预览），发送帧率会通过 Canvas 降至 2fps。
-
-### **添加媒体轨道到 PeerConnection**
+### 添加媒体轨道到 PeerConnection
 
 **添加音频轨道：**
-
 ```
 localStream.getAudioTracks().forEach(t => {
   pc.addTrack(t, localStream);
   gatedAudioTracks.push(t);
 });
 ```
-
 **添加视频轨道（可选，通过 Canvas 降帧至 2fps）：**
 
 Canvas 尺寸从摄像头实际分辨率动态获取，而非硬编码：
@@ -118,7 +106,6 @@ const pump = () => {
 };
 sendRafId = requestAnimationFrame(pump);
 ```
-
 **媒体门控（关键）：**
 
 添加轨道后立即禁止发送，确保在收到 `session.created` 之前不推送媒体数据：
@@ -136,11 +123,9 @@ await audioSender?.replaceTrack(null);
 await videoSender?.replaceTrack(videoTrack ? null : undefined);
 ```
 
-**说明**
+**说明**等价于其他 SDK 中的 `enableSendMediaStream(false)`，必须在收到 `session.created` 后才恢复发送。
 
-等价于其他 SDK 中的 `enableSendMediaStream(false)`，必须在收到 `session.created` 后才恢复发送。
-
-### **创建 DataChannel**
+### 创建 DataChannel
 
 创建名为 `oai-events` 的 DataChannel，用于与 AI 服务端交换会话控制事件。
 
@@ -161,7 +146,7 @@ pc.ondatachannel = (event) => {
 };
 ```
 
-### **生成 Offer SDP**
+### 生成 Offer SDP
 
 调用 `createOffer()` 并设置本地描述，等待 ICE 候选收集完成后获取完整的 Offer SDP。
 
@@ -179,11 +164,9 @@ const offer = await pc.createOffer();
 await pc.setLocalDescription(offer);
 ```
 
-**说明**
+**说明**必须等待 `iceGatheringState === "complete"` 后再使用 SDP，此时 SDP 中包含所有 ICE 候选信息。
 
-必须等待 `iceGatheringState === "complete"` 后再使用 SDP，此时 SDP 中包含所有 ICE 候选信息。
-
-### **交换 SDP（通过 curl 命令或业务 AppServer）**
+### 交换 SDP（通过 curl 命令或业务 AppServer）
 
 将 Offer SDP 发送到百炼服务端，获取 Answer SDP。Demo 中通过 curl 命令完成：
 
@@ -194,11 +177,9 @@ curl -X POST 'https://{endpoint}/api/v1/webrtc/realtime?model=qwen3.5-omni-plus-
   --data-binary '<Offer SDP 内容>'
 ```
 
-**说明**
+**说明**生产环境中，此步骤应由业务 AppServer 代理完成，避免前端暴露 API Key。`{endpoint}` 为 Realtime API 接入地址。
 
-生产环境中，此步骤应由业务 AppServer 代理完成，避免前端暴露 API Key。`{endpoint}` 为 Realtime API 接入地址。
-
-### **设置 Answer SDP 建立连接**
+### 设置 Answer SDP 建立连接
 
 将服务端返回的 Answer SDP 设置为远端描述，WebRTC 连接即开始建立。注意 SDP 格式需要规范化处理：
 
@@ -213,21 +194,16 @@ const answerSdp = normalizeSdpForSetRemote(txt);
 await pc.setRemoteDescription({ type: 'answer', sdp: answerSdp });
 ```
 
-**说明**
+**说明**SDP 规范要求行尾为 `\r\n`，`normalizeSdpForSetRemote` 负责处理不同来源的换行符兼容问题。
 
-SDP 规范要求行尾为 `\r\n`，`normalizeSdpForSetRemote` 负责处理不同来源的换行符兼容问题。
-
-### **配置 AI 会话（session.update）**
+### 配置 AI 会话（session.update）
 
 连接建立后，服务端通过 DataChannel 发送 `session.created` 事件。收到后需：
 
 1.  解除媒体门控，恢复音视频发送
-    
 2.  发送 `session.update` 配置会话参数
-    
 
 **解除门控并恢复媒体：**
-
 ```
 function handleDcMessage(data, channel) {
   let obj;
@@ -244,9 +220,7 @@ function handleDcMessage(data, channel) {
   }
 }
 ```
-
 **session.update 消息体：**
-
 ```
 const update = {
   event_id: `event_${Date.now()}`,
@@ -269,16 +243,13 @@ const update = {
 if (channel && channel.readyState === "open") channel.send(JSON.stringify(update));
 ```
 
-**说明**
+**说明**`turn_detection.type` 可设为 `server_vad`（基于音量检测）或 `semantic_vad`（基于语义检测）。WebRTC 模式不支持手动 VAD。
 
-`turn_detection.type` 可设为 `server_vad`（基于音量检测）或 `semantic_vad`（基于语义检测）。WebRTC 模式不支持手动 VAD。
-
-### **实时对话**
+### 实时对话
 
 连接建立后，音视频通过 RTP 实时传输。远端 AI 语音通过 `ontrack` 回调接收并播放，同时使用 MediaRecorder 录制以便下载。
 
 **接收远端音频并录制：**
-
 ```
 pc.ontrack = async (e) => {
   const stream = e.streams[0];
@@ -306,7 +277,6 @@ function startRecordingRemoteStream(remoteStream) {
   mediaRecorder.start();
 }
 ```
-
 **DataChannel 事件统一展示：**
 
 所有通过 DataChannel 收发的事件（包括 `session.created`、`response.audio_transcript.done` 等）统一通过事件面板展示，支持展开查看完整 JSON：
@@ -319,7 +289,7 @@ function pushEventFromDataChannel(eventObj) {
 }
 ```
 
-### **结束会话与资源清理**
+### 结束会话与资源清理
 
 结束通话时需依次清理所有资源，顺序很重要：
 
@@ -354,37 +324,25 @@ function endSession(silent = false) {
 }
 ```
 
-**说明**
+**说明**结束后可通过"下载远端音频"按钮下载 AI 回复的录音（WebM 格式）。
 
-结束后可通过"下载远端音频"按钮下载 AI 回复的录音（WebM 格式）。
-
-## **注意事项**
+## 注意事项
 
 1.  **媒体门控必须在 session.created 后解除**：在服务端发送 `session.created` 之前推送媒体数据会被丢弃，必须通过 `replaceTrack(null)` 彻底阻断发送。
-    
 2.  **视频降帧通过 Canvas 实现**：本地预览 30fps，发送至服务端仅 2fps，通过 `captureStream(2)` 控制，节省带宽。
-    
 3.  **SDP 格式规范化**：设置 Answer SDP 前必须确保行尾为 `\r\n`，否则 `setRemoteDescription` 可能失败。
-    
 4.  **视频为可选功能**：用户未勾选视频时，仅请求音频权限，不会触发摄像头授权弹窗。
-    
 5.  **远端音频自动录制**：通过 MediaRecorder 录制 AI 回复的音频流，会话结束后可下载 WebM 格式文件。
-    
 6.  **WebRTC 仅支持服务端 VAD**：不支持 `manual` 模式，可选 `server_vad`（音量检测）或 `semantic_vad`（语义检测）。
-    
 
-## **完整 demo 下载**
+## 完整 demo 下载
 
 完整示例代码请下载：[webrtc\_demo.html](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260715/ychtmj/webrtc_demo.html)。
 
-## **相关文档**
+## 相关文档
 
 -   [WebRTC API (MDN)](https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API)
-    
 -   [RTCPeerConnection (MDN)](https://developer.mozilla.org/zh-CN/docs/Web/API/RTCPeerConnection)
-    
--   qwen3.5-omni-plus-realtime 模型客户端事件：[客户端事件](https://help.aliyun.com/zh/model-studio/client-events)
-    
--   qwen3.5-omni-plus-realtime 模型服务端事件：[服务端事件](https://help.aliyun.com/zh/model-studio/server-events)
-    
+-   qwen3.5-omni-plus-realtime 模型客户端事件：[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)
+-   qwen3.5-omni-plus-realtime 模型服务端事件：[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
 -   [WebRTC 接入模型/应用](https://help.aliyun.com/zh/model-studio/realtime-connect-model#conn-rtc-title)

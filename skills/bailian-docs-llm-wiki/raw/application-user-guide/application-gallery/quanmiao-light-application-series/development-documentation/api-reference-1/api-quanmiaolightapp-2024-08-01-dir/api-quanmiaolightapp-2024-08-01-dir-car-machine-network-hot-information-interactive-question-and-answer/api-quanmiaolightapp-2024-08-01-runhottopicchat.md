@@ -4,44 +4,40 @@
 
 ## 接口说明
 
-## [](#当前接口-runhottopicchat-说明)当前接口 RunHotTopicChat 说明
+## 当前接口 RunHotTopicChat 说明
 
 通过此接口，可以对播报单（热榜）、热榜新闻、开放域内容做问答，包括频道推荐、热点推荐、热点内容问答等。
 
 欢迎前往[控制台](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/news-broadcast)体验。
 
-**通过 SDK 方式调用 API，请可参考[控制台](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/news-broadcast)“API”页签下的 java、python 示例！**
+**通过 SDK 方式调用 API，请可参考[控制台](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/news-broadcast)“API”页签下的 java、python 示例！** **通过 SDK 方式调用 API，请可参考[控制台](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/news-broadcast)“API”页签下的 java、python 示例！** **通过 SDK 方式调用 API，请可参考[控制台](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/news-broadcast)“API”页签下的 java、python 示例！**
 
-**通过 SDK 方式调用 API，请可参考[控制台](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/news-broadcast)“API”页签下的 java、python 示例！**
+## 新闻热榜互动全量 API 说明
 
-**通过 SDK 方式调用 API，请可参考[控制台](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/news-broadcast)“API”页签下的 java、python 示例！**
+### API 明细
 
-## [](#新闻热榜互动全量-api-说明)新闻热榜互动全量 API 说明
+#### AI 妙笔 SDK 下：对应 alibabacloud-aimiaobi20230801
 
-### [](#api-明细)API 明细
+-   **GetHotTopicBroadcast** - 查询完整播报单（热榜） --常用
+-   SubmitCustomHotTopicBroadcastJob - 提交自定义播报单任务
+-   GetCustomHotTopicBroadcastJob - 获取自定义播报单任务结果
 
-#### [](#ai-妙笔-sdk-下对应-alibabacloud-aimiaobi20230801)AI 妙笔 SDK 下：对应 alibabacloud-aimiaobi20230801
+#### 阿里云百炼全妙轻应用 SDK 下：对应 alibabacloud-quanmiaolightapp20240801
 
--   [**GetHotTopicBroadcast**](https://help.aliyun.com/zh/model-studio/user-guide/api-aimiaobi-2023-08-01-gethottopicbroadcast?spm=a2c4g.11186623.help-menu-search-2400256.d_0) - **查询完整播报单（热榜）** --常用
--   [SubmitCustomHotTopicBroadcastJob](https://help.aliyun.com/zh/model-studio/user-guide/api-aimiaobi-2023-08-01-submitcustomhottopicbroadcastjob?spm=a2c4g.11186623.help-menu-2400256.d_1_3_3_2_0_3_11_1.6e8226ccRBFaYz) - 提交自定义播报单任务
--   [GetCustomHotTopicBroadcastJob](https://help.aliyun.com/zh/model-studio/user-guide/api-aimiaobi-2023-08-01-getcustomhottopicbroadcastjob?spm=a2c4g.11186623.help-menu-2400256.d_1_3_3_2_0_3_11_0.fd006c4cdnYwwj) - 获取自定义播报单任务结果
+-   RunHotTopicChat - 播报单（热榜）问答 --常用
+-   RunHotTopicSummary - 播报单热点自定义摘要生成
 
-#### [](#阿里云百炼全妙轻应用-sdk-下对应-alibabacloud-quanmiaolightapp20240801)阿里云百炼全妙轻应用 SDK 下：对应 alibabacloud-quanmiaolightapp20240801
+### 场景说明
 
--   **RunHotTopicChat** - **播报单（热榜）问答** --常用
--   [RunHotTopicSummary](https://help.aliyun.com/zh/model-studio/user-guide/api-quanmiaolightapp-2024-08-01-runhottopicsummary?spm=a2c4g.11186623.help-menu-2400256.d_1_3_4_3_1_3_4_1.420a7c48CBWA8o) - 播报单热点自定义摘要生成
-
-### [](#场景说明)场景说明
-
-#### [](#场景-1获取完整播报单热榜全量或者部分频道热点)场景 1：获取完整播报单（热榜）全量或者部分频道热点：
+#### 场景 1：获取完整播报单（热榜）全量或者部分频道热点：
 
 -   GetHotTopicBroadcast：查询播报单
 
-#### [](#场景-2针对播报单或通用领域问题做问答)场景 2：针对播报单或通用领域问题做问答：
+#### 场景 2：针对播报单或通用领域问题做问答：
 
 -   RunHotTopicChat：问答
 
-#### [](#场景-3内置播报单热榜不满足要求需要个性化定制频道个性化摘要等)场景 3：内置播报单（热榜）不满足要求，需要个性化定制（频道、个性化摘要等）：
+#### 场景 3：内置播报单（热榜）不满足要求，需要个性化定制（频道、个性化摘要等）：
 
 -   SubmitCustomHotTopicBroadcastJob：提交自定义播报单任务
 -   GetCustomHotTopicBroadcastJob：轮训自定义播报单任务状态
@@ -49,21 +45,26 @@
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/RunHotTopicChat)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
-[![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png)调试](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/RunHotTopicChat)
+[调试](https://api.alibabacloud.com/api/QuanMiaoLightApp/2024-08-01/RunHotTopicChat)
 
 ## 授权信息
 
 下表是API对应的授权信息，可以在RAM权限策略语句的`Action`元素中使用，用来给RAM用户或RAM角色授予调用此API的权限。具体说明如下：
 
 -   操作：是指具体的权限点。
+    
 -   访问级别：是指每个操作的访问级别，取值为写入（Write）、读取（Read）或列出（List）。
+    
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
+    
     -   对于必选的资源类型，用前面加 \* 表示。
     -   对于不支持资源级授权的操作，用`全部资源`表示。
 -   条件关键字：是指云产品自身定义的条件关键字。
+    
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
+    
 
 操作
 
@@ -627,7 +628,7 @@ string
 
 图片
 
-http://www.example.com/xxx.png
+[http://www.example.com/xxx.png](http://www.example.com/xxx.png)
 
 url
 
@@ -635,7 +636,7 @@ string
 
 热点话题的 URL
 
-http://www.example.com/xxx.html
+[http://www.example.com/xxx.html](http://www.example.com/xxx.html)
 
 pubTime
 
@@ -873,7 +874,7 @@ You are not authorized to perform this action , Please check the assignment of t
 
 请检查workspaceId的赋值
 
-访问[错误中心](< https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/errorCode>)查看更多错误码。
+访问[错误中心](https://api.alibabacloud.com/document/QuanMiaoLightApp/2024-08-01/errorCode)查看更多错误码。
 
 ## 变更历史
 

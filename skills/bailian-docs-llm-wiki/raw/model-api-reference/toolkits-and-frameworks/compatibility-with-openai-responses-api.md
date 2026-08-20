@@ -4,41 +4,32 @@
 
 **相较于OpenAI Chat Completions API 的优势：**
 
--   **内置工具**：内置联网搜索、网页抓取、代码解释器、文搜图、图搜图等工具，可在处理复杂任务时获得更佳效果，详情参考[调用内置工具](#11cd08d0ffnxw)。
-    
+-   **内置工具**：内置联网搜索、网页抓取、代码解释器、文搜图、图搜图等工具，可在处理复杂任务时获得更佳效果，详情参考[调用内置工具](https://help.aliyun.com/zh/model-studio/compatibility-with-openai-responses-api#11cd08d0ffnxw)。
 -   **更灵活的输入**：支持直接传入字符串作为模型输入，也兼容 Chat 格式的消息数组。
-    
 -   **简化上下文管理**：通过传递上一轮响应的 `previous_response_id`，无需手动构建完整的消息历史数组。
-    
 
 输入输出参数说明请参考[OpenAI Responses API参考](https://help.aliyun.com/zh/model-studio/qwen-api-via-openai-responses)。
 
 ## 前提条件
 
-您需要先[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。若通过 OpenAI SDK 进行调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+您需要先[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。若通过 OpenAI SDK 进行调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ## 支持的模型
 
-`qwen3.8-max`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-02-15`、`qwen3.5-plus-2026-04-20`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`qwen3-max`、`qwen3-max-2026-01-23`、`qwen-plus`、`qwen-flash`、`qwen3-coder-plus`、`qwen3-coder-flash`、`qwen3-coder-next`、`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`glm-5.2`、`kimi-k3`（DeepSeek-V4 模型仅支持华北2（北京）与新加坡地域）。
+`qwen3-max`、`qwen3-max-2026-01-23`、`qwen3.8-max`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-02-15`、`qwen3.5-plus-2026-04-20`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`qwen-plus`、`qwen-flash`、`qwen3-coder-plus`、`qwen3-coder-flash`、`qwen3-coder-next`、`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`deepseek-v4-pro`、`deepseek-v4-pro-0813``glm-5.2`（DeepSeek-V4 模型仅支持华北2（北京）与新加坡地域）。
 
 ## 服务地址
 
-**重要**
+**重要**OpenAI 兼容接口 Responses API 的旧版路径 `/api/v2/apps/protocols/compatible-mode/v1/responses` 即将停止维护，请尽快迁移至新版路径 `/compatible-mode/v1/responses`。
 
-OpenAI 兼容接口 Responses API 的旧版路径 `/api/v2/apps/protocols/compatible-mode/v1/responses` 即将停止维护，请尽快迁移至新版路径 `/compatible-mode/v1/responses`。
-
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-## **华北2（北京）**
+#### 华北2（北京）
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
@@ -46,7 +37,7 @@ HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/com
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-## **新加坡**
+#### 新加坡
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
@@ -54,13 +45,13 @@ HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-## 美国（弗吉尼亚）
+#### 美国（弗吉尼亚）
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1/responses`
 
-## 德国（法兰克福）
+#### 德国（法兰克福）
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1`
 
@@ -68,7 +59,7 @@ HTTP 请求地址：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/c
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-## 日本（东京）
+#### 日本（东京）
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
@@ -78,11 +69,11 @@ HTTP 请求地址：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com
 
 ## 代码示例
 
-### **基础调用**
+### 基础调用
 
 最简单的调用方式，发送一条消息并获取模型回复。
 
-## Python
+Python
 
 ```
 import os
@@ -104,7 +95,7 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
-## Node.js
+Node.js
 
 ```
 import OpenAI from "openai";
@@ -128,7 +119,7 @@ async function main() {
 main();
 ```
 
-## curl
+curl
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
@@ -204,13 +195,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
-### **多轮对话**
+### 多轮对话
 
 通过 `previous_response_id` 参数自动关联上下文，无需手动构建消息历史，当前响应`id`有效期为7天。
 
 > `previous_response_id` 应传入上一轮响应中的顶层 `id` （`resp_xxx`，UUID格式），而不是 `output` 数组内消息的 `id` （`msg_56c860c4-3ad8-4a96-8553-d2f94c259xxx`）。
 
-## Python
+Python
 
 ```
 import os
@@ -237,7 +228,7 @@ response2 = client.responses.create(
 print(f"第二轮回复: {response2.output_text}")
 ```
 
-## Node.js
+Node.js
 
 ```
 import OpenAI from "openai";
@@ -267,7 +258,7 @@ async function main() {
 main();
 ```
 
-## curl
+curl
 
 ```
 # 第一轮对话
@@ -291,7 +282,6 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 
 **第二轮对话响应示例**
-
 ```
 {
   "id": "f0dbb153-117f-9bbf-8176-5284b47f3xxx",
@@ -330,24 +320,19 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 **说明：**第二轮对话的 `input_tokens` 为 73，包含了第一轮的上下文，模型成功记住了名字"张三"。
 
-### **深度思考**
+### 深度思考
 
 通过 `reasoning` 参数控制模型的推理强度。设置 `reasoning.effort` 后，模型会在回复前进行思考，思考内容通过 `reasoning` 类型的输出项返回。`effort` 支持以下取值：
 
 -   `none`：关闭思考，直接回答
-    
 -   `minimal`：最小化思考，最快速响应
-    
 -   `low`：轻度思考，侧重快速响应
-    
 -   `medium`（默认值）：中度思考，平衡速度与思考深度
-    
 -   `high`：深度思考，侧重处理复杂专业问题
-    
 
 > 不支持 `thinking_budget` 参数控制最大思维长度。`reasoning.effort` 的优先级高于 `enable_thinking`，建议优先使用 `reasoning.effort`，`enable_thinking` 后续将不再支持。
 
-## Python
+Python
 
 ```
 import os
@@ -378,7 +363,7 @@ for item in response.output:
 print(f"\n思考 Token 数: {response.usage.output_tokens_details.reasoning_tokens}")
 ```
 
-## Node.js
+Node.js
 
 ```
 import OpenAI from "openai";
@@ -414,7 +399,7 @@ async function main() {
 main();
 ```
 
-## curl
+curl
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
@@ -428,7 +413,6 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 
 **响应示例**
-
 ```
 {
     "created_at": 1774498317,
@@ -489,11 +473,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
-### **流式输出**
+### 流式输出
 
 通过流式输出实时接收模型生成的内容，适合长文本生成场景。
 
-## Python
+Python
 
 ```
 import os
@@ -521,7 +505,7 @@ for event in stream:
         print(f"总 Token 数: {event.response.usage.total_tokens}")
 ```
 
-## Node.js
+Node.js
 
 ```
 import OpenAI from "openai";
@@ -553,7 +537,7 @@ async function main() {
 main();
 ```
 
-## curl
+curl
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
@@ -567,7 +551,6 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 
 **响应示例**
-
 ```
 {"response":{"id":"47a71e7d-868c-4204-9693-ef8ff9058xxx","created_at":1769417481.0,"error":null,"incomplete_details":null,"instructions":null,"metadata":null,"model":"","object":"response","output":[],"parallel_tool_calls":false,"temperature":null,"tool_choice":"auto","tools":[],"top_p":null,"background":null,"completed_at":null,"conversation":null,"max_output_tokens":null,"max_tool_calls":null,"previous_response_id":null,"prompt":null,"prompt_cache_key":null,"prompt_cache_retention":null,"reasoning":null,"safety_identifier":null,"service_tier":null,"status":"queued","text":null,"top_logprobs":null,"truncation":null,"usage":null,"user":null},"sequence_number":0,"type":"response.created"}
 {"response":{"id":"47a71e7d-868c-4204-9693-ef8ff9058xxx","created_at":1769417481.0,"error":null,"incomplete_details":null,"instructions":null,"metadata":null,"model":"","object":"response","output":[],"parallel_tool_calls":false,"temperature":null,"tool_choice":"auto","tools":[],"top_p":null,"background":null,"completed_at":null,"conversation":null,"max_output_tokens":null,"max_tool_calls":null,"previous_response_id":null,"prompt":null,"prompt_cache_key":null,"prompt_cache_retention":null,"reasoning":null,"safety_identifier":null,"service_tier":null,"status":"in_progress","text":null,"top_logprobs":null,"truncation":null,"usage":null,"user":null},"sequence_number":1,"type":"response.in_progress"}
@@ -587,11 +570,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 {"response":{"id":"47a71e7d-868c-4204-9693-ef8ff9058xxx","created_at":1769417481.0,"error":null,"incomplete_details":null,"instructions":null,"metadata":null,"model":"qwen3.8-max","object":"response","output":[{"id":"msg_16db29d6-c1d3-47d7-9177-0fba81964xxx","content":[{"annotations":[],"text":"人工智能（Artificial Intelligence，简称 AI）是xxxxxx","type":"output_text","logprobs":null}],"role":"assistant","status":"completed","type":"message"}],"parallel_tool_calls":false,"temperature":null,"tool_choice":"auto","tools":[],"top_p":null,"background":null,"completed_at":null,"conversation":null,"max_output_tokens":null,"max_tool_calls":null,"previous_response_id":null,"prompt":null,"prompt_cache_key":null,"prompt_cache_retention":null,"reasoning":null,"safety_identifier":null,"service_tier":null,"status":"completed","text":null,"top_logprobs":null,"truncation":null,"usage":{"input_tokens":37,"input_tokens_details":{"cached_tokens":0},"output_tokens":166,"output_tokens_details":{"reasoning_tokens":0},"total_tokens":203},"user":null},"sequence_number":44,"type":"response.completed"}
 ```
 
-### **调用内置工具**
+### 调用内置工具
 
-开启内置工具可在处理复杂任务时获得更佳效果，当前网页抓取与代码解释器工具限时免费，支持的工具请参见[工具调用](https://help.aliyun.com/zh/model-studio/tool-calls/)。
+开启内置工具可在处理复杂任务时获得更佳效果，当前网页抓取与代码解释器工具限时免费，支持的工具请参见[工具调用](https://help.aliyun.com/zh/model-studio/tool-calls)。
 
-## Python
+Python
 
 ```
 import os
@@ -619,7 +602,7 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
-## Node.js
+Node.js
 
 ```
 import OpenAI from "openai";
@@ -657,7 +640,7 @@ async function main() {
 main();
 ```
 
-## curl
+curl
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses \
@@ -682,7 +665,6 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ```
 
 **响应示例**
-
 ```
 {
     "id": "69258b21-5099-9d09-92e8-8492b1955xxx",
@@ -765,13 +747,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
-### **Session 缓存**
+### Session 缓存
 
 在多轮对话场景中，开启 Session 缓存 可让服务端自动缓存对话上下文，降低推理延迟与使用成本。您无需手动管理缓存，只需按正常多轮对话方式调用即可。
 
 **使用方式**：在请求 Header 中添加 `x-dashscope-session-cache: enable` 开启，或设置为 `disable` 关闭。默认值为 `disable`。
 
-**支持的模型：**`qwen3.8-max`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3-max`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.5-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-flash`、`qwen-plus`、`qwen-flash`、`qwen3-coder-plus`、`qwen3-coder-flash`
+**支持的模型：**`qwen3-max`、`qwen3.8-max`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.5-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-flash`、`qwen-plus`、`qwen-flash`、`qwen3-coder-plus`、`qwen3-coder-flash`
 
 > Session 缓存 最小可缓存提示词长度为 1024 Token，缓存有效期为 5 分钟。相关约束限制与[显式缓存](https://help.aliyun.com/zh/model-studio/context-cache)一致。
 
@@ -779,7 +761,7 @@ Session 缓存的缓存键由完整请求内容计算生成，包含 system prom
 
 多轮对话中每轮 user prompt 不同，Session 缓存的命中率会显著下降。建议使用 `previous_response_id` 参数关联历史响应，复用历史请求中 system prompt 部分的缓存，仅新增内容需重新计算。
 
-## Python
+Python
 
 ```
 import os
@@ -816,7 +798,7 @@ print(f"输入 Token: {usage.input_tokens}")
 print(f"缓存命中 Token: {usage.input_tokens_details.cached_tokens}")
 ```
 
-## Node.js
+Node.js
 
 ```
 import OpenAI from "openai";
@@ -855,7 +837,7 @@ async function main() {
 main();
 ```
 
-## curl
+curl
 
 ```
 # 第一轮对话
@@ -885,11 +867,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 如果您当前使用的是 OpenAI Chat Completions API，可以通过以下步骤迁移到 Responses API。Responses API 提供了更简洁的接口和更强大的功能，同时保持了与 Chat Completions 的兼容性。
 
-### **1\. 更新端点地址**
+### 1\. 更新端点地址
 
 从 `/v1/chat/completions` 更新为 `/v1/responses`。
 
-## Python
+Python
 
 ```
 # Chat Completions API
@@ -920,7 +902,7 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
-## Node.js
+Node.js
 
 ```
 // Chat Completions API
@@ -951,7 +933,7 @@ const response2 = await client.responses.create({
 console.log(response2.output_text);
 ```
 
-## curl
+curl
 
 ```
 # Chat Completions API
@@ -976,7 +958,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-### **2\. 更新响应处理**
+### 2\. 更新响应处理
 
 Responses API 的响应结构有所不同。使用 `output_text` 快捷方法获取文本输出，或通过 `output` 数组访问详细信息。
 
@@ -1053,11 +1035,11 @@ Responses API 的响应结构有所不同。使用 `output_text` 快捷方法获
 }
 ```
 
-### **3\. 简化多轮对话管理**
+### 3\. 简化多轮对话管理
 
 在 Chat Completions 中需要手动管理消息历史数组，而 Responses API 提供了 `previous_response_id` 参数自动关联上下文，当前响应`id`有效期为7天。
 
-## Python
+#### Python
 
 ```
 # Chat Completions - 需要手动管理消息历史
@@ -1095,7 +1077,7 @@ res2 = client.responses.create(
 )
 ```
 
-## Node.js
+#### Node.js
 
 ```
 // Chat Completions - 需要手动管理消息历史
@@ -1133,11 +1115,11 @@ const res2 = await client.responses.create({
 });
 ```
 
-### **4\. 使用内置工具**
+### 4\. 使用内置工具
 
-Responses API 内置了多种工具，无需自行实现。只需在 `tools` 参数中指定即可，当前代码解释器与网页抓取工具限时免费，详情请参见[工具调用](https://help.aliyun.com/zh/model-studio/tool-calls/)。
+Responses API 内置了多种工具，无需自行实现。只需在 `tools` 参数中指定即可，当前代码解释器与网页抓取工具限时免费，详情请参见[工具调用](https://help.aliyun.com/zh/model-studio/tool-calls)。
 
-## Python
+#### Python
 
 ```
 # Chat Completions - 需要自己实现工具函数
@@ -1172,7 +1154,7 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
-## Node.js
+#### Node.js
 
 ```
 // Chat Completions - 需要自己实现工具函数
@@ -1208,7 +1190,7 @@ const response = await client.responses.create({
 console.log(response.output_text);
 ```
 
-## curl
+#### curl
 
 ```
 # Chat Completions - 需要自己实现工具
@@ -1233,18 +1215,16 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ## 常见问题
 
-### **Q：如何传递多轮对话的上下文？**
+### Q：如何传递多轮对话的上下文？
 
 A：在发起新一轮对话请求时，请将上一轮模型响应成功返回的`id`作为 `previous_response_id` 参数传入。
 
-### **Q：为何无法打印 output\_text？**
+### Q：为何无法打印 output\_text？
 
 A：OpenAI Python SDK 在某些版本（如1.99.2）错误移除了该属性，请更新 SDK 为最新版以避免该报错。
 
 ## 相关文档
 
 -   [创建响应](https://help.aliyun.com/zh/model-studio/qwen-api-via-openai-responses)
-    
--   [获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)
-    
--   [配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)
+-   [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
+-   [配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)

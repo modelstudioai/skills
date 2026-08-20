@@ -5,28 +5,20 @@
 ## 前提条件
 
 -   [已开通 政务公文配套工具 服务](https://aimiaobi.console.aliyun.com/#/audit)
-    
 
-## **相关API参考**
+## 相关API参考
 
 -   提交审核任务：[SubmitSmartAudit](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/SubmitSmartAudit)
-    
 -   查询智能审核结果：[GetSmartAuditResult](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/GetSmartAuditResult)
-    
 -   导出审核报告：[ExportAuditContentResult](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ExportAuditContentResult)
-    
 -   提交规则库：[SubmitAuditNote](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/SubmitAuditNote)
-    
 -   查询规则库解析状态：[GetAuditNoteProcessingStatus](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/GetAuditNoteProcessingStatus)
-    
 -   确认并处理规则库：[ConfirmAndPostProcessAuditNote](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ConfirmAndPostProcessAuditNote)
-    
 -   查询语义化索引状态：[GetAuditNotePostProcessingStatus](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/GetAuditNotePostProcessingStatus)
-    
 
-## **快速运行步骤**
+## 快速运行步骤
 
-### **添加Maven依赖**
+### 添加Maven依赖
 
 建议您前往 [阿里云 OpenAPI 门户](https://api.aliyun.com/api-tools/sdk/AiMiaoBi?version=2023-08-01&language=java-async-tea&tab=primer-doc) 查询并使用最新版本。
 
@@ -44,7 +36,7 @@
 </dependency>
 ```
 
-### **配置环境变量**
+### 配置环境变量
 
 环境变量名称
 
@@ -52,11 +44,11 @@
 
 ALIBABA\_CLOUD\_ACCESS\_KEY\_ID
 
-[阿里云AccessKey，用于标识用户身份。](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)
+阿里云AccessKey，用于标识用户身份。
 
 ALIBABA\_CLOUD\_ACCESS\_KEY\_SECRET
 
-[阿里云AccessKey Secret](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)
+阿里云AccessKey Secret
 
 WORKSPACE\_ID
 
@@ -68,24 +60,19 @@ ENDPOINT
 
 aimiaobi.cn-beijing.aliyuncs.com
 
-### **复制工具类到工程中**
+### 复制工具类到工程中
 
 将 AuditUtils 复制到代码工程中
 
-### **运行主类**
+### 运行主类
 
 1.  基础文章审校：ContentAuditBasicExample
-    
 2.  图片审校：ImageAuditExample
-    
 3.  联网事实性审校：FactAuditExample
-    
 4.  规则库-规则准备：RuleLibraryPreparationExample
-    
 5.  规则库-审校：RuleBasedContentAuditExample
-    
 
-## **1\. 通用工具类**
+## 1\. 通用工具类
 
 > 访问下面示例时请复制此工具类到您的工程代码中
 
@@ -217,12 +204,12 @@ public class AuditUtils {
         CloseableHttpResponse response = null;
         InputStream inputStream = null;
         FileOutputStream outputStream = null;
-        
+
         try {
             httpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
             response = httpClient.execute(httpGet);
-            
+
             // 创建临时目录
             String tmpDir = System.getProperty("java.io.tmpdir");
             File tempDir = new File(tmpDir);
@@ -238,7 +225,7 @@ public class AuditUtils {
             if (entity != null) {
                 inputStream = entity.getContent();
                 outputStream = new FileOutputStream(outputFile);
-                
+
                 byte[] buffer = new byte[4096];
                 int bytesRead;
 
@@ -416,18 +403,14 @@ public class AuditUtils {
 }
 ```
 
-## **2\. 文章审校**
+## 2\. 文章审校
 
 基础内容审核示例 本示例演示如何使用基础审核维度进行内容审核：
 
 1.  获取基础性文章审核维度列表
-    
 2.  提交内容审核任务
-    
 3.  轮询获取审核结果
-    
 4.  导出审核报告
-    
 
 ```
 package org.example.audit;
@@ -518,7 +501,7 @@ public class ContentAuditBasicExample {
 
     /**
      * 获取基础性文章审核维度列表
-     * 
+     *
      * <p>本方法获取基础性文章审核所需的四大类审核维度：</p>
      * <ul>
      *   <li><strong>内容准确性（ContentAccuracy）</strong>：音/形相似差错、标点符号错误、的地得错误、用词不当/语法错误、人名错误、地名错误、引用错误、专有名称/术语错误</li>
@@ -526,7 +509,7 @@ public class ContentAuditBasicExample {
      *   <li><strong>内容结构问题（StructureError）</strong>：文字冗余、片段重复、逻辑矛盾、占位符未填充</li>
      *   <li><strong>政治性问题（politicalError）</strong>：敏感和内容导向风险、姓名或排序差错、固有表述差错、机构名称不规范、重要讲话引用差错、落马官员、姓名职务搭配错误、职务表述错误</li>
      * </ul>
-     * 
+     *
      * <p><strong>为什么选择这四大类？</strong></p>
      * <p>根据基础性文章审核的实践，这四大类涵盖了文章审核的核心需求：</p>
      * <ul>
@@ -535,10 +518,10 @@ public class ContentAuditBasicExample {
      *   <li>内容结构：检查文章逻辑性和结构完整性</li>
      *   <li>政治性：确保内容符合政治规范，避免敏感问题</li>
      * </ul>
-     * 
+     *
      * <p>如需使用其他审核维度（如安全合规、法律错误、专业知识错误、事实性检查、图片审核、自定义词库、规则库审核等），
      * 可以修改 {@code majorTypes} 列表或移除过滤逻辑以获取所有维度。</p>
-     * 
+     *
      * <p>子审核编码完整列表请参考：
      * <a href="https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitsmartaudit#%E5%AD%90%E5%AE%A1%E6%A0%B8%E7%BC%96%E7%A0%81%E5%8F%96%E5%80%BC%E5%88%97%E8%A1%A8">API文档-子审核编码取值列表</a></p>
      *
@@ -571,7 +554,7 @@ public class ContentAuditBasicExample {
             System.out.println("主维度名称: " + item.getMajorClassName());
             System.out.println("主维度编码: " + item.getMajorClassCode());
             System.out.println("子维度列表:");
-            
+
             List<ListAuditContentErrorTypesResponseBody.SubClasses> subClasses = item.getSubClasses();
             for (ListAuditContentErrorTypesResponseBody.SubClasses subItem : subClasses) {
                 System.out.println("  子维度名称: " + subItem.getClassName());
@@ -595,16 +578,13 @@ public class ContentAuditBasicExample {
 }
 ```
 
-## **3\. 图片审校**
+## 3\. 图片审校
 
 本示例演示如何使用图片审核功能进行内容审核：
 
 1.  提交图片审核任务（支持多张图片）
-    
 2.  轮询获取审核结果
-    
 3.  导出审核报告
-    
 
 注意：图片审核的编码为：ImageAudit。在提交审核任务时，需要将此编码添加到 subCodes 参数中。
 
@@ -716,18 +696,14 @@ public class ImageAuditExample {
 }
 ```
 
-## **4\. 联网事实性审校**
+## 4\. 联网事实性审校
 
 本示例演示如何使用事实性审核功能进行内容审核：
 
 1.  配置授信的信源（可选，用于指定可信的数据源）
-    
 2.  提交事实性审核任务
-    
 3.  轮询获取审核结果
-    
 4.  导出审核报告
-    
 
 **注意：**
 
@@ -915,7 +891,7 @@ public class FactAuditExample {
 }
 ```
 
-## **5\. 规则库审校**
+## 5\. 规则库审校
 
 **功能说明**
 
@@ -923,14 +899,11 @@ public class FactAuditExample {
 
 **使用流程**
 
-1.  **首次使用：** 先运行 RuleLibraryPreparationExample 完成规则库的准备
-    
-2.  **日常审核：** 运行 RuleBasedContentAuditExample 进行内容审核
-    
-3.  **更新规则：** 如需更新规则库，重新运行阶段一的示例
-    
+1.  **首次使用：** 先运行 RuleLibraryPreparationExample 完成规则库的准备
+2.  **日常审核：** 运行 RuleBasedContentAuditExample 进行内容审核
+3.  **更新规则：** 如需更新规则库，重新运行阶段一的示例
 
-### **规则准备阶段**
+### 规则准备阶段
 
 **功能说明：**
 
@@ -939,36 +912,25 @@ public class FactAuditExample {
 **主要步骤：**
 
 1.  上传并解析规则库文件
-    
 2.  对规则库进行语义化索引处理
-    
 
 **注意事项：**
 
 -   规则库文件需要按照模板格式准备，可参考模板文件：[规则库模板](https://aimiaobi-service-prod.oss-cn-beijing.aliyuncs.com/templates/%E8%A7%84%E5%88%99%E5%BA%93%E6%A8%A1%E6%9D%BF1105.xlsx)
-    
 -   请将示例中的文件路径替换为您实际的规则库文件路径
-    
 -   规则库文件格式不正确可能导致解析失败
-    
 
 **规则库的作用：**
 
 -   允许您自定义审核规则，如禁止使用某些词汇、限制特定表达方式等
-    
 -   系统会根据规则库中的规则对内容进行审核
-    
 
 **相关API：**
 
 -   提交规则库：[SubmitAuditNote](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/SubmitAuditNote)
-    
 -   查询规则库解析状态：[GetAuditNoteProcessingStatus](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/GetAuditNoteProcessingStatus)
-    
 -   确认并处理规则库：[ConfirmAndPostProcessAuditNote](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ConfirmAndPostProcessAuditNote)
-    
 -   查询语义化索引状态：[GetAuditNotePostProcessingStatus](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/GetAuditNotePostProcessingStatus)
-    
 
 ```
 package org.example.audit;
@@ -1036,7 +998,7 @@ public class RuleLibraryPreparationExample {
 
         // 示例：上传并解析规则库文件
         // 请将文件路径替换为您的实际规则库文件路径
-        String ruleLibraryFilePath = "/Users/weisanju/Downloads/规则库模板1105.xlsx";
+        String ruleLibraryFilePath = "/Users/<username>/Downloads/规则库模板1105.xlsx";
         //示例文件内容为： 避免口语化、网络语、主观情绪词（正式文本），如"超赞""巨多""贼好"等不得出现；慎用"非常""极其"等模糊强调词。
         //可参考模板文件：https://aimiaobi-service-prod.oss-cn-beijing.aliyuncs.com/templates/%E8%A7%84%E5%88%99%E5%BA%93%E6%A8%A1%E6%9D%BF1105.xlsx
 
@@ -1128,7 +1090,7 @@ public class RuleLibraryPreparationExample {
 }
 ```
 
-### **内容审校阶段**
+### 内容审校阶段
 
 **功能说明：**
 
@@ -1136,12 +1098,9 @@ public class RuleLibraryPreparationExample {
 
 **注意事项：**
 
--   **前置条件：** 在使用本示例之前，请确保已经完成了规则库的准备阶段（阶段一），包括规则库文件的上传、解析和语义化索引处理
-    
--   **审核编码：** 规则库审核的编码为 WrongQuestionBook，在提交审核任务时，需要将此编码添加到 subCodes 参数中
-    
+-   **前置条件：** 在使用本示例之前，请确保已经完成了规则库的准备阶段（阶段一），包括规则库文件的上传、解析和语义化索引处理
+-   **审核编码：** 规则库审核的编码为 WrongQuestionBook，在提交审核任务时，需要将此编码添加到 subCodes 参数中
 -   请将示例文本替换为您需要审核的实际内容
-    
 
 ```
 package org.example.audit;

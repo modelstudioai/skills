@@ -1,4 +1,4 @@
-# RunCompletion - 通过模版ID调用通义晓蜜CCAI-对话分析AIO应用
+# RunCompletion
 
 支持调用通义晓蜜CCAI-对话分析AIO应用获取对话摘要、关键信息抽取、质检结果、对话分析结果，应用调用支持 HTTP 调用来完成客户的响应，目前提供普通 HTTP 和 HTTP SSE 两种协议，您可根据自己的需求自行选择。
 
@@ -9,17 +9,15 @@
 前提条件
 
 1.  已开通通义晓蜜 CCAI-对话分析 AIO 服务。
-    
-2.  已创建应用：应用中心完成通义晓蜜 CCAI-对话分析 AIO 应用创建，并获取到 APP-ID 和 WORKSPACE-ID：[获取 APP-ID 和 WORKSPACE-ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)。
-    
+2.  已创建应用：应用中心完成通义晓蜜 CCAI-对话分析 AIO 应用创建，并获取到 APP-ID 和 WORKSPACE-ID：[获取 APP-ID 和 WORKSPACE-ID](https://help.aliyun.com/document_detail/2782167.html?spm=a2c4g.2782164.0.0.2b2b6dcdZZ5oUE)。
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/RunCompletion)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
- [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/RunCompletion)
+[调试](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/RunCompletion)
 
-## **授权信息**
+## 授权信息
 
 当前API暂无授权信息透出。
 
@@ -385,7 +383,7 @@ string
 
 jsonObject
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -561,8 +559,6 @@ SUCCESS
 
 ## 错误码
 
-   
-
 **HTTP status code**
 
 **错误码**
@@ -637,6 +633,6 @@ The current account does not have the permission to specify the business space. 
 
 访问[错误中心](https://api.aliyun.com/document/ContactCenterAI/2024-06-03/errorCode)查看更多错误码。
 
-## **变更历史**
+## 变更历史
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/ContactCenterAI/2024-06-03/RunCompletion#workbench-doc-change-demo)。

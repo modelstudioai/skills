@@ -1,31 +1,26 @@
 # 可灵-视频生成API文档
 
-可灵-视频生成模型支持**文生视频、图生视频-基于首帧、图生视频-基于首尾帧、参考生视频以及视频编辑**。
+可灵-视频生成模型支持 文生视频、图生视频-基于首帧、图生视频-基于首尾帧、参考生视频以及视频编辑 。
 
-**重要**
+**重要**本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
 
-本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
+## 服务开通
 
-## **服务开通**
-
-请前往[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/all)，搜索“kling”，找到**可灵AI** 模型卡片，单击**立即开通**，在弹窗内确认开通及授权。
+请前往[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/all)，搜索“kling”，找到**可灵AI**模型卡片，单击**立即开通**，在弹窗内确认开通及授权。
 
 ## 适用范围
 
 为确保调用成功，请务必保证**模型、Endpoint URL 和 API Key 均属于同一地域**。跨地域调用将会失败。
 
 -   [**选择模型**](https://help.aliyun.com/zh/model-studio/use-video-generation#56194eb777noq)：确认模型所属的地域。
-    
 -   **选择 URL**：选择对应的地域 Endpoint URL，支持HTTP URL。
-    
--   **配置 API Key**：选择地域并[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-    
+-   **配置 API Key**：选择地域并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
 
 ## HTTP调用
 
 由于视频生成任务耗时较长（通常为1-5分钟），API采用异步调用。整个流程包含 **"创建任务 -> 轮询获取"** 两个核心步骤，具体如下：
 
-### **步骤1：创建任务获取任务ID**
+### 步骤1：创建任务获取任务ID
 
 **北京地域**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
 
@@ -34,13 +29,298 @@
 **说明**
 
 -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
-    
--   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
-    
+-   新手指引请参见[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
 
 #### 请求参数
 
-## 文生视频
+##### 请求头（Headers）
+
+**Content-Type**`string`**（必选）**
+
+请求内容类型。此参数必须设置为`application/json`。
+
+**Authorization**`string`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+**X-DashScope-Async**`string`**（必选）**
+
+异步处理配置参数。HTTP请求只支持异步，**必须设置为**`enable`。
+
+**重要**缺少此请求头将报错：“current user api does not support synchronous calls”。
+
+##### 请求体（Request Body）
+
+**model** `string` **（必选）**
+
+模型名称。
+
+可选值：
+
+-   `kling/kling-v3-omni-video-generation`
+-   `kling/kling-v3-video-generation`
+
+**input** `object` **（必选）**
+
+输入的基本信息，如提示词、媒体素材等。
+
+属性
+
+**prompt** `string` （条件必填）
+
+文本提示词。用来描述生成视频中期望包含的元素和视觉特点。
+
+支持中英文，每个汉字/字母占一个字符，不超过2500个字符，超过将返回错误。
+
+填写逻辑：
+
+-   当 `shot_type=intelligence` 时，此参数**必填**。
+-   当 `shot_type=customize` 时，此参数**不生效**，请以 `multi_prompt` 为准。
+
+Omni模型可通过prompt与主体、图片、视频等内容实现多种能力：
+
+-   支持模型：`kling/kling-v3-omni-video-generation`。
+-   适用任务：参考生视频。
+-   引用格式：通过`<<<>>>`的格式来指定某个主体、图片、视频，如：`<<<element_1>>>`、`<<<image_1>>>`、`<<<video_1>>>`。
+-   引用顺序：按照`media`数组顺序定义prompt中引用的顺序。
+-   用法示例：`一只<<<element_1>>>在月光下奔跑`。
+
+**media** `array` （可选）
+
+文生视频任务无需填写此参数。
+
+媒体素材列表，用于指定图像或视频素材。
+
+不同模型支持的媒体素材搭配不一样：
+
+素材组合规则
+
+kling/kling-v3-video-generation
+
+仅支持以下媒体素材组合，非法组合将报错。
+
+-   **图生视频-基于首帧**：`first_frame`。
+    
+    -   数量限制：首帧1张。
+-   **图生视频-基于首尾帧**：`first_frame+last_frame`。
+    
+    -   数量限制：首帧1张，尾帧1张。
+
+kling/kling-v3-omni-video-generation
+
+仅支持以下媒体素材组合，非法组合将报错。
+
+-   **图生视频-基于首帧**：`first_frame`。
+    
+    -   图像数量：首帧1张。
+-   **图生视频-基于首尾帧**：`first_frame+last_frame`。
+    
+    -   图像数量：首帧1张，尾帧1张。
+-   **参考生视频**：支持以下 `media` 组合。
+    
+    -   仅传入 `feature` 时：必须传入1个视频。
+    -   仅传入 `refer` 时：参考图片与多图主体数量（`element_list` 的数组长度）之和不得超过7。
+    -   传入 `feature+refer` 时：必须传入1个视频，且参考图片与多图主体数量（`element_list` 的数组长度）之和不得超过4。
+    -   传入 `feature+first_frame` 时：必须传入1个视频和1张首帧。
+-   **视频编辑**：支持以下 `media` 组合。
+    
+    -   仅传入 `base` 时：必须传入1个视频。
+    -   传入 `base+refer` 时：必须传入1个视频，且参考图片与多图主体数量（`element_list` 的数组长度）之和不得超过4。
+
+属性
+
+**type** `string` **（必选）**
+
+媒体素材类型。可选值与所选模型有关：
+
+kling/kling-v3-video-generation
+
+可选值：
+
+-   `first_frame`：首帧图片。
+-   `last_frame`：尾帧图片。
+
+不同媒体素材之间的搭配限制，请参见 `media` 参数下的“素材组合规则”。
+
+kling/kling-v3-omni-video-generation
+
+可选值：
+
+-   `first_frame`：首帧图片。
+-   `last_frame`：尾帧图片。
+-   `refer`：参考图片。
+-   `base`：待编辑视频。
+-   `feature`：特征参考视频。
+
+不同媒体素材之间的搭配限制，请参见 `media` 参数下的“素材组合规则”。
+
+**url** `string` **（必选）**
+
+媒体素材URL。素材包括图像、视频。
+
+传入图像（type=first\_frame或last\_frame或refer）
+
+图像URL。
+
+-   支持 HTTP 或 HTTPS 协议。
+-   示例值：[](https://xxx/xxx.png)[https://xxx/xxx.png](https://xxx/xxx.png)。
+
+图像限制：
+
+-   格式：JPEG、JPG、PNG（不支持透明通道）。
+-   分辨率：宽和高的范围为\[300, 8000\]像素。
+-   宽高比：1:2.5 ~ 2.5:1。
+-   文件大小：不超过10MB。
+
+传入视频（type=base或feature）
+
+视频文件的 URL。
+
+-   支持 HTTP 和 HTTPS 协议。
+-   示例值：[](https://xxx/xxx.mp4)[https://xxx/xxx.mp4](https://xxx/xxx.mp4)。
+
+视频限制：
+
+-   格式：mp4、mov。
+-   时长：3～10s。
+-   分辨率：宽和高的范围为\[720, 2160\]像素。
+-   文件大小：不超过200MB。
+-   帧率：24～60fps。
+
+**keep\_original\_sound** `string` （可选）
+
+支持模型：kling/kling-v3-omni-video-generation 。
+
+生效条件：当且仅当传入视频（type=base或feature）时生效。
+
+是否保留原视频声音。
+
+-   `no`：默认值，不保留原声。
+-   `yes`：保留原声。
+
+**multi\_shot** `boolean` （可选）
+
+是否开启多镜头生成。
+
+-   `false`：默认值，不开启多镜头。
+-   `true`：开启多镜头生成。
+
+**shot\_type** `string` （条件必填）
+
+当`multi_shot=true` 时必填。多镜头模式类型。
+
+-   `intelligence`：智能分镜，由模型自动规划镜头。
+-   `customize`：自定义模式，支持自定义每个片段的提示词和时长。
+
+**multi\_prompt** `array` （条件必填）
+
+当`shot_type=customize` 时必填。多镜头自定义模式下的片段列表。
+
+属性
+
+**index** `integer` **（必选）**
+
+分镜片段索引，分镜数量为1～6个，索引从1开始。
+
+**prompt** `string` **（必选）**
+
+对应片段的提示词，支持中英文，不超过512个字符，超过自动截断。
+
+**duration** `integer` **（必选）**
+
+对应片段的时长，单位为秒。
+
+取值为\[1, `parameters.duration`\]之间的整数。
+
+**element\_list** `array` （可选）
+
+主体列表，用于指定视频中需要引入的主体元素。
+
+属性
+
+**element\_id** `integer` （条件必填）
+
+传`element_list`时必填，表示主体ID。请在[可灵-主体ID列表](https://help.aliyun.com/zh/model-studio/kling-object-ids)获取主体ID。
+
+主体个数限制（element\_list数组长度限制）：
+
+-   图生视频-基于首帧：最多支持3个主体。
+-   图生视频-基于首尾帧：最多支持3个主体。
+-   参考生视频（`type=refer`）：参考图片与多图主体数量之和不得超过7。
+-   参考生视频（`type=feature+refer`）：参考图片与多图主体数量之和不得超过4。
+
+**parameters** `object` （可选）
+
+视频生成参数。如设置生成模式、画面比例、视频时长、是否生成音频等。
+
+属性
+
+**mode** `string` （可选）
+
+视频生成模式。
+
+-   `pro`：默认值，专业模式，输出视频分辨率为1080P。
+-   `std`：标准模式，输出视频分辨率为720P。
+-   `4k`：4K模式，输出视频分辨率为4K。
+
+**aspect\_ratio** `string` （条件必填）
+
+生成视频的宽高比例。
+
+可选值：
+
+-   `16:9`：默认值。
+-   `9:16`
+-   `1:1`
+
+以下场景必须填写：
+
+-   文生视频：必须设置。
+-   参考生视频（`type=feature`、`type=feature+refer`、`type=refer`）：必须设置。
+
+其他场景无需设置
+
+-   图生视频-基于首帧：以首帧的宽高比为基准，无需填写。
+-   图生视频-基于首尾帧：以首帧的宽高比为基准，无需填写。
+-   参考生视频（`type=feature+first_frame`）：以首帧的宽高比为基准，无需填写。
+-   视频编辑：以输入视频的宽高比为基准，无需填写。
+
+**duration** `integer` （可选）
+
+**重要**duration直接影响费用，按秒计费，时间越长费用越高，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)查看价格。
+
+生成视频的时长，单位为秒。
+
+-   kling/kling-v3-omni-video-generation：取值为\[3, 15\]之间的整数，默认值为5。
+    
+    -   注意：当传入视频时，该参数的行为因`type`不同而异：
+        
+        -   `type=feature`：取值为\[3, 10\]之间的整数，默认值为5。
+        -   `type=base`：输出视频时长与传入视频时长相同，此时当前参数无效。按输入视频时长四舍五入取整计量计费。
+-   kling/kling-v3-video-generation：取值为\[3, 15\]之间的整数，默认值为5。
+    
+
+示例值：5。
+
+**audio** `boolean` （可选）
+
+**重要**audio直接影响费用，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)查看价格。
+
+是否生成有声视频。开启后模型将根据视频内容自动生成匹配的背景音乐或音效。
+
+-   `false`：默认值，输出无声视频。
+-   `true`：输出有声视频。
+
+注意：当传入视频（`type=base或feature`）时，`audio`只能设置为`false`。
+
+**watermark** `boolean` （可选）
+
+是否同时生成含水印的视频。水印位于视频右下角，文案固定为”可灵AI”。设置为true时，响应中将额外返回`watermark_video_url`字段。
+
+-   `false`：默认值，不生成含水印的视频。
+-   `true`：同时生成含水印的视频。
+
+#### 文生视频
 
 支持模型：`kling/kling-v3-omni-video-generation`、`kling/kling-v3-video-generation`。
 
@@ -65,9 +345,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 文生视频（智能分镜）
+#### 文生视频（智能分镜）
 
-支持模型：`kling/kling-v3-omni-video-generation`、`kling/kling-v3-video-generation` 。
+支持模型：`kling/kling-v3-omni-video-generation`、`kling/kling-v3-video-generation`。
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID。
@@ -106,9 +386,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 图生视频（首帧生视频）
+#### 图生视频（首帧生视频）
 
-支持模型：`kling/kling-v3-omni-video-generation`、`kling/kling-v3-video-generation` 。
+支持模型：`kling/kling-v3-omni-video-generation`、`kling/kling-v3-video-generation`。
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID。
@@ -136,9 +416,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 图生视频（首尾帧生视频）
+#### 图生视频（首尾帧生视频）
 
-支持模型：`kling/kling-v3-omni-video-generation`、`kling/kling-v3-video-generation` 。
+支持模型：`kling/kling-v3-omni-video-generation`、`kling/kling-v3-video-generation`。
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID。
@@ -170,7 +450,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 参考生视频（视频+图像）
+#### 参考生视频（视频+图像）
 
 支持模型：`kling/kling-v3-omni-video-generation`。
 
@@ -218,369 +498,44 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-##### 请求头（Headers）
-
-**Content-Type** `_string_` **（必选）**
-
-请求内容类型。此参数必须设置为`application/json`。
-
-**Authorization** `_string_`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-**X-DashScope-Async** `_string_` **（必选）**
-
-异步处理配置参数。HTTP请求只支持异步，**必须设置为**`**enable**`。
-
-**重要**
-
-缺少此请求头将报错：“current user api does not support synchronous calls”。
-
-##### 请求体（Request Body）
-
-**model** `_string_` **（必选）**
-
-模型名称。
-
-可选值：
-
--   `kling/kling-v3-omni-video-generation`
-    
--   `kling/kling-v3-video-generation`
-    
-
-**input** `_object_` **（必选）**
-
-输入的基本信息，如提示词、媒体素材等。
-
-**属性**
-
-**prompt** `_string_` （条件必填）
-
-文本提示词。用来描述生成视频中期望包含的元素和视觉特点。
-
-支持中英文，每个汉字/字母占一个字符，不超过2500个字符，超过将返回错误。
-
-填写逻辑：
-
--   当 `shot_type=intelligence` 时，此参数**必填**。
-    
--   当 `shot_type=customize` 时，此参数**不生效**，请以 `multi_prompt` 为准。
-    
-
-Omni模型可通过prompt与主体、图片、视频等内容实现多种能力：
-
--   支持模型：`kling/kling-v3-omni-video-generation`。
-    
--   适用任务：参考生视频。
-    
--   引用格式：通过`<<<>>>`的格式来指定某个主体、图片、视频，如：`<<<element_1>>>`、`<<<image_1>>>`、`<<<video_1>>>`。
-    
--   引用顺序：按照`media`数组顺序定义prompt中引用的顺序。
-    
--   用法示例：`一只<<<element_1>>>在月光下奔跑`。
-    
-
-**media** `_array_` （可选）
-
-文生视频任务无需填写此参数。
-
-媒体素材列表，用于指定图像或视频素材。
-
-不同模型支持的媒体素材搭配不一样：
-
-**素材组合规则**
-
-kling/kling-v3-video-generation
-
-仅支持以下媒体素材组合，非法组合将报错。
-
--   **图生视频-基于首帧**：`first_frame`。
-    
-    -   数量限制：首帧1张。
-        
--   **图生视频-基于首尾帧**：`first_frame+last_frame`。
-    
-    -   数量限制：首帧1张，尾帧1张。
-        
-
-kling/kling-v3-omni-video-generation
-
-仅支持以下媒体素材组合，非法组合将报错。
-
--   **图生视频-基于首帧**：`first_frame`。
-    
-    -   图像数量：首帧1张。
-        
--   **图生视频-基于首尾帧**：`first_frame+last_frame`。
-    
-    -   图像数量：首帧1张，尾帧1张。
-        
--   **参考生视频**：支持以下 `media` 组合。
-    
-    -   仅传入 `feature` 时：必须传入1个视频。
-        
-    -   仅传入 `refer` 时：参考图片与多图主体数量（`element_list` 的数组长度）之和不得超过7。
-        
-    -   传入 `feature+refer` 时：必须传入1个视频，且参考图片与多图主体数量（`element_list` 的数组长度）之和不得超过4。
-        
-    -   传入 `feature+first_frame` 时：必须传入1个视频和1张首帧。
-        
--   **视频编辑**：支持以下 `media` 组合。
-    
-    -   仅传入 `base` 时：必须传入1个视频。
-        
-    -   传入 `base+refer` 时：必须传入1个视频，且参考图片与多图主体数量（`element_list` 的数组长度）之和不得超过4。
-        
-
-**属性**
-
-**type** `_string_` **（必选）**
-
-媒体素材类型。可选值与所选模型有关：
-
-kling/kling-v3-video-generation
-
-可选值：
-
--   `first_frame`：首帧图片。
-    
--   `last_frame`：尾帧图片。
-    
-
-不同媒体素材之间的搭配限制，请参见 `media` 参数下的“素材组合规则”。
-
-kling/kling-v3-omni-video-generation
-
-可选值：
-
--   `first_frame`：首帧图片。
-    
--   `last_frame`：尾帧图片。
-    
--   `refer`：参考图片。
-    
--   `base`：待编辑视频。
-    
--   `feature`：特征参考视频。
-    
-
-不同媒体素材之间的搭配限制，请参见 `media` 参数下的“素材组合规则”。
-
-**url** `_string_` **（必选）**
-
-媒体素材URL。素材包括图像、视频。
-
-传入图像（type=first\_frame或last\_frame或refer）
-
-图像URL。
-
--   支持 HTTP 或 HTTPS 协议。
-    
--   示例值：https://xxx/xxx.png。
-    
-
-图像限制：
-
--   格式：JPEG、JPG、PNG（不支持透明通道）。
-    
--   分辨率：宽和高的范围为\[300, 8000\]像素。
-    
--   宽高比：1:2.5 ~ 2.5:1。
-    
--   文件大小：不超过10MB。
-    
-
-传入视频（type=base或feature）
-
-视频文件的 URL。
-
--   支持 HTTP 和 HTTPS 协议。
-    
--   示例值：https://xxx/xxx.mp4。
-    
-
-视频限制：
-
--   格式：mp4、mov。
-    
--   时长：3～10s。
-    
--   分辨率：宽和高的范围为\[720, 2160\]像素。
-    
--   文件大小：不超过200MB。
-    
--   帧率：24～60fps。
-    
-
-**keep\_original\_sound** `_string_` （可选）
-
-支持模型：kling/kling-v3-omni-video-generation 。
-
-生效条件：当且仅当传入视频（type=base或feature）时生效。
-
-是否保留原视频声音。
-
--   `no`：默认值，不保留原声。
-    
--   `yes`：保留原声。
-    
-
-**multi\_shot** `_boolean_` （可选）
-
-是否开启多镜头生成。
-
--   `false`：默认值，不开启多镜头。
-    
--   `true`：开启多镜头生成。
-    
-
-**shot\_type** `_string_` （条件必填）
-
-当`multi_shot=true` 时必填。多镜头模式类型。
-
--   `intelligence`：智能分镜，由模型自动规划镜头。
-    
--   `customize`：自定义模式，支持自定义每个片段的提示词和时长。
-    
-
-**multi\_prompt** `_array_` （条件必填）
-
-当`shot_type=customize` 时必填。多镜头自定义模式下的片段列表。
-
-**属性**
-
-**index** `_integer_` **（必选）**
-
-分镜片段索引，分镜数量为1～6个，索引从1开始。
-
-**prompt** `_string_` **（必选）**
-
-对应片段的提示词，支持中英文，不超过512个字符，超过自动截断。
-
-**duration** `_integer_` **（必选）**
-
-对应片段的时长，单位为秒。
-
-取值为\[1, `parameters.duration`\]之间的整数。
-
-**element\_list** `_array_` （可选）
-
-主体列表，用于指定视频中需要引入的主体元素。
-
-**属性**
-
-**element\_id** `_integer_` （条件必填）
-
-传`element_list`时必填，表示主体ID。请在[可灵-主体ID列表](https://help.aliyun.com/zh/model-studio/kling-object-ids)获取主体ID。
-
-主体个数限制（element\_list数组长度限制）：
-
--   图生视频-基于首帧：最多支持3个主体。
-    
--   图生视频-基于首尾帧：最多支持3个主体。
-    
--   参考生视频（`type=refer`）：参考图片与多图主体数量之和不得超过7。
-    
--   参考生视频（`type=feature+refer`）：参考图片与多图主体数量之和不得超过4。
-    
-
-**parameters** `_object_` （可选）
-
-视频生成参数。如设置生成模式、画面比例、视频时长、是否生成音频等。
-
-**属性**
-
-**mode** `_string_` （可选）
-
-视频生成模式。
-
--   `pro`：默认值，专业模式，输出视频分辨率为1080P。
-    
--   `std`：标准模式，输出视频分辨率为720P。
-    
--   `4k`：4K模式，输出视频分辨率为4K。
-    
-
-**aspect\_ratio** `_string_` （条件必填）
-
-生成视频的宽高比例。
-
-可选值：
-
--   `16:9`：默认值。
-    
--   `9:16`
-    
--   `1:1`
-    
-
-以下场景必须填写：
-
--   文生视频：必须设置。
-    
--   参考生视频（`type=feature`、`type=feature+refer`、`type=refer`）：必须设置。
-    
-
-其他场景无需设置
-
--   图生视频-基于首帧：以首帧的宽高比为基准，无需填写。
-    
--   图生视频-基于首尾帧：以首帧的宽高比为基准，无需填写。
-    
--   参考生视频（`type=feature+first_frame`）：以首帧的宽高比为基准，无需填写。
-    
--   视频编辑：以输入视频的宽高比为基准，无需填写。
-    
-
-**duration** `_integer_` （可选）
-
-**重要**
-
-duration直接影响费用，按秒计费，时间越长费用越高，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)查看价格。
-
-生成视频的时长，单位为秒。
-
--   kling/kling-v3-omni-video-generation：取值为\[3, 15\]之间的整数，默认值为5。
-    
-    -   注意：当传入视频时，该参数的行为因`type`不同而异：
-        
-        -   `type=feature`：取值为\[3, 10\]之间的整数，默认值为5。
-            
-        -   `type=base`：输出视频时长与传入视频时长相同，此时当前参数无效。按输入视频时长四舍五入取整计量计费。
-            
--   kling/kling-v3-video-generation：取值为\[3, 15\]之间的整数，默认值为5。
-    
-
-示例值：5。
-
-**audio** `_boolean_` （可选）
-
-**重要**
-
-audio直接影响费用，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)查看价格。
-
-是否生成有声视频。开启后模型将根据视频内容自动生成匹配的背景音乐或音效。
-
--   `false`：默认值，输出无声视频。
-    
--   `true`：输出有声视频。
-    
-
-注意：当传入视频（`type=base或feature`）时，`audio`只能设置为`false`。
-
-**watermark** `_boolean_` （可选）
-
-是否同时生成含水印的视频。水印位于视频右下角，文案固定为”可灵AI”。设置为true时，响应中将额外返回`watermark_video_url`字段。
-
--   `false`：默认值，不生成含水印的视频。
-    
--   `true`：同时生成含水印的视频。
-    
-
 #### 响应参数
 
-### 成功响应
+**output** `object`
+
+任务输出信息。
+
+属性
+
+**task\_id** `string`
+
+任务ID。查询有效期24小时。
+
+**task\_status** `string`
+
+任务状态。
+
+枚举值
+
+-   PENDING：任务排队中
+-   RUNNING：任务处理中
+-   SUCCEEDED：任务执行成功
+-   FAILED：任务执行失败
+-   CANCELED：任务已取消
+-   UNKNOWN：任务不存在或状态未知
+
+**request\_id**`string`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+**code**`string`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**message**`string`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+#### 成功响应
 
 请保存 task\_id，用于查询任务状态与结果。
 
@@ -594,9 +549,9 @@ audio直接影响费用，请前往[百炼控制台](https://bailian.console.ali
 }
 ```
 
-### 异常响应
+#### 异常响应
 
-创建任务失败，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+创建任务失败，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 ```
 {
@@ -606,67 +561,33 @@ audio直接影响费用，请前往[百炼控制台](https://bailian.console.ali
 }
 ```
 
-**output** `_object_`
-
-任务输出信息。
-
-**属性**
-
-**task\_id** `_string_`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `_string_`
-
-任务状态。
-
-**枚举值**
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：任务执行成功
-    
--   FAILED：任务执行失败
-    
--   CANCELED：任务已取消
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-**request\_id** `_string_`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code** `_string_`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**message** `_string_`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-### **步骤2：根据任务ID查询结果**
+### 步骤2：根据任务ID查询结果
 
 **北京地域**：`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 **说明**
 
 -   **轮询建议**：视频生成过程约需数分钟，建议采用**轮询**机制，并设置合理的查询间隔（如 15 秒）来获取结果。
-    
--   **任务状态流转**：PENDING（排队中）→ RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
-    
+-   **任务状态流转**：PENDING（排队中）→ RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
 -   **task\_id 有效期**：**24小时**，超时后将无法查询结果，接口将返回任务状态为`UNKNOWN`。
-    
--   **RPS 限制**：查询接口默认RPS为20。如需更高频查询或事件通知，建议[配置异步任务回调](https://help.aliyun.com/zh/model-studio/async-task-api)。
-    
--   **更多操作**：如需批量查询、取消任务等操作，请参见[管理异步任务](https://help.aliyun.com/zh/model-studio/manage-asynchronous-tasks#f26499d72adsl)。
-    
+-   **RPS 限制**：查询接口默认RPS为20。如需更高频查询或事件通知，建议[配置异步任务回调](raw/model-api-reference/more-about-models/async-task-api.md)。
+-   **更多操作**：如需批量查询、取消任务等操作，请参见[管理异步任务](raw/model-api-reference/more-about-models/manage-asynchronous-tasks.md)。
 
 #### 请求参数
 
-## 查询任务结果
+##### 请求头（Headers）
+
+**Authorization**`string`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+##### URL路径参数（Path parameters）
+
+**task\_id** `string`**（必选）**
+
+任务ID。
+
+#### 查询任务结果
 
 将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
@@ -675,21 +596,111 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-##### **请求头（Headers）**
+#### 响应参数
 
-**Authorization** `_string_`**（必选）**
+**output**`object`
 
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+任务输出信息。
 
-##### **URL路径参数（Path parameters）**
+属性
 
-**task\_id** `_string_`**（必选）**
+**task\_id** `string`
 
-任务ID。
+任务ID。查询有效期24小时。
 
-#### **响应参数**
+**task\_status** `string`
 
-#### **任务执行成功**
+任务状态。
+
+枚举值
+
+-   PENDING：任务排队中
+-   RUNNING：任务处理中
+-   SUCCEEDED：任务执行成功
+-   FAILED：任务执行失败
+-   CANCELED：任务已取消
+-   UNKNOWN：任务不存在或状态未知
+
+**轮询过程中的状态流转：**
+
+-   PENDING（排队中） → RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
+-   初次查询状态通常为 PENDING（排队中）或 RUNNING（处理中）。
+-   当状态变为 SUCCEEDED 时，响应中将包含生成的视频URL。
+-   若状态为 FAILED，请检查错误信息并重试。
+-   若状态为 CANCELED，表示任务已取消，如需继续请重新提交任务。
+-   若状态为 UNKNOWN，表示任务不存在或状态未知，可能在 task\_id 不存在或超过 24 小时有效期后出现。
+
+**submit\_time** `string`
+
+任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**scheduled\_time** `string`
+
+任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**end\_time** `string`
+
+任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**video\_url**`string`
+
+视频URL。仅在 task\_status 为 SUCCEEDED 时返回。
+
+视频格式为MP4（H.264 编码）。视频链接有效期30天，但不建议将其作为长期存储依赖，请及时下载。
+
+**watermark\_video\_url**`string`
+
+带水印的视频URL。仅在 task\_status 为 SUCCEEDED 时返回。
+
+视频格式为MP4（H.264 编码）。视频链接有效期30天，但不建议将其作为长期存储依赖，请及时下载。
+
+**orig\_prompt** `string`
+
+原始输入的prompt，对应请求参数`prompt`。
+
+**code**`string`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**message**`string`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**usage** `object`
+
+输出信息统计。只对成功的结果计数。
+
+属性
+
+**duration** `integer`
+
+生成视频的总视频时长，用于计费。
+
+**size** `string`
+
+生成视频的分辨率。示例值：1280\*720。
+
+**fps** `integer`
+
+生成视频的帧率。示例值：24。
+
+**SR** `string`
+
+生成视频的分辨率档位。示例值：720。
+
+**audio** `boolean`
+
+生成视频是否为有声视频。示例值：false。
+
+**video\_count** `integer`
+
+生成视频的数量。固定为1。
+
+**request\_id**`string`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+#### 任务执行成功
 
 ```
 {
@@ -714,9 +725,9 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
-## 任务执行失败
+#### 任务执行失败
 
-若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 ```
 {
@@ -730,7 +741,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
-## 任务查询过期
+#### 任务查询过期
 
 task\_id查询有效期为 24 小时，超时后将无法查询，返回以下报错信息。
 
@@ -744,120 +755,6 @@ task\_id查询有效期为 24 小时，超时后将无法查询，返回以下�
 }
 ```
 
-**output** `_object_`
+## 错误码
 
-任务输出信息。
-
-**属性**
-
-**task\_id** `_string_`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `_string_`
-
-任务状态。
-
-**枚举值**
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：任务执行成功
-    
--   FAILED：任务执行失败
-    
--   CANCELED：任务已取消
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-**轮询过程中的状态流转：**
-
--   PENDING（排队中） → RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
-    
--   初次查询状态通常为 PENDING（排队中）或 RUNNING（处理中）。
-    
--   当状态变为 SUCCEEDED 时，响应中将包含生成的视频URL。
-    
--   若状态为 FAILED，请检查错误信息并重试。
-    
--   若状态为 CANCELED，表示任务已取消，如需继续请重新提交任务。
-    
--   若状态为 UNKNOWN，表示任务不存在或状态未知，可能在 task\_id 不存在或超过 24 小时有效期后出现。
-    
-
-**submit\_time** `_string_`
-
-任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**scheduled\_time** `_string_`
-
-任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**end\_time** `_string_`
-
-任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**video\_url** `_string_`
-
-视频URL。仅在 task\_status 为 SUCCEEDED 时返回。
-
-视频格式为MP4（H.264 编码）。视频链接有效期30天，但不建议将其作为长期存储依赖，请及时下载。
-
-**watermark\_video\_url** `_string_`
-
-带水印的视频URL。仅在 task\_status 为 SUCCEEDED 时返回。
-
-视频格式为MP4（H.264 编码）。视频链接有效期30天，但不建议将其作为长期存储依赖，请及时下载。
-
-**orig\_prompt** `_string_`
-
-原始输入的prompt，对应请求参数`prompt`。
-
-**code** `_string_`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**message** `_string_`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**usage** `_object_`
-
-输出信息统计。只对成功的结果计数。
-
-**属性**
-
-**duration** `_integer_`
-
-生成视频的总视频时长，用于计费。
-
-**size** `_string_`
-
-生成视频的分辨率。示例值：1280\*720。
-
-**fps** `_integer_`
-
-生成视频的帧率。示例值：24。
-
-**SR** `_string_`
-
-生成视频的分辨率档位。示例值：720。
-
-**audio** `_boolean_`
-
-生成视频是否为有声视频。示例值：false。
-
-**video\_count** `_integer_`
-
-生成视频的数量。固定为1。
-
-**request\_id** `_string_`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-## **错误码**
-
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。

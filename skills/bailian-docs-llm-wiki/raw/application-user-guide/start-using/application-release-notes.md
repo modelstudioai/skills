@@ -1,15 +1,14 @@
 # 应用功能动态
 
-## **公告通知**
+## 公告通知
 
 -   [阿里云百炼知识库商业化公告](https://www.aliyun.com/notice/117726)
-    
 
-## **功能动态**
+## 功能动态
 
-> 关于阿里云百炼模型的动态信息，请参见[模型上下架与更新](https://help.aliyun.com/zh/model-studio/newly-released-models)和[模型平台功能更新](https://help.aliyun.com/zh/model-studio/model-release-notes)。
+> 关于阿里云百炼模型的动态信息，请参见[模型上架与更新](raw/model-user-guide/release-notes/newly-released-models.md)和[模型平台功能更新公告](raw/model-user-guide/release-notes/model-release-notes.md)。
 
-### **2026年**
+#### 2026年
 
 **2月**
 
@@ -27,7 +26,7 @@
 
 知识库支持订阅计费资源包
 
-知识库提供后付费（按量付费）和[资源包](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base#a06c023507qq3)两种计费方式。资源包可前往控制台[RAG标准版资源包](https://common-buy.aliyun.com/?commodityCode=sfm_ragservicestandard_dp_cn)或[RAG旗舰版资源包](https://common-buy.aliyun.com/?commodityCode=sfm_ragserviceenterprise_dp_cn)开通。详情请参见[知识库计费说明](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base)。
+知识库提供后付费（按量付费）和[资源包](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base#a06c023507qq3)两种计费方式。资源包可前往控制台[RAG标准版资源包](https://common-buy.aliyun.com/?commodityCode=sfm_ragservicestandard_dp_cn)或[RAG旗舰版资源包](https://common-buy.aliyun.com/?commodityCode=sfm_ragserviceenterprise_dp_cn)开通。详情请参见[知识库计费说明](raw/application-user-guide/knowledge-base/billing-for-knowledge-base.md)。
 
 2月6日
 
@@ -35,7 +34,7 @@
 
 新版应用评测
 
-支持智能体、工作流和自定义三种类型的评测集，构建适合业务需求的评测体系。详情请参见[新版评测集](https://help.aliyun.com/zh/model-studio/new-version-of-evaluation-set)。
+支持智能体、工作流和自定义三种类型的评测集，构建适合业务需求的评测体系。详情请参见[新版评测集](raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/new-version-of-evaluation-set.md)。
 
 **1月**
 
@@ -53,7 +52,7 @@
 
 上线新版 长期记忆&用户画像管理 API
 
-[长期记忆（新）](https://help.aliyun.com/zh/model-studio/long-term-memory-2-0)相比[长期记忆（旧）](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-dir-long-term-memory/)的改进：
+[长期记忆 API](raw/application-user-guide/memory-library-overview/long-term-memory-2-0.md)相比[长期记忆（旧）](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-dir-long-term-memory)的改进：
 
 -   通过开放的 API 接口，可接入任意应用，也支持多应用共享同一记忆库。
     
@@ -72,7 +71,7 @@
 
 支持通过API创建音视频知识库
 
-使用此API可创建两类知识库：基于文档或音视频的非结构化知识库，以及用于数据查询或图片问答的结构化知识库。详情请参见[CreateIndex - 创建知识库](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-createindex)。
+使用此API可创建两类知识库：基于文档或音视频的非结构化知识库，以及用于数据查询或图片问答的结构化知识库。详情请参见[创建知识库](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-createindex)。
 
 1月23日
 
@@ -88,7 +87,7 @@
 
 增加知识库监控API
 
-查询指定知识库在特定时间范围内的监控数据。详情请参见[GetIndexMonitor - 获取知识库监控数据](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getindexmonitor)。
+查询指定知识库在特定时间范围内的监控数据。详情请参见[获取知识库监控数据](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getindexmonitor)。
 
 1月19日
 
@@ -96,7 +95,7 @@
 
 增加更新知识库API
 
-更新指定知识库的部分配置。详情请参见[UpdateIndex - 更新知识库](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updateindex)。
+更新指定知识库的部分配置。详情请参见[更新知识库](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updateindex)。
 
 1月15日
 
@@ -131,9 +130,9 @@
 
 知识库商业化计费
 
-阿里云百炼知识库服务自 2026 年 1 月 4 日起正式开始计费。总费用构成为规格费用和模型调用费用两部分。详情请参见[知识库计费说明](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base)。
+阿里云百炼知识库服务自 2026 年 1 月 4 日起正式开始计费。总费用构成为规格费用和模型调用费用两部分。详情请参见[知识库计费说明](raw/application-user-guide/knowledge-base/billing-for-knowledge-base.md)。
 
-### **2025年**
+#### 2025年
 
 **12月**
 
@@ -151,7 +150,7 @@
 
 上线新版智能体应用（Agent 2.0）
 
--   [新版智能体应用](https://help.aliyun.com/zh/model-studio/new-single-agent-application)将知识库、MCP 统一为工具，由智能体自主规划在何时、以何种顺序进行调用。能完整展示模型思考和工具调用的全过程。
+-   [新版智能体应用（Agent 2.0）](raw/application-user-guide/llm-application/new-single-agent-application.md)将知识库、MCP 统一为工具，由智能体自主规划在何时、以何种顺序进行调用。能完整展示模型思考和工具调用的全过程。
     
 
 12月25日
@@ -167,7 +166,7 @@
     -   对音视频素材进行二次创作，如生成脚本和字幕、给出剪辑建议等。
         
     
-    详情请参见[创建和使用知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)。
+    详情请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
     
 
 12月17日
@@ -208,7 +207,7 @@
 
 -   同步调用 API：适用于需要即时获取结果的实时交互场景，可轻松复用现有的 OpenAI 代码库，或快速集成来自 OpenAI 生态的各类工具。详情请参见[同步调用 API 参考](https://help.aliyun.com/zh/model-studio/synchronous-call-api-reference)。
     
--   异步调用 API：对于耗时较长的任务，只需在请求中设置 background 为 true，API 便会立即返回一个任务 ID，用于后续的查询与管理。详情请参见[异步调用 API 参考](https://help.aliyun.com/zh/model-studio/asynchronous-call-api-reference)。
+-   异步调用 API：对于耗时较长的任务，只需在请求中设置 background 为 true，API 便会立即返回一个任务 ID，用于后续的查询与管理。详情请参见[异步调用 API 参考](https://help.aliyun.com/zh/model-studio/asynchronous-call-api-reference)。
     
 
 **9月**
@@ -227,7 +226,7 @@
 
 新的应用类型
 
--   支持基于Python项目结构部署AI后端服务，内置自动化运维、可观测性及日志服务等企业级能力。使用方法请参见[高代码应用](https://help.aliyun.com/zh/model-studio/rich-code-application/)。
+-   支持基于Python项目结构部署AI后端服务，内置自动化运维、可观测性及日志服务等企业级能力。使用方法请参见[高代码应用](raw/application-user-guide/llm-application/rich-code-application.md)。
     
 
 9月23日
@@ -236,7 +235,7 @@
 
 新增 Dify 工作流一键导入
 
--   支持 Dify 工作流一键导入，导入后自动映射节点类型与参数。使用方法请参见[工作流导入/导出](https://help.aliyun.com/zh/model-studio/workflow-application/#5c0d7e6950p7i)。
+-   支持 Dify 工作流一键导入，导入后自动映射节点类型与参数。使用方法请参见[工作流导入/导出](https://help.aliyun.com/zh/model-studio/workflow-application#5c0d7e6950p7i)。
     
 
 9月23日
@@ -245,7 +244,7 @@
 
 文件问答升级
 
--   支持全文引用、切片检索和自定义处理三种模式，对文档、图片、音视频等多种文件进行深度分析和自动化任务处理。使用方法请参见[文件问答](https://help.aliyun.com/zh/model-studio/file-q-a)。
+-   支持全文引用、切片检索和自定义处理三种模式，对文档、图片、音视频等多种文件进行深度分析和自动化任务处理。使用方法请参见[文件问答](raw/application-user-guide/llm-application/file-q-a.md)。
     
 
 9月23日
@@ -254,7 +253,7 @@
 
 回复功能升级
 
--   当主模型在特定场景下表现受限时，将自动切换至更优模型。详情请参见[智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)。
+-   当主模型在特定场景下表现受限时，将自动切换至更优模型。详情请参见[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)。
     
 
 9月23日
@@ -272,7 +271,7 @@
 
 数据源支持DMS
 
--   创建知识库时，可直接从 DMS 指定数据表同步数据，详情请参见[知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)。
+-   创建知识库时，可直接从 DMS 指定数据表同步数据，详情请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
     
 
 9月23日
@@ -281,7 +280,7 @@
 
 创建流程优化
 
--   根据应用场景，将知识库类型分为**文档**、**数据**和**图片**三类，以简化创建过程，详情请参见[知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)。
+-   根据应用场景，将知识库类型分为**文档**、**数据**和**图片**三类，以简化创建过程，详情请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
     
 
 9月23日
@@ -290,7 +289,7 @@
 
 新增调试面板
 
--   编辑智能体应用时，可直接在线调整知识库参数，并实时验证检索召回效果。使用方法请参见[知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)。
+-   编辑智能体应用时，可直接在线调整知识库参数，并实时验证检索召回效果。使用方法请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
     
 
 **8月**
@@ -341,7 +340,7 @@ MCP
 
 知识库数据源支持自建MySQL
 
--   结构化知识库支持从自建MySQL给定数据表同步数据。配置方法详见[集成MySQL数据至知识库](https://help.aliyun.com/zh/model-studio/connect-to-rds-for-knowledge-base)。
+-   结构化知识库支持从自建MySQL给定数据表同步数据。配置方法详见集成MySQL数据至知识库。
     
 
 7月28日
@@ -378,7 +377,7 @@ MCP
 
 导入图片可选择Qwen VL进行解析
 
--   您可选择qwen-vl-max或qwen-vl-plus模型，通过传入Prompt指引需识别的版面、元素和内容，适用于解析复杂图片或图表，详情请参见[创建和使用知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)。
+-   您可选择qwen-vl-max或qwen-vl-plus模型，通过传入Prompt指引需识别的版面、元素和内容，适用于解析复杂图片或图表，详情请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
     
 
 5月8日
@@ -387,7 +386,7 @@ MCP
 
 非结构化知识库支持导入离线HTML文件
 
--   支持基于离线HTML文件构建非结构化知识库，详情请参见[创建和使用知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)。
+-   支持基于离线HTML文件构建非结构化知识库，详情请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
     
 
 **4月**
@@ -406,7 +405,7 @@ MCP
 
 新增权重设置功能
 
--   当智能体应用同时关联多个知识库时，您可以按信息源的重要性为每个知识库设置权重。系统将优先召回权重更高的知识库中的相关信息。使用方法请参见[创建和使用知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)。
+-   当智能体应用同时关联多个知识库时，您可以按信息源的重要性为每个知识库设置权重。系统将优先召回权重更高的知识库中的相关信息。使用方法请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
     
 
 4月9日
@@ -415,18 +414,18 @@ MCP
 
 新增MCP市场与MCP管理功能
 
--   您可以开通阿里云百炼预置的MCP服务或部署自定义MCP服务，并在智能体应用和工作流应用中引用这些 MCP 服务，使应用具备更强大的能力。使用方法请参见[官方 MCP 服务](https://help.aliyun.com/zh/model-studio/official-and-third-party-mcp)和[自定义MCP服务](https://help.aliyun.com/zh/model-studio/custom-mcp)。
+-   您可以开通阿里云百炼预置的MCP服务或部署自定义MCP服务，并在智能体应用和工作流应用中引用这些 MCP 服务，使应用具备更强大的能力。使用方法请参见[官方 MCP 服务](raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)和[自定义MCP服务](raw/application-user-guide/model-context-protocol/custom-mcp.md)。
     
 
 4月1日
 
 智能体应用
 
-[智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)支持QwQ系列模型
+[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)支持QwQ系列模型
 
 > 不包括插件、流程、音视频交互能力
 
--   [QwQ](https://help.aliyun.com/zh/model-studio/deep-thinking)模型具有强大的推理能力，模型会先输出思考过程，再输出回答内容。数学/代码能力（AIME 24/25、LiveCodeBench）及通用指标（IFEval等）达DeepSeek-R1满血版水平，显著优于同源精简版DeepSeek-R1-Distill。
+-   [QwQ](https://help.aliyun.com/zh/model-studio/deep-thinking)模型具有强大的推理能力，模型会先输出思考过程，再输出回答内容。数学/代码能力（AIME 24/25、LiveCodeBench）及通用指标（IFEval等）达DeepSeek-R1满血版水平，显著优于同源精简版DeepSeek-R1-Distill。
     
 
 **3月**
@@ -443,16 +442,16 @@ MCP
 
 工作流应用
 
-[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)大模型节点支持qwq-plus、qwq-32b模型
+[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)大模型节点支持qwq-plus、qwq-32b模型
 
--   [QwQ](https://help.aliyun.com/zh/model-studio/deep-thinking)模型具有强大的推理能力，模型会先输出思考过程，再输出回答内容。数学/代码能力（AIME 24/25、LiveCodeBench）及通用指标（IFEval等）达DeepSeek-R1满血版水平，显著优于同源精简版DeepSeek-R1-Distill。
+-   [QwQ](https://help.aliyun.com/zh/model-studio/deep-thinking)模型具有强大的推理能力，模型会先输出思考过程，再输出回答内容。数学/代码能力（AIME 24/25、LiveCodeBench）及通用指标（IFEval等）达DeepSeek-R1满血版水平，显著优于同源精简版DeepSeek-R1-Distill。
     
 
 3月24日
 
 智能体应用
 
-[智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)检索配置新增 “多模态回复增强”开关
+[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)检索配置新增 “多模态回复增强”开关
 
 -   开启多模态识别能力，使智能体应用能够解析知识库中的图表与图像内容，提供结合视觉信息的精准回答。
     
@@ -461,7 +460,7 @@ MCP
 
 智能体应用
 
-[智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)支持qwen-vl-plus-latest、qwen-vl-plus-2025-01-25
+[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)支持qwen-vl-plus-latest、qwen-vl-plus-2025-01-25
 
 -   qwen-vl-plus-latest始终等同最新快照版。
     
@@ -484,7 +483,7 @@ MCP
 
 工作流应用支持批量节点
 
--   批量节点是[工作流](https://help.aliyun.com/zh/model-studio/workflow-application/)中用于处理批量任务的功能节点，详情请参见[批处理](https://help.aliyun.com/zh/model-studio/workflow-application/#b66db1f209yzt)。
+-   批量节点是[工作流](raw/application-user-guide/llm-application/workflow-application.md)中用于处理批量任务的功能节点，详情请参见[批处理](raw/application-user-guide/llm-application/workflow-application.md)。
     
 
 2月18日
@@ -493,7 +492,7 @@ MCP
 
 工作流应用支持 DeepSeek 系列模型
 
--   [工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)可使用 DeepSeek 系列模型构建任务型和对话型工作流。
+-   [工作流应用](raw/application-user-guide/llm-application/workflow-application.md)可使用 DeepSeek 系列模型构建任务型和对话型工作流。
     
 
 2月18日
@@ -502,10 +501,10 @@ MCP
 
 智能体应用支持 DeepSeek 系列模型
 
--   [智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)可集成 DeepSeek 系列模型，并结合知识库、长期记忆和 Prompt 模板，构建私有知识问答应用。
+-   [智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)可集成 DeepSeek 系列模型，并结合知识库、长期记忆和 Prompt 模板，构建私有知识问答应用。
     
 
-### **2024年**
+#### 2024年
 
 **12月**
 
@@ -533,7 +532,7 @@ MCP
 -   文本转换节点支持JSON格式输出。
     
 
-详情请参见[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/#fb1d023cadqq5)。
+详情请参见[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)。
 
 12月16日
 
@@ -541,7 +540,7 @@ MCP
 
 智能体编排应用支持条件判断节点
 
--   智能体编排应用支持条件判断节点。详情请参见[智能体编排应用](https://help.aliyun.com/zh/model-studio/multi-agent-application)。
+-   智能体编排应用支持条件判断节点。详情请参见智能体编排应用。
     
 
 12月10日
@@ -572,7 +571,7 @@ MCP
 
 新增Prompt样例优化文档
 
--   大量实践表明，FewShot方法在提升大模型的推理效果和性能方面具有显著的助益。Prompt样例库功能作为阿里云百炼的FewShot能力，通过录入用户输入（Query）和期望的模型回复（Answer）作为样例信息源，在模型调用时根据用户输入，检索召回相关样例信息，以此作为输出参考，从而提高大模型的回答准确性，适用于客服及问答等场景。详情请参见[Prompt样例库](https://help.aliyun.com/zh/model-studio/prompt-sample-optimization/)。
+-   大量实践表明，FewShot方法在提升大模型的推理效果和性能方面具有显著的助益。Prompt样例库功能作为阿里云百炼的FewShot能力，通过录入用户输入（Query）和期望的模型回复（Answer）作为样例信息源，在模型调用时根据用户输入，检索召回相关样例信息，以此作为输出参考，从而提高大模型的回答准确性，适用于客服及问答等场景。详情请参见[Prompt样例库](raw/application-user-guide/prompt/prompt-sample-optimization.md)。
     
 
 **11月**
@@ -607,7 +606,7 @@ MCP
     -   导入多个具有不同表结构的Excel文档。
         
     
-    详情请参见[知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base#6028cfefaauhu)。
+    详情请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
     
 
 **10月**
@@ -626,7 +625,7 @@ MCP
 
 新增应用观测能力
 
--   新增的[应用观测](https://bailian.console.aliyun.com/knowledge-base#/app-observe)支持端到端查看阿里云百炼应用的处理流程，详情请参见[用量监控与性能分析](https://help.aliyun.com/zh/model-studio/application-observation)。
+-   新增的[应用观测](https://bailian.console.aliyun.com/knowledge-base#/app-observe)支持端到端查看阿里云百炼应用的处理流程，详情请参见[用量监控与性能分析](raw/application-user-guide/application-monitoring/application-observation.md)。
     
 
 10月24日
@@ -663,21 +662,21 @@ SFM服务关联角色
 
 结构化知识库数据源支持云上数据库
 
--   结构化知识库的数据源支持云数据库RDS。具体说明请参见[创建和使用知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base#70b5d361ed01j)。
+-   结构化知识库的数据源支持云数据库RDS。具体说明请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
     
 
 非结构化知识库支持自定义metadata
 
--   支持为非结构化知识库中的文档附加metadata，以提升知识库检索的效率和精准度。具体说明请参见[创建和使用知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base#65f260310fz0l)。
+-   支持为非结构化知识库中的文档附加metadata，以提升知识库检索的效率和精准度。具体说明请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
     
 
 支持图文检索
 
--   知识库支持解析文档中的图片，结构化文档中的图片将被转为向量，非结构化文档中的图片将被提取文字然后再转为向量。具体说明请参见[创建和使用知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base#b3c78a1ef11wi)。
+-   知识库支持解析文档中的图片，结构化文档中的图片将被转为向量，非结构化文档中的图片将被提取文字然后再转为向量。具体说明请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
     
--   如果智能体应用关联的结构化知识库包含图片索引，可以在提问时上传图片，与输入图片相关的数据记录会与提问一起提供给大模型。具体说明请参见[智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)。
+-   如果智能体应用关联的结构化知识库包含图片索引，可以在提问时上传图片，与输入图片相关的数据记录会与提问一起提供给大模型。具体说明请参见[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)。
     
--   测试知识库页面同样支持了图文输入，便于您评估知识库的图文检索能力。具体说明请参见[创建和使用知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base#96a228f196y1b)。
+-   测试知识库页面同样支持了图文输入，便于您评估知识库的图文检索能力。具体说明请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
     
 
 9月17日
@@ -686,7 +685,7 @@ SFM服务关联角色
 
 非结构化数据文件支持标签分类
 
--   非结构化数据支持标签分类，点击[创建和使用知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)查看详情。
+-   非结构化数据支持标签分类，点击[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)查看详情。
     
 
 9月4日
@@ -695,7 +694,7 @@ SFM服务关联角色
 
 智能体应用新增“检索配置”功能
 
--   智能体应用中，打开“知识检索增强”开关后，增加“检索配置”功能，用于设置大模型的回答范围、是否展示回答来源等。点击[创建和使用知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base#04fac0b0438j5)查看完整信息。
+-   智能体应用中，打开“知识检索增强”开关后，增加“检索配置”功能，用于设置大模型的回答范围、是否展示回答来源等。点击[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)查看完整信息。
     
 
 **8月**
@@ -723,7 +722,7 @@ SFM服务关联角色
 
 新增自定义参数的调用说明
 
--   调用工作流应用和智能体编排应用时，需要传入自定义参数，详情请参见[应用调用](https://help.aliyun.com/zh/model-studio/application-calling-guide#f26019986182v)。
+-   调用工作流应用和智能体编排应用时，需要传入自定义参数，详情请参见应用调用。
     
 
 8月26日
@@ -759,7 +758,7 @@ SFM服务关联角色
 
 新增传媒/零售文章风格与格式学习、电商零售推广文案写作应用
 
--   点击[应用广场](https://bailian.console.aliyun.com/#/app-market)进行体验，点击[传媒/零售文章风格与格式学习](https://help.aliyun.com/zh/model-studio/media-retail-article-style-and-format-learning)、[电商文案智能可控生成](https://help.aliyun.com/zh/model-studio/intelligent-and-controllable-generation-of-e-commerce-copywriting)查看完整信息。
+-   点击[应用广场](https://bailian.console.aliyun.com/#/app-market)进行体验，点击[传媒/零售文章风格与格式学习](raw/application-user-guide/application-gallery/quanmiao-light-application-series/light-application-guidelines-for-use/media-retail-article-style-and-format-learning.md)、[电商文案智能可控生成](raw/application-user-guide/application-gallery/quanmiao-light-application-series/light-application-guidelines-for-use/intelligent-and-controllable-generation-of-e-commerce-copywriting.md)查看完整信息。
     
 
 8月22日
@@ -786,7 +785,7 @@ SFM服务关联角色
 
 应用测试窗新增测试能力
 
--   应用测试窗**支持长期记忆用户洞察和用户画像**，点击[我的应用](https://help.aliyun.com/zh/document_detail/2782133.html)查看完整信息。
+-   应用测试窗**支持长期记忆用户洞察和用户画像**，点击我的应用查看完整信息。
     
 
 8月12日
@@ -849,7 +848,7 @@ SFM服务关联角色
 
 OSS授权方式更新
 
--   数据管理中的文档数据支持本地上传和OSS导入两种模式，**在关联OSS文件存储Bucket后**，**可实现OSS授权及跨域访问。**点击[从OSS导入数据](https://help.aliyun.com/zh/model-studio/oss-data-import-guide)查看详情。
+-   数据管理中的文档数据支持本地上传和OSS导入两种模式，**在关联OSS文件存储Bucket后**，**可实现OSS授权及跨域访问。**点击从OSS导入数据查看详情。
     
 
 7月18日
@@ -858,7 +857,7 @@ OSS授权方式更新
 
 插件服务
 
--   应用中心支持**自定义参数**透传点击[应用的参数传递](https://help.aliyun.com/zh/model-studio/pass-through-of-application-parameters)查看详情。
+-   应用中心支持**自定义参数**透传点击[应用的参数传递](raw/application-user-guide/bailian-application-calling/pass-through-of-application-parameters.md)查看详情。
     
 
 7月8日
@@ -867,7 +866,7 @@ OSS授权方式更新
 
 知识索引新增权限控制
 
--   阿里云主账号或RAM管理员给RAM用户授权后，RAM用户才能使用阿里云百炼知识索引能力。点击[知识索引自定义权限策略](https://help.aliyun.com/zh/model-studio/use-and-authorize-ram-user#efdb989adcx52)查看完整信息。
+-   阿里云主账号或RAM管理员给RAM用户授权后，RAM用户才能使用阿里云百炼知识索引能力。点击知识索引自定义权限策略查看完整信息。
     
 
 7月3日
@@ -876,7 +875,7 @@ OSS授权方式更新
 
 支持上传 Excel格式文件
 
--   支持结构化数据导入，并且支持自定义设置结构列信息。点击[数据导入](https://help.aliyun.com/zh/model-studio/data-import-instructions)查看详情。
+-   支持结构化数据导入，并且支持自定义设置结构列信息。点击数据导入查看详情。
     
 
 7月3日
@@ -913,7 +912,7 @@ OSS授权方式更新
 
 流程管理
 
--   流程画布支持业务参数透传，点击[流程编排（旧版待下线）](https://help.aliyun.com/zh/model-studio/manage-processes-old/)查看详情。
+-   流程画布支持业务参数透传，点击[流程编排（旧版待下线）](https://help.aliyun.com/zh/model-studio/manage-processes-old)查看详情。
     
 
 6月13日
@@ -963,7 +962,7 @@ OSS授权方式更新
     
 -   max、plus、turbo多模型选择，多维效果/成本配置。
     
--   全新Memory长期记忆机制，支持长期记忆存储，个性化Assistant效果。点击[我的应用](https://help.aliyun.com/zh/model-studio/application-building-instructions)查看详情。
+-   全新Memory长期记忆机制，支持长期记忆存储，个性化Assistant效果。点击我的应用查看详情。
     
 
 数据管理
@@ -1000,7 +999,7 @@ OSS授权方式更新
 
 新增官方插件能力
 
--   上线新版插件中心，新增“**图片生成**”、“**夸克搜索**”、“**Python代码解释器**”和“**计算器**”四款官方插件，点击[插件中心](https://help.aliyun.com/zh/model-studio/plug-in-overview)查看详情。
+-   上线新版插件中心，新增“**图片生成**”、“**夸克搜索**”、“**Python代码解释器**”和“**计算器**”四款官方插件，点击[插件中心](raw/application-user-guide/plug-in/plug-in-overview.md)查看详情。
     
 
 3月31日
@@ -1009,7 +1008,7 @@ OSS授权方式更新
 
 智能体API应用支持API调用
 
--   新增[Assistant API](https://help.aliyun.com/zh/model-studio/api-agent)及[Python SDK](https://help.aliyun.com/zh/model-studio/sdk-agent)接口；点击[最佳实践](https://help.aliyun.com/zh/model-studio/prompt-engineering-guide)查看详情。
+-   新增Assistant API及Python SDK接口；点击[最佳实践](raw/model-user-guide/use-cases/prompt-engineering-guide.md)查看详情。
     
 
 **2月**
@@ -1037,7 +1036,7 @@ OSS授权方式更新
 
 支持上传FAQ形式文件
 
--   新增上传Excel格式的文件，详情查看[配置企业知识库](https://help.aliyun.com/zh/model-studio/user-guide/configure-enterprise-knowledge-base)。
+-   新增上传Excel格式的文件，详情查看配置企业知识库。
     
 
 2月5日
@@ -1046,7 +1045,7 @@ OSS授权方式更新
 
 新增上传格式
 
--   支持OSS上传文档，详情查看[配置企业知识库](https://help.aliyun.com/zh/model-studio/user-guide/configure-enterprise-knowledge-base)。
+-   支持OSS上传文档，详情查看配置企业知识库。
     
 
 2月5日
@@ -1110,4 +1109,4 @@ API相关
 
 修复文档上传字段缺失
 
--   相关字段已更新，详情查看[应用调用SDK参考（旧）](https://help.aliyun.com/zh/model-studio/call-alibaba-cloud-model-studio-v1-through-sdk/)。
+-   相关字段已更新，详情查看应用调用SDK参考（旧）。

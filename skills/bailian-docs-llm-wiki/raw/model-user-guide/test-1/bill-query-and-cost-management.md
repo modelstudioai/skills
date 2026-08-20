@@ -2,15 +2,15 @@
 
 本文介绍如何查询账单明细、进行成本分摊（分账）、处理账户欠费以及停止计费。
 
-## **查询账单**
+## 查询账单
 
 仅在实际发生调用**结束**后生成账单：**大模型推理**分钟级出账（通常 2~10 分钟），**批量推理、模型训练、知识库**等小时级出账，业务高峰期请以系统最终出账时间为准。出账不等于实际扣款，按量付费采用“预占+月结”模式，详见下文常见问题“按量付费是实时扣款吗？”。
 
-### **费用概览**
+### 费用概览
 
 登录[百炼控制台](https://bailian.console.aliyun.com/?tab=model)，单击顶部**模型**标签页，选择[**费用概览**](https://bailian.console.aliyun.com/?tab=model#/costing-balance)，选择**账期月份**：
 
-> 该页面仅展示**大模型推理**相关费用。**模型训练**和**知识库**等费用请通过[账单详情](#29f8b9b9a4lmc)查看。
+> 该页面仅展示**大模型推理**相关费用。**模型训练**和**知识库**等费用请通过[账单详情](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#29f8b9b9a4lmc)查看。
 
 -   **查看总消费与构成**：顶部展示当月**总消费金额**，拆分为**订阅购买费用**（Token Plan、预置吞吐、模型单元、节省计划等）与**账单费用**（按量产生的模型调用与训练）；点击**订阅购买费用**或**账单费用**卡片的**查看明细**可展开分项。下方**账单趋势**仅展示后付费账单金额，不含预付费（订阅购买）金额。当月查看时，**账单费用**通常先更新，**账单趋势**出账稍有延迟。
     
@@ -23,90 +23,67 @@
 -   **查看历史累计花费**：费用概览仅展示当月总消费。**成本分析**按**月**粒度最多查看近 12 个月数据，按**天**粒度最多查看 92 天。如需查看 12 个月以上的历史费用或核算历史总花费，需在账单详情中逐月导出后手动汇总：
     
     1.  进入**费用与成本** > **账单详情**。
-        
     2.  将**产品名称**筛选为**大模型服务平台百炼**。
-        
-    3.  逐月切换账期，将每个月的账单导出为 CSV 文件。具体导出操作参见[账单详情](#29f8b9b9a4lmc)。
-        
+    3.  逐月切换账期，将每个月的账单导出为 CSV 文件。具体导出操作参见[账单详情](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#29f8b9b9a4lmc)。
     4.  将各月导出数据汇总求和，得到历史总花费。
-        
     
     账单详情页的**统计周期**均为单月维度，不支持跨月汇总查询，需逐月导出后手动求和。导出对话框中可选择**近 18 个月的内容**批量导出。
     
 
-### **账单详情**
+### 账单详情
 
-大模型推理、部署与训练账单可按 **ApiKeyID、业务空间ID、模型名称、输入/输出类型、调用渠道****、实例标签**拆分查看。
+大模型推理、部署与训练账单可按 **ApiKeyID、业务空间ID、模型名称、输入/输出类型、调用渠道、实例标签**拆分查看。
 
-#### **1\. 下载账单**
+#### 1\. 下载账单
 
 1.  在[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)页面，选择账单月份，
-    
 2.  选择**产品名称**为**大模型服务平台百炼**，单击**搜索**。
-    
 3.  单击页面顶部的**导出明细**，将账单下载到本地。
-    
-4.  打开文件，找到 实例 ID（出账粒度）列，根据下文规则进行核对。
-    
+4.  打开文件，找到 实例 ID（出账粒度）列，根据下文规则进行核对。
 
-#### **2\. 解读关键字段（模型推理账单）**
+#### 2\. 解读关键字段（模型推理账单）
 
-**说明**
-
-以下字段格式说明适用于**模型推理**账单。**模型训练与调优**账单的实例ID字段格式不同（使用英文感叹号 `!` 分隔），请参见下方[训练与调优账单字段](#wi82451543-train-billing-h)。
+**说明**以下字段格式说明适用于**模型推理**账单。**模型训练与调优**账单的实例ID字段格式不同（使用英文感叹号 `!` 分隔），请参见下方[训练与调优账单字段](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#wi82451543-train-billing-h)。
 
 **“实例 ID（出账粒度）”字段**以英文分号 `;` 分隔，完整格式为`ApiKeyID;业务空间ID;模型名称;输入/输出类型;调用渠道;免费额度用完即停标识`。
 
 -   格式 A：标准调用（包含ApiKeyID）
     
     -   示例：`12xxx;llm-xxx;qwen-max;output_token;app;0`
-        
     -   依次表示`ApiKeyID;业务空间ID;模型名称;输入/输出类型;调用渠道;免费额度用完即停标识`。
-        
 -   格式 B：控制台调用（不含ApiKeyID）
     
     -   示例：`;llm-xxx;qwen-max;output_token;app;0`
-        
     -   依次表示`;业务空间ID;模型名称;输入/输出类型;调用渠道;免费额度用完即停标识`。
-        
     -   若不包含`ApiKeyID`，通常表示该费用是通过阿里云百炼控制台产生的，而非通过代码调用。
-        
 
 **“实例标签”字段**：如果您使用了标签分账，该列显示格式如下：
 
 -   示例：`key:test1 value:test1; key:test2 value:test2`
-    
--   `key` 代表标签键，`value` 代表标签值。
-    
--   多个标签之间用英文分号 ; 隔开。
-    
+-   `key` 代表标签键，`value` 代表标签值。
+-   多个标签之间用英文分号 ; 隔开。
 
-#### **3\. 训练与调优账单字段**
+#### 3\. 训练与调优账单字段
 
 **模型训练**与**模型调优**账单的**“实例 ID（出账粒度）”字段**以英文感叹号 `!` 分隔，常见格式为`业务空间ID!地域!训练任务标识`，与模型推理账单的分号 `;` 分隔格式不同。
 
 **示例：**`ws-xxxxxxxxx!cn-beijing!qwen3-14b-ft-2026051510-1c3b`
 
-**说明**
+**说明**账单的**商品名称**字段可直接区分计费类型：训练与调优费用对应**商品名称**为`百炼大模型训练`。若无法确定对应的训练任务，可结合**账单月份**与**模型调优**页面的任务提交时间进行匹配。
 
-账单的**商品名称**字段可直接区分计费类型：训练与调优费用对应**商品名称**为`百炼大模型训练`。若无法确定对应的训练任务，可结合**账单月份**与**模型调优**页面的任务提交时间进行匹配。
+#### 4\. 数据溯源与术语说明
 
-#### **4\. 数据溯源与术语说明**
-
--   查询 API Key：复制账单中的 `ApiKeyID`，前往[百炼API Key管理](https://bailian.console.aliyun.com/?tab=model#/api-key)页面查找对应的 Key 名称。
+-   查询 API Key：复制账单中的 `ApiKeyID`，前往[百炼API Key管理](https://bailian.console.aliyun.com/?tab=model#/api-key)页面查找对应的 Key 名称。
     
--   查询业务空间：复制账单中的 `业务空间ID`，前往[业务空间管理](https://bailian.console.aliyun.com/?tab=globalset#/efm/business_management)页面，在列表的**业务空间ID**列确认具体空间。当前所处的业务空间显示在控制台顶部右上角的**默认业务空间**切换器中，悬停可查看其地域、业务空间ID与创建时间等详情。
+-   查询业务空间：复制账单中的 `业务空间ID`，前往[业务空间管理](https://bailian.console.aliyun.com/?tab=globalset#/efm/business_management)页面，在列表的**业务空间ID**列确认具体空间。当前所处的业务空间显示在控制台顶部右上角的**默认业务空间**切换器中，悬停可查看其地域、业务空间ID与创建时间等详情。
     
 -   调用渠道说明：
     
     -   `app`：通过应用程序（代码）调用模型。
-        
     -   `bmp`：表示通过控制台[模型体验](https://bailian.console.aliyun.com/?tab=model#/efm/model_experience_center/text)调用模型。
-        
     -   `assistant-api`：表示通过Assistant API调用模型。
-        
 
-## **分账管理**
+## 分账管理
 
 给**业务空间**绑定**标签**，可按部门或项目归集费用。
 
@@ -115,26 +92,20 @@
 2.  **绑定标签**：
     
     1.  在[**标签管理**](https://resourcemanager.console.aliyun.com/tags#/)页面选择**资源绑定标签。**
-        
     2.  资源选择方式选择“**输入多个资源ID**”，在产品选项卡搜索并选择“**大模型服务平台百炼:业务空间**”并选择业务空间对应地域，资源ID输入框中填写**业务空间ID**，完成后点击绑定标签按钮执行操作。
-        
     3.  在绑定标签页面中，创建标签键值或使用已创建的预置标签与业务空间绑定。当完成键值输入或选择好预置标签后，点击**确定**完成业务空间标签的绑定。
-        
     4.  启用标签。进入[费用标签](https://billing-cost.console.aliyun.com/finance/tags)，在“**标签key**”中输入已绑定的标签键，单击**搜索**，找到标签，并在操作列单击**启用**。
-        
 3.  **验证**：配置完成后，分账账单 T+1 天后生效。可在[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)页面通过**实例标签**列验证业务空间的绑定标签。
     
 
-## **欠费处理**
+## 欠费处理
 
 **账户可用额度 < 0** 视为欠费，可能导致模型调用等服务暂停。在[费用与成本首页](https://billing-cost.console.aliyun.com/home)悬停**账户可用额度**区域可查看，公式为：可用额度 =（现金余额 + 信控额度）-（当月未结清 + 历史未结清）。
 
 -   **欠费影响**：账户欠费将导致**按量付费（后付费）**模型调用等服务暂停，能否继续使用取决于计费方式。
     
     -   **免费额度、节省计划、资源包**：三者均用于抵扣按量付费费用，**欠费期间即使仍有剩余额度，也无法调用模型**，需结清欠费后恢复。
-        
     -   已购 **Coding Plan** 或 **Token Plan**：套餐额度独立于账户余额，欠费期间可继续使用，但会导致自动续费失败，到期后无法续用。
-        
 -   **代金券查看路径**：在[百炼控制台](https://bailian.console.aliyun.com/)右下角单击**费用**图标，进入[费用与成本](https://billing-cost.console.aliyun.com/home)控制台。在左侧导航栏选择**账户** > **卡券**，即可查看**优惠券**、**储值卡**和**提货券**。
     
     **代金券与余额说明**：代金券（含学生权益优惠券）不计入账户可用额度中的现金余额，后付费场景下系统会冻结当月消费金额，账户实际余额须大于当月冻结金额方可正常调用模型，详情参见[代金券说明文档](https://help.aliyun.com/zh/user-center/voucher-management)。
@@ -144,7 +115,7 @@
 -   **预防欠费**：在[高额消费预警](https://usercenter2.aliyun.com/home/alarm-threshold)页面设置消费阈值，达阈值即提醒。
     
 
-## **停止计费（关闭服务）**
+## 停止计费（关闭服务）
 
 不再使用百炼时，按以下方式关停对应服务即可停止计费。
 
@@ -159,54 +130,49 @@
 -   **停止模型部署**：根据部署时的计费方式操作不同：
     
     -   **按 Token 调用计费（后付费）**：[下线](https://bailian.console.aliyun.com/?tab=model#/efm/model_deploy)已部署的模型，或删除[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)防止意外调用。
-        
     -   **按算力单元或模型单元计费（后付费）**：[下线](https://bailian.console.aliyun.com/?tab=model#/efm/model_deploy)已部署的模型。
-        
-    -   **按预置吞吐单元计费（预付费）**：[下线](https://bailian.console.aliyun.com/?tab=model#/efm/model_deploy)已部署的模型，然后在[退订管理](https://usercenter2.aliyun.com/refund/refund)页面退订实例。退订时已使用部分按 1.5 倍系数结算（详见[退订说明](https://help.aliyun.com/zh/model-studio/model-deployment-introduction#ptu2sec03h4id)），退回剩余金额。
-        
+    -   **按预置吞吐单元计费（预付费）**：[下线](https://bailian.console.aliyun.com/?tab=model#/efm/model_deploy)已部署的模型，然后在[退订管理](https://usercenter2.aliyun.com/refund/refund)页面退订实例。退订时已使用部分按 1.5 倍系数结算（详见[退订说明](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)），退回剩余金额。
 
-## **常见问题**
+## 常见问题
 
-**为什么调用模型后查不到账单？**
+为什么调用模型后查不到账单？
 
 **原因：**
 
 -   **出账延迟**：模型推理账单按分钟汇总，调用后通常 2~10 分钟出账；批量推理、模型训练、知识库等按小时汇总，业务高峰可能进一步延迟。
-    
 -   **使用了非商业化模型**：公测、邀测模型不产生账单记录。
-    
 
 **解决方案：**等待对应出账时长后再查询。
 
-**为什么同一个模型在账单中有多行记录？**
+为什么同一个模型在账单中有多行记录？
 
 **原因：**同一模型按计费类型（输入 Token、输出 Token、缓存命中等）和调用渠道（API 调用、控制台体验等）分别出账。例如 qwen3.6-plus 一次对话会产生“输入 Token”和“输出 Token”两行记录。
 
-**解决方案：**通过[账单详情](#29f8b9b9a4lmc)中的`实例 ID`字段区分每行记录的具体含义。
+**解决方案：**通过[账单详情](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#29f8b9b9a4lmc)中的`实例 ID`字段区分每行记录的具体含义。
 
-**账单里很多行都叫“大模型文本消耗量”，怎么区分是哪个模型？**
+账单里很多行都叫“大模型文本消耗量”，怎么区分是哪个模型？
 
 **原因：**账单的“计费项”统一显示为“大模型文本消耗量”，未直接展示模型名称。
 
-**解决方案：**查看[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)页的**实例 ID（出账粒度）**列。字段以英文分号分隔，紧跟业务空间ID（如 llm-xxx）之后的字段即为模型名称。例：`12xxx;llm-xxx;**qwen3.6-plus**;context_0-128k_input_token;bmp;0`表示 qwen3.6-plus 模型。
+**解决方案：**查看[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)页的**实例 ID（出账粒度）**列。字段以英文分号分隔，紧跟业务空间ID（如 llm-xxx）之后的字段即为模型名称。例：`12xxx;llm-xxx; qwen3.6-plus ;context_0-128k_input_token;bmp;0`表示 qwen3.6-plus 模型。
 
-**在哪里查看模型调用次数和统计？**
+在哪里查看模型调用次数和统计？
 
 进入[阿里云百炼控制台](https://bailian.console.aliyun.com/?tab=model)，右上角选择目标地域，单击顶部**模型**标签页，选择[模型用量](https://bailian.console.aliyun.com/?tab=costing-balance#/costing-balance/usage-statistics)。
 
-**按量付费是实时扣款吗？**
+按量付费是实时扣款吗？
 
 不是。阿里云按量付费采用“预占+月结”模式 — 系统先冻结部分额度，月账期结束后（次月初）生成最终账单并实际扣款。
 
-**如何导出明细账单用于报销？**
+如何导出明细账单用于报销？
 
 参考[如何导出明细账单](https://help.aliyun.com/zh/user-center/support/billing-faqs)。
 
-**如何充值？**
+如何充值？
 
 参考[如何充值缴费](https://help.aliyun.com/zh/user-center/use-alipay-online-banking-to-recharge-online)。
 
-**为什么没怎么用却产生了欠费？**
+为什么没怎么用却产生了欠费？
 
 **原因：**百炼的[联网搜索](https://help.aliyun.com/zh/model-studio/web-search)等附加功能按调用次数单独计费（后付费），与模型推理费用分开出账。即使您近期未主动操作控制台，历史创建的应用或代码中若开启了 `enable_search` 参数，每次被调用仍会产生联网搜索费用。
 
@@ -214,60 +180,45 @@
 
 **解决方案：**
 
-1.  在[账单详情](#29f8b9b9a4lmc)中筛选**大模型服务平台百炼**，查看**实例 ID（出账粒度）**列，确认产生费用的模型名称和调用渠道。
-    
+1.  在[账单详情](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management#29f8b9b9a4lmc)中筛选**大模型服务平台百炼**，查看**实例 ID（出账粒度）**列，确认产生费用的模型名称和调用渠道。
 2.  检查应用代码或百炼应用配置中是否开启了 `enable_search`，如不再需要联网搜索，将该参数设为 `false` 或移除。
-    
 3.  如已停止所有调用但仍有扣费，检查是否有其他 API Key 或应用仍在运行，可在[API Key 管理](https://bailian.console.aliyun.com/?tab=model#/api-key)页面逐一排查或删除不再使用的 Key。
-    
 
-**为什么短时间内余额被快速耗尽？**
+为什么短时间内余额被快速耗尽？
 
 **原因：**
 
 -   **长上下文对话中输入 Token 累积**：长上下文对话中反复携带同一文档时，每次请求的输入 Token 随上下文累积增长，单次调用的 Token 消耗远高于普通短对话。例如某次实际排查中，47 次调用里有 43 次输入 Token 达 58 万至 60 万，总输入 Token 超过 2500 万，约 20 分钟内耗尽 120 元余额并转为欠费。
-    
 -   **余额预警的提醒频率有上限**：账户可用额度低于预警阈值时，每天短信提醒一次（最多连续提醒 5 天），短信接收人为账号联系人。若未及时查看通知，余额可能在两次提醒之间被耗尽。
-    
 -   **出账存在延迟**：模型推理账单按分钟汇总出账，因此模型停服后仍会收到延迟出账产生的账单，欠费金额可能在停服后继续增加。
-    
 
 **解决方案：**
 
 -   在[**模型用量**](https://bailian.console.aliyun.com/?tab=costing-balance#/costing-balance/usage-statistics)页面查看单次调用的 Token 消耗，确认是否存在高 Token 请求。
-    
 -   在[**费用概览**](https://bailian.console.aliyun.com/?tab=model#/costing-balance)页面设置**资金可用额度预警**，并及时关注预警通知。
-    
 -   如需立即停止计费，在[**API Key 管理**](https://bailian.console.aliyun.com/?tab=model#/api-key)页面删除不再使用的 API Key。
-    
 
-**为什么没有主动调用 API 也会产生费用？**
+为什么没有主动调用 API 也会产生费用？
 
 **原因：**百炼的模型部署按使用时长计费，模型完成部署即状态为**运行中**时开始收费，不依赖 API 调用。即使未主动通过 API 调用该模型，只要部署状态为**运行中**就会持续产生费用。
 
 **解决方案：**
 
 -   前往[**模型部署**](https://bailian.console.aliyun.com/?tab=model#/efm/model_deploy)页面，下线不再使用的已部署模型，停止按时长计费。
-    
 -   如需防止意外调用产生推理费用，可在[**API-KEY**](https://bailian.console.aliyun.com/?tab=model#/api-key)页面删除不再使用的 Key（注意：删除后无法恢复，请谨慎操作）。
-    
 
-**如何判断账户是否被盗用？**
+如何判断账户是否被盗用？
 
 如果怀疑账户被他人盗用产生非预期费用，按以下步骤排查：
 
 1.  在[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)中筛选**大模型服务平台百炼**，查看**实例 ID（出账粒度）**列中的 `ApiKeyID`，确认产生费用的 API Key。
-    
 2.  前往[API Key 管理页面](https://bailian.console.aliyun.com/?tab=model#/api-key)，核对每个 Key 的**创建时间**，确认是否为本人创建。API Key 管理页面仅显示创建时间，不显示调用时间。
-    
 3.  查看调用时段分布，判断是否存在非本人操作的异常调用模式：进入[模型用量](https://bailian.console.aliyun.com/?tab=costing-balance#/costing-balance/usage-statistics)页面，按**模型**或 **API Key ID** 筛选，切换至**列表**视图查看调用时间分布。
-    
 4.  如发现未授权调用，立即在[API Key 管理页面](https://bailian.console.aliyun.com/?tab=model#/api-key)删除对应 API Key 并重新生成。更新所有合法调用方使用新 Key。
-    
 
-**如何在按量计费、免费额度、Coding Plan、资源包和节省计划之间选择？**
+如何在按量计费、免费额度、Coding Plan、 资源包和 节省计划之间选择？
 
-**原因：**百炼默认采用**按量后付费**模式，不支持提前赠送 Token 额度；免费额度、资源包与节省计划都只是按量费用的抵扣手段，Coding Plan 与 Token Plan 则是独立于账户余额的订阅套餐。多种方案并存时，抵扣顺序为：**免费额度** **> 资源包** **> 其他模型节省计划 > AI 通用型节省计划 > 按量付费**。即先用免费额度，用完后依次抵扣资源包、节省计划，同类额度全部到期或抵扣完后超出的部分自动转为按量付费，使用账户余额结算。
+**原因：**百炼默认采用**按量后付费**模式，不支持提前赠送 Token 额度；免费额度、资源包与节省计划都只是按量费用的抵扣手段，Coding Plan 与 Token Plan 则是独立于账户余额的订阅套餐。多种方案并存时，抵扣顺序为：**免费额度> 资源包> 其他模型节省计划 > AI 通用型节省计划 > 按量付费**。即先用免费额度，用完后依次抵扣资源包、节省计划，同类额度全部到期或抵扣完后超出的部分自动转为按量付费，使用账户余额结算。
 
 **解决方案：**先按调用规模和承诺意愿判断方案，再结合下表的关键规则确认：
 
@@ -313,7 +264,7 @@
 
 长期稳定使用大模型服务
 
-按承诺的月消费金额阶梯折扣，承诺金额越高折扣越大，最高 5.3 折；具体折扣档位参见[节省计划与资源包](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package)
+按承诺的月消费金额阶梯折扣，承诺金额越高折扣越大，最高 5.3 折；具体折扣档位参见[节省计划与资源包](raw/model-user-guide/test-1/savings-plan-and-resource-package.md)
 
 承诺期为 3、6、12 或 24 个月；额度按月发放，当月未用完不累积到下一周期；生效并发生抵扣后通常不支持退订
 
@@ -371,4 +322,4 @@ Token Plan
 
 如需同时覆盖多个模型版本，选择 AI 通用型节省计划更合适。国际站不提供资源包，仅提供节省计划。
 
-选型结论：普通 API 调用场景优先选择 **AI 通用型节省计划**，编程工具场景优先选择 **Coding Plan**。长期稳定使用大模型服务，选择**节省计划**；用量较小或调用集中在单个特定模型，选择**资源包**；需要团队协作共享额度，选择 **Token Plan**；编码类场景希望按月锁定成本，选择 **Coding Plan**；仅做功能验证时先用完**免费额度**，再根据实际用量决定是否购买优惠方案。各方案的折扣档位、购买入口与生效规则可在[节省计划与资源包](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package)中确认，停止各方案计费的操作参见本文**停止计费（关闭服务）**章节。
+选型结论：普通 API 调用场景优先选择 **AI 通用型节省计划**，编程工具场景优先选择 **Coding Plan**。长期稳定使用大模型服务，选择**节省计划**；用量较小或调用集中在单个特定模型，选择**资源包**；需要团队协作共享额度，选择 **Token Plan**；编码类场景希望按月锁定成本，选择 **Coding Plan**；仅做功能验证时先用完**免费额度**，再根据实际用量决定是否购买优惠方案。各方案的折扣档位、购买入口与生效规则可在[节省计划与资源包](raw/model-user-guide/test-1/savings-plan-and-resource-package.md)中确认，停止各方案计费的操作参见本文**停止计费（关闭服务）**章节。

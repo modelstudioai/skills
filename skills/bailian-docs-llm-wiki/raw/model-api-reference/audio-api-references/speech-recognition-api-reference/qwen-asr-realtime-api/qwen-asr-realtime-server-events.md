@@ -4,7 +4,7 @@
 
 **用户指南：**模型介绍、功能特性和完整示例代码请参见[实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)
 
-## **error**
+## error
 
 当服务端检测到错误（包括客户端错误和服务端错误）时，向客户端发送的事件。
 
@@ -42,7 +42,7 @@ error.message
 
 string
 
-具体的报错信息。请按[错误码](https://help.aliyun.com/zh/model-studio/error-code)所示的解决方案进行处理。
+具体的报错信息。请按[错误码](raw/model-api-reference/preparations/error-code.md)所示的解决方案进行处理。
 
 error.param
 
@@ -70,7 +70,7 @@ string
 }
 ```
 
-## **session.created**
+## session.created
 
 当客户端成功连接到服务端后，服务端响应的第一个事件。该事件包含服务端为此次连接设置的默认配置信息。
 
@@ -108,7 +108,7 @@ session.model
 
 string
 
-当前调用的[模型](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#ff8c59ef0busr)名称。
+当前调用的[模型](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)名称。
 
 session.modalities
 
@@ -172,7 +172,7 @@ VAD断句检测阈值（ms）。
 }
 ```
 
-## **session.updated**
+## session.updated
 
 当客户端发送[session.update](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#af43722339yva)事件并成功被服务端处理后，服务端将发送该事件。如果处理过程中出现错误，则直接发送 error 事件。
 
@@ -188,7 +188,7 @@ string
 
 事件类型。固定为`session.updated`。
 
-其他参数含义同[session.created](#2c04b24bc3wlo)。
+其他参数含义同[session.created](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-server-events#2c04b24bc3wlo)。
 
 ```
 {
@@ -210,7 +210,7 @@ string
 }
 ```
 
-## **input\_audio\_buffer.**speech\_started
+## input\_audio\_buffer.speech\_started
 
 此事件仅在 VAD 模式下发送。当服务端在音频缓冲区中检测到语音开始时发送。
 
@@ -255,11 +255,11 @@ string
 }
 ```
 
-## **input\_audio\_buffer.**speech\_stopped
+## input\_audio\_buffer.speech\_stopped
 
 此事件仅在 VAD 模式下发送。当服务端在音频缓冲区中检测到语音结束时发送。
 
-该事件触发后，服务端将紧接着发送一个[conversation.item.created](#04dabbb9b6eto)事件，包含从音频缓冲区创建的用户消息项。
+该事件触发后，服务端将紧接着发送一个[conversation.item.created](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-server-events#04dabbb9b6eto)事件，包含从音频缓冲区创建的用户消息项。
 
 **参数**
 
@@ -300,12 +300,10 @@ string
 }
 ```
 
-## **input\_audio\_buffer.committed**
+## input\_audio\_buffer.committed
 
 -   **VAD模式：**当客户端完成音频数据发送（通过[input\_audio\_buffer.append](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#a42f8e9111n72)事件）后，服务端发送该事件。
-    
 -   **非VAD模式：**客户端完成音频数据发送（通过[input\_audio\_buffer.append](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#a42f8e9111n72)事件）并发送[input\_audio\_buffer.commit](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#d6d5cd90f3q4c)事件后，服务端发送该事件。
-    
 
 **参数**
 
@@ -390,7 +388,7 @@ item.object
 
 string
 
-固定为 `realtime.item` 。
+固定为 `realtime.item` 。
 
 item.type
 
@@ -426,7 +424,7 @@ item.content.transcript
 
 string
 
-固定为`null`。完整的识别结果通过[conversation.item.input\_audio\_transcription.completed](#403ecacd74qqg)事件提供。
+固定为`null`。完整的识别结果通过[conversation.item.input\_audio\_transcription.completed](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-server-events#403ecacd74qqg)事件提供。
 
 ```
 {
@@ -576,7 +574,7 @@ string
 
 在任何时刻，要获取当前最完整的句子预览，都需要将这两个字段拼接起来：实时预览句子 = `text` + `stash`。
 
-**点击查看示例**
+点击查看示例
 
 假设用户正在说：“今天天气不错，阳光明媚。”
 
@@ -660,7 +658,7 @@ T7
 
 \-
 
-使用[conversation.item.input\_audio\_transcription.completed](#403ecacd74qqg)的transcript的内容作为最终结果。
+使用[conversation.item.input\_audio\_transcription.completed](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-server-events#403ecacd74qqg)的transcript的内容作为最终结果。
 
 ## conversation.item.input\_audio\_transcription.completed
 
@@ -843,7 +841,7 @@ string
 
 会话结束事件，表示当前会话中，所有音频识别已完成。
 
-该事件只有在客户端发送`[session.finish](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-client-events#147ce70052d4z)`后才会发送，客户端接收到该事件后可主动断开连接。
+该事件只有在客户端发送`session.finish`后才会发送，客户端接收到该事件后可主动断开连接。
 
 **参数**
 

@@ -2,7 +2,7 @@
 
 千问-图像生成与编辑3.0模型同时支持文生图（T2I）和图生图/图像编辑（I2I），可根据文本提示词直接生成图像，也可基于1-3张参考图结合编辑指令进行精确编辑。
 
-## **模型概览**
+## 模型概览
 
 **模型名称**
 
@@ -34,46 +34,36 @@ qwen-image-3.0
 为确保调用成功，请务必保证模型、endpoint URL 和 API Key 均属于**同一地域**。跨地域调用将会失败。
 
 -   [**选择模型**](https://help.aliyun.com/zh/model-studio/use-video-generation#0754655d5ej0j)：确认模型所属的地域。
-    
 -   **选择 URL**：选择对应的地域 Endpoint URL，支持HTTP URL或 DashScope SDK URL。
-    
--   **配置 API Key**：获取该地域的[API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-    
--   **安装 SDK**：如需通过SDK进行调用，请[安装DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
-    
+-   **配置 API Key**：获取该地域的[API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
+-   **安装 SDK**：如需通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-**说明**
+**说明**本文的示例代码适用于**华北2（北京）地域**。
 
-本文的示例代码适用于**华北2（北京）地域**。
-
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-## **同步接口（推荐）**
+## 同步接口（推荐）
 
-### **HTTP调用**
+### HTTP调用
 
-## 华北2（北京）
+#### 华北2（北京）
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-## 新加坡
+#### 新加坡
 
 `POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-## 德国（法兰克福）
+#### 德国（法兰克福）
 
 `POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-## 日本（东京）
+#### 日本（东京）
 
 `POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
@@ -81,7 +71,113 @@ qwen-image-3.0
 
 #### 请求参数
 
-## 文生图（T2I）
+##### 请求头（Headers）
+
+**Content-Type**`string`**（必选）**
+
+请求内容类型。此参数必须设置为`application/json`。
+
+**Authorization**`string`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+##### 请求体（Request Body）
+
+**model** `string` **（必选）**
+
+模型名称，可选值为`qwen-image-3.0-pro`和`qwen-image-3.0`。
+
+**input** `object` **（必选）**
+
+输入参数对象，包含以下字段：
+
+属性
+
+**messages** `array` **（必选）**
+
+请求内容数组。**当前仅支持单轮对话**，因此数组内**有且只有一个对象**，该对象包含`role`和`content`两个属性。
+
+属性
+
+**role**`string` **（必选）**
+
+消息发送者角色，必须设置为`user`。
+
+**content**`array` **（必选）**
+
+消息内容数组，根据使用场景有不同的组合方式：
+
+-   **文生图（T2I）**：仅包含一个`{"text": "..."}`对象。
+-   **图生图（I2I）**：包含1-3个`{"image": "..."}`对象和1个`{"text": "..."}`对象。
+
+属性
+
+**image** `string` （可选）
+
+输入图像的 URL 或 Base64 编码数据。I2I场景下支持传入1-3张图像。多图输入时，按照数组顺序定义图像顺序。
+
+**图像要求：**
+
+-   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP和GIF。
+-   图像分辨率：建议图像的宽和高均在384像素至2048像素之间。
+-   图像大小：不超过10MB。
+
+**支持的输入格式**
+
+1.  公网URL：支持 HTTP 和 HTTPS 协议。您也可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+2.  Base64 编码：格式为`data:{MIME_type};base64,{base64_data}`。
+
+**text**`string`**（必选）**
+
+正向提示词，用于描述您期望生成或编辑的图像内容、风格和构图。支持中英文，推荐不超过4500Token。
+
+**注意**：仅支持传入一个text，不传或传入多个将报错。
+
+**parameters** `object` （可选）
+
+控制图像生成的附加参数。
+
+属性
+
+**prompt\_extend** `boolean` （可选）
+
+是否开启提示词智能改写，默认值为 `true`（建议开启）。开启后，模型会按照`prompt_extend_mode`指定的方式优化正向提示词，对描述较简单的提示词效果提升明显。
+
+**prompt\_extend\_mode** `string` （可选）
+
+提示词改写方式，默认值为`direct`。可选值：
+
+-   `direct`：直接提示词增强（DPE），适用于大多数场景。T2I和I2I均支持。
+-   `agent`：智能体提示词增强（APE），提供更精细的改写效果。仅支持文生图（T2I），图生图（I2I）场景传入`agent`将返回400错误。
+
+**enable\_thinking** `boolean` （可选）
+
+是否开启思考模式，默认值为`true`。开启时，模型将增强推理能力以提升出图质量，但会增加生成耗时。仅在 prompt\_extend=true 时生效，适用于 Direct T2I、Direct I2I 和 Agent T2I，I2I Agent 暂不支持。
+
+**n** `integer` （可选）
+
+输出图像的数量，支持输出1-6张图片，默认值为1。
+
+**size** `string` （可选）
+
+设置输出图像的分辨率，格式为`宽*高`，例如`"1024*1024"`。未指定时由模型根据提示词自动推荐分辨率。
+
+-   **文生图（T2I）**：像素面积范围512_512至2048_2048，宽高比限制1:8至8:1。
+-   **图生图（I2I）**：像素面积范围512_512至2048_2048，宽高比限制1:8至8:1。
+
+**negative\_prompt** `string` （可选）
+
+反向提示词，用来描述不希望在画面中看到的内容，可以对画面进行限制。
+
+**seed** `integer`（可选）
+
+随机数种子，取值范围为`[0, 2147483647]`，未传入时，服务会随机选择种子。固定种子可使生成结果相对稳定。
+
+**watermark** `boolean` （可选）
+
+是否添加水印，默认值为 `false`。
+
+文生图（T2I）
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
@@ -107,7 +203,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 图生图/图像编辑（I2I）
+图生图/图像编辑（I2I）
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
@@ -136,126 +232,91 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-##### 请求头（Headers）
-
-**Content-Type** `_string_` **（必选）**
-
-请求内容类型。此参数必须设置为`application/json`。
-
-**Authorization** `_string_`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-##### 请求体（Request Body）
-
-**model** `_string_` **（必选）**
-
-模型名称，可选值为`qwen-image-3.0-pro`和`qwen-image-3.0`。
-
-**input** `_object_` **（必选）**
-
-输入参数对象，包含以下字段：
-
-**属性**
-
-**messages** `_array_` **（必选）**
-
-请求内容数组。**当前仅支持单轮对话**，因此数组内**有且只有一个对象**，该对象包含`role`和`content`两个属性。
-
-**属性**
-
-**role** `_string_` **（必选）**
-
-消息发送者角色，必须设置为`user`。
-
-**content** `_array_` **（必选）**
-
-消息内容数组，根据使用场景有不同的组合方式：
-
--   **文生图（T2I）**：仅包含一个`{"text": "..."}`对象。
-    
--   **图生图（I2I）**：包含1-3个`{"image": "..."}`对象和1个`{"text": "..."}`对象。
-    
-
-**属性**
-
-**image** `_string_` （可选）
-
-输入图像的 URL 或 Base64 编码数据。I2I场景下支持传入1-3张图像。多图输入时，按照数组顺序定义图像顺序。
-
-**图像要求：**
-
--   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP和GIF。
-    
--   图像分辨率：建议图像的宽和高均在384像素至2048像素之间。
-    
--   图像大小：不超过10MB。
-    
-
-**支持的输入格式**
-
-1.  公网URL：支持 HTTP 和 HTTPS 协议。您也可在此[获取临时公网URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-    
-2.  Base64 编码：格式为`data:{MIME_type};base64,{base64_data}`。
-    
-
-**text** `_string_` **（必选）**
-
-正向提示词，用于描述您期望生成或编辑的图像内容、风格和构图。支持中英文，推荐不超过4500Token。
-
-**注意**：仅支持传入一个text，不传或传入多个将报错。
-
-**parameters** `_object_` （可选）
-
-控制图像生成的附加参数。
-
-**属性**
-
-**prompt\_extend** `_boolean_` （可选）
-
-是否开启提示词智能改写，默认值为 `true`（建议开启）。开启后，模型会按照`prompt_extend_mode`指定的方式优化正向提示词，对描述较简单的提示词效果提升明显。
-
-**prompt\_extend\_mode** `_string_` （可选）
-
-提示词改写方式，默认值为`direct`。可选值：
-
--   `direct`：直接提示词增强（DPE），适用于大多数场景。T2I和I2I均支持。
-    
--   `agent`：智能体提示词增强（APE），提供更精细的改写效果。仅支持文生图（T2I），图生图（I2I）场景传入`agent`将返回400错误。
-    
-
-**enable\_thinking** `_boolean_` （可选）
-
-是否开启思考模式，默认值为`true`。开启时，模型将增强推理能力以提升出图质量，但会增加生成耗时。仅在 prompt\_extend=true 时生效，适用于 Direct T2I、Direct I2I 和 Agent T2I，I2I Agent 暂不支持。
-
-**n** `_integer_` （可选）
-
-输出图像的数量，支持输出1-6张图片，默认值为1。
-
-**size** `_string_` （可选）
-
-设置输出图像的分辨率，格式为`宽*高`，例如`"1024*1024"`。未指定时由模型根据提示词自动推荐分辨率。
-
--   **文生图（T2I）**：像素面积范围512\*512至2048\*2048，宽高比限制1:8至8:1。
-    
--   **图生图（I2I）**：像素面积范围512\*512至2048\*2048，宽高比限制1:8至8:1。
-    
-
-**negative\_prompt** `_string_` （可选）
-
-反向提示词，用来描述不希望在画面中看到的内容，可以对画面进行限制。
-
-**seed** `_integer_`（可选）
-
-随机数种子，取值范围为`[0, 2147483647]`，未传入时，服务会随机选择种子。固定种子可使生成结果相对稳定。
-
-**watermark** `_boolean_` （可选）
-
-是否添加水印，默认值为 `false`。
-
 #### 响应参数
 
-## 任务执行成功
+**output** `object`
+
+包含模型生成结果。
+
+属性
+
+**rewrite\_status** `string`
+
+提示词改写状态，具体取值由请求是否开启改写以及改写执行结果决定。
+
+**choices** `array`
+
+结果选项列表。
+
+属性
+
+**finish\_reason** `string`
+
+任务停止原因，自然停止时为`stop`。
+
+**message** `object`
+
+模型返回的消息。
+
+属性
+
+**role**`string`
+
+消息的角色，固定为`assistant`。
+
+**content**`array`
+
+消息内容，包含生成的图像信息。
+
+属性
+
+**image** `string`
+
+生成图像的 URL，格式为PNG。**链接有效期为24小时**，请及时下载并保存图像。
+
+**usage** `object`
+
+本次调用的资源使用情况，仅调用成功时返回。
+
+属性
+
+**output\_width** `integer`
+
+最终输出图片的宽度（像素）。
+
+**output\_height** `integer`
+
+最终输出图片的高度（像素）。
+
+**input\_image\_count** `integer`
+
+用户请求中输入图片的数量。文生图（T2I）时为0，图生图（I2I）按实际输入图片数返回。
+
+**input\_image\_type** `string`
+
+输入图片计量档位。按输出分辨率像素面积判断：面积≤2,250,000为`qima_input_1k`，面积>2,250,000为`qima_input_2k`。
+
+**output\_image\_count** `integer`
+
+实际返回的输出图片数量。
+
+**output\_image\_type** `string`
+
+输出图片计量档位。按输出分辨率像素面积判断：面积≤2,250,000为`qima_output_1k`，面积>2,250,000为`qima_output_2k`。
+
+**request\_id**`string`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+**code**`string`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**message**`string`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+#### 任务执行成功
 
 任务数据（如任务状态、图像URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。
 
@@ -288,9 +349,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-## 任务执行异常
+#### 任务执行异常
 
-如果因为某种原因导致任务执行失败，将返回相关信息，可以通过code和message字段明确指示错误原因。请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果因为某种原因导致任务执行失败，将返回相关信息，可以通过code和message字段明确指示错误原因。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 ```
 {
@@ -300,93 +361,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-**output** `_object_`
-
-包含模型生成结果。
-
-**属性**
-
-**rewrite\_status** `_string_`
-
-提示词改写状态，具体取值由请求是否开启改写以及改写执行结果决定。
-
-**choices** `_array_`
-
-结果选项列表。
-
-**属性**
-
-**finish\_reason** `_string_`
-
-任务停止原因，自然停止时为`stop`。
-
-**message** `_object_`
-
-模型返回的消息。
-
-**属性**
-
-**role** `_string_`
-
-消息的角色，固定为`assistant`。
-
-**content** `_array_`
-
-消息内容，包含生成的图像信息。
-
-**属性**
-
-**image** `_string_`
-
-生成图像的 URL，格式为PNG。**链接有效期为24小时**，请及时下载并保存图像。
-
-**usage** `_object_`
-
-本次调用的资源使用情况，仅调用成功时返回。
-
-**属性**
-
-**output\_width** `_integer_`
-
-最终输出图片的宽度（像素）。
-
-**output\_height** `_integer_`
-
-最终输出图片的高度（像素）。
-
-**input\_image\_count** `_integer_`
-
-用户请求中输入图片的数量。文生图（T2I）时为0，图生图（I2I）按实际输入图片数返回。
-
-**input\_image\_type** `_string_`
-
-输入图片计量档位。按输出分辨率像素面积判断：面积≤2,250,000为`qima_input_1k`，面积>2,250,000为`qima_input_2k`。
-
-**output\_image\_count** `_integer_`
-
-实际返回的输出图片数量。
-
-**output\_image\_type** `_string_`
-
-输出图片计量档位。按输出分辨率像素面积判断：面积≤2,250,000为`qima_output_1k`，面积>2,250,000为`qima_output_2k`。
-
-**request\_id** `_string_`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code** `_string_`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**message** `_string_`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-### **SDK调用**
+### SDK调用
 
 以下以图生图/图像编辑（I2I）为示例，展示Python和Java SDK的调用方式。
 
-## Python
+Python
 
 ```
 import os
@@ -432,7 +411,7 @@ else:
     print(f"Error: {response.code} - {response.message}")
 ```
 
-## Java
+Java
 
 ```
 import java.util.Arrays;
@@ -507,44 +486,152 @@ public class ImageEditExample {
 }
 ```
 
-## **异步接口**
+## 异步接口
 
 千问-图像生成与编辑3.0模型除了支持上文的同步调用外，还支持异步调用。异步接口与同步接口共用相同的请求参数结构，仅需在请求头中增加`X-DashScope-Async: enable`，服务受理后返回任务ID（`task_id`），再通过任务ID轮询查询接口获取最终结果。
 
-**重要**
+**重要**异步接口的请求地址与同步接口不同，请使用本节给出的Endpoint，不要沿用同步接口地址。
 
-异步接口的请求地址与同步接口不同，请使用本节给出的Endpoint，不要沿用同步接口地址。
-
-### **HTTP调用**
+### HTTP调用
 
 调用流程分为两步：
 
 1.  **创建任务获取任务ID**：发送一个请求创建任务，该请求会返回**任务ID（task\_id）**。
-    
 2.  **根据任务ID查询结果**：使用task\_id轮询任务状态，直到任务完成并获得图像URL。
-    
 
-#### **步骤1：创建任务获取任务ID**
+#### 步骤1：创建任务获取任务ID
 
-## **华北2（北京）**
+#### 华北2（北京）
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation`
 
-## **新加坡**
+#### 新加坡
 
 `POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation`
 
-## **德国（法兰克福）**
+#### 德国（法兰克福）
 
 `POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation`
 
-## **日本（东京）**
+#### 日本（东京）
 
 `POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation`
 
-##### **请求参数**
+##### 请求参数
 
-## 文生图（T2I）
+###### 请求头（Headers）
+
+**Content-Type**`string`**（必选）**
+
+请求内容类型。此参数必须设置为`application/json`。
+
+**Authorization**`string`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+**X-DashScope-Async**`string`**（必选）**
+
+异步处理配置参数。HTTP请求只支持异步，**必须设置为**`enable`。
+
+**重要**缺少此请求头将报错：“current user api does not support synchronous calls”。
+
+###### 请求体（Request Body）
+
+**model** `string` **（必选）**
+
+模型名称，可选值为`qwen-image-3.0-pro`和`qwen-image-3.0`。
+
+**input** `object` **（必选）**
+
+输入参数对象，包含以下字段：
+
+属性
+
+**messages** `array` **（必选）**
+
+请求内容数组。**当前仅支持单轮对话**，因此数组内**有且只有一个对象**，该对象包含`role`和`content`两个属性。
+
+属性
+
+**role**`string` **（必选）**
+
+消息发送者角色，必须设置为`user`。
+
+**content**`array` **（必选）**
+
+消息内容数组，根据使用场景有不同的组合方式：
+
+-   **文生图（T2I）**：仅包含一个`{"text": "..."}`对象。
+-   **图生图（I2I）**：包含1-3个`{"image": "..."}`对象和1个`{"text": "..."}`对象。
+
+属性
+
+**image** `string` （可选）
+
+输入图像的 URL 或 Base64 编码数据。I2I场景下支持传入1-3张图像。多图输入时，按照数组顺序定义图像顺序。
+
+**图像要求：**
+
+-   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP和GIF。
+-   图像分辨率：建议图像的宽和高均在384像素至2048像素之间。
+-   图像大小：不超过10MB。
+
+**支持的输入格式**
+
+1.  公网URL：支持 HTTP 和 HTTPS 协议。您也可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+2.  Base64 编码：格式为`data:{MIME_type};base64,{base64_data}`。
+
+**text**`string`**（必选）**
+
+正向提示词，用于描述您期望生成或编辑的图像内容、风格和构图。支持中英文，推荐不超过4500Token。
+
+**注意**：仅支持传入一个text，不传或传入多个将报错。
+
+**parameters** `object` （可选）
+
+控制图像生成的附加参数。
+
+属性
+
+**prompt\_extend** `boolean` （可选）
+
+是否开启提示词智能改写，默认值为 `true`（建议开启）。开启后，模型会按照`prompt_extend_mode`指定的方式优化正向提示词，对描述较简单的提示词效果提升明显。
+
+**prompt\_extend\_mode** `string` （可选）
+
+提示词改写方式，默认值为`direct`。可选值：
+
+-   `direct`：直接提示词增强（DPE），适用于大多数场景。T2I和I2I均支持。
+-   `agent`：智能体提示词增强（APE），提供更精细的改写效果。仅支持文生图（T2I），图生图（I2I）场景传入`agent`将返回400错误。
+
+**enable\_thinking** `boolean` （可选）
+
+是否开启思考模式，默认值为`true`。开启时，模型将增强推理能力以提升出图质量，但会增加生成耗时。仅在 prompt\_extend=true 时生效，适用于 Direct T2I、Direct I2I 和 Agent T2I，I2I Agent 暂不支持。
+
+**n** `integer` （可选）
+
+输出图像的数量，支持输出1-6张图片，默认值为1。
+
+**size** `string` （可选）
+
+设置输出图像的分辨率，格式为`宽*高`，例如`"1024*1024"`。未指定时由模型根据提示词自动推荐分辨率。
+
+-   **文生图（T2I）**：像素面积范围512_512至2048_2048，宽高比限制1:8至8:1。
+-   **图生图（I2I）**：像素面积范围512_512至2048_2048，宽高比限制1:8至8:1。
+
+**negative\_prompt** `string` （可选）
+
+反向提示词，用来描述不希望在画面中看到的内容，可以对画面进行限制。
+
+**seed** `integer`（可选）
+
+随机数种子，取值范围为`[0, 2147483647]`，未传入时，服务会随机选择种子。固定种子可使生成结果相对稳定。
+
+**watermark** `boolean` （可选）
+
+是否添加水印，默认值为 `false`。
+
+文生图（T2I）
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
@@ -571,7 +658,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 图生图/图像编辑（I2I）
+图生图/图像编辑（I2I）
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
@@ -601,134 +688,40 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-###### **请求头（Headers）**
+##### 响应参数
 
-**Content-Type** `_string_` **（必选）**
+**output** `object`
 
-请求内容类型。此参数必须设置为`application/json`。
+任务输出信息。
 
-**Authorization** `_string_`**（必选）**
+属性
 
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+**task\_id** `string`
 
-**X-DashScope-Async** `_string_` **（必选）**
+任务ID。查询有效期24小时。
 
-异步处理配置参数。HTTP请求只支持异步，**必须设置为**`**enable**`。
+**task\_status** `string`
 
-**重要**
+任务状态。
 
-缺少此请求头将报错：“current user api does not support synchronous calls”。
+枚举值
 
-###### **请求体（Request Body）**
+-   PENDING：任务排队中
+-   RUNNING：任务处理中
+-   SUCCEEDED：任务执行成功
+-   FAILED：任务执行失败
+-   CANCELED：任务已取消
+-   UNKNOWN：任务不存在或状态未知
 
-**model** `_string_` **（必选）**
+**request\_id**`string`
 
-模型名称，可选值为`qwen-image-3.0-pro`和`qwen-image-3.0`。
+请求唯一标识。可用于请求明细溯源和问题排查。
 
-**input** `_object_` **（必选）**
+**code**`string`
 
-输入参数对象，包含以下字段：
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
 
-**属性**
-
-**messages** `_array_` **（必选）**
-
-请求内容数组。**当前仅支持单轮对话**，因此数组内**有且只有一个对象**，该对象包含`role`和`content`两个属性。
-
-**属性**
-
-**role** `_string_` **（必选）**
-
-消息发送者角色，必须设置为`user`。
-
-**content** `_array_` **（必选）**
-
-消息内容数组，根据使用场景有不同的组合方式：
-
--   **文生图（T2I）**：仅包含一个`{"text": "..."}`对象。
-    
--   **图生图（I2I）**：包含1-3个`{"image": "..."}`对象和1个`{"text": "..."}`对象。
-    
-
-**属性**
-
-**image** `_string_` （可选）
-
-输入图像的 URL 或 Base64 编码数据。I2I场景下支持传入1-3张图像。多图输入时，按照数组顺序定义图像顺序。
-
-**图像要求：**
-
--   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP和GIF。
-    
--   图像分辨率：建议图像的宽和高均在384像素至2048像素之间。
-    
--   图像大小：不超过10MB。
-    
-
-**支持的输入格式**
-
-1.  公网URL：支持 HTTP 和 HTTPS 协议。您也可在此[获取临时公网URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-    
-2.  Base64 编码：格式为`data:{MIME_type};base64,{base64_data}`。
-    
-
-**text** `_string_` **（必选）**
-
-正向提示词，用于描述您期望生成或编辑的图像内容、风格和构图。支持中英文，推荐不超过4500Token。
-
-**注意**：仅支持传入一个text，不传或传入多个将报错。
-
-**parameters** `_object_` （可选）
-
-控制图像生成的附加参数。
-
-**属性**
-
-**prompt\_extend** `_boolean_` （可选）
-
-是否开启提示词智能改写，默认值为 `true`（建议开启）。开启后，模型会按照`prompt_extend_mode`指定的方式优化正向提示词，对描述较简单的提示词效果提升明显。
-
-**prompt\_extend\_mode** `_string_` （可选）
-
-提示词改写方式，默认值为`direct`。可选值：
-
--   `direct`：直接提示词增强（DPE），适用于大多数场景。T2I和I2I均支持。
-    
--   `agent`：智能体提示词增强（APE），提供更精细的改写效果。仅支持文生图（T2I），图生图（I2I）场景传入`agent`将返回400错误。
-    
-
-**enable\_thinking** `_boolean_` （可选）
-
-是否开启思考模式，默认值为`true`。开启时，模型将增强推理能力以提升出图质量，但会增加生成耗时。仅在 prompt\_extend=true 时生效，适用于 Direct T2I、Direct I2I 和 Agent T2I，I2I Agent 暂不支持。
-
-**n** `_integer_` （可选）
-
-输出图像的数量，支持输出1-6张图片，默认值为1。
-
-**size** `_string_` （可选）
-
-设置输出图像的分辨率，格式为`宽*高`，例如`"1024*1024"`。未指定时由模型根据提示词自动推荐分辨率。
-
--   **文生图（T2I）**：像素面积范围512\*512至2048\*2048，宽高比限制1:8至8:1。
-    
--   **图生图（I2I）**：像素面积范围512\*512至2048\*2048，宽高比限制1:8至8:1。
-    
-
-**negative\_prompt** `_string_` （可选）
-
-反向提示词，用来描述不希望在画面中看到的内容，可以对画面进行限制。
-
-**seed** `_integer_`（可选）
-
-随机数种子，取值范围为`[0, 2147483647]`，未传入时，服务会随机选择种子。固定种子可使生成结果相对稳定。
-
-**watermark** `_boolean_` （可选）
-
-是否添加水印，默认值为 `false`。
-
-##### **响应参数**
-
-##### 成功响应
+#### 成功响应
 
 请保存 task\_id，用于查询任务状态与结果。
 
@@ -742,9 +735,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-##### 异常响应
+#### 异常响应
 
-创建任务失败，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+创建任务失败，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 ```
 {
@@ -754,66 +747,41 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-**output** `_object_`
+#### 步骤2：根据任务ID查询结果
 
-任务输出信息。
-
-**属性**
-
-**task\_id** `_string_`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `_string_`
-
-任务状态。
-
-**枚举值**
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：任务执行成功
-    
--   FAILED：任务执行失败
-    
--   CANCELED：任务已取消
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-**request\_id** `_string_`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code** `_string_`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-#### **步骤2：根据任务ID查询结果**
-
-## **华北2（北京）**
+#### 华北2（北京）
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-## **新加坡**
+#### 新加坡
 
 `GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-## **德国（法兰克福）**
+#### 德国（法兰克福）
 
 `GET https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-## **日本（东京）**
+#### 日本（东京）
 
 `GET https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 必须使用提交任务时的地域、业务空间和API Key查询任务，不可跨地域或跨业务空间查询。
 
-##### **请求参数**
+##### 请求参数
 
-## 查询任务结果
+###### 请求头（Headers）
+
+**Authorization**`string`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+###### URL路径参数（Path parameters）
+
+**task\_id** `string`**（必选）**
+
+任务ID。
+
+#### 查询任务结果
 
 将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
@@ -822,21 +790,120 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-###### **请求头（Headers）**
+##### 响应参数
 
-**Authorization** `_string_`**（必选）**
+**output** `object`
 
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+任务输出信息。
 
-###### **URL路径参数（Path parameters）**
+属性
 
-**task\_id** `_string_`**（必选）**
+**task\_id** `string`
 
-任务ID。
+任务ID。查询有效期24小时。
 
-##### **响应参数**
+**task\_status** `string`
 
-## 任务执行成功
+任务状态。
+
+枚举值
+
+-   PENDING：任务排队中
+-   RUNNING：任务处理中
+-   SUCCEEDED：任务执行成功
+-   FAILED：任务执行失败
+-   CANCELED：任务已取消
+-   UNKNOWN：任务不存在或状态未知
+
+**submit\_time** `string`
+
+任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**scheduled\_time** `string`
+
+任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**end\_time** `string`
+
+任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**rewrite\_status** `string`
+
+提示词改写状态，具体取值由请求是否开启改写以及改写执行结果决定。
+
+**choices** `array`
+
+结果选项列表。
+
+属性
+
+**finish\_reason** `string`
+
+任务停止原因，自然停止时为`stop`。
+
+**message** `object`
+
+模型返回的消息。
+
+属性
+
+**role**`string`
+
+消息的角色，固定为`assistant`。
+
+**content**`array`
+
+消息内容，包含生成的图像信息。
+
+属性
+
+**image** `string`
+
+生成图像的 URL，格式为PNG。**链接有效期为24小时**，请及时下载并保存图像。
+
+**usage** `object`
+
+本次调用的资源使用情况，仅调用成功时返回。
+
+属性
+
+**output\_width** `integer`
+
+最终输出图片的宽度（像素）。
+
+**output\_height** `integer`
+
+最终输出图片的高度（像素）。
+
+**input\_image\_count** `integer`
+
+用户请求中输入图片的数量。文生图（T2I）时为0，图生图（I2I）按实际输入图片数返回。
+
+**input\_image\_type** `string`
+
+输入图片计量档位。按输出分辨率像素面积判断：面积≤2,250,000为`qima_input_1k`，面积>2,250,000为`qima_input_2k`。
+
+**output\_image\_count** `integer`
+
+实际返回的输出图片数量。
+
+**output\_image\_type** `string`
+
+输出图片计量档位。按输出分辨率像素面积判断：面积≤2,250,000为`qima_output_1k`，面积>2,250,000为`qima_output_2k`。
+
+**request\_id**`string`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+**code**`string`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**message**`string`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+#### 任务执行成功
 
 任务数据（如任务状态、图像URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。
 
@@ -876,9 +943,9 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
-## 任务执行异常
+#### 任务执行异常
 
-若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 ```
 {
@@ -892,123 +959,6 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
-**output** `_object_`
+## 错误码
 
-任务输出信息。
-
-**属性**
-
-**task\_id** `_string_`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `_string_`
-
-任务状态。
-
-**枚举值**
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：任务执行成功
-    
--   FAILED：任务执行失败
-    
--   CANCELED：任务已取消
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-**submit\_time** `_string_`
-
-任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**scheduled\_time** `_string_`
-
-任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**end\_time** `_string_`
-
-任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**rewrite\_status** `_string_`
-
-提示词改写状态，具体取值由请求是否开启改写以及改写执行结果决定。
-
-**choices** `_array_`
-
-结果选项列表。
-
-**属性**
-
-**finish\_reason** `_string_`
-
-任务停止原因，自然停止时为`stop`。
-
-**message** `_object_`
-
-模型返回的消息。
-
-**属性**
-
-**role** `_string_`
-
-消息的角色，固定为`assistant`。
-
-**content** `_array_`
-
-消息内容，包含生成的图像信息。
-
-**属性**
-
-**image** `_string_`
-
-生成图像的 URL，格式为PNG。**链接有效期为24小时**，请及时下载并保存图像。
-
-**usage** `_object_`
-
-本次调用的资源使用情况，仅调用成功时返回。
-
-**属性**
-
-**output\_width** `_integer_`
-
-最终输出图片的宽度（像素）。
-
-**output\_height** `_integer_`
-
-最终输出图片的高度（像素）。
-
-**input\_image\_count** `_integer_`
-
-用户请求中输入图片的数量。文生图（T2I）时为0，图生图（I2I）按实际输入图片数返回。
-
-**input\_image\_type** `_string_`
-
-输入图片计量档位。按输出分辨率像素面积判断：面积≤2,250,000为`qima_input_1k`，面积>2,250,000为`qima_input_2k`。
-
-**output\_image\_count** `_integer_`
-
-实际返回的输出图片数量。
-
-**output\_image\_type** `_string_`
-
-输出图片计量档位。按输出分辨率像素面积判断：面积≤2,250,000为`qima_output_1k`，面积>2,250,000为`qima_output_2k`。
-
-**request\_id** `_string_`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code** `_string_`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**message** `_string_`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-## **错误码**
-
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。

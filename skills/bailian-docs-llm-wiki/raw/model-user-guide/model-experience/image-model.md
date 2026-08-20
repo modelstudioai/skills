@@ -37,22 +37,17 @@ FLUX.2
 ### 何时使用wan2.7-image-pro
 
 -   需要品牌色控制，调色盘功能
-    
 -   需要更高分辨率，`wan2.7-image-pro`文生图最高支持4096x4096分辨率
-    
 
 ### 何时使用z-image-turbo
 
 -   只需要生成图片（不需要编辑功能）
-    
 -   速度或成本是优先考虑 -- 生成速度快10倍，价格约为1/5
-    
 -   写实人像和产品照片
-    
 
 ## 图片编辑
 
-推荐使用`qwen-image-3.0-pro`，具备强大的复杂内容生成与高保真渲染能力，支持最大 4.5k token 输入，可生成复杂版面，并兼容图中图与密集信息排版，接近真实摄影质感。详细使用方法请参见[图像编辑](https://help.aliyun.com/zh/model-studio/image-edit-guide/)。
+推荐使用`qwen-image-3.0-pro`，具备强大的复杂内容生成与高保真渲染能力，支持最大 4.5k token 输入，可生成复杂版面，并兼容图中图与密集信息排版，接近真实摄影质感。详细使用方法请参见[图像编辑](https://help.aliyun.com/zh/model-studio/image-edit-guide)。
 
 ### 何时使用wan2.7-image-pro
 

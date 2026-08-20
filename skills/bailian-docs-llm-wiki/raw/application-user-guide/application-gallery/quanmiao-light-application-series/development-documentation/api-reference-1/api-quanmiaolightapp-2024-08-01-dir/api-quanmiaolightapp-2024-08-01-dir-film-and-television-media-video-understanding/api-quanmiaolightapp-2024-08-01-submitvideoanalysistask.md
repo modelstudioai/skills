@@ -1,4 +1,4 @@
-# SubmitVideoAnalysisTask - 视频理解-提交异步任务
+# SubmitVideoAnalysisTask
 
 阿里云百炼轻应用-提交视频理解离线异步任务。
 
@@ -11,11 +11,8 @@
 ### 接口调用说明
 
 -   支持绝大部分开发语言 SDK 方式接入
-    
 -   可在 OpenAPI 门户 直接调试和使用
-    
 -   也可前往 [轻应用-影视传媒视频理解控制台](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/video-comprehend)，切换到"API"页签查看调用 Demo
-    
 
 ### 并发说明
 
@@ -42,41 +39,32 @@
 ### 角色识别说明
 
 -   通过 API 接口实现"识别视频中的人物身份"
-    
 -   **默认可识别**：16 个人物，每个角色 1 张图片
-    
 -   **放宽限制**：如需进一步放宽，请加入钉钉群 `116015001424` 联系产研
-    
 -   **超时风险**：一个视频理解任务中做太多次人物角色匹配，存在超时风险
-    
 
 ### 调度轮询最佳实践
 
 因接口调用并发有限制，建议如下：
 
 -   **扩并发**：扩的是异步处理任务的并发，非提交任务接口的并发
-    
 -   **提交任务**：理论串行即可。任务多时可适当 2~3 个并发提交
-    
 -   **结果轮询**：任务按提交顺序调度，只需周期轮询最早未完成的 top n（n == 异步任务并发数）即可。更多任务状态只会是排队中，轮询意义不大
-    
 
 ### Agent 集成
 
 Agent 可通过 Skill 直接使用视频理解能力：
 
 -   **Skill 名称**：`alibabacloud-bailian-videoanalysis`
-    
 -   **Skill 地址**：[https://skills.aliyun.com/skills/alibabacloud-bailian-videoanalysis](https://skills.aliyun.com/skills/alibabacloud-bailian-videoanalysis)
-    
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/SubmitVideoAnalysisTask)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
- [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/SubmitVideoAnalysisTask)
+[调试](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/SubmitVideoAnalysisTask)
 
-## **授权信息**
+## 授权信息
 
 下表是API对应的授权信息，可以在RAM权限策略语句的`Action`元素中使用，用来给RAM用户或RAM角色授予调用此API的权限。具体说明如下：
 
@@ -86,10 +74,8 @@ Agent 可通过 Skill 直接使用视频理解能力：
     
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
     
-    -   对于必选的资源类型，用前面加 \* 表示。
-        
+    -   对于必选的资源类型，用前面加 \* 表示。
     -   对于不支持资源级授权的操作，用`全部资源`表示。
-        
 -   条件关键字：是指云产品自身定义的条件关键字。
     
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
@@ -165,7 +151,7 @@ string
 
 视频 url
 
-http://xxxx.mp4
+[http://xxxx.mp4](http://xxxx.mp4)
 
 videoModelId
 
@@ -867,7 +853,7 @@ string
 
 xxx
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -956,8 +942,6 @@ string
 
 ## 错误码
 
-   
-
 **HTTP status code**
 
 **错误码**
@@ -976,6 +960,6 @@ You are not authorized to perform this action , Please check the assignment of t
 
 访问[错误中心](https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/errorCode)查看更多错误码。
 
-## **变更历史**
+## 变更历史
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/SubmitVideoAnalysisTask#workbench-doc-change-demo)。

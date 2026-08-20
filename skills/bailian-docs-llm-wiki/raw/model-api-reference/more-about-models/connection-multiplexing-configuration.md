@@ -2,20 +2,18 @@
 
 在调用大模型服务时，高并发场景下可能会出现请求超时、资源消耗大等问题。为解决这些问题，可通过连接复用优化网络连接的使用效率。
 
-## **连接复用**
+## 连接复用
 
 DashScope SDK 支持通过复用已有的连接来减少资源消耗，提高请求处理效率。
 
 -   **Java SDK**：内置连接池机制，支持配置连接数、超时时间等参数，默认启用。
-    
 -   **Python SDK**：支持通过传入自定义 Session 实现连接复用，包括同步和异步两种方式。
-    
 
-## **Java SDK**
+## Java SDK
 
 DashScope Java SDK 内置了连接池机制，默认启用。建议您根据具体业务合理调整连接池的连接数和超时时间，优化连接复用效果。
 
-### **配置参数说明**
+### 配置参数说明
 
 **参数**
 
@@ -96,7 +94,7 @@ maximumAsyncRequestsPerHost
 
 个
 
-### **代码示例**
+### 代码示例
 
 运行代码前，请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/first-api-call-to-qwen#fcceb7b5d2pqx)并[安装最新版SDK](https://help.aliyun.com/zh/model-studio/install-sdk#75aa2ffbb2afo)。
 
@@ -166,11 +164,11 @@ public class Main {
 }
 ```
 
-## **Python SDK**
+## Python SDK
 
-DashScope Python SDK 支持通过传入自定义 Session 实现连接复用，提供[HTTP异步](#41cb49b5d22i8)（协程）和[HTTP同步](#21a3c6f345ipv)两种调用方式。
+DashScope Python SDK 支持通过传入自定义 Session 实现连接复用，提供[HTTP异步](https://help.aliyun.com/zh/model-studio/connection-multiplexing-configuration#41cb49b5d22i8)（协程）和[HTTP同步](https://help.aliyun.com/zh/model-studio/connection-multiplexing-configuration#21a3c6f345ipv)两种调用方式。
 
-### **HTTP异步调用方式**
+### HTTP异步调用方式
 
 在异步调用场景中，您可以通过 `aiohttp.ClientSession` 配合 `aiohttp.TCPConnector` 实现连接复用。`TCPConnector` 支持配置连接数限制等参数：
 
@@ -206,7 +204,7 @@ None
 
 用于HTTPS连接的SSL证书验证配置。
 
-#### **代码示例**
+#### 代码示例
 
 运行代码前，请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/first-api-call-to-qwen#fcceb7b5d2pqx)并[安装最新版SDK](https://help.aliyun.com/zh/model-studio/install-sdk#75aa2ffbb2afo)。
 
@@ -235,7 +233,7 @@ async def main():
         limit_per_host=30,   # 每个主机的连接数限制
         ssl=ssl.create_default_context(cafile=certifi.where()),
     )
-    
+
     # 创建自定义Session并传入调用方法
     async with aiohttp.ClientSession(connector=connector) as session:
         response = await AioGeneration.call(
@@ -248,11 +246,11 @@ async def main():
 asyncio.run(main())
 ```
 
-### **HTTP同步调用方式**
+### HTTP同步调用方式
 
 在同步调用场景中，您可以通过 `requests.Session` 实现连接复用。在同一个 Session 内的多次请求会复用底层 TCP 连接，避免重复建立连接的开销。
 
-#### **代码示例**
+#### 代码示例
 
 运行代码前，请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/first-api-call-to-qwen#fcceb7b5d2pqx)并[安装最新版SDK](https://help.aliyun.com/zh/model-studio/install-sdk#75aa2ffbb2afo)。
 
@@ -307,7 +305,7 @@ try:
         session=session
     )
     print(response1)
-    
+
     response2 = Generation.call(
         model='qwen-plus',
         prompt='介绍一下你自己',
@@ -321,13 +319,10 @@ finally:
 
 ## 最佳实践
 
--   **Java SDK**：根据业务并发量合理配置 `connectionPoolSize`、`maximumAsyncRequests` 等参数，避免连接数过高或过低。
-    
--   **Python SDK**：推荐使用 `with` 语句自动管理 Session 的生命周期，确保资源正确释放。
-    
+-   **Java SDK**：根据业务并发量合理配置 `connectionPoolSize`、`maximumAsyncRequests` 等参数，避免连接数过高或过低。
+-   **Python SDK**：推荐使用 `with` 语句自动管理 Session 的生命周期，确保资源正确释放。
 -   **选择合适的调用方式**：如果您的应用是异步架构（如使用 asyncio、FastAPI 等），建议使用异步调用方式；如果是传统同步架构，使用同步调用方式即可。
-    
 
-## **错误码**
+## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。

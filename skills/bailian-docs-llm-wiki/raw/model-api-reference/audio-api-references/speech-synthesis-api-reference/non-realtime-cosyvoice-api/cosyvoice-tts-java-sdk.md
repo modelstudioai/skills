@@ -2,32 +2,26 @@
 
 本文介绍非实时语音合成Qwen-Audio-TTS/CosyVoice的Java SDK调用方法，支持非流式和流式两种调用模式。
 
-**用户指南**：参见[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)。
+**用户指南**：参见非实时语音合成。
 
-**重要**
+**重要**本文描述的功能仅在华北2（北京）地域可用。
 
-本文描述的功能仅在华北2（北京）地域可用。
+**重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
 
-**重要**
+`{WorkspaceId}`需要替换为真实的Workspace ID。现有域名仍可正常使用。
 
-阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+## 前提条件
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+-   已获取与配置 API Key并将其配置到环境变量
+-   已安装符合版本要求的DashScope Java SDK，建议安装最新版，SDK版本需≥2.22.15
 
-## **前提条件**
-
--   已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)
-    
--   已安装符合版本要求的DashScope Java SDK，建议[安装最新版](https://help.aliyun.com/zh/model-studio/install-sdk)，SDK版本需≥2.22.15
-    
-
-## **HttpSpeechSynthesizer 类**
+## HttpSpeechSynthesizer 类
 
 **包路径**：`com.alibaba.dashscope.audio.http_tts.HttpSpeechSynthesizer`
 
 **功能**：基于HTTP的语音合成，支持非流式和流式两种调用方式。
 
-### **构造方法**
+### 构造方法
 
 ```
 public HttpSpeechSynthesizer()
@@ -35,7 +29,7 @@ public HttpSpeechSynthesizer()
 
 创建HttpSpeechSynthesizer实例，使用默认配置。SDK会自动从环境变量`DASHSCOPE_API_KEY`或`Constants.apiKey`获取API Key。
 
-### **callAndReturnAudio() - 非流式调用（返回音频数据）**
+### callAndReturnAudio() - 非流式调用（返回音频数据）
 
 **方法签名**：
 
@@ -53,13 +47,13 @@ public ByteBuffer callAndReturnAudio(HttpSpeechSynthesisParam param) throws ApiE
 
 param
 
-[HttpSpeechSynthesisParam](#h2-cv3a4b5c)
+[HttpSpeechSynthesisParam](https://help.aliyun.com/zh/model-studio/cosyvoice-tts-java-sdk#h2-cv3a4b5c)
 
 语音合成参数对象，包含模型、文本、音色等配置。
 
 **返回值**：`ByteBuffer`，包含完整的音频数据。可通过`remaining()`获取音频大小（字节）。
 
-### **call() - 非流式调用（返回音频URL）**
+### call() - 非流式调用（返回音频URL）
 
 **方法签名**：
 
@@ -77,13 +71,13 @@ public HttpSpeechSynthesisResult call(HttpSpeechSynthesisParam param) throws Api
 
 param
 
-[HttpSpeechSynthesisParam](#h2-cv3a4b5c)
+[HttpSpeechSynthesisParam](https://help.aliyun.com/zh/model-studio/cosyvoice-tts-java-sdk#h2-cv3a4b5c)
 
 语音合成参数对象。
 
 **返回值**：`HttpSpeechSynthesisResult`对象，通过`getAudioInfo().getUrl()`获取音频下载URL，URL有效期有限，可通过`getAudioInfo().getExpiresAt()`获取过期时间。
 
-### **streamCall() - 流式调用**
+### streamCall() - 流式调用
 
 **方法签名**：
 
@@ -101,7 +95,7 @@ public void streamCall(HttpSpeechSynthesisParam param, ResultCallback<HttpSpeech
 
 param
 
-[HttpSpeechSynthesisParam](#h2-cv3a4b5c)
+[HttpSpeechSynthesisParam](https://help.aliyun.com/zh/model-studio/cosyvoice-tts-java-sdk#h2-cv3a4b5c)
 
 语音合成参数对象。
 
@@ -141,7 +135,7 @@ Exception e
 
 合成过程中发生错误时触发，可通过`e.getMessage()`获取错误信息。
 
-## **HttpSpeechSynthesisParam 类**
+## HttpSpeechSynthesisParam 类
 
 **包路径**：`com.alibaba.dashscope.audio.http_tts.HttpSpeechSynthesisParam`
 
@@ -168,19 +162,12 @@ String
 取值范围：
 
 -   qwen-audio-3.0-tts-plus
-    
 -   qwen-audio-3.0-tts-flash
-    
 -   cosyvoice-v3.5-plus
-    
 -   cosyvoice-v3.5-flash
-    
 -   cosyvoice-v3-plus
-    
 -   cosyvoice-v3-flash
-    
 -   cosyvoice-v2
-    
 
 text(String)
 
@@ -192,10 +179,8 @@ String
 
 支持 SSML 和 LaTeX 格式输入。将待合成文本替换为对应格式即可。
 
--   使用 SSML 时，需同时将 `enable_ssml` 设置为 `true`。支持的 SSML 标签及用法，请参见[SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
-    
--   使用 LaTeX 时，将待合成文本替换为 LaTeX 格式即可，无需额外配置。支持的 LaTeX 语法及用法，请参见[LaTeX 公式转语音](https://help.aliyun.com/zh/model-studio/latex-capability-support-description)。
-    
+-   使用 SSML 时，需同时将 `enable_ssml` 设置为 `true`。支持的 SSML 标签及用法，请参见SSML 与 LaTeX。
+-   使用 LaTeX 时，将待合成文本替换为 LaTeX 格式即可，无需额外配置。支持的 LaTeX 语法及用法，请参见LaTeX 公式转语音。
 
 voice(String)
 
@@ -207,12 +192,9 @@ String
 
 取值范围：
 
--   系统音色：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
-    
--   声音复刻音色：如何创建音色请参见[CosyVoice声音复刻/设计API](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)
-    
--   声音设计音色：如何创建音色请参见[CosyVoice声音复刻/设计API](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)
-    
+-   系统音色：参见Qwen-Audio-TTS音色列表、CosyVoice音色列表
+-   声音复刻音色：如何创建音色请参见CosyVoice声音复刻/设计API
+-   声音设计音色：如何创建音色请参见CosyVoice声音复刻/设计API
 
 format(String)
 
@@ -227,13 +209,9 @@ String
 取值范围：
 
 -   mp3
-    
 -   pcm
-    
 -   wav
-    
 -   opus
-    
 
 sampleRate(int)
 
@@ -287,15 +265,13 @@ boolean
 
 否
 
-是否开启SSML功能。设置为`true`时，`text`参数需传入SSML格式文本。支持的SSML标签及用法，请参见[SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。SSML 的使用限制（支持的模型、音色和接口），请参见[使用限制](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide#sl01-constraint-h3)。
+是否开启SSML功能。设置为`true`时，`text`参数需传入SSML格式文本。支持的SSML标签及用法，请参见SSML 与 LaTeX。SSML 的使用限制（支持的模型、音色和接口），请参见使用限制。
 
 默认值：false。
 
-**说明**
+**说明**`enable_ssml`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`enable_ssml`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -306,7 +282,7 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
     .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -327,13 +303,11 @@ boolean
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及Qwen-Audio-TTS音色列表、CosyVoice音色列表中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
 
-**说明**
+**说明**`word_timestamp_enabled`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`word_timestamp_enabled`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -344,7 +318,7 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
     .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -367,11 +341,9 @@ int
 
 取值范围：\[0, 65535\]。
 
-**说明**
+**说明**`seed`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`seed`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -382,7 +354,7 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
     .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -402,61 +374,38 @@ List
 **重要**
 
 -   此参数为数组，但当前版本仅处理第一个元素，因此建议只传入一个值。
-    
 -   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见声音复刻API参考。
-    
 
 指定语音合成的目标语言，提升合成效果。
 
 当数字、缩写、符号等朗读方式或者小语种合成效果不符合预期时使用，例如：
 
 -   数字朗读方式不符合预期，“hello, this is 110”读成“hello, this is one one zero”而非“hello, this is 幺幺零”
-    
 -   符号朗读不准确，“@”读成“艾特”而非“at”
-    
 -   小语种合成效果差，合成不自然
-    
 
 取值范围：
 
 -   zh：中文
-    
 -   en：英语
-    
 -   fr：法语
-    
 -   de：德语
-    
 -   ja：日语
-    
 -   ko：韩语
-    
 -   ru：俄语
-    
 -   pt：葡萄牙语
-    
 -   th：泰语
-    
 -   id：印尼语
-    
 -   vi：越南语
-    
 -   es：西班牙语
-    
 -   it：意大利语
-    
 -   ms：马来西亚语
-    
 -   fil：菲律宾语
-    
 -   ar：阿拉伯语
-    
 
-**说明**
+**说明**`language_hints`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`language_hints`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -467,7 +416,7 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
     .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -486,13 +435,11 @@ String
 
 设置指令，用于控制方言、情感或角色等合成效果。
 
-具体用法请参见[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)。
+具体用法请参见非实时语音合成。
 
-**说明**
+**说明**`instruction`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`instruction`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -503,7 +450,7 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
     .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -526,15 +473,11 @@ int
 
 取值范围：\[6, 510\]。
 
-**重要**
+**重要**仅在`format`为`opus`时支持使用该参数。
 
-仅在`format`为`opus`时支持使用该参数。
+**说明**`bit_rate`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-**说明**
-
-`bit_rate`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -546,7 +489,7 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
     .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -570,11 +513,9 @@ boolean
 
 仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
-**说明**
+**说明**`enable_aigc_tag`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`enable_aigc_tag`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -585,7 +526,7 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
     .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -608,11 +549,9 @@ String
 
 仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
-**说明**
+**说明**`aigc_propagator`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`aigc_propagator`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -624,7 +563,7 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
     .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 Map<String, Object> map = new HashMap<>();
@@ -651,11 +590,9 @@ String
 
 仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
-**说明**
+**说明**`aigc_propagate_id`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`aigc_propagate_id`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -667,7 +604,7 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
     .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 Map<String, Object> map = new HashMap<>();
@@ -690,14 +627,12 @@ Map
 
 文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
 
-qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v2不支持该功能。
+cosyvoice-v2不支持该功能。
 
 参数介绍：
 
 -   pronunciation：自定义发音。指定词语的拼音标注，用于纠正默认发音不准确的情况。
-    
 -   replace：文本替换。在语音合成前将指定词语替换为目标文本，替换后的文本将作为实际合成内容。
-    
 
 示例：
 
@@ -712,11 +647,9 @@ qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v2不支持该功
 }
 ```
 
-**说明**
+**说明**`hot_fix`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`hot_fix`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 Map<String, Object> hotFix = new HashMap<>();
@@ -741,7 +674,7 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
     .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 // 构建hotFix对象同上
@@ -759,9 +692,7 @@ boolean
 
 否
 
-**重要**
-
-仅cosyvoice-v3-flash复刻音色支持该功能。
+**重要**仅cosyvoice-v3-flash复刻音色支持该功能。
 
 是否启用 Markdown 过滤。启用该功能后，系统在合成语音前自动过滤输入文本中的 Markdown 标记符号，避免将其朗读为文字内容。
 
@@ -770,15 +701,11 @@ boolean
 取值范围：
 
 -   true：启用Markdown过滤
-    
 -   false：禁用Markdown过滤
-    
 
-**说明**
+**说明**`enable_markdown_filter`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`enable_markdown_filter`需要通过`HttpSpeechSynthesisParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -789,7 +716,7 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
     .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
@@ -800,22 +727,18 @@ HttpSpeechSynthesisParam param = HttpSpeechSynthesisParam.builder()
     .build();
 ```
 
-## **示例代码**
+## 示例代码
 
 以下示例展示Qwen-Audio-TTS/CosyVoice语音合成的非流式和流式调用方式。运行前请确保已设置环境变量`DASHSCOPE_API_KEY`。
 
-**重要**
+**重要**不同模型版本需使用对应版本的音色。例如`cosyvoice-v3-flash`和`cosyvoice-v3-plus`使用`longanyang`等音色，`cosyvoice-v2`使用`longxiaochun_v2`等音色。更换模型时请同步更换为对应版本的音色。此外，每个音色支持的语言不同，合成非中文语言时，需选择支持对应语言的音色。具体的模型与音色对应关系，请参见CosyVoice音色列表。
 
-不同模型版本需使用对应版本的音色。例如`cosyvoice-v3-flash`和`cosyvoice-v3-plus`使用`longanyang`等音色，`cosyvoice-v2`使用`longxiaochun_v2`等音色。更换模型时请同步更换为对应版本的音色。此外，每个音色支持的语言不同，合成非中文语言时，需选择支持对应语言的音色。具体的模型与音色对应关系，请参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)。
-
-### **非流式调用**
+### 非流式调用
 
 非流式调用会等待服务端合成完成后一次性返回结果。根据返回类型的不同，提供以下两种方式：
 
 -   `callAndReturnAudio()`：返回音频二进制数据（ByteBuffer），适用于直接保存或处理音频的场景。
-    
 -   `call()`：返回音频URL，适用于需要通过URL下载音频的场景。
-    
 
 ```
 import com.alibaba.dashscope.audio.http_tts.AudioInfo;
@@ -825,6 +748,7 @@ import com.alibaba.dashscope.audio.http_tts.HttpSpeechSynthesizer;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.utils.Constants;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -847,7 +771,7 @@ public class CosyVoiceSyncExample {
             HttpSpeechSynthesisParam.builder()
                 .model("qwen-audio-3.0-tts-flash")  // 更换模型时，需同步更换为对应版本的音色
                 .text("我家的后面有一个很大的花园。")
-                .voice("longanhuan_v3.6")  // 该音色适用于qwen-audio-3.0-tts系列，cosyvoice-v3请使用longanyang等v3音色，cosyvoice-v2请使用longxiaochun_v2等v2音色
+                .voice("longanhuan_v3.6")  // 该音色适用于qwen-audio-3.0-tts-flash；qwen-audio-3.0-tts-plus请使用longanlingxin、longanlufeng，cosyvoice-v3请使用longanhuan等v3音色，cosyvoice-v2请使用longxiaochun_v2等v2音色
                 .format("wav")
                 .sampleRate(24000)
                 // 未配置环境变量时，将下行替换为：apiKey("sk-xxx")，即替换为实际的API Key
@@ -887,7 +811,7 @@ public class CosyVoiceSyncExample {
             HttpSpeechSynthesisParam.builder()
                 .model("qwen-audio-3.0-tts-flash")  // 更换模型时，需同步更换为对应版本的音色
                 .text("我家的后面有一个很大的花园。")
-                .voice("longanhuan_v3.6")  // 该音色适用于qwen-audio-3.0-tts系列，cosyvoice-v3请使用longanyang等v3音色，cosyvoice-v2请使用longxiaochun_v2等v2音色
+                .voice("longanhuan_v3.6")  // 该音色适用于qwen-audio-3.0-tts-flash；qwen-audio-3.0-tts-plus请使用longanlingxin、longanlufeng，cosyvoice-v3请使用longanhuan等v3音色，cosyvoice-v2请使用longxiaochun_v2等v2音色
                 .format("wav")
                 .sampleRate(24000)
                 // 未配置环境变量时，将下行替换为：apiKey("sk-xxx")，即替换为实际的API Key
@@ -918,7 +842,7 @@ public class CosyVoiceSyncExample {
 }
 ```
 
-### **流式调用**
+### 流式调用
 
 流式调用通过回调函数分片返回音频数据，无需等待合成完成即可开始处理，适用于对首包延迟有要求的实时播放场景。
 
@@ -930,6 +854,7 @@ import com.alibaba.dashscope.common.ResultCallback;
 import com.alibaba.dashscope.exception.ApiException;
 import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.utils.Constants;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -948,7 +873,7 @@ public class CosyVoiceStreamExample {
                 HttpSpeechSynthesisParam.builder()
                         .model("qwen-audio-3.0-tts-flash")  // 更换模型时，需同步更换为对应版本的音色
                         .text("今天天气真好，适合出去玩。")
-                        .voice("longanhuan_v3.6")  // 该音色适用于qwen-audio-3.0-tts系列，cosyvoice-v3请使用longanyang等v3音色，cosyvoice-v2请使用longxiaochun_v2等v2音色
+                        .voice("longanhuan_v3.6")  // 该音色适用于qwen-audio-3.0-tts-flash；qwen-audio-3.0-tts-plus请使用longanlingxin、longanlufeng，cosyvoice-v3请使用longanhuan等v3音色，cosyvoice-v2请使用longxiaochun_v2等v2音色
                         .format("wav")
                         .sampleRate(24000)
                         // 未配置环境变量时，将下行替换为：apiKey("sk-xxx")，即替换为实际的API Key

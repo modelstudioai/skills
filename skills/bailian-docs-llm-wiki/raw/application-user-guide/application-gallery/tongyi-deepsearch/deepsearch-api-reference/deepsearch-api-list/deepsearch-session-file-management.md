@@ -2,17 +2,17 @@
 
 深度搜索应用支持按 session\_id 维护对话文件目录树：可基于临时文件ID和文件/目录元信息更新目录树，也可删除文件并获取目录树信息，该能力仅适用于法律阅卷场景。
 
-## **更新session文件**
+## 更新session文件
 
 支持创建 session\_id 维度文件目录树信息，增强模型在特定场景下对文件的理解能力，需要基于已解析成功的临时动态文件 ID、目录及文件元信息自行构建。
 
-### **请求语法**
+### 请求语法
 
 ```
 POST /deep-search-agent/session/files/upsert HTTP/1.1
 ```
 
-### **请求参数**
+### 请求参数
 
 **参数名**
 
@@ -110,7 +110,7 @@ object
 
 配置参数，该接口下留空 {}
 
-### **返回参数**
+### 返回参数
 
 **参数名**
 
@@ -184,30 +184,30 @@ bool
 
 更新处理状态
 
-### **示例**
+### 示例
 
-#### **请求示例**
+#### 请求示例
 
 ```
 {
     "input": {
         "session_id": "18220***66b3",
         "files":[
-    		{
+            {
                 "file_id": "file_session_e93***17301",
                 "file_name": "测试文档.txt",
                 "file_path": "评测/测试文档.txt",
                 "type": "file",
                 "index_order": 0
             }
-    	]
+        ]
     },
     "parameters": {
     }
 }
 ```
 
-#### **返回示例**
+#### 返回示例
 
 ```
 {
@@ -216,13 +216,13 @@ bool
     "output": {
         "request_id": "bbe29140-766b-4caf-8558-2c703d9cb641",
         "result": {
-            "status": true              
+            "status": true
         }
     }
 }
 ```
 
-## **删除session文件**
+## 删除session文件
 
 支持删除 session\_id 维度文件目录树中的文件信息
 
@@ -230,13 +230,13 @@ bool
 
 支持删除 session\_id 维度文件目录树信息。
 
-### **请求语法**
+### 请求语法
 
 ```
 POST /deep-search-agent/session/files/delete HTTP/1.1
 ```
 
-### **请求参数**
+### 请求参数
 
 **参数名**
 
@@ -302,7 +302,7 @@ object
 
 配置参数，该接口下留空 {}
 
-### **返回参数**
+### 返回参数
 
 **参数名**
 
@@ -376,24 +376,24 @@ bool
 
 更新处理状态
 
-### **示例**
+### 示例
 
-#### **请求示例**
+#### 请求示例
 
 ```
 {
     "input": {
         "session_id": "18220***66b3",
         "file_ids":[
-    		"file_session_e93***17301"
-    	]
+            "file_session_e93***17301"
+        ]
     },
     "parameters": {
     }
 }
 ```
 
-#### **返回示例**
+#### 返回示例
 
 ```
 {
@@ -402,23 +402,23 @@ bool
     "output": {
         "request_id": "bbe29140-766b-4caf-8558-2c703d9cb641",
         "result": {
-            "status": true              
+            "status": true
         }
     }
 }
 ```
 
-## **获取session文件**
+## 获取session文件
 
 支持获取 session\_id 维度文件目录树信息。
 
-### **请求语法**
+### 请求语法
 
 ```
 POST /deep-search-agent/session/files/list HTTP/1.1
 ```
 
-### **请求参数**
+### 请求参数
 
 **参数名**
 
@@ -484,7 +484,7 @@ object
 
 配置参数，该接口下留空 {}
 
-### **返回参数**
+### 返回参数
 
 **参数名**
 
@@ -606,9 +606,9 @@ int
 
 排序
 
-### **示例**
+### 示例
 
-#### **请求示例**
+#### 请求示例
 
 ```
 {
@@ -622,7 +622,7 @@ int
 }
 ```
 
-#### **返回示例**
+#### 返回示例
 
 ```
 {
@@ -632,15 +632,15 @@ int
         "request_id": "bbe29140-766b-4caf-8558-2c703d9cb641",
         "result": {
             "total": 0,
-            "files": []              
+            "files": []
         }
     }
 }
 ```
 
-## **调用示例**
+## 调用示例
 
-Python
+python
 
 ```
 import os
@@ -737,7 +737,7 @@ if __name__ == "__main__":
         exit(1)
 ```
 
-Java
+java
 
 ```
 import com.alibaba.fastjson.JSON;

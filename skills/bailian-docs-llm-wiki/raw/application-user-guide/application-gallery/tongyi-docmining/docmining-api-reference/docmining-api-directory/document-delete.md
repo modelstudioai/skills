@@ -2,13 +2,13 @@
 
 本文为您介绍通义数据挖掘文档删除API的语法及示例。
 
-## **请求语法**
+## 请求语法
 
 ```
 POST /zhiwen-file/delete_file HTTP/1.1
 ```
 
-## **请求参数**
+## 请求参数
 
 **名称**
 
@@ -30,7 +30,7 @@ string
 
 file\_zhiwen\_XXX
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -62,11 +62,11 @@ string
 
 响应消息
 
-## **示例**
+## 示例
 
-### **调用示例**
+### 调用示例
 
-Python
+python
 
 ```
 import os
@@ -98,7 +98,7 @@ else:
     print(f'code={response.status_code}')
 ```
 
-Java
+java
 
 ```
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -172,7 +172,7 @@ public class FileDeleteDemo {
 }
 ```
 
-### **正常返回示例**
+### 正常返回示例
 
 `JSON`格式
 
@@ -185,6 +185,6 @@ public class FileDeleteDemo {
 }
 ```
 
-## **错误码**
+## 错误码
 
-请参见[错误码-通义数据挖掘](https://help.aliyun.com/zh/model-studio/docmining-error-code)。
+请参见[错误码-通义数据挖掘](raw/application-user-guide/application-gallery/tongyi-docmining/docmining-api-reference/docmining-error-code.md)。

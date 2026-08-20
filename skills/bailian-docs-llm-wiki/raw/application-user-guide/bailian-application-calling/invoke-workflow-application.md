@@ -1,34 +1,26 @@
 # 调用工作流应用
 
-本文档主要介绍如何通过 DashScope SDK 或 HTTP API，快速、高效地将阿里云百炼**工作流应用**集成到业务系统中。
+本文档主要介绍如何通过 DashScope SDK 或 HTTP API，快速、高效地将阿里云百炼 工作流应用 集成到业务系统中。
 
-> 如需使用 Responses API 调用，请参阅 [Responses API](https://help.aliyun.com/zh/model-studio/openai-responses-api/)。
+> 如需使用 Responses API 调用，请参阅 [Responses API](https://help.aliyun.com/zh/model-studio/openai-responses-api)。
 
-**重要**
+**重要**本文档仅适用于华北2（北京）地域。
 
-本文档仅适用于华北2（北京）地域。
+**说明**百炼工作流不支持使用文生图大模型。
 
-**说明**
-
-百炼工作流不支持使用文生图大模型。
-
-## **前提条件**
+## 前提条件
 
 开始前，请确保您已完成以下操作：
 
-1.  已[获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-    
-2.  已创建[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)，并在[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面的应用卡片上获取 APP\_ID。
-    
-3.  若通过DashScope SDK调用，需要[安装DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk#f3e80b21069aa)。
-    
+1.  已[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
+2.  已创建[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)，并在[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面的应用卡片上获取 APP\_ID。
+3.  若通过DashScope SDK调用，需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-## **快速开始**
+## 快速开始
 
-### Python
+#### Python
 
 **请求示例**
-
 ```
 import os
 from http import HTTPStatus
@@ -47,17 +39,14 @@ if response.status_code != HTTPStatus.OK:
 else:
     print(response.output.text)
 ```
-
 **响应示例**
-
 ```
 我是阿里云开发的一款超大规模语言模型，我叫千问。我被设计用来帮助用户生成各种类型的文本，如文章、故事、诗歌、故事等，并能根据不同的场景和需求进行调整和优化。此外，我还能够回答各种问题，提供信息和解释，辅助学习和研究。如果您有任何需要，欢迎随时向我提问！
 ```
 
-### Java
+#### Java
 
 **请求示例**
-
 ```
 // 建议dashscope SDK的版本 >= 2.12.0
 import com.alibaba.dashscope.app.*;
@@ -93,19 +82,16 @@ public class Main {
     }
 }
 ```
-
 **响应示例**
-
 ```
 text: 我是阿里云开发的一款超大规模语言模型，我叫千问。
 ```
 
-### HTTP
+#### HTTP
 
 #### curl
 
 **请求示例**
-
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -122,7 +108,6 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 > APP\_ID替换为实际的应用 ID。
 
 **响应示例**
-
 ```
 {"output":{"finish_reason":"stop",
 "session_id":"232ea2e9e6ef448db6b14465c06a9a56",
@@ -134,7 +119,6 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 #### PHP
 
 **请求示例**
-
 ```
 <?php
 
@@ -197,15 +181,13 @@ else {
         echo "request_id={$response_data['request_id']}\n";}
     echo "code={$status_code}\n";
     if (isset($response_data['message'])) {
-        echo "message={$response_data['message']}\n";} 
+        echo "message={$response_data['message']}\n";}
     else {
         echo "message=Unknown error\n";}
 }
 ?>
 ```
-
 **响应示例**
-
 ```
 我是来自阿里云的超大规模语言模型，我叫千问。
 ```
@@ -213,13 +195,10 @@ else {
 #### Node.js
 
 **需安装相关依赖：**
-
 ```
 npm install axios
 ```
-
 **请求示例**
-
 ```
 const axios = require('axios');
 
@@ -264,9 +243,7 @@ async function callDashScope() {
 
 callDashScope();
 ```
-
 **响应示例**
-
 ```
 我是来自阿里云的大规模语言模型，我叫千问。
 ```
@@ -274,7 +251,6 @@ callDashScope();
 #### C#
 
 **请求示例**
-
 ```
 using System;
 using System.Net.Http;
@@ -285,7 +261,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        //若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。 
+        //若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
         string apiKey = Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY") ?? throw new InvalidOperationException("DASHSCOPE_API_KEY environment variable is not set.");
         string appId = "APP_ID"; // 替换为实际的应用ID
 
@@ -330,9 +306,7 @@ class Program
     }
 }
 ```
-
 **响应示例**
-
 ```
 {
     "output": {
@@ -356,7 +330,6 @@ class Program
 #### Go
 
 **请求示例**
-
 ```
 package main
 
@@ -433,9 +406,7 @@ func main() {
 	}
 }
 ```
-
 **响应示例**
-
 ```
 {
     "output": {
@@ -456,17 +427,17 @@ func main() {
 }
 ```
 
-## **多轮对话**
+## 多轮对话
 
 相比于单轮对话，多轮对话可以让大模型参考历史对话信息，更符合日常交流的场景。
 
-**使用** `**session_id**`
+**使用**`session_id`
 
 系统会自动从云端加载存储的对话历史，并结合`prompt`指令生成上下文。实现简单，无需维护。
 
 > `session_id` 有效期为 1 小时，最多支持 50 轮对话。
 
-**自行管理** `**messages**`**（推荐）**
+**自行管理**`messages`**（推荐）**
 
 自行维护一个 `messages` 数组，手动记录和传递每一轮的对话历史及新指令。无需传递`prompt`。控制上下文，更灵活。
 
@@ -474,12 +445,11 @@ func main() {
 
 在**大模型节点**配置提示词变量`historyList`并**发布**应用后，发起 API 调用。
 
-#### **云端存储**
+#### 云端存储
 
-## Python
+#### Python
 
 **请求示例**
-
 ```
 import os
 from http import HTTPStatus
@@ -517,9 +487,7 @@ def call_with_session():
 if __name__ == '__main__':
     call_with_session()
 ```
-
 **响应示例**
-
 ```
 我具备多种技能，可以协助你完成各种任务。以下是一些主要的技能：
 
@@ -537,10 +505,9 @@ if __name__ == '__main__':
  session_id=98ceb3ca0c4e4b05a20a00f913050b42
 ```
 
-## Java
+#### Java
 
 **请求示例**
-
 ```
 import com.alibaba.dashscope.app.*;
 import com.alibaba.dashscope.exception.ApiException;
@@ -581,9 +548,7 @@ public class Main {
     }
 }
 ```
-
 **响应示例**
-
 ```
 我具备多项技能，可以为您提供多种帮助。以下是一些主要的技能：
 
@@ -599,12 +564,11 @@ public class Main {
  session_id: f2e94a980a34424fa25be45a7048d77c
 ```
 
-## HTTP
+#### HTTP
 
-## curl
+#### curl
 
 **请求示例（上一轮对话）**
-
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -617,9 +581,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
     "debug": {}
 }'
 ```
-
 **响应示例**
-
 ```
 {
     "output": {
@@ -639,9 +601,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
     "request_id": "e571b14a-423f-9278-8d1e-d86c418801e0"
 }
 ```
-
 **请求示例（下一轮对话）**
-
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -655,9 +615,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
     "debug": {}
 }'
 ```
-
 **响应示例**
-
 ```
 {
     "output": {
@@ -689,10 +647,9 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 }
 ```
 
-## PHP
+#### PHP
 
 **请求示例（上一轮对话）**
-
 ```
 <?php
 # 若没有配置环境变量，可用百炼API Key将下行替换为：$api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
@@ -757,22 +714,18 @@ if ($status_code == 200) {
         echo "request_id={$response_data['request_id']}\n";}
     echo "code={$status_code}\n";
     if (isset($response_data['message'])) {
-        echo "message={$response_data['message']}\n";} 
+        echo "message={$response_data['message']}\n";}
     else {
         echo "message=Unknown error\n";}
 }
 ?>
 ```
-
 **响应示例**
-
 ```
 我是来自阿里云的超大规模语言模型，我叫通义千问。
 session_id=2e658bcb514f4d30ab7500b4766a8d43
 ```
-
 **请求示例（下一轮对话）**
-
 ```
 <?php
 # 若没有配置环境变量，可用百炼API Key将下行替换为：$api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
@@ -839,15 +792,13 @@ if ($status_code == 200) {
         echo "request_id={$response_data['request_id']}\n";}
     echo "code={$status_code}\n";
     if (isset($response_data['message'])) {
-        echo "message={$response_data['message']}\n";} 
+        echo "message={$response_data['message']}\n";}
     else {
         echo "message=Unknown error\n";}
 }
 ?>
 ```
-
 **响应示例**
-
 ```
 我具备多项技能，包括但不限于：
 
@@ -863,16 +814,13 @@ if ($status_code == 200) {
 session_id=2e658bcb514f4d30ab7500b4766a8d43
 ```
 
-## Node.js
+#### Node.js
 
 **需安装相关依赖：**
-
 ```
 npm install axios
 ```
-
 **请求示例（上一轮对话）**
-
 ```
 const axios = require('axios');
 
@@ -917,16 +865,12 @@ async function callDashScope() {
 }
 callDashScope();
 ```
-
 **响应示例**
-
 ```
 我是通义千问，由阿里云开发的人工智能助手。我可以回答各种问题、提供信息和与用户进行对话。有什么我可以帮助你的吗？
 session_id=fe4ce8b093bf46159ea9927a7b22f0d3
 ```
-
 **请求示例（下一轮对话）**
-
 ```
 const axios = require('axios');
 
@@ -972,9 +916,7 @@ async function callDashScope() {
 }
 callDashScope();
 ```
-
 **响应示例**
-
 ```
 我具备多种技能，可以帮助你处理不同的任务和问题。以下是一些主要的技能领域：
 
@@ -990,10 +932,9 @@ callDashScope();
 session_id=fe4ce8b093bf46159ea9927a7b22f0d3
 ```
 
-## C#
+#### C#
 
 **请求示例（上一轮对话）**
-
 ```
 using System;
 using System.Net.Http;
@@ -1004,7 +945,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        //若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。 
+        //若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
         string apiKey = Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY") ?? throw new InvalidOperationException("DASHSCOPE_API_KEY environment variable is not set.");
         string appId = "APP_ID"; // 替换为实际的应用ID
 
@@ -1049,9 +990,7 @@ class Program
     }
 }
 ```
-
 **响应示例**
-
 ```
 {
     "output": {
@@ -1071,9 +1010,7 @@ class Program
     "request_id": "53691ae5-be17-96c6-a830-8f0f92329028"
 }
 ```
-
 **请求示例（下一轮对话）**
-
 ```
 using System;
 using System.Net.Http;
@@ -1084,7 +1021,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        //若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。 
+        //若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
         string apiKey = Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY") ?? throw new InvalidOperationException("DASHSCOPE_API_KEY environment variable is not set.");
         string appId = "APP_ID"; // 替换为实际的应用ID
 
@@ -1130,9 +1067,7 @@ class Program
     }
 }
 ```
-
 **响应示例**
-
 ```
 {
     "output": {
@@ -1162,10 +1097,9 @@ class Program
 }
 ```
 
-## Go
+#### Go
 
 **请求示例（上一轮对话）**
-
 ```
 package main
 
@@ -1242,9 +1176,7 @@ func main() {
 	}
 }
 ```
-
 **响应示例**
-
 ```
 {
     "output": {
@@ -1264,9 +1196,7 @@ func main() {
     "request_id": "fa65e14a-ab63-95b2-aa43-035bf5c51835"
 }
 ```
-
 **请求示例（下一轮对话）**
-
 ```
 package main
 
@@ -1344,9 +1274,7 @@ func main() {
 	}
 }
 ```
-
 **响应示例**
-
 ```
 {
     "output": {
@@ -1377,12 +1305,11 @@ func main() {
 
 > APP\_ID替换为实际的应用 ID。下一轮对话的输入参数`session_id`字段值替换为实际上一轮对话返回的session\_id值。
 
-#### **自行管理**
+#### 自行管理
 
-##### **Python**
+#### Python
 
 **请求示例**
-
 ```
 # dashscope SDK的版本需 >= 1.20.14
 import os
@@ -1409,9 +1336,7 @@ if response.status_code != HTTPStatus.OK:
 else:
     print('%s\n' % (response.output.text))
 ```
-
 **响应示例**
-
 ```
 作为通义千问，我可以帮助你完成多种任务，包括但不限于：
 
@@ -1425,10 +1350,9 @@ else:
 总之，我的目标是成为你工作和生活中的得力助手。如果你有任何具体的需求，请随时告诉我！
 ```
 
-##### **Java**
+#### Java
 
 **请求示例**
-
 ```
 // dashscope SDK的版本需 >= 2.17.0
 import java.util.ArrayList;
@@ -1474,9 +1398,7 @@ public class Main {
     }
 }
 ```
-
 **响应示例**
-
 ```
 text: 我可以帮助你完成多种任务，包括但不限于：
 
@@ -1490,19 +1412,18 @@ text: 我可以帮助你完成多种任务，包括但不限于：
 如果你有任何具体的需求，请随时告诉我！
 ```
 
-##### **HTTP**
+#### HTTP
 
-##### **curl**
+#### curl
 
 **请求示例**
-
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json' \
 --data '{
     "input": {
-        "messages":[      
+        "messages":[
             {
                 "role": "system",
                 "content": "You are a helpful assistant."
@@ -1525,9 +1446,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
     "debug": {}
 }'
 ```
-
 **响应示例**
-
 ```
 {"output":
 {"finish_reason":"stop","session_id":"990ca89d89794826976d7499ad10cddb",
@@ -1535,10 +1454,9 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 "usage":{"models":[{"output_tokens":126,"model_id":"qwen-max","input_tokens":86}]},"request_id":"3908c4a3-8d7a-9e51-81a5-0fc366582990"}%
 ```
 
-##### **PHP**
+#### PHP
 
 **请求示例**
-
 ```
 <?php
 # 若没有配置环境变量，可用百炼API Key将下行替换为：$api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
@@ -1627,9 +1545,7 @@ if ($status_code == 200) {
 }
 ?>
 ```
-
 **响应示例**
-
 ```
 我可以帮助你完成多种任务，比如：
 
@@ -1641,16 +1557,13 @@ if ($status_code == 200) {
 如果你有任何需要帮助的地方，都可以告诉我哦！
 ```
 
-##### **Node.js**
+#### Node.js
 
 **需安装相关依赖：**
-
 ```
 npm install axios
 ```
-
 **请求示例**
-
 ```
 const axios = require('axios');
 async function callDashScope() {
@@ -1662,7 +1575,7 @@ async function callDashScope() {
 
     const data = {
         "input": {
-        "messages":[      
+        "messages":[
             {
                 "role": "system",
                 "content": "You are a helpful assistant."
@@ -1711,9 +1624,7 @@ async function callDashScope() {
 
 callDashScope();
 ```
-
 **响应示例**
-
 ```
 可以帮助你完成多种任务，包括但不限于：
 
@@ -1727,10 +1638,9 @@ callDashScope();
 如果你有任何具体的需求，请随时告诉我！
 ```
 
-##### **C#**
+#### C#
 
 **请求示例**
-
 ```
 using System.Text;
 
@@ -1748,7 +1658,7 @@ class Program
         }
 
         string url = $"https://dashscope.aliyuncs.com/api/v1/apps/{appId}/completion";
-        
+
         using (HttpClient client = new HttpClient())
         {
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
@@ -1803,9 +1713,7 @@ class Program
     }
 }
 ```
-
 **响应示例**
-
 ```
 {
     "output": {
@@ -1826,10 +1734,9 @@ class Program
 }
 ```
 
-##### **Go**
+#### Go
 
 **请求示例**
-
 ```
 package main
 
@@ -1923,9 +1830,7 @@ func main() {
 	}
 }
 ```
-
 **响应示例**
-
 ```
 {
     "output": {
@@ -1946,43 +1851,37 @@ func main() {
 }
 ```
 
-## **流式输出**
+## 流式输出
 
 大模型接收输入后，逐步生成中间结果并实时输出，这种方式称为流式输出，可让您在模型生成过程中即时查看内容，减少等待时间。
 
 根据调用方式的不同，设置相应参数即可启用流式输出：
 
 -   Python SDK方式：设置`stream`参数为`True`。
-    
 -   Java SDK方式：使用`streamCall`方法。
-    
 -   HTTP方式：在`Header`中指定`X-DashScope-SSE`为`enable`。
-    
 
 流式输出的内容默认是非增量式（即每次返回的内容都包含之前生成的内容），如需增量输出，请设置相应参数：
 
--   Python SDK方式：设置 `incremental_output`参数为`True`。
-    
--   Java SDK方式：使用 `incrementalOutput` 方法并设置为 `true`。
-    
--   HTTP方式：在 `parameters` 中使用 `incremental_output`参数并设置为`true`。
-    
+-   Python SDK方式：设置 `incremental_output`参数为`True`。
+-   Java SDK方式：使用 `incrementalOutput` 方法并设置为 `true`。
+-   HTTP方式：在 `parameters` 中使用 `incremental_output`参数并设置为`true`。
 
-#### **流式输出模式**
+#### 流式输出模式
 
 工作流应用通过`flow_stream_mode`参数控制流式输出模式，参数值如下：
 
-`**message_format_plus**`**（推荐）**
+`message_format_plus`**（推荐）**
 
 消息增强模式。在`workflow_message`字段流式返回**所有节点**的执行过程和结果，覆盖全部节点类型。与`message_format`返回相同数据结构。
 
 > Python SDK 版本至少为1.24.0，Java SDK 版本至少为2.22.18。
 
-`**message_format**`**（推荐）**
+`message_format`**（推荐）**
 
 消息模式。在`message`字段结构化的流式返回**指定节点**的执行结果。必要条件：需在控制台为目标节点开启**流式输出**开关。
 
-`**full_thoughts**`（默认，不推荐）
+`full_thoughts`（默认，不推荐）
 
 完整思考模式。在`thoughts`字段流式返回**所有节点**的执行详情，适用于调试。
 
@@ -1990,7 +1889,7 @@ func main() {
 
 不推荐新业务使用，建议改用`message_format`或`message_format_plus`。
 
-## message\_format\_plus模式
+#### message\_format\_plus模式
 
 消息增强模式。覆盖所有节点类型，通过`workflow_message`字段流式返回各节点的执行状态和结果。与`message_format`模式返回相同的数据结构，但支持全部节点类型的流式推送。
 
@@ -1999,14 +1898,11 @@ func main() {
 **客户端处理规则：**
 
 -   所有节点的`message.content`均为增量输出，需**追加拼接**。部分节点（如开始节点、变量替换等）仅推送一次数据包。
-    
 -   当`node_is_completed=true`时，标记该节点执行完毕。
-    
 
-## HTTP
+#### HTTP
 
 **请求示例**
-
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/apps/YOUR_APP_ID/completion' \
 --header 'X-DashScope-SSE: enable' \
@@ -2021,7 +1917,6 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/apps/YOUR_APP_ID/completi
     }
 }'
 ```
-
 **响应示例**
 
 以下为多条 SSE 事件的响应示例，展示工作流从开始到结束的完整推送过程：
@@ -2058,10 +1953,9 @@ event:result
 data:{"output":{"session_id":"3d46d9a4ae...","finish_reason":"stop","text":"你好呀！有什么可以帮您的吗？"},"usage":{"models":[{"input_tokens":15,"output_tokens":50,"model_id":"qwen-plus-latest"}]},"request_id":"0e241c2b-..."}
 ```
 
-## Python
+#### Python
 
 **请求示例**
-
 ```
 # Python SDK版本至少为1.24.0
 from http import HTTPStatus
@@ -2090,10 +1984,9 @@ if __name__ == '__main__':
     call_workflow_plus()
 ```
 
-## Java
+#### Java
 
 **请求示例**
-
 ```
 // Java SDK版本至少为2.22.18
 import com.alibaba.dashscope.app.*;
@@ -2121,14 +2014,13 @@ public class WorkflowPlusExample {
 }
 ```
 
-## message\_format模式
+#### message\_format模式
 
 通过API调用**已发布**的**工作流应用**：配置结束节点打开**流式输出**开关。
 
-## Python
+#### Python
 
 **请求示例**
-
 ```
 # Python SDK版本至少为1.24.0
 from http import HTTPStatus
@@ -2154,14 +2046,12 @@ def bailianTask():
             if response.output.finish_reason != "stop":
                 print(f'workflowMessage={response.output.workflow_message}\n')
             else:
-                print(f'text={response.output.text}\n')  
+                print(f'text={response.output.text}\n')
 
 if __name__ == "__main__":
     bailianTask()
 ```
-
 **响应示例**
-
 ```
 workflowMessage={'node_status': 'executing', 'node_type': 'End', 'node_msg_seq_id': 1, 'node_name': '结束', 'message': {'content': '我是', 'role': 'assistant'}, 'node_is_completed': False, 'node_id': 'End_7w1V'}
 
@@ -2188,10 +2078,9 @@ workflowMessage={'node_status': 'success', 'node_type': 'End', 'node_msg_seq_id'
 text=我是通义千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
-## Java
+#### Java
 
 **请求示例**
-
 ```
 //Java SDK版本至少为2.21.0
 import com.alibaba.dashscope.app.*;
@@ -2239,9 +2128,7 @@ public class Main {
     }
 }
 ```
-
 **响应示例**
-
 ```
 我是
 通义千问，阿里巴巴集团
@@ -2255,12 +2142,11 @@ public class Main {
 task is finished ,text = 我是通义千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！
 ```
 
-## HTTP
+#### HTTP
 
-## curl
+#### curl
 
 **请求示例**
-
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion' \
 --header 'X-DashScope-SSE: enable' \
@@ -2276,9 +2162,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion' \
     "debug": {}
 }'
 ```
-
 **响应示例**
-
 ```
 id:1
 event:result
@@ -2336,10 +2220,9 @@ event:result
 data:{"output":{"session_id":"0a6aff53d8e945e4900452f04d55499b","finish_reason":"stop","text":"我是通义千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！"},"usage":{},"request_id":"88878d48-097f-99c3-b6b9-b76f7366da90"}
 ```
 
-## PHP
+#### PHP
 
 **请求示例**
-
 ```
 <?php
 
@@ -2355,7 +2238,7 @@ $data = [
         'prompt' => '你是谁？'
     ],
     "parameters" => [
-        'flow_stream_mode' => 'message_format', 
+        'flow_stream_mode' => 'message_format',
     ]
 ];
 // 将数据编码为 JSON
@@ -2402,9 +2285,7 @@ if ($status_code != 200) {
 }
 ?>
 ```
-
 **响应示例**
-
 ```
 id:1
 event:result
@@ -2462,16 +2343,13 @@ event:result
 data:{"output":{"session_id":"45e68c1f3d19467b91f032c9889d61c4","finish_reason":"stop","text":"我是通义千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！"},"usage":{},"request_id":"1f077942-e1c1-9d0c-82f2-31f1112b3e1c"}
 ```
 
-## Node.js
+#### Node.js
 
 **需安装相关依赖：**
-
 ```
 npm install axios
 ```
-
 **请求示例**
-
 ```
 const axios = require('axios');
 
@@ -2485,7 +2363,7 @@ async function callDashScope() {
     const data = {
         input: {
             prompt: "你是谁？"
- 
+
         },
         parameters: {
             "flow_stream_mode" : "message_format"
@@ -2543,9 +2421,7 @@ async function callDashScope() {
 
 callDashScope();
 ```
-
 **响应示例**
-
 ```
 Request successful:
 Received chunk: id:1
@@ -2611,10 +2487,9 @@ data:{"output":{"session_id":"9830d3f2390f4a0e995ddb17bbe406ed","finish_reason":
 Stream ended.
 ```
 
-## C#
+#### C#
 
 **请求示例**
-
 ```
 using System.Net;
 using System.Text;
@@ -2637,7 +2512,7 @@ class Program
                     ""prompt"": ""你是谁？""
                 },
                 ""parameters"": {
-                    ""flow_stream_mode"": ""message_format"" 
+                    ""flow_stream_mode"": ""message_format""
                     },
                 ""debug"": {}
             }";
@@ -2651,7 +2526,6 @@ class Program
                 request.Content = content;
 
                 HttpResponseMessage response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-                
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -2687,9 +2561,7 @@ class Program
     }
 }
 ```
-
 **响应示例**
-
 ```
 2025-07-23 10:43:12:090
 Request successful:
@@ -2713,10 +2585,9 @@ Request successful:
 {"output":{"session_id":"20ef9ae27ee64d1dacfdb532963a5a93","finish_reason":"stop","text":"我是通义千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！"},"usage":{},"request_id":"dcff0825-07c8-9dce-bc8b-a8a565c546c1"}
 ```
 
-## Go
+#### Go
 
 **请求示例**
-
 ```
 package main
 
@@ -2789,9 +2660,7 @@ func main() {
 	}
 }
 ```
-
 **响应示例**
-
 ```
 id:1
 event:result
@@ -2854,18 +2723,15 @@ event:result
 data:{"output":{"session_id":"fc3b6fd2c7664e92841ba040fc1bc2ef","finish_reason":"stop","text":"我是通义千问，阿里巴巴集团旗下的通义实验室自主研发的超大规模语言模型。我可以帮助你回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。如果你有任何问题或需要帮助，欢迎随时告诉我！"},"usage":{},"request_id":"b1f7dc74-e0b7-9329-a6fc-603916f57310"}
 ```
 
-## **full\_thoughts模式**
+#### full\_thoughts模式
 
-**说明**
-
-不推荐新业务使用，建议改用`message_format`或`message_format_plus`。
+**说明**不推荐新业务使用，建议改用`message_format`或`message_format_plus`。
 
 通过API调用**已发布**的**工作流应用**：开始节点配置`city`参数，两个大模型节点分别对`city`的美食和景点进行流式输出。
 
-## Python
+#### Python
 
 **请求示例**
-
 ```
 import os
 from http import HTTPStatus
@@ -2895,9 +2761,7 @@ for response in responses:
     else:
         print(f'{response.output.thoughts}\n')  # 处理输出只返回thoughts；在output的thoughts字段中返回过程信息
 ```
-
 **响应示例**
-
 ```
 [ApplicationThought(thought=None, action_type=None, response='{"nodeName":"开始","nodeType":"Start","nodeStatus":"success","nodeId":"Start_bYxoRU","nodeExecTime":"0ms"}', action_name=None, action=None, action_input_stream=None, action_input=None, observation=None), ApplicationThought(thought=None, action_type=None, response='{"nodeName":"LLM_Ilo9","nodeResult":"{\\"result\\":\\"\\"}","nodeType":"LLM","nodeStatus":"executing","nodeId":"LLM_Ilo9"}', action_name=None, action=None, action_input_stream=None, action_input=None, observation=None)]
 
@@ -2924,10 +2788,9 @@ for response in responses:
 [ApplicationThought(thought=None, action_type=None, response='{"nodeName":"开始","nodeType":"Start","nodeStatus":"success","nodeId":"Start_bYxoRU","nodeExecTime":"0ms"}', action_name=None, action=None, action_input_stream=None, action_input=None, observation=None), ApplicationThought(thought=None, action_type=None, response='{"nodeName":"大模型_Bsvj","nodeResult":"{\\"result\\":\\"\\"}","nodeType":"LLM","nodeStatus":"success","nodeId":"LLM_Ilo9","nodeExecTime":"1332ms"}', action_name=None, action=None, action_input_stream=None, action_input=None, observation=None), ApplicationThought(thought=None, action_type=None, response='{"nodeName":"大模型_kBgf","nodeResult":"{\\"result\\":\\"\\"}","nodeType":"LLM","nodeStatus":"success","nodeId":"LLM_vQDv","nodeExecTime":"948ms"}', action_name=None, action=None, action_input_stream=None, action_input=None, observation=None), ApplicationThought(thought=None, action_type=None, response='{"nodeName":"结束","nodeResult":"{\\"result\\":\\"西湖,灵隐寺,宋城,西溪湿地,千岛湖\\"}","nodeType":"End","nodeStatus":"success","nodeId":"End_DrQn7F","nodeExecTime":"1ms"}', action_name=None, action=None, action_input_stream=None, action_input=None, observation=None)]
 ```
 
-## Java
+#### Java
 
 **请求示例**
-
 ```
 // 建议dashscope SDK的版本 >= 2.15.0
 import com.alibaba.dashscope.app.*;
@@ -2969,9 +2832,7 @@ public class Main {
     }
 }
 ```
-
 **响应示例**
-
 ```
 [ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"开始","nodeType":"Start","nodeStatus":"success","nodeId":"Start_bYxoRU","nodeExecTime":"0ms"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null), ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"LLM_S78u","nodeResult":"{\"result\":\"\"}","nodeType":"LLM","nodeStatus":"executing","nodeId":"LLM_S78u"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null)]
 [ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"开始","nodeType":"Start","nodeStatus":"success","nodeId":"Start_bYxoRU","nodeExecTime":"0ms"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null), ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"大模型_UTh7","nodeResult":"{\"result\":\"西湖醋鱼,\"}","nodeType":"LLM","nodeStatus":"executing","nodeId":"LLM_S78u"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null)]
@@ -2986,12 +2847,11 @@ public class Main {
 [ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"开始","nodeType":"Start","nodeStatus":"success","nodeId":"Start_bYxoRU","nodeExecTime":"0ms"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null), ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"大模型_UTh7","nodeResult":"{\"result\":\"\"}","nodeType":"LLM","nodeStatus":"success","nodeId":"LLM_S78u","nodeExecTime":"1164ms"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null), ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"大模型_jjc0","nodeResult":"{\"result\":\"\"}","nodeType":"LLM","nodeStatus":"success","nodeId":"LLM_5ZzA","nodeExecTime":"938ms"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null), ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"结束","nodeResult":"{\"result\":\"西湖,灵隐寺,宋城,西溪湿地,千岛湖\"}","nodeType":"End","nodeStatus":"success","nodeId":"End_DrQn7F","nodeExecTime":"5ms"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null)]
 ```
 
-## HTTP
+#### HTTP
 
-## curl
+#### curl
 
 **请求示例**
-
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 --header 'X-DashScope-SSE: enable' \
@@ -3014,7 +2874,6 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 > APP\_ID替换为实际的应用 ID。
 
 **响应示例**
-
 ```
 id:1
 event:result
@@ -3077,10 +2936,9 @@ event:result
 data:{"output":{"thoughts":[{"response":"{\"nodeName\":\"开始\",\"nodeType\":\"Start\",\"nodeStatus\":\"success\",\"nodeId\":\"Start_bYxoRU\",\"nodeExecTime\":\"0ms\"}"},{"response":"{\"nodeName\":\"大模型_1\",\"nodeResult\":\"{\\\"result\\\":\\\"\\\"}\",\"nodeType\":\"LLM\",\"nodeStatus\":\"success\",\"nodeId\":\"LLM_j45e\",\"nodeExecTime\":\"1167ms\"}"},{"response":"{\"nodeName\":\"大模型_2\",\"nodeResult\":\"{\\\"result\\\":\\\"杭州动物园\\\"}\",\"nodeType\":\"LLM\",\"nodeStatus\":\"success\",\"nodeId\":\"LLM_2Km9\",\"nodeExecTime\":\"1137ms\"}"},{"response":"{\"nodeName\":\"结束\",\"nodeResult\":\"{\\\"result\\\":\\\"亲，对我的介绍还满意吗\\\"}\",\"nodeType\":\"End\",\"nodeStatus\":\"success\",\"nodeId\":\"End_DrQn7F\",\"nodeExecTime\":\"1ms\"}"}],"session_id":"6035ee0814b64a9fb88346ecaf8b44bf","finish_reason":"stop","text":"亲，对我的介绍还满意吗"},"usage":{"models":[{"input_tokens":25,"output_tokens":21,"model_id":"qwen-max"},{"input_tokens":23,"output_tokens":17,"model_id":"qwen-max"}]},"request_id":"64825069-b3aa-93a7-bcf1-c66fe57111fd"}
 ```
 
-## PHP
+#### PHP
 
 **请求示例**
-
 ```
 <?php
 
@@ -3147,9 +3005,7 @@ if ($status_code != 200) {
 }
 ?>
 ```
-
 **响应示例**
-
 ```
 id:1
 event:result
@@ -3201,16 +3057,14 @@ event:result
 data:{"output":{"thoughts":[{"response":"{\"nodeName\":\"开始\",\"nodeType\":\"Start\",\"nodeStatus\":\"success\",\"nodeId\":\"Start_bYxoRU\",\"nodeExecTime\":\"0ms\"}"},{"response":"{\"nodeName\":\"大模型_Bsvj\",\"nodeResult\":\"{\\\"result\\\":\\\"\\\"}\",\"nodeType\":\"LLM\",\"nodeStatus\":\"success\",\"nodeId\":\"LLM_Ilo9\",\"nodeExecTime\":\"1486ms\"}"},{"response":"{\"nodeName\":\"大模型_kBgf\",\"nodeResult\":\"{\\\"result\\\":\\\",杭州塔\\\"}\",\"nodeType\":\"LLM\",\"nodeStatus\":\"success\",\"nodeId\":\"LLM_vQDv\",\"nodeExecTime\":\"899ms\"}"},{"response":"{\"nodeName\":\"结束\",\"nodeResult\":\"{\\\"result\\\":\\\"西湖,灵隐寺,宋城,西溪湿地,杭州塔\\\"}\",\"nodeType\":\"End\",\"nodeStatus\":\"success\",\"nodeId\":\"End_DrQn7F\",\"nodeExecTime\":\"0ms\"}"}],"session_id":"a3b73a6db84d444d8efdab2b2e754f52","finish_reason":"stop","text":"西湖,灵隐寺,宋城,西溪湿地,杭州塔"},"usage":{},"request_id":"795e98eb-5de3-969f-a9b5-5983d1b6d955"}
 ```
 
-## Node.js
+#### Node.js
 
 需安装相关依赖：
 
 ```
 npm install axios
 ```
-
 **请求示例**
-
 ```
 const axios = require('axios');
 
@@ -3285,9 +3139,7 @@ async function callDashScope() {
 
 callDashScope();
 ```
-
 **响应示例**
-
 ```
 /opt/homebrew/bin/node ./index.js
 Sending request to DashScope API...
@@ -3351,10 +3203,9 @@ data:{"output":{"thoughts":[{"response":"{\"nodeType\":\"Start\",\"nodeStatus\":
 Stream ended.
 ```
 
-## C#
+#### C#
 
 **请求示例**
-
 ```
 using System.Net;
 using System.Text;
@@ -3382,7 +3233,7 @@ class Program
                 },
                 ""parameters"": {
                     ""incremental_output"": true,
-                    ""has_thoughts"": true 
+                    ""has_thoughts"": true
                     },
                 ""debug"": {}
             }";
@@ -3396,7 +3247,6 @@ class Program
                 request.Content = content;
 
                 HttpResponseMessage response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-                
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -3432,9 +3282,7 @@ class Program
     }
 }
 ```
-
 **响应示例**
-
 ```
 2025-02-14 16:55:28:670
 Request successful:
@@ -3463,10 +3311,9 @@ Request successful:
 2025-02-14 16:55:31:751
 ```
 
-## Go
+#### Go
 
 **请求示例**
-
 ```
 package main
 
@@ -3543,9 +3390,7 @@ func main() {
 	}
 }
 ```
-
 **响应示例**
-
 ```
 Request successful:
 id:1
@@ -3625,60 +3470,55 @@ data:{"output":{"thoughts":[{"response":"{\"nodeType\":\"Start\",\"nodeStatus\":
 ```
 
 -   `thoughts`内每一项都是一个节点的执行详情，如下以一个LLM节点结果为例。
-    
-    ```
-    id:7
-    event:result
-    :HTTP_STATUS/200
-    data:
-    {
-        "output": {
-            "thoughts": [
-                {
-                    "response": "{\"nodeName\":\"开始\",\"nodeType\":\"Start\",\"nodeStatus\":\"success\",\"nodeId\":\"Start_bYxoRU\",\"nodeExecTime\":\"0ms\"}"
-                },
-                {
-                    "response": "{\"nodeName\":\"大模型_1\",\"nodeResult\":\"{\\\"result\\\":\\\"嫂鱼羹\\\"}\",\"nodeType\":\"LLM\",\"nodeStatus\":\"success\",\"nodeId\":\"LLM_j45e\",\"nodeExecTime\":\"1167ms\"}"
-                },
-                {
-                    "response": "{\"nodeName\":\"LLM_2Km9\",\"nodeResult\":\"{\\\"result\\\":\\\"\\\"}\",\"nodeType\":\"LLM\",\"nodeStatus\":\"executing\",\"nodeId\":\"LLM_2Km9\"}"
-                }
-            ],
-            "session_id": "6035ee0814b64a9fb88346ecaf8b44bf",
-            "finish_reason": "null"
-        },
-        "usage": {
-            "models": [
-                {
-                    "input_tokens": 25,
-                    "output_tokens": 21,
-                    "model_id": "qwen-max"
-                }
-            ]
-        },
-        "request_id": "64825069-b3aa-93a7-bcf1-c66fe57111fd"
-    }
-    ```
-    
-    > 如果用户关注一个LLM节点（以上方LLM\_j45e为例）的流式结果，可以关注每次推送的`thoughts`中nodeId为LLM\_j45e的节点输出。
-    
+
+```
+id:7
+event:result
+:HTTP_STATUS/200
+data:
+{
+    "output": {
+        "thoughts": [
+            {
+                "response": "{\"nodeName\":\"开始\",\"nodeType\":\"Start\",\"nodeStatus\":\"success\",\"nodeId\":\"Start_bYxoRU\",\"nodeExecTime\":\"0ms\"}"
+            },
+            {
+                "response": "{\"nodeName\":\"大模型_1\",\"nodeResult\":\"{\\\"result\\\":\\\"嫂鱼羹\\\"}\",\"nodeType\":\"LLM\",\"nodeStatus\":\"success\",\"nodeId\":\"LLM_j45e\",\"nodeExecTime\":\"1167ms\"}"
+            },
+            {
+                "response": "{\"nodeName\":\"LLM_2Km9\",\"nodeResult\":\"{\\\"result\\\":\\\"\\\"}\",\"nodeType\":\"LLM\",\"nodeStatus\":\"executing\",\"nodeId\":\"LLM_2Km9\"}"
+            }
+        ],
+        "session_id": "6035ee0814b64a9fb88346ecaf8b44bf",
+        "finish_reason": "null"
+    },
+    "usage": {
+        "models": [
+            {
+                "input_tokens": 25,
+                "output_tokens": 21,
+                "model_id": "qwen-max"
+            }
+        ]
+    },
+    "request_id": "64825069-b3aa-93a7-bcf1-c66fe57111fd"
+}
+```
+
+> 如果用户关注一个LLM节点（以上方LLM\_j45e为例）的流式结果，可以关注每次推送的`thoughts`中nodeId为LLM\_j45e的节点输出。
+
 -   如果节点发生失败，则整个任务也会失败。
-    
 
-### **深度思考**
+### 深度思考
 
-当工作流应用使用了[深度思考模型](https://help.aliyun.com/zh/model-studio/deep-thinking#5be853b164zv4)时，模型会在生成最终回复前进行一步或多步的推理，以提升处理复杂问题（如逻辑推理、代码生成、数学计算等）的准确性。
+当工作流应用使用了[深度思考模型](https://help.aliyun.com/zh/model-studio/deep-thinking)时，模型会在生成最终回复前进行一步或多步的推理，以提升处理复杂问题（如逻辑推理、代码生成、数学计算等）的准确性。
 
-**重要**
+**重要**工作流应用可包含多个大模型节点，思考模式需要在各大模型节点中分别设置，不支持通过 API 的`enable_thinking`参数动态控制。
 
-工作流应用可包含多个大模型节点，思考模式需要在各大模型节点中分别设置，不支持通过 API 的`enable_thinking`参数动态控制。
+#### 获取思考过程
 
-#### **获取思考过程**
-
--   在 API 调用时，将 has\_thoughts 设置为 true。
-    
+-   在 API 调用时，将 has\_thoughts 设置为 true。
 -   或在控制台应用内的流程输出节点或结束节点引用指定大模型节点的 reasoningContent 变量。
-    
 
 模型返回的数据将包含：
 
@@ -3688,10 +3528,9 @@ data:{"output":{"thoughts":[{"response":"{\"nodeType\":\"Start\",\"nodeStatus\":
 
 由于深度思考会增加响应时间，建议使用流式输出方式以获得更好的体验。示例如下：
 
-## Python
+#### Python
 
 **请求示例**
-
 ```
 import json
 from http import HTTPStatus
@@ -3733,7 +3572,7 @@ for chunk in response:
         print(f'message={chunk.message}')
         print(f'请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code')
         continue
-    
+
     # 跳过空数据块
     if not chunk.output or not chunk.output.thoughts:
         continue
@@ -3743,10 +3582,10 @@ for chunk in response:
         try:
             response_json = json.loads(thought.response)
             node_result = response_json.get('nodeResult', {})
-            
+
             if isinstance(node_result, str):
                 node_result = json.loads(node_result)
-            
+
             extracted_reasoning_content = node_result.get('reasoningContent', '')
             extracted_result = node_result.get('result', '')
             node_name = response_json.get('nodeName', '')
@@ -3755,7 +3594,7 @@ for chunk in response:
             if extracted_reasoning_content and not is_answering:
                 reasoning_content.append(extracted_reasoning_content)
                 print(extracted_reasoning_content, end="", flush=True)
-            
+
             # 处理回答内容
             if extracted_result and node_name != "结束":
                 answer_content.append(extracted_result)
@@ -3777,9 +3616,7 @@ final_answer = "".join(answer_content)
 # print_section("完整回复")
 # print(final_answer)
 ```
-
 **响应示例**
-
 ```
 ==================== 思考过程 ====================
 
@@ -3789,10 +3626,9 @@ final_answer = "".join(answer_content)
 您好！我是由中国的深度求索（DeepSeek）公司开发的智能助手DeepSeek-R1。如您有任何问题，我会尽我所能为您提供帮助。
 ```
 
-## Java
+#### Java
 
 **请求示例**
-
 ```
 // 建议dashscope SDK的版本 >= 2.15.0
 import com.alibaba.dashscope.app.*;
@@ -3835,9 +3671,7 @@ public class Main {
     }
 }
 ```
-
 **响应示例**
-
 ```
 [ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"开始","nodeType":"Start","nodeStatus":"success","nodeId":"Start_9SAz","nodeExecTime":"0ms"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null), ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"大模型1","nodeResult":"{\"result\":\"\"}","nodeType":"LLM","nodeStatus":"executing","nodeId":"LLM_T61i"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null), ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"结束","nodeResult":"{\"result\":\"\"}","nodeType":"End","nodeStatus":"executing","nodeId":"End_7w1V"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null)]
 [ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"开始","nodeType":"Start","nodeStatus":"success","nodeId":"Start_9SAz","nodeExecTime":"0ms"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null), ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"大模型1","nodeResult":"{\"result\":\"\",\"reasoningContent\":\"嗯\"}","nodeType":"LLM","nodeStatus":"executing","nodeId":"LLM_T61i"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null), ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"结束","nodeResult":"{\"result\":\"\"}","nodeType":"End","nodeStatus":"executing","nodeId":"End_7w1V"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null)]
@@ -4060,21 +3894,15 @@ public class Main {
 [ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"开始","nodeType":"Start","nodeStatus":"success","nodeId":"Start_9SAz","nodeExecTime":"0ms"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null), ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"大模型1","nodeResult":"{\"result\":\"\",\"reasoningContent\":\"\"}","nodeType":"LLM","nodeStatus":"success","nodeId":"LLM_T61i","nodeExecTime":"12936ms"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null), ApplicationOutput.Thought(thought=null, actionType=null, response={"nodeName":"结束","nodeResult":"{\"result\":\"\"}","nodeType":"End","nodeStatus":"success","nodeId":"End_7w1V","nodeExecTime":"12913ms"}, actionName=null, action=null, actionInputStream=null, actionInput=null, observation=null)]
 ```
 
-## curl
+#### curl
 
 -   APP\_ID替换为实际的应用ID。
-    
 -   如需直接传入 API Key，请将$DASHSCOPE\_API\_KEY 替换为您的 API Key。
-    
--   请指定Header中的 **X-DashScope-SSE** 为 **enable，**表示流式输出回复。
-    
+-   请指定Header中的 **X-DashScope-SSE**为 **enable，**表示流式输出回复。
 -   请在`parameters`对象中添加`has_thoughts`参数，表示是否返回思考过程，true：返回；false（默认值）：不返回。
-    
 -   请在`parameters`对象中添加`incremental_output`数，表示是否增量输出，true：增量输出；false（默认值）：非增量输出。
-    
 
 **请求示例**
-
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -4092,9 +3920,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
     "debug": {}
 }'
 ```
-
 **响应示例**
-
 ```
 id:1
 event:result
@@ -4132,16 +3958,15 @@ event:result
 data:{"output":{"thoughts":[{"action":"reasoning","thought":"","action_type":"reasoning","response":"","action_name":"思考过程"}],"session_id":"ea188f5f795a485f8956e3af0212ba29","finish_reason":"stop","text":""},"usage":{"models":[{"input_tokens":31,"output_tokens":324,"model_id":"deepseek-r1"}]},"request_id":"b4b0b65f-4378-93b6-8ca2-7936b2725bc8"}
 ```
 
-## **参数传递**
+## 参数传递
 
 若需让同一个工作流适配不同业务场景，可在 API 调用时，通过`biz_params`传递自定义参数。
 
 需在**开始节点**添加自定义参数（如城市名`city`），并在**提示词**中引用变量`city`和`query`，最后**发布**应用。
 
-## Python
+#### Python
 
 **请求示例**
-
 ```
 import os
 from http import HTTPStatus
@@ -4164,9 +3989,7 @@ if response.status_code != HTTPStatus.OK:
 else:
     print(f'{response.output.text}')  # 处理只输出文本text
 ```
-
 **响应示例**
-
 ```
 杭州市，作为浙江省的省会城市，其行政区域划分包括10个市辖区：上城区、拱墅区、西湖区、滨江区、萧山区、余杭区、临平区、钱塘区、富阳区、临安区。每个区都有其独特的特色和发展重点。
 
@@ -4184,10 +4007,9 @@ else:
 请注意，随着时间推移，具体的城市规划可能会有所变化，请参考最新的官方信息。
 ```
 
-## Java
+#### Java
 
 **请求示例**
-
 ```
 import com.alibaba.dashscope.app.*;
 import com.alibaba.dashscope.exception.ApiException;
@@ -4226,9 +4048,7 @@ public class Main {
     }
 }
 ```
-
 **响应示例**
-
 ```
 杭州市是浙江省的省会城市，其行政区域划分主要包括10个市辖区：上城区、拱墅区、西湖区、滨江区、萧山区、余杭区、临平区、钱塘区、富阳区、临安区。每个区都有自己的特色和发展重点。
 
@@ -4246,12 +4066,11 @@ public class Main {
 这些区域共同构成了杭州市独特的地理格局和社会经济结构。如果你对某个特定区域感兴趣或需要更详细的信息，请告诉我！
 ```
 
-## HTTP
+#### HTTP
 
-## curl
+#### curl
 
 **请求示例**
-
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -4269,7 +4088,6 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 > APP\_ID替换为实际的应用 ID。
 
 **响应示例**
-
 ```
 {"output":{"finish_reason":"stop","session_id":"c211219896004b50a1f6f66f2ec5413e",
 "text":"杭州市下辖10个区、1个县，代管2个县级市，分别为：
@@ -4278,10 +4096,9 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 "request_id":"02c3c9e1-7912-9505-91aa-248d04fb1f5d"}
 ```
 
-## PHP
+#### PHP
 
 **请求示例**
-
 ```
 <?php
 
@@ -4352,9 +4169,7 @@ if ($status_code == 200) {
     }
 }
 ```
-
 **响应示例**
-
 ```
 杭州市是浙江省的省会城市，其行政区域划分主要包括10个市辖区：上城区、拱墅区、西湖区、滨江区、萧山区、余杭区、临平区、钱塘区、富阳区、临安区。
 
@@ -4368,16 +4183,13 @@ if ($status_code == 200) {
 请注意，中国的行政区划可能会根据国家政策调整有所变化，请通过官方渠道获取最新信息。
 ```
 
-## Node.js
+#### Node.js
 
 **需安装相关依赖：**
-
 ```
 npm install axios
 ```
-
 **请求示例**
-
 ```
 const axios = require('axios');
 
@@ -4436,9 +4248,7 @@ async function callDashScope() {
 
 callDashScope();
 ```
-
 **响应示例**
-
 ```
 杭州市是浙江省的省会，其行政区域划分包括10个市辖区。具体如下：
 
@@ -4456,10 +4266,9 @@ callDashScope();
 以上信息反映了截至我最后更新时的情况，请注意行政区划可能会有所调整，请以官方发布的最新消息为准。
 ```
 
-## C#
+#### C#
 
 **请求示例**
-
 ```
 using System.Text;
 
@@ -4467,7 +4276,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        //若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。 
+        //若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
         string apiKey = Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY") ?? throw new InvalidOperationException("DASHSCOPE_API_KEY environment variable is not set.");
         string appId = "APP_ID"; // 替换为实际的应用ID
         string url = $"https://dashscope.aliyuncs.com/api/v1/apps/{appId}/completion";
@@ -4513,9 +4322,7 @@ class Program
     }
 }
 ```
-
 **响应示例**
-
 ```
 {
     "output": {
@@ -4530,10 +4337,9 @@ class Program
 }
 ```
 
-## Go
+#### Go
 
 **请求示例**
-
 ```
 package main
 
@@ -4613,9 +4419,7 @@ func main() {
 	}
 }
 ```
-
 **响应示例**
-
 ```
 {
     "output": {
@@ -4636,28 +4440,25 @@ func main() {
 }
 ```
 
-## **文件问答**
+## 文件问答
 
 在应用内上传文件，大模型可对文件内容进行问答。也可配置文件解析节点，使工作流能够接收并解析各类文件（如 文档、图片、视频、音频），提取内容用于后续的分析、总结或问答。
 
 1.  **构建支持文件问答的工作流**
     
-    1.  **配置开始节点**：在**开始**节点中，添加一个自定义参数，用于接收文件 URL。例如：将其命名为 `file_url`，类型选择 `File`（多文件可选择`Array[File]`）。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577255671/p1032582.png)
+    1.  **配置开始节点**：在**开始**节点中，添加一个自定义参数，用于接收文件 URL。例如：将其命名为 `file_url`，类型选择 `File`（多文件可选择`Array[File]`）。
         
-    2.  **（可选）添加解析节点**：添加一个合适的文件解析节点，并将`file_url`作为该节点的输入变量。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577255671/p1032583.png)
+    2.  **（可选）添加解析节点**：添加一个合适的文件解析节点，并将`file_url`作为该节点的输入变量。
         
     3.  **配置大模型节点：**
-        
-        -   **引用解析输出变量**：如果配置了解析节点，可将其文本输出变量（如 `markdownContent`、`ASRInfo`等）添加到后续节点（如**大模型节点**）中，以便对文件内容进行处理。
-            
+        -   **引用解析输出变量**：如果配置了解析节点，可将其文本输出变量（如 `markdownContent`、`ASRInfo`等）添加到后续节点（如**大模型节点**）中，以便对文件内容进行处理。
         -   **引用自定义变量：**在**大模型节点**的**提示词**中引用**开始节点**的自定义变量并填写提示词。
-            
     4.  **发布应用**：检查节点配置，测试无误后，**发布**工作流应用。
         
     
     > **注意**：传入的文件 URL 必须是公网可直接访问的。
     
-    > **相关文档**：[工作流应用节点说明](https://help.aliyun.com/zh/model-studio/workflow-application/)。
+    > **相关文档**：[工作流应用节点说明](raw/application-user-guide/llm-application/workflow-application.md)。
     
 2.  **调用应用**
     
@@ -4665,16 +4466,15 @@ func main() {
     
     1.  **通过控制台测试**
         
-        在应用详情页的**测试**窗，进入入参变量配置，为 `file_url` 参数上传**本地文件**或**粘贴文件 URL**，进行快速测试。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8577255671/p1032595.png)
+        在应用详情页的**测试**窗，进入入参变量配置，为 `file_url` 参数上传**本地文件**或**粘贴文件 URL**，进行快速测试。
         
     2.  **通过 API 调用**
         
         在 API 请求中，通过 `biz_params` 字段传递文件 URL。`biz_params` 中的键名必须与您在**开始**节点中设置的参数名（本例中为 `file_url`）完全一致。
         
-        ## Python
+        #### Python
         
         **请求示例**
-        
         ```
         """
         阿里云百炼 Application SDK 调用示例（流式输出）
@@ -4686,7 +4486,7 @@ func main() {
         # 若没有配置环境变量，可替换为：api_key="sk-xxx"
         # 但不建议在生产环境中硬编码 API Key
         responses = Application.call(
-            api_key=os.getenv("DASHSCOPE_API_KEY"), 
+            api_key=os.getenv("DASHSCOPE_API_KEY"),
             app_id='APP_ID',  # 替换为实际的应用 ID
             prompt='一句话总结文件内容',
             stream=True,           # 流式输出
@@ -4706,7 +4506,7 @@ func main() {
                 #     {"url": "https://www.berkshirehathaway.com/letters/2024ltr.pdf", "name": "文件1.pdf"},
                 #     {"url": "https://www.berkshirehathaway.com/letters/2024ltr.pdf", "name": "文件2.pdf"}
                 # ]
-            } 
+            }
         )
         
         # 处理流式响应
@@ -4722,17 +4522,14 @@ func main() {
         
         print()  # 换行
         ```
-        
         **响应示例**
-        
         ```
         该文件内容仅为一句欢迎语：“欢迎你使用阿里云。”
         ```
         
-        ## Java
+        #### Java
         
         **请求示例**
-        
         ```
         import com.alibaba.dashscope.app.*;
         import com.alibaba.dashscope.exception.ApiException;
@@ -4770,10 +4567,10 @@ func main() {
                         .build();
         
                 Application application = new Application();
-                
+        
                 // 流式输出
                 Flowable<ApplicationResult> result = application.streamCall(param);
-                
+        
                 result.blockingForEach(data -> {
                     if (data.getOutput() != null && data.getOutput().getText() != null) {
                         System.out.print(data.getOutput().getText());
@@ -4783,19 +4580,16 @@ func main() {
             }
         }
         ```
-        
         **响应示例**
-        
         ```
         该文件内容仅为一句欢迎语："欢迎你使用阿里云。"
         ```
         
-        ## HTTP
+        #### HTTP
         
-        ## curl
+        #### curl
         
         **请求示例**
-        
         ```
         #!/bin/bash
         # 若没有配置环境变量，可用百炼API Key将下行替换为：API_KEY="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
@@ -4819,9 +4613,7 @@ func main() {
             }
           }'
         ```
-        
         **响应示例**
-        
         ```
         id:1
         event:result
@@ -4874,10 +4666,9 @@ func main() {
         data:{"output":{"session_id":"dd52a93f1a124d9e89f40315636ef232","finish_reason":"stop","text":"该文件内容仅为一句欢迎语：“欢迎你使用阿里云。”"},"usage":{"models":[{"input_tokens":39,"output_tokens":14,"model_id":"qwen-plus-latest"}]},"request_id":"f8d6803a-d5c3-4d1b-bcd2-c1f78759157b"}
         ```
         
-        ## PHP
+        #### PHP
         
         **请求示例**
-        
         ```
         <?php
         // 若没有配置环境变量，可用百炼API Key将下行替换为：$apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
@@ -4948,17 +4739,14 @@ func main() {
         echo "\n";
         ?>
         ```
-        
         **响应示例**
-        
         ```
         该文件内容仅为一句欢迎语：“欢迎你使用阿里云。”
         ```
         
-        ## Node.js
+        #### Node.js
         
         **请求示例**
-        
         ```
         import https from 'https';
         
@@ -5004,12 +4792,12 @@ func main() {
         const req = https.request(options, (res) => {
             res.setEncoding('utf8');
             let buffer = '';
-            
+        
             res.on('data', (chunk) => {
                 buffer += chunk;
                 const lines = buffer.split('\n');
                 buffer = lines.pop() || '';
-                
+        
                 for (const line of lines) {
                     const trimmedLine = line.trim();
                     if (trimmedLine.startsWith('data:')) {
@@ -5059,17 +4847,14 @@ func main() {
         req.write(postData);
         req.end();
         ```
-        
         **响应示例**
-        
         ```
         该文件内容仅为一句欢迎语："欢迎你使用阿里云。"
         ```
         
-        ## C#
+        #### C#
         
         **请求示例**
-        
         ```
         using System;
         using System.Net.Http;
@@ -5082,7 +4867,7 @@ func main() {
             // 应用ID替换APP_ID
             private static readonly string AppId = "APP_ID";
             private static readonly string ApiUrl = $"https://dashscope.aliyuncs.com/api/v1/apps/{AppId}/completion";
-            
+        
             static async Task Main(string[] args)
             {
                 // 若没有配置环境变量，可用百炼API Key将下行替换为：apiKey = "sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
@@ -5127,7 +4912,7 @@ func main() {
                 try
                 {
                     var response = await client.PostAsync(ApiUrl, content);
-                    
+        
                     if (!response.IsSuccessStatusCode)
                     {
                         Console.WriteLine($"code={(int)response.StatusCode}");
@@ -5138,7 +4923,7 @@ func main() {
         
                     using var stream = await response.Content.ReadAsStreamAsync();
                     using var reader = new System.IO.StreamReader(stream);
-                    
+        
                     string? line;
                     while ((line = await reader.ReadLineAsync()) != null)
                     {
@@ -5171,151 +4956,146 @@ func main() {
             }
         }
         ```
-        
         **响应示例**
-        
         ```
         该文件内容仅为一句欢迎语："欢迎你使用阿里云。"
         ```
         
-        ## Go
+        #### Go
         
         **请求示例**
-        
         ```
         package main
         
         import (
-        	"bufio"
-        	"bytes"
-        	"encoding/json"
-        	"fmt"
-        	"net/http"
-        	"os"
-        	"strings"
+           "bufio"
+           "bytes"
+           "encoding/json"
+           "fmt"
+           "net/http"
+           "os"
+           "strings"
         )
         
         const appId = "APP_ID" // 应用ID替换APP_ID
         
         type RequestBody struct {
-        	Input      Input      `json:"input"`
-        	Parameters Parameters `json:"parameters"`
+           Input      Input      `json:"input"`
+           Parameters Parameters `json:"parameters"`
         }
         
         type Input struct {
-        	Prompt    string    `json:"prompt"`
-        	BizParams BizParams `json:"biz_params"`
+           Prompt    string    `json:"prompt"`
+           BizParams BizParams `json:"biz_params"`
         }
         
         type BizParams struct {
-        	FileUrl FileUrl `json:"file_url"`
+           FileUrl FileUrl `json:"file_url"`
         }
         
         type FileUrl struct {
-        	URL string `json:"url"`
+           URL string `json:"url"`
         }
         
         type Parameters struct {
-        	IncrementalOutput bool `json:"incremental_output"` // 增量输出
+           IncrementalOutput bool `json:"incremental_output"` // 增量输出
         }
         
         type ResponseBody struct {
-        	Output struct {
-        		Text string `json:"text"`
-        	} `json:"output"`
-        	RequestID string `json:"request_id"`
+           Output struct {
+               Text string `json:"text"`
+           } `json:"output"`
+           RequestID string `json:"request_id"`
         }
         
         func main() {
-        	// 若没有配置环境变量，可用百炼API Key将下行替换为：apiKey := "sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
-        	apiKey := os.Getenv("DASHSCOPE_API_KEY")
-        	if apiKey == "" {
-        		fmt.Println("错误: 请设置环境变量 DASHSCOPE_API_KEY")
-        		os.Exit(1)
-        	}
+           // 若没有配置环境变量，可用百炼API Key将下行替换为：apiKey := "sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
+           apiKey := os.Getenv("DASHSCOPE_API_KEY")
+           if apiKey == "" {
+               fmt.Println("错误: 请设置环境变量 DASHSCOPE_API_KEY")
+               os.Exit(1)
+           }
         
-        	apiUrl := "https://dashscope.aliyuncs.com/api/v1/apps/" + appId + "/completion"
+           apiUrl := "https://dashscope.aliyuncs.com/api/v1/apps/" + appId + "/completion"
         
-        	requestBody := RequestBody{
-        		Input: Input{
-        			Prompt: "一句话总结文件内容",
-        			BizParams: BizParams{
-        				FileUrl: FileUrl{
-        					URL: "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3",
-        				},
-        			},
-        		},
-        		Parameters: Parameters{
-        			IncrementalOutput: true,
-        		},
-        	}
+           requestBody := RequestBody{
+               Input: Input{
+                   Prompt: "一句话总结文件内容",
+                   BizParams: BizParams{
+                       FileUrl: FileUrl{
+                           URL: "https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3",
+                       },
+                   },
+               },
+               Parameters: Parameters{
+                   IncrementalOutput: true,
+               },
+           }
         
-        	jsonData, err := json.Marshal(requestBody)
-        	if err != nil {
-        		fmt.Printf("code=JSONError\nmessage=%v\n", err)
-        		os.Exit(1)
-        	}
+           jsonData, err := json.Marshal(requestBody)
+           if err != nil {
+               fmt.Printf("code=JSONError\nmessage=%v\n", err)
+               os.Exit(1)
+           }
         
-        	req, err := http.NewRequest("POST", apiUrl, bytes.NewBuffer(jsonData))
-        	if err != nil {
-        		fmt.Printf("code=RequestError\nmessage=%v\n", err)
-        		os.Exit(1)
-        	}
+           req, err := http.NewRequest("POST", apiUrl, bytes.NewBuffer(jsonData))
+           if err != nil {
+               fmt.Printf("code=RequestError\nmessage=%v\n", err)
+               os.Exit(1)
+           }
         
-        	req.Header.Set("Authorization", "Bearer "+apiKey)
-        	req.Header.Set("Content-Type", "application/json")
-        	req.Header.Set("X-DashScope-SSE", "enable") // 流式输出
+           req.Header.Set("Authorization", "Bearer "+apiKey)
+           req.Header.Set("Content-Type", "application/json")
+           req.Header.Set("X-DashScope-SSE", "enable") // 流式输出
         
-        	client := &http.Client{}
-        	resp, err := client.Do(req)
-        	if err != nil {
-        		fmt.Printf("code=NetworkError\nmessage=%v\n", err)
-        		fmt.Println("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
-        		os.Exit(1)
-        	}
-        	defer resp.Body.Close()
+           client := &http.Client{}
+           resp, err := client.Do(req)
+           if err != nil {
+               fmt.Printf("code=NetworkError\nmessage=%v\n", err)
+               fmt.Println("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+               os.Exit(1)
+           }
+           defer resp.Body.Close()
         
-        	if resp.StatusCode != http.StatusOK {
-        		fmt.Printf("code=%d\n", resp.StatusCode)
-        		fmt.Println("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
-        	}
+           if resp.StatusCode != http.StatusOK {
+               fmt.Printf("code=%d\n", resp.StatusCode)
+               fmt.Println("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+           }
         
-        	scanner := bufio.NewScanner(resp.Body)
-        	for scanner.Scan() {
-        		line := scanner.Text()
-        		if strings.HasPrefix(line, "data:") {
-        			jsonStr := strings.TrimSpace(strings.TrimPrefix(line, "data:"))
-        			if jsonStr != "" && jsonStr != "[DONE]" {
-        				var response ResponseBody
-        				if err := json.Unmarshal([]byte(jsonStr), &response); err == nil {
-        					if response.Output.Text != "" {
-        						fmt.Print(response.Output.Text)
-        					}
-        				}
-        			}
-        		}
-        	}
+           scanner := bufio.NewScanner(resp.Body)
+           for scanner.Scan() {
+               line := scanner.Text()
+               if strings.HasPrefix(line, "data:") {
+                   jsonStr := strings.TrimSpace(strings.TrimPrefix(line, "data:"))
+                   if jsonStr != "" && jsonStr != "[DONE]" {
+                       var response ResponseBody
+                       if err := json.Unmarshal([]byte(jsonStr), &response); err == nil {
+                           if response.Output.Text != "" {
+                               fmt.Print(response.Output.Text)
+                           }
+                       }
+                   }
+               }
+           }
         
-        	if err := scanner.Err(); err != nil {
-        		fmt.Printf("\ncode=ReadError\nmessage=%v\n", err)
-        		fmt.Println("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
-        	}
-        	fmt.Println()
+           if err := scanner.Err(); err != nil {
+               fmt.Printf("\ncode=ReadError\nmessage=%v\n", err)
+               fmt.Println("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
+           }
+           fmt.Println()
         }
         ```
-        
         **响应示例**
-        
         ```
         该文件内容仅为一句欢迎语："欢迎你使用阿里云。"
         ```
         
 
-## **私网调用**
+私网调用
 
 为提高数据传输的安全性和效率，您可通过私网调用阿里云百炼平台的应用。
 
-1.  [创建终端节点](https://help.aliyun.com/zh/model-studio/access-model-studio-through-privatelink#b49f50b6202nn)：在阿里云控制台为您的VPC创建一个私网终端节点。
+1.  [创建终端节点](raw/model-user-guide/security-and-compliance/transmission-security/access-model-studio-through-privatelink.md)：在阿里云控制台为您的VPC创建一个私网终端节点。
     
 2.  **替换域名**：将API请求URL中的公网域名`dashscope.aliyuncs.com`替换为您获取到的私网终端节点服务域名。例如：
     
@@ -5323,7 +5103,7 @@ func main() {
     
 3.  发起请求：示例代码如下。
     
-    ### Python
+    #### Python
     
     ```
     import os
@@ -5346,7 +5126,7 @@ func main() {
         print(response.output.text)
     ```
     
-    ### Java
+    #### Java
     
     ```
     // 建议dashscope SDK的版本 >= 2.12.0
@@ -5363,7 +5143,7 @@ func main() {
                     .apiKey(System.getenv("DASHSCOPE_API_KEY"))
                     .appId("APP_ID")
                     .prompt("你是谁？")
-                    .build(); 
+                    .build();
             // 配置私网终端节点
             Application application = new Application("https://ep-2zei6917b47eed******.dashscope.cn-beijing.privatelink.aliyuncs.com/api/v1/");
             ApplicationResult result = application.call(param);
@@ -5384,7 +5164,7 @@ func main() {
     }
     ```
     
-    ### HTTP
+    #### HTTP
     
     这里给出curl代码示例。
     
@@ -5406,96 +5186,79 @@ func main() {
 
 ## API 参考
 
-应用调用的完整参数列表，请参考[工作流与旧版智能体应用 API](https://help.aliyun.com/zh/model-studio/agent-and-workflow-application-api-reference) 。
+应用调用的完整参数列表，请参考[工作流与旧版智能体应用 API应用 DashScope API 参考](https://help.aliyun.com/zh/model-studio/agent-and-workflow-application-api-reference) 。
 
-## **错误码**
+## 错误码
 
-如果调用失败并返回报错信息，请参阅[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果调用失败并返回报错信息，请参阅[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
-## **计费说明**
+## 计费说明
 
 工作流应用的计费基于其内部实际执行的**计费节点**（如大模型、知识库等）的调用量。
 
 -   **计费单元**：每个计费节点都有其独立的计费单位（例如，大模型节点按 Token 计费）。
-    
 -   **总费用**：一次工作流 API 调用的总费用，是该次执行路径上**所有计费节点产生的费用之和**。
-    
 
-## **相关文档**
+## 相关文档
 
 **了解应用构建和使用**
 
-如果你想了解工作流应用的更多配置信息，如节点说明、工作流的导入导出等，请参见[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)。
+如果你想了解工作流应用的更多配置信息，如节点说明、工作流的导入导出等，请参见[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)。
 
 **了解Prompt 辅助工具**
 
-关于应用内 Prompt 辅助工具的使用请参阅[Prompt工程](https://help.aliyun.com/zh/model-studio/use-prompt-engineering-to-communicate-with-large-models)。
+关于应用内 Prompt 辅助工具的使用请参阅[Prompt工程](raw/application-user-guide/prompt/prompt-template.md)。
 
 **了解文本转语音的方法**
 
-如需将模型回复的文本信息转成语音，请参见[实时语音合成-CosyVoice /Sambert](https://help.aliyun.com/zh/model-studio/text-to-speech)。
+如需将模型回复的文本信息转成语音，请参见[实时语音合成-CosyVoice /Sambert](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)。
 
 **了解进阶用法**
 
-如果您想使用 Responses API 调用应用，请参见[Responses API](https://help.aliyun.com/zh/model-studio/openai-responses-api/)。
+如果您想使用 Responses API 调用应用，请参见[Responses API](https://help.aliyun.com/zh/model-studio/openai-responses-api)。
 
 ## 常见问题
 
-**1.为什么我的工作流在控制台测试正常，但通过API调用时报错或结果不符合预期？**
+1.为什么我的工作流在控制台测试正常，但通过API调用时报错或结果不符合预期？
 
 通常由版本或参数不一致导致。请主要检查以下几点：
 
 -   **确认应用已发布**：API 调用的是您**最后一次发布**的工作流版本。任何在控制台保存但未发布的修改，都不会在 API 调用中生效。请确保您的修改已点击“发布”。
-    
--   **检查自定义参数 (**`**biz_params**`**)**：API 请求中 `biz_params` 的`键名`和`数据类型`必须与工作流**开始节点**中定义的参数完全一致。例如，如果在开始节点定义了名为 `city` 的字符串参数，API 调用时就必须传递 `{"city": "some_value"}`。
-    
--   **检查输入内容**：确认 API 调用的 `prompt` 或 `messages` 内容与您在控制台测试时输入的内容和格式保持一致，特别是当提示词中有特定格式要求时。
-    
+-   **检查自定义参数 (**`biz_params`**)**：API 请求中 `biz_params` 的`键名`和`数据类型`必须与工作流**开始节点**中定义的参数完全一致。例如，如果在开始节点定义了名为 `city` 的字符串参数，API 调用时就必须传递 `{"city": "some_value"}`。
+-   **检查输入内容**：确认 API 调用的 `prompt` 或 `messages` 内容与您在控制台测试时输入的内容和格式保持一致，特别是当提示词中有特定格式要求时。
 
-**2.运行Java代码示例时，如果出现类似“java: 程序包com.alibaba.dashscope.app不存在”的异常信息，应该怎么处理？**
+2.运行Java代码示例时，如果出现类似“java: 程序包com.alibaba.dashscope.app不存在”的异常信息，应该怎么处理？
 
 1.  检查导入语句中的类名和包名是否正确。
-    
 2.  添加依赖库：如果使用Maven或Gradle进行项目管理，确保DashScope Java SDK依赖库已经添加到`pom.xml`或`build.gradle`文件中，且为最新版本。您可以访问[Maven](https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java)获取DashScope Java SDK的最新版本号。
-    
-    XML
-    
-    ```
-    <!-- https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java -->
-    <dependency>
-        <groupId>com.alibaba</groupId>
-        <artifactId>dashscope-sdk-java</artifactId>
-        <version>在此处填写最新版本号，例如2.16.4</version>
-    </dependency>
-    ```
-    
-    Gradle
-    
-    ```
-    // https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java
-    implementation group: 'com.alibaba', name: 'dashscope-sdk-java', version: '在此处填写最新版本号，例如2.16.4'
-    ```
-    
+
+```
+<!-- https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java -->
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>dashscope-sdk-java</artifactId>
+    <version>在此处填写最新版本号，例如2.16.4</version>
+</dependency>
+```
+```
+// https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java
+implementation group: 'com.alibaba', name: 'dashscope-sdk-java', version: '在此处填写最新版本号，例如2.16.4'
+```
+
 3.  升级SDK：旧版本的DashScope Java SDK可能不包含您尝试使用的功能或类。如果您已经添加过依赖库DashScope Java SDK，请确认您所使用的DashScope Java SDK是否为最新版。如果当前版本较低，请将其升级至最新版本。在`pom.xml`或`build.gradle`文件中修改DashScope Java SDK的版本为最新版本。
-    
-    XML
-    
-    ```
-    <!-- https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java -->
-    <dependency>
-        <groupId>com.alibaba</groupId>
-        <artifactId>dashscope-sdk-java</artifactId>
-        <version>请将此处的版本号修改为最新版本</version>
-    </dependency>
-    ```
-    
-    Gradle
-    
-    ```
-    // https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java
-    implementation group: 'com.alibaba', name: 'dashscope-sdk-java', version: '请将此处的版本号修改为最新版本'
-    ```
-    
+
+```
+<!-- https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java -->
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>dashscope-sdk-java</artifactId>
+    <version>请将此处的版本号修改为最新版本</version>
+</dependency>
+```
+```
+// https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java
+implementation group: 'com.alibaba', name: 'dashscope-sdk-java', version: '请将此处的版本号修改为最新版本'
+```
+
 4.  重新加载项目使更改生效。
-    
 5.  重新运行代码示例。

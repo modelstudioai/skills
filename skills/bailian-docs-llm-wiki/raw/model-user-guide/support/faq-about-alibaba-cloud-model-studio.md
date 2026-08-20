@@ -6,19 +6,19 @@
 
 1.  **阿里云百炼平台中模型服务中各模型的收费单价是什么？**
     
-    模型介绍请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)，模型价格请参见[模型调用计费](https://help.aliyun.com/zh/model-studio/model-pricing)。
+    模型介绍请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)，模型价格请参见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
     
 2.  **模型部署的费用是如何计算的？**
     
-    请查看[模型部署计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing)。
+    请查看[模型部署计费](raw/model-user-guide/test-1/model-training-and-deployment-billing.md)。
     
 3.  **千问大模型训练单价计费是什么？**
     
-    请查看[模型训练计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing)。
+    请查看[模型训练计费](raw/model-user-guide/test-1/model-training-and-deployment-billing.md)。
     
 4.  **目前是否有预付费相关的服务？**
     
-    部分模型支持预付费服务，详情请参见[节省计划与资源包](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package)。
+    部分模型支持预付费服务，详情请参见[节省计划与资源包节省计划](raw/model-user-guide/test-1/savings-plan-and-resource-package.md)。
     
 5.  **后付费的账单是月结算吗？**
     
@@ -41,7 +41,7 @@
     不支持。万相会员与阿里云百炼的计费体系相互独立，万相会员权益不适用于百炼的API调用。
     
 
-## **API/SDK相关**
+## API/SDK相关
 
 1.  **Completion API 调用报错提示“参数缺失”，错误码“100004”，是什么问题？**
     
@@ -49,26 +49,27 @@
     
     **正确示例如下**：
     
-    ```
-    curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
-    --header 'Content-Type: application/json' \
-    --header 'Authorization: Bearer 85763*************cf050f' \
-    --data '{
-    "RequestId":"B8265C3E-9248-56C0-8665-A37A12F06F6B",
-    "AppId":"3cc760a7ef5d47d09255dd28b06b94d8",
-    "Prompt":"今天深圳天气如何？",
-    "User":"1",
-    "Bot":"1"
-    }'
-    ```
-    
+
+```
+curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer 85763*************cf050f' \
+--data '{
+"RequestId":"B8265C3E-9248-56C0-8665-A37A12F06F6B",
+"AppId":"3cc760a7ef5d47d09255dd28b06b94d8",
+"Prompt":"今天深圳天气如何？",
+"User":"1",
+"Bot":"1"
+}'
+```
+
 2.  **如何查看错误码信息？**
     
-    阿里云百炼模型服务的API调用将返回状态码以标识调用结果。详情及解决方案请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+    阿里云百炼模型服务的API调用将返回状态码以标识调用结果。详情及解决方案请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
     
 3.  **如何安装SDK?**
     
-    阿里云百炼目前支持Java和Python语言的SDK。详情请参见[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+    阿里云百炼目前支持Java和Python语言的SDK。详情请参见[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
     
 4.  **Assistant API 调用 function call ，用户需要依次调用两个本地函数，现在支持吗？**
     
@@ -85,7 +86,7 @@
     doc\_reference\_type 参数只在旧版本应用中生效，新版本应用中直接在应用操作页面开启展示答案来源按钮即可。请检查应用配置中**展示回答来源**开关是否已开启。若该开关处于关闭状态，`doc_reference_type` 参数设置将不会生效。
     
 
-## **产品相关**
+## 产品相关
 
 1.  **如何开通阿里云百炼服务？**
     
@@ -107,7 +108,7 @@
     
 5.  **我的产品接入了千问大模型，需要上架到微信小程序等其他应用商店，需要提供合作协议用于上架产品，应该怎么申请？**
     
-    a.备案号获取流程请查看[应用合规备案](https://help.aliyun.com/zh/model-studio/compliance-and-launch-filing-guide-for-ai-apps-powered-by-the-tongyi-model)；
+    a.备案号获取流程请查看[应用合规备案](raw/model-user-guide/security-and-compliance/compliance-and-launch-filing-guide-for-ai-apps-powered-by-the-tongyi-model.md)；
     
     b.如需申请千问系列模型的合作协议，请联系您的商务经理获取。如需商业化算法/模型备案指导服务，请前往[算法/模型备案咨询](https://page.aliyun.com/form/act1311146645/index.htm)页面提交申请。
     
@@ -134,11 +135,11 @@
      百炼目前没有提供官方的独立手机应用，主要通过Web控制台访问。
      
 
-## **模型中心**
+## 模型中心
 
 1.  **完形填空词的数据能作为训练题吗？**
     
-    可以的，可以通过上传训练集时，指定好问题内容及答案，引导大模型学习。可以点击[自定义模型最佳实践](https://help.aliyun.com/zh/model-studio/model-training-best-practices)参考。
+    可以的，可以通过上传训练集时，指定好问题内容及答案，引导大模型学习。可以点击[自定义模型最佳实践](raw/model-user-guide/use-cases/model-training-best-practices.md)参考。
     
 2.  **目前阿里云百炼只能训练文字吗？图片可以训练吗？**
     
@@ -158,7 +159,7 @@
     
 6.  **个人使用大模型训练时，qwen-turbo和qwen-max应该怎么选？**
     
-    qwen-turbo注重速度与资源效率，适合对响应速度和部署便捷性有较高要求的场景；qwen-max则聚焦顶级性能与全面知识，适用于对模型精度和处理复杂任务能力有严格要求的环境。其中qwen-turbo的费用要比qwen-max低。根据您的具体需求和条件权衡，选择最适合自己的模型版本。也可以查看模型介绍：[千问介绍](https://help.aliyun.com/zh/document_detail/2713153.html)了解具体差异。
+    qwen-turbo注重速度与资源效率，适合对响应速度和部署便捷性有较高要求的场景；qwen-max则聚焦顶级性能与全面知识，适用于对模型精度和处理复杂任务能力有严格要求的环境。其中qwen-turbo的费用要比qwen-max低。根据您的具体需求和条件权衡，选择最适合自己的模型版本。也可以查看模型介绍：[千问介绍](https://help.aliyun.com/zh/model-studio/text-generation)了解具体差异。
     
 7.  **模型训练中的自定义模型怎么上传？**
     
@@ -191,11 +192,8 @@
      为了准备高质量的领域SFT数据，请注意：
      
      -   **任务定义清晰**：避免同一个输入（prompt）对应模棱两可的答案。
-         
      -   **数据质量高**：答案应准确、简洁，直接回答问题，避免冗余和无关的“废话”。
-         
      -   **数据多样性**：同一语义可以用多种不同的prompt来表达，以避免模型只学会响应单一的模式。高质量的训练数据通常需要多次迭代优化。
-         
 14.  **在训练的时候发现，数据量少的情况下，比如100条左右，循环次数越大效果越好。但在数据量多的情况下比如1000条以上，循环次数越多越容易过拟合。请问这个超参配置和数据配比，有什么最佳实践？**
      
      为获得理想的模型效果，训练数据在保证高质量的同时应尽可能丰富，尤其是在处理复杂任务时。循环次数等超参数并无固定规律，需根据具体任务通过实验来确定。例如，在处理包含数千条数据的复杂任务时，训练通常需要20轮左右。另外，评估大模型不应仅通过损失（loss）判断是否过拟合。与传统模型不同，即便loss显示过拟合，大模型的实际效果仍可能提升，因此最终效果需以人工评估为准。
@@ -213,7 +211,7 @@
      qwen-plus-latest 是 qwen-plus 的最新版本，属于 Qwen3 系列，而非 Qwen3.5 或 Qwen3.7 系列。另外 Qwen3.5、Qwen3.7 等是独立的模型系列，与 Qwen3 系列并列，并非 Qwen3 的子版本。
      
 
-## **模型幻觉问题**
+## 模型幻觉问题
 
 1.  **什么是模型幻觉？**
     
@@ -224,19 +222,13 @@
     您可以通过以下方式降低模型幻觉的发生：
     
     1.  **选择更强的模型**：通常选择更大型、更高级的模型可以降低幻觉发生。例如在千问系列中，Max级别模型的效果优于Plus级别，Plus级别优于Turbo级别。
-        
     2.  **提示词工程**：修改prompt是操作简单且有效的降低模型幻觉的方式。例如在RAG场景中添加"请仅基于提供的文档回答，如果信息不足请说'我不知道'"；添加"请引用具体数据或报告支持你的结论"；通过prompt引导将任务分为多步；在prompt中设定严谨的角色等。
-        
     3.  **RAG（检索增强生成）**：利用RAG的能力，让模型的回复有所参考，并严格限制模型回答在检索到的知识范围内，可以显著降低幻觉。构建RAG系统时，需要确保检索系统高质量、清晰标注信息来源、优雅拒绝检索不到的情况。
-        
     4.  **插件/MCP**：利用插件或MCP的能力降低模型幻觉。例如利用大模型去总结结构化数据库中的数据时，可以通过插件/MCP调用数据库客户端完成数据计算，再将计算结果返回给模型做总结，避免模型直接处理数值计算时产生幻觉。
-        
     5.  **模型参数调优**：降低`temperature`、`top_k`、`top_p`等随机性参数，使输出更保守，避免离奇生成，但可能牺牲创造力。降低`max_tokens`在某些场景下可以防止模型回复关键信息后继续捏造内容。
-        
     6.  **后处理验证**：模型推理完成之后，通过后续步骤验证回复内容的正确性。通常是通过AI的能力再去校验一次回答过程是否有幻觉。该方法会增加成本并降低模型请求处理速度。
-        
 
-## **如何联系我们**
+## 如何联系我们
 
 1.  **如有业务合作方面的场景，应该怎么联系？**
     

@@ -4,17 +4,13 @@
 
 **相关指南**：[图像画面扩展](https://help.aliyun.com/zh/model-studio/image-expansion)
 
-**重要**
+**重要**本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
 
-本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
-
-**重要**
-
-阿里云百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
+**重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-## **模型概览**
+## 模型概览
 
 **模型名称**
 
@@ -22,7 +18,7 @@
 
 **限流（主账号与RAM子账号共享）**
 
-**免费额度**[（查看）](https://help.aliyun.com/zh/model-studio/new-free-quota)
+**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
 
 **任务下发接口QPS限制**
 
@@ -38,28 +34,173 @@ image-out-painting
 
 500张
 
-## **前提条件**
+## 前提条件
 
-您需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
 
-## **HTTP调用**
+## HTTP调用
 
 为了减少等待时间并且避免请求超时，服务采用异步方式提供。您需要发起两个请求：
 
 -   **步骤1：创建任务获取任务ID**：首先发送一个请求创建扩图任务，该请求会返回任务ID。
-    
 -   **步骤2：根据任务ID查询结果**：使用上一步获得的任务ID，查询模型生成的结果。
-    
 
-### **步骤1：创建任务获取任务ID**
+### 步骤1：创建任务获取任务ID
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/out-painting`
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### **请求头（Headers）**
+#### 请求头（Headers）
 
-## 旋转图像
+**Content-Type**`string`**（必选）**
+
+请求内容类型。此参数必须设置为`application/json`。
+
+**Authorization**`string`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+**X-DashScope-Async**`string`**（必选）**
+
+异步处理配置参数。HTTP请求只支持异步，**必须设置为**`enable`。
+
+**重要**缺少此请求头将报错：“current user api does not support synchronous calls”。
+
+#### 请求体（Request Body）
+
+**model**`string`**（必选）**
+
+模型名称。示例值：`image-out-painting`。
+
+**input**`object`**（必选）**
+
+输入图像的基本信息，比如图像URL地址。
+
+属性
+
+**image\_url** `string`**（必选）**
+
+图像URL地址或者图像base64数据。
+
+URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+
+图像限制：
+
+-   图像格式：JPG、JPEG、PNG、HEIF、WEBP。
+-   图像大小：不超过10MB。
+-   图像分辨率：不低于512×512像素且不超过4096×4096像素。
+-   图像单边长度范围：\[512, 4096\]，单位像素。
+
+**parameters**`object`**（必选）**
+
+设置输出图像的处理参数，如逆时针旋转角度、宽高比、扩展比例、四个方向像素填充等。
+
+属性
+
+**angle** `integer`（可选）
+
+逆时针旋转角度。默认值为0，取值范围\[0, 359\]，单位为度。
+
+更多内容请参见[参数使用说明](https://help.aliyun.com/zh/model-studio/image-scaling-api#014530f228d94)。
+
+**output\_ratio** `string`（可选）
+
+图像宽高比。可选值有\["","1:1", "3:4", "4:3", "9:16", "16:9"\]。默认值为""，表示不设置输出图像的宽高比。
+
+更多内容请参见[参数使用说明](https://help.aliyun.com/zh/model-studio/image-scaling-api#014530f228d94)。
+
+**x\_scale** `float`（可选）
+
+图像居中，在水平方向上按比例扩展图像。
+
+默认值为1.0，取值范围\[1.0, 3.0\]。
+
+您可以选择与y\_scale参数搭配使用，更多内容请参见[参数使用说明](https://help.aliyun.com/zh/model-studio/image-scaling-api#014530f228d94)。
+
+示例
+
+例如：输入图像分辨率为1000×1000（宽×高），x\_scale=2.0，扩展后的图像分辨率为2000×1000（宽×高）。保持高度不变，左右各添加500个像素。
+
+**y\_scale** `float`（可选）
+
+图像居中，在垂直方向上按比例扩展图像。
+
+默认值为1.0，取值范围\[1.0, 3.0\]。
+
+您可以选择与x\_scale参数搭配使用，更多内容请参见[参数使用说明](https://help.aliyun.com/zh/model-studio/image-scaling-api#014530f228d94)。
+
+示例
+
+例如：输入图像分辨率为1000×1000（宽×高），y\_scale=2.0，扩展后的图像分辨率为1000×2000（宽×高）。保持宽度不变，上下各添加500个像素。
+
+**top\_offset** `integer`（可选）
+
+在图像上方添加像素。
+
+默认值为0，取值限制`top_offset+bottom_offset < 3×输入图像高度`。
+
+您可以选择与bottom\_offset、left\_offset 、right\_offset参数搭配使用，更多内容请参见[参数使用说明](https://help.aliyun.com/zh/model-studio/image-scaling-api#014530f228d94)。
+
+示例
+
+例如：输入图像分辨率为1000×1000（宽×高），top\_offset=500，扩展后的图像分辨率为1000×1500（宽×高）。保持宽度不变，只在图像上方添加500个像素。
+
+**bottom\_offset** `integer`（可选）
+
+在图像下方添加像素。
+
+默认值为0，取值限制`top_offset+bottom_offset < 3×输入图像高度`。
+
+您可以选择与top\_offset、left\_offset 、right\_offset参数搭配使用，更多内容请参见[参数使用说明](https://help.aliyun.com/zh/model-studio/image-scaling-api#014530f228d94)。
+
+示例
+
+例如：输入图像分辨率为1000×1000（宽×高），bottom\_offset=500，扩展后的图像分辨率为1000×1500（宽×高）。保持宽度不变，只在图像下方添加500个像素。
+
+**left\_offset** `integer`（可选）
+
+在图像左侧添加像素。
+
+默认值为0，扩展限制`left_offset+right_offset < 3×输入图像宽度`。
+
+您可以选择与top\_offset、bottom\_offset、right\_offset参数搭配使用，更多内容请参见[参数使用说明](https://help.aliyun.com/zh/model-studio/image-scaling-api#014530f228d94)。
+
+示例
+
+例如：输入图像分辨率为1000×1000（宽×高），left\_offset=500，扩展后的图像分辨率为1500×1000（宽×高）。保持高度不变，只在图像左侧添加500个像素。
+
+**right\_offset** `integer`（可选）
+
+在图像右侧添加像素。
+
+默认值为0，扩展限制`left_offset+right_offset < 3×输入图像宽度`。
+
+您可以选择与top\_offset、bottom\_offset、left\_offset参数搭配使用，更多内容请参见[参数使用说明](https://help.aliyun.com/zh/model-studio/image-scaling-api#014530f228d94)。
+
+示例
+
+例如：输入图像分辨率为1000×1000（宽×高），right\_offset=500，扩展后的图像分辨率为1500×1000（宽×高）。保持高度不变，只在图像右侧添加500个像素。
+
+**best\_quality** `boolean`（可选）
+
+开启图像最佳质量模式。默认值为false，减少图像生成的等待时间。
+
+如果您需要更多图像细节，可以设置为true，但耗时会成倍增加。
+
+**limit\_image\_size** `boolean`（可选）
+
+限制模型生成的图像文件大小。默认值为true，当输入图像单边长度<=10000时，输出图像文件大小在5MB以下。
+
+输出图像的长宽比范围为`1:4至4:1`。
+
+**建议设置为true**。模型生成的图像需要经过一层安全过滤后才能输出，当前不支持大于10M的图像处理。
+
+**add\_watermark** `boolean`（可选）
+
+添加`Generated by AI`水印。默认值为True，在输出图像左下角处添加水印。
+
+旋转图像
 
 ```
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -80,7 +221,7 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 }'
 ```
 
-## 等比例扩图
+等比例扩图
 
 ```
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -102,7 +243,7 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 }'
 ```
 
-## 指定方向扩图
+指定方向扩图
 
 ```
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -124,7 +265,7 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 }'
 ```
 
-## 指定宽高比扩图
+指定宽高比扩图
 
 ```
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -146,162 +287,44 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 }'
 ```
 
-**Content-Type** `_string_` **（必选）**
+#### 响应
 
-请求内容类型。此参数必须设置为`application/json`。
+**output**_object_
 
-**Authorization** `_string_`**（必选）**
+任务输出信息。
 
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+属性
 
-**X-DashScope-Async** `_string_` **（必选）**
+**task\_id** `string`
 
-异步处理配置参数。HTTP请求只支持异步，**必须设置为**`**enable**`。
+任务ID。查询有效期24小时。
 
-**重要**
+**task\_status** `string`
 
-缺少此请求头将报错：“current user api does not support synchronous calls”。
+任务状态。
 
-#### **请求体（Request Body）**
+枚举值
 
-**model** `_string_` **（必选）**
+-   PENDING：任务排队中
+-   RUNNING：任务处理中
+-   SUCCEEDED：任务执行成功
+-   FAILED：任务执行失败
+-   CANCELED：任务已取消
+-   UNKNOWN：任务不存在或状态未知
 
-模型名称。示例值：`image-out-painting`。
+**request\_id**`string`
 
-**input** `_object_` **（必选）**
+请求唯一标识。可用于请求明细溯源和问题排查。
 
-输入图像的基本信息，比如图像URL地址。
+**code**`string`
 
-**属性**
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
 
-**image\_url** `_string_` **（必选）**
+**message**`string`
 
-图像URL地址或者图像base64数据。
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
 
-URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-
-图像限制：
-
--   图像格式：JPG、JPEG、PNG、HEIF、WEBP。
-    
--   图像大小：不超过10MB。
-    
--   图像分辨率：不低于512×512像素且不超过4096×4096像素。
-    
--   图像单边长度范围：\[512, 4096\]，单位像素。
-    
-
-**parameters** `_object_` **（必选）**
-
-设置输出图像的处理参数，如逆时针旋转角度、宽高比、扩展比例、四个方向像素填充等。
-
-**属性**
-
-**angle** `_integer_` （可选）
-
-逆时针旋转角度。默认值为0，取值范围\[0, 359\]，单位为度。
-
-更多内容请参见[参数使用说明](#014530f228d94)。
-
-**output\_ratio** `_string_` （可选）
-
-图像宽高比。可选值有\["","1:1", "3:4", "4:3", "9:16", "16:9"\]。默认值为""，表示不设置输出图像的宽高比。
-
-更多内容请参见[参数使用说明](#014530f228d94)。
-
-**x\_scale** `_float_` （可选）
-
-图像居中，在水平方向上按比例扩展图像。
-
-默认值为1.0，取值范围\[1.0, 3.0\]。
-
-您可以选择与y\_scale参数搭配使用，更多内容请参见[参数使用说明](#014530f228d94)。
-
-**示例**
-
-例如：输入图像分辨率为1000×1000（宽×高），x\_scale=2.0，扩展后的图像分辨率为2000×1000（宽×高）。保持高度不变，左右各添加500个像素。
-
-**y\_scale** `_float_` （可选）
-
-图像居中，在垂直方向上按比例扩展图像。
-
-默认值为1.0，取值范围\[1.0, 3.0\]。
-
-您可以选择与x\_scale参数搭配使用，更多内容请参见[参数使用说明](#014530f228d94)。
-
-**示例**
-
-例如：输入图像分辨率为1000×1000（宽×高），y\_scale=2.0，扩展后的图像分辨率为1000×2000（宽×高）。保持宽度不变，上下各添加500个像素。
-
-**top\_offset** `_integer_` （可选）
-
-在图像上方添加像素。
-
-默认值为0，取值限制`top_offset+bottom_offset < 3×输入图像高度`。
-
-您可以选择与bottom\_offset、left\_offset 、right\_offset参数搭配使用，更多内容请参见[参数使用说明](#014530f228d94)。
-
-**示例**
-
-例如：输入图像分辨率为1000×1000（宽×高），top\_offset=500，扩展后的图像分辨率为1000×1500（宽×高）。保持宽度不变，只在图像上方添加500个像素。
-
-**bottom\_offset** `_integer_` （可选）
-
-在图像下方添加像素。
-
-默认值为0，取值限制`top_offset+bottom_offset < 3×输入图像高度`。
-
-您可以选择与top\_offset、left\_offset 、right\_offset参数搭配使用，更多内容请参见[参数使用说明](#014530f228d94)。
-
-**示例**
-
-例如：输入图像分辨率为1000×1000（宽×高），bottom\_offset=500，扩展后的图像分辨率为1000×1500（宽×高）。保持宽度不变，只在图像下方添加500个像素。
-
-**left\_offset** `_integer_` （可选）
-
-在图像左侧添加像素。
-
-默认值为0，扩展限制`left_offset+right_offset < 3×输入图像宽度`。
-
-您可以选择与top\_offset、bottom\_offset、right\_offset参数搭配使用，更多内容请参见[参数使用说明](#014530f228d94)。
-
-**示例**
-
-例如：输入图像分辨率为1000×1000（宽×高），left\_offset=500，扩展后的图像分辨率为1500×1000（宽×高）。保持高度不变，只在图像左侧添加500个像素。
-
-**right\_offset** `_integer_` （可选）
-
-在图像右侧添加像素。
-
-默认值为0，扩展限制`left_offset+right_offset < 3×输入图像宽度`。
-
-您可以选择与top\_offset、bottom\_offset、left\_offset参数搭配使用，更多内容请参见[参数使用说明](#014530f228d94)。
-
-**示例**
-
-例如：输入图像分辨率为1000×1000（宽×高），right\_offset=500，扩展后的图像分辨率为1500×1000（宽×高）。保持高度不变，只在图像右侧添加500个像素。
-
-**best\_quality** `_boolean_` （可选）
-
-开启图像最佳质量模式。默认值为false，减少图像生成的等待时间。
-
-如果您需要更多图像细节，可以设置为true，但耗时会成倍增加。
-
-**limit\_image\_size** `_boolean_` （可选）
-
-限制模型生成的图像文件大小。默认值为true，当输入图像单边长度<=10000时，输出图像文件大小在5MB以下。
-
-输出图像的长宽比范围为`1:4至4:1`。
-
-**建议设置为true**。模型生成的图像需要经过一层安全过滤后才能输出，当前不支持大于10M的图像处理。
-
-**add\_watermark** `_boolean_` （可选）
-
-添加`Generated by AI`水印。默认值为True，在输出图像左下角处添加水印。
-
-#### **响应**
-
-### 成功响应
+#### 成功响应
 
 请保存 task\_id，用于查询任务状态与结果。
 
@@ -315,9 +338,9 @@ URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可
 }
 ```
 
-### 异常响应
+#### 异常响应
 
-创建任务失败，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+创建任务失败，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 ```
 {
@@ -327,56 +350,25 @@ URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可
 }
 ```
 
-**output** _object_
-
-任务输出信息。
-
-**属性**
-
-**task\_id** `_string_`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `_string_`
-
-任务状态。
-
-**枚举值**
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：任务执行成功
-    
--   FAILED：任务执行失败
-    
--   CANCELED：任务已取消
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-**request\_id** `_string_`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code** `_string_`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**message** `_string_`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-### **步骤2：根据任务ID查询结果**
+### 步骤2：根据任务ID查询结果
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### **请求头（Headers）**
+#### 请求头（Headers）
 
-## 查询任务结果
+**Authorization**`string`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+#### URL路径参数（Path parameters）
+
+**task\_id** `string`**（必选）**
+
+任务ID。
+
+#### 查询任务结果
 
 请将`86ecf553-d340-4e21-xxxxxxxxx`替换为真实的task\_id。
 
@@ -387,19 +379,84 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-**Authorization** `_string_`**（必选）**
+#### 响应
 
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+**output**_object_
 
-#### **URL路径参数（Path parameters）**
+输出的任务信息。
 
-**task\_id** `_string_`**（必选）**
+属性
 
-任务ID。
+**task\_id** `string`
 
-#### **响应**
+任务ID。查询有效期24小时。
 
-## 任务执行成功
+**task\_status** `string`
+
+任务状态。
+
+枚举值
+
+-   PENDING：任务排队中
+-   RUNNING：任务处理中
+-   SUCCEEDED：任务执行成功
+-   FAILED：任务执行失败
+-   CANCELED：任务已取消
+-   UNKNOWN：任务不存在或状态未知
+
+**task\_metrics** `object`
+
+任务结果统计。
+
+属性
+
+**TOTAL** `integer`
+
+总的任务数。
+
+**SUCCEEDED** `integer`
+
+任务状态为成功的任务数。
+
+**FAILED** `integer`
+
+任务状态为失败的任务数。
+
+**submit\_time** `string`
+
+任务提交时间。
+
+**end\_time** `string`
+
+任务完成时间。
+
+**output\_image\_url** `string`
+
+输出图像URL地址。
+
+**code**`string`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**message**`string`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**usage**_object_
+
+图像统计信息。
+
+属性
+
+**image\_count** `integer`
+
+模型成功生成图片的数量。计费公式：费用 = 图片数量 × 单价。
+
+**request\_id**`string`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+任务执行成功
 
 ```
 {
@@ -418,7 +475,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 }
 ```
 
-## 任务执行中
+任务执行中
 
 ```
 {
@@ -435,7 +492,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 }
 ```
 
-## 任务执行失败
+任务执行失败
 
 ```
 {
@@ -452,88 +509,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 }
 ```
 
-**output** _object_
-
-输出的任务信息。
-
-**属性**
-
-**task\_id** `_string_`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `_string_`
-
-任务状态。
-
-**枚举值**
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：任务执行成功
-    
--   FAILED：任务执行失败
-    
--   CANCELED：任务已取消
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-**task\_metrics** `_object_`
-
-任务结果统计。
-
-**属性**
-
-**TOTAL** `_integer_`
-
-总的任务数。
-
-**SUCCEEDED** `_integer_`
-
-任务状态为成功的任务数。
-
-**FAILED** `_integer_`
-
-任务状态为失败的任务数。
-
-**submit\_time** `_string_`
-
-任务提交时间。
-
-**end\_time** `_string_`
-
-任务完成时间。
-
-**output\_image\_url** `_string_`
-
-输出图像URL地址。
-
-**code** `_string_`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**message** `_string_`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**usage** _object_
-
-图像统计信息。
-
-**属性**
-
-**image\_count** `_integer_`
-
-模型成功生成图片的数量。计费公式：费用 = 图片数量 × 单价。
-
-**request\_id** `_string_`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-## **图像处理参数使用说明**
+## 图像处理参数使用说明
 
 在图像处理参数 `parameters`中，主要包含两类参数：旋转参数、扩展参数。扩展参数按功能分为三类，它们之间相互独立、互不影响。
 
@@ -573,14 +549,11 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
     
 4.  **仅旋转图像** ：只需设置 `angle` ，并将其设置为 \[1, 359\] 范围内的值，但不能设置为 90、180、270。
     
-5.  **先旋转再扩图**：需要设置`angle` ，并将其设置为 \[1, 359\] 范围内的任意值。同时必须与以下三组扩展参数中的一组搭配使用。若同时设置多组扩展参数，按[参数优先级](#3404cbdb44tku)生效。
+5.  **先旋转再扩图**：需要设置`angle` ，并将其设置为 \[1, 359\] 范围内的任意值。同时必须与以下三组扩展参数中的一组搭配使用。若同时设置多组扩展参数，按[参数优先级](raw/model-api-reference/image-generation/image-creative-tools-api-reference/image-scaling-api.md)生效。
     
     1.  `output_ratio`：不为空。
-        
     2.  `x_scale、y_scale`：至少有一个大于 1.0。
-        
     3.  `top_offset、bottom_offset、left_offset、right_offset`：至少有一个参数值大于 0。
-        
     
     > **注意** ：先旋转后扩图时，模型会先根据指定角度旋转图像，再在旋转后的图像上进行扩图操作。实际扩图效果请以模型输出为准。
     
@@ -626,9 +599,9 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 
 先逆时针旋转90°，再对旋转后的图像按宽高比4:3扩图（仅`angle`、`output_ratio`生效）
 
-## **错误码**
+## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 此API还有特定状态码，具体如下所示。
 
@@ -704,13 +677,13 @@ oss upload error
 
 文件上传失败
 
-## **常见问题**
+## 常见问题
 
 **Q：创建任务接口响应成功，但没有返回图像URL？**
 
 **A：**在图像模型处理中，HTTP请求需要经过两步才能获取结果：创建任务、根据任务ID查询结果。创建任务接口仅提交任务，不返回图像结果。您需要查询 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}` 接口获得模型生成的图像URL。
 
-**Q：设置输出比例** `**output_ratio**` **后，为什么模型没有根据** `**x_scale**` **或** `**y_scale**` **自动计算另一个方向的比例？**
+**Q：设置输出比例**`output_ratio`**后，为什么模型没有根据**`x_scale`**或**`y_scale`**自动计算另一个方向的比例？**
 
 **A：**图像画面扩展API目前支持三种扩展方式：按宽高比扩展、按比例扩展、在指定方向添加像素扩展。三者参数相互独立，互不影响。为避免参数冲突，系统设定了明确的优先级：`output_ratio > x_scale / y_scale > *offset`。
 

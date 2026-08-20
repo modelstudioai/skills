@@ -2,15 +2,13 @@
 
 本章节介绍 AOQ Client SDK 的连接状态机及其对应的 API 调用。
 
-## **连接状态图**
+## 连接状态图
 
 下图描述了 AOQ Client SDK 的连接状态迁移关系：
 
 AOQ Client SDK 连接状态迁移图
 
-![111](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3811364871/p1088081.svg)
-
-## **状态说明**
+## 状态说明
 
 **状态**
 
@@ -42,115 +40,89 @@ AOQ Client SDK 连接状态迁移图
 
 初始状态/主动断开/异常断开后的终态
 
-## **状态迁移规则**
+## 状态迁移规则
 
 1.  **App 调用** `connect` → 进入 `Connecting` 状态。
-    
 2.  **链接成功** → 从 `Connecting` 迁移到 `Connected`。
-    
 3.  **链接异常** → 从 `Connecting` 迁移到 `Failed`，随后 SDK 自动迁移到 `Disconnected`。
-    
 4.  **链接异常** → 从 `Connected` 迁移到 `Failed`，随后 SDK 自动迁移到 `Disconnected`。
-    
 5.  **App 调用** `disconnect` → 从 `Connected` 迁移到 `Disconnected`。
-    
 
-**说明**：`Failed` 是瞬态，SDK 触发 `onConnectionStatusChange(Failed)` 后会自动迁移到 `Disconnected`，业务层无需手动调用 disconnect。
+**说明****说明**：`Failed` 是瞬态，SDK 触发 `onConnectionStatusChange(Failed)` 后会自动迁移到 `Disconnected`，业务层无需手动调用 disconnect。
 
-## **connect API**
+## connect API
 
 调用 `connect` 发起与 AI Service 的连接，传入由 AppServer allocate 接口返回的鉴权凭证。
 
-### **方法签名**
+### 方法签名
 
 **Android：**
-
 ```
 public abstract int connect(@NonNull AoqConnectConfig config);
 ```
-
 **iOS：**
-
 ```
 - (int)connect:(AoqConnectConfig * _Nonnull)config;
 ```
-
 **Ohos：**
-
 ```
 connect(config: AoqConnectConfig): number;
 ```
 
 **返回值：**`0` 表示调用成功（异步建连）；`< 0` 表示失败。
 
-### **行为说明**
+### 行为说明
 
 -   调用后触发 `onConnectionStatusChange(connecting)` 回调。
-    
 -   如果链接成功时触发 `onConnectionStatusChange(connected)` 回调。
-    
 -   如果链接失败时触发 `onConnectionStatusChange(failed)` 回调。
-    
 
-## **disconnect API**
+## disconnect API
 
 调用 `disconnect` 主动断开与 AI Service 的连接。
 
-### **方法签名**
+### 方法签名
 
 **Android：**
-
 ```
 public abstract int disconnect();
 ```
-
 **iOS：**
-
 ```
 - (int)disconnect;
 ```
-
 **Ohos：**
-
 ```
 disconnect(): number;
 ```
 
 **返回值：**`0` 表示成功；`< 0` 表示失败。
 
-### **行为说明**
+### 行为说明
 
 -   调用后触发 `onConnectionStatusChange(Disconnected)` 回调。
-    
 -   引擎不会自动释放，可重新调用 `connect` 进行重连。
-    
 -   未连接状态下调用 `disconnect` 是安全的，返回 0。
-    
 
-## **onConnectionStatusChange 回调**
+## onConnectionStatusChange 回调
 
 连接状态变化时，SDK 通过此回调通知业务层。
 
 **Android：**
-
 ```
 public void onConnectionStatusChange(
     @NonNull AoqClientEngine.AoqConnectionStatus status) {}
 ```
-
 **iOS：**
-
 ```
 - (void)onConnectionStatusChange:(AoqConnectionStatus)status;
 ```
-
 **Ohos：**
-
 ```
 onConnectionStatusChange?: (status: AoqConnectionStatus) => void;
 ```
 
-### **示例代码**
+### 示例代码
 
 ```
 func onConnectionStatusChange(_ status: AoqConnectionStatus) {

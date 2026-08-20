@@ -2,33 +2,28 @@
 
 介绍如何使用 AOQ Client SDK 实现自定义音频采集功能，包括外部音频流的添加、PCM 数据推送和管理。
 
-## **功能介绍**
+## 功能介绍
 
 AOQ Client SDK 内部音频模块可满足应用中对基本音频功能的需求，但在特定场景中，SDK 内部的音频采集模块可能无法满足开发需求，需要实现自定义音频采集功能，例如：
 
 -   解决音频采集设备被占用问题。
-    
 -   需要从定制的采集系统、音频文件中获取音频数据后交给 SDK 传输。
-    
 -   需要将 AI TTS 生成的音频数据通过 SDK 推流传输。
-    
 
 AOQ Client SDK 支持灵活的自定义采集功能，允许用户根据业务场景自行管理音频设备与音频源。外部音频流的数据会与内部采集的音频数据混音后一起推流发送。
 
-## **示例代码**
+## 示例代码
 
 暂无
 
-## **前提条件**
+## 前提条件
 
 -   已创建引擎实例（调用 `createEngine`）。
-    
 -   已成功连接服务器（`onConnectionStatusChange` 回调状态为 `AoqConnectionStatusConnected`）。
-    
 
-## **功能实现**
+## 功能实现
 
-### **1\. 打开或关闭音频采集**
+### 1\. 打开或关闭音频采集
 
 需要先开启音频采集，外部音频流输入的数据会与内部采集数据混音后一起推流。如果不需要内部麦克风采集，可以设置 `isExternal=true` 关闭内部采集设备。
 
@@ -45,7 +40,7 @@ config.isExternal = true; // 不打开麦克风，由外部音频流提供数据
 engine.startAudioCapture(config);
 ```
 
-### **2\. 连接成功后，添加外部音频流**
+### 2\. 连接成功后，添加外部音频流
 
 在 `onConnectionStatusChange` 回调状态变为 `AoqConnectionStatusConnected` 后，调用 `addAudioExternalStream` 添加外部音频流。需要指定一个唯一的 `streamId` 用于后续推送数据和管理。
 
@@ -76,7 +71,6 @@ private void addExternalAudioStream() {
     }
 }
 ```
-
 **参数说明：**
 
 **参数**
@@ -151,31 +145,24 @@ false
 
 是否对输入 PCM 进行 3A 处理
 
-### **3\. 实现自采集模块或从文件获取 PCM 数据**
+### 3\. 实现自采集模块或从文件获取 PCM 数据
 
 自定义采集功能需要根据业务场景自行采集并处理音频数据，之后将数据传入 SDK 进行传输。常见的数据来源：
 
 -   **麦克风采集**：通过 Android AudioRecord 采集 PCM 数据。
-    
 -   **文件读取**：从本地 PCM/WAV 音频文件中解析获取 PCM 数据。
-    
 -   **AI TTS**：从语音合成引擎获取 PCM 数据。
-    
 -   **网络流**：从网络音频流中解码获取 PCM 数据。
-    
 
 音频数据需要为 PCM 格式，并记录对应的采样率、声道数等参数，用于构造 `AoqAudioFrameData` 对象。
 
-### **4\. 通过外部音频流 ID 推送音频数据到 SDK**
+### 4\. 通过外部音频流 ID 推送音频数据到 SDK
 
 调用 `pushAudioExternalStreamData` 接口，将采集到的 PCM 音频数据传入 SDK。
 
 -   从硬件采集：建议采集 10ms 为一帧数据，采集到数据就 push 给 SDK。
-    
 -   从文件解析：建议 40ms 为一帧数据，每 push 一帧 Sleep 30ms 后 push 下一帧。
-    
 -   需要维护一个 `running` 标记，当引擎退出或 stream ID 被删除时退出推送循环。
-    
 
 ```
 // 成员变量：控制推送循环的运行标记
@@ -224,23 +211,16 @@ private void pushAudioData(byte[] audioData, int bytesRead) {
     } while (true);
 }
 ```
-
 **注意事项：**
 
 -   需要在连接成功且添加外部音频流之后再开始推送数据。
-    
 -   需要按照数据的实际长度设置 `AoqAudioFrameData` 的 `numOfSamples`。
-    
 -   调用 `pushAudioExternalStreamData` 时，可能出现内部缓冲区满（错误码 110）而导致失败，需要等待重试。
-    
 -   实时采集建议 10ms 一帧数据 push，有数据就调用 push，注意处理内部缓冲区满（错误码 110）。
-    
 -   从文件解析建议 40ms 一帧数据，间隔 30ms 调用 push，注意处理内部缓冲区满（错误码 110）。
-    
 -   引擎退出（`destroy`）或 stream ID 被移除前，必须先设置 `mPushRunning = false` 停止推送循环，避免在已释放的资源上操作。
-    
 
-### **5\. 移除外部音频流**
+### 5\. 移除外部音频流
 
 当不再需要发布自定义采集的音频时，先停止推送循环，再调用 `removeAudioExternalStream` 接口移除外部音频流。
 

@@ -1,8 +1,8 @@
 # 多模态对话结果 extra_info 说明
 
-## **通过 SDK 或者 API 获取LLM 的结果**
+## 通过 SDK 或者 API 获取LLM 的结果
 
-### **RespondingContent**
+### RespondingContent
 
 服务端通过 type 为 RespondingContent 类型结果下发 LLM 对话、Agent、插件的结果。
 
@@ -82,7 +82,7 @@ object
 
 其他扩展信息，目前支持：
 
--   commands: 命令字符串，此字段为JSON字符串，需要进行二次解析。各类agent使用的命令字符串可以参考[调用官方Agent](https://help.aliyun.com/zh/model-studio/official-agent)的说明。
+-   commands: 命令字符串，此字段为JSON字符串，需要进行二次解析。各类agent使用的命令字符串可以参考[调用官方Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/official-agent.md)的说明。
     
 -   agent\_info: 智能体信息
     
@@ -91,7 +91,7 @@ object
 
 如果没有扩展信息要提交则省略此字段。
 
-### **1.1 extra\_info.commands**
+### 1.1 extra\_info.commands
 
 **多模态应用**下发的指令。
 
@@ -174,7 +174,7 @@ String
 
 语音理解的 intent
 
-### **1.2 extra\_info.agent\_info**
+### 1.2 extra\_info.agent\_info
 
 ```
 {
@@ -233,7 +233,7 @@ String
 
 业务定义的 intent，协议透传
 
-### **1.3 extra\_info.**tool\_calls
+### 1.3 extra\_info.tool\_calls
 
 **插件和语音应用**的技能调用结果从这个接口返回。
 
@@ -281,9 +281,9 @@ list
 
 插件或者技能下发的参数列表
 
-## **技能执行结果的响应**
+## 技能执行结果的响应
 
-### **配置技能响应**
+### 配置技能响应
 
 在管控台选择技能根据执行情况回复。
 
@@ -327,7 +327,7 @@ list
 
 当用户选择根据执行情况回复时， 返回结果中包含command\_request\_id。在回复结果时，这个 ID 作为回复的 key 使用。
 
-### **端侧回复参数**
+### 端侧回复参数
 
 您在收到指令或者 Agent的结果后，通过端侧执行，获得一个成功或者失败的结果，同步给服务端，通过如下接口提交：
 
@@ -396,7 +396,7 @@ JSON object
 ]
 ```
 
-### **请求代码- 端侧回调执行结果（以 java 为例）**
+### 请求代码- 端侧回调执行结果（以 java 为例）
 
 ```
 public static HashMap<String,Object> getAgentorCommandResult() {

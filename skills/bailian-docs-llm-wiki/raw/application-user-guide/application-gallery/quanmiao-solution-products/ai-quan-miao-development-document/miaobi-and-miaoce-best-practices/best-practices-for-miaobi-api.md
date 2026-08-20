@@ -4,14 +4,10 @@
 
 ## 前提条件
 
--   已开通服务，开通地址：[https://common-buy.aliyun.com/?spm=a2c4g.11186623.0.0.225a777dIkFbJA&commodityCode=sfm\_miaobi\_public\_cn&request={%22guige%22:%22try%22}](https://common-buy.aliyun.com/?spm=a2c4g.11186623.0.0.225a777dIkFbJA&commodityCode=sfm_miaobi_public_cn&request={%22guige%22:%22try%22})；
-    
+-   已开通服务，开通地址：[https://common-buy.aliyun.com/?spm=a2c4g.11186623.0.0.225a777dIkFbJA&commodityCode=sfm\_miaobi\_public\_cn&request={%22guige%22:%22try%22}](https://common-buy.aliyun.com/?spm=a2c4g.11186623.0.0.225a777dIkFbJA&commodityCode=sfm_miaobi_public_cn&request=%7B%22guige%22:%22try%22%7D)；
 -   [获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)；
-    
--   [获取 AccessKey ID、AccessKey Secret](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)；
-    
+-   获取 AccessKey ID、AccessKey Secret；
 -   引入妙笔SDK [注意获取最新SDK版本](https://api.aliyun.com/api-tools/sdk/AiMiaoBi?version=2023-08-01&language=java-async-tea&tab=primer-doc)；
-    
 
 ```
 <dependency>
@@ -28,7 +24,6 @@
 生成调用demo如下：
 
 -   Java：
-    
 
 ```
 package org.example.writing;
@@ -99,7 +94,6 @@ public class RunWritingV2DirectWritingDemo {
 ```
 
 -   Python：
-    
 
 ```
 import os
@@ -187,7 +181,7 @@ if __name__ == '__main__':
     asyncio.run(test_run_writing())
 ```
 
-## 2、使用**模板生成文章**
+## 2、使用模板生成文章
 
 ```
 package org.example.writing;
@@ -334,7 +328,6 @@ public class RunWritingV2WithTemplate {
 
 }
 ```
-
 ```
 """
 模板写作示例（Python）。
@@ -487,7 +480,7 @@ if __name__ == "__main__":
     asyncio.run(template_writing())
 ```
 
-## **3、分大纲生成文章**
+## 3、分大纲生成文章
 
 ```
 package org.example.writing;
@@ -723,7 +716,6 @@ public class RunWritingV2Outline {
     }
 }
 ```
-
 ```
 """
 分步骤大纲写作示例（Python）。

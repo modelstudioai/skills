@@ -2,23 +2,23 @@
 
 通过DashScope Java SDK进行Qwen-Audio-TTS/CosyVoice语音合成。
 
-**用户指南：**关于模型介绍和选型建议请参见[语音合成](https://help.aliyun.com/zh/model-studio/tts-model/)。
+**用户指南：**关于模型介绍和选型建议请参见[语音合成](raw/model-user-guide/model-experience/tts-model.md)。
 
-## **接口地址**
+## 接口地址
 
 SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）。如需切换到其他地域，请修改 `Constants.baseWebsocketApiUrl`为对应地域的URL。
 
-## 华北2（北京）
+#### 华北2（北京）
 
 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的Workspace ID。
 
-## 新加坡
+#### 新加坡
 
 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的Workspace ID。
 
 **切换到新加坡地域**：
 
@@ -29,22 +29,18 @@ import com.alibaba.dashscope.utils.Constants;
 Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference";
 ```
 
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+`{WorkspaceId}`需要替换为真实的Workspace ID。现有域名仍可正常使用。
 
-## **SpeechSynthesizer**
+## SpeechSynthesizer
 
 **包路径**：`com.alibaba.dashscope.audio.ttsv2.SpeechSynthesizer`
 
-### **构造方法**
+### 构造方法
 
 ```
 public SpeechSynthesizer(SpeechSynthesisParam param, ResultCallback<SpeechSynthesisResult> callback)
@@ -52,12 +48,10 @@ public SpeechSynthesizer(SpeechSynthesisParam param, ResultCallback<SpeechSynthe
 
 **参数说明**：
 
--   `param`：语音合成参数，通过`[SpeechSynthesisParam](#sec-5k9m2p7r).builder()`构建
-    
+-   `param`：语音合成参数，通过`SpeechSynthesisParam .builder()`构建
 -   `callback`：回调函数，用于流式调用。非流式调用时传入null
-    
 
-### **call() - 非流式/单向流式合成**
+### call() - 非流式/单向流式合成
 
 **方法签名**：
 
@@ -85,7 +79,7 @@ String
 
 **返回值**：`ByteBuffer` 或 null。非流式调用时返回完整音频数据；单向流式调用时音频通过回调返回，此方法返回null。
 
-### **streamingCall() - 双向流式合成**
+### streamingCall() - 双向流式合成
 
 **方法签名**：
 
@@ -111,7 +105,7 @@ String
 
 待合成的文本，长度不得超过20000字符。可多次调用追加文本。
 
-### **streamingComplete() - 结束双向流式调用**
+### streamingComplete() - 结束双向流式调用
 
 **方法签名**：
 
@@ -121,7 +115,7 @@ public void streamingComplete()
 
 结束双向流式调用，通知服务端所有文本已发送完毕。
 
-### **streamingCancel() - 取消双向流式调用**
+### streamingCancel() - 取消双向流式调用
 
 **方法签名**：
 
@@ -131,20 +125,14 @@ public void streamingCancel()
 
 **说明**：取消当前轮次的双向流式语音合成任务。调用后，SDK 会立即结束当前任务。取消后可在当前连接上继续发起新的合成任务，无需重新初始化 `SpeechSynthesizer` 实例。
 
-**重要**
+**重要****版本要求**：使用该功能需要 Java SDK 版本不低于 2.22.26。
 
-**版本要求**：使用该功能需要 Java SDK 版本不低于 2.22.26。
-
-**重要**
-
-**模型限制**：
+**重要****模型限制**：
 
 -   华北2（北京）地域：Qwen-Audio-TTS 系列模型的所有模型都支持该功能；CosyVoice 系列模型仅 v2 及以上版本支持该功能。
-    
 -   新加坡地域：Qwen-Audio-TTS 系列模型的所有模型都支持该功能；CosyVoice 系列模型不支持该功能。
-    
 
-### **callAsFlowable() - 单向流式合成（响应式）**
+### callAsFlowable() - 单向流式合成（响应式）
 
 **方法签名**：
 
@@ -170,9 +158,9 @@ String
 
 待合成的文本。
 
-**返回值**：`Flowable<[SpeechSynthesisResult](#sec-7m5k9p2r)>` 响应式流。
+**返回值**：`Flowable< SpeechSynthesisResult >` 响应式流。
 
-### **streamingCallAsFlowable() - 双向流式合成（响应式）**
+### streamingCallAsFlowable() - 双向流式合成（响应式）
 
 **方法签名**：
 
@@ -198,9 +186,9 @@ Flowable<String>
 
 文本的响应式流。
 
-**返回值**：`Flowable<[SpeechSynthesisResult](#sec-7m5k9p2r)>` 响应式流。
+**返回值**：`Flowable< SpeechSynthesisResult >` 响应式流。
 
-### **getDuplexApi().close() - 关闭WebSocket连接**
+### getDuplexApi().close() - 关闭WebSocket连接
 
 **方法签名**：
 
@@ -236,7 +224,7 @@ String
 
 **返回值**：`boolean`，是否成功关闭。
 
-### **getLastRequestId() - 获取请求ID**
+### getLastRequestId() - 获取请求ID
 
 **方法签名**：
 
@@ -246,7 +234,7 @@ public String getLastRequestId()
 
 **返回值**：`String`，请求ID。
 
-### **getFirstPackageDelay() - 获取首包延迟**
+### getFirstPackageDelay() - 获取首包延迟
 
 **方法签名**：
 
@@ -256,7 +244,7 @@ public long getFirstPackageDelay()
 
 **返回值**：`long`，首包延迟（ms），从发送第一包到收到首包结果。
 
-## **SpeechSynthesisParam**
+## SpeechSynthesisParam
 
 **包路径**：`com.alibaba.dashscope.audio.ttsv2.SpeechSynthesisParam`
 
@@ -297,16 +285,13 @@ String
 
 是
 
-**voice** `_string_` **（必选）**
+**voice**`string`**（必选）**
 
 语音合成所使用的音色。
 
--   **系统音色**：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
-    
+-   **系统音色**：参见Qwen-Audio-TTS音色列表、CosyVoice音色列表
 -   **复刻音色**：通过声音复刻功能定制
-    
 -   **声音设计音色**：通过声音设计功能定制
-    
 
 `format(SpeechSynthesisAudioFormat)`
 
@@ -368,7 +353,7 @@ boolean
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash及其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及Qwen-Audio-TTS音色列表、CosyVoice音色列表中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
 
 `seed(int)`
 
@@ -395,55 +380,34 @@ List<String>
 **重要**
 
 -   此参数为数组，但当前版本仅处理第一个元素，因此建议只传入一个值。
-    
 -   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见声音复刻API参考。
-    
 
 指定语音合成的目标语言，提升合成效果。cosyvoice-v1不支持该功能。
 
 当数字、缩写、符号等朗读方式或者小语种合成效果不符合预期时使用，例如：
 
 -   数字朗读方式不符合预期，“hello, this is 110”读成“hello, this is one one zero”而非“hello, this is 幺幺零”
-    
 -   符号朗读不准确，“@”读成“艾特”而非“at”
-    
 -   小语种合成效果差，合成不自然
-    
 
 取值范围：
 
 -   zh：中文
-    
 -   en：英语
-    
 -   fr：法语
-    
 -   de：德语
-    
 -   ja：日语
-    
 -   ko：韩语
-    
 -   ru：俄语
-    
 -   pt：葡萄牙语
-    
 -   th：泰语
-    
 -   id：印尼语
-    
 -   vi：越南语
-    
 -   es：西班牙语
-    
 -   it：意大利语
-    
 -   ms：马来西亚语
-    
 -   fil：菲律宾语
-    
 -   ar：阿拉伯语
-    
 
 `instruction(String)`
 
@@ -453,7 +417,7 @@ String
 
 设置指令，用于控制方言、情感或角色等合成效果。
 
-使用说明请参见[指令控制](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#12884a10929p9)。
+使用说明请参见指令控制。
 
 `hotFix(ParamHotFix)`
 
@@ -463,14 +427,12 @@ ParamHotFix
 
 文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
 
-qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v2、cosyvoice-v1不支持该功能。
+cosyvoice-v2、cosyvoice-v1不支持该功能。
 
 参数介绍：
 
 -   pronunciation：自定义发音。指定词语的拼音标注，用于纠正默认发音不准确的情况。
-    
 -   replace：文本替换。在语音合成前将指定词语替换为目标文本，替换后的文本将作为实际合成内容。
-    
 
 示例：
 
@@ -498,7 +460,7 @@ String, Object
 
 否
 
-设置[扩展参数](#8135356d13pvn)。
+设置[扩展参数](https://help.aliyun.com/zh/model-studio/cosyvoice-java-sdk#8135356d13pvn)。
 
 `parameters(Map<String, Object>)`
 
@@ -506,7 +468,7 @@ Map
 
 否
 
-设置[扩展参数](#8135356d13pvn)。
+设置[扩展参数](https://help.aliyun.com/zh/model-studio/cosyvoice-java-sdk#8135356d13pvn)。
 
 ### 扩展参数
 
@@ -562,7 +524,7 @@ String
 
 否
 
-设置AIGC隐性标识中的 `ContentPropagator` 字段，用于标识内容的传播者。仅在 `enable_aigc_tag` 为 `true` 时生效。
+设置AIGC隐性标识中的 `ContentPropagator` 字段，用于标识内容的传播者。仅在 `enable_aigc_tag` 为 `true` 时生效。
 
 默认值：阿里云UID。
 
@@ -574,7 +536,7 @@ String
 
 否
 
-设置AIGC隐性标识中的 `PropagateID` 字段，用于唯一标识一次具体的传播行为。仅在 `enable_aigc_tag` 为 `true` 时生效。
+设置AIGC隐性标识中的 `PropagateID` 字段，用于唯一标识一次具体的传播行为。仅在 `enable_aigc_tag` 为 `true` 时生效。
 
 默认值：本次语音合成请求Request ID。
 
@@ -585,8 +547,6 @@ String
 boolean
 
 否
-
-**重要**
 
 仅cosyvoice-v3-flash复刻音色支持该功能。
 
@@ -601,11 +561,11 @@ boolean
 -   false：禁用Markdown过滤
     
 
-## **ResultCallback**
+## ResultCallback
 
 **包路径**：`com.alibaba.dashscope.common.ResultCallback`
 
-### **onEvent() - 接收音频数据**
+### onEvent() - 接收音频数据
 
 **方法签名**：
 
@@ -625,13 +585,13 @@ public void onEvent(SpeechSynthesisResult result)
 
 result
 
-[SpeechSynthesisResult](#sec-7m5k9p2r)
+[SpeechSynthesisResult](https://help.aliyun.com/zh/model-studio/cosyvoice-java-sdk#sec-7m5k9p2r)
 
 是
 
 接收到合成事件时触发，包含音频帧、时间戳信息和输出信息（事件类型、原始文本等）。
 
-### **onComplete() - 合成完成**
+### onComplete() - 合成完成
 
 **方法签名**：
 
@@ -641,7 +601,7 @@ public void onComplete()
 
 语音合成完成时触发。
 
-### **onError() - 错误处理**
+### onError() - 错误处理
 
 **方法签名**：
 
@@ -667,11 +627,11 @@ Exception
 
 发生错误时触发，包含异常信息。
 
-## **SpeechSynthesisResult**
+## SpeechSynthesisResult
 
 **包路径**：`com.alibaba.dashscope.audio.tts.SpeechSynthesisResult`
 
-### **getAudioFrame() - 获取音频数据帧**
+### getAudioFrame() - 获取音频数据帧
 
 **方法签名**：
 
@@ -681,7 +641,7 @@ public ByteBuffer getAudioFrame()
 
 **返回值**：`ByteBuffer`，音频数据帧。
 
-### **getTimestamp() - 获取时间戳信息**
+### getTimestamp() - 获取时间戳信息
 
 **方法签名**：
 
@@ -689,9 +649,9 @@ public ByteBuffer getAudioFrame()
 public Sentence getTimestamp()
 ```
 
-**返回值**：`[Sentence](#sec-sentence-ts)`，时间戳信息。
+**返回值**：`Sentence`，时间戳信息。
 
-### **getOutput() - 获取输出信息**
+### getOutput() - 获取输出信息
 
 **方法签名**：
 
@@ -699,13 +659,13 @@ public Sentence getTimestamp()
 public JsonObject getOutput()
 ```
 
-**返回值**：`com.google.gson.JsonObject`，合成事件的[输出信息](#sec-output-info)，包含事件类型和文本内容。需要SDK版本 >= 2.22.0。
+**返回值**：`com.google.gson.JsonObject`，合成事件的[输出信息](https://help.aliyun.com/zh/model-studio/cosyvoice-java-sdk#sec-output-info)，包含事件类型和文本内容。需要SDK版本 >= 2.22.0。
 
 ### 句子级别时间戳信息（`Sentence`）
 
 `Sentence`封装了句子级别时间戳信息。
 
-#### **getBeginTime() - 获取句子开始时间**
+#### getBeginTime() - 获取句子开始时间
 
 **方法签名**：
 
@@ -715,7 +675,7 @@ public int getBeginTime()
 
 **返回值**：句子开始时间，单位为ms。
 
-#### **getEndTime() - 获取句子结束时间**
+#### getEndTime() - 获取句子结束时间
 
 **方法签名**：
 
@@ -725,7 +685,7 @@ public int getEndTime()
 
 **返回值**：句子结束时间，单位为ms。
 
-#### **getWords() - 获取字级别时间戳**
+#### getWords() - 获取字级别时间戳
 
 **方法签名**：
 
@@ -733,13 +693,13 @@ public int getEndTime()
 public List<Word> getWords()
 ```
 
-**返回值**：[Word](#h4-word-ts)的`List`集合，批量获取字级别时间戳信息，可能为空。
+**返回值**：[Word](https://help.aliyun.com/zh/model-studio/cosyvoice-java-sdk#h4-word-ts)的`List`集合，批量获取字级别时间戳信息，可能为空。
 
 ### 字级别时间戳信息（`Word`）
 
 `Word`封装了字级别时间戳信息。
 
-#### **getBeginTime() - 获取词开始时间**
+#### getBeginTime() - 获取词开始时间
 
 **方法签名**：
 
@@ -749,7 +709,7 @@ public int getBeginTime()
 
 **返回值**：词开始时间，单位为ms。
 
-#### **getEndTime() - 获取词结束时间**
+#### getEndTime() - 获取词结束时间
 
 **方法签名**：
 
@@ -759,7 +719,7 @@ public int getEndTime()
 
 **返回值**：词结束时间，单位为ms。
 
-#### **getText() - 获取文本信息**
+#### getText() - 获取文本信息
 
 **方法签名**：
 
@@ -769,7 +729,7 @@ public String getText()
 
 **返回值**：`String`，文本信息。
 
-#### **getPhonemes() - 获取音素级别时间戳**
+#### getPhonemes() - 获取音素级别时间戳
 
 **方法签名**：
 
@@ -777,13 +737,13 @@ public String getText()
 public List<Phoneme> getPhonemes()
 ```
 
-**返回值**：[Phoneme](#h4-phoneme-ts)的`List`集合，批量获取音素级别时间戳信息，可能为空。
+**返回值**：[Phoneme](https://help.aliyun.com/zh/model-studio/cosyvoice-java-sdk#h4-phoneme-ts)的`List`集合，批量获取音素级别时间戳信息，可能为空。
 
 ### 音素级别时间戳信息（`Phoneme`）
 
 `Phoneme`封装了音素级别时间戳信息。
 
-#### **getBeginTime() - 获取音素开始时间**
+#### getBeginTime() - 获取音素开始时间
 
 **方法签名**：
 
@@ -793,7 +753,7 @@ public int getBeginTime()
 
 **返回值**：音素开始时间，单位为ms。
 
-#### **getEndTime() - 获取音素结束时间**
+#### getEndTime() - 获取音素结束时间
 
 **方法签名**：
 
@@ -803,7 +763,7 @@ public int getEndTime()
 
 **返回值**：音素结束时间，单位为ms。
 
-#### **getText() - 获取文本信息**
+#### getText() - 获取文本信息
 
 **方法签名**：
 
@@ -813,7 +773,7 @@ public String getText()
 
 **返回值**：`String`，文本信息。
 
-#### **getTone() - 获取音调**
+#### getTone() - 获取音调
 
 **方法签名**：
 
@@ -824,9 +784,7 @@ public int getTone()
 **返回值**：音调。
 
 -   英文中，0、1、2分别代表轻音、重音和次重音。
-    
 -   拼音中，1、2、3、4、5分别代表一声、二声、三声、四声和轻声。
-    
 
 ### 输出信息（`output`）
 
@@ -856,28 +814,21 @@ JsonObject
 
 句子信息，包含句子编号（`index`）和字级别时间戳（`words`）。在`sentence-end`事件中包含完整的字级别时间戳信息。
 
-## **示例代码**
+## 示例代码
 
 SDK提供了语音合成的关键接口，支持以下几种调用方式：
 
 -   非流式调用：阻塞式，一次性发送完整文本，直接返回完整音频。适合短文本语音合成场景。
-    
 -   单向流式调用：非阻塞式，一次性发送完整文本，通过回调函数接收音频数据（可能分片）。适用于对实时性要求高的短文本语音合成场景。
-    
 -   双向流式调用：非阻塞式，可分多次发送文本片段，通过回调函数实时接收增量合成的音频流。适合实时性要求高的长文本语音合成场景。
-    
 
 更多示例，请参见[GitHub](https://github.com/aliyun/alibabacloud-bailian-speech-demo)。
 
-### **非流式调用**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6745055871/CAEQURiBgIDHpsn4phkiIDQ0ZGE2OTk3NmY5NTRhNDVhZDQwNWE3ZGZiMzk4Yjk54709861_20241015153444.149.svg)
+### 非流式调用
 
 发送的文本长度不得超过20000字符。
 
-**重要**
-
-每次调用`call`方法前，需要重新初始化`SpeechSynthesizer`实例。
+**重要**每次调用`call`方法前，需要重新初始化`SpeechSynthesizer`实例。
 
 ```
 import com.alibaba.dashscope.audio.ttsv2.SpeechSynthesisParam;
@@ -944,15 +895,11 @@ public class Main {
 }
 ```
 
-### **单向流式调用**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7745055871/CAEQVRiBgMCfo..hrBkiIGEyMjNkZjVlMWZiYzRhZDU4ZjEyZjdjMmMzYjM1YzMz4709861_20241015153444.149.svg)
+### 单向流式调用
 
 发送的文本长度不得超过20000字符。
 
-**重要**
-
-每次调用`call`方法前，需要重新初始化`SpeechSynthesizer`实例。
+**重要**每次调用`call`方法前，需要重新初始化`SpeechSynthesizer`实例。
 
 ```
 import com.alibaba.dashscope.audio.tts.SpeechSynthesisResult;
@@ -1053,16 +1000,12 @@ public class Main {
 
 ### 双向流式调用
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7745055871/CAEQVRiBgICHxPGhrBkiIGE3ZTVmMzY0YzI3NzQxYTFiYWE2MmU2NTBhMDgzZGM14709861_20241015153444.149.svg)
-
 单次发送文本长度不得超过 20000 字符，且累计发送文本总长度不得超过 20 万字符。
 
 -   流式输入时可多次调用`streamingCall`按顺序提交文本片段。服务端接收文本片段后自动进行分句：
     
     -   完整语句立即合成
-        
     -   不完整语句缓存至完整后合成
-        
     
     调用 `streamingComplete` 时，服务端会强制合成所有已接收但未处理的文本片段（包括未完成的句子）。
     
@@ -1070,9 +1013,7 @@ public class Main {
     
     若无待发送文本，需及时调用 `streamingComplete`结束任务。
     
-    **重要**
-    
-    请务必确保调用`streamingComplete`方法，否则可能会导致结尾部分的文本无法成功转换为语音。
+    **重要**请务必确保调用`streamingComplete`方法，否则可能会导致结尾部分的文本无法成功转换为语音。
     
     > 服务端强制设定23秒超时机制，客户端无法修改该配置。
     
@@ -1174,7 +1115,7 @@ public class Main {
 }
 ```
 
-### **通过Flowable调用**
+### 通过Flowable调用
 
 Flowable是一个用于工作流和业务流程管理的开源框架，它基于Apache 2.0许可证发布。关于Flowable的使用，请参见[Flowable API详情](http://reactivex.io/RxJava/2.x/javadoc/)。
 
@@ -1182,7 +1123,7 @@ Flowable是一个用于工作流和业务流程管理的开源框架，它基于
 
 单次发送文本长度不得超过 20000 字符，且累计发送文本总长度不得超过 20 万字符。
 
-## 单向流式调用
+#### 单向流式调用
 
 以下示例展示了通过Flowable对象的`blockingForEach`接口，阻塞式地获取每次流式返回的`SpeechSynthesisResult`类型数据。
 
@@ -1249,7 +1190,7 @@ public class Main {
 }
 ```
 
-## 双向流式调用
+#### 双向流式调用
 
 以下示例展示了通过Flowable对象作为输入参数，输入文本流。并通过Flowable对象作为返回值，利用的`blockingForEach`接口，阻塞式地获取每次流式返回的`SpeechSynthesisResult`类型数据。
 
@@ -1340,6 +1281,6 @@ public class Main {
 }
 ```
 
-### **高并发调用**
+### 高并发调用
 
-在DashScope Java SDK中，采用了OkHttp3的连接池技术，以减少重复建立连接的开销。详情请参见[高并发最佳实践](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#ug-hc-h3)。
+在DashScope Java SDK中，采用了OkHttp3的连接池技术，以减少重复建立连接的开销。详情请参见高并发最佳实践。
