@@ -4,16 +4,14 @@
 
 本文涉及的图像模型有：文生图V1和V2、涂鸦作画、图像局部重绘、Cosplay动漫人物生成、人像风格重绘、虚拟模特、鞋靴模特、图像画面扩展、人物实例分割、图像擦除补全、创意海报生成、图像背景生成、图配文。
 
-## **本地调试接口**
+## 本地调试接口
 
 图像API均支持HTTP调用。下面以文生图API为例展示本地调试HTTP接口的流程。
 
-1.  需要[开通模型服务并获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-    
+1.  需要[开通模型服务并获取API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
 2.  在图像API文档中找到`curl`命令。
-    
 
-**示例：文生图curl命令**
+示例：文生图curl命令
 
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis \
@@ -32,14 +30,12 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
 }'
 ```
 
-3.  若操作系统为macOS或Linux，可在终端执行curl命令。
-    
-4.  若操作系统为Windows，可使用Postman、Apifox等接口平台发送HTTP请求。
-    
+1.  若操作系统为macOS或Linux，可在终端执行curl命令。
+2.  若操作系统为Windows，可使用Postman、Apifox等接口平台发送HTTP请求。
 
 > 注意：使用接口平台发送请求时，需要将curl命令`Bearer $DASHSCOPE_API_KEY`中的`$DASHSCOPE_API_KEY`替换为真实API\_KEY，比如`Bearer sk-xxxxxx`。
 
-## **模型计费与限流**
+## 模型计费与限流
 
 **模型计费示例**
 
@@ -47,7 +43,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
 
 **模型名称**
 
-**免费额度**[（查看）](https://help.aliyun.com/zh/model-studio/new-free-quota)
+**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
 
 **计费单价**
 
@@ -80,42 +76,30 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
 **免费额度**
 
 -   额度说明：免费额度是指模型成功生成的输出图片数量。输入图片及模型处理失败的情况不占用免费额度。
-    
 -   领取方式：开通阿里云百炼大模型服务后自动发放，有效期90天。
-    
 -   使用账号：阿里云主账号与其RAM子账号共享免费额度。
-    
--   更多详情请参见[新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota)。
-    
+-   更多详情请参见[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
 
 **限时免费**
 
 -   当计费为“限时免费”时，表示该模型处于公测阶段，免费额度用尽后不可使用。
-    
 
 **计费说明**
 
 -   当计费有明确单价时，如0.02元/张，表示该模型已商业化，免费额度用尽或过期后需付费使用。
-    
 -   计费项：只对模型成功生成的输出图片进行收费，其余情况暂不计费。
-    
 -   付费方式：由阿里云主账号统一付费。RAM子账号不能独立计量计费，必须由所属的主账号付费。如果您需要查询账单信息，请前往阿里云控制台[账单概览](https://billing-cost.console.aliyun.com/finance/month-bill/account)。
-    
 -   充值途径：您可以在阿里云控制台[费用与成本](https://billing-cost.console.aliyun.com/home?spm=a2c4g.11186623.0.0.2d543048F4KRQP)页面进行充值。
-    
 -   模型调用情况：您可以前往阿里云百炼平台的[模型观测](https://bailian.console.aliyun.com/#/model-telemetry)查看模型调用量及调用次数。
-    
--   更多计费问题请参见[计费项](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)。
-    
+-   更多计费问题请参见[计费项](raw/model-user-guide/test-1/model-pricing.md)。
 
 **限流**
 
 -   限流说明：阿里云主账号与其RAM子账号共享限流限制。
-    
 
-## **接口报错**
+## 接口报错
 
-### **图像无法下载或下载失败**
+### 图像无法下载或下载失败
 
 **报错场景**：当使用您自己的图片链接（非文档示例图片链接）请求接口时，报错提示“下载图片失败，请检查图片url”。
 
@@ -135,11 +119,11 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
 
 **解决方案**：请确保图片URL链接完整，并能够支持公网访问。您可以将图片上传至可供公网访问的自建存储服务，或选择上传至OSS等云存储服务。请务必确保图片URL能够支持公网访问。
 
-### **创建任务接口的curl命令执行失败**
+### 创建任务接口的curl命令执行失败
 
 **报错场景**：如果您在文档中复制创建任务接口的curl命令，执行后报错。下面以图像背景生成模型的curl命令为例。
 
-**示例：图像背景生成-创建任务接口curl命令**
+示例：图像背景生成-创建任务接口curl命令
 
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/background-generation/generation/' \
@@ -191,7 +175,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/background-
 
 **解决方案**：macOS或者Linux系统用户直接在终端执行curl命令即可。Windows用户建议使用HTTP接口平台发送请求，如Postman、Apifox等。
 
-### **海外调用API接口显示资源下载超时**
+### 海外调用API接口显示资源下载超时
 
 **报错场景**：您在海外调用接口，且图片资源存储于非中国内地地域，较大概率出现资源下载超时报错，报错信息如下所示。
 

@@ -2,31 +2,26 @@
 
 本文档是关于全妙视频混剪API调用的操作介绍文档,该功能同时提供SaaS使用界面，可以前往全妙-妙笔-视频混剪入口，进行能力试用。
 
-## **传统视频剪辑痛点**
+## 传统视频剪辑痛点
 
 传统视频剪辑通常高度依赖专业剪辑软件，操作门槛高、流程繁琐，需要人工完成素材筛选、剪辑、转场、字幕添加等环节，耗时耗力。同时，传统方式难以实现批量处理和自动化生成，尤其在面对大量短视频生产需求时，效率低下且成本高昂。
 
-## **视频混剪优势**
+## 视频混剪优势
 
 视频混剪通过AI技术有效解决了上述痛点：它无需安装复杂软件，支持一键自动剪辑，能够智能识别精彩片段、自动配乐、生成字幕、优化画面节奏，并可基于模板快速批量产出高质量视频。这不仅大幅降低了剪辑门槛，还显著提升了内容生产效率，满足了企业及个人在短视频时代对高效、智能化视频制作的需求。
 
-## **视频混剪支持场景及效果**
+## 视频混剪支持场景及效果
 
 目前视频混剪适合的领域是营销广告领域，主要支持三个视频剪辑场景：
 
 1.  基于一个长视频素材，用户输入脚本的主题要求，系统会结合长视频素材和生成的脚本，最后剪辑成一个短视频；
-    
 2.  基于若干素材视频，用户输入脚本的主题要求，系统会结合多个视频素材和生成的脚本，最后剪辑成一个短视频；
-    
 3.  模型首先会学习用户上传的样本视频和视频内脚本的特点，基于用户上传的视频素材，用户输入脚本的主题要求，系统会结合学习到的样本视频的特点，以及新的视频素材和脚本内容，最后剪辑成一个新的短视频。
-    
 
 ## 前提条件
 
 -   获取WorkSpaceId [获取Workspace ID](https://help.aliyun.com/zh/model-studio/developer-reference/obtain-api-key-app-id-and-workspace-id#732535cfc959h)；
-    
 -   引入全妙SDK [注意获取最新SDK版本](https://api.aliyun.com/api-tools/sdk/AiMiaoBi?version=2023-08-01&language=java-async-tea&tab=primer-doc)。
-    
 
 使⽤视频混剪功能，是使⽤SDK⽅式，MAVEN依赖如下：
 
@@ -40,25 +35,19 @@
 
 **重要**
 
-## **调用前必读**
+## 调用前必读
 
 1.  接口调用顺序：asyncUploadVideo（上传素材阶段）-> asyncCreateClipsTimeLine（生成剪辑timeline阶段）-> asyncCreateClipsTask（生成剪辑视频阶段）；
-    
 2.  定时使用getAutoClipsTaskInfo获取每个阶段的任务状态，每个阶段结束才能进入下一阶段；
-    
-3.  视频混剪的接口地址：[妙笔-视频混剪](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-dir-wonderful-pen-video-mixed-cut/)。
-    
+3.  视频混剪的接口地址：[妙笔-视频混剪](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-dir-wonderful-pen-video-mixed-cut)。
 
-## **接口调用的步骤**
+## 接口调用的步骤
 
-### **第一步上传视频素材**
+### 第一步上传视频素材
 
 1.  上传视频素材；
-    
 
-**说明**
-
-视频素材的大小要求：一个视频素材不超过200M，全部视频素材总时长不超过20分钟。
+**说明**视频素材的大小要求：一个视频素材不超过200M，全部视频素材总时长不超过20分钟。
 
 ```
 package com.aliyun.sdk.service.aimiaobi20230801;
@@ -157,8 +146,7 @@ public class asyncUploadVideo {
 }
 ```
 
-2.  确认视频是否上传成功，上传完成后可操作第二步。
-    
+1.  确认视频是否上传成功，上传完成后可操作第二步。
 
 ```
 package com.aliyun.sdk.service.aimiaobi20230801;
@@ -224,10 +212,9 @@ public class getAutoClipsTaskInfo {
 }
 ```
 
-### **第二步生成剪辑timeline阶段**
+### 第二步生成剪辑timeline阶段
 
 1.  调用接口生成剪辑的timeline；
-    
 
 ```
 package com.aliyun.sdk.service.aimiaobi20230801;
@@ -300,8 +287,7 @@ public class asyncCreateClipsTimeLine {
 }
 ```
 
-2.  确认视频剪辑的timeline是否生成完成，生成完成后可操作第三步。
-    
+1.  确认视频剪辑的timeline是否生成完成，生成完成后可操作第三步。
 
 ```
 package com.aliyun.sdk.service.aimiaobi20230801;
@@ -367,10 +353,9 @@ public class getAutoClipsTaskInfo {
 }
 ```
 
-### **第三步生成剪辑视频阶段**
+### 第三步生成剪辑视频阶段
 
 1.  最后生成新视频；
-    
 
 ```
 package com.aliyun.sdk.service.aimiaobi20230801;
@@ -450,8 +435,7 @@ public class asyncCreateClipsTask {
 }
 ```
 
-2.  确认新视频是否剪辑完成。
-    
+1.  确认新视频是否剪辑完成。
 
 ```
 package com.aliyun.sdk.service.aimiaobi20230801;

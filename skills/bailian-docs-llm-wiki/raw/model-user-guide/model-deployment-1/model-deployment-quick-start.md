@@ -1,31 +1,23 @@
-# 使用 API或命令行进行模型部署
+# 使用 API 或命令行进行模型部署
 
-本文档以千问模型的部署为例进行说明，使用 API（HTTP）调用方式帮助您使用阿里云百炼提供的模型部署功能。
-
-**重要**
-
-本文档仅适用于华北2（北京）地域。
+**重要**本文档仅适用于华北2（北京）地域。
 
 ## 前提条件
 
--   您已经完整阅读了[模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)，熟悉阿里云百炼平台模型部署支持的模型和基本步骤。
-    
--   您需要已[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-    
+-   您已经完整阅读了[模型部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)，熟悉阿里云百炼平台模型部署支持的模型和基本步骤。
+-   您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
 
-## **1\. 部署模型**
+## 1\. 部署模型
 
 下面的命令展示如何创建专属服务。其中，按 Token 计费的示例使用已经调优好的自定义模型`qwen3-8b-ft-202511132025-0260`，创建一个专属服务`qwen3-8b-ft-202511132025-0260`；按预置吞吐和按模型单元的示例使用预置模型。
 
 获取自定义模型 ID 的方法：前往[百炼控制台-模型调优](https://bailian.console.aliyun.com/cn-beijing?tab=model#/efm/model_manager)，点击需要部署的**任务名称** -> **产出** -> 点击蓝色字体的模型名称，进入**我的模型**页面，在模型基本信息区域可查看模型 ID。
 
-使用**模型 ID** 作为输入的`model_name`参数，即可使用 API 部署该模型。
+使用**模型 ID**作为输入的`model_name`参数，即可使用 API 部署该模型。
 
-### 按预置吞吐（PTU）计费
+#### 按预置吞吐（PTU）计费
 
-**说明**
-
-执行以下部署命令后，即便您还没有调用模型，模型部署服务仍将在部署成功后开始计费。建议您先确认服务计费规则，再执行部署命令。
+**说明**执行以下部署命令后，即便您还没有调用模型，模型部署服务仍将在部署成功后开始计费。建议您先确认服务计费规则，再执行部署命令。
 
 按预置吞吐计费模式按预置吞吐的使用时长收费，适用于追求稳定吞吐保障和高并发低延迟、且流量可预估的场景。该模式下，**吞吐/并发**和**生成速度**均为平台预置，用户不可调。
 
@@ -44,14 +36,12 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 }'
 ```
 
-### 按模型单元的使用时长计费
+#### 按模型单元的使用时长计费
 
 **说明**
 
 -   执行以下部署命令后，即便您还没有调用模型，模型部署服务仍将在部署成功后开始计费。建议您先确认服务计费规则，再执行部署命令。
-    
 -   模型单元-后付费方式的算力资源先买到先得。如购买不成功会全额退款。
-    
 
 选择**按模型单元计费**计费方式，计费模式为按模型单元的使用时长收费，适用场景为模型调优后的大规模推理业务，资源专属，性能和成本灵活可调；吞吐/并发和生成速度均为客户自定义。
 
@@ -117,7 +107,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 
 如何在 API 设置上述内容，请参考：[使用 API 创建部署](https://help.aliyun.com/zh/model-studio/create-deployment-api)。
 
-### 按模型 Token 使用量计费
+#### 按模型 Token 使用量计费
 
 选择计费方式为**按Token计费**，计费模式为按Token用量收费，适用于高性价比诉求且对并发和延迟要求不高的场景。该模式价格优势最高，吞吐/并发和生成速度均由平台预置，用户不可调。
 
@@ -159,7 +149,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 
 其中`deployed_model`为专属服务的唯一ID。
 
-## **2\. 查询服务状态**
+## 2\. 查询服务状态
 
 通过以下命令查询指定专属服务的详细信息：
 
@@ -197,11 +187,9 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8b-ft-202511132025
 
 当服务状态为`RUNNING`时，服务部署完成。
 
-## **3\. 执行推理请求**
+## 3\. 执行推理请求
 
-**说明**
-
-若首次使用DashScope SDK，请参考[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+**说明**若首次使用DashScope SDK，请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 请确保 API Key 所在的业务空间与模型部署所在的业务空间相同。
 
@@ -232,16 +220,12 @@ else:
 {"input_tokens": 11, "output_tokens": 63, "total_tokens": 74}
 ```
 
-## **4\. 删除专属服务**
+## 4\. 删除专属服务
 
-**警告**
-
-执行以下删除命令后，模型部署服务将立即开始下线，且不可恢复。您将：
+**警告**执行以下删除命令后，模型部署服务将立即开始下线，且不可恢复。您将：
 
 1.  无法调用该模型。
-    
 2.  部署服务停止计费。
-    
 
 不再使用的专属服务，可以通过下面的命令删除：
 
@@ -277,15 +261,15 @@ curl --request DELETE 'https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8
 }
 ```
 
-删除成功后，再使用[2\. 查询服务状态](#7ce6489058608)接口将无法查询到部署模型的状态。
+删除成功后，再使用[2\. 查询服务状态](https://help.aliyun.com/zh/model-studio/model-deployment-quick-start#7ce6489058608)接口将无法查询到部署模型的状态。
 
 ## API参考
 
-详细API调用请参考[API 详情](https://help.aliyun.com/zh/model-studio/model-deployment-api)。
+详细API调用请参考[API 详情](https://help.aliyun.com/zh/model-studio/create-deployment-api)。
 
-## **常见问题**
+## 常见问题
 
-### **模型部署时报错权限不足怎么办？**
+### 模型部署时报错权限不足怎么办？
 
 在使用 API 进行模型部署时，需要确保：
 
@@ -299,7 +283,7 @@ curl --request DELETE 'https://dashscope.aliyuncs.com/api/v1/deployments/qwen3-8
     
     如果提示权限不足，请联系您的组织或 IT 管理员添加相关权限或代为操作。
     
-2.  API Key 的**归属账号**在**归属业务空间**中拥有操作权限。请前往[百炼控制台](https://bailian.console.aliyun.com/?tab=model#/model-market)，点击左下角的业务空间，切换到对应业务空间，再点击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1816324671/p1030217.png)检查对应业务空间的模型部署权限设置。
+2.  API Key 的**归属账号**在**归属业务空间**中拥有操作权限。请前往[百炼控制台](https://bailian.console.aliyun.com/?tab=model#/model-market)，点击左下角的业务空间，切换到对应业务空间，再点击检查对应业务空间的模型部署权限设置。
     
     > API 调用报错：`Workspace access denied`。
     

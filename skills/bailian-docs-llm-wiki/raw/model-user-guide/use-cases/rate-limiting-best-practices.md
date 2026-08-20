@@ -1,4 +1,4 @@
-# 限流应对最佳实践 
+# 限流应对最佳实践
 
 百炼 API 按请求数和 Token 用量限流。本文提供从平台配置到客户端流控再到架构兜底的应对方案。
 
@@ -6,31 +6,25 @@
 
 本文按改动成本从低到高，介绍三类方案：
 
--   [平台配置方案](#sec-platform-solutions)（低改动成本）：[服务端排队等待](#sec-wait-timeout)、[提升限流额度](#sec-quota)、[PTU](#sec-ptu)、[Batch API](#sec-batch-api)。
-    
--   [客户端流控策略](#sec-strategies)（改客户端代码）：从[基础重试](#h3-l1)到[自适应拥塞控制](#h3-l4)，按工程复杂度递进的四种策略。
-    
--   [架构兜底方案](#sec-arch-fallback)（改系统架构）：[模型降级（Fallback）](#sec-fallback)、[基于消息队列（MQ）的削峰填谷](#sec-mq-arch)。
-    
+-   [平台配置方案](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_platform_solutions)（低改动成本）：[服务端排队等待](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_wait_timeout)、[提升限流额度](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_quota)、[PTU](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_ptu)、[Batch API](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_batch_api)。
+-   [客户端流控策略](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_strategies)（改客户端代码）：从[基础重试](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_l1)到[自适应拥塞控制](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_l4)，按工程复杂度递进的四种策略。
+-   [架构兜底方案](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_arch_fallback)（改系统架构）：[模型降级（Fallback）](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_fallback)、[基于消息队列（MQ）的削峰填谷](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_mq_arch)。
 
-如果当前正在解决 `429` 报错，可查看[错误诊断与策略推荐](#sec-diag-table)定位原因。若为突发流量（Traffic Burst）触发，推荐先试[服务端排队等待](#sec-wait-timeout)——只需加一个请求头。
+如果当前正在解决 `429` 报错，可查看[错误诊断与策略推荐](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_diag_table)定位原因。若为突发流量（Traffic Burst）触发，推荐先试[服务端排队等待](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_wait_timeout)——只需加一个请求头。
 
 ## 平台限流机制
 
-限流按**主账号**维度、**模型**独立计算，触发后通常 1 分钟内恢复。各模型的限流条件和当前用量参见[模型限流条件](https://help.aliyun.com/zh/model-studio/rate-limit)和[模型用量监控](https://help.aliyun.com/zh/model-studio/model-telemetry)。百炼 API 有以下三种限流规则：
+限流按**主账号**维度、**模型**独立计算，触发后通常 1 分钟内恢复。各模型的限流条件和当前用量参见[模型限流条件](raw/model-user-guide/get-started-with-models/rate-limit.md)和[模型用量监控](raw/model-user-guide/model-monitoring/model-telemetry.md)。百炼 API 有以下三种限流规则：
 
 -   **分钟级配额限制（RPM / TPM）**：每分钟允许的最大请求数（Requests Per Minute，RPM）和最大 Token 用量（Tokens Per Minute，TPM）。
-    
 -   **瞬时频率限制（RPS / TPS）**：每秒允许的最大请求数（RPS）和最大 Token 用量（TPS）。单秒内请求或 Token 消耗过于密集时触发。
-    
 -   **增速限制（Traffic Burst）**：短时间内请求量或 Token 用量激增时触发。阈值随服务状态动态调整，逐步提升请求量可避免触发。
-    
 
 以下从平台配置、客户端流控、架构兜底三个层面介绍应对方案。
 
 ## 错误诊断与策略推荐
 
-同一错误码可能由不同限流维度触发。高并发下服务端饱和也可能导致响应变慢或超时，可通过[自适应拥塞控制策略](#h3-l4)缓解。
+同一错误码可能由不同限流维度触发。高并发下服务端饱和也可能导致响应变慢或超时，可通过[自适应拥塞控制策略](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#h3_l4)缓解。
 
 **错误码 (DashScope / OpenAI)**
 
@@ -47,14 +41,14 @@ Throttling.RateQuota / limit\_requests
 
 间歇性报错，成功率随时间下降
 
-[令牌桶](#sec-l2)：控制单位时间内的请求配额
+[令牌桶](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_l2)：控制单位时间内的请求配额
 
 **请求频率超限**  
 （RPS 超限）  
 
 启动瞬间或并发激增时集中报错
 
-[并发信号量](#sec-l2)或[平滑限速器](#sec-l3)：拉开请求间距
+[并发信号量](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_l2)或[平滑限速器](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_l3)：拉开请求间距
 
 Throttling.AllocationQuota / insufficient\_quota
 
@@ -63,14 +57,14 @@ Throttling.AllocationQuota / insufficient\_quota
 
 长文本处理时间歇性报错
 
-[双重令牌桶](#sec-l3)：同时限制 RPM 和 TPM 配额
+[双重令牌桶](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_l3)：同时限制 RPM 和 TPM 配额
 
 **Token 用量超限**  
 （TPS 超限）  
 
 长文本并发时瞬间 Token 消耗过大
 
-[并发信号量](#sec-l2)或[平滑限速器](#sec-l3)
+[并发信号量](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_l2)或[平滑限速器](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_l3)
 
 Throttling.BurstRate / limit\_burst\_rate
 
@@ -79,7 +73,7 @@ Throttling.BurstRate / limit\_burst\_rate
 
 启动或空闲恢复后突然发起大量请求
 
-推荐首选[服务端排队等待](#sec-wait-timeout)；或令牌桶设置低初始值（如 `initial_tokens=0`）实现冷启动缓起；或使用[平滑限速器](#sec-l3)削峰
+推荐首选[服务端排队等待](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_wait_timeout)；或令牌桶设置低初始值（如 `initial_tokens=0`）实现冷启动缓起；或使用[平滑限速器](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_l3)削峰
 
 ## 平台配置方案
 
@@ -89,9 +83,7 @@ Throttling.BurstRate / limit\_burst\_rate
 
 针对增速/突发限流（Traffic Burst），百炼支持在请求头中声明最大等待时间。服务端收到后，在指定时间内排队重试，直到请求开始处理或超时。相比直接返回 429，该机制可显著提升突发流量下的成功率。
 
-**说明**
-
-该功能仅适用于增速/突发限流（Throttling.BurstRate），不适用于 RPM/TPM 绝对值限流。
+**说明**该功能仅适用于增速/突发限流（Throttling.BurstRate），不适用于 RPM/TPM 绝对值限流。
 
 **配置方式**
 
@@ -119,15 +111,13 @@ X-DashScope-Wait-Timeout
 配置排队等待后，需相应调整客户端超时时间，避免因叠加排队时间导致连接提前关闭：
 
 -   **非流式请求**（stream: false）：超时时间 = 原基础超时时间 + Wait-Timeout 值。
-    
 -   **流式请求**（stream: true）：超时时间 > Wait-Timeout 值。流式请求在收到首个 chunk 后开始计时，只需确保首次响应超时大于排队时间。
-    
 
 例如：原基础超时时间为 120 秒，Wait-Timeout 设为 30 秒，则非流式请求的超时时间应设为 150 秒。
 
-**代码示例**
+代码示例
 
-## OpenAI Python SDK
+OpenAI Python SDK
 
 ```
 import os
@@ -149,7 +139,7 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-## curl
+curl
 
 ```
 curl -X POST "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions" \
@@ -166,13 +156,13 @@ curl -X POST "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
 
 默认额度不足时，可在百炼控制台直接提升临时限流额度，提交后立即生效。目前支持华北2（北京）和新加坡地域。
 
-适用场景：业务增长导致 RPM/TPM 配额不足，或短期活动需临时提升吞吐量。操作详情参见[限流](https://help.aliyun.com/zh/model-studio/rate-limit#h2-temp-limit-raise)。
+适用场景：业务增长导致 RPM/TPM 配额不足，或短期活动需临时提升吞吐量。操作详情参见[限流](https://help.aliyun.com/zh/model-studio/rate-limit#h2_temp_limit_raise)。
 
 操作简单，建议在尝试客户端流控前优先评估。
 
 ### 预置吞吐单元（PTU）
 
-[PTU 服务](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)提供独立预留的专享算力，可避免公共资源池的竞争，是保障实时高吞吐的首选。
+[PTU 服务](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)提供独立预留的专享算力，可避免公共资源池的竞争，是保障实时高吞吐的首选。
 
 适用场景：业务对吞吐量有确定性要求（如 SLA 承诺），或希望免去客户端流控开发，直接获得稳定高吞吐。
 
@@ -188,35 +178,25 @@ PTU 为预留资源，未满负荷使用也持续计费。建议根据实际峰�
 
 ## 客户端流控策略
 
-当平台方案（如[服务端排队等待](#sec-wait-timeout)、提升额度等）无法满足需求时，需在客户端引入流控。核心原则：**将请求均匀分布在时间窗口内**，避免突发触发限流。系统启动或长时间空闲后，应逐步提升并发而非瞬间拉满。
+当平台方案（如[服务端排队等待](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_wait_timeout)、提升额度等）无法满足需求时，需在客户端引入流控。核心原则：**将请求均匀分布在时间窗口内**，避免突发触发限流。系统启动或长时间空闲后，应逐步提升并发而非瞬间拉满。
 
 以下四种策略按工程复杂度递增，每种包含上一级能力并增强：
 
 -   基础重试仅做被动防御；
-    
 -   请求速率限制加入主动排队；
-    
 -   流量整形进一步引入 Token 维度管控和平滑发送；
-    
 -   自适应拥塞控制则基于实时反馈动态调整发送速率。
-    
 
 在满足业务需求的前提下，优先选择实现成本更低的策略。
 
-### **各策略的吞吐量表现对比**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0844336771/p1067109.png)
+### 各策略的吞吐量表现对比
 
 四种策略在不同负载下的吞吐量表现：
 
 -   **基础重试策略**：低负载下有效，高并发下易触发拥塞崩溃，吞吐量断崖式下降。
-    
 -   **请求速率限制策略**：防崩溃能力强，但长文本混合负载下因缺乏 Token 管控，吞吐量呈锯齿状波动。
-    
 -   **流量整形策略**：稳定性高，以牺牲部分峰值吞吐换取平稳输出。
-    
 -   **自适应拥塞控制策略**：高负载下可动态收敛至稳定高吞吐点，但存在冷启动探测开销。
-    
 
 ### 基础重试策略
 
@@ -224,9 +204,9 @@ PTU 为预留资源，未满负荷使用也持续计费。建议根据实际峰�
 
 没有前置流量控制，多线程并发下易触发限流并导致请求积压。
 
-**代码示例**
+代码示例
 
-## 使用 tenacity 库
+使用 tenacity 库
 
 ```
 import openai
@@ -273,7 +253,7 @@ except Exception as e:
     print(f"请求失败: {e}")
 ```
 
-## 原生实现（无依赖）
+原生实现（无依赖）
 
 ```
 import time
@@ -329,9 +309,7 @@ except Exception as e:
 上述代码使用指数退避而非固定间隔重试。**固定间隔重试**会让所有失败请求同时重发，再次触发限流。**指数退避 + 随机抖动**将重试打散：
 
 -   **等待时间逐步翻倍**：如 `1s：2s：4s...`，避免短时间内反复请求。
-    
 -   **加入随机抖动**：引入随机值（如 `2s +/- 0.5s`）打散重试流量，防止"扎堆"重试形成二次洪峰（惊群效应）。
-    
 
 系统以分散方式恢复，避免"失败—集体重试—再次失败"的恶性循环。
 
@@ -344,9 +322,7 @@ except Exception as e:
 客户端主动排队分两级控制：
 
 -   **RPM 令牌桶**：限制每分钟请求总数。桶容量即 RPM 配额，令牌恒定速率填充。支持预支：令牌不足时可透支未来额度，严格 FIFO。
-    
 -   **并发信号量**：限制并发请求数，防止瞬时高并发触发 RPS 限制。
-    
 
 两级控制必须**先获取 RPM 令牌，再获取并发信号量**。并发槽位是稀缺资源，只应分配给已满足执行条件的请求。若顺序颠倒，高负载下会引发**队头阻塞**——请求占住槽位却无令牌可用，所有槽位被占满但无请求发出。原则：持有稀缺资源时，不做长耗时等待。
 
@@ -354,9 +330,9 @@ except Exception as e:
 
 该策略不追踪 Token 用量，长文本任务中仍可能耗尽 TPM 配额。
 
-**代码示例**
+代码示例
 
-## 核心组件：令牌桶
+核心组件：令牌桶
 
 ```
 import time
@@ -400,7 +376,7 @@ class TokenBucket:
             self.last_refill = now
 ```
 
-## 客户端逻辑
+客户端逻辑
 
 ```
 import asyncio
@@ -463,13 +439,9 @@ RAG 实时入库、长文档批量分析等高稳吞吐场景中，请求速率�
 在请求速率限制基础上，增强了以下能力：
 
 -   **双重资源管控（RPM & TPM）**：同时维护 RPM 和 TPM 令牌桶，所有请求在发出前必须通过两个维度的配额检查。
-    
 -   **输入事前预扣，输出事后结算**：模型输出长度请求前未知。TPM 令牌桶发送时仅预扣输入 Token，完成后结算实际输出。即使结算后令牌为负，后续请求也会等待回正，自然平滑流速。
-    
 -   **匀速预热**：冷启动期间，令牌发放速率随时间线性增长，消除初始突发风险。
-    
 -   **平滑限速**：通过强制请求间保持最小间隔（Pacing），平滑发送速率，降低触发速率限制的风险。
-    
 
 **备选方案**：若业务对启动时的微小排队延迟不敏感，可复用标准令牌桶（设 `initial_tokens=0`）实现安全启动，降低客户端复杂度。Python 令牌桶仅用于演示思路，生产环境建议使用成熟限流组件（如 Java Guava 的 `SmoothRateLimiter`）。
 
@@ -477,13 +449,11 @@ RAG 实时入库、长文档批量分析等高稳吞吐场景中，请求速率�
 
 完整的流量整形链路为：`预估输入 Token → 双重准入（RPM & TPM）→ 并发锁 → 平滑整形 → 发送 → 输出 Token 结算`。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0844336771/p1067110.png)
-
 该策略采用保守平滑机制，会牺牲部分峰值并发，不适用于极致低延迟的在线服务。
 
-**代码示例**
+代码示例
 
-## 进阶令牌桶
+进阶令牌桶
 
 ```
 import time
@@ -547,7 +517,7 @@ class TokenBucket:
         self.tokens = min(self.capacity, self.tokens + amount)
 ```
 
-## 平滑限流器
+平滑限流器
 
 ```
 import time
@@ -565,7 +535,7 @@ class SmoothRateLimiter:
         return wait_time
 ```
 
-## 客户端逻辑
+客户端逻辑
 
 ```
 import asyncio
@@ -617,11 +587,8 @@ class TrafficShapingClient:
 该策略的价值在于应对**高度不确定**与**剧烈波动**的环境，并非普适选择：
 
 -   **性能悖论**：若负载可预测（如定量批处理），直接设定最优静态参数通常优于需要"试探与收敛"的动态探测。
-    
 -   **探测损耗**：动态算法必然伴随冷启动爬坡与试探波动，在可知场景下是不必要的性能损耗。
-    
 -   **维护成本**：闭环反馈机制增加系统复杂度与排查难度。
-    
 
 除非业务**规模极大、负载复杂且波动显著**，否则优先选择更简单的前三种策略。
 
@@ -630,37 +597,25 @@ class TrafficShapingClient:
 该策略借鉴 [BBR](https://cacm.acm.org/practice/bbr-congestion-based-congestion-control)，建立基于 **EBP（Elastic Bandwidth Probing）** 的闭环控制系统。以 RPM/TPM 配额为指导上限，根据实时反馈（延迟、限流信号）动态计算最佳发送速率。
 
 -   **弹性探测（EBP）**：记忆历史最高成功水位，根据当前并发与最高水位的距离模拟弹簧张力计算探测增益（距离远加速，近减速）。叠加微小线性推力确保高饱和区仍能探索边界。
-    
 -   **TPT 拥塞感知**：大模型生成耗时与长度成正比，长文本延迟高不代表拥塞。使用 TPT（Time Per Token）作为指标，滤除内容长度噪声，仅在 TPT 显著恶化时判定为计算饱和。
-    
 -   **防突发调速器**：无论 EBP 算出的目标多高，调速器强制限制并发增长加速度，确保流量平滑上升，避免阶梯跳变触发增速限制。
-    
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0844336771/p1067112.png)
 
 相较于原生 BBR，针对大模型特性做了以下改造：
 
 -   **指导性探测**：引入已知的 RPM/TPM 配额作为"指导上限"，避免盲目试探导致的频繁撞墙。
-    
 -   **信号源改造（RTT → TPT）**：原生 BBR 依赖 RTT，但大模型中内容长度带来的延迟差异远大于网络抖动，改用 TPT 剔除干扰。
-    
 -   **响应机制强化（ProbeRTT → Hold）**：面对延迟波动，选择保持当前并发水平，而非主动退避降低吞吐。
-    
 -   **硬限流响应（Packet Loss → 429 Drain）**：一旦触发 `429` 错误，进入激进的 Drain 状态，冷却期结束后执行快速恢复。
-    
 
 局限：
 
 -   **TPT 噪点**：当前 TPT 按"总延迟 / 总 Token 数"粗估，混入了网络往返、排队与首字生成耗时，易受抖动或长输入干扰而虚高，可能误触发 Hold 状态。
-    
 -   **大请求饥饿**：为追求调度性能采用了非严格 FIFO 唤醒机制，配额紧缺时短 Token 请求可能抢占资源，导致长 Token 请求等待过长。
-    
 -   **冷启动**：需要预热时间建立统计模型，低负载或短时任务中吞吐量可能低于前三种策略。
-    
 
-**代码示例**
+代码示例
 
-## 控制入口
+控制入口
 
 ```
 class ElasticCongestionController:
@@ -699,7 +654,7 @@ class ElasticCongestionController:
             self.update_limit_via_ebp()
 ```
 
-## EBP 探测
+EBP 探测
 
 ```
 def probe_next_limit(self, current_limit, max_known_capacity):
@@ -730,7 +685,7 @@ def probe_next_limit(self, current_limit, max_known_capacity):
     return min(final_limit, dynamic_ceiling)
 ```
 
-## 统计追踪
+统计追踪
 
 ```
 class CongestionMetrics:
@@ -768,13 +723,10 @@ class CongestionMetrics:
 **降级链路设计原则**
 
 -   **选择不同系列的模型**：百炼限流按模型独立计算，可选不同模型作为备选，例如 `qwen3.6-plus` 降级至 `qwen3.6-flash`。
-    
 -   **仅限流错误时降级**：降级针对 `429` 限流错误，网络超时或参数错误切换模型无法解决。
-    
 -   **备选模型需提前验证**：确保备选模型支持业务所需功能（如 Function Calling、结构化输出），避免降级后功能异常。
-    
 
-**代码示例**
+代码示例
 
 以下示例演示了基于 429 错误码的模型降级逻辑：主模型请求触发限流时，自动切换至备选模型重试。
 
@@ -818,7 +770,7 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-模型降级可与客户端流控策略组合使用。例如，在[请求速率限制策略](#sec-l2)的重试逻辑中集成降级判断：当重试次数耗尽仍触发限流时，切换至备选模型。
+模型降级可与客户端流控策略组合使用。例如，在[请求速率限制策略](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_l2)的重试逻辑中集成降级判断：当重试次数耗尽仍触发限流时，切换至备选模型。
 
 ### 基于消息队列（MQ）的削峰填谷
 
@@ -828,12 +780,9 @@ if __name__ == "__main__":
 
 设计要点：
 
--   **消费速率控制**：消费端应配合[请求速率限制](#sec-l2)或[流量整形](#sec-l3)策略，按 RPM/TPM 配额匀速消费，而非无限制地拉取消息。
-    
+-   **消费速率控制**：消费端应配合[请求速率限制](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_l2)或[流量整形](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices#sec_l3)策略，按 RPM/TPM 配额匀速消费，而非无限制地拉取消息。
 -   **死信处理**：多次重试仍失败的消息转入死信队列并告警，避免无限重试阻塞消费。
-    
 -   **背压传递**：MQ 积压超阈值时向上游反馈压力（如返回排队状态），避免队列无限增长。
-    
 
 ## 生产环境注意事项
 
@@ -844,11 +793,9 @@ if __name__ == "__main__":
     上述策略以文本模型为例，核心思想同样适用于多模态模型（图像生成、语音合成等）。计量单位不同，但本质均为限制提交速率和处理容量：
     
     -   语音识别等模型：通常受单位时间内请求数（如 RPM）和用量（如音频时长）双重约束，策略与文本模型基本一致。
-        
     -   图片/视频等模型：通常受任务提交速率和并发任务数约束。可沿用请求速率限制策略的思路，限制任务提交速率并配合信号量控制并发数。
-        
     
-    无论限流指标如何变化，客户端主动流控的原则不变。只需将计数器或探测指标替换为对应模态的指标。具体规则参见[模型限流条件](https://help.aliyun.com/zh/model-studio/rate-limit)。
+    无论限流指标如何变化，客户端主动流控的原则不变。只需将计数器或探测指标替换为对应模态的指标。具体规则参见[模型限流条件](raw/model-user-guide/get-started-with-models/rate-limit.md)。
     
 -   **并发模型的原子性**
     

@@ -4,13 +4,31 @@
 
 > 相关文档：[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)。
 
-## **error**
+## error
 
 不论是遇到客户端错误还是服务端错误，服务端都会响应该事件。
 
-**event\_id** `_string_`
+**event\_id**`string`
 
 服务端事件ID。
+
+**type**`string`
+
+事件类型，固定为`error`。
+
+**error**`object`
+
+错误详情。
+
+属性
+
+**code**_string_
+
+错误码。
+
+**message**_string_
+
+错误信息。
 
 ```
 {
@@ -23,31 +41,51 @@
 }
 ```
 
-**type** `_string_`
-
-事件类型，固定为`error`。
-
-**error** `_object_`
-
-错误详情。
-
-**属性**
-
-**code** _string_
-
-错误码。
-
-**message** _string_
-
-错误信息。
-
-## **session.created**
+## session.created
 
 客户端连接到服务端后，响应的第一个事件，该事件返回时会携带服务端对此次连接的默认配置信息。
 
-**event\_id** `_string_`
+**event\_id**`string`
 
 服务端事件ID。
+
+**type**`string`
+
+事件类型，固定为`session.created`。
+
+**session**`object`
+
+会话配置。
+
+属性
+
+**id**`string`
+
+会话ID。
+
+**object**`string`
+
+会话服务名。
+
+**mode**`string`
+
+交互模式，`server_commit`或`commit`。
+
+**model**`string`
+
+使用的模型。
+
+**voice**`string`
+
+使用的音色。
+
+**response\_format**`string`
+
+音频格式。
+
+**sample\_rate**`integer`
+
+音频采样率。
 
 ```
 {
@@ -65,51 +103,55 @@
 }
 ```
 
-**type** `_string_`
-
-事件类型，固定为`session.created`。
-
-**session** `_object_`
-
-会话配置。
-
-**属性**
-
-**id** `_string_`
-
-会话ID。
-
-**object** `_string_`
-
-会话服务名。
-
-**mode** `_string_`
-
-交互模式，`server_commit`或`commit`。
-
-**model** `_string_`
-
-使用的模型。
-
-**voice** `_string_`
-
-使用的音色。
-
-**response\_format** `_string_`
-
-音频格式。
-
-**sample\_rate** `_integer_`
-
-音频采样率。
-
-## **session.updated**
+## session.updated
 
 接收到客户端的`session.update`请求并正确处理后返回。如果出现错误，则直接返回error事件。
 
-**event\_id** `_string_`
+**event\_id**`string`
 
 服务端事件ID。
+
+**type**`string`
+
+事件类型，固定为`session.updated`。
+
+**session**`object`
+
+会话配置。
+
+属性
+
+**id**`string`
+
+会话ID。
+
+**object**`string`
+
+会话服务名。
+
+**mode**`string`
+
+交互模式，`server_commit`或`commit`。
+
+**model**`string`
+
+使用的模型。
+
+**voice**`string`
+
+使用的音色。
+
+**response\_format**`string`
+
+音频格式。
+
+**sample\_rate**`integer`
+
+音频采样率。
+
+**language\_type**`string`
+
+音频语种。
 
 ```
 {
@@ -128,55 +170,21 @@
 }
 ```
 
-**type** `_string_`
-
-事件类型，固定为`session.updated`。
-
-**session** `_object_`
-
-会话配置。
-
-**属性**
-
-**id** `_string_`
-
-会话ID。
-
-**object** `_string_`
-
-会话服务名。
-
-**mode** `_string_`
-
-交互模式，`server_commit`或`commit`。
-
-**model** `_string_`
-
-使用的模型。
-
-**voice** `_string_`
-
-使用的音色。
-
-**response\_format** `_string_`
-
-音频格式。
-
-**sample\_rate** `_integer_`
-
-音频采样率。
-
-**language\_type** `_string_`
-
-音频语种。
-
-## **input\_text\_buffer.committed**
+## input\_text\_buffer.committed
 
 客户端发送`input_text_buffer.commit`事件后，服务端的响应事件。
 
-**event\_id** `_string_`
+**event\_id**`string`
 
 服务端事件ID。
+
+**type**`string`
+
+事件类型，固定为`input_text_buffer.committed`。
+
+**item\_id**`string`
+
+将创建的用户消息项的 ID。
 
 ```
 {
@@ -186,21 +194,17 @@
 }
 ```
 
-**type** `_string_`
-
-事件类型，固定为`input_text_buffer.committed`。
-
-**item\_id** `_string_`
-
-将创建的用户消息项的 ID。
-
-## **input\_text\_buffer.****cleared**
+## input\_text\_buffer.cleared
 
 客户端发送`input_audio_buffer.clear`事件后，服务端的响应事件。
 
-**event\_id** `_string_`
+**event\_id**`string`
 
 服务端事件ID。
+
+**type**`string`
+
+事件类型，固定为`input_text_buffer.cleared`。
 
 ```
 {
@@ -209,17 +213,48 @@
 }
 ```
 
-**type** `_string_`
-
-事件类型，固定为`input_text_buffer.cleared`。
-
-## **response.created**
+## response.created
 
 客户端发送`input_text_buffer.commit`事件后，服务端的响应事件。
 
-**event\_id** `_string_`
+**event\_id**`string`
 
 服务端事件ID。
+
+**type**`string`
+
+事件类型，固定为`response.created`。
+
+**response**`object`
+
+响应详情。
+
+属性
+
+**id**`string`
+
+响应ID。
+
+**object**`string`
+
+对象类型，在此事件下固定为`realtime.response`。
+
+**status**`string`
+
+响应的最终状态，取值范围：
+
+-   completed
+-   failed
+-   in\_progress
+-   incomplete
+
+**voice**`string`
+
+使用的音色。
+
+**output**`array`
+
+在此事件下为空。
 
 ```
 {
@@ -236,52 +271,47 @@
 }
 ```
 
-**type** `_string_`
-
-事件类型，固定为`response.created`。
-
-**response** `_object_`
-
-响应详情。
-
-**属性**
-
-**id** `_string_`
-
-响应ID。
-
-**object** `_string_`
-
-对象类型，在此事件下固定为`realtime.response`。
-
-**status** `_string_`
-
-响应的最终状态，取值范围：
-
--   completed
-    
--   failed
-    
--   in\_progress
-    
--   incomplete
-    
-
-**voice** `_string_`
-
-使用的音色。
-
-**output** `_array_`
-
-在此事件下为空。
-
-## **response.output\_item.added**
+## response.output\_item.added
 
 当新的item项需要输出时，服务端返回此事件。
 
-**event\_id** `_string_`
+**event\_id**`string`
 
 服务端事件ID。
+
+**type**`string`
+
+事件类型，固定为`response.output_item.added`。
+
+**response\_id**`string`
+
+响应的ID。
+
+**output\_index**`integer`
+
+响应输出项的索引，目前固定为0。
+
+**item**`object`
+
+输出项信息。
+
+属性
+
+**id**`string`
+
+输出项ID。
+
+**object**`string`
+
+始终为 `realtime.item`。
+
+**status**`string`
+
+输出项的状态。
+
+**content**`array`
+
+消息的内容。
 
 ```
 {
@@ -300,47 +330,47 @@
 }
 ```
 
-**type** `_string_`
-
-事件类型，固定为`response.output_item.added`。
-
-**response\_id** `_string_`
-
-响应的ID。
-
-**output\_index** `_integer_`
-
-响应输出项的索引，目前固定为0。
-
-**item** `_object_`
-
-输出项信息。
-
-**属性**
-
-**id** `_string_`
-
-输出项ID。
-
-**object** `_string_`
-
-始终为 `realtime.item`。
-
-**status** `_string_`
-
-输出项的状态。
-
-**content** `_array_`
-
-消息的内容。
-
-## **response.content\_part.added**
+## response.content\_part.added
 
 当新的内容项需要输出时，服务端返回此事件。
 
-**event\_id** `_string_`
+**event\_id**`string`
 
 服务端事件ID。
+
+**type**`string`
+
+事件类型，固定为`response.content_part.added`。
+
+**response\_id**`string`
+
+响应的ID。
+
+**item\_id**`string`
+
+消息项ID。
+
+**output\_index**`integer`
+
+响应输出项的索引，目前固定为0。
+
+**content\_index**`integer`
+
+响应输出项中内部部分的索引，目前固定为0。
+
+**part**`object`
+
+已完成的内容部分。
+
+属性
+
+**type**`string`
+
+内容部分的类型。
+
+**text**`string`
+
+内容部分的文本。
 
 ```
 {
@@ -357,47 +387,37 @@
 }
 ```
 
-**type** `_string_`
-
-事件类型，固定为`response.content_part.added`。
-
-**response\_id** `_string_`
-
-响应的ID。
-
-**item\_id** `_string_`
-
-消息项ID。
-
-**output\_index** `_integer_`
-
-响应输出项的索引，目前固定为0。
-
-**content\_index** `_integer_`
-
-响应输出项中内部部分的索引，目前固定为0。
-
-**part** `_object_`
-
-已完成的内容部分。
-
-**属性**
-
-**type** `_string_`
-
-内容部分的类型。
-
-**text** `_string_`
-
-内容部分的文本。
-
-## **response.audio.delta**
+## response.audio.delta
 
 当模型增量生成新的audio数据时，系统会返回服务器 response.audio.delta 事件。
 
-**event\_id** `_string_`
+**event\_id**`string`
 
 服务端事件ID。
+
+**type**`string`
+
+事件类型，固定为`response.audio.delta`。
+
+**response\_id**`string`
+
+响应的ID。
+
+**item\_id**`string`
+
+消息项ID。
+
+**output\_index**`integer`
+
+响应输出项的索引，目前固定为0。
+
+**content\_index**`integer`
+
+响应输出项中内部部分的索引，目前固定为0。
+
+**delta**`string`
+
+模型增量输出的audio数据，使用Base64编码。
 
 ```
 {
@@ -411,37 +431,47 @@
 }
 ```
 
-**type** `_string_`
-
-事件类型，固定为`response.audio.delta`。
-
-**response\_id** `_string_`
-
-响应的ID。
-
-**item\_id** `_string_`
-
-消息项ID。
-
-**output\_index** `_integer_`
-
-响应输出项的索引，目前固定为0。
-
-**content\_index** `_integer_`
-
-响应输出项中内部部分的索引，目前固定为0。
-
-**delta** `_string_`
-
-模型增量输出的audio数据，使用Base64编码。
-
-## **response.content\_part.done**
+## response.content\_part.done
 
 当新的内容项输出完成时，服务端返回此事件。
 
-**event\_id** `_string_`
+**event\_id**`string`
 
 服务端事件ID。
+
+**type**`string`
+
+事件类型，固定为`response.content_part.done`。
+
+**response\_id**`string`
+
+响应的ID。
+
+**item\_id**`string`
+
+消息项ID。
+
+**output\_index**`integer`
+
+响应输出项的索引，目前固定为0。
+
+**content\_index**`integer`
+
+响应输出项中内部部分的索引，目前固定为0。
+
+**part**`object`
+
+已完成的内容部分。
+
+属性
+
+**type**`string`
+
+内容部分的类型。
+
+**text**`string`
+
+内容部分的文本。
 
 ```
 {
@@ -458,47 +488,47 @@
 }
 ```
 
-**type** `_string_`
-
-事件类型，固定为`response.content_part.done`。
-
-**response\_id** `_string_`
-
-响应的ID。
-
-**item\_id** `_string_`
-
-消息项ID。
-
-**output\_index** `_integer_`
-
-响应输出项的索引，目前固定为0。
-
-**content\_index** `_integer_`
-
-响应输出项中内部部分的索引，目前固定为0。
-
-**part** `_object_`
-
-已完成的内容部分。
-
-**属性**
-
-**type** `_string_`
-
-内容部分的类型。
-
-**text** `_string_`
-
-内容部分的文本。
-
-## **response.output\_item.done**
+## response.output\_item.done
 
 当新的item输出完成时，服务端返回此事件。
 
-**event\_id** `_string_`
+**event\_id**`string`
 
 服务端事件ID。
+
+**type**`string`
+
+事件类型，固定为`response.output_item.done`。
+
+**response\_id**`string`
+
+响应的ID。
+
+**output\_index**`integer`
+
+响应输出项的索引，目前固定为0。
+
+**item**`object`
+
+输出项信息。
+
+属性
+
+**id**`string`
+
+输出项ID。
+
+**object**`string`
+
+始终为 `realtime.item`。
+
+**status**`string`
+
+输出项的状态。
+
+**content**`array`
+
+消息的内容。
 
 ```
 {
@@ -522,47 +552,33 @@
 }
 ```
 
-**type** `_string_`
-
-事件类型，固定为`response.output_item.done`。
-
-**response\_id** `_string_`
-
-响应的ID。
-
-**output\_index** `_integer_`
-
-响应输出项的索引，目前固定为0。
-
-**item** `_object_`
-
-输出项信息。
-
-**属性**
-
-**id** `_string_`
-
-输出项ID。
-
-**object** `_string_`
-
-始终为 `realtime.item`。
-
-**status** `_string_`
-
-输出项的状态。
-
-**content** `_array_`
-
-消息的内容。
-
-## **response.audio.done**
+## response.audio.done
 
 当模型生成audio数据完成时，系统会返回服务器 response.audio.done 事件。
 
-**event\_id** `_string_`
+**event\_id**`string`
 
 服务端事件ID。
+
+**type**`string`
+
+事件类型，固定为`response.audio.done`。
+
+**response\_id**`string`
+
+响应的ID。
+
+**item\_id**`string`
+
+消息项ID。
+
+**output\_index**`integer`
+
+响应输出项的索引，目前固定为0。
+
+**content\_index**`integer`
+
+响应输出项中内部部分的索引，目前固定为0。
 
 ```
 {
@@ -575,35 +591,85 @@
 }
 ```
 
-**type** `_string_`
-
-事件类型，固定为`response.audio.done`。
-
-**response\_id** `_string_`
-
-响应的ID。
-
-**item\_id** `_string_`
-
-消息项ID。
-
-**output\_index** `_integer_`
-
-响应输出项的索引，目前固定为0。
-
-**content\_index** `_integer_`
-
-响应输出项中内部部分的索引，目前固定为0。
-
-## **response.done**
+## response.done
 
 当响应生成完成时，服务端会返回此事件。该事件中包含的 Response 对象将包含 Response 中的所有输出项，但不包括已返回的原始音频数据。
 
-**event\_id** `_string_`
+**event\_id**`string`
 
 服务端事件ID。
 
-## Qwen3-TTS Realtime
+**type**`string`
+
+事件类型，固定为`response.done`。
+
+**response\_id**`string`
+
+响应的ID。
+
+**response**`object`
+
+响应详情。
+
+属性
+
+**id**`string`
+
+响应ID。
+
+**object**`string`
+
+对象类型，在此事件下固定为`realtime.response`。
+
+**output**`array`
+
+响应的输出。
+
+**usage**`object`
+
+本次语音合成计费信息。
+
+属性
+
+**characters**`integer`
+
+Qwen3-TTS Realtime计费字符数。
+
+**total\_tokens**`integer`
+
+Qwen-TTS Realtime输入和输出（合成的音频）内容总长度（Token）。
+
+**input\_tokens**`integer`
+
+Qwen-TTS Realtime输入内容总长度（Token）。
+
+**output\_tokens**`integer`
+
+Qwen-TTS Realtime输出内容总长度（Token）。
+
+**input\_tokens\_details**`integer`
+
+Qwen-TTS Realtime输入内容长度（Token）详情。
+
+**input\_tokens\_details.text\_tokens**`integer`
+
+Qwen-TTS Realtime输入文本内容总长度（Token）。
+
+**output\_tokens\_details**`integer`
+
+Qwen-TTS Realtime输出内容长度（Token）详情。
+
+**output\_tokens\_details.text\_tokens**`integer`
+
+Qwen-TTS Realtime输出文本内容总长度（Token）。
+
+**output\_tokens\_details.audio\_tokens**`integer`
+
+Qwen-TTS Realtime输出音频内容总长度（Token）。
+
+音频转换为 Token 的规则：每1秒的音频对应 50个 Token 。若音频时长不足1秒，则按 50个 Token 计算。
+
+Qwen3-TTS Realtime
 
 ```
 {
@@ -641,7 +707,7 @@
 }
 ```
 
-## Qwen-TTS Realtime
+Qwen-TTS Realtime
 
 ```
 {
@@ -688,83 +754,17 @@
 }
 ```
 
-**type** `_string_`
-
-事件类型，固定为`response.done`。
-
-**response\_id** `_string_`
-
-响应的ID。
-
-**response** `_object_`
-
-响应详情。
-
-**属性**
-
-**id** `_string_`
-
-响应ID。
-
-**object** `_string_`
-
-对象类型，在此事件下固定为`realtime.response`。
-
-**output** `_array_`
-
-响应的输出。
-
-**usage** `_object_`
-
-本次语音合成计费信息。
-
-**属性**
-
-**characters** `_integer_`
-
-Qwen3-TTS Realtime计费字符数。
-
-**total\_tokens** `_integer_`
-
-Qwen-TTS Realtime输入和输出（合成的音频）内容总长度（Token）。
-
-**input\_tokens** `_integer_`
-
-Qwen-TTS Realtime输入内容总长度（Token）。
-
-**output\_tokens** `_integer_`
-
-Qwen-TTS Realtime输出内容总长度（Token）。
-
-**input\_tokens\_details** `_integer_`
-
-Qwen-TTS Realtime输入内容长度（Token）详情。
-
-**input\_tokens\_details.text\_tokens** `_integer_`
-
-Qwen-TTS Realtime输入文本内容总长度（Token）。
-
-**output\_tokens\_details** `_integer_`
-
-Qwen-TTS Realtime输出内容长度（Token）详情。
-
-**output\_tokens\_details.text\_tokens** `_integer_`
-
-Qwen-TTS Realtime输出文本内容总长度（Token）。
-
-**output\_tokens\_details.audio\_tokens** `_integer_`
-
-Qwen-TTS Realtime输出音频内容总长度（Token）。
-
-音频转换为 Token 的规则：每1秒的音频对应 50个 Token 。若音频时长不足1秒，则按 50个 Token 计算。
-
-## **session.finished**
+## session.finished
 
 当所有响应生成完成时，服务端会返回此事件。
 
-**event\_id** `_string_`
+**event\_id**`string`
 
 服务端事件ID。
+
+**type**`string`
+
+事件类型，固定为`session.finished`。
 
 ```
 {
@@ -772,7 +772,3 @@ Qwen-TTS Realtime输出音频内容总长度（Token）。
   "type": "session.finished"
 }
 ```
-
-**type** `_string_`
-
-事件类型，固定为`session.finished`。

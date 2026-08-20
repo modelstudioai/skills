@@ -2,38 +2,32 @@
 
 通过HTTP API管理定制热词列表，包括创建、查询、更新和删除热词列表。
 
-**用户指南：**[提升识别准确率](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。热词列表数量上限等使用限制详见[限制与计费](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw10-limit-sec)。
+**用户指南：**[提升识别准确率](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。热词列表数量上限等使用限制详见[热词限制与计费](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw10_limit_sec)。
 
-**重要**
+**重要**新加坡地域的子业务空间暂不支持热词功能。
 
-新加坡地域的子业务空间暂不支持热词功能。
+## 接口地址
 
-## **接口地址**
-
-## 华北2（北京）
+#### 华北2（北京）
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/customization`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-## 新加坡
+#### 新加坡
 
 `POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/asr/customization`
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
 `{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
-## **请求头**
+## 请求头
 
 **参数**
 
@@ -59,13 +53,81 @@ string
 
 请求体的媒体类型，固定为`application/json`。
 
-## **创建热词列表**
+## 创建热词列表
 
-### **请求体**
+### 请求体
+
+**model**`string`**（必选）**
+
+定制热词模型，固定为`speech-biasing`。
+
+**input**`object`**（必选）**
+
+输入参数对象。
+
+属性
+
+**action** `string`**（必选）**
+
+操作类型，固定为`create_vocabulary`。
+
+**target\_model** `string`**（必选）**
+
+使用热词列表的语音识别模型，必须与后续调用语音识别接口时使用的模型一致。
+
+**prefix** `string`**（必选）**
+
+热词列表自定义前缀，仅允许数字和小写字母，长度不超过10个字符。
+
+**vocabulary** `array[object]`**（必选）**
+
+热词列表数组。
+
+属性
+
+**text** `string`**（必选）**
+
+热词文本。
+
+热词文本的语言必须在所选模型的支持范围内，不同模型支持的语言各不相同。
+
+热词用于提升识别的准确率，请使用实际词语而非任意字符组合。
+
+长度限制：含非 ASCII 字符时不超过 15 个字符；纯 ASCII 时空格分隔片段不超过 7 个。
+
+**weight** `integer`**（必选）**
+
+热词权重。常用值：4。
+
+取值范围：\[1, 5\]。
+
+如果效果不明显，可以适当增加权重，但权重过大可能产生负面效果，导致其他词语识别不准确。
+
+**lang** `string`（可选）
+
+待识别音频的语言代码。设置后，系统将对指定语种进行热词识别增强。如果无法提前确定语种，可不设置，模型会自动识别语种。
+
+取值范围（因模型而异）：
+
+-   Paraformer：
+    
+    -   zh: 中文
+    -   en: 英文
+    -   ja: 日语
+    -   yue: 粤语
+    -   ko: 韩语
+    -   de：德语
+    -   fr：法语
+    -   ru：俄语
+-   Fun-ASR：
+    
+    -   zh: 中文
+    -   en: 英文
+    -   ja: 日语
 
 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
 
-新加坡地域和北京地域的API Key不同，详情请参见[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+新加坡地域和北京地域的API Key不同，详情请参见[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/customization \
@@ -84,86 +146,31 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
-**model** `_string_` **（必选）**
+### 返回体
 
-定制热词模型，固定为`speech-biasing`。
+**request\_id**`string`
 
-**input** `_object_` **（必选）**
+本次调用的唯一标识符。
 
-输入参数对象。
+**output**`object`
 
-**属性**
+模型返回的数据。
 
-**action** `_string_` **（必选）**
+属性
 
-操作类型，固定为`create_vocabulary`。
+**vocabulary\_id**`string`
 
-**target\_model** `_string_` **（必选）**
+创建的热词列表ID。
 
-使用热词列表的语音识别模型，必须与后续调用语音识别接口时使用的模型一致。
+**usage**`object`
 
-**prefix** `_string_` **（必选）**
+本次请求用量信息。
 
-热词列表自定义前缀，仅允许数字和小写字母，长度不超过10个字符。
+属性
 
-**vocabulary** `_array[object]_` **（必选）**
+**count** `integer`
 
-热词列表数组。
-
-**属性**
-
-**text** `_string_` **（必选）**
-
-热词文本。
-
-热词文本的语言必须在所选模型的支持范围内，不同模型支持的语言各不相同。
-
-热词用于提升识别的准确率，请使用实际词语而非任意字符组合。
-
-长度限制：含非 ASCII 字符时不超过 15 个字符；纯 ASCII 时空格分隔片段不超过 7 个。
-
-**weight** `_integer_` **（必选）**
-
-热词权重。常用值：4。
-
-取值范围：\[1, 5\]。
-
-如果效果不明显，可以适当增加权重，但权重过大可能产生负面效果，导致其他词语识别不准确。
-
-**lang** `_string_` （可选）
-
-待识别音频的语言代码。设置后，系统将对指定语种进行热词识别增强。如果无法提前确定语种，可不设置，模型会自动识别语种。
-
-取值范围（因模型而异）：
-
--   Paraformer：
-    
-    -   zh: 中文
-        
-    -   en: 英文
-        
-    -   ja: 日语
-        
-    -   yue: 粤语
-        
-    -   ko: 韩语
-        
-    -   de：德语
-        
-    -   fr：法语
-        
-    -   ru：俄语
-        
--   Fun-ASR：
-    
-    -   zh: 中文
-        
-    -   en: 英文
-        
-    -   ja: 日语
-        
-
-### **返回体**
+创建的热词列表数量，固定为1。
 
 ```
 {
@@ -177,37 +184,43 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
-**request\_id** `_string_`
+## 批量查询热词列表
 
-本次调用的唯一标识符。
+### 请求体
 
-**output** `_object_`
+**model**`string`**（必选）**
 
-模型返回的数据。
+定制热词模型，固定为`speech-biasing`。
 
-**属性**
+**input**`object`**（必选）**
 
-**vocabulary\_id** `_string_`
+输入参数对象。
 
-创建的热词列表ID。
+属性
 
-**usage** `_object_`
+**action** `string`**（必选）**
 
-本次请求用量信息。
+操作类型，固定为`list_vocabulary`。
 
-**属性**
+**prefix** `string`（可选）
 
-**count** `_integer_`
+热词列表自定义前缀，如果设定则只返回指定前缀的热词列表。
 
-创建的热词列表数量，固定为1。
+**page\_index** `integer`
 
-## **批量查询热词列表**
+页码索引，从0开始计数。
 
-### **请求体**
+默认值：0。
+
+**page\_size** `integer`
+
+每页包含数据条数。
+
+默认值：10。
 
 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
 
-新加坡地域和北京地域的API Key不同，详情请参见[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+新加坡地域和北京地域的API Key不同，详情请参见[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/customization \
@@ -224,37 +237,52 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
-**model** `_string_` **（必选）**
+### 返回体
 
-定制热词模型，固定为`speech-biasing`。
+**request\_id**`string`
 
-**input** `_object_` **（必选）**
+本次调用的唯一标识符。
 
-输入参数对象。
+**output**`object`
 
-**属性**
+模型返回的数据。
 
-**action** `_string_` **（必选）**
+属性
 
-操作类型，固定为`list_vocabulary`。
+**vocabulary\_list**`array[object]`
 
-**prefix** `_string_` （可选）
+查询到的热词列表。
 
-热词列表自定义前缀，如果设定则只返回指定前缀的热词列表。
+属性
 
-**page\_index** `_integer_`
+**vocabulary\_id**`string`
 
-页码索引，从0开始计数。
+热词列表ID。
 
-默认值：0。
+**gmt\_create**`string`
 
-**page\_size** `_integer_`
+创建时间。
 
-每页包含数据条数。
+**gmt\_modified**`string`
 
-默认值：10。
+修改时间。
 
-### **返回体**
+**status**`string`
+
+状态：
+
+-   OK：可调用
+-   UNDEPLOYED：不可调用。
+
+**usage**`object`
+
+本次请求用量信息。
+
+属性
+
+**count** `integer`
+
+固定为1。
 
 ```
 {
@@ -281,60 +309,31 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
-**request\_id** `_string_`
+## 查询热词列表
 
-本次调用的唯一标识符。
+### 请求体
 
-**output** `_object_`
+**model**`string`**（必选）**
 
-模型返回的数据。
+定制热词模型，固定为`speech-biasing`。
 
-**属性**
+**input**`object`**（必选）**
 
-**vocabulary\_list** `_array[object]_`
+输入参数对象。
 
-查询到的热词列表。
+属性
 
-**属性**
+**action** `string`**（必选）**
 
-**vocabulary\_id** `_string_`
+操作类型，固定为`query_vocabulary`。
 
-热词列表ID。
+**vocabulary\_id** `string`**（必选）**
 
-**gmt\_create** `_string_`
-
-创建时间。
-
-**gmt\_modified** `_string_`
-
-修改时间。
-
-**status** `_string_`
-
-状态：
-
--   OK：可调用
-    
--   UNDEPLOYED：不可调用。
-    
-
-**usage** `_object_`
-
-本次请求用量信息。
-
-**属性**
-
-**count** `_integer_`
-
-固定为1。
-
-## **查询热词列表**
-
-### **请求体**
+需要查询的热词列表ID。
 
 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
 
-新加坡地域和北京地域的API Key不同，详情请参见[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+新加坡地域和北京地域的API Key不同，详情请参见[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/customization \
@@ -349,25 +348,64 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
-**model** `_string_` **（必选）**
+### 返回体
 
-定制热词模型，固定为`speech-biasing`。
+**request\_id**`string`
 
-**input** `_object_` **（必选）**
+本次调用的唯一标识符。
 
-输入参数对象。
+**output**`object`
 
-**属性**
+模型返回的数据。
 
-**action** `_string_` **（必选）**
+属性
 
-操作类型，固定为`query_vocabulary`。
+**gmt\_create**`string`
 
-**vocabulary\_id** `_string_` **（必选）**
+创建时间。
 
-需要查询的热词列表ID。
+**gmt\_modified**`string`
 
-### **返回体**
+修改时间。
+
+**status**`string`
+
+状态：
+
+-   OK：可调用
+-   UNDEPLOYED：不可调用。
+
+**target\_model** `string`
+
+使用热词列表的语音识别模型，必须与后续调用语音识别接口时使用的模型一致。
+
+**vocabulary**`array[object]`
+
+查询到的热词列表。
+
+属性
+
+**text** `string`
+
+热词文本。
+
+**weight** `integer`
+
+热词权重。
+
+**lang** `string`
+
+待识别音频语种。
+
+**usage**`object`
+
+本次请求用量信息。
+
+属性
+
+**count** `integer`
+
+固定为1。
 
 ```
 {
@@ -391,72 +429,77 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
-**request\_id** `_string_`
+## 更新热词列表
 
-本次调用的唯一标识符。
+### 请求体
 
-**output** `_object_`
+**model**`string`**（必选）**
 
-模型返回的数据。
+定制热词模型，固定为`speech-biasing`。
 
-**属性**
+**input**`object`**（必选）**
 
-**gmt\_create** `_string_`
+输入参数对象。
 
-创建时间。
+属性
 
-**gmt\_modified** `_string_`
+**action** `string`**（必选）**
 
-修改时间。
+操作类型，固定为`update_vocabulary`。
 
-**status** `_string_`
+**vocabulary\_id** `string`**（必选）**
 
-状态：
+需要更新的热词列表ID。
 
--   OK：可调用
-    
--   UNDEPLOYED：不可调用。
-    
+**vocabulary** `array[object]`**（必选）**
 
-**target\_model** `_string_`
+新的热词列表，将完全替换原有内容。
 
-使用热词列表的语音识别模型，必须与后续调用语音识别接口时使用的模型一致。
+属性
 
-**vocabulary** `_array[object]_`
-
-查询到的热词列表。
-
-**属性**
-
-**text** `_string_`
+**text** `string`**（必选）**
 
 热词文本。
 
-**weight** `_integer_`
+热词文本的语言必须在所选模型的支持范围内，不同模型支持的语言各不相同。
 
-热词权重。
+热词用于提升识别的准确率，请使用实际词语而非任意字符组合。
 
-**lang** `_string_`
+长度限制：含非 ASCII 字符时不超过 15 个字符；纯 ASCII 时空格分隔片段不超过 7 个。
 
-待识别音频语种。
+**weight** `integer`**（必选）**
 
-**usage** `_object_`
+热词权重。常用值：4。
 
-本次请求用量信息。
+取值范围：\[1, 5\]。
 
-**属性**
+如果效果不明显，可以适当增加权重，但权重过大可能产生负面效果，导致其他词语识别不准确。
 
-**count** `_integer_`
+**lang** `string`（可选）
 
-固定为1。
+待识别音频的语言代码。设置后，系统将对指定语种进行热词识别增强。如果无法提前确定语种，可不设置，模型会自动识别语种。
 
-## **更新热词列表**
+取值范围（因模型而异）：
 
-### **请求体**
+-   Paraformer：
+    
+    -   zh: 中文
+    -   en: 英文
+    -   ja: 日语
+    -   yue: 粤语
+    -   ko: 韩语
+    -   de：德语
+    -   fr：法语
+    -   ru：俄语
+-   Fun-ASR：
+    
+    -   zh: 中文
+    -   en: 英文
+    -   ja: 日语
 
 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
 
-新加坡地域和北京地域的API Key不同，详情请参见[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+新加坡地域和北京地域的API Key不同，详情请参见[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/customization \
@@ -474,82 +517,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
-**model** `_string_` **（必选）**
+### 返回体
 
-定制热词模型，固定为`speech-biasing`。
+**request\_id**`string`
 
-**input** `_object_` **（必选）**
+本次调用的唯一标识符。
 
-输入参数对象。
+**output**`object`
 
-**属性**
+模型返回的数据，固定为空。
 
-**action** `_string_` **（必选）**
+**usage**`object`
 
-操作类型，固定为`update_vocabulary`。
+本次请求用量信息。
 
-**vocabulary\_id** `_string_` **（必选）**
+属性
 
-需要更新的热词列表ID。
+**count** `integer`
 
-**vocabulary** `_array[object]_` **（必选）**
-
-新的热词列表，将完全替换原有内容。
-
-**属性**
-
-**text** `_string_` **（必选）**
-
-热词文本。
-
-热词文本的语言必须在所选模型的支持范围内，不同模型支持的语言各不相同。
-
-热词用于提升识别的准确率，请使用实际词语而非任意字符组合。
-
-长度限制：含非 ASCII 字符时不超过 15 个字符；纯 ASCII 时空格分隔片段不超过 7 个。
-
-**weight** `_integer_` **（必选）**
-
-热词权重。常用值：4。
-
-取值范围：\[1, 5\]。
-
-如果效果不明显，可以适当增加权重，但权重过大可能产生负面效果，导致其他词语识别不准确。
-
-**lang** `_string_` （可选）
-
-待识别音频的语言代码。设置后，系统将对指定语种进行热词识别增强。如果无法提前确定语种，可不设置，模型会自动识别语种。
-
-取值范围（因模型而异）：
-
--   Paraformer：
-    
-    -   zh: 中文
-        
-    -   en: 英文
-        
-    -   ja: 日语
-        
-    -   yue: 粤语
-        
-    -   ko: 韩语
-        
-    -   de：德语
-        
-    -   fr：法语
-        
-    -   ru：俄语
-        
--   Fun-ASR：
-    
-    -   zh: 中文
-        
-    -   en: 英文
-        
-    -   ja: 日语
-        
-
-### **返回体**
+更新的热词列表数量，固定为1。
 
 ```
 {
@@ -561,31 +547,31 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
-**request\_id** `_string_`
+## 删除热词列表
 
-本次调用的唯一标识符。
+### 请求体
 
-**output** `_object_`
+**model**`string`**（必选）**
 
-模型返回的数据，固定为空。
+定制热词模型，固定为`speech-biasing`。
 
-**usage** `_object_`
+**input**`object`**（必选）**
 
-本次请求用量信息。
+输入参数对象。
 
-**属性**
+属性
 
-**count** `_integer_`
+**action** `string`**（必选）**
 
-更新的热词列表数量，固定为1。
+操作类型，固定为`delete_vocabulary`。
 
-## **删除热词列表**
+**vocabulary\_id** `string`**（必选）**
 
-### **请求体**
+需要删除的热词列表ID。
 
 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
 
-新加坡地域和北京地域的API Key不同，详情请参见[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+新加坡地域和北京地域的API Key不同，详情请参见[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/customization \
@@ -600,25 +586,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }'
 ```
 
-**model** `_string_` **（必选）**
+### 返回体
 
-定制热词模型，固定为`speech-biasing`。
+**request\_id**`string`
 
-**input** `_object_` **（必选）**
+本次调用的唯一标识符。
 
-输入参数对象。
+**output**`object`
 
-**属性**
+模型返回的数据，固定为空。
 
-**action** `_string_` **（必选）**
+**usage**`object`
 
-操作类型，固定为`delete_vocabulary`。
+本次请求用量信息。
 
-**vocabulary\_id** `_string_` **（必选）**
+属性
 
-需要删除的热词列表ID。
+**count** `integer`
 
-### **返回体**
+删除的热词列表数量，固定为1。
 
 ```
 {
@@ -629,21 +615,3 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
   "request_id": "aee47022-2352-40fe-acfa-xxxx"
 }
 ```
-
-**request\_id** `_string_`
-
-本次调用的唯一标识符。
-
-**output** `_object_`
-
-模型返回的数据，固定为空。
-
-**usage** `_object_`
-
-本次请求用量信息。
-
-**属性**
-
-**count** `_integer_`
-
-删除的热词列表数量，固定为1。

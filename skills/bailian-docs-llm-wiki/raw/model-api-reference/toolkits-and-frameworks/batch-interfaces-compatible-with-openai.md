@@ -1,77 +1,54 @@
 # OpenAI兼容-Batch（文件输入）
 
-阿里云百炼提供与 OpenAI 兼容的 Batch File API，支持通过文件批量提交请求。系统异步处理所有请求，在全部完成或达到最长等待时间后返回结果，费用仅为实时调用的 **50%**。适用于数据分析、模型评测等时效性要求不高但需大批量处理的场景。
+阿里云百炼提供与 OpenAI 兼容的 Batch File API，支持通过文件批量提交请求。系统异步处理所有请求，在全部完成或达到最长等待时间后返回结果，费用仅为实时调用的 50% 。适用于数据分析、模型评测等时效性要求不高但需大批量处理的场景。
 
-如需在控制台操作，请参见[批量推理](https://help.aliyun.com/zh/model-studio/batch-inference)。
+如需在控制台操作，请参见批量推理。
 
-## **工作流程**
+## 工作流程
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8629496871/CAEQaxiBgIDB5qWk4BkiIDViYzQ0MWUwNTYyNDQ3NDM5NzM0ZTc4N2Y3NTU2NjA56318723_20260129171731.699.svg)
-
-## **前提条件**
+## 前提条件
 
 支持通过 OpenAI SDK（Python、Node.js）或HTTP API调用 Batch File 接口。
 
--   **获取API Key**：[获取并配置API Key 到环境变量](https://help.aliyun.com/zh/model-studio/get-api-key)
+-   **获取API Key**：获取并配置API Key 到环境变量
     
--   **安装 SDK（可选）：**如需使用SDK调用，请安装 [OpenAI SDK](https://help.aliyun.com/zh/model-studio/install-sdk)
+-   **安装 SDK（可选）：**如需使用SDK调用，请安装 OpenAI SDK
     
 -   **服务端点**
-    
     -   **华北2（北京）：**`https://dashscope.aliyuncs.com/compatible-mode/v1`
-        
-    -   **新加坡：**`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
-        
+    -   **新加坡：**`https://dashscope-intl.aliyuncs.com/compatible-mode/v1`
 
-**重要**
+## 适用范围
 
-百炼为新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
-
-## **适用范围**
-
-### 华北2（北京）
+#### 华北2（北京）
 
 **支持的模型：**
 
 -   **文本生成模型**
-    
     -   千问 Max：qwen3.8-max、qwen3.7-max、qwen3-max
-        
     -   千问 Plus：qwen3.7-plus、qwen3.6-plus、qwen3.5-plus、qwen-plus、qwen-plus-latest
-        
     -   千问 Flash：qwen3.7-flash、qwen3.6-flash、qwen3.5-flash、qwen-flash
-        
     -   千问 Long：qwen-long、qwen-long-latest
-        
     -   第三方模型：deepseek-r1、deepseek-v3.2、deepseek-v3
-        
 -   **多模态模型**
-    
-    -   [图像与视频理解](https://help.aliyun.com/zh/model-studio/vision)：qwen3.8-max、qwen3.7-plus、qwen3.6-plus、qwen3.7-flash、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus、qwen3-vl-flash
-        
-    -   [文字提取](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr)：qwen-vl-ocr、qwen-vl-ocr-latest
-        
-    -   [全模态](https://help.aliyun.com/zh/model-studio/qwen-omni)：qwen3.5-omni-plus
-        
+    -   图像与视频理解：qwen3.8-max、qwen3.7-plus、qwen3.6-plus、qwen3.7-flash、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus、qwen3-vl-flash
+    -   文字提取：qwen-vl-ocr、qwen-vl-ocr-latest
+    -   全模态：qwen3.5-omni-plus
 -   [**文本向量模型**](https://help.aliyun.com/zh/model-studio/user-guide/embedding)**：**text-embedding-v1、text-embedding-v2、text-embedding-v3、text-embedding-v4
     
 
 **重要**
 
 -   在Batch 场景下，`qwen3.8-max`、`qwen3.7-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`和`qwen3.5-omni-plus`单次请求的上下文 Token 数最大支持 256K，`qwen3.5-omni-plus`不支持语音输出。
-    
 -   部分模型支持思考模式，开启后会产生思考`tokens`导致成本增加。
-    
--   `qwen3.8`、`qwen3.7`、`qwen3.6`和`qwen3.5` 系列模型默认开启思考模式。建议使用混合思考模型时，显式设置`enable_thinking`参数（`true`开启/`false`关闭）。
-    
+-   `qwen3.8`、`qwen3.7`、`qwen3.6`和`qwen3.5` 系列模型默认开启思考模式。建议使用混合思考模型时，显式设置`enable_thinking`参数（`true`开启/`false`关闭）。
 -   在 JSONL 请求体中，`enable_thinking` 为 `body` 的顶层参数，须与 `model` 同级传入，不能放在 `extra_body` 中。
-    
 
-### 新加坡
+#### 新加坡
 
 **支持的模型**：qwen-max、qwen-plus、qwen-turbo。
 
-## **快速开始**
+## 快速开始
 
 在处理正式任务前，使用测试模型`batch-test-model`进行全链路闭环测试。该模型跳过推理过程，直接返回固定的成功响应，用于验证API调用链路和数据格式是否正确。
 
@@ -79,14 +56,11 @@
 
 **测试模型（batch-test-model）的限制：**
 
--   测试文件需满足[输入文件要求](#0214fa4f9dxb3)，且文件大小不超过 **1 MB**，行数不超过**100行**。
-    
+-   测试文件需满足[输入文件要求](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai#0214fa4f9dxb3)，且文件大小不超过 **1 MB**，行数不超过**100行**。
 -   并发限制：最大并行任务数 **2 个**。
-    
 -   费用：测试模型不产生模型推理费用。
-    
 
-### **第 1 步：准备输入文件**
+### 第 1 步：准备输入文件
 
 准备一个名为[test\_model.jsonl](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250403/ilveat/test_model.jsonl)的文件，内容如下：
 
@@ -102,15 +76,13 @@
 {"custom_id":"image-base64","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen-vl-plus","messages":[{"role":"user","content":[{"type":"image_url","image_url":{"url":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEA8ADwAAD..."}},{"type":"text","text":"请描述这张图片"}]}]}}
 ```
 
-### **第 2 步：运行代码**
+### 第 2 步：运行代码
 
 根据使用的编程语言，选择以下示例代码并保存到输入文件的同一目录下，然后运行。代码将完成文件上传、创建任务、轮询状态和下载结果的完整流程。
 
 > 如需调整文件路径或其他参数，请根据实际情况修改代码。
 
-**说明**
-
-**复用已有文件 ID：**文件上传后返回的 ID（如 `file-batch-xxx`）可重复使用。如果输入内容不变，无需每次重新上传，直接用已有 ID 创建任务即可：
+**说明****复用已有文件 ID：**文件上传后返回的 ID（如 `file-batch-xxx`）可重复使用。如果输入内容不变，无需每次重新上传，直接用已有 ID 创建任务即可：
 
 ```
 batch = client.batches.create(
@@ -122,9 +94,9 @@ batch = client.batches.create(
 
 可通过 `client.files.list(purpose="batch")` 接口查询已上传的 Batch 文件 ID。
 
-**示例代码**
+示例代码
 
-## **OpenAI Python SDK**
+OpenAI Python SDK
 
 ```
 import os
@@ -137,7 +109,7 @@ client = OpenAI(
     # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"，但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     # 新加坡和北京地域的API Key不同。
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
     # 注意：切换地域时，API Key也需要对应更换
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"  # 阿里云百炼服务的base_url
 )
@@ -230,7 +202,7 @@ if __name__ == "__main__":
     main()
 ```
 
-## **OpenAI Node.js SDK**
+OpenAI Node.js SDK
 
 ```
 /**
@@ -246,7 +218,7 @@ const fs = require('fs');
 // 北京地域的 Base URL
 const BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 // 如果使用新加坡地域，使用以下 URL：
-// const BASE_URL = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1';
+// const BASE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
 
 const apiKey = process.env.DASHSCOPE_API_KEY;
 if (!apiKey) {
@@ -349,7 +321,7 @@ async function main() {
 main();
 ```
 
-## **Java（HTTP）**
+Java（HTTP）
 
 ```
 import java.io.*;
@@ -368,14 +340,14 @@ import java.util.Scanner;
  *
  * 地域配置说明：
  * - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
- * - 新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+ * - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
  */
 public class BatchAPITest {
 
     // 北京地域的 Base URL（默认）
     private static final String BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
     // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-    // private static final String BASE_URL = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1";
+    // private static final String BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1";
 
     private static String API_KEY;
 
@@ -578,7 +550,7 @@ public class BatchAPITest {
 }
 ```
 
-## **curl (HTTP)**
+curl (HTTP)
 
 ```
 #!/bin/bash
@@ -590,13 +562,13 @@ public class BatchAPITest {
 #
 # 地域配置说明：
 # - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
-# - 新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+# - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
 
 API_KEY="${DASHSCOPE_API_KEY}"
 BASE_URL="https://dashscope.aliyuncs.com/compatible-mode/v1"
 
 # 如果使用新加坡地域，请将 BASE_URL 替换为：
-# BASE_URL="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1"
+# BASE_URL="https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
 
 # 检查 API Key
 if [ -z "$API_KEY" ]; then
@@ -691,7 +663,7 @@ else
 fi
 ```
 
-### **第 3 步： 验证测试结果**
+### 第 3 步： 验证测试结果
 
 任务成功完成后，结果文件`result.jsonl`包含固定响应`{"content":"This is a test result."}`：
 
@@ -700,20 +672,15 @@ fi
 {"id":"39b74f09-a902-434f-b9ea-2aaaeebc59e0","custom_id":"2","response":{"status_code":200,"request_id":"39b74f09-a902-434f-b9ea-2aaaeebc59e0","body":{"created":1743562621,"usage":{"completion_tokens":6,"prompt_tokens":20,"total_tokens":26},"model":"batch-test-model","id":"chatcmpl-1e32a8ba-2b69-4dc4-be42-e2897eac9e84","choices":[{"finish_reason":"stop","index":0,"message":{"content":"This is a test result."}}],"object":"chat.completion"}},"error":null}
 ```
 
-## **执行正式任务**
+## 执行正式任务
 
-### **输入文件要求**
+### 输入文件要求
 
 -   **格式**：UTF-8 编码的 JSONL（每行一个独立JSON对象）
-    
 -   **规模限制**：单文件最多 50,000 个请求，且不超过 500 MB
-    
 -   **单行限制**：每个JSON对象不超过 6 MB，且不超过模型上下文长度
-    
 -   **一致性要求**：同一文件内所有请求须使用相同的模型及思考模式（如适用）
-    
 -   **唯一标识**：每个请求必须包含文件内唯一的 custom\_id 字段，用于匹配请求与结果
-    
 
 **场景1：文本对话**
 
@@ -723,7 +690,6 @@ fi
 {"custom_id":"1","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen-plus","messages":[{"role":"system","content":"You are a helpful assistant."},{"role":"user","content":"你好！有什么可以帮助你的吗？"}]}}
 {"custom_id":"2","method":"POST","url":"/v1/chat/completions","body":{"model":"qwen-plus","messages":[{"role":"system","content":"You are a helpful assistant."},{"role":"user","content":"What is 2+2?"}]}}
 ```
-
 **场景2：图像与视频理解**
 
 多模态模型（如 qwen-vl-plus）支持文件 URL、Base64 编码传入方式。
@@ -739,67 +705,190 @@ fi
 
 > 示例中的 Base64 字符串已省略，使用下方 Python 代码生成完整编码即可。
 
-**传入 Base64 编码字符串（以图像为例）**
+传入 Base64 编码字符串（以图像为例）
 
 1.  将本地文件转换为 Base64 编码：
-    
-    ```
-    #  编码函数： 将本地文件转换为 Base64 编码的字符串
-    import base64
-    def encode_image(image_path):
-        with open(image_path, "rb") as image_file:
-            return base64.b64encode(image_file.read()).decode("utf-8")
-    
-    # 将xxxx/eagle.png替换为你本地图像的绝对路径
-    base64_image = encode_image("xxx/eagle.png")
-    ```
-    
+
+```
+#  编码函数： 将本地文件转换为 Base64 编码的字符串
+import base64
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode("utf-8")
+
+# 将xxxx/eagle.png替换为你本地图像的绝对路径
+base64_image = encode_image("xxx/eagle.png")
+```
+
 2.  构建[Data URL](https://www.rfc-editor.org/rfc/rfc2397)格式：`data:[MIME_type];base64,{base64_image}`；
     
-    1.  `MIME_type`需替换为实际的媒体类型，确保与`MIME Type` 的值匹配（如`image/jpeg`、`image/png`）；
-        
+    1.  `MIME_type`需替换为实际的媒体类型，确保与`MIME Type` 的值匹配（如`image/jpeg`、`image/png`）；
     2.  `base64_image`为上一步生成的 Base64 字符串。
-        
 
-**说明**
+**说明**完整说明（包括文件限制、MIME 类型、编码方法）请参见传入本地文件（Base64 编码或文件路径）。
 
-完整说明（包括文件限制、MIME 类型、编码方法）请参见[传入本地文件（Base64 编码或文件路径）](https://help.aliyun.com/zh/model-studio/vision#d987f8de5395x)。
+**Batch 推理 JSONL 文件生成工具**
 
-**JSONL 批量生成工具**
+Batch 推理需要构造 JSONL 文件，每行为一个独立请求。以下 Python 脚本可直接运行生成符合格式的 JSONL 文件。
 
-使用以下工具可快速生成 JSONL 文件。
+## 使用方式
 
- JSONL 批量生成工具
+1.  将以下代码保存为 `generate_batch_jsonl.py`
+2.  修改脚本中 `TASKS` 列表的请求内容
+3.  运行 `python generate_batch_jsonl.py`
+4.  生成的 `batch_input.jsonl` 文件可直接用于 Batch 推理任务
 
-**请选择地域：**
+## 文本生成模型 JSONL 生成脚本
 
-华北2（北京） 新加坡
+```
+#!/usr/bin/env python3
+"""
+Batch 推理 JSONL 文件生成工具
 
-**选择模型系列:** 文本生成模型 多模态模型 通用文本向量模型
+支持的地域：
+  - 华北2（北京）：文本生成、多模态、通用文本向量
+  - 新加坡：文本生成（qwen-max、qwen-plus、qwen-turbo）
 
-**选择具体模型:** qwen3-max qwen-max qwen-max-latest qwen3.5-plus（思考模式） qwen3.5-plus（非思考模式） qwen3.5-flash（思考模式） qwen3.5-flash（非思考模式） qwen-flash（思考模式） qwen-flash（非思考模式） qwen-plus（思考模式） qwen-plus（非思考模式） qwen-plus-latest（思考模式） qwen-plus-latest（非思考模式） qwen-turbo（思考模式） qwen-turbo（非思考模式） qwen-turbo-latest（思考模式） qwen-turbo-latest（非思考模式） qwen-long qwen-long-latest qwq-plus qwq-32b-preview deepseek-r1 deepseek-v3
+支持的模型：
+  文本生成（华北2）：
+    qwen3-max, qwen-max, qwen-max-latest,
+    qwen3.5-plus*, qwen3.5-flash*, qwen-flash*,
+    qwen-plus*, qwen-plus-latest*, qwen-turbo*, qwen-turbo-latest*,
+    qwen-long, qwen-long-latest,
+    qwq-plus, qwq-32b-preview, deepseek-r1, deepseek-v3
+    (* 表示支持思考模式和非思考模式)
+  文本生成（新加坡）：qwen-max, qwen-plus, qwen-turbo
+  多模态（华北2）：
+    qwen3.5-plus*, qwen3.5-flash*, qwen3-vl-plus*, qwen3-vl-flash*,
+    qwen-vl-max, qwen-vl-max-latest, qwen-vl-plus, qwen-vl-plus-latest,
+    qwen-vl-ocr, qwen-vl-ocr-latest, qwen-omni-turbo
+  文本向量（华北2）：text-embedding-v1/v2/v3/v4
 
-**写入您的请求内容（每行一条请求）:** 你好！有什么可以帮助你的吗？ What is 2+2?
+文件大小限制：单行 ≤6MB，总文件 ≤500MB，建议 ≤10000 行
 
-**粘贴您的媒体URL (每行一个或多个，英文逗号分隔):** **输入您对媒体的提问:**
+使用方式：
+  1. 修改下方 TASKS 列表
+  2. 运行: python generate_batch_jsonl.py
+  3. 输出: batch_input.jsonl
+"""
+import json
 
-生成
+# ═══════════════════════════════════════════════════════
+# 配置区：修改以下内容来生成您需要的 JSONL
+# ═══════════════════════════════════════════════════════
 
-**请选择地域：**
+MODEL = "qwen-max"          # 选择模型（参见上方支持列表）
+ENABLE_THINKING = False     # 是否开启思考模式（仅部分模型支持）
+THINKING_BUDGET = 50        # 思考 token 预算（思考模式下生效）
 
-华北2（北京） 新加坡
+# 任务列表：每个 dict 代表一条用户消息
+TASKS = [
+    {"role": "user", "content": "你好！请介绍一下自己。"},
+    {"role": "user", "content": "What is 2+2?"},
+    {"role": "user", "content": "请用Python写一个快速排序算法"},
+]
 
-**选择模型系列:** 文本生成模型
+# ═══════════════════════════════════════════════════════
+# 以下为生成逻辑，一般无需修改
+# ═══════════════════════════════════════════════════════
 
-**选择具体模型:** qwen-max qwen-plus qwen-turbo
+def build_request(custom_id: str, model: str, messages: list,
+                  enable_thinking: bool = False, thinking_budget: int = 50) -> dict:
+    """构造单条 Batch 请求"""
+    body = {"model": model, "messages": messages}
+    if enable_thinking:
+        body["enable_thinking"] = True
+        body["thinking_budget"] = thinking_budget
+        body["stream"] = True  # 思考模式需开启 stream
+    return {
+        "custom_id": custom_id,
+        "method": "POST",
+        "url": "/v1/chat/completions",
+        "body": body
+    }
 
-**写入您的请求内容（每行一条请求）:** 你好！有什么可以帮助你的吗？ What is 2+2?
+def main():
+    output_file = "batch_input.jsonl"
+    with open(output_file, "w", encoding="utf-8") as f:
+        for i, task in enumerate(TASKS, 1):
+            messages = [
+                {"role": "system", "content": "You are a helpful assistant."},
+                task
+            ]
+            req = build_request(
+                custom_id=f"request-{i}",
+                model=MODEL,
+                messages=messages,
+                enable_thinking=ENABLE_THINKING,
+                thinking_budget=THINKING_BUDGET
+            )
+            f.write(json.dumps(req, ensure_ascii=False) + "\n")
+    print(f"已生成 {output_file}，共 {len(TASKS)} 条请求")
 
-生成
+if __name__ == "__main__":
+    main()
+```
 
-### **1\. 修改输入文件**
+## 多模态模型请求格式
 
--   可直接修改用于测试的 `test_model.jsonl` 文件，将 model 参数设置为目标正式模型，并设置URL字段：
+多模态模型的 `content` 字段为数组格式，包含媒体对象和文本提问。每行请求中的媒体URL需为同一类型（图片、视频或音频）。将上方脚本中的 `TASKS` 替换为以下格式即可：
+
+```
+# 多模态模型配置示例
+MODEL = "qwen-vl-max"       # 多模态模型
+
+# 多模态任务：content 为数组格式
+TASKS = [
+    {"role": "user", "content": [
+        {"type": "image_url", "image_url": {"url": "https://example.com/image1.jpg"}},
+        {"type": "image_url", "image_url": {"url": "https://example.com/image2.jpg"}},
+        {"type": "text", "text": "这些图描绘了什么内容？"}
+    ]},
+]
+
+# qwen-omni-turbo 音频/视频格式：
+# {"type": "input_audio", "input_audio": {"data": "https://example.com/audio.wav", "format": "wav"}}
+# {"type": "video_url", "video_url": "https://example.com/video.mp4"}
+
+# 注意：
+# - qwen3-vl-plus 和 qwen3-vl-flash 不使用 system 角色，thinking_budget 设置为 500
+# - 其他多模态模型包含 system 角色，thinking_budget 设置为 50
+# - 思考模式需额外设置 ENABLE_THINKING = True
+```
+
+## 文本向量模型请求格式
+
+文本向量模型使用 `/v1/embeddings` 接口，请求格式不同于文本生成模型。可使用以下独立脚本生成：
+
+```
+#!/usr/bin/env python3
+"""文本向量模型 Batch JSONL 生成（使用 /v1/embeddings 接口）"""
+import json
+
+MODEL = "text-embedding-v3"  # 可选: v1, v2, v3, v4
+
+TEXTS = [
+    "衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买。",
+    "风急天高猿啸哀",
+    "The quick brown fox jumps over the lazy dog",
+]
+
+output_file = "batch_embedding.jsonl"
+with open(output_file, "w", encoding="utf-8") as f:
+    for i, text in enumerate(TEXTS, 1):
+        req = {
+            "custom_id": f"emb-{i}",
+            "method": "POST",
+            "url": "/v1/embeddings",
+            "body": {"model": MODEL, "input": text, "encoding_format": "float"}
+        }
+        f.write(json.dumps(req, ensure_ascii=False) + "\n")
+print(f"已生成 {output_file}，共 {len(TEXTS)} 条请求")
+```
+
+### 1\. 修改输入文件
+
+-   可直接修改用于测试的 `test_model.jsonl` 文件，将 model 参数设置为目标正式模型，并设置URL字段：
     
     **模型类型**
     
@@ -813,47 +902,40 @@ fi
     
     `/v1/embeddings`
     
--   或使用上方的“JSONL 批量生成工具”为正式任务生成一个新的文件。关键是确保 `model` 和 `url` 字段正确。
+-   或使用上方的“JSONL 批量生成工具”为正式任务生成一个新的文件。关键是确保 `model` 和 `url` 字段正确。
     
 
-### **2\. 修改快速开始的代码**
+### 2\. 修改快速开始的代码
 
 1.  输入文件路径更改为您的文件名
-    
 2.  将 endpoint 参数值修改为与输入文件中URL字段一致的值
-    
 
-### **3\. 运行代码并等待结果**
+### 3\. 运行代码并等待结果
 
 任务完成后，成功请求的结果保存在本地 result.jsonl 文件中。如有请求失败，错误详情保存在 error.jsonl 文件中。
 
--   成功结果（`output_file_id`）：每一行对应一个成功的原始请求，包含 `custom_id` 和 `response`。
-    
-    ```
-    {"id":"3a5c39d5-3981-4e4c-97f2-e0e821893f03","custom_id":"req-001","response":{"status_code":200,"request_id":"3a5c39d5-3981-4e4c-97f2-e0e821893f03","body":{"created":1768306034,"usage":{"completion_tokens":654,"prompt_tokens":14,"total_tokens":668},"model":"qwen-plus","id":"chatcmpl-3a5c39d5-3981-4e4c-97f2-e0e821893f03","choices":[{"finish_reason":"stop","index":0,"message":{"role":"assistant","content":"你好！杭州西湖是中国著名的风景名胜区，位于浙江省杭州市西部，因此得名“西湖”。它是中国十大风景名胜之一，也是世界文化遗产（2011年被联合国教科文组织列入《世界遗产名录》），以其秀丽的自然风光与深厚的人文底蕴闻名于世。\n\n### 一、自然景观\n西湖三面环山，一面邻城，湖面面积约6.39平方公里，形似如意，碧波荡漾。湖中被孤山、白堤、苏堤、杨公堤等自然或人工分隔成多个水域，形成“一山二塔三岛三堤”的格局。\n\n主要景点包括：\n- **苏堤春晓**：北宋大文豪苏东坡任杭州知州时主持疏浚西湖，用挖出的淤泥堆筑成堤，后人称为“苏堤”。春天桃红柳绿，景色如画。\n- **断桥残雪**：位于白堤东端，是白蛇传中“断桥相会”的发生地，冬日雪后银装素裹，尤为著名。\n- **雷峰夕照**：雷峰塔在夕阳映照下金光熠熠，曾是“西湖十景”之一。\n- **三潭印月**：湖中小瀛洲上的三座石塔，中秋夜可在塔内点灯，月影、灯光、湖光交相辉映。\n- **平湖秋月**：位于白堤西端，是观赏湖上明月的绝佳地点。\n- **花港观鱼**：以赏花和观鱼著称，园内牡丹、锦鲤相映成趣。\n\n### 二、人文历史\n西湖不仅风景优美，还承载着丰富的历史文化：\n- 自唐宋以来，众多文人墨客如白居易、苏东坡、林逋、杨万里等在此留下诗篇。\n- 白居易曾主持修建“白堤”，疏浚西湖，造福百姓。\n- 西湖周边有众多古迹，如岳王庙（纪念民族英雄岳飞）、灵隐寺（千年古刹）、六和塔、龙井村（中国十大名茶龙井茶的产地）等。\n\n### 三、文化象征\n西湖被誉为“人间天堂”的代表，是中国传统山水美学的典范。它融合了自然美与人文美，体现了“天人合一”的哲学思想。许多诗词、绘画、戏曲都以西湖为题材，成为中国文化的重要符号。\n\n### 四、旅游建议\n- 最佳游览季节：春季（3-5月）桃红柳绿，秋季（9-11月）天高气爽。\n- 推荐方式：步行、骑行（环湖绿道）、乘船游湖。\n- 周边美食：西湖醋鱼、龙井虾仁、东坡肉、片儿川等。\n\n总之，杭州西湖不仅是一处自然美景，更是一座活着的文化博物馆，值得细细品味。如果你有机会到杭州，一定不要错过这个“淡妆浓抹总相宜”的人间仙境。"}}],"object":"chat.completion"}},"error":null}
-    {"id":"628312ba-172c-457d-ba7f-3e5462cc6899","custom_id":"req-002","response":{"status_code":200,"request_id":"628312ba-172c-457d-ba7f-3e5462cc6899","body":{"created":1768306035,"usage":{"completion_tokens":25,"prompt_tokens":18,"total_tokens":43},"model":"qwen-plus","id":"chatcmpl-628312ba-172c-457d-ba7f-3e5462cc6899","choices":[{"finish_reason":"stop","index":0,"message":{"role":"assistant","content":"春风拂柳绿，  \n夜雨润花红。  \n鸟语林间闹，  \n山川处处同。"}}],"object":"chat.completion"}},"error":null}
-    ```
-    
--   失败请求详情（`error_file_id`）：包含处理失败的请求行信息和错误原因，可参考[错误码](#97e145aeabbwf)进行排查。
-    
+-   成功结果（`output_file_id`）：每一行对应一个成功的原始请求，包含 `custom_id` 和 `response`。
 
-## **具体流程**
+```
+{"id":"3a5c39d5-3981-4e4c-97f2-e0e821893f03","custom_id":"req-001","response":{"status_code":200,"request_id":"3a5c39d5-3981-4e4c-97f2-e0e821893f03","body":{"created":1768306034,"usage":{"completion_tokens":654,"prompt_tokens":14,"total_tokens":668},"model":"qwen-plus","id":"chatcmpl-3a5c39d5-3981-4e4c-97f2-e0e821893f03","choices":[{"finish_reason":"stop","index":0,"message":{"role":"assistant","content":"你好！杭州西湖是中国著名的风景名胜区，位于浙江省杭州市西部，因此得名“西湖”。它是中国十大风景名胜之一，也是世界文化遗产（2011年被联合国教科文组织列入《世界遗产名录》），以其秀丽的自然风光与深厚的人文底蕴闻名于世。\n\n### 一、自然景观\n西湖三面环山，一面邻城，湖面面积约6.39平方公里，形似如意，碧波荡漾。湖中被孤山、白堤、苏堤、杨公堤等自然或人工分隔成多个水域，形成“一山二塔三岛三堤”的格局。\n\n主要景点包括：\n- **苏堤春晓**：北宋大文豪苏东坡任杭州知州时主持疏浚西湖，用挖出的淤泥堆筑成堤，后人称为“苏堤”。春天桃红柳绿，景色如画。\n- **断桥残雪**：位于白堤东端，是白蛇传中“断桥相会”的发生地，冬日雪后银装素裹，尤为著名。\n- **雷峰夕照**：雷峰塔在夕阳映照下金光熠熠，曾是“西湖十景”之一。\n- **三潭印月**：湖中小瀛洲上的三座石塔，中秋夜可在塔内点灯，月影、灯光、湖光交相辉映。\n- **平湖秋月**：位于白堤西端，是观赏湖上明月的绝佳地点。\n- **花港观鱼**：以赏花和观鱼著称，园内牡丹、锦鲤相映成趣。\n\n### 二、人文历史\n西湖不仅风景优美，还承载着丰富的历史文化：\n- 自唐宋以来，众多文人墨客如白居易、苏东坡、林逋、杨万里等在此留下诗篇。\n- 白居易曾主持修建“白堤”，疏浚西湖，造福百姓。\n- 西湖周边有众多古迹，如岳王庙（纪念民族英雄岳飞）、灵隐寺（千年古刹）、六和塔、龙井村（中国十大名茶龙井茶的产地）等。\n\n### 三、文化象征\n西湖被誉为“人间天堂”的代表，是中国传统山水美学的典范。它融合了自然美与人文美，体现了“天人合一”的哲学思想。许多诗词、绘画、戏曲都以西湖为题材，成为中国文化的重要符号。\n\n### 四、旅游建议\n- 最佳游览季节：春季（3-5月）桃红柳绿，秋季（9-11月）天高气爽。\n- 推荐方式：步行、骑行（环湖绿道）、乘船游湖。\n- 周边美食：西湖醋鱼、龙井虾仁、东坡肉、片儿川等。\n\n总之，杭州西湖不仅是一处自然美景，更是一座活着的文化博物馆，值得细细品味。如果你有机会到杭州，一定不要错过这个“淡妆浓抹总相宜”的人间仙境。"}}],"object":"chat.completion"}},"error":null}
+{"id":"628312ba-172c-457d-ba7f-3e5462cc6899","custom_id":"req-002","response":{"status_code":200,"request_id":"628312ba-172c-457d-ba7f-3e5462cc6899","body":{"created":1768306035,"usage":{"completion_tokens":25,"prompt_tokens":18,"total_tokens":43},"model":"qwen-plus","id":"chatcmpl-628312ba-172c-457d-ba7f-3e5462cc6899","choices":[{"finish_reason":"stop","index":0,"message":{"role":"assistant","content":"春风拂柳绿，  \n夜雨润花红。  \n鸟语林间闹，  \n山川处处同。"}}],"object":"chat.completion"}},"error":null}
+```
+
+-   失败请求详情（`error_file_id`）：包含处理失败的请求行信息和错误原因，可参考[错误码](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai#97e145aeabbwf)进行排查。
+
+## 具体流程
 
 Batch API使用流程分为四步：上传文件、创建任务、查询任务状态、下载结果。
 
-**说明**
+**说明**如果数据已存储在阿里云OSS中，可跳过文件上传步骤，直接在创建 Batch 任务时使用OSS文件路径。详情请参见[使用OSS文件创建 Batch 任务](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai#f667257850olj)。
 
-如果数据已存储在阿里云OSS中，可跳过文件上传步骤，直接在创建 Batch 任务时使用OSS文件路径。详情请参见[使用OSS文件创建 Batch 任务](#f667257850olj)。
-
-### 1\. 上传文件
+1\. 上传文件
 
 创建 Batch 任务前，通过文件上传接口上传符合格式要求的 JSONL 文件，获取`file_id`。
 
 > 上传文件， `purpose` 必须是 `batch` 。
 
-**说明**
-
-**复用已有文件 ID：**文件上传后返回的 ID（如 `file-batch-xxx`）可重复使用。如果输入内容不变，无需每次重新上传，直接用已有 ID 创建任务即可：
+**说明****复用已有文件 ID：**文件上传后返回的 ID（如 `file-batch-xxx`）可重复使用。如果输入内容不变，无需每次重新上传，直接用已有 ID 创建任务即可：
 
 ```
 batch = client.batches.create(
@@ -865,7 +947,7 @@ batch = client.batches.create(
 
 可通过 `client.files.list(purpose="batch")` 接口查询已上传的 Batch 文件 ID。
 
-## **OpenAI Python SDK**
+#### OpenAI Python SDK
 
 #### 请求示例
 
@@ -889,18 +971,18 @@ file_object = client.files.create(file=Path("test.jsonl"), purpose="batch")
 print(file_object.model_dump_json())
 ```
 
-## **OpenAI Node.js SDK**
+#### OpenAI Node.js SDK
 
 #### 请求示例
 
 ```
 /**
  * 阿里云百炼 Batch API - 上传文件
- * 
+ *
  * 若没有配置环境变量，可在代码中硬编码API Key：apiKey: 'sk-xxx'
  * 但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
  * 新加坡和北京地域的API Key不同。
- * 
+ *
  * 安装依赖：npm install openai
  */
 const OpenAI = require('openai');
@@ -932,7 +1014,7 @@ const fileObject = await client.files.create({
 console.log(fileObject.id);
 ```
 
-## **Java（HTTP）**
+#### Java（HTTP）
 
 #### 请求示例
 
@@ -948,26 +1030,26 @@ import java.util.regex.Matcher;
 
 /**
  * 阿里云百炼 Batch API - 上传文件
- * 
+ *
  * 若没有配置环境变量，可在代码中硬编码API Key：API_KEY = "sk-xxx"
  * 但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
  * 新加坡和北京地域的API Key不同。
- * 
+ *
  * 地域配置：
  * - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
  * - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
  * 注意：切换地域时，API Key也需要对应更换
  */
 public class BatchAPIUploadFile {
-    
+
     // 北京地域配置（默认）
     private static final String BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
     // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
     // private static final String BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1";
     // 注意：切换地域时，API Key也需要对应更换
-    
+
     private static String API_KEY;
-    
+
     public static void main(String[] args) throws Exception {
         API_KEY = System.getenv("DASHSCOPE_API_KEY");
         if (API_KEY == null || API_KEY.isEmpty()) {
@@ -975,13 +1057,13 @@ public class BatchAPIUploadFile {
             System.err.println("或在代码中设置: API_KEY = \"sk-xxx\";");
             System.exit(1);
         }
-        
+
 String fileId = uploadFile("test.jsonl");
         System.out.println("文件ID: " + fileId);
     }
-    
+
     // === 工具方法 ===
-    
+
     private static String uploadFile(String filePath) throws Exception {
         String boundary = "----WebKitFormBoundary" + System.currentTimeMillis();
         URL url = new URL(BASE_URL + "/files");
@@ -1011,7 +1093,7 @@ String fileId = uploadFile("test.jsonl");
         String response = readResponse(conn);
         return parseField(response, "\"id\":\\s*\"([^\"]+)\"");
     }
-    
+
     private static String readResponse(HttpURLConnection conn) throws Exception {
         int responseCode = conn.getResponseCode();
         InputStream is = (responseCode < 400) ? conn.getInputStream() : conn.getErrorStream();
@@ -1019,7 +1101,7 @@ String fileId = uploadFile("test.jsonl");
             return scanner.hasNext() ? scanner.next() : "";
         }
     }
-    
+
     private static String parseField(String json, String regex) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(json);
@@ -1028,7 +1110,7 @@ String fileId = uploadFile("test.jsonl");
 }
 ```
 
-## **curl(HTTP)**
+#### curl(HTTP)
 
 #### 请求示例
 
@@ -1058,11 +1140,11 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 }
 ```
 
-### 2\. 创建 Batch 任务
+2\. 创建 Batch 任务
 
 使用上传文件返回的文件ID 或OSS路径 创建 Batch 任务。
 
-## **OpenAI Python SDK**
+#### OpenAI Python SDK
 
 #### 请求示例
 
@@ -1074,7 +1156,7 @@ client = OpenAI(
     # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     # 新加坡和北京地域的API Key不同。
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
     # 注意：切换地域时，API Key也需要对应更换
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
@@ -1088,18 +1170,18 @@ batch = client.batches.create(
 print(batch)
 ```
 
-## **OpenAI Node.js SDK**
+#### OpenAI Node.js SDK
 
 #### 请求示例
 
 ```
 /**
  * 阿里云百炼 Batch API - 创建Batch任务
- * 
+ *
  * 若没有配置环境变量，可在代码中硬编码API Key：apiKey: 'sk-xxx'
  * 但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
  * 新加坡和北京地域的API Key不同。
- * 
+ *
  * 安装依赖：npm install openai
  */
 const OpenAI = require('openai');
@@ -1107,7 +1189,7 @@ const OpenAI = require('openai');
 // 北京地域配置（默认）
 const BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-// const BASE_URL = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1';
+// const BASE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
 // 注意：切换地域时，API Key也需要对应更换
 
 const apiKey = process.env.DASHSCOPE_API_KEY;
@@ -1131,7 +1213,7 @@ const batch = await client.batches.create({
 console.log(batch.id);
 ```
 
-## **Java（HTTP）**
+#### Java（HTTP）
 
 #### 请求示例
 
@@ -1145,26 +1227,26 @@ import java.util.regex.Matcher;
 
 /**
  * 阿里云百炼 Batch API - 创建Batch任务
- * 
+ *
  * 若没有配置环境变量，可在代码中硬编码API Key：API_KEY = "sk-xxx"
  * 但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
  * 新加坡和北京地域的API Key不同。
- * 
+ *
  * 地域配置：
  * - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
- * - 新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+ * - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
  * 注意：切换地域时，API Key也需要对应更换
  */
 public class BatchAPICreateBatch {
-    
+
     // 北京地域配置（默认）
     private static final String BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
     // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-    // private static final String BASE_URL = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1";
+    // private static final String BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1";
     // 注意：切换地域时，API Key也需要对应更换
-    
+
     private static String API_KEY;
-    
+
     public static void main(String[] args) throws Exception {
         API_KEY = System.getenv("DASHSCOPE_API_KEY");
         if (API_KEY == null || API_KEY.isEmpty()) {
@@ -1172,21 +1254,21 @@ public class BatchAPICreateBatch {
             System.err.println("或在代码中设置: API_KEY = \"sk-xxx\";");
             System.exit(1);
         }
-        
+
         String jsonBody = "{\"input_file_id\":\"file-batch-xxx\",\"endpoint\":\"/v1/chat/completions\",\"completion_window\":\"24h\",\"metadata\":{\"ds_name\":\"任务名称\",\"ds_description\":\"任务描述\"}}";
 String response = sendRequest("POST", "/batches", jsonBody);
         String batchId = parseField(response, "\"id\":\\s*\"([^\"]+)\"");
         System.out.println("Batch任务ID: " + batchId);
     }
-    
+
     // === 工具方法 ===
-    
+
     private static String sendRequest(String method, String path, String jsonBody) throws Exception {
         URL url = new URL(BASE_URL + path);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod(method);
         conn.setRequestProperty("Authorization", "Bearer " + API_KEY);
-        
+
         if (jsonBody != null) {
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", "application/json");
@@ -1194,10 +1276,10 @@ String response = sendRequest("POST", "/batches", jsonBody);
                 os.write(jsonBody.getBytes("UTF-8"));
             }
         }
-        
+
         return readResponse(conn);
     }
-    
+
     private static String readResponse(HttpURLConnection conn) throws Exception {
         int responseCode = conn.getResponseCode();
         InputStream is = (responseCode < 400) ? conn.getInputStream() : conn.getErrorStream();
@@ -1205,7 +1287,7 @@ String response = sendRequest("POST", "/batches", jsonBody);
             return scanner.hasNext() ? scanner.next() : "";
         }
     }
-    
+
     private static String parseField(String json, String regex) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(json);
@@ -1214,14 +1296,14 @@ String response = sendRequest("POST", "/batches", jsonBody);
 }
 ```
 
-## **curl（HTTP）**
+#### curl（HTTP）
 
 #### 请求示例
 
 ```
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
-# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/batches
+# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/batches
 # === 执行时请删除该注释 ===
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/batches \
   -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1234,7 +1316,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/batches \
   }'
 ```
 
-#### **输入参数**
+#### 输入参数
 
 **字段**
 
@@ -1258,9 +1340,9 @@ Body
 
 用于指定文件ID、OSS文件URL或OSS文件资源标识符，作为Batch任务的输入文件。您可以通过以下任一方式提供此参数：
 
--   [准备与上传文件](#a6e2ba320a8nt)接口返回的文件ID，如`file-batch-xxx`；
+-   [准备与上传文件](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)接口返回的文件ID，如`file-batch-xxx`；
     
--   [使用OSS文件创建 Batch 任务](#f667257850olj)。
+-   [使用OSS文件创建 Batch 任务](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai#f667257850olj)。
     
 
 endpoint
@@ -1510,15 +1592,15 @@ String
 
 任务描述。
 
-### 3\. 查询**与管理 Batch 任务**
+3\. 查询 与管理 Batch 任务
 
 任务创建后，可通过以下接口查询状态、列出历史任务或取消进行中的任务。
 
-#### 查询指定任务状态
+查询指定任务状态
 
 传入 Batch 任务ID可查询指定任务的详细信息。当前仅支持查询 30 天内创建的 Batch 任务。
 
-## **OpenAI Python SDK**
+#### OpenAI Python SDK
 
 #### 请求示例
 
@@ -1530,7 +1612,7 @@ client = OpenAI(
     # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     # 新加坡和北京地域的API Key不同。
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
     # 注意：切换地域时，API Key也需要对应更换
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
@@ -1538,18 +1620,18 @@ batch = client.batches.retrieve("batch_id")  # 将batch_id替换为Batch任务�
 print(batch)
 ```
 
-## **OpenAI Node.js SDK**
+#### OpenAI Node.js SDK
 
 #### 请求示例
 
 ```
 /**
  * 阿里云百炼 Batch API - 查询单个任务
- * 
+ *
  * 若没有配置环境变量，可在代码中硬编码API Key：apiKey: 'sk-xxx'
  * 但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
  * 新加坡和北京地域的API Key不同。
- * 
+ *
  * 安装依赖：npm install openai
  */
 const OpenAI = require('openai');
@@ -1557,7 +1639,7 @@ const OpenAI = require('openai');
 // 北京地域配置（默认）
 const BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-// const BASE_URL = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1';
+// const BASE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
 // 注意：切换地域时，API Key也需要对应更换
 
 const apiKey = process.env.DASHSCOPE_API_KEY;
@@ -1576,7 +1658,7 @@ const batch = await client.batches.retrieve('batch_id');
 console.log(batch.status);
 ```
 
-## **Java（HTTP）**
+#### Java（HTTP）
 
 #### 请求示例
 
@@ -1590,26 +1672,26 @@ import java.util.regex.Matcher;
 
 /**
  * 阿里云百炼 Batch API - 查询单个任务
- * 
+ *
  * 若没有配置环境变量，可在代码中硬编码API Key：API_KEY = "sk-xxx"
  * 但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
  * 新加坡和北京地域的API Key不同。
- * 
+ *
  * 地域配置：
  * - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
- * - 新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+ * - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
  * 注意：切换地域时，API Key也需要对应更换
  */
 public class BatchAPIRetrieveBatch {
-    
+
     // 北京地域配置（默认）
     private static final String BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
     // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-    // private static final String BASE_URL = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1";
+    // private static final String BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1";
     // 注意：切换地域时，API Key也需要对应更换
-    
+
     private static String API_KEY;
-    
+
     public static void main(String[] args) throws Exception {
         API_KEY = System.getenv("DASHSCOPE_API_KEY");
         if (API_KEY == null || API_KEY.isEmpty()) {
@@ -1617,20 +1699,20 @@ public class BatchAPIRetrieveBatch {
             System.err.println("或在代码中设置: API_KEY = \"sk-xxx\";");
             System.exit(1);
         }
-        
+
         String batchInfo = sendRequest("GET", "/batches/batch_id", null);
         String status = parseField(batchInfo, "\"status\":\\s*\"([^\"]+)\"");
         System.out.println("任务状态: " + status);
     }
-    
+
     // === 工具方法 ===
-    
+
     private static String sendRequest(String method, String path, String jsonBody) throws Exception {
         URL url = new URL(BASE_URL + path);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod(method);
         conn.setRequestProperty("Authorization", "Bearer " + API_KEY);
-        
+
         if (jsonBody != null) {
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", "application/json");
@@ -1638,10 +1720,10 @@ public class BatchAPIRetrieveBatch {
                 os.write(jsonBody.getBytes("UTF-8"));
             }
         }
-        
+
         return readResponse(conn);
     }
-    
+
     private static String readResponse(HttpURLConnection conn) throws Exception {
         int responseCode = conn.getResponseCode();
         InputStream is = (responseCode < 400) ? conn.getInputStream() : conn.getErrorStream();
@@ -1649,7 +1731,7 @@ public class BatchAPIRetrieveBatch {
             return scanner.hasNext() ? scanner.next() : "";
         }
     }
-    
+
     private static String parseField(String json, String regex) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(json);
@@ -1658,20 +1740,20 @@ public class BatchAPIRetrieveBatch {
 }
 ```
 
-## **curl(HTTP)**
+#### curl(HTTP)
 
 #### 请求示例
 
 ```
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
-# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/batches/batch_id
+# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/batches/batch_id
 # === 执行时请删除该注释 ===
 curl --request GET 'https://dashscope.aliyuncs.com/compatible-mode/v1/batches/batch_id' \
  -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-#### **返回示例**
+#### 返回示例
 
 查询成功后返回 Batch 任务的详细信息。以下为 completed 状态的返回示例：
 
@@ -1762,13 +1844,13 @@ Object
 
 请求数量统计对象，包含 total、completed、failed 字段。
 
-#### 查询任务列表
+查询任务列表
 
 可使用 `batches.list()` 方法查询 Batch 任务列表，通过分页机制逐步获取完整的任务列表。
 
-## **OpenAI Python SDK**
+#### OpenAI Python SDK
 
-#### **请求示例**
+#### 请求示例
 
 ```
 import os
@@ -1778,25 +1860,25 @@ client = OpenAI(
     # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     # 新加坡和北京地域的API Key不同。
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
 batches = client.batches.list(after="batch_xxx", limit=2,extra_query={'ds_name':'任务名称','input_file_ids':'file-batch-xxx,file-batch-xxx','status':'completed,expired','create_after':'20250304000000','create_before':'20250306123000'})
 print(batches)
 ```
 
-## **OpenAI Node.js SDK**
+#### OpenAI Node.js SDK
 
 #### 请求示例
 
 ```
 /**
  * 阿里云百炼 Batch API - 查询任务列表
- * 
+ *
  * 若没有配置环境变量，可在代码中硬编码API Key：apiKey: 'sk-xxx'
  * 但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
  * 新加坡和北京地域的API Key不同。
- * 
+ *
  * 安装依赖：npm install openai
  */
 const OpenAI = require('openai');
@@ -1804,7 +1886,7 @@ const OpenAI = require('openai');
 // 北京地域配置（默认）
 const BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-// const BASE_URL = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1';
+// const BASE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
 // 注意：切换地域时，API Key也需要对应更换
 
 const apiKey = process.env.DASHSCOPE_API_KEY;
@@ -1836,7 +1918,7 @@ for (const batch of batches.data) {
 }
 ```
 
-## **Java（HTTP）**
+#### Java（HTTP）
 
 #### 请求示例
 
@@ -1850,26 +1932,26 @@ import java.util.regex.Matcher;
 
 /**
  * 阿里云百炼 Batch API - 查询任务列表
- * 
+ *
  * 若没有配置环境变量，可在代码中硬编码API Key：API_KEY = "sk-xxx"
  * 但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
  * 新加坡和北京地域的API Key不同。
- * 
+ *
  * 地域配置：
  * - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
- * - 新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+ * - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
  * 注意：切换地域时，API Key也需要对应更换
  */
 public class BatchAPIListBatches {
-    
+
     // 北京地域配置（默认）
     private static final String BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
     // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-    // private static final String BASE_URL = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1";
+    // private static final String BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1";
     // 注意：切换地域时，API Key也需要对应更换
-    
+
     private static String API_KEY;
-    
+
     public static void main(String[] args) throws Exception {
         API_KEY = System.getenv("DASHSCOPE_API_KEY");
         if (API_KEY == null || API_KEY.isEmpty()) {
@@ -1877,20 +1959,20 @@ public class BatchAPIListBatches {
             System.err.println("或在代码中设置: API_KEY = \"sk-xxx\";");
             System.exit(1);
         }
-        
+
         String response = sendRequest("GET", "/batches?after=batch_xxx&limit=2&ds_name=Batch&input_file_ids=file-batch-xxx,file-batch-xxx&status=completed,failed&create_after=20250303000000&create_before=20250320000000", null);
 // 解析 JSON 获取任务列表
         System.out.println(response);
     }
-    
+
     // === 工具方法 ===
-    
+
     private static String sendRequest(String method, String path, String jsonBody) throws Exception {
         URL url = new URL(BASE_URL + path);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod(method);
         conn.setRequestProperty("Authorization", "Bearer " + API_KEY);
-        
+
         if (jsonBody != null) {
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", "application/json");
@@ -1898,10 +1980,10 @@ public class BatchAPIListBatches {
                 os.write(jsonBody.getBytes("UTF-8"));
             }
         }
-        
+
         return readResponse(conn);
     }
-    
+
     private static String readResponse(HttpURLConnection conn) throws Exception {
         int responseCode = conn.getResponseCode();
         InputStream is = (responseCode < 400) ? conn.getInputStream() : conn.getErrorStream();
@@ -1909,7 +1991,7 @@ public class BatchAPIListBatches {
             return scanner.hasNext() ? scanner.next() : "";
         }
     }
-    
+
     private static String parseField(String json, String regex) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(json);
@@ -1918,14 +2000,14 @@ public class BatchAPIListBatches {
 }
 ```
 
-## **curl(HTTP)**
+#### curl(HTTP)
 
 #### 请求示例
 
 ```
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
-# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/batches?xxx同下方内容xxx
+# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/batches?xxx同下方内容xxx
 # === 执行时请删除该注释 ===
 curl --request GET  'https://dashscope.aliyuncs.com/compatible-mode/v1/batches?after=batch_xxx&limit=2&ds_name=Batch&input_file_ids=file-batch-xxx,file-batch-xxx&status=completed,failed&create_after=20250303000000&create_before=20250320000000' \
  -H "Authorization: Bearer $DASHSCOPE_API_KEY"
@@ -1933,7 +2015,7 @@ curl --request GET  'https://dashscope.aliyuncs.com/compatible-mode/v1/batches?a
 
 > 将 `after=batch_id` 中的 `batch_id` 替换为实际值， `limit` 参数设置为返回任务的数量， `ds_name` 填写为任务名称片段，input\_file\_ids的值可填写多个文件ID， `status` 填写Batch任务的多个状态， `create_after` 和 `create_before` 的值填写为时间点。
 
-#### **输入参数**
+#### 输入参数
 
 **字段**
 
@@ -2015,7 +2097,7 @@ Query
 
 筛选在此时间点之前创建的任务，格式：`yyyyMMddHHmmss`。
 
-#### **返回示例**
+#### 返回示例
 
 ```
 {
@@ -2055,7 +2137,7 @@ Query
 }
 ```
 
-#### **返回参数**
+#### 返回参数
 
 **字段**
 
@@ -2093,11 +2175,11 @@ Boolean
 
 是否有下一页。
 
-#### 取消Batch任务
+取消Batch任务
 
 取消一个正在进行或排队中的任务。成功调用后，任务状态将变为 cancelling，最终变为 cancelled。在任务被完全取消前，已完成的部分仍会计费。
 
-## **OpenAI Python SDK**
+#### OpenAI Python SDK
 
 #### 请求示例
 
@@ -2109,25 +2191,25 @@ client = OpenAI(
     # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     # 新加坡和北京地域的API Key不同。
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
 batch = client.batches.cancel("batch_id")  # 将batch_id替换为Batch任务的id
 print(batch)
 ```
 
-## **OpenAI Node.js SDK**
+#### OpenAI Node.js SDK
 
 #### 请求示例
 
 ```
 /**
  * 阿里云百炼 Batch API - 取消任务
- * 
+ *
  * 若没有配置环境变量，可在代码中硬编码API Key：apiKey: 'sk-xxx'
  * 但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
  * 新加坡和北京地域的API Key不同。
- * 
+ *
  * 安装依赖：npm install openai
  */
 const OpenAI = require('openai');
@@ -2135,7 +2217,7 @@ const OpenAI = require('openai');
 // 北京地域配置（默认）
 const BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-// const BASE_URL = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1';
+// const BASE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
 // 注意：切换地域时，API Key也需要对应更换
 
 const apiKey = process.env.DASHSCOPE_API_KEY;
@@ -2154,7 +2236,7 @@ const batch = await client.batches.cancel('batch_id');
 console.log(batch.status); // cancelled
 ```
 
-## **Java（HTTP）**
+#### Java（HTTP）
 
 #### 请求示例
 
@@ -2168,26 +2250,26 @@ import java.util.regex.Matcher;
 
 /**
  * 阿里云百炼 Batch API - 取消任务
- * 
+ *
  * 若没有配置环境变量，可在代码中硬编码API Key：API_KEY = "sk-xxx"
  * 但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
  * 新加坡和北京地域的API Key不同。
- * 
+ *
  * 地域配置：
  * - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
- * - 新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+ * - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
  * 注意：切换地域时，API Key也需要对应更换
  */
 public class BatchAPICancelBatch {
-    
+
     // 北京地域配置（默认）
     private static final String BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
     // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-    // private static final String BASE_URL = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1";
+    // private static final String BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1";
     // 注意：切换地域时，API Key也需要对应更换
-    
+
     private static String API_KEY;
-    
+
     public static void main(String[] args) throws Exception {
         API_KEY = System.getenv("DASHSCOPE_API_KEY");
         if (API_KEY == null || API_KEY.isEmpty()) {
@@ -2195,19 +2277,19 @@ public class BatchAPICancelBatch {
             System.err.println("或在代码中设置: API_KEY = \"sk-xxx\";");
             System.exit(1);
         }
-        
+
         String response = sendRequest("POST", "/batches/batch_id/cancel", null);
         System.out.println(response);
     }
-    
+
     // === 工具方法 ===
-    
+
     private static String sendRequest(String method, String path, String jsonBody) throws Exception {
         URL url = new URL(BASE_URL + path);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod(method);
         conn.setRequestProperty("Authorization", "Bearer " + API_KEY);
-        
+
         if (jsonBody != null) {
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", "application/json");
@@ -2215,10 +2297,10 @@ public class BatchAPICancelBatch {
                 os.write(jsonBody.getBytes("UTF-8"));
             }
         }
-        
+
         return readResponse(conn);
     }
-    
+
     private static String readResponse(HttpURLConnection conn) throws Exception {
         int responseCode = conn.getResponseCode();
         InputStream is = (responseCode < 400) ? conn.getInputStream() : conn.getErrorStream();
@@ -2226,7 +2308,7 @@ public class BatchAPICancelBatch {
             return scanner.hasNext() ? scanner.next() : "";
         }
     }
-    
+
     private static String parseField(String json, String regex) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(json);
@@ -2235,14 +2317,14 @@ public class BatchAPICancelBatch {
 }
 ```
 
-## **curl(HTTP)**
+#### curl(HTTP)
 
 #### 请求示例
 
 ```
 # ======= 重要提示 =======
 # 新加坡和北京地域的API Key不同。
-# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/batches/batch_id/cancel
+# 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1/batches/batch_id/cancel
 # === 执行时请删除该注释 ===
 curl --request POST 'https://dashscope.aliyuncs.com/compatible-mode/v1/batches/batch_id/cancel' \
  -H "Authorization: Bearer $DASHSCOPE_API_KEY"
@@ -2250,7 +2332,7 @@ curl --request POST 'https://dashscope.aliyuncs.com/compatible-mode/v1/batches/b
 
 > 将 `batch_id` 替换为实际值。
 
-#### **返回示例**
+#### 返回示例
 
 取消任务成功后返回 Batch 任务的详细信息。以下是一个 cancelling 状态的返回示例：
 
@@ -2285,13 +2367,13 @@ curl --request POST 'https://dashscope.aliyuncs.com/compatible-mode/v1/batches/b
 
 > 取消任务后，状态会先变为 `cancelling` ，等待正在执行的请求完成；最终会变为 `cancelled` 。已完成的请求结果仍会保存在输出文件中。
 
-### 4\. 下载Batch结果文件
+4\. 下载Batch结果文件
 
 任务结束后会生成结果文件（output\_file\_id）和可能的错误文件（error\_file\_id），两者均通过相同的文件下载接口获取。
 
 仅支持下载以`file-batch_output`开头的`file_id`对应的文件。
 
-## **OpenAI Python SDK**
+#### OpenAI Python SDK
 
 您可以通过`content`方法获取Batch任务结果文件内容，并通过`write_to_file`方法将其保存至本地。
 
@@ -2305,7 +2387,7 @@ client = OpenAI(
     # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     # 新加坡和北京地域的API Key不同。
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
     # 注意：切换地域时，API Key也需要对应更换
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
@@ -2323,7 +2405,7 @@ content.write_to_file("result.jsonl")
 {"id":"73291560-xxx","custom_id":"2","response":{"status_code":200,"request_id":"73291560-7616-97bf-87f2-7d747bbe84fd","body":{"created":1742303743,"usage":{"completion_tokens":7,"prompt_tokens":26,"total_tokens":33},"model":"qwen-plus","id":"chatcmpl-73291560-7616-97bf-87f2-7d747bbe84fd","choices":[{"finish_reason":"stop","index":0,"message":{"content":"2+2 equals 4."}}],"object":"chat.completion"}},"error":null}
 ```
 
-## **OpenAI Node.js SDK**
+#### OpenAI Node.js SDK
 
 您可以通过`content`方法获取Batch任务结果文件内容。
 
@@ -2332,11 +2414,11 @@ content.write_to_file("result.jsonl")
 ```
 /**
  * 阿里云百炼 Batch API - 下载结果文件
- * 
+ *
  * 若没有配置环境变量，可在代码中硬编码API Key：apiKey: 'sk-xxx'
  * 但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
  * 新加坡和北京地域的API Key不同。
- * 
+ *
  * 安装依赖：npm install openai
  */
 const OpenAI = require('openai');
@@ -2345,7 +2427,7 @@ const fs = require('fs');
 // 北京地域配置（默认）
 const BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-// const BASE_URL = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1';
+// const BASE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1';
 // 注意：切换地域时，API Key也需要对应更换
 
 const apiKey = process.env.DASHSCOPE_API_KEY;
@@ -2370,7 +2452,7 @@ fs.writeFileSync('result.jsonl', text);
 console.log('结果已保存到 result.jsonl');
 ```
 
-## **Java（HTTP）**
+#### Java（HTTP）
 
 您可以通过GET请求到`/files/{file_id}/content`端点获取文件内容。
 
@@ -2388,26 +2470,26 @@ import java.util.regex.Matcher;
 
 /**
  * 阿里云百炼 Batch API - 下载结果文件
- * 
+ *
  * 若没有配置环境变量，可在代码中硬编码API Key：API_KEY = "sk-xxx"
  * 但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
  * 新加坡和北京地域的API Key不同。
- * 
+ *
  * 地域配置：
  * - 北京地域：https://dashscope.aliyuncs.com/compatible-mode/v1
- * - 新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+ * - 新加坡地域：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
  * 注意：切换地域时，API Key也需要对应更换
  */
 public class BatchAPIDownloadFile {
-    
+
     // 北京地域配置（默认）
     private static final String BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1";
     // 如果使用新加坡地域，请将上面的 BASE_URL 替换为：
-    // private static final String BASE_URL = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1";
+    // private static final String BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1";
     // 注意：切换地域时，API Key也需要对应更换
-    
+
     private static String API_KEY;
-    
+
     public static void main(String[] args) throws Exception {
         API_KEY = System.getenv("DASHSCOPE_API_KEY");
         if (API_KEY == null || API_KEY.isEmpty()) {
@@ -2424,15 +2506,15 @@ System.out.println(content);
         Files.write(Paths.get("result.jsonl"), content.getBytes());
         System.out.println("结果已保存到 result.jsonl");
     }
-    
+
     // === 工具方法 ===
-    
+
     private static String sendRequest(String method, String path, String jsonBody) throws Exception {
         URL url = new URL(BASE_URL + path);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod(method);
         conn.setRequestProperty("Authorization", "Bearer " + API_KEY);
-        
+
         if (jsonBody != null) {
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", "application/json");
@@ -2440,10 +2522,10 @@ System.out.println(content);
                 os.write(jsonBody.getBytes("UTF-8"));
             }
         }
-        
+
         return readResponse(conn);
     }
-    
+
     private static String readResponse(HttpURLConnection conn) throws Exception {
         int responseCode = conn.getResponseCode();
         InputStream is = (responseCode < 400) ? conn.getInputStream() : conn.getErrorStream();
@@ -2451,7 +2533,7 @@ System.out.println(content);
             return scanner.hasNext() ? scanner.next() : "";
         }
     }
-    
+
     private static String parseField(String json, String regex) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(json);
@@ -2460,7 +2542,7 @@ System.out.println(content);
 }
 ```
 
-## **curl(HTTP)**
+#### curl(HTTP)
 
 您可以通过GET方法，在URL中指定`file_id`来下载Batch任务结果文件。
 
@@ -2475,7 +2557,7 @@ curl -X GET https://dashscope.aliyuncs.com/compatible-mode/v1/files/file-batch_o
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" > result.jsonl
 ```
 
-#### **返回示例**
+#### 返回示例
 
 单条响应结果：
 
@@ -2511,7 +2593,7 @@ curl -X GET https://dashscope.aliyuncs.com/compatible-mode/v1/files/file-batch_o
 }
 ```
 
-#### **返回参数**
+#### 返回参数
 
 **字段**
 
@@ -2595,7 +2677,7 @@ error.code
 
 String
 
-错误行信息和错误原因，可参考[错误码](#97e145aeabbwf)进行排查。
+错误行信息和错误原因，可参考[错误码](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai#97e145aeabbwf)进行排查。
 
 error.message
 
@@ -2603,9 +2685,9 @@ String
 
 错误信息。
 
-## **进阶功能**
+## 进阶功能
 
-### **使用OSS文件创建 Batch 任务**
+### 使用OSS文件创建 Batch 任务
 
 大型文件推荐存储在阿里云OSS中，通过 `input_file_id` 直接引用，避免本地上传限制。
 
@@ -2621,10 +2703,9 @@ batch_job = client.batches.create(
 )
 ```
 
-**获取文件URL**
+获取文件URL
 
 1.  **OSS 控制台**
-    
     1.  进入**Bucket列表**页面，找到目标Bucket并单击名称；
         
     2.  在**文件列表**中定位目标文件，单击右侧**详情**按钮；
@@ -2640,46 +2721,40 @@ batch_job = client.batches.create(
 
 1.  **完成OSS授权**
     
-    参阅[从OSS导入文件配置说明](https://help.aliyun.com/zh/model-studio/data-import-instructions#a2b61704136bj)的授权和添加标签步骤。
+    参阅从OSS导入文件配置说明的授权和添加标签步骤。
     
 2.  **参数配置**
     
     使用`oss:{region}:{bucket}/{file_path}`格式的OSS资源标识符：
     
-    ```
-    batch_job = client.batches.create(
-        input_file_id="oss:cn-beijing:your-bucket/path/to/file.jsonl",
-        endpoint="/v1/chat/completions",
-        completion_window="24h"
-    )
-    ```
-    
+
+```
+batch_job = client.batches.create(
+    input_file_id="oss:cn-beijing:your-bucket/path/to/file.jsonl",
+    endpoint="/v1/chat/completions",
+    completion_window="24h"
+)
+```
 
 **建议**：
 
--   使用与阿里云百炼服务同地域 Bucket（ `cn-beijing`）可利用阿里云内网传输，降低网络延迟、提升稳定性并避免跨地域流量费用。
-    
+-   使用与阿里云百炼服务同地域 Bucket（ `cn-beijing`）可利用阿里云内网传输，降低网络延迟、提升稳定性并避免跨地域流量费用。
 -   方式二更安全，基于RAM授权而非公开 URL。
-    
 
-### **配置任务完成通知**
+### 配置任务完成通知
 
 长时间运行的任务使用轮询会消耗不必要的资源。建议配置异步通知，系统在任务完成后主动通知。
 
-**说明**
-
-任务完成通知功能仅支持在北京地域配置。
+**说明**任务完成通知功能仅支持在北京地域配置。
 
 -   **Callback 回调：**在创建任务时指定一个公网可访问的 URL
-    
 -   **EventBridge 消息队列：**与阿里云生态深度集成，无需公网 IP
-    
 
-#### 方式一：Callback 回调
+方式一：Callback 回调
 
 创建任务时通过 `metadata` 指定一个公网可访问的 URL。任务完成后，系统向该URL发送包含任务状态的 POST 请求：
 
-## **OpenAI Python SDK**
+#### OpenAI Python SDK
 
 ```
 import os
@@ -2688,8 +2763,8 @@ from openai import OpenAI
 client = OpenAI(
     # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
     # 新加坡和北京地域的API Key不同。
-    api_key=os.getenv("DASHSCOPE_API_KEY"), 
-    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # 以下是北京地域base_url，如果使用新加坡地域的模型，需要将base_url替换为：https://dashscope-intl.aliyuncs.com/compatible-mode/v1
     # 注意：切换地域时，API Key也需要对应更换
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
@@ -2697,7 +2772,7 @@ client = OpenAI(
 batch = client.batches.create(
     input_file_id="file-batch-xxx",  # 上传文件返回的 id
     endpoint="/v1/chat/completions",  # Embedding文本向量模型填写"/v1/embeddings",测试模型batch-test-model填写/v1/chat/ds-test,其他模型填写/v1/chat/completions
-    completion_window="24h", 
+    completion_window="24h",
     metadata={
             "ds_batch_finish_callback": "https://xxx/xxx"
           }
@@ -2705,9 +2780,9 @@ batch = client.batches.create(
 print(batch)
 ```
 
-## **curl(HTTP)**
+#### curl(HTTP)
 
-#### **请求示例**
+#### 请求示例
 
 ```
 curl -X POST --location "https://dashscope.aliyuncs.com/compatible-mode/v1/batches" \
@@ -2723,53 +2798,37 @@ curl -X POST --location "https://dashscope.aliyuncs.com/compatible-mode/v1/batch
         }'
 ```
 
-#### 方式二：EventBridge 消息队列
+方式二：EventBridge 消息队列
 
 此方式无需公网 IP，适用于与阿里云其他服务（如函数计算、RocketMQ）集成的场景。
 
 当 Batch 任务完成时，系统会向阿里云事件总线 EventBridge 发送一个事件。您可以配置 EventBridge 规则来监听此事件，并将其路由到指定目标。
 
--   事件源 (Source): `acs.dashscope`
-    
--   事件类型 (Type): `dashscope:System:BatchTaskFinish`
-    
+-   事件源 (Source): `acs.dashscope`
+-   事件类型 (Type): `dashscope:System:BatchTaskFinish`
 
 相关文档：[路由到消息队列RocketMQ版](https://help.aliyun.com/zh/eventbridge/user-guide/route-events-to-message-queue-for-apache-rocketmq)。
 
-## **应用于生产环境**
+## 应用于生产环境
 
 -   **文件管理**
-    
-    -   定期调用 [OpenAI-File删除文件接口](https://help.aliyun.com/zh/model-studio/openai-file-interface#3457ce1d7ezr3)删除不需要的文件，避免达到文件存储上限（10000个文件或100GB）
-        
+    -   定期调用 OpenAI-File删除文件接口删除不需要的文件，避免达到文件存储上限（10000个文件或100GB）
     -   对于大型文件，推荐将其存储在阿里云OSS中
-        
 -   **任务监控**
-    
     -   优先使用 Callback 或 EventBridge 异步通知
-        
     -   轮询间隔 > 1分钟，使用指数退避策略
-        
 -   **错误处理**
-    
     -   实现完整的异常处理机制，涵盖网络错误、API 错误等
-        
     -   下载并分析 `error_file_id` 的错误详情
-        
-    -   对于常见错误码，参考[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决
-        
+    -   对于常见错误码，参考错误码进行解决
 -   **成本优化**
-    
     -   将时效性要求不高的任务迁移到 Batch API
-        
     -   合并小任务到一个批次
-        
-    -   合理设置 `completion_window` 提供更多调度灵活性
-        
+    -   合理设置 `completion_window` 提供更多调度灵活性
 
-### **实用工具**
+### 实用工具
 
-#### CSV 转 JSONL
+CSV 转 JSONL
 
 原始数据存储在 CSV 文件中（第一列为 ID，第二列为内容）时，可使用以下脚本快速生成 Batch 任务所需的 JSONL 文件。
 
@@ -2792,7 +2851,7 @@ with open("input_demo.csv", "r") as fin:
             fout.write(json.dumps(request, separators=(',', ':'), ensure_ascii=False) + "\n")
 ```
 
-#### JSONL 结果转 CSV
+JSONL 结果转 CSV
 
 使用以下脚本可将 `result.jsonl` 文件解析为易于在Excel中分析的 `result.csv` 文件。
 
@@ -2838,15 +2897,12 @@ with open("result.jsonl", "r") as fin:
         writer = csv.writer(fout)
         writer.writerows(rows)
 ```
-
 **Excel 乱码解决**
 
 -   可使用文本编辑器（如Sublime）将 CSV 文件的编码转换为GBK，然后再用Excel打开。
-    
 -   或在Excel中新建一个Excel文件，并在导入数据时指定正确的编码格式 UTF-8。
-    
 
-## **接口限流**
+## 接口限流
 
 **接口**
 
@@ -2868,31 +2924,25 @@ with open("result.jsonl", "r") as fin:
 
 1000 次/分钟
 
-## **计费说明**
+## 计费说明
 
--   **计费单价：** 所有成功请求的输入和输出Token，单价均为对应模型实时推理价格的**50%** ，具体请参见[模型列表](https://help.aliyun.com/zh/model-studio/models)。
+-   **计费单价：** 所有成功请求的输入和输出Token，单价均为对应模型实时推理价格的**50%** ，具体请参见[模型列表](raw/model-user-guide/get-started-with-models/models.md)。
     
 -   **计费范围：**
-    
     -   仅对成功执行的请求计费。
-        
     -   文件解析失败、任务执行失败或行级错误请求均**不产生费用** 。
-        
     -   已取消的任务中，取消前已成功完成的请求仍正常计费。
-        
 
 **说明**
 
--   批量推理为独立计费项，支持[AI 通用型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package)，但不支持[预付费](https://common-buy.aliyun.com/?commodityCode=sfm_llminference_spn_public_cn)（节省计划）、[新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota)等优惠，以及[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)等功能。
-    
--   部分模型（如 qwen3.5-plus、qwen3.5-flash）默认开启思考模式，会产生额外的思考tokens，并按输出token价格计费，导致成本增加。建议根据任务复杂度设置enable\_thinking参数以控制成本，具体请参考[深度思考](https://help.aliyun.com/zh/model-studio/deep-thinking)。
-    
+-   批量推理为独立计费项，支持AI 通用型节省计划，但不支持[预付费](https://common-buy.aliyun.com/?commodityCode=sfm_llminference_spn_public_cn)（节省计划）、新人免费额度等优惠，以及[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)等功能。
+-   部分模型（如 qwen3.5-plus、qwen3.5-flash）默认开启思考模式，会产生额外的思考tokens，并按输出token价格计费，导致成本增加。建议根据任务复杂度设置enable\_thinking参数以控制成本，具体请参考深度思考。
 
 ## 错误码
 
-调用失败时，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+调用失败时，请参见错误码进行解决。
 
-## **常见问题**
+## 常见问题
 
 1.  **如何选择使用 Batch Chat 还是Batch File？**
     

@@ -2,18 +2,14 @@
 
 千问的意图理解模型能够在百毫秒级时间内快速、准确地解析用户意图，并选择合适的工具来解决用户的问题。
 
-**重要**
-
-百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-## **支持的模型**
+## 支持的模型
 
 **模型名称**
 
@@ -51,13 +47,13 @@ tongyi-intent-detect-v3
 
 有效期：百炼开通后90天内
 
-## **使用方法**
+## 使用方法
 
-### **前提条件**
+### 前提条件
 
-您需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。如果通过OpenAI SDK或DashScope SDK进行调用，还需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
 
-### **同时输出意图与函数调用信息**
+### 同时输出意图与函数调用信息
 
 为了使意图理解模型可以同时输出意图与函数调用信息，您需要按照以下方式设置System Message：
 
@@ -149,9 +145,9 @@ Response in INTENT_MODE.
 ]
 ```
 
-#### **请求示例**
+#### 请求示例
 
-## OpenAI兼容
+OpenAI兼容
 
 ```
 import os
@@ -202,7 +198,7 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-## DashScope
+DashScope
 
 ```
 import os
@@ -246,7 +242,7 @@ messages = [
     ]
 response = Generation.call(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"), 
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
     model="tongyi-intent-detect-v3",
     messages=messages,
     result_format="message"
@@ -255,7 +251,7 @@ response = Generation.call(
 print(response.output.choices[0].message.content)
 ```
 
-#### **响应示例**
+#### 响应示例
 
 ```
 <tags>
@@ -322,7 +318,7 @@ print(parse_text(response))
 }
 ```
 
-### **只输出意图信息**
+### 只输出意图信息
 
 为了使意图理解模型只输出意图信息，您需要按照以下方式设置System Message：
 
@@ -341,9 +337,9 @@ You are Qwen, created by Alibaba Cloud. You are a helpful assistant. \nYou shoul
 }
 ```
 
-#### **请求示例**
+#### 请求示例
 
-## OpenAI兼容
+OpenAI兼容
 
 ```
 import os
@@ -371,7 +367,7 @@ intent_dict = {
 
 intent_string = json.dumps(intent_dict,ensure_ascii=False)
 
-system_prompt = f"""You are Qwen, created by Alibaba Cloud. You are a helpful assistant. 
+system_prompt = f"""You are Qwen, created by Alibaba Cloud. You are a helpful assistant.
 You should choose one tag from the tag list:
 {intent_string}
 Just reply with the chosen tag."""
@@ -392,7 +388,7 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-## DashScope
+DashScope
 
 ```
 import os
@@ -422,7 +418,7 @@ intent_dict = {
 
 intent_string = json.dumps(intent_dict,ensure_ascii=False)
 
-system_prompt = f"""You are Qwen, created by Alibaba Cloud. You are a helpful assistant. 
+system_prompt = f"""You are Qwen, created by Alibaba Cloud. You are a helpful assistant.
 You should choose one tag from the tag list:
 {intent_string}
 Just reply with the chosen tag."""
@@ -433,7 +429,7 @@ messages = [
     ]
 response = Generation.call(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"), 
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
     model="tongyi-intent-detect-v3",
     messages=messages,
     result_format="message"
@@ -442,17 +438,17 @@ response = Generation.call(
 print(response.output.choices[0].message.content)
 ```
 
-#### **响应示例**
+#### 响应示例
 
 ```
 alarm_set
 ```
 
-#### **提升意图识别的响应速度**
+#### 提升意图识别的响应速度
 
 为了提升意图识别的响应速度，您可以将意图的分类种类用一个简单的大写字母进行指代，意图识别响应结果将始终为一个 Token，这可以优化模型调用的响应时间。
 
-## OpenAI兼容
+OpenAI兼容
 
 ```
 import os
@@ -480,7 +476,7 @@ intent_dict = {
 
 intent_string = json.dumps(intent_dict, ensure_ascii=False)
 
-system_prompt = f"""You are Qwen, created by Alibaba Cloud. You are a helpful assistant. 
+system_prompt = f"""You are Qwen, created by Alibaba Cloud. You are a helpful assistant.
 You should choose one tag from the tag list:
 {intent_string}
 Just reply with the chosen tag."""
@@ -500,7 +496,7 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-## DashScope
+DashScope
 
 ```
 import os
@@ -530,7 +526,7 @@ intent_dict = {
 
 intent_string = json.dumps(intent_dict, ensure_ascii=False)
 
-system_prompt = f"""You are Qwen, created by Alibaba Cloud. You are a helpful assistant. 
+system_prompt = f"""You are Qwen, created by Alibaba Cloud. You are a helpful assistant.
 You should choose one tag from the tag list:
 {intent_string}
 Just reply with the chosen tag."""
@@ -556,7 +552,7 @@ print(response.output.choices[0].message.content)
 M
 ```
 
-### **只输出函数调用信息**
+### 只输出函数调用信息
 
 为了使意图理解模型只输出函数调用信息，您需要按照以下方式设置System Message：
 
@@ -564,11 +560,11 @@ M
 You are Qwen, created by Alibaba Cloud. You are a helpful assistant. You may call one or more tools to assist with the user query. The tools you can use are as follows:\n{工具信息}\nResponse in NORMAL_MODE.
 ```
 
-其中工具信息与[同时输出意图与函数调用信息](#b1da224bc8g6r)中的工具信息格式相同。
+其中工具信息与[同时输出意图与函数调用信息](https://help.aliyun.com/zh/model-studio/intent-detect-capability#b1da224bc8g6r)中的工具信息格式相同。
 
-#### **请求示例**
+#### 请求示例
 
-## OpenAI兼容
+OpenAI兼容
 
 ```
 import os
@@ -619,7 +615,7 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-## DashScope
+DashScope
 
 ```
 import os
@@ -663,7 +659,7 @@ messages = [
     ]
 response = Generation.call(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-    api_key=os.getenv("DASHSCOPE_API_KEY"), 
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
     model="tongyi-intent-detect-v3",
     messages=messages,
     result_format="message"
@@ -672,7 +668,7 @@ response = Generation.call(
 print(response.output.choices[0].message.content)
 ```
 
-#### **响应示例**
+#### 响应示例
 
 ```
 <tool_call>
@@ -705,15 +701,15 @@ print(parse_text(response))
 {"name": "get_current_weather", "arguments": {"location": "杭州市"}}
 ```
 
-### **多轮对话**
+### 多轮对话
 
 如果用户在提问时未提供充足的信息，意图理解模型会进行反问，通过多轮对话采集到必要的参数后，再输出函数调用的信息。
 
-## 同时输出意图与函数调用信息
+#### 同时输出意图与函数调用信息
 
-##### **请求示例**
+##### 请求示例
 
-## OpenAI 兼容
+OpenAI 兼容
 
 ```
 import os
@@ -775,7 +771,7 @@ print("第二轮输出：\n")
 print(response.choices[0].message.content)
 ```
 
-## DashScope
+DashScope
 
 ```
 import os
@@ -847,7 +843,7 @@ print("第二轮输出：\n")
 print(response.output.choices[0].message.content)
 ```
 
-##### **响应示例**
+##### 响应示例
 
 ```
 查询问题：我想查天气
@@ -873,11 +869,11 @@ print(response.output.choices[0].message.content)
 </content>
 ```
 
-## 只输出函数调用信息
+#### 只输出函数调用信息
 
-##### **请求示例**
+##### 请求示例
 
-## OpenAI兼容
+OpenAI兼容
 
 ```
 import os
@@ -937,7 +933,7 @@ print("第二轮输出：\n")
 print(response.choices[0].message.content)
 ```
 
-## DashScope
+DashScope
 
 ```
 import os
@@ -1005,7 +1001,7 @@ print("第二轮输出：\n")
 print(response.output.choices[0].message.content)
 ```
 
-##### **响应示例**
+##### 响应示例
 
 ```
 查询问题：我想查天气
@@ -1021,8 +1017,8 @@ print(response.output.choices[0].message.content)
 </tool_call>
 ```
 
-## **常见问题**
+## 常见问题
 
-### **Q：最多传入几个工具？**
+### Q：最多传入几个工具？
 
 A：我们建议您传入不超过10个的工具，否则模型调用工具的准确率可能会降低。

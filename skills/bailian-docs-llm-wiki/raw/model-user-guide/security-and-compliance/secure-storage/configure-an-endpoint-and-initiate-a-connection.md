@@ -15,7 +15,6 @@
     -   专有网络需要满足以下条件：
         
         -   公共云：专有网络的地域为“华北2（北京）”。专有网络的可用区包括可用区G、可用区H、可用区L中的任意两个。每个可用区至少配备一个交换机。
-            
     -   安全组不需要配置任何出网和入网规则，安全组不要放入其他云组件。
         
 
@@ -73,7 +72,7 @@
     
     **专有网络**
     
-    配置为[前提条件](#9f5eaa7638q38)中已经获取的专有网络、安全组、可用区与交换机。
+    配置为[前提条件](https://help.aliyun.com/zh/model-studio/configure-an-endpoint-and-initiate-a-connection#9f5eaa7638q38)中已经获取的专有网络、安全组、可用区与交换机。
     
     **安全组**
     
@@ -84,17 +83,13 @@
     此时，**连接状态**为**未连接**，说明终端节点未成功连接到阿里云百炼。
     
 
-## 步骤3：**在阿里云百炼中确认连接**
+## 步骤3：在阿里云百炼中确认连接
 
 1.  访问**[业务空间管理](https://bailian.console.aliyun.com/?admin=1#/efm/business_management)**页面。
-    
 2.  查找到已经创建的阿里云百炼安全存储业务空间，在**操作**列单击**管理阿里云百炼安全存储空间**。
-    
 3.  选择已创建的终端节点，点击**连接**，开始建立私网连接。
-    
 4.  建立连接需要等待一定时间。当**状态**显示**已连接**时，表示成功建立私网连接。
-    
 
 ## 下一步
 
-[配置可用区IP](https://help.aliyun.com/zh/model-studio/configure-zone-ip)
+[配置可用区IP](raw/model-user-guide/security-and-compliance/secure-storage/configure-zone-ip.md)

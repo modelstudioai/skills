@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 179 个模型家族 · 401 个主干模型 · 更新于 2026-08-20
+> 自动生成 · 共 178 个模型家族 · 400 个主干模型 · 更新于 2026-08-21
 
 **机器查询走结构化文件**：
 
@@ -94,7 +94,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [通义法睿-Plus-32K](groups/farui-plus.json) — 通义法睿是以通义千问为基座经法律行业数据和知识专门训练的法律行业大模型产品，综合运用了模型精调、强化学习、 RAG检索增强、法律Agent技术，具有回答法律问题、推理法律适用、推荐裁判类案、辅助案情分…
   - 模型：`farui-plus`
 
-## 图像生成 `IG` — 32 个家族
+## 图像生成 `IG` — 31 个家族
 
 - [AI试衣-Plus版](groups/aitryon-plus.json) — aitryon-plus是一款效果出众的虚拟试衣图片生成模型，可基于服饰平拍图片以及人物正面全身照，输出服饰的人物试衣效果图片。 相较于aitryon模型，aitryon-plus模型在图片清晰度、服…
   - 模型：`aitryon-plus`
@@ -120,8 +120,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen-image-edit-max`
 - [Qwen-Image-Edit-Plus](groups/qwen-image-edit.json) — 千问系列图像编辑Plus模型，在首版Edit模型基础上进一步优化了推理性能与系统稳定性，大幅缩短图像生成与编辑的响应时间；支持单次请求返回多张图片，显著提升用户体验。
   - 模型：`qwen-image-edit`, `qwen-image-edit-plus`
-- [Qwen-Image-Max](groups/qwen-image-max.json) — 千问图像生成模型Max系列，在各类生成任务中表现出色，相较Plus系列大幅度降低生成图片的AI感，提升图像真实性；具备更真实的人物质感、更细腻的自然纹理、更美观的文字渲染。
-  - 模型：`qwen-image-max`
 - [Qwen-Image-Plus](groups/qwen-image-plus.json) — 千问系列图像生成模型，参数规模200亿。具备卓越的文本渲染能力，在复杂文本渲染、各类生成与编辑任务重表现出色，在多个公开基准测试中获得SOTA，模型性能大幅提升。
   - 模型：`qwen-image`, `qwen-image-plus`
 - [Qwen-MT-Image](groups/qwen-mt-image.json) — 专注做图片翻译的模型服务，能将中、英、日等11个语言的图片翻译到指定的语言，精准还原图片排版和内容信息，支持术语定义、敏感词过滤、商品主体检测等自定义功能，提供灵活、准确、高效的图像本地化服务。

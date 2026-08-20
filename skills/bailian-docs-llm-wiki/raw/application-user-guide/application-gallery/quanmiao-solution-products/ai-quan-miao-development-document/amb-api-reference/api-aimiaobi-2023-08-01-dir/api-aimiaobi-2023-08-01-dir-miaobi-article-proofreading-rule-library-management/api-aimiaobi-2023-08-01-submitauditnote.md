@@ -1,18 +1,18 @@
-# SubmitAuditNote - 提交自定义规则库
+# SubmitAuditNote
 
 妙笔为您提供了与公有云“智能审校”模块中相同的上传自定义规则库的功能。由于鉴权限制，用户需要使用自定义规则库文件的 fileKey 作为入参才能顺利调用本接口。该接口在被调用后，会对用户的自定义规则库进行结构化处理，并生成一个 xlsx 格式的结构化解析结果。您可以调用 GetAuditNoteProcessingStatus 接口查询结构化处理状态，也可以调用 DownloadAuditNote 接口获取结构化之后的规则库。接口功能正在迭代中，预计会在未来使用可访问的文件 URL 作为入参。
 
 ## 接口说明
 
-全妙产品支持 iframe 嵌入 具体请参考文档： [客户对接\_全妙公有云 iframe 定制方案](https://help.aliyun.com/zh/model-studio/iframe-embedding-scheme)
+全妙产品支持 iframe 嵌入 具体请参考文档： [客户对接\_全妙公有云 iframe 定制方案](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/quanmiao-more/iframe-embedding-scheme.md)
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/SubmitAuditNote)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
- [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/SubmitAuditNote)
+[调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/SubmitAuditNote)
 
-## **授权信息**
+## 授权信息
 
 下表是API对应的授权信息，可以在RAM权限策略语句的`Action`元素中使用，用来给RAM用户或RAM角色授予调用此API的权限。具体说明如下：
 
@@ -22,10 +22,8 @@
     
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
     
-    -   对于必选的资源类型，用前面加 \* 表示。
-        
+    -   对于必选的资源类型，用前面加 \* 表示。
     -   对于不支持资源级授权的操作，用`全部资源`表示。
-        
 -   条件关键字：是指云产品自身定义的条件关键字。
     
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
@@ -101,7 +99,7 @@ string
 
 note\_id\_unique
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -184,6 +182,6 @@ xxx\_Default\_89123748917
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
 
-## **变更历史**
+## 变更历史
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/SubmitAuditNote#workbench-doc-change-demo)。

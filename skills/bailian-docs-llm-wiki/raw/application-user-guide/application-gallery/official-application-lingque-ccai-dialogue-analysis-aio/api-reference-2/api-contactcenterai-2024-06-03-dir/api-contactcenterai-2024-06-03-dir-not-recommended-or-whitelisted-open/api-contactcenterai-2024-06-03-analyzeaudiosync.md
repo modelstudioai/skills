@@ -6,21 +6,21 @@
 
 请确保在使用该接口前，已充分了解通义晓蜜 CCAI-对话分析 AIO 产品的收费方式和价格。
 
-## [](#前提条件)前提条件
+## 前提条件
 
 -   1.已开通通义晓蜜 CCAI-对话分析 AIO 服务。
--   2.已创建应用：应用中心完成通义晓蜜 CCAI-对话分析 AIO 应用创建，并获取到 APP-ID 和 WORKSPACE-ID：[获取 APP-ID 和 WORKSPACE-ID](https://help.aliyun.com/zh/model-studio/developer-reference/obtain-api-key-app-id-and-workspace-id?spm=openapi-amp.newDocPublishment.0.0.3491281fOQZK5f)。
+-   2.已创建应用：应用中心完成通义晓蜜 CCAI-对话分析 AIO 应用创建，并获取到 APP-ID 和 WORKSPACE-ID：获取 APP-ID 和 WORKSPACE-ID。
 
-## [](#注意事项)注意事项
+## 注意事项
 
 -   1.超过 3 分钟的音频请使用离线任务分析。
 -   2.目前支持双轨录音文件，并且需要指定声轨对应的角色。
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/AnalyzeAudioSync)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
-[![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png)调试](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/AnalyzeAudioSync)
+[调试](https://api.alibabacloud.com/api/ContactCenterAI/2024-06-03/AnalyzeAudioSync)
 
 ## 授权信息
 
@@ -354,7 +354,7 @@ string
 
 文件地址
 
-http://1111.com/sss.mp3
+[http://1111.com/sss.mp3](http://1111.com/sss.mp3)
 
 serviceChannelKeywords
 
@@ -456,9 +456,9 @@ boolean
 
 false
 
-## [](#接口请求示例)接口请求示例
+## 接口请求示例
 
-```java
+```
 import com.alibaba.fastjson.JSONObject;
 import com.aliyun.contactcenterai20240603.Client;
 import com.aliyun.contactcenterai20240603.models.AnalyzeAudioSyncRequest;
@@ -503,7 +503,7 @@ public class CCAiTask {
         AnalyzeAudioSyncResponse response = client.analyzeAudioSync(workspaceId, appId, request);
         System.out.println(JSONObject.toJSONString(response));
     }
-    
+
 }
 ```
 
@@ -669,4 +669,4 @@ The request processing has failed due to some unknown error, exception or failur
 
 系统内部错误，请稍后重试
 
-访问[错误中心](< https://api.aliyun.com/document/ContactCenterAI/2024-06-03/errorCode>)查看更多错误码。
+访问[错误中心](https://api.alibabacloud.com/document/ContactCenterAI/2024-06-03/errorCode)查看更多错误码。

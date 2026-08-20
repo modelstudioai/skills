@@ -4,7 +4,7 @@
 
 ## 前提条件
 
-已创建 API Key 并配置为环境变量 `DASHSCOPE_API_KEY`。配置方法请参见[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+已创建 API Key 并配置为环境变量 `DASHSCOPE_API_KEY`。配置方法请参见[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
 
 ## 请求说明
 
@@ -24,11 +24,11 @@
     
     新加坡
     
-    `https://dashscope-intl.aliyuncs.com/api/v1/models`
+    `[https://dashscope-intl.aliyuncs.com/api/v1/models](https://dashscope-intl.aliyuncs.com/api/v1/models)`
     
     中国香港
     
-    `https://cn-hongkong.dashscope.aliyuncs.com/api/v1/models`
+    `[https://cn-hongkong.dashscope.aliyuncs.com/api/v1/models](https://cn-hongkong.dashscope.aliyuncs.com/api/v1/models)`
     
     日本（东京）
     
@@ -426,15 +426,12 @@ String
 ## 请求示例
 
 **示例一：查询所有文本生成模型**
-
 ```
 curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models?capabilities=TG&page_no=1&page_size=20" \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header "Content-Type: application/json"
 ```
-
 **示例二：查询 Qwen 系列的推理模型**
-
 ```
 curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models?providers=qwen&capabilities=TG&capabilities=Reasoning&page_no=1&page_size=100" \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -531,4 +528,4 @@ curl "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/models?providers
 
 ## 错误码
 
-如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)。
+如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](raw/model-api-reference/preparations/error-code.md)。

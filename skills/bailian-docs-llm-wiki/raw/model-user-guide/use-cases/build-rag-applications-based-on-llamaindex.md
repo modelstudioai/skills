@@ -4,33 +4,27 @@
 
 ## 开始
 
-### **前提条件**
+### 前提条件
 
--   您需要已[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-    
+-   您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
 -   已在[百炼控制台](https://bailian.console.aliyun.com/#/knowledge-base)开通知识库服务。首次进入知识库页面时，按照页面提示开通即可。
-    
 -   如果需要指定业务空间，还要获取指定业务空间的“业务空间ID”。
-    
 -   在Python编程工具的终端中执行以下命令安装DashScopeCloudIndex的安装包（您的Python版本要求：>=3.8 且 <=3.12）。
-    
-    ```
-    pip install llama-index-core
-    pip install llama-index-llms-dashscope
-    pip install llama-index-indices-managed-dashscope
-    ```
-    
 
-### **文件解析**
+```
+pip install llama-index-core
+pip install llama-index-llms-dashscope
+pip install llama-index-indices-managed-dashscope
+```
+
+### 文件解析
 
 准备您的知识库文件：
 
 -   可以是一个或多个独立的文件。
-    
 -   可以将所有文件放在一个文件夹中。
-    
 
-下面的例子将使用阿里云百炼的[DashScopeParse](https://help.aliyun.com/zh/model-studio/dashscopeparse)作为文档解析器。
+下面的例子将使用阿里云百炼的[智能化解析和切分文档](https://help.aliyun.com/zh/model-studio/dashscopeparse)作为文档解析器。
 
 > DashScopeParse 解析器支持在线解析 .doc、.docx、.pdf 文件，要求单个文件的大小在100M以内， 并且文件页数在1000以内。
 

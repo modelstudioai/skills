@@ -2,7 +2,7 @@
 
 访问控制（RAM）是阿里云提供的管理用户身份与资源访问权限的服务。使用 RAM 可以让您避免与其他用户共享阿里云账号密钥，并可按需为用户授予最小权限。RAM 中使用权限策略描述授权的具体内容。
 
-本文为您介绍 _大模型服务平台百炼_ 为 RAM 权限策略定义的操作（Action）、资源（Resource）和条件（Condition）。 _大模型服务平台百炼_ 的 RAM 代码（RamCode）为 _anytrans_ ，支持的授权粒度为 _操作级_ 。
+本文为您介绍_大模型服务平台百炼_为 RAM 权限策略定义的操作（Action）、资源（Resource）和条件（Condition）。_大模型服务平台百炼_的 RAM 代码（RamCode）为_anytrans_，支持的授权粒度为_操作级_。
 
 ## 权限策略通用结构
 
@@ -32,18 +32,15 @@
 
 -   Effect：权限策略效果。取值：Allow（允许）、Deny（拒绝）。
     
--   Action：授予允许或拒绝权限的具体操作。具体信息，请参见[操作（Action）](#title-auth-detail-2)。
+-   Action：授予允许或拒绝权限的具体操作。具体信息，请参见[操作（Action）](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-ram#title-auth-detail-2)。
     
--   Resource：受操作影响的具体对象，您可以使用资源 ARN 来描述指定资源。具体信息，请参见[资源（Resource）](#title-auth-detail-3)。
+-   Resource：受操作影响的具体对象，您可以使用资源 ARN 来描述指定资源。具体信息，请参见[资源（Resource）](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-ram#title-auth-detail-3)。
     
--   Condition：指授权生效的条件。可选字段。具体信息，请参见[条件（Condition）](#title-auth-detail-4)。
+-   Condition：指授权生效的条件。可选字段。具体信息，请参见[条件（Condition）](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-ram#title-auth-detail-4)。
     
-    -   Condition\_operator：条件运算符，不同类型的条件对应不同的条件运算符。具体信息，请参见[权限策略基本元素](https://help.aliyun.com/zh/ram/policy-elements)。
-        
+    -   Condition\_operator：条件运算符，不同类型的条件对应不同的条件运算符。具体信息，请参见权限策略基本元素。
     -   Condition\_key：条件关键字。
-        
     -   Condition\_value：条件关键字对应的值。
-        
 
 ## 操作（Action）
 
@@ -58,10 +55,8 @@
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
     
     -   对于必选的资源类型，用前面加 \* 表示。
-        
     -   对于不支持资源级授权的操作，用`全部资源`表示。
-        
--   条件关键字：是指云产品自身定义的条件关键字。该列不体现适用于任何操作的[通用条件关键字](https://help.aliyun.com/zh/ram/policy-elements)。
+-   条件关键字：是指云产品自身定义的条件关键字。该列不体现适用于任何操作的通用条件关键字。
     
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
@@ -80,13 +75,13 @@
 
 anytrans:BatchTranslate
 
-[BatchTranslate](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-batchtranslate)
+[BatchTranslate](raw/application-user-guide/application-gallery/official-application-tongyi-translate/tongyi-translate-api-reference/api-anytrans-2025-07-07-dir/api-anytrans-2025-07-07-dir-text-translation/api-anytrans-2025-07-07-batchtranslate.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -94,13 +89,13 @@ none
 
 anytrans:SubmitHtmlTranslateTask
 
-[SubmitHtmlTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-submithtmltranslatetask)
+[SubmitHtmlTranslateTask](raw/application-user-guide/application-gallery/official-application-tongyi-translate/tongyi-translate-api-reference/api-anytrans-2025-07-07-dir/api-anytrans-2025-07-07-dir-text-translation/api-anytrans-2025-07-07-submithtmltranslatetask.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -108,13 +103,13 @@ none
 
 anytrans:TermQuery
 
-[TermQuery](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-termquery)
+[TermQuery](raw/application-user-guide/application-gallery/official-application-tongyi-translate/tongyi-translate-api-reference/api-anytrans-2025-07-07-dir/api-anytrans-2025-07-07-dir-text-translation/api-anytrans-2025-07-07-termquery.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -122,13 +117,13 @@ none
 
 anytrans:GetImageTranslateTask
 
-[GetImageTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-getimagetranslatetask)
+[GetImageTranslateTask](raw/application-user-guide/application-gallery/official-application-tongyi-translate/tongyi-translate-api-reference/api-anytrans-2025-07-07-dir/api-anytrans-2025-07-07-dir-image-translation/api-anytrans-2025-07-07-getimagetranslatetask.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -136,13 +131,13 @@ none
 
 anytrans:BatchTranslateForHtml
 
-[BatchTranslateForHtml](https://help.aliyun.com/zh/document_detail/3037877.html)
+BatchTranslateForHtml
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -150,13 +145,13 @@ none
 
 anytrans:SubmitDocTranslateTask
 
-[SubmitDocTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-submitdoctranslatetask)
+[SubmitDocTranslateTask](raw/application-user-guide/application-gallery/official-application-tongyi-translate/tongyi-translate-api-reference/api-anytrans-2025-07-07-dir/api-anytrans-2025-07-07-dir-document-translation/api-anytrans-2025-07-07-submitdoctranslatetask.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -164,13 +159,13 @@ none
 
 anytrans:TermEdit
 
-[TermEdit](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-termedit)
+[TermEdit](raw/application-user-guide/application-gallery/official-application-tongyi-translate/tongyi-translate-api-reference/api-anytrans-2025-07-07-dir/api-anytrans-2025-07-07-dir-text-translation/api-anytrans-2025-07-07-termedit.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -178,13 +173,13 @@ none
 
 anytrans:GetLongTextTranslateTask
 
-[GetLongTextTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-getlongtexttranslatetask)
+[GetLongTextTranslateTask](raw/application-user-guide/application-gallery/official-application-tongyi-translate/tongyi-translate-api-reference/api-anytrans-2025-07-07-dir/api-anytrans-2025-07-07-dir-text-translation/api-anytrans-2025-07-07-getlongtexttranslatetask.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -192,13 +187,13 @@ none
 
 anytrans:SubmitLongTextTranslateTask
 
-[SubmitLongTextTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-submitlongtexttranslatetask)
+[SubmitLongTextTranslateTask](raw/application-user-guide/application-gallery/official-application-tongyi-translate/tongyi-translate-api-reference/api-anytrans-2025-07-07-dir/api-anytrans-2025-07-07-dir-text-translation/api-anytrans-2025-07-07-submitlongtexttranslatetask.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -206,13 +201,13 @@ none
 
 anytrans:GetDocTranslateTask
 
-[GetDocTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-getdoctranslatetask)
+[GetDocTranslateTask](raw/application-user-guide/application-gallery/official-application-tongyi-translate/tongyi-translate-api-reference/api-anytrans-2025-07-07-dir/api-anytrans-2025-07-07-dir-document-translation/api-anytrans-2025-07-07-getdoctranslatetask.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -220,13 +215,13 @@ none
 
 anytrans:TextTranslate
 
-[TextTranslate](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-texttranslate)
+[TextTranslate](raw/application-user-guide/application-gallery/official-application-tongyi-translate/tongyi-translate-api-reference/api-anytrans-2025-07-07-dir/api-anytrans-2025-07-07-dir-text-translation/api-anytrans-2025-07-07-texttranslate.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -234,13 +229,13 @@ none
 
 anytrans:SubmitImageTranslateTask
 
-[SubmitImageTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-submitimagetranslatetask)
+[SubmitImageTranslateTask](raw/application-user-guide/application-gallery/official-application-tongyi-translate/tongyi-translate-api-reference/api-anytrans-2025-07-07-dir/api-anytrans-2025-07-07-dir-image-translation/api-anytrans-2025-07-07-submitimagetranslatetask.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -248,13 +243,13 @@ none
 
 anytrans:GetHtmlTranslateTask
 
-[GetHtmlTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-gethtmltranslatetask)
+[GetHtmlTranslateTask](raw/application-user-guide/application-gallery/official-application-tongyi-translate/tongyi-translate-api-reference/api-anytrans-2025-07-07-dir/api-anytrans-2025-07-07-dir-text-translation/api-anytrans-2025-07-07-gethtmltranslatetask.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -269,11 +264,8 @@ none
 -   `*`表示全部。例如：
     
     -   `{#resourceType}`为`*`时：表示全部资源。
-        
     -   `{#regionId}`为`*`时：表示全部地域。
-        
     -   `{#accountId}`为`*`时：表示全部阿里云账号。
-        
 
 资源类型
 
@@ -281,16 +273,13 @@ none
 
 ## 条件（Condition）
 
-_大模型服务平台百炼_未定义产品级别的条件关键字。如需查看适用于所有云产品的通用条件关键字，请参见[通用条件关键字](https://help.aliyun.com/zh/ram/policy-elements)。
+_大模型服务平台百炼_未定义产品级别的条件关键字。如需查看适用于所有云产品的通用条件关键字，请参见通用条件关键字。
 
 ## 相关操作
 
 您可以创建自定义权限策略，并将权限策略授予 RAM 用户、RAM 用户组或 RAM 角色。具体操作如下：
 
--   [创建自定义权限策略](https://help.aliyun.com/zh/ram/create-a-custom-policy)
-    
--   [为 RAM 用户授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)
-    
--   [为 RAM 用户组授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-a-ram-user-group)
-    
--   [为 RAM 角色授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-a-ram-role)
+-   创建自定义权限策略
+-   为 RAM 用户授权
+-   为 RAM 用户组授权
+-   为 RAM 角色授权

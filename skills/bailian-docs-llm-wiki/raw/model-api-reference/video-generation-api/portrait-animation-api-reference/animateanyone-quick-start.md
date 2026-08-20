@@ -2,22 +2,17 @@
 
 舞动人像AnimateAnyone可基于人物图片和人物动作模板，生成人物动作视频。其中，包含3个独立的模型“舞动人像AnimateAnyone-detect”、“舞动人像AnimateAnyone-template”和“舞动人像AnimateAnyone”，分别提供人物图片合规检测、人物动作模板生成与人物视频生成能力。
 
-**重要**
+**重要**本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
 
-本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
+### 模型概览
 
-### **模型概览**
-
-#### **模型简介**
+#### 模型简介
 
 -   舞动人像AnimateAnyone-detect，是一个图像检测模型，用于检测输入的图片是否满足AnimateAnyone模型所需的人物图片规范。
-    
 -   舞动人像AnimateAnyone-template，是一个动作模板生成模型，用于从人物运动视频中提取人物动作并生成满足AnimateAnyone模型所需的动作模板。
-    
 -   舞动人像AnimateAnyone，是一个人物视频生成模型，可基于人物图片和动作模板生成人物动作视频。
-    
 
-#### **模型效果示例**
+#### 模型效果示例
 
 **输入：人物图片**
 
@@ -27,18 +22,12 @@
 
 **输出（按视频背景生成）**
 
-![05-9\_16](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5770383371/p885845.png)
-
-![04-9\_16](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9239161571/p885846.png)
-
 **说明**
 
 -   以上示例，由集成了“舞动人像AnimateAnyone”的千问APP生成。
-    
 -   舞动人像AnimateAnyone模型的生成内容为视频画面，不包含音频。
-    
 
-### **资费与限流**
+### 资费与限流
 
 **模式**
 
@@ -46,7 +35,7 @@
 
 **单价**
 
-**免费额度**[（查看）](https://help.aliyun.com/zh/model-studio/new-free-quota)
+**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
 
 **任务下发接口QPS限制**
 
@@ -111,7 +100,7 @@ animate-anyone
 
 ### 前提条件
 
-已开通服务并获得API-KEY：[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+已开通服务并获得API-KEY：[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
 ### 模型调用
 
@@ -144,5 +133,4 @@ animate-anyone
 **说明**
 
 -   animate-anyone-detect、animate-anyone仅为模型能力代称，独立部署的模型将在部署成功后生成唯一的模型名称，如“animate-anyone-detect-xxx”，模型调用时需指明调用的是该独立部署模型。
-    
 -   由于图像检测的调用耗时较短，而视频生成算法的调用耗时较长。使用时，可结合实际需要调整图像检测模型与视频生成模型的部署比例。通常，当图像以有序的队列输入时，1路图像检测并发应可支撑5路视频生成并发任务。

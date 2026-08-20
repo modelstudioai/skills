@@ -2,32 +2,31 @@
 
 QwenPaw（原 CoPaw）是 AgentScope 团队开源的个人 AI 助手，支持本地或云端部署，可通过 Token Plan 个人版、Token Plan 团队版、Coding Plan 或按量计费接入阿里云百炼。
 
-## **安装 QwenPaw**
+## 安装 QwenPaw
 
 推荐 pip 包或一键安装脚本。Docker、桌面端、ModelScope 在线运行等方式参考 [QwenPaw 官方文档](https://qwenpaw.agentscope.io/)。
 
-## 一键脚本
+#### 一键脚本
 
 脚本自动安装 uv、创建虚拟环境并下载依赖，无需手动配置 Python。根据操作系统选择对应命令：
 
 -   macOS / Linux：
-    
-    ```
-    curl -fsSL https://qwenpaw.agentscope.io/install.sh | bash
-    ```
-    
+
+```
+curl -fsSL https://qwenpaw.agentscope.io/install.sh | bash
+```
+
 -   Windows（CMD）：
-    
-    ```
-    curl -fsSL https://qwenpaw.agentscope.io/install.bat -o install.bat && install.bat
-    ```
-    
+
+```
+curl -fsSL https://qwenpaw.agentscope.io/install.bat -o install.bat && install.bat
+```
+
 -   Windows（PowerShell）：
-    
-    ```
-    irm https://qwenpaw.agentscope.io/install.ps1 | iex
-    ```
-    
+
+```
+irm https://qwenpaw.agentscope.io/install.ps1 | iex
+```
 
 安装完成后，在新终端执行：
 
@@ -36,7 +35,7 @@ qwenpaw init --defaults
 qwenpaw app
 ```
 
-## pip 安装
+#### pip 安装
 
 需 Python 3.10 ~ 3.13：
 
@@ -48,7 +47,7 @@ qwenpaw app
 
 启动后访问 `http://127.0.0.1:8088/` 打开 QwenPaw Console。
 
-## **配置接入凭证**
+## 配置接入凭证
 
 在 Console 点击 **设置** > **模型**，根据计费方案配置对应的提供商。
 
@@ -66,7 +65,7 @@ qwenpaw app
 
 **模型**
 
-已预设常用模型。新增模型点击**添加模型**，**模型 ID**填入 Token Plan 个人版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)。
+已预设常用模型。新增模型点击**添加模型**，**模型 ID**填入 Token Plan 个人版[支持的模型](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-personal-overview.md)。
 
 ### Token Plan 团队版
 
@@ -82,7 +81,7 @@ qwenpaw app
 
 **模型**
 
-已预设常用模型。新增模型点击**添加模型**，**模型 ID**填入 Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)。
+已预设常用模型。新增模型点击**添加模型**，**模型 ID**填入 Token Plan 团队版[支持的模型](raw/model-user-guide/token-plan-guide/token-plan-overview.md)。
 
 ### Coding Plan
 
@@ -98,7 +97,7 @@ qwenpaw app
 
 **模型**
 
-已预设常用模型，可在**模型**页面**测试连接**验证。新增模型点击**添加模型**，**模型 ID**填入 Coding Plan [支持的模型](https://help.aliyun.com/zh/model-studio/coding-plan)。
+已预设常用模型，可在**模型**页面**测试连接**验证。新增模型点击**添加模型**，**模型 ID**填入 Coding Plan [支持的模型](raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan.md)。
 
 ### 按量计费
 
@@ -110,7 +109,7 @@ qwenpaw app
 
 **API 密钥**
 
-填入[阿里云百炼 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，需与所选地域对应。
+填入[阿里云百炼 API Key](raw/model-api-reference/preparations/get-api-key.md)，需与所选地域对应。
 
 **基础 URL**
 
@@ -127,33 +126,27 @@ qwenpaw app
 
 已预设常用模型。新增模型点击**添加模型**，**模型 ID**填入[支持的模型](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#7f9c78ae99pwz)。
 
-## **设置默认模型**
+## 设置默认模型
 
 进入 **设置** > **模型** > **默认LLM** 选择模型并**保存**。聊天页面右上角下拉菜单可临时切换当前会话的提供商和模型。
 
-## **常见问题**
+## 常见问题
 
 ### 错误码
 
 按计费方案排查：
 
--   按量计费：[错误码排查](https://help.aliyun.com/zh/model-studio/error-code)
-    
--   Coding Plan：[Coding Plan 常见问题](https://help.aliyun.com/zh/model-studio/coding-plan-faq)
-    
--   Token Plan 个人版：[Token Plan 个人版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-team-faq)
-    
--   Token Plan 团队版：[Token Plan 团队版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-team-faq)
-    
+-   按量计费：[错误码排查](raw/model-api-reference/preparations/error-code.md)
+-   Coding Plan：[Coding Plan 常见问题](raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan-faq.md)
+-   Token Plan 个人版：[Token Plan 个人版常见问题](raw/model-user-guide/token-plan-guide/token-plan-team-edition/token-plan-team-faq.md)
+-   Token Plan 团队版：[Token Plan 团队版常见问题](raw/model-user-guide/token-plan-guide/token-plan-team-edition/token-plan-team-faq.md)
 
 ### 报错 401 Incorrect API key provided
 
 可能原因：
 
 -   三种计费方案的 API Key 不通用，确认与基础 URL 来自同一方案。
-    
 -   按量计费的 API Key 与基础 URL 不在同一地域。
-    
 
 ### 长对话或工具调用时报错上下文超限
 

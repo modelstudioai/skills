@@ -2,12 +2,11 @@
 
 本文档主要介绍妙笔对接写作信源的操作步骤，有两种写作信源的对接方式，分别是API对接和本地上传，它们均可以作为写作信源提供相应素材能力。
 
-## **通过API引入数据源**
+## 通过API引入数据源
 
 -   客户已经有自己的搜索引擎或者是RAG链路，此时可以通过配置接口来实现信源配置，可直接通过API 进行配置，具体操作如下：
-    
 
-1\. 第一步调用[数据源-创建](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-createdataset)接口：http://${host}/api/privateDataset/createDataset
+1.  第一步调用[数据源-创建](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-createdataset.md)接口：http://${host}/api/privateDataset/createDataset
 
 请求入参示例：
 
@@ -19,7 +18,7 @@
 }
 ```
 
-2\. 第二步调用[数据源-修改](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-updatedataset)接口：http://${host}/api/privateDataset/updateDataset
+2.  第二步调用[数据源-修改](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-updatedataset.md)接口：http://${host}/api/privateDataset/updateDataset
 
 请求入参示例：
 
@@ -162,11 +161,10 @@
 }
 ```
 
--   具体参数含义请参考如下文档：[妙搜-通过API引入数据源](https://help.aliyun.com/zh/model-studio/miaosou-introduce-data-source-through-api)。
-    
+-   具体参数含义请参考如下文档：[妙搜-通过API引入数据源](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/quanmiao-more/miaosou-introduce-data-source-through-api.md)。
 
-## **上传文件用作数据源**
+## 上传文件用作数据源
 
-此种场景为客户仅有原始数据，没有现成的搜索引擎或者RAG链路，需要通过全妙-妙搜的能力构建向量索引。所以需要将用户的原始数据上传到妙搜中构建为数据源，此场景下需要客户开通妙搜服务，可以点击[计费说明（妙搜和妙读）](https://help.aliyun.com/zh/model-studio/miaosou-miaodu-api-billing)文档查看开通和计费的详情。
+此种场景为客户仅有原始数据，没有现成的搜索引擎或者RAG链路，需要通过全妙-妙搜的能力构建向量索引。所以需要将用户的原始数据上传到妙搜中构建为数据源，此场景下需要客户开通妙搜服务，可以点击[计费说明（妙搜和妙读）](raw/application-user-guide/application-gallery/quanmiao-solution-products/miaosou-and-miaodu/miaosou-miaodu-api-billing.md)文档查看开通和计费的详情。
 
-具体对接的接口文档：[数据源-创建](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-createdataset)、[妙搜-智能搜索](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runsearchgeneration)。
+具体对接的接口文档：[数据源-创建](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-createdataset.md)、[妙搜-智能搜索](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-smart-search/api-aimiaobi-2023-08-01-runsearchgeneration.md)。

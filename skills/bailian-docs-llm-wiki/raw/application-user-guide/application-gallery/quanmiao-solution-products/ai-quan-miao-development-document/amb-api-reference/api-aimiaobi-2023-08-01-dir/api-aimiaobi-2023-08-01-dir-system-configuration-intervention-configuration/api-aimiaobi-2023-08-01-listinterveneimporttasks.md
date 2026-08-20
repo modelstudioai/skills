@@ -4,9 +4,9 @@
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListInterveneImportTasks)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
-[![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png)调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListInterveneImportTasks)
+[调试](https://api.alibabacloud.com/api/AiMiaoBi/2023-08-01/ListInterveneImportTasks)
 
 ## 授权信息
 
@@ -30,7 +30,7 @@ string
 
 是
 
-业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)
+业务空间唯一标识： AgentKey
 
 xxxxx\_p\_efm
 
@@ -229,4 +229,4 @@ true
 
 ## 错误码
 
-访问[错误中心](< https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode>)查看更多错误码。
+访问[错误中心](https://api.alibabacloud.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。

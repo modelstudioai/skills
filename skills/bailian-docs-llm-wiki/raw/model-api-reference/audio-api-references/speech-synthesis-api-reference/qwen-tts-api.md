@@ -4,11 +4,11 @@
 
 > 模型的使用方法请参见 [非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide) 。
 
-## **请求体**
+## 请求体
 
-## 非流式输出
+#### 非流式输出
 
-## Python
+#### Python
 
 > DashScope Python SDK中的`SpeechSynthesizer`接口已统一为`MultiModalConversation`，使用方法和参数保持完全一致。
 
@@ -37,7 +37,7 @@ response = dashscope.MultiModalConversation.call(
 print(response)
 ```
 
-## Java
+#### Java
 
 ```
 // 请安装 DashScope SDK 的最新版本
@@ -84,7 +84,7 @@ public class Main {
 }
 ```
 
-## curl
+#### curl
 
 ```
 # ======= 重要提示 =======
@@ -106,9 +106,9 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 }'
 ```
 
-## 流式输出
+#### 流式输出
 
-## Python
+#### Python
 
 > DashScope Python SDK中的`SpeechSynthesizer`接口已统一为`MultiModalConversation`，使用新接口只需替换名称即可，其他参数完全兼容。
 
@@ -139,7 +139,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
         print(chunk)
 ```
 
-## Java
+#### Java
 
 ```
 // DashScope SDK 版本需要不低于 2.19.0
@@ -188,7 +188,7 @@ public class Main {
 }
 ```
 
-## curl
+#### curl
 
 ```
 # ======= 重要提示 =======
@@ -211,56 +211,46 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 }'
 ```
 
-> 实时播放Base64 音频的方法请参见：[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#c204937c02gsb)。
+> 实时播放Base64 音频的方法请参见：[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)。
 
-**model** `_string_` **（必选）**
+**model**`string`**（必选）**
 
 模型名称，详情请参见[支持的模型](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#d2ad2470a394c)。
 
-**input** `_object_` **（必选）**
+**input**`object`**（必选）**
 
 输入参数**。**
 
-**属性**
+属性
 
-**text** `_string_` **（必选）**
+**text** `string` **（必选）**
 
 要合成的文本，支持多语种混合输入。最大输入长度：千问-TTS模型为 512 Token，其他模型为 600 字符。
 
-**voice** `_string_` **（必选）**
+**voice** `string` **（必选）**
 
 使用的音色，参见[支持的系统音色](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#bac280ddf5a1u)。
 
-**language\_type** `_string_` （可选）
+**language\_type** `string` （可选）
 
 合成音频的语种。默认为 `Auto`。
 
 -   `Auto`：适用于文本包含多种语言或语种不确定的场景。模型自动为不同语言片段匹配发音，但无法保证完全精准。
     
--   指定语种：适用于单一语种文本。指定具体语种能显著提升合成质量，效果通常优于 `Auto`。可选值：
+-   指定语种：适用于单一语种文本。指定具体语种能显著提升合成质量，效果通常优于 `Auto`。可选值：
     
     -   `Chinese`
-        
     -   `English`
-        
     -   `German`
-        
     -   `Italian`
-        
     -   `Portuguese`
-        
     -   `Spanish`
-        
     -   `Japanese`
-        
     -   `Korean`
-        
     -   `French`
-        
     -   `Russian`
-        
 
-**instructions** `_string_` （可选）
+**instructions**`string`（可选）
 
 设置指令，参见[指令控制](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#12884a10929p9)。
 
@@ -272,7 +262,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 
 适用范围：该功能仅适用于千问3-TTS-Instruct-Flash系列模型。
 
-**optimize\_instructions** `_boolean_` （可选）
+**optimize\_instructions**`boolean`（可选）
 
 对 `instructions` 进行语义优化，以提升语音合成的自然度和表现力。
 
@@ -286,9 +276,9 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 
 适用范围：该功能仅适用于千问3-TTS-Instruct-Flash系列模型。
 
-## **返回对象**（流式与非流式输出格式一致）
+## 返回对象（流式与非流式输出格式一致）
 
-## 千问3-TTS-Flash
+千问3-TTS-Flash
 
 ```
 {
@@ -302,7 +292,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
         "choices": null,
         "audio": {
             "data": "",
-            "url": "http://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/1d/ab/20251218/d2033070/39b6d8f2-c0db-4daa-9073-5d27bfb66b78.wav?Expires=1766113409&OSSAccessKeyId=LTAI5xxxxxxxxxxxx&Signature=NOrqxxxxxxxxxxxx%3D",
+            "url": "http://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/1d/ab/20251218/d2033070/39b6d8f2-c0db-4daa-9073-5d27bfb66b78.wav?Expires=1766113409&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
             "id": "audio_5c63c65c-cad8-4bf4-959d-xxxxxxxxxxxx",
             "expires_at": 1766113409
         }
@@ -315,7 +305,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 }
 ```
 
-## 千问-TTS
+千问-TTS
 
 ```
 {
@@ -329,7 +319,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
         "choices": null,
         "audio": {
             "data": "",
-            "url": "http://dashscope-result-wlcb.oss-cn-wulanchabu.aliyuncs.com/1d/50/20251218/e6c1b9cc/9acec74e-e317-4dbd-9e76-745c47bcbf2d.wav?Expires=1766116806&OSSAccessKeyId=LTAxxxxxxxxx&Signature=afYZxxxxxxxxx%2FAX9bk%3D",
+            "url": "http://dashscope-result-wlcb.oss-cn-wulanchabu.aliyuncs.com/1d/50/20251218/e6c1b9cc/9acec74e-e317-4dbd-9e76-745c47bcbf2d.wav?Expires=1766116806&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
             "id": "audio_f4e8139b-3203-4887-92cb-xxxxxxxxxxxx",
             "expires_at": 1766116806
         }
@@ -350,7 +340,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 }
 ```
 
-**status\_code** `_integer_`
+**status\_code** `integer`
 
 HTTP状态码。遵循 [RFC 9110](https://www.rfc-editor.org/rfc/rfc9110.html#name-status-codes)标准定义。例如：  
 • `200`：请求成功，正常返回结果  
@@ -358,119 +348,110 @@ HTTP状态码。遵循 [RFC 9110](https://www.rfc-editor.org/rfc/rfc9110.html#n
 • `401`：未授权访问  
 • `404`：资源未找到  
 • `500`：服务器内部错误。  
-  
-  
-  
-  
-  
 
-**request\_id** `_string_`
+**request\_id** `string`
 
 本次请求的唯一标识，可用于问题排查。
 
-**code** `_string_`
+**code** `string`
 
-请求失败时展示错误码（参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)）。
+请求失败时展示错误码（参见[错误码](raw/model-api-reference/preparations/error-code.md)）。
 
-**message** `_string_`
+**message** `string`
 
-请求失败时展示错误信息（参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)）。
+请求失败时展示错误信息（参见[错误码](raw/model-api-reference/preparations/error-code.md)）。
 
-**output** `_object_`
+**output**`object`
 
 模型的输出。
 
-**属性**
+属性
 
-**text** `_string_`
-
-始终为null，无需关注该参数。
-
-**choices** `_string_`
+**text**`string`
 
 始终为null，无需关注该参数。
 
-**finish\_reason** `_string_`
+**choices**`string`
+
+始终为null，无需关注该参数。
+
+**finish\_reason**`string`
 
 生成状态标识：
 
 -   正在生成时为"null"；
-    
 -   模型输出自然结束或触发了停止条件时为 "stop"。
-    
 
-**audio** `_object_`
+**audio** `object`
 
 模型输出的音频信息。
 
-**属性**
+属性
 
-**url** `_string_`
+**url** `string`
 
 完整音频文件的 URL，有效期 24 小时。
 
-**说明**
+**说明**流式输出说明：流式模式下，API 返回多个 chunk。中间 chunk 的 audio.data 包含 Base64 编码的音频片段，audio.url 为空；最后一个 chunk 的 audio.data 为空字符串，audio.url 包含完整音频文件的 **OSS** 地址。开发者可在最后一个 chunk 中通过 url 字段下载完整音频。非流式模式下，该字段直接返回完整音频文件 URL。
 
-流式输出说明：流式模式下，API 返回多个 chunk。中间 chunk 的 audio.data 包含 Base64 编码的音频片段，audio.url 为空；最后一个 chunk 的 audio.data 为空字符串，audio.url 包含完整音频文件的 **OSS** 地址。开发者可在最后一个 chunk 中通过 url 字段下载完整音频。非流式模式下，该字段直接返回完整音频文件 URL。
-
-**data** `_string_`
+**data** `string`
 
 Base64 编码的音频数据。非流式输出和流式输出的中间 chunk 中返回 Base64 编码的音频片段；流式输出的最后一个 chunk 中该字段为空字符串，音频通过同级的 url 字段获取。
 
-**id** `_string_`
+**id** `string`
 
 音频的唯一标识。
 
-**expires\_at** `_integer_`
+**expires\_at** `integer`
 
 URL 过期时间的 UNIX 时间戳。
 
-**usage** `_object_`
+**usage** `object`
 
 本次请求的 Token 或字符消耗信息。千问-TTS模型返回Token消耗信息，千问3-TTS-Flash模型返回字符消耗信息
 
-**属性**
+属性
 
-**input\_tokens\_details** `_object_`
+**input\_tokens\_details** `object`
 
 输入文本的 Token消耗信息。仅千问-TTS模型返回该字段。
 
-**属性**
+属性
 
-**text\_tokens** `_integer_`
+**text\_tokens** `integer`
 
 输入文本的 Token 消耗量。
 
-**total\_tokens** `_integer_`
+**total\_tokens** `integer`
 
 本次请求总共消耗的 Token 量。仅千问-TTS模型返回该字段。
 
-**output\_tokens** `_integer_`
+**output\_tokens** `integer`
 
 输出音频的 Token 消耗量。对于千问3-TTS-Flash模型，该字段固定为0。
 
-**input\_tokens** `_integer_`
+**input\_tokens** `integer`
 
 输入文本的 Token 消耗量。对于千问3-TTS-Flash模型，该字段固定为0。
 
-**output\_tokens\_details** `_object_`
+**output\_tokens\_details** `object`
 
 输出的 Token 消耗信息。仅千问-TTS模型返回该字段。
 
-**属性**
+属性
 
-**audio\_tokens** `_integer_`
+**audio\_tokens** `integer`
 
 输出音频的 Token 消耗量。
 
-**text\_tokens** `_integer_`
+**text\_tokens** `integer`
 
 输出文本的 Token 消耗量，当前固定为0。
 
-**characters** `_integer_`
+**characters** `integer`
 
 输入文本的字符数。仅千问3-TTS-Flash模型返回该字段。
 
-**request\_id** `_string_`
+**request\_id** `string`
 
 本次请求的 ID。

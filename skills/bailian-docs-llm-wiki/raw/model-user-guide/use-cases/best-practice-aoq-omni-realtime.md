@@ -2,15 +2,15 @@
 
 本文档说明如何在 Android、iOS、HarmonyOS 平台接入 AOQ Client SDK，实现 AOQ+qwen3.5-omni-plus-realtime 音视频通话功能。
 
-## **SDK 获取**
+## SDK 获取
 
-AOQ Client SDK 及音频 Opus 插件请参见[SDK下载](https://help.aliyun.com/zh/model-studio/realtime-sdk-download)。Opus 编码以独立插件形式提供，请根据您的场景按需引入。
+AOQ Client SDK 及音频 Opus 插件请参见[SDK下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)。Opus 编码以独立插件形式提供，请根据您的场景按需引入。
 
-## **SDK 导入**
+## SDK 导入
 
 请根据不同平台将核心 SDK 产物导入工程依赖目录，并在工程配置中声明相关权限。
 
-### **Android**
+### Android
 
 将 `AoqClientSdk-release.aar` 放入工程 `app/libs/` 目录，将 `libPluginOpus.so` 按 ABI 放入 `app/libs/armeabi-v7a/` 和 `app/libs/arm64-v8a/`，并在 `app/build.gradle` 中：
 
@@ -44,7 +44,7 @@ dependencies {
 
 其中 `RECORD_AUDIO` 和 `CAMERA` 为运行时权限，应用需在运行时调用 Android `ActivityCompat.requestPermissions()` 方法，主动向 Android 系统申请用户授权。
 
-### **iOS（framework）**
+### iOS（framework）
 
 1.  将 `AoqClientSdk.framework` 与 `PluginOpus.framework` 拖入 Xcode 工程，在 Target > General > Frameworks, Libraries, and Embedded Content 中选择 **Embed & Sign**。
     
@@ -65,49 +65,42 @@ dependencies {
 3.  Swift 工程：`import AoqClientSdk`；Objective-C 工程：`#import <AoqClientSdk/AoqClientSdk.h>`。
     
 
-### **HarmonyOS（har）**
+### HarmonyOS（har）
 
 1.  将 `aoq-client-sdk.har` 放入工程 `libs/` 目录，将 `libPluginOpus.so` 按 ABI 放入 `entry/libs/armeabi-v7a/` 和 `entry/libs/arm64-v8a/`；并在 `entry/oh-package.json5` 中声明。
-    
 2.  在 `entry/src/main/module.json5` 添加权限：
-    
-    ```
-    "requestPermissions": [
-      { "name": "ohos.permission.INTERNET" },
-      { "name": "ohos.permission.MICROPHONE",
-        "reason": "$string:perm_mic_reason",
-        "usedScene": { "abilities": ["EntryAbility"], "when": "inuse" } },
-      { "name": "ohos.permission.CAMERA",
-        "reason": "$string:perm_camera_reason",
-        "usedScene": { "abilities": ["EntryAbility"], "when": "inuse" } }
-    ]
-    ```
-    
-3.  在 `EntryAbility` 中通过 `abilityAccessCtrl.createAtManager().requestPermissionsFromUser` 触发运行时授权。
-    
 
-## **体验 Demo**
+```
+"requestPermissions": [
+  { "name": "ohos.permission.INTERNET" },
+  { "name": "ohos.permission.MICROPHONE",
+    "reason": "$string:perm_mic_reason",
+    "usedScene": { "abilities": ["EntryAbility"], "when": "inuse" } },
+  { "name": "ohos.permission.CAMERA",
+    "reason": "$string:perm_camera_reason",
+    "usedScene": { "abilities": ["EntryAbility"], "when": "inuse" } }
+]
+```
+
+3.  在 `EntryAbility` 中通过 `abilityAccessCtrl.createAtManager().requestPermissionsFromUser` 触发运行时授权。
+
+## 体验 Demo
 
 阿里云百炼提供适用于 Android 平台的 Demo，可用于快速验证 AOQ 接入效果。下载 APK 并配置 API Key 和 `workspaceId` 后，即可体验部分模型。
 
 扫描以下二维码下载并安装 Android Demo：
 
-![Demo 下载二维码](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7714207871/p1095700.png)
+## AppServer获取Token
 
-## **AppServer获取Token**
+请按照[Token鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)的 AOQ 章节搭建获取 Token 的 AppServer。每次通话前，客户端需要向业务侧 AppServer 请求一次 Token。
 
-请按照[Token鉴权](https://help.aliyun.com/zh/model-studio/realtime-token-authentication)的 AOQ 章节搭建获取 Token 的 AppServer。每次通话前，客户端需要向业务侧 AppServer 请求一次 Token。
+## 实现 AI 音视频通话
 
-## **实现 AI 音视频通话**
-
-![111](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0075914871/p1088080.svg)
-
-### **创建引擎并设置回调**
+### 创建引擎并设置回调
 
 调用 `createEngine` 接口创建 `AoqClientEngine` 实例。
 
 **iOS：**
-
 ```
 let config = AoqCreateConfig()
 config.workDir = workDir
@@ -117,26 +110,22 @@ engine = AoqClientEngine.createEngine(config, delegate: self)
 实现 `AoqEngineDelegate` 协议监听 `onConnectionStatusChange`、`onDataMsg`、`onError` 等回调。
 
 **Android：**
-
 ```
 AoqCreateConfig config = new AoqCreateConfig();
 config.workDir = appCtx.getFilesDir().getAbsolutePath();
 engine = AoqClientEngine.createEngine(appCtx, config, this);
 ```
-
 **HarmonyOS：**
-
 ```
 const config: AoqCreateConfig = { workDir: context.filesDir, extras: '' };
 engine = AoqClientEngine.createEngine(config, this, context);
 ```
 
-### **启动音视频采集与播放**
+### 启动音视频采集与播放
 
 调用 `startAudioCapture` 与 `startAudioPlayer` 启动本地音频采集与播放；调用 `startVideoCapture` 启动摄像头，并通过 `setLocalView` 将 SDK 渲染目标绑定到业务侧的预览控件。
 
 **iOS：**
-
 ```
 // 音频采集
 let capCfg = AoqAudioCaptureConfig()
@@ -159,9 +148,7 @@ canvas.view = localPreview
 canvas.renderMode = .crop
 engine.setLocalView(.video, canvas: canvas)
 ```
-
 **Android：**
-
 ```
 // 音频采集
 AoqAudioCaptureConfig capCfg = new AoqAudioCaptureConfig();
@@ -184,9 +171,7 @@ canvas.view = localPreview;
 canvas.renderMode = AoqRenderMode.AoqRenderModeCrop;
 engine.setLocalView(AoqTrackType.AoqTrackTypeVideo, canvas);
 ```
-
 **HarmonyOS：**
-
 ```
 // 音频采集
 const capCfg: AoqAudioCaptureConfig = { channel: 1, isExternal: false };
@@ -205,18 +190,17 @@ const canvas: AoqVideoCanvas = { view: localCtrl, renderMode: AoqRenderMode.AoqR
 engine.setLocalView(AoqTrackType.AoqTrackTypeVideo, canvas);
 ```
 
-### **获取连接凭证**
+### 获取连接凭证
 
-由业务 AppServer 代理百炼请求，参见[Token鉴权](https://help.aliyun.com/zh/model-studio/realtime-token-authentication)。
+由业务 AppServer 代理百炼请求，参见[Token鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)。
 
-### **设置编解码及建立连接**
+### 设置编解码及建立连接
 
 设置编解码参数后调用 `connect`。
 
-注意：qwen3.5-omni-plus-realtime 要求客户端在收到服务端的 `session.updated` 之后才能开始发送媒体数据。为避免 `connect` 建联成功到 `session.updated` 到达之间的空档期误推媒体，在 `connect` 之前对上行音频与视频轨道分别调用 `enableSendMediaStream(trackType, false)`，将上行推流暂时关闭。WebSocket事件说明详见[客户端事件](https://help.aliyun.com/zh/model-studio/client-events)。
+注意：qwen3.5-omni-plus-realtime 要求客户端在收到服务端的 `session.updated` 之后才能开始发送媒体数据。为避免 `connect` 建联成功到 `session.updated` 到达之间的空档期误推媒体，在 `connect` 之前对上行音频与视频轨道分别调用 `enableSendMediaStream(trackType, false)`，将上行推流暂时关闭。WebSocket事件说明详见[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)。
 
 **iOS：**
-
 ```
 // 音频编解码配置
 let encCfg = AoqAudioCodecConfig()
@@ -240,9 +224,7 @@ conn.publishTracks   = [aTrack, vTrack, dTrack]
 conn.subscribeTracks = [aTrack, dTrack]
 engine.connect(conn)
 ```
-
 **Android：**
-
 ```
 // 音频编解码配置
 AoqAudioCodecConfig encCfg = new AoqAudioCodecConfig();
@@ -270,9 +252,7 @@ conn.subscribeTracks.add(aTrack);
 conn.subscribeTracks.add(dTrack);
 engine.connect(conn);
 ```
-
 **HarmonyOS：**
-
 ```
 // 音频编解码配置
 const encCfg: AoqAudioCodecConfig = {
@@ -304,14 +284,13 @@ const conn: AoqConnectConfig = {
 engine.connect(conn);
 ```
 
-**重要**：AOQ SDK 在建联后会默认发送媒体数据，此示例演示了连接模型时关闭媒体发送的能力。
+**重要****重要**：AOQ SDK 在建联后会默认发送媒体数据，此示例演示了连接模型时关闭媒体发送的能力。
 
-### **配置 AI 会话**
+### 配置 AI 会话
 
-在 `onConnectionStatusChange(Connected)` 回调中通过 `sendDataMsg` 发送 `session.update` 消息（业务自定义 JSON，包含 modalities、voice、instructions、turn\_detection 等会话参数），完成会话握手，WebSocket事件说明详见[客户端事件](https://help.aliyun.com/zh/model-studio/client-events)。
+在 `onConnectionStatusChange(Connected)` 回调中通过 `sendDataMsg` 发送 `session.update` 消息（业务自定义 JSON，包含 modalities、voice、instructions、turn\_detection 等会话参数），完成会话握手，WebSocket事件说明详见[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)。
 
 **iOS：**
-
 ```
 func onConnectionStatusChange(_ status: AoqConnectionStatus) {
     if status == .connected { sendSessionUpdate() }
@@ -357,9 +336,7 @@ private func sendSessionUpdate() {
     engine.send(msg)
 }
 ```
-
 **Android：**
-
 ```
 @Override
 public void onConnectionStatusChange(AoqConnectionStatus status) {
@@ -375,9 +352,7 @@ private void sendSessionUpdate() {
     engine.sendDataMsg(msg);
 }
 ```
-
 **HarmonyOS：**
-
 ```
 onConnectionStatusChange(status: AoqConnectionStatus): void {
   if (status === AoqConnectionStatus.AoqConnectionStatusConnected) {
@@ -392,12 +367,11 @@ private sendSessionUpdate(): void {
 }
 ```
 
-### **收到 session.updated 后开启媒体发送**
+### 收到 session.updated 后开启媒体发送
 
-在 `onDataMsg` 回调中解析下行消息，收到模型回复 `session.updated` 的时候，对上一步禁推的每个轨道类型调用 `enableSendMediaStream(trackType, true)` 放开推流。下面为代码示例，WebSocket事件说明详见[服务端事件](https://help.aliyun.com/zh/model-studio/server-events)。
+在 `onDataMsg` 回调中解析下行消息，收到模型回复 `session.updated` 的时候，对上一步禁推的每个轨道类型调用 `enableSendMediaStream(trackType, true)` 放开推流。下面为代码示例，WebSocket事件说明详见[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)。
 
 **iOS：**
-
 ```
 func onDataMsg(_ msg: AoqDataMsg) {
     guard let obj = try? JSONSerialization.jsonObject(with: msg.data) as? [String: Any],
@@ -408,9 +382,7 @@ func onDataMsg(_ msg: AoqDataMsg) {
     }
 }
 ```
-
 **Android：**
-
 ```
 @Override
 public void onDataMsg(AoqDataMsg msg) {
@@ -424,9 +396,7 @@ public void onDataMsg(AoqDataMsg msg) {
     } catch (JSONException ignored) {}
 }
 ```
-
 **HarmonyOS：**
-
 ```
 onDataMsg(msg: AoqDataMsg): void {
   if (!msg?.data) return;
@@ -443,37 +413,35 @@ onDataMsg(msg: AoqDataMsg): void {
 
 **重要**
 
+**重要**
+
 1.  模型必须在收到 `session.updated` 后才开启媒体流发送，否则 AI 侧可能还未准备好接收数据。
     
 2.  建连时添加的音频轨道和视频轨道（即 AOQ 媒体通道）会自动将数据传输到服务端。
     
     1.  音频：通过音频轨道直接传输，无需发送 `input_audio_buffer.append` 事件。
-        
     2.  视频：通过视频轨道发送画面帧，无需发送 `input_image_buffer.append` 事件。
-        
 
-### **断开连接与销毁引擎**
+### 断开连接与销毁引擎
 
 ```
 engine.disconnect()
 AoqClientEngine.destroy()
 ```
 
-## **典型场景**
+## 典型场景
 
-### **打断（Barge-in）**
+### 打断（Barge-in）
 
 -   SDK 与百炼深度融合，支持百炼模型的打断消息会在新一轮对话开始时打断上一轮次。
-    
 -   SDK 提供**本地播放器打断**接口 `interruptAudioPlayer`，当用户主动需要停止时可以调用打断 API 实现此功能。
-    
 
 ```
 // iOS
 engine.interruptAudioPlayer(.audio, fadeMs: 100)
 ```
 
-### **静音 / 取消静音**
+### 静音 / 取消静音
 
 静音后 SDK 仍在采集音频，但只推送静音帧，`session` 不会中断。
 
@@ -482,7 +450,7 @@ engine.muteAudioCapture(true);   // 静音麦克风（采集仍在跑，但只�
 engine.muteAudioCapture(false);  // 恢复
 ```
 
-### **切换前后摄像头**
+### 切换前后摄像头
 
 ```
 // 传入期望切换到的方向枚举即可
@@ -490,37 +458,30 @@ engine.switchCamera(AoqCameraDirection.AoqCameraDirectionFront);
 engine.switchCamera(AoqCameraDirection.AoqCameraDirectionBack);
 ```
 
-### **通话字幕与ASR结果显示**
+### 通话字幕与ASR结果显示
 
-服务端通过下行数据消息推送 ASR 结果与 AI 文本回复。业务侧在 `onDataMsg` 回调中根据 `type` 字段分流即可。WebSocket事件说明详见[服务端事件](https://help.aliyun.com/zh/model-studio/server-events)。
+服务端通过下行数据消息推送 ASR 结果与 AI 文本回复。业务侧在 `onDataMsg` 回调中根据 `type` 字段分流即可。WebSocket事件说明详见[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)。
 
-## **注意事项**
+## 注意事项
 
 1.  **单例语义**：`createEngine` 是单例，重复调用返回同一实例；`destroy` 后才能重新创建。多页面共用建议在 Application/Ability 级管理引擎生命周期。
     
 2.  **本地预览 View 类型**：
     
     -   Android：`SurfaceView` 或 `TextureView`；其它类型不支持。
-        
     -   iOS：任意 `UIView` 子类。
-        
     -   HarmonyOS：请参考 SDK 文档。
-        
 3.  **音频路由变化**：耳机插拔、蓝牙连接等会触发 `onAudioDeviceRouteChanged`，业务侧通常无需处理；如果 UI 上显示"扬声器/听筒"开关，需要根据该回调同步状态。
     
 4.  **后台续传**：如需通话切到后台后继续传音频，`Info.plist` 必须开启 `UIBackgroundModes = audio`，并在前台时正确激活 `AVAudioSession`（SDK 会处理大部分情况，业务侧用 `setAudioSessionRestriction:` 可精细控制是否让 SDK 接管）。
     
 
-## **iOS Demo 源码**
-
-![iOS Demo 界面](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5762814871/p1087917.png)
+## iOS Demo 源码
 
 如需参考 iOS 端的 AOQ 接入实现，请下载示例源码：[aoqdemo.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260715/grpnos/aoqdemo.zip)。
 
-## **相关文档**
+## 相关文档
 
--   AOQ Client SDK 详细 API：[SDK简介](https://help.aliyun.com/zh/model-studio/realtime-api-aoq-sdk-desc/)
-    
--   qwen3.5-omni-plus-realtime 模型客户端事件：[客户端事件](https://help.aliyun.com/zh/model-studio/client-events)
-    
--   qwen3.5-omni-plus-realtime 模型服务端事件：[服务端事件](https://help.aliyun.com/zh/model-studio/server-events)
+-   AOQ Client SDK 详细 API：[SDK简介](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
+-   qwen3.5-omni-plus-realtime 模型客户端事件：[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)
+-   qwen3.5-omni-plus-realtime 模型服务端事件：[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)

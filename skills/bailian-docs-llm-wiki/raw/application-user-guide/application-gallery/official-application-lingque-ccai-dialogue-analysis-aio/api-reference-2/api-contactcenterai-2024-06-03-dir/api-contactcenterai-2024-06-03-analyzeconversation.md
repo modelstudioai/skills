@@ -1,4 +1,4 @@
-# AnalyzeConversation - 通过任务类型调用通义晓蜜CCAI-对话分析AIO应用
+# AnalyzeConversation
 
 获取对话摘要、标题生成、关键词、字段信息抽取、问题及解决方案、服务质检、代办事项、满意度、情绪检测、QA抽取、用户画像、标签分类等对话分析结果，应用调用支持 HTTP 调用来完成客户的响应。
 
@@ -9,17 +9,15 @@
 前提条件
 
 1.  已开通通义晓蜜 CCAI-对话分析 AIO 服务。
-    
 2.  已创建应用：应用中心完成通义晓蜜 CCAI-对话分析 AIO 应用创建，并获取到 APP-ID 和 WORKSPACE-ID：获取[APP-ID 和 WORKSPACE-ID](https://help.aliyun.com/zh/model-studio/developer-reference/get-app-id-and-workspace?spm=openapi-amp.newDocPublishment.0.0.41df281fWNMfrx)。
-    
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/AnalyzeConversation)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
- [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/AnalyzeConversation)
+[调试](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/AnalyzeConversation)
 
-## **授权信息**
+## 授权信息
 
 当前API暂无授权信息透出。
 
@@ -507,7 +505,7 @@ string
 
 jsonObject
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -615,8 +613,6 @@ Tokens 总量
 
 ## 错误码
 
-   
-
 **HTTP status code**
 
 **错误码**
@@ -691,6 +687,6 @@ User not authorized to operate on the specified resource %s .
 
 访问[错误中心](https://api.aliyun.com/document/ContactCenterAI/2024-06-03/errorCode)查看更多错误码。
 
-## **变更历史**
+## 变更历史
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/ContactCenterAI/2024-06-03/AnalyzeConversation#workbench-doc-change-demo)。

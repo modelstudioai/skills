@@ -64,16 +64,14 @@ text-embedding-async-v1
 
 通用文本向量批处理接口API支持通过HTTP和DashScope SDK进行调用。
 
-在调用前，先[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如需通过SDK进行调用，请[安装DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+在调用前，先[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。如需通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ## HTTP调用
 
 HTTP调用仅支持异步模式，需通过两步完成：
 
 1.  **创建任务**：首先发送一个请求创建任务，该请求会返回任务ID。
-    
 2.  **根据任务ID查询结果**：使用上一步获得的任务ID，查询模型生成的结果。
-    
 
 **通过HTTP调用时需配置的endpoint：**
 
@@ -83,7 +81,60 @@ HTTP调用仅支持异步模式，需通过两步完成：
 
 ### 创建任务
 
-##### **请求参数**
+##### 请求参数
+
+###### 请求头（Headers）
+
+**Authorization**`string`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+**Content-Type**`string`**（必选）**
+
+请求内容类型。此参数必须设置为`application/json`。
+
+**X-DashScope-Async**`string`**（必选）**
+
+异步处理配置参数。HTTP请求只支持异步，**必须设置为**`enable`。
+
+**重要**缺少此请求头将报错：“current user api does not support synchronous calls”。
+
+###### 请求体（Request Body）
+
+**model** `string`**（必选）**
+
+调用模型名称，可以选择`text-embedding-async-v1`或者`text-embedding-async-v2`。
+
+**input** `object` **（必选）**
+
+用户需要批量向量化处理的输入。
+
+属性
+
+url `string` **（必选）**
+
+用户需要批量向量化的文件HTTP url。（需要embedding的内容，一行一条）
+
+文本限制：
+
+-   单行字符串最长支持 2,048 Token
+-   单次请求文本最大100,000行
+-   文件大小不超过 200MB
+
+**parameters** `object` **（可选）**
+
+向量化处理参数。
+
+属性
+
+**text\_type** `string` **（可选）**
+
+参数值：
+
+-   `document`(默认值)
+-   `query`
+
+文本转换为向量后可以应用于检索、聚类、分类等下游任务，对检索这类非对称任务为了达到更好的检索效果建议区分查询文本（query）和底库文本（document）类型；聚类、分类等对称任务无需特别指定，采用系统默认值`document`即可。
 
 ```
 curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \
@@ -101,67 +152,42 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
-###### **请求头（Headers）**
+##### 响应参数
 
-**Authorization** `_string_`**（必选）**
+**output** `object`
 
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+任务输出信息。
 
-**Content-Type** `_string_` **（必选）**
+属性
 
-请求内容类型。此参数必须设置为`application/json`。
+**task\_id** `string`
 
-**X-DashScope-Async** `_string_` **（必选）**
+任务ID。查询有效期24小时。
 
-异步处理配置参数。HTTP请求只支持异步，**必须设置为**`**enable**`。
+**task\_status** `string`
 
-**重要**
+任务状态。
 
-缺少此请求头将报错：“current user api does not support synchronous calls”。
+枚举值
 
-###### **请求体（Request Body）**
+-   PENDING：任务排队中
+-   RUNNING：任务处理中
+-   SUCCEEDED：任务执行成功
+-   FAILED：任务执行失败
+-   CANCELED：任务已取消
+-   UNKNOWN：任务不存在或状态未知
 
-**model** `_string_` **（必选）**
+**request\_id**`string`
 
-调用模型名称，可以选择`text-embedding-async-v1`或者`text-embedding-async-v2`。
+请求唯一标识。可用于请求明细溯源和问题排查。
 
-**input** `_object_` **（必选）**
+**code**`string`
 
-用户需要批量向量化处理的输入。
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
 
-**属性**
+**message**`string`
 
-url `_string_` **（必选）**
-
-用户需要批量向量化的文件HTTP url。（需要embedding的内容，一行一条）
-
-文本限制：
-
--   单行字符串最长支持 2,048 Token
-    
--   单次请求文本最大100,000行
-    
--   文件大小不超过 200MB
-    
-
-**parameters** `_object_` **（可选）**
-
-向量化处理参数。
-
-**属性**
-
-**text\_type** `_string_` **（可选）**
-
-参数值：
-
--   `document`(默认值)
-    
--   `query`
-    
-
-文本转换为向量后可以应用于检索、聚类、分类等下游任务，对检索这类非对称任务为了达到更好的检索效果建议区分查询文本（query）和底库文本（document）类型；聚类、分类等对称任务无需特别指定，采用系统默认值`document`即可。
-
-##### **响应参数**
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
 
 #### 成功响应
 
@@ -179,7 +205,7 @@ url `_string_` **（必选）**
 
 #### 异常响应
 
-创建任务失败，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+创建任务失败，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 ```
 {
@@ -189,54 +215,25 @@ url `_string_` **（必选）**
 }
 ```
 
-**output** `_object_`
-
-任务输出信息。
-
-**属性**
-
-**task\_id** `_string_`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `_string_`
-
-任务状态。
-
-**枚举值**
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：任务执行成功
-    
--   FAILED：任务执行失败
-    
--   CANCELED：任务已取消
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-**request\_id** `_string_`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code** `_string_`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**message** `_string_`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-### **根据任务ID查询结果**
+### 根据任务ID查询结果
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-##### **请求参数**
+##### 请求参数
 
-## 查询任务结果
+###### 请求头（Headers）
+
+**Authorization**`string`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+###### URL路径参数（Path parameters）
+
+**task\_id** `string`**（必选）**
+
+任务ID。
+
+#### 查询任务结果
 
 请将`86ecf553-d340-4e21-xxxxxxxxx`替换为真实的task\_id。
 
@@ -247,21 +244,70 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-###### **请求头（Headers）**
+##### 响应参数
 
-**Authorization** `_string_`**（必选）**
+**output**`object`
 
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+任务输出信息。
 
-###### **URL路径参数（Path parameters）**
+属性
 
-**task\_id** `_string_`**（必选）**
+**task\_id** `string`
 
-任务ID。
+任务ID。查询有效期24小时。
 
-##### **响应参数**
+**task\_status** `string`
 
-## 任务执行成功
+任务状态。
+
+枚举值
+
+-   PENDING：任务排队中
+-   RUNNING：任务处理中
+-   SUCCEEDED：任务执行成功
+-   FAILED：任务执行失败
+-   CANCELED：任务已取消
+-   UNKNOWN：任务不存在或状态未知
+
+**submit\_time** `string`
+
+任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**scheduled\_time** `string`
+
+任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**end\_time** `string`
+
+任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**url** `string`
+
+模型生成图片的URL地址。
+
+**code**`string`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**message**`string`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**usage** `object`
+
+输出信息统计。只对成功的结果计数。
+
+属性
+
+**total\_tokens**`integer`
+
+本次请求输入内容的Token数目，根据用户输入的文本文件被模型Tokenizer解析之后所对应的Token数目来进行计算。
+
+**request\_id**`string`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+#### 任务执行成功
 
 任务数据（如任务状态、处理结果URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。
 
@@ -282,7 +328,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 }
 ```
 
-## 任务执行中
+#### 任务执行中
 
 ```
 {
@@ -294,7 +340,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 }
 ```
 
-## 任务执行失败
+#### 任务执行失败
 
 如果因为某种原因导致任务执行失败，任务状态将被设置为FAILED，并通过code和message字段明确指示错误原因。
 
@@ -302,99 +348,50 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 {
   "request_id": "<Your Request ID>"
   "output": {
-    	"task_id": "<Your Task ID>", 
-    	"task_status": "FAILED",
-    	"submit_time":"2025-02-20 15:57:19.039",
-    	"scheduled_time":"2025-02-20 15:57:19.059",
-    	"end_time":"2025-02-20 15:57:19.418",
-        "code": "xxx", 
+        "task_id": "<Your Task ID>",
+        "task_status": "FAILED",
+        "submit_time":"2025-02-20 15:57:19.039",
+        "scheduled_time":"2025-02-20 15:57:19.059",
+        "end_time":"2025-02-20 15:57:19.418",
+        "code": "xxx",
          "message": "xxxxxx"
-  }  
+  }
 }
 ```
 
-**output** `_object_`
-
-任务输出信息。
-
-**属性**
-
-**task\_id** `_string_`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `_string_`
-
-任务状态。
-
-**枚举值**
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：任务执行成功
-    
--   FAILED：任务执行失败
-    
--   CANCELED：任务已取消
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-**submit\_time** `_string_`
-
-任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**scheduled\_time** `_string_`
-
-任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**end\_time** `_string_`
-
-任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**url** `_string_`
-
-模型生成图片的URL地址。
-
-**code** `_string_`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**message** `_string_`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**usage** `_object_`
-
-输出信息统计。只对成功的结果计数。
-
-**属性**
-
-**total\_tokens** `_integer_`
-
-本次请求输入内容的Token数目，根据用户输入的文本文件被模型Tokenizer解析之后所对应的Token数目来进行计算。
-
-**request\_id** `_string_`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
 ## Dashscope
 
-请先确认已安装最新版DashScope SDK，否则可能运行报错：[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+请先确认已安装最新版DashScope SDK，否则可能运行报错：[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 DashScope SDK目前已支持Python和Java。
 
-SDK与HTTP接口的参数名基本一致，参数结构根据不同语言的SDK封装而定。参数说明可参考[万相-文生图V2](https://help.aliyun.com/zh/model-studio/text-to-image-v2-api-reference#42703589880ts)。
+SDK与HTTP接口的参数名基本一致，参数结构根据不同语言的SDK封装而定。参数说明可参考[万相-文生图V2](raw/model-api-reference/image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md)。
 
 由于模型处理时间较长，底层服务采用异步方式提供。SDK在上层进行了封装，支持同步、异步两种调用方式。
 
 #### 请求体
 
-## 同步调用
+**model** `string`**（必选）**
 
-## Python
+调用模型名称，可以选择`text-embedding-async-v1`或者`text-embedding-async-v2`。
+
+url `string` **（必选）**
+
+用户需要批量向量化的文件HTTP url。（需要向量化的内容，一行一条）
+
+文本限制：
+
+-   单行字符串最长支持2,048Token
+-   单次请求文本最大100,000行
+-   文件大小不超过 200MB
+
+**text\_type** `string`**可选**
+
+文本转换为向量后可以应用于检索、聚类、分类等下游任务，对检索这类非对称任务为了达到更好的检索效果建议区分查询文本（query）和底库文本（document）类型；聚类、分类等对称任务可以不用特殊指定，采用系统默认值`document`即可。
+
+#### 同步调用
+
+Python
 
 ```
 from dashscope import BatchTextEmbedding
@@ -408,7 +405,7 @@ result = BatchTextEmbedding.call(BatchTextEmbedding.Models.text_embedding_async_
 print(result)
 ```
 
-## Java
+Java
 
 ```
 import com.alibaba.dashscope.embeddings.BatchTextEmbedding;
@@ -448,9 +445,9 @@ public class Main {
 }
 ```
 
-## 异步调用
+#### 异步调用
 
-## Python
+Python
 
 ```
 from dashscope import BatchTextEmbedding
@@ -508,7 +505,7 @@ if __name__ == '__main__':
     wait_task(task_info)
 ```
 
-## Java
+Java
 
 ```
 import com.alibaba.dashscope.embeddings.BatchTextEmbedding;
@@ -583,32 +580,88 @@ public class Main {
 }
 ```
 
-**model** `_string_` **（必选）**
+#### 响应参数
 
-调用模型名称，可以选择`text-embedding-async-v1`或者`text-embedding-async-v2`。
+**status\_code** `string`
 
-url `_string_` **（必选）**
+请求状态码，表示请求的执行结果（如 200 表示成功）。详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
 
-用户需要批量向量化的文件HTTP url。（需要向量化的内容，一行一条）
+**request\_id** `string`
 
-文本限制：
+请求唯一标识。可用于请求明细溯源和问题排查。
 
--   单行字符串最长支持2,048Token
-    
--   单次请求文本最大100,000行
-    
--   文件大小不超过 200MB
-    
+**code** `string`
 
-**text\_type** `_string_` **可选**
+请求失败时表示错误码，成功时返回参数中该参数为空。详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
 
-文本转换为向量后可以应用于检索、聚类、分类等下游任务，对检索这类非对称任务为了达到更好的检索效果建议区分查询文本（query）和底库文本（document）类型；聚类、分类等对称任务可以不用特殊指定，采用系统默认值`document`即可。
+**message** `string`
 
-#### **响应参数**
+请求失败，表示失败详细信息，成功时返回参数中该参数为空。详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
 
-## 同步调用
+**output**`object`
 
-## 成功响应
+任务输出信息。
+
+属性
+
+**task\_id**`string`
+
+任务唯一标识。可用于任务明细溯源和问题排查。
+
+**task\_status**`string`
+
+任务状态
+
+-   SUCCEEDED: 任务执行成功
+-   FAILED: 任务执行失败
+-   CANCELED： 任务被取消
+-   PENDING：任务排队中
+-   SUSPENDED：任务挂起
+-   RUNNING：任务处理中
+
+**url**`string`
+
+包含Embedding结果的url，任务执行失败时返回参数中该参数为空。
+
+**submit\_time**`string`
+
+任务提交时间
+
+> Java SDK的返回结果中不包含此字段
+
+**scheduled\_time**`string`
+
+任务调度时间
+
+> Java SDK的返回结果中不包含此字段
+
+**end\_time**`string`
+
+任务处理结束时间
+
+> Java SDK的返回结果中不包含此字段
+
+**code**`string`
+
+任务执行失败，表示失败原因，成功执行时响应中不会包含此参数。
+
+**message**`string`
+
+任务执行失败，表示失败详细信息，成功执行时响应中不会包含此参数。
+
+**usage**`object`
+
+**属性**
+
+Details
+
+**total\_tokens** `integer`
+
+本次请求输入内容的Token数目，算法的计量是根据用户输入字符串被模型Tokenizer解析之后对应的Token数目来进行。
+
+#### 同步调用
+
+#### 成功响应
 
 ```
 {
@@ -630,10 +683,9 @@ url `_string_` **（必选）**
 }
 ```
 
-## 异常响应
+#### 异常响应
 
 **请求失败**
-
 ```
 {
     "code":"InvalidApiKey",
@@ -641,9 +693,7 @@ url `_string_` **（必选）**
     "request_id":"<Your Request ID>"
 }
 ```
-
 **任务执行失败**
-
 ```
 {
     "status_code": 200,
@@ -664,9 +714,9 @@ url `_string_` **（必选）**
 }
 ```
 
-## 异步调用
+#### 异步调用
 
-## 成功响应
+#### 成功响应
 
 ```
 {
@@ -678,8 +728,8 @@ url `_string_` **（必选）**
         "task_id": "<Your Task ID>",
         "task_status": "SUCCEEDED",
         "url": "<包含输出结果的url>",
-        "submit_time": "2025-02-21 13:51:26.465", 
-        "scheduled_time": "2025-02-21 13:51:26.507", 
+        "submit_time": "2025-02-21 13:51:26.465",
+        "scheduled_time": "2025-02-21 13:51:26.507",
         "end_time": "2025-02-21 13:51:27.273"
     },
     "usage": {
@@ -688,10 +738,9 @@ url `_string_` **（必选）**
 }
 ```
 
-## 异常响应
+#### 异常响应
 
 **请求失败**
-
 ```
 {
     "code":"InvalidApiKey",
@@ -699,9 +748,7 @@ url `_string_` **（必选）**
     "request_id":"<Your Request ID>"
 }
 ```
-
 **任务执行失败**
-
 ```
 {
     "status_code": 200,
@@ -722,115 +769,26 @@ url `_string_` **（必选）**
 }
 ```
 
-**status\_code** `string`
-
-请求状态码，表示请求的执行结果（如 200 表示成功）。详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**request\_id** `string`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code** `string`
-
-请求失败时表示错误码，成功时返回参数中该参数为空。详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**message** `string`
-
-请求失败，表示失败详细信息，成功时返回参数中该参数为空。详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**output** `_object_`
-
-任务输出信息。
-
-**属性**
-
-**task\_id** `_string_`
-
-任务唯一标识。可用于任务明细溯源和问题排查。
-
-**task\_status** `_string_`
-
-任务状态
-
--   SUCCEEDED: 任务执行成功
-    
--   FAILED: 任务执行失败
-    
--   CANCELED： 任务被取消
-    
--   PENDING：任务排队中
-    
--   SUSPENDED：任务挂起
-    
--   RUNNING：任务处理中
-    
-
-**url** `_string_`
-
-包含Embedding结果的url，任务执行失败时返回参数中该参数为空。
-
-**submit\_time** `_string_`
-
-任务提交时间
-
-> Java SDK的返回结果中不包含此字段
-
-**scheduled\_time** `_string_`
-
-任务调度时间
-
-> Java SDK的返回结果中不包含此字段
-
-**end\_time** `_string_`
-
-任务处理结束时间
-
-> Java SDK的返回结果中不包含此字段
-
-**code** `_string_`
-
-任务执行失败，表示失败原因，成功执行时响应中不会包含此参数。
-
-**message** `_string_`
-
-任务执行失败，表示失败详细信息，成功执行时响应中不会包含此参数。
-
-**usage** `_object_`
-
-**属性**
-
-**total\_tokens** `_integer_`
-
-本次请求输入内容的Token数目，算法的计量是根据用户输入字符串被模型Tokenizer解析之后对应的Token数目来进行。
-
 ## 常见问题
 
-### **输入文件限制**
+### 输入文件限制
 
 -   输入文件需为 **UTF-8 编码的文本文件**，每行包含一个需要计算文字向量的字符串。系统会逐行处理每个输入，并在最终输出文件中返回对应的行号和生成的 embedding 结果。
-    
--   单个文件大小不得超过 **200MB**。
-    
--   单次请求的文本行数不得超过 **100,000 行**。
-    
--   每行内容的长度不得超过 **2,048 Token**。
-    
+-   单个文件大小不得超过 **200MB**。
+-   单次请求的文本行数不得超过 **100,000 行**。
+-   每行内容的长度不得超过 **2,048 Token**。
 -   空行（即不包含任何字符的行）会被系统自动跳过，不会计算其文字向量。然而，为了便于结果对应，输出文件中仍会保留这些空行的行号。
-    
 
-### **输出文件说明**
+### 输出文件说明
 
 -   当任务成功完成后，提交的输入数据将被转换为向量结果，并存储在输出文件中。为了节省存储空间并方便下载，输出文件会被压缩为 `.gz` 格式。下载至本地后可解压缩以获取对应的文本输出文件。
-    
 -   任务数据（如任务状态、处理结果URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存包含任务结果的输出文件。
-    
 -   经过模型向量化后输出的文件是一个 jsonl 格式文件，即每一行都是一个完整的 json 结构，包含对应输入文件特定行的向量化输出。
-    
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 ## 基础限流
 
-为了保证用户调用模型的公平性，通用文本向量对用户设置了基础限流。如果超出调用限制，用户的API请求将因为限流控制而失败，用户需要等待一段时间待满足限流条件后方能再次调用。各模型详细限流条件请参见[限流](https://help.aliyun.com/zh/model-studio/rate-limit)。
+为了保证用户调用模型的公平性，通用文本向量对用户设置了基础限流。如果超出调用限制，用户的API请求将因为限流控制而失败，用户需要等待一段时间待满足限流条件后方能再次调用。各模型详细限流条件请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。

@@ -2,23 +2,19 @@
 
 本文档介绍如何调用阿里云百炼部署的 MiniMax 模型推理服务。
 
-**重要**
+**重要**MiniMax-M2.1 将于**2026年7月9日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-plus)、[qwen3.7-max](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-max)、[qwen3.6-flash](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.6-flash)。
 
-MiniMax-M2.1 将于**2026年7月9日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-plus)、[qwen3.7-max](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-max)、[qwen3.6-flash](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.6-flash)。
+**重要**本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
-**重要**
+## 快速开始
 
-本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+API 使用前提：已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-## **快速开始**
+#### OpenAI兼容
 
-API 使用前提：已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk#8833b9274f4v8)。
+#### Python
 
-## OpenAI兼容
-
-## Python
-
-### **示例代码**
+### 示例代码
 
 ```
 import os
@@ -59,7 +55,7 @@ for chunk in completion:
             answer_content += delta.content
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -72,9 +68,9 @@ for chunk in completion:
 你好！我是 MiniMax-M2.5，一个AI助手。我可以帮助你回答问题、提供信息、进行对话等。有什么我可以帮你的吗？
 ```
 
-## Node.js
+#### Node.js
 
-### **示例代码**
+### 示例代码
 
 ```
 import OpenAI from "openai";
@@ -130,7 +126,7 @@ async function main() {
 main();
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -143,11 +139,11 @@ main();
 你好！我是 MiniMax-M2.5，一个AI助手。我可以帮助你回答问题、提供信息、进行对话等。有什么我可以帮你的吗？
 ```
 
-## HTTP
+#### HTTP
 
-### **示例代码**
+### 示例代码
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -158,14 +154,14 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     "model": "MiniMax-M2.5",
     "messages": [
         {
-            "role": "user", 
+            "role": "user",
             "content": "你是谁"
         }
     ]
 }'
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 {
@@ -200,11 +196,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
-## DashScope
+#### DashScope
 
-## Python
+#### Python
 
-### **示例代码**
+### 示例代码
 
 ```
 import os
@@ -234,7 +230,7 @@ print("\n" + "=" * 20 + "思考过程" + "=" * 20 + "\n")
 
 for chunk in completion:
     message = chunk.output.choices[0].message
-    
+
     # 只收集思考内容
     if message.reasoning_content:
         if not is_answering:
@@ -255,7 +251,7 @@ for chunk in completion:
 # print(f"\n完整回复:\n{answer_content}")
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -268,9 +264,9 @@ for chunk in completion:
 你好！我是 MiniMax-M2.5，一个AI助手。我可以帮助你回答问题、提供信息、进行对话等。有什么我可以帮你的吗？
 ```
 
-## Java
+#### Java
 
-### **示例代码**
+### 示例代码
 
 ```
 // dashscope SDK的版本 >= 2.19.4
@@ -356,7 +352,7 @@ public class Main {
 }
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -369,11 +365,11 @@ public class Main {
 你好！我是 MiniMax-M2.5，一个AI助手。我可以帮助你回答问题、提供信息、进行对话等。有什么我可以帮你的吗？
 ```
 
-## HTTP
+#### HTTP
 
-### **示例代码**
+### 示例代码
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -383,7 +379,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 -d '{
     "model": "MiniMax-M2.5",
     "input":{
-        "messages":[      
+        "messages":[
             {
                 "role": "user",
                 "content": "你是谁？"
@@ -396,7 +392,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 {
@@ -427,11 +423,11 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }
 ```
 
-## Anthropic兼容
+#### Anthropic兼容
 
-## Python
+#### Python
 
-### **示例代码**
+### 示例代码
 
 ```
 import anthropic
@@ -461,11 +457,11 @@ for event in message:
             print(event.delta.text, end="", flush=True)
 ```
 
-## HTTP
+#### HTTP
 
-### **示例代码**
+### 示例代码
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -485,7 +481,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v
 }'
 ```
 
-## **其它功能**
+## 其它功能
 
 **模型**
 
@@ -537,7 +533,7 @@ MiniMax-M2.1
 
 不支持
 
-## **参数默认值**
+## 参数默认值
 
 **模型**
 
@@ -563,7 +559,7 @@ MiniMax-M2.1
 
 0.0
 
-## **模型列表与计费**
+## 模型列表与计费
 
 MiniMax-M2.5 模型擅长编程、办公、文本摘要等任务，且输出速度快，推荐使用。
 
@@ -571,6 +567,6 @@ MiniMax-M2.5 模型擅长编程、办公、文本摘要等任务，且输出速�
 
 按照模型的输入与输出 Token 数量计费。
 
-## **错误码**
+## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。

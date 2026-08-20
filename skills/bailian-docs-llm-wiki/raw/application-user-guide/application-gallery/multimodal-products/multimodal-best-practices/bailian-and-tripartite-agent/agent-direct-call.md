@@ -11,18 +11,14 @@
 **说明**
 
 1.  目前该功能仅多模态应用支持，语音应用暂不支持。
-    
 2.  关闭文本模型后，只下发意图识别结果，欢迎语、提示词、对话承接语、知识库、长期记忆暂不可用，开启后即可恢复。
-    
 
 ## 通过管控台集成百炼Agent和三方Agent
 
 当前您可以在多模态应用中使用该方式。套件提供两种方式接入您的业务Agent。
 
-1.  百炼Agent：参见[接入百炼智能体应用](https://help.aliyun.com/zh/model-studio/multimodal-call-app)创建和配置说明。
-    
-2.  三方Agent：您完成 A2A 服务部署后在管控台集成，参见 [AgentCard](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a/#854b8c0b10ozm)。
-    
+1.  百炼Agent：参见[接入百炼智能体应用](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/bailian-and-tripartite-agent/multimodal-call-app.md)创建和配置说明。
+2.  三方Agent：您完成 A2A 服务部署后在管控台集成，参见 [AgentCard](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#854b8c0b10ozm)。
 
 在 Agent 配置面板中，单击**百炼应用**区域右上角的**+**按钮添加百炼平台应用，单击**三方应用**区域右上角的**+**按钮添加 A2A 应用。
 
@@ -79,7 +75,6 @@ Object
 以 agentId为 key的对象，对象中的参数会传递给 Agent
 
 **parameters.bizParams.commands\[\]**
-
 ```
 [{
   "name":"agent_command",
@@ -89,9 +84,7 @@ Object
   }
 }]
 ```
-
 **以 Android SDK 设置参数为例**
-
 ```
 private MultiModalRequestParam buildRequestParams() {
 
@@ -166,7 +159,6 @@ Object
 当您使用百炼**智能体应用**时，通过此结构传递智能体提示词中定义的参数。
 
 **parameters.bizParams.user\_defined\_params**
-
 ```
 "user_defined_params":{
     "xxxxx":{
@@ -177,9 +169,7 @@ Object
     }
 }
 ```
-
 **以 Android SDK 设置参数为例**
-
 ```
 private void updateParams(){
         try {
@@ -241,9 +231,7 @@ String
   }]
 }
 ```
-
 **以 Android SDK 设置参数为例**
-
 ```
 MultiModalRequestParam updateParams = null;
 try {

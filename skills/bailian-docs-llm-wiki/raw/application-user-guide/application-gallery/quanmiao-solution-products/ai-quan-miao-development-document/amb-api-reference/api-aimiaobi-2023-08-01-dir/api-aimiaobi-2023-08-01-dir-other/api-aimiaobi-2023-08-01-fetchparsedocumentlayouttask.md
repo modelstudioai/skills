@@ -1,14 +1,14 @@
-# FetchParseDocumentLayoutTask - 获取排版任务结果
+# FetchParseDocumentLayoutTask
 
 获取排版任务结果
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/FetchParseDocumentLayoutTask)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
- [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/FetchParseDocumentLayoutTask)
+[调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/FetchParseDocumentLayoutTask)
 
-## **授权信息**
+## 授权信息
 
 当前API暂无授权信息透出。
 
@@ -50,7 +50,7 @@ string
 
 29ae0ba84c1c4cc694d0f4f1aead8005
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -199,6 +199,6 @@ string
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
 
-## **变更历史**
+## 变更历史
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/FetchParseDocumentLayoutTask#workbench-doc-change-demo)。

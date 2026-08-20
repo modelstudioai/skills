@@ -2,7 +2,7 @@
 
 访问控制（RAM）是阿里云提供的管理用户身份与资源访问权限的服务。使用 RAM 可以让您避免与其他用户共享阿里云账号密钥，并可按需为用户授予最小权限。RAM 中使用权限策略描述授权的具体内容。
 
-本文为您介绍 _大模型服务平台百炼_ 为 RAM 权限策略定义的操作（Action）、资源（Resource）和条件（Condition）。 _大模型服务平台百炼_ 的 RAM 代码（RamCode）为 _aimiaobi_ ，支持的授权粒度为 _操作级_ 。
+本文为您介绍_大模型服务平台百炼_为 RAM 权限策略定义的操作（Action）、资源（Resource）和条件（Condition）。_大模型服务平台百炼_的 RAM 代码（RamCode）为_aimiaobi_，支持的授权粒度为_操作级_。
 
 ## 权限策略通用结构
 
@@ -32,18 +32,15 @@
 
 -   Effect：权限策略效果。取值：Allow（允许）、Deny（拒绝）。
     
--   Action：授予允许或拒绝权限的具体操作。具体信息，请参见[操作（Action）](#title-auth-detail-2)。
+-   Action：授予允许或拒绝权限的具体操作。具体信息，请参见[操作（Action）](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-ram#title-auth-detail-2)。
     
--   Resource：受操作影响的具体对象，您可以使用资源 ARN 来描述指定资源。具体信息，请参见[资源（Resource）](#title-auth-detail-3)。
+-   Resource：受操作影响的具体对象，您可以使用资源 ARN 来描述指定资源。具体信息，请参见[资源（Resource）](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-ram#title-auth-detail-3)。
     
--   Condition：指授权生效的条件。可选字段。具体信息，请参见[条件（Condition）](#title-auth-detail-4)。
+-   Condition：指授权生效的条件。可选字段。具体信息，请参见[条件（Condition）](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-ram#title-auth-detail-4)。
     
-    -   Condition\_operator：条件运算符，不同类型的条件对应不同的条件运算符。具体信息，请参见[权限策略基本元素](https://help.aliyun.com/zh/ram/policy-elements)。
-        
+    -   Condition\_operator：条件运算符，不同类型的条件对应不同的条件运算符。具体信息，请参见权限策略基本元素。
     -   Condition\_key：条件关键字。
-        
     -   Condition\_value：条件关键字对应的值。
-        
 
 ## 操作（Action）
 
@@ -58,10 +55,8 @@
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
     
     -   对于必选的资源类型，用前面加 \* 表示。
-        
     -   对于不支持资源级授权的操作，用`全部资源`表示。
-        
--   条件关键字：是指云产品自身定义的条件关键字。该列不体现适用于任何操作的[通用条件关键字](https://help.aliyun.com/zh/ram/policy-elements)。
+-   条件关键字：是指云产品自身定义的条件关键字。该列不体现适用于任何操作的通用条件关键字。
     
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
@@ -80,13 +75,13 @@
 
 aimiaobi:RunDocTranslation
 
-[RunDocTranslation](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundoctranslation)
+[RunDocTranslation](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-other/api-aimiaobi-2023-08-01-rundoctranslation.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -94,13 +89,13 @@ get
 
 aimiaobi:RunWriting
 
-[RunWriting](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runwriting)
+[RunWriting](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-runwriting.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -108,13 +103,13 @@ create
 
 aimiaobi:InitiatePptCreationV2
 
-[InitiatePptCreationV2](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-initiatepptcreationv2)
+[InitiatePptCreationV2](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-ppt-generation/api-aimiaobi-2023-08-01-initiatepptcreationv2.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -122,13 +117,13 @@ create
 
 aimiaobi:DocumentExtraction
 
-[DocumentExtraction](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-documentextraction)
+[DocumentExtraction](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-material-library-custom-text/api-aimiaobi-2023-08-01-documentextraction.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -136,13 +131,13 @@ get
 
 aimiaobi:ListTopicViewPointRecommendEventList
 
-[ListTopicViewPointRecommendEventList](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listtopicviewpointrecommendeventlist)
+[ListTopicViewPointRecommendEventList](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-policy-custom-topic/api-aimiaobi-2023-08-01-listtopicviewpointrecommendeventlist.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -150,13 +145,13 @@ list
 
 aimiaobi:SubmitImportTermsTask
 
-[SubmitImportTermsTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitimporttermstask)
+[SubmitImportTermsTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-review-thesaurus-management/api-aimiaobi-2023-08-01-submitimporttermstask.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -164,13 +159,13 @@ none
 
 aimiaobi:RunGenerateQuestions
 
-[RunGenerateQuestions](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rungeneratequestions)
+[RunGenerateQuestions](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-question-and-answer-class/api-aimiaobi-2023-08-01-rungeneratequestions.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -178,13 +173,13 @@ get
 
 aimiaobi:DeleteCustomTopicByTopic
 
-[DeleteCustomTopicByTopic](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletecustomtopicbytopic)
+[DeleteCustomTopicByTopic](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-policy-custom-topic/api-aimiaobi-2023-08-01-deletecustomtopicbytopic.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -192,13 +187,13 @@ delete
 
 aimiaobi:RunStyleFeatureAnalysis
 
-[RunStyleFeatureAnalysis](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runstylefeatureanalysis)
+[RunStyleFeatureAnalysis](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-style-imitation-writing/api-aimiaobi-2023-08-01-runstylefeatureanalysis.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -206,13 +201,13 @@ get
 
 aimiaobi:GetAutoClipsTaskInfo
 
-[GetAutoClipsTaskInfo](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getautoclipstaskinfo)
+[GetAutoClipsTaskInfo](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-video-mixed-cut/api-aimiaobi-2023-08-01-getautoclipstaskinfo.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -220,13 +215,13 @@ get
 
 aimiaobi:RunCustomHotTopicViewPointAnalysis
 
-[RunCustomHotTopicViewPointAnalysis](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runcustomhottopicviewpointanalysis)
+[RunCustomHotTopicViewPointAnalysis](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-policy-custom-topic/api-aimiaobi-2023-08-01-runcustomhottopicviewpointanalysis.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -234,13 +229,13 @@ create
 
 aimiaobi:AsyncUploadVideo
 
-[AsyncUploadVideo](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-asyncuploadvideo)
+[AsyncUploadVideo](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-video-mixed-cut/api-aimiaobi-2023-08-01-asyncuploadvideo.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -248,13 +243,13 @@ create
 
 aimiaobi:DeleteGeneratedContent
 
-[DeleteGeneratedContent](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletegeneratedcontent)
+[DeleteGeneratedContent](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-document-management/api-aimiaobi-2023-08-01-deletegeneratedcontent.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -262,13 +257,13 @@ delete
 
 aimiaobi:SaveMaterialDocument
 
-[SaveMaterialDocument](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-savematerialdocument)
+[SaveMaterialDocument](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-material-library/api-aimiaobi-2023-08-01-savematerialdocument.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -276,13 +271,13 @@ create
 
 aimiaobi:AsyncCreateClipsTimeLine
 
-[AsyncCreateClipsTimeLine](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-asynccreateclipstimeline)
+[AsyncCreateClipsTimeLine](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-video-mixed-cut/api-aimiaobi-2023-08-01-asynccreateclipstimeline.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -290,13 +285,13 @@ create
 
 aimiaobi:ListMaterialDocuments
 
-[ListMaterialDocuments](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listmaterialdocuments)
+[ListMaterialDocuments](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-material-library/api-aimiaobi-2023-08-01-listmaterialdocuments.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -304,13 +299,13 @@ list
 
 aimiaobi:GetCustomSourceTopicAnalysisTask
 
-[GetCustomSourceTopicAnalysisTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getcustomsourcetopicanalysistask)
+[GetCustomSourceTopicAnalysisTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tips-custom-data-source/api-aimiaobi-2023-08-01-getcustomsourcetopicanalysistask.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -318,13 +313,13 @@ get
 
 aimiaobi:ListFreshViewPoints
 
-[ListFreshViewPoints](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listfreshviewpoints)
+[ListFreshViewPoints](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-listfreshviewpoints.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -332,13 +327,13 @@ list
 
 aimiaobi:GetInterveneGlobalReply
 
-[GetInterveneGlobalReply](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getinterveneglobalreply)
+[GetInterveneGlobalReply](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-intervention-configuration/api-aimiaobi-2023-08-01-getinterveneglobalreply.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -346,13 +341,13 @@ get
 
 aimiaobi:ListDocs
 
-[ListDocs](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listdocs)
+[ListDocs](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-basic-operation-class/api-aimiaobi-2023-08-01-listdocs.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -360,13 +355,13 @@ list
 
 aimiaobi:AddAuditTerms
 
-[AddAuditTerms](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-addauditterms)
+[AddAuditTerms](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-review-thesaurus-management/api-aimiaobi-2023-08-01-addauditterms.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -374,13 +369,13 @@ create
 
 aimiaobi:DeleteDataset
 
-[DeleteDataset](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletedataset)
+[DeleteDataset](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-deletedataset.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -388,13 +383,13 @@ delete
 
 aimiaobi:ListAuditContentErrorTypes
 
-[ListAuditContentErrorTypes](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listauditcontenterrortypes)
+[ListAuditContentErrorTypes](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-article-reviser/api-aimiaobi-2023-08-01-listauditcontenterrortypes.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -402,13 +397,13 @@ list
 
 aimiaobi:DeleteInterveneRule
 
-[DeleteInterveneRule](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deleteintervenerule)
+[DeleteInterveneRule](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-intervention-configuration/api-aimiaobi-2023-08-01-deleteintervenerule.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -416,13 +411,13 @@ delete
 
 aimiaobi:UpdateMaterialDocument
 
-[UpdateMaterialDocument](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-updatematerialdocument)
+[UpdateMaterialDocument](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-material-library/api-aimiaobi-2023-08-01-updatematerialdocument.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -430,13 +425,13 @@ update
 
 aimiaobi:ListDatasetDocuments
 
-[ListDatasetDocuments](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listdatasetdocuments)
+[ListDatasetDocuments](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-listdatasetdocuments.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -444,13 +439,13 @@ list
 
 aimiaobi:GenerateViewPoint
 
-[GenerateViewPoint](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-generateviewpoint)
+[GenerateViewPoint](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-other/api-aimiaobi-2023-08-01-generateviewpoint.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -458,13 +453,13 @@ list
 
 aimiaobi:CreateDataset
 
-[CreateDataset](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-createdataset)
+[CreateDataset](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-createdataset.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -472,13 +467,13 @@ create
 
 aimiaobi:GetClipsBuildInResource
 
-[GetClipsBuildInResource](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getclipsbuildinresource)
+[GetClipsBuildInResource](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-video-mixed-cut/api-aimiaobi-2023-08-01-getclipsbuildinresource.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -486,13 +481,13 @@ get
 
 aimiaobi:GetSmartAuditResult
 
-[GetSmartAuditResult](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getsmartauditresult)
+[GetSmartAuditResult](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-article-reviser/api-aimiaobi-2023-08-01-getsmartauditresult.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -500,13 +495,13 @@ get
 
 aimiaobi:RunCommentGeneration
 
-[RunCommentGeneration](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runcommentgeneration)
+[RunCommentGeneration](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-generate-class/api-aimiaobi-2023-08-01-runcommentgeneration.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -514,13 +509,13 @@ get
 
 aimiaobi:InsertInterveneRule
 
-[InsertInterveneRule](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-insertintervenerule)
+[InsertInterveneRule](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-intervention-configuration/api-aimiaobi-2023-08-01-insertintervenerule.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -528,13 +523,13 @@ create
 
 aimiaobi:CreateGeneralConfig
 
-[CreateGeneralConfig](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-creategeneralconfig)
+[CreateGeneralConfig](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-common-configuration/api-aimiaobi-2023-08-01-creategeneralconfig.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -542,13 +537,13 @@ create
 
 aimiaobi:GetDatasetDocument
 
-[GetDatasetDocument](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdatasetdocument)
+[GetDatasetDocument](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-getdatasetdocument.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -556,13 +551,13 @@ get
 
 aimiaobi:ClearIntervenes
 
-[ClearIntervenes](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-clearintervenes)
+[ClearIntervenes](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-intervention-configuration/api-aimiaobi-2023-08-01-clearintervenes.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -570,13 +565,13 @@ delete
 
 aimiaobi:ListDataPermissions
 
-[ListDataPermissions](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listdatapermissions)
+[ListDataPermissions](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-other/api-aimiaobi-2023-08-01-listdatapermissions.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -584,13 +579,13 @@ list
 
 aimiaobi:ListCustomText
 
-[ListCustomText](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listcustomtext)
+[ListCustomText](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-material-library-custom-text/api-aimiaobi-2023-08-01-listcustomtext.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -598,13 +593,13 @@ list
 
 aimiaobi:RunDocSmartCard
 
-[RunDocSmartCard](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundocsmartcard)
+[RunDocSmartCard](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-other/api-aimiaobi-2023-08-01-rundocsmartcard.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -612,13 +607,13 @@ get
 
 aimiaobi:UpdateGeneratedContent
 
-[UpdateGeneratedContent](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-updategeneratedcontent)
+[UpdateGeneratedContent](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-document-management/api-aimiaobi-2023-08-01-updategeneratedcontent.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -626,13 +621,13 @@ update
 
 aimiaobi:GetDataSourceOrderConfig
 
-[GetDataSourceOrderConfig](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdatasourceorderconfig)
+[GetDataSourceOrderConfig](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-source-management/api-aimiaobi-2023-08-01-getdatasourceorderconfig.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -640,13 +635,13 @@ get
 
 aimiaobi:SubmitTopicSelectionPerspectiveAnalysisTask
 
-[SubmitTopicSelectionPerspectiveAnalysisTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submittopicselectionperspectiveanalysistask)
+[SubmitTopicSelectionPerspectiveAnalysisTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tips-openapi/api-aimiaobi-2023-08-01-submittopicselectionperspectiveanalysistask.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -654,13 +649,13 @@ create
 
 aimiaobi:ListInterveneRules
 
-[ListInterveneRules](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listintervenerules)
+[ListInterveneRules](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-intervention-configuration/api-aimiaobi-2023-08-01-listintervenerules.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -668,13 +663,13 @@ list
 
 aimiaobi:ListHotTopics
 
-[ListHotTopics](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listhottopics)
+[ListHotTopics](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-listhottopics.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -682,13 +677,13 @@ list
 
 aimiaobi:SubmitCustomTopicSelectionPerspectiveAnalysisTask
 
-[SubmitCustomTopicSelectionPerspectiveAnalysisTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitcustomtopicselectionperspectiveanalysistask)
+[SubmitCustomTopicSelectionPerspectiveAnalysisTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tips-openapi/api-aimiaobi-2023-08-01-submitcustomtopicselectionperspectiveanalysistask.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -696,13 +691,13 @@ create
 
 aimiaobi:CreateToken
 
-[CreateToken](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-createtoken)
+[CreateToken](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-universal-interface/api-aimiaobi-2023-08-01-createtoken.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -710,13 +705,13 @@ create
 
 aimiaobi:RunDocIntroduction
 
-[RunDocIntroduction](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundocintroduction)
+[RunDocIntroduction](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-generate-class/api-aimiaobi-2023-08-01-rundocintroduction.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -724,13 +719,13 @@ get
 
 aimiaobi:CancelDeepWriteTask
 
-[CancelDeepWriteTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-canceldeepwritetask)
+[CancelDeepWriteTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-deep-writing/api-aimiaobi-2023-08-01-canceldeepwritetask.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -738,13 +733,13 @@ update
 
 aimiaobi:DeleteAuditTerms
 
-[DeleteAuditTerms](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deleteauditterms)
+[DeleteAuditTerms](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-review-thesaurus-management/api-aimiaobi-2023-08-01-deleteauditterms.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -752,13 +747,13 @@ delete
 
 aimiaobi:FeedbackDialogue
 
-[FeedbackDialogue](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-feedbackdialogue)
+[FeedbackDialogue](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-feedbackdialogue.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -766,13 +761,13 @@ create
 
 aimiaobi:ListWebReviewPoints
 
-[ListWebReviewPoints](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listwebreviewpoints)
+[ListWebReviewPoints](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-listwebreviewpoints.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -780,13 +775,13 @@ list
 
 aimiaobi:RunDocWashing
 
-[RunDocWashing](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundocwashing)
+[RunDocWashing](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-generate-class/api-aimiaobi-2023-08-01-rundocwashing.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -794,13 +789,13 @@ get
 
 aimiaobi:DeleteAuditNote
 
-[DeleteAuditNote](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deleteauditnote)
+[DeleteAuditNote](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-proofreading-rule-library-management/api-aimiaobi-2023-08-01-deleteauditnote.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -808,13 +803,13 @@ delete
 
 aimiaobi:ImportInterveneFileAsync
 
-[ImportInterveneFileAsync](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-importintervenefileasync)
+[ImportInterveneFileAsync](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-intervention-configuration/api-aimiaobi-2023-08-01-importintervenefileasync.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -822,13 +817,13 @@ create
 
 aimiaobi:DeletePptArtifact
 
-[DeletePptArtifact](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletepptartifact)
+[DeletePptArtifact](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-ppt-generation/api-aimiaobi-2023-08-01-deletepptartifact.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -836,13 +831,13 @@ delete
 
 aimiaobi:SearchDatasetDocuments
 
-[SearchDatasetDocuments](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-searchdatasetdocuments)
+[SearchDatasetDocuments](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-searchdatasetdocuments.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -850,13 +845,13 @@ list
 
 aimiaobi:RunPptOutlineGeneration
 
-[RunPptOutlineGeneration](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runpptoutlinegeneration)
+[RunPptOutlineGeneration](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-ppt-generation/api-aimiaobi-2023-08-01-runpptoutlinegeneration.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -864,13 +859,13 @@ create
 
 aimiaobi:GetCategoriesByTaskId
 
-[GetCategoriesByTaskId](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getcategoriesbytaskid)
+[GetCategoriesByTaskId](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaoce-enterprise-voc-mining/api-aimiaobi-2023-08-01-getcategoriesbytaskid.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -878,13 +873,13 @@ get
 
 aimiaobi:GenerateExportWordTask
 
-[GenerateExportWordTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-generateexportwordtask)
+[GenerateExportWordTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-document-management/api-aimiaobi-2023-08-01-generateexportwordtask.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -892,13 +887,13 @@ get
 
 aimiaobi:QueryAuditTask
 
-[QueryAuditTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-queryaudittask)
+[QueryAuditTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-other/api-aimiaobi-2023-08-01-queryaudittask.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -906,13 +901,13 @@ get
 
 aimiaobi:AsyncEditTimeline
 
-[AsyncEditTimeline](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-asyncedittimeline)
+[AsyncEditTimeline](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-video-mixed-cut/api-aimiaobi-2023-08-01-asyncedittimeline.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -920,13 +915,13 @@ update
 
 aimiaobi:ListWritingStyles
 
-[ListWritingStyles](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listwritingstyles)
+[ListWritingStyles](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-style-imitation-writing/api-aimiaobi-2023-08-01-listwritingstyles.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -934,13 +929,13 @@ list
 
 aimiaobi:CreateGeneratedContent
 
-[CreateGeneratedContent](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-creategeneratedcontent)
+[CreateGeneratedContent](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-document-management/api-aimiaobi-2023-08-01-creategeneratedcontent.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -948,13 +943,13 @@ create
 
 aimiaobi:SubmitCustomHotTopicBroadcastJob
 
-[SubmitCustomHotTopicBroadcastJob](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitcustomhottopicbroadcastjob)
+[SubmitCustomHotTopicBroadcastJob](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-policy-news-broadcast/api-aimiaobi-2023-08-01-submitcustomhottopicbroadcastjob.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -962,13 +957,13 @@ create
 
 aimiaobi:GetDeepWriteTask
 
-[GetDeepWriteTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdeepwritetask)
+[GetDeepWriteTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-deep-writing/api-aimiaobi-2023-08-01-getdeepwritetask.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -976,13 +971,13 @@ get
 
 aimiaobi:GetGeneratedContent
 
-[GetGeneratedContent](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getgeneratedcontent)
+[GetGeneratedContent](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-document-management/api-aimiaobi-2023-08-01-getgeneratedcontent.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -990,13 +985,13 @@ get
 
 aimiaobi:SubmitCustomSourceTopicAnalysis
 
-[SubmitCustomSourceTopicAnalysis](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitcustomsourcetopicanalysis)
+[SubmitCustomSourceTopicAnalysis](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tips-custom-data-source/api-aimiaobi-2023-08-01-submitcustomsourcetopicanalysis.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1004,13 +999,13 @@ create
 
 aimiaobi:GetEnterpriseVocAnalysisTask
 
-[GetEnterpriseVocAnalysisTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getenterprisevocanalysistask)
+[GetEnterpriseVocAnalysisTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaoce-enterprise-voc-mining/api-aimiaobi-2023-08-01-getenterprisevocanalysistask.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1018,13 +1013,13 @@ get
 
 aimiaobi:RunDeepWriting
 
-[RunDeepWriting](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundeepwriting)
+[RunDeepWriting](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-deep-writing/api-aimiaobi-2023-08-01-rundeepwriting.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1032,13 +1027,13 @@ create
 
 aimiaobi:RunBookBrainmap
 
-[RunBookBrainmap](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runbookbrainmap)
+[RunBookBrainmap](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-generate-class/api-aimiaobi-2023-08-01-runbookbrainmap.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1046,13 +1041,13 @@ get
 
 aimiaobi:ListSearchTasks
 
-[ListSearchTasks](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listsearchtasks)
+[ListSearchTasks](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-smart-search/api-aimiaobi-2023-08-01-listsearchtasks.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1060,13 +1055,13 @@ list
 
 aimiaobi:GetPptConfig
 
-[GetPptConfig](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getpptconfig)
+[GetPptConfig](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-ppt-generation/api-aimiaobi-2023-08-01-getpptconfig.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1074,13 +1069,13 @@ create
 
 aimiaobi:RunHotword
 
-[RunHotword](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runhotword)
+[RunHotword](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-extraction-class/api-aimiaobi-2023-08-01-runhotword.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1088,13 +1083,13 @@ get
 
 aimiaobi:ListBiddingDoc
 
-[ListBiddingDoc](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listbiddingdoc)
+[ListBiddingDoc](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tender-generation/api-aimiaobi-2023-08-01-listbiddingdoc.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1102,13 +1097,13 @@ list
 
 aimiaobi:ListGeneratedContents
 
-[ListGeneratedContents](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listgeneratedcontents)
+[ListGeneratedContents](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-document-management/api-aimiaobi-2023-08-01-listgeneratedcontents.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1116,13 +1111,13 @@ list
 
 aimiaobi:ExportAnalysisTagDetailByTaskId
 
-[ExportAnalysisTagDetailByTaskId](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-exportanalysistagdetailbytaskid)
+[ExportAnalysisTagDetailByTaskId](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaoce-enterprise-voc-mining/api-aimiaobi-2023-08-01-exportanalysistagdetailbytaskid.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1130,13 +1125,13 @@ get
 
 aimiaobi:ListStyleLearningResult
 
-[ListStyleLearningResult](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-liststylelearningresult)
+[ListStyleLearningResult](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-style-imitation-writing/api-aimiaobi-2023-08-01-liststylelearningresult.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1144,13 +1139,13 @@ list
 
 aimiaobi:RunSearchSimilarArticles
 
-[RunSearchSimilarArticles](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runsearchsimilararticles)
+[RunSearchSimilarArticles](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-smart-search/api-aimiaobi-2023-08-01-runsearchsimilararticles.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1158,13 +1153,13 @@ none
 
 aimiaobi:GetSmartClipTask
 
-[GetSmartClipTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getsmartcliptask)
+[GetSmartClipTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-other/api-aimiaobi-2023-08-01-getsmartcliptask.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1172,13 +1167,13 @@ create
 
 aimiaobi:GetInterveneImportTaskInfo
 
-[GetInterveneImportTaskInfo](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getinterveneimporttaskinfo)
+[GetInterveneImportTaskInfo](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-intervention-configuration/api-aimiaobi-2023-08-01-getinterveneimporttaskinfo.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1186,13 +1181,13 @@ get
 
 aimiaobi:CancelAsyncTask
 
-[CancelAsyncTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-cancelasynctask)
+[CancelAsyncTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-asynchronous-task-management/api-aimiaobi-2023-08-01-cancelasynctask.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1200,13 +1195,13 @@ update
 
 aimiaobi:AsyncUploadTenderDoc
 
-[AsyncUploadTenderDoc](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-asyncuploadtenderdoc)
+[AsyncUploadTenderDoc](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tender-generation/api-aimiaobi-2023-08-01-asyncuploadtenderdoc.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1214,13 +1209,13 @@ create
 
 aimiaobi:UpdateCustomText
 
-[UpdateCustomText](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-updatecustomtext)
+[UpdateCustomText](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-material-library-custom-text/api-aimiaobi-2023-08-01-updatecustomtext.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1228,13 +1223,13 @@ update
 
 aimiaobi:ListHotViewPoints
 
-[ListHotViewPoints](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listhotviewpoints)
+[ListHotViewPoints](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-listhotviewpoints.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1242,13 +1237,13 @@ list
 
 aimiaobi:QueryAsyncTask
 
-[QueryAsyncTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-queryasynctask)
+[QueryAsyncTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-asynchronous-task-management/api-aimiaobi-2023-08-01-queryasynctask.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1256,13 +1251,13 @@ get
 
 aimiaobi:DownloadAuditNote
 
-[DownloadAuditNote](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-downloadauditnote)
+[DownloadAuditNote](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-proofreading-rule-library-management/api-aimiaobi-2023-08-01-downloadauditnote.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1270,13 +1265,13 @@ get
 
 aimiaobi:ImportInterveneFile
 
-[ImportInterveneFile](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-importintervenefile)
+[ImportInterveneFile](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-intervention-configuration/api-aimiaobi-2023-08-01-importintervenefile.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1284,13 +1279,13 @@ create
 
 aimiaobi:DeleteCustomText
 
-[DeleteCustomText](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletecustomtext)
+[DeleteCustomText](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-material-library-custom-text/api-aimiaobi-2023-08-01-deletecustomtext.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1298,13 +1293,13 @@ delete
 
 aimiaobi:ExportHotTopicPlanningProposals
 
-[ExportHotTopicPlanningProposals](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-exporthottopicplanningproposals)
+[ExportHotTopicPlanningProposals](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-exporthottopicplanningproposals.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1312,13 +1307,13 @@ get
 
 aimiaobi:RunDocSummary
 
-[RunDocSummary](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundocsummary)
+[RunDocSummary](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-generate-class/api-aimiaobi-2023-08-01-rundocsummary.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1326,13 +1321,13 @@ get
 
 aimiaobi:SubmitEnterpriseVocAnalysisTask
 
-[SubmitEnterpriseVocAnalysisTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitenterprisevocanalysistask)
+[SubmitEnterpriseVocAnalysisTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaoce-enterprise-voc-mining/api-aimiaobi-2023-08-01-submitenterprisevocanalysistask.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1340,13 +1335,13 @@ get
 
 aimiaobi:ListDialogues
 
-[ListDialogues](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listdialogues)
+[ListDialogues](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-universal-interface/api-aimiaobi-2023-08-01-listdialogues.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1354,13 +1349,13 @@ list
 
 aimiaobi:GenerateImageTask
 
-[GenerateImageTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-generateimagetask)
+[GenerateImageTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-generateimagetask.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1368,13 +1363,13 @@ create
 
 aimiaobi:SaveOrUpdateOssConfig
 
-[SaveOrUpdateOssConfig](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-saveorupdateossconfig)
+[SaveOrUpdateOssConfig](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-other/api-aimiaobi-2023-08-01-saveorupdateossconfig.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1382,13 +1377,13 @@ create
 
 aimiaobi:DeleteDocs
 
-[DeleteDocs](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletedocs)
+[DeleteDocs](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-basic-operation-class/api-aimiaobi-2023-08-01-deletedocs.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1396,13 +1391,13 @@ delete
 
 aimiaobi:ListHotNewsWithType
 
-[ListHotNewsWithType](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listhotnewswithtype)
+[ListHotNewsWithType](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-listhotnewswithtype.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1410,13 +1405,13 @@ list
 
 aimiaobi:RunKeywordsExtractionGeneration
 
-[RunKeywordsExtractionGeneration](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runkeywordsextractiongeneration)
+[RunKeywordsExtractionGeneration](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-runkeywordsextractiongeneration.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1424,13 +1419,13 @@ create
 
 aimiaobi:RunTranslateGeneration
 
-[RunTranslateGeneration](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runtranslategeneration)
+[RunTranslateGeneration](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-runtranslategeneration.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1438,13 +1433,13 @@ create
 
 aimiaobi:RunCustomHotTopicAnalysis
 
-[RunCustomHotTopicAnalysis](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runcustomhottopicanalysis)
+[RunCustomHotTopicAnalysis](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-policy-custom-topic/api-aimiaobi-2023-08-01-runcustomhottopicanalysis.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1452,13 +1447,13 @@ create
 
 aimiaobi:GetTopicById
 
-[GetTopicById](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-gettopicbyid)
+[GetTopicById](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-gettopicbyid.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1466,13 +1461,13 @@ get
 
 aimiaobi:DeleteCustomTopicViewPointById
 
-[DeleteCustomTopicViewPointById](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletecustomtopicviewpointbyid)
+[DeleteCustomTopicViewPointById](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-policy-custom-topic/api-aimiaobi-2023-08-01-deletecustomtopicviewpointbyid.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1480,13 +1475,13 @@ delete
 
 aimiaobi:BindPptArtifact
 
-[BindPptArtifact](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-bindpptartifact)
+[BindPptArtifact](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-ppt-generation/api-aimiaobi-2023-08-01-bindpptartifact.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1494,13 +1489,13 @@ create
 
 aimiaobi:InsertInterveneGlobalReply
 
-[InsertInterveneGlobalReply](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-insertinterveneglobalreply)
+[InsertInterveneGlobalReply](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-intervention-configuration/api-aimiaobi-2023-08-01-insertinterveneglobalreply.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1508,13 +1503,13 @@ create
 
 aimiaobi:DeleteDatasetDocument
 
-[DeleteDatasetDocument](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletedatasetdocument)
+[DeleteDatasetDocument](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-deletedatasetdocument.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1522,13 +1517,13 @@ delete
 
 aimiaobi:ListSearchTaskDialogues
 
-[ListSearchTaskDialogues](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listsearchtaskdialogues)
+[ListSearchTaskDialogues](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-smart-search/api-aimiaobi-2023-08-01-listsearchtaskdialogues.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1536,13 +1531,13 @@ list
 
 aimiaobi:GetPptArtifactExportResult
 
-[GetPptArtifactExportResult](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getpptartifactexportresult)
+[GetPptArtifactExportResult](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-ppt-generation/api-aimiaobi-2023-08-01-getpptartifactexportresult.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1550,13 +1545,13 @@ create
 
 aimiaobi:AddDatasetDocument
 
-[AddDatasetDocument](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-adddatasetdocument)
+[AddDatasetDocument](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-adddatasetdocument.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1564,13 +1559,13 @@ create
 
 aimiaobi:ListAuditTerms
 
-[ListAuditTerms](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listauditterms)
+[ListAuditTerms](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-review-thesaurus-management/api-aimiaobi-2023-08-01-listauditterms.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1578,13 +1573,13 @@ list
 
 aimiaobi:SubmitVideoAudit
 
-[SubmitVideoAudit](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitvideoaudit)
+[SubmitVideoAudit](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-video-review/api-aimiaobi-2023-08-01-submitvideoaudit.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1592,13 +1587,13 @@ create
 
 aimiaobi:ListInterveneCnt
 
-[ListInterveneCnt](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listintervenecnt)
+[ListInterveneCnt](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-intervention-configuration/api-aimiaobi-2023-08-01-listintervenecnt.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1606,13 +1601,13 @@ list
 
 aimiaobi:ListCustomViewPoints
 
-[ListCustomViewPoints](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listcustomviewpoints)
+[ListCustomViewPoints](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-policy-custom-topic/api-aimiaobi-2023-08-01-listcustomviewpoints.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1620,13 +1615,13 @@ list
 
 aimiaobi:SaveStyleLearningResult
 
-[SaveStyleLearningResult](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-savestylelearningresult)
+[SaveStyleLearningResult](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-style-imitation-writing/api-aimiaobi-2023-08-01-savestylelearningresult.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1634,13 +1629,13 @@ create
 
 aimiaobi:RunSearchGeneration
 
-[RunSearchGeneration](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runsearchgeneration)
+[RunSearchGeneration](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-smart-search/api-aimiaobi-2023-08-01-runsearchgeneration.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1648,13 +1643,13 @@ create
 
 aimiaobi:ListEnterprisePptTemplates
 
-[ListEnterprisePptTemplates](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listenterpriseppttemplates)
+[ListEnterprisePptTemplates](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-ppt-generation/api-aimiaobi-2023-08-01-listenterpriseppttemplates.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1662,13 +1657,13 @@ list
 
 aimiaobi:GetTopicSelectionPerspectiveAnalysisTask
 
-[GetTopicSelectionPerspectiveAnalysisTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-gettopicselectionperspectiveanalysistask)
+[GetTopicSelectionPerspectiveAnalysisTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tips-openapi/api-aimiaobi-2023-08-01-gettopicselectionperspectiveanalysistask.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1676,13 +1671,13 @@ get
 
 aimiaobi:SaveDataSourceOrderConfig
 
-[SaveDataSourceOrderConfig](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-savedatasourceorderconfig)
+[SaveDataSourceOrderConfig](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-source-management/api-aimiaobi-2023-08-01-savedatasourceorderconfig.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1690,13 +1685,13 @@ create
 
 aimiaobi:GetBiddingRemainLimitNum
 
-[GetBiddingRemainLimitNum](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getbiddingremainlimitnum)
+[GetBiddingRemainLimitNum](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tender-generation/api-aimiaobi-2023-08-01-getbiddingremainlimitnum.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1704,13 +1699,13 @@ get
 
 aimiaobi:UploadBook
 
-[UploadBook](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-uploadbook)
+[UploadBook](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-basic-operation-class/api-aimiaobi-2023-08-01-uploadbook.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1718,13 +1713,13 @@ create
 
 aimiaobi:ListPptArtifacts
 
-[ListPptArtifacts](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listpptartifacts)
+[ListPptArtifacts](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-ppt-generation/api-aimiaobi-2023-08-01-listpptartifacts.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1732,13 +1727,13 @@ list
 
 aimiaobi:GetProperties
 
-[GetProperties](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getproperties)
+[GetProperties](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-universal-interface/api-aimiaobi-2023-08-01-getproperties.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1746,13 +1741,13 @@ get
 
 aimiaobi:ListHotSources
 
-[ListHotSources](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listhotsources)
+[ListHotSources](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-listhotsources.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1760,13 +1755,13 @@ list
 
 aimiaobi:GenerateFileUrlByKey
 
-[GenerateFileUrlByKey](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-generatefileurlbykey)
+[GenerateFileUrlByKey](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-file-upload-and-download/api-aimiaobi-2023-08-01-generatefileurlbykey.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1774,13 +1769,13 @@ get
 
 aimiaobi:EditAuditTerms
 
-[EditAuditTerms](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-editauditterms)
+[EditAuditTerms](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-review-thesaurus-management/api-aimiaobi-2023-08-01-editauditterms.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1788,13 +1783,13 @@ update
 
 aimiaobi:ListAutoClipsTask
 
-[ListAutoClipsTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listautoclipstask)
+[ListAutoClipsTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-video-mixed-cut/api-aimiaobi-2023-08-01-listautoclipstask.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1802,13 +1797,13 @@ list
 
 aimiaobi:ListBuildConfigs
 
-[ListBuildConfigs](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listbuildconfigs)
+[ListBuildConfigs](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-listbuildconfigs.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1816,13 +1811,13 @@ get
 
 aimiaobi:RunWriteToneGeneration
 
-[RunWriteToneGeneration](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runwritetonegeneration)
+[RunWriteToneGeneration](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-runwritetonegeneration.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1830,13 +1825,13 @@ create
 
 aimiaobi:GetDataset
 
-[GetDataset](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdataset)
+[GetDataset](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-getdataset.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1844,13 +1839,13 @@ get
 
 aimiaobi:RunBookSmartCard
 
-[RunBookSmartCard](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runbooksmartcard)
+[RunBookSmartCard](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-other/api-aimiaobi-2023-08-01-runbooksmartcard.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1858,13 +1853,13 @@ get
 
 aimiaobi:GetPptInfo
 
-[GetPptInfo](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getpptinfo)
+[GetPptInfo](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-other/api-aimiaobi-2023-08-01-getpptinfo.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1872,13 +1867,13 @@ create
 
 aimiaobi:DeleteMaterialById
 
-[DeleteMaterialById](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletematerialbyid)
+[DeleteMaterialById](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-material-library/api-aimiaobi-2023-08-01-deletematerialbyid.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1886,13 +1881,13 @@ delete
 
 aimiaobi:ListIntervenes
 
-[ListIntervenes](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listintervenes)
+[ListIntervenes](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-intervention-configuration/api-aimiaobi-2023-08-01-listintervenes.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1900,13 +1895,13 @@ list
 
 aimiaobi:InitiatePptCreation
 
-[InitiatePptCreation](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-initiatepptcreation)
+[InitiatePptCreation](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-ppt-generation/api-aimiaobi-2023-08-01-initiatepptcreation.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1914,13 +1909,13 @@ create
 
 aimiaobi:SubmitSmartClipTask
 
-[SubmitSmartClipTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitsmartcliptask)
+[SubmitSmartClipTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-other/api-aimiaobi-2023-08-01-submitsmartcliptask.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1928,13 +1923,13 @@ create
 
 aimiaobi:RunStepByStepWriting
 
-[RunStepByStepWriting](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runstepbystepwriting)
+[RunStepByStepWriting](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-runstepbystepwriting.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1942,13 +1937,13 @@ create
 
 aimiaobi:FetchImageTask
 
-[FetchImageTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-fetchimagetask)
+[FetchImageTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-fetchimagetask.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1956,13 +1951,13 @@ get
 
 aimiaobi:ExportPptArtifact
 
-[ExportPptArtifact](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-exportpptartifact)
+[ExportPptArtifact](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-ppt-generation/api-aimiaobi-2023-08-01-exportpptartifact.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1970,13 +1965,13 @@ create
 
 aimiaobi:GetCustomText
 
-[GetCustomText](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getcustomtext)
+[GetCustomText](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-material-library-custom-text/api-aimiaobi-2023-08-01-getcustomtext.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1984,13 +1979,13 @@ get
 
 aimiaobi:UploadDoc
 
-[UploadDoc](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-uploaddoc)
+[UploadDoc](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-basic-operation-class/api-aimiaobi-2023-08-01-uploaddoc.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1998,13 +1993,13 @@ create
 
 aimiaobi:QueryVideoAuditResult
 
-[QueryVideoAuditResult](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-queryvideoauditresult)
+[QueryVideoAuditResult](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-video-review/api-aimiaobi-2023-08-01-queryvideoauditresult.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2012,13 +2007,13 @@ get
 
 aimiaobi:GetStyleLearningResult
 
-[GetStyleLearningResult](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getstylelearningresult)
+[GetStyleLearningResult](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-style-imitation-writing/api-aimiaobi-2023-08-01-getstylelearningresult.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2026,13 +2021,13 @@ get
 
 aimiaobi:UpdateGeneralConfig
 
-[UpdateGeneralConfig](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-updategeneralconfig)
+[UpdateGeneralConfig](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-common-configuration/api-aimiaobi-2023-08-01-updategeneralconfig.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2040,13 +2035,13 @@ update
 
 aimiaobi:AsyncCreateClipsTask
 
-[AsyncCreateClipsTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-asynccreateclipstask)
+[AsyncCreateClipsTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-video-mixed-cut/api-aimiaobi-2023-08-01-asynccreateclipstask.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2054,13 +2049,13 @@ create
 
 aimiaobi:CreateDataPermissions
 
-[CreateDataPermissions](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-createdatapermissions)
+[CreateDataPermissions](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-other/api-aimiaobi-2023-08-01-createdatapermissions.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2068,13 +2063,13 @@ create
 
 aimiaobi:RunQuickWriting
 
-[RunQuickWriting](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runquickwriting)
+[RunQuickWriting](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-runquickwriting.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2082,13 +2077,13 @@ create
 
 aimiaobi:SubmitSmartAudit
 
-[SubmitSmartAudit](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitsmartaudit)
+[SubmitSmartAudit](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-article-reviser/api-aimiaobi-2023-08-01-submitsmartaudit.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2096,13 +2091,13 @@ create
 
 aimiaobi:ListVersions
 
-[ListVersions](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listversions)
+[ListVersions](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-universal-interface/api-aimiaobi-2023-08-01-listversions.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2110,13 +2105,13 @@ list
 
 aimiaobi:GetInterveneRuleDetail
 
-[GetInterveneRuleDetail](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getinterveneruledetail)
+[GetInterveneRuleDetail](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-intervention-configuration/api-aimiaobi-2023-08-01-getinterveneruledetail.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2124,13 +2119,13 @@ get
 
 aimiaobi:RunTopicSelectionMerge
 
-[RunTopicSelectionMerge](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runtopicselectionmerge)
+[RunTopicSelectionMerge](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-runtopicselectionmerge.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2138,13 +2133,13 @@ create
 
 aimiaobi:GetFactAuditUrl
 
-[GetFactAuditUrl](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getfactauditurl)
+[GetFactAuditUrl](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-review-factual-review/api-aimiaobi-2023-08-01-getfactauditurl.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2152,13 +2147,13 @@ delete
 
 aimiaobi:SaveCustomText
 
-[SaveCustomText](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-savecustomtext)
+[SaveCustomText](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-material-library-custom-text/api-aimiaobi-2023-08-01-savecustomtext.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2166,13 +2161,13 @@ create
 
 aimiaobi:ExportIntervenes
 
-[ExportIntervenes](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-exportintervenes)
+[ExportIntervenes](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-intervention-configuration/api-aimiaobi-2023-08-01-exportintervenes.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2180,13 +2175,13 @@ list
 
 aimiaobi:GetHotTopicBroadcast
 
-[GetHotTopicBroadcast](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-gethottopicbroadcast)
+[GetHotTopicBroadcast](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-policy-news-broadcast/api-aimiaobi-2023-08-01-gethottopicbroadcast.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2194,13 +2189,13 @@ get
 
 aimiaobi:SubmitDeepWriteTask
 
-[SubmitDeepWriteTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitdeepwritetask)
+[SubmitDeepWriteTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-deep-writing/api-aimiaobi-2023-08-01-submitdeepwritetask.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2208,13 +2203,13 @@ create
 
 aimiaobi:ListSearchTaskDialogueDatas
 
-[ListSearchTaskDialogueDatas](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listsearchtaskdialoguedatas)
+[ListSearchTaskDialogueDatas](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-smart-search/api-aimiaobi-2023-08-01-listsearchtaskdialoguedatas.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2222,13 +2217,13 @@ list
 
 aimiaobi:ValidateUploadTemplate
 
-[ValidateUploadTemplate](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-validateuploadtemplate)
+[ValidateUploadTemplate](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaoce-enterprise-voc-mining/api-aimiaobi-2023-08-01-validateuploadtemplate.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2236,13 +2231,13 @@ get
 
 aimiaobi:RunAiHelperWriting
 
-[RunAiHelperWriting](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runaihelperwriting)
+[RunAiHelperWriting](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-runaihelperwriting.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2250,13 +2245,13 @@ create
 
 aimiaobi:GetDocClusterTask
 
-[GetDocClusterTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdocclustertask)
+[GetDocClusterTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tips-openapi/api-aimiaobi-2023-08-01-getdocclustertask.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2264,13 +2259,13 @@ get
 
 aimiaobi:RunWritingV2
 
-[RunWritingV2](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runwritingv2)
+[RunWritingV2](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-runwritingv2.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2278,13 +2273,13 @@ create
 
 aimiaobi:ListDatasets
 
-[ListDatasets](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listdatasets)
+[ListDatasets](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-listdatasets.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2292,13 +2287,13 @@ list
 
 aimiaobi:RunTextPolishing
 
-[RunTextPolishing](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runtextpolishing)
+[RunTextPolishing](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-runtextpolishing.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2306,13 +2301,13 @@ create
 
 aimiaobi:ListDocumentRetrieve
 
-[ListDocumentRetrieve](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listdocumentretrieve)
+[ListDocumentRetrieve](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-public-library-retrieval/api-aimiaobi-2023-08-01-listdocumentretrieve.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2320,13 +2315,13 @@ list
 
 aimiaobi:SubmitAuditNote
 
-[SubmitAuditNote](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitauditnote)
+[SubmitAuditNote](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-proofreading-rule-library-management/api-aimiaobi-2023-08-01-submitauditnote.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2334,13 +2329,13 @@ none
 
 aimiaobi:ExportCustomSourceAnalysisTask
 
-[ExportCustomSourceAnalysisTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-exportcustomsourceanalysistask)
+[ExportCustomSourceAnalysisTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tips-custom-data-source/api-aimiaobi-2023-08-01-exportcustomsourceanalysistask.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2348,13 +2343,13 @@ get
 
 aimiaobi:FetchExportWordTask
 
-[FetchExportWordTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-fetchexportwordtask)
+[FetchExportWordTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-document-management/api-aimiaobi-2023-08-01-fetchexportwordtask.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2362,13 +2357,13 @@ get
 
 aimiaobi:DownloadBiddingDoc
 
-[DownloadBiddingDoc](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-downloadbiddingdoc)
+[DownloadBiddingDoc](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tender-generation/api-aimiaobi-2023-08-01-downloadbiddingdoc.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2376,13 +2371,13 @@ get
 
 aimiaobi:RunVideoScriptGenerate
 
-[RunVideoScriptGenerate](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runvideoscriptgenerate)
+[RunVideoScriptGenerate](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-other/api-aimiaobi-2023-08-01-runvideoscriptgenerate.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2390,13 +2385,13 @@ create
 
 aimiaobi:ListAnalysisTagDetailByTaskId
 
-[ListAnalysisTagDetailByTaskId](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listanalysistagdetailbytaskid)
+[ListAnalysisTagDetailByTaskId](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaoce-enterprise-voc-mining/api-aimiaobi-2023-08-01-listanalysistagdetailbytaskid.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2404,13 +2399,13 @@ get
 
 aimiaobi:ListTopicRecommendEventList
 
-[ListTopicRecommendEventList](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listtopicrecommendeventlist)
+[ListTopicRecommendEventList](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-policy-custom-topic/api-aimiaobi-2023-08-01-listtopicrecommendeventlist.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2418,13 +2413,13 @@ list
 
 aimiaobi:AsyncWritingBiddingDoc
 
-[AsyncWritingBiddingDoc](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-asyncwritingbiddingdoc)
+[AsyncWritingBiddingDoc](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tender-generation/api-aimiaobi-2023-08-01-asyncwritingbiddingdoc.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2432,13 +2427,13 @@ create
 
 aimiaobi:SubmitExportTermsTask
 
-[SubmitExportTermsTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitexporttermstask)
+[SubmitExportTermsTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-review-thesaurus-management/api-aimiaobi-2023-08-01-submitexporttermstask.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2446,13 +2441,13 @@ none
 
 aimiaobi:GetCustomTopicSelectionPerspectiveAnalysisTask
 
-[GetCustomTopicSelectionPerspectiveAnalysisTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getcustomtopicselectionperspectiveanalysistask)
+[GetCustomTopicSelectionPerspectiveAnalysisTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tips-openapi/api-aimiaobi-2023-08-01-getcustomtopicselectionperspectiveanalysistask.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2460,13 +2455,13 @@ get
 
 aimiaobi:GetCustomHotTopicBroadcastJob
 
-[GetCustomHotTopicBroadcastJob](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getcustomhottopicbroadcastjob)
+[GetCustomHotTopicBroadcastJob](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-policy-news-broadcast/api-aimiaobi-2023-08-01-getcustomhottopicbroadcastjob.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2474,13 +2469,13 @@ get
 
 aimiaobi:DeleteStyleLearningResult
 
-[DeleteStyleLearningResult](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletestylelearningresult)
+[DeleteStyleLearningResult](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-style-imitation-writing/api-aimiaobi-2023-08-01-deletestylelearningresult.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2488,13 +2483,13 @@ delete
 
 aimiaobi:UpdateDataset
 
-[UpdateDataset](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-updatedataset)
+[UpdateDataset](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-updatedataset.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2502,13 +2497,13 @@ update
 
 aimiaobi:ListPptTemplates
 
-[ListPptTemplates](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listppttemplates)
+[ListPptTemplates](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-ppt-generation/api-aimiaobi-2023-08-01-listppttemplates.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2516,13 +2511,13 @@ list
 
 aimiaobi:GetPptArtifact
 
-[GetPptArtifact](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getpptartifact)
+[GetPptArtifact](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-ppt-generation/api-aimiaobi-2023-08-01-getpptartifact.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2530,13 +2525,13 @@ get
 
 aimiaobi:GetDeepWriteTaskResult
 
-[GetDeepWriteTaskResult](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdeepwritetaskresult)
+[GetDeepWriteTaskResult](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-deep-writing/api-aimiaobi-2023-08-01-getdeepwritetaskresult.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2544,13 +2539,13 @@ get
 
 aimiaobi:FetchExportTermsTask
 
-[FetchExportTermsTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-fetchexporttermstask)
+[FetchExportTermsTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-review-thesaurus-management/api-aimiaobi-2023-08-01-fetchexporttermstask.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2558,13 +2553,13 @@ none
 
 aimiaobi:GetAvailableAuditNotes
 
-[GetAvailableAuditNotes](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getavailableauditnotes)
+[GetAvailableAuditNotes](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-proofreading-rule-library-management/api-aimiaobi-2023-08-01-getavailableauditnotes.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2572,13 +2567,13 @@ get
 
 aimiaobi:RunAbbreviationContent
 
-[RunAbbreviationContent](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runabbreviationcontent)
+[RunAbbreviationContent](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-runabbreviationcontent.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2586,13 +2581,13 @@ get
 
 aimiaobi:GetInterveneTemplateFileUrl
 
-[GetInterveneTemplateFileUrl](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getintervenetemplatefileurl)
+[GetInterveneTemplateFileUrl](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-intervention-configuration/api-aimiaobi-2023-08-01-getintervenetemplatefileurl.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2600,13 +2595,13 @@ get
 
 aimiaobi:RunContinueContent
 
-[RunContinueContent](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runcontinuecontent)
+[RunContinueContent](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-runcontinuecontent.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2614,13 +2609,13 @@ get
 
 aimiaobi:GetGeneralConfig
 
-[GetGeneralConfig](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getgeneralconfig)
+[GetGeneralConfig](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-common-configuration/api-aimiaobi-2023-08-01-getgeneralconfig.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2628,13 +2623,13 @@ get
 
 aimiaobi:ListPlanningProposal
 
-[ListPlanningProposal](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listplanningproposal)
+[ListPlanningProposal](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-listplanningproposal.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2642,13 +2637,13 @@ list
 
 aimiaobi:GetAuditNoteProcessingStatus
 
-[GetAuditNoteProcessingStatus](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getauditnoteprocessingstatus)
+[GetAuditNoteProcessingStatus](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-proofreading-rule-library-management/api-aimiaobi-2023-08-01-getauditnoteprocessingstatus.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2656,13 +2651,13 @@ get
 
 aimiaobi:GetAuditNotePostProcessingStatus
 
-[GetAuditNotePostProcessingStatus](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getauditnotepostprocessingstatus)
+[GetAuditNotePostProcessingStatus](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-proofreading-rule-library-management/api-aimiaobi-2023-08-01-getauditnotepostprocessingstatus.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2670,13 +2665,13 @@ get
 
 aimiaobi:ListTimedViewAttitude
 
-[ListTimedViewAttitude](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listtimedviewattitude)
+[ListTimedViewAttitude](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-listtimedviewattitude.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2684,13 +2679,13 @@ list
 
 aimiaobi:RunSummaryGenerate
 
-[RunSummaryGenerate](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runsummarygenerate)
+[RunSummaryGenerate](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-runsummarygenerate.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2698,13 +2693,13 @@ get
 
 aimiaobi:FetchImportTermsTask
 
-[FetchImportTermsTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-fetchimporttermstask)
+[FetchImportTermsTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-review-thesaurus-management/api-aimiaobi-2023-08-01-fetchimporttermstask.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2712,13 +2707,13 @@ none
 
 aimiaobi:RunDocBrainmap
 
-[RunDocBrainmap](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundocbrainmap)
+[RunDocBrainmap](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-generate-class/api-aimiaobi-2023-08-01-rundocbrainmap.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2726,13 +2721,13 @@ get
 
 aimiaobi:DeleteDataPermissions
 
-[DeleteDataPermissions](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletedatapermissions)
+[DeleteDataPermissions](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-other/api-aimiaobi-2023-08-01-deletedatapermissions.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2740,13 +2735,13 @@ delete
 
 aimiaobi:RunBookIntroduction
 
-[RunBookIntroduction](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runbookintroduction)
+[RunBookIntroduction](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-generate-class/api-aimiaobi-2023-08-01-runbookintroduction.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2754,13 +2749,13 @@ get
 
 aimiaobi:GetBiddingDocInfo
 
-[GetBiddingDocInfo](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getbiddingdocinfo)
+[GetBiddingDocInfo](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tender-generation/api-aimiaobi-2023-08-01-getbiddingdocinfo.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2768,13 +2763,13 @@ get
 
 aimiaobi:ListGeneralConfigs
 
-[ListGeneralConfigs](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listgeneralconfigs)
+[ListGeneralConfigs](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-common-configuration/api-aimiaobi-2023-08-01-listgeneralconfigs.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2782,13 +2777,13 @@ list
 
 aimiaobi:RunMultiDocIntroduction
 
-[RunMultiDocIntroduction](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runmultidocintroduction)
+[RunMultiDocIntroduction](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-generate-class/api-aimiaobi-2023-08-01-runmultidocintroduction.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2796,13 +2791,13 @@ get
 
 aimiaobi:SubmitAsyncTask
 
-[SubmitAsyncTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitasynctask)
+[SubmitAsyncTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-asynchronous-task-management/api-aimiaobi-2023-08-01-submitasynctask.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2810,13 +2805,13 @@ create
 
 aimiaobi:UpdateDatasetDocument
 
-[UpdateDatasetDocument](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-updatedatasetdocument)
+[UpdateDatasetDocument](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-updatedatasetdocument.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2824,13 +2819,13 @@ update
 
 aimiaobi:RunExpandContent
 
-[RunExpandContent](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runexpandcontent)
+[RunExpandContent](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-runexpandcontent.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2838,13 +2833,13 @@ get
 
 aimiaobi:GenerateUploadConfig
 
-[GenerateUploadConfig](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-generateuploadconfig)
+[GenerateUploadConfig](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-file-upload-and-download/api-aimiaobi-2023-08-01-generateuploadconfig.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2852,13 +2847,13 @@ create
 
 aimiaobi:RunTitleGeneration
 
-[RunTitleGeneration](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runtitlegeneration)
+[RunTitleGeneration](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-runtitlegeneration.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2866,13 +2861,13 @@ create
 
 aimiaobi:ListAsyncTasks
 
-[ListAsyncTasks](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listasynctasks)
+[ListAsyncTasks](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-asynchronous-task-management/api-aimiaobi-2023-08-01-listasynctasks.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2880,13 +2875,13 @@ list
 
 aimiaobi:ExportGeneratedContent
 
-[ExportGeneratedContent](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-exportgeneratedcontent)
+[ExportGeneratedContent](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-document-management/api-aimiaobi-2023-08-01-exportgeneratedcontent.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2894,13 +2889,13 @@ get
 
 aimiaobi:ConfirmAndPostProcessAuditNote
 
-[ConfirmAndPostProcessAuditNote](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-confirmandpostprocessauditnote)
+[ConfirmAndPostProcessAuditNote](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-proofreading-rule-library-management/api-aimiaobi-2023-08-01-confirmandpostprocessauditnote.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2908,13 +2903,13 @@ none
 
 aimiaobi:GetMaterialById
 
-[GetMaterialById](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getmaterialbyid)
+[GetMaterialById](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-material-library/api-aimiaobi-2023-08-01-getmaterialbyid.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2922,13 +2917,13 @@ get
 
 aimiaobi:DeleteGeneralConfig
 
-[DeleteGeneralConfig](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletegeneralconfig)
+[DeleteGeneralConfig](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-common-configuration/api-aimiaobi-2023-08-01-deletegeneralconfig.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2936,13 +2931,13 @@ delete
 
 aimiaobi:GetFileContentLength
 
-[GetFileContentLength](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getfilecontentlength)
+[GetFileContentLength](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-basic-operation-class/api-aimiaobi-2023-08-01-getfilecontentlength.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2950,13 +2945,13 @@ get
 
 aimiaobi:CancelAuditTask
 
-[CancelAuditTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-cancelaudittask)
+[CancelAuditTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-other/api-aimiaobi-2023-08-01-cancelaudittask.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2964,13 +2959,13 @@ update
 
 aimiaobi:SubmitDocClusterTask
 
-[SubmitDocClusterTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitdocclustertask)
+[SubmitDocClusterTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tips-openapi/api-aimiaobi-2023-08-01-submitdocclustertask.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2978,13 +2973,13 @@ create
 
 aimiaobi:DeleteFactAuditUrl
 
-[DeleteFactAuditUrl](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletefactauditurl)
+[DeleteFactAuditUrl](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-review-factual-review/api-aimiaobi-2023-08-01-deletefactauditurl.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -2992,13 +2987,13 @@ delete
 
 aimiaobi:EditBiddingDoc
 
-[EditBiddingDoc](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-editbiddingdoc)
+[EditBiddingDoc](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tender-generation/api-aimiaobi-2023-08-01-editbiddingdoc.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -3006,13 +3001,13 @@ update
 
 aimiaobi:SubmitAuditTask
 
-[SubmitAuditTask](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitaudittask)
+[SubmitAuditTask](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-other/api-aimiaobi-2023-08-01-submitaudittask.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -3020,13 +3015,13 @@ create
 
 aimiaobi:GetDocInfo
 
-[GetDocInfo](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdocinfo)
+[GetDocInfo](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-basic-operation-class/api-aimiaobi-2023-08-01-getdocinfo.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -3034,13 +3029,13 @@ get
 
 aimiaobi:GetPptTemplateSelector
 
-[GetPptTemplateSelector](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getppttemplateselector)
+[GetPptTemplateSelector](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-ppt-generation/api-aimiaobi-2023-08-01-getppttemplateselector.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -3048,13 +3043,13 @@ create
 
 aimiaobi:SearchNews
 
-[SearchNews](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-searchnews)
+[SearchNews](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-creative-articles/api-aimiaobi-2023-08-01-searchnews.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -3062,13 +3057,13 @@ list
 
 aimiaobi:ExportAuditContentResult
 
-[ExportAuditContentResult](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-exportauditcontentresult)
+[ExportAuditContentResult](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-article-reviser/api-aimiaobi-2023-08-01-exportauditcontentresult.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -3076,13 +3071,13 @@ create
 
 aimiaobi:RunDocQa
 
-[RunDocQa](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-rundocqa)
+[RunDocQa](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-question-and-answer-class/api-aimiaobi-2023-08-01-rundocqa.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -3090,13 +3085,13 @@ get
 
 aimiaobi:SubmitFactAuditUrl
 
-[SubmitFactAuditUrl](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-submitfactauditurl)
+[SubmitFactAuditUrl](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaobi-article-review-factual-review/api-aimiaobi-2023-08-01-submitfactauditurl.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -3111,11 +3106,8 @@ create
 -   `*`表示全部。例如：
     
     -   `{#resourceType}`为`*`时：表示全部资源。
-        
     -   `{#regionId}`为`*`时：表示全部地域。
-        
     -   `{#accountId}`为`*`时：表示全部阿里云账号。
-        
 
 资源类型
 
@@ -3123,16 +3115,13 @@ create
 
 ## 条件（Condition）
 
-_大模型服务平台百炼_未定义产品级别的条件关键字。如需查看适用于所有云产品的通用条件关键字，请参见[通用条件关键字](https://help.aliyun.com/zh/ram/policy-elements)。
+_大模型服务平台百炼_未定义产品级别的条件关键字。如需查看适用于所有云产品的通用条件关键字，请参见通用条件关键字。
 
 ## 相关操作
 
 您可以创建自定义权限策略，并将权限策略授予 RAM 用户、RAM 用户组或 RAM 角色。具体操作如下：
 
--   [创建自定义权限策略](https://help.aliyun.com/zh/ram/create-a-custom-policy)
-    
--   [为 RAM 用户授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)
-    
--   [为 RAM 用户组授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-a-ram-user-group)
-    
--   [为 RAM 角色授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-a-ram-role)
+-   创建自定义权限策略
+-   为 RAM 用户授权
+-   为 RAM 用户组授权
+-   为 RAM 角色授权

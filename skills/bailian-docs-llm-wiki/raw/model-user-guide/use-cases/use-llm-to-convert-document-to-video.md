@@ -11,27 +11,21 @@
 ## 方案概览
 
 1.  **文档切片：**首先，我们运用大模型来总结文档标题，将文档划分为不同段落。并为每个段落生成一个概括性的段落标题。
-    
 2.  **生成演示文稿：**紧接着，我们整合各部分内容，包括标题、正文以及图片等，利用这些素材生成演示文稿图片。
-    
 3.  **生成讲解语音与字幕：**接下来，我们采用多模态大模型技术，将文字材料转换成音频文件，并依据音频的播放时长自动生成配套的文字字幕。
-    
 4.  **生成视频：**最后我们将所有演示文稿图片剪辑为视频，并将音频与字幕文件嵌入视频。
-    
-
-![架构图.svg](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1931574271/p840399.svg)
 
 ## 准备工作
 
-1.  [获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，用于调用阿里云百炼提供的大模型。
+1.  [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，用于调用阿里云百炼提供的大模型。
     
-    > 百炼为新用户提供了免费额度，额度消耗完后按 token 计费。您可以查看[计费说明](https://help.aliyun.com/zh/model-studio/billing/)获取计费详情。
+    > 百炼为新用户提供了免费额度，额度消耗完后按 token 计费。您可以查看[计费说明](raw/model-user-guide/test-1/model-pricing.md)获取计费详情。
     
-2.  配置环境变量，以降低API-KEY的泄露风险。您可以参考[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，根据您的操作系统选择适合的环境变量配置方法。
+2.  配置环境变量，以降低API-KEY的泄露风险。您可以参考[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)，根据您的操作系统选择适合的环境变量配置方法。
     
 3.  本实践教程依赖音视频处理工具FFmpeg和演示文稿制作工具Marp，请您使用如下示例代码安装这两个工具：
     
-    ## MacOS
+    #### MacOS
     
     ```
     # 您需要在终端运行如下代码
@@ -45,7 +39,7 @@
     cnpm install -g @marp-team/marp-cli
     ```
     
-    ## Windows
+    #### Windows
     
     1.  安装[Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install#windows-power-shell)（如已安装请跳过）
         
@@ -53,42 +47,44 @@
         
         在cmd中执行以下命令：
         
-        ```
-        # 其中，“py12”为虚拟环境名称，可修改；“3.12”为Python版本，可修改
-        conda create --name py12 python=3.12 
-        conda activate py12
-        ```
-        
+    
+    ```
+    # 其中，“py12”为虚拟环境名称，可修改；“3.12”为Python版本，可修改
+    conda create --name py12 python=3.12
+    conda activate py12
+    ```
+    
     3.  安装Marp
         
         继续在cmd中执行如下命令：
         
-        ```
-        # 先安装nodejs，这是为了方便安装marp，命令为：
-        conda config --add channels conda-forge
-        conda install nodejs
-        
-        #然后配置镜像——使用淘宝镜像：
-        npm config set registry https://registry.npmmirror.com
-        
-        #最后安装marp：
-        npm install -g @marp-team/marp-cli
-        ```
-        
+    
+    ```
+    # 先安装nodejs，这是为了方便安装marp，命令为：
+    conda config --add channels conda-forge
+    conda install nodejs
+    
+    #然后配置镜像——使用淘宝镜像：
+    npm config set registry https://registry.npmmirror.com
+    
+    #最后安装marp：
+    npm install -g @marp-team/marp-cli
+    ```
+    
     4.  安装FFmpeg
         
         继续在cmd中执行如下命令：
         
-        ```
-        conda install -c conda-forge ffmpeg
-        ```
-        
+    
+    ```
+    conda install -c conda-forge ffmpeg
+    ```
     
 4.  本实践教程中的图片生成依赖于浏览器引擎渲染，请您确保您的工作环境中安装了浏览器应用，如Chromium，Google Chrome，Microsoft Edge等。
     
 5.  本实践教程基于Python代码，请您确认您的工作环境中已经[安装Python](https://help.aliyun.com/zh/sdk/developer-reference/installing-python)，并安装本实践教程所需的Python库，代码示例如下：
     
-    ## MacOS
+    #### MacOS
     
     ```
     # 您需要在终端运行如下代码
@@ -105,7 +101,7 @@
     pip install --upgrade requests
     ```
     
-    ## Windows
+    #### Windows
     
     由于前面已使用Miniconda创建Python虚拟环境，这里直接选择前面那个Python虚拟环境：
     
@@ -141,11 +137,11 @@
     ```
     
 
-## **快速体验**
+## 快速体验
 
 如果您希望快速尝试，可以直接下载本教程中提供的[完整代码](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250610/ivnifp/doc2video.zip)到您的本地工作环境中，并在本地执行如下命令：
 
-## MacOS
+#### MacOS
 
 ```
 # 解压缩
@@ -158,22 +154,18 @@ chmod +x run.sh
 ./run.sh
 ```
 
-## Windows
+#### Windows
 
 **说明**
 
 -   下面Linux命令可以在Windows中通过WSL运行：
     
     -   关于安装WSL，请参见：[安装 WSL | Microsoft Learn](https://learn.microsoft.com/zh-cn/windows/wsl/install)。
-        
     -   关于在WSL使用Linux命令，请参见：[通过 WSL 开始使用 Linux | Microsoft Learn](https://learn.microsoft.com/zh-cn/windows/wsl/tutorials/linux)。
-        
 -   也可以通过Git运行：
     
     -   关于安装Git，请参见：[Git - 安装 Git (git-scm.com)](https://git-scm.com/book/zh/v2/%e8%b5%b7%e6%ad%a5-%e5%ae%89%e8%a3%85-Git)。
-        
     -   关于在Git使用Linux命令，请参见：[Windows系统下如何运行.sh脚本文件](https://jingyan.baidu.com/article/7082dc1cdc80a2e40a89bd22.html)。
-        
 
 ```
 # 解压缩，进入文件目录
@@ -184,11 +176,11 @@ bash run.sh
 
 为了帮助您理解方案流程，并能够根据实际需要进行个性化定制，下面我们将为您介绍如何从 0 开始，逐步构建一个文档生成视频的工程。
 
-## **步骤一：准备素材**
+## 步骤一：准备素材
 
 请您将文档中的文字、Markdown格式的图片链接等内容写到Markdown文件中，并以**section\_1.md**的格式命名，保存到**input**文件夹中。我们将下面提供的**section\_1.md**文件作为示例输入文档。
 
-**section\_1.md**
+section\_1.md
 
 ```
 你有过使用搜索引擎搜索问题却怎么也找不到有效信息的时候吗？
@@ -211,11 +203,9 @@ bash run.sh
 
 您可以直接使用[完整代码](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250610/tepjft/doc2video.zip)中我们提供的图片、风格文件等素材，并将其全部保存到**style**文件夹中。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4284314271/p837047.png)
-
 您需要在您的工作环境目录下创建一个Python文件**main.py**，以便于设置参数以及函数调用，示例代码如下：
 
-**main.py**
+main.py
 
 ```
 import argparse
@@ -232,26 +222,26 @@ def main(args):
     input_base_name = os.path.splitext(os.path.basename(args.input_txt_path))[0]
 
     if not os.path.exists(args.markdown_path):
-        os.makedirs(args.markdown_path)  
+        os.makedirs(args.markdown_path)
     for filename in os.listdir(args.input_style_path):
         full_path = os.path.join(args.input_style_path, filename)
         if os.path.isfile(full_path):
-            shutil.copy2(full_path, args.markdown_path) 
+            shutil.copy2(full_path, args.markdown_path)
 
     # 在此处调用各函数
 
     # 记录结束时间
-    end_time = datetime.datetime.now() 
+    end_time = datetime.datetime.now()
 
     # 计算总时间
-    elapsed_time = end_time - start_time  
+    elapsed_time = end_time - start_time
     elapsed_hours, remainder = divmod(elapsed_time.total_seconds(), 3600)
     elapsed_minutes, elapsed_seconds = divmod(remainder, 60)
-    
+
     start_time_str = start_time.strftime("%Y年%m月%d日 %H时%M分%S秒")
     end_time_str = end_time.strftime("%Y年%m月%d日 %H时%M分%S秒")
     elapsed_time_str = f"{int(elapsed_hours)}时{int(elapsed_minutes)}分{int(elapsed_seconds)}秒"
-    
+
     print(f"开始时间: {start_time_str}")
     print(f"结束时间: {end_time_str}")
     print(f"总时间: {elapsed_time_str}")
@@ -259,7 +249,7 @@ def main(args):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="文档生成视频")
- 
+
     # 添加命令行参数 --input_txt_path，默认值为 './input/section_1.md'，表示输入文本的路径
     parser.add_argument('--input_txt_path', type=str, default='./input/section_1.md', help='输入文本的路径')
 
@@ -314,7 +304,7 @@ python main.py
 
 在这一部分中，我们运用大模型为输入文档生成文档标题并划分段落，然后借助大模型对每个段落的内容进行归纳总结，同时为每个段落自动生成相应的段落标题。
 
-### **划分文本段落**
+### 划分文本段落
 
 我们借助API调用阿里云百炼提供的千问系列大模型**千问-Plus**，为输入文档生成一个文档标题并划分段落。
 
@@ -324,7 +314,7 @@ python main.py
 
 新建一个名为**theme\_generate.py**的Python文件，代码示例如下：
 
-**theme\_generate.py**
+theme\_generate.py
 
 ```
 from http import HTTPStatus
@@ -336,7 +326,7 @@ def theme_generate_with_qwen_plus(input_filepath, title):
     使用千问-Plus生成摘要标题。
 
     本函数读取指定文件的内容，并基于该内容和给定的主题生成一个精确、概括性的摘要标题。
-    
+
     参数:
     - input_filepath: 输入文件的路径。该文件的内容将用于生成摘要标题。
     - title: 生成摘要标题需围绕的主题。确保生成的标题与该主题紧密相关。
@@ -399,7 +389,7 @@ def theme_generate_with_qwen_plus(input_filepath, title):
 
 在**theme\_generate.py**中，我们定义了一个函数**theme\_generate\_with\_qwen\_plus**，通过API调用**千问-Plus**为文档生成一个文档标题。在**main.py**中导入并调用该函数，代码示例如下：
 
-**导入并调用theme\_generate\_with\_qwen\_plus**
+导入并调用theme\_generate\_with\_qwen\_plus
 
 ```
 # 导入
@@ -414,13 +404,11 @@ print(theme)
 
 我们可以调用该函数来获取示例文档**section\_1.md**的文档标题：
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1931574271/p839900.png)
-
 > 示例文档的标题：大模型：影响与应用。
 
 接下来新建一个名为**doc\_split.py**的Python文件，代码示例如下：
 
-**doc\_split.py**
+doc\_split.py
 
 ```
 from http import HTTPStatus
@@ -443,14 +431,13 @@ def doc_split_with_qwen_plus(input_filepath, output_filepath):
                     2. **标题创作**：为每一独立段落设计一个精炼标题，确保该标题简洁明了（不超过10个字），并能有效准确地概括该段落核心信息。
 
                     3. **输出规格**：完成处理后，生成的文档结构需符合JSON格式标准，每段落及对应的标题组成一个条目，具体格式示例如下：
-                    
 
-                    [ 
+                    [
                         {"title": " ", "content": " "},
                         {"title": " ", "content": " "},
                         ...
                     ]
-              
+
                     输出内容是以"["开头，并以"]"收尾的JSON数据，请不要输出其他内容。
 
                     4. **原文忠实性**：在输出的JSON数据中，各段落的“content”字段必须精确匹配原始文档的文字内容，不得有增删改动。必须完整地处理原始文档的全部内容，不能有遗漏。请严格保证文字和链接在原文档中的相对位置保持不变。
@@ -458,7 +445,7 @@ def doc_split_with_qwen_plus(input_filepath, output_filepath):
                     5. **格式化链接**：对于文档中的markdown格式的图片链接，将他们单独保存到JSON条目中。其"title"为"链接{index}"，"content"为链接地址，其中index为索引顺序。
 
                     6. **内容限制**：输出内容中不得包含任何多余的空格、换行符、制表符等空白字符，也不得包含任何HTML、XML、Markdown等格式的符号。始终保持中文。
-    
+
                     请严格依据上述要求执行文档处理任务。
 
                     文档内容如下：
@@ -500,7 +487,7 @@ def doc_split_with_qwen_plus(input_filepath, output_filepath):
 
 在**doc\_split.py**中，我们定义了一个函数**doc\_split\_with\_qwen\_plus**，通过API调用**千问-Plus**将输入文档划分为不同段落并为每个段落总结一个段落标题。在**main.py**中导入并调用该函数，代码示例如下：
 
-**导入并调用doc\_split.py**
+导入并调用doc\_split.py
 
 ```
 # 导入
@@ -513,17 +500,15 @@ doc_split_with_qwen_plus(args.input_txt_path, os.path.join(args.json_path))
 
 调用该函数来为示例文档**section\_1.md**划分段落并生成段落标题，输出的JSON文件**section\_1.json**会被保存到**./material/json**中：
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1931574271/p840138.png)
-
 > 输出section\_1.json。“title”字段为段落标题，“content”字段为段落内容，图片链接单独保存在字段中。
 
-### **提炼内容**
+### 提炼内容
 
 接着我们通过API调用百炼平台大模型**千问-Plus**，总结提炼各个段落的内容。
 
 新建一个名为**qwen\_plus\_marp.py**的Python文件，代码示例如下：
 
-**qwen\_plus\_marp.py**
+qwen\_plus\_marp.py
 
 ```
 import asyncio
@@ -548,7 +533,6 @@ def call_with_stream(content):
                     示例输出：https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/54Lq3RNeD78gn7Ed/img/6f9f3049-78a2-46b3-a052-88792052890d.png
 
                     以下是待提炼的文字内容：
-                    
 
               """
 
@@ -582,25 +566,21 @@ def call_with_stream(content):
 在**qwen\_plus\_marp.py**中，我们定义了一个函数**call\_with\_stream**，通过API调用**千问-Plus**来处理各段落中的内容，具体如下：
 
 -   文字内容：提炼关键要点，以Markdown格式输出。
-    
 -   图片链接：直接输出该链接。
-    
 
 我们将在整合图文素材时导入并调用**call\_with\_stream**函数。
 
-## 步骤三：**生成演示文稿**
+## 步骤三：生成演示文稿
 
 在这一部分中，我们将图文素材整合到Markdown文件中，并生成演示文稿图片。
 
 在介绍详细流程和代码之前，我们首先简单介绍一下这部分用到的工具：Marp。Marp是一款基于Markdown语法的开源演示文稿制作工具。您只需要通过编辑Markdown文本，即可生成精美的演示文稿。如果您是VS Code使用者，您还可以下载安装Marp for VS Code插件来实时预览。您也可以参考[Marp官方文档](https://marpit.marp.app/)，打造出独具个人风格特色的演示文稿。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4284314271/p836868.png)
-
 > 在VS Code的扩展中搜索并安装Marp for VS Code。
 
 由于Marp在将Markdown转换为演示文稿时采用了特定的格式规范和扩展语法，我们准备了一个Python脚本——**markdown\_gather.py**，用于汇总一些优化和调整Markdown格式内容的函数，代码示例如下：
 
-**markdown\_gather.py**
+markdown\_gather.py
 
 ```
 import os
@@ -612,11 +592,11 @@ def merge_style_with_md_files(md_file_path, style_file_path):
     # 检查样式文件是否存在
     if not os.path.isfile(style_file_path):
         raise FileNotFoundError(f"样式文件 {style_file_path} 不存在。")
-    
+
     # 读取样式文件内容
     with open(style_file_path, 'r', encoding='utf-8') as f:
         style_content = f.read()
-    
+
     # 遍历指定目录下的所有文件
     for filename in os.listdir(md_file_path):
         if filename.startswith('section') and filename.endswith('.md'):
@@ -752,11 +732,11 @@ def title_to_md(file_path, content, title_url):
 
 您需要将其和**main.py**、各函数文件放在同一路径目录下，并在后续调用该文件中的函数。
 
-### **整合图文素材**
+### 整合图文素材
 
 我们将调用前文步骤二中“提炼内容”部分介绍的函数**call\_with\_stream**得到文档各段落关键要点、标题、图片链接等内容，并将它们整合为Markdown格式，输出Markdown文件。新建一个名为**json2md.py**的函数文件，代码示例如下：
 
-**json2md.py**
+json2md.py
 
 ```
 import json
@@ -772,10 +752,10 @@ def is_link(text):
 def parse_json_list_to_markdown(json_list, theme_url):
     """
     将 JSON 对象列表转换为 Markdown 格式，并通过 call_with_stream 处理 'content'。
-    
+
     参数:
     - json_list (list): 字典列表，每个字典都包含 'title' 和 'content' 键。
-    
+
     返回:
     - str: Markdown 格式的字符串。
     """
@@ -785,7 +765,7 @@ def parse_json_list_to_markdown(json_list, theme_url):
     for item in json_list:
         title = item.get('title', '未命名')
         processed_content = call_with_stream(item.get('content', ''))
-        
+
         if is_link(processed_content):
             markdown_content += f"---\n\n![bg right 70%]({processed_content})\n\n---"
         else:
@@ -795,10 +775,10 @@ def parse_json_list_to_markdown(json_list, theme_url):
 def parse_json_list_to_markdown_new(json_list, theme_url):
     """
     将 JSON 对象列表转换为 Markdown 格式，并通过 call_with_stream 处理 'content'。
-    
+
     参数:
     - json_list (list): 字典列表，每个字典都包含 'title' 和 'content' 键。
-    
+
     返回:
     - str: Markdown 格式的字符串。
     """
@@ -833,24 +813,24 @@ def parse_json_list_to_markdown_new(json_list, theme_url):
 def convert_json_file_to_md(json_file_path, output_dir, theme_url):
     """
     读取 JSON 文件，通过 call_with_stream 转换其内容，然后保存为 Markdown 文件。
-    
+
     参数:
     - json_file_path (str): JSON 文件的路径。
     - output_dir (str): Markdown 文件将被保存的目录。
     """
-    
+
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
     with open(json_file_path, 'r', encoding='utf-8') as file:
         json_data = json.load(file)
-    
+
     markdown_content = parse_json_list_to_markdown_new(json_data, theme_url)
-    
+
     base_name = os.path.splitext(os.path.basename(json_file_path))[0]
     md_file_name = f"{base_name}.md"
     output_path = os.path.join(output_dir, md_file_name)
-    
+
     with open(output_path, 'w', encoding='utf-8') as file:
         file.write(markdown_content)
 
@@ -872,7 +852,7 @@ def process_markdown(input_file):
 
     filenames = []
     base_path = os.path.dirname(input_file)  # 获取基础文件的路径
-    
+
     for i, part in enumerate(parts):
         # 生成文件名
         filename = f'{os.path.splitext(os.path.basename(input_file))[0]}_{i}.md'
@@ -885,15 +865,12 @@ def process_markdown(input_file):
 在**json2md.py**中，我们定义了多个函数，主要作用如下：
 
 -   将归属于同一段落的标题、文本内容与其对应的图片链接整合在一起；
-    
 -   使用“---”分隔不同段落的内容，以生成多张演示文稿图片。
-    
 -   设置演示文稿背景。
-    
 
 您需要在**main.py**中导入并调用**json2md.py**中的函数，代码如下：
 
-**导入并调用json2md.py中的函数**
+导入并调用json2md.py中的函数
 
 ```
 # 导入
@@ -908,7 +885,7 @@ for filename in os.listdir(args.json_path):
 
 为了美化演示文稿，我们进一步添加阿里云Logo、标题页，并调整Markdown格式以适配Marp语法。我们通过导入并调用前文提供的**markdown\_gather.py**中的函数实现，代码如下：
 
-**导入并调用markdown\_gather.py中的函数**
+导入并调用markdown\_gather.py中的函数
 
 ```
 # 导入
@@ -927,11 +904,9 @@ insert_logo(os.path.join(args.markdown_path,f'{input_base_name}.md'), os.path.jo
 
 将步骤二中输出的**section\_1.json**作为输入，输出的Markdown文件**section\_1.md**会被保存在**./material/markdown**中，效果演示如下：
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1931574271/p840171.png)
-
 > 素材整合后的示例输出section\_1.md。
 
-### **生成演示文稿**
+### 生成演示文稿
 
 接下来我们基于Marp生成演示文稿。在使用Marp生成演示文稿前，我们需要定义Marp的整体风格及全局样式。我们可以在Markdown文件的顶部设置，例如：
 
@@ -944,13 +919,11 @@ theme: gaia
 ```
 
 -   **marp: true**，表示该Markdown文件会被当作Marp演示文稿来处理；
-    
 -   **theme: gaia**，表示将Marp的主题设置为gaia（Marp官方主题之一）。
-    
 
 您可以在本实践教程的[完整代码](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250610/qpeijj/doc2video.zip)中**style**文件夹里获取我们为您准备的Markdown风格文件**style.md**，并将其置于Markdown文件的开头。您可以通过在**main.py**中导入并调用**markdown\_gather.py**中的函数来实现，具体代码如下：
 
-**加载风格文件style.md**
+加载风格文件style.md
 
 ```
 # 导入
@@ -967,25 +940,19 @@ remove_trailing_dashes(args.markdown_path)
 
 得到的输出如下：
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1931574271/p840174.png)
-
 > 加载风格文件style.md之后的Markdown示例输出。
 
 得到上述的输出后，如果您是VS Code用户且已经安装了Marp for VS Code插件，那么您可以实时预览Marp演示文稿的输出效果。点击界面右上角的预览图标：
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4284314271/p836911.png)
 
 > 在VS Code界面左上角点击预览图标。
 
 实时预览效果如下：
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1931574271/p840176.png)
-
 > Marp实时预览效果演示。
 
 通过预览确认了Marp演示文稿的输出内容无误后，我们将其导出为图片。新建一个名为**marp2image.py**的Python文件，代码示例如下：
 
-**marp2image.py**
+marp2image.py
 
 ```
 import os
@@ -997,11 +964,11 @@ def merge_style_with_md_files(md_file_path, style_file_path):
     # 检查样式文件是否存在
     if not os.path.isfile(style_file_path):
         raise FileNotFoundError(f"样式文件 {style_file_path} 不存在。")
-    
+
     # 读取样式文件内容
     with open(style_file_path, 'r', encoding='utf-8') as f:
         style_content = f.read()
-    
+
     # 遍历指定目录下的所有文件
     for filename in os.listdir(md_file_path):
         if filename.startswith('section') and filename.endswith('.md'):
@@ -1137,7 +1104,7 @@ def title_to_md(file_path, content, title_url):
 
 在**marp2image.py**中，我们定义了一个函数**convert\_md\_files\_to\_png**，将Markdown文件导出为png格式的Marp演示文稿。在**main.py**中导入并调用函数**convert\_md\_files\_to\_png**，代码示例如下：
 
-**导入并调用函数convert\_md\_files\_to\_png**
+导入并调用函数convert\_md\_files\_to\_png
 
 ```
 # 导入
@@ -1149,19 +1116,17 @@ convert_md_files_to_png(os.path.join(args.markdown_path,f'{input_base_name}.md')
 
 调用函数得到的所有的输出图片均会被保存到**./material/image**中，示例如下：
 
-![section\_1\_2.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1931574271/p840178.png)
-
 > 示例图片。
 
-## 步骤四：**生成讲解语音与字幕**
+## 步骤四：生成讲解语音与字幕
 
 在这一部分中，我们利用多模态语音大模型将文字内容合成为音频，并且精确计算音频的时长，随后自动生成对应的字幕时间戳。
 
-### **文字合成音频**
+### 文字合成音频
 
 我们将文档内容划分为若干个句子，然后通过API调用阿里云百炼提供的语音合成大模型**CosyVoice**，将所有句子全部合成为mp3格式的音频文件。新建一个名为**audio\_generate\_each\_sentence.py**的Python文件，代码示例如下：
 
-**audio\_generate\_each\_sentence.py**
+audio\_generate\_each\_sentence.py
 
 ```
 import json
@@ -1182,12 +1147,12 @@ def split_into_sentences(text):
     # 中文标点符号列表
     punctuation = ['，', '。', '；', '？', '！']
     brackets = {'(': ')', '[': ']', '{': '}', '（': '）', '【': '】', '《': '》'}
-    
+
     # 初始化结果列表和临时句子存储
     sentences = []
     temp_sentence = ''
     bracket_stack = []
-    
+
     # 遍历文本中的每一个字符
     for char in text:
         # 如果是左括号，压入栈
@@ -1196,7 +1161,7 @@ def split_into_sentences(text):
         # 如果是右括号且与栈顶匹配，弹出栈
         elif char in brackets.values() and bracket_stack and brackets[bracket_stack[-1]] == char:
             bracket_stack.pop()
-        
+
         # 如果字符是中文标点之一且括号栈为空，表示句子结束
         if char in punctuation and not bracket_stack:
             # 添加临时句子到结果列表，并清空临时句子
@@ -1205,11 +1170,11 @@ def split_into_sentences(text):
         else:
             # 否则，将字符添加到临时句子中
             temp_sentence += char
-    
+
     # 处理最后一个可能没有标点结尾的句子
     if temp_sentence:
         sentences.append(temp_sentence.strip())
-    
+
     return sentences
 
 def save_sentences_to_markdown(sentences, base_dir, index1):
@@ -1218,27 +1183,27 @@ def save_sentences_to_markdown(sentences, base_dir, index1):
         dir_name = f'audio_for_paragraph_{index1}'
         dir_path = os.path.join(base_dir, dir_name)
         os.makedirs(dir_path, exist_ok=True)
-        
+
         # 构建文件名
         file_name = f'paragraph_{index1}_sentence_{index2}.md'
         file_path = os.path.join(dir_path, file_name)
-        
+
         # 写入Markdown文件
         with open(file_path, 'w', encoding='utf-8') as file:
             file.write(sentence + '\n')
 
 def process_json_file(json_file_path, base_dir):
-    
+
     if not os.path.exists(base_dir):
         os.makedirs(base_dir)
 
     file_prefix = os.path.splitext(os.path.basename(json_file_path))[0]
-    
+
     base_dir = os.path.join(base_dir, file_prefix)
 
     # 读取JSON文件
     json_data = read_json_file(json_file_path)
-    
+
     # 处理JSON数据中的每个条目
     for index1, item in enumerate(json_data):
         if 'content' in item:
@@ -1263,51 +1228,48 @@ def synthesize_md_to_speech(base_directory):
     # 确保环境变量中存在DashScope API密钥
     if 'DASHSCOPE_API_KEY' not in os.environ:
         raise ValueError("DashScope API key must be set in the environment variables.")
-    
+
     # 遍历指定目录及其子目录
     for root, dirs, files in os.walk(base_directory):
         for file in files:
             if file.endswith('.md'):
                 # 构建完整文件路径
                 md_file_path = os.path.join(root, file)
-                
+
                 # 读取.md文件内容
                 with open(md_file_path, 'r', encoding='utf-8') as f:
                     text = f.read()
-                
+
                 # 初始化语音合成器
                 speech_synthesizer = SpeechSynthesizer(model='cosyvoice-v2', voice='longxiaochun_v2')
 
-                
                 # 合成语音
                 audio_data = speech_synthesizer.call(text)
-                
+
                 # 构建输出.mp3文件路径
                 mp3_file_path = os.path.splitext(md_file_path)[0] + '.mp3'
-                
+
                 # 保存音频到文件
                 with open(mp3_file_path, 'wb') as f:
                     f.write(audio_data)
-                
+
                 print(f'Synthesized text from file "{md_file_path}" to file: {mp3_file_path}')
 ```
 
 我们在**audio\_generate\_each\_sentence.py**定义了两个函数，其作用分别为：
 
 -   **process\_json\_file**：将文档内容划分为若干个句子。
-    
 -   **synthesize\_md\_to\_speech**：通过API调用百炼提供的语音合成模型**CosyVoice**，将所有句子全部合成为mp3格式的音频文件。
-    
 
 在**main.py**中导入并引用这两个函数，代码如下：
 
-**导入并引用process\_json\_file和synthesize\_md\_to\_speech**
+导入并引用process\_json\_file和synthesize\_md\_to\_speech
 
 ```
 # 导入
 from audio_generate_each_sentence import process_json_file, synthesize_md_to_speech
 # 调用
-# 将各段落文档划分为若干句子，并通过API调用CosyVoice合成语音 
+# 将各段落文档划分为若干句子，并通过API调用CosyVoice合成语音
 process_json_file(os.path.join(args.json_path,f'{input_base_name}.json'), args.audio_path)
 synthesize_md_to_speech(os.path.join(args.audio_path, input_base_name))
 ```
@@ -1316,11 +1278,11 @@ synthesize_md_to_speech(os.path.join(args.audio_path, input_base_name))
 
 > 文字内容为：你有过使用搜索引擎搜索问题却怎么也找不到有效信息的时候吗？
 
-### **生成字幕**
+### 生成字幕
 
 接下来，我们将通过读取音频的时长以及其对应的文字内容，来生成SRT格式的字幕文件。新建一个Pyhton文件，命名为**srt\_generate\_for\_each\_sentence.py**，代码示例如下：
 
-**srt\_generate\_for\_each\_sentence.py**
+srt\_generate\_for\_each\_sentence.py
 
 ```
 import os
@@ -1362,7 +1324,6 @@ def generate_srt_from_audio(base_dir: str, output_dir: str, output_srt_file: str
     # 确保输出文件名有.srt后缀
     if not output_srt_file.endswith('.srt'):
         output_srt_file += '.srt'
-    
 
     # 初始化当前时间
     current_time = 2.000  # 初始时间
@@ -1422,7 +1383,7 @@ def generate_srt_from_audio(base_dir: str, output_dir: str, output_srt_file: str
 
 在**main.py**中导入并调用函数**generate\_srt\_from\_audio**，代码示例如下：
 
-**导入并调用函数generate\_srt\_from\_audio**
+导入并调用函数generate\_srt\_from\_audio
 
 ```
 # 导入
@@ -1434,17 +1395,15 @@ generate_srt_from_audio(os.path.join(args.audio_path, input_base_name), args.srt
 
 调用函数会自动生成srt文件并保存在**./material/video**中，示例输出如下：
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4284314271/p837063.png)
-
-## 步骤五：**生成视频**
+## 步骤五：生成视频
 
 在这一部分中，我们将生成的演示文稿剪辑为视频，并将音频文件和字幕文件嵌入到视频中。
 
-### **剪辑视频**
+### 剪辑视频
 
 首先我们计算每一张演示文稿在视频中的持续时间。新建一个Python文件，命名为**calculate\_durations\_for\_each\_image.py**，代码示例如下：
 
-**calculate\_durations\_for\_each\_image.py**
+calculate\_durations\_for\_each\_image.py
 
 ```
 import os
@@ -1453,7 +1412,7 @@ from pydub import AudioSegment
 def calculate_audio_durations(directory):
     """
     计算指定目录下所有以 audio_for_paragraph_{index} 命名的文件夹中 mp3 文件的总持续时间（以秒为单位）。
-    
+
     参数:
         directory (str): 需要扫描的根目录路径。
 
@@ -1462,16 +1421,16 @@ def calculate_audio_durations(directory):
     """
     # 初始化结果列表
     durations = []
-    
+
     # 遍历目录下的所有子目录
     for entry in os.scandir(directory):
         if entry.is_dir() and entry.name.startswith("audio_for_paragraph_"):
             # 提取 index
             index = int(entry.name.split("_")[-1])
-            
+
             # 初始化当前文件夹的总持续时间为0
             total_duration_ms = 0
-            
+
             # 遍历子目录中的所有文件
             for file_entry in os.scandir(entry.path):
                 if file_entry.name.endswith(".mp3"):
@@ -1479,20 +1438,19 @@ def calculate_audio_durations(directory):
                     audio = AudioSegment.from_mp3(file_entry.path)
                     delay = 300
                     total_duration_ms += len(audio) + delay
-            
+
             # 将当前文件夹的总持续时间转换为秒，并添加到结果列表中
             total_duration_seconds = total_duration_ms / 1000.0
             durations.append((index, total_duration_seconds))
-    
+
     # 按照 index 排序结果列表
     durations.sort(key=lambda x: x[0])
 
-    
     # 只保留持续时间（秒）
     durations = [duration for _, duration in durations]
 
     durations.insert(0, 2)
-    
+
     return durations
 ```
 
@@ -1500,7 +1458,7 @@ def calculate_audio_durations(directory):
 
 在**main.py**中导入并调用函数**calculate\_audio\_durations**，代码示例如下：
 
-**导入并调用函数calculate\_audio\_durations**
+导入并调用函数calculate\_audio\_durations
 
 ```
 # 导入
@@ -1512,7 +1470,7 @@ durations = calculate_audio_durations(os.path.join(args.audio_path, input_base_n
 
 接着我们将所有演示文稿剪辑为视频。新建一个函数文件，命名为**movie\_editor.py**，代码示例如下：
 
-**movie\_editor.py**
+movie\_editor.py
 
 ```
 from moviepy import *
@@ -1562,7 +1520,6 @@ def images_to_video_with_durations(input_image_path, output_video_path, duration
         # if i < len(image_files) - 1:  # 确保不是最后一个剪辑
         #     composite_clip = composite_clip.fx(vfx.fadein, duration=0.3).fx(vfx.fadeout, duration=0.3)
 
-    
         clips.append(composite_clip)
 
     # 使用concatenate_videoclips函数将所有剪辑串联起来
@@ -1576,7 +1533,7 @@ def images_to_video_with_durations(input_image_path, output_video_path, duration
 
 在**movie\_editor.py**中，我们定义了函数**images\_to\_video\_with\_durations**，其功能是将所有输入演示文稿按顺序剪辑为视频。在**main.py**中导入并调用函数**images\_to\_video\_with\_durations**，代码示例如下：
 
-**导入并调用函数images\_to\_video\_with\_durations**
+导入并调用函数images\_to\_video\_with\_durations
 
 ```
 # 导入
@@ -1589,11 +1546,11 @@ images_to_video_with_durations(os.path.join(args.image_path,f'{input_base_name}'
 
 > 以上视频不包含音频与字幕。
 
-### **嵌入音频与字幕**
+### 嵌入音频与字幕
 
 接下来我们将音频文件嵌入到视频中。新建一个函数文件，命名为**audio2video.py**，代码示例如下：
 
-**audio2video.py**
+audio2video.py
 
 ```
 import os
@@ -1610,13 +1567,13 @@ def merge_audio_and_add_to_video(video_path, audio_base_dir, output_path):
     """
     # 加载视频文件
     video_clip = VideoFileClip(video_path)
-    
+
     # 初始化音频列表
     audio_clips = []
 
     silent_audio_start = AudioClip(lambda t: [0,0], duration=2)
     audio_clips.append(silent_audio_start)
-    
+
     # 遍历所有子目录，按数字大小排序
     audio_dirs = glob(os.path.join(audio_base_dir, "audio_for_paragraph_*"))
     audio_dirs.sort(key=lambda x: int(re.search(r'\d+', os.path.basename(x)).group()))
@@ -1625,7 +1582,7 @@ def merge_audio_and_add_to_video(video_path, audio_base_dir, output_path):
     for audio_dir in audio_dirs:
         # 获取当前目录的index
         index = int(os.path.basename(audio_dir).split("_")[-1])
-        
+
         # 遍历目录中的所有mp3文件
         mp3_files = glob(os.path.join(audio_dir, f"paragraph_{index}_sentence_*.mp3"))
         mp3_files.sort(key=lambda x: int(re.search(r'_sentence_(\d+)', os.path.basename(x)).group(1)))
@@ -1634,7 +1591,7 @@ def merge_audio_and_add_to_video(video_path, audio_base_dir, output_path):
         for mp3_file in mp3_files:
             # 加载音频文件
             audio_clip = AudioFileClip(mp3_file)
-            
+
             # 添加到音频列表
             if audio_clips:
                 # 如果不是第一个音频，则在前一个音频之后添加0.5秒的静音
@@ -1642,16 +1599,16 @@ def merge_audio_and_add_to_video(video_path, audio_base_dir, output_path):
                 silent_audio = AudioClip(lambda t: [0,0], duration=0.3)
                 audio_clips.append(silent_audio)
             audio_clips.append(audio_clip)
-    
+
     # 合并所有音频片段
     final_audio = concatenate_audioclips(audio_clips)
-    
+
     # 将音频添加到视频中
     video_with_audio = video_clip.with_audio(final_audio)
-    
+
     # 输出带有新音频的视频文件
     video_with_audio.write_videofile(output_path, codec='libx264', audio_codec='aac')
-    
+
     # 关闭剪辑对象，释放资源
     video_clip.close()
 ```
@@ -1660,7 +1617,7 @@ def merge_audio_and_add_to_video(video_path, audio_base_dir, output_path):
 
 在**main.py**中导入并调用函数**merge\_audio\_and\_add\_to\_video**，代码如下：
 
-**导入并调用函数merge\_audio\_and\_add\_to\_video**
+导入并调用函数merge\_audio\_and\_add\_to\_video
 
 ```
 # 导入
@@ -1673,7 +1630,7 @@ merge_audio_and_add_to_video(os.path.join(args.srt_and_video_path,f'{input_base_
 
 最后我们将字幕文件嵌入到视频中。新建一个函数文件，命名为**srt2video.py**，代码示例如下：
 
-**srt2video.py**
+srt2video.py
 
 ```
 import subprocess
@@ -1702,7 +1659,7 @@ def merge_video_and_subtitle(video_and_srt_path, base_name):
 
 我们在函数文件**srt2video.py**中定义了函数**merge\_video\_and\_subtitle**，其功能为将srt字幕文件嵌入到视频中。在**main.py**中导入并调用函数**merge\_video\_and\_subtitle**，代码示例如下：
 
-**导入并调用函数merge\_video\_and\_subtitle**
+导入并调用函数merge\_video\_and\_subtitle
 
 ```
 # 导入
@@ -1719,17 +1676,15 @@ merge_video_and_subtitle(args.srt_and_video_path, input_base_name)
 
 通过以上步骤，相信您已经成功地构建了完整的文档生成视频项目工程，并且能够成功地将我们提供的示例文档**section\_1.md**转化为视频。在实际应用中，您可能会有将更长篇幅的文档转化为视频的需求，例如阿里云大模型工程师ACA认证课程第一章第一课时认识大模型。我们建议您将长篇幅文档划分为若干短文档，并生成所有短文档对应的视频，最终将所有视频整合为一个完整的视频。
 
-### **划分文档**
+### 划分文档
 
 您需要将长篇幅文档按顺序划分为若干短文档，并按特定的命名格式保存到**input**文件夹中。其命名要求为**section\_index.md**，index为短文档索引。示例如下：
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4284314271/p837069.png)
-
-### **生成长文档视频**
+### 生成长文档视频
 
 新建一个Python文件，命名为**merge\_all\_videos.py**，代码示例如下：
 
-**merge\_all\_videos.py**
+merge\_all\_videos.py
 
 ```
 import os
@@ -1739,19 +1694,19 @@ from moviepy import VideoFileClip, concatenate_videoclips
 def merge_videos(input_directory):
     # 定义视频文件的模式
     video_pattern = r"section_(\d+)_with_audio_with_subs\.mp4"
-    
+
     # 查找并排序符合模式的文件
     files = sorted(
         (fn for fn in os.listdir(input_directory) if re.match(video_pattern, fn)),
         key=lambda x: int(re.match(video_pattern, x).group(1))
     )
-    
+
     # 读取所有视频片段
     clips = [VideoFileClip(os.path.join(input_directory, file)) for file in files]
-    
+
     # 合并所有视频片段
     final_clip = concatenate_videoclips(clips)
-    
+
     # 输出合并后的视频
     output_path = os.path.join(input_directory, 'output_merge_all_video.mp4')
     final_clip.write_videofile(output_path, audio_codec='aac')
@@ -1763,7 +1718,7 @@ merge_videos("./material/video")
 
 为了更便捷地实现所有短文档视频生成及合并所有视频的全过程，我们新建一个名为**run.sh**的Shell脚本，代码示例如下：
 
-**run.sh**
+run.sh
 
 ```
 #!/bin/bash
@@ -1823,7 +1778,7 @@ cat "$log_file"
 
 在**run.sh**中，顺序读取所有文档并将其依次转化为视频，最终将所有视频合并输出。您可以运行**run.sh**脚本来实现上述过程，代码示例如下：
 
-## MacOS
+MacOS
 
 ```
 # 更改权限
@@ -1832,21 +1787,19 @@ chmod +x run.sh
 ./run.sh
 ```
 
-## Windows
+Windows
 
 ```
 # 运行脚本，您可以在result.log中查看代码运行日志
 bash run.sh
 ```
 
-运行脚本后，您可以在**./result.log**中查看代码运行日志。最终合并完成的视频**output\_merge\_all\_video.mp4**会被保存在**./material/video**中，其内容可以参考[效果演示](#b3438da6a64d6)。
+运行脚本后，您可以在**./result.log**中查看代码运行日志。最终合并完成的视频**output\_merge\_all\_video.mp4**会被保存在**./material/video**中，其内容可以参考[效果演示](https://help.aliyun.com/zh/model-studio/use-llm-to-convert-document-to-video#b3438da6a64d6)。
 
 ## 总结
 
 通过本实践教程，您将能够：
 
 1.  了解如何综合运用大语言模型、多模态应用、Marp等工具将一篇图文并茂的文档转化为更生动的讲解演示视频；
-    
 2.  通过我们提供的完整代码上手完整地体验文档生成视频的端到端全过程；
-    
 3.  自行调整输入文档、Marp风格文件、渲染素材等内容，个性化地打造具有您专属风格的视频。

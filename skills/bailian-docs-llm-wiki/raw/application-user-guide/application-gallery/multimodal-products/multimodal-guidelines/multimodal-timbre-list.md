@@ -16,7 +16,7 @@
 
 **音频采样率**
 
-[CosyVoice-v3-Flash](https://help.aliyun.com/zh/model-studio/text-to-speech)
+[CosyVoice-v3-Flash](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)
 
 专属定制音色，支持情感控制，表现力更优。
 
@@ -28,7 +28,7 @@ pcm、wav、mp3、opus
 
 8kHz、16kHz、22.05kHz、24kHz、44.1kHz、48kHz
 
-[CosyVoice-v3-plus](https://help.aliyun.com/zh/model-studio/cosyvoice-large-model-for-speech-synthesis/)
+[CosyVoice-v3-plus](https://help.aliyun.com/zh/model-studio/cosyvoice-large-model-for-speech-synthesis)
 
 合成效果最佳，音色持续上新中。支持声音复刻。
 
@@ -40,7 +40,7 @@ pcm、wav、mp3、opus
 
 8kHz、16kHz、22.05kHz、24kHz、44.1kHz、48kHz
 
-[CosyVoice-v2](https://help.aliyun.com/zh/model-studio/cosyvoice-large-model-for-speech-synthesis/)
+[CosyVoice-v2](https://help.aliyun.com/zh/model-studio/cosyvoice-large-model-for-speech-synthesis)
 
 70+音色可选，一句话声音复刻，支持中英日韩粤等音色。
 
@@ -88,7 +88,7 @@ pcm、wav、mp3、opus
 
 16kHz、24kHz、48kHz
 
-[Sambert语音合成模型](https://help.aliyun.com/zh/model-studio/sambert-speech-synthesis/)
+[Sambert语音合成模型](https://help.aliyun.com/zh/model-studio/sambert-speech-synthesis)
 
 合成速度快、音色丰富，支持中英意西印法德泰等语言。
 
@@ -112,7 +112,7 @@ pcm、wav、mp3
 
 16kHz、48kHz
 
-[千问-TTS](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#ebd9df2c70s8y)
+[千问-TTS](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)
 
 支持中英双语。目前仅支持24k 采样率、pcm编码。
 
@@ -124,21 +124,19 @@ pcm
 
 24kHz
 
-除系统音色外，还支持[声音复刻能力](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)（CosyVoice系列大模型）。
+除系统音色外，还支持[声音复刻能力](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide)（CosyVoice系列大模型）。
 
-## **音色列表**
+## 音色列表
 
 套件支持龙火火、龙汪汪、龙川叔等专有亮点音色，适配儿童陪伴、情感闲聊等场景，实现沉浸式互动。
 
-### **CosyVoice-v3-Flash**
+### CosyVoice-v3-Flash
 
 **适用场景**
 
 **名称**
 
-**音色名称**
-
-**（voice参考值）**
+**音色名称****（voice参考值）**
 
 **年龄**
 
@@ -606,25 +604,17 @@ loongbella\_v3
 
 中英双语
 
-### **CosyVoice-v2**
+### CosyVoice-v2
 
 **适用场景**
 
-**名称**
+**名称****（界面展示）**
 
-**（界面展示）**
+**音色名称****（voice参考值）**
 
-**音色名称**
+**性别****（界面展示）**
 
-**（voice参考值）**
-
-**性别**
-
-**（界面展示）**
-
-**语言**
-
-**（界面展示）**
+**语言****（界面展示）**
 
 **音色特质**
 
@@ -2094,7 +2084,7 @@ longyingxiao
 
 您好呀，请问是赵女士吗？我是这个品牌的客服，咱们品牌最近推出了一款特别实用的产品，特别适合您这样的人群，想跟您简单介绍一下，您看方便吗？
 
-### **CosyVoice-v3-plus**
+### CosyVoice-v3-plus
 
 **适用场景**
 
@@ -2320,7 +2310,7 @@ voice参数：loongjohn
 
 语言：英文
 
-### **多模态交互轻量版语音合成**
+### 多模态交互轻量版语音合成
 
 **名称**
 
@@ -2604,7 +2594,7 @@ zhiqing
 
 台湾话
 
-### **千问3-TTS**
+### 千问3-TTS
 
 **名称**
 
@@ -2790,7 +2780,7 @@ Eric
 
 中文（四川话）、英语、法语、德语、俄语、意大利语、西班牙语、葡萄牙语、日语、韩语
 
-### **千问-TTS**
+### 千问-TTS
 
 **名称**
 
@@ -2846,7 +2836,7 @@ Serena声音甜润活泼，藏着细碎的笑意，给人阳光亲切感。
 
 中英双语
 
-### **Sambert语音合成模型**
+### Sambert语音合成模型
 
 **名称**
 

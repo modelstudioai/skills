@@ -2,28 +2,19 @@
 
 本文介绍万相-通用图像编辑模型的输入输出参数。
 
-**重要**
+**重要**本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
 
-本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
-
-**重要**
-
-阿里云百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
+**重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 该模型通过简单的指令即可实现多样化的图像编辑，适用于扩图、去水印、风格迁移、图像修复、图像美化等场景。 当前支持以下功能：
 
 -   **图像风格化**：全局风格化、局部风格化。
-    
 -   **图像内容编辑**：指令编辑（无需指定区域，仅通过指令增加/修改图片内容）、局部重绘（针对指定区域增加/删除/修改图片内容）、去文字水印（中英文）。
-    
 -   **图像尺寸与分辨率优化**：扩图（按比例扩图）、图像超分（高清放大）。
-    
 -   **图像色彩处理**：图像上色（黑白或灰度图像转为彩色图像）。
-    
 -   **基于参考图像生成**：线稿生图（先提取输入图像的线稿，再参考线稿生成图像）、参考卡通形象生图。
-    
 
 **相关指南**：[图像编辑-万相2.1](https://help.aliyun.com/zh/model-studio/wanx-image-edit)
 
@@ -35,7 +26,7 @@
 
 **限流（主账号与RAM子账号共用）**
 
-**免费额度**[（查看）](https://help.aliyun.com/zh/model-studio/new-free-quota)
+**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
 
 **任务下发接口RPS限制**
 
@@ -53,7 +44,7 @@ wanx2.1-imageedit
 
 更多说明请参见[模型计费与限流](https://help.aliyun.com/zh/model-studio/image-faq#3436cf2280fnh)。
 
-## **模型效果**
+## 模型效果
 
 **模型功能**
 
@@ -65,124 +56,80 @@ wanx2.1-imageedit
 
 **全局风格化**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930138.png)
-
 转换成法国绘本风格
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930139.png)
 
 **局部风格化**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930188.png)
-
 把房子变成木板风格。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930413.png)
 
 **指令编辑**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p942602.png)
-
 把她的头发修改为红色。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p942603.png)
 
 **局部重绘**
 
 输入图像
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930416.png)
-
 输入涂抹区域图像（白色为涂抹区域）
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930417.png)
 
 一只陶瓷兔子抱着一朵陶瓷花。
 
 输出图像
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930415.png)
-
 **去文字水印**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930146.png)
 
 去除图像中的文字。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930418.png)
-
 **扩图**
 
-![20250319105917](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930580.jpg)
-
 一位绿色仙子。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930750.png)
 
 **图像超分**
 
 模糊图像
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930151.png)
-
 图像超分。
 
 清晰图像
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930152.png)
-
 **图像上色**
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930149.png)
-
 蓝色背景，黄色的叶子。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930150.png)
 
 **线稿生图**
 
 输入图像
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930155.png)
-
 北欧极简风格的客厅。
 
 提取原图的线稿并生成图像
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930156.png)
 
 **参考卡通形象生图**
 
 输入参考图（卡通形象）
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930153.png)
-
 卡通形象小心翼翼地探出头，窥视着房间内一颗璀璨的蓝色宝石。
 
 输出图像
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9206061571/p930154.png)
 
 ## 前提条件
 
 万相-通用图像编辑API支持通过HTTP和DashScope SDK进行调用。
 
-在调用前，您需要[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+在调用前，您需要[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
 
-如需通过SDK进行调用，请[安装DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。目前，该SDK已支持Python和Java。
+如需通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。目前，该SDK已支持Python和Java。
+
+> 请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
 
 ## HTTP调用
 
 图像模型处理时间较长，为了避免请求超时，HTTP调用仅支持异步获取模型结果。您需要发起两个请求：
 
 1.  **创建任务获取任务ID**：首先发起创建任务请求，该请求会返回任务ID（task\_id）。
-    
 2.  **根据任务ID查询结果**：使用上一步获得的任务ID，查询任务状态及结果。任务成功执行时将返回图像URL，有效期24小时。
-    
 
-**说明**
-
-创建任务后，该任务将被加入到排队队列，等待调度执行。后续需要调用“根据任务ID查询结果接口”获取任务状态及结果。
+**说明**创建任务后，该任务将被加入到排队队列，等待调度执行。后续需要调用“根据任务ID查询结果接口”获取任务状态及结果。
 
 > 通用图像编辑模型大约需要5-15秒。实际耗时取决于排队任务数量和网络状况，请您在获取结果时耐心等待。
 
@@ -194,7 +141,213 @@ wanx2.1-imageedit
 
 #### 请求参数
 
-## **全局风格化**
+##### 请求头（Headers）
+
+**Content-Type**`string`**（必选）**
+
+请求内容类型。此参数必须设置为`application/json`。
+
+**Authorization**`string`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+**X-DashScope-Async**`string`**（必选）**
+
+异步处理配置参数。HTTP请求只支持异步，**必须设置为**`enable`。
+
+**重要**缺少此请求头将报错：“current user api does not support synchronous calls”。
+
+##### 请求体（Request Body）
+
+**model** `string` **（必选）**
+
+模型名称。示例值：wanx2.1-imageedit。
+
+**input** `object` **（必选）**
+
+输入的基本信息，如提示词等。
+
+属性
+
+**prompt**`string`**（必选）**
+
+提示词，用来描述生成图像中期望包含的元素和视觉特点。
+
+支持中英文，长度不超过800个字符，每个汉字/字母占一个字符，超过部分会自动截断。
+
+> 不同功能的提示词存在差异，建议根据具体功能参考相应的技巧说明。
+
+**function**`string`**（必选）**
+
+图像编辑功能。目前支持的功能有：
+
+-   stylization\_all：全局风格化，当前支持2种风格。[风格和提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#3be4a1e9569kk)
+-   stylization\_local：局部风格化，当前支持8种风格。[风格和提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#9b8864717b5al)
+-   description\_edit：指令编辑。通过指令即可编辑图像，简单编辑任务优先推荐这种方式。[提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#0c932e6efebf7)
+-   description\_edit\_with\_mask：局部重绘。需要指定编辑区域，适合对编辑范围有精确控制的场景。[提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#346e4ebb1ctjj)
+-   remove\_watermark：去文字水印。[提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#c82e609a4f0bq)
+-   expand：扩图。[提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#4bd67e438bnuv)
+-   super\_resolution：图像超分。[提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#b438794ec2agn)
+-   colorization：图像上色。[提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#ade6bb5d8d28j)
+-   doodle：线稿生图。[提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#b78933f9e819x)
+-   control\_cartoon\_feature：参考卡通形象生图。[提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#ee9063aeaeagf)
+
+**base\_image\_url** `string` **（必选）**
+
+输入图像的URL或 Base64 编码数据。
+
+图像限制：
+
+-   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
+-   图像分辨率：图像的宽度和高度范围为\[512, 4096\]像素。
+-   图像大小：不超过10MB。
+-   URL地址中不能包含中文字符。
+
+输入图像说明：
+
+1.  使用公网可访问URL
+    
+    -   支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+    -   示例值：`http://wanx.alicdn.com/material/20250318/stylization_all_1.jpeg`。
+2.  传入 Base64 编码图像后的字符串
+    
+    -   数据格式：`data:{MIME_type};base64,{base64_data}`。
+    -   示例值：`data:image/jpeg;base64,GDU7MtCZzEbTbmRZ......`。
+    -   示例中的编码字符串不完整，仅做演示，更多内容请参见[传值方式](https://help.aliyun.com/zh/model-studio/wanx-image-edit-api-reference#c92c9077cbebb)。
+
+**mask\_image\_url** `string` （可选）
+
+仅当`function`设置为`description_edit_with_mask`（局部重绘）时必填，其余情况无需填写。
+
+涂抹区域图像的URL或 Base64 编码数据。
+
+支持传入公网可访问的 URL（HTTP/HTTPS）或 Base64 编码字符串，更多内容请参见[传值方式](https://help.aliyun.com/zh/model-studio/wanx-image-edit-api-reference#c92c9077cbebb)。
+
+涂抹区域图像要求：
+
+-   图像分辨率 ：必须与`base_image_url`的图像分辨率保持一致。图像宽度和高度需在\[512, 4096\]像素之间。
+-   图像格式 ：支持JPG、JPEG、PNG、BMP、TIFF、WEBP。
+-   图像大小 ：不超过10MB。
+-   URL地址中不能包含中文字符。
+
+涂抹区域颜色要求：
+
+-   白色区域 ：表示需要编辑的部分，必须使用纯白色（RGB值为\[255,255,255\]），否则可能无法正确识别。
+-   黑色区域：表示无需改变的部分，必须使用纯黑色（RGB值为\[0,0,0\]），否则可能无法正确识别。
+
+关于如何获取涂抹区域图像：使用PS抠图或其他工具生成黑白涂抹图像。
+
+**parameters** `object` （可选）
+
+图像处理参数。
+
+属性
+
+#### 通用
+
+**n** `integer` （可选）
+
+生成图片的数量。范围1~4，默认1。
+
+**seed**`integer`（可选）
+
+随机数种子，用于控制生成内容的随机性。取值范围`[0, 2147483647]`，未指定时自动生成；使用相同值可保持结果稳定。
+
+**watermark** `bool` （可选）
+
+是否添加水印标识，水印位于图片右下角，文案为“AI生成”。
+
+-   false：默认值，不添加水印。
+-   true：添加水印。
+
+#### 全局风格化
+
+**n**、**seed**、**watermark**
+
+说明见通用参数。
+
+**strength** `float` （可选）
+
+当`function`设置为 `stylization_all`（全局风格化）时填写。
+
+图像修改幅度。范围\[0.0, 1.0\]，默认0.5。
+
+值越接近0，则越接近原图效果；值越接近1，对原图的修改幅度越大。
+
+#### 指令编辑
+
+**n**、**seed**、**watermark**
+
+说明见通用参数。
+
+**strength** `float` （可选）
+
+当`function`设置为`description_edit`（指令编辑）时填写。
+
+图像修改幅度。范围\[0.0, 1.0\]，默认0.5。
+
+值越接近0，则越接近原图效果；值越接近1，对原图的修改幅度越大。
+
+#### 扩图
+
+**n**、**seed**、**watermark**
+
+说明见通用参数。
+
+**top\_scale** `float`（可选）
+
+当`function`设置为`expand`（扩图）时才需填写。
+
+向上扩展比例，默认1.0，范围\[1.0, 2.0\]。
+
+**bottom\_scale** `float`（可选）
+
+当`function`设置为`expand`（扩图）时才需填写。
+
+向下扩展比例，默认1.0，范围\[1.0, 2.0\]。
+
+**left\_scale** `float`（可选）
+
+当`function`设置为`expand`（扩图）时才需填写。
+
+向左扩展比例，默认1.0，范围\[1.0, 2.0\]。
+
+**right\_scale** `float`（可选）
+
+当`function`设置为`expand`（扩图）时才需填写。
+
+向右扩展比例，默认1.0，范围\[1.0, 2.0\]。
+
+#### 图像超分
+
+**n**、**seed**、**watermark**
+
+说明见通用参数。
+
+**upscale\_factor** `integer`（可选）
+
+当`function`设置为`super_resolution`（图像超分）时才需填写。
+
+图像超分的放大倍数。在放大图像的同时增强细节，提升图像分辨率，实现高清处理。
+
+范围1~4，默认1。当设置为1时，仅进行高清处理，不放大。
+
+#### 线稿生图
+
+**n**、**seed**、**watermark**
+
+说明见通用参数。
+
+**is\_sketch** `bool` （可选）
+
+当`function`设置为`doodle`（线稿生图）时才需填写。
+
+输入图像是否为线稿图像。
+
+-   false：默认值，输入图像不为线稿图像。模型会先从输入图像中提取线稿，再参考提取的线稿生成新的图像。
+-   true：输入图像为线稿图像。模型将直接基于输入图像生成图像，适用于涂鸦作画场景。
+
+#### 全局风格化
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
@@ -214,13 +367,13 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 传入本地文件（base64）
+#### 传入本地文件（base64）
 
 下面以全局风格化为例，展示Base64传参示例。
 
 由于 Base64 编码后的字符串较长，请下载[image\_base64](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250722/lzyoev/stylization_image_base64.txt)，并将文本内容全部复制到`base_image_url`参数中。
 
-数据格式详见[传值方式](#c92c9077cbebb)。
+数据格式详见[传值方式](https://help.aliyun.com/zh/model-studio/wanx-image-edit-api-reference#c92c9077cbebb)。
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
@@ -240,7 +393,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 局部风格化
+#### 局部风格化
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
@@ -260,7 +413,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 指令编辑
+#### 指令编辑
 
 无需指定区域，通过指令即可增加/修改图片内容。
 
@@ -282,7 +435,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 局部重绘
+#### 局部重绘
 
 针对指定区域,可增加/删除/修改图片内容。
 
@@ -305,7 +458,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 去文字水印
+#### 去文字水印
 
 可去除中英文文字水印。
 
@@ -327,7 +480,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 扩图
+#### 扩图
 
 支持在上下左右四个方向按比例扩图。
 
@@ -353,7 +506,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 图像超分
+#### 图像超分
 
 支持将模糊图像进行高清放大。
 
@@ -367,7 +520,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
   "input": {
     "function": "super_resolution",
     "prompt": "图像超分。",
-    "base_image_url": "http://wanx.alicdn.com/material/20250318/super_resolution_1.jpeg"  
+    "base_image_url": "http://wanx.alicdn.com/material/20250318/super_resolution_1.jpeg"
   },
   "parameters": {
     "upscale_factor": 2,
@@ -376,7 +529,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 图像上色
+#### 图像上色
 
 支持将黑白或灰度图像转为彩色图像。
 
@@ -390,7 +543,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
   "input": {
     "function": "colorization",
     "prompt": "蓝色背景，黄色的叶子。",
-    "base_image_url": "http://wanx.alicdn.com/material/20250318/colorization_1.jpeg"  
+    "base_image_url": "http://wanx.alicdn.com/material/20250318/colorization_1.jpeg"
   },
   "parameters": {
     "n": 1
@@ -398,7 +551,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 线稿生图
+#### 线稿生图
 
 先提取输入图像的线稿，再参考该线稿生成图像。
 
@@ -420,7 +573,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 参考卡通形象生图
+#### 参考卡通形象生图
 
 支持参考卡通形象生成图像。
 
@@ -442,246 +595,44 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-##### 请求头（Headers）
-
-**Content-Type** `_string_` **（必选）**
-
-请求内容类型。此参数必须设置为`application/json`。
-
-**Authorization** `_string_`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-**X-DashScope-Async** `_string_` **（必选）**
-
-异步处理配置参数。HTTP请求只支持异步，**必须设置为**`**enable**`。
-
-**重要**
-
-缺少此请求头将报错：“current user api does not support synchronous calls”。
-
-##### 请求体（Request Body）
-
-**model** `_string_` **（必选）**
-
-模型名称。示例值：wanx2.1-imageedit。
-
-**input** `_object_` **（必选）**
-
-输入的基本信息，如提示词等。
-
-**属性**
-
-**prompt** `_string_` **（必选）**
-
-提示词，用来描述生成图像中期望包含的元素和视觉特点。
-
-支持中英文，长度不超过800个字符，每个汉字/字母占一个字符，超过部分会自动截断。
-
-> 不同功能的提示词存在差异，建议根据具体功能参考相应的技巧说明。
-
-**function** `_string_` **（必选）**
-
-图像编辑功能。目前支持的功能有：
-
--   stylization\_all：全局风格化，当前支持2种风格。[风格和提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#3be4a1e9569kk)
-    
--   stylization\_local：局部风格化，当前支持8种风格。[风格和提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#9b8864717b5al)
-    
--   description\_edit：指令编辑。通过指令即可编辑图像，简单编辑任务优先推荐这种方式。[提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#0c932e6efebf7)
-    
--   description\_edit\_with\_mask：局部重绘。需要指定编辑区域，适合对编辑范围有精确控制的场景。[提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#346e4ebb1ctjj)
-    
--   remove\_watermark：去文字水印。[提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#c82e609a4f0bq)
-    
--   expand：扩图。[提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#4bd67e438bnuv)
-    
--   super\_resolution：图像超分。[提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#b438794ec2agn)
-    
--   colorization：图像上色。[提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#ade6bb5d8d28j)
-    
--   doodle：线稿生图。[提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#b78933f9e819x)
-    
--   control\_cartoon\_feature：参考卡通形象生图。[提示词技巧](https://help.aliyun.com/zh/model-studio/wanx-image-edit#ee9063aeaeagf)
-    
-
-**base\_image\_url** `_string_` **（必选）**
-
-输入图像的URL或 Base64 编码数据。
-
-图像限制：
-
--   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
-    
--   图像分辨率：图像的宽度和高度范围为\[512, 4096\]像素。
-    
--   图像大小：不超过10MB。
-    
--   URL地址中不能包含中文字符。
-    
-
-输入图像说明：
-
-1.  使用公网可访问URL
-    
-    -   支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-        
-    -   示例值：`http://wanx.alicdn.com/material/20250318/stylization_all_1.jpeg`。
-        
-2.  传入 Base64 编码图像后的字符串
-    
-    -   数据格式：`data:{MIME_type};base64,{base64_data}`。
-        
-    -   示例值：`data:image/jpeg;base64,GDU7MtCZzEbTbmRZ......`。
-        
-    -   示例中的编码字符串不完整，仅做演示，更多内容请参见[传值方式](#c92c9077cbebb)。
-        
-
-**mask\_image\_url** `_string_` （可选）
-
-仅当`**function**`设置为`**description_edit_with_mask**`（局部重绘）时必填，其余情况无需填写。
-
-涂抹区域图像的URL或 Base64 编码数据。
-
-支持传入公网可访问的 URL（HTTP/HTTPS）或 Base64 编码字符串，更多内容请参见[传值方式](#c92c9077cbebb)。
-
-涂抹区域图像要求：
-
--   图像分辨率 ：必须与`base_image_url`的图像分辨率保持一致。图像宽度和高度需在\[512, 4096\]像素之间。
-    
--   图像格式 ：支持JPG、JPEG、PNG、BMP、TIFF、WEBP。
-    
--   图像大小 ：不超过10MB。
-    
--   URL地址中不能包含中文字符。
-    
-
-涂抹区域颜色要求：
-
--   白色区域 ：表示需要编辑的部分，必须使用纯白色（RGB值为\[255,255,255\]），否则可能无法正确识别。
-    
--   黑色区域：表示无需改变的部分，必须使用纯黑色（RGB值为\[0,0,0\]），否则可能无法正确识别。
-    
-
-关于如何获取涂抹区域图像：使用PS抠图或其他工具生成黑白涂抹图像。
-
-**parameters** `_object_` （可选）
-
-图像处理参数。
-
-**属性**
-
-## 通用
-
-**n** `_integer_` （可选）
-
-生成图片的数量。范围1~4，默认1。
-
-**seed** `_integer_` （可选）
-
-随机数种子，用于控制生成内容的随机性。取值范围`[0, 2147483647]`，未指定时自动生成；使用相同值可保持结果稳定。
-
-**watermark** `_bool_` （可选）
-
-是否添加水印标识，水印位于图片右下角，文案为“AI生成”。
-
--   false：默认值，不添加水印。
-    
--   true：添加水印。
-    
-
-## 全局风格化
-
-**n**、**seed**、**watermark**
-
-说明见通用参数。
-
-**strength** `_float_` （可选）
-
-当`**function**`设置为 `**stylization_all**`（全局风格化）时填写。
-
-图像修改幅度。范围\[0.0, 1.0\]，默认0.5。
-
-值越接近0，则越接近原图效果；值越接近1，对原图的修改幅度越大。
-
-## 指令编辑
-
-**n**、**seed**、**watermark**
-
-说明见通用参数。
-
-**strength** `_float_` （可选）
-
-当`**function**`设置为`**description_edit**`（指令编辑）时填写。
-
-图像修改幅度。范围\[0.0, 1.0\]，默认0.5。
-
-值越接近0，则越接近原图效果；值越接近1，对原图的修改幅度越大。
-
-## 扩图
-
-**n**、**seed**、**watermark**
-
-说明见通用参数。
-
-**top\_scale** `_float_` （可选）
-
-当`**function**`设置为`**expand**`（扩图）时才需填写。
-
-向上扩展比例，默认1.0，范围\[1.0, 2.0\]。
-
-**bottom\_scale** `_float_` （可选）
-
-当`**function**`设置为`**expand**`（扩图）时才需填写。
-
-向下扩展比例，默认1.0，范围\[1.0, 2.0\]。
-
-**left\_scale** `_float_` （可选）
-
-当`**function**`设置为`**expand**`（扩图）时才需填写。
-
-向左扩展比例，默认1.0，范围\[1.0, 2.0\]。
-
-**right\_scale** `_float_` （可选）
-
-当`**function**`设置为`**expand**`（扩图）时才需填写。
-
-向右扩展比例，默认1.0，范围\[1.0, 2.0\]。
-
-## 图像超分
-
-**n**、**seed**、**watermark**
-
-说明见通用参数。
-
-**upscale\_factor** `_integer_` （可选）
-
-当`**function**`设置为`**super_resolution**`（图像超分）时才需填写。
-
-图像超分的放大倍数。在放大图像的同时增强细节，提升图像分辨率，实现高清处理。
-
-范围1~4，默认1。当设置为1时，仅进行高清处理，不放大。
-
-## 线稿生图
-
-**n**、**seed**、**watermark**
-
-说明见通用参数。
-
-**is\_sketch** `_bool_` （可选）
-
-当`**function**`设置为`**doodle**`（线稿生图）时才需填写。
-
-输入图像是否为线稿图像。
-
--   false：默认值，输入图像不为线稿图像。模型会先从输入图像中提取线稿，再参考提取的线稿生成新的图像。
-    
--   true：输入图像为线稿图像。模型将直接基于输入图像生成图像，适用于涂鸦作画场景。
-    
-
 #### 响应参数
 
-### 成功响应
+**output** `object`
+
+任务输出信息。
+
+属性
+
+**task\_id** `string`
+
+任务ID。查询有效期24小时。
+
+**task\_status** `string`
+
+任务状态。
+
+枚举值
+
+-   PENDING：任务排队中
+-   RUNNING：任务处理中
+-   SUCCEEDED：任务执行成功
+-   FAILED：任务执行失败
+-   CANCELED：任务已取消
+-   UNKNOWN：任务不存在或状态未知
+
+**request\_id**`string`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+**code**`string`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**message**`string`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+#### 成功响应
 
 请保存 task\_id，用于查询任务状态与结果。
 
@@ -695,9 +646,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-### 异常响应
+#### 异常响应
 
-创建任务失败，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+创建任务失败，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 ```
 {
@@ -707,47 +658,6 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-**output** `_object_`
-
-任务输出信息。
-
-**属性**
-
-**task\_id** `_string_`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `_string_`
-
-任务状态。
-
-**枚举值**
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：任务执行成功
-    
--   FAILED：任务执行失败
-    
--   CANCELED：任务已取消
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-**request\_id** `_string_`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code** `_string_`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**message** `_string_`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
 ### 步骤2：根据任务ID查询结果
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
@@ -756,7 +666,19 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 #### 请求参数
 
-## 查询任务结果
+##### 请求头（Headers）
+
+**Authorization**`string`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+##### URL路径参数（Path parameters）
+
+**task\_id** `string`**（必选）**
+
+任务ID。
+
+#### 查询任务结果
 
 请将`86ecf553-d340-4e21-xxxxxxxxx`替换为真实的task\_id。
 
@@ -765,21 +687,104 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-##### **请求头（Headers）**
+#### 响应参数
 
-**Authorization** `_string_`**（必选）**
+**output**`object`
 
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+任务输出信息。
 
-##### **URL路径参数（Path parameters）**
+属性
 
-**task\_id** `_string_`**（必选）**
+**task\_id** `string`
 
-任务ID。
+任务ID。查询有效期24小时。
 
-#### **响应参数**
+**task\_status** `string`
 
-## 任务执行成功
+任务状态。
+
+枚举值
+
+-   PENDING：任务排队中
+-   RUNNING：任务处理中
+-   SUCCEEDED：任务执行成功
+-   FAILED：任务执行失败
+-   CANCELED：任务已取消
+-   UNKNOWN：任务不存在或状态未知
+
+**submit\_time** `string`
+
+任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**scheduled\_time** `string`
+
+任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**end\_time** `string`
+
+任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**results** `array object`
+
+任务结果列表，包括图像URL、部分任务执行失败报错信息等。
+
+数据结构
+
+```
+{
+    "results": [
+        {
+            "url": ""
+        },
+        {
+            "code": "",
+            "message": ""
+        }
+    ]
+}
+```
+
+**task\_metrics** `object`
+
+任务结果统计。
+
+属性
+
+**TOTAL** `integer`
+
+总的任务数。
+
+**SUCCEEDED** `integer`
+
+任务状态为成功的任务数。
+
+**FAILED** `integer`
+
+任务状态为失败的任务数。
+
+**code**`string`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**message**`string`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**usage** `object`
+
+输出信息统计。只对成功的结果计数。
+
+属性
+
+**image\_count** `integer`
+
+模型成功生成图片的数量。计费公式：费用 = 图片数量 × 单价。
+
+**request\_id**`string`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+#### 任务执行成功
 
 任务数据（如任务状态、图像URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。
 
@@ -809,9 +814,9 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 }
 ```
 
-## 任务执行失败
+#### 任务执行失败
 
-若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 ```
 {
@@ -830,9 +835,9 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 }
 ```
 
-## 任务部分失败
+#### 任务部分失败
 
-模型可以在一次任务中生成多张图片。只要有一张图片生成成功，任务状态将标记为`SUCCEEDED`，并且返回相应的图像URL。对于生成失败的图片，结果中会返回相应的失败原因。同时在usage统计中，只会对成功的结果计数。请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+模型可以在一次任务中生成多张图片。只要有一张图片生成成功，任务状态将标记为`SUCCEEDED`，并且返回相应的图像URL。对于生成失败的图片，结果中会返回相应的失败原因。同时在usage统计中，只会对成功的结果计数。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 ```
 {
@@ -861,114 +866,13 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 }
 ```
 
-**output** `_object_`
-
-任务输出信息。
-
-**属性**
-
-**task\_id** `_string_`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `_string_`
-
-任务状态。
-
-**枚举值**
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：任务执行成功
-    
--   FAILED：任务执行失败
-    
--   CANCELED：任务已取消
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-**submit\_time** `_string_`
-
-任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**scheduled\_time** `_string_`
-
-任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**end\_time** `_string_`
-
-任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**results** `_array object_`
-
-任务结果列表，包括图像URL、部分任务执行失败报错信息等。
-
-**数据结构**
-
-```
-{
-    "results": [
-        {
-            "url": ""
-        },
-        {
-            "code": "",
-            "message": ""
-        }
-    ]
-}
-```
-
-**task\_metrics** `_object_`
-
-任务结果统计。
-
-**属性**
-
-**TOTAL** `_integer_`
-
-总的任务数。
-
-**SUCCEEDED** `_integer_`
-
-任务状态为成功的任务数。
-
-**FAILED** `_integer_`
-
-任务状态为失败的任务数。
-
-**code** `_string_`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**message** `_string_`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**usage** `_object_`
-
-输出信息统计。只对成功的结果计数。
-
-**属性**
-
-**image\_count** `_integer_`
-
-模型成功生成图片的数量。计费公式：费用 = 图片数量 × 单价。
-
-**request\_id** `_string_`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
 ## DashScope SDK调用
 
-请先确认已[安装最新版DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)，否则可能导致运行报错。
+请先确认已[安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)，否则可能导致运行报错。
 
 DashScope SDK目前已支持Python和Java。
 
-SDK与HTTP接口的参数名基本一致，参数结构根据不同语言的SDK封装而定。参数说明可参考[HTTP调用](https://help.aliyun.com/zh/model-studio/legacy-image-to-video-api-reference/#42703589880ts)。
+SDK与HTTP接口的参数名基本一致，参数结构根据不同语言的SDK封装而定。参数说明可参考[HTTP调用](https://help.aliyun.com/zh/model-studio/legacy-image-to-video-api-reference#42703589880ts)。
 
 由于视频模型处理时间较长，底层服务采用异步方式提供。SDK在上层进行了封装，支持同步、异步两种调用方式。
 
@@ -976,18 +880,13 @@ SDK与HTTP接口的参数名基本一致，参数结构根据不同语言的SDK�
 
 ### Python SDK调用
 
-**重要**
-
-**本示例要求 dashscope Python SDK ≥ 1.23.8。**低于该版本运行本示例时会报错 **TypeError: got multiple values for keyword argument 'function'**。请先执行 **pip install -U "dashscope>=1.23.8"** 升级 SDK 后再运行示例。
+**重要****本示例要求 dashscope Python SDK ≥ 1.23.8。**低于该版本运行本示例时会报错 **TypeError: got multiple values for keyword argument 'function'**。请先执行 **pip install -U "dashscope>=1.23.8"** 升级 SDK 后再运行示例。
 
 使用Python SDK处理图像文件时，支持以下三种方式输入图像。请根据您的场景选择其中一种即可。
 
-1.  公网 URL：公网可访问的图像 URL（HTTP/HTTPS）。您可在此[获取临时公网URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-    
+1.  公网 URL：公网可访问的图像 URL（HTTP/HTTPS）。您可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
 2.  Base64编码：传入Base64编码文件后的字符串，格式为`data:{MIME_type};base64,{base64_data}`。
-    
 3.  本地文件路径：支持传入文件的**绝对路径和相对路径**。请参考下表，传入正确的文件路径。
-    
 
 **系统**
 
@@ -1011,13 +910,11 @@ file://D:/images/test.png
 
 file://./images/test.png
 
-#### **示例代码**
+#### 示例代码
 
-**说明**
+**说明**在调用代码前，请确保已安装 DashScope Python SDK，推荐升级至最新版本：`pip install -U dashscope`，详见[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-在调用代码前，请确保已安装 DashScope Python SDK，推荐升级至最新版本：`pip install -U dashscope`，详见[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
-
-## 同步调用
+#### 同步调用
 
 本示例展示同步调用方式，并支持三种图像输入方式：公网URL、Base64编码、本地文件路径。
 
@@ -1136,7 +1033,7 @@ if __name__ == '__main__':
 }
 ```
 
-## 异步调用
+#### 异步调用
 
 本示例仅展示异步调用方式。
 
@@ -1260,12 +1157,9 @@ if __name__ == '__main__':
 
 使用Java SDK处理图像文件时，支持以下三种方式输入图像。请根据您的场景选择其中一种即可。
 
-1.  公网 URL：公网可访问的图像 URL（HTTP/HTTPS）。您可在此[获取临时公网URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-    
+1.  公网 URL：公网可访问的图像 URL（HTTP/HTTPS）。您可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
 2.  Base 64编码：传入Base64编码文件后的字符串，格式为`data:{MIME_type};base64,{base64_data}`。
-    
 3.  本地文件路径：仅支持传入文件的**绝对路径**。请参考下表，传入正确的文件路径。
-    
 
 **系统**
 
@@ -1285,13 +1179,11 @@ file:///{文件的绝对路径}
 
 file:///D:/images/test.png
 
-#### **示例代码**
+#### 示例代码
 
-**说明**
+**说明**在调用代码前，请确保已安装 DashScope Java SDK。推荐您升级至最新版本，详见[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-在调用代码前，请确保已安装 DashScope Java SDK。推荐您升级至最新版本，详见[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
-
-## 同步调用
+#### 同步调用
 
 本示例展示同步调用方式，并支持三种图像输入方式：公网URL、Base64编码、本地文件路径。
 
@@ -1322,7 +1214,7 @@ import java.util.Map;
  * 更新maven依赖:
  *      https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java
  */
- 
+
 public class ImageEditSync {
     static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
 
@@ -1443,7 +1335,7 @@ public class ImageEditSync {
 }
 ```
 
-## 异步调用
+#### 异步调用
 
 本示例仅展示异步调用方式。
 
@@ -1471,7 +1363,7 @@ import java.util.Map;
  * 更新maven依赖:
  *      https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java
  */
- 
+
 public class ImageEditAsync {
     static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
 
@@ -1589,9 +1481,9 @@ public class ImageEditAsync {
 }
 ```
 
-## **错误码**
+## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 此API还有特定状态码，具体如下所示。
 
@@ -1635,9 +1527,9 @@ InternalError
 
 服务异常。请先尝试重试，排除偶发情况。
 
-## **输入图像说明**
+## 输入图像说明
 
-### **传值方式**
+### 传值方式
 
 输入图像支持多种字符串格式，不同调用方式的支持情况如下表所示。
 
@@ -1672,16 +1564,14 @@ InternalError
 
 **方式一：使用公网URL**
 
--   提供一个公网可访问的图像地址，支持 HTTP 或 HTTPS 协议。请在此[获取临时公网URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-    
+-   提供一个公网可访问的图像地址，支持 HTTP 或 HTTPS 协议。请在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
 -   示例值：`https://xxxx/img.png`。
-    
 
 **方式二：使用Base64编码**
 
 将本地图片文件转换为 Base64 格式的字符串，并根据`data:{MIME_type};base64,{base64_data}`格式拼接成完整的字符串。
 
--   转换代码请参见[示例代码](#f2b1639e488og)。
+-   转换代码请参见[示例代码](https://help.aliyun.com/zh/model-studio/wanx-image-edit-api-reference#f2b1639e488og)。
     
 -   {MIME\_type}：图像的媒体类型，需与文件格式对应。
     
@@ -1725,10 +1615,8 @@ InternalError
 **方式三：本地文件路径**
 
 -   HTTP调用不支持本地文件路径，仅Python SDK和Java SDK支持。
-    
--   关于本地文件路径的传入规则，请参见[Python SDK调用](#a3ad9a3b6d9if)和[Java SDK调用](#589b80853e6rn)。
-    
+-   关于本地文件路径的传入规则，请参见[Python SDK调用](https://help.aliyun.com/zh/model-studio/wanx-image-edit-api-reference#a3ad9a3b6d9if)和[Java SDK调用](https://help.aliyun.com/zh/model-studio/wanx-image-edit-api-reference#589b80853e6rn)。
 
 ## 常见问题
 
-图像模型的通用问题请参见[常见问题](https://help.aliyun.com/zh/model-studio/image-faq)文档，包括以下内容：模型计费与限流规则、接口高频报错解决方法等。
+图像模型的通用问题请参见[常见问题](raw/model-api-reference/image-generation/image-faq.md)文档，包括以下内容：模型计费与限流规则、接口高频报错解决方法等。

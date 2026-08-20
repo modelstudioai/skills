@@ -4,37 +4,37 @@
 
 ## 插件介绍
 
-插件是一个工具的集合。一个插件下可以包含多个工具（API），每个工具实现特定的功能。百炼支持[官方插件](#32ac325aaes00)、[三方插件](#2d13bdc978fp9)及[自定义插件](#ef3ed62bd6v08)。
+插件是一个工具的集合。一个插件下可以包含多个工具（API），每个工具实现特定的功能。百炼支持[官方插件](https://help.aliyun.com/zh/model-studio/plug-in-overview#32ac325aaes00)、[三方插件](https://help.aliyun.com/zh/model-studio/plug-in-overview#2d13bdc978fp9)及[自定义插件](https://help.aliyun.com/zh/model-studio/plug-in-overview#ef3ed62bd6v08)。
 
-### **官方插件**
+### 官方插件
 
 组件广场中预置了百炼的官方插件，您无需配置其输入和输出参数，即可直接调用。关于官方插件的使用，请参见[官方插件说明](https://help.aliyun.com/zh/model-studio/plugins#00edef12dc50q)。
 
 **官方插件名称**
 
-**工具ID**
+**工具 ID**
 
 **说明**
 
 **计费方案**
 
-[Python代码解释器](https://help.aliyun.com/zh/model-studio/plugins#f8658b5c70a93)
+[Python 代码解释器Python Code Interpreter](raw/application-user-guide/plug-in/plugins.md)
 
 code\_interpreter
 
-使大模型可以执行Python代码片段，例如数学计算、数据分析与可视化、数据处理。
+使大模型可以执行 Python 代码片段，例如数学计算、数据分析与可视化、数据处理。
 
 免费
 
-[计算器](https://help.aliyun.com/zh/model-studio/plugins#12e61be838qub)
+[计算器Calculator](raw/application-user-guide/plug-in/plugins.md)
 
 calculator
 
-使大模型可以进行复杂的数学计算，例如计算“12313x13232”。
+使大模型可以完成复杂的数学计算，例如计算“12313x13232”。
 
 免费
 
-[图片生成](https://help.aliyun.com/zh/model-studio/plugins#da38f8a429lso)
+[图片生成Image Generation](raw/application-user-guide/plug-in/plugins.md)
 
 text\_to\_image
 
@@ -42,41 +42,41 @@ text\_to\_image
 
 限时免费，需申请开通
 
-[夸克搜索](https://help.aliyun.com/zh/model-studio/plugins#2c23406bd0sca)
+[夸克搜索](raw/application-user-guide/plug-in/plugins.md)
 
 quark\_search
 
 使大模型可以搜索实时信息，查找公开的网络知识和信息，例如“杭州今天天气如何”。
 
-> 夸克搜索插件目前支持检索出网页标题、关键词和摘要，但不支持直接访问网页详情。
+> 夸克搜索插件目前支持检索网页标题、关键词和摘要，但不支持直接访问网页详情。
 
 限时免费，需申请开通
 
-[生成二维码](https://help.aliyun.com/zh/model-studio/plugins#dbdea0e23ap97)
+[生成二维码](raw/application-user-guide/plug-in/plugins.md)
 
 generate\_qrcode
 
-使大模型可以根据网站链接地址生成二维码，例如“请给阿里云百炼简介文档生成二维码：https://help.aliyun.com/zh/model-studio/getting-started/what-is-model-studio”。
+使大模型可以根据网站链接地址生成二维码，例如“请给阿里云百炼简介文档生成二维码：[](https://help.aliyun.com/zh/model-studio/getting-started/what-is-model-studio)[https://help.aliyun.com/zh/model-studio/getting-started/what-is-model-studio](https://help.aliyun.com/zh/model-studio/getting-started/what-is-model-studio)”。
 
 免费
 
-[GitHub搜索](https://help.aliyun.com/zh/model-studio/plugins#112834c291kd3)
+[GitHub 搜索](raw/application-user-guide/plug-in/plugins.md)
 
 github\_search
 
-使大模型可以在GitHub中搜索相关项目列表，例如“GitHub搜索：千问”。
+使大模型可以在 GitHub 中搜索相关项目列表，例如“GitHub 搜索：千问”。
 
 免费
 
-### **三方插件**
+### 三方插件
 
 除官方插件外，第三方插件涵盖了商业服务、图像视频、学习教育等多个领域，并且经过了效果测试。您可以在开通后直接调用，无需进行额外配置。关于三方插件的使用，请参见[三方插件说明](https://help.aliyun.com/zh/model-studio/plugins#9a2fc92e80f2w)。
 
-### **自定义插件**
+### 自定义插件
 
-您可以[自定义插件](https://help.aliyun.com/zh/model-studio/custom-plug-ins)，并将其集成到您的大模型应用中，以实现灵活、个性化的功能拓展。
+您可以[自定义插件](raw/application-user-guide/plug-in/custom-plug-ins.md)，并将其集成到您的大模型应用中，以实现灵活、个性化的功能拓展。
 
-## **插件效果示例**
+## 插件效果示例
 
 **示例输入**
 
@@ -120,21 +120,17 @@ qwen-vl-max
 
 qwen-vl-plus
 
-**说明**
+**说明**各模型对插件的兼容性可能有差异，最新的兼容性状态，请以控制台实际执行结果为准。
 
-各模型对插件的兼容性可能有差异，最新的兼容性状态，请以控制台实际执行结果为准。
+模型详情请参见[选择模型](raw/model-user-guide/get-started-with-models/models.md)。
 
-模型详情请参见[选择模型](https://help.aliyun.com/zh/model-studio/models)。
+## 插件调用机制
 
-## **插件调用机制**
-
-调用插件的本质是调用插件下的工具。百炼支持通过[智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)、[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)以及[Assistant API](https://help.aliyun.com/zh/model-studio/quick-start-of-assistant-api)调用插件。
+调用插件的本质是调用插件下的工具。百炼支持通过[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)、[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)以及[Assistant API](https://help.aliyun.com/zh/model-studio/quick-start-of-assistant-api)调用插件。
 
 通过智能体应用或Assistant API调用插件后，大模型将根据**用户输入的内容**、**工具名称**以及**工具描述**来判断是否调用插件下的工具。
 
 -   如果需要调用工具，大模型会选择合适的工具，应用内部完成工具调用后，会将工具返回结果和用户内容合并后再次输入到大模型，由大模型生成最终结果并输出。
-    
 -   如果无需调用工具，大模型将直接生成结果并输出。
-    
 
 在工作流应用中调用插件，是将插件作为工作流应用的一个节点，按照用户编排的方式执行特定任务，而非由大模型主动进行规划和调用。

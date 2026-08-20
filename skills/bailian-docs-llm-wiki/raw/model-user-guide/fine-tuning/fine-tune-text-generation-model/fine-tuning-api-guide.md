@@ -1,23 +1,16 @@
 # 使用 API 或命令行进行模型调优
 
-本文档以千问模型的调优操作为例进行说明，通过 API （HTTP）和 命令行（Shell）两种方式，使用阿里云百炼提供的模型调优功能。模型调优包含模型微调（SFT）、继续预训练（CPT）、模型偏好训练（DPO）三种模型训练方式。
+## 前提条件
 
-## **前提条件**
+-   已经完整阅读了[模型调优简介](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)，了解模型调优的基本概念、流程及数据格式要求。
+-   已开通服务并获得API-KEY， 请参考[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+-   [阿里云子账号](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（[RAM用户](https://help.aliyun.com/zh/ram/user-guide/overview-of-ram-users)）需被授予必要的调用、训练和部署权限。
 
--   已经完整阅读了[模型调优简介](https://help.aliyun.com/zh/model-studio/model-training-overview)，了解模型调优的基本概念、流程及数据格式要求。
-    
--   已开通服务并获得API-KEY， 请参考[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
-    
--   [阿里云子账号](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)（[RAM用户](https://help.aliyun.com/zh/ram/user-guide/overview-of-ram-users)）需被授予必要的调用、训练和部署[权限](https://help.aliyun.com/zh/model-studio/use-workspace#895b613347th4)。
-    
-
-**说明**
-
-通过 API 创建的训练任务仅支持按 Token 计费，暂不支持使用模型训练单元（预付费或后付费）。如需使用训练单元，请通过控制台创建任务。
+**说明**通过 API 创建的训练任务仅支持按 Token 计费，暂不支持使用模型训练单元（预付费或后付费）。如需使用训练单元，请通过控制台创建任务。
 
 ## 上传调优文件
 
-### **准备调优文件**
+### 准备调优文件
 
 SFT/DPO/CPT 各训练方式的数据格式规格、打包规则、大小与数量限制、API 上传配额详见[调优数据上传规则](https://help.aliyun.com/zh/model-studio/text-generation-tuning-data-upload-rules#sec-support-matrix)。各训练方式支持的文件格式概览：
 
@@ -49,9 +42,9 @@ xlsx
 
 在**新增数据集**页面的上传文件区域下方，可找到**数据模板**下载链接。
 
-### **将调优**文件**上传至阿里云百炼**
+### 将调优文件上传至阿里云百炼
 
-#### **DashScope API**
+#### DashScope API
 
 > Windows CMD 请将`${DASHSCOPE_API_KEY}`替换为 `%DASHSCOPE_API_KEY%`，PowerShell 请替换为 `$env:DASHSCOPE_API_KEY`
 
@@ -64,22 +57,16 @@ curl --request POST \
 --form 'descriptions="a sample fine-tune data file for qwen"'
 ```
 
-**说明**
-
-使用限制：
+**说明**使用限制：
 
 -   单个文件大小最大为300MB
-    
 -   所有的有效文件（未删除）总使用空间配额为100GB
-    
 -   所有的有效文件（未删除）总数量配额为10000个
-    
 -   文件存储没有时间限制
-    
 
 通过 API 上传的调优文件，在百炼控制台模型调优页面与 API 调用中均可见可用。
 
-更多详细信息请参见[上传文件](https://help.aliyun.com/zh/model-studio/upload-file-api#t6612629.html)。
+更多详细信息请参见[上传文件](https://help.aliyun.com/zh/model-studio/upload-file-api)。
 
 返回结果：
 
@@ -94,11 +81,11 @@ curl --request POST \
  }
 ```
 
-## **模型调优**
+## 模型调优
 
-### **创建调优任务**
+### 创建调优任务
 
-## HTTP
+#### HTTP
 
 > Windows CMD 请将`${DASHSCOPE_API_KEY}`替换为 `%DASHSCOPE_API_KEY%`，PowerShell 请替换为 `$env:DASHSCOPE_API_KEY`
 
@@ -136,11 +123,9 @@ curl --location "https://dashscope.aliyuncs.com/api/v1/fine-tunes" \
 }'
 ```
 
-**说明**
+**说明**使用 OSS 挂载方式加载数据集时，需将未经压缩的数据集文件夹整体上传到 OSS Bucket，不支持 zip 文件。MountStorage 的 file\_path 指定数据集的 data.jsonl 文件路径；对包含多个文件的数据集（如 data.jsonl 和图片/视频文件同目录），只需指定 data.jsonl 的路径，无需指定其他文件。挂载前需授权百炼服务访问您的 OSS 数据。OSS Bucket 所属地域支持北京（cn-beijing）和新加坡（ap-southeast-1）。
 
-使用 OSS 挂载方式加载数据集时，需将未经压缩的数据集文件夹整体上传到 OSS Bucket，不支持 zip 文件。MountStorage 的 file\_path 指定数据集的 data.jsonl 文件路径；对包含多个文件的数据集（如 data.jsonl 和图片/视频文件同目录），只需指定 data.jsonl 的路径，无需指定其他文件。挂载前需授权百炼服务访问您的 OSS 数据。OSS Bucket 所属地域支持北京（cn-beijing）和新加坡（ap-southeast-1）。
-
-### **输入参数**
+### 输入参数
 
 **字段**
 
@@ -234,7 +219,7 @@ Body
 
 调优产生的模型名称（并非模型 ID，模型 ID 由系统生成）
 
-## **返回样例**
+## 返回样例
 
 ```
 {
@@ -281,15 +266,13 @@ Body
 }
 ```
 
-#### **支持的基础模型ID（**`**model**`**）列表与训练类型（**`**training_type**`**）支持情况：**
+支持的基础模型ID（ model ）列表与训练类型（ training\_type ）支持情况：
 
-##### **支持的模型**
+##### 支持的模型
 
-###### 文本生成
+#### 文本生成
 
-**说明**
-
-Qwen3.7-Plus-2026-05-26 调优后部署请联系商务经理。
+**说明**Qwen3.7-Plus-2026-05-26 调优后部署请联系商务经理。
 
 **模型服务**
 
@@ -571,7 +554,9 @@ qwen-plus-character-2025-11-06
 
 支持
 
-###### 视觉理解（千问VL）
+> `-Base`表示该模型只完成了预训练，虽然模型内已经存储了海量的知识，但无法正常进行对话。
+
+#### 视觉理解（千问VL）
 
 **模型服务**
 
@@ -671,7 +656,9 @@ qwen2.5-vl-7b-instruct
 
 ×
 
-###### **调优方法对比**
+> `-Base`表示该模型只完成了预训练，虽然模型内已经存储了海量的知识，但无法正常进行对话。
+
+###### 调优方法对比
 
 **特性**
 
@@ -727,7 +714,7 @@ CPT 之后，DPO 之前
 
 通常在 SFT 之后，作为对齐的最后一步
 
-###### **训练模式对比**
+###### 训练模式对比
 
 **全参训练**
 
@@ -749,7 +736,7 @@ CPT 之后，DPO 之前
 
 较短，收敛速度快。
 
-#### `hyper_parameters`内**支持的设置**
+hyper\_parameters 内 支持的设置
 
 > 不同模型支持的参数及其默认值不同，**请前往**[**控制台**](https://bailian.console.aliyun.com/?tab=model#/efm/model_manager)**选择相同的模型和训练方式查看实际默认值**。
 
@@ -800,9 +787,7 @@ Boolean
 
 用于冻结视觉主干网络的参数，使其在训练过程中不更新权重。仅适用于 千问-VL（视觉理解）模型。
 
-**警告**
-
-只有 freeze\_vit 设置为“true”时，模型才能进行按 [Token 用量](https://help.aliyun.com/zh/model-studio/model-deployment-introduction#9ea9924cd8138)计费。
+只有 freeze\_vit 设置为“true”时，模型才能进行按 [Token 用量](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)计费。
 
 `batch_size`
 
@@ -846,7 +831,7 @@ String
 
 在模型训练中动态调整学习率的策略。
 
-各策略详情请参考[在控制台进行模型调优](https://help.aliyun.com/zh/model-studio/model-training-on-console#7864d6a606ztg)。
+各策略详情请参考[在控制台进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
 
 `max_length`
 
@@ -858,7 +843,7 @@ Integer
 
 指的是单条训练数据 token 支持的最大长度。如果单条数据 token 长度超过设定值，调优会直接丢弃该条数据，不进行训练。
 
-字符与 token 之间的关系请参考[Token和字符串之间怎么换算](https://help.aliyun.com/zh/model-studio/billing-for-model-studio#35d3b2ad2386c)
+字符与 token 之间的关系请参考Token和字符串之间怎么换算
 
 `max_split_val_dataset_sample`
 
@@ -913,8 +898,6 @@ Float
 L2正则化强度。L2正则化能在一定程度上保持模型的通用能力。数值过大会导致模型调优效果不明显。
 
 **高效微调（支持**`efficient_sft`、`dpo_lora`**）参数**
-
-**说明**
 
 当对一个已经高效微调后的模型进行二次高效微调时，`lora_rank`、`lora_alpha`、`lora_dropout`三个参数必须保持一致。
 
@@ -1096,7 +1079,7 @@ Integer
 
 使用创建任务时返回的`job_id`来查询任务状态。
 
-## HTTP
+#### HTTP
 
 ```
 curl 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<job_id>' \
@@ -1104,7 +1087,7 @@ curl 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<job_id>' \
 --header 'Content-Type: application/json'
 ```
 
-### **输入参数**
+### 输入参数
 
 **字段**
 
@@ -1126,7 +1109,7 @@ Path Parameter
 
 要查询的调优任务的ID。
 
-### **返回成功样例**
+### 返回成功样例
 
 ```
 {
@@ -1205,13 +1188,11 @@ CANCELED
 
 训练已经取消。
 
-**说明**
+**说明**训练成功后，`finetuned_output`指的是调优成功后的模型 ID，可用于模型部署。
 
-训练成功后，`finetuned_output`指的是调优成功后的模型 ID，可用于模型部署。
+### 获取调优任务日志
 
-### **获取调优任务日志**
-
-## HTTP
+#### HTTP
 
 ```
 curl 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<job_id>/logs?offset=0&line=1000' \
@@ -1243,14 +1224,13 @@ curl 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<job_id>/logs?offset=0&li
 
 > 仅 SFT微调训练（`efficient_sft`、`sft`）支持保存和发布其中间状态的模型参数快照（Checkpoint）。
 
-#### **查询调优任务的参数快照列表**
+#### 查询调优任务的参数快照列表
 
 ```
 curl 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<job_id>/checkpoints' \
 --header 'Authorization: Bearer '${DASHSCOPE_API_KEY} \
 --header 'Content-Type: application/json'
 ```
-
 **输入参数**
 
 **字段**
@@ -1275,9 +1255,7 @@ Path Parameter
 
 **返回成功样例**
 
-**说明**
-
-`checkpoint`指的是 Checkpoint ID，用于在[模型发布（可选）](#7188bc825bl6b) API 中指定要发布的快照；`model_name`指的是模型 ID，可用于模型部署。（`finetuned_output` 输出的是最后一个 checkpoint 的 `model_name`）
+**说明**`checkpoint`指的是 Checkpoint ID，用于在[模型发布（可选）](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide#7188bc825bl6b) API 中指定要发布的快照；`model_name`指的是模型 ID，可用于模型部署。（`finetuned_output` 输出的是最后一个 checkpoint 的 `model_name`）
 
 ```
 {
@@ -1302,7 +1280,7 @@ Path Parameter
 
 PENDING
 
-快照（Checkpoint）待发布，需要使用[模型发布](#7188bc825bl6b) API 发布后才可以进行[模型部署&调用](#a61a0681fawzl)。
+快照（Checkpoint）待发布，需要使用[模型发布](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide#7188bc825bl6b)API 发布后才可以进行[模型部署&调用](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide#a61a0681fawzl)。
 
 PROCESSING
 
@@ -1310,30 +1288,25 @@ PROCESSING
 
 SUCCEEDED
 
-快照（Checkpoint）发布成功。可直接进行[模型部署&调用](#a61a0681fawzl)。
+快照（Checkpoint）发布成功。可直接进行[模型部署&调用](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide#a61a0681fawzl)。
 
 FAILED
 
 快照（Checkpoint）发布失败。
 
-#### **模型发布（可选）**
+#### 模型发布（可选）
 
-**说明**
-
-在百炼平台上，模型调优完成后可以导出参数快照，导出后才能基于此版本的参数快照在百炼上进行模型部署。
+**说明**在百炼平台上，模型调优完成后可以导出参数快照，导出后才能基于此版本的参数快照在百炼上进行模型部署。
 
 导出的参数快照保存在云存储中，暂不支持访问或下载。
 
-**说明**
-
-URL 中的 `<checkpoint_id>` 取值来自上一步查询快照列表接口返回的 `checkpoint` 字段（如 `checkpoint-20`），而非 `full_name` 或其他含 job\_id 前缀的字段值。
+**说明**URL 中的 `<checkpoint_id>` 取值来自上一步查询快照列表接口返回的 `checkpoint` 字段（如 `checkpoint-20`），而非 `full_name` 或其他含 job\_id 前缀的字段值。
 
 ```
 curl --request GET 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<job_id>/export/<checkpoint_id>?model_name=<model_name>' \
 --header 'Authorization: Bearer '${DASHSCOPE_API_KEY} \
 --header 'Content-Type: application/json'
 ```
-
 **输入参数**
 
 **字段**
@@ -1377,7 +1350,6 @@ Path Parameter
 发布后期望的模型 ID。
 
 **发布任务成功返回样例**
-
 ```
 {
     "request_id": "ed3faa41-6be3-4271-9b83-941b23680537",
@@ -1385,13 +1357,11 @@ Path Parameter
 }
 ```
 
-由于发布任务是异步执行的，请使用[查询快照列表](#4aaa5bd325vy7) API 观察快照发布状态。
+由于发布任务是异步执行的，请使用[查询快照列表](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide#4aaa5bd325vy7) API 观察快照发布状态。
 
 ### 模型调优的更多操作
 
 #### 列举调优任务列表
-
-HTTP
 
 ```
 curl 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
@@ -1399,11 +1369,9 @@ curl 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 --header 'Content-Type: application/json'
 ```
 
-#### **中止调优任务**
+#### 中止调优任务
 
 > 智能终止正在训练中的调优任务
-
-HTTP
 
 ```
 curl --request POST 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<job_id>/cancel' \
@@ -1411,11 +1379,9 @@ curl --request POST 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<job_id>/c
 --header 'Content-Type: application/json'
 ```
 
-#### **删除调优任务**
+#### 删除调优任务
 
 > 无法删除正在训练中的调优任务
-
-HTTP
 
 ```
 curl --request DELETE 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<job_id>' \
@@ -1425,15 +1391,15 @@ curl --request DELETE 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<job_id>
 
 ## API参考
 
-DashScope命令行调用参考已包含在本篇内容中，详细API调用请参考[API详情](https://help.aliyun.com/zh/model-studio/model-training-api-reference)。
+DashScope命令行调用参考已包含在本篇内容中，详细API调用请参考API详情。
 
 ## 模型部署&调用
 
-### **模型部署**
+### 模型部署
 
-更多模型部署方式的相关信息请参考：[使用 API 进行模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-quick-start)。
+更多模型部署方式的相关信息请参考：[使用 API 进行模型部署](raw/model-user-guide/model-deployment-1/model-deployment-quick-start.md)。
 
-#### **按模型 Token 使用量**
+按模型 Token 使用量
 
 ```
 curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
@@ -1447,7 +1413,7 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 }'
 ```
 
-#### **按模型单元的使用时长**
+按模型单元的使用时长
 
 ```
 curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
@@ -1466,11 +1432,9 @@ curl "https://dashscope.aliyuncs.com/api/v1/deployments" \
 }'
 ```
 
-### **查询模型部署的状态**
+### 查询模型部署的状态
 
 当部署状态为`RUNNING`时，表示该模型当前可供调用。
-
-HTTP
 
 ```
 curl 'https://dashscope.aliyuncs.com/api/v1/deployments/<替换为部署任务成功后的模型实例 ID>' \
@@ -1478,17 +1442,15 @@ curl 'https://dashscope.aliyuncs.com/api/v1/deployments/<替换为部署任务�
 --header 'Content-Type: application/json'
 ```
 
-更多模型部署相关的操作，如扩缩容、下线等请参见：[模型部署-API详情](https://help.aliyun.com/zh/model-studio/model-deployment-api)。
+更多模型部署相关的操作，如扩缩容、下线等请参见：模型部署-API详情。
 
-### 模型**调用**
+### 模型调用
 
 当模型部署状态为`RUNNING`时，可以像调用其他模型一样使用调优后的模型。
 
 也可以前往[模型部署控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/efm/model_deploy)界面获取**模型code**。
 
-更多使用方法和参数设置请前往[DashScope API 参考](https://help.aliyun.com/zh/model-studio/qwen-api-reference/#69cac67a477k2)。
-
-HTTP
+更多使用方法和参数设置请前往[DashScope API 参考](raw/model-api-reference/qwen-api-reference.md)。
 
 ```
 curl 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation' \
@@ -1510,8 +1472,8 @@ curl 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/genera
 }'
 ```
 
-## **模型评测**
+## 模型评测
 
 阿里云百炼的模型评测功能必须使用控制台，请前往阿里云百炼的[模型评测](https://bailian.console.aliyun.com/?tab=model#/efm/model_evaluate) 页面，评估模型训练效果。
 
-相关信息请参见[模型评测](https://help.aliyun.com/zh/model-studio/getting-started/evaluate-models)。
+相关信息请参见模型评测。

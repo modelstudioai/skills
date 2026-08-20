@@ -1,71 +1,54 @@
 # 上传本地文件获取临时URL
 
-在调用多模态、图像、视频或音频模型时，通常需要传入文件的 URL。为此，阿里云百炼提供了**免费**临时存储空间，您可将本地文件上传至该空间并获得 URL（**有效期为 48 小时**）。
+在调用多模态、图像、视频或音频模型时，通常需要传入文件的 URL。为此，阿里云百炼提供了 免费 临时存储空间，您可将本地文件上传至该空间并获得 URL（ 有效期为 48 小时 ）。
 
-## **使用限制**
+## 使用限制
 
 -   **文件与模型绑定**：文件上传时必须指定模型名称，且该模型须与后续调用的**模型一致**，不同模型无法共享文件。
-    
 -   **文件大小限制**：接口上传文件大小不得超过**1GB**，超出限制将导致上传失败。此外，不同模型对输入文件大小有不同限制，超出限制将导致模型调用失败。
-    
 -   **文件与主账号绑定**：文件上传与模型调用所使用的 API Key 必须**属于同一个阿里云主账号**，且上传的文件仅限该主账号及其对应模型使用，无法被其他主账号或其他模型共享。
-    
 -   **文件有效期限制**：文件上传后**有效期48小时**，超时后文件将被自动清理，请确保在有效期内完成模型调用。
-    
 -   **文件使用限制**：文件一旦上传，不可查询、修改或下载，仅能**通过URL参数在模型调用时使用**。
-    
 -   **文件上传限流**：文件上传凭证接口的调用限流按照“阿里云主账号+模型”维度为**100QPS**，**超出限流将导致请求失败**。
-    
 
 **重要**
 
 -   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
-    
 -   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
-    
 -   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
-    
 
-## **使用方式**
+## 使用方式
 
-1.  获取文件 URL：请先通过[步骤一](#a363e01e741gu)上传文件（图片、视频或音频），获取以`oss://` 为前缀的临时 URL。
-    
-2.  调用模型：**请务必根据**[**步骤二**](#1c60469225ufa)**使用临时 URL 进行调用**。该步骤不能跳过，否则接口将报错。
-    
+1.  获取文件 URL：请先通过[步骤一](https://help.aliyun.com/zh/model-studio/get-temporary-file-url#a363e01e741gu)上传文件（图片、视频或音频），获取以`oss://` 为前缀的临时 URL。
+2.  调用模型：**请务必根据**[**步骤二**](https://help.aliyun.com/zh/model-studio/get-temporary-file-url#1c60469225ufa)**使用临时 URL 进行调用**。该步骤不能跳过，否则接口将报错。
 
-## **步骤一：获取临时URL**
+## 步骤一：获取临时URL
 
-### **方式一：通过代码上传文件**
+#### 方式一：通过代码上传文件
 
 本文提供 Python 和 Java 示例代码，简化上传文件操作。您只需**指定模型和待上传的文件**，即可获取临时URL。
 
 **前提条件**
 
-在调用前，您需要[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+在调用前，您需要[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
 
-#### **示例代码**
+#### 示例代码
 
-## Python
+#### Python
 
 **环境配置**
 
 -   推荐使用Python 3.8及以上版本。
-    
 -   请安装必要的依赖包。
-    
 
 ```
 pip install -U requests
 ```
-
 **输入参数**
 
 -   api\_key：阿里云百炼API KEY。
-    
 -   model\_name：指定文件将要用于哪个模型，如`qwen-vl-plus`。
-    
 -   file\_path：待上传的本地文件路径（图片、视频等）。
-    
 
 ```
 import os
@@ -84,18 +67,18 @@ def get_upload_policy(api_key, model_name):
         "action": "getPolicy",
         "model": model_name
     }
-    
+
     response = requests.get(url, headers=headers, params=params)
     if response.status_code != 200:
         raise Exception(f"Failed to get upload policy: {response.text}")
-    
+
     return response.json()['data']
 
 def upload_file_to_oss(policy_data, file_path):
     """将文件上传到临时存储OSS"""
     file_name = Path(file_path).name
     key = f"{policy_data['upload_dir']}/{file_name}"
-    
+
     with open(file_path, 'rb') as file:
         files = {
             'OSSAccessKeyId': (None, policy_data['oss_access_key_id']),
@@ -107,20 +90,20 @@ def upload_file_to_oss(policy_data, file_path):
             'success_action_status': (None, '200'),
             'file': (file_name, file)
         }
-        
+
         response = requests.post(policy_data['upload_host'], files=files)
         if response.status_code != 200:
             raise Exception(f"Failed to upload file: {response.text}")
-    
+
     return f"oss://{key}"
 
 def upload_file_and_get_url(api_key, model_name, file_path):
     """上传文件并获取URL"""
     # 1. 获取上传凭证，上传凭证接口有限流，超出限流将导致请求失败
-    policy_data = get_upload_policy(api_key, model_name) 
+    policy_data = get_upload_policy(api_key, model_name)
     # 2. 上传文件到OSS
     oss_url = upload_file_to_oss(policy_data, file_path)
-    
+
     return oss_url
 
 # 使用示例
@@ -129,13 +112,13 @@ if __name__ == "__main__":
     api_key = os.getenv("DASHSCOPE_API_KEY")
     if not api_key:
         raise Exception("请设置DASHSCOPE_API_KEY环境变量")
-        
+
     # 设置model名称
     model_name="qwen-vl-plus"
 
     # 待上传的文件路径
     file_path = "/tmp/cat.png"  # 替换为实际文件路径
-    
+
     try:
         public_url = upload_file_and_get_url(api_key, model_name, file_path)
         expire_time = datetime.now() + timedelta(hours=48)
@@ -146,27 +129,21 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Error: {str(e)}")
 ```
-
 **输出示例**
-
 ```
 文件上传成功，有效期为48小时，过期时间: 2024-07-18 17:36:15
 临时URL: oss://dashscope-instant/xxx/2024-07-18/xxx/cat.png
 注意：使用oss://形式的临时URL时，必须在HTTP请求头（Header）中显式添加参数：X-DashScope-OssResourceResolve: enable，具体请参考：https://help.aliyun.com/zh/model-studio/get-temporary-file-url#http-call
 ```
 
-**重要**
+**重要**获取临时 URL 后，调用时**必须**在 HTTP 请求头（Header）中显式添加参数：`X-DashScope-OssResourceResolve: enable`，具体请参见[通过HTTP调用](https://help.aliyun.com/zh/model-studio/get-temporary-file-url#d6a1cb0f01h5k)。
 
-获取临时 URL 后，调用时**必须**在 HTTP 请求头（Header）中显式添加参数：`**X-DashScope-OssResourceResolve: enable**`，具体请参见[通过HTTP调用](#d6a1cb0f01h5k)。
-
-## Java
+#### Java
 
 **环境配置**
 
 -   推荐使用JDK 1.8及以上版本。
-    
 -   请在Maven项目的`pom.xml`文件中导入以下依赖。
-    
 
 ```
 <dependencies>
@@ -187,15 +164,11 @@ if __name__ == "__main__":
         </dependency>
 </dependencies>
 ```
-
 **输入参数**
 
 -   apiKey：阿里云百炼API KEY。
-    
 -   modelName：指定文件将要用于哪个模型，如`qwen-vl-plus`。
-    
 -   filePath：待上传的本地文件路径（图片、视频等）。
-    
 
 ```
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -308,41 +281,34 @@ public class PublicUrlHandler {
     }
 }
 ```
-
 **输出示例**
-
 ```
 文件上传成功，有效期为48小时，过期时间: 2024-07-18 17:36:15
 临时URL: oss://dashscope-instant/xxx/2024-07-18/xxx/cat.png
 注意：使用oss://形式的临时URL时，必须在HTTP请求头（Header）中显式添加参数：X-DashScope-OssResourceResolve: enable，具体请参考：https://help.aliyun.com/zh/model-studio/get-temporary-file-url#http-call
 ```
 
-**重要**
+**重要**获取临时 URL 后，调用时**必须**在 HTTP 请求头（Header）中显式添加参数：`X-DashScope-OssResourceResolve: enable`，具体请参见[通过HTTP调用](https://help.aliyun.com/zh/model-studio/get-temporary-file-url#d6a1cb0f01h5k)。
 
-获取临时 URL 后，调用时**必须**在 HTTP 请求头（Header）中显式添加参数：`**X-DashScope-OssResourceResolve: enable**`，具体请参见[通过HTTP调用](#d6a1cb0f01h5k)。
-
-### **方式二：通过命令行工具上传文件**
+#### 方式二：通过命令行工具上传文件
 
 对于熟悉命令行的开发者，可使用DashScope提供的命令行工具来上传文件。**执行命令后，即可获取临时URL**。
 
-#### **前提条件**
+#### 前提条件
 
 1.  环境准备：推荐使用 Python 3.8 及以上版本。
-    
-2.  获取API-KEY：在调用前，您需要[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
-    
-3.  安装SDK：请确保[DashScope Python SDK](https://help.aliyun.com/zh/model-studio/install-sdk) 版本不低于 `1.24.0`。执行以下命令进行安装或升级：
-    
+2.  获取API-KEY：在调用前，您需要[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+3.  安装SDK：请确保[DashScope Python SDK](raw/model-api-reference/preparations/install-sdk.md) 版本不低于 `1.24.0`。执行以下命令进行安装或升级：
 
 ```
 pip install -U dashscope
 ```
 
-#### **方法1：使用环境变量（推荐）**
+#### 方法1：使用环境变量（推荐）
 
 此方法更安全，可以避免API-KEY在命令历史或脚本中明文暴露。
 
-前提条件：请确保已[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+前提条件：请确保已[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
 
 执行上传命令：
 
@@ -357,11 +323,9 @@ Start oss.upload: model=qwen-vl-plus, file=cat.png, api_key=None
 Uploaded oss url: oss://dashscope-instant/xxxx/2025-08-01/xxxx/cat.png
 ```
 
-**重要**
+**重要**获取临时 URL 后，调用时**必须**在 HTTP 请求头（Header）中显式添加参数：`X-DashScope-OssResourceResolve: enable`，具体请参见[通过HTTP调用](https://help.aliyun.com/zh/model-studio/get-temporary-file-url#d6a1cb0f01h5k)。
 
-获取临时 URL 后，调用时**必须**在 HTTP 请求头（Header）中显式添加参数：`**X-DashScope-OssResourceResolve: enable**`，具体请参见[通过HTTP调用](#d6a1cb0f01h5k)。
-
-#### **方法2：通过命令行参数指定API-KEY（临时使用）**
+#### 方法2：通过命令行参数指定API-KEY（临时使用）
 
 执行上传命令：
 
@@ -376,11 +340,9 @@ Start oss.upload: model=qwen-vl-plus, file=cat.png, api_key=sk-xxxxxxx
 Uploaded oss url: oss://dashscope-instant/xxx/2025-08-01/xxx/cat.png
 ```
 
-**重要**
+**重要**获取临时 URL 后，调用时**必须**在 HTTP 请求头（Header）中显式添加参数：`X-DashScope-OssResourceResolve: enable`，具体请参见[通过HTTP调用](https://help.aliyun.com/zh/model-studio/get-temporary-file-url#d6a1cb0f01h5k)。
 
-获取临时 URL 后，调用时**必须**在 HTTP 请求头（Header）中显式添加参数：`**X-DashScope-OssResourceResolve: enable**`，具体请参见[通过HTTP调用](#d6a1cb0f01h5k)。
-
-#### **命令行参数说明**
+#### 命令行参数说明
 
 **参数**
 
@@ -422,37 +384,29 @@ cat.png，/data/img.jpg
 
 sk-xxxx
 
-## **步骤二：使用临时URL调用模型**
+## 步骤二：使用临时URL调用模型
 
-#### **使用限制**
+#### 使用限制
 
 -   **文件格式**：临时URL须通过上述方式生成，且以 `oss://`为前缀的URL字符串。
-    
 -   **文件未过期**：文件URL仍在上传后的48小时有效期内。
-    
 -   **模型一致**：模型调用所使用的模型必须与文件上传时指定的模型完全一致。
-    
 -   **账号一致**：模型调用的API KEY必须与文件上传时使用的API KEY同属一个阿里云主账号。
-    
 
-#### **方式一：通过HTTP调用**
+#### 方式一：通过HTTP调用
 
 通过curl、Postman或任何其他HTTP客户端直接调用API，则**必须遵循以下规则**：
 
 **重要**
 
--   使用临时URL，**必须**在请求的**Header**中添加参数：`**X-DashScope-OssResourceResolve: enable**`。
-    
--   若缺失此Header，系统将无法解析`oss://`链接，请求将失败，报错信息请参考[错误码](#3b9b15a6a8qkl)。
-    
+-   使用临时URL，**必须**在请求的**Header**中添加参数：`X-DashScope-OssResourceResolve: enable`。
+-   若缺失此Header，系统将无法解析`oss://`链接，请求将失败，报错信息请参考[错误码](https://help.aliyun.com/zh/model-studio/get-temporary-file-url#3b9b15a6a8qkl)。
 
-## **请求示例**
+#### 请求示例
 
 本示例为调用 qwen-vl-plus 模型识别图片内容。
 
-**说明**
-
-请将 `oss://...`替换为真实的临时 URL，否则请求将失败。
+**说明**请将 `oss://...`替换为真实的临时 URL，否则请求将失败。
 
 ```
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
@@ -463,14 +417,14 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
   "model": "qwen-vl-plus",
   "messages": [{
       "role": "user",
-      "content": 
+      "content":
       [{"type": "text","text": "这是什么"},
        {"type": "image_url","image_url": {"url": "oss://dashscope-instant/xxx/2024-07-18/xxxx/cat.png"}}]
     }]
 }'
 ```
 
-## 响应示例
+#### 响应示例
 
 ```
 {
@@ -498,38 +452,32 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 }
 ```
 
-## 上传的本地图片示例
+#### 上传的本地图片示例
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5231249371/p915804.png)
-
-#### **方式二：通过DashScope SDK调用**
+#### 方式二：通过DashScope SDK调用
 
 您也可以使用阿里云百炼提供的 Python 或 Java SDK。
 
 -   **直接传入 URL**：调用模型 SDK 时，直接将以`oss://`为前缀的URL字符串作为文件参数传入。
-    
 -   **无需关心 Header**：SDK 会自动添加必需的请求头，无需额外操作。
-    
 
 **注意**：并非所有模型都支持 SDK 调用，请以模型 API 文档为准。
 
 > 不支持 OpenAI SDK。
 
-## Python
+#### Python
 
 **前提条件**
 
-请[安装DashScope Python SDK](https://help.aliyun.com/zh/model-studio/install-sdk)，且DashScope Python SDK版本号 >=`1.24.0`。
+请[安装DashScope Python SDK](raw/model-api-reference/preparations/install-sdk.md)，且DashScope Python SDK版本号 >=`1.24.0`。
 
 **示例代码**
 
 本示例为调用 qwen-vl-plus 模型识别图片内容。此代码示例仅适用于 qwen-vl 和 omni 系列模型。
 
-## 请求示例
+#### 请求示例
 
-**说明**
-
-请将 image 参数中的 `oss://...`替换为真实的临时 URL，否则请求将失败。
+**说明**请将 image 参数中的 `oss://...`替换为真实的临时 URL，否则请求将失败。
 
 ```
 import os
@@ -559,7 +507,7 @@ response = dashscope.MultiModalConversation.call(
 print(response)
 ```
 
-## 响应示例
+#### 响应示例
 
 ```
 {
@@ -603,21 +551,19 @@ print(response)
 }
 ```
 
-## Java
+#### Java
 
 **前提条件**
 
-请[安装DashScope Java SDK](https://help.aliyun.com/zh/model-studio/install-sdk)，且DashScope Java SDK版本号 >= `2.21.0`。
+请[安装DashScope Java SDK](raw/model-api-reference/preparations/install-sdk.md)，且DashScope Java SDK版本号 >= `2.21.0`。
 
 **示例代码**
 
 本示例为调用 qwen-vl-plus 模型识别图片内容。此代码示例仅适用于 qwen-vl 和 omni 系列模型。
 
-## 请求示例
+#### 请求示例
 
-**说明**
-
-请将 `oss://...`替换为真实的临时 URL，否则请求将失败。
+**说明**请将 `oss://...`替换为真实的临时 URL，否则请求将失败。
 
 ```
 import com.alibaba.dashscope.aigc.multimodalconversation.*;
@@ -672,7 +618,7 @@ public class MultiModalConversationUsage {
 }
 ```
 
-## 响应示例
+#### 响应示例
 
 ```
 {
@@ -718,25 +664,23 @@ public class MultiModalConversationUsage {
 
 ## 附接口说明
 
-在上述[获取临时URL](#a363e01e741gu)的两种方式中，代码调用和命令行工具已集成以下三个步骤，简化文件上传操作。以下是各步骤的接口说明。
+在上述[获取临时URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url#a363e01e741gu)的两种方式中，代码调用和命令行工具已集成以下三个步骤，简化文件上传操作。以下是各步骤的接口说明。
 
-#### **步骤1：获取文件上传凭证**
+#### 步骤1：获取文件上传凭证
 
-##### **前提条件**
+##### 前提条件
 
-您需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
 
-##### **请求接口**
+##### 请求接口
 
 ```
 GET https://dashscope.aliyuncs.com/api/v1/uploads
 ```
 
-**重要**
+**重要**文件上传凭证接口限流为 100 QPS（按“阿里云主账号+模型”维度），且临时存储不可扩容。生产环境或高并发场景请使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)等存储服务。
 
-文件上传凭证接口限流为 100 QPS（按“阿里云主账号+模型”维度），且临时存储不可扩容。生产环境或高并发场景请使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)等存储服务。
-
-##### **入参描述**
+##### 入参描述
 
 **传参方式**
 
@@ -794,7 +738,7 @@ _string_
 
 qwen-vl-plus
 
-##### **出参描述**
+##### 出参描述
 
 **字段**
 
@@ -850,15 +794,13 @@ _string_
 
 上传的host地址。
 
-https://dashscope-file-xxx.oss-cn-beijing.aliyuncs.com
+[https://dashscope-file-xxx.oss-cn-beijing.aliyuncs.com](https://dashscope-file-xxx.oss-cn-beijing.aliyuncs.com)
 
 data.expire\_in\_seconds
 
 _string_
 
 凭证有效期（单位：秒）。
-
-**说明**
 
 过期后，重新调用本接口获取新的凭证。
 
@@ -906,7 +848,7 @@ _string_
 
 true
 
-##### **请求示例**
+##### 请求示例
 
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/uploads?action=getPolicy&model=qwen-vl-plus' \
@@ -914,18 +856,16 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/uploads?action=getPolicy&
 --header 'Content-Type: application/json'
 ```
 
-**说明**
+**说明**若未配置阿里云百炼API Key到环境变量，请将`$DASHSCOPE_API_KEY`替换为实际API Key，例如：`--header "Authorization: Bearer sk-xxx"`。
 
-若未配置阿里云百炼API Key到环境变量，请将`$DASHSCOPE_API_KEY`替换为实际API Key，例如：`--header "Authorization: Bearer sk-xxx"`。
-
-#### **响应示例**
+#### 响应示例
 
 ```
 {
     "request_id": "52f4383a-c67d-9f8c-xxxxxx",
     "data": {
         "policy": "eyJl...1ZSJ=",
-        "signature": "eWy...=",
+        "signature": "YOUR_SIGNATURE",
         "upload_dir": "dashscope-instant/xxx/2024-07-18/xxx",
         "upload_host": "https://dashscope-file-xxx.oss-cn-beijing.aliyuncs.com",
         "expire_in_seconds": 300,
@@ -938,9 +878,9 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/uploads?action=getPolicy&
 }
 ```
 
-#### **步骤2：上传文件至临时存储空间**
+#### 步骤2：上传文件至临时存储空间
 
-#### **前提条件**
+#### 前提条件
 
 -   已获取文件上传凭证。
     
@@ -949,17 +889,15 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/uploads?action=getPolicy&
     > 查看文件上传凭证有效期：步骤1的输出参数`data.expire_in_seconds`为凭证有效期，单位为秒。
     
 
-#### **请求接口**
+#### 请求接口
 
 ```
 POST {data.upload_host}
 ```
 
-**说明**
+**说明**请将{data.upload\_host}替换为步骤1的输出参数`data.upload_host`对应的值。
 
-请将{data.upload\_host}替换为步骤1的输出参数`data.upload_host`对应的值。
-
-#### **入参描述**
+#### 入参描述
 
 **传参方式**
 
@@ -1019,7 +957,7 @@ _text_
 
 文件上传凭证接口的输出参数 `data.signature` 的值。
 
-Sm/tv7DcZuTZftFVvt5yOoSETsc=
+YOUR\_SIGNATURE
 
 key
 
@@ -1027,7 +965,7 @@ _text_
 
 是
 
-文件上传凭证接口的输出参数 `data.upload_dir` 的值拼接上`/_文件名_`。
+文件上传凭证接口的输出参数 `data.upload_dir` 的值拼接上`/ 文件名`。
 
 例如，`upload_dir` 为 `dashscope-instant/xxx/2024-07-18/xxx`，需要上传的文件名为 `cat.png`，拼接后的完整路径为：
 
@@ -1071,8 +1009,6 @@ _text_
 
 文件或文本内容。
 
-**说明**
-
 -   一次只支持上传一个文件。
     
 -   file必须为最后一个表单域，除file以外的其他表单域并无顺序要求。
@@ -1080,11 +1016,11 @@ _text_
 
 例如，待上传文件`cat.png`在Linux系统中的存储路径为`/tmp`，则此处应为`file=@"/tmp/cat.png"`。
 
-#### **出参描述**
+#### 出参描述
 
 调用成功时，本接口无任何参数输出。
 
-#### **请求示例**
+#### 请求示例
 
 ```
 curl --location 'https://dashscope-file-xxx.oss-cn-beijing.aliyuncs.com' \
@@ -1098,17 +1034,17 @@ curl --location 'https://dashscope-file-xxx.oss-cn-beijing.aliyuncs.com' \
 --form 'file=@"/tmp/cat.png"'
 ```
 
-#### **步骤3：生成文件URL**
+#### 步骤3：生成文件URL
 
-文件URL拼接逻辑：`**oss://**` + `**key**` （步骤2的入参`key`）。该URL有效期为 48 小时。
+文件URL拼接逻辑：`oss://` + `key` （步骤2的入参`key`）。该URL有效期为 48 小时。
 
 ```
 oss://dashscope-instant/xxx/2024-07-18/xxxx/cat.png
 ```
 
-## **错误码**
+## 错误码
 
-如果接口调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果接口调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 本文的API还有特定状态码，具体如下所示。
 
@@ -1140,7 +1076,7 @@ The media format is not supported or incorrect for the data inspection.
 
 -   请求Header 缺少必要参数，请设置 `X-DashScope-OssResourceResolve: enable`**。**
     
--   上传的图片格式不符合模型要求，更多信息请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+-   上传的图片格式不符合模型要求，更多信息请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
     
 
 403
@@ -1151,7 +1087,7 @@ Invalid according to Policy: Policy expired.
 
 文件上传凭证已经过期。
 
-请重新调用[文件上传凭证接口](#32db94982cllx)生成新凭证。
+请重新调用[文件上传凭证接口](https://help.aliyun.com/zh/model-studio/get-temporary-file-url#32db94982cllx)生成新凭证。
 
 429
 
@@ -1161,22 +1097,20 @@ Requests rate limit exceeded, please try again later.
 
 调用频次触发限流。
 
-[文件上传凭证接口](#32db94982cllx)限流为 100 QPS（按阿里云主账号 + 模型维度）。触发限流后，建议降低请求频率，或迁移至 OSS 等自有存储服务以规避限制。
+[文件上传凭证接口](https://help.aliyun.com/zh/model-studio/get-temporary-file-url#32db94982cllx)限流为 100 QPS（按阿里云主账号 + 模型维度）。触发限流后，建议降低请求频率，或迁移至 OSS 等自有存储服务以规避限制。
 
-## **常见问题**
+## 常见问题
 
-#### **Q：使用** `**oss://**` **前缀的 URL 调用时报错，该如何处理？**
+#### Q：使用`oss://`前缀的 URL 调用时报错，该如何处理？
 
 A：请按以下步骤排查：
 
 1.  **检查请求头（Header）**：  
-    若您通过 HTTP（如 Postman、curl）直接调用，**必须在** `**Header**` **中添加参数** `**X-DashScope-OssResourceResolve: enable**`。未添加该参数会导致服务端无法识别 OSS 内部协议。关于请求头配置，请参见[通过HTTP调用](#d6a1cb0f01h5k)。
-    
+    若您通过 HTTP（如 Postman、curl）直接调用，**必须在**`Header`**中添加参数**`X-DashScope-OssResourceResolve: enable`。未添加该参数会导致服务端无法识别 OSS 内部协议。关于请求头配置，请参见[通过HTTP调用](https://help.aliyun.com/zh/model-studio/get-temporary-file-url#d6a1cb0f01h5k)。
 2.  **检查 URL 有效性**：  
-    `oss://` 链接为临时 URL，请确保该链接是48小时内生成的。如果链接已过期，请重新上传文件获取新的 URL。
-    
+    `oss://` 链接为临时 URL，请确保该链接是48小时内生成的。如果链接已过期，请重新上传文件获取新的 URL。
 
-#### **Q：文件上传与模型调用使用的API KEY可以不一样吗？**
+#### Q：文件上传与模型调用使用的API KEY可以不一样吗？
 
 A：文件存储和访问权限基于阿里云主账号管理，API Key 仅为主账号的访问凭证。
 

@@ -10,13 +10,13 @@ OpenAPI 名称
 
 操作
 
-[SubmitDocTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-submitdoctranslatetask)
+SubmitDocTranslateTask
 
 OpenAPI 错误码发生变更。
 
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitDocTranslateTask?updateTime=2026-05-19#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitDocTranslateTask?updateTime=2026-05-19#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitDocTranslateTask)
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitDocTranslateTask)
 
 ## 变更时间：2026-04-15
 
@@ -28,29 +28,29 @@ OpenAPI 名称
 
 操作
 
-[BatchTranslate](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-batchtranslate)
+BatchTranslate
 
 OpenAPI 错误码发生变更。
 
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/BatchTranslate?updateTime=2026-04-15#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/BatchTranslate?updateTime=2026-04-15#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/BatchTranslate)
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/BatchTranslate)
 
-[BatchTranslateForHtml](https://help.aliyun.com/zh/document_detail/3037877.html)
-
-OpenAPI 错误码发生变更。
-
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/BatchTranslateForHtml?updateTime=2026-04-15#workbench-doc-change-demo)
-
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/BatchTranslateForHtml)
-
-[TextTranslate](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-texttranslate)
+BatchTranslateForHtml
 
 OpenAPI 错误码发生变更。
 
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/TextTranslate?updateTime=2026-04-15#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/BatchTranslateForHtml?updateTime=2026-04-15#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/TextTranslate)
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/BatchTranslateForHtml)
+
+TextTranslate
+
+OpenAPI 错误码发生变更。
+
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/TextTranslate?updateTime=2026-04-15#workbench-doc-change-demo)
+
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/TextTranslate)
 
 ## 变更时间：2026-03-26
 
@@ -62,29 +62,29 @@ OpenAPI 名称
 
 操作
 
-[BatchTranslate](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-batchtranslate)
+BatchTranslate
 
 OpenAPI 错误码发生变更、OpenAPI 返回结构发生变更。
 
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/BatchTranslate?updateTime=2026-03-26#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/BatchTranslate?updateTime=2026-03-26#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/BatchTranslate)
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/BatchTranslate)
 
-[BatchTranslateForHtml](https://help.aliyun.com/zh/document_detail/3037877.html)
-
-OpenAPI 错误码发生变更、OpenAPI 返回结构发生变更。
-
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/BatchTranslateForHtml?updateTime=2026-03-26#workbench-doc-change-demo)
-
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/BatchTranslateForHtml)
-
-[TextTranslate](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-texttranslate)
+BatchTranslateForHtml
 
 OpenAPI 错误码发生变更、OpenAPI 返回结构发生变更。
 
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/TextTranslate?updateTime=2026-03-26#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/BatchTranslateForHtml?updateTime=2026-03-26#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/TextTranslate)
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/BatchTranslateForHtml)
+
+TextTranslate
+
+OpenAPI 错误码发生变更、OpenAPI 返回结构发生变更。
+
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/TextTranslate?updateTime=2026-03-26#workbench-doc-change-demo)
+
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/TextTranslate)
 
 ## 变更时间：2026-03-17
 
@@ -96,37 +96,37 @@ OpenAPI 名称
 
 操作
 
-[SubmitDocTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-submitdoctranslatetask)
+SubmitDocTranslateTask
 
 OpenAPI 错误码发生变更、OpenAPI 返回结构发生变更。
 
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitDocTranslateTask?updateTime=2026-03-17#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitDocTranslateTask?updateTime=2026-03-17#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitDocTranslateTask)
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitDocTranslateTask)
 
-[SubmitHtmlTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-submithtmltranslatetask)
-
-OpenAPI 错误码发生变更、OpenAPI 返回结构发生变更。
-
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitHtmlTranslateTask?updateTime=2026-03-17#workbench-doc-change-demo)
-
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitHtmlTranslateTask)
-
-[SubmitImageTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-submitimagetranslatetask)
+SubmitHtmlTranslateTask
 
 OpenAPI 错误码发生变更、OpenAPI 返回结构发生变更。
 
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitImageTranslateTask?updateTime=2026-03-17#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitHtmlTranslateTask?updateTime=2026-03-17#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitImageTranslateTask)
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitHtmlTranslateTask)
 
-[SubmitLongTextTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-submitlongtexttranslatetask)
+SubmitImageTranslateTask
 
 OpenAPI 错误码发生变更、OpenAPI 返回结构发生变更。
 
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitLongTextTranslateTask?updateTime=2026-03-17#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitImageTranslateTask?updateTime=2026-03-17#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitLongTextTranslateTask)
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitImageTranslateTask)
+
+SubmitLongTextTranslateTask
+
+OpenAPI 错误码发生变更、OpenAPI 返回结构发生变更。
+
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitLongTextTranslateTask?updateTime=2026-03-17#workbench-doc-change-demo)
+
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitLongTextTranslateTask)
 
 ## 变更时间：2025-12-25
 
@@ -138,69 +138,69 @@ OpenAPI 名称
 
 操作
 
-[BatchTranslate](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-batchtranslate)
+BatchTranslate
 
 OpenAPI 错误码发生变更。
 
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/BatchTranslate?updateTime=2025-12-25#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/BatchTranslate?updateTime=2025-12-25#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/BatchTranslate)
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/BatchTranslate)
 
-[SubmitDocTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-submitdoctranslatetask)
-
-OpenAPI 错误码发生变更。
-
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitDocTranslateTask?updateTime=2025-12-25#workbench-doc-change-demo)
-
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitDocTranslateTask)
-
-[SubmitHtmlTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-submithtmltranslatetask)
+SubmitDocTranslateTask
 
 OpenAPI 错误码发生变更。
 
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitHtmlTranslateTask?updateTime=2025-12-25#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitDocTranslateTask?updateTime=2025-12-25#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitHtmlTranslateTask)
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitDocTranslateTask)
 
-[SubmitImageTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-submitimagetranslatetask)
-
-OpenAPI 错误码发生变更。
-
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitImageTranslateTask?updateTime=2025-12-25#workbench-doc-change-demo)
-
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitImageTranslateTask)
-
-[SubmitLongTextTranslateTask](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-submitlongtexttranslatetask)
+SubmitHtmlTranslateTask
 
 OpenAPI 错误码发生变更。
 
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitLongTextTranslateTask?updateTime=2025-12-25#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitHtmlTranslateTask?updateTime=2025-12-25#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/SubmitLongTextTranslateTask)
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitHtmlTranslateTask)
 
-[TermEdit](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-termedit)
+SubmitImageTranslateTask
 
 OpenAPI 错误码发生变更。
 
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/TermEdit?updateTime=2025-12-25#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitImageTranslateTask?updateTime=2025-12-25#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/TermEdit)
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitImageTranslateTask)
 
-[TermQuery](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-termquery)
+SubmitLongTextTranslateTask
+
+OpenAPI 错误码发生变更。
+
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitLongTextTranslateTask?updateTime=2025-12-25#workbench-doc-change-demo)
+
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/SubmitLongTextTranslateTask)
+
+TermEdit
+
+OpenAPI 错误码发生变更。
+
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/TermEdit?updateTime=2025-12-25#workbench-doc-change-demo)
+
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/TermEdit)
+
+TermQuery
 
 OpenAPI 错误码发生变更、OpenAPI 入参发生变更。
 
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/TermQuery?updateTime=2025-12-25#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/TermQuery?updateTime=2025-12-25#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/TermQuery)
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/TermQuery)
 
-[TextTranslate](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-texttranslate)
+TextTranslate
 
 OpenAPI 错误码发生变更。
 
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/TextTranslate?updateTime=2025-12-25#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/TextTranslate?updateTime=2025-12-25#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/TextTranslate)
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/TextTranslate)
 
 ## 变更时间：2025-12-11
 
@@ -212,13 +212,13 @@ OpenAPI 名称
 
 操作
 
-[TextTranslate](https://help.aliyun.com/zh/model-studio/api-anytrans-2025-07-07-texttranslate)
+TextTranslate
 
 OpenAPI 错误码发生变更。
 
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/TextTranslate?updateTime=2025-12-11#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/TextTranslate?updateTime=2025-12-11#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/TextTranslate)
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/TextTranslate)
 
 ## 变更时间：2025-11-25
 
@@ -230,10 +230,10 @@ OpenAPI 名称
 
 操作
 
-[BatchTranslateForHtml](https://help.aliyun.com/zh/document_detail/3037877.html)
+BatchTranslateForHtml
 
 新增 OpenAPI。
 
-[查看变更详情](https://api.aliyun.com/document/AnyTrans/2025-07-07/BatchTranslateForHtml?updateTime=2025-11-25#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/BatchTranslateForHtml?updateTime=2025-11-25#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/AnyTrans/2025-07-07/BatchTranslateForHtml)
+[查看API文档](https://api.alibabacloud.com/document/AnyTrans/2025-07-07/BatchTranslateForHtml)

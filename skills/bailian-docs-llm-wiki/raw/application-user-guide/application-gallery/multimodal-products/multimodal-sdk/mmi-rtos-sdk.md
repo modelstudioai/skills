@@ -2,25 +2,18 @@
 
 本文介绍如何使用阿里云百炼大模型服务提供的嵌入式C SDK进行实时多模态交互。重点说明了在License模式下如何进行设备管理与实时多模态交互，包括SDK下载和安装，License模式下全托管和半托管方式，云端和设备端关键接口及代码示例。
 
-## **前提条件**
+## 前提条件
 
 **重要**
 
-1.  开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](https://help.aliyun.com/zh/model-studio/get-api-key)
-    
-2.  根据[应用创建](https://help.aliyun.com/zh/model-studio/multimodal-app-creation)的文档完成应用创建。
-    
-3.  根据[应用配置](https://help.aliyun.com/zh/model-studio/multimodal-app-configuration)的文档完成应用的配置。
-    
-4.  License模式[产品计费](https://help.aliyun.com/zh/model-studio/product-billing)
-    
+1.  开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](raw/model-api-reference/preparations/get-api-key.md)
+2.  根据[应用创建](raw/application-user-guide/application-gallery/multimodal-products/multimodal-guidelines/multimodal-app-creation.md)的文档完成应用创建。
+3.  根据[应用配置](raw/application-user-guide/application-gallery/multimodal-products/multimodal-guidelines/multimodal-app-configuration.md)的文档完成应用的配置。
+4.  License模式[产品计费](raw/application-user-guide/application-gallery/multimodal-products/product-billing.md)
 
-**说明**
-
-当前最新SDK版本：v1.3.0
+**说明**当前最新SDK版本：v1.3.0
 
 -   已适配的硬件列表
-    
 
 **序号**
 
@@ -286,47 +279,33 @@ W217
 
 ## 1\. 接入模式说明
 
-#### **半托管模式**
+#### 半托管模式
 
 适用场景：客户未来有后运营/设备升级等需求的。客户自有云服务，能对自己的设备进行管理和鉴权，客户云服务和设备端有双向通信通道；
 
-**警告**
-
-同一个DeviceName注册过后，无法再次注册去获取设备证书
-
-![image.jpeg](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1975660571/p966440.jpeg)
+**警告**同一个DeviceName注册过后，无法再次注册去获取设备证书
 
 -   服务端开发：
     
-    -   参考[云端接口说明](#557a524795xam)部分完成云端接口对接，设备计量管理服务提供设备注册和获取Token两个接口
-        
+    -   参考[云端接口说明](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#557a524795xam)部分完成云端接口对接，设备计量管理服务提供设备注册和获取Token两个接口
 -   设备端开发
     
-    -   参考[芯片平台HAL层对接](#GiY73)部分进行芯片适配（若采用阿里云推荐芯片/模组，则可以省略此步骤）
-        
-    -   参考[设备端业务逻辑对接](#3ba890579dmb9)部分在集成SDK后完成业务逻辑开发，设备按**一型一密**进行注册，设备预置创建应用时生成的AppId和AppSecret（License 密钥）
-        
+    -   参考[芯片平台HAL层对接](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#GiY73)部分进行芯片适配（若采用阿里云推荐芯片/模组，则可以省略此步骤）
+    -   参考[设备端业务逻辑对接](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#3ba890579dmb9)部分在集成SDK后完成业务逻辑开发，设备按**一型一密**进行注册，设备预置创建应用时生成的AppId和AppSecret（License 密钥）
 
-#### **全托管模式**
+#### 全托管模式
 
 适用场景：客户一次性售卖硬件无后向运营需求，且客户没有云服务，无法对设备进行管理，由阿里云进行设备管理和鉴权。
 
-**警告**
-
-同一个DeviceName注册过后，无法再次注册去获取设备证书
-
-![yuque\_diagram (3)](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7496264571/p987882.jpg)
+**警告**同一个DeviceName注册过后，无法再次注册去获取设备证书
 
 -   服务端开发：
     
     -   无
-        
 -   设备端开发
     
-    -   参考[芯片平台HAL层对接](#GiY73)部分进行芯片适配（若采用阿里云推荐芯片/模组，则可以省略此步骤）
-        
-    -   参考[设备端业务逻辑对接](#3ba890579dmb9)部分在集成SDK后完成业务逻辑开发，设备按**一型一密**进行注册，设备预置创建应用时生成的AppId和AppSecret（License 密钥）
-        
+    -   参考[芯片平台HAL层对接](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#GiY73)部分进行芯片适配（若采用阿里云推荐芯片/模组，则可以省略此步骤）
+    -   参考[设备端业务逻辑对接](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#3ba890579dmb9)部分在集成SDK后完成业务逻辑开发，设备按**一型一密**进行注册，设备预置创建应用时生成的AppId和AppSecret（License 密钥）
 
 **说明**
 
@@ -334,17 +313,14 @@ W217
     
     就是同一产品型号下所有设备预烧录相同的产品信息（AppId、AppSecret（License 密钥））。当设备到计量管理服务进行注册时，会对其携带的设备信息（AppId、AppSecret（License 密钥）、DeviceName）进行认证。认证通过后，会下发设备唯一的设备证书（即三元组AppId、DeviceName和DeviceSecret），后续设备通过该证书才能完成后续所有通信链路的鉴权。
     
-
-1.  **如何查看AppId和AppSecret（License 密钥）？**
+2.  **如何查看AppId和AppSecret（License 密钥）？**
     
     在我的应用界面能够直接复制应用ID（AppID）。在配置应用按钮边上有三个小点的按钮，点击后能够查看AppSecret（License 密钥）**（购买License之后才会有）**
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7719720871/p1075768.png)
     
 
 ## 2\. 云端接口开发说明
 
-#### **导入依赖包**
+#### 导入依赖包
 
 域名： bailianmodelonchip.cn-beijing.aliyuncs.com
 
@@ -352,8 +328,7 @@ regin : cn-beijing
 
 version: 使用最新版本version
 
--   查询地址： https://mvnrepository.com/artifact/com.aliyun/bailianmodelonchip20240816
-    
+-   查询地址： [https://mvnrepository.com/artifact/com.aliyun/bailianmodelonchip20240816](https://mvnrepository.com/artifact/com.aliyun/bailianmodelonchip20240816)
 
 ```
 <dependency>
@@ -370,9 +345,7 @@ version: 使用最新版本version
 </dependency>
 ```
 
-**说明**
-
-maven仓库地址：[https://repo1.maven.org/maven2](https://repo1.maven.org/maven2)
+**说明**maven仓库地址：[https://repo1.maven.org/maven2](https://repo1.maven.org/maven2)
 
 endPoint：bailianmodelonchip.cn-beijing.aliyuncs.com
 
@@ -384,7 +357,7 @@ python版本
 pip install alibabacloud_bailianmodelonchip20240816==1.4.0alibabacloud_bailianmodelonchip20240816
 ```
 
-### **2.1 设备注册接口** deviceRegister
+### 2.1 设备注册接口deviceRegister
 
 在设备首次联网后，设备需要通过客户云服务调用该接口，向百炼设备计量管理服务进行注册，以获取设备的三元组信息。鉴权采用阿里云POP网关鉴权，需集成POP SDK
 
@@ -404,7 +377,7 @@ String
 
 是
 
-13字节随机数（26字符)，由设备端SDK生成的数据中提取，参考[设备注册接口](#Gejwz)
+13字节随机数（26字符)，由设备端SDK生成的数据中提取，参考[设备注册接口](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#Gejwz)
 
 appId
 
@@ -428,7 +401,7 @@ String
 
 是
 
-请求时间戳（ms），由设备端SDK生成的数据中提取，参考[设备注册接口](#Gejwz)
+请求时间戳（ms），由设备端SDK生成的数据中提取，参考[设备注册接口](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#Gejwz)
 
 signature
 
@@ -436,7 +409,7 @@ String
 
 是
 
-JSON加密信息，由设备端SDK生成的数据中提取，参考[设备注册接口](#Gejwz)
+YOUR\_SIGNATURE
 
 **接口出参：DeviceRegisterResponseBody对象**
 
@@ -542,7 +515,7 @@ signature
 
 String
 
-设备三元组信息，设备端SDK可解析，参考[设备注册接口](#Gejwz)
+YOUR\_SIGNATURE
 
 Java示例
 
@@ -579,7 +552,7 @@ public class DeviceTest {
 
         DeviceRegisterResponse response = client.deviceRegister(request);
         DeviceRegisterResponseBody.DeviceRegisterResponseBodyData data = response.getBody().getData();
-        
+
         //以json格式，透传data给设备端，厂商自行实现
         System.out.println("透传结果：" + JSON.toJSONString(data));
     }
@@ -647,19 +620,14 @@ if __name__ == '__main__':
 **重要**
 
 1.  **your-ak**和**your-as**可从阿里云官网控制台获取，具体请参见：[链接](https://ram.console.aliyun.com/profile/access-keys)
-    
 2.  **endPoint**：bailianmodelonchip.cn-beijing.aliyuncs.com
-    
 3.  DeviceRegisterResponseBodyData需要通过JSON.toJSONString转换成json格式，再下发给设备端，这部分逻辑需要厂商自行实现
-    
 
-### **2.2 获取访问业务交互令牌接口** getToken
+### 2.2 获取访问业务交互令牌接口getToken
 
 设备完成注册之后，在使用多模态交互相关能力时需要动态获取访问令牌，可以通过该接口从百炼设备计量管理服务获取对应的令牌。采用阿里云POP网关鉴权，需集成POP SDK
 
-**接口入参：**
-
-**GetTokenRequest**
+**接口入参：** **GetTokenRequest**
 
 **参数**
 
@@ -707,7 +675,7 @@ String
 
 是
 
-JSON加密信息，由设备端SDK生成的数据中提取，参考[获取交互令牌接口](#Yo6VT)
+YOUR\_SIGNATURE
 
 tokenType
 
@@ -727,11 +695,9 @@ String
 
 用来换取令牌的Key，需要根据不同的令牌类型传递不同的值（当前仅支持MMI类型）
 
-MMI：传入百炼的[API Key](https://help.aliyun.com/zh/model-studio/get-api-key)
+MMI：传入百炼的[API Key](raw/model-api-reference/preparations/get-api-key.md)
 
-**接口出参**
-
-**GetTokenResponseBody**
+**接口出参** **GetTokenResponseBody**
 
 **参数**
 
@@ -791,7 +757,7 @@ GetTokenResponseBodyData
 
 是
 
-结果，可直接透传给设备端解析，参考[获取交互令牌接口](#Yo6VT)
+结果，可直接透传给设备端解析，参考[获取交互令牌接口](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk#Yo6VT)
 
 **GetTokenResponseBodyData**
 
@@ -829,7 +795,7 @@ signature
 
 String
 
-token加密信息，设备端SDK可解析
+YOUR\_SIGNATURE
 
 Java示例
 
@@ -869,7 +835,7 @@ public class TokenTest {
 
         GetTokenResponse response = client.getToken(request);
         GetTokenResponseBody.GetTokenResponseBodyData data = response.getBody().getData();
-        
+
         //以json格式，透传data给设备端，厂商自行实现
         System.out.println("执行结果：" + JSON.toJSONString(data));
     }
@@ -940,13 +906,10 @@ if __name__ == '__main__':
 **重要**
 
 1.  **your-ak**和**your-as**可从阿里云官网控制台获取，具体请参见：[链接](https://ram.console.aliyun.com/profile/access-keys)
-    
 2.  **endPoint**：bailianmodelonchip.cn-beijing.aliyuncs.com
-    
 3.  GetTokenResponseBodyData需要通过JSON.toJSONString转换成json格式，再下发给设备端，这部分逻辑需要厂商自行实现。另外，**tokenKey**参数需要传入百炼的API Key，获取方式请参考百炼平台文档。
-    
 
-### **2.3 云端错误码**
+### 2.3 云端错误码
 
 **错误码**
 
@@ -1058,14 +1021,13 @@ if __name__ == '__main__':
 
 ## 3\. 设备端接口说明
 
-### **3.1. SDK获取**
+### 3.1. SDK获取
 
 不同芯片平台需要使用对应平台的toolchain进行编译，目前百炼已经支持的芯片清单，可直接下载SDK。
 
 如果是新的芯片平台，请联系阿里云销售寻求技术支持
 
 **SDK目录结构**
-
 ```
 ├── ReleaseNote.md
 ├── include
@@ -1104,25 +1066,18 @@ if __name__ == '__main__':
 **说明**
 
 -   include目录下包含使用SDK所需要的头文件，需要将该目录添加至工程头文件目录下。
-    
 -   libqwen\_sdk.a包含SDK核心代码，必须加载。
-    
 -   libc\_license.a包含license模式相关代码，如使用license模式接入必须加载，如使用后付费模式接入不能加载该库。
-    
 -   libhal\_dummy.a包含dummy hal代码，用于SDK未适配前检查编译环境用，在完成hal移植后建议删除该库。
-    
 -   libqwen\_test.a包含测试代码，自动化测试过程需要加载该库，正式生产时需要去除。
-    
 -   libtinycrypt.a包含加解密依赖接口，如果平台未集成该三方库则必须加载。
-    
 -   libcjson.a包含SDK相关依赖接口，如果平台未集成该三方库则必须加载。
-    
 
-### **3.2. 厂商完成HAL层开发**
+### 3.2. 厂商完成HAL层开发
 
 SDK中抽象了HAL层，需要各个厂商在自己的芯片平台上完成对应的开发
 
-#### **3.2.1. 内存**
+#### 3.2.1. 内存
 
 ```
 /**
@@ -1131,37 +1086,35 @@ SDK中抽象了HAL层，需要各个厂商在自己的芯片平台上完成对�
  *
  * 本函数通过调用标准库函数malloc来分配内存，目的是为了提供一个更健壮的内存分配方法。
  * 它可能包含了额外的错误检查或者内存管理策略，以提高程序的稳定性和性能。
- * 
+ *
  * 返回值： 返回指向所分配内存的指针，如果内存分配失败，则返回NULL。
  */
 void * util_malloc(int32_t size);
 
 /**
  * 释放动态分配的内存。
- * 
+ *
  * 本函数旨在释放之前通过动态分配获得的内存空间，以避免内存泄漏。
  * 它接受一个指向动态分配内存区域的指针，并将其设置为NULL，以防止悬挂指针的出现。
- * 
+ *
  * @param ptr 指向动态分配内存区域的指针。如果为NULL，函数将不执行任何操作。
  *            在释放内存后，此指针将被设置为NULL。
  */
 void util_free(void *ptr);
 ```
 
-**警告**
+**警告**内存数模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
 
-内存数模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
-
-#### **3.2.2. 随机数模块**
+#### 3.2.2. 随机数模块
 
 ```
 /**
  * 初始化随机数生成器
- * 
+ *
  * @param seed 用于初始化随机数生成器的种子值
- * 
+ *
  * @return 返回初始化结果，0表示成功，非0表示失败
- * 
+ *
  * 此函数通过对随机数生成器进行初始化，以确保后续生成的随机数序列具有良好的随机性
  * 种子值的选择对生成的随机数序列有重要影响，相同的种子值会生成相同的随机数序列
  */
@@ -1169,38 +1122,36 @@ int32_t util_random_init(uint32_t seed);
 
 /**
  * 生成一个随机数
- * 
+ *
  * @return 返回生成的随机数
- * 
+ *
  * 在调用此函数之前，应确保随机数生成器已经通过util_random_init函数成功初始化
  * 此函数生成的随机数是基于初始化时提供的种子值产生的
  */
 uint32_t util_random(void);
 ```
 
-**警告**
+**警告**随机数模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
 
-随机数模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
-
-#### **3.2.3. 存储模块**
+#### 3.2.3. 存储模块
 
 ```
 /**
  * @brief擦除存储器
- * 
+ *
  * 该函数用于擦除存储器中的所有数据。在调用此函数之前，应确保不再需要存储器中的任何信息，
  * 因为擦除操作将删除所有数据，且此操作不可逆。
- * 
+ *
  * @return int32_t 返回擦除操作的结果。如果返回值为0，表示擦除成功；如果返回值非0，表示擦除过程中出现错误。
  */
 int32_t util_storage_erase(void);
 
 /**
  * @brief存储数据到存储器
- * 
+ *
  * 该函数将指定的数据存储到存储器中。在调用此函数之前，应确保数据的正确性和完整性，
  * 因为存储操作将覆盖存储器中的现有数据。
- * 
+ *
  * @param data 指向要存储的数据的指针。数据类型为uint8_t，即无符号的8位整数。
  * @param size 要存储的数据的大小，以字节为单位。数据类型为uint32_t，即无符号的32位整数。
  * @return int32_t 返回存储操作的结果。如果返回值为0，表示存储成功；如果返回值非0，表示存储过程中出现错误。
@@ -1209,10 +1160,10 @@ int32_t util_storage_storage(uint8_t *data, uint32_t size);
 
 /**
  * @brief从存储器加载数据
- * 
+ *
  * 该函数从存储器中加载指定大小的数据。在调用此函数之前，应确保提供的数据指针指向的内存区域足够大，
  * 以容纳从存储器加载的数据。
- * 
+ *
  * @param data 指向用于存储从存储器加载的数据的缓冲区的指针。数据类型为uint8_t，即无符号的8位整数。
  * @param size 要加载的数据的大小，以字节为单位。数据类型为uint32_t，即无符号的32位整数。
  * @return int32_t 返回加载操作的结果。如果返回值为0，表示加载成功；如果返回值非0，表示加载过程中出现错误。
@@ -1220,60 +1171,56 @@ int32_t util_storage_storage(uint8_t *data, uint32_t size);
 int32_t util_storage_load(uint8_t *data, uint32_t size);
 ```
 
-**警告**
-
-存储模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
+**警告**存储模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
 
 建议将数据存储在独立分区，确保即使恢复出厂设置也不会被清除
 
-#### **3.2.4. 时间模块**
+#### 3.2.4. 时间模块
 
 ```
 /**
  * 获取当前时间戳（毫秒级）
- * 
+ *
  * 此函数用于获取当前的时间戳，精确到毫秒该时间戳通常用于计算时间差、
  * 记录事件发生时间等场景
- * 
+ *
  * 返回：当前时间戳（毫秒级）
  */
 int64_t util_now_ms(void);
 
 /**
  * 毫秒级睡眠函数
- * 
+ *
  * 此函数使当前线程暂停执行指定毫秒数，用于控制程序执行节奏、等待事件发生等
- * 
+ *
  * 参数 ms：需要暂停的毫秒数
  */
 void util_msleep(uint32_t ms);
 
 /**
  * 获取当前时间戳
- * 
+ *
  * 此函数用于获取当前的时间戳，即从1970年1月1日00:00:00 UTC开始到现在的毫秒数
  * 它没有输入参数，返回一个int64_t类型的值，代表当前的时间戳
- * 
+ *
  * @return int64_t 当前时间戳，单位为毫秒
  */
 int64_t util_get_timestamp(void);
 
 /**
  * 检查时间戳功能是否已初始化
- * 
+ *
  * 此函数用于检查时间戳相关功能是否已经初始化如果返回真（非零），则表示
  * 时间戳功能可用；如果返回假（零），则可能需要进行初始化操作或者避免使用时间戳功能
- * 
+ *
  * 返回：如果时间戳功能已初始化，则返回非零，否则返回零
  */
 uint8_t util_timestamp_inited(void);
 ```
 
-**警告**
+**警告**时间模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
 
-时间模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
-
-#### **3.2.5. 互斥锁模块**
+#### 3.2.5. 互斥锁模块
 
 ```
 /* 互斥锁结构体定义 */
@@ -1318,11 +1265,9 @@ int32_t util_mutex_lock(util_mutex_t *mutex, int32_t timeout);
 int32_t util_mutex_unlock(util_mutex_t *mutex);
 ```
 
-**警告**
+**警告**互斥锁模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
 
-互斥锁模块为阿里提供的SDK所依赖的模块，需要各厂商在自己的硬件平台上实现
-
-#### **3.2.6. HAL层移植验收标准**
+#### 3.2.6. HAL层移植验收标准
 
 在实现以上各模块之后，再加载libqwen\_test.a，在主程序中直接调用接口qwen\_sdk\_test接口，就会对以上工作模块进行测试，输出日志可查看测试结果。
 
@@ -1330,22 +1275,14 @@ int32_t util_mutex_unlock(util_mutex_t *mutex);
 
 测试成功的输出日志示例：
 
-![p966580](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7719720871/p1075773.png)
+### 3.3. 设备端业务逻辑对接
 
-### **3.3. 设备端业务逻辑对接**
-
-**说明**
-
-本SDK兼容license模式与后付费模式
+**说明**本SDK兼容license模式与后付费模式
 
 -   当加载libc\_license.a时为license模式
-    
 -   当不加载libc\_license.a时为后付费模式。
-    
 
-**重要**
-
-加载libc\_license.a需要添加编译选项强制加载库中所有符号
+**重要**加载libc\_license.a需要添加编译选项强制加载库中所有符号
 
 以ARM平台编译参数为例，需要做如下配置
 
@@ -1357,28 +1294,20 @@ LDFLAGS += -L./YourLibPath \
           -Wl,--no-whole-archive \
 ```
 
-**重要**
+**重要**当使用后付费模式时，在连接多模态网关前，需要在设备上写入API Key。
 
-当使用后付费模式时，在连接多模态网关前，需要在设备上写入API Key。
-
-**警告**
-
-当使用license模式（全托管模式）时，需在设备端写入API Key，开发者需自行确保API Key存储及应用安全。
+**警告**当使用license模式（全托管模式）时，需在设备端写入API Key，开发者需自行确保API Key存储及应用安全。
 
 当使用后付费模式时，如在设备上写入API Key，开发者需自行确保API Key存储及应用安全。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9629836671/p1036191.png)
+**说明**对应的模块可参考图中标记的示例代码1-示例代码6，在详细接口说明中找到对应的示例代码
 
-**说明**
-
-对应的模块可参考图中标记的示例代码1-示例代码6，在详细接口说明中找到对应的示例代码
-
-#### **3.3.1. 初始化接口**
+#### 3.3.1. 初始化接口
 
 ```
 /**
  * @brief 初始化MMI
- * 
+ *
  * @return int32_t 返回操作结果，0表示成功，非0表示失败
  */
 int32_t c_mmi_sdk_init(void);
@@ -1388,20 +1317,16 @@ int32_t c_mmi_sdk_init(void);
  *
  * 此函数用于初始化MMI模块的各项配置参数，包括事件回调、工作模式、文本模式、
  * 音色设置、音频流模式以及缓冲区大小等
- * 
+ *
  * @param config 指向mmi_user_config_t结构体的指针，包含配置参数
  * @return int32_t 返回操作结果，0表示成功，非0表示失败
  */
 int32_t c_mmi_config(mmi_user_config_t *config);
 ```
 
-**说明**
+**说明**本SDK兼容后付费模式，当不加载libc\_license.a时则为后付费模式。
 
-本SDK兼容后付费模式，当不加载libc\_license.a时则为后付费模式。
-
-**重要**
-
-加载libc\_license.a需要添加编译选项强制加载库中所有符号
+**重要**加载libc\_license.a需要添加编译选项强制加载库中所有符号
 
 以ARM平台编译参数为例，需要做如下配置
 
@@ -1440,12 +1365,12 @@ c_mmi_config(&mmi_config);
 c_mmi_set_voice_id("longxiaochun_v2");
 ```
 
-#### **3.3.2. 产品信息配置接口**
+#### 3.3.2. 产品信息配置接口
 
 ```
 /**
  * @brief 检查设备是否已注册
- * 
+ *
  * @return uint8_t 设备注册状态
  *         - 0: 设备未注册
  *         - 1: 设备已注册
@@ -1454,26 +1379,26 @@ uint8_t c_license_device_is_registered(void);
 
 /**
  * @brief 重置配置
- * 
+ *
  * 此函数用于清除所有已保存的设备配置信息
  * 调用此函数后，配置将恢复为默认状态，需要重新设置相关参数
- * 
+ *
  * @return int32_t 返回操作结果，0表示成功，非0表示失败
  */
 int32_t c_mmi_storage_reset(void);
 
 /**
  * @brief 保存配置
- * 
+ *
  * @return int32_t 返回操作结果，0表示成功，非0表示失败
  */
 int32_t c_mmi_storage_save(void);
 
 /**
  * @brief 设置AppId
- * 
+ *
  * 此函数用于设置AppId，完成设置后需要调用c_mmi_storage_save进行保存
- * 
+ *
  * @param app_id_str AppId，由阿里云颁发，字符串格式
  * @return int32_t 返回操作结果，0表示成功，非0表示失败
  */
@@ -1481,9 +1406,9 @@ int32_t c_mmi_storage_set_app_id_str(char *app_id_str);
 
 /**
  * @brief 设置ApiKey
- * 
+ *
  * 此函数用于设置ApiKey，完成设置后需要调用c_mmi_storage_save进行保存
- * 
+ *
  * @param api_key 通过百炼平台获取
  * @return int32_t 返回操作结果，0表示成功，非0表示失败
  */
@@ -1491,9 +1416,9 @@ int32_t c_mmi_storage_set_api_key(char *api_key);
 
 /**
  * @brief 设置WorkSpaceId
- * 
+ *
  * 此函数用于设置WorkSpaceId，完成设置后需要调用c_mmi_storage_save进行保存
- * 
+ *
  * @param ws_id WorkSpaceId，通过百炼平台获取
  * @return int32_t 返回操作结果，0表示成功，非0表示失败
  */
@@ -1501,9 +1426,9 @@ int32_t c_mmi_storage_set_ws_id(char *ws_id);
 
 /**
  * @brief 设置设备名称DeviceName
- * 
+ *
  * 此函数用于设置设备名称DeviceName，完成设置后需要调用c_mmi_storage_save进行保存
- * 
+ *
  * @param dn 设备名称DeviceName，用户可自行设定，长度不超过32字符
  * @return int32_t 返回操作结果，0表示成功，非0表示失败
  */
@@ -1512,7 +1437,7 @@ int32_t c_mmi_storage_set_device_name(char *device_name);
 /**
  * @brief 设置AppSecret
  * 此函数用于设置AppSecret，完成设置后需要调用c_mmi_storage_save进行保存
- * 
+ *
  * @param app_secret AppSecret，由阿里云颁发，字符串格式
  * @return int32_t 返回操作结果，0表示成功，非0表示失败
  */
@@ -1520,13 +1445,13 @@ int32_t c_license_set_app_secret_str(char *app_secret);
 
 /**
  * @brief 初始化mmi
- * 
+ *
  * 该函数用于初始化mmi，仅后付费模式需要调用该接口
- * 
+ *
  * @param workspace WorkSpaceId，通过百炼平台获取
  * @param app_id AppId，由阿里云颁发，字符串格式
  * @param api_key 通过百炼平台获取
- * 
+ *
  * @return int32_t 返回操作结果，0表示成功，非0表示失败
  */
 int32_t c_mmi_init(char *workspace, char *app_id, char *api_key);
@@ -1575,12 +1500,12 @@ if (c_license_device_is_registered() == 0) {
 c_mmi_storage_set_api_key("Your ApiKey");
 ```
 
-#### **3.3.3. 设备注册接口（后付费模式无需实现该流程）**
+#### 3.3.3. 设备注册接口（后付费模式无需实现该流程）
 
 ```
 /**
  * @brief 生成注册字符串
- * 
+ *
  * @param buffer 用于存储生成的注册字符串的缓冲区
  * @param buffer_size 缓冲区大小
  * @return int32_t 返回操作结果，0表示成功，非0表示失败
@@ -1589,7 +1514,7 @@ int32_t c_license_gen_register_str_v2(char *buffer, uint32_t buffer_size);
 
 /**
  * @brief 解析云端的设备注册响应信息。
- * 
+ *
  * @param rsp_str 指向设备注册响应字符串的指针。
  * @return int32_t 返回操作结果，0表示成功，非0表示失败
  */
@@ -1620,9 +1545,7 @@ if (c_license_device_is_registered() == 0) {
 }
 ```
 
-**说明**
-
-关于示例代码中dummy\_http\_request接口
+**说明**关于示例代码中dummy\_http\_request接口
 
 -   半托管模式下，该dummy\_http\_request应访问客户已有的设备管理服务端提供的http接口，来间接完成设备端注册
     
@@ -1644,7 +1567,7 @@ if (c_license_device_is_registered() == 0) {
     "nonce": "<YOUR NONCE>",
     "requestTime": "1753326620619",
     "sdkVersion": "0.3.2",
-    "signature": "<YOUR SIGNATURE>"
+    "signature": "YOUR_SIGNATURE"
 }
 ```
 
@@ -1656,23 +1579,21 @@ if (c_license_device_is_registered() == 0) {
   "responseTime": "1753326621269",
   "appId": "<YOUR APP ID>",
   "deviceName": "<YOUR DEVICE NAME>",
-  "signature": "<YOUR SIGNATURE>"
+  "signature": "YOUR_SIGNATURE"
 }
 ```
 
 **说明**
 
 1.  http\_request需客户自行实现，负责从客户云端接收返回的数据
-    
 2.  最终传递给c\_device\_analyze\_register\_rsp的时候，需要保持rsp示例数据相同的格式
-    
 
-#### **3.3.4. 获取交互令牌接口（后付费模式无需实现该流程）**
+#### 3.3.4. 获取交互令牌接口（后付费模式无需实现该流程）
 
 ```
 /**
  * @brief 检查token是否已过期。
- * 
+ *
  * @return uint8_t 返回1表示token有效，0表示token已过期。
  */
 uint8_t c_license_is_token_expire_v2(void);
@@ -1727,9 +1648,7 @@ if (err) {
 }
 ```
 
-**说明**
-
-关于示例代码中dummy\_http\_request接口
+**说明**关于示例代码中dummy\_http\_request接口
 
 -   半托管模式下，该dummy\_http\_request应访问客户已有的设备管理服务端提供的http接口，来间接获取token
     
@@ -1742,9 +1661,7 @@ if (err) {
         GetToken API: /api/token/v1/getToken
         
 
-**警告**
-
-getToken接口返回的数据最大可达到300字节以上，建议接收缓冲区预留512字节以上的空间。
+**警告**getToken接口返回的数据最大可达到300字节以上，建议接收缓冲区预留512字节以上的空间。
 
 设备端SDK生成的请求数据包示例
 
@@ -1756,7 +1673,7 @@ getToken接口返回的数据最大可达到300字节以上，建议接收缓冲
     "requestTime":"1753327457730",
     "sdkVersion":"0.3.2",
     "tokenType":"MMI",
-    "signature": "<YOUR SIGNATURE>"
+    "signature": "YOUR_SIGNATURE"
 }
 ```
 
@@ -1770,14 +1687,12 @@ getToken接口返回的数据最大可达到300字节以上，建议接收缓冲
     "requestTime":"1753327457730",
     "sdkVersion":"0.3.2",
     "tokenType":"MMI",
-    "signature": "<YOUR SIGNATURE>",
+    "signature": "YOUR_SIGNATURE",
     "tokenKey": "<YOUR TOKEN KEY>"
 }
 ```
 
-**重要**
-
-当设备将SDK生成数据传输至云端后，在云端需要添加对应的tokenKey字段后，才能访问阿里云提供的接口获取令牌，设备端尽量不存储TokenKey，避免泄露
+**重要**当设备将SDK生成数据传输至云端后，在云端需要添加对应的tokenKey字段后，才能访问阿里云提供的接口获取令牌，设备端尽量不存储TokenKey，避免泄露
 
 设备端收到云端透传的数据包示例
 
@@ -1788,25 +1703,23 @@ getToken接口返回的数据最大可达到300字节以上，建议接收缓冲
     "appId": "<YOUR APP ID>",
     "deviceName": "<YOUR DEVICE NAME>",
     "requestIp": "<YOUR IP>",
-    "signature": "<YOUR SIGNATURE>"
+    "signature": "YOUR_SIGNATURE"
 }
 ```
 
 **说明**
 
 1.  http\_request需客户自行实现，负责从客户云端接收返回的数据
-    
 2.  最终传递给c\_mmi\_analyze\_rsp的时候，需要保持rsp示例数据相同的格式
-    
 
-#### **3.3.5. 建立业务连接**
+#### 3.3.5. 建立业务连接
 
 ```
 /**
  * @brief 获取WSS服务器主机名字符串。
  *
  * 此函数返回WSS服务器主机名字符串。
- * 
+ *
  * @return char* 返回指向WSS服务器主机名字符串的指针
  */
 char *c_mmi_get_wss_host(void);
@@ -1815,7 +1728,7 @@ char *c_mmi_get_wss_host(void);
  * @brief 获取WSS服务器端口字符串。
  *
  * 此函数返回WSS服务器端口字符串。
- * 
+ *
  * @return char* 返回指向WSS服务器端口字符串的指针
  */
 char *c_mmi_get_wss_port(void);
@@ -1824,7 +1737,7 @@ char *c_mmi_get_wss_port(void);
  * @brief 获取WSS服务API路径字符串。
  *
  * 此函数返回WSS服务API路径字符串。
- * 
+ *
  * @return char* 返回指向WSS服务API路径字符串的指针
  */
 char *c_mmi_get_wss_api(void);
@@ -1833,8 +1746,8 @@ char *c_mmi_get_wss_api(void);
  * @brief 获取WSS请求头信息字符串。
  *
  * 此函数返回WSS请求头信息字符串。
- * 
- * @return char* 
+ *
+ * @return char*
  *         返回指向WSS请求头信息字符串的指针
  */
 char *c_mmi_get_wss_header(void);
@@ -1854,20 +1767,13 @@ char *wss_header = c_mmi_get_wss_header();
 WSS_HANDLE *wss = dummy_wss_connect(wss_host, wss_port, wss_api, wss_header);
 ```
 
-**重要**
-
-本 SDK 与云端的 websocket 通信需要建立 TLS隧道，用户需自行做如下配置：
+**重要**本 SDK 与云端的 websocket 通信需要建立 TLS隧道，用户需自行做如下配置：
 
 -   TLS 版本要求TLS1.2 或以上
-    
 -   开启SNI（SERVER NAME INDICATION）
-    
 -   配置CA证书（GlobalSign Root CA - R46）
-    
 -   务必通过这三个接口获取websocket建联所需要的端口，API，和header
-    
 -   wss\_connect、wss\_register\_recv\_func、wss\_register\_send\_func、wss\_send等相关的接口可复用各模商或芯片已有方案，需客户自行实现
-    
 
 websocket建立连接时upgrade请求报文示例
 
@@ -1876,7 +1782,7 @@ GET <WSS API> HTTP/1.1
 Host: <WSS HOST>
 Upgrade: websocket
 Connection: Upgrade
-Sec-WebSocket-Key: FhVlQeR4S1N06+1/SU79XA== 
+Sec-WebSocket-Key: FhVlQeR4S1N06+1/SU79XA==
 Sec-WebSocket-Version: 13
 <WSS HEADER>
 ```
@@ -1892,7 +1798,7 @@ date: Thu, 24 Jul 2025 08:25:24 GMT
 server: istio-envoy
 ```
 
-#### **3.3.7. 事件回调**
+#### 3.3.7. 事件回调
 
 ```
 enum {
@@ -1922,7 +1828,7 @@ enum {
  * @brief mmi事件回调函数类型
  *
  * 当mmi模块发生状态变化或事件时触发的回调函数
- * 
+ *
  * @param event 事件类型，取值为C_MMI_EVENT_xxx系列宏定义
  * @param param 事件参数，根据事件类型不同指向不同数据结构
  * @return int32_t 返回0表示处理成功，非0表示处理失败
@@ -1930,11 +1836,9 @@ enum {
 typedef int32_t(*c_mmi_event_callback)(uint32_t event, void *param);
 ```
 
-**说明**
+**说明**该回调接口的注册是在初始化阶段c\_mmi\_config配置的时候注册的
 
-该回调接口的注册是在初始化阶段c\_mmi\_config配置的时候注册的
-
-#### **3.3.8. 多模态数据交互**
+#### 3.3.8. 多模态数据交互
 
 ```
 /**
@@ -1957,10 +1861,10 @@ uint32_t c_mmi_get_player_data(uint8_t *data, uint32_t size);
 
 /**
  * @brief 获取需要通过websocket发送的数据
- * 
+ *
  * 本函数用于根据指定的类型获取数据，准备通过websocket进行发送
  * 它会根据传入的类型参数，将相应类型的数据填充到提供的数据缓冲区中
- * 
+ *
  * @param opcode 用于返回websocket数据类型，如：WS_DATA_TYPE_TEXT、WS_DATA_TYPE_BINARY
  * @param data 指向一个uint8_t数组的指针，该数组用于存储获取的数据
  * @param size 表示数据数组的最大容量，以字节为单位
@@ -1970,10 +1874,10 @@ uint32_t c_mmi_get_send_data(uint8_t *opcode, uint8_t *data, uint32_t size);
 
 /**
  * @brief 分析接收到的websocket数据函数
- * 
+ *
  * 此函数根据提供的数据类型和数据内容，分析接收到的数据包
  * 它的主要作用是解析数据内容，以便进一步处理或使用
- * 
+ *
  * @param opcode websocket数据类型，如：WS_DATA_TYPE_TEXT、WS_DATA_TYPE_BINARY
  * @param data 指向接收到的数据的指针，数据的内容将根据type参数进行解析
  * @param size 数据的长度，以字节为单位，用于确定数据的范围
@@ -2081,6 +1985,4 @@ int _mmi_event_callback(uint32_t event, void *param)
 }
 ```
 
-**说明**
-
-在c\_mmi\_analyze\_recv\_data接口中会在SDK内部触发各种事件回调，回调到\_mmi\_event\_callback中，再由用户自己处理
+**说明**在c\_mmi\_analyze\_recv\_data接口中会在SDK内部触发各种事件回调，回调到\_mmi\_event\_callback中，再由用户自己处理
