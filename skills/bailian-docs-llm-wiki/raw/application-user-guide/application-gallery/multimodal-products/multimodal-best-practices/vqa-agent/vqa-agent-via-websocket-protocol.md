@@ -6,29 +6,49 @@
 
 实时多模态交互的标准流程通常如下：如果需要在该完整链路中使用拍照问答Agent（例如智能眼镜场景，直接问“帮我看看这是什么”），请阅读[拍照问答](https://help.aliyun.com/zh/model-studio/official-agent#d7b29ce94950f)和[RTOS SDK (License模式) 视觉模块接入](https://help.aliyun.com/zh/model-studio/rtos-sdk-license-mode-vision-module)
 
-如果只需要直通Agent，并不需要语音合成TTS，请阅读[通过HTTP协议接入拍照问答Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/vqa-agent/vqa-agent-through-the-http-protocol.md)，即如下流程。
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5088379671/p1049999.png)
+
+如果只需要直通Agent，并不需要语音合成TTS，请阅读[通过HTTP协议接入拍照问答Agent](https://help.aliyun.com/zh/model-studio/vqa-agent-through-the-http-protocol)，即如下流程。
+
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5088379671/p1049998.png)
 
 本文介绍的流程如下：
 
-## 前提条件
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5088379671/p1049994.png)
 
-必须先阅读[实时多模态交互协议（WebSocket）](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/multimodal-interaction-protocol.md) ，了解实时多模态交互的整体WebSocket协议。
+## **前提条件**
 
-### 开通阿里云百炼模型服务并获取API KEY
+必须先阅读[实时多模态交互协议（WebSocket）](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/) ，了解实时多模态交互的整体WebSocket协议。
 
-请参考[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，API KEY作为百炼模型服务的鉴权凭证。
+### **开通阿里云百炼模型服务并获取API KEY**
 
-### 管控台开通拍照问答直通链路
+请参考[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，API KEY作为百炼模型服务的鉴权凭证。
+
+### **管控台开通拍照问答直通链路**
 
 1.  在[多模态开发套件](https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.394f1b92MoDMrb&tab=app#/app/app-market/multi-modal-app)中创建多模态交互应用，模板选择全能版本（不要选择视觉版），关闭语音识别，打开语音合成。
+    
 
-**重要**意图识别配置、文本模型配置均需打开（按照本文配置方式下，使用拍照问答不产生意图识别和文本模型的费用）。
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5088379671/p1049995.png)
 
-1.  关闭 对话承接语、知识库、联网搜索、长期记忆配置。
+**重要**
 
-1.  技能配置全部清空、Agent配置只保留拍照问答。
+意图识别配置、文本模型配置均需打开（按照本文配置方式下，使用拍照问答不产生意图识别和文本模型的费用）。
 
-1.  配置拍照问答Agent，启动指令置空，模型推荐选择“视觉理解均衡版”，请按需要配置提示词。
+2.  关闭 对话承接语、知识库、联网搜索、长期记忆配置。
+    
+
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5088379671/p1050000.png)
+
+3.  技能配置全部清空、Agent配置只保留拍照问答。
+    
+
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5088379671/p1049997.png)
+
+4.  配置拍照问答Agent，启动指令置空，模型推荐选择“视觉理解均衡版”，请按需要配置提示词。
+    
+
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5088379671/p1049996.png)
 
 测试图片描述场景，提示词可使用如下（仅做演示支持，用户可按场景编辑）：
 
@@ -47,20 +67,25 @@
 不加入个人主观猜测或情绪判断（除非氛围明显）。
 ```
 
-1.  配置完成后请点击右上角发布按键进行发布（必须发布后才能测试）。
+5.  配置完成后请点击右上角发布按键进行发布（必须发布后才能测试）。
+    
 
-## 时序图
+## **时序图**
 
 \[**关键流程**\] 服务端返回`Started`消息表示会话创建成功，但客户端禁止立即发送音频。客户端必须等待并接收到`DialogStateChanged`事件且`state`为`Listening`后，方可开始发送音频流。
+
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5088379671/p1050108.png)
 
 **重要**
 
 1.  服务端返回`Started`消息表示会话创建成功，但客户端禁止立即发送请求。客户端必须等待并接收到`DialogStateChanged`事件且`state`为`Listening`后，方可开始发送请求。
+    
 2.  本文与标准语音对话在流程上的区别是，标准语音对话是在服务端处于`Listening`后开始上行语音，要监听VAD相关事件如SpeechStarted、SpeechEnded等事件，而本文是通过RequestToRespond 直接发送请求到服务端。
+    
 
-## 通过RequestToRespond发送请求
+## **通过**RequestToRespond发送请求
 
-### RequestToRespond
+### **RequestToRespond**
 
 在Listening状态时，通知服务端与用户主动交互，可以上传文本调用agent，返回的结果再转换为语音下发
 
@@ -193,7 +218,7 @@ object
 
 表示指定的agent，本实践固定，具体请参考commands.exec\_params参数说明
 
-##### commands.exec\_params参数说明
+##### **commands.exec\_params参数说明**
 
 **一级参数**
 
@@ -262,5 +287,6 @@ string
 
 **重要**
 
-1.  header中的参数定义见[实时多模态交互协议（WebSocket）](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/multimodal-interaction-protocol.md)相关说明
-2.  时序图中的其他流程见[实时多模态交互协议（WebSocket）](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/multimodal-interaction-protocol.md)相关说明
+1.  header中的参数定义见[实时多模态交互协议（WebSocket）](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/)相关说明
+    
+2.  时序图中的其他流程见[实时多模态交互协议（WebSocket）](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/)相关说明

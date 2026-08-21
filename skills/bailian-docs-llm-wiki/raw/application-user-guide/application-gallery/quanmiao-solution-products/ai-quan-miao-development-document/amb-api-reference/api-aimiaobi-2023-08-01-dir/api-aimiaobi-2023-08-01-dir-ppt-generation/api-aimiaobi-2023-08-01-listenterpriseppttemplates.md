@@ -1,18 +1,18 @@
-# ListEnterprisePptTemplates
+# ListEnterprisePptTemplates - 查询企业专属PPT模板列表
 
 查询企业专属PPT模板列表
 
 ## 接口说明
 
-全妙产品支持 iframe 嵌入 具体请参考文档： [客户对接\_全妙公有云 iframe 定制方案](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/quanmiao-more/iframe-embedding-scheme.md)
+全妙产品支持 iframe 嵌入 具体请参考文档： [客户对接\_全妙公有云 iframe 定制方案](https://help.aliyun.com/zh/model-studio/iframe-embedding-scheme)
 
 ## 调试
 
-您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListEnterprisePptTemplates)
 
-[调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListEnterprisePptTemplates)
+ [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListEnterprisePptTemplates)
 
-## 授权信息
+## **授权信息**
 
 当前API暂无授权信息透出。
 
@@ -74,7 +74,7 @@ integer
 
 10
 
-## 返回参数
+## **返回参数**
 
 **名称**
 
@@ -128,7 +128,7 @@ string
 
 封面图
 
-[http://xxx.com/a.png](http://xxx.com/a.png)
+http://xxx.com/a.png
 
 HttpStatusCode
 
@@ -225,6 +225,6 @@ integer
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
 
-## 变更历史
+## **变更历史**
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/ListEnterprisePptTemplates#workbench-doc-change-demo)。

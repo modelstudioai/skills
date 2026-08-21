@@ -1,42 +1,16 @@
 # Qwen-Audio 实时语音对话服务端事件
 
-Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包含 event\_id （服务端自动生成）和 type （事件类型）公共字段。
+Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包含 `event_id`（服务端自动生成）和 `type`（事件类型）公共字段。
 
-**用户指南**：[实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides)。如需了解事件交互时序，请参见[WebSocket API](raw/model-api-reference/audio-api-references/voice-conversation-api-references/real-time-voice-conversation-api-references/fun-audiochat-realtime-websocket-api.md)。
+**用户指南**：[实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime)。如需了解事件交互时序，请参见[WebSocket API](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime-websocket-api)。
 
-## error
+## **error**
 
 **说明**：请求错误或服务异常时返回。客户端错误（`invalid_request_error`）不中断连接；服务端错误（`server_error`）将终止连接。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `error`。
-
-**error**`object`
-
-错误的详细信息。
-
-属性
-
-**type**`string`
-
-错误类型，如 `invalid_request_error`（客户端错误）或 `server_error`（服务端错误）。
-
-**code**`string`
-
-错误码。
-
-**message**`string`
-
-错误信息。
-
-**param**`string`
-
-与错误相关的参数。
 
 ```
 {
@@ -51,57 +25,39 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 }
 ```
 
-## session.created
+**type** `_string_`
+
+事件类型，固定为 `error`。
+
+**error** `_object_`
+
+错误的详细信息。
+
+**属性**
+
+**type** `_string_`
+
+错误类型，如 `invalid_request_error`（客户端错误）或 `server_error`（服务端错误）。
+
+**code** `_string_`
+
+错误码。
+
+**message** `_string_`
+
+错误信息。
+
+**param** `_string_`
+
+与错误相关的参数。
+
+## **session.created**
 
 **说明**：连接建立后服务端发送的首个事件，携带会话默认配置。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `session.created`。
-
-**session**`object`
-
-会话的配置信息。
-
-属性
-
-**object**`string`
-
-固定为 `realtime.session`。
-
-**model**`string`
-
-使用的模型名称。
-
-**modalities**`array`
-
-模型输出模态设置。
-
-**voice**`string`
-
-模型生成音频的音色，为系统音色名称或声音复刻音色的 `voice_id`。
-
-**input\_audio\_transcription**`object`
-
-语音转录的配置。
-
-属性
-
-**model**`string`
-
-语音转录模型，如 `fun-asr`。
-
-**turn\_detection**`object`
-
-轮次检测（VAD）的配置。
-
-**id**`string`
-
-会话唯一标识符。
 
 ```
 {
@@ -125,21 +81,57 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 }
 ```
 
-## session.updated
+**type** `_string_`
+
+事件类型，固定为 `session.created`。
+
+**session** `_object_`
+
+会话的配置信息。
+
+**属性**
+
+**object** `_string_`
+
+固定为 `realtime.session`。
+
+**model** `_string_`
+
+使用的模型名称。
+
+**modalities** `_array_`
+
+模型输出模态设置。
+
+**voice** `_string_`
+
+模型生成音频的音色，为系统音色名称或声音复刻音色的 `voice_id`。
+
+**input\_audio\_transcription** `_object_`
+
+语音转录的配置。
+
+**属性**
+
+**model** `_string_`
+
+语音转录模型，如 `fun-asr`。
+
+**turn\_detection** `_object_`
+
+轮次检测（VAD）的配置。
+
+**id** `_string_`
+
+会话唯一标识符。
+
+## **session.updated**
 
 **说明**：收到 `session.update` 请求后，若处理成功，则返回此事件，携带更新后的完整会话配置；若出错，则返回 `error` 事件。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `session.updated`。
-
-**session**`object`
-
-更新后的完整会话配置信息。结构与 `session.created` 中的 session 对象一致。
 
 ```
 {
@@ -163,25 +155,21 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 }
 ```
 
-## input\_audio\_buffer.speech\_started
+**type** `_string_`
+
+事件类型，固定为 `session.updated`。
+
+**session** `_object_`
+
+更新后的完整会话配置信息。结构与 `session.created` 中的 session 对象一致。
+
+## **input\_audio\_buffer.speech\_started**
 
 **说明**：VAD 检测到语音开始（server\_vad / smart\_turn 模式）。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `input_audio_buffer.speech_started`。
-
-**audio\_start\_ms**`integer`
-
-语音开始的时间戳（毫秒）。
-
-**item\_id**`string`
-
-该段语音最终提交时将创建的 item 的 ID。
 
 ```
 {
@@ -192,29 +180,25 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 }
 ```
 
-## input\_audio\_buffer.speech\_stopped
+**type** `_string_`
+
+事件类型，固定为 `input_audio_buffer.speech_started`。
+
+**audio\_start\_ms** `_integer_`
+
+语音开始的时间戳（毫秒）。
+
+**item\_id** `_string_`
+
+该段语音最终提交时将创建的 item 的 ID。
+
+## **input\_audio\_buffer.speech\_stopped**
 
 **说明**：VAD 检测到语音结束（server\_vad / smart\_turn 模式）。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `input_audio_buffer.speech_stopped`。
-
-**audio\_end\_ms**`integer`
-
-语音结束的时间戳（毫秒）。
-
-**item\_id**`string`
-
-将创建的用户消息项的 ID。
-
-**reason**`string`
-
-仅 smart\_turn 模式返回此字段。取值为 `turn_invalid` 时表示当前 turn 被判定为无效轮（无语义内容），不会触发推理。有效轮次时不返回此字段。
 
 ```
 {
@@ -226,25 +210,29 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 }
 ```
 
-## input\_audio\_buffer.committed
+**type** `_string_`
+
+事件类型，固定为 `input_audio_buffer.speech_stopped`。
+
+**audio\_end\_ms** `_integer_`
+
+语音结束的时间戳（毫秒）。
+
+**item\_id** `_string_`
+
+将创建的用户消息项的 ID。
+
+**reason** `_string_`
+
+仅 smart\_turn 模式返回此字段。取值为 `turn_invalid` 时表示当前 turn 被判定为无效轮（无语义内容），不会触发推理。有效轮次时不返回此字段。
+
+## **input\_audio\_buffer.committed**
 
 **说明**：音频缓冲已提交为用户消息（push-to-talk 的 commit 或 VAD 自动提交）。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `input_audio_buffer.committed`。
-
-**previous\_item\_id**`string`
-
-前一条对话项的 ID。
-
-**item\_id**`string`
-
-创建的用户消息项的 ID。
 
 ```
 {
@@ -255,17 +243,25 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 }
 ```
 
-## input\_audio\_buffer.cleared
+**type** `_string_`
+
+事件类型，固定为 `input_audio_buffer.committed`。
+
+**previous\_item\_id** `_string_`
+
+前一条对话项的 ID。
+
+**item\_id** `_string_`
+
+创建的用户消息项的 ID。
+
+## **input\_audio\_buffer.cleared**
 
 **说明**：音频缓冲已清空（仅 push-to-talk 模式）。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `input_audio_buffer.cleared`。
 
 ```
 {
@@ -274,51 +270,17 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 }
 ```
 
-## conversation.item.created
+**type** `_string_`
+
+事件类型，固定为 `input_audio_buffer.cleared`。
+
+## **conversation.item.created**
 
 **说明**：新的对话项创建成功。用户音频提交、客户端手动创建或助手响应开始时触发。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `conversation.item.created`。
-
-**previous\_item\_id**`string`
-
-前一条对话项的 ID。
-
-**item**`object`
-
-创建的对话项。
-
-属性
-
-**id**`string`
-
-对话项的唯一标识符。
-
-**object**`string`
-
-固定为 `realtime.item`。
-
-**type**`string`
-
-对话项类型：`message`（普通消息）或 `function_call`（函数调用）。
-
-**status**`string`
-
-对话项状态，如 `in_progress`、`completed`。
-
-**role**`string`
-
-消息角色，如 `user`、`assistant`。仅 `message` 类型包含。
-
-**content**`array`
-
-消息内容列表。仅 `message` 类型包含。
 
 ```
 {
@@ -336,21 +298,51 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 }
 ```
 
-## conversation.item.deleted
+**type** `_string_`
+
+事件类型，固定为 `conversation.item.created`。
+
+**previous\_item\_id** `_string_`
+
+前一条对话项的 ID。
+
+**item** `_object_`
+
+创建的对话项。
+
+**属性**
+
+**id** `_string_`
+
+对话项的唯一标识符。
+
+**object** `_string_`
+
+固定为 `realtime.item`。
+
+**type** `_string_`
+
+对话项类型：`message`（普通消息）或 `function_call`（函数调用）。
+
+**status** `_string_`
+
+对话项状态，如 `in_progress`、`completed`。
+
+**role** `_string_`
+
+消息角色，如 `user`、`assistant`。仅 `message` 类型包含。
+
+**content** `_array_`
+
+消息内容列表。仅 `message` 类型包含。
+
+## **conversation.item.deleted**
 
 **说明**：对话项已删除。客户端发送 `conversation.item.delete` 后返回此确认事件。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `conversation.item.deleted`。
-
-**item\_id**`string`
-
-已删除的对话项 ID。
 
 ```
 {
@@ -360,43 +352,21 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 }
 ```
 
-## conversation.item.retrieved
+**type** `_string_`
+
+事件类型，固定为 `conversation.item.deleted`。
+
+**item\_id** `_string_`
+
+已删除的对话项 ID。
+
+## **conversation.item.retrieved**
 
 **说明**：查询对话项成功返回。客户端发送 `conversation.item.retrieve` 后返回此事件。音频类型 content 仅包含转写文本，不返回原始音频数据。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `conversation.item.retrieved`。
-
-**item**`object`
-
-查询到的对话项完整信息。
-
-属性
-
-**id**`string`
-
-对话项的唯一标识符。
-
-**object**`string`
-
-固定为 `realtime.item`。
-
-**type**`string`
-
-对话项类型：`message`（普通消息）或 `function_call`（函数调用）。
-
-**role**`string`
-
-消息角色，如 `user`、`assistant`。仅 `message` 类型包含。
-
-**content**`array`
-
-消息内容列表。音频类型 content 仅包含转写文本，不返回原始音频数据。
 
 ```
 {
@@ -417,33 +387,43 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 }
 ```
 
-## conversation.item.input\_audio\_transcription.delta
+**type** `_string_`
+
+事件类型，固定为 `conversation.item.retrieved`。
+
+**item** `_object_`
+
+查询到的对话项完整信息。
+
+**属性**
+
+**id** `_string_`
+
+对话项的唯一标识符。
+
+**object** `_string_`
+
+固定为 `realtime.item`。
+
+**type** `_string_`
+
+对话项类型：`message`（普通消息）或 `function_call`（函数调用）。
+
+**role** `_string_`
+
+消息角色，如 `user`、`assistant`。仅 `message` 类型包含。
+
+**content** `_array_`
+
+消息内容列表。音频类型 content 仅包含转写文本，不返回原始音频数据。
+
+## **conversation.item.input\_audio\_transcription.delta**
 
 **说明**：ASR 转写增量结果，在语音识别过程中流式返回。包含情绪和语种检测信息。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `conversation.item.input_audio_transcription.delta`。
-
-**item\_id**`string`
-
-关联的对话项 ID。
-
-**content\_index**`integer`
-
-内容部分的索引。
-
-**text**`string`
-
-已确定的转写文本。
-
-**stash**`string`
-
-尚未确定的暂存文本。
 
 ```
 {
@@ -456,29 +436,33 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 }
 ```
 
-## conversation.item.input\_audio\_transcription.completed
+**type** `_string_`
 
-**说明**：ASR 转写最终结果。转写文本会写入对应 item 的 `transcript` 字段。
+事件类型，固定为 `conversation.item.input_audio_transcription.delta`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `conversation.item.input_audio_transcription.completed`。
-
-**item\_id**`string`
+**item\_id** `_string_`
 
 关联的对话项 ID。
 
-**content\_index**`integer`
+**content\_index** `_integer_`
 
 内容部分的索引。
 
-**transcript**`string`
+**text** `_string_`
 
-完整的转写文本。
+已确定的转写文本。
+
+**stash** `_string_`
+
+尚未确定的暂存文本。
+
+## **conversation.item.input\_audio\_transcription.completed**
+
+**说明**：ASR 转写最终结果。转写文本会写入对应 item 的 `transcript` 字段。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -490,43 +474,29 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 }
 ```
 
-## conversation.item.input\_audio\_transcription.failed
+**type** `_string_`
 
-**说明**：ASR 转写失败。
+事件类型，固定为 `conversation.item.input_audio_transcription.completed`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `conversation.item.input_audio_transcription.failed`。
-
-**item\_id**`string`
+**item\_id** `_string_`
 
 关联的对话项 ID。
 
-**content\_index**`integer`
+**content\_index** `_integer_`
 
 内容部分的索引。
 
-**error**`object`
+**transcript** `_string_`
 
-错误的详细信息。
+完整的转写文本。
 
-属性
+## **conversation.item.input\_audio\_transcription.failed**
 
-**type**`string`
+**说明**：ASR 转写失败。
 
-错误类型，如 `transcription_error`。
+**event\_id** `_string_`
 
-**code**`string`
-
-错误码，如 `transcription_failed`。
-
-**message**`string`
-
-错误信息。
+本次事件唯一标识符。
 
 ```
 {
@@ -542,33 +512,43 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 }
 ```
 
-## conversation.item.ambient\_audio\_transcription.delta
+**type** `_string_`
 
-**说明**：**仅 smart\_turn 模式。**环境音频转写增量结果。当 VAD 检测到语音活动但语义判定为非有效轮次（如噪声、“嗯”、“啊”等无语义内容）时，将 ASR 识别结果以 ambient 事件透传给客户端。该事件不会关联到对话上下文中的任何 item，`item_id` 为独立生成的临时 ID。
+事件类型，固定为 `conversation.item.input_audio_transcription.failed`。
 
-**event\_id**`string`
+**item\_id** `_string_`
 
-本次事件唯一标识符。
+关联的对话项 ID。
 
-**type**`string`
-
-事件类型，固定为 `conversation.item.ambient_audio_transcription.delta`。
-
-**item\_id**`string`
-
-独立生成的临时 ID，不关联到对话上下文中的任何 item。
-
-**content\_index**`integer`
+**content\_index** `_integer_`
 
 内容部分的索引。
 
-**text**`string`
+**error** `_object_`
 
-已确定的转写文本。
+错误的详细信息。
 
-**stash**`string`
+**属性**
 
-尚未确定的暂存文本。
+**type** `_string_`
+
+错误类型，如 `transcription_error`。
+
+**code** `_string_`
+
+错误码，如 `transcription_failed`。
+
+**message** `_string_`
+
+错误信息。
+
+## **conversation.item.ambient\_audio\_transcription.delta**
+
+**说明**：**仅 smart\_turn 模式。**环境音频转写增量结果。当 VAD 检测到语音活动但语义判定为非有效轮次（如噪声、“嗯”、“啊”等无语义内容）时，将 ASR 识别结果以 ambient 事件透传给客户端。该事件不会关联到对话上下文中的任何 item，`item_id` 为独立生成的临时 ID。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -581,29 +561,33 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 }
 ```
 
-## conversation.item.ambient\_audio\_transcription.completed
+**type** `_string_`
 
-**说明**：**仅 smart\_turn 模式。**环境音频转写最终结果。与 delta 事件配对，表示一段环境音频的转写结束。该转写结果不会写入对话上下文。
+事件类型，固定为 `conversation.item.ambient_audio_transcription.delta`。
 
-**event\_id**`string`
+**item\_id** `_string_`
 
-本次事件唯一标识符。
+独立生成的临时 ID，不关联到对话上下文中的任何 item。
 
-**type**`string`
-
-事件类型，固定为 `conversation.item.ambient_audio_transcription.completed`。
-
-**item\_id**`string`
-
-独立生成的临时 ID，不关联到对话上下文。
-
-**content\_index**`integer`
+**content\_index** `_integer_`
 
 内容部分的索引。
 
-**transcript**`string`
+**text** `_string_`
 
-完整的转写文本。
+已确定的转写文本。
+
+**stash** `_string_`
+
+尚未确定的暂存文本。
+
+## **conversation.item.ambient\_audio\_transcription.completed**
+
+**说明**：**仅 smart\_turn 模式。**环境音频转写最终结果。与 delta 事件配对，表示一段环境音频的转写结束。该转写结果不会写入对话上下文。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -615,47 +599,29 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 }
 ```
 
-## response.created
+**type** `_string_`
+
+事件类型，固定为 `conversation.item.ambient_audio_transcription.completed`。
+
+**item\_id** `_string_`
+
+独立生成的临时 ID，不关联到对话上下文。
+
+**content\_index** `_integer_`
+
+内容部分的索引。
+
+**transcript** `_string_`
+
+完整的转写文本。
+
+## **response.created**
 
 **说明**：一轮模型推理开始。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `response.created`。
-
-**response**`object`
-
-响应对象。
-
-属性
-
-**id**`string`
-
-响应的唯一标识符。
-
-**object**`string`
-
-固定为 `realtime.response`。
-
-**status**`string`
-
-响应状态，如 `in_progress`。
-
-**modalities**`array`
-
-模型输出模态设置。
-
-**voice**`string`
-
-模型生成音频的音色，为系统音色名称或声音复刻音色的 `voice_id`。
-
-**output**`array`
-
-响应的输出项列表，初始为空数组。
 
 ```
 {
@@ -672,55 +638,47 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
 }
 ```
 
-## response.output\_item.added
+**type** `_string_`
+
+事件类型，固定为 `response.created`。
+
+**response** `_object_`
+
+响应对象。
+
+**属性**
+
+**id** `_string_`
+
+响应的唯一标识符。
+
+**object** `_string_`
+
+固定为 `realtime.response`。
+
+**status** `_string_`
+
+响应状态，如 `in_progress`。
+
+**modalities** `_array_`
+
+模型输出模态设置。
+
+**voice** `_string_`
+
+模型生成音频的音色，为系统音色名称或声音复刻音色的 `voice_id`。
+
+**output** `_array_`
+
+响应的输出项列表，初始为空数组。
+
+## **response.output\_item.added**
 
 **说明**：响应中新增一个输出项。普通回复的输出项类型为 `message`；Function Calling 的输出项类型为 `function_call`。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `response.output_item.added`。
-
-**response\_id**`string`
-
-关联的响应 ID。
-
-**output\_index**`integer`
-
-输出项在响应中的索引。
-
-**item**`object`
-
-新增的输出项。
-
-属性
-
-**id**`string`
-
-输出项的唯一标识符。
-
-**object**`string`
-
-固定为 `realtime.item`。
-
-**type**`string`
-
-输出项类型：`message`（普通消息）或 `function_call`（函数调用）。
-
-**status**`string`
-
-输出项状态，如 `in_progress`。
-
-**role**`string`
-
-消息角色，固定为 `assistant`。仅 `message` 类型包含。
-
-**content**`array`
-
-消息内容列表。仅 `message` 类型包含。
 
 ```
 {
@@ -755,49 +713,59 @@ Function Call 输出项示例：
 }
 ```
 
-**说明**一轮响应可包含多个 `function_call`，也可能同时包含普通 `message` 输出和 `function_call` 输出。Function Call 部分不会送入 TTS 播报。
+**说明**
 
-## response.content\_part.added
+一轮响应可包含多个 `function_call`，也可能同时包含普通 `message` 输出和 `function_call` 输出。Function Call 部分不会送入 TTS 播报。
 
-**说明**：输出项中新增一个内容部分。
+**type** `_string_`
 
-**event\_id**`string`
+事件类型，固定为 `response.output_item.added`。
 
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `response.content_part.added`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 关联的响应 ID。
 
-**item\_id**`string`
-
-关联的输出项 ID。
-
-**output\_index**`integer`
+**output\_index** `_integer_`
 
 输出项在响应中的索引。
 
-**content\_index**`integer`
+**item** `_object_`
 
-内容部分在输出项中的索引。
+新增的输出项。
 
-**part**`object`
+**属性**
 
-新增的内容部分。
+**id** `_string_`
 
-属性
+输出项的唯一标识符。
 
-**type**`string`
+**object** `_string_`
 
-内容类型，如 `audio`、`text`。
+固定为 `realtime.item`。
 
-**text**`string`
+**type** `_string_`
 
-文本内容，初始为空字符串。
+输出项类型：`message`（普通消息）或 `function_call`（函数调用）。
+
+**status** `_string_`
+
+输出项状态，如 `in_progress`。
+
+**role** `_string_`
+
+消息角色，固定为 `assistant`。仅 `message` 类型包含。
+
+**content** `_array_`
+
+消息内容列表。仅 `message` 类型包含。
+
+## **response.content\_part.added**
+
+**说明**：输出项中新增一个内容部分。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -814,37 +782,47 @@ Function Call 输出项示例：
 }
 ```
 
-## response.text.delta
+**type** `_string_`
 
-**说明**：纯文本模式下的文本增量事件，流式返回文本片段。
+事件类型，固定为 `response.content_part.added`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `response.text.delta`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 关联的响应 ID。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
 关联的输出项 ID。
 
-**output\_index**`integer`
+**output\_index** `_integer_`
 
 输出项在响应中的索引。
 
-**content\_index**`integer`
+**content\_index** `_integer_`
 
 内容部分在输出项中的索引。
 
-**delta**`string`
+**part** `_object_`
 
-文本增量片段。
+新增的内容部分。
+
+**属性**
+
+**type** `_string_`
+
+内容类型，如 `audio`、`text`。
+
+**text** `_string_`
+
+文本内容，初始为空字符串。
+
+## **response.text.delta**
+
+**说明**：纯文本模式下的文本增量事件，流式返回文本片段。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -858,37 +836,37 @@ Function Call 输出项示例：
 }
 ```
 
-## response.text.done
+**type** `_string_`
 
-**说明**：纯文本模式下的文本输出完成事件。
+事件类型，固定为 `response.text.delta`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `response.text.done`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 关联的响应 ID。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
 关联的输出项 ID。
 
-**output\_index**`integer`
+**output\_index** `_integer_`
 
 输出项在响应中的索引。
 
-**content\_index**`integer`
+**content\_index** `_integer_`
 
 内容部分在输出项中的索引。
 
-**text**`string`
+**delta** `_string_`
 
-完整的文本输出。
+文本增量片段。
+
+## **response.text.done**
+
+**说明**：纯文本模式下的文本输出完成事件。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -902,37 +880,37 @@ Function Call 输出项示例：
 }
 ```
 
-## response.audio\_transcript.delta
+**type** `_string_`
 
-**说明**：音频模式下的文字字幕增量事件，流式返回字幕片段。
+事件类型，固定为 `response.text.done`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `response.audio_transcript.delta`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 关联的响应 ID。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
 关联的输出项 ID。
 
-**output\_index**`integer`
+**output\_index** `_integer_`
 
 输出项在响应中的索引。
 
-**content\_index**`integer`
+**content\_index** `_integer_`
 
 内容部分在输出项中的索引。
 
-**delta**`string`
+**text** `_string_`
 
-字幕增量片段。
+完整的文本输出。
+
+## **response.audio\_transcript.delta**
+
+**说明**：音频模式下的文字字幕增量事件，流式返回字幕片段。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -946,37 +924,37 @@ Function Call 输出项示例：
 }
 ```
 
-## response.audio\_transcript.done
+**type** `_string_`
 
-**说明**：音频模式下的字幕输出完成事件。
+事件类型，固定为 `response.audio_transcript.delta`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `response.audio_transcript.done`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 关联的响应 ID。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
 关联的输出项 ID。
 
-**output\_index**`integer`
+**output\_index** `_integer_`
 
 输出项在响应中的索引。
 
-**content\_index**`integer`
+**content\_index** `_integer_`
 
 内容部分在输出项中的索引。
 
-**transcript**`string`
+**delta** `_string_`
 
-完整的字幕文本。
+字幕增量片段。
+
+## **response.audio\_transcript.done**
+
+**说明**：音频模式下的字幕输出完成事件。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -990,37 +968,37 @@ Function Call 输出项示例：
 }
 ```
 
-## response.audio.delta
+**type** `_string_`
 
-**说明**：音频模式下的音频数据增量事件。`delta` 字段为 Base64 编码的 PCM 音频数据。
+事件类型，固定为 `response.audio_transcript.done`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `response.audio.delta`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 关联的响应 ID。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
 关联的输出项 ID。
 
-**output\_index**`integer`
+**output\_index** `_integer_`
 
 输出项在响应中的索引。
 
-**content\_index**`integer`
+**content\_index** `_integer_`
 
 内容部分在输出项中的索引。
 
-**delta**`string`
+**transcript** `_string_`
 
-Base64 编码的 PCM 音频数据片段。
+完整的字幕文本。
+
+## **response.audio.delta**
+
+**说明**：音频模式下的音频数据增量事件。`delta` 字段为 Base64 编码的 PCM 音频数据。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1034,33 +1012,37 @@ Base64 编码的 PCM 音频数据片段。
 }
 ```
 
-## response.audio.done
+**type** `_string_`
 
-**说明**：音频模式下的音频输出完成事件，不包含音频数据。
+事件类型，固定为 `response.audio.delta`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `response.audio.done`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 关联的响应 ID。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
 关联的输出项 ID。
 
-**output\_index**`integer`
+**output\_index** `_integer_`
 
 输出项在响应中的索引。
 
-**content\_index**`integer`
+**content\_index** `_integer_`
 
 内容部分在输出项中的索引。
+
+**delta** `_string_`
+
+Base64 编码的 PCM 音频数据片段。
+
+## **response.audio.done**
+
+**说明**：音频模式下的音频输出完成事件，不包含音频数据。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1073,47 +1055,33 @@ Base64 编码的 PCM 音频数据片段。
 }
 ```
 
-## response.content\_part.done
+**type** `_string_`
 
-**说明**：输出项中的内容部分输出完成。
+事件类型，固定为 `response.audio.done`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `response.content_part.done`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 关联的响应 ID。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
 关联的输出项 ID。
 
-**output\_index**`integer`
+**output\_index** `_integer_`
 
 输出项在响应中的索引。
 
-**content\_index**`integer`
+**content\_index** `_integer_`
 
 内容部分在输出项中的索引。
 
-**part**`object`
+## **response.content\_part.done**
 
-完成的内容部分。
+**说明**：输出项中的内容部分输出完成。
 
-属性
+**event\_id** `_string_`
 
-**type**`string`
-
-内容类型，如 `audio`、`text`。
-
-**text**`string`
-
-文本内容或音频字幕文本。
+本次事件唯一标识符。
 
 ```
 {
@@ -1130,55 +1098,47 @@ Base64 编码的 PCM 音频数据片段。
 }
 ```
 
-## response.output\_item.done
+**type** `_string_`
 
-**说明**：响应中的输出项输出完成。
+事件类型，固定为 `response.content_part.done`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `response.output_item.done`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 关联的响应 ID。
 
-**output\_index**`integer`
+**item\_id** `_string_`
+
+关联的输出项 ID。
+
+**output\_index** `_integer_`
 
 输出项在响应中的索引。
 
-**item**`object`
+**content\_index** `_integer_`
 
-完成的输出项完整信息。
+内容部分在输出项中的索引。
 
-属性
+**part** `_object_`
 
-**id**`string`
+完成的内容部分。
 
-输出项的唯一标识符。
+**属性**
 
-**object**`string`
+**type** `_string_`
 
-固定为 `realtime.item`。
+内容类型，如 `audio`、`text`。
 
-**type**`string`
+**text** `_string_`
 
-输出项类型：`message`（普通消息）或 `function_call`（函数调用）。
+文本内容或音频字幕文本。
 
-**status**`string`
+## **response.output\_item.done**
 
-输出项状态，如 `completed`。
+**说明**：响应中的输出项输出完成。
 
-**role**`string`
+**event\_id** `_string_`
 
-消息角色，固定为 `assistant`。仅 `message` 类型包含。
-
-**content**`array`
-
-消息内容列表。仅 `message` 类型包含。
+本次事件唯一标识符。
 
 ```
 {
@@ -1202,37 +1162,55 @@ Base64 编码的 PCM 音频数据片段。
 }
 ```
 
-## response.function\_call\_arguments.delta
+**type** `_string_`
 
-**说明**：Function Calling 参数增量。模型决定调用工具时，服务端会先发送 `response.output_item.added`（`item.type=function_call`）和对应的 `conversation.item.created`，随后通过本事件流式输出参数片段。
+事件类型，固定为 `response.output_item.done`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `response.function_call_arguments.delta`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 关联的响应 ID。
 
-**item\_id**`string`
-
-关联的输出项 ID。
-
-**output\_index**`integer`
+**output\_index** `_integer_`
 
 输出项在响应中的索引。
 
-**call\_id**`string`
+**item** `_object_`
 
-函数调用的唯一标识符。
+完成的输出项完整信息。
 
-**delta**`string`
+**属性**
 
-函数调用参数的增量片段（JSON 字符串片段）。
+**id** `_string_`
+
+输出项的唯一标识符。
+
+**object** `_string_`
+
+固定为 `realtime.item`。
+
+**type** `_string_`
+
+输出项类型：`message`（普通消息）或 `function_call`（函数调用）。
+
+**status** `_string_`
+
+输出项状态，如 `completed`。
+
+**role** `_string_`
+
+消息角色，固定为 `assistant`。仅 `message` 类型包含。
+
+**content** `_array_`
+
+消息内容列表。仅 `message` 类型包含。
+
+## **response.function\_call\_arguments.delta**
+
+**说明**：Function Calling 参数增量。模型决定调用工具时，服务端会先发送 `response.output_item.added`（`item.type=function_call`）和对应的 `conversation.item.created`，随后通过本事件流式输出参数片段。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1246,41 +1224,37 @@ Base64 编码的 PCM 音频数据片段。
 }
 ```
 
-## response.function\_call\_arguments.done
+**type** `_string_`
 
-**说明**：Function Calling 参数输出完成。收到该事件后，客户端应执行对应工具，并通过 `conversation.item.create` 写入 `function_call_output`，随后发送 `response.create` 触发二轮推理。
+事件类型，固定为 `response.function_call_arguments.delta`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `response.function_call_arguments.done`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 关联的响应 ID。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
 关联的输出项 ID。
 
-**output\_index**`integer`
+**output\_index** `_integer_`
 
 输出项在响应中的索引。
 
-**call\_id**`string`
+**call\_id** `_string_`
 
 函数调用的唯一标识符。
 
-**name**`string`
+**delta** `_string_`
 
-调用的函数名称。
+函数调用参数的增量片段（JSON 字符串片段）。
 
-**arguments**`string`
+## **response.function\_call\_arguments.done**
 
-完整的函数调用参数（JSON 字符串）。
+**说明**：Function Calling 参数输出完成。收到该事件后，客户端应执行对应工具，并通过 `conversation.item.create` 写入 `function_call_output`，随后发送 `response.create` 触发二轮推理。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1295,113 +1269,43 @@ Base64 编码的 PCM 音频数据片段。
 }
 ```
 
-## response.done
+**type** `_string_`
+
+事件类型，固定为 `response.function_call_arguments.done`。
+
+**response\_id** `_string_`
+
+关联的响应 ID。
+
+**item\_id** `_string_`
+
+关联的输出项 ID。
+
+**output\_index** `_integer_`
+
+输出项在响应中的索引。
+
+**call\_id** `_string_`
+
+函数调用的唯一标识符。
+
+**name** `_string_`
+
+调用的函数名称。
+
+**arguments** `_string_`
+
+完整的函数调用参数（JSON 字符串）。
+
+## **response.done**
 
 **说明**：一轮推理完成。`status` 表示结束原因。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
 
-**type**`string`
-
-事件类型，固定为 `response.done`。
-
-**response**`object`
-
-完整的响应对象。
-
-属性
-
-**id**`string`
-
-响应的唯一标识符。
-
-**object**`string`
-
-固定为 `realtime.response`。
-
-**status**`string`
-
-响应的结束状态。可选值：
-
--   `completed`：正常完成。
--   `cancelled`：被打断取消。`status_details.reason` 为 `turn_detected`（VAD 打断）或 `client_cancelled`（客户端取消）。
--   `failed`：LLM 或 TTS 错误。
-
-**status\_details**`object`
-
-状态详情，仅在 `cancelled` 或 `failed` 时存在。
-
-属性
-
-**type**`string`
-
-状态类型，如 `cancelled`。
-
-**reason**`string`
-
-取消原因：`turn_detected`（VAD 打断）或 `client_cancelled`（客户端取消）。
-
-**modalities**`array`
-
-模型输出模态设置。
-
-**voice**`string`
-
-模型生成音频的音色，为系统音色名称或声音复刻音色的 `voice_id`。
-
-**output**`array`
-
-响应的输出项列表，包含完整的 item 对象。
-
-**usage**`object`
-
-本次响应的 Token 消耗信息。仅在 `status` 为 `completed` 时返回。
-
-属性
-
-**total\_tokens**`integer`
-
-本次响应消耗的总 Token 数。
-
-**input\_tokens**`integer`
-
-输入 Token 数。
-
-**output\_tokens**`integer`
-
-输出 Token 数。
-
-**input\_tokens\_details**`object`
-
-输入 Token 的分项详情，包含 `text_tokens`（文本 Token 数）和 `audio_tokens`（音频 Token 数，仅在使用音频模态时存在）。
-
-**output\_tokens\_details**`object`
-
-输出 Token 的分项详情，包含 `text_tokens`（文本 Token 数）和 `audio_tokens`（音频 Token 数，仅在使用音频模态时存在）。
-
-**plugins**`object`（可选）
-
-插件使用计量信息。启用联网搜索（`enable_search`）时返回。
-
-属性
-
-**search**`object`
-
-联网搜索计量信息。
-
-属性
-
-**count**`integer`
-
-搜索次数。
-
-**strategy**`string`
-
-搜索策略。
-
-正常完成
+## 正常完成
 
 ```
 {
@@ -1445,7 +1349,7 @@ Base64 编码的 PCM 音频数据片段。
 }
 ```
 
-被打断取消
+## 被打断取消
 
 ```
 {
@@ -1462,21 +1366,114 @@ Base64 编码的 PCM 音频数据片段。
 }
 ```
 
-## voiceprint\_audio\_list.in\_progress
+**type** `_string_`
+
+事件类型，固定为 `response.done`。
+
+**response** `_object_`
+
+完整的响应对象。
+
+**属性**
+
+**id** `_string_`
+
+响应的唯一标识符。
+
+**object** `_string_`
+
+固定为 `realtime.response`。
+
+**status** `_string_`
+
+响应的结束状态。可选值：
+
+-   `completed`：正常完成。
+    
+-   `cancelled`：被打断取消。`status_details.reason` 为 `turn_detected`（VAD 打断）或 `client_cancelled`（客户端取消）。
+    
+-   `failed`：LLM 或 TTS 错误。
+    
+
+**status\_details** `_object_`
+
+状态详情，仅在 `cancelled` 或 `failed` 时存在。
+
+**属性**
+
+**type** `_string_`
+
+状态类型，如 `cancelled`。
+
+**reason** `_string_`
+
+取消原因：`turn_detected`（VAD 打断）或 `client_cancelled`（客户端取消）。
+
+**modalities** `_array_`
+
+模型输出模态设置。
+
+**voice** `_string_`
+
+模型生成音频的音色，为系统音色名称或声音复刻音色的 `voice_id`。
+
+**output** `_array_`
+
+响应的输出项列表，包含完整的 item 对象。
+
+**usage** `_object_`
+
+本次响应的 Token 消耗信息。仅在 `status` 为 `completed` 时返回。
+
+**属性**
+
+**total\_tokens** `_integer_`
+
+本次响应消耗的总 Token 数。
+
+**input\_tokens** `_integer_`
+
+输入 Token 数。
+
+**output\_tokens** `_integer_`
+
+输出 Token 数。
+
+**input\_tokens\_details** `_object_`
+
+输入 Token 的分项详情，包含 `text_tokens`（文本 Token 数）和 `audio_tokens`（音频 Token 数，仅在使用音频模态时存在）。
+
+**output\_tokens\_details** `_object_`
+
+输出 Token 的分项详情，包含 `text_tokens`（文本 Token 数）和 `audio_tokens`（音频 Token 数，仅在使用音频模态时存在）。
+
+**plugins** `_object_`（可选）
+
+插件使用计量信息。启用联网搜索（`enable_search`）时返回。
+
+**属性**
+
+**search** `_object_`
+
+联网搜索计量信息。
+
+**属性**
+
+**count** `_integer_`
+
+搜索次数。
+
+**strategy** `_string_`
+
+搜索策略。
+
+## **voiceprint\_audio\_list.in\_progress**
 
 **说明**：声纹注册流程异步进行中。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `voiceprint_audio_list.in_progress`。
-
-**item\_id**`string`
-
-声纹注册任务的唯一标识符。
 
 ```
 {
@@ -1486,21 +1483,21 @@ Base64 编码的 PCM 音频数据片段。
 }
 ```
 
-## voiceprint\_audio\_list.completed
+**type** `_string_`
+
+事件类型，固定为 `voiceprint_audio_list.in_progress`。
+
+**item\_id** `_string_`
+
+声纹注册任务的唯一标识符。
+
+## **voiceprint\_audio\_list.completed**
 
 **说明**：声纹注册流程已完成。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `voiceprint_audio_list.completed`。
-
-**item\_id**`string`
-
-声纹注册任务的唯一标识符。
 
 ```
 {
@@ -1510,25 +1507,21 @@ Base64 编码的 PCM 音频数据片段。
 }
 ```
 
-## voiceprint\_audio\_list.failed
+**type** `_string_`
 
-**说明**：声纹注册失败，不阻塞正常对话调用。
+事件类型，固定为 `voiceprint_audio_list.completed`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为 `voiceprint_audio_list.failed`。
-
-**item\_id**`string`
+**item\_id** `_string_`
 
 声纹注册任务的唯一标识符。
 
-**reason**`string`
+## **voiceprint\_audio\_list.failed**
 
-失败原因描述。
+**说明**：声纹注册失败，不阻塞正常对话调用。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1538,3 +1531,15 @@ Base64 编码的 PCM 音频数据片段。
     "reason": ""
 }
 ```
+
+**type** `_string_`
+
+事件类型，固定为 `voiceprint_audio_list.failed`。
+
+**item\_id** `_string_`
+
+声纹注册任务的唯一标识符。
+
+**reason** `_string_`
+
+失败原因描述。

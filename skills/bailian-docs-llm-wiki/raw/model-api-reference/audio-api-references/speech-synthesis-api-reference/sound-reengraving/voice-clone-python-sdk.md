@@ -4,17 +4,17 @@
 
 **用户指南：**[声音复刻](https://help.aliyun.com/zh/model-studio/voice-cloning-user-guide)。
 
-## 接口地址
+## **接口地址**
 
 SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）。如需切换到其他地域，请修改 `dashscope.base_http_api_url`为对应地域的URL。
 
-#### 华北2（北京）
+### 华北2（北京）
 
 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 新加坡
+### 新加坡
 
 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
@@ -32,28 +32,34 @@ dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyunc
 **注意**：
 
 -   不同地域的 API Key 不同，请确保使用对应地域的 API Key
+    
 -   地域配置为全局设置，影响所有 DashScope SDK 的 API 调用
+    
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+**重要**
+
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
 
 `{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
-## VoiceEnrollmentService 类
+## **VoiceEnrollmentService 类**
 
 **包路径**：`dashscope.audio.tts_v2.VoiceEnrollmentService`
 
 **功能**：管理Qwen-Audio-TTS/CosyVoice复刻音色的生命周期（创建、查询、更新、删除）。
 
-### 构造方法
+### **构造方法**
 
 ```
 VoiceEnrollmentService()
 ```
 
-### create\_voice() - 创建音色
+### **create\_voice() - 创建音色**
 
 **方法签名**：
 
@@ -104,9 +110,11 @@ List\[str\]
 
 否
 
+**重要**
+
 仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash、v3-plus和v3-flash模型支持。
 
-辅助模型识别样本音频的语种，从而更准确地提取音色特征，提升复刻效果。若设置的语种与实际音频语种不符（例如为中文音频设置 `en`），系统将忽略该设置并自动检测语种。
+辅助模型识别样本音频的语种，从而更准确地提取音色特征，提升复刻效果。若设置的语种与实际音频语种不符（例如为中文音频设置 `en`），系统将忽略该设置并自动检测语种。
 
 此参数为数组，但当前版本仅处理第一个元素。
 
@@ -195,6 +203,8 @@ float
 
 否
 
+**重要**
+
 仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash和v3-flash模型支持。
 
 音频预处理后用于声音复刻的参考音频最大时长（秒）。取值范围：\[3.0, 30.0\]。
@@ -206,6 +216,8 @@ enable\_preprocess
 bool
 
 否
+
+**重要**
 
 仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash和v3-flash模型支持。
 
@@ -223,7 +235,7 @@ bool
 
 **返回值**：`str`，音色ID（voice\_id）。
 
-### list\_voices() - 查询音色列表
+### **list\_voices() - 查询音色列表**
 
 **方法签名**：
 
@@ -267,7 +279,7 @@ int
 
 **返回值**：`list`，音色列表。
 
-### query\_voice() - 查询音色详情
+### **query\_voice() - 查询音色详情**
 
 **方法签名**：
 
@@ -295,7 +307,7 @@ str
 
 **返回值**：`dict`，音色详情。
 
-### update\_voice() - 更新音色
+### **update\_voice() - 更新音色**
 
 **方法签名**：
 
@@ -354,7 +366,7 @@ bool
 
 是否开启音频预处理。
 
-### delete\_voice() - 删除音色
+### **delete\_voice() - 删除音色**
 
 **方法签名**：
 
@@ -380,9 +392,9 @@ str
 
 要删除的音色ID。
 
-## 示例代码
+## **示例代码**
 
-### 创建音色
+### **创建音色**
 
 ```
 import dashscope
@@ -409,7 +421,7 @@ print(f"Request ID: {service.get_last_request_id()}")
 print(f"Voice ID: {voice_id}")
 ```
 
-### 查询音色列表
+### **查询音色列表**
 
 ```
 import dashscope
@@ -426,7 +438,7 @@ print(f"Request ID: {service.get_last_request_id()}")
 print(f"Found voices: {voices}")
 ```
 
-### 查询特定音色
+### **查询特定音色**
 
 ```
 import dashscope
@@ -443,7 +455,7 @@ print(f"Request ID: {service.get_last_request_id()}")
 print(f"Voice Details: {voice_details}")
 ```
 
-### 更新音色
+### **更新音色**
 
 ```
 import dashscope
@@ -459,7 +471,7 @@ service.update_voice(
 print(f"Update submitted. Request ID: {service.get_last_request_id()}")
 ```
 
-### 删除音色
+### **删除音色**
 
 ```
 import dashscope

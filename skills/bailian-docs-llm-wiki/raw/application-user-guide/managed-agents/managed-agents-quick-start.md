@@ -5,7 +5,9 @@
 ## 前置准备
 
 -   已开通[阿里云百炼](https://bailian.console.aliyun.com/)。
+    
 -   当前账号在目标工作空间内具备 Managed Agents 操作权限。
+    
 
 ## 步骤 1：配置智能体
 
@@ -37,7 +39,7 @@ Skill / MCP
 
 也可通过 API 完成，指定名称、模型和工具（详见[创建 Agent](https://help.aliyun.com/zh/model-studio/agent-create)）：
 
-bash
+Bash
 
 ```
 curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/agents" \
@@ -51,7 +53,7 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
   }'
 ```
 
-python
+Python
 
 ```
 agent = client.agents.create(
@@ -64,7 +66,7 @@ print(agent.id)       # "agent_xxx"
 print(agent.version)  # 1
 ```
 
-java
+Java
 
 ```
 Agent agent = client.agents().create(AgentCreateParam.builder()
@@ -96,7 +98,7 @@ System.out.println(agent.getVersion());  // 1
 
 也可通过 API 完成，指定沙箱类型与预装包（详见[创建 Environment](https://help.aliyun.com/zh/model-studio/environment-create)）：
 
-bash
+Bash
 
 ```
 curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/environments" \
@@ -116,7 +118,7 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
   }'
 ```
 
-python
+Python
 
 ```
 env = client.environments.create(
@@ -133,7 +135,7 @@ env = client.environments.create(
 )
 ```
 
-java
+Java
 
 ```
 Environment env = client.environments().create(EnvironmentCreateParam.builder()
@@ -149,12 +151,15 @@ Environment env = client.environments().create(EnvironmentCreateParam.builder()
 页面展示已创建的智能体与环境摘要，并基于两者自动发起会话。
 
 -   确认**智能体**卡片中的名称、模型信息。
+    
 -   确认**环境**卡片中的名称、托管类型。
+    
 -   如需在沙箱中使用本地文件，点击**上传文件**挂载；否则直接跳过。
+    
 
 也可通过 API 完成，绑定智能体与环境（详见[创建 Session](https://help.aliyun.com/zh/model-studio/session-create)）：
 
-bash
+Bash
 
 ```
 curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/sessions" \
@@ -167,7 +172,7 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
   }'
 ```
 
-python
+Python
 
 ```
 session = client.sessions.create(
@@ -178,7 +183,7 @@ session = client.sessions.create(
 print(session.id, session.status)
 ```
 
-java
+Java
 
 ```
 Session session = client.sessions().create(SessionCreateParam.builder()
@@ -196,11 +201,13 @@ System.out.println(session.getId() + " " + session.getStatus());
 配置完成。页面提供两个标签页：
 
 -   **可调用 API**：展示创建事件的 curl 命令，可直接复制到终端执行。
+    
 -   **预览调试**：在页面内直接与智能体对话，实时查看事件与工具调用过程。左上角下拉框可按事件类型筛选（User、Agent、Tool、Tool\_output、Error、Model、System）。
+    
 
 向会话写入消息触发智能体处理（详见[发送 Event](https://help.aliyun.com/zh/model-studio/event-post)）：
 
-bash
+Bash
 
 ```
 curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/sessions/sesn_xxx/events" \
@@ -219,7 +226,7 @@ curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentst
   }'
 ```
 
-python
+Python
 
 ```
 client.sessions.events.send(
@@ -228,7 +235,7 @@ client.sessions.events.send(
 )
 ```
 
-java
+Java
 
 ```
 client.sessions().events().send("sesn_xxx",
@@ -238,7 +245,7 @@ client.sessions().events().send("sesn_xxx",
 
 通过 SSE 事件流实时接收处理过程与输出（详见[订阅 Event SSE 事件流](https://help.aliyun.com/zh/model-studio/event-sse-stream)）：
 
-bash
+Bash
 
 ```
 curl -N "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/sessions/sesn_xxx/events/stream" \
@@ -246,7 +253,7 @@ curl -N "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/
   -H "Accept: text/event-stream"
 ```
 
-python
+Python
 
 ```
 with client.sessions.events.stream("sesn_xxx", timeout=120.0) as stream:
@@ -260,7 +267,7 @@ with client.sessions.events.stream("sesn_xxx", timeout=120.0) as stream:
                 break
 ```
 
-java
+Java
 
 ```
 try (AgentStudioEventStream stream = client.sessions().events().stream("sesn_xxx", 120_000L)) {

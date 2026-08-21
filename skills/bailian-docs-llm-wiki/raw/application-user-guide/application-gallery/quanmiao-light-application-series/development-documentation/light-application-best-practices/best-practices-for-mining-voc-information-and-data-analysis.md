@@ -1,33 +1,40 @@
 # 挖掘VOC信息和数据分析的最佳实践
 
-本文的主要介绍借助 全妙-泛企业VOC挖掘 和 析言GBI 两个产品挖掘VOC信息并进行数据分析。
+本文的主要介绍借助**全妙-泛企业VOC挖掘**和**析言GBI**两个产品挖掘VOC信息并进行数据分析。
 
-## 目标
+## **目标**
 
 针对海量非结构化的VOC数据快速打标，整理成结构化标签数据，在通过ChatBI的方式进行实时标签分析，帮助企业完成VOC洞察的一整套流程。
 
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7431988371/p910970.png)
+
 * * *
 
-## 前提条件
+## **前提条件**
 
 -   已开通阿里云百炼中的下面两个产品：
     
-    -   全妙-泛企业VOC挖掘【[https://bailian.console.aliyun.com/?spm=5176.29619931.J\_\_Z58Z6CX7MY\_\_Ll8p1ZOR.1.74cd59fcHNZmnE#/app/app-market/quanmiao/voc](https://bailian.console.aliyun.com/?spm=5176.29619931.J__Z58Z6CX7MY__Ll8p1ZOR.1.74cd59fcHNZmnE#/app/app-market/quanmiao/voc)】；
-    -   析言GBI【[https://bailian.console.aliyun.com/xiyan?switchAgent=10037901&productCode=p\_efm#/home](https://bailian.console.aliyun.com/xiyan?switchAgent=10037901&productCode=p_efm#/home)】。
+    -   全妙-泛企业VOC挖掘【[https://bailian.console.aliyun.com/?spm=5176.29619931.J\_\_Z58Z6CX7MY\_\_Ll8p1ZOR.1.74cd59fcHNZmnE#/app/app-market/quanmiao/voc](https://bailian.console.aliyun.com/?spm=5176.29619931.J__Z58Z6CX7MY__Ll8p1ZOR.1.74cd59fcHNZmnE#/app/app-market/quanmiao/voc)】；![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7431988371/p910980.png)
+        
+    -   析言GBI【[https://bailian.console.aliyun.com/xiyan?switchAgent=10037901&productCode=p\_efm#/home](https://bailian.console.aliyun.com/xiyan?switchAgent=10037901&productCode=p_efm#/home)】。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7431988371/p910981.png)
+        
 -   已获取WorkspaceID：[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
     
 -   已获取AccessKey ID和AccessKey Secret：[获取 AccessKey 与 AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)。
     
--   RAM用户已添加`AliyunDataAnalysisGBIFullAccess`权限策略：[管理RAM用户的权限](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)。
+-   RAM用户已添加`AliyunDataAnalysisGBIFullAccess`权限策略：[为RAM用户授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)。
     
 
 * * *
 
-## 安装依赖
+## **安装依赖**
 
 1.  获取析言GBI和全秒-泛企业VOC挖掘[JAVA SDK](https://api.aliyun.com/api-tools/sdk/DataAnalysisGBI?version=2024-08-23&language=java-async-tea&tab=primer-doc)最新版本号。
+    
 2.  打开您的Maven项目的`pom.xml`文件。
+    
 3.  在`<dependencies>`标签内添加以下依赖信息，并将`<version></version>`标签中的版本号替换为最新的版本号。
+    
 
 ```
 <dependency>
@@ -35,24 +42,24 @@
   <artifactId>alibabacloud-dataanalysisgbi20240823</artifactId>
   <version>1.0.0</version>
   </dependency>
-
+ 
   <groupId>com.aliyun</groupId>
   <artifactId>alibabacloud-aimiaobi20230801</artifactId>
   <version>取最新版本</version>
   </dependency>
-
+ 
   <dependency>
   <groupId>org.projectlombok</groupId>
   <artifactId>lombok</artifactId>
   <version>1.18.30</version>
   </dependency>
-
+ 
   <dependency>
   <groupId>com.alibaba.fastjson2</groupId>
   <artifactId>fastjson2</artifactId>
   <version>2.0.21</version>
   </dependency>
-
+ 
   <dependency>
   <groupId>org.junit.jupiter</groupId>
   <artifactId>junit-jupiter</artifactId>
@@ -60,16 +67,18 @@
   </dependency>
 ```
 
-1.  保存`pom.xml`文件。
-2.  更新项目依赖，将SDK添加到您的项目中。
+4.  保存`pom.xml`文件。
+    
+5.  更新项目依赖，将SDK添加到您的项目中。
+    
 
 * * *
 
-## 操作步骤
+## **操作步骤**
 
-### 步骤一：通过全妙-泛企业VOC挖掘提取内容标签
+### **步骤一：通过全妙-泛企业VOC挖掘提取内容标签**
 
-基于全妙泛企业VOC挖掘的接口[妙策-企业VOC挖掘](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-dir-miaoce-enterprise-voc-mining)（例如：本示例中的`SubmitEnterpriseVocAnalysisTask`接口），来帮您实现对已有工单类数据的Voc挖掘、标签提取。
+基于全妙泛企业VOC挖掘的接口[妙策-企业VOC挖掘](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-dir-miaoce-enterprise-voc-mining/)（例如：本示例中的`SubmitEnterpriseVocAnalysisTask`接口），来帮您实现对已有工单类数据的Voc挖掘、标签提取。
 
 请将代码示例中的`accessKeyId`、`accessKeySecret`及`workspaceId`替换为实际值，以确保代码正常运行并返回正确的结果。
 
@@ -294,6 +303,8 @@ public class EnterpriseVocTest {
 
 在如上的代码示例中，企业Voc挖掘接口，会将如下图所示的工单数据：
 
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7431988371/p910968.png)
+
 提取出我们所需要的各种信息、标签类型，并以结构化信息的形式返回：
 
 ```
@@ -415,7 +426,7 @@ public class EnterpriseVocTest {
 ]
 ```
 
-### 步骤二：将内容标签的结构化数据转存到数据库
+### **步骤二：将内容标签的结构化数据转存到数据库**
 
 根据企业Voc挖掘结果中的tagName，将其构建成数据库中的列名并生成数据库DDL语句，构建数据库。以MySQL数据库为例。
 
@@ -448,16 +459,23 @@ CREATE TABLE `analyze_table` (
 INSERT INTO `chat_bi`.`analyze_table` (`Uid`, `服务站省`, `服务站市`, `服务站区`, `服务里程`, `提交时间`, `提交来源`, `经销商名称`, `经销商编码`, `机型`, `情绪情感`, `问题描述`, `故障件`, `问题类型一级标签`, `问题类型二级标签`, `问题类型三级标签`) VALUES ('001eeb2d-bd96-4bbe-a2f9-15b05d65ff7c', '辽宁省', '大连市', '中山区', 774, '2025-01-02 20:07:00', '电话', '经销商C', 'ed1de1b2-3b5b-4564-b881-5fab9f29fbb1', '机型1', '负向', '关于车架的故障问题进行了描述。', '车架', '配件咨询', '配件开箱破损（含售后衍生品）', '配件内物破损');
 ```
 
-### 步骤三：将数据库关联到析言GBI并进行对话分析
+### **步骤三：将数据库关联到析言GBI并进行对话分析**
 
 -   在[析言GBI](https://bailian.console.aliyun.com/xiyan/#/dataManagement/dataSourceM?back=back)中将刚刚配置好的数据库与析言GBI进行关联配置。
     
+    ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7431988371/p910972.png)
+    
 -   无需额外的配置，即可对刚刚关联的数据库内容进行问答，并获取数据结果以及相关可视化分析展示。
     
-      
+    ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7431988371/p910973.png)
+    
+    ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7431988371/p910971.png)
+    
+    ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7431988371/p910969.png)
+    
 
-### （可选）步骤四：将析言GBI的对话接口集成到业务系统
+### **（可选）步骤四：将析言GBI的对话接口集成到业务系统**
 
-可以采用析言GBI云服务所提供的[Chat对话接口](https://help.aliyun.com/zh/model-studio/api-dataanalysisgbi-2024-08-23-rundataanalysis)来实现如图所示的chatbi能力，并集成到自己的业务系统。
+可以采用析言GBI云服务所提供的[RunDataAnalysis - Chat对话接口](https://help.aliyun.com/zh/model-studio/api-dataanalysisgbi-2024-08-23-rundataanalysis)来实现如图所示的chatbi能力，并集成到自己的业务系统。
 
 代码示例参考：[操作步骤](https://help.aliyun.com/zh/model-studio/gbi-best-practices#71c9235ce84u5)

@@ -28,7 +28,9 @@ Gemini 3.1 Live
 
 `qwen3.5-livetranslate-flash-realtime`
 
-**说明**本文档面向“语音 → 语音”场景。如需视觉理解、音视频分析、内容审核等更广泛的多模态能力，请参考[全模态](raw/model-user-guide/model-experience/omni.md)。
+**说明**
+
+本文档面向“语音 → 语音”场景。如需视觉理解、音视频分析、内容审核等更广泛的多模态能力，请参考[全模态](https://help.aliyun.com/zh/model-studio/omni/)。
 
 ## S2S（Speech-to-Speech）与Pipeline对比
 
@@ -57,18 +59,25 @@ Gemini 3.1 Live
 声音克隆、声音设计（CosyVoice）
 
 -   **使用S2S**：当交互式对话、低延迟和音频感知的回复是关键需求时。
+    
 -   **使用Pipeline**：当需要自定义音色，或者需要为每个阶段分别选择最优的ASR、LLM和TTS模型时。
+    
 
 本文档继续介绍 S2S 单模型路线（Omni、Livetranslate）。如选择 Pipeline 路线，分别在以下文档中挑选三个组件：
 
--   **ASR（语音识别）**：[语音识别](raw/model-user-guide/model-experience/asr-model.md)
--   **LLM（大语言模型）**：[文本生成](raw/model-user-guide/model-experience/text-generation-model.md)
--   **TTS（语音合成）**：[语音合成](raw/model-user-guide/model-experience/tts-model.md)
+-   **ASR（语音识别）**：[语音识别](https://help.aliyun.com/zh/model-studio/asr-model/)
+    
+-   **LLM（大语言模型）**：[文本生成](https://help.aliyun.com/zh/model-studio/text-generation-model/)
+    
+-   **TTS（语音合成）**：[语音合成](https://help.aliyun.com/zh/model-studio/tts-model/)
+    
 
 ## 实时还是文件模式？
 
 -   **实时（WebSocket）**：适用于语音助手、呼叫中心、同声传译等实时语音交互场景。音频流式输入，语音流式输出。
+    
 -   **文件模式（HTTP）**：可以用延迟换取更好的效果，适用于视频配音、播客翻译、离线内容处理等场景。文件模式下还支持 Function Calling、联网搜索、思考模式、视频上下文等附带能力（详见下方“S2S 单模型的附带能力”）。
+    
 
 ## 按场景选模型（S2S 单模型路线）
 
@@ -124,32 +133,44 @@ WebSocket
 
 让模型根据听到和看到的内容执行操作 -- 查询知识库、查询日程、触发工作流。使用 Qwen3.5 Omni（WebSocket 与 HTTP 模式）、Qwen3 Omni（HTTP 模式）或 Qwen-Audio Realtime（WebSocket 模式）。
 
-**说明**Qwen3.5-Omni / Qwen3-Omni 实时（WebSocket）模式和 Livetranslate 模型不支持此功能。
+**说明**
+
+Qwen3.5-Omni / Qwen3-Omni 实时（WebSocket）模式和 Livetranslate 模型不支持此功能。
 
 ### 联网搜索
 
 让模型检索实时信息，回答关于时事、股价、天气等问题。使用 Qwen3.5 Omni（HTTP 和 WebSocket），包括 Plus 和 Flash 系列。模型自主决定是否搜索。Qwen-Audio Realtime 不支持此功能。
 
-**说明**Qwen3-Omni-Flash 和 Livetranslate 模型不支持此功能。
+**说明**
+
+Qwen3-Omni-Flash 和 Livetranslate 模型不支持此功能。
 
 ### 思考模式
 
 当回答质量比延迟更重要时，使用 Qwen3 Omni（HTTP 模式）。模型在回复前会逐步推理，适用于视频分析、批量打标等场景。Qwen-Audio Realtime 不支持此功能。
 
-**说明**思考模式下不支持生成语音。
+**说明**
+
+思考模式下不支持生成语音。
 
 ## 翻译
 
 以下模型系列均支持语音翻译：
 
 -   **Qwen3.5-Livetranslate**：支持 60 种语言互译，其中 29 种支持音频+文本输出、31 种仅支持文本输出，覆盖中文、英语、法语、德语、俄语、日语、韩语、西班牙语、葡萄牙语、阿拉伯语等主流语种。
+    
 -   **Qwen3-Livetranslate**：支持18种语言 + 5种中文方言，约3秒延迟，开箱即用。文件模式支持输入视频以获得上下文感知的翻译精度。其中7种语言仅输出文本（不输出语音）。
+    
 -   **Qwen3.5-Omni**：支持29种输出语言 + 7种中文方言。优秀的音视频理解能力和联网搜索。可通过系统提示词注入术语和领域上下文。支持实时和文件模式。
+    
 -   **Qwen3-Omni-Flash**：支持11种输出语言 + 8种中文方言。可通过系统提示词注入术语和领域上下文。支持实时和文件模式。成本更低。
+    
 
-**说明**快速搭建翻译应用推荐Livetranslate；最高质量和最广语言覆盖推荐Qwen3.5-Omni；成本敏感场景推荐Qwen3-Omni-Flash。
+**说明**
 
-支持的语言
+快速搭建翻译应用推荐Livetranslate；最高质量和最广语言覆盖推荐Qwen3.5-Omni；成本敏感场景推荐Qwen3-Omni-Flash。
+
+**支持的语言**
 
 **语言**
 
@@ -1335,8 +1356,12 @@ WebSocket
 
 选定模型后，参考对应的调用文档：
 
--   Qwen-Audio Realtime（WebSocket，实时语音对话）→ [实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides)
+-   Qwen-Audio Realtime（WebSocket，实时语音对话）→ [实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime)
+    
 -   Qwen3.5-Omni / Qwen3-Omni（WebSocket，实时）→ [实时（Qwen-Omni-Realtime）](https://help.aliyun.com/zh/model-studio/realtime)
+    
 -   Qwen3.5-Omni / Qwen3-Omni（HTTP，文件）→ [非实时（Qwen-Omni）](https://help.aliyun.com/zh/model-studio/qwen-omni)
+    
 -   Qwen3.5-Livetranslate（WebSocket，实时）→ [实时语音/音视频翻译-千问](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime)
+    
 -   Qwen3-Livetranslate（HTTP，文件）→ [音视频文件翻译-千问](https://help.aliyun.com/zh/model-studio/qwen3-livetranslate-flash)

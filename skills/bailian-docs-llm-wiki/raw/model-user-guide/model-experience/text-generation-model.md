@@ -53,7 +53,9 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 100万Token约相当于70万个汉字或10本小说。
 
 -   长文档或大型代码库：`qwen3.8-max`/`qwen3.7-plus` / `qwen3.7-flash` （100万）。
+    
 -   常规任务：128k-256k已足够。
+    
 
 模型的上下文信息请前往模型广场查看。
 
@@ -72,9 +74,11 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 让模型执行操作：查询天气、查询数据库、预订会议等。
 
 -   Function Calling（自定义工具，模型调用）：所有通用模型均支持。
+    
 -   内置工具（联网搜索、代码解释器、网页抓取等，无需复杂配置）。
+    
 
-> 详情参见[工具调用](https://help.aliyun.com/zh/model-studio/tool-calls)。
+> 详情参见[工具调用](https://help.aliyun.com/zh/model-studio/tool-calls/)。
 
 ### 结构化输出
 
@@ -222,7 +226,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 以下模型不再作为首选推荐。如需查看模型详细参数（上下文窗口、计费等），请前往模型广场。
 
-### Qwen3.7
+### **Qwen3.7**
 
 **模型ID**
 
@@ -912,7 +916,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-#### 三方模型
+#### **三方模型**
 
 **模型ID**
 

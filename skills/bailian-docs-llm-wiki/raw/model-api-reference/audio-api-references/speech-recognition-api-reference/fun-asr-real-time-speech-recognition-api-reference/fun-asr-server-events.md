@@ -2,33 +2,29 @@
 
 本文介绍 Qwen-Audio-3.0-ASR-Flash-Streaming/Fun-ASR-Realtime 实时语音识别服务通过 WebSocket 推送给客户端的服务端事件，包括 task-started、result-generated、task-finished、task-failed 四类事件的数据结构与字段含义。
 
-**用户指南：**关于模型介绍和选型建议请参见[语音识别](raw/model-user-guide/model-experience/asr-model.md)。
+**用户指南：**关于模型介绍和选型建议请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model/)。
 
-**事件交互流程**：如需了解事件交互时序，请参见[WebSocket API](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/fun-asr-real-time-speech-recognition-api-reference/fun-asr-realtime-websocket-api.md)。
+**事件交互流程**：如需了解事件交互时序，请参见[WebSocket API](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-websocket-api)。
 
-## task-started
+## **task-started**
 
 **说明**：任务启动成功，客户端可开始发送音频数据。
 
-**header**`object`
+**header** `_object_`
 
-属性
+**属性**
 
-**task\_id**`string`
+**task\_id** `_string_`
 
 客户端生成的任务 ID（UUID 格式）。
 
-**event**`string`
+**event** `_string_`
 
 事件类型，固定为 `task-started`。
 
-**attributes**`object`
+**attributes** `_object_`
 
 附加属性（通常为空）。
-
-**payload**`object`
-
-固定为`{}`。
 
 ```
 {
@@ -41,99 +37,28 @@
 }
 ```
 
-## result-generated
+**payload** `_object_`
+
+固定为`{}`。
+
+## **result-generated**
 
 **说明**：识别结果，包含中间结果（sentence\_end=false）和最终结果（sentence\_end=true）。其中，新句子的首个中间结果包含 sentence\_begin=true。
 
-**header**`object`
+**header** `_object_`
 
-属性
+**属性**
 
-**task\_id**`string`
+**task\_id** `_string_`
 
 客户端生成的任务 ID（UUID 格式）。
 
-**event**`string`
+**event** `_string_`
 
 事件类型，固定为 `result-generated`。
 
-**payload**`object`
-
-属性
-
-**output**`object`
-
-属性
-
-**usage**`object`
-
-当`payload.output.sentence.sentence_end`为`false`（当前句子未结束）时，`usage`为`null`。
-
-当`payload.output.sentence.sentence_end`为`true`（当前句子已结束）时，`usage.duration`为当前任务计费时长。
-
-属性
-
-**duration**`integer`
-
-任务计费时长（s）。
-
-属性
-
-**sentence**`object`
-
-属性
-
-**begin\_time**`integer`
-
-句子开始时间（ms）。
-
-**end\_time**`integer`
-
-句子结束时间（ms）。
-
-**text**`string`
-
-识别文本。
-
-**heartbeat**`boolean`
-
-若为 true，可跳过该结果（心跳包）。
-
-**sentence\_begin**`boolean`
-
-用于标识句子开始。
-
-**sentence\_end**`boolean`
-
-是否句子结束（true=最终结果，false=中间结果）。
-
-**sentence\_id**`integer`
-
-句子的序号标识。正常识别结果中，sentence\_id 从 1 开始递增。当 heartbeat 为 true 时（即心跳包），sentence\_id 固定为 0。
-
-**words**`array[object]`
-
-字时间戳信息。
-
-属性
-
-**begin\_time**`integer`
-
-字开始时间（ms）。
-
-**end\_time**`integer`
-
-字结束时间（ms）。
-
-**text**`string`
-
-识别文本。
-
-**punctuation**`string`
-
-标点符号。
-
 **句子开始结果：**
+
 ```
 {
   "header": {
@@ -157,7 +82,9 @@
   }
 }
 ```
+
 **最终结果：**
+
 ```
 {
   "header": {
@@ -209,29 +136,101 @@
 }
 ```
 
-## task-finished
+**payload** `_object_`
+
+**属性**
+
+**output** `_object_`
+
+**属性**
+
+**usage** `_object_`
+
+当`payload.output.sentence.sentence_end`为`false`（当前句子未结束）时，`usage`为`null`。
+
+当`payload.output.sentence.sentence_end`为`true`（当前句子已结束）时，`usage.duration`为当前任务计费时长。
+
+**属性**
+
+**duration** `_integer_`
+
+任务计费时长（s）。
+
+**属性**
+
+**sentence** `_object_`
+
+**属性**
+
+**begin\_time** `_integer_`
+
+句子开始时间（ms）。
+
+**end\_time** `_integer_`
+
+句子结束时间（ms）。
+
+**text** `_string_`
+
+识别文本。
+
+**heartbeat** `_boolean_`
+
+若为 true，可跳过该结果（心跳包）。
+
+**sentence\_begin** `_boolean_`
+
+用于标识句子开始。
+
+**sentence\_end** `_boolean_`
+
+是否句子结束（true=最终结果，false=中间结果）。
+
+**sentence\_id** `_integer_`
+
+句子的序号标识。正常识别结果中，sentence\_id 从 1 开始递增。当 heartbeat 为 true 时（即心跳包），sentence\_id 固定为 0。
+
+**words** `_array[object]_`
+
+字时间戳信息。
+
+**属性**
+
+**begin\_time** `_integer_`
+
+字开始时间（ms）。
+
+**end\_time** `_integer_`
+
+字结束时间（ms）。
+
+**text** `_string_`
+
+识别文本。
+
+**punctuation** `_string_`
+
+标点符号。
+
+## **task-finished**
 
 **说明**：任务正常结束，可关闭连接或复用连接。
 
-**header**`object`
+**header** `_object_`
 
-属性
+**属性**
 
-**task\_id**`string`
+**task\_id** `_string_`
 
 客户端生成的任务 ID（UUID 格式）。
 
-**event**`string`
+**event** `_string_`
 
 事件类型，固定为 `task-finished`。
 
-**attributes**`object`
+**attributes** `_object_`
 
 附加属性（通常为空）。
-
-**payload**`object`
-
-无需关注其中内容，通常为`{}`。
 
 ```
 {
@@ -247,37 +246,37 @@
 }
 ```
 
-## task-failed
+**payload** `_object_`
+
+无需关注其中内容，通常为`{}`。
+
+## **task-failed**
 
 **说明**：任务失败，连接会被关闭，无法复用。
 
-**header**`object`
+**header** `_object_`
 
-属性
+**属性**
 
-**task\_id**`string`
+**task\_id** `_string_`
 
 客户端生成的任务 ID（UUID 格式）。
 
-**event**`string`
+**event** `_string_`
 
 事件类型，固定为 `task-failed`。
 
-**error\_code**`string`
+**error\_code** `_string_`
 
 错误类型描述。
 
-**error\_message**`string`
+**error\_message** `_string_`
 
 具体错误原因。
 
-**attributes**`object`
+**attributes** `_object_`
 
 附加属性（通常为空）。
-
-**payload**`object`
-
-固定为`{}`。
 
 ```
 {
@@ -291,3 +290,7 @@
     "payload": {}
 }
 ```
+
+**payload** `_object_`
+
+固定为`{}`。

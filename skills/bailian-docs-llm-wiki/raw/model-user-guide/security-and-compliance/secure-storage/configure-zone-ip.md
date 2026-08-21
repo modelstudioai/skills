@@ -8,7 +8,7 @@
 
 ## 前提条件
 
-已配置终端节点并发起连接。具体操作，请参见[配置终端节点并发起连接](raw/model-user-guide/security-and-compliance/secure-storage/configure-an-endpoint-and-initiate-a-connection.md)。
+已配置终端节点并发起连接。具体操作，请参见[配置终端节点并发起连接](https://help.aliyun.com/zh/model-studio/configure-an-endpoint-and-initiate-a-connection)。
 
 ## 步骤1：创建网关
 
@@ -16,7 +16,7 @@
 
 1.  登录[MSE网关管理控制台](https://mse.console.aliyun.com/#/microgw?region=cn-beijing)。
     
-2.  在左侧导航栏选择**云原生网关** > **网关列表**。
+2.  在左侧导航栏选择**云原生网关** > **网关列表**。
     
 3.  顶部菜单栏选择地域“华北2（北京）”。
     
@@ -102,7 +102,7 @@
     
 3.  在**终端节点配置**页面单击**下一步**，进入**可用区IP配置**页面。
     
-    选择与[步骤1：创建网关](https://help.aliyun.com/zh/model-studio/configure-zone-ip#18a2a3bed0hua)中一致的可用区，如果仅有一个可用区一致，则只选择该可用区。可用区IP地址为[步骤2：获取可用区VIP及交换机网段](https://help.aliyun.com/zh/model-studio/configure-zone-ip#24a6fbbdc0hkn)中已获取的可用区的VIP。
+    选择与[步骤1：创建网关](#18a2a3bed0hua)中一致的可用区，如果仅有一个可用区一致，则只选择该可用区。可用区IP地址为[步骤2：获取可用区VIP及交换机网段](#24a6fbbdc0hkn)中已获取的可用区的VIP。
     
 4.  配置完成后，单击**保存**。
     
@@ -116,10 +116,12 @@
 3.  在**入方向**页签中，单击**手动添加**，配置以下参数。
     
     -   **端口范围 > 目的**：选择**全部（1/65535）**。
-    -   **源**：[步骤2：获取可用区VIP及交换机网段](https://help.aliyun.com/zh/model-studio/configure-zone-ip#24a6fbbdc0hkn)中已经获取的VIP，多个VIP之间用逗号分隔。
+        
+    -   **源**：[步骤2：获取可用区VIP及交换机网段](#24a6fbbdc0hkn)中已经获取的VIP，多个VIP之间用逗号分隔。
+        
 4.  单击当前行最右侧的**保存**。
     
 
 ## 下一步
 
-进入**资源配置**页面[配置私有网络中的资源](raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)（例如，ElasticSearch、ADB、OSS），便于阿里云百炼将数据存储到相应资源中。
+进入**资源配置**页面[配置私有网络中的资源](https://help.aliyun.com/zh/model-studio/configure-resources-in-private-network)（例如，ElasticSearch、ADB、OSS），便于阿里云百炼将数据存储到相应资源中。

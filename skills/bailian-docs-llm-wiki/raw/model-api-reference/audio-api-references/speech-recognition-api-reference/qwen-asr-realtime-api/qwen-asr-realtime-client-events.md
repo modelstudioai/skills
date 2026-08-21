@@ -4,11 +4,11 @@
 
 **用户指南：**模型介绍、功能特性和完整示例代码请参见[实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)
 
-## session.update
+## **session.update**
 
 用于更新会话配置，建议在 WebSocket 连接建立后首先发送该事件。建议在WebSocket连接建立成功后，立即发送此事件作为交互的第一步。如果未发送，系统将使用默认配置。
 
-服务端成功处理此事件后，会发送`服务端事件`事件作为确认。
+服务端成功处理此事件后，会发送`[服务端事件](https://help.aliyun.com/zh/model-studio/qwen-tts-realtime-server-events#424ef2e774q9p)`事件作为确认。
 
 **参数**
 
@@ -151,7 +151,7 @@ string
 
 否，`turn_dection`存在时必须
 
-固定为 `server_vad`。
+固定为 `server_vad`。
 
 session.turn\_detection.threshold
 
@@ -200,14 +200,16 @@ VAD断句检测阈值（ms）。静音持续时长超过该阈值将被认为是
 }
 ```
 
-## input\_audio\_buffer.append
+## **input\_audio\_buffer.append**
 
 用于将音频数据块追加到服务端的输入缓冲区。这是流式发送音频的核心事件。
 
 **不同场景下的区别：**
 
 -   **VAD 模式**：音频缓冲区用于语音活动检测，服务端会自动决定何时提交音频进行识别。
--   **非VAD模式**：客户端可以控制每个事件中的音频数据量，单个 `input_audio_buffer.append` 事件中的 `audio` 字段内容最大为 15 MiB。建议流式发送较小的音频块以获得更快的响应。
+    
+-   **非VAD模式**：客户端可以控制每个事件中的音频数据量，单个 `input_audio_buffer.append` 事件中的 `audio` 字段内容最大为 15 MiB。建议流式发送较小的音频块以获得更快的响应。
+    
 
 **重要提示**：服务端不会对`input_audio_buffer.append`事件发送任何确认响应。
 
@@ -251,13 +253,13 @@ Base64编码的音频数据。
 }
 ```
 
-## input\_audio\_buffer.commit
+## **input\_audio\_buffer.commit**
 
 非VAD模式下，用于手动触发识别。此事件通知服务端，客户端已发送完一段完整的语音，将当前缓冲区内的所有音频数据作为一个整体进行识别。
 
 **禁用场景：**VAD模式。
 
-服务端成功处理后，会发送`input_audio_buffer.committed`事件作为确认响应。
+服务端成功处理后，会发送`[input_audio_buffer.committed](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-server-events#1108a3764an0e)`事件作为确认响应。
 
 **参数**
 
@@ -290,16 +292,18 @@ string
 }
 ```
 
-## session.finish
+## **session.finish**
 
 用于结束当前会话。
 
 服务端响应流程：
 
--   已检测到语音：服务端完成最后的语音识别后，发送包含识别结果的`conversation.item.input_audio_transcription.completed`事件，随后发送[session.finished](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-server-events#6eaa77339djdv)事件作为会话结束标识。
--   未检测到语音：服务端直接发送`session.finished`事件。
+-   已检测到语音：服务端完成最后的语音识别后，发送包含识别结果的`[conversation.item.input_audio_transcription.completed](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-server-events#403ecacd74qqg)`事件，随后发送[session.finished](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-server-events#6eaa77339djdv)事件作为会话结束标识。
+    
+-   未检测到语音：服务端直接发送`[session.finished](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-server-events#6eaa77339djdv)`事件。
+    
 
-客户端监听到`session.finished`事件后，需主动断开连接。
+客户端监听到`[session.finished](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-server-events#6eaa77339djdv)`事件后，需主动断开连接。
 
 **参数**
 

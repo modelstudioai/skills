@@ -4,39 +4,13 @@
 
 > 相关文档：[实时语音/音视频翻译-千问](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime)。
 
-## error
+## **error**
 
 服务端返回的错误信息。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`error`。
-
-**error**`object`
-
-错误的详细信息。
-
-属性
-
-**type**`string`
-
-错误类型。
-
-**code**`string`
-
-错误码。
-
-**message**`string`
-
-错误信息。
-
-**param**`string`
-
-与错误相关的参数，如`session.modalities`。
 
 ```
 {
@@ -51,79 +25,39 @@
 }
 ```
 
-## session.created
+**type** `_string_`
+
+事件类型，固定为`error`。
+
+**error** `_object_`
+
+错误的详细信息。
+
+**属性**
+
+**type** `_string_`
+
+错误类型。
+
+**code** `_string_`
+
+错误码。
+
+**message** `_string_`
+
+错误信息。
+
+**param** `_string_`
+
+与错误相关的参数，如`session.modalities`。
+
+## **session.created**
 
 客户端连接后，服务端返回的第一个事件，包含本次连接的默认配置信息。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`session.created`。
-
-**session**`object`
-
-会话的配置。
-
-属性
-
-**id**`string`
-
-会话的唯一标识符。
-
-**object**`string`
-
-固定为`realtime.session`。
-
-**model**`string`
-
-使用的模型。
-
-**modalities**`array`
-
-模型输出模态设置。
-
-**voice**`string`
-
-模型生成音频的音色。
-
-**input\_audio\_format**`string`
-
-输入音频的格式，默认为`pcm`。
-
-**sample\_rate**`integer`
-
-输入音频的采样率，单位为Hz。
-
-**output\_audio\_format**`string`
-
-输出音频的格式，默认为`pcm`。
-
-**turn\_detection**`object`
-
-VAD（语音活动检测）配置。
-
-**translation**`object`（可选）
-
-翻译配置。
-
-属性
-
-**language**`string`（可选）
-
-设置的翻译目标语种。
-
-**corpus**`object` （可选）
-
-热词配置，用于提升特定词汇的翻译准确性。
-
-属性
-
-**corpus.phrases**`object` （可选）
-
-热词映射表。key 为源语言词汇，value 为目标语言对应翻译，参见[支持的语种](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#4ffd192226f0s) 。
 
 ```
 {
@@ -159,133 +93,79 @@ VAD（语音活动检测）配置。
 }
 ```
 
-## session.updated
+**type** `_string_`
 
-收到用户的 `session.update` 请求后，若处理成功，则返回此事件；若出错，则返回 `error` 事件。
+事件类型，固定为`session.created`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`session.updated`。
-
-**session**`object`
+**session** `_object_`
 
 会话的配置。
 
-属性
+**属性**
 
-**id**`string`
+**id** `_string_`
 
 会话的唯一标识符。
 
-**object**`string`
+**object** `_string_`
 
 固定为`realtime.session`。
 
-**model**`string`
+**model** `_string_`
 
 使用的模型。
 
-**modalities**`array`
+**modalities** `_array_`
 
 模型输出模态设置。
 
-**voice**`string`
+**voice** `_string_`
 
 模型生成音频的音色。
 
-**sample\_rate**`integer`（可选）
+**input\_audio\_format** `_string_`
 
-输入音频的采样率。
+输入音频的格式，默认为`pcm`。
 
-**input\_audio\_format**`string`
+**sample\_rate** `_integer_`
 
-输入音频的格式，固定为`pcm`。
+输入音频的采样率，单位为Hz。
 
-**output\_audio\_format**`string`
+**output\_audio\_format** `_string_`
 
-输出音频的格式，固定为`pcm`。
+输出音频的格式，默认为`pcm`。
 
-**input\_audio\_transcription**`object`
+**turn\_detection** `_object_`
 
-输入音频转录配置。仅在会话配置了`input_audio_transcription.model`参数时返回。
+VAD（语音活动检测）配置。
 
-属性
-
-**model**`string`
-
-语音识别模型。
-
-**language**`string`
-
-设置的语音识别语种。
-
-**turn\_detection**`object`
-
-VAD（语音活动检测）配置。Manual 模式下（客户端在`session.update`中将该参数设为`null`）不返回此字段。
-
-属性
-
-**type**`string`
-
-VAD 类型，固定为`server_vad`。
-
-**threshold**`float`
-
-VAD 检测灵敏度。
-
-**prefix\_padding\_ms**`integer`
-
-语音开始前保留的音频时长（毫秒），避免丢失语音起始部分。
-
-**silence\_duration\_ms**`integer`
-
-语音结束后需保持静音的最短时长（毫秒），超过该时长即判定语音结束。
-
-**create\_response**`boolean`
-
-VAD 检测到语音结束后，是否自动触发翻译响应。
-
-**interrupt\_response**`boolean`
-
-VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译响应。
-
-**translation**`object`（可选）
+**translation** `_object_` （可选）
 
 翻译配置。
 
-属性
+**属性**
 
-**language**`string`（可选）
+**language** `_string_` （可选）
 
 设置的翻译目标语种。
 
-**corpus**`object`（可选）
+**corpus** `_object_` （可选）
 
 热词配置，用于提升特定词汇的翻译准确性。
 
-属性
+**属性**
 
-**corpus.phrases**`object`（可选）
+**corpus.phrases** `_object_` （可选）
 
-热词映射表。key 为源语言词汇，value 为目标语言对应翻译。
+热词映射表。key 为源语言词汇，value 为目标语言对应翻译，参见[支持的语种](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#4ffd192226f0s) 。
 
-**enable\_voice\_clone**`boolean`
+## **session.updated**
 
-是否启用声音复刻。
+收到用户的 `session.update` 请求后，若处理成功，则返回此事件；若出错，则返回 `error` 事件。
 
-**voice\_clone\_options**`object`
+**event\_id** `_string_`
 
-声音复刻控制参数，仅在`enable_voice_clone`为`true`时返回。
-
-属性
-
-**frequency**`string`
-
-音色复刻频率。
+本次事件唯一标识符。
 
 ```
 {
@@ -332,19 +212,135 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 }
 ```
 
-## session.finished
+**type** `_string_`
+
+事件类型，固定为`session.updated`。
+
+**session** `_object_`
+
+会话的配置。
+
+**属性**
+
+**id** `_string_`
+
+会话的唯一标识符。
+
+**object** `_string_`
+
+固定为`realtime.session`。
+
+**model** `_string_`
+
+使用的模型。
+
+**modalities** `_array_`
+
+模型输出模态设置。
+
+**voice** `_string_`
+
+模型生成音频的音色。
+
+**sample\_rate** `_integer_` （可选）
+
+输入音频的采样率。
+
+**input\_audio\_format** `_string_`
+
+输入音频的格式，固定为`pcm`。
+
+**output\_audio\_format** `_string_`
+
+输出音频的格式，固定为`pcm`。
+
+**input\_audio\_transcription** `_object_`
+
+输入音频转录配置。仅在会话配置了`input_audio_transcription.model`参数时返回。
+
+**属性**
+
+**model** `_string_`
+
+语音识别模型。
+
+**language** `_string_`
+
+设置的语音识别语种。
+
+**turn\_detection** `_object_`
+
+VAD（语音活动检测）配置。Manual 模式下（客户端在`session.update`中将该参数设为`null`）不返回此字段。
+
+**属性**
+
+**type** `_string_`
+
+VAD 类型，固定为`server_vad`。
+
+**threshold** `_float_`
+
+VAD 检测灵敏度。
+
+**prefix\_padding\_ms** `_integer_`
+
+语音开始前保留的音频时长（毫秒），避免丢失语音起始部分。
+
+**silence\_duration\_ms** `_integer_`
+
+语音结束后需保持静音的最短时长（毫秒），超过该时长即判定语音结束。
+
+**create\_response** `_boolean_`
+
+VAD 检测到语音结束后，是否自动触发翻译响应。
+
+**interrupt\_response** `_boolean_`
+
+VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译响应。
+
+**translation** `_object_` （可选）
+
+翻译配置。
+
+**属性**
+
+**language** `_string_` （可选）
+
+设置的翻译目标语种。
+
+**corpus** `_object_` （可选）
+
+热词配置，用于提升特定词汇的翻译准确性。
+
+**属性**
+
+**corpus.phrases** `_object_` （可选）
+
+热词映射表。key 为源语言词汇，value 为目标语言对应翻译。
+
+**enable\_voice\_clone** `_boolean_`
+
+是否启用声音复刻。
+
+**voice\_clone\_options** `_object_`
+
+声音复刻控制参数，仅在`enable_voice_clone`为`true`时返回。
+
+**属性**
+
+**frequency** `_string_`
+
+音色复刻频率。
+
+## **session.finished**
 
 会话结束事件，表示当前会话中，所有音频翻译已完成。
 
 该事件在客户端发送[session.finish](https://help.aliyun.com/zh/model-studio/live-translator-client-events#f8075550b26jf)后才会发送，客户端接收到该事件后可主动断开连接。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`session.finished`。
 
 ```
 {
@@ -353,60 +349,17 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 }
 ```
 
-## response.created
+**type** `_string_`
+
+事件类型，固定为`session.finished`。
+
+## **response.created**
 
 当服务端生成新的模型响应时，会返回此事件。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.created`。
-
-**response**`object`
-
-响应对象。
-
-属性
-
-**id** `string`
-
-响应的唯一标识符。
-
-**conversation\_id** `string`
-
-当前会话的唯一标识符。
-
-**object** `string`
-
-对象类型，此事件下固定为`realtime.response`。
-
-**status** `string`
-
-响应状态，取值范围：
-
--   `completed`（已完成）
--   `failed`（失败）
--   `in_progress`（进行中）
--   `incomplete`（不完整）
-
-**modalities** `array`
-
-响应的模态。
-
-**voice** `string`
-
-模型生成音频的音色。
-
-**output\_audio\_format**`string`
-
-输出音频的格式。
-
-**output** `string`
-
-此事件下目前为空。
 
 ```
 {
@@ -428,99 +381,64 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 }
 ```
 
-## response.done
+**type** `_string_`
 
-响应生成完成后，服务端会返回此事件。事件中的 `response` 对象包含除原始音频数据外的全部输出项。
+事件类型，固定为`response.created`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.done`。
-
-**response**`object`
+**response** `_object_`
 
 响应对象。
 
-属性
+**属性**
 
-**id** `string`
+**id** `_string_`
 
 响应的唯一标识符。
 
-**conversation\_id** `string`
+**conversation\_id** `_string_`
 
 当前会话的唯一标识符。
 
-**object** `string`
+**object** `_string_`
 
 对象类型，此事件下固定为`realtime.response`。
 
-**status** `string`
+**status** `_string_`
 
-响应的状态。
+响应状态，取值范围：
 
-**modalities** `array`
+-   `completed`（已完成）
+    
+-   `failed`（失败）
+    
+-   `in_progress`（进行中）
+    
+-   `incomplete`（不完整）
+    
+
+**modalities** `_array_`
 
 响应的模态。
 
-**voice** `string`
+**voice** `_string_`
 
 模型生成音频的音色。
 
-**output\_audio\_format**`string`
+**output\_audio\_format** `_string_`
 
 输出音频的格式。
 
-**output** `object`
+**output** `_string_`
 
-响应的输出。
+此事件下目前为空。
 
-属性
+## **response.done**
 
-**id** `string`
+响应生成完成后，服务端会返回此事件。事件中的 `response` 对象包含除原始音频数据外的全部输出项。
 
-响应输出的唯一标识符。
+**event\_id** `_string_`
 
-**type** `string`
-
-输出项的类型，当前固定为`message`。
-
-**object** `string`
-
-输出项的对象类型，当前固定为`realtime.item`。
-
-**status** `string`
-
-输出项的状态。
-
-**role** `string`
-
-输出项的角色。
-
-**content** `array`
-
-输出项的内容。
-
-属性
-
-**type** `string`
-
-输出内容的类型。输出为纯文本时，为`text`；输出包含音频时，为`audio`。
-
-**text** `string`
-
-输出的文本内容。
-
-**transcript** `string`
-
-音频转录为文字后的内容。
-
-**usage** `object`
-
-本次响应的 Token 消耗信息。
+本次事件唯一标识符。
 
 ```
 {
@@ -569,41 +487,99 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 }
 ```
 
-## response.text.text
+**type** `_string_`
+
+事件类型，固定为`response.done`。
+
+**response** `_object_`
+
+响应对象。
+
+**属性**
+
+**id** `_string_`
+
+响应的唯一标识符。
+
+**conversation\_id** `_string_`
+
+当前会话的唯一标识符。
+
+**object** `_string_`
+
+对象类型，此事件下固定为`realtime.response`。
+
+**status** `_string_`
+
+响应的状态。
+
+**modalities** `_array_`
+
+响应的模态。
+
+**voice** `_string_`
+
+模型生成音频的音色。
+
+**output\_audio\_format** `_string_`
+
+输出音频的格式。
+
+**output** `_object_`
+
+响应的输出。
+
+**属性**
+
+**id** `_string_`
+
+响应输出的唯一标识符。
+
+**type** `_string_`
+
+输出项的类型，当前固定为`message`。
+
+**object** `_string_`
+
+输出项的对象类型，当前固定为`realtime.item`。
+
+**status** `_string_`
+
+输出项的状态。
+
+**role** `_string_`
+
+输出项的角色。
+
+**content** `_array_`
+
+输出项的内容。
+
+**属性**
+
+**type** `_string_`
+
+输出内容的类型。输出为纯文本时，为`text`；输出包含音频时，为`audio`。
+
+**text** `_string_`
+
+输出的文本内容。
+
+**transcript** `_string_`
+
+音频转录为文字后的内容。
+
+**usage** `_object_`
+
+本次响应的 Token 消耗信息。
+
+## **response.text.text**
 
 当输出模态仅包含文本，且模型增量生成新的文本时，服务端将返回此事件。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.text.text`。
-
-**text**`string`
-
-返回的增量文本。
-
-**response\_id**`string`
-
-回复的ID。
-
-**item\_id**`string`
-
-消息项ID，可以关联同一个消息项。
-
-**output\_index**`integer`
-
-目前固定为 0。
-
-**content\_index**`integer`
-
-目前固定为 0。
-
-**stash**`string`
-
-初步生成的临时文本，与当前 `text` 拼接后构成临时生成结果；系统会通过 `response.text.text` 事件持续更新 `text` 和 `stash`，直至收到[response.text.done](https://help.aliyun.com/zh/model-studio/live-translator-server-events#d675635a94jfb)事件，此时可通过 `text` 字段获取完整的最终文本。
 
 ```
 {
@@ -618,39 +594,43 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 }
 ```
 
-## response.text.done
+**type** `_string_`
+
+事件类型，固定为`response.text.text`。
+
+**text** `_string_`
+
+返回的增量文本。
+
+**response\_id** `_string_`
+
+回复的ID。
+
+**item\_id** `_string_`
+
+消息项ID，可以关联同一个消息项。
+
+**output\_index** `_integer_`
+
+目前固定为 0。
+
+**content\_index** `_integer_`
+
+目前固定为 0。
+
+**stash** `_string_`
+
+初步生成的临时文本，与当前 `text` 拼接后构成临时生成结果；系统会通过 `response.text.text` 事件持续更新 `text` 和 `stash`，直至收到[response.text.done](#d675635a94jfb)事件，此时可通过 `text` 字段获取完整的最终文本。
+
+## **response.text.done**
 
 当输出模态仅包含文本，且模型生成的文本结束时，服务端返回此事件。
 
 > 当响应中断、不完整或取消时，服务端也会返回此事件。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.text.done`。
-
-**response\_id**`string`
-
-响应的唯一标识符。
-
-**item\_id**`string`
-
-消息项的唯一标识符。
-
-**output\_index**`integer`
-
-目前固定为 0。
-
-**content\_index**`integer`
-
-目前固定为 0。
-
-**text** `string`
-
-模型输出的完整文本。
 
 ```
 {
@@ -664,37 +644,37 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 }
 ```
 
-## response.audio.delta
+**type** `_string_`
 
-当输出模态包含音频，且模型增量生成新的音频数据时，服务端将返回此事件。
+事件类型，固定为`response.text.done`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.audio.delta`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 响应的唯一标识符。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
-消息项唯一标识符。
+消息项的唯一标识符。
 
-**output\_index**_integer_
-
-目前固定为 0。
-
-**content\_index**`integer`
+**output\_index**`_integer_`
 
 目前固定为 0。
 
-**delta** `string`
+**content\_index**`_integer_`
 
-模型增量输出的音频数据，使用Base64编码。
+目前固定为 0。
+
+**text** `_string_`
+
+模型输出的完整文本。
+
+## **response.audio.delta**
+
+当输出模态包含音频，且模型增量生成新的音频数据时，服务端将返回此事件。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -708,7 +688,31 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 }
 ```
 
-## response.audio.done
+**type** `_string_`
+
+事件类型，固定为`response.audio.delta`。
+
+**response\_id** `_string_`
+
+响应的唯一标识符。
+
+**item\_id** `_string_`
+
+消息项唯一标识符。
+
+**output\_index**_integer_
+
+目前固定为 0。
+
+**content\_index**`_integer_`
+
+目前固定为 0。
+
+**delta** `_string_`
+
+模型增量输出的音频数据，使用Base64编码。
+
+## **response.audio.done**
 
 当输出模态包含音频，且模型生成音频结束时，服务端返回此事件。
 
@@ -716,29 +720,9 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 
 > 该事件不返回完整音频数据。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.audio.done`。
-
-**response\_id**`string`
-
-响应的唯一标识符。
-
-**item\_id**`string`
-
-消息项唯一标识符。
-
-**output\_index**`integer`
-
-目前固定为 0。
-
-**content\_index**`integer`
-
-目前固定为 0。
 
 ```
 {
@@ -751,25 +735,33 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 }
 ```
 
-## input\_audio\_buffer.speech\_started
+**type** `_string_`
+
+事件类型，固定为`response.audio.done`。
+
+**response\_id** `_string_`
+
+响应的唯一标识符。
+
+**item\_id** `_string_`
+
+消息项唯一标识符。
+
+**output\_index**`_integer_`
+
+目前固定为 0。
+
+**content\_index**`_integer_`
+
+目前固定为 0。
+
+## **input\_audio\_buffer.speech\_started**
 
 当服务端 VAD（语音活动检测）检测到用户开始说话时，返回此事件。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`input_audio_buffer.speech_started`。
-
-**audio\_start\_ms**`integer`
-
-检测到语音开始的时间点（毫秒），相对于音频流开始的偏移量。
-
-**item\_id**`string`
-
-关联的消息项唯一标识符。
 
 ```
 {
@@ -780,25 +772,25 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 }
 ```
 
-## input\_audio\_buffer.speech\_stopped
+**type** `_string_`
+
+事件类型，固定为`input_audio_buffer.speech_started`。
+
+**audio\_start\_ms** `_integer_`
+
+检测到语音开始的时间点（毫秒），相对于音频流开始的偏移量。
+
+**item\_id** `_string_`
+
+关联的消息项唯一标识符。
+
+## **input\_audio\_buffer.speech\_stopped**
 
 当服务端 VAD 检测到用户停止说话时，返回此事件，标志本轮语音输入结束。由于翻译响应基于流式语音同步生成，实际的翻译响应可能已经在语音输入过程中开始，无需等待此事件。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`input_audio_buffer.speech_stopped`。
-
-**audio\_end\_ms**`integer`
-
-检测到语音结束的时间点（毫秒），相对于音频流开始的偏移量。
-
-**item\_id**`string`
-
-关联的消息项唯一标识符。
 
 ```
 {
@@ -809,17 +801,25 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 }
 ```
 
-## input\_audio\_buffer.committed
+**type** `_string_`
+
+事件类型，固定为`input_audio_buffer.speech_stopped`。
+
+**audio\_end\_ms** `_integer_`
+
+检测到语音结束的时间点（毫秒），相对于音频流开始的偏移量。
+
+**item\_id** `_string_`
+
+关联的消息项唯一标识符。
+
+## **input\_audio\_buffer.committed**
 
 Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_buffer.commit`事件后，服务端返回此事件进行确认，并自动开始生成翻译响应。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`input_audio_buffer.committed`。
 
 ```
 {
@@ -828,17 +828,17 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 }
 ```
 
-## input\_audio\_buffer.cleared
+**type** `_string_`
+
+事件类型，固定为`input_audio_buffer.committed`。
+
+## **input\_audio\_buffer.cleared**
 
 客户端发送`input_audio_buffer.clear`事件后，服务端返回此事件进行确认，表示已清空缓冲区中尚未提交的音频数据。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`input_audio_buffer.cleared`。
 
 ```
 {
@@ -847,56 +847,24 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 }
 ```
 
-## conversation.item.created
+**type** `_string_`
+
+事件类型，固定为`input_audio_buffer.cleared`。
+
+## **conversation.item.created**
 
 当对话中创建新的消息项时，服务端返回此事件。以下场景会触发此事件：
 
 -   服务端开始生成翻译响应时，创建对应的 assistant 消息项（此时`content`为空数组，内容随流式响应逐步填充）。
+    
 -   Manual 模式下，客户端发送`input_audio_buffer.commit`事件后，服务端会额外创建一个对应用户输入音频的消息项（`content`中包含`{"type": "input_audio"}`）。
+    
 
 对于同一个 VAD 片段，服务端会分别创建语音识别结果和翻译结果消息项。语音识别结果消息项的 `item.id` 与翻译结果事件的 `previous_item_id` 相同。客户端可据此关联原文和译文，并同时展示。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`conversation.item.created`。
-
-**previous\_item\_id**`string`
-
-前一消息项的唯一标识符。对于翻译结果事件，该值与同一 VAD 片段的语音识别结果消息项 `item.id` 相同。
-
-**item**`object`
-
-消息项信息。
-
-属性
-
-**id**`string`
-
-消息项的唯一标识符。
-
-**type**`string`
-
-固定为`message`。
-
-**object**`string`
-
-固定为`realtime.item`。
-
-**status**`string`
-
-消息项的状态。
-
-**role**`string`
-
-消息的角色，取值为`assistant`或`user`。
-
-**content**`array`
-
-消息的内容。响应刚创建时为空数组，随流式响应逐步填充；Manual 模式下 commit 产生的用户消息项中包含`{"type": "input_audio"}`。
 
 ```
 {
@@ -914,49 +882,51 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 }
 ```
 
-## conversation.item.input\_audio\_transcription.text
+**type** `_string_`
+
+事件类型，固定为`conversation.item.created`。
+
+**previous\_item\_id** `_string_`
+
+前一消息项的唯一标识符。对于翻译结果事件，该值与同一 VAD 片段的语音识别结果消息项 `item.id` 相同。
+
+**item** `_object_`
+
+消息项信息。
+
+**属性**
+
+**id** `_string_`
+
+消息项的唯一标识符。
+
+**type** `_string_`
+
+固定为`message`。
+
+**object** `_string_`
+
+固定为`realtime.item`。
+
+**status** `_string_`
+
+消息项的状态。
+
+**role** `_string_`
+
+消息的角色，取值为`assistant`或`user`。
+
+**content** `_array_`
+
+消息的内容。响应刚创建时为空数组，随流式响应逐步填充；Manual 模式下 commit 产生的用户消息项中包含`{"type": "input_audio"}`。
+
+## **conversation.item.input\_audio\_transcription.text**
 
 当配置了`input_audio_transcription.model`参数时，服务端会流式返回输入音频的语音识别结果（源语言原文）。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`conversation.item.input_audio_transcription.text`。
-
-**item\_id**`string`
-
-消息项唯一标识符。
-
-**content\_index**`integer`
-
-目前固定为 0。
-
-**text**`string`
-
-已确认的识别文本。
-
-**stash**`string`
-
-待确认的识别文本（可能会被后续事件修正）。
-
-**language**`string`
-
-检测到的源语种。
-
-**emotion**`string`
-
-被识别音频的情感。支持的情感如下：
-
--   `surprised`：惊讶
--   `neutral`：平静
--   `happy`：愉快
--   `sad`：悲伤
--   `disgusted`：厌恶
--   `angry`：愤怒
--   `fearful`：恐惧
 
 ```
 {
@@ -971,45 +941,56 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 }
 ```
 
-## conversation.item.input\_audio\_transcription.completed
+**type** `_string_`
 
-当配置了`input_audio_transcription.model`参数时，语音识别完成后服务端会返回此事件，包含最终的完整识别结果。
+事件类型，固定为`conversation.item.input_audio_transcription.text`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`conversation.item.input_audio_transcription.completed`。
-
-**item\_id**`string`
+**item\_id** `_string_`
 
 消息项唯一标识符。
 
-**content\_index**`integer`
+**content\_index** `_integer_`
 
 目前固定为 0。
 
-**transcript**`string`
+**text** `_string_`
 
-完整的语音识别结果（源语言原文）。
+已确认的识别文本。
 
-**language**`string`
+**stash** `_string_`
+
+待确认的识别文本（可能会被后续事件修正）。
+
+**language** `_string_`
 
 检测到的源语种。
 
-**emotion**`string`
+**emotion** `_string_`
 
 被识别音频的情感。支持的情感如下：
 
 -   `surprised`：惊讶
+    
 -   `neutral`：平静
+    
 -   `happy`：愉快
+    
 -   `sad`：悲伤
+    
 -   `disgusted`：厌恶
+    
 -   `angry`：愤怒
+    
 -   `fearful`：恐惧
+    
+
+## **conversation.item.input\_audio\_transcription.completed**
+
+当配置了`input_audio_transcription.model`参数时，语音识别完成后服务端会返回此事件，包含最终的完整识别结果。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1023,29 +1004,52 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 }
 ```
 
-## conversation.item.input\_audio\_transcription.failed
+**type** `_string_`
+
+事件类型，固定为`conversation.item.input_audio_transcription.completed`。
+
+**item\_id** `_string_`
+
+消息项唯一标识符。
+
+**content\_index** `_integer_`
+
+目前固定为 0。
+
+**transcript** `_string_`
+
+完整的语音识别结果（源语言原文）。
+
+**language** `_string_`
+
+检测到的源语种。
+
+**emotion** `_string_`
+
+被识别音频的情感。支持的情感如下：
+
+-   `surprised`：惊讶
+    
+-   `neutral`：平静
+    
+-   `happy`：愉快
+    
+-   `sad`：悲伤
+    
+-   `disgusted`：厌恶
+    
+-   `angry`：愤怒
+    
+-   `fearful`：恐惧
+    
+
+## **conversation.item.input\_audio\_transcription.failed**
 
 当输入了音频但识别失败时，服务端发送该事件。与其他`error`事件分开处理，便于客户端识别相关的具体项目。
 
-**type**`string`
+**type** `_string_`
 
 事件类型，固定为`conversation.item.input_audio_transcription.failed`。
-
-**item\_id**`string`
-
-关联的对话项 ID。
-
-**content\_index**`integer`
-
-包含音频的内容部分的索引。
-
-**error.code**`string`
-
-错误代码。
-
-**error.message**`string`
-
-错误消息。
 
 ```
 {
@@ -1061,41 +1065,29 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 }
 ```
 
-## response.audio\_transcript.text
+**item\_id** `_string_`
+
+关联的对话项 ID。
+
+**content\_index** `_integer_`
+
+包含音频的内容部分的索引。
+
+**error.code** `_string_`
+
+错误代码。
+
+**error.message** `_string_`
+
+错误消息。
+
+## **response.audio\_transcript.text**
 
 当输出模态包含音频时，服务端可能返回此事件，用于展示实时翻译内容。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.audio_transcript.text`。
-
-**response\_id**`string`
-
-响应的唯一标识符。
-
-**item\_id**`string`
-
-消息项唯一标识符。
-
-**output\_index**`integer`
-
-目前固定为 0。
-
-**content\_index**`integer`
-
-目前固定为 0。
-
-**text**`string`
-
-已确认无误的翻译文本片段。
-
-**stash**`string`
-
-初步翻译的临时文本，与当前 `text` 拼接后构成临时翻译结果；系统会通过 `response.audio_transcript.text` 事件持续更新 `text` 和 `stash`，直至收到[response.audio\_transcript.done](https://help.aliyun.com/zh/model-studio/live-translator-server-events#f4d1698567bsm)事件，此时可通过 `transcript` 字段获取完整的最终翻译文本。
 
 ```
 {
@@ -1110,37 +1102,41 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 }
 ```
 
-## response.audio\_transcript.done
+**type** `_string_`
 
-当输出模态包含音频，且模型生成文本结束时，服务端返回此事件。
+事件类型，固定为`response.audio_transcript.text`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.audio_transcript.done`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 响应的唯一标识符。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
 消息项唯一标识符。
 
-**output\_index**`integer`
+**output\_index**`_integer_`
 
 目前固定为 0。
 
-**content\_index**`integer`
+**content\_index**`_integer_`
 
 目前固定为 0。
 
-**transcript**`string`
+**text** `_string_`
 
-完整文本。
+已确认无误的翻译文本片段。
+
+**stash** `_string_`
+
+初步翻译的临时文本，与当前 `text` 拼接后构成临时翻译结果；系统会通过 `response.audio_transcript.text` 事件持续更新 `text` 和 `stash`，直至收到[response.audio\_transcript.done](#f4d1698567bsm)事件，此时可通过 `transcript` 字段获取完整的最终翻译文本。
+
+## **response.audio\_transcript.done**
+
+当输出模态包含音频，且模型生成文本结束时，服务端返回此事件。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1154,55 +1150,37 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 }
 ```
 
-## response.output\_item.added
+**type** `_string_`
 
-在响应生成过程中创建新输出项时，服务端返回此事件。
+事件类型，固定为`response.audio_transcript.done`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.output_item.added`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 响应的唯一标识符。
 
-**output\_index**`integer`
+**item\_id** `_string_`
+
+消息项唯一标识符。
+
+**output\_index**`_integer_`
 
 目前固定为 0。
 
-**item**`object`
+**content\_index**`_integer_`
 
-输出项信息。
+目前固定为 0。
 
-属性
+**transcript** `_string_`
 
-**id**`string`
+完整文本。
 
-输出项的唯一标识符。
+## **response.output\_item.added**
 
-**type**`string`
+在响应生成过程中创建新输出项时，服务端返回此事件。
 
-固定为 `message`。
+**event\_id** `_string_`
 
-**object**`string`
-
-始终为 `realtime.item` 。
-
-**status**`string`
-
-输出项的状态。
-
-**role**`string`
-
-消息的角色。
-
-**content**`string`
-
-消息的内容。
+本次事件唯一标识符。
 
 ```
 {
@@ -1221,55 +1199,55 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 }
 ```
 
-## response.output\_item.done
+**type** `_string_`
 
-当新的项输出完成时，服务端返回此事件。
+事件类型，固定为`response.output_item.added`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.output_item.done`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 响应的唯一标识符。
 
-**output\_index**`integer`
+**output\_index**`_integer_`
 
 目前固定为 0。
 
-**item**`object`
+**item**`_object_`
 
 输出项信息。
 
-属性
+**属性**
 
-**id**`string`
+**id** `_string_`
 
 输出项的唯一标识符。
 
-**object**`string`
-
-始终为 `realtime.item` 。
-
-**type**`string`
+**type** `_string_`
 
 固定为 `message`。
 
-**status**`string`
+**object** `_string_`
+
+始终为 `realtime.item` 。
+
+**status** `_string_`
 
 输出项的状态。
 
-**role**`string`
+**role** `_string_`
 
-发送消息的角色。
+消息的角色。
 
-**content**`string`
+**content** `_string_`
 
 消息的内容。
+
+## **response.output\_item.done**
+
+当新的项输出完成时，服务端返回此事件。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1293,47 +1271,55 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 }
 ```
 
-## response.content\_part.added
+**type** `_string_`
 
-当新的内容部分输出时，服务端返回此事件。
+事件类型，固定为`response.output_item.done`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.content_part.added`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 响应的唯一标识符。
 
-**item\_id**`string`
-
-消息项唯一标识符。
-
-**output\_index**`integer`
+**output\_index**`_integer_`
 
 目前固定为 0。
 
-**content\_index**`integer`
-
-目前固定为 0。
-
-**part**`object`
+**item**`_object_`
 
 输出项信息。
 
-属性
+**属性**
 
-**type**`string`
+**id** `_string_`
 
-内容部分的类型。
+输出项的唯一标识符。
 
-**text**`string`
+**object** `_string_`
 
-内容部分的文本。
+始终为 `realtime.item` 。
+
+**type** `_string_`
+
+固定为 `message`。
+
+**status** `_string_`
+
+输出项的状态。
+
+**role** `_string_`
+
+发送消息的角色。
+
+**content** `_string_`
+
+消息的内容。
+
+## **response.content\_part.added**
+
+当新的内容部分输出时，服务端返回此事件。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1350,47 +1336,47 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 }
 ```
 
-## response.content\_part.done
+**type** `_string_`
 
-当新的内容部分输出完成时，服务端返回此事件。
+事件类型，固定为`response.content_part.added`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.content_part.done`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 响应的唯一标识符。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
 消息项唯一标识符。
 
-**output\_index**`integer`
+**output\_index**`_integer_`
 
 目前固定为 0。
 
-**content\_index**`integer`
+**content\_index**`_integer_`
 
 目前固定为 0。
 
-**part**`object`
+**part**`_object_`
 
 输出项信息。
 
-属性
+**属性**
 
-**type**`string`
+**type** `_string_`
 
 内容部分的类型。
 
-**text**`string`
+**text** `_string_`
 
 内容部分的文本。
+
+## **response.content\_part.done**
+
+当新的内容部分输出完成时，服务端返回此事件。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1406,3 +1392,37 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
     }
 }
 ```
+
+**type** `_string_`
+
+事件类型，固定为`response.content_part.done`。
+
+**response\_id** `_string_`
+
+响应的唯一标识符。
+
+**item\_id** `_string_`
+
+消息项唯一标识符。
+
+**output\_index**`_integer_`
+
+目前固定为 0。
+
+**content\_index**`_integer_`
+
+目前固定为 0。
+
+**part**`_object_`
+
+输出项信息。
+
+**属性**
+
+**type** `_string_`
+
+内容部分的类型。
+
+**text** `_string_`
+
+内容部分的文本。

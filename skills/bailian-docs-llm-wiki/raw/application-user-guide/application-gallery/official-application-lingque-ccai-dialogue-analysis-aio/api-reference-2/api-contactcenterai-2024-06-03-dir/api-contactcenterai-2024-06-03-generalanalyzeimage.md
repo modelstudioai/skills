@@ -4,9 +4,9 @@
 
 ## 调试
 
-您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/GeneralAnalyzeImage)
 
-[调试](https://api.alibabacloud.com/api/ContactCenterAI/2024-06-03/GeneralAnalyzeImage)
+[![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png)调试](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/GeneralAnalyzeImage)
 
 ## 授权信息
 
@@ -82,7 +82,7 @@ string
 
 图片地址列表
 
-[https://img.123.com/1.jppg](https://img.123.com/1.jppg)
+https://img.123.com/1.jppg
 
 customPrompt
 
@@ -272,4 +272,4 @@ The request processing has failed due to some unknown error, exception or failur
 
 系统内部错误，请稍后重试
 
-访问[错误中心](https://api.alibabacloud.com/document/ContactCenterAI/2024-06-03/errorCode)查看更多错误码。
+访问[错误中心](< https://api.aliyun.com/document/ContactCenterAI/2024-06-03/errorCode>)查看更多错误码。

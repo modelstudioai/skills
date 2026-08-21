@@ -1,39 +1,44 @@
 # OpenAI文件接口兼容
 
-文件上传接口用于上传文件，以便在 Qwen-Long 和 Qwen-Doc-Turbo 模型中进行文档问答与数据提取，或将其用作批量推理任务的输入文件。
+文件上传接口用于上传文件，以便在[Qwen-Long](https://help.aliyun.com/zh/model-studio/long-context-qwen-long)和[Qwen-Doc-Turbo](https://help.aliyun.com/zh/model-studio/data-mining-qwen-doc)模型中进行文档问答与数据提取，或将其用作批量推理任务的输入文件。
 
 ## 使用方式
 
 支持通过OpenAI SDK（Python、Java）或HTTP API调用文件接口，包括上传、查询、删除等操作。
 
-### 前提条件
+### **前提条件**
 
--   阿里云百炼API-KEY：[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)
--   使用OpenAI SDK调用服务，您还需安装[OpenAI SDK](raw/model-api-reference/preparations/install-sdk.md)。
+-   阿里云百炼API-KEY：[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)
+    
+-   使用OpenAI SDK调用服务，您还需安装[OpenAI SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+    
 
 ## 支持的模型
 
 文件ID可用于以下场景：
 
 -   **Qwen-Long**：通过文件ID进行长文档问答
+    
 -   **Qwen-Doc-Turbo**：通过文件ID进行文件内数据提取与问答
--   [**批量推理**](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)：通过文件ID上传批量任务输入文件
+    
+-   [**批量推理**](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/#80d1d39cf85zk)：通过文件ID上传批量任务输入文件
+    
 
 ## 快速开始
 
-### 上传文件
+### **上传文件**
 
 百炼存储空间支持的最大文件数为10000个，总大小不超过100 GB，暂时没有有效期限制。当文件数量或总大小达到任一上限时，新的文件上传请求将会失败。请删除不再需要的文件以释放配额，然后才能继续上传。
 
-#### 用于文档分析
+### 用于文档分析
 
 将purpose指定为`file-extract`，文件格式支持文本文件（ TXT、DOCX、PDF、XLSX、EPUB、MOBI、MD、CSV、JSON），图片文件（BMP、PNG、JPG/JPEG、GIF和PDF扫描件），单个文件最大为 **150 MB**。
 
 > 关于通过file\_id进行文档分析，请参考[长上下文（Qwen-Long）](https://help.aliyun.com/zh/model-studio/long-context-qwen-long)。
 
-#### 请求示例
+#### **请求示例**
 
-python
+Python
 
 ```
 import os
@@ -52,7 +57,7 @@ file_object = client.files.create(file=Path("test.txt"), purpose="file-extract")
 print(file_object.model_dump_json())
 ```
 
-java
+Java
 
 ```
 import com.openai.client.OpenAIClient;
@@ -84,7 +89,7 @@ public class Main {
 }
 ```
 
-bash
+curl
 
 ```
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
@@ -93,7 +98,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 --form 'purpose="file-extract"'
 ```
 
-#### 响应示例
+#### **响应示例**
 
 ```
 {
@@ -108,15 +113,15 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 }
 ```
 
-#### 用于Batch调用
+### **用于Batch调用**
 
-将purpose指定为`batch`，输入文件必须是jsonl文件且符合[输入文件大小与格式要求](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，上传Batch任务的单个文件最大为500 MB。
+将purpose指定为`batch`，输入文件必须是jsonl文件且符合[输入文件大小与格式要求](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/#578afe12c1uvz)，上传Batch任务的单个文件最大为500 MB。
 
-> 关于Batch调用的更多用法，请参考[OpenAI兼容-Batch（文件输入）](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)。
+> 关于Batch调用的更多用法，请参考[OpenAI兼容-Batch（文件输入）](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)。
 
-#### 请求示例
+#### **请求示例**
 
-python
+Python
 
 ```
 import os
@@ -135,7 +140,7 @@ file_object = client.files.create(file=Path("test.jsonl"), purpose="batch")
 print(file_object.model_dump_json())
 ```
 
-java
+Java
 
 ```
 import com.openai.client.OpenAIClient;
@@ -167,7 +172,7 @@ public class Main {
 }
 ```
 
-bash
+curl
 
 ```
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
@@ -176,7 +181,7 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 --form 'purpose="batch"'
 ```
 
-#### 响应示例
+#### **响应示例**
 
 ```
 {
@@ -191,15 +196,15 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 }
 ```
 
-#### 用于创建调优任务
+## 用于创建调优任务
 
-将purpose指定为`fine-tune`，输入文件必须是jsonl文件且符合[输入文件大小与格式要求](https://help.aliyun.com/zh/model-studio/upload-file-api#7d3645a119ovw)，上传调优数据集/训练集的单个文件最大为300 MB。
+将purpose指定为`fine-tune`，输入文件必须是jsonl文件且符合[输入文件大小与格式要求](https://help.aliyun.com/zh/model-studio/model-customization-file-management-service#7d3645a119ovw)，上传调优数据集/训练集的单个文件最大为300 MB。
 
-> 关于使用 API 进行模型调优的更多用法，请参考[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)
+> 关于使用 API 进行模型调优的更多用法，请参考[模型调优](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide)
 
-#### 请求示例
+#### **请求示例**
 
-python
+Python
 
 ```
 import os
@@ -218,7 +223,7 @@ file_object = client.files.create(file=Path("file.jsonl"), purpose="fine-tune")
 print(file_object.model_dump_json())
 ```
 
-java
+Java
 
 ```
 import com.openai.client.OpenAIClient;
@@ -250,7 +255,7 @@ public class Main {
 }
 ```
 
-bash
+curl
 
 ```
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
@@ -259,11 +264,11 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 --form 'purpose="fine-tune"'
 ```
 
-### 查询文件信息
+### **查询文件信息**
 
 通过在retrieve或GET方法中指定`file_id`来查询文件信息。
 
-#### OpenAI Python SDK
+## OpenAI Python SDK
 
 #### 请求示例
 
@@ -281,7 +286,7 @@ file = client.files.retrieve(file_id="file-batch-xxx")
 print(file.model_dump_json())
 ```
 
-#### 返回示例
+#### **返回示例**
 
 ```
 {
@@ -296,7 +301,7 @@ print(file.model_dump_json())
 }
 ```
 
-#### OpenAI Java SDK
+## OpenAI Java SDK
 
 ```
 import com.openai.client.OpenAIClient;
@@ -322,7 +327,7 @@ public class Main {
 }
 ```
 
-#### HTTP
+## HTTP
 
 #### 需要配置的endpoint
 
@@ -330,14 +335,14 @@ public class Main {
 GET https://dashscope-intl.aliyuncs.com/compatible-mode/v1/files/{file_id}
 ```
 
-#### 请求示例
+#### **请求示例**
 
 ```
 curl -X GET https://dashscope.aliyuncs.com/compatible-mode/v1/files/file-batch-xxx \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-#### 返回示例
+#### **返回示例**
 
 ```
 {
@@ -355,9 +360,11 @@ curl -X GET https://dashscope.aliyuncs.com/compatible-mode/v1/files/file-batch-x
 
 返回所有文件的信息，包括通过上传文件接口上传的文件以及batch任务的结果文件。
 
-**说明**此接口支持更多筛选参数，详情请参见[参数说明](https://help.aliyun.com/zh/model-studio/openai-file-interface#a9b268386f7x8)。
+**说明**
 
-#### OpenAI Python SDK
+此接口支持更多筛选参数，详情请参见[参数说明](#a9b268386f7x8)。
+
+## OpenAI Python SDK
 
 #### 请求示例
 
@@ -374,7 +381,7 @@ file_stk = client.files.list(after="file-batch-xxx",limit=20)
 print(file_stk.model_dump_json())
 ```
 
-#### 返回示例
+#### **返回示例**
 
 ```
 {
@@ -405,7 +412,7 @@ print(file_stk.model_dump_json())
 }
 ```
 
-#### OpenAI Java SDK
+## OpenAI Java SDK
 
 ```
 import com.openai.client.OpenAIClient;
@@ -432,7 +439,7 @@ public class Main {
 }
 ```
 
-#### HTTP
+## HTTP
 
 #### 需要配置的endpoint
 
@@ -440,14 +447,14 @@ public class Main {
 GET https://dashscope-intl.aliyuncs.com/compatible-mode/v1/files
 ```
 
-#### 请求示例
+#### **请求示例**
 
 ```
 curl -X GET https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-#### 返回示例
+#### **返回示例**
 
 ```
 {
@@ -478,11 +485,11 @@ curl -X GET https://dashscope.aliyuncs.com/compatible-mode/v1/files \
 
 ### 删除文件
 
-通过删除文件接口删除指定`file_id`的文件。可以通过[查询文件列表](https://help.aliyun.com/zh/model-studio/openai-file-interface#77a1a1d0bdq4n)接口查询文件信息。
+通过删除文件接口删除指定`file_id`的文件。可以通过[查询文件列表](#77a1a1d0bdq4n)接口查询文件信息。
 
-#### OpenAI Python SDK
+## OpenAI Python SDK
 
-#### 请求示例
+#### **请求示例**
 
 ```
 import os
@@ -497,7 +504,7 @@ file_object = client.files.delete("file-batch-xxx")
 print(file_object.model_dump_json())
 ```
 
-#### 返回示例
+#### **返回示例**
 
 ```
 {
@@ -507,7 +514,7 @@ print(file_object.model_dump_json())
 }
 ```
 
-#### OpenAI Java SDK
+## OpenAI Java SDK
 
 ```
 import com.openai.client.OpenAIClient;
@@ -529,7 +536,7 @@ public class Main {
 }
 ```
 
-#### HTTP
+## HTTP
 
 #### 需要配置的endpoint
 
@@ -537,14 +544,14 @@ public class Main {
 DELETE https://dashscope-intl.aliyuncs.com/compatible-mode/v1/files/{file_id}
 ```
 
-#### 请求示例
+#### **请求示例**
 
 ```
 curl -X  DELETE https://dashscope.aliyuncs.com/compatible-mode/v1/files/file-batch-xxx \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-#### 返回示例
+#### **返回示例**
 
 ```
 {
@@ -565,42 +572,56 @@ curl -X  DELETE https://dashscope.aliyuncs.com/compatible-mode/v1/files/file-bat
 ## 应用于生产环境
 
 -   **定期清理**：定期删除不再使用的文件，避免达到10000个文件上限。
+    
 -   **状态检查**：上传后检查文件状态，确保`status`为`processed`后再使用。
+    
 -   **限流检查**：上传文件接口的QPS（每秒请求数）限制为3。查询文件信息、查询文件列表、删除文件接口的QPS总和限制为10。
+    
 -   **错误处理**：实现完整的异常处理机制，包括网络错误、API错误等。
+    
 
 ## 常见问题
 
-### 1\. 文件上传后状态一直是"processing"怎么办？
+### **1\. 文件上传后状态一直是"processing"怎么办？**
 
 文件处理需要一定时间，通常几秒内完成。如果长时间处于"processing"状态：
 
 -   检查文件格式是否支持
+    
 -   检查文件大小是否超过限制
+    
 -   使用`retrieve`接口定期查询状态
+    
 
-### 2\. 文件ID可以跨账号使用吗？
+### **2\. 文件ID可以跨账号使用吗？**
 
 不可以。文件ID仅在生成它的阿里云主账号内有效，不支持跨账号共享。
 
-### 3\. 上传的文件会被永久保存吗？
+### **3\. 上传的文件会被永久保存吗？**
 
 是的，上传的文件会被永久保存在您的阿里云账号下，除非主动删除。建议定期清理不需要的文件。
 
-### 4\. 文件上传失败，可能的原因有哪些？
+### **4\. 文件上传失败，可能的原因有哪些？**
 
 -   API Key无效或未配置
+    
 -   文件格式不支持
+    
 -   文件大小超过限制（file-extract: 150MB，batch: 500MB）
+    
 -   已达到文件数量上限（10000个）或总大小上限（100GB）
+    
 -   上传文件接口的QPS（每秒请求数）限制为3。
+    
 
-### 5\. purpose参数应该如何选择？
+### **5\. purpose参数应该如何选择？**
 
 -   `file-extract`：用于文档分析场景，配合Qwen-Long或Qwen-Doc-Turbo使用
+    
 -   `batch`：用于批量推理任务，文件必须是符合格式要求的JSONL文件
+    
 
-## 参数说明
+## **参数说明**
 
 **接口类别**
 
@@ -636,7 +657,7 @@ _String_
 
 `file-extract`: 用于[Qwen-Long](https://help.aliyun.com/zh/model-studio/long-context-qwen-long)与[Qwen-Doc](https://help.aliyun.com/zh/model-studio/data-mining-qwen-doc)模型的文档理解与数据提取；
 
-`batch`: 用于[OpenAI兼容-Batch（文件输入）](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)任务；
+`batch`: 用于[OpenAI兼容-Batch（文件输入）](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)任务；
 
 "file-extract"
 
@@ -658,7 +679,7 @@ _String_
 
 否
 
-[查询文件列表](https://help.aliyun.com/zh/model-studio/openai-file-interface#77a1a1d0bdq4n)任务中用于分页的游标。
+[查询文件列表](#77a1a1d0bdq4n)任务中用于分页的游标。
 
 参数`after`的取值为当前分页的最后一个file\_id，表示查询该ID之后下一页的数据。
 
@@ -672,7 +693,7 @@ _String_
 
 否
 
-[查询文件列表](https://help.aliyun.com/zh/model-studio/openai-file-interface#77a1a1d0bdq4n)任务中，一个字符串格式的时间戳。用于筛选并返回创建时间**早于**该指定时间点的file\_id。
+[查询文件列表](#77a1a1d0bdq4n)任务中，一个字符串格式的时间戳。用于筛选并返回创建时间**早于**该指定时间点的file\_id。
 
 `"20250306123000"`, `"2025-11-12 10:10:10"`, `"2025-11-12"`, `"20251112"`
 
@@ -682,7 +703,7 @@ _String_
 
 否
 
-[查询文件列表](https://help.aliyun.com/zh/model-studio/openai-file-interface#77a1a1d0bdq4n)任务中，一个字符串格式的时间戳。用于筛选并返回创建时间**晚于**该指定时间点的file\_id。
+[查询文件列表](#77a1a1d0bdq4n)任务中，一个字符串格式的时间戳。用于筛选并返回创建时间**晚于**该指定时间点的file\_id。
 
 `"20250306123000"`, `"2025-11-12 10:10:10"`, `"2025-11-12"`, `"20251112"`
 
@@ -692,7 +713,7 @@ _String_
 
 否
 
-[查询文件列表](https://help.aliyun.com/zh/model-studio/openai-file-interface#77a1a1d0bdq4n)任务中根据文件的用途进行筛选，仅返回与指定 purpose（`file-extract`或`batch`）相匹配的file\_id。
+[查询文件列表](#77a1a1d0bdq4n)任务中根据文件的用途进行筛选，仅返回与指定 purpose（`file-extract`或`batch`）相匹配的file\_id。
 
 "batch"
 
@@ -702,7 +723,7 @@ _Integer_
 
 否
 
-[查询文件列表](https://help.aliyun.com/zh/model-studio/openai-file-interface#77a1a1d0bdq4n)任务中每次查询返回的文件数量，取值范围\[1,2000\]，默认2000。
+[查询文件列表](#77a1a1d0bdq4n)任务中每次查询返回的文件数量，取值范围\[1,2000\]，默认2000。
 
 2000
 
@@ -730,7 +751,7 @@ _String_
 
 文件的标识符
 
-[删除文件](https://help.aliyun.com/zh/model-studio/openai-file-interface#3457ce1d7ezr3)任务中表示成功删除的文件的id。
+[删除文件](#3457ce1d7ezr3)任务中表示成功删除的文件的id。
 
 "file-fe-xxx"
 
@@ -764,7 +785,7 @@ _String_
 
 对象类型
 
-[查询文件列表](https://help.aliyun.com/zh/model-studio/openai-file-interface#77a1a1d0bdq4n)任务中始终为"list"。
+[查询文件列表](#77a1a1d0bdq4n)任务中始终为"list"。
 
 其余类型任务中始终为"file"。
 
@@ -827,4 +848,4 @@ true
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。

@@ -2,30 +2,36 @@
 
 本文档介绍如何在阿里云百炼平台通过OpenAI兼容接口或DashScope SDK调用硅基流动提供的DeepSeek系列模型。
 
-> 阿里云百炼提供两个推理服务供应商的DeepSeek模型服务，硅基流动供应商支持更长上下文；[阿里云百炼](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/deepseek-api.md)供应商限流条件更宽松，且支持联网搜索与上下文缓存功能。
+> 阿里云百炼提供两个推理服务供应商的DeepSeek模型服务，硅基流动供应商支持更长上下文；[阿里云百炼](https://help.aliyun.com/zh/model-studio/deepseek-api)供应商限流条件更宽松，且支持联网搜索与上下文缓存功能。
 
-**重要**本文档仅适用于华北2（北京）地域。如需使用模型，需使用华北2（北京）地域的[API Key](https://bailian.console.alibabacloud.com/?tab=model#/api-key)。
+**重要**
 
-## 服务开通
+本文档仅适用于华北2（北京）地域。如需使用模型，需使用华北2（北京）地域的[API Key](https://bailian.console.alibabacloud.com/?tab=model#/api-key)。
+
+## **服务开通**
 
 1.  前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/all)，搜索 deepseek，找到 SiliconFlow DeepSeek 模型卡片，单击立即开通；
+    
 2.  在弹窗内确认开通及授权。
+    
 
 完成以上步骤即可调用硅基流动提供的 DeepSeek 模型服务。
 
-## 快速开始
+## **快速开始**
 
 deepseek-v3.2 是 DeepSeek 系列最新模型，支持通过`enable_thinking`参数设置思考与非思考模式。运行以下代码快速调用思考模式的 deepseek-v3.2 模型。
 
-需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk#8833b9274f4v8)。
 
-#### OpenAI兼容
+## OpenAI兼容
 
-**说明**`enable_thinking`非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body`传入，Node.js SDK 作为顶层参数传入。
+**说明**
 
-#### Python
+`enable_thinking`非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body`传入，Node.js SDK 作为顶层参数传入。
 
-### 示例代码
+## Python
+
+### **示例代码**
 
 ```
 from openai import OpenAI
@@ -79,7 +85,7 @@ for chunk in completion:
         answer_content += delta.content
 ```
 
-### 返回结果
+### **返回结果**
 
 ```
 ====================思考过程====================
@@ -103,9 +109,9 @@ for chunk in completion:
 CompletionUsage(completion_tokens=239, prompt_tokens=5, total_tokens=244, completion_tokens_details=CompletionTokensDetails(accepted_prediction_tokens=None, audio_tokens=None, reasoning_tokens=95, rejected_prediction_tokens=None, text_tokens=144), prompt_tokens_details=None)
 ```
 
-#### Node.js
+## Node.js
 
-### 示例代码
+### **示例代码**
 
 ```
 import OpenAI from "openai";
@@ -114,7 +120,7 @@ import process from 'process';
 // 初始化OpenAI客户端
 const openai = new OpenAI({
     // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: "sk-xxx"
-    apiKey: process.env.DASHSCOPE_API_KEY,
+    apiKey: process.env.DASHSCOPE_API_KEY, 
     // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
     baseURL: 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1'
 });
@@ -126,7 +132,7 @@ let isAnswering = false; // 是否进入回复阶段
 async function main() {
     try {
         const messages = [{ role: 'user', content: '你是谁' }];
-
+        
         const stream = await openai.chat.completions.create({
             model: 'siliconflow/deepseek-v3.2',
             messages,
@@ -148,7 +154,7 @@ async function main() {
             }
 
             const delta = chunk.choices[0].delta;
-
+            
             // 只收集思考内容
             if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {
                 if (!isAnswering) {
@@ -175,7 +181,7 @@ async function main() {
 main();
 ```
 
-### 返回结果
+### **返回结果**
 
 ```
 ====================思考过程====================
@@ -204,11 +210,11 @@ main();
 }
 ```
 
-#### HTTP
+## HTTP
 
-### 示例代码
+### **示例代码**
 
-#### curl
+## curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -219,7 +225,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     "model": "siliconflow/deepseek-v3.2",
     "messages": [
         {
-            "role": "user",
+            "role": "user", 
             "content": "你是谁"
         }
     ],
@@ -231,11 +237,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-#### DashScope
+## DashScope
 
-#### Python
+## Python
 
-### 示例代码
+### **示例代码**
 
 ```
 import os
@@ -285,7 +291,7 @@ print("\n" + "=" * 20 + "Token 消耗" + "=" * 20 + "\n")
 print(chunk.usage)
 ```
 
-### 返回结果
+### **返回结果**
 
 ```
 ====================思考过程====================
@@ -314,11 +320,13 @@ print(chunk.usage)
 {"input_tokens": 6, "output_tokens": 265, "total_tokens": 271, "output_tokens_details": {"reasoning_tokens": 103, "text_tokens": 162}}
 ```
 
-#### Java
+## Java
 
-### 示例代码
+### **示例代码**
 
-**重要**DashScope Java SDK 版本需要不低于2.19.4。
+**重要**
+
+DashScope Java SDK 版本需要不低于2.19.4。
 
 ```
 // dashscope SDK的版本 >= 2.19.4
@@ -393,7 +401,7 @@ public class Main {
 }
 ```
 
-### 返回结果
+### **返回结果**
 
 ```
 ====================思考过程====================
@@ -404,11 +412,11 @@ public class Main {
 DeepSeek-V3，一个由深度求索公司创造的智能助手！我可以帮助你解答各种问题、提供建议、进行知识查询，甚至陪你聊天！无论是学习、工作还是日常生活中的疑问，尽管问我吧~有什么我可以帮你的吗？
 ```
 
-#### HTTP
+## HTTP
 
-### 示例代码
+### **示例代码**
 
-#### curl
+## curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -419,7 +427,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 -d '{
     "model": "siliconflow/deepseek-v3.2",
     "input":{
-        "messages":[
+        "messages":[      
             {
                 "role": "user",
                 "content": "你是谁？"
@@ -434,7 +442,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
-## 其它功能
+## **其它功能**
 
 **模型**
 
@@ -510,7 +518,7 @@ siliconflow/deepseek-v3-0324
 
 不支持
 
-## 参数默认值
+## **参数默认值**
 
 **模型**
 
@@ -564,13 +572,16 @@ siliconflow/deepseek-v3-0324
 
 “-” 表示没有默认值，也不支持设置。
 
-## 模型列表与计费
+## **模型列表与计费**
 
 硅基流动基于自研推理引擎，为DeepSeek模型提供低延迟、高稳定性的推理服务。
 
 -   混合思考模型（通过`enable_thinking`参数控制是否思考）：siliconflow/deepseek-v3.2、siliconflow/deepseek-v3.1-terminus
+    
 -   仅思考模型（回复前总会思考）：siliconflow/deepseek-r1-0528
+    
 -   非思考模型：siliconflow/deepseek-v3-0324
+    
 
 siliconflow/deepseek-v3.2 模型在代码和数学等任务上表现优异，且价格最低，推荐优先使用。
 
@@ -580,6 +591,6 @@ siliconflow/deepseek-v3.2 模型在代码和数学等任务上表现优异，且
 
 > 思考模式下，思维链按照输出 Token 计费。
 
-## 错误码
+## **错误码**
 
-如果执行报错，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果执行报错，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。

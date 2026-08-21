@@ -48,7 +48,7 @@ Qwen3.5-Omni Realtime（WebSocket）
 
 Qwen-Audio（WebSocket）
 
-[实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides)
+[实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime)
 
 **音视频内容分析**：上传音频或视频文件，AI分析内容并生成文本或语音回复（视频审核、会议纪要、字幕生成）
 
@@ -81,16 +81,21 @@ Qwen3.5-Omni Plus / Flash（HTTP / WebSocket）
 [非实时（Qwen-Omni）](https://help.aliyun.com/zh/model-studio/qwen-omni)
 
 -   内容分析场景中，Qwen3.5-Omni支持音频最长3小时、视频最长1小时。
+    
 -   支持工具调用（Function Calling）：Qwen3.5-Omni（WebSocket + HTTP）、Qwen3-Omni-Flash（仅HTTP）、Qwen-Audio Realtime（WebSocket）。
+    
 -   支持联网搜索：仅Qwen3.5-Omni（HTTP / WebSocket）。联网搜索与Function Calling不可同时开启。
+    
 
 ## 翻译
 
 全模态模型支持语音翻译，不同模型适用于不同翻译场景。
 
-**说明**快速搭建翻译应用推荐Qwen3.5-Livetranslate（60种语言，约3秒延迟，开箱即用）；最高质量和最广语言覆盖推荐Qwen3.5-Omni（29种输出语言，支持联网搜索和术语注入）；成本敏感场景推荐Qwen3-Omni-Flash（11种输出语言，成本更低）。
+**说明**
 
-支持的语言
+快速搭建翻译应用推荐Qwen3.5-Livetranslate（60种语言，约3秒延迟，开箱即用）；最高质量和最广语言覆盖推荐Qwen3.5-Omni（29种输出语言，支持联网搜索和术语注入）；成本敏感场景推荐Qwen3-Omni-Flash（11种输出语言，成本更低）。
+
+**支持的语言**
 
 **语言**
 

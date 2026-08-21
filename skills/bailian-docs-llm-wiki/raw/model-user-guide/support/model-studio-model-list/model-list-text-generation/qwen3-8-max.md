@@ -6,7 +6,7 @@
 
 ## 模型能力
 
-#### 华北2（北京）
+## 华北2（北京）
 
 能力项
 
@@ -18,7 +18,7 @@
 
 输入模态
 
-**Image** **Text** **Video**
+**Image**　**Text**　**Video**
 
 输出模态
 
@@ -56,7 +56,7 @@ Function Calling
 
 不支持
 
-#### 新加坡
+## 新加坡
 
 部署范围：国际
 
@@ -70,7 +70,7 @@ Function Calling
 
 输入模态
 
-**Image** **Text** **Video**
+**Image**　**Text**　**Video**
 
 输出模态
 
@@ -108,7 +108,7 @@ Function Calling
 
 不支持
 
-#### 德国（法兰克福）
+## 德国（法兰克福）
 
 部署范围：全球
 
@@ -122,7 +122,7 @@ Function Calling
 
 输入模态
 
-**Image** **Text** **Video**
+**Image**　**Text**　**Video**
 
 输出模态
 
@@ -160,7 +160,7 @@ Function Calling
 
 不支持
 
-#### 美国（弗吉尼亚）
+## 美国（弗吉尼亚）
 
 部署范围：全球
 
@@ -174,7 +174,7 @@ Function Calling
 
 输入模态
 
-**Image** **Text** **Video**
+**Image**　**Text**　**Video**
 
 输出模态
 
@@ -212,7 +212,7 @@ Function Calling
 
 不支持
 
-#### 日本（东京）
+## 日本（东京）
 
 部署范围：全球
 
@@ -226,7 +226,7 @@ Function Calling
 
 输入模态
 
-**Image** **Text** **Video**
+**Image**　**Text**　**Video**
 
 输出模态
 
@@ -304,7 +304,7 @@ Function Calling
 
 本文仅展示模型调用原价，不包含限时优惠等活动信息，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)查看活动优惠。
 
-#### 华北2（北京）
+## 华北2（北京）
 
 计费项
 
@@ -366,7 +366,7 @@ Function Calling
 
 每百万tokens
 
-#### 新加坡
+## 新加坡
 
 部署范围：国际
 
@@ -406,7 +406,7 @@ Function Calling
 
 每百万tokens
 
-#### 德国（法兰克福）
+## 德国（法兰克福）
 
 部署范围：全球
 
@@ -446,7 +446,7 @@ Function Calling
 
 每百万tokens
 
-#### 美国（弗吉尼亚）
+## 美国（弗吉尼亚）
 
 部署范围：全球
 
@@ -486,7 +486,7 @@ Function Calling
 
 每百万tokens
 
-#### 日本（东京）
+## 日本（东京）
 
 部署范围：全球
 
@@ -528,7 +528,7 @@ Function Calling
 
 ## 限流
 
-#### 华北2（北京）
+## 华北2（北京）
 
 参数
 
@@ -542,7 +542,7 @@ TPM（每分钟tokens）
 
 5,000,000
 
-#### 新加坡
+## 新加坡
 
 部署范围：国际
 
@@ -558,7 +558,7 @@ TPM（每分钟tokens）
 
 2,000,000
 
-#### 德国（法兰克福）
+## 德国（法兰克福）
 
 部署范围：全球
 
@@ -574,7 +574,7 @@ TPM（每分钟tokens）
 
 5,000,000
 
-#### 美国（弗吉尼亚）
+## 美国（弗吉尼亚）
 
 部署范围：全球
 
@@ -590,7 +590,7 @@ TPM（每分钟tokens）
 
 5,000,000
 
-#### 日本（东京）
+## 日本（东京）
 
 部署范围：全球
 

@@ -2,28 +2,33 @@
 
 AOQ Client SDK 支持自定义音频播放功能，通过音频帧回调机制将解码后的 PCM 数据回调给应用层，由开发者自行实现音频渲染播放。
 
-## 功能介绍
+## **功能介绍**
 
 AOQ Client SDK 内部音频模块默认会将接收到的远端音频数据通过系统扬声器/听筒播放，但在特定场景中，SDK 内部的音频播放模块可能无法满足开发需求，需要实现自定义音频播放功能，例如：
 
 -   需要将接收到的音频数据输出到自定义的播放设备或音频处理管线。
+    
 -   需要对接收到的音频数据进行二次处理（如 AI 语音识别、音效处理等）。
+    
 -   解决音频播放设备被占用的问题。
+    
 
 AOQ Client SDK 支持灵活的自定义播放功能，通过音频帧回调机制，将解码后的 PCM 数据回调给应用层，由开发者自行实现音频渲染播放。
 
-## 示例代码
+## **示例代码**
 
 暂无
 
-## 前提条件
+## **前提条件**
 
 -   已创建引擎实例（调用 `createEngine`）。
+    
 -   已成功连接服务器（`onConnectionStatusChange` 回调状态为 `AoqConnectionStatusConnected`）。
+    
 
-## 功能实现
+## **功能实现**
 
-### 1\. 开启音频播放（外部模式）
+### **1\. 开启音频播放（外部模式）**
 
 调用 `startAudioPlayer` 时设置 `isExternal=true`，关闭 SDK 内部的音频渲染设备，由应用层自行处理音频播放。
 
@@ -33,6 +38,7 @@ config.isExternal = true;  // 关闭 SDK 内部播放，由应用层自行渲染
 config.channel = 1;        // 声道数
 engine.startAudioPlayer(config);
 ```
+
 **参数说明：**
 
 **参数**
@@ -75,7 +81,7 @@ int
 
 声道数
 
-### 2\. 设置音频帧回调监听
+### **2\. 设置音频帧回调监听**
 
 调用 `setAudioFrameObserver` 设置音频帧数据回调监听器，实现 `onPlaybackAudioFrame` 回调方法接收播放 PCM 数据。
 
@@ -94,7 +100,7 @@ engine.setAudioFrameObserver(new AoqClientListener.AoqAudioFrameListener() {
 });
 ```
 
-### 3\. 开启播放数据回调
+### **3\. 开启播放数据回调**
 
 调用 `enableAudioFrameObserver` 开启播放位置的音频帧回调，指定数据源为 `AoqAudioSourcePlayback`。
 
@@ -110,6 +116,7 @@ engine.enableAudioFrameObserver(
     observerConfig
 );
 ```
+
 **参数说明：**
 
 **参数**
@@ -144,14 +151,18 @@ AoqAudioObserverModeReadOnly
 
 读写模式
 
-### 4\. 实现自定义音频渲染
+### **4\. 实现自定义音频渲染**
 
 在 `onPlaybackAudioFrame` 回调中接收到 PCM 数据后，由应用层自行实现音频渲染播放。常见的实现方式：
 
 -   **Android AudioTrack**：通过 AudioTrack 将 PCM 数据写入系统音频设备播放。
+    
 -   **AI 语音识别**：将 PCM 数据传入 ASR 引擎进行语音识别。
+    
 -   **音效处理**：对 PCM 数据进行音效处理后再播放。
+    
 -   **文件存储**：将接收到的音频数据保存到本地文件。
+    
 
 ```
 // 示例：使用 Android AudioTrack 播放
@@ -185,13 +196,17 @@ private void playPcmData(AoqClientEngine.AoqAudioFrameData frame) {
     }
 }
 ```
+
 **注意事项：**
 
 -   `onPlaybackAudioFrame` 回调在 SDK 内部线程触发，回调中的 `frame.dataPtr` 仅在回调期间有效，异步使用需自行拷贝。
+    
 -   AudioTrack.write 是阻塞操作，在回调中直接写入即可，SDK 内部会按节奏回调。
+    
 -   需要维护 `mPlayRunning` 标记，当引擎退出或停止播放时退出处理逻辑。
+    
 
-### 5\. 停止自定义播放
+### **5\. 停止自定义播放**
 
 当不再需要自定义播放时，先关闭音频帧回调，再停止播放设备，释放 AudioTrack 资源。
 

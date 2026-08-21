@@ -9,13 +9,13 @@
 前提条件
 
 -   已开通通义晓蜜 CCAI-对话分析 AIO 服务。
--   已创建应用：应用中心完成通义晓蜜 CCAI-对话分析 AIO 应用创建，并获取到 APP-ID 和 WORKSPACE-ID：获取 APP-ID 和 WORKSPACE-ID。
+-   已创建应用：应用中心完成通义晓蜜 CCAI-对话分析 AIO 应用创建，并获取到 APP-ID 和 WORKSPACE-ID：[获取 APP-ID 和 WORKSPACE-ID](https://help.aliyun.com/zh/model-studio/developer-reference/obtain-api-key-app-id-and-workspace-id?spm=openapi-amp.newDocPublishment.0.0.39e3281fMO5qOX)。
 
 ## 调试
 
-您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/DeleteVocab)
 
-[调试](https://api.alibabacloud.com/api/ContactCenterAI/2024-06-03/DeleteVocab)
+[![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png)调试](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/DeleteVocab)
 
 ## 授权信息
 
@@ -67,9 +67,9 @@ string
 
 llm-0\*\*\*\*\*jlg8s
 
-## 请求代码示例
+## [](#请求代码示例)请求代码示例
 
-```
+```java
 import com.alibaba.fastjson.JSONObject;
 import com.aliyun.contactcenterai20240603.Client;
 import com.aliyun.contactcenterai20240603.models.*;
@@ -231,4 +231,4 @@ The request processing has failed due to some unknown error, exception or failur
 
 系统内部错误，请稍后重试
 
-访问[错误中心](https://api.alibabacloud.com/document/ContactCenterAI/2024-06-03/errorCode)查看更多错误码。
+访问[错误中心](< https://api.aliyun.com/document/ContactCenterAI/2024-06-03/errorCode>)查看更多错误码。

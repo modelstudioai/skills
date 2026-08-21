@@ -2,43 +2,49 @@
 
 阿里云百炼知识库提供开放的API接口，便于您快速接入现有业务系统，实现自动化操作，并应对复杂的检索需求。
 
-**重要**本文档仅适用于文档搜索类知识库。
+**重要**
 
-**重要**知识库相关功能在中国站仅支持**华北2（北京）**地域，在国际站仅支持**新加坡**地域开通和使用，其他地域如德国（法兰克福）等均不支持知识库功能。
-
-## 前置步骤
-
-1.  [子账号](raw/application-user-guide/application-permission-management/application-permission-management-overview.md)（主账号不需要）需获取[API权限](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（AliyunBailianDataFullAccess策略），并[加入一个业务空间](raw/model-user-guide/security-and-compliance/permission-management-overview.md)，然后才能通过阿里云API操作知识库。
-    
-    > 子账号只能操作已加入业务空间中的知识库；主账号可操作所有业务空间下的知识库。
-    
-2.  安装最新版[阿里云百炼SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29&language=python-tea&tab=primer-doc)，以调用知识库相关的阿里云API。如何安装请参考[阿里云SDK开发参考](https://help.aliyun.com/sdk/developer-reference/)目录下文档。
-    
-    > 如果SDK不能满足需求，可以通过[签名机制](https://help.aliyun.com/zh/sdk/product-overview/v3-request-structure-and-signature)（较为复杂）HTTP请求知识库的相关接口。具体对接方式请参见[API概览](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-overview)。
-    
-3.  [获取AccessKey和AccessKey Secret](https://help.aliyun.com/zh/sdk/developer-reference/configure-the-alibaba-cloud-accesskey-environment-variable-on-linux-macos-and-windows-systems)以及[业务空间 ID](raw/model-user-guide/security-and-compliance/permission-management-overview.md)，并将它们配置到系统环境变量，以运行示例代码。以Linux操作系统为例：
-    
-    > 如果您使用了 IDE 或其他辅助开发插件，需自行将ALIBABA\_CLOUD\_ACCESS\_KEY\_ID、ALIBABA\_CLOUD\_ACCESS\_KEY\_SECRET和WORKSPACE\_ID变量配置到相应的开发环境中。
-    
-
-```
-export ALIBABA_CLOUD_ACCESS_KEY_ID='您的阿里云访问密钥ID'
-export ALIBABA_CLOUD_ACCESS_KEY_SECRET='您的阿里云访问密钥密码'
-export WORKSPACE_ID='您的阿里云百炼业务空间ID'
-```
-
-4.  准备好示例知识文档[阿里云百炼系列手机产品介绍.docx](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250428/tfewui/%E9%98%BF%E9%87%8C%E4%BA%91%E7%99%BE%E7%82%BC%E7%B3%BB%E5%88%97%E6%89%8B%E6%9C%BA%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D.docx)，用于创建知识库。
-
-完整示例代码
-
-#### 创建知识库
+本文档仅适用于文档搜索类知识库。
 
 **重要**
 
--   在调用本示例之前，请务必完成上述所有[前置步骤](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#a4a15bd543can)。子账号调用本示例前需[获取AliyunBailianDataFullAccess策略](raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
--   若您使用了 IDE 或其他辅助开发插件，需将`ALIBABA_CLOUD_ACCESS_KEY_ID`、`ALIBABA_CLOUD_ACCESS_KEY_SECRET`和`WORKSPACE_ID`变量配置到相应的开发环境中。
+知识库相关功能在中国站仅支持**华北2（北京）**地域，在国际站仅支持**新加坡**地域开通和使用，其他地域如德国（法兰克福）等均不支持知识库功能。
 
-Python
+## **前置步骤**
+
+1.  [子账号](https://help.aliyun.com/zh/model-studio/application-permission-management-overview#24ca2dad7djzs)（主账号不需要）需获取[API权限](https://help.aliyun.com/zh/model-studio/member-management#a2e8c1d6246s2)（AliyunBailianDataFullAccess策略），并[加入一个业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)，然后才能通过阿里云API操作知识库。
+    
+    > 子账号只能操作已加入业务空间中的知识库；主账号可操作所有业务空间下的知识库。
+    
+2.  安装最新版[阿里云百炼SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29&language=python-tea&tab=primer-doc)，以调用知识库相关的阿里云API。如何安装请参考[阿里云SDK开发参考](https://help.aliyun.com/zh/sdk/developer-reference/)目录下文档。
+    
+    > 如果SDK不能满足需求，可以通过[签名机制](https://help.aliyun.com/zh/sdk/product-overview/v3-request-structure-and-signature)（较为复杂）HTTP请求知识库的相关接口。具体对接方式请参见[API概览](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-overview)。
+    
+3.  [获取AccessKey和AccessKey Secret](https://help.aliyun.com/zh/sdk/developer-reference/configure-the-alibaba-cloud-accesskey-environment-variable-on-linux-macos-and-windows-systems)以及[业务空间 ID](https://help.aliyun.com/zh/model-studio/use-workspace#3d584de2733bp)，并将它们配置到系统环境变量，以运行示例代码。以Linux操作系统为例：
+    
+    > 如果您使用了 IDE 或其他辅助开发插件，需自行将ALIBABA\_CLOUD\_ACCESS\_KEY\_ID、ALIBABA\_CLOUD\_ACCESS\_KEY\_SECRET和WORKSPACE\_ID变量配置到相应的开发环境中。
+    
+    ```
+    export ALIBABA_CLOUD_ACCESS_KEY_ID='您的阿里云访问密钥ID'
+    export ALIBABA_CLOUD_ACCESS_KEY_SECRET='您的阿里云访问密钥密码'
+    export WORKSPACE_ID='您的阿里云百炼业务空间ID'
+    ```
+    
+4.  准备好示例知识文档[阿里云百炼系列手机产品介绍.docx](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250428/tfewui/%E9%98%BF%E9%87%8C%E4%BA%91%E7%99%BE%E7%82%BC%E7%B3%BB%E5%88%97%E6%89%8B%E6%9C%BA%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D.docx)，用于创建知识库。
+    
+
+## **完整示例代码**
+
+## 创建知识库
+
+**重要**
+
+-   在调用本示例之前，请务必完成上述所有[前置步骤](#a4a15bd543can)。子账号调用本示例前需[获取AliyunBailianDataFullAccess策略](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)。
+    
+-   若您使用了 IDE 或其他辅助开发插件，需将`ALIBABA_CLOUD_ACCESS_KEY_ID`、`ALIBABA_CLOUD_ACCESS_KEY_SECRET`和`WORKSPACE_ID`变量配置到相应的开发环境中。
+    
+
+## Python
 
 ```
 # 示例代码仅供参考，请勿在生产环境中直接使用
@@ -64,7 +70,7 @@ def check_environment_variables():
         if not os.environ.get(var):
             missing_vars.append(var)
             print(f"错误：请设置 {var} 环境变量 ({description})")
-
+    
     return len(missing_vars) == 0
 
 def calculate_md5(file_path: str) -> str:
@@ -362,7 +368,7 @@ if __name__ == '__main__':
     main()
 ```
 
-Java
+## Java
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -730,7 +736,7 @@ public class KnowledgeBaseCreate {
 }
 ```
 
-PHP
+## PHP
 
 ```
 <?php
@@ -805,7 +811,7 @@ class KnowledgeBaseCreate {
      */
     public static function createClient(){
         $config = new Config([
-            "accessKeyId" => getenv("ALIBABA_CLOUD_ACCESS_KEY_ID"),
+            "accessKeyId" => getenv("ALIBABA_CLOUD_ACCESS_KEY_ID"), 
             "accessKeySecret" => getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET")
         ]);
         // 下方接入地址以公有云的公网接入地址为例，可按需更换接入地址。
@@ -1081,7 +1087,7 @@ if (file_exists($path)) {
 KnowledgeBaseCreate::main(array_slice($argv, 1));
 ```
 
-Node.js
+## Node.js
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -1422,7 +1428,7 @@ exports.KbCreate = KbCreate;
 KbCreate.main(process.argv.slice(2));
 ```
 
-C#
+## C#
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -1850,7 +1856,7 @@ namespace AlibabaCloud.SDK.KnowledgeBase
 }
 ```
 
-Go
+## Go
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -2271,14 +2277,16 @@ func main() {
 }
 ```
 
-#### 检索知识库
+## 检索知识库
 
 **重要**
 
--   在调用本示例之前，请务必完成上述所有[前置步骤](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#a4a15bd543can)。子账号调用本示例前需[获取AliyunBailianDataFullAccess策略](raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
+-   在调用本示例之前，请务必完成上述所有[前置步骤](#a4a15bd543can)。子账号调用本示例前需[获取AliyunBailianDataFullAccess策略](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)。
+    
 -   若您使用了 IDE 或其他辅助开发插件，需将`ALIBABA_CLOUD_ACCESS_KEY_ID`、`ALIBABA_CLOUD_ACCESS_KEY_SECRET`和`WORKSPACE_ID`变量配置到相应的开发环境中。
+    
 
-Python
+## Python
 
 ```
 # 示例代码仅供参考，请勿在生产环境中直接使用
@@ -2302,7 +2310,7 @@ def check_environment_variables():
         if not os.environ.get(var):
             missing_vars.append(var)
             print(f"错误：请设置 {var} 环境变量 ({description})")
-
+    
     return len(missing_vars) == 0
 
 # 创建客户端（Client）
@@ -2371,7 +2379,7 @@ if __name__ == '__main__':
     main()
 ```
 
-Java
+## Java
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -2473,7 +2481,7 @@ public class KnowledgeBaseRetrieve {
 }
 ```
 
-PHP
+## PHP
 
 ```
 <?php
@@ -2517,7 +2525,7 @@ class KnowledgeBaseRetrieve {
      */
     public static function createClient(){
         $config = new Config([
-            "accessKeyId" => getenv("ALIBABA_CLOUD_ACCESS_KEY_ID"),
+            "accessKeyId" => getenv("ALIBABA_CLOUD_ACCESS_KEY_ID"), 
             "accessKeySecret" => getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET")
         ]);
         // 下方接入地址以公有云的公网接入地址为例，可按需更换接入地址。
@@ -2562,7 +2570,7 @@ class KnowledgeBaseRetrieve {
             // 步骤2：检索知识库
             echo "步骤2：检索知识库\n";
             $indexId = readline("请输入知识库ID："); // 即 CreateIndex 接口返回的 Data.Id，您也可以在阿里云百炼控制台的知识库页面获取。
-            $query = readline("请输入检索query：");
+            $query = readline("请输入检索query："); 
             $workspaceId = getenv("WORKSPACE_ID");
             // 调用检索方法
             $resp = self::retrieveIndex($client, $workspaceId, $indexId, $query);
@@ -2582,7 +2590,7 @@ if (file_exists($path)) {
 KnowledgeBaseRetrieve::main(array_slice($argv, 1));
 ```
 
-Node.js
+## Node.js
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -2666,7 +2674,7 @@ class KbRetrieve {
         try {
             console.log("步骤1：创建Client")
             const client = this.createClient();
-
+            
             console.log("步骤2：检索知识库")
             const indexId = await new Promise((resolve, reject) => {
                 // 知识库ID即 CreateIndex 接口返回的 Data.Id，您也可以在阿里云百炼控制台的知识库页面获取
@@ -2696,7 +2704,7 @@ exports.KbRetrieve = KbRetrieve;
 KbRetrieve.main(process.argv.slice(2));
 ```
 
-C#
+## C#
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -2823,7 +2831,7 @@ namespace AlibabaCloud.SDK.KnowledgeBase
 }
 ```
 
-Go
+## Go
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -2933,14 +2941,16 @@ func main() {
 }
 ```
 
-#### 更新知识库
+## 更新知识库
 
 **重要**
 
--   在调用本示例之前，请务必完成上述所有[前置步骤](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#a4a15bd543can)。子账号调用本示例前需[获取AliyunBailianDataFullAccess策略](raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
+-   在调用本示例之前，请务必完成上述所有[前置步骤](#a4a15bd543can)。子账号调用本示例前需[获取AliyunBailianDataFullAccess策略](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)。
+    
 -   若您使用了 IDE 或其他辅助开发插件，需将`ALIBABA_CLOUD_ACCESS_KEY_ID`、`ALIBABA_CLOUD_ACCESS_KEY_SECRET`和`WORKSPACE_ID`变量配置到相应的开发环境中。
+    
 
-Python
+## Python
 
 ```
 # 示例代码仅供参考，请勿在生产环境中直接使用
@@ -2966,7 +2976,7 @@ def check_environment_variables():
         if not os.environ.get(var):
             missing_vars.append(var)
             print(f"错误：请设置 {var} 环境变量 ({description})")
-
+    
     return len(missing_vars) == 0
 
 # 创建客户端（Client）
@@ -3262,7 +3272,7 @@ if __name__ == '__main__':
     main()
 ```
 
-Java
+## Java
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -3628,7 +3638,7 @@ public class KnowledgeBaseUpdate {
 }
 ```
 
-PHP
+## PHP
 
 ```
 <?php
@@ -3703,7 +3713,7 @@ class KnowledgeBaseUpdate {
      */
     public static function createClient(){
         $config = new Config([
-            "accessKeyId" => getenv("ALIBABA_CLOUD_ACCESS_KEY_ID"),
+            "accessKeyId" => getenv("ALIBABA_CLOUD_ACCESS_KEY_ID"), 
             "accessKeySecret" => getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET")
         ]);
         // 下方接入地址以公有云的公网接入地址为例，可按需更换接入地址。
@@ -3986,7 +3996,7 @@ if (file_exists($path)) {
 KnowledgeBaseUpdate::main(array_slice($argv, 1));
 ```
 
-Node.js
+## Node.js
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -4339,7 +4349,7 @@ exports.KbUpdate = KbUpdate;
 KbUpdate.main(process.argv.slice(2));
 ```
 
-C#
+## C#
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -4763,7 +4773,7 @@ namespace AlibabaCloud.SDK.KnowledgeBase
 }
 ```
 
-Go
+## Go
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -5195,14 +5205,16 @@ func main() {
 }
 ```
 
-#### 管理知识库
+## 管理知识库
 
 **重要**
 
--   在调用本示例之前，请务必完成上述所有[前置步骤](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#a4a15bd543can)。子账号调用本示例前需[获取AliyunBailianDataFullAccess策略](raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
+-   在调用本示例之前，请务必完成上述所有[前置步骤](#a4a15bd543can)。子账号调用本示例前需[获取AliyunBailianDataFullAccess策略](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)。
+    
 -   若您使用了 IDE 或其他辅助开发插件，需将`ALIBABA_CLOUD_ACCESS_KEY_ID`、`ALIBABA_CLOUD_ACCESS_KEY_SECRET`和`WORKSPACE_ID`变量配置到相应的开发环境中。
+    
 
-Python
+## Python
 
 ```
 # 示例代码仅供参考，请勿在生产环境中直接使用
@@ -5328,7 +5340,7 @@ if __name__ == '__main__':
     main()
 ```
 
-Java
+## Java
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -5466,7 +5478,7 @@ public class KnowledgeBaseManage {
 }
 ```
 
-PHP
+## PHP
 
 ```
 <?php
@@ -5511,7 +5523,7 @@ class KnowledgeBaseManage {
      */
     public static function createClient(){
         $config = new Config([
-            "accessKeyId" => getenv("ALIBABA_CLOUD_ACCESS_KEY_ID"),
+            "accessKeyId" => getenv("ALIBABA_CLOUD_ACCESS_KEY_ID"), 
             "accessKeySecret" => getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET")
         ]);
         // 下方接入地址以公有云的公网接入地址为例，可按需更换接入地址。
@@ -5593,7 +5605,7 @@ class KnowledgeBaseManage {
                 $response = self::deleteIndex($client, $workspaceId, $indexId);
                 if ($response->body->status == "200")
                     echo "知识库" . $indexId . "删除成功！\n";
-                else
+                else 
                     echo "发生错误：" . json_encode($response->body) . "\n";
             } else {
                 echo "无效的选项，程序退出。\n";
@@ -5611,7 +5623,7 @@ if (file_exists($path)) {
 KnowledgeBaseManage::main(array_slice($argv, 1));
 ```
 
-Node.js
+## Node.js
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -5763,7 +5775,7 @@ exports.KbManage = KbManage;
 KbManage.main(process.argv.slice(2));
 ```
 
-C#
+## C#
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -5934,7 +5946,7 @@ namespace AlibabaCloud.SDK.KnowledgeBase
 }
 ```
 
-Go
+## Go
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -6098,14 +6110,16 @@ func main() {
 }
 ```
 
-#### 切片管理
+## 切片管理
 
 **重要**
 
--   在调用本示例之前，请务必完成上述所有[前置步骤](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#a4a15bd543can)。子账号调用本示例前需[获取AliyunBailianDataFullAccess策略](raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
+-   在调用本示例之前，请务必完成上述所有[前置步骤](#a4a15bd543can)。子账号调用本示例前需[获取AliyunBailianDataFullAccess策略](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)。
+    
 -   若您使用了 IDE 或其他辅助开发插件，需将`ALIBABA_CLOUD_ACCESS_KEY_ID`、`ALIBABA_CLOUD_ACCESS_KEY_SECRET`和`WORKSPACE_ID`变量配置到相应的开发环境中。
+    
 
-Python
+## Python
 
 ```
 # 示例代码仅供参考，请勿在生产环境中直接使用
@@ -6205,7 +6219,7 @@ if __name__ == "__main__":
     main()
 ```
 
-Java
+## Java
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -6321,7 +6335,7 @@ public class ChunkManagement {
 }
 ```
 
-PHP
+## PHP
 
 ```
 <?php
@@ -6390,7 +6404,7 @@ if ($body->data->nodes && count($body->data->nodes) > 0) {
 }
 ```
 
-Node.js
+## Node.js
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -6479,7 +6493,7 @@ main().catch(err => {
 });
 ```
 
-C#
+## C#
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -6569,7 +6583,7 @@ class Program
 }
 ```
 
-Go
+## Go
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -6673,28 +6687,30 @@ func main() {
 }
 ```
 
-## 创建知识库
+## **创建知识库**
 
 接下来通过示例，引导您在给定的业务空间下创建一个文档搜索类知识库。
 
-### 1\. 初始化客户端
+### **1\. 初始化客户端**
 
-在开始上传文件和创建知识库之前，您需要使用[配置好的AccessKey和AccessKey Secret](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#a4a15bd543can)初始化客户端（Client），以完成身份验证和接入点`endpoint`配置。
+在开始上传文件和创建知识库之前，您需要使用[配置好的AccessKey和AccessKey Secret](#a4a15bd543can)初始化客户端（Client），以完成身份验证和接入点`endpoint`配置。
 
 -   **公网接入地址：**
     
     > 请确保您的客户端可以访问公网。
     
     -   公有云：`bailian.cn-beijing.aliyuncs.com`
+        
 -   **VPC接入地址：**
     
     > 若您的客户端部署在阿里云北京地域`cn-beijing`（公有云），且处于[VPC](https://help.aliyun.com/zh/vpc/what-is-vpc)网络环境中，可以使用以下VPC接入地址（不支持跨地域访问）。
     
     -   公有云：`bailian-vpc.cn-beijing.aliyuncs.com`
+        
 
 创建完成后，您将得到一个Client对象，用于后续的 API 调用。
 
-Python
+## Python
 
 ```
 def create_client() -> bailian20231229Client:
@@ -6713,7 +6729,7 @@ def create_client() -> bailian20231229Client:
     return bailian20231229Client(config)
 ```
 
-Java
+## Java
 
 ```
 /**
@@ -6731,7 +6747,7 @@ public com.aliyun.bailian20231229.Client createClient() throws Exception {
 }
 ```
 
-PHP
+## PHP
 
 ```
 /**
@@ -6741,7 +6757,7 @@ PHP
  */
 public function createClient(){
     $config = new Config([
-        "accessKeyId" => getenv("ALIBABA_CLOUD_ACCESS_KEY_ID"),
+        "accessKeyId" => getenv("ALIBABA_CLOUD_ACCESS_KEY_ID"), 
         "accessKeySecret" => getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET")
     ]);
     // 下方接入地址以公有云的公网接入地址为例，可按需更换接入地址。
@@ -6750,7 +6766,7 @@ public function createClient(){
 }
 ```
 
-Node.js
+## Node.js
 
 ```
 /**
@@ -6769,7 +6785,7 @@ function createClient() {
 }
 ```
 
-C#
+## C#
 
 ```
 /// <summary>
@@ -6790,7 +6806,7 @@ public AlibabaCloud.SDK.Bailian20231229.Client CreateClient()
 }
 ```
 
-Go
+## Go
 
 ```
 // CreateClient 创建并配置客户端（Client）。
@@ -6811,26 +6827,29 @@ func CreateClient() (_result *bailian20231229.Client, _err error) {
 }
 ```
 
-### 2\. 上传知识库文件
+### **2\. 上传知识库文件**
 
-#### 2.1. 申请文件上传租约
+#### **2.1. 申请文件上传租约**
 
 在创建知识库前，您需先将文件上传至**同一业务空间**，作为知识库的知识来源。上传文件前，需调用[ApplyFileUploadLease接口](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-applyfileuploadlease)申请一个文件上传租约。该租约是一个临时的授权，允许您在限定时间内（有效期为分钟级）上传文件。
 
--   **workspace\_id：**[如何获取业务空间ID](raw/model-user-guide/security-and-compliance/permission-management-overview.md)
+-   **workspace\_id：**[如何获取业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace#c5222ec081sbo)
     
 -   **category\_id：**本示例中，请传入`default`。阿里云百炼使用类目管理您上传的文件，系统会自动创建一个默认类目。您亦可调用[AddCategory接口](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addcategory)创建新类目，并获取对应的`category_id`。
     
 -   **file\_name：**请传入上传文件的名称（包括后缀）。其值必须与实际文件名一致。例如，上传图中的文件时，请传入`阿里云百炼系列手机产品介绍.docx`。
     
+    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5825785471/p904944.png)
+    
 -   **file\_md5：**请传入上传文件的MD5值（但当前阿里云不对该值进行校验，便于您使用URL地址上传文件）。
     
-    > 以Python为例，MD5值可使用hashlib模块获取。其他语言请参见[完整示例代码](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)。
+    > 以Python为例，MD5值可使用hashlib模块获取。其他语言请参见[完整示例代码](#17d78ffbdafbj)。
     
-    代码示例
+    **代码示例**
     
     ```
     import hashlib
+    
     
     def calculate_md5(file_path):
         """
@@ -6852,6 +6871,7 @@ func CreateClient() (_result *bailian20231229.Client, _err error) {
     
         return md5_hash.hexdigest()
     
+    
     # 使用示例
     file_path = "请替换为您需要上传文件的实际本地路径，例如/xxx/xxx/xxx/阿里云百炼系列手机产品介绍.docx"
     md5_value = calculate_md5(file_path)
@@ -6866,12 +6886,13 @@ func CreateClient() (_result *bailian20231229.Client, _err error) {
     
 -   **file\_size：**请传入上传文件的字节大小。
     
-    > 以Python为例，该值可使用os模块获取。其他语言请参见[完整示例代码](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)。
+    > 以Python为例，该值可使用os模块获取。其他语言请参见[完整示例代码](#17d78ffbdafbj)。
     
-    代码示例
+    **代码示例**
     
     ```
     import os
+    
     
     def get_file_size(file_path: str) -> int:
         """
@@ -6884,6 +6905,7 @@ func CreateClient() (_result *bailian20231229.Client, _err error) {
             int: 文件大小（以字节为单位）。
         """
         return os.path.getsize(file_path)
+    
     
     # 使用示例
     file_path = "请替换为您需要上传文件的实际本地路径，例如/xxx/xxx/xxx/阿里云百炼系列手机产品介绍.docx"
@@ -6901,10 +6923,15 @@ func CreateClient() (_result *bailian20231229.Client, _err error) {
 申请临时上传租约成功后，您将获得：
 
 -   **一组临时上传参数：**
+    
     -   `Data.FileUploadLeaseId`
+        
     -   `Data.Param.Method`
+        
     -   `Data.Param.Headers`中的`X-bailian-extra`
+        
     -   `Data.Param.Headers`中的`Content-Type`
+        
 -   **一个临时上传URL：**`Data.Param.Url`
     
 
@@ -6912,10 +6939,12 @@ func CreateClient() (_result *bailian20231229.Client, _err error) {
 
 **重要**
 
--   子账号调用本示例前需获取[API权限](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（AliyunBailianDataFullAccess策略）。
+-   子账号调用本示例前需获取[API权限](https://help.aliyun.com/zh/model-studio/member-management#a2e8c1d6246s2)（AliyunBailianDataFullAccess策略）。
+    
 -   本示例支持[在线调试](https://api.aliyun.com/api/bailian/2023-12-29/ApplyFileUploadLease)及多语言[代码示例生成](https://api.aliyun.com/api/bailian/2023-12-29/ApplyFileUploadLease?lang=JAVA&tab=DEMO)。
+    
 
-Python
+## Python
 
 ```
 def apply_lease(client, category_id, file_name, file_md5, file_size, workspace_id):
@@ -6943,7 +6972,7 @@ def apply_lease(client, category_id, file_name, file_md5, file_size, workspace_i
     return client.apply_file_upload_lease_with_options(category_id, workspace_id, request, headers, runtime)
 ```
 
-Java
+## Java
 
 ```
 /**
@@ -6970,7 +6999,7 @@ public ApplyFileUploadLeaseResponse applyLease(com.aliyun.bailian20231229.Client
 }
 ```
 
-PHP
+## PHP
 
 ```
 /**
@@ -6996,7 +7025,7 @@ public function applyLease($client, $categoryId, $fileName, $fileMd5, $fileSize,
 }
 ```
 
-Node.js
+## Node.js
 
 ```
 /**
@@ -7027,7 +7056,7 @@ async function applyLease(client, categoryId, fileName, fileMd5, fileSize, works
 }
 ```
 
-C#
+## C#
 
 ```
 /// <summary>
@@ -7061,7 +7090,7 @@ public AlibabaCloud.SDK.Bailian20231229.Models.ApplyFileUploadLeaseResponse Appl
 }
 ```
 
-Go
+## Go
 
 ```
 // ApplyLease 从阿里云百炼服务申请文件上传租约。
@@ -7089,7 +7118,7 @@ func ApplyLease(client *bailian20231229.Client, categoryId, fileName, fileMD5 st
 }
 ```
 
-请求示例
+**请求示例**
 
 ```
 {
@@ -7101,7 +7130,7 @@ func ApplyLease(client *bailian20231229.Client, categoryId, fileName, fileMD5 st
 }
 ```
 
-响应示例
+**响应示例**
 
 ```
 {
@@ -7115,27 +7144,29 @@ func ApplyLease(client *bailian20231229.Client, categoryId, fileName, fileMD5 st
     "Type": "HTTP",
     "Param": {
       "Method": "PUT",
-      "Url": "https://bailian-datahub-data-origin-prod.oss-cn-hangzhou.aliyuncs.com/1005426495169178/10024405/68abd1dea7b6404d8f7d7b9f7fbd332d.1716698936847.pdf?Expires=1716699536&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
+      "Url": "https://bailian-datahub-data-origin-prod.oss-cn-hangzhou.aliyuncs.com/1005426495169178/10024405/68abd1dea7b6404d8f7d7b9f7fbd332d.1716698936847.pdf?Expires=1716699536&OSSAccessKeyId=TestID&Signature=HfwPUZo4pR6DatSDym0zFKVh9Wg%3D",
       "Headers": "        \"X-bailian-extra\": \"MTAwNTQyNjQ5NTE2OTE3OA==\",\n        \"Content-Type\": \"application/pdf\""
     }
   }
 }
 ```
 
-#### 2.2. 上传文件到临时存储
+#### **2.2. 上传文件到临时存储**
 
 取得上传租约后，您即可使用租约中的临时上传参数和临时上传URL，将本地存储或可通过公网访问的文件上传至阿里云百炼服务器。请注意，每个业务空间最多支持10万个文件。目前支持上传的格式包括：PDF、DOCX、DOC、TXT、Markdown、PPTX、PPT、XLSX、XLS、HTML、PNG、JPG、JPEG、BMP 和 GIF。
 
--   **pre\_signed\_url：**请传入[申请文件上传租约](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#9eb81df79bvkg)时接口返回的`Data.Param.Url`。
+-   **pre\_signed\_url：**请传入[申请文件上传租约](#9eb81df79bvkg)时接口返回的`Data.Param.Url`。
     
     > 该 URL 为预签名 URL，不支持 FormData 方式上传，需使用二进制方式上传（详见示例代码）。
     
 
-**重要**本示例不支持在线调试和多语言示例代码生成。
+**重要**
 
-#### 本地上传
+本示例不支持在线调试和多语言示例代码生成。
 
-Python
+## 本地上传
+
+## Python
 
 ```
 import requests
@@ -7148,7 +7179,7 @@ def upload_file(pre_signed_url, file_path):
     参数:
         pre_signed_url (str): 上传租约中的URL。
         file_path (str): 文件本地路径。
-
+    
     返回:
         阿里云百炼服务的响应。
     """
@@ -7182,7 +7213,7 @@ if __name__ == "__main__":
     upload_file(pre_signed_url_or_http_url, file_path)
 ```
 
-Java
+## Java
 
 ```
 import java.io.DataOutputStream;
@@ -7240,7 +7271,7 @@ public class UploadFile {
 }
 ```
 
-PHP
+## PHP
 
 ```
 <?php
@@ -7323,7 +7354,7 @@ main();
 ?>
 ```
 
-Node.js
+## Node.js
 
 ```
 const fs = require('fs');
@@ -7394,7 +7425,7 @@ function main() {
 main();
 ```
 
-C#
+## C#
 
 ```
 using System;
@@ -7470,7 +7501,7 @@ public class UploadFilExample
 }
 ```
 
-Go
+## Go
 
 ```
 package main
@@ -7556,11 +7587,11 @@ func main() {
 }
 ```
 
-#### URL地址上传
+## URL地址上传
 
 > 请确保URL公开可访问且指向一个有效的文件。
 
-Python
+## Python
 
 ```
 import requests
@@ -7573,7 +7604,7 @@ def upload_file_link(pre_signed_url, source_url_string):
     参数:
         pre_signed_url (str): 上传租约中的 URL。
         source_url_string (str): 文件的URL地址。
-
+    
     返回:
         阿里云百炼服务的响应。
     """
@@ -7610,7 +7641,7 @@ if __name__ == "__main__":
     upload_file_link(pre_signed_url_or_http_url, source_url)
 ```
 
-Java
+## Java
 
 ```
 import java.io.BufferedInputStream;
@@ -7671,14 +7702,14 @@ public class UploadFile {
 
     public static void main(String[] args) {
         String preSignedUrlOrHttpUrl = "请替换为您在上一步中调用ApplyFileUploadLease接口实际返回的Data.Param中Url字段的值";
-
+        
         String sourceUrl = "请替换为您需要上传文件的URL地址";
         uploadFileLink(preSignedUrlOrHttpUrl, sourceUrl);
     }
 }
 ```
 
-PHP
+## PHP
 
 ```
 <?php
@@ -7759,7 +7790,7 @@ main();
 ?>
 ```
 
-Node.js
+## Node.js
 
 ```
 const axios = require('axios');
@@ -7830,7 +7861,7 @@ function main() {
 main();
 ```
 
-C#
+## C#
 
 ```
 using System;
@@ -7904,25 +7935,25 @@ public class UploadFileExample
     public static async Task Main(string[] args)
     {
         string preSignedUrlOrHttpUrl = "请替换为您在上一步中调用 ApplyFileUploadLease 接口实际返回的 Data.Param 中 Url 字段的值";
-        string url = "请替换为您需要上传文件的URL地址";
+        string url = "请替换为您需要上传文件的URL地址";   
 
         await UploadFileFromUrl(preSignedUrlOrHttpUrl, url);
     }
 }
 ```
 
-Go
+## Go
 
 ```
 package main
-
+ 
 import (
     "fmt"
     "net/http"
-
+ 
     "github.com/go-resty/resty/v2"
 )
-
+ 
 // UploadFileFromUrl 将可通过公网访问的文件上传至临时存储。
 //
 // 参数:
@@ -7939,56 +7970,56 @@ func UploadFileFromUrl(preSignedUrl string, headers map[string]string, sourceUrl
         return fmt.Errorf("获取文件失败: %w", err)
     }
     defer resp.Body.Close()
-
+ 
     if resp.StatusCode != http.StatusOK {
         return fmt.Errorf("获取文件失败，状态码: %d", resp.StatusCode)
     }
-
+ 
     // 创建 REST 客户端
     client := resty.New()
-
+ 
     // 构建上传所需的请求头
     uploadHeaders := map[string]string{
         "X-bailian-extra": headers["X-bailian-extra"],
         "Content-Type":    headers["Content-Type"],
     }
-
+ 
     // 发送 PUT 请求
     response, err := client.R().
         SetHeaders(uploadHeaders).
         SetBody(resp.Body).
         Put(preSignedUrl)
-
+ 
     if err != nil {
         return fmt.Errorf("发送请求失败: %w", err)
     }
-
+ 
     if err != nil {
         return fmt.Errorf("发送请求失败: %w", err)
     }
-
+ 
     // 检查 HTTP 响应状态码
     if response.IsError() {
         return fmt.Errorf("HTTP 错误: %d", response.StatusCode())
     }
-
+ 
     fmt.Println("File uploaded successfully from URL.")
     return nil
 }
-
+ 
 // main 主函数
 func main() {
     // 请替换为您在上一步中调用 ApplyFileUploadLease 接口实际返回的 Data.Param 中 Url 字段的值
     preSignedUrl := "请替换为您在上一步中调用ApplyFileUploadLease接口实际返回的Data.Param中Url字段的值"
-
+ 
     // 请替换为您在上一步中调用ApplyFileUploadLease接口实际返回的Data.Param.Headers中的 X-bailian-extra 和 Content-Type
     headers := map[string]string{
         "X-bailian-extra": "请替换为您在上一步中调用ApplyFileUploadLease接口实际返回的Data.Param.Headers中X-bailian-extra字段的值",
         "Content-Type":    "请替换为您在上一步中调用ApplyFileUploadLease接口实际返回的Data.Param.Headers中Content-Type字段的值（返回空值时，传空值即可）",
     }
-
+ 
     sourceUrl := "请替换为您需要上传文件的URL地址"
-
+ 
     // 调用上传函数
     err := UploadFileFromUrl(preSignedUrl, headers, sourceUrl)
     if err != nil {
@@ -7997,27 +8028,31 @@ func main() {
 }
 ```
 
-#### 2.3. 添加文件到类目中
+#### **2.3. 添加文件到类目中**
 
 阿里云百炼使用类目管理您上传的文件。因此，接下来您需要调用[AddFile接口](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addfile)将已上传的文件添加到同一业务空间下的类目中。
 
 -   **parser：**请传入`DASHSCOPE_DOCMIND`。
     
--   **lease\_id：**请传入[申请文件上传租约](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#9eb81df79bvkg)时接口返回的`Data.FileUploadLeaseId`。
+-   **lease\_id：**请传入[申请文件上传租约](#9eb81df79bvkg)时接口返回的`Data.FileUploadLeaseId`。
     
 -   **category\_id：**本示例中，请传入`default`。若您使用了自建类目上传，则需传入对应的`category_id`。
     
-    **重要**请确保此处传入的`CategoryId`与[申请文件上传租约](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#9eb81df79bvkg)步骤中使用的`CategoryId`保持一致，否则会出现`Category is mismatched`错误。
+    **重要**
+    
+    请确保此处传入的`CategoryId`与[申请文件上传租约](#9eb81df79bvkg)步骤中使用的`CategoryId`保持一致，否则会出现`Category is mismatched`错误。
     
 
 完成添加后，阿里云百炼将返回该文件的`FileId`，并自动开始解析您的文件。同时`lease_id`（租约ID）随即失效，**请勿再使用相同的租约ID重复提交**。
 
 **重要**
 
--   子账号调用本示例前需获取[API权限](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（AliyunBailianDataFullAccess策略）。
+-   子账号调用本示例前需获取[API权限](https://help.aliyun.com/zh/model-studio/member-management#a2e8c1d6246s2)（AliyunBailianDataFullAccess策略）。
+    
 -   本示例支持[在线调试](https://api.aliyun.com/api/bailian/2023-12-29/AddFile)及多语言[代码示例生成](https://api.aliyun.com/api/bailian/2023-12-29/AddFile?lang=JAVA&tab=DEMO)。
+    
 
-Python
+## Python
 
 ```
 def add_file(client: bailian20231229Client, lease_id: str, parser: str, category_id: str, workspace_id: str):
@@ -8044,7 +8079,7 @@ def add_file(client: bailian20231229Client, lease_id: str, parser: str, category
     return client.add_file_with_options(workspace_id, request, headers, runtime)
 ```
 
-Java
+## Java
 
 ```
 /**
@@ -8068,7 +8103,7 @@ public AddFileResponse addFile(com.aliyun.bailian20231229.Client client, String 
 }
 ```
 
-PHP
+## PHP
 
 ```
 /**
@@ -8093,7 +8128,7 @@ public function addFile($client, $leaseId, $parser, $categoryId, $workspaceId) {
 }
 ```
 
-Node.js
+## Node.js
 
 ```
 /**
@@ -8117,7 +8152,7 @@ async function addFile(client, leaseId, parser, categoryId, workspaceId) {
 }
 ```
 
-C#
+## C#
 
 ```
 /// <summary>
@@ -8149,7 +8184,7 @@ public AlibabaCloud.SDK.Bailian20231229.Models.AddFileResponse AddFile(
 }
 ```
 
-Go
+## Go
 
 ```
 // AddFile 将文件添加到阿里云百炼服务的指定类目中。
@@ -8176,7 +8211,7 @@ func AddFile(client *bailian20231229.Client, leaseId, parser, categoryId, worksp
 }
 ```
 
-请求示例
+**请求示例**
 
 ```
 {
@@ -8187,7 +8222,7 @@ func AddFile(client *bailian20231229.Client, leaseId, parser, categoryId, worksp
 }
 ```
 
-响应示例
+**响应示例**
 
 ```
 {
@@ -8203,20 +8238,23 @@ func AddFile(client *bailian20231229.Client, leaseId, parser, categoryId, worksp
 }
 ```
 
-#### 2.4. 查询文件的解析状态
+#### **2.4. 查询文件的解析状态**
 
 未解析完成的文件无法用于知识库，在请求高峰时段，该过程可能需要数小时。您可以调用[DescribeFile接口](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-describefile)查询文件的解析状态。
 
--   **file\_id：**请传入[添加文件到类目中](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#494345d4b1hx2)时接口返回的`FileId`。
+-   **file\_id：**请传入[添加文件到类目中](#494345d4b1hx2)时接口返回的`FileId`。
+    
 
 当本接口返回的`Data.Status`字段值为`PARSE_SUCCESS`时，表示文件已解析完成，可以将其导入知识库。
 
 **重要**
 
--   子账号调用本示例前需获取[API权限](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（AliyunBailianDataFullAccess或AliyunBailianDataReadOnlyAccess策略）。
+-   子账号调用本示例前需获取[API权限](https://help.aliyun.com/zh/model-studio/member-management#a2e8c1d6246s2)（AliyunBailianDataFullAccess或AliyunBailianDataReadOnlyAccess策略）。
+    
 -   本示例支持[在线调试](https://api.aliyun.com/api/bailian/2023-12-29/DescribeFile)及多语言[代码示例生成](https://api.aliyun.com/api/bailian/2023-12-29/DescribeFile?lang=JAVA&tab=DEMO)。
+    
 
-Python
+## Python
 
 ```
 def describe_file(client, workspace_id, file_id):
@@ -8236,7 +8274,7 @@ def describe_file(client, workspace_id, file_id):
     return client.describe_file_with_options(workspace_id, file_id, headers, runtime)
 ```
 
-Java
+## Java
 
 ```
 /**
@@ -8254,7 +8292,7 @@ public DescribeFileResponse describeFile(com.aliyun.bailian20231229.Client clien
 }
 ```
 
-PHP
+## PHP
 
 ```
 /**
@@ -8272,7 +8310,7 @@ public function describeFile($client, $workspaceId, $fileId) {
 }
 ```
 
-Node.js
+## Node.js
 
 ```
 /**
@@ -8289,7 +8327,7 @@ async function describeFile(client, workspaceId, fileId) {
 }
 ```
 
-C#
+## C#
 
 ```
 /// <summary>
@@ -8311,7 +8349,7 @@ public AlibabaCloud.SDK.Bailian20231229.Models.DescribeFileResponse DescribeFile
 }
 ```
 
-Go
+## Go
 
 ```
 // DescribeFile 获取文件的基本信息。
@@ -8331,7 +8369,7 @@ func DescribeFile(client *bailian20231229.Client, workspaceId, fileId string) (_
 }
 ```
 
-请求示例
+**请求示例**
 
 ```
 {
@@ -8340,7 +8378,7 @@ func DescribeFile(client *bailian20231229.Client, workspaceId, fileId string) (_
 }
 ```
 
-响应示例
+**响应示例**
 
 ```
 {
@@ -8362,15 +8400,15 @@ func DescribeFile(client *bailian20231229.Client, workspaceId, fileId string) (_
 }
 ```
 
-### 3\. 创建知识库
+### **3\. 创建知识库**
 
-#### 3.1. 初始化知识库
+#### **3.1. 初始化知识库**
 
 文件解析完成后，您即可将其导入同一业务空间下的知识库。初始化（非最终提交）一个文档搜索类知识库，可以调用[CreateIndex接口](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-createindex)。
 
--   **workspace\_id：**[如何获取业务空间ID](raw/model-user-guide/security-and-compliance/permission-management-overview.md)
+-   **workspace\_id：**[如何获取业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace#c5222ec081sbo)
     
--   **file\_id：**请传入[添加文件到类目中](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#494345d4b1hx2)时接口返回的`FileId`。
+-   **file\_id：**请传入[添加文件到类目中](#494345d4b1hx2)时接口返回的`FileId`。
     
     > 若source\_type为`DATA_CENTER_FILE`，则该参数为必传，否则接口将报错。
     
@@ -8387,10 +8425,12 @@ func DescribeFile(client *bailian20231229.Client, workspaceId, fileId string) (_
 
 **重要**
 
--   子账号调用本示例前需获取[API权限](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（AliyunBailianDataFullAccess策略）。
+-   子账号调用本示例前需获取[API权限](https://help.aliyun.com/zh/model-studio/member-management#a2e8c1d6246s2)（AliyunBailianDataFullAccess策略）。
+    
 -   本示例支持[在线调试](https://api.aliyun.com/api/bailian/2023-12-29/CreateIndex)及多语言[代码示例生成](https://api.aliyun.com/api/bailian/2023-12-29/CreateIndex?lang=JAVA&tab=DEMO)。
+    
 
-Python
+## Python
 
 ```
 def create_index(client, workspace_id, file_id, name, structure_type, source_type, sink_type):
@@ -8421,7 +8461,7 @@ def create_index(client, workspace_id, file_id, name, structure_type, source_typ
     return client.create_index_with_options(workspace_id, request, headers, runtime)
 ```
 
-Java
+## Java
 
 ```
 /**
@@ -8449,7 +8489,7 @@ public CreateIndexResponse createIndex(com.aliyun.bailian20231229.Client client,
 }
 ```
 
-PHP
+## PHP
 
 ```
 /**
@@ -8480,7 +8520,7 @@ public function createIndex($client, $workspaceId, $fileId, $name, $structureTyp
 }
 ```
 
-Node.js
+## Node.js
 
 ```
 /**
@@ -8508,7 +8548,7 @@ async function createIndex(client, workspaceId, fileId, name, structureType, sou
 }
 ```
 
-C#
+## C#
 
 ```
 /// <summary>
@@ -8546,7 +8586,7 @@ public AlibabaCloud.SDK.Bailian20231229.Models.CreateIndexResponse CreateIndex(
 }
 ```
 
-Go
+## Go
 
 ```
 // CreateIndex 在阿里云百炼服务中创建知识库（初始化）。
@@ -8577,7 +8617,7 @@ func CreateIndex(client *bailian20231229.Client, workspaceId, fileId, name, stru
 }
 ```
 
-请求示例
+**请求示例**
 
 ```
 {
@@ -8592,7 +8632,7 @@ func CreateIndex(client *bailian20231229.Client, workspaceId, fileId, name, stru
 }
 ```
 
-响应示例
+**响应示例**
 
 ```
 {
@@ -8607,20 +8647,23 @@ func CreateIndex(client *bailian20231229.Client, workspaceId, fileId, name, stru
 }
 ```
 
-#### 3.2. 提交索引任务
+#### **3.2. 提交索引任务**
 
 初始化知识库后，您需要调用[SubmitIndexJob接口](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-submitindexjob)提交索引任务，以启动知识库的索引构建。
 
--   **index\_id：**请传入[初始化知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#00ded5ee90ffx)时接口返回的`Data.Id`。
+-   **index\_id：**请传入[初始化知识库](#00ded5ee90ffx)时接口返回的`Data.Id`。
+    
 
 完成提交后，阿里云百炼随即以异步任务方式开始构建索引。本接口返回的`Data.Id`为对应的任务ID。下一步中，您将用到此ID查询任务的最新状态。
 
 **重要**
 
--   子账号调用本示例前需获取[API权限](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（AliyunBailianDataFullAccess策略）。
+-   子账号调用本示例前需获取[API权限](https://help.aliyun.com/zh/model-studio/member-management#a2e8c1d6246s2)（AliyunBailianDataFullAccess策略）。
+    
 -   本示例支持[在线调试](https://api.aliyun.com/api/bailian/2023-12-29/SubmitIndexJob)及多语言[代码示例生成](https://api.aliyun.com/api/bailian/2023-12-29/SubmitIndexJob?lang=JAVA&tab=DEMO)。
+    
 
-Python
+## Python
 
 ```
 def submit_index(client, workspace_id, index_id):
@@ -8643,7 +8686,7 @@ def submit_index(client, workspace_id, index_id):
     return client.submit_index_job_with_options(workspace_id, submit_index_job_request, headers, runtime)
 ```
 
-Java
+## Java
 
 ```
 /**
@@ -8663,7 +8706,7 @@ public SubmitIndexJobResponse submitIndex(com.aliyun.bailian20231229.Client clie
 }
 ```
 
-PHP
+## PHP
 
 ```
 /**
@@ -8684,7 +8727,7 @@ public static function submitIndex($client, $workspaceId, $indexId) {
 }
 ```
 
-Node.js
+## Node.js
 
 ```
 /**
@@ -8702,7 +8745,7 @@ async function submitIndex(client, workspaceId, indexId) {
 }
 ```
 
-C#
+## C#
 
 ```
 /// <summary>
@@ -8728,7 +8771,7 @@ public AlibabaCloud.SDK.Bailian20231229.Models.SubmitIndexJobResponse SubmitInde
 }
 ```
 
-Go
+## Go
 
 ```
 // SubmitIndex 提交索引任务。
@@ -8751,7 +8794,7 @@ func SubmitIndex(client *bailian20231229.Client, workspaceId, indexId string) (_
 }
 ```
 
-请求示例
+**请求示例**
 
 ```
 {
@@ -8760,7 +8803,7 @@ func SubmitIndex(client *bailian20231229.Client, workspaceId, indexId string) (_
 }
 ```
 
-响应示例
+**响应示例**
 
 ```
 {
@@ -8776,20 +8819,23 @@ func SubmitIndex(client *bailian20231229.Client, workspaceId, indexId string) (_
 }
 ```
 
-#### 3.3. 等待索引任务完成
+#### **3.3. 等待索引任务完成**
 
 索引任务的执行需要一定时间，在请求高峰时段，该过程可能需要数小时。查询其执行状态可以调用[GetIndexJobStatus接口](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getindexjobstatus)。
 
--   **job\_id：**请传入[提交索引任务](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#bf14fb34a58vy)时接口返回的`Data.Id`。
+-   **job\_id：**请传入[提交索引任务](#bf14fb34a58vy)时接口返回的`Data.Id`。
+    
 
 当本接口返回的`Data.Status`字段值为`COMPLETED`时，表示知识库已创建完成。
 
 **重要**
 
--   子账号调用本示例前需获取[API权限](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（AliyunBailianDataFullAccess策略）。
+-   子账号调用本示例前需获取[API权限](https://help.aliyun.com/zh/model-studio/member-management#a2e8c1d6246s2)（AliyunBailianDataFullAccess策略）。
+    
 -   本示例支持[在线调试](https://api.aliyun.com/api/bailian/2023-12-29/SubmitIndexJob)及多语言[代码示例生成](https://api.aliyun.com/api/bailian/2023-12-29/SubmitIndexJob?lang=JAVA&tab=DEMO)。
+    
 
-Python
+## Python
 
 ```
 def get_index_job_status(client, workspace_id, index_id, job_id):
@@ -8814,7 +8860,7 @@ def get_index_job_status(client, workspace_id, index_id, job_id):
     return client.get_index_job_status_with_options(workspace_id, get_index_job_status_request, headers, runtime)
 ```
 
-Java
+## Java
 
 ```
 /**
@@ -8838,7 +8884,7 @@ public GetIndexJobStatusResponse getIndexJobStatus(com.aliyun.bailian20231229.Cl
 }
 ```
 
-PHP
+## PHP
 
 ```
 /**
@@ -8861,7 +8907,7 @@ public function getIndexJobStatus($client, $workspaceId, $jobId, $indexId) {
 }
 ```
 
-Node.js
+## Node.js
 
 ```
 /**
@@ -8880,7 +8926,7 @@ async function getIndexJobStatus(client, workspaceId, jobId, indexId) {
 }
 ```
 
-C#
+## C#
 
 ```
 /// <summary>
@@ -8909,7 +8955,7 @@ public AlibabaCloud.SDK.Bailian20231229.Models.GetIndexJobStatusResponse GetInde
 }
 ```
 
-Go
+## Go
 
 ```
 // GetIndexJobStatus 查询索引任务状态。
@@ -8934,7 +8980,7 @@ func GetIndexJobStatus(client *bailian20231229.Client, workspaceId, jobId, index
 }
 ```
 
-请求示例
+**请求示例**
 
 ```
 {
@@ -8944,7 +8990,7 @@ func GetIndexJobStatus(client *bailian20231229.Client, workspaceId, jobId, index
 }
 ```
 
-响应示例
+**响应示例**
 
 ```
 {
@@ -8971,13 +9017,16 @@ func GetIndexJobStatus(client *bailian20231229.Client, workspaceId, jobId, index
 
 通过以上步骤，您已成功创建了一个知识库，并包含了需要上传的文件。
 
-## 检索知识库
+## **检索知识库**
 
 目前，检索知识库支持以下方式：
 
--   **使用阿里云百炼应用：**[调用应用](https://help.aliyun.com/zh/model-studio/application-calling-guide)时，通过`rag_options`传入知识库ID`index_id`，为您的大模型应用补充私有知识和提供最新信息。
+-   **使用阿里云百炼应用：**[调用应用](https://help.aliyun.com/zh/model-studio/application-calling-guide#4100253b7chc3)时，通过`rag_options`传入知识库ID`index_id`，为您的大模型应用补充私有知识和提供最新信息。
+    
 -   **使用阿里云API：**调用[Retrieve接口](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve)在指定的知识库中检索信息并返回原始文本切片。
+    
 -   **使用知识检索服务（推荐）：**调用[Search接口](https://help.aliyun.com/zh/model-studio/knowledgesearch)跨多个知识库执行联合语义检索，返回按相关性排序的文本切片。检索策略预先在控制台配置并发布，调用方只需传入检索意图（`query`/`images`）与`agent_id`。
+    
 
 三者的区别在于：第一种方式先将检索到的相关文本切片传给您配置的大模型，模型再结合这些切片与用户的原始查询生成最终回答并返回；后两种方式则是直接返回文本切片。其中**知识检索服务（Search接口）**为推荐方式，支持跨多库联合检索与多模态检索，且检索策略在控制台统一配置管理，无需在请求中维护。
 
@@ -8991,7 +9040,7 @@ func GetIndexJobStatus(client *bailian20231229.Client, workspaceId, jobId, index
     
 -   **workspace\_id：**知识库所在的业务空间，用于拼接 Base URL（`https://{workspaceId}.cn-beijing.maas.aliyuncs.com`）。在控制台[业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)获取。
     
-    > 子账号只能检索自己[已加入的业务空间](raw/model-user-guide/security-and-compliance/permission-management-overview.md)中的知识库。
+    > 子账号只能检索自己[已加入的业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)中的知识库。
     
 
 检索策略（多库权重、知识路由、混排模型等）预先在控制台配置进服务实例并发布，调用方只需传入检索意图（`query`/`images`）与`agent_id`，无需在请求中维护检索策略参数。
@@ -8999,9 +9048,11 @@ func GetIndexJobStatus(client *bailian20231229.Client, workspaceId, jobId, index
 **重要**
 
 -   调用前须在百炼控制台[知识检索服务页面](https://bailian.console.aliyun.com/cn-beijing?tab=app#/knowledge-base/list?activeKey=retrieval)创建并发布知识检索服务（agent），获取服务 ID（`agent_id`）。未发布时返回 Agent 未发布错误。
+    
 -   默认用户维度 25 QPS。如遇限流，请稍后重试。
+    
 
-cURL
+## cURL
 
 ```
 curl -X POST "https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/indices/knowledge/search" \
@@ -9014,7 +9065,7 @@ curl -X POST "https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/indices/
   }'
 ```
 
-Python
+## Python
 
 ```
 import os
@@ -9035,7 +9086,7 @@ resp = requests.post(
 print(resp.json())
 ```
 
-请求示例
+**请求示例**
 
 ```
 {
@@ -9045,7 +9096,7 @@ print(resp.json())
 }
 ```
 
-响应示例
+**响应示例**
 
 ```
 {
@@ -9079,7 +9130,7 @@ print(resp.json())
 }
 ```
 
-## 结构化输出
+## **结构化输出**
 
 知识库检索 API 不支持 `response_format` 参数。如需 JSON 格式输出，需在**模型调用层**设置 `response_format`。
 
@@ -9089,7 +9140,7 @@ Agent API 的 `instructions` 字段可通过提示词指定 JSON 输出格式，
 
 阿里云百炼不直接生成 JSON 文件，返回的 JSON 内容需由调用方自行写入文件。
 
-### 知识库检索 + JSON 输出
+### **知识库检索 + JSON 输出**
 
 先调用检索接口获取知识库文本切片，再将切片作为上下文调用 DashScope 模型接口，并设置 `response_format={"type": "json_object"}`，即可得到结构化输出。
 
@@ -9117,46 +9168,57 @@ print(resp.output.text)
 
 模型调用接口的更多参数说明，参见[DashScope API 参考](https://help.aliyun.com/zh/model-studio/qwen-api-via-dashscope)。
 
-## 更新知识库
+## **更新知识库**
 
 接下来通过示例，引导您更新文档搜索类知识库。所有引用该知识库的应用会实时生效您本次的更新（新增内容可用于检索和召回，而已删除内容将不再可用）。
 
-> 数据查询、图片问答类知识库不支持通过API更新。如何更新请参见[知识库：更新知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+> 数据查询、图片问答类知识库不支持通过API更新。如何更新请参见[知识库：更新知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base#b2f92e9d2car8)。
 
 -   **如何增量更新知识库：**请您按照以下三步（先上传更新后的文件，再追加文件至知识库，最后删除旧文件）操作。此外暂无其他实现方式。
+    
 -   **如何全量更新知识库：**对知识库中的所有文件，请您逐一执行以下三步完成更新。
--   **如何实现知识库的自动更新/同步：**请详见[如何实现知识库的自动更新/同步](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)。
+    
+-   **如何实现知识库的自动更新/同步：**请详见[如何实现知识库的自动更新/同步](#827f8c570a9ni)。
+    
 -   **单次更新对文件数量是否有限制：**建议不超过10万个，否则可能导致知识库无法正常更新。
+    
 
-### 1\. 上传更新后的文件
+### **1\. 上传更新后的文件**
 
-按照[创建知识库：第二步](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#4b4a1236aalno)操作，将更新后的文件上传至该知识库所在的业务空间。
+按照[创建知识库：第二步](#4b4a1236aalno)操作，将更新后的文件上传至该知识库所在的业务空间。
 
 > 您需要重新申请文件上传租约，为更新后的文件生成一组新的上传参数。
 
-### 2\. 追加文件至知识库
+### **2\. 追加文件至知识库**
 
-#### 2.1. 提交追加文件任务
+#### **2.1. 提交追加文件任务**
 
 上传文件解析完成后，请调用[SubmitIndexAddDocumentsJob接口](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-submitindexadddocumentsjob)将新文件追加至知识库，并重新构建知识库索引。
 
--   **client：**[如何获取client](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#52ff2774f0pq9)
--   **workspace\_id：**[如何获取业务空间ID](raw/model-user-guide/security-and-compliance/permission-management-overview.md)
--   **file\_id：**请传入[添加文件到类目中](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#494345d4b1hx2)时接口返回的`FileId`。
+-   **client：**[如何获取client](#52ff2774f0pq9)
+    
+-   **workspace\_id：**[如何获取业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace#c5222ec081sbo)
+    
+-   **file\_id：**请传入[添加文件到类目中](#494345d4b1hx2)时接口返回的`FileId`。
+    
 -   **source\_type：**在本示例中，请传入`DATA_CENTER_FILE`。
+    
 
 完成提交后，阿里云百炼将以异步任务方式开始重新构建知识库。本接口返回的`Data.Id`为对应的任务ID（job\_id）。下一步中，您将用到此ID查询任务的最新状态。
 
 **重要**
 
 -   SubmitIndexAddDocumentsJob接口调用成功后，将执行一段时间，您可通过`job_id`查询任务的最新状态。**在任务完成前，请勿重复提交。**
+    
 
 **重要**
 
--   子账号调用本示例前需获取[API权限](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（AliyunBailianDataFullAccess策略）。
+-   子账号调用本示例前需获取[API权限](https://help.aliyun.com/zh/model-studio/member-management#a2e8c1d6246s2)（AliyunBailianDataFullAccess策略）。
+    
 -   本示例支持[在线调试](https://api.aliyun.com/api/bailian/2023-12-29/SubmitIndexAddDocumentsJob)及多语言[代码示例生成](https://api.aliyun.com/api/bailian/2023-12-29/SubmitIndexAddDocumentsJob?lang=JAVA&tab=DEMO)。
+    
 
-Python
+## Python
 
 ```
 def submit_index_add_documents_job(client, workspace_id, index_id, file_id, source_type):
@@ -9183,7 +9245,7 @@ def submit_index_add_documents_job(client, workspace_id, index_id, file_id, sour
     return client.submit_index_add_documents_job_with_options(workspace_id, submit_index_add_documents_job_request, headers, runtime)
 ```
 
-Java
+## Java
 
 ```
 /**
@@ -9207,7 +9269,7 @@ public SubmitIndexAddDocumentsJobResponse submitIndexAddDocumentsJob(com.aliyun.
 }
 ```
 
-PHP
+## PHP
 
 ```
 /**
@@ -9235,7 +9297,7 @@ public function submitIndexAddDocumentsJob($client, $workspaceId, $indexId, $fil
 }
 ```
 
-Node.js
+## Node.js
 
 ```
 /**
@@ -9259,7 +9321,7 @@ async function submitIndexAddDocumentsJob(client, workspaceId, indexId, fileId, 
 }
 ```
 
-C#
+## C#
 
 ```
 /// <summary>
@@ -9290,7 +9352,7 @@ public AlibabaCloud.SDK.Bailian20231229.Models.SubmitIndexAddDocumentsJobRespons
 }
 ```
 
-Go
+## Go
 
 ```
 // SubmitIndexAddDocumentsJob 向一个文档搜索类知识库追加导入已解析的文件。
@@ -9317,7 +9379,7 @@ func SubmitIndexAddDocumentsJob(client *bailian20231229.Client, workspaceId, ind
 }
 ```
 
-请求示例
+**请求示例**
 
 ```
 {
@@ -9330,7 +9392,7 @@ func SubmitIndexAddDocumentsJob(client *bailian20231229.Client, workspaceId, ind
 }
 ```
 
-响应示例
+**响应示例**
 
 ```
 {
@@ -9345,11 +9407,12 @@ func SubmitIndexAddDocumentsJob(client *bailian20231229.Client, workspaceId, ind
 }
 ```
 
-#### 2.2. 等待追加任务完成
+#### **2.2. 等待追加任务完成**
 
 索引任务的执行需要一定时间，在请求高峰时段，该过程可能需要数小时。查询其执行状态可以调用[GetIndexJobStatus接口](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getindexjobstatus)。
 
--   **job\_id：**请传入[提交追加文件任务](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#b2f19a956bcsl)时接口返回的`Data.Id`。
+-   **job\_id：**请传入[提交追加文件任务](#b2f19a956bcsl)时接口返回的`Data.Id`。
+    
 
 当本接口返回的`Data.Status`字段值为`COMPLETED`，表示本次更新的文件已全部成功追加至知识库。
 
@@ -9357,10 +9420,12 @@ func SubmitIndexAddDocumentsJob(client *bailian20231229.Client, workspaceId, ind
 
 **重要**
 
--   子账号调用本示例前需获取[API权限](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（AliyunBailianDataFullAccess策略）。
+-   子账号调用本示例前需获取[API权限](https://help.aliyun.com/zh/model-studio/member-management#a2e8c1d6246s2)（AliyunBailianDataFullAccess策略）。
+    
 -   本示例支持[在线调试](https://api.aliyun.com/api/bailian/2023-12-29/GetIndexJobStatus)及多语言[代码示例生成](https://api.aliyun.com/api/bailian/2023-12-29/GetIndexJobStatus?lang=JAVA&tab=DEMO)。
+    
 
-Python
+## Python
 
 ```
 def get_index_job_status(client, workspace_id, index_id, job_id):
@@ -9385,7 +9450,7 @@ def get_index_job_status(client, workspace_id, index_id, job_id):
     return client.get_index_job_status_with_options(workspace_id, get_index_job_status_request, headers, runtime)
 ```
 
-Java
+## Java
 
 ```
 /**
@@ -9409,7 +9474,7 @@ public GetIndexJobStatusResponse getIndexJobStatus(com.aliyun.bailian20231229.Cl
 }
 ```
 
-PHP
+## PHP
 
 ```
 /**
@@ -9432,7 +9497,7 @@ public function getIndexJobStatus($client, $workspaceId, $jobId, $indexId) {
 }
 ```
 
-Node.js
+## Node.js
 
 ```
 /**
@@ -9451,7 +9516,7 @@ static getIndexJobStatus(client, workspaceId, jobId, indexId) {
 }
 ```
 
-C#
+## C#
 
 ```
 /// <summary>
@@ -9480,7 +9545,7 @@ public AlibabaCloud.SDK.Bailian20231229.Models.GetIndexJobStatusResponse GetInde
 }
 ```
 
-Go
+## Go
 
 ```
 // GetIndexJobStatus 查询索引任务状态。
@@ -9505,7 +9570,7 @@ func GetIndexJobStatus(client *bailian20231229.Client, workspaceId, jobId, index
 }
 ```
 
-请求示例
+**请求示例**
 
 ```
 {
@@ -9515,7 +9580,7 @@ func GetIndexJobStatus(client *bailian20231229.Client, workspaceId, jobId, index
 }
 ```
 
-响应示例
+**响应示例**
 
 ```
 {
@@ -9540,20 +9605,25 @@ func GetIndexJobStatus(client *bailian20231229.Client, workspaceId, jobId, index
 }
 ```
 
-### 3\. 删除旧文件
+### **3\. 删除旧文件**
 
 最后，从指定知识库中永久删除旧版本的文件（避免旧的知识被错误检索），可以调用[DeleteIndexDocument接口](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deleteindexdocument)。
 
 -   **file\_id：**请传入旧版本文件的`FileId`。
+    
 
-**说明**仅能删除知识库中状态为导入失败（INSERT\_ERROR）或导入成功（FINISH）的文件。如需查询知识库中的文件状态，可调用[ListIndexDocuments接口](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listindexdocuments)。
+**说明**
+
+仅能删除知识库中状态为导入失败（INSERT\_ERROR）或导入成功（FINISH）的文件。如需查询知识库中的文件状态，可调用[ListIndexDocuments接口](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listindexdocuments)。
 
 **重要**
 
--   子账号调用本示例前需获取[API权限](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（AliyunBailianDataFullAccess策略）。
+-   子账号调用本示例前需获取[API权限](https://help.aliyun.com/zh/model-studio/member-management#a2e8c1d6246s2)（AliyunBailianDataFullAccess策略）。
+    
 -   本示例支持[在线调试](https://api.aliyun.com/api/bailian/2023-12-29/DeleteIndexDocument)及多语言[代码示例生成](https://api.aliyun.com/api/bailian/2023-12-29/DeleteIndexDocument?lang=JAVA&tab=DEMO)。
+    
 
-Python
+## Python
 
 ```
 def delete_index_document(client, workspace_id, index_id, file_id):
@@ -9578,7 +9648,7 @@ def delete_index_document(client, workspace_id, index_id, file_id):
     return client.delete_index_document_with_options(workspace_id, delete_index_document_request, headers, runtime)
 ```
 
-Java
+## Java
 
 ```
 /**
@@ -9600,7 +9670,7 @@ public DeleteIndexDocumentResponse deleteIndexDocument(com.aliyun.bailian2023122
 }
 ```
 
-PHP
+## PHP
 
 ```
 /**
@@ -9626,7 +9696,7 @@ public function deleteIndexDocument($client, $workspaceId, $indexId, $fileId) {
 }
 ```
 
-Node.js
+## Node.js
 
 ```
 /**
@@ -9648,7 +9718,7 @@ async function deleteIndexDocument(client, workspaceId, indexId, fileId) {
 }
 ```
 
-C#
+## C#
 
 ```
 /// <summary>
@@ -9676,7 +9746,7 @@ public AlibabaCloud.SDK.Bailian20231229.Models.DeleteIndexDocumentResponse Delet
 }
 ```
 
-Go
+## Go
 
 ```
 // DeleteIndexDocument 从指定的文档搜索类知识库中永久删除一个或多个文件。
@@ -9701,7 +9771,7 @@ func DeleteIndexDocument(client *bailian20231229.Client, workspaceId, indexId, f
 }
 ```
 
-请求示例
+**请求示例**
 
 ```
 {
@@ -9713,7 +9783,7 @@ func DeleteIndexDocument(client *bailian20231229.Client, workspaceId, indexId, f
 }
 ```
 
-响应示例
+**响应示例**
 
 ```
 {
@@ -9730,27 +9800,29 @@ func DeleteIndexDocument(client *bailian20231229.Client, workspaceId, indexId, f
 }
 ```
 
-## 管理知识库
+## **管理知识库**
 
-> [创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)不支持通过API操作，请使用[阿里云百炼控制台](https://bailian.console.aliyun.com/?&tab=app#/knowledge-base)操作。
+> [创建和使用知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base#81f57beb71zs1)不支持通过API操作，请使用[阿里云百炼控制台](https://bailian.console.aliyun.com/?&tab=app#/knowledge-base)操作。
 
-### 查看知识库
+### **查看知识库**
 
 要查看给定业务空间下的一个或多个知识库的信息，可以调用[ListIndices接口](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listindices)。
 
--   **client：**[如何获取client](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#52ff2774f0pq9)
+-   **client：**[如何获取client](#52ff2774f0pq9)
     
--   **workspace\_id：**[如何获取业务空间ID](raw/model-user-guide/security-and-compliance/permission-management-overview.md)
+-   **workspace\_id：**[如何获取业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace#c5222ec081sbo)
     
-    > 子账号只能查看自己[已加入的业务空间](raw/model-user-guide/security-and-compliance/permission-management-overview.md)中的知识库。
+    > 子账号只能查看自己[已加入的业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)中的知识库。
     
 
 **重要**
 
--   子账号调用本示例前需获取[API权限](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（AliyunBailianDataFullAccess策略）。
+-   子账号调用本示例前需获取[API权限](https://help.aliyun.com/zh/model-studio/member-management#a2e8c1d6246s2)（AliyunBailianDataFullAccess策略）。
+    
 -   本示例支持[在线调试](https://api.aliyun.com/api/bailian/2023-12-29/ListIndices)及多语言[代码示例生成](https://api.aliyun.com/api/bailian/2023-12-29/ListIndices?lang=JAVA&tab=DEMO)。
+    
 
-Python
+## Python
 
 ```
 def list_indices(client, workspace_id):
@@ -9770,7 +9842,7 @@ def list_indices(client, workspace_id):
     return client.list_indices_with_options(workspace_id, list_indices_request, headers, runtime)
 ```
 
-Java
+## Java
 
 ```
 /**
@@ -9788,7 +9860,7 @@ public ListIndicesResponse listIndices(com.aliyun.bailian20231229.Client client,
 }
 ```
 
-PHP
+## PHP
 
 ```
 /**
@@ -9807,7 +9879,7 @@ public function listIndices($client, $workspaceId) {
 }
 ```
 
-Node.js
+## Node.js
 
 ```
 /**
@@ -9824,7 +9896,7 @@ async function listIndices(client, workspaceId) {
 }
 ```
 
-C#
+## C#
 
 ```
 /// <summary>
@@ -9842,7 +9914,7 @@ public AlibabaCloud.SDK.Bailian20231229.Models.ListIndicesResponse ListIndices(A
 }
 ```
 
-Go
+## Go
 
 ```
 // listIndices 获取指定业务空间下一个或多个知识库的详细信息。
@@ -9862,7 +9934,7 @@ func listIndices(client *bailian20231229.Client, workspaceId string) (_result *b
 }
 ```
 
-请求示例
+**请求示例**
 
 ```
 {
@@ -9870,7 +9942,7 @@ func listIndices(client *bailian20231229.Client, workspaceId string) (_result *b
 }
 ```
 
-响应示例
+**响应示例**
 
 ```
 {
@@ -9907,27 +9979,29 @@ func listIndices(client *bailian20231229.Client, workspaceId string) (_result *b
 }
 ```
 
-### 删除知识库
+### **删除知识库**
 
-要永久性删除某个知识库，可以调用[DeleteIndex接口](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deleteindex)。删除前，请[解除该知识库关联的所有阿里云百炼应用](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)（仅可通过阿里云百炼控制台操作），否则会删除失败。
+要永久性删除某个知识库，可以调用[DeleteIndex接口](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deleteindex)。删除前，请[解除该知识库关联的所有阿里云百炼应用](https://help.aliyun.com/zh/model-studio/rag-knowledge-base#a78dc244578vx)（仅可通过阿里云百炼控制台操作），否则会删除失败。
 
--   **client：**[如何获取client](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#52ff2774f0pq9)
+-   **client：**[如何获取client](#52ff2774f0pq9)
     
--   **workspace\_id：**[如何获取业务空间ID](raw/model-user-guide/security-and-compliance/permission-management-overview.md)
+-   **workspace\_id：**[如何获取业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace#c5222ec081sbo)
     
-    > 子账号只能删除自己[已加入的业务空间](raw/model-user-guide/security-and-compliance/permission-management-overview.md)中的知识库。
+    > 子账号只能删除自己[已加入的业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)中的知识库。
     
--   **index\_id：**请传入[初始化知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#00ded5ee90ffx)时接口返回的`Data.Id`。
+-   **index\_id：**请传入[初始化知识库](#00ded5ee90ffx)时接口返回的`Data.Id`。
     
 
-请注意：本操作不会删除您已[添加至类目中](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#494345d4b1hx2)的文件。
+请注意：本操作不会删除您已[添加至类目中](#494345d4b1hx2)的文件。
 
 **重要**
 
--   子账号调用本示例前需获取[API权限](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（AliyunBailianDataFullAccess策略）。
+-   子账号调用本示例前需获取[API权限](https://help.aliyun.com/zh/model-studio/member-management#a2e8c1d6246s2)（AliyunBailianDataFullAccess策略）。
+    
 -   本示例支持[在线调试](https://api.aliyun.com/api/bailian/2023-12-29/DeleteIndex)及多语言[代码示例生成](https://api.aliyun.com/api/bailian/2023-12-29/DeleteIndex?lang=JAVA&tab=DEMO)。
+    
 
-Python
+## Python
 
 ```
 def delete_index(client, workspace_id, index_id):
@@ -9950,7 +10024,7 @@ def delete_index(client, workspace_id, index_id):
     return client.delete_index_with_options(workspace_id, delete_index_request, headers, runtime)
 ```
 
-Java
+## Java
 
 ```
 /**
@@ -9970,7 +10044,7 @@ public DeleteIndexResponse deleteIndex(com.aliyun.bailian20231229.Client client,
 }
 ```
 
-PHP
+## PHP
 
 ```
 /**
@@ -9992,7 +10066,7 @@ public function deleteIndex($client, $workspaceId, $indexId) {
 }
 ```
 
-Node.js
+## Node.js
 
 ```
 /**
@@ -10012,7 +10086,7 @@ async function deleteIndex(client, workspaceId, indexId) {
 }
 ```
 
-C#
+## C#
 
 ```
 /// <summary>
@@ -10034,7 +10108,7 @@ public AlibabaCloud.SDK.Bailian20231229.Models.DeleteIndexResponse DeleteIndex(A
 }
 ```
 
-Go
+## Go
 
 ```
 // deleteIndex 永久性删除指定的知识库。
@@ -10058,7 +10132,7 @@ func deleteIndex(client *bailian20231229.Client, workspaceId, indexId string) (_
 }
 ```
 
-请求示例
+**请求示例**
 
 ```
 {
@@ -10067,7 +10141,7 @@ func deleteIndex(client *bailian20231229.Client, workspaceId, indexId string) (_
 }
 ```
 
-响应示例
+**响应示例**
 
 ```
 {
@@ -10079,22 +10153,28 @@ func deleteIndex(client *bailian20231229.Client, workspaceId, indexId string) (_
 }
 ```
 
-## 管理切片
+## **管理切片**
 
 对知识库中的切片进行查询、编辑和删除操作。编辑切片所有类型知识库均支持；新增和删除方面，文档搜索类、数据查询类、图片问答类知识库均支持，音视频搜索类知识库仅支持删除。
 
-### 查询切片列表
+### **查询切片列表**
 
 调用ListChunks接口查询知识库的切片列表。
 
--   **client：**[如何获取client](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#52ff2774f0pq9)
--   **workspace\_id：**[如何获取业务空间ID](raw/model-user-guide/security-and-compliance/permission-management-overview.md)
+-   **client：**[如何获取client](#52ff2774f0pq9)
+    
+-   **workspace\_id：**[如何获取业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace#c5222ec081sbo)
+    
 -   **index\_id：**知识库ID，即创建知识库时返回的`Data.Id`。
+    
 -   **page\_num：**页码，从1开始（可选，默认1）。
+    
 -   **page\_size：**每页数量（可选，默认10）。
+    
 -   **file\_id：**文档ID（可选，不传时返回整个知识库的切片）。
+    
 
-Python
+## Python
 
 ```
 def list_chunks(client, workspace_id, index_id, page_num=1, page_size=10, file_id=None):
@@ -10110,7 +10190,7 @@ def list_chunks(client, workspace_id, index_id, page_num=1, page_size=10, file_i
     return client.list_chunks_with_options(workspace_id, request, headers, runtime)
 ```
 
-Java
+## Java
 
 ```
 public static ListChunksResponse listChunks(Client client, String workspaceId, String indexId, Integer pageNum, Integer pageSize) throws Exception {
@@ -10124,7 +10204,7 @@ public static ListChunksResponse listChunks(Client client, String workspaceId, S
 }
 ```
 
-PHP
+## PHP
 
 ```
 function listChunks($client, $workspaceId, $indexId, $pageNum = 1, $pageSize = 10) {
@@ -10138,7 +10218,7 @@ function listChunks($client, $workspaceId, $indexId, $pageNum = 1, $pageSize = 1
 }
 ```
 
-Node.js
+## Node.js
 
 ```
 async function listChunks(client, workspaceId, indexId, pageNum = 1, pageSize = 10) {
@@ -10148,7 +10228,7 @@ async function listChunks(client, workspaceId, indexId, pageNum = 1, pageSize = 
 }
 ```
 
-C#
+## C#
 
 ```
 public static ListChunksResponse ListChunks(Client client, string workspaceId, string indexId, int pageNum = 1, int pageSize = 10)
@@ -10165,7 +10245,7 @@ public static ListChunksResponse ListChunks(Client client, string workspaceId, s
 }
 ```
 
-Go
+## Go
 
 ```
 func listChunks(client *bailian20231229.Client, workspaceId, indexId string, pageNum, pageSize int32) (*bailian20231229.ListChunksResponse, error) {
@@ -10180,19 +10260,26 @@ func listChunks(client *bailian20231229.Client, workspaceId, indexId string, pag
 }
 ```
 
-### 编辑切片
+### **编辑切片**
 
 调用UpdateChunk接口修改指定切片的内容。所有类型的知识库均支持此操作。
 
--   **client：**[如何获取client](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#52ff2774f0pq9)
--   **workspace\_id：**[如何获取业务空间ID](raw/model-user-guide/security-and-compliance/permission-management-overview.md)
+-   **client：**[如何获取client](#52ff2774f0pq9)
+    
+-   **workspace\_id：**[如何获取业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace#c5222ec081sbo)
+    
 -   **pipeline\_id：**知识库ID，即创建知识库时返回的`Data.Id`。
+    
 -   **data\_id：**文档ID（切片所属文档，可从ListChunks响应的`metadata.doc_id`获取）。
+    
 -   **chunk\_id：**切片的完整\_id值（可从ListChunks响应的`metadata._id`获取）。
+    
 -   **content：**新的切片内容（10-6000字符）。
+    
 -   **is\_displayed\_chunk\_content：**是否展示切片内容（设为true）。
+    
 
-Python
+## Python
 
 ```
 def update_chunk(client, workspace_id, pipeline_id, data_id, chunk_id, content):
@@ -10209,7 +10296,7 @@ def update_chunk(client, workspace_id, pipeline_id, data_id, chunk_id, content):
     return client.update_chunk_with_options(workspace_id, request, headers, runtime)
 ```
 
-Java
+## Java
 
 ```
 public static UpdateChunkResponse updateChunk(Client client, String workspaceId, String pipelineId, String dataId, String chunkId, String content) throws Exception {
@@ -10225,7 +10312,7 @@ public static UpdateChunkResponse updateChunk(Client client, String workspaceId,
 }
 ```
 
-PHP
+## PHP
 
 ```
 function updateChunk($client, $workspaceId, $pipelineId, $dataId, $chunkId, $content) {
@@ -10241,7 +10328,7 @@ function updateChunk($client, $workspaceId, $pipelineId, $dataId, $chunkId, $con
 }
 ```
 
-Node.js
+## Node.js
 
 ```
 async function updateChunk(client, workspaceId, pipelineId, dataId, chunkId, content) {
@@ -10251,7 +10338,7 @@ async function updateChunk(client, workspaceId, pipelineId, dataId, chunkId, con
 }
 ```
 
-C#
+## C#
 
 ```
 public static UpdateChunkResponse UpdateChunk(Client client, string workspaceId, string pipelineId, string dataId, string chunkId, string content)
@@ -10270,7 +10357,7 @@ public static UpdateChunkResponse UpdateChunk(Client client, string workspaceId,
 }
 ```
 
-Go
+## Go
 
 ```
 func updateChunk(client *bailian20231229.Client, workspaceId, pipelineId, dataId, chunkId, content string) (*bailian20231229.UpdateChunkResponse, error) {
@@ -10287,16 +10374,20 @@ func updateChunk(client *bailian20231229.Client, workspaceId, pipelineId, dataId
 }
 ```
 
-### 删除切片
+### **删除切片**
 
 调用DeleteChunk接口删除一个或多个切片。单次最多删除10个。
 
--   **client：**[如何获取client](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#52ff2774f0pq9)
--   **workspace\_id：**[如何获取业务空间ID](raw/model-user-guide/security-and-compliance/permission-management-overview.md)
+-   **client：**[如何获取client](#52ff2774f0pq9)
+    
+-   **workspace\_id：**[如何获取业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace#c5222ec081sbo)
+    
 -   **pipeline\_id：**知识库ID，即创建知识库时返回的`Data.Id`。
+    
 -   **chunk\_ids：**要删除的切片\_id列表（从ListChunks响应的`metadata._id`获取）。
+    
 
-Python
+## Python
 
 ```
 def delete_chunk(client, workspace_id, pipeline_id, chunk_ids):
@@ -10310,7 +10401,7 @@ def delete_chunk(client, workspace_id, pipeline_id, chunk_ids):
     return client.delete_chunk_with_options(workspace_id, request, headers, runtime)
 ```
 
-Java
+## Java
 
 ```
 public static DeleteChunkResponse deleteChunk(Client client, String workspaceId, String pipelineId, java.util.List<String> chunkIds) throws Exception {
@@ -10323,7 +10414,7 @@ public static DeleteChunkResponse deleteChunk(Client client, String workspaceId,
 }
 ```
 
-PHP
+## PHP
 
 ```
 function deleteChunk($client, $workspaceId, $pipelineId, $chunkIds) {
@@ -10336,7 +10427,7 @@ function deleteChunk($client, $workspaceId, $pipelineId, $chunkIds) {
 }
 ```
 
-Node.js
+## Node.js
 
 ```
 async function deleteChunk(client, workspaceId, pipelineId, chunkIds) {
@@ -10346,7 +10437,7 @@ async function deleteChunk(client, workspaceId, pipelineId, chunkIds) {
 }
 ```
 
-C#
+## C#
 
 ```
 public static DeleteChunkResponse DeleteChunk(Client client, string workspaceId, string pipelineId, List<string> chunkIds)
@@ -10362,7 +10453,7 @@ public static DeleteChunkResponse DeleteChunk(Client client, string workspaceId,
 }
 ```
 
-Go
+## Go
 
 ```
 func deleteChunk(client *bailian20231229.Client, workspaceId, pipelineId string, chunkIds []*string) (*bailian20231229.DeleteChunkResponse, error) {
@@ -10378,58 +10469,70 @@ func deleteChunk(client *bailian20231229.Client, workspaceId, pipelineId string,
 
 ## API参考
 
-请参阅[API目录（知识库）](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-dir-knowledge-base)获取最新完整的知识库API列表及输入输出参数。
+请参阅[API目录（知识库）](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-dir-knowledge-base/)获取最新完整的知识库API列表及输入输出参数。
 
 ## 常见问题
 
 1.  **如何实现知识库的自动更新/同步？**
     
-    #### 文档搜索类知识库
+    ## 文档搜索类知识库
     
     使用对象存储OSS管理文件，通过函数计算FC监听文件变更事件，自动同步更新至知识库，实现知识的实时更新。详见[告别手动操作，让AI知识库自动更新](https://www.aliyun.com/solution/tech-solution/auto-updated-knowledge-base)。
     
-    #### 数据查询/图片问答类知识库
+    ## 数据查询/图片问答类知识库
     
-    若要实现数据查询/图片问答类知识库的自动更新，可基于RDS数据表构建知识库。具体操作请参见[创建知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+    若要实现数据查询/图片问答类知识库的自动更新，可基于RDS数据表构建知识库。具体操作请参见[创建知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base#6028cfefaauhu)。
     
-    #### 音视频搜索类知识库
+    ## 音视频搜索类知识库
     
     不支持。
     
+
 2.  **为什么我新建的知识库里没有内容？**
     
-    一般是由于没有执行或未能成功执行[提交索引任务](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#bf14fb34a58vy)这一步导致。若调用[CreateIndex](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-createindex)接口后未成功调用[SubmitIndexJob](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-submitindexjob)接口，您将得到一个空知识库。此时，您只需重新执行[提交索引任务](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#bf14fb34a58vy)并[等待索引任务完成](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#402c6d08c3k71)即可。
+    一般是由于没有执行或未能成功执行[提交索引任务](#bf14fb34a58vy)这一步导致。若调用[CreateIndex](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-createindex)接口后未成功调用[SubmitIndexJob](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-submitindexjob)接口，您将得到一个空知识库。此时，您只需重新执行[提交索引任务](#bf14fb34a58vy)并[等待索引任务完成](#402c6d08c3k71)即可。
     
+
 3.  **遇到报错Access your uploaded file failed. Please check if your upload action was successful，应该如何处理？**
     
-    一般是由于没有执行或未能成功执行[上传文件到临时存储](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#a275d1cdd2gph)这一步导致。请在确认该步骤成功执行后，再调用[AddFile](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addfile)接口。
+    一般是由于没有执行或未能成功执行[上传文件到临时存储](#a275d1cdd2gph)这一步导致。请在确认该步骤成功执行后，再调用[AddFile](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addfile)接口。
     
+
 4.  **遇到报错Access denied: Either you are not authorized to access this workspace, or the workspace does not exist，应该如何处理？**
     
     一般是由于：
     
     -   **您请求的服务地址（**[服务接入点](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-endpoint)**）有误：**以公网接入为例，如果您是中国站用户，应访问北京（公有云用户）地域的接入地址；如果您是国际站用户，应访问新加坡地域的接入地址。如果您正在使用[在线调试](https://api.aliyun.com/api/bailian/2023-12-29/CreateIndex)功能，请确认您选择的服务地址正确无误（如下图所示）。
         
-    -   **您传入的WorkspaceId值不正确，或者您还不是该业务空间的成员导致：**请确认`WorkspaceId`值无误且您是该业务空间的成员后，再调用接口。[如何被添加为指定业务空间的成员](raw/model-user-guide/security-and-compliance/permission-management-overview.md)
+        ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2181138471/p952092.png)
         
+    -   **您传入的WorkspaceId值不正确，或者您还不是该业务空间的成员导致：**请确认`WorkspaceId`值无误且您是该业务空间的成员后，再调用接口。[如何被添加为指定业务空间的成员](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)
+        
+
 5.  **遇到报错Specified access key is not found or invalid，应该如何处理？**
     
     一般是由于您传入的`access_key_id`或`access_key_secret`值不正确，或者该`access_key_id`已被[禁用](https://help.aliyun.com/zh/ram/user-guide/disable-an-accesskey-pair-of-a-ram-user)导致。请确认`access_key_id`值无误且未被禁用后，再调用接口。
     
+
 6.  **遇到报错Category is mismatched，应该如何处理？**
     
     一般是由于在调用`ApplyFileUploadLease`接口申请文件上传租约时使用的`CategoryId`，与后续调用`AddFile`接口时传入的`CategoryId`不一致导致。
     
     请确保在整个文件上传流程中（从`ApplyFileUploadLease`到`AddFile`），使用同一个`CategoryId`。您可以通过`ListCategory`接口获取当前业务空间下的类目列表，确认所使用的`CategoryId`正确无误。
     
+
 7.  **调用知识库应用时，为什么 API 返回结果与控制台调试窗口不一致？**
     
     按以下维度排查：
     
     -   **多轮对话上下文**：**控制台调试窗口**默认保留多轮对话历史；API 调用若不传`session_id`，每次都是无上下文的单次调用，依赖上文指代的追问会丢失指代对象，可能返回与调试窗口完全不同的答案。需要多轮对话能力时，从首次调用的响应中取回`session_id`，并在后续调用中传入同一个`session_id`，以保持会话连续性。
+        
     -   **应用发布状态**：应用配置修改后需单击**发布**才会生效，API 调用的始终是**已发布**版本。若调试窗口中验证的是尚未发布的改动，API 返回不会体现这些改动。请先确认应用状态为**已发布**。
+        
     -   **参数对齐**：通过应用调用（App API）时使用应用中配置的默认参数（如`temperature`、`top_p`等），与调试窗口一致；若直接调用模型服务 DashScope 的 API，这些参数需自行显式指定，取值可能与调试环境不同，从而导致回答风格与内容差异。
+        
     -   **知识库关联方式**：通过应用调用（App API）时会自动关联应用中已配置的知识库，无需手动指定；若直接调用知识库检索 API，则必须显式传入`knowledgebase_id`，遗漏或传错会导致检索不到预期知识。
+        
 
 ## 计费说明
 
@@ -10441,11 +10544,11 @@ func deleteChunk(client *bailian20231229.Client, workspaceId, pipelineId string,
 
 **规格费用**
 
-`标准版` 或 `旗舰版` 知识库的实际运行时长费用，价格详见[知识库计费说明](raw/application-user-guide/knowledge-base/billing-for-knowledge-base.md)。变更配置时，按变更时间点[分段计费](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base#d90304901atdb)。
+`标准版` 或 `旗舰版` 知识库的实际运行时长费用，价格详见[知识库计费说明](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base)。变更配置时，按变更时间点[分段计费](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base#d90304901atdb)。
 
 **向量、排序模型调用费用**
 
-创建、更新或检索知识库时会调用向量（embedding）和排序（rerank）模型，按输入 Token 用量计费，价格以[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)页为准。
+创建、更新或检索知识库时会调用向量（embedding）和排序（rerank）模型，按输入 Token 用量计费，价格以[模型调用计费](https://help.aliyun.com/zh/model-studio/model-pricing)页为准。
 
 **账单查询：**[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)
 

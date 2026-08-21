@@ -31,8 +31,11 @@ AliyunServiceRoleForAiMiaoBiAccessingIMS
 ### 角色及权限说明
 
 -   角色名称：AliyunServiceRoleForAIMiaoBiAccessingOss；
+    
 -   角色权限策略：AliyunServiceRolePolicyForAIMiaoBiAccessingOss；
+    
 -   权限说明：
+    
 
 ```
 {
@@ -85,8 +88,11 @@ AliyunServiceRoleForAiMiaoBiAccessingIMS
 ### 角色及权限说明
 
 -   角色名称：AliyunServiceRoleForAiMiaoBiAccessingIMS；
+    
 -   角色权限策略：AliyunServiceRolePolicyForAiMiaoBiAccessingIMS；
+    
 -   权限说明：
+    
 
 ```
 {

@@ -18,7 +18,7 @@ MiniMax M3 凭借业界领先的 Coding 与 Agentic 能力、1M 超长上下文�
 
 输入模态
 
-**Image** **Text** **Video**
+**Image**　**Text**　**Video**
 
 输出模态
 
@@ -86,7 +86,7 @@ Function Calling
 
 本文仅展示模型调用原价，不包含限时优惠等活动信息，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)查看活动优惠。
 
-#### 华北2（北京）
+## 华北2（北京）
 
 计费项
 
@@ -114,7 +114,7 @@ Function Calling
 
 ## 限流
 
-#### 华北2（北京）
+## 华北2（北京）
 
 参数
 

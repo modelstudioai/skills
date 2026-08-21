@@ -2,15 +2,18 @@
 
 本文档主要介绍全妙产品矩阵里的AI Agent -- 车机网络热点互动问答 的计费方案。
 
-## 计费说明
+## **计费说明**
 
 计费方式：**开通型后付费（按量付费）**。开通服务本身不产生费用，仅在实际调用API时根据用量计费。
 
 -   获取播报单：按调用版本数后付费；
+    
 -   个性化内容推荐 ：按调用的次数后付费；
+    
 -   新闻问答互动：按提问的次数后付费。
+    
 
-## 计费详情
+## **计费详情**
 
 **计费项**
 
@@ -37,9 +40,9 @@
     -   如果改过频道、热点条数或者风格，导致版本会改变，则调取时会重新收取1元。
         
 
--   [新闻热点推荐](raw/application-user-guide/application-gallery/quanmiao-light-application-series/development-documentation/api-reference-1/api-quanmiaolightapp-2024-08-01-dir/api-quanmiaolightapp-2024-08-01-dir-other/api-quanmiaolightapp-2024-08-01-hotnewsrecommend.md)
+-   [HotNewsRecommend - 新闻热点推荐](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-hotnewsrecommend)
     
--   [查询完整播报单（热榜）](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-policy-news-broadcast/api-aimiaobi-2023-08-01-gethottopicbroadcast.md)
+-   [GetHotTopicBroadcast - 查询完整播报单（热榜）](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-gethottopicbroadcast)
     
 
 -   功能说明：
@@ -47,7 +50,7 @@
     -   用户可以根据需求，自定义播报单的输出风格，以满足个性化体验。
         
 
-[播报单热点自定义摘要生成](raw/application-user-guide/application-gallery/quanmiao-light-application-series/development-documentation/api-reference-1/api-quanmiaolightapp-2024-08-01-dir/api-quanmiaolightapp-2024-08-01-dir-car-machine-network-hot-information-interactive-question-and-answer/api-quanmiaolightapp-2024-08-01-runhottopicsummary.md)
+[RunHotTopicSummary - 播报单热点自定义摘要生成](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runhottopicsummary)
 
 个性化内容推荐
 
@@ -84,14 +87,14 @@
 
 此外您还可以通过MCP server的形式使用此agent，对应地址为 [全妙网络热点信息播报MCP Server](https://bailian.console.aliyun.com/?spm=5176.29619931.J__Z58Z6CX7MY__Ll8p1ZOR.1.5f3c521cV95qKK&tab=mcp#/mcp-market/detail/quanmiao-hotnews)
 
-## 账单地址
+## **账单地址**
 
 账单查询地址：[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail?spm=a2c4g.11186623.0.0.619355efACwmfT)。
 
-## 产品地址
+## **产品地址**
 
 可点击[产品地址](https://bailian.console.aliyun.com/?spm=5176.29619931.J__Z58Z6CX7MY__Ll8p1ZOR.1.74cd521c43xzda#/app/app-market/quanmiao/news-broadcast)进行产品体验。
 
-## 相关文档
+## **相关文档**
 
-[车机网络热点信息互动问答接口文档](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-dir-car-machine-network-hot-information-interactive-question-and-answer)
+[车机网络热点信息互动问答接口文档](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-dir-car-machine-network-hot-information-interactive-question-and-answer/)

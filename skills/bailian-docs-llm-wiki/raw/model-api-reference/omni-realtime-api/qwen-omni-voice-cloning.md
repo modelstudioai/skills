@@ -1,19 +1,25 @@
 # 声音复刻API参考
 
-声音复刻依托大模型进行特征提取，无需训练即可复刻声音。仅需提供 10~20 秒的音频，即可生成高度相似且听感自然的定制音色。声音复刻与模型调用是前后关联的两个步骤。本文档聚焦于介绍声音复刻的参数和接口细节，模型调用请参见 实时（Qwen-Omni-Realtime） 或 非实时（Qwen-Omni） 。
+声音复刻依托大模型进行特征提取，无需训练即可复刻声音。仅需提供 10~20 秒的音频，即可生成高度相似且听感自然的定制音色。声音复刻与模型调用是前后关联的两个步骤。本文档聚焦于介绍声音复刻的参数和接口细节，模型调用请参见[实时（Qwen-Omni-Realtime）](https://help.aliyun.com/zh/model-studio/realtime)或[非实时（Qwen-Omni）](https://help.aliyun.com/zh/model-studio/qwen-omni)。
 
 **用户指南**：关于模型介绍和选型建议请参见[实时（Qwen-Omni-Realtime）](https://help.aliyun.com/zh/model-studio/realtime)或[非实时（Qwen-Omni）](https://help.aliyun.com/zh/model-studio/qwen-omni)。
 
-**重要**本文档专用于千问Omni和千问Omni-Realtime声音复刻接口；若您使用的是语音合成模型，请参见[语音合成](https://help.aliyun.com/zh/model-studio/speech-synthesis-api-reference)。
+**重要**
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+本文档专用于千问Omni和千问Omni-Realtime声音复刻接口；若您使用的是语音合成模型，请参见[语音合成](https://help.aliyun.com/zh/model-studio/speech-synthesis-api-reference/)。
+
+**重要**
+
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-## 音频要求
+## **音频要求**
 
 高质量的输入音频是获得优质复刻效果的基础。
 
@@ -53,19 +59,21 @@ WAV (16bit)、MP3、M4A
 
 ## 快速开始：复刻与使用音色
 
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2365984871/CAEQbxiBgICd6_Do8BkiIDM3NjYwZDQxMGIyMTQzMDdhOGMyY2YwNWFhMmM2NjVi5899512_20251120114927.389.svg)
+
 ### 1\. 工作流程
 
 声音复刻与模型调用是紧密关联的两个独立步骤，遵循“先创建，后使用”的流程：
 
 1.  创建音色
     
-    调用[创建音色](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#1eaa57d82did9)接口，上传一段音频。系统会分析该音频，创建一个专属的复刻音色。**此步骤必须指定**`target_model`**，声明创建的音色将由哪个全模态模型驱动。**
+    调用[创建音色](#1eaa57d82did9)接口，上传一段音频。系统会分析该音频，创建一个专属的复刻音色。**此步骤必须指定**`**target_model**`**，声明创建的音色将由哪个全模态模型驱动。**
     
-    若已有创建好的音色（调用[查询音色列表](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#401d33226330i)接口查看），可跳过这一步直接进行下一步。
+    若已有创建好的音色（调用[查询音色列表](#401d33226330i)接口查看），可跳过这一步直接进行下一步。
     
 2.  使用音色进行对话
     
-    调用 Omni 接口（实时或非实时），传入上一步获得的音色。**此步骤指定的全模态模型必须和上一步的**`target_model`**一致。**
+    调用 Omni 接口（实时或非实时），传入上一步获得的音色。**此步骤指定的全模态模型必须和上一步的**`**target_model**`**一致。**
     
 
 ### 2\. 模型配置与准备工作
@@ -81,28 +89,37 @@ WAV (16bit)、MP3、M4A
 -   驱动音色的全模态模型：
     
     -   qwen3.5-omni-plus-realtime
+        
     -   qwen3.5-omni-flash-realtime
+        
     -   qwen3.5-omni-plus
+        
     -   qwen3.5-omni-flash
+        
 
 #### 准备工作
 
-1.  **获取API Key**：[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，为安全起见，推荐将API Key配置到环境变量。
-2.  **安装SDK**：确保已[安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
-3.  **准备待复刻音频**：音频需符合[音频要求](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#fe3daa6c3f7jw)。
+1.  **获取API Key**：[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，为安全起见，推荐将API Key配置到环境变量。
+    
+2.  **安装SDK**：确保已[安装最新版DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+    
+3.  **准备待复刻音频**：音频需符合[音频要求](#fe3daa6c3f7jw)。
+    
 
 ### 3\. 端到端示例
 
 以下示例演示了如何在对话中使用声音复刻生成的专属音色，实现与原音高度相似的输出效果。
 
 -   **关键原则**：声音复刻时，`target_model`（驱动音色的全模态模型）必须与后续调用 Omni 接口时指定的模型一致，否则会合成失败。
+    
 -   示例使用本地音频文件 `voice.mp3` 进行声音复刻，运行代码时，请注意替换。
+    
 
-#### 实时
+## 实时
 
 适用于千问Omni-Realtime系列模型，更多说明请参见[实时（Qwen-Omni-Realtime）](https://help.aliyun.com/zh/model-studio/realtime)。
 
-Python
+## Python
 
 ```
 # 依赖：dashscope >= 1.23.9，pyaudio
@@ -216,7 +233,7 @@ if __name__ == '__main__':
         print("\n对话结束")
 ```
 
-Java
+## Java
 
 ```
 import com.alibaba.dashscope.audio.omni.*;
@@ -414,11 +431,11 @@ public class Main {
 }
 ```
 
-#### 非实时
+## 非实时
 
 适用于千问Omni系列模型，更多说明请参见[非实时（Qwen-Omni）](https://help.aliyun.com/zh/model-studio/qwen-omni)。
 
-Python
+## Python
 
 ```
 # 依赖：dashscope >= 1.23.9，soundfile，numpy
@@ -520,7 +537,7 @@ if __name__ == '__main__':
         print("\n音频文件已保存至：audio_cloned.wav")
 ```
 
-Java
+## Java
 
 ```
 import com.google.gson.Gson;
@@ -689,11 +706,11 @@ public class Main {
 }
 ```
 
-## API参考
+## **API参考**
 
 使用不同 API 时，请确保使用同一账号进行操作。
 
-### 创建音色
+### **创建音色**
 
 上传用于复刻的音频，创建自定义音色。
 
@@ -701,17 +718,16 @@ public class Main {
     
     华北2（北京）：
     
-
-```
-POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization
-```
-
-新加坡：
-
-```
-POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization
-```
-
+    ```
+    POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization
+    ```
+    
+    新加坡：
+    
+    ```
+    POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization
+    ```
+    
 -   **请求头**
     
     **参数**
@@ -742,28 +758,31 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     
     包含所有请求参数的消息体如下，对于可选字段，在实际业务中可根据需求省略。
     
-    **重要**注意区分如下参数：
+    **重要**
+    
+    注意区分如下参数：
     
     -   `model`：声音复刻模型，固定为`qwen-voice-enrollment`
+        
     -   `target_model`：驱动音色的全模态模型，须和后续调用实时多模态接口时使用的全模态模型一致，否则合成会失败
+        
     
-
-```
-{
-    "model": "qwen-voice-enrollment",
-    "input": {
-        "action": "create",
-        "target_model": "qwen3.5-omni-plus-realtime",
-        "preferred_name": "guanyu",
-        "audio": {
-            "data": "https://xxx.wav"
-        },
-        "text": "可选项，填入audio.data对应的文本",
-        "language": "可选项，填入audio.data对应的语种，如zh"
+    ```
+    {
+        "model": "qwen-voice-enrollment",
+        "input": {
+            "action": "create",
+            "target_model": "qwen3.5-omni-plus-realtime",
+            "preferred_name": "guanyu",
+            "audio": {
+                "data": "https://xxx.wav"
+            },
+            "text": "可选项，填入audio.data对应的文本",
+            "language": "可选项，填入audio.data对应的语种，如zh"
+        }
     }
-}
-```
-
+    ```
+    
 -   **请求参数**
     
     **参数**
@@ -780,6 +799,8 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     
     string
     
+    \-
+    
     支持
     
     声音复刻模型，固定为`qwen-voice-enrollment`。
@@ -787,6 +808,8 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     action
     
     string
+    
+    \-
     
     支持
     
@@ -796,20 +819,28 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     
     string
     
+    \-
+    
     支持
     
     驱动音色的全模态模型：
     
     -   qwen3.5-omni-plus-realtime
+        
     -   qwen3.5-omni-flash-realtime
+        
     -   qwen3.5-omni-plus
+        
     -   qwen3.5-omni-flash
+        
     
     必须与后续调用全模态接口时使用的模型一致，否则合成会失败。
     
     preferred\_name
     
     string
+    
+    \-
     
     支持
     
@@ -821,9 +852,11 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     
     string
     
+    \-
+    
     支持
     
-    用于复刻的音频（录制时需遵循[录音操作指南](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#8d342f3949vge)，音频需满足[音频要求](raw/model-api-reference/omni-realtime-api/qwen-omni-voice-cloning.md)）。
+    用于复刻的音频（录制时需遵循[录音操作指南](#8d342f3949vge)，音频需满足[音频要求](#音频要求与最佳实践)）。
     
     可通过以下两种方式提交音频数据：
     
@@ -834,17 +867,20 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
         -   `<mediatype>`：MIME类型
             
             -   WAV：`audio/wav`
+                
             -   MP3：`audio/mpeg`
+                
             -   M4A：`audio/mp4`
+                
         -   `<data>`：音频转成的Base64编码的字符串
             
             Base64编码会增大体积，请控制原文件大小，确保编码后仍小于10MB
             
         -   示例：`data:audio/wav;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//PAxABQ/BXRbMPe4IQAhl9`
             
-            点击查看示例代码
+            **点击查看示例代码**
             
-            python
+            Python
             
             ```
             import base64, pathlib
@@ -855,7 +891,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
             data_uri = f"data:audio/mpeg;base64,{base64_str}"
             ```
             
-            java
+            Java
             
             ```
             import java.nio.file.*;
@@ -881,11 +917,15 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     2.  音频URL（推荐将音频[上传至OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)）
         
         -   文件大小不超过10MB
+            
         -   URL必须公网可访问且无需鉴权
+            
     
     text
     
     string
+    
+    \-
     
     不支持
     
@@ -896,6 +936,8 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     language
     
     string
+    
+    \-
     
     不支持
     
@@ -909,7 +951,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     
 -   **响应参数**
     
-    点击查看响应示例
+    **点击查看响应示例**
     
     ```
     {
@@ -965,18 +1007,22 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     
     integer
     
-    本次请求实际计入费用的“创建音色”次数，本次请求的费用为 count × 0.01元。
+    本次请求实际计入费用的“创建音色”次数，本次请求的费用为 count×0.01元。
     
     创建音色时，count恒为1。
     
 -   **示例代码**
     
-    **重要**注意区分如下参数：
+    **重要**
+    
+    注意区分如下参数：
     
     -   `model`：声音复刻模型，固定为`qwen-voice-enrollment`
+        
     -   `target_model`：驱动音色的语音合成模型，须和后续调用语音合成接口时使用的语音合成模型一致，否则合成会失败
+        
     
-    #### cURL
+    ## cURL
     
     若未将API Key配置到环境变量，需将示例中的`$DASHSCOPE_API_KEY`替换为实际的API Key。
     
@@ -1002,7 +1048,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     }'
     ```
     
-    #### Python
+    ## Python
     
     ```
     import os
@@ -1051,7 +1097,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
         print("请求失败:", resp.status_code, resp.text)
     ```
     
-    #### Java
+    ## Java
     
     ```
     import com.google.gson.Gson;
@@ -1140,7 +1186,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     ```
     
 
-### 查询音色列表
+### **查询音色列表**
 
 分页查询已创建的音色列表。
 
@@ -1148,17 +1194,16 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     
     华北2（北京）：
     
-
-```
-POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization
-```
-
-新加坡：
-
-```
-POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization
-```
-
+    ```
+    POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization
+    ```
+    
+    新加坡：
+    
+    ```
+    POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization
+    ```
+    
 -   **请求头**
     
     **参数**
@@ -1189,20 +1234,21 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     
     包含所有请求参数的消息体如下，对于可选字段，在实际业务中可根据需求省略。
     
-    **重要**`model`：声音复刻模型，固定为`qwen-voice-enrollment`，请勿修改。
+    **重要**
     
-
-```
-{
-    "model": "qwen-voice-enrollment",
-    "input": {
-        "action": "list",
-        "page_size": 2,
-        "page_index": 0
+    `model`：声音复刻模型，固定为`qwen-voice-enrollment`，请勿修改。
+    
+    ```
+    {
+        "model": "qwen-voice-enrollment",
+        "input": {
+            "action": "list",
+            "page_size": 2,
+            "page_index": 0
+        }
     }
-}
-```
-
+    ```
+    
 -   **请求参数**
     
     **参数**
@@ -1257,7 +1303,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     
 -   **响应参数**
     
-    点击查看响应示例
+    **点击查看响应示例**
     
     ```
     {
@@ -1329,15 +1375,17 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     
     integer
     
-    本次请求实际计入费用的“创建音色”次数，本次请求的费用为count × 0.01元。
+    本次请求实际计入费用的“创建音色”次数，本次请求的费用为count×0.01元。
     
     查询音色不计费，因此`count`恒为0。
     
 -   **示例代码**
     
-    **重要**`model`：声音复刻模型，固定为`qwen-voice-enrollment`，请勿修改。
+    **重要**
     
-    #### cURL
+    `model`：声音复刻模型，固定为`qwen-voice-enrollment`，请勿修改。
+    
+    ## cURL
     
     若未将API Key配置到环境变量，需将示例中的`$DASHSCOPE_API_KEY`替换为实际的API Key。
     
@@ -1360,7 +1408,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     }'
     ```
     
-    #### Python
+    ## Python
     
     ```
     import os
@@ -1401,7 +1449,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
         print("请求失败:", response.text)
     ```
     
-    #### Java
+    ## Java
     
     ```
     import com.google.gson.Gson;
@@ -1483,7 +1531,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     ```
     
 
-### 删除音色
+### **删除音色**
 
 删除指定音色，释放对应额度。
 
@@ -1491,17 +1539,16 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     
     华北2（北京）：
     
-
-```
-POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization
-```
-
-新加坡：
-
-```
-POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization
-```
-
+    ```
+    POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization
+    ```
+    
+    新加坡：
+    
+    ```
+    POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/tts/customization
+    ```
+    
 -   **请求头**
     
     **参数**
@@ -1532,19 +1579,20 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     
     包含所有请求参数的消息体如下，对于可选字段，在实际业务中可根据需求省略：
     
-    **重要**`model`：声音复刻模型，固定为`qwen-voice-enrollment`，请勿修改。
+    **重要**
     
-
-```
-{
-    "model": "qwen-voice-enrollment",
-    "input": {
-        "action": "delete",
-        "voice": "yourVoice"
+    `model`：声音复刻模型，固定为`qwen-voice-enrollment`，请勿修改。
+    
+    ```
+    {
+        "model": "qwen-voice-enrollment",
+        "input": {
+            "action": "delete",
+            "voice": "yourVoice"
+        }
     }
-}
-```
-
+    ```
+    
 -   **请求参数**
     
     **参数**
@@ -1589,7 +1637,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     
 -   **响应参数**
     
-    点击查看响应示例
+    **点击查看响应示例**
     
     ```
     {
@@ -1618,15 +1666,17 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     
     integer
     
-    本次请求实际计入费用的“创建音色”次数，本次请求的费用为count × 0.01元。
+    本次请求实际计入费用的“创建音色”次数，本次请求的费用为count×0.01元。
     
     删除音色不计费，因此`count`恒为0。
     
 -   **示例代码**
     
-    **重要**`model`：声音复刻模型，固定为`qwen-voice-enrollment`，请勿修改。
+    **重要**
     
-    #### cURL
+    `model`：声音复刻模型，固定为`qwen-voice-enrollment`，请勿修改。
+    
+    ## cURL
     
     若未将API Key配置到环境变量，需将示例中的`$DASHSCOPE_API_KEY`替换为实际的API Key。
     
@@ -1648,7 +1698,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     }'
     ```
     
-    #### Python
+    ## Python
     
     ```
     import os
@@ -1689,7 +1739,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
         print("请求失败:", response.text)
     ```
     
-    #### Java
+    ## Java
     
     ```
     import com.google.gson.Gson;
@@ -1764,82 +1814,106 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     ```
     
 
-### 对话使用
+### **对话使用**
 
-如何使用声音复刻生成的专属音色进行对话，请参见[快速开始：复刻与使用音色](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#bb60d81324wsu)。
+如何使用声音复刻生成的专属音色进行对话，请参见[快速开始：复刻与使用音色](#bb60d81324wsu)。
 
-## 音色配额与自动清理规则
+## **音色配额与自动清理规则**
 
 -   **总数限制**：1000个音色/账号
     
-    > 当前接口不提供音色数量查询功能，可通过调用[查询音色列表](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#401d33226330i)接口自行统计音色数目
+    > 当前接口不提供音色数量查询功能，可通过调用[查询音色列表](#401d33226330i)接口自行统计音色数目
     
 -   **自动清理**：若单个音色在过去一年内未被用于任何模型调用请求，系统将自动将其删除
     
 
-## 计费说明
+## **计费说明**
 
 声音复刻和模型调用分开计费：
 
--   声音复刻：[创建音色](https://help.aliyun.com/zh/model-studio/qwen-omni-voice-cloning#1eaa57d82did9)按0.01 元/个计费，创建失败不计费
+-   声音复刻：[创建音色](#1eaa57d82did9)按0.01 元/个计费，创建失败不计费
     
-    **说明**免费额度说明（仅中国站北京地域和国际站新加坡地域有免费额度）：
+    **说明**
+    
+    免费额度说明（仅中国站北京地域和国际站新加坡地域有免费额度）：
     
     -   阿里云百炼开通后90天内，可享1000次免费音色创建机会。
+        
     -   创建失败不占用免费次数。
+        
     -   删除音色不会恢复免费次数。
+        
     -   免费额度用完或超出 90 天有效期后，创建音色将按0.01 元/个的价格计费。
+        
     
--   使用复刻生成的专属音色进行对话：按模型调用的 token 用量计费，详情请参见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)
+-   使用复刻生成的专属音色进行对话：按模型调用的 token 用量计费，详情请参见[模型调用计费](https://help.aliyun.com/zh/model-studio/model-pricing)
     
 
-## 版权与合法性
+## **版权与合法性**
 
 您需对所提供声音的所有权及合法使用权负责，请注意阅读[服务协议](https://terms.alicdn.com/legal-agreement/terms/b_platform_service_agreement/20240229113512917/20240229113512917.html)。
 
 ## 录音操作指南
 
-### 录音设备
+### **录音设备**
 
 推荐使用具备降噪功能的麦克风，或在安静环境下使用手机近距离录音，以保证音源纯净。
 
-### 录音环境
+### **录音环境**
 
-#### 场地
+#### **场地**
 
--   建议在 10 平方米以内的小型封闭空间录音。
+-   建议在 10 平方米以内的小型封闭空间录音。
+    
 -   优先选择配有吸音材料（如吸音棉、地毯、窗帘）的房间。
+    
 -   避免空旷大厅、会议室、教室等高混响场所。
+    
 
-#### 噪音控制
+#### **噪音控制**
 
 -   室外噪音：关闭门窗，避免交通、施工等干扰。
+    
 -   室内噪音：关闭空调、风扇、日光灯镇流器等设备；可通过手机录制环境音并放大播放，识别潜在噪音源。
+    
 
-#### 混响控制
+#### **混响控制**
 
 -   混响会导致声音模糊、清晰度下降。
+    
 -   减少光滑表面反射：拉上窗帘、打开衣柜门、铺放衣物或床单覆盖桌面/柜面。
+    
 -   利用不规则物体（如书架、软包家具）实现声波漫反射。
+    
 
-### 录音文案
+### **录音文案**
 
 -   文案内容灵活，建议与目标应用场景一致（例如，若用于客服场景，文案应为客服对话风格），但必须确保不包含任何敏感或非法词汇（如政治、色情、暴力相关内容），否则会导致复刻失败。
+    
 -   避免短句（如“你好”、“是的”），应使用完整句子。
+    
 -   保持语义连贯，朗读时避免频繁停顿（建议至少连续 3 秒无中断）。
+    
 -   可带入目标情绪（如亲切、严肃），但需避免过度夸张的戏剧化朗读，保持语调自然。
+    
 
-### 操作建议
+### **操作建议**
 
 以普通卧室为例：
 
 1.  关闭门窗，隔绝外部噪音。
+    
 2.  关闭空调、电扇等电器。
+    
 3.  拉上窗帘，减少玻璃反射。
+    
 4.  在桌面铺放衣物或毛毯，降低桌面反射。
+    
 5.  提前熟悉文案，设定角色语气，自然演绎。
-6.  与录音设备保持约 10 厘米距离，避免喷麦或信号过弱。
+    
+6.  与录音设备保持约 10 厘米距离，避免喷麦或信号过弱。
+    
 
-## 错误信息
+## **错误信息**
 
-如遇报错问题，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行排查。
+如遇报错问题，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行排查。

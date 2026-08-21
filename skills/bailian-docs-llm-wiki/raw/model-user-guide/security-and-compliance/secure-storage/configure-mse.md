@@ -9,7 +9,9 @@ MSE（Microservices Engine）云原生网关使各服务能够互相通信。配
 ## 前提条件
 
 -   已[创建网关](https://help.aliyun.com/zh/model-studio/configure-zone-ip#18a2a3bed0hua)。
--   已[配置私有网络中的资源](raw/model-user-guide/security-and-compliance/secure-storage/configure-resources-in-private-network.md)。
+    
+-   已[配置私有网络中的资源](https://help.aliyun.com/zh/model-studio/configure-resources-in-private-network)。
+    
 
 ## 步骤1：创建服务
 
@@ -17,7 +19,7 @@ MSE（Microservices Engine）云原生网关使各服务能够互相通信。配
 
 1.  登录[MSE网关管理控制台](https://mse.console.aliyun.com/#/microgw?region=cn-beijing)。
     
-2.  在左侧导航栏选择**云原生网关** > **网关列表**，单击[创建网关](https://help.aliyun.com/zh/model-studio/configure-zone-ip#18a2a3bed0hua)中已经创建的网关名称。
+2.  在左侧导航栏选择**云原生网关** > **网关列表**，单击[创建网关](https://help.aliyun.com/zh/model-studio/configure-zone-ip#18a2a3bed0hua)中已经创建的网关名称。
     
 3.  在左侧导航栏中，选择**路由管理**。
     
@@ -102,14 +104,20 @@ MSE（Microservices Engine）云原生网关使各服务能够互相通信。配
 ## 步骤3：激活安全存储业务空间
 
 1.  登录[阿里云百炼大模型服务平台](https://bailian.console.aliyun.com/#/home)。
+    
 2.  在**[业务空间管理](https://bailian.console.aliyun.com/?admin=1#/efm/business_management)页面**，查找到已经创建的阿里云百炼安全存储业务空间，在**操作**列单击**管理阿里云百炼安全存储空间**。
+    
 3.  连续单击**下一步**，进入**资源配置**页面。
+    
 4.  确认ElasticSearch、ADB、OSS都配置无误后，单击页面下方的**激活**。
+    
 5.  等待界面上提示**激活成功**。
+    
 
 ## 验证结果
 
 返回业务空间列表，查看安全存储业务空间状态。
 
 -   激活前，阿里云百炼安全存储空间不可用。
+    
 -   激活成功后，阿里云百炼安全存储空间可用。

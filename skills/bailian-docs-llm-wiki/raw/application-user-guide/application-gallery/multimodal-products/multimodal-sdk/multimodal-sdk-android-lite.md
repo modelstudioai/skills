@@ -4,15 +4,18 @@
 
 MultiModalDialog SDK是阿里云通义团队提供的支持音视频端到端多模实时交互的SDK。通过SDK对接千问大模型以及后端多种Agent，能够支持用户接入语音对话、天气、音乐、新闻等多种能力，并支持视频和图像的大模型对话能力。
 
-## 多模态实时交互服务架构
+## **多模态实时交互服务架构**
 
-## 前提条件
+![多模态实时交互服务接入架构-通用-流程图](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7227370571/p976841.jpg)
 
--   开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](raw/model-api-reference/preparations/get-api-key.md)。
+## **前提条件**
 
-## SDK接入
+-   开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+    
 
-### 交互数据链路说明
+## **SDK接入**
+
+### **交互数据链路说明**
 
 多模对话Android Lite SDK仅支持Websocket链路与服务端交互，并支持AudioOnly 音频模式进行对话：
 
@@ -21,9 +24,11 @@ MultiModalDialog SDK是阿里云通义团队提供的支持音视频端到端多
     -   WS 链路音频格式说明：
         
         -   上行：支持 pcm 和 opus 格式音频进行语音识别。
+            
         -   下行：支持 pcm 和 mp3 音频流。
+            
 
-### 交互模式说明
+### **交互模式说明**
 
 SDK支持 **Push2Talk**、 **Tap2Talk**和**Duplex**（全双工）三种交互模式。
 
@@ -33,34 +38,37 @@ SDK支持 **Push2Talk**、 **Tap2Talk**和**Duplex**（全双工）三种交互�
     
 -   Duplex: 全双工交互，连接开始后支持任意时刻开始说话，支持语音打断。
     
-    注意：全双工交互需要客户端集成回声消除算法（AEC），Lite SDK不提供此算法模块。您可以自行集成回声消除算法模块，或者使用百炼多模对话全功能[移动端Android SDK](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/multimodal-sdk-android.md)。
+    注意：全双工交互需要客户端集成回声消除算法（AEC），Lite SDK不提供此算法模块。您可以自行集成回声消除算法模块，或者使用百炼多模对话全功能[移动端Android SDK](https://help.aliyun.com/zh/model-studio/multimodal-sdk-android/)。
     
 
-### 调用说明
+### **调用说明**
 
 SDK及其调用Demo。
 
 -   下载SDK和Demo [dashscope-lite-android-1.0.2.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250723/mesbwx/dashscope-lite-android-1.0.2.zip)并配置必要的环境、依赖。
+    
 -   导入压缩包中的示例代码，按照调用流程接入SDK。
+    
 
-#### SDK引用
+#### **SDK引用**
 
 导入依赖库。
 
 -   app/src/main/libs
     
     -   dashscope-multimodal-dialog-lite-1.\*.aar //阿里云多模交互Lite SDK
+        
 -   其他Demo APP引入的依赖：
     
     参考`app/build.gradle`
     
+    ```
+    implementation 'com.alibaba:fastjson:1.1.76.android'
+    implementation 'org.java-websocket:Java-WebSocket:1.5.7'
+    ```
+    
 
-```
-implementation 'com.alibaba:fastjson:1.1.76.android'
-implementation 'org.java-websocket:Java-WebSocket:1.5.7'
-```
-
-#### 关键参数
+#### **关键参数**
 
 **参数名称**
 
@@ -84,7 +92,7 @@ api\_key
 
 String
 
-百炼服务接入[API Key](raw/model-api-reference/preparations/get-api-key.md) 请您在百炼平台创建API\_KEY，移动端为了安全考虑，您也可以在服务端接入[短时Token](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，并下发给客户端使用。
+百炼服务接入[API Key](https://help.aliyun.com/zh/model-studio/get-api-key) 请您在百炼平台创建API\_KEY，移动端为了安全考虑，您也可以在服务端接入[短时Token](https://help.aliyun.com/zh/model-studio/generate-temporary-api-key)，并下发给客户端使用。
 
 workspace\_id
 
@@ -102,11 +110,12 @@ String
 
 您在管控台创建的应用id。
 
-#### Demo简介
+#### **Demo简介**
 
 -   **EntranceActivity** 入口页面，需要修改url/api\_key/app\_id等信息。
     
     -   可以通过页面选择对话使用Tap2Talk或者Push2Talk等模式。
+        
 -   **MultimodalDialogActivity**，对话交互实现类。
     
     -   Demo页面中引用TYAudioRecorder 作为录音输入，您可以替换为自己的实现。
@@ -116,165 +125,159 @@ String
     -   Demo在音频交互模式下，支持VQA（图生文）功能，即通过语音说“拍照识别xxx”，触发服务下发拍照意图。之后：
         
         -   您可以将本地拍照并上传OSS（或其他内容服务生成公共链接），触发单张图片的识别和对话。
+            
         -   您也可以直接上传图片的base64请求服务或者图片的对话结果。
+            
 
-#### 接口设计
+#### **接口设计**
 
-##### MultimodalDialog 对话入口类
+##### **MultimodalDialog 对话入口类**
 
 1.  MultiModalDialog
     
     初始化对话类，传入必要的全局参数。
     
-
-```
-/**
- * 初始化
- * @param context: 上下文
- * @param url: 服务器地址
- * @param workspaceId: 工作空间id
- * @param appId: 应用id
- * @param dialogMode: 对话模式
- * */
-    fun MultiModalDialog(
-        context: Context,
-        url: String?,
-        workspaceId: String?,
-        appId: String?,
-        dialogMode: DialogMode?
-    )
-```
-
+    ```
+    /**
+     * 初始化     
+     * @param context: 上下文
+     * @param url: 服务器地址
+     * @param workspaceId: 工作空间id
+     * @param appId: 应用id
+     * @param dialogMode: 对话模式
+     * */
+        fun MultiModalDialog(
+            context: Context,
+            url: String?,
+            workspaceId: String?,
+            appId: String?,
+            dialogMode: DialogMode?
+        )
+    ```
+    
 2.  createConversation
     
     创建会话。
     
-
-```
-/**
- * 初始化成功后，启动对话流程
- * @param params 初始化参数
- * @param chatCallback 主回调，除了初始化过程的所有消息，都会从这里透出给上层
- */
- fun createConversation(@NonNull MultiModalRequestParam params,chatCallback: IConversationCallback)
-```
-
+    ```
+    /**
+     * 初始化成功后，启动对话流程
+     * @param params 初始化参数
+     * @param chatCallback 主回调，除了初始化过程的所有消息，都会从这里透出给上层
+     */
+     fun createConversation(@NonNull MultiModalRequestParam params,chatCallback: IConversationCallback)
+    ```
+    
 3.  start
     
     开始对话。
     
-
-```
-/**
- * 连接,启动对话
- * @param apiKey: 百炼服务apikey ，推荐使用短时apiKey
- * @param dialogId: 对话id，可选，传值继承之前的对话历史
- */
- fun start(String apiKey, String dialogId)
-```
-
+    ```
+    /**
+     * 连接,启动对话
+     * @param apiKey: 百炼服务apikey ，推荐使用短时apiKey
+     * @param dialogId: 对话id，可选，传值继承之前的对话历史
+     */
+     fun start(String apiKey, String dialogId)
+    ```
+    
 4.  stop
     
     结束对话。
     
-
-```
-/**
- * 断开,结束对话
- */
-fun stop()
-```
-
+    ```
+    /**
+     * 断开,结束对话
+     */
+    fun stop()
+    ```
+    
 5.  destroy
-
-```
-/**
- * 销毁实例
- */
-fun destroy()
-```
-
+    
+    ```
+    /**
+     * 销毁实例
+     */
+    fun destroy()
+    ```
+    
 6.  interrupt
     
     打断交互。
     
-
-```
-/**
- * 打断AI说话
- */
-fun interrupt()
-```
-
+    ```
+    /**
+     * 打断AI说话
+     */
+    fun interrupt()
+    ```
+    
 7.  startSpeech
     
     通知服务端开始上传音频，注意需要在Listening状态才可以调用。只需要在Push2Talk模式下调用。
     
-
-```
-/**
- * 通知服务端开始上传音频，注意需要在Listening状态才可以调用。
- * 只需要在Push2Talk模式下调用。
- */
-fun startSpeech()
-```
-
+    ```
+    /**
+     * 通知服务端开始上传音频，注意需要在Listening状态才可以调用。
+     * 只需要在Push2Talk模式下调用。
+     */
+    fun startSpeech()
+    ```
+    
 8.  sendAudioData
     
     通知服务端上传音频。
     
-
-```
-/**
- * 通知服务端上传音频。
- * @param audioData 音频帧数据
- */
-fun sendAudioData(byte[] data)
-```
-
+    ```
+    /**
+     * 通知服务端上传音频。
+     * @param audioData 音频帧数据
+     */
+    fun sendAudioData(byte[] data)
+    ```
+    
 9.  stopSpeech
     
     通知服务端结束上传音频。只需要在Push2Talk模式下调用。
     
-
-```
-/**
- * 通知服务端结束上传音频。只需要在Push2Talk模式下调用。
- * Push2Talk 用户结束说话
- */
-fun stopSpeech()
-```
-
+    ```
+    /**
+     * 通知服务端结束上传音频。只需要在Push2Talk模式下调用。
+     * Push2Talk 用户结束说话
+     */
+    fun stopSpeech()
+    ```
+    
 10.  requestToRespond
      
      请求服务端回答指定问题or做TTS播放出来。
      
-
-```
-/**
- * 请求服务端回答指定问题or做TTS播放出来
- * @param type: transcript 表示直接把文本转语音，prompt 表示把文本送大模型回答
- * @param text：对应的文本
- * @param params: 额外参数
- */
-fun requestToRespond(type: String, text: String, params: MultiModalRequestParam)
-```
-
+     ```
+     /**
+      * 请求服务端回答指定问题or做TTS播放出来
+      * @param type: transcript 表示直接把文本转语音，prompt 表示把文本送大模型回答
+      * @param text：对应的文本
+      * @param params: 额外参数
+      */
+     fun requestToRespond(type: String, text: String, params: MultiModalRequestParam)
+     ```
+     
 11.  其他接口。
+     
+     ```
+     /**
+      * 发送语音回复结束
+      */
+     fun sendResponseEnded()
+         
+     /**
+      * 发送语音回复开始
+      */
+     fun sendResponseStarted()
+     ```
+     
 
-```
-/**
- * 发送语音回复结束
- */
-fun sendResponseEnded()
-
-/**
- * 发送语音回复开始
- */
-fun sendResponseStarted()
-```
-
-###### 关键参数枚举
+###### **关键参数枚举**
 
 ##### **参数**
 
@@ -296,7 +299,7 @@ DUPLEX
 
 全双工交互
 
-###### MultiModalRequestParam 端云交互参数详情
+###### **MultiModalRequestParam 端云交互参数详情**
 
 **一级参数**
 
@@ -517,7 +520,7 @@ object
 
 透传用户prompt自定义参数
 
-##### IConversationCallback （回调接口）
+##### **IConversationCallback （回调接口）**
 
 ```
 /**
@@ -600,13 +603,13 @@ fun onRespondingContent(output: Map<String, Any>)
 fun onClosed(closeCode: Int, reason: String)
 ```
 
-###### 重要回调方法说明
+###### **重要回调方法说明**
 
 -   onSpeechContent(output: Map<String, Any>)
     
     语音识别内容
     
-    ##### SpeechContent - response
+    ##### **SpeechContent - response**
     
     **一级参数**
     
@@ -800,9 +803,9 @@ fun onClosed(closeCode: Int, reason: String)
     ```
     
 
-#### 异常处理
+#### **异常处理**
 
-##### onErrorReceived - response
+##### **onErrorReceived - response**
 
 错误码以及对应的错误信息。
 
@@ -890,13 +893,15 @@ InternalSynthesizerError
 
 tts内部错误
 
-#### 调用时序
+#### **调用时序**
 
-##### 半双工交互
+##### **半双工交互**
 
-## 更多SDK接口使用说明
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0921377471/p957927.png)
 
-### VQA交互
+## **更多SDK接口使用说明**
+
+### **VQA交互**
 
 VQA 是在对话过程中通过发送图片实现图片+语音的多模交互的功能。
 
@@ -905,11 +910,12 @@ VQA 是在对话过程中通过发送图片实现图片+语音的多模交互的
 当客户端通过回调函数`onRespondingContent`收到拍照指令后， 发送图片链接或者base64数据（支持小于180KB的图片）。
 
 -   处理"visual\_qa" command和上传拍照。
+    
 
 ```
 @Override
 public void onRespondingContent(@NotNull final Map<String, ?> output) {
-  Log.i(TAG,"onRespondingContent output:{"+output+"}");
+  Log.i(TAG,"onRespondingContent output:{"+output+"}");     
   if (output.containsKey("extra_info")) {
     JSONObject extraInfo = (JSONObject) output.get("extra_info");
     try {
@@ -944,17 +950,19 @@ private void uploadVQAImg(){
 }
 ```
 
-### 通过 Websocket 链路请求LiveAI
+### **通过 Websocket 链路请求LiveAI**
 
 LiveAI （视频通话）是百炼多模交互提供的官方Agent。通过Android Lite SDK， 您也可以在Websocket链路中通过自行录制视频帧的方式来调用视频通话功能。
 
 注意：通过 Websocket 调用 LiveAI发送图片只支持base64编码，每张图片的大小在180K以下。
 
 -   LiveAI调用时序
+    
 
-#### 
+#### ![截屏2025-06-20 11](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975541.png)
 
 -   关键代码示例
+    
 
 请注意参照如下的调用流程实现 通过Websocket 协议调用 LiveAI。
 
@@ -1056,7 +1064,7 @@ private String getImageBase64(InputStream file) { //200k以内大小图片
 }
 ```
 
-### 文本合成TTS
+### **文本合成TTS**
 
 SDK支持通过文本直接请求服务端合成音频。
 
@@ -1068,13 +1076,17 @@ SDK支持通过文本直接请求服务端合成音频。
 multimodalDialog.requestToRespond("transcript","幸福是一种技能，是你摒弃了外在多余欲望后的内心平和。",null);
 ```
 
-### 自定义提示词变量和传值
+### **自定义提示词变量和传值**
 
 -   在管控台项目【提示词】配置自定义变量。
+    
 
 如下图示例，定义了一个`user_name`字段代表用户昵称。并将变量`user_name`以占位符形式${user\_name} 插入到Prompt 中。
 
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975545.png)
+
 -   在代码中设置变量。
+    
 
 如下示例，设置`"user_name" = "大米"`。
 
@@ -1089,3 +1101,6 @@ userPromptParams.put("user_name", "大米");
 ```
 
 -   请求回复
+    
+
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975544.png)

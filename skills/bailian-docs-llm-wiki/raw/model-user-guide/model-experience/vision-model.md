@@ -41,15 +41,20 @@ GPT-5.4-mini、Gemini 3.1 Flash
 ### 视频支持
 
 -   最长2小时 / 2GB：`qwen3.8-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
+    
 -   最长1小时 / 2GB：`qwen3-vl-plus`、`qwen3-vl-flash`
+    
 -   最长1小时 / 2GB：`qwen3.5-omni-plus`、`qwen3.5-omni-flash`（同时支持音频输入）
+    
 
 ### Function Calling与内置工具
 
 让模型根据图像或视频中的内容执行操作。
 
 -   Function Calling：Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列模型均支持
+    
 -   内置工具（联网搜索、代码执行，无需额外配置）：仅`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
+    
 
 ### 结构化输出
 
@@ -597,29 +602,38 @@ Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列支持此功能。
 
 [华北2（北京）](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all) | [新加坡](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=doc#/doc/?type=model&url=2840914) | [美国](https://modelstudio.console.aliyun.com/us-east-1?tab=doc#/doc/?type=model&url=2840914) | [法兰克福](https://modelstudio.console.aliyun.com/eu-central-1?tab=doc#/doc/?type=model&url=2840914)
 
-查看旧版及其他模型列表
+**查看旧版及其他模型列表**
 
 #### Qwen3-VL
 
 -   `qwen3-vl-plus`及其快照版本
+    
 -   `qwen3-vl-flash`及其快照版本
+    
 
 #### Qwen-Omni
 
 -   `qwen3-omni-flash`及其快照版本
+    
 -   `qwen-omni-turbo`及其快照版本
+    
 
 #### Qwen-OCR
 
 -   `qwen-vl-ocr`及其快照版本
+    
 -   `qwen-vl-ocr-latest`
+    
 
 #### QVQ
 
 -   `qvq-max`
+    
 -   `qvq-plus`
+    
 
 #### 旧版Qwen-VL
 
 -   `qwen-vl-max`
+    
 -   `qwen-vl-plus`

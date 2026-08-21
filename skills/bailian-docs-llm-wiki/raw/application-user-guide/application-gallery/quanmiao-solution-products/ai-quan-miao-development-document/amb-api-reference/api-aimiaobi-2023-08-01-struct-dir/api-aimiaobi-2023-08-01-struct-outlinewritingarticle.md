@@ -18,7 +18,7 @@ string
 
 新闻 URL
 
-[http://www.example.com/xxxx.html](http://www.example.com/xxxx.html)
+http://www.example.com/xxxx.html
 
 Title
 

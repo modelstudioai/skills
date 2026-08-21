@@ -34,7 +34,7 @@ string
 
 新闻 URL 链接
 
-[http://www.example.com/xxx.html](http://www.example.com/xxx.html)
+http://www.example.com/xxx.html
 
 Comments
 

@@ -16,38 +16,46 @@ wan2.7-image-pro
 
 图片格式：PNG。
 
-图像分辨率和尺寸请参见[size参数](raw/model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-and-editing-api-reference.md)。
+图像分辨率和尺寸请参见[size参数](https://help.aliyun.com/zh/model-studio/wan-image-generation-and-editing-api-reference#wan27-param-size-section)。
 
 wan2.7-image
 
 万相2.7 image，生成速度更快
 
-**说明**调用前，请查阅各地域支持的[模型列表与价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
+**说明**
+
+调用前，请查阅各地域支持的[模型列表与价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
 
 ## 前提条件
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
+您需要已[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
-**重要**华北2（北京）和新加坡地域拥有独立的 **API Key**与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错。
+**重要**
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+华北2（北京）和新加坡地域拥有独立的 **API Key** 与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错。
+
+**重要**
+
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-## HTTP同步调用
+## **HTTP同步调用**
 
 一次请求即可获得结果，流程简单，推荐大多数场景使用。
 
-#### 北京
+## **北京**
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 新加坡
+## **新加坡**
 
 `POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
@@ -55,7 +63,7 @@ wan2.7-image
 
 #### 请求参数
 
-#### 文生图
+## 文生图
 
 > wan2.7-image-pro仅文生图场景支持4K分辨率，图像编辑和组图生成支持最高2K分辨率
 
@@ -84,7 +92,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-#### 图像编辑
+## **图像编辑**
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
@@ -112,7 +120,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-#### 交互式编辑
+## **交互式编辑**
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
@@ -141,7 +149,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-#### 组图生成
+## **组图生成**
 
 > wan2.7-image-pro组图生成仅支持最高2K分辨率。
 
@@ -171,86 +179,99 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 ##### 请求头（Headers）
 
-**Content-Type**`string`**（必选）**
+**Content-Type** `_string_` **（必选）**
 
 请求内容类型。此参数必须设置为`application/json`。
 
-**Authorization**`string`**（必选）**
+**Authorization** `_string_`**（必选）**
 
 请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
 
 ##### 请求体（Request Body）
 
-**model** `string` **（必选）**
+**model** `_string_` **（必选）**
 
 模型名称。可选值：`wan2.7-image-pro`、`wan2.7-image`。
 
-**input** `object` **（必选）**
+**input** `_object_` **（必选）**
 
 输入的基本信息。
 
-属性
+**属性**
 
-**messages** `array` **（必选）**
+**messages** `_array_` **（必选）**
 
 请求内容数组。当前**仅支持单轮对话**，即传入一组role、content参数，不支持多轮对话。
 
-属性
+**属性**
 
-**role** `string` **（必选）**
+**role** `_string_` **（必选）**
 
 消息的角色。此参数固定设置为`user`。
 
-**content** `array` **（必选）**
+**content** `_array_` **（必选）**
 
 消息内容数组。
 
-属性
+**属性**
 
-**text** `string`
+**text** `_string_`
 
 用户输入提示词。支持中英文，长度不超过5000个字符，每个汉字、字母、数字或符号计为一个字符，超过部分会自动截断。
 
-**image** `string`
+**image** `_string_`
 
 输入图像的URL或Base64编码字符串。
 
 图像限制：
 
 -   图像格式：JPEG、JPG、PNG（不支持透明通道）、BMP、WEBP。
+    
 -   图像分辨率：图像的宽高范围均为\[240, 8000\]像素，宽高比范围\[1:8, 8:1\]。
+    
 -   文件大小：不超过20MB。
+    
 
 图像数量限制：
 
 -   可传入0-9张图片。
+    
 -   当输入多张图像时，需在`content`数组中传入多个`image`对象，并按照数组顺序定义图像顺序。
+    
 
 支持的输入格式：
 
 1.  使用公网可访问URL
     
     -   支持HTTP或HTTPS协议。
+        
     -   示例值：`http://wanx.alicdn.com/material/xxx.jpeg`。
+        
 2.  传入 Base64 编码图像后的字符串
     
     -   格式：data:{MIME\_type};base64,{base64\_data}
+        
     -   示例：data:image/jpeg;base64,GDU7MtCZzEbTbmRZ...（仅示意，实际需传入完整字符串）
+        
     -   Base64 编码规范请参见[图像传入方式](https://help.aliyun.com/zh/model-studio/wan-image-edit#8db0e2215frua)。
+        
 
-**parameters** `object` （可选）
+**parameters** `_object_` （可选）
 
 模型参数配置。
 
-属性
+**属性**
 
-**bbox\_list** `array[array[array[integer]]]` （可选）
+**bbox\_list** `_array[array[array[integer]]]_` （可选）
 
 交互式编辑框选区域。
 
--   对应关系：列表长度必须与输入图片数量一致。若某张图片无需编辑，请在对应位置传入空列表 `[]`。
+-   对应关系：列表长度必须与输入图片数量一致。若某张图片无需编辑，请在对应位置传入空列表 `[]`。
+    
 -   坐标格式：`[x1, y1, x2, y2]`（左上角 x, 左上角 y, 右下角 x, 右下角 y），使用原图绝对像素坐标，左上角坐标为（0，0）。
+    
 -   限制条件：单张图片最多支持 2 个边界框。
+    
 
 示例：输入 3 张图片，其中第 2 张无框选，第 1 张有两个框选：
 
@@ -262,73 +283,91 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 ]
 ```
 
-**enable\_sequential** `boolean` （可选）
+**enable\_sequential** `_boolean_` （可选）
 
 控制生图模式：
 
 -   false：默认值。
+    
 -   true ：启用组图输出模式。
+    
 
-**size** `string` （可选）
+**size** `_string_` （可选）
 
 关于输出图片分辨率参数，支持以下两种方式，不可混用：
 
 **模型：wan2.7-image-pro**
 
 -   **方式一：指定输出图片的分辨率（推荐）**
+    
     -   支持 1K、2K（默认）、4K 三种规格
         
     -   **适用范围**：
         
         -   文生图（无图片输入，非组图生成）：支持1K、2K、4K。
+            
         -   其他场景：支持1K、2K。
-    -   **各规格总像素**：1K：1024_1024、2K：2048_2048、4K：4096\*4096
+            
+    -   **各规格总像素**：1K：1024\*1024、2K：2048\*2048、4K：4096\*4096
         
     -   **图像比例**：
         
         -   当有图片输入时：输出宽高比与输入图像（多图输入时为最后一张）一致，并缩放到选定分辨率。
+            
         -   当没有图片输入时：输出为正方形。
+            
 -   **方式二：指定生成图像的宽高像素值**
-    -   文生图：总像素在 \[768_768, 4096_4096\] 之间，宽高比范围为 \[1:8, 8:1\]。
-    -   其他场景：总像素在 \[768_768, 2048_2048\] 之间，宽高比范围为 \[1:8, 8:1\]。
+    
+    -   文生图：总像素在 \[768\*768, 4096\*4096\] 之间，宽高比范围为 \[1:8, 8:1\]。
+        
+    -   其他场景：总像素在 \[768\*768, 2048\*2048\] 之间，宽高比范围为 \[1:8, 8:1\]。
+        
 
 **模型：wan2.7-image**
 
 -   **方式一：指定输出图片的分辨率（推荐）**
+    
     -   支持1K、2K（默认）两种规格，不支持4K。
+        
 -   **方式二：指定生成图像的宽高像素值**
-    -   所有场景下，总像素在 \[768_768, 2048_2048\] 之间，宽高比范围为 \[1:8, 8:1\]。
+    
+    -   所有场景下，总像素在 \[768\*768, 2048\*2048\] 之间，宽高比范围为 \[1:8, 8:1\]。
+        
 
 > 输出图片的像素值可能和指定像素值存在微小差异。
 
-**n** `integer` （可选）
+**n** `_integer_` （可选）
 
-**重要**n直接影响费用。费用 = 单价 × 成功生成的图片张数，请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
+**重要**
 
--   关闭组图模式时，该数值代表生成图像数量，取值范围 1-4，**默认为 1**；
--   开启组图模式时，该数值代表最大生成图像数量，取值范围 1-12，**默认为 12**。实际数量由模型决定且不超过 n。
+n直接影响费用。费用 = 单价 × 成功生成的图片张数，请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
 
-**thinking\_mode** `boolean` （可选）
+-   关闭组图模式时，该数值代表生成图像数量，取值范围 1-4，**默认为 1**；
+    
+-   开启组图模式时，该数值代表最大生成图像数量，取值范围 1-12，**默认为 12**。实际数量由模型决定且不超过 n。
+    
+
+**thinking\_mode** `_boolean_` （可选）
 
 是否开启思考模式，默认为`true`（开启）。仅在关闭组图模式且无图片输入时生效。开启时，模型将增强推理能力以提升出图质量，但会增加生成耗时。
 
-**color\_palette** `array` （可选）
+**color\_palette** `_array_` （可选）
 
 自定义颜色主题，一个包含颜色（hex）和占比（ratio）的对象数组，需要包含 3 至 10 种颜色，推荐设置为 8 种。
 
 仅当关闭组图模式（`enable_sequential=false`）时可用。
 
-属性
+**属性**
 
-**hex** `string` **（必选）**
+**hex** `_string_` **（必选）**
 
 十六进制（HEX）格式的色值。
 
-**ratio** `string` **（必选）**
+**ratio** `_string_` **（必选）**
 
 颜色所占的百分比，需精确到小数点后两位（如`"25.00%"`）。所有 ratio 值相加**总和必须为 100.00%**。
 
-点击查看输入示例
+**点击查看输入示例**
 
 ```
 "color_palette": [
@@ -367,14 +406,16 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 ]
 ```
 
-**watermark** `bool` （可选）
+**watermark** `_bool_` （可选）
 
 是否添加水印标识，水印位于图片右下角，文案固定为“AI生成”。
 
 -   false：默认值，不添加水印。
+    
 -   true：添加水印。
+    
 
-**seed** `integer` （可选）
+**seed** `_integer_` （可选）
 
 随机数种子，取值范围`[0,2147483647]`。
 
@@ -384,7 +425,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 #### 响应参数
 
-#### 任务执行成功
+## 任务执行成功
 
 任务数据（如任务状态、图像URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。
 
@@ -418,9 +459,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-#### 任务执行异常
+## 任务执行异常
 
-如果因为某种原因导致任务执行失败，将返回相关信息，可以通过code和message字段明确指示错误原因。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果因为某种原因导致任务执行失败，将返回相关信息，可以通过code和message字段明确指示错误原因。请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ```
 {
@@ -430,104 +471,106 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-**output** `object`
+**output** `_object_`
 
 任务输出信息。
 
-属性
+**属性**
 
-**choices** `array`
+**choices** `_array_`
 
 模型生成的输出内容。
 
-属性
+**属性**
 
-**finish\_reason** `string`
+**finish\_reason** `_string_`
 
 任务停止原因。自然停止时为`stop`。
 
-**message** `object`
+**message** `_object_`
 
 模型返回的消息。
 
-属性
+**属性**
 
-**role**`string`
+**role** `_string_`
 
 消息的角色，固定为`assistant`。
 
-**content**`array`
+**content** `_array_`
 
-属性
+**属性**
 
-**type** `string`
+**type** `_string_`
 
 输出的类型，固定为image。
 
-**image** `string`
+**image** `_string_`
 
 生成图像的 URL，图像格式为PNG。
 
 **链接有效期为24小时**，请及时下载并保存图像。
 
-**finished** `boolean`
+**finished** `_boolean_`
 
 任务是否结束。
 
 -   true：已结束。
+    
 -   false：未结束。
+    
 
-**usage** `object`
+**usage** `_object_`
 
 输出信息统计。只对成功的结果计数。
 
-属性
+**属性**
 
-**image\_count** `integer`
+**image\_count** `_integer_`
 
 生成图像的张数。
 
-**size** `string`
+**size** `_string_`
 
 生成的图像分辨率。示例值：1376\*768。
 
-**input\_tokens** `integer`
+**input\_tokens** `_integer_`
 
 输入token数量（不计费）。按图片张数计费。
 
-**output\_tokens** `integer`
+**output\_tokens** `_integer_`
 
 输出token数量（不计费）。按图片张数计费。
 
-**total\_tokens**`integer`
+**total\_tokens** `_integer_`
 
 总token数量（不计费）。按图片张数计费。
 
-**request\_id**`string`
+**request\_id** `_string_`
 
 请求唯一标识。可用于请求明细溯源和问题排查。
 
-**code**`string`
+**code** `_string_`
 
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
 
-**message**`string`
+**message** `_string_`
 
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
 
-## HTTP异步调用
+## **HTTP异步调用**
 
 适用于耗时较长的任务，支持查询任务状态和结果。
 
 ### 步骤1：创建任务获取任务ID
 
-#### 北京
+## **北京**
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation`
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 新加坡
+## **新加坡**
 
 `POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation`
 
@@ -535,7 +578,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 #### 请求参数
 
-#### 文生图
+## **文生图**
 
 > wan2.7-image-pro仅文生图场景支持4K分辨率，图像编辑和组图生成支持最高2K分辨率
 
@@ -565,7 +608,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-#### 图像编辑
+## **图像编辑**
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
@@ -594,7 +637,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-#### 交互式编辑
+## **交互式编辑**
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
@@ -624,7 +667,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-#### 组图生成
+## **组图生成**
 
 > wan2.7-image-pro组图生成仅支持最高2K分辨率。
 
@@ -655,92 +698,107 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 ##### 请求头（Headers）
 
-**Content-Type**`string`**（必选）**
+**Content-Type** `_string_` **（必选）**
 
 请求内容类型。此参数必须设置为`application/json`。
 
-**Authorization**`string`**（必选）**
+**Authorization** `_string_`**（必选）**
 
 请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
 
-**X-DashScope-Async**`string`**（必选）**
+**X-DashScope-Async** `_string_` **（必选）**
 
-异步处理配置参数。HTTP请求只支持异步，**必须设置为**`enable`。
+异步处理配置参数。HTTP请求只支持异步，**必须设置为**`**enable**`。
 
-**重要**缺少此请求头将报错：“current user api does not support synchronous calls”。
+**重要**
+
+缺少此请求头将报错：“current user api does not support synchronous calls”。
 
 ##### 请求体（Request Body）
 
-**model** `string` **（必选）**
+**model** `_string_` **（必选）**
 
 模型名称。可选值：`wan2.7-image-pro`、`wan2.7-image`。
 
-**input** `object` **（必选）**
+**input** `_object_` **（必选）**
 
 输入的基本信息。
 
-属性
+**属性**
 
-**messages** `array` **（必选）**
+**messages** `_array_` **（必选）**
 
 请求内容数组。当前**仅支持单轮对话**，即传入一组role、content参数，不支持多轮对话。
 
-属性
+**属性**
 
-**role** `string` **（必选）**
+**role** `_string_` **（必选）**
 
 消息的角色。此参数固定设置为`user`。
 
-**content** `array` **（必选）**
+**content** `_array_` **（必选）**
 
 消息内容数组。
 
-属性
+**属性**
 
-**text** `string`
+**text** `_string_`
 
 用户输入提示词。支持中英文，长度不超过5000个字符，每个汉字、字母、数字或符号计为一个字符，超过部分会自动截断。
 
-**image** `string`
+**image** `_string_`
 
 输入图像的URL或Base64编码字符串。
 
 图像限制：
 
 -   图像格式：JPEG、JPG、PNG（不支持透明通道）、BMP、WEBP。
+    
 -   图像分辨率：图像的宽高范围均为\[240, 8000\]像素，宽高比范围\[1:8, 8:1\]。
+    
 -   文件大小：不超过20MB。
+    
 
 图像数量限制：
 
 -   可传入0-9张图片。
+    
 -   当输入多张图像时，需在`content`数组中传入多个`image`对象，并按照数组顺序定义图像顺序。
+    
 
 支持的输入格式：
 
 1.  使用公网可访问URL
     
     -   支持HTTP或HTTPS协议。
+        
     -   示例值：`http://wanx.alicdn.com/material/xxx.jpeg`。
+        
 2.  传入 Base64 编码图像后的字符串
     
     -   格式：data:{MIME\_type};base64,{base64\_data}
+        
     -   示例：data:image/jpeg;base64,GDU7MtCZzEbTbmRZ...（仅示意，实际需传入完整字符串）
+        
     -   Base64 编码规范请参见[图像传入方式](https://help.aliyun.com/zh/model-studio/wan-image-edit#8db0e2215frua)。
+        
 
-**parameters** `object` （可选）
+**parameters** `_object_` （可选）
 
 模型参数配置。
 
-属性
+**属性**
 
-**bbox\_list** `array[array[array[integer]]]` （可选）
+**bbox\_list** `_array[array[array[integer]]]_` （可选）
 
 交互式编辑框选区域。
 
--   对应关系：列表长度必须与输入图片数量一致。若某张图片无需编辑，请在对应位置传入空列表 `[]`。
+-   对应关系：列表长度必须与输入图片数量一致。若某张图片无需编辑，请在对应位置传入空列表 `[]`。
+    
 -   坐标格式：`[x1, y1, x2, y2]`（左上角 x, 左上角 y, 右下角 x, 右下角 y），使用原图绝对像素坐标，左上角坐标为（0，0）。
+    
 -   限制条件：单张图片最多支持 2 个边界框。
+    
 
 示例：输入 3 张图片，其中第 2 张无框选，第 1 张有两个框选：
 
@@ -752,73 +810,91 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 ]
 ```
 
-**enable\_sequential** `boolean` （可选）
+**enable\_sequential** `_boolean_` （可选）
 
 控制生图模式：
 
 -   false：默认值。
+    
 -   true ：启用组图输出模式。
+    
 
-**size** `string` （可选）
+**size** `_string_` （可选）
 
 关于输出图片分辨率参数，支持以下两种方式，不可混用：
 
 **模型：wan2.7-image-pro**
 
 -   **方式一：指定输出图片的分辨率（推荐）**
+    
     -   支持 1K、2K（默认）、4K 三种规格
         
     -   **适用范围**：
         
         -   文生图（无图片输入，非组图生成）：支持1K、2K、4K。
+            
         -   其他场景：支持1K、2K。
-    -   **各规格总像素**：1K：1024_1024、2K：2048_2048、4K：4096\*4096
+            
+    -   **各规格总像素**：1K：1024\*1024、2K：2048\*2048、4K：4096\*4096
         
     -   **图像比例**：
         
         -   当有图片输入时：输出宽高比与输入图像（多图输入时为最后一张）一致，并缩放到选定分辨率。
+            
         -   当没有图片输入时：输出为正方形。
+            
 -   **方式二：指定生成图像的宽高像素值**
-    -   文生图：总像素在 \[768_768, 4096_4096\] 之间，宽高比范围为 \[1:8, 8:1\]。
-    -   其他场景：总像素在 \[768_768, 2048_2048\] 之间，宽高比范围为 \[1:8, 8:1\]。
+    
+    -   文生图：总像素在 \[768\*768, 4096\*4096\] 之间，宽高比范围为 \[1:8, 8:1\]。
+        
+    -   其他场景：总像素在 \[768\*768, 2048\*2048\] 之间，宽高比范围为 \[1:8, 8:1\]。
+        
 
 **模型：wan2.7-image**
 
 -   **方式一：指定输出图片的分辨率（推荐）**
+    
     -   支持1K、2K（默认）两种规格，不支持4K。
+        
 -   **方式二：指定生成图像的宽高像素值**
-    -   所有场景下，总像素在 \[768_768, 2048_2048\] 之间，宽高比范围为 \[1:8, 8:1\]。
+    
+    -   所有场景下，总像素在 \[768\*768, 2048\*2048\] 之间，宽高比范围为 \[1:8, 8:1\]。
+        
 
 > 输出图片的像素值可能和指定像素值存在微小差异。
 
-**n** `integer` （可选）
+**n** `_integer_` （可选）
 
-**重要**n直接影响费用。费用 = 单价 × 成功生成的图片张数，请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
+**重要**
 
--   关闭组图模式时，该数值代表生成图像数量，取值范围 1-4，**默认为 1**；
--   开启组图模式时，该数值代表最大生成图像数量，取值范围 1-12，**默认为 12**。实际数量由模型决定且不超过 n。
+n直接影响费用。费用 = 单价 × 成功生成的图片张数，请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
 
-**thinking\_mode** `boolean` （可选）
+-   关闭组图模式时，该数值代表生成图像数量，取值范围 1-4，**默认为 1**；
+    
+-   开启组图模式时，该数值代表最大生成图像数量，取值范围 1-12，**默认为 12**。实际数量由模型决定且不超过 n。
+    
+
+**thinking\_mode** `_boolean_` （可选）
 
 是否开启思考模式，默认为`true`（开启）。仅在关闭组图模式且无图片输入时生效。开启时，模型将增强推理能力以提升出图质量，但会增加生成耗时。
 
-**color\_palette** `array` （可选）
+**color\_palette** `_array_` （可选）
 
 自定义颜色主题，一个包含颜色（hex）和占比（ratio）的对象数组，需要包含 3 至 10 种颜色，推荐设置为 8 种。
 
 仅当关闭组图模式（`enable_sequential=false`）时可用。
 
-属性
+**属性**
 
-**hex** `string` **（必选）**
+**hex** `_string_` **（必选）**
 
 十六进制（HEX）格式的色值。
 
-**ratio** `string` **（必选）**
+**ratio** `_string_` **（必选）**
 
 颜色所占的百分比，需精确到小数点后两位（如`"25.00%"`）。所有 ratio 值相加**总和必须为 100.00%**。
 
-点击查看输入示例
+**点击查看输入示例**
 
 ```
 "color_palette": [
@@ -857,14 +933,16 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 ]
 ```
 
-**watermark** `bool` （可选）
+**watermark** `_bool_` （可选）
 
 是否添加水印标识，水印位于图片右下角，文案固定为“AI生成”。
 
 -   false：默认值，不添加水印。
+    
 -   true：添加水印。
+    
 
-**seed** `integer` （可选）
+**seed** `_integer_` （可选）
 
 随机数种子，取值范围`[0,2147483647]`。
 
@@ -890,7 +968,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 #### 异常响应
 
-创建任务失败，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+创建任务失败，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ```
 {
@@ -900,54 +978,60 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-**output** `object`
+**output** `_object_`
 
 任务输出信息。
 
-属性
+**属性**
 
-**task\_id** `string`
+**task\_id** `_string_`
 
 任务ID。查询有效期24小时。
 
-**task\_status** `string`
+**task\_status** `_string_`
 
 任务状态。
 
-枚举值
+**枚举值**
 
 -   PENDING：任务排队中
+    
 -   RUNNING：任务处理中
+    
 -   SUCCEEDED：任务执行成功
+    
 -   FAILED：任务执行失败
+    
 -   CANCELED：任务已取消
+    
 -   UNKNOWN：任务不存在或状态未知
+    
 
-**request\_id**`string`
+**request\_id** `_string_`
 
 请求唯一标识。可用于请求明细溯源和问题排查。
 
-**code**`string`
+**code** `_string_`
 
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
 
-**message**`string`
+**message** `_string_`
 
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
 
 ### 步骤2：根据任务ID查询结果
 
-#### 北京
+## **北京**
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-#### 新加坡
+## **新加坡**
 
 `GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 #### 请求参数
 
-#### 查询任务结果
+## 查询任务结果
 
 将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
@@ -956,21 +1040,21 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-##### 请求头（Headers）
+##### **请求头（Headers）**
 
-**Authorization**`string`**（必选）**
+**Authorization** `_string_`**（必选）**
 
 请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
 
-##### URL路径参数（Path parameters）
+##### **URL路径参数（Path parameters）**
 
-**task\_id** `string`**（必选）**
+**task\_id** `_string_`**（必选）**
 
 任务ID。
 
 #### 响应参数
 
-#### 任务执行成功
+## 任务执行成功
 
 任务数据（如任务状态、图像URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。
 
@@ -1009,9 +1093,9 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
-#### 任务执行异常
+## 任务执行异常
 
-如果因为某种原因导致任务执行失败，将返回相关信息，可以通过code和message字段明确指示错误原因。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果因为某种原因导致任务执行失败，将返回相关信息，可以通过code和message字段明确指示错误原因。请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ```
 {
@@ -1021,132 +1105,144 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
-**output** `object`
+**output** `_object_`
 
 任务输出信息。
 
-属性
+**属性**
 
-**task\_id** `string`
+**task\_id** `_string_`
 
 任务ID。查询有效期24小时。
 
-**task\_status** `string`
+**task\_status** `_string_`
 
 任务状态。
 
-枚举值
+**枚举值**
 
 -   PENDING：任务排队中
+    
 -   RUNNING：任务处理中
+    
 -   SUCCEEDED：任务执行成功
+    
 -   FAILED：任务执行失败
+    
 -   CANCELED：任务已取消
+    
 -   UNKNOWN：任务不存在或状态未知
+    
 
 **轮询过程中的状态流转：**
 
--   PENDING（排队中） → RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
+-   PENDING（排队中） → RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
+    
 -   初次查询状态通常为 PENDING（排队中）或 RUNNING（处理中）。
+    
 -   当状态变为 SUCCEEDED 时，响应中将包含生成的图像URL。
+    
 -   若状态为 FAILED，请检查错误信息并重试。
+    
 
-**submit\_time** `string`
+**submit\_time** `_string_`
 
 任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
 
-**scheduled\_time** `string`
+**scheduled\_time** `_string_`
 
 任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
 
-**end\_time** `string`
+**end\_time** `_string_`
 
 任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
 
-**finished** `boolean`
+**finished** `_boolean_`
 
 任务是否结束。
 
 -   true：已结束。
+    
 -   false：未结束。
+    
 
-**choices** `array`
+**choices** `_array_`
 
 模型生成的输出内容。
 
-属性
+**属性**
 
-**finish\_reason** `string`
+**finish\_reason** `_string_`
 
 任务停止原因，自然停止时为`stop`。
 
-**message** `object`
+**message** `_object_`
 
 模型返回的消息。
 
-属性
+**属性**
 
-**role**`string`
+**role** `_string_`
 
 消息的角色，固定为`assistant`。
 
-**content**`array`
+**content** `_array_`
 
-属性
+**属性**
 
-**type** `string`
+**type** `_string_`
 
 输出的类型，枚举值为text、image。
 
-**text** `string`
+**text** `_string_`
 
 生成的文字。
 
-**image** `string`
+**image** `_string_`
 
 生成图像的 URL，图像格式为PNG。
 
 **链接有效期为24小时**，请及时下载并保存图像。
 
-**usage** `object`
+**usage** `_object_`
 
 输出信息统计。只对成功的结果计数。
 
-属性
+**属性**
 
-**image\_count** `integer`
+**image\_count** `_integer_`
 
 生成图像的张数。
 
-**size** `string`
+**size** `_string_`
 
 生成的图像分辨率。示例值：1376\*768。
 
-**input\_tokens** `integer`
+**input\_tokens** `_integer_`
 
 输入token数量（不计费）。按图片张数计费。
 
-**output\_tokens** `integer`
+**output\_tokens** `_integer_`
 
 输出token数量（不计费）。按图片张数计费。
 
-**total\_tokens**`integer`
+**total\_tokens** `_integer_`
 
 总token数量（不计费）。按图片张数计费。
 
-**request\_id**`string`
+**request\_id** `_string_`
 
 请求唯一标识。可用于请求明细溯源和问题排查。
 
-**code**`string`
+**code** `_string_`
 
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
 
-**message**`string`
+**message** `_string_`
 
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
 
-## Python SDK调用
+## **Python SDK调用**
 
 SDK 参数命名与HTTP接口基本一致。
 
@@ -1154,27 +1250,29 @@ SDK 参数命名与HTTP接口基本一致。
 
 > 具体耗时受限于排队任务数和服务执行情况，请在获取结果时耐心等待。
 
-**重要**请确保 DashScope Python SDK版本**不低于 1.25.15**，再运行以下代码。更新请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+**重要**
+
+请确保 DashScope Python SDK版本**不低于 1.25.15**，再运行以下代码。更新请参考[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
 
 各地域的`base_url`和API Key 不通用，以下示例以北京地域为例进行调用：
 
-#### 华北2（北京）
+### 华北2（北京）
 
 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 新加坡
+### 新加坡
 
 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-### 图像编辑
+### **图像编辑**
 
-#### 同步调用
+## **同步调用**
 
-##### 请求示例
+##### **请求示例**
 
 ```
 import os
@@ -1294,9 +1392,9 @@ else:
 }
 ```
 
-#### 异步调用
+## **异步调用**
 
-##### 请求示例
+##### **请求示例**
 
 ```
 import os
@@ -1488,11 +1586,11 @@ if __name__ == "__main__":
 }
 ```
 
-### 组图生成
+### **组图生成**
 
-#### 同步调用
+## **同步调用**
 
-##### 请求示例
+##### **请求示例**
 
 ```
 import os
@@ -1625,9 +1723,9 @@ else:
 }
 ```
 
-#### 异步调用
+## **异步调用**
 
-##### 请求示例
+##### **请求示例**
 
 ```
 import os
@@ -1808,29 +1906,31 @@ if __name__ == "__main__":
 }
 ```
 
-## Java SDK调用
+## **Java SDK调用**
 
 SDK 参数命名与HTTP接口基本一致。
 
 任务可能耗时较长，SDK 已封装HTTP异步调用流程，同时支持同步和异步调用。
 
-**重要**请确保 DashScope Java SDK版本不低于 `2.22.13`，否则可能不支持本文所用的部分参数。
+**重要**
 
-#### 华北2（北京）
+请确保 DashScope Java SDK版本不低于 `2.22.13`，否则可能不支持本文所用的部分参数。
+
+### 华北2（北京）
 
 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 新加坡
+### 新加坡
 
 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-### 图像编辑
+### **图像编辑**
 
-#### 同步调用
+## **同步调用**
 
 ##### 请求示例
 
@@ -1985,7 +2085,7 @@ public class Main {
 }
 ```
 
-#### 异步调用
+## **异步调用**
 
 ##### 请求示例
 
@@ -2174,9 +2274,9 @@ public class Main {
 }
 ```
 
-### 组图生成
+### **组图生成**
 
-#### 同步调用
+## **同步调用**
 
 ##### 请求示例
 
@@ -2345,7 +2445,7 @@ public class Main {
 }
 ```
 
-#### 异步调用
+## **异步调用**
 
 ##### 请求示例
 
@@ -2547,12 +2647,15 @@ public class Main {
 }
 ```
 
-## 计费与限流
+## **计费与限流**
 
 -   模型免费额度和计费单价请参见[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
+    
 -   模型限流请参见[万相](https://help.aliyun.com/zh/model-studio/rate-limit#513e0a3df24v7)。
--   计费说明：按成功生成的 **图像张数** 计费。模型调用失败或处理错误不产生任何费用，也不消耗[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
+    
+-   计费说明：按成功生成的 **图像张数** 计费。模型调用失败或处理错误不产生任何费用，也不消耗[新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota)。
+    
 
-## 错误码
+## **错误码**
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。

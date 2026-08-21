@@ -31,14 +31,10 @@
 各字段含义如下：
 
 -   Effect：权限策略效果。取值：Allow（允许）、Deny（拒绝）。
-    
--   Action：授予允许或拒绝权限的具体操作。具体信息，请参见操作（Action）。
-    
--   Resource：受操作影响的具体对象，您可以使用资源ARN来描述指定资源。具体信息，请参见资源（Resource）。
-    
--   Condition：指授权生效的条件。可选字段。具体信息，请参见条件（Condition）。
-    
-    -   Condition\_operator：条件运算符，不同类型的条件对应不同的条件运算符。具体信息，请参见权限策略基本元素。
+-   Action：授予允许或拒绝权限的具体操作。具体信息，请参见[操作（Action）](#title-auth-detail-2)。
+-   Resource：受操作影响的具体对象，您可以使用资源ARN来描述指定资源。具体信息，请参见[资源（Resource）](#title-auth-detail-3)。
+-   Condition：指授权生效的条件。可选字段。具体信息，请参见[条件（Condition）](#title-auth-detail-4)。
+    -   Condition\_operator：条件运算符，不同类型的条件对应不同的条件运算符。具体信息，请参见[权限策略基本元素](https://help.aliyun.com/zh/ram/policy-elements)。
     -   Condition\_key：条件关键字。
     -   Condition\_value：条件关键字对应的值。
 
@@ -47,19 +43,13 @@
 下表是大模型服务平台百炼（QuanMiaoLightApp）定义的操作，这些操作可以在RAM权限策略语句的`Action`元素中使用，用来授予执行该操作的权限。下面对表中的具体项提供说明：
 
 -   操作：是指具体的权限点。
-    
 -   API：是指操作对应的API接口。
-    
 -   访问级别：是指每个操作的访问级别，取值为写入（Write）、读取（Read）或列出（List）。
-    
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
-    
     -   对于必选的资源类型，用前面加 \* 表示。
-    -   对于不支持资源级授权的操作，用全部资源表示。
--   条件关键字：是指云产品自身定义的条件关键字。该列不体现适用于任何操作的通用条件关键字。
-    
+    -   对于不支持资源级授权的操作，用`全部资源`表示。
+-   条件关键字：是指云产品自身定义的条件关键字。该列不体现适用于任何操作的[通用条件关键字](https://help.aliyun.com/zh/ram/policy-elements)。
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
-    
 
 操作
 
@@ -75,7 +65,7 @@ API
 
 quanmiaolightapp:CancelAsyncTask
 
-CancelAsyncTask
+[CancelAsyncTask](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-cancelasynctask)
 
 create
 
@@ -89,7 +79,7 @@ create
 
 quanmiaolightapp:ExportAnalysisTagDetailByTaskId
 
-ExportAnalysisTagDetailByTaskId
+[ExportAnalysisTagDetailByTaskId](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-exportanalysistagdetailbytaskid)
 
 none
 
@@ -103,7 +93,7 @@ none
 
 quanmiaolightapp:GenerateBroadcastNews
 
-GenerateBroadcastNews
+[GenerateBroadcastNews](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-generatebroadcastnews)
 
 none
 
@@ -117,7 +107,7 @@ none
 
 quanmiaolightapp:GenerateOutputFormat
 
-GenerateOutputFormat
+[GenerateOutputFormat](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-generateoutputformat)
 
 none
 
@@ -131,7 +121,7 @@ none
 
 quanmiaolightapp:GetEnterpriseVocAnalysisTask
 
-GetEnterpriseVocAnalysisTask
+[GetEnterpriseVocAnalysisTask](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-getenterprisevocanalysistask)
 
 get
 
@@ -145,7 +135,7 @@ get
 
 quanmiaolightapp:GetEssayCorrectionTask
 
-GetEssayCorrectionTask
+[GetEssayCorrectionTask](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-getessaycorrectiontask)
 
 get
 
@@ -159,7 +149,7 @@ get
 
 quanmiaolightapp:GetFileContent
 
-GetFileContent
+[GetFileContent](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-getfilecontent)
 
 get
 
@@ -173,7 +163,7 @@ get
 
 quanmiaolightapp:GetTagMiningAnalysisTask
 
-GetTagMiningAnalysisTask
+[GetTagMiningAnalysisTask](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-gettagmininganalysistask)
 
 get
 
@@ -187,7 +177,7 @@ get
 
 quanmiaolightapp:GetVideoAnalysisConfig
 
-GetVideoAnalysisConfig
+[GetVideoAnalysisConfig](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-getvideoanalysisconfig)
 
 get
 
@@ -201,7 +191,7 @@ get
 
 quanmiaolightapp:GetVideoAnalysisTask
 
-GetVideoAnalysisTask
+[GetVideoAnalysisTask](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-getvideoanalysistask)
 
 get
 
@@ -215,7 +205,7 @@ get
 
 quanmiaolightapp:GetVideoDetectShotConfig
 
-GetVideoDetectShotConfig
+[GetVideoDetectShotConfig](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-getvideodetectshotconfig)
 
 get
 
@@ -229,7 +219,7 @@ get
 
 quanmiaolightapp:GetVideoDetectShotTask
 
-GetVideoDetectShotTask
+[GetVideoDetectShotTask](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-getvideodetectshottask)
 
 get
 
@@ -243,7 +233,7 @@ get
 
 quanmiaolightapp:HotNewsRecommend
 
-HotNewsRecommend
+[HotNewsRecommend](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-hotnewsrecommend)
 
 create
 
@@ -257,7 +247,7 @@ create
 
 quanmiaolightapp:ListAnalysisTagDetailByTaskId
 
-ListAnalysisTagDetailByTaskId
+[ListAnalysisTagDetailByTaskId](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-listanalysistagdetailbytaskid)
 
 list
 
@@ -271,7 +261,7 @@ list
 
 quanmiaolightapp:ListHotTopicSummaries
 
-ListHotTopicSummaries
+[ListHotTopicSummaries](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-listhottopicsummaries)
 
 list
 
@@ -285,7 +275,7 @@ list
 
 quanmiaolightapp:RunEnterpriseVocAnalysis
 
-RunEnterpriseVocAnalysis
+[RunEnterpriseVocAnalysis](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runenterprisevocanalysis)
 
 none
 
@@ -299,7 +289,7 @@ none
 
 quanmiaolightapp:RunEssayCorrection
 
-RunEssayCorrection
+[RunEssayCorrection](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runessaycorrection)
 
 create
 
@@ -313,7 +303,7 @@ create
 
 quanmiaolightapp:RunHotTopicChat
 
-RunHotTopicChat
+[RunHotTopicChat](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runhottopicchat)
 
 none
 
@@ -327,7 +317,7 @@ none
 
 quanmiaolightapp:RunHotTopicSummary
 
-RunHotTopicSummary
+[RunHotTopicSummary](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runhottopicsummary)
 
 none
 
@@ -341,7 +331,7 @@ none
 
 quanmiaolightapp:RunMarketingInformationExtract
 
-RunMarketingInformationExtract
+[RunMarketingInformationExtract](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runmarketinginformationextract)
 
 none
 
@@ -355,7 +345,7 @@ none
 
 quanmiaolightapp:RunMarketingInformationWriting
 
-RunMarketingInformationWriting
+[RunMarketingInformationWriting](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runmarketinginformationwriting)
 
 none
 
@@ -369,7 +359,7 @@ none
 
 quanmiaolightapp:RunNetworkContentAudit
 
-RunNetworkContentAudit
+[RunNetworkContentAudit](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runnetworkcontentaudit)
 
 create
 
@@ -383,7 +373,7 @@ create
 
 quanmiaolightapp:RunOcrParse
 
-RunOcrParse
+[RunOcrParse](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runocrparse)
 
 create
 
@@ -397,7 +387,7 @@ create
 
 quanmiaolightapp:RunScriptChat
 
-RunScriptChat
+[RunScriptChat](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runscriptchat)
 
 none
 
@@ -411,7 +401,7 @@ none
 
 quanmiaolightapp:RunScriptContinue
 
-RunScriptContinue
+[RunScriptContinue](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runscriptcontinue)
 
 none
 
@@ -425,7 +415,7 @@ none
 
 quanmiaolightapp:RunScriptPlanning
 
-RunScriptPlanning
+[RunScriptPlanning](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runscriptplanning)
 
 none
 
@@ -439,7 +429,7 @@ none
 
 quanmiaolightapp:RunScriptRefine
 
-RunScriptRefine
+[RunScriptRefine](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runscriptrefine)
 
 none
 
@@ -453,7 +443,7 @@ none
 
 quanmiaolightapp:RunStyleWriting
 
-RunStyleWriting
+[RunStyleWriting](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runstylewriting)
 
 none
 
@@ -467,7 +457,7 @@ none
 
 quanmiaolightapp:RunTagMiningAnalysis
 
-RunTagMiningAnalysis
+[RunTagMiningAnalysis](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runtagmininganalysis)
 
 create
 
@@ -481,7 +471,7 @@ create
 
 quanmiaolightapp:RunVideoAnalysis
 
-RunVideoAnalysis
+[RunVideoAnalysis](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runvideoanalysis)
 
 none
 
@@ -495,7 +485,7 @@ none
 
 quanmiaolightapp:RunVideoDetectShot
 
-RunVideoDetectShot
+[RunVideoDetectShot](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-runvideodetectshot)
 
 none
 
@@ -509,7 +499,7 @@ none
 
 quanmiaolightapp:SubmitEnterpriseVocAnalysisTask
 
-SubmitEnterpriseVocAnalysisTask
+[SubmitEnterpriseVocAnalysisTask](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-submitenterprisevocanalysistask)
 
 create
 
@@ -523,7 +513,7 @@ create
 
 quanmiaolightapp:SubmitEssayCorrectionTask
 
-SubmitEssayCorrectionTask
+[SubmitEssayCorrectionTask](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-submitessaycorrectiontask)
 
 create
 
@@ -537,7 +527,7 @@ create
 
 quanmiaolightapp:SubmitTagMiningAnalysisTask
 
-SubmitTagMiningAnalysisTask
+[SubmitTagMiningAnalysisTask](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-submittagmininganalysistask)
 
 create
 
@@ -551,7 +541,7 @@ create
 
 quanmiaolightapp:SubmitVideoAnalysisTask
 
-SubmitVideoAnalysisTask
+[SubmitVideoAnalysisTask](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-submitvideoanalysistask)
 
 create
 
@@ -565,7 +555,7 @@ create
 
 quanmiaolightapp:SubmitVideoDetectShotTask
 
-SubmitVideoDetectShotTask
+[SubmitVideoDetectShotTask](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-submitvideodetectshottask)
 
 create
 
@@ -579,7 +569,7 @@ create
 
 quanmiaolightapp:UpdateVideoAnalysisConfig
 
-UpdateVideoAnalysisConfig
+[UpdateVideoAnalysisConfig](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-updatevideoanalysisconfig)
 
 update
 
@@ -593,7 +583,7 @@ update
 
 quanmiaolightapp:UpdateVideoAnalysisTask
 
-UpdateVideoAnalysisTask
+[UpdateVideoAnalysisTask](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-updatevideoanalysistask)
 
 update
 
@@ -607,7 +597,7 @@ update
 
 quanmiaolightapp:UpdateVideoAnalysisTasks
 
-UpdateVideoAnalysisTasks
+[UpdateVideoAnalysisTasks](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-updatevideoanalysistasks)
 
 update
 
@@ -621,7 +611,7 @@ update
 
 quanmiaolightapp:UpdateVideoDetectShotConfig
 
-UpdateVideoDetectShotConfig
+[UpdateVideoDetectShotConfig](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-updatevideodetectshotconfig)
 
 update
 
@@ -635,7 +625,7 @@ update
 
 quanmiaolightapp:UpdateVideoDetectShotTask
 
-UpdateVideoDetectShotTask
+[UpdateVideoDetectShotTask](https://help.aliyun.com/zh/model-studio/api-quanmiaolightapp-2024-08-01-updatevideodetectshottask)
 
 update
 
@@ -659,7 +649,7 @@ update
 
 您可以创建自定义权限策略，并将权限策略授予RAM用户、RAM用户组或RAM角色。具体操作如下：
 
--   创建自定义权限策略
--   为RAM用户授权
--   为RAM用户组授权
--   为RAM角色授权
+-   [创建自定义权限策略](https://help.aliyun.com/zh/ram/create-a-custom-policy)
+-   [为RAM用户授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)
+-   [为RAM用户组授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-a-ram-user-group)
+-   [为RAM角色授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-a-ram-role)

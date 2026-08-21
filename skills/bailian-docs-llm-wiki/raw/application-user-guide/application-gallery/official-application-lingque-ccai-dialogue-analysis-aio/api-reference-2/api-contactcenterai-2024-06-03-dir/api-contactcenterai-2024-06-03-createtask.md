@@ -6,12 +6,12 @@
 
 请确保在使用该接口前，已充分了解通义晓蜜 CCAI-对话分析 AIO 产品的收费方式和价格。
 
-## 前提条件
+## [](#前提条件)前提条件
 
 -   1.已开通通义晓蜜 CCAI-对话分析 AIO 服务。
--   2.已创建应用：应用中心完成通义晓蜜 CCAI-对话分析 AIO 应用创建，并获取到 APP-ID 和 WORKSPACE-ID：获取 APP-ID 和 WORKSPACE-ID。
+-   2.已创建应用：应用中心完成通义晓蜜 CCAI-对话分析 AIO 应用创建，并获取到 APP-ID 和 WORKSPACE-ID：[获取 APP-ID 和 WORKSPACE-ID](https://help.aliyun.com/zh/model-studio/developer-reference/obtain-api-key-app-id-and-workspace-id?spm=openapi-amp.newDocPublishment.0.0.3491281fOQZK5f)。
 
-## 注意事项
+## [](#注意事项)注意事项
 
 -   1.目前任务数据在服务端保存时间为 90 天。
 -   2.对话内容字数限制为 2 万字，超过部分会自动截断。
@@ -19,9 +19,9 @@
 
 ## 调试
 
-您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/CreateTask)
 
-[调试](https://api.alibabacloud.com/api/ContactCenterAI/2024-06-03/CreateTask)
+[![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png)调试](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/CreateTask)
 
 ## 授权信息
 
@@ -449,7 +449,7 @@ string
 
 文件地址
 
-[http://1111.com/sss.mp3](http://1111.com/sss.mp3)
+http://1111.com/sss.mp3
 
 asrModelCode
 
@@ -599,13 +599,13 @@ string
 
 123.456.com/callback
 
-## 语音识别参数说明
+## [](#语音识别参数说明)语音识别参数说明
 
 上传语音文件时，需要通过 serviceChannel 或 clientChannel 设置不同角色的音轨，后台服务通过音轨来识别角色。或是通过 serviceChannelKeywords 设置客服通话中的关键字，后台服务通过客服通话中的关键字来识别角色。
 
-## 回调参数说明
+## [](#回调参数说明)回调参数说明
 
-假设调用方传入的回调地址是：[](http://aliyun.com/callback)[http://aliyun.com/callback](http://aliyun.com/callback)，那么回调时的完整 URL 为 [](http://aliyun.com/callback?taskId=xxx&timestamp=xxx&taskType=xxx&signature=YOUR_SIGNATURE&&success=xxx)[http://aliyun.com/callback?taskId=xxx&amp;timestamp=xxx&amp;taskType=xxx&amp;signature=YOUR\_SIGNATURE&amp;&amp;success=xxx](http://aliyun.com/callback?taskId=xxx&amp;timestamp=xxx&amp;taskType=xxx&amp;signature=YOUR_SIGNATURE&amp;&amp;success=xxx)，其中：
+假设调用方传入的回调地址是：http://aliyun.com/callback，那么回调时的完整 URL 为 http://aliyun.com/callback?taskId=xxx&timestamp=xxx&taskType=xxx&signature=xxx&&success=xxx，其中：
 
 -   taskId：为任务 ID
 -   timestamp：为调用时的时间戳，单位：毫秒
@@ -613,7 +613,7 @@ string
 -   success：为是否成功
 -   signature：为签名，调用方可用来判断请求是否来自阿里云；计算说明：将 taskId=xxx&timestamp=xxx&aliUid=xxx 进行 md5+base64 加密，注意顺序；调用方接到回调后，taskId 和 timestamp 可以从回调 URL 中获取，aliUid 即为阿里云主账号 ID。通过计算来比对自己计算出的 signature，与 URL 中的 signature 是否一致，详见下方 Java 代码示例。
 
-```
+```java
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -789,4 +789,4 @@ The request processing has failed due to some unknown error, exception or failur
 
 系统内部错误，请稍后重试
 
-访问[错误中心](https://api.alibabacloud.com/document/ContactCenterAI/2024-06-03/errorCode)查看更多错误码。
+访问[错误中心](< https://api.aliyun.com/document/ContactCenterAI/2024-06-03/errorCode>)查看更多错误码。

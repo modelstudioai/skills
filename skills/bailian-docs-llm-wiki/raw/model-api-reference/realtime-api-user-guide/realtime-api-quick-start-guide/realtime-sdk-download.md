@@ -2,7 +2,7 @@
 
 本文提供适用于Android、iOS、HarmonyOS、Windows、macOS、Electron和Linux平台的AOQ SDK下载链接及版本更新说明。
 
-## AOQ SDK下载
+## **AOQ SDK下载**
 
 **版本**
 
@@ -151,8 +151,10 @@ HarmonyOS
 
 [libPluginOpus.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260715/wvtyrh/libPluginOpus.zip)
 
-**重要**AOQ使用音频插件的方式加载Opus编解码器，如果需要Opus编解码时需要下载Opus插件并加载到工程内。
+**重要**
 
-## WebSocket SDK下载
+AOQ使用音频插件的方式加载Opus编解码器，如果需要Opus编解码时需要下载Opus插件并加载到工程内。
 
-参见[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+## **WebSocket SDK下载**
+
+参见[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。

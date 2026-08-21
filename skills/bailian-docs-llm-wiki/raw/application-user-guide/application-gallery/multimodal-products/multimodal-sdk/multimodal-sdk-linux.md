@@ -2,13 +2,15 @@
 
 本文介绍了如何使用阿里云百炼大模型服务提供的实时多模交互 Linux C++ SDK，包括SDK下载安装、关键接口及代码示例。
 
-## 前提条件
+## **前提条件**
 
-开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](raw/model-api-reference/preparations/get-api-key.md)。
+开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
 
-## 多模态实时交互服务接入架构
+## **多模态实时交互服务接入架构**
 
-## 下载安装
+![多模态实时交互服务接入架构-通用-流程图](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7227370571/p976841.jpg)
+
+## **下载安装**
 
 **最新SDK包**
 
@@ -38,16 +40,18 @@ Linux aarch64
 
 fd01741ce3c285e3a8bd602dc30bed67
 
-## 音频格式说明
+## **音频格式说明**
 
 Websocket 链路音频格式说明：
 
 -   上行：支持 pcm 和 opus 格式音频进行语音识别。仅支持用户送入pcm格式音频（16K采样率，16bit，单通道），opus格式音频由SDK内部自动完成编码。
+    
 -   下行：支持单通道 pcm、mp3和opus 音频流。其中opus音频流将会在SDK内部进行解码，用户收到的将是对应格式的pcm数据。
+    
 
 ## 接口说明
 
-### CreateConversation
+### **CreateConversation**
 
 创建交互，设置回调。对应销毁接口为DestroyConversation。
 
@@ -67,7 +71,7 @@ static Conversation* CreateConversation(
 
 其中ConversationCallbackMethod类型如下：
 
-#### ConversationCallbackMethod
+#### **ConversationCallbackMethod**
 
 SDK事件回调
 
@@ -81,7 +85,7 @@ SDK事件回调
 typedef void (*ConversationCallbackMethod)(ConvEvent*, void*);
 ```
 
-##### ConvEvent
+##### **ConvEvent**
 
 方法列表
 
@@ -179,7 +183,7 @@ int GetNetworkLatency();
 
 返回网络延迟信息, 单位为毫秒。当ConvEvent::kNetworkStatus时使用。
 
-###### ConvEventType
+###### **ConvEventType**
 
 **事件名称**
 
@@ -329,7 +333,7 @@ kAvatarStateChanged
 
 RTC模式使用，"AvatarStateChanged"事件。
 
-###### NetworkEventType
+###### **NetworkEventType**
 
 **事件名称**
 
@@ -345,7 +349,7 @@ kNetworkEventLatency
 
 其中EventTrackCallbackMethod类型如下：
 
-#### EventTrackCallbackMethod
+#### **EventTrackCallbackMethod**
 
 获得关键埋点信息日志
 
@@ -368,7 +372,7 @@ enum ConvLogLevel {
 };
 ```
 
-### DestroyConversation
+### **DestroyConversation**
 
 销毁交互。对应创建接口为CreateConversation。
 
@@ -380,7 +384,7 @@ enum ConvLogLevel {
 ConvRetCode DestroyConversation();
 ```
 
-### Connect
+### **Connect**
 
 组装一个start请求，用于发起对服务端的链接。返回成功并不代表与VoiceChat Server链接成功，仅代表发起start请求构建成功，是否链接成功以返回的Response为准。
 
@@ -393,7 +397,7 @@ ConvRetCode DestroyConversation();
 ConvRetCode Connect(const char* params);
 ```
 
-#### 百炼参数设置说明
+#### **百炼参数设置说明**
 
 **一级参数**
 
@@ -413,7 +417,7 @@ String
 
 是
 
-临时凭证，具体请查看[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+临时凭证，具体请查看[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
 
 workspace
 
@@ -500,11 +504,17 @@ String
 运行模式，默认"duplex"或"mix\_duplex"。
 
 -   full\_duplex：启用本地能力(VAD、AEC)，且云端提升打断效果的全双工模式。
+    
 -   duplex/mix\_duplex：启用本地能力(VAD、AEC)的全双工模式。
+    
 -   tap2talk/tap\_to\_talk：可点击打断的交互模式。
+    
 -   push2talk/push\_to\_talk
+    
 -   kws\_duplex/mix\_kws\_duplex：duplex/mix\_duplex模式基础上，前置唤醒功能。
+    
 -   cloud\_duplex：未启用本地能力(VAD、AEC)的双工模式。
+    
 
 注意：SDK中的AEC为软件AEC， 需使用回声硬参考，保障mic和ref时延严格稳定对齐。推荐使用硬件AEC。
 
@@ -555,8 +565,11 @@ int
 否
 
 -   0：送回第一通道数据，即对VAD友好的音频数据。
+    
 -   1：送回第二通道数据，即对ASR友好的音频数据。
+    
 -   2：默认设置，即VAD+ASR组成的双通道数据。
+    
 
 若为02C版本（纯云端RTC），则默认1，即返回MIC的音频数据。
 
@@ -718,9 +731,13 @@ int
 上行语音的采样率，支持范围：
 
 -   8000
+    
 -   16000
+    
 -   24000
+    
 -   48000
+    
 
 默认为16000。
 
@@ -762,7 +779,7 @@ String
 
 否
 
-合成语音的音色，支持范围取决于用户在[管控台](https://bailian.console.aliyun.com/?tab=app#/app/app-market/multi-modal-app)的应用配置中选择的TTS模型和可选音色。具体选择范围可参考[Python SDK](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-python-sdk.md)。
+合成语音的音色，支持范围取决于用户在[管控台](https://bailian.console.aliyun.com/?tab=app#/app/app-market/multi-modal-app)的应用配置中选择的TTS模型和可选音色。具体选择范围可参考[Python SDK](https://help.aliyun.com/zh/model-studio/cosyvoice-python-sdk#fbe0209896w38)。
 
 sample\_rate
 
@@ -773,8 +790,11 @@ int
 合成语音的采样率，默认由服务端指定。支持范围：
 
 -   16000
+    
 -   24000
+    
 -   48000
+    
 
 默认为24000。
 
@@ -950,7 +970,7 @@ JSONObject
 
 否
 
-用于设置并传入用户自定义的提示词中的变量。设置方法详见示例：[自定义提示词变量和传值](https://help.aliyun.com/zh/model-studio/multimodal-sdk-linux#84db981acd6za)。
+用于设置并传入用户自定义的提示词中的变量。设置方法详见示例：[自定义提示词变量和传值](#84db981acd6za)。
 
 user\_query\_params
 
@@ -958,7 +978,7 @@ JSONObject
 
 否
 
-用于设置并传入用户自定义的结构化后的对话变量，是给到大模型的额外信息。搭配提示词设置，增加大模型的环境感知能力。设置方法详见示例：[自定义对话变量和传值](https://help.aliyun.com/zh/model-studio/multimodal-sdk-linux#18ce21efcck1m)。
+用于设置并传入用户自定义的结构化后的对话变量，是给到大模型的额外信息。搭配提示词设置，增加大模型的环境感知能力。设置方法详见示例：[自定义对话变量和传值](#18ce21efcck1m)。
 
 nls\_rule
 
@@ -977,7 +997,7 @@ JSONObject
       "Start_custom1"
     ],
     "payload":[
-      "Start_task_group",
+      "Start_task_group", 
       "Start_task"
     ]
   }
@@ -1024,7 +1044,7 @@ payload.function的值改为"generation",
 
 payload.model的值改为"multimodal-dialog"。
 
-### Disconnect
+### **Disconnect**
 
 组装一个stop请求，用于发送指令告诉服务端中止链接。返回成功并不代表与VoiceChat Server断链成功，仅代表发起stop请求构建成功，是否断链成功以返回的Response为准。
 
@@ -1036,7 +1056,7 @@ payload.model的值改为"multimodal-dialog"。
 ConvRetCode Disconnect();
 ```
 
-### Interrupt
+### **Interrupt**
 
 打断交互，使AI进入听状态。
 
@@ -1048,7 +1068,7 @@ ConvRetCode Disconnect();
 ConvRetCode Interrupt();
 ```
 
-### SendAudioData
+### **SendAudioData**
 
 推送实时采集的音频数据。
 
@@ -1066,7 +1086,7 @@ ConvRetCode SendAudioData(const uint8_t* data, size_t data_size,
                           uint64_t timestamp = 0);
 ```
 
-### SendRefData
+### **SendRefData**
 
 推送参考音频数据，在音频数据送给播放器时推送。
 
@@ -1082,7 +1102,7 @@ ConvRetCode SendRefData(const uint8_t* data, size_t data_size,
                           uint64_t timestamp = 0);
 ```
 
-### SendResponseData
+### **SendResponseData**
 
 Listening/Idle状态下，通知服务端与用户主动交互，可以直接把上传的文本转换为语音下发，也可以上传文本调用大模型，返回的结果再转换为语音下发。
 
@@ -1096,7 +1116,7 @@ Listening/Idle状态下，通知服务端与用户主动交互，可以直接把
 ConvRetCode SendResponseData(const char* params);
 ```
 
-#### parameters参数设置
+#### **parameters参数设置**
 
 **参数**
 
@@ -1158,9 +1178,9 @@ Any
 
 将会透传给协议的payload中。
 
-#### parameters示例
+#### **parameters示例**
 
-##### 切换到视频模式
+##### **切换到视频模式**
 
 ```
 {
@@ -1176,7 +1196,7 @@ Any
 }
 ```
 
-##### 退出视频模式
+##### **退出视频模式**
 
 ```
 {
@@ -1192,7 +1212,7 @@ Any
 }
 ```
 
-##### 发送图片进行问答
+##### **发送图片进行问答**
 
 ```
 # 发送图片base64数据(支持小于180KB图片)
@@ -1218,7 +1238,7 @@ Any
 }
 ```
 
-### UpdateMessage
+### **UpdateMessage**
 
 更新参数，如p2t参数，或者发送参数，如UpdateInfo。
 
@@ -1231,7 +1251,7 @@ Any
 ConvRetCode UpdateMessage(const char* params);
 ```
 
-#### 更新自定义唤醒词（仅kws\_duplex有效）
+#### **更新自定义唤醒词（仅kws\_duplex有效）**
 
 ```
 {
@@ -1246,7 +1266,7 @@ ConvRetCode UpdateMessage(const char* params);
 }
 ```
 
-#### 更新其他参数
+#### **更新其他参数**
 
 ```
 {"type":"update_nls_parameters", "avatar":{}}
@@ -1257,11 +1277,11 @@ ConvRetCode UpdateMessage(const char* params);
 {"type":"update_nls_parameters", "extra_info":{}, "context":{}}
 ```
 
-#### 更新参数万能方法
+#### **更新参数万能方法**
 
-用户自定义服务端交互参数，`"type": "update_custom_nls_parameters"`表示使用用户自定义参数功能。
+用户自定义服务端交互参数，`_"type": "update_custom_nls_parameters"_` 表示使用用户自定义参数功能。
 
-`nls_rule`中规定参数在协议中添加的位置，如`"payload": ["Start_custom2", "SendSpeech_custom3"]`表示在向服务端发送`"Start"`协议时，`payload`中添加参数`"custom2":{"test":2}； "header": ["Start_custom1"]`表示在向服务端发送`"Start"`协议时，`header`中添加参数`"custom1":{"test":1}`。
+`_nls_rule_` 中规定参数在协议中添加的位置，如`_"payload": ["Start_custom2", "SendSpeech_custom3"]_` 表示在向服务端发送`"Start"`协议时，`payload`中添加参数`"custom2":{"test":2}；_"header": ["Start_custom1"]_` 表示在向服务端发送`"Start"`协议时，`header`中添加参数`"custom1":{"test":1}`。
 
 ```
 {
@@ -1288,11 +1308,11 @@ ConvRetCode UpdateMessage(const char* params);
 }
 ```
 
-#### 发送参数（UpdateInfo）
+#### **发送参数（UpdateInfo）**
 
 客户端更新事件，例如发送图片数据。
 
-##### 百炼协议参数
+##### **百炼协议参数**
 
 **参数**
 
@@ -1350,11 +1370,11 @@ JSONObject
 
 与Start消息中biz\_params相同，传递对话系统自定义参数。
 
-##### 百炼协议示例
+##### **百炼协议示例**
 
 ```
 {
-    "type": "update_info",
+  	"type": "update_info",
 	"parameters": {
 		"biz_params": {},
 		"client_info": {
@@ -1372,7 +1392,7 @@ JSONObject
 }
 ```
 
-#### 发送万能参数
+#### **发送万能参数**
 
 ```
 {
@@ -1399,7 +1419,7 @@ JSONObject
 }
 ```
 
-### SetAction
+### **SetAction**
 
 需要有一个音频（播放）开始/结束事件告知到SDK。
 
@@ -1415,7 +1435,7 @@ JSONObject
                         size_t data_size = 0);
 ```
 
-#### ConvAction
+#### **ConvAction**
 
 **枚举名**
 
@@ -1498,7 +1518,7 @@ kKeywordTrusted
 }
 ```
 
-### GetState
+### **GetState**
 
 获得当前各种状态。
 
@@ -1511,7 +1531,7 @@ kKeywordTrusted
 int GetState(StateType type);
 ```
 
-#### StateType
+#### **StateType**
 
 **枚举名**
 
@@ -1533,7 +1553,7 @@ kTypePlayerState
 
 PLAYER当前状态，枚举值为ConvConstants.ConvAppAction。
 
-##### DialogState
+##### **DialogState**
 
 **枚举名**
 
@@ -1555,7 +1575,7 @@ kDialogThinking
 
 AI（服务端）处于思考阶段。
 
-### GetResponse
+### **GetResponse**
 
 向SDK送入通过RTC获得的VoiceChat相关response。response将在VideoChat Native SDK内部进行解析，转成交互状态和相关事件给APP。
 
@@ -1584,9 +1604,9 @@ ConvRetCode GetResponse(const char* params);
 {"header":{"name":"AvatarStateChanged","namespace":"Conversation"},"payload":{"from_state":"2","seq_id":"2","to_state":"0"}}
 ```
 
-## 代码示例
+## **代码示例**
 
-### 语音对话初始化
+### **语音对话初始化**
 
 这一步通过设置回调函数来接收交互过程中的所有事件，包括对话状态、对话结果等。
 
@@ -1660,7 +1680,7 @@ Conversation* conversation = Conversation::CreateConversation(on_message_callbac
                                                               on_et_callback, NULL);
 ```
 
-### 语音对话发起建连
+### **语音对话发起建连**
 
 建连参数把包括账号信息以json的形式构建，具体参考接口文档。PushToTalk模式下，建连成功后对话状态处于Idle状态。
 
@@ -1731,20 +1751,20 @@ std::string gen_init_params() {
 ConvRetCode ret = conversation->Connect(gen_init_params().c_str());
 ```
 
-### 语音对话结束
+### **语音对话结束**
 
 ```
 ConvRetCode ret = conversation->Disconnect();
 ```
 
-### 语音对话释放
+### **语音对话释放**
 
 ```
 conversation->DestroyConversation();
 conversation = NULL;
 ```
 
-### 打断当前语音对话
+### **打断当前语音对话**
 
 对话正处于Responding状态可调用此接口打断，并进入Listening状态。
 
@@ -1752,7 +1772,7 @@ conversation = NULL;
 ConvRetCode ret = conversation->Interrupt();
 ```
 
-### PushToTalk模式用户开始说话
+### **PushToTalk模式用户开始说话**
 
 对话状态处于Idle状态时调用此接口，对话状态进入Listening。若对话状态处于Responding和Thinking，则打断当前状态重新进入Listening。调用接口成功后，用户所说的话持续送给服务端进行交互，直到停止。
 
@@ -1760,7 +1780,7 @@ ConvRetCode ret = conversation->Interrupt();
 ConvRetCode ret = conversation->SetAction(kStartHumanSpeech);
 ```
 
-### PushToTalk模式用户结束说话
+### **PushToTalk模式用户结束说话**
 
 用户所说的话持续送给服务端进行交互，直到调用此接口，AI将根据用户所说的话进行对应的反馈。
 
@@ -1768,7 +1788,7 @@ ConvRetCode ret = conversation->SetAction(kStartHumanSpeech);
 ConvRetCode ret = conversation->SetAction(kStopHumanSpeech);
 ```
 
-### 文本合成TTS
+### **文本合成TTS**
 
 SDK支持通过文本直接请求服务端合成音频。
 
@@ -1787,7 +1807,7 @@ writer["indentation"] = "";
 ConvRetCode ret = conversation->SendResponseData(Json::writeString(writer, root).c_str());
 ```
 
-### VQA交互发送图片实现多模交互
+### **VQA交互发送图片实现多模交互**
 
 VQA 是在对话过程中通过发送图片实现图片+语音的多模交互的功能。
 
@@ -1825,11 +1845,11 @@ Json::Value images(Json::arrayValue);
     ConversationUtils utils;
     image["type"] = "base64";
     image["value"] = utils.Base64EncodeFromFilePath(path/*图片路径*/);
-
+    
     // 发送图片链接的示例
     image["type"] = "url";
     image["value"] = "https://xxxx";
-
+    
     images.append(image);
 }
 parameters["images"] = images;
@@ -1841,7 +1861,7 @@ writer["indentation"] = "";
 ConvRetCode ret = conversation->SendResponseData(Json::writeString(writer, root).c_str());
 ```
 
-### LiveAI交互发送图片实现多模交互
+### **LiveAI交互发送图片实现多模交互**
 
 若使用此功能，需要Connect()入参中upstream.type设置为AudioAndVideo，即通过UpdateInfo接口持续发送图片数据来实现图片+语音的多模交互。图片大小只支持720p、480p。视频模式每500ms传一次。
 
@@ -1880,15 +1900,17 @@ if (!base64_content.empty()) {
 }
 ```
 
-### 自定义提示词变量和传值
+### **自定义提示词变量和传值**
 
 -   在管控台项目【提示词】配置自定义变量。
+    
 
 定义了一个`user_name`字段代表用户昵称。并将变量`user_name`以占位符形式${user\_name} 插入到Prompt 中。
 
 在控制台**提示词**编辑区顶部可通过**自定义变量**入口添加变量字段，并在Prompt正文中以`${变量名}`占位符形式引用。
 
 -   在代码中设置变量。
+    
 
 如下示例，设置`"user_name" = "大米"`。
 
@@ -1913,15 +1935,17 @@ std::string gen_init_params() {
 ConvRetCode ret = conversation->Connect(gen_init_params().c_str());
 ```
 
-### 自定义对话变量和传值
+### **自定义对话变量和传值**
 
 -   在管控台项目【对话变量】配置自定义变量。
+    
 
 添加一个`name`变量代表面前的人，添加一个`emotion`变量代表用户的心情。
 
 在控制台**提示词**编辑区下方的**对话变量**面板中，单击右上角**\+ 添加**按钮，依次录入变量名（如`name`、`emotion`）和对应描述（如`面前的人`、`用户的心情`）。
 
 -   在代码中设置变量。
+    
 
 如下示例，设置`"name" = "张三"`和`"emotion" = "难过"`。
 
@@ -1947,7 +1971,7 @@ std::string gen_init_params() {
 ConvRetCode ret = conversation->Connect(gen_init_params().c_str());
 ```
 
-## SDK错误码
+## **SDK错误码**
 
 **枚举值**
 
@@ -2339,10 +2363,16 @@ token返回失败
 
 * * *
 
-## 时序图说明
+## **时序图说明**
 
-### duplex
+### **duplex**
 
-### push2talk
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6431377471/p957958.png)
 
-### tap2talk
+### **push2talk**
+
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6431377471/p957956.png)
+
+### **tap2talk**
+
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6431377471/p957957.png)

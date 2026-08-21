@@ -4,14 +4,20 @@
 
 MultiModalDialog SDK是阿里云千问团队提供的支持音视频端到端多模实时交互的SDK。通过SDK对接千问大模型以及后端多种Agent，能够支持用户接入语音对话、天气、音乐、新闻等多种能力，并支持视频和图像的大模型对话能力。
 
-## 多模态实时交互服务架构
+## **多模态实时交互服务架构**
 
-## 前提条件
+![多模态实时交互服务接入架构-通用-流程图](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7227370571/p976841.jpg)
 
--   开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://bailian.console.aliyun.com/?tab=app#/app/app-market/multi-modal-app/myApp)和[API Key](raw/model-api-reference/preparations/get-api-key.md)。
+## **前提条件**
+
+-   开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://bailian.console.aliyun.com/?tab=app#/app/app-market/multi-modal-app/myApp)和[API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+    
 -   下载SDK和 Demo并配置必要的环境、依赖。
+    
 -   导入示例代码，按照调用流程接入SDK。
+    
 -   您可以直接运行压缩包中的 APK 测试程序，填入上方三个必要参数，即可进行测试。
+    
 
 Package
 
@@ -21,50 +27,58 @@ Version
 
 1.0.6.7
 
-## SDK接入
+## **SDK接入**
 
-### 交互数据链路说明
+### **交互数据链路说明**
 
 SDK使用WebSocket协议与服务端交互，支持AudioOnly和AudioAndVideo 两种模式：
 
 -   音频交互：仅支持音频和文本对话功能。
+    
 -   音视频交互：在交互中通过指令方式进入视频通话模式，客户端持续向服务端发送图片序列，实现端到端的音视频多模交互能力。
+    
 
-### 交互模式说明
+### **交互模式说明**
 
 SDK支持 **Push2Talk**、 **Tap2Talk**和**Duplex**（全双工）三种交互模式。
 
 -   Push2Talk: 长按说话，抬起结束的收音方式。
+    
 -   Tap2Talk: 点击开始说话，自动判断用户说话结束的收音方式。
+    
 -   Duplex: 全双工交互，连接开始后支持任意时刻开始说话，支持语音打断。
+    
 
-### 调用说明
+### **调用说明**
 
 SDK及其调用Demo。
 
-#### SDK引用
+#### **SDK引用**
 
 导入依赖库。
 
 -   app/src/main/libs
     
     -   convsdk-release\_\*.aar //阿里云VoiceChatSDK
+        
     -   multimodal\_dialog\_sdk.aar // 阿里云多模对话SDK
+        
     -   multimodal\_dialog\_tongyimetathings.aar //使用 License 模式接入服务使用的鉴权 SDK
+        
 -   其他Demo APP 引入的依赖：
     
     参考`app/build.gradle`
     
+    ```
+    implementation libs.androidbootstrap
+    implementation libs.okhttp
+    implementation libs.okio //Android OKHttp3应用要增加一个收发IO的okio包
+    implementation libs.http.logging.interceptor
+    implementation libs.core.ktx
+    ```
+    
 
-```
-implementation libs.androidbootstrap
-implementation libs.okhttp
-implementation libs.okio //Android OKHttp3应用要增加一个收发IO的okio包
-implementation libs.http.logging.interceptor
-implementation libs.core.ktx
-```
-
-#### 关键参数
+#### **关键参数**
 
 参数名称
 
@@ -90,7 +104,7 @@ api\_key
 
 String
 
-百炼服务接入[API Key](raw/model-api-reference/preparations/get-api-key.md)。请您在百炼平台创建API\_KEY，移动端为了安全考虑，您也可以在服务端接入[短时Token](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，并下发给客户端使用。
+百炼服务接入[API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。请您在百炼平台创建API\_KEY，移动端为了安全考虑，您也可以在服务端接入[短时Token](https://help.aliyun.com/zh/model-studio/generate-temporary-api-key)，并下发给客户端使用。
 
 workspace\_id
 
@@ -116,12 +130,14 @@ String
 
 WebSocket。
 
-#### Demo简介
+#### **Demo简介**
 
 -   **EntranceActivity** 入口页面，需要修改url/api\_key/app\_id等信息。
     
     -   可以通过页面选择对话使用Tap2Talk或者Duplex等模式。
+        
     -   使用 License 模式，请参考子文档【[使用 License 模式接入Android SDK](https://help.aliyun.com/zh/model-studio/multimodal-license-android)】。
+        
 -   **MultimodalDialogActivity**，对话交互实现类。
     
     -   Demo页面中引用TYAudioRecorder 作为录音输入，您可以替换为自己的实现。
@@ -131,198 +147,191 @@ WebSocket。
     -   Demo在音频交互模式下，支持VQA（图生文）功能，即通过语音说"拍照识别xxx"，触发服务下发拍照意图。之后：
         
         -   您可以将本地拍照并上传OSS（或其他内容服务生成公共链接），触发单张图片的识别和对话。
+            
         -   您也可以直接上传图片的 base64 数据，向服务请求图片识别对话结果。
+            
     -   Demo在VideoAndAudio音视频交互模式下，目前通过外部采集的方式输入图像序列，方便眼镜等IoT设备的采集和视频对话接入。
         
 
-#### 接口设计
+#### **接口设计**
 
-##### MultimodalDialog 对话入口类
+##### **MultimodalDialog 对话入口类**
 
 1.  MultiModalDialog
     
     初始化对话类，传入必要的全局参数。
     
-
-```
-/**
-     * 初始化
-     * @param context: 上下文
-     * @param url: 服务器地址
-     * @param chainMode: 链路模式
-     * @param workspaceId: 工作空间id
-     * @param appId: 应用id
-     * @param dialogMode: 对话模式
-     * */
-    fun MultiModalDialog(
-        context: Context,
-        url: String?,
-        chainMode: ChainMode?,
-        workspaceId: String?,
-        appId: String?,
-        dialogMode: DialogMode?
-    )
-```
-
+    ```
+    /**
+         * 初始化     
+         * @param context: 上下文
+         * @param url: 服务器地址
+         * @param chainMode: 链路模式
+         * @param workspaceId: 工作空间id
+         * @param appId: 应用id
+         * @param dialogMode: 对话模式
+         * */
+        fun MultiModalDialog(
+            context: Context,
+            url: String?,
+            chainMode: ChainMode?,
+            workspaceId: String?,
+            appId: String?,
+            dialogMode: DialogMode?
+        )
+    ```
+    
 2.  createConversation
     
     创建会话。
     
-
-```
-/**
-     * 初始化成功后，启动对话流程
-     * @param params 初始化参数
-     * @param chatCallback 主回调，除了初始化过程的所有消息，都会从这里透出给上层
-     */
-    fun createConversation(@NonNull MultiModalRequestParam params,chatCallback: IConversationCallback)
-```
-
+    ```
+    /**
+         * 初始化成功后，启动对话流程
+         * @param params 初始化参数
+         * @param chatCallback 主回调，除了初始化过程的所有消息，都会从这里透出给上层
+         */
+        fun createConversation(@NonNull MultiModalRequestParam params,chatCallback: IConversationCallback)
+    ```
+    
 3.  start
     
     开始对话。
     
-
-```
-/**
-     * 连接,启动对话
-     */
-    fun start()
-```
-
+    ```
+    /**
+         * 连接,启动对话
+         */
+        fun start()
+    ```
+    
 4.  stop
     
     结束对话。
     
-
-```
-/**
-     * 断开,结束对话
-     */
-    fun stop()
-```
-
+    ```
+    /**
+         * 断开,结束对话
+         */
+        fun stop()
+    ```
+    
 5.  destroy
-
-```
-/**
-     * 销毁实例
-     */
-    fun destroy()
-```
-
+    
+    ```
+    /**
+         * 销毁实例
+         */
+        fun destroy()
+    ```
+    
 6.  setConversationTimeout
     
     设置超时时间。
     
-
-```
-/**
-     * 设置对话超时时间,当服务未在指定时间内检出用户说话，上报timeout事件
-     * @param timeout 超时时间,单位ms
-     */
-    fun setConversationTimeout(timeout: Long)
-```
-
+    ```
+    /**
+         * 设置对话超时时间,当服务未在指定时间内检出用户说话，上报timeout事件
+         * @param timeout 超时时间,单位ms
+         */
+        fun setConversationTimeout(timeout: Long)
+    ```
+    
 7.  interrupt
     
     打断交互。
     
-
-```
-/**
-     * 打断AI说话
-     */
-    fun interrupt()
-```
-
+    ```
+    /**
+         * 打断AI说话
+         */
+        fun interrupt()
+    ```
+    
 8.  startSpeech
     
     通知服务端开始上传音频，注意需要在Listening状态才可以调用。只需要在Push2Talk模式下调用。
     
-
-```
-/**
- * 通知服务端开始上传音频，注意需要在Listening状态才可以调用。
- * 只需要在Push2Talk模式下调用。
- */
-fun startSpeech()
-```
-
+    ```
+    /**
+     * 通知服务端开始上传音频，注意需要在Listening状态才可以调用。
+     * 只需要在Push2Talk模式下调用。
+     */
+    fun startSpeech()
+    ```
+    
 9.  sendAudioData
     
     通知服务端上传音频。
     
-
-```
-/**
- * 通知服务端上传音频。
- * @param audioData 音频帧数据
- */
-fun sendAudioData(audioData: ByteArray?)
-```
-
+    ```
+    /**
+     * 通知服务端上传音频。
+     * @param audioData 音频帧数据
+     */
+    fun sendAudioData(audioData: ByteArray?)
+    ```
+    
 10.  stopSpeech
      
      通知服务端结束上传音频。只需要在Push2Talk模式下调用。
      
-
-```
-/**
- * 通知服务端结束上传音频。只需要在Push2Talk模式下调用。
- * Push2Talk 用户结束说话
- */
-fun stopSpeech()
-```
-
+     ```
+     /**
+      * 通知服务端结束上传音频。只需要在Push2Talk模式下调用。
+      * Push2Talk 用户结束说话
+      */
+     fun stopSpeech()
+     ```
+     
 11.  requestToRespond
      
      请求服务端回答指定问题或做TTS播放出来。
      
-
-```
-/**
-     * 请求服务端回答指定问题或做TTS播放出来
-     * @param type: transcript 表示直接把文本转语音，prompt 表示把文本送大模型回答
-     * @param text：对应的文本
-     * @param params: 额外参数
-     */
-    fun requestToRespond(type: String, text: String, params: JSONObject)
-```
-
+     ```
+     /**
+          * 请求服务端回答指定问题或做TTS播放出来
+          * @param type: transcript 表示直接把文本转语音，prompt 表示把文本送大模型回答
+          * @param text：对应的文本
+          * @param params: 额外参数
+          */
+         fun requestToRespond(type: String, text: String, params: JSONObject)
+     ```
+     
 12.  其他接口。
+     
+     ```
+     /**
+          * 当前配置是否是全双工模式
+          */
+         fun isDuplexMode(): Boolean
+     
+         /**
+          * Push2Talk 用户取消说话
+          */
+         fun cancelSpeech()
+     
+         /**
+          * 发送语音回复结束
+          * */
+         fun sendResponseEnded()
+         
+         /**
+          * 发送语音回复开始
+          * */
+         fun sendResponseStarted()
+     
+         /**
+          * 推送视频帧
+          *
+          * @param videoFrame 视频帧
+          * @param callback: 送帧结果回调
+          */
+         fun sendVideoFrame(videoFrame: TYVideoFrame,callback: IVideoChatPushFrameCallback)
+     ```
+     
 
-```
-/**
-     * 当前配置是否是全双工模式
-     */
-    fun isDuplexMode(): Boolean
-
-    /**
-     * Push2Talk 用户取消说话
-     */
-    fun cancelSpeech()
-
-    /**
-     * 发送语音回复结束
-     * */
-    fun sendResponseEnded()
-
-    /**
-     * 发送语音回复开始
-     * */
-    fun sendResponseStarted()
-
-    /**
-     * 推送视频帧
-     *
-     * @param videoFrame 视频帧
-     * @param callback: 送帧结果回调
-     */
-    fun sendVideoFrame(videoFrame: TYVideoFrame,callback: IVideoChatPushFrameCallback)
-```
-
-###### 关键参数枚举
+###### **关键参数枚举**
 
 ##### 参数
 
@@ -350,7 +359,7 @@ DUPLEX
 
 全双工交互
 
-###### MultiModalRequestParam 端云交互参数详情
+###### **MultiModalRequestParam 端云交互参数详情**
 
 **Start - Input Message**
 
@@ -440,7 +449,7 @@ object
 
 是
 
-参数说明参考下方 [parameters.upstream的参数说明](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/multimodal-sdk-android.md)表格
+参数说明参考下方 [parameters.upstream的参数说明](#c70ad23b46rng)表格
 
 downstream
 
@@ -448,7 +457,7 @@ object
 
 否
 
-参数说明参考下方 [parameters.downstream的参数说明](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/multimodal-sdk-android.md)表格
+参数说明参考下方 [parameters.downstream的参数说明](#18bc9ff97bxur)表格
 
 client\_info
 
@@ -456,7 +465,7 @@ object
 
 是
 
-参数说明参考下方 [parameters.client\_info的参数说明](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/multimodal-sdk-android.md)表格
+参数说明参考下方 [parameters.client\_info的参数说明](#51228f3bc17yk)表格
 
 biz\_params
 
@@ -464,7 +473,7 @@ object
 
 否
 
-参数说明参考下方 [parameters.biz\_params的参数说明](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/multimodal-sdk-android.md)表格
+参数说明参考下方 [parameters.biz\_params的参数说明](#eb89a03bfdk00)表格
 
 **parameters.upstream**的参数说明如下**：**
 
@@ -503,7 +512,7 @@ string
 -   duplex: 双工模式。
     
 
-三种模式的对比可以参考下方的[客户端使用的三种模式对比](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/multimodal-sdk-android.md)表格。
+三种模式的对比可以参考下方的[客户端使用的三种模式对比](#5e82453407pum)表格。
 
 audio\_format
 
@@ -681,7 +690,7 @@ boolean
 
 必须在intermediate\_text有指定dialog的情况下才会返回；
 
-只有[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中表明支持时间戳的音色和复刻音色才会返回。
+只有[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list#undefined)中表明支持时间戳的音色和复刻音色才会返回。
 
 transmit\_rate\_limit
 
@@ -797,7 +806,7 @@ json object
 
 否
 
-设置需要透传给agent 和 mcp 服务的参数，各类agent传递的参数参考[调用官方Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/official-agent.md)文档说明， mcp 传递参数依照 mcp 服务本身所需的参数。可以在extra\_config子节点中设置对话扩展参数，目前支持：1. enable\_web\_search，表示是否开启联网搜索。这里的设置优先级更高，会覆盖管控台配置；2. agent\_timeout，表示agent连接超时的时间，传值范围是10秒到120秒。如果不传，则默认为10秒。
+设置需要透传给agent 和 mcp 服务的参数，各类agent传递的参数参考[调用官方Agent](https://help.aliyun.com/zh/model-studio/official-agent)文档说明， mcp 传递参数依照 mcp 服务本身所需的参数。可以在extra\_config子节点中设置对话扩展参数，目前支持：1. enable\_web\_search，表示是否开启联网搜索。这里的设置优先级更高，会覆盖管控台配置；2. agent\_timeout，表示agent连接超时的时间，传值范围是10秒到120秒。如果不传，则默认为10秒。
 
 user\_prompt\_params
 
@@ -855,9 +864,9 @@ VAD检测方
 
 打断方式
 
-[RequestToSpeak](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#8f987c58ddg2i)消息打断
+[RequestToSpeak](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#8f987c58ddg2i)消息打断
 
-[RequestToSpeak](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#8f987c58ddg2i)消息打断
+[RequestToSpeak](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#8f987c58ddg2i)消息打断
 
 语音打断
 
@@ -934,7 +943,7 @@ VAD检测方
 }
 ```
 
-##### IConversationCallback （回调接口）
+##### **IConversationCallback （回调接口）**
 
 ```
 /**
@@ -998,13 +1007,13 @@ VAD检测方
     fun onDebugInfoTrack(level: Int, type: Constant.TYDebugInfoType, debugInfo: String)
 ```
 
-###### onConvEventCallback AI对话 Response详情
+###### **onConvEventCallback AI对话 Response详情**
 
 -   EVENT\_HUMAN\_SPEAKING\_DETAIL
     
     语音识别内容
     
-    ##### SpeechContent - response
+    ##### **SpeechContent - response**
     
     一级参数
     
@@ -1184,31 +1193,36 @@ VAD检测方
     ```
     
 
-#### 异常处理
+#### **异常处理**
 
-##### onErrorReceived - response
+##### **onErrorReceived - response**
 
-#### 通用错误码
+#### **通用错误码**
 
-如遇报错问题，请参见[多模态交互套件-错误码](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/multimodal-error-code.md)进行排查。
+如遇报错问题，请参见[多模态交互套件-错误码](https://help.aliyun.com/zh/model-studio/multimodal-error-code)进行排查。
 
 若问题仍未解决，请联系技术支持，反馈遇到的问题，并提供完整的request\_id和dialog\_id，以便进一步排查问题。
 
-#### 调用时序
+#### **调用时序**
 
-##### 全双工交互
+##### **全双工交互**
 
-##### 半双工交互
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0921377471/p957926.png)
 
-## 更多SDK接口使用说明
+##### **半双工交互**
 
-### 双工交互
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0921377471/p957927.png)
+
+## **更多SDK接口使用说明**
+
+### **双工交互**
 
 移动端Android SDK支持Duplex 双工交互模式。 在双工交互模式下，SDK支持在播放语音合成回复的同时，输入录音数据。当用户在此时说话时，服务会自动打断当前播报数据返回 (客户端播放器缓存需要应用层处理)，并开始新的回复。
 
 双工交互需要实现回声消除（AEC，Acoustic Echo Cancellation），Android SDK内置了回声消除算法。当您需要使用双工交互时，仍需要您进行必要的配置。
 
 -   输入麦克风录音音频
+    
 
 请将实时录音获取的音频数据通过如下接口传入SDK。
 
@@ -1217,6 +1231,7 @@ multiModalDialog.sendAudioData(data);
 ```
 
 -   输入参考通道音频
+    
 
 请将实时播放的音频数据通过如下接口传入SDK。注意传入数据需要保证与当前播放数据一致。
 
@@ -1224,7 +1239,7 @@ multiModalDialog.sendAudioData(data);
 multiModalDialog.sendRefData(data);
 ```
 
-### VQA交互
+### **VQA交互**
 
 VQA 是在对话过程中通过发送图片实现图片+语音的多模交互的功能。
 
@@ -1233,6 +1248,7 @@ VQA 是在对话过程中通过发送图片实现图片+语音的多模交互的
 当客户端通过回调函数`onConvEventCallback`收到拍照指令后， 发送图片链接或者base64数据（支持小于 180 KB 的图片）。
 
 -   处理"visual\_qa" command和上传拍照。
+    
 
 ```
 private void executeCmd(String cmd,String dialogId,String taskId){
@@ -1273,17 +1289,19 @@ public static JSONArray getMockOSSImage() {
   }
 ```
 
-### 通过 WebSocket 链路请求LiveAI
+### **通过 WebSocket 链路请求LiveAI**
 
 LiveAI （视频通话）是百炼多模交互提供的官方Agent。通过Android 全功能版本SDK， 您也可以在 WebSocket 链路中通过自行录制视频帧的方式来调用视频通话功能。
 
 注意：通过 WebSocket 调用 LiveAI发送图片只支持base64编码，每张图片的大小在 180 KB 以下。
 
 -   LiveAI调用时序
+    
 
-#### 
+#### ![截屏2025-06-20 11](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975541.png)
 
 -   关键代码示例
+    
 
 请注意参照如下的调用流程实现 通过 WebSocket 协议调用 LiveAI。
 
@@ -1372,7 +1390,7 @@ private static String getLocalImageBase64(){
 }
 ```
 
-### 文本合成TTS
+### **文本合成TTS**
 
 SDK支持通过文本直接请求服务端合成音频。
 
@@ -1384,15 +1402,17 @@ SDK支持通过文本直接请求服务端合成音频。
 conversation.requestToRespond("transcript","幸福是一种技能，是你摒弃了外在多余欲望后的内心平和。",null);
 ```
 
-### 自定义提示词变量和传值
+### **自定义提示词变量和传值**
 
 -   在管控台项目【提示词】配置自定义变量。
+    
 
 例如，定义了一个`user_name`字段代表用户昵称。并将变量`user_name`以占位符形式${user\_name} 插入到Prompt 中。
 
 在**提示词**编辑页面顶部，单击**{x} 自定义变量**按钮添加所需的自定义变量。
 
 -   在代码中设置变量。
+    
 
 如下示例，设置`"user_name" = "大米"`。
 
@@ -1407,12 +1427,16 @@ userPromptParams.put("user_name", "大米");
 ```
 
 -   请求回复
+    
 
-### ASR结果即时纠错
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975544.png)
+
+### **ASR结果即时纠错**
 
 在对话过程中，ASR 识别结果有可能出现错误或者非预期的结果。 除了配置热词之外，您也可以通过即时纠错功能接口上传词表进行实时干预。
 
 -   参数说明。
+    
 
 通过配置UpStream的AsrPostProcessing 参数来配置纠错词表。
 

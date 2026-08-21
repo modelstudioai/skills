@@ -1,21 +1,29 @@
 # 音乐生成
 
-Fun-Music 支持通过提示词描述音乐风格和场景，或提供自定义歌词，生成带有男声或女声的中文/英文完整歌曲 ，也支持生成纯音乐 。
+Fun-Music 支持通过提示词描述音乐风格和场景，或提供自定义歌词，生成带有男声或女声的中文/英文完整歌曲，也支持生成纯音乐。
 
-**重要**该模型目前处于邀测阶段，您需要前往[模型广场](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/fun-music-v1)申请开通后方可使用。该模型服务仅在华北2（北京）地域下可用。
+**重要**
 
-## 概述
+该模型目前处于邀测阶段，您需要前往[模型广场](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/fun-music-v1)申请开通后方可使用。该模型服务仅在华北2（北京）地域下可用。
+
+## **概述**
 
 Fun-Music 是端到端音乐生成模型，输入自然语言描述或自定义歌词即可生成完整歌曲或纯音乐：
 
 -   通过提示词（`prompt`）描述音乐风格、场景、情绪和乐器偏好，模型自动创作歌词并生成歌曲
+    
 -   通过歌词（`lyrics`）提供自定义歌词内容，模型据此谱曲并演唱
+    
 -   通过声音性别（`gender`）选择男声或女声（仅 `fun-music-v1` 模型）
+    
 -   通过纯音乐模式（`is_instrumental`\=true）生成无人声的纯音乐
+    
 -   支持流式和非流式两种输出模式
+    
 -   支持 MP3 和 WAV 两种音频格式输出
+    
 
-### 两个模型的区别
+### **两个模型的区别**
 
 Fun-Music 提供两个模型，主要区别如下：
 
@@ -49,7 +57,7 @@ gender
 
 不支持
 
-### 音频输出格式
+### **音频输出格式**
 
 通过 `format` 参数指定输出格式：
 
@@ -71,26 +79,30 @@ gender
 
 后期处理、高质量播放
 
-## 前提条件
+## **前提条件**
 
 -   已获取 API Key。获取方式请参见[获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+    
 -   已将 API Key 配置到环境变量（推荐）：
+    
+    ```
+    export DASHSCOPE_API_KEY="sk-xxx"
+    ```
+    
 
-```
-export DASHSCOPE_API_KEY="sk-xxx"
-```
+**说明**
 
-**说明**以下示例代码中的 `{WorkspaceId}` 需要替换为您的业务空间ID。获取方式请参见[业务空间管理](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)。
+以下示例代码中的 `{WorkspaceId}` 需要替换为您的业务空间ID。获取方式请参见[业务空间管理](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)。
 
-## 快速开始
+## **快速开始**
 
 以下示例展示三种典型用法。
 
-#### 通过提示词生成歌曲
+## 通过提示词生成歌曲
 
 传入 `prompt` 参数描述音乐风格和场景，模型将自动创作歌词并生成歌曲。
 
-curl
+## curl
 
 ```
 curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \
@@ -105,7 +117,7 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
-Python
+## Python
 
 ```
 import requests
@@ -134,7 +146,7 @@ audio_url = result["output"]["audio"]["url"]
 print(f"音乐生成成功！下载地址：{audio_url}")
 ```
 
-Java
+## Java
 
 ```
 import java.io.*;
@@ -173,11 +185,11 @@ public class FunMusicDemo {
 }
 ```
 
-#### 通过歌词生成歌曲
+## 通过歌词生成歌曲
 
 传入 `lyrics` 参数提供自定义歌词，模型将根据歌词谱曲并生成歌曲。
 
-curl
+## curl
 
 ```
 curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \
@@ -192,7 +204,7 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
-Python
+## Python
 
 ```
 import requests
@@ -233,7 +245,7 @@ audio_url = result["output"]["audio"]["url"]
 print(f"音乐生成成功！下载地址：{audio_url}")
 ```
 
-Java
+## Java
 
 ```
 import java.io.*;
@@ -281,11 +293,11 @@ public class FunMusicLyricsDemo {
 }
 ```
 
-#### 生成纯音乐
+## 生成纯音乐
 
 将 `is_instrumental` 设为 `true`，可生成无人声的纯音乐。当 `is_instrumental` 设为 `true` 时，`lyrics` 和 `gender` 参数将被忽略。
 
-curl
+## curl
 
 ```
 curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \
@@ -300,7 +312,7 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
-Python
+## Python
 
 ```
 import requests
@@ -329,7 +341,7 @@ audio_url = result["output"]["audio"]["url"]
 print(f"纯音乐生成成功！下载地址：{audio_url}")
 ```
 
-Java
+## Java
 
 ```
 import java.io.*;
@@ -368,18 +380,22 @@ public class FunMusicInstrumentalDemo {
 }
 ```
 
-## 创作指南
+## **创作指南**
 
-### 提示词（prompt）
+### **提示词（prompt）**
 
 `prompt` 是描述音乐创作意图的核心参数。模型会根据您的描述自动创作歌词、编曲并生成歌曲。
 
 **撰写建议**：具体描述情绪、场景、乐器偏好，能生成更贴合需求的音乐。
 
 -   推荐：`悲伤钢琴曲，雨夜思念`
+    
 -   不推荐：`悲伤音乐`（过于笼统）
+    
 
-**说明**您可以在提示词中直接指定乐器（如“钢琴伴奏”“萨克斯独奏”“古筝与竹笛”）、节奏（如“轻快节奏”“慢节拍”“密集鼓点”）和情感基调（如“温暖”“伤感”“热血”“慵懒”），模型会尽可能遵循这些描述进行创作。描述越具体，生成效果越贴合预期。
+**说明**
+
+您可以在提示词中直接指定乐器（如“钢琴伴奏”“萨克斯独奏”“古筝与竹笛”）、节奏（如“轻快节奏”“慢节拍”“密集鼓点”）和情感基调（如“温暖”“伤感”“热血”“慵懒”），模型会尽可能遵循这些描述进行创作。描述越具体，生成效果越贴合预期。
 
 **不同风格的提示词示例**
 
@@ -411,7 +427,7 @@ public class FunMusicInstrumentalDemo {
 
 欢快可爱的儿童歌曲，木琴与手鼓伴奏，节奏简单明快，教小朋友认识大自然
 
-### 歌词（lyrics）
+### **歌词（lyrics）**
 
 `lyrics` 参数用于传入您自己编写的歌词，模型将严格根据歌词内容谱曲并生成歌曲。在歌词中使用结构标签可以控制歌曲的段落编排。
 
@@ -442,6 +458,7 @@ public class FunMusicInstrumentalDemo {
 尾奏，渐弱收尾
 
 **歌词示例**
+
 ```
 [intro]
 琴键轻落，晚风微凉.
@@ -473,35 +490,45 @@ public class FunMusicInstrumentalDemo {
 琴声渐远，星光铺满长街.
 故事未完，下一页仍热烈.
 ```
+
 **创作要求**
 
 -   **原创性原则**：严禁抄袭已发表歌曲的歌词，不得模仿知名歌曲的押韵模式或标志性句式。
+    
 -   **内容安全**：禁止涉及政治、暴力、色情、低俗、恐怖、毒品等违法内容，保持内容健康、情感真挚。
+    
 -   **语言要求**：仅支持中文或英文，不支持日文、韩文等其他语言。
+    
 
-### 声音性别（gender）
+### **声音性别（gender）**
 
 通过 `gender` 参数选择演唱声音的性别，默认为女声。仅 `fun-music-v1` 模型支持该参数。
 
 -   `female`：女声（默认）
+    
 -   `male`：男声
+    
 
-### 纯音乐模式（is\_instrumental）
+### **纯音乐模式（is\_instrumental）**
 
 将 `is_instrumental` 参数设为 `true` 可生成无人声的纯音乐。此时 `lyrics` 和 `gender` 参数将被忽略。默认值为 `false`（生成歌曲）。
 
-## 进阶功能
+## **进阶功能**
 
-### 流式输出
+### **流式输出**
 
 流式模式支持边生成边返回音频数据，适用于实时播放等场景，`fun-music-v1` 和 `fun-music-preview` 均支持该模式。启用流式输出需要在请求头中添加 `X-DashScope-SSE: enable`。
 
-**说明**流式模式与非流式模式的输入参数字符数限制不同，请注意区分：
+**说明**
+
+流式模式与非流式模式的输入参数字符数限制不同，请注意区分：
 
 -   非流式模式：`lyrics` 支持中文 5~350 字符、英文 5~2000 字符，`prompt` 支持 1~2000 字符。
+    
 -   流式模式：`lyrics` 支持中文 300~350 字、英文 200~250 词，`prompt` 支持 5~1000 个中文汉字或英文单词。
+    
 
-curl
+## curl
 
 ```
 curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \
@@ -517,7 +544,7 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
-Python
+## Python
 
 ```
 import requests
@@ -561,7 +588,7 @@ with open(output_file, "wb") as f:
                 print(f"音乐生成完成！已保存到 {output_file}")
 ```
 
-Java
+## Java
 
 ```
 import java.io.*;
@@ -615,41 +642,43 @@ public class FunMusicStreamDemo {
 }
 ```
 
-## 支持的模型与地域
+## **支持的模型与地域**
 
-#### 华北2（北京）
+## 华北2（北京）
 
 调用以下模型时，请选择北京地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)：
 
 -   fun-music-v1
+    
 -   fun-music-preview
+    
 
-## API参考
+## **API参考**
 
-[音乐生成API参考](raw/model-api-reference/audio-api-references/music-generation-references/fun-music-api.md)
+[音乐生成API参考](https://help.aliyun.com/zh/model-studio/fun-music-api)
 
-## 常见问题
+## **常见问题**
 
-### 能否指定乐器、节奏或情感？
+### **能否指定乐器、节奏或情感？**
 
-可以。在 `prompt` 中直接描述即可，例如“钢琴伴奏，慢节拍，伤感”。模型会尽可能遵循这些描述进行创作。描述越具体，生成效果越贴合预期。详细的提示词撰写建议请参见[提示词（prompt）](https://help.aliyun.com/zh/model-studio/fun-music#rv94p4q5r6s7t)。
+可以。在 `prompt` 中直接描述即可，例如“钢琴伴奏，慢节拍，伤感”。模型会尽可能遵循这些描述进行创作。描述越具体，生成效果越贴合预期。详细的提示词撰写建议请参见[提示词（prompt）](#rv94p4q5r6s7t)。
 
-### 两个模型怎么选？
+### **两个模型怎么选？**
 
-`fun-music-v1` 支持通过 `gender` 参数选择男声或女声，且支持 `prompt` 和 `lyrics` 二选一。`fun-music-preview` 必须传入 `prompt`，不支持 `gender` 参数。两个模型的详细差异请参见[两个模型的区别](https://help.aliyun.com/zh/model-studio/fun-music#rv22v4w5x6y7z)。
+`fun-music-v1` 支持通过 `gender` 参数选择男声或女声，且支持 `prompt` 和 `lyrics` 二选一。`fun-music-preview` 必须传入 `prompt`，不支持 `gender` 参数。两个模型的详细差异请参见[两个模型的区别](#rv22v4w5x6y7z)。
 
-### 生成的音频 URL 有效期是多久？
+### **生成的音频 URL 有效期是多久？**
 
 音频文件下载 URL 的有效期为 24 小时，请在此时间内完成下载。超过有效期后 URL 将失效，需要重新调用接口生成。
 
-### lyrics 和 prompt 有什么区别？
+### **lyrics 和 prompt 有什么区别？**
 
 `lyrics` 参数用于传入您自己编写的歌词，模型将严格根据歌词内容谱曲并生成歌曲。`prompt` 参数用于传入对音乐风格、场景的自然语言描述，模型将自动创作并生成音乐。两个参数的必选性因模型而异：`fun-music-v1` 至少传入其中之一，若同时传入仅 `lyrics` 生效；`fun-music-preview` 必须传入 `prompt`，`lyrics` 为可选参数，传入后将优先作为歌词内容。
 
-### 流式和非流式模式如何选择？
+### **流式和非流式模式如何选择？**
 
 如果只需获取最终的完整音频文件，推荐使用非流式模式，接口调用更简单。如果需要在音乐生成过程中逐步获取音频数据（如边生成边播放），建议使用流式模式。
 
-### 流式和非流式模式的参数限制有何不同？
+### **流式和非流式模式的参数限制有何不同？**
 
 两种模式下 `lyrics` 和 `prompt` 的字符数限制存在差异。非流式模式下，`lyrics` 支持中文 5~350 字符、英文 5~2000 字符，`prompt` 支持 1~2000 字符。流式模式下，`lyrics` 支持中文 300~350 字、英文 200~250 词，`prompt` 支持 5~1000 个中文汉字或英文单词。请根据所选模式注意对应的参数限制。

@@ -1,12 +1,16 @@
 # 模型调用价格
 
-模型调用默认 按量计费 ，涵盖各类模型的计费规则与价格。
+模型调用默认**按量计费**，涵盖各类模型的计费规则与价格。
 
-**说明**本文仅展示模型调用**原价**，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)查看活动优惠。
+**说明**
 
-**说明**部分模型支持**上下文缓存**（显式缓存、隐式缓存）。缓存命中的输入 Token 及创建显式缓存的 Token 采用与标准输入不同的计费单价（例如显式缓存创建按标准输入单价的 125% 计费、命中按 10% 计费），本文价格表中的输入单价**不含**缓存单价。缓存的计费规则、单价折扣及支持的模型请参见[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)。
+本文仅展示模型调用**原价**，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)查看活动优惠。
 
-## 阶梯计费规则
+**说明**
+
+部分模型支持**上下文缓存**（显式缓存、隐式缓存）。缓存命中的输入 Token 及创建显式缓存的 Token 采用与标准输入不同的计费单价（例如显式缓存创建按标准输入单价的 125% 计费、命中按 10% 计费），本文价格表中的输入单价**不含**缓存单价。缓存的计费规则、单价折扣及支持的模型请参见[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)。
+
+## **阶梯计费规则**
 
 百炼部分模型实行阶梯计费。单价取决于单次请求的输入 Token 总量。该请求的所有 Token 均按对应阶梯的单价结算。
 
@@ -14,15 +18,17 @@
 
 例如，某模型设有两档计费区间：0 < Token ≤ 32K 和 32K < Token ≤ 128K。若输入 100K Token，因数值落在第二区间（32K < 100K ≤ 128K），所有 Token 均按第二档单价结算。
 
-## 文本生成-千问
+## **文本生成-千问**
 
-### 千问Max
+### **千问Max**
 
 计费规则：按输入Token和输出Token计费。
 
-影响计费的因素：若模型支持[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，其输入和输出Token单价均按实时推理价格的50%计费；若模型支持[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)，仅输入Token享有折扣。两者不能同时生效。
+影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费；若模型支持[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)，仅输入Token享有折扣。两者不能同时生效。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -38,13 +44,13 @@
 
 > **思维链+回答**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
 qwen3.8-max
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
@@ -62,7 +68,7 @@ qwen3.7-max
 
 > 当前能力等同于qwen3.7-max-2026-05-20
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
@@ -150,7 +156,7 @@ qwen3-max
 
 > 当前能力等同于qwen3-max-2026-01-23
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
@@ -250,7 +256,7 @@ qwen3-max-preview
 
 60元
 
-##### 更多模型
+##### **更多模型**
 
 **模型 ID（Model ID）**
 
@@ -262,7 +268,7 @@ qwen3-max-preview
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -632,7 +638,7 @@ qwen3-max-preview
 
 110.089元
 
-##### 更多模型
+##### **更多模型**
 
 **模型 ID（Model ID）**
 
@@ -648,7 +654,7 @@ qwen3-max-preview
 
 qwen-max
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 国际
 
@@ -918,13 +924,15 @@ qwen3.7-max-2026-05-20
 
 36元
 
-### 千问Plus
+### **千问Plus**
 
 计费规则：按输入Token和输出Token计费。
 
-影响计费的因素：若模型支持[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，其输入和输出Token单价均按实时推理价格的50%计费。
+影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -936,7 +944,7 @@ qwen3.7-max-2026-05-20
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -948,7 +956,7 @@ qwen3.7-plus
 
 > 当前能力等同于qwen3.7-plus-2026-05-26
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
@@ -1124,7 +1132,7 @@ qwen-plus
 
 > 当前能力等同于qwen-plus-2025-12-01
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 0<Token≤128K
 
@@ -1154,7 +1162,7 @@ qwen-plus
 
 qwen-plus-latest
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 0<Token≤128K
 
@@ -1290,7 +1298,7 @@ qwen-plus-2025-04-28
 
 100万Token
 
-##### 更多模型
+##### **更多模型**
 
 **模型 ID（Model ID）**
 
@@ -1300,7 +1308,7 @@ qwen-plus-2025-04-28
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -1966,7 +1974,7 @@ qwen-plus-2025-04-28
 
 29.357元
 
-##### 更多模型
+##### **更多模型**
 
 **模型 ID（Model ID）**
 
@@ -2458,13 +2466,15 @@ qwen3.6-plus-2026-04-02
 
 48元
 
-### 千问Flash
+### **千问Flash**
 
 计费规则：按输入Token和输出Token计费。
 
-影响计费的因素：若模型支持[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，其输入和输出Token单价均按实时推理价格的50%计费；若模型支持[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)，仅输入Token享有折扣。两者不能同时生效。
+影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费；若模型支持[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)，仅输入Token享有折扣。两者不能同时生效。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -2480,7 +2490,7 @@ qwen3.6-plus-2026-04-02
 
 > **思维链+回答**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -2488,7 +2498,7 @@ qwen3.7-flash
 
 > 当前能力等同于qwen3.7-flash-2026-07-15
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
@@ -2542,7 +2552,7 @@ qwen3.6-flash
 
 > 当前能力等同于qwen3.6-flash-2026-04-16
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
@@ -2584,7 +2594,7 @@ qwen3.5-flash
 
 > 当前能力等同于qwen3.5-flash-2026-02-23
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
@@ -2638,7 +2648,7 @@ qwen-flash
 
 > 当前能力等同于qwen-flash-2025-07-28
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
@@ -2846,7 +2856,7 @@ qwen-flash
 
 > 当前能力等同于qwen-flash-2025-07-28
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
@@ -3046,7 +3056,7 @@ qwen3.5-flash
 
 > 当前能力等同于qwen3.5-flash-2026-02-23
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
@@ -3076,7 +3086,7 @@ qwen-flash
 
 > 当前能力等同于qwen-flash-2025-07-28
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
@@ -3304,7 +3314,7 @@ qwen-flash
 
 > 当前能力等同于qwen-flash-2025-07-28
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
@@ -3462,13 +3472,15 @@ qwen3.6-flash-2026-04-16
 
 28.8元
 
-### 千问Turbo
+### **千问Turbo**
 
 计费规则：按输入Token和输出Token计费。
 
-影响计费的因素：若模型支持[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，其输入和输出Token单价均按实时推理价格的50%计费。
+影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -3480,7 +3492,7 @@ qwen3.6-flash-2026-04-16
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -3518,7 +3530,7 @@ qwen-turbo
 
 qwen-turbo
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 国际
 
@@ -3530,13 +3542,15 @@ qwen-turbo
 
 3.67元
 
-### QwQ
+### **QwQ**
 
 计费规则：按输入Token和输出Token计费。
 
-影响计费的因素：若模型支持[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，其输入和输出Token单价均按实时推理价格的50%计费。
+影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -3548,7 +3562,7 @@ qwen-turbo
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -3588,7 +3602,7 @@ qwq-plus
 
 计费规则：按输入Token和输出Token计费。
 
-影响计费的因素：若模型支持[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，其输入和输出Token单价均按实时推理价格的50%计费。
+影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
 
 #### 华北2（北京）
 
@@ -3598,13 +3612,13 @@ qwq-plus
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
 qwen-long
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 0.5元
 
@@ -3628,11 +3642,13 @@ qwen-long-2025-01-25
 
 100万Token
 
-### 千问Omni
+### **千问Omni**
 
-计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见计费与限流。
+计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费与限流](https://help.aliyun.com/zh/model-studio/qwen-omni#12db7427b94qt)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -3642,7 +3658,7 @@ qwen-long-2025-01-25
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -3710,7 +3726,7 @@ qwen3.5-omni-flash-2026-03-15
 
 100万Token
 
-更多模型
+##### 更多模型
 
 **模型 ID（Model ID）**
 
@@ -3720,7 +3736,7 @@ qwen3.5-omni-flash-2026-03-15
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -3946,7 +3962,7 @@ qwen3.5-omni-flash-2026-03-15
 
 89.18元
 
-更多模型
+##### 更多模型
 
 **模型 ID（Model ID）**
 
@@ -4088,11 +4104,13 @@ qwen-omni-turbo-2025-03-26
 
 65.246元
 
-### 千问Omni-Realtime
+### **千问Omni-Realtime**
 
-计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见计费与限流。
+计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费与限流](https://help.aliyun.com/zh/model-studio/realtime#dc0370c95d3ja)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -4102,7 +4120,7 @@ qwen-omni-turbo-2025-03-26
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -4170,7 +4188,7 @@ qwen3.5-omni-flash-realtime-2026-03-15
 
 100万Token
 
-更多模型
+##### 更多模型
 
 **模型 ID（Model ID）**
 
@@ -4178,7 +4196,7 @@ qwen3.5-omni-flash-realtime-2026-03-15
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -4374,7 +4392,7 @@ qwen3.5-omni-flash-realtime-2026-03-15
 
 132.65元
 
-更多模型
+##### 更多模型
 
 **模型 ID（Model ID）**
 
@@ -4502,11 +4520,13 @@ qwen-omni-turbo-realtime-2025-05-08
 
 65.246元
 
-### QVQ
+### **QVQ**
 
 计费规则：按输入Token和输出Token计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -4516,7 +4536,7 @@ qwen-omni-turbo-realtime-2025-05-08
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -4558,9 +4578,11 @@ qvq-max
 
 计费规则：按输入Token和输出Token计费。
 
-影响计费的因素：若模型支持[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，其输入和输出Token单价均按实时推理价格的50%计费。
+影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -4576,7 +4598,7 @@ qvq-max
 
 > **思维链+回答**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -4584,7 +4606,7 @@ qwen3-vl-plus
 
 > 当前能力等同于qwen3-vl-plus-2025-12-19
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
@@ -4662,7 +4684,7 @@ qwen3-vl-flash
 
 > 当前能力等同于qwen3-vl-flash-2026-01-22
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
@@ -4736,7 +4758,7 @@ qwen3-vl-flash-2025-10-15
 
 6元
 
-##### 更多模型
+##### **更多模型**
 
 **模型 ID（Model ID）**
 
@@ -4746,7 +4768,7 @@ qwen3-vl-flash-2025-10-15
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -5134,7 +5156,7 @@ qwen3-vl-flash-2025-10-15
 
 7.046元
 
-##### 更多模型
+##### **更多模型**
 
 **模型 ID（Model ID）**
 
@@ -5416,9 +5438,11 @@ qwen3-vl-plus-2025-09-23
 
 计费规则：按输入Token和输出Token计费。
 
-影响计费的因素：若模型支持[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，其输入和输出Token单价均按实时推理价格的50%计费。
+影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -5428,7 +5452,7 @@ qwen3-vl-plus-2025-09-23
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -5444,7 +5468,7 @@ qwen-vl-ocr
 
 > 当前能力等同于qwen-vl-ocr-2025-11-20
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 0.3元
 
@@ -5454,7 +5478,7 @@ qwen-vl-ocr
 
 qwen-vl-ocr-latest
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 0.3元
 
@@ -5592,7 +5616,7 @@ qwen-vl-ocr-2025-11-20
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -5600,7 +5624,7 @@ qwen-audio-turbo
 
 目前仅供免费体验。
 
-> 免费额度用完后不可调用，推荐使用全模态（Qwen-Omni）作为替代模型
+> 免费额度用完后不可调用，推荐使用[全模态（Qwen-Omni）](https://help.aliyun.com/zh/model-studio/qwen-omni)作为替代模型
 
 10万Token
 
@@ -5618,7 +5642,7 @@ qwen-audio-turbo-latest
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -5642,7 +5666,9 @@ qwen-math-turbo
 
 影响计费的因素：若模型支持[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)，仅输入Token享有折扣。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -5654,7 +5680,7 @@ qwen-math-turbo
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -5804,7 +5830,7 @@ qwen3-coder-flash-2025-07-28
 
 25元
 
-##### 更多模型
+##### **更多模型**
 
 **模型 ID（Model ID）**
 
@@ -5814,7 +5840,7 @@ qwen3-coder-flash-2025-07-28
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -6306,11 +6332,13 @@ qwen3-coder-flash-2025-07-28
 
 25元
 
-### 千问翻译模型
+### **千问翻译模型**
 
 计费规则：按输入Token和输出Token计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -6320,7 +6348,7 @@ qwen3-coder-flash-2025-07-28
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -6486,7 +6514,7 @@ qwen-mt-lite
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 qwen-doc-turbo
 
@@ -6496,7 +6524,7 @@ qwen-doc-turbo
 
 无免费额度
 
-### 千问深入研究模型
+### **千问深入研究模型**
 
 计费规则：按输入Token和输出Token计费。
 
@@ -6508,7 +6536,7 @@ qwen-doc-turbo
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 qwen-deep-research
 
@@ -6526,11 +6554,11 @@ qwen-deep-research-2025-12-15
 
 无免费额度
 
-### 通义晓蜜对话分析模型
+### **通义晓蜜对话分析模型**
 
 计费规则：按输入Token和输出Token计费。
 
-影响计费的因素：若模型支持[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，其输入和输出Token单价均按实时推理价格的50%计费；若模型支持[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)，仅输入Token享有折扣。两者不能同时生效。
+影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费；若模型支持[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)，仅输入Token享有折扣。两者不能同时生效。
 
 #### 华北2（北京）
 
@@ -6540,7 +6568,7 @@ qwen-deep-research-2025-12-15
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -6560,13 +6588,15 @@ tongyi-xiaomi-analysis-pro
 
 100万Token
 
-## 文本生成-千问-开源版
+## **文本生成-千问-开源版**
 
-### Qwen3.8
+### **Qwen3.8**
 
 计费规则：按输入Token和输出Token计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -6582,7 +6612,7 @@ tongyi-xiaomi-analysis-pro
 
 > **思维链+回答**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -6658,11 +6688,13 @@ qwen3.8-27b
 
 21.875元
 
-### Qwen3.6
+### **Qwen3.6**
 
 计费规则：按输入Token和输出Token计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -6674,7 +6706,7 @@ qwen3.8-27b
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -6802,11 +6834,13 @@ qwen3.6-35b-a3b
 
 10.8元
 
-### Qwen3.5
+### **Qwen3.5**
 
 计费规则：按输入Token和输出Token计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -6818,7 +6852,7 @@ qwen3.6-35b-a3b
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -7162,11 +7196,13 @@ qwen3.5-35b-a3b
 
 12.8元
 
-### Qwen3
+### **Qwen3**
 
 计费规则：按输入Token和输出Token计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -7178,7 +7214,7 @@ qwen3.5-35b-a3b
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -7478,7 +7514,7 @@ qwen3-8b
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -7788,11 +7824,13 @@ qwen3-8b
 
 5元
 
-### Qwen-Omni
+### **Qwen-Omni**
 
-计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见计费与限流。
+计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费与限流](https://help.aliyun.com/zh/model-studio/qwen-omni#12db7427b94qt)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -7802,7 +7840,7 @@ qwen3-8b
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -7884,11 +7922,13 @@ qwen2.5-omni-7b
 
 99.153元
 
-### Qwen3-Omni-Captioner
+### **Qwen3-Omni-Captioner**
 
 计费规则：按输入Token和输出Token计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -7898,7 +7938,7 @@ qwen2.5-omni-7b
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -7928,11 +7968,13 @@ qwen3-omni-30b-a3b-captioner
 
 22.458元
 
-### Qwen-VL
+### **Qwen-VL**
 
 计费规则：按输入Token和输出Token计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -7946,7 +7988,7 @@ qwen3-omni-30b-a3b-captioner
 
 > **思维链+回答**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -8312,7 +8354,7 @@ qwen3-vl-8b-instruct
 
 2元
 
-### Qwen-Audio
+### **Qwen-Audio**
 
 计费规则：按输入Token和输出Token计费。
 
@@ -8324,7 +8366,7 @@ qwen3-vl-8b-instruct
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -8332,17 +8374,19 @@ qwen2-audio-instruct
 
 目前仅供免费体验。
 
-> 免费额度用完后不可调用，推荐使用全模态（Qwen-Omni）作为替代模型。
+> 免费额度用完后不可调用，推荐使用[全模态（Qwen-Omni）](https://help.aliyun.com/zh/model-studio/qwen-omni)作为替代模型。
 
 10万Token
 
 qwen-audio-chat
 
-### Qwen-Coder
+### **Qwen-Coder**
 
 计费规则：按输入Token和输出Token计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -8354,7 +8398,7 @@ qwen-audio-chat
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -8636,17 +8680,21 @@ qwen3-coder-next
 
 29.977元
 
-## 文本生成-第三方模型
+## **文本生成-第三方模型**
 
-### DeepSeek
+### **DeepSeek**
 
 计费规则：按输入Token和输出Token计费。
 
-影响计费的因素：若模型支持[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，其输入和输出Token单价均按实时推理价格的50%计费。
+影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
 
-**说明**DeepSeek-V4-Flash-0731 已于 2026-08-17 00:00 起调整为峰谷定价模式，调整后单价可见下表，更多信息详见[DeepSeek-V4-Flash-0731 模型涨价通知](https://www.aliyun.com/notice/118555)。
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+
+**说明**
+
+DeepSeek-V4-Flash-0731 已于 2026-08-17 00:00 起调整为峰谷定价模式，调整后单价可见下表，更多信息详见[DeepSeek-V4-Flash-0731 模型涨价通知](https://www.aliyun.com/notice/118555)。
 
 #### 华北2（北京）
 
@@ -8658,7 +8706,7 @@ qwen3-coder-next
 
 > **思维链+回答**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -8738,7 +8786,7 @@ deepseek-v3.1
 
 deepseek-r1
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 4元
 
@@ -8756,7 +8804,7 @@ deepseek-r1-0528
 
 deepseek-v3
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 2元
 
@@ -8796,13 +8844,13 @@ deepseek-r1-distill-llama-8b
 
 已下线
 
-> 该模型已下线，推荐使用深度思考、DeepSeek-阿里云、Kimi-阿里云作为替代模型。
+> 该模型已下线，推荐使用[深度思考](https://help.aliyun.com/zh/model-studio/deep-thinking)、[DeepSeek-阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)、[Kimi-阿里云](https://help.aliyun.com/zh/model-studio/kimi-api)作为替代模型。
 
 deepseek-r1-distill-llama-70b
 
 目前仅供免费体验
 
-> 免费额度用完后不可调用，推荐使用深度思考、DeepSeek-阿里云、Kimi-阿里云作为替代模型
+> 免费额度用完后不可调用，推荐使用[深度思考](https://help.aliyun.com/zh/model-studio/deep-thinking)、[DeepSeek-阿里云](https://help.aliyun.com/zh/model-studio/deepseek-api)、[Kimi-阿里云](https://help.aliyun.com/zh/model-studio/kimi-api)作为替代模型
 
 100万Token
 
@@ -9124,7 +9172,7 @@ deepseek-v4-flash-0731
 
 闲时 4.813元
 
-### DeepSeek-硅基流动
+### **DeepSeek-硅基流动**
 
 #### 华北2（北京）
 
@@ -9164,7 +9212,7 @@ siliconflow/deepseek-v3-0324
 
 8元
 
-### DeepSeek-快手万擎
+### **DeepSeek-快手万擎**
 
 #### 华北2（北京）
 
@@ -9218,11 +9266,13 @@ vanchin/deepseek-ocr
 
 0.216元
 
-### Kimi
+### **Kimi**
 
 计费规则：按输入Token和输出Token计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -9234,9 +9284,19 @@ vanchin/deepseek-ocr
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
+
+kimi-k3
+
+仅思考模式
+
+20元
+
+100元
+
+100万Token
 
 kimi-k2.7-code
 
@@ -9332,6 +9392,16 @@ kimi-k2.5
 
 **输出单价（每百万Token）**
 
+kimi-k3
+
+全球
+
+仅思考模式
+
+20元
+
+100元
+
 kimi-k2.7-code
 
 全球
@@ -9363,6 +9433,18 @@ kimi-k2.5
 **输入单价（每百万Token）**
 
 **输出单价（每百万Token）**
+
+kimi-k3
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+仅思考模式
+
+20元
+
+100元
 
 kimi-k2.7-code
 
@@ -9398,6 +9480,16 @@ kimi-k2.5
 
 **输出单价（每百万Token）**
 
+kimi-k3
+
+国际
+
+仅思考模式
+
+21.875元
+
+109.376元
+
 kimi-k2.7-code
 
 国际
@@ -9408,7 +9500,7 @@ kimi-k2.7-code
 
 29.977元
 
-### Kimi-月之暗面
+### **Kimi-月之暗面**
 
 计费规则：按输入Token和输出Token计费。
 
@@ -9422,7 +9514,7 @@ kimi-k2.7-code
 
 > **思维链和回答**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 kimi/kimi-k2.7-code-highspeed
 
@@ -9458,11 +9550,13 @@ kimi/kimi-k2.5
 
 21元
 
-### GLM
+### **GLM**
 
 计费规则：按输入Token和输出Token计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -9478,7 +9572,7 @@ kimi/kimi-k2.5
 
 > **思维链和回答**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -9688,7 +9782,7 @@ glm-5.1
 
 > **思维链和回答**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -9816,7 +9910,7 @@ glm-5.1
 
 28元
 
-### GLM-智谱
+### **GLM-智谱**
 
 计费规则：按输入Token和输出Token计费。
 
@@ -9832,7 +9926,7 @@ glm-5.1
 
 > **思维链和回答**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 ZHIPU/GLM-5.3
 
@@ -9890,7 +9984,7 @@ ZHIPU/GLM-5
 
 > **思维链和回答**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -9912,7 +10006,7 @@ MiniMax-M2.1
 
 8.4元
 
-### MiniMax-稀宇科技
+### **MiniMax-稀宇科技**
 
 计费规则：按输入Token和输出Token计费。
 
@@ -9928,7 +10022,7 @@ MiniMax-M2.1
 
 > **思维链和回答**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 MiniMax/MiniMax-M3
 
@@ -9972,7 +10066,7 @@ MiniMax/MiniMax-M2.1
 
 8.4元
 
-### MiMo-小米
+### **MiMo-小米**
 
 计费规则：按输入Token和输出Token计费。
 
@@ -9988,7 +10082,7 @@ MiniMax/MiniMax-M2.1
 
 > **思维链和回答**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 xiaomi/mimo-v2.5-pro
 
@@ -10006,7 +10100,7 @@ xiaomi/mimo-v2.5-pro
 
 42元
 
-### Stepfun-阶跃星辰
+### **Stepfun-阶跃星辰**
 
 #### 华北2（北京）
 
@@ -10018,7 +10112,7 @@ xiaomi/mimo-v2.5-pro
 
 > **思维链和回答**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 stepfun/step-3.7-flash
 
@@ -10028,9 +10122,9 @@ stepfun/step-3.7-flash
 
 无
 
-## 图像生成
+## **图像生成**
 
-计费规则：按输入图像和成功生成的 **图像张数**计费。未说明输入图像价格的模型，输入不计费，仅输出计费。
+计费规则：按输入图像和成功生成的 **图像张数** 计费。未说明输入图像价格的模型，输入不计费，仅输出计费。
 
 计费公式：`费用 = 输入图像单价 × 输入的图像张数 + 输出图像单价 × 输出的图像张数`。
 
@@ -10041,13 +10135,17 @@ stepfun/step-3.7-flash
 假设输入图像单价为0，输出图像单价为 0.10元/张。若您调用接口请求生成 4 张图像，但实际仅成功返回 3 张图像的 URL，另 1 张生成失败，系统将仅对成功生成的图像进行计费。
 
 -   计费数量：3 张。
+    
 -   费用计算：0.1 × 3 = 0.3元。
+    
 
-### 千问图像生成与编辑
+### **千问图像生成与编辑**
 
-> 按输入输出的图像张数计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 按输入输出的图像张数计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -10059,7 +10157,7 @@ stepfun/step-3.7-flash
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -10131,7 +10229,7 @@ qwen-image-3.0
 
 0.224826元/张
 
-#### 德国（法兰克福）
+## 德国（法兰克福）
 
 **模型 ID（Model ID）**
 
@@ -10171,7 +10269,7 @@ qwen-image-3.0
 
 0.18元/张
 
-#### 日本（东京）
+## 日本（东京）
 
 **模型 ID（Model ID）**
 
@@ -10211,11 +10309,13 @@ qwen-image-3.0
 
 0.18元/张
 
-### 千问文生图
+### **千问文生图**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -10223,7 +10323,7 @@ qwen-image-3.0
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -10383,11 +10483,13 @@ qwen-image
 
 0.256873元/张
 
-### 千问图像编辑
+### **千问图像编辑**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -10395,7 +10497,7 @@ qwen-image
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -10567,9 +10669,9 @@ qwen-image-edit
 
 0.330266元/张
 
-### 千问图像翻译
+### **千问图像翻译**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
 #### 华北2（北京）
 
@@ -10577,7 +10679,7 @@ qwen-image-edit
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -10587,11 +10689,13 @@ qwen-mt-image
 
 100张
 
-### Z-Image
+### **Z-Image**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -10599,7 +10703,7 @@ qwen-mt-image
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -10627,11 +10731,13 @@ z-image-turbo
 
 开启提示词改写（`prompt_extend=true`）：0.220177元/张
 
-### 万相文生图
+### **万相文生图**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -10639,7 +10745,7 @@ z-image-turbo
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -10763,11 +10869,13 @@ wan2.6-t2i
 
 0.20元/张
 
-### 万相图像生成与编辑
+### **万相图像生成与编辑**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -10775,7 +10883,7 @@ wan2.6-t2i
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -10851,11 +10959,13 @@ wan2.6-image
 
 0.20元/张
 
-### 万相通用图像编辑
+### **万相通用图像编辑**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -10863,7 +10973,7 @@ wan2.6-image
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -10893,9 +11003,9 @@ wan2.5-i2i-preview
 
 0.220177元/张
 
-### 万相涂鸦作画
+### **万相涂鸦作画**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
 #### 华北2（北京）
 
@@ -10903,7 +11013,7 @@ wan2.5-i2i-preview
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -10913,9 +11023,9 @@ wanx-sketch-to-image-lite
 
 500张
 
-### 万相图像局部重绘
+### **万相图像局部重绘**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
 #### 华北2（北京）
 
@@ -10923,7 +11033,7 @@ wanx-sketch-to-image-lite
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -10931,13 +11041,13 @@ wanx-x-painting
 
 目前仅供免费体验。
 
-> 免费额度用完后不可调用，推荐参考图像编辑-千问或图像编辑-万相2.1获取替代方案。
+> 免费额度用完后不可调用，推荐参考[图像编辑-千问](https://help.aliyun.com/zh/model-studio/qwen-image-edit-guide)或[图像编辑-万相2.1](https://help.aliyun.com/zh/model-studio/wanx-image-edit)获取替代方案。
 
 500张
 
 ### 人像风格重绘
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
 #### 华北2（北京）
 
@@ -10945,7 +11055,7 @@ wanx-x-painting
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -10955,9 +11065,9 @@ wanx-style-repaint-v1
 
 500张
 
-### 图像背景生成
+### **图像背景生成**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
 #### 华北2（北京）
 
@@ -10965,7 +11075,7 @@ wanx-style-repaint-v1
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -10975,9 +11085,9 @@ wanx-background-generation-v2
 
 500张
 
-### 图像画面扩展
+### **图像画面扩展**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
 #### 华北2（北京）
 
@@ -10985,7 +11095,7 @@ wanx-background-generation-v2
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -10995,9 +11105,9 @@ image-out-painting
 
 500张
 
-### 人物实例分割
+### **人物实例分割**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
 #### 华北2（北京）
 
@@ -11005,7 +11115,7 @@ image-out-painting
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11017,9 +11127,9 @@ image-instance-segmentation
 
 500张
 
-### 图像擦除补全
+### **图像擦除补全**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
 #### 华北2（北京）
 
@@ -11027,7 +11137,7 @@ image-instance-segmentation
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11035,13 +11145,13 @@ image-erase-completion
 
 目前仅供免费体验。
 
-> 免费额度用完后不可调用，推荐参考图像编辑-千问或图像编辑-万相2.1获取替代方案。
+> 免费额度用完后不可调用，推荐参考[图像编辑-千问](https://help.aliyun.com/zh/model-studio/qwen-image-edit-guide)或[图像编辑-万相2.1](https://help.aliyun.com/zh/model-studio/wanx-image-edit)获取替代方案。
 
 500张
 
-### 虚拟模特
+### **虚拟模特**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
 #### 华北2（北京）
 
@@ -11049,7 +11159,7 @@ image-erase-completion
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11057,15 +11167,15 @@ wanx-virtualmodel
 
 目前仅供免费体验。
 
-> 免费额度用完后不可调用，推荐参考图像编辑-千问或图像编辑-万相2.1获取替代方案。
+> 免费额度用完后不可调用，推荐参考[图像编辑-千问](https://help.aliyun.com/zh/model-studio/qwen-image-edit-guide)或[图像编辑-万相2.1](https://help.aliyun.com/zh/model-studio/wanx-image-edit)获取替代方案。
 
 各500张
 
 virtualmodel-v2
 
-### 鞋靴模特
+### **鞋靴模特**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
 #### 华北2（北京）
 
@@ -11073,7 +11183,7 @@ virtualmodel-v2
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11085,9 +11195,9 @@ shoemodel-v1
 
 500张
 
-### 创意海报生成
+### **创意海报生成**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
 #### 华北2（北京）
 
@@ -11095,7 +11205,7 @@ shoemodel-v1
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11103,15 +11213,18 @@ wanx-poster-generation-v1
 
 目前仅供免费体验。
 
-> 免费额度用完后不可调用，推荐参考图像编辑-千问或图像编辑-万相2.1获取替代方案。
+> 免费额度用完后不可调用，推荐参考[图像编辑-千问](https://help.aliyun.com/zh/model-studio/qwen-image-edit-guide)或[图像编辑-万相2.1](https://help.aliyun.com/zh/model-studio/wanx-image-edit)获取替代方案。
 
 500张
 
-### 人物写真生成-FaceChain
+### **人物写真生成-FaceChain**
 
 -   facechain-facedetect：限时免费。
+    
 -   facechain-finetune：按训练次数计费，请求失败不计费。
--   facechain-generation：输入不计费，输出计费。输出按成功生成的图片张数计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+    
+-   facechain-generation：输入不计费，输出计费。输出按成功生成的图片张数计费，计费规则请参见[图像生成](#26310bc5cf4do)。
+    
 
 #### 华北2（北京）
 
@@ -11119,7 +11232,7 @@ wanx-poster-generation-v1
 
 **单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 facechain-facedetect
 
@@ -11143,9 +11256,9 @@ facechain-generation
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
-### 创意文字生成-WordArt锦书
+### **创意文字生成-WordArt锦书**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
 #### 华北2（北京）
 
@@ -11153,7 +11266,7 @@ facechain-generation
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11167,18 +11280,22 @@ wordart-semantic
 
 0.24元/张
 
-### AI试衣-OutfitAnyone
+### **AI试衣-OutfitAnyone**
 
--   aitryon：输入不计费，输出计费。计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
--   aitryon-plus：输入不计费，输出计费。计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+-   aitryon：输入不计费，输出计费。计费规则请参见[图像生成](#26310bc5cf4do)。
+    
+-   aitryon-plus：输入不计费，输出计费。计费规则请参见[图像生成](#26310bc5cf4do)。
+    
 -   aitryon-parsing-v1：输入计费，输出不计费。按输入的图像张数计费，请求失败不计费。
--   aitryon-refiner：输入不计费，输出计费。计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+    
+-   aitryon-refiner：输入不计费，输出计费。计费规则请参见[图像生成](#26310bc5cf4do)。
+    
 
 #### 华北2（北京）
 
 **模型 ID（Model ID）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11274,11 +11391,11 @@ aitryon-refiner
 
 生成数量 ＞ 2.5万张
 
-## 图像生成-第三方模型
+## **图像生成-第三方模型**
 
-### 可灵-图像生成
+### **可灵-图像生成**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
 #### 华北2（北京）
 
@@ -11288,7 +11405,7 @@ aitryon-refiner
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 kling/kling-v3-image-generation
 
@@ -11316,9 +11433,9 @@ kling/kling-v3-omni-image-generation
 
 0.4元/张
 
-### Vidu-图像生成
+### **Vidu-图像生成**
 
-> 仅输出计费，计费规则请参见[图像生成](https://help.aliyun.com/zh/model-studio/model-pricing#26310bc5cf4do)。
+> 仅输出计费，计费规则请参见[图像生成](#26310bc5cf4do)。
 
 #### 华北2（北京）
 
@@ -11328,7 +11445,7 @@ kling/kling-v3-omni-image-generation
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 vidu/vidu-image\_reference2image
 
@@ -11380,7 +11497,7 @@ vidu/viduq2-fast\_reference2image
 
 0.28125元/张
 
-## 音乐生成
+## **音乐生成**
 
 计费规则：按输出音频的秒数计费，输入不计费。
 
@@ -11390,7 +11507,7 @@ vidu/viduq2-fast\_reference2image
 
 **输出单价（每秒）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11404,21 +11521,26 @@ fun-music-v1
 
 0.002元
 
-## 语音合成（文本转语音）
+## **语音合成（文本转语音）**
 
 **字符计算规则**：本节中按字符数计费的模型（输入单价按「每万字符」计），其输入文本的字符数按以下规则统计：
 
 -   一个汉字（包括简体汉字、繁体汉字、日文汉字和韩文汉字）计为 2 个字符。
+    
 -   其他字符（如一个英文字母、一个数字、一个标点符号、一个空格、一个日文假名、一个韩文字母）计为 1 个字符。
+    
 -   使用 SSML 时，SSML 标签本身不计入字符数，仅统计待合成的文本内容。
+    
 
 **示例**：“你好”为 4 个字符（2+2）；“中A文123”为 8 个字符（2+1+2+1+1+1）；“中文。”为 5 个字符（2+2+1）；“中 文。”为 6 个字符（2+1+2+1）。
 
-### Qwen-Audio-TTS
+### **Qwen-Audio-TTS**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -11426,7 +11548,7 @@ fun-music-v1
 
 **输入单价（每万字符）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11462,13 +11584,15 @@ qwen-audio-3.0-tts-flash
 
 1.12413元
 
-### Qwen-TTS
+### **Qwen-TTS**
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
-#### 千问3-TTS-Instruct-Flash
+#### **千问3-TTS-Instruct-Flash**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
@@ -11478,7 +11602,7 @@ qwen-audio-3.0-tts-flash
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11500,7 +11624,7 @@ qwen3-tts-instruct-flash-2026-01-26
 
 1万字符
 
-#### 千问3-TTS-VD
+#### **千问3-TTS-VD**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
@@ -11510,7 +11634,7 @@ qwen3-tts-instruct-flash-2026-01-26
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11522,7 +11646,7 @@ qwen3-tts-vd-2026-01-26
 
 1万字符
 
-#### 千问3-TTS-VC
+#### **千问3-TTS-VC**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
@@ -11532,7 +11656,7 @@ qwen3-tts-vd-2026-01-26
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11554,7 +11678,7 @@ qwen3-tts-vc-2026-01-22
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11594,7 +11718,7 @@ qwen3-tts-flash-2025-09-18
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11632,7 +11756,7 @@ qwen-tts-2025-04-10
 
 #### 新加坡
 
-#### 千问3-TTS-Instruct-Flash
+#### **千问3-TTS-Instruct-Flash**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
@@ -11656,7 +11780,7 @@ qwen3-tts-instruct-flash-2026-01-26
 
 0.8元
 
-#### 千问3-TTS-VD
+#### **千问3-TTS-VD**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
@@ -11672,7 +11796,7 @@ qwen3-tts-vd-2026-01-26
 
 0.8元
 
-#### 千问3-TTS-VC
+#### **千问3-TTS-VC**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
@@ -11718,13 +11842,15 @@ qwen3-tts-flash-2025-09-18
 
 0.733924元
 
-### Qwen-TTS-Realtime
+### **Qwen-TTS-Realtime**
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
-#### 千问3-TTS-Instruct-Flash-Realtime
+#### **千问3-TTS-Instruct-Flash-Realtime**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
@@ -11734,7 +11860,7 @@ qwen3-tts-flash-2025-09-18
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11766,7 +11892,7 @@ qwen3-tts-instruct-flash-realtime-2026-01-22
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11796,7 +11922,7 @@ qwen3-tts-vd-realtime-2025-12-16
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11822,7 +11948,7 @@ qwen3-tts-vc-realtime-2025-11-27
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11860,7 +11986,7 @@ qwen3-tts-flash-realtime-2025-09-18
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -11890,7 +12016,7 @@ qwen-tts-realtime-2025-07-15
 
 #### 新加坡
 
-#### 千问3-TTS-Instruct-Flash-Realtime
+#### **千问3-TTS-Instruct-Flash-Realtime**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
@@ -11986,11 +12112,13 @@ qwen3-tts-flash-realtime-2025-09-18
 
 0.954101元
 
-### Qwen-TTS声音复刻
+### **Qwen-TTS声音复刻**
 
 计费规则：按新建音色个数计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -11998,7 +12126,7 @@ qwen3-tts-flash-realtime-2025-09-18
 
 **单价（每个音色）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -12022,11 +12150,13 @@ qwen-voice-enrollment
 
 0.01元
 
-### Qwen-TTS声音设计
+### **Qwen-TTS声音设计**
 
 计费规则：按新建音色个数计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -12034,7 +12164,7 @@ qwen-voice-enrollment
 
 **单价（每个音色）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -12058,9 +12188,11 @@ qwen-voice-design
 
 0.2元
 
-### CosyVoice
+### **CosyVoice**
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -12070,7 +12202,7 @@ qwen-voice-design
 
 **输入单价（每万字符）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -12134,7 +12266,7 @@ cosyvoice-v3-flash
 
 `CosyVoice` 模型目前仅提供按量付费模式，暂无单独的用量套餐或资源包。
 
-### Sambert
+### **Sambert**
 
 计费规则：按输入文本的字符数计费，输出不计费。
 
@@ -12144,9 +12276,9 @@ cosyvoice-v3-flash
 
 **输入单价（每万字符）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
-参见模型列表
+参见[模型列表](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#57d33631f7doi)
 
 1元
 
@@ -12162,9 +12294,9 @@ cosyvoice-v3-flash
 
 **语音合成单价（每万字符）**
 
-复刻一个音色
+[复刻一个音色](https://help.aliyun.com/zh/model-studio/mini-clone-api)
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 MiniMax/speech-2.8-hd
 
@@ -12188,13 +12320,15 @@ MiniMax/speech-02-turbo
 
 2元
 
-## 语音识别（语音转文本）与翻译（语音转成指定语种的文本）
+## **语音识别（语音转文本）与翻译（语音转成指定语种的文本）**
 
-### 千问-LiveTranslate-Flash-Realtime
+### **千问-LiveTranslate-Flash-Realtime**
 
-计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见计费说明。
+计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费说明](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#6a95f2fc38za0)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -12204,7 +12338,7 @@ MiniMax/speech-02-turbo
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -12334,11 +12468,13 @@ qwen3-livetranslate-flash-realtime-2025-09-22
 
 278.891元
 
-### 千问-LiveTranslate-Flash
+### **千问-LiveTranslate-Flash**
 
-计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见计费说明。
+计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费说明](https://help.aliyun.com/zh/model-studio/qwen3-livetranslate-flash#e02a82e668y2c)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -12348,7 +12484,7 @@ qwen3-livetranslate-flash-realtime-2025-09-22
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -12430,7 +12566,9 @@ qwen3-livetranslate-flash-2025-12-01
 
 计费规则：按输入音频的秒数计费，输出不计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -12438,7 +12576,7 @@ qwen3-livetranslate-flash-2025-12-01
 
 **输入单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -12462,11 +12600,13 @@ qwen-audio-3.0-asr-flash-streaming
 
 0.00066元/秒
 
-### Qwen-Audio-3.0-ASR-Flash-Filetrans
+### **Qwen-Audio-3.0-ASR-Flash-Filetrans**
 
 计费规则：按输入音频的秒数计费，输出不计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -12474,7 +12614,7 @@ qwen-audio-3.0-asr-flash-streaming
 
 **输入单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -12498,11 +12638,13 @@ qwen-audio-3.0-asr-flash-filetrans
 
 0.00026元/秒
 
-### Qwen-Audio-3.0-ASR-Flash
+### **Qwen-Audio-3.0-ASR-Flash**
 
 计费规则：按输入音频的秒数计费，输出不计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -12510,7 +12652,7 @@ qwen-audio-3.0-asr-flash-filetrans
 
 **输入单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -12534,9 +12676,11 @@ qwen-audio-3.0-asr-flash
 
 0.00026元/秒
 
-### 千问ASR
+### **千问ASR**
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -12548,7 +12692,7 @@ qwen-audio-3.0-asr-flash
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -12650,11 +12794,13 @@ qwen3-asr-flash-2025-09-08
 
 0.00026元/秒
 
-### 千问ASR-Realtime
+### **千问ASR-Realtime**
 
 计费规则：按输入音频的秒数计费，输出不计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -12662,7 +12808,7 @@ qwen3-asr-flash-2025-09-08
 
 **输入单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -12706,13 +12852,15 @@ qwen3-asr-flash-realtime-2025-10-27
 
 国际
 
-### Fun-ASR
+### **Fun-ASR**
 
-#### 录音文件识别
+#### **录音文件识别**
 
 计费规则：按输入音频的秒数计费，输出不计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -12720,7 +12868,7 @@ qwen3-asr-flash-realtime-2025-10-27
 
 **输入单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -12792,7 +12940,7 @@ fun-asr-flash-2026-06-15
 
 0.00026元/秒
 
-#### 实时语音识别
+#### **实时语音识别**
 
 计费规则：按输入音频的秒数计费，输出不计费。
 
@@ -12802,7 +12950,7 @@ fun-asr-flash-2026-06-15
 
 **输入单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -12862,9 +13010,9 @@ fun-asr-realtime-2025-11-07
 
 国际
 
-### Paraformer
+### **Paraformer**
 
-#### 录音文件识别
+#### **录音文件识别**
 
 计费规则：按输入音频的秒数计费，输出不计费。
 
@@ -12874,7 +13022,7 @@ fun-asr-realtime-2025-11-07
 
 **输入单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 paraformer-v2
 
@@ -12894,7 +13042,7 @@ paraformer-8k-v1
 
 paraformer-mtl-v1
 
-#### 实时语音识别
+#### **实时语音识别**
 
 计费规则：按输入音频的秒数计费，输出不计费。
 
@@ -12904,7 +13052,7 @@ paraformer-mtl-v1
 
 **输入单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 paraformer-realtime-v2
 
@@ -12922,22 +13070,28 @@ paraformer-realtime-8k-v2
 
 paraformer-realtime-8k-v1
 
-## 语音对话
+## **语音对话**
 
-### 实时语音对话
+### **实时语音对话**
 
 实时语音对话模型支持文本和音频的输入与输出，按输入 Token 和输出 Token 分别计费。音频 Token 按时长折算：`总 Token 数 = 音频时长（单位：秒）* 12.5`，不足 1 秒按 1 秒计算。
 
 在多轮对话场景中，与文本大模型一致，模型会维护完整的对话上下文以保持连贯的对话能力。历史对话内容会作为后续轮次的输入处理和计费，因此每轮的输入 Token 数会随对话轮次增加而逐步增长。各类内容的具体计费方式如下：
 
 -   **用户输入的音频和文本**：计入上下文，在后续每轮对话中作为输入计费。其中音频按音频 Token 计费，文本按文本 Token 计费。
+    
 -   **用户设置的 instructions**：按文本 Token 每轮计费一次。
+    
 -   **模型输出的文本**：按文本 Token 计入上下文，在后续每轮对话中作为输入计费。
+    
 -   **模型输出的音频**：按音频 Token 仅在输出时计费一次，不计入上下文。
+    
 
 > 随着对话轮次增加，上下文累积的 Token 数量会逐步增长。建议合理控制单次会话的对话轮数，或在适当时机开启新会话，以优化使用成本。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -12947,7 +13101,7 @@ paraformer-realtime-8k-v1
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -13025,25 +13179,32 @@ qwen-audio-3.0-realtime-flash
 
 112.413元
 
-## 视频生成
+## **视频生成**
 
-计费规则：输入不计费，输出计费。输出按成功生成的 **视频秒数**计费。
+计费规则：输入不计费，输出计费。输出按成功生成的 **视频秒数** 计费。
 
 计费公式：`费用 = 视频单价 × 输出的视频时长（单位：秒）`。
 
 计费说明：
 
 -   部分模型按**输出视频分辨率定价**。不同分辨率（480P/720P/1080P）的计费价格有差异。
+    
 -   部分模型按**输出视频模式定价**。不同视频模式（标准版/专业版）的计费价格有差异。
+    
 -   部分模型按**输出视频画幅定价**。不同视频画幅（1:1/3:4）的计费价格有差异。
+    
 -   部分模型采用**统一定价**，与分辨率、模式或画幅无关。
+    
 -   请求失败不产生任何费用，也不会消耗免费额度。
+    
 
-### HappyHorse-文生视频
+### **HappyHorse-文生视频**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -13053,7 +13214,7 @@ qwen-audio-3.0-realtime-flash
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -13225,11 +13386,13 @@ happyhorse-1.1-t2v
 
 原价1.2元/秒 限时6折
 
-### HappyHorse-图生视频-基于首帧
+### **HappyHorse-图生视频-基于首帧**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -13239,7 +13402,7 @@ happyhorse-1.1-t2v
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -13411,11 +13574,13 @@ happyhorse-1.1-i2v
 
 原价1.2元/秒 限时6折
 
-### HappyHorse-参考生视频
+### **HappyHorse-参考生视频**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -13425,7 +13590,7 @@ happyhorse-1.1-i2v
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -13597,9 +13762,11 @@ happyhorse-1.1-r2v
 
 原价1.2元/秒 限时6折
 
-### HappyHorse-视频编辑
+### **HappyHorse-视频编辑**
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -13611,7 +13778,7 @@ happyhorse-1.1-r2v
 
 **输入和输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -13723,17 +13890,22 @@ happyhorse-1.0-video-edit
 
 原价1.6元/秒 限时8折
 
-### 万相3.0-视频生成
+### **万相3.0-视频生成**
 
 计费规则：输入视频和输出视频均计费，按**视频秒数**计费，失败不计费也不占用免费额度。
 
 计费公式：计费时长 = 输入视频时长 + 输出视频时长。
 
 -   输入视频的计费时长为**实际输入的视频秒数**。
+    
 -   输出视频的计费时长为**成功生成的视频秒数**。
+    
 -   免费额度为输入视频时长与输出视频时长合计 **30 秒**。
+    
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -13743,7 +13915,7 @@ happyhorse-1.0-video-edit
 
 **输入和输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -13789,11 +13961,13 @@ wan3.0-video 邀测中
 
 1.49884元/秒
 
-### 万相-文生视频
+### **万相-文生视频**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -13803,7 +13977,7 @@ wan3.0-video 邀测中
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -14065,11 +14239,13 @@ wan2.6-t2v
 
 1元/秒
 
-### 万相-图生视频
+### **万相-图生视频**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -14081,7 +14257,7 @@ wan2.6-t2v
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -14153,11 +14329,13 @@ wan2.7-i2v
 
 1.100886元/秒
 
-### 万相-图生视频-基于首帧
+### **万相-图生视频-基于首帧**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -14169,7 +14347,7 @@ wan2.7-i2v
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -14479,11 +14657,13 @@ wan2.6-i2v
 
 1元/秒
 
-### 万相-图生视频-基于首尾帧
+### **万相-图生视频-基于首尾帧**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -14493,7 +14673,7 @@ wan2.6-i2v
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -14539,14 +14719,16 @@ wan2.1-kf2v-plus
 
 0.733924元/秒
 
-### 万相-参考生视频
+### **万相-参考生视频**
 
 计费规则：输入视频和输出视频均计费，按**视频秒数**计费，失败不计费也不占用免费额度。
 
 计费公式：计费时长 = 输入视频时长（上限 5 秒）+ 输出视频时长。
 
--   输入视频的计费时长不超过 **5 秒**，计算规则参见计费与限流。
+-   输入视频的计费时长不超过 **5 秒**，计算规则参见[计费与限流](https://help.aliyun.com/zh/model-studio/video-to-video-guide#6f5774ce5fqie)。
+    
 -   输出视频的计费时长为**成功生成的视频秒数**。
+    
 
 #### 华北2（北京）
 
@@ -14558,7 +14740,7 @@ wan2.1-kf2v-plus
 
 **输入和输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -14766,9 +14948,11 @@ wan2.6-r2v
 
 1元/秒
 
-### 万相-视频编辑
+### **万相-视频编辑**
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -14780,7 +14964,7 @@ wan2.6-r2v
 
 **输入和输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -14804,7 +14988,7 @@ wan2.7-videoedit
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -14858,10 +15042,12 @@ wan2.1-vace-plus
 
 0.733924元/秒
 
-### 万相-数字人
+### **万相-数字人**
 
 -   wan2.2-s2v-detect：输入计费，输出不计费。输入按检测的图像张数计费，只要请求成功（无论检测结果通过与否），每张输入图像均计费一次。
--   wan2.2-s2v：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+    
+-   wan2.2-s2v：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](#d809366847gza)。
+    
 
 #### 华北2（北京）
 
@@ -14869,7 +15055,7 @@ wan2.1-vace-plus
 
 **单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -14890,11 +15076,13 @@ wan2.2-s2v
 
 100秒
 
-### 万相-图生动作
+### **万相-图生动作**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -14904,7 +15092,7 @@ wan2.2-s2v
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -14944,11 +15132,13 @@ wan2.2-animate-move
 
 1.321063元/秒
 
-### 万相-视频换人
+### **万相-视频换人**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -14958,7 +15148,7 @@ wan2.2-animate-move
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -14998,11 +15188,14 @@ wan2.2-animate-mix
 
 1.908202元/秒
 
-### 舞动人像AnimateAnyone
+### **舞动人像AnimateAnyone**
 
 -   animate-anyone-detect-gen2：输入计费，输出不计费。输入按检测的图像张数计费，只要请求成功（无论检测结果通过与否），每张输入图像均计费一次。
--   animate-anyone-template-gen2：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
--   animate-anyone-gen2：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+    
+-   animate-anyone-template-gen2：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](#d809366847gza)。
+    
+-   animate-anyone-gen2：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](#d809366847gza)。
+    
 
 #### 华北2（北京）
 
@@ -15010,7 +15203,7 @@ wan2.2-animate-mix
 
 **单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -15032,10 +15225,12 @@ animate-anyone-gen2
 
 1800秒（30分钟）
 
-### 悦动人像EMO
+### **悦动人像EMO**
 
 -   emo-detect-v1：输入计费，输出不计费。输入按检测的图像张数计费，只要请求成功（无论检测结果通过与否），每张输入图像均计费一次。
--   emo-v1：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+    
+-   emo-v1：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](#d809366847gza)。
+    
 
 #### 华北2（北京）
 
@@ -15043,7 +15238,7 @@ animate-anyone-gen2
 
 **单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -15064,10 +15259,12 @@ emo-v1
 
 1800秒（30分钟）
 
-### 灵动人像LivePortrait
+### **灵动人像LivePortrait**
 
 -   liveportrait-detect：输入计费，输出不计费。输入按检测的图像张数计费，只要请求成功（无论检测结果通过与否），每张输入图像均计费一次。
--   liveportrait：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+    
+-   liveportrait：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](#d809366847gza)。
+    
 
 #### 华北2（北京）
 
@@ -15075,7 +15272,7 @@ emo-v1
 
 **单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -15091,10 +15288,12 @@ liveportrait
 
 1800秒（30分钟）
 
-### 表情包Emoji
+### **表情包Emoji**
 
 -   emoji-detect-v1：输入计费，输出不计费。输入按检测的图像张数计费，只要请求成功（无论检测结果通过与否），每张输入图像均计费一次。
--   emoji-v1：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+    
+-   emoji-v1：输入不计费，输出计费。输出按成功生成的视频秒数计费，计费规则请参见[视频生成](#d809366847gza)。
+    
 
 #### 华北2（北京）
 
@@ -15102,7 +15301,7 @@ liveportrait
 
 **单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -15118,9 +15317,9 @@ emoji-v1
 
 1800秒（30分钟）
 
-### 声动人像VideoRetalk
+### **声动人像VideoRetalk**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
 #### 华北2（北京）
 
@@ -15128,7 +15327,7 @@ emoji-v1
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -15138,9 +15337,9 @@ videoretalk
 
 1800秒（30分钟）
 
-### 视频风格重绘
+### **视频风格重绘**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
 #### 华北2（北京）
 
@@ -15150,7 +15349,7 @@ videoretalk
 
 **输出单价**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -15166,11 +15365,11 @@ video-style-transform
 
 0.5元/秒
 
-## 视频生成-第三方模型
+## **视频生成-第三方模型**
 
-### 爱诗-文生视频
+### **爱诗-文生视频**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
 #### 华北2（北京）
 
@@ -15182,7 +15381,7 @@ video-style-transform
 
 **输出单价**
 
-**免费额度****（注）**
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 pixverse/pixverse-c1-t2v
 
@@ -15360,9 +15559,9 @@ pixverse/pixverse-v5.6-it2v
 
 0.44元/秒
 
-### 爱诗-图生视频-基于首帧
+### **爱诗-图生视频-基于首帧**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
 #### 华北2（北京）
 
@@ -15374,7 +15573,7 @@ pixverse/pixverse-v5.6-it2v
 
 **输出单价**
 
-**免费额度****（注）**
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 pixverse/pixverse-c1-it2v
 
@@ -15508,9 +15707,9 @@ pixverse/pixverse-v5.6-it2v
 
 0.44元/秒
 
-### 爱诗-图生视频-基于首尾帧
+### **爱诗-图生视频-基于首尾帧**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
 #### 华北2（北京）
 
@@ -15522,7 +15721,7 @@ pixverse/pixverse-v5.6-it2v
 
 **输出单价**
 
-**免费额度****（注）**
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 pixverse/pixverse-c1-kf2v
 
@@ -15656,9 +15855,9 @@ pixverse/pixverse-v5.6-kf2v
 
 0.44元/秒
 
-### 爱诗-参考生视频
+### **爱诗-参考生视频**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
 #### 华北2（北京）
 
@@ -15672,7 +15871,7 @@ pixverse/pixverse-v5.6-kf2v
 
 **输出单价**
 
-**免费额度****（注）**
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 pixverse/pixverse-v6-r2v-omni
 
@@ -15770,7 +15969,7 @@ pixverse/pixverse-v6-r2v-omni
 
 **输出单价**
 
-**免费额度****（注）**
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 pixverse/pixverse-v6-r2v
 
@@ -15904,9 +16103,9 @@ pixverse/pixverse-v5.6-r2v
 
 0.44元/秒
 
-### 爱诗-视频对口型
+### **爱诗-视频对口型**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
 #### 华北2（北京）
 
@@ -15914,7 +16113,7 @@ pixverse/pixverse-v5.6-r2v
 
 **输出单价**
 
-**免费额度****（注）**
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 pixverse/pixverse-lipsync
 
@@ -15922,9 +16121,9 @@ pixverse/pixverse-lipsync
 
 无免费额度
 
-### 爱诗-视频动作模仿
+### **爱诗-视频动作模仿**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
 #### 华北2（北京）
 
@@ -15934,7 +16133,7 @@ pixverse/pixverse-lipsync
 
 **输出单价**
 
-**免费额度****（注）**
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 pixverse/pixverse-motioncontrol
 
@@ -15952,9 +16151,9 @@ pixverse/pixverse-motioncontrol
 
 0.36元/秒
 
-### 爱诗-视频超清
+### **爱诗-视频超清**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
 #### 华北2（北京）
 
@@ -15962,7 +16161,7 @@ pixverse/pixverse-motioncontrol
 
 **输出单价**
 
-**免费额度****（注）**
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 pixverse/pixverse-upscale
 
@@ -15970,9 +16169,9 @@ pixverse/pixverse-upscale
 
 无免费额度
 
-### 可灵-视频生成
+### **可灵-视频生成**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
 #### 华北2（北京）
 
@@ -15984,7 +16183,7 @@ pixverse/pixverse-upscale
 
 **输出单价**
 
-**免费额度****（注）**
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 kling/kling-v3-video-generation
 
@@ -16064,9 +16263,9 @@ kling/kling-v3-omni-video-generation
 
 3.0元/秒
 
-### Vidu-文生视频
+### **Vidu-文生视频**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
 #### 华北2（北京）
 
@@ -16076,7 +16275,7 @@ kling/kling-v3-omni-video-generation
 
 **输出单价**
 
-**免费额度****（注）**
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 vidu/viduq3-pro\_text2video
 
@@ -16126,9 +16325,9 @@ vidu/viduq2\_text2video
 
 0.375元/秒
 
-### Vidu-图生视频-基于首帧
+### **Vidu-图生视频-基于首帧**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
 #### 华北2（北京）
 
@@ -16138,7 +16337,7 @@ vidu/viduq2\_text2video
 
 **输出单价**
 
-**免费额度****（注）**
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 vidu/viduq3-pro-fast\_img2video
 
@@ -16228,9 +16427,9 @@ vidu/viduq2-pro-fast\_img2video
 
 0.2元/秒
 
-### Vidu-图生视频-基于首尾帧
+### **Vidu-图生视频-基于首尾帧**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
 #### 华北2（北京）
 
@@ -16240,7 +16439,7 @@ vidu/viduq2-pro-fast\_img2video
 
 **输出单价**
 
-**免费额度****（注）**
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 vidu/viduq3-pro\_start-end2video
 
@@ -16306,9 +16505,9 @@ vidu/viduq2-turbo\_start-end2video
 
 0.46875元/秒
 
-### Vidu-参考生视频
+### **Vidu-参考生视频**
 
-> 仅输出计费，计费规则请参见[视频生成](https://help.aliyun.com/zh/model-studio/model-pricing#d809366847gza)。
+> 仅输出计费，计费规则请参见[视频生成](#d809366847gza)。
 
 #### 华北2（北京）
 
@@ -16318,7 +16517,7 @@ vidu/viduq2-turbo\_start-end2video
 
 **输出单价**
 
-**免费额度****（注）**
+**免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 vidu/viduq3-ad\_reference2video
 
@@ -16420,7 +16619,7 @@ vidu/viduq2\_reference2video
 
 0.71875元/秒
 
-## 3D模型生成-第三方模型
+## **3D模型生成-第三方模型**
 
 **Tripo-3D模型生成**
 
@@ -16520,11 +16719,11 @@ Tripo/Tripo-P1.0
 
 4.2元/次
 
-## 文本向量
+## **文本向量**
 
 计费规则：按输入Token计费，输出不计费。
 
-影响计费的因素：若模型支持[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)，其输入和输出Token单价均按实时推理价格的50%计费。
+影响计费的因素：若模型支持[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)，其输入和输出Token单价均按实时推理价格的50%计费。
 
 #### 华北2（北京）
 
@@ -16532,7 +16731,7 @@ Tripo/Tripo-P1.0
 
 **输入单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -16544,7 +16743,7 @@ qwen3.7-text-embedding
 
 text-embedding-v4
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 0.5元
 
@@ -16552,7 +16751,7 @@ text-embedding-v4
 
 text-embedding-v3
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 > 免费额度用完后不可调用，推荐使用 text-embedding-v4 作为替代模型，免费额度提升至 100 万 Token
 
@@ -16562,7 +16761,7 @@ text-embedding-v3
 
 text-embedding-v2
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 0.7元
 
@@ -16570,7 +16769,7 @@ text-embedding-v2
 
 text-embedding-v1
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
+> [Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)半价
 
 0.7元
 
@@ -16614,7 +16813,7 @@ text-embedding-v3
 
 0.514元
 
-## 多模态向量
+## **多模态向量**
 
 计费规则：按输入Token计费，输出不计费。
 
@@ -16624,7 +16823,7 @@ text-embedding-v3
 
 **输入单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -16668,13 +16867,15 @@ multimodal-embedding-v1
 
 100万Token
 
-## 排序模型
+## **排序模型**
 
-### 文本排序模型
+### **文本排序模型**
 
 计费规则：按输入Token计费，输出不计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -16682,7 +16883,7 @@ multimodal-embedding-v1
 
 **输入单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -16720,9 +16921,9 @@ qwen3-rerank
 
 0.74942元
 
-## 行业模型
+## **行业模型**
 
-### 通义法睿
+### **通义法睿**
 
 计费规则：按输入Token和输出Token计费。
 
@@ -16734,7 +16935,7 @@ qwen3-rerank
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 farui-plus
 
@@ -16744,7 +16945,7 @@ farui-plus
 
 无免费额度
 
-### 意图理解
+### **意图理解**
 
 计费规则：按输入Token和输出Token计费。
 
@@ -16756,7 +16957,7 @@ farui-plus
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -16768,11 +16969,13 @@ tongyi-intent-detect-v3
 
 100万Token
 
-### 角色扮演
+### **角色扮演**
 
 计费规则：按输入Token和输出Token计费。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**
+
+以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
 
@@ -16782,13 +16985,13 @@ tongyi-intent-detect-v3
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
 qwen-plus-character
 
-> Session Cache享有折扣
+> [Session Cache](https://help.aliyun.com/zh/model-studio/role-play#6034f997cde74)享有折扣
 
 0.8元
 
@@ -16798,7 +17001,7 @@ qwen-plus-character
 
 qwen-flash-character
 
-> Session Cache享有折扣
+> [Session Cache](https://help.aliyun.com/zh/model-studio/role-play#6034f997cde74)享有折扣
 
 0.25元
 
@@ -16808,7 +17011,7 @@ qwen-flash-character
 
 qwen-flash-character-2026-02-26
 
-> Session Cache享有折扣
+> [Session Cache](https://help.aliyun.com/zh/model-studio/role-play#6034f997cde74)享有折扣
 
 0.18元
 
@@ -16828,7 +17031,7 @@ qwen-flash-character-2026-02-26
 
 qwen-plus-character
 
-> Session Cache享有折扣
+> [Session Cache](https://help.aliyun.com/zh/model-studio/role-play#6034f997cde74)享有折扣
 
 国际
 
@@ -16838,7 +17041,7 @@ qwen-plus-character
 
 qwen-flash-character
 
-> Session Cache享有折扣
+> [Session Cache](https://help.aliyun.com/zh/model-studio/role-play#6034f997cde74)享有折扣
 
 国际
 
@@ -16908,7 +17111,7 @@ qwen-plus-character
 
 2元
 
-### 界面交互
+### **界面交互**
 
 计费规则：按输入Token和输出Token计费。
 
@@ -16920,7 +17123,7 @@ qwen-plus-character
 
 **输出单价（每百万Token）**
 
-**免费额度**（注）
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
@@ -16934,7 +17137,7 @@ gui-plus
 
 gui-plus-2026-02-26
 
-## Token 消耗与成本控制
+## **Token 消耗与成本控制**
 
 **通过 URL 读取文件的计费方式**：通过 URL 读取文件时，文件传输过程本身不消耗 Token；文件内容解析后转化为输入 Token 计费，消耗量取决于解析后的文本长度，而不是文件大小。如果需要处理大文件，建议使用知识库切片索引以降低 Token 消耗。
 
@@ -16946,4 +17149,4 @@ gui-plus-2026-02-26
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见错误码进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。

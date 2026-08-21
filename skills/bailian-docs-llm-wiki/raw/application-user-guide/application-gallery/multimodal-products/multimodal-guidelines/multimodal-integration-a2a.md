@@ -2,24 +2,31 @@
 
 如果多模态交互开发套件里内置的技能或Agent不满足需求，可以参考本文调用三方Agent的能力。
 
-## 协议标准
+## **协议标准**
 
 需基于Google A2A协议进行集成（参见[A2A 0.2.5规范](https://a2aproject.github.io/A2A/latest/specification/)）
 
-## 接入流程
+## **接入流程**
 
-### 1\. 配置AgentCard
+### **1\. 配置AgentCard**
 
--   步骤3的返回结果及示例，请参见[AgentCard](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#854b8c0b10ozm)。
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7028182571/p986101.png)
 
-### 2\. 调用Agent
+-   步骤3的返回结果及示例，请参见[AgentCard](#854b8c0b10ozm)。
+    
 
--   步骤4的请求参数及示例，请参见[Agent调用请求字段](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#f5598eb155aob)。
--   步骤6返回结果及示例，请参见[Agent调用返回字段](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#6e74c0e6d8uwa)。
+### **2\. 调用Agent**
 
-## 字段说明
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7028182571/p986102.png)
 
-### AgentCard
+-   步骤4的请求参数及示例，请参见[Agent调用请求字段](#f5598eb155aob)。
+    
+-   步骤6返回结果及示例，请参见[Agent调用返回字段](#6e74c0e6d8uwa)。
+    
+
+## **字段说明**
+
+### **AgentCard**
 
 **字段名称**
 
@@ -73,7 +80,7 @@ Agent支持的A2A协议版本。
 
 capabilities
 
-[AgentCapabilities](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#8eb8061367cb6)
+[AgentCapabilities](#8eb8061367cb6)
 
 是
 
@@ -113,7 +120,7 @@ Agent生成的输出媒体类型。
 
 skills
 
-[AgentSkill](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#9567dc941c71f)\[\]
+[AgentSkill](#9567dc941c71f)\[\]
 
 是
 
@@ -139,7 +146,7 @@ Boolean
 
 extensions
 
-[AgentExtension](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#dc95f15495kh2)\[\]
+[AgentExtension](#dc95f15495kh2)\[\]
 
 否
 
@@ -237,7 +244,7 @@ String\[\]
 
 输出的媒体类型，设置时会覆盖`defaultOutputModes`。
 
-#### 示例
+#### **示例**
 
 ```
 {
@@ -322,7 +329,7 @@ String\[\]
 }
 ```
 
-### Agent调用请求字段
+### **Agent调用请求**字段
 
 **字段名称**
 
@@ -353,7 +360,7 @@ String
 
 params
 
-[MessageSendParams](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#7ae5771db9x5k)
+[MessageSendParams](#7ae5771db9x5k)
 
 是
 
@@ -379,7 +386,7 @@ String
 
 message
 
-[Message](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#ad7fc73eeelos)
+[Message](#ad7fc73eeelos)
 
 是
 
@@ -416,7 +423,7 @@ String
 
 parts
 
-[Part](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#8ec627dd2eu4p)\[\]
+[Part](#8ec627dd2eu4p)\[\]
 
 是
 
@@ -472,9 +479,9 @@ String
 
 该部分的文本内容，kind=text时填写。
 
-#### 示例
+#### **示例**
 
-##### HTTP请求
+##### **HTTP请求**
 
 ```
 {
@@ -497,7 +504,7 @@ String
 }
 ```
 
-##### HTTP SSE请求
+##### **HTTP SSE请求**
 
 ```
 {
@@ -520,7 +527,7 @@ String
 }
 ```
 
-### Agent调用返回字段
+### **Agent调用返回字段**
 
 **字段名称**
 
@@ -548,7 +555,7 @@ String
 
 result
 
-[Task](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#3f23b86c115fe) | [TaskStatusUpdateEvent](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#ee061dacccy6j) | [TaskArtifactUpdateEvent](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#108a408128acg)
+[Task](#3f23b86c115fe) | [TaskStatusUpdateEvent](#ee061dacccy6j) | [TaskArtifactUpdateEvent](#108a408128acg)
 
 否
 
@@ -556,13 +563,13 @@ result
 
 error
 
-[JSONRpcError](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a#bea1cc7762ej1)
+[JSONRpcError](#bea1cc7762ej1)
 
 否
 
 请求处理失败时返回。
 
-#### Task
+#### **Task**
 
 **字段名称**
 
@@ -811,9 +818,9 @@ String
 
 错误描述信息。
 
-#### 示例
+#### **示例**
 
-##### HTTP返回
+##### **HTTP返回**
 
 ```
 {
@@ -851,7 +858,7 @@ String
 }
 ```
 
-##### HTTP SSE返回
+##### **HTTP SSE返回**
 
 ```
 {
@@ -926,13 +933,16 @@ String
 }
 ```
 
-## 接入示例
+## **接入示例**
 
 在管控台填入`https://example/.well-known/agent.json`可体验接入自研Agent的流程：
 
-## 进一步集成
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7028182571/p986762.png)
+
+## **进一步集成**
 
 至此，您已经完成了自研Agent与多模态交互套件的基础集成，如需进一步集成，请参见：
 
 -   [Protocol扩展](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a-protocol)
+    
 -   [Intent扩展](https://help.aliyun.com/zh/model-studio/multimodal-integration-a2a-intent)

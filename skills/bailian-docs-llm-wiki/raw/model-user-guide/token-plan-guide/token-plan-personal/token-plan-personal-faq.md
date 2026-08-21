@@ -2,7 +2,7 @@
 
 Token Plan 个人版的额度、购买、订阅和接入常见问题。
 
-## 额度与限额
+## **额度与限额**
 
 ### 5 小时/7 天限额是什么意思？
 
@@ -21,21 +21,21 @@ Token Plan 个人版采用每 5 小时滚动窗口和每 7 天固定窗口双重
 Lite 套餐
 
 700 Credits  
-限时 **无限制**
+限时 **无限制**  
 
 2,500 Credits
 
 Standard 套餐
 
 3,000 Credits  
-限时 **无限制**
+限时 **无限制**  
 
 10,000 Credits
 
 Pro 套餐
 
 12,000 Credits  
-限时 **无限制**
+限时 **无限制**  
 
 40,000 Credits
 
@@ -48,8 +48,11 @@ Pro 套餐
 限额用完后调用会被阻断，不会按量计费。恢复方式：
 
 -   等待额度释放。
+    
 -   升级套餐。
+    
 -   购买用量包，获得不受限额约束的额外额度。
+    
 
 ### 什么是重置卡？如何使用？
 
@@ -60,8 +63,11 @@ Pro 套餐
 开通 Token Plan 后仍看到按量扣费，通常是以下原因导致：
 
 -   **生效前调用**：开通 Token Plan 之前发生的调用属于独立计费，无法被套餐抵扣。
+    
 -   **配置错误**：未使用 Token Plan 专属 API Key 和 Base URL（例如误用百炼通用 dashscope.aliyuncs.com 或 Coding Plan 的 Key），导致请求走按量计费通道。
+    
 -   **模型不支持**：调用了 Token Plan 白名单之外的模型（如 Qwen3-VL-Plus 及部分子型号）。
+    
 
 已产生的按量费用无法通过 Credits 事后抵扣或退款。请立即检查并更正 API Key 和 Base URL 配置，确保后续调用正常抵扣。
 
@@ -86,8 +92,11 @@ Pro 套餐
 Credits 消耗与账单或插件统计出现差异，常见原因：
 
 -   **上下文缓存命中**：命中缓存时抵扣系数较低，未命中时抵扣系数较高。
+    
 -   **模型系列差异**：不同模型（如 Qwen 系列与 GLM 系列）的 Credits 抵扣系数不同。
+    
 -   **功能模式影响**：频繁切换工具调用或思考模式可能影响计费。
+    
 
 验证方法：对比具体时间段内的抵扣记录，通过“抵扣 Credits ÷ 消耗 Token”计算实际系数进行核实。
 
@@ -98,19 +107,28 @@ Token Plan 套餐本身不提供试用额度，也不包含免费赠送的 Token
 ### 如何减少 Token Plan 的 Credits 消耗？
 
 -   压缩历史消息或新开对话窗口，避免长上下文累积消耗。
+    
 -   关闭思考模式（Thinking Mode）以降低推理开销。
+    
 -   非复杂任务场景下切换至轻量模型（如 qwen3.6-plus 替代 qwen3.7-max）。
+    
 -   利用缓存机制，缓存命中的 Token 计费价格低于正常 Input Token。
+    
 -   通过**用量分析**页面监控消耗明细，及时调整使用策略。
+    
 
 ### 为什么第三方工具（如 Claude Code）显示的 Token 用量与百炼控制台统计不一致？
 
 -   **统计口径不同**：第三方工具仅显示模型层面的输入输出 Token；百炼控制台统计包含完整消耗项。
+    
 -   **隐藏消耗项**：系统提示词、工具定义（Schema）、用户配置、项目约定、多轮对话历史累积、工具调用参数与返回结果、模型内部推理内容（reasoning）等，均会计入 Credits 消耗但不在第三方工具中显示。
+    
 -   **模型单价影响**：Credits 消耗与模型抵扣系数相关，高价模型（如 qwen3.7-max）会导致相同 Token 数下 Credits 消耗更高。
+    
 -   **优化建议**：通过百炼控制台 Token Plan 订阅页的**用量分析**查看官方统计；使用 `/compact` 压缩历史消息或 `/clear` 新开对话以减少上下文累积。
+    
 
-## 接入报错
+## **接入报错**
 
 ### 常见报错及解决方案
 
@@ -183,9 +201,11 @@ Token Plan 套餐本身不提供试用额度，也不包含免费赠送的 Token
 ### Token Plan 用量显示为 0 或调用仍扣费/欠费怎么办？
 
 -   用量显示为 0 通常是因为尚未产生实际消耗，或使用了非 Token Plan 专属 API Key。
+    
 -   调用仍扣余额或产生欠费，是因为配置了普通 API Key 而非套餐专属 Key。
+    
 
-## 并发与性能
+## **并发与性能**
 
 ### 最多支持多少个 Agent 并发？
 
@@ -217,7 +237,7 @@ Pro 套餐
 
 优化建议：精简上下文、降低任务复杂度以减少单次输入 Token 数量；遇到限流时等待约 1 分钟后重试。
 
-## 使用规则
+## **使用规则**
 
 ### "禁止 API 生产自动化调用"具体是什么意思？
 
@@ -231,16 +251,20 @@ Token Plan 个人版仅供个人通过官方指定工具（如 Cursor、Claude C
 
 可以。Token Plan 个人版每个订阅对应一个专属 API Key，生成后请立即复制并妥善保存。您可以将同一个 API Key 配置到多台设备（如家庭电脑和公司电脑）上使用，无需为每台设备重新生成。
 
-**重要**重置 API Key 会使旧 Key 立即失效，届时需在所有设备上更新为新 Key。建议仅在 Key 泄露时才重置。
+**重要**
 
-## 购买与订阅
+重置 API Key 会使旧 Key 立即失效，届时需在所有设备上更新为新 Key。建议仅在 Key 泄露时才重置。
+
+## **购买与订阅**
 
 ### RAM 用户可以使用 Token Plan 吗？
 
 可以，需由主账号完成以下授权：
 
 1.  在 [RAM 控制台](https://ram.console.aliyun.com/)为该 RAM 用户授予 `AliyunTokenPlanReadOnlyAccess`（只读）或 `AliyunTokenPlanFullAccess`（管理）系统策略，同时授予 `AliyunBSSReadOnlyAccess` 系统策略。
+    
 2.  在百炼控制台[账号管理](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)页面，为该 RAM 用户分配管理员或订阅套餐权限。
+    
 
 ### 可以升配吗？升配后额度怎么算？
 
@@ -257,7 +281,9 @@ Token Plan 个人版仅供个人通过官方指定工具（如 Cursor、Claude C
 ### 如何查看 Token Plan 套餐的生效时间和剩余天数？
 
 -   **生效时间查看路径**：登录[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/token-plan)的 **Token Plan** 页面查看套餐生效时间。
+    
 -   **剩余天数显示逻辑**：控制台显示的剩余天数为向下取整后的完整 24 小时周期数，实际有效期以具体结束时间戳为准（例如剩余 22 天 20 小时会显示为 22 天），属正常显示逻辑。
+    
 
 ### Token Plan 是否支持学生代金券购买？
 

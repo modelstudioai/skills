@@ -10,38 +10,40 @@
 
 **新加坡：POST** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations`
 
-**重要**旧版URL路径 `/api/v2/apps/protocols/compatible-mode/v1/conversations` 即将停止维护，请尽快迁移至新版路径 `/compatible-mode/v1/conversations`。
+**重要**
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+旧版URL路径 `/api/v2/apps/protocols/compatible-mode/v1/conversations` 即将停止维护，请尽快迁移至新版路径 `/compatible-mode/v1/conversations`。
+
+**重要**
+
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-**items**`array`（可选）
+**items** `_array_`（可选）
 
 初始消息项列表，最多20条。
 
-属性
+**属性**
 
-**type**`string`**(必选)**
+**type** `_string_` **(必选)**
 
 消息类型，仅支持 `message`。
 
-**role**`string`**(必选)**
+**role** `_string_` **(必选)**
 
 消息的角色。`system` 与`developer` 角色的指令优先级高于 `user` 角色，`assistant` 角色表示模型在之前交互中生成的消息。取值：`user` 、`assistant` 、`system` 、`developer` 。
 
-**content**`string or array`**(必选)**
+**content** `_string or array_` **(必选)**
 
 消息内容。支持纯文本字符串或结构化内容列表（如 ResponseInputText 对象数组），列表格式可包含文本等多种内容类型。
 
-**metadata**`object`（可选）
-
-会话元数据，用于以结构化格式存储会话的附加信息。最多16对键值对，key最大长度64字符，value最大长度512字符。
-
-Python
+## Python
 
 ```
 import os
@@ -61,7 +63,7 @@ conversation = client.conversations.create(
 print(conversation)
 ```
 
-Node.js
+## Node.js
 
 ```
 import OpenAI from "openai";
@@ -84,7 +86,7 @@ const conversation = await client.conversations.create({
 console.log(conversation);
 ```
 
-cURL
+## cURL
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations' \
@@ -104,23 +106,15 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+**metadata** `_object_`（可选）
+
+会话元数据，用于以结构化格式存储会话的附加信息。最多16对键值对，key最大长度64字符，value最大长度512字符。
+
 ### 响应参数
 
-**created\_at**`integer`
+**created\_at** `_integer_`
 
 会话创建的 Unix 时间戳（毫秒）。
-
-**id**`string`
-
-会话唯一标识符。
-
-**metadata**`object`
-
-会话元数据，以键值对形式存储的附加信息。最多16对，key最大长度64字符，value最大长度512字符。
-
-**object**`string`
-
-对象类型，固定为 `conversation`。
 
 ```
 {
@@ -133,6 +127,18 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }
 ```
 
+**id** `_string_`
+
+会话唯一标识符。
+
+**metadata** `_object_`
+
+会话元数据，以键值对形式存储的附加信息。最多16对，key最大长度64字符，value最大长度512字符。
+
+**object** `_string_`
+
+对象类型，固定为 `conversation`。
+
 ## Retrieve conversation
 
 获取指定会话的信息。
@@ -141,11 +147,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 **新加坡：GET** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
 
-**conversation\_id**`string`**(必选, Path)**
+**conversation\_id** `_string_` **(必选, Path)**
 
 会话ID。
 
-Python
+## Python
 
 ```
 import os
@@ -160,7 +166,7 @@ conversation = client.conversations.retrieve("conv_xxx")
 print(conversation)
 ```
 
-Node.js
+## Node.js
 
 ```
 import OpenAI from "openai";
@@ -176,7 +182,7 @@ const conversation = await client.conversations.retrieve(
 console.log(conversation);
 ```
 
-cURL
+## cURL
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx' \
@@ -185,21 +191,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 ### 响应参数
 
-**created\_at**`integer`
+**created\_at** `_integer_`
 
 会话创建的 Unix 时间戳（毫秒）。
-
-**id**`string`
-
-会话唯一标识符。
-
-**metadata**`object`
-
-会话元数据，以键值对形式存储的附加信息。最多16对，key最大长度64字符，value最大长度512字符。
-
-**object**`string`
-
-对象类型，固定为 `conversation`。
 
 ```
 {
@@ -212,6 +206,18 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }
 ```
 
+**id** `_string_`
+
+会话唯一标识符。
+
+**metadata** `_object_`
+
+会话元数据，以键值对形式存储的附加信息。最多16对，key最大长度64字符，value最大长度512字符。
+
+**object** `_string_`
+
+对象类型，固定为 `conversation`。
+
 ## Update conversation
 
 更新会话的元数据信息。
@@ -220,15 +226,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 **新加坡：POST** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
 
-**conversation\_id**`string`**(必选, Path)**
+**conversation\_id** `_string_` **(必选, Path)**
 
 会话ID。
 
-**metadata**`object`**(必选)**
-
-会话元数据，会完全覆盖原有元数据。最多16对键值对，key最大长度64字符，value最大长度512字符。
-
-Python
+## Python
 
 ```
 import os
@@ -246,7 +248,7 @@ updated = client.conversations.update(
 print(updated)
 ```
 
-Node.js
+## Node.js
 
 ```
 import OpenAI from "openai";
@@ -263,7 +265,7 @@ const updated = await client.conversations.update(
 console.log(updated);
 ```
 
-cURL
+## cURL
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx' \
@@ -276,23 +278,15 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+**metadata** `_object_` **(必选)**
+
+会话元数据，会完全覆盖原有元数据。最多16对键值对，key最大长度64字符，value最大长度512字符。
+
 ### 响应参数
 
-**created\_at**`integer`
+**created\_at** `_integer_`
 
 会话创建的 Unix 时间戳（毫秒）。
-
-**id**`string`
-
-会话唯一标识符。
-
-**metadata**`object`
-
-会话元数据，以键值对形式存储的附加信息。最多16对，key最大长度64字符，value最大长度512字符。
-
-**object**`string`
-
-对象类型，固定为 `conversation`。
 
 ```
 {
@@ -305,6 +299,18 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }
 ```
 
+**id** `_string_`
+
+会话唯一标识符。
+
+**metadata** `_object_`
+
+会话元数据，以键值对形式存储的附加信息。最多16对，key最大长度64字符，value最大长度512字符。
+
+**object** `_string_`
+
+对象类型，固定为 `conversation`。
+
 ## Delete conversation
 
 删除指定会话。会话中的消息项不会被删除。
@@ -313,11 +319,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 **新加坡：DELETE** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}`
 
-**conversation\_id**`string`**(必选, Path)**
+**conversation\_id** `_string_` **(必选, Path)**
 
 会话ID。
 
-Python
+## Python
 
 ```
 import os
@@ -332,7 +338,7 @@ result = client.conversations.delete("conv_xxx")
 print(result)
 ```
 
-Node.js
+## Node.js
 
 ```
 import OpenAI from "openai";
@@ -348,7 +354,7 @@ const result = await client.conversations.del(
 console.log(result);
 ```
 
-cURL
+## cURL
 
 ```
 curl --location --request DELETE 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx' \
@@ -357,17 +363,9 @@ curl --location --request DELETE 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs
 
 ### 响应参数
 
-**deleted**`boolean`
+**deleted** `_boolean_`
 
 是否删除成功。
-
-**id**`string`
-
-被删除的会话ID。
-
-**object**`string`
-
-对象类型，固定为 `conversation.deleted`。
 
 ```
 {
@@ -377,6 +375,14 @@ curl --location --request DELETE 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs
 }
 ```
 
+**id** `_string_`
+
+被删除的会话ID。
+
+**object** `_string_`
+
+对象类型，固定为 `conversation.deleted`。
+
 ## Create Items
 
 向指定会话添加消息项。
@@ -385,29 +391,11 @@ curl --location --request DELETE 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs
 
 **新加坡：POST** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items`
 
-**conversation\_id**`string`**(必选, Path)**
+**conversation\_id** `_string_` **(必选, Path)**
 
 会话ID。
 
-**items**`array`**(必选)**
-
-消息项列表，每次最多添加20条。
-
-属性
-
-**type**`string`**(必选)**
-
-消息类型，仅支持 `message`。
-
-**role**`string`**(必选)**
-
-消息的角色。`system` 、`developer`角色的指令优先级高于 `user` 角色，`assistant` 角色表示模型在之前交互中生成的消息。取值：`user`、`assistant`、`system`、`developer`。
-
-**content**`string or array`**(必选)**
-
-消息内容。支持纯文本字符串或结构化内容列表（如 ResponseInputText 对象数组），列表格式可包含文本等多种内容类型。
-
-Python
+## Python
 
 ```
 import os
@@ -431,7 +419,7 @@ items = client.conversations.items.create(
 print(items.data)
 ```
 
-Node.js
+## Node.js
 
 ```
 import OpenAI from "openai";
@@ -456,7 +444,7 @@ const items = await client.conversations.items.create(
 console.log(items.data);
 ```
 
-cURL
+## cURL
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx/items' \
@@ -476,45 +464,51 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
+**items** `_array_` **(必选)**
+
+消息项列表，每次最多添加20条。
+
+**属性**
+
+**type** `_string_` **(必选)**
+
+消息类型，仅支持 `message`。
+
+**role** `_string_` **(必选)**
+
+消息的角色。`system` 、`developer`角色的指令优先级高于 `user` 角色，`assistant` 角色表示模型在之前交互中生成的消息。取值：`user`、`assistant`、`system`、`developer`。
+
+**content** `_string or array_` **(必选)**
+
+消息内容。支持纯文本字符串或结构化内容列表（如 ResponseInputText 对象数组），列表格式可包含文本等多种内容类型。
+
 ### 响应参数
 
-**data**`array[object]`
+**data** `_array[object]_`
 
 创建的消息项列表。
 
-属性
+**属性**
 
-**id**`string`
+**id** `_string_`
 
 消息项唯一标识符。
 
-**content**`string or array`
+**content** `_string or array_`
 
 消息内容。纯文本字符串或结构化内容列表（如 ResponseInputText 对象数组）。
 
-**role**`string`
+**role** `_string_`
 
 消息的角色类型，取值：`user`、`assistant`、`system`、`developer`。
 
-**status**`string`
+**status** `_string_`
 
 消息的处理状态，取值：`in_progress`（处理中）、`completed`（已完成）、`incomplete`（未完成）。
 
-**type**`string`
+**type** `_string_`
 
 消息项的类型，固定为 `message`。
-
-**first\_id**`string`
-
-列表中第一条消息项的ID。
-
-**has\_more**`boolean`
-
-是否还有更多数据。
-
-**last\_id**`string`
-
-列表中最后一条消息项的ID。
 
 ```
 {
@@ -538,6 +532,18 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }
 ```
 
+**first\_id** `_string_`
+
+列表中第一条消息项的ID。
+
+**has\_more** `_boolean_`
+
+是否还有更多数据。
+
+**last\_id** `_string_`
+
+列表中最后一条消息项的ID。
+
 ## List Items
 
 列出会话中的所有消息项。
@@ -546,23 +552,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 **新加坡：GET** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items`
 
-**conversation\_id**`string`**(必选, Path)**
+**conversation\_id** `_string_` **(必选, Path)**
 
 会话ID。
 
-**after**`string`（可选）
-
-分页游标，返回指定消息ID之后的消息项。
-
-**order**`string`（可选）
-
-排序方式，`asc`（升序）或 `desc`（降序），默认 `desc`。
-
-**limit**`integer`（可选）
-
-返回数量，范围1-100，默认20。
-
-Python
+## Python
 
 ```
 import os
@@ -577,7 +571,7 @@ items = client.conversations.items.list("conv_xxx")
 print(items.data)
 ```
 
-Node.js
+## Node.js
 
 ```
 import OpenAI from "openai";
@@ -593,56 +587,52 @@ const items = await client.conversations.items.list(
 console.log(items.data);
 ```
 
-cURL
+## cURL
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx/items?limit=10&order=asc' \
 --header 'Authorization: Bearer $DASHSCOPE_API_KEY'
 ```
 
+**after** `_string_`（可选）
+
+分页游标，返回指定消息ID之后的消息项。
+
+**order** `_string_`（可选）
+
+排序方式，`asc`（升序）或 `desc`（降序），默认 `desc`。
+
+**limit** `_integer_`（可选）
+
+返回数量，范围1-100，默认20。
+
 ### 响应参数
 
-**data**`array[object]`
+**data** `_array[object]_`
 
 消息项列表。
 
-属性
+**属性**
 
-**id**`string`
+**id** `_string_`
 
 消息项唯一标识符。
 
-**content**`string or array`
+**content** `_string or array_`
 
 消息内容。纯文本字符串或结构化内容列表（如 ResponseInputText 对象数组）。
 
-**role**`string`
+**role** `_string_`
 
 消息的角色类型，取值：`user`、`assistant`、`system`、`developer`。
 
-**status**`string`
+**status** `_string_`
 
 消息的处理状态，取值：`in_progress`（处理中）、`completed`（已完成）、`incomplete`（未完成）。
 
-**type**`string`
+**type** `_string_`
 
 消息项的类型，固定为 `message`。
-
-**first\_id**`string`
-
-列表中第一条消息项的ID。
-
-**has\_more**`boolean`
-
-是否还有更多数据。
-
-**last\_id**`string`
-
-列表中最后一条消息项的ID。
-
-**object**`string`
-
-对象类型，固定为 `list`。
 
 ```
 {
@@ -679,6 +669,22 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }
 ```
 
+**first\_id** `_string_`
+
+列表中第一条消息项的ID。
+
+**has\_more** `_boolean_`
+
+是否还有更多数据。
+
+**last\_id** `_string_`
+
+列表中最后一条消息项的ID。
+
+**object** `_string_`
+
+对象类型，固定为 `list`。
+
 ## Retrieve Item
 
 获取指定消息项的详情。
@@ -687,15 +693,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 **新加坡：GET** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items/{item_id}`
 
-**conversation\_id**`string`**(必选, Path)**
+**conversation\_id** `_string_` **(必选, Path)**
 
 会话ID。
 
-**item\_id**`string`**(必选, Path)**
-
-消息项ID。
-
-Python
+## Python
 
 ```
 import os
@@ -713,7 +715,7 @@ item = client.conversations.items.retrieve(
 print(item)
 ```
 
-Node.js
+## Node.js
 
 ```
 import OpenAI from "openai";
@@ -730,44 +732,32 @@ const item = await client.conversations.items.retrieve(
 console.log(item);
 ```
 
-cURL
+## cURL
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx/items/msg_xxx' \
 --header 'Authorization: Bearer $DASHSCOPE_API_KEY'
 ```
 
+**item\_id** `_string_` **(必选, Path)**
+
+消息项ID。
+
 ### 响应参数
 
-**content**`array[object]`
+**content** `_array[object]_`
 
 消息内容列表，包含一个或多个内容对象。
 
-属性
+**属性**
 
-**type**`string`
+**type** `_string_`
 
 内容类型，如 `input_text`（用户输入文本）或 `output_text`（模型输出文本）。
 
-**text**`string`
+**text** `_string_`
 
 文本内容。
-
-**id**`string`
-
-消息项唯一标识符。
-
-**role**`string`
-
-消息的角色类型，取值：`user`、`assistant`、`system`、`developer`。
-
-**status**`string`
-
-消息的处理状态，取值：`in_progress`（处理中）、`completed`（已完成）、`incomplete`（未完成）。
-
-**type**`string`
-
-消息项的类型，固定为 `message`。
 
 ```
 {
@@ -784,6 +774,22 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }
 ```
 
+**id** `_string_`
+
+消息项唯一标识符。
+
+**role** `_string_`
+
+消息的角色类型，取值：`user`、`assistant`、`system`、`developer`。
+
+**status** `_string_`
+
+消息的处理状态，取值：`in_progress`（处理中）、`completed`（已完成）、`incomplete`（未完成）。
+
+**type** `_string_`
+
+消息项的类型，固定为 `message`。
+
 ## Delete Item
 
 删除指定的消息项。
@@ -792,15 +798,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 **新加坡：DELETE** `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/conversations/{conversation_id}/items/{item_id}`
 
-**conversation\_id**`string`**(必选, Path)**
+**conversation\_id** `_string_` **(必选, Path)**
 
 会话ID。
 
-**item\_id**`string`**(必选, Path)**
-
-消息项ID。
-
-Python
+## Python
 
 ```
 import os
@@ -818,7 +820,7 @@ result = client.conversations.items.delete(
 print(result)
 ```
 
-Node.js
+## Node.js
 
 ```
 import OpenAI from "openai";
@@ -835,26 +837,22 @@ const result = await client.conversations.items.del(
 console.log(result);
 ```
 
-cURL
+## cURL
 
 ```
 curl --location --request DELETE 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/conversations/conv_xxx/items/msg_xxx' \
 --header 'Authorization: Bearer $DASHSCOPE_API_KEY'
 ```
 
+**item\_id** `_string_` **(必选, Path)**
+
+消息项ID。
+
 ### 响应参数
 
-**deleted**`boolean`
+**deleted** `_boolean_`
 
 是否删除成功。
-
-**id**`string`
-
-被删除的消息项ID。
-
-**object**`string`
-
-对象类型，固定为 `conversation.item.deleted`。
 
 ```
 {
@@ -864,13 +862,21 @@ curl --location --request DELETE 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs
 }
 ```
 
+**id** `_string_`
+
+被删除的消息项ID。
+
+**object** `_string_`
+
+对象类型，固定为 `conversation.item.deleted`。
+
 ## Response API 使用 conversation 示例
 
 通过 Responses API 的 `conversation` 参数，可以实现多轮对话的上下文保持。
 
-> 请勿同时传入`previous_response_id`和`conversation`，否则会报错：`[400] INVALID_REQUEST: Mutually exclusive parameters: Ensure you are only providing one of: previous_response_id or conversation.`
+> 请勿同时传入`previous_response_id`和`conversation`，否则会报错：`[400] INVALID_REQUEST: Mutually exclusive parameters: Ensure you are only providing one of: previous_response_id or conversation.`
 
-Python
+## Python
 
 ```
 import os
@@ -902,7 +908,7 @@ response2 = client.responses.create(
 print(f"第二轮响应: {response2.output_text}")
 ```
 
-Node.js
+## Node.js
 
 ```
 import OpenAI from "openai";
@@ -940,5 +946,7 @@ console.log("第二轮响应:", response2.output_text);
 ## 使用限制
 
 -   创建会话或添加消息项时，`items` 最多包含20条。
+    
 -   `metadata` 最多16对键值对，key最大长度64字符，value最大长度512字符。
+    
 -   会话信息保留最近7天内的最新100条，超出时间或数量限制的内容将自动清理。

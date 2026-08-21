@@ -8,26 +8,21 @@
 
 ## 调试
 
-您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/EduTutor/2025-07-07/CutQuestions)
 
-[调试](https://api.alibabacloud.com/api/EduTutor/2025-07-07/CutQuestions)
+[![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png)调试](https://api.aliyun.com/api/EduTutor/2025-07-07/CutQuestions)
 
 ## 授权信息
 
 下表是API对应的授权信息，可以在RAM权限策略语句的`Action`元素中使用，用来给RAM用户或RAM角色授予调用此API的权限。具体说明如下：
 
 -   操作：是指具体的权限点。
-    
 -   访问级别：是指每个操作的访问级别，取值为写入（Write）、读取（Read）或列出（List）。
-    
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
-    
     -   对于必选的资源类型，用前面加 \* 表示。
     -   对于不支持资源级授权的操作，用`全部资源`表示。
 -   条件关键字：是指云产品自身定义的条件关键字。
-    
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
-    
 
 操作
 
@@ -95,7 +90,7 @@ string
 
 试卷、题目图片链接。
 
-[https://oss.xxx.com/xx.png](https://oss.xxx.com/xx.png)
+https://oss.xxx.com/xx.png
 
 parameters
 
@@ -185,7 +180,7 @@ string
 
 算法返回结果。
 
-'{ "questions": \[ { "pos\_list": \[ \[ 21, 0, 364, 0, 364, 82, 21, 82 \] \], "sub\_images": \[ "[](http://duguang-mld.oss-accelerate.aliyuncs.com/ocr_edu/1CE2851D-96D6-51D0-8ADA-EB7ACAF374BB_0_0.png?OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Expires=1755593474&Signature=YOUR_SIGNATURE)[http://duguang-mld.oss-accelerate.aliyuncs.com/ocr\_edu/1CE2851D-96D6-51D0-8ADA-EB7ACAF374BB\_0\_0.png?OSSAccessKeyId=YOUR\_ACCESS\_KEY\_ID\*\*\*\*&Expires=1755593474&Signature=YOUR\_SIGNATURE](http://duguang-mld.oss-accelerate.aliyuncs.com/ocr_edu/1CE2851D-96D6-51D0-8ADA-EB7ACAF374BB_0_0.png?OSSAccessKeyId=YOUR_ACCESS_KEY_ID****&Expires=1755593474&Signature=YOUR_SIGNATURE)" \], "merged\_image": "[](http://duguang-mld.oss-accelerate.aliyuncs.com/ocr_edu/1CE2851D-96D6-51D0-8ADA-EB7ACAF374BB_0_0.png?OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Expires=1755593474&Signature=YOUR_SIGNATURE)[http://duguang-mld.oss-accelerate.aliyuncs.com/ocr\_edu/1CE2851D-96D6-51D0-8ADA-EB7ACAF374BB\_0\_0.png?OSSAccessKeyId=YOUR\_ACCESS\_KEY\_ID\*\*\*\*&Expires=1755593474&Signature=YOUR\_SIGNATURE](http://duguang-mld.oss-accelerate.aliyuncs.com/ocr_edu/1CE2851D-96D6-51D0-8ADA-EB7ACAF374BB_0_0.png?OSSAccessKeyId=YOUR_ACCESS_KEY_ID****&Expires=1755593474&Signature=YOUR_SIGNATURE)", "info": { "stem": { "text": "8. 若 \\\\\\\\(a + b = -1\\\\\\\\), \\\\\\\\(ab = 4\\\\\\\\), 则 \\\\\\\\((4a - 5b - 3ab) - (3a - 6b + ab)\\\\\\\\) 的值为 \_ 。", "pos\_list": \[ \[ 21, 4, 364, 4, 364, 78, 21, 78 \] \] }, "option": \[\], "figure": \[\], "answer": \[ { "text": "-17", "pos\_list": \[ \[ 225, 51, 262, 51, 262, 70, 225, 70 \] \] } \], "type": "填空题", "subquestion": \[\] } } \] }'
+'{ "questions": \[ { "pos\_list": \[ \[ 21, 0, 364, 0, 364, 82, 21, 82 \] \], "sub\_images": \[ "http://duguang-mld.oss-accelerate.aliyuncs.com/ocr\_edu/1CE2851D-96D6-51D0-8ADA-EB7ACAF374BB\_0\_0.png?OSSAccessKeyId=LTAI5tPtEwpyT4JR9Gym\*\*\*\*&Expires=1755593474&Signature=SnqwepQVvZ51PnUGtpH0fWV50JI%3D" \], "merged\_image": "http://duguang-mld.oss-accelerate.aliyuncs.com/ocr\_edu/1CE2851D-96D6-51D0-8ADA-EB7ACAF374BB\_0\_0.png?OSSAccessKeyId=LTAI5tPtEwpyT4JR9Gy\*\*\*\*&Expires=1755593474&Signature=SnqwepQVvZ51PnUGtpH0fWV50JI%3D", "info": { "stem": { "text": "8. 若 \\\\\\\\(a + b = -1\\\\\\\\), \\\\\\\\(ab = 4\\\\\\\\), 则 \\\\\\\\((4a - 5b - 3ab) - (3a - 6b + ab)\\\\\\\\) 的值为 \_ 。", "pos\_list": \[ \[ 21, 4, 364, 4, 364, 78, 21, 78 \] \] }, "option": \[\], "figure": \[\], "answer": \[ { "text": "-17", "pos\_list": \[ \[ 225, 51, 262, 51, 262, 70, 225, 70 \] \] } \], "type": "填空题", "subquestion": \[\] } } \] }'
 
 input\_tokens
 
@@ -203,7 +198,7 @@ integer
 
 38
 
-#### 算法结果字段 data
+#### [](#算法结果字段-data)算法结果字段 data
 
 -   需要序列化，字段说明如下：
 
@@ -407,7 +402,7 @@ array
   "code": "SUCCESS",
   "httpStatusCode": 200,
   "message": "success",
-  "data": "'{\n    \"questions\": [\n        {\n            \"pos_list\": [\n                [\n                    21,\n                    0,\n                    364,\n                    0,\n                    364,\n                    82,\n                    21,\n                    82\n                ]\n            ],\n            \"sub_images\": [\n                \"http://duguang-mld.oss-accelerate.aliyuncs.com/ocr_edu/1CE2851D-96D6-51D0-8ADA-EB7ACAF374BB_0_0.png?OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Expires=1755593474&Signature=YOUR_SIGNATURE"\n            ],\n            \"merged_image\": \"http://duguang-mld.oss-accelerate.aliyuncs.com/ocr_edu/1CE2851D-96D6-51D0-8ADA-EB7ACAF374BB_0_0.png?OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Expires=1755593474&Signature=YOUR_SIGNATURE",\n            \"info\": {\n                \"stem\": {\n                    \"text\": \"8. 若 \\\\\\\\(a + b = -1\\\\\\\\), \\\\\\\\(ab = 4\\\\\\\\), 则 \\\\\\\\((4a - 5b - 3ab) - (3a - 6b + ab)\\\\\\\\) 的值为 _ 。\",\n                    \"pos_list\": [\n                        [\n                            21,\n                            4,\n                            364,\n                            4,\n                            364,\n                            78,\n                            21,\n                            78\n                        ]\n                    ]\n                },\n                \"option\": [],\n                \"figure\": [],\n                \"answer\": [\n                    {\n                        \"text\": \"-17\",\n                        \"pos_list\": [\n                            [\n                                225,\n                                51,\n                                262,\n                                51,\n                                262,\n                                70,\n                                225,\n                                70\n                            ]\n                        ]\n                    }\n                ],\n                \"type\": \"填空题\",\n                \"subquestion\": []\n            }\n        }\n    ]\n}'",
+  "data": "'{\n    \"questions\": [\n        {\n            \"pos_list\": [\n                [\n                    21,\n                    0,\n                    364,\n                    0,\n                    364,\n                    82,\n                    21,\n                    82\n                ]\n            ],\n            \"sub_images\": [\n                \"http://duguang-mld.oss-accelerate.aliyuncs.com/ocr_edu/1CE2851D-96D6-51D0-8ADA-EB7ACAF374BB_0_0.png?OSSAccessKeyId=LTAI5tPtEwpyT4JR9Gym****&Expires=1755593474&Signature=SnqwepQVvZ51PnUGtpH0fWV50JI%3D\"\n            ],\n            \"merged_image\": \"http://duguang-mld.oss-accelerate.aliyuncs.com/ocr_edu/1CE2851D-96D6-51D0-8ADA-EB7ACAF374BB_0_0.png?OSSAccessKeyId=LTAI5tPtEwpyT4JR9Gy****&Expires=1755593474&Signature=SnqwepQVvZ51PnUGtpH0fWV50JI%3D\",\n            \"info\": {\n                \"stem\": {\n                    \"text\": \"8. 若 \\\\\\\\(a + b = -1\\\\\\\\), \\\\\\\\(ab = 4\\\\\\\\), 则 \\\\\\\\((4a - 5b - 3ab) - (3a - 6b + ab)\\\\\\\\) 的值为 _ 。\",\n                    \"pos_list\": [\n                        [\n                            21,\n                            4,\n                            364,\n                            4,\n                            364,\n                            78,\n                            21,\n                            78\n                        ]\n                    ]\n                },\n                \"option\": [],\n                \"figure\": [],\n                \"answer\": [\n                    {\n                        \"text\": \"-17\",\n                        \"pos_list\": [\n                            [\n                                225,\n                                51,\n                                262,\n                                51,\n                                262,\n                                70,\n                                225,\n                                70\n                            ]\n                        ]\n                    }\n                ],\n                \"type\": \"填空题\",\n                \"subquestion\": []\n            }\n        }\n    ]\n}'",
   "input_tokens": 80,
   "output_tokens": 38
 }
@@ -415,7 +410,7 @@ array
 
 ## 错误码
 
-访问[错误中心](https://api.alibabacloud.com/document/EduTutor/2025-07-07/errorCode)查看更多错误码。
+访问[错误中心](< https://api.aliyun.com/document/EduTutor/2025-07-07/errorCode>)查看更多错误码。
 
 ## 变更历史
 

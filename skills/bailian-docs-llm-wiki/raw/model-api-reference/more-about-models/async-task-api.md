@@ -2,7 +2,7 @@
 
 在异步任务处理中，频繁轮询任务结果接口不仅会造成资源浪费，还可能因请求频率过高触发接口限流。阿里云百炼支持通过事件总线在任务完成处理后主动推送任务完成通知。您可以通过配置 HTTP 回调 URL 或 RocketMQ 消息队列来接收通知，在收到通知后，只需一次查询即可获取任务结果，从而避免频繁轮询。
 
-## 背景介绍
+## **背景介绍**
 
 阿里云百炼的异步任务已接入[事件总线EventBridge](https://help.aliyun.com/zh/eventbridge/product-overview/what-is-eventbridge)。事件总线作为事件中转服务，负责将事件路由至配置的事件目标（即事件接收端）。本文中提到的“通知”，在事件总线体系中即为一个具体的“事件”。
 
@@ -52,12 +52,14 @@
 
 为接收异步任务完成通知，您可以通过事件总线配置事件目标，常见的配置方案包括：
 
--   [配置HTTP回调URL](https://help.aliyun.com/zh/model-studio/async-task-api#d3591b073966f)：需要一个支持公网或[阿里云专有网络VPC](https://help.aliyun.com/zh/vpc/what-is-vpc)访问的 HTTP URL，且支持 POST 请求，适合大多数通用场景。
--   [配置RocketMQ](https://help.aliyun.com/zh/model-studio/async-task-api#e2f044afc2c0w)：通过[云消息队列 RocketMQ](https://help.aliyun.com/zh/apsaramq-for-rocketmq/product-overview/what-is-apsaramq-for-rocketmq) 接收事件并进行消费，适用于对消息可靠性要求较高的场景。
+-   [配置HTTP回调URL](#d3591b073966f)：需要一个支持公网或[阿里云专有网络VPC](https://help.aliyun.com/zh/vpc/what-is-vpc)访问的 HTTP URL，且支持 POST 请求，适合大多数通用场景。
+    
+-   [配置RocketMQ](#e2f044afc2c0w)：通过[云消息队列 RocketMQ](https://help.aliyun.com/zh/apsaramq-for-rocketmq/product-overview/what-is-apsaramq-for-rocketmq) 接收事件并进行消费，适用于对消息可靠性要求较高的场景。
+    
 
-## 方案一：配置HTTP回调URL
+## **方案一：配置HTTP回调URL**
 
-### 方案介绍
+### **方案介绍**
 
 阿里云百炼在任务完成后上报至事件总线，事件总线将任务完成事件推送到回调接口。回调接口接收到事件并进行解析，解析出已成功处理的任务 ID，随后只需调用一次查询结果接口即可获取任务结果。
 
@@ -65,7 +67,7 @@
 
 **计费说明**：[事件总线计费](https://help.aliyun.com/zh/eventbridge/product-overview/billing-overview)。
 
-以[文生图](raw/model-api-reference/image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md)为例，基于HTTP回调URL的异步调用流程为：
+以[文生图](https://help.aliyun.com/zh/model-studio/text-to-image-v2-api-reference)为例，基于HTTP回调URL的异步调用流程为：
 
 -   创建文生图任务，返回task\_id，此时任务未完成。
     
@@ -78,17 +80,22 @@
 -   最后调用查询结果接口获取生成的图像URL。
     
 
-### 操作步骤
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9610776471/p950666.png)
 
-步骤1：准备HTTP回调接口
+### **操作步骤**
+
+**步骤1：准备HTTP回调接口**
 
 通常情况下，HTTP 回调接口部署在您的业务系统中，用于接收异步事件通知。其配置需满足以下要求：
 
 -   请求URL：支持公网或[阿里云专有网络VPC](https://help.aliyun.com/zh/vpc/what-is-vpc) 访问的 HTTP URL。
+    
 -   请求方式：`POST`。
+    
 -   请求Body：`JSON` 格式，内容为异步任务完成事件数据。具体事件结构可在事件总线控制台查询，示例如下：
+    
 
-点击查看异步任务完成事件的数据结构
+**点击查看异步任务完成事件的数据结构**
 
 ```
 {
@@ -117,7 +124,7 @@
 }
 ```
 
-步骤2：在事件总线控制台查询事件
+#### **步骤2：在事件总线控制台查询事件**
 
 事件总线控制台支持查询阿里云百炼投递的事件。
 
@@ -127,39 +134,41 @@
     
 2.  点击**事件追踪**，输入查询条件，查询阿里云百炼的异步任务完成事件。
     
-    -   事件源：搜索选择`acs.dashscope`，表示事件来源于 DashScope（即灵积模型服务，属于阿里云百炼的底层服务）。
-    -   事件类型：搜索选择`dashscope:System:AsyncTaskFinish`，表示异步任务完成事件。
+    -   事件源：搜索选择`**acs.dashscope**`，表示事件来源于 DashScope（即灵积模型服务，属于阿里云百炼的底层服务）。
+        
+    -   事件类型：搜索选择`**dashscope:System:AsyncTaskFinish**`，表示异步任务完成事件。
+        
 3.  点击**详情**，查看阿里云百炼上报的异步任务完成事件的详细信息。
     
+    ```
+    {
+        "datacontenttype": "application/json;charset=utf-8",
+        "aliyunaccountid": "xxxxx",
+        "aliyunpublishtime": "2023-10-25T01:45:16.993Z",
+        "data": {
+            "start_time": "2023-10-25 09:45:09",
+            "user_api_unique_key": "apikey:v1:audio:asr:transcription:paraformer-8k-v1",
+            "task_status": "SUCCEEDED",
+            "contain_result": false,
+            "end_time": "2023-10-25 09:45:16",
+            "task_id": "a154c328-xxxx-xxxx-xxxx-e52a9a7e9a35",
+            "region": "cn-beijing",
+            "request_id": "108f38f5-xxxx-xxxx-xxxx-6504db9080b3",
+            "api_key_id": "1250"
+        },
+        "aliyunoriginalaccountid": "xxxxxxxx",
+        "specversion": "1.0",
+        "aliyuneventbusname": "default",
+        "id": "81765e5b-xxxx-xxxx-xxxx-bbad8dde2bd9",
+        "source": "acs.dashscope",
+        "time": "2023-1-25T01:45:16.969Z",
+        "aliyunregionid": "cn-beijing",
+        "type": "dashscope:System:AsyncTaskFinish"
+    }
+    ```
+    
 
-```
-{
-    "datacontenttype": "application/json;charset=utf-8",
-    "aliyunaccountid": "xxxxx",
-    "aliyunpublishtime": "2023-10-25T01:45:16.993Z",
-    "data": {
-        "start_time": "2023-10-25 09:45:09",
-        "user_api_unique_key": "apikey:v1:audio:asr:transcription:paraformer-8k-v1",
-        "task_status": "SUCCEEDED",
-        "contain_result": false,
-        "end_time": "2023-10-25 09:45:16",
-        "task_id": "a154c328-xxxx-xxxx-xxxx-e52a9a7e9a35",
-        "region": "cn-beijing",
-        "request_id": "108f38f5-xxxx-xxxx-xxxx-6504db9080b3",
-        "api_key_id": "1250"
-    },
-    "aliyunoriginalaccountid": "xxxxxxxx",
-    "specversion": "1.0",
-    "aliyuneventbusname": "default",
-    "id": "81765e5b-xxxx-xxxx-xxxx-bbad8dde2bd9",
-    "source": "acs.dashscope",
-    "time": "2023-1-25T01:45:16.969Z",
-    "aliyunregionid": "cn-beijing",
-    "type": "dashscope:System:AsyncTaskFinish"
-}
-```
-
-点击查看事件的参数描述
+**点击查看事件的参数描述**
 
 **参数**
 
@@ -384,7 +393,7 @@ String
 
 dashscope:System:AsyncTaskFinish
 
-步骤3：配置事件转发规则
+#### **步骤3：配置事件转发规则**
 
 1.  在左侧导航栏选择**事件规则**，单击**创建规则**。
     
@@ -392,38 +401,41 @@ dashscope:System:AsyncTaskFinish
     
 3.  **配置事件模式**：指定需要转发的事件。
     
-    -   **事件源**：搜索选择`acs.dashscope`，表示事件来源于阿里云百炼。
+    -   **事件源**：搜索选择`**acs.dashscope**`，表示事件来源于阿里云百炼。
         
-    -   **事件类型**：搜索选择`dashscope:System:AsyncTaskFinish`，表示异步任务完成事件。
+    -   **事件类型**：搜索选择`**dashscope:System:AsyncTaskFinish**`，表示异步任务完成事件。
         
     -   **模式内容**：用来配置过滤条件，可通过指定字段过滤事件。指定字段来源于步骤2中查询到的事件详情字段。模式编写规则请参见[事件模式](https://help.aliyun.com/zh/eventbridge/user-guide/event-patterns)，示例如下：
         
         -   默认情况：在选择事件源和事件类型后，模式内容默认展示如下内容，表示转发所有的`dashscope:System:AsyncTaskFinish`事件。
-
-```
-{
-  "source": ["acs.dashscope"],
-  "type": ["dashscope:System:AsyncTaskFinish"]
-}
-```
-
--   通过指定字段过滤事件：筛选出 `user_api_unique_key`字段后缀为`:paraformer-8k-v1`的事件，即仅转发模型名称为`paraformer-8k-v1`的事件。事件类型为`dashscope:System:AsyncTaskFinish`。
-
-```
-{
-  "source": ["acs.dashscope"],
-  "type": ["dashscope:System:AsyncTaskFinish"],
-  "data": {
-    "user_api_unique_key": [
-      {"suffix": ":paraformer-8k-v1"}
-    ]
-  }
-}
-```
-
+            
+        
+        ```
+        {
+          "source": ["acs.dashscope"],
+          "type": ["dashscope:System:AsyncTaskFinish"]
+        }
+        ```
+        
+        -   通过指定字段过滤事件：筛选出 `user_api_unique_key`字段后缀为`:paraformer-8k-v1`的事件，即仅转发模型名称为`paraformer-8k-v1`的事件。事件类型为`dashscope:System:AsyncTaskFinish`。
+            
+        
+        ```
+        {
+          "source": ["acs.dashscope"],
+          "type": ["dashscope:System:AsyncTaskFinish"],
+          "data": {
+            "user_api_unique_key": [
+              {"suffix": ":paraformer-8k-v1"}
+            ]
+          }
+        }
+        ```
+        
 4.  **配置事件目标**：支持配置多种类型的[事件目标](https://help.aliyun.com/zh/eventbridge/user-guide/event-target-overview)，包括HTTP回调URL、RocketMQ消息队列等。具体操作见步骤4。
+    
 
-步骤4：配置事件目标为HTTP回调接口
+#### **步骤4：配置事件目标为HTTP回调接口**
 
 1.  **配置事件目标**：将事件转发到HTTP回调URL。
     
@@ -436,14 +448,15 @@ dashscope:System:AsyncTaskFinish
     -   网络类型：根据服务地址选择。
         
         -   HTTP支持公网和专用网络两种类型，当选择专用网络时，需要配置VPC、vSwitch和SecurityGroup。
+            
 2.  点击**确认**即可完成规则的修改。查看事件目标，如果有HTTP样式，则代表配置成功。
     
     此时规则的**事件目标**列将显示**HTTP (1)**。
     
 
-## 方案二：配置RocketMQ
+## **方案二：配置RocketMQ**
 
-### 方案介绍
+### **方案介绍**
 
 阿里云百炼在任务完成后上报至事件总线，事件总线将任务完成事件推送到云消息队列RocketMQ。业务方监听消息队列并消费消息，解析出已成功处理的任务 ID，随后只需调用一次查询结果接口即可获取任务结果。
 
@@ -451,7 +464,7 @@ dashscope:System:AsyncTaskFinish
 
 **计费说明**：[事件总线计费](https://help.aliyun.com/zh/eventbridge/product-overview/billing-overview)、[RocketMQ计费](https://help.aliyun.com/zh/apsaramq-for-rocketmq/cloud-message-queue-rocketmq-5-x-series/product-overview/overview-2)。
 
-以[文生图](raw/model-api-reference/image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md)为例，基于RocketMQ的异步调用流程为：
+以[文生图](https://help.aliyun.com/zh/model-studio/text-to-image-v2-api-reference)为例，基于RocketMQ的异步调用流程为：
 
 -   创建文生图任务，返回task\_id，此时任务未完成。
     
@@ -464,9 +477,11 @@ dashscope:System:AsyncTaskFinish
 -   最后调用查询结果接口获取生成的图像URL。
     
 
-### 操作步骤
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9610776471/p950716.png)
 
-步骤1：准备RocketMQ实例（若已有 RocketMQ队列，可跳过此步 ）
+### **操作步骤**
+
+#### **步骤1：准备RocketMQ实例（若已有**RocketMQ队列，可跳过此步**）**
 
 通过RocketMQ消息队列接收事件，需要先准备好RocketMQ队列，再接收消息。
 
@@ -474,12 +489,12 @@ dashscope:System:AsyncTaskFinish
     
     实例ID：示例为`rmq-cn-nwy*******`。
     
-2.  创建对应实例的`Topic`，设置自定义的Topic名称。
+2.  创建对应实例的`**Topic**`，设置自定义的Topic名称。
     
-3.  创建对应实例的`Group`，设置自定义的Group名称。
+3.  创建对应实例的`**Group**`，设置自定义的Group名称。
     
 
-步骤2：在事件总线控制台查询事件
+#### **步骤2：在事件总线控制台查询事件**
 
 事件总线控制台支持查询阿里云百炼投递的事件。
 
@@ -489,39 +504,41 @@ dashscope:System:AsyncTaskFinish
     
 2.  点击**事件追踪**，输入查询条件，查询阿里云百炼的异步任务完成事件。
     
-    -   事件源：搜索选择`acs.dashscope`，表示事件来源于 DashScope（即灵积模型服务，属于阿里云百炼的底层服务）。
-    -   事件类型：搜索选择`dashscope:System:AsyncTaskFinish`，表示异步任务完成事件。
+    -   事件源：搜索选择`**acs.dashscope**`，表示事件来源于 DashScope（即灵积模型服务，属于阿里云百炼的底层服务）。
+        
+    -   事件类型：搜索选择`**dashscope:System:AsyncTaskFinish**`，表示异步任务完成事件。
+        
 3.  点击**详情**，查看阿里云百炼上报的异步任务完成事件的详细信息。
     
+    ```
+    {
+        "datacontenttype": "application/json;charset=utf-8",
+        "aliyunaccountid": "xxxxx",
+        "aliyunpublishtime": "2023-10-25T01:45:16.993Z",
+        "data": {
+            "start_time": "2023-10-25 09:45:09",
+            "user_api_unique_key": "apikey:v1:audio:asr:transcription:paraformer-8k-v1",
+            "task_status": "SUCCEEDED",
+            "contain_result": false,
+            "end_time": "2023-10-25 09:45:16",
+            "task_id": "a154c328-xxxx-xxxx-xxxx-e52a9a7e9a35",
+            "region": "cn-beijing",
+            "request_id": "108f38f5-xxxx-xxxx-xxxx-6504db9080b3",
+            "api_key_id": "1250"
+        },
+        "aliyunoriginalaccountid": "xxxxxxxx",
+        "specversion": "1.0",
+        "aliyuneventbusname": "default",
+        "id": "81765e5b-xxxx-xxxx-xxxx-bbad8dde2bd9",
+        "source": "acs.dashscope",
+        "time": "2023-1-25T01:45:16.969Z",
+        "aliyunregionid": "cn-beijing",
+        "type": "dashscope:System:AsyncTaskFinish"
+    }
+    ```
+    
 
-```
-{
-    "datacontenttype": "application/json;charset=utf-8",
-    "aliyunaccountid": "xxxxx",
-    "aliyunpublishtime": "2023-10-25T01:45:16.993Z",
-    "data": {
-        "start_time": "2023-10-25 09:45:09",
-        "user_api_unique_key": "apikey:v1:audio:asr:transcription:paraformer-8k-v1",
-        "task_status": "SUCCEEDED",
-        "contain_result": false,
-        "end_time": "2023-10-25 09:45:16",
-        "task_id": "a154c328-xxxx-xxxx-xxxx-e52a9a7e9a35",
-        "region": "cn-beijing",
-        "request_id": "108f38f5-xxxx-xxxx-xxxx-6504db9080b3",
-        "api_key_id": "1250"
-    },
-    "aliyunoriginalaccountid": "xxxxxxxx",
-    "specversion": "1.0",
-    "aliyuneventbusname": "default",
-    "id": "81765e5b-xxxx-xxxx-xxxx-bbad8dde2bd9",
-    "source": "acs.dashscope",
-    "time": "2023-1-25T01:45:16.969Z",
-    "aliyunregionid": "cn-beijing",
-    "type": "dashscope:System:AsyncTaskFinish"
-}
-```
-
-点击查看事件的参数描述
+**点击查看事件的参数描述**
 
 **参数**
 
@@ -746,7 +763,7 @@ String
 
 dashscope:System:AsyncTaskFinish
 
-步骤3：配置事件转发规则
+#### **步骤3：配置事件转发规则**
 
 1.  在左侧导航栏选择**事件规则**，单击**创建规则**。
     
@@ -754,52 +771,61 @@ dashscope:System:AsyncTaskFinish
     
 3.  **配置事件模式**：指定需要转发的事件。
     
-    -   **事件源**：搜索选择`acs.dashscope`，表示事件来源于阿里云百炼。
+    -   **事件源**：搜索选择`**acs.dashscope**`，表示事件来源于阿里云百炼。
         
-    -   **事件类型**：搜索选择`dashscope:System:AsyncTaskFinish`，表示异步任务完成事件。
+    -   **事件类型**：搜索选择`**dashscope:System:AsyncTaskFinish**`，表示异步任务完成事件。
         
     -   **模式内容**：用来配置过滤条件，可通过指定字段过滤事件。指定字段来源于步骤2中查询到的事件详情字段。模式编写规则请参见[事件模式](https://help.aliyun.com/zh/eventbridge/user-guide/event-patterns)，示例如下：
         
         -   默认情况：在选择事件源和事件类型后，模式内容默认展示如下内容，表示转发所有的`dashscope:System:AsyncTaskFinish`事件。
-
-```
-{
-  "source": ["acs.dashscope"],
-  "type": ["dashscope:System:AsyncTaskFinish"]
-}
-```
-
--   通过指定字段过滤事件：筛选出 `user_api_unique_key`字段后缀为`:paraformer-8k-v1`的事件，即仅转发模型名称为`paraformer-8k-v1`的事件。事件类型为`dashscope:System:AsyncTaskFinish`。
-
-```
-{
-  "source": ["acs.dashscope"],
-  "type": ["dashscope:System:AsyncTaskFinish"],
-  "data": {
-    "user_api_unique_key": [
-      {"suffix": ":paraformer-8k-v1"}
-    ]
-  }
-}
-```
-
+            
+        
+        ```
+        {
+          "source": ["acs.dashscope"],
+          "type": ["dashscope:System:AsyncTaskFinish"]
+        }
+        ```
+        
+        -   通过指定字段过滤事件：筛选出 `user_api_unique_key`字段后缀为`:paraformer-8k-v1`的事件，即仅转发模型名称为`paraformer-8k-v1`的事件。事件类型为`dashscope:System:AsyncTaskFinish`。
+            
+        
+        ```
+        {
+          "source": ["acs.dashscope"],
+          "type": ["dashscope:System:AsyncTaskFinish"],
+          "data": {
+            "user_api_unique_key": [
+              {"suffix": ":paraformer-8k-v1"}
+            ]
+          }
+        }
+        ```
+        
 4.  **配置事件目标**：支持配置多种类型的[事件目标](https://help.aliyun.com/zh/eventbridge/user-guide/event-target-overview)，包括HTTP回调URL、RocketMQ消息队列等。具体操作见步骤4。
+    
 
-步骤4：配置事件目标为RocketMQ
+#### **步骤4：配置事件目标为RocketMQ**
 
 RocketMQ创建完成后，打开配置的事件目标界面，选择已配置的RocketMQ实例。
 
 -   服务类型：选择“消息队列RocketMQ版”。
+    
 -   版本：已创建的RocketMQ版本，如RocketMQ 5.x
--   实例ID：已创建的RocketMQ的实例ID。请参见[步骤1](raw/model-api-reference/more-about-models/async-task-api.md)的配置。
--   Topic：已创建的Topic名称。请参见[步骤1](raw/model-api-reference/more-about-models/async-task-api.md)的配置。
+    
+-   实例ID：已创建的RocketMQ的实例ID。请参见[步骤1](#258327c52dbc3)的配置。
+    
+-   Topic：已创建的Topic名称。请参见[步骤1](#258327c52dbc3)的配置。
+    
 
-步骤5：在RocketMQ控制台查看消息
+#### **步骤5：在RocketMQ控制台查看消息**
 
 配置完成后，提交异步任务，待任务完成后，在配置的RocketMQ的Topic中查看消息。
 
 -   RocketMQ在线查看消息需要开通消息一键收发体验功能。
--   消息一键收发体验功能是基于[函数计算](https://help.aliyun.com/zh/functioncompute/what-is-function-compute)实现的，如果超过了免费试用额度后将会产生少量费用，请查看[函数计算计费规则](https://help.aliyun.com/zh/functioncompute/what-is-function-compute)。
+    
+-   消息一键收发体验功能是基于[函数计算](https://help.aliyun.com/zh/functioncompute/what-is-function-compute)实现的，如果超过了免费试用额度后将会产生少量费用，请查看[函数计算计费规则](https://help.aliyun.com/zh/functioncompute/fc-2-0/product-overview/billing-overview)。
+    
 
 在**Topic 管理**页面找到已创建的Topic，单击其右侧**操作**列中的**详情**。
 
@@ -807,13 +833,14 @@ RocketMQ创建完成后，打开配置的事件目标界面，选择已配置的
 
 配置好**Topic 名称**和**Group ID**等参数后，单击**运行**开始接收消息。**运行结果**页签将显示收到的消息列表，包括消息ID和接收时间等信息。
 
-步骤6：使用SDK接收并消费消息
+#### **步骤6：使用SDK接收并消费消息**
 
 使用RocketMQ的[Java SDK](https://help.aliyun.com/zh/apsaramq-for-rocketmq/cloud-message-queue-rocketmq-5-x-series/developer-reference/overview-8)实现以下逻辑：先订阅相关Topic，实现消息监听逻辑。在接收到消息后，再进行消费处理。
 
 下面展示RocketMQ 5.0版本的Java客户端示例代码。
 
 -   在Maven项目中，引入以下依赖
+    
 
 ```
 <dependency>
@@ -824,6 +851,7 @@ RocketMQ创建完成后，打开配置的事件目标界面，选择已配置的
 ```
 
 -   消费MQ消息的示例代码
+    
 
 ```
 import com.alibaba.fastjson2.JSON;
@@ -900,17 +928,17 @@ public class ConsumerExample {
 }
 ```
 
-## 常见问题
+## **常见问题**
 
-### 一个事件规则可以配置多个事件目标吗？
+### **一个事件规则可以配置多个事件目标吗？**
 
 可以，同一个事件规则可以配置多个事件目标。如果配置多个事件目标，则同一个事件会投递到配置的每个事件目标中。
 
-### 配置完事件规则，但是接收不到事件？
+### **配置完事件规则，但是接收不到事件？**
 
 请确认事件转发规则的地域与事件所属地域一致。例如，北京地域配置的规则仅能转发北京地域的事件，无法转发上海等地域的事件。事件总线所在地域可在控制台页面顶部导航栏的地域选择器中查看。
 
-### HTTP/HTTPS服务请求超时或者请求错误？
+### **HTTP/HTTPS服务请求超时或者请求错误？**
 
 请按以下步骤排查：
 
@@ -925,5 +953,7 @@ public class ConsumerExample {
     -   PrivateNetwork：VPC网络，若选择此项，需正确配置VPC、vSwitch和SecurityGroup信息。
         
         -   检查VPC网络和交换机配置是否正确。
+            
         -   检查网络安全组配置是否正确。
+            
 4.  其他参数配置：请参见[事件目标参数](https://help.aliyun.com/zh/eventbridge/user-guide/event-target-parameters#section-tpm-hnw-bdr)。

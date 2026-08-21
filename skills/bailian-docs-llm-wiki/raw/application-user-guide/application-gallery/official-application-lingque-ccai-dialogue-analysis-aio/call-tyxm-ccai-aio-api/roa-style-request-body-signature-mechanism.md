@@ -6,7 +6,7 @@
 
 请求及返回结果都使用UTF-8字符集进行编码。
 
-## RequestHeader（公共请求头）
+### RequestHeader（公共请求头）
 
 一个完整的阿里云 OpenAPI 请求，包含以下部分。
 
@@ -46,13 +46,13 @@ String
 
 非匿名请求必须
 
-用于验证请求合法性的认证信息，格式为Authorization:SignatureAlgorithmCredential=AccessKeyId,SignedHeaders=SignedHeaders,Signature=YOUR\_SIGNATURE
+用于验证请求合法性的认证信息，格式为Authorization:SignatureAlgorithmCredential=AccessKeyId,SignedHeaders=SignedHeaders,Signature=Signature。其中SignatureAlgorithm为签名加密方式，为ACS3-HMAC-SHA256。
 
 Credential为用户的访问密钥ID。您可以在[RAM 控制台](https://ram.console.aliyun.com/manage/ak)查看您的 AccessKeyId。如需创建 AccessKey，请参见[创建AccessKey](https://help.aliyun.com/zh/document_detail/53045.html)。SignedHeaders为请求头中包含的参与签名字段键名，【说明】：除Authorization外的所有公共请求头，只要存在必须被加入签名。
 
 Signature为请求签名，取值参见签名机制。
 
-ACS3-HMAC-SHA256 Credential=YourAccessKeyId,SignedHeaders=host;x-acs-action;x-acs-content-sha256;x-acs-date;x-acs-signature-nonce;x-acs-version,Signature=YOUR\_SIGNATURE
+ACS3-HMAC-SHA256 Credential=YourAccessKeyId,SignedHeaders=host;x-acs-action;x-acs-content-sha256;x-acs-date;x-acs-signature-nonce;x-acs-version,Signature=e521358f7776c97df52e6b2891a8bc73026794a071b50c3323388c4e0df64804
 
 x-acs-signature-nonce
 
@@ -106,7 +106,7 @@ STS认证必传
 
 为保证API的安全调用，在调用API时阿里云会对每个API请求通过签名（Signature）进行身份验证。无论使用HTTP还是HTTPS协议提交请求，都需要在请求中包含签名信息。本文指导您如何进行签名处理。
 
-### 步骤一：构造规范化请求
+### **步骤一：构造规范化请求**
 
 使用AK/SK方式进行签名与认证，首先需要规范请求内容，然后再进行签名。客户端与云服务API网关使用相同的请求规范，可以确保同一个HTTP请求的前后端得到相同的签名结果，从而完成身份校验。
 
@@ -122,11 +122,11 @@ CanonicalRequest =
   HashedRequestPayload
 ```
 
--   **请求方法（HTTPRequestMethod）**
+-   #### **请求方法（HTTPRequestMethod）**
     
     即大写的HTTP方法名，如GET、POST。
     
--   **规范化URI（CanonicalURI）**
+-   #### **规范化URI（CanonicalURI）**
     
     即URL的资源路径部分经过编码得到，资源路径部分指URL中host与查询字符串之间的部分，包含host之后的`/`但不包含查询字符串前的`?`。用户发起请求时的URI应使用规范化URI，编码方式使用UTF-8字符集按照[RFC3986](http://tools.ietf.org/html/rfc3986)的规则对URI中的每一部分（即被`/`分割开的字符串）进行编码：
     
@@ -145,54 +145,67 @@ CanonicalRequest =
     
     ROA风格API该参数为元数据文件中`path`的值，例如/api/v1/clusters。
     
--   **规范化查询字符串（CanonicalQueryString）**
+-   #### **规范化查询字符串（CanonicalQueryString）**
     
     构造方法如下：
     
     1.  将查询字符串中的参数按照参数名的字符代码升序排列，具有重复名称的参数应按值进行排序。
+        
     2.  使用UTF-8字符集按照[RFC3986](http://tools.ietf.org/html/rfc3986)的规则对每个参数的参数名和参数值分别进行URI编码，具体规则与上一节中的CanonicalURI编码规则相同。
+        
     3.  使用等号（`=`）连接编码后的请求参数名和参数值，对于没有值的参数使用空字符串。
+        
     4.  按照步骤4中的顺序使用与号（`&`）连接编码后的请求参数。
+        
     
     **重要**
     
     当请求的查询字符串为空时，使用空字符串作为规范化查询字符串。
     
--   **规范化请求头（CanonicalizedHeaders）**
+-   #### **规范化请求头（CanonicalizedHeaders）**
     
     一个非标准HTTP头部信息。需要将请求中包含以`x-acs-`为前缀、`host`、`content-type`的参数信息，添加到规范化请求头中，构造方法如下：
     
     1.  将所有需要签名的参数的名称转换为小写。
+        
     2.  将所有参数按照参数名称的字符顺序以升序排列。
+        
     3.  将参数的值除去首尾空格。对于有多个值的参数，将多个值分别除去首尾空格后按值升序排列，然后用逗号（`,`）连接。
+        
     4.  将步骤2、3的结果以英文冒号（`:`）连接，并在尾部添加换行符，组成一个规范化消息头（`CanonicalHeaderEntry`）。
+        
     5.  如果没有需要签名的消息头，使用空字符串作为规范化消息头列表。
+        
     
     **重要**
     
     除Authorization外的所有公共请求头，只要符合要求的参数都必须被加入签名。
     
--   **已签名消息头列表（SignedHeaders）**
+-   #### **已签名消息头列表（SignedHeaders）**
     
     用于说明此次请求包含了哪些消息头参与签名，与CanonicalHeaders中包含的消息头是一一对应的，构造方法如下：
     
     -   将CanonicalHeaders中包含的请求头的名称转为小写。
+        
     -   多个请求头名称（小写）按首字母升序排列并以英文分号（`;`）分隔，例如`content-type;host;x-acs-date`。
+        
     -   伪代码如下：
-
-```
-CanonicalHeaderEntry = Lowercase(HeaderName) + ':' + Trim(HeaderValue) + '\n'
-
-CanonicalHeaders =
-    CanonicalHeaderEntry0 + CanonicalHeaderEntry1 + ... + CanonicalHeaderEntryN
-```
-
--   **HashedRequestPayload**
+        
+        ```
+        CanonicalHeaderEntry = Lowercase(HeaderName) + ':' + Trim(HeaderValue) + '\n'
+        
+        CanonicalHeaders = 
+            CanonicalHeaderEntry0 + CanonicalHeaderEntry1 + ... + CanonicalHeaderEntryN
+        ```
+        
+-   #### **HashedRequestPayload**
     
     当请求体（body）为空时，RequestPayload固定为空字符串，否则RequestPayload的值为请求体（body）对应的JSON字符串。再使用哈希函数对RequestPayload进行转换得到HashedRequestPayload，转换规则用伪代码可表示为`HashedRequestPayload = HexEncode(Hash(RequestPayload))`。
     
     -   Hash表示消息摘要函数，目前支持SHA256算法，例如，当签名协议使用ACS3-HMAC-SHA256时，应使用SHA256作为Hash函数。
+        
     -   HexEncode表示以小写的十六进制的形式返回摘要的编码函数（即Base16编码）。
+        
     
     表1：签名协议与签名算法、摘要函数的对应关系
     
@@ -211,7 +224,7 @@ CanonicalHeaders =
     HMAC-SHA256
     
 
-## 步骤二：构造待签名字符串
+### **步骤二：构造待签名字符串**
 
 按照以下伪代码构造待签名字符串（stringToSign）：
 
@@ -229,15 +242,17 @@ StringToSign =
     
     规范化请求摘要串，计算方法伪代码如下：
     
-
-```
-HashedCanonicalRequest = HexEncode(Hash(CanonicalRequest))
-```
+    ```
+    HashedCanonicalRequest = HexEncode(Hash(CanonicalRequest))
+    ```
+    
 
 1.  使用哈希函数（Hash）对步骤一中得到的规范化请求（CanonicalRequest）进行摘要处理，具体使用的Hash函数取决于签名协议（SignatureAlgorithm），参见表1，例如，当签名协议为ACS3-HMAC-SHA256时，应使用SHA256作为Hash函数。
+    
 2.  将上一步得到的摘要结果以小写的十六进制形式编码。
+    
 
-## 步骤三：计算签名
+### **步骤三：计算签名**
 
 按照以下伪代码计算签名值（Signature）
 
@@ -246,15 +261,19 @@ Signature = HexEncode(SignatureMethod(Secret, StringToSign))
 ```
 
 -   StringToSign：步骤二中构造的待签名字符串，UTF-8编码。
+    
 -   SignatureMethod：签名算法，具体使用的算法取决于签名协议（SignatureAlgorithm），其对应关系如表1。
+    
 -   Secret：用户的签名密钥，为二进制数据。
+    
 -   HexEncode：以小写的十六进制的形式返回摘要的编码函数（即Base16编码）。
+    
 
-## 步骤四：将签名添加到请求中
+### **步骤四：将签名添加到请求中**
 
 计算完签名后，构造Authorization请求头，格式为：`Authorization:<SignatureAlgorithm>Credential=<AccessKeyId>,SignedHeaders=<SignedHeaders>,Signature=<Signature>`
 
-## 接口签名示例
+## **接口签名示例**
 
 运行Java示例，需要您在pom.xml中添加以下Maven依赖。
 
@@ -276,6 +295,7 @@ Signature = HexEncode(SignatureMethod(Secret, StringToSign))
     <scope>provided</scope>
 </dependency>
 ```
+
 ```
 package org.example.service;
 
@@ -418,7 +438,7 @@ public class RoaDemo {
         field2.put("Desc", "用户的信用卡号");
         fieldList.add(field1);
         fieldList.add(field2);
-
+        
         //templateIds需填写真实的模板ID，47L为示例ID
         Map<String, Object> body = new java.util.HashMap<>();
         body.put("Dialogue", dialogue);
@@ -571,7 +591,7 @@ public class RoaDemo {
 
             // 步骤 3：计算签名
             String signature = DatatypeConverter.printHexBinary(hmac256(ACCESS_KEY_SECRET.getBytes(StandardCharsets.UTF_8), stringToSign)).toLowerCase();
-            System.out.println("signature=YOUR_SIGNATURE>" + signature);
+            System.out.println("signature=========>" + signature);
 
             // 步骤 4：拼接 Authorization
             String authorization = ALGORITHM + " " + "Credential=" + ACCESS_KEY_ID + ",SignedHeaders=" + signedHeaders + ",Signature=" + signature;

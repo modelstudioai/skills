@@ -50,6 +50,6 @@ array
 
 检索到的素材列表
 
-OutlineWritingArticle
+[OutlineWritingArticle](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-struct-outlinewritingarticle)
 
 检索到的素材

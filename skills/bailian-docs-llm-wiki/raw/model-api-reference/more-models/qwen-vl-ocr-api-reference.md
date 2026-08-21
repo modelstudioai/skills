@@ -1,272 +1,47 @@
 # Qwen-OCR API参考
 
-本文介绍通过OpenAI兼容接口 或 DashScopeAPI 调用通义千问OCR 模型的输入与输出参数。
+本文介绍通过 OpenAI 兼容接口 或 DashScope API 调用通义千问OCR 模型的输入与输出参数。
 
 > 相关文档：[文字提取（Qwen-OCR）](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr)
 
 ## OpenAI 兼容
 
-#### 华北2（北京）地域
+## 华北2（北京）地域
 
 SDK 调用配置的`base_url`为：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 调用配置的`endpoint`：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-#### 新加坡地域
+## 新加坡地域
 
 SDK 调用配置的`base_url`为：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 调用配置的`endpoint`：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-#### 美国（弗吉尼亚）地域
+## 美国（弗吉尼亚）地域
 
 SDK 调用配置的`base_url`为：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 调用配置的`endpoint`：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+**重要**
+
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-> 您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。若通过OpenAI SDK进行调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+> 您需要已[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。若通过OpenAI SDK进行调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
 
 ### 请求体
 
-**model**`string`**（必选）**
+## 非流式输出
 
-模型名称。支持的模型可参见`选择模型`。
-
-**messages**`array`**（必选）**
-
-传递给大模型的上下文，按对话顺序排列。
-
-消息类型
-
-User Message`object`**（必选）**
-
-用户消息，用于向模型传递指令和待识别的图像。
-
-属性
-
-**content**`array`**（必选）**
-
-消息内容。
-
-属性
-
-**type**`string`**（必选）**
-
-可选值：
-
--   `text`
-    
-    输入文本时需设为`text`。
-    
--   `image_url`
-    
-    输入图片时需设为`image_url`。
-    
-
-**text**`string`**（可选）**
-
-输入的文本。
-
-默认值为：`Please output only the text content from the image without any additional descriptions or formatting.` ，即模型默认提取图像中的全部文本。
-
-**image\_url**`object`
-
-输入的图片信息。当`type`为`image_url`时是必选参数。
-
-属性
-
-**url** `string`**（必选）**
-
-图片的 URL或 Base64 Data URL。传入本地文件请参考[文字提取](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#ea4e1d92dbry2)。
-
-**min\_pixels**`integer`（可选）
-
-用于设定输入图像的最小像素阈值，单位为像素。
-
-当输入图像像素小于`min_pixels`时，会将图像进行放大，直到总像素高于`min_pixels`。
-
-图像Token与像素的转换关系
-
-不同模型，每个图像 Token 对应的像素不同：
-
--   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：每 Token 对应像素为`32*32`。
--   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：每 Token 对应像素为`28*28`。
-
-min\_pixels 取值范围
-
--   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：默认值和最小值均为3072（即`3×32×32`）
--   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：默认值和最小值均为 `3136` （即`4×28×28`）。
-
-示例值：`{"type": "image_url","image_url": {"url":"https://xxxx.jpg"},"min_pixels": 3072}`
-
-**max\_pixels**`integer`（可选）
-
-用于设定输入图像的最大像素阈值，单位为像素。
-
-当输入图像像素在`[min_pixels, max_pixels]`区间内时，模型会按原图进行识别。当输入图像像素大于`max_pixels`时，会将图像进行缩小，直到总像素低于`max_pixels`。
-
-图像Token与像素的转换关系
-
-不同模型，每个图像 Token 对应的像素不同：
-
--   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：每 Token 对应像素为`32*32`。
--   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：每 Token 对应像素为`28*28`。
-
-max\_pixels 取值范围
-
--   `qwen3.5-ocr、qwen-vl-ocr-latest、qwen-vl-ocr-2025-11-20`
-    
-    -   默认值：8388608 （即`8192x32x32`）
-    -   最大值：30720000（即`30000x32x32`）
--   `qwen-vl-ocr、qwen-vl-ocr-2025-08-28`及之前更新的模型
-    
-    -   默认值：6422528（即`8192x28x28`）
-    -   最大值：23520000（即`30000x28x28`）
-
-示例值：`{"type": "image_url","image_url": {"url":"https://xxxx.jpg"},"max_pixels": 8388608}`
-
-**role**`string`**（必选）**
-
-用户消息的角色，固定为`user`。
-
-**stream**`boolean`（可选） 默认值为 `false`
-
-是否以流式方式输出回复。
-
-可选值：
-
--   `false`：等待模型生成完整回复后一次性返回。
--   `true`：模型边生成边返回数据块。客户端需逐块读取，以还原完整回复。
-
-**stream\_options**`object`（可选）
-
-流式输出的配置项，仅在 `stream` 为 `true` 时生效。
-
-属性
-
-**include\_usage**`boolean`（可选）默认值为 `false`
-
-是否在**最后一个数据块**包含Token消耗信息。
-
-可选值：
-
--   `true`：包含；
--   `false`：不包含。
-
-**max\_tokens**`integer`（可选）
-
-用于限制模型输出的最大 Token 数。若生成内容超过此值，响应将被截断。
-
--   `qwen3.5-ocr`：默认值与最大值为32768。
-    
--   `qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`、`qwen-vl-ocr-2024-10-28`默认值与最大值均为模型的最大输出长度，请参见[模型选型](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#f4299b0a1ace4)。
-    
--   `qwen-vl-ocr、qwen-vl-ocr-2025-04-13、qwen-vl-ocr-2025-08-28`，默认值和最大值为4096。
-    
-    > 如需提高该参数值（4097~8192范围），请联系商务经理进行申请，并提供以下信息：主账号ID、图像类型（如文档图、电商图、合同等）、模型名称、预计 QPS 和每日请求总数，以及模型输出长度超过4096的请求占比。
-    
-
-**logprobs** `boolean` （可选）默认值为 `false`
-
-是否返回输出 Token 的对数概率，可选值：
-
--   `true`
-    
-    返回
-    
--   `false`
-    
-    不返回
-    
-
-**top\_logprobs** `integer` （可选）默认值为0
-
-指定在每一步生成时，返回模型最大概率的候选 Token 个数。
-
-取值范围：\[0,5\]
-
-仅当 `logprobs` 为 `true` 时生效。
-
-**temperature**`float`（可选）默认值为0.01
-
-采样温度，控制模型生成文本的多样性。
-
-temperature越高，生成的文本更多样，反之，生成的文本更确定。
-
-取值范围： \[0, 2)
-
-temperature与top\_p均可以控制生成文本的多样性，建议只设置其中一个值。
-
-> 建议设置为默认值即可。
-
-**top\_p**`float`（可选）默认值为0.001
-
-核采样的概率阈值，控制模型生成文本的多样性。
-
-top\_p越高，生成的文本更多样。反之，生成的文本更确定。
-
-取值范围：（0,1.0\]
-
-temperature与top\_p均可以控制生成文本的多样性，建议只设置其中一个值。
-
-> 建议设置为默认值即可。
-
-**top\_k**`integer`（可选）默认值为1
-
-生成过程中采样候选集的大小。例如，取值为50时，仅将单次生成中得分最高的50个Token组成随机采样的候选集。取值越大，生成的随机性越高；取值越小，生成的确定性越高。取值为None或当top\_k大于100时，表示不启用top\_k策略，此时仅有top\_p策略生效。
-
-取值需要大于或等于0。
-
-该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中，配置方式为：`extra_body={"top_k": xxx}`；通过 Node.js SDK 或 HTTP 方式调用时，请作为顶层参数传递。
-
-> 建议设置为默认值即可。
-
-**repetition\_penalty**`float`（可选）默认值为1.0
-
-模型生成时连续序列中的重复度。提高repetition\_penalty时可以降低模型生成的重复度，1.0表示不做惩罚。该参数对模型效果影响较大，建议保持默认值。
-
-> 建议设置为默认值即可。
-
-**presence\_penalty** `float`（可选）默认值为0.0
-
-控制模型生成文本时的内容重复度。
-
-取值范围：\[-2.0, 2.0\]。正值降低重复度，负值增加重复度。
-
-在创意写作或头脑风暴等需要多样性、趣味性或创造力的场景中，建议调高该值；在技术文档或正式文本等强调一致性与术语准确性的场景中，建议调低该值。
-
-原理介绍
-
-如果参数值是正数，模型将对目前文本中已存在的Token施加一个惩罚值（惩罚值与文本出现的次数无关），减少这些Token重复出现的几率，从而减少内容重复度，增加用词多样性。
-
-> 建议设置为默认值即可。
-
-**seed**`integer`（可选）
-
-随机数种子。用于确保在相同输入和参数下生成结果可复现。若调用时传入相同的 `seed` 且其他参数不变，模型将尽可能返回相同结果。
-
-取值范围：`[0,2 31 −1]`。
-
-> 建议设置为默认值即可。
-
-**stop**`string 或 array`（可选）
-
-用于指定停止词。当模型生成的文本中出现`stop` 指定的字符串或`token_id`时，生成将立即终止。
-
-可传入敏感词以控制模型的输出。
-
-> stop为数组时，不可将`token_id`和字符串同时作为元素输入，比如不可以指定为`["你好",104307]`。
-
-#### 非流式输出
-
-Python
+## Python
 
 ```
 from openai import OpenAI
@@ -280,7 +55,7 @@ PROMPT_TICKET_EXTRACTION = """
 
 try:
     client = OpenAI(
-        # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+        # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx" 
         # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
         api_key=os.getenv("DASHSCOPE_API_KEY"),
         # 以下为北京地域的 base_url，若使用弗吉尼亚地域模型，需要将base_url换成https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1
@@ -301,7 +76,7 @@ try:
                         # 输入图像的最大像素阈值，超过该值图像会缩小，直到总像素低于max_pixels
                         "max_pixels": 32 * 32 * 8192
                     },
-                    # 模型支持在以下text字段中传入Prompt，若未传入，则会使用默认的Prompt：Please output only the text content from the image without any additional descriptions or formatting.
+                    # 模型支持在以下text字段中传入Prompt，若未传入，则会使用默认的Prompt：Please output only the text content from the image without any additional descriptions or formatting.    
                     {"type": "text",
                      "text": PROMPT_TICKET_EXTRACTION}
                 ]
@@ -312,7 +87,7 @@ except Exception as e:
     print(f"错误信息: {e}")
 ```
 
-Node.js
+## Node.js
 
 ```
 import OpenAI from 'openai';
@@ -371,7 +146,7 @@ async function main() {
 main();
 ```
 
-curl
+## curl
 
 ```
 # ======= 重要提示 =======
@@ -402,9 +177,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-#### 流式输出
+## 流式输出
 
-Python
+## Python
 
 ```
 import os
@@ -417,7 +192,7 @@ PROMPT_TICKET_EXTRACTION = """
 """
 
 client = OpenAI(
-    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
+    # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx" 
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
     # 以下是北京地域base-url，如果使用新加坡地域的模型，需要将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
@@ -450,7 +225,7 @@ for chunk in completion:
     print(chunk.model_dump_json())
 ```
 
-Node.js
+## Node.js
 
 ```
 import OpenAI from 'openai';
@@ -509,7 +284,7 @@ let fullContent = ""
 main();
 ```
 
-curl
+## curl
 
 ```
 # ======= 重要提示 =======
@@ -542,152 +317,250 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
+**model** `_string_` **（必选）**
+
+模型名称。支持的模型可参见`[选择模型](https://help.aliyun.com/zh/model-studio/models#55c81ba3ccgct)`。
+
+**messages** `_array_` **（必选）**
+
+传递给大模型的上下文，按对话顺序排列。
+
+**消息类型**
+
+User Message `_object_` **（必选）**
+
+用户消息，用于向模型传递指令和待识别的图像。
+
+**属性**
+
+**content** `_array_`**（必选）**
+
+消息内容。
+
+**属性**
+
+**type** `_string_` **（必选）**
+
+可选值：
+
+-   `text`
+    
+    输入文本时需设为`text`。
+    
+-   `image_url`
+    
+    输入图片时需设为`image_url`。
+    
+
+**text** `_string_` **（可选）**
+
+输入的文本。
+
+默认值为：`Please output only the text content from the image without any additional descriptions or formatting.` ，即模型默认提取图像中的全部文本。
+
+**image\_url** `_object_`
+
+输入的图片信息。当`type`为`image_url`时是必选参数。
+
+**属性**
+
+**url** `_string_`**（必选）**
+
+图片的 URL或 Base64 Data URL。传入本地文件请参考[文字提取](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#ea4e1d92dbry2)。
+
+**min\_pixels** `_integer_` （可选）
+
+用于设定输入图像的最小像素阈值，单位为像素。
+
+当输入图像像素小于`min_pixels`时，会将图像进行放大，直到总像素高于`min_pixels`。
+
+**图像Token与像素的转换关系**
+
+不同模型，每个图像 Token 对应的像素不同：
+
+-   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：每 Token 对应像素为`32*32`。
+    
+-   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：每 Token 对应像素为`28*28`。
+    
+
+**min\_pixels 取值范围**
+
+-   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：默认值和最小值均为3072（即`3×32×32`）
+    
+-   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：默认值和最小值均为 `3136` （即`4×28×28`）。
+    
+
+示例值：`{"type": "image_url","image_url": {"url":"https://xxxx.jpg"},"min_pixels": 3072}`
+
+**max\_pixels** `_integer_` （可选）
+
+用于设定输入图像的最大像素阈值，单位为像素。
+
+当输入图像像素在`[min_pixels, max_pixels]`区间内时，模型会按原图进行识别。当输入图像像素大于`max_pixels`时，会将图像进行缩小，直到总像素低于`max_pixels`。
+
+**图像Token与像素的转换关系**
+
+不同模型，每个图像 Token 对应的像素不同：
+
+-   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：每 Token 对应像素为`32*32`。
+    
+-   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：每 Token 对应像素为`28*28`。
+    
+
+**max\_pixels 取值范围**
+
+-   `qwen3.5-ocr、qwen-vl-ocr-latest、qwen-vl-ocr-2025-11-20`
+    
+    -   默认值：8388608 （即`8192x32x32`）
+        
+    -   最大值：30720000（即`30000x32x32`）
+        
+-   `qwen-vl-ocr、qwen-vl-ocr-2025-08-28`及之前更新的模型
+    
+    -   默认值：6422528（即`8192x28x28`）
+        
+    -   最大值：23520000（即`30000x28x28`）
+        
+
+示例值：`{"type": "image_url","image_url": {"url":"https://xxxx.jpg"},"max_pixels": 8388608}`
+
+**role** `_string_` **（必选）**
+
+用户消息的角色，固定为`user`。
+
+**stream** `_boolean_` （可选） 默认值为 `false`
+
+是否以流式方式输出回复。
+
+可选值：
+
+-   `false`：等待模型生成完整回复后一次性返回。
+    
+-   `true`：模型边生成边返回数据块。客户端需逐块读取，以还原完整回复。
+    
+
+**stream\_options** `_object_` （可选）
+
+流式输出的配置项，仅在 `stream` 为 `true` 时生效。
+
+**属性**
+
+**include\_usage** `_boolean_` （可选）默认值为 `false`
+
+是否在**最后一个数据块**包含Token消耗信息。
+
+可选值：
+
+-   `true`：包含；
+    
+-   `false`：不包含。
+    
+
+**max\_tokens** `_integer_` （可选）
+
+用于限制模型输出的最大 Token 数。若生成内容超过此值，响应将被截断。
+
+-   `qwen3.5-ocr`：默认值与最大值为32768。
+    
+-   `qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`、`qwen-vl-ocr-2024-10-28`默认值与最大值均为模型的最大输出长度，请参见[模型选型](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#f4299b0a1ace4)。
+    
+-   `qwen-vl-ocr、qwen-vl-ocr-2025-04-13、qwen-vl-ocr-2025-08-28`，默认值和最大值为4096。
+    
+    > 如需提高该参数值（4097~8192范围），请联系商务经理进行申请，并提供以下信息：主账号ID、图像类型（如文档图、电商图、合同等）、模型名称、预计 QPS 和每日请求总数，以及模型输出长度超过4096的请求占比。
+    
+
+**logprobs** `_boolean_` （可选）默认值为 `false`
+
+是否返回输出 Token 的对数概率，可选值：
+
+-   `true`
+    
+    返回
+    
+-   `false`
+    
+    不返回
+    
+
+**top\_logprobs** `_integer_` （可选）默认值为0
+
+指定在每一步生成时，返回模型最大概率的候选 Token 个数。
+
+取值范围：\[0,5\]
+
+仅当 `logprobs` 为 `true` 时生效。
+
+**temperature** `_float_` （可选） 默认值为0.01
+
+采样温度，控制模型生成文本的多样性。
+
+temperature越高，生成的文本更多样，反之，生成的文本更确定。
+
+取值范围： \[0, 2)
+
+temperature与top\_p均可以控制生成文本的多样性，建议只设置其中一个值。
+
+> 建议设置为默认值即可。
+
+**top\_p** `_float_` （可选）默认值为0.001
+
+核采样的概率阈值，控制模型生成文本的多样性。
+
+top\_p越高，生成的文本更多样。反之，生成的文本更确定。
+
+取值范围：（0,1.0\]
+
+temperature与top\_p均可以控制生成文本的多样性，建议只设置其中一个值。
+
+> 建议设置为默认值即可。
+
+**top\_k** `_integer_` （可选）默认值为1
+
+生成过程中采样候选集的大小。例如，取值为50时，仅将单次生成中得分最高的50个Token组成随机采样的候选集。取值越大，生成的随机性越高；取值越小，生成的确定性越高。取值为None或当top\_k大于100时，表示不启用top\_k策略，此时仅有top\_p策略生效。
+
+取值需要大于或等于0。
+
+该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中，配置方式为：`extra_body={"top_k": xxx}`；通过 Node.js SDK 或 HTTP 方式调用时，请作为顶层参数传递。
+
+> 建议设置为默认值即可。
+
+**repetition\_penalty** `_float_` （可选）默认值为1.0
+
+模型生成时连续序列中的重复度。提高repetition\_penalty时可以降低模型生成的重复度，1.0表示不做惩罚。该参数对模型效果影响较大，建议保持默认值。
+
+> 建议设置为默认值即可。
+
+**presence\_penalty** `_float_` （可选）默认值为0.0
+
+控制模型生成文本时的内容重复度。
+
+取值范围：\[-2.0, 2.0\]。正值降低重复度，负值增加重复度。
+
+在创意写作或头脑风暴等需要多样性、趣味性或创造力的场景中，建议调高该值；在技术文档或正式文本等强调一致性与术语准确性的场景中，建议调低该值。
+
+**原理介绍**
+
+如果参数值是正数，模型将对目前文本中已存在的Token施加一个惩罚值（惩罚值与文本出现的次数无关），减少这些Token重复出现的几率，从而减少内容重复度，增加用词多样性。
+
+> 建议设置为默认值即可。
+
+**seed** `_integer_` （可选）
+
+随机数种子。用于确保在相同输入和参数下生成结果可复现。若调用时传入相同的 `seed` 且其他参数不变，模型将尽可能返回相同结果。
+
+取值范围：`[0,231−1]`。
+
+> 建议设置为默认值即可。
+
+**stop** `_string 或 array_` （可选）
+
+用于指定停止词。当模型生成的文本中出现`stop` 指定的字符串或`token_id`时，生成将立即终止。
+
+可传入敏感词以控制模型的输出。
+
+> stop为数组时，不可将`token_id`和字符串同时作为元素输入，比如不可以指定为`["你好",104307]`。
+
 ### chat响应对象（非流式输出）
-
-**id**`string`
-
-本次请求的唯一标识符。
-
-**choices**`array`
-
-模型生成内容的数组。
-
-属性
-
-**finish\_reason**`string`
-
-模型停止生成的原因。
-
-有两种情况：
-
--   自然停止输出时为`stop`；
--   生成长度过长而结束为`length`。
-
-**index**`integer`
-
-当前对象在`choices`数组中的索引。
-
-**message**`object`
-
-模型输出的消息。
-
-属性
-
-**content** `string`
-
-大模型的返回结果。
-
-**processed\_text** `string`
-
-对模型原始输出进行后处理的结果，自动删除重复片段等。当模型输出存在重复内容时，该字段提供清洗后的文本。
-
-> 仅通过 DashScope SDK 和 curl 调用时返回，OpenAI 兼容 SDK 不返回该字段。
-
-**refusal** `string`
-
-该参数当前固定为`null`。
-
-**role** `string`
-
-消息的角色，固定为`assistant`。
-
-**audio** `object`
-
-该参数当前固定为`null`。
-
-**function\_call** `object`
-
-该参数当前固定为`null`。
-
-**tool\_calls** `array`
-
-该参数当前固定为`null`。
-
-**created**`integer`
-
-本次请求被创建时的时间戳。
-
-**model**`string`
-
-本次请求使用的模型。
-
-**object** `string`
-
-始终为`chat.completion`。
-
-**service\_tier** `string`
-
-该参数当前固定为`null`。
-
-**system\_fingerprint**`string`
-
-该参数当前固定为`null`。
-
-**usage** `object`
-
-本次请求的 Token 消耗信息。
-
-属性
-
-**completion\_tokens** `integer`
-
-模型输出的 Token 数。
-
-**prompt\_tokens** `integer`
-
-输入的 Token 数。
-
-**total\_tokens** `integer`
-
-消耗的总 Token 数，为`prompt_tokens`与`completion_tokens`的总和。
-
-**completion\_tokens\_details** `object`
-
-模型输出Token的细粒度分类。
-
-属性
-
-**accepted\_prediction\_tokens**`integer`
-
-该参数当前固定为`null`。
-
-**audio\_tokens** `integer`
-
-该参数当前固定为`null`。
-
-**reasoning\_tokens** `integer`
-
-该参数当前固定为`null`。
-
-**text\_tokens** `integer`
-
-模型输出文本对应的 Token 数。
-
-**rejected\_prediction\_tokens**`integer`
-
-该参数当前固定为`null`。
-
-**prompt\_tokens\_details** `object`
-
-输入 Token 的细粒度分类。
-
-属性
-
-**audio\_tokens** `integer`
-
-该参数当前固定为`null`。
-
-**cached\_tokens** `integer`
-
-该参数当前固定为`null`。
-
-**text\_tokens** `integer`
-
-模型输入的文本对应的Token 数。
-
-**image\_tokens** `integer`
-
-模型输入的图像对应的 Token数。
 
 ```
 {
@@ -734,137 +607,154 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
-### chat响应chunk对象（流式输出）
+**id** `_string_`
 
-**id**`string`
+本次请求的唯一标识符。
 
-本次调用的唯一标识符。每个chunk对象有相同的 id。
+**choices** `_array_`
 
-**choices**`array`
+模型生成内容的数组。
 
-模型生成内容的数组。若设置`include_usage`参数为`true`，则在最后一个chunk中为空。
+**属性**
 
-属性
+**finish\_reason** `_string_`
 
-**delta** `object`
+模型停止生成的原因。
 
-流式返回的输出内容。
+有两种情况：
 
-属性
+-   自然停止输出时为`stop`；
+    
+-   生成长度过长而结束为`length`。
+    
 
-**content** `string`
+**index** `_integer_`
+
+当前对象在`choices`数组中的索引。
+
+**message** `_object_`
+
+模型输出的消息。
+
+**属性**
+
+**content** `_string_`
 
 大模型的返回结果。
 
-**function\_call** `object`
+**processed\_text** `_string_`
+
+对模型原始输出进行后处理的结果，自动删除重复片段等。当模型输出存在重复内容时，该字段提供清洗后的文本。
+
+> 仅通过 DashScope SDK 和 curl 调用时返回，OpenAI 兼容 SDK 不返回该字段。
+
+**refusal** `_string_`
 
 该参数当前固定为`null`。
 
-**refusal** `object`
+**role** `_string_`
+
+消息的角色，固定为`assistant`。
+
+**audio** `_object_`
 
 该参数当前固定为`null`。
 
-**role** `string`
+**function\_call** `_object_`
 
-消息对象的角色，只在第一个chunk中有值。
+该参数当前固定为`null`。
 
-**finish\_reason** `string`
+**tool\_calls** `_array_`
 
-模型停止生成的原因。有三种情况：
+该参数当前固定为`null`。
 
--   自然停止输出时为`stop`；
--   生成未结束时为`null`；
--   生成长度过长而结束为`length`。
+**created** `_integer_`
 
-**index** `integer`
+本次请求被创建时的时间戳。
 
-当前响应在`choices`数组中的索引。
-
-**created**`integer`
-
-本次请求被创建时的时间戳。每个chunk有相同的时间戳。
-
-**model**`string`
+**model** `_string_`
 
 本次请求使用的模型。
 
-**object** `string`
+**object** `_string_`
 
-始终为`chat.completion.chunk`。
+始终为`chat.completion`。
 
-**service\_tier** `string`
-
-该参数当前固定为`null`。
-
-**system\_fingerprint**`string`
+**service\_tier** `_string_`
 
 该参数当前固定为`null`。
 
-**usage** `object`
+**system\_fingerprint** `_string_`
 
-本次请求消耗的Token。只在`include_usage`为`true`时，在最后一个chunk返回。
+该参数当前固定为`null`。
 
-属性
+**usage** `_object_`
 
-**completion\_tokens** `integer`
+本次请求的 Token 消耗信息。
+
+**属性**
+
+**completion\_tokens** `_integer_`
 
 模型输出的 Token 数。
 
-**prompt\_tokens** `integer`
+**prompt\_tokens** `_integer_`
 
 输入的 Token 数。
 
-**total\_tokens** `integer`
+**total\_tokens** `_integer_`
 
 消耗的总 Token 数，为`prompt_tokens`与`completion_tokens`的总和。
 
-**completion\_tokens\_details** `object`
+**completion\_tokens\_details** `_object_`
 
 模型输出Token的细粒度分类。
 
-属性
+**属性**
 
-**accepted\_prediction\_tokens**`integer`
-
-该参数当前固定为`null`。
-
-**audio\_tokens** `integer`
+**accepted\_prediction\_tokens**`_integer_`
 
 该参数当前固定为`null`。
 
-**reasoning\_tokens** `integer`
+**audio\_tokens** `_integer_`
 
 该参数当前固定为`null`。
 
-**text\_tokens** `integer`
+**reasoning\_tokens** `_integer_`
+
+该参数当前固定为`null`。
+
+**text\_tokens** `_integer_`
 
 模型输出文本对应的 Token 数。
 
-**rejected\_prediction\_tokens**`integer`
+**rejected\_prediction\_tokens** `_integer_`
 
 该参数当前固定为`null`。
 
-**prompt\_tokens\_details** `object`
+**prompt\_tokens\_details** `_object_`
 
 输入 Token 的细粒度分类。
 
-属性
+**属性**
 
-**audio\_tokens** `integer`
-
-该参数当前固定为`null`。
-
-**cached\_tokens** `integer`
+**audio\_tokens** `_integer_`
 
 该参数当前固定为`null`。
 
-**text\_tokens** `integer`
+**cached\_tokens** `_integer_`
+
+该参数当前固定为`null`。
+
+**text\_tokens** `_integer_`
 
 模型输入的文本对应的Token 数。
 
-**image\_tokens** `integer`
+**image\_tokens** `_integer_`
 
 模型输入的图像对应的 Token数。
+
+### chat响应chunk对象（流式输出）
 
 ```
 {"id":"chatcmpl-f6fbdc0d-78d6-418f-856f-f099c2e4859b","choices":[{"delta":{"content":"","function_call":null,"refusal":null,"role":"assistant","tool_calls":null},"finish_reason":null,"index":0,"logprobs":null}],"created":1764139204,"model":"qwen3.5-ocr","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":null}
@@ -879,374 +769,214 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 {"id":"chatcmpl-f6fbdc0d-78d6-418f-856f-f099c2e4859b","choices":[],"created":1764139204,"model":"qwen3.5-ocr","object":"chat.completion.chunk","service_tier":null,"system_fingerprint":null,"usage":{"completion_tokens":141,"prompt_tokens":513,"total_tokens":654,"completion_tokens_details":{"accepted_prediction_tokens":null,"audio_tokens":null,"reasoning_tokens":null,"rejected_prediction_tokens":null,"text_tokens":141},"prompt_tokens_details":{"audio_tokens":null,"cached_tokens":null,"image_tokens":332,"text_tokens":181}}}
 ```
 
+**id** `_string_`
+
+本次调用的唯一标识符。每个chunk对象有相同的 id。
+
+**choices** `_array_`
+
+模型生成内容的数组。若设置`include_usage`参数为`true`，则在最后一个chunk中为空。
+
+**属性**
+
+**delta** `_object_`
+
+流式返回的输出内容。
+
+**属性**
+
+**content** `_string_`
+
+大模型的返回结果。
+
+**function\_call** `_object_`
+
+该参数当前固定为`null`。
+
+**refusal** `_object_`
+
+该参数当前固定为`null`。
+
+**role** `_string_`
+
+消息对象的角色，只在第一个chunk中有值。
+
+**finish\_reason** `_string_`
+
+模型停止生成的原因。有三种情况：
+
+-   自然停止输出时为`stop`；
+    
+-   生成未结束时为`null`；
+    
+-   生成长度过长而结束为`length`。
+    
+
+**index** `_integer_`
+
+当前响应在`choices`数组中的索引。
+
+**created** `_integer_`
+
+本次请求被创建时的时间戳。每个chunk有相同的时间戳。
+
+**model** `_string_`
+
+本次请求使用的模型。
+
+**object** `_string_`
+
+始终为`chat.completion.chunk`。
+
+**service\_tier** `_string_`
+
+该参数当前固定为`null`。
+
+**system\_fingerprint**`_string_`
+
+该参数当前固定为`null`。
+
+**usage** `_object_`
+
+本次请求消耗的Token。只在`include_usage`为`true`时，在最后一个chunk返回。
+
+**属性**
+
+**completion\_tokens** `_integer_`
+
+模型输出的 Token 数。
+
+**prompt\_tokens** `_integer_`
+
+输入的 Token 数。
+
+**total\_tokens** `_integer_`
+
+消耗的总 Token 数，为`prompt_tokens`与`completion_tokens`的总和。
+
+**completion\_tokens\_details** `_object_`
+
+模型输出Token的细粒度分类。
+
+**属性**
+
+**accepted\_prediction\_tokens**`_integer_`
+
+该参数当前固定为`null`。
+
+**audio\_tokens** `_integer_`
+
+该参数当前固定为`null`。
+
+**reasoning\_tokens** `_integer_`
+
+该参数当前固定为`null`。
+
+**text\_tokens** `_integer_`
+
+模型输出文本对应的 Token 数。
+
+**rejected\_prediction\_tokens** `_integer_`
+
+该参数当前固定为`null`。
+
+**prompt\_tokens\_details** `_object_`
+
+输入 Token 的细粒度分类。
+
+**属性**
+
+**audio\_tokens** `_integer_`
+
+该参数当前固定为`null`。
+
+**cached\_tokens** `_integer_`
+
+该参数当前固定为`null`。
+
+**text\_tokens** `_integer_`
+
+模型输入的文本对应的Token 数。
+
+**image\_tokens** `_integer_`
+
+模型输入的图像对应的 Token数。
+
 ## DashScope
 
-#### 华北2（北京）地域
+## 华北2（北京）地域
 
 HTTP 调用配置的`endpoint`：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK 调用无需配置 `base_url`。
 
-#### 新加坡地域
+## 新加坡地域
 
 HTTP 调用配置的`endpoint`：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的`base_url`：
 
-#### Python代码
+## **Python代码**
 
 ```
 dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
 ```
 
-#### Java代码
+## **Java代码**
 
 -   **方式一：**
-
-```
-import com.alibaba.dashscope.protocol.Protocol;
-MultiModalConversation conv = new MultiModalConversation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1");
-```
-
+    
+    ```
+    import com.alibaba.dashscope.protocol.Protocol;
+    MultiModalConversation conv = new MultiModalConversation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1");
+    ```
+    
 -   **方式二：**
+    
+    ```
+    import com.alibaba.dashscope.utils.Constants;
+    Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
+    ```
+    
 
-```
-import com.alibaba.dashscope.utils.Constants;
-Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
-```
-
-#### 美国（弗吉尼亚）地域
+## 美国（弗吉尼亚）地域
 
 HTTP 调用配置的`endpoint`：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的`base_url`：
 
-#### Python代码
+## **Python代码**
 
 ```
 dashscope.base_http_api_url = 'https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1'
 ```
 
-#### Java代码
+## **Java代码**
 
 -   **方式一：**
-
-```
-import com.alibaba.dashscope.protocol.Protocol;
-MultiModalConversation conv = new MultiModalConversation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1");
-```
-
+    
+    ```
+    import com.alibaba.dashscope.protocol.Protocol;
+    MultiModalConversation conv = new MultiModalConversation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1");
+    ```
+    
 -   **方式二：**
+    
+    ```
+    import com.alibaba.dashscope.utils.Constants;
+    Constants.baseHttpApiUrl="https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1";
+    ```
+    
 
-```
-import com.alibaba.dashscope.utils.Constants;
-Constants.baseHttpApiUrl="https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1";
-```
-
-> 您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。若通过DashScope SDK进行调用，需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
+> 您需要已[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。若通过DashScope SDK进行调用，需要[安装DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk#f3e80b21069aa)。
 
 ### 请求体
 
-**model**`string`**（必选）**
-
-模型名称。支持的模型可参见`选择模型`。
-
-**messages**`array`**（必选）**
-
-传递给大模型的上下文，按对话顺序排列。
-
-> 通过HTTP调用时，请将**messages**放入 **input** 对象中。
-
-消息类型
-
-User Message`object`**（必选）**
-
-用户消息，用于向模型传递问题、指令或上下文等。
-
-属性
-
-**content**`string 或 array`**（必选）**
-
-消息内容。若输入只有文本，则为 string 类型；若输入包含图像数据，则为 array 类型。
-
-属性
-
-**text**`string`**（可选）**
-
-输入的文本。
-
-默认值为：`Please output only the text content from the image without any additional descriptions or formatting.` ，即模型默认提取图像中的全部文本。
-
-**image**`string`（可选）
-
-图片的URL、 Base64 Data URL、或本地路径。传入本地文件请参见[传入本地文件](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#ea4e1d92dbry2)。
-
-示例值：`{"image":"https://xxxx.jpeg"}`
-
-**enable\_rotate**`boolean`（可选）默认值为`false`
-
-是否对倾斜的图像进行校正处理。
-
-可选值：
-
--   `true`：自动校正
--   `false`：不进行校正
-
-示例值：`{"image":"https://xxxx.jpeg","enable_rotate": True}`
-
-**min\_pixels**`integer`（可选）
-
-用于设定输入图像的最小像素阈值，单位为像素。
-
-当输入图像像素小于`min_pixels`时，会将图像进行放大，直到总像素高于`min_pixels`。
-
-图像Token与像素的转换关系
-
-不同模型，每个图像 Token 对应的像素不同：
-
--   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：每 Token 对应像素为`32*32`。
--   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：每 Token 对应像素为`28*28`。
-
-min\_pixels 取值范围
-
--   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：默认值和最小值均为3072（即`3×32×32`）
--   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：默认值和最小值均为 `3136` （即`4×28×28`）。
-
-示例值：`{"image":"https://xxxx.jpeg","min_pixels": 3072}`
-
-**max\_pixels**`integer`（可选）
-
-用于设定输入图像的最大像素阈值，单位为像素。
-
-当输入图像像素在`[min_pixels, max_pixels]`区间内时，模型会按原图进行识别。当输入图像像素大于`max_pixels`时，会将图像进行缩小，直到总像素低于`max_pixels`。
-
-图像Token与像素的转换关系
-
-不同模型，每个图像 Token 对应的像素不同：
-
--   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：每 Token 对应像素为`32*32`。
--   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：每 Token 对应像素为`28*28`。
-
-max\_pixels 取值范围
-
--   `qwen3.5-ocr、qwen-vl-ocr-latest、qwen-vl-ocr-2025-11-20`
-    
-    -   默认值：8388608 （即`8192x32x32`）
-    -   最大值：30720000（即`30000x32x32`）
--   `qwen-vl-ocr、qwen-vl-ocr-2025-08-28`及之前更新的模型
-    
-    -   默认值：6422528（即`8192x28x28`）
-    -   最大值：23520000（即`30000x28x28`）
-
-示例值：`{"image":"https://xxxx.jpeg","max_pixels": 8388608}`
-
-**role**`string`**（必选）**
-
-用户消息的角色，固定为`user`。
-
-**max\_tokens**`integer`（可选）
-
-用于限制模型输出的最大 Token 数。若生成内容超过此值，响应将被截断。
-
--   `qwen3.5-ocr`：默认值与最大值为32768。
-    
--   `qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`、`qwen-vl-ocr-2024-10-28`默认值与最大值均为模型的最大输出长度，请参见[模型选型](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#f4299b0a1ace4)。
-    
--   `qwen-vl-ocr、qwen-vl-ocr-2025-04-13、qwen-vl-ocr-2025-08-28`，默认值和最大值为4096。
-    
-    > 如需提高该参数值（4097~8192范围），请联系商务经理进行申请，并提供以下信息：主账号ID、图像类型（如文档图、电商图、合同等）、模型名称、预计 QPS 和每日请求总数，以及模型输出长度超过4096的请求占比。
-    
-
-> Java SDK中为**maxTokens**\*。\*通过HTTP调用时，请将 **max\_tokens**放入 **parameters** 对象中。
-
-**ocr\_options**_object_（可选）
-
-使用通义千问OCR模型[调用内置任务](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#1aae916a0br7o)时需要配置的参数。调用内置任务时，无需传入`User Message`，模型内部会采用对应任务的`Prompt`。相关章节：[调用内置任务](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#1aae916a0br7o)。
-
-属性
-
-**task** `string` （必选）
-
-内置任务的名称，可选值如下：
-
--   `text_recognition`：通用文字识别
--   `key_information_extraction`：信息抽取
--   `document_parsing`：文档解析
--   `table_parsing`：表格解析
--   `formula_recognition`：公式识别
--   `multi_lan`：多语言识别
--   `advanced_recognition`：高精识别
-
-**task\_config** `object` （可选）
-
-当`task`的取值为`key_information_extraction`（信息抽取）时，此参数用于指定需抽取的特定字段。如未指定 `task_config`，模型将默认提取图像中的所有字段。
-
-属性
-
-**result\_schema**`object` （可选）
-
-表示需要模型抽取的字段，应为JSON对象结构，最多可嵌套3层JSON 对象。
-
-在JSON对象的键（`key`）中指定待抽取字段的名称，对应的值（`value`）可为空，建议在值中提供字段描述或格式要求，可提高信息提取的准确率。
-
-示例值：
-
-```
-"result_schema": {
-     "发票号码": "发票的唯一识别编号，通常为数字和字母的组合。",
-     "开票日期": "发票开具的日期，请以YYYY-MM-DD格式提取，例如2023-10-26。",
-     "销售方名称": "发票上显示的销售方公司全称。",
-     "总金额": "发票中包含税费的总计金额，要求提取数值并保留两位小数，例如123.45。"
-}
-```
-
-> Java SDK为**OcrOptions**，DashScope Python SDK 最低版本为1.22.2， Java SDK 最低版本为2.18.4。
-
-> 通过HTTP调用时，请将 **ocr\_options**放入 **parameters** 对象中。
-
-**seed**`integer`（可选）
-
-随机数种子。用于确保在相同输入和参数下生成结果可复现。若调用时传入相同的 `seed` 且其他参数不变，模型将尽可能返回相同结果。
-
-取值范围：`[0,2 31 −1]`。
-
-> 建议设置为默认值即可。
-
-> 通过HTTP调用时，请将 **seed**放入 **parameters** 对象中。
-
-**temperature**`float`（可选）默认值为0.01
-
-采样温度，控制模型生成文本的多样性。
-
-temperature越高，生成的文本更多样，反之，生成的文本更确定。
-
-取值范围： \[0, 2)
-
-temperature与top\_p均可以控制生成文本的多样性，建议只设置其中一个值。
-
-> 建议设置为默认值即可。
-
-> 通过HTTP调用时，请将 **temperature**放入 **parameters** 对象中。
-
-**top\_p**`float`（可选）默认值为0.001
-
-核采样的概率阈值，控制模型生成文本的多样性。
-
-top\_p越高，生成的文本更多样。反之，生成的文本更确定。
-
-取值范围：（0,1.0\]
-
-temperature与top\_p均可以控制生成文本的多样性，建议只设置其中一个值。
-
-> 建议设置为默认值即可。
-
-> Java SDK中为**topP**\*。\*通过HTTP调用时，请将 **top\_p**放入 **parameters** 对象中。
-
-**top\_k**`integer`（可选）默认值为1
-
-生成过程中采样候选集的大小。例如，取值为50时，仅将单次生成中得分最高的50个Token组成随机采样的候选集。取值越大，生成的随机性越高；取值越小，生成的确定性越高。取值为None或当top\_k大于100时，表示不启用top\_k策略，此时仅有top\_p策略生效。
-
-取值需要大于或等于0。
-
-该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中，配置方式为：`extra_body={"top_k": xxx}`；通过 Node.js SDK 或 HTTP 方式调用时，请作为顶层参数传递。
-
-> 建议设置为默认值即可。
-
-**repetition\_penalty**`float`（可选）默认值为1.0
-
-模型生成时连续序列中的重复度。提高repetition\_penalty时可以降低模型生成的重复度，1.0表示不做惩罚。该参数对模型效果影响较大，建议保持默认值。
-
-> 建议设置为默认值即可。
-
-> Java SDK中为**repetitionPenalty**\*。\*通过HTTP调用时，请将 **repetition\_penalty**放入 **parameters** 对象中。
-
-**presence\_penalty** `float`（可选）默认值为0.0
-
-控制模型生成文本时的内容重复度。
-
-取值范围：\[-2.0, 2.0\]。正值降低重复度，负值增加重复度。
-
-在创意写作或头脑风暴等需要多样性、趣味性或创造力的场景中，建议调高该值；在技术文档或正式文本等强调一致性与术语准确性的场景中，建议调低该值。
-
-原理介绍
-
-如果参数值是正数，模型将对目前文本中已存在的Token施加一个惩罚值（惩罚值与文本出现的次数无关），减少这些Token重复出现的几率，从而减少内容重复度，增加用词多样性。
-
-> 建议设置为默认值即可。
-
-**stream**`boolean`（可选）默认值为`false`
-
-是否流式输出回复。参数值：
-
--   false：模型生成完所有内容后一次性返回结果。
--   true：边生成边输出，即每生成一部分内容就立即输出一个片段（chunk）。
-
-> 该参数仅支持Python SDK。通过Java SDK实现流式输出请通过`streamCall`接口调用；通过HTTP实现流式输出请在Header中指定`X-DashScope-SSE`为`enable`。
-
-**incremental\_output**`boolean`（可选）默认为`false`
-
-在流式输出模式下是否开启增量输出。推荐您优先设置为`true`。
-
-参数值：
-
--   false：每次输出为当前已经生成的整个序列，最后一次输出为生成的完整结果。
-
-```
-I
-I like
-I like apple
-I like apple.
-```
-
--   true（推荐）：增量输出，即后续输出内容不包含已输出的内容。您需要实时地逐个读取这些片段以获得完整的结果。
-
-```
-I
-like
-apple
-.
-```
-
-> Java SDK中为**incrementalOutput**\*。\*通过HTTP调用时，请将 **incremental\_output**放入 **parameters** 对象中。
-
-**stop**`string 或 array`（可选）
-
-用于指定停止词。当模型生成的文本中出现`stop` 指定的字符串或`token_id`时，生成将立即终止。
-
-可传入敏感词以控制模型的输出。
-
-> stop为数组时，不可将`token_id`和字符串同时作为元素输入，比如不可以指定为`["你好",104307]`。
-
-**logprobs** `boolean` （可选）默认值为 `false`
-
-是否返回输出 Token 的对数概率，可选值：
-
--   `true`
-    
-    返回
-    
--   `false`
-    
-    不返回
-    
-
-支持的模型：qwen-vl-ocr-2025-04-13及之后更新的模型
-
-> 通过HTTP调用时，请将 **logprobs**放入 **parameters** 对象中。
-
-**top\_logprobs** `integer` （可选）默认值为0
-
-指定在每一步生成时，返回模型最大概率的候选 Token 个数。仅当 `logprobs` 为 `true` 时生效。
-
-取值范围：\[0,5\]
-
-> Java SDK中为**topLogprobs**\*。\*通过HTTP调用时，请将 **top\_logprobs**放入 **parameters** 对象中。
-
-#### 高精识别
+## 高精识别
 
 > 以下为调用高精识别内置任务的代码示例，详情请参见[调用内置任务](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#1aae916a0br7o)。
 
-python
+Python
 
 ```
 import os
@@ -1266,7 +996,7 @@ messages = [{
                 # 是否开启图像自动转正功能
                 "enable_rotate": False}]
             }]
-
+            
 response = dashscope.MultiModalConversation.call(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -1280,7 +1010,7 @@ response = dashscope.MultiModalConversation.call(
 print(response["output"]["choices"][0]["message"].content[0]["text"])
 ```
 
-java
+Java
 
 ```
 // dashscope SDK的版本 >= 2.21.8
@@ -1303,7 +1033,7 @@ public class Main {
 
     // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
     static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
-
+    
     public static void simpleMultiModalConversationCall()
             throws ApiException, NoApiKeyException, UploadFileException {
         MultiModalConversation conv = new MultiModalConversation();
@@ -1346,7 +1076,7 @@ public class Main {
 }
 ```
 
-bash
+curl
 
 ```
 # ======= 重要提示 =======
@@ -1384,11 +1114,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
-#### 信息抽取
+## 信息抽取
 
 > 以下为调用信息抽取内置任务的代码示例，详情请参见[调用内置任务](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#1aae916a0br7o)。
 
-python
+Python
 
 ```
 # use [pip install -U dashscope] to update sdk
@@ -1409,7 +1139,7 @@ messages = [
               "min_pixels": 32 * 32 * 3,
               "max_pixels": 32 * 32 *8192,
               "enable_rotate": False
-          }
+          }    
         ]
       }
     ]
@@ -1433,12 +1163,12 @@ response = MultiModalConversation.call(
     messages=messages,
     **params,
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-    api_key=os.getenv('DASHSCOPE_API_KEY'))
+    api_key=os.getenv('DASHSCOPE_API_KEY'))     
 
 print(response.output.choices[0].message.content[0]["ocr_result"])
 ```
 
-java
+Java
 
 ```
 import java.util.Arrays;
@@ -1461,7 +1191,7 @@ public class Main {
 
     // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
     static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
-
+    
     public static void simpleMultiModalConversationCall()
             throws ApiException, NoApiKeyException, UploadFileException {
         MultiModalConversation conv = new MultiModalConversation();
@@ -1516,7 +1246,7 @@ public class Main {
 }
 ```
 
-bash
+curl
 
 ```
 # ======= 重要提示 =======
@@ -1561,11 +1291,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
-#### 表格解析
+## 表格解析
 
 > 以下为调用表格解析内置任务的代码示例，详情请参见[调用内置任务](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#1aae916a0br7o)。
 
-python
+Python
 
 ```
 import os
@@ -1598,7 +1328,7 @@ response = dashscope.MultiModalConversation.call(
 print(response["output"]["choices"][0]["message"].content[0]["text"])
 ```
 
-java
+Java
 
 ```
 import java.util.Arrays;
@@ -1663,7 +1393,7 @@ public class Main {
 }
 ```
 
-bash
+curl
 
 ```
 # ======= 重要提示 =======
@@ -1701,11 +1431,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
-#### 文档解析
+## **文档解析**
 
 > 以下为调用文档解析内置任务的代码示例，详情请参见[调用内置任务](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#1aae916a0br7o)。
 
-python
+Python
 
 ```
 import os
@@ -1725,7 +1455,7 @@ messages = [{
                 # 是否开启图像自动转正功能
                 "enable_rotate": False}]
             }]
-
+            
 response = dashscope.MultiModalConversation.call(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -1739,7 +1469,7 @@ response = dashscope.MultiModalConversation.call(
 print(response["output"]["choices"][0]["message"].content[0]["text"])
 ```
 
-java
+Java
 
 ```
 import java.util.Arrays;
@@ -1803,7 +1533,7 @@ public class Main {
 }
 ```
 
-bash
+curl
 
 ```
 # ======= 重要提示 =======
@@ -1839,11 +1569,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
-#### 公式识别
+## 公式识别
 
 > 以下为调用公式识别内置任务的代码示例，详情请参见[调用内置任务](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#1aae916a0br7o)。
 
-python
+Python
 
 ```
 import os
@@ -1863,7 +1593,7 @@ messages = [{
                 # 是否开启图像自动转正功能
                 "enable_rotate": False }]
             }]
-
+            
 response = dashscope.MultiModalConversation.call(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
     api_key=os.getenv('DASHSCOPE_API_KEY'),
@@ -1877,7 +1607,7 @@ response = dashscope.MultiModalConversation.call(
 print(response["output"]["choices"][0]["message"].content[0]["text"])
 ```
 
-java
+Java
 
 ```
 import java.util.Arrays;
@@ -1899,7 +1629,7 @@ public class Main {
 
     // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
     static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
-
+    
     public static void simpleMultiModalConversationCall()
             throws ApiException, NoApiKeyException, UploadFileException {
         MultiModalConversation conv = new MultiModalConversation();
@@ -1942,7 +1672,7 @@ public class Main {
 }
 ```
 
-bash
+curl
 
 ```
 # ======= 重要提示 =======
@@ -1980,11 +1710,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
-#### 通用文字识别
+## **通用文字识别**
 
 > 以下为调用通用文字识别内置任务的代码示例，详情请参见[调用内置任务](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#1aae916a0br7o)。
 
-python
+Python
 
 ```
 import os
@@ -2004,7 +1734,7 @@ messages = [{
                 # 是否开启图像自动转正功能
                 "enable_rotate": False}]
         }]
-
+        
 response = dashscope.MultiModalConversation.call(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -2012,13 +1742,13 @@ response = dashscope.MultiModalConversation.call(
     model='qwen3.5-ocr',
     messages=messages,
     # 设置内置任务为通用文字识别
-    ocr_options= {"task": "text_recognition"}
+    ocr_options= {"task": "text_recognition"} 
 )
 # 通用文字识别任务以纯文本格式返回结果
 print(response["output"]["choices"][0]["message"].content[0]["text"])
 ```
 
-java
+Java
 
 ```
 import java.util.Arrays;
@@ -2040,7 +1770,7 @@ public class Main {
 
     // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
     static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
-
+    
     public static void simpleMultiModalConversationCall()
             throws ApiException, NoApiKeyException, UploadFileException {
         MultiModalConversation conv = new MultiModalConversation();
@@ -2052,7 +1782,7 @@ public class Main {
         map.put("min_pixels", 3072);
         // 是否开启图像自动转正功能
         map.put("enable_rotate", false);
-
+        
         // 配置内置任务
         OcrOptions ocrOptions = OcrOptions.builder()
                 .task(OcrOptions.Task.TEXT_RECOGNITION)
@@ -2084,7 +1814,7 @@ public class Main {
 }
 ```
 
-bash
+curl
 
 ```
 # ======= 重要提示 =======
@@ -2119,11 +1849,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-#### 多语言识别
+## 多语言识别
 
 > 以下为调用通用多语言识别内置任务的代码示例，详情请参见[调用内置任务](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#1aae916a0br7o)。
 
-python
+Python
 
 ```
 import os
@@ -2143,7 +1873,7 @@ messages = [{
                 # 是否开启图像自动转正功能
                 "enable_rotate": False }]
             }]
-
+            
 response = dashscope.MultiModalConversation.call(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
@@ -2157,7 +1887,7 @@ response = dashscope.MultiModalConversation.call(
 print(response["output"]["choices"][0]["message"].content[0]["text"])
 ```
 
-java
+Java
 
 ```
 import java.util.Arrays;
@@ -2179,7 +1909,7 @@ public class Main {
 
     // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
     static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
-
+    
     public static void simpleMultiModalConversationCall()
             throws ApiException, NoApiKeyException, UploadFileException {
         MultiModalConversation conv = new MultiModalConversation();
@@ -2222,7 +1952,7 @@ public class Main {
 }
 ```
 
-bash
+curl
 
 ```
 # ======= 重要提示 =======
@@ -2260,9 +1990,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 '
 ```
 
-#### 流式输出
+## 流式输出
 
-Python
+## Python
 
 ```
 import os
@@ -2320,7 +2050,7 @@ for response in response:
 print(f"完整内容为：{full_content}")
 ```
 
-Java
+## Java
 
 ```
 import java.util.*;
@@ -2337,11 +2067,11 @@ import io.reactivex.Flowable;
 import com.alibaba.dashscope.utils.Constants;
 
 public class Main {
-
+    
     // 以下为北京地域 base_url，若使用弗吉尼亚地域模型，需要将base_url换成 https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1
     // 若使用新加坡地域的模型，需将base_url替换为：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1
     static {Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";}
-
+    
     public static void simpleMultiModalConversationCall()
             throws ApiException, NoApiKeyException, UploadFileException {
         MultiModalConversation conv = new MultiModalConversation();
@@ -2390,7 +2120,7 @@ public class Main {
 }
 ```
 
-curl
+## curl
 
 ```
 # ======= 重要提示 =======
@@ -2426,209 +2156,324 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+**model** `_string_` **（必选）**
+
+模型名称。支持的模型可参见`[选择模型](https://help.aliyun.com/zh/model-studio/models#55c81ba3ccgct)`。
+
+**messages** `_array_` **（必选）**
+
+传递给大模型的上下文，按对话顺序排列。
+
+> 通过HTTP调用时，请将**messages** 放入 **input** 对象中。
+
+**消息类型**
+
+User Message `_object_`**（必选）**
+
+用户消息，用于向模型传递问题、指令或上下文等。
+
+**属性**
+
+**content** `_string 或 array_`**（必选）**
+
+消息内容。若输入只有文本，则为 string 类型；若输入包含图像数据，则为 array 类型。
+
+**属性**
+
+**text** `_string_` **（可选）**
+
+输入的文本。
+
+默认值为：`Please output only the text content from the image without any additional descriptions or formatting.` ，即模型默认提取图像中的全部文本。
+
+**image** `_string_`（可选）
+
+图片的URL、 Base64 Data URL、或本地路径。传入本地文件请参见[传入本地文件](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#ea4e1d92dbry2)。
+
+示例值：`{"image":"https://xxxx.jpeg"}`
+
+**enable\_rotate** `_boolean_` （可选）默认值为`false`
+
+是否对倾斜的图像进行校正处理。
+
+可选值：
+
+-   `true`：自动校正
+    
+-   `false`：不进行校正
+    
+
+示例值：`{"image":"https://xxxx.jpeg","enable_rotate": True}`
+
+**min\_pixels** `_integer_` （可选）
+
+用于设定输入图像的最小像素阈值，单位为像素。
+
+当输入图像像素小于`min_pixels`时，会将图像进行放大，直到总像素高于`min_pixels`。
+
+**图像Token与像素的转换关系**
+
+不同模型，每个图像 Token 对应的像素不同：
+
+-   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：每 Token 对应像素为`32*32`。
+    
+-   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：每 Token 对应像素为`28*28`。
+    
+
+**min\_pixels 取值范围**
+
+-   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：默认值和最小值均为3072（即`3×32×32`）
+    
+-   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：默认值和最小值均为 `3136` （即`4×28×28`）。
+    
+
+示例值：`{"image":"https://xxxx.jpeg","min_pixels": 3072}`
+
+**max\_pixels** `_integer_` （可选）
+
+用于设定输入图像的最大像素阈值，单位为像素。
+
+当输入图像像素在`[min_pixels, max_pixels]`区间内时，模型会按原图进行识别。当输入图像像素大于`max_pixels`时，会将图像进行缩小，直到总像素低于`max_pixels`。
+
+**图像Token与像素的转换关系**
+
+不同模型，每个图像 Token 对应的像素不同：
+
+-   `qwen3.5-ocr`、`qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`：每 Token 对应像素为`32*32`。
+    
+-   `qwen-vl-ocr`、`qwen-vl-ocr-2025-08-28`及之前更新的模型：每 Token 对应像素为`28*28`。
+    
+
+**max\_pixels 取值范围**
+
+-   `qwen3.5-ocr、qwen-vl-ocr-latest、qwen-vl-ocr-2025-11-20`
+    
+    -   默认值：8388608 （即`8192x32x32`）
+        
+    -   最大值：30720000（即`30000x32x32`）
+        
+-   `qwen-vl-ocr、qwen-vl-ocr-2025-08-28`及之前更新的模型
+    
+    -   默认值：6422528（即`8192x28x28`）
+        
+    -   最大值：23520000（即`30000x28x28`）
+        
+
+示例值：`{"image":"https://xxxx.jpeg","max_pixels": 8388608}`
+
+**role** `_string_` **（必选）**
+
+用户消息的角色，固定为`user`。
+
+**max\_tokens** `_integer_` （可选）
+
+用于限制模型输出的最大 Token 数。若生成内容超过此值，响应将被截断。
+
+-   `qwen3.5-ocr`：默认值与最大值为32768。
+    
+-   `qwen-vl-ocr-latest`、`qwen-vl-ocr-2025-11-20`、`qwen-vl-ocr-2024-10-28`默认值与最大值均为模型的最大输出长度，请参见[模型选型](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#f4299b0a1ace4)。
+    
+-   `qwen-vl-ocr、qwen-vl-ocr-2025-04-13、qwen-vl-ocr-2025-08-28`，默认值和最大值为4096。
+    
+    > 如需提高该参数值（4097~8192范围），请联系商务经理进行申请，并提供以下信息：主账号ID、图像类型（如文档图、电商图、合同等）、模型名称、预计 QPS 和每日请求总数，以及模型输出长度超过4096的请求占比。
+    
+
+> Java SDK中为**maxTokens**_。_通过HTTP调用时，请将 **max\_tokens** 放入 **parameters** 对象中。
+
+**ocr\_options** _object_ （可选）
+
+使用通义千问OCR模型[调用内置任务](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#1aae916a0br7o)时需要配置的参数。调用内置任务时，无需传入`User Message`，模型内部会采用对应任务的`Prompt`。相关章节：[调用内置任务](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#1aae916a0br7o)。
+
+**属性**
+
+**task** `_string_` （必选）
+
+内置任务的名称，可选值如下：
+
+-   `text_recognition`：通用文字识别
+    
+-   `key_information_extraction`：信息抽取
+    
+-   `document_parsing`：文档解析
+    
+-   `table_parsing`：表格解析
+    
+-   `formula_recognition`：公式识别
+    
+-   `multi_lan`：多语言识别
+    
+-   `advanced_recognition`：高精识别
+    
+
+**task\_config** `_object_` （可选）
+
+当`task`的取值为`key_information_extraction`（信息抽取）时，此参数用于指定需抽取的特定字段。如未指定 `task_config`，模型将默认提取图像中的所有字段。
+
+**属性**
+
+**result\_schema** `_object_` （可选）
+
+表示需要模型抽取的字段，应为JSON对象结构，最多可嵌套3层JSON 对象。
+
+在JSON对象的键（`key`）中指定待抽取字段的名称，对应的值（`value`）可为空，建议在值中提供字段描述或格式要求，可提高信息提取的准确率。
+
+示例值：
+
+```
+"result_schema": {
+     "发票号码": "发票的唯一识别编号，通常为数字和字母的组合。",
+     "开票日期": "发票开具的日期，请以YYYY-MM-DD格式提取，例如2023-10-26。",
+     "销售方名称": "发票上显示的销售方公司全称。",
+     "总金额": "发票中包含税费的总计金额，要求提取数值并保留两位小数，例如123.45。" 
+}
+```
+
+> Java SDK为**OcrOptions**，DashScope Python SDK 最低版本为1.22.2， Java SDK 最低版本为2.18.4。
+
+> 通过HTTP调用时，请将 **ocr\_options** 放入 **parameters** 对象中。
+
+**seed** `_integer_` （可选）
+
+随机数种子。用于确保在相同输入和参数下生成结果可复现。若调用时传入相同的 `seed` 且其他参数不变，模型将尽可能返回相同结果。
+
+取值范围：`[0,231−1]`。
+
+> 建议设置为默认值即可。
+
+> 通过HTTP调用时，请将 **seed** 放入 **parameters** 对象中。
+
+**temperature** `_float_` （可选） 默认值为0.01
+
+采样温度，控制模型生成文本的多样性。
+
+temperature越高，生成的文本更多样，反之，生成的文本更确定。
+
+取值范围： \[0, 2)
+
+temperature与top\_p均可以控制生成文本的多样性，建议只设置其中一个值。
+
+> 建议设置为默认值即可。
+
+> 通过HTTP调用时，请将 **temperature** 放入 **parameters** 对象中。
+
+**top\_p** `_float_` （可选）默认值为0.001
+
+核采样的概率阈值，控制模型生成文本的多样性。
+
+top\_p越高，生成的文本更多样。反之，生成的文本更确定。
+
+取值范围：（0,1.0\]
+
+temperature与top\_p均可以控制生成文本的多样性，建议只设置其中一个值。
+
+> 建议设置为默认值即可。
+
+> Java SDK中为**topP**_。_通过HTTP调用时，请将 **top\_p** 放入 **parameters** 对象中。
+
+**top\_k** `_integer_` （可选）默认值为1
+
+生成过程中采样候选集的大小。例如，取值为50时，仅将单次生成中得分最高的50个Token组成随机采样的候选集。取值越大，生成的随机性越高；取值越小，生成的确定性越高。取值为None或当top\_k大于100时，表示不启用top\_k策略，此时仅有top\_p策略生效。
+
+取值需要大于或等于0。
+
+该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中，配置方式为：`extra_body={"top_k": xxx}`；通过 Node.js SDK 或 HTTP 方式调用时，请作为顶层参数传递。
+
+> 建议设置为默认值即可。
+
+**repetition\_penalty** `_float_` （可选）默认值为1.0
+
+模型生成时连续序列中的重复度。提高repetition\_penalty时可以降低模型生成的重复度，1.0表示不做惩罚。该参数对模型效果影响较大，建议保持默认值。
+
+> 建议设置为默认值即可。
+
+> Java SDK中为**repetitionPenalty**_。_通过HTTP调用时，请将 **repetition\_penalty** 放入 **parameters** 对象中。
+
+**presence\_penalty** `_float_` （可选）默认值为0.0
+
+控制模型生成文本时的内容重复度。
+
+取值范围：\[-2.0, 2.0\]。正值降低重复度，负值增加重复度。
+
+在创意写作或头脑风暴等需要多样性、趣味性或创造力的场景中，建议调高该值；在技术文档或正式文本等强调一致性与术语准确性的场景中，建议调低该值。
+
+**原理介绍**
+
+如果参数值是正数，模型将对目前文本中已存在的Token施加一个惩罚值（惩罚值与文本出现的次数无关），减少这些Token重复出现的几率，从而减少内容重复度，增加用词多样性。
+
+> 建议设置为默认值即可。
+
+**stream** `_boolean_` （可选） 默认值为`false`
+
+是否流式输出回复。参数值：
+
+-   false：模型生成完所有内容后一次性返回结果。
+    
+-   true：边生成边输出，即每生成一部分内容就立即输出一个片段（chunk）。
+    
+
+> 该参数仅支持Python SDK。通过Java SDK实现流式输出请通过`streamCall`接口调用；通过HTTP实现流式输出请在Header中指定`X-DashScope-SSE`为`enable`。
+
+**incremental\_output** `_boolean_` （可选）默认为`false`
+
+在流式输出模式下是否开启增量输出。推荐您优先设置为`true`。
+
+参数值：
+
+-   false：每次输出为当前已经生成的整个序列，最后一次输出为生成的完整结果。
+    
+    ```
+    I
+    I like
+    I like apple
+    I like apple.
+    ```
+    
+-   true（推荐）：增量输出，即后续输出内容不包含已输出的内容。您需要实时地逐个读取这些片段以获得完整的结果。
+    
+    ```
+    I
+    like
+    apple
+    .
+    ```
+    
+
+> Java SDK中为**incrementalOutput**_。_通过HTTP调用时，请将 **incremental\_output** 放入 **parameters** 对象中。
+
+**stop** `_string 或 array_` （可选）
+
+用于指定停止词。当模型生成的文本中出现`stop` 指定的字符串或`token_id`时，生成将立即终止。
+
+可传入敏感词以控制模型的输出。
+
+> stop为数组时，不可将`token_id`和字符串同时作为元素输入，比如不可以指定为`["你好",104307]`。
+
+**logprobs** `_boolean_` （可选）默认值为 `false`
+
+是否返回输出 Token 的对数概率，可选值：
+
+-   `true`
+    
+    返回
+    
+-   `false`
+    
+    不返回
+    
+
+支持的模型：qwen-vl-ocr-2025-04-13及之后更新的模型
+
+> 通过HTTP调用时，请将 **logprobs** 放入 **parameters** 对象中。
+
+**top\_logprobs** `_integer_` （可选）默认值为0
+
+指定在每一步生成时，返回模型最大概率的候选 Token 个数。仅当 `logprobs` 为 `true` 时生效。
+
+取值范围：\[0,5\]
+
+> Java SDK中为**topLogprobs**_。_通过HTTP调用时，请将 **top\_logprobs** 放入 **parameters** 对象中。
+
 ### chat响应对象（流式与非流式输出格式一致）
-
-**status\_code**`string`
-
-本次请求的状态码。200 表示请求成功，否则表示请求失败。
-
-> Java SDK不会返回该参数。调用失败会抛出异常，异常信息为**status\_code**和**message**的内容。
-
-**request\_id**`string`
-
-本次调用的唯一标识符。
-
-> Java SDK返回参数为**requestId。**
-
-**code**`string`
-
-错误码，调用成功时为空值。
-
-> 只有Python SDK返回该参数。
-
-**output**`object`
-
-调用结果信息。
-
-属性
-
-**text**`string`
-
-该参数当前固定为`null`。
-
-**finish\_reason**`string`
-
-模型结束生成的原因。有以下情况：
-
--   正在生成时为`null`；
--   模型输出自然结束为`stop`；
--   因生成长度过长而结束为`length`；
-
-**choices**`array`
-
-模型的输出信息。
-
-属性
-
-**finish\_reason**`string`
-
-有以下情况：
-
--   正在生成时为`null`；
--   因模型输出自然结束为`stop`；
--   因生成长度过长而结束为`length`；
-
-**message**`object`
-
-模型输出的消息对象。
-
-属性
-
-**role**`string`
-
-输出消息的角色，固定为`assistant`。
-
-**content**`object`
-
-输出消息的内容。
-
-属性
-
-**ocr\_result**`object`
-
-当Qwen-OCR系列模型调用内置的信息抽取、高精识别任务时，输出的任务结果信息。
-
-属性
-
-**kv\_result**`array`
-
-信息抽取任务的输出结果。
-
-**words\_info**`array`
-
-高精识别任务的输出结果。
-
-属性
-
-**rotate\_rect** `array`
-
-示例值：`[center_x, center_y, width, height, angle]`
-
-文字框的旋转矩形表示：
-
--   `center_x、center_y为文本框中心点坐标`
--   `width`为文本框宽度，`height`为高度
--   `angle`为文本框相对于水平方向的旋转角度，取值范围为`[-90, 90]`
-
-**location** `array`
-
-示例值：`[x1, y1, x2, y2, x3, y3, x4, y4]`
-
-文字框四个顶点的坐标，坐标顺序为左上角开起，按左上角→右上角→右下角→左下角的顺时针顺序排列。
-
-**text**`string`
-
-文本行的内容
-
-**text**`string`
-
-输出消息的内容。
-
-**processed\_text**`string`
-
-对模型原始输出进行后处理的结果，自动删除重复片段等。当模型输出存在重复内容时，该字段提供清洗后的文本。
-
-**logprobs**`object`
-
-当前 choices 对象的概率信息。
-
-属性
-
-**content** `array`
-
-带有对数概率信息的 Token 数组。
-
-属性
-
-**token** `string`
-
-当前 Token。
-
-**bytes** `array`
-
-当前 Token 的 UTF‑8 原始字节列表，用于精确还原输出内容，在处理表情符号、中文字符时有帮助。
-
-**logprob** `float`
-
-当前 Token 的对数概率。返回值为 null 表示概率值极低。
-
-**top\_logprobs** `array`
-
-当前 Token 位置最可能的若干个 Token 及其对数概率，元素个数与入参的`top_logprobs`保持一致。
-
-属性
-
-**token** `string`
-
-当前 Token。
-
-**bytes** `array`
-
-当前 Token 的 UTF‑8 原始字节列表，用于精确还原输出内容，在处理表情符号、中文字符时有帮助。
-
-**logprob** `float`
-
-当前 Token 的对数概率。返回值为 null 表示概率值极低。
-
-**usage**`object`
-
-本次请求使用的Token信息。
-
-属性
-
-**input\_tokens** `integer`
-
-输入 Token 数。
-
-**output\_tokens** `integer`
-
-输出 Token 数。
-
-**characters** `integer`
-
-该参数当前固定为0。
-
-**input\_tokens\_details**`object`
-
-输入 Token 的细粒度分类。
-
-属性
-
-**image\_tokens** `integer`
-
-模型输入的图像对应的 Token数。
-
-**text\_tokens** `integer`
-
-模型输入的文本对应的Token 数。
-
-**output\_tokens\_details**`object`
-
-输出 Token 的细粒度分类。
-
-属性
-
-**text\_tokens** `integer`
-
-模型输入的文本对应的Token 数。
-
-**total\_tokens** `integer`
-
-消耗的总 Token 数，为`input_tokens`与`output_tokens`的总和。
-
-**image\_tokens** `integer`
-
-输入内容包含`image`时返回该字段。为用户输入图片内容转换成Token后的长度。
 
 ```
 {"status_code": 200,
@@ -2680,6 +2525,217 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-## 错误码
+**status\_code** `_string_`
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+本次请求的状态码。200 表示请求成功，否则表示请求失败。
+
+> Java SDK不会返回该参数。调用失败会抛出异常，异常信息为**status\_code**和**message**的内容。
+
+**request\_id** `_string_`
+
+本次调用的唯一标识符。
+
+> Java SDK返回参数为**requestId。**
+
+**code** `_string_`
+
+错误码，调用成功时为空值。
+
+> 只有Python SDK返回该参数。
+
+**output** `_object_`
+
+调用结果信息。
+
+**属性**
+
+**text** `_string_`
+
+该参数当前固定为`null`。
+
+**finish\_reason** `_string_`
+
+模型结束生成的原因。有以下情况：
+
+-   正在生成时为`null`；
+    
+-   模型输出自然结束为`stop`；
+    
+-   因生成长度过长而结束为`length`；
+    
+
+**choices** `_array_`
+
+模型的输出信息。
+
+**属性**
+
+**finish\_reason** `_string_`
+
+有以下情况：
+
+-   正在生成时为`null`；
+    
+-   因模型输出自然结束为`stop`；
+    
+-   因生成长度过长而结束为`length`；
+    
+
+**message** `_object_`
+
+模型输出的消息对象。
+
+**属性**
+
+**role** `_string_`
+
+输出消息的角色，固定为`assistant`。
+
+**content** `_object_`
+
+输出消息的内容。
+
+**属性**
+
+**ocr\_result** `_object_`
+
+当Qwen-OCR系列模型调用内置的信息抽取、高精识别任务时，输出的任务结果信息。
+
+**属性**
+
+**kv\_result** `_array_`
+
+信息抽取任务的输出结果。
+
+**words\_info** `_array_`
+
+高精识别任务的输出结果。
+
+**属性**
+
+**rotate\_rect** `_array_`
+
+示例值：`[center_x, center_y, width, height, angle]`
+
+文字框的旋转矩形表示：
+
+-   `center_x、center_y为文本框中心点坐标`
+    
+-   `width`为文本框宽度，`height`为高度
+    
+-   `angle`为文本框相对于水平方向的旋转角度，取值范围为`[-90, 90]`
+    
+
+**location** `_array_`
+
+示例值：`[x1, y1, x2, y2, x3, y3, x4, y4]`
+
+文字框四个顶点的坐标，坐标顺序为左上角开起，按左上角→右上角→右下角→左下角的顺时针顺序排列。
+
+**text** `_string_`
+
+文本行的内容
+
+**text** `_string_`
+
+输出消息的内容。
+
+**processed\_text** `_string_`
+
+对模型原始输出进行后处理的结果，自动删除重复片段等。当模型输出存在重复内容时，该字段提供清洗后的文本。
+
+**logprobs** `_object_`
+
+当前 choices 对象的概率信息。
+
+**属性**
+
+**content** `_array_`
+
+带有对数概率信息的 Token 数组。
+
+**属性**
+
+**token** `_string_`
+
+当前 Token。
+
+**bytes** `_array_`
+
+当前 Token 的 UTF‑8 原始字节列表，用于精确还原输出内容，在处理表情符号、中文字符时有帮助。
+
+**logprob** `_float_`
+
+当前 Token 的对数概率。返回值为 null 表示概率值极低。
+
+**top\_logprobs** `_array_`
+
+当前 Token 位置最可能的若干个 Token 及其对数概率，元素个数与入参的`top_logprobs`保持一致。
+
+**属性**
+
+**token** `_string_`
+
+当前 Token。
+
+**bytes** `_array_`
+
+当前 Token 的 UTF‑8 原始字节列表，用于精确还原输出内容，在处理表情符号、中文字符时有帮助。
+
+**logprob** `_float_`
+
+当前 Token 的对数概率。返回值为 null 表示概率值极低。
+
+**usage** `_object_`
+
+本次请求使用的Token信息。
+
+**属性**
+
+**input\_tokens** `_integer_`
+
+输入 Token 数。
+
+**output\_tokens** `_integer_`
+
+输出 Token 数。
+
+**characters** `_integer_`
+
+该参数当前固定为0。
+
+**input\_tokens\_details** `_object_`
+
+输入 Token 的细粒度分类。
+
+**属性**
+
+**image\_tokens** `_integer_`
+
+模型输入的图像对应的 Token数。
+
+**text\_tokens** `_integer_`
+
+模型输入的文本对应的Token 数。
+
+**output\_tokens\_details** `_object_`
+
+输出 Token 的细粒度分类。
+
+**属性**
+
+**text\_tokens** `_integer_`
+
+模型输入的文本对应的Token 数。
+
+**total\_tokens** `_integer_`
+
+消耗的总 Token 数，为`input_tokens`与`output_tokens`的总和。
+
+**image\_tokens** `_integer_`
+
+输入内容包含`image`时返回该字段。为用户输入图片内容转换成Token后的长度。
+
+## **错误码**
+
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。

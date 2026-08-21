@@ -18,7 +18,7 @@ Embedding-Vision是基于LLM底座的视觉多模态表征模型，具有以视�
 
 输入模态
 
-**Text** **Image** **Video**
+**Text**　**Image**　**Video**
 
 输出模态
 
@@ -82,7 +82,7 @@ Function Calling
 
 本文仅展示模型调用原价，不包含限时优惠等活动信息，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)查看活动优惠。
 
-#### 华北2（北京）
+## 华北2（北京）
 
 计费项
 
@@ -102,7 +102,7 @@ Function Calling
 
 每百万tokens
 
-#### 新加坡
+## 新加坡
 
 部署范围：国际
 
@@ -126,7 +126,7 @@ Function Calling
 
 ## 限流
 
-#### 华北2（北京）
+## 华北2（北京）
 
 参数
 
@@ -140,7 +140,7 @@ TPM（每分钟tokens）
 
 200,000
 
-#### 新加坡
+## 新加坡
 
 部署范围：国际
 
@@ -160,9 +160,7 @@ TPM（每分钟tokens）
 
 ### tongyi-embedding-vision-flash-2026-03-06
 
-Tongyi-Embedding-Vision是基于LLM底座的视觉多模态表征模型，支持文本、图像、视频3种模态，具有以视觉为中心、全场景性能优异、高性价比的特点，适用于以图搜图、以文搜图、以文搜视频、以视频搜视频、以文搜文、以文搜图文等下游多样化任务场景。本模型（tongyi-embedding-vision-flash）是轻量化版本，具备极高性价比。
-
-2026-03-06版本在保留极致性价比优势的同时，基于Qwen3底座实现了效果与功能全面升级，包括全场景性能提升、多分辨率模式/多向量维度/多语言能力/融合向量等能力的支持。
+Tongyi-Embedding-Vision是基于LLM底座的视觉多模态表征模型，支持文本、图像、视频3种模态，具有以视觉为中心、全场景性能优异、高性价比的特点，适用于以图搜图、以文搜图、以文搜视频、以视频搜视频、以文搜文、以文搜图文等下游多样化任务场景。本模型（tongyi-embedding-vision-flash）是轻量化版本，具备极高性价比。 2026-03-06版本在保留极致性价比优势的同时，基于Qwen3底座实现了效果与功能全面升级，包括全场景性能提升、多分辨率模式/多向量维度/多语言能力/融合向量等能力的支持。
 
 #### 推理服务供应商
 
@@ -180,7 +178,7 @@ Tongyi-Embedding-Vision是基于LLM底座的视觉多模态表征模型，支持
 
 输入模态
 
-**Text** **Image** **Video**
+**Text**　**Image**　**Video**
 
 输出模态
 
@@ -244,7 +242,7 @@ Function Calling
 
 本文仅展示模型调用原价，不包含限时优惠等活动信息，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)查看活动优惠。
 
-#### 华北2（北京）
+## 华北2（北京）
 
 计费项
 
@@ -266,7 +264,7 @@ Function Calling
 
 #### 限流
 
-#### 华北2（北京）
+## 华北2（北京）
 
 参数
 

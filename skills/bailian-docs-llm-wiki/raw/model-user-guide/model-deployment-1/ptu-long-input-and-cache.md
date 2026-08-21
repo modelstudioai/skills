@@ -1,20 +1,27 @@
 # 预置吞吐长输入与缓存
 
+本文介绍 PTU（预置吞吐）部署的长输入和前缀缓存能力，包括额度消耗规则、**预置吞吐额度计算器**使用方法和 API 响应字段说明。
+
 ## 功能概述
 
 PTU 部署支持长输入请求（部分模型最高 200K token）和前缀缓存，通过阶梯容量系数和缓存折扣灵活管理额度消耗。
 
 核心能力：
 
--   长输入支持：部分模型支持超过 32K token 的输入，超出部分按更高的阶梯系数折算 TPM（每分钟 Token 数）消耗，详见[额度消耗规则](https://help.aliyun.com/zh/model-studio/ptu-long-input-and-cache#sec-billing)。
+-   长输入支持：部分模型支持超过 32K token 的输入，超出部分按更高的阶梯系数折算 TPM（每分钟 Token 数）消耗，详见[额度消耗规则](#sec-billing)。
+    
 -   前缀缓存优惠：部分模型支持前缀缓存，命中缓存的输入 token 按折扣系数消耗额度（具体折扣率因模型而异），可降低多轮对话和重复前缀场景的额度消耗。
+    
 -   溢出策略：创建 PTU 时可选——自动溢出至按量计费（默认，业务不中断）或仅使用 PTU 容量（超出返回 429、不产生额外费用）。输入超过模型上限（千问 128K / DeepSeek 64K）仍自动转为按量计费。
+    
 
-**重要**自动溢出策略下转为按量计费后，费用按对应模型的按量付费单价计算（仅使用 PTU 容量策略下超出返回 429、不产生额外费用）。建议通过**预置吞吐额度计算器**合理规划 PTU 额度，避免意外费用。
+**重要**
+
+自动溢出策略下转为按量计费后，费用按对应模型的按量付费单价计算（仅使用 PTU 容量策略下超出返回 429、不产生额外费用）。建议通过**预置吞吐额度计算器**合理规划 PTU 额度，避免意外费用。
 
 常见于长文档分析（合同、研报摘要）和多轮对话（客服、编程助手）等输入超 32K token 的场景。
 
-关于 PTU 部署的基础概念和购买方式，请参见[模型部署简介](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)。关于前缀缓存的工作原理，请参见[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)。
+关于 PTU 部署的基础概念和购买方式，请参见[模型部署简介](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)。关于前缀缓存的工作原理，请参见[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)。
 
 ## 额度消耗规则
 
@@ -51,9 +58,10 @@ qwen3.7-flash-2026-07-15
 0.2（缓存命中部分按 20% 折算容量）
 
 \[0, 32K)：输入 1.0 / 输出 1.0  
-(32K, 256K\]：输入 3.0 / 输出 3.0
+(32K, 256K\]：输入 3.0 / 输出 3.0  
 
 (256K, 1Million\]：输入 6.0 / 输出 6.0  
+  
   
 
 glm-5.2
@@ -72,6 +80,8 @@ glm-5.1
 
 \[0, 32K)：输入 1.0 / 输出 1.0  
 (32K, 200K\]：输入 1.33 / 输出 1.17  
+  
+  
   
 
 deepseek-v4-pro
@@ -116,11 +126,15 @@ deepseek-v4-flash-0731
   输入合计 = 31.940 KTPM（比无缓存节省 43%）
 ```
 
-## 使用预置吞吐额度计算器估算额度
+## 使用**预置吞吐额度计算器**估算额度
 
-**说明**建议在创建或扩容前使用计算器评估长输入场景的额度需求，避免额度不足导致请求转为按量计费。购买上限以控制台实际展示为准。
+**说明**
+
+建议在创建或扩容前使用计算器评估长输入场景的额度需求，避免额度不足导致请求转为按量计费。购买上限以控制台实际展示为准。
 
 前提条件：已开通百炼服务并具备 PTU 部署权限。登录[百炼控制台](https://bailian.console.aliyun.com/#/efm/model_deploy/create)，在**模型部署** > **创建部署**页面（或在已有部署详情页单击**扩容**），选择可部署的PTU（预置吞吐）模型后，展开**预置吞吐额度计算器**。
+
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4645961871/p1082157.png)
 
 **预置吞吐额度计算器**根据业务负载自动推荐额度。填写以下参数后，计算器输出建议购买的输入 KTPM 和输出 KTPM。
 
@@ -184,7 +198,7 @@ Integer
 
 不同 API 格式下上述字段的 JSON 路径存在差异：
 
-#### OpenAI Chat 兼容
+### OpenAI Chat 兼容
 
 **字段**
 
@@ -210,7 +224,7 @@ Integer
 
 输出侧 PTU 额度消耗
 
-#### OpenAI Responses
+### OpenAI Responses
 
 **字段**
 
@@ -236,7 +250,7 @@ Integer
 
 输出侧 PTU 额度消耗
 
-#### Anthropic 兼容
+### Anthropic 兼容
 
 **字段**
 
@@ -256,9 +270,11 @@ Integer
 
 输出侧 PTU 额度消耗
 
-**说明**Anthropic 兼容格式暂不返回 `cached_tokens` 字段，可通过 `provisioned_tokens` 间接判断缓存效果。
+**说明**
 
-#### DashScope
+Anthropic 兼容格式暂不返回 `cached_tokens` 字段，可通过 `provisioned_tokens` 间接判断缓存效果。
+
+### DashScope
 
 **字段**
 
@@ -291,29 +307,32 @@ Integer
 PTU 部署的运行监控通过百炼平台的模型监控功能实现，支持查看以下与长输入和缓存相关的指标：
 
 -   PTU 利用率：输入/输出/思考模式输出三条独立曲线。长输入场景下阶梯系数会使利用率超过 100%，属于正常现象。
+    
 -   Token 用量与缓存命中：包含 `cached_tokens` 数据系列，可查看缓存命中量占总输入的比例。
+    
 -   配额内/外调用次数：了解超出 PTU 额度后的请求占比（自动溢出策略下转为按量计费，仅使用 PTU 容量策略下返回 429）。
+    
 
-更多监控指标和操作方式，请参见[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)。
+更多监控指标和操作方式，请参见[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)。
 
 ## 常见问题
 
-Q: 超出 PTU 额度时会怎样？
+**Q: 超出 PTU 额度时会怎样？**
 
 取决于创建时选择的溢出策略：「自动溢出」策略下，请求自动转为按量计费，API 响应中 `service_tier` 字段不返回或返回 `default`，同时响应头包含 `x-dashscope-ptu-overflow:true`，业务不会中断；「仅使用 PTU 容量」策略下，超出请求返回 429 错误，不产生额外费用。
 
-Q: 单次输入超过模型上限时会怎样？
+**Q: 单次输入超过模型上限时会怎样？**
 
 千问系列模型输入上限为 128K token，DeepSeek 系列为 64K token。超过上限的请求同样自动转为按量计费。
 
-Q: 如何确认缓存是否生效？
+**Q: 如何确认缓存是否生效？**
 
-检查 API 响应中 `cached_tokens` 字段，值大于 0 表示前缀缓存命中。缓存命中部分按模型对应的折扣系数消耗额度（具体折扣率见[额度消耗规则](https://help.aliyun.com/zh/model-studio/ptu-long-input-and-cache#sec-billing)）。也可在控制台监控页面的 Token 用量图表中查看趋势。
+检查 API 响应中 `cached_tokens` 字段，值大于 0 表示前缀缓存命中。缓存命中部分按模型对应的折扣系数消耗额度（具体折扣率见[额度消耗规则](#sec-billing)）。也可在控制台监控页面的 Token 用量图表中查看趋势。
 
-Q: cached\_tokens 始终为 0，缓存未生效怎么办？
+**Q: cached\_tokens 始终为 0，缓存未生效怎么办？**
 
 常见原因：请求间的输入前缀不一致（如 System Message 变化）、两次请求间隔超过缓存有效期、输入 token 数不足以触发缓存。排查方法和缓存使用限制详见[上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)。
 
-Q: 利用率为什么超过 100%？
+**Q: 利用率为什么超过 100%？**
 
 部分模型（如 glm-5.1）的长输入阶梯系数使实际额度消耗高于原始 token 数。利用率 = 折算后消耗 ÷ 购买额度。超过 100% 表示消耗速度超过购买额度，超出部分按溢出策略处理（自动溢出则转为按量计费、不影响服务可用性；仅使用 PTU 容量则返回 429）。

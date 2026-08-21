@@ -9,13 +9,13 @@
 前提条件
 
 -   已开通通义晓蜜 CCAI-对话分析 AIO 服务。
--   已创建应用：应用中心完成通义晓蜜 CCAI-对话分析 AIO 应用创建，并获取到 APP-ID 和 WORKSPACE-ID：获取 APP-ID 和 WORKSPACE-ID。
+-   已创建应用：应用中心完成通义晓蜜 CCAI-对话分析 AIO 应用创建，并获取到 APP-ID 和 WORKSPACE-ID：[获取 APP-ID 和 WORKSPACE-ID](https://help.aliyun.com/zh/model-studio/developer-reference/obtain-api-key-app-id-and-workspace-id?spm=openapi-amp.newDocPublishment.0.0.39e3281fMO5qOX)。
 
 ## 调试
 
-您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/CreateVocab)
 
-[调试](https://api.alibabacloud.com/api/ContactCenterAI/2024-06-03/CreateVocab)
+[![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png)调试](https://api.aliyun.com/api/ContactCenterAI/2024-06-03/CreateVocab)
 
 ## 授权信息
 
@@ -119,20 +119,28 @@ string
 
 大树
 
-## 请求入参限制
+## [](#请求入参限制)请求入参限制
 
 -   默认最多创建 10 个词表。
+    
 -   每个词表最多添加 500 个词，每个词语最长 10 个字。
+    
 -   业务专属热词必须为 UTF-8 编码，不能包含标点、特殊字符。
+    
 -   业务专属词对应的权重取值范围为\[-6,5\]之间的整数。
+    
 -   取值大于 0 增大该词语被识别的概率，小于 0 减小该词语被识别的概率。
+    
 -   取值为-6：表示尽量不要识别出该词语。
+    
 -   取值为 2：常用值。
+    
 -   如果效果不明显可以适当增加权重，但是当权重较大时可能会引起负面效果，导致其他词语识别不准确。
+    
 
-## 接口请求示例
+## [](#接口请求示例)接口请求示例
 
-```
+```java
 import com.alibaba.fastjson.JSONObject;
 import com.aliyun.contactcenterai20240603.Client;
 import com.aliyun.contactcenterai20240603.models.CreateVocabRequest;
@@ -318,4 +326,4 @@ The request processing has failed due to some unknown error, exception or failur
 
 系统内部错误，请稍后重试
 
-访问[错误中心](https://api.alibabacloud.com/document/ContactCenterAI/2024-06-03/errorCode)查看更多错误码。
+访问[错误中心](< https://api.aliyun.com/document/ContactCenterAI/2024-06-03/errorCode>)查看更多错误码。

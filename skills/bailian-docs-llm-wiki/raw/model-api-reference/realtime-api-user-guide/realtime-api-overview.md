@@ -87,10 +87,13 @@ Android / iOS / HarmonyOS
 开发者可根据实际需求选择协议方案：
 
 -   **AOQ 方案**：适合对延迟、弱网对抗、多模态数据传输有极致要求的 AI 实时交互场景，同时内置回声消除和降噪能力，尤其是移动端原生应用。
+    
 -   **WebRTC 方案**：适合需要浏览器原生支持、已有 WebRTC 基础设施的传统音视频通话场景，内置回声消除和降噪能力。
+    
 -   **WebSocket 方案**：适合服务端集成、快速原型验证、对接入门槛要求极低的场景。通过 DashScope SDK 可快速实现实时语音对话。
+    
 
-## 模型/应用支持力度
+## **模型/应用支持力度**
 
 不同协议对模型和应用的支持情况如下：
 
@@ -132,7 +135,7 @@ qwen3.5-livetranslate-flash-realtime
 
 支持
 
-[多模态开发套件](raw/application-user-guide/application-gallery/multimodal-products/multimodal-products-overview.md)
+[多模态开发套件](https://help.aliyun.com/zh/model-studio/multimodal-products-overview)
 
 multimodal-dialog
 
@@ -170,7 +173,7 @@ qwen-audio-3.0-tts-flash、qwen-audio-3.0-tts-plus
 
 支持
 
-[实时语音对话](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides)
+[实时语音对话](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime)
 
 qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
 
@@ -180,14 +183,22 @@ qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
 
 支持
 
-**说明**模型的名称、上下文、价格、快照版本等信息请参见[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing#/home)；并发限流条件请参考[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
+**说明**
 
-## 最佳实践
+模型的名称、上下文、价格、快照版本等信息请参见[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing#/home)；并发限流条件请参考[限流](https://help.aliyun.com/zh/model-studio/rate-limit)。
 
--   [通过WebRTC使用多模态交互套件实现实时通话](raw/model-user-guide/use-cases/best-practice-webrtc-multimodal-dialog.md)
--   [通过WebRTC使用qwen3.5-omni-plus-realtime实现实时通话](raw/model-user-guide/use-cases/best-practice-webrtc-omni-realtime.md)
--   [通过AOQ使用qwen3.5-omni-plus-realtime实现实时通话](raw/model-user-guide/use-cases/best-practice-aoq-omni-realtime.md)
--   [使用 AOQ 接入 qwen3.5-omni-plus-realtime 实现按键语音对话](raw/model-user-guide/use-cases/use-aoq-to-access-qwen3-5-omni-plus-realtime-to-realize-key-voice-dialogue.md)
--   [使用 AOQ 接入 qwen-audio-3.0-realtime-plus 实现实时语音对话](raw/model-user-guide/use-cases/real-time-voice-conversation-using-aoq-access-qwen-audio-3-0-realtime-plus.md)
--   [使用 AOQ 接入 qwen-audio-3.0-tts-flash 实现语音合成](raw/model-user-guide/use-cases/speech-synthesis-using-aoq-access-qwen-audio-3-0-tts-flash.md)
--   [使用 AOQ 接入 fun-asr-realtime 实现实时语音识别](raw/model-user-guide/use-cases/real-time-speech-recognition-using-aoq-access-fun-asr-realtime.md)
+## **最佳实践**
+
+-   [通过WebRTC使用多模态交互套件实现实时通话](https://help.aliyun.com/zh/model-studio/best-practice-webrtc-multimodal-dialog)
+    
+-   [通过WebRTC使用qwen3.5-omni-plus-realtime实现实时通话](https://help.aliyun.com/zh/model-studio/best-practice-webrtc-omni-realtime)
+    
+-   [通过AOQ使用qwen3.5-omni-plus-realtime实现实时通话](https://help.aliyun.com/zh/model-studio/best-practice-aoq-omni-realtime)
+    
+-   [使用 AOQ 接入 qwen3.5-omni-plus-realtime 实现按键语音对话](https://help.aliyun.com/zh/model-studio/use-aoq-to-access-qwen3-5-omni-plus-realtime-to-realize-key-voice-dialogue)
+    
+-   [使用 AOQ 接入 qwen-audio-3.0-realtime-plus 实现实时语音对话](https://help.aliyun.com/zh/model-studio/real-time-voice-conversation-using-aoq-access-qwen-audio-3-0-realtime-plus)
+    
+-   [使用 AOQ 接入 qwen-audio-3.0-tts-flash 实现语音合成](https://help.aliyun.com/zh/model-studio/speech-synthesis-using-aoq-access-qwen-audio-3-0-tts-flash)
+    
+-   [使用 AOQ 接入 fun-asr-realtime 实现实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-using-aoq-access-fun-asr-realtime)

@@ -12,13 +12,13 @@
 
 文本 Embedding
 
-OpenAI text-embedding-3-large、Voyage-3-large、Cohere embed-v4、Google Gemini Embedding 2
+OpenAI text-embedding-3-large、Voyage-3-large、Cohere embed-v4、Google Gemini Embedding 2
 
 `text-embedding-v4`
 
 多模态 Embedding
 
-Cohere embed-v4、Voyage multimodal、Google Gemini Embedding 2
+Cohere embed-v4、Voyage multimodal、Google Gemini Embedding 2
 
 `qwen3-vl-embedding`、`tongyi-embedding-vision-plus`
 
@@ -35,8 +35,11 @@ Cohere Rerank 3.5、Voyage rerank-2.5
 ### 如何选择维度？
 
 -   大规模搜索且存储空间有限：选择256或512维。
+    
 -   通用场景：选择1024维（默认值，平衡效果好）。
+    
 -   对检索精度要求高：选择1536或2048维。
+    
 
 ## 多模态Embedding
 
@@ -45,7 +48,9 @@ Cohere Rerank 3.5、Voyage rerank-2.5
 ### 融合向量 vs 独立向量
 
 -   **融合向量**：将文本和图片融合为一个向量，适用于图文混合检索。推荐使用`qwen3-vl-embedding`或`qwen2.5-vl-embedding`。
+    
 -   **独立向量**：为每种模态分别生成向量，适用于跨模态搜索（文搜图、图搜图）。推荐使用`tongyi-embedding-vision-plus`。
+    
 
 ### 只有纯文本数据？
 
@@ -56,7 +61,9 @@ Cohere Rerank 3.5、Voyage rerank-2.5
 用于提升RAG精度：在Embedding检索之后使用重排序模型对Top-N结果进行重排序，通过交叉注意力机制提高排序质量。
 
 -   **纯文本重排序**：使用`qwen3-rerank`，支持100+语言，最多500个文档。
+    
 -   **多模态重排序**：使用`qwen3-vl-rerank`，支持文本、图片和视频混合排序。
+    
 
 ## 所有模型
 
