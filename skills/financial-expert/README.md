@@ -1,88 +1,75 @@
-# financial-expert
+# Financial Data Analysis
 
-> [中文版 / Chinese →](README.zh.md)
+> [中文说明 →](README.zh.md)
 
-Financial data analysis skill powered by **Alibaba Cloud Model Studio MCP** (`bl mcp` + `market-cmapi00073529`) — covering China A-share stocks, mutual funds, bonds, macro indicators, broker research reports, and listed-company filings.
+This skill uses Aliyun Model Studio CLI `bl mcp` and the financial MCP server `market-cmapi00073529` to query China and Hong Kong securities, funds, fund managers, company financials and valuation, global macro and industry data, broker research, disclosures, financial news, and enterprise risk data. It provides sourced facts and neutral analysis only; it does not trade, recommend securities, or predict prices.
 
-## What it does
+## Coverage
 
-Ask your agent financial questions in natural language, and this skill will:
+- A-share screening, plus structured data for supported A-share, Hong Kong, fund, bond, and index instruments
+- Fund and fund-manager screening
+- GDP, CPI, core PCE, and industry production, sales, and price series across China and other major economies
+- Broker research reports
+- A-share, Hong Kong company, and public-fund announcements
+- Financial news and enterprise registration, compliance, and judicial-risk data
 
-1. **Parse your intent** — identify the target (stock / fund / industry), filters (ROE > 15%, growth > 30%), and data type
-2. **Route to the right tool** — stock screening, fund screening, fund manager screening, financial data query, macro/industry time-series, research reports, or company announcements
-3. **Call the MCP service** — `bl mcp call market-cmapi00073529.<Tool> --query "..."` and return structured results
-4. **Present the data** — formatted tables, charts, or summaries ready for analysis
-
-## When to use
-
-| Scenario | Example |
-|----------|---------|
-| Stock screening | "Find consumption stocks with ROE > 15% and net profit growth > 30%" |
-| Fund screening | "Low-risk bond funds with 3-year annualized return above 5%" |
-| Fund manager screening | "Managers with AUM > 10B and top-quartile performance" |
-| Financial data | "Kweichow Moutai's net profit for the past 3 years" |
-| Macro / industry data | "China GDP quarterly growth for 2023–2025" |
-| Research reports | "Latest broker reports on the new energy vehicle sector" |
-| Company filings | "PetroChina's recent major-event announcements" |
-
-**Not for this skill:**
-- Non-China markets (US stocks, crypto, forex)
-- Real-time trading / order execution
-- Investment advice — data only, decisions are yours
-
-## Quick examples
+Treat the live tool schema as authoritative:
 
 ```bash
-# Stock screening
-bl mcp call market-cmapi00073529.SmartStockSelection \
-  --query "筛选净利润增速超过 30% 且 ROE 大于 15% 的消费股"
-
-# Fund screening
-bl mcp call market-cmapi00073529.SmartFundSelection \
-  --query "近三年年化收益超过 10% 的股票型基金"
-
-# Financial data
-bl mcp call market-cmapi00073529.FinQuery \
-  --query "贵州茅台 2024 年净利润和营收"
-
-# Macro data
-bl mcp call market-cmapi00073529.MacroIndustryData \
-  --query "2023-2025 中国季度 GDP 增速"
-
-# Research reports
-bl mcp call market-cmapi00073529.FinancialResearchReport \
-  --query "新能源汽车行业最新券商研报"
+bl mcp tools --server market-cmapi00073529 --output json
 ```
+
+## Authentication
+
+- `bl mcp list` uses a Console session and is only needed to discover a Server Code.
+- `bl mcp tools` and `bl mcp call` use a DashScope API Key. When `market-cmapi00073529` is already known, skip `mcp list`.
+
+```bash
+bl auth status --output json
+
+# Only for mcp list; domestic is the default and may be selected explicitly
+bl auth login --console --console-site domestic
+```
+
+## Tools
+
+| Tool | Purpose |
+|---|---|
+| `SmartStockSelection` | Multi-factor A-share screening |
+| `SmartFundSelection` | Fund screening |
+| `SmartFundManagerSelection` | Fund-manager screening |
+| `FinQuery` | Financials, market data, valuation, and instrument facts |
+| `MacroIndustryData` | Macro and industry time series across major economies |
+| `FinancialResearchReport` | Broker research |
+| `AnnouncementData` | A-share, Hong Kong company, and public-fund announcements |
+| `NewsDataQuery` | Financial news and public updates |
+| `IcEnterpriseDataQuery` | Enterprise registration, compliance, and judicial risk |
+
+## Quick example
+
+```bash
+bl mcp call \
+  --target market-cmapi00073529.FinQuery \
+  --query "Query Kweichow Moutai (600519.SH) revenue, parent net profit, and ROE for its latest complete fiscal year" \
+  --output json
+```
+
+For “latest” or “latest complete fiscal year,” do not hard-code a year. Capture the actual query time and verify the reporting period returned by the tool:
+
+```bash
+TZ=Asia/Shanghai date '+%F %T %Z'
+```
+
+See [SKILL.md](SKILL.md) for routing, error handling, and output requirements.
 
 ## Prerequisites
 
-This skill requires Alibaba Cloud Model Studio CLI (`bl`). Before using this skill, check if `bl` is installed:
+Install [Aliyun Model Studio CLI](https://bailian.aliyun.com/cli/install.md) and configure a DashScope API Key:
 
 ```bash
-bl --version
+export DASHSCOPE_API_KEY="YOUR_DASHSCOPE_API_KEY"
+bl auth status --output json
 ```
-
-If not installed or the command is not found, follow the install guide:
-
-> https://bailian.aliyun.com/cli/install.md
-
-Also log in to the Bailian console:
-
-```bash
-bl auth login --console
-```
-
-## Available tools
-
-| Tool | Purpose |
-|------|---------|
-| `SmartStockSelection` | Multi-dimension A-share stock screening |
-| `SmartFundSelection` | Fund screening by performance, risk, holdings, type |
-| `SmartFundManagerSelection` | Fund manager screening by AUM, style, track record |
-| `FinQuery` | Structured financial data (income, valuation, quotes) |
-| `MacroIndustryData` | Macro & industry time-series (GDP, CPI, production) |
-| `FinancialResearchReport` | Broker research report search |
-| `AnnouncementData` | Listed-company filing / announcement search |
 
 ## License
 
