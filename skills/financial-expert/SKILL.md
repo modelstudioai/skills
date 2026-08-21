@@ -1,277 +1,128 @@
 ---
 name: financial-expert
 description: >-
-  金融数据分析技能（基于 `bl mcp` + 阿里云百炼 MCP 市场 `market-cmapi00073529`），
-  覆盖中国 A 股、基金、债券等金融标的。支持股票筛选、基金筛选、基金经理筛选、
-  财务数据查询（净利润 / 营收 / ROE 等）、宏观与行业时序数据（GDP / CPI / 产销价）、
-  券商研报检索、A 股上市公司公告检索。当用户问及以下关键词时务必激活：
-  选股 / 股票筛选、基金筛选、基金经理筛选、财务数据 / 净利润 / 营收 / 估值、
-  宏观经济 / GDP / CPI、行业产量销量价格、券商研报 / 行业研报、上市公司公告。
-  不适用于：通用编程问题、非金融数据、非中国市场标的。
+  Use when users need China or Hong Kong securities, funds, fund managers, company financials,
+  valuation, global macro or industry time series, broker research, announcements, financial news,
+  or enterprise-risk data. Triggers include 选股、基金筛选、基金经理、净利润、营收、ROE、估值、
+  GDP、CPI、核心 PCE、行业产销价、研报、公告、财经新闻、工商与司法风险。
 ---
 
-# 前置依赖：阿里云百炼 CLI
+# 金融数据分析
 
-本技能依赖阿里云百炼 CLI（`bl`）。在使用本技能前，请先检查 `bl` 是否已安装：
+通过百炼 CLI `bl mcp` 调用金融 MCP `market-cmapi00073529`。只返回数据与中立分析，不下单、不荐股、不预测涨跌。
+
+## 能力边界
+
+- 适用：A 股筛选；A 股、港股、基金、债券、指数等结构化查询；基金和基金经理筛选；中国及全球主要经济体宏观/行业时序；券商研报；A 股、港股公司及公募基金公告；财经新闻；企业工商、合规与司法风险。
+- 不适用：美股个股、加密货币等未被实时 schema 证实的证券或资产；交易下单；无数据依据的投资结论。全球宏观指标不受此限制。
+- 工具能力可能更新。执行前以 `bl mcp tools --server market-cmapi00073529 --output json` 返回的实时 schema 为准。
+
+## 前置检查与鉴权
 
 ```bash
 bl --version
+bl auth status --output json
 ```
 
-如果未安装或命令不存在，请阅读以下安装文档并按照说明为用户完成安装：
-
-> https://bailian.aliyun.com/cli/install.md
-
----
-
-# 金融数据分析 Skill
-
-> 基于 `bl mcp` 调用阿里云百炼 MCP 市场金融数据服务（`market-cmapi00073529`），
-> 提供股票 / 基金 / 基金经理筛选、财务与宏观数据查询、研报与公告检索的端到端能力。
-> `bl` 内置 MCP 客户端，复用 `DASHSCOPE_API_KEY`,无需额外注册服务。
-
-## 何时使用
-
-满足以下任一条件时激活：
-
-- **股票相关**：选股、股票筛选、A 股财务指标筛选、行业 / 概念股查询
-- **基金相关**：基金筛选、按业绩 / 风险 / 持仓 / 类型筛选基金
-- **基金经理相关**：按管理规模 / 业绩 / 风格筛选基金经理
-- **结构化金融数据**：净利润、营业收入、ROE、市盈率、行情快照、舆情、工商信息
-- **宏观 / 行业数据**：GDP、CPI、PPI、行业产量 / 销量 / 价格时序
-- **券商研报**：分析师观点、行业格局、公司发展、市场趋势叙述
-- **公司公告**:A 股上市公司公告原文（财务、重大事项、权益分派、关联交易）
-
-## 何时**不要**使用
-
-- 非中国市场标的（美股、港股、加密货币等）
-- 通用编程 / 框架问题
-- 实时行情下单 / 交易接口（本技能仅提供数据查询，不下单）
-- 投资建议或荐股 — 仅返回数据，由用户自行决策
-
-## 前置条件
-
-### 1. 安装 `bailian-cli`
+未安装时按 [百炼 CLI 安装文档](https://bailian.aliyun.com/cli/install.md) 安装。API Key 可通过环境变量或 CLI 配置：
 
 ```bash
-npm install -g bailian-cli
-bl --version
+export DASHSCOPE_API_KEY="YOUR_DASHSCOPE_API_KEY"
+# 或
+bl auth login --api-key "YOUR_DASHSCOPE_API_KEY"
 ```
 
-如果用户尚未安装,引导其访问 https://bailian.aliyun.com/cli/install.md
+鉴权边界：
 
-### 2. 配置百炼 API Key
+- `bl mcp list` 查询账号控制面，使用 Console 登录态。只有需要发现 Server Code 时才调用；国内站登录使用 `bl auth login --console --console-site domestic`。
+- `bl mcp tools` 与 `bl mcp call` 使用 API Key。已知 Server Code 时，即使 Console 会话过期，也应直接查询 tools 或调用工具。
 
 ```bash
-# 方式 A：环境变量（推荐）
-export DASHSCOPE_API_KEY=sk-你的APIKey
+# 可选：发现已激活的金融 MCP（Console）
+bl mcp list --name 金融 --output json
 
-# 方式 B：bl auth
-bl auth login --api-key sk-你的APIKey
-
-# 验证
-bl auth status
+# 权威：查看实时工具与入参 schema（API Key）
+bl mcp tools --server market-cmapi00073529 --output json
 ```
 
-获取 API Key:https://bailian.console.aliyun.com/cli?source_channel=key_github&
+## 工具路由
 
-**注意**：用户已有 `DASHSCOPE_API_KEY` 则跳过配置。仅当 `bl auth status` 显示未登录或调用失败时再询问 Key。
-
-### 3. 确认 MCP 服务可用
-
-```bash
-# 在用户百炼账号下查看已激活的 MCP 服务
-bl mcp list --name 金融
-
-# 查看具体服务暴露的工具
-bl mcp tools market-cmapi00073529
-```
-
-如 `bl mcp list` 中没有目标服务，引导用户去百炼控制台「MCP 市场」激活
-`market-cmapi00073529`（金融数据分析）。
-
-## 工作流程
-
-### 第一步：解析用户
-
-从用户输入中提取：
-
-- **目标标的** — 具体股票 / 基金名称或品类（如「贵州茅台」「消费板块」「股票型基金」）
-- **筛选条件** — 财务指标、业绩阈值、行业筛选、时间窗口等
-- **数据类型** — 结构化（财务 / 行情）、时序（宏观）、非结构化（研报 / 公告）
-- **时间范围** — 数据或研报的历史区间
-
-### 第二步：选择工具
-
-| 用户意图 | 工具 | 类别 |
+| 用户意图 | MCP 工具 | 说明 |
 |---|---|---|
-| 「筛选...股票」「选股」 | `SmartStockSelection` | 候选清单 |
-| 「筛选...基金」 | `SmartFundSelection` | 候选清单 |
-| 「筛选...基金经理」 | `SmartFundManagerSelection` | 候选清单 |
-| 「查 X 公司 / 基金的财务 / 行情 / 估值」 | `FinQuery` | 结构化数据 |
-| 「查 GDP / CPI / 行业产销 / 价格走势」 | `MacroIndustryData` | 时序数据 |
-| 「找 X 行业 / 公司的券商研报」 | `FinancialResearchReport` | 非结构化研报 |
-| 「查 X 公司公告」 | `AnnouncementData` | 非结构化公告 |
+| 筛选股票 | `SmartStockSelection` | A 股候选清单 |
+| 筛选基金 | `SmartFundSelection` | 基金业绩、风险、持仓、类型 |
+| 筛选基金经理 | `SmartFundManagerSelection` | 规模、业绩、风格、风险控制 |
+| 财务、行情、估值、证券资料 | `FinQuery` | A 股、港股、基金、债券、指数等结构化数据 |
+| 全球 GDP、CPI、核心 PCE、行业产销价 | `MacroIndustryData` | 中国及全球主要经济体宏观和行业时序数据 |
+| 公司或行业券商研报 | `FinancialResearchReport` | 研报原文与机构观点 |
+| 公司或基金公告 | `AnnouncementData` | A 股、港股公司及公募基金公告 |
+| 财经新闻与公开动态 | `NewsDataQuery` | 新闻、事件与舆情素材 |
+| 企业深度信息 | `IcEnterpriseDataQuery` | 工商、经营、合规与司法风险 |
 
-### 第三步:调用 `bl mcp call`
+复杂问题应分别调用相关工具，再对齐实体、日期、单位和口径；不要让一个宽泛 query 替代多工具核验。涉及“前 N / Top N”时必须先确定排序指标；排序指标不明确时先追问，再通过 query 和 `topk` 固化口径。
 
-所有金融工具都挂在 `market-cmapi00073529` 这一个 MCP server 下,
-调用格式统一为：
+## 调用格式
 
-```bash
-bl mcp call market-cmapi00073529.<ToolName> --query "<自然语言查询>"
-```
-
-也支持结构化入参:
+所有工具使用 `--target <server.tool>`：
 
 ```bash
-# 完整 JSON 入参
-bl mcp call market-cmapi00073529.SmartStockSelection \
-  --json '{"query":"消费板块","filters":{"roe":">15"}}'
-
-# 多个 K=V（值自动尝试解析为 JSON）
-bl mcp call market-cmapi00073529.SmartFundSelection \
-  --arg riskLevel=R3 --arg minScale=10
+bl mcp call \
+  --target market-cmapi00073529.FinQuery \
+  --query "查询贵州茅台（600519.SH）最近一个完整财年的营业收入、归母净利润和 ROE" \
+  --output json
 ```
 
-输出 JSON 用于 Agent 解析:
+结构化参数必须先查看实时 schema：
 
 ```bash
-bl mcp call market-cmapi00073529.FinQuery --query "贵州茅台 2024 年净利润" --output json
+bl mcp call \
+  --target market-cmapi00073529.SmartStockSelection \
+  --json '{"query":"筛选 ROE 大于 15% 且净利润增速超过 20% 的消费股"}' \
+  --output json
 ```
 
-## 工具参考
+## 时间与数据口径
 
-每个工具的入参 schema 可通过 `bl mcp tools market-cmapi00073529 --output json` 查询。
-下面给出**典型调用示例**，所有工具默认接收自然语言 `--query`。
+- 用户说“最新”“最近一个完整财年”时，先运行 `TZ=Asia/Shanghai date '+%F %T %Z'` 获取实际查询时间；不要自行写死年份。
+- 让工具按相对时间查询，并检查返回的报告期是否真是最新已披露期间。若只返回更早期间，明确说明，不得静默替代。
+- 区分实际查询时间、行情交易时间、财报报告期和研报/公告发布时间。
 
-### 1. 股票筛选 — `SmartStockSelection`
+## 输出规范
 
-按财务、行情、技术、行业 / 概念等多维条件筛选股票。仅返回候选名单，不返回详情。
+- 筛选与结构化数据：Markdown 表格，包含名称、代码、期间、数值、单位和来源。
+- 宏观/行业时序：时序表格 + 一句话趋势，区分同比和环比。
+- 研报：标题、日期、机构，每篇最多 3 条观点；机构评级只能作为来源事实转述。
+- 公告：标题、日期、主体、披露事项；新闻和企业信息注明对应工具。
+- 结尾注明：实际查询时间、调用的工具、`market-cmapi00073529`，以及“仅供数据参考，不构成投资建议”。
+- 空结果、冲突数据或缺失指标必须如实说明；保留工具返回的单位和有效精度，不编造、不擅自换口径。
 
-```bash
-bl mcp call market-cmapi00073529.SmartStockSelection \
-  --query "筛选净利润增速超过 30% 且 ROE 大于 15% 的消费股"
-```
+## 常见错误
 
-### 2. 基金筛选 — `SmartFundSelection`
-
-按业绩、风险、持仓、基金经理、类型等条件筛选基金。
-
-```bash
-bl mcp call market-cmapi00073529.SmartFundSelection \
-  --query "筛选近一年收益率排名前 10% 的股票型基金"
-```
-
-### 3. 基金经理筛选 — `SmartFundManagerSelection`
-
-按管理规模、业绩、风险控制、投资风格等条件筛选基金经理。
-
-```bash
-bl mcp call market-cmapi00073529.SmartFundManagerSelection \
-  --query "筛选管理规模超过 100 亿且年化收益超过 15% 的基金经理"
-```
-
-### 4. 金融数据查询 — `FinQuery`
-
-查询股票 / 基金 / 债券基本资料、财务数据、行情快照、估值指标等**结构化数据**。
-也支持舆情、工商数据。返回表格或叙述文本。
-
-```bash
-bl mcp call market-cmapi00073529.FinQuery \
-  --query "查询贵州茅台 2020 年至今的净利润数据"
-```
-
-### 5. 宏观行业数据 — `MacroIndustryData`
-
-查询宏观经济(GDP、CPI)或行业经济(产量、销量、价格)的**时序数据**。
-
-```bash
-bl mcp call market-cmapi00073529.MacroIndustryData \
-  --query "查询近五年中国 GDP 同比增速数据"
-```
-
-### 6. 研报查询 — `FinancialResearchReport`
-
-检索券商研报中的分析师观点、行业格局判断、公司发展历程、市场趋势叙述等**非结构化内容**。
-
-```bash
-bl mcp call market-cmapi00073529.FinancialResearchReport \
-  --query "查找最近三个月关于新能源汽车行业的券商研报"
-```
-
-### 7. 公告检索 — `AnnouncementData`
-
-检索 A 股上市公司公告原文：财务公告、重大事项、权益分派、关联交易等。
-
-```bash
-bl mcp call market-cmapi00073529.AnnouncementData \
-  --query "查询贵州茅台 2024 年年度股东大会决议公告"
-```
-
-## 输出呈现规范
-
-向用户展示结果时遵循以下结构:
-
-- **筛选类**(股票 / 基金 / 经理)：表格展示，含名称、代码、关键指标值
-- **`FinQuery` 结构化数据**:表格展示，列标题需含单位（万元 / %  / 倍 / 元等）
-- **`MacroIndustryData` 时序**:时序表格 + 一句话趋势摘要（同比 / 环比方向）
-- **`FinancialResearchReport` 研报**:研报标题 + 发布日期 + 券商 + 核心观点摘要（不超过 3 条）
-- **`AnnouncementData` 公告**：公告标题 + 发布日期 + 公司名称 + 相关原文片段
-
-**强约束:**
-
-- 始终注明**数据来源**(百炼 MCP 市场 / market-cmapi00073529)和**查询时间**(`date` 命令)。
-- 若工具返回为空，**不要编造**数据；建议用户放宽筛选条件或调整关键词后重试。
-- 涉及金额、比例时保留原始精度,不要四舍五入到无意义的位数。
-- 不要给出投资建议；可总结数据特征，但不得说「建议买入 / 卖出」。
-
-## 错误处理
-
-| 错误现象 | 排查思路 |
+| 现象 | 处理 |
 |---|---|
-| `BailianGateway.Login.NotLogined` / 401 | API Key 缺失或失效 → `bl auth login --api-key sk-...` |
-| `bl mcp list` 找不到 `market-cmapi00073529` | 用户未在百炼控制台「MCP 市场」激活该服务,引导其激活 |
-| `bl mcp tools` 报 connection 错误 | 检查网络 / 区域(默认 `cn-beijing`);可加 `--region us` 或 `--base-url` 覆盖 |
-| 工具返回 `isError: true` | 读取 `result.content[].text` 中的错误描述,常见原因:query 太宽 / 缺少必填实体名 |
-| 无返回结果 | 放宽筛选条件、确认实体名称(全称 / 简称 / 代码)是否准确 |
+| `Unexpected argument: market-...` | 使用 `tools --server` 或 `call --target`，不要再传位置参数 |
+| `mcp list` 提示 Console token/session 缺失 | 如确需发现服务，按站点登录 Console；已知 Server Code 则跳过 list |
+| `mcp tools` / `mcp call` 返回 401 或 API Key 缺失 | 检查 `DASHSCOPE_API_KEY` 或运行 `bl auth login --api-key ...` |
+| 提示 MCP 未开通或不存在 | 打开错误中的市场链接，在当前账号/Workspace 激活服务后重试 |
+| `isError: true` | 原样读取 `result.content[].text`，补全实体、代码、指标或时间范围后重试 |
+| 无结果 | 核对全称、简称、证券代码和日期；征得用户同意后再放宽条件 |
 
-## 完整端到端示例
+## 端到端示例
 
-用户问：「**帮我筛选 ROE > 15% 且近三年净利润复合增速 > 20% 的消费股，再查一下排名前 3 的公司最近的研报观点。**」
+用户问：“筛选 ROE > 15% 且近三年净利润复合增速 > 20% 的消费股，按 ROE 从高到低取前三家公司，再看它们近一个月研报。”
 
 ```bash
-# Step 1: 候选筛选
-bl mcp call market-cmapi00073529.SmartStockSelection \
-  --query "ROE 大于 15%，近三年净利润复合增速大于 20% 的消费股" \
+bl mcp call \
+  --target market-cmapi00073529.SmartStockSelection \
+  --query "ROE 大于 15%，近三年净利润复合增速大于 20% 的消费股，按 ROE 从高到低排序" \
+  --arg topk=3 \
   --output json
 
-# 假设返回 top 3：贵州茅台、五粮液、伊利股份
-
-# Step 2: 分别拉取最新研报
-bl mcp call market-cmapi00073529.FinancialResearchReport \
-  --query "贵州茅台近一个月券商研报核心观点"
-
-bl mcp call market-cmapi00073529.FinancialResearchReport \
-  --query "五粮液近一个月券商研报核心观点"
-
-bl mcp call market-cmapi00073529.FinancialResearchReport \
-  --query "伊利股份近一个月券商研报核心观点"
+# 从真实返回中取前三名，逐家公司调用；不要预设公司名单
+bl mcp call \
+  --target market-cmapi00073529.FinancialResearchReport \
+  --query "<公司名称或代码>近一个月券商研报核心观点" \
+  --output json
 ```
 
-汇总为表格 + 每家 3 条要点 + 数据来源 + 查询时间。
-
-## 与 `bailian-cli` skill 的协同
-
-- 本 skill 专注**金融 MCP 工具调用**;不要在这里调用 `bl text chat` / `bl image` 等。
-- 若用户拿到金融数据后想**写研报 / 出图 / 出 PPT**:
-  - 文本撰写 → 转给 `bailian-cli` 用 `bl text chat`
-  - 可视化图表生成 → 转给 `bailian-cli` 用 `bl image generate`
-  - 配音播报 → 转给 `bailian-cli` 用 `bl speech synthesize`
-
-## 备注
-
-- 本 skill 依赖的 `bl mcp` 子命令(`list` / `tools` / `call`)由 `bailian-cli` 提供;
-  详细参数见 `bailian-cli` skill 的 `reference/` 目录或 `bl mcp <子命令> --help`。
-- 金融 MCP 服务可能按调用计费;首次大批量调用前建议先 `--dry-run` 预览请求。
-- 数据准确性以阿里云百炼 MCP 市场提供方为准,本 skill 不对数据准确性背书。
+汇总候选指标和研报事实，注明来源与时间，不输出买卖建议。
