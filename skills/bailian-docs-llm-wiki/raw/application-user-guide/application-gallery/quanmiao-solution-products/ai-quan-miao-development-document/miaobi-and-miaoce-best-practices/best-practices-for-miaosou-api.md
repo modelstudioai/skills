@@ -4,93 +4,125 @@
 
 ## 一、妙搜功能概述
 
-## 1.1、一句话说明
+## **1.1、一句话说明**
 
 妙搜内置“互联网搜索”，可以供通用领域知识、信息智能搜索生成，为了应对更多领域、企业知识的搜索生成，我们提供了“通过API引入数据源”和“上传文件用作数据源”的集成能力。通过以下接口可以配置和管理企业API和知识。[控制台入口](https://aimiaobi.console.aliyun.com/?productCode=p_broadscope_search)：
 
-## 1.2、产品页面展示
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7377257371/p908375.png)
 
-### 1.2.1、数据源管理
+## **1.2、产品页面展示**
 
-#### 控制台入口
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7377257371/p908376.png)
+
+### **1.2.1、数据源管理**
+
+#### **控制台入口**
 
 对应“**数据源管理**”菜单：此菜单下为数据接入说明，支持PaaS API方式维护数据源和数据集下知识。
 
-#### 功能说明
+#### **功能说明**
 
 维护数据源，可以是多个，供“智能搜索”模块搜索获取知识。支持的数据源类型目前有三种：
 
 -   **系统内置数据源**：系统内置，不支持修改，目前内置“互联网搜索”，支持互联网通用领域的网站数据搜索；
+    
 -   **通过API引入数据源**：企业提供搜索API，妙搜提供大模型能力并整合，目前需联系后台技术维护，暂未开放自定义；
+    
 -   **上传文件用作数据源**：企业提供知识，妙搜提供搜索和大模型能力，可以通过“数据源管理”下数据集相关API维护索引和索引中知识。
+    
 
-#### API：[数据源管理](https://alidocs.dingtalk.com/i/nodes/Qnp9zOoBVBDEydnQUNwzpGZ281DK0g6l?utm_medium=dingdoc_doc_plugin_url&utm_source=dingdoc_doc)
+#### **API：**[数据源管理](https://alidocs.dingtalk.com/i/nodes/Qnp9zOoBVBDEydnQUNwzpGZ281DK0g6l?utm_medium=dingdoc_doc_plugin_url&utm_source=dingdoc_doc)
 
-### 1.2.2、系统配置->通用/媒资搜索信源
+### **1.2.2、系统配置->通用/媒资搜索信源**
 
-#### 控制台入口
+#### **控制台入口**
 
 对应“**系统配置**”菜单下“**通用搜索信源**”、“**媒资搜索信源**”两个tab。
 
-#### 功能说明
+#### **功能说明**
 
 维护“智能搜索”模块两个tab下索引的启用与否、召回文章、chunk（片段）条数。
 
-#### API：[系统配置-信源管理](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-dir-system-configuration-source-management)
+#### **API：**[系统配置-信源管理](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-dir-system-configuration-source-management/)
 
-### 1.2.3、智能搜索
+### **1.2.3、智能搜索**
 
-#### 控制台入口
+#### **控制台入口**
 
--   妙搜首页下多模态搜索框。
--   妙笔首页右上角**搜索素材**。
+-   妙搜首页下多模态搜索框。![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7377257371/p908377.png)
+    
+-   妙笔首页右上角**搜索素材**。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0391743471/p936052.png)
+    
 
-#### 功能说明
+#### **功能说明**
 
 深度服务通用领域，影视、媒体、营销、影视、媒体等行业的多模态搜索。
 
-#### API：[智能搜索](https://alidocs.dingtalk.com/i/nodes/jb9Y4gmKWrx9eo4dCmZqdNrjJGXn6lpz)
+#### **API：**[智能搜索](https://alidocs.dingtalk.com/i/nodes/jb9Y4gmKWrx9eo4dCmZqdNrjJGXn6lpz)
 
 chatconfig.SearchSource 字段下配置“数据源（信源）”。
 
-## 二、PaasAPI整体对接方案
+## **二、PaasAPI整体对接方案**
 
 ## 2.1、方案概览
 
-## 2.2、接口明细
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7377257371/p908378.png)
 
--   [妙搜-数据源](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source)：维护企业知识
+## **2.2、接口明细**
+
+-   [妙搜-数据源](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/)：维护企业知识
     
-    -   [数据源-创建](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-createdataset.md)
-    -   [数据源-详情](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-getdataset.md)
-    -   [数据源-修改](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-updatedataset.md)
-    -   [数据源-列表](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-listdatasets.md)
-    -   [数据源-删除](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-deletedataset.md)
-    -   [数据源-添加文档到数据集](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-adddatasetdocument.md)
-    -   [数据源-获取文档详情](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-getdatasetdocument.md)
-    -   [数据源-修改文档](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-updatedatasetdocument.md)
-    -   [数据源-文档列表](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-listdatasetdocuments.md)
-    -   [数据源-搜索文档](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-searchdatasetdocuments.md)
-    -   [数据源-删除数据集文档](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-deletedatasetdocument.md)
--   [系统配置-信源管理](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-dir-system-configuration-source-management)：配置信源，可以通过控制台配置
+    -   [数据源-创建](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-createdataset)
+        
+    -   [数据源-详情](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdataset)
+        
+    -   [数据源-修改](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-updatedataset)
+        
+    -   [ListDatasets - 数据源-列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listdatasets)
+        
+    -   [DeleteDataset - 数据源-删除](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletedataset)
+        
+    -   [数据源-添加文档到数据集](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-adddatasetdocument)
+        
+    -   [数据源-获取文档详情](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdatasetdocument)
+        
+    -   [数据源-修改文档](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-updatedatasetdocument)
+        
+    -   [数据源-文档列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listdatasetdocuments)
+        
+    -   [数据源-搜索文档](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-searchdatasetdocuments)
+        
+    -   [DeleteDatasetDocument - 数据源-删除数据集文档](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-deletedatasetdocument)
+        
+-   [系统配置-信源管理](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-dir-system-configuration-source-management/)：配置信源，可以通过控制台配置
     
-    -   [保存信源权重配置](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-source-management/api-aimiaobi-2023-08-01-savedatasourceorderconfig.md)
-    -   [获取信源配置权重数据](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-system-configuration-source-management/api-aimiaobi-2023-08-01-getdatasourceorderconfig.md)
--   [妙搜-智能搜索](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-smart-search/api-aimiaobi-2023-08-01-runsearchgeneration.md)：端到端智能搜索生成推理能力
+    -   [SaveDataSourceOrderConfig - 保存信源权重配置](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-savedatasourceorderconfig)
+        
+    -   [GetDataSourceOrderConfig - 获取信源配置权重数据](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdatasourceorderconfig)
+        
+-   [妙搜-智能搜索](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runsearchgeneration)：端到端智能搜索生成推理能力
     
-    -   [妙搜-智能搜索](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-smart-search/api-aimiaobi-2023-08-01-runsearchgeneration.md)
-    -   [查询妙搜搜索生成历史任务列表](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-smart-search/api-aimiaobi-2023-08-01-listsearchtasks.md)
-    -   [查询妙搜搜索生成任务详情列表](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-smart-search/api-aimiaobi-2023-08-01-listsearchtaskdialogues.md)
-    -   [查询搜索生成任务对话详情中数据列表](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-smart-search/api-aimiaobi-2023-08-01-listsearchtaskdialoguedatas.md)
+    -   [妙搜-智能搜索](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runsearchgeneration)
+        
+    -   [ListSearchTasks - 查询妙搜搜索生成历史任务列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listsearchtasks)
+        
+    -   [ListSearchTaskDialogues - 查询妙搜搜索生成任务详情列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listsearchtaskdialogues)
+        
+    -   [ListSearchTaskDialogueDatas - 查询搜索生成任务对话详情中数据列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listsearchtaskdialoguedatas)
+        
 
 ## 三、PaasAPI对接示例
 
-## 3.1、前提条件
+## **3.1、前提条件**
 
 -   阿里云账号已开通本产品；
--   获得AgentKey、AccessKeyId、AccessKeySecret：获取 AccessKey 与 AgentKey；
+    
+-   获得AgentKey、AccessKeyId、AccessKeySecret：[获取 AccessKey 与 AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)；
+    
 -   获取WorkSpaceId [获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)；
+    
 -   引入妙笔SDK [注意获取最新sdk版本](https://api.aliyun.com/api-tools/sdk/AiMiaoBi?version=2023-08-01&language=java-async-tea&tab=primer-doc)；
+    
 
 ```
 <dependency>
@@ -101,6 +133,7 @@ chatconfig.SearchSource 字段下配置“数据源（信源）”。
 ```
 
 -   引入三方依赖：本文SSE示例采用okhttp开源三方组件，如果使用示例代码需要引入如下pom。
+    
 
 ```
 <dependency>
@@ -116,30 +149,37 @@ chatconfig.SearchSource 字段下配置“数据源（信源）”。
 </dependency>
 ```
 
-## 3.2、管控API（HTTP）-ListDatasets
+## **3.2、管控API（HTTP）-**ListDatasets
 
-### 准备：
+### **准备：**
 
 -   阿里云账号已开通产品；
+    
 -   获取AccessKey：对应示例中 ALIBABA\_CLOUD\_ACCESS\_KEY\_ID；
+    
 -   获取AccessKeySecret：对应示例中 ALIBABA\_CLOUD\_ACCESS\_KEY\_SECRET；
+    
 -   获取WorkspaceId：对应示例中 WorkspaceId。
+    
 
-### 接口说明
+### **接口说明**
 
 -   妙搜-数据源列表接口。
+    
 
-### 接口文档
+### **接口文档**
 
--   [数据源-列表](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-data-source/api-aimiaobi-2023-08-01-listdatasets.md)。
+-   [ListDatasets - 数据源-列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listdatasets)。
+    
 
-### 在线调试
+### **在线调试**
 
 [ListDatasets\_AI妙笔\_API调试-阿里云OpenAPI开发者门户](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/ListDatasets)。
 
-### 调用示例
+### **调用示例**
 
 -   Java-SDK：
+    
 
 ```
 // This file is auto-generated, don't edit it. Thanks.
@@ -234,26 +274,33 @@ public class ListDatasets {
 }
 ```
 
-## 3.3、推理API（HTTP-SSE）-RunSearchGeneration
+## **3.3、推理API（HTTP-SSE）**\-RunSearchGeneration 
 
-### 准备
+### **准备**
 
 -   阿里云账号已开通产品；
+    
 -   获取AccessKey：对应示例中 ALIBABA\_CLOUD\_ACCESS\_KEY\_ID；
+    
 -   获取AccessKeySecret：对应示例中 ALIBABA\_CLOUD\_ACCESS\_KEY\_SECRET；
+    
 -   获取WorkspaceId：对应示例中 WorkspaceId。
+    
 
-### 接口说明
+### **接口说明**
 
 -   妙搜-智能搜索接口。
+    
 
-### 接口文档
+### **接口文档**
 
--   [妙搜-智能搜索](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-smart-search/api-aimiaobi-2023-08-01-runsearchgeneration.md)。
+-   [妙搜-智能搜索](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runsearchgeneration)。
+    
 
-### 调用示例
+### **调用示例**
 
 -   Java-SDK：
+    
 
 ```
 package com.aliyun.sdk.service.demo;
@@ -288,7 +335,7 @@ public class RunSearchGenerationTest {
                 .overrideConfiguration(ClientOverrideConfiguration.create().setProtocol("HTTPS").setEndpointOverride("aimiaobi.cn-beijing.aliyuncs.com"))
                 .build();
     }
-
+    
     @Test
     public void testRunSearchGeneration() {
         AsyncClient client = getAsyncClient();
@@ -321,6 +368,7 @@ public class RunSearchGenerationTest {
 ```
 
 -   python：
+    
 
 ```
 # 前置要求：
@@ -419,7 +467,7 @@ if __name__ == '__main__':
     asyncio.run(run())
 ```
 
-### 响应示例
+### **响应示例**
 
 ```
 id:32c02e8e-3498-4765-878e-2125fd5e7caa
@@ -486,13 +534,15 @@ data:{
 }
 ```
 
-**说明**关注event:task-finished：标识搜索生成完成。
+**说明**
 
-### 简单的demo示例
+关注event:task-finished：标识搜索生成完成。
+
+### **简单的demo示例**
 
 根据不同的使用场景设计了demo示例，您可以使用当前示例进行使用。
 
-##### 总结生成答案+数据源-互联网搜索
+##### **总结生成答案+数据源-互联网搜索**
 
 ```
 {
@@ -519,7 +569,7 @@ data:{
 }
 ```
 
-##### 总结生成答案+数据源-互联网搜索+跳过反问
+##### **总结生成答案+数据源-互联网搜索+跳过反问**
 
 ```
 {
@@ -539,14 +589,14 @@ data:{
         }
     },
     "AgentContext": {
-        "BizContext": {
-            "SkipCurrentSupplement": true
-        }
+    	"BizContext": {
+    		"SkipCurrentSupplement": true
+    	}
     }
 }
 ```
 
-##### 原文语句回答+数据源-互联网搜索
+##### **原文语句回答+数据源-互联网搜索**
 
 ```
 {
@@ -568,7 +618,7 @@ data:{
 }
 ```
 
-##### 按时间线总结+数据源-互联网搜索
+##### **按时间线总结+数据源-互联网搜索**
 
 ```
 {
@@ -590,7 +640,7 @@ data:{
 }
 ```
 
-##### 媒资搜索+精准搜索+数据源-互联网搜索
+##### **媒资搜索+精准搜索+数据源-互联网搜索**
 
 ```
 {
@@ -614,20 +664,22 @@ data:{
 
 ## 四、业务场景最佳实践
 
-## 4.1、场景一：互联网智能搜索
+## **4.1、场景一：**互联网智能搜索
 
-### 场景说明
+### **场景说明**
 
 无企业专属知识，走互联网通用领域知识进行智能搜索生成。
 
-### 技术对接步骤
+### **技术对接步骤**
 
 1.  配置信源：
     
-    1.  [1.2.2、系统配置->通用/媒资搜索信源](https://help.aliyun.com/zh/model-studio/best-practices-for-miaosou-api#bc74145d52kp3)下配置“互联网搜索”的开启&条数。
+    1.  [1.2.2、系统配置->通用/媒资搜索信源](#bc74145d52kp3)下配置“互联网搜索”的开启&条数。
+        
 2.  对接智能搜索API：
     
-    1.  [1.2.3、智能搜索](https://help.aliyun.com/zh/model-studio/best-practices-for-miaosou-api#6bb0f44e32hfy)下API，指定“互联网搜索”数据集作为搜索源。
+    1.  [1.2.3、智能搜索](#6bb0f44e32hfy)下API，指定“互联网搜索”数据集作为搜索源。
+        
 
 ## 4.2、场景二：企业搜索API智能搜索
 
@@ -635,39 +687,47 @@ data:{
 
 企业有自己的搜索能力（可以是企业知识库搜索，也可以是三方通用领域搜索等），并提供了搜索API，可以用三方企业搜索API接入，加持妙搜大模型能力后，实现灵活的企业级智能搜索生成。
 
-### 技术对接步骤：
+### **技术对接步骤：**
 
 1.  准备三方企业搜索API：
     
-    1.  按照推荐的API模板提供API（非标、或不支持的鉴权需要定开）：[三方搜索API规范](https://help.aliyun.com/zh/model-studio/third-party-search-api-template)。
+    1.  按照推荐的API模板提供API（非标、或不支持的鉴权需要定开）：[三方搜索API模板](https://help.aliyun.com/zh/model-studio/third-party-search-api-template)。
+        
 2.  配置三方企业搜索API：
     
     1.  提供账号、API定义给技术团队后台维护（未来会开放自定义三方API的维护能力）。
+        
 3.  配置信源：
     
-    1.  [1.2.2、系统配置->通用/媒资搜索信源](https://help.aliyun.com/zh/model-studio/best-practices-for-miaosou-api#bc74145d52kp3)下配置对应索引的开启&条数。
+    1.  [1.2.2、系统配置->通用/媒资搜索信源](#bc74145d52kp3)下配置对应索引的开启&条数。
+        
 4.  对接智能搜索API：
     
-    1.  [1.2.3、智能搜索](https://help.aliyun.com/zh/model-studio/best-practices-for-miaosou-api#6bb0f44e32hfy)模块下API，指定对应数据集作为搜索源。
+    1.  [1.2.3、智能搜索](#6bb0f44e32hfy)模块下API，指定对应数据集作为搜索源。
+        
 
-## 4.3、场景三：上传文件用作数据源
+## **4.3、场景三：上传文件用作数据源**
 
-### 场景说明：
+### **场景说明：**
 
 有企业知识需要语义构建索引，或已有企业知识搜索能力效果不理想，可以考虑直接通过妙搜构建企业知识库语义索引，用来企业知识库智能搜索生成。
 
-### 技术对接步骤：
+### **技术对接步骤：**
 
-1.  数据对接：通过[1.2.1、数据源管理](https://help.aliyun.com/zh/model-studio/best-practices-for-miaosou-api#20c3204988kwk)模块下维护企业知识语义索引。
+1.  数据对接：通过[1.2.1、数据源管理](#20c3204988kwk)模块下维护企业知识语义索引。
     
     1.  如果是poc或者临时固定数据集构建，可以联系技术团队后台批量导入。
+        
 2.  通过API构建：
     
     1.  数据集-新增接口：初始化一个新的数据集（全局一次）可以手动（curl）一次性提前创建好；
+        
     2.  数据集-添加文档数据接口：往步骤i创建的数据集中添加企业知识。
+        
 3.  配置信源：
     
-    1.  [1.2.2、系统配置->通用/媒资搜索信源](https://help.aliyun.com/zh/model-studio/best-practices-for-miaosou-api#bc74145d52kp3)下配置对应索引的开启&条数。
+    1.  [1.2.2、系统配置->通用/媒资搜索信源](#bc74145d52kp3)下配置对应索引的开启&条数。
+        
 4.  对接智能搜索API：
     
-    1.  [1.2.3、智能搜索](https://help.aliyun.com/zh/model-studio/best-practices-for-miaosou-api#6bb0f44e32hfy)模块下API，指定对应数据集作为搜索源。
+    1.  [1.2.3、智能搜索](#6bb0f44e32hfy)模块下API，指定对应数据集作为搜索源。

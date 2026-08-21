@@ -4,11 +4,17 @@
 
 **相关指南**：[图像背景生成](https://help.aliyun.com/zh/model-studio/image-background-generation)
 
-**重要**本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
+**重要**
 
-## 模型概览
+本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
 
-**模型效果示意**  **模型简介**
+## **模型概览**
+
+**模型效果示意**
+
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5996781571/p904710.png)
+
+**模型简介**
 
 **模型名**
 
@@ -26,7 +32,7 @@ wanx-background-generation-v2
 
 **限流（含主账号与RAM子账号）**
 
-**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
+**免费额度**[（查看）](https://help.aliyun.com/zh/model-studio/new-free-quota)
 
 **任务下发接口QPS限制**
 
@@ -44,235 +50,32 @@ wanx-background-generation-v2
 
 更多说明请参见[模型计费与限流](https://help.aliyun.com/zh/model-studio/image-faq#3436cf2280fnh)。
 
-## 前提条件
+## **前提条件**
 
 图像背景生成API目前仅支持HTTP调用。
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
+您需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
 ## HTTP调用
 
 图像模型处理时间较长，为了避免请求超时，HTTP调用仅支持异步获取模型结果。您需要发起两个请求：
 
 1.  **创建任务获取任务ID**：首先发起创建任务请求，该请求会返回任务ID（task\_id）。
+    
 2.  **根据任务ID查询结果**：使用上一步获得的任务ID，查询任务状态及结果。任务成功执行时将返回图像URL，有效期24小时。
+    
 
-**说明**创建任务后，该任务将被加入到排队队列，等待调度执行。后续需要调用“根据任务ID查询结果接口”获取任务状态及结果。
+**说明**
 
-### 步骤1：创建任务获取任务ID
+创建任务后，该任务将被加入到排队队列，等待调度执行。后续需要调用“根据任务ID查询结果接口”获取任务状态及结果。
+
+### **步骤1：创建任务获取任务ID**
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/background-generation/generation`
 
-#### 请求头（Headers）
+#### **请求头（Headers）**
 
-**Content-Type**`string`**（必选）**
-
-请求内容类型。此参数必须设置为`application/json`。
-
-**Authorization**`string`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-**X-DashScope-Async**`string`**（必选）**
-
-异步处理配置参数。HTTP请求只支持异步，**必须设置为**`enable`。
-
-**重要**缺少此请求头将报错：“current user api does not support synchronous calls”。
-
-**X-DashScope-WorkSpace**`string`（可选）
-
-阿里云百炼业务空间ID。示例值：llm-xxxx。
-
-您可以在此[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
-
-详细说明
-
-此参数根据阿里云百炼API Key进行填写。
-
--   若为主账号API Key，可不填。不填则使用主账号权限，填写则使用对应的业务空间权限。
--   若为RAM子账号API Key，则必填。RAM子账号一定归属于某个业务空间。
-
-业务空间必须具备访问模型的权限，才能调用API。若无权限，请参考[授权子业务空间模型调用、训练和部署](raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
-
-> 关于如何区分阿里云百炼主账号和RAM子账号，请参考[主账号管理](raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
-
-#### 请求体（Request Body）
-
-**model**`string`**（必选）**
-
-模型名称。**当前仅支持填写**`wanx-background-generation-v2`。
-
-wanx-background-generation-v2模型有两个版本：v2和v3，默认版本为v2。如需切换版本，请设置parameters.model\_version参数。
-
-> **注意：**切换模型版本时，请不要将model设置为wanx-background-generation-v3。
-
-> **正确的做法是**：model设置为wanx-background-generation-v2，parameters.model\_version设置为v3。
-
-如何切换模型版本？
-
-```
-//注意：model必须设置为 wanx-background-generation-v2，model_version参数只支持设置为 v2 或 v3
-//默认版本v2：旧版模型，速度快。
-{
-    "model": "wanx-background-generation-v2",
-    "parameters": {
-        "model_version": "v2"
-    }
-}
-
-//切换为新版本v3：新版模型，速度稍慢，但效果更好，推荐切换到v3。
-{
-    "model": "wanx-background-generation-v2",
-    "parameters": {
-        "model_version": "v3"
-    }
-}
-```
-
-**input**`object`**（必选）**
-
-输入图像的基本信息，比如图像URL。
-
-属性
-
-**base\_image\_url**`string`**（_必选_）**
-
-主体图像URL。主体图像必须为带透明背景的RGBA四通道图像。输出图像的分辨率与该图像保持一致。
-
-URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
-
-图像格式为png，图像长边不超过2048像素。
-
-更多说明请参见[主体图像限制](https://help.aliyun.com/zh/model-studio/image-background-generation#a65d17585c3iz)、[如何查看并获取RGBA图像](https://help.aliyun.com/zh/model-studio/image-background-generation#c456bddd3e6vy)。
-
-**ref\_image\_url**`string`（可选）
-
-引导图像URL。它与`ref_prompt`参数至少填写一个。
-
-URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
-
-图像要求：jpg、png、webp等常见格式。
-
-引导图像可以是 RGB 图像或带透明背景的 RGBA 图像。对于RGBA图像，Alpha通道值为0的区域将不参与引导过程的生成，适用于带有主体的引导图。
-
-**ref\_prompt**`string`（可选）
-
-引导文本提示词，支持中英双语。它与`ref_image_url`参数至少填写一个。
-
-英文最多支持150个单词，中文大概是100-120个中文字符，超过部分会被自动忽略。
-
-示例：山脉和晚霞。
-
-**neg\_ref\_prompt**`string`（可选）
-
-负向提示词，描述画面不希望出现的内容。一般不填，使用模型内置的默认值。
-
-英文最多支持150个单词，中文大概是100-120个中文字符，超过部分会被自动忽略。
-
-示例：低质量的，模糊的，错误的。
-
-**reference\_edge**`object`（可选）
-
-边缘引导元素图像，包括前景元素图像列表和背景元素图像列表。
-
-属性
-
-**foreground\_edge**`s tring list`（可选）
-
-前景元素图像URL列表。
-
-每个图像必须为带透明背景的RGBA四通道图像，分辨率和主体图像相同，如果不同则会自动缩放到和主体图像相同的分辨率。
-
-所有前景元素生成的图层在主体前面，可以对主体形成遮挡。每个元素的图层顺序为从底到上。
-
-foreground\_edge图像列表和background\_edge图像列表之和不得超过10。
-
-前景元素图像的生成方式参考[边缘引导元素生成方法](https://help.aliyun.com/zh/model-studio/wanx-background-generation-api-reference#ce3012665044e)。
-
-**foreground\_edge\_prompt**`s tring list`（可选）
-
-前景元素列表对应的prompt列表。
-
-如果输入该参数，长度必须和foreground\_edge列表相等，且顺序一一对应。如果无需填写某个元素的prompt，可用空字符串占位。
-
-对于每个列表元素，若为英文，则最多支持150个单词；若为中文，则大约支持100至120个中文字符。超过该范围的部分将被自动忽略。
-
-**background\_edge**`s tring list`（可选）
-
-背景元素图像URL列表。
-
-每个图像必须为带透明背景的RGBA四通道图像，分辨率和主体图像相同，如果不同则会自动缩放到和主体图像相同的分辨率。
-
-生成图层在主体的后面，如果重叠会被主体遮挡，每个元素的图层顺序为从底到上。
-
-foreground\_edge图像列表和background\_edge图像列表之和不得超过10。
-
-背景图像的生成方式参考[边缘引导元素生成方法](https://help.aliyun.com/zh/model-studio/wanx-background-generation-api-reference#ce3012665044e)。
-
-**background\_edge\_prompt**`s tring list`（可选）
-
-背景元素列表对应的prompt列表。
-
-如果输入该参数，长度必须和background\_edge列表相等，且顺序一一对应，如果无需填写某个元素的prompt，可用空字符串占位。
-
-对于每个列表元素，若为英文，则最多支持150个单词；若为中文，则大约支持100至120个中文字符。超过该范围的部分将被自动忽略。
-
-已废弃字段
-
-**title**`string`（可选）
-
-**已废弃**，建议使用[图配文](https://help.aliyun.com/zh/model-studio/image-text-composition-api-reference)。
-
-图像上添加文字主标题。算法自动确定文字的大小和位置，限制1~8个字符。
-
-**sub\_title**`string`（可选）
-
-**已废弃**，建议使用[图配文](https://help.aliyun.com/zh/model-studio/image-text-composition-api-reference)。
-
-图像上添加文字副标题。算法自动确定文字的大小和位置，限制1~10个字符。
-
-仅当title不为空时生效**。**
-
-**parameters**`object`（可选）
-
-图像处理参数。
-
-属性
-
-**n**`integer` （可选）
-
-图片生成的数量，支持1~4 张，默认值1。
-
-**model\_version**`string` （可选）
-
-模型版本。可选值有：
-
--   v2：旧版模型，速度快，默认值。
--   v3：新版模型，速度慢，但效果更好，推荐切换到最新版本v3。
-
-**noise\_level**`integer` （可选）
-
-当ref\_image\_url不为空时生效。该参数在图像引导的过程中添加随机变化，数值越大生成背景与引导图像的相关性越低，默认值300，取值范围\[0,999\]。
-
-**ref\_prompt\_weight**`float` （可选）
-
-仅当ref\_image\_url和ref\_prompt同时输入时生效，表示引导文本prompt的权重。取值范围 \[0,1\]，默认值为0.5。
-
-默认值表示引导文本和引导图像的权重都是0.5，对生成背景的影响程度相当。数值越大（大于0.5）表示引导文本对生成背景的影响程度越大。
-
-已废弃字段
-
-**scene\_type**`string`（可选）
-
-**已废弃**，不建议使用该参数。
-
-使用场景，当前包含3种场景：
-
--   GENERAL: 通用场景，默认值。
--   ROOM: 室内家居场景。
--   COSMETIC：美妆场景，也适用于大部分小商品摆放场景。
-
-#### 图像背景生成
+## 图像背景生成
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
@@ -312,44 +115,225 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-#### 响应
+**Content-Type** `_string_` **（必选）**
 
-**output**_object_
+请求内容类型。此参数必须设置为`application/json`。
 
-任务输出信息。
+**Authorization** `_string_`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+**X-DashScope-Async** `_string_` **（必选）**
+
+异步处理配置参数。HTTP请求只支持异步，**必须设置为**`**enable**`。
+
+**重要**
+
+缺少此请求头将报错：“current user api does not support synchronous calls”。
+
+**X-DashScope-WorkSpace** `_string_` （可选）
+
+阿里云百炼业务空间ID。示例值：llm-xxxx。
+
+您可以在此[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+**详细说明**
+
+此参数根据阿里云百炼API Key进行填写。
+
+-   若为主账号API Key，可不填。不填则使用主账号权限，填写则使用对应的业务空间权限。
+    
+-   若为RAM子账号API Key，则必填。RAM子账号一定归属于某个业务空间。
+    
+
+业务空间必须具备访问模型的权限，才能调用API。若无权限，请参考[授权子业务空间模型调用、训练和部署](https://help.aliyun.com/zh/model-studio/use-workspace#f2e68d7ba7ubk)。
+
+> 关于如何区分阿里云百炼主账号和RAM子账号，请参考[主账号管理](https://help.aliyun.com/zh/model-studio/business-space-management)。
+
+#### **请求体（Request Body）**
+
+**model** `_string_` **（必选）**
+
+模型名称。**当前仅支持填写** `**wanx-background-generation-v2**`。
+
+wanx-background-generation-v2模型有两个版本：v2和v3，默认版本为v2。如需切换版本，请设置parameters.model\_version参数。
+
+> **注意：**切换模型版本时，请不要将model设置为wanx-background-generation-v3。
+
+> **正确的做法是**：model设置为wanx-background-generation-v2，parameters.model\_version设置为v3。
+
+**如何切换模型版本？**
+
+```
+//注意：model必须设置为 wanx-background-generation-v2，model_version参数只支持设置为 v2 或 v3
+//默认版本v2：旧版模型，速度快。
+{
+    "model": "wanx-background-generation-v2",
+    "parameters": {
+        "model_version": "v2"
+    }
+}
+
+//切换为新版本v3：新版模型，速度稍慢，但效果更好，推荐切换到v3。
+{
+    "model": "wanx-background-generation-v2",
+    "parameters": {
+        "model_version": "v3"
+    }
+}
+```
+
+**input** `_object_`**（必选）**
+
+输入图像的基本信息，比如图像URL。
+
+**属性**
+
+**base\_image\_url** `_string_`**（****_必选_****）**
+
+主体图像URL。主体图像必须为带透明背景的RGBA四通道图像。输出图像的分辨率与该图像保持一致。
+
+URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
+
+图像格式为png，图像长边不超过2048像素。
+
+更多说明请参见[主体图像限制](https://help.aliyun.com/zh/model-studio/image-background-generation#a65d17585c3iz)、[如何查看并获取RGBA图像](https://help.aliyun.com/zh/model-studio/image-background-generation#c456bddd3e6vy)。
+
+**ref\_image\_url** `_string_`（可选）
+
+引导图像URL。它与`ref_prompt`参数至少填写一个。
+
+URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
+
+图像要求：jpg、png、webp等常见格式。
+
+引导图像可以是 RGB 图像或带透明背景的 RGBA 图像。对于RGBA图像，Alpha通道值为0的区域将不参与引导过程的生成，适用于带有主体的引导图。
+
+**ref\_prompt** `_string_` （可选）
+
+引导文本提示词，支持中英双语。它与`ref_image_url`参数至少填写一个。
+
+英文最多支持150个单词，中文大概是100-120个中文字符，超过部分会被自动忽略。
+
+示例：山脉和晚霞。
+
+**neg\_ref\_prompt** `_string_` （可选）
+
+负向提示词，描述画面不希望出现的内容。一般不填，使用模型内置的默认值。
+
+英文最多支持150个单词，中文大概是100-120个中文字符，超过部分会被自动忽略。
+
+示例：低质量的，模糊的，错误的。
+
+**reference\_edge** `_object_` （可选）
+
+边缘引导元素图像，包括前景元素图像列表和背景元素图像列表。
+
+**属性**
+
+**foreground\_edge** `**s**_tring list_` （可选）
+
+前景元素图像URL列表。
+
+每个图像必须为带透明背景的RGBA四通道图像，分辨率和主体图像相同，如果不同则会自动缩放到和主体图像相同的分辨率。
+
+所有前景元素生成的图层在主体前面，可以对主体形成遮挡。每个元素的图层顺序为从底到上。
+
+foreground\_edge图像列表和background\_edge图像列表之和不得超过10。
+
+前景元素图像的生成方式参考[边缘引导元素生成方法](#ce3012665044e)。
+
+**foreground\_edge\_prompt** `**s**_tring list_` （可选）
+
+前景元素列表对应的prompt列表。
+
+如果输入该参数，长度必须和foreground\_edge列表相等，且顺序一一对应。如果无需填写某个元素的prompt，可用空字符串占位。
+
+对于每个列表元素，若为英文，则最多支持150个单词；若为中文，则大约支持100至120个中文字符。超过该范围的部分将被自动忽略。
+
+**background\_edge** `**s**_tring list_` （可选）
+
+背景元素图像URL列表。
+
+每个图像必须为带透明背景的RGBA四通道图像，分辨率和主体图像相同，如果不同则会自动缩放到和主体图像相同的分辨率。
+
+生成图层在主体的后面，如果重叠会被主体遮挡，每个元素的图层顺序为从底到上。
+
+foreground\_edge图像列表和background\_edge图像列表之和不得超过10。
+
+背景图像的生成方式参考[边缘引导元素生成方法](#ce3012665044e)。
+
+**background\_edge\_prompt** `s_tring list_` （可选）
+
+背景元素列表对应的prompt列表。
+
+如果输入该参数，长度必须和background\_edge列表相等，且顺序一一对应，如果无需填写某个元素的prompt，可用空字符串占位。
+
+对于每个列表元素，若为英文，则最多支持150个单词；若为中文，则大约支持100至120个中文字符。超过该范围的部分将被自动忽略。
+
+**已废弃字段**
+
+**title** `_string_` （可选）
+
+**已废弃**，建议使用[图配文](https://help.aliyun.com/zh/model-studio/image-text-composition-api-reference)。
+
+图像上添加文字主标题。算法自动确定文字的大小和位置，限制1~8个字符。
+
+**sub\_title** `_string_` （可选）
+
+**已废弃**，建议使用[图配文](https://help.aliyun.com/zh/model-studio/image-text-composition-api-reference)。
+
+图像上添加文字副标题。算法自动确定文字的大小和位置，限制1~10个字符。
+
+仅当title不为空时生效**。**
+
+**parameters** `_object_` （可选）
+
+图像处理参数。
 
 属性
 
-**task\_id** `string`
+**n** `_integer_` （可选）
 
-任务ID。查询有效期24小时。
+图片生成的数量，支持1~4 张，默认值1。
 
-**task\_status** `string`
+**model\_version** `_string_` （可选）
 
-任务状态。
+模型版本。可选值有：
 
-枚举值
+-   v2：旧版模型，速度快，默认值。
+    
+-   v3：新版模型，速度慢，但效果更好，推荐切换到最新版本v3。
+    
 
--   PENDING：任务排队中
--   RUNNING：任务处理中
--   SUCCEEDED：任务执行成功
--   FAILED：任务执行失败
--   CANCELED：任务已取消
--   UNKNOWN：任务不存在或状态未知
+**noise\_level** `_integer_` （可选）
 
-**request\_id**`string`
+当ref\_image\_url不为空时生效。该参数在图像引导的过程中添加随机变化，数值越大生成背景与引导图像的相关性越低，默认值300，取值范围\[0,999\]。
 
-请求唯一标识。可用于请求明细溯源和问题排查。
+**ref\_prompt\_weight** `_float_` （可选）
 
-**code**`string`
+仅当ref\_image\_url和ref\_prompt同时输入时生效，表示引导文本prompt的权重。取值范围 \[0,1\]，默认值为0.5。
 
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+默认值表示引导文本和引导图像的权重都是0.5，对生成背景的影响程度相当。数值越大（大于0.5）表示引导文本对生成背景的影响程度越大。
 
-**message**`string`
+**已废弃字段**
 
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+**scene\_type** `_string_` （可选）
 
-成功响应
+**已废弃**，不建议使用该参数。
+
+使用场景，当前包含3种场景：
+
+-   GENERAL: 通用场景，默认值。
+    
+-   ROOM: 室内家居场景。
+    
+-   COSMETIC：美妆场景，也适用于大部分小商品摆放场景。
+    
+
+#### **响应**
+
+## 成功响应
 
 ```
 {
@@ -361,7 +345,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-异常响应
+## 异常响应
 
 ```
 {
@@ -371,23 +355,54 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-### 步骤2：根据任务ID查询结果
+**output** _object_
+
+任务输出信息。
+
+**属性**
+
+**task\_id** `_string_`
+
+任务ID。查询有效期24小时。
+
+**task\_status** `_string_`
+
+任务状态。
+
+**枚举值**
+
+-   PENDING：任务排队中
+    
+-   RUNNING：任务处理中
+    
+-   SUCCEEDED：任务执行成功
+    
+-   FAILED：任务执行失败
+    
+-   CANCELED：任务已取消
+    
+-   UNKNOWN：任务不存在或状态未知
+    
+
+**request\_id** `_string_`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+**code** `_string_`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+
+**message** `_string_`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+
+### **步骤2：根据任务ID查询结果**
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-#### 请求头（Headers）
+#### **请求头（Headers）**
 
-**Authorization**`string`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-#### URL路径参数（Path parameters）
-
-**task\_id** `string`**（必选）**
-
-任务ID。
-
-#### 查询任务结果
+## 查询任务结果
 
 请将`86ecf553-d340-4e21-xxxxxxxxx`替换为真实的task\_id。
 
@@ -398,82 +413,19 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-#### 响应
+**Authorization** `_string_`**（必选）**
 
-**output**_object_
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
 
-任务输出信息。
+#### **URL路径参数（Path parameters）**
 
-属性
+**task\_id** `_string_`**（必选）**
 
-**task\_id** `string`
+任务ID。
 
-任务ID。查询有效期24小时。
+#### **响应**
 
-**task\_status** `string`
-
-任务状态。
-
-枚举值
-
--   PENDING：任务排队中
--   RUNNING：任务处理中
--   SUCCEEDED：任务执行成功
--   FAILED：任务执行失败
--   CANCELED：任务已取消
--   UNKNOWN：任务不存在或状态未知
-
-**submit\_time** `string`
-
-任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**scheduled\_time** `string`
-
-任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**end\_time** `string`
-
-任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**results**`list`
-
-返回结果图像，图像分辨率大小与输入图像（base\_image\_url）保持一致。
-
-示例值： \[{"url":"[](http://oss.aliyuncs.com/xxx/a.jpg)[http://oss.aliyuncs.com/xxx/a.jpg](http://oss.aliyuncs.com/xxx/a.jpg)"},{"url":"[](http://oss.aliyuncs.com/xxx/b.jpg)[http://oss.aliyuncs.com/xxx/b.jpg](http://oss.aliyuncs.com/xxx/b.jpg)"}\]。
-
-**task\_metrics** `object`
-
-任务结果统计。
-
-属性
-
-**TOTAL** `integer`
-
-总的任务数。
-
-**SUCCEEDED** `integer`
-
-任务状态为成功的任务数。
-
-**FAILED** `integer`
-
-任务状态为失败的任务数。
-
-**usage**`object`
-
-输出信息统计。
-
-属性
-
-**image\_count** `integer`
-
-模型成功生成图片的数量。计费公式：费用 = 图片数量 × 单价。
-
-**request\_id**`string`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-#### 任务执行成功
+## 任务执行成功
 
 任务数据（如任务状态、图像URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。
 
@@ -512,7 +464,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 }
 ```
 
-#### 任务执行中
+## 任务执行中
 
 ```
 {
@@ -529,7 +481,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 }
 ```
 
-#### 任务执行失败
+## 任务执行失败
 
 ```
 {
@@ -546,7 +498,86 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 }
 ```
 
-## 边缘引导元素生成方法
+**output** _object_
+
+任务输出信息。
+
+**属性**
+
+**task\_id** `_string_`
+
+任务ID。查询有效期24小时。
+
+**task\_status** `_string_`
+
+任务状态。
+
+**枚举值**
+
+-   PENDING：任务排队中
+    
+-   RUNNING：任务处理中
+    
+-   SUCCEEDED：任务执行成功
+    
+-   FAILED：任务执行失败
+    
+-   CANCELED：任务已取消
+    
+-   UNKNOWN：任务不存在或状态未知
+    
+
+**submit\_time** `_string_`
+
+任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**scheduled\_time** `_string_`
+
+任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**end\_time** `_string_`
+
+任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**results** `_list_`
+
+返回结果图像，图像分辨率大小与输入图像（base\_image\_url）保持一致。
+
+示例值： \[{"url":"http://oss.aliyuncs.com/xxx/a.jpg"},{"url":"http://oss.aliyuncs.com/xxx/b.jpg"}\]。
+
+**task\_metrics** `_object_`
+
+任务结果统计。
+
+**属性**
+
+**TOTAL** `_integer_`
+
+总的任务数。
+
+**SUCCEEDED** `_integer_`
+
+任务状态为成功的任务数。
+
+**FAILED** `_integer_`
+
+任务状态为失败的任务数。
+
+**usage** `_object_`
+
+输出信息统计。
+
+**属性**
+
+**image\_count** `_integer_`
+
+模型成功生成图片的数量。计费公式：费用 = 图片数量 × 单价。
+
+**request\_id** `_string_`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+## **边缘引导元素生成方法**
 
 边缘引导元素生成方法因其能够有效保留图像中的边缘和结构信息，在图像背景生成任务中常用于生成前景或背景元素图像。
 
@@ -563,12 +594,14 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 方案二：使用代码本地生成。
 
 -   环境准备，Python环境中安装需要用到的依赖包。
+    
 
 ```
 pip install controlnet-aux==0.0.7
 ```
 
 -   运行代码，使用如下Python脚本生成边缘引导元素。
+    
 
 ```
 import numpy as np
@@ -594,7 +627,7 @@ def make_elements(name):
 
 ## 错误码
 
-大模型服务通用状态码请查阅：[错误码](raw/model-api-reference/preparations/error-code.md)
+大模型服务通用状态码请查阅：[错误码](https://help.aliyun.com/zh/model-studio/error-code)
 
 同时本模型还有如下特定错误码：
 
@@ -616,13 +649,13 @@ Download the media resource timed out during the data inspection process.
 
 ## 常见问题
 
-图像模型的通用问题请参见[常见问题](raw/model-api-reference/image-generation/image-faq.md)文档，包含模型计费与限流、接口高频报错等。
+图像模型的通用问题请参见[常见问题](https://help.aliyun.com/zh/model-studio/image-faq)文档，包含模型计费与限流、接口高频报错等。
 
 本模型还存在一些特有问题。
 
-### 接口报错
+### **接口报错**
 
-#### wanx-background-generation-v3模型不存在
+#### **wanx-background-generation-v3模型不存在**
 
 **报错场景**：如果您想切换V3模型，并将model参数设置为wanx-background-generation-v3，发送请求后发现报错，报错信息显示模型不存在。
 
@@ -636,7 +669,7 @@ Download the media resource timed out during the data inspection process.
 
 **原因及解决方案**：目前图像背景生成只有`wanx-background-generation-v2`这一个模型。如果需要切换V3模型，请设置`parameters.model_version`为v3，才能成功调用v3模型。
 
-#### 使用文档中的示例图片报错提示需要提供RGBA模式的图片
+#### **使用文档中的示例图片报错提示需要提供RGBA模式的图片**
 
 **报错场景**：如果您将文档的示例图片下载到本地，重新上传到自己的存储服务器，并使用新的图片链接发起请求。请求后报错提示图像格式是RGB格式，而不是RGBA格式。
 

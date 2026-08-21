@@ -4,39 +4,13 @@
 
 > 相关文档：[实时（Qwen-Omni-Realtime）](https://help.aliyun.com/zh/model-studio/realtime)。
 
-## error
+## **error**
 
 服务端返回的错误信息。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`error`。
-
-**error**`object`
-
-错误的详细信息。
-
-属性
-
-**type**`string`
-
-错误类型。
-
-**code**`string`
-
-错误码。
-
-**message**`string`
-
-错误信息。
-
-**param**`string`
-
-与错误相关的参数，如`session.modalities`。
 
 ```
 {
@@ -51,91 +25,39 @@
 }
 ```
 
-## session.created
+**type** `_string_`
+
+事件类型，固定为`error`。
+
+**error** `_object_`
+
+错误的详细信息。
+
+**属性**
+
+**type** `_string_`
+
+错误类型。
+
+**code** `_string_`
+
+错误码。
+
+**message** `_string_`
+
+错误信息。
+
+**param** `_string_`
+
+与错误相关的参数，如`session.modalities`。
+
+## **session.created**
 
 客户端连接后，服务端返回的第一个事件，包含本次连接的默认配置信息。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`session.created`。
-
-**session**`object`
-
-会话的配置信息。
-
-属性
-
-**object**`string`
-
-固定为`realtime.session`。
-
-**model**`string`
-
-使用的模型。
-
-**modalities**`array`
-
-模型输出模态设置。
-
-**voice**`string`
-
-模型生成音频的音色。
-
-**input\_audio\_format**`string`
-
-用户输入音频的格式，当前仅支持设为`pcm`。输入音频要求为16 kHz采样率的PCM音频流。
-
-**output\_audio\_format**`string`
-
-模型输出音频的格式，当前仅支持设为`pcm`。输出音频为24 kHz采样率的PCM音频流。当前不支持自定义输出采样率。
-
-**input\_audio\_transcription**`object`
-
-语音转录的配置。
-
-属性
-
-**model**`string`
-
-语音转录模型，固定为`qwen3-asr-flash-realtime`，不支持修改。
-
-**turn\_detection**`object`
-
-语音活动检测（VAD）的配置。
-
-属性
-
-**type**`string`
-
-VAD类型。取值：`server_vad`（默认值）或 `semantic_vad`。详情请参见[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)。
-
-**threshold**`float`
-
-VAD检测阈值。
-
-**silence\_duration\_ms**`integer`
-
-检测语音停止的静音持续时间。
-
-**idle\_timeout\_ms**`integer`
-
-静默超时时间（毫秒）。仅在 `server_vad` 模式下，使用 `qwen3.5-omni-plus-realtime` 或 `qwen3.5-omni-flash-realtime` 模型时返回。
-
-**enable\_search**`boolean`
-
-是否启用联网搜索功能。仅 Qwen3.5-Omni-Realtime 系列模型支持。
-
-**search\_options**`object`
-
-联网搜索选项配置。
-
-**temperature**`float`
-
-模型的温度参数。
 
 ```
 {
@@ -172,169 +94,91 @@ VAD检测阈值。
 }
 ```
 
-## session.updated
+**type** `_string_`
 
-收到用户的 `session.update` 请求后，若处理成功，则返回此事件；若出错，则返回 `error` 事件。
+事件类型，固定为`session.created`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`session.updated`。
-
-**session**`object`
+**session** `_object_`
 
 会话的配置信息。
 
-属性
+**属性**
 
-**temperature**`float`
+**object** `_string_`
 
-模型的温度参数。
+固定为`realtime.session`。
 
-**modalities**`array`
+**model** `_string_`
+
+使用的模型。
+
+**modalities** `_array_`
 
 模型输出模态设置。
 
-**voice**`string`
+**voice** `_string_`
 
 模型生成音频的音色。
 
-**instructions**`string`
+**input\_audio\_format** `_string_`
 
-模型的目标与角色。
+用户输入音频的格式，当前仅支持设为`pcm`。输入音频要求为16 kHz采样率的PCM音频流。
 
-**audio**`object`
+**output\_audio\_format** `_string_`
 
-回显的音频格式配置。若客户端传入了 `session.audio.input.format` / `session.audio.output.format`，服务端将在 `session.updated` 中按相同嵌套结构回显。未使用嵌套字段的客户端，服务端事件结构保持原有行为。
+模型输出音频的格式，当前仅支持设为`pcm`。输出音频为24 kHz采样率的PCM音频流。当前不支持自定义输出采样率。
 
-属性
-
-**audio.input.format.type**`string`
-
-用户输入音频格式。可选值：`pcm`（默认值）、`wav`。
-
-**audio.input.format.sample\_rate**`integer`
-
-用户输入音频采样率，单位为 Hz。
-
-**audio.output.format.type**`string`
-
-模型输出音频格式。可选值：`pcm`（默认值）、`wav`。
-
-**audio.output.format.sample\_rate**`integer`
-
-模型输出音频采样率，单位为 Hz。
-
-**input\_audio\_format**`string`
-
-历史兼容字段，回显客户端配置的输入音频格式。
-
-**output\_audio\_format**`string`
-
-历史兼容字段，回显客户端配置的输出音频格式。
-
-**input\_audio\_transcription**`object`
+**input\_audio\_transcription** `_object_`
 
 语音转录的配置。
 
-属性
+**属性**
 
-**model**`string`
+**model** `_string_`
 
 语音转录模型，固定为`qwen3-asr-flash-realtime`，不支持修改。
 
-**turn\_detection**`object`
+**turn\_detection** `_object_`
 
 语音活动检测（VAD）的配置。
 
-属性
+**属性**
 
-**type**`string`
+**type** `_string_`
 
-VAD类型。取值：`server_vad`（默认值）或 `semantic_vad`。详情请参见[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)。
+VAD类型。取值：`server_vad`（默认值）或 `semantic_vad`。详情请参见[客户端事件](https://help.aliyun.com/zh/model-studio/client-events#7c8172272codm)。
 
-**threshold**`float`
+**threshold** `_float_`
 
 VAD检测阈值。
 
-**silence\_duration\_ms**`integer`
+**silence\_duration\_ms** `_integer_`
 
 检测语音停止的静音持续时间。
 
-**idle\_timeout\_ms**`integer`
+**idle\_timeout\_ms** `_integer_`
 
 静默超时时间（毫秒）。仅在 `server_vad` 模式下，使用 `qwen3.5-omni-plus-realtime` 或 `qwen3.5-omni-flash-realtime` 模型时返回。
 
-**enable\_search**`boolean`（可选）
+**enable\_search** `_boolean_`
 
 是否启用联网搜索功能。仅 Qwen3.5-Omni-Realtime 系列模型支持。
 
-**search\_options**`object`（可选）
+**search\_options** `_object_`
 
 联网搜索选项配置。
 
-**tools**`array`（可选）
+**temperature** `_float_`
 
-工具定义列表。配置后模型可根据用户输入自主决定是否调用工具。
+模型的温度参数。
 
-属性
+## **session.updated**
 
-**type**`string`（必选）
+收到用户的 `session.update` 请求后，若处理成功，则返回此事件；若出错，则返回 `error` 事件。
 
-固定为 `function`。
+**event\_id** `_string_`
 
-**function.name**`string`（必选）
-
-自定义的工具函数名称，建议使用与函数相同的名称，如`get_current_weather`或`get_current_time`。
-
-**function.description**`string`（可选）
-
-对工具函数功能的描述，大模型会参考该字段来选择是否使用该工具函数。
-
-**function.parameters**`object`（可选）
-
-对工具函数入参的描述，大模型会参考该字段来进行入参的提取。如果工具函数不需要输入参数，则无需指定。
-
-属性
-
-**type**`string`（必选）
-
-固定为 `object`。
-
-**properties**`object`（可选）
-
-描述各入参的名称、数据类型与描述。Key 值为入参的名称，Value 值为包含数据类型（`type`）与描述（`description`）的对象。
-
-**required**`array`（可选）
-
-指定哪些入参为必填项。
-
-**top\_p**`float`
-
-核采样的概率阈值。
-
-**top\_k**`integer`
-
-模型生成过程中，采样候选集的大小。
-
-**max\_tokens**`integer`
-
-模型在本次请求返回的最大 Token 数。
-
-**repetition\_penalty**`float`
-
-控制模型生成时，连续序列中的重复度\*。\*
-
-**presence\_penalty**`float`
-
-控制模型在生成内容时的重复度。
-
-**seed**`integer`
-
-模型在每次请求时，运行结果一致性程度。
+本次事件唯一标识符。
 
 ```
 {
@@ -410,29 +254,171 @@ VAD检测阈值。
 }
 ```
 
-## input\_audio\_buffer.speech\_started
+**type** `_string_`
+
+事件类型，固定为`session.updated`。
+
+**session** `_object_`
+
+会话的配置信息。
+
+**属性**
+
+**temperature** `_float_`
+
+模型的温度参数。
+
+**modalities** `_array_`
+
+模型输出模态设置。
+
+**voice** `_string_`
+
+模型生成音频的音色。
+
+**instructions** `_string_`
+
+模型的目标与角色。
+
+**audio** `_object_`
+
+回显的音频格式配置。若客户端传入了 `session.audio.input.format` / `session.audio.output.format`，服务端将在 `session.updated` 中按相同嵌套结构回显。未使用嵌套字段的客户端，服务端事件结构保持原有行为。
+
+**属性**
+
+**audio.input.format.type** `_string_`
+
+用户输入音频格式。可选值：`pcm`（默认值）、`wav`。
+
+**audio.input.format.sample\_rate** `_integer_`
+
+用户输入音频采样率，单位为 Hz。
+
+**audio.output.format.type** `_string_`
+
+模型输出音频格式。可选值：`pcm`（默认值）、`wav`。
+
+**audio.output.format.sample\_rate** `_integer_`
+
+模型输出音频采样率，单位为 Hz。
+
+**input\_audio\_format** `_string_`
+
+历史兼容字段，回显客户端配置的输入音频格式。
+
+**output\_audio\_format** `_string_`
+
+历史兼容字段，回显客户端配置的输出音频格式。
+
+**input\_audio\_transcription** `_object_`
+
+语音转录的配置。
+
+**属性**
+
+**model** `_string_`
+
+语音转录模型，固定为`qwen3-asr-flash-realtime`，不支持修改。
+
+**turn\_detection** `_object_`
+
+语音活动检测（VAD）的配置。
+
+**属性**
+
+**type** `_string_`
+
+VAD类型。取值：`server_vad`（默认值）或 `semantic_vad`。详情请参见[客户端事件](https://help.aliyun.com/zh/model-studio/client-events#7c8172272codm)。
+
+**threshold** `_float_`
+
+VAD检测阈值。
+
+**silence\_duration\_ms** `_integer_`
+
+检测语音停止的静音持续时间。
+
+**idle\_timeout\_ms** `_integer_`
+
+静默超时时间（毫秒）。仅在 `server_vad` 模式下，使用 `qwen3.5-omni-plus-realtime` 或 `qwen3.5-omni-flash-realtime` 模型时返回。
+
+**enable\_search** `_boolean_`（可选）
+
+是否启用联网搜索功能。仅 Qwen3.5-Omni-Realtime 系列模型支持。
+
+**search\_options** `_object_`（可选）
+
+联网搜索选项配置。
+
+**tools** `_array_`（可选）
+
+工具定义列表。配置后模型可根据用户输入自主决定是否调用工具。
+
+**属性**
+
+**type** `_string_`（必选）
+
+固定为 `function`。
+
+**function.name** `_string_`（必选）
+
+自定义的工具函数名称，建议使用与函数相同的名称，如`get_current_weather`或`get_current_time`。
+
+**function.description** `_string_`（可选）
+
+对工具函数功能的描述，大模型会参考该字段来选择是否使用该工具函数。
+
+**function.parameters** `_object_`（可选）
+
+对工具函数入参的描述，大模型会参考该字段来进行入参的提取。如果工具函数不需要输入参数，则无需指定。
+
+**属性**
+
+**type** `_string_`（必选）
+
+固定为 `object`。
+
+**properties** `_object_`（可选）
+
+描述各入参的名称、数据类型与描述。Key 值为入参的名称，Value 值为包含数据类型（`type`）与描述（`description`）的对象。
+
+**required** `_array_`（可选）
+
+指定哪些入参为必填项。
+
+**top\_p**`_float_`
+
+核采样的概率阈值。
+
+**top\_k** `_integer_`
+
+模型生成过程中，采样候选集的大小。
+
+**max\_tokens** `_integer_`
+
+模型在本次请求返回的最大 Token 数。
+
+**repetition\_penalty** `_float_`
+
+控制模型生成时，连续序列中的重复度_。_
+
+**presence\_penalty** `_float_`
+
+控制模型在生成内容时的重复度。
+
+**seed** `_integer_`
+
+模型在每次请求时，运行结果一致性程度。
+
+## **input\_audio\_buffer.speech\_started**
 
 在 VAD 模式下，当服务端在音频缓冲区中检测到语音开始时，会返回此事件。
 
 > 若服务端尚未检测到语音，则每次向缓冲区添加音频时都可能触发此事件。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`input_audio_buffer.speech_started`。
-
-**audio\_start\_ms**`integer`
-
-从音频开始写入缓冲区到首次检测到语音所经过的毫秒数。
-
-**item\_id**`string`
-
-语音停止时将创建的用户消息项的 ID。
-
-> 用户消息项用于将用户输入追加到对话历史，供模型后续推理与生成使用。
 
 ```
 {
@@ -443,27 +429,29 @@ VAD检测阈值。
 }
 ```
 
-## input\_audio\_buffer.speech\_stopped
+**type** `_string_`
+
+事件类型，固定为`input_audio_buffer.speech_started`。
+
+**audio\_start\_ms** `_integer_`
+
+从音频开始写入缓冲区到首次检测到语音所经过的毫秒数。
+
+**item\_id** `_string_`
+
+语音停止时将创建的用户消息项的 ID。
+
+> 用户消息项用于将用户输入追加到对话历史，供模型后续推理与生成使用。
+
+## **input\_audio\_buffer.speech\_stopped**
 
 在 VAD 模式下，当音频缓冲区中检测到语音结束时，服务端会返回此事件。
 
 同时，服务端还会返回一个 `conversation.item.created` 事件，以创建对应的用户消息项。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`input_audio_buffer.speech_stopped`。
-
-**audio\_end\_ms**`integer`
-
-语音停止时刻距会话开始经过的毫秒数。
-
-**item\_id**`string`
-
-将创建的用户消息项的 ID。
 
 ```
 {
@@ -474,24 +462,30 @@ VAD检测阈值。
 }
 ```
 
-## input\_audio\_buffer.committed
+**type** `_string_`
+
+事件类型，固定为`input_audio_buffer.speech_stopped`。
+
+**audio\_end\_ms** `_integer_`
+
+语音停止时刻距会话开始经过的毫秒数。
+
+**item\_id** `_string_`
+
+将创建的用户消息项的 ID。
+
+## **input\_audio\_buffer.committed**
 
 当输入音频缓冲区被提交时返回此事件。
 
 -   在VAD模式下，当检测到用户说话结束时，服务端会自动提交音频缓冲区并返回此事件。
+    
 -   在 Manual 模式下，当客户端发送`input_audio_buffer.commit`事件后，服务端返回此事件。
+    
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`input_audio_buffer.committed`。
-
-**item\_id**`string`
-
-将创建的用户消息项的 ID。
 
 ```
 {
@@ -501,17 +495,21 @@ VAD检测阈值。
 }
 ```
 
-## input\_audio\_buffer.cleared
+**type** `_string_`
+
+事件类型，固定为`input_audio_buffer.committed`。
+
+**item\_id** `_string_`
+
+将创建的用户消息项的 ID。
+
+## **input\_audio\_buffer.cleared**
 
 客户端发送`input_audio_buffer.clear`事件后，服务端将返回此事件。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`input_audio_buffer.cleared`。
 
 ```
 {
@@ -520,59 +518,17 @@ VAD检测阈值。
 }
 ```
 
-## conversation.item.created
+**type** `_string_`
+
+事件类型，固定为`input_audio_buffer.cleared`。
+
+## **conversation.item.created**
 
 当对话项创建时返回此事件。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`conversation.item.created`。
-
-**item**`object`
-
-要添加到对话中的项。
-
-属性
-
-**id**`string`
-
-对话项的唯一ID。
-
-**object**`string`
-
-始终为 `realtime.item` 。
-
-**status**`string`
-
-对话项的状态。
-
-**role**`string`
-
-消息的角色。
-
-**content**`string`
-
-消息的内容。当 type 为 `message` 时存在。
-
-**type**`string`
-
-对话项的类型。可选值为 `message`（常规消息）或 `function_call`（工具调用）。
-
-**name**`string`
-
-当 type 为 `function_call` 时，被调用的函数名称。
-
-**call\_id**`string`
-
-当 type 为 `function_call` 时，本次函数调用的唯一 ID。
-
-**arguments**`string`
-
-当 type 为 `function_call` 时，函数调用的参数（JSON 字符串）。
 
 ```
 {
@@ -607,41 +563,59 @@ VAD检测阈值。
 }
 ```
 
-## conversation.item.input\_audio\_transcription.delta
+**type** `_string_`
+
+事件类型，固定为`conversation.item.created`。
+
+**item** `_object_`
+
+要添加到对话中的项。
+
+**属性**
+
+**id** `_string_`
+
+对话项的唯一ID。
+
+**object** `_string_`
+
+始终为 `realtime.item` 。
+
+**status** `_string_`
+
+对话项的状态。
+
+**role** `_string_`
+
+消息的角色。
+
+**content** `_string_`
+
+消息的内容。当 type 为 `message` 时存在。
+
+**type** `_string_`
+
+对话项的类型。可选值为 `message`（常规消息）或 `function_call`（工具调用）。
+
+**name** `_string_`
+
+当 type 为 `function_call` 时，被调用的函数名称。
+
+**call\_id** `_string_`
+
+当 type 为 `function_call` 时，本次函数调用的唯一 ID。
+
+**arguments** `_string_`
+
+当 type 为 `function_call` 时，函数调用的参数（JSON 字符串）。
+
+## **conversation.item.input\_audio\_transcription.delta**
 
 开启输入音频转录后，此事件会在用户说话过程中高频发送，用于展示实时识别的中间结果。您可以通过拼接 `text` + `stash` 获取当前最完整的句子预览。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`conversation.item.input_audio_transcription.delta`。
-
-**item\_id**`string`
-
-关联的对话项 ID。
-
-**content\_index**`integer`
-
-包含音频的内容部分的索引。
-
-**text**`string`
-
-已确认的文本前缀。这是当前句子中，模型已确认不会再变更的部分。
-
-**stash**`string`
-
-预识别的文本后缀。这是紧跟在已确认部分之后，模型仍在处理、可能会被修正的临时草稿。
-
-**language**`string`
-
-被识别音频的语种。
-
-**emotion**`string`
-
-被识别音频的情感。可选值：`neutral`（平静）、`happy`（愉快）、`sad`（悲伤）、`angry`（愤怒）、`surprised`（惊讶）、`disgusted`（厌恶）、`fearful`（恐惧）。
 
 ```
 {
@@ -659,7 +633,7 @@ VAD检测阈值。
 
 在任何时刻，要获取当前最完整的句子预览，都需要将这两个字段拼接起来：实时预览句子 = `text` + `stash`。
 
-点击查看示例
+**点击查看示例**
 
 假设用户正在说："今天天气不错，阳光明媚。"
 
@@ -745,31 +719,43 @@ T7
 
 使用 conversation.item.input\_audio\_transcription.completed 的 transcript 内容作为最终结果。
 
-## conversation.item.input\_audio\_transcription.completed
+**type** `_string_`
+
+事件类型，固定为`conversation.item.input_audio_transcription.delta`。
+
+**item\_id** `_string_`
+
+关联的对话项 ID。
+
+**content\_index** `_integer_`
+
+包含音频的内容部分的索引。
+
+**text** `_string_`
+
+已确认的文本前缀。这是当前句子中，模型已确认不会再变更的部分。
+
+**stash** `_string_`
+
+预识别的文本后缀。这是紧跟在已确认部分之后，模型仍在处理、可能会被修正的临时草稿。
+
+**language** `_string_`
+
+被识别音频的语种。
+
+**emotion** `_string_`
+
+被识别音频的情感。可选值：`neutral`（平静）、`happy`（愉快）、`sad`（悲伤）、`angry`（愤怒）、`surprised`（惊讶）、`disgusted`（厌恶）、`fearful`（恐惧）。
+
+## **conversation.item.input\_audio\_transcription.completed**
 
 此事件表示用户音频写入缓冲区后生成的转录结果。其转录由内置的语音识别模型（固定为 `qwen3-asr-flash-realtime`）处理，不支持修改。
 
 > 语音识别模型生成的转录文本可能与 Qwen-Omni-Realtime 模型的理解存在差异，仅供参考。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`conversation.item.input_audio_transcription.completed`。
-
-**item\_id**`string`
-
-用户消息项的 ID。
-
-**content\_index**_integer_
-
-当前固定为0。
-
-**transcript**`string`
-
-转录的文本内容。
 
 ```
 {
@@ -781,43 +767,29 @@ T7
 }
 ```
 
-## conversation.item.input\_audio\_transcription.failed
+**type** `_string_`
 
-启用输入音频转录后，若用户音频转录失败，服务端会返回此事件。此事件独立于 `error` 事件，便于客户端识别。
+事件类型，固定为`conversation.item.input_audio_transcription.completed`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`conversation.item.input_audio_transcription.failed`。
-
-**item\_id**`string`
+**item\_id** `_string_`
 
 用户消息项的 ID。
 
-**content\_index**`integer`
+**content\_index** _integer_
 
 当前固定为0。
 
-**error**`object`
+**transcript** `_string_`
 
-错误信息。
+转录的文本内容。
 
-属性
+## **conversation.item.input\_audio\_transcription.failed**
 
-**code** `string`
+启用输入音频转录后，若用户音频转录失败，服务端会返回此事件。此事件独立于 `error` 事件，便于客户端识别。
 
-错误码。
+**event\_id** `_string_`
 
-**message** `string`
-
-错误消息。
-
-**param** `string`
-
-错误相关的参数。
+本次事件唯一标识符。
 
 ```
 {
@@ -832,51 +804,43 @@ T7
 }
 ```
 
-## response.created
+**type** `_string_`
+
+事件类型，固定为`conversation.item.input_audio_transcription.failed`。
+
+**item\_id** `_string_`
+
+用户消息项的 ID。
+
+**content\_index** `_integer_`
+
+当前固定为0。
+
+**error** `_object_`
+
+错误信息。
+
+**属性**
+
+**code** `_string_`
+
+错误码。
+
+**message** `_string_`
+
+错误消息。
+
+**param** `_string_`
+
+错误相关的参数。
+
+## **response.created**
 
 当服务端生成新的模型响应时，会返回此事件。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.created`。
-
-**response**`object`
-
-响应对象。
-
-属性
-
-**id** `string`
-
-响应的唯一 ID。
-
-**conversation\_id** `string`
-
-当前会话的唯一ID。
-
-**object** `string`
-
-对象类型，此事件下固定为`realtime.response`。
-
-**status** `string`
-
-响应的状态。在`[completed, failed, in_progress, or incomplete]`范围内。
-
-**modalities** `array`
-
-响应的模态。
-
-**voice** `string`
-
-模型生成音频的音色。
-
-**output** `string`
-
-此事件下目前为空。
 
 ```
 {
@@ -898,149 +862,51 @@ T7
 }
 ```
 
-## response.done
+**type** `_string_`
 
-响应生成完成后，服务端会返回此事件。事件中的 `response` 对象包含除原始音频数据外的全部输出项。
+事件类型，固定为`response.created`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.done`。
-
-**response**`object`
+**response** `_object_`
 
 响应对象。
 
-属性
+**属性**
 
-**id** `string`
+**id** `_string_`
 
 响应的唯一 ID。
 
-**conversation\_id** `string`
+**conversation\_id** `_string_`
 
 当前会话的唯一ID。
 
-**object** `string`
+**object** `_string_`
 
 对象类型，此事件下固定为`realtime.response`。
 
-**status** `string`
+**status** `_string_`
 
-响应的状态。
+响应的状态。在`[completed, failed, in_progress, or incomplete]`范围内。
 
-**modalities** `array`
+**modalities** `_array_`
 
 响应的模态。
 
-**voice** `string`
+**voice** `_string_`
 
 模型生成音频的音色。
 
-**output** `object`
+**output** `_string_`
 
-响应的输出。
+此事件下目前为空。
 
-属性
+## **response.done**
 
-**id** `string`
+响应生成完成后，服务端会返回此事件。事件中的 `response` 对象包含除原始音频数据外的全部输出项。
 
-响应输出对应的ID。
+**event\_id** `_string_`
 
-**type** `string`
-
-输出项的类型，可选值为 `message`（常规消息）或 `function_call`（工具调用）。
-
-**object** `string`
-
-输出项的对象类型，当前固定为`realtime.item`。
-
-**status** `string`
-
-输出项的状态。
-
-**role** `string`
-
-输出项的角色。
-
-**content** `array`
-
-输出项的内容。当 type 为 `message` 时存在。
-
-属性
-
-**type** `string`
-
-输出内容的类型。输出为纯文本时，为`text`；输出包含音频时，为`audio`。
-
-**text** `string`
-
-输出的文本内容。
-
-**transcript** `string`
-
-音频转录为文字后的内容。
-
-**name** `string`
-
-当 type 为 `function_call` 时，被调用的函数名称。
-
-**call\_id** `string`
-
-当 type 为 `function_call` 时，函数调用的唯一 ID。
-
-**arguments** `string`
-
-当 type 为 `function_call` 时，函数调用的完整参数（JSON 字符串）。
-
-**usage** `object`
-
-本次响应的 Token 消耗信息。
-
-属性
-
-**total\_tokens** `integer`
-
-本次响应消耗的总 Token 数。
-
-**input\_tokens** `integer`
-
-输入 Token 数。
-
-**output\_tokens** `integer`
-
-输出 Token 数。
-
-**input\_tokens\_details** `object`
-
-输入 Token 的分项详情，包含 `text_tokens`（文本 Token 数）和 `audio_tokens`（音频 Token 数）。
-
-**output\_tokens\_details** `object`
-
-输出 Token 的分项详情，包含 `text_tokens`（文本 Token 数）和 `audio_tokens`（音频 Token 数）。
-
-**plugins** `object`（可选）
-
-插件使用计量信息。启用联网搜索（`enable_search`）时返回。
-
-属性
-
-**search** `object`
-
-联网搜索计量信息。
-
-属性
-
-**count** `integer`
-
-搜索次数。
-
-**strategy** `string`
-
-搜索策略。
+本次事件唯一标识符。
 
 ```
 {
@@ -1132,37 +998,149 @@ T7
 }
 ```
 
-## response.text.delta
+**type** `_string_`
+
+事件类型，固定为`response.done`。
+
+**response** `_object_`
+
+响应对象。
+
+**属性**
+
+**id** `_string_`
+
+响应的唯一 ID。
+
+**conversation\_id** `_string_`
+
+当前会话的唯一ID。
+
+**object** `_string_`
+
+对象类型，此事件下固定为`realtime.response`。
+
+**status** `_string_`
+
+响应的状态。
+
+**modalities** `_array_`
+
+响应的模态。
+
+**voice** `_string_`
+
+模型生成音频的音色。
+
+**output** `_object_`
+
+响应的输出。
+
+**属性**
+
+**id** `_string_`
+
+响应输出对应的ID。
+
+**type** `_string_`
+
+输出项的类型，可选值为 `message`（常规消息）或 `function_call`（工具调用）。
+
+**object** `_string_`
+
+输出项的对象类型，当前固定为`realtime.item`。
+
+**status** `_string_`
+
+输出项的状态。
+
+**role** `_string_`
+
+输出项的角色。
+
+**content** `_array_`
+
+输出项的内容。当 type 为 `message` 时存在。
+
+**属性**
+
+**type** `_string_`
+
+输出内容的类型。输出为纯文本时，为`text`；输出包含音频时，为`audio`。
+
+**text** `_string_`
+
+输出的文本内容。
+
+**transcript** `_string_`
+
+音频转录为文字后的内容。
+
+**name** `_string_`
+
+当 type 为 `function_call` 时，被调用的函数名称。
+
+**call\_id** `_string_`
+
+当 type 为 `function_call` 时，函数调用的唯一 ID。
+
+**arguments** `_string_`
+
+当 type 为 `function_call` 时，函数调用的完整参数（JSON 字符串）。
+
+**usage** `_object_`
+
+本次响应的 Token 消耗信息。
+
+**属性**
+
+**total\_tokens** `_integer_`
+
+本次响应消耗的总 Token 数。
+
+**input\_tokens** `_integer_`
+
+输入 Token 数。
+
+**output\_tokens** `_integer_`
+
+输出 Token 数。
+
+**input\_tokens\_details** `_object_`
+
+输入 Token 的分项详情，包含 `text_tokens`（文本 Token 数）和 `audio_tokens`（音频 Token 数）。
+
+**output\_tokens\_details** `_object_`
+
+输出 Token 的分项详情，包含 `text_tokens`（文本 Token 数）和 `audio_tokens`（音频 Token 数）。
+
+**plugins** `_object_`（可选）
+
+插件使用计量信息。启用联网搜索（`enable_search`）时返回。
+
+**属性**
+
+**search** `_object_`
+
+联网搜索计量信息。
+
+**属性**
+
+**count** `_integer_`
+
+搜索次数。
+
+**strategy** `_string_`
+
+搜索策略。
+
+## **response.text.delta**
 
 当输出模态仅包含文本，且模型增量生成新的文本时，服务端将返回此事件。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.text.delta`。
-
-**delta**`string`
-
-返回的增量文本。
-
-**response\_id**`string`
-
-回复的ID。
-
-**item\_id**`string`
-
-消息项ID，可以关联同一个消息项。
-
-**output\_index**`integer`
-
-响应中输出项的索引, 目前固定为 0。
-
-**content\_index**`integer`
-
-响应中输出项中内部部分的索引, 目前固定为 0。
 
 ```
 {
@@ -1176,39 +1154,39 @@ T7
 }
 ```
 
-## response.text.done
+**type** `_string_`
+
+事件类型，固定为`response.text.delta`。
+
+**delta** `_string_`
+
+返回的增量文本。
+
+**response\_id** `_string_`
+
+回复的ID。
+
+**item\_id** `_string_`
+
+消息项ID，可以关联同一个消息项。
+
+**output\_index** `_integer_`
+
+响应中输出项的索引, 目前固定为 0。
+
+**content\_index** `_integer_`
+
+响应中输出项中内部部分的索引, 目前固定为 0。
+
+## **response.text.done**
 
 当输出模态仅包含文本，且模型生成的文本结束时，服务端将返回此事件。
 
 > 当响应中断、不完整或取消时，也会返回此事件。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.text.done`。
-
-**response\_id**`string`
-
-响应的ID。
-
-**item\_id**`string`
-
-消息项ID。
-
-**output\_index**`integer`
-
-响应输出项的索引。
-
-**content\_index**`integer`
-
-响应输出项的索引。
-
-**text** `string`
-
-模型输出的完整文本。
 
 ```
 {
@@ -1222,37 +1200,37 @@ T7
 }
 ```
 
-## response.audio.delta
+**type** `_string_`
 
-当输出模态包含音频，且模型增量生成新的音频数据时，服务端将返回此事件。
+事件类型，固定为`response.text.done`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.audio.delta`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 响应的ID。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
 消息项ID。
 
-**output\_index**`integer`
+**output\_index**`_integer_`
 
 响应输出项的索引。
 
-**content\_index**`integer`
+**content\_index**`_integer_`
 
 响应输出项的索引。
 
-**delta** `string`
+**text** `_string_`
 
-模型增量输出的音频数据，使用Base64编码。
+模型输出的完整文本。
+
+## **response.audio.delta**
+
+当输出模态包含音频，且模型增量生成新的音频数据时，服务端将返回此事件。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1266,35 +1244,39 @@ T7
 }
 ```
 
-## response.audio.done
+**type** `_string_`
+
+事件类型，固定为`response.audio.delta`。
+
+**response\_id** `_string_`
+
+响应的ID。
+
+**item\_id** `_string_`
+
+消息项ID。
+
+**output\_index**`_integer_`
+
+响应输出项的索引。
+
+**content\_index**`_integer_`
+
+响应输出项的索引。
+
+**delta** `_string_`
+
+模型增量输出的音频数据，使用Base64编码。
+
+## **response.audio.done**
 
 当输出模态包含音频，且模型完成生成音频数据时，服务端将返回此事件。
 
 > 当响应中断、不完整或取消时，也会返回此事件。
 
-**event\_id**`string`
+**event\_id** `_string_`
 
 本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.audio.done`。
-
-**response\_id**`string`
-
-响应的ID。
-
-**item\_id**`string`
-
-消息项ID。
-
-**output\_index**`integer`
-
-响应输出项的索引。
-
-**content\_index**`integer`
-
-响应输出项的索引。
 
 ```
 {
@@ -1307,37 +1289,33 @@ T7
 }
 ```
 
-## response.audio\_transcript.delta
+**type** `_string_`
 
-当输出模态包含音频，且模型增量生成新的音频对应的文本时，服务端将返回 `response.audio_transcript.delta` 事件。
+事件类型，固定为`response.audio.done`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.audio_transcript.delta`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 响应的ID。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
 消息项ID。
 
-**output\_index**`integer`
+**output\_index**`_integer_`
 
 响应输出项的索引。
 
-**content\_index**`integer`
+**content\_index**`_integer_`
 
 响应输出项的索引。
 
-**delta**`string`
+## **response.audio\_transcript.delta**
 
-增量文本。
+当输出模态包含音频，且模型增量生成新的音频对应的文本时，服务端将返回 `response.audio_transcript.delta` 事件。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1351,37 +1329,37 @@ T7
 }
 ```
 
-## response.audio\_transcript.done
+**type** `_string_`
 
-当输出模态包含音频，且模型完成音频转录后，服务端将返回 `response.audio_transcript.done` 事件。
+事件类型，固定为`response.audio_transcript.delta`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.audio_transcript.done`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 响应的ID。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
 消息项ID。
 
-**output\_index**`integer`
+**output\_index**`_integer_`
 
 响应输出项的索引。
 
-**content\_index**`integer`
+**content\_index**`_integer_`
 
 响应输出项的索引。
 
-**transcript**`string`
+**delta** `_string_`
 
-完整文本。
+增量文本。
+
+## **response.audio\_transcript.done**
+
+当输出模态包含音频，且模型完成音频转录后，服务端将返回 `response.audio_transcript.done` 事件。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1395,37 +1373,37 @@ T7
 }
 ```
 
-## response.function\_call\_arguments.delta
+**type** `_string_`
 
-当模型以流式方式生成函数调用的参数字符串时，每产生一段新内容，服务端推送一次本事件。客户端应按接收顺序将各事件中的 `delta` 字段拼接，得到与当前进度一致的参数文本；完整内容以随后的 `response.function_call_arguments.done` 为准。
+事件类型，固定为`response.audio_transcript.done`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.function_call_arguments.delta`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 响应的ID。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
 消息项ID。
 
-**output\_index**`integer`
+**output\_index**`_integer_`
 
-该响应中输出项的索引。
+响应输出项的索引。
 
-**call\_id**`string`
+**content\_index**`_integer_`
 
-本次函数调用的唯一 ID，与同一轮中的 `done` 事件保持一致。
+响应输出项的索引。
 
-**delta**`string`
+**transcript** `_string_`
 
-本段新增的参数字符串片段（增量）。需按顺序拼接。
+完整文本。
+
+## **response.function\_call\_arguments.delta**
+
+当模型以流式方式生成函数调用的参数字符串时，每产生一段新内容，服务端推送一次本事件。客户端应按接收顺序将各事件中的 `delta` 字段拼接，得到与当前进度一致的参数文本；完整内容以随后的 `response.function_call_arguments.done` 为准。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1439,41 +1417,37 @@ T7
 }
 ```
 
-## response.function\_call\_arguments.done
+**type** `_string_`
 
-函数调用参数已全部生成完毕。本事件中的 `arguments` 为完整的参数字符串。客户端可在收到本事件后解析参数并调用本地工具函数；应以本事件中的完整 `arguments` 为准，而非 `delta` 拼接结果。
+事件类型，固定为`response.function_call_arguments.delta`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.function_call_arguments.done`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 响应的ID。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
 消息项ID。
 
-**output\_index**`integer`
+**output\_index**`_integer_`
 
 该响应中输出项的索引。
 
-**call\_id**`string`
+**call\_id** `_string_`
 
-本次函数调用的唯一 ID。
+本次函数调用的唯一 ID，与同一轮中的 `done` 事件保持一致。
 
-**name**`string`
+**delta** `_string_`
 
-被调用的函数名称。
+本段新增的参数字符串片段（增量）。需按顺序拼接。
 
-**arguments**`string`
+## **response.function\_call\_arguments.done**
 
-函数调用的完整参数，一般以 JSON 字符串形式表示。
+函数调用参数已全部生成完毕。本事件中的 `arguments` 为完整的参数字符串。客户端可在收到本事件后解析参数并调用本地工具函数；应以本事件中的完整 `arguments` 为准，而非 `delta` 拼接结果。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1488,67 +1462,41 @@ T7
 }
 ```
 
-## response.output\_item.added
+**type** `_string_`
 
-在响应生成过程中创建新项目时，服务端返回此事件。项目类型可以是 `message`（常规消息）或 `function_call`（工具调用）。
+事件类型，固定为`response.function_call_arguments.done`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.output_item.added`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 响应的ID。
 
-**output\_index**`integer`
+**item\_id** `_string_`
 
-响应输出项的索引。
+消息项ID。
 
-**item**`object`
+**output\_index**`_integer_`
 
-输出项信息。
+该响应中输出项的索引。
 
-属性
+**call\_id** `_string_`
 
-**id**`string`
+本次函数调用的唯一 ID。
 
-输出项的唯一ID。
+**name** `_string_`
 
-**object**`string`
+被调用的函数名称。
 
-始终为 `realtime.item` 。
+**arguments** `_string_`
 
-**status**`string`
+函数调用的完整参数，一般以 JSON 字符串形式表示。
 
-输出项的状态。
+## **response.output\_item.added**
 
-**role**`string`
+在响应生成过程中创建新项目时，服务端返回此事件。项目类型可以是 `message`（常规消息）或 `function_call`（工具调用）。
 
-发送消息的角色。
+**event\_id** `_string_`
 
-**content**`string`
-
-消息的内容。当 type 为 `message` 时存在。
-
-**type**`string`
-
-输出项的类型。可选值为 `message`（常规消息）或 `function_call`（工具调用）。
-
-**name**`string`
-
-当 type 为 `function_call` 时，被调用的函数名称。
-
-**call\_id**`string`
-
-当 type 为 `function_call` 时，本次函数调用的唯一 ID。
-
-**arguments**`string`
-
-当 type 为 `function_call` 时，函数调用的参数（JSON 字符串）。在 added 事件中初始为空字符串。
+本次事件唯一标识符。
 
 ```
 {
@@ -1583,67 +1531,67 @@ T7
 }
 ```
 
-## response.output\_item.done
+**type** `_string_`
 
-当新的项目输出完成时，服务端返回此事件。
+事件类型，固定为`response.output_item.added`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.output_item.done`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 响应的ID。
 
-**output\_index**`integer`
+**output\_index**`_integer_`
 
 响应输出项的索引。
 
-**item**`object`
+**item**`_object_`
 
 输出项信息。
 
-属性
+**属性**
 
-**id**`string`
+**id** `_string_`
 
 输出项的唯一ID。
 
-**object**`string`
+**object** `_string_`
 
 始终为 `realtime.item` 。
 
-**status**`string`
+**status** `_string_`
 
 输出项的状态。
 
-**role**`string`
+**role** `_string_`
 
 发送消息的角色。
 
-**content**`string`
+**content** `_string_`
 
 消息的内容。当 type 为 `message` 时存在。
 
-**type**`string`
+**type** `_string_`
 
 输出项的类型。可选值为 `message`（常规消息）或 `function_call`（工具调用）。
 
-**name**`string`
+**name** `_string_`
 
 当 type 为 `function_call` 时，被调用的函数名称。
 
-**call\_id**`string`
+**call\_id** `_string_`
 
 当 type 为 `function_call` 时，本次函数调用的唯一 ID。
 
-**arguments**`string`
+**arguments** `_string_`
 
-当 type 为 `function_call` 时，函数调用的完整参数（JSON 字符串）。
+当 type 为 `function_call` 时，函数调用的参数（JSON 字符串）。在 added 事件中初始为空字符串。
+
+## **response.output\_item.done**
+
+当新的项目输出完成时，服务端返回此事件。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1683,47 +1631,67 @@ T7
 }
 ```
 
-## response.content\_part.added
+**type** `_string_`
 
-在响应生成过程中，向助手消息项中添加新内容部分时，服务端返回此事件。
+事件类型，固定为`response.output_item.done`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.content_part.added`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 响应的ID。
 
-**item\_id**`string`
+**output\_index**`_integer_`
 
-消息项ID。
+响应输出项的索引。
 
-**output\_index**`integer`
-
-响应输出项的索引，目前固定为 0。
-
-**content\_index**`integer`
-
-响应输出项中内部部分的索引, 目前固定为 0。
-
-**part**`object`
+**item**`_object_`
 
 输出项信息。
 
-属性
+**属性**
 
-**type**`string`
+**id** `_string_`
 
-内容部分的类型。
+输出项的唯一ID。
 
-**text**`string`
+**object** `_string_`
 
-内容部分的文本。
+始终为 `realtime.item` 。
+
+**status** `_string_`
+
+输出项的状态。
+
+**role** `_string_`
+
+发送消息的角色。
+
+**content** `_string_`
+
+消息的内容。当 type 为 `message` 时存在。
+
+**type** `_string_`
+
+输出项的类型。可选值为 `message`（常规消息）或 `function_call`（工具调用）。
+
+**name** `_string_`
+
+当 type 为 `function_call` 时，被调用的函数名称。
+
+**call\_id** `_string_`
+
+当 type 为 `function_call` 时，本次函数调用的唯一 ID。
+
+**arguments** `_string_`
+
+当 type 为 `function_call` 时，函数调用的完整参数（JSON 字符串）。
+
+## **response.content\_part.added**
+
+在响应生成过程中，向助手消息项中添加新内容部分时，服务端返回此事件。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1740,47 +1708,47 @@ T7
 }
 ```
 
-## response.content\_part.done
+**type** `_string_`
 
-在助手消息项中的内容部分完成流式传输时，服务端返回此事件。
+事件类型，固定为`response.content_part.added`。
 
-**event\_id**`string`
-
-本次事件唯一标识符。
-
-**type**`string`
-
-事件类型，固定为`response.content_part.done`。
-
-**response\_id**`string`
+**response\_id** `_string_`
 
 响应的ID。
 
-**item\_id**`string`
+**item\_id** `_string_`
 
 消息项ID。
 
-**output\_index**`integer`
+**output\_index**`_integer_`
 
 响应输出项的索引，目前固定为 0。
 
-**content\_index**`integer`
+**content\_index**`_integer_`
 
-该项内容数组中内容部分的索引，目前固定为 0。
+响应输出项中内部部分的索引, 目前固定为 0。
 
-**part**`object`
+**part**`_object_`
 
 输出项信息。
 
-属性
+**属性**
 
-**type**`string`
+**type** `_string_`
 
 内容部分的类型。
 
-**text**`string`
+**text** `_string_`
 
 内容部分的文本。
+
+## **response.content\_part.done**
+
+在助手消息项中的内容部分完成流式传输时，服务端返回此事件。
+
+**event\_id** `_string_`
+
+本次事件唯一标识符。
 
 ```
 {
@@ -1796,3 +1764,37 @@ T7
     }
 }
 ```
+
+**type** `_string_`
+
+事件类型，固定为`response.content_part.done`。
+
+**response\_id** `_string_`
+
+响应的ID。
+
+**item\_id** `_string_`
+
+消息项ID。
+
+**output\_index**`_integer_`
+
+响应输出项的索引，目前固定为 0。
+
+**content\_index**`_integer_`
+
+该项内容数组中内容部分的索引，目前固定为 0。
+
+**part**`_object_`
+
+输出项信息。
+
+**属性**
+
+**type** `_string_`
+
+内容部分的类型。
+
+**text** `_string_`
+
+内容部分的文本。

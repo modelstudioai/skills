@@ -1,33 +1,33 @@
 # Java SDK
 
-本文介绍 DashScope Java SDK 调用 Qwen-Omni 实时模型 时的关键接口与请求参数。
+本文介绍 DashScope Java SDK 调用[Qwen-Omni 实时模型](https://help.aliyun.com/zh/model-studio/realtime)时的关键接口与请求参数。
 
-## 前期准备
+## **前期准备**
 
-您的 Java SDK 版本需要不低于v2.22.15。请先阅读[实时多模态交互流程](raw/model-api-reference/omni-realtime-api/omni-realtime-interaction-process.md)。
+您的 Java SDK 版本需要不低于v2.22.15。请先阅读[实时多模态交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process)。
 
-## 快速开始
+## **快速开始**
 
 请访问[github](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/omni)下载示例代码。我们提供了三种调用方式的示例代码：
 
-1.  [音频对话示例](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/omni/java)：麦克风采集实时音频输入，开启[VAD 模式](https://help.aliyun.com/zh/model-studio/realtime)（自动检测语音起止），支持语音打断。
+1.  [音频对话示例](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/omni/java)：麦克风采集实时音频输入，开启[VAD 模式](https://help.aliyun.com/zh/model-studio/realtime#68d826b358q1r)（自动检测语音起止），支持语音打断。
     
     > enableTurnDetection 参数需设为 `true`。
     
     > 推荐您使用耳机播放音频，避免回声触发语音打断。
     
-2.  [音视频对话示例](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/omni/java)：麦克风和摄像头采集实时音视频输入，开启[VAD 模式](https://help.aliyun.com/zh/model-studio/realtime)（自动检测语音起止），支持语音打断。
+2.  [音视频对话示例](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/omni/java)：麦克风和摄像头采集实时音视频输入，开启[VAD 模式](https://help.aliyun.com/zh/model-studio/realtime#68d826b358q1r)（自动检测语音起止），支持语音打断。
     
     > enableTurnDetection 参数需设为 `true`。
     
     > 推荐您使用耳机播放音频，避免回声触发语音打断。
     
-3.  [本地调用](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/omni/java)：本地音频和图片作为输入，开启[Manual 模式](https://help.aliyun.com/zh/model-studio/realtime)（手动控制发送节奏）。
+3.  [本地调用](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/omni/java)：本地音频和图片作为输入，开启[Manual 模式](https://help.aliyun.com/zh/model-studio/realtime#3dbb650fb3ird)（手动控制发送节奏）。
     
     > enableTurnDetection 参数需设为 `false`。
     
 
-## 请求参数
+## **请求参数**
 
 下述请求参数可以通过`OmniRealtimeParam`对象的链式方法或setter配置、之后作为参数传入OmniRealtimeConversation的构造方法完成配置。
 
@@ -41,7 +41,7 @@ model
 
 String
 
-Qwen-Omni 实时模型的名称。参见[模型列表](raw/model-user-guide/get-started-with-models/models.md)。
+Qwen-Omni 实时模型的名称。参见[模型列表](https://help.aliyun.com/zh/model-studio/models#6deec483126rk)。
 
 url
 
@@ -56,10 +56,14 @@ String
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+**重要**
+
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `wss://dashscope.aliyuncs.com` 迁移至 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
 -   新加坡地域：从 `wss://dashscope-intl.aliyuncs.com` 迁移至 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
@@ -86,8 +90,11 @@ String
 默认音色：
 
 -   Qwen3.5-Omni: "Tina"
+    
 -   Qwen3-Omni-Flash-Realtime：“Cherry”，
+    
 -   Qwen-Omni-Turbo-Realtime：“Chelsie”
+    
 
 inputAudioFormat
 
@@ -109,7 +116,9 @@ String
 
 例如：你是某五星级酒店的AI客服专员，请准确且友好地解答客户关于房型、设施、价格、预订政策的咨询。请始终以专业和乐于助人的态度回应，杜绝提供未经证实或超出酒店服务范围的信息。
 
-**说明**`instructions`需要通过`OmniRealtimeConfig`实例的`parameters`方法进行设置：
+**说明**
+
+`instructions`需要通过`OmniRealtimeConfig`实例的`parameters`方法进行设置：
 
 ```
 conversation.updateSession(OmniRealtimeConfig.builder()
@@ -166,7 +175,9 @@ String
 VAD类型，取值如下：
 
 -   `server_vad`（默认值）：基于声学特征检测用户语音结束。
+    
 -   `semantic_vad`：基于语义有效性检测用户语音结束，可过滤无意义语音（如回应语、背景音）。仅`qwen3.5-omni-realtime`系列模型支持。
+    
 
 turnDetectionThreshold
 
@@ -175,7 +186,9 @@ Float
 VAD检测阈值。建议在嘈杂的环境中增加， 在安静的环境中降低。
 
 -   取值越接近-1，噪音被判定为语音的概率越大。
+    
 -   取值越接近1，噪音被判定为语音的概率越小。
+    
 
 默认为 0.5, 参数范围：\[-1.0, 1.0\]。
 
@@ -189,7 +202,7 @@ turnDetectionParam
 
 Map
 
-VAD 扩展参数，用于传入 `turn_detection` 的额外配置项。当前支持传入 `idle_timeout_ms`（Integer）：静默超时时间（毫秒）。**仅在使用**`qwen3.5-omni-plus-realtime`**或**`qwen3.5-omni-flash-realtime`**模型且 VAD 类型为**`server_vad`**时生效。**服务端完成音频播报且用户持续静默超过该时间（未触发 `speech.started`）后，模型将主动触发一轮响应，基于当前上下文引导用户继续对话。取值范围：\[5000, 30000\]。
+VAD 扩展参数，用于传入 `turn_detection` 的额外配置项。当前支持传入 `idle_timeout_ms`（Integer）：静默超时时间（毫秒）。**仅在使用** `**qwen3.5-omni-plus-realtime**` **或** `**qwen3.5-omni-flash-realtime**` **模型且 VAD 类型为** `**server_vad**` **时生效。**服务端完成音频播报且用户持续静默超过该时间（未触发 `speech.started`）后，模型将主动触发一轮响应，基于当前上下文引导用户继续对话。取值范围：\[5000, 30000\]。
 
 示例：`turnDetectionParam(Map.of("idle_timeout_ms", 5000))`
 
@@ -234,8 +247,11 @@ List<Map<String, Object>>
     -   `parameters`（Map，可选）：对工具函数入参的描述，大模型会参考该字段来进行入参的提取。如果工具函数不需要输入参数，则无需指定。包含以下字段：
         
         -   `type`（String，必选）：固定为 "object"。
+            
         -   `properties`（Map，可选）：描述各入参的名称、数据类型与描述。Key 值为入参的名称，Value 值为包含数据类型（type）与描述（description）的 Map。
+            
         -   `required`（List，可选）：指定哪些入参为必填项。
+            
 
 > `search_options`需要通过`OmniRealtimeConfig`实例的`parameters`方法进行设置，用法与`instructions`一致。
 
@@ -254,8 +270,11 @@ temperature越高，生成的内容更多样，反之，生成的内容更确定
 temperature默认值：
 
 -   `qwen3.5-omni-realtime`系列：0.7
+    
 -   `qwen3-omni-flash-realtime`系列：0.9
+    
 -   `qwen-omni-turbo-realtime`系列：1.0
+    
 
 > `qwen-omni-turbo` 系列模型**不支持修改**。
 
@@ -276,8 +295,11 @@ top\_p越高，生成的内容更多样。反之，生成的内容更确定。
 top\_p默认值：
 
 -   `qwen3.5-omni-realtime`系列：0.8
+    
 -   `qwen3-omni-flash-realtime`系列：1.0
+    
 -   `qwen-omni-turbo-realtime`系列：0.01
+    
 
 > `qwen-omni-turbo` 系列模型**不支持修改**。
 
@@ -294,8 +316,11 @@ Integer
 top\_k默认值：
 
 -   `qwen3.5-omni-realtime`系列：20
+    
 -   `qwen3-omni-flash-realtime`系列：50
+    
 -   `qwen-omni-turbo-realtime`系列：20
+    
 
 > `qwen-omni-turbo` 系列模型**不支持修改**。
 
@@ -309,7 +334,7 @@ Integer
 
 > `max_tokens` 的设置不会影响大模型的生成过程，如果模型生成的 Token 数超过`max_tokens`，本次请求会返回截断后的内容。
 
-默认值和最大值都是模型的最大输出长度。关于各模型的最大输出长度，请参见[模型列表](raw/model-user-guide/get-started-with-models/models.md)。
+默认值和最大值都是模型的最大输出长度。关于各模型的最大输出长度，请参见[模型列表](https://help.aliyun.com/zh/model-studio/models#9f8890ce29g5u)。
 
 max\_tokens参数适用于需要限制字数（如生成摘要、关键词）、控制成本或减少响应时间的场景。
 
@@ -326,7 +351,9 @@ Float
 repetition\_penalty默认值：
 
 -   `qwen3.5-omni-realtime`系列：1.0
+    
 -   其他模型：1.05
+    
 
 > `qwen-omni-turbo` 系列模型**不支持修改**。
 
@@ -343,7 +370,9 @@ Float
 presence\_penalty默认值：
 
 -   `qwen3.5-omni-realtime`系列：1.5
+    
 -   其他模型：0.0
+    
 
 适用场景：
 
@@ -369,9 +398,9 @@ Integer
 
 > `seed`需要通过`OmniRealtimeConfig`实例的`parameters`方法进行设置，用法与`instructions`一致。
 
-## 关键接口
+## **关键接口**
 
-### OmniRealtimeConversation类
+### **OmniRealtimeConversation类**
 
 OmniRealtimeConversation通过`import com.alibaba.dashscope.audio.omni.OmniRealtimeConversation;`方法引入。
 
@@ -385,7 +414,7 @@ OmniRealtimeConversation通过`import com.alibaba.dashscope.audio.omni.OmniRealt
 public void connect() throws NoApiKeyException, InterruptedException
 ```
 
-[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
+[服务端事件](https://help.aliyun.com/zh/model-studio/server-events#39689ed6e90ag)
 
 > 会话已创建
 
@@ -418,7 +447,9 @@ public void appendAudio(String audioBase64)
 将base64编码后的音频数据片段追加到云端输入音频缓冲区。 音频缓冲区是你可以写入并稍后提交的临时存储。
 
 -   打开"turn\_detection"，音频缓冲区用于检测语音，服务器决定何时提交。
+    
 -   关闭"turn\_detection"，客户端可以选择每个事件中放置多少音频量，最多放置 15 MiB。 例如，从客户端流式处理较小的数据块可以让 VAD 响应更迅速。
+    
 
 ```
 public void appendVideo(String videoBase64)
@@ -431,9 +462,13 @@ public void appendVideo(String videoBase64)
 目前对图片输入有以下限制：
 
 -   图片格式需要为JPG或JPEG，建议传入的图片分辨率为480P或720P， 最大1080P；
+    
 -   单张图片经Base64编码后不得超过256KB，建议编码前原始图片大小不超过190KB；
+    
 -   图片数据需要经过Base64编码；
+    
 -   建议您以 1张/秒 的频率向服务端发送图片；
+    
 
 ```
 public void clearAppendedAudio()
@@ -456,18 +491,22 @@ public void commit()
 提交之前通过append添加到云端缓冲区的音视频，如果输入的音频缓冲区为空将产生错误。
 
 -   打开"turn\_detection"，客户端不需要发送此事件，服务器会自动提交音频缓冲区。
+    
 -   关闭"turn\_detection"，客户端必须提交音频缓冲区才能创建用户消息项。
+    
 
 **注意**⚠️：
 
 1.  如果 input\_audio\_transcription为会话配置了音频转录，系统会转录音频。
+    
 2.  提交输入音频缓冲区不会从模型创建响应。
+    
 
 ```
 public void createResponse(String instructions, List<OmniRealtimeModality> modalities)
 ```
 
-[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
+[服务端事件](https://help.aliyun.com/zh/model-studio/server-events#38033afc582r1)
 
 > 服务端开始生成响应
 
@@ -475,7 +514,7 @@ public void createResponse(String instructions, List<OmniRealtimeModality> modal
 
 > 响应时有新的输出内容
 
-[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
+[服务端事件](https://help.aliyun.com/zh/model-studio/server-events#bb4547ed5b5ht)
 
 > 对话项被创建
 
@@ -534,8 +573,11 @@ public void createItem(JsonObject item)
 item 参数为 JsonObject，需包含以下字段：
 
 -   `type`：固定为 "function\_call\_output"。
+    
 -   `call_id`：对应 `response.function_call_arguments.done` 事件中的 call\_id。
+    
 -   `output`：工具执行结果的字符串。
+    
 
 ```
 public void close()
@@ -561,7 +603,7 @@ public String getResponseId()
 
 获取最近一次response的response\_id。
 
-### 回调接口（OmniRealtimeCallback）
+### **回调接口（OmniRealtimeCallback）**
 
 服务端会通过回调的方式，将服务端响应事件和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
 
@@ -593,7 +635,7 @@ message：服务端响应事件。
 
 无
 
-包括对接口调用的回复响应和模型生成的文本和音频。具体可以参考：[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
+包括对接口调用的回复响应和模型生成的文本和音频。具体可以参考：[服务端事件](https://help.aliyun.com/zh/model-studio/server-events)
 
 ```
 public abstract void onClose(int code, String reason)
@@ -607,7 +649,7 @@ reason：关闭websocket的关闭信息。
 
 当服务已经关闭连接后进行回调。
 
-## 常见问题
+## **常见问题**
 
 #### Q：输入的音频和图片要如何对齐？
 
@@ -615,27 +657,33 @@ omni-realtime模型的输入将音频作为时间轴，图片会按照发送的�
 
 在实时交互场景下，您可以在任意时刻打开或关闭视频输入。
 
-#### Q：输入图片和音频的推荐频率？
+#### **Q：输入图片和音频的推荐频率？**
 
 在实时交互场景，推荐按照1 fps或2 fps的帧率发送图片，按照100ms一包的音频发送音频。
 
-#### Q：turn\_detection开关两种模式的区别？
+#### **Q：turn\_detection开关两种模式的区别？**
 
 turn\_detection打开后支持server\_vad和semantic\_vad两种模式：
 
 -   打开"turn\_detection"：
     
     -   输入状态：云端的VAD（语音事件监测）会根据输入音频判断输入的一句话结束，并且立刻自动调用omni的推理下发回复文本和语音。
+        
     -   回复状态：在此状态下，音视频可以继续输入，不需要在模型回复阶段中断。回复结束后会回到输入状态等待语音。
+        
     -   打断：如果在模型回复期间，如果检测到用户开始说话则会触发打断，服务会立刻停止这一次的回复并且转换到输入状态。
+        
 -   关闭"turn\_detection"：
     
     -   用户需要自己判断一轮音视频输入的结束，并且手动通过commit和create\_response触发omni的推理，获得回复。
+        
     -   在模型回复状态，需要停止音视频的输入。在模型回复结束后才可以继续输入下一轮音视频。
+        
     -   需要通过response\_cancel接口打断模型回复。
+        
 
 注意，在打开"turn\_detection"时，依旧可以通过commit和create\_response主动触发回复，通过response\_cancel主动打断。
 
-#### Q：input\_audio\_transcription为何要选择其他模型？
+#### **Q：input\_audio\_transcription为何要选择其他模型？**
 
 omni是端到端的多模态大模型，文本输出是对输入的回答，因此不会直接产生输入音频的转录。需要接入其他ASR模型转录。目前由内置模型决定，不支持修改。

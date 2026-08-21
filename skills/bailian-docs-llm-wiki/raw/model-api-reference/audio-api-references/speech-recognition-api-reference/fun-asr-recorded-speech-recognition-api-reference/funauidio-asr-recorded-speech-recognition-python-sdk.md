@@ -2,41 +2,50 @@
 
 本文介绍Qwen-Audio-3.0-ASR-Flash-Filetrans/Fun-ASR非实时语音识别Python SDK的参数和接口细节。
 
-**用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
+**用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model/#asr-audio-spec02)。
 
-## 前提条件
+## **前提条件**
 
-已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
+-   已开通服务并[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
+    
+    **说明**
+    
+    当您需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时鉴权Token](https://help.aliyun.com/zh/model-studio/generate-temporary-api-key)。
+    
+    与长期有效的 API Key 相比，临时鉴权 Token 具备时效性短（60秒）、安全性高的特点，适用于临时调用场景，能有效降低API Key泄露的风险。
+    
+    使用方式：在代码中，将原本用于鉴权的 API Key 替换为获取到的临时鉴权 Token 即可。
+    
+-   [安装最新版DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+    
 
-**说明**当您需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时鉴权Token](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)。
+## **快速开始**
 
-与长期有效的 API Key 相比，临时鉴权 Token 具备时效性短（60秒）、安全性高的特点，适用于临时调用场景，能有效降低API Key泄露的风险。
-
-使用方式：在代码中，将原本用于鉴权的 API Key 替换为获取到的临时鉴权 Token 即可。
-
--   [安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
-
-## 快速开始
-
-[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)提供了异步提交任务、同步等待任务结束和异步查询任务执行结果的接口。可通过如下两种调用方式进行非实时语音识别：
+[核心类（Transcription）](#adcb5e9bddbyq)提供了异步提交任务、同步等待任务结束和异步查询任务执行结果的接口。可通过如下两种调用方式进行非实时语音识别：
 
 -   异步提交任务+同步等待任务结束：提交任务后，阻塞当前线程直到任务结束并获取识别结果。
+    
 -   异步提交任务+异步查询任务执行结果：提交任务后，在需要的时候通过调用查询任务接口获取任务的执行结果。
+    
 
-### 异步提交任务+同步等待任务结束
+### **异步提交任务+同步等待任务结束**
 
-1.  调用[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)的`async_call`方法并设置[请求参数](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#340f6879fci7d)。
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7269765871/CAEQURiBgMCvo5zjpxkiIDQyNzUwZjVjMWM3MjQ5Nzg4ODBjNDRjNzE1ZGFiOGFj4709861_20241015153444.149.svg)
+
+1.  调用[核心类（Transcription）](#adcb5e9bddbyq)的`async_call`方法并设置[请求参数](#340f6879fci7d)。
     
     **说明**
     
     -   文件转写服务对通过API提交的任务采取尽力服务原则进行处理。任务提交后将进入排队（`PENDING`）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内。任务开始处理后，语音识别将以数百倍加速完成。
+        
     -   每一个任务完成后，识别结果和URL下载链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。
+        
     
-2.  调用[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)的`wait`方法同步等待任务结束。
+2.  调用[核心类（Transcription）](#adcb5e9bddbyq)的`wait`方法同步等待任务结束。
     
     任务的状态包括`PENDING`、`RUNNING`、`SUCCEEDED`和`FAILED`。当任务处于`PENDING`或`RUNNING`状态时，`wait`接口将被阻塞。当任务处于`SUCCEEDED`或`FAILED`状态时，`wait`接口不再阻塞并返回任务的执行结果。
     
-    `wait`返回[TranscriptionResponse](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c4fe4e43ee4n6)。
+    `wait`返回[TranscriptionResponse](#c4fe4e43ee4n6)。
     
 
 点击查看完整示例
@@ -66,20 +75,24 @@ if transcribe_response.status_code == HTTPStatus.OK:
     print('transcription done!')
 ```
 
-### 异步提交任务+异步查询任务执行结果
+### **异步提交任务+异步查询任务执行结果**
 
-1.  调用[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)的`async_call`方法并设置[请求参数](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#340f6879fci7d)。
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7269765871/CAEQURiBgMCN3qzkpxkiIGE0YmU4YTdjMWNiNzRmYjJhMjFlMWZkZmFmOWQ1NmEx4709861_20241015153444.149.svg)
+
+1.  调用[核心类（Transcription）](#adcb5e9bddbyq)的`async_call`方法并设置[请求参数](#340f6879fci7d)。
     
     **说明**
     
     -   文件转写服务对通过API提交的任务采取尽力服务原则进行处理。任务提交后将进入排队（`PENDING`）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内。任务开始处理后，语音识别将以数百倍加速完成。
+        
     -   每一个任务完成后，识别结果和URL下载链接有效期为24小时，超时后无法查询任务或通过先前查询结果中的URL下载结果。
+        
     
-2.  循环调用[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)的`fetch`方法直到获取最终的任务结果。
+2.  循环调用[核心类（Transcription）](#adcb5e9bddbyq)的`fetch`方法直到获取最终的任务结果。
     
     当任务状态为`SUCCEEDED`或`FAILED`时，停止轮询并处理结果。
     
-    `fetch`返回[TranscriptionResponse](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c4fe4e43ee4n6)。
+    `fetch`返回[TranscriptionResponse](#c4fe4e43ee4n6)。
     
 
 点击查看完整示例
@@ -113,17 +126,17 @@ if transcribe_response.status_code == HTTPStatus.OK:
     print('transcription done!')
 ```
 
-## 接口地址
+## **接口地址**
 
 SDK 默认使用**北京地域**的接口地址。如需切换到其他地域，需在初始化前修改 `dashscope.base_http_api_url`。
 
-#### 华北2（北京）
+## 华北2（北京）
 
 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 新加坡
+## 新加坡
 
 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
@@ -141,11 +154,13 @@ dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyunc
 **注意**：
 
 -   不同地域的 API Key 不同，请确保使用对应地域的 API Key
+    
 -   地域配置为全局设置，影响所有 DashScope SDK 的 API 调用
+    
 
-## 请求参数
+## **请求参数**
 
-请求参数通过[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)的`async_call`方法进行设置。
+请求参数通过[核心类（Transcription）](#adcb5e9bddbyq)的`async_call`方法进行设置。
 
 **参数**
 
@@ -169,7 +184,7 @@ list\[str\]
 
 是
 
-音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
+音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model/#asr-audio-spec02)。
 
 若录音文件存储在阿里云OSS，使用RESTful API方式支持使用以`oss://`为前缀的临时 URL，使用SDK方式不支持使用以 oss://为前缀的临时 URL。
 
@@ -198,7 +213,7 @@ str
 
 适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。
 
-使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
+使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw-precompiled-h3)。
 
 vocabulary
 
@@ -212,9 +227,11 @@ dict
 
 适用于临时性、会话级别的热词优化。
 
-与预编译热词同时配置时，仅即时热词生效。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
+与预编译热词同时配置时，仅即时热词生效。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw-instant-h3)。
 
-**重要**仅`qwen-audio-3.0-asr-flash-filetrans`支持即时热词。
+**重要**
+
+仅`qwen-audio-3.0-asr-flash-filetrans`支持即时热词。
 
 示例：
 
@@ -237,7 +254,9 @@ list\[int\]
 
 指定在多音轨音频文件中需要识别的音轨索引，索引从 0 开始。例如，\[0\] 表示识别第一个音轨，\[0, 1\] 表示同时识别第一和第二个音轨。如果省略此参数，则默认处理第一个音轨。
 
-**重要**指定的每一个音轨都将独立计费。例如，为单个文件请求 \[0, 1\] 会产生两笔独立的费用。
+**重要**
+
+指定的每一个音轨都将独立计费。例如，为单个文件请求 \[0, 1\] 会产生两笔独立的费用。
 
 默认值：\[0\]。
 
@@ -247,7 +266,7 @@ str
 
 否
 
-指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03_sensitive_h3)。
+指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#nrt03-sensitive-h3)。
 
 diarization\_enabled
 
@@ -261,11 +280,13 @@ bool
 
 启用该功能后，识别结果中将显示`speaker_id`字段，用于区分不同说话人。
 
-**说明**如果启用说话人分离功能，建议音频时长不超过2小时，否则可能导致识别失败或超时。
+**说明**
+
+如果启用说话人分离功能，建议音频时长不超过2小时，否则可能导致识别失败或超时。
 
 默认值：False。
 
-有关`speaker_id`的示例，请参见[识别结果说明](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#a9021178ccl7s)。
+有关`speaker_id`的示例，请参见[识别结果说明](#a9021178ccl7s)。
 
 speaker\_count
 
@@ -273,7 +294,9 @@ int
 
 否
 
-**重要**仅在开启说话人分离功能（`diarization_enabled`设置为`True`）时生效。
+**重要**
+
+仅在开启说话人分离功能（`diarization_enabled`设置为`True`）时生效。
 
 说话人数量参考值。取值范围为2至100的整数（包含2和100）。
 
@@ -296,49 +319,81 @@ list\[str\]
 -   qwen-audio-3.0-asr-flash-filetrans、fun-asr、fun-asr-2025-11-07、fun-asr-mtl、fun-asr-mtl-2025-08-25：
     
     -   zh: 中文
+        
     -   en: 英文
+        
     -   ja: 日语
+        
     -   ko：韩语
+        
     -   vi：越南语
+        
     -   th：泰语
+        
     -   id：印尼语
+        
     -   ms：马来语
+        
     -   tl：菲律宾语
+        
     -   hi：印地语
+        
     -   ar：阿拉伯语
+        
     -   fr：法语
+        
     -   de：德语
+        
     -   es：西班牙语
+        
     -   pt：葡萄牙语
+        
     -   ru：俄语
+        
     -   it：意大利语
+        
     -   nl：荷兰语
+        
     -   sv：瑞典语
+        
     -   da：丹麦语
+        
     -   fi：芬兰语
+        
     -   no：挪威语
+        
     -   el：希腊语
+        
     -   pl：波兰语
+        
     -   cs：捷克语
+        
     -   hu：匈牙利语
+        
     -   ro：罗马尼亚语
+        
     -   bg：保加利亚语
+        
     -   hr：克罗地亚语
+        
     -   sk：斯洛伐克语
+        
 -   fun-asr-2025-08-25：
     
     -   zh: 中文
+        
     -   en: 英文
+        
 
-## 响应结果
+## **响应结果**
 
-### `TranscriptionResponse`
+### `**TranscriptionResponse**`
 
-`TranscriptionResponse`封装了任务的基本信息（`task_id`和`task_status`）和执行结果（`output`属性对应的内容，参见[TranscriptionOutput](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#3c2916848c07k)）。
+`TranscriptionResponse`封装了任务的基本信息（`task_id`和`task_status`）和执行结果（`output`属性对应的内容，参见[TranscriptionOutput](#3c2916848c07k)）。
 
-点击查看 TranscriptionResponse 结构示例
+点击查看`TranscriptionResponse`结构示例
 
-PENDING 状态
+## `PENDING`状态
 
 ```
 {
@@ -361,7 +416,7 @@ PENDING 状态
 }
 ```
 
-RUNNING 状态
+## `RUNNING`状态
 
 ```
 {
@@ -384,7 +439,7 @@ RUNNING 状态
 }
 ```
 
-SUCCEEDED 状态
+## `SUCCEEDED`状态
 
 ```
 {
@@ -401,7 +456,7 @@ SUCCEEDED 状态
         "results":[
             {
                 "file_url":"{YOUR_AUDIO_URL}",
-                "transcription_url":"https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20250213/17%3A31/20ee4e4f-0404-4806-b617-c7d4c62eed19-1.json?Expires=1739525481&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
+                "transcription_url":"https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20250213/17%3A31/20ee4e4f-0404-4806-b617-c7d4c62eed19-1.json?Expires=1739525481&OSSAccessKeyId=yourOSSAccessKeyId&Signature=3q%2B1uQmRwltd7FPn5HQM2mBKw74%3D",
                 "subtask_status":"SUCCEEDED"
             }
         ],
@@ -417,7 +472,7 @@ SUCCEEDED 状态
 }
 ```
 
-FAILED 状态
+## `FAILED`状态
 
 ```
 {
@@ -465,14 +520,14 @@ code
 
 -   最外层的`code`不必关注。
     
--   `output.results`下面的`code`，代表错误码。可以结合`message`字段，对照[错误码](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c70f9758027ph)排查问题。
+-   `output.results`下面的`code`，代表错误码。可以结合`message`字段，对照[错误码](#c70f9758027ph)排查问题。
     
 
 message
 
 -   最外层的`message`不必关注。
     
--   `output.results`下面的`message`，代表错误信息。可以结合`code`字段，对照[错误码](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c70f9758027ph)排查问题。
+-   `output.results`下面的`message`，代表错误信息。可以结合`code`字段，对照[错误码](#c70f9758027ph)排查问题。
     
 
 task\_id
@@ -505,15 +560,15 @@ transcription\_url
 
 音频识别结果对应的URL。
 
-识别结果保存为JSON文件，您可以通过`transcription_url`对应的链接下载文件或直接通过HTTP请求读取该文件中的内容。JSON文件的内容请参见[识别结果说明](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#a9021178ccl7s)。
+识别结果保存为JSON文件，您可以通过`transcription_url`对应的链接下载文件或直接通过HTTP请求读取该文件中的内容。JSON文件的内容请参见[识别结果说明](#a9021178ccl7s)。
 
 ### `TranscriptionOutput`
 
-`TranscriptionOutput`对应[TranscriptionResponse](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c4fe4e43ee4n6)的`output`属性，代表当前任务执行结果。
+`TranscriptionOutput`对应[TranscriptionResponse](#c4fe4e43ee4n6)的`output`属性，代表当前任务执行结果。
 
-点击查看 TranscriptionOutput 结构示例
+点击查看`TranscriptionOutput`结构示例
 
-#### PENDING状态
+## PENDING状态
 
 ```
 {
@@ -529,7 +584,7 @@ transcription\_url
 }
 ```
 
-#### RUNNING状态
+## RUNNING状态
 
 ```
 {
@@ -545,7 +600,7 @@ transcription\_url
 }
 ```
 
-#### SUCCEEDED 状态
+## `SUCCEEDED`状态
 
 ```
 {
@@ -557,7 +612,7 @@ transcription\_url
     "results":[
         {
             "file_url":"{YOUR_AUDIO_URL}",
-            "transcription_url":"https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20250213/17%3A59/70e737cc-bf8c-418b-b0c8-83fab192a0fa-1.json?Expires=1739527168&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
+            "transcription_url":"https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/prod/paraformer-v2/20250213/17%3A59/70e737cc-bf8c-418b-b0c8-83fab192a0fa-1.json?Expires=1739527168&OSSAccessKeyId=yourOSSAccessKeyId&Signature=AtGjIKI%2BdgbzjJIu%2BHsr1R5nSAY%3D",
             "subtask_status":"SUCCEEDED"
         }
     ],
@@ -569,9 +624,9 @@ transcription\_url
 }
 ```
 
-#### FAILED 状态
+## `FAILED`状态
 
-“`code`”为错误码，“`message`”为错误信息，只有异常情况才有这两个字段，您可以通过这两个字段，对照[错误码](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c70f9758027ph)排查问题。
+“`code`”为错误码，“`message`”为错误信息，只有异常情况才有这两个字段，您可以通过这两个字段，对照[错误码](#c70f9758027ph)排查问题。
 
 ```
 {
@@ -604,11 +659,11 @@ transcription\_url
 
 code
 
-代表错误码。可以结合`message`字段，对照[错误码](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c70f9758027ph)排查问题。
+代表错误码。可以结合`message`字段，对照[错误码](#c70f9758027ph)排查问题。
 
 message
 
-代表错误信息。可以结合`code`字段，对照[错误码](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c70f9758027ph)排查问题。
+代表错误信息。可以结合`code`字段，对照[错误码](#c70f9758027ph)排查问题。
 
 task\_id
 
@@ -640,7 +695,7 @@ transcription\_url
 
 音频识别结果对应的URL。
 
-识别结果以JSON格式保存在一个JSON文件中，您可以通过`transcription_url`对应的链接下载文件或直接通过HTTP请求读取该文件中的内容。JSON文件的内容请参见[识别结果说明](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#a9021178ccl7s)。
+识别结果以JSON格式保存在一个JSON文件中，您可以通过`transcription_url`对应的链接下载文件或直接通过HTTP请求读取该文件中的内容。JSON文件的内容请参见[识别结果说明](#a9021178ccl7s)。
 
 ### 识别结果说明
 
@@ -737,6 +792,8 @@ integer
 
 音轨中被判定为语音内容的时长（ms）。
 
+**重要**
+
 语音识别模型服务仅对音轨中被判定为语音内容的时长进行语音转写，并据此进行计量计费，非语音内容不计量、不计费。通常情况下语音内容时长会短于原始音频时长。由于对是否存在语音内容的判定是由AI模型给出的，可能与实际情况存在一定误差。
 
 transcript
@@ -789,7 +846,7 @@ string
 
 预测出的词之后的标点符号（如有）。
 
-## 关键接口
+## **关键接口**
 
 ### 核心类（`Transcription`）
 
@@ -829,7 +886,7 @@ def wait(cls,
 
 阻塞当前线程直到异步任务结束（任务状态为`SUCCEEDED`或`FAILED`）。
 
-该方法返回[TranscriptionResponse](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c4fe4e43ee4n6)。
+该方法返回[TranscriptionResponse](#c4fe4e43ee4n6)。
 
 fetch
 
@@ -844,15 +901,15 @@ def fetch(cls,
 
 异步查询当前任务执行结果。
 
-该方法返回[TranscriptionResponse](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c4fe4e43ee4n6)。
+该方法返回[TranscriptionResponse](#c4fe4e43ee4n6)。
 
-## 其他接口：批量查询任务状态/取消任务
+## **其他接口：批量查询任务状态/取消任务**
 
-详情请参见[管理异步任务](raw/model-api-reference/more-about-models/manage-asynchronous-tasks.md)：支持批量查询24小时内提交的非实时语音识别任务，同时支持取消`PENDING`（排队）状态的任务。
+详情请参见[管理异步任务](https://help.aliyun.com/zh/model-studio/manage-asynchronous-tasks)：支持批量查询24小时内提交的非实时语音识别任务，同时支持取消`PENDING`（排队）状态的任务。
 
-## 错误码
+## **错误码**
 
-如遇报错问题，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行排查。
+如遇报错问题，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行排查。
 
 当任务包含多个子任务时，只要存在任一子任务成功，整个任务状态将标记为`SUCCEEDED`，需通过`subtask_status`字段判断具体子任务结果。
 
@@ -881,15 +938,15 @@ def fetch(cls,
 }
 ```
 
-## 常见问题
+## **常见问题**
 
-### 功能特性
+### **功能特性**
 
-#### Q：是否支持Base64编码方式的音频？
+#### **Q：是否支持Base64编码方式的音频？**
 
 不支持Base64编码方式的音频。仅支持可通过公网访问的 URL 所指向的音频的识别，不支持识别二进制流，也不支持直接识别本地文件。
 
-#### Q：如何将音频文件以公网可访问的URL形式提供？
+#### **Q：如何将音频文件以公网可访问的URL形式提供？**
 
 通常遵循以下几个步骤（这里为您提供一种思路，具体情况因不同存储产品而异，推荐将音频[上传至阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)）：
 
@@ -900,15 +957,21 @@ def fetch(cls,
 -   对象存储服务（推荐）：
     
     -   使用云服务商的对象存储服务（如[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)），将音频文件上传到存储桶中，并设置为公开访问。
+        
     -   优点：高可用性、支持 CDN 加速、易于管理。
+        
 -   Web 服务器：
     
     -   将音频文件放置在支持 HTTP/HTTPS 访问的 Web 服务器上（如 Nginx、Apache）。
+        
     -   优点：适合小型项目或本地测试。
+        
 -   内容分发网络（CDN）：
     
     -   将音频文件托管在 CDN 上，通过 CDN 提供的 URL 访问。
+        
     -   优点：加速文件传输，适合高并发场景。
+        
 
 2、上传音频文件
 
@@ -917,11 +980,15 @@ def fetch(cls,
 -   对象存储服务：
     
     -   登录云服务商的控制台，创建存储桶。
+        
     -   上传音频文件，并设置文件权限为“公共读”或生成临时访问链接。
+        
 -   Web 服务器：
     
-    -   将音频文件放置在服务器指定目录下（如 `/var/www/html/audio/`）。
+    -   将音频文件放置在服务器指定目录下（如 `/var/www/html/audio/`）。
+        
     -   确保文件可以通过 HTTP/HTTPS 访问。
+        
 
 3、生成公网可访问的URL
 
@@ -929,21 +996,27 @@ def fetch(cls,
 
 -   对象存储服务：
     
-    -   文件上传后，系统会自动生成一个公网访问 URL（通常格式为 `https://<bucket-name>.<region>.aliyuncs.com/<file-name>`）。
+    -   文件上传后，系统会自动生成一个公网访问 URL（通常格式为 `https://<bucket-name>.<region>.aliyuncs.com/<file-name>`）。
+        
     -   如果需要更友好的域名，可以绑定自定义域名并开启 HTTPS。
+        
 -   Web 服务器：
     
-    -   文件的访问 URL 通常是服务器地址加上文件路径（如 `https://your-domain.com/audio/file.mp3`）。
+    -   文件的访问 URL 通常是服务器地址加上文件路径（如 `https://your-domain.com/audio/file.mp3`）。
+        
 -   CDN：
     
-    -   配置 CDN 加速后，使用 CDN 提供的 URL（如 `https://cdn.your-domain.com/audio/file.mp3`）。
+    -   配置 CDN 加速后，使用 CDN 提供的 URL（如 `https://cdn.your-domain.com/audio/file.mp3`）。
+        
 
 4、验证URL的可用性
 
 公网环境下，确保生成的 URL 可以正常访问，例如：
 
 -   在浏览器中打开 URL，检查是否能播放音频文件。
--   使用工具（如 `curl` 或 Postman）验证 URL 是否返回正确的 HTTP 响应（状态码 200）。
+    
+-   使用工具（如 `curl` 或 Postman）验证 URL 是否返回正确的 HTTP 响应（状态码 200）。
+    
 
 使用SDK时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，不支持使用以 `oss://`为前缀的临时 URL。
 
@@ -952,22 +1025,25 @@ def fetch(cls,
 **重要**
 
 -   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
+    
 -   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
+    
 -   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
+    
 
-#### Q：多久能获取识别结果？
+#### **Q：多久能获取识别结果？**
 
 任务提交后将进入排队（PENDING）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内，请耐心等待。并且音频时长越长，所需时间越久。
 
-### 故障排查
+### **故障排查**
 
-如遇代码报错问题，请根据[错误码](https://help.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk#c70f9758027ph)中的信息进行排查。
+如遇代码报错问题，请根据[错误码](#c70f9758027ph)中的信息进行排查。
 
-#### Q：一直轮询不到结果？
+#### **Q：一直轮询不到结果？**
 
 可能是限流原因，请耐心等待。
 
-#### Q：无法识别语音（无识别结果）是什么原因？
+#### **Q：无法识别语音（无识别结果）是什么原因？**
 
 请检查音频格式和采样率是否正确且符合参数约束。
 

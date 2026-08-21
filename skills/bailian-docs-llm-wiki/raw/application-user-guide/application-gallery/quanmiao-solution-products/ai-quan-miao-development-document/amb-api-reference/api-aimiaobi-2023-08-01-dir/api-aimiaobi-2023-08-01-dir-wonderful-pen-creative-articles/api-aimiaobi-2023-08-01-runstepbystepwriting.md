@@ -1,18 +1,18 @@
-# RunStepByStepWriting
+# RunStepByStepWriting - 分步骤写作
 
 使用大纲+摘编的分步骤的模式进行写作。
 
 ## 接口说明
 
-全妙产品支持 iframe 嵌入 具体请参考文档： [客户对接\_全妙公有云 iframe 定制方案](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/quanmiao-more/iframe-embedding-scheme.md)
+全妙产品支持 iframe 嵌入 具体请参考文档： [客户对接\_全妙公有云 iframe 定制方案](https://help.aliyun.com/zh/model-studio/iframe-embedding-scheme)
 
 ## 调试
 
-您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/RunStepByStepWriting)
 
-[调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/RunStepByStepWriting)
+ [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/RunStepByStepWriting)
 
-## 授权信息
+## **授权信息**
 
 下表是API对应的授权信息，可以在RAM权限策略语句的`Action`元素中使用，用来给RAM用户或RAM角色授予调用此API的权限。具体说明如下：
 
@@ -22,8 +22,10 @@
     
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
     
-    -   对于必选的资源类型，用前面加 \* 表示。
+    -   对于必选的资源类型，用前面加 \* 表示。
+        
     -   对于不支持资源级授权的操作，用`全部资源`表示。
+        
 -   条件关键字：是指云产品自身定义的条件关键字。
     
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
@@ -96,6 +98,8 @@ string
 否
 
 任务 ID，多轮对话可复用同一轮任务 ID
+
+**说明**
 
 TaskId 默认无需填写，系统将自动生成。当后续任务填写的 TaskId 相同时，表示这些任务属于同一组对话。
 
@@ -371,7 +375,7 @@ string
 
 原始素材地址
 
-[http://www.example.com](http://www.example.com)
+http://www.example.com
 
 PubTime
 
@@ -431,7 +435,7 @@ string
 
 文章 URL
 
-[https://www.example.com/aaa.docx](https://www.example.com/aaa.docx)
+https://www.example.com/aaa.docx
 
 MiniDoc
 
@@ -533,7 +537,7 @@ string
 
 摘编结果（模型上下文）
 
-## 返回参数
+## **返回参数**
 
 **名称**
 
@@ -669,7 +673,7 @@ string
 
 原始素材地址
 
-[http://www.example.com](http://www.example.com)
+http://www.example.com
 
 PubTime
 
@@ -717,7 +721,7 @@ string
 
 文章 URL
 
-[https://www.example.com/aaa.docx](https://www.example.com/aaa.docx)
+https://www.example.com/aaa.docx
 
 ExtraOutput
 
@@ -862,6 +866,8 @@ string
 
 ## 错误码
 
+   
+
 **HTTP status code**
 
 **错误码**
@@ -880,6 +886,6 @@ You are not authorized to perform this action.
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
 
-## 变更历史
+## **变更历史**
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/RunStepByStepWriting#workbench-doc-change-demo)。

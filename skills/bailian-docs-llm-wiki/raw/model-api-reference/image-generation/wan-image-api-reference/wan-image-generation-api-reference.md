@@ -1,6 +1,6 @@
 # 万相-图像生成与编辑2.6 API参考
 
-万相图像生成模型支持 图像编辑 、 图文混排输出 ，满足多样化生成与集成需求。
+万相图像生成模型支持**图像编辑**、**图文混排输出**，满足多样化生成与集成需求。
 
 ## 模型概览
 
@@ -16,273 +16,60 @@ wan2.6-image
 
 支持图像编辑和图文混排输出
 
-如需纯文本生成图片（文生图），建议使用[wan2.6-t2i 模型（通义万相-文生图V2）](raw/model-api-reference/image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md)。
+如需纯文本生成图片（文生图），建议使用[wan2.6-t2i 模型（通义万相-文生图V2）](https://help.aliyun.com/zh/model-studio/text-to-image-v2-api-reference#t2841764.html)。
 
 图片格式：PNG。
 
-图像分辨率和尺寸请参见[size参数](raw/model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-api-reference.md)。
+图像分辨率和尺寸请参见[size参数](#249489db9c7rf)。
 
-**说明**调用前，请查阅各地域支持的[模型列表与价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
+**说明**
+
+调用前，请查阅各地域支持的[模型列表与价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
 
 ## 前提条件
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
+您需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
-**重要**华北2（北京）、新加坡和美国（弗吉尼亚）地域拥有独立的 **API Key**与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错，详情请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
+**重要**
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+华北2（北京）、新加坡和美国（弗吉尼亚）地域拥有独立的 **API Key** 与**请求地址**，不可混用，跨地域调用将导致鉴权失败或服务报错，详情请参见[选择地域、服务部署范围和接入域名](https://help.aliyun.com/zh/model-studio/regions/)。
+
+**重要**
+
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-## HTTP同步调用
+## **HTTP同步调用**
 
 一次请求即可获得结果，流程简单，推荐大多数场景使用。
 
-#### 华北2（北京）
+### 华北2（北京）
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 新加坡
+### 新加坡
 
 `POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 美国（弗吉尼亚）
+### 美国（弗吉尼亚）
 
-`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
+`POST https://dashscope-us.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
-> 全球部署范围（法兰克福地域）仅支持[异步调用](https://help.aliyun.com/zh/model-studio/wan-image-generation-api-reference#42703589880ts)。
+> 全球部署范围（法兰克福地域）仅支持[异步调用](#42703589880ts)。
 
 #### 请求参数
 
-##### 请求头（Headers）
-
-**Content-Type**`string`**（必选）**
-
-请求内容类型。此参数必须设置为`application/json`。
-
-**Authorization**`string`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-**X-DashScope-Sse**`string`（可选）
-
-用于启用流式输出。
-
--   仅当 `parameters.enable_interleave=true` 时，**必须**将该字段设为 `enable`。
--   其他情况下可不传或忽略。
-
-##### 请求体（Request Body）
-
-**model** `string` **（必选）**
-
-模型名称。设置为wan2.6-image。
-
-**input** `object` **（必选）**
-
-输入的基本信息。
-
-属性
-
-**messages** `array` **（必选）**
-
-请求内容数组。当前**仅支持单轮对话**，即传入一组role、content参数，不支持多轮对话。
-
-属性
-
-**role**`string` **（必选）**
-
-消息的角色。此参数固定设置为`user`。
-
-**content**`array` **（必选）**
-
-消息内容数组。
-
-属性
-
-**text**`string`**（必选）**
-
-正向提示词用于描述您期望生成的图像内容、风格和构图。
-
-支持中英文，长度不超过2000个字符，每个汉字、字母、数字或符号计为一个字符，超过部分会自动截断。
-
-示例值：参考这个风格的图片，生成番茄炒蛋。
-
-**注意**：`content`数组中，必须且只能包含一个含 `text` 字段的对象。
-
-**image**`string`（可选）
-
-输入图像的URL或Base64编码字符串。
-
-图像限制：
-
--   图像格式：JPEG、JPG、PNG（不支持透明通道）、BMP、WEBP。
--   图像分辨率：图像的宽高范围均为\[240, 8000\]像素。
--   文件大小：不超过10MB。
-
-图像数量限制：
-
--   输入图像数量与`parameters.enable_interleave`参数有关。
-    
-    -   当`enable_interleave=true`时（图文混排输出），可输入**0~1**张图像。
-    -   当`enable_interleave=false`时（图像编辑），**必须**输入**1~4**张图像。
--   当输入多张图像时，需在`content`数组中传入多个`image`对象，并按照数组顺序定义图像顺序。
-    
-
-支持的输入格式：
-
-1.  使用公网可访问URL
-    
-    -   支持 HTTP 或 HTTPS 协议。
-    -   示例值：`http://wanx.alicdn.com/material/xxx.jpeg`。
-2.  传入 Base64 编码图像后的字符串
-    
-    -   格式：data:{MIME\_type};base64,{base64\_data}
-    -   示例：data:image/jpeg;base64,GDU7MtCZzEbTbmRZ...（仅示意，实际需传入完整字符串）
-    -   Base64 编码规范请参见[图像传入方式](https://help.aliyun.com/zh/model-studio/wan-image-edit#8db0e2215frua)。
-
-**parameters** `object` （可选）
-
-图像处理参数。
-
-属性
-
-**negative\_prompt** `string` （可选）
-
-反向提示词，用于描述不希望在图像中出现的内容，对画面进行限制。
-
-支持中英文，长度不超过500个字符，超出部分将自动截断。
-
-示例值：低分辨率，低画质，肢体畸形，手指畸形，画面过饱和，蜡像感，人脸无细节，过度光滑，画面具有AI感。构图混乱。文字模糊，扭曲。
-
-**size** `string` （可选）
-
-输出图片分辨率参数，支持参考输入图比例和直接指定两种方式。
-
-当`enable_interleave=false`（即图像编辑模式）时：
-
--   方式一：参考输入图比例（推荐）
-    
-    可选的输出分辨率档位：`1K`（默认）、`2K`。
-    
-    -   `1K`：输出总像素接近 1280\*1280，宽高比与最后一张输入图像一致。
-    -   `2K`：输出总像素接近 2048\*2048，宽高比与最后一张输入图像一致。
--   方式二：指定生成图像的宽高像素值
-    
-    总像素在 \[768_768, 2048_2048\] 之间，且宽高比范围为 \[1:4, 4:1\]。
-    
-    > 实际输出图像的像素值为接近指定值的16的倍数。
-    
-
-当`enable_interleave=true`（即图文混排输出模式）时：
-
--   方式一：参考输入图比例（默认方式）
-    
-    -   若输入图像总像素 ≤ 1280\*1280，输出总像素和宽高比与输入图像一致。
-    -   若输入图像总像素 > 1280_1280，输出总像素接近 1280_1280，宽高比与输入图像一致。
-    -   若无输入图像，则为1280\*1280。
--   方式二：指定生成图像的宽高像素值
-    
-    总像素在 \[768_768, 1280_1280\] 之间，且宽高比范围为 \[1:4, 4:1\]。
-    
-    > 实际输出图像的像素值为接近指定值的16的倍数。
-    
-
-常见比例推荐的分辨率
-
--   1:1：1280\*1280
--   2:3：800\*1200
--   3:2：1200\*800
--   3:4：960\*1280
--   4:3：1280\*960
--   9:16：720\*1280
--   16:9：1280\*720
--   21:9：1344\*576
-
-**enable\_interleave** `bool` （可选）
-
-控制生图模式：
-
--   false：默认值，表示图像编辑模式（支持多图输入及主体一致性生成）。
-    
-    -   用途：基于1～4张输入图像进行编辑、风格迁移或主体一致性生成。
-    -   输入：必须提供至少1张参考图像。
-    -   输出：可生成1至4张结果图像。
--   true ：表示启用图文混排输出模式（仅支持传入一张图像或不传图像）。
-    
-    -   用途：根据文本描述生成图文并茂的内容，或进行纯文本生成图像（文生图）。
-        
-        纯文生图场景建议优先使用[wan2.6-t2i 模型（通义万相-文生图V2）](raw/model-api-reference/image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md)。
-        
-    -   输入：可以不提供图像（文生图），或提供最多1张参考图像。
-        
-    -   输出：生成包含文本和图像的混合内容。
-        
-
-**n** `integer` （可选）
-
-**重要**n直接影响费用。费用 = 单价 × 成功生成的图片张数，请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
-
-指定生成图片的数量。该参数的取值范围与含义取决于 enable\_interleave（模式开关）的状态：
-
--   当 `enable_interleave=false`（图像编辑模式）：
-    
-    -   作用：直接控制生成图像的数量。
-    -   取值范围：1～4，默认值为 4。
-    -   建议在测试阶段将此值设置为 1，以便低成本验证效果。
--   当 `enable_interleave=true`（图文混排模式）：
-    
-    -   限制：此参数默认为1，且必须固定为1。若设置为其他值，接口将报错。
-    -   说明：在此模式下，如需控制生成图像的数量上限，请使用 `max_images` 参数。
-
-**max\_images** `integer` （可选）
-
-**重要**max\_images影响费用。费用 = 单价 × 成功生成的图片张数，请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
-
-仅在图文混排模式（即 `enable_interleave=true`）下生效。
-
--   作用：指定模型在单次回复中生成图像的**最大数量**。
--   取值范围：1～5，默认值为 5。
--   注意：该参数仅代表“数量上限”。实际生成的图像数量由模型推理决定，可能会少于设定值（例如：设置为 5，模型可能根据内容仅生成 3 张）。
-
-**prompt\_extend** `bool` （可选）
-
-仅在图像编辑模式（即`enable_interleave = false`）下生效。
-
-是否开启 Prompt（提示词）智能改写功能。该功能仅对正向提示词进行优化与润色，不会改变反向提示词。
-
--   true：默认值，开启智能改写。
--   false：关闭智能改写，使用原始提示词。
-
-**stream** `bool` （可选）
-
-控制返回结果是否为流式输出。在图像混排模式（即 `enable_interleave = true`）下，**必须**设置为`true`。
-
--   false：默认值，非流式输出。
--   true：流式输出。
-
-**watermark** `bool` （可选）
-
-是否添加水印标识，水印位于图片右下角，文案固定为“AI生成”。
-
--   false：默认值，不添加水印。
--   true：添加水印。
-
-**seed** `integer` （可选）
-
-随机数种子，取值范围`[0,2147483647]`。
-
-使用相同的`seed`参数值可使生成内容保持相对稳定。若不提供，算法将自动使用随机数种子。
-
-**注意**：模型生成过程具有概率性，即使使用相同的`seed`，也不能保证每次生成结果完全一致。
-
-#### 图像编辑
+## **图像编辑**
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
@@ -318,12 +105,14 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-#### 图文混排（仅支持流式）
+## **图文混排（仅支持流式）**
 
 同步接口在启用图文混排输出（即 `parameters.enable_interleave = true`）时，**仅支持流式输出**，必须同时满足以下两项配置：
 
 -   设置`X-DashScope-Sse`为`enable`。
+    
 -   设置`parameters.stream`为`true`。
+    
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
@@ -353,114 +142,276 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+##### 请求头（Headers）
+
+**Content-Type** `_string_` **（必选）**
+
+请求内容类型。此参数必须设置为`application/json`。
+
+**Authorization** `_string_`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+**X-DashScope-Sse** `_string_`（可选）
+
+用于启用流式输出。
+
+-   仅当 `parameters.enable_interleave=true` 时，**必须**将该字段设为 `**enable**`。
+    
+-   其他情况下可不传或忽略。
+    
+
+##### 请求体（Request Body）
+
+**model** `_string_` **（必选）**
+
+模型名称。设置为wan2.6-image。
+
+**input** `_object_` **（必选）**
+
+输入的基本信息。
+
+**属性**
+
+**messages** `_array_` **（必选）**
+
+请求内容数组。当前**仅支持单轮对话**，即传入一组role、content参数，不支持多轮对话。
+
+**属性**
+
+**role** `_string_` **（必选）**
+
+消息的角色。此参数固定设置为`user`。
+
+**content** `_array_` **（必选）**
+
+消息内容数组。
+
+**属性**
+
+**text** `_string_` **（必选）**
+
+正向提示词用于描述您期望生成的图像内容、风格和构图。
+
+支持中英文，长度不超过2000个字符，每个汉字、字母、数字或符号计为一个字符，超过部分会自动截断。
+
+示例值：参考这个风格的图片，生成番茄炒蛋。
+
+**注意**：`content`数组中，必须且只能包含一个含 `text` 字段的对象。
+
+**image** `_string_` （可选）
+
+输入图像的URL或Base64编码字符串。
+
+图像限制：
+
+-   图像格式：JPEG、JPG、PNG（不支持透明通道）、BMP、WEBP。
+    
+-   图像分辨率：图像的宽高范围均为\[240, 8000\]像素。
+    
+-   文件大小：不超过10MB。
+    
+
+图像数量限制：
+
+-   输入图像数量与`parameters.enable_interleave`参数有关。
+    
+    -   当`enable_interleave=true`时（图文混排输出），可输入**0~1**张图像。
+        
+    -   当`enable_interleave=false`时（图像编辑），**必须**输入**1~4**张图像。
+        
+-   当输入多张图像时，需在`content`数组中传入多个`image`对象，并按照数组顺序定义图像顺序。
+    
+
+支持的输入格式：
+
+1.  使用公网可访问URL
+    
+    -   支持 HTTP 或 HTTPS 协议。
+        
+    -   示例值：`http://wanx.alicdn.com/material/xxx.jpeg`。
+        
+2.  传入 Base64 编码图像后的字符串
+    
+    -   格式：data:{MIME\_type};base64,{base64\_data}
+        
+    -   示例：data:image/jpeg;base64,GDU7MtCZzEbTbmRZ...（仅示意，实际需传入完整字符串）
+        
+    -   Base64 编码规范请参见[图像传入方式](https://help.aliyun.com/zh/model-studio/wan-image-edit#8db0e2215frua)。
+        
+
+**parameters** `_object_` （可选）
+
+图像处理参数。
+
+**属性**
+
+**negative\_prompt** `_string_` （可选）
+
+反向提示词，用于描述不希望在图像中出现的内容，对画面进行限制。
+
+支持中英文，长度不超过500个字符，超出部分将自动截断。
+
+示例值：低分辨率，低画质，肢体畸形，手指畸形，画面过饱和，蜡像感，人脸无细节，过度光滑，画面具有AI感。构图混乱。文字模糊，扭曲。
+
+**size** `_string_` （可选）
+
+输出图片分辨率参数，支持参考输入图比例和直接指定两种方式。
+
+当`enable_interleave=false`（即图像编辑模式）时：
+
+-   方式一：参考输入图比例（推荐）
+    
+    可选的输出分辨率档位：`1K`（默认）、`2K`。
+    
+    -   `1K`：输出总像素接近 1280\*1280，宽高比与最后一张输入图像一致。
+        
+    -   `2K`：输出总像素接近 2048\*2048，宽高比与最后一张输入图像一致。
+        
+-   方式二：指定生成图像的宽高像素值
+    
+    总像素在 \[768\*768, 2048\*2048\] 之间，且宽高比范围为 \[1:4, 4:1\]。
+    
+    > 实际输出图像的像素值为接近指定值的16的倍数。
+    
+
+当`enable_interleave=true`（即图文混排输出模式）时：
+
+-   方式一：参考输入图比例（默认方式）
+    
+    -   若输入图像总像素 ≤ 1280\*1280，输出总像素和宽高比与输入图像一致。
+        
+    -   若输入图像总像素 > 1280\*1280，输出总像素接近 1280\*1280，宽高比与输入图像一致。
+        
+    -   若无输入图像，则为1280\*1280。
+        
+-   方式二：指定生成图像的宽高像素值
+    
+    总像素在 \[768\*768, 1280\*1280\] 之间，且宽高比范围为 \[1:4, 4:1\]。
+    
+    > 实际输出图像的像素值为接近指定值的16的倍数。
+    
+
+**常见比例推荐的分辨率**
+
+-   1:1：1280\*1280
+    
+-   2:3：800\*1200
+    
+-   3:2：1200\*800
+    
+-   3:4：960\*1280
+    
+-   4:3：1280\*960
+    
+-   9:16：720\*1280
+    
+-   16:9：1280\*720
+    
+-   21:9：1344\*576
+    
+
+**enable\_interleave** `_bool_` （可选）
+
+控制生图模式：
+
+-   false：默认值，表示图像编辑模式（支持多图输入及主体一致性生成）。
+    
+    -   用途：基于1～4张输入图像进行编辑、风格迁移或主体一致性生成。
+        
+    -   输入：必须提供至少1张参考图像。
+        
+    -   输出：可生成1至4张结果图像。
+        
+-   true ：表示启用图文混排输出模式（仅支持传入一张图像或不传图像）。
+    
+    -   用途：根据文本描述生成图文并茂的内容，或进行纯文本生成图像（文生图）。
+        
+        纯文生图场景建议优先使用[wan2.6-t2i 模型（通义万相-文生图V2）](https://help.aliyun.com/zh/model-studio/text-to-image-v2-api-reference#t2841764.html)。
+        
+    -   输入：可以不提供图像（文生图），或提供最多1张参考图像。
+        
+    -   输出：生成包含文本和图像的混合内容。
+        
+
+**n** `_integer_` （可选）
+
+**重要**
+
+n直接影响费用。费用 = 单价 × 成功生成的图片张数，请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
+
+指定生成图片的数量。该参数的取值范围与含义取决于 enable\_interleave（模式开关）的状态：
+
+-   当 `enable_interleave=false`（图像编辑模式）：
+    
+    -   作用：直接控制生成图像的数量。
+        
+    -   取值范围：1～4，默认值为 4。
+        
+    -   建议在测试阶段将此值设置为 1，以便低成本验证效果。
+        
+-   当 `enable_interleave=true`（图文混排模式）：
+    
+    -   限制：此参数默认为1，且必须固定为1。若设置为其他值，接口将报错。
+        
+    -   说明：在此模式下，如需控制生成图像的数量上限，请使用 `max_images` 参数。
+        
+
+**max\_images** `_integer_` （可选）
+
+**重要**
+
+max\_images影响费用。费用 = 单价 × 成功生成的图片张数，请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
+
+仅在图文混排模式（即 `enable_interleave=true`）下生效。
+
+-   作用：指定模型在单次回复中生成图像的**最大数量**。
+    
+-   取值范围：1～5，默认值为 5。
+    
+-   注意：该参数仅代表“数量上限”。实际生成的图像数量由模型推理决定，可能会少于设定值（例如：设置为 5，模型可能根据内容仅生成 3 张）。
+    
+
+**prompt\_extend** `_bool_` （可选）
+
+仅在图像编辑模式（即`enable_interleave = false`）下生效。
+
+是否开启 Prompt（提示词）智能改写功能。该功能仅对正向提示词进行优化与润色，不会改变反向提示词。
+
+-   true：默认值，开启智能改写。
+    
+-   false：关闭智能改写，使用原始提示词。
+    
+
+**stream** `_bool_` （可选）
+
+控制返回结果是否为流式输出。在图像混排模式（即 `enable_interleave = true`）下，**必须**设置为`true`。
+
+-   false：默认值，非流式输出。
+    
+-   true：流式输出。
+    
+
+**watermark** `_bool_` （可选）
+
+是否添加水印标识，水印位于图片右下角，文案固定为“AI生成”。
+
+-   false：默认值，不添加水印。
+    
+-   true：添加水印。
+    
+
+**seed** `_integer_` （可选）
+
+随机数种子，取值范围`[0,2147483647]`。
+
+使用相同的`seed`参数值可使生成内容保持相对稳定。若不提供，算法将自动使用随机数种子。
+
+**注意**：模型生成过程具有概率性，即使使用相同的`seed`，也不能保证每次生成结果完全一致。
+
 #### 响应参数
 
-**output** `object`
-
-任务输出信息。
-
-属性
-
-**choices** `array of object`
-
-模型生成的输出内容。
-
-属性
-
-**finish\_reason** `string`
-
-任务停止原因。
-
-**非流式输出场景**：自然停止时为`stop`。
-
-**流式输出场景**：当开启流式输出时，该参数判断数据流是否传输结束。
-
--   传输过程中：前序数据包会持续返回 `"finish_reason": "null"`，表示内容仍在生成中，请继续接收。
--   传输结束时：仅在**最后一个** JSON 结构体中返回 `"finish_reason":"stop"`，表示流式请求已全部结束，应停止接收。
-
-**message** `object`
-
-模型返回的消息。
-
-属性
-
-**role**`string`
-
-消息的角色，固定为`assistant`。
-
-**content**`array`
-
-属性
-
-**type** `string`
-
-输出的类型，枚举值为text、image。
-
-**text** `string`
-
-生成的文字。
-
-**image** `string`
-
-生成图像的 URL，图像格式为PNG。
-
-**链接有效期为24小时**，请及时下载并保存图像。
-
-**finished** `bool`
-
-请求结束标志符。
-
--   true：表示请求结束。
--   false：表示请求未结束。
-
-**usage** `object`
-
-输出信息统计。只对成功的结果计数。
-
-属性
-
-**image\_count** `integer`
-
-生成图像的张数。
-
-**size** `string`
-
-生成的图像分辨率。示例值：1376\*768。
-
-**input\_tokens** `integer`
-
-按图片张数计费。
-
--   在图像编辑模式下，固定为0。
--   在图文混排模式下，此字段统计输入文本的token数量（不计费）。
-
-**output\_tokens** `integer`
-
-按图片张数计费。
-
--   在图像编辑模式下，固定为0。
--   在图文混排模式下，此字段统计输出文本的token数量（不计费）。
-
-**total\_tokens**`integer`
-
-按图片张数计费。
-
--   在图像编辑模式下，固定为0。
--   在图文混排模式下，此字段统计总token数量（不计费）。
-
-**request\_id**`string`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code**`string`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-**message**`string`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-#### 任务执行成功
+## 任务执行成功
 
 任务数据（如任务状态、图像URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。
 
@@ -494,7 +445,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-#### 任务执行成功（流式输出）
+## 任务执行成功（流式输出）
 
 任务数据（如任务状态、图像URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。
 
@@ -512,9 +463,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 {"output":{"choices":[{"message":{"content":[{"type":"text","text":"肉"}],"role":"assistant"},"finish_reason":"stop"}],"finished":true},"usage":{"total_tokens":563,"image_count":3,"output_tokens":535,"size":"1280*1280","input_tokens":28},"request_id":"d2dcb952-bf91-4a6a-aad5-xxxxxx"}
 ```
 
-#### 任务执行异常
+## 任务执行异常
 
-如果因为某种原因导致任务执行失败，将返回相关信息，可以通过code和message字段明确指示错误原因。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果因为某种原因导致任务执行失败，将返回相关信息，可以通过code和message字段明确指示错误原因。请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ```
 {
@@ -524,7 +475,122 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-## HTTP异步调用
+**output** `_object_`
+
+任务输出信息。
+
+**属性**
+
+**choices** `_array of object_`
+
+模型生成的输出内容。
+
+**属性**
+
+**finish\_reason** `_string_`
+
+任务停止原因。
+
+**非流式输出场景**：自然停止时为`stop`。
+
+**流式输出场景**：当开启流式输出时，该参数判断数据流是否传输结束。
+
+-   传输过程中：前序数据包会持续返回 `"finish_reason": "null"`，表示内容仍在生成中，请继续接收。
+    
+-   传输结束时：仅在**最后一个** JSON 结构体中返回 `"finish_reason":"stop"`，表示流式请求已全部结束，应停止接收。
+    
+
+**message** `_object_`
+
+模型返回的消息。
+
+**属性**
+
+**role** `_string_`
+
+消息的角色，固定为`assistant`。
+
+**content** `_array_`
+
+**属性**
+
+**type** `_string_`
+
+输出的类型，枚举值为text、image。
+
+**text** `_string_`
+
+生成的文字。
+
+**image** `_string_`
+
+生成图像的 URL，图像格式为PNG。
+
+**链接有效期为24小时**，请及时下载并保存图像。
+
+**finished** `_bool_`
+
+请求结束标志符。
+
+-   true：表示请求结束。
+    
+-   false：表示请求未结束。
+    
+
+**usage** `_object_`
+
+输出信息统计。只对成功的结果计数。
+
+**属性**
+
+**image\_count** `_integer_`
+
+生成图像的张数。
+
+**size** `_string_`
+
+生成的图像分辨率。示例值：1376\*768。
+
+**input\_tokens** `_integer_`
+
+按图片张数计费。
+
+-   在图像编辑模式下，固定为0。
+    
+-   在图文混排模式下，此字段统计输入文本的token数量（不计费）。
+    
+
+**output\_tokens** `_integer_`
+
+按图片张数计费。
+
+-   在图像编辑模式下，固定为0。
+    
+-   在图文混排模式下，此字段统计输出文本的token数量（不计费）。
+    
+
+**total\_tokens** `_integer_`
+
+按图片张数计费。
+
+-   在图像编辑模式下，固定为0。
+    
+-   在图文混排模式下，此字段统计总token数量（不计费）。
+    
+
+**request\_id** `_string_`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+**code** `_string_`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+
+**message** `_string_`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+
+## **HTTP异步调用**
 
 流程包含 **“创建任务 -> 轮询获取”** 两个核心步骤，具体如下：
 
@@ -544,237 +610,24 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 #### 美国（弗吉尼亚）
 
-`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation`
+`POST https://dashscope-us.aliyuncs.com/api/v1/services/aigc/image-generation/generation`
 
 #### 德国（法兰克福）
 
-`POST https:// {WorkspaceId}.eu-central-1.maas.aliyuncs.com /api/v1/services/aigc/image-generation/generation`
+`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
 -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
--   新手指引请参见[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
+    
+-   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
+    
 
 #### 请求参数
 
-##### 请求头（Headers）
-
-**Content-Type**`string`**（必选）**
-
-请求内容类型。此参数必须设置为`application/json`。
-
-**Authorization**`string`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-**X-DashScope-Async**`string`**（必选）**
-
-异步处理配置参数，**必须设置为**`enable`。
-
-**重要**缺少此请求头将报错：“current user api does not support synchronous calls”。
-
-##### 请求体（Request Body）
-
-**model** `string` **（必选）**
-
-模型名称。
-
-示例值：wan2.6-image
-
-**input** `object` **（必选）**
-
-输入的基本信息。
-
-属性
-
-**messages** `array` **（必选）**
-
-请求内容数组。当前**仅支持单轮对话**，即传入一组role、content参数，不支持多轮对话。
-
-属性
-
-**role**`string` **（必选）**
-
-消息的角色。此参数固定设置为`user`。
-
-**content**`array` **（必选）**
-
-消息内容数组。
-
-属性
-
-**text**`string`**（必选）**
-
-正向提示词用于描述您期望生成的图像内容、风格和构图。
-
-支持中英文，长度不超过2000个字符，每个汉字、字母、数字或符号计为一个字符，超过部分会自动截断。
-
-示例值：参考这个风格的图片，生成番茄炒蛋。
-
-**注意**：`content`数组中，必须且只能包含一个含 `text` 字段的对象。
-
-**image**`string`（可选）
-
-输入图像的URL或Base64编码字符串。
-
-图像限制：
-
--   图像格式：JPEG、JPG、PNG（不支持透明通道）、BMP、WEBP。
--   图像分辨率：图像的宽高范围均为\[240, 8000\]像素。
--   文件大小：不超过10MB。
-
-图像数量限制：
-
--   输入图像数量与`parameters.enable_interleave`参数有关。
-    
-    -   当`enable_interleave=true`时（图文混排输出），可输入**0~1**张图像。
-    -   当`enable_interleave=false`时（图像编辑），**必须**输入**1~4**张图像。
--   当输入多张图像时，需在`content`数组中传入多个`image`对象，并按照数组顺序定义图像顺序。
-    
-
-支持的输入格式：
-
-1.  使用公网可访问URL
-    
-    -   支持 HTTP 或 HTTPS 协议。
-    -   示例值：`http://wanx.alicdn.com/material/xxx.jpeg`。
-2.  传入 Base64 编码图像后的字符串
-    
-    -   格式：data:{MIME\_type};base64,{base64\_data}
-    -   示例：data:image/jpeg;base64,GDU7MtCZzEbTbmRZ...（仅示意，实际需传入完整字符串）
-    -   Base64 编码规范请参见[图像传入方式](https://help.aliyun.com/zh/model-studio/wan-image-edit#8db0e2215frua)。
-
-**parameters** `object` （可选）
-
-图像处理参数。
-
-属性
-
-**negative\_prompt** `string` （可选）
-
-反向提示词，用于描述不希望在图像中出现的内容，对画面进行限制。
-
-支持中英文，长度不超过500个字符，超出部分将自动截断。
-
-示例值：低分辨率，低画质，肢体畸形，手指畸形，画面过饱和，蜡像感，人脸无细节，过度光滑，画面具有AI感。构图混乱。文字模糊，扭曲。
-
-**size** `string` （可选）
-
-输出图片分辨率参数，支持参考输入图比例和直接指定两种方式。
-
-当`enable_interleave=false`（即图像编辑模式）时：
-
--   方式一：参考输入图比例（推荐）
-    
-    可选的输出分辨率档位：`1K`（默认）、`2K`。
-    
-    -   `1K`：输出总像素接近 1280\*1280，宽高比与最后一张输入图像一致。
-    -   `2K`：输出总像素接近 2048\*2048，宽高比与最后一张输入图像一致。
--   方式二：指定生成图像的宽高像素值
-    
-    总像素在 \[768_768, 2048_2048\] 之间，且宽高比范围为 \[1:4, 4:1\]。
-    
-    > 实际输出图像的像素值为接近指定值的16的倍数。
-    
-
-当`enable_interleave=true`（即图文混排输出模式）时：
-
--   方式一：参考输入图比例（默认方式）
-    
-    -   若输入图像总像素 ≤ 1280\*1280，输出总像素和宽高比与输入图像一致。
-    -   若输入图像总像素 > 1280_1280，输出总像素接近 1280_1280，宽高比与输入图像一致。
-    -   若无输入图像，则为1280\*1280。
--   方式二：指定生成图像的宽高像素值
-    
-    总像素在 \[768_768, 1280_1280\] 之间，且宽高比范围为 \[1:4, 4:1\]。
-    
-    > 实际输出图像的像素值为接近指定值的16的倍数。
-    
-
-常见比例推荐的分辨率
-
--   1:1：1280\*1280
--   2:3：800\*1200
--   3:2：1200\*800
--   3:4：960\*1280
--   4:3：1280\*960
--   9:16：720\*1280
--   16:9：1280\*720
--   21:9：1344\*576
-
-**enable\_interleave** `bool` （可选）
-
-控制生图模式：
-
--   false：默认值，表示图像编辑模式（支持多图输入及主体一致性生成）。
-    
-    -   用途：基于1～4张输入图像进行编辑、风格迁移或主体一致性生成。
-    -   输入：必须提供至少1张参考图像。
-    -   输出：可生成1至4张结果图像。
--   true ：表示启用图文混排输出模式（仅支持传入一张图像或不传图像）。
-    
-    -   用途：根据文本描述生成图文并茂的内容，或进行纯文本生成图像（文生图）。
-        
-        纯文生图场景建议优先使用[wan2.6-t2i 模型（通义万相-文生图V2）](raw/model-api-reference/image-generation/wan-image-api-reference/text-to-image-v2-api-reference.md)。
-        
-    -   输入：可以不提供图像（文生图），或提供最多1张参考图像。
-        
-    -   输出：生成包含文本和图像的混合内容。
-        
-
-**n** `integer` （可选）
-
-**重要**n直接影响费用。费用 = 单价 × 成功生成的图片张数，请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
-
-指定生成图片的数量。该参数的取值范围与含义取决于 enable\_interleave（模式开关）的状态：
-
--   当 `enable_interleave=false`（图像编辑模式）：
-    
-    -   作用：直接控制生成图像的数量。
-    -   取值范围：1～4，默认值为 4。
-    -   建议在测试阶段将此值设置为 1，以便低成本验证效果。
--   当 `enable_interleave=true`（图文混排模式）：
-    
-    -   限制：此参数默认为1，且必须固定为1。若设置为其他值，接口将报错。
-    -   说明：在此模式下，如需控制生成图像的数量上限，请使用 `max_images` 参数。
-
-**max\_images** `integer` （可选）
-
-**重要**max\_images影响费用。费用 = 单价 × 成功生成的图片张数，请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
-
-仅在图文混排模式（即 `enable_interleave=true`）下生效。
-
--   作用：指定模型在单次回复中生成图像的**最大数量**。
--   取值范围：1～5，默认值为 5。
--   注意：该参数仅代表“数量上限”。实际生成的图像数量由模型推理决定，可能会少于设定值（例如：设置为 5，模型可能根据内容仅生成 3 张）。
-
-**prompt\_extend** `bool` （可选）
-
-仅在图像编辑模式（即`enable_interleave = false`）下生效。
-
-是否开启 Prompt（提示词）智能改写功能。该功能仅对正向提示词进行优化与润色，不会改变反向提示词。
-
--   true：默认值，开启智能改写。
--   false：关闭智能改写，使用原始提示词。
-
-**watermark** `bool` （可选）
-
-是否添加水印标识，水印位于图片右下角，文案固定为“AI生成”。
-
--   false：默认值，不添加水印。
--   true：添加水印。
-
-**seed** `integer` （可选）
-
-随机数种子，取值范围`[0,2147483647]`。
-
-使用相同的`seed`参数值可使生成内容保持相对稳定。若不提供，算法将自动使用随机数种子。
-
-**注意**：模型生成过程具有概率性，即使使用相同的`seed`，也不能保证每次生成结果完全一致。
-
-图像编辑
+## **图像编辑**
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
@@ -811,7 +664,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-图文混排输出
+## 图文混排输出
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
@@ -840,44 +693,268 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+##### 请求头（Headers）
+
+**Content-Type** `_string_` **（必选）**
+
+请求内容类型。此参数必须设置为`application/json`。
+
+**Authorization** `_string_`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+**X-DashScope-Async** `_string_` **（必选）**
+
+异步处理配置参数，**必须设置为**`**enable**`。
+
+**重要**
+
+缺少此请求头将报错：“current user api does not support synchronous calls”。
+
+##### 请求体（Request Body）
+
+**model** `_string_` **（必选）**
+
+模型名称。
+
+示例值：wan2.6-image
+
+**input** `_object_` **（必选）**
+
+输入的基本信息。
+
+**属性**
+
+**messages** `_array_` **（必选）**
+
+请求内容数组。当前**仅支持单轮对话**，即传入一组role、content参数，不支持多轮对话。
+
+**属性**
+
+**role** `_string_` **（必选）**
+
+消息的角色。此参数固定设置为`user`。
+
+**content** `_array_` **（必选）**
+
+消息内容数组。
+
+**属性**
+
+**text** `_string_` **（必选）**
+
+正向提示词用于描述您期望生成的图像内容、风格和构图。
+
+支持中英文，长度不超过2000个字符，每个汉字、字母、数字或符号计为一个字符，超过部分会自动截断。
+
+示例值：参考这个风格的图片，生成番茄炒蛋。
+
+**注意**：`content`数组中，必须且只能包含一个含 `text` 字段的对象。
+
+**image** `_string_` （可选）
+
+输入图像的URL或Base64编码字符串。
+
+图像限制：
+
+-   图像格式：JPEG、JPG、PNG（不支持透明通道）、BMP、WEBP。
+    
+-   图像分辨率：图像的宽高范围均为\[240, 8000\]像素。
+    
+-   文件大小：不超过10MB。
+    
+
+图像数量限制：
+
+-   输入图像数量与`parameters.enable_interleave`参数有关。
+    
+    -   当`enable_interleave=true`时（图文混排输出），可输入**0~1**张图像。
+        
+    -   当`enable_interleave=false`时（图像编辑），**必须**输入**1~4**张图像。
+        
+-   当输入多张图像时，需在`content`数组中传入多个`image`对象，并按照数组顺序定义图像顺序。
+    
+
+支持的输入格式：
+
+1.  使用公网可访问URL
+    
+    -   支持 HTTP 或 HTTPS 协议。
+        
+    -   示例值：`http://wanx.alicdn.com/material/xxx.jpeg`。
+        
+2.  传入 Base64 编码图像后的字符串
+    
+    -   格式：data:{MIME\_type};base64,{base64\_data}
+        
+    -   示例：data:image/jpeg;base64,GDU7MtCZzEbTbmRZ...（仅示意，实际需传入完整字符串）
+        
+    -   Base64 编码规范请参见[图像传入方式](https://help.aliyun.com/zh/model-studio/wan-image-edit#8db0e2215frua)。
+        
+
+**parameters** `_object_` （可选）
+
+图像处理参数。
+
+**属性**
+
+**negative\_prompt** `_string_` （可选）
+
+反向提示词，用于描述不希望在图像中出现的内容，对画面进行限制。
+
+支持中英文，长度不超过500个字符，超出部分将自动截断。
+
+示例值：低分辨率，低画质，肢体畸形，手指畸形，画面过饱和，蜡像感，人脸无细节，过度光滑，画面具有AI感。构图混乱。文字模糊，扭曲。
+
+**size** `_string_` （可选）
+
+输出图片分辨率参数，支持参考输入图比例和直接指定两种方式。
+
+当`enable_interleave=false`（即图像编辑模式）时：
+
+-   方式一：参考输入图比例（推荐）
+    
+    可选的输出分辨率档位：`1K`（默认）、`2K`。
+    
+    -   `1K`：输出总像素接近 1280\*1280，宽高比与最后一张输入图像一致。
+        
+    -   `2K`：输出总像素接近 2048\*2048，宽高比与最后一张输入图像一致。
+        
+-   方式二：指定生成图像的宽高像素值
+    
+    总像素在 \[768\*768, 2048\*2048\] 之间，且宽高比范围为 \[1:4, 4:1\]。
+    
+    > 实际输出图像的像素值为接近指定值的16的倍数。
+    
+
+当`enable_interleave=true`（即图文混排输出模式）时：
+
+-   方式一：参考输入图比例（默认方式）
+    
+    -   若输入图像总像素 ≤ 1280\*1280，输出总像素和宽高比与输入图像一致。
+        
+    -   若输入图像总像素 > 1280\*1280，输出总像素接近 1280\*1280，宽高比与输入图像一致。
+        
+    -   若无输入图像，则为1280\*1280。
+        
+-   方式二：指定生成图像的宽高像素值
+    
+    总像素在 \[768\*768, 1280\*1280\] 之间，且宽高比范围为 \[1:4, 4:1\]。
+    
+    > 实际输出图像的像素值为接近指定值的16的倍数。
+    
+
+**常见比例推荐的分辨率**
+
+-   1:1：1280\*1280
+    
+-   2:3：800\*1200
+    
+-   3:2：1200\*800
+    
+-   3:4：960\*1280
+    
+-   4:3：1280\*960
+    
+-   9:16：720\*1280
+    
+-   16:9：1280\*720
+    
+-   21:9：1344\*576
+    
+
+**enable\_interleave** `_bool_` （可选）
+
+控制生图模式：
+
+-   false：默认值，表示图像编辑模式（支持多图输入及主体一致性生成）。
+    
+    -   用途：基于1～4张输入图像进行编辑、风格迁移或主体一致性生成。
+        
+    -   输入：必须提供至少1张参考图像。
+        
+    -   输出：可生成1至4张结果图像。
+        
+-   true ：表示启用图文混排输出模式（仅支持传入一张图像或不传图像）。
+    
+    -   用途：根据文本描述生成图文并茂的内容，或进行纯文本生成图像（文生图）。
+        
+        纯文生图场景建议优先使用[wan2.6-t2i 模型（通义万相-文生图V2）](https://help.aliyun.com/zh/model-studio/text-to-image-v2-api-reference#t2841764.html)。
+        
+    -   输入：可以不提供图像（文生图），或提供最多1张参考图像。
+        
+    -   输出：生成包含文本和图像的混合内容。
+        
+
+**n** `_integer_` （可选）
+
+**重要**
+
+n直接影响费用。费用 = 单价 × 成功生成的图片张数，请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
+
+指定生成图片的数量。该参数的取值范围与含义取决于 enable\_interleave（模式开关）的状态：
+
+-   当 `enable_interleave=false`（图像编辑模式）：
+    
+    -   作用：直接控制生成图像的数量。
+        
+    -   取值范围：1～4，默认值为 4。
+        
+    -   建议在测试阶段将此值设置为 1，以便低成本验证效果。
+        
+-   当 `enable_interleave=true`（图文混排模式）：
+    
+    -   限制：此参数默认为1，且必须固定为1。若设置为其他值，接口将报错。
+        
+    -   说明：在此模式下，如需控制生成图像的数量上限，请使用 `max_images` 参数。
+        
+
+**max\_images** `_integer_` （可选）
+
+**重要**
+
+max\_images影响费用。费用 = 单价 × 成功生成的图片张数，请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
+
+仅在图文混排模式（即 `enable_interleave=true`）下生效。
+
+-   作用：指定模型在单次回复中生成图像的**最大数量**。
+    
+-   取值范围：1～5，默认值为 5。
+    
+-   注意：该参数仅代表“数量上限”。实际生成的图像数量由模型推理决定，可能会少于设定值（例如：设置为 5，模型可能根据内容仅生成 3 张）。
+    
+
+**prompt\_extend** `_bool_` （可选）
+
+仅在图像编辑模式（即`enable_interleave = false`）下生效。
+
+是否开启 Prompt（提示词）智能改写功能。该功能仅对正向提示词进行优化与润色，不会改变反向提示词。
+
+-   true：默认值，开启智能改写。
+    
+-   false：关闭智能改写，使用原始提示词。
+    
+
+**watermark** `_bool_` （可选）
+
+是否添加水印标识，水印位于图片右下角，文案固定为“AI生成”。
+
+-   false：默认值，不添加水印。
+    
+-   true：添加水印。
+    
+
+**seed** `_integer_` （可选）
+
+随机数种子，取值范围`[0,2147483647]`。
+
+使用相同的`seed`参数值可使生成内容保持相对稳定。若不提供，算法将自动使用随机数种子。
+
+**注意**：模型生成过程具有概率性，即使使用相同的`seed`，也不能保证每次生成结果完全一致。
+
 #### 响应参数
 
-**output** `object`
-
-任务输出信息。
-
-属性
-
-**task\_id** `string`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `string`
-
-任务状态。
-
-枚举值
-
--   PENDING：任务排队中
--   RUNNING：任务处理中
--   SUCCEEDED：任务执行成功
--   FAILED：任务执行失败
--   CANCELED：任务已取消
--   UNKNOWN：任务不存在或状态未知
-
-**request\_id**`string`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code**`string`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-**message**`string`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-#### 成功响应
+### 成功响应
 
 请保存 task\_id，用于查询任务状态与结果。
 
@@ -891,9 +968,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-#### 异常响应
+### 异常响应
 
-创建任务失败，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+创建任务失败，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ```
 {
@@ -902,6 +979,47 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     "request_id": "7438d53d-6eb8-4596-8835-xxxxxx"
 }
 ```
+
+**output** `_object_`
+
+任务输出信息。
+
+**属性**
+
+**task\_id** `_string_`
+
+任务ID。查询有效期24小时。
+
+**task\_status** `_string_`
+
+任务状态。
+
+**枚举值**
+
+-   PENDING：任务排队中
+    
+-   RUNNING：任务处理中
+    
+-   SUCCEEDED：任务执行成功
+    
+-   FAILED：任务执行失败
+    
+-   CANCELED：任务已取消
+    
+-   UNKNOWN：任务不存在或状态未知
+    
+
+**request\_id** `_string_`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+**code** `_string_`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+
+**message** `_string_`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
 
 ### 步骤2：根据任务ID查询结果
 
@@ -917,39 +1035,32 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 美国（弗吉尼亚）
+#### **美国（弗吉尼亚）**
 
-`GET https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+`GET https://dashscope-us.aliyuncs.com/api/v1/tasks/{task_id}`
 
 #### 德国（法兰克福）
 
-`GET https:// {WorkspaceId}.eu-central-1.maas.aliyuncs.com /api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
 -   **轮询建议**：图像生成过程耗时较长，建议采用**轮询**机制，并设置合理的查询间隔（如 10 秒）来获取结果。
--   **任务状态流转**：PENDING（排队中）→ RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
+    
+-   **任务状态流转**：PENDING（排队中）→ RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
+    
 -   **结果链接**：任务成功后返回图像链接，有效期为 **24 小时**。建议在获取链接后立即下载并转存至永久存储（如[阿里云 OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)）。
--   **RPS 限制**：查询接口默认RPS为20。如需更高频查询或事件通知，建议[配置异步任务回调](raw/model-api-reference/more-about-models/async-task-api.md)。
--   **更多操作**：如需批量查询、取消任务等操作，请参见[管理异步任务](raw/model-api-reference/more-about-models/manage-asynchronous-tasks.md)。
+    
+-   **RPS 限制**：查询接口默认RPS为20。如需更高频查询或事件通知，建议[配置异步任务回调](https://help.aliyun.com/zh/model-studio/async-task-api)。
+    
+-   **更多操作**：如需批量查询、取消任务等操作，请参见[管理异步任务](https://help.aliyun.com/zh/model-studio/manage-asynchronous-tasks#f26499d72adsl)。
+    
 
 #### 请求参数
 
-##### 请求头（Headers）
-
-**Authorization**`string`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-##### URL路径参数（Path parameters）
-
-**task\_id** `string`**（必选）**
-
-任务ID。
-
-#### 查询任务结果
+## 查询任务结果
 
 将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
@@ -958,134 +1069,21 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
+##### **请求头（Headers）**
+
+**Authorization** `_string_`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+##### **URL路径参数（Path parameters）**
+
+**task\_id** `_string_`**（必选）**
+
+任务ID。
+
 #### 响应参数
 
-**output** `object`
-
-任务输出信息。
-
-属性
-
-**task\_id** `string`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `string`
-
-任务状态。
-
-枚举值
-
--   PENDING：任务排队中
--   RUNNING：任务处理中
--   SUCCEEDED：任务执行成功
--   FAILED：任务执行失败
--   CANCELED：任务已取消
--   UNKNOWN：任务不存在或状态未知
-
-**轮询过程中的状态流转：**
-
--   PENDING（排队中） → RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
--   初次查询状态通常为 PENDING（排队中）或 RUNNING（处理中）。
--   当状态变为 SUCCEEDED 时，响应中将包含生成的图像URL。
--   若状态为 FAILED，请检查错误信息并重试。
-
-**submit\_time** `string`
-
-任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**scheduled\_time** `string`
-
-任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**end\_time** `string`
-
-任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**finished** `bool`
-
-请求结束标志符。
-
--   true：表示请求结束。
--   false：表示请求未结束。
-
-**choices** `array of object`
-
-模型生成的输出内容。
-
-属性
-
-**finish\_reason** `string`
-
-任务停止原因，自然停止时为`stop`。
-
-**message** `object`
-
-模型返回的消息。
-
-属性
-
-**role**`string`
-
-消息的角色，固定为`assistant`。
-
-**content**`array`
-
-属性
-
-**type** `string`
-
-输出的类型，枚举值为text、image。
-
-**text** `string`
-
-生成的文字。
-
-**image** `string`
-
-生成图像的 URL，图像格式为PNG。
-
-**链接有效期为24小时**，请及时下载并保存图像。
-
-**usage** `object`
-
-输出信息统计。只对成功的结果计数。
-
-属性
-
-**image\_count** `integer`
-
-生成图像的张数。
-
-**size** `string`
-
-生成的图像分辨率。示例值：1376\*768。
-
-**input\_tokens** `integer`
-
-输入token数量。按图片张数计费，当前固定为0。
-
-**output\_tokens** `integer`
-
-输出token数量。按图片张数计费，当前固定为0。
-
-**total\_tokens**`integer`
-
-总token数量。按图片张数计费，当前固定为0。
-
-**request\_id**`string`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code**`string`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-**message**`string`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-#### 任务执行成功
+## 任务执行成功
 
 任务数据（如任务状态、图像URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的图像。
 
@@ -1136,9 +1134,9 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
-#### 任务执行异常
+## 任务执行异常
 
-如果因为某种原因导致任务执行失败，将返回相关信息，可以通过code和message字段明确指示错误原因。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果因为某种原因导致任务执行失败，将返回相关信息，可以通过code和message字段明确指示错误原因。请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ```
 {
@@ -1148,7 +1146,144 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
-## DashScope Python SDK调用
+**output** `_object_`
+
+任务输出信息。
+
+**属性**
+
+**task\_id** `_string_`
+
+任务ID。查询有效期24小时。
+
+**task\_status** `_string_`
+
+任务状态。
+
+**枚举值**
+
+-   PENDING：任务排队中
+    
+-   RUNNING：任务处理中
+    
+-   SUCCEEDED：任务执行成功
+    
+-   FAILED：任务执行失败
+    
+-   CANCELED：任务已取消
+    
+-   UNKNOWN：任务不存在或状态未知
+    
+
+**轮询过程中的状态流转：**
+
+-   PENDING（排队中） → RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
+    
+-   初次查询状态通常为 PENDING（排队中）或 RUNNING（处理中）。
+    
+-   当状态变为 SUCCEEDED 时，响应中将包含生成的图像URL。
+    
+-   若状态为 FAILED，请检查错误信息并重试。
+    
+
+**submit\_time** `_string_`
+
+任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**scheduled\_time** `_string_`
+
+任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**end\_time** `_string_`
+
+任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**finished** `_bool_`
+
+请求结束标志符。
+
+-   true：表示请求结束。
+    
+-   false：表示请求未结束。
+    
+
+**choices** `_array of object_`
+
+模型生成的输出内容。
+
+**属性**
+
+**finish\_reason** `_string_`
+
+任务停止原因，自然停止时为`stop`。
+
+**message** `_object_`
+
+模型返回的消息。
+
+**属性**
+
+**role** `_string_`
+
+消息的角色，固定为`assistant`。
+
+**content** `_array_`
+
+**属性**
+
+**type** `_string_`
+
+输出的类型，枚举值为text、image。
+
+**text** `_string_`
+
+生成的文字。
+
+**image** `_string_`
+
+生成图像的 URL，图像格式为PNG。
+
+**链接有效期为24小时**，请及时下载并保存图像。
+
+**usage** `_object_`
+
+输出信息统计。只对成功的结果计数。
+
+**属性**
+
+**image\_count** `_integer_`
+
+生成图像的张数。
+
+**size** `_string_`
+
+生成的图像分辨率。示例值：1376\*768。
+
+**input\_tokens** `_integer_`
+
+输入token数量。按图片张数计费，当前固定为0。
+
+**output\_tokens** `_integer_`
+
+输出token数量。按图片张数计费，当前固定为0。
+
+**total\_tokens** `_integer_`
+
+总token数量。按图片张数计费，当前固定为0。
+
+**request\_id** `_string_`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+**code** `_string_`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+
+**message** `_string_`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+
+## **DashScope Python SDK调用**
 
 SDK 的参数命名与HTTP接口基本一致，参数结构根据语言特性进行封装。
 
@@ -1156,39 +1291,41 @@ SDK 的参数命名与HTTP接口基本一致，参数结构根据语言特性进
 
 > 具体耗时受限于排队任务数和服务执行情况，请在获取结果时耐心等待。
 
-**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.8`，再运行以下代码。更新请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+**重要**
+
+请确保 DashScope Python SDK 版本**不低于** `**1.25.8**`，再运行以下代码。更新请参考[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
 
 各地域的`base_url`和 API Key 不通用，以下示例以北京地域为例进行调用：
 
-#### 华北2（北京）
+### **华北2（北京）**
 
 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 新加坡
+### 新加坡
 
 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 美国（弗吉尼亚）
+### 美国（弗吉尼亚）
 
-`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1`
+`https://dashscope-us.aliyuncs.com/api/v1`
 
-#### 德国（法兰克福）
+### 德国（法兰克福）
 
-`https:// {WorkspaceId}.eu-central-1.maas.aliyuncs.com /api/v1`
+`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 > 全球部署范围（法兰克福地域）仅支持异步调用。
 
-### 图像编辑
+### **图像编辑**
 
-#### 同步调用
+## 同步调用
 
-##### 请求示例
+##### **请求示例**
 
 ```
 import os
@@ -1275,9 +1412,9 @@ print(rsp)
 }
 ```
 
-#### 异步调用
+## 异步调用
 
-##### 请求示例
+##### **请求示例**
 
 ```
 import os
@@ -1315,7 +1452,7 @@ def create_async_task():
         enable_interleave=False,
         size="1K"
     )
-
+    
     if response.status_code == 200:
         print("Task created successfully:", response)
         return response  # 返回任务ID
@@ -1326,7 +1463,7 @@ def create_async_task():
 def wait_for_completion(task_response):
     print("Waiting for task completion...")
     status = ImageGeneration.wait(task=task_response, api_key=api_key)
-
+    
     if status.output.task_status == "SUCCEEDED":
         print("Task succeeded!")
         print("Response:", status)
@@ -1337,7 +1474,7 @@ def wait_for_completion(task_response):
 def fetch_task_status(task):
     print("Fetching task status...")
     status = ImageGeneration.fetch(task=task, api_key=api_key)
-
+    
     if status.status_code == HTTPStatus.OK:
         print("Task status:", status.output.task_status)
         print("Response details:", status)
@@ -1348,7 +1485,7 @@ def fetch_task_status(task):
 def cancel_task(task):
     print("Canceling task...")
     response = ImageGeneration.cancel(task=task, api_key=api_key)
-
+    
     if response.status_code == HTTPStatus.OK:
         print("Task canceled successfully:", response.output.task_status)
     else:
@@ -1432,11 +1569,11 @@ if __name__ == "__main__":
 }
 ```
 
-### 图文混合输出
+### **图文混合输出**
 
-#### 同步调用（仅支持流式）
+## 同步调用（仅支持流式）
 
-##### 请求示例
+##### **请求示例**
 
 ```
 import os
@@ -1497,9 +1634,9 @@ if __name__ == "__main__":
 {"status_code": 200, "request_id": "5b98e8f3-aeff-4c20-a26c-499a7525axxx", "code": "", "message": "", "output": {"text": null, "finish_reason": null, "choices": [{"finish_reason": "stop", "message": {"role": "assistant", "content": [{"type": "image", "image": "https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx"}]}}], "audio": null, "finished": true}, "usage": {"input_tokens": 28, "output_tokens": 523, "characters": 0, "total_tokens": 551, "image_count": 3, "size": "1280*1280"}}
 ```
 
-#### 异步调用
+## 异步调用
 
-##### 请求示例
+##### **请求示例**
 
 **注意**：异步调用不需要设置stream参数
 
@@ -1661,7 +1798,7 @@ if __name__ == "__main__":
 }
 ```
 
-## DashScope Java SDK调用
+## **DashScope Java SDK调用**
 
 SDK 的参数命名与HTTP接口基本一致，参数结构根据语言特性进行封装。
 
@@ -1669,39 +1806,41 @@ SDK 的参数命名与HTTP接口基本一致，参数结构根据语言特性进
 
 > 具体耗时受限于排队任务数和服务执行情况，请在获取结果时耐心等待。
 
-**重要**请确保 DashScope Java SDK 版本**不低于**`2.22.6`，再运行以下代码。
+**重要**
+
+请确保 DashScope Java SDK 版本**不低于** `**2.22.6**`，再运行以下代码。
 
 各地域的`base_url`和 API Key 不通用，以下示例以北京地域为例进行调用：
 
-#### 华北2（北京）
+### **华北2（北京）**
 
 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 新加坡
+### 新加坡
 
 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 美国（弗吉尼亚）
+### 美国（弗吉尼亚）
 
-`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1`
+`https://dashscope-us.aliyuncs.com/api/v1`
 
-#### 德国（法兰克福）
+### 德国（法兰克福）
 
-`https:// {WorkspaceId}.eu-central-1.maas.aliyuncs.com /api/v1`
+`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 > 全球部署范围（法兰克福地域）仅支持异步调用。
 
-### 图像编辑
+### **图像编辑**
 
-#### 同步调用
+## 同步调用
 
-##### 请求示例
+##### **请求示例**
 
 ```
 import com.alibaba.dashscope.aigc.imagegeneration.*;
@@ -1808,9 +1947,9 @@ public class Main {
 }
 ```
 
-#### 异步调用
+## 异步调用
 
-##### 请求示例
+##### **请求示例**
 
 ```
 import com.alibaba.dashscope.aigc.imagegeneration.*;
@@ -1952,11 +2091,11 @@ public class Main {
 }
 ```
 
-### 图文混合输出
+### **图文混合输出**
 
-#### 同步调用（仅支持流式）
+## 同步调用（仅支持流式）
 
-##### 请求示例
+##### **请求示例**
 
 ```
 import com.alibaba.dashscope.aigc.imagegeneration.*;
@@ -2053,9 +2192,9 @@ public class Main {
 {"requestId":"12c7432c-8028-4289-a97c-4e22df98bxxx","usage":{"input_tokens":28,"output_tokens":541,"total_tokens":569,"image_count":3,"size":"1280*1280"},"output":{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":[{"type":"image","image":"https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/xxx.png?Expires=xxx"}]}}],"finished":true},"status_code":200,"code":"","message":""}
 ```
 
-#### 异步调用
+## 异步调用
 
-##### 请求示例
+##### **请求示例**
 
 **注意**：异步调用不需要设置stream参数
 
@@ -2213,23 +2352,28 @@ public class Main {
 }
 ```
 
-## 使用限制
+## **使用限制**
 
 -   **数据时效**：任务`task_id`和 图像`url`均只保留 24 小时，过期后将无法查询或下载。
--   **内容审核**：输入的 `prompt` 和输出的图像均会经过内容安全审核，包含违规内容的请求将报错“IPInfringementSuspect”或“DataInspectionFailed”，具体参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+    
+-   **内容审核**：输入的 `prompt` 和输出的图像均会经过内容安全审核，包含违规内容的请求将报错“IPInfringementSuspect”或“DataInspectionFailed”，具体参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+    
 
-## 计费与限流
+## **计费与限流**
 
 -   模型免费额度和计费单价请参见[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#e2540d71a2utl)。
+    
 -   模型限流请参见[万相](https://help.aliyun.com/zh/model-studio/rate-limit#513e0a3df24v7)。
--   计费说明：按成功生成的 **图像张数** 计费。模型调用失败或处理错误不产生任何费用，也不消耗[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
+    
+-   计费说明：按成功生成的 **图像张数** 计费。模型调用失败或处理错误不产生任何费用，也不消耗[新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota)。
+    
 
-## 错误码
+## **错误码**
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
-## 常见问题
+## **常见问题**
 
 **Q：为什么代码示例无法调用？**
 
-A：请升级您的SDK版本到最新版，更新请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+A：请升级您的SDK版本到最新版，更新请参考[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。

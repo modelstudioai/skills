@@ -2,9 +2,9 @@
 
 评测任务是应用评测的核心功能，用于对应用的输出质量进行系统化评估。支持智能体应用和工作流应用的评测，可结合自动评估器和人工标签进行多维度评价。
 
-> 在[评测任务](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/efm/app_evaluate/tabs?activeKey=task&pageNum=1&statuses=%5B%22all%22%5D&name=)页面左上角单击**返回旧版**，可返回[旧版应用评测](raw/application-user-guide/application-evaluation/application-auto-evaluation.md)。
+> 在[评测任务](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/efm/app_evaluate/tabs?activeKey=task&pageNum=1&statuses=%5B%22all%22%5D&name=)页面左上角单击**返回旧版**，可返回[旧版应用评测](https://help.aliyun.com/zh/model-studio/application-auto-evaluation)。
 
-## 创建评测任务
+## **创建评测任务**
 
 1.  访问[评测任务](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/efm/app_evaluate/tabs?activeKey=task&pageNum=1&statuses=%5B%22all%22%5D&name=)页面，单击**创建评测任务**，配置以下基本信息：
     
@@ -37,7 +37,7 @@
     
     评估器
     
-    可添加评估器进行自动评分。选择评估器后，需要配置参数映射，将评估器的变量参数映射到实际数据源。详见[评估器](raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/grader.md)。
+    可添加评估器进行自动评分。选择评估器后，需要配置参数映射，将评估器的变量参数映射到实际数据源。详见[评估器](https://help.aliyun.com/zh/model-studio/grader)。
     
     **配置要求**：
     
@@ -45,6 +45,8 @@
         
     -   确保映射关系正确，避免评分结果不准确
         
+    
+    **说明**
     
     建议为评测任务添加3-5个评估器，从不同维度评估应用质量。常见组合：
     
@@ -71,7 +73,9 @@
 2.  确认所有配置后，点击**完成创建**按钮创建评测任务。
     
 
-**说明**注意：评测任务发起后将无法修改配置。
+**说明**
+
+注意：评测任务发起后将无法修改配置。
 
 ## 管理任务
 
@@ -88,16 +92,19 @@
     -   **标注模式：**
         
         -   **普通模式**：页面平铺展示，字段横向排列。
+            
         -   **快速标注**：点击后，自定义标签变为可编辑状态。分类标签显示为下拉选择，输入类型显示为输入框，修改后立即保存。
+            
         
         两种模式下均可点击**标注**查看单条数据的完整信息，进行逐条标注。
         
         单条标注页面分为三栏：左栏 **评测集数据** 展示原始数据，中栏 **应用输出** 展示智能体输出结果，右栏 **人工标注** 区域包含 **智能体标签（布尔值）**（可选 **true**、**false** 或 **Pass**）和 **文本（文本）** 输入框（上限 200 字）。页面底部通过 **上一条** 和 **下一条** 逐条切换数据。
         
+
 -   **指标统计：**展示综合得分和评测进度等信息。指标统计页面包含**综合得分**仪表盘（显示整体评测得分百分比）、**评测进度**区域（展示评测集总量、未完成量、已完成量）、**得分汇总**区域（以柱状图展示各评估器的通过率）以及**得分明细 - 数据项分布**区域。
     
 
-## 计费说明
+## **计费说明**
 
 评测任务调用大模型产生的Token费用正常计费。消耗的Token量可访问[评测任务](https://bailian.console.aliyun.com/cn-beijing?tab=app#/efm/app_evaluate/tabs?pageNum=1&statuses=%5B%22all%22%5D&name=)页面查看，价格详情请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)。
 

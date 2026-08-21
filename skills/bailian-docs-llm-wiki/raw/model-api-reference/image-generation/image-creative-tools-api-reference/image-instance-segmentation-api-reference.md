@@ -7,13 +7,15 @@
 **重要**
 
 -   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
+    
 -   image-instance-segmentation 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费。
+    
 
-## 模型概览
+## **模型概览**
 
 **模型名**
 
-**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
+**免费额度**[（查看）](https://help.aliyun.com/zh/model-studio/new-free-quota)
 
 **计费单价**
 
@@ -35,64 +37,28 @@ image-instance-segmentation
 
 1
 
-## 前提条件
+## **前提条件**
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
+您需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
 ## HTTP调用
 
 为了减少等待时间并且避免请求超时，服务采用异步方式提供。您需要发起两个请求：
 
 -   **创建任务**：首先发送一个请求创建人物实例分割任务，该请求会返回任务ID。
+    
 -   **根据任务ID查询结果**：使用上一步获得的任务ID，查询模型生成的结果。
+    
 
-### 步骤1：创建任务获取任务ID
+### **步骤1：创建任务获取任务ID**
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis`
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 请求头（Headers）
+#### **请求头（Headers）**
 
-**Content-Type**_string_**必选**
-
-请求内容类型。固定为`application/json`。
-
-**Authorization**_string_**必选**
-
-推荐您使用阿里云百炼API-Key，也可填DashScope API-Key。例如：Bearer d1xxx2a。
-
-**X-DashScope-Async**_string_**必选**
-
-是否开启异步处理。必须开启异步处理，设置为`enable`。
-
-#### 请求体（Request Body）
-
-**model**_string_**必选**
-
-调用模型。
-
-**input**_object_**必选**
-
-输入图像的基本信息，比如图像URL。
-
-属性
-
-**image\_url**_string_**必选**
-
-输入图像URL地址。
-
-URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
-
-图像限制：
-
--   图片格式：JPEG，PNG，JPG，BMP，WEBP。
--   图像分辨率：不低于512×512像素且不超过4096×4096像素。
--   图像单边长度范围：\[512, 4096\]，单位像素。
--   图片大小：不超过10M。
--   URL地址中不能包含中文字符。
-
-#### 人物实例分割
+## 人物实例分割
 
 ```
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -110,41 +76,52 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 }'
 ```
 
-#### 响应
+**Content-Type** _string_ **必选**
 
-**output**_object_
+请求内容类型。固定为`application/json`。
 
-任务输出信息。
+**Authorization** _string_ **必选**
 
-属性
+推荐您使用阿里云百炼API-Key，也可填DashScope API-Key。例如：Bearer d1xxx2a。
 
-**task\_id**_string_
+**X-DashScope-Async** _string_ **必选**
 
-任务id，任务唯一标识。
+是否开启异步处理。必须开启异步处理，设置为`enable`。
 
-**task\_status**_string_
+#### **请求体（Request Body）**
 
-任务状态。
+**model** _string_ **必选**
 
--   PENDING：排队中
--   RUNNING：处理中
--   SUSPENDED：挂起
--   SUCCEEDED：执行成功
--   FAILED：执行失败
+调用模型。
 
-**code**_string_
+**input** _object_ **必选**
 
-接口错误码。接口成功请求不会返回该参数。
+输入图像的基本信息，比如图像URL。
 
-**message**_string_
+**属性**
 
-接口错误信息。接口成功请求不会返回该参数。
+**image\_url** _string_ **必选**
 
-**request\_id（可选）**_string_
+输入图像URL地址。
 
-本次请求的系统唯一码。
+URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
 
-成功响应
+图像限制：
+
+-   图片格式：JPEG，PNG，JPG，BMP，WEBP。
+    
+-   图像分辨率：不低于512×512像素且不超过4096×4096像素。
+    
+-   图像单边长度范围：\[512, 4096\]，单位像素。
+    
+-   图片大小：不超过10M。
+    
+-   URL地址中不能包含中文字符。
+    
+
+#### **响应**
+
+## 成功响应
 
 ```
 {
@@ -156,7 +133,7 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 }
 ```
 
-异常响应
+## 异常响应
 
 ```
 {
@@ -166,25 +143,52 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 }
 ```
 
-### 步骤2：根据任务ID查询结果
+**output** _object_
+
+任务输出信息。
+
+**属性**
+
+**task\_id** _string_
+
+任务id，任务唯一标识。
+
+**task\_status** _string_
+
+任务状态。
+
+-   PENDING：排队中
+    
+-   RUNNING：处理中
+    
+-   SUSPENDED：挂起
+    
+-   SUCCEEDED：执行成功
+    
+-   FAILED：执行失败
+    
+
+**code** _string_
+
+接口错误码。接口成功请求不会返回该参数。
+
+**message** _string_
+
+接口错误信息。接口成功请求不会返回该参数。
+
+**request\_id（可选）**_string_
+
+本次请求的系统唯一码。
+
+### **步骤2：根据任务ID查询结果**
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 请求头（Headers）
+#### **请求头（Headers）**
 
-**Authorization**_string_**必选**
-
-API-Key，例如：Bearer d1\*\*2a。
-
-#### URL路径参数（Path parameters）
-
-**task\_id**_string_**必选**
-
-任务id。
-
-#### 获取任务结果
+## 获取任务结果
 
 ```
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -193,63 +197,19 @@ curl -X GET \
 https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/53950fb7-281a-4e60-xxxxxxxxxxxx
 ```
 
-#### 响应
+**Authorization** _string_ **必选**
 
-**request\_id**_string_
+API-Key，例如：Bearer d1\*\*2a。
 
-本次请求的系统唯一码。
+#### **URL路径参数（Path parameters）**
 
-**status\_code**_int_
-
-200（HTTPStatus.OK）表示请求成功，否则表示请求失败，可以通过code获取错误码，通过message字段获取错误详细信息。
-
-**code**_string_
-
-如果失败表示错误码，参考错误码表。
-
-**message**_string_
-
-如果失败，内容为失败详细信息。
-
-**output**_object_
-
-任务输出信息。
-
-属性
-
-**task\_id**_string_
+**task\_id** _string_ **必选**
 
 任务id。
 
-**task\_status**_string_
+#### **响应**
 
-任务状态。
-
--   PENDING：排队中。
--   RUNNING：处理中。
--   SUCCEEDED：成功。
--   FAILED：失败。
--   UNKNOWN：任务不存在或状态未知。
-
-**output\_image\_url**_string_
-
-分割后图像URL地址。限制输出图像长宽比范围为1:10-10:1。
-
-**output\_vis\_image\_url**_string_
-
-分割后可视化图像的URL地址，限制输出图像长宽比范围为1:10-10:1。
-
-**usage**_object_
-
-输出信息统计。
-
-属性
-
-**image\_count**_integer_
-
-本次请求生成图像数量。
-
-#### 任务执行成功
+## 任务执行成功
 
 对于本模型，任务在结束之后的状态会持续保留24小时以备客户随时查询，24小时之后，任务将从系统中清除，相关的结果也将一并清除；对应的，任务生成的结果为图像的URL地址，出于安全考虑，该URL的下载有效期也是24小时，需要用户在获取任务结果后根据需要及时使用或者转存。
 
@@ -271,7 +231,7 @@ https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/53950fb7-281a-4e
 }
 ```
 
-#### 任务执行中
+## 任务执行中
 
 ```
 {
@@ -288,7 +248,7 @@ https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/53950fb7-281a-4e
 }
 ```
 
-#### 任务执行失败
+## 任务执行失败
 
 ```
 {
@@ -305,6 +265,65 @@ https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/53950fb7-281a-4e
 }
 ```
 
+**request\_id** _string_
+
+本次请求的系统唯一码。
+
+**status\_code** _int_
+
+200（HTTPStatus.OK）表示请求成功，否则表示请求失败，可以通过code获取错误码，通过message字段获取错误详细信息。
+
+**code** _string_
+
+如果失败表示错误码，参考错误码表。
+
+**message** _string_
+
+如果失败，内容为失败详细信息。
+
+**output** _object_
+
+任务输出信息。
+
+**属性**
+
+**task\_id** _string_
+
+任务id。
+
+**task\_status** _string_
+
+任务状态。
+
+-   PENDING：排队中。
+    
+-   RUNNING：处理中。
+    
+-   SUCCEEDED：成功。
+    
+-   FAILED：失败。
+    
+-   UNKNOWN：任务不存在或状态未知。
+    
+
+**output\_image\_url** _string_
+
+分割后图像URL地址。限制输出图像长宽比范围为1:10-10:1。
+
+**output\_vis\_image\_url** _string_
+
+分割后可视化图像的URL地址，限制输出图像长宽比范围为1:10-10:1。
+
+**usage** _object_
+
+输出信息统计。
+
+**属性**
+
+**image\_count** _integer_
+
+本次请求生成图像数量。
+
 ## 补充：如何从人物实例分割掩码图中获取保留人物和待擦除人物掩码图？
 
 以下代码示例将得到的人物实例分割结果图拆分成擦除区域图以及保留区域图，后续调用图像擦除模型擦除不需要的人像。
@@ -317,9 +336,17 @@ https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/53950fb7-281a-4e
 
 **擦除区域**
 
+![图片擦除2-原图.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0184161571/p840837.png)
+
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6043984271/p841094.png)
+
 mask.png
 
+![图片擦除2-保留.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0184161571/p840841.png)
+
 reserve.png
+
+![图片擦除2-擦除.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0184161571/p840839.png)
 
 remove.png
 
@@ -354,9 +381,9 @@ if __name__ == '__main__':
     get_reserve_mask(mask_path, reserve_mask_path, reserve_ids=[1])
 ```
 
-## 错误码
+## **错误码**
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 此API还有特定状态码，具体如下所示。
 

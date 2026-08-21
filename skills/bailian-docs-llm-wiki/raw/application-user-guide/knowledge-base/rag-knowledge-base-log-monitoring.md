@@ -6,7 +6,7 @@
 
 检索日志的存储与查询全部由日志服务（SLS）承载，开通后会自动在您账号下创建固定的 Project 与 LogStore，按 SLS 实际产生的存储与流量计费（参见[日志服务收费概述](https://help.aliyun.com/zh/sls/billing-overview)）。
 
-### 首次使用
+### **首次使用**
 
 在[知识库列表页](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/knowledge-base)右上方单击**监控配置**，弹出知识库监控配置面板，首次使用时面板会引导完成以下工作：
 
@@ -27,11 +27,13 @@
     > **检索日志**开关显示**已开启**后，所有检索调用都会实时投递到上述 LogStore，投递延迟通常为秒级。
     
 
-### 查看与分析日志
+### **查看与分析日志**
 
 在[知识库列表页](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/knowledge-base)右上方单击**监控配置**，然后在监控配置面板的**存储到日志服务**区域单击**查看详情**，即可跳转到 SLS 控制台对应的[LogStore](https://sls.console.aliyun.com/lognext/project/aliyun-product-data-1673024660412530-cn-hangzhou/logsearch/bailian-rag-retrieve-log)页面，使用 SLS 的查询分析、仪表盘、告警等能力。
 
-**说明**关闭**检索日志**开关只会停止新日志投递，已投递的历史日志仍按 SLS 默认配置保留与计费。如需彻底停止计费，请到 SLS 控制台删除对应 LogStore。
+**说明**
+
+关闭**检索日志**开关只会停止新日志投递，已投递的历史日志仍按 SLS 默认配置保留与计费。如需彻底停止计费，请到 SLS 控制台删除对应 LogStore。
 
 ## 字段说明
 
@@ -113,9 +115,12 @@ json
 
 以下为常见使用场景，更多语法参考[SLS 查询语法](https://help.aliyun.com/zh/sls/query-syntax/)与[SLS分析语法](https://help.aliyun.com/zh/sls/query-and-analyze-logs-in-index-mode/)。
 
-**说明**遇到语法问题可在查询分析框中使用 **使用 Copilot** 入口，由 SLS 内置 AI 辅助纠错与生成。
+**说明**
+
+遇到语法问题可在查询分析框中使用 **使用 Copilot** 入口，由 SLS 内置 AI 辅助纠错与生成。
 
 **场景一：用量统计（按知识库 / 业务空间）**
+
 ```
 * | select pipeline_id, count(*) as cnt
     group by pipeline_id
@@ -125,6 +130,7 @@ json
 将 `pipeline_id` 替换为 `workspace_id` 即可改为按业务空间聚合；将聚合字段去掉、改用 `select distinct pipeline_id` 可获取活跃的知识库 ID 列表。
 
 **场景二：按 API 路径聚合调用量**
+
 ```
 * | select path, count(*) as cnt
     group by path

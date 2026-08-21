@@ -1,18 +1,18 @@
-# RunWritingV2
+# RunWritingV2 - 智能写作
 
 智能写作。
 
 ## 接口说明
 
-全妙产品支持 iframe 嵌入 具体请参考文档： [客户对接\_全妙公有云 iframe 定制方案](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/quanmiao-more/iframe-embedding-scheme.md)
+全妙产品支持 iframe 嵌入 具体请参考文档： [客户对接\_全妙公有云 iframe 定制方案](https://help.aliyun.com/zh/model-studio/iframe-embedding-scheme)
 
 ## 调试
 
-您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/RunWritingV2)
 
-[调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/RunWritingV2)
+ [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/RunWritingV2)
 
-## 授权信息
+## **授权信息**
 
 下表是API对应的授权信息，可以在RAM权限策略语句的`Action`元素中使用，用来给RAM用户或RAM角色授予调用此API的权限。具体说明如下：
 
@@ -22,8 +22,10 @@
     
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
     
-    -   对于必选的资源类型，用前面加 \* 表示。
+    -   对于必选的资源类型，用前面加 \* 表示。
+        
     -   对于不支持资源级授权的操作，用`全部资源`表示。
+        
 -   条件关键字：是指云产品自身定义的条件关键字。
     
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
@@ -87,6 +89,8 @@ string
 
 任务唯一 ID，多轮对话可复用同一轮任务 ID
 
+**说明**
+
 TaskId 默认无需填写，系统将自动生成。当后续任务填写的 TaskId 相同时，表示这些任务属于同一组对话。
 
 3f7045e099474ba28ceca1b4eb6d6e21
@@ -117,7 +121,7 @@ string
 
 否
 
-写作文体，具体文体列表请参考： [ListWritingStyles](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-style-imitation-writing/api-aimiaobi-2023-08-01-listwritingstyles.md)
+写作文体，具体文体列表请参考： [ListWritingStyles](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listwritingstyles)
 
 新闻评论
 
@@ -141,7 +145,7 @@ string
 
 1.  当 PromptMode 为空时，传 Prompt，推荐格式为：写作主题+写作篇幅+写作要求+禁止事项
     
-2.  当 PromptMode=Template 时，需要传 WritingParams（字典类型，key、value 都是字符串），writingParams 表单定义参考： [ListWritingStyles](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-style-imitation-writing/api-aimiaobi-2023-08-01-listwritingstyles.md) 接口中的 .Data.TemplateDefine\[\].Fields
+2.  当 PromptMode=Template 时，需要传 WritingParams（字典类型，key、value 都是字符串），writingParams 表单定义参考： [ListWritingStyles](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listwritingstyles) 接口中的 .Data.TemplateDefine\[\].Fields
     
 3.  当 PromptMode=PE，需要传 WritingParams，且固定传两个字段
     
@@ -211,7 +215,7 @@ string
 
 文章 URL
 
-[https://www.example.com/aaa.docx](https://www.example.com/aaa.docx)
+https://www.example.com/aaa.docx
 
 Source
 
@@ -530,7 +534,7 @@ array
 
 大纲列表(新版分大纲写作)
 
-[WritingOutline](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-struct-dir/api-aimiaobi-2023-08-01-struct-writingoutline.md)
+[WritingOutline](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-struct-writingoutline)
 
 否
 
@@ -575,14 +579,19 @@ modelSourceTrace
   }
 }
 ```
+
 **模板字段说明（传媒场景）：**
 
 -   **topic** (必填): 选题，用简单的语言描述新闻事件或者从常见的新闻中挖掘新颖切入点，1-2000 字符
+    
 -   **corePerspective** (必填): 核心观点，明确价值判断立场、体现社会意义或行业影响，1-2000 字符
+    
 
 ### 3\. 高级模式（PromptMode=PE）
 
-**说明**（自定义提示词，系统会完全根据提示词进行写作，区分写作主题与写作要求）
+**说明**
+
+（自定义提示词，系统会完全根据提示词进行写作，区分写作主题与写作要求）
 
 ```
 {
@@ -594,6 +603,7 @@ modelSourceTrace
   }
 }
 ```
+
 **模板字段说明（PE 模式）：**
 
 -   **topic** (必填): 话题，需要写的主题内容
@@ -601,10 +611,15 @@ modelSourceTrace
 -   **prompt** (可选): 其他自定义提示词，其他写作要求。填写时可按以下格式组织内容：
     
     -   **字数要求**：如"字数 800-1000 字"、"篇幅控制在 1500 字左右"
+        
     -   **写作风格**：如"观点鲜明，逻辑清晰"、"语言生动，富有感染力"
+        
     -   **内容要求**：如"需要包含背景介绍、现状分析、未来展望"、"重点突出创新点"
+        
     -   **禁止事项**：如"禁止使用过于夸张的表述"、"避免使用专业术语"
+        
     -   **其他特殊要求**：如"需要引用具体数据"、"要求结构层次分明"
+        
     
     多个要求可以用句号、分号或换行分隔，建议格式：`"字数要求：XXX。写作风格：XXX。内容要求：XXX。禁止事项：XXX。其他要求：XXX。"`
     
@@ -620,11 +635,15 @@ modelSourceTrace
   "Prompt": "请生成一篇关于人工智能发展的新闻评论大纲，字数要求 800-1000 字，要求包含背景介绍、现状分析、未来展望三个部分"
 }
 ```
+
 **说明：**
 
 -   第一步生成大纲，返回结果中包含 `Outlines` 字段，包含生成的大纲结构
+    
 -   `Prompt` 中应明确说明要生成的大纲主题、字数要求、结构要求等
+    
 -   返回的 `Outlines` 结构需要保存，用于第二步传递
+    
 
 ### 5\. 分步骤写作 - 第二步：使用大纲写作
 
@@ -670,16 +689,20 @@ modelSourceTrace
   "Prompt": "根据生成的大纲进行写作，字数要求 800-1000 字，要求观点鲜明，逻辑清晰，语言生动"
 }
 ```
+
 **说明：**
 
 -   第二步使用大纲进行写作，必须传入第一步返回的 `Outlines` 结构
     
--   OutlineList 是必填参数，包含大纲的层级结构，每个大纲节点包含：
-    
+-   `OutlineList` 是必填参数，包含大纲的层级结构，每个大纲节点包含：
     -   **OutlineId** (必填): 大纲节点 ID
+        
     -   **Outline** (必填): 大纲名称
+        
     -   **WordCount** (可选): 该部分的字数要求
+        
     -   **Children** (可选): 子大纲列表，结构同父级大纲
+        
 -   `Prompt` 中可以补充写作要求，如字数、风格、内容要求等
     
 
@@ -697,18 +720,24 @@ modelSourceTrace
   }
 }
 ```
+
 **模板字段说明（快速以稿写稿）：**
 
 -   **topic** (必填): 主题内容，描述要写作的主题和核心信息，最大 3000 字符
+    
 -   **styleStructReferenceContent** (必填): 参考结构的文章列表，需要传入 JSON 数组序列化后的字符串，每个元素包含 `title` 和 `content` 字段，用于学习文章的结构和写作风格
+    
 
 **其他说明：**
 
 -   参考文章应选择结构清晰、层次分明的文章（如：引言-现状-分析-结论的结构）
+    
 -   系统会学习参考文章的结构框架和写作风格，然后基于新的主题内容生成新文章
+    
 -   建议只选择一篇结构鲜明的参考文章，以确保生成文章的结构一致性
+    
 
-## 返回参数
+## **返回参数**
 
 **名称**
 
@@ -896,7 +925,7 @@ string
 
 文章 URL
 
-[https://www.example.com/aaa.docx](https://www.example.com/aaa.docx)
+https://www.example.com/aaa.docx
 
 MiniDoc
 
@@ -934,7 +963,7 @@ array
 
 大纲列表（分步骤大纲生成场景下 writingStyle=outlineWriting。step=outlineWriting 时返回该字段）
 
-[WritingOutline](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-struct-dir/api-aimiaobi-2023-08-01-struct-writingoutline.md)
+[WritingOutline](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-struct-writingoutline)
 
 大纲
 
@@ -948,13 +977,13 @@ string
 
 SearchResult
 
-[OutlineSearchResult](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-struct-dir/api-aimiaobi-2023-08-01-struct-outlinesearchresult.md)
+[OutlineSearchResult](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-struct-outlinesearchresult)
 
 检索结果（分步骤大纲生成场景下 writingStyle=outlineWriting。step=OutlineSearch 时返回该字段）
 
 GenerateTraceability
 
-[GenerateTraceability](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-struct-dir/api-aimiaobi-2023-08-01-struct-generatetraceability.md)
+[GenerateTraceability](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-struct-generatetraceability)
 
 溯源对象（当传入 该 modelSourceTrace 参数 后会返回该字段）
 
@@ -1162,6 +1191,8 @@ true
 
 ## 错误码
 
+   
+
 **HTTP status code**
 
 **错误码**
@@ -1180,6 +1211,6 @@ You are not authorized to perform this action.
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
 
-## 变更历史
+## **变更历史**
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/RunWritingV2#workbench-doc-change-demo)。

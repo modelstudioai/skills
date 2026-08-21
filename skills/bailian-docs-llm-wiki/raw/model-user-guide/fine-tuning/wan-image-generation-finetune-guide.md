@@ -1,22 +1,23 @@
 # 微调图像生成模型
 
-当使用万相进行 图像生成 时，若通过 Prompt 优化 仍无法满足对 特定风格、IP形象或画面效果 的定制需求，请使用 模型微调 。
+当使用万相进行**图像生成**时，若通过[Prompt 优化](https://help.aliyun.com/zh/model-studio/text-to-video-prompt)仍无法满足对**特定风格、IP形象或画面效果**的定制需求，请使用**模型微调**。
 
-## 适用范围
+## **适用范围**
 
 -   **适用部署模式及地域**：本文描述的功能仅在华北2（北京）地域可用，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
     
--   **开通账号权限**：若使用[阿里云子账号](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（[RAM用户](https://help.aliyun.com/zh/ram/user-guide/overview-of-ram-users)），需要为子账号授予模型调用、训练和部署[权限](raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
+-   **开通账号权限**：若使用[阿里云子账号](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)（[RAM用户](https://help.aliyun.com/zh/ram/user-guide/overview-of-ram-users)），需要为子账号授予模型调用、训练和部署[权限](https://help.aliyun.com/zh/model-studio/use-workspace#895b613347th4)。
     
 -   **支持微调的方式**：SFT-LoRA高效微调。
     
 -   **支持微调的模型**：
     
     -   图像生成（文生图/图生图）：wan2.7-image-pro、wan2.7-image。
+        
 
-## 如何微调模型
+## **如何微调模型**
 
-#### 文生图
+## 文生图
 
 **微调目标：训练一个人物LoRA模型**。
 
@@ -28,13 +29,17 @@
 
 **输出图像（微调前-文生图）**
 
+![7217b6ac-789d-43c3-aaa5-22647532de52\_0](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9433450871/p1075807.png)
+
 > 无参考图无法生成特定人物形象。
 
 **输出图像（微调后）**
 
+![1\_24](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9433450871/p1075796.png)
+
 > 微调后的模型能稳定复现训练集中的特定人物形象。
 
-#### 图生图
+## 图生图
 
 **微调目标：训练一个"末日废土红黑机甲+骨架姿势"LoRA模型**。
 
@@ -42,24 +47,32 @@
 
 **输入图像**
 
+![29\_0-combine](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6448182871/p1084644.webp)
+
 **输出图像（微调前）**
+
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6448182871/p1084667.png)
 
 > 无法通过提示词每次生成固定风格的“末日废土红黑机甲”特效。
 
 **输出图像（微调后）**
 
+![29\_1](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6448182871/p1084647.jpg)
+
 > 微调后的模型无需提示词即能复现训练集中的特定“末日废土红黑机甲”特效。
 
-运行下述代码前，请[开通百炼服务](raw/model-api-reference/preparations/get-api-key.md)，并[配置API Key](raw/model-api-reference/preparations/get-api-key.md)。
+运行下述代码前，请[开通百炼服务](https://help.aliyun.com/zh/model-studio/get-api-key)，并[配置API Key](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
-### 步骤1：上传数据集
+### **步骤1：上传数据集**
 
-将本地的数据集（.zip 格式）上传到阿里云百炼平台，并获取文件 ID (`file_id`)。
+将本地的数据集（.zip 格式）上传到阿里云百炼平台，并获取文件 ID (`**file_id**`)。
 
-训练集样例数据：格式请参见[训练集](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide#d2dc0825ca6fv)。
+训练集样例数据：格式请参见[训练集](#d2dc0825ca6fv)。
 
 -   图像生成-文生图：[wan-image-t2i-training-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260601/iszvtr/wan-image-t2i-training.zip)
+    
 -   图像生成-图生图：[wan-image-i2i-training-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260630/iqjtin/wan-image-i2i-training-dataset.zip)
+    
 
 **请求示例**
 
@@ -72,6 +85,7 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/files' \
 --form 'purpose="fine-tune"' \
 --form 'descriptions="a fine-tune training data file for wan"'
 ```
+
 **响应示例**
 
 请保存 `file_id`，这是上传数据集的唯一标识。
@@ -91,17 +105,17 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/files' \
 }
 ```
 
-### 步骤2：微调模型
+### **步骤2：微调模型**
 
-##### 步骤2.1 创建微调任务
+##### **步骤2.1 创建微调任务**
 
 使用步骤1中的文件ID启动训练任务。
 
 **请求示例**
 
-请将`<替换为训练数据集的文件id>`完整替换为上一步获取的`file_id`。完整参数说明与格式约束请参见[超参数](https://help.aliyun.com/zh/model-studio/create-fine-tuning-job-api)。
+请将`<替换为训练数据集的文件id>`完整替换为上一步获取的`file_id`。完整参数说明与格式约束请参见[超参数](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#5f391e4b3cezf)。
 
-超参数
+**超参数**
 
 **字段**
 
@@ -303,20 +317,29 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 }'
 ```
 
-**说明**使用 OSS 挂载方式加载数据集时，需将未经压缩的数据集文件夹整体上传到 OSS Bucket（如 dataset 文件夹下包含 data.jsonl 及对应的图片文件），不支持 zip 文件；挂载时指定 data.jsonl 的文件路径即可，无需单独指定图片文件。OSS Bucket 所属地域支持北京（cn-beijing）和新加坡（ap-southeast-1）。
+**说明**
 
-**说明****训练耗时**（仅供参考）：
+使用 OSS 挂载方式加载数据集时，需将未经压缩的数据集文件夹整体上传到 OSS Bucket（如 dataset 文件夹下包含 data.jsonl 及对应的图片文件），不支持 zip 文件；挂载时指定 data.jsonl 的文件路径即可，无需单独指定图片文件。OSS Bucket 所属地域支持北京（cn-beijing）和新加坡（ap-southeast-1）。
+
+**说明**
+
+**训练耗时**（仅供参考）：
 
 -   文生图（t2i）：2K，300 步，约 77 分钟。
+    
 -   图生图（i2i）：2K，300 步，约 110 分钟。
+    
 
 **响应示例**
 
 关注 `output` 中的三个关键参数：
 
 -   `job_id`：任务ID，用于查询进度。
+    
 -   `finetuned_output`：微调后的新模型名称，后续部署和调用时必须使用此名称。
+    
 -   `status`：模型训练状态。创建微调任务后，初始状态为PENDING，表示训练待开始。
+    
 
 ```
 {
@@ -330,7 +353,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 }
 ```
 
-##### 步骤2.2 查询微调任务状态
+##### **步骤2.2 查询微调任务状态**
 
 通过步骤2.1获得的 `job_id` 查询任务进度，轮询以下接口直到 `status` 变为 **SUCCEEDED**。
 
@@ -343,12 +366,15 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json'
 ```
+
 **响应示例**
 
 关注`output` 字段的两个参数：
 
--   `status`：当它的值变为 **SUCCEEDED** 时，表示模型已训练完毕，可以进行模型部署。
+-   `status`：当它的值变为 **SUCCEEDED** 时，表示模型已训练完毕，可以进行模型部署。
+    
 -   `usage`：模型训练消耗的总Token数量，用于模型训练计费。
+    
 
 ```
 {
@@ -362,15 +388,15 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
 }
 ```
 
-### 步骤3：部署微调后的模型
+### **步骤3：部署微调后的模型**
 
-##### 步骤3.1 部署模型为在线服务
+##### **步骤3.1 部署模型为在线服务**
 
 当微调任务的状态为 **SUCCEEDED** 后，将模型部署为在线服务。
 
 **请求示例**
 
-请将`<替换为模型名称model_name>` 完整替换为[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide#bc825b6ec11y2)的输出参数`finetuned_output`的值。
+请将`<替换为模型名称model_name>` 完整替换为[创建微调任务](#bc825b6ec11y2)的输出参数`finetuned_output`的值。
 
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/deployments' \
@@ -382,12 +408,15 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/deployments' \
     "plan": "lora"
 }'
 ```
+
 **响应示例**
 
 关注 `output` 中的两个参数：
 
 -   `deployed_model`：部署的模型名称，用于查询部署状态和调用模型。
+    
 -   `status`：模型部署状态。部署微调模型后，初始状态为PENDING，表示部署未开始。
+    
 
 ```
 {
@@ -400,11 +429,13 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/deployments' \
 }
 ```
 
-##### 步骤3.2 查询部署状态
+##### **步骤3.2 查询部署状态**
 
 查询部署状态，轮询以下接口直到 `status` 变为 **RUNNING**。
 
-**说明**本文示例的微调模型，部署过程预计需要 **5～10分钟**。
+**说明**
+
+本文示例的微调模型，部署过程预计需要 **5～10分钟**。
 
 **请求示例**
 
@@ -415,12 +446,15 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/deployments/<替换为dep
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json'
 ```
+
 **响应示例**
 
 关注`output`字段的两个参数：
 
--   `status`：当状态变为 **RUNNING** 时，表示模型已部署成功，可以开始调用。
+-   `status`：当状态变为 **RUNNING** 时，表示模型已部署成功，可以开始调用。
+    
 -   `deployed_model`：部署的模型名称。
+    
 
 ```
 {
@@ -433,19 +467,21 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/deployments/<替换为dep
 }
 ```
 
-### 步骤4：调用模型生成图像
+### **步骤4：**调用模型生成图像
 
 模型部署成功后（即部署状态`status`为 **RUNNING** ），即可发起调用。
 
-**说明**当前部署后的图像模型仅支持**异步调用**，且返回响应的`message.content`中无`type`字段。
+**说明**
 
-步骤4.1：创建图像生成任务，并获取task\_id
+当前部署后的图像模型仅支持**异步调用**，且返回响应的`message.content`中无`type`字段。
+
+**步骤4.1：创建图像生成任务，并获取task\_id**
 
 **请求示例**
 
 请将`<替换为部署名称deployed_model>`完整替换为上一步输出的`deployed_model`值。
 
-#### 文生图
+## 文生图
 
 输入一段包含触发词的文本描述，模型自动生成符合训练风格的图像。
 
@@ -473,7 +509,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image-gener
 }'
 ```
 
-#### 图生图
+## 图生图
 
 输入一张参考图像和编辑指令，模型基于参考图像生成符合训练风格的图像。
 
@@ -515,9 +551,12 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image-gener
     }
 }
 ```
+
 **输入参数说明**
 
-**说明**调用微调后的 LoRA 模型时，输入参数用法与[万相-图像生成与编辑2.7 API](raw/model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-and-editing-api-reference.md)保持一致。
+**说明**
+
+调用微调后的 LoRA 模型时，输入参数用法与[万相-图像生成与编辑2.7 API](https://help.aliyun.com/zh/model-studio/wan-image-generation-and-editing-api-reference)保持一致。
 
 下表仅列出 LoRA 模型调用时的**关键参数说明**。
 
@@ -590,7 +629,7 @@ integer
 
 1
 
-步骤4.2：根据task\_id查询结果
+**步骤4.2：根据task\_id查询结果**
 
 使用`task_id`轮询任务状态，直到 `task_status` 变为 SUCCEEDED，从`output.choices[].message.content[].image`获取图像URL。
 
@@ -602,6 +641,7 @@ integer
 curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
 **响应示例**
 
 > 图像URL有效期为24小时，请及时下载图像。
@@ -640,125 +680,136 @@ curl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxx
 }
 ```
 
-## 构建自定义数据集
+## **构建自定义数据集**
 
 除了使用本文示例数据体验微调流程外，您也可以构建自己的数据集进行微调。
 
-数据集应包含 **训练集**（必须）和 **验证集**（可选，支持从训练集自动划分）。所有文件请打包为`.zip`格式，文件名建议仅使用英文、数字、下划线或短横线。
+数据集应包含 **训练集**（必须）和 **验证集**（可选，支持从训练集自动划分）。所有文件请打包为`**.zip**` 格式，文件名建议仅使用英文、数字、下划线或短横线。
 
-### 数据集格式
+### **数据集格式**
 
-#### 训练集：必须提供
+#### **训练集：必须提供**
 
-#### 文生图
+## 文生图
 
 训练集包括**训练目标图像和标注文件（data.jsonl）**。
 
 -   训练集样例：[wan-image-t2i-training-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260601/iszvtr/wan-image-t2i-training.zip)
+    
 -   zip包目录结构：
-
-```
-wan-image-t2i-training-dataset.zip
-├── data.jsonl      # 必须固定命名为data.jsonl，最大支持 20MB
-├── 1_0.png         # 训练目标图像，最大分辨率4096*4096，单张≤20MB，支持PNG/JPG/JPEG/WEBP/BMP
-├── 1_1.png         # 文件名仅支持英文字符，平铺结构（禁止子目录）
-└── 1_2.png
-```
-
+    
+    ```
+    wan-image-t2i-training-dataset.zip
+    ├── data.jsonl      # 必须固定命名为data.jsonl，最大支持 20MB
+    ├── 1_0.png         # 训练目标图像，最大分辨率4096*4096，单张≤20MB，支持PNG/JPG/JPEG/WEBP/BMP
+    ├── 1_1.png         # 文件名仅支持英文字符，平铺结构（禁止子目录）
+    └── 1_2.png
+    ```
+    
 -   标注文件（data.jsonl）：每一行代表一条训练数据，必须为 JSON 对象。
+    
+    ```
+    {
+      "prompt": "s86b5p, 人物在午后静谧的私人图书馆，身后是高耸的深色胡桃木书架，阳光透过百叶窗洒下条纹状的光影，身穿柔软的米色绞花针织毛衣，人物站立面向镜头，半身照，画面具有细腻的胶片颗粒感。",
+      "img_path": "./1_0.png"
+    }
+    ```
+    
 
-```
-{
-  "prompt": "s86b5p, 人物在午后静谧的私人图书馆，身后是高耸的深色胡桃木书架，阳光透过百叶窗洒下条纹状的光影，身穿柔软的米色绞花针织毛衣，人物站立面向镜头，半身照，画面具有细腻的胶片颗粒感。",
-  "img_path": "./1_0.png"
-}
-```
-
-#### 单图生图
+## 单图生图
 
 训练集包括**参考图像（输入）、训练目标图像（输出）和标注文件（data.jsonl）**。
 
 -   训练集样例：[wan-image-i2i-training-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260610/yynsck/wan-image-i2i-training.zip)
+    
 -   zip包目录结构：
-
-```
-wan-image-i2i-training-dataset.zip
-├── data.jsonl      # 必须固定命名为data.jsonl，最大支持 20MB
-├── 1_0.jpg         # 训练目标图像（输出）
-├── 1_1.jpg         # 参考图像（输入）
-├── 6_0.jpg         # 训练目标图像（输出）
-└── 6_1.jpg         # 参考图像（输入）
-```
-
+    
+    ```
+    wan-image-i2i-training-dataset.zip
+    ├── data.jsonl      # 必须固定命名为data.jsonl，最大支持 20MB
+    ├── 1_0.jpg         # 训练目标图像（输出）
+    ├── 1_1.jpg         # 参考图像（输入）
+    ├── 6_0.jpg         # 训练目标图像（输出）
+    └── 6_1.jpg         # 参考图像（输入）
+    ```
+    
 -   标注文件（data.jsonl）：每一行代表一条训练数据，必须为 JSON 对象。
+    
+    ```
+    {
+      "prompt": "s86b5p, Change the background to an elevator with red lighting, featuring large floor-to-ceiling windows. Change the character's clothing to red tight-fitting mech armor with black stripe decorations.",
+      "input_img": "./1_1.jpg",
+      "img_path": "./1_0.jpg"
+    }
+    ```
+    
 
-```
-{
-  "prompt": "s86b5p, Change the background to an elevator with red lighting, featuring large floor-to-ceiling windows. Change the character's clothing to red tight-fitting mech armor with black stripe decorations.",
-  "input_img": "./1_1.jpg",
-  "img_path": "./1_0.jpg"
-}
-```
-
-#### 多图生图
+## 多图生图
 
 训练集包括**多张参考图像（输入）、训练目标图像（输出）和标注文件（data.jsonl）**。与单图生图不同，多图生图支持同时输入多张参考图像（如人物照片+姿态图，最多支持**9张**参考图），模型基于多张参考图的综合信息生成目标图像。
 
 **说明**
 
 -   多图生图使用`input_imgs`（数组），单图生图使用`input_img`（字符串），请注意区分。
+    
 -   `input_imgs`数组中的图像顺序应与训练意图一致（如第一张为人物参考，第二张为姿态参考）。
+    
 
 -   训练集样例：[wan-image-i2i-training-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260630/iqjtin/wan-image-i2i-training-dataset.zip)
+    
 -   zip包目录结构：
-
-```
-wan-image-multi-i2i-training-dataset.zip
-├── data.jsonl      # 必须固定命名为data.jsonl，最大支持 20MB
-├── 1_0.jpg         # 训练目标图像（输出）
-├── 1_ref.jpg       # 参考图像1（如人物照片）
-├── 1_pose.jpg      # 参考图像2（如姿态图）
-├── 2_0.jpg         # 训练目标图像（输出）
-├── 2_ref.jpg       # 参考图像1
-└── 2_pose.jpg      # 参考图像2
-```
-
+    
+    ```
+    wan-image-multi-i2i-training-dataset.zip
+    ├── data.jsonl      # 必须固定命名为data.jsonl，最大支持 20MB
+    ├── 1_0.jpg         # 训练目标图像（输出）
+    ├── 1_ref.jpg       # 参考图像1（如人物照片）
+    ├── 1_pose.jpg      # 参考图像2（如姿态图）
+    ├── 2_0.jpg         # 训练目标图像（输出）
+    ├── 2_ref.jpg       # 参考图像1
+    └── 2_pose.jpg      # 参考图像2
+    ```
+    
 -   标注文件（data.jsonl）：每一行代表一条训练数据，必须为 JSON 对象。使用`input_imgs`字段传入多张参考图像路径。
-
-```
-{
-  "prompt": "s86b5p, Change the background to an elevator with red lighting, featuring large floor-to-ceiling windows. Outside the windows, there is a post-apocalyptic scene with red mist. Change the character's clothing to red tight-fitting mech armor with black stripe decorations. Standing with both arms stretched horizontally to form a T-shape.",
-  "input_imgs": ["./1_ref.jpg", "./1_pose.jpg"],
-  "img_path": "./1_0.jpg"
-}
-```
+    
+    ```
+    {
+      "prompt": "s86b5p, Change the background to an elevator with red lighting, featuring large floor-to-ceiling windows. Outside the windows, there is a post-apocalyptic scene with red mist. Change the character's clothing to red tight-fitting mech armor with black stripe decorations. Standing with both arms stretched horizontally to form a T-shape.",
+      "input_imgs": ["./1_ref.jpg", "./1_pose.jpg"],
+      "img_path": "./1_0.jpg"
+    }
+    ```
+    
 
 **说明**
 
 -   data.jsonl 必须为 Line-delimited JSONL 格式（每行一个独立 JSON 对象），**禁止**使用 JSON 数组格式（即文件首字符不能是 `[`）。
+    
 -   zip 包内文件必须平铺放置，**禁止**使用子目录。文件名仅支持英文字符（禁止中文、空格、特殊字符）。
+    
 
-#### 验证集：可选
+#### **验证集：可选**
 
 验证集包括**标注文件（data.jsonl）和可选的参考图像（图生图模式需要）**，无需提供目标图像。训练任务会在每个评估节点，自动调用模型服务，使用验证集的 Prompt（和参考图像）生成预览图像。
 
 -   验证集**：**
     
     -   **文生图：**[wan-image-t2i-valid-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260601/ulrlhp/wan-image-t2i-valid-dataset.zip)
+        
     -   **图生图：**[wan-image-i2i-vaild-dataset.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260630/wndcac/wan-image-i2i-vaild-dataset.zip)
+        
 -   zip包目录结构：
     
-
-```
-wan-image-i2i-valid-dataset.zip
-├── data.jsonl       # 必须固定命名为data.jsonl，最大支持 20MB
-├── input_001.png    # 可选，图生图模式的参考图像
-└── input_002.png
-```
-
+    ```
+    wan-image-i2i-valid-dataset.zip
+    ├── data.jsonl       # 必须固定命名为data.jsonl，最大支持 20MB
+    ├── input_001.png    # 可选，图生图模式的参考图像
+    └── input_002.png
+    ```
+    
 -   标注文件（data.jsonl）：每一行代表一条验证数据，必须为 JSON 对象。
     
-    #### 文生图
+    ## 文生图
     
     ```
     {
@@ -766,7 +817,7 @@ wan-image-i2i-valid-dataset.zip
     }
     ```
     
-    #### 图生图
+    ## 图生图
     
     ```
     {
@@ -775,7 +826,7 @@ wan-image-i2i-valid-dataset.zip
     }
     ```
     
-    #### 多图生图
+    ## 多图生图
     
     多图生图验证集使用`input_imgs`（数组）传入多张参考图像路径，最多支持**9张**。
     
@@ -787,7 +838,7 @@ wan-image-i2i-valid-dataset.zip
     ```
     
 
-### 数据规模与限制
+### **数据规模与限制**
 
 -   **数据量**：建议至少提供 **25张** 图像（推荐 50 张以上效果更佳）。要求同一角色/风格，多场景多角度，内容描述一致。
     
@@ -796,26 +847,35 @@ wan-image-i2i-valid-dataset.zip
 -   **训练图像要求**：
     
     -   图像格式支持BMP、JPEG、PNG、WEBP。
+        
     -   图像分辨率 ≤ 4096×4096。
+        
     -   单个图像文件大小 ≤ 20MB。
+        
 
-### 数据收集和清洗
+### **数据收集和清洗**
 
-###### 1\. 确定微调场景
+###### **1\. 确定微调场景**
 
 万相支持**图像生成**的微调场景包括：
 
 -   **IP角色风格化**：让模型学会特定IP角色的绘画风格，如二次元人物、吉祥物形象等。
+    
 -   **固定画面风格**：提升模型对特定艺术风格的复现度，如扁平插画、水墨画、像素风等。
+    
 -   **特定场景生成**：复刻特定的构图模式或场景模板，如商品展示图、海报版式等。
+    
 
-###### 2\. 获取原始素材
+###### **2\. 获取原始素材**
 
 -   AI 生成筛选：利用"万相"基础模型批量生成图像，再人工挑选出最符合目标效果的优质样本。这是最常用的方法。
+    
 -   真实拍摄：如果您的目标是追求高真实感的场景（如产品实拍、人物摄影等），使用实拍素材是最佳选择。
+    
 -   三维软件渲染：对于需要控制细节的场景或3D渲染风格，建议使用 3D 软件（如 Blender、C4D）制作素材。
+    
 
-###### 3\. 清洗数据
+###### **3\. 清洗数据**
 
 **维度**
 
@@ -873,11 +933,11 @@ wan-image-i2i-valid-dataset.zip
 
 训练集中既有 256×256 的小图，又有 4096×4096 的大图，会影响训练稳定性。
 
-### 图像标注：为图像编写Prompt
+### **图像标注：为图像编写Prompt**
 
 在数据集的标注文件（data.jsonl）中，每张图像都有对应的一段 Prompt。Prompt 是用来描述**目标图像**的画面内容，Prompt 的质量直接决定模型"学什么"。
 
-#### Prompt编写公式
+#### **Prompt编写公式**
 
 **Prompt = \[主体描述\] + \[背景描述\] + \[触发词\] + \[风格描述\]**
 
@@ -921,7 +981,7 @@ s86b5p 或 m01aa
 
 采用扁平化插画风格，以简洁流畅的线条、鲜明平涂色彩突出主体立体感与现代设计感。
 
-关于"触发词"
+##### **关于"触发词"**
 
 -   **触发词是什么？**
     
@@ -935,66 +995,75 @@ s86b5p 或 m01aa
     
     两者分工不同，配合使用效果更好。
     
-    -   风格描述：负责解释 "画面应该是什么样的"。它告诉模型基础的艺术风格和视觉特征，通常多个样本的风格描述是一致的。
-    -   触发词：负责解释 "风格具体是什么样"。它代表了那些文字无法精确描述的独特视觉特征。
+    -   风格描述：负责解释 "画面应该是什么样的"。它告诉模型基础的艺术风格和视觉特征，通常多个样本的风格描述是一致的。
+        
+    -   触发词：负责解释 "风格具体是什么样"。它代表了那些文字无法精确描述的独特视觉特征。
+        
 
-## 使用验证集评估模型
+## **使用验证集评估模型**
 
-### 指定验证集
+### **指定验证集**
 
 微调任务必须包含训练集，验证集则是可选项。您可以选择由系统**自动划分**或**手动上传**验证集，具体指定方式如下：
 
-##### 方式一：未上传验证集（系统自动划分）
+##### **方式一：未上传验证集（系统自动划分）**
 
-在[创建微调任务](https://help.aliyun.com/zh/model-studio/create-fine-tuning-job-api)时，如果没有单独上传验证集（即未传入`validation_datasets`参数），系统将根据`split`从训练集划分验证集，默认 0.9。即 90% 用于训练，10% 用作验证。
+在[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#e702c9786b40q)时，如果没有单独上传验证集（即未传入`validation_datasets`参数），系统将根据`split`从训练集划分验证集，默认 0.9。即 90% 用于训练，10% 用作验证。
 
-##### 方式二：主动上传验证集（通过 validation\_datasets 指定）
+##### **方式二：主动上传验证集（通过 validation\_datasets 指定）**
 
 如果您希望使用一套自己准备的数据来评估Checkpoint，而不是依赖系统随机划分，可以上传自定义验证集。
 
 注意：一旦选择主动上传，系统将**完全忽略**上述自动划分规则，仅使用您上传的数据进行验证。
 
-操作步骤：主动上传验证集
+**操作步骤：主动上传验证集**
 
-1.  **准备验证集**：将验证数据打包成一个独立的 `.zip` 文件，请参见[验证集格式](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide#4a214aadd60df)。
-2.  **上传验证集**：调用[上传数据集](https://help.aliyun.com/zh/model-studio/create-fine-tuning-job-api)接口，上传这个验证集 `.zip` 文件，获得一个专属的文件ID。
-3.  **创建任务时指定验证集**：在调用[创建微调任务](https://help.aliyun.com/zh/model-studio/create-fine-tuning-job-api)接口时，将这个文件ID填入 `validation_datasets` 参数中。
+1.  **准备验证集**：将验证数据打包成一个独立的 `.zip` 文件，请参见[验证集格式](#4a214aadd60df)。
+    
+2.  **上传验证集**：调用[上传数据集](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#Kv4zB)接口，上传这个验证集 `.zip` 文件，获得一个专属的文件ID。
+    
+3.  **创建任务时指定验证集**：在调用[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#e702c9786b40q)接口时，将这个文件ID填入 `validation_datasets` 参数中。
+    
+    ```
+    {
+        "model":"wan2.7-image-pro",
+        "training_datasets":[ {"data_source_type":"file_id", "file_id":"<训练集的文件id>"} ],
+        "validation_datasets": [ {"data_source_type":"file_id", "file_id":"<自定义验证集的文件id>"} ],
+        ...
+    }
+    ```
+    
 
-```
-{
-    "model":"wan2.7-image-pro",
-    "training_datasets":[ {"data_source_type":"file_id", "file_id":"<训练集的文件id>"} ],
-    "validation_datasets": [ {"data_source_type":"file_id", "file_id":"<自定义验证集的文件id>"} ],
-    ...
-}
-```
-
-### 挑选最佳Checkpoint进行部署
+### **挑选最佳Checkpoint进行部署**
 
 在训练过程中，系统会定期保存模型的"快照"（即 Checkpoint）。默认情况下，系统会输出**最后一个Checkpoint**作为最终的微调模型。但中间过程产出的Checkpoint效果可能优于最终版本，您可以从中挑选出最满意的一个进行部署。
 
-系统将按照[超参数](https://help.aliyun.com/zh/model-studio/create-fine-tuning-job-api)`eval_steps`设定的间隔，在**验证集**上运行Checkpoint并生成预览图像。
+系统将按照[超参数](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#5f391e4b3cezf)`eval_steps`设定的间隔，在**验证集**上运行Checkpoint并生成预览图像。
 
 -   **如何评估**：通过直接观察生成的预览图像来判断效果。
+    
 -   **挑选标准**：找到效果最好、且风格最贴合的那个 Checkpoint 。
+    
 
-#### 操作步骤
+#### **操作步骤**
 
-步骤1：查看Checkpoint生成的预览效果
+##### **步骤1：查看Checkpoint生成的预览效果**
 
-##### 步骤1.1 查询已通过验证的Checkpoint列表
+##### **步骤1.1 查询已通过验证的Checkpoint列表**
 
 该接口仅返回通过验证集验证、**且成功生成预览图像的 Checkpoint**，验证失败的不会列出。
 
 **请求示例**
 
--   `<替换为微调任务job_id>`：完整替换为[创建微调任务接口](https://help.aliyun.com/zh/model-studio/create-fine-tuning-job-api)的输出参数`job_id`。
+-   `<替换为微调任务job_id>`：完整替换为[创建微调任务接口](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#e69160039ceah)的输出参数`job_id`。
+    
 
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微调任务job_id>/validation-results' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
 --header 'Content-Type: application/json'
 ```
+
 **响应示例**
 
 此接口返回一个仅包含成功通过验证的Checkpoint名称的列表。
@@ -1011,19 +1080,22 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
 }
 ```
 
-##### 步骤1.2 查询Checkpoint对应的验证集结果
+##### **步骤1.2 查询Checkpoint对应的验证集结果**
 
 从上一步返回的 Checkpoint 列表中选择一个（例如"checkpoint-160"），查看其生成的图像效果。
 
 **请求示例**
 
--   `<替换为微调任务job_id>`： 完整替换为[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide#bc825b6ec11y2)输出参数`job_id`的值。
+-   `<替换为微调任务job_id>`： 完整替换为[创建微调任务](#bc825b6ec11y2)输出参数`job_id`的值。
+    
 -   `<替换为待导出的checkpoint>`：完整替换为checkpoint的值，例如"checkpoint-160"。
+    
 
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微调任务job_id>/validation-details/<替换为选择的checkpoint>?page_no=1&page_size=10' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
 **响应示例**
 
 预览图像URL为`img_path`，有效期为24小时，请及时下载图像并查看效果。重复此步骤，比较多个Checkpoint的效果，找出最满意的一个。
@@ -1047,22 +1119,26 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
 }
 ```
 
-步骤2：导出Checkpoint，并获取待部署的模型名称
+##### **步骤2：导出Checkpoint，并获取待部署的模型名称**
 
-##### 步骤2.1 导出模型
+##### **步骤2.1 导出模型**
 
 假设"checkpoint-160"的效果最佳，接下来是将其导出。
 
 **请求示例**
 
--   `<替换为微调任务job_id>`： 完整替换为[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide#bc825b6ec11y2)输出参数`job_id`的值。
+-   `<替换为微调任务job_id>`： 完整替换为[创建微调任务](#bc825b6ec11y2)输出参数`job_id`的值。
+    
 -   `<替换为待导出的checkpoint>`：完整替换为checkpoint的值，例如"checkpoint-160"。
--   `<替换为控制台展示的导出模型名称>`：完整替换为自定义的模型名称，仅用于控制台展示，例如"wan2.5-checkpoint-160"。该名称必须全局唯一，不支持重复名称多次导出，参数填写请参见[导出Checkpoint](https://help.aliyun.com/zh/model-studio/create-fine-tuning-job-api)。
+    
+-   `<替换为控制台展示的导出模型名称>`：完整替换为自定义的模型名称，仅用于控制台展示，例如"wan2.5-checkpoint-160"。该名称必须全局唯一，不支持重复名称多次导出，参数填写请参见[导出Checkpoint](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#2636e0fdfewpw)。
+    
 
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微调任务job_id>/export/<替换为待导出的checkpoint>?model_name=<替换为控制台展示的导出模型名称>' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
 **响应示例**
 
 响应参数`output=true`，表示导出请求已成功创建。
@@ -1074,21 +1150,23 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
 }
 ```
 
-##### 步骤2.2 查询部署后的新模型名称
+##### **步骤2.2 查询部署后的新模型名称**
 
-查询所有Checkpoint的状态，确认导出已完成，并获取它专属的、用于部署的新模型名称（`model_name`）。
+查询所有Checkpoint的状态，确认导出已完成，并获取它专属的、用于部署的新模型名称（`**model_name**`）。
 
 **请求示例**
 
--   `<替换为微调任务job_id>` ：完整替换为[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide#bc825b6ec11y2)输出参数`job_id`的值。
+-   `<替换为微调任务job_id>` ：完整替换为[创建微调任务](#bc825b6ec11y2)输出参数`job_id`的值。
+    
 
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微调任务job_id>/checkpoints' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
+
 **响应示例**
 
-在返回列表中定位导出的 Checkpoint（如 checkpoint-160）。当其 `status` 变为 **SUCCEEDED** 时，表示导出成功；此时返回的 `model_name` 字段即为导出后的新模型名称。
+在返回列表中定位导出的 Checkpoint（如 checkpoint-160）。当其 `status` 变为 **SUCCEEDED** 时，表示导出成功；此时返回的 `**model_name**` 字段即为导出后的新模型名称。
 
 ```
 {
@@ -1099,36 +1177,38 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
             "create_time": "2025-11-11T13:27:29",
             "full_name": "ft-202511111122-496e:checkpoint-160",
             "job_id": "ft-202511111122-496e",
-            "checkpoint": "checkpoint-160",
+            "checkpoint": "checkpoint-160",                             
             "model_name": "xxxx-ft-202511111122-xxxx-c160", // 重要字段，将用于模型部署和调用
-            "model_display_name": "xxxx-ft-202511111122-xxxx",
+            "model_display_name": "xxxx-ft-202511111122-xxxx", 
             "status": "SUCCEEDED" // 成功导出的checkpoint
         },
         ...
-
+        
     ]
 }
 ```
 
-步骤3：部署并调用模型
+##### **步骤3：部署并调用模型**
 
-在成功导出 Checkpoint 并获取 `model_name` 后，请按照以下步骤执行后续操作：
+在成功导出 Checkpoint 并获取 `**model_name**` 后，请按照以下步骤执行后续操作：
 
--   [模型部署](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide#0ad4c110b58ui)：在输入参数 `model_name`，填入导出后获取到的具体值。
+-   [模型部署](#0ad4c110b58ui)：在输入参数 `model_name`，填入导出后获取到的具体值。
     
--   [模型调用](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide#543cc07530gl2)：参照接口说明，调用已部署模型，详情请参见[万相-图像生成与编辑2.7](raw/model-api-reference/image-generation/wan-image-api-reference/wan-image-generation-and-editing-api-reference.md)。
+-   [模型调用](#543cc07530gl2)：参照接口说明，调用已部署模型，详情请参见[万相-图像生成与编辑2.7](https://help.aliyun.com/zh/model-studio/wan-image-generation-and-editing-api-reference)。
     
     > 当前部署后的图像模型**仅支持异步调用**，且返回响应的`message.content`中无`type`字段。
     
 
-## 计费说明
+## **计费说明**
 
--   **模型训练：收费。**详情请参见[模型训练计费](raw/model-user-guide/test-1/model-training-and-deployment-billing.md)。
+-   **模型训练：收费。**详情请参见[模型训练计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing)。
     
     -   费用 = 训练 Tokens 总量 × 单价。
-    -   训练结束后，在[查询微调任务状态](https://help.aliyun.com/zh/model-studio/create-fine-tuning-job-api)接口 `usage` 字段查看训练消耗的总 Token 数。
+        
+    -   训练结束后，在[查询微调任务状态](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference#a242dac535nqt)接口 `usage` 字段查看训练消耗的总 Token 数。
+        
     
-    下表列出了wan2.7-image、wan2.7-image-pro不同生成类型训练中常见训练步数及预估费用。该数据仅供参考，实际训练效果请以最终交付为准，费用请以正式账单为准。详细计费公式请参见[模型训练计费](raw/model-user-guide/test-1/model-training-and-deployment-billing.md)。
+    下表列出了wan2.7-image、wan2.7-image-pro不同生成类型训练中常见训练步数及预估费用。该数据仅供参考，实际训练效果请以最终交付为准，费用请以正式账单为准。详细计费公式请参见[模型训练计费](https://help.aliyun.com/zh/model-studio/model-training-and-deployment-billing)。
     
     **generation\_type**
     
@@ -1239,15 +1319,16 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
     0.20元/张
     
 
-## API文档
+## **API文档**
 
-[视频/图像生成模型微调 API 参考](https://help.aliyun.com/zh/model-studio/create-fine-tuning-job-api)
+[视频/图像生成模型微调 API 参考](https://help.aliyun.com/zh/model-studio/wan-generation-finetune-api-reference)
 
-## 常见问题
+## **常见问题**
 
-#### Q：如何设计一个好的触发词？
+#### **Q：如何设计一个好的触发词？**
 
 A: 规则如下：
 
--   推荐使用无实际语义的稀有字符组合，如 s86b5p、m01aa、EVEAven638123。确保在基模词表中无语义含义。
--   **避免**使用常用英语单词（如 beautiful, fire, dance），否则会污染模型原本对这些词的理解。
+-   推荐使用无实际语义的稀有字符组合，如 s86b5p、m01aa、EVEAven638123。确保在基模词表中无语义含义。
+    
+-   **避免**使用常用英语单词（如 beautiful, fire, dance），否则会污染模型原本对这些词的理解。

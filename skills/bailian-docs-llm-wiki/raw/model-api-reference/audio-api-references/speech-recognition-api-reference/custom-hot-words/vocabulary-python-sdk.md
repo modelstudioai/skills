@@ -2,37 +2,47 @@
 
 通过Python SDK管理定制热词列表，包括VocabularyService类的方法说明与示例代码。
 
-**用户指南：**[提升识别准确率](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。热词列表数量上限等使用限制详见[热词限制与计费](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw10_limit_sec)。
+**用户指南：**[提升识别准确率](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。热词列表数量上限等使用限制详见[限制与计费](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw10-limit-sec)。
 
-**重要**新加坡地域的子业务空间暂不支持热词功能。
+**重要**
 
-## 接口地址
+新加坡地域的子业务空间暂不支持热词功能。
+
+## **接口地址**
 
 SDK 默认使用**北京地域**的接口地址。如需切换到其他地域，需在初始化前修改 `dashscope.base_http_api_url`。
 
-#### 华北2（北京）
+### 华北2（北京）
 
 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 新加坡
+### 新加坡
 
 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+**重要**
+
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
 
 `{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+**重要**
+
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
 
 `{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
@@ -48,15 +58,17 @@ dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyunc
 **注意**：
 
 -   不同地域的 API Key 不同，请确保使用对应地域的 API Key
+    
 -   地域配置为全局设置，影响所有 DashScope SDK 的 API 调用
+    
 
-## VocabularyService
+## **VocabularyService**
 
 **包路径**：`dashscope.audio.asr.VocabularyService`
 
 **功能**：管理热词列表的生命周期（创建、查询、更新、删除）
 
-### 构造方法
+### **构造方法**
 
 ```
 VocabularyService(api_key: str = None, workspace: str = None, model: str = None)
@@ -64,7 +76,7 @@ VocabularyService(api_key: str = None, workspace: str = None, model: str = None)
 
 未传 `api_key` 时，SDK 使用全局 `dashscope.api_key` 的值。
 
-### create\_vocabulary() - 创建热词列表
+### **create\_vocabulary() - 创建热词列表**
 
 **方法签名**：
 
@@ -110,7 +122,7 @@ List\[dict\]
 
 热词列表，每个dict包含 text、weight、lang 等字段。
 
-详情请参见[热词字典结构](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words/vocabulary-python-sdk.md)。
+详情请参见[热词字典结构](#热词字典结构)。
 
 **返回值**：
 
@@ -122,7 +134,7 @@ str
 
 热词列表ID。
 
-### list\_vocabularies() - 批量查询热词列表
+### **list\_vocabularies() - 批量查询热词列表**
 
 对应 HTTP API 的 `action: list_vocabulary`（HTTP 用单数，Python 方法名用复数 `list_vocabularies`）。
 
@@ -223,7 +235,7 @@ str
 
 * * *
 
-### query\_vocabulary() - 查询热词列表
+### **query\_vocabulary() - 查询热词列表**
 
 **方法签名**：
 
@@ -304,7 +316,7 @@ str
 -   UNDEPLOYED：不可调用。
     
 
-### update\_vocabulary() - 更新热词列表
+### **update\_vocabulary() - 更新热词列表**
 
 **方法签名**：
 
@@ -343,7 +355,7 @@ List\[dict\]
 
 **返回值**：无
 
-### delete\_vocabulary() - 删除热词列表
+### **delete\_vocabulary() - 删除热词列表**
 
 **方法签名**：
 
@@ -373,9 +385,9 @@ str
 
 **返回值**：无
 
-## 热词字典结构
+## **热词字典结构**
 
-**用于**`vocabulary`**参数的字典定义**：
+**用于** `**vocabulary**` **参数的字典定义**：
 
 **字段**
 
@@ -448,9 +460,9 @@ str
     -   ja: 日语
         
 
-## 示例代码
+## **示例代码**
 
-### 创建热词列表
+### **创建热词列表**
 
 ```
 import dashscope
@@ -481,7 +493,7 @@ vocabulary_id = service.create_vocabulary(
 print(f"热词列表ID为：{vocabulary_id}")
 ```
 
-### 批量查询热词列表
+### **批量查询热词列表**
 
 ```
 import dashscope
@@ -501,7 +513,7 @@ vocabularies = service.list_vocabularies()
 print(f"热词列表：{json.dumps(vocabularies)}")
 ```
 
-### 查询热词列表
+### **查询热词列表**
 
 ```
 import dashscope
@@ -522,7 +534,7 @@ vocabulary = service.query_vocabulary("vocab-testpfx-xxx")
 print(f"热词列表：{json.dumps(vocabulary)}")
 ```
 
-### 更新热词列表
+### **更新热词列表**
 
 ```
 import dashscope
@@ -544,7 +556,7 @@ my_vocabulary = [
 service.update_vocabulary("vocab-testpfx-xxx", my_vocabulary)
 ```
 
-### 删除热词列表
+### **删除热词列表**
 
 ```
 import dashscope

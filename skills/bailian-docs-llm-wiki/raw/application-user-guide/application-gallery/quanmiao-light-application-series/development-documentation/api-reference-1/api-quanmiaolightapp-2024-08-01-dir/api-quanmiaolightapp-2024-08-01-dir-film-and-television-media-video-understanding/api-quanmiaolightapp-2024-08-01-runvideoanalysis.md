@@ -1,4 +1,4 @@
-# RunVideoAnalysis
+# RunVideoAnalysis - 视频理解-在线任务
 
 阿里云百炼轻应用-影视传媒视频理解。
 
@@ -7,7 +7,11 @@
 阿里云百炼轻应用-视频理解：基于这接口，可以传入一个视频，进行字幕提取、视频内容分析、视频总结、标题抽取、思维导图生成等任务，也可以通过自定义 prompt 来实现差异化的视频内容生成。
 
 -   欢迎前往[轻应用-影视传媒视频理解](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/video-comprehend)直接体验。
--   通过 SDK 方式调用 API 可参考视频理解控制台“API”下的示例。 当通过 SDK 调用当前 API 时，因“**调试**”-OpenAPI 门户对 SSE 协议支持还不够完善，建议参考**调用示例**，详见[**轻应用-影视传媒视频理解**](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/video-comprehend)\-切换**API 页签**。
+    
+-   通过 SDK 方式调用 API 可参考视频理解控制台“API”下的示例。
+    
+    **重要** 当通过 SDK 调用当前 API 时，因“**调试**”-OpenAPI 门户对 SSE 协议支持还不够完善，建议参考**调用示例**，详见[**轻应用-影视传媒视频理解**](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/video-comprehend)\-切换**API 页签**。
+    
 
 ## API-SDK 调用说明
 
@@ -16,7 +20,9 @@
 调用视频理解 API 有 **2** 种方式，对应 2 个接口
 
 -   调用[离线异步 API](https://help.aliyun.com/zh/model-studio/user-guide/api-quanmiaolightapp-2024-08-01-submitvideoanalysistask?spm=a2c4g.11186623.help-menu-2400256.d_1_2_4_3_1_3_3_1.3b2e46c2wjL7dc&scm=20140722.H_2867156._.OR_help-T_cn~zh-V_1)（**推荐**）：默认支持 2 并发，可以通过配置接口调整并发到 10，如果业务量大，可以联系客服（或运营等）申请更多并发，无需等待执行结束，异步调度，并发数等于后台同时跑的任务数，超过并发数的任务会排队，sdk 支持绝大部分开发语言，openapi 门户可以直接调试和使用，也可以到[**轻应用-影视传媒视频理解**](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/video-comprehend)控制台，切换到“API” 页签下查看调用 demo。
+    
 -   调用[在线同步 API](https://help.aliyun.com/zh/model-studio/user-guide/api-quanmiaolightapp-2024-08-01-runvideoanalysis?spm=a2c4g.11186623.help-menu-2400256.d_1_2_4_3_1_3_3_0.396c36b9Pjqtm9&scm=20140722.H_2846254._.OR_help-T_cn~zh-V_1)（**不推荐**）：本文档对应接口，全局只有 **1** 并发，需保持链接等待结果，sdk 支持的语言有限（java、python），openapi 门户页面不支持调试和调用（sse）（copy 出来代码无法直接使用），一般少量体验用，调用需到[**轻应用-影视传媒视频理解**](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/video-comprehend)控制台，切换到“API” 页签下查看调用 demo。
+    
 
 ### 在线同步 API 调用说明
 
@@ -31,16 +37,22 @@
 ```
 
 -   获取[Java（异步）最新版本依赖](https://api.aliyun.com/api-tools/sdk/QuanMiaoLightApp?version=2024-08-01&language=java-async-tea&tab=primer-doc)。
--   获取AccessKey ID、AccessKey Secret。
+    
+-   获取[AccessKey ID、AccessKey Secret](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)。
+    
 -   获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)。
+    
 
 ## 权限说明
 
 ### 前置条件
 
 -   登录阿里云百炼控制台，确认阿里云百炼是开通可用状态。
+    
 -   主账号调用：默认有所有 API 调用权限。
+    
 -   子账号调用：子账号默认无权限（AccessForbid）调用当前 API，需要同时在 **RAM 控制台**和**阿里云百炼控制台**中做授权。
+    
 
 ### RAM 控制台授权说明
 
@@ -57,6 +69,7 @@
 适用于精细化管理 API 维度访问的场景。
 
 -   **自定义授权策略**：菜单“**权限管理-权限策略**”下，创建权限策略，脚本编辑方式录入如下任意一个方案中 json。 授权子子账号指定接口，比如视频理解“RunVideoAnalysis”。
+    
 
 ```
 {
@@ -87,6 +100,7 @@
 ```
 
 -   **给子账号授权**：菜单“**身份管理-用户**”下，找到对应用户，新增授权，切换自定义授权，添加上面自定义的授权策略。
+    
 
 ### 阿里云百炼控制台授权说明
 
@@ -99,32 +113,38 @@
 用于调整抽帧的参数，包括抽帧间隔、抽帧像素。抽帧方式默认为标准方式，目前共提供三种方式可供选择，标准、快速/更低成本、自定义。
 
 -   使用“标准”方式进行抽帧时，应用系统内置参数进行抽帧，抽帧间隔与抽帧像素无需用户自定义。标准方式抽帧间隔和抽帧像素取值规则为：
-    
     -   根据视频时长选择不同档位，具体请参见[视频理解控制台](https://bailian.console.aliyun.com/#/app/app-market/quanmiao/video-comprehend)，“效果调试”页签下的高级功能 > 抽帧方式 > 自定义中的“推荐取值范围 1.0 ~6.0”和“推荐取值范围 650 ~ 750”右侧的“？”提示信息。
+        
     -   视频时长和档位映射关系为：取视频时长和档位时长举例最近的档，如果相同，取档位时长大的。
+        
 -   使用“快速/更低成本”方式进行抽帧时，应用系统内置参数系数运算后的结果进行抽帧，抽帧间隔与抽帧像素无需用户自定义。
     
 -   使用“自定义”方式时，则需要用户传入抽帧间隔、抽帧像素两个参数，参数的取值范围对不同时长的视频存在不同的限制，取值范围具体计算规则如下：
-    
     -   最小抽帧间隔 = max("标准"方式对应抽帧间隔 - 0.2，1)
+        
     -   最大抽帧间隔 = "标准"方式对应抽帧间隔 + 5
+        
     -   最小抽帧像素 = max("标准"方式对应抽帧像素 - 50，300)
+        
     -   最大抽帧像素 = "标准"方式对应抽帧像素 + 50
+        
 
 ## Agent 集成
 
 Agent 可通过 Skill 直接使用视频理解能力：
 
 -   **Skill 名称**：`alibabacloud-bailian-videoanalysis`
+    
 -   **Skill 地址**：[https://skills.aliyun.com/skills/alibabacloud-bailian-videoanalysis](https://skills.aliyun.com/skills/alibabacloud-bailian-videoanalysis)
+    
 
 ## 调试
 
-您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/RunVideoAnalysis)
 
-[调试](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/RunVideoAnalysis)
+ [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/RunVideoAnalysis)
 
-## 授权信息
+## **授权信息**
 
 下表是API对应的授权信息，可以在RAM权限策略语句的`Action`元素中使用，用来给RAM用户或RAM角色授予调用此API的权限。具体说明如下：
 
@@ -134,8 +154,10 @@ Agent 可通过 Skill 直接使用视频理解能力：
     
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
     
-    -   对于必选的资源类型，用前面加 \* 表示。
+    -   对于必选的资源类型，用前面加 \* 表示。
+        
     -   对于不支持资源级授权的操作，用`全部资源`表示。
+        
 -   条件关键字：是指云产品自身定义的条件关键字。
     
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
@@ -187,7 +209,7 @@ string
 
 是
 
-阿里云百炼业务空间唯一标识：获取业务空间 ID（Workspace ID）
+阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/use-workspace)
 
 llm-xxx
 
@@ -211,12 +233,14 @@ string
 
 视频链接
 
+**说明**
+
 -   videoUrl 字段必填（如果填写了 originalSessionId 字段，videoUrl 可不填）。
     
 -   不支持上传本地视频，您需填入可下载的 URL 地址。
     
 
-[http://xxxx.mp4](http://xxxx.mp4)
+http://xxxx.mp4
 
 videoModelId
 
@@ -926,7 +950,7 @@ string
 
 xx
 
-## 返回参数
+## **返回参数**
 
 **名称**
 
@@ -1698,7 +1722,7 @@ string
 
 图片 url
 
-[https://img.alicdn.com/imgextra/i1/O1CN01qtgazV1oZ3djafcFz\_!!6000000005238-0-tps-1540-1540.jpg](https://img.alicdn.com/imgextra/i1/O1CN01qtgazV1oZ3djafcFz_!!6000000005238-0-tps-1540-1540.jpg)
+https://img.alicdn.com/imgextra/i1/O1CN01qtgazV1oZ3djafcFz\_!!6000000005238-0-tps-1540-1540.jpg
 
 ratio
 
@@ -2071,6 +2095,8 @@ string
 
 ## 错误码
 
+   
+
 **HTTP status code**
 
 **错误码**
@@ -2089,6 +2115,6 @@ You are not authorized to perform this action , Please check the assignment of t
 
 访问[错误中心](https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/errorCode)查看更多错误码。
 
-## 变更历史
+## **变更历史**
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/RunVideoAnalysis#workbench-doc-change-demo)。

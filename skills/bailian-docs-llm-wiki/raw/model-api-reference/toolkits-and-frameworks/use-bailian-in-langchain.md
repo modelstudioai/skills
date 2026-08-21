@@ -2,18 +2,20 @@
 
 本文主要介绍如何将阿里云百炼提供的模型集成到大模型应用开发框架LangChain中。
 
-## 前提条件
+## **前提条件**
 
--   已开通阿里云百炼服务并获得API Key， 请参考[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
--   已[将API Key配置到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
+-   已开通阿里云百炼服务并获得API Key， 请参考[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+    
+-   已[将API Key配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+    
 
-## 聊天模型（Chat Model）
+## **聊天模型（Chat Model）**
 
-#### Python
+## Python
 
-#### OpenAI
+## OpenAI
 
-只支持阿里云百炼的部分模型。完整列表请参考：[OpenAI 兼容模式支持的模型列表](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#eadfc13038jd5)。调用费用、输入输出上限等请参考：[选择模型](raw/model-user-guide/get-started-with-models/models.md)。
+只支持阿里云百炼的部分模型。完整列表请参考：[OpenAI 兼容模式支持的模型列表](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#eadfc13038jd5)。调用费用、输入输出上限等请参考：[模型总览](https://help.aliyun.com/zh/model-studio/models#850732b1aabs0)。
 
 使用前需要安装以下依赖：
 
@@ -42,9 +44,9 @@ print(response.model_dump_json())
 
 工具调用等进阶技巧请前往 LangChain 官方的 [ChatOpenAI](https://python.langchain.com/docs/integrations/chat/openai/)。完整的 API参考文档请前往 LangChain 官方的 [ChatOpenAI API Reference](https://python.langchain.com/api_reference/openai/chat_models/langchain_openai.chat_models.base.ChatOpenAI.html)。
 
-#### DashScope
+## DashScope
 
-支持阿里云百炼所有的文本生成模型，完整列表与调用费用请参考：[选择模型](raw/model-user-guide/get-started-with-models/models.md)。（也支持[部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)后的模型）
+支持阿里云百炼所有的文本生成模型，完整列表与调用费用请参考：[模型总览](https://help.aliyun.com/zh/model-studio/models#850732b1aabs0)。（也支持[部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)后的模型）
 
 使用前需要安装以下依赖：
 
@@ -73,11 +75,11 @@ for r in res:
 
 多模态调用、工具调用等进阶技巧请前往 LangChain 官方的 [ChatTongyi](https://python.langchain.com/docs/integrations/chat/tongyi/)。完整的 API参考文档请前往 LangChain 官方的 [ChatTongyi API Reference](https://python.langchain.com/api_reference/community/chat_models/langchain_community.chat_models.tongyi.ChatTongyi.html)。
 
-#### JavaScript
+## JavaScript
 
-#### OpenAI
+## OpenAI
 
-只支持阿里云百炼的部分模型。完整列表请参考：[OpenAI 兼容模式支持的模型列表](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#eadfc13038jd5)。调用费用、输入输出上限等请参考：[选择模型](raw/model-user-guide/get-started-with-models/models.md)。
+只支持阿里云百炼的部分模型。完整列表请参考：[OpenAI 兼容模式支持的模型列表](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#eadfc13038jd5)。调用费用、输入输出上限等请参考：[模型总览](https://help.aliyun.com/zh/model-studio/models#850732b1aabs0)。
 
 使用前需要安装以下依赖：
 
@@ -118,9 +120,9 @@ console.log(aiMsg.content);
 
 工具调用等进阶技巧请前往 LangChain 官方的 [ChatOpenAI](https://js.langchain.com/docs/integrations/chat/openai/)。完整的 API参考文档请前往 LangChain 官方的 [ChatOpenAI API Reference](https://v03.api.js.langchain.com/classes/_langchain_openai.ChatOpenAI.html)。
 
-#### DashScope
+## DashScope
 
-支持阿里云百炼所有的文本生成模型，完整列表与调用费用请参考：[选择模型](raw/model-user-guide/get-started-with-models/models.md)。（也支持[部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)后的模型）
+支持阿里云百炼所有的文本生成模型，完整列表与调用费用请参考：[模型总览](https://help.aliyun.com/zh/model-studio/models#850732b1aabs0)。（也支持[部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)后的模型）
 
 使用前需要安装以下依赖：
 
@@ -163,257 +165,255 @@ console.log(res2.content);
 
 多模态调用、工具调用等进阶技巧请前往 LangChain 官方的 [ChatTongyi](https://js.langchain.com/docs/integrations/chat/alibaba_tongyi/)。完整的 API参考文档请前往 LangChain 官方的 [ChatTongyi API Reference](https://v03.api.js.langchain.com/classes/_langchain_community.chat_models_alibaba_tongyi.ChatAlibabaTongyi.html)。
 
-#### Java
+## Java
 
 > LangChain4j 1.0.0-beta3 需要 Java 17 及以上版本。使用较低版本（如 Java 11）编译时会出现 `Unsupported class file major version 61` 错误。
 
-#### OpenAI
+## OpenAI
 
-只支持阿里云百炼的部分模型。完整列表请参考：[OpenAI 兼容模式支持的模型列表](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#eadfc13038jd5)。调用费用、输入输出上限等请参考：[选择模型](raw/model-user-guide/get-started-with-models/models.md)。
+只支持阿里云百炼的部分模型。完整列表请参考：[OpenAI 兼容模式支持的模型列表](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#eadfc13038jd5)。调用费用、输入输出上限等请参考：[模型总览](https://help.aliyun.com/zh/model-studio/models#850732b1aabs0)。
 
 借助LangChain4j开源库，您可以使用Java编码以实现相关功能。有Plain Java（纯Java）和Spring Boot这两种实现方式，更多的接口细节和代码示例，请参见[LangChain4j OpenAI官网](https://docs.langchain4j.dev/integrations/language-models/open-ai)。
 
-#### Plain Java
+## Plain Java
 
 1.  添加依赖
     
     以Maven为例，在pom.xml中添加如下依赖：
     
-
-```
-<!-- https://mvnrepository.com/artifact/dev.langchain4j/langchain4j-open-ai -->
-<dependency>
-    <groupId>dev.langchain4j</groupId>
-    <artifactId>langchain4j-open-ai</artifactId>
-    <version>1.0.0-beta3</version>
-</dependency>
-```
-
-2.  编写代码，调用模型
-
-```
-import dev.langchain4j.data.message.SystemMessage;
-import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.openai.OpenAiChatModel;
-
-public class LangChainOpenAITest {
-    public static void main(String[] args) {
-        ChatLanguageModel model = OpenAiChatModel.builder()
-                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
-                .modelName("qwen-plus")
-                .build();
-
-        SystemMessage systemMessage = SystemMessage.from("你是心理专家");
-        UserMessage userMessage = UserMessage.from("你好");
-
-        System.out.println(model.chat(systemMessage, userMessage).aiMessage().text());
-    }
-}
-```
-
-#### Spring Boot
-
-1.  添加依赖
-    
-    以Maven为例，在pom.xml中添加如下依赖：
-    
-
-```
-<dependencies>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/dev.langchain4j/langchain4j-open-ai-spring-boot-starter -->
+    ```
+    <!-- https://mvnrepository.com/artifact/dev.langchain4j/langchain4j-open-ai -->
     <dependency>
         <groupId>dev.langchain4j</groupId>
-	<artifactId>langchain4j-open-ai-spring-boot-starter</artifactId>
-	<version>1.0.0-beta3</version>
+        <artifactId>langchain4j-open-ai</artifactId>
+        <version>1.0.0-beta3</version>
     </dependency>
-</dependencies>
-```
+    ```
+    
+2.  编写代码，调用模型
+    
+    ```
+    import dev.langchain4j.data.message.SystemMessage;
+    import dev.langchain4j.data.message.UserMessage;
+    import dev.langchain4j.model.chat.ChatLanguageModel;
+    import dev.langchain4j.model.openai.OpenAiChatModel;
+    
+    public class LangChainOpenAITest {
+        public static void main(String[] args) {
+            ChatLanguageModel model = OpenAiChatModel.builder()
+                    .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+                    .baseUrl("https://dashscope.aliyuncs.com/compatible-mode/v1")
+                    .modelName("qwen-plus")
+                    .build();
+    
+            SystemMessage systemMessage = SystemMessage.from("你是心理专家");
+            UserMessage userMessage = UserMessage.from("你好");
+    
+            System.out.println(model.chat(systemMessage, userMessage).aiMessage().text());
+        }
+    }
+    ```
+    
 
+## Spring Boot
+
+1.  添加依赖
+    
+    以Maven为例，在pom.xml中添加如下依赖：
+    
+    ```
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    
+        <!-- https://mvnrepository.com/artifact/dev.langchain4j/langchain4j-open-ai-spring-boot-starter -->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+    	<artifactId>langchain4j-open-ai-spring-boot-starter</artifactId>
+    	<version>1.0.0-beta3</version>
+        </dependency>
+    </dependencies>
+    ```
+    
 2.  配置模型信息
     
     在application.properties中配置模型、端口号等信息：
     
-
-```
-langchain4j.open-ai.chat-model.api-key=${DASHSCOPE_API_KEY}
-langchain4j.open-ai.chat-model.model-name=qwen-plus
-langchain4j.open-ai.chat-model.base-url=https://dashscope.aliyuncs.com/compatible-mode/v1
-
-server.port=9000
-```
-
+    ```
+    langchain4j.open-ai.chat-model.api-key=${DASHSCOPE_API_KEY}
+    langchain4j.open-ai.chat-model.model-name=qwen-plus
+    langchain4j.open-ai.chat-model.base-url=https://dashscope.aliyuncs.com/compatible-mode/v1
+    
+    server.port=9000
+    ```
+    
 3.  编写代码，调用模型
-
-```
-import dev.langchain4j.model.chat.ChatLanguageModel;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-@RestController
-public class ChatLanguageModelController {
-    ChatLanguageModel chatLanguageModel;
-
-    ChatLanguageModelController(ChatLanguageModel chatLanguageModel) {
-        this.chatLanguageModel = chatLanguageModel;
+    
+    ```
+    import dev.langchain4j.model.chat.ChatLanguageModel;
+    import org.springframework.web.bind.annotation.GetMapping;
+    import org.springframework.web.bind.annotation.RequestParam;
+    import org.springframework.web.bind.annotation.RestController;
+    
+    @RestController
+    public class ChatLanguageModelController {
+        ChatLanguageModel chatLanguageModel;
+    
+        ChatLanguageModelController(ChatLanguageModel chatLanguageModel) {
+            this.chatLanguageModel = chatLanguageModel;
+        }
+    
+        @GetMapping("/chat")
+        public String chat(@RequestParam(value = "message", defaultValue = "你好") String message) {
+            return chatLanguageModel.chat(message);
+        }
     }
+    ```
+    
 
-    @GetMapping("/chat")
-    public String chat(@RequestParam(value = "message", defaultValue = "你好") String message) {
-        return chatLanguageModel.chat(message);
-    }
-}
-```
+## DashScope
 
-#### DashScope
-
-支持阿里云百炼所有的文本生成模型，完整列表与调用费用请参考：[选择模型](raw/model-user-guide/get-started-with-models/models.md)。（也支持[部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)后的模型）
+支持阿里云百炼所有的文本生成模型，完整列表与调用费用请参考：[模型总览](https://help.aliyun.com/zh/model-studio/models#850732b1aabs0)。（也支持[部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)后的模型）
 
 借助LangChain4j开源库，您可以使用Java编码以实现相关功能。有Plain Java（纯Java）和Spring Boot这两种实现方式，更多的接口细节和代码示例，请参见[LangChain4j DashScope官网](https://docs.langchain4j.dev/integrations/language-models/dashscope)。
 
-#### Plain Java
+## Plain Java
 
 1.  添加依赖
     
     以Maven为例，在pom.xml中添加如下依赖：
     
-
-```
-<!-- https://mvnrepository.com/artifact/dev.langchain4j/langchain4j-community-dashscope -->
-<dependency>
-    <groupId>dev.langchain4j</groupId>
-    <artifactId>langchain4j-community-dashscope</artifactId>
-    <version>1.0.0-beta3</version>
-</dependency>
-```
-
-2.  编写代码，调用模型
-
-```
-import dev.langchain4j.community.model.dashscope.QwenChatModel;
-import dev.langchain4j.community.model.dashscope.QwenStreamingChatModel;
-import dev.langchain4j.data.message.ChatMessage;
-import dev.langchain4j.data.message.SystemMessage;
-import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.chat.StreamingChatLanguageModel;
-import dev.langchain4j.model.chat.request.ChatRequest;
-import dev.langchain4j.model.chat.response.ChatResponse;
-import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
-
-public class LangChainDashScopeTest {
-    public static void main(String[] args) {
-        chatLanguageModelTest();
-//        streamingChatLanguageModelTest();
-    }
-
-    public static void chatLanguageModelTest() {
-        ChatLanguageModel qwenModel = QwenChatModel.builder()
-                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .modelName("qwen-plus")
-                .build();
-//        System.out.println(qwenModel.chat("你好"));
-        ChatRequest request = ChatRequest.builder().messages(new ChatMessage[]{SystemMessage.from("你是心理专家"), UserMessage.from("你好")}).build();
-        System.out.println(qwenModel.chat(request).aiMessage().text());
-    }
-
-    public static void streamingChatLanguageModelTest() {
-        StreamingChatLanguageModel model = QwenStreamingChatModel.builder()
-                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .modelName("qwen-plus")
-                .build();
-        model.chat("你好", new StreamingChatResponseHandler() {
-            @Override
-            public void onPartialResponse(String s) {
-                System.out.println(s);
-            }
-
-            @Override
-            public void onCompleteResponse(ChatResponse chatResponse) {
-                System.out.println("对话结束");
-                System.exit(0);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                System.out.println("出现异常");
-                System.exit(0);
-            }
-        });
-    }
-}
-```
-
-#### Spring Boot
-
-1.  添加依赖
-    
-    以Maven为例，在pom.xml中添加如下依赖：
-    
-
-```
-<dependencies>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/dev.langchain4j/langchain4j-community-dashscope-spring-boot-starter -->
+    ```
+    <!-- https://mvnrepository.com/artifact/dev.langchain4j/langchain4j-community-dashscope -->
     <dependency>
         <groupId>dev.langchain4j</groupId>
-	<artifactId>langchain4j-community-dashscope-spring-boot-starter</artifactId>
-	<version>1.0.0-beta3</version>
+        <artifactId>langchain4j-community-dashscope</artifactId>
+        <version>1.0.0-beta3</version>
     </dependency>
-</dependencies>
-```
+    ```
+    
+2.  编写代码，调用模型
+    
+    ```
+    import dev.langchain4j.community.model.dashscope.QwenChatModel;
+    import dev.langchain4j.community.model.dashscope.QwenStreamingChatModel;
+    import dev.langchain4j.data.message.ChatMessage;
+    import dev.langchain4j.data.message.SystemMessage;
+    import dev.langchain4j.data.message.UserMessage;
+    import dev.langchain4j.model.chat.ChatLanguageModel;
+    import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+    import dev.langchain4j.model.chat.request.ChatRequest;
+    import dev.langchain4j.model.chat.response.ChatResponse;
+    import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
+    
+    public class LangChainDashScopeTest {
+        public static void main(String[] args) {
+            chatLanguageModelTest();
+    //        streamingChatLanguageModelTest();
+        }
+    
+        public static void chatLanguageModelTest() {
+            ChatLanguageModel qwenModel = QwenChatModel.builder()
+                    .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+                    .modelName("qwen-plus")
+                    .build();
+    //        System.out.println(qwenModel.chat("你好"));
+            ChatRequest request = ChatRequest.builder().messages(new ChatMessage[]{SystemMessage.from("你是心理专家"), UserMessage.from("你好")}).build();
+            System.out.println(qwenModel.chat(request).aiMessage().text());
+        }
+    
+        public static void streamingChatLanguageModelTest() {
+            StreamingChatLanguageModel model = QwenStreamingChatModel.builder()
+                    .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+                    .modelName("qwen-plus")
+                    .build();
+            model.chat("你好", new StreamingChatResponseHandler() {
+                @Override
+                public void onPartialResponse(String s) {
+                    System.out.println(s);
+                }
+    
+                @Override
+                public void onCompleteResponse(ChatResponse chatResponse) {
+                    System.out.println("对话结束");
+                    System.exit(0);
+                }
+    
+                @Override
+                public void onError(Throwable throwable) {
+                    System.out.println("出现异常");
+                    System.exit(0);
+                }
+            });
+        }
+    }
+    ```
+    
 
+## Spring Boot
+
+1.  添加依赖
+    
+    以Maven为例，在pom.xml中添加如下依赖：
+    
+    ```
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    
+        <!-- https://mvnrepository.com/artifact/dev.langchain4j/langchain4j-community-dashscope-spring-boot-starter -->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+    	<artifactId>langchain4j-community-dashscope-spring-boot-starter</artifactId>
+    	<version>1.0.0-beta3</version>
+        </dependency>
+    </dependencies>
+    ```
+    
 2.  配置模型信息
     
     在application.properties中配置模型、端口号等信息：
     
-
-```
-langchain4j.community.dashscope.chat-model.api-key=${DASHSCOPE_API_KEY}
-langchain4j.community.dashscope.chat-model.model-name=qwen-plus
-
-server.port=9000
-```
-
+    ```
+    langchain4j.community.dashscope.chat-model.api-key=${DASHSCOPE_API_KEY}
+    langchain4j.community.dashscope.chat-model.model-name=qwen-plus
+    
+    server.port=9000
+    ```
+    
 3.  编写代码，调用模型
-
-```
-import dev.langchain4j.community.model.dashscope.QwenChatModel;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-@RestController
-public class QwenChatModelController {
-    QwenChatModel qwenChatModel;
-
-    QwenChatModelController(QwenChatModel qwenChatModel) {
-        this.qwenChatModel = qwenChatModel;
+    
+    ```
+    import dev.langchain4j.community.model.dashscope.QwenChatModel;
+    import org.springframework.web.bind.annotation.GetMapping;
+    import org.springframework.web.bind.annotation.RequestParam;
+    import org.springframework.web.bind.annotation.RestController;
+    
+    @RestController
+    public class QwenChatModelController {
+        QwenChatModel qwenChatModel;
+    
+        QwenChatModelController(QwenChatModel qwenChatModel) {
+            this.qwenChatModel = qwenChatModel;
+        }
+    
+        @GetMapping("/chat")
+        public String chat(@RequestParam(value = "message", defaultValue = "你好") String message) {
+            return qwenChatModel.chat(message);
+        }
     }
+    ```
+    
 
-    @GetMapping("/chat")
-    public String chat(@RequestParam(value = "message", defaultValue = "你好") String message) {
-        return qwenChatModel.chat(message);
-    }
-}
-```
+## **文本嵌入模型（Embedding Model）**
 
-## 文本嵌入模型（Embedding Model）
+#### **支持的模型：**
 
-#### 支持的模型：
-
-> MTEB、CMTEB是 Embedding 模型的通用评估指标，数值越大，模型效果越好。text-embedding-v3 与 text-embedding-v4模型当前无法通过 LangChain 框架接口指定向量维度，默认采用 1024 维度作为输出向量维度值。
+> MTEB、CMTEB 是 Embedding 模型的通用评估指标，数值越大，模型效果越好。text-embedding-v3 与 text-embedding-v4模型当前无法通过 LangChain 框架接口指定向量维度，默认采用 1024 维度作为输出向量维度值。
 
 **模型**
 
@@ -465,9 +465,9 @@ text-embedding-v4（1024维度）
 
 73.98
 
-#### Python
+## Python
 
-#### DashScope
+## DashScope
 
 使用前需要安装以下依赖：
 
@@ -503,9 +503,9 @@ print("文本向量数量：", len(doc_results), "，文本向量长度：", len
 
 详细介绍与更多使用方式请前往 LangChain 官方的 [DashScope Embeddings](https://python.langchain.com/docs/integrations/text_embedding/dashscope/)。完整的 API参考文档请前往 LangChain 官方的 [Embedding API Reference](https://python.langchain.com/api_reference/community/embeddings/langchain_community.embeddings.dashscope.DashScopeEmbeddings.html)。
 
-#### JavaScript
+## JavaScript
 
-#### DashScope
+## DashScope
 
 使用前需要安装以下依赖：
 
@@ -518,7 +518,7 @@ npm install @langchain/community @langchain/core
 ```
 import { AlibabaTongyiEmbeddings } from "@langchain/community/embeddings/alibaba_tongyi";
 
-const model = new AlibabaTongyiEmbeddings({
+const model = new AlibabaTongyiEmbeddings({ 
   apiKey: process.env.DASHSCOPE_API_KEY,
   modelName: "text-embedding-v4",
   // other params...
@@ -532,9 +532,9 @@ console.log({ res });
 
 详细介绍与更多使用方式请前往 LangChain 官方的 [DashScope Embeddings](https://js.langchain.com/docs/integrations/text_embedding/alibaba_tongyi/)。完整的 API参考文档请前往 LangChain 官方的 [Embedding API Reference](https://v03.api.js.langchain.com/classes/_langchain_community.embeddings_alibaba_tongyi.AlibabaTongyiEmbeddings.html)。
 
-#### Java
+## Java
 
-#### DashScope
+## DashScope
 
 借助LangChain4j开源库，您可以使用Java编码以实现相关功能。更多的接口细节和代码示例，请参见[LangChain4j DashScope官网](https://docs.langchain4j.dev/integrations/language-models/dashscope)。
 
@@ -542,44 +542,44 @@ console.log({ res });
     
     以Maven为例，在pom.xml中添加如下依赖：
     
-
-```
-<!-- https://mvnrepository.com/artifact/dev.langchain4j/langchain4j-community-dashscope -->
-<dependency>
-    <groupId>dev.langchain4j</groupId>
-    <artifactId>langchain4j-community-dashscope</artifactId>
-    <version>1.0.0-beta3</version>
-</dependency>
-```
-
+    ```
+    <!-- https://mvnrepository.com/artifact/dev.langchain4j/langchain4j-community-dashscope -->
+    <dependency>
+        <groupId>dev.langchain4j</groupId>
+        <artifactId>langchain4j-community-dashscope</artifactId>
+        <version>1.0.0-beta3</version>
+    </dependency>
+    ```
+    
 2.  编写代码，调用模型
-
-```
-import dev.langchain4j.community.model.dashscope.QwenEmbeddingModel;
-import dev.langchain4j.data.embedding.Embedding;
-
-import java.util.List;
-
-import static dev.langchain4j.data.segment.TextSegment.textSegment;
-import static java.util.Arrays.asList;
-
-public class LangChainEmbeddingsTest {
-    public static void main(String[] args) {
-        QwenEmbeddingModel model = QwenEmbeddingModel.builder()
-                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                .modelName("text-embedding-v4")
-                .build();
-
-        List<Embedding> embeddings = model.embedAll(asList(textSegment("hello"), textSegment("how are you?")))
-                .content();
-        System.out.println(embeddings.size());
+    
+    ```
+    import dev.langchain4j.community.model.dashscope.QwenEmbeddingModel;
+    import dev.langchain4j.data.embedding.Embedding;
+    
+    import java.util.List;
+    
+    import static dev.langchain4j.data.segment.TextSegment.textSegment;
+    import static java.util.Arrays.asList;
+    
+    public class LangChainEmbeddingsTest {
+        public static void main(String[] args) {
+            QwenEmbeddingModel model = QwenEmbeddingModel.builder()
+                    .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+                    .modelName("text-embedding-v4")
+                    .build();
+    
+            List<Embedding> embeddings = model.embedAll(asList(textSegment("hello"), textSegment("how are you?")))
+                    .content();
+            System.out.println(embeddings.size());
+        }
     }
-}
-```
+    ```
+    
 
-## 重排序模型（Reranker Model）
+## **重排序模型（Reranker Model）**
 
-#### 支持的模型：
+#### **支持的模型：**
 
 **模型名称**
 
@@ -641,9 +641,9 @@ gte-rerank-v2
 
 0.0008元
 
-#### Python
+## Python
 
-#### DashScope
+## DashScope
 
 使用前需要安装以下依赖：
 

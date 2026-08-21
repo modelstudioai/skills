@@ -1,10 +1,14 @@
 # 模型部署
 
+无论是平台的预置模型还是您[调优](https://help.aliyun.com/zh/model-studio/model-training-overview)后的模型，您可通过部署获得独立的、资源专享的推理服务，以满足您对高并发、低延迟等不同性能的业务需求。
+
 ## 计费方式
 
 > 部署前可以在[模型部署控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_deploy/create)查看不同模型的预估每小时费用。
 
-**说明**计费方式在服务创建后无法更改。如需切换，必须下线已经部署的模型后再重新部署。
+**说明**
+
+计费方式在服务创建后无法更改。如需切换，必须下线已经部署的模型后再重新部署。
 
 **预置吞吐**（PTU，Provisioned Throughput Unit）
 
@@ -24,7 +28,7 @@
 
 按使用时长与模型单元数量配置算力，资源独占的模型部署方式。
 
-以每次调用产生的输入 Token 与输出 Token 作为用量计量依据的模型部署方式。
+以每次调用产生的输入 Token 与输出 Token 作为用量计量依据的模型部署方式。
 
 **优势**
 
@@ -39,7 +43,7 @@
     
 2.  支持设置自动续费。
     
-3.  支持 [PD 分离计算模式](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)。
+3.  支持 [PD 分离计算模式](#fb689f3346gjl)。
     
 
 **不使用不计费**。
@@ -72,6 +76,12 @@
 
 **计费图示**
 
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6346770771/p1052924.png)
+
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6346770771/p1052921.png)
+
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6346770771/p1052922.png)
+
 **计费方式**
 
 按使用时长和预置吞吐
@@ -98,7 +108,7 @@
 
 1.  预付费按天计费。无法提前退费
     
-2.  如果单位时间内使用超出购买的吞吐量，按创建时选择的溢出策略处理：自动溢出则切换为该模型的[模型调用](raw/model-user-guide/test-1/model-pricing.md)按量付费，仅使用 PTU 容量则返回 429。
+2.  如果单位时间内使用超出购买的吞吐量，按创建时选择的溢出策略处理：自动溢出则切换为该模型的[模型调用](https://help.aliyun.com/zh/model-studio/model-pricing)按量付费，仅使用 PTU 容量则返回 429。
     
 
 预付费购买后，若在首月内提前退订，日单价（≈ 月单价 / 30）将按 **1.2** 倍计费
@@ -110,31 +120,39 @@
 
 如需查看单次调用的 Token 使用量及调用次数历史统计，请前往：[模型监控](https://bailian.console.aliyun.com/?tab=model#/model-telemetry)。
 
-## 计费详情
+## **计费详情**
 
 #### 按使用时长计费（预置吞吐）
 
-`费用 = 使用时长 × (输入 TPM 单价 × 输入 TPM + 输出 TPM 单价 × 输出 TPM)`
+`**费用 = 使用时长 × (输入 TPM 单价 × 输入 TPM + 输出 TPM 单价 × 输出 TPM)**`
 
 后付费按小时计算：使用时长单位为小时，单价取下表"持续 1 小时"列；预付费按天计算：使用时长单位为天，单价取下表"持续 1 天"列。
 
 -   预付费订单支付后实时生效，有效期 N 天至第 N 天 23:59 结束。若在 22:00 后下单，到期日将自动顺延1天。
+    
 -   预付费订单到期后，将延后2小时停止服务，停止后资源保留14小时后释放。
+    
 -   预付费订单无法提前终止服务。
+    
 -   后付费时，如果账户欠费，部署的资源将继续保留并计费 24 小时，在这 24 小时内服务仍可正常使用。超过 24 小时后系统停止计费，模型部署进入欠费状态，底层资源将被删除，但模型部署任务仍会保留。补足欠费后，系统将重新分配资源并恢复使用（恢复后继续产生费用）。如果您不希望继续产生费用，可删除模型部署任务，删除成功后将不再计费。
+    
 
-当模型输入超过最长输入 Token 时，相关调用将自动切换为当前模型的按量付费模式；超出购买的 TPM 量时，按创建时选择的溢出策略处理（「自动溢出」切换为按量付费，「仅使用 PTU 容量」返回 429）。此时，推理性能可能下降，将受业务空间中当前快照模型的公共流量的管控，[费用](raw/model-user-guide/test-1/model-pricing.md)按模型调用（按量付费）标准计收。
+当模型输入超过最长输入 Token 时，相关调用将自动切换为当前模型的按量付费模式；超出购买的 TPM 量时，按创建时选择的溢出策略处理（「自动溢出」切换为按量付费，「仅使用 PTU 容量」返回 429）。此时，推理性能可能下降，将受业务空间中当前快照模型的公共流量的管控，[费用](https://help.aliyun.com/zh/model-studio/model-pricing)按模型调用（按量付费）标准计收。
 
 -   此时（仅「自动溢出」策略下），调用 API 返回 Header 将包含：`x-dashscope-ptu-overflow:true`。
+    
 -   TPM 统计请前往：[模型监控（北京）](https://bailian.console.aliyun.com/?tab=model#/model-telemetry)。
+    
 
 缩容场景（降配）的具体降费退费规则请参考：[降配退款规则说明](https://help.aliyun.com/zh/user-center/description-of-downgrade-refund-rules)。
 
-**说明**PTU 部署支持长输入阶梯容量系数和缓存折扣，详见[预置吞吐长输入与缓存](raw/model-user-guide/model-deployment-1/ptu-long-input-and-cache.md)。
+**说明**
+
+PTU 部署支持长输入阶梯容量系数和缓存折扣，详见[预置吞吐长输入与缓存](https://help.aliyun.com/zh/model-studio/ptu-long-input-and-cache)。
 
 #### 华北2（北京）
 
-#### 千问
+## 千问
 
 **模型名称**
 
@@ -288,7 +306,7 @@ qwen-plus-2025-12-01
 
 思考：¥23.04
 
-#### DeepSeek
+## DeepSeek
 
 **模型名称**
 
@@ -368,7 +386,7 @@ deepseek-v3
 
 ¥34.56
 
-#### 千问VL
+## 千问VL
 
 **模型名称**
 
@@ -406,7 +424,7 @@ qwen3-vl-plus-2025-09-23
 
 ¥28.8
 
-#### GLM
+## GLM
 
 **模型名称**
 
@@ -446,7 +464,7 @@ glm-5.2
 
 #### 新加坡
 
-#### 千问
+## 千问
 
 **模型名称**
 
@@ -554,7 +572,7 @@ qwen3.5-plus-2026-04-20
 
 ¥51.8
 
-#### DeepSeek
+## DeepSeek
 
 **模型名称**
 
@@ -620,7 +638,7 @@ deepseek-v4-pro
 
 ¥155.4
 
-#### 千问VL
+## 千问VL
 
 **模型名称**
 
@@ -658,7 +676,7 @@ qwen3-vl-plus-2025-09-23
 
 ¥34.53
 
-#### GLM
+## GLM
 
 **模型名称**
 
@@ -698,13 +716,16 @@ glm-5.2
 
 #### 按使用时长计费（模型单元）
 
-`费用 = 使用时长（小时）× 模型单元数量 × 模型单元单价`
+`**费用 = 使用时长（小时）× 模型单元数量 × 模型单元单价**`
 
 "模型单元单价"在后付费场景下取下表"小时单价"列；预付费按月计费时，公式改为 **包月数 × 模型单元数量 × 月单价**。
 
 -   预付费购买的首月，如在首月内提前退订，日单价（≈ 月单价 / 30）将按 **1.2** 倍计费（不满一天按一天计费）
+    
 
-**说明**模型单元-后付费方式的算力资源先买到先得。如购买不成功会全额退款。
+**说明**
+
+模型单元-后付费方式的算力资源先买到先得。如购买不成功会全额退款。
 
 #### 文本生成
 
@@ -1281,7 +1302,9 @@ MU2 x 8
 模型类型：
 
 -   Instruct - 模型部署后以**非思考模式**进行推理。
+    
 -   Thinking - 模型部署后以思考模式进行推理。
+    
 
 模型部署类型：
 
@@ -1457,8 +1480,11 @@ MU9 x 1
 模型类型：
 
 -   Instruct - 模型部署后以**非思考模式**进行推理。
+    
 -   Thinking - 模型部署后以思考模式进行推理。
+    
 -   Instruct/Thinking - 可在模型部署时**选择是否开启思考模式**。
+    
 
 #### 语音合成
 
@@ -1486,9 +1512,10 @@ MU5
 
 #### 按模型 Token 使用量
 
-`费用 = 模型输入 Token 数 × 模型输入单价 + 模型输出 Token 数 × 模型输出单价（最小计费单位：1 token）`
+`**费用 = 模型输入 Token 数 × 模型输入单价 + 模型输出 Token 数 × 模型输出单价（最小计费单位：1 token）**`
 
 -   仅当对下列基础模型完成 SFT 高效训练（即 LoRA 高效微调，API 部署时 plan 取值为 lora）并得到自定义模型后，才支持按模型 Token 使用量计费。
+    
 
 #### 北京
 
@@ -1592,20 +1619,28 @@ qwen3-14b
 
 您可以在控制台上部署模型，请参考以下操作步骤：
 
-> 如果提示权限不足，请参考：[部署时提示权限不足怎么办？](https://help.aliyun.com/zh/model-studio/model-deployment-introduction#5c1c099745drz)
+> 如果提示权限不足，请参考：[部署时提示权限不足怎么办？](#5c1c099745drz)
 
 1.  前往[模型部署控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_deploy/create)。
-
-1.  填写服务名称，选择模型和计费方式，其他设置保持默认，点击确认。
-    
-    > 需先完成[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)，方可部署大部分模型。
     
 
-1.  部署状态为**运行中**时，代表该模型已部署成功。
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8117463771/p1059807.png)
 
-**重要**模型部署成功后将产生费用。
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8117463771/p1059808.png)
 
-### 部署配置
+2.  填写服务名称，选择模型和计费方式，其他设置保持默认，点击确认。
+    
+    > 需先完成[模型调优](https://help.aliyun.com/zh/model-studio/model-training-on-console#a6da1accf0dun)，方可部署大部分模型。
+    
+
+3.  部署状态为**运行中**时，代表该模型已部署成功。
+    
+
+**重要**
+
+模型部署成功后将产生费用。
+
+### **部署配置**
 
 #### 模型单元
 
@@ -1655,33 +1690,50 @@ qwen3-14b
 部署成功后，您可以在部署列表页查看和管理所有部署服务。列表页包含以下信息：
 
 -   **服务名称**：部署服务的名称，单击可查看部署详情。
+    
 -   **模型名称**：部署使用的模型。
+    
 -   **模型Code**：模型部署成功后生成的唯一标识，用于 API 调用时指定模型。
+    
 -   **部署状态/事件状态**：包括待部署、部署中、运行中、部署失败、下线中、服务暂停、已停止、删除中、退订停服/欠费停服、停服恢复中、运行中（变配中）、运行中（变配失败）等状态。
+    
 -   **计费方式**：当前部署服务的计费方式。
+    
 -   **部署详情**：模型单元类型、副本数等配置信息。
+    
 -   **限流详情**：展示当前部署服务的 RPM（每分钟请求数）、TPM（每分钟 Token 数）等限流配置。
+    
 -   **服务时间**：展示部署服务的创建时间与到期时间。
+    
 -   **操作**：根据部署状态和计费方式，可执行更新、监控、扩缩容、续费、下线、删除、体验等操作。
+    
 
-## 部署后调用
+## **部署后调用**
 
-模型部署成功后，支持通过 [OpenAI 兼容](raw/model-api-reference/qwen-api-reference.md)、[Dashscope](raw/model-api-reference/qwen-api-reference.md)及[Assistant SDK](https://help.aliyun.com/zh/model-studio/assistant)进行调用。
+模型部署成功后，支持通过 [OpenAI 兼容](https://help.aliyun.com/zh/model-studio/qwen-api-reference/#d397bcc41eu3q)、[Dashscope](https://help.aliyun.com/zh/model-studio/qwen-api-reference/#69cac67a477k2)及[Assistant SDK](https://help.aliyun.com/zh/model-studio/assistant#87b4aacb4bsww)进行调用。
 
 在调用已部署成功的模型时，`model`的取值应为模型部署成功后的模型`code`。请前往[模型部署控制台（北京）](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_deploy)界面获取**模型code**。
 
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0929900771/p1051901.png)
+
 示例代码以调用微调后的 qwen3-8b 模型为例：
 
-**说明**模型特性（是否支持非流式输出、结构化输出等）与[微调前的模型](raw/model-user-guide/get-started-with-models/models.md)保持一致。
+**说明**
+
+模型特性（是否支持非流式输出、结构化输出等）与[微调前的模型](https://help.aliyun.com/zh/model-studio/models)保持一致。
 
 经过调优的深度思考模型在调用时是否开启深度思考，建议与调优数据格式一致：
 
 -   调优数据含深度思考，调用时建议开启`enable_thinking`参数。
+    
 -   调优数据不含深度思考，调用时不建议开启`enable_thinking`参数。
+    
 
-**重要**预置吞吐部署方式的 GLM-5.2 模型，在调用时`thinking_budget`参数（限制思考长度）在调用时不生效。
+**重要**
 
-DashScope
+预置吞吐部署方式的 GLM-5.2 模型，在调用时`thinking_budget`参数（限制思考长度）在调用时不生效。
+
+#### DashScope
 
 ```
 import os
@@ -1702,7 +1754,7 @@ response = dashscope.Generation.call(
 print(response)
 ```
 
-OpenAI兼容接口
+#### OpenAI兼容接口
 
 ```
 import os
@@ -1728,40 +1780,53 @@ print(completion)
 ## 部署服务扩缩容
 
 -   预置吞吐（按时长）：点击**扩缩容**按钮，自助、手动调节实例数量。具体降费退费规则请参考：[降配退款规则说明](https://help.aliyun.com/zh/user-center/description-of-downgrade-refund-rules)。
+    
 -   模型单元（按时长）：点击**扩缩容**按钮，自助、手动调节实例数量。
+    
 -   按 Token 调用量：点击**扩容**按钮，填写并提交扩容申请表单，等待人工审核。
+    
 
 此外，您还可以通过操作列的伸缩配置按钮，配置自动伸缩策略（包括伸缩阈值、最小/最大副本数、定时伸缩等）。
 
-## 部署服务下线
+## **部署服务下线**
 
 前往[模型部署控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_deploy/create)，找到要停止的部署服务，根据计费类型点击对应操作：
 
 -   模型单元预付费：点击**下线**并确认。
+    
 -   后付费：点击**删除**并确认。
+    
 
 操作完成后将不再产生计费。
+
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0929900771/p1051902.png)
 
 ## 其他操作
 
 除下线外，部署列表页的操作列还支持以下操作：
 
 -   **更新**：更新已部署服务的模型版本，支持全部更新或分批更新（金丝雀发布）。
+    
 -   **删除**：按量付费服务可直接删除，停止计费。
+    
 -   **续费**：预付费服务可续费延长服务时间，支持自动续费。
+    
 -   **购买容量包**：为预置吞吐部署购买容量包。
+    
 
-## 常见问题
+## **常见问题**
 
-### 可以上传和部署自己的模型吗？
+### **可以上传和部署自己的模型吗？**
 
-支持在[我的模型控制台（北京）](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_center)导入部分开源模型，详细支持列表请参考：[模型导入](raw/model-user-guide/model-deployment-1/model-import.md)。
+支持在[我的模型控制台（北京）](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/model_center)导入部分开源模型，详细支持列表请参考：[模型导入](https://help.aliyun.com/zh/model-studio/model-import)。
 
 此外，阿里云人工智能平台 PAI 提供了部署自有模型的功能，您可以参考[PAI-LLM大语言模型部署](https://help.aliyun.com/zh/pai/deploy-an-llm/)了解部署方法。
 
-### 部署时提示权限不足怎么办？
+### **部署时提示权限不足怎么办？**
 
 1.  如果显示**“缺少该模块的权限”**，请确保您的账号在该业务空间的权限管理页面中拥有**模型部署-操作**权限。
+    
+    ![PixPin\_2025-11-27\_15-09-44](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5138594771/p1030122.png)
     
     如果无法正常操作，请联系您的组织或 IT 管理员添加相关权限或代为检查权限问题。
     
@@ -1769,17 +1834,21 @@ print(completion)
     
     > API 调用报错：`Workspace xxx does not have deployment privilege for model xxxx`。
     
-     
+    ![PixPin\_2025-11-27\_15-03-57](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1816324671/p1030115.png)
+    
+    ![PixPin\_2025-11-27\_15-06-41](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1816324671/p1030118.png)
     
     如果提示权限不足，请联系您的组织或 IT 管理员添加相关权限或代为操作。
     
 
-### 该如何切换到其他的计费方式？
+### **该如何切换到其他的计费方式？**
 
 只能释放原有资源，再通过需要的计费方式创建新资源。
 
 建议按照以下步骤进行切换：
 
 1.  使用需要的计费方式部署新的资源。
+    
 2.  切换 API 并测试服务可用性。
+    
 3.  下线释放原有资源。

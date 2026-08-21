@@ -1,10 +1,12 @@
 # HTTP协议
 
-本文介绍基于 HTTP 协议的多模态交互 API。
+本文介绍基于 HTTP 协议的多模态交互 API。
 
 多模态交互开发套件中的HTTP协议支持使用纯文本或图片发起**http-sse**请求，获取大模型处理结果。
 
-**重要**使用HTTP协议接入多模态交互开发套件，不支持以下功能：
+**重要**
+
+使用HTTP协议接入多模态交互开发套件，不支持以下功能：
 
 -   不支持纯视觉应用
     
@@ -13,21 +15,25 @@
     视频通话、极速视频/语音通话、语音翻译、新闻电台、儿童故事、录音纪要、主动导览、主动陪伴。
     
 
-## 前提条件
+## **前提条件**
 
-已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
+已开通服务并[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
 
-**说明**对于客户端调用的场景，在客户端处理API Key有安全风险，建议从服务端用API Key获取临时鉴权Token，再把Token下发给客户端使用。具体方法请参考：[生成临时API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)。
+**说明**
 
-## 服务地址
+对于客户端调用的场景，在客户端处理API Key有安全风险，建议从服务端用API Key获取临时鉴权Token，再把Token下发给客户端使用。具体方法请参考：[生成临时API Key](https://help.aliyun.com/zh/model-studio/generate-temporary-api-key)。
+
+## **服务地址**
 
 ```
 https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
 ```
 
-**说明**发起HTTP请求时，请求的header里要有**X-DashScope-SSE: enable**
+**说明**
 
-## 鉴权
+发起HTTP请求时，请求的header里要有**X-DashScope-SSE: enable**
+
+## **鉴权**
 
 需要在发起HTTP请求时，把API Key放在HTTP Header里（需要将your\_api\_key替换为真实的API Key）：
 
@@ -35,13 +41,13 @@ https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/genera
 "Authorization": "Bearer your_api_key"
 ```
 
-## 消息类型
+## **消息类型**
 
 当前HTTP协议仅包含文本消息。文本消息是JSON格式字符串。
 
-### 发起请求
+### **发起请求**
 
-#### Request - Input Message
+#### **Request - Input Message**
 
 发起HTTP请求。
 
@@ -97,7 +103,7 @@ string
 
 要处理的文本。
 
--   调用部分agent时，text可以是""空字符串，服务端需要使用parameters中的images或者biz\_params参数处理。具体参考[调用官方Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/official-agent.md)。
+-   调用部分agent时，text可以是""空字符串，服务端需要使用parameters中的images或者biz\_params参数处理。具体参考[调用官方Agent](https://help.aliyun.com/zh/model-studio/official-agent)。
     
 
 parameters
@@ -108,7 +114,7 @@ object
 
 是
 
-参数说明参考下方 [parameters.client\_info的参数说明](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/multimodal-http-protocol.md)表格
+参数说明参考下方 [parameters.client\_info的参数说明](#8639a70e4bsn1)表格
 
 history
 
@@ -124,7 +130,7 @@ list\[\]
 
 否
 
-需要分析的图片数据，仅多模态应用可支持图片问答，参数说明参考下方[parameters.images的参数说明](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/multimodal-http-protocol.md)表格
+需要分析的图片数据，仅多模态应用可支持图片问答，参数说明参考下方[parameters.images的参数说明](#e17e1d8629h1u)表格
 
 biz\_params
 
@@ -132,7 +138,7 @@ object
 
 否
 
-按需配置，参数说明参考下方[parameters.biz\_params的参数说明](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/multimodal-http-protocol.md)表格
+按需配置，参数说明参考下方[parameters.biz\_params的参数说明](#314d1091471e2)表格
 
 **parameters.client\_info**的参数说明如下：
 
@@ -275,7 +281,7 @@ json object
 
 否
 
-需要透传给agent的参数，各类agent传递的参数参考[调用官方Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/official-agent.md)文档说明
+需要透传给agent的参数，各类agent传递的参数参考[调用官方Agent](https://help.aliyun.com/zh/model-studio/official-agent)文档说明
 
 user\_prompt\_params
 
@@ -293,7 +299,7 @@ json object
 
 用于设置用户自定义对话变量，由用户自定义设置json中的key和value。管控台上配置自定义对话变量的方法参考[应用配置-对话变量](https://help.aliyun.com/zh/model-studio/multimodal-app-configuration#62d90ef075ve1)
 
-##### 示例如下
+##### **示例如下**
 
 ```
 {
@@ -324,9 +330,9 @@ json object
 }
 ```
 
-### 文本下发事件
+### **文本下发事件**
 
-#### RespondingContent - Output Message
+#### **RespondingContent - Output Message**
 
 **一级参数**
 
@@ -415,7 +421,7 @@ object
 
 其他扩展信息，目前支持：
 
--   commands: 命令字符串，**此字段为JSON字符串，需要进行二次解析。**各类agent使用的命令字符串可以参考[调用官方Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/official-agent.md)的说明。
+-   commands: 命令字符串，**此字段为JSON字符串，需要进行二次解析。**各类agent使用的命令字符串可以参考[调用官方Agent](https://help.aliyun.com/zh/model-studio/official-agent)的说明。
     
 -   agent\_info: 智能体信息
     
@@ -424,7 +430,7 @@ object
 -   tool\_infos: 工具信息
     
 
-##### 示例如下：
+##### **示例如下：**
 
 ```
 {
@@ -457,11 +463,11 @@ object
 }
 ```
 
-### 错误事件
+### **错误事件**
 
-报错信息。错误码说明可以参考官方文档：[多模态交互套件-错误码](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/multimodal-error-code.md)
+报错信息。错误码说明可以参考官方文档：[多模态交互套件-错误码](https://help.aliyun.com/zh/model-studio/multimodal-error-code)
 
-#### Error - Output Message
+#### **Error - Output Message**
 
 **一级参数**
 
@@ -503,15 +509,17 @@ string
 }
 ```
 
-## 调用示例
+## **调用示例**
 
 请求示例如下：
 
 header里要有**X-DashScope-SSE: enable**。
 
-**说明**注意把your\_api\_key，app\_id，text，以及parameters里的其他参数都替换为实际使用的值。
+**说明**
 
-curl
+注意把your\_api\_key，app\_id，text，以及parameters里的其他参数都替换为实际使用的值。
+
+## curl
 
 ```
 curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
@@ -546,7 +554,7 @@ curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-
 }'
 ```
 
-Java
+## Java
 
 ```
 import okhttp3.*;

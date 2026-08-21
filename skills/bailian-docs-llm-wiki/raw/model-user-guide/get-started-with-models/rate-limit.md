@@ -5,9 +5,13 @@
 ## 限流规则
 
 -   **账号级别限流**：限流按主账号维度计算，账号下所有RAM子账号、业务空间和API Key 的调用量合并计算。
+    
 -   **模型独立限流**：不同模型限流额度相互独立，具体参见下方表格。
+    
 
-**说明**部分模型，如 qwen3.8-max 采用 [动态限流（新）](raw/model-user-guide/get-started-with-models/quota-management.md)的方式，根据百炼月消费档位进行软限流。且不支持自助提升临时限流额度。
+**说明**
+
+部分模型，如 qwen3.8-max 采用 [动态限流（新）](https://help.aliyun.com/zh/model-studio/quota-management)的方式，根据百炼月消费档位进行软限流。且不支持自助提升临时限流额度。
 
 ## FAQ
 
@@ -16,21 +20,27 @@
 根据错误信息判断触发了哪类限流：
 
 -   `Requests rate limit exceeded` 或 `You exceeded your current requests list`：触发了每分钟请求数（RPM）限流。
+    
 -   `Allocated quota exceeded` 或 `You exceeded your current quota`：触发了每分钟 Token 消耗（TPM）限流。
+    
 -   `Request rate increased too quickly`：请求频率在短时间内激增，触发了系统稳定性保护——即使总调用量未达到 RPM 或 TPM 上限也会触发。
--   其他报错，参见[错误码](raw/model-api-reference/preparations/error-code.md)确认原因。
+    
+-   其他报错，参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)确认原因。
+    
 
 除 RPM 和 TPM 外，限流策略可能按秒级 RPS（RPM/60）与 TPS（TPM/60）执行。即使每分钟总调用量未超限，短时间内的请求爆发也可能触发限流。
 
 ### 如何查看模型调用量？
 
-模型调用完**一小时后**，在模型监控（[北京](https://bailian.console.aliyun.com/?tab=model#/model-telemetry)或[新加坡](https://modelstudio.console.aliyun.com/?tab=model#/model-telemetry)）页面设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**操作**列的**监控**，即可查看该模型的调用统计结果。具体请参见[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)文档。
+模型调用完**一小时后**，在模型监控（[北京](https://bailian.console.aliyun.com/?tab=model#/model-telemetry)或[新加坡](https://modelstudio.console.aliyun.com/?tab=model#/model-telemetry)）页面设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**操作**列的**监控**，即可查看该模型的调用统计结果。具体请参见[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)文档。
 
 > 数据按小时更新，高峰期可能有小时级延迟，请您耐心等待。
 
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6923304571/p992753.png)
+
 ### 遇到限流后多久恢复？
 
-通常在一分钟内恢复。如出现其他报错，参见[错误码](raw/model-api-reference/preparations/error-code.md)进行处理。
+通常在一分钟内恢复。如出现其他报错，参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行处理。
 
 ### 模型响应速度与付费有关吗？
 
@@ -39,8 +49,11 @@
 ### 什么因素影响模型响应速度？
 
 -   **模型类型**：轻量模型（如 qwen-flash）比大型模型（如 qwen-max）生成更快。
+    
 -   **输出长度**：输出 Token 越多，总耗时越长。
+    
 -   **服务器负载**：高峰期可能略有波动。
+    
 
 ### 限流会降低已接受请求的生成速度吗？
 
@@ -49,17 +62,24 @@
 ### 如何避免限流？
 
 1.  **选用高限流模型**
-    -   优先使用 [qwen-plus](raw/model-user-guide/get-started-with-models/models.md) 等限流额度更高的模型。
+    
+    -   优先使用 [qwen-plus](https://help.aliyun.com/zh/model-studio/models#6c45e49509gtr) 等限流额度更高的模型。
+        
     -   稳定版或最新版比带日期的快照版本限流更宽松。
+        
 2.  **优化调用策略**
+    
     -   **降低调用频率**：收到 `Requests rate limit exceeded` 或 `You exceeded your current requests list` 时，降低API调用频率。
+        
     -   **减少 Token 消耗**：收到 `Allocated quota exceeded` 或 `You exceeded your current quota` 时，缩短输入或限制输出长度。
+        
     -   **平滑请求速率**：收到 `Request rate increased too quickly` 时，采用匀速调度、指数退避或请求队列将请求均匀分散，避免瞬时高峰。
+        
 3.  **添加备选模型**
     
     触发限流后切换到备用模型继续生成，可降低失败概率、提升吞吐量。以下代码在调用 `qwen-plus-2025-07-28` 触发限流后，自动改用 `qwen-plus-2025-07-14` 重试。也可以选择不同系列的模型（如 qwen-flash）作为备选模型，进一步降低主备模型同时限流的风险。
     
-    示例代码
+    **示例代码**
     
     ```
     import os
@@ -79,7 +99,7 @@
     
     client = AsyncOpenAI(
         api_key=API_KEY,
-        # 以下为华北2（北京）地域的URL，请将WorkspaceId替换为真实的业务空间ID。
+        # 以下为华北2（北京）地域的URL，请将WorkspaceId替换为真实的业务空间ID。     
         base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
     )
     
@@ -119,22 +139,25 @@
     
 5.  **批量推理**：无需实时响应时，使用[批量推理](https://help.aliyun.com/zh/model-studio/batch-inference)（Batch API）。批量请求不受实时限流约束，但需考虑排队和处理时间。
     
-6.  **提升限流额度**：默认限流额度不足时，在百炼控制台的**限流提额**页面提升模型的临时 TPM 额度，提交后立即生效。详见[提升临时限流额度](https://help.aliyun.com/zh/model-studio/rate-limit#h2_temp_limit_raise)。
+6.  **提升限流额度**：默认限流额度不足时，在百炼控制台的**限流提额**页面提升模型的临时 TPM 额度，提交后立即生效。详见[提升临时限流额度](#h2-temp-limit-raise)。
     
 
 ### 如何控制 Token 用量或费用支出？
 
 限流仅约束单位时间内的调用速率，不限制累计用量。如需控制 Token 用量或费用支出，可通过以下方式管理：
 
--   **设置消费限额与费用告警**：在**账单费用**卡片设置**费用告警**，开启月度消费限额并配置阈值通知，达到阈值即提醒，避免超额支出。详见[账单查询与成本管理](raw/model-user-guide/test-1/bill-query-and-cost-management.md)。
--   **开启免费额度用完即停**：对支持免费额度的模型，可开启**免费额度用完即停**，免费额度耗尽后自动停止调用，避免产生额外费用。详见[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
--   **监控模型调用量**：定期查看各模型的 Token 用量，及时发现异常增长，参见上文[如何查看模型调用量？](https://help.aliyun.com/zh/model-studio/rate-limit#2c4544e8d8wy6)。
+-   **设置消费限额与费用告警**：在**账单费用**卡片设置**费用告警**，开启月度消费限额并配置阈值通知，达到阈值即提醒，避免超额支出。详见[账单查询与成本管理](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management)。
+    
+-   **开启免费额度用完即停**：对支持免费额度的模型，可开启**免费额度用完即停**，免费额度耗尽后自动停止调用，避免产生额外费用。详见[新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota)。
+    
+-   **监控模型调用量**：定期查看各模型的 Token 用量，及时发现异常增长，参见上文[如何查看模型调用量？](#2c4544e8d8wy6)。
+    
 
 ### 充值后是否还会被限流？
 
 充值不改变模型默认的 RPM 和 TPM 限流阈值。限流按阿里云主账号维度配置，与计费相互独立；充值（按量付费）仅确保账号不因欠费停服，不会提升限流值。
 
-如需更高的限流额度，请参见本文[如何避免限流？](https://help.aliyun.com/zh/model-studio/rate-limit#0e4e875b9c2eg)，或在百炼控制台的**限流提额**页面申请[提升临时限流额度](https://help.aliyun.com/zh/model-studio/rate-limit#h2_temp_limit_raise)。
+如需更高的限流额度，请参见本文[如何避免限流？](#0e4e875b9c2eg)，或在百炼控制台的**限流提额**页面申请[提升临时限流额度](#h2-temp-limit-raise)。
 
 ## 提升临时限流额度
 
@@ -143,27 +166,37 @@
 目前支持华北2（北京）和新加坡地域。
 
 1.  登录百炼控制台，进入[限流提额](https://bailian.console.aliyun.com/?tab=model#/efm/temp_limit_raise)页面。
+    
 2.  单击页面右上角的**提升模型临时限流额度**。
+    
 3.  在弹窗中选择**模型**，填写期望的 **Token 账号限流（Token/60 秒）**值。弹窗中会显示当前额度和可设置上限。
+    
 4.  单击**确定**，提额立即生效。
+    
 
 提额生效后，可通过以下方式确认：
 
 -   在[限流提额](https://bailian.console.aliyun.com/?tab=model#/efm/temp_limit_raise)页面的列表中，查看已提额的模型及对应限流数据。
+    
 -   在[模型广场](https://bailian.console.aliyun.com/?tab=model#/model-market/all)中进入对应模型的详情页，查看更新后的限流数据。
+    
 
 **说明**
 
 -   支持临时提额的模型以[限流提额](https://bailian.console.aliyun.com/?tab=model#/efm/temp_limit_raise)页面弹窗的可选列表为准。
+    
 -   对已提额的模型再次提交视为重新申请，有效期随之重置为 30 天。
+    
 -   按实际需求申请额度。若配置容量长期显著超过实际使用量，系统可能在提前通知后将其恢复为默认值。
+    
 -   若限流额度不满足需求，请联系商务经理申请提额。
+    
 
-## 文本生成-千问
+## **文本生成-千问**
 
-### 千问语言模型
+### **千问语言模型**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -179,7 +212,7 @@
 
 qwen3.8-max
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 30,000
 
@@ -187,7 +220,7 @@ qwen3.8-max
 
 qwen3.7-max
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 30,000
 
@@ -225,7 +258,7 @@ qwen3.6-max-preview
 
 qwen3-max
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 30,000
 
@@ -251,7 +284,7 @@ qwen3-max-preview
 
 qwen-max
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 1,200
 
@@ -271,7 +304,7 @@ qwen3.7-plus-2026-05-26
 
 qwen3.6-plus
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 30,000
 
@@ -285,7 +318,7 @@ qwen3.6-plus-2026-04-02
 
 qwen3.7-flash
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 30,000
 
@@ -299,7 +332,7 @@ qwen3.7-flash-2026-07-15
 
 qwen3.6-flash
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 30,000
 
@@ -313,7 +346,7 @@ qwen3.6-flash-2026-04-16
 
 qwen3.5-plus
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 30,000
 
@@ -333,7 +366,7 @@ qwen3.5-plus-2026-02-15
 
 qwen-plus
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 30,000
 
@@ -341,7 +374,7 @@ qwen-plus
 
 qwen-plus-latest
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 15,000
 
@@ -409,7 +442,7 @@ qwen-plus-2024-12-20
 
 qwen3.5-flash
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 30,000
 
@@ -423,7 +456,7 @@ qwen3.5-flash-2026-02-23
 
 qwen-flash
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 30,000
 
@@ -437,7 +470,7 @@ qwen-flash-2025-07-28
 
 qwen-turbo
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 1,200
 
@@ -445,7 +478,7 @@ qwen-turbo
 
 qwq-plus
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 600
 
@@ -453,7 +486,7 @@ qwq-plus
 
 qwen-long
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 1,200
 
@@ -461,7 +494,7 @@ qwen-long
 
 qwen-long-latest
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 1,200
 
@@ -475,7 +508,7 @@ qwen-long-2025-01-25
 
 7,500
 
-#### 美国（弗吉尼亚）
+## **美国（弗吉尼亚）**
 
 **模型名称**
 
@@ -747,7 +780,7 @@ qwen-flash-2025-07-28-us
 
 5,000,000
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -837,7 +870,7 @@ qwen3-max-preview
 
 qwen-max
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 国际
 
@@ -1037,7 +1070,7 @@ qwq-plus
 
 qwen-turbo
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 国际
 
@@ -1045,7 +1078,7 @@ qwen-turbo
 
 5,000,000
 
-#### 德国（法兰克福）
+## **德国（法兰克福）**
 
 **模型名称**
 
@@ -1309,7 +1342,7 @@ qwen-flash-2025-07-28
 
 1,000,000
 
-#### 日本（东京）
+## **日本（东京）**
 
 **模型名称**
 
@@ -1429,9 +1462,9 @@ qwen3.6-flash-2026-04-16
 
 1,000,000
 
-### 千问VL（视觉理解/图生文）
+### **千问VL（视觉理解/图生文）**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -1447,7 +1480,7 @@ qwen3.6-flash-2026-04-16
 
 qwen3-vl-plus
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 3,000
 
@@ -1467,7 +1500,7 @@ qwen3-vl-plus-2025-09-23
 
 qwen3-vl-flash
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 3,000
 
@@ -1487,7 +1520,7 @@ qwen3-vl-flash-2025-10-15
 
 qwen-vl-max
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 1,200
 
@@ -1495,7 +1528,7 @@ qwen-vl-max
 
 qwen-vl-plus
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 1,200
 
@@ -1513,7 +1546,7 @@ qvq-plus
 
 100,000
 
-#### 美国（弗吉尼亚）
+## **美国（弗吉尼亚）**
 
 **模型名称**
 
@@ -1577,7 +1610,7 @@ qwen3-vl-flash-2025-10-15-us
 
 1,000,000
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -1665,7 +1698,7 @@ qvq-max
 
 100,000
 
-#### 德国（法兰克福）
+## **德国（法兰克福）**
 
 **模型名称**
 
@@ -1745,9 +1778,9 @@ qwen3-vl-flash-2025-10-15
 
 1,000,000
 
-### 千问Omni
+### **千问Omni**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -1805,7 +1838,7 @@ qwen3-omni-flash-2025-09-15
 
 qwen-omni-turbo
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 60
 
@@ -1833,7 +1866,7 @@ qwen-omni-turbo-2025-01-19
 
 100,000
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -1929,9 +1962,9 @@ qwen-omni-turbo-2025-03-26
 
 100,000
 
-### 千问Omni-Realtime
+### **千问Omni-Realtime**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -1999,7 +2032,7 @@ qwen-omni-turbo-realtime-2025-05-08
 
 100,000
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -2095,9 +2128,9 @@ qwen-omni-turbo-realtime-2025-05-08
 
 10,000
 
-### 千问OCR（文字提取）
+### **千问OCR（文字提取）**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -2119,7 +2152,7 @@ qwen3.5-ocr
 
 qwen-vl-ocr
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 600
 
@@ -2127,7 +2160,7 @@ qwen-vl-ocr
 
 qwen-vl-ocr-latest
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 6,000
 
@@ -2157,7 +2190,7 @@ qwen-vl-ocr-2024-10-28
 
 6,000,000
 
-#### 美国（弗吉尼亚）
+## **美国（弗吉尼亚）**
 
 **模型名称**
 
@@ -2189,7 +2222,7 @@ qwen-vl-ocr-2025-11-20
 
 6,000,000
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -2221,7 +2254,7 @@ qwen-vl-ocr-2025-11-20
 
 6,000,000
 
-#### 德国（法兰克福）
+## **德国（法兰克福）**
 
 **模型名称**
 
@@ -2253,9 +2286,9 @@ qwen-vl-ocr-2025-11-20
 
 6,000,000
 
-### 千问Audio（音频理解）
+### **千问Audio（音频理解）**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -2281,9 +2314,9 @@ qwen-audio-turbo-latest
 
 无 TPM 限制
 
-### 千问数学模型
+### **千问数学模型**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -2331,9 +2364,9 @@ qwen-math-turbo
 
 1,000,000
 
-### 千问Coder
+### **千问Coder**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -2389,7 +2422,7 @@ qwen-coder-turbo
 
 1,000,000
 
-#### 美国（弗吉尼亚）
+## **美国（弗吉尼亚）**
 
 **模型名称**
 
@@ -2445,7 +2478,7 @@ qwen3-coder-flash-2025-07-28
 
 1,000,000
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -2501,7 +2534,7 @@ qwen3-coder-flash-2025-07-28
 
 5,000,000
 
-#### 德国（法兰克福）
+## **德国（法兰克福）**
 
 **模型名称**
 
@@ -2557,9 +2590,9 @@ qwen3-coder-flash-2025-07-28
 
 1,000,000
 
-### 千问翻译模型
+### **千问翻译模型**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -2597,7 +2630,7 @@ qwen-mt-turbo
 
 35,000
 
-#### 美国（弗吉尼亚）
+## **美国（弗吉尼亚）**
 
 **模型名称**
 
@@ -2645,7 +2678,7 @@ qwen-mt-lite-us
 
 100,000
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -2693,7 +2726,7 @@ qwen-mt-turbo
 
 100,000
 
-#### 德国（法兰克福）
+## **德国（法兰克福）**
 
 **模型名称**
 
@@ -2733,9 +2766,9 @@ qwen-mt-lite
 
 100,000
 
-### 千问数据挖掘模型
+### **千问数据挖掘模型**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -2755,9 +2788,9 @@ qwen-doc-turbo
 
 3,000,000
 
-### 千问深入研究模型
+### **千问深入研究模型**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -2777,9 +2810,9 @@ qwen-deep-research
 
 1,200,000
 
-### 通义晓蜜对话分析模型
+### **通义晓蜜对话分析模型**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -2805,11 +2838,11 @@ tongyi-xiaomi-analysis-pro
 
 1,000,000
 
-## 文本生成-千问-开源版
+## **文本生成-千问-开源版**
 
-### 千问语言模型开源版
+### **千问语言模型开源版**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -2937,7 +2970,7 @@ qwen3-8b
 
 1,000,000
 
-#### 美国（弗吉尼亚）
+## **美国（弗吉尼亚）**
 
 **模型名称**
 
@@ -3081,7 +3114,7 @@ qwen3-8b
 
 1,000,000
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -3249,7 +3282,7 @@ qwen3-8b
 
 1,000,000
 
-#### 德国（法兰克福）
+## **德国（法兰克福）**
 
 **模型名称**
 
@@ -3393,9 +3426,9 @@ qwen3-8b
 
 1,000,000
 
-### Qwen-VL
+### **Qwen-VL**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -3457,167 +3490,7 @@ qwen3-vl-235b-a22b-instruct
 
 100,000
 
-#### 美国（弗吉尼亚）
-
-**模型名称**
-
-**服务部署范围**
-
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-vl-235b-a22b-thinking
-
-全球
-
-60
-
-100,000
-
-qwen3-vl-235b-a22b-instruct
-
-全球
-
-60
-
-100,000
-
-qwen3-vl-32b-thinking
-
-全球
-
-600
-
-1,000,000
-
-qwen3-vl-32b-instruct
-
-全球
-
-600
-
-1,000,000
-
-qwen3-vl-30b-a3b-thinking
-
-全球
-
-600
-
-1,000,000
-
-qwen3-vl-30b-a3b-instruct
-
-全球
-
-600
-
-1,000,000
-
-qwen3-vl-8b-thinking
-
-全球
-
-600
-
-1,000,000
-
-qwen3-vl-8b-instruct
-
-全球
-
-600
-
-1,000,000
-
-#### 新加坡
-
-**模型名称**
-
-**服务部署范围**
-
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-qwen3-vl-32b-thinking
-
-国际
-
-60
-
-100,000
-
-qwen3-vl-32b-instruct
-
-国际
-
-60
-
-100,000
-
-qwen3-vl-30b-a3b-thinking
-
-国际
-
-60
-
-100,000
-
-qwen3-vl-30b-a3b-instruct
-
-国际
-
-60
-
-100,000
-
-qwen3-vl-8b-thinking
-
-国际
-
-60
-
-100,000
-
-qwen3-vl-8b-instruct
-
-国际
-
-60
-
-100,000
-
-qwen3-vl-235b-a22b-thinking
-
-国际
-
-60
-
-100,000
-
-qwen3-vl-235b-a22b-instruct
-
-国际
-
-60
-
-100,000
-
-#### 德国（法兰克福）
+## **美国（弗吉尼亚）**
 
 **模型名称**
 
@@ -3697,9 +3570,169 @@ qwen3-vl-8b-instruct
 
 1,000,000
 
-### Qwen-Omni
+## **新加坡**
 
-#### 华北2（北京）
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+qwen3-vl-32b-thinking
+
+国际
+
+60
+
+100,000
+
+qwen3-vl-32b-instruct
+
+国际
+
+60
+
+100,000
+
+qwen3-vl-30b-a3b-thinking
+
+国际
+
+60
+
+100,000
+
+qwen3-vl-30b-a3b-instruct
+
+国际
+
+60
+
+100,000
+
+qwen3-vl-8b-thinking
+
+国际
+
+60
+
+100,000
+
+qwen3-vl-8b-instruct
+
+国际
+
+60
+
+100,000
+
+qwen3-vl-235b-a22b-thinking
+
+国际
+
+60
+
+100,000
+
+qwen3-vl-235b-a22b-instruct
+
+国际
+
+60
+
+100,000
+
+## **德国（法兰克福）**
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+qwen3-vl-235b-a22b-thinking
+
+全球
+
+60
+
+100,000
+
+qwen3-vl-235b-a22b-instruct
+
+全球
+
+60
+
+100,000
+
+qwen3-vl-32b-thinking
+
+全球
+
+600
+
+1,000,000
+
+qwen3-vl-32b-instruct
+
+全球
+
+600
+
+1,000,000
+
+qwen3-vl-30b-a3b-thinking
+
+全球
+
+600
+
+1,000,000
+
+qwen3-vl-30b-a3b-instruct
+
+全球
+
+600
+
+1,000,000
+
+qwen3-vl-8b-thinking
+
+全球
+
+600
+
+1,000,000
+
+qwen3-vl-8b-instruct
+
+全球
+
+600
+
+1,000,000
+
+### **Qwen-Omni**
+
+## **华北2（北京）**
 
 **模型名称**
 
@@ -3719,7 +3752,7 @@ qwen2.5-omni-7b
 
 100,000
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -3743,9 +3776,9 @@ qwen2.5-omni-7b
 
 100,000
 
-### Qwen3-Omni-Captioner
+### **Qwen3-Omni-Captioner**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -3765,7 +3798,7 @@ qwen3-omni-30b-a3b-captioner
 
 100,000
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -3789,9 +3822,9 @@ qwen3-omni-30b-a3b-captioner
 
 100,000
 
-### Qwen-Coder
+### **Qwen-Coder**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -3823,7 +3856,7 @@ qwen3-coder-30b-a3b-instruct
 
 1,000,000
 
-#### 美国（弗吉尼亚）
+## **美国（弗吉尼亚）**
 
 **模型名称**
 
@@ -3855,7 +3888,7 @@ qwen3-coder-30b-a3b-instruct
 
 1,000,000
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -3895,7 +3928,7 @@ qwen3-coder-30b-a3b-instruct
 
 1,000,000
 
-#### 德国（法兰克福）
+## **德国（法兰克福）**
 
 **模型名称**
 
@@ -3935,11 +3968,11 @@ qwen3-coder-next
 
 1,000,000
 
-## 文本生成-第三方模型
+## **文本生成-第三方模型**
 
-### DeepSeek
+### **DeepSeek**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -3979,7 +4012,7 @@ deepseek-v4-flash
 
 deepseek-v3.2
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 15,000
 
@@ -4005,7 +4038,7 @@ deepseek-r1-0528
 
 deepseek-r1
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 15,000
 
@@ -4013,7 +4046,7 @@ deepseek-r1
 
 deepseek-v3
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 15,000
 
@@ -4055,7 +4088,7 @@ deepseek-r1-distill-llama-70b
 
 100,000
 
-#### 美国（弗吉尼亚）
+## **美国（弗吉尼亚）**
 
 **模型名称**
 
@@ -4127,7 +4160,7 @@ deepseek-v4-flash-0731-us
 
 1,200,000
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -4183,7 +4216,7 @@ deepseek-v3.2
 
 1,200,000
 
-#### 德国（法兰克福）
+## **德国（法兰克福）**
 
 **模型名称**
 
@@ -4231,7 +4264,7 @@ deepseek-v4-flash
 
 1,200,000
 
-#### 日本（东京）
+## **日本（东京）**
 
 **模型名称**
 
@@ -4311,9 +4344,9 @@ deepseek-v4-flash
 
 1,200,000
 
-### DeepSeek-硅基流动直供
+### **DeepSeek-硅基流动直供**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -4351,9 +4384,9 @@ siliconflow/deepseek-v3-0324
 
 500,000
 
-### DeepSeek-快手万擎直供
+### **DeepSeek-快手万擎直供**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -4397,9 +4430,9 @@ vanchin/deepseek-ocr
 
 1,000,000
 
-### Kimi
+### **Kimi**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -4449,7 +4482,7 @@ Moonshot-Kimi-K2-Instruct
 
 1,000,000
 
-#### 美国（弗吉尼亚）
+## **美国（弗吉尼亚）**
 
 **模型名称**
 
@@ -4464,22 +4497,6 @@ Moonshot-Kimi-K2-Instruct
 **每分钟消耗Token数（TPM）**
 
 > **含输入与输出Token**
-
-kimi-k3
-
-全球
-
-15,000
-
-1,200,000
-
-kimi-k3
-
-国际
-
-10,000
-
-1,200,000
 
 kimi-k2.7-code
 
@@ -4497,47 +4514,7 @@ kimi-k2.5
 
 1,000,000
 
-#### 德国（法兰克福）
-
-**模型名称**
-
-**服务部署范围**
-
-**限流条件（超出任一数值时触发限流）**
-
-> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
-
-**每分钟调用次数（RPM）**
-
-**每分钟消耗Token数（TPM）**
-
-> **含输入与输出Token**
-
-kimi-k3
-
-全球
-
-15,000
-
-1,200,000
-
-kimi-k2.7-code
-
-全球
-
-500
-
-1,000,000
-
-kimi-k2.5
-
-全球
-
-500
-
-1,000,000
-
-#### 日本（东京）
+## **德国（法兰克福）**
 
 **模型名称**
 
@@ -4577,7 +4554,47 @@ kimi-k2.5
 
 1,000,000
 
-#### 新加坡
+## **日本（东京）**
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+kimi-k3
+
+全球
+
+15,000
+
+1,200,000
+
+kimi-k2.7-code
+
+全球
+
+500
+
+1,000,000
+
+kimi-k2.5
+
+全球
+
+500
+
+1,000,000
+
+## **新加坡**
 
 **模型名称**
 
@@ -4609,9 +4626,9 @@ kimi-k2.7-code
 
 1,000,000
 
-### Kimi-月之暗面直供
+### **Kimi-月之暗面直供**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -4643,9 +4660,9 @@ kimi/kimi-k2.6
 
 kimi/kimi-k2.5
 
-### GLM
+### **GLM**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -4701,7 +4718,7 @@ glm-4.5-air
 
 1,000,000
 
-#### 美国（弗吉尼亚）
+## **美国（弗吉尼亚）**
 
 **模型名称**
 
@@ -4741,7 +4758,7 @@ glm-5.1
 
 1,000,000
 
-#### 德国（法兰克福）
+## **德国（法兰克福）**
 
 **模型名称**
 
@@ -4773,7 +4790,7 @@ glm-5.1
 
 1,000,000
 
-#### 日本（东京）
+## **日本（东京）**
 
 **模型名称**
 
@@ -4797,7 +4814,7 @@ glm-5.1
 
 1,000,000
 
-#### 新加坡
+## 新加坡
 
 **模型名称**
 
@@ -4829,9 +4846,9 @@ glm-5.1
 
 1,000,000
 
-### GLM-智谱直供
+### **GLM-智谱直供**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -4869,9 +4886,9 @@ ZHIPU/GLM-5
 
 3,000,000
 
-### MiniMax
+### **MiniMax**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -4897,9 +4914,9 @@ MiniMax-M2.1
 
 1,000,000
 
-### MiniMax-稀宇科技直供
+### **MiniMax-稀宇科技直供**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -4937,9 +4954,9 @@ MiniMax/MiniMax-M2.1
 
 20,000,000
 
-### MiMo-小米直供
+### **MiMo-小米直供**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -4959,9 +4976,9 @@ xiaomi/mimo-v2.5-pro
 
 10,000,000
 
-### Stepfun-阶跃星辰直供
+### **Stepfun-阶跃星辰直供**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -4981,11 +4998,11 @@ stepfun/step-3.7-flash
 
 20,000,000
 
-## 图像生成
+## **图像生成**
 
-### 千问（Qwen-Image）
+### **千问（Qwen-Image）**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -5115,7 +5132,7 @@ qwen-mt-image
 
 2
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -5279,7 +5296,7 @@ qwen-image-edit
 
 同步接口无限制
 
-#### 德国（法兰克福）
+## **德国（法兰克福）**
 
 **模型名称**
 
@@ -5307,7 +5324,7 @@ qwen-image-3.0
 
 同步接口无限制 / 异步接口 10
 
-#### 日本（东京）
+## **日本（东京）**
 
 **模型名称**
 
@@ -5335,9 +5352,9 @@ qwen-image-3.0
 
 同步接口无限制 / 异步接口 10
 
-### 文生图-Z-Image
+### **文生图-Z-Image**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -5353,7 +5370,7 @@ z-image-turbo
 
 同步接口无限制
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -5373,9 +5390,9 @@ z-image-turbo
 
 同步接口无限制
 
-### 万相
+### **万相**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -5475,7 +5492,7 @@ wanx-sketch-to-image-lite
 
 1
 
-#### 美国（弗吉尼亚）
+## **美国（弗吉尼亚）**
 
 **模型名称**
 
@@ -5503,7 +5520,7 @@ wan2.6-image
 
 5
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -5595,7 +5612,7 @@ wan2.5-i2i-preview
 
 5
 
-#### 德国（法兰克福）
+## **德国（法兰克福）**
 
 **模型名称**
 
@@ -5623,9 +5640,9 @@ wan2.6-image
 
 5
 
-### 图像编辑与生成
+### **图像编辑与生成**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -5689,9 +5706,9 @@ image-out-painting
 
 10
 
-### 人物写真生成-FaceChain
+### **人物写真生成-FaceChain**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -5719,9 +5736,9 @@ facechain-generation
 
 1
 
-### 创意文字生成-WordArt锦书
+### **创意文字生成-WordArt锦书**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -5743,9 +5760,9 @@ wordart-semantic
 
 1
 
-### AI试衣-OutfitAnyone
+### **AI试衣-OutfitAnyone**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -5779,11 +5796,11 @@ aitryon-refiner
 
 5
 
-## 图像生成-第三方模型
+## **图像生成-第三方模型**
 
-### 可灵系列
+### **可灵系列**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -5799,13 +5816,13 @@ kling/kling-v3-omni-image-generation
 
 10
 
-> 同一阿里云百炼API Key 下，可灵系列的 4 个模型（[图像](https://help.aliyun.com/zh/model-studio/rate-limit#fdd6e348d2md4)及[视频](https://help.aliyun.com/zh/model-studio/rate-limit#kling-third-party-limit)）共享 10 个并发数。即这 4 个模型处于运行状态的任务总数加起来不能超过 10 个。
+> 同一阿里云百炼API Key 下，可灵系列的 4 个模型（[图像](#fdd6e348d2md4)及[视频](#kling-third-party-limit)）共享 10 个并发数。即这 4 个模型处于运行状态的任务总数加起来不能超过 10 个。
 
 kling/kling-v3-image-generation
 
-### Vidu系列
+### **Vidu系列**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -5829,9 +5846,9 @@ vidu/viduq2-pro\_reference2image
 
 vidu/viduq2-fast\_reference2image
 
-## 音乐生成
+## **音乐生成**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -5845,11 +5862,11 @@ fun-music-v1
 
 180
 
-## 语音对话
+## **语音对话**
 
-### 实时语音对话
+### **实时语音对话**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -5875,7 +5892,7 @@ qwen-audio-3.0-realtime-flash
 
 100,000
 
-#### 新加坡
+## 新加坡
 
 **模型名称**
 
@@ -5907,9 +5924,9 @@ qwen-audio-3.0-realtime-flash
 
 100,000
 
-## 语音合成（文本转语音）
+## **语音合成（文本转语音）**
 
-### Qwen-Audio-TTS
+### **Qwen-Audio-TTS**
 
 #### 华北2（北京）
 
@@ -5945,11 +5962,11 @@ qwen-audio-3.0-tts-flash
 
 3
 
-### Qwen-TTS
+### **Qwen-TTS**
 
 #### 华北2（北京）
 
-#### Qwen3-TTS-Instruct-Flash
+##### **Qwen3-TTS-Instruct-Flash**
 
 **模型名称**
 
@@ -5963,7 +5980,7 @@ qwen3-tts-instruct-flash-2026-01-26
 
 180
 
-#### Qwen3-TTS-VD
+##### **Qwen3-TTS-VD**
 
 **模型名称**
 
@@ -5973,7 +5990,7 @@ qwen3-tts-vd-2026-01-26
 
 180
 
-#### Qwen3-TTS-VC
+##### **Qwen3-TTS-VC**
 
 **模型名称**
 
@@ -5983,7 +6000,7 @@ qwen3-tts-vc-2026-01-22
 
 180
 
-#### Qwen3-TTS-Flash
+##### Qwen3-TTS-Flash
 
 **模型名称**
 
@@ -6001,7 +6018,7 @@ qwen3-tts-flash-2025-09-18
 
 10
 
-#### Qwen-TTS
+##### Qwen-TTS
 
 **模型名称**
 
@@ -6029,7 +6046,7 @@ qwen-tts-2025-04-10
 
 #### 新加坡
 
-#### Qwen3-TTS-Instruct-Flash
+##### **Qwen3-TTS-Instruct-Flash**
 
 **模型名称**
 
@@ -6049,7 +6066,7 @@ qwen3-tts-instruct-flash-2026-01-26
 
 180
 
-#### Qwen3-TTS-VD
+##### **Qwen3-TTS-VD**
 
 **模型名称**
 
@@ -6063,7 +6080,7 @@ qwen3-tts-vd-2026-01-26
 
 180
 
-#### Qwen3-TTS-VC
+##### **Qwen3-TTS-VC**
 
 **模型名称**
 
@@ -6077,7 +6094,7 @@ qwen3-tts-vc-2026-01-22
 
 180
 
-#### Qwen3-TTS-Flash
+##### Qwen3-TTS-Flash
 
 **模型名称**
 
@@ -6103,11 +6120,11 @@ qwen3-tts-flash-2025-09-18
 
 10
 
-### Qwen-TTS-Realtime
+### **Qwen-TTS-Realtime**
 
 #### 华北2（北京）
 
-#### Qwen3-TTS-Instruct-Flash-Realtime
+##### **Qwen3-TTS-Instruct-Flash-Realtime**
 
 **模型名称**
 
@@ -6121,7 +6138,7 @@ qwen3-tts-instruct-flash-realtime-2026-01-22
 
 180
 
-#### Qwen3-TTS-VD-Realtime
+##### Qwen3-TTS-VD-Realtime
 
 **模型名称**
 
@@ -6133,7 +6150,7 @@ qwen3-tts-vd-realtime-2026-01-15
 
 qwen3-tts-vd-realtime-2025-12-16
 
-#### Qwen3-TTS-VC-Realtime
+##### Qwen3-TTS-VC-Realtime
 
 **模型名称**
 
@@ -6145,7 +6162,7 @@ qwen3-tts-vc-realtime-2026-01-15
 
 qwen3-tts-vc-realtime-2025-11-27
 
-#### Qwen3-TTS-Flash-Realtime
+##### Qwen3-TTS-Flash-Realtime
 
 **模型名称**
 
@@ -6163,7 +6180,7 @@ qwen3-tts-flash-realtime-2025-09-18
 
 10
 
-#### Qwen-TTS-Realtime
+##### Qwen-TTS-Realtime
 
 **模型名称**
 
@@ -6189,7 +6206,7 @@ qwen-tts-realtime-2025-07-15
 
 #### 新加坡
 
-#### Qwen3-TTS-Instruct-Flash-Realtime
+##### **Qwen3-TTS-Instruct-Flash-Realtime**
 
 **模型名称**
 
@@ -6209,7 +6226,7 @@ qwen3-tts-instruct-flash-realtime-2026-01-22
 
 180
 
-#### Qwen3-TTS-VD-Realtime
+##### Qwen3-TTS-VD-Realtime
 
 **模型名称**
 
@@ -6227,7 +6244,7 @@ qwen3-tts-vd-realtime-2025-12-16
 
 国际
 
-#### Qwen3-TTS-VC-Realtime
+##### Qwen3-TTS-VC-Realtime
 
 **模型名称**
 
@@ -6245,7 +6262,7 @@ qwen3-tts-vc-realtime-2025-11-27
 
 国际
 
-#### Qwen3-TTS-Flash-Realtime
+##### Qwen3-TTS-Flash-Realtime
 
 **模型名称**
 
@@ -6271,7 +6288,7 @@ qwen3-tts-flash-realtime-2025-09-18
 
 10
 
-### Qwen-TTS声音复刻
+### **Qwen-TTS声音复刻**
 
 #### 华北2（北京）
 
@@ -6297,7 +6314,7 @@ qwen-voice-enrollment
 
 180
 
-### Qwen-TTS声音设计
+### **Qwen-TTS声音设计**
 
 #### 华北2（北京）
 
@@ -6323,7 +6340,7 @@ qwen-voice-design
 
 180
 
-### CosyVoice
+### **CosyVoice**
 
 #### 华北2（北京）
 
@@ -6363,7 +6380,7 @@ cosyvoice-v3-flash
 
 国际
 
-### Qwen-Audio-TTS/CosyVoice声音复刻/设计
+### **Qwen-Audio-TTS/CosyVoice声音复刻/设计**
 
 Qwen-Audio-TTS/CosyVoice声音复刻/设计共用一个模型，共用限流额度。
 
@@ -6391,9 +6408,9 @@ voice-enrollment
 
 10
 
-### Sambert
+### **Sambert**
 
-#### 华北2（北京）
+#### **华北2（北京）**
 
 **模型服务**
 
@@ -6403,11 +6420,11 @@ Sambert系列模型
 
 20
 
-## 语音合成（文本转语音）-第三方模型
+## **语音合成（文本转语音）-第三方模型**
 
-### MiniMax-稀宇科技直供
+### **MiniMax-稀宇科技直供**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -6443,9 +6460,9 @@ MiniMax/speech-02-turbo
 
 20,000
 
-## 语音识别（语音转文本）与翻译（语音转成指定语种的文本）
+## **语音识别（语音转文本）与翻译（语音转成指定语种的文本）**
 
-### Qwen3-LiveTranslate-Flash
+### **Qwen3-LiveTranslate-Flash**
 
 #### 华北2（北京）
 
@@ -6497,7 +6514,7 @@ qwen3-livetranslate-flash-2025-12-01
 
 国际
 
-### Qwen-LiveTranslate-Flash-Realtime
+### **Qwen-LiveTranslate-Flash-Realtime**
 
 #### 华北2（北京）
 
@@ -6587,7 +6604,7 @@ qwen-audio-3.0-asr-flash-streaming
 
 20
 
-### Qwen-Audio-3.0-ASR-Flash-Filetrans
+### **Qwen-Audio-3.0-ASR-Flash-Filetrans**
 
 #### 华北2（北京）
 
@@ -6613,7 +6630,7 @@ qwen-audio-3.0-asr-flash-filetrans
 
 600
 
-### Qwen-Audio-3.0-ASR-Flash
+### **Qwen-Audio-3.0-ASR-Flash**
 
 #### 华北2（北京）
 
@@ -6639,11 +6656,11 @@ qwen-audio-3.0-asr-flash
 
 600
 
-### Qwen-ASR
+### **Qwen-ASR**
 
 #### 华北2（北京）
 
-#### Qwen3-ASR-Flash-Filetrans
+##### Qwen3-ASR-Flash-Filetrans
 
 **模型名称**
 
@@ -6655,7 +6672,7 @@ qwen3-asr-flash-filetrans
 
 qwen3-asr-flash-filetrans-2025-11-17
 
-#### Qwen3-ASR-Flash
+##### **Qwen3-ASR-Flash**
 
 **模型名称**
 
@@ -6671,7 +6688,7 @@ qwen3-asr-flash-2025-09-08
 
 #### 新加坡
 
-#### Qwen3-ASR-Flash-Filetrans
+##### Qwen3-ASR-Flash-Filetrans
 
 **模型名称**
 
@@ -6689,7 +6706,7 @@ qwen3-asr-flash-filetrans-2025-11-17
 
 国际
 
-#### Qwen3-ASR-Flash
+##### **Qwen3-ASR-Flash**
 
 **模型名称**
 
@@ -6729,7 +6746,7 @@ qwen3-asr-flash-2025-09-08-us
 
 美国
 
-### Qwen-ASR-Realtime
+### **Qwen-ASR-Realtime**
 
 #### 华北2（北京）
 
@@ -6767,7 +6784,7 @@ qwen3-asr-flash-realtime-2025-10-27
 
 国际
 
-### Fun-ASR
+### **Fun-ASR**
 
 #### 华北2（北京）
 
@@ -6833,7 +6850,7 @@ fun-asr-flash-2026-06-15
 
 600
 
-### Fun-ASR-Realtime
+### **Fun-ASR-Realtime**
 
 #### 华北2（北京）
 
@@ -6873,9 +6890,9 @@ fun-asr-realtime-2025-11-07
 
 国际
 
-### Paraformer
+### **Paraformer**
 
-#### 华北2（北京）
+#### **华北2（北京）**
 
 **模型名称**
 
@@ -6937,11 +6954,11 @@ paraformer-8k-v1
 
 500
 
-## 视频生成
+## **视频生成**
 
-### HappyHorse系列
+### **HappyHorse系列**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -6993,143 +7010,7 @@ happyhorse-1.0-video-edit
 
 5
 
-#### 美国（弗吉尼亚）
-
-**模型名称**
-
-**服务部署范围**
-
-**限流条件（超出任一数值时触发限流）**
-
-**每秒钟任务下发接口RPS限制**
-
-**同时处理中任务数量（并发数）**
-
-happyhorse-1.1-t2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.1-i2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.1-r2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.0-t2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.0-i2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.0-r2v
-
-全球
-
-5
-
-5
-
-happyhorse-1.0-video-edit
-
-全球
-
-5
-
-5
-
-#### 新加坡
-
-**模型名称**
-
-**服务部署范围**
-
-**限流条件（超出任一数值时触发限流）**
-
-**每秒钟任务下发接口RPS限制**
-
-**同时处理中任务数量（并发数）**
-
-happyhorse-1.1-t2v
-
-国际
-
-5
-
-5
-
-happyhorse-1.1-i2v
-
-国际
-
-5
-
-5
-
-happyhorse-1.1-r2v
-
-国际
-
-5
-
-5
-
-happyhorse-1.0-t2v
-
-国际
-
-5
-
-5
-
-happyhorse-1.0-i2v
-
-国际
-
-5
-
-5
-
-happyhorse-1.0-r2v
-
-国际
-
-5
-
-5
-
-happyhorse-1.0-video-edit
-
-国际
-
-5
-
-5
-
-#### 德国（法兰克福）
+## **美国（弗吉尼亚）**
 
 **模型名称**
 
@@ -7197,7 +7078,143 @@ happyhorse-1.0-video-edit
 
 5
 
-#### 日本（东京）
+## **新加坡**
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+**每秒钟任务下发接口RPS限制**
+
+**同时处理中任务数量（并发数）**
+
+happyhorse-1.1-t2v
+
+国际
+
+5
+
+5
+
+happyhorse-1.1-i2v
+
+国际
+
+5
+
+5
+
+happyhorse-1.1-r2v
+
+国际
+
+5
+
+5
+
+happyhorse-1.0-t2v
+
+国际
+
+5
+
+5
+
+happyhorse-1.0-i2v
+
+国际
+
+5
+
+5
+
+happyhorse-1.0-r2v
+
+国际
+
+5
+
+5
+
+happyhorse-1.0-video-edit
+
+国际
+
+5
+
+5
+
+## **德国（法兰克福）**
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+**每秒钟任务下发接口RPS限制**
+
+**同时处理中任务数量（并发数）**
+
+happyhorse-1.1-t2v
+
+全球
+
+5
+
+5
+
+happyhorse-1.1-i2v
+
+全球
+
+5
+
+5
+
+happyhorse-1.1-r2v
+
+全球
+
+5
+
+5
+
+happyhorse-1.0-t2v
+
+全球
+
+5
+
+5
+
+happyhorse-1.0-i2v
+
+全球
+
+5
+
+5
+
+happyhorse-1.0-r2v
+
+全球
+
+5
+
+5
+
+happyhorse-1.0-video-edit
+
+全球
+
+5
+
+5
+
+## **日本（东京）**
 
 **模型名称**
 
@@ -7241,9 +7258,9 @@ happyhorse-1.0-video-edit
 
 5
 
-### 万相系列
+### **万相系列**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -7427,7 +7444,7 @@ wan2.2-animate-mix
 
 1
 
-#### 美国（弗吉尼亚）
+## **美国（弗吉尼亚）**
 
 **模型名称**
 
@@ -7487,7 +7504,7 @@ wan2.6-i2v-us
 
 5
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -7691,7 +7708,7 @@ wan2.2-animate-mix
 
 1
 
-#### 德国（法兰克福）
+## **德国（法兰克福）**
 
 **模型名称**
 
@@ -7727,9 +7744,9 @@ wan2.6-r2v
 
 5
 
-### 舞动人像AnimateAnyone
+### **舞动人像AnimateAnyone**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -7771,9 +7788,9 @@ animate-anyone
 
 1算力单元支持1并发
 
-### 悦动人像EMO
+### **悦动人像EMO**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -7795,9 +7812,9 @@ emo-v1
 
 在同一时刻，只有1个作业实际处于运行状态，其他队列中的作业处于排队状态。
 
-### 灵动人像LivePortrait
+### **灵动人像LivePortrait**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -7819,9 +7836,9 @@ liveportrait
 
 在同一时刻，只有1个作业实际处于运行状态，其他队列中的作业处于排队状态。
 
-### 声动人像VideoRetalk
+### **声动人像VideoRetalk**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -7837,9 +7854,9 @@ videoretalk
 
 在同一时刻，只有1个作业实际处于运行状态，其他队列中的作业处于排队状态。
 
-### 表情包Emoji
+### **表情包Emoji**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -7861,9 +7878,9 @@ emoji-v1
 
 在同一时刻，只有1个作业实际处于运行状态，其他队列中的作业处于排队状态。
 
-### 视频风格重绘
+### **视频风格重绘**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -7879,11 +7896,11 @@ video-style-transform
 
 在同一时刻，只有1个作业实际处于运行状态，其他队列中的作业处于排队状态。
 
-## 视频生成-第三方模型
+## **视频生成-第三方模型**
 
-### 爱诗系列
+### **爱诗系列**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -7961,9 +7978,9 @@ pixverse/pixverse-v5.6-kf2v
 
 pixverse/pixverse-v5.6-r2v
 
-### 可灵系列
+### **可灵系列**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -7979,13 +7996,13 @@ kling/kling-v3-omni-video-generation
 
 10
 
-> 同一阿里云百炼API Key 下，可灵系列的 4 个模型（[图像](https://help.aliyun.com/zh/model-studio/rate-limit#fdd6e348d2md4)及[视频](https://help.aliyun.com/zh/model-studio/rate-limit#kling-third-party-limit)）共享 10 个并发数。即这 4 个模型处于运行状态的任务总数加起来不能超过 10 个。
+> 同一阿里云百炼API Key 下，可灵系列的 4 个模型（[图像](#fdd6e348d2md4)及[视频](#kling-third-party-limit)）共享 10 个并发数。即这 4 个模型处于运行状态的任务总数加起来不能超过 10 个。
 
 kling/kling-v3-video-generation
 
-### Vidu系列
+### **Vidu系列**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -8079,11 +8096,11 @@ vidu/viduq2\_reference2video
 
 5
 
-## 3D模型生成-第三方模型
+## **3D模型生成-第三方模型**
 
-### Tripo系列
+### **Tripo系列**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -8105,11 +8122,11 @@ Tripo/Tripo-P1.0
 
 5
 
-## 向量模型
+## **向量模型**
 
-### 文本向量
+### **文本向量**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -8129,7 +8146,7 @@ qwen3.7-text-embedding
 
 text-embedding-v1
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 1,800
 
@@ -8137,7 +8154,7 @@ text-embedding-v1
 
 text-embedding-v2
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 1,800
 
@@ -8145,7 +8162,7 @@ text-embedding-v2
 
 text-embedding-v3
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 1,800
 
@@ -8153,7 +8170,7 @@ text-embedding-v3
 
 text-embedding-v4
 
-> 用[Batch API](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)调用服务时，不受限流限制。
+> 用[Batch API](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)调用服务时，不受限流限制。
 
 1,800
 
@@ -8175,7 +8192,7 @@ text-embedding-async-v2
 
 另外，为了避免大量突发的作业占据太多资源，限制并发的作业数为3个，即任意时间，单个用户最多只有3个通用文本向量的异步作业在并发运行，其他的作业只能在队列中等待。
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -8215,9 +8232,9 @@ text-embedding-v3
 
 24,000,000
 
-### 多模态向量
+### **多模态向量**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -8273,11 +8290,11 @@ multimodal-embedding-v1
 
 1,000,000
 
-## 排序模型
+## **排序模型**
 
-### 排序模型
+### **排序模型**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -8309,7 +8326,7 @@ gte-rerank-v2
 
 4,980,000,000
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -8341,11 +8358,11 @@ gte-rerank-v2
 
 4,980,000,000
 
-## 行业
+## **行业**
 
-### 通义法睿（法律模型）
+### **通义法睿（法律模型）**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -8365,9 +8382,9 @@ farui-plus
 
 1,000,000
 
-### 意图理解
+### **意图理解**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -8387,9 +8404,9 @@ tongyi-intent-detect-v3
 
 1,000,000
 
-### 角色扮演
+### **角色扮演**
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -8421,7 +8438,7 @@ qwen-flash-character-2026-02-26
 
 500,000
 
-#### 新加坡
+## **新加坡**
 
 **模型名称**
 
@@ -8461,7 +8478,7 @@ qwen-plus-character-ja
 
 500,000
 
-#### 美国（弗吉尼亚）
+## **美国（弗吉尼亚）**
 
 **模型名称**
 
@@ -8485,7 +8502,7 @@ qwen-plus-character
 
 500,000
 
-#### 德国（法兰克福）
+## **德国（法兰克福）**
 
 **模型名称**
 
@@ -8509,7 +8526,7 @@ qwen-plus-character
 
 5,000,000
 
-#### 日本（东京）
+## **日本（东京）**
 
 **模型名称**
 
@@ -8535,7 +8552,7 @@ qwen-plus-character
 
 ### 界面交互
 
-#### 华北2（北京）
+## **华北2（北京）**
 
 **模型名称**
 
@@ -8561,11 +8578,11 @@ gui-plus-2026-02-26
 
 540,000
 
-## 已下线模型
+## **已下线模型**
 
-> 详细信息，请参见 [模型下线机制说明](raw/model-user-guide/release-notes/model-depreciation.md) 。
+> 详细信息，请参见 [模型下线机制说明](https://help.aliyun.com/zh/model-studio/model-depreciation) 。
 
-#### 2026年5月13日下线
+## **2026年5月13日下线**
 
 **类别**
 
@@ -8719,7 +8736,7 @@ qwen3-1.7b
 
 qwen3-4b
 
-#### 2026年3月30日下线
+## **2026年3月30日下线**
 
 **类别**
 
@@ -8819,7 +8836,7 @@ OpenNLU
 
 opennlu-v1
 
-#### 2026年1月30日下线
+## **2026年1月30日下线**
 
 **类别**
 
@@ -8875,7 +8892,7 @@ qwen-audio-turbo-2024-08-07
 
 qwen-audio-asr-2024-12-04
 
-#### 2025年7月30日下线
+## **2025年7月30日下线**
 
 **类别**
 
@@ -8911,7 +8928,7 @@ Dolly
 
 dolly-12b-v2
 
-#### 2025年7月2日下线
+## **2025年7月2日下线**
 
 **类别**
 
@@ -9017,7 +9034,7 @@ AnyText图文融合
 
 wanx-anytext-v1
 
-#### 2025年5月8日下线
+## **2025年5月8日下线**
 
 **类别**
 

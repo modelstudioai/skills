@@ -4,14 +4,13 @@
 
 ## 使用说明
 
-1.  如需使用长期记忆能力，请先在应用配置界面开启长期记忆开关。
-    
-2.  开启长期记忆后，默认启用通用记忆配置，记忆用户的个人信息、兴趣爱好、近期行为等，并在后续对话中自动召回，无需额外操作。以userid维度进行记忆的存储。
-    
-3.  如需根据业务场景自定义记忆策略，可使用本文档提供的接口。API配置后即时生效，并自动覆盖系统默认的记忆策略。
-    
-4.  如需对记忆结果进行查询和修改，可使用本文档提供的接口。
-    
+1\. 如需使用长期记忆能力，请先在应用配置界面开启长期记忆开关。
+
+2\. 开启长期记忆后，默认启用通用记忆配置，记忆用户的个人信息、兴趣爱好、近期行为等，并在后续对话中自动召回，无需额外操作。以userid维度进行记忆的存储。
+
+3\. 如需根据业务场景自定义记忆策略，可使用本文档提供的接口。API配置后即时生效，并自动覆盖系统默认的记忆策略。
+
+4\. 如需对记忆结果进行查询和修改，可使用本文档提供的接口。
 
 Endpoint: sfmmultimodalapp.cn-beijing.aliyuncs.com
 
@@ -38,8 +37,8 @@ Config config = new Config();
         config.setAccessKeyId("*");
         config.setAccessKeySecret("*");
 
-        config.setEndpoint("********");
-        config.setRegionId("********");
+        config.setEndpoint("********");  
+        config.setRegionId("********"); 
         Client client = new Client(config);
 
         QueryMemoryConfigRequest request = new QueryMemoryConfigRequest();
@@ -112,10 +111,13 @@ class PopRequest:
 if __name__ == '__main__':
     PopRequest.main(sys.argv[1:])
 ```
+
 **前置条件**
 
 1.  需要首先登录阿里云，进入访问控制，为请求的ram账号分配权限：AliyunSFMMultiModalAppFullAcces，管理阿里云多模态交互开发套件（sfmmultimodalapp）的权限。
+    
 2.  ram账号同时必须在百炼有该工作空间id的权限。
+    
 
 ## 接口列表
 
@@ -177,9 +179,9 @@ Object
 
 返回数据
 
-### 记忆策略配置
+### **记忆策略配置**
 
-#### 用户画像（profile）
+#### **用户画像（profile）**
 
 用户画像用于设定具体的记忆挖掘策略，例如个人信息、兴趣爱好、行为偏好等。
 
@@ -187,7 +189,7 @@ Object
 
 通过接口完成配置后，将覆盖默认的用户画像配置。
 
-##### 1\. 创建profile\_schema(CreateProfile)
+##### **1\. 创建profile\_schema(CreateProfile)**
 
 入参：
 
@@ -321,7 +323,7 @@ String
 
 profile描述
 
-##### 2\. 更新profile\_schema(UpdateProfile)
+##### **2\. 更新profile\_schema(UpdateProfile)**
 
 入参：
 
@@ -455,7 +457,7 @@ String
 
 profile描述
 
-##### 3\. 删除profile\_schema(DeleteProfile)
+##### **3\. 删除profile\_schema(DeleteProfile)**
 
 入参：
 
@@ -509,7 +511,7 @@ String
 
 请求Id
 
-##### 4\. 获取profile\_schema详情(QueryProfile)
+##### **4\. 获取profile\_schema详情(QueryProfile)**
 
 入参：
 
@@ -619,7 +621,7 @@ String
 
 初始值, 如果immutable为True则必填
 
-##### 5\. 获取用户画像数据(QueryUserProfile)
+##### **5\. 获取用户画像数据(QueryUserProfile)**
 
 入参：
 
@@ -717,7 +719,7 @@ String
 
 记忆片段用于挖掘用户画像之外的零散记忆片段，例如近期行为等。可以通过prompt配置具体的记忆策略。
 
-##### 1\. 更新记忆片段配置(PatchMemoryConfig)
+##### **1\. 更新记忆片段配置(PatchMemoryConfig)**
 
 不存在就新增，存在就修改
 
@@ -813,7 +815,7 @@ String
 
 请求id
 
-##### 2\. 查询记忆片段配置(QueryMemoryConfig)
+##### **2\. 查询记忆片段配置(QueryMemoryConfig)**
 
 入参：
 
@@ -907,13 +909,13 @@ Double
 
 最低阈值，建议值0.03
 
-### 记忆数据管理
+### **记忆数据管理**
 
-#### 记忆管理(memory)
+#### **记忆管理(memory)**
 
 记忆管理接口，用于查询、编辑单个用户的记忆挖掘结果。
 
-##### 1\. 新增记忆内容(CreateMemory)
+##### **1\. 新增记忆内容(CreateMemory)**
 
 入参：
 
@@ -1132,7 +1134,7 @@ String
 
 过去的内容，仅当event为"UPDATE"时有效
 
-##### 2\. 查询记忆列表(QueryMemoryList)
+##### **2\. 查询记忆列表(QueryMemoryList)**
 
 入参：
 
@@ -1318,7 +1320,7 @@ Integer
 
 页号
 
-##### 3\. 删除记忆内容(DeleteMemory)
+##### **3\. 删除记忆内容(DeleteMemory)**
 
 入参：
 
@@ -1380,7 +1382,7 @@ String
 
 请求Id
 
-##### 4\. 修改记忆内容(UpdateMemory)
+##### **4\. 修改记忆内容(UpdateMemory)**
 
 入参：
 
@@ -1512,7 +1514,9 @@ String
 
 目前，基于用户维度的长期记忆，可挖掘和召回以下内容：
 
-**说明**下面表格是默认的用户画像，如果通过接口定义用户画像，这些内容将会被覆盖掉。
+**说明**
+
+下面表格是默认的用户画像，如果通过接口定义用户画像，这些内容将会被覆盖掉。
 
 profile模块
 

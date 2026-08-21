@@ -7,13 +7,15 @@
 **重要**
 
 -   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
+    
 -   shoemodel-v1 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费。
+    
 
-## 模型概览
+## **模型概览**
 
 **模型名**
 
-**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
+**免费额度**[（查看）](https://help.aliyun.com/zh/model-studio/new-free-quota)
 
 **计费单价**
 
@@ -35,83 +37,28 @@ shoemodel-v1
 
 1
 
-## 前提条件
+## **前提条件**
 
-您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
+您需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
 ## HTTP调用
 
 为了减少等待时间并且避免请求超时，服务采用异步方式提供。您需要发起两个请求：
 
 -   **创建任务**：首先发送一个请求创建鞋靴模特任务，该请求会返回任务ID。
+    
 -   **根据任务ID查询结果**：使用上一步获得的任务ID，查询模型生成的结果。
+    
 
-### 步骤1：创建任务获取任务ID
+### **步骤1：创建任务获取任务ID**
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/virtualmodel/generation`
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 请求头（Headers）
+#### **请求头（Headers）**
 
-**Authorization**_string_**必选**
-
-推荐您使用阿里云百炼API-Key，也可填DashScope API-Key。例如：Bearer d1xxx2a。
-
-**X-DashScope-Async**_string_**必选**
-
-是否使用DashScope异步调用。HTTP只支持异步调用，设置为`enable`。
-
-**Content-Type**_string_**必选**
-
-请求内容类型。固定为`application/json`。
-
-#### 请求体（Request Body）
-
-**model**_string_**必选**
-
-调用模型。鞋靴模特生成模型为`shoemodel-v1`。
-
-**parameters** Integer**必选**
-
-图片生成的数量，目前支持 1~4 张，默认值 1。
-
-**input**_object_**必选**
-
-输入图像的基本信息，比如图像URL地址。
-
-属性
-
-**template\_image\_url** _string_**必选**
-
-模板模特图片的URL地址。
-
-URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
-
-图像限制：
-
--   图片大小建议小于5M。
--   图像格式：jpg、png、jpeg、bmp、webp、avif。
--   图像比例：图长边与短边的比例需在`[2:3, 3:2]` 范围内，推荐比例为`4:3`。
-
-**shoe\_image\_url** _list_ **必选**
-
-鞋靴多视角图片URL地址。
-
-URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
-
--   图片大小建议小于5M。
--   图像格式：jpg、png、jpeg、bmp、webp、avif。
--   图像比例：图长边与短边的比例需在`[2:3, 3:2]` 范围内，推荐与模特模板一样，比例为`4:3`。
--   多视角图片张数小于3。
-
-**scale** _float_ 可选
-
-控制生成强度。
-
-范围在\[2.0,8.0\]，默认为5.0，数值越大，颜色越鲜亮。
-
-#### 鞋靴模特试穿
+## 鞋靴模特试穿
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/virtualmodel/generation' \
@@ -124,60 +71,92 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
         "template_image_url": "https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8268778171/p809310.webp",
         "shoe_image_url": ["https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8268778171/p809301.webp"]
     },
-    "parameters":
+    "parameters": 
     {
         "n": 1
     }
 }'
 ```
 
-#### 响应
+**Authorization** _string_ **必选**
 
-**output**_object_
+推荐您使用阿里云百炼API-Key，也可填DashScope API-Key。例如：Bearer d1xxx2a。
 
-任务输出信息。
+**X-DashScope-Async** _string_ **必选**
 
-属性
+是否使用DashScope异步调用。HTTP只支持异步调用，设置为`enable`。
 
-**task\_id** _string_
+**Content-Type** _string_ **必选**
 
-任务id。
+请求内容类型。固定为`application/json`。
 
-**task\_status** _string_
+#### **请求体（Request Body）**
 
-任务状态。
+**model** _string_ **必选**
 
--   PENDING：排队中
--   RUNNING：处理中
--   SUSPENDED：挂起
--   SUCCEEDED：执行成功
--   FAILED：执行失败
+调用模型。鞋靴模特生成模型为`shoemodel-v1`。
 
-**code**_string_
+**parameters** Integer **必选**
 
-任务执行失败的错误码。
+图片生成的数量，目前支持 1~4 张，默认值 1。
 
-**message**_string_
+**input** _object_ **必选**
 
-任务执行失败的详细信息。
+输入图像的基本信息，比如图像URL地址。
 
-**request\_id**_string_
+**属性**
 
-请求唯一标识。可用于请求明细溯源和问题排查。
+**template\_image\_url** _string_ **必选**
 
-正常响应
+模板模特图片的URL地址。
+
+URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
+
+图像限制：
+
+-   图片大小建议小于5M。
+    
+-   图像格式：jpg、png、jpeg、bmp、webp、avif。
+    
+-   图像比例：图长边与短边的比例需在`[2:3, 3:2]` 范围内，推荐比例为`4:3`。
+    
+
+**shoe\_image\_url** _list_ **必选**
+
+鞋靴多视角图片URL地址。
+
+URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
+
+-   图片大小建议小于5M。
+    
+-   图像格式：jpg、png、jpeg、bmp、webp、avif。
+    
+-   图像比例：图长边与短边的比例需在`[2:3, 3:2]` 范围内，推荐与模特模板一样，比例为`4:3`。
+    
+-   多视角图片张数小于3。
+    
+
+**scale** _float_ 可选
+
+控制生成强度。
+
+范围在\[2.0,8.0\]，默认为5.0，数值越大，颜色越鲜亮。
+
+#### **响应**
+
+## 正常响应
 
 ```
 {
     "output": {
-	"task_id": "d76ec1e8-ea27-4038-8913-xxxxxxxxxxxx",
+	"task_id": "d76ec1e8-ea27-4038-8913-xxxxxxxxxxxx", 
         "task_status": "PENDING"
     }
     "request_id": "7574ee8f-38a3-4b1e-9280-11c33ab46e51"
 }
 ```
 
-异常响应
+## 异常响应
 
 ```
 {
@@ -187,38 +166,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-### 步骤2：根据任务ID查询结果
-
-`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
-
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
-
-#### 请求头（Headers）
-
-**Authorization**_string_**必选**
-
-推荐使用阿里云百炼API-Key，也可填DashScope API-Key。例如：Bearer d1xxx2a。
-
-#### URL路径参数（Path parameters）
-
-**task\_id**_string_**必选**
-
-任务id。
-
-#### 获取任务结果
-
-```
-curl --location --request GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}' \
---header "Authorization: Bearer $DASHSCOPE_API_KEY"
-```
-
-#### 响应
-
-**output**_object_
+**output** _object_
 
 任务输出信息。
 
-属性
+**属性**
 
 **task\_id** _string_
 
@@ -229,16 +181,150 @@ curl --location --request GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.co
 任务状态。
 
 -   PENDING：排队中
+    
 -   RUNNING：处理中
+    
 -   SUSPENDED：挂起
+    
 -   SUCCEEDED：执行成功
+    
 -   FAILED：执行失败
+    
+
+**code** _string_
+
+任务执行失败的错误码。
+
+**message** _string_
+
+任务执行失败的详细信息。
+
+**request\_id** _string_
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+### **步骤2：根据任务ID查询结果**
+
+`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+
+#### **请求头（Headers）**
+
+## 获取任务结果
+
+```
+curl --location --request GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}' \
+--header "Authorization: Bearer $DASHSCOPE_API_KEY"
+```
+
+**Authorization** _string_ **必选**
+
+推荐使用阿里云百炼API-Key，也可填DashScope API-Key。例如：Bearer d1xxx2a。
+
+#### **URL路径参数（Path parameters）**
+
+**task\_id** _string_ **必选**
+
+任务id。
+
+#### **响应**
+
+## 任务执行成功
+
+```
+{
+    "request_id":"<your request id>",
+    "output":{
+        "task_id":"<your task id>",
+        "task_status":"SUCCEEDED",
+        "submit_time":"2024-05-16 13:50:xx.xxx",
+        "scheduled_time":"2024-05-16 13:50:xx.xxx",
+        "end_time":"2024-05-16 13:50:xx.xxx",
+        "results":[
+            {
+                "url":"https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/xxx/res_img.png?Expires=xxx&OSSAccessKeyId=xxx&Signature=xxx"
+            }
+        ],
+        "task_metrics":{
+            "TOTAL":1,
+            "SUCCEEDED":1,
+            "FAILED":0
+        }
+    },
+    "usage":{
+        "image_count":1
+    }
+}
+```
+
+## 任务执行中
+
+```
+{
+    "request_id":"e5d70b02-ebd3-98ce-9fe8-759d7d7b107d",
+    "output":{
+        "task_id":"86ecf553-d340-4e21-af6e-a0c6a421c010",
+        "task_status":"RUNNING",
+        "task_metrics":{
+            "TOTAL":1,
+            "SUCCEEDED":1,
+            "FAILED":0
+        }
+    }
+}
+```
+
+## 任务执行失败
+
+```
+{
+  "request_id": "<your request id>",
+  "output": {
+    "task_id": "<your task id>",
+    "task_status": "FAILED",
+    "submit_time": "2024-05-16 13:50:xx.xxx",
+    "scheduled_time": "2024-05-16 13:50:xx.xxx",
+    "end_time": "2024-05-16 13:50:xx.xxx",
+    "code": "InvalidImageResolution",
+    "message": "The input image resolution is too large or small"
+  },
+  "usage": {
+    "image_num": 0
+  }
+}
+```
+
+**output** _object_
+
+任务输出信息。
+
+**属性**
+
+**task\_id** _string_
+
+任务id。
+
+**task\_status** _string_
+
+任务状态。
+
+-   PENDING：排队中
+    
+-   RUNNING：处理中
+    
+-   SUSPENDED：挂起
+    
+-   SUCCEEDED：执行成功
+    
+-   FAILED：执行失败
+    
 
 **task\_metrics** _object_
 
 任务信息统计指标。
 
-属性
+**属性**
 
 **TOTAL** _integer_
 
@@ -268,86 +354,21 @@ curl --location --request GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.co
 
 输出图片列表。每个元素包含一个`url`字段，表示生成图片的URL。
 
-**code**_string_
+**code** _string_
 
 任务执行失败的错误码。
 
-**message**_string_
+**message** _string_
 
 任务执行失败的详细信息。
 
-**request\_id**_string_
+**request\_id** _string_
 
 请求唯一标识。可用于请求明细溯源和问题排查。
 
-任务执行成功
+## **错误码**
 
-```
-{
-    "request_id":"<your request id>",
-    "output":{
-        "task_id":"<your task id>",
-        "task_status":"SUCCEEDED",
-        "submit_time":"2024-05-16 13:50:xx.xxx",
-        "scheduled_time":"2024-05-16 13:50:xx.xxx",
-        "end_time":"2024-05-16 13:50:xx.xxx",
-        "results":[
-            {
-                "url":"https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/xxx/res_img.png?Expires=xxx&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE"
-            }
-        ],
-        "task_metrics":{
-            "TOTAL":1,
-            "SUCCEEDED":1,
-            "FAILED":0
-        }
-    },
-    "usage":{
-        "image_count":1
-    }
-}
-```
-
-任务执行中
-
-```
-{
-    "request_id":"e5d70b02-ebd3-98ce-9fe8-759d7d7b107d",
-    "output":{
-        "task_id":"86ecf553-d340-4e21-af6e-a0c6a421c010",
-        "task_status":"RUNNING",
-        "task_metrics":{
-            "TOTAL":1,
-            "SUCCEEDED":1,
-            "FAILED":0
-        }
-    }
-}
-```
-
-任务执行失败
-
-```
-{
-  "request_id": "<your request id>",
-  "output": {
-    "task_id": "<your task id>",
-    "task_status": "FAILED",
-    "submit_time": "2024-05-16 13:50:xx.xxx",
-    "scheduled_time": "2024-05-16 13:50:xx.xxx",
-    "end_time": "2024-05-16 13:50:xx.xxx",
-    "code": "InvalidImageResolution",
-    "message": "The input image resolution is too large or small"
-  },
-  "usage": {
-    "image_num": 0
-  }
-}
-```
-
-## 错误码
-
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 此API还有特定状态码，具体如下所示。
 

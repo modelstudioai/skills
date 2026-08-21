@@ -2,13 +2,13 @@
 
 深度搜索应用生成结果报告文件 (md、html、pdf) 的获取。
 
-## 请求语法
+## **请求语法**
 
 ```
 POST /deep-search-agent/file/expose HTTP/1.1
 ```
 
-## 请求参数
+## **请求参数**
 
 **参数名**
 
@@ -64,9 +64,9 @@ object
 
 配置参数字段，该接口下留空 {}
 
-## 示例
+## **示例**
 
-### 请求示例
+### **请求示例**
 
 ```
 {
@@ -79,7 +79,7 @@ object
 }
 ```
 
-### 返回示例
+### **返回示例**
 
 ```
 {
@@ -97,9 +97,9 @@ object
 }
 ```
 
-## 调用示例
+## **调用示例**
 
-python
+Python
 
 ```
 # coding=utf-8
@@ -153,7 +153,7 @@ if __name__ == "__main__":
     print(json.dumps(export_info, indent=2, ensure_ascii=False))
 ```
 
-java
+Java
 
 ```
 import java.io.*;
@@ -229,7 +229,7 @@ public class DeepSearchDemo {
                 }
                 responseBody = sb.toString();
             }
-
+            
             JSONObject respJson = JSON.parseObject(responseBody);
 
             return respJson.getJSONObject("output").getJSONArray("result");

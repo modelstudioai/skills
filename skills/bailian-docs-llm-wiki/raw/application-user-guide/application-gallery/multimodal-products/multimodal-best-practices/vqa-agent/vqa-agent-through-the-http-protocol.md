@@ -4,27 +4,30 @@
 
 直通链路：是指不通过语音识别(ASR)、意图识别、语音合成(TTS)等节点，直接将请求送入Agent，并将Agent的回答直接返回的链路。
 
-## 适用场景
+## **适用场景**
 
 将图片直接送入Agent进行识别，无需意图检测及语音链路，适用于带摄像头产品的图片理解、拍学机或学习机内的拍照识图等功能。
 
-## 前提条件
+## **前提条件**
 
-### 开通阿里云百炼模型服务并获取API KEY
+### **开通阿里云百炼模型服务并获取API KEY**
 
-请参考[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，API KEY作为百炼模型服务的鉴权凭证。
+请参考[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，API KEY作为百炼模型服务的鉴权凭证。
 
-## 管控台开通拍照问答直通链路
+## **管控台开通拍照问答直通链路**
 
 1.  在[多模态开发套件](https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.394f1b92MoDMrb&tab=app#/app/app-market/multi-modal-app)中创建多模态交互应用，模版选择全能版本(不要选择视觉版)，关闭语音交互。
+    
 
 ⚠️注意：关闭语音交互配置即可，意图识别配置、文本模型配置均需打开。
 
-1.  关闭 对话承接语、知识库、联网搜索、长期记忆配置。
+2.  关闭 对话承接语、知识库、联网搜索、长期记忆配置。
     
-2.  技能配置全部清空、Agent配置只保留拍照问答。
+
+3.  技能配置全部清空、Agent配置只保留拍照问答。
     
-3.  配置拍照问答Agent，启动指令置空，模型推荐选择“视觉理解均衡版”，请按需要配置提示词。
+
+4.  配置拍照问答Agent，启动指令置空，模型推荐选择“视觉理解均衡版”，请按需要配置提示词。
     
 
 测试图片描述场景，提示词可使用如下(仅做演示支持，用户可按场景编辑)
@@ -44,9 +47,10 @@
 不加入个人主观猜测或情绪判断（除非氛围明显）。
 ```
 
-1.  配置完成后请点击右上角发布按键进行发布(必须发布后才能测试)。
+5.  配置完成后请点击右上角发布按键进行发布(必须发布后才能测试)。
+    
 
-## HTTP协议接入
+## **HTTP协议接入**
 
 ### 请求参数说明
 
@@ -277,7 +281,7 @@ string
 }
 ```
 
-### curl请求示例
+### **curl请求示例**
 
 ```
 curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
@@ -322,7 +326,9 @@ curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-
 **重要**
 
 1.  请替换请求中的your\_api\_key(API\_KEY)，app\_id，img\_url。
+    
 2.  text字段请置为""空字符串，否则会进入意图
+    
 
 ### 文本返回事件说明
 

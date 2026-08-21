@@ -2,49 +2,49 @@
 
 本文介绍使用阿里云百炼多模态交互套件可能出现的错误信息及解决方案。
 
-## AccessDenied.Unpurchased
+## **AccessDenied.Unpurchased**
 
 ```
 {"header":{"task_id":"xxxxx","event":"task-failed","error_code":"AccessDenied.Unpurchased","error_message":"Access to model denied. Please make sure you are eligible for using the model.","attributes":{}},"payload":{}}
 ```
 
-### Access to model denied. Please make sure you are eligible for using the model.
+### **Access to model denied. Please make sure you are eligible for using the model.**
 
 **原因：**错误码error\_code出现在header里，用户未开通阿里云百炼服务，无法建连。
 
 **解决方案：**注册或登录阿里云账号，然后前往模型广场开通百炼服务。
 
-## Model.AccessDenied
+## **Model.AccessDenied**
 
 ```
 {"header":{"task_id":"xxxxx","event":"task-failed","error_code":"Model.AccessDenied","error_message":"Model access denied.","attributes":{}},"payload":{}}
 ```
 
-### Model access denied.
+### **Model access denied.**
 
 **原因：** 错误码error\_code出现在header里，使用的业务空间不是默认业务空间，无法建连。目前多模态交互只支持从默认业务空间调用。
 
 **解决方案：**使用默认业务空间的API Key调用多模态交互。
 
-## RequestTimeOut
+## **RequestTimeOut**
 
 ```
 {"header":{"task_id":"xxxxx","event":"task-failed","error_code":"ResponseTimeout","error_message":"Response timeout!","attributes":{}},"payload":{}}
 ```
 
-### Response timeout!
+### **Response timeout!**
 
 **原因：** 错误码error\_code出现在header里，百炼网关报错，无法建连。百炼网关要求服务端和客户端必须持续通信，如果超过1分钟没有交互则会超时报错。
 
-**解决方案：** 持续交互，避免长时间无消息传递。若客户端需在无交互时保持连接，应定期发送心跳消息（HeartBeat）。服务端会回应心跳，确保连接活跃，避免超时关闭。具体的心跳消息格式参见[心跳事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#df274da95fsoq)。
+**解决方案：** 持续交互，避免长时间无消息传递。若客户端需在无交互时保持连接，应定期发送心跳消息（HeartBeat）。服务端会回应心跳，确保连接活跃，避免超时关闭。具体的心跳消息格式参见[心跳事件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#df274da95fsoq)。
 
-## 421-InvalidParameter
+## **421-**InvalidParameter
 
 ```
 {"header":{"event":"result-generated","task_id":"xxxxx","status_code":421,"status_name":"InvalidParameter","status_message":"xxxxx"},"payload":{"output":{"event":"Error","dialog_id":"xxxxx"}}}
 ```
 
-### type of directive payload is error, please choose transcript or prompt
+### **type of directive payload is error, please choose transcript or prompt**
 
 **原因：**错误码status\_code出现在header里，收到该错误后连接会断开，是RequestToRespond的参数type取值错误。
 
@@ -54,13 +54,13 @@
 
 （2）prompt 表示把文本送大模型回答。
 
-### status\_message是其他报错信息
+### **status\_message是其他报错信息**
 
 **原因：**status\_code出现在header里，收到该错误后连接会断开，是其他的参数取值错误 ，status\_message 信息都有具体的提示说明。
 
 **解决方案：**根据 status\_message 信息提示修正参数取值。
 
-## 422-DirectiveNotSupported
+## **422-**DirectiveNotSupported
 
 ```
 {"header":{"event":"result-generated","task_id":"xxxxx","status_code":422,"status_name":"DirectiveNotSupported","status_message":"Directive not supported: xxx"},"payload":{"output":{"event":"Error","dialog_id":"xxxxx"}}}
@@ -70,9 +70,9 @@
 
 **原因：**错误码status\_code出现在header里，收到该错误后连接会断开。传入的指令 directive 的取值是不支持的指令。
 
-**解决方案：**请检查指令名称，使用多模态交互可用的指令。参考[文本消息类型](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol#15c38d92bc50s)的说明。
+**解决方案：**请检查指令名称，使用多模态交互可用的指令。参考[文本消息类型](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/#15c38d92bc50s)的说明。
 
-## 432-AppConfigError
+## **432-**AppConfigError
 
 ```
 {"header":{"event":"result-generated","task_id":"xxxxx","status_code":432,"status_name":"AppConfigError","status_message":"xxxxxxx"},"payload":{"output":{"event":"Error","dialog_id":"xxxxx"}}}
@@ -82,7 +82,7 @@
 
 **解决方案：**参考status\_message 里的具体信息，修改传入的参数配置。
 
-## 433-BillingAuthError
+## **433-**BillingAuthError
 
 ```
 {"header":{"event":"result-generated","task_id":"xxxxx","status_code":433,"status_name":"BillingAuthError","status_message":"xxxxxxx"},"payload":{"output":{"event":"Error","dialog_id":"xxxxx"}}}
@@ -94,7 +94,7 @@
 
 **解决方案：**为当前账号开通百炼多模态交互服务，或使用已开通的账号。
 
-## 444-ClientAudioTimeout
+## **444-**ClientAudioTimeout
 
 ```
 {"header":{"event":"result-generated","task_id":"xxxxx","status_code":444,"status_name":"ClientAudioTimeout","status_message":"Waiting for client audio timed out."},"payload":{"output":{"event":"Error","dialog_id":"xxxxx"}}}
@@ -106,7 +106,7 @@
 
 **解决方案：**在duplex模式应持续向服务端上传音频；在tap2talk模式应保证在状态切换到Listening之后立刻持续上传音频，也可以在所有状态下都上传音频；在push2talk模式发送SendSpeech消息后应立刻上传音频直到发送StopSpeech消息。
 
-## 449-TooManyInterrupt
+## **449-**TooManyInterrupt
 
 ```
 {"header":{"event":"result-generated","task_id":"xxxxx","status_code":449,"status_name":"TooManyInterrupt","status_message":"Send too many RequestToRespond or RequestToSpeak directives in a short time!"},"payload":{"output":{"event":"Error","dialog_id":"xxxxx"}}}
@@ -118,7 +118,7 @@
 
 **解决方案：**排查程序调用逻辑，避免多次发送RequestToRespond或RequestToSpeek 。
 
-## 424-AudioFormatError
+## **424-**AudioFormatError
 
 ```
 {"header":{"event":"result-generated","task_id":"xxxxx","status_code":424,"status_name":"AudioFormatError","status_message":"xxxxx"},"payload":{"output":{"event":"Error","dialog_id":"xxxxx"}}}
@@ -130,7 +130,7 @@
 
 **解决方案：**检查输入的音频格式，输入正确的音频数据。
 
-## 425-NoInputAudioError
+## **425-**NoInputAudioError
 
 ```
 {"header":{"event":"result-generated","task_id":"xxxxx","status_code":200,"status_name":"Success","status_message":"Success"},"payload":{"output":{"event":"Error","dialog_id":"xxxxx","round_id":"xxxxx","llm_request_id":"xxxxx","error_code":425,"error_name":"NoInputAudioError","error_message":"ASR input audio error, no input audio , please check audio data!"}}}
@@ -142,7 +142,7 @@
 
 **解决方案：**检查是否有音频数据发送，重新输入正确的音频数据。
 
-## 426-InvalidTtsVoice
+## **426-**InvalidTtsVoice
 
 ```
 {"header":{"event":"result-generated","task_id":"xxxxx","status_code":200,"status_name":"Success","status_message":"Success"},"payload":{"output":{"event":"Error","dialog_id":"xxxxx","round_id":"xxxxx","llm_request_id":"xxxxx","error_code":426,"error_name":"InvalidTtsVoice","error_message":"tts voice error , need xxx voice."}}}
@@ -157,11 +157,13 @@
 （1）官方音色：
 
 -   参考官方文档：[支持的音色](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#bac280ddf5a1u)，sambert支持的音色参考[模型列表](https://help.aliyun.com/zh/model-studio/sambert-java-sdk#74cedcb97el0b)（去掉开头的"sambert-"和末尾的"-v1"后就是voice的取值）。
+    
 -   语音合成模型的音色都可以在多模态交互控制台上查看：在左侧**语音交互**配置区域选择对应的语音合成模型，点击右侧**语音交互体验**区域的右上角即可查看可用的音色列表。
+    
 
-（2）复刻音色，确认音色状态为“OK”后才能使用。查询方法参考查询特定音色。
+（2）复刻音色，确认音色状态为“OK”后才能使用。查询方法参考[查询特定音色](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api#34490e5a2by7z)。
 
-## 451-NoSpeechRecognized
+## **451-**NoSpeechRecognized
 
 ```
 {"header":{"event":"result-generated","task_id":"xxxxx","status_code":200,"status_name":"Success","status_message":"Success"},"payload":{"output":{"event":"Error","dialog_id":"xxxxx","round_id":"xxxxx","llm_request_id":"xxxxx","error_code":451,"error_name":"NoSpeechRecognized","error_message":"No speech recognized from audio!"}}}
@@ -173,7 +175,7 @@
 
 **解决方案：**检查消息发送的逻辑，确认是否有用户说话的音频数据发送到服务端。
 
-## 500-InternalSynthesizerError/InternalAsrError /InternalLLMError/LLMTimeoutError
+## **500-InternalSynthesizerError/InternalAsrError /InternalLLMError/LLMTimeoutError**
 
 ```
 {"header":{"event":"result-generated","task_id":"xxxxx","status_code":200,"status_name":"Success","status_message":"Success"},"payload":{"output":{"event":"Error","dialog_id":"xxxxx","round_id":"xxxxx","llm_request_id":"xxxxx","error_code":500,"error_name":"InternalAsrError","error_message":"Internal asr error"}}}

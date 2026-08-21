@@ -1,14 +1,14 @@
-# SubmitCustomSourceTopicAnalysis
+# SubmitCustomSourceTopicAnalysis - 提交自定义源话题选题分析任务
 
 从自定义数据源提交选题热点分析
 
 ## 调试
 
-您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/SubmitCustomSourceTopicAnalysis)
 
-[调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/SubmitCustomSourceTopicAnalysis)
+ [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/SubmitCustomSourceTopicAnalysis)
 
-## 授权信息
+## **授权信息**
 
 下表是API对应的授权信息，可以在RAM权限策略语句的`Action`元素中使用，用来给RAM用户或RAM角色授予调用此API的权限。具体说明如下：
 
@@ -18,8 +18,10 @@
     
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
     
-    -   对于必选的资源类型，用前面加 \* 表示。
+    -   对于必选的资源类型，用前面加 \* 表示。
+        
     -   对于不支持资源级授权的操作，用`全部资源`表示。
+        
 -   条件关键字：是指云产品自身定义的条件关键字。
     
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
@@ -67,7 +69,7 @@ string
 
 文件 URL（FileUrl 与 News 二选一）（文件的结构请参考 News 字段）
 
-[http://www.example.com/xxx.json](http://www.example.com/xxx.json)
+http://www.example.com/xxx.json
 
 FileType
 
@@ -131,7 +133,7 @@ string
 
 新闻 URL
 
-[http://www.example.com/xxx.html](http://www.example.com/xxx.html)
+http://www.example.com/xxx.html
 
 Comments
 
@@ -235,7 +237,7 @@ array
 
 新闻列表
 
-[HottopicNews](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-struct-dir/api-aimiaobi-2023-08-01-hottopicnews.md)
+[HottopicNews](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-hottopicnews)
 
 否
 
@@ -259,7 +261,7 @@ string
 
 话题 URL，无其他作用，仅供 ListHotTopics 透传作用
 
-[https://www.example.com/topic/123](https://www.example.com/topic/123)
+https://www.example.com/topic/123
 
 TopicsFileUrl
 
@@ -269,23 +271,29 @@ string
 
 话题列表 URL(使用 json line 格式，每行是一个 json)
 
-[http://www.example.com/xxx.jsonline](http://www.example.com/xxx.jsonline)
+http://www.example.com/xxx.jsonline
 
 支持两种分析模式
 
 1.  传 一批文章，进行 新闻聚类 -> 然后进行 选题策划分析
     
     1.  待分析的内容为 新闻列表 对象 具体结构 请参考：News 字段。
+        
     2.  News 字段与 fileUrl 字段二选一
+        
     3.  支持分析的新闻数最大支持 1w 条新闻。
+        
     4.  支持最大 产出的聚合话题 200 个。由参数：MaxTopicSize 控制。
+        
 2.  从聚类好的新闻 直接进行选题策划分析
     
     1.  待分析的内容为 话题列表 对象 具体结构 请参考：Topics 字段
+        
     2.  Topics 字段与 TopicsFileUrl 字段二选一
-3.  支持将分析结果导出为 json 或者 excel。参考[导出接口](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-tips-custom-data-source/api-aimiaobi-2023-08-01-exportcustomsourceanalysistask.md)的 ExportType 字段
+        
+3.  支持将分析结果导出为 json 或者 excel。参考[导出接口](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-exportcustomsourceanalysistask)的 ExportType 字段
     
-4.  最佳实践请参考：[妙策自定义数据源最佳实践](https://help.aliyun.com/zh/model-studio/best-practices-for-miaoce-api?spm=a2c4g.11186623.help-menu-2400256.d_1_12_6_2_1_1.6acd4b9e5922F7&scm=20140722.H_2848246._.OR_help-T_cn~zh-V_1#42209ec83blza)
+4.  最佳实践请参考：[妙策自定义数据源最佳实践](https://help.aliyun.com/zh/model-studio/best-practices-for-miaoce-api)
     
 
 fileUrl 示例格式为：
@@ -320,7 +328,7 @@ fileUrl 示例格式为：
 ]
 ```
 
-## 返回参数
+## **返回参数**
 
 **名称**
 
@@ -418,6 +426,8 @@ true
 
 ## 错误码
 
+   
+
 **HTTP status code**
 
 **错误码**
@@ -436,6 +446,6 @@ You are not authorized to perform this action.
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
 
-## 变更历史
+## **变更历史**
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/SubmitCustomSourceTopicAnalysis#workbench-doc-change-demo)。

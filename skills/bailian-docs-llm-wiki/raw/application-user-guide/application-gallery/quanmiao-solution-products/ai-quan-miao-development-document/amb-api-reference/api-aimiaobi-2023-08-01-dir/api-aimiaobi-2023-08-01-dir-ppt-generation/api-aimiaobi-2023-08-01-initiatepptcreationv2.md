@@ -1,14 +1,14 @@
-# InitiatePptCreationV2
+# InitiatePptCreationV2 - 初始化PPT创建操作
 
 初始化PPT创建操作V2
 
 ## 调试
 
-您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/InitiatePptCreationV2)
 
-[调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/InitiatePptCreationV2)
+ [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/InitiatePptCreationV2)
 
-## 授权信息
+## **授权信息**
 
 当前API暂无授权信息透出。
 
@@ -122,7 +122,7 @@ boolean
 
 true
 
-## 返回参数
+## **返回参数**
 
 **名称**
 
@@ -196,7 +196,7 @@ string
 
 用于初始化前端组件的 Signature
 
-YOUR\_SIGNATURE
+dBBGvT0Toje5887Qw+/IwwMNYfk=
 
 PptProcessId
 
@@ -220,7 +220,7 @@ string
 
 作品封面图
 
-[http://a.com/xxx.png](http://a.com/xxx.png)
+http://a.com/xxx.png
 
 ExportTaskId
 
@@ -251,7 +251,7 @@ string
   "HttpStatusCode": 400,
   "Data": {
     "AppKey": "S1X5ecouBztZelaQ",
-    "Signature": "YOUR_SIGNATURE",
+    "Signature": "dBBGvT0Toje5887Qw+/IwwMNYfk=",
     "PptProcessId": "8485143",
     "PptArtifactId": "53059801",
     "PptArtifactCover": "http://a.com/xxx.png",
@@ -265,6 +265,6 @@ string
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
 
-## 变更历史
+## **变更历史**
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/InitiatePptCreationV2#workbench-doc-change-demo)。

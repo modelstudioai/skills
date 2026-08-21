@@ -31,14 +31,10 @@
 各字段含义如下：
 
 -   Effect：权限策略效果。取值：Allow（允许）、Deny（拒绝）。
-    
--   Action：授予允许或拒绝权限的具体操作。具体信息，请参见操作（Action）。
-    
--   Resource：受操作影响的具体对象，您可以使用资源ARN来描述指定资源。具体信息，请参见资源（Resource）。
-    
--   Condition：指授权生效的条件。可选字段。具体信息，请参见条件（Condition）。
-    
-    -   Condition\_operator：条件运算符，不同类型的条件对应不同的条件运算符。具体信息，请参见权限策略基本元素。
+-   Action：授予允许或拒绝权限的具体操作。具体信息，请参见[操作（Action）](#title-auth-detail-2)。
+-   Resource：受操作影响的具体对象，您可以使用资源ARN来描述指定资源。具体信息，请参见[资源（Resource）](#title-auth-detail-3)。
+-   Condition：指授权生效的条件。可选字段。具体信息，请参见[条件（Condition）](#title-auth-detail-4)。
+    -   Condition\_operator：条件运算符，不同类型的条件对应不同的条件运算符。具体信息，请参见[权限策略基本元素](https://help.aliyun.com/zh/ram/policy-elements)。
     -   Condition\_key：条件关键字。
     -   Condition\_value：条件关键字对应的值。
 
@@ -47,19 +43,13 @@
 下表是大模型服务平台百炼（BailianVoiceBot）定义的操作，这些操作可以在RAM权限策略语句的`Action`元素中使用，用来授予执行该操作的权限。下面对表中的具体项提供说明：
 
 -   操作：是指具体的权限点。
-    
 -   API：是指操作对应的API接口。
-    
 -   访问级别：是指每个操作的访问级别，取值为写入（Write）、读取（Read）或列出（List）。
-    
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
-    
     -   对于必选的资源类型，用前面加 \* 表示。
-    -   对于不支持资源级授权的操作，用全部资源表示。
--   条件关键字：是指云产品自身定义的条件关键字。该列不体现适用于任何操作的通用条件关键字。
-    
+    -   对于不支持资源级授权的操作，用`全部资源`表示。
+-   条件关键字：是指云产品自身定义的条件关键字。该列不体现适用于任何操作的[通用条件关键字](https://help.aliyun.com/zh/ram/policy-elements)。
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
-    
 
 操作
 
@@ -75,7 +65,7 @@ API
 
 bailianvoicebot:BridgeWebCall
 
-BridgeWebCall
+[BridgeWebCall](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-bridgewebcall)
 
 create
 
@@ -89,7 +79,7 @@ create
 
 bailianvoicebot:CreateApplication
 
-CreateApplication
+[CreateApplication](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-createapplication)
 
 create
 
@@ -103,7 +93,7 @@ create
 
 bailianvoicebot:CreateApplicationVersion
 
-CreateApplicationVersion
+[CreateApplicationVersion](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-createapplicationversion)
 
 create
 
@@ -117,7 +107,7 @@ create
 
 bailianvoicebot:CreateCloneVoice
 
-CreateCloneVoice
+[CreateCloneVoice](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-createclonevoice)
 
 create
 
@@ -131,7 +121,7 @@ create
 
 bailianvoicebot:CreateVariable
 
-CreateVariable
+[CreateVariable](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-createvariable)
 
 create
 
@@ -145,7 +135,7 @@ create
 
 bailianvoicebot:CreateVocabulary
 
-CreateVocabulary
+[CreateVocabulary](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-createvocabulary)
 
 create
 
@@ -159,7 +149,7 @@ create
 
 bailianvoicebot:CreateVoiceAccessProfile
 
-CreateVoiceAccessProfile
+[CreateVoiceAccessProfile](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-createvoiceaccessprofile)
 
 create
 
@@ -173,7 +163,7 @@ create
 
 bailianvoicebot:DeleteApplication
 
-DeleteApplication
+[DeleteApplication](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-deleteapplication)
 
 delete
 
@@ -187,7 +177,7 @@ delete
 
 bailianvoicebot:DeleteCloneVoice
 
-DeleteCloneVoice
+[DeleteCloneVoice](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-deleteclonevoice)
 
 delete
 
@@ -201,7 +191,7 @@ delete
 
 bailianvoicebot:DeleteVariable
 
-DeleteVariable
+[DeleteVariable](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-deletevariable)
 
 delete
 
@@ -215,7 +205,7 @@ delete
 
 bailianvoicebot:DeleteVocabulary
 
-DeleteVocabulary
+[DeleteVocabulary](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-deletevocabulary)
 
 delete
 
@@ -229,7 +219,7 @@ delete
 
 bailianvoicebot:DeleteVoiceAccessProfile
 
-DeleteVoiceAccessProfile
+[DeleteVoiceAccessProfile](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-deletevoiceaccessprofile)
 
 delete
 
@@ -243,7 +233,7 @@ delete
 
 bailianvoicebot:DisableSubscription
 
-DisableSubscription
+[DisableSubscription](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-disablesubscription)
 
 update
 
@@ -257,7 +247,7 @@ update
 
 bailianvoicebot:ExportVocabulary
 
-ExportVocabulary
+[ExportVocabulary](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-exportvocabulary)
 
 get
 
@@ -271,7 +261,7 @@ get
 
 bailianvoicebot:GenerateFileUploadParams
 
-GenerateFileUploadParams
+[GenerateFileUploadParams](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-generatefileuploadparams)
 
 update
 
@@ -285,7 +275,7 @@ update
 
 bailianvoicebot:GetApplication
 
-GetApplication
+[GetApplication](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-getapplication)
 
 get
 
@@ -299,7 +289,7 @@ get
 
 bailianvoicebot:GetDataChannelCredential
 
-GetDataChannelCredential
+[GetDataChannelCredential](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-getdatachannelcredential)
 
 get
 
@@ -313,7 +303,7 @@ get
 
 bailianvoicebot:GetSubscription
 
-GetSubscription
+[GetSubscription](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-getsubscription)
 
 get
 
@@ -327,7 +317,7 @@ get
 
 bailianvoicebot:GetVocabulary
 
-GetVocabulary
+[GetVocabulary](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-getvocabulary)
 
 get
 
@@ -341,7 +331,7 @@ get
 
 bailianvoicebot:ImportVocabulary
 
-ImportVocabulary
+[ImportVocabulary](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-importvocabulary)
 
 create
 
@@ -355,7 +345,7 @@ create
 
 bailianvoicebot:ListApplications
 
-ListApplications
+[ListApplications](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-listapplications)
 
 none
 
@@ -369,7 +359,7 @@ none
 
 bailianvoicebot:ListBackgroundMusics
 
-ListBackgroundMusics
+[ListBackgroundMusics](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-listbackgroundmusics)
 
 list
 
@@ -383,7 +373,7 @@ list
 
 bailianvoicebot:ListCloneVoice
 
-ListCloneVoice
+[ListCloneVoice](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-listclonevoice)
 
 list
 
@@ -397,7 +387,7 @@ list
 
 bailianvoicebot:ListCloneVoiceModels
 
-ListCloneVoiceModels
+[ListCloneVoiceModels](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-listclonevoicemodels)
 
 list
 
@@ -411,7 +401,7 @@ list
 
 bailianvoicebot:ListNluModels
 
-ListNluModels
+[ListNluModels](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-listnlumodels)
 
 list
 
@@ -425,7 +415,7 @@ list
 
 bailianvoicebot:ListVariable
 
-ListVariable
+[ListVariable](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-listvariable)
 
 list
 
@@ -439,7 +429,7 @@ list
 
 bailianvoicebot:ListVocabulary
 
-ListVocabulary
+[ListVocabulary](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-listvocabulary)
 
 list
 
@@ -453,7 +443,7 @@ list
 
 bailianvoicebot:ListVoiceAccessProfile
 
-ListVoiceAccessProfile
+[ListVoiceAccessProfile](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-listvoiceaccessprofile)
 
 list
 
@@ -467,7 +457,7 @@ list
 
 bailianvoicebot:ListVoiceEngines
 
-ListVoiceEngines
+[ListVoiceEngines](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-listvoiceengines)
 
 list
 
@@ -481,7 +471,7 @@ list
 
 bailianvoicebot:ListVoices
 
-ListVoices
+[ListVoices](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-listvoices)
 
 list
 
@@ -495,7 +485,7 @@ list
 
 bailianvoicebot:PreviewVoice
 
-PreviewVoice
+[PreviewVoice](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-previewvoice)
 
 create
 
@@ -509,7 +499,7 @@ create
 
 bailianvoicebot:PublishApplicationVersion
 
-PublishApplicationVersion
+[PublishApplicationVersion](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-publishapplicationversion)
 
 update
 
@@ -523,7 +513,7 @@ update
 
 bailianvoicebot:UpdateApplication
 
-UpdateApplication
+[UpdateApplication](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-updateapplication)
 
 update
 
@@ -537,7 +527,7 @@ update
 
 bailianvoicebot:UpdateApplicationVersion
 
-UpdateApplicationVersion
+[UpdateApplicationVersion](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-updateapplicationversion)
 
 update
 
@@ -551,7 +541,7 @@ update
 
 bailianvoicebot:UpdateCloneVoice
 
-UpdateCloneVoice
+[UpdateCloneVoice](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-updateclonevoice)
 
 update
 
@@ -565,7 +555,7 @@ update
 
 bailianvoicebot:UpdateSubscription
 
-UpdateSubscription
+[UpdateSubscription](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-updatesubscription)
 
 update
 
@@ -579,7 +569,7 @@ update
 
 bailianvoicebot:UpdateVariable
 
-UpdateVariable
+[UpdateVariable](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-updatevariable)
 
 update
 
@@ -593,7 +583,7 @@ update
 
 bailianvoicebot:UpdateVocabulary
 
-UpdateVocabulary
+[UpdateVocabulary](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-updatevocabulary)
 
 update
 
@@ -607,7 +597,7 @@ update
 
 bailianvoicebot:UpdateVoiceAccessProfile
 
-UpdateVoiceAccessProfile
+[UpdateVoiceAccessProfile](https://help.aliyun.com/zh/model-studio/api-bailianvoicebot-2025-01-01-updatevoiceaccessprofile)
 
 update
 
@@ -631,7 +621,7 @@ update
 
 您可以创建自定义权限策略，并将权限策略授予RAM用户、RAM用户组或RAM角色。具体操作如下：
 
--   创建自定义权限策略
--   为RAM用户授权
--   为RAM用户组授权
--   为RAM角色授权
+-   [创建自定义权限策略](https://help.aliyun.com/zh/ram/create-a-custom-policy)
+-   [为RAM用户授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)
+-   [为RAM用户组授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-a-ram-user-group)
+-   [为RAM角色授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-a-ram-role)

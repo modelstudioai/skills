@@ -564,6 +564,12 @@
       "latestOnlineAt": "2026-04-24T07:51:16.000+00:00",
       "contextWindow": 1000000,
       "maxInputTokens": 1000000,
+      "offlineInfo": {
+        "inference": {
+          "announceUrl": "https://www.aliyun.com/notice/118434",
+          "offlineTime": "2026-10-10 00:00:00"
+        }
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "DeepSeek-V4-Flash",
       "docUrl": "https://help.aliyun.com/document_detail/2868565.html",

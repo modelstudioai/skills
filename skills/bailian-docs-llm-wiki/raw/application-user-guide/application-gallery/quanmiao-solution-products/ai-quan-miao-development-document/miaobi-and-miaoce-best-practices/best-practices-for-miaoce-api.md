@@ -5,9 +5,13 @@
 ## 前提要求
 
 -   阿里云账号已开通产品；
--   获得AgentKey、AccessKeyId、AcccessKeySecret：获取 AccessKey 与 AgentKey；
+    
+-   获得AgentKey、AccessKeyId、AcccessKeySecret：[获取 AccessKey 与 AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)；
+    
 -   获取WorkSpaceId [获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)；
+    
 -   引入妙笔SDK [注意获取最新SDK版本](https://api.aliyun.com/api-tools/sdk/AiMiaoBi?version=2023-08-01&language=java-async-tea&tab=primer-doc)；
+    
 
 ```
 <dependency>
@@ -18,6 +22,7 @@
 ```
 
 -   引入其他三方依赖。
+    
 
 ```
 <dependency>
@@ -446,7 +451,7 @@ public class MiaoCeSubmitCustomTopicSelectionPerspectiveAnalysisTaskTest {
 
 ## SASS页面查询类接口
 
-涉及接口：[获取三方热榜源列表](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-listhotsources.md)、[获取热点话题列表](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-listhottopics.md)、[获取热门视角列表](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-listhotviewpoints.md)、[获取网友视角列表](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-listwebreviewpoints.md)、[获取新颖视角列表](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-listfreshviewpoints.md)、[获取时效性视角列表](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-miaozi-hot-topics/api-aimiaobi-2023-08-01-listtimedviewattitude.md)。
+涉及接口：[获取三方热榜源列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listhotsources)、[获取热点话题列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listhottopics)、[获取热门视角列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listhotviewpoints)、[获取网友视角列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listwebreviewpoints)、[获取新颖视角列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listfreshviewpoints)、[获取时效性视角列表](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-listtimedviewattitude)。
 
 ```
 package org.example.miaoce;
@@ -642,14 +647,16 @@ public class MiaoCePortalQueryDemoTest {
 }
 ```
 
-## 自定义数据源
+## **自定义数据源**
 
 > 请参照以下demo示例进行调用。
 
 **说明**
 
 -   调用自定义数据源的前提：请点击[全妙智能检索生成应用后付费API](https://common-buy.aliyun.com/?commodityCode=sfm_quanmiaoAPI_public_cn)进行开通。
--   自定义数据源的计费说明：自定义数据源是按照token消耗计费，妙策其他接口即购买妙笔和妙策公有云预付费版本即可调用，自定义数据源计费详见：《[计费说明（妙策-自定义数据源）](raw/application-user-guide/application-gallery/quanmiao-solution-products/miaobi-miaoce-shenjiao/billing-document-miaoce-custom-data-source.md)》。
+    
+-   自定义数据源的计费说明：自定义数据源是按照token消耗计费，妙策其他接口即购买妙笔和妙策公有云预付费版本即可调用，自定义数据源计费详见：《[计费说明（妙策-自定义数据源）](https://help.aliyun.com/zh/model-studio/billing-document-miaoce-custom-data-source)》。
+    
 
 ```
 package org.example.miaoce;

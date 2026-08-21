@@ -144,7 +144,7 @@ array
 
 级联字段列表定义（使用方式 参考 通知文体的定义）
 
-[WritingStyleTemplateField](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-struct-dir/api-aimiaobi-2023-08-01-struct-writingstyletemplatefield.md)
+[WritingStyleTemplateField](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-struct-writingstyletemplatefield)
 
 级联字段
 

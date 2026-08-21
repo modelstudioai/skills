@@ -2,46 +2,57 @@
 
 本文档提供了语音合成Sambert Android SDK的详细使用指南，帮助您将文本转换为高质量、富有表现力的语音。
 
-**用户指南：**关于模型介绍和选型建议请参见[语音合成-Sambert](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)。
+**用户指南：**关于模型介绍和选型建议请参见[语音合成-Sambert](https://help.aliyun.com/zh/model-studio/text-to-speech)。
 
 **在线体验**：暂不支持。
 
-## 快速开始
+## **快速开始**
 
-1.  **获取API Key：**[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，为安全起见，推荐将API Key配置到环境变量。
+1.  **获取API Key：**[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，为安全起见，推荐将API Key配置到环境变量。
     
-    **说明**当需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)。临时API Key默认拥有60秒有效期，过期后需重新获取。
+    **说明**
+    
+    当需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时API Key](https://help.aliyun.com/zh/model-studio/generate-temporary-api-key)。临时API Key默认拥有60秒有效期，过期后需重新获取。
     
 2.  **下载SDK并运行示例代码：**
+    
     -   [下载最新SDK整合包](https://help.aliyun.com/zh/isi/sdk-selection-and-download)。
-    -   解压 ZIP 包。在 `app/libs` 目录中获取 AAR 格式 SDK，并添加到项目依赖。  
-        需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。
+        
+    -   解压 ZIP 包。在 `app/libs` 目录中获取 AAR 格式 SDK，并添加到项目依赖。  
+        需要 Android CPP 接入时，使用 ZIP 包内的 `android_libs` 与 `android_include` 获取动态库和头文件。
+        
     -   用 Android Studio 打开工程。示例代码位于`DashSambertTtsActivity.java`，替换 API Key 后体验功能。
+        
 
-### 调用步骤
+### **调用步骤**
 
 1.  初始化 SDK。
-2.  按业务需求设置参数：通过[tts\_initialize](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#ae6d7dd9cfad3)接口的`ticket`参数设置[连接与控制参数](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#57acf5ecc1w8j)；通过[setparamTts](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#a23e0d85d7ymt)接口设置[语音合成效果参数](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#d20cce9518kla)。
-3.  调用 `startTts` 开始语音合成。
-4.  在[onTtsDataCallback](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#bc71fe2545pfy)回调中获取音频数据，建议使用流式播放。如需保存本地，按追加模式将音频写入同一文件，直到合成完成。
-5.  任务结束后，调用 `tts_release` 释放SDK资源。
+    
+2.  按业务需求设置参数：通过[tts\_initialize](#ae6d7dd9cfad3)接口的`ticket`参数设置[连接与控制参数](#57acf5ecc1w8j)；通过[setparamTts](#a23e0d85d7ymt)接口设置[语音合成效果参数](#d20cce9518kla)。
+    
+3.  调用 `[startTts](#7d33691bdb32v)` 开始语音合成。
+    
+4.  在[onTtsDataCallback](#bc71fe2545pfy)回调中获取音频数据，建议使用流式播放。如需保存本地，按追加模式将音频写入同一文件，直到合成完成。
+    
+5.  任务结束后，调用 `[tts_release](#44bf12ed9a4g9)` 释放SDK资源。
+    
 
-## 请求参数
+## **请求参数**
 
 ### 连接与控制参数
 
-通过在[tts\_initialize](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#ae6d7dd9cfad3)接口的`ticket`参数中传入一个JSON字符串来配置。
+通过在[tts\_initialize](#ae6d7dd9cfad3)接口的`ticket`参数中传入一个JSON字符串来配置。
 
 -   **参数示例：**以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
-
-```
-{
-    "url": "wss://dashscope.aliyuncs.com/api-ws/v1/inference",
-    "apikey": "st-****",
-    "device_id": "my_device_id"
-}
-```
-
+    
+    ```
+    {
+        "url": "wss://dashscope.aliyuncs.com/api-ws/v1/inference",
+        "apikey": "st-****",
+        "device_id": "my_device_id"
+    }
+    ```
+    
 -   **参数说明**
     
     **参数**
@@ -58,7 +69,7 @@
     
     是
     
-    服务地址，固定为 `wss://dashscope.aliyuncs.com/api-ws/v1/inference`。
+    服务地址，固定为 `wss://dashscope.aliyuncs.com/api-ws/v1/inference`。
     
     `apikey`
     
@@ -66,7 +77,7 @@
     
     是
     
-    API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，以降低长期有效Key泄露的风险。
+    API Key。建议使用时效性短、安全性更高的[临时API Key](https://help.aliyun.com/zh/model-studio/generate-temporary-api-key)，以降低长期有效Key泄露的风险。
     
     `mode_type`
     
@@ -74,7 +85,7 @@
     
     是
     
-    模式类型。必须设置为字符串 `"2"`，代表在线语音合成模式。
+    模式类型。必须设置为字符串 `"2"`，代表在线语音合成模式。
     
     `device_id`
     
@@ -92,7 +103,7 @@
     
     日志文件的存储路径。
     
-    此参数仅在调用[tts\_initialize](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#ae6d7dd9cfad3)接口时将`save_log`设为true时生效。此时必须设置日志文件路径，否则将报错。
+    此参数仅在调用[tts\_initialize](#ae6d7dd9cfad3)接口时将`save_log`设为true时生效。此时必须设置日志文件路径，否则将报错。
     
     本地最多保留两个日志文件。
     
@@ -104,7 +115,7 @@
     
     设定日志文件的最大字节数。
     
-    此参数仅在调用[tts\_initialize](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#ae6d7dd9cfad3)接口时将`save_log`设为true时生效。
+    此参数仅在调用[tts\_initialize](#ae6d7dd9cfad3)接口时将`save_log`设为true时生效。
     
     默认值：104857600（100 \* 1024 \* 1024 字节, 即 100MiB）。
     
@@ -114,7 +125,7 @@
     
     否
     
-    控制通过日志回调（`onTtsLogTrackCallback`）对外发送的日志内容的过滤级别。
+    控制通过日志回调（`[onTtsLogTrackCallback](#9c10968457gc6)`）对外发送的日志内容的过滤级别。
     
     默认值：2。
     
@@ -133,12 +144,12 @@
     -   5：LOG\_LEVEL\_NONE（表示关闭此功能）
         
     
-    注意：`log_track_level`与`log_level`（通过[tts\_initialize](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#ae6d7dd9cfad3)接口设置）共同决定最终回调的日志。一条日志的级别数值必须同时大于或等于`log_track_level`和`log_level`的值，才会被回调。例如，`log_track_level`设为2 (INFO)，`log_level`设为3 (WARNING)，则只有WARNING及以上级别（数值>=3）的日志才会被回调。
+    注意：`log_track_level`与`log_level`（通过[tts\_initialize](#ae6d7dd9cfad3)接口设置）共同决定最终回调的日志。一条日志的级别数值必须同时大于或等于`log_track_level`和`log_level`的值，才会被回调。例如，`log_track_level`设为2 (INFO)，`log_level`设为3 (WARNING)，则只有WARNING及以上级别（数值>=3）的日志才会被回调。
     
 
-### 语音合成效果参数
+### **语音合成效果参数**
 
-通过[setparamTts](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#a23e0d85d7ymt)接口进行设置。
+通过[setparamTts](#a23e0d85d7ymt)接口进行设置。
 
 **参数**
 
@@ -154,7 +165,7 @@
 
 是
 
-语音合成[模型](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#a737f8b6f8gx0)。
+语音合成[模型](#a737f8b6f8gx0)。
 
 `format`
 
@@ -162,7 +173,7 @@
 
 否
 
-音频编码格式。支持 pcm、wav、mp3。
+音频编码格式。支持 pcm、wav、mp3。
 
 默认值：pcm。
 
@@ -186,7 +197,7 @@
 
 采样率（单位Hz）。
 
-默认值：[模型](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#a737f8b6f8gx0)对应的默认采样率。
+默认值：[模型](#a737f8b6f8gx0)对应的默认采样率。
 
 推荐使用模型的默认值。若不匹配，服务端会进行重采样。
 
@@ -237,7 +248,7 @@
 
 否
 
-是否开启音素级别时间戳。此参数仅在 `word_timestamp_enabled` 设为1（开启）时生效。
+是否开启音素级别时间戳。此参数仅在 `word_timestamp_enabled` 设为1（开启）时生效。
 
 默认值：0。
 
@@ -265,25 +276,25 @@
 -   0：关闭。
     
 
-## 关键接口
+## **关键接口**
 
-### NativeNui
+### **NativeNui**
 
-#### tts\_initialize
+#### **tts\_initialize**
 
-初始化语音合成SDK实例。SDK为单例模式，在调用 `tts_release` 前禁止重复初始化。
+初始化语音合成SDK实例。SDK为单例模式，在调用 `[tts_release](#44bf12ed9a4g9)` 前禁止重复初始化。
 
 此接口会引起阻塞，应在非UI线程调用。
 
 -   **方法签名**
-
-```
-public synchronized int tts_initialize(INativeTtsCallback callback,
-                                       String ticket,
-                                       final Constants.LogLevel level,
-                                       boolean save_log)
-```
-
+    
+    ```
+    public synchronized int tts_initialize(INativeTtsCallback callback,
+                                           String ticket,
+                                           final Constants.LogLevel level,
+                                           boolean save_log)
+    ```
+    
 -   **参数说明**
     
     **参数**
@@ -294,7 +305,7 @@ public synchronized int tts_initialize(INativeTtsCallback callback,
     
     `callback`
     
-    `INativeTtsCallback`
+    `[INativeTtsCallback](#8b030fec74e01)`
     
     事件和数据回调接口的实现。
     
@@ -302,7 +313,7 @@ public synchronized int tts_initialize(INativeTtsCallback callback,
     
     `String`
     
-    JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参数](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#57acf5ecc1w8j)。
+    JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参数](#57acf5ecc1w8j)。
     
     `level`
     
@@ -314,23 +325,23 @@ public synchronized int tts_initialize(INativeTtsCallback callback,
     
     `boolean`
     
-    是否保存本地日志。若为`true`，须在[连接与控制参数](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#57acf5ecc1w8j)中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
+    是否保存本地日志。若为`true`，须在[连接与控制参数](#57acf5ecc1w8j)中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
     
 -   **返回值说明**
     
     返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
     
 
-#### setparamTts
+#### **setparamTts**
 
-以键值对的形式设置[语音合成效果参数](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#d20cce9518kla)。在 `startTts` 之前调用。
+以键值对的形式设置[语音合成效果参数](#d20cce9518kla)。在 `[startTts](#7d33691bdb32v)` 之前调用。
 
 -   **方法签名**
-
-```
-public synchronized int setparamTts(String param, String value)
-```
-
+    
+    ```
+    public synchronized int setparamTts(String param, String value)
+    ```
+    
 -   **参数说明**
     
     **参数**
@@ -343,29 +354,29 @@ public synchronized int setparamTts(String param, String value)
     
     `String`
     
-    [语音合成效果参数](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#d20cce9518kla)名。
+    [语音合成效果参数](#d20cce9518kla)名。
     
     `value`
     
     `String`
     
-    [语音合成效果参数](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#d20cce9518kla)值。
+    [语音合成效果参数](#d20cce9518kla)值。
     
 -   **返回值说明**
     
     返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
     
 
-#### getparamTts
+#### **getparamTts**
 
 获取参数值。主要用于错误排查。
 
 -   **方法签名**
-
-```
-public String getparamTts(String param);
-```
-
+    
+    ```
+    public String getparamTts(String param);
+    ```
+    
 -   **参数说明**
     
     **参数**
@@ -385,16 +396,16 @@ public String getparamTts(String param);
     返回参数值。
     
 
-#### startTts
+#### **startTts**
 
 启动语音合成任务。合成结果通过回调返回。
 
 -   **方法签名**
-
-```
-public synchronized int startTts(String priority, String taskid, String text)
-```
-
+    
+    ```
+    public synchronized int startTts(String priority, String taskid, String text)
+    ```
+    
 -   **参数说明**
     
     **参数**
@@ -413,7 +424,7 @@ public synchronized int startTts(String priority, String taskid, String text)
     
     `String`
     
-    任务ID。传入 `null` 时由SDK自动生成。
+    任务ID。传入 `null` 时由SDK自动生成。
     
     `text`
     
@@ -426,50 +437,50 @@ public synchronized int startTts(String priority, String taskid, String text)
     返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
     
 
-#### pauseTts
+#### **pauseTts**
 
-暂停当前语音合成任务。任务暂停后，可通过 `resumeTts` 恢复，或通过 `cancelTts` 彻底取消。在任务暂停期间，SDK不支持启动新的合成任务。
+暂停当前语音合成任务。任务暂停后，可通过 `[resumeTts](#01f640f02bka9)` 恢复，或通过 `[cancelTts](#8c464959f9lm9)` 彻底取消。在任务暂停期间，SDK不支持启动新的合成任务。
 
 注意：此操作仅暂停从服务端的数据拉取，播放器中已缓存的音频数据会继续播放。
 
 -   **方法签名**
-
-```
-public synchronized int pauseTts()
-```
-
+    
+    ```
+    public synchronized int pauseTts()
+    ```
+    
 -   **返回值说明**
     
     返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
     
 
-#### resumeTts
+#### **resumeTts**
 
 恢复处于暂停的语音合成任务。
 
 -   **方法签名**
-
-```
-public synchronized int resumeTts()
-```
-
+    
+    ```
+    public synchronized int resumeTts()
+    ```
+    
 -   **返回值说明**
     
     返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
     
 
-#### cancelTts
+#### **cancelTts**
 
 取消合成任务。
 
 注意：此操作仅取消从服务端的数据拉取，播放器中已缓存的音频数据会继续播放。
 
 -   **方法签名**
-
-```
-public synchronized int cancelTts(String taskid)
-```
-
+    
+    ```
+    public synchronized int cancelTts(String taskid)
+    ```
+    
 -   **参数说明**
     
     **参数**
@@ -482,38 +493,38 @@ public synchronized int cancelTts(String taskid)
     
     `String`
     
-    要取消的任务ID。若传入 `null`，则取消所有正在暂停/进行中的合成任务。
+    要取消的任务ID。若传入 `null`，则取消所有正在暂停/进行中的合成任务。
     
 -   **返回值说明**
     
     返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
     
 
-#### tts\_release
+#### **tts\_release**
 
-释放SDK所有内部资源，并强制终止所有正在进行的合成任务。此方法调用后，SDK实例将变为不可用状态，如需再次使用，必须重新调用 `tts_initialize` 进行初始化。
+释放SDK所有内部资源，并强制终止所有正在进行的合成任务。此方法调用后，SDK实例将变为不可用状态，如需再次使用，必须重新调用 `[tts_initialize](#ae6d7dd9cfad3)` 进行初始化。
 
 -   **方法签名**
-
-```
-public synchronized int tts_release()
-```
-
+    
+    ```
+    public synchronized int tts_release()
+    ```
+    
 -   **返回值说明**
     
     返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
     
 
-### INativeTtsCallback：监听回调
+### INativeTtsCallback**：监听回调**
 
-#### onTtsEventCallback：监听事件
+#### onTtsEventCallback**：监听事件**
 
 -   **方法签名**
-
-```
-void onTtsEventCallback(TtsEvent event, String task_id, int ret_code);
-```
-
+    
+    ```
+    void onTtsEventCallback(TtsEvent event, String task_id, int ret_code);
+    ```
+    
 -   **参数说明**
     
     **参数**
@@ -524,7 +535,7 @@ void onTtsEventCallback(TtsEvent event, String task_id, int ret_code);
     
     `event`
     
-    `TtsEvent`
+    `[TtsEvent](#981ff433acpmr)`
     
     回调事件。
     
@@ -541,14 +552,14 @@ void onTtsEventCallback(TtsEvent event, String task_id, int ret_code);
     错误码，仅在事件 TTS\_EVENT\_ERROR 中有效。参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
     
 
-#### onTtsDataCallback：监听音频数据和时间戳信息
+#### onTtsDataCallback**：监听音频数据和时间戳信息**
 
 -   **方法签名**
-
-```
-void onTtsDataCallback(String info, int info_len, byte[] data);
-```
-
+    
+    ```
+    void onTtsDataCallback(String info, int info_len, byte[] data);
+    ```
+    
 -   **参数说明**
     
     **参数**
@@ -561,7 +572,7 @@ void onTtsDataCallback(String info, int info_len, byte[] data);
     
     `String`
     
-    JSON格式的时间戳结果。[语音合成效果参数](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#d20cce9518kla)`word_timestamp_enabled`设为`"1"`时生效。
+    JSON格式的时间戳结果。[语音合成效果参数](#d20cce9518kla)`word_timestamp_enabled`设为`"1"`时生效。
     
     `info_len`
     
@@ -576,7 +587,7 @@ void onTtsDataCallback(String info, int info_len, byte[] data);
     返回当前片段的音频数据。
     
 
-#### onTtsLogTrackCallback：监听追踪日志
+#### onTtsLogTrackCallback**：监听追踪日志**
 
 此回调用于接收 SDK 内部的详细日志，方便进行问题定位和调试。
 
@@ -584,7 +595,7 @@ void onTtsDataCallback(String info, int info_len, byte[] data);
 default void onTtsLogTrackCallback(Constants.LogLevel level, String log)
 ```
 
-### `TtsEvent`：事件类型
+### `TtsEvent`**：事件类型**
 
 **事件**
 
@@ -627,9 +638,11 @@ TTS\_EVENT\_ERROR
 }
 ```
 
-## 模型列表
+## **模型列表**
 
-**说明**默认采样率代表当前模型的最佳采样率，缺省条件下默认按照该采样率输出，同时支持降采样或升采样。如知妙音色，默认采样率16 kHz，使用时可以降采样到8 kHz，但升采样到48 kHz时不会有额外效果提升。
+**说明**
+
+默认采样率代表当前模型的最佳采样率，缺省条件下默认按照该采样率输出，同时支持降采样或升采样。如知妙音色，默认采样率16 kHz，使用时可以降采样到8 kHz，但升采样到48 kHz时不会有额外效果提升。
 
 **音色**
 

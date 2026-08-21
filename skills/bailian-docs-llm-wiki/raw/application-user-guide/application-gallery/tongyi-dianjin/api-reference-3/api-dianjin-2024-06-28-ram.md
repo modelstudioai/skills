@@ -2,7 +2,7 @@
 
 访问控制（RAM）是阿里云提供的管理用户身份与资源访问权限的服务。使用 RAM 可以让您避免与其他用户共享阿里云账号密钥，并可按需为用户授予最小权限。RAM 中使用权限策略描述授权的具体内容。
 
-本文为您介绍_大模型服务平台百炼_为 RAM 权限策略定义的操作（Action）、资源（Resource）和条件（Condition）。_大模型服务平台百炼_的 RAM 代码（RamCode）为_dianjin_，支持的授权粒度为_操作级_。
+本文为您介绍 _大模型服务平台百炼_ 为 RAM 权限策略定义的操作（Action）、资源（Resource）和条件（Condition）。 _大模型服务平台百炼_ 的 RAM 代码（RamCode）为 _dianjin_ ，支持的授权粒度为 _操作级_ 。
 
 ## 权限策略通用结构
 
@@ -32,15 +32,18 @@
 
 -   Effect：权限策略效果。取值：Allow（允许）、Deny（拒绝）。
     
--   Action：授予允许或拒绝权限的具体操作。具体信息，请参见[操作（Action）](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-ram#title-auth-detail-2)。
+-   Action：授予允许或拒绝权限的具体操作。具体信息，请参见[操作（Action）](#title-auth-detail-2)。
     
--   Resource：受操作影响的具体对象，您可以使用资源 ARN 来描述指定资源。具体信息，请参见[资源（Resource）](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-ram#title-auth-detail-3)。
+-   Resource：受操作影响的具体对象，您可以使用资源 ARN 来描述指定资源。具体信息，请参见[资源（Resource）](#title-auth-detail-3)。
     
--   Condition：指授权生效的条件。可选字段。具体信息，请参见[条件（Condition）](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-ram#title-auth-detail-4)。
+-   Condition：指授权生效的条件。可选字段。具体信息，请参见[条件（Condition）](#title-auth-detail-4)。
     
-    -   Condition\_operator：条件运算符，不同类型的条件对应不同的条件运算符。具体信息，请参见权限策略基本元素。
+    -   Condition\_operator：条件运算符，不同类型的条件对应不同的条件运算符。具体信息，请参见[权限策略基本元素](https://help.aliyun.com/zh/ram/policy-elements)。
+        
     -   Condition\_key：条件关键字。
+        
     -   Condition\_value：条件关键字对应的值。
+        
 
 ## 操作（Action）
 
@@ -55,8 +58,10 @@
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
     
     -   对于必选的资源类型，用前面加 \* 表示。
+        
     -   对于不支持资源级授权的操作，用`全部资源`表示。
--   条件关键字：是指云产品自身定义的条件关键字。该列不体现适用于任何操作的通用条件关键字。
+        
+-   条件关键字：是指云产品自身定义的条件关键字。该列不体现适用于任何操作的[通用条件关键字](https://help.aliyun.com/zh/ram/policy-elements)。
     
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
     
@@ -75,13 +80,13 @@
 
 dianjin:GetHistoryListByBizType
 
-[GetHistoryListByBizType](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-gethistorylistbybiztype.md)
+[GetHistoryListByBizType](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-gethistorylistbybiztype)
 
 get
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -89,13 +94,13 @@ get
 
 dianjin:DeleteLibrary
 
-[DeleteLibrary](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-deletelibrary.md)
+[DeleteLibrary](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-deletelibrary)
 
 delete
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -103,13 +108,13 @@ delete
 
 dianjin:ReIndex
 
-[ReIndex](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-reindex.md)
+[ReIndex](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-reindex)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -117,13 +122,13 @@ none
 
 dianjin:GetTaskStatus
 
-[GetTaskStatus](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-gettaskstatus.md)
+[GetTaskStatus](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-gettaskstatus)
 
 get
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -131,13 +136,13 @@ get
 
 dianjin:RealtimeDialogAssist
 
-[RealtimeDialogAssist](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-realtimedialogassist.md)
+[RealtimeDialogAssist](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-realtimedialogassist)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -145,13 +150,13 @@ none
 
 dianjin:GetDocumentUrl
 
-[GetDocumentUrl](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getdocumenturl.md)
+[GetDocumentUrl](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-getdocumenturl)
 
 get
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -159,13 +164,13 @@ get
 
 dianjin:GetQualityCheckTaskResult
 
-[GetQualityCheckTaskResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getqualitychecktaskresult.md)
+[GetQualityCheckTaskResult](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-getqualitychecktaskresult)
 
 get
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -173,13 +178,13 @@ get
 
 dianjin:RunLibraryChatGeneration
 
-[RunLibraryChatGeneration](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-runlibrarychatgeneration.md)
+[RunLibraryChatGeneration](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-runlibrarychatgeneration)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -187,13 +192,13 @@ none
 
 dianjin:GetLibrary
 
-[GetLibrary](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getlibrary.md)
+[GetLibrary](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-getlibrary)
 
 get
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -201,13 +206,13 @@ get
 
 dianjin:InvokePlugin
 
-[InvokePlugin](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-invokeplugin.md)
+[InvokePlugin](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-invokeplugin)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -215,13 +220,13 @@ none
 
 dianjin:GetDialogLog
 
-[GetDialogLog](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getdialoglog.md)
+[GetDialogLog](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-getdialoglog)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -229,13 +234,13 @@ none
 
 dianjin:CreateFinReportSummaryTask
 
-[CreateFinReportSummaryTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createfinreportsummarytask.md)
+[CreateFinReportSummaryTask](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-createfinreportsummarytask)
 
 create
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -243,13 +248,13 @@ create
 
 dianjin:GetTaskResult
 
-[GetTaskResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-gettaskresult.md)
+[GetTaskResult](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-gettaskresult)
 
 get
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -257,13 +262,13 @@ get
 
 dianjin:RecognizeIntention
 
-[RecognizeIntention](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-recognizeintention.md)
+[RecognizeIntention](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-recognizeintention)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -271,13 +276,13 @@ none
 
 dianjin:SubmitChatQuestion
 
-[SubmitChatQuestion](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-submitchatquestion.md)
+[SubmitChatQuestion](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-submitchatquestion)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -285,13 +290,13 @@ none
 
 dianjin:CreateDocsSummaryTask
 
-[CreateDocsSummaryTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createdocssummarytask.md)
+[CreateDocsSummaryTask](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-createdocssummarytask)
 
 create
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -299,13 +304,13 @@ create
 
 dianjin:RunAgent
 
-[RunAgent](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-runagent.md)
+[RunAgent](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-runagent)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -313,13 +318,13 @@ none
 
 dianjin:RebuildTask
 
-[RebuildTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-rebuildtask.md)
+[RebuildTask](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-rebuildtask)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -327,13 +332,13 @@ none
 
 dianjin:GetParseResult
 
-[GetParseResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getparseresult.md)
+[GetParseResult](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-getparseresult)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -341,13 +346,13 @@ none
 
 dianjin:UpdateLibrary
 
-[UpdateLibrary](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-updatelibrary.md)
+[UpdateLibrary](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-updatelibrary)
 
 update
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -355,13 +360,13 @@ update
 
 dianjin:UpdateDocumentChunk
 
-[UpdateDocumentChunk](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-updatedocumentchunk.md)
+[UpdateDocumentChunk](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-updatedocumentchunk)
 
 update
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -369,13 +374,13 @@ update
 
 dianjin:PreviewDocument
 
-[PreviewDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-previewdocument.md)
+[PreviewDocument](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-previewdocument)
 
 get
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -383,13 +388,13 @@ get
 
 dianjin:CreateDialogAnalysisTask
 
-[CreateDialogAnalysisTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createdialoganalysistask.md)
+[CreateDialogAnalysisTask](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-createdialoganalysistask)
 
 create
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -397,13 +402,13 @@ create
 
 dianjin:CreateLibrary
 
-[CreateLibrary](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-createlibrary.md)
+[CreateLibrary](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-createlibrary)
 
 create
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -411,13 +416,13 @@ create
 
 dianjin:GetDialogDetail
 
-[GetDialogDetail](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getdialogdetail.md)
+[GetDialogDetail](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-getdialogdetail)
 
 get
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -425,13 +430,13 @@ get
 
 dianjin:RealTimeDialog
 
-[RealTimeDialog](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-realtimedialog.md)
+[RealTimeDialog](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-realtimedialog)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -439,13 +444,13 @@ none
 
 dianjin:GetAppConfig
 
-[GetAppConfig](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getappconfig.md)
+[GetAppConfig](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-getappconfig)
 
 get
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -453,13 +458,13 @@ get
 
 dianjin:DeleteDocument
 
-[DeleteDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-deletedocument.md)
+[DeleteDocument](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-deletedocument)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -467,13 +472,13 @@ none
 
 dianjin:EvictTask
 
-[EvictTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-evicttask.md)
+[EvictTask](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-evicttask)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -481,13 +486,13 @@ none
 
 dianjin:UpdateDocument
 
-[UpdateDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-updatedocument.md)
+[UpdateDocument](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-updatedocument)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -495,13 +500,13 @@ none
 
 dianjin:CreatePredefinedDocument
 
-[CreatePredefinedDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-createpredefineddocument.md)
+[CreatePredefinedDocument](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-createpredefineddocument)
 
 create
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -509,13 +514,13 @@ create
 
 dianjin:GetDocumentChunkList
 
-[GetDocumentChunkList](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getdocumentchunklist.md)
+[GetDocumentChunkList](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-getdocumentchunklist)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -523,13 +528,13 @@ none
 
 dianjin:GetSummaryTaskResult
 
-[GetSummaryTaskResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getsummarytaskresult.md)
+[GetSummaryTaskResult](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-getsummarytaskresult)
 
 get
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -537,13 +542,13 @@ get
 
 dianjin:RecallDocument
 
-[RecallDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-recalldocument.md)
+[RecallDocument](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-recalldocument)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -551,13 +556,13 @@ none
 
 dianjin:GetDialogAnalysisResult
 
-[GetDialogAnalysisResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getdialoganalysisresult.md)
+[GetDialogAnalysisResult](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-getdialoganalysisresult)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -565,13 +570,13 @@ none
 
 dianjin:GenDocQaResult
 
-[GenDocQaResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-gendocqaresult.md)
+[GenDocQaResult](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-gendocqaresult)
 
 create
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -579,13 +584,13 @@ create
 
 dianjin:GetDocumentList
 
-[GetDocumentList](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getdocumentlist.md)
+[GetDocumentList](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-getdocumentlist)
 
 get
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -593,13 +598,13 @@ get
 
 dianjin:EndToEndRealTimeDialog
 
-[EndToEndRealTimeDialog](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-endtoendrealtimedialog.md)
+[EndToEndRealTimeDialog](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-endtoendrealtimedialog)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -607,13 +612,13 @@ none
 
 dianjin:CreateDialog
 
-[CreateDialog](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createdialog.md)
+[CreateDialog](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-createdialog)
 
 create
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -621,13 +626,13 @@ create
 
 dianjin:DashscopeAsyncTaskFinishEvent
 
-[DashscopeAsyncTaskFinishEvent](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-other/api-dianjin-2024-06-28-dashscopeasynctaskfinishevent.md)
+[DashscopeAsyncTaskFinishEvent](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-dashscopeasynctaskfinishevent)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -635,13 +640,13 @@ none
 
 dianjin:CreateQualityCheckTask
 
-[CreateQualityCheckTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createqualitychecktask.md)
+[CreateQualityCheckTask](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-createqualitychecktask)
 
 create
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -649,13 +654,13 @@ create
 
 dianjin:GetLibraryList
 
-[GetLibraryList](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getlibrarylist.md)
+[GetLibraryList](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-getlibrarylist)
 
 get
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -663,13 +668,13 @@ get
 
 dianjin:GetFilterDocumentList
 
-[GetFilterDocumentList](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getfilterdocumentlist.md)
+[GetFilterDocumentList](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-getfilterdocumentlist)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -677,13 +682,13 @@ none
 
 dianjin:GetChatQuestionResp
 
-[GetChatQuestionResp](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getchatquestionresp.md)
+[GetChatQuestionResp](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-getchatquestionresp)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -691,13 +696,13 @@ none
 
 dianjin:RunDialogAnalysis
 
-[RunDialogAnalysis](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-rundialoganalysis.md)
+[RunDialogAnalysis](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-rundialoganalysis)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -705,13 +710,13 @@ none
 
 dianjin:CreatePdfTranslateTask
 
-[CreatePdfTranslateTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createpdftranslatetask.md)
+[CreatePdfTranslateTask](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-createpdftranslatetask)
 
 create
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -719,13 +724,13 @@ create
 
 dianjin:UpdateQaLibrary
 
-[UpdateQaLibrary](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-updateqalibrary.md)
+[UpdateQaLibrary](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-updateqalibrary)
 
 create
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -733,13 +738,13 @@ create
 
 dianjin:RunChatResultGeneration
 
-[RunChatResultGeneration](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-runchatresultgeneration.md)
+[RunChatResultGeneration](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-runchatresultgeneration)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -747,13 +752,13 @@ none
 
 dianjin:CreateAnnualDocSummaryTask
 
-[CreateAnnualDocSummaryTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createannualdocsummarytask.md)
+[CreateAnnualDocSummaryTask](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-createannualdocsummarytask)
 
 create
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -761,13 +766,13 @@ create
 
 dianjin:UploadDocument
 
-[UploadDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-uploaddocument.md)
+[UploadDocument](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-uploaddocument)
 
 none
 
 \*全部资源
 
-`*`
+`*****`
 
 无
 
@@ -782,8 +787,11 @@ none
 -   `*`表示全部。例如：
     
     -   `{#resourceType}`为`*`时：表示全部资源。
+        
     -   `{#regionId}`为`*`时：表示全部地域。
+        
     -   `{#accountId}`为`*`时：表示全部阿里云账号。
+        
 
 资源类型
 
@@ -791,13 +799,16 @@ none
 
 ## 条件（Condition）
 
-_大模型服务平台百炼_未定义产品级别的条件关键字。如需查看适用于所有云产品的通用条件关键字，请参见通用条件关键字。
+_大模型服务平台百炼_未定义产品级别的条件关键字。如需查看适用于所有云产品的通用条件关键字，请参见[通用条件关键字](https://help.aliyun.com/zh/ram/policy-elements)。
 
 ## 相关操作
 
 您可以创建自定义权限策略，并将权限策略授予 RAM 用户、RAM 用户组或 RAM 角色。具体操作如下：
 
--   创建自定义权限策略
--   为 RAM 用户授权
--   为 RAM 用户组授权
--   为 RAM 角色授权
+-   [创建自定义权限策略](https://help.aliyun.com/zh/ram/create-a-custom-policy)
+    
+-   [为 RAM 用户授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)
+    
+-   [为 RAM 用户组授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-a-ram-user-group)
+    
+-   [为 RAM 角色授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-a-ram-role)

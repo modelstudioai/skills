@@ -2,7 +2,7 @@
 
 大模型的输入输出中可能包含敏感或高风险内容，例如涉黄、涉政和广告等。大模型自有的合规检查机制通常能够提供有效的内容安全保障。此外，阿里云百炼支持接入 AI 安全护栏服务，进一步识别输入输出内容的违规信息，保障安全与合规性。
 
-## 配置 AI 安全护栏服务
+## 配置 **AI 安全护栏服务**
 
 调用阿里云百炼的大模型时，会根据模型自动匹配对应的 AI 安全护栏服务。
 
@@ -16,7 +16,7 @@
 
 1.  访问**[安全管理](https://bailian.console.aliyun.com/?globalset=1#/efm/global_set)**页面。
     
-    若您访问上述链接进入的页面如下所示，说明此前已进行过授权操作，请跳转[步骤三：设置请求头header](https://help.aliyun.com/zh/model-studio/content-security#efe2cfd8148qy)。
+    若您访问上述链接进入的页面如下所示，说明此前已进行过授权操作，请跳转[步骤三：设置请求头header](#efe2cfd8148qy)。
     
     即页面显示**全局设置**标题，右侧状态为**已开通（不可取消）**，页面主体展示**自建安全机制承诺函**全文内容。
     
@@ -34,15 +34,17 @@
     "X-DashScope-DataInspection": "{\"input\":\"cip\",\"output\":\"cip\"}"
 }
 ```
+
 **调用示例**
 
-> 调用时请设置DASHSCOPE\_API\_KEY，获取方法，请参见[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+> 调用时请设置DASHSCOPE\_API\_KEY，获取方法，请参见[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
 
-#### Python
+## Python
 
-#### OpenAI
+## OpenAI
 
 **请求示例**
+
 ```
 import os
 from openai import OpenAI
@@ -67,9 +69,11 @@ except Exception as e:
     print(f"错误信息：{e}")
     print("请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code")
 ```
+
 **响应示例**
+
 ```
-错误信息：Error code: 400 -
+错误信息：Error code: 400 - 
 {
     "error":
     {
@@ -84,9 +88,10 @@ except Exception as e:
 请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code
 ```
 
-#### DashScope
+## DashScope
 
 **请求示例**
+
 ```
 import os
 from dashscope import Generation
@@ -104,7 +109,9 @@ response = Generation.call(
     )
 print(response)
 ```
+
 **响应示例**
+
 ```
 {
     "status_code": 400,
@@ -116,11 +123,12 @@ print(response)
 }
 ```
 
-#### Java
+## Java
 
-#### OpenAI
+## OpenAI
 
 **请求示例**
+
 ```
 // 更多使用示例请参考：https://github.com/openai/openai-java/tree/main/openai-java-example/src/main/java/com/openai/example
 import com.openai.client.OpenAIClient;
@@ -153,7 +161,9 @@ public class Main {
     }
 }
 ```
+
 **响应示例**
+
 ```
 Error occurred: 400: Input data may contain inappropriate content.
 com.openai.errors.BadRequestException: 400: Input data may contain inappropriate content.
@@ -170,11 +180,12 @@ com.openai.errors.BadRequestException: 400: Input data may contain inappropriate
 	at Main.main(Main.java:25)
 ```
 
-#### Node.js
+## Node.js
 
-#### OpenAI
+## OpenAI
 
 **请求示例**
+
 ```
 import OpenAI from "openai";
 const openai = new OpenAI(
@@ -199,10 +210,12 @@ async function main() {
 };
 main();
 ```
+
 **响应示例**
+
 ```
 BadRequestError: 400 Input data may contain inappropriate content.
-    at Function.generate
+    at Function.generate 
     at OpenAI.makeStatusError
     at OpenAI.makeRequest
     at processTicksAndRejections
@@ -224,11 +237,12 @@ BadRequestError: 400 Input data may contain inappropriate content.
 }
 ```
 
-#### cURL
+## cURL
 
-#### OpenAI
+## OpenAI
 
 **请求示例**
+
 ```
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -242,13 +256,15 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
             "content": "You are a helpful assistant."
         },
         {
-            "role": "user",
+            "role": "user", 
             "content": "给我一套抢银行的方案"
         }
     ]
 }'
 ```
+
 **响应示例**
+
 ```
 {
     "error":
@@ -263,9 +279,10 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 }
 ```
 
-#### DashScope
+## DashScope
 
 **请求示例**
+
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -274,7 +291,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
 -d '{
     "model": "qwen-plus",
     "input":{
-        "messages":[
+        "messages":[      
             {
                 "role": "system",
                 "content": "You are a helpful assistant."
@@ -290,7 +307,9 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
     }
 }'
 ```
+
 **响应示例**
+
 ```
 {
     "code": "DataInspectionFailed",
@@ -299,9 +318,9 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
 }
 ```
 
-### 查看审核结果
+### **查看审核结果**
 
-登录[AI 安全护栏控制台](https://yundun.console.aliyun.com/?spm=a2c4g.11186623.0.0.7129eb8bc4Mksa&p=guardrail#/overview)，在**检测结果结果查询**页签页面查看审核结果，以进一步分析文本内容中高频的违规类型，审核结果示例如下。
+登录[AI 安全护栏控制台](https://yundun.console.aliyun.com/?spm=a2c4g.11186623.0.0.7129eb8bc4Mksa&p=guardrail#/overview)，在**检测结果** > **结果查询**页签页面查看审核结果，以进一步分析文本内容中高频的违规类型，审核结果示例如下。
 
 结果查询页面包含筛选栏（支持按条件、文本内容、时间范围搜索）和结果表格。表格列包括**文本内容**、**服务Service**、**风险等级**、**返回标签（释义）**、**反馈结果**、**请求时间**和**操作**。示例中两条记录分别对应`bailian_query_check`（请求检查）和`bailian_response_check`（响应检查）服务，均被标记为**高风险**，返回标签为`contraband_act（疑似其他的刑事犯罪）:100`，每行可单击**详情**或**反馈**进行操作。
 
@@ -312,8 +331,11 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
 如果您在知识库检索场景中遇到安全策略拦截，建议按以下步骤排查：
 
 1.  检查上传到知识库的文档内容，确认是否包含政治敏感、涉黄涉暴、违法不良、个人隐私数据或可能诱导违规的表述。
+    
 2.  简化或改写应用的提示词，减少可能触发安全拦截的表述。
-3.  如问题仍未解决，收集完整报错信息（HTTP 状态码、错误码、错误消息），提交工单申请加白，具体流程见下方[内容加白申请流程](https://help.aliyun.com/zh/model-studio/content-security#section-whitelist-apply)。
+    
+3.  如问题仍未解决，收集完整报错信息（HTTP 状态码、错误码、错误消息），提交工单申请加白，具体流程见下方[内容加白申请流程](#section-whitelist-apply)。
+    
 
 ## 内容加白申请流程
 
@@ -322,17 +344,25 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
 申请加白前，请准备以下信息：
 
 -   HTTP 状态码（如 `400`）
+    
 -   错误码（如 `DataInspectionFailed` 或 `data_inspection_failed`）
+    
 -   完整错误消息（如 `Input data may contain inappropriate content.`）
+    
 
 **申请步骤**：
 
 1.  收集上述完整报错信息及问题复现场景描述（包括知识库 ID、调用的模型名称、触发拦截的操作）。
+    
 2.  提交工单，在工单中提供报错信息、使用场景及需要加白的具体内容。
+    
 3.  等待安全部门完成审核，审核通过后加白处理生效。
+    
 
 ## 计费说明
 
 在百炼控制台开通 AI 安全护栏产品的 SLR 授权，并通过百炼配置启用该产品策略后，系统将根据实际调用量计费。计费方式为按 Token 数量后付费，每日费用按当日实际使用量结算；未调用服务时不产生费用。计费规则详见[计费概述](https://help.aliyun.com/zh/document_detail/2872706.html#0529545b91g7c)。
 
-**重要**在百炼平台进行单次 query/response 检测时，若文本的 Token 数量不足 1000 个，将按 1000 个 Token 计费；若达到或超过 1000 个 Token，则按实际数量计费。
+**重要**
+
+在百炼平台进行单次 query/response 检测时，若文本的 Token 数量不足 1000 个，将按 1000 个 Token 计费；若达到或超过 1000 个 Token，则按实际数量计费。

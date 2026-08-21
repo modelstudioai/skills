@@ -7,15 +7,21 @@
 **重要**
 
 -   本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
+    
 -   wanx-x-painting 模型当前仅提供**免费体验**，免费额度用完后不可调用且不支持付费，推荐参考[图像编辑-千问](https://help.aliyun.com/zh/model-studio/qwen-image-edit-guide)或[图像编辑-万相2.1](https://help.aliyun.com/zh/model-studio/wanx-image-edit)获取替代方案。
+    
 
-**重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
+**重要**
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+百炼为华北2（北京）地域推出了业务空间专属域名 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`，**能够为推理请求提供卓越的性能和更高的稳定性**，建议从 `https://dashscope.aliyuncs.com` 迁移至新域名。
 
-## 模型概览
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+
+## **模型概览**
 
 **模型效果示意**
+
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1300704371/p885604.png)
 
 **模型简介**
 
@@ -35,7 +41,7 @@ wanx-x-painting
 
 **限流（主账号与RAM子账号共用）**
 
-**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
+**免费额度**[（查看）](https://help.aliyun.com/zh/model-studio/new-free-quota)
 
 **任务下发接口QPS限制**
 
@@ -53,135 +59,36 @@ wanx-x-painting
 
 500张
 
-更多说明请参见[模型计费及限流说明](https://help.aliyun.com/zh/model-studio/vary-region-api-reference#b8457b7223zhp)。
+更多说明请参见[模型计费及限流说明](#b8457b7223zhp)。
 
-## 前提条件
+## **前提条件**
 
 图像局部重绘API支持通过HTTP和DashScope SDK进行调用。
 
-在调用前，您需要[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
+在调用前，您需要[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
-如需通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。目前，该SDK已支持Python和Java。
+如需通过SDK进行调用，请[安装DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。目前，该SDK已支持Python和Java。
 
-> 请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
-
-## HTTP调用
+## **HTTP调用**
 
 图像模型处理时间较长，为了避免请求超时，HTTP调用仅支持异步获取模型结果。您需要发起两个请求：
 
 1.  **创建任务获取任务ID**：首先发起创建任务请求，该请求会返回任务ID（task\_id）。
+    
 2.  **根据任务ID查询结果**：使用上一步获得的任务ID，查询任务状态及结果。任务成功执行时将返回图像URL，有效期24小时。
+    
 
-**说明**创建任务后，该任务将被加入到排队队列，等待调度执行。后续需要调用“根据任务ID查询结果接口”获取任务状态及结果。
+**说明**
 
-### 步骤1：创建任务获取任务ID
+创建任务后，该任务将被加入到排队队列，等待调度执行。后续需要调用“根据任务ID查询结果接口”获取任务状态及结果。
+
+### **步骤1：创建任务获取任务ID**
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis`
 
-#### 请求参数
+#### **请求参数**
 
-##### 请求头（Headers）
-
-**Content-Type**`string`**（必选）**
-
-请求内容类型。此参数必须设置为`application/json`。
-
-**Authorization**`string`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-**X-DashScope-Async**`string`**（必选）**
-
-异步处理配置参数。HTTP请求只支持异步，**必须设置为**`enable`。
-
-**重要**缺少此请求头将报错：“current user api does not support synchronous calls”。
-
-##### 请求体（Request Body）
-
-**model**`string`**（必选）**
-
-模型名称。示例值：wanx-x-painting。
-
-**input**`object`**（必选）**
-
-输入的基本信息，如提示词、图像URL等。
-
-属性
-
-**prompt**`string`**（必选）**
-
-正向提示词，用来描述生成图像中期望包含的元素和视觉特点。
-
-支持中英文，长度不超过75个字符，超过部分会自动截断。
-
-**base\_image\_url**`string`**（必选）**
-
-输入图像URL地址，不支持填写图像Base64数据。
-
-URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
-
-图像限制：
-
--   图像格式：JPG、JPEG、PNG、BMP。
--   图像分辨率：大于256×256像素，小于4096×4096像素。
--   图像大小：不超过10MB。
--   URL地址中不能包含中文字符。
-
-**mask\_image\_url**`string`**（必选）**
-
-用户标记涂抹区域的图像URL地址，需要和base\_image\_url图像分辨率保持一致。不支持填写图像Base64数据。
-
-URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
-
-图像限制：
-
--   图像格式：JPG、JPEG、PNG、BMP。
--   图像分辨率：大于256×256像素，小于4096×4096像素。
--   图像大小：不超过10MB。
--   URL地址中不能包含中文字符。
-
-您可以使用PS或者其他图像编辑工具在原图上涂抹获得掩码图像。
-
-**parameters**`object`（可选）
-
-图像处理参数。
-
-属性
-
-**style**`string`（可选）
-
-输出图像的风格。目前支持以下风格取值：
-
--   <auto>： 默认。
--   <3d cartoon>：3D卡通。
--   <anime>：动画。
--   <oil painting>： 油画。
--   <watercolor>：水彩。
--   <sketch>：素描。
--   <chinese painting>：中国画。
--   <flat illustration>：扁平插画。
-
-**size**`string`（可选）
-
-输出图像的分辨率。目前支持3种图像分辨率：
-
--   1024\*1024：默认值。
--   720\*1280
--   1280\*720
-
-**n**`integer`（可选）
-
-生成图片的数量。取值范围为1~4张，默认为1。
-
-**mask\_color**`array`（可选）
-
-RGB颜色数值列表，用于指定掩码图片中表示涂改区域的颜色。默认值为\[\]。
-
-当该字段为空，默认对掩码图片进行二值化处理（处理后白色代表涂抹区域）。当该字段非空时，表示RGB颜色数值列表，代表一种或多种颜色。这些RGB颜色所描绘的区域即为涂改区域，如\[0,0,0\]和\[134,134,134\]，而未被指定的颜色则视为背景色。
-
-示例值：\[\[0, 0, 0\], \[134, 134, 134\]\]。
-
-#### 图像局部重绘
+## 图像局部重绘
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \
@@ -202,42 +109,129 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-#### 响应参数
+##### **请求头（Headers）**
 
-**output** `object`
+**Content-Type** `_string_` **（必选）**
 
-任务输出信息。
+请求内容类型。此参数必须设置为`application/json`。
 
-属性
+**Authorization** `_string_`**（必选）**
 
-**task\_id** `string`
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
 
-任务ID。查询有效期24小时。
+**X-DashScope-Async** `_string_` **（必选）**
 
-**task\_status** `string`
+异步处理配置参数。HTTP请求只支持异步，**必须设置为**`**enable**`。
 
-任务状态。
+**重要**
 
-枚举值
+缺少此请求头将报错：“current user api does not support synchronous calls”。
 
--   PENDING：任务排队中
--   RUNNING：任务处理中
--   SUCCEEDED：任务执行成功
--   FAILED：任务执行失败
--   CANCELED：任务已取消
--   UNKNOWN：任务不存在或状态未知
+##### **请求体（Request Body）**
 
-**request\_id**`string`
+**model** `_string_` **（必选）**
 
-请求唯一标识。可用于请求明细溯源和问题排查。
+模型名称。示例值：wanx-x-painting。
 
-**code**`string`
+**input** `_object_` **（必选）**
 
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+输入的基本信息，如提示词、图像URL等。
 
-**message**`string`
+**属性**
 
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+**prompt** `_string_` **（必选）**
+
+正向提示词，用来描述生成图像中期望包含的元素和视觉特点。
+
+支持中英文，长度不超过75个字符，超过部分会自动截断。
+
+**base\_image\_url** `_string_` **（必选）**
+
+输入图像URL地址，不支持填写图像Base64数据。
+
+URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
+
+图像限制：
+
+-   图像格式：JPG、JPEG、PNG、BMP。
+    
+-   图像分辨率：大于256×256像素，小于4096×4096像素。
+    
+-   图像大小：不超过10MB。
+    
+-   URL地址中不能包含中文字符。
+    
+
+**mask\_image\_url** `_string_` **（必选）**
+
+用户标记涂抹区域的图像URL地址，需要和base\_image\_url图像分辨率保持一致。不支持填写图像Base64数据。
+
+URL 需为公网可访问的地址，并支持 HTTP 或 HTTPS 协议。您也可在此[获取临时公网URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
+
+图像限制：
+
+-   图像格式：JPG、JPEG、PNG、BMP。
+    
+-   图像分辨率：大于256×256像素，小于4096×4096像素。
+    
+-   图像大小：不超过10MB。
+    
+-   URL地址中不能包含中文字符。
+    
+
+您可以使用PS或者其他图像编辑工具在原图上涂抹获得掩码图像。
+
+**parameters** `_object_` （可选）
+
+图像处理参数。
+
+**属性**
+
+**style** `_string_` （可选）
+
+输出图像的风格。目前支持以下风格取值：
+
+-   <auto>： 默认。
+    
+-   <3d cartoon>：3D卡通。
+    
+-   <anime>：动画。
+    
+-   <oil painting>： 油画。
+    
+-   <watercolor>：水彩。
+    
+-   <sketch>：素描。
+    
+-   <chinese painting>：中国画。
+    
+-   <flat illustration>：扁平插画。
+    
+
+**size** `_string_` （可选）
+
+输出图像的分辨率。目前支持3种图像分辨率：
+
+-   1024\*1024：默认值。
+    
+-   720\*1280
+    
+-   1280\*720
+    
+
+**n** `_integer_` （可选）
+
+生成图片的数量。取值范围为1~4张，默认为1。
+
+**mask\_color** `_array_` （可选）
+
+RGB颜色数值列表，用于指定掩码图片中表示涂改区域的颜色。默认值为\[\]。
+
+当该字段为空，默认对掩码图片进行二值化处理（处理后白色代表涂抹区域）。当该字段非空时，表示RGB颜色数值列表，代表一种或多种颜色。这些RGB颜色所描绘的区域即为涂改区域，如\[0,0,0\]和\[134,134,134\]，而未被指定的颜色则视为背景色。
+
+示例值：\[\[0, 0, 0\], \[134, 134, 134\]\]。
+
+#### **响应参数**
 
 #### 成功响应
 
@@ -255,7 +249,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 #### 异常响应
 
-创建任务失败，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+创建任务失败，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ```
 {
@@ -265,119 +259,77 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
+**output** `_object_`
+
+任务输出信息。
+
+属性
+
+**task\_id** `_string_`
+
+任务ID。查询有效期24小时。
+
+**task\_status** `_string_`
+
+任务状态。
+
+**枚举值**
+
+-   PENDING：任务排队中
+    
+-   RUNNING：任务处理中
+    
+-   SUCCEEDED：任务执行成功
+    
+-   FAILED：任务执行失败
+    
+-   CANCELED：任务已取消
+    
+-   UNKNOWN：任务不存在或状态未知
+    
+
+**request\_id** `_string_`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+**code** `_string_`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+
+**message** `_string_`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+
 ### 步骤2：根据任务ID查询结果
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 #### 请求参数
 
-#### 请求头（Headers）
-
-**Authorization**`string`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-#### URL路径参数（Path parameters）
-
-**task\_id** `string`**（必选）**
-
-任务ID。
-
 #### 查询任务结果
 
 请将`86ecf553-d340-4e21-xxxxxxxxx`替换为真实的task\_id。
 
-> 若使用新加坡地域的模型，需将base\_url替换为https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx，其中{WorkspaceId}需替换为真实的业务空间ID。
+> 若使用新加坡地域的模型，需将base\_url替换为https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx，其中WorkspaceId需替换为真实的业务空间ID。
 
 ```
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ecf553-d340-4e21-xxxxxxxxx \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-#### 响应参数
+#### **请求头（Headers）**
 
-**output**`object`
+**Authorization** `_string_`**（必选）**
 
-任务输出信息。
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
 
-属性
+#### **URL路径参数（Path parameters）**
 
-**task\_id** `string`
+**task\_id** `_string_`**（必选）**
 
-任务ID。查询有效期24小时。
+任务ID。
 
-**task\_status** `string`
-
-任务状态。
-
-枚举值
-
--   PENDING：任务排队中
--   RUNNING：任务处理中
--   SUCCEEDED：任务执行成功
--   FAILED：任务执行失败
--   CANCELED：任务已取消
--   UNKNOWN：任务不存在或状态未知
-
-**task\_metrics** `object`
-
-任务结果统计。
-
-属性
-
-**TOTAL** `integer`
-
-总的任务数。
-
-**SUCCEEDED** `integer`
-
-任务状态为成功的任务数。
-
-**FAILED** `integer`
-
-任务状态为失败的任务数。
-
-**results** `array of object`
-
-任务结果列表，包括图像URL、部分任务执行失败报错信息等。
-
-数据结构
-
-```
-{
-    "results": [
-        {
-            "url": ""
-        },
-        {
-            "code": "",
-            "message": ""
-        }
-    ]
-}
-```
-
-**code**`string`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-**message**`string`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-**usage** `object`
-
-输出信息统计。只对成功的结果计数。
-
-属性
-
-**image\_count** `integer`
-
-模型成功生成图片的数量。计费公式：费用 = 图片数量 × 单价。
-
-**request\_id**`string`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
+#### **响应参数**
 
 #### 任务执行成功
 
@@ -411,7 +363,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 
 #### 任务执行失败
 
-若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ```
 {
@@ -432,7 +384,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 
 #### 任务部分失败
 
-模型可以在一次任务中生成多张图片。只要有一张图片生成成功，任务状态将标记为`SUCCEEDED`，并且返回相应的图像URL。对于生成失败的图片，结果中会返回相应的失败原因。同时在usage统计中，只会对成功的结果计数。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+模型可以在一次任务中生成多张图片。只要有一张图片生成成功，任务状态将标记为`SUCCEEDED`，并且返回相应的图像URL。对于生成失败的图片，结果中会返回相应的失败原因。同时在usage统计中，只会对成功的结果计数。请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ```
 {
@@ -461,9 +413,98 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 }
 ```
 
+**output** `_object_`
+
+任务输出信息。
+
+**属性**
+
+**task\_id** `_string_`
+
+任务ID。查询有效期24小时。
+
+**task\_status** `_string_`
+
+任务状态。
+
+**枚举值**
+
+-   PENDING：任务排队中
+    
+-   RUNNING：任务处理中
+    
+-   SUCCEEDED：任务执行成功
+    
+-   FAILED：任务执行失败
+    
+-   CANCELED：任务已取消
+    
+-   UNKNOWN：任务不存在或状态未知
+    
+
+**task\_metrics** `_object_`
+
+任务结果统计。
+
+**属性**
+
+**TOTAL** `_integer_`
+
+总的任务数。
+
+**SUCCEEDED** `_integer_`
+
+任务状态为成功的任务数。
+
+**FAILED** `_integer_`
+
+任务状态为失败的任务数。
+
+**results** `_array of object_`
+
+任务结果列表，包括图像URL、部分任务执行失败报错信息等。
+
+**数据结构**
+
+```
+{
+    "results": [
+        {
+            "url": ""
+        },
+        {
+            "code": "",
+            "message": ""
+        }
+    ]
+}
+```
+
+**code** `_string_`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+
+**message** `_string_`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+
+**usage** `_object_`
+
+输出信息统计。只对成功的结果计数。
+
+**属性**
+
+**image\_count** `_integer_`
+
+模型成功生成图片的数量。计费公式：费用 = 图片数量 × 单价。
+
+**request\_id** `_string_`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
 ## DashScope SDK调用
 
-请先确认已安装最新版DashScope SDK：[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+请先确认已安装最新版DashScope SDK：[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
 
 DashScope SDK目前已支持Python和Java。
 
@@ -473,9 +514,9 @@ SDK与HTTP接口的参数名基本一致，参数结构根据不同语言的SDK�
 
 ### Python SDK调用
 
-#### 同步调用
+## 同步调用
 
-##### 请求示例
+##### **请求示例**
 
 ```
 from http import HTTPStatus
@@ -514,7 +555,7 @@ else:
           (rsp.status_code, rsp.code, rsp.message))
 ```
 
-##### 响应示例
+##### **响应示例**
 
 ```
 {
@@ -543,9 +584,9 @@ else:
 }
 ```
 
-#### 异步调用
+## 异步调用
 
-##### 请求示例
+##### **请求示例**
 
 ```
 from http import HTTPStatus
@@ -606,9 +647,10 @@ if __name__ == '__main__':
     async_call()
 ```
 
-##### 响应示例
+##### **响应示例**
 
 **1、创建任务的响应示例**
+
 ```
 {
 	"status_code": 200,
@@ -623,7 +665,9 @@ if __name__ == '__main__':
 	"usage": null
 }
 ```
+
 **2、查询任务结果的响应示例**
+
 ```
 {
 	"status_code": 200,
@@ -653,7 +697,7 @@ if __name__ == '__main__':
 
 ### Java SDK调用
 
-#### 同步调用
+## 同步调用
 
 ##### 请求示例
 
@@ -710,7 +754,7 @@ public class Main {
 }
 ```
 
-##### 响应示例
+##### **响应示例**
 
 ```
 {
@@ -733,9 +777,9 @@ public class Main {
 }
 ```
 
-#### 异步调用
+## 异步调用
 
-##### 请求示例
+##### **请求示例**
 
 ```
 // Copyright (c) Alibaba, Inc. and its affiliates.
@@ -821,9 +865,10 @@ public class Main {
 }
 ```
 
-##### 响应示例
+##### **响应示例**
 
 **1、创建任务的响应示例**
+
 ```
 {
 	"request_id": "5dbf9dc5-4f4c-9605-85ea-542f97709ba8",
@@ -833,7 +878,11 @@ public class Main {
 	}
 }
 ```
-**2、查询任务结果的响应示例****output字段内容：**
+
+**2、查询任务结果的响应示例**
+
+**output字段内容：**
+
 ```
 {
 	"task_id": "7277e20e-aa01-4709-xxxxxxxx",
@@ -848,16 +897,18 @@ public class Main {
 	}
 }
 ```
+
 **usage字段内容：**
+
 ```
 {
 	"image_count": 1
 }
 ```
 
-## 错误码
+## **错误码**
 
-如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ## 常见问题
 
@@ -866,37 +917,54 @@ public class Main {
 **免费额度**
 
 -   额度说明：免费额度是指模型成功生成的输出图片数量。输入图片及模型处理失败的情况不占用免费额度。
+    
 -   领取方式：开通阿里云百炼大模型服务后自动发放，有效期90天。
+    
 -   使用账号：阿里云主账号与其RAM子账号共享免费额度。
--   更多详情请参见[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)。
+    
+-   更多详情请参见[新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota)。
+    
 
 **限时免费**
 
 -   当计费为限时免费时，表示该模型处于公测阶段，免费额度用尽后不可使用。
+    
 
 **计费说明**
 
 -   当计费有明确单价时，如0.2元/秒，表示该模型已商业化，免费额度用尽或过期后需付费使用。
+    
 -   计费项：只对模型成功生成的输出图片进行收费，其余情况暂不计费。
+    
 -   付费方式：由阿里云主账号统一付费。RAM子账号不能独立计量计费，必须由所属的主账号付费。如果您需要查询账单信息，请前往阿里云控制台[账单概览](https://billing-cost.console.aliyun.com/finance/month-bill/account)。
+    
 -   充值途径：您可以在阿里云控制台[费用与成本](https://billing-cost.console.aliyun.com/home?spm=a2c4g.11186623.0.0.2d543048F4KRQP)页面进行充值。
+    
 -   模型调用情况：您可以前往阿里云百炼的[模型观测](https://bailian.console.aliyun.com/#/model-telemetry)查看模型调用量及调用次数。
--   更多计费问题请参见[计费项](raw/model-user-guide/test-1/model-pricing.md)。
+    
+-   更多计费问题请参见[计费项](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)。
+    
 
 **限流**
 
 -   限流说明：阿里云主账号与其RAM子账号共享限流限制。
+    
 
-### 图像局部重绘API通用问题
+### **图像局部重绘API通用问题**
 
 1.  **输入图像的掩码图像（mask\_image）有什么限制？**
+    
     -   只能使用图像URL地址，暂不支持填写图像Base64数据。
+        
     -   需要和输入图像的分辨率保持一致。
+        
     -   文档中的示例掩码图像为白色背景，实际上，掩码图像并不要求必须为白色背景，可以通过`mask_color`字段指定其他颜色。
+        
+    
 2.  **如何获得输入图像的掩码图像？**
     
     您可以使用PS或者其他图像编辑工具在原图上涂抹获得掩码图像。
     
-3.  **使用图像局部重绘功能时，若涂抹区域外的图片输出效果不理想，应如何处理？**
+3.  **使用****图像局部重绘****功能时，若涂抹区域外的图片输出效果不理想，应如何处理？**
     
-    建议您使用[通用图像编辑](raw/model-api-reference/image-generation/wan-image-api-reference/wanx-image-edit-api-reference.md)的局部重绘功能重新生成。
+    建议您使用[通用图像编辑](https://help.aliyun.com/zh/model-studio/wanx-image-edit-api-reference)的局部重绘功能重新生成。

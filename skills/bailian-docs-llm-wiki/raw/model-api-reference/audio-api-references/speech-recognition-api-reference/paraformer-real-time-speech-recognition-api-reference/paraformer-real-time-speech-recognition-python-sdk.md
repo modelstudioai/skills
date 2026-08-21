@@ -2,27 +2,32 @@
 
 本文介绍Paraformer实时语音识别Python SDK的参数和接口细节。
 
-**重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+**重要**
+
+阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
 
 `{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
-**用户指南：**关于模型介绍和选型建议请参见[实时语音识别-Fun-ASR/Paraformer](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)。
+**用户指南：**关于模型介绍和选型建议请参见[实时语音识别-Fun-ASR/Paraformer](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition)。
 
 **在线体验**：仅paraformer-realtime-v2、paraformer-realtime-8k-v2和paraformer-realtime-v1支持[在线体验](https://bailian.console.aliyun.com/?tab=model#/efm/model_experience_center/voice)。
 
-## 前提条件
+## **前提条件**
 
-已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
+-   已开通服务并[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
+    
+    **说明**
+    
+    当您需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时鉴权Token](https://help.aliyun.com/zh/model-studio/generate-temporary-api-key)。
+    
+    与长期有效的 API Key 相比，临时鉴权 Token 具备时效性短（60秒）、安全性高的特点，适用于临时调用场景，能有效降低API Key泄露的风险。
+    
+    使用方式：在代码中，将原本用于鉴权的 API Key 替换为获取到的临时鉴权 Token 即可。
+    
+-   [安装最新版DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+    
 
-**说明**当您需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时鉴权Token](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)。
-
-与长期有效的 API Key 相比，临时鉴权 Token 具备时效性短（60秒）、安全性高的特点，适用于临时调用场景，能有效降低API Key泄露的风险。
-
-使用方式：在代码中，将原本用于鉴权的 API Key 替换为获取到的临时鉴权 Token 即可。
-
--   [安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
-
-## 模型列表
+## **模型列表**
 
 **paraformer-realtime-v2（推荐）**
 
@@ -86,9 +91,9 @@
 
 **定制热词**
 
-✅ 参见[定制热词](https://help.aliyun.com/zh/model-studio/custom-hot-words)
+✅ 参见[定制热词](https://help.aliyun.com/zh/model-studio/custom-hot-words/)
 
-✅ 参见[定制热词](https://help.aliyun.com/zh/model-studio/custom-hot-words)
+✅ 参见[定制热词](https://help.aliyun.com/zh/model-studio/custom-hot-words/)
 
 ✅ 参见[Paraformer语音识别热词定制与管理](https://help.aliyun.com/zh/model-studio/paraformer-asr-phrase-manager)
 
@@ -113,27 +118,34 @@
 情感识别遵循如下约束：
 
 -   仅限`paraformer-realtime-8k-v2`模型。
--   必须关闭语义断句（可通过[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#555007db2033f)`semantic_punctuation_enabled`控制）。语义断句默认为关闭状态。
--   只有在[识别结果（RecognitionResult）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#bc3e1a43d6hhy)的`is_sentence_end`方法返回结果为`True`时才显示情感识别结果。
+    
+-   必须关闭语义断句（可通过[请求参数](#555007db2033f)`semantic_punctuation_enabled`控制）。语义断句默认为关闭状态。
+    
+-   只有在[识别结果（RecognitionResult）](#bc3e1a43d6hhy)的`is_sentence_end`方法返回结果为`True`时才显示情感识别结果。
+    
 
-情感识别结果获取方式：通过[单句信息（Sentence）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#f28f50b035qtn)的`emo_tag`和`emo_confidence`字段分别获取当前句子的情感和情感置信度。
+情感识别结果获取方式：通过[单句信息（Sentence）](#f28f50b035qtn)的`emo_tag`和`emo_confidence`字段分别获取当前句子的情感和情感置信度。
 
 ❌
 
 ❌
 
-## 快速开始
+## **快速开始**
 
-[Recognition类](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#d6bc1f133f871)提供了非流式调用和双向流式调用接口。请根据实际需求选择合适的调用方式：
+[Recognition类](#d6bc1f133f871)提供了非流式调用和双向流式调用接口。请根据实际需求选择合适的调用方式：
 
 -   非流式调用：针对本地文件进行识别，并一次性返回完整的处理结果。适合处理录制好的音频。
+    
 -   双向流式调用：可直接对音频流进行识别，并实时输出结果。音频流可以来自外部设备（如麦克风）或从本地文件读取。适合需要即时反馈的场景。
+    
 
-### 非流式调用
+### **非流式调用**
 
 提交单个语音实时转写任务，通过传入本地文件的方式同步阻塞地拿到转写结果。
 
-实例化[Recognition类](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#d6bc1f133f871)绑定[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#555007db2033f)，调用`call`进行识别/翻译并最终获取[识别结果（RecognitionResult）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#bc3e1a43d6hhy)。
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8535166871/CAEQURiBgMDS0c2RpxkiIDNmYjBlMTE3ODQxYTQ3Nzk4MGMxNTc5MjY3OWVjZjlj4709861_20241015153444.149.svg)
+
+实例化[Recognition类](#d6bc1f133f871)绑定[请求参数](#555007db2033f)，调用`call`进行识别/翻译并最终获取[识别结果（RecognitionResult）](#bc3e1a43d6hhy)。
 
 点击查看完整示例
 
@@ -173,34 +185,36 @@ print(
 
 `result.get_sentence()`在非流式调用（`call`）中返回**句子列表**（`List[Dict]`），每个元素为`Dict[str, Any]`，包含`text`（识别文本）、`begin_time` / `end_time`（时间戳）、`words`（字时间戳）等字段。如需获取识别文本，需遍历列表并通过`sentence['text']`提取。
 
-在流式回调（`on_event`）中，`result.get_sentence()`返回**单句信息**（`Dict[str, Any]`），可直接使用`sentence['text']`获取识别文本。两种调用模式的返回值类型不同，详见[识别结果（RecognitionResult）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#bc3e1a43d6hhy)中的`get_sentence`方法说明。
+在流式回调（`on_event`）中，`result.get_sentence()`返回**单句信息**（`Dict[str, Any]`），可直接使用`sentence['text']`获取识别文本。两种调用模式的返回值类型不同，详见[识别结果（RecognitionResult）](#bc3e1a43d6hhy)中的`get_sentence`方法说明。
 
-### 双向流式调用
+### **双向流式调用**
 
 提交单个语音实时转写任务，通过实现回调接口的方式流式输出实时识别结果。
 
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8535166871/CAEQURiBgIDvi..2pxkiIGE4NTc3Njg4ZGM2YzQ2NzVhZGI3MzE2YWUwYTA3OGEy4709861_20241015153444.149.svg)
+
 1.  启动流式语音识别
     
-    实例化[Recognition类](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#d6bc1f133f871)绑定[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#555007db2033f)和[回调接口（RecognitionCallback）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#85d698b9f9g8s)，调用`start`方法启动流式语音识别。
+    实例化[Recognition类](#d6bc1f133f871)绑定[请求参数](#555007db2033f)和[回调接口（RecognitionCallback）](#85d698b9f9g8s)，调用`start`方法启动流式语音识别。
     
 2.  流式传输
     
-    循环调用[Recognition类](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#d6bc1f133f871)的`send_audio_frame`方法，将从本地文件或设备（如麦克风）读取的二进制音频流分段发送至服务端。
+    循环调用[Recognition类](#d6bc1f133f871)的`send_audio_frame`方法，将从本地文件或设备（如麦克风）读取的二进制音频流分段发送至服务端。
     
-    在发送音频数据的过程中，服务端会通过[回调接口（RecognitionCallback）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#85d698b9f9g8s)的`on_event`方法，将识别结果实时返回给客户端。
+    在发送音频数据的过程中，服务端会通过[回调接口（RecognitionCallback）](#85d698b9f9g8s)的`on_event`方法，将识别结果实时返回给客户端。
     
     建议每次发送的音频时长约为100毫秒，数据大小保持在1KB至16KB之间。
     
 3.  结束处理
     
-    调用[Recognition类](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#d6bc1f133f871)的`stop`方法结束语音识别。
+    调用[Recognition类](#d6bc1f133f871)的`stop`方法结束语音识别。
     
-    该方法会阻塞当前线程，直到[回调接口（RecognitionCallback）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#85d698b9f9g8s)的`on_complete`或者`on_error`回调触发后才会释放线程阻塞。
+    该方法会阻塞当前线程，直到[回调接口（RecognitionCallback）](#85d698b9f9g8s)的`on_complete`或者`on_error`回调触发后才会释放线程阻塞。
     
 
 点击查看完整示例
 
-识别传入麦克风的语音
+## 识别传入麦克风的语音
 
 ```
 import os
@@ -330,7 +344,7 @@ if __name__ == '__main__':
     recognition.stop()
 ```
 
-识别本地语音文件
+## 识别本地语音文件
 
 ```
 import os
@@ -364,7 +378,7 @@ class Callback(RecognitionCallback):
         if 'text' in sentence:
             print(get_timestamp() + ' RecognitionCallback text: ', sentence['text'])
             if RecognitionResult.is_sentence_end(sentence):
-                print(get_timestamp() +
+                print(get_timestamp() + 
                     'RecognitionCallback sentence end, request_id:%s, usage:%s'
                     % (result.get_request_id(), result.get_usage(sentence)))
 
@@ -408,13 +422,13 @@ print(
     ))
 ```
 
-### 并发调用
+### **并发调用**
 
 在Python中，由于存在[全局解释器锁](https://docs.python.org/zh-cn/3/glossary.html#term-global-interpreter-lock)，同一时刻只有一个线程可以执行Python代码（虽然某些性能导向的库可能会去除此限制）。如果您想更好地利用多核心计算机的计算资源，推荐您使用[multiprocessing](https://docs.python.org/zh-cn/3.11/library/multiprocessing.html#module-multiprocessing)或[concurrent.futures.ProcessPoolExecutor](https://docs.python.org/zh-cn/3.11/library/concurrent.futures.html#concurrent.futures.ProcessPoolExecutor)。 多线程在较高并发下会显著增加SDK调用延迟。
 
-## 请求参数
+## **请求参数**
 
-请求参数通过[Recognition类](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#d6bc1f133f871)的构造方法（_init_）进行设置。
+请求参数通过[Recognition类](#d6bc1f133f871)的构造方法（\_init\_）进行设置。
 
 **参数**
 
@@ -434,7 +448,7 @@ str
 
 是
 
-用于实时语音识别的模型（参见[模型列表](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#1e173d999c1th)）。
+用于实时语音识别的模型（参见[模型列表](#1e173d999c1th)）。
 
 sample\_rate
 
@@ -469,6 +483,8 @@ str
 
 支持的音频格式：pcm、wav、mp3、opus、speex、aac、amr。
 
+**重要**
+
 opus/speex：必须使用Ogg封装；
 
 wav：必须为PCM编码；
@@ -485,7 +501,7 @@ str
 
 设置热词ID，若未设置则不生效。v2及更高版本模型设置热词ID时使用该字段。
 
-在本次语音识别中，将应用与该热词ID对应的热词信息。具体使用方法请参见[定制热词](https://help.aliyun.com/zh/model-studio/custom-hot-words)。
+在本次语音识别中，将应用与该热词ID对应的热词信息。具体使用方法请参见[定制热词](https://help.aliyun.com/zh/model-studio/custom-hot-words/)。
 
 phrase\_id
 
@@ -543,7 +559,7 @@ list\[str\]
 -   ru：俄语
     
 
-该参数仅对支持多语言的模型生效（参见[模型列表](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#1e173d999c1th)）。
+该参数仅对支持多语言的模型生效（参见[模型列表](#1e173d999c1th)）。
 
 semantic\_punctuation\_enabled
 
@@ -654,13 +670,13 @@ RecognitionCallback
 
 否
 
-[回调接口（RecognitionCallback）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#85d698b9f9g8s)。
+[回调接口（RecognitionCallback）](#85d698b9f9g8s)。
 
-## 关键接口
+## **关键接口**
 
 ### `Recognition`类
 
-`Recognition`通过“`from dashscope.audio.asr import *`”方式引入。
+`Recognition`通过“`from dashscope.audio.asr import *`”方式引入。
 
 **成员方法**
 
@@ -696,7 +712,7 @@ def send_audio_frame(self, buffer: bytes)
 
 推送音频。每次推送的音频流不宜过大或过小，建议每包音频时长为100ms左右，大小在1KB~16KB之间。
 
-识别结果通过[回调接口（RecognitionCallback）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#85d698b9f9g8s)的on\_event方法获取。
+识别结果通过[回调接口（RecognitionCallback）](#85d698b9f9g8s)的on\_event方法获取。
 
 stop
 
@@ -730,9 +746,9 @@ def get_last_package_delay(self)
 
 获得尾包延迟，发送`stop`指令到最后一包识别结果下发耗时，在任务完成后使用。
 
-### 回调接口（`RecognitionCallback`）
+### **回调接口（**`RecognitionCallback`）
 
-[双向流式调用](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#9d1e5f6852jr8)时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
+[双向流式调用](#9d1e5f6852jr8)时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
 
 点击查看示例
 
@@ -779,7 +795,7 @@ def on_open(self) -> None
 def on_event(self, result: RecognitionResult) -> None
 ```
 
-`result`：[识别结果（RecognitionResult）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#bc3e1a43d6hhy)
+`result`：[识别结果（RecognitionResult）](#bc3e1a43d6hhy)
 
 无
 
@@ -799,7 +815,7 @@ def on_complete(self) -> None
 def on_error(self, result: RecognitionResult) -> None
 ```
 
-`result`：[识别结果（RecognitionResult）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#bc3e1a43d6hhy)
+`result`：[识别结果（RecognitionResult）](#bc3e1a43d6hhy)
 
 无
 
@@ -815,11 +831,11 @@ def on_close(self) -> None
 
 当服务已经关闭连接后进行回调。
 
-## 响应结果
+## **响应结果**
 
-### 识别结果（`RecognitionResult`）
+### **识别结果（**`**RecognitionResult**`**）**
 
-`RecognitionResult`代表[双向流式调用](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#9d1e5f6852jr8)中一次实时识别或[非流式调用](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#8341058094tc3)的识别结果。
+`RecognitionResult`代表[双向流式调用](#9d1e5f6852jr8)中一次实时识别或[非流式调用](#8341058094tc3)的识别结果。
 
 **成员方法**
 
@@ -835,7 +851,7 @@ def get_sentence(self) -> Union[Dict[str, Any], List[Any]]
 
 获取当前识别的句子及时间戳信息。回调中返回的是单句信息，所以此方法返回类型为Dict\[str, Any\]。
 
-详情请参见[单句信息（Sentence）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#f28f50b035qtn)。
+详情请参见[单句信息（Sentence）](#f28f50b035qtn)。
 
 get\_request\_id
 
@@ -884,7 +900,7 @@ str
 
 words
 
-[字时间戳信息（Word）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#b55a7391caxxe)的list集合
+[字时间戳信息（Word）](#b55a7391caxxe)的list集合
 
 字时间戳信息。
 
@@ -905,9 +921,9 @@ str
 
 -   仅限`paraformer-realtime-8k-v2`模型。
     
--   必须关闭语义断句（可通过[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#555007db2033f)`semantic_punctuation_enabled`控制）。语义断句默认为关闭状态。
+-   必须关闭语义断句（可通过[请求参数](#555007db2033f)`semantic_punctuation_enabled`控制）。语义断句默认为关闭状态。
     
--   只有在[识别结果（RecognitionResult）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#bc3e1a43d6hhy)的`is_sentence_end`方法返回结果为`True`时才显示情感识别结果。
+-   只有在[识别结果（RecognitionResult）](#bc3e1a43d6hhy)的`is_sentence_end`方法返回结果为`True`时才显示情感识别结果。
     
 
 emo\_confidence
@@ -920,12 +936,12 @@ float
 
 -   仅限`paraformer-realtime-8k-v2`模型。
     
--   必须关闭语义断句（可通过[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#555007db2033f)`semantic_punctuation_enabled`控制）。语义断句默认为关闭状态。
+-   必须关闭语义断句（可通过[请求参数](#555007db2033f)`semantic_punctuation_enabled`控制）。语义断句默认为关闭状态。
     
--   只有在[识别结果（RecognitionResult）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#bc3e1a43d6hhy)的`is_sentence_end`方法返回结果为`True`时才显示情感识别结果。
+-   只有在[识别结果（RecognitionResult）](#bc3e1a43d6hhy)的`is_sentence_end`方法返回结果为`True`时才显示情感识别结果。
     
 
-### 字时间戳信息（`Word`）
+### **字时间戳信息（**`**Word**`**）**
 
 Word类成员如下：
 
@@ -959,27 +975,27 @@ str
 
 标点。
 
-## 错误码
+## **错误码**
 
-如遇报错问题，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行排查。
+如遇报错问题，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行排查。
 
 若问题仍未解决，请加入[开发者群](https://github.com/aliyun/alibabacloud-bailian-speech-demo)反馈遇到的问题，并提供Request ID，以便进一步排查问题。
 
-## 更多示例
+## **更多示例**
 
 更多示例，请参见[GitHub](https://github.com/aliyun/alibabacloud-bailian-speech-demo)。
 
-## 常见问题
+## **常见问题**
 
-### 功能特性
+### **功能特性**
 
-#### Q：在长时间静默的情况下，如何保持与服务端长连接？
+#### **Q：在长时间静默的情况下，如何保持与服务端长连接？**
 
 将请求参数`heartbeat`设置为true，并持续向服务端发送静音音频。
 
 静音音频指的是在音频文件或数据流中没有声音信号的内容。静音音频可以通过多种方法生成，例如使用音频编辑软件如Audacity或Adobe Audition，或者通过命令行工具如FFmpeg。
 
-#### Q：如何将音频格式转换为满足要求的格式？
+#### **Q：如何将音频格式转换为满足要求的格式？**
 
 可使用[FFmpeg工具](https://ffmpeg.en.lo4d.com/download)，更多用法请参见FFmpeg官网。
 
@@ -1004,39 +1020,40 @@ ffmpeg -i input.m4a -c:a aac -b:a 256k output.aac  # 重编码提高质量
 ffmpeg -i input.flac -c:a libopus -b:a 128k -vbr on output.opus
 ```
 
-##### Q：是否支持查看每句话对应的时间范围？
+##### **Q：**是否支持查看每句话对应的时间范围？
 
 支持。语音识别结果中会包含每句话的开始时间戳和结束时间戳，可通过它们确定每句话的时间范围。
 
-#### Q：如何识别本地文件（录音文件）？
+#### **Q：如何识别本地文件（录音文件）？**
 
 识别本地文件有两种方式：
 
 -   直接传入本地文件路径：此种方式在最终识别结束后获取完整识别结果，不适合即时反馈的场景。
     
-    参见[非流式调用](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#8341058094tc3)，在[Recognition类](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#d6bc1f133f871)的`call`方法中传入文件路径对录音文件直接进行识别。
+    参见[非流式调用](#8341058094tc3)，在[Recognition类](#d6bc1f133f871)的`call`方法中传入文件路径对录音文件直接进行识别。
     
 -   将本地文件转成二进制流进行识别：此种方式一边识别文件一边流式获取识别结果，适合即时反馈的场景。
     
-    参见[双向流式调用](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#9d1e5f6852jr8)，通过[Recognition类](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#d6bc1f133f871)的`send_audio_frame`方法向服务端发送二进制流对其进行识别。
+    参见[双向流式调用](#9d1e5f6852jr8)，通过[Recognition类](#d6bc1f133f871)的`send_audio_frame`方法向服务端发送二进制流对其进行识别。
     
 
-### 故障排查
+### **故障排查**
 
-#### Q：无法识别语音（无识别结果）是什么原因？
+#### **Q：无法识别语音（无识别结果）是什么原因？**
 
 1.  请检查请求参数中的音频格式（`format`）和采样率（`sampleRate`/`sample_rate`）设置是否正确且符合参数约束。以下为常见错误示例：
     
     -   音频文件扩展名为 .wav，但实际为 MP3 格式，而请求参数 `format` 设置为 mp3（参数设置错误）。
+        
     -   音频采样率为 3600Hz，但请求参数 `sampleRate`/`sample_rate` 设置为 48000（参数设置错误）。
+        
     
     可以使用[ffprobe](https://ffmpeg.org/ffprobe.html)工具获取音频的容器、编码、采样率、声道等信息：
     
-
-```
-ffprobe -v error -show_entries format=format_name -show_entries stream=codec_name,sample_rate,channels -of default=noprint_wrappers=1 input.xxx
-```
-
+    ```
+    ffprobe -v error -show_entries format=format_name -show_entries stream=codec_name,sample_rate,channels -of default=noprint_wrappers=1 input.xxx
+    ```
+    
 2.  使用`paraformer-realtime-v2`模型时，请检查`language_hints`设置的语言是否与音频实际语言一致。
     
     例如：音频实际为中文，但`language_hints`设置为`en`（英文）。
@@ -1044,24 +1061,27 @@ ffprobe -v error -show_entries format=format_name -show_entries stream=codec_nam
 3.  若以上检查均无问题，可通过定制热词提升对特定词语的识别效果。
     
 
-#### Q：音频文件扩展名与实际编码格式不一致导致无识别结果，如何处理？
+#### **Q：音频文件扩展名与实际编码格式不一致导致无识别结果，如何处理？**
 
 当音频文件的扩展名与实际编码格式不一致时（例如文件扩展名为`.wav`但实际编码为 MP3），请求参数`format`必须与音频的**实际编码格式**一致，而非文件扩展名。
 
 您可以按以下步骤排查和解决：
 
 1.  **检查音频实际格式**：使用`ffprobe`工具查看音频文件的实际编码格式。
-
-```
-ffprobe -v error -show_entries format=format_name -show_entries stream=codec_name,sample_rate,channels -of default=noprint_wrappers=1 your_audio_file
-```
-
+    
+    ```
+    ffprobe -v error -show_entries format=format_name -show_entries stream=codec_name,sample_rate,channels -of default=noprint_wrappers=1 your_audio_file
+    ```
+    
 2.  **转换音频格式**：如果音频的实际编码格式与目标格式不一致，可使用`ffmpeg`工具将音频转换为标准 WAV 格式（PCM 编码）。
-
-```
-ffmpeg -i input_file -c:a pcm_s16le -ar 16000 -ac 1 output.wav
-```
-
+    
+    ```
+    ffmpeg -i input_file -c:a pcm_s16le -ar 16000 -ac 1 output.wav
+    ```
+    
 3.  **修改请求参数**：将`format`参数设置为与转换后音频一致的格式（如`wav`），并确保`sample_rate`参数与音频的实际采样率一致。
+    
 
-**重要**`format`参数设置为`wav`时，音频必须为 PCM 编码。如果音频文件扩展名为`.wav`但实际编码不是 PCM（例如 MP3），需要先使用上述`ffmpeg`命令进行格式转换。
+**重要**
+
+`format`参数设置为`wav`时，音频必须为 PCM 编码。如果音频文件扩展名为`.wav`但实际编码不是 PCM（例如 MP3），需要先使用上述`ffmpeg`命令进行格式转换。

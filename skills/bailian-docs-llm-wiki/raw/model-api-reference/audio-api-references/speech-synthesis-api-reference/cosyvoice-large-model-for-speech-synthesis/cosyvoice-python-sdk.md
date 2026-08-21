@@ -2,23 +2,23 @@
 
 本文介绍通过DashScope Python SDK进行Qwen-Audio-TTS/CosyVoice实时语音合成的类定义、请求参数和示例代码。
 
-**用户指南：**关于模型介绍和选型建议请参见[语音合成](raw/model-user-guide/model-experience/tts-model.md)。
+**用户指南：**关于模型介绍和选型建议请参见[语音合成](https://help.aliyun.com/zh/model-studio/tts-model/)。
 
-## 接口地址
+## **接口地址**
 
 SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）。如需切换到其他地域，请修改 `dashscope.base_websocket_api_url`为对应地域的URL。
 
-#### 华北2（北京）
+## 华北2（北京）
 
 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的Workspace ID。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
-#### 新加坡
+## 新加坡
 
 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的Workspace ID。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **切换到新加坡地域**：
 
@@ -29,18 +29,22 @@ import dashscope
 dashscope.base_websocket_api_url = 'wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference'
 ```
 
-**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+**重要**
+
+阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+    
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+    
 
-`{WorkspaceId}`需要替换为真实的Workspace ID。现有域名仍可正常使用。
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
 
-## SpeechSynthesizer
+## **SpeechSynthesizer**
 
 **包路径**：`dashscope.audio.tts_v2.SpeechSynthesizer`
 
-### 构造方法
+### **构造方法**
 
 ```
 SpeechSynthesizer(
@@ -53,7 +57,7 @@ SpeechSynthesizer(
     callback: ResultCallback = None)
 ```
 
-### call() - 非流式调用
+### **call() - 非流式调用**
 
 **方法签名**：
 
@@ -83,7 +87,7 @@ str
 
 **说明**：非流式调用，阻塞等待并一次性返回完整音频数据。适用于短文本、对实时性无严格要求的场景。每次调用前需重新初始化SpeechSynthesizer实例。
 
-### streaming\_call() - 流式调用
+### **streaming\_call() - 流式调用**
 
 **方法签名**：
 
@@ -111,7 +115,7 @@ str
 
 **说明**：双向流式调用，支持分片提交文本并通过回调实时获取合成音频。适用于与大语言模型对接、边生成文本边合成语音的场景。发送完毕后需调用streaming\_complete()结束合成。
 
-### streaming\_complete() - 结束流式合成
+### **streaming\_complete() - 结束流式合成**
 
 **方法签名**：
 
@@ -121,7 +125,7 @@ def streaming_complete(self) -> None
 
 **说明**：通知服务端所有文本已发送完毕，阻塞当前线程直到剩余文本合成完成并返回所有音频数据。未调用此方法可能导致尾部文本无法转换为语音。
 
-### streaming\_cancel() - 取消流式合成
+### **streaming\_cancel() - 取消流式合成**
 
 **方法签名**：
 
@@ -149,14 +153,20 @@ int
 
 **说明**：取消当前轮次的流式语音合成任务。调用后，SDK 会立即结束当前任务。取消后可在当前连接上继续发起新的合成任务，无需重新初始化 `SpeechSynthesizer` 实例。
 
-**重要****版本要求**：使用该功能需要 Python SDK 版本不低于 1.26.4。
+**重要**
 
-**重要****模型限制**：
+**版本要求**：使用该功能需要 Python SDK 版本不低于 1.26.4。
+
+**重要**
+
+**模型限制**：
 
 -   华北2（北京）地域：Qwen-Audio-TTS 系列模型的所有模型都支持该功能；CosyVoice 系列模型仅 v2 及以上版本支持该功能。
+    
 -   新加坡地域：Qwen-Audio-TTS 系列模型的所有模型都支持该功能；CosyVoice 系列模型不支持该功能。
+    
 
-### get\_last\_request\_id() - 获取请求ID
+### **get\_last\_request\_id() - 获取请求ID**
 
 **方法签名**：
 
@@ -166,7 +176,7 @@ def get_last_request_id(self) -> str
 
 **返回值**：`str`，最近一次请求的request\_id，可用于问题排查和日志关联。
 
-### get\_first\_package\_delay() - 获取首包延迟
+### **get\_first\_package\_delay() - 获取首包延迟**
 
 **方法签名**：
 
@@ -176,7 +186,7 @@ def get_first_package_delay(self) -> float
 
 **返回值**：`float`，从发送文本到收到第一块音频数据的延迟时间（毫秒）。需在合成完成后调用。
 
-### get\_response() - 获取响应消息
+### **get\_response() - 获取响应消息**
 
 **方法签名**：
 
@@ -186,7 +196,7 @@ def get_response(self) -> dict
 
 **返回值**：`dict`，最近一次合成任务的响应消息（含 `header`/`payload` 键）。
 
-### 构造参数
+### **构造参数**
 
 以下参数通过SpeechSynthesizer构造方法设置，用于控制合成音频的模型、音色、格式和音频特征。
 
@@ -212,13 +222,16 @@ str
 
 是
 
-**voice**`string`**（必选）**
+**voice** `_string_` **（必选）**
 
 语音合成所使用的音色。
 
--   **系统音色**：参见Qwen-Audio-TTS音色列表、CosyVoice音色列表
+-   **系统音色**：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
+    
 -   **复刻音色**：通过声音复刻功能定制
+    
 -   **声音设计音色**：通过声音设计功能定制
+    
 
 format
 
@@ -284,7 +297,9 @@ int
 
 `cosyvoice-v1`模型不支持该参数。
 
-**说明**`bit_rate`需要通过`additional_params`参数进行设置：
+**说明**
+
+`bit_rate`需要通过`additional_params`参数进行设置：
 
 ```
 synthesizer = SpeechSynthesizer(
@@ -304,9 +319,11 @@ bool
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及Qwen-Audio-TTS音色列表、CosyVoice音色列表中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
 
-**说明**`word_timestamp_enabled`需要通过`additional_params`参数进行设置：
+**说明**
+
+`word_timestamp_enabled`需要通过`additional_params`参数进行设置：
 
 ```
 synthesizer = SpeechSynthesizer(
@@ -339,34 +356,55 @@ list\[str\]
 **重要**
 
 -   此参数为数组，但当前版本仅处理第一个元素，因此建议只传入一个值。
+    
 -   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见声音复刻API参考。
+    
 
 指定语音合成的目标语言，提升合成效果。cosyvoice-v1不支持该功能。
 
 当数字、缩写、符号等朗读方式或者小语种合成效果不符合预期时使用，例如：
 
 -   数字朗读方式不符合预期，“hello, this is 110”读成“hello, this is one one zero”而非“hello, this is 幺幺零”
+    
 -   符号朗读不准确，“@”读成“艾特”而非“at”
+    
 -   小语种合成效果差，合成不自然
+    
 
 取值范围：
 
 -   zh：中文
+    
 -   en：英语
+    
 -   fr：法语
+    
 -   de：德语
+    
 -   ja：日语
+    
 -   ko：韩语
+    
 -   ru：俄语
+    
 -   pt：葡萄牙语
+    
 -   th：泰语
+    
 -   id：印尼语
+    
 -   vi：越南语
+    
 -   es：西班牙语
+    
 -   it：意大利语
+    
 -   ms：马来西亚语
+    
 -   fil：菲律宾语
+    
 -   ar：阿拉伯语
+    
 
 instruction
 
@@ -376,7 +414,7 @@ str
 
 设置指令，用于控制方言、情感或角色等合成效果。
 
-使用说明请参见指令控制。
+使用说明请参见[指令控制](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#12884a10929p9)。
 
 enable\_aigc\_tag
 
@@ -390,7 +428,9 @@ bool
 
 仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
-**说明**`enable_aigc_tag`、`aigc_propagator`和`aigc_propagate_id`需要通过`additional_params`参数进行设置：
+**说明**
+
+`enable_aigc_tag`、`aigc_propagator`和`aigc_propagate_id`需要通过`additional_params`参数进行设置：
 
 ```
 synthesizer = SpeechSynthesizer(
@@ -445,7 +485,9 @@ cosyvoice-v2、cosyvoice-v1不支持该功能。
 参数介绍：
 
 -   pronunciation：自定义发音。指定词语的拼音标注，用于纠正默认发音不准确的情况。
+    
 -   replace：文本替换。在语音合成前将指定词语替换为目标文本，替换后的文本将作为实际合成内容。
+    
 
 示例：
 
@@ -466,7 +508,9 @@ bool
 
 否
 
-**重要**仅cosyvoice-v3-flash复刻音色支持该功能。
+**重要**
+
+仅cosyvoice-v3-flash复刻音色支持该功能。
 
 是否启用 Markdown 过滤。启用该功能后，系统在合成语音前自动过滤输入文本中的 Markdown 标记符号，避免将其朗读为文字内容。
 
@@ -475,9 +519,13 @@ bool
 取值范围：
 
 -   true：启用Markdown过滤
+    
 -   false：禁用Markdown过滤
+    
 
-**说明**`enable_markdown_filter`需要通过`additional_params`参数进行设置：
+**说明**
+
+`enable_markdown_filter`需要通过`additional_params`参数进行设置：
 
 ```
 synthesizer = SpeechSynthesizer(
@@ -495,11 +543,11 @@ ResultCallback
 
 回调函数实例，用于异步接收合成音频和事件通知。设置此参数时，call()方法以流式模式运行，音频数据通过on\_data回调返回；不设置时，call()以非流式模式运行，直接返回完整音频的bytes数据。
 
-## ResultCallback
+## **ResultCallback**
 
 **包路径**：`dashscope.audio.tts_v2.ResultCallback`
 
-### on\_open() - 连接建立
+### **on\_open() - 连接建立**
 
 **方法签名**：
 
@@ -509,7 +557,7 @@ def on_open(self) -> None
 
 **触发时机**：WebSocket连接成功建立时触发。可在此回调中初始化音频输出流或打开文件等资源。
 
-### on\_event() - 接收服务端回复
+### **on\_event() - 接收服务端回复**
 
 **方法签名**：
 
@@ -533,11 +581,11 @@ str
 
 是
 
-服务端响应事件（JSON格式），包含`header`（请求信息）和`payload`（输出信息）。其中`payload.output`包含事件类型、原始文本等信息，详见[on\_event消息中的output字段](https://help.aliyun.com/zh/model-studio/cosyvoice-python-sdk#sec-py-output-info)。
+服务端响应事件（JSON格式），包含`header`（请求信息）和`payload`（输出信息）。其中`payload.output`包含事件类型、原始文本等信息，详见[on\_event消息中的output字段](#sec-py-output-info)。
 
 **触发时机**：接收到服务端回复时触发。消息为JSON字符串，包含合成事件的输出信息（事件类型、原始文本、句子信息等）。可通过`json.loads(message)`解析后访问`payload.output`获取详细信息。
 
-### on\_complete() - 合成完成
+### **on\_complete() - 合成完成**
 
 **方法签名**：
 
@@ -547,7 +595,7 @@ def on_complete(self) -> None
 
 **触发时机**：所有文本合成完成且音频数据已全部通过on\_data返回后触发。可在此回调中调用get\_first\_package\_delay()获取性能指标。
 
-### on\_data() - 接收音频数据
+### **on\_data() - 接收音频数据**
 
 **方法签名**：
 
@@ -575,7 +623,7 @@ bytes
 
 **触发时机**：每接收到一块音频数据时触发，合成过程中会被多次调用。可在此回调中将数据写入文件或送入播放设备。
 
-### on\_error() - 发生错误
+### **on\_error() - 发生错误**
 
 **方法签名**：
 
@@ -603,7 +651,7 @@ str
 
 **触发时机**：合成过程中发生错误时触发。触发后连接将自动关闭，建议在此回调中记录错误日志以便排查问题。
 
-### on\_close() - 连接关闭
+### **on\_close() - 连接关闭**
 
 **方法签名**：
 
@@ -613,7 +661,7 @@ def on_close(self) -> None
 
 **触发时机**：WebSocket连接关闭时触发（无论正常结束还是异常断开）。可在此回调中释放音频播放设备等资源。
 
-## on\_event消息中的output字段
+## **on\_event消息中的output字段**
 
 `on_event`回调接收的JSON消息中，`payload.output`包含合成事件的输出信息，可用于跟踪合成进度和获取逐句信息。以下为`output`字段的结构说明：
 
@@ -677,21 +725,28 @@ def on_event(self, message):
         print(f'事件类型: {event_type}, 原始文本: {original_text}')
 ```
 
-## 示例代码
+## **示例代码**
 
 SDK提供了语音合成的关键接口，支持以下几种调用方式：
 
 -   非流式调用：阻塞式，一次性发送完整文本，直接返回完整音频。适合短文本语音合成场景。
+    
 -   单向流式调用：非阻塞式，一次性发送完整文本，通过回调函数接收音频数据（可能分片）。适用于对实时性要求高的短文本语音合成场景。
+    
 -   双向流式调用：非阻塞式，可分多次发送文本片段，通过回调函数实时接收增量合成的音频流。适合实时性要求高的长文本语音合成场景。
+    
 
 更多示例，请参见[GitHub](https://github.com/aliyun/alibabacloud-bailian-speech-demo)。
 
-### 非流式调用
+### **非流式调用**
+
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1251227871/CAEQURiBgMDRr9T4phkiIGNmYzBiZjFkZjQ4MDQzZGU4NDIyZDU2NWJjYjkyZTQ04709861_20241015153444.149.svg)
 
 单次调用发送的文本长度不得超过20000字符，超出限制将返回错误。
 
-**重要**每次调用`call`方法前，需要重新初始化`SpeechSynthesizer`实例。
+**重要**
+
+每次调用`call`方法前，需要重新初始化`SpeechSynthesizer`实例。
 
 ```
 # coding=utf-8
@@ -726,11 +781,15 @@ with open('output.mp3', 'wb') as f:
     f.write(audio)
 ```
 
-### 单向流式调用
+### **单向流式调用**
+
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1251227871/CAEQVRiBgIDv9fShrBkiIDhmNTk5YmQ1ZDgwNzRjZjRiN2VlMTU5YzI1ZGMwMTlm4709861_20241015153444.149.svg)
 
 单次调用发送的文本长度不得超过20000字符，超出限制将返回错误。
 
-**重要**每次调用`call`方法前，需要重新初始化`SpeechSynthesizer`实例。
+**重要**
+
+每次调用`call`方法前，需要重新初始化`SpeechSynthesizer`实例。
 
 ```
 # coding=utf-8
@@ -809,14 +868,18 @@ synthesizer = SpeechSynthesizer(
 synthesizer.call("今天天气怎么样？")
 ```
 
-### 双向流式调用
+### **双向流式调用**
+
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1251227871/CAEQVRiBgMDb7PahrBkiIDVkNjEwOTMxYjEwOTRmOWFhMmI1OTRiY2Q3ZDgzZmE54709861_20241015153444.149.svg)
 
 单次发送文本长度不得超过 20000 字符，且累计发送文本总长度不得超过 20 万字符。
 
 -   流式输入时可多次调用`streaming_call`按顺序提交文本片段。服务端接收文本片段后自动进行分句：
     
     -   完整语句立即合成
+        
     -   不完整语句缓存至完整后合成
+        
     
     调用 `streaming_complete` 时，服务端会强制合成所有已接收但未处理的文本片段（包括未完成的句子）。
     
@@ -824,7 +887,9 @@ synthesizer.call("今天天气怎么样？")
     
     若无待发送文本，需及时调用 `streaming_complete`结束任务。
     
-    **重要**请务必确保调用`streaming_complete`方法，否则可能会导致结尾部分的文本无法成功转换为语音。
+    **重要**
+    
+    请务必确保调用`streaming_complete`方法，否则可能会导致结尾部分的文本无法成功转换为语音。
     
     > 服务端强制设定23秒超时机制，客户端无法修改该配置。
     
@@ -932,7 +997,7 @@ test_text = [
 synthesizer = SpeechSynthesizer(
     model=model,
     voice=voice,
-    format=AudioFormat.PCM_22050HZ_MONO_16BIT,
+    format=AudioFormat.PCM_22050HZ_MONO_16BIT,  
     callback=callback,
 )
 

@@ -28,7 +28,7 @@ string
 
 URL
 
-[http://www.example.com/xxx.html](http://www.example.com/xxx.html)
+http://www.example.com/xxx.html
 
 Title
 

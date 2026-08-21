@@ -2,7 +2,7 @@
 
 您可以查阅有关阿里云百炼应用和知识库的常见问题。
 
-## 应用中心
+## **应用中心**
 
 1.  **目前官方都支持什么类型的插件？**
     
@@ -12,11 +12,11 @@
     
     自定义插件服务目前暂时不收费，但配置智能体API时如涉及到prompt优化、应用调用及测试窗测试，则会收费。
     
-3.  **对于我自己定义的插件或函数，Assistant API是如何理解插件或函数的参数，并使用它们的？**
+3.  **对于我自己定义的插件或函数，****Assistant API****是如何理解插件或函数的参数，并使用它们的？**
     
     自定义API插件是可以理解的，会遵循协议，传给大模型，让大模型进行理解。对于函数而言，大模型会学习传入的参数信息，会返回完整的结果。
     
-4.  **Agent和Assistant API的最大区别是什么？**
+4.  **Agent****和****Assistant API****的最大区别是什么？**
     
     调整插件模型、基于上下文的理解，用户可以自己去开发，而Assistant API是可以提供各种类，方便调优。
     
@@ -27,6 +27,8 @@
 6.  **在RAG检索增强应用进行测试时，会出现模型回复不准确的情况，应该如何优化？**
     
     您可以点击模型回复内容下方的问题反馈按钮，勾选问题类型并提交。也可以**复制RequestId**，通过提交阿里云工单反馈给我们。
+    
+    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5827845471/p948683.png)
     
 7.  **AI输出后包含\*\*xxxxx\*\*，如何给他变成加粗显示？**
     
@@ -47,7 +49,7 @@
      不支持自定义header， 仅支持authorization。
      
 
-## 数据管理
+## **数据管理**
 
 1.  **上传文件仅支持 pdf/doc/docx 文件, 请重试 错误码：140010**
     
@@ -66,12 +68,15 @@
     请确认表格中的数据中是否存在空行。产品策略中如果出现空行后面的数据将不会识别。如果第一行是空行，就会认为是空文件。
     
 
-## 应用/小程序备案
+## 应用/小程序**备案**
 
 1.  **我的产品接入了通义千问大模型，现需上架到应用市场或小程序平台中，如何备案及申请合作协议？**
-    1.  请您参考[应用合规备案](raw/model-user-guide/security-and-compliance/compliance-and-launch-filing-guide-for-ai-apps-powered-by-the-tongyi-model.md)进行备案。
+    
+    1.  请您参考[应用合规备案](https://help.aliyun.com/zh/model-studio/compliance-and-launch-filing-guide-for-ai-apps-powered-by-the-tongyi-model)进行备案。
+        
     2.  请您[提交工单](https://smartservice.console.aliyun.com/service/create-ticket)申请通义千问系列模型的合作协议。
+        
 
-## 阿里云百炼服务协议
+## **阿里云百炼服务协议**
 
 [阿里云百炼服务协议](https://terms.alicdn.com/legal-agreement/terms/common_platform_service/20230728213935489/20230728213935489.html?spm=5176.28197581.0.0.16e829a4HTC9FE)

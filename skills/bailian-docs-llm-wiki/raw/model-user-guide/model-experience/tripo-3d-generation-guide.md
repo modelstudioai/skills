@@ -1,10 +1,12 @@
 # Tripo 3D模型生成
 
-通过阿里云百炼平台调用 Tripo 模型，支持三种生成模式： 文生3D模型、单图生3D模型和多图生3D模型 。
+通过阿里云百炼平台调用 Tripo 模型，支持三种生成模式：**文生3D模型、单图生3D模型和多图生3D模型**。
 
-**重要**本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
+**重要**
 
-## 快速开始
+本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
+
+## **快速开始**
 
 > 以**文生3D模型**为例。
 
@@ -14,11 +16,13 @@
 
 一只可爱的猫
 
+![cat](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3562228771/p1072253.gif)
+
 > 上图为效果展示，实际产物为[3D文件](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260507/ffaaxt/tripo-text-to-3d-result.glb)
 
-在调用前，[开通Tripo模型服务](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/all)，并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
+在调用前，[开通Tripo模型服务](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/all)，并[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
-#### 步骤1：创建任务获取任务ID
+#### **步骤1：创建任务获取任务ID**
 
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
@@ -40,9 +44,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 返回 `task_id`，示例值：`0385dc79-5ff8-4d82-bcb6-xxxxxx`。
 
-#### 步骤2：根据任务ID获取结果
+#### **步骤2：根据任务ID获取结果**
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时。
 
 ```
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
@@ -51,9 +55,10 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 > 任务状态流转：`PENDING`（排队中）→ `RUNNING`（处理中）→ `SUCCEEDED`（成功）/ `FAILED`（失败）。
 
-> 3D 生成通常需要数分钟，建议**轮询**间隔 15 秒，如需事件通知替代轮询，请参见[配置异步任务回调](raw/model-api-reference/more-about-models/async-task-api.md)。
+> 3D 生成通常需要数分钟，建议**轮询**间隔 15 秒，如需事件通知替代轮询，请参见[配置异步任务回调](https://help.aliyun.com/zh/model-studio/async-task-api)。
 
 **输出示例**
+
 ```
 {
     "request_id": "c1209113-8437-424f-a386-xxxxxx",
@@ -72,7 +77,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
-## 模型选型
+## **模型选型**
 
 **模型名称**
 
@@ -118,7 +123,7 @@ Tripo/Tripo-P1.0
 
 三种模式通过 `input` 中的不同字段区分。`prompt`、`image`、`images` 三个字段互斥，每次请求只能选一种。
 
-### 文生3D模型
+### **文生3D模型**
 
 通过 `prompt` 传入文本提示词，描述期望生成的3D模型。支持多语言（中文、英文等）。
 
@@ -127,6 +132,8 @@ Tripo/Tripo-P1.0
 **输出预览**
 
 一辆红色跑车
+
+![red\_car](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3562228771/p1072252.gif)
 
 > 上图为效果展示，实际产物为[3D文件](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260508/smfsql/red_car.glb)
 
@@ -146,7 +153,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-### 单图生3D模型
+### **单图生3D模型**
 
 通过 `image` **传入单张图片**的URL，从图片生成3D模型。
 
@@ -155,6 +162,10 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 **输入图像（单张）**
 
 **输出预览**
+
+![tripo-single-1](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3562228771/p1072233.jpg)
+
+![tripo-image-to-3d-result-2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3562228771/p1072250.gif)
 
 > 上图为效果展示，实际产物为[3D文件](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260507/lqsfqk/tripo-image-to-3d-result.glb)
 
@@ -174,13 +185,19 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-### 多图生3D模型
+### **多图生3D模型**
 
 通过 `images` **传入2~4张多角度图片**的URL列表，生成还原度更高的3D模型。多张图片的分辨率和宽高比不要求一致，每张图片的格式要求与单图相同。
 
 **输入图像（多张）**
 
 **输出预览**
+
+![tripo-images-1](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3562228771/p1072239.png)![tripo-images-2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3562228771/p1072240.png)
+
+![tripo-images-3](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3562228771/p1072241.png)![tripo-images-4](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3562228771/p1072242.png)
+
+![tripo-multi-image-to-3d-result-1](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3562228771/p1072251.gif)
 
 > 上图为效果展示，实际产物为[3D文件](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260507/qoomsm/tripo-multi-image-to-3d-result.glb)
 
@@ -205,14 +222,16 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 贴图与几何精度
+## **贴图与几何精度**
 
-### 贴图质量
+### **贴图质量**
 
-贴图是覆盖在 3D 模型表面的纹理图像，决定外观细节。通过 `parameters.texture_quality` 控制贴图质量：
+贴图是覆盖在 3D 模型表面的纹理图像，决定外观细节。通过 `**parameters.texture_quality**` 控制贴图质量：
 
 -   `standard`：默认值，标清贴图，满足大多数场景。
+    
 -   `detailed`：高清贴图，适合需要精细表面细节的场景。
+    
 
 **输出模型是否贴图**
 
@@ -230,6 +249,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 > 返回结果中包含 `pbr_model_url`
 
+![cat](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3562228771/p1072253.gif)
+
 > 上图为效果展示，实际产物为[3D文件](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260507/ffaaxt/tripo-text-to-3d-result.glb)
 
 **无贴图**
@@ -245,31 +266,38 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 > 返回结果中包含 `base_model_url`
 
+![cat-no-texture](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3562228771/p1072259.gif)
+
 > 上图为效果展示，实际产物为[3D文件](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260508/wwonyw/cat-no-texture.glb)
 
-### 几何精度
+### **几何精度**
 
-仅 `Tripo/Tripo-H3.1` 支持。通过 `parameters.geometry_quality` 控制几何精度：
+仅 `Tripo/Tripo-H3.1` 支持。通过 `**parameters.geometry_quality**` 控制几何精度：
 
 -   `standard`：默认值，最高150万面。
+    
 -   `ultra`：超清版，最高200万面。
+    
 
-## 输出产物
+## **输出产物**
 
 任务成功后，响应中包含：
 
 -   `pbr_model_url`：PBR 材质的 3D 模型（GLB 格式），可直接导入 Blender、Unity 等工具。
+    
 -   `base_model_url`：无贴图基础模型（GLB 格式）。当 `texture` 和 `pbr` 均为 `false` 时返回。
+    
 -   `rendered_image_url`：3D 模型的渲染预览图（1 张）。
+    
 
 以上链接有效期均为 **2 小时**，请及时下载保存。
 
-## API参考
+## **API参考**
 
-[Tripo-3D模型生成API参考](raw/model-api-reference/3d-generation/tripo-3d-generation-api-reference.md)
+[Tripo-3D模型生成API参考](https://help.aliyun.com/zh/model-studio/tripo-3d-generation-api-reference)
 
-## 常见问题
+## **常见问题**
 
-#### prompt、image、images 能同时传入吗？
+#### **prompt、image、images 能同时传入吗？**
 
 不能。三个字段互斥，每次请求只能选择其中一种生成模式。同时传入多个字段会导致请求失败。

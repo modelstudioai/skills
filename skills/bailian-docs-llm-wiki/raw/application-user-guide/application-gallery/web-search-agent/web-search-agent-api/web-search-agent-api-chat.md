@@ -2,15 +2,16 @@
 
 基于千问联网检索Agent提供的 agent\_id 与 agent\_version 信息，提供联网知识检索、场景化对话等能力。
 
-## 请求语法
+## **请求语法**
 
 ```
 POST /web-search-agent/chat/completions HTTP/1.1
 ```
 
-## 请求参数
+## **请求参数**
 
 -   注意：请求提供动态参数后，将会直接覆盖应用配置中的状态值。
+    
 
 **参数名**
 
@@ -246,7 +247,7 @@ string
 
 维度（小数点6位）
 
-## 返回参数
+## **返回参数**
 
 **参数名**
 
@@ -448,7 +449,7 @@ int
 
 总 tokens
 
-## 执行阶段枚举
+## **执行阶段枚举**
 
 执行阶段（`group`）
 
@@ -489,12 +490,17 @@ tool\_calling\_{工具名称}
 工具调用中，附带工具名称
 
 -   由于模型原因 step\_change 值可能为不存在，请尽可能使用持久化的标志step
+    
 -   空包情况下 step、step\_change、group 字段的值可能不存在
+    
 -   plan、generation 均由 xxx\_start 事件 和 xxx\_end 事件两个事件组成
+    
 -   tool\_call 由 tool\_call\_start、tool\_calling、tool\_return 三个事件组成
+    
 -   tool\_call\_start 表示工具调用开始、tool\_calling 表示获取到完整工具调用的参数并会抛出完整的工具调用参数、tool\_return 表示工具调用返回结果，同时会携带结构化的工具返回信息。
+    
 
-事件发生时 `step` 的值
+事件发生时 `step` 的值
 
 步骤变化事件 (`step_change`)
 
@@ -508,7 +514,7 @@ plan\_start
 
 开始规划
 
-`step` 状态变为 `planning`, 表示对应状态的开头（包含当前包）。
+`step` 状态变为 `planning`, 表示对应状态的开头（包含当前包）。
 
 `planning`
 
@@ -524,7 +530,7 @@ plan\_end
 
 结束规划
 
-`step` 开始变成其他状态，事件发生时 `step` 仍为 `planning`，表示对应状态的结尾（包含当前包）。
+`step` 开始变成其他状态，事件发生时 `step` 仍为 `planning`，表示对应状态的结尾（包含当前包）。
 
 `generating`
 
@@ -532,7 +538,7 @@ generation\_start
 
 开始生成
 
-与 `plan` 事件同理
+与 `plan` 事件同理
 
 `generating`
 
@@ -548,7 +554,7 @@ generation\_end
 
 结束生成
 
-与 `plan` 事件同理
+与 `plan` 事件同理
 
 `tool_calling_{工具名称}`
 
@@ -572,13 +578,13 @@ tool\_return
 
 工具返回
 
-会携带工具返回信息， `step` 开始变成其他状态，事件发生时 `step` 仍为 `tool_calling_{工具名称}`。
+会携带工具返回信息， `step` 开始变成其他状态，事件发生时 `step` 仍为 `tool_calling_{工具名称}`。
 
 ## Agent tool call message和工具名映射
 
 当有工具调用时，在消息中的\["extra"\]\["step"\]字段中，会显示“tool\_calling\_xx”，显示正在调用的工具是什么。具体消息中的工具调用消息和实际的工具名的映射关系如下表所示。
 
-### 文本问答
+### **文本问答**
 
 **工具调用的 step 消息**
 
@@ -604,7 +610,7 @@ tool\_calling\_query\_suggesting
 
 追问
 
-### 多模态问答
+### **多模态问答**
 
 相比于文本问答，新增了 2 个工具图搜图，文搜图。
 
@@ -620,7 +626,7 @@ tool\_calling\_image\_to\_image\_search
 
 图搜图
 
-### 本地生活 POI 工具
+### **本地生活 POI 工具**
 
 **工具调用的 step 消息**
 
@@ -636,7 +642,7 @@ tool\_calling\_around\_search
 
 ## 工具调用状态信息
 
-### 参数
+### **参数**
 
 工具调用的状态在消息中的\["extra"\]\["step\_change"\]字段中，工具调用的信息在\["extra"\]\["step\_info"\]中，工具调用状态和工具调用信息的映射如下：
 
@@ -683,10 +689,15 @@ xxx 工具调用完成，xxx
 标签中：
 
 -   data-type：数据类型，image 为图片数据
+    
 -   src ：图片的 url 地址
+    
 -   data-url ：图片的来源网址
+    
 -   data-tile ：图片标题
+    
 -   width/height ：图片的尺寸宽和高
+    
 
 在包含图片的模型消息中，additional\_kwargs 字段中包含了如下两个字段：
 
@@ -697,12 +708,19 @@ xxx 工具调用完成，xxx
     -   在 data\_json 中，每张图片的消息体如下所示：
         
         -   idx：图片编号 id
+            
         -   url：图片来源网址
+            
         -   title：图片标题
+            
         -   published：网址发布日期
+            
         -   image\_info\["url"\]：图片网址
+            
         -   image\_info\["width"\]：图片宽
+            
         -   image\_info\["height"\]：图片高
+            
 
 ```
 {"idx": 15, "query": "杭州 晴天 蓝天", "url": "xxx", "title": "xx", "published": "2024-11-04 03:04:04", "image_info": {"url": "xxx", "width": 1080, "height": 1410}}
@@ -857,7 +875,7 @@ data: {
 }
 ```
 
-## 本地生活 POI 卡片渲染
+## **本地生活 POI 卡片渲染**
 
 **开启本地生活后**模型会输出基于位置检索POI的结果信息。同时**开启图文并茂**后，在POI 检索结果信息中会穿插图片，图片在消息正文中的为 html 标准图片格式，示例如下：
 
@@ -868,15 +886,22 @@ data: {
 标签中：
 
 -   data-type：数据类型，poi 为地图卡片
+    
 -   src ：第一个卡片图片的链接
+    
 -   data-url ：卡片对应高德链接
+    
 -   data-tile ：卡片标题
+    
 -   width/height ：图片的尺寸宽和高
+    
 
 在包含图片的模型消息中，additional\_kwargs 字段中包含了如下两个字段：
 
 -   data\_type，如果为地图卡片的图片消息，则值为 poi
+    
 -   data\_json，包含当前内容相关的所有地图卡片，正文中只显示一个。这里是所有相关卡片的集合，数据类型为 json。
+    
 
 在 data\_json 中，每个地图卡片的消息体如下所示：
 
@@ -1084,11 +1109,11 @@ string
 }
 ```
 
-## 多模态图像理解问答
+## **多模态图像理解问答**
 
 联网搜索 Agent 多模态接口支持通过图片 + 文本的方式进行对话。用户可以上传图片 URL，并附加文本问题，Agent 将理解图片内容调用工具并给出回答。
 
-### 请求参数
+### **请求参数**
 
 **参数名**
 
@@ -1120,7 +1145,7 @@ string
 
 是
 
-角色，固定为 user
+角色，固定为 user
 
 input.messages\[\].content
 
@@ -1138,7 +1163,7 @@ string
 
 图片地址，支持两种格式：
 
-1\. URL 格式（[推荐](raw/application-user-guide/application-gallery/web-search-agent/web-search-agent-api/web-search-agent-api-chat-multimodal-file.md)）：[](https://example.com/image.jpg)[https://example.com/image.jpg](https://example.com/image.jpg)
+1\. URL 格式（[推荐](https://help.aliyun.com/zh/model-studio/web-search-agent-api-chat-multimodal-file)）：[https://example.com/image.jpg](https://example.com/image.jpg)
 
 2\. Base64 格式：data:<content\_type>;base64,<base64\_data>，其中 content\_type 为图片 MIME 类型（如 image/jpeg）
 
@@ -1148,20 +1173,21 @@ object
 
 条件必须
 
-当 type为 image\_url 时必须
+当 type为 image\_url 时必须
 
-## 示例
+## **示例**
 
-### 请求示例
+### **请求示例**
 
 -   文本请求示例
+    
 
 ```
 {
     "input": {
         "messages": [
             {
-                "role": "user",
+                "role": "user", 
                 "content": "现在日期"
             }
         ]
@@ -1177,6 +1203,7 @@ object
 ```
 
 -   多模态请求示例
+    
 
 ```
 {
@@ -1209,7 +1236,7 @@ object
 }
 ```
 
-### 返回示例
+### **返回示例**
 
 ```
 data: {
@@ -1262,9 +1289,9 @@ data: {
 }
 ```
 
-### 调用示例
+### **调用示例**
 
-python
+Python
 
 ```
 # coding=utf-8
@@ -1293,9 +1320,9 @@ if __name__ == "__main__":
         },
         "stream": True
     }
-
+    
     response = requests.post(chat_completions_url, headers=headers, json=params, stream=True)
-
+    
     resultlist = []
     stage = ''
     action = ''
@@ -1314,21 +1341,21 @@ if __name__ == "__main__":
                     # 获取消息体
                     msg = obj.get('output', {}).get('choices', [{}])[0].get('message', {})
                     extra_flags = msg.get('extra', {})  # 获取模型状态标记字段
-
+    
                     if stage != extra_flags.get('group', ''):  # 获取 模型当前阶段
                         print(f"agent stage: {extra_flags.get('group', '')}")
                     stage = extra_flags.get('group', '')
-
+    
                     if action != extra_flags.get('step', '') and extra_flags.get('step', ''):  # 获取 模型当前阶段
                         print(f"agent action: {extra_flags.get('step', '')}")
                     action = extra_flags.get('step', '')
-
+    
                     role = msg.get('role', '')  # 获取模型角色 assistant or role
                     content = msg.get('content')  # 获取生成内容
                     toolcalls = msg.get('tool_calls', [])  # 获取工具调用
                     if toolcalls:
                         print(f'{toolcalls}')
-
+    
                     if role == "tool":
                         print("\\n" + content + "\\n", end='')  # 前后都换行
                     else:
@@ -1339,7 +1366,7 @@ if __name__ == "__main__":
                     print("异常解析:", e)
 ```
 
-java
+Java
 
 ```
 import java.io.*;
@@ -1367,7 +1394,7 @@ public class WebSearchStreamDemo {
         Map<String, Object> input = new HashMap<>();
         input.put("messages", messages);
         // parameters.agent_options
-        Map<String, Object> agentOptions = new HashMap<>(); //
+        Map<String, Object> agentOptions = new HashMap<>(); // 
         agentOptions.put("agent_id", "${agent_id}");// 应用ID，可在应用管理页面获取到，例如：aid-8fd***e00
         agentOptions.put("agent_version", "${agent_version}"); // 应用版本，beta 测试版本 / release 发布版本
         // parameters

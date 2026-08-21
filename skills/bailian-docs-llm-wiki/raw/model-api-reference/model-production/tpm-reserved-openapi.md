@@ -1,15 +1,23 @@
 # TPM 预留 DashScope OpenAPI 接口文档
 
+TPM 预留 DashScope OpenAPI 提供创建、扩缩容、查询、续订、溢出策略六个 REST 接口，支持通过 API Key 认证调用 TPM 预留部署全生命周期管理。
+
 ## 接口概述
 
 TPM 预留 DashScope OpenAPI 提供六个 REST 接口，覆盖 TPM 预留部署的创建、查询、扩缩容、续订与溢出策略全生命周期管理。通过 `plan=ptu` 标识 TPM 预留场景，结合 `service_tier` 区分部署类型。
 
 -   **POST /api/v1/deployments** — 创建 TPM 预留部署
+    
 -   **GET /api/v1/deployments/{deployed\_model}** — 查询单个部署状态与配置
+    
 -   **GET /api/v1/deployments** — 分页列表查询
+    
 -   **PUT /api/v1/deployments/{deployed\_model}/scale** — 扩缩容
+    
 -   **PUT /api/v1/deployments/{deployed\_model}/renew** — 续订预付费部署
+    
 -   **PUT /api/v1/deployments/{deployed\_model}/updateOverflowStrategy** — 修改溢出策略
+    
 
 `service_tier` 取值：`ptu_default` 对应 TPM 预留（容量保障）场景，`ptu_fast` 对应 PTU v2 通用部署场景。创建 TPM 预留部署时传 `service_tier=ptu_default`。
 
@@ -18,10 +26,13 @@ TPM 预留 DashScope OpenAPI 提供六个 REST 接口，覆盖 TPM 预留部署�
 `ptu_capacity` 容量单位为 kTPM（1 kTPM = 1000 Tokens/分钟），包含 `input_tpm`、`output_tpm`、`thinking_output_tpm` 三个独立维度。起跑和步长因模型而异，以控制台创建页展示为准。
 
 -   华北2（北京）支持的模型：千问3.8-Max、千问3.7-Max-2026-05-20、千问3.7-Plus-2026-05-26、千问3.6-Flash-2026-04-16、GLM-5.2、GLM-5.1、DeepSeek-v4-Flash、DeepSeek-v4-Pro、Kimi-K2.6
+    
 -   新加坡区域无 Kimi-K2.6，其余模型一致
+    
 -   上述 9 款模型均支持思考输出配额（`thinking_output_tpm`），思考模型家族与启用方式详见[深度思考模型](https://help.aliyun.com/zh/model-studio/deep-thinking)
+    
 
-认证方式、请求头与 endpoint 域名配置详见[认证与调用准备](https://help.aliyun.com/zh/model-studio/tpm-reserved-openapi#h2-sec-auth)。控制台操作入口与 TPM 预留概念详见[TPM 预留](raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)，通用部署创建 API 详见[使用 API 进行模型部署](raw/model-user-guide/model-deployment-1/model-deployment-quick-start.md)。
+认证方式、请求头与 endpoint 域名配置详见[认证与调用准备](#h2-sec-auth)。控制台操作入口与 TPM 预留概念详见[TPM 预留](https://help.aliyun.com/zh/model-studio/tpm-reservation)，通用部署创建 API 详见[使用 API 进行模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-quick-start)。
 
 ## 认证与调用准备
 
@@ -76,9 +87,11 @@ Bearer Token
 工作空间 ID 字符串
 
 -   **DashScope 原生 SDK**：当前支持 Python 与 Java
+    
 -   **OpenAI 兼容 SDK**：当前支持 Python、Node.js、Java、Go，调用路径前缀为 `/compatible-mode/v1`
+    
 
-如需指定子业务空间，请求头携带 `X-DashScope-WorkSpace: <workspace-id>`。workspace-dedicated 域名格式为 `[workspaceId].[region].maas.aliyuncs.com`，区域包括 cn-beijing、ap-southeast-1、ap-northeast-1、eu-central-1。模型部署简介与三种计费方式对比详见[模型部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)。
+如需指定子业务空间，请求头携带 `X-DashScope-WorkSpace: <workspace-id>`。workspace-dedicated 域名格式为 `[workspaceId].[region].maas.aliyuncs.com`，区域包括 cn-beijing、ap-southeast-1、ap-northeast-1、eu-central-1。模型部署简介与三种计费方式对比详见[模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)。
 
 项目
 
@@ -86,7 +99,7 @@ Bearer Token
 
 DashScope API 域名
 
-`[https://dashscope.aliyuncs.com](https://dashscope.aliyuncs.com)`
+`https://dashscope.aliyuncs.com`
 
 弗吉尼亚区域
 
@@ -280,7 +293,7 @@ TPM 预留创建不传 `suffix`，后端自动生成部署服务 ID（deployed\_
 
 TPM 预留 OpenAPI 提供单个查询与列表查询两种方式，分别用于查看指定部署详情和分页浏览全部部署。
 
-#### 查询单个部署
+### 查询单个部署
 
 调用 `GET /api/v1/deployments/{deployed_model}` 查询指定部署的状态与配置。路径参数 `deployed_model` 为部署服务 ID。
 
@@ -364,7 +377,7 @@ String
 }
 ```
 
-#### 列表查询
+### 列表查询
 
 调用 `GET /api/v1/deployments` 分页查询部署列表，支持 `page_no` 与 `page_size` 分页参数。
 
@@ -458,7 +471,7 @@ Object
 
 预付费扩缩容触发商业化下单（UPGRADE/DOWNGRADE），异步完成后状态变为 `RUNNING`。后付费扩缩容直接生效，不触发下单。
 
-**重要**预付费扩缩容为异步操作，调用接口返回 `SCALING` 状态后需等待商业化下单完成，状态自动变为 `RUNNING`。请勿在 `SCALING` 状态期间重复发起扩缩容。
+预付费扩缩容为异步操作，调用接口返回 `SCALING` 状态后需等待商业化下单完成，状态自动变为 `RUNNING`。请勿在 `SCALING` 状态期间重复发起扩缩容。
 
 扩缩容方向约束：`input_tpm`、`output_tpm`、`thinking_output_tpm` 须同增或同减，混合方向会报错。
 
@@ -560,9 +573,9 @@ String
 }
 ```
 
-该接口为后端独立 API，前端控制台无封装。开发者通过 OpenAPI 直接调用，溢出策略可随时切换无需重建部署。溢出策略概念详见[预置吞吐长输入与缓存](raw/model-user-guide/model-deployment-1/ptu-long-input-and-cache.md)。
+该接口为后端独立 API，前端控制台无封装。开发者通过 OpenAPI 直接调用，溢出策略可随时切换无需重建部署。溢出策略概念详见[预置吞吐长输入与缓存](https://help.aliyun.com/zh/model-studio/ptu-long-input-and-cache)。
 
-**重要**`overflow_strategy=enable` 时，超出 PTU 容量的流量会溢出到公共池按量计费，产生额外费用。`disable` 时超出直接限流，不产生额外费用但影响服务可用性。
+`overflow_strategy=enable` 时，超出 PTU 容量的流量会溢出到公共池按量计费，产生额外费用。`disable` 时超出直接限流，不产生额外费用但影响服务可用性。
 
 ## 错误码
 
@@ -648,26 +661,16 @@ API Key 无效
 }
 ```
 
-429 限流错误中，TPM 容量超额走 `AllocationQuota` 错误码。限流应对最佳实践详见[限流应对最佳实践](raw/model-user-guide/use-cases/rate-limiting-best-practices.md)。
+429 限流错误中，TPM 容量超额走 `AllocationQuota` 错误码。限流应对最佳实践详见[限流应对最佳实践](https://help.aliyun.com/zh/model-studio/rate-limiting-best-practices)。
 
 ## 常见问题
 
-service\_tier 的 ptu\_default 与 ptu\_fast 有什么区别？
-
 二者不是「默认/快速」版本关系，而是不同部署场景。`ptu_default` 对应 TPM 预留（容量保障），`ptu_fast` 对应 PTU v2 通用部署。
-
-auto\_renewal\_cycle 字段是否存在？
 
 官方 API 无 `auto_renewal_cycle` 字段。实际续费字段为 `duration`（购买时长）、`auto_renewal`（是否自动续费）、`auto_renewal_duration`（`auto_renewal=true` 时必填的续费时长）。
 
-thinking\_output\_tpm 适用于哪些模型？
-
 `thinking_output_tpm` 仅适用于思考模型。TPM 预留支持的 9 款模型均支持思考输出配额。
 
-创建传 plan=ptu，续费传 plan=ptu\_v2，是否接口错误？
-
 不是接口错误。创建请求 `plan=ptu` 与续费请求 `plan=ptu_v2` 的差异是前后端命名约定，后端均映射到 ptu\_v2 内部处理。
-
-deployed\_model 后缀是否固定 8 位？
 
 TPM 预留创建不传 `suffix`，由后端自动生成部署服务 ID，后缀长度由后端决定，不固定为 8 位。

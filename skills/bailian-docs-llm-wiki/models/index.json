@@ -1,16 +1,16 @@
 {
-  "updatedAt": "2026-08-21",
+  "updatedAt": "2026-08-22",
   "totalFamilies": 178,
-  "totalModels": 400,
+  "totalModels": 401,
   "profileCoverage": {
     "full": 0,
     "partial": 0,
-    "structured-only": 400,
+    "structured-only": 401,
     "none": 0
   },
   "capabilityDistribution": {
-    "TG": 37,
-    "IG": 31,
+    "TG": 36,
+    "IG": 32,
     "VG": 27,
     "TTS": 16,
     "Reasoning": 15,
@@ -27,8 +27,8 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 108,
-    "qwen-domain-model": 34,
+    "qwen": 109,
+    "qwen-domain-model": 33,
     "wan": 14,
     "happyhorse": 4,
     "pixverse": 4,
@@ -55,15 +55,16 @@
       "providers": [
         "moonshot-ai"
       ],
-      "itemCount": 5,
+      "itemCount": 6,
       "items": [
         "kimi-k2-thinking",
         "kimi-k2.5",
         "kimi-k2.6",
         "kimi-k2.7-code",
+        "kimi-k3",
         "Moonshot-Kimi-K2-Instruct"
       ],
-      "maxContextWindow": 262144
+      "maxContextWindow": 1048576
     },
     {
       "slug": "MiniMax-M2.1",
@@ -1273,6 +1274,21 @@
       "items": [
         "qwen-image-edit",
         "qwen-image-edit-plus"
+      ]
+    },
+    {
+      "slug": "qwen-image-max",
+      "name": "Qwen-Image-Max",
+      "primaryCapability": "IG",
+      "capabilities": [
+        "IG"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen-image-max"
       ]
     },
     {
@@ -2559,22 +2575,6 @@
         "tongyi-intent-detect-v3"
       ],
       "maxContextWindow": 8192
-    },
-    {
-      "slug": "tongyi-xiaomi-analysis-flash",
-      "name": "伶鹊-对话分析-flash",
-      "primaryCapability": "TG",
-      "capabilities": [
-        "TG"
-      ],
-      "providers": [
-        "qwen-domain-model"
-      ],
-      "itemCount": 1,
-      "items": [
-        "tongyi-xiaomi-analysis-flash"
-      ],
-      "maxContextWindow": 32768
     },
     {
       "slug": "tongyi-xiaomi-analysis-pro",

@@ -2,7 +2,7 @@
 
 使用联网搜索多模态能力时，可以通过如下文件接口，将需要与联网搜索 agent 交互的图片提前上传到 OSS 处，在进行联网问答时，使用已经提前上传到 OSS 图片 url， 可以提供更流畅的问答体验。
 
-## 获取预签名 OSS 上传地址
+## **获取预签名 OSS 上传地址**
 
 获取与签名 OSS 上传地址，可以将图片上传至该地址
 
@@ -10,7 +10,7 @@
 POST /web-search-agent/file/upload/apply HTTP/1.1
 ```
 
-### 请求参数
+### **请求参数**
 
 **参数名**
 
@@ -98,7 +98,7 @@ str
 
 Agent ID
 
-### 返回参数
+### **返回参数**
 
 **参数名**
 
@@ -192,15 +192,15 @@ int
 
 过期时间(Unix 时间戳)，默认 1 小时
 
-## 执行上传
+## **执行上传**
 
-在获取到 OSS 预签名上传地址后，可以通过如下操作将本地文件上传到对应的地址。其中，${output.result.upload\_tasks\[\].upload\_url}为通过调用**获取预签名 OSS 上传地址**接口获取到对应文件的OSS 预签名上传地址。
+在获取到 OSS 预签名上传地址后，可以通过如下操作将本地文件上传到对应的地址。其中，${output.result.upload\_tasks\[\].upload\_url}为通过调用**获取预签名 OSS 上传地址** 接口获取到对应文件的OSS 预签名上传地址。
 
 ```
 curl -X PUT -T ./path/to/test.jpg -H "Content-Type: image/jpeg" ${output.result.upload_tasks[].upload_url}
 ```
 
-## 回调获取文件上传的状态
+## **回调获取文件上传的状态**
 
 调用文件上传回调，查看文件上传的结果，即是否成功。
 
@@ -208,7 +208,7 @@ curl -X PUT -T ./path/to/test.jpg -H "Content-Type: image/jpeg" ${output.result.
 POST /web-search-agent/file/upload/callback HTTP/1.1
 ```
 
-### 请求参数
+### **请求参数**
 
 **参数名**
 
@@ -272,7 +272,7 @@ str
 
 Agent ID
 
-### 返回参数
+### **返回参数**
 
 **参数名**
 
@@ -330,7 +330,7 @@ str
 
 上传状态(成功:SUCCESS)
 
-## 获取文件上传的信息
+## **获取文件上传的信息**
 
 查看已经上传文件的状态信息
 
@@ -338,7 +338,7 @@ str
 POST /web-search-agent/file/info/get HTTP/1.1
 ```
 
-### 请求参数
+### **请求参数**
 
 **参数名**
 
@@ -400,7 +400,7 @@ str
 
 Agent ID
 
-### 返回参数
+### **返回参数**
 
 **参数名**
 
@@ -512,7 +512,7 @@ str
 
 文件状态(如:done)
 
-## 删除文件
+## **删除文件**
 
 删除已上传的文件
 
@@ -520,7 +520,7 @@ str
 POST /web-search-agent/file/delete HTTP/1.1
 ```
 
-### 请求参数
+### **请求参数**
 
 **参数名**
 
@@ -582,7 +582,7 @@ str
 
 Agent ID
 
-### 返回参数
+### **返回参数**
 
 **参数名**
 
@@ -640,9 +640,9 @@ str
 
 删除状态(成功:SUCCESS)
 
-## 调用示例
+## **调用示例**
 
-python
+Python
 
 ```
 # coding=utf-8
@@ -676,11 +676,11 @@ AGENT_OPTIONS = {
 def call_get_upload_url(session_id: str, files: list) -> dict:
     """
     获取文件上传 URL
-
+    
     Args:
         session_id: 会话 ID
         files: 文件列表，每个文件包含 file_name, file_size, content_type, file_ext
-
+    
     Returns:
         上传任务信息，包含 upload_tasks 列表
     """
@@ -693,7 +693,7 @@ def call_get_upload_url(session_id: str, files: list) -> dict:
             "agent_options": AGENT_OPTIONS
         }
     }
-
+    
     response = requests.post(get_upload_url, json=params, headers=headers)
     if response.status_code == HTTPStatus.OK:
         result = response.json()
@@ -708,11 +708,11 @@ def call_get_upload_url(session_id: str, files: list) -> dict:
 def call_upload_callback(session_id: str, file_id: str) -> dict:
     """
     文件上传完成后的回调
-
+    
     Args:
         session_id: 会话 ID
         file_id: 文件 ID
-
+    
     Returns:
         回调结果，包含 status
     """
@@ -725,7 +725,7 @@ def call_upload_callback(session_id: str, file_id: str) -> dict:
             "agent_options": AGENT_OPTIONS
         }
     }
-
+    
     response = requests.post(upload_callback, json=params, headers=headers)
     if response.status_code == HTTPStatus.OK:
         result = response.json()
@@ -740,11 +740,11 @@ def call_upload_callback(session_id: str, file_id: str) -> dict:
 def call_get_file_info(session_id: str, file_ids: list) -> dict:
     """
     获取文件信息
-
+    
     Args:
         session_id: 会话 ID
         file_ids: 文件 ID 列表
-
+    
     Returns:
         文件信息列表，包含 file_name, file_size, content_type, preview_url 等
     """
@@ -757,7 +757,7 @@ def call_get_file_info(session_id: str, file_ids: list) -> dict:
             "agent_options": AGENT_OPTIONS
         }
     }
-
+    
     response = requests.post(get_file_info, json=params, headers=headers)
     if response.status_code == HTTPStatus.OK:
         result = response.json()
@@ -772,11 +772,11 @@ def call_get_file_info(session_id: str, file_ids: list) -> dict:
 def call_delete_file(session_id: str, file_ids: list) -> dict:
     """
     删除文件
-
+    
     Args:
         session_id: 会话 ID
         file_ids: 待删除的文件 ID 列表
-
+    
     Returns:
         删除结果，包含 status
     """
@@ -789,7 +789,7 @@ def call_delete_file(session_id: str, file_ids: list) -> dict:
             "agent_options": AGENT_OPTIONS
         }
     }
-
+    
     response = requests.post(delete_file, json=params, headers=headers)
     if response.status_code == HTTPStatus.OK:
         result = response.json()
@@ -804,7 +804,7 @@ def call_delete_file(session_id: str, file_ids: list) -> dict:
 if __name__ == "__main__":
     # 示例用法
     SESSION_ID = "session-456"
-
+    
     # 1. 获取上传 URL
     print("=" * 50)
     print("1. 获取上传 URL")
@@ -817,7 +817,7 @@ if __name__ == "__main__":
             "file_ext": "jpg"
         }
     ])
-
+    
     # 从结果中获取 upload_tasks
     upload_tasks = upload_result.get("upload_tasks", [])
     if upload_tasks:
@@ -826,7 +826,7 @@ if __name__ == "__main__":
         upload_url = task["upload_url"]
         print(f"\nfile_id: {file_id}")
         print(f"upload_url: {upload_url}")
-
+        
         # 2. 实际上传文件（使用 PUT 方法上传到 OSS）
         print("\n" + "=" * 50)
         print("2. 上传文件到 OSS")
@@ -836,19 +836,19 @@ if __name__ == "__main__":
         #     response = requests.put(upload_url, data=f)
         #     if response.status_code == HTTPStatus.OK:
         #         print("文件上传成功")
-
+        
         # 3. 上传完成后回调
         print("\n" + "=" * 50)
         print("3. 上传回调")
         print("=" * 50)
         callback_result = call_upload_callback(SESSION_ID, file_id)
-
+        
         # 4. 获取文件信息
         print("\n" + "=" * 50)
         print("4. 获取文件信息")
         print("=" * 50)
         file_info = call_get_file_info(SESSION_ID, [file_id])
-
+        
         # 5. 删除文件（可选）
         print("\n" + "=" * 50)
         print("5. 删除文件")
@@ -856,7 +856,7 @@ if __name__ == "__main__":
         delete_result = call_delete_file(SESSION_ID, [file_id])
 ```
 
-java
+Java
 
 ```
 import java.io.*;

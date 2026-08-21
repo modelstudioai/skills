@@ -2,24 +2,31 @@
 
 本文档介绍全妙-妙搜和妙读的计费说明。
 
-## 计费概述
+## **计费概述**
 
 1.  妙搜计费分为在线和离线两部分：
+    
 
 -   在线：通过问答式搜索和纯搜索进行问答所消耗的大模型Token量；
+    
 -   离线：包含各种模态的文件存储及索引存储，各种模态文件的预处理，各种模态文件的向量索引。
+    
 
-1.  妙读则统一按接口调用消耗的 Token 计费。
+2.  妙读则统一按接口调用消耗的 Token 计费。
+    
 
-## 开通&产品地址
+## **开通&产品地址**
 
 -   开通产品：点击[全妙智能检索生成应用后付费API](https://common-buy.aliyun.com/?commodityCode=sfm_quanmiaoAPI_public_cn)打开页面，选择需要开通的产品（妙搜/妙读）；
--   妙搜SaaS产品地址：[妙搜控制台](https://aimiaobi.console.aliyun.com/?product_code=g_broadscope_search&from=bailian#/search_copilot_reference)，接口地址：[妙搜-智能搜索](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-search-smart-search/api-aimiaobi-2023-08-01-runsearchgeneration.md)；
--   妙读线上仅提供PaaS接口调用，接口地址：[获取文档信息](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-reading-basic-operation-class/api-aimiaobi-2023-08-01-getdocinfo.md)。
+    
+-   妙搜SaaS产品地址：[妙搜控制台](https://aimiaobi.console.aliyun.com/?product_code=g_broadscope_search&from=bailian#/search_copilot_reference)，接口地址：[妙搜-智能搜索](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-runsearchgeneration)；
+    
+-   妙读线上仅提供PaaS接口调用，接口地址：[获取文档信息](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-getdocinfo)。
+    
 
-## 妙搜计费说明
+## **妙搜计费说明**
 
-### 在线计费项
+### **在线计费项**
 
 用户在 SaaS 页面可选择问答式搜索或纯搜索，系统将根据所选模型按以下规则计费：
 
@@ -41,7 +48,7 @@ quanmiao-Plus
 
 0.002元/千Token
 
-### 离线计费项
+### **离线计费项**
 
 **计费项**
 
@@ -91,7 +98,7 @@ quanmiao-clip
 
 您需要对知识库中的文本及多模态文件进行向量化（Embedding）处理。
 
-## 妙读计费说明
+## **妙读计费说明**
 
 调用妙读接口（包括生成类、抽取类、问答类）时，可通过 `ModelName` 字段指定模型（ `quanmiao-max` 或 `quanmiao-plus`），系统将根据所选模型的实际 Token 消耗进行计费。
 
@@ -107,11 +114,13 @@ quanmiao-Plus
 
 0.002元/千Token
 
-## 接口调用最佳实践
+## **接口调用最佳实践**
 
--   妙搜：[妙搜API最佳实践](https://help.aliyun.com/zh/model-studio/best-practices-for-miaosou-api#2c08b4f8e2wz3)；
--   妙读：[妙读最佳实践](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/miaobi-and-miaoce-best-practices/miaodu-best-practices.md)。
+-   妙搜：[妙搜API最佳实践](https://help.aliyun.com/zh/model-studio/best-practices-for-miaosou-api/#2c08b4f8e2wz3)；
+    
+-   妙读：[妙读最佳实践](https://help.aliyun.com/zh/model-studio/miaodu-best-practices)。
+    
 
-## 账单查询
+## **账单查询**
 
 请点击[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail?spm=a2c4g.11186623.0.0.619355efACwmfT)查看账单。

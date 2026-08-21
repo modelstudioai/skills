@@ -2,21 +2,27 @@
 
 本文档介绍如何在阿里云百炼平台调用月之暗面（Moonshot AI）直供的模型推理服务。
 
-**重要**本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+**重要**
 
-## 服务开通
+本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+
+## **服务开通**
 
 1.  前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/all)，搜索 Kimi，找到 Kimi 模型卡片，单击立即开通；
+    
 2.  在弹窗内确认开通及授权。
+    
 
 完成以上步骤即可调用月之暗面提供的 Kimi 模型服务。
 
-## 快速开始
+## **快速开始**
 
 **前提条件**
 
--   需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)
--   如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)
+-   需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)
+    
+-   如果通过SDK调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk#8833b9274f4v8)
+    
 
 kimi 系列模型均支持输入文本、图像或视频：
 
@@ -27,17 +33,21 @@ kimi 系列模型均支持输入文本、图像或视频：
 3.  kimi/kimi-k2.6、kimi/kimi-k2.5 可通过 `enable_thinking` 参数控制思考模式，默认开启思考模式：
     
     -   **思考模式**（`reasoning_effort: "max"`）：模型会输出详细的推理过程（`reasoning_content`）
-    -   **非思考模式**（`enable_thinking: false` 或不设置）：直接输出结果，不包含推理过程
+        
+    -   **非思考模式**（`enable_thinking: false` 或不设置）：直接输出结果，不包含推理过程
+        
 
 除 kimi/kimi-k2.5外，其他模型均支持通过 `preserve_thinking` 参数在多轮对话中传递思考过程，详情请参见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
 
 以下示例演示如何调用思考模式的 kimi/kimi-k3 模型进行文本生成。
 
-#### OpenAI兼容
+## OpenAI兼容
 
-**说明**`reasoning_effort`非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body`传入，Node.js SDK 作为顶层参数传入。
+**说明**
 
-#### Python
+`reasoning_effort`非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body`传入，Node.js SDK 作为顶层参数传入。
+
+## Python
 
 ```
 from openai import OpenAI
@@ -65,7 +75,7 @@ print("\n" + "=" * 20 + "完整回复" + "=" * 20 + "\n")
 print(msg.content)
 ```
 
-### 返回结果
+### **返回结果**
 
 ```
 ====================思考过程====================
@@ -89,7 +99,7 @@ print(msg.content)
 这是最基本的算术运算，两个单位相加得到两个单位。
 ```
 
-#### Node.js
+## Node.js
 
 ```
 import OpenAI from "openai";
@@ -121,7 +131,7 @@ console.log("\n" + "=".repeat(20) + "完整回复" + "=".repeat(20) + "\n");
 console.log(msg.content);
 ```
 
-### 返回结果
+### **返回结果**
 
 ```
 ====================思考过程====================
@@ -145,9 +155,9 @@ console.log(msg.content);
 这是最基本的算术运算，两个单位相加得到两个单位。
 ```
 
-#### HTTP
+## HTTP
 
-#### curl
+## curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -170,19 +180,21 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
-## 多模态调用示例
+## **多模态调用示例**
 
 Kimi 系列模型不仅支持纯文本对话，还具备强大的多模态理解能力。本章节将介绍如何让模型理解图像和视频内容。
 
-**重要**图像/视频文件仅支持通过公网URL传入，不支持 Base64 编码。
+**重要**
 
-### 图像理解
+图像/视频文件仅支持通过公网URL传入，不支持 Base64 编码。
 
-图像理解功能让 Kimi 模型能够识别和分析图像内容。您可以传入单张或多张图像。图像文件的限制请参见[图像限制](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api-by-moonshot-ai.md)。
+### **图像理解**
 
-#### OpenAI兼容
+图像理解功能让 Kimi 模型能够识别和分析图像内容。您可以传入单张或多张图像。图像文件的限制请参见[图像限制](#ac28219766ibq)。
 
-#### Python
+## OpenAI兼容
+
+## Python
 
 ```
 import os
@@ -251,7 +263,7 @@ print(completion.choices[0].message.content)
 # print("\n完整回复：\n" + completion.choices[0].message.content)
 ```
 
-#### Node.js
+## Node.js
 
 ```
 import OpenAI from "openai";
@@ -322,9 +334,9 @@ console.log(completion.choices[0].message.content);
 // console.log('\n完整回复：\n' + multiCompletion.choices[0].message.content);
 ```
 
-#### HTTP
+## HTTP
 
-#### curl
+## curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -387,13 +399,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 # }'
 ```
 
-### 视频理解
+### **视频理解**
 
-视频文件的限制请参见[视频限制](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api-by-moonshot-ai.md)。
+视频文件的限制请参见[视频限制](#3a523e6bb19wp)。
 
-#### OpenAI兼容
+## OpenAI兼容
 
-#### Python
+## Python
 
 ```
 import os
@@ -430,7 +442,7 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
-#### Node.js
+## Node.js
 
 ```
 import OpenAI from "openai";
@@ -470,7 +482,7 @@ async function main() {
 main();
 ```
 
-### 返回结果
+### **返回结果**
 
 ```
 ====================思考过程====================
@@ -494,9 +506,9 @@ main();
 这是最基本的算术运算，两个单位相加得到两个单位。
 ```
 
-#### HTTP
+## HTTP
 
-#### curl
+## curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -526,22 +538,29 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
   }'
 ```
 
-### 文件限制
+### **文件限制**
 
-#### 图像文件
+## 图像文件
 
 -   **图像分辨率：**建议图像分辨率不超过4k (4096\*2160)
+    
 -   **支持的图像格式：**PNG、JPEG、WEBP、GIF
+    
 -   **图像大小与图像数量：**无限制，但需确保请求的文本和图像的大小不超过 100M。
+    
 
-#### 视频文件
+## 视频文件
 
 -   **视频大小与视频时长：**无限制，但需确保请求的文本和视频的大小不超过 100M。
+    
 -   **视频格式：** MP4、MPEG、MOV、AVI、X-FLV、MPG、WEBM、WMV、3GPP。
+    
 -   **视频尺寸：**无特定限制，建议不超过2K，再高的分辨率只会增加处理时间，也不会对模型理解的效果有提升。
+    
 -   **音频理解：**不支持对视频文件的音频进行理解。
+    
 
-## 其它功能
+## **其它功能**
 
 **模型**
 
@@ -582,11 +601,15 @@ kimi/kimi-k2.5
 以上模型支持上下文缓存（隐式缓存，自动开启）：
 
 -   kimi/kimi-k3命中缓存的输入Token按输入价格的10%计费
+    
 -   kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code 命中缓存的输入Token按输入价格的20.0%计费，
+    
 -   kimi/kimi-k2.6命中缓存的输入Token按输入价格的16.9%计费
+    
 -   kimi/kimi-k2.5命中缓存的输入Token按输入价格的17.5%计费。
+    
 
-## 参数默认值
+## **参数默认值**
 
 **模型**
 
@@ -670,6 +693,7 @@ kimi/kimi-k2.6
 
 思考模式：1.0  
 非思考模式：0.6  
+  
 
 思考模式/非思考模式：0.95
 
@@ -686,11 +710,15 @@ kimi/kimi-k2.5
 \-
 
 -   `stream_options`仅支持设置为`true`，`temperature`、`top_p`、`repetition_penalty`、`presence_penalty`不支持设置为其他值；
+    
 -   kimi/kimi-k3 支持 `reasoning_effort` 参数，唯一支持值 `max`。
--   在思考模式下，使用 Kimi 模型进行工具调用时：必须在每轮 assistant 消息中保留 `reasoning_content` 字段；对于`tool_choice`参数，`kimi-k3` 支持 `auto` / `none` / `required` 三档；其他模型不支持 `required`，传入会报错。`kimi-k3` 支持动态加载工具，详细用法请参见[动态加载工具](https://platform.kimi.com/docs/guide/use-dynamic-tool-loading)。
+    
+-   在思考模式下，使用 Kimi 模型进行工具调用时：必须在每轮 assistant 消息中保留 `reasoning_content` 字段；对于`tool_choice`参数，`kimi-k3` 支持 `auto` / `none` / `required` 三档；其他模型不支持 `required`，传入会报错。`kimi-k3` 支持动态加载工具，详细用法请参见[动态加载工具](https://platform.kimi.com/docs/guide/use-dynamic-tool-loading)。
+    
 -   ”-”表示没有默认值，也不支持设置。
+    
 
-## 模型列表与计费
+## **模型列表与计费**
 
 模型上下文长度与价格信息请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)。
 
@@ -698,6 +726,6 @@ kimi/kimi-k2.5
 
 > 思考模式下，思维链按照输出 Token 计费。
 
-## 错误码
+## **错误码**
 
-如果执行报错，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+如果执行报错，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。

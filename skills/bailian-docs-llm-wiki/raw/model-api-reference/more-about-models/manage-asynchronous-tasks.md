@@ -2,13 +2,13 @@
 
 阿里云百炼的部分模型（如图像生成、视频生成等）因处理时间较长，采用异步调用机制，通常需要调用两个接口完成操作：先创建任务获取 ID，再通过该 ID 查询结果。为了方便管理异步任务，阿里云百炼提供了一组通用的异步任务接口，支持查询单个任务结果、批量查询多个任务状态、以及取消正在排队且尚未处理的任务。
 
-## 前提条件
+## **前提条件**
 
 异步任务API通过HTTP进行调用。
 
-在调用前，您需要[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
+在调用前，您需要[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
-## 查询异步任务结果接口
+## **查询异步任务结果接口**
 
 **API描述**：根据`任务ID（task_id）`查询任务状态和任务结果。
 
@@ -17,21 +17,28 @@
 **重要**
 
 -   支持查询当前 API Key 所属阿里云主账号下的所有任务（包括该主账号下通过任意 API Key 提交的任务），但无法查询其他主账号提交的任务。
+    
 -   异步任务在完成后通常保留 24 小时 （具体以对应任务的 API 文档为准），超时后系统将自动清理历史任务数据。
+    
 
-**说明**查询任务结果的次数不影响任务的执行。建议根据任务类型合理设置查询间隔：
+**说明**
+
+查询任务结果的次数不影响任务的执行。建议根据任务类型合理设置查询间隔：
 
 -   较快的任务（如文本向量）可以使用较短的查询间隔。
+    
 -   较慢的任务（如图像生成、视频生成）建议使用较长的查询间隔。
+    
 -   避免过于频繁地查询任务状态，以防触发限流（20 QPS）。
+    
 
-#### 请求接口
+#### **请求接口**
 
 ```
 GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks{task_id}
 ```
 
-#### 入参描述
+#### **入参描述**
 
 **传参方式**
 
@@ -69,7 +76,7 @@ String
 
 a8532587-xxxx-xxxx-xxxx-0c46b17950d1
 
-#### 出参描述
+#### **出参描述**
 
 **字段**
 
@@ -196,16 +203,18 @@ Object
 
 `"usage": {"image_count": 1}`
 
-#### 请求示例
+#### **请求示例**
 
 ```
 curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks73205176-xxxx-xxxx-xxxx-16bd5d902219' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-**说明**若未配置阿里云百炼API Key到环境变量，请将`$DASHSCOPE_API_KEY`替换为实际API Key，例如：`--header "Authorization: Bearer sk-xxx"`。
+**说明**
 
-#### 响应示例
+若未配置阿里云百炼API Key到环境变量，请将`$DASHSCOPE_API_KEY`替换为实际API Key，例如：`--header "Authorization: Bearer sk-xxx"`。
+
+#### **响应示例**
 
 ```
 {
@@ -243,7 +252,7 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks7320
 }
 ```
 
-## 批量查询异步任务状态接口
+## **批量查询异步任务状态接口**
 
 **API描述**：支持通过组合多种查询条件，批量获取多个异步任务的当前状态。该接口适用于一次性查看多个任务的执行进度。
 
@@ -252,15 +261,17 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks7320
 **重要**
 
 -   支持查询当前 API Key 所属阿里云主账号下的所有任务（包括该主账号下通过任意 API Key 提交的任务），但无法查询到其他主账号下的任务。
+    
 -   已结束的任务在超时后将被系统自动清理，届时将无法查询到相关任务数据。
+    
 
-#### 请求接口
+#### **请求接口**
 
 ```
 GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks
 ```
 
-#### 入参描述
+#### **入参描述**
 
 **传参方式**
 
@@ -381,7 +392,7 @@ Integer
 
 \-
 
-#### 出参描述
+#### **出参描述**
 
 **字段**
 
@@ -478,11 +489,17 @@ String
 任务状态：
 
 -   PENDING：任务排队中
+    
 -   RUNNING：任务处理中
+    
 -   SUCCEEDED：任务执行成功
+    
 -   FAILED：任务执行失败
+    
 -   CANCELED：任务取消成功
+    
 -   UNKNOWN：任务不存在或状态未知
+    
 
 data\[\].task\_id
 
@@ -550,14 +567,14 @@ String
 
 `"message": "Requests rate limit exceeded, please try again later."`
 
-#### 请求示例
+#### **请求示例**
 
 ```
 curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks?start_time=xxx&end_time=xxx&status=xxx' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-#### 响应示例
+#### **响应示例**
 
 ```
 {
@@ -598,23 +615,24 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks?sta
 }
 ```
 
-## 取消异步任务接口
+## **取消异步任务接口**
 
-**API描述**：用于取消异步任务，仅支持取消状态为 `PENDING` 的任务 （即排队中且尚未开始处理的任务），其他状态的任务无法取消。
+**API描述**：用于取消异步任务，仅支持取消状态为 `**PENDING**` 的任务 （即排队中且尚未开始处理的任务），其他状态的任务无法取消。
 
 **流量限制**：20 QPS，即每秒每个账号（含主账号及其子账号）最多发起 20 次请求。
 
 **重要**
 
 -   支持取消当前 API Key 所属阿里云主账号下的所有任务（包括该主账号下通过任意 API Key 提交的任务），但无法取消其他主账号提交的任务。
+    
 
-#### 请求接口
+#### **请求接口**
 
 ```
 POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks{task_id}/cancel
 ```
 
-#### 入参描述
+#### **入参描述**
 
 **传参方式**
 
@@ -652,7 +670,7 @@ String
 
 a8532587-xxxx-xxxx-xxxx-0c46b17950d1
 
-#### 出参描述
+#### **出参描述**
 
 **字段**
 
@@ -686,14 +704,14 @@ String
 
 `"message": "Requests rate limit exceeded, please try again later."`
 
-#### 请求示例
+#### **请求示例**
 
 ```
 curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks73205176-xxxx-xxxx-xxxx-16bd5d902219/cancel' \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-#### 响应示例
+#### **响应示例**
 
 ```
 {
@@ -701,7 +719,7 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks732
 }
 ```
 
-## 错误码
+## **错误码**
 
 **HTTP状态码**
 
@@ -721,7 +739,7 @@ Failed to cancel the task, please confirm if the task is in PENDING status.
 
 仅 PENDING 状态的任务可取消，其他状态任务无法取消。
 
-## 常见问题
+## **常见问题**
 
 ### 任务查询返回 DataInspectionFailed 错误码是什么含义？
 
@@ -732,9 +750,13 @@ Failed to cancel the task, please confirm if the task is in PENDING status.
 通过查询任务接口返回的 `task_status` 字段判断：
 
 -   `PENDING`：任务排队中，尚未开始处理。
+    
 -   `RUNNING`：任务处理中。
+    
 -   `SUCCEEDED`：任务执行成功。
+    
 -   `FAILED`：任务执行失败，请查看 `output` 中的 `code` 和 `message` 了解失败原因。
+    
 
 ### 频繁查询任务状态会影响任务执行吗？
 

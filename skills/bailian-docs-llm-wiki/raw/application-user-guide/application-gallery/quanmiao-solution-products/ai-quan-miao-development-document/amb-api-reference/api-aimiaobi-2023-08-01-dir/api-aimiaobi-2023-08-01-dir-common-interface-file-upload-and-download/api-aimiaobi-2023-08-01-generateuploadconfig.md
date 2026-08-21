@@ -1,16 +1,18 @@
-# GenerateUploadConfig
+# GenerateUploadConfig - 生成上传配置
 
 生成文件上传配置。 1. 使用本接口 获取上传的配置 返回 PostUrl （妙笔内部OSS地址）、以及OSS临时鉴权信息：key、OSSAccessKeyId、Signature、policy，还有文件唯一标识：fileKey 2. 客户端 使用 PostUrl、以及临时鉴权信息：key、OSSAccessKeyId、Signature、policy 进行文件的上传 3. 使用 fileKey 调用 后续带有fileKey的接口 （例如：GenerateFileUrlByKey）
 
 ## 接口说明
 
-通过这接口可以拿到文件上传的地址和凭证，参考如下文档可以完成文件上传： [OSS-表单上传](https://help.aliyun.com/zh/oss/user-guide/form-upload?scm=20140722.H_31849._.OR_help-T_cn~zh-V_1)
+通过这接口可以拿到文件上传的地址和凭证，参考如下文档可以完成文件上传： [OSS-表单上传](https://help.aliyun.com/zh/oss/user-guide/form-upload)
 
 ## 调试
 
-您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
+[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/GenerateUploadConfig)
 
-## 授权信息
+ [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/AiMiaoBi/2023-08-01/GenerateUploadConfig)
+
+## **授权信息**
 
 下表是API对应的授权信息，可以在RAM权限策略语句的`Action`元素中使用，用来给RAM用户或RAM角色授予调用此API的权限。具体说明如下：
 
@@ -20,8 +22,10 @@
     
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
     
-    -   对于必选的资源类型，用前面加 \* 表示。
+    -   对于必选的资源类型，用前面加 \* 表示。
+        
     -   对于不支持资源级授权的操作，用`全部资源`表示。
+        
 -   条件关键字：是指云产品自身定义的条件关键字。
     
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
@@ -67,7 +71,7 @@ string
 
 是
 
-业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-api-key)
+业务空间唯一标识： [AgentKey](https://help.aliyun.com/zh/model-studio/get-accesskey-appid-and-agentkey)
 
 xxxxx\_p\_efm
 
@@ -100,7 +104,7 @@ string
 
 dataset
 
-## 返回参数
+## **返回参数**
 
 **名称**
 
@@ -145,7 +149,7 @@ object
 ```
 {
   "OSSAccessKeyId": "xxx",
-  "Signature": "YOUR_SIGNATURE",
+  "Signature": "xxx+xxx=",
   "MaxSize": 31457280,
   "key": "aimiaobi/dataset/2_2/xx.txt",
   "policy": "xxx=="
@@ -158,9 +162,9 @@ PostUrl
 
 string
 
-上传 oss 的地址（妙笔自有的 OSS 域名，固定是：[](https://aimiaobi-service-prod.oss-cn-beijing.aliyuncs.com/)[https://aimiaobi-service-prod.oss-cn-beijing.aliyuncs.com/](https://aimiaobi-service-prod.oss-cn-beijing.aliyuncs.com/)）
+上传 oss 的地址（妙笔自有的 OSS 域名，固定是：https://aimiaobi-service-prod.oss-cn-beijing.aliyuncs.com/）
 
-[https://aimiaobi-service-prod.oss-cn-beijing.aliyuncs.com/](https://aimiaobi-service-prod.oss-cn-beijing.aliyuncs.com/)
+https://aimiaobi-service-prod.oss-cn-beijing.aliyuncs.com/
 
 HttpStatusCode
 
@@ -198,20 +202,24 @@ true
 
 拿到 PostUrl（妙笔官方 OSS） 、FormDatas （OSS 的临时鉴权）两个参数之后，需要手动上传 到 OSS 中。
 
-**说明**此步骤是核心上传步骤，一定要执行。 执行上传完毕之后：fileKey 即可用于其他接口。
+**说明**
+
+此步骤是核心上传步骤，一定要执行。 执行上传完毕之后：fileKey 即可用于其他接口。
 
 示例请求 CURL 为：
 
-**说明**注意：此示例仅为 简单的 CURL 示例，具体 SDK 对接流程一般使用 **代码编写方式** 发起表单的文件上传。
+**说明**
+
+注意：此示例仅为 简单的 CURL 示例，具体 SDK 对接流程一般使用 **代码编写方式** 发起表单的文件上传。
 
 ```
 curl -X POST --location "${PostUrl}" \
     -H "Content-Type: multipart/form-data; boundary=WebKitFormBoundarykFF1FqdGZn2nxzfb" \
     -F "key=${key};type=*/*" \
-    -F "OSSAccessKeyId=YOUR_ACCESS_KEY_ID" \
-    -F "Signature=YOUR_SIGNATURE" \
+    -F "OSSAccessKeyId=${OSSAccessKeyId};type=*/*" \
+    -F "Signature=${Signature};type=*/*" \
     -F "policy=${policy};type=*/*" \
-    -F "file=@/Users/<username>/xxx.text;filename=xxx.text;type=text/plain"
+    -F "file=@/Users/xxxx/xxx.text;filename=xxx.text;type=text/plain"
 ```
 
 ## 示例
@@ -241,6 +249,6 @@ curl -X POST --location "${PostUrl}" \
 
 访问[错误中心](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/errorCode)查看更多错误码。
 
-## 变更历史
+## **变更历史**
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/AiMiaoBi/2023-08-01/GenerateUploadConfig#workbench-doc-change-demo)。

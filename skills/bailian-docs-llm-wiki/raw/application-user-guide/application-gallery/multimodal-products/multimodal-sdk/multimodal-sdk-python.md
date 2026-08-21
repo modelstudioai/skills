@@ -2,24 +2,28 @@
 
 本文介绍了如何使用阿里云百炼大模型服务提供的实时多模交互服务端 Python SDK，包括SDK下载安装、关键接口及代码示例。
 
-## 多模态实时交互服务架构
+## **多模态实时交互服务架构**
 
-## 前提条件
+![多模态实时交互服务接入架构-通用-流程图](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7227370571/p976841.jpg)
+
+## **前提条件**
 
 开通服务并获取必要参数。
 
-开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](raw/model-api-reference/preparations/get-api-key.md)。
+开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
 
-## 音频格式说明
+## **音频格式说明**
 
 服务端接入方式只支持 websocket 传输协议。
 
 -   WS 链路音频格式说明：
     
     -   上行：支持 pcm （16k 采样率 16bit 单通道）和 opus 音频流。
+        
     -   下行：支持 pcm 和 mp3 音频流。
+        
 
-## 环境依赖
+## **环境依赖**
 
 **运行环境要求**：Python 3.9及以上版本。
 
@@ -33,7 +37,7 @@ dashscope>=1.24.2
 
 完整示例请参考：[Github示例代码](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/multimodal_dialog)。
 
-## 接口说明
+## **接口说明**
 
 ### dashscope.multimodal.MultiModalDialog
 
@@ -41,7 +45,7 @@ dashscope>=1.24.2
 
 **方法说明：**
 
-#### 1、MultiModalDialog
+#### **1**、MultiModalDialog
 
 创建交互，设置回调。
 
@@ -71,19 +75,19 @@ def __init__(self,
                  ):
 ```
 
-#### 2、start
+#### **2**、**start**
 
 启动voice\_chat对话服务，返回on\_started回调。注意on\_started会回调dialog\_id。
 
 ```
 """
-初始化WebSocket连接并发送启动请求
+初始化WebSocket连接并发送启动请求       
 :param dialog_id: 对话ID，用于标识特定的对话会话
 """
 def start(self, dialog_id):
 ```
 
-#### 3、start\_speech
+#### **3**、**start\_speech**
 
 通知服务端开始上传音频，注意需要在LISTENING状态才可以调用。
 
@@ -94,7 +98,7 @@ def start(self, dialog_id):
 def start_speech(self):
 ```
 
-#### 4、send\_audio\_data
+#### **4**、**send\_audio\_data**
 
 通知服务端上传音频。
 
@@ -106,7 +110,7 @@ def start_speech(self):
 def send_audio_data(self, speechData):
 ```
 
-#### 5、stop\_speech
+#### **5**、**stop\_speech**
 
 通知服务端结束上传音频。
 
@@ -117,7 +121,7 @@ def send_audio_data(self, speechData):
 def stop_speech(self):
 ```
 
-#### 6、interrupt
+#### **6**、**interrupt**
 
 通知服务端，客户端需要打断当前交互，开始说话。
 
@@ -128,7 +132,7 @@ def stop_speech(self):
 def interrupt(self):
 ```
 
-#### 7、local\_responding\_started
+#### **7**、**local\_responding\_started**
 
 通知服务端，客户端开始播放tts音频。
 
@@ -139,7 +143,7 @@ def interrupt(self):
 def local_responding_started(self):
 ```
 
-#### 8、local\_responding\_ended
+#### **8**、**local\_responding\_ended**
 
 通知服务端，客户端结束播放tts音频。
 
@@ -150,18 +154,18 @@ def local_responding_started(self):
 def local_responding_ended(self):
 ```
 
-#### 9、stop
+#### **9**、**stop**
 
 结束当前轮次voice\_chat对话。
 
 ```
 """
-结束当前轮次voice_chat对话
+结束当前轮次voice_chat对话       
 """
 def stop(self):
 ```
 
-#### 10、get\_dialog\_state
+#### **10**、**get\_dialog\_state**
 
 获得当前对话服务状态。DialogState枚举。
 
@@ -172,7 +176,7 @@ def stop(self):
 get_dialog_state(self)
 ```
 
-#### 11、request\_to\_respond
+#### **11**、**request\_to\_respond**
 
 请求服务端直接文本合成语音，或者发送指令给服务端。
 
@@ -183,7 +187,7 @@ def request_to_respond(self,
                        parameters: RequestToRespondParameters = None):
 ```
 
-#### 12、classMultiModalCallback。
+#### **12**、**class** MultiModalCallback。
 
 回调函数
 
@@ -281,17 +285,20 @@ class MultiModalCallback:
         pass
 ```
 
-### 对话状态说明（DialogState）
+### **对话状态说明（**DialogState**）**
 
 多模对话服务有LISTENING、THINKING、RESPONDING三个状态：
 
 -   LISTENING (str): 表示机器人正在监听用户输入。用户可以发送音频。
+    
 -   THINKING (str): 表示机器人正在思考。
+    
 -   RESPONDING (str): 表示机器人正在生成语音或语音回复中。
+    
 
-### 调用说明
+### **调用说明**
 
-#### 参数设置
+#### **参数设置**
 
 多模交互通过RequestParameters 类设置参数，包含up\_stream、down\_stream、client\_info等多个参数段。具体如下表：
 
@@ -556,7 +563,7 @@ object
 
 透传用户prompt自定义参数
 
-#### 调用示例
+#### **调用示例**
 
 ```
 up_stream = Upstream(type="AudioOnly", mode="push2talk", audio_format="pcm")
@@ -566,11 +573,13 @@ client_info = ClientInfo(user_id="aabb", device=Device(uuid="1234567890"))
 request_params = RequestParameters(upstream=up_stream,downstream=Downstream(sample_rate=48000), client_info=client_info)
 ```
 
-## 调用交互时序图
+## **调用交互时序图**
 
-### 更多SDK接口使用说明
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5621377471/p957919.png)
 
-#### VQA（图片问答）交互
+### **更多SDK接口使用说明**
+
+#### **VQA（图片问答）交互**
 
 VQA 是对话过程中通过发送图片实现图片+语音的多模交互的功能。
 
@@ -579,68 +588,75 @@ VQA 是对话过程中通过发送图片实现图片+语音的多模交互的功
 -   通过语音请求的流程为：
     
     1.  语音说："看一下前面有什么" 。
+        
     2.  通过回调函数`on_responding_content`返回拍照意图**"visual\_qa"**。
+        
     3.  客户端收到上述意图后，调用request\_to\_respond接口提交图片内容触发问答回复。
-
-```
-# callback visual_qa
-def on_responding_content(self, payload: Dict[str, Any]):
-        if payload:
-            logger.debug(f"Response content: {payload}")
-            try:
-                commands_str = payload["output"]["extra_info"]["commands"]
-                if "visual_qa" in commands_str:
-                    if self.vqa_handler_func:
-                        self.vqa_handler_func() #send_image_vqa
-                    logger.debug("handle visual_qa command>>>>")
-            except:
-                return
-...
-
-# request VQA
-def send_image_vqa(self):
-    image1 = {"type": "base64",
-         "value": CONST_TEST_IMAGE_BASE64}
-    # 或者使用下发url方式调用
-    image2 = {"type": "url", "value": image_url}
-
-    images = [image1]
-    images_params = RequestToRespondParameters(images=images)
-
-    # 使用语音调用VQA，text传""即可
-    self.conversation.request_to_respond("prompt", "", parameters=images_params)
-```
-
+        
+    
+    ```
+    # callback visual_qa 
+    def on_responding_content(self, payload: Dict[str, Any]):
+            if payload:
+                logger.debug(f"Response content: {payload}")
+                try:
+                    commands_str = payload["output"]["extra_info"]["commands"]
+                    if "visual_qa" in commands_str:
+                        if self.vqa_handler_func:
+                            self.vqa_handler_func() #send_image_vqa 
+                        logger.debug("handle visual_qa command>>>>")
+                except:
+                    return
+    ...
+    
+    # request VQA
+    def send_image_vqa(self):
+        image1 = {"type": "base64",
+             "value": CONST_TEST_IMAGE_BASE64}
+        # 或者使用下发url方式调用
+        image2 = {"type": "url", "value": image_url}
+    
+        images = [image1]
+        images_params = RequestToRespondParameters(images=images)
+    
+        # 使用语音调用VQA，text传""即可
+        self.conversation.request_to_respond("prompt", "", parameters=images_params)
+    ```
+    
 -   直接通过文本请求流程为：
     
     1.  客户端直接调用request\_to\_respond接口提交图片内容和请求文本，触发问答回复。
-
-```
-image1 = {"type": "base64",
-         "value": CONST_TEST_IMAGE_BASE64}
-# 或者使用下发url方式调用
-image2 = {"type": "url", "value": image_url}
-
-images = [image1]
-images_params = RequestToRespondParameters(images=images)
-
-# 使用文本直接请求图片回复，text填入文本请求
-self.conversation.request_to_respond("prompt", "这张图片里面有什么", parameters=images_params)
-```
+        
+    
+    ```
+    image1 = {"type": "base64",
+             "value": CONST_TEST_IMAGE_BASE64}
+    # 或者使用下发url方式调用
+    image2 = {"type": "url", "value": image_url}
+    
+    images = [image1]
+    images_params = RequestToRespondParameters(images=images)
+    
+    # 使用文本直接请求图片回复，text填入文本请求
+    self.conversation.request_to_respond("prompt", "这张图片里面有什么", parameters=images_params)
+    ```
+    
 
 注意：VQA 支持发送图片链接或者base64数据（支持小于180KB的图片）。
 
-### 通过Websocket请求LiveAI（视频通话）
+### **通过Websocket请求LiveAI（视频通话）**
 
 LiveAI （视频通话）是百炼多模交互提供的官方Agent。通过Python SDK发送图片序列的方式，可以实现视频通话的功能。 我们推荐您的服务端和客户端（网页或者APP）通过RTC传输视频和音频，然后将服务端采集到的视频帧以 500ms/张 的速度发送给SDK，同时保持实时的音频输入。
 
 注意：LiveAI发送图片只支持base64编码，每张图片的大小在180K以下。
 
 -   LiveAI调用时序
+    
 
-#### 
+#### ![截屏2025-06-20 11](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975541.png)
 
 -   关键代码示例
+    
 
 完整代码请参考 [Github示例代码](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/multimodal_dialog)。
 
@@ -664,7 +680,8 @@ def send_connect_video_command(self):
 
     except Exception as e:
         logger.error(f"Failed to send connect video command: {e}")
-
+ 
+ 
  # 3. 间隔500ms 发送一张180KB以下的视频帧图片
  def send_video_frame_data_loop(self):
     """循环发送视频帧数据"""
@@ -677,7 +694,7 @@ def send_connect_video_command(self):
     try:
         while self.video_thread_running and self.video_mode_active:
             # 发送图片数据
-            self._send_video_frame(image_data)
+            self._send_video_frame(image_data) 
             logger.debug(f"Sent video frame, sleeping for {VIDEO_FRAME_INTERVAL}s")
 
             # 等待500ms
@@ -686,7 +703,7 @@ def send_connect_video_command(self):
 # 其他调用过程省略，可参考完整示例。
 ```
 
-### 文本合成TTS
+### **文本合成TTS**
 
 SDK支持通过文本直接请求服务端合成音频。
 
@@ -698,15 +715,17 @@ SDK支持通过文本直接请求服务端合成音频。
 conversation.request_to_respond("transcript", "今天天气不错", parameters=None)
 ```
 
-### 自定义提示词变量和传值
+### **自定义提示词变量和传值**
 
 -   在管控台项目【提示词】配置自定义变量。
+    
 
 例如，定义了一个`user_name`字段代表用户昵称。并将变量`user_name`以占位符形式${user\_name} 插入到Prompt 中。
 
 在**提示词**编辑页面顶部，单击**{x} 自定义变量**选项卡添加变量，添加后的变量将显示在编辑区上方，可在提示词正文中以 `${变量名}` 的占位符格式引用。
 
 -   在代码中设置变量。
+    
 
 如下示例，设置`"user_name" = "大米"`。
 
@@ -718,10 +737,11 @@ request_params = RequestParameters(upstream=up_stream, downstream=down_stream,
 ```
 
 -   请求回复
+    
 
 发送请求后，AI 助手将使用自定义变量值进行回复。例如，当设置 `user_name` 为"大米"时，AI 回复中将以"亲爱的大米"作为个性化称呼与用户交互。
 
-### 使用文本请求对话结果
+### **使用文本请求对话结果**
 
 SDK支持通过文本直接请求服务端返回 LLM 结果和语音合成数据。
 
@@ -731,6 +751,6 @@ SDK支持通过文本直接请求服务端返回 LLM 结果和语音合成数据
 conversation.request_to_respond("prompt", "今天天气不错", parameters=None)
 ```
 
-### 更多使用示例
+### **更多使用示例**
 
 请参考 [Github示例代码](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/multimodal_dialog)。

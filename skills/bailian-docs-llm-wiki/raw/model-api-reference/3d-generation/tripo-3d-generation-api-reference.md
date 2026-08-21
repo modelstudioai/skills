@@ -1,21 +1,25 @@
 # Tripo-3D模型生成
 
-Tripo 3D模型生成支持 文生3D模型 、 单图生3D模型和多图生3D模型 。
+Tripo 3D模型生成支持**文生3D模型**、**单图生3D模型和多图生3D模型**。
 
-**相关文档**：[使用指南](raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)
+**相关文档**：[使用指南](https://help.aliyun.com/zh/model-studio/tripo-3d-generation-guide)
 
-**重要**本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
+**重要**
+
+本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
 
 ## 适用范围
 
 1.  **开通服务**：前往[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/all)，搜索“**Tripo**”，找到Tripo模型卡片，单击**立即开通**，在弹窗内确认开通及授权。
-2.  **配置 API Key**：选择地域并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
+    
+2.  **配置 API Key**：选择地域并[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+    
 
 ## HTTP调用
 
 由于3D模型生成任务耗时较长，API采用异步调用。整个流程包含 **"创建任务 -> 轮询获取"** 两个核心步骤，具体如下：
 
-### 步骤1：创建任务获取任务ID
+### **步骤1：创建任务获取任务ID**
 
 **北京地域**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation`
 
@@ -24,112 +28,13 @@ Tripo 3D模型生成支持 文生3D模型 、 单图生3D模型和多图生3D模
 **说明**
 
 -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
--   新手指引请参见[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
+    
+-   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
+    
 
 #### 请求参数
 
-##### 请求头（Headers）
-
-**Content-Type**`string`**（必选）**
-
-请求内容类型。此参数必须设置为`application/json`。
-
-**Authorization**`string`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-**X-DashScope-Async**`string`**（必选）**
-
-异步处理配置参数。HTTP请求只支持异步，**必须设置为**`enable`。
-
-**重要**缺少此请求头将报错：“current user api does not support synchronous calls”。
-
-##### 请求体（Request Body）
-
-**model** `string` **（必选）**
-
-模型名称。可选值：
-
--   `Tripo/Tripo-H3.1`：高精度3D模型生成，输出产物最高200万面。对应 Tripo 官方 API 版本 `v3.1-20260211`。
--   `Tripo/Tripo-P1.0`：专业3D模型生成，输出产物最高2万面，速度更快。对应 Tripo 官方 API 版本 `P1-20260311`。
-
-**input** `object` **（必选）**
-
-输入信息。`prompt`、`image`、`images` 三者互斥，仅能选择其中一种输入方式。同时传入多个将会报错。
-
-属性
-
-**prompt** `string` （条件必填）
-
-文本提示词，用于描述期望生成的3D模型。**仅在文生3D模型时必填。**
-
-支持多语言（中文、英文等），每个字符（含中文汉字、英文字母等）均计为1个字符，最大长度1024个字符。
-
-示例值：一只可爱的猫。
-
-**image** `string` （条件必填）
-
-单张图像的URL。**仅在单图生3D模型时必填。**
-
-图像限制：
-
--   格式：JPEG、PNG。
--   分辨率：宽和高的范围为\[20, 6000\]像素，建议边长大于256像素。
--   文件大小：不超过20MB。
-
-公网URL：
-
--   支持 HTTP 和 HTTPS 协议。
--   示例值：[](https://xxx/xxx.jpg)[https://xxx/xxx.jpg](https://xxx/xxx.jpg)。
-
-**images** `array[object]` （条件必填）
-
-多张图像的对象列表。**仅在多图生3D模型时必填。**
-
-数组长度固定为4，对应图片顺序为**前、左、后、右**。如果某个视角不需要传入图片，传入空对象`{}`即可。实际传入的有效图片数量为2~4张。每张图像的限制与`image`参数相同。多张图像的分辨率和宽高比不要求一致。
-
-每个图像对象包含以下字段：
-
--   `type`：图像格式，可选值为`jpeg`或`png`。
--   `file_token`：图像的公网URL。
-
-**parameters** `object` （可选）
-
-3D模型生成参数。
-
-属性
-
-**texture\_quality** `string` （可选）
-
-贴图质量。贴图是覆盖在3D模型表面的纹理图像，决定了模型的外观细节和视觉效果。
-
-可选值：
-
--   `standard`：默认值，标清贴图。
--   `detailed`：高清贴图。
-
-**geometry\_quality** `string` （可选）
-
-支持模型：`Tripo/Tripo-H3.1`。
-
-几何精度。
-
--   `standard`：默认值，标准版。生成的3D模型最高150万面。
--   `ultra`：超清版。生成的3D模型最高200万面。
-
-**pbr** `boolean` （可选）
-
-是否生成PBR材质模型。默认值为`true`。
-
-当`pbr`设为`true`时，会强制启用贴图（即`texture`也会被设为`true`），返回结果中包含`pbr_model_url`。
-
-**texture** `boolean` （可选）
-
-是否生成贴图。默认值为`true`。
-
-如需生成无贴图模型，需同时设置`texture`和`pbr`为`false`，返回结果中包含`base_model_url`。
-
-#### 文生3D模型（有贴图）
+## 文生3D模型（有贴图）
 
 ```
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -148,7 +53,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-#### 单图生3D模型（有贴图）
+## 单图生3D模型（有贴图）
 
 ```
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -167,7 +72,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-#### 多图生3D模型（有贴图）
+## 多图生3D模型（有贴图）
 
 ```
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -191,7 +96,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-#### 多图生3D模型（传入2张图）
+## 多图生3D模型（传入2张图）
 
 > 图片顺序为前、左、后、右，不需要的视角传入空对象`{}`即可。
 
@@ -217,7 +122,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-#### 无贴图生成
+## 无贴图生成
 
 > 需同时将`texture`和`pbr`设为`false`。
 
@@ -239,44 +144,125 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
+##### 请求头（Headers）
+
+**Content-Type** `_string_` **（必选）**
+
+请求内容类型。此参数必须设置为`application/json`。
+
+**Authorization** `_string_`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+**X-DashScope-Async** `_string_` **（必选）**
+
+异步处理配置参数。HTTP请求只支持异步，**必须设置为**`**enable**`。
+
+**重要**
+
+缺少此请求头将报错：“current user api does not support synchronous calls”。
+
+##### 请求体（Request Body）
+
+**model** `_string_` **（必选）**
+
+模型名称。可选值：
+
+-   `Tripo/Tripo-H3.1`：高精度3D模型生成，输出产物最高200万面。对应 Tripo 官方 API 版本 `v3.1-20260211`。
+    
+-   `Tripo/Tripo-P1.0`：专业3D模型生成，输出产物最高2万面，速度更快。对应 Tripo 官方 API 版本 `P1-20260311`。
+    
+
+**input** `_object_` **（必选）**
+
+输入信息。`prompt`、`image`、`images` 三者互斥，仅能选择其中一种输入方式。同时传入多个将会报错。
+
+**属性**
+
+**prompt** `_string_` （条件必填）
+
+文本提示词，用于描述期望生成的3D模型。**仅在文生3D模型时必填。**
+
+支持多语言（中文、英文等），每个字符（含中文汉字、英文字母等）均计为1个字符，最大长度1024个字符。
+
+示例值：一只可爱的猫。
+
+**image** `_string_` （条件必填）
+
+单张图像的URL。**仅在单图生3D模型时必填。**
+
+图像限制：
+
+-   格式：JPEG、PNG。
+    
+-   分辨率：宽和高的范围为\[20, 6000\]像素，建议边长大于256像素。
+    
+-   文件大小：不超过20MB。
+    
+
+公网URL：
+
+-   支持 HTTP 和 HTTPS 协议。
+    
+-   示例值：https://xxx/xxx.jpg。
+    
+
+**images** `_array[object]_` （条件必填）
+
+多张图像的对象列表。**仅在多图生3D模型时必填。**
+
+数组长度固定为4，对应图片顺序为**前、左、后、右**。如果某个视角不需要传入图片，传入空对象`{}`即可。实际传入的有效图片数量为2~4张。每张图像的限制与`image`参数相同。多张图像的分辨率和宽高比不要求一致。
+
+每个图像对象包含以下字段：
+
+-   `type`：图像格式，可选值为`jpeg`或`png`。
+    
+-   `file_token`：图像的公网URL。
+    
+
+**parameters** `_object_` （可选）
+
+3D模型生成参数。
+
+**属性**
+
+**texture\_quality** `_string_` （可选）
+
+贴图质量。贴图是覆盖在3D模型表面的纹理图像，决定了模型的外观细节和视觉效果。
+
+可选值：
+
+-   `standard`：默认值，标清贴图。
+    
+-   `detailed`：高清贴图。
+    
+
+**geometry\_quality** `_string_` （可选）
+
+支持模型：`Tripo/Tripo-H3.1`。
+
+几何精度。
+
+-   `standard`：默认值，标准版。生成的3D模型最高150万面。
+    
+-   `ultra`：超清版。生成的3D模型最高200万面。
+    
+
+**pbr** `_boolean_` （可选）
+
+是否生成PBR材质模型。默认值为`true`。
+
+当`pbr`设为`true`时，会强制启用贴图（即`texture`也会被设为`true`），返回结果中包含`pbr_model_url`。
+
+**texture** `_boolean_` （可选）
+
+是否生成贴图。默认值为`true`。
+
+如需生成无贴图模型，需同时设置`texture`和`pbr`为`false`，返回结果中包含`base_model_url`。
+
 #### 响应参数
 
-**output** `object`
-
-任务输出信息。
-
-属性
-
-**task\_id** `string`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `string`
-
-任务状态。
-
-枚举值
-
--   PENDING：任务排队中
--   RUNNING：任务处理中
--   SUCCEEDED：任务执行成功
--   FAILED：任务执行失败
--   CANCELED：任务已取消
--   UNKNOWN：任务不存在或状态未知
-
-**request\_id**`string`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code**`string`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-**message**`string`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-#### 成功响应
+### 成功响应
 
 请保存 task\_id，用于查询任务状态与结果。
 
@@ -290,9 +276,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-#### 异常响应
+### 异常响应
 
-创建任务失败，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+创建任务失败，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ```
 {
@@ -302,33 +288,67 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-### 步骤2：根据任务ID查询结果
+**output** `_object_`
+
+任务输出信息。
+
+**属性**
+
+**task\_id** `_string_`
+
+任务ID。查询有效期24小时。
+
+**task\_status** `_string_`
+
+任务状态。
+
+**枚举值**
+
+-   PENDING：任务排队中
+    
+-   RUNNING：任务处理中
+    
+-   SUCCEEDED：任务执行成功
+    
+-   FAILED：任务执行失败
+    
+-   CANCELED：任务已取消
+    
+-   UNKNOWN：任务不存在或状态未知
+    
+
+**request\_id** `_string_`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+**code** `_string_`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+
+**message** `_string_`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+
+### **步骤2：根据任务ID查询结果**
 
 **北京地域**：`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 **说明**
 
 -   **轮询建议**：3D模型生成过程约需数分钟，建议采用**轮询**机制，并设置合理的查询间隔（如 15 秒）来获取结果。
+    
 -   **任务状态流转**：PENDING（排队中）→ RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
+    
 -   **task\_id 有效期**：**24小时**，超时后将无法查询结果，接口将返回任务状态为`UNKNOWN`。
--   **RPS 限制**：查询接口默认RPS为20。如需更高频查询或事件通知，建议[配置异步任务回调](raw/model-api-reference/more-about-models/async-task-api.md)。
--   **更多操作**：如需批量查询、取消任务等操作，请参见[管理异步任务](raw/model-api-reference/more-about-models/manage-asynchronous-tasks.md)。
+    
+-   **RPS 限制**：查询接口默认RPS为20。如需更高频查询或事件通知，建议[配置异步任务回调](https://help.aliyun.com/zh/model-studio/async-task-api)。
+    
+-   **更多操作**：如需批量查询、取消任务等操作，请参见[管理异步任务](https://help.aliyun.com/zh/model-studio/manage-asynchronous-tasks#f26499d72adsl)。
+    
 
 #### 请求参数
 
-##### 请求头（Headers）
-
-**Authorization**`string`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-##### URL路径参数（Path parameters）
-
-**task\_id** `string`**（必选）**
-
-任务ID。
-
-#### 查询任务结果
+## 查询任务结果
 
 将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
@@ -337,109 +357,21 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-#### 响应参数
+##### **请求头（Headers）**
 
-**output**`object`
+**Authorization** `_string_`**（必选）**
 
-任务输出信息。
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
 
-属性
+##### **URL路径参数（Path parameters）**
 
-**task\_id** `string`
+**task\_id** `_string_`**（必选）**
 
-任务ID。查询有效期24小时。
+任务ID。
 
-**task\_status** `string`
+#### **响应参数**
 
-任务状态。
-
-枚举值
-
--   PENDING：任务排队中
--   RUNNING：任务处理中
--   SUCCEEDED：任务执行成功
--   FAILED：任务执行失败
--   CANCELED：任务已取消
--   UNKNOWN：任务不存在或状态未知
-
-**轮询过程中的状态流转：**
-
--   PENDING（排队中） → RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
--   初次查询状态通常为 PENDING（排队中）或 RUNNING（处理中）。
--   当状态变为 SUCCEEDED 时，响应中将包含生成的视频URL。
--   若状态为 FAILED，请检查错误信息并重试。
--   若状态为 CANCELED，表示任务已取消，如需继续请重新提交任务。
--   若状态为 UNKNOWN，表示任务不存在或状态未知，可能在 task\_id 不存在或超过 24 小时有效期后出现。
-
-**submit\_time** `string`
-
-任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**scheduled\_time** `string`
-
-任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**end\_time** `string`
-
-任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**results**`array`
-
-生成结果列表。仅在 task\_status 为 SUCCEEDED 时返回。
-
-属性
-
-**pbr\_model\_url** `string`
-
-PBR材质模型（GLB格式）的下载URL。当请求参数中`pbr`为`true`（默认）时返回。链接有效期2小时，请及时下载。
-
-**base\_model\_url** `string`
-
-无贴图基础模型（GLB格式）的下载URL。当请求参数中`texture`和`pbr`均为`false`时返回。链接有效期2小时，请及时下载。
-
-**rendered\_image\_url** `string`
-
-3D模型预览渲染图的URL（1张）。链接有效期2小时，请及时下载。
-
-**orig\_prompt** `string`
-
-原始输入的prompt，对应请求参数`prompt`。
-
-**code**`string`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-**message**`string`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
-
-**usage** `object`
-
-输出信息统计。只对成功的结果计数。
-
-属性
-
-**3d\_task\_type** `string`
-
-3D模型生成任务类型。枚举值：
-
--   `text-to-3d`：文生3D模型。
--   `image-to-3d`：单图生3D模型。
--   `multi-image-to-3d`：多图生3D模型。
-
-**count** `integer`
-
-生成的3D模型数量。
-
-**texture\_quality** `string`
-
-贴图质量。
-
-**geometry\_quality** `string`
-
-几何精度。
-
-#### 任务执行成功
+#### **任务执行成功**
 
 ```
 {
@@ -465,9 +397,9 @@ PBR材质模型（GLB格式）的下载URL。当请求参数中`pbr`为`true`（
 }
 ```
 
-#### 任务执行失败
+## 任务执行失败
 
-若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
+若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
 
 ```
 {
@@ -481,7 +413,7 @@ PBR材质模型（GLB格式）的下载URL。当请求参数中`pbr`为`true`（
 }
 ```
 
-#### 任务查询过期
+## 任务查询过期
 
 task\_id查询有效期为 24 小时，超时后将无法查询，返回以下报错信息。
 
@@ -495,6 +427,121 @@ task\_id查询有效期为 24 小时，超时后将无法查询，返回以下�
 }
 ```
 
-## 错误码
+**output** `_object_`
 
-如果模型调用失败并返回报错信息，请参见[错误信息](raw/model-api-reference/preparations/error-code.md)进行解决。
+任务输出信息。
+
+**属性**
+
+**task\_id** `_string_`
+
+任务ID。查询有效期24小时。
+
+**task\_status** `_string_`
+
+任务状态。
+
+**枚举值**
+
+-   PENDING：任务排队中
+    
+-   RUNNING：任务处理中
+    
+-   SUCCEEDED：任务执行成功
+    
+-   FAILED：任务执行失败
+    
+-   CANCELED：任务已取消
+    
+-   UNKNOWN：任务不存在或状态未知
+    
+
+**轮询过程中的状态流转：**
+
+-   PENDING（排队中） → RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
+    
+-   初次查询状态通常为 PENDING（排队中）或 RUNNING（处理中）。
+    
+-   当状态变为 SUCCEEDED 时，响应中将包含生成的视频URL。
+    
+-   若状态为 FAILED，请检查错误信息并重试。
+    
+-   若状态为 CANCELED，表示任务已取消，如需继续请重新提交任务。
+    
+-   若状态为 UNKNOWN，表示任务不存在或状态未知，可能在 task\_id 不存在或超过 24 小时有效期后出现。
+    
+
+**submit\_time** `_string_`
+
+任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**scheduled\_time** `_string_`
+
+任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**end\_time** `_string_`
+
+任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**results** `_array_`
+
+生成结果列表。仅在 task\_status 为 SUCCEEDED 时返回。
+
+**属性**
+
+**pbr\_model\_url** `_string_`
+
+PBR材质模型（GLB格式）的下载URL。当请求参数中`pbr`为`true`（默认）时返回。链接有效期2小时，请及时下载。
+
+**base\_model\_url** `_string_`
+
+无贴图基础模型（GLB格式）的下载URL。当请求参数中`texture`和`pbr`均为`false`时返回。链接有效期2小时，请及时下载。
+
+**rendered\_image\_url** `_string_`
+
+3D模型预览渲染图的URL（1张）。链接有效期2小时，请及时下载。
+
+**orig\_prompt** `_string_`
+
+原始输入的prompt，对应请求参数`prompt`。
+
+**code** `_string_`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+
+**message** `_string_`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+
+**usage** `_object_`
+
+输出信息统计。只对成功的结果计数。
+
+**属性**
+
+**3d\_task\_type** `_string_`
+
+3D模型生成任务类型。枚举值：
+
+-   `text-to-3d`：文生3D模型。
+    
+-   `image-to-3d`：单图生3D模型。
+    
+-   `multi-image-to-3d`：多图生3D模型。
+    
+
+**count** `_integer_`
+
+生成的3D模型数量。
+
+**texture\_quality** `_string_`
+
+贴图质量。
+
+**geometry\_quality** `_string_`
+
+几何精度。
+
+## **错误码**
+
+如果模型调用失败并返回报错信息，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)进行解决。

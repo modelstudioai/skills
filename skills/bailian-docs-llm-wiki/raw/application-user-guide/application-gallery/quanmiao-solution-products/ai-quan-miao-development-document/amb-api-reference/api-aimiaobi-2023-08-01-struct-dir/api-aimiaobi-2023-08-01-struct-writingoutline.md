@@ -62,7 +62,7 @@ array
 
 大纲引用的文章列表
 
-OutlineWritingArticle
+[OutlineWritingArticle](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-struct-outlinewritingarticle)
 
 大纲引用的文章
 
@@ -72,6 +72,6 @@ array
 
 子大纲列表
 
-WritingOutline
+[WritingOutline](https://help.aliyun.com/zh/model-studio/api-aimiaobi-2023-08-01-struct-writingoutline)
 
 子大纲
