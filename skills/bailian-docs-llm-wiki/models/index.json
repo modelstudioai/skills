@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-22",
+  "updatedAt": "2026-08-23",
   "totalFamilies": 178,
   "totalModels": 401,
   "profileCoverage": {
@@ -9,8 +9,8 @@
     "none": 0
   },
   "capabilityDistribution": {
-    "TG": 36,
-    "IG": 32,
+    "TG": 37,
+    "IG": 31,
     "VG": 27,
     "TTS": 16,
     "Reasoning": 15,
@@ -27,8 +27,8 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 109,
-    "qwen-domain-model": 33,
+    "qwen": 108,
+    "qwen-domain-model": 34,
     "wan": 14,
     "happyhorse": 4,
     "pixverse": 4,
@@ -1274,21 +1274,6 @@
       "items": [
         "qwen-image-edit",
         "qwen-image-edit-plus"
-      ]
-    },
-    {
-      "slug": "qwen-image-max",
-      "name": "Qwen-Image-Max",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-image-max"
       ]
     },
     {
@@ -2575,6 +2560,22 @@
         "tongyi-intent-detect-v3"
       ],
       "maxContextWindow": 8192
+    },
+    {
+      "slug": "tongyi-xiaomi-analysis-flash",
+      "name": "伶鹊-对话分析-flash",
+      "primaryCapability": "TG",
+      "capabilities": [
+        "TG"
+      ],
+      "providers": [
+        "qwen-domain-model"
+      ],
+      "itemCount": 1,
+      "items": [
+        "tongyi-xiaomi-analysis-flash"
+      ],
+      "maxContextWindow": 32768
     },
     {
       "slug": "tongyi-xiaomi-analysis-pro",
