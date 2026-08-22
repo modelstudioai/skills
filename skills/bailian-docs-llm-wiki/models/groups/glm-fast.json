@@ -73,7 +73,7 @@
       "maxOutputTokens": 131072,
       "latestOnlineAt": "2026-07-09T02:50:34.000+00:00",
       "inferenceSpeeds": [
-        "fast"
+        "prime"
       ],
       "contextWindow": 1048576,
       "maxInputTokens": 1048576,
