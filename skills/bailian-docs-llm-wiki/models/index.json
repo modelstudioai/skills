@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-23",
+  "updatedAt": "2026-08-24",
   "totalFamilies": 178,
   "totalModels": 401,
   "profileCoverage": {
@@ -9,8 +9,8 @@
     "none": 0
   },
   "capabilityDistribution": {
-    "TG": 37,
-    "IG": 31,
+    "TG": 36,
+    "IG": 32,
     "VG": 27,
     "TTS": 16,
     "Reasoning": 15,
@@ -27,8 +27,8 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 108,
-    "qwen-domain-model": 34,
+    "qwen": 109,
+    "qwen-domain-model": 33,
     "wan": 14,
     "happyhorse": 4,
     "pixverse": 4,
@@ -1066,22 +1066,6 @@
       ]
     },
     {
-      "slug": "qwen-coder-plus",
-      "name": "Qwen-Coder-Plus",
-      "primaryCapability": "TG",
-      "capabilities": [
-        "TG"
-      ],
-      "providers": [
-        "qwen-domain-model"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-coder-plus"
-      ],
-      "maxContextWindow": 131072
-    },
-    {
       "slug": "qwen-coder-turbo",
       "name": "Qwen-Coder-Turbo",
       "primaryCapability": "TG",
@@ -1274,6 +1258,21 @@
       "items": [
         "qwen-image-edit",
         "qwen-image-edit-plus"
+      ]
+    },
+    {
+      "slug": "qwen-image-max",
+      "name": "Qwen-Image-Max",
+      "primaryCapability": "IG",
+      "capabilities": [
+        "IG"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen-image-max"
       ]
     },
     {
