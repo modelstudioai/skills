@@ -299,7 +299,7 @@
           "priceName": "图片生成（2K）"
         },
         {
-          "priceUnit": "每秒",
+          "priceUnit": "每张",
           "price": "0.4",
           "timeBand": "standard",
           "type": "image_type_4k",

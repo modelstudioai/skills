@@ -4,7 +4,11 @@
 
 **重要**
 
-本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+三方直供模型 kimi/kimi-k2.5 将于**2026年8月31日**下架。推荐转用：[kimi-k2.6](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/kimi-k2.6) 或其他模型。
+
+**重要**
+
+本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
 
 ## **服务开通**
 
@@ -19,7 +23,7 @@
 
 **前提条件**
 
--   需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)
+-   需要已[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)
     
 -   如果通过SDK调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk#8833b9274f4v8)
     
@@ -119,7 +123,7 @@ const messages = [
 const response = await client.chat.completions.create({
   model: "kimi/kimi-k3",
   messages,
-  extra_body: { reasoning_effort: "max" },
+  reasoning_effort: "max",
 });
 
 const msg = response.choices[0].message;

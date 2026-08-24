@@ -34,7 +34,7 @@ Function Calling
 
 结构化输出
 
-支持
+不支持
 
 联网搜索
 

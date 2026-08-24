@@ -2,6 +2,10 @@
 
 Kimi K2.5 是 Kimi 在2026年最新推出的智能模型，在 Agent、代码、视觉理解及一系列通用智能任务上取得开源 SoTA 表现。同时 Kimi K2.5 也是 Kimi 迄今最全能的模型，原生的多模态架构设计，同时支持视觉与文本输入、思考与非思考模式、对话与 Agent 任务。
 
+**重要**
+
+三方直供模型 kimi/kimi-k2.5 将于**2026年8月31日**下架。推荐转用：[kimi-k2.6](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/kimi-k2.6) 或其他模型。
+
 ## 推理服务供应商
 
 `kimi/kimi-k2.5`模型的推理服务供应商为月之暗面。

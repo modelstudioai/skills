@@ -92,7 +92,7 @@ Function Calling
 
 单位
 
-语音识别
+音频时长
 
 0.00026
 
@@ -208,7 +208,7 @@ Function Calling
 
 单位
 
-语音识别
+音频时长
 
 0.00026
 

@@ -8,6 +8,60 @@ Qwen3.5-Omni是Qwen最新一代全模态大模型，支持文本，图片，音�
 
 ## 模型能力
 
+## 华北2（北京）
+
+能力项
+
+支持情况
+
+能力项
+
+支持情况
+
+输入模态
+
+**Text**　**Image**　**Video**　**Audio**
+
+输出模态
+
+**Text**　**Audio**
+
+模型体验
+
+不支持
+
+Function Calling
+
+不支持
+
+结构化输出
+
+不支持
+
+联网搜索
+
+支持
+
+前缀续写
+
+不支持
+
+上下文缓存
+
+不支持
+
+批量推理
+
+支持
+
+模型调优
+
+不支持
+
+## 新加坡
+
+部署范围：国际
+
 能力项
 
 支持情况
@@ -109,6 +163,42 @@ Function Calling
 每百万tokens
 
 输出：文本
+
+13.3
+
+每百万tokens
+
+输入：音频（Batch File）
+
+9
+
+每百万tokens
+
+输入：文本/图片/视频（Batch File）
+
+1.1
+
+每百万tokens
+
+输出：文本（Batch File）
+
+6.65
+
+每百万tokens
+
+输入：音频（Batch Chat）
+
+18
+
+每百万tokens
+
+输入：文本/图片/视频（Batch Chat）
+
+2.2
+
+每百万tokens
+
+输出：文本（Batch Chat）
 
 13.3
 

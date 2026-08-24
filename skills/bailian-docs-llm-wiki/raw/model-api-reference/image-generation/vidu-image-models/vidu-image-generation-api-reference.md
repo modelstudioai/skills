@@ -18,6 +18,10 @@ Vidu-参考生图模型支持**文生图**、**图片编辑、参考图生图等
 
 vidu/vidu-image\_reference2image
 
+vidu/vidu-image-pro\_reference2image
+
+vidu/vidu-image-lite\_reference2image
+
 支持参考生图、文生图、图片编辑，对中英文字的精准渲染、UI/图表等设计细节的像素级还原，适合制作海报、信息图等。
 
 文本、图像
@@ -175,6 +179,10 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 模型名称。可选值：
 
 -   `vidu/vidu-image_reference2image`
+    
+-   `vidu/vidu-image-pro_reference2image`
+    
+-   `vidu/vidu-image-lite_reference2image`
     
 -   `vidu/viduq3-fast_reference2image`
     
@@ -479,7 +487,7 @@ curl --location --request GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.co
 
 ## **可用尺寸列表**
 
-### vidu-image
+### vidu-image、vidu-image-pro、vidu-image-lite
 
 **分辨率**
 

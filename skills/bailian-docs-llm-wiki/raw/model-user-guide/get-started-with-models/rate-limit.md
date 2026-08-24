@@ -4498,6 +4498,22 @@ Moonshot-Kimi-K2-Instruct
 
 > **含输入与输出Token**
 
+kimi-k3
+
+全球
+
+15,000
+
+1,200,000
+
+kimi-k3
+
+国际
+
+10,000
+
+1,200,000
+
 kimi-k2.7-code
 
 全球
@@ -5832,13 +5848,17 @@ kling/kling-v3-image-generation
 
 **同时处理中任务数量（并发数）**
 
-vidu/vidu-image\_reference2image
+vidu/vidu-image-pro\_reference2image
 
 300
 
 5
 
-> 同一个阿里云百炼API Key 下，Vidu参考生图系列的 4 个模型共享 5 个并发数。即这 4 个模型处于运行状态的任务总数加起来不能超过 5 个。
+> 同一个阿里云百炼API Key 下，Vidu参考生图系列的模型共享 5 个并发数。即所有模型处于运行状态的任务总数加起来不能超过 5 个。
+
+vidu/vidu-image-lite\_reference2image
+
+vidu/vidu-image\_reference2image
 
 vidu/viduq3-fast\_reference2image
 
@@ -7270,6 +7290,18 @@ happyhorse-1.0-video-edit
 
 **同时处理中任务数量（并发数）**
 
+wan3.0-video-prime
+
+5
+
+5
+
+wan3.0-video
+
+5
+
+5
+
 wan2.7-r2v-2026-06-12
 
 5
@@ -7456,9 +7488,25 @@ wan2.2-animate-mix
 
 **同时处理中任务数量（并发数）**
 
+wan3.0-video-prime
+
+全球
+
+5
+
+5
+
+wan3.0-video
+
+全球
+
+5
+
+5
+
 wan2.7-r2v-2026-06-12
 
-国际
+全球
 
 5
 
@@ -7515,6 +7563,22 @@ wan2.6-i2v-us
 **每秒钟任务下发接口RPS限制**
 
 **同时处理中任务数量（并发数）**
+
+wan3.0-video-prime
+
+国际
+
+5
+
+5
+
+wan3.0-video
+
+国际
+
+5
+
+5
 
 wan2.7-t2v-2026-06-12
 
@@ -7720,6 +7784,22 @@ wan2.2-animate-mix
 
 **同时处理中任务数量（并发数）**
 
+wan3.0-video-prime
+
+全球
+
+5
+
+5
+
+wan3.0-video
+
+全球
+
+5
+
+5
+
 wan2.6-t2v
 
 全球
@@ -7737,6 +7817,34 @@ wan2.6-i2v
 5
 
 wan2.6-r2v
+
+全球
+
+5
+
+5
+
+## **日本（东京）**
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+**每秒钟任务下发接口RPS限制**
+
+**同时处理中任务数量（并发数）**
+
+wan3.0-video-prime
+
+全球
+
+5
+
+5
+
+wan3.0-video
 
 全球
 
@@ -8096,6 +8204,24 @@ vidu/viduq2\_reference2video
 
 5
 
+### **MiniMax系列**
+
+## **华北2（北京）**
+
+**模型名称**
+
+**限流条件（超出任一数值时触发限流）**
+
+**每分钟任务下发接口RPM限制**
+
+**同时处理中任务数量（并发数）**
+
+MiniMax/MiniMax-H3
+
+300
+
+5
+
 ## **3D模型生成-第三方模型**
 
 ### **Tripo系列**
@@ -8139,6 +8265,12 @@ Tripo/Tripo-P1.0
 > **仅输入Token**
 
 qwen3.7-text-embedding
+
+24,000
+
+1,000,000
+
+qwen3.7-text-embedding-flash
 
 24,000
 

@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 178 个模型家族 · 401 个主干模型 · 更新于 2026-08-24
+> 自动生成 · 共 180 个模型家族 · 406 个主干模型 · 更新于 2026-08-25
 
 **机器查询走结构化文件**：
 
@@ -17,7 +17,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 `notSuitableFor: []` 表示无已知限制。`profileCompleteness` 为 `structured-only` 时该画像未读过文档，仅机械字段可信。
 硬规格（价格/QPM/contextWindow/openSource）一律看行内顶层字段，不要从 profile 里找。
 
-## 文本生成 `TG` — 36 个家族
+## 文本生成 `TG` — 37 个家族
 
 - [DeepSeek](groups/deepseek.json) — DeepSeek是由深度求索提供的开源模型，包含 V3.1、V3、R1以及基于Qwen2.5系列蒸馏的大语言模型。
   - 模型：`deepseek-r1`, `deepseek-r1-0528`, `deepseek-r1-distill-qwen-1.5b`, `deepseek-r1-distill-qwen-14b`, `deepseek-r1-distill-qwen-32b`, `deepseek-r1-distill-qwen-7b`, `deepseek-v3`, `deepseek-v3.1`, `deepseek-v3.2`, `deepseek-v3.2-exp`, `deepseek-v4-flash`, `deepseek-v4-flash-0731`, `deepseek-v4-pro`, `deepseek-v4-pro-0813`
@@ -33,6 +33,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`xiaomi/mimo-v2.5-pro`
 - [MiniMax文本模型](groups/minimax-models-market-place.json) — 由MiniMax提供的MiniMax-M系列文本模型API服务。
   - 模型：`MiniMax/MiniMax-M2.1`, `MiniMax/MiniMax-M2.5`, `MiniMax/MiniMax-M2.7`, `MiniMax/MiniMax-M3`
+- [Qwen-Coder-Plus](groups/qwen-coder-plus.json) — 千问系列代码及编程模型是专门用于编程和代码生成的语言模型，性能出色，效果突出。
+  - 模型：`qwen-coder-plus`
 - [Qwen-Coder-Turbo](groups/qwen-coder-turbo.json) — Qwen-Coder-Turbo模型是专门用于编程和代码生成的语言模型，推理速度快，成本低。
   - 模型：`qwen-coder-turbo`
 - [qwen-deep-research](groups/qwen-deep-research.json) — 千问深入研究是一款面向复杂研究任务的高级智能体系统，具备多轮推理与全局规划能力，能够运用互联网搜索等多种工具，对任务进行精细化拆解，开展推理与分析，最终为用户生成可溯源、逻辑严谨的研究型报告。
@@ -125,7 +127,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen-MT-Image](groups/qwen-mt-image.json) — 专注做图片翻译的模型服务，能将中、英、日等11个语言的图片翻译到指定的语言，精准还原图片排版和内容信息，支持术语定义、敏感词过滤、商品主体检测等自定义功能，提供灵活、准确、高效的图像本地化服务。
   - 模型：`qwen-mt-image`
 - [Vidu AI生图](groups/vidu-image-models-market-place.json) — 由生数科技提供Vidu系列图片生成API服务，多图参考，精准还原，高速高质。
-  - 模型：`vidu/vidu-image_reference2image`, `vidu/viduq2-fast_reference2image`, `vidu/viduq2-pro_reference2image`, `vidu/viduq3-fast_reference2image`
+  - 模型：`vidu/vidu-image_reference2image`, `vidu/vidu-image-lite_reference2image`, `vidu/vidu-image-pro_reference2image`, `vidu/viduq2-fast_reference2image`, `vidu/viduq2-pro_reference2image`, `vidu/viduq3-fast_reference2image`
 - [Wan-Image](groups/wan-image-edit.json) — 指令编辑图片内容，轻松实现局部修改、风格变化、一致性保持等
   - 模型：`wan2.5-i2i-preview`, `wan2.6-image`, `wan2.7-image`, `wan2.7-image-pro`, `wanx2.1-imageedit`
 - [Wan-T2I](groups/wan-text-to-image.json) — 文字生成图片，写实质感细腻画面，文字内容生成，艺术风格表现
@@ -159,7 +161,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [鞋靴模特](groups/shoemodel-v1.json) — 鞋靴模特支持输入多视角鞋靴系列图片，同时对输入模特模板图的鞋子区域进行鞋靴AI试穿，实现模特鞋靴布局重绘生成，最终生成图片的效果, 布局自然、细节丰富、画面细腻、试穿结果逼真。可用于模特商品图设计、新…
   - 模型：`shoemodel-v1`
 
-## 视频生成 `VG` — 27 个家族
+## 视频生成 `VG` — 28 个家族
 
 - [HappyHorse-I2V](groups/happyhorse-i2v.json) — HappyHorse系列最新图生视频模型，具备高度还原的动态画面生成能力，能够稳定保持与图像一致性，输出流畅自然、细节丰富的高质量视频。
   - 模型：`happyhorse-1.0-i2v`, `happyhorse-1.1-i2v`
@@ -169,6 +171,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`happyhorse-1.0-t2v`, `happyhorse-1.1-t2v`
 - [HappyHorse-Video-Edit](groups/happyhorse-video-edit.json) — HappyHorse-Video-Edit支持视频编辑，自然语言指令编辑视频，可参考最多5张图片局部或全局编辑视频元素，能够精准复刻视频动态过程，实现更强表现能力。
   - 模型：`happyhorse-1.0-video-edit`
+- [MiniMax视频模型](groups/MiniMax-video-market-place.json) — 由MiniMax提供的MiniMax-H系列视频模型API服务。
+  - 模型：`MiniMax/MiniMax-H3`
 - [PixVerse C1](groups/pixverse-c1-market-place.json) — 由爱诗科技提供的PixVerse C系列视频大模型API服务。
   - 模型：`pixverse/pixverse-c1-it2v`, `pixverse/pixverse-c1-kf2v`, `pixverse/pixverse-c1-r2v`, `pixverse/pixverse-c1-t2v`
 - [PixVerse Capabilities](groups/pixverse-capability-market-place.json) — 由爱诗科技提供的视频原子能力大模型API服务。
@@ -186,7 +190,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Wan-T2V](groups/wan-text-to-video.json) — 文字生成视频内容，丝滑动态能力，电影美学控制，精准指令遵循
   - 模型：`wan2.2-t2v-plus`, `wan2.5-t2v-preview`, `wan2.6-t2v`, `wan2.7-t2v`, `wanx2.1-t2v-plus`, `wanx2.1-t2v-turbo`
 - [Wan-Video](groups/wan-video.json) — 多模态全能参考，灵活可控生成视频内容，轻松实现故事创作、创意表达、营销物料制作等
-  - 模型：`wan3.0-video`
+  - 模型：`wan3.0-video`, `wan3.0-video-prime`
 - [Wan-VideoEdit](groups/wan-video-edit.json) — 通过指令对视频进行编辑，支持局部/整体编辑、视频重塑、视频复刻等
   - 模型：`wan2.7-videoedit`
 - [Wan2.1-VACE-Plus](groups/wanx2.1-vace-plus.json) — 万相2.1-VACE-Plus，视频编辑统一模型。支持局部编辑、视频重绘、背景扩展、时长延展、图片参考等多种视频编辑与生成任务，支持文本、图像、视频等多模态条件控制。

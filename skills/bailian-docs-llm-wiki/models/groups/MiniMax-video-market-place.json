@@ -1,0 +1,78 @@
+{
+  "name": "MiniMax视频模型",
+  "description": "由MiniMax提供的MiniMax-H系列视频模型API服务。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Text",
+          "Image",
+          "Video",
+          "Audio"
+        ]
+      },
+      "description": "MiniMax H3 是一个通用型全模态生成系统。它能够统一理解由文本、图像、视频和音频构成的多模态上下文，并可生成最高 2K 分辨率、最长 15 秒、带有原生立体声音频的视频。得益于以任务泛化为导向的系统设计，H3 在预训练阶段便已具备广泛的多模态上下文理解与生成能力，因此能够出色地遵循复杂的多模态指令。",
+      "features": [],
+      "provider": "mini-max",
+      "model": "MiniMax/MiniMax-H3",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.5",
+          "type": "video_ratio_768p",
+          "priceName": "视频生成（768P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.8",
+          "type": "video_ratio_2k",
+          "priceName": "视频生成（2K）"
+        },
+        {
+          "priceUnit": "每张",
+          "price": "0.2",
+          "type": "image_input_first_5_free",
+          "priceName": "图片输入（五张内免费）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-08-17T03:02:06.000+00:00",
+      "inferenceProvider": "mini-max",
+      "name": "MiniMax/MiniMax-H3",
+      "docUrl": "https://help.aliyun.com/document_detail/3052216.html",
+      "category": "Third-party",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"MiniMax/MiniMax-H3\",\n    \"input\": {\n        \"prompt\": \"史诗级太空歌剧院线预告：女舰长独自站在巨大观景窗前，最后一支舰队正在集结并跃迁离去，强光爆闪、舰桥震动，她被留在原地。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"768P\",\n        \"ratio\": \"16:9\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3052216.html"
+          }
+        }
+      }
+    }
+  ]
+}

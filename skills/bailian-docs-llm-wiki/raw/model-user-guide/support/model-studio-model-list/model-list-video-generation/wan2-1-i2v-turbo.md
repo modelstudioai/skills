@@ -2,6 +2,10 @@
 
 Wan2.1 image to video Turbo version, make the static image generated video. Support for large and complex movements, adherence to physical laws, artistic styles, and visual quality of movies. The ability to follow instructions is further improved, and generation more fast.
 
+## 推理服务供应商
+
+`wan2.1-i2v-turbo`模型的推理服务供应商为阿里云百炼。
+
 ## 模型能力
 
 能力项

@@ -14,6 +14,91 @@
           "Video"
         ]
       },
+      "description": "Wan3.0-Video-Prime 是万相3.0 的高速版视频生成模型，能力对齐 Wan3.0-Video 标准版，支持四模态全能参考，最长可生成30秒视频，带来沉浸式视听体验的同时端到端速度显著提升。",
+      "collectionTag": "wan3.0",
+      "features": [],
+      "provider": "wan",
+      "model": "wan3.0-video-prime",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.45",
+          "timeBand": "standard",
+          "type": "video_ratio_480p",
+          "priceName": "视频生成（480P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.9",
+          "timeBand": "standard",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1.8",
+          "timeBand": "standard",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "async_task_pending_timeout": 1440,
+          "count_limit": 300,
+          "async_task_timeout": 480,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "async_task_pending_timeout": 1440,
+          "count_limit": 300,
+          "async_task_timeout": 480,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-08-20T10:08:52.000+00:00",
+      "inferenceSpeeds": [
+        "prime"
+      ],
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Wan3.0-Video-Prime",
+      "docUrl": "https://help.aliyun.com/document_detail/3049634.html",
+      "category": "Wan",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"wan3.0-video-prime\",\n    \"input\": {\n        \"prompt\": \"一只小猫在月光下的屋顶上奔跑，城市的霓虹灯在远处闪烁，电影级画质，流畅运镜。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"480P\",\n        \"ratio\": \"adaptive\",\n        \"duration\": 5\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3049634.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Audio",
+          "Image",
+          "Text",
+          "Video"
+        ]
+      },
       "description": "万相3.0是 all-in-one 视频生成模型，统一支持参考、编辑、复刻、驱动等多种创作功能，四模态全能参考，最长支持30秒视频生成，可解析文件、网页及复杂图片。生产级角色一致性保持，音画真实，带来身临其境的视听冲击力。",
       "collectionTag": "wan3.0",
       "features": [
@@ -25,18 +110,21 @@
         {
           "priceUnit": "每秒",
           "price": "0.3",
+          "discount": 0.7,
           "type": "video_ratio_480p",
           "priceName": "视频生成（480P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.6",
+          "discount": 0.7,
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
         {
           "priceUnit": "每秒",
           "price": "1.2",
+          "discount": 0.7,
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -44,18 +132,18 @@
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 60,
-          "async_user_queue_limit": 200,
+          "async_user_queue_limit": 500,
           "async_task_pending_timeout": 1440,
-          "count_limit": 50,
+          "count_limit": 300,
           "async_task_timeout": 480,
           "type": "model-default",
           "async_user_concurrency_limit": 5
         },
         "model-default": {
           "count_limit_period": 60,
-          "async_user_queue_limit": 200,
+          "async_user_queue_limit": 500,
           "async_task_pending_timeout": 1440,
-          "count_limit": 50,
+          "count_limit": 300,
           "async_task_timeout": 480,
           "type": "model-default",
           "async_user_concurrency_limit": 5
