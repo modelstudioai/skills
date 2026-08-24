@@ -123,7 +123,7 @@ RAM 子账号授权与**席位分配**是两个独立的概念：RAM 授权决�
 
 ### **被分配席位的成员如何查看自己的用量？为什么在自己账号下看不到 Token Plan？**
 
-团队版订阅归属于购买者账号。被分配席位的成员无法在自己账号下查看 Token Plan 订阅或用量明细——**用量分析为所有者功能**，需由购买者（所有者）在 Token Plan 控制台的**用量分析**页面查看各成员的 Credits 消耗，详见[团队管理](https://help.aliyun.com/zh/model-studio/token-plan-team-management)。添加席位时系统会为成员自动生成专属 API Key，成员使用该 Key 即可调用模型，无需在自己账号下查看订阅。
+团队版订阅归属于购买者账号。被分配席位的成员无法在自己账号下查看 Token Plan 订阅或用量明细——**用量分析为所有者功能**，需由购买者（所有者）在 Token Plan 控制台的**用量分析**页面查看各成员的 Credits 消耗，详见[团队管理](https://help.aliyun.com/zh/model-studio/token-plan-team-management)。添加席位时系统会为成员自动生成独立的 API Key，成员使用该 Key 即可调用模型，无需在自己账号下查看订阅。
 
 ### **可以升配吗？升配后额度怎么算？**
 
@@ -137,17 +137,13 @@ RAM 子账号授权与**席位分配**是两个独立的概念：RAM 授权决�
 
 登录[费用中心 > 续费管理](https://usercenter2.aliyun.com/finance/renew-manage)，找到 Token Plan 团队版订单，关闭自动续费。
 
-### **续费时可以更换订阅时长吗？**
-
-不可以。续费仅支持按原订阅时长续费。如需更换订阅时长，可在订阅到期后重新购买。
-
 ### **续费后需要重新配置 API Key 吗？**
 
 不需要。续费仅延长当前订阅的有效期，不会影响已分配席位的 API Key 和 Base URL，成员无需在工具中重新配置。仅当订阅到期后重新购买、或退订席位后重新购买时，系统才会生成新的 API Key 和 Base URL，此时需在工具中重新配置，可在控制台**我的订阅**页面的 API Key 区域获取。
 
 ### **限时优惠的计费规则是什么？**
 
-限时优惠适用于包月订阅的新购、续费、自动续费、加购坐席和升级坐席，包年订阅不参与。
+限时优惠适用于新购、续费、自动续费、加购坐席和升级坐席。
 
 加购坐席或升级坐席（如标准坐席升级为高级坐席）时，按剩余时长折算费用，实际收费取折算金额与限时价中的较低值。
 
@@ -184,7 +180,7 @@ RAM 子账号授权与**席位分配**是两个独立的概念：RAM 授权决�
 
 误用了按量计费的 API Key 或 Coding Plan 的 Key；订阅过期；Key 复制不完整
 
-确认使用 Token Plan 团队版专属 API Key，确保完整且无空格
+确认使用 Token Plan 团队版套餐 API Key，确保完整且无空格
 
 404 model 'xxx' not found or not supported
 
@@ -196,13 +192,13 @@ RAM 子账号授权与**席位分配**是两个独立的概念：RAM 授权决�
 
 误用了 Coding Plan 或其他计费模式的 Base URL
 
-使用 Token Plan 团队版专属 Base URL
+使用 Token Plan 团队版套餐 Base URL
 
 401 Incorrect API key provided
 
 误用了百炼通用 Base URL（dashscope.aliyuncs.com）
 
-使用 Token Plan 团队版专属 Base URL
+使用 Token Plan 团队版套餐 Base URL
 
 400 Range of input length should be \[1, xxx\]
 

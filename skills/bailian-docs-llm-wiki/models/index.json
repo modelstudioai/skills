@@ -1,17 +1,17 @@
 {
-  "updatedAt": "2026-08-24",
-  "totalFamilies": 178,
-  "totalModels": 401,
+  "updatedAt": "2026-08-25",
+  "totalFamilies": 180,
+  "totalModels": 406,
   "profileCoverage": {
     "full": 0,
     "partial": 0,
-    "structured-only": 401,
+    "structured-only": 406,
     "none": 0
   },
   "capabilityDistribution": {
-    "TG": 36,
+    "TG": 37,
     "IG": 32,
-    "VG": 27,
+    "VG": 28,
     "TTS": 16,
     "Reasoning": 15,
     "ASR": 14,
@@ -28,11 +28,11 @@
   },
   "providerDistribution": {
     "qwen": 109,
-    "qwen-domain-model": 33,
+    "qwen-domain-model": 34,
     "wan": 14,
+    "mini-max": 4,
     "happyhorse": 4,
     "pixverse": 4,
-    "mini-max": 3,
     "deepseek": 3,
     "zhipu-ai": 3,
     "moonshot-ai": 2,
@@ -100,6 +100,21 @@
         "MiniMax/speech-02-turbo",
         "MiniMax/speech-2.8-hd",
         "MiniMax/speech-2.8-turbo"
+      ]
+    },
+    {
+      "slug": "MiniMax-video-market-place",
+      "name": "MiniMax视频模型",
+      "primaryCapability": "VG",
+      "capabilities": [
+        "VG"
+      ],
+      "providers": [
+        "mini-max"
+      ],
+      "itemCount": 1,
+      "items": [
+        "MiniMax/MiniMax-H3"
       ]
     },
     {
@@ -1064,6 +1079,22 @@
         "qwen-audio-3.0-tts-flash",
         "qwen-audio-3.0-tts-plus"
       ]
+    },
+    {
+      "slug": "qwen-coder-plus",
+      "name": "Qwen-Coder-Plus",
+      "primaryCapability": "TG",
+      "capabilities": [
+        "TG"
+      ],
+      "providers": [
+        "qwen-domain-model"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen-coder-plus"
+      ],
+      "maxContextWindow": 131072
     },
     {
       "slug": "qwen-coder-turbo",
@@ -2671,9 +2702,11 @@
       "providers": [
         "vidu"
       ],
-      "itemCount": 4,
+      "itemCount": 6,
       "items": [
         "vidu/vidu-image_reference2image",
+        "vidu/vidu-image-lite_reference2image",
+        "vidu/vidu-image-pro_reference2image",
         "vidu/viduq2-fast_reference2image",
         "vidu/viduq2-pro_reference2image",
         "vidu/viduq3-fast_reference2image"
@@ -2875,9 +2908,10 @@
       "providers": [
         "wan"
       ],
-      "itemCount": 1,
+      "itemCount": 2,
       "items": [
-        "wan3.0-video"
+        "wan3.0-video",
+        "wan3.0-video-prime"
       ]
     },
     {

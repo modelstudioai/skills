@@ -6,20 +6,6 @@
 
 Token Plan 个人版目前仅支持**华北2（北京）**地域。
 
-**购买渠道**：您可通过以下渠道购买 Token Plan 个人版套餐：
-
--   [千问云](https://www.qianwenai.com/benefits/tokenplan)
-    
--   [百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/overview)
-    
-
-**控制台入口**：您可通过以下入口管理 Token Plan 订阅：
-
--   [千问云控制台](https://platform.qianwenai.com/home/billing/subscription/token-plan-individual)
-    
--   [百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/overview)
-    
-
 ## **核心特性**
 
 -   **Credits 统一计量**：通过 Credits 统一抵扣不同模型和 Harness 工具的费用。

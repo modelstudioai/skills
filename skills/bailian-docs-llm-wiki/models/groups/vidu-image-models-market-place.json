@@ -82,6 +82,146 @@
           "Image"
         ]
       },
+      "description": "输入0-14张参考图片或文本描述，支持参考生图、文生图、图片编辑，对中英文字的精准渲染、UI/图表等设计细节的像素级还原，适合制作海报、信息图等。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/vidu-image-pro_reference2image",
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "1.6875",
+          "type": "image_type_1k",
+          "priceName": "图片生成（1K）"
+        },
+        {
+          "priceUnit": "每张",
+          "price": "3.1875",
+          "type": "image_type_2k",
+          "priceName": "图片生成（2K）"
+        },
+        {
+          "priceUnit": "每张",
+          "price": "5.125",
+          "type": "image_type_4k",
+          "priceName": "图片生成（4K）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "IG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-08-24T02:33:08.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "Vidu-image-pro_reference2image",
+      "docUrl": "https://help.aliyun.com/document_detail/3045893.html",
+      "category": "Third-party",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"vidu/vidu-image-pro_reference2image\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"一间有着精致窗户的花店,漂亮的木质门,摆放着花朵\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n      \"size\":\"1024*1024\"\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3045893.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Image"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "description": "输入0-14张参考图片或文本描述，支持参考生图、文生图、图片编辑，对中英文字的精准渲染、UI/图表等设计细节的像素级还原，适合制作海报、信息图等。",
+      "features": [],
+      "provider": "vidu",
+      "model": "vidu/vidu-image-lite_reference2image",
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.3125",
+          "type": "image_type_1k",
+          "priceName": "图片生成（1K）"
+        },
+        {
+          "priceUnit": "每张",
+          "price": "0.34375",
+          "type": "image_type_2k",
+          "priceName": "图片生成（2K）"
+        },
+        {
+          "priceUnit": "每张",
+          "price": "0.40625",
+          "type": "image_type_4k",
+          "priceName": "图片生成（4K）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "IG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-08-24T02:33:21.000+00:00",
+      "inferenceProvider": "vidu",
+      "name": "Vidu-image-lite_reference2image",
+      "docUrl": "https://help.aliyun.com/document_detail/3045893.html",
+      "category": "Third-party",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"vidu/vidu-image-lite_reference2image\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"一间有着精致窗户的花店,漂亮的木质门,摆放着花朵\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n      \"size\":\"1024*1024\"\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3045893.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Image"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
       "description": "输入0-14张参考图片或文本描述，支持参考生图、文生图、图片编辑，主打高速高质与低成本，成本比Pro降低约50%。",
       "features": [],
       "provider": "vidu",

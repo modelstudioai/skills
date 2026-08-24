@@ -320,7 +320,7 @@ text、image、video
 
 ## HTTP调用
 
-`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/multimodal-embedding/multimodal-embedding`
+`POST https://dashscope.aliyuncs.com/api/v1/services/embeddings/multimodal-embedding/multimodal-embedding`
 
 ### **请求**
 
@@ -329,7 +329,7 @@ text、image、video
 > 以下示例使用 `tongyi-embedding-vision-plus` 模型生成独立向量（每个输入各自生成 1 个向量），也可替换为其他模型名称。其中 `multi_images` 类型仅 `tongyi-embedding-vision-plus` 和 `tongyi-embedding-vision-flash` 支持。`qwen3-vl-embedding` 额外支持融合向量模式，通过设置 `enable_fusion=true` 开启，详见"多模态融合向量"标签页。
 
 ```
-curl --silent --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/multimodal-embedding/multimodal-embedding' \
+curl --silent --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/multimodal-embedding/multimodal-embedding' \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header 'Content-Type: application/json' \
     --data '{
@@ -354,7 +354,7 @@ curl --silent --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.a
 > `qwen3-vl-embedding`支持融合向量生成，通过设置 `enable_fusion=true` 将所有输入融合为 1 个向量。支持文本+图片、文本+视频、多图+文本、图片+视频+文本等多种融合组合。以下示例展示多图+视频+文本的混合融合。
 
 ```
-curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/multimodal-embedding/multimodal-embedding' \
+curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/multimodal-embedding/multimodal-embedding' \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header 'Content-Type: application/json' \
     --data '{
@@ -378,7 +378,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 > `tongyi-embedding-vision-plus-2026-03-06` 和 `tongyi-embedding-vision-flash-2026-03-06` 是基于 Qwen3 底座的新版模型，支持 `res_level`（多分辨率）和 `max_video_frames`（视频帧数）参数，同时支持独立向量和融合向量生成。
 
 ```
-curl --silent --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/multimodal-embedding/multimodal-embedding' \
+curl --silent --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/multimodal-embedding/multimodal-embedding' \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header 'Content-Type: application/json' \
     --data '{
@@ -405,7 +405,7 @@ curl --silent --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.a
 以下示例展示 2026-03-06 版本的**融合向量**用法：将 text、image、video 放在同一个 content 对象中，模型会将所有输入融合编码为 1 个向量（type 为 `fused`）。
 
 ```
-curl --silent --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/multimodal-embedding/multimodal-embedding' \
+curl --silent --location --request POST 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/multimodal-embedding/multimodal-embedding' \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header 'Content-Type: application/json' \
     --data '{
@@ -554,7 +554,7 @@ contents `_array_`**（必选）**
         ]
     },
     "usage": {
-        "input_tokens": 10,
+        "input_tokens": 903,
         "input_tokens_details": {
             "image_tokens": 896,
             "text_tokens": 7
@@ -601,6 +601,64 @@ contents `_array_`**（必选）**
     "request_id":"fb53c4ec-1c12-4fc4-a580-cdb7c3261fc1"
 }
 ```
+
+本 API 常见的错误码及排查方向如下。完整错误码请参见[通用错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+
+**错误码**
+
+**HTTP 状态码**
+
+**触发条件**
+
+**排查建议**
+
+`InvalidApiKey`
+
+401
+
+API Key 无效或已过期，返回 `Invalid API-key provided.`
+
+确认 `Authorization` 请求头为 `Bearer sk-xxx` 格式，且使用的是当前账号下有效的 API Key。
+
+`BadRequest.EmptyModel`
+
+400
+
+请求中缺少 `model` 字段，返回 `Required parameter model missing from request.`
+
+在请求体中补充 `model` 字段，取值使用本文模型列表中的模型名称。
+
+`InvalidParameter`
+
+400
+
+`model` 取值不存在，返回 `Model not exist.`
+
+核对 `model` 拼写，并确认该模型在当前地域的模型列表中已列出。
+
+`InvalidParameter`
+
+400
+
+`input.contents` 缺失或为空数组，返回 `input can not be empty: input.contents` 或 `contents input can not be empty: input.contents`
+
+确认 `input.contents` 存在且为非空数组，数组中每个元素包含有效的 `text`、`image` 或 `video` 键。
+
+`InvalidParameter`
+
+400
+
+`dimension` 取值不在所选模型支持的向量维度范围内。
+
+按本文模型列表中该模型支持的向量维度取值；`multimodal-embedding-v1` 不支持 `dimension` 参数，固定为 1024 维。
+
+`InternalError.Algo`
+
+500
+
+请求体结构不完整或 `input.contents` 元素格式异常，导致服务端处理失败。
+
+检查请求体结构，确认 `input` 及 `input.contents` 字段存在且元素格式符合本文请求参数说明；结构无误仍持续报错时，携带 `request_id` 联系技术支持。
 
 **output** `_object_`
 
@@ -656,11 +714,11 @@ contents `_array_`**（必选）**
 
 **image\_tokens** `_int_`
 
-输入的图片或视频的 Token 数量。
+输入内容中图片或视频等**视觉部分**消耗的 Token 数量，**不包含文本**（文本部分见 `text_tokens`）。图片消耗的 Token 数量与输入图片的分辨率有关，分辨率越高消耗的 Token 越多；若输入为视频，系统会先对视频抽帧，再基于抽帧结果计算 Token。
 
 **text\_tokens** `_int_`
 
-输入的文本的 Token 数量。
+输入内容中**文本部分**消耗的 Token 数量（不包含图片或视频等视觉部分）。
 
 **output\_tokens** `_int_`
 
@@ -672,7 +730,7 @@ contents `_array_`**（必选）**
 
 **image\_tokens** `_int_`
 
-本次请求输入的图片或视频的 Token 数量。系统会对输入视频进行抽帧处理，帧数上限受系统配置控制，随后基于处理结果计算 Token。仅 `qwen3-vl-embedding`、`qwen2.5-vl-embedding` 和 `multimodal-embedding-v1` 返回此字段（作为顶层字段），`tongyi-embedding-vision-*` 系列模型的图片 Token 包含在 `input_tokens_details.image_tokens` 中。
+本次请求输入的图片或视频等**视觉部分**消耗的 Token 数量（**不包含文本**）。图片消耗的 Token 数量与输入图片的分辨率有关；系统会对输入视频进行抽帧处理，帧数上限受系统配置控制，随后基于处理结果计算 Token。仅 `qwen3-vl-embedding`、`qwen2.5-vl-embedding` 和 `multimodal-embedding-v1` 返回此字段（作为顶层字段），`tongyi-embedding-vision-*` 系列模型的图片 Token 包含在 `input_tokens_details.image_tokens` 中。
 
 **image\_count** `_int_`
 
@@ -696,8 +754,6 @@ contents `_array_`**（必选）**
 import dashscope
 import json
 from http import HTTPStatus
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 # 实际使用中请将url地址替换为您的图片url地址
 image = "https://dashscope.oss-cn-beijing.aliyuncs.com/images/256_1.png"
 input = [{'image': image}]
@@ -728,8 +784,6 @@ import dashscope
 import base64
 import json
 from http import HTTPStatus
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 # 读取图片并转换为Base64,实际使用中请将xxx.png替换为您的图片文件名或路径
 image_path = "xxx.png"
 with open(image_path, "rb") as image_file:
@@ -766,8 +820,6 @@ if resp.status_code == HTTPStatus.OK:
 import dashscope
 import json
 from http import HTTPStatus
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 # 实际使用中请将url地址替换为您的视频url地址
 video = "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250107/lbcemt/new+video.mp4"
 input = [{'video': video}]
@@ -795,8 +847,6 @@ if resp.status_code == HTTPStatus.OK:
 import dashscope
 import json
 from http import HTTPStatus
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 text = "通用多模态表征模型示例"
 input = [{'text': text}]
@@ -825,8 +875,6 @@ import dashscope
 import json
 import os
 from http import HTTPStatus
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 # 多模态融合向量：将文本、图片、视频融合成一个融合向量
 # 适用于跨模态检索、图搜等场景
@@ -864,8 +912,6 @@ import dashscope
 import json
 import os
 from http import HTTPStatus
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 # 多图+文本融合向量：将多张商品图片和描述文本融合为 1 个向量
 # 适用于商品多角度图片+描述文本的综合语义检索
@@ -900,8 +946,6 @@ import dashscope
 import json
 import os
 from http import HTTPStatus
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 # tongyi-embedding-vision-plus-2026-03-06 示例
 # 支持 res_level（多分辨率）和 max_video_frames（视频帧数）参数
@@ -942,8 +986,6 @@ import dashscope
 import json
 import os
 from http import HTTPStatus
-# 以下为华北2（北京）地域的配置，调用时请将WorkspaceId替换为真实的业务空间ID，各地域的配置不同。
-dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"
 
 # 融合向量：将 text/image/video 放在同一个 content 对象中
 # 模型会将所有输入融合编码为 1 个向量，type 为 "fused"

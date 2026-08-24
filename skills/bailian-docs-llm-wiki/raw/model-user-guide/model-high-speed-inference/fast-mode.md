@@ -1,23 +1,23 @@
 # 快速模式
 
-快速模式（Fast mode）为对输出速度敏感的场景提供更高的 TPS。当前为 preview 阶段。
+高速模式为对输出速度敏感的场景提供更高的 TPS。
 
 ## **使用方式**
 
-快速模式具备以下关键特性：
+优速模式具备以下关键特性：
 
--   **高速输出**：TPS 提升至标准 API 的 1.5~2 倍，达 80~100 TPS；适用于 AI 编程助手、Agent 多步推理、实时对话等对输出速度敏感的场景。
+-   **高速输出**：TPS 提升至标准 API 的 1.5~2 倍；适用于 AI 编程助手、Agent 多步推理、实时对话等对输出速度敏感的场景。
     
--   **按 token 计费**：计费逻辑与标准 API 一致，按输入与输出 token 计费，具体价格见[模型调用计费](https://help.aliyun.com/zh/model-studio/model-pricing)。
+-   **按 token 计费**：计费逻辑与标准 API 一致，按输入与输出 token 计费。
     
--   **特殊限流**：超出 TPM 额度不会立即实行限流，请求会进入排队队列。
-    
--   **preview 阶段**：当前为预览阶段，能力与规格可能随版本调整。
+-   **特殊限流**：调用量达到限流值时，若平台仍有剩余资源，则不会触发限流，因此**实际可用 TPS** 不低于限流值。
     
 
-调用时将 model 参数指定为[支持的模型](#fast-models-h2)的model ID 即可开启，无需额外参数。接入域名格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`，其中 `{workspace_id}`可在 [业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management) 页面切换到对应地域后查看。
+调用时将 model 参数指定为[支持的模型](#fast-models-h2)的 model ID 即可开启，无需额外参数。接入域名格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`，其中 `{workspace_id}`可在 [业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management) 页面切换到对应地域后查看。
 
 基础调用示例：
+
+> glm 5.2 的 prime 模式的模型名称仍然为 glm-5.2-fast-preview。
 
 ```
 curl -X POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
@@ -34,7 +34,7 @@ curl -X POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode
 
 ## 华北2（北京）
 
-**模型名称**
+**文本生成模型**
 
 **模型计费（每百万Token）**
 
@@ -52,9 +52,27 @@ glm-5.2-fast-preview
 
 4元
 
+**视频生成模型**
+
+**模型计费（元/秒）**
+
+**480P**
+
+**720P**
+
+**1080P**
+
+wan3.0-video-prime
+
+0.45元/秒
+
+0.9元/秒
+
+1.8元/秒
+
 ## 新加坡
 
-**模型名称**
+**文本生成模型**
 
 **模型计费（每百万Token）**
 
@@ -71,6 +89,24 @@ glm-5.2-fast-preview
 65.95元
 
 4.20元
+
+**视频生成模型**
+
+**模型计费（元/秒）**
+
+**480P**
+
+**720P**
+
+**1080P**
+
+wan3.0-video-prime
+
+0.496元/秒
+
+1.02元/秒
+
+2.04元/秒
 
 ## **使用示例**
 

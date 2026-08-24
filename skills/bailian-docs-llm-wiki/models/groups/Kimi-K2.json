@@ -106,7 +106,7 @@
       ],
       "modelAlias": "",
       "versionTag": "MAJOR",
-      "maxOutputTokens": 131072,
+      "maxOutputTokens": 1048576,
       "latestOnlineAt": "2026-08-19T08:51:08.000+00:00",
       "contextWindow": 1048576,
       "maxInputTokens": 1048576,

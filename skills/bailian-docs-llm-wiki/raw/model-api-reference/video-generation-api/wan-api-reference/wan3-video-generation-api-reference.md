@@ -1,6 +1,6 @@
 # 万相3.0-视频生成API参考
 
-万相3.0是全能参考视频生成模型（All-in-One），统一支持**文生视频**、**图生视频**（首帧/首尾帧）和**参考生视频**等多种用法。最长可生成30秒视频，输出帧率为30fps。当前处于**邀测**阶段。
+万相3.0是全能参考视频生成模型（All-in-One），统一支持**文生视频**、**图生视频**（首帧/首尾帧）和**参考生视频**等多种用法。最长可生成30秒视频，输出帧率为30fps。
 
 ## 适用范围
 
@@ -30,6 +30,20 @@
 ## **新加坡**
 
 `POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+
+## **日本（东京）**
+
+`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+
+## **德国（法兰克福）**
+
+`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+
+## **美国（弗吉尼亚）**
+
+`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
 
 **说明**
 
@@ -63,7 +77,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     "parameters": {
         "resolution": "480P",
         "ratio": "adaptive",
-        "duration": 10
+        "duration": 10,
+        "prompt_extend": true
     }
 }'
 ```
@@ -107,7 +122,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     "parameters": {
         "resolution": "480P",
         "ratio": "adaptive",
-        "duration": 5
+        "duration": 5,
+        "prompt_extend": true
     }
 }'
 ```
@@ -129,7 +145,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     "parameters": {
         "resolution": "480P",
         "ratio": "adaptive",
-        "duration": 5
+        "duration": 5,
+        "prompt_extend": true
     }
 }'
 ```
@@ -157,7 +174,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     "parameters": {
         "resolution": "480P",
         "ratio": "adaptive",
-        "duration": 5
+        "duration": 5,
+        "prompt_extend": true
     }
 }'
 ```
@@ -189,7 +207,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     "parameters": {
         "resolution": "480P",
         "ratio": "adaptive",
-        "duration": 5
+        "duration": 5,
+        "prompt_extend": true
     }
 }'
 ```
@@ -216,7 +235,12 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 **model** `_string_` **（必选）**
 
-模型名称。固定值：`wan3.0-video`。
+模型名称。可选值：
+
+-   `wan3.0-video-prime`：高速版，能力对齐标准版，端到端速度显著提升。
+    
+-   `wan3.0-video`：标准版。
+    
 
 **input** `_object_` **（必选）**
 
@@ -475,6 +499,15 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 随机种子，用于复现生成结果。取值范围：\[0, 2147483647\]。
 
+**prompt\_extend** `_boolean_` （可选）
+
+是否开启prompt智能改写。开启后使用大模型对输入prompt进行智能改写。对于较短的prompt生成效果提升明显，但会增加耗时。
+
+-   `true`：默认值，开启智能改写。
+    
+-   `false`：不开启智能改写。
+    
+
 **watermark** `_boolean_` （可选）
 
 是否添加水印标识。
@@ -562,6 +595,18 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 ## **新加坡**
 
 `GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+## **日本（东京）**
+
+`GET https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+## **德国（法兰克福）**
+
+`GET https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
+
+## **美国（弗吉尼亚）**
+
+`GET https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 **说明**
 
