@@ -2,9 +2,9 @@
 
 如果您在请求 Retrieve 接口时返回的结果包含较多干扰信息，可以参考本文示例，在请求时传入SearchFilters设置个性化的检索条件，对语义检索结果进行过滤，以排除与查询Query无关的信息（该方法尤其适合结构化数据）。
 
-> 指知识库的[Retrieve](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve)接口。
+> 指知识库的[Retrieve](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-retrieve.md)接口。
 
-## **效果对比**
+## 效果对比
 
 **请求Retrieve接口（未传入SearchFilters）**
 
@@ -67,9 +67,9 @@ Retrieve接口返回：
 
 通过设置检索条件（SearchFilters），过滤语义检索结果中与查询Query（张三）无关的文本切片。
 
-## **语法说明**
+## 语法说明
 
-SearchFilters可以包含一个或多个子分组（如下方示例包含了两个子分组）。每个子分组由一组或多组Key-Value键值对（检索字段：字段值）组成，对通过用户提示词找到的文本切片进行进一步过滤。子分组之间默认采用 **AND** 语义，且不可更改。﻿关于如何使用子分组，请参见[子分组查询示例](#be34f9cc36xnv)。
+SearchFilters可以包含一个或多个子分组（如下方示例包含了两个子分组）。每个子分组由一组或多组Key-Value键值对（检索字段：字段值）组成，对通过用户提示词找到的文本切片进行进一步过滤。子分组之间默认采用 **AND** 语义，且不可更改。﻿关于如何使用子分组，请参见[子分组查询示例](raw/application-api-reference/more/how-to-use-search-filters.md)。
 
 ```
 {
@@ -87,24 +87,22 @@ SearchFilters可以包含一个或多个子分组（如下方示例包含了两�
 
 子分组内的检索字段支持**单值查询**、**多值查询**、**范围查询**、**模糊查询**和**标签（Tag）查询**。
 
--   **单值查询：**字段类型只支持数值（long或double）、字符串（string）。关于如何使用单值查询，请参见[单值查询示例](#8b1bb2d6f4xm1)。
+-   **单值查询：**字段类型只支持数值（long或double）、字符串（string）。关于如何使用单值查询，请参见[单值查询示例](raw/application-api-reference/more/how-to-use-search-filters.md)。
     
--   **多值查询：**只支持由纯数值（long或double）或纯字符串（string）组成的数组。关于如何使用多值查询，请参见[多值查询示例](#c174680d7bd3x)。
+-   **多值查询：**只支持由纯数值（long或double）或纯字符串（string）组成的数组。关于如何使用多值查询，请参见[多值查询示例](raw/application-api-reference/more/how-to-use-search-filters.md)。
     
--   **范围查询：**支持**等值查询**和**区间查询**。关于如何使用范围查询，请参见[范围查询示例](#b9cbe02a96577)。
+-   **范围查询：**支持**等值查询**和**区间查询**。关于如何使用范围查询，请参见[范围查询示例](raw/application-api-reference/more/how-to-use-search-filters.md)。
     
-    -   **等值查询**：支持 `eq`（等于）、`neq`（不等于） 属性，字段类型支持数值（long或double）和字符串（string）。一个字段不可配置多个值（不区分大小写）。
-        
-    -   **区间查询**：支持 `gt`（大于）、`gte`（大于等于）、`lt`（小于）、`lte`（小于等于） 属性，字段类型只支持数值（long, double）。
-        
--   **模糊查询：**字段类型只支持字符串（string）。支持`like` 属性。关于如何使用模糊查询，请参见[模糊查询示例](#6a1b236cc0wuo)。
+    -   **等值查询**：支持 `eq`（等于）、`neq`（不等于） 属性，字段类型支持数值（long或double）和字符串（string）。一个字段不可配置多个值（不区分大小写）。
+    -   **区间查询**：支持 `gt`（大于）、`gte`（大于等于）、`lt`（小于）、`lte`（小于等于） 属性，字段类型只支持数值（long, double）。
+-   **模糊查询：**字段类型只支持字符串（string）。支持`like` 属性。关于如何使用模糊查询，请参见[模糊查询示例](https://help.aliyun.com/zh/model-studio/how-to-use-search-filters#6a1b236cc0wuo)。
     
--   **标签（Tag）查询：**只支持文档搜索、音视频搜索类知识库。关于如何使用标签查询，请参见[标签（Tag）查询示例](#2846aa89bddag)。
+-   **标签（Tag）查询：**只支持文档搜索、音视频搜索类知识库。关于如何使用标签查询，请参见[标签（Tag）查询示例](raw/application-api-reference/more/how-to-use-search-filters.md)。
     
 
-## **前置步骤**
+## 前置步骤
 
--   [子账号](https://help.aliyun.com/zh/model-studio/application-permission-management-overview#24ca2dad7djzs)（主账号不需要）需[获取AliyunBailianDataFullAccess策略](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)，并[加入一个业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)，然后才能使用阿里云API操作知识库。
+-   [子账号](raw/application-user-guide/application-permission-management/application-permission-management-overview.md)（主账号不需要）需[获取AliyunBailianDataFullAccess策略](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)，并[加入一个业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)，然后才能使用阿里云API操作知识库。
     
     > 子账号只能操作自己已加入的业务空间中的知识库；主账号可操作所有业务空间下的知识库。
     
@@ -114,31 +112,27 @@ SearchFilters可以包含一个或多个子分组（如下方示例包含了两�
     
 -   [获取并配置AccessKey和AccessKey Secret到环境变量](https://help.aliyun.com/zh/sdk/developer-reference/configure-the-alibaba-cloud-accesskey-environment-variable-on-linux-macos-and-windows-systems)。
     
--   准备员工信息表[员工信息表.xlsx](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250224/ghwuqu/%E5%91%98%E5%B7%A5%E4%BF%A1%E6%81%AF%E8%A1%A8.xlsx)（包含三条记录），用于创建知识库（下文示例中会用到）。[创建和使用知识库说明](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)
+-   准备员工信息表[员工信息表.xlsx](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250224/ghwuqu/%E5%91%98%E5%B7%A5%E4%BF%A1%E6%81%AF%E8%A1%A8.xlsx)（包含三条记录），用于创建知识库（下文示例中会用到）。[创建和使用知识库说明](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)
     
     -   **知识库配置：**
         
         -   **知识库类型：**数据查询
-            
         -   **数据来源：**上传数据表
-            
         -   **数据表字段结构：**姓名、性别、岗位（string类型）和年龄（double类型）
-            
         -   **索引设置：**所有字段均参与检索与模型回复
-            
         
         完成配置后，**员工信息知识库**中的**员工表**显示**导入成功**状态，表中包含张三、李四、王五三条示例员工数据。
         
 
-## **完整代码示例**
+## 完整代码示例
 
 展开下方折叠面板，查看本文提供的Python和Java完整示例代码（其他语言需参考示例自行实现）。
 
 > 在调用示例代码之前，需[获取AccessKey和AccessKey Secret并配置到环境变量](https://help.aliyun.com/zh/sdk/developer-reference/configure-the-alibaba-cloud-accesskey-environment-variable-on-linux-macos-and-windows-systems)。
 
-## Python
+#### Python
 
-**SearchFiltersFullExample.py**
+SearchFiltersFullExample.py
 
 ```
 # 示例代码仅供参考，请勿在生产环境中直接使用
@@ -356,9 +350,9 @@ if __name__ == '__main__':
     SearchFiltersFullExample.main(sys.argv[1:])
 ```
 
-## Java
+#### Java
 
-**SearchFiltersFullExample.java**
+SearchFiltersFullExample.java
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -370,7 +364,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-public class SearchFiltersFullExample {    
+public class SearchFiltersFullExample {
     /**
      * <b>description</b> :
      * <p>使用AK&SK初始化账号Client</p>
@@ -618,11 +612,11 @@ public class SearchFiltersFullExample {
 }
 ```
 
-## **快速开始**
+## 快速开始
 
 以下介绍如何使用SearchFilters进行查询。
 
-### **子分组查询示例**
+### 子分组查询示例
 
 子分组用于过滤知识库的召回结果，仅返回满足特定条件的文本切片。可将多个子分组（条件）添加到SearchFilters中。子分组之间默认采用 **AND** 语义，且不可更改。
 
@@ -643,9 +637,9 @@ public class SearchFiltersFullExample {
 
 > 展开下方折叠面板查看示例代码。
 
-## Python
+#### Python
 
-**SubGroupQueryExample.py**
+SubGroupQueryExample.py
 
 ```
 # 示例代码仅供参考，请勿在生产环境中直接使用
@@ -705,9 +699,9 @@ if __name__ == '__main__':
     SubGroupQueryExample.main(sys.argv[1:])
 ```
 
-**请求示例**
+请求示例
 
-[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-35)
+[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-36)
 
 ```
 {
@@ -725,9 +719,9 @@ if __name__ == '__main__':
 }
 ```
 
-**响应示例**
+响应示例
 
-[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-40)
+[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-41)
 
 ```
 {
@@ -742,9 +736,9 @@ if __name__ == '__main__':
 }
 ```
 
-## Java
+#### Java
 
-**SubGroupQueryExample.java**
+SubGroupQueryExample.java
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -806,9 +800,9 @@ public class SubGroupQueryExample {
 }
 ```
 
-**请求示例**
+请求示例
 
-[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-35)
+[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-36)
 
 ```
 {
@@ -826,9 +820,9 @@ public class SubGroupQueryExample {
 }
 ```
 
-**响应示例**
+响应示例
 
-[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-40)
+[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-41)
 
 ```
 {
@@ -861,9 +855,9 @@ public class SubGroupQueryExample {
 
 > 展开下方折叠面板查看示例代码。
 
-## Python
+#### Python
 
-**SingleQueryExample.py**
+SingleQueryExample.py
 
 ```
 # 示例代码仅供参考，请勿在生产环境中直接使用
@@ -922,9 +916,9 @@ if __name__ == '__main__':
     SingleQueryExample.main(sys.argv[1:])
 ```
 
-**请求示例**
+请求示例
 
-[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-35)
+[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-36)
 
 ```
 {
@@ -939,9 +933,9 @@ if __name__ == '__main__':
 }
 ```
 
-**响应示例**
+响应示例
 
-[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-40)
+[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-41)
 
 ```
 {
@@ -975,9 +969,9 @@ if __name__ == '__main__':
 }
 ```
 
-## Java
+#### Java
 
-**SingleQueryExample.java**
+SingleQueryExample.java
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -1035,9 +1029,9 @@ public class SingleQueryExample {
 }
 ```
 
-**请求示例**
+请求示例
 
-[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-35)
+[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-36)
 
 ```
 {
@@ -1052,9 +1046,9 @@ public class SingleQueryExample {
 }
 ```
 
-**响应示例**
+响应示例
 
-[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-40)
+[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-41)
 
 ```
 {
@@ -1106,9 +1100,9 @@ public class SingleQueryExample {
 
 > 展开下方折叠面板查看示例代码。
 
-## Python
+#### Python
 
-**MultiQueryExample.py**
+MultiQueryExample.py
 
 ```
 # 示例代码仅供参考，请勿在生产环境中直接使用
@@ -1168,9 +1162,9 @@ if __name__ == '__main__':
     MultiQueryExample.main(sys.argv[1:])
 ```
 
-**请求示例**
+请求示例
 
-[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-35)
+[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-36)
 
 ```
 {
@@ -1185,9 +1179,9 @@ if __name__ == '__main__':
 }
 ```
 
-**响应示例**
+响应示例
 
-[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-40)
+[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-41)
 
 ```
 {
@@ -1239,9 +1233,9 @@ if __name__ == '__main__':
 }
 ```
 
-## Java
+#### Java
 
-**MultiQueryExample.java**
+MultiQueryExample.java
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -1304,9 +1298,9 @@ public class MultiQueryExample {
 }
 ```
 
-**请求示例**
+请求示例
 
-[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-35)
+[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-36)
 
 ```
 {
@@ -1321,9 +1315,9 @@ public class MultiQueryExample {
 }
 ```
 
-**响应示例**
+响应示例
 
-[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-40)
+[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-41)
 
 ```
 {
@@ -1399,9 +1393,9 @@ public class MultiQueryExample {
 
 > 展开下方折叠面板查看示例代码。
 
-## Python
+#### Python
 
-**RangeQueryExample.py**
+RangeQueryExample.py
 
 ```
 # 示例代码仅供参考，请勿在生产环境中直接使用
@@ -1472,9 +1466,9 @@ if __name__ == '__main__':
     RangeQueryExample.main(sys.argv[1:])
 ```
 
-**请求示例**
+请求示例
 
-[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-35)
+[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-36)
 
 ```
 {
@@ -1492,9 +1486,9 @@ if __name__ == '__main__':
 }
 ```
 
-**响应示例**
+响应示例
 
-[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-40)
+[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-41)
 
 ```
 {
@@ -1528,9 +1522,9 @@ if __name__ == '__main__':
 }
 ```
 
-## Java
+#### Java
 
-**RangeQueryExample.java**
+RangeQueryExample.java
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -1601,9 +1595,9 @@ public class RangeQueryExample {
 }
 ```
 
-**请求示例**
+请求示例
 
-[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-35)
+[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-36)
 
 ```
 {
@@ -1621,9 +1615,9 @@ public class RangeQueryExample {
 }
 ```
 
-**响应示例**
+响应示例
 
-[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-40)
+[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-41)
 
 ```
 {
@@ -1694,9 +1688,9 @@ SearchFilters模糊查询支持以下通配符（和SQL语法一致）：
 
 > 展开下方折叠面板查看示例代码。
 
-## Python
+#### Python
 
-**WildcardQueryExample.py**
+WildcardQueryExample.py
 
 ```
 # 示例代码仅供参考，请勿在生产环境中直接使用
@@ -1765,9 +1759,9 @@ if __name__ == '__main__':
     WildcardQueryExample.main(sys.argv[1:])
 ```
 
-**请求示例**
+请求示例
 
-[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-35)
+[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-36)
 
 ```
 {
@@ -1785,9 +1779,9 @@ if __name__ == '__main__':
 }
 ```
 
-**响应示例**
+响应示例
 
-[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-40)
+[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-41)
 
 ```
 {
@@ -1821,9 +1815,9 @@ if __name__ == '__main__':
 }
 ```
 
-## Java
+#### Java
 
-**WildcardQueryExample.java**
+WildcardQueryExample.java
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -1898,9 +1892,9 @@ public class WildcardQueryExample {
 }
 ```
 
-**请求示例**
+请求示例
 
-[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-35)
+[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-36)
 
 ```
 {
@@ -1918,9 +1912,9 @@ public class WildcardQueryExample {
 }
 ```
 
-**响应示例**
+响应示例
 
-[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-40)
+[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-41)
 
 ```
 {
@@ -1954,9 +1948,9 @@ public class WildcardQueryExample {
 }
 ```
 
-### **标签（Tag）查询示例**
+### 标签（Tag）查询示例
 
-检索文档搜索、音视频搜索类知识库时，可通过[标签](https://help.aliyun.com/zh/model-studio/rag-knowledge-base#0a4efa5d7dta6)筛选文件，提高检索效率与准确性。
+检索文档搜索、音视频搜索类知识库时，可通过[标签](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)筛选文件，提高检索效率与准确性。
 
 **示例：**创建一个文档搜索类知识库，其中包含张三、李四和王五三人的信息。
 
@@ -1980,7 +1974,7 @@ public class WildcardQueryExample {
 
 例如使用SearchFilters查询人才知识库，要求返回文件标签含**A大学**或**学生会主席**的相关文本切片：
 
-> 多个标签之间是逻辑或（OR）的关系，不是逻辑与（AND）的关系。[可通过子分组查询实现“逻辑与”](#a95c838b79jne)。
+> 多个标签之间是逻辑或（OR）的关系，不是逻辑与（AND）的关系。[可通过子分组查询实现“逻辑与”](raw/application-api-reference/more/how-to-use-search-filters.md)。
 
 ```
 {
@@ -1994,9 +1988,9 @@ public class WildcardQueryExample {
 
 > 展开下方折叠面板查看示例代码。
 
-## Python
+#### Python
 
-**TagQueryExample.py**
+TagQueryExample.py
 
 ```
 # 示例代码仅供参考，请勿在生产环境中直接使用
@@ -2057,9 +2051,9 @@ if __name__ == '__main__':
     TagQueryExample.main(sys.argv[1:])
 ```
 
-**请求示例**
+请求示例
 
-[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-35)
+[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-36)
 
 ```
 {
@@ -2070,9 +2064,9 @@ if __name__ == '__main__':
 }
 ```
 
-**响应示例**
+响应示例
 
-[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-40)
+[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-41)
 
 ```
 {
@@ -2081,7 +2075,7 @@ if __name__ == '__main__':
     "Nodes": [
       {
         "Metadata": {
-          "file_path": "https://bailian-datahub-data-prod.oss-cn-beijing.aliyuncs.com/10285263/multimodal/docJson/%E5%BC%A0%E4%B8%89%E7%AE%80%E5%8E%86_1746760910599.json?Expires=1747020348&OSSAccessKeyId=LTAI************&Signature=roY%2Falbh6smkLdPuA6wjnZRVMa4%3D",
+          "file_path": "https://bailian-datahub-data-prod.oss-cn-beijing.aliyuncs.com/10285263/multimodal/docJson/%E5%BC%A0%E4%B8%89%E7%AE%80%E5%8E%86_1746760910599.json?Expires=1747020348&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
           "is_displayed_chunk_content": "true",
           "_rc_v_score": 0.1422617520249937,
           "image_url": [],
@@ -2107,7 +2101,7 @@ if __name__ == '__main__':
       },
       {
         "Metadata": {
-          "file_path": "https://bailian-datahub-data-prod.oss-cn-beijing.aliyuncs.com/10285263/multimodal/docJson/%E7%8E%8B%E4%BA%94%E7%AE%80%E5%8E%86_1746760946844.json?Expires=1747020348&OSSAccessKeyId=LTAI************&Signature=gTGPTce5xUu9mtcMcmyMEeb5azk%3D",
+          "file_path": "https://bailian-datahub-data-prod.oss-cn-beijing.aliyuncs.com/10285263/multimodal/docJson/%E7%8E%8B%E4%BA%94%E7%AE%80%E5%8E%86_1746760946844.json?Expires=1747020348&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
           "is_displayed_chunk_content": "true",
           "_rc_v_score": 0.1592178845871759,
           "image_url": [],
@@ -2140,9 +2134,9 @@ if __name__ == '__main__':
 }
 ```
 
-## Java
+#### Java
 
-**TagQueryExample.java**
+TagQueryExample.java
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -2204,9 +2198,9 @@ public class TagQueryExample {
 }
 ```
 
-**请求示例**
+请求示例
 
-[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-35)
+[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-36)
 
 ```
 {
@@ -2217,9 +2211,9 @@ public class TagQueryExample {
 }
 ```
 
-**响应示例**
+响应示例
 
-[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-40)
+[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-41)
 
 ```
 {
@@ -2228,7 +2222,7 @@ public class TagQueryExample {
     "Nodes": [
       {
         "Metadata": {
-          "file_path": "https://bailian-datahub-data-prod.oss-cn-beijing.aliyuncs.com/10285263/multimodal/docJson/%E5%BC%A0%E4%B8%89%E7%AE%80%E5%8E%86_1746760910599.json?Expires=1747020348&OSSAccessKeyId=LTAI************&Signature=roY%2Falbh6smkLdPuA6wjnZRVMa4%3D",
+          "file_path": "https://bailian-datahub-data-prod.oss-cn-beijing.aliyuncs.com/10285263/multimodal/docJson/%E5%BC%A0%E4%B8%89%E7%AE%80%E5%8E%86_1746760910599.json?Expires=1747020348&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
           "is_displayed_chunk_content": "true",
           "_rc_v_score": 0.1422617520249937,
           "image_url": [],
@@ -2254,7 +2248,7 @@ public class TagQueryExample {
       },
       {
         "Metadata": {
-          "file_path": "https://bailian-datahub-data-prod.oss-cn-beijing.aliyuncs.com/10285263/multimodal/docJson/%E7%8E%8B%E4%BA%94%E7%AE%80%E5%8E%86_1746760946844.json?Expires=1747020348&OSSAccessKeyId=LTAI************&Signature=gTGPTce5xUu9mtcMcmyMEeb5azk%3D",
+          "file_path": "https://bailian-datahub-data-prod.oss-cn-beijing.aliyuncs.com/10285263/multimodal/docJson/%E7%8E%8B%E4%BA%94%E7%AE%80%E5%8E%86_1746760946844.json?Expires=1747020348&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
           "is_displayed_chunk_content": "true",
           "_rc_v_score": 0.1592178845871759,
           "image_url": [],
@@ -2304,9 +2298,9 @@ public class TagQueryExample {
 
 > 展开下方折叠面板查看示例代码。
 
-## Python
+#### Python
 
-**TagQueryExample2.py**
+TagQueryExample2.py
 
 ```
 import json
@@ -2368,9 +2362,9 @@ if __name__ == '__main__':
     TagQueryExample2.main(sys.argv[1:])
 ```
 
-**请求示例**
+请求示例
 
-[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-35)
+[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-36)
 
 ```
 {
@@ -2381,9 +2375,9 @@ if __name__ == '__main__':
 }
 ```
 
-**响应示例**
+响应示例
 
-[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-40)
+[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-41)
 
 ```
 {
@@ -2392,7 +2386,7 @@ if __name__ == '__main__':
     "Nodes": [
       {
         "Metadata": {
-          "file_path": "https://bailian-datahub-data-prod.oss-cn-beijing.aliyuncs.com/10285263/multimodal/docJson/%E5%BC%A0%E4%B8%89%E7%AE%80%E5%8E%86_1746760910599.json?Expires=1747020348&OSSAccessKeyId=LTAI************&Signature=roY%2Falbh6smkLdPuA6wjnZRVMa4%3D",
+          "file_path": "https://bailian-datahub-data-prod.oss-cn-beijing.aliyuncs.com/10285263/multimodal/docJson/%E5%BC%A0%E4%B8%89%E7%AE%80%E5%8E%86_1746760910599.json?Expires=1747020348&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
           "is_displayed_chunk_content": "true",
           "_rc_v_score": 0.1422617520249937,
           "image_url": [],
@@ -2425,9 +2419,9 @@ if __name__ == '__main__':
 }
 ```
 
-## Java
+#### Java
 
-**TagQueryExample2.java**
+TagQueryExample2.java
 
 ```
 import com.aliyun.bailian20231229.models.RetrieveRequest;
@@ -2492,9 +2486,9 @@ public class TagQueryExample2 {
 }
 ```
 
-**请求示例**
+请求示例
 
-[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-35)
+[请求参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-36)
 
 ```
 {
@@ -2505,9 +2499,9 @@ public class TagQueryExample2 {
 }
 ```
 
-**响应示例**
+响应示例
 
-[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-40)
+[返回参数说明](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve#api-detail-41)
 
 ```
 {
@@ -2516,7 +2510,7 @@ public class TagQueryExample2 {
     "Nodes": [
       {
         "Metadata": {
-          "file_path": "https://bailian-datahub-data-prod.oss-cn-beijing.aliyuncs.com/10285263/multimodal/docJson/%E5%BC%A0%E4%B8%89%E7%AE%80%E5%8E%86_1746760910599.json?Expires=1747020348&OSSAccessKeyId=LTAI************&Signature=roY%2Falbh6smkLdPuA6wjnZRVMa4%3D",
+          "file_path": "https://bailian-datahub-data-prod.oss-cn-beijing.aliyuncs.com/10285263/multimodal/docJson/%E5%BC%A0%E4%B8%89%E7%AE%80%E5%8E%86_1746760910599.json?Expires=1747020348&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
           "is_displayed_chunk_content": "true",
           "_rc_v_score": 0.1422617520249937,
           "image_url": [],
@@ -2549,19 +2543,19 @@ public class TagQueryExample2 {
 }
 ```
 
-## **相关文档**
+## 相关文档
 
 **知识库用户指南**
 
-请参见[创建和使用知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)。
+请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
 
 **检索知识库**
 
-可调用[Retrieve](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve)接口检索知识库并返回文本切片。
+可调用[Retrieve](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-retrieve.md)接口检索知识库并返回文本切片。
 
 **子账号调用**
 
-RAM用户（子账号）请先获取阿里云百炼的数据权限再调用[Retrieve](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve)接口，请参见[授权RAM用户API权限](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)。
+RAM用户（子账号）请先获取阿里云百炼的数据权限再调用[Retrieve](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-retrieve.md)接口，请参见[授权RAM用户API权限](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)。
 
 ## 错误码
 

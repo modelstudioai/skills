@@ -1,22 +1,18 @@
 # 万相-数字人
 
-数字人wan2.2-s2v模型支持基于**单张图片和音频**，生成动作自然的说话、唱歌或表演视频，不限制形象画幅，支持**肖像、全身或半身**的人物图像。
+数字人wan2.2-s2v模型支持基于 单张图片和音频 ，生成动作自然的说话、唱歌或表演视频，不限制形象画幅，支持 肖像、全身或半身 的人物图像。
 
-**重要**
+**重要**本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
 
-本文档仅适用于华北2（北京）地域，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
+## 模型概览
 
-## **模型概览**
-
-##### **效果示例**
+##### 效果示例
 
 **输入示例**
 
 **输出视频**
 
-![input\_image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8144216571/p1001125.jpeg)
-
-**输入音频**
+![input\_image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8144216571/p1001125.jpeg)**输入音频**
 
 ##### 模型与价格
 
@@ -28,7 +24,7 @@
 
 **限流（主账号与RAM子账号共用）**
 
-**免费额度**[（查看）](https://help.aliyun.com/zh/model-studio/new-free-quota)
+**免费额度**[（查看）](raw/model-user-guide/test-1/new-free-quota.md)
 
 **任务下发接口RPS限制**
 
@@ -62,26 +58,22 @@ wan2.2-s2v
 
 生成数字人视频的流程为：
 
--   **步骤1**：调用 wan2.2-s2v-detect 接口，传入图片URL，确认图片合规。
-    
--   **步骤2**：若检测通过，调用 wan2.2-s2v 异步接口，传入图片URL和音频URL，提交视频生成任务，并轮询获取结果。
-    
+-   **步骤1**：调用 wan2.2-s2v-detect 接口，传入图片URL，确认图片合规。
+-   **步骤2**：若检测通过，调用 wan2.2-s2v 异步接口，传入图片URL和音频URL，提交视频生成任务，并轮询获取结果。
 
-## **快速开始**
+## 快速开始
 
-#### **前提条件**
+#### 前提条件
 
-在调用前，您需要[开通模型服务并获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+在调用前，您需要[开通模型服务并获取API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
 
-#### **示例代码**
+#### 示例代码
 
 本文的示例图片已通过图像检测，以下展示视频生成的示例代码。
 
-**说明**
+**说明**HTTP 请求分两步：先创建任务，再获取结果。初学者建议使用 [Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)调用API。
 
-HTTP 请求分两步：先创建任务，再获取结果。初学者建议使用 [Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)调用API。
-
-##### **步骤1：创建任务获取任务ID**
+##### 步骤1：创建任务获取任务ID
 
 该请求会返回一个`task_id`用于查询结果。
 
@@ -102,7 +94,7 @@ curl 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2video/video-synt
     }'
 ```
 
-##### **步骤2：根据任务ID查询结果**
+##### 步骤2：根据任务ID查询结果
 
 请将`86ecf553-d340-4e21-xxxxxxxxx`替换为真实的task\_id。
 
@@ -115,7 +107,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 
 `task_id`查询有效期为24小时，过期将无法查询，接口将返回任务状态为`UNKNOWN`。
 
-## **模型对比**
+## 模型对比
 
 **模型选型建议**：如需生成包含人物全身或大半身的视频，推荐使用 wan2.2-s2v 模型；若追求性价比，可选择悦动人像EMO。
 
@@ -123,7 +115,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
 
 **数字人wan2.2-s2v**
 
-**悦动人像EMO**（[查看](https://help.aliyun.com/zh/model-studio/emo-quick-start/)）
+**悦动人像EMO**（[查看](raw/model-api-reference/video-generation-api/portrait-animation-api-reference/emo-quick-start.md)）
 
 **模型简介**
 
@@ -170,12 +162,12 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/86ec
     
 -   视频生成：
     
-    -   1:1画幅: 0.08元/秒 
+    -   1:1画幅: 0.08元/秒
         
     -   3:4画幅: 0.16元/秒
         
 
-## **下一步**
+## 下一步
 
 根据您的具体需求，查阅API文档开始您的开发工作：
 

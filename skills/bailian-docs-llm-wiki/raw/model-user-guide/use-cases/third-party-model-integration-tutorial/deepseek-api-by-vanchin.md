@@ -2,28 +2,24 @@
 
 本文档介绍如何在阿里云百炼平台调用快手万擎直供的 DeepSeek 系列模型推理服务。
 
-**重要**
+**重要**本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
-本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
-
-## **服务开通**
+## 服务开通
 
 1.  前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/all)，搜索 vanchin/deepseek，找到 DeepSeek 模型卡片，单击立即开通；
-    
 2.  在弹窗内确认开通及授权。
-    
 
 完成以上步骤即可调用快手万擎提供的 DeepSeek 模型服务。
 
-## **快速开始**
+## 快速开始
 
-API 使用前提：已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk#8833b9274f4v8)。
+API 使用前提：已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 以下以 vanchin/deepseek-v4-pro 为例，展示如何通过 OpenAI 兼容方式开启思考模式进行流式输出。
 
-## Python
+#### Python
 
-### **示例代码**
+### 示例代码
 
 ```
 import os
@@ -65,7 +61,7 @@ for chunk in completion:
             answer_content += delta.content
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -81,9 +77,9 @@ for chunk in completion:
 你好！我是DeepSeek，由深度求索公司创造的AI助手。我是一个纯文本模型，擅长回答各种问题、协助分析、写作、编程等等。有什么我可以帮助你的吗？
 ```
 
-## Node.js
+#### Node.js
 
-### **示例代码**
+### 示例代码
 
 ```
 import OpenAI from "openai";
@@ -140,7 +136,7 @@ async function main() {
 main();
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -156,11 +152,11 @@ main();
 你好！我是DeepSeek，由深度求索公司创造的AI助手。我是一个纯文本模型，擅长回答各种问题、协助分析、写作、编程等等。有什么我可以帮助你的吗？
 ```
 
-## HTTP
+#### HTTP
 
-### **示例代码**
+### 示例代码
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -179,7 +175,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 {
@@ -209,15 +205,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
-## **推理强度（reasoning\_effort）**
+## 推理强度（reasoning\_effort）
 
 deepseek-v4-pro 和 deepseek-v4-flash 默认开启思考模式。通过`reasoning_effort`参数可以调整推理强度，可选值为`high`和`max`，默认为`high`。
 
-**说明**
+**说明**设为`low`或`medium`时会映射为`high`，设为`xhigh`时会映射为`max`。
 
-设为`low`或`medium`时会映射为`high`，设为`xhigh`时会映射为`max`。
-
-## **Python**
+Python
 
 ```
 from openai import OpenAI
@@ -237,7 +231,7 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
-## **Node.js**
+Node.js
 
 ```
 import OpenAI from "openai";
@@ -256,7 +250,7 @@ const completion = await openai.chat.completions.create({
 console.log(completion.choices[0].message.content);
 ```
 
-## **curl**
+curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -270,15 +264,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-## **文字提取**
+## 文字提取
 
-### **示例代码**
+### 示例代码
 
 以下展示如何通过 OpenAI 兼容方式，输入图像URL调用 vanchin/deepseek-ocr 模型进行文字提取。
 
-## Python
+#### Python
 
-### **示例代码**
+### 示例代码
 
 ```
 import os
@@ -315,7 +309,7 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 如果您使用Linux环境下的系统管理员，那么学会编写shell脚本将让你受益匪浅。本书并未细述安装Linux系统的每个步骤，但只要系统已安装好Linux并能运行起来，你就可以开始考虑如何让一些日常的系统管理任务实现自动化。这时shell脚本编程就能发挥作用了，这也正是本书的作用所在。本书将演示如何使用shell脚本来自动处理系统管理任务，包括从监测系统统计数据和数据文件到为你的老炼成报表。
@@ -323,9 +317,9 @@ print(completion.choices[0].message.content)
 如果您是采用Linux爱好者，同样能从本书中获益。现今，用户很容易在诸多部件堆积而成的图形环境中迷失。大多数桌面Linux发行版都尽量向一般用户隐藏系统的内部细节。但有时你确实需要知道内部发生了什么。本书将告诉你如何启动Linux命令行以及接下来要做什么。通常，如果是执行一些简单任务（比scf文件管理），在命令行下操作要比在华丽的图形界面下方方便得多。在命令行下有大量的命令可供使用，本书将会展示如何使用它们。
 ```
 
-## Node.js
+#### Node.js
 
-### **示例代码**
+### 示例代码
 
 ```
 import OpenAI from "openai";
@@ -366,7 +360,7 @@ async function main() {
 main();
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 如果您使用Linux环境下的系统管理员，那么学会编写shell脚本将让你受益匪浅。本书并未细述安装Linux系统的每个步骤，但只要系统已安装好Linux并能运行起来，你就可以开始考虑如何让一些日常的系统管理任务实现自动化。这时shell脚本编程就能发挥作用了，这也正是本书的作用所在。本书将演示如何使用shell脚本来自动处理系统管理任务，包括从监测系统统计数据和数据文件到为你的老炼成报表。
@@ -374,11 +368,11 @@ main();
 如果您是采用Linux爱好者，同样能从本书中获益。现今，用户很容易在诸多部件堆积而成的图形环境中迷失。大多数桌面Linux发行版都尽量向一般用户隐藏系统的内部细节。但有时你确实需要知道内部发生了什么。本书将告诉你如何启动Linux命令行以及接下来要做什么。通常，如果是执行一些简单任务（比scf文件管理），在命令行下操作要比在华丽的图形界面下方方便得多。在命令行下有大量的命令可供使用，本书将会展示如何使用它们。
 ```
 
-## HTTP
+#### HTTP
 
-### **示例代码**
+### 示例代码
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -408,7 +402,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 {
@@ -435,18 +429,16 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
-### **文件传入方式**
+### 文件传入方式
 
 -   公网 URL：一个公网可访问的图像地址，支持 HTTP 或 HTTPS 协议。
-    
--   Base64 编码：将图像文件转换为 Base64 编码字符串，详情请参见[Base64 编码上传](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr#2fa300d397flo)。
-    
+-   Base64 编码：将图像文件转换为 Base64 编码字符串，详情请参见[Base64 编码上传](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr)。
 
-### **图像限制**
+### 图像限制
 
 图像的大小、分辨率、格式及数量均无硬性限制，实际处理能力取决于引擎资源。建议合理控制单次请求的数据量，以获得最佳响应速度。
 
-## **其它功能**
+## 其它功能
 
 **模型**
 
@@ -463,6 +455,22 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 [前缀续写](https://help.aliyun.com/zh/model-studio/partial-mode)
 
 [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)
+
+vanchin/deepseek-v4-pro-0813
+
+支持
+
+支持
+
+支持
+
+支持
+
+不支持
+
+支持
+
+支持
 
 vanchin/deepseek-v4-pro
 
@@ -578,14 +586,11 @@ vanchin/deepseek-v4-pro 不支持以下参数：`repetition_penalty`、`preserve
 
 -   除 vanchin/deepseek-ocr 外，其他模型均支持上下文缓存（隐式缓存，自动开启），缓存命中时的输入价格折扣为：
     
-    -   vanchin/deepseek-v4-pro：按输入价格的 8.33% 计费
-        
+    -   vanchin/deepseek-v4-pro、vanchin/deepseek-v4-pro-0813：按输入价格的 8.33% 计费
     -   vanchin/deepseek-v3.2-think：按输入价格的 10% 计费
-        
     -   vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3：按输入价格的 40% 计费
-        
 
-## **参数默认值**
+## 参数默认值
 
 **模型**
 
@@ -596,6 +601,16 @@ vanchin/deepseek-v4-pro 不支持以下参数：`repetition_penalty`、`preserve
 **enable\_thinking**
 
 **detail**
+
+vanchin/deepseek-v4-pro-0813
+
+0.6
+
+0.95
+
+true
+
+\-
 
 vanchin/deepseek-v4-pro
 
@@ -657,14 +672,14 @@ vanchin/deepseek-ocr
 
 auto（可取值为：auto、high、low）
 
-## **模型列表与计费**
+## 模型列表与计费
 
-vanchin/deepseek-v4-pro 模型兼顾高计算效率与卓越推理能力，推荐使用。若用于文字识别任务，可使用快手万擎提供的deepseek-ocr 模型。
+vanchin/deepseek-v4-pro、vanchin/deepseek-v4-pro-0813 模型兼顾高计算效率与卓越推理能力，推荐使用。若用于文字识别任务，可使用快手万擎提供的deepseek-ocr 模型。
 
 模型上下文长度与价格信息请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)。
 
 按照模型的输入与输出 Token 数量计费。
 
-## **错误码**
+## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。

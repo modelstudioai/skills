@@ -1,27 +1,21 @@
-# AddChunk - 新增切片
+# AddChunk
 
 使用此API可为文档搜索类（document）、数据查询类（table）、图片问答类（image）知识库添加切片。
 
 ## 接口说明
 
 -   对于文档搜索类（document）、数据查询类（table）、图片问答类（image）知识库，本接口可向指定知识库中添加切片内容；目前尚不支持对音视频搜索类（multimedia）知识库进行相关操作。仅当数据源为表格连接器(excel)时，对数据查询与图片问答类型知识库的操作方可生效。
-    
 -   RAM 用户（子账号）需要首先获取阿里云百炼的 [API 权限](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)（需要`AliyunBailianDataFullAccess`，已包括 sfm:ChunkList 权限点），并[加入一个业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)后，方可调用本接口。阿里云账号（主账号）可直接调用无须授权。建议您通过最新版[阿里云百炼 SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)[阿里云百炼 SDK](https://api.alibabacloud.com/api-tools/sdk/bailian?version=2023-12-29)来调用本接口。
-    
 -   调用本接口前，请确保您的知识库已经创建完成且未被删除（即知识库 ID`IndexId`有效）。
-    
 -   本接口具有幂等性。
-    
 
 **限流说明：** 本接口频繁调用会被限流，频率请勿超过 10 次/秒。如遇限流，请稍后重试。
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/bailian/2023-12-29/AddChunk)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
- [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/bailian/2023-12-29/AddChunk)
-
-## **授权信息**
+## 授权信息
 
 当前API暂无授权信息透出。
 
@@ -102,7 +96,7 @@ object
 
 数据查询类、图片问答类知识库 key 不固定，由该知识库的数据源表格决定：key 为 Excel 列标题，value 为对应列的值。
 
-{ "content": "The Bailian platform supports parsing multiple document formats including PDF, Word, and PPT.", "title": "Document Parsing and Chunking", "image\_urls": \[ "https://example.com/images/chunk-flow.png", "https://example.com/images/parsing-result.png" \] }
+{ "content": "The Bailian platform supports parsing multiple document formats including PDF, Word, and PPT.", "title": "Document Parsing and Chunking", "image\_urls": \[ "[](https://example.com/images/chunk-flow.png)[https://example.com/images/chunk-flow.png](https://example.com/images/chunk-flow.png)", "[](https://example.com/images/parsing-result.png)[https://example.com/images/parsing-result.png](https://example.com/images/parsing-result.png)" \] }
 
 any
 
@@ -121,9 +115,9 @@ any
 -   **image\_url 类型**：最多 5 张，多张用英文逗号拼接为一个字符串
     
 
-{"Product Name": "Wireless Bluetooth Headphones", "Publish Time": 1752624000000, "Stock Quantity": 1580, "Unit Price": 299.99, "image\_url":"https://example.com/images/headphones-front.jpg,https://example.com/images/headphones-side.jpg,https://example.com/images/headphones-package.jpg" }
+{"Product Name": "Wireless Bluetooth Headphones", "Publish Time": 1752624000000, "Stock Quantity": 1580, "Unit Price": 299.99, "image\_url":"[](https://example.com/images/headphones-front.jpg,https://example.com/images/headphones-side.jpg,https://example.com/images/headphones-package.jpg)[https://example.com/images/headphones-front.jpg,https://example.com/images/headphones-side.jpg,https://example.com/images/headphones-package.jpg](https://example.com/images/headphones-front.jpg,https://example.com/images/headphones-side.jpg,https://example.com/images/headphones-package.jpg)" }
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -228,6 +222,6 @@ string
 
 访问[错误中心](https://api.aliyun.com/document/bailian/2023-12-29/errorCode)查看更多错误码。
 
-## **变更历史**
+## 变更历史
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/bailian/2023-12-29/AddChunk#workbench-doc-change-demo)。

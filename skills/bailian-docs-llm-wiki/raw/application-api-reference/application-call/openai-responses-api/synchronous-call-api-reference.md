@@ -1,42 +1,151 @@
 # 同步调用 API 参考
 
-本文介绍如何通过 OpenAI 兼容模式的 Responses API **同步调用**阿里云百炼应用（**智能体**、**工作流**）。适用于需要**即时获取结果**的实时交互场景，可轻松复用现有的 OpenAI 代码库，或快速集成来自 OpenAI 生态的各类工具。
+本文介绍如何通过 OpenAI 兼容模式的 Responses API 同步调用 阿里云百炼应用（ 智能体 、 工作流 ）。适用于需要 即时获取结果 的实时交互场景，可轻松复用现有的 OpenAI 代码库，或快速集成来自 OpenAI 生态的各类工具。
 
 **相关参考**
 
--   **异步调用**：对于**耗时较长**的任务（如生成报告、多步骤工具调用），为避免请求超时，请参阅[异步调用 API 参考](https://help.aliyun.com/zh/model-studio/asynchronous-call-api-reference)。
-    
--   **DashScope API**：如需获取更全面的功能与更高的性能，请参阅[工作流与旧版智能体应用 API](https://help.aliyun.com/zh/model-studio/agent-and-workflow-application-api-reference)。
-    
+-   **异步调用**：对于**耗时较长**的任务（如生成报告、多步骤工具调用），为避免请求超时，请参阅[异步调用 API 参考](raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)。
+-   **DashScope API**：如需获取更全面的功能与更高的性能，请参阅[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)。
 
-**重要**
-
-本文档仅适用于华北2（北京）地域。
+**重要**本文档仅适用于华北2（北京）地域。
 
 ## 前提条件
 
--   已[获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-    
--   已创建[阿里云百炼应用](https://help.aliyun.com/zh/model-studio/application-introduction)，并已获取应用ID：在[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面的应用卡片上复制其ID。
-    
--   如果通过SDK调用，还需要[安装OpenAI Python SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
-    
+-   已[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+-   已创建[阿里云百炼应用](raw/application-user-guide/llm-application/application-introduction.md)，并已获取应用ID：在[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面的应用卡片上复制其ID。
+-   如果通过SDK调用，还需要[安装OpenAI Python SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 使用SDK调用时需配置的`base_url`：`https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/v1`
 
 使用HTTP方式调用时需配置的`Endpoint`：`POST https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/v1/responses`
 
-**说明**
+**说明**请将 `{APP_ID}` 替换为实际的应用ID。
 
-请将 `{APP_ID}` 替换为实际的应用ID。
+### 请求体
 
-### **请求体**
+**app\_id** _string_**（必选）**
 
-## 文本输入
+应用的标识。
+
+在[应用管理](https://bailian.console.aliyun.com/#/app-center)页面的应用卡片上获取应用ID。
+
+> 通过 HTTP 调用时，请将实际的应用ID放入 URL 中，替换`APP_ID`。
+
+**input**`string`/`array`**（必选）**
+
+请求的核心输入内容。可以是一个简单的字符串，也可以是一个包含多轮对话历史的消息数组。
+
+-   **简单字符串**: 用于单轮文本对话，例如 `"你好"`。
+    
+-   **消息数组 (Messages)**： 用于多轮对话或包含多媒体（如图片、文件）的输入。数组中的每个元素都是一个消息对象。
+    
+    **说明**基于`pre_response_id`或`conversation_id`的上下文功能将在**后续支持**。目前请在每次请求时传递完整的对话历史。
+    
+    消息类型
+    
+    **System Message**`object`（可选）
+    
+    系统消息，用于设定大模型的角色、语气、任务目标或约束条件等。一般放在`messages`数组的第一位。
+    
+    属性
+    
+    **content**`string`**（必选）**
+    
+    消息内容。
+    
+    **role**`string`**（必选）**
+    
+    固定为`system`。
+    
+    **User Message**`object`**（必选）**
+    
+    用户消息，用于向模型传递问题、指令或上下文等。
+    
+    属性
+    
+    **content**`string 或 array`**（必选）**
+    
+    消息内容。
+    
+    -   **纯文本输入**: `content` 为字符串，例如 `"你好"`。
+        
+    -   **多模态输入**: `content` 为一个数组，包含文本、图片或文件对象。
+        
+        子属性
+        
+        **文本**
+        
+        **type** `string` **（必选）**
+        
+        固定为 `input_text`。
+        
+        **text** `string`**（必选）**
+        
+        文本内容。
+        
+        **图像**
+        
+        **type** `string` **（必选）**
+        
+        固定为 `input_image`。
+        
+        **image\_url** `string`**（必选）**
+        
+        图片的 URL。
+        
+        **文件**
+        
+        仅**智能体应用**支持文件传入。
+        
+        **type** `string` **（必选）**
+        
+        固定为 `input_file`。
+        
+        **file\_url** `string`**（必选）**
+        
+        文件的URL。
+        
+    
+    **role**`string`**（必选）**
+    
+    固定为`user`。
+    
+    **Assistant Message** `object`（可选）
+    
+    模型对用户消息的回复。
+    
+    属性
+    
+    **content**`string`（可选）
+    
+    消息内容。
+    
+    **role**`string`**（必选）**
+    
+    固定为`assistant`。
+    
+
+**stream** `boolean`（可选）
+
+是否流式输出回复。
+
+-   false（默认值）：模型生成完所有内容后一次性返回结果。
+-   true：边生成边输出，即每生成一部分内容就立即输出一个片段（chunk）。
+
+**background** `boolean`（可选）
+
+是否以异步方式执行任务。
+
+**说明**异步调用暂不支持流式输出。
+
+-   `false`（默认值）：同步。API将保持连接直到任务完成。
+-   `true`：异步。API将立即返回一个任务ID，可通过查询接口来获取结果。
+
+#### 文本输入
 
 **单轮对话**
 
-Python
+python
 
 ```
 from openai import OpenAI
@@ -59,7 +168,7 @@ response = client.responses.create(
 print(response.model_dump_json(indent=2))
 ```
 
-curl
+bash
 
 ```
 curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/v1/responses" \
@@ -85,7 +194,7 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compa
 
 将包含完整历史消息的消息对象数组传递给`input` 参数。
 
-Python
+python
 
 ```
 from openai import OpenAI
@@ -115,7 +224,7 @@ response = client.responses.create(
 print(response.model_dump_json(indent=2))
 ```
 
-curl
+bash
 
 ```
 curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/v1/responses" \
@@ -157,13 +266,13 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compa
 }'
 ```
 
-## 流式输出
+#### 流式输出
 
 在请求体中设置`stream`为`true`，以流式方式获取响应，实现实时展示生成内容的效果。
 
 **应用配置：**若应用类型为**工作流**，需在**结束节点**或**流程输出节点**中启用**流式输出**开关，并重新**发布**应用。
 
-Python
+python
 
 ```
 from openai import OpenAI
@@ -198,7 +307,7 @@ for chunk in stream:
         print(chunk.delta, end='', flush=True)
 ```
 
-curl
+bash
 
 ```
 curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/v1/responses" \
@@ -241,7 +350,7 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compa
      }'
 ```
 
-## 图像输入
+#### 图像输入
 
 在 `content` 数组中包含 `image_url` 对象，向模型提供图像的 URL，模型基于图像内容进行问答。
 
@@ -249,7 +358,7 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compa
 
 **工作流应用**配置：需选用[通义千问VL系列模型](https://help.aliyun.com/zh/model-studio/vision)，并将模型节点的模型入参变量填为`imageList`，然后重新**发布**应用。
 
-Python
+python
 
 ```
 from openai import OpenAI
@@ -285,7 +394,7 @@ response = client.responses.create(
 print(response.model_dump_json(indent=2))
 ```
 
-curl
+bash
 
 ```
 curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/v1/responses" \
@@ -310,15 +419,15 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compa
 }'
 ```
 
-## 文件输入
+#### 文件输入
 
 在 `content` 数组中包含 `input_file` 对象，向模型提供文件的 URL，模型基于文件中的内容进行问答。
 
 仅**智能体应用**支持，应用内的文件处理方式需选择**全文引用**或**切片检索**。
 
-相关文档：[文件问答](https://help.aliyun.com/zh/model-studio/file-q-a)。
+相关文档：[文件问答](raw/application-user-guide/llm-application/file-q-a.md)。
 
-Python
+python
 
 ```
 from openai import OpenAI
@@ -357,7 +466,7 @@ response = client.responses.create(
 print(response.model_dump_json(indent=2))
 ```
 
-curl
+bash
 
 ```
 # 请将 {APP_ID} 替换为实际的应用ID
@@ -383,133 +492,55 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compa
 }'
 ```
 
-**app\_id** _string_**（必选）**
+### 响应对象（非流式输出）
 
-应用的标识。
+**id** `string`  
+本次请求的唯一标识符（ID），可用于日志记录和问题追踪。
 
-在[应用管理](https://bailian.console.aliyun.com/#/app-center)页面的应用卡片上获取应用ID。
+**object**`string`
 
-> 通过 HTTP 调用时，请将实际的应用ID放入 URL 中，替换`APP_ID`。
+对象类型，对于本API，其值固定为 `response`。
 
-**input** `_string_`/`_array_` **（必选）**
+**created\_at** `integer`  
+响应创建时间的Unix时间戳（以秒为单位）。
 
-请求的核心输入内容。可以是一个简单的字符串，也可以是一个包含多轮对话历史的消息数组。
+**status**`string`
 
--   **简单字符串**: 用于单轮文本对话，例如 `"你好"`。
-    
--   **消息数组 (Messages)**： 用于多轮对话或包含多媒体（如图片、文件）的输入。数组中的每个元素都是一个消息对象。
-    
-    **说明**
-    
-    基于`pre_response_id`或`conversation_id`的上下文功能将在**后续支持**。目前请在每次请求时传递完整的对话历史。
-    
-    **消息类型**
-    
-    **System Message** `_object_` （可选）
-    
-    系统消息，用于设定大模型的角色、语气、任务目标或约束条件等。一般放在`messages`数组的第一位。
-    
-    **属性**
-    
-    **content** `_string_` **（必选）**
-    
-    消息内容。
-    
-    **role** `_string_` **（必选）**
-    
-    固定为`system`。
-    
-    **User Message** `_object_` **（必选）**
-    
-    用户消息，用于向模型传递问题、指令或上下文等。
-    
-    **属性**
-    
-    **content** `_string 或 array_` **（必选）**
-    
-    消息内容。
-    
-    -   **纯文本输入**: `content` 为字符串，例如 `"你好"`。
-        
-    -   **多模态输入**: `content` 为一个数组，包含文本、图片或文件对象。
-        
-        **子属性**
-        
-        **文本**
-        
-        **type** `_string_` **（必选）**
-        
-        固定为 `input_text`。
-        
-        **text** `_string_`**（必选）**
-        
-        文本内容。
-        
-        **图像**
-        
-        **type** `_string_` **（必选）**
-        
-        固定为 `input_image`。
-        
-        **image\_url** `_string_`**（必选）**
-        
-        图片的 URL。
-        
-        **文件**
-        
-         仅**智能体应用**支持文件传入。
-        
-        **type** `_string_` **（必选）**
-        
-        固定为 `input_file`。
-        
-        **file\_url** `_string_`**（必选）**
-        
-        文件的URL。
-        
-    
-    **role** `_string_` **（必选）**
-    
-    固定为`user`。
-    
-    **Assistant Message** `_object_` （可选）
-    
-    模型对用户消息的回复。
-    
-    **属性**
-    
-    **content** `_string_` （可选）
-    
-    消息内容。
-    
-    **role** `_string_` **（必选）**
-    
-    固定为`assistant`。
-    
+整个响应任务的最终状态。`completed` 表示任务已成功结束。
 
-**stream** `_boolean_` （可选）
+**output**`array`  
+一个数组，包含了模型生成的所有输出内容。
 
-是否流式输出回复。
+子属性
 
--   false（默认值）：模型生成完所有内容后一次性返回结果。
-    
--   true：边生成边输出，即每生成一部分内容就立即输出一个片段（chunk）。
-    
+**output** **message**`object`
 
-**background** `_boolean_` （可选）
+包含了模型输出内容的消息对象。
 
-是否以异步方式执行任务。
+子属性
 
-**说明**
+**content** `array`  
+消息的核心内容数组，包含多种类型的内容块（如文本、代码、图片等）。
 
-异步调用暂不支持流式输出。
+子属性
 
--   `false`（默认值）：同步。API将保持连接直到任务完成。
-    
--   `true`：异步。API将立即返回一个任务ID，可通过查询接口来获取结果。
-    
+**text** `string`  
+模型实际生成的文本回复。
 
-### **响应对象（非流式输出）**
+**type** `string`  
+内容块的类型。`output_text` 表示这是一个输出的文本块。
+
+**id** `string`  
+此条输出消息的唯一ID。
+
+**role** `string`  
+消息的角色。`assistant` 表示这条消息是由AI助手生成的。
+
+**status** `string`  
+表示该条消息的生成状态。`completed` 表示该条消息已成功生成。
+
+**type** `string`  
+`output`数组中元素的类型。`message` 表示这是一个消息对象。
 
 ```
 {
@@ -541,55 +572,360 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compa
 }
 ```
 
-**id** `_string_`  
-本次请求的唯一标识符（ID），可用于日志记录和问题追踪。
+### 响应对象（流式输出）
 
-**object** `_string_`
+**id** `string`
 
-对象类型，对于本API，其值固定为 `response`。
+事件的消息ID。
 
-**created\_at** `_integer_`  
+**code** `string`
+
+错误码，调用成功时为空值。
+
+**message**`string`
+
+表示错误详细信息，请求成功则忽略。
+
+**event** `string`
+
+事件类型，表示当前响应的状态。
+
+事件通用数据
+
+**sequence\_number** `integer`
+
+事件的序列号，从0开始递增。
+
+**type** `string`
+
+事件类型，与`event`内容相同。
+
+事件类型详解
+
+整体响应生命周期事件
+
+**response.created**: 表示响应已创建。
+
+**response.in\_progress**: 表示响应处理中。
+
+**response.completed**: 响应完成。
+
+通用数据
+
+**response**`object`
+
+响应对象，包含响应的详细信息\*。\*
+
+子属性
+
+**id** `string`
+
+响应的唯一标识符。
+
+**status**`string`
+
+响应的最终状态。
+
+**object**`string`
+
+对象类型**。**固定值为 `"response"`。
+
+**created\_at**`integer`  
 响应创建时间的Unix时间戳（以秒为单位）。
 
-**status** `_string_`
+**output** `array`  
+输出内容列表。
 
-整个响应任务的最终状态。`completed` 表示任务已成功结束。
+子属性
 
-**output** `_array_`  
-一个数组，包含了模型生成的所有输出内容。
-
-**子属性**
-
-**output** **message**`_object_`
+**output** **message**`object`
 
 包含了模型输出内容的消息对象。
 
-**子属性**
+子属性
 
-**content** `_array_`  
-消息的核心内容数组，包含多种类型的内容块（如文本、代码、图片等）。
+**id**`string`
 
-**子属性**
+输出项的唯一标识符。
 
-**text** `_string_`  
-模型实际生成的文本回复。
+**type** `string`
 
-**type** `_string_`  
-内容块的类型。`output_text` 表示这是一个输出的文本块。
+输出项的类型。
 
-**id** `_string_`  
-此条输出消息的唯一ID。
+-   `"reasoning"`: 模型的思考过程。
+-   `"message"`: 最终回复。
 
-**role** `_string_`  
-消息的角色。`assistant` 表示这条消息是由AI助手生成的。
+**role** `string`
 
-**status** `_string_`  
-表示该条消息的生成状态。`completed` 表示该条消息已成功生成。
+消息的角色。
 
-**type** `_string_`  
-`output`数组中元素的类型。`message` 表示这是一个消息对象。
+**content**`array`
 
-### **响应对象（流式输出）**
+输出内容部分的列表。
+
+子属性
+
+**type** `string`
+
+内容部分的类型。例如 `"output_text"` 表示这是一个文本部分。
+
+**text**`string`
+
+文本内容。
+
+**annotations**`array`
+
+注解列表。
+
+**status**`string`
+
+响应的当前状态。
+
+内容构建事件
+
+**response.output\_item.added**: 表示输出项已添加。
+
+子属性
+
+**output\_index**`integer`
+
+`item` 在 `output` 数组中的索引。
+
+**item**`object`
+
+新增的输出项对象。
+
+子属性
+
+**output** **message**`object`
+
+包含了模型输出内容的消息对象。
+
+子属性
+
+**id**`string`
+
+输出项的唯一标识符。
+
+**type** `string`
+
+输出项的类型。
+
+-   `"reasoning"`: 模型的思考过程。
+-   `"message"`: 最终回复。
+
+**role** `string`
+
+消息的角色。
+
+**content**`array`
+
+内容部分列表。
+
+**status**`string`
+
+响应的当前状态。
+
+**response.output\_item.done**: 输出项完成。
+
+子属性
+
+**output\_index**`integer`
+
+已完成的 `item` 在 `output` 数组中的索引。
+
+**item**`object`
+
+完整的输出项对象。
+
+子属性
+
+**id**`string`
+
+输出项的唯一标识符。
+
+**type** `string`
+
+输出项的类型。
+
+-   `"reasoning"`: 模型的思考过程。
+-   `"message"`: 最终回复。
+
+**role** `string`
+
+消息的角色。
+
+**content**`array`
+
+输出内容部分的列表。
+
+子属性
+
+**type** `string`
+
+内容部分的类型。例如 `"output_text"` 表示这是一个文本部分。
+
+**text**`string`
+
+文本内容。
+
+**annotations**`array`
+
+注解列表。
+
+**status**`string`
+
+响应的当前状态。
+
+**response.content\_part.added**: 表示在一个输出项（如一条消息）中，新生成了一个内容块（如文本、图片等）。
+
+子属性
+
+**output\_index**`integer`
+
+关联的 `response.output` 数组索引。
+
+**content\_index**`integer`
+
+关联的 `item.content` 数组索引。
+
+**item\_id**`string`
+
+关联的输出项ID。
+
+**part**`object`
+
+新添加的内容部分对象。
+
+子属性
+
+**type** `string`
+
+内容部分的类型。例如 `"output_text"` 表示这是一个文本部分。
+
+**text** `string`
+
+文本内容。
+
+**annotations**`array`
+
+注解列表。
+
+**response.content\_part.done**: 内容部分完成。
+
+子属性
+
+**output\_index**`integer`
+
+关联的 `response.output` 数组索引。
+
+**content\_index**`integer`
+
+关联的 `item.content` 数组索引。
+
+**item\_id**`string`
+
+关联的输出项ID。
+
+**part**`object`
+
+新添加的内容部分对象。
+
+子属性
+
+**type** `string`
+
+内容部分的类型。例如 `"output_text"` 表示这是一个文本部分。
+
+**text** `string`
+
+文本内容。
+
+**annotations**`array`
+
+注解列表。
+
+文本流事件
+
+**response.output\_text.delta**：输出内容的文本增量。
+
+子属性
+
+**delta** `string`
+
+输出文本的增量片段。
+
+**output\_index**`integer`
+
+关联的 `response.output` 数组索引。
+
+**content\_index**`integer`
+
+关联的 `item.content` 数组索引。
+
+**item\_id**`string`
+
+关联的输出项ID。
+
+**response.output\_text.done**: 输出文本完成。
+
+子属性
+
+**text** `String`
+
+完整的输出文本内容。
+
+**output\_index**`integer`
+
+关联的 `response.output` 数组索引。
+
+**content\_index**`integer`
+
+关联的 `item.content` 数组索引。
+
+**item\_id**`string`
+
+关联的输出项ID。
+
+**response.reasoning\_text.delta**：思考过程的文本增量。
+
+子属性
+
+**delta** `string`
+
+思考文本的增量片段。
+
+**output\_index**`integer`
+
+关联的 `response.output` 数组索引。
+
+**content\_index**`integer`
+
+关联的 `item.content` 数组索引。
+
+**item\_id**`string`
+
+关联的输出项ID。
+
+**response.reasoning\_text.done**：思考过程的流式输出已全部结束。
+
+子属性
+
+**text** `String`
+
+完整的思考过程。
+
+**output\_index**`integer`
+
+关联的 `response.output` 数组索引。
+
+**content\_index**`integer`
+
+关联的 `item.content` 数组索引。
+
+**item\_id**`string`
+
+关联的输出项ID。
 
 ```
 id:1 | event:response.created | :HTTP_STATUS/200 | data:{"sequence_number":0,"type":"response.created","response":{"output":[],"parallel_tool_calls":false,"created_at":1760076609,"tool_choice":"auto","model":"","id":"508f1306-3760-49da-9e43-380fd952c297","tools":[],"object":"response","status":"queued"}}
@@ -627,365 +963,6 @@ id:32 | event:response.output_item.done | :HTTP_STATUS/200 | data:{"sequence_num
 id:33 | event:response.completed | :HTTP_STATUS/200 | data:{"sequence_number":32,"type":"response.completed","response":{"output":[{"id":"msg_8087bfdd-ba53-45db-b309-6a3b92ca4f3e","role":"assistant","type":"message","content":[{"type":"output_text","annotations":[],"text":"你好！我是通义千问（Qwen），由阿里云研发的超大规模语言模型。我能够回答问题、创作文字，比如写故事、写公文、写邮件、写剧本、逻辑推理、编程等等，还能表达观点，玩游戏等。我支持多种语言，包括但不限于中文、英文、德语、法语、西班牙语等，满足国际化的使用需求。我擅长处理各种任务，无论是专业领域的知识问答，还是日常生活中的问题咨询，我都会尽力提供帮助。我的目标是成为你最可靠的智能伙伴！"}],"status":"completed"}],"parallel_tool_calls":false,"created_at":1760076609,"tool_choice":"auto","model":"","id":"508f1306-3760-49da-9e43-380fd952c297","tools":[],"object":"response","status":"completed"}}
 ```
 
-**id** `_string_`
-
-事件的消息ID。
-
-**code** `_string_`
-
-错误码，调用成功时为空值。
-
-**message** `_string_`
-
-表示错误详细信息，请求成功则忽略。
-
-**event** `_string_`
-
-事件类型，表示当前响应的状态。
-
-**事件通用数据**
-
-**sequence\_number** `_integer_`
-
-事件的序列号，从0开始递增。
-
-**type** `_string_`
-
-事件类型，与`event`内容相同。
-
-**事件类型详解**
-
-**整体响应生命周期事件**
-
-**response.created**: 表示响应已创建。
-
-**response.in\_progress**: 表示响应处理中。
-
-**response.completed**: 响应完成。
-
-**通用数据**
-
-**response** `_object_`
-
-响应对象，包含响应的详细信息_。_
-
-**子属性**
-
-**id** `_string_`
-
-响应的唯一标识符。
-
-**status** `_string_`
-
-响应的最终状态。
-
-**object** `_string_`
-
-对象类型**。**固定值为 `"response"`。
-
-**created\_at** `_integer_`  
-响应创建时间的Unix时间戳（以秒为单位）。
-
-**output** `_array_`  
-输出内容列表。
-
-**子属性**
-
-**output** **message**`_object_`
-
-包含了模型输出内容的消息对象。
-
-**子属性**
-
-**id** `_string_`
-
-输出项的唯一标识符。
-
-**type** `_string_`
-
-输出项的类型。
-
--   `"reasoning"`: 模型的思考过程。
-    
--   `"message"`: 最终回复。
-    
-
-**role** `_string_`
-
-消息的角色。
-
-**content** `_array_`
-
-输出内容部分的列表。
-
-**子属性**
-
-**type** `_string_`
-
-内容部分的类型。例如 `"output_text"` 表示这是一个文本部分。
-
-**text** `_string_`
-
-文本内容。
-
-**annotations** `_array_`
-
-注解列表。
-
-**status** `_string_`
-
-响应的当前状态。
-
-**内容构建事件**
-
-**response.output\_item.added**: 表示输出项已添加。
-
-**子属性**
-
-**output\_index** `_integer_`
-
-`item` 在 `output` 数组中的索引。
-
-**item** `_object_`
-
-新增的输出项对象。
-
-**子属性**
-
-**output** **message**`_object_`
-
-包含了模型输出内容的消息对象。
-
-**子属性**
-
-**id** `_string_`
-
-输出项的唯一标识符。
-
-**type** `_string_`
-
-输出项的类型。
-
--   `"reasoning"`: 模型的思考过程。
-    
--   `"message"`: 最终回复。
-    
-
-**role** `_string_`
-
-消息的角色。
-
-**content** `_array_`
-
-内容部分列表。
-
-**status** `_string_`
-
-响应的当前状态。
-
-**response.output\_item.done**: 输出项完成。
-
-**子属性**
-
-**output\_index** `_integer_`
-
-已完成的 `item` 在 `output` 数组中的索引。
-
-**item** `_object_`
-
-完整的输出项对象。
-
-**子属性**
-
-**id** `_string_`
-
-输出项的唯一标识符。
-
-**type** `_string_`
-
-输出项的类型。
-
--   `"reasoning"`: 模型的思考过程。
-    
--   `"message"`: 最终回复。
-    
-
-**role** `_string_`
-
-消息的角色。
-
-**content** `_array_`
-
-输出内容部分的列表。
-
-**子属性**
-
-**type** `_string_`
-
-内容部分的类型。例如 `"output_text"` 表示这是一个文本部分。
-
-**text** `_string_`
-
-文本内容。
-
-**annotations** `_array_`
-
-注解列表。
-
-**status** `_string_`
-
-响应的当前状态。
-
-**response.content\_part.added**: 表示在一个输出项（如一条消息）中，新生成了一个内容块（如文本、图片等）。
-
-**子属性**
-
-**output\_index** `_integer_`
-
-关联的 `response.output` 数组索引。
-
-**content\_index** `_integer_`
-
-关联的 `item.content` 数组索引。
-
-**item\_id** `_string_`
-
-关联的输出项ID。
-
-**part** `_object_`
-
-新添加的内容部分对象。
-
-**子属性**
-
-**type** `_string_`
-
-内容部分的类型。例如 `"output_text"` 表示这是一个文本部分。
-
-**text** `_string_`
-
-文本内容。
-
-**annotations** `_array_`
-
-注解列表。
-
-**response.content\_part.done**: 内容部分完成。
-
-**子属性**
-
-**output\_index** `_integer_`
-
-关联的 `response.output` 数组索引。
-
-**content\_index** `_integer_`
-
-关联的 `item.content` 数组索引。
-
-**item\_id** `_string_`
-
-关联的输出项ID。
-
-**part** `_object_`
-
-新添加的内容部分对象。
-
-**子属性**
-
-**type** `_string_`
-
-内容部分的类型。例如 `"output_text"` 表示这是一个文本部分。
-
-**text** `_string_`
-
-文本内容。
-
-**annotations** `_array_`
-
-注解列表。
-
-**文本流事件**
-
-**response.output\_text.delta**：输出内容的文本增量。
-
-**子属性**
-
-**delta** `_string_`
-
-输出文本的增量片段。
-
-**output\_index** `_integer_`
-
-关联的 `response.output` 数组索引。
-
-**content\_index** `_integer_`
-
-关联的 `item.content` 数组索引。
-
-**item\_id** `_string_`
-
-关联的输出项ID。
-
-**response.output\_text.done**: 输出文本完成。
-
-**子属性**
-
-**text** `_String_`
-
-完整的输出文本内容。
-
-**output\_index** `_integer_`
-
-关联的 `response.output` 数组索引。
-
-**content\_index** `_integer_`
-
-关联的 `item.content` 数组索引。
-
-**item\_id** `_string_`
-
-关联的输出项ID。
-
-**response.reasoning\_text.delta**：思考过程的文本增量。
-
-**子属性**
-
-**delta** `_string_`
-
-思考文本的增量片段。
-
-**output\_index** `_integer_`
-
-关联的 `response.output` 数组索引。
-
-**content\_index** `_integer_`
-
-关联的 `item.content` 数组索引。
-
-**item\_id** `_string_`
-
-关联的输出项ID。
-
-**response.reasoning\_text.done**：思考过程的流式输出已全部结束。
-
-**子属性**
-
-**text** `_String_`
-
-完整的思考过程。
-
-**output\_index** `_integer_`
-
-关联的 `response.output` 数组索引。
-
-**content\_index** `_integer_`
-
-关联的 `item.content` 数组索引。
-
-**item\_id** `_string_`
-
-关联的输出项ID。
-
 ## 常见问题
 
 1.  **如何传递多轮对话的上下文？**
@@ -1001,4 +978,4 @@ id:33 | event:response.completed | :HTTP_STATUS/200 | data:{"sequence_number":32
 
 ## 错误码
 
-如果应用调用失败并返回报错信息，请参阅[错误码](https://help.aliyun.com/zh/model-studio/error-code)解决。
+如果应用调用失败并返回报错信息，请参阅[错误码](raw/model-api-reference/preparations/error-code.md)解决。

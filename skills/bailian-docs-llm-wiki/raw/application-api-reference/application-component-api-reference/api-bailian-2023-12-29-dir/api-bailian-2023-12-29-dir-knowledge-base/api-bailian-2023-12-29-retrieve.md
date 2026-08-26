@@ -1,16 +1,15 @@
-# Retrieve - 检索知识库
+# Retrieve
 
 在指定的知识库中检索信息。
 
 ## 接口说明
 
--   **调用方式**：可通过最新版[阿里云百炼 SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)（配合阿里云访问密钥 [AccessKey](https://help.aliyun.com/zh/ram/user-guide/create-an-accesskey-pair) ）或[Spring AI Alibaba](https://help.aliyun.com/zh/model-studio/spring-ai-alibaba-integrate-knowledge-base)（配合阿里云百炼[API-Key](https://help.aliyun.com/zh/model-studio/get-api-key)）检索知识库，两者均已封装复杂的签名计算逻辑，可简化您的调用过程。
+-   **调用方式**：可通过最新版[阿里云百炼 SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)（配合阿里云访问密钥 [AccessKey](https://help.aliyun.com/zh/ram/user-guide/create-an-accesskey-pair) ）或[Spring AI Alibaba](raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)（配合阿里云百炼[API-Key](raw/model-api-reference/preparations/get-api-key.md)）检索知识库，两者均已封装复杂的签名计算逻辑，可简化您的调用过程。
     
--   **权限要求**：
+-   权限要求：
+    
     -   **RAM 用户（子账号）**：需先获取阿里云百炼的 [API 权限](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)（可使用`AliyunBailianDataFullAccess`策略，该策略已包含本接口所需的 sfm:Retrieve 权限点），并[加入一个业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)后，才能调用本接口。
-        
     -   **阿里云账号（主账号）**：默认拥有权限，可直接调用。
-        
 -   **响应延迟**：由于接口调用包含复杂的检索和匹配，响应时间可能较长，建议您合理设置请求的超时与重试策略。
     
 -   **幂等性**：本接口具有幂等性。
@@ -18,11 +17,9 @@
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/bailian/2023-12-29/Retrieve)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
- [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/bailian/2023-12-29/Retrieve)
-
-## **授权信息**
+## 授权信息
 
 下表是API对应的授权信息，可以在RAM权限策略语句的`Action`元素中使用，用来给RAM用户或RAM角色授予调用此API的权限。具体说明如下：
 
@@ -32,10 +29,8 @@
     
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
     
-    -   对于必选的资源类型，用前面加 \* 表示。
-        
+    -   对于必选的资源类型，用前面加 \* 表示。
     -   对于不支持资源级授权的操作，用`全部资源`表示。
-        
 -   条件关键字：是指云产品自身定义的条件关键字。
     
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
@@ -131,7 +126,7 @@ boolean
 
 否
 
-是否开启重排序。更多信息，请参见[知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)。取值范围：
+是否开启重排序。更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。取值范围：
 
 -   true：开启。
     
@@ -214,11 +209,7 @@ string
 
 默认值为空，使用创建知识库时选择的排序模型。
 
-**说明**
-
 如仅需语义排序，可使用`qwen3-rerank`；若同时需要语义排序和文本匹配特征以确保相关性，建议使用`qwen3-rerank-hybrid`。
-
-**说明**
 
 `gte-rerank-hybrid`与`gte-rerank`后续停止更新，不建议使用。
 
@@ -277,7 +268,7 @@ string
 
 提供一个自然语言指令，用于精细化控制重排序模型的行为。
 
-**重要** 此参数仅在 rerank\_mode 设置为 "custom" 时生效。
+此参数仅在 rerank\_mode 设置为 "custom" 时生效。
 
 RerankMinScore
 
@@ -357,8 +348,6 @@ string
 
 知识库 ID，即 **CreateIndex** 接口返回的`Data.Id`。
 
-**说明**
-
 -   请确保对应知识库已成功创建且未被删除。
     
 
@@ -387,7 +376,7 @@ array<object>
 
 否
 
-支持通过 SearchFilter 设置个性化的检索条件（比如标签），对语义检索结果进行过滤，以排除与查询 Query 无关的信息。 设置 is\_displayed\_chunk\_content 参数为 true 生效筛选逻辑，具体内容请参见[知识库 SearchFilters](https://help.aliyun.com/zh/model-studio/how-to-use-search-filters)。
+支持通过 SearchFilter 设置个性化的检索条件（比如标签），对语义检索结果进行过滤，以排除与查询 Query 无关的信息。 设置 is\_displayed\_chunk\_content 参数为 true 生效筛选逻辑，具体内容请参见[知识库 SearchFilters](raw/application-api-reference/more/how-to-use-search-filters.md)。
 
 object
 
@@ -413,15 +402,11 @@ string
 
 检索图片问答类知识库时您可传入图片 URL 地址。当该知识库中存在图片索引时，系统会将输入图片转为向量并检索到相关记录；如果不存在图片索引，则输入的图片不会用于检索。
 
-**说明**
-
 本字段不支持文档搜索/数据查询/音视频搜索类知识库（即使传入也不生效）
 
-**说明**
+请确保链接公开可访问且指向一个有效的图片文件。格式示例：[https://example.com/downloads/pic.jpg](https://example.com/downloads/pic.jpg)
 
-请确保链接公开可访问且指向一个有效的图片文件。格式示例：https://example.com/downloads/pic.jpg
-
-https://example.com/downloads/pic.jpg
+[https://example.com/downloads/pic.jpg](https://example.com/downloads/pic.jpg)
 
 QueryHistory
 
@@ -474,7 +459,7 @@ string
 
 否
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -516,19 +501,11 @@ any
 
 文本切片的元数据 Map。
 
-**说明**
-
 文档搜索类知识库的元数据 Map 中`file_path`字段无意义，请勿在业务代码中使用。
-
-**说明**
 
 检索文档搜索类识库时，若切片包含图片，将通过元数据 Map 中`image_url`字段透出，并附有过期时间。
 
-**说明**
-
 检索音视频搜索类知识库时，若切片包含音频，将通过元数据 Map 中`audio_url`字段透出，并附有过期时间。
-
-**说明**
 
 检索音视频搜索类知识库时，若切片包含视频，将通过元数据 Map 中`video_url`字段透出，并附有过期时间。
 
@@ -616,6 +593,6 @@ true
 
 访问[错误中心](https://api.aliyun.com/document/bailian/2023-12-29/errorCode)查看更多错误码。
 
-## **变更历史**
+## 变更历史
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/bailian/2023-12-29/Retrieve#workbench-doc-change-demo)。

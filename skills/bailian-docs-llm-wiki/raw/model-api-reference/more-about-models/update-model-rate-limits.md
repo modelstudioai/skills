@@ -4,7 +4,7 @@
 
 ## 前提条件
 
-已创建 API Key 并配置为环境变量 `DASHSCOPE_API_KEY`。配置方法请参见[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+已创建 API Key 并配置为环境变量 `DASHSCOPE_API_KEY`。配置方法请参见[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
 
 ## 请求说明
 
@@ -147,7 +147,6 @@ Object
 ## 请求示例
 
 **示例一：设置 QPM=60、TPM=100000**
-
 ```
 curl -X POST "https://dashscope.aliyuncs.com/api/v1/models/limits" \
     --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
@@ -165,9 +164,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/models/limits" \
         ]
     }'
 ```
-
 **示例二：删除限流**
-
 ```
 curl -X POST "https://dashscope.aliyuncs.com/api/v1/models/limits" \
     --header "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
@@ -182,7 +179,6 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/models/limits" \
 ## 返回示例
 
 **成功示例**
-
 ```
 {
     "code": null,
@@ -192,9 +188,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/models/limits" \
     "request_id": "d5f5201f-ee7a-9e3d-8569-bc0eedec21f9"
 }
 ```
-
 **失败示例**
-
 ```
 {
     "code": "InvalidParameter",
@@ -207,4 +201,4 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/models/limits" \
 
 ## 错误码
 
-如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](https://help.aliyun.com/zh/model-studio/error-code)。
+如果调用失败，会返回错误信息。更多错误码及解决方法，请参见[错误信息](raw/model-api-reference/preparations/error-code.md)。

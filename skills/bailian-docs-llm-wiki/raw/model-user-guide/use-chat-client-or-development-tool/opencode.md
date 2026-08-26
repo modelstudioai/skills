@@ -2,48 +2,40 @@
 
 OpenCode 是一款终端 AI 编程工具，可以通过按量计费、Coding Plan、Token Plan 个人版或 Token Plan 团队版接入阿里云百炼。
 
-## **安装 OpenCode**
+## 安装 OpenCode
 
 1.  安装 [Node.js](https://nodejs.org/en/download/)（v18.0 或更高版本）。
-    
 2.  在终端中执行以下命令安装 OpenCode：
-    
-    ```
-    npm install -g opencode-ai
-    ```
-    
-    运行以下命令验证安装。若有版本号输出，则表示安装成功。
-    
-    ```
-    opencode -v
-    ```
-    
 
-## **配置接入凭证**
+```
+npm install -g opencode-ai
+```
+
+运行以下命令验证安装。若有版本号输出，则表示安装成功。
+
+```
+opencode -v
+```
+
+## 配置接入凭证
 
 使用文本编辑器打开：
 
 -   macOS / Linux：`~/.config/opencode/opencode.json`
-    
 -   Windows：`C:\Users\<用户名>\.config\opencode\opencode.json`
-    
 
 根据所选方案写入对应配置：
 
 -   **Token Plan 个人版**：个人订阅，按 token 消耗抵扣 Credits。
-    
 -   **Token Plan 团队版**：按坐席订阅，按 token 消耗抵扣 Credits。
-    
 -   **Coding Plan**：固定月费订阅，按模型调用次数计量。
-    
 -   **按量计费**：按实际调用量后付费。
-    
 
 ### Token Plan 个人版
 
 需先购买 Token Plan 个人版套餐且套餐处于有效期内。可在[Token Plan 个人版页面](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/overview)购买套餐。
 
-将 `YOUR_API_KEY` 替换为 Token Plan 个人版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/overview)。可用模型请参考 Token Plan 个人版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)。
+将 `YOUR_API_KEY` 替换为 Token Plan 个人版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/overview)。可用模型请参考 Token Plan 个人版[支持的模型](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-personal-overview.md)。
 
 ```
 {
@@ -59,6 +51,21 @@ OpenCode 是一款终端 AI 编程工具，可以通过按量计费、Coding Pla
       "models": {
         "qwen3.8-max": {
           "name": "Qwen3.8 Max",
+          "reasoning": true,
+          "limit": {
+            "context": 983616,
+            "output": 131072
+          },
+          "modalities": {
+            "input": ["text", "image"],
+            "output": ["text"]
+          },
+          "options": {
+            "effort": "xhigh"
+          }
+        },
+        "qwen3.8-flash": {
+          "name": "Qwen3.8 Flash",
           "reasoning": true,
           "limit": {
             "context": 983616,
@@ -135,7 +142,7 @@ OpenCode 是一款终端 AI 编程工具，可以通过按量计费、Coding Pla
 
 需先购买 Token Plan 团队版套餐且套餐处于有效期内。可在[Token Plan 团队版页面](https://bailian.console.aliyun.com/?tab=plan#/efm/subscription/overview)购买套餐。
 
-将 `YOUR_API_KEY` 替换为 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)。可用模型请参考 Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)。
+将 `YOUR_API_KEY` 替换为 Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beijing?tab=plan#/efm/subscription/uac-admin/organization/members/list)。可用模型请参考 Token Plan 团队版[支持的模型](raw/model-user-guide/token-plan-guide/token-plan-overview.md)。
 
 ```
 {
@@ -151,6 +158,21 @@ OpenCode 是一款终端 AI 编程工具，可以通过按量计费、Coding Pla
       "models": {
         "qwen3.8-max": {
           "name": "Qwen3.8 Max",
+          "reasoning": true,
+          "limit": {
+            "context": 983616,
+            "output": 131072
+          },
+          "modalities": {
+            "input": ["text", "image"],
+            "output": ["text"]
+          },
+          "options": {
+            "effort": "xhigh"
+          }
+        },
+        "qwen3.8-flash": {
+          "name": "Qwen3.8 Flash",
           "reasoning": true,
           "limit": {
             "context": 983616,
@@ -304,7 +326,7 @@ OpenCode 是一款终端 AI 编程工具，可以通过按量计费、Coding Pla
 
 ### Coding Plan
 
-将 `YOUR_API_KEY` 替换为 Coding Plan 专属 [API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)。可用模型请参考 Coding Plan [支持的模型](https://help.aliyun.com/zh/model-studio/coding-plan)。
+将 `YOUR_API_KEY` 替换为 Coding Plan 专属 [API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/efm/coding_plan)。可用模型请参考 Coding Plan [支持的模型](raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan.md)。
 
 ```
 {
@@ -402,14 +424,12 @@ OpenCode 是一款终端 AI 编程工具，可以通过按量计费、Coding Pla
 
 ### 按量计费
 
-将 `YOUR_API_KEY` 替换为[阿里云百炼 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。可用模型请参考[Anthropic 兼容 API](https://help.aliyun.com/zh/model-studio/anthropic-api-messages#07833dedefft7)。
+将 `YOUR_API_KEY` 替换为[阿里云百炼 API Key](raw/model-api-reference/preparations/get-api-key.md)。可用模型请参考[Anthropic 兼容 API](https://help.aliyun.com/zh/model-studio/anthropic-api-messages)。
 
-`baseURL` 按地域设置（将 `{WorkspaceId}` 替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)），API Key 需与所选地域对应：
+`baseURL` 按地域设置（将 `{WorkspaceId}` 替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)），API Key 需与所选地域对应：
 
 -   华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1`
-    
 -   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic/v1`
-    
 
 ```
 {
@@ -467,22 +487,19 @@ OpenCode 是一款终端 AI 编程工具，可以通过按量计费、Coding Pla
 }
 ```
 
-如需添加[其他模型](https://help.aliyun.com/zh/model-studio/anthropic-api-messages#07833dedefft7)，在 `models` 中以相同格式追加即可。
+如需添加[其他模型](https://help.aliyun.com/zh/model-studio/anthropic-api-messages)，在 `models` 中以相同格式追加即可。
 
-## **验证配置**
+## 验证配置
 
 保存配置后，重启 OpenCode，输入 `/models`，搜索 `Alibaba Cloud Model Studio`，选择需要使用的模型即可开始对话。
 
-## **常见问题**
+## 常见问题
 
 ### 错误码
 
 配置过程中遇到报错，请参考对应计费方案的常见问题文档：
 
--   按量付费：[Anthropic API 兼容 - 错误码](https://help.aliyun.com/zh/model-studio/anthropic-api-messages#7d8d58d0736zv)
-    
--   Coding Plan：[Coding Plan 常见问题](https://help.aliyun.com/zh/model-studio/coding-plan-faq)
-    
--   Token Plan 个人版：[Token Plan 个人版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-team-faq)
-    
--   Token Plan 团队版：[Token Plan 团队版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-team-faq)
+-   按量付费：[Anthropic API 兼容 - 错误码](https://help.aliyun.com/zh/model-studio/anthropic-api-messages)
+-   Coding Plan：[Coding Plan 常见问题](raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan-faq.md)
+-   Token Plan 个人版：[Token Plan 个人版常见问题](raw/model-user-guide/token-plan-guide/token-plan-team-edition/token-plan-team-faq.md)
+-   Token Plan 团队版：[Token Plan 团队版常见问题](raw/model-user-guide/token-plan-guide/token-plan-team-edition/token-plan-team-faq.md)

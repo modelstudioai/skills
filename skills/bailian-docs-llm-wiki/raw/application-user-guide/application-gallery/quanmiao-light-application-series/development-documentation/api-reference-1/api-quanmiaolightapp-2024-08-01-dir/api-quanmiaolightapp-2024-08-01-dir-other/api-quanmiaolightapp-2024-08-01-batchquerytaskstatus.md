@@ -1,14 +1,12 @@
-# BatchQueryTaskStatus - 批量查询异步任务状态
+# BatchQueryTaskStatus
 
 批量查询任务状态
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/BatchQueryTaskStatus)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
- [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/QuanMiaoLightApp/2024-08-01/BatchQueryTaskStatus)
-
-## **授权信息**
+## 授权信息
 
 当前API暂无授权信息透出。
 
@@ -36,7 +34,7 @@ string
 
 否
 
-阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)
+阿里云百炼业务空间唯一标识：获取[业务空间 ID（Workspace ID）](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)
 
 llm-xx
 
@@ -80,7 +78,7 @@ string
 
 xxx
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -201,8 +199,6 @@ string
 
 ## 错误码
 
-   
-
 **HTTP status code**
 
 **错误码**
@@ -221,6 +217,6 @@ You are not authorized to perform this action , Please check the assignment of t
 
 访问[错误中心](https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/errorCode)查看更多错误码。
 
-## **变更历史**
+## 变更历史
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/QuanMiaoLightApp/2024-08-01/BatchQueryTaskStatus#workbench-doc-change-demo)。

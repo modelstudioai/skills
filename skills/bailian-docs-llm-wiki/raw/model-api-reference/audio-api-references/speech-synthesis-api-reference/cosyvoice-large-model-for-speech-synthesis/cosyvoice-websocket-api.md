@@ -4,40 +4,34 @@
 
 DashScope SDK目前仅支持Java和Python。使用其他编程语言时，可通过WebSocket连接与服务进行通信。
 
-**用户指南：**关于模型介绍和选型建议请参见[语音合成](https://help.aliyun.com/zh/model-studio/tts-model/)。
+**用户指南：**关于模型介绍和选型建议请参见[语音合成](raw/model-user-guide/model-experience/tts-model.md)。
 
-## **接口地址**
+## 接口地址
 
 WebSocket URL固定如下：
 
-## 华北2（北京）
+#### 华北2（北京）
 
 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## 新加坡
+#### 新加坡
 
 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-**重要**
+**重要**URL 必须使用 `wss://` 协议，且固定不变。Authorization 在请求头中设置（参见[请求头](https://help.aliyun.com/zh/model-studio/cosyvoice-websocket-api#b02603aacf7e9)）。
 
-URL 必须使用 `wss://` 协议，且固定不变。Authorization 在请求头中设置（参见[请求头](#b02603aacf7e9)）。
-
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。现有域名仍可正常使用。
 
-## **请求头**
+## 请求头
 
 请求头中需添加如下信息：
 
@@ -71,7 +65,7 @@ string
 
 否
 
-阿里云百炼[业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace#c5222ec081sbo)。
+阿里云百炼[业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)。
 
 X-DashScope-DataInspection
 
@@ -81,15 +75,13 @@ string
 
 是否启用数据合规检测功能。默认不传或设为`enable`。如非必要，请勿启用该参数。
 
-**重要**
-
-Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或缺失，握手将失败并返回 HTTP 401/403 错误。
+**重要**Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或缺失，握手将失败并返回 HTTP 401/403 错误。
 
 ## 交互流程
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7962835871/CAEQaxiBgID50pCW3hkiIDVlOWNkODdhOGYyYjQ2ZDFiMzgyYjNmMmUzOGZkNGVh4709861_20241015153444.149.svg)
 
-客户端事件和服务端事件的详细说明，请参见[客户端事件](https://help.aliyun.com/zh/model-studio/cosyvoice-client-events)和[服务端事件](https://help.aliyun.com/zh/model-studio/cosyvoice-server-events)。
+客户端事件和服务端事件的详细说明，请参见[客户端事件](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-client-events.md)和[服务端事件](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-server-events.md)。
 
 按时间顺序，客户端与服务端的交互流程如下：
 
@@ -103,18 +95,14 @@ Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或�
     
     客户端按顺序向服务端发送一个或多个包含待合成文本的continue-task事件，服务端接收到完整语句后返回result-generated事件和音频流（文本长度有约束， 详情参见continue-task事件中`text`字段描述）。
     
-    **说明**
-    
-    支持多次发送continue-task事件，按顺序提交文本片段。服务端接收文本片段后自动进行分句：
+    **说明**支持多次发送continue-task事件，按顺序提交文本片段。服务端接收文本片段后自动进行分句：
     
     -   完整语句立即合成，此时客户端能够接收到服务端返回的音频
-        
     -   不完整语句缓存至完整后合成，语句不完整时服务端不返回音频
-        
     
     当发送finish-task事件时，服务端会强制合成所有缓存内容。
     
-5.  接收音频：通过 `binary` 通道接收音频流
+5.  接收音频：通过 `binary` 通道接收音频流
     
 6.  通知服务端结束任务：
     
@@ -129,6 +117,4 @@ Authorization 鉴权在 WebSocket 握手阶段验证。如果 API Key 无效或�
 
 为提高资源利用率，建议复用 WebSocket 连接处理多个任务，而非为每个任务建立新连接。
 
-**重要**
-
-同一次合成任务中，run-task、所有 continue-task、finish-task 必须使用相同的 `task_id`。每次发起新任务时生成新的 task\_id（如使用 UUID）。使用不同 task\_id 会导致音频错乱或任务失败。
+**重要**同一次合成任务中，run-task、所有 continue-task、finish-task 必须使用相同的 `task_id`。每次发起新任务时生成新的 task\_id（如使用 UUID）。使用不同 task\_id 会导致音频错乱或任务失败。

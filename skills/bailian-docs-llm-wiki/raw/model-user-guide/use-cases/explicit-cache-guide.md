@@ -5,11 +5,8 @@
 ## 什么时候使用显式缓存
 
 -   **需要稳定命中缓存的场景**：当业务对缓存命中有明确要求，需要确保指定内容被稳定复用时，建议使用显式缓存。显式缓存可做到 100% 确定性命中，不受后端资源调度影响。
-    
 -   **高频复用相同 Prompt 的场景**：当相同或高度一致的 Prompt 会被反复提交时，显式缓存可以显著降低调用成本。首次写入缓存仅产生标准价格 25% 的额外开销，后续命中可节省 90% 成本；只要发生至少一次命中，总体成本即低于不使用缓存的方案。
-    
 -   **工业级 Agent 的长上下文管理场景**：在 Agent 应用中，常见的压缩、recap、system reminder 等机制会导致上下文持续变化。显式缓存可对关键上下文片段进行标记和固定复用，确保这些内容在复杂上下文演进过程中仍能稳定命中缓存。
-    
 
 ## 常用 Agent 和 Coding 工具
 
@@ -17,7 +14,7 @@
 
 以下示例以华北2（北京）端点为例，其他地域请替换为对应的地域端点。
 
-## Claude Code
+#### Claude Code
 
 Claude Code 自 v2.x 起默认在请求中携带 `cache_control` 标记（system、env、最近 user message 三处），接入百炼 Anthropic 兼容端点后无需额外配置。
 
@@ -35,13 +32,10 @@ claude
 确保接入端点为 Anthropic 协议：
 
 -   Token Plan 团队版：`https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic`
-    
 -   Coding Plan：`https://coding.dashscope.aliyuncs.com/apps/anthropic`
-    
 -   按量计费：`https://dashscope.aliyuncs.com/apps/anthropic`
-    
 
-详见 [Claude Code](https://help.aliyun.com/zh/model-studio/claude-code)。
+详见 [Claude Code](raw/model-user-guide/use-chat-client-or-development-tool/claude-code.md)。
 
 **可选：提升跨会话命中率**
 
@@ -50,7 +44,6 @@ Claude Code 默认会在 system prompt 中包含当前目录、日期、git 状�
 ```
 claude --exclude-dynamic-system-prompt-sections
 ```
-
 **可选：关闭显式缓存**
 
 如需关闭（一般无须关闭）：
@@ -61,16 +54,14 @@ export DISABLE_PROMPT_CACHING=1
 
 支持按模型粒度关闭：`DISABLE_PROMPT_CACHING_HAIKU`、`DISABLE_PROMPT_CACHING_SONNET`、`DISABLE_PROMPT_CACHING_OPUS`。
 
-## Open Code
+#### Open Code
 
 OpenCode 通过 `@ai-sdk/anthropic` 接入百炼 Anthropic 兼容端点时，默认对 system 与最近的非 system 消息注入 `cache_control`。
 
 **安装**
-
 ```
 npm install -g opencode-ai
 ```
-
 **配置**
 
 创建配置文件 `~/.config/opencode/opencode.json`（Windows：`C:\Users\<用户名>\.config\opencode\opencode.json`）：
@@ -94,9 +85,7 @@ npm install -g opencode-ai
 }
 ```
 
-**说明**
-
-`baseURL` 末尾需带 `/v1`。
+**说明**`baseURL` 末尾需带 `/v1`。
 
 ```
 export DASHSCOPE_API_KEY=sk-xxxxx
@@ -106,36 +95,29 @@ opencode run -m "bailian/qwen3.7-max" "..."
 其他套餐 base URL：
 
 -   Token Plan 团队版：`https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1`
-    
 -   Coding Plan：`https://coding.dashscope.aliyuncs.com/apps/anthropic/v1`
-    
 
-详见 [OpenCode](https://help.aliyun.com/zh/model-studio/opencode)。
+详见 [OpenCode](raw/model-user-guide/use-chat-client-or-development-tool/opencode.md)。
 
-## OpenClaw
+#### OpenClaw
 
 OpenClaw 走 Anthropic 兼容端点时默认对每次请求注入 `cache_control` 标记（系统提示词与最近用户消息），无需任何额外开关。只要 provider 的 Base URL 指向 `/apps/anthropic`，显式缓存即自动启用。
 
 **安装**
-
 ```
 npm install -g openclaw
 # 或
 curl -fsSL https://openclaw.ai/install.sh | bash
 ```
-
 **配置**
 
 打开配置文件 `~/.openclaw/openclaw.json`，将 `"api"` 设置为 `"anthropic-messages"`，并设置 base URL：
 
 -   Token Plan 团队版：`https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1`
-    
 -   Coding Plan：`https://coding.dashscope.aliyuncs.com/apps/anthropic/v1`
-    
 -   按量计费：`https://dashscope.aliyuncs.com/apps/anthropic/v1`
-    
 
-详见 [OpenClaw](https://help.aliyun.com/zh/model-studio/openclaw)。
+详见 [OpenClaw](raw/model-user-guide/use-chat-client-or-development-tool/openclaw.md)。
 
 **可选：自定义缓存边界**
 
@@ -149,44 +131,36 @@ curl -fsSL https://openclaw.ai/install.sh | bash
 <!-- OPENCLAW_CACHE_BOUNDARY -->
 
 当前时间：2026-05-25 18:42
-工作目录：/Users/.../project
+工作目录：/Users/<username>/project
 ```
 
 未使用该标记时，OpenClaw 按内置策略整体挂 `cache_control`，仍可享受显式缓存，不影响基础使用。
 
-## Hermes
+#### Hermes
 
 通过 `hermes config set` 命令配置接入参数，设置 base URL：
 
 -   Token Plan 团队版：`https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1`
-    
 -   Coding Plan：`https://coding.dashscope.aliyuncs.com/apps/anthropic/v1`
-    
 -   按量计费：`https://dashscope.aliyuncs.com/apps/anthropic/v1`
-    
 
-详见 [Hermes Agent](https://help.aliyun.com/zh/model-studio/hermes-agent)。
+详见 [Hermes Agent](raw/model-user-guide/use-chat-client-or-development-tool/hermes-agent.md)。
 
 ## API 接入
 
 ### 核心要点
 
 -   在需要缓存的消息上添加 `"cache_control": {"type": "ephemeral"}`，从 messages 数组开头到该标记位置之间的所有内容将被创建为缓存块。
-    
 -   缓存内容最少需要 **1024 Token**。
-    
 -   单次请求最多支持 **4** 个缓存标记。
-    
 -   缓存有效期为 **5 分钟**，每次命中自动续期。
-    
 -   Tools 定义是 System Prompt 的一部分参与缓存计算，如果 Tools 改变则无法命中缓存。
-    
 
 ### 快速开始
 
 以下示例展示了显式缓存的基本使用方式：第一次请求创建缓存，第二次请求命中缓存。
 
-## OpenAI 兼容
+OpenAI 兼容
 
 ```
 from openai import OpenAI
@@ -233,7 +207,7 @@ print(f"创建缓存 Token：{second.usage.prompt_tokens_details.cache_creation_
 print(f"命中缓存 Token：{second.usage.prompt_tokens_details.cached_tokens}")
 ```
 
-## Anthropic 兼容
+Anthropic 兼容
 
 ```
 import anthropic
@@ -292,9 +266,7 @@ print(f"命中缓存 Token：{second.usage.cache_read_input_tokens}")
 请求完成后，可以通过响应中的 `usage` 字段确认缓存状态：
 
 -   `cache_creation_input_tokens`：本次请求新创建缓存的 Token 数。该值大于 0 说明创建了新缓存。
-    
 -   `cached_tokens`（OpenAI 兼容）或 `cache_read_input_tokens`（Anthropic 兼容）：本次请求命中缓存的 Token 数。该值大于 0 说明成功命中缓存。
-    
 
 ## 不同场景下的最佳实践
 
@@ -303,14 +275,11 @@ print(f"命中缓存 Token：{second.usage.cache_read_input_tokens}")
 **场景特点：**
 
 -   用户与模型进行多轮交互，每轮请求携带完整对话历史
-    
 -   典型应用：客服对话、知识问答、代码辅助等
-    
 
 **最佳实践：**在每次请求的最后一条消息上添加 `cache_control` 标记。每轮对话都会命中上一轮创建的缓存（对话历史部分），同时为下一轮创建包含当前完整对话的新缓存。
 
 **示例：**
-
 ```
 from openai import OpenAI
 import os
@@ -396,22 +365,15 @@ print(f"客服: {chat('可以同时控制多少个设备？')[:60]}...")
 **场景特点：**
 
 -   超长多轮对话，包含：长 System Prompt + skills/tools 说明 + project 上下文 + 用户对话 / 工具调用
-    
 -   不同部分的变化频率不同
-    
 -   典型应用：AI 编程助手（如 Claude Code、OpenClaw）、RAG 问答系统等
-    
 
 **最佳实践：**使用多个缓存标记（最多 4 个），分别标记不同稳定性层级的内容。每个标记需放在不同的 message 上才能作为独立截断点：
 
 -   System Prompt 加一个（几乎不变）
-    
 -   skills/tools 说明加一个（可能出现组合变化）
-    
 -   project 上下文加一个（可能切换/压缩）
-    
 -   用户对话 / 工具调用加一个（每轮增长）
-    
 
 **示例：**以下示例中，系统人设几乎不变（缓存标记 1），知识库随商品切换而变化（缓存标记 2），对话历史每轮增长（缓存标记 3）。注意：知识库放在 user message 中，以确保它有独立的缓存截断点——多条 system message 会被内部合并，无法作为独立截断点：
 
@@ -527,29 +489,21 @@ A2: 关于冰晶蓝的具体补货时间...我需要为您转接人工客服...
 **多标记缓存的命中逻辑：**
 
 -   **用户继续追问同一商品**：系统人设 + 知识库均未变化，命中缓存标记 2 处的缓存（最长前缀匹配），节约最大。
-    
 -   **对话轮次增加**：前面的内容（系统人设 + 知识库 + 历史对话）命中上一轮的缓存，仅新增部分需创建新缓存。
-    
 
-**说明**
-
-建议将内容按稳定性从高到低排列：将变化最少的内容放在最前面（如系统人设），变化最频繁的内容放在最后面（如当前对话），以最大化缓存命中率。
+**说明**建议将内容按稳定性从高到低排列：将变化最少的内容放在最前面（如系统人设），变化最频繁的内容放在最后面（如当前对话），以最大化缓存命中率。
 
 ### 任务完成型场景（批量处理）
 
 **场景特点：**
 
 -   单轮对话，不需要上下文记忆
-    
 -   不变的长 System Prompt（任务说明）+ 变化的用户输入（待处理数据）
-    
 -   典型应用：文本分类、意图识别、数据提取、内容审核等
-    
 
 **最佳实践：**仅在 System Prompt 上添加 `cache_control` 标记。后续每次请求只要 System Prompt 不变，即可命中缓存。
 
 **示例：**
-
 ```
 from openai import OpenAI
 import os
@@ -634,9 +588,7 @@ for i, review in enumerate(reviews):
 **场景特点：**
 
 -   使用 Function Calling 功能，工具定义列表较长
-    
 -   工具定义在多次请求间保持不变
-    
 
 **最佳实践：**`tools` 参数的内容会作为 System Prompt 的一部分参与缓存。只需确保每次请求的工具定义完全一致（工具顺序、字段顺序、字段结构），并在 messages 的 content 上添加 `cache_control` 标记即可。
 
@@ -737,25 +689,17 @@ Q2: 帮我查明天从上海到北京的航班
   调用工具: ['search_flights']
 ```
 
-**重要**
-
-提高 Function Calling 缓存命中率的关键：
+**重要**提高 Function Calling 缓存命中率的关键：
 
 -   **工具列表顺序一致**：tools 数组中各工具的排列顺序需保持一致。
-    
 -   **字段顺序一致**：同一个 tool 的 JSON 字段顺序需保持一致。
-    
 -   **字段结构一致**：不要遗漏或新增字段，即使该字段为空或可选。
-    
 
 ## 注意事项
 
 -   **content 格式要求**：添加 `cache_control` 时，必须将 content 字段改为数组形式。字符串形式的 content 不支持添加缓存标记。
-    
 -   **缓存标记粒度**：Qwen3.5 及之后的模型仅支持消息级别的缓存截断点。在同一条 message 的 content 数组内放置多个 `cache_control` 不会产生多个截断点——系统仅在该 message 的最后一个 marker 位置存储缓存，无法在中间 block 处截断命中。此外，多条 system message 会被内部合并为一个整体，也无法在中间截断。如需多个独立截断点，应将带 `cache_control` 的内容分布在不同角色的 message 上（如 system 放一个，user 放一个）。Qwen3.5 之前的模型支持 content 级别（消息内部）的缓存截断。
-    
 -   **与隐式缓存互斥**：同一请求只能使用一种缓存模式。若请求中包含 `cache_control` 标记则使用显式缓存，否则系统自动使用隐式缓存。
-    
 
 ## 支持的模型
 

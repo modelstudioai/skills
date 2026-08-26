@@ -28,11 +28,11 @@ GPT-5.4、Claude Sonnet 4.6、Gemini 3 Pro
 
 GPT-5.4-mini、Gemini 3.1 Flash
 
-`qwen3.7-flash`
+`qwen3.8-flash`
 
 ## 图像与视频理解
 
-推荐从`qwen3.7-plus`开始，它是千问旗舰模型，支持1M上下文、最长2小时视频、Function Calling和内置工具等完整功能。当您的场景稳定后，可以尝试`qwen3.7-flash`来降低成本，它提供接近旗舰的效果，并支持相同的上下文长度和功能集。
+推荐从`qwen3.8-max`开始，它是千问迄今能力最强的旗舰模型，支持1M上下文、最长2小时视频、Function Calling和内置工具等完整功能。当您的场景稳定后，可以尝试`qwen3.8-flash`或`qwen3.7-plus`来降低成本，它们提供接近旗舰的效果，并支持相同的上下文长度和功能集。
 
 ### 图像分辨率
 
@@ -40,21 +40,16 @@ GPT-5.4-mini、Gemini 3.1 Flash
 
 ### 视频支持
 
--   最长2小时 / 2GB：`qwen3.8-max`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
-    
+-   最长2小时 / 2GB：`qwen3.8-max`、`qwen3.8-flash`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
 -   最长1小时 / 2GB：`qwen3-vl-plus`、`qwen3-vl-flash`
-    
 -   最长1小时 / 2GB：`qwen3.5-omni-plus`、`qwen3.5-omni-flash`（同时支持音频输入）
-    
 
 ### Function Calling与内置工具
 
 让模型根据图像或视频中的内容执行操作。
 
 -   Function Calling：Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列模型均支持
-    
--   内置工具（联网搜索、代码执行，无需额外配置）：仅`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
-    
+-   内置工具（联网搜索、代码执行，无需额外配置）：仅`qwen3.8-max`、`qwen3.8-flash`、`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
 
 ### 结构化输出
 
@@ -64,7 +59,7 @@ Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列支持此功能。
 
 ## OCR与文档提取
 
-`qwen3.5-ocr`专为文档、表格、试卷和手写内容的文字提取而优化。您也可以使用`qwen3.7-plus`或`qwen3.7-flash`进行通用图片文字提取。
+`qwen3.5-ocr`专为文档、表格、试卷和手写内容的文字提取而优化。您也可以使用`qwen3.8-flash`或`qwen3.7-plus`进行通用图片文字提取。
 
 ## 推荐模型
 
@@ -89,6 +84,26 @@ Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列支持此功能。
 **结构化输出**
 
 `qwen3.8-max`
+
+1M
+
+16M
+
+2小时
+
+2GB
+
+2048
+
+64
+
+支持
+
+支持
+
+支持
+
+`qwen3.8-flash`
 
 1M
 
@@ -602,38 +617,29 @@ Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列支持此功能。
 
 [华北2（北京）](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all) | [新加坡](https://modelstudio.console.aliyun.com/ap-southeast-1?tab=doc#/doc/?type=model&url=2840914) | [美国](https://modelstudio.console.aliyun.com/us-east-1?tab=doc#/doc/?type=model&url=2840914) | [法兰克福](https://modelstudio.console.aliyun.com/eu-central-1?tab=doc#/doc/?type=model&url=2840914)
 
-**查看旧版及其他模型列表**
+查看旧版及其他模型列表
 
 #### Qwen3-VL
 
 -   `qwen3-vl-plus`及其快照版本
-    
 -   `qwen3-vl-flash`及其快照版本
-    
 
 #### Qwen-Omni
 
 -   `qwen3-omni-flash`及其快照版本
-    
 -   `qwen-omni-turbo`及其快照版本
-    
 
 #### Qwen-OCR
 
 -   `qwen-vl-ocr`及其快照版本
-    
 -   `qwen-vl-ocr-latest`
-    
 
 #### QVQ
 
 -   `qvq-max`
-    
 -   `qvq-plus`
-    
 
 #### 旧版Qwen-VL
 
 -   `qwen-vl-max`
-    
 -   `qwen-vl-plus`

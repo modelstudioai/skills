@@ -2,7 +2,7 @@
 
 本文档介绍了如何通过自定义方式创建应用
 
-## **创建应用**
+## 创建应用
 
 -   第一步：首先点击**我的应用**，再点击**创建应用**。
     
@@ -11,11 +11,9 @@
     -   **应用名称：**根据实际业务需要修改应用名称。
         
     -   **应用创建方式：**
-        
         -   这里选择**自定义创建**：通过编写自定义指令（Prompt）来构建应用逻辑，用户可使用内置或自定义指令模板进行测试，适合有一定经验的人员。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6469763871/p1086533.png)
-            
 
-## **应用配置**
+## 应用配置
 
 进入已经创建完成的应用中进行配置。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6469763871/p1086534.png)
 
@@ -23,19 +21,15 @@
     
 -   **指令信息：**通过编写指令信息来配置对应的任务、格式、要求等，来完成对应分析任务。
     
-    -   **变量配置：**若需要在对话过程中引用更多变量可以在此配置，在指令编辑器中输入 `/` 可触发变量自动补全，选择后插入对应变量引用。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6469763871/p1086535.png)
-        
+    -   **变量配置：**若需要在对话过程中引用更多变量可以在此配置，在指令编辑器中输入 `/` 可触发变量自动补全，选择后插入对应变量引用。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6469763871/p1086535.png)
     -   **选择指令模板：**同时可以选择直接使用官方预置模板，当前线上提供了总结摘要、信息抽取、服务质检、标签分类、多指令任务，共五类模板。同时支持自定义指令模板，或在官方预置模板基础上自定义修改的指令模板。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6379940671/p1009498.png)
-        
     -   **保存指令模板：**在编写指令信息或者自定义修改系统行业示例后，可以点击“保存指令模板”按钮，进行保存，选择指令模板保存方式，可选【新增指令模板、覆盖已有指令模板】，在“指令模板管理”中可以查看。选择‘覆盖已有指令模板’，需从下拉列表中选择目标模板名称。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6469763871/p1086536.png)
-        
     -   **指令优化：**对编写完成的指令信息进行AI优化。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6469763871/p1086537.png)
-        
 -   **分析对象类型**
     
     分析对象类型可以分为三种，纯文本、语音、图片，同时支持添加知识库进行辅助分析，支持添加热词组有助于提升语音转译准确性。
     
-    -   **知识库：**开启后可添加文档、表格、图片等类型知识用于辅助分析，当分析对象类型选择为图片时无法使用知识库。具体介绍可参考文档：[知识库的使用](https://help.aliyun.com/zh/model-studio/using-the-knowledge-base)。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6469763871/p1086538.png)
+    -   **知识库：**开启后可添加文档、表格、图片等类型知识用于辅助分析，当分析对象类型选择为图片时无法使用知识库。具体介绍可参考文档：[知识库的使用](raw/application-user-guide/application-gallery/official-application-lingque-ccai-dialogue-analysis-aio/lingque-ccai-aio-user-guide/using-the-knowledge-base.md)。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6469763871/p1086538.png)
         
     -   **选择文本时**：需要按照以下格式编写对话信息，同时也可以通过使用已经提供的行业对话示例。
         

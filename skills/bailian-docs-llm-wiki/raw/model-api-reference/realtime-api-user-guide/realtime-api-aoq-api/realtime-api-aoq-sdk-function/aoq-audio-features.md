@@ -2,14 +2,12 @@
 
 AOQ Client SDK 提供了完整的音频能力，覆盖音频采集、播放、编解码配置、扬声器管理、文件混音、外部音频流注入、音频帧数据回调等核心场景。本文档基于 Android（Java）、iOS（Objective-C）、Ohos（ArkTS）三个平台的公开 API，对音频常用功能进行统一介绍。
 
-## **音频采集**
+## 音频采集
 
 音频采集用于打开设备麦克风，将实时音频数据送入 SDK 编码推流管线。SDK 支持两种采集模式：
 
 -   **内部采集**（默认）：SDK 自动管理麦克风设备的打开、录音和关闭。
-    
 -   **外部采集**：由应用自行管理麦克风，采集到的 PCM 数据通过外部音频流接口输入 SDK。
-    
 
 ### 配置参数
 
@@ -82,31 +80,26 @@ int
 ### 使用示例
 
 **Android**
-
 ```
 AoqAudioCaptureConfig config = new AoqAudioCaptureConfig();
 config.isVoipMode = true;
 config.channel = 1;
 engine.startAudioCapture(config);
 ```
-
 **iOS**
-
 ```
 AoqAudioCaptureConfig *config = [[AoqAudioCaptureConfig alloc] init];
 config.isVoipMode = YES;
 config.channel = 1;
 [engine startAudioCapture:config];
 ```
-
 **Ohos**
-
 ```
 const config: AoqAudioCaptureConfig = { isVoipMode: true, channel: 1 };
 engine.startAudioCapture(config);
 ```
 
-## **音频播放**
+## 音频播放
 
 音频播放用于将接收到的远端音频数据渲染到本地扬声器或耳机。SDK 支持播放暂停/恢复（带淡入淡出）、打断当前轮音频通话等高级控制。
 
@@ -202,11 +195,9 @@ int
 
 `interruptAudioPlayer(trackType, fadeMs)`
 
-**说明**
+**说明****fadeMs 参数**：暂停和恢复播放时的淡入/淡出时长（毫秒），设为 0 则立即切换。
 
-**fadeMs 参数**：暂停和恢复播放时的淡入/淡出时长（毫秒），设为 0 则立即切换。
-
-## **扬声器管理**
+## 扬声器管理
 
 控制音频输出设备在扬声器和听筒之间切换。
 
@@ -234,15 +225,11 @@ int
 
 `isSpeakerphoneEnabled()`
 
-**说明**
+**说明**需要在 VoIP 模式下才允许切换，非 VoIP 时，`enableSpeakerphone` 调用有 OnError(AoqECAudioDeviceEarpieceRequiresVoipMode) 错误通知。
 
-需要在 VoIP 模式下才允许切换，非 VoIP 时，`enableSpeakerphone` 调用有 OnError(AoqECAudioDeviceEarpieceRequiresVoipMode) 错误通知。
+**说明****iOS 特殊行为**：iPad 设备只有扬声器模式；当 AVAudioSession 不是 PlayAndRecord 类别时，也始终返回 YES。
 
-**说明**
-
-**iOS 特殊行为**：iPad 设备只有扬声器模式；当 AVAudioSession 不是 PlayAndRecord 类别时，也始终返回 YES。
-
-## **音频编解码配置**
+## 音频编解码配置
 
 设置音频上行（编码器）和下行（解码器）的编码格式、采样率、声道数和码率。表示推流/拉流的格式。
 
@@ -342,7 +329,7 @@ AoqEncoderTypeAudioOpus
 
 Opus 编码
 
-## **音频文件混音**
+## 音频文件混音
 
 支持将本地音频文件混入当前音频流中一起推流和/或本地播放。每个音频文件通过业务自分配的 `fileId` 标识，可同时管理多个文件实例。
 
@@ -478,9 +465,7 @@ int
 
 `getAudioFileVolume(fileId, type)`
 
-**说明**
-
-**音量方向（type）**：`AoqAudioStreamPublish(0)` 控制推流音量；`AoqAudioStreamPlayout(1)` 控制本地播放音量。
+**说明****音量方向（type）**：`AoqAudioStreamPublish(0)` 控制推流音量；`AoqAudioStreamPlayout(1)` 控制本地播放音量。
 
 ### 状态回调
 
@@ -544,7 +529,7 @@ AoqAudioFileFailed
 
 播放失败
 
-## **外部音频流**
+## 外部音频流
 
 外部音频流允许将应用生成的 PCM 音频数据注入到 SDK 的音频管线中，支持推流和/或本地播放。典型场景包括 TTS 语音合成输出、AI 模型音频输出、背景音效等。每个外部音频流通过业务自分配的 `streamId` 标识。
 
@@ -683,15 +668,11 @@ false
 ### Push 数据最佳实践
 
 -   需要循环调用 `pushAudioExternalStreamData`，保证数据 push 成功
-    
 -   返回错误码 110（缓冲区满）时短暂 Sleep 30ms 后重试，不要丢弃数据
-    
 -   引擎退出前先停止推送循环，再调用 `removeAudioExternalStream`
-    
 -   实时采集每帧 10ms 长，有数据就调用 push；从文件解析每帧 40ms 长，间隔 30ms 调用 push 一次
-    
 
-## **音频帧数据回调**
+## 音频帧数据回调
 
 音频帧回调允许开发者在音频管线的不同位置获取原始 PCM 数据，用于音频分析、自定义处理、录制等场景。
 
@@ -764,11 +745,8 @@ ReadOnly
 ### 使用步骤
 
 1.  **注册观察者**：调用 `setAudioFrameObserver` 设置音频帧回调监听器
-    
 2.  **启用数据源**：调用 `enableAudioFrameObserver` 选择需要监听的数据源位置，开启回调
-    
 3.  **处理回调数据**：在回调函数中获取 PCM 数据
-    
 
 ### API 对照
 
@@ -838,7 +816,7 @@ ReadOnly
 
 `onPlaybackAudioFrame(frame)`
 
-## **音频状态与路由**
+## 音频状态与路由
 
 SDK 自动监测音频设备的状态变化和路由切换，并通过回调通知应用层。
 
@@ -1014,7 +992,7 @@ BluetoothA2dp
 
 `onAudioFileState(fileId, stateCode, errorCode)`
 
-## **音频错误码与警告码**
+## 音频错误码与警告码
 
 ### 音频错误码
 
@@ -1152,7 +1130,7 @@ PlayoutError
 
 播放错误
 
-## **iOS 专有：AVAudioSession 控制**
+## iOS 专有：AVAudioSession 控制
 
 iOS 平台提供了 `setAudioSessionRestriction` 接口，可精细控制 SDK 对系统 AVAudioSession 的管理权限。
 

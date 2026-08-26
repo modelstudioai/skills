@@ -4,31 +4,23 @@
 
 -   base\_url：
     
-    -   华北2（北京）地域：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1调用时请将 `WorkspaceId` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
-        
+    -   华北2（北京）地域：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1调用时请将 `WorkspaceId` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
     -   新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
-        
     -   日本（东京）：https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1
-        
     -   美国（弗吉尼亚）：https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1
-        
--   api\_key：替换为[阿里云百炼API Key](https://help.aliyun.com/zh/model-studio/get-api-key)
+-   api\_key：替换为[阿里云百炼API Key](raw/model-api-reference/preparations/get-api-key.md)
     
 -   model: 替换为以下模型列表中的名称
     
 
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-## **支持的模型**
+## 支持的模型
 
 支持的模型：Qwen-VL、QVQ、Qwen-OCR
 
@@ -36,13 +28,13 @@
 
 ## 模型调用
 
-### **调用示例**
+### 调用示例
 
-本章节提供Python（OpenAI SDK与LangChain\_OpenAI SDK）和cURL（HTTP接口）的流式调用示例，更多编程语言或输入方式示例请参考：[视觉理解请求示例](https://help.aliyun.com/zh/model-studio/vision#7a7077f8a9r6o)。
+本章节提供Python（OpenAI SDK与LangChain\_OpenAI SDK）和cURL（HTTP接口）的流式调用示例，更多编程语言或输入方式示例请参考：[视觉理解请求示例](https://help.aliyun.com/zh/model-studio/vision)。
 
 > QVQ模型仅支持流式输出，具体使用方法请参见[视觉推理](https://help.aliyun.com/zh/model-studio/visual-reasoning)。
 
-## 使用OpenAI SDK调用
+#### 使用OpenAI SDK调用
 
 ```
 from openai import OpenAI
@@ -102,29 +94,26 @@ if __name__=='__main__':
 
 ## 通过langchain\_openai SDK调用
 
-### **前提条件**
+### 前提条件
 
 -   请确保您的计算机上安装了Python环境。
     
-
 -   通过运行以下命令安装langchain\_openai SDK。
     
-    ```
-    # 如果下述命令报错，请将pip替换为pip3
-    pip install -U langchain_openai
-    ```
-    
 
--   您需要开通阿里云百炼模型服务并获得API-KEY，详情请参考：[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
-    
+```
+# 如果下述命令报错，请将pip替换为pip3
+pip install -U langchain_openai
+```
+
+-   您需要开通阿里云百炼模型服务并获得API-KEY，详情请参考：[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 -   我们推荐您将API-KEY配置到环境变量中以降低API-KEY的泄露风险，详情可参考[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。您也可以在代码中配置API-KEY，**但是泄露风险会提高**。
-    
 
-### **使用方式**
+### 使用方式
 
 您可以参考以下示例来通过langchain\_openai SDK使用通义千问视觉模型。
 
-#### **非流式输出**
+#### 非流式输出
 
 非流式输出使用invoke方法实现，请参考以下示例代码：
 
@@ -213,7 +202,7 @@ if __name__ == "__main__":
 }
 ```
 
-#### **流式输出**
+#### 流式输出
 
 > 以下示例不适用QVQ模型，QVQ调用方法请参见[视觉推理](https://help.aliyun.com/zh/model-studio/visual-reasoning)。
 
@@ -280,18 +269,16 @@ if __name__ == "__main__":
 
 关于输入参数的配置，可以参考[输入参数配置](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#d553cbbee6mxk)，相关参数在ChatOpenAI对象中定义。
 
-## **通过HTTP接口调用**
+## 通过HTTP接口调用
 
 您可以通过HTTP接口来调用通义千问视觉模型，获得与通过HTTP接口调用OpenAI服务相同结构的返回结果。
 
-### **前提条件**
+### 前提条件
 
--   您需要开通阿里云百炼模型服务并获得API-KEY，详情请参考：[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
-    
+-   您需要开通阿里云百炼模型服务并获得API-KEY，详情请参考：[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 -   我们推荐您将API-KEY配置到环境变量中以降低API-KEY的泄露风险，配置方法可参考[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。您也可以在代码中配置API-KEY，**但是泄露风险会提高**。
-    
 
-### **提交接口调用**
+### 提交接口调用
 
 ```
 北京：POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions
@@ -300,17 +287,13 @@ if __name__ == "__main__":
 弗吉尼亚：POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions
 ```
 
-### **请求示例**
+### 请求示例
 
 以下示例展示通过`CURL`命令来调用API的脚本。
 
-**说明**
+**说明**如果您没有配置API-KEY为环境变量，需将$DASHSCOPE\_API\_KEY更换为您的API-KEY\*。\*
 
-如果您没有配置API-KEY为环境变量，需将$DASHSCOPE\_API\_KEY更换为您的API-KEY_。_
-
-#### **非流式输出**
-
-curl
+#### 非流式输出
 
 ```
 # ======= 重要提示 =======
@@ -376,7 +359,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }
 ```
 
-#### **流式输出**
+#### 流式输出
 
 如果您需要使用流式输出，请在请求体中指定stream参数为true。
 
@@ -450,7 +433,7 @@ data: [DONE]
 
 输入参数的详情请参考[输入参数配置](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#d553cbbee6mxk)。
 
-### **异常响应示例**
+### 异常响应示例
 
 在访问请求出错的情况下，输出的结果中会通过 code 和 message 指明出错原因。
 
@@ -465,6 +448,6 @@ data: [DONE]
 }
 ```
 
-## **状态码说明**
+## 状态码说明
 
 相关状态错误码信息参考：[状态码说明](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#8dd39ae94bygm)。

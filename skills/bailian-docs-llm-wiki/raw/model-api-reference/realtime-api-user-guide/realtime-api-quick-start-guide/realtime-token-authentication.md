@@ -40,37 +40,30 @@ HTTP Header `Authorization: Bearer <API_KEY>`
 
 客户端或服务端直接携带 API Key 建连
 
-## **获取 API Key**
+## 获取 API Key
 
-### **步骤 1：开通百炼服务**
+### 步骤 1：开通百炼服务
 
 1.  访问[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing#/home)并登录您的阿里云账号。
-    
 2.  如果是首次使用，按照页面提示完成服务开通。
-    
 
-### **步骤 2：创建** [API Key](https://help.aliyun.com/zh/model-studio/get-api-key)
+### 步骤 2：创建 [API Key](raw/model-api-reference/preparations/get-api-key.md)
 
 1.  在控制台左侧导航栏中，选择 **API Key**。
-    
 2.  点击 **创建 API Key**，选择关联的业务空间。
-    
 3.  创建完成后，请**立即复制并妥善保存** API Key。
-    
 
-**重要**
+**重要****安全提示**：API Key 是您访问服务的唯一凭证，请勿将其硬编码到客户端代码中或提交到代码仓库。建议通过环境变量或后端服务下发的方式管理。
 
-**安全提示**：API Key 是您访问服务的唯一凭证，请勿将其硬编码到客户端代码中或提交到代码仓库。建议通过环境变量或后端服务下发的方式管理。
+## 建连鉴权详解
 
-## **建连鉴权详解**
-
-### **AOQ 协议鉴权**
+### AOQ 协议鉴权
 
 AOQ 采用**服务端代理鉴权**模式：API Key 仅在业务 AppServer 侧使用，客户端通过网关返回的临时 Token 建连，避免 API Key 暴露在客户端。
 
 ![Token鉴权](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3935914871/p1088069.jpg)
 
-## **Realtime 协议**
+Realtime 协议
 
 ```
 curl -X POST \
@@ -81,7 +74,7 @@ curl -X POST \
   -d "{\"clientIp\": \"${CLIENT_REAL_IP}\"}"
 ```
 
-## **Inference 协议**
+Inference 协议
 
 ```
 curl -X POST \
@@ -92,7 +85,7 @@ curl -X POST \
   -d "{\"clientIp\": \"${CLIENT_REAL_IP}\"}"
 ```
 
-#### **参数说明**
+#### 参数说明
 
 **配置项**
 
@@ -104,7 +97,7 @@ endpoint
 
 根据业务情况选择接入域名
 
-指定对应的接入域名，详情请参见[选择地域、服务部署范围和接入域名](https://help.aliyun.com/zh/model-studio/regions/)
+指定对应的接入域名，详情请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)
 
 Content-Type
 
@@ -130,7 +123,7 @@ clientIp
 
 选填。不填写时，默认使用请求百炼网关的 IP；填写后以 clientIp 为准。Realtime API 会根据客户端 IP 分配最佳的 Relay 接入点
 
-#### **响应示例**
+#### 响应示例
 
 ```
 {
@@ -143,7 +136,7 @@ clientIp
 }
 ```
 
-#### **响应参数说明**
+#### 响应参数说明
 
 **字段**
 
@@ -173,13 +166,11 @@ extraInfo.workspaceIdHash
 
 工作区 ID 哈希
 
-#### **AOQ Client SDK 连接示例**
+#### AOQ Client SDK 连接示例
 
-**说明**
+**说明**`clientIp` 为请求体中的选填字段。不填写时，默认使用请求百炼网关的 IP 作为客户端 IP；填写后则以指定的 clientIp 为准。建议由业务 AppServer 获取客户端真实 IP 后填入，以获得最佳的 Relay 接入点。
 
-`clientIp` 为请求体中的选填字段。不填写时，默认使用请求百炼网关的 IP 作为客户端 IP；填写后则以指定的 clientIp 为准。建议由业务 AppServer 获取客户端真实 IP 后填入，以获得最佳的 Relay 接入点。
-
-## **iOS (Swift)**
+iOS (Swift)
 
 ```
 let resp = try JSONDecoder().decode(AllocateResponse.self, from: responseData)
@@ -208,7 +199,7 @@ config.subscribeTracks = [audioTrack, dataTrack]
 engine.connect(config)
 ```
 
-## **Android (Java)**
+Android (Java)
 
 ```
 JSONObject obj = new JSONObject(responseText);
@@ -245,7 +236,7 @@ cfg.subscribeTracks.add(data);
 engine.connect(cfg);
 ```
 
-## **OHOS (ArkTS)**
+OHOS (ArkTS)
 
 ```
 const obj = JSON.parse(responseText) as Record<string, Object | undefined>;
@@ -272,7 +263,7 @@ const cfg: AoqConnectConfig = {
 engine.connect(cfg);
 ```
 
-### **WebRTC 协议鉴权**
+### WebRTC 协议鉴权
 
 WebRTC 通过 HTTP POST 请求完成 SDP 交换，鉴权在此阶段完成。客户端将 Offer SDP 发送至服务端，服务端返回 Answer SDP。
 
@@ -334,7 +325,7 @@ const answerSdp = await resp.text();
 await pc.setRemoteDescription({ type: 'answer', sdp: answerSdp });
 ```
 
-### **WebSocket 协议鉴权**
+### WebSocket 协议鉴权
 
 WebSocket 的鉴权方式最为简单，在建立连接时直接通过 HTTP Header 携带 API Key 即可。
 

@@ -2,34 +2,28 @@
 
 本文介绍音乐生成 Fun-Music 模型的 API 参数详情。
 
-**用户指南**：关于模型介绍和选型建议请参见[音乐生成](https://help.aliyun.com/zh/model-studio/fun-music/)。
+**用户指南**：关于模型介绍和选型建议请参见[音乐生成](raw/model-user-guide/model-experience/fun-music.md)。
 
-**重要**
+**重要**该模型目前处于邀测阶段，您需要前往[模型广场](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/fun-music-v1)申请开通后方可使用。该模型服务仅在华北2（北京）地域下可用。
 
-该模型目前处于邀测阶段，您需要前往[模型广场](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/fun-music-v1)申请开通后方可使用。该模型服务仅在华北2（北京）地域下可用。
+## 前提条件
 
-## **前提条件**
+已获取 API Key。获取方式请参见[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
-已获取 API Key。获取方式请参见[获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+## 服务端点
 
-## **服务端点**
-
-POST `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation`，调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+POST `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation`，调用时请将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
 通信协议：HTTPS。流式输出支持 SSE（Server-Sent Events）。
 
-**重要**
-
-百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-## **请求头**
+## 请求头
 
 **参数名**
 
@@ -63,9 +57,74 @@ string
 
 设为 `enable` 启用 SSE 流式输出
 
-## **请求体**
+## 请求体
 
-## 非流式输出
+**model**`string`**（必选）**
+
+模型名称。可选值：
+
+-   `fun-music-v1`
+-   `fun-music-preview`
+
+**input**`object`**（必选）**
+
+输入参数对象**。**
+
+属性
+
+**prompt**`string`**（条件必选）**
+
+提示词内容，模型将根据提示词自动创作并生成音乐。
+
+-   `fun-music-v1`：与 `lyrics` 二选一，至少传入其中之一。
+-   `fun-music-preview`：必选。
+
+字符限制：
+
+-   非流式模式：1~2000 字符
+-   流式模式：5~1000 个中文汉字或英文单词
+
+**说明**当同时传入 `prompt` 和 `lyrics` 时，仅 `lyrics` 生效，`prompt` 将被忽略。
+
+**lyrics**`string`**（条件必选）**
+
+歌词内容。
+
+-   `fun-music-v1`：与 `prompt` 二选一，至少传入其中之一。
+-   `fun-music-preview`：可选。
+
+字符限制：
+
+-   非流式模式：中文 5~350 字符，英文 5~2000 字符
+-   流式模式：中文 300~350 字，英文 200~250 词
+
+**说明**当同时传入 `lyrics` 和 `prompt` 时，仅 `lyrics` 生效，`prompt` 将被忽略。
+
+**is\_instrumental**`boolean`（可选） 默认值为 `false`
+
+是否生成纯音乐。设为 `true` 时生成纯音乐（无人声演唱），设为 `false` 时生成歌曲。
+
+**说明**当 `is_instrumental` 为 `true` 时，`lyrics` 和 `gender` 参数无效。
+
+**gender**`string`（可选） 默认值为 `female`
+
+演唱声音的性别。仅 `fun-music-v1` 模型支持该参数。可选值：
+
+-   `male`：男声
+-   `female`：女声
+
+**format**`string`（可选） 默认值为 `mp3`
+
+音频编码格式。可选值：
+
+-   `mp3`：适合网络传输和存储
+-   `wav`：适合后期处理和高质量播放
+
+**enable\_aigc\_watermark**`boolean`（可选） 默认值为 `false`
+
+AIGC 水印开关。开启后，会在生成的音频末尾追加表示“AI”的摩尔斯电码音频信号（·— ··），用于标识该音频为 AI 生成内容。开启水印会增加音频时长。
+
+非流式输出
 
 ```
 curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \
@@ -80,7 +139,7 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
-## 流式输出
+流式输出
 
 ```
 curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \
@@ -96,94 +155,76 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
-**model** `_string_` **（必选）**
+## 返回对象
 
-模型名称。可选值：
+**request\_id** `string`
 
--   `fun-music-v1`
-    
--   `fun-music-preview`
-    
+请求 ID，用于问题排查和日志追踪。
 
-**input** `_object_` **（必选）**
+**output**`object`
 
-输入参数对象**。**
+模型的输出。
 
-**属性**
+属性
 
-**prompt** `_string_` **（条件必选）**
+**audio** `object`
 
-提示词内容，模型将根据提示词自动创作并生成音乐。
+模型输出的音频信息。
 
--   `fun-music-v1`：与 `lyrics` 二选一，至少传入其中之一。
-    
--   `fun-music-preview`：必选。
-    
+属性
 
-字符限制：
+**data** `string`
 
--   非流式模式：1~2000 字符
-    
--   流式模式：5~1000 个中文汉字或英文单词
-    
+流式输出时的 Base64 音频数据片段。非流式输出时为空字符串。
 
-**说明**
+**url** `string`
 
-当同时传入 `prompt` 和 `lyrics` 时，仅 `lyrics` 生效，`prompt` 将被忽略。
+完整音频文件的 OSS URL，有效期 24 小时。非流式模式下直接返回；流式模式下仅在最终消息中出现。
 
-**lyrics** `_string_` **（条件必选）**
+**id** `string`
+
+音频文件 ID。
+
+**expires\_at** `integer`
+
+音频 URL 过期时间戳（Unix timestamp）。
+
+**extra\_info** `object`
+
+额外信息。包含以下字段：
+
+属性
+
+**channels** `integer`
+
+音频声道数（如：2 表示立体声）。
+
+**sample\_rate** `string`
+
+音频采样率（如："48000"）。
+
+**lyrics** `string`
 
 歌词内容。
 
--   `fun-music-v1`：与 `prompt` 二选一，至少传入其中之一。
-    
--   `fun-music-preview`：可选。
-    
+**finish\_reason** `string`
 
-字符限制：
+结束原因：
 
--   非流式模式：中文 5~350 字符，英文 5~2000 字符
-    
--   流式模式：中文 300~350 字，英文 200~250 词
-    
+-   `null`：正在生成中
+-   `stop`：生成自然结束
 
-**说明**
+**usage** `object`
 
-当同时传入 `lyrics` 和 `prompt` 时，仅 `lyrics` 生效，`prompt` 将被忽略。
+本次请求的计费信息。
 
-**is\_instrumental** `_boolean_` （可选） 默认值为 `false`
+属性
 
-是否生成纯音乐。设为 `true` 时生成纯音乐（无人声演唱），设为 `false` 时生成歌曲。
+**duration** `integer`
 
-**说明**
+音乐时长（秒），用于计费。
 
-当 `is_instrumental` 为 `true` 时，`lyrics` 和 `gender` 参数无效。
-
-**gender** `_string_` （可选） 默认值为 `female`
-
-演唱声音的性别。仅 `fun-music-v1` 模型支持该参数。可选值：
-
--   `male`：男声
-    
--   `female`：女声
-    
-
-**format** `_string_` （可选） 默认值为 `mp3`
-
-音频编码格式。可选值：
-
--   `mp3`：适合网络传输和存储
-    
--   `wav`：适合后期处理和高质量播放
-    
-
-**enable\_aigc\_watermark** `_boolean_` （可选） 默认值为 `false`
-
-AIGC 水印开关。开启后，会在生成的音频末尾追加表示“AI”的摩尔斯电码音频信号（·— ··），用于标识该音频为 AI 生成内容。开启水印会增加音频时长。
-
-## **返回对象**
-
-## 非流式输出
+非流式输出
 
 ```
 {
@@ -208,7 +249,7 @@ AIGC 水印开关。开启后，会在生成的音频末尾追加表示“AI”�
 }
 ```
 
-## 流式输出（中间消息）
+流式输出（中间消息）
 
 ```
 {
@@ -224,7 +265,7 @@ AIGC 水印开关。开启后，会在生成的音频末尾追加表示“AI”�
 }
 ```
 
-## 流式输出（最终消息）
+流式输出（最终消息）
 
 ```
 {
@@ -248,72 +289,3 @@ AIGC 水印开关。开启后，会在生成的音频末尾追加表示“AI”�
     "request_id": "a8db24cc-d35f-961b-af81-xxxxxxxxxxxx"
 }
 ```
-
-**request\_id** `_string_`
-
-请求 ID，用于问题排查和日志追踪。
-
-**output** `_object_`
-
-模型的输出。
-
-**属性**
-
-**audio** `_object_`
-
-模型输出的音频信息。
-
-**属性**
-
-**data** `_string_`
-
-流式输出时的 Base64 音频数据片段。非流式输出时为空字符串。
-
-**url** `_string_`
-
-完整音频文件的 OSS URL，有效期 24 小时。非流式模式下直接返回；流式模式下仅在最终消息中出现。
-
-**id** `_string_`
-
-音频文件 ID。
-
-**expires\_at** `_integer_`
-
-音频 URL 过期时间戳（Unix timestamp）。
-
-**extra\_info** `_object_`
-
-额外信息。包含以下字段：
-
-**属性**
-
-**channels** `_integer_`
-
-音频声道数（如：2 表示立体声）。
-
-**sample\_rate** `_string_`
-
-音频采样率（如："48000"）。
-
-**lyrics** `_string_`
-
-歌词内容。
-
-**finish\_reason** `_string_`
-
-结束原因：
-
--   `null`：正在生成中
-    
--   `stop`：生成自然结束
-    
-
-**usage** `_object_`
-
-本次请求的计费信息。
-
-**属性**
-
-**duration** `_integer_`
-
-音乐时长（秒），用于计费。

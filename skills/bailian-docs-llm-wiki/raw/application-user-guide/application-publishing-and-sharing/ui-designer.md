@@ -7,40 +7,32 @@
 阿里云百炼的UI设计器集成了阿里云[多端低代码开发平台魔笔](https://help.aliyun.com/zh/mobi/what-is-mobi)的能力，具备以下核心优势：
 
 -   **低代码：**UI 设计器提供可视化编辑器，支持通过拖放组件、配置路由和布局，快速构建页面。
-    
 -   **服务集成：**支持集成百炼智能体、大模型、数据库和 HTTP 服务等多种资源，灵活扩展应用能力。
-    
 -   **权限管理：**内置测试账号体系，支持钉钉、企业微信等一键登录。兼容 OIDC、OAuth 2.0 等标准协议，并可通过权限组管理访问权限。
-    
 -   **一键发布：**默认支持免费发布至开发环境，通过内置域名即可访问。生产环境发布支持绑定自定义域名。
-    
 
-## **准备工作**
+## 准备工作
 
-集成AI对话能力，需要创建并发布百炼[智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)或[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)，并获取用于调用阿里云百炼服务的[API Key](https://help.aliyun.com/zh/model-studio/get-api-key#c38fb45bc6sje)。
+集成AI对话能力，需要创建并发布百炼[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)或[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)，并获取用于调用阿里云百炼服务的[API Key](https://help.aliyun.com/zh/model-studio/get-api-key#c38fb45bc6sje)。
 
-**重要**
+**重要**百炼应用、API Key和UI设计需要归属于**同一**[**业务空间**](https://help.aliyun.com/zh/model-studio/use-workspace)**。**
 
-百炼应用、API Key和UI设计需要归属于**同一**[**业务空间**](https://help.aliyun.com/zh/model-studio/use-workspace)**。**
-
-## 从已有**应用发布为 UI**
+## 从已有应用发布为 UI
 
 1.  进入应用的发布渠道页面，选择**UI应用**，单击**创建**。
     
 2.  系统会根据已有应用自动填充基础信息，包括应用标题及应用描述、百炼API-KEY、百炼智能体、头像、预设问题等，可按需修改。确认无误后，单击**立即创建**。
     
-3.  创建完成后，单击链接即可体验网页 UI 应用，链接有效期为24小时。如果需要调整界面，可单击**编辑 UI** 进行修改，详情可参考[通过UI设计器创建UI应用](#87545aa6facnz)。
+3.  创建完成后，单击链接即可体验网页 UI 应用，链接有效期为24小时。如果需要调整界面，可单击**编辑 UI** 进行修改，详情可参考[通过UI设计器创建UI应用](https://help.aliyun.com/zh/model-studio/ui-designer#b7ce75a0f370w)。
     
-    **说明**
-    
-    对于工作流应用，如果配置了文件类型的自定义参数，需要在UI设计器中编辑并指定自定义参数`{{{file_name:files[0]}}}`（需要把`file_name`替换为实际的变量名），才能使应用正确读取用户在UI界面上传的文件。
+    **说明**对于工作流应用，如果配置了文件类型的自定义参数，需要在UI设计器中编辑并指定自定义参数`{{{file_name:files[0]}}}`（需要把`file_name`替换为实际的变量名），才能使应用正确读取用户在UI界面上传的文件。
     
     ![截屏2026-04-01 16](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4563305771/p1064598.png)
     
 
-## **通过UI设计器创建UI应用**
+## 通过UI设计器创建UI应用
 
-### **步骤一：创建UI**
+### 步骤一：创建UI
 
 创建UI旨在生成初始页面结构，作为后续添加组件和布局设计的基础。
 
@@ -50,7 +42,7 @@
     
     阿里云百炼平台提供四种预置模板（智能出行助手、智能体门户、AI基础对话、企业AI知识库Lite）及空白模板。预置模板包含预设组件和界面，支持直接修改或二次开发，空白模板则需要从零开始设计。
     
-    **模板简介**
+    模板简介
     
     **模板名称**
     
@@ -105,18 +97,13 @@
 2.  **填写基础信息**
     
     -   **应用名称**及**应用描述**：自定义填写，建议填写有意义的名称与描述，以便识别用途。
-        
-    -   **百炼API-KEY**：选择百炼[API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
-        
-    -   **百炼智能体****：**选择已发布的百炼应用。
-        
+    -   **百炼API-KEY**：选择百炼[API Key](raw/model-api-reference/preparations/get-api-key.md)。
+    -   **百炼智能体：**选择已发布的百炼应用。
     -   **上传图标**（可选）：上传自有图标。
-        
     
     > 如果无法选择API Key及百炼应用，请确认您创建UI的业务空间是否与所需的API Key及应用位于同一业务空间。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5961492671/p1026156.png)
-    
 3.  **配置数据库表映射**
     
     部分UI模板自带用于存储运行时数据的数据库表（如`kb_chat_list`会话记录），其结构固定且无法修改，可单击**模板中数据库表名称**列的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1998405571/p996216.png)图标查看。
@@ -128,21 +115,18 @@
     UI创建完成后，可在[数据库](https://bailian.console.aliyun.com/?tab=app#/data-center/mobi/database)中查看表详情。若表中无数据，通常是因为没有进行相关操作。例如，`kb_chat_list` 表在用户发起问答后才会生成记录。
     
     ![配置数据库表映射](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1947958571/p1009228.jpg)
-    
 
-### **步骤二：编辑UI**
+### 步骤二：编辑UI
 
 **通过拖放组件来搭建页面**。左侧的[组件面板](https://help.aliyun.com/zh/mobi/low-code-development-designer-overview)中提供各类UI元素，包括按钮、输入框、展示、导航栏等。将所需[页面组件](https://help.aliyun.com/zh/mobi/components/)添加到页面中，根据业务需求调整其位置和样式，完成[页面搭建](https://help.aliyun.com/zh/mobi/page-build/)。
 
 如果需要使用自定义的图片或文件，可在搭建过程中随时上传，或可提前在[文件](https://bailian.console.aliyun.com/?tab=app#/data-center/mobi/files)页面上传。上传的文件将保存在[文件](https://bailian.console.aliyun.com/?tab=app#/data-center/mobi/files)页面，详情请参见[UI应用数据](https://help.aliyun.com/zh/model-studio/ui-application-data)。
 
-### **步骤三：发布与分享**
+### 步骤三：发布与分享
 
 1.  UI搭建完成后，可通过设计器右上角的**发布**按钮将UI发布到**开发环境**或**生产环境**，发布后单击**访问应用**即可体验搭建的UI。
     
-    ![发布UI](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1947958571/p1009231.png)
-    
-    ![5](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1947958571/p1009461.webp)
+    ![发布UI](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1947958571/p1009231.png) ![5](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1947958571/p1009461.webp)
     
     **环境对比**
     
@@ -164,9 +148,9 @@
     
     **有效期**
     
-    **发布的 UI 24 小时后失效**，需要重新发布才能访问
+    **发布的 UI 24 小时后失效**，需要重新发布才能访问
     
-    发布的 UI 长期有效
+    发布的 UI 长期有效
     
     **是否收费**
     
@@ -177,24 +161,20 @@
 2.  在[UI设计器](https://bailian.console.aliyun.com/?tab=app#/app-ui)页面，悬停于已发布的UI，单击**环境部署**。
     
     ![UI设计器](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1947958571/p1009238.webp)
-    
 3.  **应用地址**可分享给其他用户，默认持有链接的阿里云用户均可访问。单击**下线**可以停止该应用服务。
     
     ![应用地址](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1947958571/p1009240.webp)
-    
 
-### **配置访问权限（可选）**
+### 配置访问权限（可选）
 
 UI应用发布后，默认持有链接的阿里云用户可访问。也可通过设定访问权限，允许匿名用户访问，在会话页进行知识问答，同时限制其访问管理后台。
 
 1.  在UI设计器的左下角单击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7508903571/p983695.png)图标，在**登录配置**中打开**允许匿名访问**开关，并单击**匿名用户权限组配置**。
     
     ![匿名访问权限配置](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1947958571/p1009235.webp)
-    
 2.  选择环境，在**应用访问权限**页签中，勾选已经搭建的UI，单击**权限设置**。
     
     ![匿名访问权限配置权限组](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1947958571/p1009236.webp)
-    
 3.  选择对用户开放的页面，单击**确定**。
     
 4.  退出管理员账号，打开UI地址，验证权限配置是否生效。
@@ -204,9 +184,9 @@ UI应用发布后，默认持有链接的阿里云用户可访问。也可通过
 
 UI设计器功能本身不计费，但使用过程中可能涉及以下费用：
 
--   [模型调用费用](https://help.aliyun.com/zh/model-studio/billing-for-model-studio#9cd9788102v3r)：进行AI对话会产生模型调用费用，详情请参见[模型列表](https://help.aliyun.com/zh/model-studio/models)。
+-   [模型调用费用](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)：进行AI对话会产生模型调用费用，详情请参见[选择模型](raw/model-user-guide/get-started-with-models/models.md)。
     
-    > 阿里云百炼提供[新人免费额度](https://help.aliyun.com/zh/model-studio/new-free-quota)，额度消耗完后按 Token 的使用量来计费。
+    > 阿里云百炼提供[新人免费额度](raw/model-user-guide/test-1/new-free-quota.md)，额度消耗完后按 Token 的使用量来计费。
     
 -   [UI应用数据](https://help.aliyun.com/zh/model-studio/ui-application-data)：UI设计过程中会使用配额资源，例如文件存储和内置数据库。阿里云百炼默认提供1GB的免费文件存储和0.3GB的免费数据库容量，超出免费额度或套餐配额的资源使用量将[按量计费](https://help.aliyun.com/zh/mobi/product-billing-description#f35df080df0p4)。
     
@@ -219,7 +199,7 @@ UI设计器功能本身不计费，但使用过程中可能涉及以下费用：
 
 ## 常见问题
 
-### **在**[**UI设计器**](https://bailian.console.aliyun.com/?tab=app#/app-ui)**页面编辑或设置UI时，提示“当前应用正在编辑中”应该怎么处理？**
+### 在[UI设计器](https://bailian.console.aliyun.com/?tab=app#/app-ui)页面编辑或设置UI时，提示“当前应用正在编辑中”应该怎么处理？
 
 ![当前应用正在编辑中](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1947958571/p983433.png)
 

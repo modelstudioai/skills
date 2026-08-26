@@ -8,11 +8,11 @@
 
 ## 前提条件
 
-已[配置可用区IP](https://help.aliyun.com/zh/model-studio/configure-zone-ip)。
+已[配置可用区IP](raw/model-user-guide/security-and-compliance/secure-storage/configure-zone-ip.md)。
 
 ## 1\. 配置OSS存储
 
-### **1.1 创建Bucket**
+### 1.1 创建Bucket
 
 在上传文件（Object）到OSS之前，您需要创建一个用于存储文件的存储空间（Bucket）。
 
@@ -37,32 +37,30 @@
 4.  单击**完成创建**。
     
 
-### **1.2 设置Bucket对阿里云百炼可操作**
+### 1.2 设置Bucket对阿里云百炼可操作
 
 基于安全规范要求，阿里云百炼只能访问客户授权过且设定了特定标签的Bucket。在授权阿里云百炼访问Bucket之前，需要对Bucket设置阿里云百炼可以访问的特定标签。
 
 1.  在**Bucket 列表**页面，单击刚才创建的Bucket名称“bailian-safe-workspace-oss-access”。
     
-2.  在左侧导航栏，选择**Bucket 配置** > **Bucket 标签**。
+2.  在左侧导航栏，选择**Bucket 配置Bucket 标签**。
     
 3.  在**Bucket 标签**页面，单击**创建标签**。
     
 4.  单击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3883543271/p832537.png)添加标签，并输入以下值配置Bucket标签。
     
     -   标签名称：输入`bailian-safe-workspace-oss-access`。
-        
     -   标签值：输入`ReadAndWrite`。
-        
 5.  单击**保存**，完成设置。
     
 
-### **1.3 创建跨域规则**
+### 1.3 创建跨域规则
 
 跨域访问是由浏览器实施的一种安全策略，核心在于遵循同源策略，这是一项旨在防范恶意脚本的重要安全机制，确保网页只能访问与其来源相同的资源。依据这一原则，未经特殊配置，浏览器会阻止页面向不同源的服务器（如阿里云对象存储OSS）发起请求，以保护用户数据和系统安全。然而，通过正确配置跨源资源共享（CORS）规则，我们可以授权特定来源的请求访问OSS跨域资源，从而规避浏览器的跨域限制，实现安全可控的数据交互。
 
 1.  在**Bucket 列表**页面，单击刚才创建的Bucket名称“bailian-safe-workspace-oss-access”。
     
-2.  在左侧导航栏，选择**数据安全** > **跨域设置**。
+2.  在左侧导航栏，选择**数据安全跨域设置**。
     
 3.  单击**创建规则**，配置以下参数，其它参数保持默认即可。
     
@@ -81,7 +79,7 @@
 4.  单击**确定**，完成创建。
     
 
-### **1.4 配置OSS**
+### 1.4 配置OSS
 
 1.  访问**[业务空间管理](https://bailian.console.aliyun.com/?admin=1#/efm/business_management)**页面。
     
@@ -100,14 +98,12 @@
     **重要**
     
     -   如果OSS的Bucket停止服务，将导致阿里云百炼安全存储空间、知识库、审计日志、历史记录等模块不可用，需要恢复OSS的Bucket才能恢复服务。
-        
     -   如果OSS的Bucket被释放，将造成阿里云百炼安全存储空间不可用，且无法恢复，需要重新创建一个新的阿里云百炼安全存储空间。
-        
     
 
-## **2\. 配置ADB**存储
+## 2\. 配置ADB存储
 
-### **2.1 购买ADB资源**
+### 2.1 购买ADB资源
 
 1.  登录[云原生数据仓库AnalyticDB PostgreSQL版控制台](https://gpdbnext.console.aliyun.com/gpdb/overview)。
     
@@ -141,7 +137,7 @@
     
     **专有网络（VPC）**
     
-    选择与[配置终端节点并发起连接](https://help.aliyun.com/zh/model-studio/configure-an-endpoint-and-initiate-a-connection)中相同的专有网络和交换机。
+    选择与[配置终端节点并发起连接](raw/model-user-guide/security-and-compliance/secure-storage/configure-an-endpoint-and-initiate-a-connection.md)中相同的专有网络和交换机。
     
     **专有网络交换机**
     
@@ -150,7 +146,7 @@
     创建过程可能需要几分钟，请您耐心等待。当运行状态为**运行中**时，表示ADB可用。
     
 
-### **2.2 配置ADB**
+### 2.2 配置ADB
 
 1.  访问**[业务空间管理](https://bailian.console.aliyun.com/?admin=1#/efm/business_management)**页面。
     
@@ -171,7 +167,7 @@
 
 ## 3\. 配置ES存储
 
-### **3.1 购买ElasticSearch存储**
+### 3.1 购买ElasticSearch存储
 
 1.  登录[阿里云Elasticsearch控制台](https://elasticsearch.console.aliyun.com/cn-beijing/instances)。
     
@@ -199,7 +195,7 @@
     
     **专有网络**
     
-    选择与[配置终端节点并发起连接](https://help.aliyun.com/zh/model-studio/configure-an-endpoint-and-initiate-a-connection)中相同的专有网络和交换机。
+    选择与[配置终端节点并发起连接](raw/model-user-guide/security-and-compliance/secure-storage/configure-an-endpoint-and-initiate-a-connection.md)中相同的专有网络和交换机。
     
     **虚拟交换机**
     
@@ -228,18 +224,18 @@
     实例创建后，需要一段时间才能生效。时间长短与您的集群规格、数据结构和大小等相关，一般在小时级别。ES实例**状态**为**正常**时，表示实例可用。
     
 
-### **3.2 将交换机的网段添加到ES的白名单中**
+### 3.2 将交换机的网段添加到ES的白名单中
 
 1.  在**Elasticsearch实例**页面单击已创建的ES实例名称进入ES实例详情页。
     
 2.  在左侧导航栏中选择**安全配置**，再单击**VPC私网访问白名单**后的**修改**。
     
-3.  单击**新增IP白名单分组**，将[获取可用区IP及交换机网段](https://help.aliyun.com/zh/model-studio/configure-zone-ip#aba8d442fbrbl)中获取的交换机网段添加到白名单分组中。
+3.  单击**新增IP白名单分组**，将[获取可用区IP及交换机网段](https://help.aliyun.com/zh/model-studio/configure-zone-ip#24a6fbbdc0hkn)中获取的交换机网段添加到白名单分组中。
     
     在弹出的对话框中，设置 **IP白名单分组名称**（例如 `mse_switch_iplist`），并在 **白名单内IP地址** 中填写交换机网段（例如 `192.168.0.0/24,172.16.1.0/24`），然后单击 **确认**。
     
 
-### **3.3 配置ES**
+### 3.3 配置ES
 
 1.  访问**[业务空间管理](https://bailian.console.aliyun.com/?admin=1#/efm/business_management)**页面。
     
@@ -270,11 +266,9 @@
     **重要**
     
     -   如果ES停止计费，将导致阿里云百炼安全存储空间、知识库、审计日志、历史记录等模块不可用。需要给ES续费才能恢复服务。
-        
     -   如果ES被释放，将造成阿里云百炼安全存储空间不可用，且无法恢复。需要重新创建一个新的阿里云百炼安全存储空间。
-        
     
 
 ## 下一步
 
-[配置MSE云原生网关](https://help.aliyun.com/zh/model-studio/configure-mse)
+[配置MSE云原生网关](raw/model-user-guide/security-and-compliance/secure-storage/configure-mse.md)

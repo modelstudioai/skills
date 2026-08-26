@@ -2,7 +2,7 @@
 
 访问控制（RAM）是阿里云提供的管理用户身份与资源访问权限的服务。使用 RAM 可以让您避免与其他用户共享阿里云账号密钥，并可按需为用户授予最小权限。RAM 中使用权限策略描述授权的具体内容。
 
-本文为您介绍 _大模型服务平台百炼_ 为 RAM 权限策略定义的操作（Action）、资源（Resource）和条件（Condition）。 _大模型服务平台百炼_ 的 RAM 代码（RamCode）为 _sfm_ ，支持的授权粒度为 _操作级_ 。
+本文为您介绍_大模型服务平台百炼_为 RAM 权限策略定义的操作（Action）、资源（Resource）和条件（Condition）。_大模型服务平台百炼_的 RAM 代码（RamCode）为_sfm_，支持的授权粒度为_操作级_。
 
 ## 权限策略通用结构
 
@@ -32,18 +32,15 @@
 
 -   Effect：权限策略效果。取值：Allow（允许）、Deny（拒绝）。
     
--   Action：授予允许或拒绝权限的具体操作。具体信息，请参见[操作（Action）](#title-auth-detail-2)。
+-   Action：授予允许或拒绝权限的具体操作。具体信息，请参见[操作（Action）](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-ram#title-auth-detail-2)。
     
--   Resource：受操作影响的具体对象，您可以使用资源 ARN 来描述指定资源。具体信息，请参见[资源（Resource）](#title-auth-detail-3)。
+-   Resource：受操作影响的具体对象，您可以使用资源 ARN 来描述指定资源。具体信息，请参见[资源（Resource）](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-ram#title-auth-detail-3)。
     
--   Condition：指授权生效的条件。可选字段。具体信息，请参见[条件（Condition）](#title-auth-detail-4)。
+-   Condition：指授权生效的条件。可选字段。具体信息，请参见[条件（Condition）](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-ram#title-auth-detail-4)。
     
     -   Condition\_operator：条件运算符，不同类型的条件对应不同的条件运算符。具体信息，请参见[权限策略基本元素](https://help.aliyun.com/zh/ram/policy-elements)。
-        
     -   Condition\_key：条件关键字。
-        
     -   Condition\_value：条件关键字对应的值。
-        
 
 ## 操作（Action）
 
@@ -58,9 +55,7 @@
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
     
     -   对于必选的资源类型，用前面加 \* 表示。
-        
     -   对于不支持资源级授权的操作，用`全部资源`表示。
-        
 -   条件关键字：是指云产品自身定义的条件关键字。该列不体现适用于任何操作的[通用条件关键字](https://help.aliyun.com/zh/ram/policy-elements)。
     
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
@@ -80,13 +75,13 @@
 
 sfm:ListCategory
 
-[ListCategory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listcategory)
+[ListCategory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-listcategory.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -94,13 +89,13 @@ list
 
 sfm:GetIndexJobStatus
 
-[GetIndexJobStatus](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getindexjobstatus)
+[GetIndexJobStatus](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-getindexjobstatus.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -108,13 +103,13 @@ get
 
 sfm:AddCategory
 
-[AddCategory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addcategory)
+[AddCategory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addcategory.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -122,13 +117,13 @@ create
 
 sfm:GetAlipayUrl
 
-[GetAlipayUrl](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getalipayurl)
+[GetAlipayUrl](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-getalipayurl.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -136,13 +131,13 @@ none
 
 sfm:DeleteMemoryNode
 
-[DeleteMemoryNode](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletememorynode)
+[DeleteMemoryNode](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-deletememorynode.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -150,13 +145,13 @@ delete
 
 sfm:GetParseSettings
 
-[GetParseSettings](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getparsesettings)
+[GetParseSettings](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-getparsesettings.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -164,13 +159,13 @@ get
 
 sfm:SubmitIndexJob
 
-[SubmitIndexJob](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-submitindexjob)
+[SubmitIndexJob](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-submitindexjob.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -178,13 +173,13 @@ create
 
 sfm:DeleteCategory
 
-[DeleteCategory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletecategory)
+[DeleteCategory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-deletecategory.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -192,13 +187,13 @@ delete
 
 sfm:ListIndexFileDetails
 
-[ListIndexFileDetails](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listindexfiledetails)
+[ListIndexFileDetails](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-listindexfiledetails.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -206,13 +201,13 @@ list
 
 sfm:UpdateConnector
 
-[UpdateConnector](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updateconnector)
+[UpdateConnector](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-updateconnector.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -220,13 +215,13 @@ update
 
 sfm:ChangeParseSetting
 
-[ChangeParseSetting](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-changeparsesetting)
+[ChangeParseSetting](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-changeparsesetting.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -234,13 +229,13 @@ update
 
 sfm:GetMemory
 
-[GetMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getmemory)
+[GetMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-getmemory.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -248,13 +243,13 @@ get
 
 sfm:GetAvailableParserTypes
 
-[GetAvailableParserTypes](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getavailableparsertypes)
+[GetAvailableParserTypes](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-getavailableparsertypes.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -262,13 +257,13 @@ get
 
 sfm:UpdateMemory
 
-[UpdateMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatememory)
+[UpdateMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-updatememory.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -276,13 +271,13 @@ update
 
 sfm:CreateMemory
 
-[CreateMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-creatememory)
+[CreateMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-creatememory.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -290,13 +285,13 @@ create
 
 sfm:ApplyFileUploadLease
 
-[ApplyFileUploadLease](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-applyfileuploadlease)
+[ApplyFileUploadLease](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-applyfileuploadlease.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -304,13 +299,13 @@ none
 
 sfm:ListFile
 
-[ListFile](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listfile)
+[ListFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-listfile.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -324,7 +319,7 @@ delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -332,13 +327,13 @@ delete
 
 sfm:BatchUpdateFileTag
 
-[BatchUpdateFileTag](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-batchupdatefiletag)
+[BatchUpdateFileTag](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-batchupdatefiletag.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -346,13 +341,13 @@ update
 
 sfm:AddFile
 
-[AddFile](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addfile)
+[AddFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addfile.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -360,13 +355,13 @@ create
 
 sfm:DeleteChunk
 
-[DeleteChunk](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletechunk)
+[DeleteChunk](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-deletechunk.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -374,13 +369,13 @@ delete
 
 sfm:DeleteMemory
 
-[DeleteMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletememory)
+[DeleteMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-deletememory.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -388,13 +383,13 @@ delete
 
 sfm:DeletePromptTemplate
 
-[DeletePromptTemplate](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deleteprompttemplate)
+[DeletePromptTemplate](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-deleteprompttemplate.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -402,13 +397,13 @@ delete
 
 sfm:ListMemories
 
-[ListMemories](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listmemories)
+[ListMemories](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-listmemories.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -416,13 +411,13 @@ list
 
 sfm:AddConnector
 
-[AddConnector](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addconnector)
+[AddConnector](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addconnector.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -430,13 +425,13 @@ create
 
 sfm:GetConnector
 
-[GetConnector](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getconnector)
+[GetConnector](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-getconnector.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -444,13 +439,13 @@ get
 
 sfm:UpdatePromptTemplate
 
-[UpdatePromptTemplate](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updateprompttemplate)
+[UpdatePromptTemplate](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-updateprompttemplate.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -458,13 +453,13 @@ update
 
 sfm:DeleteFiles
 
-[DeleteFiles](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletefiles)
+[DeleteFiles](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-deletefiles.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -472,13 +467,13 @@ delete
 
 sfm:GetMemoryNode
 
-[GetMemoryNode](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getmemorynode)
+[GetMemoryNode](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-getmemorynode.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -486,13 +481,13 @@ get
 
 sfm:ApplyTempStorageLease
 
-[ApplyTempStorageLease](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-applytempstoragelease)
+[ApplyTempStorageLease](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-applytempstoragelease.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -500,13 +495,13 @@ none
 
 sfm:DeleteFile
 
-[DeleteFile](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletefile)
+[DeleteFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-deletefile.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -514,13 +509,13 @@ delete
 
 sfm:AddFilesFromAuthorizedOss
 
-[AddFilesFromAuthorizedOss](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addfilesfromauthorizedoss)
+[AddFilesFromAuthorizedOss](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addfilesfromauthorizedoss.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -528,13 +523,13 @@ create
 
 sfm:CreateMemoryNode
 
-[CreateMemoryNode](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-creatememorynode)
+[CreateMemoryNode](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-creatememorynode.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -542,13 +537,13 @@ create
 
 sfm:UpdateChunk
 
-[UpdateChunk](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatechunk)
+[UpdateChunk](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-updatechunk.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -556,13 +551,13 @@ update
 
 sfm:ListCategory
 
-[ListCategory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listcategory)
+[ListCategory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-listcategory.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -570,13 +565,13 @@ list
 
 sfm:GetIndexJobStatus
 
-[GetIndexJobStatus](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getindexjobstatus)
+[GetIndexJobStatus](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-getindexjobstatus.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -584,13 +579,13 @@ get
 
 sfm:GetParseSettings
 
-[GetParseSettings](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getparsesettings)
+[GetParseSettings](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-getparsesettings.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -598,13 +593,13 @@ get
 
 sfm:GetAlipayUrl
 
-[GetAlipayUrl](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getalipayurl)
+[GetAlipayUrl](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-getalipayurl.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -612,13 +607,13 @@ none
 
 sfm:AddCategory
 
-[AddCategory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addcategory)
+[AddCategory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addcategory.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -626,13 +621,13 @@ create
 
 sfm:SubmitIndexJob
 
-[SubmitIndexJob](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-submitindexjob)
+[SubmitIndexJob](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-submitindexjob.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -640,13 +635,13 @@ create
 
 sfm:ChangeParseSetting
 
-[ChangeParseSetting](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-changeparsesetting)
+[ChangeParseSetting](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-changeparsesetting.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -654,13 +649,13 @@ update
 
 sfm:DeleteMemoryNode
 
-[DeleteMemoryNode](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletememorynode)
+[DeleteMemoryNode](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-deletememorynode.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -668,13 +663,13 @@ delete
 
 sfm:UpdateConnector
 
-[UpdateConnector](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updateconnector)
+[UpdateConnector](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-updateconnector.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -682,13 +677,13 @@ update
 
 sfm:GetMemory
 
-[GetMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getmemory)
+[GetMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-getmemory.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -696,13 +691,13 @@ get
 
 sfm:ListIndexFileDetails
 
-[ListIndexFileDetails](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listindexfiledetails)
+[ListIndexFileDetails](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-listindexfiledetails.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -716,7 +711,7 @@ delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -724,13 +719,13 @@ delete
 
 sfm:UpdateMemory
 
-[UpdateMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatememory)
+[UpdateMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-updatememory.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -738,13 +733,13 @@ update
 
 sfm:CreateMemory
 
-[CreateMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-creatememory)
+[CreateMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-creatememory.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -752,13 +747,13 @@ create
 
 sfm:ListFile
 
-[ListFile](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listfile)
+[ListFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-listfile.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -766,13 +761,13 @@ list
 
 sfm:DeleteChunk
 
-[DeleteChunk](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletechunk)
+[DeleteChunk](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-deletechunk.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -780,13 +775,13 @@ delete
 
 sfm:GetAvailableParserTypes
 
-[GetAvailableParserTypes](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getavailableparsertypes)
+[GetAvailableParserTypes](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-getavailableparsertypes.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -794,13 +789,13 @@ get
 
 sfm:DeleteCategory
 
-[DeleteCategory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletecategory)
+[DeleteCategory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-deletecategory.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -808,13 +803,13 @@ delete
 
 sfm:ListMemories
 
-[ListMemories](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listmemories)
+[ListMemories](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-listmemories.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -822,13 +817,13 @@ list
 
 sfm:ApplyFileUploadLease
 
-[ApplyFileUploadLease](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-applyfileuploadlease)
+[ApplyFileUploadLease](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-applyfileuploadlease.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -836,13 +831,13 @@ none
 
 sfm:BatchUpdateFileTag
 
-[BatchUpdateFileTag](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-batchupdatefiletag)
+[BatchUpdateFileTag](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-batchupdatefiletag.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -850,13 +845,13 @@ update
 
 sfm:GetConnector
 
-[GetConnector](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getconnector)
+[GetConnector](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-getconnector.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -864,13 +859,13 @@ get
 
 sfm:GetMemoryNode
 
-[GetMemoryNode](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getmemorynode)
+[GetMemoryNode](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-getmemorynode.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -878,13 +873,13 @@ get
 
 sfm:AddFile
 
-[AddFile](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addfile)
+[AddFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addfile.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -892,13 +887,13 @@ create
 
 sfm:AddConnector
 
-[AddConnector](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addconnector)
+[AddConnector](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addconnector.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -906,13 +901,13 @@ create
 
 sfm:DeleteFiles
 
-[DeleteFiles](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletefiles)
+[DeleteFiles](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-deletefiles.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -920,13 +915,13 @@ delete
 
 sfm:DeleteFile
 
-[DeleteFile](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletefile)
+[DeleteFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-deletefile.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -934,13 +929,13 @@ delete
 
 sfm:DeletePromptTemplate
 
-[DeletePromptTemplate](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deleteprompttemplate)
+[DeletePromptTemplate](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-deleteprompttemplate.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -948,13 +943,13 @@ delete
 
 sfm:UpdatePromptTemplate
 
-[UpdatePromptTemplate](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updateprompttemplate)
+[UpdatePromptTemplate](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-updateprompttemplate.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -962,13 +957,13 @@ update
 
 sfm:AddFilesFromAuthorizedOss
 
-[AddFilesFromAuthorizedOss](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addfilesfromauthorizedoss)
+[AddFilesFromAuthorizedOss](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addfilesfromauthorizedoss.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -976,13 +971,13 @@ create
 
 sfm:CreateMemoryNode
 
-[CreateMemoryNode](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-creatememorynode)
+[CreateMemoryNode](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-creatememorynode.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -990,13 +985,13 @@ create
 
 sfm:DeleteMemory
 
-[DeleteMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deletememory)
+[DeleteMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-deletememory.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1004,13 +999,13 @@ delete
 
 sfm:UpdateChunk
 
-[UpdateChunk](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatechunk)
+[UpdateChunk](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-updatechunk.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1018,13 +1013,13 @@ update
 
 sfm:ApplyTempStorageLease
 
-[ApplyTempStorageLease](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-applytempstoragelease)
+[ApplyTempStorageLease](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-applytempstoragelease.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1032,13 +1027,13 @@ none
 
 sfm:GetIndexMonitor
 
-[GetIndexMonitor](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getindexmonitor)
+[GetIndexMonitor](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-getindexmonitor.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1046,13 +1041,13 @@ get
 
 sfm:Retrieve
 
-[Retrieve](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve)
+[Retrieve](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-retrieve.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1060,13 +1055,13 @@ none
 
 sfm:DeleteIndex
 
-[DeleteIndex](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deleteindex)
+[DeleteIndex](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-deleteindex.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1074,13 +1069,13 @@ none
 
 sfm:ListMemoryNodes
 
-[ListMemoryNodes](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listmemorynodes)
+[ListMemoryNodes](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-listmemorynodes.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1088,13 +1083,13 @@ list
 
 sfm:ListIndex
 
-[ListIndices](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listindices)
+[ListIndices](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-listindices.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1102,13 +1097,13 @@ list
 
 sfm:UpdateMemoryNode
 
-[UpdateMemoryNode](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatememorynode)
+[UpdateMemoryNode](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-updatememorynode.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1116,13 +1111,13 @@ update
 
 sfm:GetPromptTemplate
 
-[GetPromptTemplate](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getprompttemplate)
+[GetPromptTemplate](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-getprompttemplate.md)
 
 get
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1130,13 +1125,13 @@ get
 
 sfm:CreateIndex
 
-[CreateIndex](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-createindex)
+[CreateIndex](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-createindex.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1144,13 +1139,13 @@ create
 
 sfm:ListPromptTemplates
 
-[ListPromptTemplates](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listprompttemplates)
+[ListPromptTemplates](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-listprompttemplates.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1158,13 +1153,13 @@ list
 
 sfm:DeleteIndexDocument
 
-[DeleteIndexDocument](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-deleteindexdocument)
+[DeleteIndexDocument](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-deleteindexdocument.md)
 
 delete
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1172,13 +1167,13 @@ delete
 
 sfm:SubmitIndexAddDocumentsJob
 
-[SubmitIndexAddDocumentsJob](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-submitindexadddocumentsjob)
+[SubmitIndexAddDocumentsJob](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-submitindexadddocumentsjob.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1186,13 +1181,13 @@ create
 
 sfm:UpdateFileTag
 
-[UpdateFileTag](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatefiletag)
+[UpdateFileTag](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-updatefiletag.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1200,13 +1195,13 @@ update
 
 sfm:UpdateTableFromAuthorizedOss
 
-[UpdateTableFromAuthorizedOss](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatetablefromauthorizedoss)
+[UpdateTableFromAuthorizedOss](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-updatetablefromauthorizedoss.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1214,13 +1209,13 @@ update
 
 sfm:ListIndexFiles
 
-[ListIndexDocuments](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listindexdocuments)
+[ListIndexDocuments](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-listindexdocuments.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1228,13 +1223,13 @@ list
 
 sfm:UpdateIndex
 
-[UpdateIndex](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updateindex)
+[UpdateIndex](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-updateindex.md)
 
 update
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1242,13 +1237,13 @@ update
 
 sfm:DescribeFile
 
-[DescribeFile](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-describefile)
+[DescribeFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-describefile.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1256,13 +1251,13 @@ none
 
 sfm:ChunkList
 
-[ListChunks](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-listchunks)
+[ListChunks](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-listchunks.md)
 
 list
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1270,13 +1265,13 @@ list
 
 sfm:AddTable
 
-[AddTable](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-addtable)
+[AddTable](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addtable.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1284,13 +1279,13 @@ create
 
 sfm:CreatePromptTemplate
 
-[CreatePromptTemplate](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-createprompttemplate)
+[CreatePromptTemplate](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-createprompttemplate.md)
 
 create
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1298,13 +1293,13 @@ create
 
 sfm:GetAlipayTransferStatus
 
-[GetAlipayTransferStatus](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getalipaytransferstatus)
+[GetAlipayTransferStatus](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-getalipaytransferstatus.md)
 
 none
 
 \*全部资源
 
-`*****`
+`*`
 
 无
 
@@ -1319,11 +1314,8 @@ none
 -   `*`表示全部。例如：
     
     -   `{#resourceType}`为`*`时：表示全部资源。
-        
     -   `{#regionId}`为`*`时：表示全部地域。
-        
     -   `{#accountId}`为`*`时：表示全部阿里云账号。
-        
 
 资源类型
 
@@ -1338,9 +1330,6 @@ _大模型服务平台百炼_未定义产品级别的条件关键字。如需查
 您可以创建自定义权限策略，并将权限策略授予 RAM 用户、RAM 用户组或 RAM 角色。具体操作如下：
 
 -   [创建自定义权限策略](https://help.aliyun.com/zh/ram/create-a-custom-policy)
-    
 -   [为 RAM 用户授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)
-    
 -   [为 RAM 用户组授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-a-ram-user-group)
-    
 -   [为 RAM 角色授权](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-a-ram-role)

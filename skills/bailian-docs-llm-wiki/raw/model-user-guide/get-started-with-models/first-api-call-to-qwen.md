@@ -4,21 +4,15 @@
 
 **说明**
 
--   若您熟悉大模型调用，可直接查看API参考文档[文本生成](https://help.aliyun.com/zh/model-studio/qwen-api-reference/)。
-    
--   若您不熟悉编程，可参考[Chatbox](https://help.aliyun.com/zh/model-studio/chatbox)，通过图形化界面与千问模型对话。
-    
+-   若您熟悉大模型调用，可直接查看API参考文档[文本生成](raw/model-api-reference/qwen-api-reference.md)。
+-   若您不熟悉编程，可参考[Chatbox](https://help.aliyun.com/zh/model-studio/cline-tool)，通过图形化界面与千问模型对话。
 -   API调用与操作系统版本无关，只要网络能连通即可正常使用。
-    
 
 本文以千问为例，引导您完成大模型API调用。您将了解到：
 
 -   如何获取 API Key
-    
 -   如何配置本地开发环境
-    
 -   如何调用千问 API
-    
 
 ## 账号设置
 
@@ -30,40 +24,111 @@
     
     > 如果开通服务时提示“您尚未进行实名认证”，请先进行[实名认证](https://help.aliyun.com/zh/account/verify-your-identity-individual-account)。
     
-3.  **获取API Key：**前往[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)页面，单击**创建API Key****，**即可通过API KEY调用大模型。
+3.  **获取API Key：**前往[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)页面，单击**创建API Key，**即可通过API KEY调用大模型。
     
-    创建 API Key 时无需选择模型，调用时通过请求体中的`model`参数指定要调用的模型（例如`model="qwen-plus"`），可用模型请参见[模型列表](https://help.aliyun.com/zh/model-studio/models)。如需限制该 API Key 可调用的模型范围，创建时选择**自定义**权限，并开启**访问模型范围**开关，开启后该 API Key 仅能调用已选择的模型。
+    创建 API Key 时无需选择模型，调用时通过请求体中的`model`参数指定要调用的模型（例如`model="qwen-plus"`），可用模型请参见[模型列表](raw/model-user-guide/get-started-with-models/models.md)。如需限制该 API Key 可调用的模型范围，创建时选择**自定义**权限，并开启**访问模型范围**开关，开启后该 API Key 仅能调用已选择的模型。
     
 4.  **获取业务空间ID：**使用**华北2（北京）**、**新加坡**、**日本（东京）**或**德国（法兰克福）**地域的模型时，需在Base URL中填入业务空间ID（WorkspaceId），可在[业务空间管理](https://modelstudio.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)页面中查看。
     
 
-## **配置API Key到环境变量**
+## 配置API Key到环境变量
 
 建议您把API Key配置到环境变量，避免在代码里显式地配置API Key，降低泄露风险。
 
-**配置步骤**
+配置步骤
 
-### Linux系统
+#### Linux系统
 
 #### 添加永久性环境变量
 
 如果您希望API Key环境变量在当前用户的所有新会话中生效，可以添加永久性环境变量。
 
-1.  执行以下命令来将环境变量设置追加到`~/.bashrc` 文件中。
+1.  执行以下命令来将环境变量设置追加到`~/.bashrc`文件中。
+
+```
+# 用您的阿里云百炼API Key代替YOUR_DASHSCOPE_API_KEY
+echo "export DASHSCOPE_API_KEY='YOUR_DASHSCOPE_API_KEY'" >> ~/.bashrc
+```
+
+也可以手动修改`~/.bashrc`文件。
+
+手动修改
+
+执行以下命令，打开`~/.bashrc`文件。
+
+```
+nano ~/.bashrc
+```
+
+在配置文件中添加以下内容。
+
+```
+# 用您的阿里云百炼API Key代替YOUR_DASHSCOPE_API_KEY
+export DASHSCOPE_API_KEY="YOUR_DASHSCOPE_API_KEY"
+```
+
+在nano编辑器中，按Ctrl + X，接着按Y，再按Enter以保存并关闭文件。
+
+2.  执行以下命令，使变更生效。
+
+```
+source ~/.bashrc
+```
+
+3.  重新打开一个终端窗口，运行以下命令检查环境变量是否生效。
+
+```
+echo $DASHSCOPE_API_KEY
+```
+
+#### 添加临时性环境变量
+
+如果您仅希望在当前会话中使用该环境变量，可以添加临时性环境变量。
+
+1.  执行以下命令。
+
+```
+# 用您的阿里云百炼API Key代替YOUR_DASHSCOPE_API_KEY
+export DASHSCOPE_API_KEY="YOUR_DASHSCOPE_API_KEY"
+```
+
+2.  执行以下命令，验证该环境变量是否生效。
+
+```
+echo $DASHSCOPE_API_KEY
+```
+
+#### macOS系统
+
+#### 添加永久性环境变量
+
+如果您希望API Key环境变量在当前用户的所有新会话中生效，可以添加永久性环境变量。
+
+1.  在终端中执行以下命令，查看默认Shell类型。
+
+```
+echo $SHELL
+```
+
+2.  根据默认Shell类型进行操作。
+    
+    #### Zsh
+    
+    1.  执行以下命令来将环境变量设置追加到 `~/.zshrc` 文件中。
     
     ```
     # 用您的阿里云百炼API Key代替YOUR_DASHSCOPE_API_KEY
-    echo "export DASHSCOPE_API_KEY='YOUR_DASHSCOPE_API_KEY'" >> ~/.bashrc
+    echo "export DASHSCOPE_API_KEY='YOUR_DASHSCOPE_API_KEY'" >> ~/.zshrc
     ```
     
-    也可以手动修改`~/.bashrc` 文件。
+    也可以手动修改`~/.zshrc` 文件。
     
-    **手动修改**
+    手动修改
     
-    执行以下命令，打开`~/.bashrc` 文件。
+    执行以下命令，打开Shell配置文件。
     
     ```
-    nano ~/.bashrc
+    nano ~/.zshrc
     ```
     
     在配置文件中添加以下内容。
@@ -75,132 +140,57 @@
     
     在nano编辑器中，按Ctrl + X，接着按Y，再按Enter以保存并关闭文件。
     
-2.  执行以下命令，使变更生效。
+    2.  执行以下命令，使变更生效。
     
     ```
-    source ~/.bashrc
+    source ~/.zshrc
     ```
     
-3.  重新打开一个终端窗口，运行以下命令检查环境变量是否生效。
+    3.  重新打开一个终端窗口，运行以下命令检查环境变量是否生效。
     
     ```
     echo $DASHSCOPE_API_KEY
     ```
     
-
-#### 添加临时性环境变量
-
-如果您仅希望在当前会话中使用该环境变量，可以添加临时性环境变量。
-
-1.  执行以下命令。
+    #### Bash
+    
+    1.  执行以下命令来将环境变量设置追加到 `~/.bash_profile` 文件中。
+    
+    ```
+    # 用您的阿里云百炼API Key代替YOUR_DASHSCOPE_API_KEY
+    echo "export DASHSCOPE_API_KEY='YOUR_DASHSCOPE_API_KEY'" >> ~/.bash_profile
+    ```
+    
+    也可以手动修改`~/.bash_profile` 文件。
+    
+    手动修改
+    
+    执行以下命令，打开Shell配置文件。
+    
+    ```
+    nano ~/.bash_profile
+    ```
+    
+    在配置文件中添加以下内容。
     
     ```
     # 用您的阿里云百炼API Key代替YOUR_DASHSCOPE_API_KEY
     export DASHSCOPE_API_KEY="YOUR_DASHSCOPE_API_KEY"
     ```
     
-2.  执行以下命令，验证该环境变量是否生效。
+    在nano编辑器中，按Ctrl + X，接着按Y，再按Enter以保存并关闭文件。
+    
+    2.  执行以下命令，使变更生效。
+    
+    ```
+    source ~/.bash_profile
+    ```
+    
+    3.  重新打开一个终端窗口，运行以下命令检查环境变量是否生效。
     
     ```
     echo $DASHSCOPE_API_KEY
     ```
-    
-
-### macOS系统
-
-#### 添加永久性环境变量
-
-如果您希望API Key环境变量在当前用户的所有新会话中生效，可以添加永久性环境变量。
-
-1.  在终端中执行以下命令，查看默认Shell类型。
-    
-    ```
-    echo $SHELL
-    ```
-    
-2.  根据默认Shell类型进行操作。
-    
-    ##### **Zsh**
-    
-    1.  执行以下命令来将环境变量设置追加到 `~/.zshrc` 文件中。
-        
-        ```
-        # 用您的阿里云百炼API Key代替YOUR_DASHSCOPE_API_KEY
-        echo "export DASHSCOPE_API_KEY='YOUR_DASHSCOPE_API_KEY'" >> ~/.zshrc
-        ```
-        
-        也可以手动修改`~/.zshrc` 文件。
-        
-        **手动修改**
-        
-        执行以下命令，打开Shell配置文件。
-        
-        ```
-        nano ~/.zshrc
-        ```
-        
-        在配置文件中添加以下内容。
-        
-        ```
-        # 用您的阿里云百炼API Key代替YOUR_DASHSCOPE_API_KEY
-        export DASHSCOPE_API_KEY="YOUR_DASHSCOPE_API_KEY"
-        ```
-        
-        在nano编辑器中，按Ctrl + X，接着按Y，再按Enter以保存并关闭文件。
-        
-    2.  执行以下命令，使变更生效。
-        
-        ```
-        source ~/.zshrc
-        ```
-        
-    3.  重新打开一个终端窗口，运行以下命令检查环境变量是否生效。
-        
-        ```
-        echo $DASHSCOPE_API_KEY
-        ```
-        
-    
-    ##### **Bash**
-    
-    1.  执行以下命令来将环境变量设置追加到 `~/.bash_profile` 文件中。
-        
-        ```
-        # 用您的阿里云百炼API Key代替YOUR_DASHSCOPE_API_KEY
-        echo "export DASHSCOPE_API_KEY='YOUR_DASHSCOPE_API_KEY'" >> ~/.bash_profile
-        ```
-        
-        也可以手动修改`~/.bash_profile` 文件。
-        
-        **手动修改**
-        
-        执行以下命令，打开Shell配置文件。
-        
-        ```
-        nano ~/.bash_profile
-        ```
-        
-        在配置文件中添加以下内容。
-        
-        ```
-        # 用您的阿里云百炼API Key代替YOUR_DASHSCOPE_API_KEY
-        export DASHSCOPE_API_KEY="YOUR_DASHSCOPE_API_KEY"
-        ```
-        
-        在nano编辑器中，按Ctrl + X，接着按Y，再按Enter以保存并关闭文件。
-        
-    2.  执行以下命令，使变更生效。
-        
-        ```
-        source ~/.bash_profile
-        ```
-        
-    3.  重新打开一个终端窗口，运行以下命令检查环境变量是否生效。
-        
-        ```
-        echo $DASHSCOPE_API_KEY
-        ```
-        
     
 
 #### 添加临时性环境变量
@@ -210,33 +200,29 @@
 > 以下命令适用于 Zsh 和 Bash。
 
 1.  执行以下命令。
-    
-    ```
-    # 用您的阿里云百炼API Key代替YOUR_DASHSCOPE_API_KEY
-    export DASHSCOPE_API_KEY="YOUR_DASHSCOPE_API_KEY"
-    ```
-    
-2.  执行以下命令，验证该环境变量是否生效。
-    
-    ```
-    echo $DASHSCOPE_API_KEY
-    ```
-    
 
-### Windows系统
+```
+# 用您的阿里云百炼API Key代替YOUR_DASHSCOPE_API_KEY
+export DASHSCOPE_API_KEY="YOUR_DASHSCOPE_API_KEY"
+```
+
+2.  执行以下命令，验证该环境变量是否生效。
+
+```
+echo $DASHSCOPE_API_KEY
+```
+
+#### Windows系统
 
 在Windows系统中，您可以通过系统属性、CMD或PowerShell配置环境变量。
 
-#### **系统属性**
+#### 系统属性
 
 **说明**
 
 -   此方式配置的环境变量永久生效。
-    
 -   修改系统环境变量需具备管理员权限。
-    
 -   配置环境变量后不会立即影响已经打开的命令窗口、IDE或其他正在运行的应用程序。您需要重新启动这些程序或者打开新的命令行使环境变量生效。
-    
 
 1.  在Windows系统桌面中按`Win+Q`键，在搜索框中搜索**编辑系统环境变量**，单击打开**系统属性**界面。
     
@@ -247,56 +233,53 @@
 4.  打开CMD（命令提示符）窗口或Windows PowerShell窗口，执行如下命令检查环境变量是否生效。
     
     -   CMD查询命令：
-        
-        ```
-        echo %DASHSCOPE_API_KEY%
-        ```
-        ```
-        Microsoft Windows [版本 10.0.19045.5371]
-        (c) Microsoft Corporation。保留所有权利。
-        C:\Windows\system32>echo %DASHSCOPE_API_KEY%
-        sk-ee166797fe40xxx
-        C:\Windows\system32>
-        ```
-        
-    -   Windows PowerShell查询命令：
-        
-        ```
-        echo $env:DASHSCOPE_API_KEY
-        ```
-        ```
-        Windows PowerShell
-        版权所有 (C) Microsoft Corporation。保留所有权利。
-        尝试新的跨平台 PowerShell https://aka.ms/pscore6
-        PS C:\Windows\system32> echo $env:DASHSCOPE_API_KEY
-        sk-ee166797fe40xxx
-        PS C:\Windows\system32>
-        ```
-        
 
-#### **CMD**
+```
+echo %DASHSCOPE_API_KEY%
+```
+```
+Microsoft Windows [版本 10.0.19045.5371]
+(c) Microsoft Corporation。保留所有权利。
+C:\Windows\system32>echo %DASHSCOPE_API_KEY%
+sk-ee166797fe40xxx
+C:\Windows\system32>
+```
 
-##### **添加永久性环境变量**
+-   Windows PowerShell查询命令：
+
+```
+echo $env:DASHSCOPE_API_KEY
+```
+```
+Windows PowerShell
+版权所有 (C) Microsoft Corporation。保留所有权利。
+尝试新的跨平台 PowerShell https://aka.ms/pscore6
+PS C:\Windows\system32> echo $env:DASHSCOPE_API_KEY
+sk-ee166797fe40xxx
+PS C:\Windows\system32>
+```
+
+#### CMD
+
+#### 添加永久性环境变量
 
 如果您希望API Key环境变量在当前用户的所有新会话中生效，可以按如下操作。
 
 1.  在CMD中运行以下命令。
-    
-    ```
-    # 用您的阿里云百炼API Key代替YOUR_DASHSCOPE_API_KEY
-    setx DASHSCOPE_API_KEY "YOUR_DASHSCOPE_API_KEY"
-    ```
-    
-2.  打开一个新的CMD窗口。
-    
-3.  在新的CMD窗口运行以下命令，检查环境变量是否生效。
-    
-    ```
-    echo %DASHSCOPE_API_KEY%
-    ```
-    
 
-##### **添加临时性环境变量**
+```
+# 用您的阿里云百炼API Key代替YOUR_DASHSCOPE_API_KEY
+setx DASHSCOPE_API_KEY "YOUR_DASHSCOPE_API_KEY"
+```
+
+2.  打开一个新的CMD窗口。
+3.  在新的CMD窗口运行以下命令，检查环境变量是否生效。
+
+```
+echo %DASHSCOPE_API_KEY%
+```
+
+#### 添加临时性环境变量
 
 如果您仅希望在当前会话中使用该环境变量，可以在CMD中运行以下命令。
 
@@ -311,29 +294,27 @@ set DASHSCOPE_API_KEY=YOUR_DASHSCOPE_API_KEY
 echo %DASHSCOPE_API_KEY%
 ```
 
-#### **PowerShell**
+#### PowerShell
 
-##### **添加永久性环境变量**
+#### 添加永久性环境变量
 
 如果您希望API Key环境变量在当前用户的所有新会话中生效，可以按如下操作。
 
 1.  在PowerShell中运行以下命令。
-    
-    ```
-    # 用您的阿里云百炼API Key代替YOUR_DASHSCOPE_API_KEY
-    [Environment]::SetEnvironmentVariable("DASHSCOPE_API_KEY", "YOUR_DASHSCOPE_API_KEY", [EnvironmentVariableTarget]::User)
-    ```
-    
-2.  打开一个新的PowerShell窗口。
-    
-3.  在新的PowerShell窗口运行以下命令，检查环境变量是否生效。
-    
-    ```
-    echo $env:DASHSCOPE_API_KEY
-    ```
-    
 
-##### 添加临时性环境变量
+```
+# 用您的阿里云百炼API Key代替YOUR_DASHSCOPE_API_KEY
+[Environment]::SetEnvironmentVariable("DASHSCOPE_API_KEY", "YOUR_DASHSCOPE_API_KEY", [EnvironmentVariableTarget]::User)
+```
+
+2.  打开一个新的PowerShell窗口。
+3.  在新的PowerShell窗口运行以下命令，检查环境变量是否生效。
+
+```
+echo $env:DASHSCOPE_API_KEY
+```
+
+#### 添加临时性环境变量
 
 如果您仅希望在当前会话中使用该环境变量，可以在PowerShell中运行以下命令。
 
@@ -348,15 +329,15 @@ $env:DASHSCOPE_API_KEY = "YOUR_DASHSCOPE_API_KEY"
 echo $env:DASHSCOPE_API_KEY
 ```
 
-## **选择开发语言**
+## 选择开发语言
 
 选择您熟悉的语言或工具，用于调用大模型API。
 
-## Python
+#### Python
 
-### **步骤 1：配置Python环境**
+### 步骤 1：配置Python环境
 
-### **检查您的Python版本**
+检查您的Python版本
 
 您的Python需要为3.8或以上版本，请您参考[安装Python](https://help.aliyun.com/zh/sdk/developer-reference/installing-python)进行安装。
 
@@ -377,22 +358,18 @@ C:\Users\Administrator>pip --version
 pip 24.3.1 from C:\Users\Administrator\AppData\Local\Programs\Python\Python313\Lib\site-packages\pip (python 3.13)
 ```
 
-#### **常见问题**
+#### 常见问题
 
 Q：执行`python -V`、`pip --version`报错：
 
 -   `'python' 不是内部或外部命令，也不是可运行的程序或批处理文件。`
-    
 -   `'pip' 不是内部或外部命令，也不是可运行的程序或批处理文件。`
-    
 -   `-bash: python: command not found`
-    
 -   `-bash: pip: command not found`
-    
 
 解决办法如下：
 
-## **Windows系统**
+#### Windows系统
 
 1.  请确认是否已参考[安装Python](https://help.aliyun.com/zh/sdk/developer-reference/installing-python)，在您的计算环境中安装Python，并将python.exe添加至环境变量PATH中。
     
@@ -401,35 +378,34 @@ Q：执行`python -V`、`pip --version`报错：
 2.  如果已安装了Python并添加了环境变量，仍报此错，请关闭当前终端，重新打开一个新的终端窗口，再进行尝试。
     
 
-## Linux、macOS系统
+#### Linux、macOS系统
 
 1.  请确认是否已参考[安装Python](https://help.aliyun.com/zh/sdk/developer-reference/installing-python)，在您的计算环境中安装的Python。
     
 2.  如果已安装Python后，仍报此错，请输入`which python pip`命令查询系统中是否有`python`、`pip`。
     
     -   如果返回如下结果，请关闭当前连接终端，重新打开一个新的终端窗口，再进行尝试。
-        
-        ```
-        /usr/bin/python
-        /usr/bin/pip
-        ```
-        
-    -   如果返回如下结果，则再次输入`which python3 pip3`查询。
-        
-        ```
-        /usr/bin/which: no python in (/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin)
-        /usr/bin/which: no pip in (/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin)
-        ```
-        
-        如果返回结果如下，则使用`python3 -V`、`pip3 --version`查询版本。
-        
-        ```
-        /usr/bin/python3
-        /usr/bin/pip3
-        ```
-        
 
-### **配置虚拟环境（可选）**
+```
+/usr/bin/python
+/usr/bin/pip
+```
+
+-   如果返回如下结果，则再次输入`which python3 pip3`查询。
+
+```
+/usr/bin/which: no python in (/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin)
+/usr/bin/which: no pip in (/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin)
+```
+
+如果返回结果如下，则使用`python3 -V`、`pip3 --version`查询版本。
+
+```
+/usr/bin/python3
+/usr/bin/pip3
+```
+
+配置虚拟环境（可选）
 
 如果您的Python已安装完成，可以创建一个虚拟环境来安装OpenAI Python SDK或DashScope Python SDK，这可以帮助您避免与其它项目发生依赖冲突。
 
@@ -437,31 +413,32 @@ Q：执行`python -V`、`pip --version`报错：
     
     您可以运行以下命令，创建一个命名为**.venv**的虚拟环境：
     
-    ```
-    # 如果运行失败，您可以将python替换成python3再运行
-    python -m venv .venv
-    ```
-    
+
+```
+# 如果运行失败，您可以将python替换成python3再运行
+python -m venv .venv
+```
+
 2.  **激活虚拟环境**
     
     若您使用Windows系统，请运行以下命令来激活虚拟环境：
     
-    ```
-    .venv\Scripts\activate
-    ```
-    
-    如果您使用macOS或者Linux系统，请运行以下命令来激活虚拟环境：
-    
-    ```
-    source .venv/bin/activate
-    ```
-    
 
-### **安装**OpenAI Python SDK或DashScope Python SDK
+```
+.venv\Scripts\activate
+```
+
+如果您使用macOS或者Linux系统，请运行以下命令来激活虚拟环境：
+
+```
+source .venv/bin/activate
+```
+
+安装 OpenAI Python SDK或DashScope Python SDK
 
 您可以通过OpenAI的Python SDK或DashScope的Python SDK来调用阿里云百炼平台上的模型。
 
-## 安装 OpenAI Python SDK
+#### 安装 OpenAI Python SDK
 
 通过运行以下命令安装或升级 OpenAI Python SDK：
 
@@ -472,7 +449,7 @@ pip install -U openai
 
 当终端出现`Successfully installed ... openai-x.x.x`的提示后，表示您已经成功安装OpenAI Python SDK。
 
-## 安装 DashScope Python SDK
+#### 安装 DashScope Python SDK
 
 通过运行以下命令安装或升级 DashScope Python SDK：
 
@@ -483,15 +460,13 @@ pip install -U dashscope
 
 当终端出现`Successfully installed ... dashscope-x.x.x`的提示后，表示您已经成功安装DashScope Python SDK。
 
-### **步骤 2：调用大模型API**
+### 步骤 2：调用大模型API
 
-## OpenAI Python SDK
+#### OpenAI Python SDK
 
 如果您安装完成了Python以及OpenAI的Python SDK，可以参考以下步骤发送您的API请求。
 
-**重要**
-
-示例代码中的`import os`用于读取环境变量，请勿省略。如果您使用`.env`文件管理API Key，需同时导入`os`和`dotenv`：
+**重要**示例代码中的`import os`用于读取环境变量，请勿省略。如果您使用`.env`文件管理API Key，需同时导入`os`和`dotenv`：
 
 ```
 import os
@@ -504,98 +479,94 @@ api_key = os.getenv("DASHSCOPE_API_KEY")
 缺少`import os`会导致`NameError`，请勿将其误判为`.env`文件加载失败。
 
 1.  新建一个文件，命名为`hello_qwen.py`。
-    
 2.  将以下代码复制到`hello_qwen.py`中并保存。
-    
-    ```
-    import os
-    from openai import OpenAI
-    
-    try:
-        client = OpenAI(
-            # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为: api_key="sk-xxx",
-            api_key=os.getenv("DASHSCOPE_API_KEY"),
-            # 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将{WorkspaceId}替换为真实的业务空间ID。
-            base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
-        )
-    
-        completion = client.chat.completions.create(
-            model="qwen3.8-max",  # 模型列表: https://help.aliyun.com/model-studio/getting-started/models
-            messages=[
-                {'role': 'system', 'content': 'You are a helpful assistant.'},
-                {'role': 'user', 'content': '你是谁？'}
-            ]
-        )
-        print(completion.choices[0].message.content)
-    except Exception as e:
-        print(f"错误信息：{e}")
-        print("请参考文档：https://help.aliyun.com/model-studio/developer-reference/error-code")
-    ```
-    
+
+```
+import os
+from openai import OpenAI
+
+try:
+    client = OpenAI(
+        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为: api_key="sk-xxx",
+        api_key=os.getenv("DASHSCOPE_API_KEY"),
+        # 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将{WorkspaceId}替换为真实的业务空间ID。
+        base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+    )
+
+    completion = client.chat.completions.create(
+        model="qwen3.8-max",  # 模型列表: https://help.aliyun.com/model-studio/getting-started/models
+        messages=[
+            {'role': 'system', 'content': 'You are a helpful assistant.'},
+            {'role': 'user', 'content': '你是谁？'}
+        ]
+    )
+    print(completion.choices[0].message.content)
+except Exception as e:
+    print(f"错误信息：{e}")
+    print("请参考文档：https://help.aliyun.com/model-studio/developer-reference/error-code")
+```
+
 3.  通过命令行运行`python hello_qwen.py`或`python3 hello_qwen.py`。
     
     > 若提示`No such file or directory`，则需在文件名前指定具体文件路径。
     
     运行后您将会看到输出结果：
     
-    ```
-    我是阿里云开发的一款超大规模语言模型，我叫千问。
-    ```
-    
 
-## DashScope Python SDK
+```
+我是阿里云开发的一款超大规模语言模型，我叫千问。
+```
+
+#### DashScope Python SDK
 
 如果您安装完成了Python以及DashScope的Python SDK，可以参考以下步骤发送您的API请求。
 
 1.  新建一个文件，命名为`hello_qwen.py`。
-    
 2.  将以下代码复制到`hello_qwen.py`中并保存。
-    
-    ```
-    import os
-    from dashscope import MultiModalConversation
-    import dashscope
-    
-    # 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将{WorkspaceId}替换为真实的业务空间ID。
-    dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
-    messages = [
-        {'role': 'system', 'content': [{'text': 'You are a helpful assistant.'}]},
-        {'role': 'user', 'content': [{'text': '你是谁？'}]}
-    ]
-    response = MultiModalConversation.call(
-        # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
-        api_key=os.getenv("DASHSCOPE_API_KEY"), 
-        model="qwen3.8-max",   # 模型列表：https://help.aliyun.com/model-studio/getting-started/models
-        messages=messages,
-    )
-    
-    if response.status_code == 200:
-        print(response.output.choices[0].message.content[0]["text"])
-    else:
-        print(f"HTTP返回码：{response.status_code}")
-        print(f"错误码：{response.code}")
-        print(f"错误信息：{response.message}")
-        print("请参考文档：https://help.aliyun.com/model-studio/developer-reference/error-code")
-    ```
-    
+
+```
+import os
+from dashscope import MultiModalConversation
+import dashscope
+
+# 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将{WorkspaceId}替换为真实的业务空间ID。
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+messages = [
+    {'role': 'system', 'content': [{'text': 'You are a helpful assistant.'}]},
+    {'role': 'user', 'content': [{'text': '你是谁？'}]}
+]
+response = MultiModalConversation.call(
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    model="qwen3.8-max",   # 模型列表：https://help.aliyun.com/model-studio/getting-started/models
+    messages=messages,
+)
+
+if response.status_code == 200:
+    print(response.output.choices[0].message.content[0]["text"])
+else:
+    print(f"HTTP返回码：{response.status_code}")
+    print(f"错误码：{response.code}")
+    print(f"错误信息：{response.message}")
+    print("请参考文档：https://help.aliyun.com/model-studio/developer-reference/error-code")
+```
+
 3.  通过命令行运行`python hello_qwen.py`或`python3 hello_qwen.py`。
     
-    **说明**
-    
-    本示例使用的运行命令需在Python文件所在目录执行，如果想要在任意位置执行，请在文件名前指定具体文件路径。
+    **说明**本示例使用的运行命令需在Python文件所在目录执行，如果想要在任意位置执行，请在文件名前指定具体文件路径。
     
     运行后您将会看到输出结果：
     
-    ```
-    我是来自阿里云的大规模语言模型，我叫千问。
-    ```
-    
 
-## Node.js
+```
+我是来自阿里云的大规模语言模型，我叫千问。
+```
 
-### **步骤 1：配置Node.js环境**
+#### Node.js
 
-### 检查Node.js安装状态
+### 步骤 1：配置Node.js环境
+
+检查Node.js安装状态
 
 您可以在终端中输入以下命令查看当前计算环境是否安装了Node.js和npm：
 
@@ -616,7 +587,7 @@ C:\Users\Administrator>npm -v
 
 这将打印出您当前Node.js 版本。如果您的环境中没有Node.js，请访问[Node.js官网](https://nodejs.org/en/download/package-manager)进行下载。
 
-### 安装模型调用SDK
+安装模型调用SDK
 
 您可以在终端运行以下命令：
 
@@ -626,9 +597,7 @@ npm install --save openai
 yarn add openai
 ```
 
-**说明**
-
-如果安装失败，您可以通过配置镜像源的方法来完成安装，如：
+**说明**如果安装失败，您可以通过配置镜像源的方法来完成安装，如：
 
 ```
 npm config set registry https://registry.npmmirror.com/
@@ -641,64 +610,60 @@ npm config set registry https://registry.npmmirror.com/
 ### 步骤 2：调用大模型API
 
 1.  新建一个`hello_qwen.mjs`文件。
-    
 2.  将以下代码复制到文件中。
-    
-    ```
-    import OpenAI from "openai";
-    
-    try {
-        const openai = new OpenAI(
-            {
-                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为: apiKey: "sk-xxx",
-                apiKey: process.env.DASHSCOPE_API_KEY,
-                // 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将{WorkspaceId}替换为真实的业务空间ID。
-                baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
-            }
-        );
-        const completion = await openai.chat.completions.create({
-            model: "qwen3.8-max",  //模型列表: https://help.aliyun.com/model-studio/getting-started/models
-            messages: [
-                { role: "system", content: "You are a helpful assistant." },
-                { role: "user", content: "你是谁？" }
-            ],
-        });
-        console.log(completion.choices[0].message.content);
-    } catch (error) {
-        console.log(`错误信息：${error}`);
-        console.log("请参考文档：https://help.aliyun.com/model-studio/developer-reference/error-code");
-    }
-    ```
-    
+
+```
+import OpenAI from "openai";
+
+try {
+    const openai = new OpenAI(
+        {
+            // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为: apiKey: "sk-xxx",
+            apiKey: process.env.DASHSCOPE_API_KEY,
+            // 以下为华北2（北京）地域的URL，各地域的URL不同。调用时请将{WorkspaceId}替换为真实的业务空间ID。
+            baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
+        }
+    );
+    const completion = await openai.chat.completions.create({
+        model: "qwen3.8-max",  //模型列表: https://help.aliyun.com/model-studio/getting-started/models
+        messages: [
+            { role: "system", content: "You are a helpful assistant." },
+            { role: "user", content: "你是谁？" }
+        ],
+    });
+    console.log(completion.choices[0].message.content);
+} catch (error) {
+    console.log(`错误信息：${error}`);
+    console.log("请参考文档：https://help.aliyun.com/model-studio/developer-reference/error-code");
+}
+```
+
 3.  通过命令行运行以下命令来发送API请求：
-    
-    ```
-    node hello_qwen.mjs
-    ```
-    
-    **说明**
-    
-    -   本示例使用的运行命令需在`hello_qwen.mjs`文件所在目录执行，如果想要在任意位置执行，请在文件名前指定具体文件路径。
-        
-    -   请确保已在`hello_qwen.mjs`文件所在目录中安装了SDK，如果SDK与文件不在同一目录下，则会报错`Cannot find package 'openai' imported from xxx`。
-        
-    
-    运行成功后您将会看到输出结果：
-    
-    ```
-    PS D:\node_project> node hello_qwen.mjs
-    (node:25072) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
-    (Use `node --trace-deprecation ...` to show where the warning was created)
-    我是来自阿里云的语言模型，我叫通义千问。
-    PS D:\node_project>
-    ```
-    
 
-## Java
+```
+node hello_qwen.mjs
+```
 
-### **步骤 1：配置Java环境**
+**说明**
 
-### **检查您的Java版本**
+-   本示例使用的运行命令需在`hello_qwen.mjs`文件所在目录执行，如果想要在任意位置执行，请在文件名前指定具体文件路径。
+-   请确保已在`hello_qwen.mjs`文件所在目录中安装了SDK，如果SDK与文件不在同一目录下，则会报错`Cannot find package 'openai' imported from xxx`。
+
+运行成功后您将会看到输出结果：
+
+```
+PS D:\node_project> node hello_qwen.mjs
+(node:25072) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+我是来自阿里云的语言模型，我叫通义千问。
+PS D:\node_project>
+```
+
+#### Java
+
+### 步骤 1：配置Java环境
+
+检查您的Java版本
 
 您可以在终端运行以下命令：
 
@@ -724,29 +689,26 @@ Java version: 23.0.2
 
 为了使用DashScope Java SDK，您的Java需要在Java 8或以上版本。您可以查看打印信息中的第一行确认Java版本，例如打印信息：`openjdk version "16.0.1" 2021-04-20`表明当前Java版本为Java 16。如果您当前计算环境没有Java，或版本低于Java 8，请前往[Java下载](https://www.oracle.com/cn/java/technologies/downloads/)进行下载与安装。
 
-### **安装模型调用SDK**
+安装模型调用SDK
 
 如果您的环境中已安装Java，请安装DashScope Java SDK。SDK的版本请参考：[DashScope Java SDK](https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java)。执行以下命令来添加 Java SDK 依赖，并将 `the-latest-version` 替换为最新的版本号。
 
-## XML
+#### XML
 
 1.  打开您的Maven项目的`pom.xml`文件。
-    
 2.  在`<dependencies>`标签内添加以下依赖信息。
-    
-    ```
-    <dependency>
-        <groupId>com.alibaba</groupId>
-        <artifactId>dashscope-sdk-java</artifactId>
-        <!-- 请将 'the-latest-version' 替换为最新版本号：https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java -->
-        <version>the-latest-version</version>
-    </dependency>
-    ```
-    
+
+```
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>dashscope-sdk-java</artifactId>
+    <!-- 请将 'the-latest-version' 替换为最新版本号：https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java -->
+    <version>the-latest-version</version>
+</dependency>
+```
+
 3.  保存`pom.xml`文件。
-    
 4.  使用Maven命令（如`mvn compile`或`mvn clean install`）来更新项目依赖，这样Maven会自动下载并添加DashScope Java SDK到您的项目中。
-    
 
 以Windows的IDEA集成开发环境为例：
 
@@ -791,27 +753,24 @@ mvn compile
 [INFO] ------------------------------------------------------------------------
 ```
 
-## Gradle
+#### Gradle
 
 1.  打开您的Gradle项目的`build.gradle`文件。
-    
 2.  在`dependencies`块内添加以下依赖信息。
-    
-    ```
-    dependencies {
-        // 请将 'the-latest-version' 替换为最新版本号：https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java
-        implementation group: 'com.alibaba', name: 'dashscope-sdk-java', version: 'the-latest-version'
-    }
-    ```
-    
+
+```
+dependencies {
+    // 请将 'the-latest-version' 替换为最新版本号：https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java
+    implementation group: 'com.alibaba', name: 'dashscope-sdk-java', version: 'the-latest-version'
+}
+```
+
 3.  保存`build.gradle`文件。
-    
 4.  在命令行中，切换到您的项目根目录，执行以下Gradle命令来更新项目依赖。这将会自动下载并添加DashScope Java SDK到您的项目中。
-    
-    ```
-    ./gradlew build --refresh-dependencies
-    ```
-    
+
+```
+./gradlew build --refresh-dependencies
+```
 
 以Windows的IDEA集成开发环境为例：
 
@@ -856,7 +815,7 @@ BUILD SUCCESSFUL in 7m 51s
 2 actionable tasks: 2 executed
 ```
 
-### **步骤 2：调用大模型API**
+### 步骤 2：调用大模型API
 
 您可以运行以下代码来调用大模型API。
 
@@ -915,19 +874,17 @@ public class Main {
 我是阿里云开发的一款超大规模语言模型，我叫千问。
 ```
 
-## curl
+#### curl
 
-您可以通过OpenAI兼容的HTTP方式或DashScope的HTTP方式来调用阿里云百炼平台上的模型。模型列表请参考：[选择模型](https://help.aliyun.com/zh/model-studio/models)。
+您可以通过OpenAI兼容的HTTP方式或DashScope的HTTP方式来调用阿里云百炼平台上的模型。模型列表请参考：[选择模型](raw/model-user-guide/get-started-with-models/models.md)。
 
-**说明**
+**说明**若没有配置环境变量，请用阿里云百炼API Key将：-H "Authorization: Bearer $DASHSCOPE\_API\_KEY" \\ 换为：-H "Authorization: Bearer sk-xxx" \\ 。
 
-若没有配置环境变量，请用阿里云百炼API Key将：-H "Authorization: Bearer $DASHSCOPE\_API\_KEY" \\ 换为：-H "Authorization: Bearer sk-xxx" \\ 。
-
-## OpenAI兼容-HTTP
+#### OpenAI兼容-HTTP
 
 您可以运行以下命令发送API请求：
 
-**Windows**
+Windows
 
 ```
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions" ^
@@ -948,7 +905,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
 }"
 ```
 
-**Linux/macOS**
+Linux/macOS
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
@@ -997,11 +954,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
-## DashScope-HTTP
+#### DashScope-HTTP
 
 您可以运行以下命令发送API请求：
 
-**Windows**
+Windows
 
 ```
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" ^
@@ -1027,7 +984,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }"
 ```
 
-**Linux/macOS**
+Linux/macOS
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \
@@ -1077,11 +1034,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 }
 ```
 
-## 其它语言
+#### 其它语言
 
 **调用大模型API**
 
-Go
+go
 
 ```
 package main
@@ -1154,7 +1111,7 @@ func main() {
 }
 ```
 
-PHP
+php
 
 ```
 <?php
@@ -1204,7 +1161,7 @@ echo $response;
 ?>
 ```
 
-C#
+csharp
 
 ```
 using System.Net.Http.Headers;
@@ -1235,7 +1192,7 @@ class Program
                     ""content"": ""You are a helpful assistant.""
                 },
                 {
-                    ""role"": ""user"", 
+                    ""role"": ""user"",
                     ""content"": ""你是谁？""
                 }
             ]
@@ -1273,59 +1230,57 @@ class Program
 }
 ```
 
-## **API参考**
+## API参考
 
--   关于千问API的输入输出参数，请参见[文本生成](https://help.aliyun.com/zh/model-studio/qwen-api-reference/)。
-    
--   关于其他模型，请参见[选择模型](https://help.aliyun.com/zh/model-studio/models)。
-    
+-   关于千问API的输入输出参数，请参见[文本生成](raw/model-api-reference/qwen-api-reference.md)。
+-   关于其他模型，请参见[选择模型](raw/model-user-guide/get-started-with-models/models.md)。
 
-## **常见问题**
+## 常见问题
 
-### **免费额度用完后如何购买 Token？**
+### 免费额度用完后如何购买 Token？
 
 A：您可以访问[费用与成本](https://usercenter2.aliyun.com/home)中心，确保您的账户没有欠费即可调用千问模型。
 
 > 调用千问模型会自动扣费，出账周期为分钟级（即一条账单代表一分钟内的费用）。消费明细请前往[**账单详情**](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail-by-instance)进行查看。
 
-### **调用大模型API后报错**`**Model.AccessDenied**`**，如何处理？**
+### 调用大模型API后报错`Model.AccessDenied`，如何处理？
 
 A：该报错是因为您使用子业务空间的API Key，子业务空间无法访问**主账号空间**的应用或模型。使用子空间API Key需由主账号管理员为对应子空间开通模型授权（如本文使用`qwen3.8-max`模型）。详细操作步骤请参见[设置模型调用权限](https://help.aliyun.com/zh/model-studio/permission-management-overview#f642213a1f38l)。
 
-### **如何接入** [**Chatbox**](https://chatboxai.app/zh)**、**[**Cherry Studio**](https://cherry-ai.com/)**、**[Cline](https://cline.bot/)**或** [Dify](https://cloud.dify.ai/apps)**？**
+### 如何接入[Chatbox](https://chatboxai.app/zh)、[Cherry Studio](https://cherry-ai.com/)、[Cline](https://cline.bot/)或[Dify](https://cloud.dify.ai/apps)？
 
 A：请根据您的使用情况参考以下步骤：
 
 > 此处以使用较多的工具为例，其它大模型工具接入的方法较为类似。
 
-## Chatbox
+#### Chatbox
 
-请参见[Chatbox](https://help.aliyun.com/zh/model-studio/chatbox)。
+请参见[Chatbox](https://help.aliyun.com/zh/model-studio/cline-tool)。
 
-## Cherry Studio
+#### Cherry Studio
 
-1.  单击左下角的设置按钮，在**模型服务**栏中找到**阿里云百炼**，**API 密钥**输入您的 API Key，获取方法请参见：[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)；**API 地址**填入`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/`（请将WorkspaceId替换为业务空间ID）；单击**添加**。
+1.  单击左下角的设置按钮，在**模型服务**栏中找到**阿里云百炼**，**API 密钥**输入您的 API Key，获取方法请参见：[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)；**API 地址**填入`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/`（请将WorkspaceId替换为业务空间ID）；单击**添加**。
     
-2.  在**模型 ID**填入您需要使用的千问模型，此处以 qwen3.8-max 为例（更多可用的模型请参考[选择模型](https://help.aliyun.com/zh/model-studio/models)中的千问模型）； **模型名称**与**分组名称**会自动生成。
+2.  在**模型 ID**填入您需要使用的千问模型，此处以 qwen3.8-max 为例（更多可用的模型请参考[选择模型](raw/model-user-guide/get-started-with-models/models.md)中的千问模型）； **模型名称**与**分组名称**会自动生成。
     
 3.  在界面上方选中添加的模型，部分模型支持联网搜索，打开输入框处的联网搜索按钮。输入“杭州天气咋样？”进行测试：
     
     联网搜索按钮为输入框下方工具栏中的地球图标。开启后，模型成功返回杭州实时天气信息及未来几天天气预报，验证联网搜索功能正常。
     
 
-## Cline
+#### Cline
 
-请参见[Cline](https://help.aliyun.com/zh/model-studio/cline)。
+请参见[Cline](raw/model-user-guide/use-chat-client-or-development-tool/cline.md)。
 
-## Dify
+#### Dify
 
-请参见[Dify](https://help.aliyun.com/zh/model-studio/dify)。
+请参见[Dify](raw/model-user-guide/use-chat-client-or-development-tool/dify.md)。
 
-## **下一步**
+## 下一步
 
 **查看更多模型**
 
-示例代码以 qwen3.8-max 模型为例，阿里云百炼还支持其他千问模型与 DeepSeek、Llama 等第三方模型，**支持的模型**以及对应的**API参考**文档请参见[选择模型](https://help.aliyun.com/zh/model-studio/models)。
+示例代码以 qwen3.8-max 模型为例，阿里云百炼还支持其他千问模型与 DeepSeek、Llama 等第三方模型，**支持的模型**以及对应的**API参考**文档请参见[选择模型](raw/model-user-guide/get-started-with-models/models.md)。
 
 **了解进阶用法**
 
@@ -1341,8 +1296,8 @@ A：请根据您的使用情况参考以下步骤：
 
 **0代码进行大模型微调**
 
-通常来说，对大模型微调需要有人工智能知识背景与工程能力，阿里云百炼提供了0代码对大模型进行微调的功能，您仅需提供数据集即可。详情请参见[在控制台进行模型调优](https://help.aliyun.com/zh/model-studio/model-training-on-console)。
+通常来说，对大模型微调需要有人工智能知识背景与工程能力，阿里云百炼提供了0代码对大模型进行微调的功能，您仅需提供数据集即可。详情请参见[在控制台进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
 
 **调用自训练模型**
 
-如果您在百炼平台部署了自训练模型，调用时需使用模型部署页面生成的模型 code 作为`model`参数，而非模型 ID，否则将报错 Model not exist。详情请参见[模型部署简介](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)中的「部署后调用」章节。
+如果您在百炼平台部署了自训练模型，调用时需使用模型部署页面生成的模型 code 作为`model`参数，而非模型 ID，否则将报错 Model not exist。详情请参见[模型部署简介](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)中的「部署后调用」章节。

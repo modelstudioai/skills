@@ -2,38 +2,32 @@
 
 通过Java SDK管理定制热词列表，包括VocabularyService类的方法说明与示例代码。
 
-**用户指南：**[提升识别准确率](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。热词列表数量上限等使用限制详见[限制与计费](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw10-limit-sec)。
+**用户指南：**[提升识别准确率](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。热词列表数量上限等使用限制详见[热词限制与计费](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw10_limit_h2)。
 
-**重要**
+**重要**新加坡地域的子业务空间暂不支持热词功能。
 
-新加坡地域的子业务空间暂不支持热词功能。
-
-## **接口地址**
+## 接口地址
 
 SDK 默认使用**北京地域**的接口地址。如需切换到其他地域，需在初始化前修改 `Constants.baseHttpApiUrl`。
 
-## 华北2（北京）
+#### 华北2（北京）
 
 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## 新加坡
+#### 新加坡
 
 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。现有域名仍可正常使用。
 
 **切换到新加坡地域**：
 
@@ -47,17 +41,15 @@ Constants.baseHttpApiUrl = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.c
 **注意**：
 
 -   不同地域的 API Key 不同，请确保使用对应地域的 API Key
-    
 -   地域配置为全局设置，影响所有 DashScope SDK 的 API 调用
-    
 
-## **VocabularyService**
+## VocabularyService
 
 **包路径**：`com.alibaba.dashscope.audio.asr.vocabulary.VocabularyService`
 
 **功能**：管理热词列表的生命周期（创建、查询、更新、删除）
 
-### **构造方法**
+### 构造方法
 
 ```
 public VocabularyService(String apiKey)
@@ -77,7 +69,7 @@ String
 
 DashScope API Key
 
-### **createVocabulary() - 创建热词列表**
+### createVocabulary() - 创建热词列表
 
 **方法签名**：
 
@@ -119,7 +111,7 @@ JsonArray
 
 热词列表，每个JsonObject包含 text、weight、lang 等字段。
 
-详情请参见[热词对象结构](#热词对象结构)。
+详情请参见[热词对象结构](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/custom-hot-words/vocabulary-java-sdk.md)。
 
 **返回值**：
 
@@ -145,7 +137,7 @@ InputRequiredException
 
 必填参数为空。
 
-### **listVocabulary() - 批量查询热词列表**
+### listVocabulary() - 批量查询热词列表
 
 **方法签名**：
 
@@ -254,7 +246,7 @@ InputRequiredException
 
 必填参数为空。
 
-### **queryVocabulary() - 查询热词列表**
+### queryVocabulary() - 查询热词列表
 
 **方法签名**：
 
@@ -347,7 +339,7 @@ InputRequiredException
 
 必填参数为空。
 
-### **updateVocabulary() - 更新热词列表**
+### updateVocabulary() - 更新热词列表
 
 **方法签名**：
 
@@ -397,7 +389,7 @@ InputRequiredException
 
 必填参数为空。
 
-### **deleteVocabulary() - 删除热词列表**
+### deleteVocabulary() - 删除热词列表
 
 **方法签名**：
 
@@ -439,13 +431,13 @@ InputRequiredException
 
 必填参数为空。
 
-## **Vocabulary 类**
+## Vocabulary 类
 
 **包路径**：`com.alibaba.dashscope.audio.asr.vocabulary.Vocabulary`
 
 **功能**：热词列表对象，封装热词列表的元数据和内容
 
-### **主要方法**
+### 主要方法
 
 **方法**
 
@@ -495,9 +487,9 @@ JsonObject
 
 获取完整数据（JSON格式）。
 
-## **热词对象结构**
+## 热词对象结构
 
-**用于** `**vocabulary**` **参数的 JsonObject 定义**：
+**用于**`vocabulary`**参数的 JsonObject 定义**：
 
 **字段**
 
@@ -570,9 +562,9 @@ String
     -   ja: 日语
         
 
-## **示例代码**
+## 示例代码
 
-### **创建热词列表**
+### 创建热词列表
 
 ```
 import com.alibaba.dashscope.audio.asr.vocabulary.Vocabulary;
@@ -625,7 +617,7 @@ class Hotword {
 }
 ```
 
-### **批量查询热词列表**
+### 批量查询热词列表
 
 ```
 import com.alibaba.dashscope.audio.asr.vocabulary.Vocabulary;
@@ -655,7 +647,7 @@ public class Main {
 }
 ```
 
-### **查询热词列表**
+### 查询热词列表
 
 ```
 import com.alibaba.dashscope.audio.asr.vocabulary.Vocabulary;
@@ -686,7 +678,7 @@ public class Main {
 }
 ```
 
-### **更新热词列表**
+### 更新热词列表
 
 ```
 import com.alibaba.dashscope.audio.asr.vocabulary.VocabularyService;
@@ -740,7 +732,7 @@ class Hotword {
 }
 ```
 
-### **删除热词列表**
+### 删除热词列表
 
 ```
 import com.alibaba.dashscope.audio.asr.vocabulary.VocabularyService;

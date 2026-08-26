@@ -2,14 +2,12 @@
 
 介绍如何通过 AOQ、WebRTC、WebSocket 三种协议接入 Realtime API 模型或应用，包含各协议的连接流程、时序图和代码示例。
 
-## **前提条件**
+## 前提条件
 
 -   接入前请先确认[模型/应用支持力度](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)
-    
--   了解如何进行[Token鉴权](https://help.aliyun.com/zh/model-studio/realtime-token-authentication)
-    
+-   了解如何进行[Token鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)
 
-## **体验 Demo**
+## 体验 Demo
 
 阿里云百炼提供适用于 Android 平台的 Demo，可用于快速验证 AOQ 接入效果。下载 APK 并配置 API Key 和 `workspaceId` 后，即可体验部分模型。
 
@@ -17,15 +15,15 @@
 
 ![Demo 下载二维码](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7714207871/p1095700.png)
 
-## **AOQ 接入**
+## AOQ 接入
 
-AOQ 基于 QUIC 协议深度定制，适合移动端原生应用，支持音频/视频/数据混合传输，内置极致抗弱网能力。以下以实时全模态（Omni）的 iOS Demo 为例介绍 AOQ 接入流程。AOQ SDK API 详情请参见[AOQ客户端SDK](https://help.aliyun.com/zh/model-studio/realtime-api-aoq-api/)。
+AOQ 基于 QUIC 协议深度定制，适合移动端原生应用，支持音频/视频/数据混合传输，内置极致抗弱网能力。以下以实时全模态（Omni）的 iOS Demo 为例介绍 AOQ 接入流程。AOQ SDK API 详情请参见[AOQ客户端SDK](https://help.aliyun.com/zh/model-studio/realtime-api-aoq-api)。
 
-### **整体流程时序图**
+### 整体流程时序图
 
 ![AOQ中文1](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5755914871/p1088073.jpg)
 
-### **创建引擎并设置回调**
+### 创建引擎并设置回调
 
 ```
 let config = AoqCreateConfig()
@@ -36,7 +34,7 @@ engine = AoqClientEngine.createEngine(config, delegate: self)
 
 实现 `AoqEngineDelegate` 协议监听 `onConnectionStatusChange`、`onDataMsg`、`onError` 等回调。
 
-### **启动音频采集与播放**
+### 启动音频采集与播放
 
 ```
 // 音频采集
@@ -55,11 +53,11 @@ vidCfg.width = 720; vidCfg.height = 1280; vidCfg.fps = 15
 engine.startVideoCapture(vidCfg)
 ```
 
-### **获取连接凭证**
+### 获取连接凭证
 
-由业务 AppServer 代理百炼请求，参见[Token鉴权](https://help.aliyun.com/zh/model-studio/realtime-token-authentication)。
+由业务 AppServer 代理百炼请求，参见[Token鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)。
 
-### **设置编解码及建立连接**
+### 设置编解码及建立连接
 
 设置编解码参数后调用 `connect`：
 
@@ -84,13 +82,11 @@ config.subscribeTracks = [audioTrack, dataTrack]
 engine.connect(config)
 ```
 
-**重要**
+**重要****重要**：AOQ SDK 在建连后会默认发送媒体数据，此示例演示了在连接模型时先关闭媒体发送，待会话就绪后再开启的流程。
 
-**重要**：AOQ SDK 在建连后会默认发送媒体数据，此示例演示了在连接模型时先关闭媒体发送，待会话就绪后再开启的流程。
+### 配置 AI 会话
 
-### **配置 AI 会话**
-
-连接成功后发送 `session.update` 的示例，详见[客户端事件](https://help.aliyun.com/zh/model-studio/client-events)：
+连接成功后发送 `session.update` 的示例，详见[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)：
 
 ```
 func onConnectionStatusChange(_ status: AoqConnectionStatus) {
@@ -138,9 +134,9 @@ private func sendSessionUpdate() {
 }
 ```
 
-### **收到 session.updated 后开启媒体发送**
+### 收到 session.updated 后开启媒体发送
 
-收到模型回复 `session.updated` 的示例，详见[服务端事件](https://help.aliyun.com/zh/model-studio/server-events)：
+收到模型回复 `session.updated` 的示例，详见[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)：
 
 ```
 func onDataMsg(_ msg: AoqDataMsg) {
@@ -160,26 +156,24 @@ func onDataMsg(_ msg: AoqDataMsg) {
 2.  建连时添加的音频轨道和视频轨道（即 AOQ 媒体通道）会自动将数据传输到服务端。
     
     1.  音频：通过音频轨道直接传输，无需发送 `input_audio_buffer.append` 事件。
-        
     2.  视频：通过视频轨道发送画面帧，无需发送 `input_image_buffer.append` 事件。
-        
 
-### **断开连接与销毁引擎**
+### 断开连接与销毁引擎
 
 ```
 engine.disconnect()
 AoqClientEngine.destroy()
 ```
 
-## **WebRTC 接入**
+## WebRTC 接入
 
 WebRTC 不提供专用 SDK。Web 端可直接使用浏览器原生 JavaScript API 接入，其他端可通过开源 WebRTC 库或支持标准 WebRTC 协议的第三方 RTC 服务接入。以下以 Web 端 JavaScript 为例进行介绍。
 
-### **整体流程图**
+### 整体流程图
 
 ![AOQ中文2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5755914871/p1088074.jpg)
 
-### **建立连接**
+### 建立连接
 
 ```
 # pip install aiortc aiohttp certifi
@@ -229,7 +223,7 @@ async def connect():
     return pc
 ```
 
-### **配置目标模型参数**
+### 配置目标模型参数
 
 监听模型通过 DataChannel 返回的消息，确保交互时序正确：
 
@@ -252,31 +246,24 @@ pc.ondatachannel = (event) => {
 };
 ```
 
-### **收发媒体数据**
+### 收发媒体数据
 
 建连时添加的音频轨道和视频轨道（即 RTP 媒体通道）会自动将数据传输到服务端。
 
 -   音频：通过音频轨道（RTP）直接传输，无需发送 `input_audio_buffer.append` 事件。
-    
 -   图片：通过视频轨道（RTP）发送画面帧，不支持 `input_image_buffer.append` 事件。
-    
 
-**说明**
+**说明**WebRTC 仅支持服务端 VAD 模式（`server_vad` 或 `semantic_vad`），不支持手动模式。
 
-WebRTC 仅支持服务端 VAD 模式（`server_vad` 或 `semantic_vad`），不支持手动模式。
+### Demo 源码
 
-### **Demo 源码**
-
-#### **前提条件**
+#### 前提条件
 
 -   使用支持 WebRTC 的现代浏览器（Chrome、Edge、Firefox、Safari 等）。
-    
 -   浏览器需要麦克风权限。
-    
 -   浏览器受跨域安全策略限制，无法直接向服务端发起建连请求，因此需要通过终端执行 curl 命令完成连接建立。
-    
 
-#### **运行示例**
+#### 运行示例
 
 新建一个 HTML 文件，命名为 `webrtc_demo.html`，并将以下代码复制到文件中：
 
@@ -285,24 +272,16 @@ WebRTC 仅支持服务端 VAD 模式（`server_vad` 或 `semantic_vad`），不�
 在浏览器中打开此文件，按以下步骤操作：
 
 1.  点击开始会话，页面会自动生成 Offer SDP 和对应的 curl 命令。
-    
 2.  点击复制 curl 命令，在终端中执行。命令返回的内容即为 Answer SDP。
-    
 3.  将 Answer SDP 粘贴到页面的 Answer SDP 文本框中，点击设置 Answer 即可建立连接并开始语音对话。
-    
 
-## **WebSocket 接入**
+## WebSocket 接入
 
 不同模型的接入方式和流程不同，详情请参见：
 
 -   [实时全模态](https://help.aliyun.com/zh/model-studio/realtime#bdaa43cdd7hsd)
-    
 -   [实时语音翻译](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime)
-    
--   [多模态开发套件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol/)
-    
--   [实时语音识别](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-websocket-api)
-    
--   [实时语音合成](https://help.aliyun.com/zh/model-studio/cosyvoice-websocket-api)
-    
--   [实时语音对话](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime-websocket-api)
+-   [多模态开发套件](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/multimodal-interaction-protocol.md)
+-   [实时语音识别](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/fun-asr-real-time-speech-recognition-api-reference/fun-asr-realtime-websocket-api.md)
+-   [实时语音合成](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-websocket-api.md)
+-   [实时语音对话](raw/model-api-reference/audio-api-references/voice-conversation-api-references/real-time-voice-conversation-api-references/fun-audiochat-realtime-websocket-api.md)

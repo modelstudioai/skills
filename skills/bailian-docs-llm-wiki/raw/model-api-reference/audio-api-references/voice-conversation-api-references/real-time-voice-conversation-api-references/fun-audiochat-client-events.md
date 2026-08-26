@@ -2,19 +2,130 @@
 
 Qwen-Audio Realtime API的客户端事件参考。
 
-**用户指南**：[实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime)。如需了解事件交互时序，请参见[WebSocket API](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime-websocket-api)。
+**用户指南**：[实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime)。如需了解事件交互时序，请参见[WebSocket API](raw/model-api-reference/audio-api-references/voice-conversation-api-references/real-time-voice-conversation-api-references/fun-audiochat-realtime-websocket-api.md)。
 
-## **session.update**
+## session.update
 
 **说明**：建立连接后，发送此事件更新会话的默认配置。仅包含需要变更的字段，未传字段保持原值。服务端收到后校验参数，若参数不合法则返回错误，若参数合法则应用更改并返回完整配置。
 
-**说明**
+**说明**`turn_detection` 仅在首次发送音频之前（IDLE 状态）允许修改。
 
-`turn_detection` 仅在首次发送音频之前（IDLE 状态）允许修改。
-
-**type** `_string_`**（必选）**
+**type**`string`**（必选）**
 
 事件类型，固定为 `session.update`。
+
+**session**`object`（可选）
+
+会话配置。
+
+属性
+
+**modalities**`array`（可选）
+
+模型输出模态设置，可选值：
+
+-   `["text"]`
+    
+    仅输出文本。
+    
+-   `["audio", "text"]`（默认值）
+    
+    同时输出文本和音频。
+    
+
+**voice**`string`（可选）
+
+TTS 音色名称，默认值为 `longanqian`。支持两种类型，仅可在第一次 `session.update` 中设置，后续传入将被忽略。
+
+-   **系统音色**：可选值：`longanqian`、`longanlingxin`、`longanlingxi`、`longanxiaoxin`、`longanlufeng`。
+-   **声音复刻音色**：通过声音复刻 API 创建，将返回的 `voice_id` 填入此参数。详见[音色配置](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime#fc60h311)。
+
+**enable\_speech\_emotion**`boolean`（可选）
+
+是否开启情绪增强功能。开启后，回复音色的情绪变化更明显。默认值：`true`。可选值：`true`、`false`。
+
+**instructions**`string`（可选）
+
+系统指令，用于设定模型的角色身份、回答风格和行为偏好。对整个会话生效。
+
+**input\_audio\_format**`string`（可选）
+
+输入音频格式。当前仅支持 `pcm`（16kHz 16bit 单声道），为默认值。仅在首次发送音频之前（IDLE 状态）允许修改。
+
+**output\_audio\_format**`string`（可选）
+
+输出音频格式。当前仅支持 `pcm`（24kHz 16bit 单声道），为默认值。
+
+**max\_history\_turns**`integer`（可选）
+
+允许单次请求的最大历史 QA 轮数。取值范围为 1-50，默认值为 20。
+
+**tools**`array`（可选）
+
+Function Calling 工具定义列表。配置后模型可根据用户输入自主决定是否调用工具。
+
+属性
+
+**type**`string`**（必选）**
+
+固定为 `function`。
+
+**function.name**`string`**（必选）**
+
+工具函数名称。
+
+**function.description**`string`（可选）
+
+对工具函数功能的描述，模型据此判断是否调用该工具。
+
+**function.parameters**`object`（可选）
+
+对工具函数入参的描述，模型据此提取所需入参。若函数无需入参，可不指定。
+
+属性
+
+**type**`string`**（必选）**
+
+固定为 `object`。
+
+**properties**`object`（可选）
+
+描述各入参的名称、数据类型与说明。
+
+**required**`array`（可选）
+
+指定哪些入参为必填项。
+
+**turn\_detection**`object|null`（可选）
+
+轮次检测配置。设为 `null` 可切换为 push-to-talk 模式（手动提交音频并触发推理）。若不提供此字段，系统将使用默认参数启用 VAD。
+
+属性
+
+**type**`string`（可选）
+
+VAD 类型，可选值：
+
+-   `server_vad`（默认值）：基于声学特征检测语音起止，自动触发推理。
+-   `smart_turn`：融合声学感知与语义理解的智能轮次检测，通过声学与语义双重判断轮次边界。无语义的声音（如”嗯”、”啊”）不会触发对话轮或打断模型播报。
+
+**threshold**`float`（可选）
+
+VAD灵敏度，仅在 server\_vad 模式下生效（smart\_turn 模式下无效）。值越低，VAD越灵敏，越容易将微弱声音（包括背景噪音）识别为语音；值越高，越不灵敏，需要更清晰、音量更大的语音才能触发。
+
+取值范围为\[-1.0, 1.0\]，默认值为 0.5。
+
+**silence\_duration\_ms**`integer`（可选）
+
+语音结束后需保持静音的最短时间（毫秒），仅在 server\_vad 模式下生效（smart\_turn 模式下无效）。超时即触发模型响应。值越低，响应越快，但可能在短暂停顿时误触发。
+
+取值范围为\[200, 6000\]，默认值为 800。对话场景推荐 400-800。
+
+**voiceprint\_audio\_urls**`array`（可选）
+
+**仅在 smart\_turn 模式下生效。**目标用户预录音频的公网可访问 URL 列表，用于说话人增强。传入后，模型将在双工对话中精准锁定目标说话人，有效忽略旁人声音与背景噪声。最多支持 5 个 URL。音频格式要求：16kHz PCM 或 WAV。
+
+**重要**该参数仅在**第一次**发送 `session.update` 事件时可配置，后续传入该字段将被忽略。
 
 ```
 {
@@ -90,132 +201,17 @@ Function Calling：
 }
 ```
 
-**session** `_object_`（可选）
-
-会话配置。
-
-**属性**
-
-**modalities** `_array_`（可选）
-
-模型输出模态设置，可选值：
-
--   `["text"]`
-    
-    仅输出文本。
-    
--   `["audio", "text"]`（默认值）
-    
-    同时输出文本和音频。
-    
-
-**voice** `_string_`（可选）
-
-TTS 音色名称，默认值为 `longanqian`。支持两种类型，仅可在第一次 `session.update` 中设置，后续传入将被忽略。
-
--   **系统音色**：可选值：`longanqian`、`longanlingxin`、`longanlingxi`、`longanxiaoxin`、`longanlufeng`。
-    
--   **声音复刻音色**：通过声音复刻 API 创建，将返回的 `voice_id` 填入此参数。详见[音色配置](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime#fc60h311)。
-    
-
-**enable\_speech\_emotion** `_boolean_`（可选）
-
-是否开启情绪增强功能。开启后，回复音色的情绪变化更明显。默认值：`true`。可选值：`true`、`false`。
-
-**instructions** `_string_`（可选）
-
-系统指令，用于设定模型的角色身份、回答风格和行为偏好。对整个会话生效。
-
-**input\_audio\_format** `_string_`（可选）
-
-输入音频格式。当前仅支持 `pcm`（16kHz 16bit 单声道），为默认值。仅在首次发送音频之前（IDLE 状态）允许修改。
-
-**output\_audio\_format** `_string_`（可选）
-
-输出音频格式。当前仅支持 `pcm`（24kHz 16bit 单声道），为默认值。
-
-**max\_history\_turns** `_integer_`（可选）
-
-允许单次请求的最大历史 QA 轮数。取值范围为 1-50，默认值为 20。
-
-**tools** `_array_`（可选）
-
-Function Calling 工具定义列表。配置后模型可根据用户输入自主决定是否调用工具。
-
-**属性**
-
-**type** `_string_`**（必选）**
-
-固定为 `function`。
-
-**function.name** `_string_`**（必选）**
-
-工具函数名称。
-
-**function.description** `_string_`（可选）
-
-对工具函数功能的描述，模型据此判断是否调用该工具。
-
-**function.parameters** `_object_`（可选）
-
-对工具函数入参的描述，模型据此提取所需入参。若函数无需入参，可不指定。
-
-**属性**
-
-**type** `_string_`**（必选）**
-
-固定为 `object`。
-
-**properties** `_object_`（可选）
-
-描述各入参的名称、数据类型与说明。
-
-**required** `_array_`（可选）
-
-指定哪些入参为必填项。
-
-**turn\_detection** `_object|null_`（可选）
-
-轮次检测配置。设为 `null` 可切换为 push-to-talk 模式（手动提交音频并触发推理）。若不提供此字段，系统将使用默认参数启用 VAD。
-
-**属性**
-
-**type** `_string_`（可选）
-
-VAD 类型，可选值：
-
--   `server_vad`（默认值）：基于声学特征检测语音起止，自动触发推理。
-    
--   `smart_turn`：融合声学感知与语义理解的智能轮次检测，通过声学与语义双重判断轮次边界。无语义的声音（如”嗯”、”啊”）不会触发对话轮或打断模型播报。
-    
-
-**threshold** `_float_`（可选）
-
-VAD灵敏度，仅在 server\_vad 模式下生效（smart\_turn 模式下无效）。值越低，VAD越灵敏，越容易将微弱声音（包括背景噪音）识别为语音；值越高，越不灵敏，需要更清晰、音量更大的语音才能触发。
-
-取值范围为\[-1.0, 1.0\]，默认值为 0.5。
-
-**silence\_duration\_ms** `_integer_`（可选）
-
-语音结束后需保持静音的最短时间（毫秒），仅在 server\_vad 模式下生效（smart\_turn 模式下无效）。超时即触发模型响应。值越低，响应越快，但可能在短暂停顿时误触发。
-
-取值范围为\[200, 6000\]，默认值为 800。对话场景推荐 400-800。
-
-**voiceprint\_audio\_urls** `_array_`（可选）
-
-**仅在 smart\_turn 模式下生效。**目标用户预录音频的公网可访问 URL 列表，用于说话人增强。传入后，模型将在双工对话中精准锁定目标说话人，有效忽略旁人声音与背景噪声。最多支持 5 个 URL。音频格式要求：16kHz PCM 或 WAV。
-
-**重要**
-
-该参数仅在**第一次**发送 `session.update` 事件时可配置，后续传入该字段将被忽略。
-
-## **input\_audio\_buffer.append**
+## input\_audio\_buffer.append
 
 **说明**：追加音频数据到输入缓冲区。应持续、高频发送（如每 20~40 ms 一帧）。此事件无服务端确认回包。
 
-**type** `_string_`**（必选）**
+**type**`string`**（必选）**
 
 事件类型，固定为 `input_audio_buffer.append`。
+
+**audio**`string`**（必选）**
+
+Base64 编码的音频数据。
 
 ```
 {
@@ -224,17 +220,13 @@ VAD灵敏度，仅在 server\_vad 模式下生效（smart\_turn 模式下无效�
 }
 ```
 
-**audio** `_string_`**（必选）**
-
-Base64 编码的音频数据。
-
-## **input\_audio\_buffer.commit**
+## input\_audio\_buffer.commit
 
 **说明**：**仅 push-to-talk 模式。**将缓冲区音频提交为一条用户消息。提交后不会自动触发推理，需要发送 `response.create` 手动触发。
 
 server\_vad / smart\_turn 模式下此事件被忽略。
 
-**type** `_string_`**（必选）**
+**type**`string`**（必选）**
 
 事件类型，固定为 `input_audio_buffer.commit`。
 
@@ -244,11 +236,11 @@ server\_vad / smart\_turn 模式下此事件被忽略。
 }
 ```
 
-## **input\_audio\_buffer.clear**
+## input\_audio\_buffer.clear
 
 **说明**：**仅 push-to-talk 模式。**清空缓冲区中尚未提交的音频。server\_vad / smart\_turn 模式下此事件被忽略。服务端以 `input_audio_buffer.cleared` 事件响应。
 
-**type** `_string_`**（必选）**
+**type**`string`**（必选）**
 
 事件类型，固定为 `input_audio_buffer.clear`。
 
@@ -258,17 +250,76 @@ server\_vad / smart\_turn 模式下此事件被忽略。
 }
 ```
 
-## **conversation.item.create**
+## conversation.item.create
 
 **说明**：手动向对话上下文插入一条对话项。可用于注入历史上下文、补充文本信息，或写回 Function Calling 的工具执行结果。
 
-**说明**
+**说明**若 `item.id` 已存在于对话中，会返回错误并拒绝创建。
 
-若 `item.id` 已存在于对话中，会返回错误并拒绝创建。
-
-**type** `_string_`**（必选）**
+**type**`string`**（必选）**
 
 事件类型，固定为 `conversation.item.create`。
+
+**previous\_item\_id**`string`（可选）
+
+指定新项插入到哪条对话项之后。不传时追加到对话末尾。
+
+**item**`object`**（必选）**
+
+要创建的对话项。
+
+属性
+
+**id**`string`（可选）
+
+对话项的唯一标识符。不传时由服务端自动生成。若指定的 ID 已存在于对话中，会返回错误。
+
+**type**`string`**（必选）**
+
+对话项类型，可选值：
+
+-   `message`：普通对话消息。
+-   `function_call`：函数调用请求。通常由服务端生成，客户端也可用于补充历史上下文。
+-   `function_call_output`：工具执行结果。客户端收到 `function_call` 后执行工具，并用该类型写回结果。
+
+**role**`string`（`message` 类型必选）
+
+消息角色，可选值：`system`、`user`、`assistant`。
+
+**content**`array`（`message` 类型必选）
+
+消息内容列表。每个元素包含 `type` 和对应的数据字段。
+
+各 role 支持的 content 类型
+
+**system**
+
+`input_text`：系统消息，必填字段 `text`。
+
+**user**
+
+-   `input_text`：用户文本输入，必填字段 `text`。
+-   `input_audio`：用户音频输入，必填字段 `audio`（Base64 编码）。
+
+**assistant**
+
+`output_text`：助手文本输出，必填字段 `text`。
+
+**call\_id**`string`（`function_call` / `function_call_output` 类型必选）
+
+函数调用的唯一标识符，用于关联请求和结果。
+
+**name**`string`（`function_call` 类型必选）
+
+要调用的函数名称。
+
+**arguments**`string`（`function_call` 类型必选）
+
+函数调用参数，JSON 字符串格式。
+
+**output**`string`（`function_call_output` 类型必选）
+
+工具执行结果，JSON 字符串格式。
 
 注入用户文本消息：
 
@@ -303,79 +354,17 @@ server\_vad / smart\_turn 模式下此事件被忽略。
 }
 ```
 
-**previous\_item\_id** `_string_`（可选）
-
-指定新项插入到哪条对话项之后。不传时追加到对话末尾。
-
-**item** `_object_`**（必选）**
-
-要创建的对话项。
-
-**属性**
-
-**id** `_string_`（可选）
-
-对话项的唯一标识符。不传时由服务端自动生成。若指定的 ID 已存在于对话中，会返回错误。
-
-**type** `_string_`**（必选）**
-
-对话项类型，可选值：
-
--   `message`：普通对话消息。
-    
--   `function_call`：函数调用请求。通常由服务端生成，客户端也可用于补充历史上下文。
-    
--   `function_call_output`：工具执行结果。客户端收到 `function_call` 后执行工具，并用该类型写回结果。
-    
-
-**role** `_string_`（`message` 类型必选）
-
-消息角色，可选值：`system`、`user`、`assistant`。
-
-**content** `_array_`（`message` 类型必选）
-
-消息内容列表。每个元素包含 `type` 和对应的数据字段。
-
-**各 role 支持的 content 类型**
-
-**system**
-
-`input_text`：系统消息，必填字段 `text`。
-
-**user**
-
--   `input_text`：用户文本输入，必填字段 `text`。
-    
--   `input_audio`：用户音频输入，必填字段 `audio`（Base64 编码）。
-    
-
-**assistant**
-
-`output_text`：助手文本输出，必填字段 `text`。
-
-**call\_id** `_string_`（`function_call` / `function_call_output` 类型必选）
-
-函数调用的唯一标识符，用于关联请求和结果。
-
-**name** `_string_`（`function_call` 类型必选）
-
-要调用的函数名称。
-
-**arguments** `_string_`（`function_call` 类型必选）
-
-函数调用参数，JSON 字符串格式。
-
-**output** `_string_`（`function_call_output` 类型必选）
-
-工具执行结果，JSON 字符串格式。
-
-## **conversation.item.retrieve**
+## conversation.item.retrieve
 
 **说明**：查询服务端存储的某条对话项。返回的音频类型 content 仅包含转写文本（`transcript`），不包含原始音频数据。
 
-**type** `_string_`**（必选）**
+**type**`string`**（必选）**
 
 事件类型，固定为 `conversation.item.retrieve`。
+
+**item\_id**`string`**（必选）**
+
+要查询的对话项 ID。服务端以 `conversation.item.retrieved` 事件返回查询结果。
 
 ```
 {
@@ -384,17 +373,17 @@ server\_vad / smart\_turn 模式下此事件被忽略。
 }
 ```
 
-**item\_id** `_string_`**（必选）**
-
-要查询的对话项 ID。服务端以 `conversation.item.retrieved` 事件返回查询结果。
-
-## **conversation.item.delete**
+## conversation.item.delete
 
 **说明**：从对话上下文中删除指定对话项。服务端以 `conversation.item.deleted` 事件确认。
 
-**type** `_string_`**（必选）**
+**type**`string`**（必选）**
 
 事件类型，固定为 `conversation.item.delete`。
+
+**item\_id**`string`**（必选）**
+
+要删除的对话项 ID。
 
 ```
 {
@@ -403,30 +392,35 @@ server\_vad / smart\_turn 模式下此事件被忽略。
 }
 ```
 
-**item\_id** `_string_`**（必选）**
-
-要删除的对话项 ID。
-
-## **response.create**
+## response.create
 
 **说明**：显式触发一次模型推理。各模式下的行为如下：
 
 -   **push-to-talk 模式**：必须手动调用，需先通过 `input_audio_buffer.commit` 提交缓冲区音频或写入 `function_call_output` 后触发。当前有响应正在生成时不允许重复触发。
-    
 -   **server\_vad 模式**：通常由服务端自动触发。当前无响应正在生成时，客户端也允许手动调用；有响应正在生成时不允许重复触发。
-    
 -   **smart\_turn 模式**：等待用户下一轮输入时允许调用。当前处于一个 turn 内时（收到 `input_audio_buffer.speech_started` 到 `response.done` 期间）不允许重复触发。
-    
 
 `response` 字段可选，用于覆盖本轮推理的会话默认配置。Function Calling 场景下，客户端写入 `function_call_output` 后也通过该事件触发二轮推理。
 
-**说明**
+**说明**server\_vad / smart\_turn 模式下，手动触发的推理仍可能被新语音打断。
 
-server\_vad / smart\_turn 模式下，手动触发的推理仍可能被新语音打断。
-
-**type** `_string_`**（必选）**
+**type**`string`**（必选）**
 
 事件类型，固定为 `response.create`。
+
+**response**`object`（可选）
+
+用于覆盖本轮推理的会话默认配置。不传时使用当前会话配置。
+
+属性
+
+**modalities**`array`（可选）
+
+覆盖本轮的输出模态设置。可选值与 `session.update` 中的 `modalities` 一致。
+
+**voice**`string`（可选）
+
+覆盖本轮的 TTS 音色。
 
 ```
 {
@@ -437,27 +431,13 @@ server\_vad / smart\_turn 模式下，手动触发的推理仍可能被新语音
 }
 ```
 
-**response** `_object_`（可选）
-
-用于覆盖本轮推理的会话默认配置。不传时使用当前会话配置。
-
-**属性**
-
-**modalities** `_array_`（可选）
-
-覆盖本轮的输出模态设置。可选值与 `session.update` 中的 `modalities` 一致。
-
-**voice** `_string_`（可选）
-
-覆盖本轮的 TTS 音色。
-
-## **response.cancel**
+## response.cancel
 
 **说明**：取消当前正在进行的推理。已输出的部分文本会写入 item 链表，服务端返回 `status=cancelled` 的 `response.done`。
 
 若当前无进行中的推理，返回错误。
 
-**type** `_string_`**（必选）**
+**type**`string`**（必选）**
 
 事件类型，固定为 `response.cancel`。
 

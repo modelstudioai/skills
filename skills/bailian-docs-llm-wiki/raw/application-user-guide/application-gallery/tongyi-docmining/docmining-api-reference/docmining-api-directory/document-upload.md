@@ -2,15 +2,15 @@
 
 本文为您介绍通义数据挖掘文档上传API的语法及示例。
 
-## **1\. 申请上传租约**
+## 1\. 申请上传租约
 
-### **请求语法**
+### 请求语法
 
 ```
 POST /zhiwen-file/apply_upload_lease HTTP/1.1
 ```
 
-### **请求参数**
+### 请求参数
 
 **名称**
 
@@ -50,7 +50,7 @@ string
 
 文档md5
 
-### **返回参数**
+### 返回参数
 
 **名称**
 
@@ -132,7 +132,7 @@ string
 
 响应消息
 
-### **示例**
+### 示例
 
 正常返回示例
 
@@ -148,7 +148,7 @@ string
         "Content-Type": "text/plain"
       },
       "method": "PUT",
-      "url": "https://dashscope-file-datacenter-prod-01.oss-cn-beijing.aliyuncs.com/1880205101189661/10064170/zhiwen/3631bf9f24ea4ac7b362a135deee7fec.1753176187488.txt?Expires=1753182187&OSSAccessKeyId=TestID&Signature=4%2Ba%2B9UoSjdSIj7a4FErUqBwOSfc%3D"
+      "url": "https://dashscope-file-datacenter-prod-01.oss-cn-beijing.aliyuncs.com/1880205101189661/10064170/zhiwen/3631bf9f24ea4ac7b362a135deee7fec.1753176187488.txt?Expires=1753182187&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE"
     },
     "type": "OSS.PreSignedUrl",
     "lease_id": "3631bf9f24ea4ac7b3dr5135deee7fec.1752176287488"
@@ -159,11 +159,11 @@ string
 }
 ```
 
-## **2\. 上传文档到OSS**
+## 2\. 上传文档到OSS
 
 使用上一步（申请文档上传租约）返回的`data.param.url`、`data.param.method`、`data.param.headers`中`x-bailian-extra`和`Content-Type`等参数，将您在本地的文档上传至OSS。示例代码如下。
 
-Python
+python
 
 ```
 # 示例代码仅供参考，请勿在生产环境中直接使用
@@ -200,7 +200,7 @@ if __name__ == "__main__":
     upload_file(pre_signed_url_or_http_url, file_path)
 ```
 
-Java
+java
 
 ```
 // 示例代码仅供参考，请勿在生产环境中直接使用
@@ -271,15 +271,15 @@ public class UploadFile{
 }
 ```
 
-## **3\. 提交解析文档**
+## 3\. 提交解析文档
 
-### **请求语法**
+### 请求语法
 
 ```
 POST /zhiwen-file/submit_parse_file HTTP/1.1
 ```
 
-### **请求参数**
+### 请求参数
 
 **名称**
 
@@ -301,7 +301,7 @@ string
 
 3631bf9f24ea4ac7b3dr5135deee7fec.1752176287488
 
-### **返回参数**
+### 返回参数
 
 **名称**
 
@@ -379,7 +379,7 @@ string
 
 响应消息
 
-### **示例**
+### 示例
 
 正常返回示例
 
@@ -394,7 +394,7 @@ string
     "name": "阿里云百炼",
     "pageSize": 5,
     "type": "pdf",
-    "url": "https://dashscope-file-datacenter-prod-01.oss-cn-beijing.aliyuncs.com/1880205101189661/10064170/zhiwen/3631bf9f24ea4ac7b362a135deee7fec.1753176187488.pdf?Expires=1753435388&OSSAccessKeyId=TestID&Signature=PfS0v1YqpH7MsbEJ7Ma%2FsablW50%3D",
+    "url": "https://dashscope-file-datacenter-prod-01.oss-cn-beijing.aliyuncs.com/1880205101189661/10064170/zhiwen/3631bf9f24ea4ac7b362a135deee7fec.1753176187488.pdf?Expires=1753435388&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
     "fileId": "file_zhiwen_XXX"
   },
   "requestId": "e33ba5e9-fef6-96ae-b8b0-1b4a0c151e2b",
@@ -403,9 +403,9 @@ string
 }
 ```
 
-## **调用示例**
+## 调用示例
 
-Python
+python
 
 ```
 import hashlib
@@ -484,7 +484,7 @@ else:
     print(f'code={response.status_code}')
 ```
 
-Java
+java
 
 ```
 import com.fasterxml.jackson.databind.JsonNode;
@@ -687,6 +687,6 @@ public class FileUploadDemo {
 }
 ```
 
-## **错误码**
+## 错误码
 
-请参见[错误码-通义数据挖掘](https://help.aliyun.com/zh/model-studio/docmining-error-code)。
+请参见[错误码-通义数据挖掘](raw/application-user-guide/application-gallery/tongyi-docmining/docmining-api-reference/docmining-error-code.md)。

@@ -2,33 +2,26 @@
 
 本文档介绍如何使用 DashScope Java SDK 调用实时语音识别（Qwen-ASR-Realtime）模型。
 
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。现有域名仍可正常使用。
 
 **用户指南：**模型介绍、功能特性和完整示例代码请参见[实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)
 
-## **前提条件**
+## 前提条件
 
-1.  [安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)，确保DashScope SDK版本不低于2.22.5。
-    
-2.  [获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
-    
-3.  了解[WebSocket API](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-interaction-process)。
-    
+1.  [安装SDK](raw/model-api-reference/preparations/install-sdk.md)，确保DashScope SDK版本不低于2.22.5。
+2.  [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
+3.  了解[WebSocket API](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/qwen-asr-realtime-api/qwen-asr-realtime-interaction-process.md)。
 
-## **请求参数**
+## 请求参数
 
 -   以下参数通过`OmniRealtimeParam`的链式方法设置。
     
-    **点击查看示例代码**
+    点击查看示例代码
     
     ```
     OmniRealtimeParam param = OmniRealtimeParam.builder()
@@ -55,7 +48,7 @@
     
     是
     
-    指定要使用的[模型](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#ff8c59ef0busr)名称。
+    指定要使用的[模型](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)名称。
     
     `url`
     
@@ -65,9 +58,9 @@
     
     语音识别服务地址：
     
-    -   华北2（北京）地域：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`。调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+    -   华北2（北京）地域：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`。调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
         
-    -   新加坡地域：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`。调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+    -   新加坡地域：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`。调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
         
     
     `apikey`
@@ -80,7 +73,7 @@
     
 -   以下参数通过`OmniRealtimeConfig`的链式方法设置。
     
-    **点击查看示例代码**
+    点击查看示例代码
     
     ```
     OmniRealtimeTranscriptionParam transcriptionParam = new OmniRealtimeTranscriptionParam();
@@ -137,7 +130,7 @@
     
     否
     
-    服务端VAD类型，固定为 `server_vad`。
+    服务端VAD类型，固定为 `server_vad`。
     
     `turnDetectionThreshold`
     
@@ -147,7 +140,7 @@
     
     VAD检测阈值。推荐将该值设为`0.0`。
     
-    默认值：`0.2`。
+    默认值：`0.5`。
     
     取值范围：`[-1, 1]`。
     
@@ -177,7 +170,7 @@
     
 -   以下参数通过`OmniRealtimeTranscriptionParam`的`setter`方法设置。
     
-    **点击查看示例代码**
+    点击查看示例代码
     
     ```
     OmniRealtimeTranscriptionParam transcriptionParam = new OmniRealtimeTranscriptionParam();
@@ -280,9 +273,9 @@
     默认值：`pcm`。
     
 
-## **关键接口**
+## 关键接口
 
-### **OmniRealtimeConversation类**
+### OmniRealtimeConversation类
 
 OmniRealtimeConversation通过`import com.alibaba.dashscope.audio.omni.OmniRealtimeConversation;`方法引入。
 
@@ -322,7 +315,7 @@ public void updateSession(OmniRealtimeConfig config)
 
 > 会话配置已更新
 
-用于更新会话配置，建议在连接建立后首先调用该方法进行设置。若未调用该方法，系统将使用默认配置。只需关注[请求参数](#21cc616e29q8y)中的涉及到的参数。
+用于更新会话配置，建议在连接建立后首先调用该方法进行设置。若未调用该方法，系统将使用默认配置。只需关注[请求参数](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/qwen-asr-realtime-api/qwen-asr-realtime-java-sdk.md)中的涉及到的参数。
 
 ```
 public void appendAudio(String audioBase64)
@@ -332,10 +325,8 @@ public void appendAudio(String audioBase64)
 
 将Base64编码后的音频数据片段追加到云端输入音频缓冲区。
 
--   [请求参数](#21cc616e29q8y)`enableTurnDetection`设为`true`，音频缓冲区用于检测语音，服务端决定何时提交。
-    
--   [请求参数](#21cc616e29q8y)`enableTurnDetection`设为`false`，客户端可以选择每个事件中放置多少音频量，最多放置 15 MiB。 例如，从客户端流式处理较小的数据块可以让 VAD 响应更迅速。
-    
+-   [请求参数](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/qwen-asr-realtime-api/qwen-asr-realtime-java-sdk.md)`enableTurnDetection`设为`true`，音频缓冲区用于检测语音，服务端决定何时提交。
+-   [请求参数](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/qwen-asr-realtime-api/qwen-asr-realtime-java-sdk.md)`enableTurnDetection`设为`false`，客户端可以选择每个事件中放置多少音频量，最多放置 15 MiB。 例如，从客户端流式处理较小的数据块可以让 VAD 响应更迅速。
 
 ```
 public void commit()
@@ -347,7 +338,7 @@ public void commit()
 
 提交之前通过append添加到云端缓冲区的音视频，如果输入的音频缓冲区为空将产生错误。
 
-**禁用场景：**[请求参数](#21cc616e29q8y)`enableTurnDetection`设为`true`时。
+**禁用场景：**[请求参数](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/qwen-asr-realtime-api/qwen-asr-realtime-java-sdk.md)`enableTurnDetection`设为`true`时。
 
 ```
 public void endSession() throws InterruptedException
@@ -362,9 +353,7 @@ public void endSession() throws InterruptedException
 **调用时机**：
 
 -   [VAD 模式（默认）](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-interaction-process#9b49887720jcw)下，发送完音频后调用该方法
-    
 -   [Manual 模式](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-interaction-process#ee09a3493fsuc)下，调用commit方法之后调用该方法
-    
 
 `endSessionAsync` 是 `endSession` 的异步版本，两者功能完全相同。
 
@@ -392,7 +381,7 @@ public String getResponseId()
 
 获取最近一次response的response\_id。
 
-### **回调接口（OmniRealtimeCallback）**
+### 回调接口（OmniRealtimeCallback）
 
 服务端会通过回调的方式，将服务端响应事件和数据返回给客户端。
 
@@ -418,7 +407,7 @@ WebSocket连接成功建立时触发。
 public abstract void onEvent(JsonObject message)
 ```
 
-message：[服务端事件](https://help.aliyun.com/zh/model-studio/qwen-asr-realtime-server-events)
+message：[服务端事件](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/qwen-asr-realtime-api/qwen-asr-realtime-server-events.md)
 
 收到服务端事件时触发。
 

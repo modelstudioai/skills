@@ -2,22 +2,18 @@
 
 从零开始构建高质量的Prompt不仅耗时，且难以保证输出效果的一致性。阿里云百炼的自定义Prompt模板功能，通过创建结构化、可复用的模板，高效地设计、管理和优化提示词，并确保模型输出的稳定性和高质量。
 
-**重要**
+**重要**本文档仅适用于华北2（北京）地域。
 
-本文档仅适用于华北2（北京）地域。
-
-## **创建文本生成模板**
+## 创建文本生成模板
 
 主要用于文本创作、知识问答、代码生成、对话交互等场景。支持通过Prompt工程框架进行结构化设计。
 
 支持两种**输入模式**：
 
 -   **自定义创建**：适用于您已有现成的Prompt，希望快速将其模板化或进行简单优化。
-    
 -   **基于Prompt工程创建**：适用于构建高质量、复杂任务的Prompt，或希望借助专业框架激发思路、确保Prompt结构的完整性。
-    
 
-### **方式一：自定义创建**
+### 方式一：自定义创建
 
 1.  访问[提示词](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt)页面，单击**创建提示词**，配置以下信息。
     
@@ -28,7 +24,6 @@
     3.  **输入模式**：选择**自定义创建**。
         
         ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3440607471/p953717.png)
-        
     4.  在文本框中输入您需要优化的提示词，单击**优化Prompt**，即可优化提示词。
         
         > 示例：文本框中输入`请帮我写一封100字销售数据分析报告`。
@@ -46,33 +41,25 @@
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4212191371/p853680.png)
     
 
-### **方式二：基于Prompt工程创建**
+### 方式二：基于Prompt工程创建
 
 1.  访问[提示词](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt)页面，单击**创建提示词**，并配置以下信息：
     
     1.  **模板名称**：自定义填写。
-        
     2.  **基础信息**：选择**文本生成**。
-        
     3.  **输入模式**：选择**基于Prompt工程创建**。
-        
-2.  选择一种**Prompt优化方法**，不同框架适用于不同复杂度的任务，可参阅文末[Prompt工程框架详解](#26ffef3c19aj1)。
+2.  选择一种**Prompt优化方法**，不同框架适用于不同复杂度的任务，可参阅文末[Prompt工程框架详解](https://help.aliyun.com/zh/model-studio/prompt-custom-template#26ffef3c19aj1)。
     
 3.  根据所选框架的结构，在对应的输入框中填写内容。
     
-    示例：选择**ICIO**框架，填写如下内容。
+    示例：选择 ICIO 框架，填写如下内容。
     
     -   指令（Instruction）： 请写一篇关于可持续能源的博客文章，长度大约为1000字，适合中级读者。
-        
     -   背景信息（Context）：当前全球正面临能源危机，人们对环境友好型能源解决方案的兴趣日益增加。文章应该涵盖可持续能源的基本概念、主要类型以及它们如何帮助减少碳足迹。
-        
     -   补充数据（Input Data）：当前全球正面临能源危机，人们对环境友好型能源解决方案的兴趣日益增加。文章应该涵盖可持续能源的基本概念、主要类型以及它们如何帮助减少碳足迹。
-        
     -   输出格式（Output Indicator）：文章应该结构清晰，包含引言、主题和结论。使用易于理解的语言，避免过多的技术术语。确保文章包含事实性数据和引用，以增强说服力。
-        
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3440607471/p953751.png)
-    
 4.  单击**优化Prompt**，系统将对输入的内容进行智能润色和增强。
     
 
@@ -84,21 +71,19 @@
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0332300471/p907913.png)
 
-5.  优化完成后，单击**保存**，即创建成功。
+1.  优化完成后，单击**保存**，即创建成功。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4212191371/p853680.png)
     
 
-## **创建图片生成模板**
+## 创建图片生成模板
 
 主要用于图像创作场景。支持分别定义正向和负向提示词，以控制画面内容和风格。
 
 1.  访问[提示词](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt)页面，单击**创建提示词**，并配置以下信息：
     
     1.  **模板名称**：自定义填写。
-        
     2.  **基础信息**：选择**图片生成**。
-        
 2.  分别输入**正向Prompt**和**负向Prompt**。
     
     正向Prompt用于指示大模型生成的图片**应该包含**哪些内容，而负向Prompt则用于指示大模型生成的图片**应排除**哪些内容。合理运用正向与负向Prompt，可以更有效地生成符合预期的自定义图像。
@@ -106,18 +91,15 @@
     示例：
     
     -   正向Prompt：生成一幅色彩鲜艳的夜空，星星闪烁，流星划过，背景是一个宁静的湖面，湖水倒映出星星的光辉，画面给人一种宁静和梦想的感觉。
-        
     -   负向Prompt：不要生成任何阴暗或模糊的背景，避免使用黑色或深灰色。画面中不要有城市建筑、干枯的树木或任何显得压抑的元素，确保整体氛围是明亮和愉悦的。
-        
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4212191371/p853787.png)
-    
 3.  输入完成后，单击**保存**，即创建成功。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4212191371/p853680.png)
     
 
-## **Prompt工程框架详解**
+## Prompt工程框架详解
 
 平台内置了多种Prompt工程框架，为复杂的任务提供了结构化的思维模型。
 
@@ -137,7 +119,7 @@
 
 涉及多步骤的复杂业务流程，如项目规划、战略分析、流程设计。
 
-**附录1：文本生成提示词框架详解**
+附录1：文本生成提示词框架详解
 
 **提示词框架名称**
 
@@ -248,7 +230,7 @@ RASCEF
 
 以结构化的文档形式呈现策略，每个关键领域都有相应的部分。
 
-**附录2：文本生成提示词框架优化示例**
+附录2：文本生成提示词框架优化示例
 
 **提示词框架**
 
@@ -428,8 +410,7 @@ Format
 
 采用正式邮件格式，注重语言的专业性和结构的条理性，确保信息传达的准确性和礼貌性。
 
-## **相关文档**
+## 相关文档
 
--   通过 API 创建自定义 Prompt 模板，请参阅[通过API创建自定义Prompt模板](https://help.aliyun.com/zh/model-studio/prompt-template#fe6ff09278aun)。
-    
--   查看、管理和使用自定义 Prompt 模板，请参阅[Prompt模板概述](https://help.aliyun.com/zh/model-studio/prompt-template)。
+-   通过 API 创建自定义 Prompt 模板，请参阅[通过API创建自定义Prompt模板](https://help.aliyun.com/zh/model-studio/prompt-template#feeae05684q1w)。
+-   查看、管理和使用自定义 Prompt 模板，请参阅[Prompt模板概述](raw/application-user-guide/prompt/prompt-template.md)。

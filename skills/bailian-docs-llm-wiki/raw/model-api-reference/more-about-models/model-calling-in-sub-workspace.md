@@ -2,55 +2,33 @@
 
 本文以千问-Plus为例，引导您通过API调用子业务空间（即非默认业务空间）中的模型。
 
-## **适用场景**
+## 适用场景
 
--   **需要管控某类用户可调用的模型：**默认业务空间的[API Key](https://help.aliyun.com/zh/model-studio/get-api-key)可调用所有模型（权限过大）。如需管控[RAM用户](https://help.aliyun.com/zh/model-studio/permission-management-overview#d41e21)可调用的模型，可将其添加至某个子业务空间，仅授权必要模型，并要求使用该空间的 API Key 调用。
-    
--   **需要对模型调用的费用进行分账：**当默认业务空间包含多个业务或场景时，往往难以区分各自的模型调用费用。通过为每个业务或场景创建独立的子业务空间，每个空间可独立[生成账单](https://help.aliyun.com/zh/model-studio/bill-query-and-cost-management)，便于对调用费用进行分账。
-    
+-   **需要管控某类用户可调用的模型：**默认业务空间的[API Key](raw/model-api-reference/preparations/get-api-key.md)可调用所有模型（权限过大）。如需管控[RAM用户](raw/model-user-guide/security-and-compliance/permission-management-overview.md)可调用的模型，可将其添加至某个子业务空间，仅授权必要模型，并要求使用该空间的 API Key 调用。
+-   **需要对模型调用的费用进行分账：**当默认业务空间包含多个业务或场景时，往往难以区分各自的模型调用费用。通过为每个业务或场景创建独立的子业务空间，每个空间可独立[生成账单](raw/model-user-guide/test-1/bill-query-and-cost-management.md)，便于对调用费用进行分账。
 
-## **准备工作**
+## 准备工作
 
-1.  **获取子业务空间的API Key：**在子业务空间中[创建API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，并[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)（变量名使用`DASHSCOPE_API_KEY`），用于调用大模型API。
+1.  **获取子业务空间的API Key：**在子业务空间中[创建API Key](raw/model-api-reference/preparations/get-api-key.md)，并[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)（变量名使用`DASHSCOPE_API_KEY`），用于调用大模型API。
     
-2.  **获取模型调用权限（调用标准模型需要）：**使用子业务空间的API Key调用[标准模型](https://help.aliyun.com/zh/model-studio/models)（例如`qwen-plus`）前，需为该空间[设置模型调用权限](https://help.aliyun.com/zh/model-studio/permission-management-overview#f642213a1f38l)。
+2.  **获取模型调用权限（调用标准模型需要）：**使用子业务空间的API Key调用[标准模型](raw/model-user-guide/get-started-with-models/models.md)（例如`qwen-plus`）前，需为该空间[设置模型调用权限](https://help.aliyun.com/zh/model-studio/permission-management-overview#f642213a1f38l)。
     
-    > **注意：**调用在阿里云百炼[调优](https://help.aliyun.com/zh/model-studio/model-training-overview)并部署的模型，**无需模型调用授权**，但此类模型仅能由其所在业务空间的 API Key 调用。
+    > **注意：**调用在阿里云百炼[调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)并部署的模型，**无需模型调用授权**，但此类模型仅能由其所在业务空间的 API Key 调用。
     
-3.  **选择开发语言：**[选择您熟悉的语言和SDK](https://help.aliyun.com/zh/model-studio/first-api-call-to-qwen#81e0419728kdd)，用于调用大模型API。
+3.  **选择开发语言：**[选择您熟悉的语言和SDK](https://help.aliyun.com/zh/model-studio/first-api-call-to-qwen#831702e17ff6u)，用于调用大模型API。
     
 
-## **开始调用**
+## 开始调用
 
-### **OpenAI 兼容**
+### OpenAI 兼容
 
-在线调试
-
-##### OpenAI 兼容接口在线调试 ×
-
- 中国大陆（北京） 国际（新加坡）
-
-POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
-
-API Key Bearer Token [获取中国大陆（北京）地域 API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)
-
-请求体
-
-{ "model": "qwen-plus", "messages": \[ { "role": "system", "content": "You are a helpful assistant." }, { "role": "user", "content": "你是谁？" } \], "stream": true, "stream\_options": { "include\_usage": true }, "top\_p": 0.8, "temperature": 0.7, "enable\_thinking": true }
-
-发送请求 清空响应
-
-响应结果
-
-原始响应 解析内容
-
-## 北京地域
+#### 北京地域
 
 SDK 调用配置的`base_url`：`https://dashscope.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-## 新加坡地域
+#### 新加坡地域
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
@@ -58,9 +36,9 @@ HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com
 
 以文本输入为例，通过 OpenAI 兼容方式调用子业务空间的`qwen-plus`标准模型。与默认业务空间的模型调用的区别在于：**必须使用该子业务空间的 API Key**。
 
-> 调用在阿里云百炼[调优](https://help.aliyun.com/zh/model-studio/model-training-overview)后的模型：仅支持通过[DashScope](#32a12dae0d6ze)调用，不支持通过OpenAI兼容方式调用。
+> 调用在阿里云百炼[调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)后的模型：仅支持通过[DashScope](raw/model-api-reference/more-about-models/model-calling-in-sub-workspace.md)调用，不支持通过OpenAI兼容方式调用。
 
-## Python（SDK）
+Python（SDK）
 
 ```
 import os
@@ -83,7 +61,7 @@ completion = client.chat.completions.create(
 print(completion.model_dump_json())
 ```
 
-## Java（SDK）
+Java（SDK）
 
 ```
 // 该代码 OpenAI SDK 版本为 2.6.0
@@ -115,7 +93,7 @@ public class Main {
 }
 ```
 
-## Node.js（SDK）
+Node.js（SDK）
 
 ```
 import OpenAI from "openai";
@@ -142,7 +120,7 @@ async function main() {
 main();
 ```
 
-## Go（SDK）
+Go（SDK）
 
 ```
 package main
@@ -177,7 +155,7 @@ func main() {
 }
 ```
 
-## C#（HTTP）
+C#（HTTP）
 
 ```
 using System.Net.Http.Headers;
@@ -209,7 +187,7 @@ class Program
                     ""content"": ""You are a helpful assistant.""
                 },
                 {
-                    ""role"": ""user"", 
+                    ""role"": ""user"",
                     ""content"": ""你是谁？""
                 }
             ]
@@ -247,7 +225,7 @@ class Program
 }
 ```
 
-## PHP（HTTP）
+PHP（HTTP）
 
 ```
 <?php
@@ -296,7 +274,7 @@ echo $response;
 ?>
 ```
 
-## curl（HTTP）
+curl（HTTP）
 
 ```
 curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
@@ -317,56 +295,51 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
 }'
 ```
 
-### **DashScope**
+### DashScope
 
-## 北京地域
+#### 北京地域
 
 HTTP 请求地址：
 
 -   千问大语言模型：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
-    
 -   千问VL/Audio模型：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
-    
 
 SDK 调用无需配置 `base_url`。
 
-## 新加坡地域
+#### 新加坡地域
 
 HTTP 请求地址：
 
 -   千问大语言模型：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
-    
 -   千问VL/OCR模型：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
-    
 
 SDK调用配置的`base_url`：
 
-## **Python代码**
+#### Python代码
 
 ```
 dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'
 ```
 
-## **Java代码**
+#### Java代码
 
 -   **方式一：**
-    
-    ```
-    import com.alibaba.dashscope.protocol.Protocol;
-    Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1");
-    ```
-    
+
+```
+import com.alibaba.dashscope.protocol.Protocol;
+Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1");
+```
+
 -   **方式二：**
-    
-    ```
-    import com.alibaba.dashscope.utils.Constants;
-    Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
-    ```
-    
+
+```
+import com.alibaba.dashscope.utils.Constants;
+Constants.baseHttpApiUrl="https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";
+```
 
 以文本输入为例，通过 DashScope 方式调用子业务空间的`qwen-plus`标准模型。与默认业务空间的模型调用的区别在于：**必须使用该子业务空间的 API Key**。
 
-## Python（SDK）
+#### Python（SDK）
 
 ```
 import os
@@ -386,7 +359,7 @@ response = dashscope.Generation.call(
 print(response)
 ```
 
-## Java（SDK）
+#### Java（SDK）
 
 ```
 // 建议dashscope SDK的版本 >= 2.12.0
@@ -436,7 +409,7 @@ public class Main {
 }
 ```
 
-## PHP（HTTP）
+#### PHP（HTTP）
 
 ```
 <?php
@@ -489,9 +462,9 @@ curl_close($ch);
 ?>
 ```
 
-## Node.js（HTTP）
+#### Node.js（HTTP）
 
-DashScope 未提供 Node.js 环境的 SDK。如需通过 OpenAI Node.js SDK调用，请参考本文的[OpenAI 兼容](#d397bcc41eu3q)章节。
+DashScope 未提供 Node.js 环境的 SDK。如需通过 OpenAI Node.js SDK调用，请参考本文的[OpenAI 兼容](https://help.aliyun.com/zh/model-studio/model-calling-in-sub-workspace#d397bcc41eu3q)章节。
 
 ```
 import fetch from 'node-fetch';
@@ -534,7 +507,7 @@ fetch('https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/gener
 });
 ```
 
-## C#（HTTP）
+#### C#（HTTP）
 
 ```
 using System.Net.Http.Headers;
@@ -559,7 +532,7 @@ class Program
         string url = "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation";
         // 此处以qwen-plus为例，可按需更换模型名称。模型列表：https://help.aliyun.com/model-studio/getting-started/models
         string jsonContent = @"{
-            ""model"": ""qwen-plus"", 
+            ""model"": ""qwen-plus"",
             ""input"": {
                 ""messages"": [
                     {
@@ -609,9 +582,9 @@ class Program
 }
 ```
 
-## Go（HTTP）
+#### Go（HTTP）
 
-DashScope 未提供 Go 的 SDK。如需通过 OpenAI Go SDK调用，请参考本文的[OpenAI 兼容](#d397bcc41eu3q)章节。
+DashScope 未提供 Go 的 SDK。如需通过 OpenAI Go SDK调用，请参考本文的[OpenAI 兼容](https://help.aliyun.com/zh/model-studio/model-calling-in-sub-workspace#d397bcc41eu3q)章节。
 
 ```
 package main
@@ -705,7 +678,7 @@ func main() {
 }
 ```
 
-## curl（HTTP）
+#### curl（HTTP）
 
 ```
 curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation" \
@@ -714,7 +687,7 @@ curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-genera
 --data '{
     "model": "qwen-plus",
     "input":{
-        "messages":[      
+        "messages":[
             {
                 "role": "system",
                 "content": "You are a helpful assistant."
@@ -731,15 +704,15 @@ curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-genera
 }'
 ```
 
-## **错误码**
+## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
-## **下一步**
+## 下一步
 
 **查看更多模型**
 
-示例代码以`qwen-plus`模型为例，阿里云百炼还支持其他千问模型及 DeepSeek 等第三方模型，**支持的模型**以及对应的**API参考**文档请参见[选择模型](https://help.aliyun.com/zh/model-studio/models)。
+示例代码以`qwen-plus`模型为例，阿里云百炼还支持其他千问模型及 DeepSeek 等第三方模型，**支持的模型**以及对应的**API参考**文档请参见[选择模型](raw/model-user-guide/get-started-with-models/models.md)。
 
 **了解进阶用法**
 

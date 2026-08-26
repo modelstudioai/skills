@@ -2,14 +2,14 @@
 
 您可以查阅有关 MCP 协议和 MCP 服务的常见问题。
 
-## **MCP 协议**
+## MCP 协议
 
 1.  **MCP 协议是如何实现的？**
     
     MCP 是 Anthropic 提出的开源标准协议。详细实现请参考 [MCP 官网](https://modelcontextprotocol.io/)。
     
 
-## **云部署 MCP 服务**
+## 云部署 MCP 服务
 
 1.  **Firecrawl/EverArt MCP Server 报错：请求用量受限/余额不足？**
     
@@ -20,7 +20,7 @@
     请为您的 API-Key 授予足够的权限。具体操作请参考对应 MCP 服务的文档。
     
 
-## **自定义 MCP 服务**
+## 自定义 MCP 服务
 
 1.  **所有 MCP 服务都可以正常部署使用吗？**
     
@@ -31,27 +31,20 @@
     请确认：
     
     1.  MCP 服务本地可正常运行。
-        
     2.  MCP 服务可云端托管（无需浏览器/本地应用通信）。
-        
     3.  部署时安装方式及配置代码正确。
-        
     4.  已开通函数计算 FC 及相关权限，主账号未欠费。
-        
 3.  **我能否部署自己开发的 MCP 服务？**
     
-    -   **Node.js：** 软件包发布到公共 npm 仓库，通过 npx <package-name> 部署。
-        
-    -   **Python：** 软件包发布到 PyPI 仓库，通过 uvx <package-name> 部署。
-        
-    -   **已部署在远程服务器：** 通过 SSE 连接。
-        
+    -   **Node.js：** 软件包发布到公共 npm 仓库，通过 npx <package-name> 部署。
+    -   **Python：** 软件包发布到 PyPI 仓库，通过 uvx <package-name> 部署。
+    -   **已部署在远程服务器：** 通过 SSE 连接。
     
-    详见[自定义MCP服务](https://help.aliyun.com/zh/model-studio/custom-mcp)。
+    详见[自定义MCP服务](raw/application-user-guide/model-context-protocol/custom-mcp.md)。
     
 4.  **阿里云百炼 MCP 服务能在其他 MCP 客户端 （Cline、Cherry Studio）中使用吗？**
     
-    支持。MCP 既支持在平台内部（如智能体、工作流）进行配置，也支持通过外部调用集成至第三方应用（Cherry Studio、Cursor），详见[外部调用](https://help.aliyun.com/zh/model-studio/mcp-external-calls)。
+    支持。MCP 既支持在平台内部（如智能体、工作流）进行配置，也支持通过外部调用集成至第三方应用（Cherry Studio、Cursor），详见[外部调用](raw/application-user-guide/model-context-protocol/mcp-external-calls.md)。
     
 5.  **阿里云百炼 MCP 服务能访问本地数据库吗？**
     
@@ -69,7 +62,7 @@
     
     不会。仅限您的阿里云主账号及授权 RAM 用户访问。
     
-9.  **为什么有些****本地端 MCP Server****无法在阿里云百炼上自定义部署？**
+9.  **为什么有些本地端 MCP Server无法在阿里云百炼上自定义部署？**
     
     因为它们需要访问本地资源（如文件、硬件），云端环境无法访问。建议此类服务在本地部署。
     
@@ -78,7 +71,7 @@
      不会。通过 npx/uvx 部署的服务，版本更新后需手动重新部署。
      
 
-## **自定义 MCP 服务错误码及排查方案**
+## 自定义 MCP 服务错误码及排查方案
 
 **错误码**
 
@@ -97,7 +90,7 @@
 -   网络不可达或地址配置错误。
     
 
--   执行 `curl <服务地址>` 测试连通性。
+-   执行 `curl <服务地址>` 测试连通性。
     
 -   查看下游服务日志，确认 MCP 服务是否已经启动。
     
@@ -155,9 +148,9 @@
 
 建议先重试 2~3 次。若仍失败：
 
--   执行 `nslookup` 确认域名解析正常，异常时更换 DNS 后重试。
+-   执行 `nslookup` 确认域名解析正常，异常时更换 DNS 后重试。
     
--   检查配置中的 `url` 字段，执行 `curl <url>` 测试服务是否响应。
+-   检查配置中的 `url` 字段，执行 `curl <url>` 测试服务是否响应。
     
 
 11200048 - MCP\_SSL\_ERROR
@@ -271,7 +264,7 @@ HTTP 5xx，服务端或网关内部错误。可能原因：
 
 -   根据 JSON-RPC error code 修正请求格式、方法名或参数。
     
--   确认配置中 `type` 与端点路径一致：`"sse"` 对应 `/sse`，`"streamableHttp"` 对应 `/mcp`。
+-   确认配置中 `type` 与端点路径一致：`"sse"` 对应 `/sse`，`"streamableHttp"` 对应 `/mcp`。
     
 
 11200055 - MCP\_SESSION\_NOT\_FOUND
@@ -315,9 +308,9 @@ HTTP 5xx，服务端或网关内部错误。可能原因：
 
 建议先重试 2~3 次。若仍失败：
 
--   前往[MCP 管理](https://bailian.console.aliyun.com/?tab=app#/mcp-manage)核对接入地址和传输方式（`sse` 或 `streamableHttp`）。
+-   前往[MCP 管理](https://bailian.console.aliyun.com/?tab=app#/mcp-manage)核对接入地址和传输方式（`sse` 或 `streamableHttp`）。
     
--   执行 `curl <接入地址>` 测试连通性。
+-   执行 `curl <接入地址>` 测试连通性。
     
 -   反向代理需启用长连接并设置足够超时时间。
     
@@ -333,7 +326,7 @@ HTTP 405，端点不接受所使用的 HTTP 方法。可能原因：
 -   对同一 URL 使用了服务端不支持的方法（如误用 GET/POST）。
     
 
--   确认配置中 `type` 与端点路径匹配：`"sse"` 对应 GET `/sse`，`"streamableHttp"` 对应 POST `/mcp`。配置错误时在[MCP 管理](https://bailian.console.aliyun.com/?tab=app#/mcp-manage)中修改后重新部署。
+-   确认配置中 `type` 与端点路径匹配：`"sse"` 对应 GET `/sse`，`"streamableHttp"` 对应 POST `/mcp`。配置错误时在[MCP 管理](https://bailian.console.aliyun.com/?tab=app#/mcp-manage)中修改后重新部署。
     
 -   建议使用标准的 MCP SDK 实现下游MCP服务。
     
@@ -372,24 +365,20 @@ HTTP 400，请求格式或参数不合法。可能原因：
 -   使用 `curl`工具测试连通性。
     
 
-## **接入智能体/工作流应用**
+## 接入智能体/工作流应用
 
 1.  **为什么智能体应用无法调用 MCP 服务，或报参数错误？**
     
     智能体根据提示词（Prompt）决定调用和参数。请尝试：
     
     1.  优化提示词，明确意图。
-        
     2.  若无效，更换更强的推理模型（如千问 3 系列）。
-        
 2.  **调用 MCP 会导致模型输入或输出 Token 增加吗？**
     
     会，调用 MCP 可能导致模型输入和输出 Token 增加。
     
     1.  输入 Token 增加：从 MCP 服务获取的内容会作为上下文传递给模型，直接增加来输入 Token 数量。
-        
     2.  输出 Token 增加：虽然调用 MCP 本身不直接产生输出 Token，但由于模型获得了更丰富的上下文信息，可能生成更详细、更完整的响应，从而间接增加输出 Token 数量。
-        
 3.  **MCP 服务能否在调用千问 API 时接入？**
     
     不可以。阿里云百炼 MCP 服务需集成在**智能体**或**工作流**应用中使用，不能直接在调用千问 API 时接入。

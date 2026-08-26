@@ -4,42 +4,35 @@
 
 ## 前提
 
-1.  已开通百炼并创建 API Key（`sk-xxx`），已获取工作空间 ID（`ws_xxxxxxxxxxxx`），详见[API 总览与认证](https://help.aliyun.com/zh/model-studio/managed-agents-api-overview)。
-    
+1.  已开通百炼并创建 API Key（`sk-xxx`），已获取工作空间 ID（`ws_xxxxxxxxxxxx`），详见[API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)。
 2.  将 API Key 与 Endpoint 导出为环境变量，后续示例直接引用：
-    
-    ```
-    export DASHSCOPE_API_KEY="sk-xxx"
-    export AGENTSTUDIO_URL="https://ws_xxxxxxxxxxxx.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio"
-    ```
-    
+
+```
+export DASHSCOPE_API_KEY="sk-xxx"
+export AGENTSTUDIO_URL="https://ws_xxxxxxxxxxxx.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio"
+```
 
 ## 调用流程
 
 一次完整的任务执行分五步：
 
 1.  **创建 Agent**：定义模型与系统提示词，得到 `agent_xxx`。Agent 通常只创建一次并长期复用。
-    
 2.  **创建 Environment**：定义运行环境，得到 `env_xxx`。Environment 通常只创建一次并长期复用。
-    
 3.  **创建 Session**：绑定 Agent 与 Environment，得到 `sesn_xxx`。
-    
 4.  **发送 Event**：向 Session 提交任务指令，触发 Agent 进入 `running`。
-    
 5.  **订阅 SSE**：以事件流方式接收执行结果，直至 Session 回到 `idle`。
-    
 
 ## 安装 SDK
 
 使用 Python 或 Java SDK 前，请先安装对应的 DashScope 包。Managed Agents 模块要求 Python SDK v1.26.2 及以上、Java SDK v2.22.24 及以上。若已安装旧版本，请重新执行安装命令以升级。
 
-Python
+python
 
 ```
 pip install dashscope
 ```
 
-Java
+java
 
 ```
 <dependency>
@@ -52,7 +45,7 @@ Java
 
 下例创建一个代码生成 Agent，开启 Session 后提交一个编码任务并流式接收执行结果。
 
-Bash
+bash
 
 ```
 ## 1. 创建 Agent
@@ -97,7 +90,7 @@ curl -N "$AGENTSTUDIO_URL/sessions/$SESSION_ID/events/stream" \
   -H "Accept: text/event-stream"
 ```
 
-Python
+python
 
 ```
 import os
@@ -136,7 +129,7 @@ with client.sessions.events.stream(session.id) as stream:
             break
 ```
 
-Java
+java
 
 ```
 import com.alibaba.dashscope.agentstudio.*;

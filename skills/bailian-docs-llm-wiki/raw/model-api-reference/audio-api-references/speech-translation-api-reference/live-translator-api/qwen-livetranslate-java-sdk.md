@@ -2,31 +2,24 @@
 
 本文档介绍如何使用 DashScope Java SDK 调用实时音视频翻译（Qwen-LiveTranslate）模型。
 
-## **前提条件**
+## 前提条件
 
-1.  [安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)，确保DashScope SDK版本不低于2.22.5。
-    
-2.  [获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
-    
+1.  [安装SDK](raw/model-api-reference/preparations/install-sdk.md)，确保DashScope SDK版本不低于2.22.5。
+2.  [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 3.  了解[实时语音/音视频翻译-千问](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime)。
-    
 
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `wss://dashscope.aliyuncs.com` 迁移至 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `wss://dashscope-intl.aliyuncs.com` 迁移至 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-## **请求参数**
+## 请求参数
 
 -   以下参数通过`OmniRealtimeParam`的链式方法设置。
     
-    **点击查看示例代码**
+    点击查看示例代码
     
     ```
     OmniRealtimeParam param = OmniRealtimeParam.builder()
@@ -66,11 +59,9 @@
     实时翻译服务地址：
     
     -   华北2（北京）：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime`
-        
     -   新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime`
-        
     
-    调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+    调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
     
     `apikey`
     
@@ -82,7 +73,7 @@
     
 -   以下参数通过`OmniRealtimeConfig`的链式方法设置。
     
-    **点击查看示例代码**
+    点击查看示例代码
     
     ```
     // 设置翻译热词
@@ -197,11 +188,11 @@
     
     默认值：`true`，即启用 VAD 模式，服务端自动检测语音起止并自动触发翻译。
     
-    设为`false`可切换为 Manual 模式，由客户端通过`commit()`方法手动提交音频。详细参数说明参见[turn\_detection object （可选） 语音活动检测（VAD，Voice Activity Detection）配置，用于控制语音起止的检测方式： 设为配置对象（默认值）：启用 VAD 模式。服务端自动检测语音起止，自动提交音频缓冲区并触发翻译响应，客户端无需发送input\_audio\_buffer.commit事件。 设为null：启用 Manual 模式。由客户端通过input\_audio\_buffer.commit事件手动提交音频缓冲区，服务端收到后自动开始生成翻译响应。 属性 type string （可选） VAD 类型，固定为server\_vad。 threshold float （可选） VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音）识别为语音；值越高，需要更清晰、音量更大的语音才能触发。 取值范围：\[-1.0, 1.0\]，默认值为 0.2。 silence\_duration\_ms integer （可选） 语音结束后需保持静音的最短时长（毫秒）。超过该时长后判定语音结束，服务端自动提交音频缓冲区并触发翻译响应。 取值范围：\[200, 6000\]，默认值为 1000。](https://help.aliyun.com/zh/model-studio/live-translator-client-events#lttd001sec)。
+    设为`false`可切换为 Manual 模式，由客户端通过`commit()`方法手动提交音频。详细参数说明参见[turn\_detection object （可选） 语音活动检测（VAD，Voice Activity Detection）配置，用于控制语音起止的检测方式： 设为配置对象（默认值）：启用 VAD 模式。服务端自动检测语音起止，自动提交音频缓冲区并触发翻译响应，客户端无需发送input\_audio\_buffer.commit事件。 设为null：启用 Manual 模式。由客户端通过input\_audio\_buffer.commit事件手动提交音频缓冲区，服务端收到后自动开始生成翻译响应。 属性 type string （可选） VAD 类型，固定为server\_vad。 threshold float （可选） VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音）识别为语音；值越高，需要更清晰、音量更大的语音才能触发。 取值范围：\[-1.0, 1.0\]，默认值为 0.2。 silence\_duration\_ms integer （可选） 语音结束后需保持静音的最短时长（毫秒）。超过该时长后判定语音结束，服务端自动提交音频缓冲区并触发翻译响应。 取值范围：\[200, 6000\]，默认值为 1000。](raw/model-api-reference/audio-api-references/speech-translation-api-reference/live-translator-api/live-translator-client-events.md)。
     
 -   以下参数通过OmniRealtimeTranslationParam的链式方法设置。
     
-    **点击查看示例代码**
+    点击查看示例代码
     
     ```
     // 设置翻译热词
@@ -256,9 +247,9 @@
     示例：`{"人工智能": "Artificial Intelligence"}`
     
 
-## **关键接口**
+## 关键接口
 
-### **OmniRealtimeConversation类**
+### OmniRealtimeConversation类
 
 OmniRealtimeConversation通过`import com.alibaba.dashscope.audio.omni.OmniRealtimeConversation;`方法引入。
 
@@ -280,11 +271,11 @@ public OmniRealtimeConversation(OmniRealtimeParam param, OmniRealtimeCallback ca
 public void connect() throws NoApiKeyException, InterruptedException
 ```
 
-[服务端事件](https://help.aliyun.com/zh/model-studio/live-translator-server-events#2c04b24bc3wlo)
+[服务端事件](raw/model-api-reference/audio-api-references/speech-translation-api-reference/live-translator-api/live-translator-server-events.md)
 
 > 会话已创建
 
-[服务端事件](https://help.aliyun.com/zh/model-studio/live-translator-server-events#4d6ed9dd62vmj)
+[服务端事件](raw/model-api-reference/audio-api-references/speech-translation-api-reference/live-translator-api/live-translator-server-events.md)
 
 > 会话配置已更新
 
@@ -294,7 +285,7 @@ public void connect() throws NoApiKeyException, InterruptedException
 public void updateSession(OmniRealtimeConfig config)
 ```
 
-[服务端事件](https://help.aliyun.com/zh/model-studio/live-translator-server-events#4d6ed9dd62vmj)
+[服务端事件](raw/model-api-reference/audio-api-references/speech-translation-api-reference/live-translator-api/live-translator-server-events.md)
 
 > 会话配置已更新
 
@@ -312,7 +303,7 @@ public void appendAudio(String audioBase64)
 public void commit()
 ```
 
-[input\_audio\_buffer.committed](https://help.aliyun.com/zh/model-studio/live-translator-server-events#ltcommitted001sec)
+[input\_audio\_buffer.committed](https://help.aliyun.com/zh/model-studio/live-translator-server-events#ltcommitted001h2)
 
 > 输入音频缓冲区已提交
 
@@ -322,7 +313,7 @@ Manual 模式下，提交之前通过`appendAudio`方法追加到云端缓冲区
 public void clearAppendedAudio()
 ```
 
-[input\_audio\_buffer.cleared](https://help.aliyun.com/zh/model-studio/live-translator-server-events#ltcleared001sec)
+[input\_audio\_buffer.cleared](https://help.aliyun.com/zh/model-studio/live-translator-server-events#ltcleared001h2)
 
 > 输入音频缓冲区已清空
 
@@ -378,7 +369,7 @@ public long getFirstAudioDelay()
 
 获取最近一次响应的首个音频延迟（毫秒）。
 
-### **回调接口（OmniRealtimeCallback）**
+### 回调接口（OmniRealtimeCallback）
 
 服务端会通过回调的方式，将服务端响应事件和数据返回给客户端。
 
@@ -404,7 +395,7 @@ WebSocket连接成功建立时触发。
 public abstract void onEvent(JsonObject message)
 ```
 
-message：[服务端事件](https://help.aliyun.com/zh/model-studio/live-translator-server-events)
+message：[服务端事件](raw/model-api-reference/audio-api-references/speech-translation-api-reference/live-translator-api/live-translator-server-events.md)
 
 收到服务端事件时触发。
 
@@ -418,11 +409,11 @@ reason：WebSocket连接关闭时的日志信息
 
 WebSocket连接关闭时触发。
 
-## **完整示例**
+## 完整示例
 
 以下示例展示如何从麦克风实时录音并进行翻译。
 
-**麦克风实时翻译示例代码**
+麦克风实时翻译示例代码
 
 ```
 import com.alibaba.dashscope.audio.omni.*;

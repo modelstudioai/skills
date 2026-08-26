@@ -4,15 +4,15 @@
 
 MultiModalDialog SDK是阿里云通义团队提供的支持音视频端到端多模实时交互的SDK。通过SDK对接千问大模型以及后端多种Agent，能够支持用户接入语音对话、天气、音乐、新闻等多种能力，并支持视频和图像的大模型对话能力。
 
-## **多模态实时交互服务架构**
+## 多模态实时交互服务架构
 
 ![多模态实时交互服务接入架构-通用-流程图](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7227370571/p976841.jpg)
 
-## **前提条件**
+## 前提条件
 
-开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
-## **交互数据链路说明**
+## 交互数据链路说明
 
 多模对话iOS Lite SDK仅支持Websocket链路与服务端交互，并支持AudioOnly 音频模式进行对话：
 
@@ -21,11 +21,9 @@ MultiModalDialog SDK是阿里云通义团队提供的支持音视频端到端多
     -   WS 链路音频格式说明：
         
         -   上行：支持 pcm 和 opus 格式音频进行语音识别。
-            
         -   下行：支持 pcm 和 mp3 音频流。
-            
 
-## **交互模式说明**
+## 交互模式说明
 
 SDK支持 **Push2Talk**、 **Tap2Talk**和**Duplex**（全双工）三种交互模式。
 
@@ -35,10 +33,10 @@ SDK支持 **Push2Talk**、 **Tap2Talk**和**Duplex**（全双工）三种交互�
     
 -   Duplex: 全双工交互，连接开始后支持任意时刻开始说话，支持语音打断。
     
-    注意：全双工交互需要客户端集成回声消除算法（AEC），Lite SDK不提供此算法模块。您可以自行集成回声消除算法模块，或者使用百炼多模对话全功能[移动端iOS SDK](https://help.aliyun.com/zh/model-studio/multimodal-sdk-ios/)。
+    注意：全双工交互需要客户端集成回声消除算法（AEC），Lite SDK不提供此算法模块。您可以自行集成回声消除算法模块，或者使用百炼多模对话全功能[移动端iOS SDK](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/multimodal-sdk-ios.md)。
     
 
-## **环境和依赖**
+## 环境和依赖
 
 -   导入SDK [dashscope-lite-ios-demo-1.0.1.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250707/fnwsen/dashscope-lite-ios-demo-1.0.1.zip)
     
@@ -47,13 +45,11 @@ SDK支持 **Push2Talk**、 **Tap2Talk**和**Duplex**（全双工）三种交互�
     -   其他依赖：
         
         -   'SocketRocket', '~> 0.7.1'
-            
 -   百炼环境接入
     
-    -   多模对话服务基于阿里云大模型服务平台百炼，接入鉴权使用百炼[API\_KEY](https://help.aliyun.com/zh/model-studio/get-api-key) 请您在百炼平台创建API\_KEY，移动端为了安全考虑，您也可以在服务端接入[短时Token](https://help.aliyun.com/zh/model-studio/generate-temporary-api-key)，并下发给客户端使用。
-        
+    -   多模对话服务基于阿里云大模型服务平台百炼，接入鉴权使用百炼[API\_KEY](raw/model-api-reference/preparations/get-api-key.md) 请您在百炼平台创建API\_KEY，移动端为了安全考虑，您也可以在服务端接入[短时Token](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，并下发给客户端使用。
 
-## **接口说明**
+## 接口说明
 
 ### MultimodalDialog
 
@@ -73,7 +69,7 @@ SDK支持 **Push2Talk**、 **Tap2Talk**和**Duplex**（全双工）三种交互�
 public init(url: String?, workSpaceId: String, appId:String ,mode: DialogMode)
 ```
 
-#### **2 start**
+#### 2 start
 
 启动对话服务. 返回onConversationStarted回调。
 
@@ -86,7 +82,7 @@ public init(url: String?, workSpaceId: String, appId:String ,mode: DialogMode)
 public func start(apiKey: String, params: MultiModalRequestParam, completion: @escaping (Bool, TYError?) -> Void )
 ```
 
-#### **3** startSpeech
+#### 3startSpeech
 
 通知服务端开始上传音频，注意需要在Listening状态才可以调用。只需要在push2talk/tap2talk模式下调用。
 
@@ -95,7 +91,7 @@ public func start(apiKey: String, params: MultiModalRequestParam, completion: @e
 public func startSpeech()
 ```
 
-#### **4** sendAudioData
+#### 4sendAudioData
 
 通知服务端上传音频。
 
@@ -108,7 +104,7 @@ public func startSpeech()
 public func sendAudioData(data: UnsafeMutablePointer<UInt8>, length: Int32) -> Int32?
 ```
 
-#### **5** stopSpeech
+#### 5stopSpeech
 
 通知服务端结束上传音频。只需要在push2talk模式下调用。
 
@@ -117,7 +113,7 @@ public func sendAudioData(data: UnsafeMutablePointer<UInt8>, length: Int32) -> I
 public func stopSpeech()
 ```
 
-#### **6 interrupt**
+#### 6 interrupt
 
 通知服务端，客户端需要打断当前交互，开始说话。会返回RequestAccepted。
 
@@ -126,7 +122,7 @@ public func stopSpeech()
 public func interrupt()
 ```
 
-#### **7** sendLocalRespondingStarted
+#### 7sendLocalRespondingStarted
 
 通知服务端，客户端开始播放tts音频。
 
@@ -135,7 +131,7 @@ public func interrupt()
 public func sendLocalRespondingStarted()
 ```
 
-#### **8** sendLocalRespondingEnded
+#### 8sendLocalRespondingEnded
 
 通知服务端，客户端结束播放tts音频。
 
@@ -144,7 +140,7 @@ public func sendLocalRespondingStarted()
 public func sendLocalRespondingEnded()
 ```
 
-#### **9 stop**
+#### 9 stop
 
 结束当前轮次对话。断开服务端连接。
 
@@ -153,7 +149,7 @@ public func sendLocalRespondingEnded()
 public func stop()
 ```
 
-#### **10** requestToRespond
+#### 10requestToRespond
 
 端侧主动通过文本发起tts语音合成，或者向服务端发起图片等其他请求。
 
@@ -166,7 +162,7 @@ public func stop()
 public func requestToRespond(type:String, text:String, params:[String : Any])
 ```
 
-#### **11** updateInfo
+#### 11updateInfo
 
 更新参数信息等操作。
 
@@ -215,7 +211,7 @@ public var onWebsocketClosed:((_ code: Int,_ reason: String?) -> Void)?
 
 请求参数均支持builder模式设置参数，参数的值和说明参考如下。以下是客户端需要/可选配置的参数。
 
-#### **Start建联请求参数**
+#### Start建联请求参数
 
 **一级参数**
 
@@ -420,7 +416,7 @@ object
 
 透传agent所需prompt
 
-#### **RequestToRespond 请求参数**
+#### RequestToRespond 请求参数
 
 **一级参数**
 
@@ -474,7 +470,7 @@ object
 
 与Start消息中biz\_params相同，传递对话系统自定义参数。RequestToRespond的biz\_params参数只在本次请求中生效。
 
-#### **UpdateInfo 请求参数**
+#### UpdateInfo 请求参数
 
 **一级参数**
 
@@ -516,7 +512,7 @@ object
 
 与Start消息中biz\_params相同，传递对话系统自定义参数
 
-### **对话状态说明（**DialogState**）**
+### 对话状态说明（DialogState）
 
 voicechat服务有LISTENING、THINKING、RESPONDING三个状态，分别代表：
 
@@ -527,7 +523,7 @@ THINKING("Thinking"),表示机器人正在思考。
 RESPONDING("Responding")表示机器人正在生成语音或语音回复中。
 ```
 
-### **对话LLM输出结果**
+### 对话LLM输出结果
 
 对话结果通过`onMessageReceived` 回调，格式如下。
 
@@ -619,13 +615,13 @@ dialog\_debug: 对话debug信息
 
 timestamps: 链路中各节点时间戳
 
-## **调用交互时序图**
+## 调用交互时序图
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8131377471/p957947.png)
 
-## **调用示例**
+## 调用示例
 
-### **初始化对话参数**
+### 初始化对话参数
 
 调用MultiModalRequestParam类中的各子类的builder方法构建参数。
 
@@ -647,20 +643,20 @@ var params = MultiModalRequestParam{ multiBuilder in
         }
 ```
 
-### **创建**MultiModalDialog对象
+### 创建MultiModalDialog对象
 
 ```
 self.conversation = MultiModalDialog(url: self.HOST,  workSpaceId:self.WORKSPACE_ID ,
      appId: self.APP_ID, mode: DialogMode.duplex)
 ```
 
-### **完整调用示例**
+### 完整调用示例
 
 参考章节**环境和依赖**下载的Demo 工程中`ChatViewController`相关调用。
 
-## **更多SDK接口使用说明**
+## 更多SDK接口使用说明
 
-### **VQA交互**
+### VQA交互
 
 VQA 是对话过程中通过发送图片实现图片+语音的多模交互的功能。
 
@@ -683,7 +679,7 @@ private func createImageParams() -> [String: Any]{
                 "value":"imagebase64"
     ]
     var images = [imageObject]
-    
+
     var updateParam = MultiModalRequestParam{ multiBuilder in
         multiBuilder.images = images
     }
@@ -693,19 +689,17 @@ private func createImageParams() -> [String: Any]{
 self.conversation?.requestToRespond(type: "prompt", text: "", params: self.createImageParams())
 ```
 
-### **通过 Websocket 链路请求LiveAI**
+### 通过 Websocket 链路请求LiveAI
 
 LiveAI （视频通话）是百炼多模交互提供的官方Agent。通过iOS Lite SDK， 您可以在Websocket链路中通过自行录制视频帧的方式来调用视频通话功能。
 
 注意：通过 Websocket 调用 LiveAI发送图片只支持base64编码，每张图片的大小在180K以下。
 
 -   LiveAI调用时序
-    
 
 #### ![截屏2025-06-20 11](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975541.png)
 
 -   关键代码示例
-    
 
 请注意参照如下的调用流程实现 通过Websocket 协议调用 LiveAI。
 
@@ -726,7 +720,7 @@ private func createVideoChatParams() -> [String: Any]{
             "type" : "voicechat_video_channel"
         ]
         var videos = [video]
-        
+
         var updateParam = MultiModalRequestParam{ multiBuilder in
             multiBuilder.bizParams = MultiModalRequestParam.BizParams(builder: {
                 bizBuilder in
@@ -759,34 +753,32 @@ private func sendLocalImageBase64() {
                 "value":getImageAsBase64FromAssets(imageName:"bridge") //实现图片 base64 编码
     ]
     var images = [imageObjectBase64]
-    
+
     var updateParam = MultiModalRequestParam{ multiBuilder in
         multiBuilder.images = images
     }
-    
+
     self.conversation?.updateInfo(params: updateParam.parameters)
-    
+
 }
 //完整示例请参考 Demo 中的代码。
 ```
 
-### **文本合成TTS**
+### 文本合成TTS
 
 ```
 self.conversation?.requestToRespond(type: "prompt", text: "幸福是一种技能，是你摒弃了外在多余欲望后的内心平和。", params:[:])
 ```
 
-### **自定义提示词变量和传值**
+### 自定义提示词变量和传值
 
 -   在管控台项目【提示词】配置自定义变量。
-    
 
 如下图示例，定义了一个`user_name`字段代表用户昵称。并将变量`user_name`以占位符形式${user\_name} 插入到Prompt 中。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975545.png)
 
 -   在代码中设置变量。
-    
 
 如下示例，设置`"user_name" = "大米"`。
 
@@ -802,6 +794,5 @@ var params = MultiModalRequestParam{ multiBuilder in
 ```
 
 -   请求回复
-    
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975544.png)

@@ -2,19 +2,17 @@
 
 本文档介绍如何在阿里云百炼平台调用阶跃星辰（Stepfun）直供的 Step 系列模型推理服务。
 
-**重要**
+**重要**本文档仅适用于华北2（北京）地域。如需使用模型，需使用华北2（北京）地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
 
-本文档仅适用于华北2（北京）地域。如需使用模型，需使用华北2（北京）地域的[API Key](https://bailian.console.aliyun.com/?tab=model#/api-key)。
-
-## **快速开始**
+## 快速开始
 
 stepfun/step-3.7-flash 是阶跃星辰直供的多模态推理模型，**默认关闭思考模式**，您可以通过设置 `enable_thinking` 为 `true` 开启思考模式。开启后，模型的推理过程通过 `reasoning_content` 字段返回，您可以通过 `reasoning_effort` 参数（可选值：`low`、`medium`、`high`）控制推理深度。运行以下代码快速调用 stepfun/step-3.7-flash 模型。
 
-需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk#8833b9274f4v8)。
+需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-## Python
+#### Python
 
-### **示例代码**
+### 示例代码
 
 ```
 from openai import OpenAI
@@ -69,7 +67,7 @@ for chunk in completion:
         answer_content += delta.content
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -87,9 +85,9 @@ for chunk in completion:
 CompletionUsage(completion_tokens=85, prompt_tokens=10, total_tokens=95, prompt_tokens_details={'cached_tokens': 0})
 ```
 
-## Node.js
+#### Node.js
 
-### **示例代码**
+### 示例代码
 
 ```
 import OpenAI from "openai";
@@ -158,7 +156,7 @@ async function main() {
 main();
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -176,11 +174,11 @@ main();
 { prompt_tokens: 10, completion_tokens: 85, total_tokens: 95, prompt_tokens_details: { cached_tokens: 0 } }
 ```
 
-## HTTP
+#### HTTP
 
-### **示例代码**
+### 示例代码
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -203,15 +201,15 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-## **多模态调用示例**
+## 多模态调用示例
 
 stepfun/step-3.7-flash 不仅支持纯文本对话，还具备多模态理解能力，支持图像和视频输入。
 
-### **图像理解**
+### 图像理解
 
-图像理解功能让模型能够识别和分析图像内容。支持通过公网 URL 或 Base64 编码传入图像。图像文件的限制请参见[图像限制](#sf01sec00013)。
+图像理解功能让模型能够识别和分析图像内容。支持通过公网 URL 或 Base64 编码传入图像。图像文件的限制请参见[图像限制](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/stepfun.md)。
 
-## Python
+#### Python
 
 ```
 import os
@@ -252,7 +250,7 @@ print("\n" + "=" * 20 + "完整回复" + "=" * 20 + "\n")
 print(completion.choices[0].message.content)
 ```
 
-## Node.js
+#### Node.js
 
 ```
 import OpenAI from "openai";
@@ -294,9 +292,9 @@ console.log('\n' + '='.repeat(20) + '完整回复' + '='.repeat(20) + '\n');
 console.log(completion.choices[0].message.content);
 ```
 
-## HTTP
+#### HTTP
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -326,11 +324,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-### **视频理解**
+### 视频理解
 
-视频理解功能让模型能够识别和分析视频内容。支持通过公网 URL 传入视频。视频文件的限制请参见[视频限制](#sf01sec00014)。
+视频理解功能让模型能够识别和分析视频内容。支持通过公网 URL 传入视频。视频文件的限制请参见[视频限制](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/stepfun.md)。
 
-## Python
+#### Python
 
 ```
 import os
@@ -366,7 +364,7 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
-## Node.js
+#### Node.js
 
 ```
 import OpenAI from "openai";
@@ -405,9 +403,9 @@ async function main() {
 main();
 ```
 
-## HTTP
+#### HTTP
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -436,31 +434,23 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-### **文件限制**
+### 文件限制
 
-## 图像文件
+#### 图像文件
 
 -   **支持的图像格式：**JPG/JPEG、PNG、WEBP、静态 GIF
-    
 -   **单张图像大小：**不超过 10M
-    
 -   **多图输入限制：**单次请求最多 50 张图像，多张图片总大小不超过 20M
-    
 -   **图像分辨率：**建议长或宽不超过 4096 像素。分辨率越高，模型推理成本越高（网络传输时间、首字延迟和费用消耗相应增加）
-    
 -   **图像传入方式：**支持通过 HTTP/HTTPS 公网 URL 或 Base64 编码传入
-    
 
-## 视频文件
+#### 视频文件
 
 -   **视频大小：**最大 128M
-    
 -   **视频时长：**无时长限制，推荐 5 分钟以内
-    
 -   **音频理解：**不支持对视频文件的音频进行理解
-    
 
-## **其它功能**
+## 其它功能
 
 **功能**
 
@@ -562,7 +552,7 @@ stepfun/step-3.7-flash 不支持以下参数：`tool_choice`、`thinking_budget`
 
 范围 0.0~1.0，默认 0
 
-## **模型列表与计费**
+## 模型列表与计费
 
 Step 系列模型是阶跃星辰直供的多模态推理模型，支持文本、图像和视频输入，支持通过 `enable_thinking` 开启思考模式。
 
@@ -572,7 +562,7 @@ Step 系列模型是阶跃星辰直供的多模态推理模型，支持文本、
 
 > 思考模式下，思维链按照输出 Token 计费。
 
-## **错误码**
+## 错误码
 
 Step 系列模型由阶跃星辰直供，其错误码与百炼平台标准错误码存在差异。调用 Step 模型时，请以下表为准。
 

@@ -2,34 +2,32 @@
 
 本文介绍了如何使用阿里云百炼大模型服务提供的实时多模交互服务端 Go SDK，包括SDK下载安装、关键接口及代码示例。
 
-## **多模态实时交互服务架构**
+## 多模态实时交互服务架构
 
 ![多模态实时交互服务接入架构-通用-流程图](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7227370571/p976841.jpg)
 
-## **前提条件**
+## 前提条件
 
 开通服务并获取必要参数。
 
-开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+开通阿里云百炼实时多模交互应用，获取[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)、[APP ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#2612f896detsz)和[API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
-## **环境依赖**
+## 环境依赖
 
 **运行环境要求**：Go 1.18 及以上版本。
 
 **依赖安装方式**：本SDK提供源码集成，请下载[multimodal-go-sdk](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260528/qibgux/multimodal-go-sdk-f4af148c1313d8aa88f87f43357544107ff0891e.zip) 并按照说明集成。完整示例可参考压缩包中examples。
 
-## **音频格式说明**
+## 音频格式说明
 
 使用 Go SDK接入使用 websocket 传输协议。
 
 -   WS 链路音频格式说明：
     
     -   上行：支持 pcm （16k 采样率 16bit 单通道）和 opus 音频流。
-        
     -   下行：支持 pcm 和 mp3 音频流。
-        
 
-## **客户端调用的三种模式**
+## 客户端调用的三种模式
 
 **对比项**
 
@@ -83,15 +81,15 @@ RequestToSpeak消息打断
 
 客户端需持续上传音频，服务端自动检测语音活动的场景。用户随时可以说话打断大模型输出。
 
-## **接口说明**
+## 接口说明
 
-### **dashscope.MultiModalDialog**
+### dashscope.MultiModalDialog
 
 **客户端请求（客户端 → 服务端）**
 
 主对话管理类，提供与服务端交互的所有方法。
 
-#### **1\. NewMultiModalDialog**
+#### 1\. NewMultiModalDialog
 
 创建交互，设置回调。
 
@@ -121,7 +119,7 @@ func NewMultiModalDialog(
 ) (*MultiModalDialog, error)
 ```
 
-#### **2\. Start**
+#### 2\. Start
 
 启动对话服务，返回 `OnStarted` 回调。注意 `OnStarted` 会回调 `dialogID`。
 
@@ -133,7 +131,7 @@ func NewMultiModalDialog(
 func (d *MultiModalDialog) Start(dialogID string) error
 ```
 
-#### **3\. StartSpeech**
+#### 3\. StartSpeech
 
 通知服务端开始上传音频，注意需要在 **LISTENING** 状态才可以调用。
 
@@ -142,7 +140,7 @@ func (d *MultiModalDialog) Start(dialogID string) error
 func (d *MultiModalDialog) StartSpeech() error
 ```
 
-#### **4\. SendAudioData**
+#### 4\. SendAudioData
 
 发送语音数据。
 
@@ -154,7 +152,7 @@ func (d *MultiModalDialog) StartSpeech() error
 func (d *MultiModalDialog) SendAudioData(speechData []byte) error
 ```
 
-#### **5\. StopSpeech**
+#### 5\. StopSpeech
 
 通知服务端结束上传音频。
 
@@ -163,7 +161,7 @@ func (d *MultiModalDialog) SendAudioData(speechData []byte) error
 func (d *MultiModalDialog) StopSpeech() error
 ```
 
-#### **6\. Interrupt**
+#### 6\. Interrupt
 
 通知服务端，客户端需要打断当前交互，开始说话。
 
@@ -172,7 +170,7 @@ func (d *MultiModalDialog) StopSpeech() error
 func (d *MultiModalDialog) Interrupt() error
 ```
 
-#### **7\. LocalRespondingStarted**
+#### 7\. LocalRespondingStarted
 
 通知服务端，客户端开始播放 TTS 音频。
 
@@ -181,7 +179,7 @@ func (d *MultiModalDialog) Interrupt() error
 func (d *MultiModalDialog) LocalRespondingStarted() error
 ```
 
-#### **8\. LocalRespondingEnded**
+#### 8\. LocalRespondingEnded
 
 通知服务端，客户端结束播放 TTS 音频。
 
@@ -190,7 +188,7 @@ func (d *MultiModalDialog) LocalRespondingStarted() error
 func (d *MultiModalDialog) LocalRespondingEnded() error
 ```
 
-#### **9\. Stop**
+#### 9\. Stop
 
 结束当前轮次对话。
 
@@ -199,7 +197,7 @@ func (d *MultiModalDialog) LocalRespondingEnded() error
 func (d *MultiModalDialog) Stop() error
 ```
 
-#### **10\. GetDialogState**
+#### 10\. GetDialogState
 
 获得当前对话服务状态，返回 `DialogState` 枚举。
 
@@ -211,7 +209,7 @@ func (d *MultiModalDialog) Stop() error
 func (d *MultiModalDialog) GetDialogState() DialogState
 ```
 
-#### **11\. RequestToRespond**
+#### 11\. RequestToRespond
 
 请求服务端直接文本合成语音，或者发送指令给服务端。
 
@@ -233,7 +231,7 @@ func (d *MultiModalDialog) RequestToRespond(
 
 ### 请求参数
 
-#### **RequestParameters**
+#### RequestParameters
 
 **字段**
 
@@ -265,7 +263,7 @@ func (d *MultiModalDialog) RequestToRespond(
 
 业务参数（可选）
 
-#### **Upstream**
+#### Upstream
 
 **字段**
 
@@ -320,7 +318,7 @@ map
 
 其他参数通过透传方式传递
 
-#### **Downstream**
+#### Downstream
 
 **字段**
 
@@ -418,7 +416,7 @@ map
 
 其他参数通过透传方式传递
 
-#### **ClientInfo**
+#### ClientInfo
 
 **字段**
 
@@ -484,7 +482,7 @@ string
 
 调用方经度信息，在需要客户端精确位置的业务场景提交
 
-#### **BizParams**
+#### BizParams
 
 **字段**
 
@@ -500,7 +498,7 @@ map
 
 否
 
-设置需要透传给agent的参数，各类agent传递的参数参考[调用官方Agent](https://help.aliyun.com/zh/model-studio/official-agent)文档说明。可以在extra\_config子节点中设置对话扩展参数，目前支持enable\_web\_search，表示是否开启联网搜索。这里的设置优先级更高，会覆盖管控台配置。
+设置需要透传给agent的参数，各类agent传递的参数参考[调用官方Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/official-agent.md)文档说明。可以在extra\_config子节点中设置对话扩展参数，目前支持enable\_web\_search，表示是否开启联网搜索。这里的设置优先级更高，会覆盖管控台配置。
 
 `UserPromptParams`
 
@@ -508,7 +506,7 @@ map
 
 否
 
-用于设置用户自定义prompt变量，由用户自定义设置json中的key和value。管控台上配置自定义prompt变量的方法参考[应用配置-提示词](https://help.aliyun.com/zh/model-studio/multimodal-app-configuration#74a8b82973u0r)
+用于设置用户自定义prompt变量，由用户自定义设置json中的key和value。管控台上配置自定义prompt变量的方法参考[应用配置-提示词](https://help.aliyun.com/zh/model-studio/multimodal-app-configuration#cbbc5f73caixw)
 
 `UserQueryParams`
 
@@ -516,7 +514,7 @@ map
 
 否
 
-用于设置用户自定义对话变量，由用户自定义设置json中的key和value。管控台上配置自定义对话变量的方法参考[应用配置-对话变量](https://help.aliyun.com/zh/model-studio/multimodal-app-configuration#62d90ef075ve1)
+用于设置用户自定义对话变量，由用户自定义设置json中的key和value。管控台上配置自定义对话变量的方法参考[应用配置-对话变量](https://help.aliyun.com/zh/model-studio/multimodal-app-configuration#6abc9330e2yx9)
 
 `PassThroughParams`
 
@@ -526,7 +524,7 @@ map
 
 其他参数通过透传方式传递
 
-#### **构建参数示例**
+#### 构建参数示例
 
 ```
 // 配置上行参数
@@ -559,7 +557,7 @@ requestParams := &dashscope.RequestParameters{
 }
 ```
 
-#### **MultiModalCallback 回调接口**
+#### MultiModalCallback 回调接口
 
 **服务端返回 （服务端 → 客户端）**
 
@@ -621,81 +619,49 @@ type MultiModalCallback interface {
 }
 ```
 
-### **对话状态说明（DialogState）**
+### 对话状态说明（DialogState）
 
 OnStateChanged接口回调的状态包括 LISTENING、THINKING、RESPONDING 三个状态：
 
 -   **Listening**：表示机器人正在监听用户输入，用户可以发送音频。
-    
 -   **Thinking**：表示机器人正在思考。
-    
 -   **Responding**：表示机器人正在生成语音或语音回复中。
-    
 
-## **调用交互时序图**
+## 调用交互时序图
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5621377471/p957919.png)
 
-## **更多SDK接口使用说明**
+## 更多SDK接口使用说明
 
-#### **VQA（图片问答）交互**
+#### VQA（图片问答）交互
 
 VQA 是在对话过程中通过发送图片实现图片+语音的多模交互的功能。
 
 核心过程是通过输入类似"看一下xxx"意图的语音，或者直接输入请求文本的方式触发 VQA，返回基于图片内容的问答结果。
 
 -   **通过语音请求的流程为：**
-    
     1.  语音说："看一下前面有什么"。
-        
-    2.  通过回调函数 `OnRespondingContent` 返回拍照意图 **"visual\_qa"**。
-        
-    3.  客户端收到上述意图后，调用 `RequestToRespond` 接口提交图片内容触发问答回复。
-        
+    2.  通过回调函数 `OnRespondingContent` 返回拍照意图 **"visual\_qa"**。
+    3.  客户端收到上述意图后，调用 `RequestToRespond` 接口提交图片内容触发问答回复。
 
--   ```
-    // callback 中处理 visual_qa 意图
-      func (c *MyCallback) OnRespondingContent(payload map[string]interface{}) {
-          if output, ok := payload["output"].(map[string]interface{}); ok {
-              if extraInfo, ok := output["extra_info"].(map[string]interface{}); ok {
-                  if commands, ok := extraInfo["commands"].(string); ok {
-                      if strings.Contains(commands, "visual_qa") {
-                          // 触发 VQA
-                          sendImageVQA(dialog)
-                      }
+```
+// callback 中处理 visual_qa 意图
+  func (c *MyCallback) OnRespondingContent(payload map[string]interface{}) {
+      if output, ok := payload["output"].(map[string]interface{}); ok {
+          if extraInfo, ok := output["extra_info"].(map[string]interface{}); ok {
+              if commands, ok := extraInfo["commands"].(string); ok {
+                  if strings.Contains(commands, "visual_qa") {
+                      // 触发 VQA
+                      sendImageVQA(dialog)
                   }
               }
           }
       }
-    
-      // 发送 VQA 请求
-      func sendImageVQA(dialog *dashscope.MultiModalDialog) {
-          image := map[string]interface{}{
-              "type":  "base64",
-              "value": imageBase64Data,
-          }
-          // 或者使用 URL 方式
-          // image := map[string]interface{}{
-          //     "type":  "url",
-          //     "value": imageURL,
-          // }
-    
-          imagesParams := &dashscope.RequestToRespondParameters{
-              Images: []interface{}{image},
-          }
-    
-          // 使用语音调用 VQA，text 传空字符串即可
-          dialog.RequestToRespond("prompt", "", imagesParams, false)
-      }
-    ```
-    
--   **直接通过文本请求流程为：**
-    
-    1.  客户端直接调用request\_to\_respond接口提交图片内容和请求文本，触发问答回复。
-        
-    
-    ```
-    image := map[string]interface{}{
+  }
+
+  // 发送 VQA 请求
+  func sendImageVQA(dialog *dashscope.MultiModalDialog) {
+      image := map[string]interface{}{
           "type":  "base64",
           "value": imageBase64Data,
       }
@@ -704,31 +670,51 @@ VQA 是在对话过程中通过发送图片实现图片+语音的多模交互的
       //     "type":  "url",
       //     "value": imageURL,
       // }
-    
+
       imagesParams := &dashscope.RequestToRespondParameters{
           Images: []interface{}{image},
       }
-    
-      // 使用文本直接请求图片回复，text 填入文本请求
-      dialog.RequestToRespond("prompt", "这张图片里面有什么", imagesParams, false)
-    ```
-    
+
+      // 使用语音调用 VQA，text 传空字符串即可
+      dialog.RequestToRespond("prompt", "", imagesParams, false)
+  }
+```
+
+-   **直接通过文本请求流程为：**
+    1.  客户端直接调用request\_to\_respond接口提交图片内容和请求文本，触发问答回复。
+
+```
+image := map[string]interface{}{
+      "type":  "base64",
+      "value": imageBase64Data,
+  }
+  // 或者使用 URL 方式
+  // image := map[string]interface{}{
+  //     "type":  "url",
+  //     "value": imageURL,
+  // }
+
+  imagesParams := &dashscope.RequestToRespondParameters{
+      Images: []interface{}{image},
+  }
+
+  // 使用文本直接请求图片回复，text 填入文本请求
+  dialog.RequestToRespond("prompt", "这张图片里面有什么", imagesParams, false)
+```
 
 注意：VQA 支持发送图片链接或者base64数据（支持小于180KB的图片）。
 
-### **通过Websocket请求LiveAI（视频通话）**
+### 通过Websocket请求LiveAI（视频通话）
 
 LiveAI（视频通话）是百炼多模交互提供的官方 Agent。通过 Go SDK 发送图片序列的方式，可以实现视频通话的功能。我们推荐您的服务端和客户端（网页或者 APP）通过 RTC 传输视频和音频，然后将服务端采集到的视频帧以 500ms/张 的速度发送给 SDK，同时保持实时的音频输入。
 
 注意：LiveAI 发送图片只支持 base64 编码，每张图片的大小在 180K 以下。
 
 -   LiveAI调用时序
-    
 
 #### ![截屏2025-06-20 11](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975541.png)
 
 -   关键代码示例
-    
 
 ```
 // 1. 设置请求模式为 AudioAndVideo
@@ -779,7 +765,7 @@ func sendVideoFrameLoop(dialog *dashscope.MultiModalDialog, stopChan chan bool) 
 }
 ```
 
-### **文本合成TTS**
+### 文本合成TTS
 
 SDK支持通过文本直接请求服务端合成音频。
 
@@ -791,17 +777,15 @@ SDK支持通过文本直接请求服务端合成音频。
 dialog.RequestToRespond("transcript", "今天天气不错", nil, false)
 ```
 
-### **自定义提示词变量和传值**
+### 自定义提示词变量和传值
 
 -   在管控台项目【提示词】配置自定义变量。
-    
 
-如下图示例，定义了一个`user_name`字段代表用户昵称。并将变量`user_name`以占位符形式`${user_name}` 插入到Prompt 中。
+如下图示例，定义了一个`user_name`字段代表用户昵称。并将变量`user_name`以占位符形式`${user_name}`插入到Prompt 中。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975545.png)
 
 -   在代码中设置变量。
-    
 
 如下示例，设置`"user_name" = "大米"`。
 
@@ -822,11 +806,10 @@ requestParams := &dashscope.RequestParameters{
 ```
 
 -   请求回复
-    
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1903140571/p975544.png)
 
-### **使用文本请求对话结果**
+### 使用文本请求对话结果
 
 SDK支持通过文本直接请求返回 LLM 结果和语音合成数据。
 
@@ -836,9 +819,9 @@ SDK支持通过文本直接请求返回 LLM 结果和语音合成数据。
 dialog.RequestToRespond("prompt", "今天天气不错", nil, false)
 ```
 
-## **SDK连接和状态管理**
+## SDK连接和状态管理
 
-### **1\. 资源管理**
+### 1\. 资源管理
 
 使用完毕后请调用 `Cleanup()` 方法释放所有资源：
 
@@ -846,7 +829,7 @@ dialog.RequestToRespond("prompt", "今天天气不错", nil, false)
 defer dialog.Cleanup()
 ```
 
-### **2\. 心跳保活**
+### 2\. 心跳保活
 
 建议定期发送心跳以保持链接：
 
@@ -859,7 +842,7 @@ go func() {
 }()
 ```
 
-### **3\. 状态监控**
+### 3\. 状态监控
 
 通过实现 `MultiModalCallback` 接口监控对话状态变化：
 

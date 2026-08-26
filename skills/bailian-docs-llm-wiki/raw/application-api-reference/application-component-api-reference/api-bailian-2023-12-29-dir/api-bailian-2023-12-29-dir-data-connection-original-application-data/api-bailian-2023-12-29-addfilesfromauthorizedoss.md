@@ -1,4 +1,4 @@
-# AddFilesFromAuthorizedOss - 从已授权OSS Bucket中导入文件
+# AddFilesFromAuthorizedOss
 
 将已授权OSS Bucket中的文件导入阿里云百炼应用数据中。
 
@@ -7,9 +7,7 @@
 -   请确保该 OSS Bucket 与阿里云百炼同属一个阿里云账号（主账号），并已按[从 OSS 导入数据配置说明](https://help.aliyun.com/zh/model-studio/data-import-instructions)完成授权。
     
     -   支持的 Bucket 存储类型不包括归档、冷归档或深度冷归档。支持内容加密的 Bucket。支持公共读写/公共读/私有的 Bucket。
-        
-    -   如需使用开启 [Referer 防盗链](https://help.aliyun.com/zh/oss/configure-referer-policy-to-prevent-other-websites-from-referring-to-oss-files)的 Bucket，须参考[仅允许受信任的网站访问](https://help.aliyun.com/zh/oss/configure-referer-policy-to-prevent-other-websites-from-referring-to-oss-files)将域名`*.console.aliyun.com`添加到白名单 Referer 中。
-        
+    -   如需使用开启 [Referer 防盗链](https://help.aliyun.com/zh/oss/user-guide/hotlink-protection)的 Bucket，须参考[仅允许受信任的网站访问](https://help.aliyun.com/zh/oss/user-guide/hotlink-protection)将域名`*.console.aliyun.com`添加到白名单 Referer 中。
 -   RAM 用户（子账号）需要首先获取阿里云百炼的 [API 权限](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)（需要`AliyunBailianDataFullAccess`，已包括 sfm:AddFilesFromAuthorizedOss 权限点）并[加入一个业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)方可调用本接口。阿里云账号（主账号）可直接调用无须授权。建议您通过最新版[阿里云百炼 SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)来调用本接口。
     
 -   本接口不具有幂等性。
@@ -19,11 +17,9 @@
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/bailian/2023-12-29/AddFilesFromAuthorizedOss)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
- [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/bailian/2023-12-29/AddFilesFromAuthorizedOss)
-
-## **授权信息**
+## 授权信息
 
 下表是API对应的授权信息，可以在RAM权限策略语句的`Action`元素中使用，用来给RAM用户或RAM角色授予调用此API的权限。具体说明如下：
 
@@ -33,10 +29,8 @@
     
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
     
-    -   对于必选的资源类型，用前面加 \* 表示。
-        
+    -   对于必选的资源类型，用前面加 \* 表示。
     -   对于不支持资源级授权的操作，用`全部资源`表示。
-        
 -   条件关键字：是指云产品自身定义的条件关键字。
     
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
@@ -125,8 +119,6 @@ string
 -   UNSTRUCTURED：类目，用于构建知识库场景。
     
 
-**说明**
-
 本接口不支持导入用于智能体应用[会话交互](https://help.aliyun.com/zh/model-studio/user-guide/file-interaction)的 SESSION\_FILE，请使用 **AddFile** 接口从本地上传 SESSION\_FILE。
 
 **枚举值：**
@@ -166,8 +158,6 @@ array<object>
 
 导入文件列表。一次最多可上传 10 个文件。
 
-**说明**
-
 一次最多可上传 10 个文件。
 
 array<object>
@@ -188,12 +178,10 @@ string
     
 -   文件名称长度限制 4-128 个字符。
     
--   对文件上传要求限制，请参见[知识库配额与限制](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-specifications)。
+-   对文件上传要求限制，请参见[知识库配额与限制](raw/application-user-guide/knowledge-base/rag-knowledge-base-specifications.md)。
     
 
-**重要** 当导入的文件名称与知识库中已有文件名称重复时，接口仍会返回`Status`为`SUCCESS`，但该文件实际不会被导入知识库，已有的同名文件保持不变。请确保每次导入的文件名称唯一。
-
-**说明**
+当导入的文件名称与知识库中已有文件名称重复时，接口仍会返回`Status`为`SUCCESS`，但该文件实际不会被导入知识库，已有的同名文件保持不变。请确保每次导入的文件名称唯一。
 
 如需新增数据表并上传数据，请使用阿里云百炼控制台，API 不支持。
 
@@ -205,7 +193,7 @@ string
 
 是
 
-导入文件在 OSS Bucket 中的键名（Key），详见[对象命名](https://help.aliyun.com/zh/oss/user-guide/object-naming-conventions)。
+导入文件在 OSS Bucket 中的键名（Key），详见[对象命名](https://help.aliyun.com/zh/oss/user-guide/object-overview)。
 
 root/path/this\_is\_temp\_xxxx.pdf
 
@@ -230,9 +218,9 @@ string
 -   AUTO\_SELECT（自动选择解析器）
     
 
-**说明** 当 CategoryType 为 UNSTRUCTURED 时，解析器会根据当前类目的数据解析设置，对您上传的文件进行解析。
+当 CategoryType 为 UNSTRUCTURED 时，解析器会根据当前类目的数据解析设置，对您上传的文件进行解析。
 
-**说明** 当 CategoryType 为 SESSION\_FILE 时，系统将使用默认方式（不支持更改）解析文件内容。
+当 CategoryType 为 SESSION\_FILE 时，系统将使用默认方式（不支持更改）解析文件内容。
 
 AUTO\_SELECT
 
@@ -290,7 +278,7 @@ boolean
 
 false
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -354,8 +342,6 @@ string
     
 -   FAILED：导入（应用数据）失败。
     
-
-**说明**
 
 状态为 SUCCESS 的文件才能用于创建/更新知识库。
 
@@ -436,6 +422,6 @@ true
 
 访问[错误中心](https://api.aliyun.com/document/bailian/2023-12-29/errorCode)查看更多错误码。
 
-## **变更历史**
+## 变更历史
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/bailian/2023-12-29/AddFilesFromAuthorizedOss#workbench-doc-change-demo)。

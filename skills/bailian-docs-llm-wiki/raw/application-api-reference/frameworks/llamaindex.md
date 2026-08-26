@@ -6,33 +6,28 @@
 
 > 本方案将知识库部署在云端，使用默认的智能文档切分与官方向量模型，不支持自定义文档切分方式或自定义嵌入模型。
 
-> 如果您希望将知识库部署在本地，实现灵活地文档切分与嵌入模型选择，请参考[基于本地知识库构建RAG应用](https://help.aliyun.com/zh/model-studio/build-rag-application-based-on-local-retrieval)。
+> 如果您希望将知识库部署在本地，实现灵活地文档切分与嵌入模型选择，请参考[基于本地知识库构建RAG应用](raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)。
 
-> 如果您希望将知识库部署在云端，实现0代码地创建RAG应用，请参考[0代码构建RAG应用](https://help.aliyun.com/zh/model-studio/build-knowledge-base-qa-assistant-without-coding/)。
+> 如果您希望将知识库部署在云端，实现0代码地创建RAG应用，请参考[0代码构建RAG应用](raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)。
 
-## **效果展示**
+## 效果展示
 
 您可以通过本方案实现以下效果：
 
 ![9月19日](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5536607271/p851327.gif)
 
-## **方案概览**
+## 方案概览
 
 1.  **读取本地文件并构建云端知识库**：仅支持读取并解析`.txt`、`.docx`、`.pdf`等非结构化数据文件，上传文件到云端，并构建云端知识库。
-    
 2.  **构建检索引擎和RAG应用**：基于云端知识库，构建检索引擎，能够接收终端用户的提问，从云端知识库中检索相关的文本片段，再将提问和检索结果合并后输入到大模型，并生成回答。RAG应用提供与终端用户的交互界面，如果无法检索到相关的文本片段，或根据检索到的文本片段无法回答终端用户的提问，则返回适当的报错信息。
-    
 
-## **前提条件**
+## 前提条件
 
-1.  开通阿里云百炼服务并[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
-    
-2.  [配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)
-    
+1.  开通阿里云百炼服务并[获取API Key](raw/model-api-reference/preparations/get-api-key.md)。
+2.  [配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)
 3.  已安装Python 3.9及以上版本。
-    
 
-## **下载示例文件和代码**
+## 下载示例文件和代码
 
 下载[llamaindex\_cloud\_rag.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20240917/jwyocp/llamaindex_cloud_rag.zip)并解压，目录结构如下：
 
@@ -49,7 +44,7 @@ llamaindex_cloud_rag
 
 其中`docs/`包含示例文件，您可以替换为实际的业务文件；`create_cloud_index.py`用于读取`docs/`中的文件并构建云端知识库；`rag.py`用于构建检索引擎和RAG应用；`requirements.txt`用于安装环境依赖。
 
-## **安装环境依赖**
+## 安装环境依赖
 
 进入`requirements.txt`所在路径，运行如下命令：
 
@@ -57,7 +52,7 @@ llamaindex_cloud_rag
 pip install -r requirements.txt
 ```
 
-## **读取本地文件并构建云端知识库**
+## 读取本地文件并构建云端知识库
 
 进入`create_cloud_index.py`所在路径，运行如下命令：`python create_cloud_index.py`，即可将`docs/`中的业务文件上传到阿里云百炼[应用数据](https://bailian.console.aliyun.com/?tab=app#/data-center)，并构建云端知识库。
 
@@ -69,7 +64,7 @@ pip install -r requirements.txt
 
 您可以在[知识库](https://bailian.console.aliyun.com/?tab=app#/knowledge-base)页面，查看已构建的云端知识库。
 
-### **代码解析**
+代码解析
 
 `create_cloud_index.py`
 
@@ -111,11 +106,11 @@ if __name__ == '__main__':
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5536607271/p849965.png)
 
-### **代码解析**
+代码解析
 
 `rag.py`
 
-> `Settings.llm = DashScope(model_name="qwen-max")` ：model\_name参数可以传入"qwen-max"等模型名称，以设置检索引擎生成回答时调用的大模型。全部模型名称，请参考[文本生成-千问](https://help.aliyun.com/zh/model-studio/models#9f8890ce29g5u)和[文本生成-千问-开源版](https://help.aliyun.com/zh/model-studio/models#23f477ab156wv)。
+> `Settings.llm = DashScope(model_name="qwen-max")`：model\_name参数可以传入"qwen-max"等模型名称，以设置检索引擎生成回答时调用的大模型。全部模型名称，请参考[选择模型](raw/model-user-guide/get-started-with-models/models.md)和[选择模型](raw/model-user-guide/get-started-with-models/models.md)。
 
 ```
 from llama_index.core import Settings
@@ -172,6 +167,6 @@ if __name__ == '__main__':
         print(output)
 ```
 
-## **相关文档**
+## 相关文档
 
 如果您需要查看与阿里云百炼相关的LlamaIndex API详情，请参考本目录下的内容。

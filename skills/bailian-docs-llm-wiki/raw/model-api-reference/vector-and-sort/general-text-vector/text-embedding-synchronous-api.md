@@ -2,9 +2,9 @@
 
 通用文本向量模型可将文本数据转换为数值向量，用于语义搜索、推荐、聚类、分类等下游任务。
 
-## **模型概览**
+## 模型概览
 
-## 北京
+#### 北京
 
 **模型名称**
 
@@ -12,13 +12,13 @@
 
 **最大行数**
 
-**单行最大**[Token](https://help.aliyun.com/zh/model-studio/billing-for-model-studio#f300d75bd5rb2)**数**
+**单行最大**[Token](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)**数**
 
 **单价（每千输入Token）**
 
 **支持语种**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
 
 qwen3.7-text-embedding
 
@@ -48,7 +48,7 @@ text-embedding-v4
 
 0.0005元
 
-[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)：0.00025元
+[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)：0.00025元
 
 中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等100+主流语种及多种编程语言
 
@@ -68,7 +68,7 @@ text-embedding-v2
 
 0.0007元
 
-[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)：0.00035元
+[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)：0.00035元
 
 中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语
 
@@ -80,7 +80,7 @@ text-embedding-v1
 
 中文、英语、西班牙语、法语、葡萄牙语、印尼语
 
-## 新加坡
+#### 新加坡
 
 **模型名称**
 
@@ -138,27 +138,60 @@ text-embedding-v3
 
 关于模型限流，请参考[限流](https://help.aliyun.com/zh/model-studio/rate-limit#953ddcd76495l)。
 
-## **前提条件**
+## 前提条件
 
 若熟悉OpenAI生态，可使用兼容API快速迁移；DashScope API则提供更丰富的独有特性。请根据您的需求选择。
 
-您需要已[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
 
-## **OpenAI兼容**
+## OpenAI兼容
 
-## 公共云
+#### 公共云
 
 **使用SDK调用时需配置的base\_url：**`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
 **使用HTTP方式调用时需配置的endpoint：**`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/embeddings`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-### **请求体**
+### 请求体
 
-## 输入字符串
+**model**`string`**必选**
 
-## Python
+调用的模型名称，参考[模型概览](https://help.aliyun.com/zh/model-studio/text-embedding-synchronous-api#0e41425c577u4)表格中的模型名称进行选择。
+
+**input**`array<string> 或 string 或 file`**必选**
+
+输入待处理的文本。可以是字符串（string）、字符串列表（array）或文件（file）。不同模型版本支持的文本长度和批量大小不同，具体如下：
+
+-   **qwen3.7-text-embedding 模型：**
+    -   **输入为字符串**：最长支持 **128,000** Token。
+    -   **输入为字符串列表或文件**：最多支持 **20** 条（行），每条（行）最长支持 **128,000** Token。
+-   **text-embedding-v3 / v4 模型：**
+    -   **输入为字符串**：最长支持 **8,192** Token。
+    -   **输入为字符串列表或文件**：最多支持 **10** 条（行），每条（行）最长支持 **8,192** Token。
+-   **text-embedding-v1 / v2 模型：**
+    -   **输入为字符串**：最长支持 **2,048** Token。
+    -   **输入为字符串列表或文件**：最多支持 **25** 条（行），每条（行）最长支持 **2,048** Token。
+
+**dimensions** `integer` **可选**
+
+指定的向量维度，必须为以下值之一：`2560（仅适用于qwen3.7-text-embedding）、`2048（仅适用于`text-embedding-v4`）、1536（仅适用于`text-embedding-v4`）1024、768、512、256、128 或 64，默认值为1024。
+
+**encoding\_format** `string` **可选**
+
+用于控制返回的Embedding格式，入参支持`float`和`base64`，出参的Embedding数据也支持`float`和`base64`两种格式。实际返回格式取决于请求路由到的网关：
+
+-   **老网关**：无论`encoding_format`设置为`float`还是`base64`，均只返回`float`类型数据，不支持输出`base64`数据。
+    
+-   **新网关**：
+    
+    -   **短请求**：按`encoding_format`设置的格式返回数据。
+    -   **长请求**：内部路由到老网关，仅返回`float`类型数据。
+
+#### 输入字符串
+
+Python
 
 ```
 import os
@@ -180,7 +213,7 @@ completion = client.embeddings.create(
 print(completion.model_dump_json())
 ```
 
-## Java
+Java
 
 ```
 import com.openai.client.OpenAIClient;
@@ -219,7 +252,7 @@ public class Main {
 }
 ```
 
-## curl
+curl
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/embeddings' \
@@ -227,15 +260,15 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 --header 'Content-Type: application/json' \
 --data '{
     "model": "qwen3.7-text-embedding",
-    "input": "风急天高猿啸哀，渚清沙白鸟飞回，无边落木萧萧下，不尽长江滚滚来",  
-    "dimensions": 1024,  
+    "input": "风急天高猿啸哀，渚清沙白鸟飞回，无边落木萧萧下，不尽长江滚滚来",
+    "dimensions": 1024,
     "encoding_format": "float"
 }'
 ```
 
-## 输入字符串列表
+#### 输入字符串列表
 
-## Python
+Python
 
 ```
 import os
@@ -257,7 +290,7 @@ completion = client.embeddings.create(
 print(completion.model_dump_json())
 ```
 
-## Java
+Java
 
 ```
 import com.openai.client.OpenAIClient;
@@ -319,7 +352,7 @@ public class Main {
 }
 ```
 
-## curl
+curl
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/embeddings' \
@@ -329,8 +362,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
     "model": "qwen3.7-text-embedding",
     "input": [
         "风急天高猿啸哀",
-        "渚清沙白鸟飞回", 
-        "无边落木萧萧下", 
+        "渚清沙白鸟飞回",
+        "无边落木萧萧下",
         "不尽长江滚滚来"
         ],
     "dimensions": 1024,
@@ -338,9 +371,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
-## 输入文件
+#### 输入文件
 
-## Python
+#### Python
 
 ```
 import os
@@ -362,7 +395,7 @@ with open('texts_to_embedding.txt', 'r', encoding='utf-8') as f:
 print(completion.model_dump_json())
 ```
 
-## Java
+#### Java
 
 ```
 import com.openai.client.OpenAIClient;
@@ -422,7 +455,7 @@ public class Main {
 }
 ```
 
-## curl
+#### curl
 
 > 确保将 'texts\_to\_embedding.txt' 替换为您自己的文件名或路径
 
@@ -439,44 +472,53 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
-**model** `_string_`**必选**
+### 响应对象
 
-调用的模型名称，参考[模型概览](#6b8938034edvk)表格中的模型名称进行选择。
+**data**`array`
 
-**input** `_array<string> 或 string 或 file_` **必选**
+任务输出信息。
 
-输入待处理的文本。可以是字符串（string）、字符串列表（array）或文件（file）。不同模型版本支持的文本长度和批量大小不同，具体如下：
+属性
 
--   **qwen3.7-text-embedding 模型：**
-    
-    -   **输入为字符串**：最长支持 **128,000** Token。
-        
-    -   **输入为字符串列表或文件**：最多支持 **20** 条（行），每条（行）最长支持 **128,000** Token。
-        
--   **text-embedding-v3 / v4 模型：**
-    
-    -   **输入为字符串**：最长支持 **8,192** Token。
-        
-    -   **输入为字符串列表或文件**：最多支持 **10** 条（行），每条（行）最长支持 **8,192** Token。
-        
--   **text-embedding-v1 / v2 模型：**
-    
-    -   **输入为字符串**：最长支持 **2,048** Token。
-        
-    -   **输入为字符串列表或文件**：最多支持 **25** 条（行），每条（行）最长支持 **2,048** Token。
-        
+**embedding**`list`
 
-**dimensions** `_integer_` **可选**
+本次调用返回object对象的value，类型是元素为float数据的数组，包含具体Embedding向量。
 
-指定的向量维度，必须为以下值之一：`2560（仅适用于qwen3.7-text-embedding）、`2048（仅适用于`text-embedding-v4`）、1536（仅适用于`text-embedding-v4`）1024、768、512、256、128 或 64，默认值为1024。
+**index**`integer`
 
-**encoding\_format** `_string_` **可选**
+本结构中的算法结果对应的输入文字在输入数组中的索引值。
 
-用于控制返回的Embedding格式，当前仅支持`float`格式。
+**object**_string_
 
-### **响应对象**
+本次调用返回的object对象类型，默认为embedding。
 
-## 成功响应
+**model**`string`
+
+本次调用的模型名。
+
+**object**_string_
+
+本次调用返回的data类型，默认为list。
+
+**usage**`object`
+
+本次请求的 Token 用量。向量模型只有输入没有输出，因此 `prompt_tokens` 与 `total_tokens` 的取值始终相同。
+
+属性
+
+**prompt\_tokens**_integer_
+
+本次请求输入内容对应的 Token 数目。取值与 `total_tokens` 相同。
+
+**total\_tokens** _integer_
+
+本次请求消耗的 Token 总数，用于计量计费。Token 数目按输入字符串被模型 Tokenizer 解析后的结果统计，与自行估算的字符数或词数可能不一致。
+
+**id**_string_
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+成功响应
 
 ```
 {
@@ -507,7 +549,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }
 ```
 
-## 异常响应
+异常响应
 
 ```
 {
@@ -520,63 +562,63 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }
 ```
 
-**data** `_array_`
-
-任务输出信息。
-
-**属性**
-
-**embedding** `_list_`
-
-本次调用返回object对象的value，类型是元素为float数据的数组，包含具体Embedding向量。
-
-**index** `_integer_`
-
-本结构中的算法结果对应的输入文字在输入数组中的索引值。
-
-**object** _string_
-
-本次调用返回的object对象类型，默认为embedding。
-
-**model** `_string_`
-
-本次调用的模型名。
-
-**object** _string_
-
-本次调用返回的data类型，默认为list。
-
-**usage** `_object_`
-
-**属性**
-
-**prompt\_tokens** _integer_
-
-用户输入文本转换成Token后的长度。
-
-**total\_tokens** _integer_
-
-本次请求输入内容的 Token 数目，算法的计量是根据用户输入字符串被模型Tokenizer解析之后对应的Token数目来进行。
-
-**id** _string_
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
 ## DashScope
 
-## 公共云
+#### 公共云
 
 **使用SDK调用时需配置的base\_url：**https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1
 
 **使用HTTP方式调用时需配置的endpoint：**POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-### **请求体**
+### 请求体
 
-## 输入字符串
+**model**`string`**必选**
 
-## Python
+调用的模型，参考[模型概览](https://help.aliyun.com/zh/model-studio/text-embedding-synchronous-api#0e41425c577u4)表格中的模型名称进行选择。
+
+**input**`string`_或_`array<string>`**必选**
+
+输入待处理的文本。可以是字符串（string）、字符串列表（array）或文件（file）。不同模型版本支持的文本长度和批量大小不同，具体如下：
+
+-   **qwen3.7-text-embedding 模型：**
+    -   **输入为字符串**：最长支持 **128,000** Token。
+    -   **输入为字符串列表或文件**：最多支持 **20** 条（行），每条（行）最长支持 **128,000** Token。
+-   **text-embedding-v3 / v4 模型：**
+    -   **输入为字符串**：最长支持 **8,192** Token。
+    -   **输入为字符串列表或文件**：最多支持 **10** 条（行），每条（行）最长支持 **8,192** Token。
+-   **text-embedding-v1 / v2 模型：**
+    -   **输入为字符串**：最长支持 **2,048** Token。
+    -   **输入为字符串列表或文件**：最多支持 **25** 条（行），每条（行）最长支持 **2,048** Token。
+
+**text\_type** `string`**可选**
+
+> 通过 HTTP 调用时，请将 **text\_type**放入parameters对象中。
+
+文本转换为向量后可以应用于检索、聚类、分类等下游任务，对检索这类非对称任务为了达到更好的检索效果建议区分查询文本（query）和底库文本（document）类型，入库、聚类、分类等对称任务可以不用特殊指定，采用系统默认值`document`即可。
+
+**dimension** `integer` **可选**
+
+> 通过 HTTP 调用时，请将 **dimension**放入parameters对象中。
+
+指定的向量维度，必须为以下值之一：`2560（仅适用于qwen3.7-text-embedding）、`2048（仅适用于`text-embedding-v4`）、1536（仅适用于`text-embedding-v4`）1024、768、512、256、128 或 64，默认值为1024。
+
+**output\_type** `string` **可选**
+
+> 通过 HTTP 调用时，请将 **output\_type**放入parameters对象中。
+
+用户指定输出离散向量表示只适用于`qwen3.7-text-embedding、``text-embedding-v3`与`text-embedding-v4`模型，取值在dense、sparse、dense&sparse之间，默认取dense，只输出连续向量。
+
+**instruct** `string` **可选**
+
+添加自定义任务说明，可用于指导模型理解查询意图。建议使用英文撰写，通常可带来约 1%–5% 的效果提升。
+
+该参数仅在 `text_type` 取值为 `query` 时生效，并按输入文本的条数计入 Token 用量。`text_type` 取值为 `document` 或未设置 `text_type` 时，该参数不生效，也不计入 Token 用量。
+
+#### 输入字符串
+
+Python
 
 ```
 import dashscope
@@ -594,7 +636,7 @@ resp = dashscope.TextEmbedding.call(
 print(resp) if resp.status_code == HTTPStatus.OK else print(resp)
 ```
 
-## Java
+Java
 
 ```
 import java.util.Arrays;
@@ -624,10 +666,10 @@ public final class Main {
             // 创建模型实例并调用
             TextEmbedding textEmbedding = new TextEmbedding();
             TextEmbeddingResult result = textEmbedding.call(param);
-            
+
             // 输出结果
             System.out.println(result);
-            
+
         } catch (ApiException | NoApiKeyException e) {
             System.out.println("调用失败：" + e.getMessage());
         }
@@ -635,7 +677,7 @@ public final class Main {
 }
 ```
 
-## curl
+curl
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \
@@ -649,15 +691,15 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
         ]
     },
     "parameters": {
-    	"dimension": 1024,
-    	"output_type": "dense"
+        "dimension": 1024,
+        "output_type": "dense"
     }
 }'
 ```
 
-## 输入字符串列表
+#### 输入字符串列表
 
-## Python
+Python
 
 ```
 import dashscope
@@ -693,7 +735,7 @@ for i in range(0, len(inputs), DASHSCOPE_MAX_BATCH_SIZE):
 print(result)
 ```
 
-## Java
+Java
 
 ```
 import java.util.Arrays;
@@ -757,7 +799,7 @@ public final class Main {
 }
 ```
 
-## curl
+curl
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \
@@ -768,21 +810,21 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     "input": {
         "texts": [
           "风急天高猿啸哀",
-          "渚清沙白鸟飞回", 
-          "无边落木萧萧下", 
+          "渚清沙白鸟飞回",
+          "无边落木萧萧下",
           "不尽长江滚滚来"
         ]
     },
     "parameters": {
-    	  "dimension": 1024,
-    	  "output_type": "dense"
+          "dimension": 1024,
+          "output_type": "dense"
     }
 }'
 ```
 
-## 输入文件
+#### 输入文件
 
-## Python
+#### Python
 
 ```
 from http import HTTPStatus
@@ -803,7 +845,7 @@ with open('texts_to_embedding.txt', 'r', encoding='utf-8') as f:
         print(resp)
 ```
 
-## Java
+#### Java
 
 ```
 import java.io.BufferedReader;
@@ -848,7 +890,7 @@ public final class Main {
 }
 ```
 
-## curl
+#### curl
 
 > 确保将 'texts\_to\_embedding.txt' 替换为您自己的文件名或路径
 
@@ -869,74 +911,97 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-**model** `_string_` **必选**
+### 响应对象
 
-调用的模型，参考[模型概览](#6b8938034edvk)表格中的模型名称进行选择。
+**status\_code** `string`
 
-**input** `_string_`_或_`_array<string>_` **必选**
+状态码，表示请求的执行结果（如 200 表示成功）。
 
-输入待处理的文本。可以是字符串（string）、字符串列表（array）或文件（file）。不同模型版本支持的文本长度和批量大小不同，具体如下：
+**request\_id** `string`
 
--   **qwen3.7-text-embedding 模型：**
-    
-    -   **输入为字符串**：最长支持 **128,000** Token。
-        
-    -   **输入为字符串列表或文件**：最多支持 **20** 条（行），每条（行）最长支持 **128,000** Token。
-        
--   **text-embedding-v3 / v4 模型：**
-    
-    -   **输入为字符串**：最长支持 **8,192** Token。
-        
-    -   **输入为字符串列表或文件**：最多支持 **10** 条（行），每条（行）最长支持 **8,192** Token。
-        
--   **text-embedding-v1 / v2 模型：**
-    
-    -   **输入为字符串**：最长支持 **2,048** Token。
-        
-    -   **输入为字符串列表或文件**：最多支持 **25** 条（行），每条（行）最长支持 **2,048** Token。
-        
+请求唯一标识。可用于请求明细溯源和问题排查。
 
-**text\_type** `_string_` **可选**
+**code** `string`
 
-> 通过 HTTP 调用时，请将 **text\_type** 放入parameters对象中。
+请求失败，表示错误码，成功时返回参数中该参数为空。
 
-文本转换为向量后可以应用于检索、聚类、分类等下游任务，对检索这类非对称任务为了达到更好的检索效果建议区分查询文本（query）和底库文本（document）类型，入库、聚类、分类等对称任务可以不用特殊指定，采用系统默认值`document`即可。
+**message** `string`
 
-**dimension** `_integer_` **可选**
+请求失败，表示失败详细信息，成功时返回参数中该参数为空。
 
-> 通过 HTTP 调用时，请将 **dimension** 放入parameters对象中。
+**output**`object`
 
-指定的向量维度，必须为以下值之一：`2560（仅适用于qwen3.7-text-embedding）、`2048（仅适用于`text-embedding-v4`）、1536（仅适用于`text-embedding-v4`）1024、768、512、256、128 或 64，默认值为1024。
+任务输出信息。
 
-**output\_type** `_string_` **可选**
+属性
 
-> 通过 HTTP 调用时，请将 **output\_type** 放入parameters对象中。
+**embeddings**`array`
 
-用户指定输出离散向量表示只适用于`qwen3.7-text-embedding、``text-embedding-v3`与`text-embedding-v4`模型，取值在dense、sparse、dense&sparse之间，默认取dense，只输出连续向量。
+本次请求的算法输出内容，是一个由结构组成的数组，每一个数组中包含一个对应的输入 text 的算法输出内容。
 
-**instruct** `_string_` **可选**
+属性
 
-添加自定义任务说明，可用于指导模型理解查询意图。建议使用英文撰写，通常可带来约 1%–5% 的效果提升。
+**sparse\_embedding** `array`
 
-### **响应对象**
+对应字符串的算法输出离散向量表示 （sparse embedding仅适用于`text-embedding-v3`与`text-embedding-v4`）。
 
-## 成功响应
+属性
+
+**index** `integer`
+
+词汇或字符在词汇表中的位置索引。
+
+**value** `float`
+
+表示该 `Token` 的权重或重要性分数，值越高，表示该 `Token` 在当前文本上下文中的重要性或相关性越大。
+
+**token** `string`
+
+实际的文本单元或词汇表中的词。
+
+**embedding** `array`
+
+对应字符串的算法输出连续向量表示 （dense embedding)。
+
+**text\_index** `integer`
+
+本结构中的算法结果对应的输入文字在输入数组中的索引值。
+
+**usage**`object`
+
+本次请求的 Token 用量。向量模型只有输入没有输出，因此该对象中各字段的取值始终相同。
+
+属性
+
+**input\_tokens** `integer`
+
+本次请求输入内容对应的 Token 数目。取值与 `total_tokens` 相同。
+
+仅 `qwen3.7-text-embedding` 返回该参数。`text-embedding-v4`、`text-embedding-v3`、`text-embedding-v2` 和 `text-embedding-v1` 不返回该参数。
+
+**total\_tokens** `integer`
+
+本次请求消耗的 Token 总数，用于计量计费。Token 数目按输入字符串被模型 Tokenizer 解析后的结果统计，与自行估算的字符数或词数可能不一致。
+
+设置 `instruct` 且 `text_type` 取值为 `query` 时，`instruct` 会按输入文本的条数重复计入 Token 用量。
+
+成功响应
 
 ```
-{   "status_code": 200, 
-    "request_id": "1ba94ac8-e058-99bc-9cc1-7fdb37940a46", 
-    "code": "", 
+{   "status_code": 200,
+    "request_id": "1ba94ac8-e058-99bc-9cc1-7fdb37940a46",
+    "code": "",
     "message": "",
     "output":{
         "embeddings": [
-          {  
+          {
              "sparse_embedding":[
                {"index":7149,"value":0.829,"token":"风"},
                .....
                {"index":111290,"value":0.9004,"token":"哀"}],
              "embedding": [-0.006929283495992422,-0.005336422007530928, ...],
              "text_index": 0
-          }, 
+          },
           {
              "sparse_embedding":[
                {"index":246351,"value":1.0483,"token":"渚"},
@@ -969,7 +1034,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-## 异常响应
+异常响应
 
 ```
 {
@@ -979,68 +1044,6 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-**status\_code** `string`
-
-状态码，表示请求的执行结果（如 200 表示成功）。
-
-**request\_id** `string`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code** `string`
-
-请求失败，表示错误码，成功时返回参数中该参数为空。
-
-**message** `string`
-
-请求失败，表示失败详细信息，成功时返回参数中该参数为空。
-
-**output** `_object_`
-
-任务输出信息。
-
-**属性**
-
-**embeddings** `_array_`
-
-本次请求的算法输出内容，是一个由结构组成的数组，每一个数组中包含一个对应的输入 text 的算法输出内容。
-
-**属性**
-
-**sparse\_embedding** `_array_`
-
-对应字符串的算法输出离散向量表示 （sparse embedding仅适用于`text-embedding-v3`与`text-embedding-v4`）。
-
-**属性**
-
-**index** `_integer_`
-
-词汇或字符在词汇表中的位置索引。
-
-**value** `_float_`
-
-表示该 `Token` 的权重或重要性分数，值越高，表示该 `Token` 在当前文本上下文中的重要性或相关性越大。
-
-**token** `_string_`
-
-实际的文本单元或词汇表中的词。
-
-**embedding** `_array_`
-
-对应字符串的算法输出连续向量表示 （dense embedding)。
-
-**text\_index** `_integer_`
-
-本结构中的算法结果对应的输入文字在输入数组中的索引值。
-
-**usage** `_object_`
-
-**属性**
-
-**total\_tokens** _integer_
-
-本次请求输入内容的 token 数目，算法的计量是根据用户输入字符串被模型tokenizer解析之后对应的token 数目来进行。
-
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。

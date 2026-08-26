@@ -30,17 +30,17 @@ GPT-5.4、Claude Sonnet 4.6、Gemini 3 Pro
 
 GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
-`qwen3.7-flash`、`deepseek-v4-flash`、`MiniMax-M2.5`
+`qwen3.8-flash`、`deepseek-v4-flash`、`MiniMax-M2.5`
 
 ## 应用场景
 
-聊天机器人、内容生成、摘要总结、文档处理等场景，推荐使用 `qwen3.7-plus`，能力与成本均衡，拥有100万上下文窗口和完整的内置工具。确认效果满足需求后，可以尝试 `qwen3.7-flash` 来降低成本，效果接近旗舰模型，且拥有相同的上下文长度和功能支持。如需最强推理能力，可选择 `qwen3.8-max`。
+聊天机器人、内容生成、摘要总结、文档处理等场景，推荐使用 `qwen3.7-plus`，能力与成本均衡，拥有100万上下文窗口和完整的内置工具。确认效果满足需求后，可以尝试 `qwen3.8-flash` 来降低成本，效果接近旗舰模型，且拥有相同的上下文长度和功能支持。如需最强推理能力，可选择 `qwen3.8-max`。
 
 ### 办公场景（非编程）
 
 处理日常办公任务（文档撰写、邮件处理、会议纪要整理、数据分析等）时，推荐 `qwen3.7-plus`——能力与成本均衡，拥有 100 万上下文窗口，支持 Function Calling 和内置工具，适合文档摘要、内容生成等办公类任务。
 
-确认效果满足需求后，可尝试 `qwen3.7-flash` 降低成本，效果接近旗舰模型，且拥有相同的上下文长度和功能支持。
+确认效果满足需求后，可尝试 `qwen3.8-flash` 降低成本，效果接近旗舰模型，且拥有相同的上下文长度和功能支持。
 
 如需最强推理能力（如复杂数据分析、多步逻辑推演），可选择 `qwen3.8-max`，但成本较高。
 
@@ -52,10 +52,8 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 100万Token约相当于70万个汉字或10本小说。
 
--   长文档或大型代码库：`qwen3.8-max`/`qwen3.7-plus` / `qwen3.7-flash` （100万）。
-    
+-   长文档或大型代码库：`qwen3.8-max` / `qwen3.8-flash` / `qwen3.7-plus` / `qwen3.7-flash`（100万）。
 -   常规任务：128k-256k已足够。
-    
 
 模型的上下文信息请前往模型广场查看。
 
@@ -74,11 +72,9 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 让模型执行操作：查询天气、查询数据库、预订会议等。
 
 -   Function Calling（自定义工具，模型调用）：所有通用模型均支持。
-    
 -   内置工具（联网搜索、代码解释器、网页抓取等，无需复杂配置）。
-    
 
-> 详情参见[工具调用](https://help.aliyun.com/zh/model-studio/tool-calls/)。
+> 详情参见[工具调用](https://help.aliyun.com/zh/model-studio/tool-calls)。
 
 ### 结构化输出
 
@@ -107,6 +103,18 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 **结构化输出**
 
 `qwen3.8-max`
+
+1M
+
+支持
+
+支持
+
+支持
+
+支持
+
+`qwen3.8-flash`
 
 1M
 
@@ -226,7 +234,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 以下模型不再作为首选推荐。如需查看模型详细参数（上下文窗口、计费等），请前往模型广场。
 
-### **Qwen3.7**
+### Qwen3.7
 
 **模型ID**
 
@@ -916,7 +924,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 不支持
 
-#### **三方模型**
+#### 三方模型
 
 **模型ID**
 

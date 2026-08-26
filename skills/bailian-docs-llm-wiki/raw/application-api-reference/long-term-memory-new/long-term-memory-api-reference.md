@@ -2,7 +2,7 @@
 
 长期记忆（新）的完整 API 接口参考文档，包含所有 API 的请求参数、返回结果和示例代码。
 
-本文档提供长期记忆（新）功能的完整 API 接口参考。关于功能介绍和使用指南，请参见[长期记忆（新）](#)。
+本文档提供长期记忆（新）功能的完整 API 接口参考。关于功能介绍和使用指南，请参见[长期记忆（新）](raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md)。
 
 ## 公共请求信息
 
@@ -12,11 +12,11 @@
 
 Base URL
 
-`https://dashscope.aliyuncs.com/api/v2/apps/memory/`
+`[https://dashscope.aliyuncs.com/api/v2/apps/memory/](https://dashscope.aliyuncs.com/api/v2/apps/memory/)`
 
 认证方式
 
-在请求 Header 中添加 `Authorization: Bearer $DASHSCOPE_API_KEY`。API Key 的获取方式请参见[获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+在请求 Header 中添加 `Authorization: Bearer $DASHSCOPE_API_KEY`。API Key 的获取方式请参见[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
 Content-Type
 
@@ -24,9 +24,7 @@ Content-Type
 
 ## 接口概览
 
-**重要**
-
-记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式商业化计费。Add 和 Search 调用区分 **Pro**（开启 Rerank）和 **Lite**（关闭 Rerank）版本。详见[记忆库计费标准](https://help.aliyun.com/zh/model-studio/memory-library#h3-pricing)。
+**重要**记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式商业化计费。Add 和 Search 调用区分 **Pro**（开启 Rerank）和 **Lite**（关闭 Rerank）版本。详见[记忆库计费标准](https://help.aliyun.com/zh/model-studio/memory-library#h3-pricing)。
 
 长期记忆（新）提供以下 API 接口：
 
@@ -180,8 +178,6 @@ array
 
 对话消息列表，每个消息包含 `role`（user/assistant）和 `content` 文本内容。
 
-**说明**
-
 最多支持50条对话记录。
 
 一问一答算 2 条。
@@ -216,7 +212,7 @@ string
 
 否
 
-[画像模板 ID](#4najl0a4ju096)，在记忆库详情页获取。不传则不提取用户画像，仅写入记忆片段。
+[画像模板 ID](raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md)，在记忆库详情页获取。不传则不提取用户画像，仅写入记忆片段。
 
 memory\_library\_id
 
@@ -225,8 +221,6 @@ string
 否
 
 记忆库 ID，最大 32 个字符，在[记忆库](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)卡片上获取。
-
-**说明**
 
 如不传此参数，会自动选择默认记忆库ID。
 
@@ -237,8 +231,6 @@ string
 否
 
 记忆片段规则 ID。
-
-**说明**
 
 如不传此参数，会自动选择指定记忆库的默认的记忆片段规则 ID。
 
@@ -255,9 +247,7 @@ object
 返回字段包括：
 
 -   `request_id` (string) - 请求ID
-    
 -   `memory_nodes` (array) - 变更的记忆片段列表，结构如下：
-    
 
 **字段**
 
@@ -291,7 +281,7 @@ string
 
 **示例代码：**
 
-## cURL
+#### cURL
 
 ```
 # 添加记忆片段
@@ -351,11 +341,9 @@ curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/add \
   }'
 ```
 
-## Python
+#### Python
 
-**说明**
-
-需要安装 agentscope-runtime，安装命令：`pip install agentscope-runtime>=1.1.5`
+**说明**需要安装 agentscope-runtime，安装命令：`pip install agentscope-runtime>=1.1.5`
 
 ```
 from agentscope_runtime.tools.modelstudio_memory import (
@@ -435,8 +423,6 @@ string
 
 记忆库 ID，最大 32 个字符，在记忆库卡片上获取。
 
-**说明**
-
 如不传此参数，会自动选择默认记忆库 ID。
 
 project\_ids
@@ -446,8 +432,6 @@ list
 否
 
 记忆片段规则 ID 数组。可传入多记忆片段规则 ID 进行混合检索。
-
-**说明**
 
 如不传此参数，会自动选择指定记忆库的默认的记忆片段规则 ID。
 
@@ -504,9 +488,7 @@ boolean
 返回字段包括：
 
 -   `request_id` (string) - 请求 ID
-    
 -   `memory_nodes` (array) - 记忆片段列表，包含以下字段：
-    
 
 **字段**
 
@@ -540,7 +522,7 @@ long
 
 **示例代码：**
 
-## cURL
+#### cURL
 
 ```
 # 搜索记忆片段
@@ -581,11 +563,9 @@ curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/sear
 }
 ```
 
-## Python
+#### Python
 
-**说明**
-
-需要安装 agentscope-runtime，安装命令：`pip install agentscope-runtime>=1.1.5`
+**说明**需要安装 agentscope-runtime，安装命令：`pip install agentscope-runtime>=1.1.5`
 
 ```
 from agentscope_runtime.tools.modelstudio_memory import (
@@ -641,8 +621,6 @@ string
 
 记忆库 ID，最大 32 个字符，在[记忆库](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)卡片上获取。
 
-**说明**
-
 如不传此参数，会自动选择默认记忆库 ID。
 
 project\_id
@@ -652,8 +630,6 @@ string
 否
 
 记忆片段规则 ID。
-
-**说明**
 
 如不传此参数，会自动选择指定记忆库的默认的记忆片段规则 ID。
 
@@ -678,9 +654,7 @@ integer
 返回字段包括：
 
 -   `request_id` (string) - 请求 ID
-    
 -   `memory_nodes` (array) - 记忆片段列表，包含以下字段：
-    
 
 **字段**
 
@@ -721,15 +695,12 @@ object
 分页字段：
 
 -   `total` (integer) - 总数
-    
 -   `page_size` (integer) - 每页大小
-    
 -   `page_num` (integer) - 页号
-    
 
 **示例代码：**
 
-## cURL
+#### cURL
 
 ```
 # 列出记忆片段
@@ -758,11 +729,9 @@ curl --location --request GET 'https://dashscope.aliyuncs.com/api/v2/apps/memory
 }
 ```
 
-## Python
+#### Python
 
-**说明**
-
-需要安装 agentscope-runtime，安装命令：`pip install agentscope-runtime>=1.1.5`
+**说明**需要安装 agentscope-runtime，安装命令：`pip install agentscope-runtime>=1.1.5`
 
 ```
 from agentscope_runtime.tools.modelstudio_memory import (
@@ -810,13 +779,11 @@ string
 
 记忆库 ID，最大 32 个字符，在记忆库卡片上获取。
 
-**说明**
-
 如不传此参数，会自动选择默认记忆库。
 
 **示例代码：**
 
-## cURL
+#### cURL
 
 ```
 # 删除记忆片段
@@ -831,11 +798,9 @@ curl --location --request DELETE 'https://dashscope.aliyuncs.com/api/v2/apps/mem
 }
 ```
 
-## Python
+#### Python
 
-**说明**
-
-需要安装 agentscope-runtime，安装命令：`pip install agentscope-runtime>=1.1.5`
+**说明**需要安装 agentscope-runtime，安装命令：`pip install agentscope-runtime>=1.1.5`
 
 ```
 from agentscope_runtime.tools.modelstudio_memory import (
@@ -897,8 +862,6 @@ string
 
 记忆库 ID，最大 32 个字符，在[记忆库](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)卡片上获取。
 
-**说明**
-
 如不传此参数，会自动选择默认记忆库。
 
 timestamp
@@ -921,7 +884,7 @@ object
 
 **示例代码：**
 
-## cURL
+#### cURL
 
 ```
 # 更新记忆片段
@@ -944,11 +907,9 @@ curl --location --request PATCH 'https://dashscope.aliyuncs.com/api/v2/apps/memo
 }
 ```
 
-## Python
+#### Python
 
-**说明**
-
-Python SDK 暂未提供此接口的封装，以下示例通过 requests 库直接调用 API。安装命令：`pip install requests`
+**说明**Python SDK 暂未提供此接口的封装，以下示例通过 requests 库直接调用 API。安装命令：`pip install requests`
 
 ```
 import os
@@ -993,8 +954,6 @@ string
 否
 
 记忆库 ID，最大 32 个字符，在记忆库卡片上获取。
-
-**说明**
 
 如不传此参数，会自动选择默认记忆库ID。
 
@@ -1057,13 +1016,11 @@ string
 **返回结果：**
 
 -   `request_id` (string) - 请求 ID
-    
 -   `profile_schema_id` (string) - 画像模板 ID
-    
 
 **示例代码：**
 
-## cURL
+#### cURL
 
 ```
 # 创建画像模板
@@ -1106,11 +1063,9 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/memory/profile_schem
 }
 ```
 
-## Python
+#### Python
 
-**说明**
-
-需要安装 agentscope-runtime，安装命令：`pip install agentscope-runtime>=1.1.5`
+**说明**需要安装 agentscope-runtime，安装命令：`pip install agentscope-runtime>=1.1.5`
 
 ```
 from agentscope_runtime.tools.modelstudio_memory import (
@@ -1159,8 +1114,6 @@ string
 
 记忆库 ID，最大 32 个字符，在[记忆库](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)卡片上获取。
 
-**说明**
-
 如不传此参数，会自动选择默认记忆库ID。
 
 page\_size
@@ -1182,21 +1135,15 @@ integer
 **返回结果：**
 
 -   `request_id` (string) - 请求 ID
-    
 -   `profile_schemas` (array) - 画像模板列表，每个模板包含：
-    
 -   `name` (string) - 画像模板名称
-    
 -   `description` (string) - 画像模板描述
-    
 -   `profile_schema_id` (string) - 画像模板 ID
-    
 -   `total` (integer) - 总数
-    
 
 **示例代码：**
 
-## cURL
+#### cURL
 
 ```
 # 获取画像模板列表
@@ -1224,11 +1171,9 @@ curl --location --request GET 'https://dashscope.aliyuncs.com/api/v2/apps/memory
 }
 ```
 
-## Python
+#### Python
 
-**说明**
-
-Python SDK 暂未提供此接口的封装，以下示例通过 requests 库直接调用 API。安装命令：`pip install requests`
+**说明**Python SDK 暂未提供此接口的封装，以下示例通过 requests 库直接调用 API。安装命令：`pip install requests`
 
 ```
 import os
@@ -1258,15 +1203,13 @@ print(f"总数: {result.get('total')}")
 
 **查询参数：**`memory_library_id`：记忆库 ID，最大 32 个字符，在[记忆库](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)卡片上获取。
 
-**说明**
-
-如不传此参数，会自动选择默认记忆库ID。
+**说明**如不传此参数，会自动选择默认记忆库ID。
 
 **返回结果：**`request_id` (string) - 请求ID
 
 **示例代码：**
 
-## cURL
+#### cURL
 
 ```
 # 删除画像模板
@@ -1281,11 +1224,9 @@ curl --location --request DELETE 'https://dashscope.aliyuncs.com/api/v2/apps/mem
 }
 ```
 
-## Python
+#### Python
 
-**说明**
-
-Python SDK 暂未提供此接口的封装，以下示例通过 requests 库直接调用 API。安装命令：`pip install requests`
+**说明**Python SDK 暂未提供此接口的封装，以下示例通过 requests 库直接调用 API。安装命令：`pip install requests`
 
 ```
 import os
@@ -1328,8 +1269,6 @@ string
 否
 
 记忆库 ID，最大 32 个字符，在[记忆库](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)卡片上获取。
-
-**说明**
 
 如不传此参数，会自动选择默认记忆库ID。
 
@@ -1401,7 +1340,7 @@ string
 
 **示例代码：**
 
-## cURL
+#### cURL
 
 ```
 # 更新画像模板
@@ -1438,11 +1377,9 @@ curl --location --request PATCH 'https://dashscope.aliyuncs.com/api/v2/apps/memo
 }
 ```
 
-## Python
+#### Python
 
-**说明**
-
-Python SDK 暂未提供此接口的封装，以下示例通过 requests 库直接调用 API。安装命令：`pip install requests`
+**说明**Python SDK 暂未提供此接口的封装，以下示例通过 requests 库直接调用 API。安装命令：`pip install requests`
 
 ```
 import os
@@ -1492,32 +1429,22 @@ print(response.json())
 
 **查询参数：**`memory_library_id`：记忆库 ID，最大 32 个字符，在[记忆库](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)卡片上获取。
 
-**说明**
-
-如不传此参数，会自动选择默认记忆库ID。
+**说明**如不传此参数，会自动选择默认记忆库ID。
 
 **返回结果：**
 
 -   `request_id` (string) - 请求ID
-    
 -   `name` (string) - 画像模板名称
-    
 -   `description` (string) - 画像模板描述
-    
 -   `attributes` (array) - 属性列表，每个属性包含：
-    
 -   `attribute_id` (string) - 属性ID
-    
 -   `name` (string) - 名称
-    
 -   `description` (string) - 描述
-    
 -   `default_value` (string) - 属性初始值
-    
 
 **示例代码：**
 
-## cURL
+#### cURL
 
 ```
 # 获取画像模板详情
@@ -1552,11 +1479,9 @@ curl --location --request GET 'https://dashscope.aliyuncs.com/api/v2/apps/memory
 }
 ```
 
-## Python
+#### Python
 
-**说明**
-
-Python SDK 暂未提供此接口的封装，以下示例通过 requests 库直接调用 API。安装命令：`pip install requests`
+**说明**Python SDK 暂未提供此接口的封装，以下示例通过 requests 库直接调用 API。安装命令：`pip install requests`
 
 ```
 import os
@@ -1591,9 +1516,7 @@ for attr in result.get("attributes", []):
     
 -   `memory_library_id`：记忆库 ID，最大 32 个字符，在[记忆库](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)卡片上获取。
     
-    **说明**
-    
-    如不传此参数，会自动选择默认记忆库ID。
+    **说明**如不传此参数，会自动选择默认记忆库ID。
     
 
 **返回结果：**
@@ -1601,9 +1524,7 @@ for attr in result.get("attributes", []):
 返回字段包括：
 
 -   `request_id` (string) - 请求ID
-    
 -   `profile` (object) - 用户画像对象，包含以下字段：
-    
 
 **字段**
 
@@ -1657,7 +1578,7 @@ value（提取的属性值，未提取时不存在此字段）
 
 **示例代码：**
 
-## cURL
+#### cURL
 
 ```
 # 获取用户画像
@@ -1772,11 +1693,9 @@ curl --location --request GET 'https://dashscope.aliyuncs.com/api/v2/apps/memory
 }
 ```
 
-## Python
+#### Python
 
-**说明**
-
-需要安装 agentscope-runtime，安装命令：`pip install agentscope-runtime>=1.1.5`
+**说明**需要安装 agentscope-runtime，安装命令：`pip install agentscope-runtime>=1.1.5`
 
 ```
 from agentscope_runtime.tools.modelstudio_memory import (
@@ -1843,4 +1762,4 @@ InternalError
 
 稍后重试，如持续出现请联系技术支持
 
-更多错误码信息，请参考[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+更多错误码信息，请参考[错误码](raw/model-api-reference/preparations/error-code.md)。

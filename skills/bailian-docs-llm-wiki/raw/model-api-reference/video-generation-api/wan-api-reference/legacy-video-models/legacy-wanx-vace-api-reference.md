@@ -9,24 +9,15 @@
 为确保调用成功，请务必保证模型、Endpoint URL 和 API Key 均属于**同一地域**。跨地域调用将会失败。
 
 -   [**选择模型**](https://help.aliyun.com/zh/model-studio/wan-vace-guide#scope-title)：确认模型所属的地域。
-    
 -   **选择 URL**：选择对应的地域 Endpoint URL，支持HTTP URL。
-    
--   **配置 API Key**：选择地域并[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-    
+-   **配置 API Key**：选择地域并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
-**说明**
+**说明**本文的示例代码适用于**北京地域**。
 
-本文的示例代码适用于**北京地域**。
-
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
@@ -36,21 +27,781 @@
 
 ### 步骤1：创建任务获取任务ID
 
-## **北京**
+#### 北京
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## **新加坡**
+#### 新加坡
 
 `POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
 #### 请求参数
 
-## **多图参考**
+##### 请求头（Headers）
+
+**Content-Type**`string`**（必选）**
+
+请求内容类型。此参数必须设置为`application/json`。
+
+**Authorization**`string`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+**X-DashScope-Async**`string`**（必选）**
+
+异步处理配置参数。HTTP请求只支持异步，**必须设置为**`enable`。
+
+**重要**缺少此请求头将报错：“current user api does not support synchronous calls”。
+
+##### 请求体（Request Body）
+
+#### 多图参考
+
+**model** `string` **（必选）**
+
+模型名称。示例值：wanx2.1-vace-plus。
+
+**input** `object` **（必选）**
+
+输入的基本信息，如提示词等。
+
+属性
+
+**prompt**`string`**（必选）**
+
+提示词，用来描述生成视频中期望包含的元素和视觉特点。
+
+支持中英文，长度不超过800个字符，每个汉字/字母占一个字符，超过部分会自动截断。
+
+提示词技巧请参见[文生视频/图生视频Prompt指南](raw/model-user-guide/use-cases/text-to-video-prompt.md)。
+
+**function**`string`**（必选）**
+
+功能名称。多图参考设置为`image_reference`。
+
+多图参考支持最多3张参考图。图像内容可以包括主体与背景，例如人物、动物、服饰、场景等。使用 `prompt` 描述期望生成的视频画面内容，模型可将多张图片融合生成连贯的视频内容。
+
+**ref\_images\_url**`array[string]` **（必选）**
+
+输入参考图像的URL 数组。
+
+1.  公网URL：
+    
+    -   支持 HTTP 和 HTTPS 协议。
+    -   示例值：[](https://xxx/xxx.mp3)[https://xxx/xxx.mp3](https://xxx/xxx.mp3)。
+2.  临时URL：
+    
+    -   支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
+
+参考图像支持**1-3 张**图像，若超过 3 张，则仅保留前 3 张作为输入。
+
+图像限制：
+
+-   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
+-   图像分辨率：图像的宽和高范围在\[360, 2000\]，单位像素。
+-   图像大小：不超过10MB。
+-   URL地址中不能包含中文字符。
+
+使用建议：
+
+-   若使用参考图像中的主体时，建议每张图像中仅包含一个主体。背景建议为纯色（如白色或单一颜色），以便更好地突出主体。
+-   若使用参考图像的背景时，背景图像最多只有一张，且背景图像中不包含任何主体对象。
+
+**parameters** `object` （可选）
+
+视频处理参数，如设置水印等。
+
+属性
+
+**obj\_or\_bg** `array[string]` （可选）
+
+该参数用于标识每张参考图像的用途，与 `ref_images_url` 参数一一对应。数组中每个元素表示对应位置的图像为“主体”还是“背景”：
+
+-   `obj`：表示该图像作为主体参考。
+-   `bg`：表示该图像作为背景参考 （最多仅允许一个）。
+
+使用说明：
+
+-   建议传入该参数，且长度必须与 `ref_images_url`保持一致，否则将报错。
+-   仅当 `ref_images_url`为单元素数组时，可不传，此时默认值为 `["obj"]`。
+
+示例值： \["obj", "obj", "bg"\]。
+
+**size** `string` （可选）
+
+生成视频的分辨率（宽\*高）。目前支持生成720P 视频，分辨率的取值为：
+
+-   `1280*720`（默认值）：视频宽高比为16:9。其中，1280代表宽度，720代表高度。
+-   `720*1280`：视频宽高比为9:16。
+-   `960*960`：视频宽高比为1:1。
+-   `832*1088`：视频宽高比为3:4。
+-   `1088*832`：视频宽高比为4:3。
+
+**duration** `integer` （可选）
+
+视频生成时长，单位为秒。当前参数值固定为5，且不支持修改。模型将始终生成5秒时长的视频。
+
+**prompt\_extend**`bool` （可选）
+
+是否开启prompt智能改写。开启后使用大模型对输入prompt进行智能改写。对于较短的prompt生成效果提升明显，但会增加耗时。
+
+-   `true`（默认值）：开启智能改写。
+-   `false`：关闭智能改写。
+
+**seed**`integer`（可选）
+
+随机数种子，用于控制模型生成内容的随机性。seed参数取值范围是`[0, 2147483647]`。
+
+如果不提供，则算法自动生成一个随机数作为种子。如果您希望生成内容保持相对稳定，请使用相同的seed参数值。
+
+**watermark** `bool`（可选）
+
+是否添加水印标识，水印位于图片右下角，文案为“AI生成”。
+
+-   `false`（默认值）：不添加水印。
+-   `true`：添加水印。
+
+#### 视频重绘
+
+**model** `string` **（必选）**
+
+模型名称。示例值：wanx2.1-vace-plus。
+
+**input** `object` **（必选）**
+
+输入的基本信息，如提示词等。
+
+属性
+
+**prompt**`string`**（必选）**
+
+提示词，用来描述生成视频中期望包含的元素和视觉特点。
+
+支持中英文，长度不超过800个字符，每个汉字/字母占一个字符，超过部分会自动截断。
+
+提示词技巧请参见[文生视频/图生视频Prompt指南](raw/model-user-guide/use-cases/text-to-video-prompt.md)。
+
+**function**`string`**（必选）**
+
+功能名称。视频重绘设置为 `video_repainting`。
+
+视频重绘支持从输入视频中提取主体姿态与动作、构图与运动轮廓以及线稿结构，结合文本提示词（prompt），生成具有相同动态特征的新视频。同时，还支持通过参考图像替换原视频中的主体，例如更换角色形象但仍保留原有动作。
+
+**video\_url**`string` **（必选）**
+
+输入视频的URL地址。
+
+1.  公网URL：
+    
+    -   支持 HTTP 和 HTTPS 协议。
+    -   示例值：[](https://xxx/xxx.mp3)[https://xxx/xxx.mp3](https://xxx/xxx.mp3)。
+2.  临时URL：
+    
+    -   支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
+
+视频限制：
+
+-   视频格式：MP4。
+-   视频帧率：大于等于16FPS。
+-   视频大小：不超过50MB。
+-   视频长度：不超过5秒，否则取视频的前5秒。
+-   URL地址中不能包含中文字符。
+
+关于输出视频的分辨率：
+
+-   若输入视频分辨率 ≤ 720P，输出将保留原始分辨率；
+-   若输入视频分辨率 > 720P，则在保持原视频宽高比的前提下，按比例缩放至不超过 720P。
+
+关于输出视频的时长：
+
+-   输出视频时长与输入视频一致，最长不超过 5 秒。
+-   示例：若输入视频为 3 秒，则输出也为 3 秒；若输入为 6 秒，则输出为前 5 秒。
+
+**ref\_images\_url**`array[string]` （可选）
+
+输入参考图像的 URL数组。
+
+1.  公网URL：
+    
+    -   支持 HTTP 和 HTTPS 协议。
+    -   示例值：[](https://xxx/xxx.mp3)[https://xxx/xxx.mp3](https://xxx/xxx.mp3)。
+2.  临时URL：
+    
+    -   支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
+
+仅支持传入**1张**参考图像，且该图像建议为主体图像，用于替换输入视频中的主体内容。
+
+图像限制：
+
+-   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
+-   图像分辨率：图像的宽度和高度范围为\[360, 2000\]，单位为像素。
+-   图像大小：不超过10MB。
+-   URL地址中不能包含中文字符。
+
+使用建议：
+
+-   若使用参考图像中的主体时，建议每张图像仅包含一个主体。背景建议为纯色（如白色或单一颜色），以便更好地突出主体。
+
+**parameters** `object` **（必选）**
+
+视频处理参数，如设置水印等。
+
+属性
+
+**control\_condition** `string` **（必选）**
+
+设置视频特征提取的方式。
+
+-   `posebodyface`：提取输入视频中主体的脸部表情和肢体动作，适用于需保留主体表情细节的场景。
+-   `posebody`：提取输入视频中主体的肢体动作（不含脸部表情），适用于只需要控制主体身体动作的场景。
+-   `depth`：提取输入视频的构图和运动轮廓。
+-   `scribble`：提取输入视频的线稿结构。
+
+**strength** `float` （可选）
+
+调节 `control_condition` 所指定的视频特征提取方式对生成视频的控制强度。
+
+默认值为1.0，取值范围\[0.0, 1.0\]。
+
+数值越大，生成视频越贴近原视频动作和构图；数值越小，生成内容越自由。
+
+**prompt\_extend**`bool` （可选）
+
+是否开启prompt智能改写。开启后使用大模型对输入prompt进行智能改写。对于较短的prompt生成效果提升明显，但会增加耗时。
+
+-   `true`（默认值）：开启智能改写。
+-   `false`：关闭智能改写。**（推荐）**
+
+> 当文本描述与输入的视频内容不一致时，模型可能产生误解。建议手动关闭智能扩写，并在 `prompt` 中提供清晰、具体的画面描述，以提升生成一致性与准确性。
+
+**seed**`integer`（可选）
+
+随机数种子，用于控制模型生成内容的随机性。seed参数取值范围是`[0, 2147483647]`。
+
+如果不提供，则算法自动生成一个随机数作为种子。如果您希望生成内容保持相对稳定，请使用相同的seed参数值。
+
+**watermark** `bool`（可选）
+
+是否添加水印标识，水印位于图片右下角，文案为“AI生成”。
+
+-   `false`（默认值）：不添加水印。
+-   `true`：添加水印。
+
+#### 局部编辑
+
+**model** `string` **（必选）**
+
+模型名称。示例值：wanx2.1-vace-plus。
+
+**input** `object` **（必选）**
+
+输入的基本信息，如提示词等。
+
+属性
+
+**prompt**`string`**（必选）**
+
+提示词，用来描述生成视频中期望包含的元素和视觉特点。
+
+支持中英文，长度不超过800个字符，每个汉字/字母占一个字符，超过部分会自动截断。
+
+提示词技巧请参见[文生视频/图生视频Prompt指南](raw/model-user-guide/use-cases/text-to-video-prompt.md)。
+
+**function**`string`**（必选）**
+
+功能名称。局部编辑设置为 `video_edit`。
+
+局部编辑支持对输入视频的指定区域进行增加、修改或删除元素，还可以对编辑区域的主体或背景进行替换，实现精细化的视频编辑。
+
+**video\_url**`string` **（必选）**
+
+输入视频的URL地址。
+
+1.  公网URL：
+    
+    -   支持 HTTP 和 HTTPS 协议。
+    -   示例值：[](https://xxx/xxx.mp3)[https://xxx/xxx.mp3](https://xxx/xxx.mp3)。
+2.  临时URL：
+    
+    -   支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
+
+视频限制：
+
+-   视频格式：MP4。
+-   视频帧率：大于等于16FPS。
+-   视频大小：不超过50MB。
+-   视频长度：不超过5秒，否则取视频的前5秒。
+-   URL地址中不能包含中文字符。
+
+关于输出视频的分辨率：
+
+-   若输入视频分辨率 ≤ 720P，输出将保留原始分辨率；
+-   若输入视频分辨率 > 720P，则在保持原视频宽高比的前提下，按比例缩放至不超过 720P。
+
+关于输出视频的时长：
+
+-   输出视频时长与输入视频一致，最长不超过 5 秒。
+-   示例：若输入视频为 3 秒，则输出也为 3 秒；若输入为 6 秒，则输出为前 5 秒。
+
+**ref\_images\_url**`array[string]` （可选）
+
+输入参考图像的URL数组。
+
+1.  公网URL：
+    
+    -   支持 HTTP 和 HTTPS 协议。
+    -   示例值：[](https://xxx/xxx.mp3)[https://xxx/xxx.mp3](https://xxx/xxx.mp3)。
+2.  临时URL：
+    
+    -   支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
+
+当前仅支持传入 **1 张**参考图像 ，该图像可作为主体或背景使用，用于替换输入视频中的对应内容。
+
+图像限制：
+
+-   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
+-   图像分辨率：图像的宽度和高度范围为\[360, 2000\]，单位为像素。
+-   图像大小：不超过10MB。
+-   URL地址中不能包含中文字符。
+
+使用建议：
+
+-   若使用参考图像中的主体时，建议每张图像中仅包含一个主体。背景建议为纯色（如白色或单一颜色），以便更好地突出主体。
+-   若使用参考图像的背景时，背景图像中不包含任何主体对象。
+
+**mask\_image\_url**`string` （可选）
+
+掩码图像的URL地址。
+
+1.  公网URL：
+    
+    -   支持 HTTP 和 HTTPS 协议。
+    -   示例值：[](https://xxx/xxx.mp3)[https://xxx/xxx.mp3](https://xxx/xxx.mp3)。
+2.  临时URL：
+    
+    -   支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
+
+该参数用于指定视频的编辑区域。与 `mask_video_url` 参数二选一填写，**推荐优先使用此参数** 。
+
+掩码图像的白色区域（像素值严格为 \[255, 255, 255\]）表示需要编辑的部分；黑色区域（像素值严格为 \[0, 0, 0\]）表示保留不变的区域。
+
+图像限制：
+
+-   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
+-   图像分辨率：和输入视频（`video_url`）分辨率严格相同。
+-   图像大小：不超过10MB。
+-   URL地址中不能包含中文字符。
+
+**mask\_frame\_id**`integer` （可选）
+
+当 `mask_image_url` 不为空时，该参数生效，用于标识掩码目标出现在视频中的哪一帧，以“帧 ID”表示。
+
+默认值为 1，单位为帧，表示视频的第一帧（首帧）。
+
+取值范围为`[1, max_frame_id]`，其中`max_frame_id=输入视频帧率*输入视频时长+1`。
+
+> 例如，输入视频（`video_url`）帧率为16FPS，表示每秒 16 帧，视频时长为5秒，因此输入视频的总帧数为16\*5+1=81，即max\_frame\_id=81。
+
+**mask\_video\_url**`string` （可选）
+
+掩码视频的URL地址。
+
+1.  公网URL：
+    
+    -   支持 HTTP 和 HTTPS 协议。
+    -   示例值：[](https://xxx/xxx.mp3)[https://xxx/xxx.mp3](https://xxx/xxx.mp3)。
+2.  临时URL：
+    
+    -   支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
+
+该参数用于指定视频的编辑区域。与`mask_image_url`参数，二选一填写。
+
+掩码视频的视频格式、帧率、分辨率、长度需与输入视频（`video_url`）完全一致。
+
+掩码视频的白色区域（像素值严格为 \[255, 255, 255\]）表示需要编辑的部分；黑色区域（像素值严格为 \[0, 0, 0\]）表示保留不变的区域。
+
+**parameters** `object` （可选）
+
+视频处理参数，如设置水印等。
+
+属性
+
+**control\_condition** `string` （可选）
+
+设置视频特征提取的方式。默认为""，表示不做任何提取。
+
+-   `posebodyface`：提取输入视频的主体的脸部表情和肢体动作，适用于主体脸部在画面中占比较大、特征清晰可见的场景。
+-   `depth`：提取输入视频的构图和运动轮廓。
+
+**mask\_type** `string` （可选）
+
+当 `mask_image_url` 不为空时，该参数生效，用于指定编辑区域的行为方式。
+
+-   `tracking`（默认值）：编辑区域将根据目标物体的运动轨迹动态跟随，适用于主体运动场景。
+-   `fixed` ：编辑区域保持固定不变，不会随画面内容变化。
+
+**expand\_ratio** `float` （可选）
+
+当 `mask_type` 为 `tracking` 时，该参数生效，表示对掩码区域进行向外扩展的比例。
+
+取值范围为 \[0.0, 1.0\]，默认值为 0.05。推荐使用默认值。
+
+取值越小，掩码区域越贴合目标物体；取值越大，掩码区域的扩展范围越广。
+
+**expand\_mode** `string` （可选）
+
+当 `mask_type` 为 `tracking` 时，该参数生效，表示掩码区域的形状。
+
+算法会根据选择的`expand_mode`，基于输入的掩码图像生成对应形状的掩码视频。支持的取值如下：
+
+-   `hull`（默认值）：多边形模式，表示使用一个多边形包裹掩码目标。
+-   `bbox`：边界框模式，表示使用一个矩形包裹掩码目标。
+-   `original`：原始模式，表示尽量保持与原始掩码目标的形状一致。
+
+**size** `string` （可选）
+
+生成视频的分辨率（宽\*高）。目前支持生成720P 视频，分辨率的取值为：
+
+-   `1280*720`（默认值）：视频宽高比为16:9。其中，1280代表宽度，720代表高度。
+-   `720*1280`：视频宽高比为9:16。
+-   `960*960`：视频宽高比为1:1。
+-   `832*1088`：视频宽高比为3:4。
+-   `1088*832`：视频宽高比为4:3。
+
+**duration** `integer` （可选）
+
+视频生成时长，单位为秒。当前参数值固定为5，且不支持修改。模型将始终生成5秒时长的视频。
+
+**prompt\_extend**`bool` （可选）
+
+是否开启prompt智能改写。开启后使用大模型对输入prompt进行智能改写。对于较短的prompt生成效果提升明显，但会增加耗时。
+
+-   `true`（默认值）：开启智能改写。
+-   `false`：关闭智能改写。**（推荐）**
+
+> 当文本描述与输入的视频内容不一致时，模型可能产生误解。建议手动关闭智能扩写，并在 `prompt` 中提供清晰、具体的画面描述，以提升生成一致性与准确性。
+
+**seed**`integer`（可选）
+
+随机数种子，用于控制模型生成内容的随机性。seed参数取值范围是`[0, 2147483647]`。
+
+如果不提供，则算法自动生成一个随机数作为种子。如果您希望生成内容保持相对稳定，请使用相同的seed参数值。
+
+**watermark** `bool`（可选）
+
+是否添加水印标识，水印位于图片右下角，文案为“AI生成”。
+
+-   `false`（默认值）：不添加水印。
+-   `true`：添加水印。
+
+#### 视频延展
+
+**model** `string` **（必选）**
+
+模型名称。示例值：wanx2.1-vace-plus。
+
+**input** `object` **（必选）**
+
+输入的基本信息，如提示词等。
+
+属性
+
+**prompt**`string`**（必选）**
+
+提示词，用来描述生成视频中期望包含的元素和视觉特点。
+
+支持中英文，长度不超过800个字符，每个汉字/字母占一个字符，超过部分会自动截断。
+
+提示词技巧请参见[文生视频/图生视频Prompt指南](raw/model-user-guide/use-cases/text-to-video-prompt.md)。
+
+**function**`string`**（必选）**
+
+功能名称。视频延展设置为 `video_extension`。
+
+视频延展支持基于图像或视频生成延续性内容，还支持通过参考视频提取动态特征（如动作、构图等），用于指导生成具有相似运动表现的视频。
+
+> 延长后的视频总时长为 5 秒 ，请注意：这是指最终输出视频的完整时长为 5 秒，而非在原视频基础上延长 5 秒。
+
+**first\_frame\_url**`string` （可选）
+
+首帧图像的URL地址。
+
+1.  公网URL：
+    
+    -   支持 HTTP 和 HTTPS 协议。
+    -   示例值：[](https://xxx/xxx.mp3)[https://xxx/xxx.mp3](https://xxx/xxx.mp3)。
+2.  临时URL：
+    
+    -   支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
+
+图像限制：
+
+-   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
+-   图像分辨率：图像的宽和高范围在\[360, 2000\]，单位像素。
+-   图像大小：不超过10MB。
+-   URL地址中不能包含中文字符。
+
+**last\_frame\_url**`string`（可选）
+
+尾帧图像的URL地址。
+
+1.  公网URL：
+    
+    -   支持 HTTP 和 HTTPS 协议。
+    -   示例值：[](https://xxx/xxx.mp3)[https://xxx/xxx.mp3](https://xxx/xxx.mp3)。
+2.  临时URL：
+    
+    -   支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
+
+图像限制：
+
+-   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
+-   图像分辨率：图像的宽和高范围在\[360, 2000\]，单位像素。
+-   图像大小：不超过10MB。
+-   URL地址中不能包含中文字符。
+
+**first\_clip\_url**`string` （可选）
+
+首段视频的URL地址。
+
+1.  公网URL：
+    
+    -   支持 HTTP 和 HTTPS 协议。
+    -   示例值：[](https://xxx/xxx.mp3)[https://xxx/xxx.mp3](https://xxx/xxx.mp3)。
+2.  临时URL：
+    
+    -   支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
+
+视频限制：
+
+-   视频格式：MP4。
+-   视频帧率：大于等于16FPS。当`first_clip_url`和`last_clip_url`同时使用时，建议两个片段的帧率保持一致。
+-   视频大小：不超过50MB。
+-   视频长度：不超过3秒，否则取视频的前3秒。若同时填写`first_clip_url`和`last_clip_url`时，两段视频的总时长不超过3秒。
+-   URL地址中不能包含中文字符。
+
+关于输出视频的分辨率：
+
+-   若输入视频分辨率 ≤ 720P，输出将保留原始分辨率；
+-   若输入视频分辨率 > 720P，则在保持原视频宽高比的前提下，按比例缩放至不超过 720P。
+
+**last\_clip\_url**`string`（可选）
+
+尾段视频的URL地址。
+
+1.  公网URL：
+    
+    -   支持 HTTP 和 HTTPS 协议。
+    -   示例值：[](https://help-static-aliyun-doc.aliyuncs.com/xxx.mp3)[https://help-static-aliyun-doc.aliyuncs.com/xxx.mp3](https://help-static-aliyun-doc.aliyuncs.com/xxx.mp3)。
+2.  临时URL：
+    
+    -   支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
+
+视频限制：
+
+-   视频格式：MP4。
+-   视频帧率：大于等于16FPS。当`first_clip_url`和`last_clip_url`同时使用时，建议两个片段的帧率保持一致。
+-   视频大小：不超过50MB。
+-   视频长度：不超过3秒，否则取视频的前3秒。若同时填写`first_clip_url`和`last_clip_url`时，两段视频的总时长不超过3秒。
+-   URL地址中不能包含中文字符。
+
+关于输出视频的分辨率：
+
+-   若输入视频分辨率 ≤ 720P，输出将保留原始分辨率；
+-   若输入视频分辨率 > 720P，则在保持原视频宽高比的前提下，按比例缩放至不超过 720P。
+
+**video\_url**`string` （可选）
+
+输入视频的URL地址。
+
+1.  公网URL：
+    
+    -   支持 HTTP 和 HTTPS 协议。
+    -   示例值：[](https://help-static-aliyun-doc.aliyuncs.com/xxx.mp3)[https://help-static-aliyun-doc.aliyuncs.com/xxx.mp3](https://help-static-aliyun-doc.aliyuncs.com/xxx.mp3)。
+2.  临时URL：
+    
+    -   支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
+
+该视频主要用于提取其中的运动特征，与 `first_frame_url` 、 `last_frame_url` 、`first_clip_url` 、 `last_clip_url`参数配合使用，以指导生成具有相似运动表现的延展视频。
+
+视频限制：
+
+-   视频格式：MP4。
+-   视频帧率：大于等于16FPS，与前后片段保持一致。
+-   视频分辨率：与前后帧、前后片段保持一致。
+-   视频大小：不超过50MB。
+-   视频长度：不超过5秒，否则取视频的前5秒。
+-   URL地址中不能包含中文字符。
+
+**parameters** `object` （可选）
+
+视频处理参数，如设置输出视频的分辨率等。
+
+属性
+
+**control\_condition** `string` （可选）
+
+设置视频特征提取的方式，输入video\_url时必选。默认为""，表示不做任何提取。
+
+-   `posebodyface`：提取输入视频的主体的脸部表情和肢体动作。
+-   `depth`：提取输入视频的构图和运动轮廓。
+
+**duration** `integer` （可选）
+
+视频生成时长，单位为秒。当前参数值固定为5，且不支持修改。模型将始终生成5秒时长的视频。
+
+**prompt\_extend**`bool` （可选）
+
+是否开启prompt智能改写。开启后使用大模型对输入prompt进行智能改写。对于较短的prompt生成效果提升明显，但会增加耗时。
+
+-   `true`（默认值）：开启智能改写。
+-   `false`：关闭智能改写。**（推荐）**
+
+> 当文本描述与输入的视频内容不一致时，模型可能产生误解。建议手动关闭智能扩写，并在 `prompt` 中提供清晰、具体的画面描述，以提升生成一致性与准确性。
+
+**seed**`integer`（可选）
+
+随机数种子，用于控制模型生成内容的随机性。seed参数取值范围是`[0, 2147483647]`。
+
+如果不提供，则算法自动生成一个随机数作为种子。如果您希望生成内容保持相对稳定，请使用相同的seed参数值。
+
+**watermark** `bool`（可选）
+
+是否添加水印标识，水印位于图片右下角，文案为“AI生成”。
+
+-   `false`（默认值）：不添加水印。
+-   `true`：添加水印。
+
+#### 视频画面扩展
+
+**model** `string` **（必选）**
+
+模型名称。示例值：wanx2.1-vace-plus。
+
+**input** `object` **（必选）**
+
+输入的基本信息，如提示词等。
+
+属性
+
+**prompt**`string`**（必选）**
+
+提示词，用来描述生成视频中期望包含的元素和视觉特点。
+
+支持中英文，长度不超过800个字符，每个汉字/字母占一个字符，超过部分会自动截断。
+
+提示词技巧请参见[文生视频/图生视频Prompt指南](raw/model-user-guide/use-cases/text-to-video-prompt.md)。
+
+**function**`string`**（必选）**
+
+功能名称。视频画面扩展设置为 `video_outpainting`。
+
+视频画面扩展支持对视频在上、下、左、右四个方向按比例扩展。
+
+**video\_url**`string` **（必选）**
+
+输入视频的URL地址。
+
+1.  公网URL：
+    
+    -   支持 HTTP 和 HTTPS 协议。
+    -   示例值：[](https://xxx/xxx.mp3)[https://xxx/xxx.mp3](https://xxx/xxx.mp3)。
+2.  临时URL：
+    
+    -   支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
+
+视频限制：
+
+-   视频格式：MP4。
+-   视频帧率：大于等于16FPS。
+-   视频大小：不超过50MB。
+-   视频长度：不超过5秒，否则取视频的前5秒。
+-   URL地址中不能包含中文字符。
+
+关于输出视频的分辨率：
+
+-   若输入视频分辨率 ≤ 720P，输出将保留原始分辨率；
+-   若输入视频分辨率 > 720P，则在保持原视频宽高比的前提下，按比例缩放至不超过 720P。
+
+关于输出视频的时长：
+
+-   输出视频时长与输入视频一致，最长不超过 5 秒。
+-   示例：若输入视频为 3 秒，则输出也为 3 秒；若输入为 6 秒，则输出为前 5 秒。
+
+**parameters** `object` （可选）
+
+视频处理参数，如设置扩展比例等。
+
+属性
+
+**top\_scale** `float` （可选）
+
+视频画面居中，向上按比例扩展视频。
+
+取值范围为\[1.0, 2.0\]，默认值为1.0，表示不扩展。
+
+**bottom\_scale** `float` （可选）
+
+视频画面居中，向下按比例扩展视频。
+
+取值范围为\[1.0, 2.0\]，默认值为1.0，表示不扩展。
+
+**left\_scale** `float` （可选）
+
+视频画面居中，向左按比例扩展视频。
+
+取值范围为\[1.0, 2.0\]，默认值为1.0，表示不扩展。
+
+**right\_scale** `float` （可选）
+
+视频画面居中，向右按比例扩展视频。
+
+取值范围为\[1.0, 2.0\]，默认值为1.0，表示不扩展。
+
+**duration** `integer` （可选）
+
+视频生成时长，单位为秒。当前参数值固定为5，且不支持修改。模型将始终生成5秒时长的视频。
+
+**prompt\_extend**`bool` （可选）
+
+是否开启prompt智能改写。开启后使用大模型对输入prompt进行智能改写。对于较短的prompt生成效果提升明显，但会增加耗时。
+
+-   `true`（默认值）：开启智能改写。
+-   `false`：关闭智能改写。**（推荐）**
+
+> 当文本描述与输入的视频内容不一致时，模型可能产生误解。建议手动关闭智能扩写，并在 `prompt` 中提供清晰、具体的画面描述，以提升生成一致性与准确性。
+
+**seed**`integer`（可选）
+
+随机数种子，用于控制模型生成内容的随机性。seed参数取值范围是`[0, 2147483647]`。
+
+如果不提供，则算法自动生成一个随机数作为种子。如果您希望生成内容保持相对稳定，请使用相同的seed参数值。
+
+**watermark** `bool`（可选）
+
+是否添加水印标识，水印位于图片右下角，文案为“AI生成”。
+
+-   `false`（默认值）：不添加水印。
+-   `true`：添加水印。
+
+多图参考
 
 ```
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -76,7 +827,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 视频重绘
+视频重绘
 
 ```
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -98,7 +849,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## **局部编辑**
+局部编辑
 
 ```
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -123,7 +874,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 视频延展
+视频延展
 
 ```
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -144,7 +895,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 视频画面扩展
+视频画面扩展
 
 ```
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -169,946 +920,44 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-##### 请求头（Headers）
-
-**Content-Type** `_string_` **（必选）**
-
-请求内容类型。此参数必须设置为`application/json`。
-
-**Authorization** `_string_`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-**X-DashScope-Async** `_string_` **（必选）**
-
-异步处理配置参数。HTTP请求只支持异步，**必须设置为**`**enable**`。
-
-**重要**
-
-缺少此请求头将报错：“current user api does not support synchronous calls”。
-
-##### 请求体（Request Body）
-
-## 多图参考
-
-**model** `_string_` **（必选）**
-
-模型名称。示例值：wanx2.1-vace-plus。
-
-**input** `_object_` **（必选）**
-
-输入的基本信息，如提示词等。
-
-**属性**
-
-**prompt** `_string_` **（必选）**
-
-提示词，用来描述生成视频中期望包含的元素和视觉特点。
-
-支持中英文，长度不超过800个字符，每个汉字/字母占一个字符，超过部分会自动截断。
-
-提示词技巧请参见[文生视频/图生视频Prompt指南](https://help.aliyun.com/zh/model-studio/text-to-video-prompt)。
-
-**function** `_string_` **（必选）**
-
-功能名称。多图参考设置为`**image_reference**`。
-
-多图参考支持最多3张参考图。图像内容可以包括主体与背景，例如人物、动物、服饰、场景等。使用 `prompt` 描述期望生成的视频画面内容，模型可将多张图片融合生成连贯的视频内容。
-
-**ref\_images\_url** `_array[string]_` **（必选）**
-
-输入参考图像的URL 数组。
-
-1.  公网URL：
-    
-    -   支持 HTTP 和 HTTPS 协议。
-        
-    -   示例值：https://xxx/xxx.mp3。
-        
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过[上传文件获取临时 URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-        
-    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
-        
-
-参考图像支持 **1-3 张**图像，若超过 3 张，则仅保留前 3 张作为输入。
-
-图像限制：
-
--   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
-    
--   图像分辨率：图像的宽和高范围在\[360, 2000\]，单位像素。
-    
--   图像大小：不超过10MB。
-    
--   URL地址中不能包含中文字符。
-    
-
-使用建议：
-
--   若使用参考图像中的主体时，建议每张图像中仅包含一个主体。背景建议为纯色（如白色或单一颜色），以便更好地突出主体。
-    
--   若使用参考图像的背景时，背景图像最多只有一张，且背景图像中不包含任何主体对象。
-    
-
-**parameters** `_object_` （可选）
-
-视频处理参数，如设置水印等。
-
-**属性**
-
-**obj\_or\_bg** `_array[string]_` （可选）
-
-该参数用于标识每张参考图像的用途，与 `ref_images_url` 参数一一对应。数组中每个元素表示对应位置的图像为“主体”还是“背景”：
-
--   `obj`：表示该图像作为主体参考。
-    
--   `bg`：表示该图像作为背景参考 （最多仅允许一个）。
-    
-
-使用说明：
-
--   建议传入该参数，且长度必须与 `ref_images_url`保持一致，否则将报错。
-    
--   仅当 `ref_images_url`为单元素数组时，可不传，此时默认值为 `["obj"]`。
-    
-
-示例值： \["obj", "obj", "bg"\]。
-
-**size** `_string_` （可选）
-
-生成视频的分辨率（宽\*高）。目前支持生成720P 视频，分辨率的取值为：
-
--   `1280*720`（默认值）：视频宽高比为16:9。其中，1280代表宽度，720代表高度。
-    
--   `720*1280`：视频宽高比为9:16。
-    
--   `960*960`：视频宽高比为1:1。
-    
--   `832*1088`：视频宽高比为3:4。
-    
--   `1088*832`：视频宽高比为4:3。
-    
-
-**duration** `_integer_` （可选）
-
-视频生成时长，单位为秒。当前参数值固定为5，且不支持修改。模型将始终生成5秒时长的视频。
-
-**prompt\_extend** `_bool_` （可选）
-
-是否开启prompt智能改写。开启后使用大模型对输入prompt进行智能改写。对于较短的prompt生成效果提升明显，但会增加耗时。
-
--   `true`（默认值）：开启智能改写。
-    
--   `false`：关闭智能改写。
-    
-
-**seed** `_integer_` （可选）
-
-随机数种子，用于控制模型生成内容的随机性。seed参数取值范围是`[0, 2147483647]`。
-
-如果不提供，则算法自动生成一个随机数作为种子。如果您希望生成内容保持相对稳定，请使用相同的seed参数值。
-
-**watermark** `_bool_` （可选）
-
-是否添加水印标识，水印位于图片右下角，文案为“AI生成”。
-
--   `false`（默认值）：不添加水印。
-    
--   `true`：添加水印。
-    
-
-## 视频重绘
-
-**model** `_string_` **（必选）**
-
-模型名称。示例值：wanx2.1-vace-plus。
-
-**input** `_object_` **（必选）**
-
-输入的基本信息，如提示词等。
-
-**属性**
-
-**prompt** `_string_` **（必选）**
-
-提示词，用来描述生成视频中期望包含的元素和视觉特点。
-
-支持中英文，长度不超过800个字符，每个汉字/字母占一个字符，超过部分会自动截断。
-
-提示词技巧请参见[文生视频/图生视频Prompt指南](https://help.aliyun.com/zh/model-studio/text-to-video-prompt)。
-
-**function** `_string_` **（必选）**
-
-功能名称。视频重绘设置为 `**video_repainting**`。
-
-视频重绘支持从输入视频中提取主体姿态与动作、构图与运动轮廓以及线稿结构，结合文本提示词（prompt），生成具有相同动态特征的新视频。同时，还支持通过参考图像替换原视频中的主体，例如更换角色形象但仍保留原有动作。
-
-**video\_url** `_string_` **（必选）**
-
-输入视频的URL地址。
-
-1.  公网URL：
-    
-    -   支持 HTTP 和 HTTPS 协议。
-        
-    -   示例值：https://xxx/xxx.mp3。
-        
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过[上传文件获取临时 URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-        
-    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
-        
-
-视频限制：
-
--   视频格式：MP4。
-    
--   视频帧率：大于等于16FPS。
-    
--   视频大小：不超过50MB。
-    
--   视频长度：不超过5秒，否则取视频的前5秒。
-    
--   URL地址中不能包含中文字符。
-    
-
-关于输出视频的分辨率：
-
--   若输入视频分辨率 ≤ 720P，输出将保留原始分辨率；
-    
--   若输入视频分辨率 > 720P，则在保持原视频宽高比的前提下，按比例缩放至不超过 720P。
-    
-
-关于输出视频的时长：
-
--   输出视频时长与输入视频一致，最长不超过 5 秒。
-    
--   示例：若输入视频为 3 秒，则输出也为 3 秒；若输入为 6 秒，则输出为前 5 秒。
-    
-
-**ref\_images\_url** `_array[string]_` （可选）
-
-输入参考图像的 URL数组。
-
-1.  公网URL：
-    
-    -   支持 HTTP 和 HTTPS 协议。
-        
-    -   示例值：https://xxx/xxx.mp3。
-        
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过[上传文件获取临时 URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-        
-    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
-        
-
-仅支持传入**1张**参考图像，且该图像建议为主体图像，用于替换输入视频中的主体内容。
-
-图像限制：
-
--   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
-    
--   图像分辨率：图像的宽度和高度范围为\[360, 2000\]，单位为像素。
-    
--   图像大小：不超过10MB。
-    
--   URL地址中不能包含中文字符。
-    
-
-使用建议：
-
--   若使用参考图像中的主体时，建议每张图像仅包含一个主体。背景建议为纯色（如白色或单一颜色），以便更好地突出主体。
-    
-
-**parameters** `_object_` **（必选）**
-
-视频处理参数，如设置水印等。
-
-**属性**
-
-**control\_condition** `_string_` **（必选）**
-
-设置视频特征提取的方式。
-
--   `posebodyface`：提取输入视频中主体的脸部表情和肢体动作，适用于需保留主体表情细节的场景。
-    
--   `posebody`：提取输入视频中主体的肢体动作（不含脸部表情），适用于只需要控制主体身体动作的场景。
-    
--   `depth`：提取输入视频的构图和运动轮廓。
-    
--   `scribble`：提取输入视频的线稿结构。
-    
-
-**strength** `_float_` （可选）
-
-调节 `control_condition` 所指定的视频特征提取方式对生成视频的控制强度。
-
-默认值为1.0，取值范围\[0.0, 1.0\]。
-
-数值越大，生成视频越贴近原视频动作和构图；数值越小，生成内容越自由。
-
-**prompt\_extend** `_bool_` （可选）
-
-是否开启prompt智能改写。开启后使用大模型对输入prompt进行智能改写。对于较短的prompt生成效果提升明显，但会增加耗时。
-
--   `true`（默认值）：开启智能改写。
-    
--   `false`：关闭智能改写。**（推荐）**
-    
-
-> 当文本描述与输入的视频内容不一致时，模型可能产生误解。建议手动关闭智能扩写，并在 `prompt` 中提供清晰、具体的画面描述，以提升生成一致性与准确性。
-
-**seed** `_integer_` （可选）
-
-随机数种子，用于控制模型生成内容的随机性。seed参数取值范围是`[0, 2147483647]`。
-
-如果不提供，则算法自动生成一个随机数作为种子。如果您希望生成内容保持相对稳定，请使用相同的seed参数值。
-
-**watermark** `_bool_` （可选）
-
-是否添加水印标识，水印位于图片右下角，文案为“AI生成”。
-
--   `false`（默认值）：不添加水印。
-    
--   `true`：添加水印。
-    
-
-## 局部编辑
-
-**model** `_string_` **（必选）**
-
-模型名称。示例值：wanx2.1-vace-plus。
-
-**input** `_object_` **（必选）**
-
-输入的基本信息，如提示词等。
-
-**属性**
-
-**prompt** `_string_` **（必选）**
-
-提示词，用来描述生成视频中期望包含的元素和视觉特点。
-
-支持中英文，长度不超过800个字符，每个汉字/字母占一个字符，超过部分会自动截断。
-
-提示词技巧请参见[文生视频/图生视频Prompt指南](https://help.aliyun.com/zh/model-studio/text-to-video-prompt)。
-
-**function** `_string_` **（必选）**
-
-功能名称。局部编辑设置为 `**video_edit**`。
-
-局部编辑支持对输入视频的指定区域进行增加、修改或删除元素，还可以对编辑区域的主体或背景进行替换，实现精细化的视频编辑。
-
-**video\_url** `_string_` **（必选）**
-
-输入视频的URL地址。
-
-1.  公网URL：
-    
-    -   支持 HTTP 和 HTTPS 协议。
-        
-    -   示例值：https://xxx/xxx.mp3。
-        
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过[上传文件获取临时 URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-        
-    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
-        
-
-视频限制：
-
--   视频格式：MP4。
-    
--   视频帧率：大于等于16FPS。
-    
--   视频大小：不超过50MB。
-    
--   视频长度：不超过5秒，否则取视频的前5秒。
-    
--   URL地址中不能包含中文字符。
-    
-
-关于输出视频的分辨率：
-
--   若输入视频分辨率 ≤ 720P，输出将保留原始分辨率；
-    
--   若输入视频分辨率 > 720P，则在保持原视频宽高比的前提下，按比例缩放至不超过 720P。
-    
-
-关于输出视频的时长：
-
--   输出视频时长与输入视频一致，最长不超过 5 秒。
-    
--   示例：若输入视频为 3 秒，则输出也为 3 秒；若输入为 6 秒，则输出为前 5 秒。
-    
-
-**ref\_images\_url** `_array[string]_` （可选）
-
-输入参考图像的URL数组。
-
-1.  公网URL：
-    
-    -   支持 HTTP 和 HTTPS 协议。
-        
-    -   示例值：https://xxx/xxx.mp3。
-        
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过[上传文件获取临时 URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-        
-    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
-        
-
-当前仅支持传入 **1 张** 参考图像 ，该图像可作为主体或背景使用，用于替换输入视频中的对应内容。
-
-图像限制：
-
--   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
-    
--   图像分辨率：图像的宽度和高度范围为\[360, 2000\]，单位为像素。
-    
--   图像大小：不超过10MB。
-    
--   URL地址中不能包含中文字符。
-    
-
-使用建议：
-
--   若使用参考图像中的主体时，建议每张图像中仅包含一个主体。背景建议为纯色（如白色或单一颜色），以便更好地突出主体。
-    
--   若使用参考图像的背景时，背景图像中不包含任何主体对象。
-    
-
-**mask\_image\_url** `_string_` （可选）
-
-掩码图像的URL地址。
-
-1.  公网URL：
-    
-    -   支持 HTTP 和 HTTPS 协议。
-        
-    -   示例值：https://xxx/xxx.mp3。
-        
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过[上传文件获取临时 URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-        
-    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
-        
-
-该参数用于指定视频的编辑区域。与 `mask_video_url` 参数二选一填写，**推荐优先使用此参数** 。
-
-掩码图像的白色区域（像素值严格为 \[255, 255, 255\]）表示需要编辑的部分；黑色区域（像素值严格为 \[0, 0, 0\]）表示保留不变的区域。
-
-图像限制：
-
--   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
-    
--   图像分辨率：和输入视频（`video_url`）分辨率严格相同。
-    
--   图像大小：不超过10MB。
-    
--   URL地址中不能包含中文字符。
-    
-
-**mask\_frame\_id** `_integer_` （可选）
-
-当 `mask_image_url` 不为空时，该参数生效，用于标识掩码目标出现在视频中的哪一帧，以“帧 ID”表示。
-
-默认值为 1，单位为帧，表示视频的第一帧（首帧）。
-
-取值范围为`[1, max_frame_id]`，其中`max_frame_id=输入视频帧率*输入视频时长+1`。
-
-> 例如，输入视频（`video_url`）帧率为16FPS，表示每秒 16 帧，视频时长为5秒，因此输入视频的总帧数为16\*5+1=81，即max\_frame\_id=81。
-
-**mask\_video\_url** `_string_` （可选）
-
-掩码视频的URL地址。
-
-1.  公网URL：
-    
-    -   支持 HTTP 和 HTTPS 协议。
-        
-    -   示例值：https://xxx/xxx.mp3。
-        
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过[上传文件获取临时 URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-        
-    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
-        
-
-该参数用于指定视频的编辑区域。与`mask_image_url`参数，二选一填写。
-
-掩码视频的视频格式、帧率、分辨率、长度需与输入视频（`video_url`）完全一致。
-
-掩码视频的白色区域（像素值严格为 \[255, 255, 255\]）表示需要编辑的部分；黑色区域（像素值严格为 \[0, 0, 0\]）表示保留不变的区域。
-
-**parameters** `_object_` （可选）
-
-视频处理参数，如设置水印等。
-
-**属性**
-
-**control\_condition** `_string_` （可选）
-
-设置视频特征提取的方式。默认为""，表示不做任何提取。
-
--   `posebodyface`：提取输入视频的主体的脸部表情和肢体动作，适用于主体脸部在画面中占比较大、特征清晰可见的场景。
-    
--   `depth`：提取输入视频的构图和运动轮廓。
-    
-
-**mask\_type** `_string_` （可选）
-
-当 `mask_image_url` 不为空时，该参数生效，用于指定编辑区域的行为方式。
-
--   `tracking`（默认值）：编辑区域将根据目标物体的运动轨迹动态跟随，适用于主体运动场景。
-    
--   `fixed` ：编辑区域保持固定不变，不会随画面内容变化。
-    
-
-**expand\_ratio** `_float_` （可选）
-
-当 `mask_type` 为 `tracking` 时，该参数生效，表示对掩码区域进行向外扩展的比例。
-
-取值范围为 \[0.0, 1.0\]，默认值为 0.05。推荐使用默认值。
-
-取值越小，掩码区域越贴合目标物体；取值越大，掩码区域的扩展范围越广。
-
-**expand\_mode** `_string_` （可选）
-
-当 `mask_type` 为 `tracking` 时，该参数生效，表示掩码区域的形状。
-
-算法会根据选择的`expand_mode`，基于输入的掩码图像生成对应形状的掩码视频。支持的取值如下：
-
--   `hull`（默认值）：多边形模式，表示使用一个多边形包裹掩码目标。
-    
--   `bbox`：边界框模式，表示使用一个矩形包裹掩码目标。
-    
--   `original`：原始模式，表示尽量保持与原始掩码目标的形状一致。
-    
-
-**size** `_string_` （可选）
-
-生成视频的分辨率（宽\*高）。目前支持生成720P 视频，分辨率的取值为：
-
--   `1280*720`（默认值）：视频宽高比为16:9。其中，1280代表宽度，720代表高度。
-    
--   `720*1280`：视频宽高比为9:16。
-    
--   `960*960`：视频宽高比为1:1。
-    
--   `832*1088`：视频宽高比为3:4。
-    
--   `1088*832`：视频宽高比为4:3。
-    
-
-**duration** `_integer_` （可选）
-
-视频生成时长，单位为秒。当前参数值固定为5，且不支持修改。模型将始终生成5秒时长的视频。
-
-**prompt\_extend** `_bool_` （可选）
-
-是否开启prompt智能改写。开启后使用大模型对输入prompt进行智能改写。对于较短的prompt生成效果提升明显，但会增加耗时。
-
--   `true`（默认值）：开启智能改写。
-    
--   `false`：关闭智能改写。**（推荐）**
-    
-
-> 当文本描述与输入的视频内容不一致时，模型可能产生误解。建议手动关闭智能扩写，并在 `prompt` 中提供清晰、具体的画面描述，以提升生成一致性与准确性。
-
-**seed** `_integer_` （可选）
-
-随机数种子，用于控制模型生成内容的随机性。seed参数取值范围是`[0, 2147483647]`。
-
-如果不提供，则算法自动生成一个随机数作为种子。如果您希望生成内容保持相对稳定，请使用相同的seed参数值。
-
-**watermark** `_bool_` （可选）
-
-是否添加水印标识，水印位于图片右下角，文案为“AI生成”。
-
--   `false`（默认值）：不添加水印。
-    
--   `true`：添加水印。
-    
-
-## 视频延展
-
-**model** `_string_` **（必选）**
-
-模型名称。示例值：wanx2.1-vace-plus。
-
-**input** `_object_` **（必选）**
-
-输入的基本信息，如提示词等。
-
-**属性**
-
-**prompt** `_string_` **（必选）**
-
-提示词，用来描述生成视频中期望包含的元素和视觉特点。
-
-支持中英文，长度不超过800个字符，每个汉字/字母占一个字符，超过部分会自动截断。
-
-提示词技巧请参见[文生视频/图生视频Prompt指南](https://help.aliyun.com/zh/model-studio/text-to-video-prompt)。
-
-**function** `_string_` **（必选）**
-
-功能名称。视频延展设置为 `**video_extension**`。
-
-视频延展支持基于图像或视频生成延续性内容，还支持通过参考视频提取动态特征（如动作、构图等），用于指导生成具有相似运动表现的视频。
-
-> 延长后的视频总时长为 5 秒 ，请注意：这是指最终输出视频的完整时长为 5 秒，而非在原视频基础上延长 5 秒。
-
-**first\_frame\_url** `_string_` （可选）
-
-首帧图像的URL地址。
-
-1.  公网URL：
-    
-    -   支持 HTTP 和 HTTPS 协议。
-        
-    -   示例值：https://xxx/xxx.mp3。
-        
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过[上传文件获取临时 URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-        
-    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
-        
-
-图像限制：
-
--   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
-    
--   图像分辨率：图像的宽和高范围在\[360, 2000\]，单位像素。
-    
--   图像大小：不超过10MB。
-    
--   URL地址中不能包含中文字符。
-    
-
-**last\_frame\_url** `_string_`（可选）
-
-尾帧图像的URL地址。
-
-1.  公网URL：
-    
-    -   支持 HTTP 和 HTTPS 协议。
-        
-    -   示例值：https://xxx/xxx.mp3。
-        
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过[上传文件获取临时 URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-        
-    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
-        
-
-图像限制：
-
--   图像格式：JPG、JPEG、PNG、BMP、TIFF、WEBP。
-    
--   图像分辨率：图像的宽和高范围在\[360, 2000\]，单位像素。
-    
--   图像大小：不超过10MB。
-    
--   URL地址中不能包含中文字符。
-    
-
-**first\_clip\_url** `_string_` （可选）
-
-首段视频的URL地址。
-
-1.  公网URL：
-    
-    -   支持 HTTP 和 HTTPS 协议。
-        
-    -   示例值：https://xxx/xxx.mp3。
-        
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过[上传文件获取临时 URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-        
-    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
-        
-
-视频限制：
-
--   视频格式：MP4。
-    
--   视频帧率：大于等于16FPS。当`first_clip_url`和`last_clip_url`同时使用时，建议两个片段的帧率保持一致。
-    
--   视频大小：不超过50MB。
-    
--   视频长度：不超过3秒，否则取视频的前3秒。若同时填写`first_clip_url`和`last_clip_url`时，两段视频的总时长不超过3秒。
-    
--   URL地址中不能包含中文字符。
-    
-
-关于输出视频的分辨率：
-
--   若输入视频分辨率 ≤ 720P，输出将保留原始分辨率；
-    
--   若输入视频分辨率 > 720P，则在保持原视频宽高比的前提下，按比例缩放至不超过 720P。
-    
-
-**last\_clip\_url** `_string_`（可选）
-
-尾段视频的URL地址。
-
-1.  公网URL：
-    
-    -   支持 HTTP 和 HTTPS 协议。
-        
-    -   示例值：https://help-static-aliyun-doc.aliyuncs.com/xxx.mp3。
-        
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过[上传文件获取临时 URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-        
-    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
-        
-
-视频限制：
-
--   视频格式：MP4。
-    
--   视频帧率：大于等于16FPS。当`first_clip_url`和`last_clip_url`同时使用时，建议两个片段的帧率保持一致。
-    
--   视频大小：不超过50MB。
-    
--   视频长度：不超过3秒，否则取视频的前3秒。若同时填写`first_clip_url`和`last_clip_url`时，两段视频的总时长不超过3秒。
-    
--   URL地址中不能包含中文字符。
-    
-
-关于输出视频的分辨率：
-
--   若输入视频分辨率 ≤ 720P，输出将保留原始分辨率；
-    
--   若输入视频分辨率 > 720P，则在保持原视频宽高比的前提下，按比例缩放至不超过 720P。
-    
-
-**video\_url** `_string_` （可选）
-
-输入视频的URL地址。
-
-1.  公网URL：
-    
-    -   支持 HTTP 和 HTTPS 协议。
-        
-    -   示例值：https://help-static-aliyun-doc.aliyuncs.com/xxx.mp3。
-        
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过[上传文件获取临时 URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-        
-    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
-        
-
-该视频主要用于提取其中的运动特征，与 `first_frame_url` 、 `last_frame_url` 、`first_clip_url` 、 `last_clip_url`参数配合使用，以指导生成具有相似运动表现的延展视频。
-
-视频限制：
-
--   视频格式：MP4。
-    
--   视频帧率：大于等于16FPS，与前后片段保持一致。
-    
--   视频分辨率：与前后帧、前后片段保持一致。
-    
--   视频大小：不超过50MB。
-    
--   视频长度：不超过5秒，否则取视频的前5秒。
-    
--   URL地址中不能包含中文字符。
-    
-
-**parameters** `_object_` （可选）
-
-视频处理参数，如设置输出视频的分辨率等。
-
-**属性**
-
-**control\_condition** `_string_` （可选）
-
-设置视频特征提取的方式，输入video\_url时必选。默认为""，表示不做任何提取。
-
--   `posebodyface`：提取输入视频的主体的脸部表情和肢体动作。
-    
--   `depth`：提取输入视频的构图和运动轮廓。
-    
-
-**duration** `_integer_` （可选）
-
-视频生成时长，单位为秒。当前参数值固定为5，且不支持修改。模型将始终生成5秒时长的视频。
-
-**prompt\_extend** `_bool_` （可选）
-
-是否开启prompt智能改写。开启后使用大模型对输入prompt进行智能改写。对于较短的prompt生成效果提升明显，但会增加耗时。
-
--   `true`（默认值）：开启智能改写。
-    
--   `false`：关闭智能改写。**（推荐）**
-    
-
-> 当文本描述与输入的视频内容不一致时，模型可能产生误解。建议手动关闭智能扩写，并在 `prompt` 中提供清晰、具体的画面描述，以提升生成一致性与准确性。
-
-**seed** `_integer_` （可选）
-
-随机数种子，用于控制模型生成内容的随机性。seed参数取值范围是`[0, 2147483647]`。
-
-如果不提供，则算法自动生成一个随机数作为种子。如果您希望生成内容保持相对稳定，请使用相同的seed参数值。
-
-**watermark** `_bool_` （可选）
-
-是否添加水印标识，水印位于图片右下角，文案为“AI生成”。
-
--   `false`（默认值）：不添加水印。
-    
--   `true`：添加水印。
-    
-
-## 视频画面扩展
-
-**model** `_string_` **（必选）**
-
-模型名称。示例值：wanx2.1-vace-plus。
-
-**input** `_object_` **（必选）**
-
-输入的基本信息，如提示词等。
-
-**属性**
-
-**prompt** `_string_` **（必选）**
-
-提示词，用来描述生成视频中期望包含的元素和视觉特点。
-
-支持中英文，长度不超过800个字符，每个汉字/字母占一个字符，超过部分会自动截断。
-
-提示词技巧请参见[文生视频/图生视频Prompt指南](https://help.aliyun.com/zh/model-studio/text-to-video-prompt)。
-
-**function** `_string_` **（必选）**
-
-功能名称。视频画面扩展设置为 `**video_outpainting**`。
-
-视频画面扩展支持对视频在上、下、左、右四个方向按比例扩展。
-
-**video\_url** `_string_` **（必选）**
-
-输入视频的URL地址。
-
-1.  公网URL：
-    
-    -   支持 HTTP 和 HTTPS 协议。
-        
-    -   示例值：https://xxx/xxx.mp3。
-        
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过[上传文件获取临时 URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-        
-    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
-        
-
-视频限制：
-
--   视频格式：MP4。
-    
--   视频帧率：大于等于16FPS。
-    
--   视频大小：不超过50MB。
-    
--   视频长度：不超过5秒，否则取视频的前5秒。
-    
--   URL地址中不能包含中文字符。
-    
-
-关于输出视频的分辨率：
-
--   若输入视频分辨率 ≤ 720P，输出将保留原始分辨率；
-    
--   若输入视频分辨率 > 720P，则在保持原视频宽高比的前提下，按比例缩放至不超过 720P。
-    
-
-关于输出视频的时长：
-
--   输出视频时长与输入视频一致，最长不超过 5 秒。
-    
--   示例：若输入视频为 3 秒，则输出也为 3 秒；若输入为 6 秒，则输出为前 5 秒。
-    
-
-**parameters** `_object_` （可选）
-
-视频处理参数，如设置扩展比例等。
-
-**属性**
-
-**top\_scale** `_float_` （可选）
-
-视频画面居中，向上按比例扩展视频。
-
-取值范围为\[1.0, 2.0\]，默认值为1.0，表示不扩展。
-
-**bottom\_scale** `_float_` （可选）
-
-视频画面居中，向下按比例扩展视频。
-
-取值范围为\[1.0, 2.0\]，默认值为1.0，表示不扩展。
-
-**left\_scale** `_float_` （可选）
-
-视频画面居中，向左按比例扩展视频。
-
-取值范围为\[1.0, 2.0\]，默认值为1.0，表示不扩展。
-
-**right\_scale** `_float_` （可选）
-
-视频画面居中，向右按比例扩展视频。
-
-取值范围为\[1.0, 2.0\]，默认值为1.0，表示不扩展。
-
-**duration** `_integer_` （可选）
-
-视频生成时长，单位为秒。当前参数值固定为5，且不支持修改。模型将始终生成5秒时长的视频。
-
-**prompt\_extend** `_bool_` （可选）
-
-是否开启prompt智能改写。开启后使用大模型对输入prompt进行智能改写。对于较短的prompt生成效果提升明显，但会增加耗时。
-
--   `true`（默认值）：开启智能改写。
-    
--   `false`：关闭智能改写。**（推荐）**
-    
-
-> 当文本描述与输入的视频内容不一致时，模型可能产生误解。建议手动关闭智能扩写，并在 `prompt` 中提供清晰、具体的画面描述，以提升生成一致性与准确性。
-
-**seed** `_integer_` （可选）
-
-随机数种子，用于控制模型生成内容的随机性。seed参数取值范围是`[0, 2147483647]`。
-
-如果不提供，则算法自动生成一个随机数作为种子。如果您希望生成内容保持相对稳定，请使用相同的seed参数值。
-
-**watermark** `_bool_` （可选）
-
-是否添加水印标识，水印位于图片右下角，文案为“AI生成”。
-
--   `false`（默认值）：不添加水印。
-    
--   `true`：添加水印。
-    
-
 #### 响应参数
 
-### 成功响应
+**output** `object`
+
+任务输出信息。
+
+属性
+
+**task\_id** `string`
+
+任务ID。查询有效期24小时。
+
+**task\_status** `string`
+
+任务状态。
+
+枚举值
+
+-   PENDING：任务排队中
+-   RUNNING：任务处理中
+-   SUCCEEDED：任务执行成功
+-   FAILED：任务执行失败
+-   CANCELED：任务已取消
+-   UNKNOWN：任务不存在或状态未知
+
+**request\_id**`string`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+**code**`string`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**message**`string`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+#### 成功响应
 
 请保存 task\_id，用于查询任务状态与结果。
 
@@ -1122,9 +971,9 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-### 异常响应
+#### 异常响应
 
-创建任务失败，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+创建任务失败，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 ```
 {
@@ -1134,87 +983,123 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }
 ```
 
-**output** `_object_`
-
-任务输出信息。
-
-**属性**
-
-**task\_id** `_string_`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `_string_`
-
-任务状态。
-
-**枚举值**
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：任务执行成功
-    
--   FAILED：任务执行失败
-    
--   CANCELED：任务已取消
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-**request\_id** `_string_`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code** `_string_`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**message** `_string_`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
 ### 步骤2：根据任务ID查询结果
 
-## **北京**
+#### 北京
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## **新加坡**
+#### 新加坡
 
 `GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
 #### 请求参数
 
-## 查询任务结果
+##### 请求头（Headers）
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+**Authorization**`string`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+##### URL路径参数（Path parameters）
+
+**task\_id** `string`**（必选）**
+
+任务ID。
+
+#### 查询任务结果
+
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
 ```
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-##### **请求头（Headers）**
+#### 响应参数
 
-**Authorization** `_string_`**（必选）**
+**output**`object`
 
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+任务输出信息。
 
-##### **URL路径参数（Path parameters）**
+属性
 
-**task\_id** `_string_`**（必选）**
+**task\_id** `string`
 
-任务ID。
+任务ID。查询有效期24小时。
 
-#### **响应参数**
+**task\_status** `string`
 
-## 任务执行成功
+任务状态。
+
+枚举值
+
+-   PENDING：任务排队中
+-   RUNNING：任务处理中
+-   SUCCEEDED：任务执行成功
+-   FAILED：任务执行失败
+-   CANCELED：任务已取消
+-   UNKNOWN：任务不存在或状态未知
+
+**submit\_time** `string`
+
+任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**scheduled\_time** `string`
+
+任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**end\_time** `string`
+
+任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**video\_url**`string`
+
+视频URL。链接有效期24小时，可通过此URL下载视频。输出视频格式为mp4（H.264 编码）。
+
+**orig\_prompt** `string`
+
+原始的输入prompt。
+
+**actual\_prompt** `string`
+
+开启prompt智能改写后实际使用的prompt。若不开启prompt智能改写，不会返回该字段。
+
+**code**`string`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**message**`string`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**usage** `object`
+
+输出信息统计。只对成功的结果计数。
+
+属性
+
+**video\_duration** `integer`
+
+生成视频的时长，单位为秒。
+
+**video\_ratio** `string`
+
+生成视频的比例。固定为`standard`。
+
+**video\_count** `integer`
+
+生成视频的数量。
+
+**request\_id**`string`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+#### 任务执行成功
 
 任务数据（如任务状态、视频URL等）仅保留24小时，超时后会被自动清除。请您务必及时保存生成的视频。
 
@@ -1239,9 +1124,9 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
-## 任务执行失败
+#### 任务执行失败
 
-若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 ```
 {
@@ -1255,102 +1140,17 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
-**output** `_object_`
-
-任务输出信息。
-
-**属性**
-
-**task\_id** `_string_`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `_string_`
-
-任务状态。
-
-**枚举值**
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：任务执行成功
-    
--   FAILED：任务执行失败
-    
--   CANCELED：任务已取消
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-**submit\_time** `_string_`
-
-任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**scheduled\_time** `_string_`
-
-任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**end\_time** `_string_`
-
-任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**video\_url** `_string_`
-
-视频URL。链接有效期24小时，可通过此URL下载视频。输出视频格式为mp4（H.264 编码）。
-
-**orig\_prompt** `_string_`
-
-原始的输入prompt。
-
-**actual\_prompt** `_string_`
-
-开启prompt智能改写后实际使用的prompt。若不开启prompt智能改写，不会返回该字段。
-
-**code** `_string_`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**message** `_string_`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**usage** `_object_`
-
-输出信息统计。只对成功的结果计数。
-
-**属性**
-
-**video\_duration** `_integer_`
-
-生成视频的时长，单位为秒。
-
-**video\_ratio** `_string_`
-
-生成视频的比例。固定为`standard`。
-
-**video\_count** `_integer_`
-
-生成视频的数量。
-
-**request\_id** `_string_`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-## **使用限制**
+## 使用限制
 
 -   **数据时效**：任务`task_id`和 视频`video_url`均只保留 24 小时，过期后将无法查询或下载。
-    
--   **音频支持**：当前仅支持生成无声视频，不支持音频输出。如有需要，可通过[语音合成](https://help.aliyun.com/zh/model-studio/speech-recognition-api-reference/)生成音频。
-    
+-   **音频支持**：当前仅支持生成无声视频，不支持音频输出。如有需要，可通过[语音合成](https://help.aliyun.com/zh/model-studio/speech-recognition-api-reference)生成音频。
 
-## **错误码**
+## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
-## **常见问题**
+## 常见问题
 
-#### **Q：如何获取视频存储的访问域名白名单？**
+#### Q：如何获取视频存储的访问域名白名单？
 
 A： 模型生成的视频存储于阿里云OSS，API将返回一个临时的公网URL。**若需要对该下载地址进行防火墙白名单配置**，请注意：由于底层存储会根据业务情况进行动态变更，为避免过期信息影响访问，文档不提供固定的OSS域名白名单。如有安全管控需求，请联系客户经理获取最新OSS域名列表。

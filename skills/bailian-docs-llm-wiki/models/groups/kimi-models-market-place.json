@@ -426,7 +426,12 @@
       "latestOnlineAt": "2026-02-12T16:00:00.000+00:00",
       "contextWindow": 262144,
       "maxInputTokens": 262144,
-      "offlineInfo": {},
+      "offlineInfo": {
+        "inference": {
+          "announceUrl": "https://help.aliyun.com/zh/marketplace/three-party-direct-supply-model-kimi-k2-5-offline-notification#section-x-02",
+          "offlineTime": "2026-08-31 00:00:00"
+        }
+      },
       "inferenceProvider": "moonshot-ai",
       "name": "Kimi/Kimi K2.5",
       "docUrl": "https://help.aliyun.com/document_detail/3021620.html",

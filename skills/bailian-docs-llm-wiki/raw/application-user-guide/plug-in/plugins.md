@@ -1,18 +1,18 @@
 # 官方和第三方插件
 
-大模型本身虽然具备强大的自然语言处理能力，但在特定领域或特定任务上，可能需要额外的功能辅助（如联网搜索实时信息、图像处理等）。阿里云百炼提供了一系列官方插件和三方插件。您可以根据具体需求选择适合的插件，进一步增强大模型功能，扩展其应用场景。
+大模型本身虽然具备强大的自然语言处理能力，但在特定领域或特定任务上，可能需要额外的功能辅助（如联网搜索实时信息、图像处理等）。阿里云百炼提供了一系列官方插件 和三方插件 。您可以根据具体需求选择适合的插件，进一步增强大模型功能，扩展其应用场景。
 
-## **首次访问插件页面**
+## 首次访问插件页面
 
 如果您的主账号或RAM用户（子账号）从未授权过AliyunServiceRoleForSFMAccessCloudAPI角色权限，您将无法访问插件。请参考以下操作进行授权。
 
-## 主账号
+#### 主账号
 
 如果您使用主账号登录阿里云百炼，请在[**插件**](https://bailian.console.aliyun.com/#/plugin-market)页面，勾选同意上述条款，单击**授权并进入**。
 
 授权页面将创建服务关联角色 `AliyunServiceRoleForSFMAccessCloudAPI`，对应权限策略为 `AliyunServiceRolePolicyForSFMAccessCloudAPI`，用于授权百炼大模型平台访问您的阿里云市场商品清单并根据插件配置进行API调用。
 
-## RAM用户（子账号）
+#### RAM用户（子账号）
 
 如果您使用RAM用户（子账号）登录阿里云百炼，在[**插件**](https://bailian.console.aliyun.com/#/plugin-market)页面，勾选同意上述条款，单击**授权并进入**时，会有如下提示：
 
@@ -23,48 +23,45 @@
 1.  授权RAM用户（子账号）创建服务关联角色的权限。
     
     1.  使用主账号登录[RAM控制台](https://ram.console.aliyun.com/)。
-        
-    2.  在左侧导航栏，选择**权限管理** **>** **权限策略**。
-        
+    2.  在左侧导航栏，选择**权限管理>权限策略**。
     3.  单击**创建权限策略**。
-        
     4.  在**脚本编辑**的`Effect`、`Action`、`Resource`、`Condition`中分别输入以下脚本中的对应内容。
-        
-        ```
-        {
-            "Action": [
-                "ram:CreateServiceLinkedRole"
-            ],
-            "Resource": "*",
-            "Effect": "Allow",
-            "Condition": {
-                "StringEquals": {
-                    "ram:ServiceName": "cloundapi-access.sfm.aliyuncs.com"
-                }
-            }
-        }
-        ```
-        
-    5.  单击**确定**。
-        
-    6.  设置权限策略名称，单击**确定**。
-        
-        例如，输入名称为`服务关联角色`。
-        
-    7.  在左侧导航栏，选择。
-        
-    8.  找到待授权的RAM用户（子账号），单击RAM用户（子账号）**操作**列的**添加权限**。
-        
-    9.  在权限策略中选择刚才创建的权限策略，单击**确认新增授权**。
-        
-        至此，RAM用户（子账号）拥有了创建服务关联角色的权限。
-        
-        在策略类型下拉框中选择**自定义策略**进行筛选，即可找到并勾选目标权限策略。
-        
-2.  返回[**插件**](https://bailian.console.aliyun.com/#/plugin-market)页面，勾选同意上述条款，单击**授权并进入**。
-    
 
-## **官方插件说明**
+```
+{
+    "Action": [
+        "ram:CreateServiceLinkedRole"
+    ],
+    "Resource": "*",
+    "Effect": "Allow",
+    "Condition": {
+        "StringEquals": {
+            "ram:ServiceName": "cloundapi-access.sfm.aliyuncs.com"
+        }
+    }
+}
+```
+
+5.  单击**确定**。
+    
+6.  设置权限策略名称，单击**确定**。
+    
+    例如，输入名称为`服务关联角色`。
+    
+7.  在左侧导航栏，选择**身份管理 > 用户**。
+    
+8.  找到待授权的RAM用户（子账号），单击RAM用户（子账号）**操作**列的**添加权限**。
+    
+9.  在权限策略中选择刚才创建的权限策略，单击**确认新增授权**。
+    
+    至此，RAM用户（子账号）拥有了创建服务关联角色的权限。
+    
+    在策略类型下拉框中选择**自定义策略**进行筛选，即可找到并勾选目标权限策略。
+    
+10.  返回[**插件**](https://bailian.console.aliyun.com/#/plugin-market)页面，勾选同意上述条款，单击**授权并进入**。
+     
+
+## 官方插件说明
 
 **组件广场**中预置了阿里云百炼的官方插件，您无需配置其输入和输出参数，即可直接调用。
 
@@ -76,7 +73,7 @@
 
 **计费方案**
 
-[Python代码解释器](#f8658b5c70a93)
+[Python代码解释器Python Code Interpreter](raw/application-user-guide/plug-in/plugins.md)
 
 code\_interpreter
 
@@ -84,7 +81,7 @@ code\_interpreter
 
 免费
 
-[计算器](#12e61be838qub)
+[计算器Calculator](raw/application-user-guide/plug-in/plugins.md)
 
 calculator
 
@@ -92,7 +89,7 @@ calculator
 
 免费
 
-[图片生成](#da38f8a429lso)
+[图片生成Image Generation](raw/application-user-guide/plug-in/plugins.md)
 
 text\_to\_image
 
@@ -100,7 +97,7 @@ text\_to\_image
 
 限时免费，需申请开通
 
-[夸克搜索](#2c23406bd0sca)
+[夸克搜索](raw/application-user-guide/plug-in/plugins.md)
 
 quark\_search
 
@@ -110,15 +107,15 @@ quark\_search
 
 限时免费，需申请开通
 
-[生成二维码](#dbdea0e23ap97)
+[生成二维码](raw/application-user-guide/plug-in/plugins.md)
 
 generate\_qrcode
 
-使大模型可以根据网站链接地址生成二维码，例如“请给阿里云百炼简介文档生成二维码：https://help.aliyun.com/zh/model-studio/getting-started/what-is-model-studio”。
+使大模型可以根据网站链接地址生成二维码，例如“请给阿里云百炼简介文档生成二维码：[](https://help.aliyun.com/zh/model-studio/getting-started/what-is-model-studio)[https://help.aliyun.com/zh/model-studio/getting-started/what-is-model-studio](https://help.aliyun.com/zh/model-studio/getting-started/what-is-model-studio)”。
 
 免费
 
-[GitHub搜索](#112834c291kd3)
+[GitHub搜索](raw/application-user-guide/plug-in/plugins.md)
 
 github\_search
 
@@ -217,7 +214,7 @@ plt.show()
 
 **有插件时输出**
 
-请给阿里云百炼简介文档生成二维码：https://help.aliyun.com/zh/model-studio/getting-started/what-is-model-studio
+请给阿里云百炼简介文档生成二维码：[https://help.aliyun.com/zh/model-studio/getting-started/what-is-model-studio](https://help.aliyun.com/zh/model-studio/getting-started/what-is-model-studio)
 
 大模型应用无法直接生成二维码，而是提供了将链接转化为二维码的操作指南。
 
@@ -259,22 +256,20 @@ GitHub搜索：通义千问
 
 ![35efefdb-753e-4594-a96d-b33d0aa1bee3-1.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7689504271/p836944.png)
 
-### **调用官方插件**
+### 调用官方插件
 
 **步骤一：在子业务空间调用官方插件时，需要先执行以下步骤为子业务空间授权。在默认业务空间调用官方插件不需要执行此步骤。**
 
 1.  访问[**插件**](https://bailian.console.aliyun.com/#/plugin-market)页面，找到需要授权的目标插件并单击**查看详情**。
-    
 2.  单击**授权**，选择待授权的子业务空间，单击**确定**完成授权。
-    
 
-**步骤二：**[调用插件](#55bb7f428fczt)**。**
+**步骤二：**[调用插件](https://help.aliyun.com/zh/model-studio/plugins#55bb7f428fczt)**。**
 
 ## 三方插件说明
 
 第三方插件涵盖了商业服务、图像视频、学习教育等多个领域，并且经过了效果测试，您可以在开通后直接调用，无需进行额外配置。
 
-### **调用三方插件**
+### 调用三方插件
 
 **步骤一：开通三方插件。**
 
@@ -285,7 +280,7 @@ GitHub搜索：通义千问
     开通成功后，插件详情卡片中将显示**已开通**状态标签。
     
 
-**步骤二：**[调用插件](#55bb7f428fczt)**。**
+**步骤二：**[调用插件](https://help.aliyun.com/zh/model-studio/plugins#55bb7f428fczt)**。**
 
 ## 调用插件
 
@@ -307,9 +302,9 @@ GitHub搜索：通义千问
         
     6.  测试完成后，发布应用。
         
--   **方式二**：访问[**应用管理**](https://bailian.console.aliyun.com/#/app-center)页面，在指定智能体或工作流应用内，添加指定插件，测试插件使用效果，并**发布**应用。具体操作请参见[智能体应用插件能力](https://help.aliyun.com/zh/model-studio/single-agent-application#550c6b3ddevkl)、[工作流应用插件节点](https://help.aliyun.com/zh/model-studio/workflow-application/#341c98019dvo8)。
+-   **方式二**：访问[**应用管理**](https://bailian.console.aliyun.com/#/app-center)页面，在指定智能体或工作流应用内，添加指定插件，测试插件使用效果，并**发布**应用。具体操作请参见[智能体应用插件能力](https://help.aliyun.com/zh/model-studio/single-agent-application#d1da8df94a98c)、[工作流应用插件节点](raw/application-user-guide/llm-application/workflow-application.md)。
     
--   **方式三**：通过Assistant API调用工具。请在[Assistant API文档](https://help.aliyun.com/zh/model-studio/quick-start-of-assistant-api)中搜索`tools`关键字，查看如何使用Assistant API调用工具。
+-   **方式三**：通过Assistant API调用工具。请在[Assistant API文档](https://help.aliyun.com/zh/model-studio/quick-start-of-assistant-api)中搜索`tools`关键字，查看如何使用Assistant API调用工具。
     
 
 ## 获取工具ID
@@ -325,12 +320,11 @@ GitHub搜索：通义千问
 
 ## 相关文档
 
-除了官方插件和三方插件外，百炼还支持用户引入自定义插件，具体操作请参见[自定义插件](https://help.aliyun.com/zh/model-studio/custom-plug-ins)。
+除了官方插件和三方插件外，百炼还支持用户引入自定义插件，具体操作请参见[自定义插件](raw/application-user-guide/plug-in/custom-plug-ins.md)。
 
 ## 常见问题
 
 **夸克搜索和联网搜索（enable\_search）有什么区别？**
 
 -   开启夸克搜索插件时，模型将直接调用插件执行搜索，并将搜索结果以文本形式返回，这些结果可以直接用于生成最终输出。夸克搜索插件目前支持检索出网页标题、关键词和摘要，但不支持直接访问网页详情。
-    
 -   联网搜索（enable\_search）也是基于夸克搜索。联网搜索开启后，模型会尝试利用互联网上的信息来丰富其生成的内容，但不会完全依赖或返回互联网搜索结果。

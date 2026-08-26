@@ -2,9 +2,7 @@
 
 在浏览器、移动 App 等不可信环境中调用模型服务时，通过安全的后端服务生成临时API Key，避免永久API Key 泄露。
 
-**重要**
-
-临时API Key 继承生成它的API Key 所拥有的全部权限，包括对特定模型或知识库的访问限制。
+**重要**临时API Key 继承生成它的API Key 所拥有的全部权限，包括对特定模型或知识库的访问限制。
 
 ## 前提条件
 
@@ -21,14 +19,14 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=180
 
 > 各地域的API Key 不同。
 
-> 以下示例使用新加坡地域的 Endpoint，调用时请将WorkspaceId替换为真实的业务空间ID。如需使用北京地域，请将URL替换为：https://dashscope.aliyuncs.com/api/v1/tokens?expire\_in\_seconds=1800
+> 以下示例使用新加坡地域的 Endpoint，调用时请将WorkspaceId替换为真实的业务空间ID。如需使用北京地域，请将URL替换为：[https://dashscope.aliyuncs.com/api/v1/tokens?expire\_in\_seconds=1800](https://dashscope.aliyuncs.com/api/v1/tokens?expire_in_seconds=1800)
 
 ## 响应示例
 
-## **正常响应示例**
+#### 正常响应示例
 
 ```
-{  
+{
     "token":"st-****",
     "expires_at":1744080369
 }
@@ -60,10 +58,10 @@ Number
 
 1744080369
 
-## **错误响应示例**
+#### 错误响应示例
 
 ```
-{  
+{
     "code":"InvalidApiKey",
     "message":"Invalid API-key provided.",
     "request_id":"902fee3b-f7f0-9a8c-96a1-6b4ea25af114"
@@ -84,7 +82,7 @@ code
 
 String
 
-错误码。更多错误原因及解决方法，请前往[错误码](https://help.aliyun.com/zh/model-studio/error-code)页面查询。
+错误码。更多错误原因及解决方法，请前往[错误码](raw/model-api-reference/preparations/error-code.md)页面查询。
 
 InvalidApiKey：无效API Key
 

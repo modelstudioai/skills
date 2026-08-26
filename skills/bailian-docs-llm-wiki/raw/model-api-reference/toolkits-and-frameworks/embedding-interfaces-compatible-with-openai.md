@@ -3,24 +3,17 @@
 阿里云百炼的Embedding模型兼容OpenAI接口规范。将原有 OpenAI 应用迁移至阿里云百炼只需调整三个参数：
 
 -   base\_url：替换为`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
-    
--   api\_key：替换为[阿里云百炼 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)
-    
+-   api\_key：替换为[阿里云百炼 API Key](raw/model-api-reference/preparations/get-api-key.md)
 -   model：替换为以下模型列表中的模型名称
-    
 
-**重要**
-
-百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
-## **支持的模型**
+## 支持的模型
 
 **模型名称**
 
@@ -28,13 +21,41 @@
 
 **最大行数**
 
-**单行最大**[Token](https://help.aliyun.com/zh/model-studio/billing-for-model-studio#f300d75bd5rb2)**数**
+**单行最大**[Token](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)**数**
 
 **单价（每千输入Token）**
 
 **支持语种**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+qwen3.7-text-embedding
+
+2560、2,048、1,536、1,024（默认）、768、512、256
+
+20
+
+128,000
+
+0.0005元
+
+中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等201种主流语种与方言
+
+各100万Token
+
+有效期：百炼开通后90天内
+
+qwen3.7-text-embedding-flash
+
+1,024（默认）、768、512、256
+
+20
+
+128,000
+
+0.000125元
+
+中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等201种主流语种与方言
 
 text-embedding-v4
 
@@ -48,13 +69,9 @@ text-embedding-v4
 
 0.0005元
 
-[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)：0.00025元
+[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)：0.00025元
 
 中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语等100+主流语种及多种编程语言
-
-各100万Token
-
-有效期：百炼开通后90天内
 
 text-embedding-v3
 
@@ -72,7 +89,7 @@ text-embedding-v2
 
 0.0007元
 
-[Batch调用](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai/)：0.00035元
+[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)：0.00035元
 
 中文、英语、西班牙语、法语、葡萄牙语、印尼语、日语、韩语、德语、俄罗斯语
 
@@ -84,17 +101,17 @@ text-embedding-v1
 
 中文、英语、西班牙语、法语、葡萄牙语、印尼语
 
-> 多模态Embedding模型（例如qwen3-vl-embedding、tongyi-embedding-vision系列）不支持OpenAI兼容接口。请参见[多模态向量](https://help.aliyun.com/zh/model-studio/multimodal-embedding-api-reference)。
+> 多模态Embedding模型（例如qwen3-vl-embedding、tongyi-embedding-vision系列）不支持OpenAI兼容接口。请参见[多模态向量](raw/model-api-reference/vector-and-sort/multimodal-vector/multimodal-embedding-api-reference.md)。
 
 ## 模型调用
 
-### **调用示例**
+### 调用示例
 
-本章节提供Python（OpenAI SDK）和cURL（HTTP接口）的字符串输入调用示例，更多编程语言或输入方式示例请参考：[文本与多模态向量化](https://help.aliyun.com/zh/model-studio/embedding#793f71eacdohs)。
+本章节提供Python（OpenAI SDK）和cURL（HTTP接口）的字符串输入调用示例，更多编程语言或输入方式示例请参考：[文本与多模态向量化](https://help.aliyun.com/zh/model-studio/embedding)。
 
-## 使用OpenAI SDK调用
+#### 使用OpenAI SDK调用
 
-使用OpenAI SDK调用服务，您还需安装[OpenAI SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+使用OpenAI SDK调用服务，您还需安装[OpenAI SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ```
 import os
@@ -115,15 +132,15 @@ completion = client.embeddings.create(
 print(completion.model_dump_json())
 ```
 
-## **使用HTTP接口调用**
+#### 使用HTTP接口调用
 
-### **提交接口调用**
+### 提交接口调用
 
 ```
 POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/embeddings
 ```
 
-### **命令行调用**
+### 命令行调用
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/embeddings' \
@@ -138,16 +155,16 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 运行代码可以获得以下结果：
 
-**运行结果**
+运行结果
 
 ```
-{ 
+{
   "data": [
     {
       "embedding": [
         0.0023064255,
         -0.009327292,
-        .... 
+        ....
         -0.0028842222
       ],
       "index": 0,
@@ -161,7 +178,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }
 ```
 
-### **异常响应示例**
+### 异常响应示例
 
 在访问请求出错的情况下，输出的结果中会通过`code`和`message`指明出错原因。
 
@@ -178,8 +195,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 ## API参考
 
-[通用文本向量接口API详情](https://help.aliyun.com/zh/model-studio/text-embedding-synchronous-api)
+[通用文本向量接口API详情](raw/model-api-reference/vector-and-sort/general-text-vector/text-embedding-synchronous-api.md)
 
 ## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。

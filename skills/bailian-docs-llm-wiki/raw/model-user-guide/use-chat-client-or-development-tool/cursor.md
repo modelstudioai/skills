@@ -2,24 +2,20 @@
 
 Cursor 是一款 AI 编程 IDE，可以通过按量计费、Coding Plan、Token Plan 个人版或 Token Plan 团队版接入阿里云百炼。
 
-## **安装 Cursor**
+## 安装 Cursor
 
 通过 [Cursor 官网](https://cursor.com/features)下载并安装 Cursor。
 
-## **配置接入凭证**
+## 配置接入凭证
 
 在 Cursor 中，点击设置图标，进入 **Cursor Settings** > **Models**。开启 **OpenAI API Key** 和 **Override OpenAI Base URL**，根据所选方案填入对应的 API Key、Base URL 和模型名称。
 
 阿里云百炼提供四种计费方案，根据需要选择：
 
 -   **Token Plan 个人版**：按 token 消耗抵扣个人 Credits。
-    
 -   **Token Plan 团队版**：按坐席订阅，按 token 消耗抵扣 Credits。
-    
 -   **Coding Plan**：固定月费订阅，按模型调用次数计量。
-    
 -   **按量计费**：按实际调用量后付费。
-    
 
 ### Token Plan 个人版
 
@@ -29,11 +25,11 @@ Token Plan 个人版专属 [API Key](https://bailian.console.aliyun.com/cn-beiji
 
 **Base URL**
 
-`https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
+`[https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1](https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1)`
 
 **可用模型**
 
-Token Plan 个人版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-personal-overview)
+Token Plan 个人版[支持的模型](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-personal-overview.md)
 
 部分模型名称需调整：glm-5.2 写为 **glm-5-2**。
 
@@ -45,11 +41,11 @@ Token Plan 团队版专属 [API Key](https://bailian.console.aliyun.com/cn-beiji
 
 **Base URL**
 
-`https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
+`[https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1](https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1)`
 
 **可用模型**
 
-Token Plan 团队版[支持的模型](https://help.aliyun.com/zh/model-studio/token-plan-overview)
+Token Plan 团队版[支持的模型](raw/model-user-guide/token-plan-guide/token-plan-overview.md)
 
 部分模型名称需调整：kimi-k2.6 写为 **kimi-k2-6**，kimi-k2.5 写为 **kimi-k2-5**，glm-5.2 写为 **glm-5-2**，glm-5.1 写为 **glm-5-1**，glm-5 写为 **glm-5-0**。
 
@@ -61,11 +57,11 @@ Coding Plan 专属 [API Key](https://bailian.console.aliyun.com/cn-beijing/?tab=
 
 **Base URL**
 
-`https://coding.dashscope.aliyuncs.com/v1`
+`[https://coding.dashscope.aliyuncs.com/v1](https://coding.dashscope.aliyuncs.com/v1)`
 
 **可用模型**
 
-Coding Plan [支持的模型](https://help.aliyun.com/zh/model-studio/coding-plan)
+Coding Plan [支持的模型](raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan.md)
 
 部分模型名称需调整：kimi-k2.5 写为 **kimi-k2-5**，glm-4.7 写为 **glm-4-7**，glm-5 写为 **glm-5-0**。
 
@@ -73,11 +69,11 @@ Coding Plan [支持的模型](https://help.aliyun.com/zh/model-studio/coding-pla
 
 **API Key**
 
-[阿里云百炼 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)
+[阿里云百炼 API Key](raw/model-api-reference/preparations/get-api-key.md)
 
 **Base URL**
 
-根据地域，填入对应 URL，请将 URL 中的 `{WorkspaceId}` 替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)：
+根据地域，填入对应 URL，请将 URL 中的 `{WorkspaceId}` 替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)：
 
 -   华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
     
@@ -92,55 +88,48 @@ Coding Plan [支持的模型](https://help.aliyun.com/zh/model-studio/coding-pla
 
 部分模型名称需调整：kimi-k2.6 写为 **kimi-k2-6**，kimi-k2.5 写为 **kimi-k2-5**，glm-5.2 写为 **glm-5-2**，glm-5.1 写为 **glm-5-1**，glm-5 写为 **glm-5-0**。
 
-## **使用案例：接入百炼 CLI**
+## 使用案例：接入百炼 CLI
 
 [百炼 CLI](https://bailian.console.aliyun.com/cli) 安装时会向 `~/.cursor/skills/bailian-cli/` 注册 Skill，Cursor 即可通过对话调用百炼能力，能力清单详见[百炼 CLI 控制台](https://bailian.console.aliyun.com/cli)。前置要求 [Node.js](https://nodejs.org/zh-cn/download) 18+。
 
 1.  告诉 Cursor 安装百炼 CLI：
-    
-    ```
-    请帮我全局安装阿里云百炼 CLI 命令行工具：npm install -g bailian-cli
-    ```
-    
-2.  前往百炼控制台[获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，告诉 Cursor 配置：
-    
-    ```
-    配置我的 API Key 是：sk-xxxxxxxxxxxxx
-    ```
-    
-3.  直接用自然语言描述需求即可开始使用，例如：
-    
-    ```
-    帮我为产品官网项目生成 6 张白色无线蓝牙耳机的商品展示图。
-    ```
-    ```
-    帮我生成一段 30 秒的白色无线蓝牙耳机产品演示视频，用于官网首页展示。
-    ```
-    
 
-## **常见问题**
+```
+请帮我全局安装阿里云百炼 CLI 命令行工具：npm install -g bailian-cli
+```
+
+2.  前往百炼控制台[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，告诉 Cursor 配置：
+
+```
+配置我的 API Key 是：sk-xxxxxxxxxxxxx
+```
+
+3.  直接用自然语言描述需求即可开始使用，例如：
+
+```
+帮我为产品官网项目生成 6 张白色无线蓝牙耳机的商品展示图。
+```
+```
+帮我生成一段 30 秒的白色无线蓝牙耳机产品演示视频，用于官网首页展示。
+```
+
+## 常见问题
 
 ### 错误码
 
 配置过程中遇到报错，请参考对应计费方案的常见问题文档：
 
--   按量付费：[错误码](https://help.aliyun.com/zh/model-studio/error-code)
-    
--   Coding Plan：[Coding Plan 常见问题](https://help.aliyun.com/zh/model-studio/coding-plan-faq)
-    
--   Token Plan 个人版：[Token Plan 常见问题](https://help.aliyun.com/zh/model-studio/token-plan-team-faq)
-    
--   Token Plan 团队版：[Token Plan 团队版常见问题](https://help.aliyun.com/zh/model-studio/token-plan-team-faq)
-    
+-   按量付费：[错误码](raw/model-api-reference/preparations/error-code.md)
+-   Coding Plan：[Coding Plan 常见问题](raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan-faq.md)
+-   Token Plan 个人版：[Token Plan 常见问题](raw/model-user-guide/token-plan-guide/token-plan-team-edition/token-plan-team-faq.md)
+-   Token Plan 团队版：[Token Plan 团队版常见问题](raw/model-user-guide/token-plan-guide/token-plan-team-edition/token-plan-team-faq.md)
 
 ### 在 Cursor 中无法调用已添加的模型
 
 报错信息如下：
 
 -   The model xxx does not work with your current plan or api key.
-    
 -   Named models unavailable Free plans can only use Auto. Switch to Auto or upgrade plans to continue.
-    
 
 **原因**：Cursor 免费版仅支持 Auto 模式，不支持调用自定义模型。
 
@@ -155,5 +144,4 @@ Coding Plan [支持的模型](https://help.aliyun.com/zh/model-studio/coding-pla
 请逐项排查：
 
 -   检查 API Key、Base URL 和模型名称是否与所选计费方案一致。不同方案的凭证不通用。
-    
 -   部分模型名称与 Cursor 内置模型名冲突，需使用别名。请参考上方可用模型中的说明。

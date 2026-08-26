@@ -4,48 +4,35 @@
 
 本文档将指引您通过模板搭建百炼应用并在多模态交互开发套件控制台完成配置和运行体验，同时推荐了部分适合学习机、穿戴设备等场景的典型应用。
 
-完整的开发集成说明请参考：[接入百炼平台应用](https://help.aliyun.com/zh/model-studio/multimodal-call-app)。
+完整的开发集成说明请参考：[接入百炼智能体应用](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/bailian-and-tripartite-agent/multimodal-call-app.md)。
 
-**说明**
+**说明**多模态交互开发套件的计费不包含您在百炼上自主搭建业务应用产生的费用，该部分费用由您与阿里云百炼平台另行结算，若涉及第三方服务，相关费用由第三方决定。
 
-多模态交互开发套件的计费不包含您在百炼上自主搭建业务应用产生的费用，该部分费用由您与阿里云百炼平台另行结算，若涉及第三方服务，相关费用由第三方决定。
-
-## **配置应用**
+## 配置应用
 
 1.  在控制台应用配置页中，您可以通过「百炼应用」-「添加应用」-「应用模板」前往阿里云百炼应用广场选择需要的应用模板。
-    
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050122.png)2\. 在[阿里云百炼](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/app-market/all)的「应用开发」—「全部应用」列表中找到需要的应用模板，或者通过搜索框搜索相应的应用模板。更推荐在[AI硬件方案专区](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/app-market/app-template-recommendation/share/AIHardwareSolutions)找到需要的应用模板，该专区提供视觉、语音等多模态套件模板，开箱即用，轻松适配各类智能硬件。
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050126.png)
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050126.png) ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050119.png) ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050123.png)
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050119.png)
+1.  您可以进入应用模板查看应用详情并点击「复制此应用」，然后在弹窗中点击「复制」即可发布应用。
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050123.png)
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050125.png) ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050132.png)
 
-3.  您可以进入应用模板查看应用详情并点击「复制此应用」，然后在弹窗中点击「复制」即可发布应用。
-    
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050125.png)
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050132.png)
-
-4.  应用复制完成后，回到多模态交互套件控制台配置页，通过「百炼应用」-「添加应用」-「我的应用」查看之前已复制的应用模板并勾选，然后点击「确定」即可添加该应用。
-    
+1.  应用复制完成后，回到多模态交互套件控制台配置页，通过「百炼应用」-「添加应用」-「我的应用」查看之前已复制的应用模板并勾选，然后点击「确定」即可添加该应用。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050121.png)
 
-5.  添加成功后，您可以根据需要配置应用，如修改应用名称、填写应用描述、设置触发&退出指令等。
-    
+1.  添加成功后，您可以根据需要配置应用，如修改应用名称、填写应用描述、设置触发&退出指令等。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050124.png)
 
-6.  完成应用配置后，您可以在控制台运行并体验该应用。
-    
+1.  完成应用配置后，您可以在控制台运行并体验该应用。
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3208379671/p1050120.png)
 
-## **推荐****应用模板**
+## 推荐应用模板
 
 本文推荐部分典型应用模板，您也可以在应用广场AI硬件专题页筛选符合需要的其他应用。
 

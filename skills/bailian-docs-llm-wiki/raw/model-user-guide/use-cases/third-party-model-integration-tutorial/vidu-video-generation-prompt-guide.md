@@ -9,13 +9,9 @@
 **主体/场景+场景描述+环境描述+艺术风格/媒介**
 
 -   调整句式和语序，避免主体物过多/复杂、主体物分散的句式。
-    
 -   避免模糊的术语，表述尽可能准确。
-    
 -   使用流畅准确的口语化措辞，避免过度文学化的叙述。
-    
 -   丰富、准确和完整的描述才能生成符合特定艺术风格和需求的视频。
-    
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8822188771/p1073369.png)
 
@@ -232,7 +228,7 @@
 
 首次编写的提示词效果往往不够理想，发现缺陷后针对性修改提示词是必要的优化步骤。
 
-#### **图生视频**
+#### 图生视频
 
 **调优分析：**原始提示词有一定概率视觉上看起来火车是倒着开的。优化后通过主体跟背景的大小比例关系来营造运动的方向。
 
@@ -258,9 +254,9 @@
 
 **\# 要求：**
 
-1\. 相机运动：向右跟随
+1.  相机运动：向右跟随
 
-#### **参考生视频**
+#### 参考生视频
 
 **调优分析：**原始提示词走路效果不自然，可能与镜头固定有关。优化后增加镜头控制（镜头拉远），配合镜头运动后人物动作更自然。如需适配各种输入图片，可按上文方式继续调整。
 
@@ -284,7 +280,7 @@
 
 **\# 要求**
 
-1\. 相机运动：镜头拉远
+1.  相机运动：镜头拉远
 
 ## 进阶教程
 
@@ -333,7 +329,7 @@ Vidu支持上传多个主体图像（人物、道具、环境等），在视频�
     图1为\[场景\]；图2为\[角色xx\]；图3为\[道具xx\]
     
 
-#### **提示词案例**
+#### 提示词案例
 
 **提示词**
 
@@ -345,27 +341,19 @@ Vidu支持上传多个主体图像（人物、道具、环境等），在视频�
 
 图1-4依次为：
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8822188771/p1073406.png)
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8822188771/p1073407.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8822188771/p1073411.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8822188771/p1073412.png)
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8822188771/p1073406.png)![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8822188771/p1073407.png)![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8822188771/p1073411.png)![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8822188771/p1073412.png)
 
 2D二次元动漫风格，从下往上运镜，不拍到脸部，先特写拍摄脚步走出来，然后慢慢运镜到胸口，但是不露脸；固定机位，画面1中，巨大的光照射，慢慢显现出邪恶老人的真实模样，老人缓缓走出来，浑身散发诡异邪恶的能量。图1为\[可怕诡异震撼的环境\]；图2：\[邪恶老人\]。
 
 图1-2依次为：
 
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8822188771/p1073413.png)
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8822188771/p1073418.png)
+![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8822188771/p1073413.png)![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8822188771/p1073418.png)
 
 三维动漫风，特写近景，平视视角，轴线左侧机位，三分构图，萧非身体被漩涡卷的飞起，萧非的手死死抓住一块从地面凸起的岩壁，萧非在狂风中艰难地回头，对着身后大吼，表情狰狞，嘴巴不停说话，镜头剧烈晃动。图1为场景；图2为角色\[萧非\]。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8822188771/p1073616.png)
 
-#### **图像输入示例**
+#### 图像输入示例
 
 **图片输入**
 

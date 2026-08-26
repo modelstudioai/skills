@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026-08-25",
-  "totalFamilies": 180,
-  "totalModels": 406,
+  "updatedAt": "2026-08-27",
+  "totalFamilies": 181,
+  "totalModels": 408,
   "profileCoverage": {
     "full": 0,
     "partial": 0,
-    "structured-only": 406,
+    "structured-only": 408,
     "none": 0
   },
   "capabilityDistribution": {
-    "TG": 37,
+    "TG": 38,
     "IG": 32,
     "VG": 28,
     "TTS": 16,
@@ -27,7 +27,7 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 109,
+    "qwen": 110,
     "qwen-domain-model": 34,
     "wan": 14,
     "mini-max": 4,
@@ -2362,6 +2362,24 @@
       "maxContextWindow": 1000000
     },
     {
+      "slug": "qwen3.8-flash",
+      "name": "Qwen3.8-Flash",
+      "primaryCapability": "TG",
+      "capabilities": [
+        "TG",
+        "VU",
+        "Reasoning"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen3.8-flash"
+      ],
+      "maxContextWindow": 1000000
+    },
+    {
       "slug": "qwen3.8-max",
       "name": "Qwen3.8-Max",
       "primaryCapability": "Reasoning",
@@ -2651,14 +2669,15 @@
       "providers": [
         "deepseek"
       ],
-      "itemCount": 6,
+      "itemCount": 7,
       "items": [
         "vanchin/deepseek-ocr",
         "vanchin/deepseek-r1",
         "vanchin/deepseek-v3",
         "vanchin/deepseek-v3.1-terminus",
         "vanchin/deepseek-v3.2-think",
-        "vanchin/deepseek-v4-pro"
+        "vanchin/deepseek-v4-pro",
+        "vanchin/deepseek-v4-pro-0813"
       ],
       "maxContextWindow": 1048576
     },
