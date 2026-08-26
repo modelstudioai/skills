@@ -2,111 +2,105 @@
 
 本文档介绍如何在阿里云百炼平台通过OpenAI兼容接口或DashScope SDK调用DeepSeek系列模型。
 
-**重要**
+**重要**deepseek-v3、deepseek-v3.1、deepseek-v3.2、deepseek-v3.2-exp、deepseek-r1、deepseek-r1-0528、deepseek-r1-distill-qwen-7b/14b/32b 将于**2026年10月10日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-plus)、[qwen3.7-max](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-max)、[qwen3.6-flash](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.6-flash)。
 
-deepseek-v3、deepseek-v3.1、deepseek-v3.2、deepseek-v3.2-exp、deepseek-r1、deepseek-r1-0528、deepseek-r1-distill-qwen-7b/14b/32b 将于**2026年10月10日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-plus)、[qwen3.7-max](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-max)、[qwen3.6-flash](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.6-flash)。
+## 服务接入地址
 
-## **服务接入地址**
+不同地域的服务接入地址不同，请根据您选择的地域配置对应的 Base URL（调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)）。各地域可调用的模型及限流不同，请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)文档。
 
-不同地域的服务接入地址不同，请根据您选择的地域配置对应的 Base URL（调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)）。各地域可调用的模型及限流不同，请参见[限流](https://help.aliyun.com/zh/model-studio/rate-limit)文档。
+#### OpenAI兼容
 
-## **OpenAI兼容**
-
-## 华北2（北京）
+#### 华北2（北京）
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-## 美国（弗吉尼亚）
+#### 美国（弗吉尼亚）
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-## 新加坡
+#### 新加坡
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-## 德国（法兰克福）
+#### 德国（法兰克福）
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-## 日本（东京）
+#### 日本（东京）
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-## **OpenAI兼容-Responses API**
+#### OpenAI兼容-Responses API
 
-**说明**
+**说明**Responses API 目前仅支持`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`模型，且仅在华北2（北京）与新加坡地域提供服务。
 
-Responses API 目前仅支持`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`模型，且仅在华北2（北京）与新加坡地域提供服务。
-
-## 华北2（北京）
+#### 华北2（北京）
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses`
 
-## 新加坡
+#### 新加坡
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/responses`
 
-## **DashScope**
+#### DashScope
 
-## 华北2（北京）
+#### 华北2（北京）
 
 HTTP 请求地址为`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1"`
 
-## 美国（弗吉尼亚）
+#### 美国（弗吉尼亚）
 
 HTTP 请求地址为`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1"`
 
-## 新加坡
+#### 新加坡
 
 HTTP 请求地址为`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1"`
 
-## 德国（法兰克福）
+#### 德国（法兰克福）
 
 HTTP 请求地址为`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1"`
 
-## 日本（东京）
+#### 日本（东京）
 
 HTTP 请求地址为`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/api/v1"`
 
-## **快速开始**
+## 快速开始
 
 deepseek-v4-pro-0813 是 DeepSeek 系列旗舰模型，在编程、数学和通用任务方面表现出色。deepseek-v4-flash-0731 是Flash系列最新版本。您可以通过`enable_thinking`参数在思考与非思考模式之间切换。以下示例以 deepseek-v4-pro 模型为例展示思考模式的调用方式，您可以将 model 参数替换为其他 DeepSeek 模型。
 
-需要已[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装 OpenAI 或 DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk#8833b9274f4v8)。
+需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装 OpenAI 或 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-## **OpenAI兼容**
+#### OpenAI兼容
 
-**说明**
+**说明**`enable_thinking`非 OpenAI 标准参数，OpenAI Python SDK通过 `extra_body`传入，Node.js SDK作为顶层参数传入。`reasoning_effort`是 OpenAI 标准参数，可直接作为顶层参数传入。
 
-`enable_thinking`非 OpenAI 标准参数，OpenAI Python SDK通过 `extra_body`传入，Node.js SDK作为顶层参数传入。`reasoning_effort`是 OpenAI 标准参数，可直接作为顶层参数传入。
+#### Python
 
-## **Python**
-
-### **示例代码**
+### 示例代码
 
 ```
 from openai import OpenAI
@@ -154,7 +148,7 @@ for chunk in completion:
         answer_content += delta.content
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -170,9 +164,9 @@ CompletionUsage(completion_tokens=238, prompt_tokens=5, total_tokens=243, comple
 Request ID: chatcmpl-a1b2c3d4-e5f6-7890-abcd-ef1234567890
 ```
 
-## **Node.js**
+#### Node.js
 
-### **示例代码**
+### 示例代码
 
 ```
 import OpenAI from "openai";
@@ -180,7 +174,7 @@ import process from 'process';
 // 初始化OpenAI客户端
 const openai = new OpenAI({
     // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: "sk-xxx"
-    apiKey: process.env.DASHSCOPE_API_KEY, 
+    apiKey: process.env.DASHSCOPE_API_KEY,
     // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
     baseURL: 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1'
 });
@@ -233,7 +227,7 @@ async function main() {
 main();
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -254,11 +248,11 @@ main();
 Request ID: chatcmpl-a1b2c3d4-e5f6-7890-abcd-ef1234567890
 ```
 
-## **HTTP**
+#### HTTP
 
-### **示例代码**
+### 示例代码
 
-## **curl**
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -269,7 +263,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     "model": "deepseek-v4-pro",
     "messages": [
         {
-            "role": "user", 
+            "role": "user",
             "content": "你是谁"
         }
     ],
@@ -281,11 +275,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-## **DashScope**
+#### DashScope
 
-## **Python**
+#### Python
 
-### **示例代码**
+### 示例代码
 
 ```
 import os
@@ -328,7 +322,7 @@ print(chunk.usage)
 print("Request ID:", chunk.request_id)
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -344,13 +338,11 @@ print("Request ID:", chunk.request_id)
 Request ID: 85735883-9062-9c33-a963-0bc12584ee68
 ```
 
-## **Java**
+#### Java
 
-### **示例代码**
+### 示例代码
 
-**重要**
-
-DashScope Java SDK版本需要不低于2.19.4。
+**重要**DashScope Java SDK版本需要不低于2.19.4。
 
 ```
 // dashscope SDK的版本 >= 2.19.4
@@ -426,7 +418,7 @@ public class Main {
 }
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -439,11 +431,11 @@ public class Main {
 有什么我可以帮你的吗？不管是学习、工作还是日常闲聊，我都很乐意陪你聊聊！
 ```
 
-## **HTTP**
+#### HTTP
 
-### **示例代码**
+### 示例代码
 
-## **curl**
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -454,7 +446,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 -d '{
     "model": "deepseek-v4-pro",
     "input":{
-        "messages":[      
+        "messages":[
             {
                 "role": "user",
                 "content": "你是谁？"
@@ -469,13 +461,13 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
-## Anthropic兼容
+#### Anthropic兼容
 
 鉴权方式：通过 `x-api-key` 请求头或 `Authorization: Bearer` 请求头传入百炼 API Key，二者选其一即可。思考模式等参数的详细说明请参见[Anthropic兼容-Messages](https://help.aliyun.com/zh/model-studio/anthropic-api-messages)。
 
-## Python
+#### Python
 
-### **示例代码**
+### 示例代码
 
 ```
 import anthropic
@@ -505,11 +497,11 @@ for event in message:
             print(event.delta.text, end="", flush=True)
 ```
 
-## HTTP
+#### HTTP
 
-### **示例代码**
+### 示例代码
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -529,13 +521,13 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v
 }'
 ```
 
-## **推理强度（reasoning\_effort）**
+## 推理强度（reasoning\_effort）
 
 deepseek-v4-pro、deepseek-v4-flash 、 deepseek-v4-flash-0731 和 deepseek-v4-pro-0813默认开启思考模式。通过`reasoning_effort`参数可以调整推理强度，可选值为`low(仅deepseek-v4-flash-0731 和 deepseek-v4-pro-0813 支持)`、`high`和`max`，默认为`high`。
 
-## **OpenAI兼容**
+#### OpenAI兼容
 
-## **Python**
+Python
 
 ```
 from openai import OpenAI
@@ -553,7 +545,7 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
-## **Node.js**
+Node.js
 
 ```
 import OpenAI from "openai";
@@ -570,7 +562,7 @@ const completion = await openai.chat.completions.create({
 console.log(completion.choices[0].message.content);
 ```
 
-## **curl**
+curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -584,7 +576,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-## **DashScope**
+#### DashScope
 
 ```
 import os
@@ -602,13 +594,13 @@ response = Generation.call(
 print(response.output.choices[0].message.content)
 ```
 
-## **Responses API**
+## Responses API
 
-`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`deepseek-v4-pro`与`deepseek-v4-pro-0813`支持通过 OpenAI 兼容的 Responses API 调用，仅支持华北2（北京）与新加坡地域，服务接入地址参见[服务接入地址](#ds-bu-h2)。
+`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`deepseek-v4-pro`与`deepseek-v4-pro-0813`支持通过 OpenAI 兼容的 Responses API 调用，仅支持华北2（北京）与新加坡地域，服务接入地址参见[服务接入地址](https://help.aliyun.com/zh/model-studio/deepseek-api#ds_bu_h2)。
 
 通过 Responses API 调用时，可在`tools`参数中添加`web_search`（[联网搜索](https://help.aliyun.com/zh/model-studio/web-search)）、`web_extractor`（[网页抓取](https://help.aliyun.com/zh/model-studio/web-extractor)）与`code_interpreter`（[代码解释器](https://help.aliyun.com/zh/model-studio/qwen-code-interpreter)）工具。
 
-## **Python**
+Python
 
 ```
 from openai import OpenAI
@@ -636,7 +628,7 @@ response = client.responses.create(
 print(response.output_text)
 ```
 
-## **Node.js**
+Node.js
 
 ```
 import OpenAI from "openai";
@@ -663,7 +655,7 @@ const response = await openai.responses.create({
 console.log(response.output_text);
 ```
 
-## **curl**
+curl
 
 ```
 # 以下为华北2（北京）地域的URL。新加坡地域请使用 https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/responses
@@ -681,7 +673,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-## **其它功能**
+## 其它功能
 
 **模型**
 
@@ -869,7 +861,7 @@ deepseek-v3
 
 不支持
 
-## **参数默认值**
+## 参数默认值
 
 **模型**
 
@@ -1044,22 +1036,15 @@ deepseek-v3
 \-
 
 -   “-” 表示没有默认值，也不支持设置。
-    
 -   deepseek-r1、deepseek-r1-0528、蒸馏版模型不支持设置以上参数值。
-    
 -   “共393,216” 表示 deepseek-v4 系列模型的 max\_tokens 与 thinking\_budget 共用同一上限，两者合计最大为 393,216 Token（即模型的最大输出长度）。
-    
 -   参数含义请参考[OpenAI兼容-Chat](https://help.aliyun.com/zh/model-studio/qwen-api-via-openai-chat-completions)。
-    
 
-## **模型列表与计费**
+## 模型列表与计费
 
 -   混合思考模型（通过`enable_thinking`参数控制是否思考）：deepseek-v4-pro、deepseek-v4-flash、deepseek-v4-flash-0731、deepseek-v3.2、deepseek-v3.2-exp、deepseek-v3.1
-    
 -   仅思考模型（回复前总会思考）：deepseek-r1、deepseek-r1-0528
-    
 -   非思考模型：deepseek-v3
-    
 
 deepseek-v4-pro 在编程、数学和通用任务方面表现出色，deepseek-v4-flash-0731 快速且经济高效，推荐优先使用 deepseek-v4-pro。
 
@@ -1069,53 +1054,50 @@ deepseek-v4-pro 在编程、数学和通用任务方面表现出色，deepseek-v
 
 > 思考模式下，思维链按照输出 Token 计费。
 
-## **常见问题**
+## 常见问题
 
-### [免费额度](https://bailian.console.aliyun.com/#/model-market/detail/deepseek-r1)**用完后如何购买 Token？**
+### [免费额度](https://bailian.console.aliyun.com/#/model-market/detail/deepseek-r1)用完后如何购买 Token？
 
 访问[费用与成本](https://usercenter2.aliyun.com/home)中心进行充值，确保您的账户没有欠费即可调用 DeepSeek 模型。
 
 > 调用 DeepSeek 模型会自动扣费，出账周期为分钟级，消费明细请前往 [**账单详情**](https://billing-cost.console.aliyun.com/finance/expense-report/expense-detail-by-instance) 进行查看。
 
-### **如何接入**[Chatbox](https://chatboxai.app/zh)**、**[Cherry Studio](https://cherry-ai.com/)**或**[Dify](https://cloud.dify.ai/apps)**？**
+### 如何接入[Chatbox](https://chatboxai.app/zh)、[Cherry Studio](https://cherry-ai.com/)或[Dify](https://cloud.dify.ai/apps)？
 
 此处以常用工具为例进行说明，其它大模型工具的接入方式类似。
 
-## **Chatbox**
+#### Chatbox
 
-请参见[Chatbox](https://help.aliyun.com/zh/model-studio/chatbox)。
+请参见[Chatbox](https://help.aliyun.com/zh/model-studio/cline-tool)。
 
-## **Cherry Studio**
+#### Cherry Studio
 
-请参见[Cherry Studio](https://help.aliyun.com/zh/model-studio/cherry-studio)。
+请参见[Cherry Studio](raw/model-user-guide/use-chat-client-or-development-tool/cherry-studio.md)。
 
-## **Dify**
+#### Dify
 
-请参见[Dify](https://help.aliyun.com/zh/model-studio/dify)。
+请参见[Dify](raw/model-user-guide/use-chat-client-or-development-tool/dify.md)。
 
-### 可以上传图片或文档进行提问吗**？**
+### 可以上传图片或文档进行提问吗？
 
 DeepSeek 模型仅支持文本输入，不支持图片或文档输入。如需图片输入，请使用[千问VL](https://help.aliyun.com/zh/model-studio/vision)模型；如需文档输入，请使用[Qwen-Long](https://help.aliyun.com/zh/model-studio/long-context-qwen-long)模型。
 
-### **如何查看Token**消耗**量**及**调用次数？**
+### 如何查看Token消耗量及调用次数？
 
-模型调用完**一小时后**，在[模型观测](https://bailian.console.aliyun.com/?tab=model#/model-telemetry)页面设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**操作**列的**监控**，即可查看该模型的调用统计结果。具体请参见[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)文档。
+模型调用完**一小时后**，在[模型观测](https://bailian.console.aliyun.com/?tab=model#/model-telemetry)页面设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**操作**列的**监控**，即可查看该模型的调用统计结果。具体请参见[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)文档。
 
 > 数据按小时更新，高峰期可能有小时级延迟，请您耐心等待。
 
-### **还有哪些使用DeepSeek的方式？**
+### 还有哪些使用DeepSeek的方式？
 
 在百炼平台使用DeepSeek有三种方式：
 
 1.  在线体验：访问[模型广场](https://bailian.console.aliyun.com/#/model-market)。
-    
 2.  通过API或客户端（如Chatbox）调用模型：请参考本文内容。
-    
-3.  0代码构建大模型应用：请参考[智能体应用（Agent 1.0）](https://help.aliyun.com/zh/model-studio/single-agent-application)或[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)。
-    
+3.  0代码构建大模型应用：请参考[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)或[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)。
 
 如需自行部署DeepSeek，请参考[技术解决方案](https://www.aliyun.com/solution/tech-solution/deepseek-r1-for-platforms)。
 
-## **错误码**
+## 错误码
 
-如果执行报错，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果执行报错，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。

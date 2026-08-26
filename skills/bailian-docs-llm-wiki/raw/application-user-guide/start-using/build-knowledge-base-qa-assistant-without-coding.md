@@ -2,7 +2,7 @@
 
 大语言模型无法直接回答私有知识领域的问题，但您可以借助阿里云百炼的智能体应用构建能力和私有知识文档，零代码构建一个能回答私有领域问题的大模型问答应用。
 
-## **效果展示**
+## 效果展示
 
 **无专属知识库的应用**
 
@@ -16,7 +16,7 @@
 
 ![有](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6101872271/p829330.png)
 
-## **第一步：构建第一个阿里云百炼智能体应用****（约 1 分钟）**
+## 第一步：构建第一个阿里云百炼智能体应用（约 1 分钟）
 
 1.  **创建空白应用：**访问[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面。点击**创建应用**，在弹窗的**智能体应用**页签中点击**立即创建**。
     
@@ -50,9 +50,7 @@
     > 预设问题3：请你帮我挑选一款拍照效果最好的阿里云百炼手机，价格在3000元以内。
     
 
-![change question](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3875211671/p1010566.jpeg)
-
-![change question 2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3875211671/p1010567.jpeg)
+![change question](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3875211671/p1010566.jpeg)![change question 2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3875211671/p1010567.jpeg)
 
 5.  **测试应用：**您可以在右侧点击任意问题发起提问：
     
@@ -63,12 +61,11 @@
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3875211671/p956921.png)
 
-## **第二步：构建知识库****（约 3 分钟）**
+## 第二步：构建知识库（约 3 分钟）
 
-### **上传知识文档**
+### 上传知识文档
 
-1.  访问[数据连接](https://bailian.console.aliyun.com/cn-beijing?spm=a2c4g.11186623.0.0.632e707f1mmU5d&tab=app#/connector/list)页面，点击创建连接器，选择文件类型连接器，填写连接器名称和描述后点击**确认**。
-    
+1.  访问[数据连接](https://bailian.console.aliyun.com/cn-beijing?spm=a2c4g.11186623.0.0.632e707f1mmU5d&tab=app#/connector/list)页面，点击**创建连接器**，选择文件类型连接器，填写连接器名称和描述后点击**确认**。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6735506771/p1066861.png)
 
@@ -86,10 +83,9 @@
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4905211671/p944074.png)
 
-### **创建知识库**
+### 创建知识库
 
 1.  进入[知识库](https://bailian.console.aliyun.com/?tab=app#/knowledge-base)页面，点击**立即开通并创建**（首次使用）或**创建知识库**。选择**创建**标准版。
-    
 
 ![createkb](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0732709571/p1010578.jpg)
 
@@ -123,15 +119,13 @@
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4905211671/p944092.png)
 
-## **第三步：为应用**添加知识库并发布应用**（约 1 分钟）**
+## 第三步：为应用添加知识库并发布应用（约 1 分钟）
 
-1.  访问[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面。查找到您创建的“阿里云百炼手机选购向导”应用，鼠标悬停于应用卡片上，点击**配置**，进入应用配置界面。
-    
+1.  访问[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面。查找到您创建的“阿里云百炼手机选购向导”应用，鼠标悬停于应用卡片上，点击****配置****，进入应用配置界面。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4368624671/p1010601.png)
 
-2.  点击**技能** > **知识库**旁的**+**按钮，再添加知识库，即可完成配置。
-    
+2.  点击**技能知识库**旁的**+**按钮，再添加知识库，即可完成配置。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1894606771/p956923.png)
 
@@ -145,16 +139,12 @@
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3875211671/p956925.png)
 
 4.  **发布应用：**确认内容变动无误后，点击**发布**。
-    
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3875211671/p956928.png)
 
-## **后续步骤**
+## 后续步骤
 
--   如果希望了解 Prompt撰写、插件工具、发布渠道以及更多应用功能，请参考[智能体应用](https://help.aliyun.com/zh/model-studio/single-agent-application)。
-    
--   如果需要集成更多外部工具，或让应用自动化地完成复杂任务和业务流程，请参考[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)，也可以参考[应用类型介绍](https://help.aliyun.com/zh/model-studio/application-introduction)了解功能对比和应用场景。
-    
--   如果希望通过 API 调用知识问答应用或其他阿里云百炼应用，请参考[调用智能体应用](https://help.aliyun.com/zh/model-studio/call-single-agent-application/)、[调用工作流应用](https://help.aliyun.com/zh/model-studio/invoke-workflow-application/)。
-    
--   如果希望全代码开发高度定制化、交互逻辑复杂的 RAG 应用，请参考[Assistant API（下线中）](https://help.aliyun.com/zh/model-studio/assistantapi/)。
+-   如果希望了解 Prompt撰写、插件工具、发布渠道以及更多应用功能，请参考[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)。
+-   如果需要集成更多外部工具，或让应用自动化地完成复杂任务和业务流程，请参考[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)，也可以参考[应用类型介绍](raw/application-user-guide/llm-application/application-introduction.md)了解功能对比和应用场景。
+-   如果希望通过 API 调用知识问答应用或其他阿里云百炼应用，请参考[调用智能体应用](raw/application-user-guide/bailian-application-calling/call-single-agent-application.md)、[调用工作流应用](raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md)。
+-   如果希望全代码开发高度定制化、交互逻辑复杂的 RAG 应用，请参考[Assistant API（下线中）](https://help.aliyun.com/zh/model-studio/assistantapi)。

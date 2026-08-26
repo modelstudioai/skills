@@ -1,6 +1,6 @@
 # 知识库配额与限制
 
-## **用量配额**
+## 用量配额
 
 **类别**
 
@@ -10,7 +10,7 @@
 
 **知识库数量**
 
-每个[阿里云账号（主账号）](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)可创建的知识库数量。
+每个[阿里云账号（主账号）](raw/model-user-guide/security-and-compliance/permission-management-overview.md)可创建的知识库数量。
 
 -   使用RDS数据源：100
     
@@ -62,9 +62,9 @@
 -   单行最大大小：100 KB
     
 
-## **文件上传**
+## 文件上传
 
-### **支持的格式**
+### 支持的格式
 
 **文档搜索类知识库**
 
@@ -91,7 +91,7 @@ png、jpg / jpeg、bmp、gif
 
 -   最大20MB
     
--   图片短边 > 15 像素，长边 < 8,192像素，最长边与最短边的比例 < 50
+-   图片短边 > 15 像素，长边 < 8,192像素，最长边与最短边的比例 < 50
     
 
 **数据查询、图片问答类知识库**
@@ -117,18 +117,15 @@ aac、amr、flac、flv、m4a、mp3、mpeg、ogg、opus、wav、webm、wma、mp4�
 
 最大512MB
 
-### **表格格式要求**
+### 表格格式要求
 
 上传 Excel 文件时，表格格式需满足以下要求，否则模型无法正确解析数据。
 
 -   **不支持合并单元格表头**：请使用标准单行表头格式，每列只有一个独立的字段名，不跨列合并。合并单元格会导致模型无法正确映射列关系，造成数据解析异常。
-    
 -   **备注信息不要写在 Excel 首行**：Excel 文件的首行会被识别为表头或数据。请将备注和说明信息写在智能体应用的**系统提示词**中作为上下文，避免模型将说明文字与实际数据混淆。
-    
 -   **格式修改后需重新上传**：修改表格格式后，需重新上传文件到知识库，并重新发布智能体应用，变更才能生效。
-    
 
-### **上传操作**
+### 上传操作
 
 **类别**
 
@@ -150,9 +147,9 @@ aac、amr、flac、flv、m4a、mp3、mpeg、ogg、opus、wav、webm、wma、mp4�
 
 32
 
-## **数据处理**
+## 数据处理
 
-### **切片**
+### 切片
 
 **类别**
 
@@ -216,11 +213,9 @@ aac、amr、flac、flv、m4a、mp3、mpeg、ogg、opus、wav、webm、wma、mp4�
 
 支持
 
-**说明**
+**说明**编辑切片内容（UpdateChunk）的长度限制为 10-6000 字符。删除切片（DeleteChunk）单次最多 10 个。
 
-编辑切片内容（UpdateChunk）的长度限制为 10-6000 字符。删除切片（DeleteChunk）单次最多 10 个。
-
-### **向量化**
+### 向量化
 
 > 更多信息，请参见[文本与多模态向量化](https://help.aliyun.com/zh/model-studio/embedding)。
 
@@ -231,22 +226,17 @@ aac、amr、flac、flv、m4a、mp3、mpeg、ogg、opus、wav、webm、wma、mp4�
 **向量模型**
 
 -   **文档搜索类、数据查询、音视频搜索类知识库：**支持text-embedding-v4、text-embedding-v3模型。
-    
 -   **图片问答类知识库：**目前只支持multimodal-embedding-v1模型。
-    
 
 **向量维度**
 
 -   text-embedding-v4：512维
-    
 -   text-embedding-v3：512维
-    
 -   multimodal-embedding-v1：1024维
-    
 
 > 以上向量维度不支持更改。
 
-## **检索**
+## 检索
 
 **类别**
 
@@ -256,14 +246,12 @@ aac、amr、flac、flv、m4a、mp3、mpeg、ogg、opus、wav、webm、wma、mp4�
 
 **检索并发**
 
-指知识库自身的核心[检索](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-retrieve)性能（不含依赖链路，例如调用排序模型）**。**
+指知识库自身的核心[检索](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-retrieve.md)性能（不含依赖链路，例如调用排序模型）**。**
 
-> 创建知识库（旗舰版）时，可预设依赖链路[限流](https://help.aliyun.com/zh/model-studio/rate-limit)后的处理策略。
+> 创建知识库（旗舰版）时，可预设依赖链路[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)后的处理策略。
 
 -   旗舰版：50-10,000 QPS（可调，对应 1-200 RCU）
-    
 -   标准版：1 QPS（固定值，无法调整）
-    
 
 **召回文本切片数量**
 

@@ -1,4 +1,4 @@
-# UpdateTableFromAuthorizedOss - 从已授权OSS Bucket中选择文件更新表格
+# UpdateTableFromAuthorizedOss
 
 使用已授权OSS Bucket中的文件更新阿里云百炼数据连接中表格连接器中的表格。
 
@@ -7,9 +7,7 @@
 -   请确保该 OSS Bucket 与阿里云百炼同属一个阿里云账号（主账号），并已按[从 OSS 导入数据配置说明](https://help.aliyun.com/zh/model-studio/data-import-instructions)完成授权。
     
     -   支持的 Bucket 存储类型不包括归档、冷归档或深度冷归档。支持内容加密的 Bucket。支持公共读写/公共读/私有的 Bucket。
-        
-    -   如需使用开启 [Referer 防盗链](https://help.aliyun.com/zh/oss/configure-referer-policy-to-prevent-other-websites-from-referring-to-oss-files)的 Bucket，须参考[仅允许受信任的网站访问](https://help.aliyun.com/zh/oss/configure-referer-policy-to-prevent-other-websites-from-referring-to-oss-files)将域名`*.console.aliyun.com`添加到白名单 Referer 中。
-        
+    -   如需使用开启 [Referer 防盗链](https://help.aliyun.com/zh/oss/user-guide/hotlink-protection)的 Bucket，须参考[仅允许受信任的网站访问](https://help.aliyun.com/zh/oss/user-guide/hotlink-protection)将域名`*.console.aliyun.com`添加到白名单 Referer 中。
 -   RAM 用户（子账号）需要首先获取阿里云百炼的 [API 权限](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)（需要`AliyunBailianDataFullAccess`，已包括 sfm:UpdateTableFromAuthorizedOss 权限点）并[加入一个业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)方可调用本接口。阿里云账号（主账号）可直接调用无须授权。建议您通过最新版[阿里云百炼 SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)来调用本接口。
     
 -   本接口不具有幂等性。
@@ -19,11 +17,9 @@
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/bailian/2023-12-29/UpdateTableFromAuthorizedOss)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
- [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/bailian/2023-12-29/UpdateTableFromAuthorizedOss)
-
-## **授权信息**
+## 授权信息
 
 当前API暂无授权信息透出。
 
@@ -103,7 +99,7 @@ string
 
 是
 
-导入文件在 OSS Bucket 中的键名（Key），详见[对象命名](https://help.aliyun.com/zh/oss/user-guide/object-naming-conventions)。
+导入文件在 OSS Bucket 中的键名（Key），详见[对象命名](https://help.aliyun.com/zh/oss/user-guide/object-overview)。
 
 a0deedbce4a8162b8d66c63ace28330c
 
@@ -117,7 +113,7 @@ string
 
 OVERWRITE
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -217,6 +213,6 @@ true
 
 访问[错误中心](https://api.aliyun.com/document/bailian/2023-12-29/errorCode)查看更多错误码。
 
-## **变更历史**
+## 变更历史
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/bailian/2023-12-29/UpdateTableFromAuthorizedOss#workbench-doc-change-demo)。

@@ -2,7 +2,7 @@
 
 UI Agent 是基于终端屏幕理解操作手机/车机/电视/PC等终端的多模态智能体方案。支持跨应用操作且无需训练，即插即用。
 
-## **基础信息**
+## 基础信息
 
 版本号：V0.0.1
 
@@ -14,12 +14,11 @@ API Endpoint： [https://dashscope.aliyuncs.com/](https://dashscope.aliyuncs.com
 
 **使用准备**
 
--   需要[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)
-    
+-   需要[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)
 
 **请求地址**
 
-https://dashscope.aliyuncs.com/api/v2/apps/gui-owl/gui\_agent\_server
+[https://dashscope.aliyuncs.com/api/v2/apps/gui-owl/gui\_agent\_server](https://dashscope.aliyuncs.com/api/v2/apps/gui-owl/gui_agent_server)
 
 **请求头**
 
@@ -53,7 +52,7 @@ String
 
 application/json
 
-### **移动端（Mobile） 链路**
+### 移动端（Mobile） 链路
 
 **入参描述**
 
@@ -260,7 +259,7 @@ String
 
 操作说明，可以添加操作知识来帮助Agent更准确地进行操作
 
-1\. 点击火车·高铁模块.\\n2. 点击日期修改时间.\\n3. 点击对应的出发时间.\\n4. 点击左侧的城市名来修改出发地.\\n5. 点击起点的对应城市.\\n6. 点击右侧的城市名来修改目的地.\\n7. 点击终点对应的城市.\\n8. 上述操作完成后，点击“搜索”.
+1.  点击火车·高铁模块.\\n2. 点击日期修改时间.\\n3. 点击对应的出发时间.\\n4. 点击左侧的城市名来修改出发地.\\n5. 点击起点的对应城市.\\n6. 点击右侧的城市名来修改目的地.\\n7. 点击终点对应的城市.\\n8. 上述操作完成后，点击“搜索”.
 
 请求示例
 
@@ -398,7 +397,7 @@ except requests.exceptions.RequestException as e:
     print(f"请求发生错误: {e}")
 ```
 
-##### **出参描述**
+##### 出参描述
 
 **字段**
 
@@ -520,9 +519,9 @@ dict
 }
 ```
 
-### **PC 端链路**
+### PC 端链路
 
-##### **入参描述**
+##### 入参描述
 
 **字段**
 
@@ -903,7 +902,7 @@ except requests.exceptions.RequestException as e:
     print(f"请求发生错误: {e}")
 ```
 
-##### **出参描述**
+##### 出参描述
 
 **字段**
 
@@ -1221,10 +1220,10 @@ String
 }
 ```
 
-## **使用限制与计费说明**
+## 使用限制与计费说明
 
 限时免费
 
 ## 状态码说明
 
-大模型服务平台通用状态码详情，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+大模型服务平台通用状态码详情，请参见[错误码](raw/model-api-reference/preparations/error-code.md)。

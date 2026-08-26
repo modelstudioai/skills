@@ -1,14 +1,12 @@
-# BatchUpdateFileTag - 批量更新文档标签
+# BatchUpdateFileTag
 
 该接口用于批量更新数据连接中的文档标签。
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/bailian/2023-12-29/BatchUpdateFileTag)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
- [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/bailian/2023-12-29/BatchUpdateFileTag)
-
-## **授权信息**
+## 授权信息
 
 当前API暂无授权信息透出。
 
@@ -101,7 +99,7 @@ string
 
 OVERWRITE
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -241,6 +239,6 @@ true
 
 访问[错误中心](https://api.aliyun.com/document/bailian/2023-12-29/errorCode)查看更多错误码。
 
-## **变更历史**
+## 变更历史
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/bailian/2023-12-29/BatchUpdateFileTag#workbench-doc-change-demo)。

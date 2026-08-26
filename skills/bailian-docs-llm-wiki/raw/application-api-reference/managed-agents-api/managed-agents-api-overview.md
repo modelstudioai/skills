@@ -5,9 +5,7 @@ Managed Agents API 是百炼提供的智能体托管运行时，由平台托管�
 ## 前提条件
 
 1.  **开通百炼并创建 API Key**：通过[控制台](https://bailian.console.aliyun.com/?tab=model#/api-key)获取，并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-    
 2.  **获取工作空间 ID**：百炼控制台右上角下拉菜单查看，形如 `ws_xxxxxxxxxxxx`。
-    
 
 ## Endpoint
 
@@ -18,9 +16,7 @@ https://{workspace_id}.{region}.maas.aliyuncs.com/api/v1/agentstudio
 ```
 
 -   `workspace_id`：工作空间 ID，例如 `ws_xxxxxxxxxxxx`
-    
 -   `region`：地域 ID，当前仅支持 `cn-beijing`
-    
 
 ## 鉴权
 
@@ -34,13 +30,13 @@ Authorization: Bearer <your-api-key>
 
 除直接调用 REST 接口外，还可通过 Python 或 Java SDK 接入。Managed Agents 模块要求 Python SDK v1.26.2 及以上、Java SDK v2.22.24 及以上。若已安装旧版本，请重新执行安装命令以升级。
 
-Python
+python
 
 ```
 pip install dashscope
 ```
 
-Java
+java
 
 ```
 <dependency>
@@ -52,11 +48,8 @@ Java
 ## 请求与响应
 
 -   请求体为 JSON，`Content-Type: application/json`
-    
 -   每次响应携带 `x-request-id` 头，提工单时附上此 ID 可加速定位
-    
 -   列表端点支持分页：`limit`（默认 20，最大 100）、`page`（首次不传，后续传上一次响应的 `next_page`）。响应不含 `next_page` 表示已是末页
-    
 
 ## 可用 API
 
@@ -66,7 +59,7 @@ Java
 
 **用途**
 
-[Agent](https://help.aliyun.com/zh/model-studio/agent-api/)
+[Agent](raw/application-api-reference/managed-agents-api/agent-api.md)
 
 `POST /agents`
 
@@ -88,7 +81,7 @@ Java
 
 归档 Agent
 
-[Environment](https://help.aliyun.com/zh/model-studio/environment-api/)
+[Environment](raw/application-api-reference/managed-agents-api/environment-api.md)
 
 `POST /environments`
 
@@ -114,7 +107,7 @@ Java
 
 归档 Environment
 
-[Session and Event](https://help.aliyun.com/zh/model-studio/session-api/)
+[Session and Event](raw/application-api-reference/managed-agents-api/session-api.md)
 
 `POST /sessions`
 
@@ -148,7 +141,7 @@ Java
 
 列出 Event 历史；订阅 SSE 事件流（流式输出）
 
-[File](https://help.aliyun.com/zh/model-studio/files-api/)
+[File](raw/application-api-reference/managed-agents-api/files-api.md)
 
 `POST /files`
 
@@ -166,7 +159,7 @@ Java
 
 删除 File
 
-[Skill](https://help.aliyun.com/zh/model-studio/skills-api/)
+[Skill](raw/application-api-reference/managed-agents-api/skills-api.md)
 
 `POST /skills`
 

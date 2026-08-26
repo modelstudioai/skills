@@ -1,17 +1,16 @@
-# CreateIndex - 创建知识库
+# CreateIndex
 
 使用此API可创建两类知识库：基于文档或音视频的非结构化知识库，以及用于数据查询或图片问答的结构化知识库。
 
 ## 接口说明
 
--   **权限要求**：
+-   权限要求：
+    
     -   **RAM 用户（子账号）**：需先获取阿里云百炼的 [API 权限](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)（可使用`AliyunBailianDataFullAccess`策略，该策略已包含本接口所需的 sfm:CreateIndex 权限点），并[加入一个业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)后，才能调用本接口。
-        
     -   **阿里云账号（主账号）**：默认拥有权限，可直接调用。
-        
 -   **调用方式**：推荐使用最新版[阿里云百炼 SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)调用，SDK 已封装复杂的签名计算逻辑，可简化您的调用过程。
     
--   **后续操作**：本接口仅初始化知识库创建作业。完成调用后，必须调用 **SubmitIndexJob** 接口以完成创建（否则，您将得到一个空的知识库）。相应代码示例请参见[知识库 API 指南](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide)。
+-   **后续操作**：本接口仅初始化知识库创建作业。完成调用后，必须调用 **SubmitIndexJob** 接口以完成创建（否则，您将得到一个空的知识库）。相应代码示例请参见[知识库 API 指南](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)。
     
 -   **幂等性**：本接口不具有幂等性，重复调用可能会创建多个同名知识库。建议通过“先查询、后创建”的逻辑实现幂等调用。
     
@@ -20,11 +19,9 @@
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/bailian/2023-12-29/CreateIndex)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
- [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/bailian/2023-12-29/CreateIndex)
-
-## **授权信息**
+## 授权信息
 
 下表是API对应的授权信息，可以在RAM权限策略语句的`Action`元素中使用，用来给RAM用户或RAM角色授予调用此API的权限。具体说明如下：
 
@@ -34,10 +31,8 @@
     
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
     
-    -   对于必选的资源类型，用前面加 \* 表示。
-        
+    -   对于必选的资源类型，用前面加 \* 表示。
     -   对于不支持资源级授权的操作，用`全部资源`表示。
-        
 -   条件关键字：是指云产品自身定义的条件关键字。
     
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
@@ -130,8 +125,6 @@ string
 -   structured：数据查询或图片问答类知识库。
     
 
-**说明**
-
 请注意，知识库创建后将无法更改其类型。
 
 **枚举值：**
@@ -184,11 +177,7 @@ string
 
 默认值为空，此时使用 qwen3-rerank。
 
-**说明**
-
 如仅需语义排序，可使用`qwen3-rerank`；若同时需要语义排序和文本匹配特征以确保相关性，建议使用`qwen3-rerank-hybrid`。
-
-**说明**
 
 `gte-rerank-hybrid`与`gte-rerank`后续停止更新，不建议使用。
 
@@ -232,8 +221,6 @@ integer
 
 取值范围\[1-6000\]。若未指定，默认采用 500。
 
-**说明**
-
 若设置了`ChunkSize`且小于 100，则必须同时设置`OverlapSize`。您也可以不指定这 2 个参数，系统将使用默认值。
 
 128
@@ -247,8 +234,6 @@ integer
 分段重叠长度，表示当前文本切片与前一个文本切片的重叠字符数。取值范围\[0-1024\]。
 
 若未指定，默认采用 100。
-
-**说明**
 
 `OverlapSize`必须小于`ChunkSize`，否则将导致切分异常。
 
@@ -272,7 +257,7 @@ string
 
 否
 
-**重要** 此参数在最新版 SDK 中已改为必传，否则调用 SubmitIndexJob 接口将报错：Required parameter(data\_sources) missing or invalid。
+此参数在最新版 SDK 中已改为必传，否则调用 SubmitIndexJob 接口将报错：Required parameter(data\_sources) missing or invalid。
 
 导入数据来源。取值范围：
 
@@ -281,11 +266,7 @@ string
 -   DATA\_CENTER\_FILE：文件类型，即导入[应用数据](https://bailian.console.aliyun.com/?tab=app#/data-center)下的指定文件，可同时导入多个文件。
     
 
-**说明**
-
 如果本参数传入 DATA\_CENTER\_CATEGORY，则必须指定`CategoryIds`参数；如果本参数传入 DATA\_CENTER\_FILE，则必须指定`DocumentIds`参数。
-
-**说明**
 
 要创建空知识库，可使用不含文件的空类目：本参数传入 DATA\_CENTER\_CATEGORY，`CategoryIds`传入空类目 ID。
 
@@ -352,14 +333,12 @@ string
 
 是
 
-知识库的向量存储类型。更多信息，请参见[知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)。取值范围：
+知识库的向量存储类型。更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。取值范围：
 
 -   BUILT\_IN：将向量数据托管在阿里云百炼平台中。
     
 -   ADB：AnalyticDB for PostgreSQL 数据库。如需高级功能，如管理、审计和监控数据库，推荐选择 ADB。
     
-
-**说明**
 
 若您尚未在阿里云百炼上使用过 ADB 存储，可前往[创建知识库](https://bailian.console.aliyun.com/#/knowledge-base/create)页面选择向量存储类型为 ADB-PG，并按界面提示完成授权。如果您传入了 ADB，则必须指定`SinkInstanceId`和`SinkRegion`参数。
 
@@ -392,7 +371,7 @@ string
 
 否
 
-AnalyticDB for PostgreSQL 实例所在地域（仅在`SinkType`指定 ADB 时才需要传入）。您可调用 [DescribeRegions](https://help.aliyun.com/zh/analyticdb-for-postgresql/developer-reference/api-gpdb-2016-05-03-describeregions) 获取地域列表。
+AnalyticDB for PostgreSQL 实例所在地域（仅在`SinkType`指定 ADB 时才需要传入）。您可调用[DescribeRegions](https://help.aliyun.com/zh/analyticdb-for-postgresql/developer-reference/api-gpdb-2016-05-03-describeregions)获取地域列表。
 
 cn-hangzhou
 
@@ -408,8 +387,6 @@ object
 
 否
 
-**说明**
-
 该参数暂不开放，请勿传入。
 
 Column
@@ -417,8 +394,6 @@ Column
 string
 
 否
-
-**说明**
 
 该参数暂不开放，请勿传入。
 
@@ -501,7 +476,7 @@ array<object>
 
 否
 
-元数据提取配置。元数据是与非结构化数据内容相关的一系列附加属性，这些属性以 key-value 键值对的形式集成到文本切片中。更多信息，请参见[知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)。
+元数据提取配置。元数据是与非结构化数据内容相关的一系列附加属性，这些属性以 key-value 键值对的形式集成到文本切片中。更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
 
 object
 
@@ -645,8 +620,6 @@ boolean
 
 是否将所有 xlsx、xls 格式文件的第一行数据作为表头，并拼接到每个文本切片中，避免大模型误将表头当作普通数据行来处理。
 
-**说明**
-
 建议仅在导入文件均为 .xlsx、.xls 格式且包含表头时启用该功能，否则无需开启。
 
 取值范围：
@@ -677,7 +650,7 @@ string
 
 否
 
-启用自定义切分，并指定切分策略。更多说明，请参见[知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)。
+启用自定义切分，并指定切分策略。更多说明，请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
 
 可能取值（不支持同时传入多个值）：
 
@@ -753,8 +726,6 @@ string
 
 否
 
-**说明**
-
 该参数暂不开放，请勿传入。
 
 standard
@@ -765,7 +736,7 @@ string
 
 否
 
-知识库的[规格类型](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base)。取值范围：
+知识库的[规格类型](raw/application-user-guide/knowledge-base/billing-for-knowledge-base.md)。取值范围：
 
 -   standard：标准版
     
@@ -804,8 +775,6 @@ string
 
 建议使用新参数 connectId，可在[数据连接](https://bailian.console.aliyun.com/cn-beijing?tab=app#/connector/list)页面的数据连接器卡片上获取。 当前参数仍可兼容使用，但未来将不再维护。
 
-**说明**
-
 -   本接口不支持关联自定义数据库，请使用阿里云百炼控制台创建。
     
 
@@ -843,7 +812,7 @@ string
 
 具体的知识类型，用于进一步指明知识库处理的数据种类。
 
-**重要** 此参数与 knowledgeScene 必须一同提供或一同省略，不可单独设置。如果一同省略，系统将根据 structureType 采用默认配置。
+此参数与 knowledgeScene 必须一同提供或一同省略，不可单独设置。如果一同省略，系统将根据 structureType 采用默认配置。
 
 **设置约束**: 此参数的取值必须与您选择的 structureType 匹配，并决定了 knowledgeScene 的可用值。
 
@@ -868,7 +837,7 @@ string
 
 知识库的具体使用场景。
 
-**重要** 此参数与 knowledgeType 必须一同提供或一同省略，不可单独设置。如果一同省略，系统将根据 structureType 采用默认配置。
+此参数与 knowledgeType 必须一同提供或一同省略，不可单独设置。如果一同省略，系统将根据 structureType 采用默认配置。
 
 **设置约束**: 此参数的取值完全依赖于您所设置的 knowledgeType。
 
@@ -947,9 +916,9 @@ string
 
 提供一个自然语言指令，用于精细化控制重排序模型的行为。
 
-**重要** 此参数仅在 rerank\_mode 设置为 "custom" 时生效。
+此参数仅在 rerank\_mode 设置为 "custom" 时生效。
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -980,8 +949,6 @@ Id
 string
 
 知识库 ID，又称`IndexId`，创建的知识库唯一标识
-
-**说明**
 
 请妥善保管该值，它将用于后续所有与此知识库相关的 API 操作。
 
@@ -1045,6 +1012,6 @@ true
 
 访问[错误中心](https://api.aliyun.com/document/bailian/2023-12-29/errorCode)查看更多错误码。
 
-## **变更历史**
+## 变更历史
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/bailian/2023-12-29/CreateIndex#workbench-doc-change-demo)。

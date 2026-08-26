@@ -18,7 +18,7 @@ MiniMax-H3 支持文生视频、图生视频（首帧/尾帧/首尾帧）和多�
 
 输入模态
 
-**Image**　**Text**　**Video**　**Audio**
+**Image** **Text** **Video** **Audio**
 
 输出模态
 
@@ -82,7 +82,7 @@ Function Calling
 
 本文仅展示模型调用原价，不包含限时优惠等活动信息，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)查看活动优惠。
 
-## 华北2（北京）
+#### 华北2（北京）
 
 **视频生成-输出价格**
 
@@ -138,7 +138,7 @@ MiniMax-H3
 
 ## 限流
 
-## 华北2（北京）
+#### 华北2（北京）
 
 参数
 

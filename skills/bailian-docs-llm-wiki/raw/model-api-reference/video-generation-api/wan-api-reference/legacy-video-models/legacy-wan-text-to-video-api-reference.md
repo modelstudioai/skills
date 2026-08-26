@@ -1,6 +1,6 @@
 # 万相-文生视频API参考（2.1-2.6）
 
-万相-文生视频模型基于**文本提示词**，生成一段流畅的视频。
+万相-文生视频模型基于 文本提示词 ，生成一段流畅的视频。
 
 **相关文档**：[使用指南](https://help.aliyun.com/zh/model-studio/text-to-video-guide)
 
@@ -9,76 +9,229 @@
 为确保调用成功，请务必保证**模型、Endpoint URL 和 API Key 均属于同一地域**。跨地域调用将会失败。
 
 -   [**选择模型**](https://help.aliyun.com/zh/model-studio/text-to-video-guide#06f39eafa2dwt)：确认模型所属的地域。
-    
 -   **选择 URL**：选择对应的地域 Endpoint URL，支持HTTP URL或 DashScope SDK URL。
-    
--   **配置 API Key**：选择地域并[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-    
--   **安装 SDK**：如需通过SDK进行调用，请[安装DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
-    
+-   **配置 API Key**：选择地域并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+-   **安装 SDK**：如需通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-**说明**
+**说明**本文的示例代码适用于**北京地域**。
 
-本文的示例代码适用于**北京地域**。
-
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `https://dashscope.aliyuncs.com` 迁移至 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `https://dashscope-intl.aliyuncs.com` 迁移至 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
 其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
 
 ## HTTP调用
 
-**重要**
-
-此接口为**旧版协议**，支持**wan2.6及早期系列模型（wan2.5/wan2.2/****wanx2.1****）**。
+**重要**此接口为**旧版协议**，支持**wan2.6及早期系列模型（wan2.5/wan2.2/wanx2.1）**。
 
 由于文生视频任务耗时较长（通常为1-5分钟），API采用异步调用。整个流程包含 **“创建任务 -> 轮询获取”** 两个核心步骤，具体如下：
 
-### **步骤1：创建任务获取任务ID**
+### 步骤1：创建任务获取任务ID
 
-## **北京**
+#### 北京
 
 `POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## **新加坡**
+#### 新加坡
 
 `POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## **弗吉尼亚**
+#### 弗吉尼亚
 
 `POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
 
-## **法兰克福**
+#### 法兰克福
 
 `POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
 **说明**
 
 -   创建成功后，使用接口返回的 `task_id` 查询结果，task\_id 有效期为 24 小时。**请勿重复创建任务**，轮询获取即可。
-    
--   新手指引请参见[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)。
-    
+-   新手指引请参见[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
 
 #### 请求参数
 
-## 多镜头叙事
+##### 请求头（Headers）
+
+**Content-Type**`string`**（必选）**
+
+请求内容类型。此参数必须设置为`application/json`。
+
+**Authorization**`string`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+**X-DashScope-Async**`string`**（必选）**
+
+异步处理配置参数。HTTP请求只支持异步，**必须设置为**`enable`。
+
+**重要**缺少此请求头将报错：“current user api does not support synchronous calls”。
+
+##### 请求体（Request Body）
+
+**model** `string` **（必选）**
+
+模型名称。可选模型请参见[模型列表](https://help.aliyun.com/zh/model-studio/model-pricing#ba6f7744d5e0o)。
+
+示例值：wan2.6-t2v。
+
+**input** `object` **（必选）**
+
+输入的基本信息，如提示词等。
+
+属性
+
+**prompt** `string` **（必选）**
+
+文本提示词。用来描述生成视频中期望包含的元素和视觉特点。
+
+支持中英文，每个汉字/字母占一个字符，超过部分会自动截断。长度限制因模型版本而异：
+
+-   wan2.6和wan2.5系列模型：不超过1500个字符。
+-   wan2.2 和wanx2.1系列模型：不超过800个字符。
+
+示例值：一只小猫在月光下奔跑。
+
+提示词的使用技巧请参见[文生视频/图生视频Prompt指南](raw/model-user-guide/use-cases/text-to-video-prompt.md)。
+
+**negative\_prompt** `string` （可选）
+
+反向提示词，用来描述不希望在视频画面中看到的内容，可以对视频画面进行限制。
+
+支持中英文，长度不超过500个字符，超过部分会自动截断。
+
+示例值：低分辨率、错误、最差质量、低质量、残缺、多余的手指、比例不良等。
+
+**audio\_url** `string` （可选）
+
+**支持模型：wan2.6和wan2.5系列模型。**
+
+音频文件URL，模型将使用该音频生成视频。
+
+支持输入的格式：
+
+1.  公网URL：
+    
+    -   支持 HTTP 和 HTTPS 协议。
+    -   示例值：[](https://help-static-aliyun-doc.aliyuncs.com/xxx.mp3)[https://help-static-aliyun-doc.aliyuncs.com/xxx.mp3](https://help-static-aliyun-doc.aliyuncs.com/xxx.mp3)。
+2.  临时URL：
+    
+    -   支持OSS协议，必须通过[上传文件获取临时 URL](raw/model-api-reference/more-about-models/get-temporary-file-url.md)。
+    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
+
+音频限制：
+
+-   格式：wav、mp3。
+-   时长：3～30s。
+-   文件大小：不超过15MB。
+-   超限处理：若音频长度超过 `duration` 值（ 如5秒），自动截取前5秒，其余部分丢弃。若音频长度不足视频时长，超出音频长度部分为无声视频。例如，音频为3秒，视频时长为5秒，输出视频前3秒有声，后2秒无声。
+
+**parameters** `object` （可选）
+
+图像处理参数。如设置视频分辨率、开启prompt智能改写、添加水印等。
+
+属性
+
+**size** `string` （可选）
+
+**重要**
+
+-   size直接影响费用，请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#ba6f7744d5e0o)。
+-   size必须设置为具体数值（如 `1280*720`），而不是 1:1或480P。
+
+指定生成的视频分辨率，格式为`宽*高`。该参数的默认值和可用枚举值依赖于 model 参数，规则如下：
+
+-   **wan2.6-t2v**：默认值为 `1920*1080`（1080P）。可选分辨率：720P、1080P对应的所有分辨率。
+-   **wan2.6-t2v-us**：默认值为 `1920*1080`（1080P）。可选分辨率：720P、1080P对应的所有分辨率。
+-   **wan2.5-t2v-preview**：默认值为 `1920*1080`（1080P）。可选分辨率：480P、720P、1080P对应的所有分辨率。
+-   **wan2.2-t2v-plus**：默认值为 `1920*1080`（1080P）。可选分辨率：480P、1080P对应的所有分辨率。
+-   **wanx2.1-t2v-turbo** ：默认值为 `1280*720`（720P）。可选分辨率：480P、720P 对应的所有分辨率。
+-   **wanx2.1-t2v-plus**：默认值为`1280*720`（720P）。可选分辨率：720P 对应的所有分辨率。
+
+480P档位：可选的视频分辨率及其对应的视频宽高比为：
+
+-   `832*480`：16:9。
+-   `480*832`：9:16。
+-   `624*624`：1:1。
+
+720P档位：可选的视频分辨率及其对应的视频宽高比为：
+
+-   `1280*720`：16:9。
+-   `720*1280`：9:16。
+-   `960*960`：1:1。
+-   `1088*832`：4:3。
+-   `832*1088`：3:4。
+
+1080P档位：可选的视频分辨率及其对应的视频宽高比为：
+
+-   `1920*1080`： 16:9。
+-   `1080*1920`： 9:16。
+-   `1440*1440`： 1:1。
+-   `1632*1248`： 4:3。
+-   `1248*1632`： 3:4。
+
+**duration** `integer` （可选）
+
+**重要**duration直接影响费用。费用 = 单价（基于分辨率）× 时长（秒），请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#ba6f7744d5e0o)。
+
+生成视频的时长，单位为秒。该参数的取值依赖于 model参数：
+
+-   wan2.6-t2v：取值为\[2, 15\]之间的整数。默认值为5。
+-   wan2.6-t2v-us：可选值为5、10。默认值为5。
+-   wan2.5-t2v-preview：可选值为5、10。默认值为5。
+-   wan2.2-t2v-plus：固定为5秒，且不支持修改。
+-   wanx2.1-t2v-plus：固定为5秒，且不支持修改。
+-   wanx2.1-t2v-turbo：固定为5秒，且不支持修改。
+
+**prompt\_extend**`boolean` （可选）
+
+是否开启prompt智能改写。开启后使用大模型对输入prompt进行智能改写。对于较短的prompt生成效果提升明显，但会增加耗时。
+
+-   `true`：默认值，开启智能改写。
+-   `false`：不开启智能改写。
+
+**shot\_type** `string` （可选）
+
+**支持模型：wan2.6模型。**
+
+指定生成视频的镜头类型，即视频是由一个连续镜头还是多个切换镜头组成。
+
+可选值：
+
+-   `single`：默认值，输出单镜头视频。
+-   `multi`：输出多镜头视频。
+
+生效条件：仅当`"prompt_extend": true` 时生效。
+
+参数优先级：`shot_type > prompt`。例如，若 shot\_type设置为"single"，即使 prompt 中包含“生成多镜头视频”，模型仍会输出单镜头视频。
+
+**watermark** `boolean` （可选）
+
+是否添加水印标识，水印位于视频右下角，文案固定为“AI生成”。
+
+-   `false`：默认值，不添加水印。
+-   `true`：添加水印。
+
+**seed**`integer`（可选）
+
+随机数种子，取值范围为`[0, 2147483647]`。
+
+未指定时，系统自动生成随机种子。若需提升生成结果的可复现性，建议固定seed值。
+
+请注意，由于模型生成具有概率性，即使使用相同 seed，也不能保证每次生成结果完全一致。
+
+#### 多镜头叙事
 
 -   `shot_type`: 多镜头必须设为 `"multi"`。
-    
 -   `prompt_extend`: 多镜头必须设为 `true`（开启智能改写以优化分镜描述）。
-    
 
 ```
 # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
@@ -101,7 +254,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 传入音频文件
+#### 传入音频文件
 
 支持模型：wan2.6/wan2.5系列模型。
 
@@ -127,7 +280,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 自动配音
+#### 自动配音
 
 支持模型wan2.6/wan2.5系列模型。
 
@@ -152,7 +305,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 生成无声视频
+#### 生成无声视频
 
 仅wan2.2 和wanx2.1系列模型支持生成无声视频。默认生成无声视频，无需设置。
 
@@ -176,7 +329,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-## 使用反向提示词
+#### 使用反向提示词
 
 支持模型：所有模型。
 
@@ -200,225 +353,44 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-##### 请求头（Headers）
-
-**Content-Type** `_string_` **（必选）**
-
-请求内容类型。此参数必须设置为`application/json`。
-
-**Authorization** `_string_`**（必选）**
-
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
-
-**X-DashScope-Async** `_string_` **（必选）**
-
-异步处理配置参数。HTTP请求只支持异步，**必须设置为**`**enable**`。
-
-**重要**
-
-缺少此请求头将报错：“current user api does not support synchronous calls”。
-
-##### 请求体（Request Body）
-
-**model** `_string_` **（必选）**
-
-模型名称。可选模型请参见[模型列表](https://help.aliyun.com/zh/model-studio/model-pricing#8e284e51d1nil)。
-
-示例值：wan2.6-t2v。
-
-**input** `_object_` **（必选）**
-
-输入的基本信息，如提示词等。
-
-**属性**
-
-**prompt** `_string_` **（必选）**
-
-文本提示词。用来描述生成视频中期望包含的元素和视觉特点。
-
-支持中英文，每个汉字/字母占一个字符，超过部分会自动截断。长度限制因模型版本而异：
-
--   wan2.6和wan2.5系列模型：不超过1500个字符。
-    
--   wan2.2 和wanx2.1系列模型：不超过800个字符。
-    
-
-示例值：一只小猫在月光下奔跑。
-
-提示词的使用技巧请参见[文生视频/图生视频Prompt指南](https://help.aliyun.com/zh/model-studio/text-to-video-prompt)。
-
-**negative\_prompt** `_string_` （可选）
-
-反向提示词，用来描述不希望在视频画面中看到的内容，可以对视频画面进行限制。
-
-支持中英文，长度不超过500个字符，超过部分会自动截断。
-
-示例值：低分辨率、错误、最差质量、低质量、残缺、多余的手指、比例不良等。
-
-**audio\_url** `_string_` （可选）
-
-**支持模型：wan2.6和wan2.5系列模型。**
-
-音频文件URL，模型将使用该音频生成视频。
-
-支持输入的格式：
-
-1.  公网URL：
-    
-    -   支持 HTTP 和 HTTPS 协议。
-        
-    -   示例值：https://help-static-aliyun-doc.aliyuncs.com/xxx.mp3。
-        
-2.  临时URL：
-    
-    -   支持OSS协议，必须通过[上传文件获取临时 URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)。
-        
-    -   示例值：oss://dashscope-instant/xxx/xxx.mp3。
-        
-
-音频限制：
-
--   格式：wav、mp3。
-    
--   时长：3～30s。
-    
--   文件大小：不超过15MB。
-    
--   超限处理：若音频长度超过 `duration` 值（ 如5秒），自动截取前5秒，其余部分丢弃。若音频长度不足视频时长，超出音频长度部分为无声视频。例如，音频为3秒，视频时长为5秒，输出视频前3秒有声，后2秒无声。
-    
-
-**parameters** `_object_` （可选）
-
-图像处理参数。如设置视频分辨率、开启prompt智能改写、添加水印等。
-
-**属性**
-
-**size** `_string_` （可选）
-
-**重要**
-
--   size直接影响费用，请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#8e284e51d1nil)。
-    
--   size必须设置为具体数值（如 `1280*720`），而不是 1:1或480P。
-    
-
-指定生成的视频分辨率，格式为`**宽*高**`。该参数的默认值和可用枚举值依赖于 model 参数，规则如下：
-
--   **wan2.6-t2v**：默认值为 `1920*1080`（1080P）。可选分辨率：720P、1080P对应的所有分辨率。
-    
--   **wan2.6-t2v-us**：默认值为 `1920*1080`（1080P）。可选分辨率：720P、1080P对应的所有分辨率。
-    
--   **wan2.5-t2v-preview**：默认值为 `1920*1080`（1080P）。可选分辨率：480P、720P、1080P对应的所有分辨率。
-    
--   **wan2.2-t2v-plus**：默认值为 `1920*1080`（1080P）。可选分辨率：480P、1080P对应的所有分辨率。
-    
--   **wanx2.1-t2v-turbo** ：默认值为 `1280*720`（720P）。可选分辨率：480P、720P 对应的所有分辨率。
-    
--   **wanx2.1-t2v-plus**：默认值为`1280*720`（720P）。可选分辨率：720P 对应的所有分辨率。
-    
-
-480P档位：可选的视频分辨率及其对应的视频宽高比为：
-
--   `832*480`：16:9。
-    
--   `480*832`：9:16。
-    
--   `624*624`：1:1。
-    
-
-720P档位：可选的视频分辨率及其对应的视频宽高比为：
-
--   `1280*720`：16:9。
-    
--   `720*1280`：9:16。
-    
--   `960*960`：1:1。
-    
--   `1088*832`：4:3。
-    
--   `832*1088`：3:4。
-    
-
-1080P档位：可选的视频分辨率及其对应的视频宽高比为：
-
--   `1920*1080`： 16:9。
-    
--   `1080*1920`： 9:16。
-    
--   `1440*1440`： 1:1。
-    
--   `1632*1248`： 4:3。
-    
--   `1248*1632`： 3:4。
-    
-
-**duration** `_integer_` （可选）
-
-**重要**
-
-duration直接影响费用。费用 = 单价（基于分辨率）× 时长（秒），请在调用前确认[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#8e284e51d1nil)。
-
-生成视频的时长，单位为秒。该参数的取值依赖于 model参数：
-
--   wan2.6-t2v：取值为\[2, 15\]之间的整数。默认值为5。
-    
--   wan2.6-t2v-us：可选值为5、10。默认值为5。
-    
--   wan2.5-t2v-preview：可选值为5、10。默认值为5。
-    
--   wan2.2-t2v-plus：固定为5秒，且不支持修改。
-    
--   wanx2.1-t2v-plus：固定为5秒，且不支持修改。
-    
--   wanx2.1-t2v-turbo：固定为5秒，且不支持修改。
-    
-
-**prompt\_extend** `_boolean_` （可选）
-
-是否开启prompt智能改写。开启后使用大模型对输入prompt进行智能改写。对于较短的prompt生成效果提升明显，但会增加耗时。
-
--   `true`：默认值，开启智能改写。
-    
--   `false`：不开启智能改写。
-    
-
-**shot\_type** `_string_` （可选）
-
-**支持模型：wan2.6模型。**
-
-指定生成视频的镜头类型，即视频是由一个连续镜头还是多个切换镜头组成。
-
-可选值：
-
--   `single`：默认值，输出单镜头视频。
-    
--   `multi`：输出多镜头视频。
-    
-
-生效条件：仅当`"prompt_extend": true` 时生效。
-
-参数优先级：`shot_type > prompt`。例如，若 shot\_type设置为"single"，即使 prompt 中包含“生成多镜头视频”，模型仍会输出单镜头视频。
-
-**watermark** `_boolean_` （可选）
-
-是否添加水印标识，水印位于视频右下角，文案固定为“AI生成”。
-
--   `false`：默认值，不添加水印。
-    
--   `true`：添加水印。
-    
-
-**seed** `_integer_` （可选）
-
-随机数种子，取值范围为`[0, 2147483647]`。
-
-未指定时，系统自动生成随机种子。若需提升生成结果的可复现性，建议固定seed值。
-
-请注意，由于模型生成具有概率性，即使使用相同 seed，也不能保证每次生成结果完全一致。
-
 #### 响应参数
 
-### 成功响应
+**output** `object`
+
+任务输出信息。
+
+属性
+
+**task\_id** `string`
+
+任务ID。查询有效期24小时。
+
+**task\_status** `string`
+
+任务状态。
+
+枚举值
+
+-   PENDING：任务排队中
+-   RUNNING：任务处理中
+-   SUCCEEDED：任务执行成功
+-   FAILED：任务执行失败
+-   CANCELED：任务已取消
+-   UNKNOWN：任务不存在或状态未知
+
+**request\_id**`string`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+**code**`string`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**message**`string`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+#### 成功响应
 
 请保存 task\_id，用于查询任务状态与结果。
 
@@ -432,9 +404,9 @@ duration直接影响费用。费用 = 单价（基于分辨率）× 时长（秒
 }
 ```
 
-### 异常响应
+#### 异常响应
 
-创建任务失败，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+创建任务失败，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 ```
 {
@@ -444,112 +416,182 @@ duration直接影响费用。费用 = 单价（基于分辨率）× 时长（秒
 }
 ```
 
-**output** `_object_`
+### 步骤2：根据任务ID查询结果
 
-任务输出信息。
-
-**属性**
-
-**task\_id** `_string_`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `_string_`
-
-任务状态。
-
-**枚举值**
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：任务执行成功
-    
--   FAILED：任务执行失败
-    
--   CANCELED：任务已取消
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-**request\_id** `_string_`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
-**code** `_string_`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**message** `_string_`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-### **步骤2：根据任务ID查询结果**
-
-## **北京**
+#### 北京
 
 `GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## **新加坡**
+#### 新加坡
 
 `GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## **弗吉尼亚**
+#### 弗吉尼亚
 
 `GET https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-## **法兰克福**
+#### 法兰克福
 
 `GET https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
 **说明**
 
 -   **轮询建议**：视频生成过程约需数分钟，建议采用**轮询**机制，并设置合理的查询间隔（如 15 秒）来获取结果。
-    
--   **任务状态流转**：PENDING（排队中）→ RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
-    
+-   **任务状态流转**：PENDING（排队中）→ RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
 -   **结果链接**：任务成功后返回视频链接，有效期为 **24 小时**。建议在获取链接后立即下载并转存至永久存储（如[阿里云 OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)）。
-    
 -   **task\_id 有效期**：**24小时**，超时后将无法查询结果，接口将返回任务状态为`UNKNOWN`。
-    
--   **RPS 限制**：查询接口默认RPS为20。如需更高频查询或事件通知，建议[配置异步任务回调](https://help.aliyun.com/zh/model-studio/async-task-api)。
-    
--   **更多操作**：如需批量查询、取消任务等操作，请参见[管理异步任务](https://help.aliyun.com/zh/model-studio/manage-asynchronous-tasks#f26499d72adsl)。
-    
+-   **RPS 限制**：查询接口默认RPS为20。如需更高频查询或事件通知，建议[配置异步任务回调](raw/model-api-reference/more-about-models/async-task-api.md)。
+-   **更多操作**：如需批量查询、取消任务等操作，请参见[管理异步任务](raw/model-api-reference/more-about-models/manage-asynchronous-tasks.md)。
 
 #### 请求参数
 
-## 查询任务结果
+##### 请求头（Headers）
 
-将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+**Authorization**`string`**（必选）**
+
+请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+
+##### URL路径参数（Path parameters）
+
+**task\_id** `string`**（必选）**
+
+任务ID。
+
+#### 查询任务结果
+
+将`{task_id}`完整替换为上一步接口返回的`task_id`的值。`task_id`查询有效期为24小时，并请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
 ```
 curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id} \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
-##### **请求头（Headers）**
+#### 响应参数
 
-**Authorization** `_string_`**（必选）**
+**output**`object`
 
-请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
+任务输出信息。
 
-##### **URL路径参数（Path parameters）**
+属性
 
-**task\_id** `_string_`**（必选）**
+**task\_id** `string`
 
-任务ID。
+任务ID。查询有效期24小时。
 
-#### **响应参数**
+**task\_status** `string`
 
-#### **任务执行成功**
+任务状态。
+
+枚举值
+
+-   PENDING：任务排队中
+-   RUNNING：任务处理中
+-   SUCCEEDED：任务执行成功
+-   FAILED：任务执行失败
+-   CANCELED：任务已取消
+-   UNKNOWN：任务不存在或状态未知
+
+**轮询过程中的状态流转：**
+
+-   PENDING（排队中） → RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
+-   初次查询状态通常为 PENDING（排队中）或 RUNNING（处理中）。
+-   当状态变为 SUCCEEDED 时，响应中将包含生成的视频URL。
+-   若状态为 FAILED，请检查错误信息并重试。
+-   若状态为 CANCELED，表示任务已取消，如需继续请重新提交任务。
+-   若状态为 UNKNOWN，表示任务不存在或状态未知，可能在 task\_id 不存在或超过 24 小时有效期后出现。
+
+**submit\_time** `string`
+
+任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**scheduled\_time** `string`
+
+任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**end\_time** `string`
+
+任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
+
+**video\_url**`string`
+
+视频URL。仅在 task\_status 为 SUCCEEDED 时返回。
+
+链接有效期24小时，可通过此URL下载视频。视频格式为MP4（H.264 编码）。
+
+**orig\_prompt** `string`
+
+原始输入的prompt，对应请求参数`prompt`。
+
+**actual\_prompt** `string`
+
+当 `prompt_extend=true` 时，系统会对输入 prompt 进行智能改写，此字段返回实际用于生成的优化后 prompt。
+
+-   若 `prompt_extend=false`，该字段不会返回。
+-   注意：wan2.6 模型无论 `prompt_extend` 取值如何，均不返回此字段。
+
+**code**`string`
+
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**message**`string`
+
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
+
+**usage** `object`
+
+输出信息统计。只对成功的结果计数。
+
+属性
+
+**video\_duration** `integer`
+
+仅在使用 wan2.5 及以下版本模型时返回，用于计费。
+
+生成视频的时长，单位秒。枚举值为5、10。
+
+**duration** `float`
+
+仅在使用 wan2.6 模型时返回，用于计费。
+
+表示总的视频时长，且`duration=input_video_duration+output_video_duration`。
+
+**input\_video\_duration** `integer`
+
+仅在使用 wan2.6 模型时返回。固定为0。
+
+**output\_video\_duration** `integer`
+
+仅在使用 wan2.6 模型时返回。
+
+输出视频的时长，单位秒。其值等同于`input.duration`的值。
+
+**SR** `integer`
+
+仅在使用 wan2.6 模型时返回。生成视频的分辨率档位。示例值：720。
+
+**size** `string`
+
+仅在使用 wan2.6 模型时返回。生成视频的分辨率。格式为“宽_高_”_，示例值：1920_1080。
+
+**video\_ratio** `string`
+
+仅 wan2.5 及以下版本模型时返回。生成视频的分辨率。格式为“宽_高_”_，示例值：832_480。
+
+**video\_count** `integer`
+
+生成视频的数量。固定为1。
+
+**request\_id**`string`
+
+请求唯一标识。可用于请求明细溯源和问题排查。
+
+#### 任务执行成功
 
 视频URL仅保留24小时，超时后会被自动清除，请及时保存生成的视频。
 
@@ -576,9 +618,9 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
-## 任务执行失败
+#### 任务执行失败
 
-若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+若任务执行失败，task\_status将置为 FAILED，并提供错误码和信息。请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
 ```
 {
@@ -592,7 +634,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 }
 ```
 
-## 任务查询过期
+#### 任务查询过期
 
 task\_id查询有效期为 24 小时，超时后将无法查询，返回以下报错信息。
 
@@ -606,137 +648,6 @@ task\_id查询有效期为 24 小时，超时后将无法查询，返回以下�
 }
 ```
 
-**output** `_object_`
-
-任务输出信息。
-
-**属性**
-
-**task\_id** `_string_`
-
-任务ID。查询有效期24小时。
-
-**task\_status** `_string_`
-
-任务状态。
-
-**枚举值**
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：任务执行成功
-    
--   FAILED：任务执行失败
-    
--   CANCELED：任务已取消
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-**轮询过程中的状态流转：**
-
--   PENDING（排队中） → RUNNING（处理中）→ SUCCEEDED（成功）/ FAILED（失败）。
-    
--   初次查询状态通常为 PENDING（排队中）或 RUNNING（处理中）。
-    
--   当状态变为 SUCCEEDED 时，响应中将包含生成的视频URL。
-    
--   若状态为 FAILED，请检查错误信息并重试。
-    
--   若状态为 CANCELED，表示任务已取消，如需继续请重新提交任务。
-    
--   若状态为 UNKNOWN，表示任务不存在或状态未知，可能在 task\_id 不存在或超过 24 小时有效期后出现。
-    
-
-**submit\_time** `_string_`
-
-任务提交时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**scheduled\_time** `_string_`
-
-任务执行时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**end\_time** `_string_`
-
-任务完成时间。格式为 YYYY-MM-DD HH:mm:ss.SSS。
-
-**video\_url** `_string_`
-
-视频URL。仅在 task\_status 为 SUCCEEDED 时返回。
-
-链接有效期24小时，可通过此URL下载视频。视频格式为MP4（H.264 编码）。
-
-**orig\_prompt** `_string_`
-
-原始输入的prompt，对应请求参数`prompt`。
-
-**actual\_prompt** `_string_`
-
-当 `prompt_extend=true` 时，系统会对输入 prompt 进行智能改写，此字段返回实际用于生成的优化后 prompt。
-
--   若 `prompt_extend=false`，该字段不会返回。
-    
--   注意：wan2.6 模型无论 `prompt_extend` 取值如何，均不返回此字段。
-    
-
-**code** `_string_`
-
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**message** `_string_`
-
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
-
-**usage** `_object_`
-
-输出信息统计。只对成功的结果计数。
-
-**属性**
-
-**video\_duration** `_integer_`
-
-仅在使用 wan2.5 及以下版本模型时返回，用于计费。
-
-生成视频的时长，单位秒。枚举值为5、10。
-
-**duration** `_float_`
-
-仅在使用 wan2.6 模型时返回，用于计费。
-
-表示总的视频时长，且`duration=input_video_duration+output_video_duration`。
-
-**input\_video\_duration** `_integer_`
-
-仅在使用 wan2.6 模型时返回。固定为0。
-
-**output\_video\_duration** `_integer_`
-
-仅在使用 wan2.6 模型时返回。
-
-输出视频的时长，单位秒。其值等同于`input.duration`的值。
-
-**SR** `_integer_`
-
-仅在使用 wan2.6 模型时返回。生成视频的分辨率档位。示例值：720。
-
-**size** `_string_`
-
-仅在使用 wan2.6 模型时返回。生成视频的分辨率。格式为“宽\*高_”_，示例值：1920\*1080。
-
-**video\_ratio** `_string_`
-
-仅 wan2.5 及以下版本模型时返回。生成视频的分辨率。格式为“宽\*高_”_，示例值：832\*480。
-
-**video\_count** `_integer_`
-
-生成视频的数量。固定为1。
-
-**request\_id** `_string_`
-
-请求唯一标识。可用于请求明细溯源和问题排查。
-
 ## DashScope SDK调用
 
 SDK 的参数命名与HTTP接口基本一致，参数结构根据语言特性进行封装。
@@ -745,39 +656,37 @@ SDK 的参数命名与HTTP接口基本一致，参数结构根据语言特性进
 
 > 具体耗时受限于排队任务数和服务执行情况，请在获取结果时耐心等待。
 
-### **Python SDK调用**
+### Python SDK调用
 
-**重要**
+**重要**请确保 DashScope Python SDK 版本**不低于**`1.25.16`，再运行以下代码。
 
-请确保 DashScope Python SDK 版本**不低于** `**1.25.16**`，再运行以下代码。
+若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)进行更新。
+根据模型所在地域设置 `dashscope.base_http_api_url`:
 
-根据模型所在地域设置 `**dashscope.base_http_api_url**`:
-
-## **北京**
+#### 北京
 
 `dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## **新加坡**
+#### 新加坡
 
 `dashscope.base_http_api_url = 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1'`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## **弗吉尼亚**
+#### 弗吉尼亚
 
 `dashscope.base_http_api_url = 'https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1'`
 
-## **法兰克福**
+#### 法兰克福
 
 `dashscope.base_http_api_url = 'https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1'`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## 同步调用
+#### 同步调用
 
 ##### 请求示例
 
@@ -850,7 +759,7 @@ if __name__ == '__main__':
 }
 ```
 
-## 异步调用
+#### 异步调用
 
 ##### 请求示例
 
@@ -886,7 +795,7 @@ def sample_async_call_t2v():
     else:
         print('Failed, status_code: %s, code: %s, message: %s' %
               (rsp.status_code, rsp.code, rsp.message))
-                           
+
     # get the task information include the task status.
     status = VideoSynthesis.fetch(task=rsp, api_key=api_key)
     if status.status_code == HTTPStatus.OK:
@@ -959,39 +868,37 @@ if __name__ == '__main__':
 }
 ```
 
-### **Java SDK调用**
+### Java SDK调用
 
-**重要**
+**重要**请确保 DashScope Java SDK 版本**不低于**`2.22.14`，再运行以下代码。
 
-请确保 DashScope Java SDK 版本**不低于** `**2.22.14**`，再运行以下代码。
+若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](raw/model-api-reference/preparations/install-sdk.md)进行更新。
 
-若版本过低，可能会触发 "url error, please check url!" 等错误。请参考[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)进行更新。
+根据模型所在地域设置 `Constants.baseHttpApiUrl`:
 
-根据模型所在地域设置 `**Constants.baseHttpApiUrl**`:
-
-## **北京**
+#### 北京
 
 `Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## **新加坡**
+#### 新加坡
 
 `Constants.baseHttpApiUrl = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1";`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## **弗吉尼亚**
+#### 弗吉尼亚
 
 `Constants.baseHttpApiUrl = "https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1";`
 
-## **法兰克福**
+#### 法兰克福
 
 `Constants.baseHttpApiUrl = "https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1";`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## 同步调用
+#### 同步调用
 
 ##### 请求示例
 
@@ -1087,7 +994,7 @@ public class Text2Video {
 }
 ```
 
-## 异步调用
+#### 异步调用
 
 ##### 请求示例
 
@@ -1109,7 +1016,6 @@ import java.util.Map;
 
 public class Text2Video {
 
-     
     static {
         // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。获取URL：https://help.aliyun.com/zh/model-studio/text-to-video-api-reference
         Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
@@ -1118,7 +1024,7 @@ public class Text2Video {
      // 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
     // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     public static String apiKey = System.getenv("DASHSCOPE_API_KEY");
-    
+
     /**
      * Create a video compositing task and wait for the task to complete.
      */
@@ -1224,13 +1130,13 @@ public class Text2Video {
 }
 ```
 
-## **错误码**
+## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
-## **常见问题**
+## 常见问题
 
-#### **Q: 如何将临时的视频链接转为永久链接？**
+#### Q: 如何将临时的视频链接转为永久链接？
 
 A: 不能直接转换该链接。正确的做法是：后端服务获取到url后，通过代码下载该视频文件，然后将其上传到永久对象存储服务（如阿里云 OSS），生成一个新的、永久访问链接。
 
@@ -1257,6 +1163,6 @@ if __name__ == '__main__':
     download_and_save_video(video_url, save_path)
 ```
 
-#### **Q: 返回的视频链接可以在浏览器中直接播放吗？**
+#### Q: 返回的视频链接可以在浏览器中直接播放吗？
 
 A: 不建议这样做，因为链接会在 24 小时后失效。最佳实践是后端下载转存后，使用永久链接进行视频播放。

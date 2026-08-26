@@ -2,22 +2,17 @@
 
 本文介绍 DashScope API 调用阿里云百炼新版智能体应用的输入与输出参数。
 
-**相关指南：**[新版智能体应用（Agent 2.0）](https://help.aliyun.com/zh/model-studio/new-single-agent-application)。
+**相关指南：**[新版智能体应用（Agent 2.0）](raw/application-user-guide/llm-application/new-single-agent-application.md)。
 
-**重要**
+**重要**本文档仅适用于华北2（北京）地域。
 
-本文档仅适用于华北2（北京）地域。
-
-## **前置准备**
+## 前置准备
 
 开始前，请确保您已完成以下操作：
 
 1.  **创建应用：**前往[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)创建阿里云百炼**新版智能体应用**并获取应用 ID。
-    
 2.  **获取 API Key：**通过[密钥管理](https://bailian.console.aliyun.com/?tab=app#/api-key)获取，并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-    
-3.  **安装SDK（可选）：**若使用 SDK 调用，请安装相应语言的[DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
-    
+3.  **安装SDK（可选）：**若使用 SDK 调用，请安装相应语言的[DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ## 调用方式
 
@@ -36,14 +31,150 @@
 
 **在线调试**：通过**应用卡片 -> 发布 -> API 调试**路径进入调试页面后，填写参数并点击运行即可。
 
-### **请求体**
+### 请求体
 
-### **单轮对话**
+**app\_id**`string`**（必选）**
 
-### **Python**
+应用标识。
+
+在[应用管理](https://bailian.console.aliyun.com/#/app-center)的应用卡片上获取。
+
+> Java SDK中为 **appId。**通过 HTTP 调用时，请将实际的应用 ID 放入 **URL**中，替换`APP_ID`。
+
+**prompt**`string`**（必选）**
+
+用户的输入指令，用于指导应用生成回复。
+
+> 通过 HTTP 调用时，请将 **prompt**放入 **input**对象中。
+
+**session\_id**`string` （可选）
+
+历史对话标识。
+
+传入`session_id`时，请求将自动携带云端存储的对话历史。此时必须传递`prompt`。
+
+该 ID 在连续**1 小时内**无任何请求后将自动失效。
+
+> Java SDK 中为 **setSessionId**。通过 HTTP 调用时，请将 **session\_id**放入 **input**对象中。
+
+**workspace** `string` （可选）
+
+业务空间标识。相关文档：[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+
+仅调用[子业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)的应用时需传递`workspace ID`。
+
+> 通过 HTTP 调用时，请指定Header中的 **X-DashScope-WorkSpace**。
+
+**stream** `boolean`（可选） 默认值为 `false`
+
+是否以流式输出方式回复。
+
+推荐设置为`true`，可提升阅读体验并降低超时风险。
+
+参数值：
+
+-   `false`（默认）：模型生成全部内容后一次性返回；
+-   `true`（推荐）：边生成边输出，每生成一部分内容即返回一个数据块（chunk）。需实时逐个读取这些块以拼接完整回复。
+
+> 通过Java SDK实现流式输出请通过`streamCall`接口调用；通过HTTP实现流式输出请在Header中指定`X-DashScope-SSE`为`enable`。
+
+**incremental\_output** `boolean`（可选）默认值为 `false`
+
+在**流式输出模式下**是否开启增量输出。
+
+推荐设置为`true`，可提升阅读体验。
+
+参数值：
+
+-   `false`（默认）：每次输出当前已经生成的整个序列，最后一次输出为生成的完整结果。
+
+```
+I
+I like
+I like apple
+I like apple.
+```
+
+-   `true`（推荐）：增量输出，即后续输出内容不包含已输出的内容。需要实时地逐个读取这些片段以获得完整的结果。
+
+```
+I
+like
+apple
+.
+```
+
+> Java SDK中为**incrementalOutput**\*。\*通过HTTP调用时，请将**incremental\_output**放入**parameters**对象中。
+
+**enable\_thinking** `boolean` （可选）默认值为 `false`
+
+此参数用于在[深度思考模型](https://help.aliyun.com/zh/model-studio/deep-thinking)中切换思考模式和非思考模式。
+
+参数值：
+
+-   False（默认）：非思考模式。直接返回最终答案（`text`字段）。
+-   True：启用思考模式。模型先输出思考过程，再返回最终答案。
+
+优先级：
+
+-   若调用时未设置此参数，以应用内模型的思考模式开关状态为准。
+-   若调用时设置了`enable_thinking`，以 API 参数为准。
+
+**重要**要获取思考过程的内容，必须同时将`has_thoughts`设为`True`，则：
+
+1.  思考过程：`thought`字段获取。
+2.  最终答案：`text`字段获取。
+
+> 开启`enable_thinking`有极小概率不会输出思考过程。
+
+> Java SDK中为**enableThinking**。通过HTTP调用时，请将 **enable\_thinking**放入 **parameters**对象中。
+
+> Java Dashscope SDK的版本至少应为**2.20.0**。
+
+**has\_thoughts** `boolean` （可选）默认值为 `false`
+
+是否输出已开启思考模式的模型思考过程，在`thoughts`字段中查看。
+
+参数值：
+
+-   True：输出。
+-   False（默认）：不输出。
+
+> Java SDK 中为 **hasThoughts**。通过 HTTP 调用时，请将 **has\_thoughts**放入 **parameters**对象中。
+
+**image\_list** `array`（可选）
+
+图片列表。支持图像 URL 和 Data URL（Base64 编码）。应用内需选择**[图像与视频理解](https://help.aliyun.com/zh/model-studio/vision)**模型。
+
+`base64`编码格式可构建为 [Data URL](https://www.rfc-editor.org/rfc/rfc2397)：`data:[MIME_type];base64,{base64_image}`。详细说明和代码示例见本文档[视觉理解章节](raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md)。
+
+> Java SDK 中为 **images**。通过 HTTP 调用时，请将 **image\_list**放入 **input**对象中。
+
+**file\_list** `array`（可选）
+
+文件 URL 列表。
+
+> Java SDK中为 **files**。通过HTTP调用时，请将 **file\_list**放入 **input**对象中。
+
+> Python Dashscope SDK 的版本至少应为1.24.7，Java Dashscope SDK的版本至少应为2.21.13。
+
+**model\_id**`string`（可选）
+
+模型名称。
+
+API 调用时，可通过此参数传递本次调用使用的模型名称。
+
+优先级：当通过 API 传递的`model_id`与控制台配置不同时，以 API 参数值为准。
+
+> Java SDK 中为 **modelId**。通过HTTP调用时，请将 **model\_id**放入 **parameters**对象中。
+
+> Java Dashscope SDK 的版本至少应为**2.19.3**。
+
+#### 单轮对话
+
+#### Python
 
 **请求示例**
-
 ```
 import os
 from http import HTTPStatus
@@ -63,10 +194,9 @@ else:
     print(response.output.text)
 ```
 
-### **Java**
+#### Java
 
 **请求示例**
-
 ```
 // 建议dashscope SDK的版本 >= 2.12.0
 import com.alibaba.dashscope.app.*;
@@ -103,12 +233,11 @@ public class Main {
 }
 ```
 
-### **HTTP**
+#### HTTP
 
-## curl
+#### curl
 
 **请求示例**
-
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -124,10 +253,9 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 
 > APP\_ID替换为实际的应用 ID。
 
-## PHP
+#### PHP
 
 **请求示例**
-
 ```
 <?php
 
@@ -190,23 +318,20 @@ else {
         echo "request_id={$response_data['request_id']}\n";}
     echo "code={$status_code}\n";
     if (isset($response_data['message'])) {
-        echo "message={$response_data['message']}\n";} 
+        echo "message={$response_data['message']}\n";}
     else {
         echo "message=Unknown error\n";}
 }
 ?>
 ```
 
-## Node.js
+#### Node.js
 
 **需安装相关依赖：**
-
 ```
 npm install axios
 ```
-
 **请求示例**
-
 ```
 const axios = require('axios');
 
@@ -252,10 +377,9 @@ async function callDashScope() {
 callDashScope();
 ```
 
-## C#
+#### C#
 
 **请求示例**
-
 ```
 using System;
 using System.Net.Http;
@@ -266,7 +390,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        //若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。 
+        //若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
         string apiKey = Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY") ?? throw new InvalidOperationException("DASHSCOPE_API_KEY environment variable is not set.");
         string appId = "APP_ID"; // 替换为实际的应用ID
 
@@ -312,10 +436,9 @@ class Program
 }
 ```
 
-## Go
+#### Go
 
 **请求示例**
-
 ```
 package main
 
@@ -393,20 +516,20 @@ func main() {
 }
 ```
 
-### **多轮对话**
+#### 多轮对话
 
 多轮对话通过`session_id`维护会话上下文：
 
-1\. 首次请求：无需传入 session\_id，响应中会返回新生成的session\_id。
+1.  首次请求：无需传入 session\_id，响应中会返回新生成的session\_id。
+    
+2.  后续请求：携带上一次响应的 session\_id 即可延续对话。
+    
+3.  有效期：session\_id 在最后一次请求后 1 小时内有效。
+    
 
-2\. 后续请求：携带上一次响应的 session\_id 即可延续对话。
-
-3\. 有效期：session\_id 在最后一次请求后 1 小时内有效。
-
-### **Python**
+#### Python
 
 **请求示例**
-
 ```
 import os
 from http import HTTPStatus
@@ -445,10 +568,9 @@ if __name__ == '__main__':
     call_with_session()
 ```
 
-### **Java**
+#### Java
 
 **请求示例**
-
 ```
 import com.alibaba.dashscope.app.*;
 import com.alibaba.dashscope.exception.ApiException;
@@ -490,12 +612,11 @@ public class Main {
 }
 ```
 
-### **HTTP**
+#### HTTP
 
-## curl
+#### curl
 
 **请求示例（上一轮对话）**
-
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -508,9 +629,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
     "debug": {}
 }'
 ```
-
 **请求示例（下一轮对话）**
-
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -525,10 +644,9 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 }'
 ```
 
-## PHP
+#### PHP
 
 **请求示例（上一轮对话）**
-
 ```
 <?php
 # 若没有配置环境变量，可用百炼API Key将下行替换为：$api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
@@ -593,15 +711,13 @@ if ($status_code == 200) {
         echo "request_id={$response_data['request_id']}\n";}
     echo "code={$status_code}\n";
     if (isset($response_data['message'])) {
-        echo "message={$response_data['message']}\n";} 
+        echo "message={$response_data['message']}\n";}
     else {
         echo "message=Unknown error\n";}
 }
 ?>
 ```
-
 **请求示例（下一轮对话）**
-
 ```
 <?php
 # 若没有配置环境变量，可用百炼API Key将下行替换为：$api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
@@ -668,23 +784,20 @@ if ($status_code == 200) {
         echo "request_id={$response_data['request_id']}\n";}
     echo "code={$status_code}\n";
     if (isset($response_data['message'])) {
-        echo "message={$response_data['message']}\n";} 
+        echo "message={$response_data['message']}\n";}
     else {
         echo "message=Unknown error\n";}
 }
 ?>
 ```
 
-## Node.js
+#### Node.js
 
 **需安装相关依赖：**
-
 ```
 npm install axios
 ```
-
 **请求示例（上一轮对话）**
-
 ```
 const axios = require('axios');
 
@@ -729,9 +842,7 @@ async function callDashScope() {
 }
 callDashScope();
 ```
-
 **请求示例（下一轮对话）**
-
 ```
 const axios = require('axios');
 
@@ -778,10 +889,9 @@ async function callDashScope() {
 callDashScope();
 ```
 
-## C#
+#### C#
 
 **请求示例（上一轮对话）**
-
 ```
 using System;
 using System.Net.Http;
@@ -792,7 +902,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        //若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。 
+        //若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
         string apiKey = Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY") ?? throw new InvalidOperationException("DASHSCOPE_API_KEY environment variable is not set.");
         string appId = "APP_ID"; // 替换为实际的应用ID
 
@@ -837,9 +947,7 @@ class Program
     }
 }
 ```
-
 **请求示例（下一轮对话）**
-
 ```
 using System;
 using System.Net.Http;
@@ -850,7 +958,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        //若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。 
+        //若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
         string apiKey = Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY") ?? throw new InvalidOperationException("DASHSCOPE_API_KEY environment variable is not set.");
         string appId = "APP_ID"; // 替换为实际的应用ID
 
@@ -897,10 +1005,9 @@ class Program
 }
 ```
 
-## Go
+#### Go
 
 **请求示例（上一轮对话）**
-
 ```
 package main
 
@@ -977,9 +1084,7 @@ func main() {
 	}
 }
 ```
-
 **请求示例（下一轮对话）**
-
 ```
 package main
 
@@ -1060,21 +1165,20 @@ func main() {
 
 > APP\_ID替换为实际的应用 ID。下一轮对话的输入参数`session_id`字段值替换为实际上一轮对话返回的session\_id值。
 
-### **流式输出**
+#### 流式输出
 
 通过`stream`实现流式输出。
 
-## Python
+#### Python
 
 **请求示例**
-
 ```
 import os
 from http import HTTPStatus
 from dashscope import Application
 responses = Application.call(
             # 若没有配置环境变量，可用百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
-            api_key=os.getenv("DASHSCOPE_API_KEY"), 
+            api_key=os.getenv("DASHSCOPE_API_KEY"),
             app_id='APP_ID',
             prompt='你是谁？',
             stream=True,  # 流式输出
@@ -1090,10 +1194,9 @@ for response in responses:
         print(f'{response.output.text}\n')  # 处理只输出文本text
 ```
 
-## Java
+#### Java
 
 **请求示例**
-
 ```
 // 建议dashscope SDK的版本 >= 2.15.0
 import com.alibaba.dashscope.app.*;
@@ -1134,12 +1237,11 @@ public class Main {
 }
 ```
 
-## HTTP
+#### HTTP
 
-## curl
+#### curl
 
 **请求示例**
-
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1159,10 +1261,9 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 
 > APP\_ID替换为实际的应用 ID。
 
-## PHP
+#### PHP
 
 **请求示例**
-
 ```
 <?php
 
@@ -1223,17 +1324,15 @@ if ($status_code != 200) {
 ?>
 ```
 
-## Node.js
+#### Node.js
 
 **需安装相关依赖：**
-
 ```
 npm install axios
 ```
-
 **请求示例**
 
-**1.输出完整响应**
+1.输出完整响应
 
 ```
 const axios = require('axios');
@@ -1298,7 +1397,7 @@ callDashScope();
 
 可展开折叠面板查看具体内容：
 
-**2.只输出text字段内容**
+2.只输出text字段内容
 
 ```
 const axios = require('axios');
@@ -1334,15 +1433,15 @@ async function callDashScope() {
             const sseTransformer = new Transform({
                 transform(chunk, encoding, callback) {
                     this.buffer += chunk.toString();
-                    
+
                     // 按SSE事件分割（两个换行符）
                     const events = this.buffer.split(/\n\n/);
                     this.buffer = events.pop() || ''; // 保留未完成部分
-                    
+
                     events.forEach(eventData => {
                         const lines = eventData.split('\n');
                         let textContent = '';
-                        
+
                         // 解析事件内容
                         lines.forEach(line => {
                             if (line.startsWith('data:')) {
@@ -1362,7 +1461,7 @@ async function callDashScope() {
                             this.push(textContent + '\n');
                         }
                     });
-                    
+
                     callback();
                 },
                 flush(callback) {
@@ -1399,10 +1498,9 @@ async function callDashScope() {
 callDashScope();
 ```
 
-## C#
+#### C#
 
 **请求示例**
-
 ```
 using System.Net;
 using System.Text;
@@ -1438,7 +1536,6 @@ class Program
                 request.Content = content;
 
                 HttpResponseMessage response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-                
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -1475,10 +1572,9 @@ class Program
 }
 ```
 
-## Go
+#### Go
 
 **请求示例**
-
 ```
 package main
 
@@ -1579,16 +1675,15 @@ func main() {
 }
 ```
 
-## 文件问答
+#### 文件问答
 
 指定`file_list`传入文件（文档、图片、音视频）URL，启用文件问答功能。
 
 **应用配置：**应用内需开启**预解析文件**开关。
 
-## Python
+#### Python
 
 **请求示例**
-
 ```
 # Dashscope SDK 的版本至少应为1.24.7
 import os
@@ -1597,12 +1692,12 @@ from dashscope import Application
 
 responses = Application.call(
     # 若没有配置环境变量，可用百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
-    api_key=os.getenv("DASHSCOPE_API_KEY"), 
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
     app_id='YOUR_APP_ID',  # 应用ID替换YOUR_APP_ID
     prompt='一句话总结文件内容',
     stream=True,  # 流式输出
     incremental_output=True, # 增量输出
-    file_list=["https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3"],  
+    file_list=["https://dashscope.oss-cn-beijing.aliyuncs.com/audios/welcome.mp3"],
 )
 
 for response in responses:
@@ -1614,19 +1709,16 @@ for response in responses:
     else:
         print('%s\n' % (response.output.text))
 ```
-
 **响应示例**
-
 ```
 该文件是一条简短的欢迎
 信息，内容为"欢迎
 与使用阿里云"。
 ```
 
-## Java
+#### Java
 
 **请求示例**
-
 ```
 // dashscope SDK 的版本 >= 2.21.13；
 import com.alibaba.dashscope.app.*;
@@ -1666,17 +1758,14 @@ public class Main {
     }
 }
 ```
-
 **响应示例**
-
 ```
 该文件是一条简短的欢迎信息，内容为"欢迎与使用阿里云"。
 ```
 
-## curl
+#### curl
 
 **请求示例**
-
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/{YOUR_APP_ID}/completion \
         --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1689,9 +1778,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/{YOUR_APP_ID}/completion
         "debug": {}
         }'
 ```
-
 **响应示例**
-
 ```
 {
     "output": {
@@ -1713,18 +1800,15 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/{YOUR_APP_ID}/completion
 }
 ```
 
-## 视觉理解
+#### 视觉理解
 
 通过 `image_list` 参数传入图像 URL 或 Data URL（Base64 编码）启用视觉理解功能。应用内需使用**[图像与视频理解](https://help.aliyun.com/zh/model-studio/vision)**模型。
 
-**说明**
+**说明**支持使用 Base64 编码本地图像。将图像编码为 Base64 字符串后，按`data:[MIME_type];base64,{base64_image}`格式构建 Data URL 传入。`MIME_type` 必须与图像格式匹配。常见格式：PNG 使用 `image/png`，JPEG 使用 `image/jpeg`，WebP 使用 `image/webp`。
 
-支持使用 Base64 编码本地图像。将图像编码为 Base64 字符串后，按`data:[MIME_type];base64,{base64_image}`格式构建 Data URL 传入。`MIME_type` 必须与图像格式匹配。常见格式：PNG 使用 `image/png`，JPEG 使用 `image/jpeg`，WebP 使用 `image/webp`。
-
-## Python
+#### Python
 
 **URL请求示例**
-
 ```
 import os
 from http import HTTPStatus
@@ -1732,7 +1816,7 @@ from http import HTTPStatus
 from dashscope import Application
 response = Application.call(
     # 若没有配置环境变量，可用百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
-    api_key=os.getenv("DASHSCOPE_API_KEY"), 
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
     app_id='APP_ID',  # 应用ID替换APP_ID
     prompt='这是什么',
     image_list=['https://dashscope.oss-cn-beijing.aliyuncs.com/images/dog_and_girl.jpeg'],
@@ -1747,9 +1831,7 @@ else:
     print('%s\n' % (response.output.text))  # 处理只输出文本text
     # print('%s\n' % (response.usage))
 ```
-
 **Base64 编码示例**
-
 ```
 import os
 import base64
@@ -1784,10 +1866,9 @@ else:
     print('%s\n' % (response.output.text))
 ```
 
-## Java
+#### Java
 
 **URL请求示例**
-
 ```
 // 建议dashscope SDK 的版本 >= 2.19.0；
 import com.alibaba.dashscope.app.*;
@@ -1823,9 +1904,7 @@ public class Main {
     }
 }
 ```
-
 **Base64 编码示例**
-
 ```
 // 建议dashscope SDK 的版本 >= 2.19.0
 import com.alibaba.dashscope.app.*;
@@ -1876,12 +1955,11 @@ public class Main {
 }
 ```
 
-## HTTP
+#### HTTP
 
-## curl
+#### curl
 
 **URL请求示例**
-
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1894,9 +1972,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion \
     "debug": {}
 }'
 ```
-
 **Base64 编码示例**
-
 ```
 # 将本地图像编码为 Base64 字符串
 base64_image=$(base64 -i /path/to/your/image.jpeg)  # macOS/Linux
@@ -1917,10 +1993,9 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/{APP_ID}/completion \
 }"
 ```
 
-## PHP
+#### PHP
 
 **URL请求示例**
-
 ```
 <?php
 # 若没有配置环境变量，可用百炼API Key将下行替换为：$api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
@@ -1983,15 +2058,13 @@ if ($status_code == 200) {
         echo "request_id={$response_data['request_id']}\n";}
     echo "code={$status_code}\n";
     if (isset($response_data['message'])) {
-        echo "message={$response_data['message']}\n";} 
+        echo "message={$response_data['message']}\n";}
     else {
         echo "message=Unknown error\n";}
 }
 ?>
 ```
-
 **Base64 编码示例**
-
 ```
 <?php
 $api_key = getenv("DASHSCOPE_API_KEY");
@@ -2025,16 +2098,13 @@ if ($status_code == 200) {
 ?>
 ```
 
-## Node.js
+#### Node.js
 
 **需安装相关依赖：**
-
 ```
 npm install axios
 ```
-
 **URL请求示例**
-
 ```
 import axios from 'axios';
 async function callDashScope() {
@@ -2078,9 +2148,7 @@ async function callDashScope() {
 
 callDashScope();
 ```
-
 **Base64 编码示例**
-
 ```
 import axios from 'axios';
 import fs from 'fs';
@@ -2105,10 +2173,9 @@ async function callWithBase64() {
 callWithBase64();
 ```
 
-## C#
+#### C#
 
 **URL请求示例**
-
 ```
 using System;
 using System.Net.Http;
@@ -2122,7 +2189,7 @@ class Program
         // 若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
         string apiKey = Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY")?? throw new InvalidOperationException("DASHSCOPE_API_KEY environment variable is not set.");;
         string appId = "APP_ID";// 替换为实际的应用ID
-        
+
         if (string.IsNullOrEmpty(apiKey))
         {
             Console.WriteLine("请确保设置了 DASHSCOPE_API_KEY。");
@@ -2130,7 +2197,7 @@ class Program
         }
 
         string url = $"https://dashscope.aliyuncs.com/api/v1/apps/{appId}/completion";
-        
+
         using (HttpClient client = new HttpClient())
         {
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
@@ -2170,9 +2237,7 @@ class Program
     }
 }
 ```
-
 **Base64 编码示例**
-
 ```
 using System;
 using System.IO;
@@ -2203,10 +2268,9 @@ class Program
 }
 ```
 
-## Go
+#### Go
 
 **URL请求示例**
-
 ```
 package main
 
@@ -2284,9 +2348,7 @@ func main() {
 	}
 }
 ```
-
 **Base64 编码示例**
-
 ```
 package main
 
@@ -2303,37 +2365,36 @@ import (
 func main() {
 	apiKey := os.Getenv("DASHSCOPE_API_KEY")
 	appId := "APP_ID"
-	
+
 	imageData, _ := os.ReadFile("/path/to/your/image.jpeg")
 	base64Image := base64.StdEncoding.EncodeToString(imageData)
 	dataUrl := fmt.Sprintf("data:image/jpeg;base64,%s", base64Image)
-	
+
 	requestBody := map[string]interface{}{
 		"input": map[string]interface{}{"prompt": "这张图片里有什么？", "image_list": []string{dataUrl}},
 	}
-	
+
 	jsonData, _ := json.Marshal(requestBody)
 	req, _ := http.NewRequest("POST", fmt.Sprintf("https://dashscope.aliyuncs.com/api/v1/apps/%s/completion", appId), bytes.NewBuffer(jsonData))
 	req.Header.Set("Authorization", "Bearer "+apiKey)
 	req.Header.Set("Content-Type", "application/json")
-	
+
 	client := &http.Client{}
 	resp, _ := client.Do(req)
 	defer resp.Body.Close()
-	
+
 	body, _ := io.ReadAll(resp.Body)
 	fmt.Println(string(body))
 }
 ```
 
-### **自定义参数传递**
+#### 自定义参数传递
 
-通过`biz_params`传递自定义参数。相关文档：[调用智能体应用-传递自定义参数](https://help.aliyun.com/zh/model-studio/call-single-agent-application/#b774db7cdc0aa)。
+通过`biz_params`传递自定义参数。相关文档：[调用智能体应用-传递自定义参数](https://help.aliyun.com/zh/model-studio/call-single-agent-application#b774db7cdc0aa)。
 
-### **Python**
+#### Python
 
 **请求示例**
-
 ```
 import os
 from http import HTTPStatus
@@ -2360,10 +2421,9 @@ else:
     print('%s\n' % (response.output.text))
 ```
 
-### **Java**
+#### Java
 
 **请求示例**
-
 ```
 import com.alibaba.dashscope.app.*;
 import com.alibaba.dashscope.exception.ApiException;
@@ -2402,10 +2462,9 @@ public class Main {
 }
 ```
 
-### **HTTP**
+#### HTTP
 
 **请求示例**
-
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -2431,160 +2490,9 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/APP_ID/completion \
 
 > APP\_ID替换为实际的应用 ID。<TOOL\_ID>替换为插件ID。
 
-**app\_id** `_string_` **（必选）**
-
-应用标识。
-
-在[应用管理](https://bailian.console.aliyun.com/#/app-center)的应用卡片上获取。
-
-> Java SDK中为 **appId。**通过 HTTP 调用时，请将实际的应用 ID 放入 **URL** 中，替换`**APP_ID**`。
-
-**prompt** `_string_` **（必选）**
-
-用户的输入指令，用于指导应用生成回复。
-
-> 通过 HTTP 调用时，请将 **prompt** 放入 **input** 对象中。
-
-**session\_id** `_string_` （可选）
-
-历史对话标识。
-
-传入`session_id`时，请求将自动携带云端存储的对话历史。此时必须传递`prompt`。
-
-该 ID 在连续 **1 小时内**无任何请求后将自动失效。
-
-> Java SDK 中为 **setSessionId**。通过 HTTP 调用时，请将 **session\_id** 放入 **input** 对象中。
-
-**workspace** `_string_` （可选）
-
-业务空间标识。相关文档：[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
-
-仅调用[子业务空间](https://help.aliyun.com/zh/model-studio/use-workspace)的应用时需传递`workspace ID`。
-
-> 通过 HTTP 调用时，请指定Header中的 **X-DashScope-WorkSpace**。
-
-**stream** `_boolean_`（可选） 默认值为 `false`
-
-是否以流式输出方式回复。
-
-推荐设置为`true`，可提升阅读体验并降低超时风险。
-
-参数值：
-
--   `false`（默认）：模型生成全部内容后一次性返回；
-    
--   `true`（推荐）：边生成边输出，每生成一部分内容即返回一个数据块（chunk）。需实时逐个读取这些块以拼接完整回复。
-    
-
-> 通过Java SDK实现流式输出请通过`streamCall`接口调用；通过HTTP实现流式输出请在Header中指定`X-DashScope-SSE`为`enable`。
-
-**incremental\_output** `_boolean_`（可选）默认值为 `false`
-
-在**流式输出模式下**是否开启增量输出。
-
-推荐设置为`true`，可提升阅读体验。
-
-参数值：
-
--   `false`（默认）：每次输出当前已经生成的整个序列，最后一次输出为生成的完整结果。
-    
-    ```
-    I
-    I like
-    I like apple
-    I like apple.
-    ```
-    
--   `true`（推荐）：增量输出，即后续输出内容不包含已输出的内容。需要实时地逐个读取这些片段以获得完整的结果。
-    
-    ```
-    I
-    like
-    apple
-    .
-    ```
-    
-
-> Java SDK中为**incrementalOutput**_。_通过HTTP调用时，请将**incremental\_output**放入**parameters**对象中。
-
-**enable\_thinking** `_boolean_` （可选）默认值为 `false`
-
-此参数用于在[深度思考模型](https://help.aliyun.com/zh/model-studio/deep-thinking#5be853b164zv4)中切换思考模式和非思考模式。
-
-参数值：
-
--   False（默认）：非思考模式。直接返回最终答案（`text`字段）。
-    
--   True：启用思考模式。模型先输出思考过程，再返回最终答案。
-    
-
-优先级：
-
--   若调用时未设置此参数，以应用内模型的思考模式开关状态为准。
-    
--   若调用时设置了`enable_thinking`，以 API 参数为准。
-    
-
-**重要**
-
-要获取思考过程的内容，必须同时将`has_thoughts`设为`True`，则：
-
-1.  思考过程：`thought`字段获取。
-    
-2.  最终答案：`text`字段获取。
-    
-
-> 开启`enable_thinking`有极小概率不会输出思考过程。
-
-> Java SDK中为**enableThinking**。通过HTTP调用时，请将 **enable\_thinking**放入 **parameters** 对象中。
-
-> Java Dashscope SDK的版本至少应为**2.20.0**。
-
-**has\_thoughts** `_boolean_` （可选）默认值为 `false`
-
-是否输出已开启思考模式的模型思考过程，在`thoughts`字段中查看。
-
-参数值：
-
--   True：输出。
-    
--   False（默认）：不输出。
-    
-
-> Java SDK 中为 **hasThoughts**。通过 HTTP 调用时，请将 **has\_thoughts** 放入 **parameters** 对象中。
-
-**image\_list**`_array_`（可选）
-
-图片列表。支持图像 URL 和 Data URL（Base64 编码）。应用内需选择**[图像与视频理解](https://help.aliyun.com/zh/model-studio/vision)**模型。
-
-`base64`编码格式可构建为 [Data URL](https://www.rfc-editor.org/rfc/rfc2397)：`data:[MIME_type];base64,{base64_image}`。详细说明和代码示例见本文档[视觉理解章节](#9f2f0735d57ix)。
-
-> Java SDK 中为 **images**。通过 HTTP 调用时，请将 **image\_list** 放入 **input** 对象中。
-
-**file\_list**`_array_`（可选）
-
-文件 URL 列表。
-
-> Java SDK中为 **files**。通过HTTP调用时，请将 **file\_list** 放入 **input** 对象中。
-
-> Python Dashscope SDK 的版本至少应为1.24.7，Java Dashscope SDK的版本至少应为2.21.13。
-
-**model\_id** `_string_`（可选）
-
-模型名称。
-
-API 调用时，可通过此参数传递本次调用使用的模型名称。
-
-优先级：当通过 API 传递的`model_id`与控制台配置不同时，以 API 参数值为准。
-
-> Java SDK 中为 **modelId**。通过HTTP调用时，请将 **model\_id**放入 **parameters** 对象中。
-
-> Java Dashscope SDK 的版本至少应为**2.19.3**。
-
-### **响应对象**
+### 响应对象
 
 **成功响应示例**
-
 ```
 {
     "status_code": 200,
@@ -2610,7 +2518,6 @@ API 调用时，可通过此参数传递本次调用使用的模型名称。
     }
 }
 ```
-
 **异常响应示例**
 
 在访问请求出错的情况下，输出的结果中会通过 code 和 message 指明错误原因。
@@ -2618,12 +2525,12 @@ API 调用时，可通过此参数传递本次调用使用的模型名称。
 此处展示未传入正确`API-KEY`的异常响应示例。
 
 ```
-request_id=1d14958f-0498-91a3-9e15-be477971967b, 
-code=401, 
+request_id=1d14958f-0498-91a3-9e15-be477971967b,
+code=401,
 message=Invalid API-key provided.
 ```
 
-**status\_code** `_string_`
+**status\_code** `string`
 
 返回的状态码。
 
@@ -2633,115 +2540,113 @@ message=Invalid API-key provided.
 
 > Java SDK不会返回该参数。调用失败会抛出异常，异常信息为**status\_code**和**message**的内容。
 
-**request\_id** `_string_`
+**request\_id** `string`
 
 本次调用的唯一标识符。
 
 > Java SDK返回参数为`requestId`。
 
-**code** `_string_`
+**code** `string`
 
 表示错误码，调用成功时为空值。
 
 > 只有Python SDK返回该参数。
 
-**message** `_string_`
+**message** `string`
 
 表示错误详细信息，请求成功则忽略。
 
 > 只有Python SDK返回该参数。
 
-**output** `_object_`
+**output** `object`
 
 调用结果信息。
 
-**output属性**
+output属性
 
-**text** `_string_`
+**text** `string`
 
 模型生成的回复内容。
 
-**finish\_reason** `_string_`
+**finish\_reason** `string`
 
 完成原因。
 
 `stop`为自然结束（遇预设标记），`null`为强制中断（如达到最大长度限制或手动停止）。
 
-**session\_id** `_string_`
+**session\_id**`string`
 
 当前对话的唯一标识。
 
 在后续请求中传入，可携带历史对话记录。
 
-**thoughts** `_array_`
+**thoughts**`array`
 
-调用时将`has_thoughts`参数设置为True，即可在`thoughts`中查看[深度思考模型](https://help.aliyun.com/zh/model-studio/deep-thinking#5be853b164zv4)的思考过程。
+调用时将`has_thoughts`参数设置为True，即可在`thoughts`中查看[深度思考模型](https://help.aliyun.com/zh/model-studio/deep-thinking)的思考过程。
 
-**thoughts属性**
+thoughts属性
 
-**thought** `_string_`
+**thought** `string`
 
 模型的思考过程。
 
 **使用步骤**
 
-1.  控制台应用内选择[深度思考模型](https://help.aliyun.com/zh/model-studio/deep-thinking#5be853b164zv4)，并成功发布；
-    
+1.  控制台应用内选择[深度思考模型](https://help.aliyun.com/zh/model-studio/deep-thinking)，并成功发布；
 2.  API 调用时将 `has_thoughts` 参数设为 `True`。
-    
 
-**action\_type** `_string_`
+**action\_type** `string`
 
-大模型返回的执行步骤类型。如reasoning表示[深度思考模型](https://help.aliyun.com/zh/model-studio/deep-thinking#5be853b164zv4)的思考过程。
+大模型返回的执行步骤类型。如reasoning表示[深度思考模型](https://help.aliyun.com/zh/model-studio/deep-thinking)的思考过程。
 
-**action\_name** `_string_`
+**action\_name** `string`
 
 执行的action名称，如思考过程。
 
-**action** `_string_`
+**action** `string`
 
 执行的步骤。
 
-**action\_input\_stream** `_string_`
+**action\_input\_stream** `string`
 
 入参的流式结果。
 
-**action\_input** `_string_`
+**action\_input** `string`
 
 输入参数。
 
-**doc\_references** `_null_`
+**doc\_references** `null`
 
 新版智能体应用（Agent 2.0）将知识库统一为工具由智能体自主调用，该字段固定返回 `null`（与旧版智能体应用 Agent 1.0 不同）。如需在回答中展示知识来源，请在应用配置中开启**展示回答来源**功能，引用信息将以角标形式嵌入回答文本中。
 
-**usage** `_object_`
+**usage** `object`
 
 表示本次请求使用的数据信息。
 
-**usage属性**
+usage属性
 
-**models** `_array_`
+**models**`array`
 
 本次调用的模型信息。
 
-**models属性**
+models属性
 
-**model\_id** `_string_`
+**model\_id** `string`
 
 本次应用调用到的模型 ID。
 
-**input\_tokens** `_integer_`
+**input\_tokens** `integer`
 
 用户输入文本转换成Token后的长度。
 
-**output\_tokens** `_integer_`
+**output\_tokens** `integer`
 
 模型生成回复转换为Token后的长度。
 
-## **QPM限制**
+## QPM限制
 
 单应用默认QPM（每分钟请求数）为15000。
 
 ## 错误码
 
-如果调用失败并返回报错信息，请参阅[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果调用失败并返回报错信息，请参阅[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。

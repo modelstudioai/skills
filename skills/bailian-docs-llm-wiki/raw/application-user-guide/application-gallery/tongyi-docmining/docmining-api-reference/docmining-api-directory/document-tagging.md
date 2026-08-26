@@ -2,13 +2,13 @@
 
 本文为您介绍通义数据挖掘打标分类API的语法及示例。
 
-## **请求语法**
+## 请求语法
 
 ```
 POST /zhiwen-chat/tagging HTTP/1.1
 ```
 
-## **请求参数**
+## 请求参数
 
 **名称**
 
@@ -66,7 +66,7 @@ boolean
 
 true
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -136,11 +136,11 @@ int
 
 总token数量
 
-## **示例**
+## 示例
 
-### **调用示例**
+### 调用示例
 
-Python
+python
 
 ```
 import os
@@ -178,7 +178,7 @@ with requests.post(url, json=request_body, headers=request_headers) as response:
         print("Received:", response.json())
 ```
 
-Java
+java
 
 ```
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -317,7 +317,7 @@ public class TaggingDemo {
 }
 ```
 
-### **正常返回示例**
+### 正常返回示例
 
 `JSON`格式
 
@@ -341,6 +341,6 @@ public class TaggingDemo {
 }
 ```
 
-## **错误码**
+## 错误码
 
-请参见[错误码-通义数据挖掘](https://help.aliyun.com/zh/model-studio/docmining-error-code)。
+请参见[错误码-通义数据挖掘](raw/application-user-guide/application-gallery/tongyi-docmining/docmining-api-reference/docmining-error-code.md)。

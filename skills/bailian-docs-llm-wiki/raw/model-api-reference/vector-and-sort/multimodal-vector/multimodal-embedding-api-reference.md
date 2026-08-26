@@ -2,18 +2,15 @@
 
 多模态向量模型将文本、图像和视频转换为同一语义空间中的向量表示，支持跨模态检索、内容分类和语义相似度计算。
 
-## **核心能力**
+## 核心能力
 
 -   **跨模态检索**：以文搜图、以图搜视频、以图搜图等跨模态语义搜索。
-    
 -   **语义相似度计算**：在统一向量空间中衡量不同模态内容之间的语义相似性。
-    
 -   **内容分类与聚类**：基于语义向量进行智能分组、打标和聚类分析。
-    
 
 > **关键特性** ：所有模态（文本、图片、视频）的向量均位于同一语义空间，可通过余弦相似度等方法直接进行跨模态匹配与比较。模型选型和使用方法详见 [文本与多模态向量化](https://help.aliyun.com/zh/model-studio/embedding) 。
 
-## **向量类型说明**
+## 向量类型说明
 
 多模态向量模型支持两种向量生成方式：
 
@@ -22,21 +19,17 @@
 -   **多模态融合向量**：将 contents 中的所有输入融合为 1 个向量，实现跨模态综合语义表征。适用于需要整体理解多模态内容的场景，如将商品图片和描述文本融合为统一表征进行检索。`qwen3-vl-embedding` 通过设置 `enable_fusion=true` 开启融合模式；`tongyi-embedding-vision-plus-2026-03-06` 和 `tongyi-embedding-vision-flash-2026-03-06` 通过将 text、image、video 放在同一个 content 对象中实现融合。融合向量支持以下组合：
     
     -   文本 + 图片融合
-        
     -   文本 + 视频融合
-        
     -   多图 + 文本融合（传入多个 image 条目）
-        
     -   图片 + 视频 + 文本混合融合
-        
 
 > `qwen2.5-vl-embedding` 仅支持融合向量，不支持独立向量。 `tongyi-embedding-vision-plus` 和 `tongyi-embedding-vision-flash` 仅支持独立向量。 `tongyi-embedding-vision-plus-2026-03-06` 和 `tongyi-embedding-vision-flash-2026-03-06` 同时支持独立向量和融合向量，融合向量通过将 text、image、video 放在同一个 content 对象中实现。
 
 模型介绍、选型建议和使用方法，请参考[文本与多模态向量化](https://help.aliyun.com/zh/model-studio/embedding)。
 
-## **模型概览**
+## 模型概览
 
-### 北京
+#### 北京
 
 **模型名称**
 
@@ -50,11 +43,11 @@
 
 **单价（每千输入Token）**
 
-**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#591f3dfedfyzj)
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
 
 qwen3-vl-embedding
 
-2560（默认）, 2048, 1536, 1024, 768, 512, 256
+2560（默认）, 2048, 1536, 1024, 768, 512, 256
 
 32,000 Token
 
@@ -72,7 +65,7 @@ qwen3-vl-embedding
 
 qwen2.5-vl-embedding
 
-2048, 1024（默认）, 768, 512
+2048, 1024（默认）, 768, 512
 
 单张大小不超过**5 MB**
 
@@ -126,7 +119,7 @@ multimodal-embedding-v1
 
 文本：0.0007 元
 
-### 新加坡
+#### 新加坡
 
 **模型名称**
 
@@ -160,7 +153,7 @@ tongyi-embedding-vision-flash
 
 0.00015元
 
-### **输入格式与语种限制：**
+### 输入格式与语种限制：
 
 **多模态融合向量模型**
 
@@ -178,7 +171,7 @@ qwen3-vl-embedding
 
 支持中、英、日、韩、法、德等33种主流语言
 
-**所有支持语言**
+所有支持语言
 
 中文、日语、韩语、印尼语、越南语、泰语、英语、法语、德语、俄语、葡萄牙语、西班牙语、意大利语、瑞典语、丹麦语、捷克语、挪威语、荷兰语、芬兰语、土耳其语、波兰语、斯瓦希里语、罗马尼亚语、塞尔维亚语、希腊语、哈萨克语、乌兹别克语、宿务语、阿拉伯语、乌尔都语、波斯语、印地语 / 天城语、希伯来语。
 
@@ -192,7 +185,7 @@ qwen2.5-vl-embedding
 
 支持中、英、日、韩、法、德等11种主流语言
 
-**所有支持语言**
+所有支持语言
 
 中文、英语、日语、韩语、法语、德语、俄语、葡萄牙语、西班牙语、意大利语、印尼语
 
@@ -214,7 +207,7 @@ tongyi-embedding-vision-plus-2026-03-06
 
 支持中、英、日、韩等超30种主流语言
 
-**所有支持语言**
+所有支持语言
 
 中文、日语、韩语、印尼语、越南语、泰语、英语、法语、德语、俄语、葡萄牙语、西班牙语、意大利语、瑞典语、丹麦语、捷克语、挪威语、荷兰语、芬兰语、土耳其语、波兰语、斯瓦希里语、罗马尼亚语、塞尔维亚语、希腊语、哈萨克语、乌兹别克语、宿务语、阿拉伯语、乌尔都语、波斯语、印地语 / 天城语、希伯来语。
 
@@ -248,7 +241,7 @@ JPG, PNG, BMP (支持URL或Base64)
 
 > 所有模型均支持 text、image、video 三种输入类型及其组合。 `tongyi-embedding-vision-plus` 、 `tongyi-embedding-vision-flash` 、`tongyi-embedding-vision-plus-2026-03-06` 和 `tongyi-embedding-vision-flash-2026-03-06` 额外支持 `multi_images` 多图序列输入。
 
-### **模型能力对照**
+### 模型能力对照
 
 **模型**
 
@@ -314,17 +307,17 @@ text、image、video
 
 不支持 dimension 参数，固定 1024 维
 
-## **前提条件**
+## 前提条件
 
-您需要已[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
 
 ## HTTP调用
 
 `POST https://dashscope.aliyuncs.com/api/v1/services/embeddings/multimodal-embedding/multimodal-embedding`
 
-### **请求**
+### 请求
 
-## 多模态独立向量
+#### 多模态独立向量
 
 > 以下示例使用 `tongyi-embedding-vision-plus` 模型生成独立向量（每个输入各自生成 1 个向量），也可替换为其他模型名称。其中 `multi_images` 类型仅 `tongyi-embedding-vision-plus` 和 `tongyi-embedding-vision-flash` 支持。`qwen3-vl-embedding` 额外支持融合向量模式，通过设置 `enable_fusion=true` 开启，详见"多模态融合向量"标签页。
 
@@ -335,7 +328,7 @@ curl --silent --location --request POST 'https://dashscope.aliyuncs.com/api/v1/s
     --data '{
         "model": "tongyi-embedding-vision-plus",
         "input": {
-            "contents": [ 
+            "contents": [
                 {"text": "多模态向量模型"},
                 {"image": "https://img.alicdn.com/imgextra/i3/O1CN01rdstgY1uiZWt8gqSL_!!6000000006071-0-tps-1970-356.jpg"},
                 {"video": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250107/lbcemt/new+video.mp4"},
@@ -349,7 +342,7 @@ curl --silent --location --request POST 'https://dashscope.aliyuncs.com/api/v1/s
     }'
 ```
 
-## 多模态融合向量
+#### 多模态融合向量
 
 > `qwen3-vl-embedding`支持融合向量生成，通过设置 `enable_fusion=true` 将所有输入融合为 1 个向量。支持文本+图片、文本+视频、多图+文本、图片+视频+文本等多种融合组合。以下示例展示多图+视频+文本的混合融合。
 
@@ -373,7 +366,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/embeddings/multi
     }'
 ```
 
-## 2026-03-06 快照版本示例
+#### 2026-03-06 快照版本示例
 
 > `tongyi-embedding-vision-plus-2026-03-06` 和 `tongyi-embedding-vision-flash-2026-03-06` 是基于 Qwen3 底座的新版模型，支持 `res_level`（多分辨率）和 `max_video_frames`（视频帧数）参数，同时支持独立向量和融合向量生成。
 
@@ -425,97 +418,86 @@ curl --silent --location --request POST 'https://dashscope.aliyuncs.com/api/v1/s
     }'
 ```
 
-#### **请求头（Headers）**
+#### 请求头（Headers）
 
-**Content-Type** `_string_` **（必选）**
+**Content-Type**`string`**（必选）**
 
 请求内容类型。此参数必须设置为`application/json`。
 
-**Authorization** `_string_`**（必选）**
+**Authorization**`string`**（必选）**
 
 请求身份认证。接口使用阿里云百炼API Key进行身份认证。示例值：Bearer sk-xxxx。
 
-#### **请求体（Request Body）**
+#### 请求体（Request Body）
 
-**model** `_string_`**（必选）**
+**model**`string`**（必选）**
 
-模型名称。设置为[模型概览](#3ef850b9cfgvv)中的模型名称。
+模型名称。设置为[模型概览](https://help.aliyun.com/zh/model-studio/multimodal-embedding-api-reference#3ef850b9cfgvv)中的模型名称。
 
-**input** `_object_` **（必选）**
+**input**`object`**（必选）**
 
 输入内容。
 
-**属性**
+属性
 
-contents `_array_`**（必选）**
+contents`array`**（必选）**
 
 待处理的内容列表。每个元素是一个字典或者字符串，用于指定内容的类型和值。格式为{"模态类型": "输入字符串或图像、视频url"}。支持`text`, `image`, `video`和`multi_images`四种模态类型。
 
 > `qwen3-vl-embedding` 同时支持融合向量和独立向量生成。在多模态独立向量的基础上增加 bool 类型字段 `enable_fusion`，当 `enable_fusion=true` 时返回融合向量。`qwen2.5-vl-embedding` 仅支持融合向量，不支持独立向量。`tongyi-embedding-vision-plus-2026-03-06` 和 `tongyi-embedding-vision-flash-2026-03-06` 同时支持独立向量和融合向量，通过将 text、image、video 放在同一个 content 对象中生成融合向量（不使用 enable\_fusion 参数）。
 
 -   文本：key为`text`。value为字符串形式。也可不通过dict直接传入字符串。
-    
 -   图片：key为`image`。value可以是公开可访问的URL，或Base64编码的Data URI。Base64格式为 `data:image/{format};base64,{data}`，其中 `{format}` 是图片格式（如 `jpeg`, `png`），`{data}` 是Base64编码字符串。
-    
 -   多图片：仅`tongyi-embedding-vision-plus`、`tongyi-embedding-vision-flash`、`tongyi-embedding-vision-plus-2026-03-06`与`tongyi-embedding-vision-flash-2026-03-06`模型支持此类型。key为`multi_images`，value是多图序列列表，每条为一个图片，格式要求如上方所示。
-    
 -   视频：key为`video`，value必须是公开可访问的URL。
-    
 
-**parameters** `_object_` （可选）
+**parameters** `object` （可选）
 
 向量处理参数。HTTP调用需包装在parameters对象中，SDK调用可直接使用以下参数。
 
-**属性**
+属性
 
-**output\_type** `_string_` （可选）
+**output\_type** `string` （可选）
 
 用户指定输出向量表示格式，目前仅支持dense。
 
-**dimension** `_integer_` （可选）
+**dimension** `integer` （可选）
 
 用于用户指定输出向量维度。不同模型支持的值不同：
 
--   `qwen3-vl-embedding` 支持 2560、2048、1536、1024、768、512、256，默认值为 2560；
-    
--   `qwen2.5-vl-embedding` 支持 2048、1024、768、512，默认值为 1024；
-    
--   `tongyi-embedding-vision-plus` 不支持此参数，固定返回 1152 维向量。
-    
--   `tongyi-embedding-vision-flash` 不支持此参数，固定返回 768 维向量。
-    
--   `tongyi-embedding-vision-plus-2026-03-06` 支持 64、128、256、512、1024、1152，默认值为 1152；
-    
--   `tongyi-embedding-vision-flash-2026-03-06` 支持 64、128、256、512、768，默认值为 768；
-    
--   `multimodal-embedding-v1` 不支持此参数，固定返回 1024 维向量。
-    
+-   `qwen3-vl-embedding` 支持 2560、2048、1536、1024、768、512、256，默认值为 2560；
+-   `qwen2.5-vl-embedding` 支持 2048、1024、768、512，默认值为 1024；
+-   `tongyi-embedding-vision-plus` 不支持此参数，固定返回 1152 维向量。
+-   `tongyi-embedding-vision-flash` 不支持此参数，固定返回 768 维向量。
+-   `tongyi-embedding-vision-plus-2026-03-06` 支持 64、128、256、512、1024、1152，默认值为 1152；
+-   `tongyi-embedding-vision-flash-2026-03-06` 支持 64、128、256、512、768，默认值为 768；
+-   `multimodal-embedding-v1` 不支持此参数，固定返回 1024 维向量。
 
-**fps** `_float_` （可选）
+**fps** `float` （可选）
 
 控制视频的帧数，比例越小，实际抽取的帧数越少，范围为 \[0,1\]。默认值为1.0。
 
-**instruct** `_string_` （可选）
+**instruct** `string` （可选）
 
 添加自定义任务说明，可用于指导模型理解查询意图。建议使用英文撰写，通常可带来约 1%–5% 的效果提升。
 
-**enable\_fusion** `_bool_` （可选）
+**enable\_fusion** `bool` （可选）
 
 是否生成融合向量。仅 `qwen3-vl-embedding` 模型支持该参数。设置为 `true` 时，将 contents 中的所有多模态内容融合为 1 个向量；默认为 `false`，各模态独立生成向量。融合向量支持文本+图片、文本+视频、多图+文本（传入多个 image 条目）、图片+视频+文本等组合，适用于需要综合理解多模态内容的检索场景。
 
 > `tongyi-embedding-vision-plus-2026-03-06` 和 `tongyi-embedding-vision-flash-2026-03-06` 不使用该参数，而是通过将 text、image、video 放在同一个 content 对象中来生成融合向量。
 
-**res\_level** `_integer_` （可选）
+**res\_level** `integer` （可选）
 
 指定输入分辨率档位，支持设置 0/1/2/3 四档，对应的单图 token 分别是 127/402/578/1026，默认值为 1（402 token）。仅 `tongyi-embedding-vision-plus-2026-03-06` 和 `tongyi-embedding-vision-flash-2026-03-06` 模型支持该参数。对于 IPC/自驾/视觉文字等图像分辨率敏感的场景，高分辨率（res\_level=3）可提升 5%-10% 效果。
 
-**max\_video\_frames** `_integer_` （可选）
+**max\_video\_frames** `integer` （可选）
 
 控制视频的最大采样帧数上限，最大不超过 64，默认值为 8。仅 `tongyi-embedding-vision-plus-2026-03-06` 和 `tongyi-embedding-vision-flash-2026-03-06` 模型支持该参数。
 
-### **响应**
+### 响应
 
-## 成功响应
+#### 成功响应
 
 ```
 {
@@ -566,14 +548,10 @@ contents `_array_`**（必选）**
 }
 ```
 
-**说明**
-
-不同模型返回的 `usage` 字段存在差异，请参考以下说明：
+**说明**不同模型返回的 `usage` 字段存在差异，请参考以下说明：
 
 -   `tongyi-embedding-vision-*` 系列模型：返回 `input_tokens`（含文本和图片 Token 总和）、`input_tokens_details`（含 `image_tokens` 和 `text_tokens`）、`output_tokens`、`total_tokens`。以上响应示例对应此类模型。
-    
 -   `qwen3-vl-embedding`：仅返回 `input_tokens`（仅含文本 Token，包括系统模板 Token）、`image_tokens`、`total_tokens`（= `input_tokens` + `image_tokens`）。不返回 `input_tokens_details` 和 `output_tokens`。示例：
-    
 
 ```
 {
@@ -588,11 +566,9 @@ contents `_array_`**（必选）**
 **说明**
 
 -   `qwen2.5-vl-embedding`：仅返回 `input_tokens` 和 `image_tokens`，不返回 `total_tokens`、`input_tokens_details` 和 `output_tokens`。
-    
 -   `multimodal-embedding-v1`：返回 `input_tokens`、`image_tokens`、`image_count` 和 `duration`，不返回 `total_tokens`、`input_tokens_details` 和 `output_tokens`。
-    
 
-## 异常响应
+#### 异常响应
 
 ```
 {
@@ -602,7 +578,7 @@ contents `_array_`**（必选）**
 }
 ```
 
-本 API 常见的错误码及排查方向如下。完整错误码请参见[通用错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+本 API 常见的错误码及排查方向如下。完整错误码请参见[通用错误码](raw/model-api-reference/preparations/error-code.md)。
 
 **错误码**
 
@@ -660,95 +636,95 @@ API Key 无效或已过期，返回 `Invalid API-key provided.`
 
 检查请求体结构，确认 `input` 及 `input.contents` 字段存在且元素格式符合本文请求参数说明；结构无误仍持续报错时，携带 `request_id` 联系技术支持。
 
-**output** `_object_`
+**output**`object`
 
 任务输出信息。
 
-**属性**
+属性
 
-**embeddings** `_array_`
+**embeddings**`array`
 
 向量结果列表，每个对象对应输入列表中的一个元素。
 
-**属性**
+属性
 
-**index** `_int_`
+**index**`int`
 
 结果在输入列表中的索引。
 
-**embedding** `_array_`
+**embedding**`array`
 
 生成的向量数组，维度取决于模型及 `dimension` 参数设置。
 
-**type** `_string_`
+**type**`string`
 
 结果对应的输入类型。`text`、`image`、`video`、`multi_images` 分别对应文本、图片、视频、多图输入。以下为特殊类型： `fused` 为 `tongyi-embedding-vision-plus-2026-03-06` 和 `tongyi-embedding-vision-flash-2026-03-06` 模型返回的融合向量类型；`fusion` 为 `qwen3-vl-embedding`或`qwen2.5-vl-embedding`模型在融合向量模式下返回的类型；`vl` 为 `qwen3-vl-embedding` 模型在独立向量模式下返回的类型。
 
-**request\_id** `_string_`
+**request\_id**`string`
 
 请求唯一标识。可用于请求明细溯源和问题排查。
 
-**code** `_string_`
+**code**`string`
 
-请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+请求失败的错误码。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
 
-**message** `_string_`
+**message**`string`
 
-请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+请求失败的详细信息。请求成功时不会返回此参数，详情请参见[错误码](raw/model-api-reference/preparations/error-code.md)。
 
-**usage** `_object_`
+**usage**`object`
 
 输出信息统计。
 
-**属性**
+属性
 
-**input\_tokens** `_int_`
+**input\_tokens**`int`
 
 本次请求输入内容的 Token 数目。对于 `qwen3-vl-embedding` 和 `qwen2.5-vl-embedding` 模型，该值仅包含文本 Token（含系统模板 Token），不包含图片/视频 Token；对于 `tongyi-embedding-vision-*` 系列模型，该值包含文本和图片/视频 Token 的总和。
 
-**input\_tokens\_details** `_object_`
+**input\_tokens\_details**`object`
 
 输入 Token 的详细分类信息。仅 `tongyi-embedding-vision-*` 系列模型返回此字段，`qwen3-vl-embedding`、`qwen2.5-vl-embedding` 和 `multimodal-embedding-v1` 不返回此字段。
 
-**属性**
+属性
 
-**image\_tokens** `_int_`
+**image\_tokens**`int`
 
 输入内容中图片或视频等**视觉部分**消耗的 Token 数量，**不包含文本**（文本部分见 `text_tokens`）。图片消耗的 Token 数量与输入图片的分辨率有关，分辨率越高消耗的 Token 越多；若输入为视频，系统会先对视频抽帧，再基于抽帧结果计算 Token。
 
-**text\_tokens** `_int_`
+**text\_tokens**`int`
 
 输入内容中**文本部分**消耗的 Token 数量（不包含图片或视频等视觉部分）。
 
-**output\_tokens** `_int_`
+**output\_tokens**`int`
 
 本次请求输出的 Token 数目。仅 `tongyi-embedding-vision-*` 系列模型返回此字段，其他模型不返回此字段。
 
-**total\_tokens** `_int_`
+**total\_tokens**`int`
 
 输入与输出的 Token 总数。对于 `qwen3-vl-embedding` 模型，`total_tokens` = `input_tokens` + `image_tokens`。仅 `qwen3-vl-embedding` 和 `tongyi-embedding-vision-*` 系列模型返回此字段，`qwen2.5-vl-embedding` 和 `multimodal-embedding-v1` 不返回此字段。
 
-**image\_tokens** `_int_`
+**image\_tokens**`int`
 
 本次请求输入的图片或视频等**视觉部分**消耗的 Token 数量（**不包含文本**）。图片消耗的 Token 数量与输入图片的分辨率有关；系统会对输入视频进行抽帧处理，帧数上限受系统配置控制，随后基于处理结果计算 Token。仅 `qwen3-vl-embedding`、`qwen2.5-vl-embedding` 和 `multimodal-embedding-v1` 返回此字段（作为顶层字段），`tongyi-embedding-vision-*` 系列模型的图片 Token 包含在 `input_tokens_details.image_tokens` 中。
 
-**image\_count** `_int_`
+**image\_count**`int`
 
 本次请求输入的图片数量。仅 `multimodal-embedding-v1` 返回此字段。
 
-**duration** `_int_`
+**duration**`int`
 
 本次请求输入的视频时长（秒）。仅 `multimodal-embedding-v1` 返回此字段。
 
-## **SDK使用**
+## SDK使用
 
 > SDK 的 input 参数对应HTTP请求体中的 input.contents，两者结构 **不一致** 。
 
-### **代码示例**
+### 代码示例
 
-## **图片向量化示例**
+#### 图片向量化示例
 
-## **使用图片URL**
+#### 使用图片URL
 
 ```
 import dashscope
@@ -775,7 +751,7 @@ if resp.status_code == HTTPStatus.OK:
     print(json.dumps(result, ensure_ascii=False, indent=4))
 ```
 
-## **使用本地图片**
+#### 使用本地图片
 
 将本地图片转换为 Base64 格式后进行向量化：
 
@@ -812,7 +788,7 @@ if resp.status_code == HTTPStatus.OK:
     print(json.dumps(result, ensure_ascii=False, indent=4))
 ```
 
-## **视频向量化示例**
+#### 视频向量化示例
 
 > 多模态向量化模型目前仅支持以URL形式输入视频文件，暂不支持直接传入本地视频。
 
@@ -841,7 +817,7 @@ if resp.status_code == HTTPStatus.OK:
     print(json.dumps(result, ensure_ascii=False, indent=4))
 ```
 
-## **文本向量化示例**
+#### 文本向量化示例
 
 ```
 import dashscope
@@ -868,7 +844,7 @@ if resp.status_code == HTTPStatus.OK:
     print(json.dumps(result, ensure_ascii=False, indent=4))
 ```
 
-## **融合向量化示例**
+#### 融合向量化示例
 
 ```
 import dashscope
@@ -903,7 +879,7 @@ resp = dashscope.MultiModalEmbedding.call(
 print(json.dumps(resp, ensure_ascii=False, indent=4))
 ```
 
-## **多图融合向量化示例**
+#### 多图融合向量化示例
 
 使用 `qwen3-vl-embedding` 将多张图片与文本融合为 1 个向量。传入多个 `image` 条目即可实现多图融合，适用于商品多角度图片与描述文本的综合语义检索。
 
@@ -937,7 +913,7 @@ resp = dashscope.MultiModalEmbedding.call(
 print(json.dumps(resp, ensure_ascii=False, indent=4))
 ```
 
-## **2026-03-06 快照版本示例**
+#### 2026-03-06 快照版本示例
 
 > 以下示例展示如何使用 `tongyi-embedding-vision-plus-2026-03-06` 模型，演示 `res_level` （多分辨率）和 `max_video_frames` （视频帧数）参数的使用。该模型基于 Qwen3 底座，支持 30+ 种语言，同时支持独立向量和融合向量生成。
 
@@ -1014,7 +990,7 @@ if resp.status_code == HTTPStatus.OK:
     print(json.dumps(result, ensure_ascii=False, indent=4))
 ```
 
-### **输出示例**
+### 输出示例
 
 ```
 {
@@ -1048,6 +1024,6 @@ if resp.status_code == HTTPStatus.OK:
 }
 ```
 
-## **错误码**
+## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。

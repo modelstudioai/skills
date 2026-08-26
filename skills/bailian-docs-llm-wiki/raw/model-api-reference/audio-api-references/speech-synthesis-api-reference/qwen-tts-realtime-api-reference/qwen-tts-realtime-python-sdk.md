@@ -4,13 +4,13 @@
 
 **用户指南**：关于模型介绍和选型建议请参见[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)或[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)。
 
-## **前期准备**
+## 前期准备
 
 DashScope Python SDK 版本需要不低于1.25.11。
 
-## **快速开始**
+## 快速开始
 
-## **server commit模式**
+server commit模式
 
 ```
 import os
@@ -88,7 +88,7 @@ if __name__  == '__main__':
     qwen_tts_realtime = QwenTtsRealtime(
         # 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash-realtime
         model='qwen3-tts-flash-realtime',
-        callback=callback, 
+        callback=callback,
         # 以下为华北2（北京）地域的配置。
         url='wss://dashscope.aliyuncs.com/api-ws/v1/realtime'
         )
@@ -100,7 +100,7 @@ if __name__  == '__main__':
         # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash-realtime
         # instructions='语速较快，带有明显的上扬语调，适合介绍时尚产品。',
         # optimize_instructions=True,
-        mode = 'server_commit'        
+        mode = 'server_commit'
     )
     for text_chunk in text_to_synthesize:
         print(f'send text: {text_chunk}')
@@ -109,12 +109,12 @@ if __name__  == '__main__':
     qwen_tts_realtime.finish()
     callback.wait_for_finished()
     print('[Metric] session: {}, first audio delay: {}'.format(
-                    qwen_tts_realtime.get_session_id(), 
+                    qwen_tts_realtime.get_session_id(),
                     qwen_tts_realtime.get_first_audio_delay(),
                     ))
 ```
 
-## **commit模式**
+commit模式
 
 ```
 import base64
@@ -208,14 +208,14 @@ if __name__  == '__main__':
         # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash-realtime
         # instructions='语速较快，带有明显的上扬语调，适合介绍时尚产品。',
         # optimize_instructions=True,
-        mode = 'commit'        
+        mode = 'commit'
     )
     print(f'send text: {text_to_synthesize[0]}')
     qwen_tts_realtime.append_text(text_to_synthesize[0])
     qwen_tts_realtime.commit()
     callback.wait_for_response_done()
     callback.reset_event()
-    
+
     print(f'send text: {text_to_synthesize[1]}')
     qwen_tts_realtime.append_text(text_to_synthesize[1])
     qwen_tts_realtime.commit()
@@ -226,17 +226,17 @@ if __name__  == '__main__':
     qwen_tts_realtime.append_text(text_to_synthesize[2])
     qwen_tts_realtime.commit()
     callback.wait_for_response_done()
-    
+
     qwen_tts_realtime.finish()
     print('[Metric] session: {}, first audio delay: {}'.format(
-                    qwen_tts_realtime.get_session_id(), 
+                    qwen_tts_realtime.get_session_id(),
                     qwen_tts_realtime.get_first_audio_delay(),
                     ))
 ```
 
 访问[github](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/omni)下载更多示例代码。
 
-## **请求参数**
+## 请求参数
 
 下述请求参数可以通过QwenTtsRealtime的构造方法进行设置。
 
@@ -254,7 +254,7 @@ str
 
 是
 
-模型名称。参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#d2ad2470a394c)。
+模型名称。参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#4a43cc1bb7kxg)。
 
 url
 
@@ -301,11 +301,11 @@ str
 
 否
 
-指定合成音频的语种，默认为 `Auto`。
+指定合成音频的语种，默认为 `Auto`。
 
 -   `Auto`：适用无法确定文本的语种或文本包含多种语言的场景，模型会自动为文本中的不同语言片段匹配各自的发音，但无法保证发音完全精准。
     
--   指定语种：适用于文本为单一语种的场景，此时指定为具体语种，能显著提升合成质量，效果通常优于 `Auto`。可选值包括：
+-   指定语种：适用于文本为单一语种的场景，此时指定为具体语种，能显著提升合成质量，效果通常优于 `Auto`。可选值包括：
     
     -   `Chinese`
         
@@ -360,7 +360,7 @@ str
 -   `opus`
     
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#a1686e997aquv)）仅支持`pcm`。
+千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）仅支持`pcm`。
 
 sample\_rate
 
@@ -381,7 +381,7 @@ int
 -   48000
     
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#a1686e997aquv)）仅支持24000。
+千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）仅支持24000。
 
 speech\_rate
 
@@ -395,7 +395,7 @@ float
 
 取值范围：\[0.5, 2.0\]。
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#a1686e997aquv)）不支持该参数。
+千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）不支持该参数。
 
 volume
 
@@ -409,7 +409,7 @@ int
 
 取值范围：\[0, 100\]。
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#a1686e997aquv)）不支持该参数。
+千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）不支持该参数。
 
 pitch\_rate
 
@@ -423,7 +423,7 @@ float
 
 取值范围：\[0.5, 2.0\]。
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#a1686e997aquv)）不支持该参数。
+千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）不支持该参数。
 
 bit\_rate
 
@@ -437,7 +437,7 @@ int
 
 取值范围：\[6, 510\]。
 
-千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#a1686e997aquv)）不支持该参数。
+千问-TTS-Realtime（参见[支持的模型](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)）不支持该参数。
 
 instructions
 
@@ -473,9 +473,9 @@ bool
 
 适用范围：该功能仅适用于千问3-TTS-Instruct-Flash-Realtime系列模型。
 
-## **关键接口**
+## 关键接口
 
-### **QwenTtsRealtime类**
+### QwenTtsRealtime类
 
 QwenTtsRealtime通过`from dashscope.audio.qwen_tts_realtime import QwenTtsRealtime`方法引入。
 
@@ -528,9 +528,7 @@ def append_text(self, text: str) -> None
 将文本片段追加到云端输入文本缓冲区。 缓冲区是你可以写入并稍后提交的临时存储。
 
 -   "server\_commit"模式下，服务器决定何时提交并合成文本缓冲区中的文本。
-    
 -   "commit"模式下，客户端需要主动通过commit触发语音合成。
-    
 
 ```
 def clear_appended_text(self, ) -> None
@@ -581,9 +579,7 @@ def commit(self, ) -> None
 提交之前通过append添加到云端缓冲区的文本，并立刻合成所有文本。如果输入的文本缓冲区为空将产生错误。
 
 -   "server\_commit"模式下，客户端不需要发送此事件，服务器会自动提交文本缓冲区。
-    
 -   "commit"模式下，客户端必须通过commit触发语音合成。
-    
 
 ```
 def finish(self, ) -> None
@@ -627,7 +623,7 @@ def get_first_audio_delay(self)
 
 获取首包音频延迟。
 
-### **回调接口（**QwenTtsRealtimeCallback**）**
+### 回调接口（QwenTtsRealtimeCallback）
 
 服务端会通过回调的方式，将服务端响应事件和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
 
@@ -659,7 +655,7 @@ message：服务端响应事件。
 
 无
 
-包括对接口调用的回复响应和模型生成的文本和音频。具体可以参考：[服务端事件](https://help.aliyun.com/zh/model-studio/qwen-tts-realtime-server-events)
+包括对接口调用的回复响应和模型生成的文本和音频。具体可以参考：[服务端事件](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/qwen-tts-realtime-api-reference/qwen-tts-realtime-server-events.md)
 
 ```
 def on_close(self, close_status_code, close_msg) -> None

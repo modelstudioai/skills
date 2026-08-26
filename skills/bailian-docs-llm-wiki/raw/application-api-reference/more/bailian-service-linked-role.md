@@ -1,6 +1,6 @@
 # 服务关联角色
 
-为实现特定功能，百炼需要通过服务关联角色（SLR）获取对其他云服务（如FC、内容安全等）或云资源的访问权限。当您首次在百炼中授权开通相关功能（如函数计算节点）时，**系统将自动为您创建对应的服务关联角色**。本文为您介绍百炼创建的服务关联角色及其删除办法。
+为实现特定功能，百炼需要通过服务关联角色（SLR）获取对其他云服务（如FC、内容安全等）或云资源的访问权限。当您首次在百炼中授权开通相关功能（如函数计算节点）时， 系统将自动为您创建对应的服务关联角色 。本文为您介绍百炼创建的服务关联角色及其删除办法。
 
 ## 百炼创建的服务关联角色
 
@@ -10,61 +10,61 @@
 
 **服务关联角色描述**
 
-[AliyunServiceRoleForSFMAccessFC](#Bd0OF)
+[AliyunServiceRoleForSFMAccessFC](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#Bd0OF)
 
-[百炼工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)和[流程编排](https://help.aliyun.com/zh/model-studio/what-is-process-orchestration-old)通过此服务关联角色访问您在[FC](https://help.aliyun.com/zh/functioncompute/what-is-function-compute)中的资源。
+[百炼工作流应用](raw/application-user-guide/llm-application/workflow-application.md)和[流程编排](https://help.aliyun.com/zh/model-studio/what-is-process-orchestration-old)通过此服务关联角色访问您在[FC](https://help.aliyun.com/zh/functioncompute/what-is-function-compute)中的资源。
 
-[AliyunServiceRoleForSFMDataHubOSSImport](#2b75fc8a97g4c)
+[AliyunServiceRoleForSFMDataHubOSSImport](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#2b75fc8a97g4c)
 
-[数据管理](https://help.aliyun.com/zh/model-studio/manage-data/)通过此服务关联角色访问您在[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)中的资源。
+[数据管理](https://help.aliyun.com/zh/model-studio/manage-data)通过此服务关联角色访问您在[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)中的资源。
 
-[AliyunServiceRoleForAccessOSS](#13012d75c0zat)
+[AliyunServiceRoleForAccessOSS](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#13012d75c0zat)
 
-[安全存储空间](https://help.aliyun.com/zh/model-studio/secure-storage/)通过此服务关联角色访问您在[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)中的资源。
+[安全存储空间](https://help.aliyun.com/zh/model-studio/secure-storage)通过此服务关联角色访问您在[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)中的资源。
 
-[AliyunServiceRoleForSFMAccessADB](#7deade0402e0y)
+[AliyunServiceRoleForSFMAccessADB](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#7deade0402e0y)
 
-[创建和使用知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)和[安全存储空间](https://help.aliyun.com/zh/model-studio/secure-storage/)通过此服务关联角色访问您的[ADB-PG](https://help.aliyun.com/zh/analyticdb/analyticdb-for-postgresql/product-overview/overview-product-overview)实例。
+[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)和[安全存储空间](https://help.aliyun.com/zh/model-studio/secure-storage)通过此服务关联角色访问您的[ADB-PG](https://help.aliyun.com/zh/analyticdb/analyticdb-for-postgresql/product-overview/overview-product-overview)实例。
 
-[AliyunServiceRoleForSFMAccessingMNS](#e412ddc7eac5w)
+[AliyunServiceRoleForSFMAccessingMNS](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#e412ddc7eac5w)
 
-[数据管理](https://help.aliyun.com/zh/model-studio/manage-data/)通过此服务关联角色访问[MNS](https://help.aliyun.com/zh/mns/product-overview/what-is-mns)队列中的[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)变更消息。
+[数据管理](https://help.aliyun.com/zh/model-studio/manage-data)通过此服务关联角色访问[MNS](https://help.aliyun.com/zh/mns/product-overview/what-is-mns)队列中的[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)变更消息。
 
-[AliyunServiceRoleForSFMTelemetry](#4223df3814svi)
+[AliyunServiceRoleForSFMTelemetry](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#31e88eb412d6c)
 
-[用量监控与性能分析](https://help.aliyun.com/zh/model-studio/application-observation)通过此服务关联角色访问您的[OpenTelemetry](https://help.aliyun.com/zh/opentelemetry/product-overview/what-is-managed-service-for-opentelemetry)实例。
+[用量监控与性能分析](raw/application-user-guide/application-monitoring/application-observation.md)通过此服务关联角色访问您的[OpenTelemetry](https://help.aliyun.com/zh/opentelemetry/product-overview/what-is-managed-service-for-opentelemetry)实例。
 
-[AliyunServiceRoleForSFMAccessingCIP](#ff0270f337iy4)
+[AliyunServiceRoleForSFMAccessingCIP](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#e02fae3cf9x0q)
 
-[百炼应用](https://help.aliyun.com/zh/model-studio/application-introduction)通过此服务关联角色访问您在[内容安全](https://help.aliyun.com/zh/document_detail/28417.html)中的服务或资源。
+[百炼应用](raw/application-user-guide/llm-application/application-introduction.md)通过此服务关联角色访问您在[内容安全](https://help.aliyun.com/zh/document_detail/28417.html)中的服务或资源。
 
-[AliyunServiceRoleForSFMAccessSLS](#4fdbab8ea2tp9)
+[AliyunServiceRoleForSFMAccessSLS](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#558c3f95f9me9)
 
-[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)通过此服务关联角色访问您在[SLS](https://help.aliyun.com/zh/sls/what-is-log-service)中的资源。
+[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)通过此服务关联角色访问您在[SLS](https://help.aliyun.com/zh/sls/what-is-log-service)中的资源。
 
-[AliyunServiceRoleForSFMAccessCMS](#0cf6db69c5z5n)
+[AliyunServiceRoleForSFMAccessCMS](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#8890ce2670qza)
 
-[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)通过此服务关联角色访问您在[CMS](https://help.aliyun.com/zh/cms/cloudmonitor-2-0/what-is-cloud-monitor-2-0)中的资源。
+[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)通过此服务关联角色访问您在[CMS](https://help.aliyun.com/zh/cms/cloudmonitor-2-0/what-is-cloud-monitor-2-0)中的资源。
 
-[AliyunServiceRoleForAccessCusOss](#21281ba873vnj)
+[AliyunServiceRoleForAccessCusOss](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#21281ba873vnj)
 
 阿里云百炼平台通过此服务关联角色访问您在[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)中的资源，使用该权限操作您的OSS文件，实现百炼平台对OSS操作的托管。
 
-[AliyunServiceRoleForSFMConnectorAccessDTS](#7f75202592td7)
+[AliyunServiceRoleForSFMConnectorAccessDTS](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#7f75202592td7)
 
 阿里云百炼平台通过此服务关联角色访问您在[DTS](https://help.aliyun.com/zh/dts/product-overview/what-is-dts)中的资源，使用该权限创建和管理DTS任务，实现从指定数据源接入数据到百炼平台。
 
-[AliyunServiceRoleForSFMFineTuning](#l8g2h4i7j6k9l)
+[AliyunServiceRoleForSFMFineTuning](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#l8g2h4i7j6k9l)
 
-[模型调优](https://help.aliyun.com/zh/model-studio/fine-tuning/)和[数据管理](https://help.aliyun.com/zh/model-studio/manage-data/)使用此服务关联角色访问您在[CPFS](https://help.aliyun.com/zh/cpfs/cpfs-product-introduction)和[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)中的资源。
+[模型调优](https://help.aliyun.com/zh/model-studio/fine-tuning)和[数据管理](https://help.aliyun.com/zh/model-studio/manage-data)使用此服务关联角色访问您在[CPFS](https://help.aliyun.com/zh/cpfs/cpfs-product-introduction)和[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)中的资源。
 
-## **AliyunServiceRoleForSFMAccessFC**
+## AliyunServiceRoleForSFMAccessFC
 
-### **应用场景**
+### 应用场景
 
-百炼[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application/)和[流程编排](https://help.aliyun.com/zh/model-studio/what-is-process-orchestration-old)中的函数计算节点通过此服务关联角色访问您在[FC](https://help.aliyun.com/zh/functioncompute/what-is-function-compute)中的资源。
+百炼[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)和[流程编排](https://help.aliyun.com/zh/model-studio/what-is-process-orchestration-old)中的函数计算节点通过此服务关联角色访问您在[FC](https://help.aliyun.com/zh/functioncompute/what-is-function-compute)中的资源。
 
-### **角色及权限说明**
+### 角色及权限说明
 
 服务关联角色名称：`AliyunServiceRoleForSFMAccessFC`
 
@@ -83,11 +83,9 @@
 }
 ```
 
-### **删除服务关联角色**
+### 删除服务关联角色
 
-**警告**
-
-删除此服务关联角色后，工作流应用和流程编排将无法创建和调用函数计算节点，请谨慎操作！
+**警告**删除此服务关联角色后，工作流应用和流程编排将无法创建和调用函数计算节点，请谨慎操作！
 
 删除AliyunServiceRoleForSFMAccessFC服务关联角色前，须先删除所有已发布的工作流应用和流程中的函数计算节点（删除后需要重新发布应用或流程）。
 
@@ -95,11 +93,11 @@
 
 ## AliyunServiceRoleForSFMDataHubOSSImport
 
-### **应用场景**
+### 应用场景
 
-百炼[数据管理](https://help.aliyun.com/zh/model-studio/manage-data/)中的OSS数据导入功能通过此服务关联角色访问您在[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)中的资源。
+百炼[数据管理](https://help.aliyun.com/zh/model-studio/manage-data)中的OSS数据导入功能通过此服务关联角色访问您在[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)中的资源。
 
-### **角色及权限说明**
+### 角色及权限说明
 
 服务关联角色名称：`AliyunServiceRoleForSFMDataHubOSSImport`
 
@@ -158,23 +156,21 @@
 }
 ```
 
-### **删除服务关联角色**
+### 删除服务关联角色
 
-**警告**
-
-删除此服务关联角色后，数据管理将无法访问您在OSS中的资源，请谨慎操作！
+**警告**删除此服务关联角色后，数据管理将无法访问您在OSS中的资源，请谨慎操作！
 
 删除AliyunServiceRoleForSFMDataHubOSSImport服务关联角色前，请确保数据管理中没有正在进行中的OSS数据导入任务。
 
 如何删除服务关联角色，请参见[服务关联角色](https://help.aliyun.com/zh/ram/user-guide/service-linked-roles#section-b9f-8dv-b5q)。
 
-## **AliyunServiceRoleForAccessOSS**
+## AliyunServiceRoleForAccessOSS
 
 ### 应用场景
 
-百炼[安全存储空间](https://help.aliyun.com/zh/model-studio/secure-storage/)通过此服务关联角色访问您在[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)中的资源。
+百炼[安全存储空间](https://help.aliyun.com/zh/model-studio/secure-storage)通过此服务关联角色访问您在[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)中的资源。
 
-### **角色及权限说明**
+### 角色及权限说明
 
 服务关联角色名称：`AliyunServiceRoleForAccessOSS`
 
@@ -242,23 +238,21 @@
 }
 ```
 
-### **删除服务关联角色**
+### 删除服务关联角色
 
-**警告**
+**警告**删除此服务关联角色后，安全存储空间将无法访问您在OSS中的资源，请谨慎操作！
 
-删除此服务关联角色后，安全存储空间将无法访问您在OSS中的资源，请谨慎操作！
-
-删除AliyunServiceRoleForAccessOSS服务关联角色前，请确保您已在安全存储空间中断开所有OSS连接。如何断开连接，请参见[断开连接](https://help.aliyun.com/zh/model-studio/configure-zone-ip#eda3c411315pd)。
+删除AliyunServiceRoleForAccessOSS服务关联角色前，请确保您已在安全存储空间中断开所有OSS连接。如何断开连接，请参见[断开连接](raw/model-user-guide/security-and-compliance/secure-storage/configure-zone-ip.md)。
 
 如何删除服务关联角色，请参见[服务关联角色](https://help.aliyun.com/zh/ram/user-guide/service-linked-roles#section-b9f-8dv-b5q)。
 
-## **AliyunServiceRoleForSFMAccessADB**
+## AliyunServiceRoleForSFMAccessADB
 
 ### 应用场景
 
-百炼[安全存储空间](https://help.aliyun.com/zh/model-studio/secure-storage/)通过此服务关联角色访问您的 [ADB-PG](https://help.aliyun.com/zh/analyticdb/analyticdb-for-postgresql/product-overview/overview-product-overview) 数据库实例。
+百炼[安全存储空间](https://help.aliyun.com/zh/model-studio/secure-storage)通过此服务关联角色访问您的 [ADB-PG](https://help.aliyun.com/zh/analyticdb/analyticdb-for-postgresql/product-overview/overview-product-overview) 数据库实例。
 
-### **角色及权限说明**
+### 角色及权限说明
 
 服务关联角色名称：`AliyunServiceRoleForSFMAccessADB`
 
@@ -308,23 +302,21 @@
 }
 ```
 
-### **删除服务关联角色**
+### 删除服务关联角色
 
-**警告**
+**警告**删除此服务关联角色后，安全存储空间将无法访问您的ADB-PG实例，请谨慎操作！
 
-删除此服务关联角色后，安全存储空间将无法访问您的ADB-PG实例，请谨慎操作！
-
-删除AliyunServiceRoleForSFMAccessADB服务关联角色前，请确保您已在安全存储空间中断开所有ADB-PG连接。如何断开连接，请参见[断开连接](https://help.aliyun.com/zh/model-studio/configure-zone-ip#eda3c411315pd)。
+删除AliyunServiceRoleForSFMAccessADB服务关联角色前，请确保您已在安全存储空间中断开所有ADB-PG连接。如何断开连接，请参见[断开连接](raw/model-user-guide/security-and-compliance/secure-storage/configure-zone-ip.md)。
 
 如何删除服务关联角色，请参见[服务关联角色](https://help.aliyun.com/zh/ram/user-guide/service-linked-roles#section-b9f-8dv-b5q)。
 
 ## AliyunServiceRoleForSFMAccessingMNS
 
-### **应用场景**
+### 应用场景
 
-百炼[数据管理](https://help.aliyun.com/zh/model-studio/manage-data/)通过此服务关联角色访问[MNS](https://help.aliyun.com/zh/mns/product-overview/what-is-mns)队列中的[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)变更消息，以实现对您在OSS中的资源（数据）变更的自动同步。
+百炼[数据管理](https://help.aliyun.com/zh/model-studio/manage-data)通过此服务关联角色访问[MNS](https://help.aliyun.com/zh/mns/product-overview/what-is-mns)队列中的[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)变更消息，以实现对您在OSS中的资源（数据）变更的自动同步。
 
-### **角色及权限说明**
+### 角色及权限说明
 
 服务关联角色名称：`AliyunServiceRoleForSFMAccessingMNS`
 
@@ -378,17 +370,17 @@
 }
 ```
 
-### **删除服务关联角色**
+### 删除服务关联角色
 
 本策略由大模型服务平台百炼定义并使用，请勿修改、删除，或将其授予除服务关联角色之外的任何RAM身份。
 
-## **AliyunServiceRoleForSFMTelemetry**
+## AliyunServiceRoleForSFMTelemetry
 
 ### 应用场景
 
-[用量监控与性能分析](https://help.aliyun.com/zh/model-studio/application-observation)通过此服务关联角色访问您的[OpenTelemetry](https://help.aliyun.com/zh/opentelemetry/product-overview/what-is-managed-service-for-opentelemetry)实例。
+[用量监控与性能分析](raw/application-user-guide/application-monitoring/application-observation.md)通过此服务关联角色访问您的[OpenTelemetry](https://help.aliyun.com/zh/opentelemetry/product-overview/what-is-managed-service-for-opentelemetry)实例。
 
-### **角色及权限说明**
+### 角色及权限说明
 
 服务关联角色名称：`AliyunServiceRoleForSFMTelemetry`
 
@@ -473,9 +465,9 @@
 
 ### 应用场景
 
-[百炼应用](https://help.aliyun.com/zh/model-studio/application-introduction)通过此服务关联角色访问您在[内容安全](https://help.aliyun.com/zh/document_detail/28417.html)中的服务或资源。
+[百炼应用](raw/application-user-guide/llm-application/application-introduction.md)通过此服务关联角色访问您在[内容安全](https://help.aliyun.com/zh/document_detail/28417.html)中的服务或资源。
 
-### **角色及权限说明**
+### 角色及权限说明
 
 服务关联角色名称：`AliyunServiceRoleForSFMAccessingCIP`
 
@@ -510,13 +502,13 @@
 
 本策略由大模型服务平台百炼定义并使用，请勿修改、删除，或将其授予除服务关联角色之外的任何RAM身份。
 
-## **AliyunServiceRoleFor**SFMAccessSLS
+## AliyunServiceRoleForSFMAccessSLS
 
 ### 应用场景
 
-百炼[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)通过此服务关联角色访问您在[SLS](https://help.aliyun.com/zh/sls/what-is-log-service)中的资源。
+百炼[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)通过此服务关联角色访问您在[SLS](https://help.aliyun.com/zh/sls/what-is-log-service)中的资源。
 
-### **角色及权限说明**
+### 角色及权限说明
 
 服务关联角色名称：`AliyunServiceRoleForSFMAccessSLS`
 
@@ -591,13 +583,13 @@
 
 本策略由大模型服务平台百炼定义并使用，请勿修改、删除，或将其授予除服务关联角色之外的任何RAM身份。
 
-## **AliyunServiceRoleFor**SFMAccessCMS
+## AliyunServiceRoleForSFMAccessCMS
 
 ### 应用场景
 
-百炼[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)通过此服务关联角色访问您在[CMS](https://help.aliyun.com/zh/cms/cloudmonitor-2-0/what-is-cloud-monitor-2-0)中的资源。
+百炼[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)通过此服务关联角色访问您在[CMS](https://help.aliyun.com/zh/cms/cloudmonitor-2-0/what-is-cloud-monitor-2-0)中的资源。
 
-### **角色及权限说明**
+### 角色及权限说明
 
 服务关联角色名称：`AliyunServiceRoleForSFMAccessCMS`
 
@@ -658,7 +650,7 @@
 
 允许阿里云百炼平台访问您的[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)，使用该权限操作您的OSS文件，实现百炼平台对OSS操作的托管。
 
-### **角色及权限说明**
+### 角色及权限说明
 
 服务关联角色名称：`AliyunServiceRoleForAccessCusOss`
 
@@ -727,13 +719,11 @@
 }
 ```
 
-### **删除服务关联角色**
+### 删除服务关联角色
 
-**警告**
+**警告**删除此服务关联角色后，百炼将无法访问您在OSS中的资源，请谨慎操作！
 
-删除此服务关联角色后，百炼将无法访问您在OSS中的资源，请谨慎操作！
-
-删除AliyunServiceRoleForAccessCusOss服务关联角色前，请确保您已在阿里云百炼平台中断开所有OSS连接。如何断开连接，请参见[断开连接](https://help.aliyun.com/zh/model-studio/configure-zone-ip#eda3c411315pd)。
+删除AliyunServiceRoleForAccessCusOss服务关联角色前，请确保您已在阿里云百炼平台中断开所有OSS连接。如何断开连接，请参见[断开连接](raw/model-user-guide/security-and-compliance/secure-storage/configure-zone-ip.md)。
 
 如何删除服务关联角色，请参见[服务关联角色](https://help.aliyun.com/zh/ram/user-guide/service-linked-roles#section-b9f-8dv-b5q)。
 
@@ -743,7 +733,7 @@
 
 允许阿里云百炼平台访问您的[DTS](https://help.aliyun.com/zh/dts/product-overview/what-is-dts)，使用该权限创建和管理DTS任务，实现从指定数据源接入数据到百炼平台。
 
-### **角色及权限说明**
+### 角色及权限说明
 
 服务关联角色名称：`AliyunServiceRoleForSFMConnectorAccessDTS`
 
@@ -800,23 +790,21 @@
 }
 ```
 
-### **删除服务关联角色**
+### 删除服务关联角色
 
-**警告**
-
-删除此服务关联角色后，百炼将无法访问您的DTS，请谨慎操作！
+**警告**删除此服务关联角色后，百炼将无法访问您的DTS，请谨慎操作！
 
 删除AliyunServiceRoleForSFMConnectorAccessDTS服务关联角色前，请确保您已在安全存储空间中断开所有DTS连接。
 
 如何删除服务关联角色，请参见[服务关联角色](https://help.aliyun.com/zh/ram/user-guide/service-linked-roles#section-b9f-8dv-b5q)。
 
-## **AliyunServiceRoleForSFMFineTuning**
+## AliyunServiceRoleForSFMFineTuning
 
-### **应用场景**
+### 应用场景
 
-阿里云百炼[模型调优](https://help.aliyun.com/zh/model-studio/fine-tuning/)和[数据管理](https://help.aliyun.com/zh/model-studio/manage-data/)通过此服务关联角色访问您在[CPFS](https://help.aliyun.com/zh/cpfs/cpfs-product-introduction)和[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)中的资源。
+阿里云百炼[模型调优](https://help.aliyun.com/zh/model-studio/fine-tuning)和[数据管理](https://help.aliyun.com/zh/model-studio/manage-data)通过此服务关联角色访问您在[CPFS](https://help.aliyun.com/zh/cpfs/cpfs-product-introduction)和[OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss)中的资源。
 
-### **角色及权限说明**
+### 角色及权限说明
 
 服务关联角色名称：`AliyunServiceRoleForSFMFineTuning`
 
@@ -886,11 +874,9 @@
 }
 ```
 
-### **删除服务关联角色**
+### 删除服务关联角色
 
-**警告**
-
-删除此服务关联角色后，阿里云百炼模型调优和数据管理将无法访问您在CPFS和OSS中的资源，请谨慎操作！
+**警告**删除此服务关联角色后，阿里云百炼模型调优和数据管理将无法访问您在CPFS和OSS中的资源，请谨慎操作！
 
 删除AliyunServiceRoleForSFMFineTuning服务关联角色前，请确保模型调优中没有正在进行的训练任务，数据管理中没有正在进行的导入和发布任务。
 

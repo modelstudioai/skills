@@ -1,10 +1,10 @@
 # 网页翻译JSSDK
 
-## **功能描述**
+## 功能描述
 
 基于翻译大模型的页面翻译插件，提供页面翻译功能。您可以通过JSSDK，一键完成网站的多语言改造。
 
-## **技术流程**
+## 技术流程
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3845767571/p997475.png)
 
@@ -22,7 +22,7 @@
 
 CDN 根路径
 
-`https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.1/`
+`[https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.1/](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.1/)`
 
 下文示例中的版本号均以 `3.0.1` 为准，升级时请同步替换 CDN 链接中的版本号。
 
@@ -31,20 +31,14 @@ CDN 根路径
 SDK 提供两种翻译模式：
 
 -   页面翻译（`pageTranslate`）：直接替换页面原文为译文，适合“单语展示”场景。
-    
 -   段落对照翻译（`paragraphTranslate`）：在原文后插入译文，适合“原文+译文对照阅读”场景。
-    
 
 同时支持：
 
 -   懒加载翻译（只翻译可视区域）
-    
 -   动态内容翻译（DOM 变化后自动翻译）
-    
 -   术语表与翻译记忆
-    
 -   细粒度 hooks（翻译前/后插入自定义逻辑）
-    
 
 * * *
 
@@ -66,7 +60,7 @@ SDK 提供两种翻译模式：
 
 全量包（核心 + 插件）
 
-[https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.1/index.js](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/index.js)
+[](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/index.js)[https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.1/index.js](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.1/index.js)
 
 ```
 <script src="https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.1/index.js"></script>
@@ -86,19 +80,19 @@ SDK 提供两种翻译模式：
 
 核心 SDK
 
-[https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.1/core.js](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/core.js)
+[](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/core.js)[https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.1/core.js](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.1/core.js)
 
 `page.js`
 
 页面翻译插件
 
-[https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.1/page.js](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/page.js)
+[](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/page.js)[https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.1/page.js](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.1/page.js)
 
 `paragraph.js`
 
 段落对照插件
 
-[https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.1/paragraph.js](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/paragraph.js)
+[](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.0/paragraph.js)[https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.1/paragraph.js](https://g.alicdn.com/code/npm/@alife/translate-js-sdk/3.0.1/paragraph.js)
 
 ```
 <!-- 页面翻译 -->
@@ -112,9 +106,7 @@ SDK 提供两种翻译模式：
 说明：
 
 -   全量引入只需一个文件；拆包引入必须先加载 `core.js`，再加载插件。
-    
 -   全局对象为 `window.AliTranslate`，同时提供别名 `window.__AliTranslate`（两者指向同一实例）。
-    
 
 * * *
 
@@ -557,15 +549,10 @@ SDK 提供了 `mutator`（可回滚变更操作器），支持在 hooks 中做�
 `mutator` 可用能力：
 
 -   `setStyle(el, prop, value, priority?)`
-    
 -   `addClass(el, className)`
-    
 -   `removeClass(el, className)`
-    
 -   `appendNode(parent, node)`
-    
 -   `removeNode(node)`
-    
 
 * * *
 
@@ -574,9 +561,7 @@ SDK 提供了 `mutator`（可回滚变更操作器），支持在 hooks 中做�
 常用语种值示例：
 
 -   `auto`（自动检测）
-    
 -   `zh`、`en`、`ja`、`ko`、`fr`、`de`、`es`、`ru`、`ar`、`th`、`vi`
-    
 
 完整语言枚举请参考 SDK 类型定义 `LANGUAGE`。
 
@@ -656,11 +641,11 @@ AliTranslate.destroy()
 
 如需同时支持“页面翻译”和“段落对照翻译”，推荐直接使用全量包 `index.js`，并在业务 UI 中明确区分两种模式的切换与清理流程。
 
-## **获取Token服务**
+## 获取Token服务
 
 使用阿里云SDK的[V3版本请求体&签名机制](https://help.aliyun.com/zh/sdk/product-overview/v3-request-structure-and-signature)进行请求签名
 
-Node.js
+javascript
 
 ```
 // 通过calculateSignature方法生成签名
@@ -770,9 +755,9 @@ export function getAuthorization(signRequest: SignatureRequest): SignedRequest {
     console.log('stringToSign=========>', stringToSign);
     // 步骤 3：计算签名
     const signature = hmac256(accessKeySecret!, stringToSign);
-    console.log('signature=========>', signature);
+    console.log('signature=YOUR_SIGNATURE>', signature);
     // 步骤 4：拼接 Authorization
-    const authorization = `${ALGORITHM} Credential=${accessKeyId},SignedHeaders=${signedHeaders},Signature=${signature}`;
+    const authorization = `${ALGORITHM} Credential=${accessKeyId},SignedHeaders=${signedHeaders},Signature=YOUR_SIGNATURE
     console.log('authorization=========>', authorization);
     signRequest.headers['Authorization'] = authorization;
     // 构建完整的URL
@@ -887,7 +872,7 @@ export function calculateSignature(req: BatchTranslateRequest): SignedRequest {
 }
 ```
 
-Java
+java
 
 ```
 // 通过calculateSignature方法生成签名
@@ -932,8 +917,8 @@ class BatchTranslateRequest {
     private Map<String, String> text;
     // 构造函数
     public BatchTranslateRequest() {}
-    public BatchTranslateRequest(String scene, 
-                               String sourceLanguage, boolean streaming, 
+    public BatchTranslateRequest(String scene,
+                               String sourceLanguage, boolean streaming,
                                String targetLanguage, Map<String, String> text) {
         this.scene = scene;
         this.sourceLanguage = sourceLanguage;
@@ -965,7 +950,7 @@ class Request implements SignatureRequest {
     private Map<String, String> headers;
     private byte[] body;
     private Map<String, Object> queryParam;
-    public Request(String httpMethod, String canonicalUri, String host, 
+    public Request(String httpMethod, String canonicalUri, String host,
                   String xAcsAction, String xAcsVersion) {
         this.httpMethod = httpMethod;
         this.canonicalUri = canonicalUri != null ? canonicalUri : "/";
@@ -1031,7 +1016,7 @@ class SignedRequest {
     private String host;
     private Map<String, String> headers;
     private String body; // Base64 字符串
-    public SignedRequest(String url, String method, String host, 
+    public SignedRequest(String url, String method, String host,
                         Map<String, String> headers, String body) {
         this.url = url;
         this.method = method;
@@ -1124,9 +1109,9 @@ public class NodeSignature {
             System.out.println("stringToSign=========>" + stringToSign);
             // 步骤 3：计算签名
             String signature = hmac256(ACCESS_KEY_SECRET, stringToSign);
-            System.out.println("signature=========>" + signature);
+            System.out.println("signature=YOUR_SIGNATURE>" + signature);
             // 步骤 4：拼接 Authorization
-            String authorization = String.format("%s Credential=%s,SignedHeaders=%s,Signature=%s",
+            String authorization = String.format("%s Credential=%s,SignedHeaders=%s,Signature=YOUR_SIGNATURE",
                 ALGORITHM, ACCESS_KEY_ID, signedHeaders, signature);
             System.out.println("authorization=========>" + authorization);
             lowerCaseHeaders.put("authorization", authorization);
@@ -1136,7 +1121,7 @@ public class NodeSignature {
                 String query = signRequest.getQueryParam().entrySet().stream()
                     .map(entry -> {
                         try {
-                            return URLEncoder.encode(entry.getKey(), "UTF-8") + "=" + 
+                            return URLEncoder.encode(entry.getKey(), "UTF-8") + "=" +
                                    URLEncoder.encode(String.valueOf(entry.getValue()), "UTF-8");
                         } catch (UnsupportedEncodingException e) {
                             throw new RuntimeException(e);
@@ -1145,9 +1130,9 @@ public class NodeSignature {
                     .collect(Collectors.joining("&"));
                 url += "?" + query;
             }
-            String bodyString = signRequest.getBody() != null ? 
+            String bodyString = signRequest.getBody() != null ?
                 Base64.getEncoder().encodeToString(signRequest.getBody()) : null;
-            return new SignedRequest(url, signRequest.getHttpMethod().toUpperCase(), 
+            return new SignedRequest(url, signRequest.getHttpMethod().toUpperCase(),
                                    signRequest.getHost(), lowerCaseHeaders, bodyString);
         } catch (Exception error) {
             System.err.println("Failed to get authorization");
@@ -1249,7 +1234,7 @@ public class NodeSignature {
         return tmp.entrySet().stream()
             .map(entry -> {
                 try {
-                    return URLEncoder.encode(entry.getKey(), "UTF-8") + "=" + 
+                    return URLEncoder.encode(entry.getKey(), "UTF-8") + "=" +
                            URLEncoder.encode(String.valueOf(entry.getValue()), "UTF-8");
                 } catch (UnsupportedEncodingException e) {
                     throw new RuntimeException(e);
@@ -1294,72 +1279,52 @@ public class NodeSignature {
 
 ## 注意事项（生产接入建议）
 
--   **必须配置** `**getToken**`：由业务侧完成鉴权签名后再发起翻译请求。
-    
+-   **必须配置**`getToken`：由业务侧完成鉴权签名后再发起翻译请求。
 -   **引入方式二选一**：全量引入 `index.js` 即可；若按需拆包，页面翻译需引入 `page.js`，段落对照需引入 `paragraph.js`。
-    
 -   **重复翻译建议先清理**：多次切换参数/语言前建议先执行 `removeTranslations()`，避免旧状态干扰新配置验证。
-    
 -   **目标与排除选择器要收敛**：`targetSelectors` 建议限定业务容器，`excludeSelectors` 排除导航、代码块、编辑区等。
-    
 -   **避免翻译敏感区域**：如输入框、编辑器、业务脚本节点、模板容器。
-    
 -   **Hook 里避免重逻辑**：`onTranslatingStart/End` 触发频率高，避免耗时操作阻塞主线程。
-    
--   **动态内容场景建议开启** `**dynamic**`：适配懒渲染和流式加载页面。
-    
+-   **动态内容场景建议开启**`dynamic`：适配懒渲染和流式加载页面。
 
 ## 常见问题
 
 ### 调用无效果
 
 -   检查是否已正确引入脚本（全量 `index.js`，或 `core.js` + 对应插件）。
-    
 -   检查 `targetSelectors` 是否命中。
-    
 -   检查 `excludeSelectors` 是否误伤目标区域。
-    
 -   检查签名接口是否返回合法请求结构。
-    
 
 ### rules / hooks 未生效
 
 -   确认传参写在 `pageTranslate` / `paragraphTranslate` 的同一层级。
-    
 -   重复执行前先 `removeTranslations()` 再重新翻译。
-    
 -   检查 `selector` 是否可命中段落 `commonAncestor` 或其祖先。
-    
 
 ### loading 看不到
 
 -   翻译速度很快时会瞬时消失，建议在业务侧设置最小可见时长（如 300-500ms）。
-    
 -   用 `data-source-hash` 做唯一标识，避免并发段落相互覆盖。
-    
 
-### **AK/SK在哪里获取？**
+### AK/SK在哪里获取？
 
 -   在[阿里云](https://ram.console.aliyun.com/profile/access-keys)平台的AccessKey模块中获取
-    
 
-### **获取Token服务中的workspaceId从哪里获取？**
+### 获取Token服务中的workspaceId从哪里获取？
 
 -   登录AK/SK对应的阿里云账号后，在[百炼](https://bailian.console.aliyun.com/)左下角的业务空间详情中获取
-    
 -   弹窗中的**业务空间id**即对应所需的workspaceId，单击字段右侧的复制图标可直接复制。
-    
 
-### **网络接口调用报没有权限**
+### 网络接口调用报没有权限
 
 -   未开通 通义多模态翻译 产品：需要使用AK所属的阿里云主账号，在百炼通义多模态翻译上进行开通
-    
 
 * * *
 
-## **变更记录**
+## 变更记录
 
-#### **2026年3月**
+#### 2026年3月
 
 发布版本
 

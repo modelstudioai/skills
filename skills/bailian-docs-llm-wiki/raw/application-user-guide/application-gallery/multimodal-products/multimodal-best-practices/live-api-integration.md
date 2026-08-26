@@ -2,7 +2,7 @@
 
 视频通话能力可以赋予AI感知周围环境、用户行为和状态的视觉理解能力，打造更丰富生动的实时多模态互动体验，例如：文物讲解、景点导览、烹饪指导、模拟面试等。本文介绍如何通过多模交互套件接入视频通话能力。
 
-## **开通视频通话Agent**
+## 开通视频通话Agent
 
 在[多模态开发套件](https://bailian.console.aliyun.com/?tab=app#/app/app-market/multi-modal-app)中创建**多模态应用**（语音应用不支持视频通话）。
 
@@ -10,26 +10,24 @@
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9367243571/p987567.png)
 
-## **使用官方Android/iOS SDK 进行视频通话**
+## 使用官方Android/iOS SDK 进行视频通话
 
 百炼多模交互 Android 和iOS SDK 内置了 RTC 协议，原生支持音视频录制和传输，通过简单的配置即可方便的实现视频通话功能。
 
-#### **SDK 调用流程**
+#### SDK 调用流程
 
 1.  设置交互链路（`ChainMode`）为`RTC` ，并设置 `upstream.type`为`AudioAndVideo`。
     
 2.  进入视频通话 Agent。支持语音或者发送指令方式切换到视频通话。
     
     -   启动对话后直接进入视频通话：启动对话之后，等待对话状态切换到 Listening状态后，发送切换视频对话指令。
-        
     -   通过语音命令进入视频通话：在对话建立连接中，语音说“进入视频通话”。
-        
 3.  服务端返回视频通话 Agent 欢迎语，即成功进入视频通话。
     
 4.  退出视频通话 Agent：发送退出指令或者语音说“退出视频通话”。
     
 
-##### **请求参数说明**
+##### 请求参数说明
 
 通过 requestToRespond 方法请求提交参数如下。
 
@@ -84,11 +82,11 @@ videos
 }
 ```
 
-##### **调用时序图**
+##### 调用时序图
 
 ![截屏2025-06-20 11](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9367243571/p987566.png)
 
-##### **关键代码示例**
+##### 关键代码示例
 
 ```
 //1. 设置交互类型为AudioAndVideo
@@ -158,7 +156,7 @@ private func createVideoChatParams() -> [String: Any]{
             "type" : "voicechat_video_channel"
         ]
         var videos = [video]
-        
+
         var updateParam = MultiModalRequestParam{ multiBuilder in
             multiBuilder.bizParams = MultiModalRequestParam.BizParams(builder: {
                 bizBuilder in
@@ -172,6 +170,6 @@ private func createVideoChatParams() -> [String: Any]{
 //完整代码请参考示例代码。
 ```
 
-## **使用图片序列实现视频通话**
+## 使用图片序列实现视频通话
 
 接入方法参见[三方RTC接入视频通话](https://help.aliyun.com/zh/model-studio/third-party-rtc-invoke-liveai)。

@@ -2,28 +2,24 @@
 
 本文档介绍如何在阿里云百炼平台调用稀宇科技（简称MiniMax）直供的模型推理服务。
 
-**重要**
+**重要**本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 
-本文档描述的功能仅在华北2（北京）地域可用，如需使用模型，需从华北2（北京）地域[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
-
-## **服务开通**
+## 服务开通
 
 1.  前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/all)，搜索 MiniMax，找到 MiniMax 模型卡片，单击立即开通；
-    
 2.  在弹窗内确认开通及授权。
-    
 
 完成以上步骤即可调用MiniMax提供的 MiniMax 模型服务。
 
-## **快速开始**
+## 快速开始
 
-API 使用前提：已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk#8833b9274f4v8)。
+API 使用前提：已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-## OpenAI兼容
+#### OpenAI兼容
 
-## Python
+#### Python
 
-### **示例代码**
+### 示例代码
 
 ```
 import os
@@ -64,7 +60,7 @@ for chunk in completion:
             answer_content += delta.content
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -80,9 +76,9 @@ for chunk in completion:
 我可以帮助你回答问题、提供信息、进行对话等各种任务。有什么我可以帮助你的吗？
 ```
 
-## Node.js
+#### Node.js
 
-### **示例代码**
+### 示例代码
 
 ```
 import OpenAI from "openai";
@@ -138,7 +134,7 @@ async function main() {
 main();
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -154,11 +150,11 @@ main();
 我可以帮助你回答问题、提供信息、进行对话等各种任务。有什么我可以帮助你的吗？
 ```
 
-## HTTP
+#### HTTP
 
-### **示例代码**
+### 示例代码
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -169,14 +165,14 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     "model": "MiniMax/MiniMax-M2.7",
     "messages": [
         {
-            "role": "user", 
+            "role": "user",
             "content": "你是谁"
         }
     ]
 }'
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 {
@@ -208,30 +204,24 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }
 ```
 
-## **多模态调用示例**
+## 多模态调用示例
 
 MiniMax/MiniMax-M3 不仅支持纯文本对话，还具备强大的多模态理解能力。本章节将介绍如何让模型理解图像和视频内容。
 
-**重要**
-
-MiniMax-M3 通过 `thinking` 参数控制思考模式，默认为自适应模式（`adaptive`）：
+**重要**MiniMax-M3 通过 `thinking` 参数控制思考模式，默认为自适应模式（`adaptive`）：
 
 -   **非思考模式**（`thinking.type: "disabled"`）：直接输出结果，不包含推理过程
-    
--   **自适应模式**（`thinking.type: "adaptive"` 或不设置）：模型自主判断是否需要思考，并输出推理过程（`reasoning_content`）
-    
+-   **自适应模式**（`thinking.type: "adaptive"` 或不设置）：模型自主判断是否需要思考，并输出推理过程（`reasoning_content`）
 
-### **图像理解**
+### 图像理解
 
 图像理解功能让 MiniMax-M3 模型能够识别和分析图像内容。您可以传入单张或多张图像。
 
-## OpenAI兼容
+#### OpenAI兼容
 
-**说明**
+**说明**`thinking`非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body`传入，Node.js SDK中作为顶层参数传入。
 
-`thinking`非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body`传入，Node.js SDK中作为顶层参数传入。
-
-## Python
+#### Python
 
 ```
 import os
@@ -300,7 +290,7 @@ print(completion.choices[0].message.content)
 # print("\n完整回复：\n" + completion.choices[0].message.content)
 ```
 
-## Node.js
+#### Node.js
 
 ```
 import OpenAI from "openai";
@@ -371,9 +361,9 @@ console.log(completion.choices[0].message.content);
 // console.log('\n完整回复：\n' + multiCompletion.choices[0].message.content);
 ```
 
-## HTTP
+#### HTTP
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -436,11 +426,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 # }'
 ```
 
-### **视频理解**
+### 视频理解
 
-## OpenAI兼容
+#### OpenAI兼容
 
-## Python
+#### Python
 
 ```
 import os
@@ -477,7 +467,7 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
-## Node.js
+#### Node.js
 
 ```
 import OpenAI from "openai";
@@ -517,9 +507,9 @@ async function main() {
 main();
 ```
 
-## HTTP
+#### HTTP
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -549,27 +539,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
   }'
 ```
 
-### **文件限制**
+### 文件限制
 
-## 图像文件
+#### 图像文件
 
 -   **传入方式：**支持通过公网URL或Base64编码传入。
-    
 -   **支持的图像格式：**PNG、JPEG、WEBP、GIF
-    
 -   **图像大小：**单张图片不超过10MB。
-    
 
-## 视频文件
+#### 视频文件
 
 -   **视频大小与时长：**视频文件不超过50MB，时长不超过30分钟。
-    
 -   **视频格式：**MP4、AVI、MOV、MKV。
-    
 -   **音频理解：**不支持对视频文件的音频进行理解。
-    
 
-## **其它功能**
+## 其它功能
 
 **模型**
 
@@ -654,11 +638,9 @@ MiniMax/MiniMax-M2.1
 上下文缓存类型为隐式缓存，自动开启，与阿里云百炼的[隐式缓存](https://help.aliyun.com/zh/model-studio/context-cache)服务有以下不同：
 
 -   MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7 命中缓存的输入 Token 折扣为 20%，MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1 折扣为 10%；缓存最少 Token 数为 512（百炼为 256）。
-    
 -   MiniMax/MiniMax-M3 不支持 `n` 参数（即不支持一次生成多条候选回复），`tool_choice` 仅支持 `none` 和 `auto`。
-    
 
-## **参数默认值**
+## 参数默认值
 
 > 当前不支持修改以下参数
 
@@ -692,7 +674,7 @@ MiniMax/MiniMax-M2.1
 
 0.9
 
-## **模型列表与计费**
+## 模型列表与计费
 
 MiniMax-M3 为最新多模态推理模型，支持图像和视频理解，推荐使用；MiniMax-M2.7 擅长编程、文本摘要等任务。
 
@@ -700,6 +682,6 @@ MiniMax-M3 为最新多模态推理模型，支持图像和视频理解，推荐
 
 按照模型的输入与输出 Token 数量计费。
 
-## **错误码**
+## 错误码
 
-如果模型调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果模型调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。

@@ -1,171 +1,162 @@
 # GLM
 
-本文介绍了在阿里云百炼平台通过API调用 GLM 系列模型的方法。每个模型各有100万免费Token。
+本文介绍了在阿里云百炼平台通过API调用 GLM 系列模型的方法。 每个模型各有100万免费Token。
 
-**重要**
+**重要**glm-4.6、glm-4.7 将于**2026年10月10日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-plus)、[qwen3.8-max](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.8-max)、[qwen3.8-flash](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.8-flash)。
 
-glm-4.6、glm-4.7 将于**2026年10月10日**下架。推荐转用：[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-plus)、[qwen3.8-max](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.8-max)、[qwen3.7-flash](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/qwen3.7-flash)。
-
-## **服务接入地址**
+## 服务接入地址
 
 不同地域的服务接入地址不同，请根据您选择的地域配置对应的 Base URL。
 
-## OpenAI兼容
+#### OpenAI兼容
 
-## 华北2（北京）
+#### 华北2（北京）
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-## 美国（弗吉尼亚）
+#### 美国（弗吉尼亚）
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-## 德国（法兰克福）
+#### 德国（法兰克福）
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-## 新加坡
+#### 新加坡
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-## OpenAI兼容-Responses API
+#### OpenAI兼容-Responses API
 
-**说明**
+**说明**Responses API 目前仅支持`glm-5.2`模型，且仅在华北2（北京）与新加坡地域提供服务。
 
-Responses API 目前仅支持`glm-5.2`模型，且仅在华北2（北京）与新加坡地域提供服务。
-
-## 华北2（北京）
+#### 华北2（北京）
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/responses`
 
-## 新加坡
+#### 新加坡
 
 SDK 调用配置的`base_url`：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/responses`
 
-## DashScope
+#### DashScope
 
-## 华北2（北京）
+#### 华北2（北京）
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 SDK 调用配置的`base_url`：
 
-## **Python**
+#### Python
 
 ```
 dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
 ```
 
-## **Java**
+#### Java
 
 -   **方式一：**
-    
-    ```
-    import com.alibaba.dashscope.protocol.Protocol;
-    Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1");
-    ```
-    
--   **方式二：**
-    
-    ```
-    import com.alibaba.dashscope.utils.Constants;
-    Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
-    ```
-    
 
-## 美国（弗吉尼亚）
+```
+import com.alibaba.dashscope.protocol.Protocol;
+Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1");
+```
+
+-   **方式二：**
+
+```
+import com.alibaba.dashscope.utils.Constants;
+Constants.baseHttpApiUrl="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
+```
+
+#### 美国（弗吉尼亚）
 
 HTTP 请求地址：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 SDK 调用配置的`base_url`：
 
-## **Python**
+#### Python
 
 ```
 dashscope.base_http_api_url = 'https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1'
 ```
 
-## **Java**
+#### Java
 
 -   **方式一：**
-    
-    ```
-    import com.alibaba.dashscope.protocol.Protocol;
-    Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1");
-    ```
-    
--   **方式二：**
-    
-    ```
-    import com.alibaba.dashscope.utils.Constants;
-    Constants.baseHttpApiUrl="https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1";
-    ```
-    
 
-## 德国（法兰克福）
+```
+import com.alibaba.dashscope.protocol.Protocol;
+Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1");
+```
+
+-   **方式二：**
+
+```
+import com.alibaba.dashscope.utils.Constants;
+Constants.baseHttpApiUrl="https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1";
+```
+
+#### 德国（法兰克福）
 
 HTTP 请求地址：`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 SDK 调用配置的`base_url`：
 
-## **Python**
+#### Python
 
 ```
 dashscope.base_http_api_url = 'https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1'
 ```
 
-## **Java**
+#### Java
 
 -   **方式一：**
-    
-    ```
-    import com.alibaba.dashscope.protocol.Protocol;
-    Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1");
-    ```
-    
--   **方式二：**
-    
-    ```
-    import com.alibaba.dashscope.utils.Constants;
-    Constants.baseHttpApiUrl="https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1";
-    ```
-    
 
-## 新加坡
+```
+import com.alibaba.dashscope.protocol.Protocol;
+Generation gen = new Generation(Protocol.HTTP.getValue(), "https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1");
+```
+
+-   **方式二：**
+
+```
+import com.alibaba.dashscope.utils.Constants;
+Constants.baseHttpApiUrl="https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1";
+```
+
+#### 新加坡
 
 HTTP 请求地址为`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation`
 
 SDK 调用配置的`base_url`：`dashscope.base_http_api_url = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1"`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## **快速开始**
+## 快速开始
 
 glm-5.2 、glm-5.2-us 和 glm-5.2-fast-preview 是 GLM 系列最新模型，上下文长度 1M，支持通过`enable_thinking`参数设置思考与非思考模式。运行以下代码快速调用思考模式的 glm-5.2 模型。
 
-需要已[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装 OpenAI 或 DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk#8833b9274f4v8)。
+需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装 OpenAI 或 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-## OpenAI兼容
+#### OpenAI兼容
 
-**说明**
+**说明**`enable_thinking`非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body`传入，Node.js SDK 作为顶层参数传入。
 
-`enable_thinking`非 OpenAI 标准参数，OpenAI Python SDK 通过 `extra_body`传入，Node.js SDK 作为顶层参数传入。
+#### Python
 
-## Python
-
-### **示例代码**
+### 示例代码
 
 ```
 from openai import OpenAI
@@ -219,7 +210,7 @@ for chunk in completion:
         answer_content += delta.content
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -253,9 +244,9 @@ for chunk in completion:
 CompletionUsage(completion_tokens=344, prompt_tokens=7, total_tokens=351, completion_tokens_details=None, prompt_tokens_details=None)
 ```
 
-## Node.js
+#### Node.js
 
-### **示例代码**
+### 示例代码
 
 ```
 import OpenAI from "openai";
@@ -264,7 +255,7 @@ import process from 'process';
 // 初始化OpenAI客户端
 const openai = new OpenAI({
     // 如果没有配置环境变量，请用阿里云百炼API Key替换：apiKey: "sk-xxx"
-    apiKey: process.env.DASHSCOPE_API_KEY, 
+    apiKey: process.env.DASHSCOPE_API_KEY,
     // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
     baseURL: 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1'
 });
@@ -276,7 +267,7 @@ let isAnswering = false; // 是否进入回复阶段
 async function main() {
     try {
         const messages = [{ role: 'user', content: '你是谁' }];
-        
+
         const stream = await openai.chat.completions.create({
             model: 'glm-5.2',
             messages,
@@ -298,7 +289,7 @@ async function main() {
             }
 
             const delta = chunk.choices[0].delta;
-            
+
             // 只收集思考内容
             if (delta.reasoning_content !== undefined && delta.reasoning_content !== null) {
                 if (!isAnswering) {
@@ -325,7 +316,7 @@ async function main() {
 main();
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -351,11 +342,11 @@ main();
 { prompt_tokens: 7, completion_tokens: 248, total_tokens: 255 }
 ```
 
-## HTTP
+#### HTTP
 
-### **示例代码**
+### 示例代码
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -366,7 +357,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     "model": "glm-5.2",
     "messages": [
         {
-            "role": "user", 
+            "role": "user",
             "content": "你是谁"
         }
     ],
@@ -378,11 +369,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-## DashScope
+#### DashScope
 
-## Python
+#### Python
 
-### **示例代码**
+### 示例代码
 
 ```
 import os
@@ -428,7 +419,7 @@ print("\n" + "=" * 20 + "Token 消耗" + "=" * 20 + "\n")
 print(chunk.usage)
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -454,13 +445,11 @@ print(chunk.usage)
 {"input_tokens": 8, "output_tokens": 269, "total_tokens": 277}
 ```
 
-## Java
+#### Java
 
-### **示例代码**
+### 示例代码
 
-**重要**
-
-DashScope Java SDK 版本需要不低于2.19.4。
+**重要**DashScope Java SDK 版本需要不低于2.19.4。
 
 ```
 // dashscope SDK的版本 >= 2.19.4
@@ -528,7 +517,7 @@ public class Main {
 }
 ```
 
-### **返回结果**
+### 返回结果
 
 ```
 ====================思考过程====================
@@ -552,11 +541,11 @@ public class Main {
 有什么我能帮您解答或探讨的问题吗？
 ```
 
-## HTTP
+#### HTTP
 
-### **示例代码**
+### 示例代码
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -582,11 +571,11 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
-## Anthropic兼容
+#### Anthropic兼容
 
-## Python
+#### Python
 
-### **示例代码**
+### 示例代码
 
 ```
 import anthropic
@@ -616,11 +605,11 @@ for event in message:
             print(event.delta.text, end="", flush=True)
 ```
 
-## HTTP
+#### HTTP
 
-### **示例代码**
+### 示例代码
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -640,7 +629,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v
 }'
 ```
 
-## **流式工具调用**
+## 流式工具调用
 
 glm-5.2、glm-5.2-us、glm-5.2-fast-preview、glm-5.1、glm-5、glm-4.7、glm-4.6 支持`tool_stream`参数（boolean，默认`false`），仅在`stream`为`true`时生效。开启后，Function Calling 返回的 tool\_call 参数（arguments）会以流式增量方式逐步返回，而非等待完整生成后一次性返回。
 
@@ -670,11 +659,11 @@ true/false
 
 tool\_stream 不生效，arguments 在完整响应中一次性返回
 
-## OpenAI兼容
+#### OpenAI兼容
 
-## Python
+#### Python
 
-### **示例代码**
+### 示例代码
 
 ```
 from openai import OpenAI
@@ -730,9 +719,9 @@ for chunk in completion:
         print(f"[usage] {chunk.usage}")
 ```
 
-## Node.js
+#### Node.js
 
-### **示例代码**
+### 示例代码
 
 ```
 import OpenAI from "openai";
@@ -806,11 +795,11 @@ async function main() {
 main();
 ```
 
-## HTTP
+#### HTTP
 
-### **示例代码**
+### 示例代码
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -847,11 +836,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-## DashScope
+#### DashScope
 
-## Python
+#### Python
 
-### **示例代码**
+### 示例代码
 
 ```
 import os
@@ -900,11 +889,11 @@ for chunk in completion:
         print(f"[finish_reason] {finish}")
 ```
 
-## HTTP
+#### HTTP
 
-### **示例代码**
+### 示例代码
 
-## curl
+#### curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -946,7 +935,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
-## **推理强度（reasoning\_effort）**
+## 推理强度（reasoning\_effort）
 
 glm-5.2、glm-5.2-fast-preview 和 glm-5.1 默认开启思考模式，模型会先输出思考过程（`reasoning_content`），再给出最终回答。通过 `reasoning_effort` 参数可以调整推理强度，取值越高思考越充分。**不同模型支持的可选取值不同**，传入不支持的取值会返回 `invalid_parameter_error` 错误，请按下表选择。
 
@@ -974,17 +963,13 @@ glm-5
 
 `none`、`minimal`、`low`、`medium`、`high`、`xhigh`（最高，不支持 max）
 
-**说明**
+**说明**如需关闭思考，可在 OpenAI 兼容与 DashScope 方式中传入 `enable_thinking`\=`false`，该参数优先级高于 `reasoning_effort`。
 
-如需关闭思考，可在 OpenAI 兼容与 DashScope 方式中传入 `enable_thinking`\=`false`，该参数优先级高于 `reasoning_effort`。
+**说明**Anthropic 兼容方式不支持 `reasoning_effort` 参数。如需获取思考内容，请使用 Anthropic 原生 `thinking` 参数：`{"thinking":{"type":"enabled","budget_tokens":1024}}`，开启后响应 `content` 中会返回 `type` 为 `thinking` 的思考块。
 
-**说明**
+#### OpenAI兼容
 
-Anthropic 兼容方式不支持 `reasoning_effort` 参数。如需获取思考内容，请使用 Anthropic 原生 `thinking` 参数：`{"thinking":{"type":"enabled","budget_tokens":1024}}`，开启后响应 `content` 中会返回 `type` 为 `thinking` 的思考块。
-
-## **OpenAI兼容**
-
-## **Python**
+Python
 
 ```
 from openai import OpenAI
@@ -1002,7 +987,7 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content)
 ```
 
-## **Node.js**
+Node.js
 
 ```
 import OpenAI from "openai";
@@ -1019,7 +1004,7 @@ const completion = await openai.chat.completions.create({
 console.log(completion.choices[0].message.content);
 ```
 
-## **curl**
+curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -1033,7 +1018,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-## **DashScope**
+#### DashScope
 
 ```
 import os
@@ -1048,24 +1033,20 @@ response = Generation.call(
 print(response.output.choices[0].message.content)
 ```
 
-## **清除历史思考（clear\_thinking）**
+## 清除历史思考（clear\_thinking）
 
 `clear_thinking` 参数用于控制多轮对话中是否将历史轮次的 `reasoning_content`（思考过程）作为上下文输入给模型。仅 GLM 系列模型支持。
 
 -   `true`：忽略历史轮次的 `reasoning_content`，仅使用可见文本、工具调用与结果等非推理内容作为上下文输入，可降低上下文长度与成本。
-    
 -   `false`（默认）：保留历史轮次的 `reasoning_content` 并随上下文一同提供给模型。若希望启用 Preserved Thinking，必须在 messages 中完整、未修改、按原顺序透传历史 `reasoning_content`，缺失、裁剪、改写或重排会导致效果下降或无法生效。
-    
 
-**说明**
-
-该参数只影响跨轮次的历史思考内容，不改变模型在当前轮次内是否产生/输出思考。
+**说明**该参数只影响跨轮次的历史思考内容，不改变模型在当前轮次内是否产生/输出思考。
 
 以下示例使用同一组多轮 messages（`assistant` 消息中携带 `reasoning_content`）。设置 `clear_thinking`\=`true` 后，历史思考内容不会被计入上下文，因此 `prompt_tokens` 少于 `false`（默认）的情况，实际数值取决于历史 `reasoning_content` 的长度。
 
-## **OpenAI兼容**
+#### OpenAI兼容
 
-## **Python**
+Python
 
 ```
 from openai import OpenAI
@@ -1099,7 +1080,7 @@ completion = client.chat.completions.create(
 print(completion.usage.prompt_tokens)  # true 时少于 false
 ```
 
-## **curl**
+curl
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
@@ -1120,7 +1101,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-## **DashScope**
+#### DashScope
 
 ```
 import os
@@ -1148,7 +1129,7 @@ response = Generation.call(
 print(response.usage.input_tokens)
 ```
 
-## **其它功能**
+## 其它功能
 
 **模型**
 
@@ -1318,7 +1299,7 @@ glm-4.5-air
 
 不支持
 
-## **参数默认值**
+## 参数默认值
 
 **模型**
 
@@ -1442,20 +1423,16 @@ true
 
 参数含义请参见[OpenAI兼容-Chat](https://help.aliyun.com/zh/model-studio/qwen-api-via-openai-chat-completions)。
 
-## **注意事项**
+## 注意事项
 
-**警告**
+**警告**云上部署的三方开源模型（如 glm-5.2）与模型官方对超参数的处理逻辑不同：模型官方会对超参数进行阈值校验，超出阈值时回退为默认值；云上部署的处理逻辑是直接透传用户传入的参数值，不做阈值校验。因此，不当设置超参数（如将 `repetition_penalty` 设为 `0.1`）可能导致非预期输出（如循环打印）。建议三方开源模型使用默认超参数值（请参见上方参数默认值表），不建议自定义传入。
 
-云上部署的三方开源模型（如 glm-5.2）与模型官方对超参数的处理逻辑不同：模型官方会对超参数进行阈值校验，超出阈值时回退为默认值；云上部署的处理逻辑是直接透传用户传入的参数值，不做阈值校验。因此，不当设置超参数（如将 `repetition_penalty` 设为 `0.1`）可能导致非预期输出（如循环打印）。建议三方开源模型使用默认超参数值（请参见上方参数默认值表），不建议自定义传入。
-
-## **模型列表与计费**
+## 模型列表与计费
 
 GLM 系列模型是智谱AI专为智能体设计的混合推理模型，提供思考与非思考两种模式。
 
 -   glm-5.2 与 glm-5.2-us：GLM 最新模型，上下文长度 1M，支持 Function Calling、结构化输出及隐式缓存。支持 OpenAI 兼容、DashScope 及 Anthropic 兼容接口调用。
-    
--   glm-5.2-fast-preview：glm-5.2模型的快速模式，详情请参考[快速模式（Fast mode）](https://help.aliyun.com/zh/model-studio/fast-mode)。
-    
+-   glm-5.2-fast-preview：glm-5.2模型的快速模式，详情请参考[优速模式（Prime）](raw/model-user-guide/model-high-speed-inference/fast-mode.md)。
 
 模型上下文长度与价格信息请参见百炼控制台。
 
@@ -1463,6 +1440,6 @@ GLM 系列模型是智谱AI专为智能体设计的混合推理模型，提供�
 
 > 思考模式下，思维链按照输出 Token 计费。
 
-## **错误码**
+## 错误码
 
-如果执行报错，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果执行报错，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。

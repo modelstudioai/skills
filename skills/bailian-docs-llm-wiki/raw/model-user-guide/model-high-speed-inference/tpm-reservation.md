@@ -7,13 +7,10 @@ TPM 预留为指定模型锁定专属推理容量，确保业务高峰期不受�
 通过 TPM（Tokens Per Minute）预留，您可以为指定模型锁定专属的推理吞吐量，预留容量内的调用不受公共资源限流影响。
 
 -   容量保障：预留的 TPM 容量为您的业务专属，不与其他用户共享。
-    
 -   专属模型 code：创建 TPM 预留后，系统自动生成专属模型 code，您需要将 API 请求中的 `model` 参数替换为该 code。
-    
 -   溢出策略：创建时可选超额处理方式——自动溢出至按量计费（默认，业务不中断）或仅使用预留容量（超出返回 429，不产生额外费用）。
-    
 
-## **方案对比与选型**
+## 方案对比与选型
 
 百炼为推理调用提供多种容量与计费方案，常见包括按量付费、资源包与节省计划、TPM 预留、PTU 专属部署。不同方案在计费单位、容量保障强度、超额处理方式与接入改动上各有侧重，本节帮助您根据业务诉求选择合适的方案。
 
@@ -65,7 +62,7 @@ TPM 预留
 
 替换 model 参数即可
 
-PTU（[模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)）
+PTU（[模型部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)）
 
 按 kTPM 预付费
 
@@ -77,11 +74,11 @@ PTU（[模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-in
 
 替换 model 参数即可
 
-## **支持的模型**
+## 支持的模型
 
 > 价格以控制台为准，表格仅供参考。
 
-## 华北2（北京）
+#### 华北2（北京）
 
 **模型名称**
 
@@ -163,7 +160,7 @@ Kimi-K2.6
 
 ¥27.22
 
-## 新加坡
+#### 新加坡
 
 **模型名称**
 
@@ -256,7 +253,7 @@ DeepSeek-v4-Pro-0813
 -   服务到期后 2 小时内：实例仍为运行中，可继续调用，可续费；到期后 2~14 小时：实例已停止，不可调用，仍可续费；到期 14 小时后：实例已删除，不可恢复。
     
 
-**点击此处查看**各模型容量换算参数
+点击此处查看 各模型容量换算参数
 
 部分模型支持长输入阶梯系数和缓存折扣，容量计算器会自动应用这些参数。具体如下：
 
@@ -308,7 +305,6 @@ glm-5.1
 
 \[0, 32K)：输入 1.0 / 输出 1.0  
 \[32K, 200K\]：输入 1.33 / 输出 1.17  
-  
 
 DeepSeek-v4-Pro-0813
 
@@ -356,9 +352,7 @@ Kimi-K2.6
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3935961871/p1081896.png)
 
-**重要**
-
-创建 TPM 预留需一次性支付预付费用。建议先使用 TPM 容量计算器估算所需 TPM，确认费用后再提交。
+**重要**创建 TPM 预留需一次性支付预付费用。建议先使用 TPM 容量计算器估算所需 TPM，确认费用后再提交。
 
 1.  填写以下参数：
     
@@ -450,39 +444,32 @@ Kimi-K2.6
     
     > 前提条件：已创建 TPM 预留实例且状态为**运行中**。
     
-    **说明**
+    **说明**GLM-5.2 的 `thinking_budget`参数（限制思考长度）在调用时不生效。
     
-    GLM-5.2 的 `thinking_budget`参数（限制思考长度）在调用时不生效。
-    
-    Python
-    
-    ```
-    # 短时间内请求量快速拉升时，系统需要短暂预热以匹配所需算力
-    # 预热期间部分请求可能出现延迟波动，预热完成后恢复稳定。
-    # 请做好请求排队或重试机制。
-    
-    import dashscope
-    
-    response = dashscope.Generation.call(
-        api_key="your-api-key",
-        model="your-dedicated-model-code",   # 替换为专属模型 code
-        messages=[{"role": "user", "content": "你好"}],
-    )
-    print(response.output.text)
-    ```
-    
-    curl
-    
-    ```
-    # 短时间内请求量快速拉升时，系统需要短暂预热以匹配所需算力
-    # 预热期间部分请求可能出现延迟波动，预热完成后恢复稳定。
-    # 请做好请求排队或重试机制。
-    curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
-      -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-      -H "Content-Type: application/json" \
-      -d '{"model":"your-dedicated-model-code","messages":[{"role":"user","content":"你好"}]}'
-    ```
-    
+
+```
+# 短时间内请求量快速拉升时，系统需要短暂预热以匹配所需算力
+# 预热期间部分请求可能出现延迟波动，预热完成后恢复稳定。
+# 请做好请求排队或重试机制。
+
+import dashscope
+
+response = dashscope.Generation.call(
+    api_key="your-api-key",
+    model="your-dedicated-model-code",   # 替换为专属模型 code
+    messages=[{"role": "user", "content": "你好"}],
+)
+print(response.output.text)
+```
+```
+# 短时间内请求量快速拉升时，系统需要短暂预热以匹配所需算力
+# 预热期间部分请求可能出现延迟波动，预热完成后恢复稳定。
+# 请做好请求排队或重试机制。
+curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"your-dedicated-model-code","messages":[{"role":"user","content":"你好"}]}'
+```
 
 ### TPM 容量计算器
 
@@ -535,17 +522,13 @@ RPM 越大，建议购买的输入和输出 TPM 同比增大。
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3935961871/p1081917.png)
 
 -   基本信息：预留名称、专属模型 code（可复制）、基础模型、输入/输出容量。
-    
 -   统计卡片（近 7 天）：生效预留数、TPM 总量与峰值用量、平均利用率。
-    
 -   使用率趋势：可切换输入/输出方向，展示预留容量线和实际用量。
-    
 -   超额降级统计：展示超出预留容量后被降级处理的次数（仅「自动溢出」策略下产生降级）。
-    
 
 #### 监控
 
-提供详细的运行监控数据：利用率、配额用量（输入/输出）、配额内/外调用次数、缓存命中量。更多详细信息请参考：[模型监控](https://help.aliyun.com/zh/model-studio/model-telemetry)。
+提供详细的运行监控数据：利用率、配额用量（输入/输出）、配额内/外调用次数、缓存命中量。更多详细信息请参考：[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3935961871/p1081918.png)
 
@@ -565,9 +548,7 @@ RPM 越大，建议购买的输入和输出 TPM 同比增大。
 
 单击**扩缩容**，在弹窗中调整输入 TPM 和输出 TPM。
 
-**说明**
-
-输入 TPM 和输出 TPM 支持调整为 0：归 0 后不再产生容量费用，且专属模型 code 继续保留，避免因到期或退订导致 code 失效。但归 0 属于减配，已使用部分按 1.5 倍系数结算违约金（详见上方计费与使用说明）。
+**说明**输入 TPM 和输出 TPM 支持调整为 0：归 0 后不再产生容量费用，且专属模型 code 继续保留，避免因到期或退订导致 code 失效。但归 0 属于减配，已使用部分按 1.5 倍系数结算违约金（详见上方计费与使用说明）。
 
 #### 续费
 
@@ -577,11 +558,9 @@ RPM 越大，建议购买的输入和输出 TPM 同比增大。
 
 单击**退订**，系统跳转至费用中心完成退订流程。
 
-**重要**
+**重要**退订不可恢复。退订后专属模型 code 失效，已有请求将回退至公共资源处理。
 
-退订不可恢复。退订后专属模型 code 失效，已有请求将回退至公共资源处理。
-
-**预留实例状态说明**
+预留实例状态说明
 
 服务到期后 2 小时内为运行中，2~14 小时转为已停止，14 小时后转为已过期并最终删除。
 
@@ -615,22 +594,22 @@ RPM 越大，建议购买的输入和输出 TPM 同比增大。
 
 ## 常见问题
 
-**Q: 超出预留容量时会怎样？**
+Q: 超出预留容量时会怎样？
 
 取决于创建时选择的溢出策略：「自动溢出」策略下，超出预留容量的请求自动降级为按量计费，服务不中断，可在详情页概览 Tab 的**超额降级统计**查看降级次数和时间，频繁降级时建议扩容；「仅使用预留容量」策略下，超出请求返回 429 错误，不产生额外费用，频繁 429 时建议扩容。
 
-**Q: 专属模型 code 怎么获取？**
+Q: 专属模型 code 怎么获取？
 
 创建 TPM 预留后，系统自动生成专属模型 code。在 TPM 预留详情页的**概览** Tab 可复制该 code。必须将 API 请求中的 `model` 参数替换为此 code 才能使用预留容量。
 
-**Q: 预留到期后会怎样？**
+Q: 预留到期后会怎样？
 
 预留到期后，专属模型 code 失效，后续请求自动回退到公共资源处理（按量计费）。建议提前开启**到期自动续费**避免服务影响。
 
-**Q: 如何判断是否需要扩容？**
+Q: 如何判断是否需要扩容？
 
 在详情页概览 Tab 查看 TPM 用量趋势图和超额降级统计。如果利用率持续接近 100% 或频繁出现降级，建议扩容输入/输出 TPM。
 
-**Q: 购买「1 天」预留，实际有效时长是多少？**
+Q: 购买「1 天」预留，实际有效时长是多少？
 
 「按天」按**自然日**计算，有效期为实例生效时刻至次日 00:00:00，而非从购买时刻起连续 24 小时。例如，16:00 购买，当天 00:00 到期，有效时长约 8 小时。如需完整一天的容量，建议在一天开始时购买，或开启**到期自动续费**以连续保障服务。

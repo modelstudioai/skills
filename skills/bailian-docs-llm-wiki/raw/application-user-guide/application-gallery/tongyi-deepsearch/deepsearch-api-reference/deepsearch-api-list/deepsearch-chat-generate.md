@@ -2,13 +2,13 @@
 
 基于智能体应用管理提供的 agent\_id 与 agent\_version 信息，提供场景化对话、研究、写作相关能力。
 
-## **请求语法**
+## 请求语法
 
 ```
 POST /deep-search-agent/chat/completions HTTP/1.1
 ```
 
-## **请求参数**
+## 请求参数
 
 **参数名**
 
@@ -104,9 +104,9 @@ array\[string\]
 
 否
 
-动态文件 ID 列表，文件 ID 的获取参考文件上传文档，最大支持传入10个文件ID
+动态文件 ID 列表，文件 ID 的获取参考文件上传文档，最大支持传入10个文件ID
 
-## **返回参数**
+## 返回参数
 
 **参数名**
 
@@ -308,9 +308,9 @@ int
 
 总 tokens
 
-### **计划枚举**
+### 计划枚举
 
-**执行阶段（**`**group**`**）**
+**执行阶段（**`group`**）**
 
 **描述**
 
@@ -328,7 +328,7 @@ generating
 
 表示为写作模型，表示系统正处于报告生成阶段，此阶段不区分详细事件变化，无 start/end 事件；step 状态仅包括 thinking 和 generating，且不会调用工具。
 
-**当前步骤（**`**step**`**）**
+**当前步骤（**`step`**）**
 
 **描述和说明**
 
@@ -357,19 +357,14 @@ tool\_calling\_{工具名称}
 工具调用中，附带工具名称
 
 -   由于模型原因 step\_change 值可能为不存在，请尽可能使用持久化的标志step
-    
 -   空包情况下 step、step\_change、group 字段的值可能不存在
-    
 -   plan、think、generation 均由 xxx\_start 事件 和 xxx\_end 事件两个事件组成
-    
 -   tool\_call 由 tool\_call\_start、tool\_calling、tool\_return 三个事件组成
-    
 -   tool\_call\_start 表示工具调用开始（开始流式收集工具调用信息，此时还无法吐出工具调用详情（name、args等））、tool\_calling 表示获取到完整工具调用的参数并会抛出完整的工具调用参数tool\_return 表示工具调用返回结果，同时会携带结构化的工具返回信息。
-    
 
-**步骤变化事件 (**`**step_change**`**)**
+**步骤变化事件 (**`step_change`**)**
 
-**事件发生时** `**step**` **的值**
+**事件发生时**`step`**的值**
 
 **事件名称**
 
@@ -381,7 +376,7 @@ plan\_start
 
 开始规划
 
-`step` 状态变为 `planning`, 表示对应状态的开头（包含当前包）。
+`step` 状态变为 `planning`, 表示对应状态的开头（包含当前包）。
 
 plan\_end
 
@@ -389,7 +384,7 @@ plan\_end
 
 结束规划
 
-`step` 开始变成其他状态，事件发生时 `step` 仍为 `planning`，表示对应状态的结尾（包含当前包）。
+`step` 开始变成其他状态，事件发生时 `step` 仍为 `planning`，表示对应状态的结尾（包含当前包）。
 
 think\_start
 
@@ -397,7 +392,7 @@ think\_start
 
 开始思考
 
-与 `plan` 事件同理
+与 `plan` 事件同理
 
 think\_end
 
@@ -405,7 +400,7 @@ think\_end
 
 结束思考
 
-与 `plan` 事件同理
+与 `plan` 事件同理
 
 report\_start
 
@@ -413,7 +408,7 @@ report\_start
 
 开始总结
 
-与 `plan` 事件同理
+与 `plan` 事件同理
 
 report\_end
 
@@ -421,7 +416,7 @@ report\_end
 
 结束总结
 
-与 `plan` 事件同理
+与 `plan` 事件同理
 
 generation\_start
 
@@ -429,7 +424,7 @@ generation\_start
 
 开始生成
 
-与 `plan` 事件同理
+与 `plan` 事件同理
 
 generation\_end
 
@@ -437,7 +432,7 @@ generation\_end
 
 结束生成
 
-与 `plan` 事件同理
+与 `plan` 事件同理
 
 tool\_call\_start
 
@@ -461,18 +456,18 @@ tool\_return
 
 工具返回
 
-会携带工具返回信息， `step` 开始变成其他状态，事件发生时 `step` 仍为 `tool_calling_{工具名称}`。
+会携带工具返回信息， `step` 开始变成其他状态，事件发生时 `step` 仍为 `tool_calling_{工具名称}`。
 
-## **示例**
+## 示例
 
-### **请求示例**
+### 请求示例
 
 ```
 {
     "input": {
         "messages": [
             {
-                "role": "user", 
+                "role": "user",
                 "content": "现在日期"
             }
         ]
@@ -486,7 +481,7 @@ tool\_return
 }
 ```
 
-### **返回示例**
+### 返回示例
 
 ```
 data: {
@@ -518,11 +513,8 @@ data: {
 当生成配置开启输出报告时，模型尾包会给出 html 和 md 的存储地址和路径，content 中 type 的含义参考如下
 
 -   file\_path：文件存储路径用于后续导出pdf和二次获取以下文件下载链接
-    
 -   md\_file\_url：md下载链接
-    
 -   html\_file\_url：html下载链接
-    
 
 ```
 {
@@ -532,20 +524,20 @@ data: {
   "output": {
     "choices": [
       {
-        "finish_reason": "stop", 
+        "finish_reason": "stop",
         "message": {
           "content": [
             {
-              "type": "file_path", 
+              "type": "file_path",
               "text": "msearch/agents/files/upload/536fa835-a381-4870-99c1-79dee3ab946c"
             },
             {
-              "type": "md_file_url", 
-              "text": "https://msearch-cloud.oss-cn-hangzhou.aliyuncs.com/msearch/agents/files/upload/536fa835-a381-4870-99c1-79dee3ab946c.md?x-oss-signature-version=OSS4-HMAC-SHA256&x-oss-date=20250904T151053Z&x-oss-expires=900&x-oss-credential=LTAI5tCLjk1ruCfq2caq****%2F20250904%2Fcn-hangzhou%2Foss%2Faliyun_v4_request&x-oss-signature=9f9af4642f3611b1b8210bd801f10610236656a016e6bda67e2239ecf59b644f"
+              "type": "md_file_url",
+              "text": "https://msearch-cloud.oss-cn-hangzhou.aliyuncs.com/msearch/agents/files/upload/536fa835-a381-4870-99c1-79dee3ab946c.md?x-oss-signature-version=OSS4-HMAC-SHA256&x-oss-date=20250904T151053Z&x-oss-expires=900&x-oss-credential=YOUR_ACCESS_KEY_ID&x-oss-signature=YOUR_SIGNATURE"
             },
             {
-              "type": "html_file_url", 
-              "text": "https://msearch-cloud.oss-cn-hangzhou.aliyuncs.com/msearch/agents/files/upload/536fa835-a381-4870-99c1-79dee3ab946c.html?x-oss-signature-version=OSS4-HMAC-SHA256&x-oss-date=20250904T151053Z&x-oss-expires=900&x-oss-credential=LTAI5tCLjk1ruCfq2caq****%2F20250904%2Fcn-hangzhou%2Foss%2Faliyun_v4_request&x-oss-signature=34164425671a0f26a39adacd12735d9ec127aec8caa68f8e1de6e252f5889a9c"
+              "type": "html_file_url",
+              "text": "https://msearch-cloud.oss-cn-hangzhou.aliyuncs.com/msearch/agents/files/upload/536fa835-a381-4870-99c1-79dee3ab946c.html?x-oss-signature-version=OSS4-HMAC-SHA256&x-oss-date=20250904T151053Z&x-oss-expires=900&x-oss-credential=YOUR_ACCESS_KEY_ID&x-oss-signature=YOUR_SIGNATURE"
             }
           ],
           "additional_kwargs": {},
@@ -565,9 +557,9 @@ data: {
 }
 ```
 
-## **调用示例**
+## 调用示例
 
-Python
+python
 
 ```
 # coding=utf-8
@@ -598,9 +590,9 @@ if __name__ == "__main__":
         },
         "stream": True
     }
-    
+
     response = requests.post(chat_completions_url, headers=headers, json=params, stream=True)
-    
+
     resultlist = []
     stage = ''
     action = ''
@@ -619,24 +611,24 @@ if __name__ == "__main__":
                     # 获取消息体
                     msg = obj.get('output', {}).get('choices', [{}])[0].get('message', {})
                     extra_flags = msg.get('extra', {})  # 获取模型状态标记字段
-    
+
                     if stage != extra_flags.get('group', ''):  # 获取 模型当前阶段
                         print(f"agent stage: {extra_flags.get('group', '')}")
                     stage = extra_flags.get('group', '')
-    
+
                     if action != extra_flags.get('step', '') and extra_flags.get('step', ''):  # 获取 模型当前阶段
                         print(f"agent action: {extra_flags.get('step', '')}")
                     action = extra_flags.get('step', '')
-    
+
                     role = msg.get('role', '')  # 获取模型角色 assistant or role
                     content = msg.get('content')  # 获取生成内容
                     toolcalls = msg.get('tool_calls', [])  # 获取工具调用
                     if toolcalls:
                         print(f'{toolcalls}')
-    
+
                     if not content:  # 如果 content内没有内容，则尝试获取最后一轮深度思考中的reasoning_content内容
                         content = msg.get('reasoning_content', '')
-    
+
                     if isinstance(content, str):
                         if role == "tool":
                             print("\\n" + content + "\\n", end='')  # 前后都换行
@@ -651,7 +643,7 @@ if __name__ == "__main__":
                     print("异常解析:", e)
 ```
 
-Java
+java
 
 ```
 import java.io.*;
@@ -679,7 +671,7 @@ public class DeepSearchStreamDemo {
         Map<String, Object> input = new HashMap<>();
         input.put("messages", messages);
         // parameters.agent_options
-        Map<String, Object> agentOptions = new HashMap<>(); // 
+        Map<String, Object> agentOptions = new HashMap<>(); //
         agentOptions.put("agent_id", "${agent_id}");// 应用ID，可在应用管理页面获取到，例如：aid-8fd***e00
         agentOptions.put("agent_version", "${agent_version}"); // 应用版本，beta 测试版本 / release 发布版本
         // parameters

@@ -2,14 +2,12 @@
 
 为了在 VPC 内直接调用阿里云百炼的模型或应用 API，且确保流量不经过公网，可以创建私网终端节点，将通信完全限制在阿里云内网。
 
-## **工作原理**
+## 工作原理
 
 百炼无专属网关，仅支持以下两种接入方式：
 
 -   **公网调用**：直接访问公网 MaaS 域名 `dashscope.aliyuncs.com`（国际站为 `dashscope-intl.aliyuncs.com`）或业务空间级公网域名，流量经公网到达百炼。
-    
 -   **PrivateLink 私网连接**：在 VPC 中创建接口终端节点后，通过终端节点服务域名访问百炼，流量全程走阿里云内网，不经过公网。
-    
 
 在专有网络（VPC）中创建接口终端节点后，阿里云私网连接服务（PrivateLink）将为您的VPC与阿里云百炼建立一条私网连接（终端节点连接）。该连接为单向设计，仅允许您的 VPC 内的资源主动访问阿里云百炼，阿里云百炼无法通过此连接反向访问您 VPC 内的资源。
 
@@ -17,7 +15,7 @@ VPC 内的计算资源访问终端节点时，流量将通过 PrivateLink 转发
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5798507871/CAEQYxiBgMCtvojh0RkiIDEzOTVhZTNhNGQxYTQ3YTQ5MjlhODJjZjM4MTY2NjQw5274221_20250627113930.173.svg)
 
-如需从其他地域的VPC内进行私网访问，请参考[跨地域私网访问阿里云百炼 API](#a576f2631au0h)。
+如需从其他地域的VPC内进行私网访问，请参考[跨地域私网访问阿里云百炼 API](https://help.aliyun.com/zh/model-studio/access-model-studio-through-privatelink#a576f2631au0h)。
 
 阿里云百炼服务所在地域：
 
@@ -26,11 +24,11 @@ VPC 内的计算资源访问终端节点时，流量将通过 PrivateLink 转发
     > 美国（弗吉尼亚）地域暂不支持私网访问。
     
 
-## **通过终端节点访问阿里云百炼 API**
+## 通过终端节点访问阿里云百炼 API
 
-### **步骤一：创建接口终端节点**
+### 步骤一：创建接口终端节点
 
-## 公共云
+#### 公共云
 
 1.  登录[终端节点控制台](https://vpc.console.aliyun.com/endpoint/cn-beijing/endpoints)。
     
@@ -57,9 +55,9 @@ VPC 内的计算资源访问终端节点时，流量将通过 PrivateLink 转发
 3.  单击**确定创建**，完成创建。
     
 
-### **步骤二：获取**终端节点服务域名
+### 步骤二：获取终端节点服务域名
 
-## 公共云
+#### 公共云
 
 完成接口终端节点创建后，可以在接口终端节点的详情页中获取服务域名，用于后续私网访问阿里云百炼 API。
 
@@ -67,26 +65,24 @@ VPC 内的计算资源访问终端节点时，流量将通过 PrivateLink 转发
 
 在**基本信息**页签下找到**终端节点服务域名**区域，可获取默认服务域名（格式为 `ep-{实例ID}.dashscope.{地域ID}.privatelink.aliyuncs.com`）。开启**自定义服务域名**开关后，可获取自定义服务域名（格式为 `vpc-{实例ID}.{地域ID}.dashscope.aliyuncs.com`）。
 
-### **步骤三：调用验证**
+### 步骤三：调用验证
 
 将阿里云百炼 API base\_url 中的域名，替换为上一步骤中获取到的终端节点服务域名，然后在对应 VPC 发起调用即可。
 
-## 公共云
+#### 公共云
 
-以 OpenAI 兼容模式调用北京地域的[通义千问文本模型](https://help.aliyun.com/zh/model-studio/qwen-api-reference/#a9b7b197e2q2v)为例：
+以 OpenAI 兼容模式调用北京地域的[通义千问文本模型](raw/model-api-reference/qwen-api-reference.md)为例：
 
 -   替换前：`https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions`
     
 -   替换后：
     
-    -   **默认服务域名**：`http://ep-***.dashscope.cn-beijing.privatelink.aliyuncs.com/compatible-mode/v1/chat/completions`
-        
-    -   **自定义服务域名**：`https://vpc-cn-beijing.dashscope.aliyuncs.com/compatible-mode/v1/chat/completions`
-        
+    -   **默认服务域名**：`http://ep-***.dashscope.cn-beijing.privatelink.aliyuncs.com /compatible-mode/v1/chat/completions`
+    -   **自定义服务域名**：`https:// vpc-cn-beijing.dashscope.aliyuncs.com /compatible-mode/v1/chat/completions`
 
 调用示例：
 
-## HTTP
+HTTP
 
 ```
 # 将原始域名替换为上一步骤中获取到的终端节点服务域名
@@ -101,14 +97,14 @@ curl -X POST http://ep-***.dashscope.cn-beijing.privatelink.aliyuncs.com/compati
             "content": "You are a helpful assistant."
         },
         {
-            "role": "user", 
+            "role": "user",
             "content": "你是谁？"
         }
     ]
 }'
 ```
 
-## OpenAI Python SDK
+OpenAI Python SDK
 
 ```
 import os
@@ -127,7 +123,7 @@ completion = client.chat.completions.create(
 print(completion.model_dump_json())
 ```
 
-## DashScope Python SDK
+DashScope Python SDK
 
 ```
 import os
@@ -155,7 +151,7 @@ else:
     ))
 ```
 
-## DashScope Java SDK
+DashScope Java SDK
 
 ```
 // 建议DashScope SDK的版本 >= 2.12.0
@@ -202,31 +198,24 @@ public class Main {
 }
 ```
 
-> 调用前，需要您已完成[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。如需要直接传入 API Key，请将`$DASHSCOPE_API_KEY` 替换为您的 API Key。
+> 调用前，需要您已完成[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。如需要直接传入 API Key，请将`$DASHSCOPE_API_KEY` 替换为您的 API Key。
 
-## **跨地域私网访问**阿里云**百炼 API**
+## 跨地域私网访问阿里云百炼 API
 
 百炼服务部署在华北2（北京）和新加坡。从其他地域 VPC 内私网访问百炼 API 时，根据互通范围选择以下方式之一：
 
--   **同境内或同境外跨地域**（例如华东1（杭州）VPC 调用华北2（北京）百炼）：推荐使用[方式一：启用跨地域端点](#1850951664d08)。
-    
--   **跨境跨地域**（中国内地与境外之间，例如华北2（北京）VPC 调用新加坡百炼）：使用[方式二：通过 CEN 跨地域 VPC 互通](#8761dd25447d4)。
-    
+-   **同境内或同境外跨地域**（例如华东1（杭州）VPC 调用华北2（北京）百炼）：推荐使用[方式一：启用跨地域端点](https://help.aliyun.com/zh/model-studio/access-model-studio-through-privatelink#1850951664d08)。
+-   **跨境跨地域**（中国内地与境外之间，例如华北2（北京）VPC 调用新加坡百炼）：使用[方式二：通过 CEN 跨地域 VPC 互通](https://help.aliyun.com/zh/model-studio/access-model-studio-through-privatelink#8761dd25447d4)。
 
-### **方式一：启用跨地域端点（推荐）**
+### 方式一：启用跨地域端点（推荐）
 
 详细操作参见 [使用接口终端节点访问跨地域的阿里云服务](https://help.aliyun.com/zh/privatelink/create-and-manage-endpoints/#231de8ecd49y6)。百炼场景的关键配置：
 
 -   **地域**：选择发起端 VPC 所在地域。
-    
 -   **类型**：选择**阿里云服务**。
-    
 -   **服务地域**：勾选**启用跨地域端点**，并选择**华北2（北京）**或**新加坡**。
-    
 -   **终端节点服务**：从下方列表中选择 `com.aliyuncs.dashscope`。
-    
 -   **跨地域配置**：跨地域流量费由 CDT 结算；带宽根据互通范围分级（中国内地与中国内地互通默认 1000 Mbps；非中国内地与非中国内地互通默认 100 Mbps）。
-    
 
 其他参数与同地域配置一致。完成后，在终端节点关联的安全组中添加入方向规则，允许发起端 VPC 内资源访问 80、443 端口。
 
@@ -234,18 +223,16 @@ public class Main {
 
 配置完成后，在发起端 VPC 内访问该终端节点的默认服务域名时，PrivateLink 直接将流量路由至阿里云百炼服务所在地域，实现跨地域私网访问。
 
-### **方式二：通过云企业网（CEN）跨地域 VPC 互通（适用于跨境场景）**
+### 方式二：通过云企业网（CEN）跨地域 VPC 互通（适用于跨境场景）
 
 用于中国内地与境外之间的跨境跨地域访问。终端节点须与百炼服务位于同一地域，通过 CEN 实现跨地域 VPC 互通：
 
-1.  参考前文，完成[通过终端节点访问阿里云百炼 API](#77efa790086jo)的配置。
+1.  参考前文，完成[通过终端节点访问阿里云百炼 API](https://help.aliyun.com/zh/model-studio/access-model-studio-through-privatelink#77efa790086jo)的配置。
     
 2.  通过云企业网（CEN）配置[跨地域VPC互通](https://help.aliyun.com/zh/cen/getting-started/inter-region-vpc-interworking)。需要注意：
     
     -   请在两端选择不同网段的 VPC，避免网段冲突导致互通失败。
-        
     -   中国内地和其他地域之间通过 CEN 实现跨地域 VPC 互通，需要按照控制台提示提交申请。审批时间通常为 1~2 工作日，更多问题可查阅[跨境常见问题](https://help.aliyun.com/zh/cen/support/faq-about-cross-border-network-communication)。
-        
 3.  在终端节点关联的安全组中，添加入方向规则，允许发起端内的资源访问 80、443 端口。
     
 
@@ -262,20 +249,17 @@ public class Main {
     **注意**：进行内网域名解析配置时，主机记录或完整域名中请勿使用下划线（\_），否则可能导致API调用失败。建议域名仅包含字母、数字和短划线（-），例如`test-for-dns.dashscope.aliyuncs.com`，而不是`test_for_dns.dashscope.aliyuncs.com`。
     
 
-配置完成后，即可在发起端 VPC 内通过自定义服务域名访问阿里云百炼 API。若使用不同名的内网域名进行配置，请参见[配置内网域名解析](#3b86fad821p5p)。
+配置完成后，即可在发起端 VPC 内通过自定义服务域名访问阿里云百炼 API。若使用不同名的内网域名进行配置，请参见[配置内网域名解析](raw/model-user-guide/security-and-compliance/transmission-security/access-model-studio-through-privatelink.md)。
 
-## **计费说明**
+## 计费说明
 
 使用私网连接（PrivateLink）和内网域名解析（Private Hosted Zone）会产生额外费用；跨境场景另需云企业网（CEN）跨地域费用。可参考对应计费说明来了解和评估成本：
 
 -   [私网连接计费说明](https://help.aliyun.com/zh/privatelink/private-link-billing-description)
-    
 -   [云企业网计费说明](https://help.aliyun.com/zh/cen/product-overview/billing-rules)（仅跨境场景使用）
-    
 -   [内网域名解析计费说明](https://help.aliyun.com/zh/dns/pvtz-product-billing)
-    
 
-## **常见问题**
+## 常见问题
 
 1.  **为什么我的 ECS 实例无法通过私网链接访问阿里云百炼 API？**
     
@@ -325,9 +309,6 @@ public class Main {
     请按以下四个方向排查：
     
     -   **网络问题**：DNS 解析失败，或到终端节点的 TCP 连接超时。请检查发起端 VPC 与终端节点是否在同一 VPC（或已通过云企业网互通）、终端节点关联的安全组是否在入方向放通 80（HTTP）和 443（HTTPS）端口，以及自定义服务域名的内网权威域名解析是否正确指向终端节点默认服务域名。
-        
     -   **服务限流**：请求速率或 Token 消耗超出模型 RPM/TPM 上限时，接口返回 HTTP 429（`Throttling.RateQuota` 等限流错误码）。请在控制台的模型限流页面查看当前配额，必要时提交提额申请。
-        
     -   **服务高峰期**：业务高峰时段的请求会进入服务端排队队列，表现为响应延迟增大甚至超时。请适当增加客户端超时时间，或错峰重试。
-        
     -   **参数设置**：QwQ、QVQ 等推理型模型仅支持流式（stream）调用，以非流式方式调用会直接报错或长时间不返回。请在请求中设置 `stream=true`，或使用对应 SDK 的流式接口启用流式输出。

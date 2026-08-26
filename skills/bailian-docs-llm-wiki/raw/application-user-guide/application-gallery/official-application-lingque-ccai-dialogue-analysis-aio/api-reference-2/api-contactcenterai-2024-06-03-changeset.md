@@ -10,10 +10,10 @@ OpenAPI 名称
 
 操作
 
-[RunCompletion](https://help.aliyun.com/zh/model-studio/api-contactcenterai-2024-06-03-runcompletion)
+RunCompletion
 
 OpenAPI 错误码发生变更。
 
-[查看变更详情](https://api.aliyun.com/document/ContactCenterAI/2024-06-03/RunCompletion?updateTime=2024-06-14#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/ContactCenterAI/2024-06-03/RunCompletion?updateTime=2024-06-14#workbench-doc-change-demo)
 
-[查看API文档](https://api.aliyun.com/document/ContactCenterAI/2024-06-03/RunCompletion)
+[查看API文档](https://api.alibabacloud.com/document/ContactCenterAI/2024-06-03/RunCompletion)

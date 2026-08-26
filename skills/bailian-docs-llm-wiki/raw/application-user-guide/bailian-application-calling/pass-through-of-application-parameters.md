@@ -1,22 +1,20 @@
 # 应用的自定义参数传递
 
-本文介绍如何在阿里云百炼的**智能体应用**和**工作流应用**（智能体编排应用已被工作流应用替代）调用中使用自定义参数传递功能，主要适用于自定义插件与自定义节点的参数传递。
+本文介绍如何在阿里云百炼的 智能体应用 和 工作流应用 （智能体编排应用已被工作流应用替代）调用中使用自定义参数传递功能，主要适用于自定义插件与自定义节点的参数传递。
 
-您需要已[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
+您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，还需要[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
 
-## **自定义插件参数传递**
+## 自定义插件参数传递
 
 本文以**寝室公约内容查询工具**作为示例，向您展示API如何调用应用的自定义插件参数传递功能。
 
-**说明**
-
-自定义插件的参数通过关联的**智能体应用**传递，或通过**工作流应用**中的**插件节点**传递。
+**说明**自定义插件的参数通过关联的**智能体应用**传递，或通过**工作流应用**中的**插件节点**传递。
 
 下方示例展示在**智能体应用**中如何传递自定义插件参数。
 
-### **如何使用**
+### 如何使用
 
-#### **步骤一：创建自定义插件工具**
+#### 步骤一：创建自定义插件工具
 
 > 如果已创建插件工具或已导入了插件，请跳过此步骤。
 
@@ -24,22 +22,18 @@
     
     > 示例插件描述：寝室公约查询工具，可以根据输入的数字索引查询特定条目。
     
-    > 示例插件 URL：https://domitorgreement-plugin-example-icohrkdjxy.cn-beijing.fcapp.run
+    > 示例插件 URL：[https://domitorgreement-plugin-example-icohrkdjxy.cn-beijing.fcapp.run](https://domitorgreement-plugin-example-icohrkdjxy.cn-beijing.fcapp.run)
     
     示例鉴权配置：鉴权类型选择**用户级鉴权**，位置选择**Header**，Type 选择 **basic**。
     
-    **请注意：****插件描述**是对插件用途的简要说明，能帮助大模型判断当前任务是否需要调用当前插件，请使用自然语言进行描述。
+    **请注意：插件描述**是对插件用途的简要说明，能帮助大模型判断当前任务是否需要调用当前插件，请使用自然语言进行描述。
     
 2.  创建工具：填写工具信息，配置输入参数和输出参数。**请注意：**
     
     1.  **工具描述**能帮助大模型更好的理解工具功能和使用场景。请使用自然语言进行描述，尽量给出使用示例。
-        
     2.  **参数名称**尽可能带有含义，可以帮助大模型理解当前需要识别的参数信息是什么。
-        
     3.  **参数描述**是对该入参的功能描述，要简练且准确，帮助大模型进一步理解取参的方式。
-        
-    4.  输入参数的**传参方式****务必**选择**业务透传**。
-        
+    4.  输入参数的**传参方式务必**选择**业务透传**。
     
     此处示例将**寝室公约内容索引**`article_index`设置为业务透传参数。
     
@@ -48,18 +42,15 @@
 3.  单击**测试工具**，运行通过后，**发布**插件。
     
 
-#### **步骤二：智能体应用关联指定插件**
+#### 步骤二：智能体应用关联指定插件
 
 > 插件工具只能与位于相同业务空间里的**智能体应用**关联。
 
 1.  可在已发布的插件卡片上单击**添加到智能体**，选择需要关联的智能体应用；
-    
 2.  也可在应用内单击**+插件**，关联指定的自定义插件；
-    
 3.  然后直接**发布**应用。
-    
 
-#### **步骤三：API调用**
+#### 步骤三：API调用
 
 -   **无需鉴权时**：通过API调用自定义插件，使用`biz_params`的`user_defined_params`传递自定义插件信息，`your_plugin_code`替换为实际的插件ID，并传递插件中配置的输入参数键值对。
     
@@ -67,10 +58,9 @@
     
     本示例中传入寝室公约索引`article_index`参数值为2，查询第二条寝室公约内容，并返回正确结果。
     
-    ## Python
+    #### Python
     
     **请求示例**
-    
     ```
     import os
     from http import HTTPStatus
@@ -96,19 +86,16 @@
         print('%s\n' % (response.output.text))  # 处理只输出文本text
         # print('%s\n' % (response.usage))
     ```
-    
     **响应示例**
-    
     ```
     寝室公约的第二条规定如下：
     "寝室成员应当互帮互助、互相关心、互相学习、共同提高；宽容谦让、相互尊重、以诚相待。"
     这表明在寝室内，成员之间应该培养一种积极正面的生活和学习氛围，彼此帮助和支持，同时也要学会理解和尊重他人。如果您需要了解公约的其他条款，请告诉我！
     ```
     
-    ## Java
+    #### Java
     
     **请求示例**
-    
     ```
     import com.alibaba.dashscope.app.*;
     import com.alibaba.dashscope.exception.ApiException;
@@ -143,21 +130,18 @@
         }
     }
     ```
-    
     **响应示例**
-    
     ```
     寝室公约的第二条规定如下：
     第二条 寝室成员应当互帮互助、互相关心、互相学习、共同提高；宽容谦让、相互尊重、以诚相待。
     这强调了在共同生活环境中，室友之间应该保持积极正面的关系，通过相互帮助和支持来营造一个和谐的生活和学习氛围。如果有更多具体的条款需要了解，请告知我。
     ```
     
-    ## HTTP
+    #### HTTP
     
-    ## curl
+    #### curl
     
     **请求示例**
-    
     ```
     curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/YOUR_APP_ID/completion \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -165,7 +149,7 @@
     --data '{
         "input": {
             "prompt": "寝室公约内容",
-            "biz_params": 
+            "biz_params":
             {
                 "user_defined_params":
                 {
@@ -174,7 +158,7 @@
                         "article_index": 2
                         }
                 }
-            } 
+            }
         },
         "parameters":  {},
         "debug":{}
@@ -184,7 +168,6 @@
     > YOUR\_APP\_ID替换为实际的应用 ID。
     
     **响应示例**
-    
     ```
     {"output":
     {"finish_reason":"stop",
@@ -194,10 +177,9 @@
     "request_id":"a39fd2b5-7e2c-983e-84a1-1039f726f18a"}%
     ```
     
-    ## PHP
+    #### PHP
     
     **请求示例**
-    
     ```
     <?php
     # 若没有配置环境变量，可用百炼API Key将下行替换为：$api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
@@ -212,7 +194,7 @@
             'biz_params' => [
             'user_defined_params' => [
                 '{your_plugin_code}' => [
-                    'article_index' => 2            
+                    'article_index' => 2
                     ]
                 ]
             ]
@@ -258,29 +240,24 @@
             echo "request_id={$response_data['request_id']}\n";}
         echo "code={$status_code}\n";
         if (isset($response_data['message'])) {
-            echo "message={$response_data['message']}\n";} 
+            echo "message={$response_data['message']}\n";}
         else {
             echo "message=Unknown error\n";}
     }
     ?>
     ```
-    
     **响应示例**
-    
     ```
     寝室公约的第二条规定：寝室成员应当互帮互助、互相关心、互相学习、共同提高；宽容谦让、相互尊重、以诚相待。这是为了保证大家能在一个和谐友爱的环境中生活和学习。如果有更多具体的条款需要了解，或者有其他问题，随时可以问我！
     ```
     
-    ## Node.js
+    #### Node.js
     
     **需安装相关依赖：**
-    
     ```
     npm install axios
     ```
-    
     **请求示例**
-    
     ```
     const axios = require('axios');
     async function callDashScope() {
@@ -338,19 +315,16 @@
     }
     callDashScope();
     ```
-    
     **响应示例**
-    
     ```
     寝室公约的第三条规定如下：
     注意安全用电，杜绝火灾隐患。寝室内严禁使用明火、违规电器、各种灶具以及其他违规物品，不得存放易爆、易燃物品，私接电源。
     如果您需要了解更多的规定，请告诉我。
     ```
     
-    ## C#
+    #### C#
     
     **请求示例**
-    
     ```
     using System.Text;
     class Program
@@ -409,9 +383,7 @@
         }
     }
     ```
-    
     **响应示例**
-    
     ```
     {
         "output": {
@@ -434,86 +406,83 @@
     }
     ```
     
-    ## Go
+    #### Go
     
     **请求示例**
-    
     ```
     package main
     import (
-    	"bytes"
-    	"encoding/json"
-    	"fmt"
-    	"io"
-    	"net/http"
-    	"os"
+      "bytes"
+      "encoding/json"
+      "fmt"
+      "io"
+      "net/http"
+      "os"
     )
     func main() {
-    	// 若没有配置环境变量，可用百炼API Key将下行替换为：apiKey := "sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
-    	apiKey := os.Getenv("DASHSCOPE_API_KEY")
-    	appId := "YOUR_APP_ID"           // 替换为实际的应用 ID
-    	pluginCode := "YOUR_PLUGIN_CODE" // 替换为实际的插件 ID
-    	if apiKey == "" {
-    		fmt.Println("请确保设置了DASHSCOPE_API_KEY。")
-    		return
-    	}
-    	url := fmt.Sprintf("https://dashscope.aliyuncs.com/api/v1/apps/%s/completion", appId)
-    	// 创建请求体
-    	requestBody := map[string]interface{}{
-    		"input": map[string]interface{}{
-    			"prompt": "寝室公约内容",
-    			"biz_params": map[string]interface{}{
-    				"user_defined_params": map[string]interface{}{
-    					pluginCode: map[string]interface{}{
-    						"article_index": 2,
-    					},
-    				},
-    			},
-    		},
-    		"parameters": map[string]interface{}{},
-    		"debug":      map[string]interface{}{},
-    	}
-    	jsonData, err := json.Marshal(requestBody)
-    	if err != nil {
-    		fmt.Printf("Failed to marshal JSON: %v\n", err)
-    		return
-    	}
-    	// 创建 HTTP POST 请求
-    	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
-    	if err != nil {
-    		fmt.Printf("Failed to create request: %v\n", err)
-    		return
-    	}
-    	// 设置请求头
-    	req.Header.Set("Authorization", "Bearer "+apiKey)
-    	req.Header.Set("Content-Type", "application/json")
-    	// 发送请求
-    	client := &http.Client{}
-    	resp, err := client.Do(req)
-    	if err != nil {
-    		fmt.Printf("Failed to send request: %v\n", err)
-    		return
-    	}
-    	defer resp.Body.Close()
-    	// 读取响应
-    	body, err := io.ReadAll(resp.Body)
-    	if err != nil {
-    		fmt.Printf("Failed to read response: %v\n", err)
-    		return
-    	}
-    	// 处理响应
-    	if resp.StatusCode == http.StatusOK {
-    		fmt.Println("Request successful:")
-    		fmt.Println(string(body))
-    	} else {
-    		fmt.Printf("Request failed with status code: %d\n", resp.StatusCode)
-    		fmt.Println(string(body))
-    	}
+      // 若没有配置环境变量，可用百炼API Key将下行替换为：apiKey := "sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
+      apiKey := os.Getenv("DASHSCOPE_API_KEY")
+      appId := "YOUR_APP_ID"           // 替换为实际的应用 ID
+      pluginCode := "YOUR_PLUGIN_CODE" // 替换为实际的插件 ID
+      if apiKey == "" {
+          fmt.Println("请确保设置了DASHSCOPE_API_KEY。")
+          return
+      }
+      url := fmt.Sprintf("https://dashscope.aliyuncs.com/api/v1/apps/%s/completion", appId)
+      // 创建请求体
+      requestBody := map[string]interface{}{
+          "input": map[string]interface{}{
+              "prompt": "寝室公约内容",
+              "biz_params": map[string]interface{}{
+                  "user_defined_params": map[string]interface{}{
+                      pluginCode: map[string]interface{}{
+                          "article_index": 2,
+                      },
+                  },
+              },
+          },
+          "parameters": map[string]interface{}{},
+          "debug":      map[string]interface{}{},
+      }
+      jsonData, err := json.Marshal(requestBody)
+      if err != nil {
+          fmt.Printf("Failed to marshal JSON: %v\n", err)
+          return
+      }
+      // 创建 HTTP POST 请求
+      req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+      if err != nil {
+          fmt.Printf("Failed to create request: %v\n", err)
+          return
+      }
+      // 设置请求头
+      req.Header.Set("Authorization", "Bearer "+apiKey)
+      req.Header.Set("Content-Type", "application/json")
+      // 发送请求
+      client := &http.Client{}
+      resp, err := client.Do(req)
+      if err != nil {
+          fmt.Printf("Failed to send request: %v\n", err)
+          return
+      }
+      defer resp.Body.Close()
+      // 读取响应
+      body, err := io.ReadAll(resp.Body)
+      if err != nil {
+          fmt.Printf("Failed to read response: %v\n", err)
+          return
+      }
+      // 处理响应
+      if resp.StatusCode == http.StatusOK {
+          fmt.Println("Request successful:")
+          fmt.Println(string(body))
+      } else {
+          fmt.Printf("Request failed with status code: %d\n", resp.StatusCode)
+          fmt.Println(string(body))
+      }
     }
     ```
-    
     **响应示例**
-    
     ```
     {
         "output": {
@@ -541,18 +510,14 @@
     > 插件ID在插件卡片上获取。
     
     -   使用`biz_params`的`user_defined_params`传递自定义插件信息，`your_plugin_code`替换为实际的插件ID，并传入插件中配置的输入参数键值对。
-        
     -   使用 `biz_params` 的`user_defined_tokens`传递相关信息，`your_plugin_code`替换为实际的插件ID，`user_token`的参数值填入鉴权信息，如实际DASHSCOPE\_API\_KEY的值。
-        
     -   鉴权通过后根据传递的索引参数查询特定条目并正确返回结果。
-        
     
     本示例中传入寝室公约索引`article_index`参数值为2，`user_token`的值`YOUR_TOKEN`替换为实际DASHSCOPE\_API\_KEY的值。鉴权通过后，查询第二条寝室公约内容，并返回正确结果。
     
-    ## Python
+    #### Python
     
     **请求示例**
-    
     ```
     from http import HTTPStatus
     import os
@@ -568,7 +533,7 @@
                 "user_token": "YOUR_TOKEN"}}}
     response = Application.call(
                 # 若没有配置环境变量，可用百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
-                api_key=os.getenv("DASHSCOPE_API_KEY"), 
+                api_key=os.getenv("DASHSCOPE_API_KEY"),
                 app_id='YOUR_APP_ID',
                 prompt='寝室公约内容',
                 biz_params=biz_params)
@@ -581,19 +546,16 @@
         print('%s\n' % (response.output.text))  # 处理只输出文本text
         # print('%s\n' % (response.usage))
     ```
-    
     **响应示例**
-    
     ```
     寝室公约的第二条规定如下：
     寝室成员应当互帮互助、互相关心、互相学习、共同提高；宽容谦让、相互尊重、以诚相待。
     如果您需要了解更多的规定内容，请告诉我。
     ```
     
-    ## Java
+    #### Java
     
     **请求示例**
-    
     ```
     import com.alibaba.dashscope.app.*;
     import com.alibaba.dashscope.exception.ApiException;
@@ -629,9 +591,7 @@
         }
     }
     ```
-    
     **响应示例**
-    
     ```
     寝室公约的第二条规定如下：
     寝室成员应当互帮互助、互相关心、互相学习、共同提高；宽容谦让、相互尊重、以诚相待。
@@ -640,12 +600,11 @@
     
     > 应用ID替换YOUR\_APP\_ID，自定义的插件ID替换your\_plugin\_code，鉴权Token替换YOUR\_TOKEN。
     
-    ## HTTP
+    #### HTTP
     
-    ## curl
+    #### curl
     
     **请求示例**
-    
     ```
     curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/YOUR_APP_ID/completion \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -653,7 +612,7 @@
     --data '{
         "input": {
             "prompt": "寝室公约内容",
-            "biz_params": 
+            "biz_params":
             {
                 "user_defined_params":
                 {
@@ -669,7 +628,7 @@
                         "user_token": "YOUR_TOKEN"
                         }
                 }
-            } 
+            }
         },
         "parameters":  {},
         "debug":{}
@@ -679,7 +638,6 @@
     > YOUR\_APP\_ID替换为实际的应用 ID，自定义的插件ID替换your\_plugin\_code，鉴权Token替换YOUR\_TOKEN。
     
     **响应示例**
-    
     ```
     {"output":{"finish_reason":"stop",
     "session_id":"d3b5c3e269dc40479255a7a02df5c630",
@@ -688,10 +646,9 @@
     "request_id":"1f77154c-edc3-9003-b622-816fa2f849cf"}%
     ```
     
-    ## PHP
+    #### PHP
     
     **请求示例**
-    
     ```
     <?php
     # 若没有配置环境变量，可用百炼API Key将下行替换为：$api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
@@ -705,7 +662,7 @@
             'biz_params' => [
             'user_defined_params' => [
                 '{your_plugin_code}' => [//{your_plugin_code}替换为实际的插件ID
-                    'article_index' => 2            
+                    'article_index' => 2
                     ]
                 ],
             'user_defined_tokens' => [
@@ -756,31 +713,26 @@
             echo "request_id={$response_data['request_id']}\n";}
         echo "code={$status_code}\n";
         if (isset($response_data['message'])) {
-            echo "message={$response_data['message']}\n";} 
+            echo "message={$response_data['message']}\n";}
         else {
             echo "message=Unknown error\n";}
     }
     ?>
     ```
-    
     **响应示例**
-    
     ```
     寝室公约的第二条规定如下：
     > 寝室成员应当互帮互助、互相关心、互相学习、共同提高；宽容谦让、相互尊重、以诚相待。
     如果需要了解更多的公约内容或其他信息，请随时告诉我！
     ```
     
-    ## Node.js
+    #### Node.js
     
     **需安装相关依赖：**
-    
     ```
     npm install axios
     ```
-    
     **请求示例**
-    
     ```
     const axios = require('axios');
     async function callDashScope() {
@@ -844,17 +796,14 @@
     }
     callDashScope();
     ```
-    
     **响应示例**
-    
     ```
     寝室公约的第六条规定：养成良好的作息习惯，每一位寝室成员都享有休息的权利和承担保证他人休息权利和义务。如果你需要了解更多的规定内容，请进一步说明。
     ```
     
-    ## C#
+    #### C#
     
     **请求示例**
-    
     ```
     using System.Text;
     class Program
@@ -886,7 +835,7 @@
                             }},
                             ""user_defined_tokens"": {{
                                 ""{pluginCode}"": {{
-                                    ""user_token"": ""YOUR_TOKEN"" 
+                                    ""user_token"": ""YOUR_TOKEN""
                                 }}
                             }}
                         }}
@@ -919,9 +868,7 @@
         }
     }
     ```
-    
     **响应示例**
-    
     ```
     {
         "output": {
@@ -944,91 +891,88 @@
     }
     ```
     
-    ## Go
+    #### Go
     
     **请求示例**
-    
     ```
     package main
     import (
-    	"bytes"
-    	"encoding/json"
-    	"fmt"
-    	"io"
-    	"net/http"
-    	"os"
+      "bytes"
+      "encoding/json"
+      "fmt"
+      "io"
+      "net/http"
+      "os"
     )
     func main() {
-    	// 若没有配置环境变量，可用百炼API Key将下行替换为：apiKey := "sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
-    	apiKey := os.Getenv("DASHSCOPE_API_KEY")
-    	appId := "YOUR_APP_ID"           // 替换为实际的应用 ID
-    	pluginCode := "YOUR_PLUGIN_CODE" // 替换为实际的插件 ID
-    	if apiKey == "" {
-    		fmt.Println("请确保设置了DASHSCOPE_API_KEY。")
-    		return
-    	}
-    	url := fmt.Sprintf("https://dashscope.aliyuncs.com/api/v1/apps/%s/completion", appId)
-    	// 创建请求体
-    	requestBody := map[string]interface{}{
-    		"input": map[string]interface{}{
-    			"prompt": "寝室公约内容",
-    			"biz_params": map[string]interface{}{
-    				"user_defined_params": map[string]interface{}{
-    					pluginCode: map[string]interface{}{
-    						"article_index": 10,
-    					},
-    				},
-    				"user_defined_tokens": map[string]interface{}{
-    					pluginCode: map[string]interface{}{
-    						"user_token": "YOUR_USER_TOKEN", // 替换实际的鉴权 token，如API key
-    					},
-    				},
-    			},
-    		},
-    		"parameters": map[string]interface{}{},
-    		"debug":      map[string]interface{}{},
-    	}
-    	jsonData, err := json.Marshal(requestBody)
-    	if err != nil {
-    		fmt.Printf("Failed to marshal JSON: %v\n", err)
-    		return
-    	}
-    	// 创建 HTTP POST 请求
-    	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
-    	if err != nil {
-    		fmt.Printf("Failed to create request: %v\n", err)
-    		return
-    	}
-    	// 设置请求头
-    	req.Header.Set("Authorization", "Bearer "+apiKey)
-    	req.Header.Set("Content-Type", "application/json")
-    	// 发送请求
-    	client := &http.Client{}
-    	resp, err := client.Do(req)
-    	if err != nil {
-    		fmt.Printf("Failed to send request: %v\n", err)
-    		return
-    	}
-    	defer resp.Body.Close()
-    	// 读取响应
-    	body, err := io.ReadAll(resp.Body)
-    	if err != nil {
-    		fmt.Printf("Failed to read response: %v\n", err)
-    		return
-    	}
-    	// 处理响应
-    	if resp.StatusCode == http.StatusOK {
-    		fmt.Println("Request successful:")
-    		fmt.Println(string(body))
-    	} else {
-    		fmt.Printf("Request failed with status code: %d\n", resp.StatusCode)
-    		fmt.Println(string(body))
-    	}
+      // 若没有配置环境变量，可用百炼API Key将下行替换为：apiKey := "sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
+      apiKey := os.Getenv("DASHSCOPE_API_KEY")
+      appId := "YOUR_APP_ID"           // 替换为实际的应用 ID
+      pluginCode := "YOUR_PLUGIN_CODE" // 替换为实际的插件 ID
+      if apiKey == "" {
+          fmt.Println("请确保设置了DASHSCOPE_API_KEY。")
+          return
+      }
+      url := fmt.Sprintf("https://dashscope.aliyuncs.com/api/v1/apps/%s/completion", appId)
+      // 创建请求体
+      requestBody := map[string]interface{}{
+          "input": map[string]interface{}{
+              "prompt": "寝室公约内容",
+              "biz_params": map[string]interface{}{
+                  "user_defined_params": map[string]interface{}{
+                      pluginCode: map[string]interface{}{
+                          "article_index": 10,
+                      },
+                  },
+                  "user_defined_tokens": map[string]interface{}{
+                      pluginCode: map[string]interface{}{
+                          "user_token": "YOUR_USER_TOKEN", // 替换实际的鉴权 token，如API key
+                      },
+                  },
+              },
+          },
+          "parameters": map[string]interface{}{},
+          "debug":      map[string]interface{}{},
+      }
+      jsonData, err := json.Marshal(requestBody)
+      if err != nil {
+          fmt.Printf("Failed to marshal JSON: %v\n", err)
+          return
+      }
+      // 创建 HTTP POST 请求
+      req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+      if err != nil {
+          fmt.Printf("Failed to create request: %v\n", err)
+          return
+      }
+      // 设置请求头
+      req.Header.Set("Authorization", "Bearer "+apiKey)
+      req.Header.Set("Content-Type", "application/json")
+      // 发送请求
+      client := &http.Client{}
+      resp, err := client.Do(req)
+      if err != nil {
+          fmt.Printf("Failed to send request: %v\n", err)
+          return
+      }
+      defer resp.Body.Close()
+      // 读取响应
+      body, err := io.ReadAll(resp.Body)
+      if err != nil {
+          fmt.Printf("Failed to read response: %v\n", err)
+          return
+      }
+      // 处理响应
+      if resp.StatusCode == http.StatusOK {
+          fmt.Println("Request successful:")
+          fmt.Println(string(body))
+      } else {
+          fmt.Printf("Request failed with status code: %d\n", resp.StatusCode)
+          fmt.Println(string(body))
+      }
     }
     ```
-    
     **响应示例**
-    
     ```
     {
         "output": {
@@ -1050,30 +994,27 @@
     ```
     
 
-## **自定义节点参数传递**
+## 自定义节点参数传递
 
 本文以**根据城市名查询城市行政区域划分**作为示例，向您展示API如何调用应用的自定义节点参数传递功能。
 
-**说明**
-
-应用的自定义节点参数通过**工作流应用**的开始节点传递。
+**说明**应用的自定义节点参数通过**工作流应用**的开始节点传递。
 
 下方示例展示在**工作流应用**中，传递开始节点的自定义参数。
 
-### **如何使用**
+### 如何使用
 
-#### **步骤一：自定义节点参数**
+#### 步骤一：自定义节点参数
 
 访问百炼控制台的**[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)**页面，选择**工作流应用**并自定义**开始节点**的参数（示例设置String类型变量city），同时在**Prompt**中插入变量city和变量query，并**发布**应用。
 
-#### **步骤二：API调用**
+#### 步骤二：API调用
 
 调用时通过`biz_params`字段传递city，通过`prompt`字段传递query。
 
-## Python
+#### Python
 
 **请求示例**
-
 ```
 import os
 from http import HTTPStatus
@@ -1095,9 +1036,7 @@ if response.status_code != HTTPStatus.OK:
 else:
     print(f'{response.output.text}')  # 处理只输出文本text
 ```
-
 **响应示例**
-
 ```
 杭州市，作为浙江省的省会城市，其行政区域划分包括10个市辖区：上城区、拱墅区、西湖区、滨江区、萧山区、余杭区、临平区、钱塘区、富阳区、临安区。每个区都有其独特的特色和发展重点。
 - 上城区：位于杭州市中心地带，是杭州的政治、经济、文化中心之一。
@@ -1113,10 +1052,9 @@ else:
 请注意，随着时间推移，具体的城市规划可能会有所变化，请参考最新的官方信息。
 ```
 
-## Java
+#### Java
 
 **请求示例**
-
 ```
 import com.alibaba.dashscope.app.*;
 import com.alibaba.dashscope.exception.ApiException;
@@ -1151,9 +1089,7 @@ public class Main {
     }
 }
 ```
-
 **响应示例**
-
 ```
 杭州市是浙江省的省会城市，其行政区域划分主要包括10个市辖区：上城区、拱墅区、西湖区、滨江区、萧山区、余杭区、临平区、钱塘区、富阳区、临安区。每个区都有自己的特色和发展重点。
 - 上城区：位于杭州市中心，拥有许多历史文化遗产。
@@ -1169,12 +1105,11 @@ public class Main {
 这些区域共同构成了杭州市独特的地理格局和社会经济结构。如果你对某个特定区域感兴趣或需要更详细的信息，请告诉我！
 ```
 
-## HTTP
+#### HTTP
 
-## curl
+#### curl
 
 **请求示例**
-
 ```
 curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/YOUR_APP_ID/completion \
 --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
@@ -1192,7 +1127,6 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/YOUR_APP_ID/completion \
 > YOUR\_APP\_ID替换为实际的应用 ID。
 
 **响应示例**
-
 ```
 {"output":{"finish_reason":"stop","session_id":"c211219896004b50a1f6f66f2ec5413e",
 "text":"杭州市下辖10个区、1个县，代管2个县级市，分别为：
@@ -1201,10 +1135,9 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/apps/YOUR_APP_ID/completion \
 "request_id":"02c3c9e1-7912-9505-91aa-248d04fb1f5d"}
 ```
 
-## PHP
+#### PHP
 
 **请求示例**
-
 ```
 <?php
 # 若没有配置环境变量，可用百炼API Key将下行替换为：$api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
@@ -1267,9 +1200,7 @@ if ($status_code == 200) {
     }
 }
 ```
-
 **响应示例**
-
 ```
 杭州市是浙江省的省会城市，其行政区域划分主要包括10个市辖区：上城区、拱墅区、西湖区、滨江区、萧山区、余杭区、临平区、钱塘区、富阳区、临安区。
 每个区都有自己的特色和发展重点，比如：
@@ -1281,16 +1212,13 @@ if ($status_code == 200) {
 请注意，中国的行政区划可能会根据国家政策调整有所变化，请通过官方渠道获取最新信息。
 ```
 
-## Node.js
+#### Node.js
 
 **需安装相关依赖：**
-
 ```
 npm install axios
 ```
-
 **请求示例**
-
 ```
 const axios = require('axios');
 async function callDashScope() {
@@ -1342,9 +1270,7 @@ async function callDashScope() {
 }
 callDashScope();
 ```
-
 **响应示例**
-
 ```
 杭州市是浙江省的省会，其行政区域划分包括10个市辖区。具体如下：
 1. 上城区（Shàngchéng Qū）：位于杭州市中心偏南，是杭州历史最悠久、文化底蕴最深厚的区域之一。
@@ -1360,17 +1286,16 @@ callDashScope();
 以上信息反映了截至我最后更新时的情况，请注意行政区划可能会有所调整，请以官方发布的最新消息为准。
 ```
 
-## C#
+#### C#
 
 **请求示例**
-
 ```
 using System.Text;
 class Program
 {
     static async Task Main(string[] args)
     {
-        //若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。 
+        //若没有配置环境变量，可用百炼API Key将下行替换为：apiKey="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
         string apiKey = Environment.GetEnvironmentVariable("DASHSCOPE_API_KEY") ?? throw new InvalidOperationException("DASHSCOPE_API_KEY environment variable is not set.");
         string appId = "YOUR_APP_ID"; // 替换为实际的应用ID
         string url = $"https://dashscope.aliyuncs.com/api/v1/apps/{appId}/completion";
@@ -1412,9 +1337,7 @@ class Program
     }
 }
 ```
-
 **响应示例**
-
 ```
 {
     "output": {
@@ -1428,10 +1351,9 @@ class Program
 }
 ```
 
-## Go
+#### Go
 
 **请求示例**
-
 ```
 package main
 import (
@@ -1500,9 +1422,7 @@ func main() {
 	}
 }
 ```
-
 **响应示例**
-
 ```
 {
     "output": {
@@ -1520,10 +1440,10 @@ func main() {
 }
 ```
 
-## **相关文档**
+## 相关文档
 
-[自定义插件](https://help.aliyun.com/zh/model-studio/custom-plug-ins)：自定义插件的创建步骤。
+[自定义插件](raw/application-user-guide/plug-in/custom-plug-ins.md)：自定义插件的创建步骤。
 
-[调用智能体应用](https://help.aliyun.com/zh/model-studio/call-single-agent-application/)、[调用工作流应用](https://help.aliyun.com/zh/model-studio/invoke-workflow-application/)：应用的调用方式及更多用法。
+[调用智能体应用](raw/application-user-guide/bailian-application-calling/call-single-agent-application.md)、[调用工作流应用](raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md)：应用的调用方式及更多用法。
 
-[应用调用API](https://help.aliyun.com/zh/model-studio/agent-and-workflow-application-api-reference)：完整的参数列表和调用示例。
+[应用调用API](raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)：完整的参数列表和调用示例。

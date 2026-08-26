@@ -1,6 +1,6 @@
 # 通过HTTP协议接入图像生成Agent
 
-## **功能介绍**
+## 功能介绍
 
 通过HTTP协议接入图像生成Agent，实现文生图、图生图、涂鸦生图功能。目前仅支持直通链路。
 
@@ -8,48 +8,41 @@
 
 直通链路是指不经过语音识别（ASR）、意图识别、语音合成（TTS）等节点，将请求直接送入图像生成Agent，并直接返回图片生成结果。
 
-## **接入说明**
+## 接入说明
 
-### **前提条件**
+### 前提条件
 
 首先需要开通阿里云百炼模型服务，并获取API KEY。
 
-请参考[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，API KEY作为百炼模型服务的鉴权凭证。
+请参考[获取API Key](raw/model-api-reference/preparations/get-api-key.md)，API KEY作为百炼模型服务的鉴权凭证。
 
-### **管控台配置**
+### 管控台配置
 
 1.  在[多模态开发套件](https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.394f1b92MoDMrb&tab=app#/app/app-market/multi-modal-app)中创建多模态交互应用，选择全能版（不要选择视觉版），关闭语音交互。保持意图识别、文本模型开启。
-    
 
 文本模型选择**多模态交互专有模型-高速版**。
 
-2.  关闭对话承接语、知识库、联网搜索、长期记忆。
-    
+1.  关闭对话承接语、知识库、联网搜索、长期记忆。
 
 将**携带上下文轮数**设置为 `5`。
 
-3.  技能、MCP服务全部清空，Agent只保留生图玩法Agent。
+1.  技能、MCP服务全部清空，Agent只保留生图玩法Agent。
     
-
-4.  配置图像生成Agent，支持涂鸦生图、生图助手、文生图3种玩法。
+2.  配置图像生成Agent，支持涂鸦生图、生图助手、文生图3种玩法。
     
     1.  涂鸦生图：基于手绘的涂鸦线稿生成图片。
-        
     2.  生图助手：基于上传的图片生成新图片。
-        
     3.  文生图：基于输入的文本指令生成图片。
-        
-5.  每种功能支持模型选择、提示词、正向提示词智能优化，反向提示词等选项。提示词可以添加变量，用于动态传入不同提示词。
+3.  每种功能支持模型选择、提示词、正向提示词智能优化，反向提示词等选项。提示词可以添加变量，用于动态传入不同提示词。
     
 
 涂鸦生图的**模型选择**提供三个选项：**图生图高级版**、**图生图均衡版**、**图生图轻量版**。
 
-6.  配置完成后请点击右上角发布按键进行发布（必须发布后才能测试）。
-    
+1.  配置完成后请点击右上角发布按键进行发布（必须发布后才能测试）。
 
-## **HTTP协议接入**
+## HTTP协议接入
 
-### **请求参数说明**
+### 请求参数说明
 
 **一级参数**
 
@@ -129,7 +122,7 @@ object
 
 按需配置，参数说明参考下方parameters.biz\_params的参数说明表格
 
-#### **parameters.client\_info的参数说明**
+#### parameters.client\_info的参数说明
 
 **一级参数**
 
@@ -159,7 +152,7 @@ string
 
 客户端全局唯一的ID，需要用户自己生成并传入SDK，最大长度40个字符。一个终端用户可以有多个设备，那么每一个设备的uuid都不同，但user\_id相同。
 
-#### **parameters.images的参数说明**
+#### parameters.images的参数说明
 
 **一级参数**
 
@@ -190,7 +183,7 @@ string
 -   当type为url时，这里是图片的url地址。
     
 
-#### **parameters.biz\_params的参数说明**
+#### parameters.biz\_params的参数说明
 
 **一级参数**
 
@@ -230,7 +223,7 @@ object
 
 表示用户自定义的agent参数，image\_to\_image表示传递给生图agent的参数，本实践仅在当需要传递生图agent内的提示词自定义变量时需要填充
 
-##### **parameters.biz\_params.commands.exec\_params参数说明**
+##### parameters.biz\_params.commands.exec\_params参数说明
 
 **一级参数**
 
@@ -268,7 +261,7 @@ list\[\]
 
 agent需要的槽位信息
 
-##### **parameters.biz\_params.commands.exec\_params.slots参数说明**
+##### parameters.biz\_params.commands.exec\_params.slots参数说明
 
 name
 
@@ -306,11 +299,8 @@ string
 function用来指定具体的生图功能，支持三种配置：
 
 -   textToImage：文生图
-    
 -   imageAssistant：生图助手
-    
 -   sketchToImage：涂鸦生图
-    
 
 size用来指定生成图片的分辨率，分辨率和选择的玩法及模型强相关，支持的分辨率范围见下表
 
@@ -348,11 +338,9 @@ size用来指定生成图片的分辨率，分辨率和选择的玩法及模型�
 
 图像分辨率：总像素在 \[768\*768, 2048\*2048\]像素之间
 
-##### **parameters.biz\_params.user\_defined\_params.image\_to\_image.user\_prompt\_params参数说明**
+##### parameters.biz\_params.user\_defined\_params.image\_to\_image.user\_prompt\_params参数说明
 
-**重要**
-
-本实践仅在当需要传递生图agent内的提示词自定义变量时需要填充。
+**重要**本实践仅在当需要传递生图agent内的提示词自定义变量时需要填充。
 
 在涂鸦生图配置面板的提示词区域，单击右上角的 **{x} 自定义变量** 按钮即可添加自定义变量，其中 `${style}` 为默认预置变量。
 
@@ -400,7 +388,7 @@ object
 }
 ```
 
-### **文生图请求示例**
+### 文生图请求示例
 
 ```
 {
@@ -455,7 +443,7 @@ object
 }
 ```
 
-#### **文生图curl请求示例**
+#### 文生图curl请求示例
 
 ```
 curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
@@ -517,13 +505,10 @@ curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-
 **重要**
 
 1.  请替换请求中的your\_api\_key（API\_KEY）、app\_id，img\_url。
-    
 2.  text字段请置为""空字符串，否则会进入意图
-    
 3.  user\_defined\_params仅需在传递生图玩法中Agent提示词自定义变量时才需传递。
-    
 
-### **生图助手请求示例**
+### 生图助手请求示例
 
 ```
 {
@@ -584,7 +569,7 @@ curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-
 }
 ```
 
-#### **生图助手curl请求示例**
+#### 生图助手curl请求示例
 
 ```
 curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
@@ -652,17 +637,14 @@ curl --location "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-
 **重要**
 
 1.  请替换请求中的your\_api\_key（API\_KEY）、app\_id，img\_url。
-    
 2.  text字段请置为""空字符串，否则会进入意图
-    
 3.  user\_defined\_params仅需在传递生图玩法中Agent提示词自定义变量时才需传递。
-    
 
-### **涂鸦生图请求示例**
+### 涂鸦生图请求示例
 
 参考生图助手请求示例，仅需将parameters.biz\_params.commands.exec\_params.slots内的function槽位从imageAssistant（表示生图助手）改为sketchToImage（表示涂鸦生图）。
 
-### **文本返回事件说明**
+### 文本返回事件说明
 
 **一级参数**
 
@@ -754,7 +736,7 @@ object
 -   agent\_info: 智能体信息，见
     
 
-#### **output.extra\_info.agent\_info的参数说明**
+#### output.extra\_info.agent\_info的参数说明
 
 **一级参数**
 
@@ -802,7 +784,7 @@ string
 
 使用的agent，本实践固定为"image\_to\_image"
 
-#### **返回示例如下**
+#### 返回示例如下
 
 ```
 {
@@ -837,9 +819,7 @@ string
 **重要**
 
 1.  在图像生成过程中，每3-5秒会返回一个心跳包，output.text="RUNNING"表示合成中，此时output.finished = false
-    
 2.  当图像合成结束，output.finished = true，此时output.text字段为img\_url
-    
 
 ```
 id:1 合成过程中
@@ -861,5 +841,5 @@ data:{"output":{"round_id":"6633eccfd6a44090b49bbb1xxx","llm_request_id":"f22fee
 id:5 合成结束
 event:result
 :HTTP_STATUS/200
-data:{"output":{"round_id":"6633eccfd6a44090b49bbbfxxx","llm_request_id":"f22feed889994756b3787de8xxx","extra_info":{"tool_infos":[{"output":"","tool_name":"image_to_image","arguments":{},"type":"agent","success":true}],"agent_info":{"round":1,"device":{"device_id":"xxx-test-251222-123"},"intent_infos":[{"intent":"open_image_to_image","domain":"image_to_image"}]},"query":""},"finish_reason":"stop","dialog_id":"00cd961c-bf58-49f5-b3bb-7cxxx","spoken":"https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/1d/03/20260107/c6e3cb4b/eb8e554d-66ff-44ca-ba0d-f05481405d2c-1-1.png?Expires=1767854752&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1f****&Signature=R5cy52xL0ODxZcoiZAmsD5Rxxx","finished":true,"text":"https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/1d/03/20260107/c6e3cb4b/eb8e554d-66ff-44ca-ba0d-f05481405d2c-1-1.png?Expires=1767854752&OSSAccessKeyId=LTAI5tKPD3TMqf2Lna1f****&Signature=R5cy52xL0ODxZcoiZxxx","event":"RespondingContent"},"request_id":"a162bf16-8156-4b13-88f6-fcbxxx"}
+data:{"output":{"round_id":"6633eccfd6a44090b49bbbfxxx","llm_request_id":"f22feed889994756b3787de8xxx","extra_info":{"tool_infos":[{"output":"","tool_name":"image_to_image","arguments":{},"type":"agent","success":true}],"agent_info":{"round":1,"device":{"device_id":"xxx-test-251222-123"},"intent_infos":[{"intent":"open_image_to_image","domain":"image_to_image"}]},"query":""},"finish_reason":"stop","dialog_id":"00cd961c-bf58-49f5-b3bb-7cxxx","spoken":"https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/1d/03/20260107/c6e3cb4b/eb8e554d-66ff-44ca-ba0d-f05481405d2c-1-1.png?Expires=1767854752&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE","finished":true,"text":"https://dashscope-result-sh.oss-cn-shanghai.aliyuncs.com/1d/03/20260107/c6e3cb4b/eb8e554d-66ff-44ca-ba0d-f05481405d2c-1-1.png?Expires=1767854752&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE","event":"RespondingContent"},"request_id":"a162bf16-8156-4b13-88f6-fcbxxx"}
 ```

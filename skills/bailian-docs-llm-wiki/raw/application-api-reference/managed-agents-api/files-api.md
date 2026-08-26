@@ -5,11 +5,8 @@
 ## 配额与状态
 
 -   单文件直传上限 **20 MB**；单个工作空间总容量上限 **100 GB**；保留期 **30 天**，超期可能被自动清理。
-    
 -   上传后进入安全审核，`status` 取值：`checking` / `available` / `rejected` / `type_rejected`。仅 `available` 可挂载到会话或作为消息内容引用。
-    
 -   挂载到会话沙箱时服务端会做内部拷贝并生成新的 `file_id`，副本元数据带 `scope: {"type": "session", "id": "sesn_..."}`，仅对应会话可见。
-    
 
 ## 文件操作
 

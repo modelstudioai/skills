@@ -2,9 +2,7 @@
 
 Managed Agents 的计费项、免费额度与计费示例。
 
-**重要**
-
-Managed Agents 自 2026-08-17 09:00:00（UTC+8）起正式商业化计费。以下价格与额度以该版本为准，实际计费时间与金额以控制台账单为准。
+**重要**Managed Agents 自 2026-08-17 09:00:00（UTC+8）起正式商业化计费。以下价格与额度以该版本为准，实际计费时间与金额以控制台账单为准。
 
 ## 计费项
 
@@ -34,9 +32,7 @@ Managed Agents 的费用由三部分组成，分别独立计费。
 
 调用工具或 MCP 服务产生的费用，单独计费
 
-**说明**
-
-会话处于运行中状态即产生运行时费，空闲状态不收取。及时终止不再使用的会话可减少运行时费。会话状态管理详见[管理会话](https://help.aliyun.com/zh/model-studio/managed-agents-session-operations)。
+**说明**会话处于运行中状态即产生运行时费，空闲状态不收取。及时终止不再使用的会话可减少运行时费。会话状态管理详见[管理会话](https://help.aliyun.com/zh/model-studio/managed-agents-session-operations)。
 
 ## 免费额度
 

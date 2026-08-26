@@ -1,23 +1,19 @@
-# UpdateConnector - 编辑连接器
+# UpdateConnector
 
 编辑连接器
 
 ## 接口说明
 
 -   RAM 用户（子账号）需要首先获取阿里云百炼的 [API 权限](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)（需要`AliyunBailianDataFullAccess`，已包括 sfm:UpdateConnector 权限点），并[加入一个业务空间](https://help.aliyun.com/zh/model-studio/grant-the-business-space-permission-to-ram-users)后，方可调用本接口。阿里云账号（主账号）可直接调用无须授权。建议您通过最新版[阿里云百炼 SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)来调用本接口。
-    
 -   本接口不具备幂等性。
-    
 
 **限流说明：** 本接口频繁调用会被限流，频率请勿超过 5 次/秒。如遇限流，请稍后重试。
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/bailian/2023-12-29/UpdateConnector)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
- [![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png) 调试](https://api.aliyun.com/api/bailian/2023-12-29/UpdateConnector)
-
-## **授权信息**
+## 授权信息
 
 当前API暂无授权信息透出。
 
@@ -91,7 +87,7 @@ string
 
 never\_delete\_aeip\_95\_us-west-1
 
-## **返回参数**
+## 返回参数
 
 **名称**
 
@@ -182,6 +178,6 @@ true
 
 访问[错误中心](https://api.aliyun.com/document/bailian/2023-12-29/errorCode)查看更多错误码。
 
-## **变更历史**
+## 变更历史
 
 更多信息，参考[变更详情](https://api.aliyun.com/document/bailian/2023-12-29/UpdateConnector#workbench-doc-change-demo)。

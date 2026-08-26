@@ -1,34 +1,28 @@
 # 媒体流发送管理
 
-`enableSendMediaStream` 用于控制客户端是否向 AI 服务发送音频/视频媒体流，在 AOQ 协议接入场景中精确控制发送时机。
+enableSendMediaStream 用于控制客户端是否向 AI 服务发送音频/视频媒体流，在 AOQ 协议接入场景中精确控制发送时机。
 
-## **概述**
+## 概述
 
 `enableSendMediaStream` 用于控制客户端是否向 AI 服务发送音频/视频媒体流。在 AOQ 协议接入场景中，部分模型要求在收到 `session.updated` 确认后才能接收媒体数据，因此需要通过此接口精确控制发送时机。
 
-## **API 定义**
+## API 定义
 
 **iOS / Mac**
-
 ```
 // iOS / Mac
 func enableSendMediaStream(_ trackType: AoqTrackType, enable: Bool)
 ```
-
 **Android**
-
 ```
 // Android
 void enableSendMediaStream(AoqTrackType trackType, boolean enable)
 ```
-
 **OHOS (ArkTS)**
-
 ```
 // OHOS (ArkTS)
 enableSendMediaStream(trackType: AoqTrackType, enable: boolean): void
 ```
-
 **参数说明：**
 
 **参数**
@@ -49,15 +43,15 @@ Bool
 
 `true` = 开启发送，`false` = 暂停发送
 
-## **控制流程**
+## 控制流程
 
 典型的媒体流控制流程如下：
 
 ![111](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0575914871/p1088082.svg)
 
-## **使用示例（iOS Swift）**
+## 使用示例（iOS Swift）
 
-### **connect 前禁用发送**
+### connect 前禁用发送
 
 ```
 // 连接前关闭音视频发送，避免模型未就绪时收到数据
@@ -68,7 +62,7 @@ engine.enableSendMediaStream(.video, enable: false)
 engine.connect(config)
 ```
 
-### **收到 session.updated 后开启**
+### 收到 session.updated 后开启
 
 ```
 func onDataMsg(_ msg: AoqDataMsg) {
@@ -83,18 +77,14 @@ func onDataMsg(_ msg: AoqDataMsg) {
 }
 ```
 
-## **注意事项**
+## 注意事项
 
 -   **调用时机**：必须在 `createEngine` 之后调用，引擎未创建时调用无效。
-    
 -   **默认行为**：如果不调用此接口，connect 成功后 SDK 会立即开始发送媒体流。
-    
 -   **模型兼容性**：部分模型要求先收到 `session.updated` 再接收媒体数据，建议统一采用"先禁用、后开启"模式。
-    
 -   **独立控制**：音频和视频可独立控制，例如仅发送音频不发送视频。
-    
 
-## **常见场景**
+## 常见场景
 
 **场景**
 

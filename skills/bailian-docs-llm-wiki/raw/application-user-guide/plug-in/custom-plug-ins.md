@@ -2,24 +2,20 @@
 
 当阿里云百炼的官方插件无法满足您的业务需求时，您可以通过创建自定义插件来扩展大模型的能力。本文档将引导您完成从创建、调试到使用的全过程，轻松集成所需 API。
 
-## **工作流程**
+## 工作流程
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1340161871/CAEQZhiBgICczru.2hkiIGNhZjkzMjM4YWJlZjRhOGU5NzA1Mzk1MWFkNGI1MzBh4867389_20250110113852.335.svg)
 
-1.  **创建****/导入****插件：**定义插件的基础信息，或直接从云市场导入。
-    
+1.  **创建/导入插件：**定义插件的基础信息，或直接从云市场导入。
 2.  **添加工具**（导入插件无需此步）**：**为插件配置具体的 API 路径、请求参数和返回数据。
-    
 3.  **调试与发布：**在线测试 API 的连通性，确保功能正常后发布。
-    
 4.  **在应用中使用：**将插件关联到智能体，通过对话测试或 API 集成来调用。
-    
 
-## **创建自定义插件**
+## 创建自定义插件
 
-## **创建个性化开发的插件**
+#### 创建个性化开发的插件
 
-### **步骤一：创建插件**
+### 步骤一：创建插件
 
 1.  访问[**插件**](https://bailian.console.aliyun.com/?tab=app#/component-manage)页面，单击**创建插件**。
     
@@ -35,7 +31,7 @@
     
     **插件URL**：插件的访问地址。
     
-    > 示例：https://domitorgreement-plugin-example-icohrkdjxy.cn-beijing.fcapp.run
+    > 示例：[https://domitorgreement-plugin-example-icohrkdjxy.cn-beijing.fcapp.run](https://domitorgreement-plugin-example-icohrkdjxy.cn-beijing.fcapp.run)
     
     -   同一个域名下，不同的路径被拆分成了不同的API（即下方创建工具中的**工具路径**）
         
@@ -43,16 +39,16 @@
         
         例如：xx插件下包含两个API：
         
-        查询：https://xxx.com/query
+        查询：[https://xxx.com/query](https://xxx.com/query)
         
-        删除：https://xxx.com/delete
+        删除：[https://xxx.com/delete](https://xxx.com/delete)
         
         在这个示例中，`https://xxx.com`对应**插件URL**，`/query`和`/delete`对应下方创建工具中的**工具路径**。这表明该插件下包含两个工具。
         
     
     如需要鉴权请打开**是否鉴权**开关，填写鉴权配置信息。
     
-    **鉴权参数说明**
+    鉴权参数说明
     
     **Header列表**（可选）
     
@@ -70,7 +66,7 @@
         
         -   **Header**：将鉴权信息放在HTTP请求头的Authorization字段中，这些信息在URL中不可见。
             
-        -   **Query**：将鉴权信息放在URL中，例如https://example.com?api\_key=123456。
+        -   **Query**：将鉴权信息放在URL中，例如[](https://example.com?api_key=123456)[https://example.com?api\_key=123456](https://example.com?api_key=123456)。
             
     -   **参数名**：如果将鉴权信息放在Query中需填写鉴权时使用的参数，如“api\_key”。如果将鉴权信息放在Header中将默认此参数为“Authorization”。
         
@@ -88,18 +84,18 @@
     -   **Token**（服务级鉴权）：从API提供方获取的鉴权Token，如API Key。
         
     
-3.  填写完成后单击**确认创建插件** > **创建工具**或单击**继续添加工具**。
+3.  填写完成后单击**确认创建插件创建工具**或单击**继续添加工具**。
     
 
-### **步骤二：创建工具**
+### 步骤二：创建工具
 
 1.  填写工具信息、配置输入/输出参数以及高级配置。
     
     本示例中，**工具名称**填写"寝室公约查询工具"，**工具描述**填写"根据输入的数字索引查询特定条目的寝室公约内容"，**工具路径**填写`/article`，**请求方法**选择**POST**，**提交方式**选择**application/json**。输入参数：参数名称`article_index`，参数描述为"索引"，类型为**Number**，传入方法为**Body**，必填，传参方式为**大模型识别**。输出参数：参数名称`article`，参数描述为"寝室公约内容"，类型为**String**。高级配置中，用户输入Query为"请根据输入的索引值，查询对应条目的寝室公约内容"，输入参数`article_index`的Value为`5`。
     
-    **工具参数说明**
+    工具参数说明
     
-    **工具信息**
+    工具信息
     
     **工具名称**
     
@@ -133,10 +129,10 @@
         
         -   这种编码方式用于 POST 请求，表单数据编码为键值对，并通过 URL 编码传输。多个键值对之间用 & 分隔，每个键和值之间用 = 分隔。URL 编码会将特殊字符转换为 % 后跟两位十六进制数的形式。例如，空格会被编码为 %20，& 会被编码为 %26，= 会被编码为 %3D
             
-        -   示例：`name=John Doe&age=25` 被编码为 `name=John%20Doe&age=25`
+        -   示例：`name=John Doe&age=25` 被编码为 `name=John%20Doe&age=25`
             
     
-    **配置输入参数与输出参数**
+    配置输入参数与输出参数
     
     **配置输入参数**
     
@@ -148,8 +144,6 @@
     
     **类型**：指参数类型。
     
-    **重要**
-    
     Object类型下的子属性不能为空。请单击该对象行末的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p905454.png)图标新增子属性。
     
     **传参方式**：要设置准确。
@@ -158,7 +152,7 @@
         
     -   **业务透传**：表示该参数的值从外部主动透传，传递过程中不对数据进行处理或修改。
         
-        使用DashScope SDK或HTTP接口调用应用时，插件中的业务透传类型的输入参数信息通过 `biz_params`和`user_defined_params`传递给应用。具体请参见[应用的参数传递](https://help.aliyun.com/zh/model-studio/pass-through-of-application-parameters)。
+        使用DashScope SDK或HTTP接口调用应用时，插件中的业务透传类型的输入参数信息通过 `biz_params`和`user_defined_params`传递给应用。具体请参见[应用的参数传递](raw/application-user-guide/bailian-application-calling/pass-through-of-application-parameters.md)。
         
     
     **配置输出参数**
@@ -169,11 +163,9 @@
     
     出参与入参一样，需要尽可能精简和准确描述，嵌套的层级也尽可能少。
     
-    **重要**
-    
     无论请求方式是GET还是POST，参数都支持Object类型。但Object类型下的子属性不能为空。请单击该对象行末的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p905454.png)图标新增子属性。
     
-    **高级配置（可选）**
+    高级配置（可选）
     
     **高级配置**
     
@@ -196,7 +188,7 @@
 4.  测试通过后单击**发布**。只有**已发布**的工具才能在应用中被调用。
     
 
-## **从云市场导入插件**
+#### 从云市场导入插件
 
 云市场提供了丰富的API，您可在云市场开通需要的API并将其导入至阿里云百炼插件列表中，以便应用进行调用。
 
@@ -204,13 +196,13 @@
     
 2.  首次在阿里云百炼平台上导入云市场 API 作为插件，需要先进行服务关联角色授权。
     
-    ## 主账号
+    #### 主账号
     
     如果您使用主账号登录百炼，请在**SLR授权**弹窗中，勾选同意上述条款，单击**确认授权**。
     
     该弹窗显示角色名称为 `AliyunServiceRoleForSFMAccessCloudAPI`，角色权限策略为 `AliyunServiceRolePolicyForSFMAccessCloudAPI`，授权百炼大模型平台访问阿里云云市场商品清单并根据插件配置进行API调用。
     
-    ## RAM用户（子账号）
+    #### RAM用户（子账号）
     
     如果您使用RAM用户（子账号）登录百炼，在**SLR授权**弹窗中，勾选同意上述条款，单击**确认授权**时，会有如下提示：
     
@@ -221,52 +213,49 @@
     1.  授权RAM用户（子账号）创建服务关联角色的权限。
         
         1.  使用主账号登录[RAM控制台](https://ram.console.aliyun.com/)。
-            
-        2.  在左侧导航栏，选择**权限管理** > **权限策略**。
-            
+        2.  在左侧导航栏，选择**权限管理权限策略**。
         3.  单击**创建权限策略**。
-            
         4.  在**脚本编辑**的`Effect`、`Action`、`Resource`、`Condition`中分别输入以下脚本中的对应内容。
-            
-            ```
-            {
-                "Action": [
-                    "ram:CreateServiceLinkedRole"
-                ],
-                "Resource": "*",
-                "Effect": "Allow",
-                "Condition": {
-                    "StringEquals": {
-                        "ram:ServiceName": "cloundapi-access.sfm.aliyuncs.com"
-                    }
-                }
+    
+    ```
+    {
+        "Action": [
+            "ram:CreateServiceLinkedRole"
+        ],
+        "Resource": "*",
+        "Effect": "Allow",
+        "Condition": {
+            "StringEquals": {
+                "ram:ServiceName": "cloundapi-access.sfm.aliyuncs.com"
             }
-            ```
-            
-        5.  单击**确定**。
-            
-        6.  设置权限策略名称，单击**确定**。
-            
-            此处**名称**设置为`服务关联角色`。
-            
-        7.  在左侧导航栏，选择。
-            
-        8.  找到待授权的RAM用户（子账号），单击RAM用户（子账号）**操作**列的**添加权限**。
-            
-        9.  在权限策略中选择刚才创建的权限策略，单击**确认新增授权**。
-            
-            至此，RAM用户（子账号）拥有了创建服务关联角色的权限。
-            
-            在**资源范围**中选择**账号级别**，在权限策略筛选下拉框中选择**自定义策略**类型，即可找到并勾选目标策略。
-            
-    2.  RAM用户（子账号）自行从云市场导入插件至阿里云百炼或使用主账号已经导入的插件。
+        }
+    }
+    ```
+    
+    5.  单击**确定**。
         
-        返回阿里云百炼控制台，单击**从云市场导入**，在**SLR授权**弹窗中，勾选同意上述条款，单击**确认授权**
+    6.  设置权限策略名称，单击**确定**。
         
+        此处**名称**设置为`服务关联角色`。
+        
+    7.  在左侧导航栏，选择**身份管理用户**。
+        
+    8.  找到待授权的RAM用户（子账号），单击RAM用户（子账号）**操作**列的**添加权限**。
+        
+    9.  在权限策略中选择刚才创建的权限策略，单击**确认新增授权**。
+        
+        至此，RAM用户（子账号）拥有了创建服务关联角色的权限。
+        
+        在**资源范围**中选择**账号级别**，在权限策略筛选下拉框中选择**自定义策略**类型，即可找到并勾选目标策略。
+        
+    10.  RAM用户（子账号）自行从云市场导入插件至阿里云百炼或使用主账号已经导入的插件。
+         
+         返回阿里云百炼控制台，单击**从云市场导入**，在**SLR授权**弹窗中，勾选同意上述条款，单击**确认授权**
+         
     
 3.  在**导入云市场插件**弹窗中，单击**点击查看**进入云市场开通需要的API。
     
-4.  您可以查看**云市场**页面，等待商品**状态**为**已开通**。
+4.  您可以查看**云市场**[**我的服务**](https://marketnext.console.aliyun.com/bizlist)页面，等待商品**状态**为**已开通**。
     
     当前页面还提供了API的AppKey、AppSecret、AppCode，如果插件需要鉴权，您可以在此处获取鉴权信息。
     
@@ -293,7 +282,7 @@
 
 ## 使用插件
 
-## 控制台
+#### 控制台
 
 -   **方式一**：将插件发布为MCP服务，然后在智能体应用中添加该MCP服务。
     
@@ -307,7 +296,6 @@
         
     
     **步骤二：在智能体应用中添加MCP服务**
-    
     1.  进入**智能体应用**的编排页面，在**MCP**区块中，单击**+**。
         
     2.  在**选择MCP服务**面板中，切换到**自定义MCP**页签，找到从插件转换的MCP服务，单击**添加全部**将其添加到应用中。
@@ -329,35 +317,28 @@
 -   **方式二**：在[**应用管理**](https://bailian.console.aliyun.com/#/app-center)页面中，进入**智能体应用**的编排页面，在**MCP**区块中添加MCP服务，测试插件使用效果，并**发布**应用。
     
 
-## API
+#### API
 
 **获取工具 ID**
 
 工具ID用于标识具体的工具。通过API调用工具时，需要正确传递工具ID，以确保请求能够被正确识别。
 
 1.  在**插件列表**中，找到工具所属的插件，单击**查看详情**。
-    
 2.  将鼠标悬浮于工具名称旁边的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p902180.png)图标上。
-    
 3.  单击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p902183.png)图标，复制工具ID。
-    
 
--   当通过API调用应用时，如果应用中关联的插件存在业务透传参数或开启了**用户级鉴权**，则需要通过参数`biz_params`传递鉴权信息或透传参数信息。具体操作请参见[工作流与旧版智能体应用 API](https://help.aliyun.com/zh/model-studio/agent-and-workflow-application-api-reference)。
-    
--   通过Assistant API调用工具。请在[Assistant API文档](https://help.aliyun.com/zh/model-studio/quick-start-of-assistant-api)中搜索`tools`关键字，查看如何使用Assistant API调用工具。
-    
+-   当通过API调用应用时，如果应用中关联的插件存在业务透传参数或开启了**用户级鉴权**，则需要通过参数`biz_params`传递鉴权信息或透传参数信息。具体操作请参见[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)。
+-   通过Assistant API调用工具。请在[Assistant API文档](https://help.aliyun.com/zh/model-studio/quick-start-of-assistant-api)中搜索`tools`关键字，查看如何使用Assistant API调用工具。
 
-## **管理自定义插件与工具**
+## 管理自定义插件与工具
 
-**删除插件**
+删除插件
 
-**重要**
+**重要**删除插件会删除插件下的所有工具，并且调用了插件的应用会失效，此操作不可撤回，请谨慎操作。
 
-删除插件会删除插件下的所有工具，并且调用了插件的应用会失效，此操作不可撤回，请谨慎操作。
+在**插件列表**中，找到目标插件，单击**...删除**。
 
-在**插件列表**中，找到目标插件，单击**删除**。
-
-**编辑插件**
+编辑插件
 
 1.  在**插件列表**中，找到目标插件，单击**查看详情**。
     
@@ -366,31 +347,23 @@
     插件信息保存后立即生效。如果修改了插件的URL、Header、鉴权信息，可能会影响工具调用，请重新测试并发布工具。
     
 
-**编辑工具**
+编辑工具
 
 工具信息修改完成后，需要重新测试并发布，才能生效。
 
 1.  在**插件列表**中，找到工具所属插件，单击**查看详情**。
-    
 2.  单击工具所在行的**编辑**，修改工具信息并单击**保存草稿**。
-    
 3.  单击**测试工具**，在线调试工具。
-    
 4.  运行成功后单击**发布**。
-    
 
-**删除工具**
+删除工具
 
-**重要**
-
-删除工具后，调用了此工具的应用会失效，此操作不可撤回，请谨慎操作。
+**重要**删除工具后，调用了此工具的应用会失效，此操作不可撤回，请谨慎操作。
 
 1.  在**插件列表**中，找到工具所属插件，单击**查看详情**。
-    
 2.  单击工具所在行的**删除**。
-    
 
-## **错误码**
+## 错误码
 
 发布工具时的常见错误信息如下表所示：
 

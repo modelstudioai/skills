@@ -2,57 +2,45 @@
 
 本文档提供了语音合成Qwen-Audio-TTS/CosyVoice iOS SDK的详细使用指南，帮助您将文本转换为高质量、富有表现力的语音。
 
-**用户指南：**关于模型介绍和选型建议请参见[语音合成](https://help.aliyun.com/zh/model-studio/tts-model/)。
+**用户指南：**关于模型介绍和选型建议请参见[语音合成](raw/model-user-guide/model-experience/tts-model.md)。
 
-## **NeoNui**
+## NeoNui
 
 **架构特点**：
 
 -   单例模式：通过 NeoNui.sharedInstance() 获取全局唯一实例
-    
--   回调驱动：通过 [`StreamInputTtsDelegate`](#secstreamdel) 协议接收事件和数据
-    
+-   回调驱动：通过 [`StreamInputTtsDelegate`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#h2streamdel) 协议接收事件和数据
 -   JSON 配置：参数通过 JSON 字符串传递
-    
 
-### **使用流程**
+### 使用流程
 
 Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式。
 
 **一次性输入**：适用于短文本合成、需要使用 [SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide) 标记语言的场景。
 
-1.  [`startStreamInputTts()`](#secstartstreamtts) - 初始化SDK，设置回调接口和连接参数
-    
-2.  [`playStreamInputTts()`](#secplaystreamtts) 或 [`asyncPlayStreamInputTts()`](#secasyncplaystreamtts) - 发送文本并开始语音合成
-    
-3.  [`onStreamInputTtsDataCallback()`](#secstreamdata) - 接收音频数据
-    
-4.  [`TTS_EVENT_SYNTHESIS_COMPLETE`](#secstreamevent) - 语音合成结束
-    
+1.  [`startStreamInputTts()`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#8c10225a80wsk) - 初始化SDK，设置回调接口和连接参数
+2.  [`playStreamInputTts()`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#be00eb5c18hnz) 或 [`asyncPlayStreamInputTts()`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#2d43b13c45u3g) - 发送文本并开始语音合成
+3.  [`onStreamInputTtsDataCallback()`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#3e08f471e8fo7) - 接收音频数据
+4.  [`TTS_EVENT_SYNTHESIS_COMPLETE`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#h2streamevent) - 语音合成结束
 
 **流式输入**：适用于实时对话、长文本"边说边合"的场景。此方式不支持 [SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide) 标记语言。
 
-1.  [`startStreamInputTts()`](#secstartstreamtts) - 初始化SDK，设置回调接口和连接参数
-    
-2.  [`sendStreamInputTts()`](#secsendstreamtts) - 持续发送待合成文本
-    
-3.  [`onStreamInputTtsDataCallback()`](#secstreamdata) - 接收音频数据
-    
-4.  [`stopStreamInputTts()`](#secstopstreamtts) 或 [`asyncStopStreamInputTts()`](#secasyncstopstreamtts) - 结束发送，等待合成完成
-    
-5.  [`TTS_EVENT_SYNTHESIS_COMPLETE`](#secstreamevent) - 语音合成结束
-    
+1.  [`startStreamInputTts()`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#8c10225a80wsk) - 初始化SDK，设置回调接口和连接参数
+2.  [`sendStreamInputTts()`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#9e9bf0b955cit) - 持续发送待合成文本
+3.  [`onStreamInputTtsDataCallback()`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#3e08f471e8fo7) - 接收音频数据
+4.  [`stopStreamInputTts()`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#eec84caadcq73) 或 [`asyncStopStreamInputTts()`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#20ff030ae9j4f) - 结束发送，等待合成完成
+5.  [`TTS_EVENT_SYNTHESIS_COMPLETE`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#h2streamevent) - 语音合成结束
 
-### **startStreamInputTts**
+### startStreamInputTts
 
 启动流式语音合成任务，与服务端建立连接。
 
 -   **方法签名**
-    
-    ```
-    - (int) startStreamInputTts:(const char *)ticket parameters:(const char *)parameters sessionId:(const char *)sessionId logLevel:(NuiSdkLogLevel)logLevel saveLog:(BOOL)saveLog;
-    ```
-    
+
+```
+- (int) startStreamInputTts:(const char *)ticket parameters:(const char *)parameters sessionId:(const char *)sessionId logLevel:(NuiSdkLogLevel)logLevel saveLog:(BOOL)saveLog;
+```
+
 -   **参数说明**
     
     **参数**
@@ -81,7 +69,7 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     
     `logLevel`
     
-    [`NuiSdkLogLevel`](#secnuisdkloglevel)
+    [`NuiSdkLogLevel`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#h2nuisdkloglevel)
     
     控制SDK自身日志的打印级别。
     
@@ -89,23 +77,23 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     
     `BOOL`
     
-    是否保存本地日志。若为`YES`，须通过[`debug_path`](#2eaf40c214i6d)指定路径，并可通过[`max_log_file_size`](#8fb08d4484uht)设置文件大小。
+    是否保存本地日志。若为`YES`，须通过[`debug_path`](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-ios-sdk.md)指定路径，并可通过[`max_log_file_size`](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-ios-sdk.md)设置文件大小。
     
 -   **返回值说明**
     
     返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
     
-
 -   **ticket JSON示例：**以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
     
-    ```
-    {
-        "url": "wss://dashscope.aliyuncs.com/api-ws/v1/inference",
-        "apikey": "st-****",
-        "device_id": "my_device_id"
-    }
-    ```
-    
+
+```
+{
+    "url": "wss://dashscope.aliyuncs.com/api-ws/v1/inference",
+    "apikey": "st-****",
+    "device_id": "my_device_id"
+}
+```
+
 -   **ticket 参数说明**
     
     **参数**
@@ -122,7 +110,7 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     
     是
     
-    服务地址，固定为 `wss://dashscope.aliyuncs.com/api-ws/v1/inference`。
+    服务地址，固定为 `wss://dashscope.aliyuncs.com/api-ws/v1/inference`。
     
     `apikey`
     
@@ -130,7 +118,7 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     
     是
     
-    API Key。建议使用时效性短、安全性更高的[临时API Key](https://help.aliyun.com/zh/model-studio/generate-temporary-api-key)，以降低长期有效Key泄露的风险。
+    API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，以降低长期有效Key泄露的风险。
     
     `device_id`
     
@@ -146,7 +134,7 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     
     否
     
-    调用[stopStreamInputTts](#secstopstreamtts)接口后，等待合成完成事件（[TTS\_EVENT\_SYNTHESIS\_COMPLETE](#secstreamevent)）的超时时间（毫秒）。
+    调用[stopStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#eec84caadcq73)接口后，等待合成完成事件（[TTS\_EVENT\_SYNTHESIS\_COMPLETE](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#h2streamevent)）的超时时间（毫秒）。
     
     默认值：10000。
     
@@ -158,7 +146,7 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     
     日志文件的存储路径。
     
-    此参数仅在调用[startStreamInputTts](#secstartstreamtts)、[playStreamInputTts](#secplaystreamtts)或[asyncPlayStreamInputTts](#secasyncplaystreamtts)接口时将[`saveLog`](#c847228d1f7q8)设为YES时生效。此时必须设置日志文件路径，否则将报错。
+    此参数仅在调用[startStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#8c10225a80wsk)、[playStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#be00eb5c18hnz)或[asyncPlayStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#2d43b13c45u3g)接口时将[`saveLog`](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-ios-sdk.md)设为YES时生效。此时必须设置日志文件路径，否则将报错。
     
     本地最多保留两个日志文件。
     
@@ -170,9 +158,9 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     
     设定日志文件的最大字节数。
     
-    此参数仅在调用[startStreamInputTts](#secstartstreamtts)、[playStreamInputTts](#secplaystreamtts)或[asyncPlayStreamInputTts](#secasyncplaystreamtts)接口时将[`saveLog`](#c847228d1f7q8)设为YES时生效。
+    此参数仅在调用[startStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#8c10225a80wsk)、[playStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#be00eb5c18hnz)或[asyncPlayStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#2d43b13c45u3g)接口时将[`saveLog`](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-ios-sdk.md)设为YES时生效。
     
-    默认值：104857600（100 \* 1024 \* 1024 字节, 即 100MiB）。
+    默认值：104857600（100 \* 1024 \* 1024 字节，即 100MiB）。
     
     `log_track_level`
     
@@ -180,7 +168,7 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     
     否
     
-    控制通过日志回调（[`onStreamInputTtsLogTrackCallback`](#3a85f16402i13c)）对外发送的日志内容的过滤级别。
+    控制通过日志回调（[`onStreamInputTtsLogTrackCallback`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#957865bad0qy7)）对外发送的日志内容的过滤级别。
     
     默认值：2。
     
@@ -199,24 +187,25 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     -   5：LOG\_LEVEL\_NONE（表示关闭此功能）
         
     
-    注意：`log_track_level`与[`logLevel`](#f4f67dba79ld6)（通过[startStreamInputTts](#secstartstreamtts)、[playStreamInputTts](#secplaystreamtts)或[asyncPlayStreamInputTts](#secasyncplaystreamtts)接口设置）共同决定最终回调的日志。一条日志的级别数值必须同时大于或等于`log_track_level`和[`logLevel`](#f4f67dba79ld6)的值，才会被回调。例如，`log_track_level`设为2 (INFO)，[`logLevel`](#f4f67dba79ld6)设为3 (WARNING)，则只有WARNING及以上级别（数值>=3）的日志才会被回调。
+    注意：`log_track_level`与[`logLevel`](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-ios-sdk.md)（通过[startStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#8c10225a80wsk)、[playStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#be00eb5c18hnz)或[asyncPlayStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#2d43b13c45u3g)接口设置）共同决定最终回调的日志。一条日志的级别数值必须同时大于或等于`log_track_level`和[`logLevel`](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-ios-sdk.md)的值，才会被回调。例如，`log_track_level`设为2 (INFO)，[`logLevel`](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-ios-sdk.md)设为3 (WARNING)，则只有WARNING及以上级别（数值>=3）的日志才会被回调。
     
 -   **parameters JSON 示例**：以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
     
-    ```
-    {
-        "model": "qwen-audio-3.0-tts-flash",
-        "voice": "longanlingxi",
-        "format": "mp3",
-        "sample_rate": 24000,
-        "volume": 50,
-        "rate": 1,
-        "pitch": 1,
-        "language_hints": ["zh"],
-        "enable_ssml": false
-    }
-    ```
-    
+
+```
+{
+    "model": "qwen-audio-3.0-tts-flash",
+    "voice": "longanlingxi",
+    "format": "mp3",
+    "sample_rate": 24000,
+    "volume": 50,
+    "rate": 1,
+    "pitch": 1,
+    "language_hints": ["zh"],
+    "enable_ssml": false
+}
+```
+
 -   **parameters 参数说明**
     
     **参数**
@@ -244,11 +233,8 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     语音合成所使用的音色。
     
     -   **系统音色**：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
-        
     -   **复刻音色**：通过声音复刻功能定制
-        
     -   **声音设计音色**：通过声音设计功能定制
-        
     
     `format`
     
@@ -261,17 +247,11 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     取值范围：
     
     -   pcm
-        
     -   wav
-        
     -   mp3（默认）
-        
     -   opus
-        
     
-    **重要**
-    
-    `cosyvoice-v1`不支持opus格式。
+    **重要**`cosyvoice-v1`不支持opus格式。
     
     `volume`
     
@@ -344,11 +324,9 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     默认值：false。
     
     -   true：开启。
-        
     -   false：关闭。
-        
     
-    SSML 的使用限制（支持的模型、音色和接口），请参见[使用限制](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide#sl01-constraint-h3)。
+    SSML 的使用限制（支持的模型、音色和接口），请参见[使用限制](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide#sl01_constraint_h3)。
     
     `word_timestamp_enabled`
     
@@ -360,9 +338,9 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     
     默认值：false。
     
-    仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+    仅在流式输出模式下可用。支持的音色范围：qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
     
-    > 时间戳结果在[onStreamInputTtsEventCallback](#bea29bbafcosq)的all\_response中。
+    > 时间戳结果在[onStreamInputTtsEventCallback](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#bea29bbafcosq)的all\_response中。
     
     `seed`
     
@@ -387,55 +365,34 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     **重要**
     
     -   此参数为数组，但当前版本仅处理第一个元素，因此建议只传入一个值。
-        
     -   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见声音复刻API参考。
-        
     
     指定语音合成的目标语言，提升合成效果。cosyvoice-v1不支持该功能。
     
     当数字、缩写、符号等朗读方式或者小语种合成效果不符合预期时使用，例如：
     
     -   数字朗读方式不符合预期，“hello, this is 110”读成“hello, this is one one zero”而非“hello, this is 幺幺零”
-        
     -   符号朗读不准确，“@”读成“艾特”而非“at”
-        
     -   小语种合成效果差，合成不自然
-        
     
     取值范围：
     
     -   zh：中文
-        
     -   en：英语
-        
     -   fr：法语
-        
     -   de：德语
-        
     -   ja：日语
-        
     -   ko：韩语
-        
     -   ru：俄语
-        
     -   pt：葡萄牙语
-        
     -   th：泰语
-        
     -   id：印尼语
-        
     -   vi：越南语
-        
     -   es：西班牙语
-        
     -   it：意大利语
-        
     -   ms：马来西亚语
-        
     -   fil：菲律宾语
-        
     -   ar：阿拉伯语
-        
     
     `instruction`
     
@@ -484,20 +441,20 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
     
 
-### **sendStreamInputTts**
+### sendStreamInputTts
 
-发送待合成的文本，与 [startStreamInputTts](#secstartstreamtts) 搭配使用。
+发送待合成的文本，与 [startStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#8c10225a80wsk) 搭配使用。
 
-在调用 [startStreamInputTts](#secstartstreamtts) 后，使用此接口持续发送文本。
+在调用 [startStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#8c10225a80wsk) 后，使用此接口持续发送文本。
 
-所有文本发送完毕后，需调用[stopStreamInputTts](#secstopstreamtts)或[asyncStopStreamInputTts](#secasyncstopstreamtts)来结束发送。
+所有文本发送完毕后，需调用[stopStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#eec84caadcq73)或[asyncStopStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#20ff030ae9j4f)来结束发送。
 
 -   **方法签名**
-    
-    ```
-    - (int) sendStreamInputTts:(const char *)text;
-    ```
-    
+
+```
+- (int) sendStreamInputTts:(const char *)text;
+```
+
 -   **参数说明**
     
     **参数**
@@ -517,70 +474,70 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
     
 
-### **stopStreamInputTts**
+### stopStreamInputTts
 
-同步接口，通知服务端文本已全部发送，并阻塞等待所有音频数据合成并收到 [TTS\_EVENT\_SYNTHESIS\_COMPLETE](#secstreamevent)。
+同步接口，通知服务端文本已全部发送，并阻塞等待所有音频数据合成并收到 [TTS\_EVENT\_SYNTHESIS\_COMPLETE](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#h2streamevent)。
 
-阻塞等待的超时时间由参数 [complete\_waiting\_ms](#5547f6238974f) 控制。
+阻塞等待的超时时间由参数 [complete\_waiting\_ms](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-ios-sdk.md) 控制。
 
 -   **方法签名**
-    
-    ```
-    - (int) stopStreamInputTts;
-    ```
-    
+
+```
+- (int) stopStreamInputTts;
+```
+
 -   **返回值说明**
     
     返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
     
 
-### **asyncStopStreamInputTts**
+### asyncStopStreamInputTts
 
 异步接口，通知服务端文本已全部发送。调用后立即返回，合成在后台继续进行。
 
-通过 [TTS\_EVENT\_SYNTHESIS\_COMPLETE](#secstreamevent) 判断合成是否完成。
+通过 [TTS\_EVENT\_SYNTHESIS\_COMPLETE](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#h2streamevent) 判断合成是否完成。
 
 -   **方法签名**
-    
-    ```
-    - (int) asyncStopStreamInputTts;
-    ```
-    
+
+```
+- (int) asyncStopStreamInputTts;
+```
+
 -   **返回值说明**
     
     返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
     
 
-### **cancelStreamInputTts**
+### cancelStreamInputTts
 
 立即中断与服务端的连接并终止当前合成任务。调用后不会再收到任何音频数据回调。
 
 -   **方法签名**
-    
-    ```
-    - (int) cancelStreamInputTts;
-    ```
-    
+
+```
+- (int) cancelStreamInputTts;
+```
+
 -   **返回值说明**
     
     返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
     
 
-### **playStreamInputTts**
+### playStreamInputTts
 
-异步执行的一次性合成接口。调用后立即返回，合成任务在后台进行，结果通过回调返回。无需再调用[stopStreamInputTts](#secstopstreamtts)接口。
+异步执行的一次性合成接口。调用后立即返回，合成任务在后台进行，结果通过回调返回。无需再调用[stopStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#eec84caadcq73)接口。
 
-该接口默认启用[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)，可通过parameters中的[`enable_ssml`](#listartstreamparamdesc)参数关闭。
+该接口默认启用[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)，可通过parameters中的[`enable_ssml`](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-ios-sdk.md)参数关闭。
 
 -   **方法签名**
-    
-    ```
-    - (int) playStreamInputTts:(const char *)ticket parameters:(const char *)parameters text:(const char *)text sessionId:(const char *)sessionId logLevel:(NuiSdkLogLevel)logLevel saveLog:(BOOL)saveLog;
-    ```
-    
+
+```
+- (int) playStreamInputTts:(const char *)ticket parameters:(const char *)parameters text:(const char *)text sessionId:(const char *)sessionId logLevel:(NuiSdkLogLevel)logLevel saveLog:(BOOL)saveLog;
+```
+
 -   **参数说明**
     
-    ticket、parameters等参数与[startStreamInputTts](#secstartstreamtts)接口中的定义相同。
+    ticket、parameters等参数与[startStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#8c10225a80wsk)接口中的定义相同。
     
     **参数**
     
@@ -599,21 +556,21 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
     
 
-### **asyncPlayStreamInputTts**
+### asyncPlayStreamInputTts
 
-此接口异步发送全部待合成文本。调用后立即返回，不等待合成数据。无需再调用[stopStreamInputTts](#secstopstreamtts)接口。
+此接口异步发送全部待合成文本。调用后立即返回，不等待合成数据。无需再调用[stopStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#eec84caadcq73)接口。
 
-该接口默认启用[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)，可通过parameters中的[`enable_ssml`](#listartstreamparamdesc)参数关闭。
+该接口默认启用[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)，可通过parameters中的[`enable_ssml`](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-ios-sdk.md)参数关闭。
 
 -   **方法签名**
-    
-    ```
-    - (int) asyncPlayStreamInputTts:(const char *)ticket parameters:(const char *)parameters text:(const char *)text sessionId:(const char *)sessionId logLevel:(NuiSdkLogLevel)logLevel saveLog:(BOOL)saveLog;
-    ```
-    
+
+```
+- (int) asyncPlayStreamInputTts:(const char *)ticket parameters:(const char *)parameters text:(const char *)text sessionId:(const char *)sessionId logLevel:(NuiSdkLogLevel)logLevel saveLog:(BOOL)saveLog;
+```
+
 -   **参数说明**
     
-    ticket、parameters等参数与[startStreamInputTts](#secstartstreamtts)接口中的定义相同。
+    ticket、parameters等参数与[startStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#8c10225a80wsk)接口中的定义相同。
     
     **参数**
     
@@ -632,18 +589,18 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
     
 
-## **StreamInputTtsDelegate**
+## StreamInputTtsDelegate
 
-[Qwen-Audio-TTS/CosyVoice](#seccosyvoicemethods) 流式语音合成回调协议，用于接收合成事件、音频数据和日志。
+[Qwen-Audio-TTS/CosyVoice](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#8c10225a80wsk) 流式语音合成回调协议，用于接收合成事件、音频数据和日志。
 
-### **onStreamInputTtsEventCallback：监听事件**
+### onStreamInputTtsEventCallback：监听事件
 
 -   **方法签名**
-    
-    ```
-    - (void)onStreamInputTtsEventCallback:(StreamInputTtsCallbackEvent)event taskId:(char*)taskid sessionId:(char*)sessionId ret_code:(int)ret_code error_msg:(char*)error_msg timestamp:(char*)timestamp all_response:(char*)all_response;
-    ```
-    
+
+```
+- (void)onStreamInputTtsEventCallback:(StreamInputTtsCallbackEvent)event taskId:(char*)taskid sessionId:(char*)sessionId ret_code:(int)ret_code error_msg:(char*)error_msg timestamp:(char*)timestamp all_response:(char*)all_response;
+```
+
 -   **参数说明**
     
     **参数**
@@ -654,7 +611,7 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     
     `event`
     
-    [`StreamInputTtsCallbackEvent`](#secstreamevent)
+    [`StreamInputTtsCallbackEvent`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#h2streamevent)
     
     回调事件。
     
@@ -674,13 +631,13 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     
     `int`
     
-    错误码，仅在事件 [TTS\_EVENT\_TASK\_FAILED](#secstreamevent) 中有效。参见[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
+    错误码，仅在事件 [TTS\_EVENT\_TASK\_FAILED](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#h2streamevent) 中有效。参见[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
     
     `error_msg`
     
     `char*`
     
-    错误信息，仅在事件 [TTS\_EVENT\_TASK\_FAILED](#secstreamevent) 中有效。
+    错误信息，仅在事件 [TTS\_EVENT\_TASK\_FAILED](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#h2streamevent) 中有效。
     
     `timestamp`
     
@@ -695,16 +652,16 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     完整的 JSON 字符串响应。可解析以获取所需数据。
     
 
-### **onStreamInputTtsDataCallback：监听音频数据**
+### onStreamInputTtsDataCallback：监听音频数据
 
 合成过程中，SDK 会连续触发此回调，需在回调中获取音频数据。
 
 -   **方法签名**
-    
-    ```
-    - (void)onStreamInputTtsDataCallback:(char*)buffer len:(int)len;
-    ```
-    
+
+```
+- (void)onStreamInputTtsDataCallback:(char*)buffer len:(int)len;
+```
+
 -   **参数说明**
     
     **参数**
@@ -730,7 +687,7 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
         
     -   组装完整文件时需采用追加模式写入同一文件。
         
-    -   对于 wav 和 mp3 格式，仅在第一次 onStreamInputTtsDataCallback 回调的数据中包含文件头，后续回调均为纯音频数据。处理时需将所有回调的 `buffer` 按顺序拼接。opus 格式的每一帧都是独立的 Ogg page，可直接拼接。
+    -   对于 wav 和 mp3 格式，仅在第一次 onStreamInputTtsDataCallback 回调的数据中包含文件头，后续回调均为纯音频数据。处理时需将所有回调的 `buffer` 按顺序拼接。opus 格式的每一帧都是独立的 Ogg page，可直接拼接。
         
     
     `len`
@@ -740,17 +697,17 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     音频数据的长度（字节）。
     
 
-### **onStreamInputTtsLogTrackCallback：监听追踪日志**
+### onStreamInputTtsLogTrackCallback：监听追踪日志
 
 此回调用于接收 SDK 内部的详细日志，方便进行问题定位和调试。
 
 -   **方法签名**
-    
-    ```
-    - (void)onStreamInputTtsLogTrackCallback:(NuiSdkLogLevel)level
-                                  logMessage:(const char *)log;
-    ```
-    
+
+```
+- (void)onStreamInputTtsLogTrackCallback:(NuiSdkLogLevel)level
+                              logMessage:(const char *)log;
+```
+
 -   **参数说明**
     
     **参数**
@@ -761,7 +718,7 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     
     `level`
     
-    [`NuiSdkLogLevel`](#secnuisdkloglevel)
+    [`NuiSdkLogLevel`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#h2nuisdkloglevel)
     
     日志级别。
     
@@ -772,7 +729,7 @@ Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式�
     日志内容。
     
 
-## **StreamInputTtsCallbackEvent**
+## StreamInputTtsCallbackEvent
 
 Qwen-Audio-TTS/CosyVoice 流式语音合成事件类型枚举。
 
@@ -782,7 +739,7 @@ Qwen-Audio-TTS/CosyVoice 流式语音合成事件类型枚举。
 
 TTS\_EVENT\_SYNTHESIS\_STARTED
 
-表示服务端已成功接收请求并开始处理。通常在此事件后，[`onStreamInputTtsDataCallback`](#secstreamdata)将很快开始返回第一批音频数据。
+表示服务端已成功接收请求并开始处理。通常在此事件后，[`onStreamInputTtsDataCallback`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#3e08f471e8fo7)将很快开始返回第一批音频数据。
 
 TTS\_EVENT\_SENTENCE\_SYNTHESIS
 
@@ -790,11 +747,11 @@ TTS\_EVENT\_SENTENCE\_SYNTHESIS
 
 TTS\_EVENT\_SYNTHESIS\_COMPLETE
 
-表示服务端已发送完全部音频数据，此后 [`onStreamInputTtsDataCallback`](#secstreamdata)将不会再被调用。收到此事件是数据流结束的明确信号。
+表示服务端已发送完全部音频数据，此后 [`onStreamInputTtsDataCallback`](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#3e08f471e8fo7)将不会再被调用。收到此事件是数据流结束的明确信号。
 
 TTS\_EVENT\_TASK\_FAILED
 
-表示任务失败。此时可从[onStreamInputTtsEventCallback](#9ed8e2b04btljc)的all\_response获得task\_id、error\_code、error\_message用于判断具体错误。
+表示任务失败。此时可从[onStreamInputTtsEventCallback](https://help.aliyun.com/zh/model-studio/cosyvoice-ios-sdk#bea29bbafcosq)的all\_response获得task\_id、error\_code、error\_message用于判断具体错误。
 
 ```
 {
@@ -809,7 +766,7 @@ TTS\_EVENT\_TASK\_FAILED
 }
 ```
 
-## **NuiSdkLogLevel**
+## NuiSdkLogLevel
 
 SDK 日志级别枚举，用于控制日志输出。
 
@@ -841,28 +798,20 @@ SDK 日志级别枚举，用于控制日志输出。
 
 关闭日志输出。
 
-## **示例代码**
+## 示例代码
 
-1.  **获取API Key：**[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。
+1.  **获取API Key：**[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
     
-    **说明**
-    
-    当您需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时API Key](https://help.aliyun.com/zh/model-studio/generate-temporary-api-key)。临时API Key拥有固定的60秒有效期，过期后需重新获取。
+    **说明**当您需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)。临时API Key拥有固定的60秒有效期，过期后需重新获取。
     
 2.  **下载SDK并运行示例代码：**
-    
     -   [下载最新SDK整合包](https://help.aliyun.com/zh/isi/sdk-selection-and-download)。
-        
-    -   解压 ZIP 包，将其中的 nuisdk.framework 添加到工程。
-        
-    -   在 Build Phases → Link Binary With Libraries 中添加 nuisdk.framework。
-        
-    -   在 General → Frameworks, Libraries, and Embedded Content 中将 nuisdk.framework 设置为 Embed & Sign。
-        
+    -   解压 ZIP 包，将其中的 nuisdk.framework 添加到工程。
+    -   在 Build Phases → Link Binary With Libraries 中添加 nuisdk.framework。
+    -   在 General → Frameworks, Libraries, and Embedded Content 中将 nuisdk.framework 设置为 Embed & Sign。
     -   用 Xcode 打开示例工程。示例代码位于`DashCosyVoiceStreamInputTTSViewController.m`，替换 API Key 后体验功能。
-        
 
-### **调用方式**
+### 调用方式
 
 **调用方式**
 
@@ -876,9 +825,9 @@ SDK 日志级别枚举，用于控制日志输出。
     
 2.  按业务需求设置参数。
     
-3.  调用 `[playStreamInputTts](#be00eb5c18hnz)`或`[asyncPlayStreamInputTts](#2d43b13c45u3g)`发送文本并开始语音合成。
+3.  调用 `playStreamInputTts`或`asyncPlayStreamInputTts`发送文本并开始语音合成。
     
-4.  接收到 `TTS_EVENT_SYNTHESIS_COMPLETE` 回调，语音合成结束。
+4.  接收到 `TTS_EVENT_SYNTHESIS_COMPLETE` 回调，语音合成结束。
     
 
 **适用场景：**
@@ -896,15 +845,15 @@ SDK 日志级别枚举，用于控制日志输出。
     
 2.  按业务需求设置参数。
     
-3.  调用 `[startStreamInputTts](#8c10225a80wsk)` 开始流式文本语音合成。
+3.  调用 `startStreamInputTts` 开始流式文本语音合成。
     
-4.  调用 `[sendStreamInputTts](#9e9bf0b955cit)` 持续发送文本。
+4.  调用 `sendStreamInputTts` 持续发送文本。
     
-5.  在`[onStreamInputTtsDataCallback](#3e08f471e8fo7)`中，获取二进制音频数据。
+5.  在`onStreamInputTtsDataCallback`中，获取二进制音频数据。
     
-6.  调用 `stopStreamInputTts` 或 `asyncStopStreamInputTts` 结束发送，等待合成完成。
+6.  调用 `stopStreamInputTts` 或 `asyncStopStreamInputTts` 结束发送，等待合成完成。
     
-7.  接收到 `TTS_EVENT_SYNTHESIS_COMPLETE` 回调，语音合成结束。
+7.  接收到 `TTS_EVENT_SYNTHESIS_COMPLETE` 回调，语音合成结束。
     
 
 **适用场景：**
@@ -914,19 +863,19 @@ SDK 日志级别枚举，用于控制日志输出。
 -   此方式不支持 SSML 标记语言
     
 
-## **高级功能**
+## 高级功能
 
-### **SSML 标记语言**
+### SSML 标记语言
 
 **目的**：通过在文本中嵌入 XML 标签，实现对发音、语速、停顿等细节的精确控制。
 
-**使用限制**：仅支持[一次性输入待合成文本](#f8b7cc6ae3s40)（`[playStreamInputTts](#be00eb5c18hnz)` 或 `[asyncPlayStreamInputTts](#2d43b13c45u3g)` 接口），不支持[流式输入待合成文本](#2e911197440yt)（`[sendStreamInputTts](#9e9bf0b955cit)`接口）。
+**使用限制**：仅支持[一次性输入待合成文本](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-ios-sdk.md)（`playStreamInputTts` 或 `asyncPlayStreamInputTts` 接口），不支持[流式输入待合成文本](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-ios-sdk.md)（`sendStreamInputTts`接口）。
 
-**使用方法**：调用 `[playStreamInputTts](#be00eb5c18hnz)` 或 `[asyncPlayStreamInputTts](#2d43b13c45u3g)` 接口时，SDK 会自动启用 SSML，此时直接在 `text` 参数中传入包含 SSML 标签的文本即可。
+**使用方法**：调用 `playStreamInputTts` 或 `asyncPlayStreamInputTts` 接口时，SDK 会自动启用 SSML，此时直接在 `text` 参数中传入包含 SSML 标签的文本即可。
 
 更多说明请参见 [SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
 
-### **数学表达式**
+### 数学表达式
 
 **目的**：使模型能够正确朗读常见的数学公式和表达式。
 

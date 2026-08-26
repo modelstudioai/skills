@@ -18,6 +18,84 @@
         "cache"
       ],
       "provider": "deepseek",
+      "model": "vanchin/deepseek-v4-pro-0813",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "9",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "27",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.3",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 600000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 30,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 600000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 30,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "TG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 393216,
+      "latestOnlineAt": "2026-08-24T02:11:05.000+00:00",
+      "contextWindow": 1048576,
+      "maxInputTokens": 1048576,
+      "inferenceProvider": "vanchin",
+      "name": "vanchin/deepseek-v4-pro-0813",
+      "docUrl": "https://help.aliyun.com/document_detail/3027089.html",
+      "category": "Third-party",
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"vanchin/deepseek-v4-pro-0813\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
+            "docUrl": "https://help.aliyun.com/document_detail/3027089.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
+      "description": "DeepSeek-V4系列是强大的混合专家（MoE）语言模型，包含DeepSeek-V4-Pro（1.6T总参数，49B激活参数）。支持高达100万（1M）token的上下文长度，是在超过32T高质量多样化token上预训练的开源模型。",
+      "features": [
+        "function-calling",
+        "structured-outputs",
+        "cache"
+      ],
+      "provider": "deepseek",
       "model": "vanchin/deepseek-v4-pro",
       "prices": [
         {

@@ -2,7 +2,7 @@
 
 本文档介绍了如何通过对话分析Agent方式创建应用
 
-## **创建应用**
+## 创建应用
 
 -   第一步：首先点击**我的应用**按钮，再点击**创建应用**按钮；
     
@@ -11,9 +11,7 @@
     -   **应用名称：**根据实际业务需要修改应用名称。
         
     -   **应用创建方式：**
-        
         -   这里选择**基于对话分析Agent创建**：通过预置最佳实践示例或上传对话数据，体验大模型生成式摘要、总结、服务质检等全场景应用能力。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086487.png)
-            
 
 ### 基于对话分析Agent创建
 
@@ -21,14 +19,12 @@
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086491.png)
 
-1.  #### **选择对话分析Agent方式**![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086492.png)
+1.  **选择对话分析Agent方式**![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086492.png)
     
     **对话分析维度：**可以根据实际业务需求的需要通过对话分析Agent来选择对应的维度。
     
     -   **标准指令：**已预置标准prompt，可快速生成理想结果。可选值为【标题、摘要、关键词、Q&A、问题解决方案】，至少选择一个选项。
-        
     -   **高级指令：**服务质检、标签分类等高级指令有一定的业务属性，该部分指令在示例通话中已预置标准prompt，若自行上传通话数据且对结果有一定要求，建议在预置指令模板→专业模式中编辑自定义指令进行调试。可选值为【服务质检、关键信息、标签分类】。
-        
     
     **分析对象类型：**可以上传不超过15000字的文本内容，同时我们还提供了行业对话示例来进行测试。
     
@@ -51,11 +47,11 @@
     
     **点击“测试”按钮，查看输出结果：**测试出来的结果生成的指令与我选择的对话分析维度相对应。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086496.png)
     
-2.  #### **选择自定义模板方式**
+2.  **选择自定义模板方式**
     
     可以选择简单构建模式&专业构建模式。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086497.png)
     
-    -   ##### **简单构建模式说明** ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9886579371/p914697.png)
+    -   **简单构建模式说明**![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9886579371/p914697.png)
         
         -   **模型配置**：伶鹊-Plus、伶鹊-Turbo。
             
@@ -68,7 +64,6 @@
                 -   **服务质检：**对通话中存在的客户情绪、敏感词、服务质量等内容进行检测。可根据业务需要质检的场景和质检项。
                     
                     -   **质检项（名称+描述）：**设置服务质检中需要质检的名称与描述。
-                        
                 -   **关键信息（名称+类型）：**提取通话中配置的关键信息，通过名称与类型配置。
                     
                 -   **标签分类（名称+描述）：**对通话内容进行分类定义，标签长度不超过10个字。
@@ -89,11 +84,9 @@
                 
         -   **点击“测试”按钮，查看测试结果。**![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086501.png)
             
-    -   ##### 专业构建模式说明
+    -   专业构建模式说明
         
-        **说明**
-        
-        在模式切换时，当前模式所编辑的内容不再生效，对话内容将会重置。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086503.png)
+        **说明**在模式切换时，当前模式所编辑的内容不再生效，对话内容将会重置。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086503.png)
         
         ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086505.png)
         
@@ -108,10 +101,9 @@
         -   **变量配置：**除了内置${field}、${dialogue}两个变量以外，如需在分析过程中引用更多变量，可以完成变量配置。测试数据可以作为测试过程中的模拟数据，临时使用。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086512.png)
             
             -   在编辑完成后，即可在指令信息中插入，使用“/”进行插入保存的变量。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086513.png)
-                
         -   **分析对象类型：**可以分为三种，纯文本、语音、图片，同时支持添加知识库进行辅助分析，支持添加热词组有助于提升语音转译准确性。
             
-            -   **知识库：**开启后可添加文档、表格、图片等类型知识用于辅助分析，当分析对象类型选择为图片时无法使用知识库。具体介绍可参考文档：[知识库的使用](https://help.aliyun.com/zh/model-studio/using-the-knowledge-base)。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086514.png)
+            -   **知识库：**开启后可添加文档、表格、图片等类型知识用于辅助分析，当分析对象类型选择为图片时无法使用知识库。具体介绍可参考文档：[知识库的使用](raw/application-user-guide/application-gallery/official-application-lingque-ccai-dialogue-analysis-aio/lingque-ccai-aio-user-guide/using-the-knowledge-base.md)。![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4169763871/p1086514.png)
                 
             -   **选择文本时**：需要按照以下格式编写对话信息，同时也可以通过使用已经提供的行业对话示例。
                 

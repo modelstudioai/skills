@@ -1,45 +1,34 @@
 # 异步调用API参考
 
-本文介绍如何通过 OpenAI 兼容模式的 Responses API **异步调用**阿里云百炼应用（**智能体**、**工作流**）。对于**耗时较长**的任务，只需在请求中设置 background 为 true，API 便会立即返回一个任务 ID，用于后续的查询与管理。这种“先提交、后查询”的方式，可有效避免请求超时或长时间等待。
+本文介绍如何通过 OpenAI 兼容模式的 Responses API 异步调用 阿里云百炼应用（ 智能体 、 工作流 ）。对于 耗时较长 的任务，只需在请求中设置 background 为 true，API 便会立即返回一个任务 ID，用于后续的查询与管理。这种“先提交、后查询”的方式，可有效避免请求超时或长时间等待。
 
 **相关参考**
 
--   **同步调用**：对于需要即时获取结果的实时交互场景，请参阅[同步调用 API 参考](https://help.aliyun.com/zh/model-studio/synchronous-call-api-reference)。
-    
--   **DashScope API**：如需获取更多功能，请参阅[DashScope API](https://help.aliyun.com/zh/model-studio/application-dashscope-api-reference/)。
-    
+-   **同步调用**：对于需要即时获取结果的实时交互场景，请参阅[同步调用 API 参考](raw/application-api-reference/application-call/openai-responses-api/synchronous-call-api-reference.md)。
+-   **DashScope API**：如需获取更多功能，请参阅[DashScope API](https://help.aliyun.com/zh/model-studio/application-dashscope-api-reference)。
 
-**重要**
+**重要**本文档仅适用于华北2（北京）地域。
 
-本文档仅适用于华北2（北京）地域。
-
-**说明**
-
-异步任务暂不支持流式输出（stream=true）。
+**说明**异步任务暂不支持流式输出（stream=true）。
 
 ## 前提条件
 
--   已[获取 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK进行调用，还需要[安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
-    
--   已创建[阿里云百炼应用](https://help.aliyun.com/zh/model-studio/application-introduction)，并已获取应用ID：在[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面的应用卡片上复制其ID。
-    
+-   已[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过OpenAI SDK进行调用，还需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+-   已创建[阿里云百炼应用](raw/application-user-guide/llm-application/application-introduction.md)，并已获取应用ID：在[应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)页面的应用卡片上复制其ID。
 
-## **快速开始**
+## 快速开始
 
 本节提供完整的 Python 和 Java 示例，演示如何发起一个异步任务，然后通过轮询方式持续检查任务状态，直到任务完成并获取最终结果。
 
 这个示例覆盖了异步调用的核心流程：
 
-1.  **创建任务**：调用 `create` 方法并设置 `background=True`，获取任务 ID。
-    
-2.  **轮询状态**：在一个循环中，定期调用 `retrieve` 方法查询任务状态。
-    
-3.  **处理结果**：当任务状态变为 `completed`、`failed` 或 `cancelled` 时，退出循环并展示最终结果。
-    
+1.  **创建任务**：调用 `create` 方法并设置 `background=True`，获取任务 ID。
+2.  **轮询状态**：在一个循环中，定期调用 `retrieve` 方法查询任务状态。
+3.  **处理结果**：当任务状态变为 `completed`、`failed` 或 `cancelled` 时，退出循环并展示最终结果。
 
-**代码示例**
+代码示例
 
-## Python
+Python
 
 ```
 import asyncio
@@ -99,7 +88,7 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-## Java
+Java
 
 ```
 import com.openai.client.OpenAIClient;
@@ -170,11 +159,11 @@ public class QuickStart {
 }
 ```
 
-## **具体流程**
+## 具体流程
 
 以下章节详细介绍了创建、查询、取消和删除异步任务的 API 操作。
 
-### **创建任务**
+### 创建任务
 
 将`background`参数设置为`true`来开启异步模式，创建异步任务，立即获取任务 ID。
 
@@ -182,11 +171,11 @@ public class QuickStart {
 
 > 请将 `{APP_ID}` 替换为实际的应用 ID。
 
-#### **请求示例**
+#### 请求示例
 
-## 单轮对话
+#### 单轮对话
 
-#### **Python**
+Python
 
 ```
 from openai import AsyncOpenAI
@@ -214,7 +203,7 @@ if __name__ == "__main__":
   asyncio.run(main())
 ```
 
-#### **Java**
+Java
 
 ```
 import com.openai.client.OpenAIClient;
@@ -247,7 +236,7 @@ public class CreateTask {
 }
 ```
 
-#### **curl**
+curl
 
 ```
 # 若没有配置环境变量，请将 {DASHSCOPE_API_KEY} 替换为实际的阿里云百炼API Key，但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
@@ -262,24 +251,21 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compa
 }'
 ```
 
-## 参数传递
+#### 参数传递
 
-**智能体应用****配置**
+**智能体应用配置**
 
 **插件参数传递**：在应用内选择指定插件工具，**发布**应用。在**插件**区域，已添加名为**寝室公约查询工具**的插件，该插件用于根据输入的数字索引查询特定条目的寝室公约内容。
 
-**工作流应用****配置**
+**工作流应用配置**
 
 **自定义参数传递**
 
 > 此处以查询城市美食作为示例。
 
 1.  在应用内的**开始**创建自定义参数；
-    
 2.  在**大模型节点**的**提示词**处引用自定义参数；
-    
 3.  测试无误后，**发布**应用。
-    
 
 在**模型配置**中选择**通义千问-Plus-Latest**模型，在**提示词**中输入`请介绍 /city 这个城市的五个特色美食，仅返回名称，用逗号分隔。`，其中`/city`通过输入"/"插入，引用**开始**节点的自定义参数。
 
@@ -288,21 +274,17 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compa
 > 此处以寝室公约查询工具作为示例。
 
 1.  如需传递插件，需添加**插件节点**，选择指定插件工具；
-    
 2.  在应用内的**开始**创建自定义参数，并将其传入插件节点的输入参数中；
-    
 3.  在**大模型节点**的**提示词**处引用自定义参数和插件输出参数；
-    
 4.  测试无误后，**发布**应用。
-    
 
 在**模型配置**中选择**通义千问-Plus-Latest**模型，在**提示词**和**用户提示词**中输入"查询寝室公约内容第"并插入变量`开始/article_index`，再接"条内容"并插入变量`插件1/article`。
 
-#### **API 调用**
+#### API 调用
 
 -   **自定义参数：**调用时通过`biz_params`传递，参数名和类型要与应用内的参数配置保持一致。
     
-    ## Python
+    Python
     
     ```
     from openai import AsyncOpenAI
@@ -322,7 +304,7 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compa
       response = await client.responses.create(
         input="你好",
         extra_body={
-            "biz_params": {"city": "北京"} 
+            "biz_params": {"city": "北京"}
         },
         background=True
       )
@@ -333,7 +315,7 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compa
       asyncio.run(main())
     ```
     
-    ## Java
+    Java
     
     ```
     import com.openai.client.OpenAIClient;
@@ -372,7 +354,7 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compa
     }
     ```
     
-    ## curl
+    curl
     
     ```
     #!/bin/bash
@@ -395,7 +377,7 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compa
     
 -   **插件参数：**调用时通过`biz_params`传递，`user_defined_params`传递工具参数，`user_defined_tokens`传递鉴权参数，参数名和类型要与工具参数配置保持一致。
     
-    ## Python
+    Python
     
     ```
     """
@@ -457,7 +439,7 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compa
         asyncio.run(main())
     ```
     
-    ## Java
+    Java
     
     ```
     import com.openai.client.OpenAIClient;
@@ -508,7 +490,7 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compa
     }
     ```
     
-    ## curl
+    curl
     
     ```
     #!/bin/bash
@@ -549,7 +531,7 @@ curl --location "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compa
     ```
     
 
-#### **请求字段说明**
+#### 请求字段说明
 
 **字段名**
 
@@ -624,7 +606,7 @@ _string_
 
 传递该插件需要的用户鉴权信息。
 
-#### **响应示例**
+#### 响应示例
 
 ```
 {
@@ -661,7 +643,7 @@ _string_
 }
 ```
 
-#### **响应字段说明**
+#### 响应字段说明
 
 **字段名**
 
@@ -679,7 +661,7 @@ string
 
 string
 
-任务的初始状态，通常为 `queued`。
+任务的初始状态，通常为 `queued`。
 
 `created_at`
 
@@ -693,7 +675,7 @@ string
 
 对象类型，固定为`response`。
 
-### **查询任务**
+### 查询任务
 
 获取指定任务的当前状态和执行结果。
 
@@ -701,9 +683,9 @@ string
 
 > 请将 `{APP_ID}` 替换为实际的应用 ID，将 `{RESPONSE_ID}` 替换为创建任务时返回的任务ID。
 
-#### **请求示例**
+#### 请求示例
 
-#### **Python**
+Python
 
 ```
 import asyncio
@@ -723,7 +705,7 @@ if __name__ == "__main__":
   asyncio.run(main())
 ```
 
-#### **Java**
+Java
 
 ```
 import com.openai.client.OpenAIClient;
@@ -751,7 +733,7 @@ public class RetrieveTask {
 }
 ```
 
-#### **curl**
+curl
 
 ```
 # 若没有配置环境变量，请将 {DASHSCOPE_API_KEY} 替换为实际的阿里云百炼API Key，但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
@@ -763,7 +745,7 @@ curl "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/
 -H "Authorization: Bearer ${DASHSCOPE_API_KEY}"
 ```
 
-#### **响应示例**
+#### 响应示例
 
 ```
 {
@@ -815,7 +797,7 @@ curl "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatible-mode/
 }
 ```
 
-#### **响应字段说明**
+#### 响应字段说明
 
 **字段名**
 
@@ -833,15 +815,15 @@ string
 
 string
 
-任务的当前状态，详见[任务生命周期](#2627a01eaf9z0)。
+任务的当前状态，详见[任务生命周期](https://help.aliyun.com/zh/model-studio/asynchronous-call-api-reference#2627a01eaf9z0)。
 
 `output`
 
 array
 
-任务的输出结果。当 `status` 为 `completed` 时，此字段包含最终结果。
+任务的输出结果。当 `status` 为 `completed` 时，此字段包含最终结果。
 
-### **取消任务**
+### 取消任务
 
 取消一个正在进行中的异步任务。此操作仅对状态为 `queued` 或 `running` 的任务有效。
 
@@ -849,9 +831,9 @@ array
 
 > 请将 `{APP_ID}` 替换为实际的应用ID，将 `{RESPONSE_ID}` 替换为创建任务时返回的任务ID。
 
-#### **请求示例**
+#### 请求示例
 
-Python
+python
 
 ```
 import asyncio
@@ -871,7 +853,7 @@ if __name__ == "__main__":
   asyncio.run(main())
 ```
 
-Java
+java
 
 ```
 import com.openai.client.OpenAIClient;
@@ -899,7 +881,7 @@ public class CancelTask {
 }
 ```
 
-curl
+bash
 
 ```
 # 若没有配置环境变量，请将 {DASHSCOPE_API_KEY} 替换为实际的阿里云百炼API Key，但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
@@ -911,7 +893,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatib
 -H "Authorization: Bearer ${DASHSCOPE_API_KEY}"
 ```
 
-#### **响应示例**
+#### 响应示例
 
 ```
 {
@@ -929,7 +911,7 @@ curl -X POST "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compatib
 }
 ```
 
-#### **响应字段说明**
+#### 响应字段说明
 
 **字段名**
 
@@ -957,7 +939,7 @@ string
 
 对象类型，固定为`response`。
 
-### **删除任务记录**
+### 删除任务记录
 
 删除一个已处于终态（`completed`, `failed`, `cancelled`）的任务记录。此操作不可恢复。
 
@@ -965,9 +947,9 @@ string
 
 > 请将 `{APP_ID}` 替换为实际的应用ID，将 `{RESPONSE_ID}` 替换为创建任务时返回的任务ID。
 
-#### **请求示例**
+#### 请求示例
 
-## Python
+Python
 
 ```
 import asyncio
@@ -981,7 +963,7 @@ base_url = f'https://dashscope.aliyuncs.com/api/v2/apps/agent/{app_id}/compatibl
 client = AsyncOpenAI(api_key=api_key, base_url=base_url)
 async def main():
     # 2. 替换为要删除的任务ID
-    response_id_to_delete = "b17c64f94-7034-403e-aef5-4f48647656d5" 
+    response_id_to_delete = "b17c64f94-7034-403e-aef5-4f48647656d5"
     try:
         response_wrapper = await client.responses.with_raw_response.delete(response_id_to_delete)
         http_response = response_wrapper.http_response
@@ -999,7 +981,7 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-## Java
+Java
 
 ```
 import com.openai.client.OpenAIClient;
@@ -1023,7 +1005,7 @@ public class DeleteTask {
 }
 ```
 
-## curl
+curl
 
 ```
 # 若没有配置环境变量，请将 {DASHSCOPE_API_KEY} 替换为实际的阿里云百炼API Key，但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
@@ -1035,7 +1017,7 @@ curl -X DELETE "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compat
 -H "Authorization: Bearer ${DASHSCOPE_API_KEY}"
 ```
 
-#### **响应示例**
+#### 响应示例
 
 ```
 {
@@ -1045,7 +1027,7 @@ curl -X DELETE "https://dashscope.aliyuncs.com/api/v2/apps/agent/{APP_ID}/compat
 }
 ```
 
-#### **响应字段说明**
+#### 响应字段说明
 
 **字段名**
 
@@ -1063,7 +1045,7 @@ string
 
 boolean
 
-`true` 表示任务记录已成功删除。
+`true` 表示任务记录已成功删除。
 
 `object`
 
@@ -1071,7 +1053,7 @@ string
 
 对象类型，固定为`response`。
 
-## **任务生命周期**
+## 任务生命周期
 
 异步任务的生命周期包含以下状态：
 
@@ -1089,7 +1071,7 @@ string
 
 `completed`
 
-任务已成功完成。可在响应的 `output` 字段中获取结果。
+任务已成功完成。可在响应的 `output` 字段中获取结果。
 
 `cancelled`
 
@@ -1097,8 +1079,8 @@ string
 
 `failed`
 
-任务执行失败。可在响应的 `output` 字段中查看错误信息。
+任务执行失败。可在响应的 `output` 字段中查看错误信息。
 
 ## 错误码
 
-如果应用调用失败并返回报错信息，请参阅[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果应用调用失败并返回报错信息，请参阅[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。

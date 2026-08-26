@@ -2,20 +2,14 @@
 
 在构建大语言模型应用时，为不同业务场景反复构建和调整结构相似的 Prompt 耗时且难以维护。通过使用 Prompt 模板，可将 Prompt 的固定结构与动态变量分离，创建可复用的模板，以实现Prompt的统一管理和优化，高效生成Prompt。
 
-**重要**
+**重要**本文档仅适用于华北2（北京）地域。
 
-本文档仅适用于华北2（北京）地域。
-
-## **工作流程**
+## 工作流程
 
 1.  **创建模板**：在阿里云百炼控制台或通过 API 创建并保存模板，获取唯一模板 ID。
-    
 2.  **获取模板**：通过 API 和模板 ID 拉取模板内容。
-    
 3.  **生成Prompt**：将业务数据填入模板变量，生成最终的Prompt。
-    
 4.  **使用模板**：将生成好的Prompt发送给目标模型以获取结果。
-    
 
 ## 模板类型
 
@@ -31,7 +25,7 @@ Prompt模板分为[预置Prompt模板](https://bailian.console.aliyun.com/?tab=a
 
 由阿里云百炼提供，涵盖了多个不同的业务场景。
 
-[通过控制台或API创建自定义模板](#dbf41d0b57qd1)
+[通过控制台或API创建自定义模板](https://help.aliyun.com/zh/model-studio/prompt-template#dbf41d0b57qd1)
 
 **效果**
 
@@ -43,7 +37,7 @@ Prompt模板分为[预置Prompt模板](https://bailian.console.aliyun.com/?tab=a
 
 无需额外开发，直接通过控制台或API调用即可。
 
-在实际使用中，可能需要多次迭代优化。因此，用户需要掌握[Prompt设计原则及优化方法](https://help.aliyun.com/zh/model-studio/prompt-engineering-guide)（如清晰指令、示例引导、格式约束），具备一定的开发和技术能力。
+在实际使用中，可能需要多次迭代优化。因此，用户需要掌握[Prompt设计原则及优化方法](raw/model-user-guide/use-cases/prompt-engineering-guide.md)（如清晰指令、示例引导、格式约束），具备一定的开发和技术能力。
 
 **适用场景**
 
@@ -63,15 +57,15 @@ Prompt模板分为[预置Prompt模板](https://bailian.console.aliyun.com/?tab=a
 
 根据实际需求修改。
 
-### **预置Prompt模板**
+### 预置Prompt模板
 
-#### **1\. 查看**
+#### 1\. 查看
 
 访问[提示词](https://bailian.console.aliyun.com/?tab=app#/plugin-market/prompt)页面，可查看和使用阿里云百炼提供的针对不同场景的预置Prompt模板。
 
 每个 Prompt 模板以卡片形式展示，包含模板内容摘要和模板 ID。卡片底部提供 **查看详情**、**复制 prompt** 和更多操作（**···**）按钮。
 
-#### **2\. 查看与管理**
+#### 2\. 查看与管理
 
 **查看：**单击模板卡片上的**查看详情**，查看模板的名称、内容、变量、ID等信息。
 
@@ -79,65 +73,57 @@ Prompt模板分为[预置Prompt模板](https://bailian.console.aliyun.com/?tab=a
 
 -   单击**复制prompt**，可以复制模板内容。
     
--   单击**创建应用**，模板内容将自动填充到**智能体应用**的提示词编辑框中。可直接使用或基于业务场景修改。
+-   单击**. . .创建应用**，模板内容将自动填充到**智能体应用**的提示词编辑框中。可直接使用或基于业务场景修改。
     
     填充后的提示词中包含自定义变量 `${number}` 和 `${content}`，用于生成小红书风格文案。
     
--   单击**调用API**，可查看模板调用的代码示例。此处仅为核心代码示例，不能直接运行。完整的代码示例，请参见[GetPromptTemplate - 获取Prompt模板](https://api.aliyun.com/api/bailian/2023-12-29/GetPromptTemplate?spm=a2c4g.11186623.0.0.15e5d339W9qg6b&RegionId=cn-beijing)中的**SDK示例**。
+-   单击**. . .调用API**，可查看模板调用的代码示例。此处仅为核心代码示例，不能直接运行。完整的代码示例，请参见[GetPromptTemplate - 获取Prompt模板](https://api.aliyun.com/api/bailian/2023-12-29/GetPromptTemplate?spm=a2c4g.11186623.0.0.15e5d339W9qg6b&RegionId=cn-beijing)中的**SDK示例**。
     
--   单击**复制模板**，会在**[提示词](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt)**页面创建一个自定义Prompt模板：“预置Prompt模板名称\_副本\_时间戳”。
+-   单击**. . .复制模板**，会在**[提示词](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt)**页面创建一个自定义Prompt模板：“预置Prompt模板名称\_副本\_时间戳”。
     
     复制后的模板卡片展示**模板内容**预览和**模板 ID**（可单击右侧图标复制），底部提供**编辑**、**复制 prompt**及更多操作按钮。
     
 
-### **自定义Prompt模板**
+### 自定义Prompt模板
 
-#### **1\. 创建**
+#### 1\. 创建
 
-您可以通过**控制台**或 **API** 两种方式创建自定义Prompt模板。
+您可以通过**控制台**或 **API**两种方式创建自定义Prompt模板。
 
-#### **控制台**
+#### 控制台
 
 -   **基于预置Prompt模板修改**
     
-    在[预置Prompt模板](https://bailian.console.aliyun.com/?tab=app#/plugin-market/prompt)卡片上，单击**复制模板**，将会创建一个自定义Prompt模板副本：“预置Prompt模板名称\_副本\_时间戳”。
+    在[预置Prompt模板](https://bailian.console.aliyun.com/?tab=app#/plugin-market/prompt)卡片上，单击**. . .复制模板**，将会创建一个自定义Prompt模板副本：“预置Prompt模板名称\_副本\_时间戳”。
     
 -   **基于业务需求创建**
     
-    在**[提示词](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt)**页面，单击**创建提示词**，完成相关配置后，单击**保存**即可完成模板创建。更多创建详情请参阅[自定义Prompt模板](https://help.aliyun.com/zh/model-studio/prompt-custom-template)。在Prompt模板管理页面，可通过类型筛选（全部、文本生成、图片生成）和搜索框查找已有模板。单击右上角**\+ 创建提示词**按钮新建Prompt模板。已创建的模板以卡片形式展示，包含模板标题、内容预览和模板ID，支持**编辑**和**复制prompt**操作。
+    在**[提示词](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt)**页面，单击**创建提示词**，完成相关配置后，单击**保存**即可完成模板创建。更多创建详情请参阅[自定义Prompt模板](raw/application-user-guide/prompt/prompt-custom-template.md)。在Prompt模板管理页面，可通过类型筛选（全部、文本生成、图片生成）和搜索框查找已有模板。单击右上角**\+ 创建提示词**按钮新建Prompt模板。已创建的模板以卡片形式展示，包含模板标题、内容预览和模板ID，支持**编辑**和**复制prompt**操作。
     
 
-#### **API**
+#### API
 
-1.  **获取业务空间ID：**[获取APP ID 和 Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)。
-    
-2.  **创建自定义Prompt模板：**使用[CreatePromptTemplate - 创建Prompt模板](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-createprompttemplate)接口。
-    
+1.  **获取业务空间ID：**[获取APP ID 和 Workspace ID](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)。
+2.  **创建自定义Prompt模板：**使用[CreatePromptTemplate - 创建Prompt模板](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-createprompttemplate.md)接口。
 
-#### **2\. 查看与管理**
+#### 2\. 查看与管理
 
 **查看：**自定义Prompt模板创建完成后，可在[提示词](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt)页面查看。
 
 **管理：**
 
 -   单击模板卡片上的**编辑**，可修改模板内容。
-    
 -   单击**复制prompt**，可以复制模板内容。
-    
--   单击**创建应用**，模板内容将自动填充到**智能体应用**的提示词编辑框中。可直接使用或基于业务场景修改。
-    
--   单击**调用API**，可查看模板调用的代码示例。此处仅为核心代码示例，不能直接运行。完整的代码示例，请参见[GetPromptTemplate - 获取Prompt模板](https://api.aliyun.com/api/bailian/2023-12-29/GetPromptTemplate?spm=a2c4g.11186623.0.0.15e5d339W9qg6b&RegionId=cn-beijing)中的**SDK示例**。
-    
--   单击**复制模板**，会在当前页面创建一个自定义Prompt模板：“自定义Prompt模板名称\_副本\_时间戳”。
-    
--   单击**删除**，可删除已创建的模板。
-    
+-   单击**. . .创建应用**，模板内容将自动填充到**智能体应用**的提示词编辑框中。可直接使用或基于业务场景修改。
+-   单击**. . .调用API**，可查看模板调用的代码示例。此处仅为核心代码示例，不能直接运行。完整的代码示例，请参见[GetPromptTemplate - 获取Prompt模板](https://api.aliyun.com/api/bailian/2023-12-29/GetPromptTemplate?spm=a2c4g.11186623.0.0.15e5d339W9qg6b&RegionId=cn-beijing)中的**SDK示例**。
+-   单击**. . .复制模板**，会在当前页面创建一个自定义Prompt模板：“自定义Prompt模板名称\_副本\_时间戳”。
+-   单击**. . .删除**，可删除已创建的模板。
 
-## **使用Prompt模板**
+## 使用Prompt模板
 
-## 控制台
+#### 控制台
 
-1.  单击预置Prompt模板或自定义Prompt模板中的**使用prompt** > **创建应用**，模板内容将自动填充到智能体应用的提示词中。
+1.  单击预置Prompt模板或自定义Prompt模板中的**使用prompt创建应用**，模板内容将自动填充到智能体应用的提示词中。
     
     填充后的提示词输入框中可见模板变量（如 `${name}`），输入框右下角显示字符计数，最大支持 6144 个字符。
     
@@ -146,46 +132,42 @@ Prompt模板分为[预置Prompt模板](https://bailian.console.aliyun.com/?tab=a
     在模型调试界面左侧，选择模型（如**通义千问-Plus-Latest 128K**）并在**提示词**区域编写系统指令；右侧在用户输入区输入测试问题后单击执行，下方展示模型回复内容及输入/输出token统计信息。
     
 
-## API
+#### API
 
-1.  打开[获取Prompt模板](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getprompttemplate)接口调用文档，单击**调试**。
+1.  打开[获取Prompt模板](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-getprompttemplate.md)接口调用文档，单击**调试**。
     
 2.  在**参数配置**界面分别输入 workspaceId 和 promptTemplateId。
     
-    -   **workspaceId**：即业务空间ID。获取方法参见[获取APP ID 和 Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)。
-        
+    -   **workspaceId**：即业务空间ID。获取方法参见[获取APP ID 和 Workspace ID](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)。
     -   **promptTemplateId**：即预置Prompt模板或自定义模板ID。在模板卡片上获取模板Id即可。
-        
 3.  单击**发起调用**即可在线调试接口。
     
     调用成功示例：
     
-    ```
-    {   // Schema of Response
-      "variables": [   // 模板变量列表
-        "platform",   // 模板变量
-        "topic",   // 模板变量
-        "num1",   // 模板变量
-        "num2"   // 模板变量
-      ],
-      "promptTemplateId": "cfec40c311f14f3e976403059d8f0116",   // 模板Id
-      "requestId": "8C616xxx",   // 请求Id
-      "name": "营销文案生成",   // 模板名称
-      "content": "你是一名在${platform}平台具有丰富经验的专业爆款营销文案策划人，现在请以\"${topic}\"为核心主题，撰写一段极具吸引力的${platform}营销内容。要求内容包括：一个引人入胜且符合SEO优化原则的标题，以及一段详细且富有情感煽动力的正文。在正文中，请至少插入${num1}不同的emoji表情，以增加内容的互动性和视觉吸引力。此外，请根据该主题，设计并提供最多${num2}热门推荐标签，这些标签需具有高度概括主题和吸引目标用户群体的特点。",   // 模板内容
-    }
-    ```
-    
 
-## SDK
+```
+{   // Schema of Response
+  "variables": [   // 模板变量列表
+    "platform",   // 模板变量
+    "topic",   // 模板变量
+    "num1",   // 模板变量
+    "num2"   // 模板变量
+  ],
+  "promptTemplateId": "cfec40c311f14f3e976403059d8f0116",   // 模板Id
+  "requestId": "8C616xxx",   // 请求Id
+  "name": "营销文案生成",   // 模板名称
+  "content": "你是一名在${platform}平台具有丰富经验的专业爆款营销文案策划人，现在请以\"${topic}\"为核心主题，撰写一段极具吸引力的${platform}营销内容。要求内容包括：一个引人入胜且符合SEO优化原则的标题，以及一段详细且富有情感煽动力的正文。在正文中，请至少插入${num1}不同的emoji表情，以增加内容的互动性和视觉吸引力。此外，请根据该主题，设计并提供最多${num2}热门推荐标签，这些标签需具有高度概括主题和吸引目标用户群体的特点。",   // 模板内容
+}
+```
 
-1.  打开[获取Prompt模板](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-getprompttemplate)接口调用文档，单击**调试**。
+#### SDK
+
+1.  打开[获取Prompt模板](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-getprompttemplate.md)接口调用文档，单击**调试**。
     
 2.  在**参数配置**界面分别输入workspaceId和promptTemplateId。配置完成后，workspaceId和promptTemplateId将自动填充至SDK示例中。
     
-    -   **workspaceId**：即业务空间ID。获取方法参见[获取APP ID 和 Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id)。
-        
+    -   **workspaceId**：即业务空间ID。获取方法参见[获取APP ID 和 Workspace ID](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)。
     -   **promptTemplateId**：即预置Prompt模板或自定义Prompt模板ID。在模板卡片上获取模板 Id 即可。
-        
 3.  在调试界面中单击**SDK示例。**
     
 4.  在线**运行示例**，或**下载完整工程**，设置 accessKeyId 和 accessKeySecret 后运行。
@@ -195,7 +177,7 @@ Prompt模板分为[预置Prompt模板](https://bailian.console.aliyun.com/?tab=a
     在 OpenAPI 调试页面右侧，单击 **SDK示例** 页签，选择 SDK 代系 **V2.0（推荐）** 及目标语言（如 **Java**），即可查看对应的 SDK 示例代码。
     
 
-## **效果示例**
+## 效果示例
 
 **预置Prompt模板**
 
@@ -234,7 +216,7 @@ Prompt模板分为[预置Prompt模板](https://bailian.console.aliyun.com/?tab=a
 9.  杭州亚运会【YYDS】金牌赛事精彩瞬间！
     
 
-**更多示例**
+更多示例
 
 **预置Prompt模板**
 
@@ -300,17 +282,17 @@ Prompt模板分为[预置Prompt模板](https://bailian.console.aliyun.com/?tab=a
 
 你是一名专业的文章内容摘要专家，请根据我提供的文章内容生成摘要。字数不超过【200字】。文章内容：【“绿色”是杭州亚运会的办赛理念之一，“无废亚运”则是“绿色”的重要内涵。
 
-　　杭州市生态环境局二级巡视员曹建松介绍，“无废亚运”是杭州首创，指在筹办过程中，全面贯彻“无废”理念，加强固体废物全生命周期管理，最大限度地减少固体废物的产生。
+杭州市生态环境局二级巡视员曹建松介绍，“无废亚运”是杭州首创，指在筹办过程中，全面贯彻“无废”理念，加强固体废物全生命周期管理，最大限度地减少固体废物的产生。
 
-　　据记者了解，杭州累计推动建成33个“无废亚运”场馆、81家“无废亚运”饭店、4家“无废亚运”工厂。同时，还建成了“无废亚运”应用场景，做到管理有平台。
+据记者了解，杭州累计推动建成33个“无废亚运”场馆、81家“无废亚运”饭店、4家“无废亚运”工厂。同时，还建成了“无废亚运”应用场景，做到管理有平台。
 
-　　作为一个新的概念，“无废亚运”的建设并没有成熟经验可供借鉴，杭州又是如何做到的？
+作为一个新的概念，“无废亚运”的建设并没有成熟经验可供借鉴，杭州又是如何做到的？
 
-　　杭州亚运会比赛场馆坚持“能改则不建”的原则，56个竞赛场馆中，有44个为改建或临建，另外12个新建场馆则充分考虑到赛后利用。杭州奥体中心亚运壁球馆，便是由杭州国博中心原4D展厅临时改建而成的，最大限度使用了原来的设施、设备。
+杭州亚运会比赛场馆坚持“能改则不建”的原则，56个竞赛场馆中，有44个为改建或临建，另外12个新建场馆则充分考虑到赛后利用。杭州奥体中心亚运壁球馆，便是由杭州国博中心原4D展厅临时改建而成的，最大限度使用了原来的设施、设备。
 
-　　同时，杭州出台了《亚运会绿色健康建筑设计导则》等标准规范，积极推广装配式建筑、可再生材料等，使得建筑垃圾大幅减少。数据显示，经过优化设计，杭州奥体中心体育场“大莲花”总用钢量为2.8万吨，比同等规模体育场的用钢量减少了约1/3。杭州奥体中心体育馆、游泳馆、临安文体会展中心等则应用了导光管无电照明系统作为日常照明，每年照明节能可达30%。
+同时，杭州出台了《亚运会绿色健康建筑设计导则》等标准规范，积极推广装配式建筑、可再生材料等，使得建筑垃圾大幅减少。数据显示，经过优化设计，杭州奥体中心体育场“大莲花”总用钢量为2.8万吨，比同等规模体育场的用钢量减少了约1/3。杭州奥体中心体育馆、游泳馆、临安文体会展中心等则应用了导光管无电照明系统作为日常照明，每年照明节能可达30%。
 
-　　据了解，在亚运村和接待饭店，杭州亚运会推行净菜入村、集中备料、按需加工等，杜绝舌尖上的浪费。同时，杭州亚运会还推出了“云上亚运村”低碳账户，鼓励“村民”通过光盘行动、垃圾分类、无塑购物等获取积分、兑换奖品。
+据了解，在亚运村和接待饭店，杭州亚运会推行净菜入村、集中备料、按需加工等，杜绝舌尖上的浪费。同时，杭州亚运会还推出了“云上亚运村”低碳账户，鼓励“村民”通过光盘行动、垃圾分类、无塑购物等获取积分、兑换奖品。
 
 】
 
@@ -322,7 +304,9 @@ Prompt模板分为[预置Prompt模板](https://bailian.console.aliyun.com/?tab=a
 
 办公提效工具、学习工具
 
-你是一名专业的文案润色专家，请根据我提供的文案进行润色改写。要【用现代语，有修辞手法】，希望达到【更为简洁、有吸引力】的效果。文案是【今天的天气真是好极了，我在上学路上看到了一只小猫在花丛里玩耍，它看起来非常开心。放学回家后，我向妈妈分享了这个有趣的经历。】
+你是一名专业的文案润色专家，请根据我提供的文案进行润色改写。要【用现代语，有修辞手法】，希望达到【更为简洁、有吸引力】的效果。文案是
+
+【今天的天气真是好极了，我在上学路上看到了一只小猫在花丛里玩耍，它看起来非常开心。放学回家后，我向妈妈分享了这个有趣的经历。】
 
 原文：今天的天气真是好极了，我在上学路上看到了一只小猫在花丛里玩耍，它看起来非常开心。放学回家后，我向妈妈分享了这个有趣的经历。
 
@@ -334,19 +318,21 @@ Prompt模板分为[预置Prompt模板](https://bailian.console.aliyun.com/?tab=a
 
 办公提效工具、学习工具
 
-你是一名专业的文案风格改写专家，请将我提供的文案用【3种】不同的【小红书】风格改写的更加【积极向上】。我的文案是【一成不变的生活，每天重复着三点一线的日子难免有些枯燥。然而，这种生活状态在现代社会中并不罕见。我们常常为了生计或者事业，每天按部就班地过着同样的生活。】
+你是一名专业的文案风格改写专家，请将我提供的文案用【3种】不同的【小红书】风格改写的更加【积极向上】。我的文案是
+
+【一成不变的生活，每天重复着三点一线的日子难免有些枯燥。然而，这种生活状态在现代社会中并不罕见。我们常常为了生计或者事业，每天按部就班地过着同样的生活。】
 
 1.  小红书风格一。
     
 
 虽然每天的生活看起来有些枯燥，但是我们可以通过改变自己的心态，让每一天都变得更加有意义。我们可以尝试新的事物，挑战自己，让生活充满惊喜。只要我们保持积极的态度，我们就可以把平淡的生活变得更加有趣。
 
-2.  小红书风格二。
+1.  小红书风格二。
     
 
 虽然我们可能每天都在重复着同样的生活，但是我们可以通过改变自己的习惯，让生活变得更加美好。我们可以尝试早起锻炼，学习新的技能，或者去一个新的地方旅行。只要我们保持积极的态度，我们就可以让生活变得更加丰富多彩。
 
-3.  小红书风格三。
+1.  小红书风格三。
     
 
 虽然我们可能每天都在重复着同样的生活，但是我们可以通过改变自己的态度，让生活变得更加有意义。我们可以尝试感恩，享受当下，或者帮助他人。只要我们保持积极的态度，我们就可以把平淡的生活变得更加充实。
@@ -368,16 +354,14 @@ Prompt模板分为[预置Prompt模板](https://bailian.console.aliyun.com/?tab=a
 
 ## 错误码
 
-如果调用失败并返回报错信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+如果调用失败并返回报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
-## **常见问题**
+## 常见问题
 
-**Q: 调用**`**GetPromptTemplate**`**接口和直接在代码中拼接字符串有什么区别？**
+**Q: 调用**`GetPromptTemplate`**接口和直接在代码中拼接字符串有什么区别？**
 
 A: 使用`GetPromptTemplate`接口管理Prompt的优势如下：
 
 -   逻辑与内容分离：可在阿里云百炼控制台更新和优化Prompt内容，无需修改或重新部署应用程序代码。
-    
 -   集中管理与协作：所有Prompt集中存储，便于团队（如Prompt工程师和开发工程师）协作、版本管理和复用。
-    
 -   一致性保障：保证在应用的不同部分或不同服务间使用的Prompt版本和结构一致，避免因手动维护导致的不一致问题。

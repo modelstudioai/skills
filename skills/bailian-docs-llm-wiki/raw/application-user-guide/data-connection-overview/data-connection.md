@@ -66,45 +66,35 @@ OSS
 
 访问对象存储中的文件
 
-## **前置条件**
+## 前置条件
 
 在创建数据连接器前，请确保满足以下条件：
 
--   **账号权限**：主账号或具有数据连接管理权限的 RAM 用户。RAM 用户需要主账号授权后才能使用数据连接功能。授权方法请参见[权限管理](https://help.aliyun.com/zh/model-studio/application-permission-management-overview)。
+-   **账号权限**：主账号或具有数据连接管理权限的 RAM 用户。RAM 用户需要主账号授权后才能使用数据连接功能。授权方法请参见[权限管理](raw/application-user-guide/application-permission-management/application-permission-management-overview.md)。
     
 -   **数据源准备：**
-    
     -   **文件/表格连接器：**已准备好要上传的文档或表格文件，或已创建OSS Bucket。
-        
     -   **MySQL连接器：**已有MySQL数据库实例（阿里云RDS或自建），并确保网络可达（公网或私网）。
-        
     -   **PostgreSQL连接器：**已有PostgreSQL数据库实例，且已将`wal_level`参数设置为`logical`。
-        
     -   **PolarDB-X 2.0连接器：**已有阿里云 PolarDB-X 2.0 实例，且实例所在地域支持私网访问。如需通过 DMS 导入数据源，请先在 DMS 中完成 PolarDB-X 实例的录入。
-        
     -   **语雀连接器：**已有语雀知识库（仅支持公网版本语雀），并获取了个人访问 Token。
-        
     -   **OSS连接器：**已创建OSS Bucket，并开通了[向量检索服务](https://help.aliyun.com/zh/oss/user-guide/vector-retrieval/)。
-        
 
-## **创建连接器**
+## 创建连接器
 
 1.  访问[数据连接](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/connector/list)页面，单击右上角的**创建连接器**。
     
 2.  选择连接器类型，填写基本信息和存储位置。
     
-    ### 文件连接器
+    #### 文件连接器
     
     文件连接器用于管理非结构化文档（PDF、Word等）。
     
     1.  在创建连接器页面，连接器类型选择文件。
         
     2.  **填写基本信息：**
-        
         1.  **连接器名称：**使用易于识别的名称。
-            
         2.  **描述：**填写连接器的用途说明。描述会用于指导应用调用的准确度,建议写明数据内容和用途。
-            
     3.  选择**存储位置**：
         
         -   **使用平台存储：**数据存储在阿里云百炼平台提供的存储空间中,提供最大200,000个文件，1 TB 存储额度，**限时免费**。
@@ -114,23 +104,18 @@ OSS
             **说明**
             
             -   首次使用需按界面提示完成授权。
-                
             -   目标 Bucket 需要添加`bailian-connector-access`标签（值为`ReadAndWrite`）以供阿里云百炼访问。[添加标签](https://oss.console.aliyun.com/bucket)
-                
             
     
-    ## 表格连接器
+    #### 表格连接器
     
     表格连接器用于管理结构化数据（CSV、Excel等）。
     
     1.  在创建连接器页面，连接器类型选择表格**。**
         
     2.  **填写基本信息：**
-        
         1.  **连接器名称：**使用易于识别的名称。
-            
         2.  **描述：**填写连接器的用途说明。描述会用于指导智能体调用的准确度,建议写明数据内容和用途。
-            
     3.  **选择存储位置**：
         
         -   **使用平台存储：**数据存储在阿里云百炼平台提供的存储空间中,提供1 TB免费额度,额度用完后自动转为按量付费。适用于小规模数据存储。
@@ -140,18 +125,14 @@ OSS
             **说明**
             
             -   首次使用需按界面提示完成授权。
-                
             -   目标 Bucket 需要添加`bailian-connector-access`标签（值为`ReadAndWrite`）以供阿里云百炼访问。[添加标签](https://oss.console.aliyun.com/bucket)
-                
             
     
-    ### MySQL连接器
+    #### MySQL连接器
     
     MySQL连接器属于**流处理**类型,用于连接MySQL数据库,使应用可以执行SQL查询获取实时数据。
     
-    **说明**
-    
-    仅通过**从DMS导入数据源**方式创建的MySQL连接器支持执行SQL查询。通过**创建自定义数据源**方式添加的MySQL连接器不支持直接执行SQL。
+    **说明**仅通过**从DMS导入数据源**方式创建的MySQL连接器支持执行SQL查询。通过**创建自定义数据源**方式添加的MySQL连接器不支持直接执行SQL。
     
     1.  在创建连接器页面,选择**MySQL**类型。
         
@@ -162,9 +143,7 @@ OSS
         -   **创建自定义数据源：**手动配置数据库连接信息,通过公网或私网连接阿里云RDS或自建MySQL数据库。
             
             -   **阿里云RDS MySQL：**通过SLR授权,关联阿里云RDS服务下的MySQL数据库。选择后,**数据库地址**和**端口**会根据实例ID自动获取,无需手动输入。
-                
             -   **自建MySQL：**手动配置远端MySQL数据库的连接信息。需要手动输入**数据库地址**和**端口**。
-                
         -   **从DMS导入数据源：**快速导入DMS（数据管理服务）中已创建的数据源。首次使用需完成SLR授权,包括EventBridge服务关联角色、RDS服务管理角色和DMS服务管理角色的授权。
             
     4.  **选择网络类型**:
@@ -204,13 +183,11 @@ OSS
             系统通过EventBridge服务检测连通性,检测不收取费用。检测通过后,可以从**选择DB**下拉列表中选择要连接的数据库。
             
     
-    ### PostgreSQL连接器
+    #### PostgreSQL连接器
     
     PostgreSQL连接器支持连接阿里云RDS PostgreSQL实例或自建PostgreSQL数据库。
     
-    **说明**
-    
-    仅通过**从DMS导入数据源**方式创建的PostgreSQL连接器支持执行SQL查询。通过**创建自定义数据源**方式添加的PostgreSQL连接器不支持直接执行SQL。
+    **说明**仅通过**从DMS导入数据源**方式创建的PostgreSQL连接器支持执行SQL查询。通过**创建自定义数据源**方式添加的PostgreSQL连接器不支持直接执行SQL。
     
     **前置条件**
     
@@ -221,28 +198,19 @@ OSS
     -   （仅自建实例）已配置`listen_addresses`参数，允许100.64.0.0/16网段访问。配置方法：
         
         1.  编辑配置文件：`sudo vim /etc/postgresql/[版本]/main/pg_hba.conf`
-            
         2.  在文件顶部添加规则：`host [数据库名] [用户名] 100.64.0.0/16 md5`
-            
         3.  重载配置：`sudo systemctl reload postgresql`
-            
     
     1.  在创建连接器页面，选择**PostgreSQL**类型。
         
     2.  **填写基本信息**：连接器名称、描述（建议说明数据内容和用途）。
         
     3.  **配置数据库连接：**
-        
         -   **主机地址：**数据库实例的连接地址（公网或私网）。
-            
         -   **端口**：默认5432。
-            
         -   **数据库名称（dbName）**：必填字段，指定要连接的数据库。
-            
         -   **用户名**：具有高权限的数据库账号。
-            
         -   **密码**：数据库密码。
-            
     4.  单击测试连通性，确保配置正确。PostgreSQL连接器使用DTS（数据传输服务）进行连通性检测。
         
     
@@ -278,13 +246,11 @@ OSS
     
     需将实例系统参数`wal_level`修改为`logical`
     
-    ### PolarDB-X 2.0连接器
+    #### PolarDB-X 2.0连接器
     
     PolarDB-X 2.0连接器属于**流处理**类型,用于连接阿里云 PolarDB-X 2.0 分布式数据库,使应用可以执行SQL查询获取实时数据。
     
-    **说明**
-    
-    仅通过**从DMS导入数据源**方式创建的PolarDB-X 2.0连接器支持执行SQL查询。通过**创建自定义数据源**方式添加的PolarDB-X 2.0连接器不支持直接执行SQL。
+    **说明**仅通过**从DMS导入数据源**方式创建的PolarDB-X 2.0连接器支持执行SQL查询。通过**创建自定义数据源**方式添加的PolarDB-X 2.0连接器不支持直接执行SQL。
     
     1.  在创建连接器页面,选择**PolarDB-X 2.0**类型。
         
@@ -336,61 +302,47 @@ OSS
     与 MySQL 连接器的主要差异:
     
     -   **网络类型**:仅支持私网,不支持公网。
-        
     -   **数据源**:仅支持阿里云 PolarDB-X 2.0 实例,不支持自建数据库。
-        
     -   **SLR 授权**:首次使用时需在弹窗中显式同意 DTS 与 PolarDB-X 服务管理角色（DMS 方式还需 DMS 角色）的授权。
-        
     
-    ### 语雀连接器
+    #### 语雀连接器
     
     语雀连接器用于访问语雀文档和知识库，使智能体可以检索和引用企业在语雀中的知识内容。
     
     > 仅支持公网版本语雀。
     
     1.  在创建连接器页面，选择**语雀**。
-        
     2.  填写**连接器名称**和**描述**。
-        
     3.  访问[语雀开放 API](https://www.yuque.com/yuque/developer/api)获取Tenant access token并填入在连接信息区域。
-        
     4.  单击**连接检测**,验证Token有效性。输入Token后该按钮自动启用。
-        
     
-    ### OSS连接器
+    #### OSS连接器
     
     OSS连接器用于访问对象存储中的文件,使应用可以读取和处理OSS中存储的各类文件。
     
     1.  在创建连接器页面,选择**OSS**类型。
-        
     2.  填写**连接器名称**和**描述**。
-        
     3.  在**存储Bucket选择**下拉列表中,选择要连接的OSS Bucket。
-        
     
     **说明**
     
     -   首次使用，需按界面提示完成授权。
-        
     -   目标 Bucket 需添加`bailian-datahub-access`标签（值为`read`）以供阿里云百炼访问。[添加标签](https://oss.console.aliyun.com/bucket)
-        
     -   如果下拉列表中没有显示Bucket,请确认已创建OSS Bucket,且当前账号拥有该Bucket的访问权限。
-        
     -   使用OSS连接器需要开通[向量检索服务](https://help.aliyun.com/zh/oss/user-guide/vector-retrieval/)。如果未开通，则无法使用**searchOSSFile**工具查询包含相关内容的文件及**searchOSSFileByFileName**工具根据文件名查询相关的文件。
-        
     
     > 不支持归档、冷归档或深度冷归档存储类型的 Bucket。
     
     > 支持内容加密的 Bucket。支持私有的 Bucket。
     
-    > 如需使用开启[Referer防盗链](https://help.aliyun.com/zh/oss/configure-referer-policy-to-prevent-other-websites-from-referring-to-oss-files)的Bucket，须参考[防盗链](https://help.aliyun.com/zh/oss/user-guide/hotlink-protection#8a560a5cc91od)将域名`*.console.aliyun.com`添加到白名单Referer中。
+    > 如需使用开启[Referer防盗链](https://help.aliyun.com/zh/oss/user-guide/hotlink-protection)的Bucket，须参考[防盗链](https://help.aliyun.com/zh/oss/user-guide/hotlink-protection#8a560a5cc91od)将域名`*.console.aliyun.com`添加到白名单Referer中。
     
 3.  单击**确认**，完成创建。
     
 
-## **导入数据**
+## 导入数据
 
-## 导入文件
+#### 导入文件
 
 点击文件连接器卡片**详情**，进入文件管理页面。
 
@@ -398,9 +350,7 @@ OSS
     
     > 阿里云百炼通过类目管理导入的文件。
     
-    **说明**
-    
-    每个业务空间最多可创建 **500** 个类目。如需扩充类目数量上限，请通过[提交工单](https://smartservice.console.aliyun.com/service/create-ticket)申请扩容。
+    **说明**每个业务空间最多可创建 **500** 个类目。如需扩充类目数量上限，请通过[提交工单](https://smartservice.console.aliyun.com/service/create-ticket)申请扩容。
     
 2.  点击**导入数据，**进入**导入数据**界面**。**导入方式选择**本地上传**。
     
@@ -408,7 +358,7 @@ OSS
     
 3.  **解析方式**可选**默认设置**或**自定义设置**（**自定义设置**可针对不同格式配置解析规则，以提升解析效果）。
     
-    **解析方式说明**
+    解析方式说明
     
     请根据实际需求配置解析策略，如不确定建议保持默认设置。有关**文档智能解析**、**大模型文档解析**和**电子文档解析**的详细说明，请参阅[文档理解](https://help.aliyun.com/zh/document-mind/product-overview/overview-of-document-understanding#9a4f5fb91fpps)。
     
@@ -418,22 +368,19 @@ OSS
         
     -   **文档智能解析：**对于文件中的插图，解析器会识别并提取图中的文本，并生成文本摘要。这些摘要将与文件中其它非图片内容一起被切分并转换为向量，参与知识库的检索。
         
-    -   **大模型文档解析：**使用[选择模型](https://help.aliyun.com/zh/model-studio/models#3f1f1c8913fvo)模型的智能体应用支持用户对文件中插图和图表的内容进行提问。如需识别和理解文件中的插图与图表，请选择**大模型文档解析**。
+    -   **大模型文档解析：**使用[选择模型](raw/model-user-guide/get-started-with-models/models.md)模型的智能体应用支持用户对文件中插图和图表的内容进行提问。如需识别和理解文件中的插图与图表，请选择**大模型文档解析**。
         
     -   **Qwen VL解析：**仅支持解析图片格式。可自主选择千问VL模型，并通过传入Prompt指定模型需要识别的版面、元素及内容，其余功能与大模型文档解析一致。
         
     -   **音视频解析：**对文件进行语音识别、视频帧提取（仅限视频）和剧情解析（仅限视频），最终将所有声画信息按时间轴结构化对齐。
         
         -   **语音识别：**字幕内容解析器通过[录音文件识别](https://help.aliyun.com/zh/model-studio/recording-file-recognition)将人类语音转为文本。暂不支持识别音乐或自然环境声（如喇叭声、钟声、雷声等）。
-            
         -   **视频帧提取：**从原始视频中抽取有代表性的视觉画面，并生成相应的文本描述。
-            
         -   **剧情解析（需手动开启）：**分析视频内容，定位具体事件并标注时间戳，同时生成相应的文本描述。
-            
     
 4.  为文件**配置标签**（可选）。
     
-    > [通过API调用应用](https://help.aliyun.com/zh/model-studio/application-calling-guide#4100253b7chc3)时，可以在请求参数`tags`中指定标签。应用在检索知识库时，会先根据标签筛选相关文件，从而提高检索效率。对于[智能体应用（Agent 1.0）](https://help.aliyun.com/zh/model-studio/single-agent-application)，可在控制台调试知识库时设置标签。
+    > [通过API调用应用](https://help.aliyun.com/zh/model-studio/application-calling-guide)时，可以在请求参数`tags`中指定标签。应用在检索知识库时，会先根据标签筛选相关文件，从而提高检索效率。对于[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)，可在控制台调试知识库时设置标签。
     
 5.  点击**确认**，系统将开始解析和导入，可在页面查看任务进度。
     
@@ -450,7 +397,7 @@ OSS
     > 导入的文件仅供当前业务空间的用户使用。阿里云百炼不会将其用于任何商业用途或对外公开。
     
 
-## 导入表格
+#### 导入表格
 
 点击表格连接器卡片**详情**，进入数据管理页面。
 
@@ -458,13 +405,13 @@ OSS
 
 > 阿里云百炼通过数据表管理导入的数据。
 
-### **导入到新数据表**
+#### 导入到新数据表
 
 1.  输入**数据表名称**。并配置数据表，选择可**直接上传Excel**或**自定义表头**。
     
     -   **直接上传Excel：**阿里云百炼将自动识别上传文件中的表头，并据此来创建数据表结构，并将其余内容作为数据记录导入该表。
         
-    -   **自定义表头：****列名**为必填参数，**描述**为选填参数，**类型**为必填参数。
+    -   **自定义表头：列名**为必填参数，**描述**为选填参数，**类型**为必填参数。
         
         **重要**
         
@@ -472,11 +419,11 @@ OSS
             
         -   上传文件的表结构必须与待导入数据文件的结构（列数、列名）完全一致，否则导入会失败。例如，待导入的数据表有2列，这里的表结构必须配置2个字段，且列名需一一对应。可通过点击**新增字段**或**操作**列的**删除**，来增加或删减字段。
             
-        -   为帮助模型理解各字段含义（如 `age` 表示年龄），请在“描述”中提供清晰的自然语言说明。
+        -   为帮助模型理解各字段含义（如 `age` 表示年龄），请在“描述”中提供清晰的自然语言说明。
             
-        -   若字段类型设为 `image_url`，请确保链接是**公开可访问**的图片URL。知识库会用此链接抓取图片并为其生成向量索引，用于以图搜图等场景。
+        -   若字段类型设为 `image_url`，请确保链接是**公开可访问**的图片URL。知识库会用此链接抓取图片并为其生成向量索引，用于以图搜图等场景。
             
-            > image\_url格式示例：https://example.com/downloads/pic.jpg
+            > image\_url格式示例：[https://example.com/downloads/pic.jpg](https://example.com/downloads/pic.jpg)
             
             > 创建知识库时，image\_url类型字段用于生成**图片索引**。阿里云百炼会访问目标图片并提取其特征，然后通过图片Embedding转换为向量并保存。知识库检索时，会用该向量与用户上传图片的向量进行相似度比对。
             
@@ -490,7 +437,7 @@ OSS
 3.  点击**确定**，开始导入。完成后，左侧的**数据表**导航树中将出现新数据表。
     
 
-### **导入到现有数据表**
+#### 导入到现有数据表
 
 1.  在左侧的**数据表**列表中选择相应的数据表，然后点击**导入数据**。
     
@@ -505,7 +452,7 @@ OSS
     > 目前平台不支持直接导入JSON、CSV、YAML格式文件。请自行用相应工具将其转换为XLSX或XLS格式再导入。
     
 
-## 导入OSS文件
+#### 导入OSS文件
 
 -   **OSS连接器**：点击卡片**详情**，进入工具页签，可搜索或获取OSS的指定文件下载链接。使用工具需开通[向量检索服务](https://help.aliyun.com/zh/oss/user-guide/vector-retrieval/)。
     
@@ -515,9 +462,7 @@ OSS
         
         > 阿里云百炼通过类目管理导入的文件。
         
-        **说明**
-        
-        每个业务空间最多可创建 **500** 个类目。如需扩充类目数量上限，请通过[提交工单](https://smartservice.console.aliyun.com/service/create-ticket)申请扩容。
+        **说明**每个业务空间最多可创建 **500** 个类目。如需扩充类目数量上限，请通过[提交工单](https://smartservice.console.aliyun.com/service/create-ticket)申请扩容。
         
     2.  点击**导入数据，**进入**导入数据**界面**。**导入方式选择**OSS**。
         
@@ -529,11 +474,11 @@ OSS
         
         > 支持内容加密的 Bucket。支持私有的 Bucket。
         
-        > 如需使用开启[Referer防盗链](https://help.aliyun.com/zh/oss/configure-referer-policy-to-prevent-other-websites-from-referring-to-oss-files)的Bucket，须参考[防盗链](https://help.aliyun.com/zh/oss/user-guide/hotlink-protection#8a560a5cc91od)将域名`*.console.aliyun.com`添加到白名单Referer中。
+        > 如需使用开启[Referer防盗链](https://help.aliyun.com/zh/oss/user-guide/hotlink-protection)的Bucket，须参考[防盗链](https://help.aliyun.com/zh/oss/user-guide/hotlink-protection#8a560a5cc91od)将域名`*.console.aliyun.com`添加到白名单Referer中。
         
     3.  **解析方式**可选**默认设置**或**自定义设置**（**自定义设置**可针对不同格式配置解析规则，以提升解析效果）。
         
-        **解析方式说明**
+        解析方式说明
         
         请根据实际需求配置解析策略，如不确定建议保持默认设置。有关**文档智能解析**、**大模型文档解析**和**电子文档解析**的详细说明，请参阅[文档理解](https://help.aliyun.com/zh/document-mind/product-overview/overview-of-document-understanding#9a4f5fb91fpps)。
         
@@ -541,22 +486,19 @@ OSS
             
         -   **文档智能解析：**对于文件中的插图，解析器会识别并提取图中的文本，并生成文本摘要。这些摘要将与文件中其它非图片内容一起被切分并转换为向量，参与知识库的检索。
             
-        -   **大模型文档解析：**使用[选择模型](https://help.aliyun.com/zh/model-studio/models#3f1f1c8913fvo)模型的应用支持用户对文件中插图和图表的内容进行提问。如需识别和理解文件中的插图与图表，请选择**大模型文档解析**。
+        -   **大模型文档解析：**使用[选择模型](raw/model-user-guide/get-started-with-models/models.md)模型的应用支持用户对文件中插图和图表的内容进行提问。如需识别和理解文件中的插图与图表，请选择**大模型文档解析**。
             
         -   **Qwen VL解析：**仅支持解析图片格式。可自主选择千问VL模型，并通过传入Prompt指定模型需要识别的版面、元素及内容，其余功能与大模型文档解析一致。
             
         -   **音视频解析：**对文件进行语音识别、视频帧提取（仅限视频）和剧情解析（仅限视频），最终将所有声画信息按时间轴结构化对齐。
             
             -   **语音识别：**字幕内容解析器通过[录音文件识别](https://help.aliyun.com/zh/model-studio/recording-file-recognition)将人类语音转为文本。暂不支持识别音乐或自然环境声（如喇叭声、钟声、雷声等）。
-                
             -   **视频帧提取：**从原始视频中抽取有代表性的视觉画面，并生成相应的文本描述。
-                
             -   **剧情解析（需手动开启）：**分析视频内容，定位具体事件并标注时间戳，同时生成相应的文本描述。
-                
         
     4.  为文件**配置标签**（可选）。
         
-        > [通过API调用应用](https://help.aliyun.com/zh/model-studio/application-calling-guide#4100253b7chc3)时，可以在请求参数`tags`中指定标签。应用在检索知识库时，会先根据标签筛选相关文件，从而提高检索效率。对于[智能体应用（Agent 1.0）](https://help.aliyun.com/zh/model-studio/single-agent-application)，可在控制台编辑应用时直接设置标签（启用**知识库** > **+知识库** > **知识库高级配置** > **标签过滤**）。
+        > [通过API调用应用](https://help.aliyun.com/zh/model-studio/application-calling-guide)时，可以在请求参数`tags`中指定标签。应用在检索知识库时，会先根据标签筛选相关文件，从而提高检索效率。对于[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)，可在控制台编辑应用时直接设置标签（启用**知识库+知识库知识库高级配置标签过滤**）。
         
     5.  点击**确认**，系统将开始解析和导入，可在页面查看任务进度。
         
@@ -569,16 +511,13 @@ OSS
         > 导入的文件仅供当前业务空间的用户使用。阿里云百炼不会将其用于任何商业用途或对外公开。
         
 
-## 导入RDS MySQL数据
+#### 导入RDS MySQL数据
 
 **重要**
 
 -   新建数据源前需开通阿里云事件总线[EventBridge](https://eventbridge.console.aliyun.com/)服务。
-    
 -   阿里云百炼与RDS实例**必须归属同一阿里云账号**。否则请按照**导入自建MySQL数据**中步骤操作。
-    
--   导入大数据表（**1,000,000**行以上）时，耗时可能超过数据库本地日志的保留时长，造成数据重复导入。[如何解决](#b44fa3ac75xg6)
-    
+-   导入大数据表（**1,000,000**行以上）时，耗时可能超过数据库本地日志的保留时长，造成数据重复导入。[如何解决](https://help.aliyun.com/zh/model-studio/data-connection#b44fa3ac75xg6)
 
 > **RDS实例限制：**目前只支持**MySQL**引擎（版本无限制），暂不支持**PostgreSQL**等其它引擎；实例地域不限；只支持**基础系列**和**高可用系列**；创建RDS实例时，网络类型必须是**专有网络**，加入白名单需选**是**（将VPC网段加入到RDS实例白名单中）。
 
@@ -586,25 +525,24 @@ OSS
 
 **网络类型**选择**公网**或**私网**。
 
-> 私网数据源[仅支持部分地域](#b44fa3ac75xg6)的RDS实例；其他地域请选择公网数据源。私网数据源在安全性和性能方面更具优势。
+> 私网数据源[仅支持部分地域](https://help.aliyun.com/zh/model-studio/data-connection#b44fa3ac75xg6)的RDS实例；其他地域请选择公网数据源。私网数据源在安全性和性能方面更具优势。
 
-## 新建公网数据源
+#### 新建公网数据源
 
-1.  为确保知识库能正常接收RDS数据，请为RDS实例设置EventBridge白名单。
+为确保知识库能正常接收RDS数据，请为RDS实例设置EventBridge白名单。
+
+> 若未正确设置白名单，创建数据源时会提示`Communications link failure`。
+
+如何设置EventBridge白名单
+
+1.  访问[RDS控制台](https://rdsnext.console.aliyun.com/)，点击左侧导航栏中的**实例列表**，然后点击包含数据表的RDS实例。接着，点击左侧导航栏中的**数据库连接**，点击外网地址旁的**设置白名单**。
     
-    > 若未正确设置白名单，创建数据源时会提示`Communications link failure`。
+2.  点击**添加白名单分组**，并将以下 EventBridge 公网 IP 地址**全部添加**至白名单分组中。
     
-    **如何设置EventBridge白名单**
+    -   39.105.55.188,39.105.110.43,47.95.35.213,47.95.33.100,39.106.255.198,47.93.177.159,47.95.32.154,39.107.99.72
+3.  点击**确定**，白名单生效。
     
-    1.  访问[RDS控制台](https://rdsnext.console.aliyun.com/)，点击左侧导航栏中的**实例列表**，然后点击包含数据表的RDS实例。接着，点击左侧导航栏中的**数据库连接**，点击外网地址旁的**设置白名单**。
-        
-    2.  点击**添加白名单分组**，并将以下 EventBridge 公网 IP 地址**全部添加**至白名单分组中。
-        
-        -   39.105.55.188,39.105.110.43,47.95.35.213,47.95.33.100,39.106.255.198,47.93.177.159,47.95.32.154,39.107.99.72
-            
-    3.  点击**确定**，白名单生效。
-        
-    
+
 2.  填写数据源相关配置：
     
     **配置项**
@@ -639,7 +577,7 @@ OSS
     
 3.  点击**创建数据源**，提交新建任务。系统将自动配置 RDS 数据源，期间业务空间将被锁定，无法同时创建其他数据源。
     
-    > 首次提交任务时，请根据界面指引开通EventBridge服务关联角色，请使用[主账号](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)操作。如需使用RAM用户，需主账号为该RAM用户[配置必要权限](https://help.aliyun.com/zh/model-studio/data-import-instructions#b0cbc9b177wvb)。
+    > 首次提交任务时，请根据界面指引开通EventBridge服务关联角色，请使用[主账号](raw/model-user-guide/security-and-compliance/permission-management-overview.md)操作。如需使用RAM用户，需主账号为该RAM用户[配置必要权限](https://help.aliyun.com/zh/model-studio/data-import-instructions)。
     
     > 在请求高峰时段，创建数据源过程可能需要几分钟，请耐心等待。
     
@@ -649,14 +587,14 @@ OSS
     
     **创建成功**
     
-    表示数据源创建成功。请选择该数据源并执行[下一步](https://help.aliyun.com/zh/model-studio/data-import-instructions#fe7af7262307m)。
+    表示数据源创建成功。请选择该数据源并执行[下一步](https://help.aliyun.com/zh/model-studio/data-import-instructions)。
     
     **创建失败**
     
     表示数据源创建失败。请检查各项参数是否正确，修改后点击**重试**重新创建数据源。您可点击**删除**，删除创建失败的数据源。
     
 
-## 新建私网数据源
+#### 新建私网数据源
 
 1.  填写数据源相关配置：
     
@@ -670,7 +608,7 @@ OSS
     
     **所属地域**
     
-    选择RDS实例[所在地域](https://help.aliyun.com/zh/model-studio/data-import-instructions#6e4bedffaedcy)。请前往[RDS控制台](https://rdsnext.console.aliyun.com/)，点击左侧导航栏中的**实例列表**获取。
+    选择RDS实例[所在地域](https://help.aliyun.com/zh/model-studio/data-import-instructions)。请前往[RDS控制台](https://rdsnext.console.aliyun.com/)，点击左侧导航栏中的**实例列表**获取。
     
     **数据库实例**
     
@@ -694,7 +632,7 @@ OSS
     
 2.  连通性检测：点击**开始检测**，对阿里云百炼与数据源之间的网络连通性进行检查。
     
-    > 首次检测时，请根据界面指引开通EventBridge服务关联角色，请使用[主账号](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)操作。如需使用RAM用户，需主账号为该RAM用户[配置必要权限](https://help.aliyun.com/zh/model-studio/data-import-instructions#b0cbc9b177wvb)。
+    > 首次检测时，请根据界面指引开通EventBridge服务关联角色，请使用[主账号](raw/model-user-guide/security-and-compliance/permission-management-overview.md)操作。如需使用RAM用户，需主账号为该RAM用户[配置必要权限](https://help.aliyun.com/zh/model-studio/data-import-instructions)。
     
     **VPC ID**
     
@@ -739,21 +677,19 @@ OSS
     
     **创建成功**
     
-    表示数据源创建成功。请选择该数据源并执行[下一步](https://help.aliyun.com/zh/model-studio/data-import-instructions#fe7af7262307m)。
+    表示数据源创建成功。请选择该数据源并执行[下一步](https://help.aliyun.com/zh/model-studio/data-import-instructions)。
     
     **创建失败**
     
     表示数据源创建失败。请检查各项参数是否正确，修改后点击**重试**重新创建数据源。您可点击**删除**，删除创建失败的数据源。
     
 
-## 导入自建MySQL数据
+#### 导入自建MySQL数据
 
 **重要**
 
 -   新建数据源前需开通阿里云事件总线[EventBridge](https://eventbridge.console.aliyun.com/)服务。
-    
--   导入大数据表（**1,000,000**行以上）时，耗时可能超过数据库本地日志的保留时长，造成数据重复导入。[如何解决](https://help.aliyun.com/zh/model-studio/data-import-instructions#d152117985mus)
-    
+-   导入大数据表（**1,000,000**行以上）时，耗时可能超过数据库本地日志的保留时长，造成数据重复导入。[如何解决](https://help.aliyun.com/zh/model-studio/data-import-instructions)
 
 > **自建MySQL限制：**必须部署在阿里云ECS实例（地域不限）上；目前只支持MySQL 5.6、5.7和8.0；不支持MySQL代理Proxy。
 
@@ -761,53 +697,52 @@ OSS
 
 **网络类型**选择**公网**或**私网**。
 
-> 私网数据源[仅支持部分地域](https://help.aliyun.com/zh/model-studio/data-import-instructions#6e4bedffaedcy)的ECS实例；其他地域请选择公网数据源。私网数据源在安全性和性能方面更具优势。
+> 私网数据源[仅支持部分地域](https://help.aliyun.com/zh/model-studio/data-import-instructions)的ECS实例；其他地域请选择公网数据源。私网数据源在安全性和性能方面更具优势。
 
-## 新建公网数据源
+#### 新建公网数据源
 
-1.  为确保知识库能正常接收数据，请为您的自建MySQL配置EventBridge白名单。
+为确保知识库能正常接收数据，请为您的自建MySQL配置EventBridge白名单。
+
+> 若未正确配置白名单，创建数据源时会提示`Communications link failure`。
+
+如何设置EventBridge白名单
+
+1.  访问[ECS控制台](https://ecs.console.aliyun.com/home)，点击左侧导航栏中的**安全组**，找到与您自建MySQL关联的安全组，然后点击**操作**栏中的**管理规则。**
     
-    > 若未正确配置白名单，创建数据源时会提示`Communications link failure`。
+2.  在安全组详情页，点击**增加规则**，将以下EventBridge公网IP地址**全部添加**至该安全组中，并且需要放行**所有流量**和**全部端口**。
     
-    **如何设置EventBridge白名单**
+    > 不可使用由第三方产品或服务间接创建的安全组。
     
-    1.  访问[ECS控制台](https://ecs.console.aliyun.com/home)，点击左侧导航栏中的**安全组**，找到与您自建MySQL关联的安全组，然后点击**操作**栏中的**管理规则。**
-        
-    2.  在安全组详情页，点击**增加规则**，将以下EventBridge公网IP地址**全部添加**至该安全组中，并且需要放行**所有流量**和**全部端口**。
-        
-        > 不可使用由第三方产品或服务间接创建的安全组。
-        
-        -   39.105.55.188,39.105.110.43,47.95.35.213,47.95.33.100,39.106.255.198,47.93.177.159,47.95.32.154,39.107.99.72
-            
-    3.  点击**确定**，安全组生效。
-        
-    4.  在您的MySQL中，创建一个允许全部来源流量的数据库账号（也可以使用已有账号）然后执行以下GRANT授权命令。
-        
-        > 请根据您的实际情况，将下方命令中的user1替换为您的实际数据库账号。
-        
-        ```
-        -- 创建用户（合并为单条语句），请将user1替换为您的实际数据库账号
-        CREATE USER 'user1'@'%' IDENTIFIED BY 'user1的密码';
-        -- 授予基础权限（合并为单条语句），请将user1替换为您的实际数据库账号
-        GRANT ALL PRIVILEGES ON *.* TO 'user1'@'%' WITH GRANT OPTION;
-        -- 刷新权限（仅需一次）
-        FLUSH PRIVILEGES;
-        ```
-        
-    5.  通过修改MySQL配置文件开启Binlog和GTID。以Linux系统为例，MySQL配置文件一般位于：/etc/my.cnf 或 /etc/mysql/my.cnf。
-        
-        ```
-        [mysqld]
-        log-bin=mysql-bin
-        server-id=1
-        binlog_format=ROW
-        gtid_mode=ON
-        enforce_gtid_consistency=ON
-        ```
-        
-    6.  重启MySQL，配置文件生效。
-        
+    -   39.105.55.188,39.105.110.43,47.95.35.213,47.95.33.100,39.106.255.198,47.93.177.159,47.95.32.154,39.107.99.72
+3.  点击**确定**，安全组生效。
     
+4.  在您的MySQL中，创建一个允许全部来源流量的数据库账号（也可以使用已有账号）然后执行以下GRANT授权命令。
+    
+    > 请根据您的实际情况，将下方命令中的user1替换为您的实际数据库账号。
+    
+
+```
+-- 创建用户（合并为单条语句），请将user1替换为您的实际数据库账号
+CREATE USER 'user1'@'%' IDENTIFIED BY 'user1的密码';
+-- 授予基础权限（合并为单条语句），请将user1替换为您的实际数据库账号
+GRANT ALL PRIVILEGES ON *.* TO 'user1'@'%' WITH GRANT OPTION;
+-- 刷新权限（仅需一次）
+FLUSH PRIVILEGES;
+```
+
+5.  通过修改MySQL配置文件开启Binlog和GTID。以Linux系统为例，MySQL配置文件一般位于：/etc/my.cnf 或 /etc/mysql/my.cnf。
+
+```
+[mysqld]
+log-bin=mysql-bin
+server-id=1
+binlog_format=ROW
+gtid_mode=ON
+enforce_gtid_consistency=ON
+```
+
+6.  重启MySQL，配置文件生效。
+
 2.  填写数据源相关配置：
     
     **配置项**
@@ -832,7 +767,7 @@ OSS
     
 3.  点击**创建数据源**，提交新建任务。系统将为您自动配置自建MySQL数据源，期间当前业务空间会被锁定，禁止同时创建其他数据源。
     
-    > 首次提交任务时，请根据界面指引开通EventBridge服务关联角色，请使用[主账号](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)操作。如需使用RAM用户，需主账号为该RAM用户[配置必要权限](https://help.aliyun.com/zh/model-studio/data-import-instructions#b0cbc9b177wvb)。
+    > 首次提交任务时，请根据界面指引开通EventBridge服务关联角色，请使用[主账号](raw/model-user-guide/security-and-compliance/permission-management-overview.md)操作。如需使用RAM用户，需主账号为该RAM用户[配置必要权限](https://help.aliyun.com/zh/model-studio/data-import-instructions)。
     
     > 在请求高峰时段，创建数据源过程可能需要几分钟，请耐心等待。
     
@@ -842,48 +777,48 @@ OSS
     
     **创建成功**
     
-    表示数据源创建成功。请选择该数据源并执行[下一步](https://help.aliyun.com/zh/model-studio/data-import-instructions#fe7af7262307m)。
+    表示数据源创建成功。请选择该数据源并执行[下一步](https://help.aliyun.com/zh/model-studio/data-import-instructions)。
     
     **创建失败**
     
     表示数据源创建失败。请检查各项参数是否正确，修改后点击**重试**重新创建数据源。您可点击**删除**，删除创建失败的数据源。
     
 
-## 新建私网数据源
+#### 新建私网数据源
 
-1.  为确保知识库能正常接收数据，请为您的自建MySQL配置EventBridge白名单。
+为确保知识库能正常接收数据，请为您的自建MySQL配置EventBridge白名单。
+
+> 若未正确配置白名单，创建数据源时会提示`Communications link failure`。
+
+如何设置EventBridge白名单
+
+1.  在您的MySQL中，创建一个允许全部来源流量的数据库账号（也可以使用已有账号）然后执行以下GRANT授权命令。
     
-    > 若未正确配置白名单，创建数据源时会提示`Communications link failure`。
+    > 请根据您的实际情况，将下方命令中的user1替换为您的实际数据库账号。
     
-    **如何设置EventBridge白名单**
-    
-    1.  在您的MySQL中，创建一个允许全部来源流量的数据库账号（也可以使用已有账号）然后执行以下GRANT授权命令。
-        
-        > 请根据您的实际情况，将下方命令中的user1替换为您的实际数据库账号。
-        
-        ```
-        -- 创建用户（合并为单条语句），请将user1替换为您的实际数据库账号
-        CREATE USER 'user1'@'%' IDENTIFIED BY 'user1的密码';
-        -- 授予基础权限（合并为单条语句），请将user1替换为您的实际数据库账号
-        GRANT ALL PRIVILEGES ON *.* TO 'user1'@'%' WITH GRANT OPTION;
-        -- 刷新权限（仅需一次）
-        FLUSH PRIVILEGES;
-        ```
-        
-    2.  通过修改MySQL配置文件开启Binlog和GTID。以Linux系统为例，MySQL配置文件一般位于：/etc/my.cnf 或 /etc/mysql/my.cnf。
-        
-        ```
-        [mysqld]
-        log-bin=mysql-bin
-        server-id=1
-        binlog_format=ROW
-        gtid_mode=ON
-        enforce_gtid_consistency=ON
-        ```
-        
-    3.  重启MySQL，配置文件生效。
-        
-    
+
+```
+-- 创建用户（合并为单条语句），请将user1替换为您的实际数据库账号
+CREATE USER 'user1'@'%' IDENTIFIED BY 'user1的密码';
+-- 授予基础权限（合并为单条语句），请将user1替换为您的实际数据库账号
+GRANT ALL PRIVILEGES ON *.* TO 'user1'@'%' WITH GRANT OPTION;
+-- 刷新权限（仅需一次）
+FLUSH PRIVILEGES;
+```
+
+2.  通过修改MySQL配置文件开启Binlog和GTID。以Linux系统为例，MySQL配置文件一般位于：/etc/my.cnf 或 /etc/mysql/my.cnf。
+
+```
+[mysqld]
+log-bin=mysql-bin
+server-id=1
+binlog_format=ROW
+gtid_mode=ON
+enforce_gtid_consistency=ON
+```
+
+3.  重启MySQL，配置文件生效。
+
 2.  填写数据源相关配置：
     
     **配置项**
@@ -912,7 +847,7 @@ OSS
     
 3.  连通性检测：点击**开始检测**，对阿里云百炼与数据源之间的网络连通性进行检查。
     
-    > 首次提交任务时，请根据界面指引开通EventBridge服务关联角色，请使用[主账号](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)操作。如需使用RAM用户，需主账号为该RAM用户[配置必要权限](https://help.aliyun.com/zh/model-studio/data-import-instructions#b0cbc9b177wvb)。
+    > 首次提交任务时，请根据界面指引开通EventBridge服务关联角色，请使用[主账号](raw/model-user-guide/security-and-compliance/permission-management-overview.md)操作。如需使用RAM用户，需主账号为该RAM用户[配置必要权限](https://help.aliyun.com/zh/model-studio/data-import-instructions)。
     
     **VPC ID**
     
@@ -947,18 +882,16 @@ OSS
     
     **创建成功**
     
-    表示数据源创建成功。请选择该数据源并执行[下一步](https://help.aliyun.com/zh/model-studio/data-import-instructions#fe7af7262307m)。
+    表示数据源创建成功。请选择该数据源并执行[下一步](https://help.aliyun.com/zh/model-studio/data-import-instructions)。
     
     **创建失败**
     
     表示数据源创建失败。请检查各项参数是否正确，修改后点击**重试**重新创建数据源。您可点击**删除**，删除创建失败的数据源。
     
 
-## **导入自建PostgreSQL数据**
+#### 导入自建PostgreSQL数据
 
-**重要**
-
-新建数据源前需开通[数据传输服务DTS](https://help.aliyun.com/zh/dts/product-overview/what-is-dts)。
+**重要**新建数据源前需开通[数据传输服务DTS](https://help.aliyun.com/zh/dts/product-overview/what-is-dts)。
 
 > **自建PostgreSQL限制：**
 
@@ -972,9 +905,9 @@ OSS
 
 > 仅支持部分地域的ECS实例。私网数据源在安全性和性能方面更具优势。
 
-**新建私网数据源**
+新建私网数据源
 
-1\. **填写数据源相关配置：**
+1.  **填写数据源相关配置：**
 
 **配置项**
 
@@ -1008,7 +941,7 @@ ecsId
 
 用于自建的pgsql实例的ecs实例的Id。
 
-2\. **连通性检测**：单击**开始检测**，对阿里云百炼与数据源之间的网络连通性进行检查。
+2.  **连通性检测**：单击**开始检测**，对阿里云百炼与数据源之间的网络连通性进行检查。
 
 > 首次提交任务时，请根据界面指引开通DTS服务关联角色，请使用主账号操作。如需使用RAM用户，需主账号为该RAM用户配置必要权限。
 
@@ -1036,7 +969,7 @@ VSwitch ID
 
 \- 入方向未设置任何访问限制。
 
-3\. 连通性检测通过后，单击**确认**，提交任务。系统将为您自动配置PostgreSQL数据源，期间当前业务空间会被锁定，禁止同时创建其他数据源。
+3.  连通性检测通过后，单击**确认**，提交任务。系统将为您自动配置PostgreSQL数据源，期间当前业务空间会被锁定，禁止同时创建其他数据源。
 
 > 在请求高峰时段，创建数据源过程可能需要几分钟，请耐心等待。
 
@@ -1052,39 +985,33 @@ VSwitch ID
 
 表示数据源创建失败。请检查各项参数是否正确，修改后单击重新创建数据源。您可单击删除，删除创建失败的数据源。
 
-## **查看连接器详情**
+## 查看连接器详情
 
 在[连接器列表页](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/connector/list)，单击目标连接器的**详情**按钮，进入连接器详情页。详情页包含以下标签页：
 
 -   **概览**:显示连接器的基本信息（名称、描述、类型、创建时间、存储配额等）和自动生成的工具列表。
-    
 -   **文件/表格**（仅平台托管类型）：管理连接器中的文件或表格数据。
-    
 -   **工具：**查看连接器自动生成的工具详情,包括参数说明和在线测试。
-    
 
 您可以在连接器详情页展开工具,填写参数后单击**运行**按钮，在线测试工具的返回结果。
 
-### **同步数据规则**
+### 同步数据规则
 
-在[文件类型数据连接器](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/connector/list)的**文件**页签下，可点击右上角的 **同步数据规则**\->**创建同步规则**进入页面创建规则。
+在[文件类型数据连接器](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/connector/list)的**文件**页签下，可点击右上角的**同步数据规则**\->**创建同步规则**进入页面创建规则。
 
 1.  选择数据同步的**类目**。
     
 2.  选择数据**同步来源**：
     
-    ### OSS
+    #### OSS
     
     通过阿里云服务关联角色（SLR）访问用户 Bucket，将 OSS 中的数据自动同步到百炼平台。
     
     **重要**
     
     -   OSS 同步基于阿里云服务关联角色（SLR）访问用户 Bucket，无需配置 AccessKey。首次使用前请确保已初始化[服务关联角色](https://help.aliyun.com/zh/ram/user-guide/service-linked-roles)，按界面提示完成授权。
-        
     -   对象路径列表需包含 Bucket 名称，例如：`my-bucket/docs/` 或 `my-bucket/docs/foo.md`。
-        
     -   当前账号需具备目标 Bucket 的读取权限，且需要为目标 Bucket 添加`bailian-datahub-access`标签（值为`read`）以供阿里云百炼访问。参见[管理存储空间标签](https://help.aliyun.com/zh/oss/user-guide/manage-bucket-tags)。
-        
     
     填写以下 OSS 对象信息：
     
@@ -1124,77 +1051,67 @@ VSwitch ID
     
     为同步的数据配置标签，便于后续分类管理。每个标签最多 32 个字符，支持中文、大小写英文字母、数字、下划线（\_）和中划线（-）。输入后按回车确认添加。
     
-    ### 飞书
+    #### 飞书
     
     通过飞书应用凭证访问飞书知识库和文档，将内容自动同步到百炼平台。如需了解如何创建飞书自建应用，请参见[飞书自建应用开发流程](https://open.feishu.cn/document/home/introduction-to-custom-app-development/self-built-application-development-process)。
     
     **重要**
     
     -   飞书文档同步前需在[飞书开放平台](https://open.feishu.cn/app)创建自建应用并获取 App ID 与 App Secret。
-        
     -   需要为应用开通知识库、云文档、电子表格相关的只读权限以及通讯录用户 ID 读取权限。
-        
     -   飞书知识库 ID、飞书目录 ID 和飞书文档 ID，必须填写一个。
-        
     -   支持同步飞书知识库下的文档（doc）、电子表格（xls）、多维表（bitable）、PPT 等节点，不支持本地上传文件。
-        
     
-    **1.创建飞书应用并获取凭证**
+    1.创建飞书应用并获取凭证
     
     1.  登录[飞书开放平台](https://open.feishu.cn/?lang=zh-CN)，在右上角单击**开发者后台**。进入后台后单击**创建企业自建应用**，填入**应用名称**、**应用描述**与**应用图标**，单击创建。
-        
     2.  在应用管理页面，找到**机器人**能力，单击**添加**。
-        
     3.  在左侧导航栏单击**权限管理**，进入页签后单击**批量导入/导出权限**，将以下JSON格式权限描述代码复制进**导入**页签中，单击**下一步，确认新增权限**，单击**申请开通**。
-        
-        ```
-        {
-          "scopes": {
-            "tenant": [
-              "aily:file:read",
-              "aily:file:write",
-              "application:application.app_message_stats.overview:readonly",
-              "application:application:self_manage",
-              "application:bot.menu:write",
-              "cardkit:card:write",
-              "contact:contact.base:readonly",
-              "contact:user.employee_id:readonly",
-              "corehr:file:download",
-              "docs:document.content:read",
-              "event:ip_list",
-              "im:chat",
-              "im:chat.access_event.bot_p2p_chat:read",
-              "im:chat.members:bot_access",
-              "im:message",
-              "im:message.group_at_msg:readonly",
-              "im:message.group_msg",
-              "im:message.p2p_msg:readonly",
-              "im:message:readonly",
-              "im:message:send_as_bot",
-              "im:resource",
-              "sheets:spreadsheet",
-              "wiki:wiki:readonly"
-            ],
-            "user": [
-              "aily:file:read",
-              "aily:file:write",
-              "im:chat.access_event.bot_p2p_chat:read"
-            ]
-          }
-        }
-        ```
-        
-    4.  进入**凭证与信息**页面，分别复制**App ID**和**App Secret**，后续需要使用。
-        
     
-    **2.为飞书应用配置访问知识库权限**
+    ```
+    {
+      "scopes": {
+        "tenant": [
+          "aily:file:read",
+          "aily:file:write",
+          "application:application.app_message_stats.overview:readonly",
+          "application:application:self_manage",
+          "application:bot.menu:write",
+          "cardkit:card:write",
+          "contact:contact.base:readonly",
+          "contact:user.employee_id:readonly",
+          "corehr:file:download",
+          "docs:document.content:read",
+          "event:ip_list",
+          "im:chat",
+          "im:chat.access_event.bot_p2p_chat:read",
+          "im:chat.members:bot_access",
+          "im:message",
+          "im:message.group_at_msg:readonly",
+          "im:message.group_msg",
+          "im:message.p2p_msg:readonly",
+          "im:message:readonly",
+          "im:message:send_as_bot",
+          "im:resource",
+          "sheets:spreadsheet",
+          "wiki:wiki:readonly"
+        ],
+        "user": [
+          "aily:file:read",
+          "aily:file:write",
+          "im:chat.access_event.bot_p2p_chat:read"
+        ]
+      }
+    }
+    ```
+    
+    4.  进入**凭证与信息**页面，分别复制**App ID**和**App Secret**，后续需要使用。
+    
+    2.为飞书应用配置访问知识库权限
     
     -   在飞书客户端创建一个群聊，并将应用添加至群聊中。
-        
     -   知识库管理员前往**知识库设置**\->**成员设置**\->**添加管理员**。
-        
     -   搜索包含机器人的群聊，添加该群为管理员。
-        
     
     填写以下飞书文档信息：
     
@@ -1269,103 +1186,71 @@ VSwitch ID
     **重要**
     
     -   飞书需要设置导出权限。
-        
     -   飞书不支持mindnote文档的导出。
-        
     
-    ### 钉钉
+    #### 钉钉
     
     通过以下步骤获取钉钉凭证信息，然后填入表单创建钉钉文档同步规则。
     
-    **1.创建钉钉应用**
+    1.创建钉钉应用
     
     1.  登录[钉钉开放平台](https://open-dev.dingtalk.com/)，选择您有开发者权限的组织，或者选择某个组织后，获取开发者权限。
-        
     2.  在顶部菜单栏，选择**应用开发**。
-        
     3.  在页面右侧，单击创建应用，填写应用名称和描述，然后点击**保存**，系统自动进入应用详情页。
-        
     
-    **2.为钉钉应用添加权限**
+    2.为钉钉应用添加权限
     
     同步数据之前，点击应用详情页中**开发配置**选项下的**权限管理**，搜索并开通以下权限：
     
     -   `Contact.User.Read`
-        
     -   `Wiki.Workspace.Read`
-        
     -   `Wiki.Node.Read`
-        
     -   `Document.Workbook.Read`
-        
     -   `Notable.Base.Read_All`
-        
     -   `qyapi_get_member`
-        
     
-    **3.发布应用**
+    3.发布应用
     
     1.  在应用详情的左侧导航栏，单击**版本管理与发布**。
-        
     2.  在页面右侧，单击**创建新版本**，填写版本号（例如 1.0.0）及版本描述。
-        
     3.  设置可见范围，例如**全部员工**。
-        
     4.  单击**保存**，然后确认发布。
-        
     
-    **4.获取应用 Client ID 和 Client Secret**
+    4.获取应用 Client ID 和 Client Secret
     
     1.  在左侧导航栏，单击**凭证与基础信息**。
-        
     2.  获取**Client ID**和**Client Secret**。
-        
     
-    **5.获取钉钉用户 ID**
+    5.获取钉钉用户 ID
     
     1.  访问[钉钉管理后台](https://oa.dingtalk.com/#/welcome)，使用**组织管理员账号**登录。
-        
     2.  在左侧导航栏单击**通讯录**\->**成员管理**。
-        
     3.  在成员列表中找到**员工UserID**列，复制目标用户的 UserID。
-        
     
-    **说明**
+    **说明**需要有组织的管理权限才能查看员工 UserID。
     
-    需要有组织的管理权限才能查看员工 UserID。
-    
-    **6.开通钉钉 MCP**
+    6.开通钉钉 MCP
     
     创建钉钉同步规则前，需要在[钉钉 MCP 广场](https://aihub.dingtalk.com/?spm=a2ty02.45883254.0.0.771474a12z3pnU#/mcp)开通以下 MCP 服务：
     
     -   **钉钉文档 MCP**：同步钉钉文档时需要开通。
-        
     -   **钉钉表格 MCP**：同步钉钉表格时需要开通。
-        
     
     获取 MCP Endpoint 的步骤：
     
     1.  访问[钉钉 MCP 广场](https://aihub.dingtalk.com/#/mcp)，分别找到钉钉文档和钉钉表格，单击进入详情页。
-        
     2.  在详情页单击获取 MCP Server 配置，复制对应的 MCP Endpoint 链接。
-        
     3.  将复制的链接分别填入表单的钉钉文档 MCP 链接和钉钉表格 MCP 链接字段。
-        
     
-    **7.获取钉钉知识库ID、文件夹 ID或文档 ID**
+    7.获取钉钉知识库ID、文件夹 ID或文档 ID
     
     表单中钉钉知识库 ID、钉钉文件夹 ID、钉钉文档 ID三者必须填写一项，用于指定同步的内容范围。可通过 URL 直接获取：
     
     -   钉钉知识库 ID：访问钉钉知识库首页，单击需要同步的知识库进入，浏览器地址栏 URL 末尾部分即为知识库 ID。
-        
     -   钉钉文件夹 ID：在知识库中单击对应文件夹，URL 末尾部分即为文件夹 ID。
-        
     -   钉钉文档 ID：在知识库中单击对应文档，URL 末尾部分即为文档 ID。
-        
     
-    **说明**
-    
-    三个 ID 决定同步范围：填写知识库 ID 同步整个知识库；填写文件夹 ID 同步该文件夹及其下属文档；填写文档 ID 仅同步单个文档。
+    **说明**三个 ID 决定同步范围：填写知识库 ID 同步整个知识库；填写文件夹 ID 同步该文件夹及其下属文档；填写文档 ID 仅同步单个文档。
     
     完成以上前置步骤后，填写**钉钉文档信息**：
     
@@ -1434,58 +1319,42 @@ VSwitch ID
     **重要**
     
     -   钉钉文档同步需获取钉钉开发资源消耗。[查看钉钉开发资源消耗情况及扩容](https://open-dev.dingtalk.com/fe/app#/corp/app)。
-        
     -   支持同步在钉钉知识库创建的钉钉文档、钉钉表格以及钉钉 AI 表格，不支持同步本地上传的文档和表格。
-        
     
-    #### **钉钉 API 调用数量说明**
+    #### 钉钉 API 调用数量说明
     
     每次同步会消耗钉钉开放平台 API 配额，消耗分为同步前校验和同步执行两个阶段，建议提前评估配额是否充足。
     
     **同步前校验**（任务启动时检查连通性、权限和资源是否存在）：
     
     -   账号鉴权：固定 1 次。
-        
     -   文档批量校验：每 30 个文档 1 次（不足 30 个也按 1 次计），再额外 1 次。
-        
     -   AI 表格存在性校验：每个 AI 表格 1 次。
-        
     -   知识库存在性校验：每个知识库 1 次。
-        
     
     **同步执行**（实际把内容拉取到百炼）：
     
     -   账号鉴权：固定 1 次。
-        
     -   知识库内容拉取：每个知识库 1 次。
-        
     -   AI 表格内容拉取：每个 AI 表格消耗 (Sheet 数 + 单/双向关联字段数) 次。
-        
     
     **示例**
     
     同步 1 个知识库（含 50 个文档）+ 2 个 AI 表格（每个 3 个 Sheet、2 个关联字段），合计调用次数：
     
     -   同步前校验：1 + (50/30 + 1) + 2 + 1 = 7 次。
-        
     -   同步执行：1 + 1 + 2 × (3 + 2) = 12 次。
-        
     -   总计约 19 次。
-        
     
-    **说明**
+    **说明**实际消耗可能因接口重试、错误回退等略有浮动，以上为典型估算。
     
-    实际消耗可能因接口重试、错误回退等略有浮动，以上为典型估算。
-    
-    ### SharePoint
+    #### SharePoint
     
     通过 Azure AD 应用注册获取凭证，将 SharePoint 中的文档和文件夹自动同步到百炼平台。
     
-    **重要**
+    **重要**SharePoint 同步功能目前仅对白名单用户开放。如需使用，请联系阿里云百炼团队申请开通。
     
-    SharePoint 同步功能目前仅对白名单用户开放。如需使用，请联系阿里云百炼团队申请开通。
-    
-    **前置条件：注册 Azure AD 应用并获取凭证**
+    前置条件：注册 Azure AD 应用并获取凭证
     
     1.  登录[Azure 门户](https://portal.azure.com/)，在顶部搜索栏中搜索**Microsoft Entra ID**（原 Azure Active Directory）并进入，或在首页单击**管理 Microsoft Entra ID**。
         
@@ -1500,20 +1369,15 @@ VSwitch ID
     6.  在左侧导航栏的**管理**下，单击**API 权限**，单击**添加权限**，选择**Microsoft Graph** -> **应用程序权限**，添加以下权限：
         
         -   `Sites.Read.All`：读取 SharePoint 站点中的文件。
-            
         -   `Files.Read.All`：读取文件内容。
-            
     7.  添加权限后，单击页面顶部的**代表 \[租户名\] 授予管理员同意**按钮完成授权。授权后权限状态将显示为"已为 \[租户名\] 授予"。
         
     
-    **获取 SharePoint 文档或文件夹分享链接**
+    获取 SharePoint 文档或文件夹分享链接
     
     1.  在 SharePoint 中打开需要同步的文档或文件夹。
-        
     2.  单击右上角的**共享**按钮，配置共享权限后获取分享链接。
-        
     3.  复制分享链接，填入表单中的**SharePoint 文档或文件夹分享链接列表**字段。多个链接之间用换行分隔。
-        
     
     填写以下 SharePoint 文档信息：
     
@@ -1573,16 +1437,14 @@ VSwitch ID
     
     填写完成后，点击**连接检测**验证连通性，通过后配置数据标签。
     
-    ### 语雀同步
+    #### 语雀同步
     
     通过语雀 Token 访问语雀文档和知识库，将内容自动同步到百炼平台。
     
-    **获取语雀 Token**
+    获取语雀 Token
     
     -   **个人 Token：**登录[语雀设置页面](https://www.yuque.com/settings/tokens)，新建并复制 Token。
-        
     -   **团队 Token：**进入团队空间 -> **团队设置** -> **开发者** -> **Tokens**，新建并复制 Token。
-        
     
     填写以下语雀文档信息：
     
@@ -1596,7 +1458,7 @@ VSwitch ID
     
     是
     
-    语雀完整的文档或知识库 URL 列表，如有多个用英文逗号（`,`）分隔。例如：`https://www.yuque.com/xionghuyi/xr0xqi,https://www.yuque.com/xionghuyi/xr0aax`。
+    语雀完整的文档或知识库 URL 列表，如有多个用英文逗号（`,`）分隔。例如：`[https://www.yuque.com/xionghuyi/xr0xqi,https://www.yuque.com/xionghuyi/xr0aax](https://www.yuque.com/xionghuyi/xr0xqi,https://www.yuque.com/xionghuyi/xr0aax)`。
     
     **语雀Token**
     
@@ -1661,7 +1523,7 @@ VSwitch ID
 -   `fileId`（string,必填）:文件ID。
     
 
-## **管理连接器**
+## 管理连接器
 
 -   **编辑**：点击卡片进入连接器详情页,单击右上角的**编辑**按钮，可以修改连接器的**名称**和**描述**。连接器类型和存储方式创建后不可更改。
     
@@ -1669,16 +1531,12 @@ VSwitch ID
     
 -   **删除**：在连接器列表页，单击目标连接器卡片上的**更多**图标（`···`），选择**删除**；或在连接器详情页单击**删除**按钮。
     
-    **重要**
-    
-    删除前需确认，**删除后无法恢复**。
+    **重要**删除前需确认，**删除后无法恢复**。
     
 
-**说明**
+**说明**知识库创建后，不支持修改关联的数据连接，已有知识库编辑页的**数据来源**为只读字段。如需使用新的数据连接，需重新创建知识库。
 
-知识库创建后，不支持修改关联的数据连接，已有知识库编辑页的**数据来源**为只读字段。如需使用新的数据连接，需重新创建知识库。
-
-## **在智能体中使用数据连接器**
+## 在智能体中使用数据连接器
 
 创建连接器后，在智能体应用中配置数据连接器工具，使智能体在对话中自动调用这些工具来查询和引用外部数据。
 
@@ -1687,16 +1545,12 @@ VSwitch ID
 2.  单击数据连接器区域的**+**按钮,在弹出的**选择数据连接器**对话框中：
     
     1.  浏览或搜索目标连接器，支持按连接器类型筛选。
-        
     2.  单击目标连接器的**添加**按钮。
-        
 
 -   添加后，连接器的工具会自动显示在配置列表中。您可以单击工具右侧的设置按钮调整参数。
-    
 -   **发布**智能体，即可在对话中自动调用这些工具。
-    
 
-## **在工作流中使用数据连接器**
+## 在工作流中使用数据连接器
 
 创建连接器后，您可以在工作流应用中添加数据连接器节点，使工作流在执行过程中调用连接器工具来查询外部数据，并将结果传递给下游节点处理。
 
@@ -1705,9 +1559,7 @@ VSwitch ID
 2.  在弹出的**选择数据连接器**对话框中：
     
     -   浏览或搜索目标连接器，支持按连接器类型（文件、表格、MySQL、PostgreSQL、语雀、OSS）筛选。
-        
     -   展开连接器，选择要使用的工具（如 searchFile、getFile），然后单击**确定**。
-        
 3.  配置节点输入：在节点配置面板的**输入**区域，为工具参数设置引用方式，将上游节点的输出或内置变量映射到工具所需的参数（如 fileId）。
     
 4.  连接节点：将数据连接器节点与上下游节点通过连线连接，确保数据流向正确。
@@ -1715,419 +1567,368 @@ VSwitch ID
 5.  节点输出为 result 对象，包含 content（Array<Object>，返回内容）和 isError（Boolean，是否发生错误）两个字段，供下游节点引用。
     
 
-**说明**
+**说明**工作流中每个数据连接器节点只能关联一个工具。如需使用同一连接器的多个工具，请添加多个数据连接器节点。
 
-工作流中每个数据连接器节点只能关联一个工具。如需使用同一连接器的多个工具，请添加多个数据连接器节点。
+## 相关文档
 
-## **相关文档**
+创建知识库导入数据源内容，用于后续检索：[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
 
-创建知识库导入数据源内容，用于后续检索：[创建和使用知识库](https://help.aliyun.com/zh/model-studio/rag-knowledge-base)。
+应用配置和使用指南：[应用类型介绍](raw/application-user-guide/llm-application/application-introduction.md)。
 
-应用配置和使用指南：[应用类型介绍](https://help.aliyun.com/zh/model-studio/application-introduction)。
+## 常见问题
 
-## **常见问题**
+### 权限与安全
 
-### **权限与安全**
+数据导入时，遇到报错“缺少该模块的权限”，应如何处理？
 
--   **数据导入时，遇到报错“缺少该模块的权限”，应如何处理？**
+[RAM用户](raw/model-user-guide/security-and-compliance/permission-management-overview.md)需主账号授予`管理员`权限，参见[页面权限](https://help.aliyun.com/zh/model-studio/member-management)。
+
+创建知识库时上传保密文件到公网数据连接器是否存在安全风险？
+
+数据连接器在传输环节通过公网链路进行数据传输，但全程使用 **HTTPS/TLS 加密通道**，数据在传输过程中为密文状态，即使链路被截获也无法解读。数据到达平台后直接写入**阿里云内网的安全存储**，外部无法通过公网直接访问这些存储资源。公网在此仅承担传输介质的角色，数据不会在公网落盘。
+
+文件导入后，将作为**独立副本**（与原始数据没有关联）存储在平台提供的安全存储空间中。导入的文件仅供**当前业务空间的用户**使用，阿里云百炼不会将其用于任何商业用途或对外公开。
+
+如果您对公网传输仍有顾虑，可以选择以下方案进一步提升安全性：
+
+-   **直接上传文件**：通过文件连接器直接上传本地文件，数据全程不经过公网链路，直接写入阿里云内网的安全存储。
+-   **使用私网数据源**：对于阿里云 RDS MySQL 或自建 MySQL 数据库，可选择私网（VPC）方式进行连接，数据通过内网传输，在安全性和性能方面更具优势。详见上方[私网数据源](https://help.aliyun.com/zh/model-studio/data-connection#b44fa3ac75xg6)说明。
+
+百炼知识库标准版与旗舰版在数据安全机制上完全一致：均具备用户级别隔离、仅限业务空间成员访问、传输采用 HTTPS/TLS 加密。两个版本的区别仅在于存储容量和功能上限，与安全性无关。
+
+### 文件解析
+
+文件解析耗时较长或偶现超时，如何处理？
+
+在流量高峰或并发较高时，文件解析可能因资源排队而延长耗时，偶现解析超时。建议避开高峰时段重试，或耐心等待任务完成。
+
+### 导入OSS文件
+
+从OSS导入文件配置说明
+
+首次从OSS导入文件时，需要授权阿里云百炼访问OSS资源。[主账号](raw/model-user-guide/security-and-compliance/permission-management-overview.md)与子账号的授权流程不同。
+
+#### 主账号授权
+
+1.  在导入数据页面，点击**前往授权**。
     
-    [RAM用户](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)需主账号授予`管理员`权限，参见[页面权限](https://help.aliyun.com/zh/model-studio/member-management#febd776ce5lbx)。
+2.  在弹出的对话框中，点击**确认授权**，系统将自动创建[OSS服务关联角色](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#2b75fc8a97g4c)，允许阿里云百炼访问OSS资源。
     
--   **创建知识库时上传保密文件到公网数据连接器是否存在安全风险？**
+    > 通常秒级生效（高峰期可能延迟）。
     
-    数据连接器在传输环节通过公网链路进行数据传输，但全程使用 **HTTPS/TLS 加密通道**，数据在传输过程中为密文状态，即使链路被截获也无法解读。数据到达平台后直接写入**阿里云内网的安全存储**，外部无法通过公网直接访问这些存储资源。公网在此仅承担传输介质的角色，数据不会在公网落盘。
+3.  为目标 OSS Bucket 添加`bailian-datahub-access`标签（值为`read`）。
     
-    文件导入后，将作为**独立副本**（与原始数据没有关联）存储在平台提供的安全存储空间中。导入的文件仅供**当前业务空间的用户**使用，阿里云百炼不会将其用于任何商业用途或对外公开。
+    > 该标签用于标记阿里云百炼可访问的 Bucket，未标记的 Bucket 阿里云百炼无法访问。
     
-    如果您对公网传输仍有顾虑，可以选择以下方案进一步提升安全性：
+    1.  访问[OSS管理控制台](https://oss.console.aliyun.com/)，点击左侧导航栏中的**Bucket 列表**，找到目标 Bucket。
+    2.  悬停鼠标在其![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0707990571/p978639.png)图标上，点击**编辑**（若未设置过标签）或**前往编辑**。
+    3.  在Bucket标签页面，点击**创建标签**（若未设置过标签）或**设置**。
+    4.  点击**标签**，添加标签名为`bailian-datahub-access`，标签值为`read`的标签，然后点击**保存**。
+4.  返回**导入数据**页面，重新选择目标 Bucket 再尝试导入。
     
-    -   **直接上传文件**：通过文件连接器直接上传本地文件，数据全程不经过公网链路，直接写入阿里云内网的安全存储。
+    > **注意：阿里云百炼不支持访问 Bucket 根目录下的文件**，请选择已有的子目录或新建一个子目录供阿里云百炼访问。
+    
+
+#### 子账号授权
+
+1.  在导入数据页面，点击**前往授权**。
+    
+2.  在弹出的对话框中，点击**确认授权**。若界面提示**授权失败**、**当前用户没有创建服务关联角色的权限**，需先授予子账号创建服务关联角色的权限。
+    
+    1.  **需主账号登录**[RAM控制台](https://ram.console.aliyun.com/)，在左侧导航栏，选择**权限管理权限策略**，然后点击页面上的**创建权限策略**。
+    2.  点击**脚本编辑**，将下方提供的完整JSON策略复制并粘贴至编辑框，点击**确定**。
+
+```
+{
+    "Action": [
+        "ram:CreateServiceLinkedRole"
+    ],
+    "Resource": "*",
+    "Effect": "Allow",
+    "Condition": {
+        "StringEquals": {
+            "ram:ServiceName": "datahub.sfm.aliyuncs.com"
+        }
+    }
+}
+```
+
+3.  输入权限策略名称（如服务关联角色）后，点击**确定**。
+    
+4.  在左侧导航栏，选择**身份管理用户**。在页面列表中找到待授权的子账号，然后点击子账号**操作**列的**添加权限**。
+    
+5.  在权限策略中选择刚才创建的权限策略（自定义策略），点击**确认新增授权**。至此，子账号拥有了创建服务关联角色的权限。
+    
+6.  授权子账号通过阿里云百炼访问OSS。
+    
+    1.  返回**导入数据**页面，点击**前往授权**。
         
-    -   **使用私网数据源**：对于阿里云 RDS MySQL 或自建 MySQL 数据库，可选择私网（VPC）方式进行连接，数据通过内网传输，在安全性和性能方面更具优势。详见上方[私网数据源](#b44fa3ac75xg6)说明。
-        
-    
-    百炼知识库标准版与旗舰版在数据安全机制上完全一致：均具备用户级别隔离、仅限业务空间成员访问、传输采用 HTTPS/TLS 加密。两个版本的区别仅在于存储容量和功能上限，与安全性无关。
-    
-
-### **文件解析**
-
--   **文件解析耗时较长或偶现超时，如何处理？**
-    
-    在流量高峰或并发较高时，文件解析可能因资源排队而延长耗时，偶现解析超时。建议避开高峰时段重试，或耐心等待任务完成。
-    
-
-### **导入OSS文件**
-
--   **从OSS导入文件配置说明**
-    
-    首次从OSS导入文件时，需要授权阿里云百炼访问OSS资源。[主账号](https://help.aliyun.com/zh/model-studio/permission-management-overview#24ca2dad7djzs)与子账号的授权流程不同。
-    
-    ## 主账号授权
-    
-    1.  在导入数据页面，点击**前往授权**。
-        
-    2.  在弹出的对话框中，点击**确认授权**，系统将自动创建[OSS服务关联角色](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#32a41eac73z64)，允许阿里云百炼访问OSS资源。
+    2.  在弹出的对话框中，点击**确认授权**，系统将自动创建[OSS服务关联角色](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#2b75fc8a97g4c)（必要条件）。
         
         > 通常秒级生效（高峰期可能延迟）。
         
-    3.  为目标 OSS Bucket 添加`bailian-datahub-access`标签（值为`read`）。
-        
-        > 该标签用于标记阿里云百炼可访问的 Bucket，未标记的 Bucket 阿里云百炼无法访问。
-        
-        1.  访问[OSS管理控制台](https://oss.console.aliyun.com/)，点击左侧导航栏中的**Bucket 列表**，找到目标 Bucket。
-            
-        2.  悬停鼠标在其![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0707990571/p978639.png)图标上，点击**编辑**（若未设置过标签）或**前往编辑**。
-            
-        3.  在Bucket标签页面，点击**创建标签**（若未设置过标签）或**设置**。
-            
-        4.  点击**标签**，添加标签名为`bailian-datahub-access`，标签值为`read`的标签，然后点击**保存**。
-            
-    4.  返回**导入数据**页面，重新选择目标 Bucket 再尝试导入。
-        
-        > **注意：阿里云百炼不支持访问 Bucket 根目录下的文件**，请选择已有的子目录或新建一个子目录供阿里云百炼访问。
-        
+7.  为目标 OSS Bucket 添加`bailian-datahub-access`标签，值为`read`。
     
-    ## **子账号授权**
+    > 该标签用于标记阿里云百炼可访问的 Bucket，未标记的 Bucket 阿里云百炼无法访问。
     
-    1.  在导入数据页面，点击**前往授权**。
-        
-    2.  在弹出的对话框中，点击**确认授权**。若界面提示**授权失败**、**当前用户没有创建服务关联角色的权限**，需先授予子账号创建服务关联角色的权限。
-        
-        1.  **需主账号登录**[RAM控制台](https://ram.console.aliyun.com/)，在左侧导航栏，选择**权限管理** > **权限策略**，然后点击页面上的**创建权限策略**。
-            
-        2.  点击**脚本编辑**，将下方提供的完整JSON策略复制并粘贴至编辑框，点击**确定**。
-            
-            ```
-            {
-                "Action": [
-                    "ram:CreateServiceLinkedRole"
-                ],
-                "Resource": "*",
-                "Effect": "Allow",
-                "Condition": {
-                    "StringEquals": {
-                        "ram:ServiceName": "datahub.sfm.aliyuncs.com"
-                    }
-                }
-            }
-            ```
-            
-        3.  输入权限策略名称（如服务关联角色）后，点击**确定**。
-            
-        4.  在左侧导航栏，选择**身份管理** > **用户**。在页面列表中找到待授权的子账号，然后点击子账号**操作**列的**添加权限**。
-            
-        5.  在权限策略中选择刚才创建的权限策略（自定义策略），点击**确认新增授权**。至此，子账号拥有了创建服务关联角色的权限。
-            
-    3.  授权子账号通过阿里云百炼访问OSS。
-        
-        1.  返回**导入数据**页面，点击**前往授权**。
-            
-        2.  在弹出的对话框中，点击**确认授权**，系统将自动创建[OSS服务关联角色](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#32a41eac73z64)（必要条件）。
-            
-            > 通常秒级生效（高峰期可能延迟）。
-            
-    4.  为目标 OSS Bucket 添加`bailian-datahub-access`标签，值为`read`。
-        
-        > 该标签用于标记阿里云百炼可访问的 Bucket，未标记的 Bucket 阿里云百炼无法访问。
-        
-        1.  访问[OSS管理控制台](https://oss.console.aliyun.com/)，点击左侧导航栏中的****Bucket 列表****，找到目标Bucket。
-            
-        2.  悬停鼠标在其![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0707990571/p978639.png)图标上，点击**编辑**（若未设置过标签）或**前往编辑**。
-            
-        3.  在Bucket标签页面，点击**创建标签**（若未设置过标签）或**设置**。
-            
-        4.  点击**标签**，添加标签名为`bailian-datahub-access`，标签值为`read`的标签，然后点击**保存**。
-            
-    5.  返回**导入数据**页面，重新选择目标 Bucket 再尝试导入。
-        
-        > **注意：阿里云百炼不支持访问 Bucket 根目录下的文件**，请选择已有的子目录或新建一个子目录供阿里云百炼访问。
-        
+    1.  访问[OSS管理控制台](https://oss.console.aliyun.com/)，点击左侧导航栏中的****Bucket 列表****，找到目标Bucket。
+    2.  悬停鼠标在其![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0707990571/p978639.png)图标上，点击**编辑**（若未设置过标签）或**前往编辑**。
+    3.  在Bucket标签页面，点击**创建标签**（若未设置过标签）或**设置**。
+    4.  点击**标签**，添加标签名为`bailian-datahub-access`，标签值为`read`的标签，然后点击**保存**。
+8.  返回**导入数据**页面，重新选择目标 Bucket 再尝试导入。
     
--   **导入OSS文件遇到“10041495”报错，应如何处理？**
-    
-    该报错由以下原因引起，按顺序排查：
-    
-    1.  主账号未开通OSS服务。需主账号前往[OSS管理控制台](https://oss.console.aliyun.com/)，按界面指引开通OSS。
-        
-    2.  目标OSS Bucket未添加`bailian-datahub-access`标签（值为`read`）。未添加该标签的Bucket阿里云百炼无法访问。前往[OSS管理控制台](https://oss.console.aliyun.com/bucket)Bucket标签页面，为目标Bucket添加标签。
-        
-    3.  完成上述操作后，返回阿里云百炼页面重新授权。
-        
+    > **注意：阿里云百炼不支持访问 Bucket 根目录下的文件**，请选择已有的子目录或新建一个子目录供阿里云百炼访问。
     
 
-### **导入MySQL数据**
+导入OSS文件遇到“10041495”报错，应如何处理？
 
--   **私网数据源支持哪些地域的RDS与ECS实例？**
+该报错由以下原因引起，按顺序排查：
+
+1.  主账号未开通OSS服务。需主账号前往[OSS管理控制台](https://oss.console.aliyun.com/)，按界面指引开通OSS。
+2.  目标OSS Bucket未添加`bailian-datahub-access`标签（值为`read`）。未添加该标签的Bucket阿里云百炼无法访问。前往[OSS管理控制台](https://oss.console.aliyun.com/bucket)Bucket标签页面，为目标Bucket添加标签。
+3.  完成上述操作后，返回阿里云百炼页面重新授权。
+
+### 导入MySQL数据
+
+私网数据源支持哪些地域的RDS与ECS实例？
+
+-   华东1（杭州）
+-   华东2（上海）
+-   华南1（深圳）
+-   华南2（河源）
+-   华南3（广州）
+-   华北1（青岛）
+-   华北2（北京）
+-   华北3（张家口）
+-   华北5（呼和浩特）
+-   华北6（乌兰察布）
+-   西南1（成都）
+
+我想使用RAM用户开通EventBridge服务关联角色，应如何为该RAM用户配置权限？
+
+1.  主账号为RAM用户配置如下三个系统策略：`AliyunBailianFullAccess`、`AliyunEventBridgeFullAccess`和`AliyunRDSReadOnlyAccess`。具体操作请参考[管理RAM用户的权限](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)。
     
-    -   华东1（杭州）
+2.  主账号为RAM用户配置**创建服务关联角色**系统策略。
+    
+    1.  使用主账号登录[RAM控制台](https://ram.console.aliyun.com/)，在左侧导航栏，选择**权限管理权限策略**，然后点击页面上的**创建权限策略**。
+    2.  在**脚本编辑**的`Effect`、`Action`、`Resource`、`Condition`中分别输入以下脚本中的对应内容后，点击**确定**。
+
+```
+{
+    "Version": "1",
+    "Statement": [
+        {
+            "Action": "ram:CreateServiceLinkedRole",
+            "Resource": "*",
+            "Effect": "Allow"
+        }
+    ]
+}
+```
+
+3.  输入权限策略名称`CreateServiceLinkedRole`后，点击**确定**。
+4.  在左侧导航栏，选择**身份管理用户**。从页面列表中找到待授权的RAM 用户，然后点击RAM 用户**操作**列的**添加权限**。
+5.  从**权限策略**列表中，选择刚创建的权限策略（CreateServiceLinkedRole），然后点击**确认新增授权**。至此，RAM 用户拥有了创建服务关联角色的权限。
+6.  完成以上步骤1和2后，返回**创建数据源**界面，使用RAM用户再尝试开通**EventBridge服务关联角色**。
+
+系统提示“数据库配置校验不通过，您选择的表数据量较大”，应如何处理？
+
+#### 阿里云RDS MySQL
+
+上方仅为示意图，提示中的建议项和建议值会根据您表中数据量不同而不同。若无对应建议项，则无需调整。
+
+以下步骤请使用阿里云账号（主账号）操作。
+
+-   **如何配置本地日志保留时长：**
+    1.  前往[RDS控制台](https://rdsnext.console.aliyun.com/)，点击左侧导航栏中的**实例列表**，然后点击包含该数据表的RDS实例。接着点击左侧导航栏中的**备份恢复**，再点击**备份策略**选项卡，即可看到**保留时长**设置项。
+    2.  修改**保留时长**为提示中提供的建议值。
+-   **如何配置wait\_timeout：**
+    1.  前往[RDS控制台](https://rdsnext.console.aliyun.com/)，点击左侧导航栏中的**实例列表**，然后点击包含数据表的RDS实例。接着点击左侧导航栏中的**参数设置**，再点击**可修改参数**选项卡，即可看到`wait_timeout`设置项。
+    2.  改为提示中提供的建议值。
+
+#### 自建MySQL
+
+> 仅为示意图，提示中的建议项和建议值会根据您表中数据量不同而不同。若无对应建议项，则无需调整。
+
+-   **如何设置本地日志保留时长：**
+    -   方式一（临时生效）：通过执行SET GLOBAL命令修改`expire_logs_days`（MySQL 5.7及以下版本）或`binlog_expire_logs_seconds`（MySQL 8.0及以上版本），该修改将在下次MySQL重启后失效。
         
-    -   华东2（上海）
+        #### MySQL 5.7及以下版本
         
-    -   华南1（深圳）
+        1.  执行命令：
+            
+            > 请将下方参数值 15 替换为提示中提供的建议值。
+            
         
-    -   华南2（河源）
+        ```
+        SET GLOBAL expire_logs_days = 15;
+        ```
         
-    -   华南3（广州）
+        2.  验证修改是否已生效，执行命令：
         
-    -   华北1（青岛）
+        ```
+        SHOW VARIABLES LIKE 'expire_logs_days';
+        ```
         
-    -   华北2（北京）
+        #### MySQL 8.0及以上版本
         
-    -   华北3（张家口）
+        1.  执行命令：
+            
+            > 请将下方参数值 1296000 替换为提示中提供的建议值。
+            
         
-    -   华北5（呼和浩特）
+        ```
+        SET GLOBAL binlog_expire_logs_seconds = 1296000;
+        ```
         
-    -   华北6（乌兰察布）
+        2.  验证修改是否已生效，执行命令：
         
-    -   西南1（成都）
+        ```
+        SHOW VARIABLES LIKE 'binlog_expire_logs_seconds';
+        ```
         
+    -   方式二（永久生效）：通过MySQL配置文件设置`expire_logs_days`（MySQL 5.7及以下版本）或`binlog_expire_logs_seconds`（MySQL 8.0及以上版本），但该方式需重启MySQL服务。
+        
+        #### MySQL 5.7及以下版本
+        
+        1.  以Linux系统为例，MySQL配置文件一般位于：/etc/my.cnf 或 /etc/mysql/my.cnf。若文件中已包含`expire_logs_days`，可直接修改；若不存在，请手动添加。
+            
+            > 请将下方参数值 15 替换为提示中提供的建议值。
+            
+        
+        ```
+        [mysqld]
+        expire_logs_days = 15
+        ```
+        
+        2.  保存配置文件后，请您手动重启MySQL服务。
+        3.  验证修改是否已生效，执行命令：
+        
+        ```
+        SHOW VARIABLES LIKE 'expire_logs_days';
+        ```
+        
+        #### MySQL 8.0及以上版本
+        
+        1.  以Linux系统为例，MySQL配置文件一般位于：/etc/my.cnf 或 /etc/mysql/my.cnf。若文件中已包含`binlog_expire_logs_seconds`，可直接修改；若不存在，请手动添加。
+            
+            > 请将下方参数值 15 替换为提示中提供的建议值。
+            
+        
+        ```
+        [mysqld]
+        binlog_expire_logs_seconds = 1296000
+        ```
+        
+        2.  保存配置文件后，请您手动重启MySQL服务。
+        3.  验证修改是否已生效，执行命令：
+        
+        ```
+        SHOW VARIABLES LIKE 'binlog_expire_logs_seconds';
+        ```
+        
+-   **如何设置wait\_timeout：**
+    -   方式一（临时生效）：通过执行SET GLOBAL命令修改`wait_timeout`（单位是秒），该修改将在下次MySQL重启后失效。
+        
+        1.  执行命令：
+            
+            > 请将下方参数值 1159200 替换为提示中提供的建议值。
+            
+            > 该命令将影响所有新建立的连接。已存在的连接不受此设置影响。
+            
+
+```
+SET GLOBAL wait_timeout = 1159200;
+```
+
+2.  验证修改是否已生效，执行命令：
+
+```
+SHOW VARIABLES LIKE 'wait_timeout';
+```
+
+-   方式二（永久生效）：通过MySQL配置文件设置`wait_timeout`（单位是秒），但该方式需重启MySQL服务。
+    
+    1.  以Linux系统为例，MySQL配置文件一般位于：/etc/my.cnf 或 /etc/mysql/my.cnf。若文件中已包含`wait_timeout`，可直接修改；若不存在，请手动添加。
+        
+        > 请将下方参数值 1159200 替换为提示中提供的`wait_timeout`建议值。
+        
+
+```
+[mysqld]
+wait_timeout = 1159200
+```
+
+2.  保存配置文件后，请您手动重启MySQL服务。
+3.  验证修改是否已生效，执行命令：
+
+```
+SHOW VARIABLES LIKE 'wait_timeout';
+```
+
+创建数据源时遇到CHECK\_BINLOG\_FORMAT、CHECK\_ENFORCE\_GTID\_MODE或CHECK\_GTID\_CONSISTENCY报错，应如何处理？
+
+这些报错表示您的MySQL数据库配置不满足数据连接器的前置要求。系统在创建数据源时会自动校验以下配置项：
+
+**报错代码**
+
+**含义**
+
+**期望值**
+
+`CHECK_BINLOG_FORMAT`
+
+Binlog格式需要为ROW模式
+
+`binlog_format=ROW`
+
+`CHECK_ENFORCE_GTID_MODE`
+
+需要开启GTID模式
+
+`gtid_mode=ON`
+
+`CHECK_GTID_CONSISTENCY`
+
+需要开启GTID一致性约束
+
+`enforce_gtid_consistency=ON`
+
+**解决方法：**
+
+#### 阿里云RDS MySQL
+
+1.  前往[RDS控制台](https://rdsnext.console.aliyun.com/)，点击左侧导航栏中的**实例列表**，然后点击目标RDS实例。
+    
+2.  点击左侧导航栏中的**参数设置**，在**可修改参数**选项卡中，将以下参数修改为对应的期望值：
+    
+    -   `binlog_format`设为`ROW`
+    -   `gtid_mode`设为`ON`
+    -   `enforce_gtid_consistency`设为`ON`
+3.  提交参数修改后，根据提示重启RDS实例使配置生效。
     
 
--   **我想使用RAM用户开通EventBridge服务关联角色，应如何为该RAM用户配置权限？**
-    
-    1.  主账号为RAM用户配置如下三个系统策略：`AliyunBailianFullAccess`、`AliyunEventBridgeFullAccess`和`AliyunRDSReadOnlyAccess`。具体操作请参考[管理RAM用户的权限](https://help.aliyun.com/zh/ram/user-guide/grant-permissions-to-the-ram-user)。
-        
-    2.  主账号为RAM用户配置**创建服务关联角色**系统策略。
-        
-        1.  使用主账号登录[RAM控制台](https://ram.console.aliyun.com/)，在左侧导航栏，选择**权限管理** > **权限策略**，然后点击页面上的**创建权限策略**。
-            
-        2.  在**脚本编辑**的`Effect`、`Action`、`Resource`、`Condition`中分别输入以下脚本中的对应内容后，点击**确定**。
-            
-            ```
-            {
-                "Version": "1",
-                "Statement": [
-                    {
-                        "Action": "ram:CreateServiceLinkedRole",
-                        "Resource": "*",
-                        "Effect": "Allow"
-                    }
-                ]
-            }
-            ```
-            
-        3.  输入权限策略名称`CreateServiceLinkedRole`后，点击**确定**。
-            
-        4.  在左侧导航栏，选择**身份管理** > **用户**。从页面列表中找到待授权的RAM 用户，然后点击RAM 用户**操作**列的**添加权限**。
-            
-        5.  从**权限策略**列表中，选择刚创建的权限策略（CreateServiceLinkedRole），然后点击**确认新增授权**。至此，RAM 用户拥有了创建服务关联角色的权限。
-            
-    3.  完成以上步骤1和2后，返回**创建数据源**界面，使用RAM用户再尝试开通**EventBridge服务关联角色**。
-        
-    
+> 修改`gtid_mode`和`enforce_gtid_consistency`需要重启实例。请在业务低峰期操作，避免影响在线业务。
 
--   **系统提示“数据库配置校验不通过，您选择的表数据量较大”，应如何处理？**
-    
-    ## 阿里云RDS MySQL
-    
-    上方仅为示意图，提示中的建议项和建议值会根据您表中数据量不同而不同。若无对应建议项，则无需调整。
-    
-    以下步骤请使用阿里云账号（主账号）操作。
-    
-    -   **如何配置本地日志保留时长：**
-        
-        1.  前往[RDS控制台](https://rdsnext.console.aliyun.com/)，点击左侧导航栏中的**实例列表**，然后点击包含该数据表的RDS实例。接着点击左侧导航栏中的**备份恢复**，再点击**备份策略**选项卡，即可看到**保留时长**设置项。
-            
-        2.  修改**保留时长**为提示中提供的建议值。
-            
-    -   **如何配置wait\_timeout：**
-        
-        1.  前往[RDS控制台](https://rdsnext.console.aliyun.com/)，点击左侧导航栏中的**实例列表**，然后点击包含数据表的RDS实例。接着点击左侧导航栏中的**参数设置**，再点击**可修改参数**选项卡，即可看到`wait_timeout`设置项。
-            
-        2.  改为提示中提供的建议值。
-            
-    
-    ## 自建MySQL
-    
-    > 仅为示意图，提示中的建议项和建议值会根据您表中数据量不同而不同。若无对应建议项，则无需调整。
-    
-    -   **如何设置本地日志保留时长：**
-        
-        -   方式一（临时生效）：通过执行SET GLOBAL命令修改`expire_logs_days`（MySQL 5.7及以下版本）或`binlog_expire_logs_seconds`（MySQL 8.0及以上版本），该修改将在下次MySQL重启后失效。
-            
-            ## MySQL 5.7及以下版本
-            
-            1.  执行命令：
-                
-                > 请将下方参数值 15 替换为提示中提供的建议值。
-                
-                ```
-                SET GLOBAL expire_logs_days = 15;
-                ```
-                
-            2.  验证修改是否已生效，执行命令：
-                
-                ```
-                SHOW VARIABLES LIKE 'expire_logs_days';
-                ```
-                
-            
-            ## MySQL 8.0及以上版本
-            
-            1.  执行命令：
-                
-                > 请将下方参数值 1296000 替换为提示中提供的建议值。
-                
-                ```
-                SET GLOBAL binlog_expire_logs_seconds = 1296000;
-                ```
-                
-            2.  验证修改是否已生效，执行命令：
-                
-                ```
-                SHOW VARIABLES LIKE 'binlog_expire_logs_seconds';
-                ```
-                
-            
-        -   方式二（永久生效）：通过MySQL配置文件设置`expire_logs_days`（MySQL 5.7及以下版本）或`binlog_expire_logs_seconds`（MySQL 8.0及以上版本），但该方式需重启MySQL服务。
-            
-            ## MySQL 5.7及以下版本
-            
-            1.  以Linux系统为例，MySQL配置文件一般位于：/etc/my.cnf 或 /etc/mysql/my.cnf。若文件中已包含`expire_logs_days`，可直接修改；若不存在，请手动添加。
-                
-                > 请将下方参数值 15 替换为提示中提供的建议值。
-                
-                ```
-                [mysqld]
-                expire_logs_days = 15
-                ```
-                
-            2.  保存配置文件后，请您手动重启MySQL服务。
-                
-            3.  验证修改是否已生效，执行命令：
-                
-                ```
-                SHOW VARIABLES LIKE 'expire_logs_days';
-                ```
-                
-            
-            ## MySQL 8.0及以上版本
-            
-            1.  以Linux系统为例，MySQL配置文件一般位于：/etc/my.cnf 或 /etc/mysql/my.cnf。若文件中已包含`binlog_expire_logs_seconds`，可直接修改；若不存在，请手动添加。
-                
-                > 请将下方参数值 15 替换为提示中提供的建议值。
-                
-                ```
-                [mysqld]
-                binlog_expire_logs_seconds = 1296000
-                ```
-                
-            2.  保存配置文件后，请您手动重启MySQL服务。
-                
-            3.  验证修改是否已生效，执行命令：
-                
-                ```
-                SHOW VARIABLES LIKE 'binlog_expire_logs_seconds';
-                ```
-                
-            
-    -   **如何设置wait\_timeout：**
-        
-        -   方式一（临时生效）：通过执行SET GLOBAL命令修改`wait_timeout`（单位是秒），该修改将在下次MySQL重启后失效。
-            
-            1.  执行命令：
-                
-                > 请将下方参数值 1159200 替换为提示中提供的建议值。
-                
-                > 该命令将影响所有新建立的连接。已存在的连接不受此设置影响。
-                
-                ```
-                SET GLOBAL wait_timeout = 1159200;
-                ```
-                
-            2.  验证修改是否已生效，执行命令：
-                
-                ```
-                SHOW VARIABLES LIKE 'wait_timeout';
-                ```
-                
-        -   方式二（永久生效）：通过MySQL配置文件设置`wait_timeout`（单位是秒），但该方式需重启MySQL服务。
-            
-            1.  以Linux系统为例，MySQL配置文件一般位于：/etc/my.cnf 或 /etc/mysql/my.cnf。若文件中已包含`wait_timeout`，可直接修改；若不存在，请手动添加。
-                
-                > 请将下方参数值 1159200 替换为提示中提供的`wait_timeout`建议值。
-                
-                ```
-                [mysqld]
-                wait_timeout = 1159200
-                ```
-                
-            2.  保存配置文件后，请您手动重启MySQL服务。
-                
-            3.  验证修改是否已生效，执行命令：
-                
-                ```
-                SHOW VARIABLES LIKE 'wait_timeout';
-                ```
-                
-    
+#### 自建MySQL
 
--   **创建数据源时遇到CHECK\_BINLOG\_FORMAT、CHECK\_ENFORCE\_GTID\_MODE或CHECK\_GTID\_CONSISTENCY报错，应如何处理？**
-    
-    这些报错表示您的MySQL数据库配置不满足数据连接器的前置要求。系统在创建数据源时会自动校验以下配置项：
-    
-    **报错代码**
-    
-    **含义**
-    
-    **期望值**
-    
-    `CHECK_BINLOG_FORMAT`
-    
-    Binlog格式需要为ROW模式
-    
-    `binlog_format=ROW`
-    
-    `CHECK_ENFORCE_GTID_MODE`
-    
-    需要开启GTID模式
-    
-    `gtid_mode=ON`
-    
-    `CHECK_GTID_CONSISTENCY`
-    
-    需要开启GTID一致性约束
-    
-    `enforce_gtid_consistency=ON`
-    
-    **解决方法：**
-    
-    ## 阿里云RDS MySQL
-    
-    1.  前往[RDS控制台](https://rdsnext.console.aliyun.com/)，点击左侧导航栏中的**实例列表**，然后点击目标RDS实例。
-        
-    2.  点击左侧导航栏中的**参数设置**，在**可修改参数**选项卡中，将以下参数修改为对应的期望值：
-        
-        -   `binlog_format`设为`ROW`
-            
-        -   `gtid_mode`设为`ON`
-            
-        -   `enforce_gtid_consistency`设为`ON`
-            
-    3.  提交参数修改后，根据提示重启RDS实例使配置生效。
-        
-    
-    > 修改`gtid_mode`和`enforce_gtid_consistency`需要重启实例。请在业务低峰期操作，避免影响在线业务。
-    
-    ## 自建MySQL
-    
-    修改MySQL配置文件（以Linux系统为例，一般位于：/etc/my.cnf 或 /etc/mysql/my.cnf），在`[mysqld]`段中添加或修改以下配置项：
-    
-    ```
-    [mysqld]
-    binlog_format=ROW
-    gtid_mode=ON
-    enforce_gtid_consistency=ON
-    ```
-    
-    保存配置文件后，重启MySQL服务使配置生效：
-    
-    ```
-    sudo systemctl restart mysqld
-    ```
-    
-    重启后，可通过以下命令验证配置是否已生效：
-    
-    ```
-    SHOW VARIABLES WHERE Variable_name IN ('binlog_format', 'gtid_mode', 'enforce_gtid_consistency');
-    ```
+修改MySQL配置文件（以Linux系统为例，一般位于：/etc/my.cnf 或 /etc/mysql/my.cnf），在`[mysqld]`段中添加或修改以下配置项：
+
+```
+[mysqld]
+binlog_format=ROW
+gtid_mode=ON
+enforce_gtid_consistency=ON
+```
+
+保存配置文件后，重启MySQL服务使配置生效：
+
+```
+sudo systemctl restart mysqld
+```
+
+重启后，可通过以下命令验证配置是否已生效：
+
+```
+SHOW VARIABLES WHERE Variable_name IN ('binlog_format', 'gtid_mode', 'enforce_gtid_consistency');
+```

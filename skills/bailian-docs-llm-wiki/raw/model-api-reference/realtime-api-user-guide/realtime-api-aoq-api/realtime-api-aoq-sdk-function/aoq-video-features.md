@@ -2,16 +2,14 @@
 
 AOQ Client SDK 提供了完整的视频能力，覆盖视频采集、渲染显示、编码配置、帧数据回调、外部视频输入等核心场景。本文档基于 Android（Java）、iOS（Objective-C）、Ohos（ArkTS）三个平台的公开 API，对视频常用功能进行统一介绍。
 
-## **1\. 视频采集**
+## 1\. 视频采集
 
 ### 1.1 功能说明
 
 视频采集用于打开设备摄像头，将实时视频帧数据送入 SDK 编码推流管线。SDK 支持两种采集模式：
 
 -   **内部采集（默认）**：SDK 自动管理摄像头设备的打开、帧采集和关闭，支持前后置摄像头切换。
-    
 -   **外部采集**：由应用自行管理摄像头或其他视频源，采集到的帧数据通过 `pushExternalVideoCapturedFrame` 接口输入 SDK。
-    
 
 ### 1.2 采集配置参数
 
@@ -120,7 +118,6 @@ switchCamera(direction)
 ### 1.5 使用示例
 
 **Android**
-
 ```
 AoqVideoCaptureConfig config = new AoqVideoCaptureConfig();
 config.width = 1280;
@@ -129,9 +126,7 @@ config.fps = 15;
 config.cameraDirection = AoqCameraDirection.AoqCameraDirectionFront;
 engine.startVideoCapture(config);
 ```
-
 **iOS**
-
 ```
 AoqVideoCaptureConfig *config = [[AoqVideoCaptureConfig alloc] init];
 config.width = 1280;
@@ -140,9 +135,7 @@ config.fps = 15;
 config.cameraDirection = AoqCameraDirectionFront;
 [engine startVideoCapture:config];
 ```
-
 **Ohos**
-
 ```
 let config: AoqVideoCaptureConfig = {
   width: 1280,
@@ -153,7 +146,7 @@ let config: AoqVideoCaptureConfig = {
 engine.startVideoCapture(config);
 ```
 
-## **2\. 视频渲染**
+## 2\. 视频渲染
 
 ### 2.1 功能说明
 
@@ -243,11 +236,9 @@ setRemoteView:trackType:canvas:
 
 setRemoteView(trackType, canvas)
 
-**说明**
+**说明****平台差异**：Android 使用 SurfaceView 或 TextureView 作为渲染容器；iOS 使用 UIView（内部通过 AoqRenderView 封装，支持 Metal 加速）；Ohos 使用 XComponent（通过 AoqXComponentController 管理 native 渲染视图）。
 
-**平台差异**：Android 使用 SurfaceView 或 TextureView 作为渲染容器；iOS 使用 UIView（内部通过 AoqRenderView 封装，支持 Metal 加速）；Ohos 使用 XComponent（通过 AoqXComponentController 管理 native 渲染视图）。
-
-## **3\. 视频编码配置**
+## 3\. 视频编码配置
 
 ### 3.1 功能说明
 
@@ -435,16 +426,14 @@ setVideoEncoderConfig:
 
 setVideoEncoderConfig(config)
 
-## **4\. 外部视频帧输入**
+## 4\. 外部视频帧输入
 
 ### 4.1 功能说明
 
 外部视频帧输入允许应用将自定义的视频帧数据推送到 SDK，用于外部采集或外部编码场景。支持两种推送方式：
 
 -   **推送原始帧**：将未编码的像素数据（I420/NV12/NV21/BGRA/RGBA 等格式）推送给 SDK，由 SDK 进行编码。
-    
 -   **推送已编码帧**：将已编码的数据（如 JPEG）直推给 SDK，SDK 不做二次编码，直接打包发送。
-    
 
 通过 `trackType` 路由，`AoqTrackTypeVideo` 对应视频采集的外部帧，`AoqTrackTypeScreen` 对应屏幕共享的外部帧。
 
@@ -672,7 +661,7 @@ pushExternalVideoEncodedFrame:frame:
 
 pushExternalVideoEncodedFrame(trackType, frame)
 
-## **5\. 视频帧数据回调**
+## 5\. 视频帧数据回调
 
 ### 5.1 功能说明
 
@@ -787,11 +776,8 @@ AoqVideoObserverAlignment16
 ### 5.5 使用步骤
 
 1.  **注册观察者**：调用 `setVideoFrameObserver` 设置视频帧回调监听器
-    
 2.  **启用数据源**：调用 `enableVideoFrameObserver` 选择需要监听的数据源位置，开启回调
-    
 3.  **处理回调数据**：在回调函数中获取帧数据（仅回调期间有效，异步使用需自行拷贝）
-    
 
 ### 5.6 API 对照
 
@@ -853,11 +839,9 @@ onRemoteVideoFrame:frame:
 
 onRemoteVideoFrame(trackType, frame)
 
-**说明**
+**说明**回调方法返回 `true`/`YES` 表示数据已修改、需写回 SDK（仅 ReadWrite 模式且 I420 格式时生效）。
 
-回调方法返回 `true`/`YES` 表示数据已修改、需写回 SDK（仅 ReadWrite 模式且 I420 格式时生效）。
-
-## **7\. 媒体流发送控制**
+## 7\. 媒体流发送控制
 
 ### 7.1 功能说明
 
@@ -907,7 +891,7 @@ AoqTrackTypeData
 
 数据轨道
 
-## **8\. 视频设备状态监控**
+## 8\. 视频设备状态监控
 
 ### 8.1 功能说明
 
@@ -975,7 +959,7 @@ onVideoDeviceStateChanged:
 
 onVideoDeviceStateChanged(state)
 
-## **9\. 视频错误码与警告码**
+## 9\. 视频错误码与警告码
 
 ### 9.1 视频错误码
 
@@ -1063,9 +1047,7 @@ Screen
 
 屏幕共享通用错误
 
-**说明**
-
-Android 额外错误码：ScreenPermissionDenied(310) 屏幕共享权限被拒绝、ScreenForegroundServiceFailed(311) 前台服务启动失败。
+**说明**Android 额外错误码：ScreenPermissionDenied(310) 屏幕共享权限被拒绝、ScreenForegroundServiceFailed(311) 前台服务启动失败。
 
 ### 9.2 视频警告码
 
@@ -1099,7 +1081,7 @@ RenderDowngrade
 
 渲染降级警告
 
-## **附录：完整视频 API 方法列表**
+## 附录：完整视频 API 方法列表
 
 **分类**
 

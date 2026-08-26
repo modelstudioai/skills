@@ -1,6 +1,6 @@
 # AI 解题 + 批改：推动课程教学智变
 
-# AI 解题 + 批改：推动课程教学智变
+## AI 解题 + 批改：推动课程教学智变
 
 针对学生课后答疑找人难、教师人工批改负担重等痛点，本方案基于 Qwen3-VL 系列视觉模型，凭借领先的图像理解与多模态推理能力，实现题目的准确解答与高效批改。开箱即用，无需自建基础设施，支持弹性伸缩与按需付费。
 
@@ -18,15 +18,15 @@
 
 ## AI 打造辅学新模式
 
-传统教辅效率低
+![AI性能](https://help-static-aliyun-doc.aliyuncs.com/assets/tech-solution-images/icons/ai-performance%402x.png)**传统教辅效率低**
 
 传统教辅应用受限于预置题库，讲解千篇一律，学生虽然搜到了答案，却难以学到解题思路，遇到变式题时依然无从下手。
 
-**人工批改负担重**
+![安全性](https://help-static-aliyun-doc.aliyuncs.com/assets/tech-solution-images/icons/security%402x.png)**人工批改负担重**
 
 人工作业批改模式需要教师投入大量时间和精力，不仅延误了学生的及时反馈，也严重挤占了教师的备课和个性化教学时间。
 
-**课业辅助全面升级**
+![安全与隐私](https://help-static-aliyun-doc.aliyuncs.com/assets/tech-solution-images/icons/security-privacy%402x.png)**课业辅助全面升级**
 
 依托 Qwen3-VL 模型，解题不只给答案，更能循序拆解，帮助学生掌握解题方法；作业批改只需数分钟，助力教师减负增效。
 
@@ -34,7 +34,9 @@
 
 ## 解锁智慧学习新体验
 
-### **领先的模型**
+![all-15fps-hq-v2](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/9502962771/p1057191.webp)
+
+### 领先的模型
 
 基于 Qwen3-VL 系列视觉模型，在 MathVista、MMMU 等权威评测中达到领域 SOTA 水平，是一位“善分析、会教方法”的专业教师。
 
@@ -62,6 +64,8 @@
 
 1 元（阿里云百炼和函数计算提供了免费试用额度；如果免费试用额度已耗尽，按照本方案标准体验流程操作一次，费用不超过 1 元。）
 
+![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5493242771/p1055260.png)
+
 对象存储函数计算大模型服务平台百炼
 
 [立即部署](https://www.aliyun.com/solution/tech-solution-deploy/3023071)
@@ -70,15 +74,15 @@
 
 ## 技术方案的广泛应用场景
 
-课后答疑
+![课后答疑@2x](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5493242771/p1055436.png)**课后答疑**
 
 拍照上传习题图片，即可获取对应的详细解析。如同拥有一位随时在线的专业导师，让优质教育资源触手可及。
 
-题库生成
+![题库生成@2x](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5493242771/p1055437.png)**题库生成**
 
 拍照即可将纸质或手写题目转化为数字资源，自动生成标准答案、解析思路和知识点讲解，轻松构建题库。
 
-智能教辅
+![智能教辅@2x](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5493242771/p1055438.png)**智能教辅**
 
 将纸质教辅转化为智能学习助手。扫描或拍照即可获得详细解析和知识点学习建议，助力出版社拓展数字化服务。
 

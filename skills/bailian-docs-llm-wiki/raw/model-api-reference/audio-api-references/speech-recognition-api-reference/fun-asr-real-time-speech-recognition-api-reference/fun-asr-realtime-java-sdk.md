@@ -2,29 +2,26 @@
 
 本文介绍Qwen-Audio-3.0-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Java SDK的参数和接口细节。
 
-**用户指南：**关于模型介绍和选型建议请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model/)。
+**用户指南：**关于模型介绍和选型建议请参见[语音识别](raw/model-user-guide/model-experience/asr-model.md)。
 
-## **前提条件**
+## 前提条件
 
--   已开通服务并[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
-    
--   [安装最新版DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
-    
+已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
 
-## **快速开始**
+-   [安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-[Recognition类](#bc8d131a37dmm)提供了非流式调用和双向流式调用等接口。请根据实际需求选择合适的调用方式：
+## 快速开始
+
+[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#adcb5e9bddbyq)提供了非流式调用和双向流式调用等接口。请根据实际需求选择合适的调用方式：
 
 -   非流式调用：针对本地文件进行识别，并一次性返回完整的处理结果。适合处理录制好的音频。
-    
 -   双向流式调用：可直接对音频流进行识别，并实时输出结果。音频流可以来自外部设备（如麦克风）或从本地文件读取。适合需要即时反馈的场景。
-    
 
 ### 非流式调用
 
 提交单个语音实时转写任务，通过传入本地文件的方式同步阻塞地拿到转写结果。
 
-实例化[Recognition类](#bc8d131a37dmm)，调用`call`方法绑定[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-java-sdk#d72d661a1brzp)和待识别文件，进行识别并最终获取识别结果。
+实例化[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#adcb5e9bddbyq)，调用`call`方法绑定[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-java-sdk#d72d661a1brzp)和待识别文件，进行识别并最终获取识别结果。
 
 点击查看完整示例
 
@@ -73,32 +70,32 @@ public class Main {
 }
 ```
 
-### 双向**流式调用：基于回调**
+### 双向流式调用：基于回调
 
 提交单个语音实时转写任务，通过实现回调接口的方式流式输出实时识别结果。
 
 1.  启动流式语音识别
     
-    实例化[Recognition类](#bc8d131a37dmm)，调用`call`方法绑定[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-java-sdk#d72d661a1brzp)和[回调接口（ResultCallback）](#1b5d714c36kuz)并启动流式语音识别。
+    实例化[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#adcb5e9bddbyq)，调用`call`方法绑定[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-java-sdk#d72d661a1brzp)和[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#3639e1cb40mxi)并启动流式语音识别。
     
 2.  流式传输
     
-    循环调用[Recognition类](#bc8d131a37dmm)的`sendAudioFrame`方法，将从本地文件或设备（如麦克风）读取的二进制音频流分段发送至服务端。
+    循环调用[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#adcb5e9bddbyq)的`sendAudioFrame`方法，将从本地文件或设备（如麦克风）读取的二进制音频流分段发送至服务端。
     
-    在发送音频数据的过程中，服务端会通过[回调接口（ResultCallback）](#1b5d714c36kuz)的`onEvent`方法，将识别结果实时返回给客户端。
+    在发送音频数据的过程中，服务端会通过[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#3639e1cb40mxi)的`onEvent`方法，将识别结果实时返回给客户端。
     
     建议每次发送的音频时长约为100毫秒，数据大小保持在1KB至16KB之间。
     
 3.  结束处理
     
-    调用[Recognition类](#bc8d131a37dmm)的`stop`方法结束语音识别。
+    调用[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#adcb5e9bddbyq)的`stop`方法结束语音识别。
     
-    该方法会阻塞当前线程，直到[回调接口（ResultCallback）](#1b5d714c36kuz)的`onComplete`或者`onError`回调触发后才会释放线程阻塞。
+    该方法会阻塞当前线程，直到[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#3639e1cb40mxi)的`onComplete`或者`onError`回调触发后才会释放线程阻塞。
     
 
 点击查看完整示例
 
-## 识别传入麦克风的语音
+识别传入麦克风的语音
 
 ```
 import com.alibaba.dashscope.audio.asr.recognition.Recognition;
@@ -204,7 +201,7 @@ class RealtimeRecognitionTask implements Runnable {
 }
 ```
 
-## 识别本地语音文件
+识别本地语音文件
 
 ```
 import com.alibaba.dashscope.api.GeneralApi;
@@ -361,24 +358,22 @@ class RealtimeRecognitionTask implements Runnable {
 }
 ```
 
-### 双向**流式调用：基于Flowable**
+### 双向流式调用：基于Flowable
 
 提交单个语音实时转写任务，通过实现工作流（Flowable）的方式流式输出实时识别结果。
 
 Flowable 是一个用于工作流和业务流程管理的开源框架，它基于 Apache 2.0 许可证发布。关于Flowable的使用，请参见[Flowable API详情](http://reactivex.io/RxJava/2.x/javadoc/)。
 
-**点击查看完整示例**
+点击查看完整示例
 
-直接调用[Recognition类](#bc8d131a37dmm)的`streamCall`方法开始识别。
+直接调用[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#adcb5e9bddbyq)的`streamCall`方法开始识别。
 
 `streamCall`方法返回一个`Flowable<RecognitionResult>`实例，您可以调用`Flowable`实例的`blockingForEach`、`subscribe`等方法处理识别结果。识别结果封装在`RecognitionResult`中。
 
 `streamCall`方法需要传入两个参数：
 
 -   `RecognitionParam`实例（[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-java-sdk#d72d661a1brzp)）：通过它可以设置语音识别所需的模型、采样率、音频格式等参数。
-    
 -   `Flowable<ByteBuffer>`实例：您需要创建一个`Flowable<ByteBuffer>`类型的实例，并在其中实现解析音频流的方法。
-    
 
 ```
 import com.alibaba.dashscope.audio.asr.recognition.Recognition;
@@ -474,25 +469,25 @@ public class Main {
 }
 ```
 
-### **高并发调用**
+### 高并发调用
 
 在DashScope Java SDK中，采用了OkHttp3的连接池技术，以减少重复建立连接的开销。详情请参见[实时语音识别高并发场景](https://help.aliyun.com/zh/model-studio/paraformer-in-high-concurrency-scenarios)。
 
-## **接口地址**
+## 接口地址
 
 SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）。如需切换到其他地域，请修改 `Constants.baseWebsocketApiUrl`为对应地域的URL。
 
-## 华北2（北京）
+#### 华北2（北京）
 
 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## 新加坡
+#### 新加坡
 
 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
 **切换到新加坡地域**：
 
@@ -503,22 +498,18 @@ import com.alibaba.dashscope.utils.Constants;
 Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference";
 ```
 
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。现有域名仍可正常使用。
 
-## **请求参数**
+## 请求参数
 
-通过`RecognitionParam`的链式方法配置模型、采样率、音频格式等参数。配置完成的参数对象传入[Recognition类](#bc8d131a37dmm)的`call`/`streamCall`方法中使用。
+通过`RecognitionParam`的链式方法配置模型、采样率、音频格式等参数。配置完成的参数对象传入[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#adcb5e9bddbyq)的`call`/`streamCall`方法中使用。
 
-**点击查看示例**
+点击查看示例
 
 ```
 RecognitionParam param = RecognitionParam.builder()
@@ -566,23 +557,14 @@ String
 取值范围：
 
 -   `pcm`
-    
 -   `wav`
-    
 -   `mp3`
-    
 -   `opus`
-    
 -   `speex`
-    
 -   `aac`
-    
 -   `amr`
-    
 
-**重要**
-
-opus/speex：必须使用Ogg封装；
+**重要**opus/speex：必须使用Ogg封装；
 
 wav：必须为PCM编码；
 
@@ -600,7 +582,7 @@ String
 
 适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。
 
-使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw-precompiled-h3)。
+使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
 
 vocabulary
 
@@ -614,17 +596,13 @@ Map<String, Integer>
 
 适用于临时性、会话级别的热词优化。
 
-与预编译热词同时配置时，仅即时热词生效。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw-instant-h3)。
+与预编译热词同时配置时，仅即时热词生效。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
 
-**重要**
+**重要**仅`qwen-audio-3.0-asr-flash-streaming`支持即时热词。
 
-仅`qwen-audio-3.0-asr-flash-streaming`支持即时热词。
+**说明**`vocabulary`需要通过 `RecognitionParam` 实例的 `parameter` 方法或者 `parameters` 方法进行设置：
 
-**说明**
-
-`vocabulary`需要通过 `RecognitionParam` 实例的 `parameter` 方法或者 `parameters` 方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 Map<String, Integer> vocab = new HashMap<>();
@@ -639,7 +617,7 @@ RecognitionParam param = RecognitionParam.builder()
         .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 Map<String, Integer> vocab = new HashMap<>();
@@ -668,17 +646,13 @@ boolean
 默认值：false。
 
 -   true：开启语义断句，关闭 VAD 断句。
-    
 -   false（默认）：开启 VAD 断句，关闭语义断句。
-    
 
 语义断句准确性更高，适合会议转写场景；VAD（Voice Activity Detection，语音活动检测）断句延迟较低，适合交互场景。
 
-**说明**
+**说明**`semantic_punctuation_enabled`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`semantic_punctuation_enabled`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 RecognitionParam param = RecognitionParam.builder()
@@ -689,7 +663,7 @@ RecognitionParam param = RecognitionParam.builder()
  .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 RecognitionParam param = RecognitionParam.builder()
@@ -712,11 +686,9 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 取值范围：\[200, 6000\]。
 
-**说明**
+**说明**`max_sentence_silence`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`max_sentence_silence`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 RecognitionParam param = RecognitionParam.builder()
@@ -727,7 +699,7 @@ RecognitionParam param = RecognitionParam.builder()
  .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 RecognitionParam param = RecognitionParam.builder()
@@ -744,19 +716,15 @@ boolean
 
 否
 
-**重要**
-
-仅在`semantic_punctuation_enabled`参数为false时生效。
+**重要**仅在`semantic_punctuation_enabled`参数为false时生效。
 
 是否启用多阈值模式。启用后可防止 VAD 断句切割过长。
 
 默认值：false。
 
-**说明**
+**说明**`multi_threshold_mode_enabled`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`multi_threshold_mode_enabled`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 RecognitionParam param = RecognitionParam.builder()
@@ -767,7 +735,7 @@ RecognitionParam param = RecognitionParam.builder()
  .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 RecognitionParam param = RecognitionParam.builder()
@@ -787,13 +755,10 @@ boolean
 设置是否在识别结果中自动添加标点：
 
 -   true（默认）：是，不支持修改。
-    
 
-**说明**
+**说明**`punctuation_prediction_enabled`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`punctuation_prediction_enabled`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 RecognitionParam param = RecognitionParam.builder()
@@ -804,7 +769,7 @@ RecognitionParam param = RecognitionParam.builder()
  .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 RecognitionParam param = RecognitionParam.builder()
@@ -826,19 +791,15 @@ boolean
 默认值：false。
 
 -   true：在持续发送静音音频的情况下，可保持与服务端的连接不中断。
-    
 -   false（默认）：即使持续发送静音音频，连接也将在一定时间后因超时而断开。
-    
 
 静音音频指的是在音频文件或数据流中没有声音信号的内容。静音音频可以通过多种方法生成，例如使用音频编辑软件如Audacity或Adobe Audition，或者通过命令行工具如FFmpeg。
 
-**说明**
-
-使用该字段时，SDK版本不能低于2.19.1。
+**说明**使用该字段时，SDK版本不能低于2.19.1。
 
 `heartbeat`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-## 通过parameter设置
+通过parameter设置
 
 ```
 RecognitionParam param = RecognitionParam.builder()
@@ -849,7 +810,7 @@ RecognitionParam param = RecognitionParam.builder()
  .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 RecognitionParam param = RecognitionParam.builder()
@@ -870,94 +831,56 @@ String\[\]
 
 对于 Qwen-Audio-3.0-ASR-Flash-Streaming 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR-Realtime 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。
 
-**点击查看支持的语言代码**
+点击查看支持的语言代码
 
 -   qwen-audio-3.0-asr-flash-streaming、fun-asr-realtime、fun-asr-realtime-2025-11-07：
     
     -   zh: 中文
-        
     -   en: 英文
-        
     -   ja: 日语
-        
     -   ko：韩语
-        
     -   vi：越南语
-        
     -   th：泰语
-        
     -   id：印尼语
-        
     -   ms：马来语
-        
     -   tl：菲律宾语
-        
     -   hi：印地语
-        
     -   ar：阿拉伯语
-        
     -   fr：法语
-        
     -   de：德语
-        
     -   es：西班牙语
-        
     -   pt：葡萄牙语
-        
     -   ru：俄语
-        
     -   it：意大利语
-        
     -   nl：荷兰语
-        
     -   sv：瑞典语
-        
     -   da：丹麦语
-        
     -   fi：芬兰语
-        
     -   no：挪威语
-        
     -   el：希腊语
-        
     -   pl：波兰语
-        
     -   cs：捷克语
-        
     -   hu：匈牙利语
-        
     -   ro：罗马尼亚语
-        
     -   bg：保加利亚语
-        
     -   hr：克罗地亚语
-        
     -   sk：斯洛伐克语
-        
 -   fun-asr-realtime-2026-02-28：
     
     -   zh: 中文
-        
     -   en: 英文
-        
     -   ja: 日语
-        
 -   fun-asr-realtime-2025-09-15：
     
     -   zh: 中文
-        
     -   en: 英文
-        
 -   fun-asr-flash-8k-realtime、fun-asr-flash-8k-realtime-2026-01-28：
     
     -   zh: 中文
-        
 
-**说明**
+**说明**`language_hints`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`language_hints`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 RecognitionParam param = RecognitionParam.builder()
@@ -968,7 +891,7 @@ RecognitionParam param = RecognitionParam.builder()
  .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 RecognitionParam param = RecognitionParam.builder()
@@ -992,22 +915,16 @@ float
 取值说明：
 
 -   取值越接近 -1：降低噪音判定阈值，噪音被识别为语音的概率增大，可能导致更多噪音被转写
-    
 -   取值越接近 +1：提高噪音判定阈值，语音被误判为噪音的概率增大，可能导致部分语音被过滤
-    
 
 此参数为高级配置参数，调整可能显著影响识别效果，建议：
 
 -   调整前充分测试验证效果
-    
 -   根据实际音频环境小幅度调整（建议步长 0.1）
-    
 
-**说明**
+**说明**`speech_noise_threshold`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`speech_noise_threshold`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 RecognitionParam param = RecognitionParam.builder()
@@ -1018,7 +935,7 @@ RecognitionParam param = RecognitionParam.builder()
  .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 RecognitionParam param = RecognitionParam.builder()
@@ -1035,13 +952,11 @@ String
 
 否
 
-指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#rt03-sensitive-h3)。
+指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#rt03_sensitive_h3)。
 
-**说明**
+**说明**`special_word_filter`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
-`special_word_filter`需要通过`RecognitionParam`实例的`parameter`方法或者`parameters`方法进行设置：
-
-## 通过parameter设置
+通过parameter设置
 
 ```
 // 1. 构建最外层对象
@@ -1073,7 +988,7 @@ RecognitionParam param = RecognitionParam.builder()
  .build();
 ```
 
-## 通过parameters设置
+通过parameters设置
 
 ```
 // 1. 构建最外层对象
@@ -1111,30 +1026,20 @@ Map<String, Object>
 
 否
 
-输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见[快速开始](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#ctx-quickstart-sec)。
+输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见[快速开始](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。
 
-**重要**
-
-仅 `qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持 context 参数。
+**重要**仅 `qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持 context 参数。
 
 Map 中需包含 `context` 键，值为 `List<Map<String, Object>>` 类型的消息数组，每条消息包含以下字段：
 
 -   `role`（String，必选）：消息角色。`user` 表示前几轮用户语音的识别结果或领域相关的词表；`assistant` 表示前几轮大语言模型的回复内容。
-    
 -   `content`（List<Map>，必选）：消息内容列表。每个元素包含 `type`（String，role 为 user 时填 `input_text`，role 为 assistant 时填 `text`）和 `text`（String，文本内容）。
-    
 
-**重要**
+**重要**约束：上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度不超过 400 个字符，超出部分从末尾截断。
 
-约束：上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度不超过 400 个字符，超出部分从末尾截断。
+**重要**携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
 
-**重要**
-
-携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
-
-**说明**
-
-使用该字段时，SDK版本不能低于2.22.23。
+**说明**使用该字段时，SDK版本不能低于2.22.23。
 
 `input`通过`RecognitionParam`实例的`input`方法进行设置：
 
@@ -1176,7 +1081,7 @@ String
 
 用户API Key。
 
-## **关键接口**
+## 关键接口
 
 ### `Recognition`类
 
@@ -1195,9 +1100,7 @@ public void call(RecognitionParam param, final ResultCallback<RecognitionResult>
 ```
 
 -   `param`：[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-java-sdk#d72d661a1brzp)
-    
--   `callback`：[回调接口（ResultCallback）](#1b5d714c36kuz)
-    
+-   `callback`：[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#3639e1cb40mxi)
 
 无
 
@@ -1208,9 +1111,7 @@ public String call(RecognitionParam param, File file)
 ```
 
 -   `param`：[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-java-sdk#d72d661a1brzp)
-    
 -   `file`：待识别音频文件
-    
 
 识别结果
 
@@ -1221,9 +1122,7 @@ public Flowable<RecognitionResult> streamCall(RecognitionParam param, Flowable<B
 ```
 
 -   `param`：[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-java-sdk#d72d661a1brzp)
-    
 -   `audioFrame`：`Flowable<ByteBuffer>`实例
-    
 
 `Flowable<RecognitionResult>`
 
@@ -1234,13 +1133,12 @@ public void sendAudioFrame(ByteBuffer audioFrame)
 ```
 
 -   `audioFrame`：二进制音频流，为`ByteBuffer`类型
-    
 
 无
 
 推送音频，每次推送的音频流不宜过大或过小，建议每包音频时长为100ms左右，大小在1KB~16KB之间。
 
-识别结果通过[回调接口（ResultCallback）](#1b5d714c36kuz)的onEvent方法获取。
+识别结果通过[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#3639e1cb40mxi)的onEvent方法获取。
 
 ```
 public void stop()
@@ -1278,9 +1176,7 @@ requestId
 
 获取当前任务的requestId，在调用`call`、`streamingCall`开始新任务之后可以使用。
 
-**说明**
-
-该方法自2.18.0版本及以后的SDK中才开始提供。
+**说明**该方法自2.18.0版本及以后的SDK中才开始提供。
 
 ```
 public long getFirstPackageDelay()
@@ -1292,9 +1188,7 @@ public long getFirstPackageDelay()
 
 获取首包延迟，从发送第一包音频到收到首包识别结果延迟，在任务完成后使用。
 
-**说明**
-
-该方法自2.18.0版本及以后的SDK中才开始提供。
+**说明**该方法自2.18.0版本及以后的SDK中才开始提供。
 
 ```
 public long getLastPackageDelay()
@@ -1306,19 +1200,17 @@ public long getLastPackageDelay()
 
 获得尾包延迟，发送`stop`指令到最后一包识别结果下发耗时，在任务完成后使用。
 
-**说明**
+**说明**该方法自2.18.0版本及以后的SDK中才开始提供。
 
-该方法自2.18.0版本及以后的SDK中才开始提供。
+### 回调接口（`ResultCallback`）
 
-### **回调接口（**`ResultCallback`）
-
-[双向流式调用](#7b019225eeqet)时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
+[双向流式调用](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/fun-asr-real-time-speech-recognition-api-reference/fun-asr-realtime-java-sdk.md)时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
 
 回调方法的实现，通过继承抽象类`ResultCallback`完成，继承该抽象类时，您可以指定泛型为`RecognitionResult`。`RecognitionResult`封装了服务器返回的数据结构。
 
 由于Java支持连接复用，因此没有`onClose`和`onOpen`。
 
-**示例**
+示例
 
 ```
 ResultCallback<RecognitionResult> callback = new ResultCallback<RecognitionResult>() {
@@ -1378,9 +1270,9 @@ public void onError(Exception e)
 
 发生异常时该接口被回调。
 
-## **响应结果**
+## 响应结果
 
-### **实时识别结果（**`**RecognitionResult**`**）**
+### 实时识别结果（`RecognitionResult`）
 
 `RecognitionResult`代表一次实时识别的结果。
 
@@ -1418,7 +1310,7 @@ public Sentence getSentence()
 
 无
 
-[单句信息（Sentence）](#237d05950411b)
+[单句信息（Sentence）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#e3e502b072h3a)
 
 获取单句信息，包括时间戳和文本信息等。
 
@@ -1468,11 +1360,11 @@ public List<Word> getWords()
 
 无
 
-[字时间戳信息（Word）](#f75897bd72y9l)的List集合
+[字时间戳信息（Word）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#125fb5faa3y7t)的List集合
 
 返回字时间戳信息。
 
-### **字时间戳信息（**`**Word**`**）**
+### 字时间戳信息（`Word`）
 
 **接口/方法**
 
@@ -1522,23 +1414,23 @@ public String getPunctuation()
 
 返回标点。
 
-## **错误码**
+## 错误码
 
-如遇报错问题，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行排查。
+如遇报错问题，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行排查。
 
 若问题仍未解决，请加入[开发者群](https://github.com/aliyun/alibabacloud-bailian-speech-demo)反馈遇到的问题，并提供Request ID，以便进一步排查问题。
 
-## **常见问题**
+## 常见问题
 
-### **功能特性**
+### 功能特性
 
-#### **Q：在长时间静默的情况下，如何保持与服务端长连接？**
+#### Q：在长时间静默的情况下，如何保持与服务端长连接？
 
 将请求参数`heartbeat`设置为true，并持续向服务端发送静音音频。
 
 静音音频指的是在音频文件或数据流中没有声音信号的内容。静音音频可以通过多种方法生成，例如使用音频编辑软件如Audacity或Adobe Audition，或者通过命令行工具如FFmpeg。
 
-#### **Q：如何将音频格式转换为满足要求的格式？**
+#### Q：如何将音频格式转换为满足要求的格式？
 
 可使用[FFmpeg工具](https://ffmpeg.en.lo4d.com/download)，更多用法请参见FFmpeg官网。
 
@@ -1563,38 +1455,35 @@ ffmpeg -i input.m4a -c:a aac -b:a 256k output.aac  # 重编码提高质量
 ffmpeg -i input.flac -c:a libopus -b:a 128k -vbr on output.opus
 ```
 
-#### **Q：如何识别本地文件（录音文件）？**
+#### Q：如何识别本地文件（录音文件）？
 
 识别本地文件有两种方式：
 
 -   直接传入本地文件路径：此种方式在最终识别结束后获取完整识别结果，不适合即时反馈的场景。
     
-    参见[非流式调用](#881157aa56lll)，在[Recognition类](#bc8d131a37dmm)的`call`方法中传入文件路径对录音文件直接进行识别。
+    参见[非流式调用](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#8341058094tc3)，在[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#adcb5e9bddbyq)的`call`方法中传入文件路径对录音文件直接进行识别。
     
 -   将本地文件转成二进制流进行识别：此种方式一边识别文件一边流式获取识别结果，适合即时反馈的场景。
     
-    -   参见[双向流式调用：基于回调](#7b019225eeqet)，通过[Recognition类](#bc8d131a37dmm)的`sendAudioFrame`方法向服务端发送二进制流对其进行识别。
-        
-    -   参见[双向流式调用：基于Flowable](#814b9be476h64)，通过[Recognition类](#bc8d131a37dmm)的`streamCall`方法向服务端发送二进制流对其进行识别。
-        
+    -   参见[双向流式调用：基于回调](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/fun-asr-real-time-speech-recognition-api-reference/fun-asr-realtime-java-sdk.md)，通过[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#adcb5e9bddbyq)的`sendAudioFrame`方法向服务端发送二进制流对其进行识别。
+    -   参见[双向流式调用：基于Flowable](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#6734e006bc0gp)，通过[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#adcb5e9bddbyq)的`streamCall`方法向服务端发送二进制流对其进行识别。
 
-### **故障排查**
+### 故障排查
 
-#### **Q：无法识别语音（无识别结果）是什么原因？**
+#### Q：无法识别语音（无识别结果）是什么原因？
 
 1.  请检查请求参数中的音频格式（`format`）和采样率（`sampleRate`/`sample_rate`）设置是否正确且符合参数约束。以下为常见错误示例：
     
     -   音频文件扩展名为 .wav，但实际为 MP3 格式，而请求参数 `format` 设置为 mp3（参数设置错误）。
-        
     -   音频采样率为 3600Hz，但请求参数 `sampleRate`/`sample_rate` 设置为 48000（参数设置错误）。
-        
     
     可以使用[ffprobe](https://ffmpeg.org/ffprobe.html)工具获取音频的容器、编码、采样率、声道等信息：
     
-    ```
-    ffprobe -v error -show_entries format=format_name -show_entries stream=codec_name,sample_rate,channels -of default=noprint_wrappers=1 input.xxx
-    ```
-    
+
+```
+ffprobe -v error -show_entries format=format_name -show_entries stream=codec_name,sample_rate,channels -of default=noprint_wrappers=1 input.xxx
+```
+
 2.  请检查`language_hints`设置的语言是否与音频实际语言一致。
     
     例如：音频实际为中文，但`language_hints`设置为`en`（英文）。

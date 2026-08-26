@@ -4,9 +4,9 @@
 
 **用户指南：**模型介绍和选型请参见[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)。
 
-## **模型接入方式**
+## 模型接入方式
 
-不同[模型](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#b8c8c0483153o)支持的接入方式不同，请根据下表选择正确的方式进行集成。
+不同[模型](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)支持的接入方式不同，请根据下表选择正确的方式进行集成。
 
 **模型**
 
@@ -14,52 +14,187 @@
 
 千问3-ASR-Flash-Filetrans
 
-仅支持[DashScope异步调用](#9937e8884002q)方式
+仅支持[DashScope异步调用](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#9937e8884002q)方式
 
 千问3-ASR-Flash
 
-[OpenAI 兼容](#d397bcc41eu3q)和[DashScope同步调用](#1afc6b20a29ie)两种方式
+[OpenAI 兼容](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#d397bcc41eu3q)和[DashScope同步调用](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#1afc6b20a29ie)两种方式
 
-## **OpenAI 兼容**
+## OpenAI 兼容
 
-**重要**
+**重要**美国地域不支持OpenAI兼容模式。
 
-美国地域不支持OpenAI兼容模式。
+### URL
 
-### **URL**
-
-## 华北2（北京）
+#### 华北2（北京）
 
 HTTP请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
 SDK调用配置的base\_url：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## 新加坡
+#### 新加坡
 
 HTTP请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
 SDK调用配置的base\_url：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+
+-   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+-   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。现有域名仍可正常使用。
+
+### 请求参数
+
+**model**`string`**（必选）**
+
+[模型](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)名称。仅适用于千问3-ASR-Flash模型。
+
+**messages**`array`**（必选）**
+
+消息列表。
+
+消息类型
+
+System Message`object`（可选）
+
+用于为语音识别提供上下文（Context），如背景文本和实体词表等参考信息，不支持设置模型角色等传统系统提示词。如果设置系统消息，请放在messages列表的第一位。
+
+属性
+
+**role**`string`**（必选）**
+
+固定为`system`。
+
+User Message`object`**（必选）**
+
+用户发送给模型的消息。
+
+属性
+
+**content**`array`**（必选）**
+
+用户消息的内容。仅允许设置一组消息。
+
+属性
+
+**type**`string`**（必选）**
+
+固定为`input_audio`，代表输入的是音频。
+
+**input\_audio**`string`**（必选）**
+
+待识别音频。具体用法请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。
+
+千问3-ASR-Flash模型在OpenAI兼容模式下支持两种输入形式：Base64编码的文件和公网可访问的待识别文件URL。
+
+使用SDK时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，不支持使用以 `oss://`为前缀的临时 URL。
+
+使用RESTful API时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，支持使用以 `oss://`为前缀的临时 URL。但需注意：
 
 **重要**
 
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+-   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
+-   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
+-   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
 
--   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
--   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
+**role**`string`**（必选）**
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+用户消息的角色，固定为`user`。
 
-### **请求参数**
+**asr\_options**`object`（可选）
 
-## 输入内容：音频文件URL
+用来指定某些功能是否启用。
 
-## Python SDK
+> `asr_options`非OpenAI标准参数，若使用OpenAI SDK，请通过`extra_body`传入。
+
+属性
+
+**language** _string_（可选）无默认值
+
+若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率。
+
+只能指定一个语种。
+
+若音频语种不确定，或包含多种语种（例如中英日韩混合），请勿指定该参数。
+
+取值范围
+
+-   zh：中文（普通话、四川话、闽南语、吴语）
+-   yue：粤语
+-   en：英文
+-   ja：日语
+-   de：德语
+-   ko：韩语
+-   ru：俄语
+-   fr：法语
+-   pt：葡萄牙语
+-   ar：阿拉伯语
+-   it：意大利语
+-   es：西班牙语
+-   hi：印地语
+-   id：印尼语
+-   th：泰语
+-   tr：土耳其语
+-   uk：乌克兰语
+-   vi：越南语
+-   cs：捷克语
+-   da：丹麦语
+-   fil：菲律宾语
+-   fi：芬兰语
+-   is：冰岛语
+-   ms：马来语
+-   no：挪威语
+-   pl：波兰语
+-   sv：瑞典语
+
+**enable\_itn**`boolean`（可选）默认值为`false`
+
+是否启用ITN（Inverse Text Normalization，逆文本标准化）。该功能仅适用于中文和英文音频。
+
+开启后，语音识别结果中的中文数字（如"一百二十三"）或英文数字（如"one hundred"）将自动转换为阿拉伯数字（如"123"）。
+
+参数值：
+
+-   true：开启；
+-   false：关闭。
+
+**stream**`boolean`（可选）默认值为`false`
+
+是否以流式输出方式回复。相关文档：[流式输出](https://help.aliyun.com/zh/model-studio/stream)
+
+可选值：
+
+-   `false`：模型生成全部内容后一次性返回；
+-   `true`：边生成边输出，每生成一部分内容即返回一个数据块（chunk）。需实时逐个读取这些块以拼接完整回复。
+
+推荐设置为`true`，可提升阅读体验并降低超时风险。
+
+**stream\_options**`object`（可选）
+
+流式输出的配置项，仅在 `stream` 为 `true` 时生效。
+
+属性
+
+**include\_usage**`boolean`（可选）默认值为`false`
+
+是否在响应的最后一个数据块包含Token消耗信息。
+
+可选值：
+
+-   `true`：包含；
+-   `false`：不包含。
+
+> 流式输出时，Token 消耗信息仅可出现在响应的最后一个数据块。
+
+#### 输入内容：音频文件URL
+
+#### Python SDK
 
 ```
 from openai import OpenAI
@@ -73,7 +208,6 @@ try:
         # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
         base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
     )
-    
 
     stream_enabled = False  # 是否开启流式输出
     completion = client.chat.completions.create(
@@ -116,7 +250,7 @@ except Exception as e:
     print(f"错误信息：{e}")
 ```
 
-## Node.js SDK
+#### Node.js SDK
 
 ```
 // 运行前的准备工作:
@@ -131,7 +265,7 @@ const client = new OpenAI({
   // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：apiKey: "sk-xxx",
   apiKey: process.env.DASHSCOPE_API_KEY,
   // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
-  baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1", 
+  baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
 });
 
 async function main() {
@@ -187,9 +321,9 @@ async function main() {
 main();
 ```
 
-## cURL
+#### cURL
 
-以下为华北2（北京）地域的配置，调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)，各地域的配置不同。
+以下为华北2（北京）地域的配置，调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)，各地域的配置不同。
 
 ```
 curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \
@@ -217,7 +351,7 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
 }'
 ```
 
-## 输入内容：Base64编码的音频文件
+#### 输入内容：Base64编码的音频文件
 
 可输入Base64编码数据（[Data URL](https://www.rfc-editor.org/rfc/rfc2397)），格式为：`data:<mediatype>;base64,<data>`。
 
@@ -226,18 +360,16 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
     因音频格式而异，例如：
     
     -   WAV：`audio/wav`
-        
     -   MP3：`audio/mpeg`
-        
 -   `<data>`：音频转成的Base64编码的字符串
     
     Base64编码会增大体积，请控制原文件大小，确保编码后仍符合输入音频大小限制（10MB）
     
 -   示例：`data:audio/wav;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//PAxABQ/BXRbMPe4IQAhl9`
     
-    **点击查看示例代码**
+    点击查看示例代码
     
-    Python
+    python
     
     ```
     import base64, pathlib
@@ -248,7 +380,7 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
     data_uri = f"data:audio/mpeg;base64,{base64_str}"
     ```
     
-    Java
+    java
     
     ```
     import java.nio.file.*;
@@ -272,7 +404,7 @@ curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode
     ```
     
 
-## Python SDK
+Python SDK
 
 ```
 import base64
@@ -300,7 +432,6 @@ try:
         # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
         base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
     )
-    
 
     stream_enabled = False  # 是否开启流式输出
     completion = client.chat.completions.create(
@@ -343,7 +474,7 @@ except Exception as e:
     print(f"错误信息：{e}")
 ```
 
-## Node.js SDK
+Node.js SDK
 
 ```
 // 运行前的准备工作:
@@ -423,186 +554,159 @@ async function main() {
 main();
 ```
 
-**model** `_string_` **（必选）**
+### 响应参数
 
-[模型](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#b8c8c0483153o)名称。仅适用于千问3-ASR-Flash模型。
+**id**`string`
 
-**messages** `_array_` **（必选）**
+本次调用的唯一标识符。
 
-消息列表。
+**choices**`array`
 
-**消息类型**
+模型的输出信息。
 
-System Message `_object_`（可选）
+属性
 
-用于为语音识别提供上下文（Context），如背景文本和实体词表等参考信息，不支持设置模型角色等传统系统提示词。如果设置系统消息，请放在messages列表的第一位。
+**finish\_reason**`string`
 
-**属性**
+有三种情况：
 
-**role** `_string_` **（必选）**
+-   正在生成时为null；
+-   因模型输出自然结束，或触发输入参数中的stop条件而结束时为stop；
+-   因生成长度过长而结束为length。
 
-固定为`system`。
+**index**`integer`
 
-User Message `_object_`**（必选）**
+当前对象在`choices`数组中的索引。
 
-用户发送给模型的消息。
+**message**`object`
 
-**属性**
+模型输出的消息对象。
 
-**content** `_array_` **（必选）**
+属性
 
-用户消息的内容。仅允许设置一组消息。
+**role**`string`
 
-**属性**
+输出消息的角色，固定为assistant。
 
-**type** `_string_`**（必选）**
+**content**`array`
 
-固定为`input_audio`，代表输入的是音频。
+语音识别结果。
 
-**input\_audio** `_string_`**（必选）**
+**annotations**`array`
 
-待识别音频。具体用法请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。
+输出标注信息（如语种）
 
-千问3-ASR-Flash模型在OpenAI兼容模式下支持两种输入形式：Base64编码的文件和公网可访问的待识别文件URL。
+属性
 
-使用SDK时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，不支持使用以 `oss://`为前缀的临时 URL。
+**language**`string`
 
-使用RESTful API时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，支持使用以 `oss://`为前缀的临时 URL。但需注意：
+被识别音频的语种。当请求参数`language`已指定语种时，该值与所指定的参数一致。
 
-**重要**
-
--   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
-    
--   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
-    
--   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
-    
-
-**role** `_string_` **（必选）**
-
-用户消息的角色，固定为`user`。
-
-**asr\_options** `_object_` （可选）
-
-用来指定某些功能是否启用。
-
-> `asr_options`非OpenAI标准参数，若使用OpenAI SDK，请通过`extra_body`传入。
-
-**属性**
-
-**language** _string_（可选）无默认值
-
-若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率。
-
-只能指定一个语种。
-
-若音频语种不确定，或包含多种语种（例如中英日韩混合），请勿指定该参数。
-
-**取值范围**
+取值范围
 
 -   zh：中文（普通话、四川话、闽南语、吴语）
-    
 -   yue：粤语
-    
 -   en：英文
-    
 -   ja：日语
-    
 -   de：德语
-    
 -   ko：韩语
-    
 -   ru：俄语
-    
 -   fr：法语
-    
 -   pt：葡萄牙语
-    
 -   ar：阿拉伯语
-    
 -   it：意大利语
-    
 -   es：西班牙语
-    
 -   hi：印地语
-    
 -   id：印尼语
-    
 -   th：泰语
-    
 -   tr：土耳其语
-    
 -   uk：乌克兰语
-    
 -   vi：越南语
-    
 -   cs：捷克语
-    
 -   da：丹麦语
-    
 -   fil：菲律宾语
-    
 -   fi：芬兰语
-    
 -   is：冰岛语
-    
 -   ms：马来语
-    
 -   no：挪威语
-    
 -   pl：波兰语
-    
 -   sv：瑞典语
-    
 
-**enable\_itn** `_boolean_`（可选）默认值为`false`
+**type**`string`
 
-是否启用ITN（Inverse Text Normalization，逆文本标准化）。该功能仅适用于中文和英文音频。
+固定为`audio_info`，表示音频信息。
 
-开启后，语音识别结果中的中文数字（如"一百二十三"）或英文数字（如"one hundred"）将自动转换为阿拉伯数字（如"123"）。
+**emotion**`string`
 
-参数值：
+被识别音频的情感。支持的情感如下：
 
--   true：开启；
-    
--   false：关闭。
-    
+-   `surprised`：惊讶
+-   `neutral`：平静
+-   `happy`：愉快
+-   `sad`：悲伤
+-   `disgusted`：厌恶
+-   `angry`：愤怒
+-   `fearful`：恐惧
 
-**stream** `_boolean_` （可选）默认值为`false`
+**created**`integer`
 
-是否以流式输出方式回复。相关文档：[流式输出](https://help.aliyun.com/zh/model-studio/stream)
+请求创建时的 Unix 时间戳（秒）。
 
-可选值：
+**model**`string`
 
--   `false`：模型生成全部内容后一次性返回；
-    
--   `true`：边生成边输出，每生成一部分内容即返回一个数据块（chunk）。需实时逐个读取这些块以拼接完整回复。
-    
+本次请求使用的模型。
 
-推荐设置为`true`，可提升阅读体验并降低超时风险。
+**object**`string`
 
-**stream\_options** `_object_` （可选）
+始终为`chat.completion`。
 
-流式输出的配置项，仅在 `stream` 为 `true` 时生效。
+**usage**`object`
 
-**属性**
+本次请求的Token消耗信息。
 
-**include\_usage** `_boolean_` （可选）默认值为`false`
+属性
 
-是否在响应的最后一个数据块包含Token消耗信息。
+**completion\_tokens** `integer`
 
-可选值：
+模型输出的 Token 数。
 
--   `true`：包含；
-    
--   `false`：不包含。
-    
+**completion\_tokens\_details** `object`
 
-> 流式输出时，Token 消耗信息仅可出现在响应的最后一个数据块。
+模型输出的 Token 细粒度详情。
 
-### **响应参数**
+属性
 
-## 非流式输出
+**text\_tokens** `integer`
+
+模型输出文本的Token数。
+
+**prompt\_tokens** `object`
+
+输入的Token数。
+
+**prompt\_tokens\_details** `object`
+
+输入的 Token 细粒度详情。
+
+属性
+
+**audio\_tokens** `integer`
+
+输入音频长度（Token）。音频转换Token规则：每秒音频转换为25个Token，不足1秒按1秒计算。
+
+**text\_tokens** `integer`
+
+无需关注该参数。
+
+**seconds** `integer`
+
+音频时长（秒）。
+
+**total\_tokens** `integer`
+
+输入和输出总Token数（`total_tokens = completion_tokens + prompt_tokens`）。
+
+非流式输出
 
 ```
 {
@@ -643,7 +747,7 @@ User Message `_object_`**（必选）**
 }
 ```
 
-## 流式输出
+流式输出
 
 ```
 data: {"model":"qwen3-asr-flash","id":"chatcmpl-3fb97803-d27f-9289-8889-xxxxx","created":1767685989,"object":"chat.completion.chunk","usage":null,"choices":[{"logprobs":null,"index":0,"delta":{"content":"","role":"assistant"}}]}
@@ -663,235 +767,157 @@ data: {"model":"qwen3-asr-flash","id":"chatcmpl-3fb97803-d27f-9289-8889-xxxxx","
 data: [DONE]
 ```
 
-**id** `_string_`
+## DashScope同步调用
 
-本次调用的唯一标识符。
+### URL
 
-**choices** `_array_`
-
-模型的输出信息。
-
-**属性**
-
-**finish\_reason** `_string_`
-
-有三种情况：
-
--   正在生成时为null；
-    
--   因模型输出自然结束，或触发输入参数中的stop条件而结束时为stop；
-    
--   因生成长度过长而结束为length。
-    
-
-**index** `_integer_`
-
-当前对象在`choices`数组中的索引。
-
-**message** `_object_`
-
-模型输出的消息对象。
-
-**属性**
-
-**role** `_string_`
-
-输出消息的角色，固定为assistant。
-
-**content** `_array_`
-
-语音识别结果。
-
-**annotations** `_array_`
-
-输出标注信息（如语种）
-
-**属性**
-
-**language** `_string_`
-
-被识别音频的语种。当请求参数`language`已指定语种时，该值与所指定的参数一致。
-
-**取值范围**
-
--   zh：中文（普通话、四川话、闽南语、吴语）
-    
--   yue：粤语
-    
--   en：英文
-    
--   ja：日语
-    
--   de：德语
-    
--   ko：韩语
-    
--   ru：俄语
-    
--   fr：法语
-    
--   pt：葡萄牙语
-    
--   ar：阿拉伯语
-    
--   it：意大利语
-    
--   es：西班牙语
-    
--   hi：印地语
-    
--   id：印尼语
-    
--   th：泰语
-    
--   tr：土耳其语
-    
--   uk：乌克兰语
-    
--   vi：越南语
-    
--   cs：捷克语
-    
--   da：丹麦语
-    
--   fil：菲律宾语
-    
--   fi：芬兰语
-    
--   is：冰岛语
-    
--   ms：马来语
-    
--   no：挪威语
-    
--   pl：波兰语
-    
--   sv：瑞典语
-    
-
-**type** `_string_`
-
-固定为`audio_info`，表示音频信息。
-
-**emotion** `_string_`
-
-被识别音频的情感。支持的情感如下：
-
--   `surprised`：惊讶
-    
--   `neutral`：平静
-    
--   `happy`：愉快
-    
--   `sad`：悲伤
-    
--   `disgusted`：厌恶
-    
--   `angry`：愤怒
-    
--   `fearful`：恐惧
-    
-
-**created** `_integer_`
-
-请求创建时的 Unix 时间戳（秒）。
-
-**model** `_string_`
-
-本次请求使用的模型。
-
-**object** `_string_`
-
-始终为`chat.completion`。
-
-**usage** `_object_`
-
-本次请求的Token消耗信息。
-
-**属性**
-
-**completion\_tokens** `_integer_`
-
-模型输出的 Token 数。
-
-**completion\_tokens\_details** `_object_`
-
-模型输出的 Token 细粒度详情。
-
-**属性**
-
-**text\_tokens** `_integer_`
-
-模型输出文本的Token数。
-
-**prompt\_tokens** `_object_`
-
-输入的Token数。
-
-**prompt\_tokens\_details** `_object_`
-
-输入的 Token 细粒度详情。
-
-**属性**
-
-**audio\_tokens** `_integer_`
-
-输入音频长度（Token）。音频转换Token规则：每秒音频转换为25个Token，不足1秒按1秒计算。
-
-**text\_tokens** `_integer_`
-
-无需关注该参数。
-
-**seconds** `_integer_`
-
-音频时长（秒）。
-
-**total\_tokens** `_integer_`
-
-输入和输出总Token数（`total_tokens = completion_tokens + prompt_tokens`）。
-
-## **DashScope同步调用**
-
-### **URL**
-
-## 华北2（北京）
+#### 华北2（北京）
 
 HTTP请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的base\_url：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## 新加坡
+#### 新加坡
 
 HTTP请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的base\_url：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## 美国（弗吉尼亚）
+#### 美国（弗吉尼亚）
 
 HTTP请求地址：`POST https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`
 
 SDK调用配置的base\_url：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1`
 
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。现有域名仍可正常使用。
 
-### **请求参数**
+### 请求参数
+
+**model**`string`**（必选）**
+
+[模型](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)名称。仅适用于千问3-ASR-Flash模型。
+
+**messages**`array`**（必选）**
+
+消息列表。
+
+> 通过HTTP调用时，请将**messages**放入 **input** 对象中。
+
+消息类型
+
+System Message`object`（可选）
+
+用于为语音识别提供上下文（Context），如背景文本和实体词表等参考信息，不支持设置模型角色等传统系统提示词。如果设置系统消息，请放在messages列表的第一位。
+
+仅千问3-ASR-Flash支持该参数。
+
+属性
+
+**role**`string`**（必选）**
+
+固定为`system`。
+
+User Message`object`**（必选）**
+
+用户发送给模型的消息。
+
+属性
+
+**content**`array`**（必选）**
+
+用户消息的内容。仅允许设置一组消息。
+
+属性
+
+**audio**`string`**（必选）**
+
+待识别音频。具体用法请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。
+
+千问3-ASR-Flash模型在DashScope调用方式下支持三种输入形式：Base64编码的文件、本地文件绝对路径、公网可访问的待识别文件URL。
+
+使用SDK时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，不支持使用以 `oss://`为前缀的临时 URL。
+
+使用RESTful API时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，支持使用以 `oss://`为前缀的临时 URL。但需注意：
+
+**重要**
+
+-   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
+-   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
+-   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
+
+**role**`string`**（必选）**
+
+用户消息的角色，固定为`user`。
+
+**asr\_options**`object`（可选）
+
+用来指定某些功能是否启用。
+
+仅千问3-ASR-Flash支持该参数。
+
+属性
+
+**language** _string_（可选）无默认值
+
+若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率。
+
+只能指定一个语种。
+
+若音频语种不确定，或包含多种语种（例如中英日韩混合），请勿指定该参数。
+
+取值范围
+
+-   zh：中文（普通话、四川话、闽南语、吴语）
+-   yue：粤语
+-   en：英文
+-   ja：日语
+-   de：德语
+-   ko：韩语
+-   ru：俄语
+-   fr：法语
+-   pt：葡萄牙语
+-   ar：阿拉伯语
+-   it：意大利语
+-   es：西班牙语
+-   hi：印地语
+-   id：印尼语
+-   th：泰语
+-   tr：土耳其语
+-   uk：乌克兰语
+-   vi：越南语
+-   cs：捷克语
+-   da：丹麦语
+-   fil：菲律宾语
+-   fi：芬兰语
+-   is：冰岛语
+-   ms：马来语
+-   no：挪威语
+-   pl：波兰语
+-   sv：瑞典语
+
+**enable\_itn**`boolean`（可选）默认值为`false`
+
+是否启用ITN（Inverse Text Normalization，逆文本标准化）。该功能仅适用于中文和英文音频。
+
+开启后，语音识别结果中的中文数字（如"一百二十三"）或英文数字（如"one hundred"）将自动转换为阿拉伯数字（如"123"）。
+
+参数值：
+
+-   true：开启；
+-   false：关闭。
 
 以下示例为音频 URL 识别；本地音频文件识别示例请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。
 
-## cURL
+Code 1
 
 ```
 curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
@@ -919,7 +945,7 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 }'
 ```
 
-## Java
+Code 2
 
 ```
 import java.util.Arrays;
@@ -976,7 +1002,7 @@ public class Main {
 }
 ```
 
-## Python
+Code 3
 
 ```
 import os
@@ -1005,152 +1031,139 @@ response = dashscope.MultiModalConversation.call(
 print(response)
 ```
 
-**model** `_string_` **（必选）**
+### 响应参数
 
-[模型](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#b8c8c0483153o)名称。仅适用于千问3-ASR-Flash模型。
+**request\_id**`string`
 
-**messages** `_array_` **（必选）**
+本次调用的唯一标识符。
 
-消息列表。
+> Java SDK返回参数为**requestId。**
 
-> 通过HTTP调用时，请将**messages** 放入 **input** 对象中。
+**output**`object`
 
-**消息类型**
+调用结果信息。
 
-System Message `_object_`（可选）
+属性
 
-用于为语音识别提供上下文（Context），如背景文本和实体词表等参考信息，不支持设置模型角色等传统系统提示词。如果设置系统消息，请放在messages列表的第一位。
+**choices**`array`
 
-仅千问3-ASR-Flash支持该参数。
+模型的输出信息。当result\_format为message时返回choices参数。
 
-**属性**
+属性
 
-**role** `_string_` **（必选）**
+**finish\_reason**`string`
 
-固定为`system`。
+有三种情况：
 
-User Message `_object_`**（必选）**
+-   正在生成时为null；
+-   因模型输出自然结束，或触发输入参数中的stop条件而结束时为stop；
+-   因生成长度过长而结束为length。
 
-用户发送给模型的消息。
+**message**`object`
 
-**属性**
+模型输出的消息对象。
 
-**content** `_array_` **（必选）**
+属性
 
-用户消息的内容。仅允许设置一组消息。
+**role**`string`
 
-**属性**
+输出消息的角色，固定为assistant。
 
-**audio** `_string_`**（必选）**
+**content**`array`
 
-待识别音频。具体用法请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。
+输出消息的内容。
 
-千问3-ASR-Flash模型在DashScope调用方式下支持三种输入形式：Base64编码的文件、本地文件绝对路径、公网可访问的待识别文件URL。
+属性
 
-使用SDK时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，不支持使用以 `oss://`为前缀的临时 URL。
+**text**`string`
 
-使用RESTful API时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，支持使用以 `oss://`为前缀的临时 URL。但需注意：
+语音识别结果。
 
-**重要**
+**annotations**`array`
 
--   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
-    
--   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
-    
--   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
-    
+输出标注信息（如语种）
 
-**role** `_string_` **（必选）**
+属性
 
-用户消息的角色，固定为`user`。
+**language**`string`
 
-**asr\_options** `_object_` （可选）
+被识别音频的语种。当请求参数`language`已指定语种时，该值与所指定的参数一致。
 
-用来指定某些功能是否启用。
-
-仅千问3-ASR-Flash支持该参数。
-
-**属性**
-
-**language** _string_（可选）无默认值
-
-若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率。
-
-只能指定一个语种。
-
-若音频语种不确定，或包含多种语种（例如中英日韩混合），请勿指定该参数。
-
-**取值范围**
+取值范围
 
 -   zh：中文（普通话、四川话、闽南语、吴语）
-    
 -   yue：粤语
-    
 -   en：英文
-    
 -   ja：日语
-    
 -   de：德语
-    
 -   ko：韩语
-    
 -   ru：俄语
-    
 -   fr：法语
-    
 -   pt：葡萄牙语
-    
 -   ar：阿拉伯语
-    
 -   it：意大利语
-    
 -   es：西班牙语
-    
 -   hi：印地语
-    
 -   id：印尼语
-    
 -   th：泰语
-    
 -   tr：土耳其语
-    
 -   uk：乌克兰语
-    
 -   vi：越南语
-    
 -   cs：捷克语
-    
 -   da：丹麦语
-    
 -   fil：菲律宾语
-    
 -   fi：芬兰语
-    
 -   is：冰岛语
-    
 -   ms：马来语
-    
 -   no：挪威语
-    
 -   pl：波兰语
-    
 -   sv：瑞典语
-    
 
-**enable\_itn** `_boolean_`（可选）默认值为`false`
+**type**`string`
 
-是否启用ITN（Inverse Text Normalization，逆文本标准化）。该功能仅适用于中文和英文音频。
+固定为`audio_info`，表示音频信息。
 
-开启后，语音识别结果中的中文数字（如"一百二十三"）或英文数字（如"one hundred"）将自动转换为阿拉伯数字（如"123"）。
+**emotion**`string`
 
-参数值：
+被识别音频的情感。支持的情感如下：
 
--   true：开启；
-    
--   false：关闭。
-    
+-   `surprised`：惊讶
+-   `neutral`：平静
+-   `happy`：愉快
+-   `sad`：悲伤
+-   `disgusted`：厌恶
+-   `angry`：愤怒
+-   `fearful`：恐惧
 
-### **响应参数**
+**usage**`object`
+
+本次请求的Token消耗信息。
+
+属性
+
+**input\_tokens\_details** `object`
+
+千问3-ASR-Flash输入内容长度（Token）。
+
+属性
+
+**text\_tokens** `integer`
+
+无需关注该参数。
+
+**output\_tokens\_details** `object`
+
+千问3-ASR-Flash输出内容长度（Token）。
+
+属性
+
+**text\_tokens** `integer`
+
+千问3-ASR-Flash输出的识别结果文本长度（Token）。
+
+**seconds** `integer`
+
+千问3-ASR-Flash音频时长（秒）。
 
 ```
 {
@@ -1189,247 +1202,163 @@ User Message `_object_`**（必选）**
 }
 ```
 
-**request\_id** `_string_`
+## DashScope异步调用
 
-本次调用的唯一标识符。
-
-> Java SDK返回参数为**requestId。**
-
-**output** `_object_`
-
-调用结果信息。
-
-**属性**
-
-**choices** `_array_`
-
-模型的输出信息。当result\_format为message时返回choices参数。
-
-**属性**
-
-**finish\_reason** `_string_`
-
-有三种情况：
-
--   正在生成时为null；
-    
--   因模型输出自然结束，或触发输入参数中的stop条件而结束时为stop；
-    
--   因生成长度过长而结束为length。
-    
-
-**message** `_object_`
-
-模型输出的消息对象。
-
-**属性**
-
-**role** `_string_`
-
-输出消息的角色，固定为assistant。
-
-**content** `_array_`
-
-输出消息的内容。
-
-**属性**
-
-**text** `_string_`
-
-语音识别结果。
-
-**annotations** `_array_`
-
-输出标注信息（如语种）
-
-**属性**
-
-**language** `_string_`
-
-被识别音频的语种。当请求参数`language`已指定语种时，该值与所指定的参数一致。
-
-**取值范围**
-
--   zh：中文（普通话、四川话、闽南语、吴语）
-    
--   yue：粤语
-    
--   en：英文
-    
--   ja：日语
-    
--   de：德语
-    
--   ko：韩语
-    
--   ru：俄语
-    
--   fr：法语
-    
--   pt：葡萄牙语
-    
--   ar：阿拉伯语
-    
--   it：意大利语
-    
--   es：西班牙语
-    
--   hi：印地语
-    
--   id：印尼语
-    
--   th：泰语
-    
--   tr：土耳其语
-    
--   uk：乌克兰语
-    
--   vi：越南语
-    
--   cs：捷克语
-    
--   da：丹麦语
-    
--   fil：菲律宾语
-    
--   fi：芬兰语
-    
--   is：冰岛语
-    
--   ms：马来语
-    
--   no：挪威语
-    
--   pl：波兰语
-    
--   sv：瑞典语
-    
-
-**type** `_string_`
-
-固定为`audio_info`，表示音频信息。
-
-**emotion** `_string_`
-
-被识别音频的情感。支持的情感如下：
-
--   `surprised`：惊讶
-    
--   `neutral`：平静
-    
--   `happy`：愉快
-    
--   `sad`：悲伤
-    
--   `disgusted`：厌恶
-    
--   `angry`：愤怒
-    
--   `fearful`：恐惧
-    
-
-**usage** `_object_`
-
-本次请求的Token消耗信息。
-
-**属性**
-
-**input\_tokens\_details** `_object_`
-
-千问3-ASR-Flash输入内容长度（Token）。
-
-**属性**
-
-**text\_tokens** `_integer_`
-
-无需关注该参数。
-
-**output\_tokens\_details** `_object_`
-
-千问3-ASR-Flash输出内容长度（Token）。
-
-**属性**
-
-**text\_tokens** `_integer_`
-
-千问3-ASR-Flash输出的识别结果文本长度（Token）。
-
-**seconds** `_integer_`
-
-千问3-ASR-Flash音频时长（秒）。
-
-## **DashScope异步调用**
-
-### **流程说明**
+### 流程说明
 
 与OpenAI兼容模式或DashScope同步调用（均为一次请求、立即返回结果）不同，异步调用专为处理长音频文件或耗时较长的任务设计，该模式采用“提交-轮询”的两步式流程，避免了因长时间等待而导致的请求超时：
 
 1.  第一步：提交任务
     
     -   客户端发起一个异步处理请求。
-        
-    -   服务器验证请求后，不会立即执行任务，而是返回一个唯一的 `task_id`，表示任务已成功创建。
-        
+    -   服务器验证请求后，不会立即执行任务，而是返回一个唯一的 `task_id`，表示任务已成功创建。
 2.  第二步：获取结果
     
-    -   客户端使用获取到的 `task_id`，通过轮询方式反复调用结果查询接口。
-        
+    -   客户端使用获取到的 `task_id`，通过轮询方式反复调用结果查询接口。
     -   当任务处理完成后，结果查询接口将返回最终的识别结果。
-        
 
 您可以根据集成环境选择使用SDK或直接调用RESTful API。
 
--   使用 SDK（示例代码请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)，请求参数请参见[提交任务](#88657039c4x0g)的请求参数[请求参数](#1a2369eebaueh)，返回结果请参见[异步调用识别结果说明](#2c27ad3e80p4y)）
+-   使用 SDK（示例代码请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)，请求参数请参见[提交任务](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#88657039c4x0g)的请求参数[请求参数](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#1a2369eebaueh)，返回结果请参见[异步调用识别结果说明](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#2c27ad3e80p4y)）
     
     SDK封装了底层的API调用细节，提供了更便捷的编程体验。
     
-    1.  提交任务：调用 `async_call()` (Python) 或 `asyncCall()` (Java) 方法提交任务。此方法将返回一个包含 `task_id` 的任务对象。
-        
-    2.  获取结果：使用上一步返回的任务对象或 `task_id`，调用 `fetch()` 方法获取结果。SDK内部会自动处理轮询逻辑，直到任务完成或超时。
-        
--   2\. 使用 RESTful API
+    1.  提交任务：调用 `async_call()` (Python) 或 `asyncCall()` (Java) 方法提交任务。此方法将返回一个包含 `task_id` 的任务对象。
+    2.  获取结果：使用上一步返回的任务对象或 `task_id`，调用 `fetch()` 方法获取结果。SDK内部会自动处理轮询逻辑，直到任务完成或超时。
+-   2.  使用 RESTful API
     
     直接调用HTTP接口提供了最大的灵活性。
     
-    1.  [提交任务](#88657039c4x0g)，如果请求成功，响应参数[响应参数](#eca6c7d3f35hn)中将包含一个 `task_id`。
-        
-    2.  使用上一步获取的 `task_id`，[获取任务执行结果](#f9109f6ea3di2)。
-        
+    1.  [提交任务](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#88657039c4x0g)，如果请求成功，响应参数[响应参数](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#eca6c7d3f35hn)中将包含一个 `task_id`。
+    2.  使用上一步获取的 `task_id`，[获取任务执行结果](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#f9109f6ea3di2)。
 
-### **提交任务**
+### 提交任务
 
-#### **URL**
+#### URL
 
-## 华北2（北京）
+#### 华北2（北京）
 
 HTTP请求地址：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription`
 
 SDK调用配置的base\_url：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## 新加坡
+#### 新加坡
 
 HTTP请求地址：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audio/asr/transcription`
 
 SDK调用配置的base\_url：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+
+-   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+-   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。现有域名仍可正常使用。
+
+#### 请求参数
+
+**model**`string`**（必选）**
+
+[模型](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)名称。仅适用于千问3-ASR-Flash-Filetrans模型。
+
+**input**`object`**（必选）**
+
+属性
+
+**file\_url** `string`**（必选）**
+
+待识别音频文件URL，URL必须公网可访问。
+
+使用SDK时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，不支持使用以 `oss://`为前缀的临时 URL。
+
+使用RESTful API时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，支持使用以 `oss://`为前缀的临时 URL。但需注意：
 
 **重要**
 
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+-   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
+-   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
+-   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
 
--   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
+**parameters**`object`（可选）
+
+属性
+
+**language** _string_（可选）无默认值
+
+若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率。
+
+只能指定一个语种。
+
+若音频语种不确定，或包含多种语种（例如中英日韩混合），请勿指定该参数。
+
+取值范围
+
+-   zh：中文（普通话、四川话、闽南语、吴语）
+-   yue：粤语
+-   en：英文
+-   ja：日语
+-   de：德语
+-   ko：韩语
+-   ru：俄语
+-   fr：法语
+-   pt：葡萄牙语
+-   ar：阿拉伯语
+-   it：意大利语
+-   es：西班牙语
+-   hi：印地语
+-   id：印尼语
+-   th：泰语
+-   tr：土耳其语
+-   uk：乌克兰语
+-   vi：越南语
+-   cs：捷克语
+-   da：丹麦语
+-   fil：菲律宾语
+-   fi：芬兰语
+-   is：冰岛语
+-   ms：马来语
+-   no：挪威语
+-   pl：波兰语
+-   sv：瑞典语
+
+**enable\_itn**`boolean`（可选）默认值为`false`
+
+是否启用ITN（Inverse Text Normalization，逆文本标准化）。该功能仅适用于中文和英文音频。
+
+开启后，语音识别结果中的中文数字（如"一百二十三"）或英文数字（如"one hundred"）将自动转换为阿拉伯数字（如"123"）。
+
+参数值：
+
+-   true：开启；
+-   false：关闭。
+
+**enable\_words**`boolean`（可选）默认值为`false`
+
+控制是否返回字级别时间戳：
+
+-   `false`：返回句级时间戳
     
--   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
+-   `true`：返回字级时间戳
+    
+    字级别时间戳仅支持以下语种：中文、英语、日语、韩语、德语、法语、西班牙语、意大利语、葡萄牙语、俄语，其他语种可能无法保证准确性
     
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+同时，该参数还影响断句规则：
 
-#### **请求参数**
+-   `false`：基于 VAD（语音活动检测）断句
+-   `true`：基于 VAD + 标点符号断句
 
-## cURL
+**channel\_id**`array`（可选）默认值为`[0]`
+
+指定在多音轨音频文件中需要识别的音轨索引，索引从 0 开始。例如，\[0\] 表示识别第一个音轨，\[0, 1\] 表示同时识别第一和第二个音轨。如果省略此参数，则默认处理第一个音轨。
+
+**重要**指定的每一个音轨都将独立计费。例如，为单个文件请求 \[0, 1\] 会产生两笔独立的费用。
+
+#### cURL
 
 ```
 # ======= 重要提示 =======
@@ -1455,7 +1384,7 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 }'
 ```
 
-## Java
+#### Java
 
 SDK示例请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。
 
@@ -1554,7 +1483,7 @@ public class Main {
 }
 ```
 
-## Python
+#### Python
 
 SDK示例请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。
 
@@ -1599,140 +1528,31 @@ else:
     print(response.json())
 ```
 
-**model** `_string_` **（必选）**
+#### 响应参数
 
-[模型](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#b8c8c0483153o)名称。仅适用于千问3-ASR-Flash-Filetrans模型。
+**request\_id**`string`
 
-**input** `_object_` **（必选）**
+本次调用的唯一标识符。
 
-**属性**
+**output**`object`
 
-**file\_url** `_string_`**（必选）**
+调用结果信息。
 
-待识别音频文件URL，URL必须公网可访问。
+属性
 
-使用SDK时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，不支持使用以 `oss://`为前缀的临时 URL。
+**task\_id**`string`
 
-使用RESTful API时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，支持使用以 `oss://`为前缀的临时 URL。但需注意：
+任务ID。该ID在查询语音识别任务接口中作为请求参数传入。
 
-**重要**
+**task\_status**`string`
 
--   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
-    
--   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
-    
--   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
-    
+任务状态：
 
-**parameters** `_object_` （可选）
-
-**属性**
-
-**language** _string_（可选）无默认值
-
-若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率。
-
-只能指定一个语种。
-
-若音频语种不确定，或包含多种语种（例如中英日韩混合），请勿指定该参数。
-
-**取值范围**
-
--   zh：中文（普通话、四川话、闽南语、吴语）
-    
--   yue：粤语
-    
--   en：英文
-    
--   ja：日语
-    
--   de：德语
-    
--   ko：韩语
-    
--   ru：俄语
-    
--   fr：法语
-    
--   pt：葡萄牙语
-    
--   ar：阿拉伯语
-    
--   it：意大利语
-    
--   es：西班牙语
-    
--   hi：印地语
-    
--   id：印尼语
-    
--   th：泰语
-    
--   tr：土耳其语
-    
--   uk：乌克兰语
-    
--   vi：越南语
-    
--   cs：捷克语
-    
--   da：丹麦语
-    
--   fil：菲律宾语
-    
--   fi：芬兰语
-    
--   is：冰岛语
-    
--   ms：马来语
-    
--   no：挪威语
-    
--   pl：波兰语
-    
--   sv：瑞典语
-    
-
-**enable\_itn** `_boolean_`（可选）默认值为`false`
-
-是否启用ITN（Inverse Text Normalization，逆文本标准化）。该功能仅适用于中文和英文音频。
-
-开启后，语音识别结果中的中文数字（如"一百二十三"）或英文数字（如"one hundred"）将自动转换为阿拉伯数字（如"123"）。
-
-参数值：
-
--   true：开启；
-    
--   false：关闭。
-    
-
-**enable\_words** `_boolean_` （可选）默认值为`false`
-
-控制是否返回字级别时间戳：
-
--   `false`：返回句级时间戳
-    
--   `true`：返回字级时间戳
-    
-    字级别时间戳仅支持以下语种：中文、英语、日语、韩语、德语、法语、西班牙语、意大利语、葡萄牙语、俄语，其他语种可能无法保证准确性
-    
-
-同时，该参数还影响断句规则：
-
--   `false`：基于 VAD（语音活动检测）断句
-    
--   `true`：基于 VAD + 标点符号断句
-    
-
-**channel\_id** `_array_` （可选）默认值为`[0]`
-
-指定在多音轨音频文件中需要识别的音轨索引，索引从 0 开始。例如，\[0\] 表示识别第一个音轨，\[0, 1\] 表示同时识别第一和第二个音轨。如果省略此参数，则默认处理第一个音轨。
-
-**重要**
-
-指定的每一个音轨都将独立计费。例如，为单个文件请求 \[0, 1\] 会产生两笔独立的费用。
-
-#### **响应参数**
+-   PENDING：任务排队中
+-   RUNNING：任务处理中
+-   SUCCEEDED：任务执行成功
+-   FAILED：任务执行失败
+-   UNKNOWN：任务不存在或状态未知
 
 ```
 {
@@ -1744,69 +1564,40 @@ else:
 }
 ```
 
-**request\_id** `_string_`
+### 获取任务执行结果
 
-本次调用的唯一标识符。
+#### URL
 
-**output** `_object_`
-
-调用结果信息。
-
-**属性**
-
-**task\_id** `_string_`
-
-任务ID。该ID在查询语音识别任务接口中作为请求参数传入。
-
-**task\_status** `_string_`
-
-任务状态：
-
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：任务执行成功
-    
--   FAILED：任务执行失败
-    
--   UNKNOWN：任务不存在或状态未知
-    
-
-### **获取任务执行结果**
-
-#### **URL**
-
-## 华北2（北京）
+#### 华北2（北京）
 
 HTTP请求地址：`GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 SDK调用配置的base\_url：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-## 新加坡
+#### 新加坡
 
 HTTP请求地址：`GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 SDK调用配置的base\_url：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
-**重要**
-
-阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
+**重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-    
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-    
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。现有域名仍可正常使用。
 
-#### **请求参数**
+#### 请求参数
 
-## cURL
+**task\_id**`string`**（必选）**
+
+任务ID。将[提交任务](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#88657039c4x0g)返回结果中的task\_id作为参数传入，查询语音识别结果。
+
+#### cURL
 
 ```
 # ======= 重要提示 =======
@@ -1819,7 +1610,7 @@ curl --location --request GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.co
 --header "Content-Type: application/json"
 ```
 
-## Java
+#### Java
 
 SDK示例请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。
 
@@ -1859,7 +1650,7 @@ public class Main {
 }
 ```
 
-## Python
+#### Python
 
 SDK示例请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。
 
@@ -1885,13 +1676,94 @@ response = requests.get(url, headers=headers)
 print(response.json())
 ```
 
-**task\_id** `_string_` **（必选）**
+#### 响应参数
 
-任务ID。将[提交任务](#88657039c4x0g)返回结果中的task\_id作为参数传入，查询语音识别结果。
+**request\_id**`string`
 
-#### **响应参数**
+本次调用的唯一标识符。
 
-## RUNNING
+**output**`object`
+
+调用结果信息。
+
+属性
+
+**task\_id**`string`
+
+任务ID。该ID在查询语音识别任务接口中作为请求参数传入。
+
+**task\_status**`string`
+
+任务状态：
+
+-   PENDING：任务排队中
+-   RUNNING：任务处理中
+-   SUCCEEDED：任务执行成功
+-   FAILED：任务执行失败
+-   UNKNOWN：任务不存在或状态未知
+
+**result**`object`
+
+语音识别结果。
+
+属性
+
+**transcription\_url**`string`
+
+识别结果文件的下载 URL，链接有效期为 24 小时。过期后无法查询任务，也无法通过先前的 URL 下载结果。  
+识别结果以 JSON 文件保存，可通过该链接下载文件，或直接使用 HTTP 请求读取文件内容。  
+
+详情参见[异步调用识别结果说明](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#2c27ad3e80p4y)。
+
+**submit\_time**`string`
+
+任务提交时间。
+
+**schedule\_time**`string`
+
+任务调度时间，即开始执行时间。
+
+**end\_time**`string`
+
+任务结束时间。
+
+**task\_metrics**`object`
+
+任务指标，包含子任务状态的统计信息。
+
+属性
+
+**TOTAL**`integer`
+
+子任务总数。
+
+**SUCCEEDED**`integer`
+
+子任务成功数。
+
+**FAILED**`integer`
+
+子任务失败数。
+
+**code**`string`
+
+错误码，仅在任务失败时返回。
+
+**message**`string`
+
+错误信息，仅任务失败时返回。
+
+**usage**`object`
+
+本次请求的Token消耗信息。
+
+属性
+
+**seconds** `integer`
+
+千问3-ASR-Flash音频时长（秒）。
+
+RUNNING
 
 ```
 {
@@ -1910,7 +1782,7 @@ print(response.json())
 }
 ```
 
-## SUCCEEDED
+SUCCEEDED
 
 ```
 {
@@ -1922,7 +1794,7 @@ print(response.json())
         "scheduled_time": "2025-10-27 13:57:46.018",
         "end_time": "2025-10-27 13:57:47.079",
         "result": {
-            "transcription_url": "http://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/pre/pre-funasr-mlt-v1/20251027/13%3A57/7a3a8236-ffd1-4099-a280-0299686ac7da.json?Expires=1761631066&OSSAccessKeyId=LTAI**************&Signature=1lKv4RgyWCarRuUdIiErOeOBnwM%3D&response-content-disposition=attachment%3Bfilename%3D7a3a8236-ffd1-4099-a280-0299686ac7da.json"
+            "transcription_url": "http://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/pre/pre-funasr-mlt-v1/20251027/13%3A57/7a3a8236-ffd1-4099-a280-0299686ac7da.json?Expires=1761631066&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE&response-content-disposition=attachment%3Bfilename%3D7a3a8236-ffd1-4099-a280-0299686ac7da.json"
         }
     },
     "usage": {
@@ -1931,7 +1803,7 @@ print(response.json())
 }
 ```
 
-## FAILED
+FAILED
 
 ```
 {
@@ -1948,98 +1820,129 @@ print(response.json())
 }
 ```
 
-**request\_id** `_string_`
+### 异步调用识别结果说明
 
-本次调用的唯一标识符。
+**file\_url** `string`
 
-**output** `_object_`
+被识别的音频文件URL。
 
-调用结果信息。
+**audio\_info**`object`
 
-**属性**
+被识别音频文件相关信息。
 
-**task\_id** `_string_`
+属性
 
-任务ID。该ID在查询语音识别任务接口中作为请求参数传入。
+**format** `string`
 
-**task\_status** `_string_`
+音频格式。
 
-任务状态：
+**sample\_rate** `integer`
 
--   PENDING：任务排队中
-    
--   RUNNING：任务处理中
-    
--   SUCCEEDED：任务执行成功
-    
--   FAILED：任务执行失败
-    
--   UNKNOWN：任务不存在或状态未知
-    
+音频采样率。
 
-**result** `_object_`
+**transcripts**`array`
 
-语音识别结果。
+完整的识别结果列表，每个元素对应一条音轨的识别内容。
 
-**属性**
+属性
 
-**transcription\_url** `_string_`
+**channel\_id**`integer`
 
-识别结果文件的下载 URL，链接有效期为 24 小时。过期后无法查询任务，也无法通过先前的 URL 下载结果。  
-识别结果以 JSON 文件保存，可通过该链接下载文件，或直接使用 HTTP 请求读取文件内容。  
-  
+音轨索引，以0为起始。
 
-详情参见[异步调用识别结果说明](#2c27ad3e80p4y)。
+**text**`string`
 
-**submit\_time** `_string_`
+识别结果文本。
 
-任务提交时间。
+**sentences**`object`
 
-**schedule\_time** `_string_`
+句子级别的识别结果列表。
 
-任务调度时间，即开始执行时间。
+属性
 
-**end\_time** `_string_`
+**begin\_time**`integer`
 
-任务结束时间。
+句子开始时间戳（毫秒）。
 
-**task\_metrics** `_object_`
+**end\_time**`integer`
 
-任务指标，包含子任务状态的统计信息。
+句子结束时间戳（毫秒）。
 
-**属性**
+**text**`string`
 
-**TOTAL** `_integer_`
+识别结果文本。
 
-子任务总数。
+**sentence\_id**`integer`
 
-**SUCCEEDED** `_integer_`
+句子索引，以0为起始。
 
-子任务成功数。
+**language**`string`
 
-**FAILED** `_integer_`
+被识别音频的语种。当请求参数`language`已指定语种时，该值与所指定的参数一致。
 
-子任务失败数。
+取值范围
 
-**code** `_string_`
+-   zh：中文（普通话、四川话、闽南语、吴语）
+-   yue：粤语
+-   en：英文
+-   ja：日语
+-   de：德语
+-   ko：韩语
+-   ru：俄语
+-   fr：法语
+-   pt：葡萄牙语
+-   ar：阿拉伯语
+-   it：意大利语
+-   es：西班牙语
+-   hi：印地语
+-   id：印尼语
+-   th：泰语
+-   tr：土耳其语
+-   uk：乌克兰语
+-   vi：越南语
+-   cs：捷克语
+-   da：丹麦语
+-   fil：菲律宾语
+-   fi：芬兰语
+-   is：冰岛语
+-   ms：马来语
+-   no：挪威语
+-   pl：波兰语
+-   sv：瑞典语
 
-错误码，仅在任务失败时返回。
+**emotion**`string`
 
-**message** `_string_`
+被识别音频的情感。支持的情感如下：
 
-错误信息，仅任务失败时返回。
+-   `surprised`：惊讶
+-   `neutral`：平静
+-   `happy`：愉快
+-   `sad`：悲伤
+-   `disgusted`：厌恶
+-   `angry`：愤怒
+-   `fearful`：恐惧
 
-**usage** `_object_`
+**words**`object`
 
-本次请求的Token消耗信息。
+词级别的识别结果列表。当请求参数`enable_words`设为`true`时展示该结果。
 
-**属性**
+属性
 
-**seconds** `_integer_`
+**begin\_time**`integer`
 
-千问3-ASR-Flash音频时长（秒）。
+开始时间戳（毫秒）。
 
-### **异步调用识别结果说明**
+**end\_time**`integer`
+
+结束时间戳（毫秒）。
+
+**text**`string`
+
+识别结果文本。
+
+**punctuation**`string`
+
+标点符号。
 
 ```
 {
@@ -2110,159 +2013,3 @@ print(response.json())
     ]
 }
 ```
-
-**file\_url** `_string_`
-
-被识别的音频文件URL。
-
-**audio\_info** `_object_`
-
-被识别音频文件相关信息。
-
-**属性**
-
-**format** `_string_`
-
-音频格式。
-
-**sample\_rate** `_integer_`
-
-音频采样率。
-
-**transcripts** `_array_`
-
-完整的识别结果列表，每个元素对应一条音轨的识别内容。
-
-**属性**
-
-**channel\_id** `_integer_`
-
-音轨索引，以0为起始。
-
-**text** `_string_`
-
-识别结果文本。
-
-**sentences** `_object_`
-
-句子级别的识别结果列表。
-
-**属性**
-
-**begin\_time**`_integer_`
-
-句子开始时间戳（毫秒）。
-
-**end\_time**`_integer_`
-
-句子结束时间戳（毫秒）。
-
-**text** `_string_`
-
-识别结果文本。
-
-**sentence\_id** `_integer_`
-
-句子索引，以0为起始。
-
-**language** `_string_`
-
-被识别音频的语种。当请求参数`language`已指定语种时，该值与所指定的参数一致。
-
-**取值范围**
-
--   zh：中文（普通话、四川话、闽南语、吴语）
-    
--   yue：粤语
-    
--   en：英文
-    
--   ja：日语
-    
--   de：德语
-    
--   ko：韩语
-    
--   ru：俄语
-    
--   fr：法语
-    
--   pt：葡萄牙语
-    
--   ar：阿拉伯语
-    
--   it：意大利语
-    
--   es：西班牙语
-    
--   hi：印地语
-    
--   id：印尼语
-    
--   th：泰语
-    
--   tr：土耳其语
-    
--   uk：乌克兰语
-    
--   vi：越南语
-    
--   cs：捷克语
-    
--   da：丹麦语
-    
--   fil：菲律宾语
-    
--   fi：芬兰语
-    
--   is：冰岛语
-    
--   ms：马来语
-    
--   no：挪威语
-    
--   pl：波兰语
-    
--   sv：瑞典语
-    
-
-**emotion** `_string_`
-
-被识别音频的情感。支持的情感如下：
-
--   `surprised`：惊讶
-    
--   `neutral`：平静
-    
--   `happy`：愉快
-    
--   `sad`：悲伤
-    
--   `disgusted`：厌恶
-    
--   `angry`：愤怒
-    
--   `fearful`：恐惧
-    
-
-**words** `_object_`
-
-词级别的识别结果列表。当请求参数`enable_words`设为`true`时展示该结果。
-
-**属性**
-
-**begin\_time**`_integer_`
-
-开始时间戳（毫秒）。
-
-**end\_time**`_integer_`
-
-结束时间戳（毫秒）。
-
-**text** `_string_`
-
-识别结果文本。
-
-**punctuation** `_string_`
-
-标点符号。

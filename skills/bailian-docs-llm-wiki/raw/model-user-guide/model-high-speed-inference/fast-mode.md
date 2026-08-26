@@ -1,19 +1,16 @@
-# 快速模式
+# 优速模式
 
 高速模式为对输出速度敏感的场景提供更高的 TPS。
 
-## **使用方式**
+## 使用方式
 
 优速模式具备以下关键特性：
 
 -   **高速输出**：TPS 提升至标准 API 的 1.5~2 倍；适用于 AI 编程助手、Agent 多步推理、实时对话等对输出速度敏感的场景。
-    
 -   **按 token 计费**：计费逻辑与标准 API 一致，按输入与输出 token 计费。
-    
 -   **特殊限流**：调用量达到限流值时，若平台仍有剩余资源，则不会触发限流，因此**实际可用 TPS** 不低于限流值。
-    
 
-调用时将 model 参数指定为[支持的模型](#fast-models-h2)的 model ID 即可开启，无需额外参数。接入域名格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`，其中 `{workspace_id}`可在 [业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management) 页面切换到对应地域后查看。
+调用时将 model 参数指定为[支持的模型](https://help.aliyun.com/zh/model-studio/fast-mode#fast-models-h2)的 model ID 即可开启，无需额外参数。接入域名格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`，其中 `{workspace_id}`可在[业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management)页面切换到对应地域后查看。
 
 基础调用示例：
 
@@ -30,9 +27,11 @@ curl -X POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode
 }'
 ```
 
-## **支持的模型**
+## 支持的模型
 
-## 华北2（北京）
+> 模型支持的能力、使用限制与原版模型相同
+
+#### 华北2（北京）
 
 **文本生成模型**
 
@@ -43,6 +42,14 @@ curl -X POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode
 **输出单价**
 
 **缓存命中**
+
+qwen3.8-max-prime
+
+24元
+
+72元
+
+3元
 
 glm-5.2-fast-preview
 
@@ -70,7 +77,7 @@ wan3.0-video-prime
 
 1.8元/秒
 
-## 新加坡
+#### 新加坡
 
 **文本生成模型**
 
@@ -108,9 +115,11 @@ wan3.0-video-prime
 
 2.04元/秒
 
-## **使用示例**
+## 使用示例
 
-glm-5.2 默认返回 `reasoning_content` 思考字段；流式输出时思考内容与回答内容分别通过 `delta.reasoning_content` 与 `delta.content` 推送。流式调用示例：
+> 模型支持的能力、使用限制与原版模型相同
+
+流式调用示例：
 
 ```
 from openai import OpenAI
@@ -127,6 +136,8 @@ completion = client.chat.completions.create(
     stream=True,
 )
 
+# glm-5.2 默认返回 reasoning_content 思考字段；
+# 流式输出时思考内容与回答内容分别通过 delta.reasoning_content 与 delta.content 推送。
 for chunk in completion:
     if not chunk.choices:
         continue
@@ -163,10 +174,10 @@ for chunk in completion:
 }
 ```
 
-## **计费说明**
+## 计费说明
 
-关于快速模式的计费规则与价格表，请参见 [模型调用计费](https://help.aliyun.com/zh/model-studio/model-pricing)。
+关于快速模式的计费规则与价格表，请参见 [模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
 
-## **错误码**
+## 错误码
 
-关于快速模式调用过程中可能出现的错误码及对应的解决方法，请参见 [错误码](https://help.aliyun.com/zh/model-studio/error-code)。
+关于快速模式调用过程中可能出现的错误码及对应的解决方法，请参见 [错误码](raw/model-api-reference/preparations/error-code.md)。

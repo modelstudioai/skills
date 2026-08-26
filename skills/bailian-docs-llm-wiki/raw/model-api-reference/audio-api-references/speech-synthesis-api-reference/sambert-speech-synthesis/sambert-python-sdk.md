@@ -6,37 +6,32 @@
 
 **在线体验：**暂不支持。
 
-**重要**
+**重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
 
-阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。现有域名仍可正常使用。
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+## 前提条件
 
-## **前提条件**
+已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
 
--   已开通服务并[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
-    
--   [安装最新版DashScope SDK](https://help.aliyun.com/zh/model-studio/install-sdk)。
-    
+-   [安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
-## **快速开始**
+## 快速开始
 
-[SpeechSynthesizer类](#adcb5e9bddbyq)提供了非流式调用和单向流式调用的接口。请根据业务场景选择合适的调用方式：
+[SpeechSynthesizer类](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#adcb5e9bddbyq)提供了非流式调用和单向流式调用的接口。请根据业务场景选择合适的调用方式：
 
 -   非流式调用：提交文本后，服务端立即处理并返回完整的语音合成结果。整个过程是阻塞式的，客户端需要等待服务端完成处理后才能继续下一步操作。适合短文本合成场景。
-    
 -   单向流式调用：将文本一次发送至服务端并实时接收语音合成结果，不允许将文本分段发送。适用于对实时性要求高的场景。
-    
 
-### **非流式调用**
+### 非流式调用
 
 提交单个语音合成任务，无需调用回调接口，进行语音合成（无流式输出中间结果），最终一次性获取完整结果。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4872835871/CAEQURiBgIDHpsn4phkiIDQ0ZGE2OTk3NmY5NTRhNDVhZDQwNWE3ZGZiMzk4Yjk54709861_20241015153444.149.svg)
 
-直接调用[SpeechSynthesizer类](#adcb5e9bddbyq)的`call`方法进行语音合成。`call`方法可对[请求参数](#fdafc9b5535f3)进行设置，注意此时不要设置`callback`参数。
+直接调用[SpeechSynthesizer类](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#adcb5e9bddbyq)的`call`方法进行语音合成。`call`方法可对[请求参数](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#fdafc9b5535f3)进行设置，注意此时不要设置`callback`参数。
 
-任务完成后该方法返回[音频数据和时间戳信息（SpeechSynthesisResult）](#a727da82951p6)。
+任务完成后该方法返回[音频数据和时间戳信息（SpeechSynthesisResult）](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#a727da82951p6)。
 
 点击查看完整示例
 
@@ -64,18 +59,16 @@ else:
     print('ERROR: response is %s' % (result.get_response()))
 ```
 
-### 单向流式**调用**
+### 单向流式调用
 
 提交单个语音合成任务，通过回调的方式流式输出中间结果，合成结果通过`ResultCallback`中的回调方法流式获取。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4872835871/CAEQVRiBgMDd6_yhrBkiIDUyZGFlNTkwOGRlYTQwZjQ4ODI4ZGY2ZTQxYmNiMTVm4709861_20241015153444.149.svg)
 
-1.  实例化[回调接口（ResultCallback）](#3639e1cb40mxi)。
-    
-2.  调用[SpeechSynthesizer类](#adcb5e9bddbyq)的`call`方法进行语音合成。`call`方法可对[请求参数](#fdafc9b5535f3)进行设置，注意此时要设置`callback`参数。
-    
+1.  实例化[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#3639e1cb40mxi)。
+2.  调用[SpeechSynthesizer类](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#adcb5e9bddbyq)的`call`方法进行语音合成。`call`方法可对[请求参数](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#fdafc9b5535f3)进行设置，注意此时要设置`callback`参数。
 
-**点击查看完整示例**
+点击查看完整示例
 
 以下示例展示了如何使用流式接口调用发音人模型知厨（sambert-zhichu-v1）将文案”今天天气怎么样”合成采样率为48kHz，默认音频格式（wav）的流式音频，并获取对应时间戳。
 
@@ -122,9 +115,9 @@ SpeechSynthesizer.call(model='sambert-zhichu-v1',
                        phoneme_timestamp_enabled=True)
 ```
 
-## **请求参数**
+## 请求参数
 
-请求参数通过[SpeechSynthesizer类](#adcb5e9bddbyq)的`call`方法进行设置。
+请求参数通过[SpeechSynthesizer类](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#adcb5e9bddbyq)的`call`方法进行设置。
 
 **参数**
 
@@ -140,17 +133,13 @@ model
 
 str
 
-\-
-
 是
 
-指定用于语音合成的音色模型名，完整列表参见[模型列表](#a737f8b6f8gx0)。
+指定用于语音合成的音色模型名，完整列表参见[模型列表](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#a737f8b6f8gx0)。
 
 text
 
 str
-
-\-
 
 是
 
@@ -180,7 +169,7 @@ int
 
 否
 
-指定合成音频的采样率（单位：Hz），建议使用模型默认采样率（参见[模型列表](#a737f8b6f8gx0)），如果不匹配，服务会进行必要的升降采样处理。
+指定合成音频的采样率（单位：Hz），建议使用模型默认采样率（参见[模型列表](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#a737f8b6f8gx0)），如果不匹配，服务会进行必要的升降采样处理。
 
 volume
 
@@ -203,11 +192,8 @@ float
 指定合成音频的语速，取值范围：0.5~2。
 
 -   0.5：表示默认语速的0.5倍速。
-    
 -   1：表示默认语速。默认语速是指模型默认输出的合成语速，语速会因发音人不同而略有不同。约每秒钟4个字。
-    
 -   2：表示默认语速的2倍速。
-    
 
 pitch
 
@@ -243,17 +229,15 @@ callback
 
 ResultCallback
 
-\-
-
 否
 
 设置callback参数时，为单向流式调用模式。
 
 不设置callback参数时，为非流式调用模式。
 
-callback的实现请参见[回调接口（ResultCallback）](#3639e1cb40mxi)
+callback的实现请参见[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#3639e1cb40mxi)
 
-## **关键接口**
+## 关键接口
 
 ### `SpeechSynthesizer`类
 
@@ -277,33 +261,26 @@ def call(cls,
          **kwargs) -> SpeechSynthesisResult:
 ```
 
--   `model`：模型名，参见[模型列表](#a737f8b6f8gx0)
-    
+-   `model`：模型名，参见[模型列表](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#a737f8b6f8gx0)
 -   `text`：待合成文本
-    
--   `callback`：[回调接口（ResultCallback）](#3639e1cb40mxi)
-    
+-   `callback`：[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#3639e1cb40mxi)
 -   `workspace`：DashScope workspace id，不必关注
-    
--   `kwargs`：[请求参数](#fdafc9b5535f3)，如`format`等
-    
+-   `kwargs`：[请求参数](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#fdafc9b5535f3)，如`format`等
 
 合成结果`SpeechSynthesisResult`，非流式调用时需要处理该返回，异步调用时不必处理
 
 开启语音合成任务。根据是否传入参数`callback`，有如下两种情况：
 
 -   不传入`callback`参数：`call`函数将在语音合成完成后返回所有语音合成结果。
-    
 -   传入`callback`参数：在语音合成过程中，服务器将回调`callback`中对应函数，流式返回语音合成结果。
-    
 
-`call`方法能够对[请求参数](#fdafc9b5535f3)进行设置。
+`call`方法能够对[请求参数](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#fdafc9b5535f3)进行设置。
 
-### **回调接口（**`ResultCallback`）
+### 回调接口（`ResultCallback`）
 
-[单向流式调用](#ba023aacfbr84)时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
+[单向流式调用](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#ba023aacfbr84)时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
 
-**点击查看示例**
+点击查看示例
 
 ```
 class Callback(ResultCallback):
@@ -351,7 +328,7 @@ def on_open(self) -> None
 def on_event(self, result: SpeechSynthesisResult) -> None
 ```
 
-`result`：[音频数据和时间戳信息（SpeechSynthesisResult）](#a727da82951p6)
+`result`：[音频数据和时间戳信息（SpeechSynthesisResult）](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#a727da82951p6)
 
 无
 
@@ -387,9 +364,9 @@ def on_close(self) -> None
 
 服务关闭连接后被回调。
 
-## **响应结果**
+## 响应结果
 
-### **音频数据和时间戳信息（**`**SpeechSynthesisResult**`**）**
+### 音频数据和时间戳信息（`SpeechSynthesisResult`）
 
 `SpeechSynthesisResult`封装了语音合成结果，常用的接口为`get_audio_frame`、`get_timestamp`、`get_audio_data`和`get_timestamps`。
 
@@ -411,9 +388,7 @@ def get_audio_frame(self) -> bytes
 
 流式合成中，获取当前合成的音频帧数据。
 
-**重要**
-
-该函数要在流式合成时，在回调方法`event`中使用。
+**重要**该函数要在流式合成时，在回调方法`event`中使用。
 
 ```
 def get_timestamp(self) -> Dict[str, str]
@@ -421,13 +396,11 @@ def get_timestamp(self) -> Dict[str, str]
 
 无
 
-当前合成的句子对应的[时间戳信息](#6a6d7363490w6)
+当前合成的句子对应的[时间戳信息](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#6a6d7363490w6)
 
 流式合成中，获取当前合成的句子对应的时间戳信息。
 
-**重要**
-
-该函数要在流式合成时，在回调方法`event`中使用。
+**重要**该函数要在流式合成时，在回调方法`event`中使用。
 
 ```
 def get_audio_data(self) -> bytes
@@ -445,7 +418,7 @@ def get_timestamps(self) -> List[Dict[str, str]]
 
 无
 
-所有句子对应的[时间戳信息](#6a6d7363490w6)
+所有句子对应的[时间戳信息](https://help.aliyun.com/zh/model-studio/sambert-python-sdk#6a6d7363490w6)
 
 获取所有句子对应的时间戳信息。
 
@@ -532,23 +505,21 @@ str
 -   拼音中，1、2、3、4、5分别代表一声、二声、三声、四声和轻声。
     
 
-## **错误码**
+## 错误码
 
-在使用API过程中，如果调用失败并返回错误信息，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行解决。
+在使用API过程中，如果调用失败并返回错误信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 
-## **更多示例**
+## 更多示例
 
 更多示例，请参见[GitHub](https://github.com/aliyun/alibabacloud-bailian-speech-demo)。
 
-## **常见问题**
+## 常见问题
 
 请参见GitHub [QA](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/docs/QA)。
 
-## **模型列表**
+## 模型列表
 
-**说明**
-
-默认采样率代表当前模型的最佳采样率，缺省条件下默认按照该采样率输出，同时支持降采样或升采样。如知妙音色，默认采样率16 kHz，使用时可以降采样到8 kHz，但升采样到48 kHz时不会有额外效果提升。
+**说明**默认采样率代表当前模型的最佳采样率，缺省条件下默认按照该采样率输出，同时支持降采样或升采样。如知妙音色，默认采样率16 kHz，使用时可以降采样到8 kHz，但升采样到48 kHz时不会有额外效果提升。
 
 **音色**
 

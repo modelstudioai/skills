@@ -2,31 +2,27 @@
 
 本文介绍Paraformer非实时语音识别HTTP API的参数和接口细节。
 
-**重要**
+**重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
 
-阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
-
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#d3eb3cd37b7fu)。现有域名仍可正常使用。
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。现有域名仍可正常使用。
 
 **用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)
 
-目前提供了[提交任务接口](#418f2ac8ecxm4)和[查询任务接口](#480630e0582sb)，通常情况下，您可以先调用提交任务接口上传识别任务，然后循环调用查询任务接口，直至任务完成。
+目前提供了[提交任务接口](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-restful-api#418f2ac8ecxm4)和[查询任务接口](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-restful-api#480630e0582sb)，通常情况下，您可以先调用提交任务接口上传识别任务，然后循环调用查询任务接口，直至任务完成。
 
-## **前提条件**
+## 前提条件
 
-已开通服务并[获取API Key](https://help.aliyun.com/zh/model-studio/get-api-key)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
+已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
 
-**说明**
-
-当您需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时鉴权Token](https://help.aliyun.com/zh/model-studio/generate-temporary-api-key)。
+**说明**当您需要为第三方应用或用户提供临时访问权限，或者希望严格控制敏感数据访问、删除等高风险操作时，建议使用[临时鉴权Token](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)。
 
 与长期有效的 API Key 相比，临时鉴权 Token 具备时效性短（60秒）、安全性高的特点，适用于临时调用场景，能有效降低API Key泄露的风险。
 
 使用方式：在代码中，将原本用于鉴权的 API Key 替换为获取到的临时鉴权 Token 即可。
 
-## **提交任务接口**
+## 提交任务接口
 
-### **基本信息**
+### 基本信息
 
 **接口描述**
 
@@ -52,7 +48,7 @@ X-DashScope-Async: enable // 请勿遗漏该请求头，否则无法提交任务
 
 **消息体**
 
-包含所有[请求参数](#493b0f8f2ap0y)的消息体如下，对于可选字段，在实际业务中可根据需求省略：
+包含所有[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-restful-api#493b0f8f2ap0y)的消息体如下，对于可选字段，在实际业务中可根据需求省略：
 
 ```
 {
@@ -79,9 +75,9 @@ X-DashScope-Async: enable // 请勿遗漏该请求头，否则无法提交任务
 }
 ```
 
-### **请求参数**
+### 请求参数
 
-**点击查看请求示例**
+点击查看请求示例
 
 以下为调用提交任务接口的cURL示例：
 
@@ -107,52 +103,39 @@ model
 
 string
 
-\-
-
 是
 
-指定用于音视频文件转写的Paraformer模型名。参见[支持的模型](https://help.aliyun.com/zh/model-studio/recording-file-recognition#da60323c9ea75)。
+指定用于音视频文件转写的Paraformer模型名。参见[支持的模型](https://help.aliyun.com/zh/model-studio/recording-file-recognition)。
 
 file\_urls
 
 array\[string\]
 
-\-
-
 是
 
 音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。
 
-**重要**
-
-URL中如果包含空格、中文或其他特殊字符，必须先进行URL编码（例如将空格替换为`%20`），否则可能导致文件下载失败，返回`InvalidFile.DownloadFailed`错误。
+**重要**URL中如果包含空格、中文或其他特殊字符，必须先进行URL编码（例如将空格替换为`%20`），否则可能导致文件下载失败，返回`InvalidFile.DownloadFailed`错误。
 
 若录音文件存储在阿里云OSS，使用RESTful API方式支持使用以 oss://为前缀的临时 URL。
 
 **重要**
 
 -   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
-    
 -   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
-    
 -   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
-    
 
 vocabulary\_id
 
 string
 
-\-
-
 否
 
-最新热词ID，支持最新v2系列模型并配置语种信息，此次语音识别中生效此热词ID对应的热词信息。默认不启用。使用方法请参考[定制热词](https://help.aliyun.com/zh/model-studio/custom-hot-words/)。
+最新热词ID，支持最新v2系列模型并配置语种信息，此次语音识别中生效此热词ID对应的热词信息。默认不启用。使用方法请参考[定制热词](https://help.aliyun.com/zh/model-studio/custom-hot-words)。
 
 resource\_id
 
 string
-
-\-
 
 否
 
@@ -163,8 +146,6 @@ string
 resource\_type
 
 string
-
-\-
 
 否
 
@@ -180,9 +161,7 @@ array\[integer\]
 
 指定在多音轨音频文件中需要识别的音轨索引，索引从 0 开始。例如，\[0\] 表示识别第一个音轨，\[0, 1\] 表示同时识别第一和第二个音轨。如果省略此参数，则默认处理第一个音轨。
 
-**重要**
-
-指定的每一个音轨都将独立计费。例如，为单个文件请求 \[0, 1\] 会产生两笔独立的费用。
+**重要**指定的每一个音轨都将独立计费。例如，为单个文件请求 \[0, 1\] 会产生两笔独立的费用。
 
 disfluency\_removal\_enabled
 
@@ -208,8 +187,6 @@ special\_word\_filter
 
 string
 
-\-
-
 否
 
 指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。
@@ -218,10 +195,8 @@ string
 
 若传入该参数，则可实现以下敏感词处理策略：
 
--   替换为 `*`：将匹配的敏感词替换为等长的 `*`；
-    
+-   替换为 `*`：将匹配的敏感词替换为等长的 `*`；
 -   直接过滤：将匹配的敏感词从识别结果中完全移除。
-    
 
 该参数的值应为一个 JSON 字符串，其结构如下所示：
 
@@ -245,14 +220,13 @@ JSON字段说明：
         
     -   是否必填：否。
         
-    -   描述：配置需替换为`*`的敏感词列表。识别结果中匹配的词语将被等长的 `*` 替代。
+    -   描述：配置需替换为`*`的敏感词列表。识别结果中匹配的词语将被等长的 `*` 替代。
         
     -   示例：以上述JSON为例，“帮我测试一下这段代码”的语音识别结果将会是“帮我\*\*一下这段代码”。
         
     -   内部字段：
         
         -   `word_list`: 字符串数组，列出需被替换的敏感词。
-            
 -   `filter_with_empty`
     
     -   类型：对象。
@@ -266,17 +240,12 @@ JSON字段说明：
     -   内部字段：
         
         -   `word_list`: 字符串数组，列出需被完全移除（过滤）的敏感词。
-            
 -   `system_reserved_filter`
     
     -   类型：布尔值。
-        
     -   是否必填：否。
-        
     -   默认值：true。
-        
     -   描述：是否启用系统预置的敏感词规则。设为`true`时，将同时启用系统内置的敏感词过滤逻辑，识别结果中与[阿里云百炼敏感词表](https://dashscope.oss-cn-beijing.aliyuncs.com/samples/audio/paraformer/%E7%99%BE%E7%82%BC%E6%95%8F%E6%84%9F%E8%AF%8D%E5%88%97%E8%A1%A8_20230716.words.txt)匹配的词语将被替换为等长的`*`。
-        
 
 language\_hints
 
@@ -293,21 +262,13 @@ array\[string\]
 支持的语言代码：
 
 -   zh: 中文
-    
 -   en: 英文
-    
 -   ja: 日语
-    
 -   yue: 粤语
-    
 -   ko: 韩语
-    
 -   de：德语
-    
 -   fr：法语
-    
 -   ru：俄语
-    
 
 diarization\_enabled
 
@@ -323,17 +284,13 @@ false
 
 启用该功能后，识别结果中将显示`speaker_id`字段，用于区分不同说话人。
 
-**说明**
+**说明**如果启用说话人分离功能，建议音频时长不超过2小时，否则可能导致识别失败或超时。
 
-如果启用说话人分离功能，建议音频时长不超过2小时，否则可能导致识别失败或超时。
-
-有关`speaker_id`的示例，请参见[识别结果说明](#a9021178ccl7s)。
+有关`speaker_id`的示例，请参见[识别结果说明](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-restful-api#a9021178ccl7s)。
 
 speaker\_count
 
 integer
-
-\-
 
 否
 
@@ -343,9 +300,9 @@ integer
 
 默认自动判断说话人数量，如果配置此项，只能辅助算法尽量输出指定人数，无法保证一定会输出此人数。
 
-### **响应参数**
+### 响应参数
 
-**点击查看响应示例**
+点击查看响应示例
 
 ```
 {
@@ -373,11 +330,11 @@ task\_id
 
 string
 
-任务ID。该ID在[查询任务接口](#480630e0582sb)中作为[请求参数](#0634617fe8jqg)传入。
+任务ID。该ID在[查询任务接口](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-restful-api#480630e0582sb)中作为[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-restful-api#0634617fe8jqg)传入。
 
-## **查询任务接口**
+## 查询任务接口
 
-### **基本信息**
+### 基本信息
 
 **接口描述**
 
@@ -403,9 +360,9 @@ Authorization: Bearer {api-key} // 需替换为您自己的API Key
 
 无。
 
-### **请求参数**
+### 请求参数
 
-**点击查看请求示例**
+点击查看请求示例
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}' --header "Authorization: Bearer $DASHSCOPE_API_KEY"
@@ -429,15 +386,15 @@ string
 
 是
 
-查询任务需指定其ID，该ID为[提交任务接口](#418f2ac8ecxm4)被调用后返回的`task_id`。
+查询任务需指定其ID，该ID为[提交任务接口](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-restful-api#418f2ac8ecxm4)被调用后返回的`task_id`。
 
-### **响应参数**
+### 响应参数
 
-**点击查看响应示例**
+点击查看响应示例
 
 当任务包含多个子任务时，只要存在任一子任务成功，整个任务状态将标记为`SUCCEEDED`，需通过`subtask_status`字段判断具体子任务结果。
 
-## 正常示例
+#### 正常示例
 
 ```
 {
@@ -451,7 +408,7 @@ string
     "results": [
       {
         "file_url": "{YOUR_AUDIO_URL}",
-        "transcription_url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/pre/filetrans-16k/20240912/15%3A11/409a4b92-445b-4dd8-8c1d-f110954d82d8-1.json?Expires=1726211500&OSSAccessKeyId=yourOSSAccessKeyId&Signature=v5Owy5qoAfT7mzGmQgH0g8C****%3D",
+        "transcription_url": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/pre/filetrans-16k/20240912/15%3A11/409a4b92-445b-4dd8-8c1d-f110954d82d8-1.json?Expires=1726211500&OSSAccessKeyId=YOUR_ACCESS_KEY_ID&Signature=YOUR_SIGNATURE",
         "subtask_status": "SUCCEEDED"
       }
     ],
@@ -467,9 +424,9 @@ string
 }
 ```
 
-## 异常示例
+#### 异常示例
 
-“`code`”为错误码，“`message`”为错误信息，只有异常情况才有这两个字段，您可以通过这两个字段，对照[错误码](#1dd0e8e854p6w)排查问题。
+“`code`”为错误码，“`message`”为错误信息，只有异常情况才有这两个字段，您可以通过这两个字段，对照[错误码](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-restful-api#1dd0e8e854p6w)排查问题。
 
 ```
 {
@@ -512,8 +469,6 @@ string
 
 被查询任务的状态。
 
-**说明**
-
 当任务包含多个子任务时，只要存在任一子任务成功，整个任务状态将标记为`SUCCEEDED`，需通过`subtask_status`字段判断具体子任务结果。
 
 subtask\_status
@@ -536,7 +491,7 @@ string
 
 识别结果保存为JSON文件，您可以通过上述链接下载该文件或直接通过HTTP请求读取该文件中的内容。
 
-JSON数据中各字段含义请参见[识别结果说明](#a9021178ccl7s)。
+JSON数据中各字段含义请参见[识别结果说明](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-restful-api#a9021178ccl7s)。
 
 ### 识别结果说明
 
@@ -633,8 +588,6 @@ integer
 
 音轨中被判定为语音内容的时长（ms）。
 
-**重要**
-
 Paraformer语音识别模型服务仅对音轨中被判定为语音内容的时长进行语音转写，并据此进行计量计费，非语音内容不计量、不计费。通常情况下语音内容时长会短于原始音频时长。由于对是否存在语音内容的判定是由AI模型给出的，可能与实际情况存在一定误差。
 
 transcript
@@ -687,11 +640,11 @@ string
 
 预测出的词之后的标点符号（如有）。
 
-## **其他接口：批量查询任务状态/取消任务**
+## 其他接口：批量查询任务状态/取消任务
 
-详情请参见[管理异步任务](https://help.aliyun.com/zh/model-studio/manage-asynchronous-tasks)：支持批量查询24小时内提交的非实时语音识别任务，同时支持取消`PENDING`（排队）状态的任务。
+详情请参见[管理异步任务](raw/model-api-reference/more-about-models/manage-asynchronous-tasks.md)：支持批量查询24小时内提交的非实时语音识别任务，同时支持取消`PENDING`（排队）状态的任务。
 
-## **完整示例**
+## 完整示例
 
 您可以使用编程语言自带的HTTP类库，来实现提交和查询任务的请求：先调用提交任务接口上传识别任务，然后循环调用查询任务接口，直至任务完成。
 
@@ -778,9 +731,9 @@ result = wait_for_complete(task_id)
 print("transcription result: ", result)
 ```
 
-## **错误码**
+## 错误码
 
-如遇报错问题，请参见[错误码](https://help.aliyun.com/zh/model-studio/error-code)进行排查。
+如遇报错问题，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行排查。
 
 若问题仍未解决，请加入[开发者群](https://github.com/aliyun/alibabacloud-bailian-speech-demo)反馈遇到的问题，并提供Request ID，以便进一步排查问题。
 
@@ -811,19 +764,19 @@ print("transcription result: ", result)
 }
 ```
 
-## **更多示例**
+## 更多示例
 
 更多示例，请参见[GitHub](https://github.com/aliyun/alibabacloud-bailian-speech-demo)。
 
-## **常见问题**
+## 常见问题
 
-### **功能特性**
+### 功能特性
 
-#### **Q：是否支持Base64编码方式的音频？**
+#### Q：是否支持Base64编码方式的音频？
 
 不支持Base64编码方式的音频。仅支持可通过公网访问的 URL 所指向的音频的识别，不支持识别二进制流，也不支持直接识别本地文件。
 
-#### **Q：如何将音频文件以公网可访问的URL形式提供？**
+#### Q：如何将音频文件以公网可访问的URL形式提供？
 
 通常遵循以下几个步骤（这里为您提供一种思路，具体情况因不同存储产品而异，推荐将音频[上传至阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)）：
 
@@ -834,21 +787,15 @@ print("transcription result: ", result)
 -   对象存储服务（推荐）：
     
     -   使用云服务商的对象存储服务（如[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)），将音频文件上传到存储桶中，并设置为公开访问。
-        
     -   优点：高可用性、支持 CDN 加速、易于管理。
-        
 -   Web 服务器：
     
     -   将音频文件放置在支持 HTTP/HTTPS 访问的 Web 服务器上（如 Nginx、Apache）。
-        
     -   优点：适合小型项目或本地测试。
-        
 -   内容分发网络（CDN）：
     
     -   将音频文件托管在 CDN 上，通过 CDN 提供的 URL 访问。
-        
     -   优点：加速文件传输，适合高并发场景。
-        
 
 2、上传音频文件
 
@@ -857,15 +804,11 @@ print("transcription result: ", result)
 -   对象存储服务：
     
     -   登录云服务商的控制台，创建存储桶。
-        
     -   上传音频文件，并设置文件权限为“公共读”或生成临时访问链接。
-        
 -   Web 服务器：
     
-    -   将音频文件放置在服务器指定目录下（如 `/var/www/html/audio/`）。
-        
+    -   将音频文件放置在服务器指定目录下（如 `/var/www/html/audio/`）。
     -   确保文件可以通过 HTTP/HTTPS 访问。
-        
 
 3、生成公网可访问的URL
 
@@ -873,27 +816,21 @@ print("transcription result: ", result)
 
 -   对象存储服务：
     
-    -   文件上传后，系统会自动生成一个公网访问 URL（通常格式为 `https://<bucket-name>.<region>.aliyuncs.com/<file-name>`）。
-        
+    -   文件上传后，系统会自动生成一个公网访问 URL（通常格式为 `https://<bucket-name>.<region>.aliyuncs.com/<file-name>`）。
     -   如果需要更友好的域名，可以绑定自定义域名并开启 HTTPS。
-        
 -   Web 服务器：
     
-    -   文件的访问 URL 通常是服务器地址加上文件路径（如 `https://your-domain.com/audio/file.mp3`）。
-        
+    -   文件的访问 URL 通常是服务器地址加上文件路径（如 `https://your-domain.com/audio/file.mp3`）。
 -   CDN：
     
-    -   配置 CDN 加速后，使用 CDN 提供的 URL（如 `https://cdn.your-domain.com/audio/file.mp3`）。
-        
+    -   配置 CDN 加速后，使用 CDN 提供的 URL（如 `https://cdn.your-domain.com/audio/file.mp3`）。
 
 4、验证URL的可用性
 
 公网环境下，确保生成的 URL 可以正常访问，例如：
 
 -   在浏览器中打开 URL，检查是否能播放音频文件。
-    
--   使用工具（如 `curl` 或 Postman）验证 URL 是否返回正确的 HTTP 响应（状态码 200）。
-    
+-   使用工具（如 `curl` 或 Postman）验证 URL 是否返回正确的 HTTP 响应（状态码 200）。
 
 使用SDK时，若录音文件存储在[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/simple-upload#a632b50f190j8)，不支持使用以 `oss://`为前缀的临时 URL。
 
@@ -902,49 +839,43 @@ print("transcription result: ", result)
 **重要**
 
 -   临时 URL 有效期48小时，过期后无法使用，**请勿用于生产环境。**
-    
 -   文件上传凭证接口限流为 100 QPS 且不支持扩容，**请勿用于生产环境、高并发及压测场景。**
-    
 -   生产环境建议使用[阿里云OSS](https://help.aliyun.com/zh/oss/user-guide/what-is-oss) 等稳定存储，确保文件长期可用并规避限流问题。
-    
 
-#### **Q：多久能获取识别结果？**
+#### Q：多久能获取识别结果？
 
 任务提交后将进入排队（PENDING）状态，排队时间取决于队列长度和文件时长，无法明确给出，通常在数分钟内，请耐心等待。并且音频时长越长，所需时间越久。
 
-### **故障排查**
+### 故障排查
 
-如遇代码报错问题，请根据[错误码](#1dd0e8e854p6w)中的信息进行排查。
+如遇代码报错问题，请根据[错误码](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-restful-api#1dd0e8e854p6w)中的信息进行排查。
 
-#### **Q：识别结果和语音播放不同步怎么办？**
+#### Q：识别结果和语音播放不同步怎么办？
 
-将[请求参数](#493b0f8f2ap0y)`timestamp_alignment_enabled`设为`true`将启用时间戳校准功能，能够让识别结果和语音播放同步。
+将[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-restful-api#493b0f8f2ap0y)`timestamp_alignment_enabled`设为`true`将启用时间戳校准功能，能够让识别结果和语音播放同步。
 
-#### **Q：提交任务后返回InvalidFile.DownloadFailed错误怎么办？**
+#### Q：提交任务后返回InvalidFile.DownloadFailed错误怎么办？
 
 请检查文件URL中是否包含空格、中文等特殊字符。如果文件名包含空格（例如"第八节 学生伤害事故处理办法.mp4"），需要将空格替换为`%20`进行URL编码后再传入`file_urls`参数。
 
-#### **Q：录音文件URL设置成OSS临时公网访问不通该如何处理？**
+#### Q：录音文件URL设置成OSS临时公网访问不通该如何处理？
 
 headers中将`X-DashScope-OssResourceResolve`设为`enable`。
 
 不推荐该方式。
 
-[Java SDK](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-java-sdk)或者[Python SDK](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-python-sdk)不支持对headers进行配置。
+[Java SDK](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/paraformer-recorded-speech-recognition-api-reference/paraformer-recorded-speech-recognition-java-sdk.md)或者[Python SDK](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/paraformer-recorded-speech-recognition-api-reference/paraformer-recorded-speech-recognition-python-sdk.md)不支持对headers进行配置。
 
-#### **Q：一直轮询不到结果？**
+#### Q：一直轮询不到结果？
 
 可能是限流原因，请耐心等待。若需扩容，请加入[开发者群](https://github.com/aliyun/alibabacloud-bailian-speech-demo)进行申请。
 
-#### **Q：无法识别语音（无识别结果）是什么原因？**
+#### Q：无法识别语音（无识别结果）是什么原因？
 
 -   请检查音频是否符合要求（格式、采样率）。
-    
 -   若是使用了`paraformer-v2`模型，检查`language_hints`的设置是否正确。
-    
 -   以上都没问题，可通过定制热词，提升对特定词语的识别效果。
-    
 
-### **更多问题**
+### 更多问题
 
 请参见GitHub [QA](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/docs/QA)。

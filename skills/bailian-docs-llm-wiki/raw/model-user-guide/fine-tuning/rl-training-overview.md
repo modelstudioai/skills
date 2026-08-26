@@ -2,7 +2,7 @@
 
 本文通过端到端示例帮助您快速完成第一个强化学习（RL） 训练任务的提交与监控。
 
-**如需了解 RL 训练的基本概念和适用场景，请点击这里。**
+如需了解 RL 训练的基本概念和适用场景，请点击这里。
 
 百炼提供的多种调优方式并不互斥，而是递进的、相辅相成的。
 
@@ -10,51 +10,34 @@
 
 1.  CPT (持续预训练）- 补知识 （通用模型知识的“广度”和“浅度”，无法满足专业领域的“深度”和“精度”要求）
     
-    -   金融模型： `学金融术语`
-        
-    -   医疗模型： `记药品病理`
-        
-    -   法律模型： `懂法条判例`
-        
+    -   金融模型： `学金融术语`
+    -   医疗模型： `记药品病理`
+    -   法律模型： `懂法条判例`
 2.  SFT (监督微调）- 学做事
     
-    -   客服机器人： `学客服流程`
-        
-    -   代码助手： `学编程范式`
-        
-    -   工具调用 (Agent)： `学使用 MCP`
-        
+    -   客服机器人： `学客服流程`
+    -   代码助手： `学编程范式`
+    -   工具调用 (Agent)： `学使用 MCP`
 3.  DPO (直接偏好优化）- 做得更好
     
-    -   安全与责任感： `拒有害建议`
-        
-    -   简洁与有效性： `答干脆利落`
-        
-    -   客观与中立： `评公正客观`
-        
+    -   安全与责任感： `拒有害建议`
+    -   简洁与有效性： `答干脆利落`
+    -   客观与中立： `评公正客观`
 4.  RL（强化学习）- 学推理（通过 Reward 信号驱动模型自主探索最优策略，无需提供标准答案）
     
-    -   数学推理： `解题更准`
-        
-    -   工具调用 (Agent)： `调得更稳`
-        
-    -   代码生成： `写得能跑`
-        
+    -   数学推理： `解题更准`
+    -   工具调用 (Agent)： `调得更稳`
+    -   代码生成： `写得能跑`
 
 ## RL 训练全流程概览
 
 RL 训练从环境准备到模型部署，共 5 步：
 
 1.  **环境准备** — 安装离线 SDK、获取 API Key、完成 RL 授权
-    
 2.  **准备数据与代码** — 下载 Demo 包，了解数据格式与项目结构
-    
 3.  **提交训练任务** — 运行 Demo 一步完成函数部署、数据上传、任务提交
-    
 4.  **训练状态观测** — 查看训练状态、日志和 Reward 趋势
-    
 5.  **发布与部署模型** — 发布 Checkpoint 至"我的模型"，部署后通过 API 调用
-    
 
 ### RL 训练原理
 
@@ -78,9 +61,7 @@ RL 训练通过"生成-评分-优化"循环不断提升模型能力。每轮训�
 
 ## 支持的模型
 
-**说明**
-
-请联系**商务经理**开启强化学习训练功能。
+**说明**请联系**商务经理**开启强化学习训练功能。
 
 **模型名称**
 
@@ -156,15 +137,11 @@ IV 型（MTU4）
 
 1 分钟
 
-**说明**
-
-预付费扩缩容、续费、退订等运营规则与具体 MTU 容量测算请联系商务经理。
+**说明**预付费扩缩容、续费、退订等运营规则与具体 MTU 容量测算请联系商务经理。
 
 ## 环境准备
 
-**警告**
-
-RL 训练**仅支持**通过模型训练单元（MTU）计费，不支持按 Token 计费方式。
+**警告**RL 训练**仅支持**通过模型训练单元（MTU）计费，不支持按 Token 计费方式。
 
 按照以下步骤完成环境配置：
 
@@ -177,30 +154,24 @@ RL 训练**仅支持**通过模型训练单元（MTU）计费，不支持按 Tok
 3.  **设置环境变量**：以下变量由本地 SDK 读取，控制打包、上传和部署行为：
     
     -   **DASHSCOPE\_API\_KEY**（必填）：API 密钥。
-        
     -   **FC\_PYPI\_LIB**（必填）：指定 FC 容器启动时安装的 dashscope 离线包。SDK 打包部署时会自动将该变量注入为 `FC_SDK_PACKAGE`，无需在 FC 侧手动安装。whl 文件名需与此变量**完全一致**，且放在项目根目录下。
-        
     -   **LOG\_LEVEL**（可选，默认 `info`）：设为 `debug` 可输出完整请求/响应信息，便于排查提交失败等问题。
-        
-    
-    ```
-    export DASHSCOPE_API_KEY="sk-your-api-key"
-    export FC_PYPI_LIB="dashscope-1.25.23-py3-none-any.whl"
-    export LOG_LEVEL="info"
-    ```
-    
+
+```
+export DASHSCOPE_API_KEY="sk-your-api-key"
+export FC_PYPI_LIB="dashscope-1.25.23-py3-none-any.whl"
+export LOG_LEVEL="info"
+```
 
 ## 准备数据与代码
 
 1.  下载 Demo 包[agentic-rl-example.zip](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260721/jfslkz/agentic-rl-example-for-customer-9bae5b71d53759bc7d051cda8f4671349d6164a5.zip)。（该 Demo 运行最低要求 24 个 IV 型模型训练单元）
-    
 2.  **下载完成后需要安装 DashScope SDK**（要求 Python >= 3.10）：请按照 Demo 包中附带的指引安装相关依赖：
-    
-    ```
-    # 本地环境使用 PyPI 源安装；FC 容器侧无需手动安装，会自动安装 FC_PYPI_LIB 指定的离线 whl 包：
-    pip install dashscope
-    ```
-    
+
+```
+# 本地环境使用 PyPI 源安装；FC 容器侧无需手动安装，会自动安装 FC_PYPI_LIB 指定的离线 whl 包：
+pip install dashscope
+```
 
 您将获得以下项目结构：
 
@@ -240,13 +211,9 @@ agentic-rl-example/
 本 Demo 实现了一个数学计算 Agent：
 
 -   **Rollout 函数**：调用训练中的模型，配合计算器工具回答数学问题
-    
 -   **Reward 函数**：将模型输出与参考答案对比，判定回答是否正确并评分
-    
 
-**说明**
-
-Demo 中的 Rollout 函数使用 LangGraph 编排 Agent 流程，通过 **MCP**（Model Context Protocol，一种 LLM 工具调用协议）调用计算器工具。
+**说明**Demo 中的 Rollout 函数使用 LangGraph 编排 Agent 流程，通过 **MCP**（Model Context Protocol，一种 LLM 工具调用协议）调用计算器工具。
 
 如需编写自己的 Rollout 和 Reward 函数，请参见[强化学习开发指南](https://help.aliyun.com/zh/model-studio/rl-function-development-guide)。
 
@@ -259,18 +226,14 @@ Demo 中的 Rollout 函数使用 LangGraph 编排 Agent 流程，通过 **MCP**�
 ```
 
 -   `messages`：用户问题，格式与 ChatML 一致
-    
 -   `rollout_extra`：存放参考答案或其他业务数据，会传递给 Reward 函数用于评分（rollout\_extra 支持自定义字段）
-    
 
 `rollout_extra` 中的数据会透传到 Rollout 函数的 `RolloutInput.rollout_extra` 和 Reward 函数的 `RewardInput.agent_output.rollout_extra`，方便在评分逻辑中使用。该字段支持自定义 key，不限于示例中的 `solution`。
 
 ### 数据量建议
 
 -   **起步**：几十到几百条即可验证方案有效性（数据量至少大于 `Batch_size`）。
-    
 -   **正式训练**：数据量越大效果越优，大规模数据集还支持更大的 batch\_size，有助于提升训练稳定性
-    
 
 ## 提交训练任务
 
@@ -280,7 +243,7 @@ Demo 中已包含 Rollout 和 Reward 函数，运行以下命令即可一步完�
 python submit_job.py
 ```
 
-**完整代码及参数说明**
+完整代码及参数说明
 
 以下为训练脚本的完整代码，注释中说明了各参数的含义和取值建议：
 
@@ -365,26 +328,18 @@ async def main():
 asyncio.run(main())
 ```
 
-**说明**
-
-也可以通过配置文件或 CLI 提交训练任务（`dashscope rl run`），三种提交方式与字段逐项说明详见 [《训练配置 — 提交与配置》](https://help.aliyun.com/zh/model-studio/rl-training-config-monitoring)。
+**说明**也可以通过配置文件或 CLI 提交训练任务（`dashscope rl run`），三种提交方式与字段逐项说明详见 [《训练配置 — 提交与配置》](https://help.aliyun.com/zh/model-studio/rl-training-config-monitoring)。
 
 ### 起步技巧
 
 第一次跑通后，建议参考以下 4 项实践：
 
 -   **先用精简数据**：Demo 默认 `calc_train_min.jsonl` + `n_epochs=1` 跑一次，确认链路通了再换完整数据集，避免拿 24 个 MTU 烧大数据集才发现配置错。
-    
 -   **超参先不动**：上面 11 项超参是 qwen3.5-9b 的推荐起点，第一次训练别调。要调时一次只动一个变量（lr 或 batch\_size），跑满 `eval_steps × 3` 步再判断趋势。
-    
 -   **盯一个核心指标**：在**指标**页签看 `critic/rewards/mean`——稳步上升说明在学；停滞或下降就停下来排查，别空跑。
-    
 -   **FAILED 先看日志**：任务失败 → **日志**页签看末尾报错，或 SDK 拉 `AgenticRL.logs(job_id="ft-xxx", lines=100)`。配置/依赖类报错通常一眼能定位。
-    
 
-**说明**
-
-算法选型、超参起点表、调参决策详见《强化学习训练配置 — 提交与配置》；Reward 函数设计哲学与 Hacking 防御详见《强化学习开发指南》；看到指标异常如何归因详见《强化学习的可观测配置与指标参考》。
+**说明**算法选型、超参起点表、调参决策详见《强化学习训练配置 — 提交与配置》；Reward 函数设计哲学与 Hacking 防御详见《强化学习开发指南》；看到指标异常如何归因详见《强化学习的可观测配置与指标参考》。
 
 ## 训练过程观测与分析
 
@@ -434,14 +389,12 @@ Checkpoint 列表、发布状态，可将 Checkpoint 发布至"我的模型"后�
 
 ## 发布与部署模型
 
-训练完成后，最后一个 Checkpoint 会自动发布至**我的模型**。如需发布中间 Checkpoint，前往百炼控制台**模型调优** > **产出**页面手动操作，详见[在控制台进行模型调优](https://help.aliyun.com/zh/model-studio/model-training-on-console)。
+训练完成后，最后一个 Checkpoint 会自动发布至**我的模型**。如需发布中间 Checkpoint，前往百炼控制台**模型调优** > **产出**页面手动操作，详见[在控制台进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
 
-发布后的模型可在**我的模型**页面进行部署。部署完成后即可通过 API 调用模型。详见[模型部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)。
+发布后的模型可在**我的模型**页面进行部署。部署完成后即可通过 API 调用模型。详见[模型部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)。
 
 ## 后续步骤
 
 -   了解函数开发的完整细节 → [强化学习开发指南](https://help.aliyun.com/zh/model-studio/rl-function-development-guide)
-    
 -   了解训练配置和监控 → [强化学习训练配置 — 提交与配置](https://help.aliyun.com/zh/model-studio/rl-training-config-monitoring)
-    
 -   了解可观测性配置、轨迹查看与训练指标参考 → [强化学习的可观测配置与指标参考](https://help.aliyun.com/zh/model-studio/observable-configuration-for-reinforcement-learning)

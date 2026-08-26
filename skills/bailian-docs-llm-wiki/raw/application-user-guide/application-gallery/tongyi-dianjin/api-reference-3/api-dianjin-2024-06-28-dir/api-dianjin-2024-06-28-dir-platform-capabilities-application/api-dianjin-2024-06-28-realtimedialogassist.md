@@ -4,7 +4,7 @@
 
 ## 接口说明
 
-请确保在使用该接口前，已充分了解通义点金产品的收费方式和[价格](https://help.aliyun.com/zh/model-studio/tongyi-dianjin-overview)。
+请确保在使用该接口前，已充分了解通义点金产品的收费方式和[价格](raw/application-user-guide/application-gallery/tongyi-dianjin/tongyi-dianjin-overview.md)。
 
 前提条件
 
@@ -14,21 +14,26 @@
 
 ## 调试
 
-[您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。](https://api.aliyun.com/api/DianJin/2024-06-28/RealtimeDialogAssist)
+您可以在OpenAPI Explorer中直接运行该接口，免去您计算签名的困扰。运行成功后，OpenAPI Explorer可以自动生成SDK代码示例。
 
-[![](https://img.alicdn.com/tfs/TB16JcyXHr1gK0jSZR0XXbP8XXa-24-26.png)调试](https://api.aliyun.com/api/DianJin/2024-06-28/RealtimeDialogAssist)
+[调试](https://api.alibabacloud.com/api/DianJin/2024-06-28/RealtimeDialogAssist)
 
 ## 授权信息
 
 下表是API对应的授权信息，可以在RAM权限策略语句的`Action`元素中使用，用来给RAM用户或RAM角色授予调用此API的权限。具体说明如下：
 
 -   操作：是指具体的权限点。
+    
 -   访问级别：是指每个操作的访问级别，取值为写入（Write）、读取（Read）或列出（List）。
+    
 -   资源类型：是指操作中支持授权的资源类型。具体说明如下：
+    
     -   对于必选的资源类型，用前面加 \* 表示。
     -   对于不支持资源级授权的操作，用`全部资源`表示。
 -   条件关键字：是指云产品自身定义的条件关键字。
+    
 -   关联操作：是指成功执行操作所需要的其他权限。操作者必须同时具备关联操作的权限，操作才能成功。
+    
 
 操作
 
@@ -601,7 +606,7 @@ null
 
 ## 错误码
 
-访问[错误中心](< https://api.aliyun.com/document/DianJin/2024-06-28/errorCode>)查看更多错误码。
+访问[错误中心](https://api.alibabacloud.com/document/DianJin/2024-06-28/errorCode)查看更多错误码。
 
 ## 变更历史
 
@@ -615,4 +620,4 @@ null
 
 OpenAPI 返回结构发生变更
 
-[查看变更详情](https://api.aliyun.com/document/DianJin/2024-06-28/RealtimeDialogAssist?updateTime=2026-01-07#workbench-doc-change-demo)
+[查看变更详情](https://api.alibabacloud.com/document/DianJin/2024-06-28/RealtimeDialogAssist?updateTime=2026-01-07#workbench-doc-change-demo)
