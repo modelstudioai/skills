@@ -40,7 +40,7 @@
     -   **Python：** 软件包发布到 PyPI 仓库，通过 uvx <package-name> 部署。
     -   **已部署在远程服务器：** 通过 SSE 连接。
     
-    详见[自定义MCP服务](raw/application-user-guide/model-context-protocol/custom-mcp.md)。
+    详见[自定义MCP服务](https://help.aliyun.com/zh/model-studio/custom-mcp)。
     
 4.  **阿里云百炼 MCP 服务能在其他 MCP 客户端 （Cline、Cherry Studio）中使用吗？**
     

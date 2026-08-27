@@ -1,10 +1,10 @@
-# vanchin/deepseek-v4-pro
+# kling/kling-v3-turbo-video-generation
 
-DeepSeek-V4系列是强大的混合专家（MoE）语言模型，包含DeepSeek-V4-Pro（1.6T总参数，49B激活参数）。支持高达100万（1M）token的上下文长度，是在超过32T高质量多样化token上预训练的开源模型。
+极速视频生成，固定音画同出，支持文生视频、图生视频（首帧）及多镜头生成。
 
 ## 推理服务供应商
 
-`vanchin/deepseek-v4-pro`模型的推理服务供应商为快手万擎。
+`kling/kling-v3-turbo-video-generation`模型的推理服务供应商为可灵AI。
 
 ## 模型能力
 
@@ -18,11 +18,11 @@ DeepSeek-V4系列是强大的混合专家（MoE）语言模型，包含DeepSeek-
 
 输入模态
 
-**Text**
+**Image** **Text**
 
 输出模态
 
-**Text**
+**Video**
 
 模型体验
 
@@ -30,11 +30,11 @@ DeepSeek-V4系列是强大的混合专家（MoE）语言模型，包含DeepSeek-
 
 Function Calling
 
-支持
+不支持
 
 结构化输出
 
-支持
+不支持
 
 联网搜索
 
@@ -46,7 +46,7 @@ Function Calling
 
 上下文缓存
 
-支持
+不支持
 
 批量推理
 
@@ -68,23 +68,15 @@ Function Calling
 
 最大输入长度
 
-1048576
+—
 
 最大输出长度
 
-393216
+—
 
 上下文长度
 
-1048576
-
-最大输入长度（思考模式下）
-
-1048576
-
-最大输出长度（思考模式下）
-
-393216
+—
 
 ## 模型价格
 
@@ -98,23 +90,17 @@ Function Calling
 
 单位
 
-输入
+视频生成（720P）
 
-12
+0.8
 
-每百万tokens
+每秒
 
-输出
+视频生成（1080P）
 
-24
+1.0
 
-每百万tokens
-
-输入（缓存命中）
-
-1
-
-每百万tokens
+每秒
 
 ## 限流
 
@@ -126,8 +112,4 @@ Function Calling
 
 RPM（每分钟请求数）
 
-60
-
-TPM（每分钟tokens）
-
-300,000
+300

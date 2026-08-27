@@ -638,7 +638,7 @@ ZHIPU/GLM-5
 
 上下文缓存类型为隐式缓存，自动开启，与阿里云百炼的[隐式缓存](https://help.aliyun.com/zh/model-studio/context-cache)服务有以下不同：
 
--   缓存最少 Token 数为 512（百炼为 256）。
+-   缓存最少 Token 数为 512（百炼为 1024）。
 
 ## 参数默认值
 

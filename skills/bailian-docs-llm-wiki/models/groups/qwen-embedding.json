@@ -14,14 +14,23 @@
       "description": "是通义实验室基于Qwen3.7训练的多语言文本统一向量模型，相较text-embedding-v4版本在文本检索、聚类、分类性能大幅提升；在MTEB多语言、中英、Code检索等评测任务上效果提升20%；支持256~2560维用户自定义向量维度。",
       "collectionTag": "qwen3.7",
       "features": [
-        "model-experience"
+        "model-experience",
+        "batch"
       ],
       "provider": "qwen",
       "model": "qwen3.7-text-embedding",
       "prices": [
         {
           "priceUnit": "每百万tokens",
+          "price": "0.25",
+          "timeBand": "standard",
+          "type": "embedding_token_batch",
+          "priceName": "向量输入（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
           "price": "0.5",
+          "timeBand": "standard",
           "type": "embedding_token",
           "priceName": "文本输入"
         }
@@ -44,7 +53,9 @@
           "type": "model-default"
         }
       },
-      "priceTimeBands": [],
+      "priceTimeBands": [
+        "standard"
+      ],
       "capabilities": [
         "TR"
       ],

@@ -46,7 +46,7 @@ Function Calling
 
 上下文缓存
 
-不支持
+支持
 
 批量推理
 
@@ -99,6 +99,12 @@ Function Calling
 输出
 
 2.7
+
+每百万tokens
+
+输入（缓存命中）
+
+0.2
 
 每百万tokens
 

@@ -19,16 +19,20 @@
         {
           "priceUnit": "每百万tokens",
           "price": "1",
-          "timeBand": "standard",
           "type": "input_token",
           "priceName": "输入"
         },
         {
           "priceUnit": "每百万tokens",
           "price": "2.7",
-          "timeBand": "standard",
           "type": "output_token",
           "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.2",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
         }
       ],
       "qpmInfo": {
@@ -49,9 +53,7 @@
           "type": "model-default"
         }
       },
-      "priceTimeBands": [
-        "standard"
-      ],
+      "priceTimeBands": [],
       "capabilities": [
         "TG"
       ],

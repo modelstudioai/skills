@@ -1087,6 +1087,14 @@ qwen3.8-max
 
 5,000,000
 
+qwen3.8-flash
+
+全球
+
+30,000
+
+5,000,000
+
 qwen3.7-max
 
 全球
@@ -1344,6 +1352,14 @@ qwen-flash-2025-07-28
 > **含输入与输出Token**
 
 qwen3.8-max
+
+全球
+
+30,000
+
+5,000,000
+
+qwen3.8-flash
 
 全球
 
@@ -5829,7 +5845,7 @@ kling/kling-v3-omni-image-generation
 
 10
 
-> 同一阿里云百炼API Key 下，可灵系列的 4 个模型（[图像](https://help.aliyun.com/zh/model-studio/rate-limit#fdd6e348d2md4)及[视频](raw/model-user-guide/get-started-with-models/rate-limit.md)）共享 10 个并发数。即这 4 个模型处于运行状态的任务总数加起来不能超过 10 个。
+> 同一阿里云百炼API Key 下，可灵系列的 5 个模型（[图像](https://help.aliyun.com/zh/model-studio/rate-limit#fdd6e348d2md4)及[视频](https://help.aliyun.com/zh/model-studio/rate-limit#kling-third-party-title)）共享 10 个并发数。即这 5 个模型处于运行状态的任务总数加起来不能超过 10 个。
 
 kling/kling-v3-image-generation
 
@@ -8101,7 +8117,9 @@ kling/kling-v3-omni-video-generation
 
 10
 
-> 同一阿里云百炼API Key 下，可灵系列的 4 个模型（[图像](https://help.aliyun.com/zh/model-studio/rate-limit#fdd6e348d2md4)及[视频](raw/model-user-guide/get-started-with-models/rate-limit.md)）共享 10 个并发数。即这 4 个模型处于运行状态的任务总数加起来不能超过 10 个。
+> 同一阿里云百炼API Key 下，可灵系列的 5 个模型（[图像](https://help.aliyun.com/zh/model-studio/rate-limit#fdd6e348d2md4)及[视频](https://help.aliyun.com/zh/model-studio/rate-limit#kling-third-party-title)）共享 10 个并发数。即这 5 个模型处于运行状态的任务总数加起来不能超过 10 个。
+
+kling/kling-v3-turbo-video-generation
 
 kling/kling-v3-video-generation
 

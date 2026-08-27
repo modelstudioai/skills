@@ -127,7 +127,7 @@ mkdir -p .opencode/agents
 
 在该目录下创建`image-analyzer.md`文件，并写入以下内容：
 
-**说明**model 字段必须使用 OpenCode 配置文件中定义的 provider 和模型名称。参考 [OpenCode](raw/model-user-guide/use-chat-client-or-development-tool/opencode.md) 文档的配置示例，应为`bailian-token-plan/qwen3.7-plus`。
+**说明**model 字段必须使用 OpenCode 配置文件中定义的 provider 和模型名称。参考 [OpenCode](https://help.aliyun.com/zh/model-studio/opencode) 文档的配置示例，应为`bailian-token-plan/qwen3.7-plus`。
 
 ```
 ---

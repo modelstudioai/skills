@@ -2508,9 +2508,9 @@ qwen3.8-flash
 
 0<Token≤1M
 
-1元
+0.8元
 
-3元
+2.7元
 
 100万Token
 
@@ -2990,7 +2990,7 @@ qwen3.8-flash
 
 0<Token≤1M
 
-1.167元
+1.094元
 
 3.427元
 
@@ -3173,6 +3173,20 @@ qwen-flash-2025-07-28
 **输出单价（每百万Token）**
 
 > **思维链+回答**
+
+qwen3.8-flash
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+0.8元
+
+2.7元
 
 qwen3.7-flash
 
@@ -3413,6 +3427,20 @@ qwen-flash-2025-07-28
 **输出单价（每百万Token）**
 
 > **思维链+回答**
+
+qwen3.8-flash
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+0.8元
+
+2.7元
 
 qwen3.7-flash
 
@@ -6590,6 +6618,8 @@ qwen-deep-research-2025-12-15
 
 tongyi-xiaomi-analysis-flash
 
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
 0.2元
 
 0.4元
@@ -6597,6 +6627,8 @@ tongyi-xiaomi-analysis-flash
 100万Token
 
 tongyi-xiaomi-analysis-pro
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
 1.0元
 
@@ -9298,6 +9330,16 @@ vanchin/deepseek-v4-pro-0813
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
+kimi-k3
+
+仅思考模式
+
+20元
+
+100元
+
+100万Token
+
 kimi-k2.7-code
 
 仅思考模式
@@ -9360,6 +9402,26 @@ Moonshot-Kimi-K2-Instruct
 
 **输出单价（每百万Token）**
 
+kimi-k3
+
+全球
+
+仅思考模式
+
+20元
+
+100元
+
+kimi-k3
+
+国际
+
+仅思考模式
+
+21.875元
+
+109.376元
+
 kimi-k2.7-code
 
 全球
@@ -9392,6 +9454,16 @@ kimi-k2.5
 
 **输出单价（每百万Token）**
 
+kimi-k3
+
+全球
+
+仅思考模式
+
+20元
+
+100元
+
 kimi-k2.7-code
 
 全球
@@ -9423,6 +9495,18 @@ kimi-k2.5
 **输入单价（每百万Token）**
 
 **输出单价（每百万Token）**
+
+kimi-k3
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+仅思考模式
+
+20元
+
+100元
 
 kimi-k2.7-code
 
@@ -9458,6 +9542,16 @@ kimi-k2.5
 
 **输出单价（每百万Token）**
 
+kimi-k3
+
+国际
+
+仅思考模式
+
+21.875元
+
+109.376元
+
 kimi-k2.7-code
 
 国际
@@ -9484,6 +9578,16 @@ kimi-k2.7-code
 
 **免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
 
+kimi/kimi-k3
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+20元
+
+100元
+
+无
+
 kimi/kimi-k2.7-code-highspeed
 
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
@@ -9491,8 +9595,6 @@ kimi/kimi-k2.7-code-highspeed
 13元
 
 54元
-
-无
 
 kimi/kimi-k2.7-code
 
@@ -16231,6 +16333,20 @@ pixverse/pixverse-upscale
 **输出单价**
 
 **免费额度**[**（注）**](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+kling/kling-v3-turbo-video-generation
+
+有声视频
+
+720P
+
+0.8元/秒
+
+无免费额度
+
+1080P
+
+1.0元/秒
 
 kling/kling-v3-video-generation
 

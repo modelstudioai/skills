@@ -68,7 +68,7 @@ curl --request POST \
 
 通过 API 上传的调优文件，在百炼控制台模型调优页面与 API 调用中均可见可用。
 
-更多详细信息请参见[上传文件](https://help.aliyun.com/zh/model-studio/upload-file-api)。
+更多详细信息请参见[上传文件](raw/model-api-reference/file-management-api/upload-file-api.md)。
 
 返回结果：
 
