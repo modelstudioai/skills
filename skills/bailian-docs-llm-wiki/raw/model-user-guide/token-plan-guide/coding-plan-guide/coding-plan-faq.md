@@ -30,7 +30,7 @@
     
 2.  通过精简输入、切换更长上下文的模型等方式可以避免输入超限问题，详见[各模型的上下文长度是多少？超出上下文长度如何处理？](https://help.aliyun.com/zh/model-studio/coding-plan-faq#d643189452x8x)
     
-3.  若使用OpenCode，请配置`limit`来限制上下文长度，详见[OpenCode](raw/model-user-guide/use-chat-client-or-development-tool/opencode.md)。
+3.  若使用OpenCode，请配置`limit`来限制上下文长度，详见[OpenCode](https://help.aliyun.com/zh/model-studio/opencode)。
     
 
 **401 invalid access token or token expired**
@@ -217,13 +217,13 @@ qwen3-coder-plus
 
 不支持思考模式
 
-**解决方案**：打开 OpenCode 配置文件 `opencode.json`，将对应模型的 `options.thinking.budgetTokens` 值调整为不超过该模型的上限值。对于不支持思考模式的模型（qwen3-coder-next、qwen3-coder-plus），需要移除 `options.thinking` 配置项。详情请参见[OpenCode](raw/model-user-guide/use-chat-client-or-development-tool/opencode.md)。
+**解决方案**：打开 OpenCode 配置文件 `opencode.json`，将对应模型的 `options.thinking.budgetTokens` 值调整为不超过该模型的上限值。对于不支持思考模式的模型（qwen3-coder-next、qwen3-coder-plus），需要移除 `options.thinking` 配置项。详情请参见[OpenCode](https://help.aliyun.com/zh/model-studio/opencode)。
 
 ### OpenCode 报错`InternalError.Algo.InvalidParameter: Range of max_tokens should be [1, xxxx]`怎么办？
 
 **原因**：配置文件`opencode.json`中 `limit.output` 的值超过了当前模型支持的最大输出Token数（`max_tokens`）。
 
-**解决方案**：请根据[OpenCode](raw/model-user-guide/use-chat-client-or-development-tool/opencode.md)修改配置文件 `opencode.json`，调整对应模型的`limit`值。
+**解决方案**：请根据[OpenCode](https://help.aliyun.com/zh/model-studio/opencode)修改配置文件 `opencode.json`，调整对应模型的`limit`值。
 
 ### Coding Plan 模型支持开启思考模式吗？
 
@@ -261,7 +261,7 @@ Coding Plan 支持深度思考的模型多为默认支持思考模式，常见�
 
 #### OpenCode
 
-参见[OpenCode](raw/model-user-guide/use-chat-client-or-development-tool/opencode.md)，配置options参数为：
+参见[OpenCode](https://help.aliyun.com/zh/model-studio/opencode)，配置options参数为：
 
 ```
 {

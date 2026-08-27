@@ -343,6 +343,69 @@
           }
         }
       }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "description": "生成更快，成本更低，音画同步精准，批量输出质量稳定可靠。",
+      "features": [],
+      "provider": "kling",
+      "model": "kling/kling-v3-turbo-video-generation",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.8",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "async_user_queue_limit": 500,
+          "count_limit": 300,
+          "type": "model-default",
+          "async_user_concurrency_limit": 10
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "VG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-08-17T03:01:59.000+00:00",
+      "inferenceProvider": "kling",
+      "name": "Kling Video 3.0 Turbo",
+      "category": "Third-party",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"kling/kling-v3-turbo-video-generation\",\n    \"input\": {\n        \"prompt\": \"一只小猫在月光下奔跑\"\n    },\n    \"parameters\": {\n        \"mode\": \"std\",\n        \"aspect_ratio\": \"16:9\",\n        \"duration\": 5,\n        \"audio\": false,\n        \"watermark\": true\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/3026701.html"
+          }
+        }
+      }
     }
   ]
 }

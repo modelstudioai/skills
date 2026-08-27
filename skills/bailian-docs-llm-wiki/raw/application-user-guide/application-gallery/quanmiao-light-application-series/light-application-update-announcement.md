@@ -293,7 +293,7 @@ OCR人物识别
 -   优化示例填充
     
 
-具体请参见[泛企业VOC挖掘](https://help.aliyun.com/zh/model-studio/pan-enterprise-voc-mining)。
+具体请参见[泛企业VOC挖掘](raw/application-user-guide/application-gallery/quanmiao-light-application-series/light-application-guidelines-for-use/pan-enterprise-voc-mining.md)。
 
 4月11日
 

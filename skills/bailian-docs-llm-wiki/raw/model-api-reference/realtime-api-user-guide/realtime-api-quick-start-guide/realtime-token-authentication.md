@@ -97,7 +97,7 @@ endpoint
 
 根据业务情况选择接入域名
 
-指定对应的接入域名，详情请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)
+指定对应的接入域名，详情请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。如果使用[Token Plan](raw/model-user-guide/token-plan-guide/token-plan-overview.md)，接入域名中的 `WorkspaceId` 固定为 `token-plan`。
 
 Content-Type
 

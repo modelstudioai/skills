@@ -97,7 +97,7 @@ opencode run -m "bailian/qwen3.7-max" "..."
 -   Token Plan 团队版：`https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1`
 -   Coding Plan：`https://coding.dashscope.aliyuncs.com/apps/anthropic/v1`
 
-详见 [OpenCode](raw/model-user-guide/use-chat-client-or-development-tool/opencode.md)。
+详见 [OpenCode](https://help.aliyun.com/zh/model-studio/opencode)。
 
 #### OpenClaw
 

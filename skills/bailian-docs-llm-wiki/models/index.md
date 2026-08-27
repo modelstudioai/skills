@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 181 个模型家族 · 408 个主干模型 · 更新于 2026-08-27
+> 自动生成 · 共 179 个模型家族 · 407 个主干模型 · 更新于 2026-08-28
 
 **机器查询走结构化文件**：
 
@@ -17,7 +17,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 `notSuitableFor: []` 表示无已知限制。`profileCompleteness` 为 `structured-only` 时该画像未读过文档，仅机械字段可信。
 硬规格（价格/QPM/contextWindow/openSource）一律看行内顶层字段，不要从 profile 里找。
 
-## 文本生成 `TG` — 38 个家族
+## 文本生成 `TG` — 37 个家族
 
 - [DeepSeek](groups/deepseek.json) — DeepSeek是由深度求索提供的开源模型，包含 V3.1、V3、R1以及基于Qwen2.5系列蒸馏的大语言模型。
   - 模型：`deepseek-r1`, `deepseek-r1-0528`, `deepseek-r1-distill-qwen-1.5b`, `deepseek-r1-distill-qwen-14b`, `deepseek-r1-distill-qwen-32b`, `deepseek-r1-distill-qwen-7b`, `deepseek-v3`, `deepseek-v3.1`, `deepseek-v3.2`, `deepseek-v3.2-exp`, `deepseek-v4-flash`, `deepseek-v4-flash-0731`, `deepseek-v4-pro`, `deepseek-v4-pro-0813`
@@ -33,8 +33,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`xiaomi/mimo-v2.5-pro`
 - [MiniMax文本模型](groups/minimax-models-market-place.json) — 由MiniMax提供的MiniMax-M系列文本模型API服务。
   - 模型：`MiniMax/MiniMax-M2.1`, `MiniMax/MiniMax-M2.5`, `MiniMax/MiniMax-M2.7`, `MiniMax/MiniMax-M3`
-- [Qwen-Coder-Plus](groups/qwen-coder-plus.json) — 千问系列代码及编程模型是专门用于编程和代码生成的语言模型，性能出色，效果突出。
-  - 模型：`qwen-coder-plus`
 - [Qwen-Coder-Turbo](groups/qwen-coder-turbo.json) — Qwen-Coder-Turbo模型是专门用于编程和代码生成的语言模型，推理速度快，成本低。
   - 模型：`qwen-coder-turbo`
 - [qwen-deep-research](groups/qwen-deep-research.json) — 千问深入研究是一款面向复杂研究任务的高级智能体系统，具备多轮推理与全局规划能力，能够运用互联网搜索等多种工具，对任务进行精细化拆解，开展推理与分析，最终为用户生成可溯源、逻辑严谨的研究型报告。
@@ -96,7 +94,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [通义法睿-Plus-32K](groups/farui-plus.json) — 通义法睿是以通义千问为基座经法律行业数据和知识专门训练的法律行业大模型产品，综合运用了模型精调、强化学习、 RAG检索增强、法律Agent技术，具有回答法律问题、推理法律适用、推荐裁判类案、辅助案情分…
   - 模型：`farui-plus`
 
-## 图像生成 `IG` — 32 个家族
+## 图像生成 `IG` — 31 个家族
 
 - [AI试衣-Plus版](groups/aitryon-plus.json) — aitryon-plus是一款效果出众的虚拟试衣图片生成模型，可基于服饰平拍图片以及人物正面全身照，输出服饰的人物试衣效果图片。 相较于aitryon模型，aitryon-plus模型在图片清晰度、服…
   - 模型：`aitryon-plus`
@@ -144,8 +142,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`wanx-x-painting`
 - [万相-涂鸦作画](groups/wanx-sketch-to-image-lite.json) — 万相-涂鸦作画通过手绘任意内容加文字描述，即可生成精美的涂鸦绘画作品，作品中的内容在参考手绘线条的同时，兼顾创意性和趣味性。涂鸦作画支持扁平插画、油画、二次元、3D卡通和水彩5种风格，可用于创意娱乐、…
   - 模型：`wanx-sketch-to-image-lite`
-- [人像风格重绘](groups/wanx-style-repaint-v1.json) — 人像风格重绘可以将输入的人物图像进行多种风格化的重绘生成，使新生成的图像在兼顾原始人物相貌的同时，带来不同风格的绘画效果。
-  - 模型：`wanx-style-repaint-v1`
 - [人物实例分割](groups/image-instance-segmentation.json) — 人物实例分割运用了检测和分割技术，不仅能够在图像中识别出不同的对象，而且还能准确地画出每一个对象边界的像素级掩码（mask）。
   - 模型：`image-instance-segmentation`
 - [创意海报生成](groups/wanx-poster-generation-v1.json) — 创意海报生成，您的创意海报魔法工厂！它能够根据你的要求自动生成海报的背景和文字排版，支持多种海报风格，从宣传到祝福，让每一张海报都成为你的个性宣言。无需设计基础，轻松制作出彩作品，让创意触手可及。
@@ -198,7 +194,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Wan2.1-VACE-Plus](groups/wanx2.1-vace-plus.json) — 万相2.1-VACE-Plus，视频编辑统一模型。支持局部编辑、视频重绘、背景扩展、时长延展、图片参考等多种视频编辑与生成任务，支持文本、图像、视频等多模态条件控制。
   - 模型：`wanx2.1-vace-plus`
 - [可灵AI](groups/kling-models-market-place.json) — 由可灵AI提供的高质量视频与图像生成及编辑模型。
-  - 模型：`kling/kling-v3-image-generation`, `kling/kling-v3-omni-image-generation`, `kling/kling-v3-omni-video-generation`, `kling/kling-v3-video-generation`
+  - 模型：`kling/kling-v3-image-generation`, `kling/kling-v3-omni-image-generation`, `kling/kling-v3-omni-video-generation`, `kling/kling-v3-turbo-video-generation`, `kling/kling-v3-video-generation`
 - [声动人像VideoRetalk](groups/videoretalk.json) — VideoRetalk是一个人物视频生成模型，可基于人物视频和人声音频，生成人物讲话口型与输入音频相匹配的新视频。
   - 模型：`videoretalk`
 - [悦动人像EMO](groups/emo-v1.json) — EMO是一款视频生成模型，可基于人物图片生成高质量的人物肖像动态视频。

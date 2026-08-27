@@ -96,14 +96,14 @@
       "prices": [
         {
           "priceUnit": "每百万tokens",
-          "price": "1",
+          "price": "0.8",
           "timeBand": "standard",
           "type": "input_token",
           "priceName": "输入"
         },
         {
           "priceUnit": "每百万tokens",
-          "price": "3",
+          "price": "2.7",
           "timeBand": "standard",
           "type": "output_token",
           "priceName": "输出"
@@ -117,14 +117,14 @@
         },
         {
           "priceUnit": "每百万tokens",
-          "price": "0.5",
+          "price": "0.4",
           "timeBand": "standard",
           "type": "input_token_batch",
           "priceName": "输入（Batch File）"
         },
         {
           "priceUnit": "每百万tokens",
-          "price": "1.5",
+          "price": "1.35",
           "timeBand": "standard",
           "type": "output_token_batch",
           "priceName": "输出（Batch File）"
@@ -145,15 +145,17 @@
         },
         {
           "priceUnit": "每百万tokens",
-          "price": "1",
+          "price": "0.8",
           "timeBand": "standard",
+          "discount": 0.5,
           "type": "input_token_batch_chat",
           "priceName": "输入（Batch Chat)"
         },
         {
           "priceUnit": "每百万tokens",
-          "price": "3",
+          "price": "2.7",
           "timeBand": "standard",
+          "discount": 0.5,
           "type": "output_token_batch_chat",
           "priceName": "输出（Batch Chat)"
         }
@@ -187,6 +189,7 @@
       "maxInputTokens": 991808,
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen3.8-Flash",
+      "docUrl": "https://help.aliyun.com/document_detail/3016807.html",
       "category": "Cost-optimized",
       "samples": {
         "openai": {

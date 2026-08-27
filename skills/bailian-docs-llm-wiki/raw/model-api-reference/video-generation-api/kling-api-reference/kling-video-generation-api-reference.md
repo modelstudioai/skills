@@ -16,6 +16,75 @@
 -   **选择 URL**：选择对应的地域 Endpoint URL，支持HTTP URL。
 -   **配置 API Key**：选择地域并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
 
+## 模型概览
+
+**模型名称**
+
+**能力支持**
+
+**输入模态**
+
+**输出视频规格**
+
+kling/kling-v3-turbo-video-generation
+
+-   文生视频
+    
+-   图生视频-基于首帧
+    
+
+文本、图像
+
+分辨率模式：std（720P）、pro（1080P）
+
+宽高比：16:9、9:16、1:1
+
+视频时长：3-15秒
+
+视频格式：MP4
+
+kling/kling-v3-video-generation
+
+-   文生视频
+    
+-   图生视频-基于首帧
+    
+-   图生视频-基于首尾帧
+    
+
+文本、图像
+
+分辨率模式：std（720P）、pro（1080P）、4k
+
+宽高比：16:9、9:16、1:1
+
+视频时长：3-15秒
+
+视频格式：MP4
+
+kling/kling-v3-omni-video-generation
+
+-   文生视频
+    
+-   图生视频-基于首帧
+    
+-   图生视频-基于首尾帧
+    
+-   参考生视频
+    
+-   视频编辑
+    
+
+文本、图像、视频
+
+分辨率模式：std（720P）、pro（1080P）、4k
+
+宽高比：16:9、9:16、1:1
+
+视频时长：3-15秒
+
+视频格式：MP4
+
 ## HTTP调用
 
 由于视频生成任务耗时较长（通常为1-5分钟），API采用异步调用。整个流程包含 **"创建任务 -> 轮询获取"** 两个核心步骤，具体如下：
@@ -57,8 +126,9 @@
 
 可选值：
 
--   `kling/kling-v3-omni-video-generation`
+-   `kling/kling-v3-turbo-video-generation`
 -   `kling/kling-v3-video-generation`
+-   `kling/kling-v3-omni-video-generation`
 
 **input** `object` **（必选）**
 
@@ -85,6 +155,13 @@ Omni模型可通过prompt与主体、图片、视频等内容实现多种能力�
 -   引用顺序：按照`media`数组顺序定义prompt中引用的顺序。
 -   用法示例：`一只<<<element_1>>>在月光下奔跑`。
 
+**negative\_prompt** `string` （可选）
+
+负向提示词，用于描述不希望在结果中出现的内容。不超过2500个字符。
+
+-   `kling/kling-v3-turbo-video-generation` 无独立负向提示词能力，该字段不生效（负向描述可写入`prompt`）。
+-   支持模型：`kling/kling-v3-video-generation`、`kling/kling-v3-omni-video-generation`。
+
 **media** `array` （可选）
 
 文生视频任务无需填写此参数。
@@ -94,6 +171,14 @@ Omni模型可通过prompt与主体、图片、视频等内容实现多种能力�
 不同模型支持的媒体素材搭配不一样：
 
 素材组合规则
+
+kling/kling-v3-turbo-video-generation
+
+仅支持以下媒体素材组合，非法组合将报错。
+
+-   **图生视频-基于首帧**：`first_frame`。
+    
+    -   数量限制：首帧恰好1张。不支持`last_frame`。
 
 kling/kling-v3-video-generation
 
@@ -133,6 +218,14 @@ kling/kling-v3-omni-video-generation
 
 媒体素材类型。可选值与所选模型有关：
 
+kling/kling-v3-turbo-video-generation
+
+可选值：
+
+-   `first_frame`：首帧图片。
+
+不支持`last_frame`。不同媒体素材之间的搭配限制，请参见 `media` 参数下的”素材组合规则”。
+
 kling/kling-v3-video-generation
 
 可选值：
@@ -140,7 +233,7 @@ kling/kling-v3-video-generation
 -   `first_frame`：首帧图片。
 -   `last_frame`：尾帧图片。
 
-不同媒体素材之间的搭配限制，请参见 `media` 参数下的“素材组合规则”。
+不同媒体素材之间的搭配限制，请参见 `media` 参数下的”素材组合规则”。
 
 kling/kling-v3-omni-video-generation
 
@@ -179,12 +272,21 @@ kling/kling-v3-omni-video-generation
 -   支持 HTTP 和 HTTPS 协议。
 -   示例值：[](https://xxx/xxx.mp4)[https://xxx/xxx.mp4](https://xxx/xxx.mp4)。
 
-视频限制：
+**`kling/kling-v3-video-generation`视频限制：**
 
 -   格式：mp4、mov。
 -   时长：3～10s。
 -   分辨率：宽和高的范围为\[720, 2160\]像素。
 -   文件大小：不超过200MB。
+-   帧率：24～60fps。
+
+**`kling/kling-v3-omni-video-generation`视频限制：**
+
+-   格式：mp4、mov。
+-   文件大小：不超过200MB。
+-   时长：3～15.5s。
+-   分辨率：宽和高的范围为\[700, 4553\]像素，像素总面积不超过8294400。
+-   宽高比：0.4～2。
 -   帧率：24～60fps。
 
 **keep\_original\_sound** `string` （可选）
@@ -204,6 +306,12 @@ kling/kling-v3-omni-video-generation
 
 -   `false`：默认值，不开启多镜头。
 -   `true`：开启多镜头生成。
+
+注意：
+
+-   视频特征参考（feature）场景支持开启多镜头（`shot_type`仅支持`intelligence`）。
+-   视频编辑（base）场景不支持多镜头。
+-   `kling/kling-v3-turbo-video-generation` 支持多镜头。
 
 **shot\_type** `string` （条件必填）
 
@@ -236,6 +344,8 @@ kling/kling-v3-omni-video-generation
 
 主体列表，用于指定视频中需要引入的主体元素。
 
+注意：`kling/kling-v3-turbo-video-generation` 不支持主体，该字段不可传。
+
 属性
 
 **element\_id** `integer` （条件必填）
@@ -248,6 +358,7 @@ kling/kling-v3-omni-video-generation
 -   图生视频-基于首尾帧：最多支持3个主体。
 -   参考生视频（`type=refer`）：参考图片与多图主体数量之和不得超过7。
 -   参考生视频（`type=feature+refer`）：参考图片与多图主体数量之和不得超过4。
+-   视频输入场景（omni模型）：支持视频类型主体，最多1个。引用视频类型主体后，不可再传参考图/图片类型主体。
 
 **parameters** `object` （可选）
 
@@ -262,6 +373,8 @@ kling/kling-v3-omni-video-generation
 -   `pro`：默认值，专业模式，输出视频分辨率为1080P。
 -   `std`：标准模式，输出视频分辨率为720P。
 -   `4k`：4K模式，输出视频分辨率为4K。
+
+注意：`kling/kling-v3-turbo-video-generation` 仅支持`std`（720P）和`pro`（1080P），不支持4K。
 
 **aspect\_ratio** `string` （条件必填）
 
@@ -291,14 +404,16 @@ kling/kling-v3-omni-video-generation
 
 生成视频的时长，单位为秒。
 
+-   kling/kling-v3-turbo-video-generation：取值为\[3, 15\]之间的整数，默认值为5。
+    
+-   kling/kling-v3-video-generation：取值为\[3, 15\]之间的整数，默认值为5。
+    
 -   kling/kling-v3-omni-video-generation：取值为\[3, 15\]之间的整数，默认值为5。
     
     -   注意：当传入视频时，该参数的行为因`type`不同而异：
         
         -   `type=feature`：取值为\[3, 10\]之间的整数，默认值为5。
         -   `type=base`：输出视频时长与传入视频时长相同，此时当前参数无效。按输入视频时长四舍五入取整计量计费。
--   kling/kling-v3-video-generation：取值为\[3, 15\]之间的整数，默认值为5。
-    
 
 示例值：5。
 
@@ -311,7 +426,10 @@ kling/kling-v3-omni-video-generation
 -   `false`：默认值，输出无声视频。
 -   `true`：输出有声视频。
 
-注意：当传入视频（`type=base或feature`）时，`audio`只能设置为`false`。
+注意：
+
+-   当传入视频（`type=base或feature`）时，`audio`只能设置为`false`。
+-   `kling/kling-v3-turbo-video-generation` 固定生成音画同出视频，该字段不生效（恒为生成）。
 
 **watermark** `boolean` （可选）
 
@@ -322,7 +440,7 @@ kling/kling-v3-omni-video-generation
 
 #### 文生视频
 
-支持模型：`kling/kling-v3-omni-video-generation`、`kling/kling-v3-video-generation`。
+支持模型：`kling/kling-v3-turbo-video-generation`、`kling/kling-v3-video-generation`、`kling/kling-v3-omni-video-generation`。
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID。
@@ -331,7 +449,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
     -H 'Content-Type: application/json' \
     -d '{
-    "model": "kling/kling-v3-video-generation",
+    "model": "kling/kling-v3-turbo-video-generation",
     "input": {
         "prompt": "一只小猫在月光下奔跑"
     },
@@ -347,7 +465,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 #### 文生视频（智能分镜）
 
-支持模型：`kling/kling-v3-omni-video-generation`、`kling/kling-v3-video-generation`。
+支持模型：`kling/kling-v3-turbo-video-generation`、`kling/kling-v3-video-generation`、`kling/kling-v3-omni-video-generation`。
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID。
@@ -388,7 +506,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 #### 图生视频（首帧生视频）
 
-支持模型：`kling/kling-v3-omni-video-generation`、`kling/kling-v3-video-generation`。
+支持模型：`kling/kling-v3-turbo-video-generation`、`kling/kling-v3-video-generation`、`kling/kling-v3-omni-video-generation`。
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID。
@@ -418,7 +536,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 #### 图生视频（首尾帧生视频）
 
-支持模型：`kling/kling-v3-omni-video-generation`、`kling/kling-v3-video-generation`。
+支持模型：`kling/kling-v3-video-generation`、`kling/kling-v3-omni-video-generation`。
 
 ```
 # 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID。
@@ -686,11 +804,11 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 **SR** `string`
 
-生成视频的分辨率档位。示例值：720。
+生成视频的分辨率档位。示例值：720。`mode=4k`时返回`4k`；`kling/kling-v3-turbo-video-generation`仅返回`720`或`1080`。
 
 **audio** `boolean`
 
-生成视频是否为有声视频。示例值：false。
+生成视频是否为有声视频。示例值：false。`kling/kling-v3-turbo-video-generation`恒为`true`（固定音画同出）。
 
 **video\_count** `integer`
 

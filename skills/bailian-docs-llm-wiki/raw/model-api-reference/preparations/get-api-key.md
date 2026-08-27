@@ -2,42 +2,6 @@
 
 在控制台获取或创建 API Key 后，您将使用它来安全地调用百炼的模型服务。
 
-## 套餐类型识别
-
-百炼提供三种 API Key 类型。API Key 与 Base URL 必须配套使用，否则调用 Anthropic 兼容接口时可能返回 401 或 403 错误。
-
-**API Key 前缀**
-
-**套餐类型**
-
-**Anthropic 兼容 Base URL**
-
-`sk-`
-
-按量付费
-
-`[https://dashscope.aliyuncs.com/apps/anthropic](https://dashscope.aliyuncs.com/apps/anthropic)`
-
-`sk-sp-`
-
-Token Plan
-
-`[https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic](https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic)`
-
-`sk-ws-`
-
-Coding Plan
-
-`[https://coding.dashscope.aliyuncs.com/apps/anthropic](https://coding.dashscope.aliyuncs.com/apps/anthropic)`
-
-**重要**关于 `sk-ws-` 前缀的归属存在待确认的事实冲突：需求断言 `sk-ws-` 对应 Coding Plan，但同一篇文档的「API key security upgrade」章节已写明 `sk-ws` 是按量付费 API Key 安全升级后的新格式。两种说法互斥。请在发布前确认 `sk-ws-` 的真实归属、按量付费升级后的前缀口径，以及三个 `/apps/anthropic` Base URL 的最终写法。
-
-### 查看套餐类型
-
-1.  登录百炼控制台。
-2.  单击顶部导航栏的**订阅**，展开后选择**Token Plan**，或进入**我的订阅**页面。
-3.  在**我的订阅**页面，通过**Coding Plan**和**Token Plan**页签查看各自的订阅状态，以及对应的 API Key 和 Base URL。
-
 ## 第一步：获取 API Key
 
 1.  前往阿里云百炼的**密钥管理**（[中国大陆版](https://bailian.console.aliyun.com/?tab=model#/api-key) | [国际版](https://modelstudio.console.aliyun.com/?tab=playground#/api-key)）页面。
@@ -54,18 +18,18 @@ Coding Plan
             
             > RAM 用户的账号格式为`username@<AccountAlias>.onaliyun.com`。
             
-        -   **归属业务空间：**选择“**默认业务空间**”，此空间下的 Key 可调用所有[标准模型](raw/model-user-guide/get-started-with-models/models.md)。若下拉框不可选，说明系统已默认选择**默认业务空间**，直接单击**确定**即可完成创建。下拉框呈灰色不可选，原因是当前账号下未创建子业务空间，或当前账号为 RAM 用户且未被加入任何子业务空间。由阿里云账号（主账号）在**业务空间管理**页面创建子业务空间后，重新创建 API Key 即可选择该子业务空间。
+        -   **归属业务空间：**选择“**默认业务空间**”，此空间下的 Key 可调用所有[标准模型](raw/model-user-guide/get-started-with-models/models.md)。
             
             > 单个业务空间最多支持创建 20 个 API Key。
             
-            如需以下功能，请选择非默认的业务空间，相关信息请参考[业务空间管理](https://help.aliyun.com/zh/model-studio/use-workspace)：
+            如需以下功能，请选择非默认的业务空间，相关信息请参考[业务空间管理](raw/model-user-guide/security-and-compliance/permission-management-overview.md)：
             
             -   对不同项目（业务空间）进行权限隔离
             -   精细化的模型访问控制
             -   进行独立的成本核算
         -   **权限**：建议选择**全部**，若有更精细的权限控制需求，可以选择**自定义**来控制可访问 IP 和 可访问模型。
             
-            > IP 白名单默认设置：IPv4（`0.0.0.0/0`）全部放通；IPv6 仅华北2（北京）地域支持，美国（弗吉尼亚）地域仅支持 IPv4。最多支持 **20** 个地址或网段，批量输入请用英文逗号隔开。输入 IP 地址后请按回车键确认，系统才会识别并保存该地址。不按回车键直接单击**确定**，输入的 IP 地址不会被保存。IP 白名单按发起请求的连接 IP 校验，不校验 `X-Forwarded-For` 等请求头中携带的 IP 地址。通过代理或网关访问百炼时，请将代理节点的出口 IP 添加到白名单，无需添加客户端自身 IP。来自白名单以外 IP 的请求会被拒绝，返回 `HTTP 403` 及 `IP access denied by API-Key restrictions`。
+            > IP 白名单默认设置：IPv4（`0.0.0.0/0`）全部放通；IPv6 仅华北2（北京）地域支持，美国（弗吉尼亚）地域仅支持 IPv4。最多支持 **20** 个地址或网段，批量输入请用英文逗号隔开。
             
     3.  点击新创建的 API Key 旁的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8412544571/p994217.png)图标复制 API Key。
         
@@ -86,8 +50,6 @@ Coding Plan
         
     
     我们也提供了一些常用工具的配置方法：[Dify](raw/model-user-guide/use-chat-client-or-development-tool/dify.md)、[Chatbox](https://help.aliyun.com/zh/model-studio/cline-tool)、[Cline](raw/model-user-guide/use-chat-client-or-development-tool/cline.md)、[Claude Code](raw/model-user-guide/use-chat-client-or-development-tool/claude-code.md)、[Postman](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)。
-    
-    百炼 API Key 用于调用百炼的 API 端点，不同套餐对应的 API Key 前缀与 Base URL 请以本文「套餐类型识别」章节为准。部分第三方工具的千问模式使用千问网页版账号登录（qwenauth），与百炼 API Key 属于不同的认证方式：工具要求填写 API Key 时，请使用百炼 API Key；工具要求账号登录时，请使用千问网页版账号。两者不能混用，否则调用会失败，并可能返回「没有额度」等错误。
     
 -   **方式二：配置 API Key 到环境变量，后续支持 cURL 和代码调用**
     
@@ -292,13 +254,13 @@ API Key 的状态随账号操作而变化：
 
 请访问[文本生成](raw/model-api-reference/qwen-api-reference.md)以及更多模型的 API 参考。
 
-OpenAI SDK 支持的模型，请参考[OpenAI 兼容](https://help.aliyun.com/zh/model-studio/compatible-with-openai)。
+OpenAI SDK 支持的模型，请参考[OpenAI 兼容](https://help.aliyun.com/zh/model-studio/toolkits-and-frameworks)。
 
 ## 常见问题
 
 #### 无法创建 API Key？
 
-API Key 的创建需使用[超级管理员](https://help.aliyun.com/zh/model-studio/permission-management-overview#982297bd47p3i)或[业务空间管理员](https://help.aliyun.com/zh/model-studio/permission-management-overview#c82f37c2033vw)操作。若系统返回 `Apikey limit number exceeded for MainAccount`，表示当前账号的 API Key 数量已达上限，请删除不再使用的 API Key 后重试。
+API Key 的创建需使用[超级管理员](https://help.aliyun.com/zh/model-studio/permission-management-overview#982297bd47p3i)或[业务空间管理员](https://help.aliyun.com/zh/model-studio/permission-management-overview#c82f37c2033vw)操作。
 
 #### 如何管理 API Key 的权限？
 
@@ -312,7 +274,7 @@ API Key 的调用权限完全由其**归属业务空间**决定。**同一空间
 如需在业务空间之外做更细粒度的控制，可在创建或编辑 API Key 时将**权限**切换为**自定义**，配置：
 
 -   **IP 访问白名单**：仅允许名单内的 IP 使用该 API Key 发起调用。支持 IPv4 与网段，默认 IPv4（`0.0.0.0/0`）全部放通；IPv6 仅华北2（北京）地域支持，美国（弗吉尼亚）地域仅支持 IPv4。最多支持 **20** 个地址或网段，批量输入请用英文逗号隔开。
--   **访问模型范围**：开关开启后，该 API Key 仅能调用已勾选的模型，可选模型限于该业务空间已授权的模型（最多 30 个）。
+-   **访问模型范围**：开关开启后，该 API Key 仅能调用已勾选的模型，可选模型限于该业务空间已授权的模型。
 
 #### 环境变量已设置，为何代码仍提示找不到 API Key？
 
@@ -329,19 +291,6 @@ API Key 的调用权限完全由其**归属业务空间**决定。**同一空间
 -   情况四：**用了sudo命令**。如果使用`sudo python xx.py`运行脚本，可能会遗漏当前用户环境变量，因为`sudo`默认不继承所有环境变量。您可采用`sudo -E python xx.py`命令，其中的`-E` 参数确保环境变量被传递。如有权限执行该脚本，可以直接执行 `python xx.py`。
     
 
-#### 百炼 API Key 与 RAM AccessKey 有何区别？
-
-两者是用途不同的凭证。百炼 API Key 不是密钥对，创建后只会得到一个字符串，不存在 AccessKeyId 与 AccessKeySecret，因此在**密钥管理**页面看不到“访问密钥密文”。具体区别如下：
-
--   **格式**：百炼 API Key 是以`sk-`开头的单个字符串；RAM AccessKey 由 AccessKeyId 和 AccessKeySecret 组成密钥对。
--   **用途**：百炼 API Key 用于调用百炼的模型与应用服务；RAM AccessKey 用于调用阿里云 OpenAPI。
--   **获取方式**：百炼 API Key 在阿里云百炼的**密钥管理**页面创建，具体步骤参见本文“第一步：获取 API Key”；RAM AccessKey 在 RAM 控制台创建。
--   **显示规则**：百炼 API Key 仅在创建成功的弹窗中完整显示一次，供您复制或下载保存，关闭弹窗后列表中只显示脱敏形式，无法再次查看完整明文；RAM AccessKey 的 AccessKeySecret 同样仅在创建时显示一次。
-
 #### 单个主账号下最多能创建多少个API Key？
 
 每个主账号下最多可创建20个业务空间（包括默认业务空间），每个业务空间下最多可创建20个API Key。
-
-#### 百炼是否支持批量导出所有 API Key 信息？
-
-不支持。百炼控制台的**API Key 管理**页面未提供批量导出或下载功能，如需获取多个 API Key 的信息，请在该页面逐个查看并复制。

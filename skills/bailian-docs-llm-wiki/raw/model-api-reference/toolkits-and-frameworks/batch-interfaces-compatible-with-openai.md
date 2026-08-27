@@ -36,7 +36,7 @@
     -   图像与视频理解：qwen3.8-max、qwen3.8-flash、qwen3.7-plus、qwen3.6-plus、qwen3.7-flash、qwen3.6-flash、qwen3.5-plus、qwen3.5-flash、qwen3-vl-plus、qwen3-vl-flash
     -   文字提取：qwen-vl-ocr、qwen-vl-ocr-latest
     -   全模态：qwen3.5-omni-plus
--   [**文本向量模型**](https://help.aliyun.com/zh/model-studio/user-guide/embedding)**：**text-embedding-v1、text-embedding-v2、text-embedding-v3、text-embedding-v4
+-   [**向量模型**](https://help.aliyun.com/zh/model-studio/user-guide/embedding)**：**text-embedding-v1、text-embedding-v2、text-embedding-v3、text-embedding-v4、qwen3.7-text-embedding
     
 
 **重要**
@@ -124,7 +124,7 @@ def upload_file(file_path):
 
 def create_batch_job(input_file_id):
     print(f"正在基于文件ID，创建Batch任务...")
-    # 请注意:此处endpoint参数值需和输入文件中的url字段保持一致.测试模型(batch-test-model)填写/v1/chat/ds-test,Embedding文本向量模型填写/v1/embeddings,其他模型填写/v1/chat/completions
+    # 请注意:此处endpoint参数值需和输入文件中的url字段保持一致.测试模型(batch-test-model)填写/v1/chat/ds-test,向量模型填写/v1/embeddings,其他模型填写/v1/chat/completions
     batch = client.batches.create(input_file_id=input_file_id, endpoint="/v1/chat/ds-test", completion_window="24h")
     print(f"Batch任务创建完成。 得到Batch任务ID: {batch.id}\n")
     return batch.id
@@ -748,7 +748,7 @@ Batch 推理需要构造 JSONL 文件，每行为一个独立请求。以下 Pyt
 Batch 推理 JSONL 文件生成工具
 
 支持的地域：
-  - 华北2（北京）：文本生成、多模态、通用文本向量
+  - 华北2（北京）：文本生成、多模态、向量
   - 新加坡：文本生成（qwen-max、qwen-plus、qwen-turbo）
 
 支持的模型：
@@ -764,7 +764,7 @@ Batch 推理 JSONL 文件生成工具
     qwen3.5-plus*, qwen3.5-flash*, qwen3-vl-plus*, qwen3-vl-flash*,
     qwen-vl-max, qwen-vl-max-latest, qwen-vl-plus, qwen-vl-plus-latest,
     qwen-vl-ocr, qwen-vl-ocr-latest, qwen-omni-turbo
-  文本向量（华北2）：text-embedding-v1/v2/v3/v4
+  向量模型（华北2）：text-embedding-v1/v2/v3/v4, qwen3.7-text-embedding
 
 文件大小限制：单行 ≤6MB，总文件 ≤500MB，建议 ≤10000 行
 
@@ -858,16 +858,16 @@ TASKS = [
 # - 思考模式需额外设置 ENABLE_THINKING = True
 ```
 
-## 文本向量模型请求格式
+## 向量模型请求格式
 
-文本向量模型使用 `/v1/embeddings` 接口，请求格式不同于文本生成模型。可使用以下独立脚本生成：
+向量模型使用 `/v1/embeddings` 接口，请求格式不同于文本生成模型。可使用以下独立脚本生成：
 
 ```
 #!/usr/bin/env python3
-"""文本向量模型 Batch JSONL 生成（使用 /v1/embeddings 接口）"""
+"""向量模型 Batch JSONL 生成（使用 /v1/embeddings 接口）"""
 import json
 
-MODEL = "text-embedding-v3"  # 可选: v1, v2, v3, v4
+MODEL = "text-embedding-v3"  # 可选: v1, v2, v3, v4, qwen3.7-text-embedding
 
 TEXTS = [
     "衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买。",
@@ -900,7 +900,7 @@ print(f"已生成 {output_file}，共 {len(TEXTS)} 条请求")
     
     `/v1/chat/completions`
     
-    文本向量模型
+    向量模型
     
     `/v1/embeddings`
     
@@ -1165,7 +1165,7 @@ client = OpenAI(
 
 batch = client.batches.create(
     input_file_id="file-batch-xxx",  # 上传文件返回的id或OSS文件URL或OSS文件资源标识符
-    endpoint="/v1/chat/completions",  # 测试模型batch-test-model填写/v1/chat/ds-test，文本向量模型填写/v1/embeddings，文本生成/多模态模型填写/v1/chat/completions
+    endpoint="/v1/chat/completions",  # 测试模型batch-test-model填写/v1/chat/ds-test，向量模型填写/v1/embeddings，文本生成/多模态模型填写/v1/chat/completions
     completion_window="24h",
     metadata={'ds_name':"任务名称",'ds_description':'任务描述'} # metadata数据，非必填字段，用于创建任务名称、描述
 )
@@ -1357,7 +1357,7 @@ Body
 
 访问路径，须与输入文件中的URL字段一致。
 
--   Embedding文本向量模型填写`/v1/embeddings`
+-   向量模型填写`/v1/embeddings`
     
 -   测试模型`batch-test-model`填写`/v1/chat/ds-test`
     
@@ -2773,7 +2773,7 @@ client = OpenAI(
 
 batch = client.batches.create(
     input_file_id="file-batch-xxx",  # 上传文件返回的 id
-    endpoint="/v1/chat/completions",  # Embedding文本向量模型填写"/v1/embeddings",测试模型batch-test-model填写/v1/chat/ds-test,其他模型填写/v1/chat/completions
+    endpoint="/v1/chat/completions",  # 向量模型填写"/v1/embeddings",测试模型batch-test-model填写/v1/chat/ds-test,其他模型填写/v1/chat/completions
     completion_window="24h",
     metadata={
             "ds_batch_finish_callback": "https://xxx/xxx"
@@ -2848,7 +2848,7 @@ with open("input_demo.csv", "r") as fin:
         csvreader = csv.reader(fin)
         for row in csvreader:
             body = {"model": "qwen-turbo", "messages": messages_builder_example(row[1])}
-            # 选择Embedding文本向量模型进行调用时，url的值需填写"/v1/embeddings",其他模型填写/v1/chat/completions
+            # 选择向量模型进行调用时，url的值需填写"/v1/embeddings",其他模型填写/v1/chat/completions
             request = {"custom_id": row[0], "method": "POST", "url": "/v1/chat/completions", "body": body}
             fout.write(json.dumps(request, separators=(',', ':'), ensure_ascii=False) + "\n")
 ```

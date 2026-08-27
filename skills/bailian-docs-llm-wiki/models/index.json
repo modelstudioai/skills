@@ -1,16 +1,16 @@
 {
-  "updatedAt": "2026-08-27",
-  "totalFamilies": 181,
-  "totalModels": 408,
+  "updatedAt": "2026-08-28",
+  "totalFamilies": 179,
+  "totalModels": 407,
   "profileCoverage": {
     "full": 0,
     "partial": 0,
-    "structured-only": 408,
+    "structured-only": 407,
     "none": 0
   },
   "capabilityDistribution": {
-    "TG": 38,
-    "IG": 32,
+    "TG": 37,
+    "IG": 31,
     "VG": 28,
     "TTS": 16,
     "Reasoning": 15,
@@ -28,8 +28,8 @@
   },
   "providerDistribution": {
     "qwen": 110,
-    "qwen-domain-model": 34,
-    "wan": 14,
+    "qwen-domain-model": 33,
+    "wan": 13,
     "mini-max": 4,
     "happyhorse": 4,
     "pixverse": 4,
@@ -686,11 +686,12 @@
       "providers": [
         "kling"
       ],
-      "itemCount": 4,
+      "itemCount": 5,
       "items": [
         "kling/kling-v3-image-generation",
         "kling/kling-v3-omni-image-generation",
         "kling/kling-v3-omni-video-generation",
+        "kling/kling-v3-turbo-video-generation",
         "kling/kling-v3-video-generation"
       ]
     },
@@ -1079,22 +1080,6 @@
         "qwen-audio-3.0-tts-flash",
         "qwen-audio-3.0-tts-plus"
       ]
-    },
-    {
-      "slug": "qwen-coder-plus",
-      "name": "Qwen-Coder-Plus",
-      "primaryCapability": "TG",
-      "capabilities": [
-        "TG"
-      ],
-      "providers": [
-        "qwen-domain-model"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-coder-plus"
-      ],
-      "maxContextWindow": 131072
     },
     {
       "slug": "qwen-coder-turbo",
@@ -2976,21 +2961,6 @@
       "itemCount": 1,
       "items": [
         "wanx-sketch-to-image-lite"
-      ]
-    },
-    {
-      "slug": "wanx-style-repaint-v1",
-      "name": "人像风格重绘",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "wan"
-      ],
-      "itemCount": 1,
-      "items": [
-        "wanx-style-repaint-v1"
       ]
     },
     {

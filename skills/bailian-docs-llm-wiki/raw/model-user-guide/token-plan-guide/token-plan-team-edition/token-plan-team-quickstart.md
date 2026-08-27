@@ -59,7 +59,7 @@ Anthropic 兼容
 
 AI 终端编码助手，支持自然语言编程
 
-![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/opencode.svg)**[OpenCode](raw/model-user-guide/use-chat-client-or-development-tool/opencode.md)**
+![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/opencode.svg)**[OpenCode](https://help.aliyun.com/zh/model-studio/opencode)**
 
 开源 AI 编程代理工具
 

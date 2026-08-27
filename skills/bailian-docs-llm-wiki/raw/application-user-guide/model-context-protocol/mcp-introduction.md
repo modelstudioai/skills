@@ -24,7 +24,7 @@
 
 ## 如何使用 MCP
 
-现在，阿里云百炼智能体和工作流应用已支持接入两种 MCP 服务。使用 MCP 服务的详细方法，请参考[官方 MCP 服务](raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)和[自定义MCP服务](raw/application-user-guide/model-context-protocol/custom-mcp.md)。
+现在，阿里云百炼智能体和工作流应用已支持接入两种 MCP 服务。使用 MCP 服务的详细方法，请参考[官方 MCP 服务](raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)和[自定义MCP服务](https://help.aliyun.com/zh/model-studio/custom-mcp)。
 
 -   官方 MCP 服务：阿里云百炼官方部署了多种 MCP 服务，方便您快速接入阿里云百炼应用。
 -   自定义 MCP 服务：阿里云百炼还支持部署自定义 MCP 服务。您可以在 MCP 市场或互联网上搜寻 MCP 服务，以自定义 MCP 服务的形式部署在阿里云百炼上。

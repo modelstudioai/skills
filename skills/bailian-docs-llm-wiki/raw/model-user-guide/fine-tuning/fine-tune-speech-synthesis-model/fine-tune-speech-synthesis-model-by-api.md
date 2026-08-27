@@ -720,7 +720,7 @@ with open('output.mp3', 'wb') as f:
 
 [上传调优文件](https://help.aliyun.com/zh/model-studio/fine-tune-speech-synthesis-model-by-api#cv_upload_title)
 
-[上传文件](https://help.aliyun.com/zh/model-studio/upload-file-api)
+[上传文件](raw/model-api-reference/file-management-api/upload-file-api.md)
 
 创建调优任务
 
