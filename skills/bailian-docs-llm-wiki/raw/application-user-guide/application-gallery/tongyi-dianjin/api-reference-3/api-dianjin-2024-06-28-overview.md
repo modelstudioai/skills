@@ -234,7 +234,7 @@ API概述
 
 中断任务。
 
-[GetTaskStatus](https://help.aliyun.com/zh/model-studio/api-dianjin-2024-06-28-gettaskstatus)
+[GetTaskStatus](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-gettaskstatus.md)
 
 获取任务状态
 

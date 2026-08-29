@@ -426,19 +426,19 @@ Function Calling
 
 输入
 
-1.1
+8
 
 每百万tokens
 
 输出
 
-3.851
+28
 
 每百万tokens
 
 输入（缓存命中）
 
-0.275
+2
 
 每百万tokens
 

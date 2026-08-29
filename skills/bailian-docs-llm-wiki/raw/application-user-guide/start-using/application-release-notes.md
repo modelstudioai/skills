@@ -413,7 +413,7 @@ MCP
 
 新增MCP市场与MCP管理功能
 
--   您可以开通阿里云百炼预置的MCP服务或部署自定义MCP服务，并在智能体应用和工作流应用中引用这些 MCP 服务，使应用具备更强大的能力。使用方法请参见[官方 MCP 服务](raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)和[自定义MCP服务](https://help.aliyun.com/zh/model-studio/custom-mcp)。
+-   您可以开通阿里云百炼预置的MCP服务或部署自定义MCP服务，并在智能体应用和工作流应用中引用这些 MCP 服务，使应用具备更强大的能力。使用方法请参见[官方 MCP 服务](raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)和[自定义MCP服务](raw/application-user-guide/model-context-protocol/custom-mcp.md)。
 
 4月1日
 

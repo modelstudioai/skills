@@ -48,7 +48,7 @@ wss://dashscope.aliyuncs.com/api-ws/v1/inference
 
 多模态交互应用开启了**语音交互**后，支持语音识别和语音合成。
 
-语音识别支持的模型包括：[Paraformer实时语音识别](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-api-reference)（Paraformer），[FUN-ASR实时语音识别](https://help.aliyun.com/zh/model-studio/fun-asr-real-time-speech-recognition-api-reference)（FunASR），[千问3-ASR-Flash-Realtime](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)（qwen3-asr-flash-realtime），多模态交互轻量版语音识别（AppSpecificASR-Realtime）。
+语音识别支持的模型包括：[Paraformer实时语音识别](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-api-reference)（Paraformer），[FUN-ASR实时语音识别](https://help.aliyun.com/zh/model-studio/fun-asr-real-time-speech-recognition-api-reference)（FunASR），[Qwen-Audio-3.0-ASR-Flash-Streaming](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/fun-asr-real-time-speech-recognition-api-reference/fun-asr-realtime-java-sdk.md)，[千问3-ASR-Flash-Realtime](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)（qwen3-asr-flash-realtime），多模态交互轻量版语音识别（AppSpecificASR-Realtime）。
 
 语音合成支持的模型包括：[语音合成CosyVoice-v2大模型](https://help.aliyun.com/zh/model-studio/cosyvoice-large-model-for-speech-synthesis)（cosyvoice-v2），[语音合成CosyVoice-v3-Flash大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3-flash），[语音合成CosyVoice-v3-plus大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3-plus），[语音合成CosyVoice-v3.5-Flash大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3.5-flash），[语音合成CosyVoice-v3.5-Plus大模型](https://help.aliyun.com/zh/model-studio/text-to-speech)（cosyvoice-v3.5-plus），[Qwen-Audio-3.0-TTS-Plus](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)（qwen-audio-3.0-tts-plus）、[Qwen-Audio-3.0-TTS-Flash](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)（qwen-audio-3.0-tts-flash），[千问3-TTS-Flash-Realtime](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)（qwen3-tts），[千问3-TTS-Instruct-Flash-Realtime](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)（qwen3-tts-instruct），[千问3-声音设计](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-design)（qwen3-tts-vd），[千问3-声音复刻](https://help.aliyun.com/zh/model-studio/qwen-tts-voice-cloning)（qwen3-tts-vc），[Sambert语音合成](https://help.aliyun.com/zh/model-studio/sambert-speech-synthesis)（sambert），多模态交互轻量版语音合成（AppSpecificTTS）。
 
@@ -351,7 +351,7 @@ string
 
 否
 
-语音识别语种，默认和控制台选择的语言保持一致。
+语音识别语种，默认和控制台选择的语言保持一致。设置多个语种时，使用英文逗号分隔，例如：`zh,en`。
 
 **parameters.downstream**的参数说明如下：
 
@@ -1970,7 +1970,7 @@ String
 
 否
 
-语音识别语种更新，不配置则语种不变。
+语音识别语种更新，不配置则语种不变。设置多个语种时，使用英文逗号分隔，例如：`zh,en`。
 
 downstream
 

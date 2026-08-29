@@ -174,8 +174,6 @@ Function Calling
 
 ## 限流
 
-本模型采用[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)机制，TPM 按百炼月消费分档调整。
-
 #### 华北2（北京）
 
 参数

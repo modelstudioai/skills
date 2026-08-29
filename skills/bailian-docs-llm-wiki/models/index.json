@@ -1,16 +1,16 @@
 {
-  "updatedAt": "2026-08-28",
-  "totalFamilies": 179,
-  "totalModels": 407,
+  "updatedAt": "2026-08-30",
+  "totalFamilies": 182,
+  "totalModels": 411,
   "profileCoverage": {
     "full": 0,
     "partial": 0,
-    "structured-only": 407,
+    "structured-only": 411,
     "none": 0
   },
   "capabilityDistribution": {
-    "TG": 37,
-    "IG": 31,
+    "TG": 39,
+    "IG": 32,
     "VG": 28,
     "TTS": 16,
     "Reasoning": 15,
@@ -27,9 +27,9 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 110,
-    "qwen-domain-model": 33,
-    "wan": 13,
+    "qwen": 111,
+    "qwen-domain-model": 34,
+    "wan": 14,
     "mini-max": 4,
     "happyhorse": 4,
     "pixverse": 4,
@@ -40,6 +40,7 @@
     "kling": 1,
     "stepfun": 1,
     "tripo": 1,
+    "unisound": 1,
     "xiaomi": 1
   },
   "families": [
@@ -1082,6 +1083,22 @@
       ]
     },
     {
+      "slug": "qwen-coder-plus",
+      "name": "Qwen-Coder-Plus",
+      "primaryCapability": "TG",
+      "capabilities": [
+        "TG"
+      ],
+      "providers": [
+        "qwen-domain-model"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen-coder-plus"
+      ],
+      "maxContextWindow": 131072
+    },
+    {
       "slug": "qwen-coder-turbo",
       "name": "Qwen-Coder-Turbo",
       "primaryCapability": "TG",
@@ -1399,11 +1416,13 @@
         "IG"
       ],
       "providers": [
+        "qwen",
         "qwen-domain-model"
       ],
-      "itemCount": 1,
+      "itemCount": 2,
       "items": [
-        "qwen-mt-image"
+        "qwen-mt-image",
+        "qwen-mt-image-2.0"
       ]
     },
     {
@@ -2643,6 +2662,23 @@
       ]
     },
     {
+      "slug": "unisound-models-market-place",
+      "name": "云知声文本模型",
+      "primaryCapability": "TG",
+      "capabilities": [
+        "TG",
+        "Reasoning"
+      ],
+      "providers": [
+        "unisound"
+      ],
+      "itemCount": 1,
+      "items": [
+        "unisound/unisound-u2"
+      ],
+      "maxContextWindow": 163840
+    },
+    {
       "slug": "vanchin-models-market-place",
       "name": "Vanchin DeepSeek",
       "primaryCapability": "TG",
@@ -2961,6 +2997,21 @@
       "itemCount": 1,
       "items": [
         "wanx-sketch-to-image-lite"
+      ]
+    },
+    {
+      "slug": "wanx-style-repaint-v1",
+      "name": "人像风格重绘",
+      "primaryCapability": "IG",
+      "capabilities": [
+        "IG"
+      ],
+      "providers": [
+        "wan"
+      ],
+      "itemCount": 1,
+      "items": [
+        "wanx-style-repaint-v1"
       ]
     },
     {

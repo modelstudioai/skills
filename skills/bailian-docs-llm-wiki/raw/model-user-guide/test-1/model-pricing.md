@@ -2500,8 +2500,6 @@ qwen3.6-plus-2026-04-02
 
 qwen3.8-flash
 
-> [Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)半价
-
 > [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
 
 非思考和思考模式
@@ -2733,6 +2731,20 @@ qwen-flash-2025-07-28
 **输出单价（每百万Token）**
 
 > **思维链+回答**
+
+qwen3.8-flash
+
+> [上下文缓存](https://help.aliyun.com/zh/model-studio/context-cache)享有折扣
+
+全球
+
+非思考和思考模式
+
+0<Token≤1M
+
+0.8元
+
+2.7元
 
 qwen3.7-flash
 
@@ -10190,6 +10202,28 @@ stepfun/step-3.7-flash
 
 无
 
+### Unisound-云知声
+
+#### 华北2（北京）
+
+**模型 ID（Model ID）**
+
+**输入单价（每百万Token）**
+
+**输出单价（每百万Token）**
+
+> **思维链和回答**
+
+**免费额度**[（注）](https://help.aliyun.com/zh/model-studio/new-free-quota#977b13081ab56)
+
+unisound/unisound-u2
+
+1元
+
+2元
+
+无
+
 ## 图像生成
 
 计费规则：按输入图像和成功生成的 **图像张数**计费。未说明输入图像价格的模型，输入不计费，仅输出计费。
@@ -10743,11 +10777,31 @@ qwen-image-edit
 
 有效期：自开通百炼/模型发布/申请通过之日起90天内（以较晚者为准）
 
+qwen-mt-image-2.0
+
+0.004元/张
+
+100张
+
 qwen-mt-image
 
 0.003元/张
 
 100张
+
+#### 新加坡
+
+**模型 ID（Model ID）**
+
+**服务部署范围**
+
+**输出单价**
+
+qwen-mt-image-2.0
+
+国际
+
+0.004375元/张
 
 ### Z-Image
 

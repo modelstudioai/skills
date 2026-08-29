@@ -6,7 +6,7 @@
 
 可参考以下选型指南快速选择：
 
--   [AI 通用型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#ghoteqo7uv9wa)**（推荐）**：通过承诺每月消费金额来换取阶梯式折扣，最高可享 5.3 折优惠。该方案可抵扣[阿里直供](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#c14b3d84925t1)的全部模型，灵活性最高，**是绝大多数场景下的首选**。
+-   [AI 通用型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#ghoteqo7uv9wa)**（推荐）**：通过承诺每月消费金额来换取阶梯式折扣，最高可享 5.3 折优惠。该方案可抵扣[阿里直供](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#c14b3d84925t1)的绝大部分模型，灵活性最高，**是绝大多数场景下的首选**。
 -   [其他模型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#0d5644e5e3su8)：一次性购买固定金额，用于抵扣特定模型系列的调用费用。仅适用于特定模型系列（如语音模型系列），且折扣通常不如AI 通用型节省计划，可按需使用。
 -   [资源包](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#636b1d18d5lhl)：一次性购买具体资源量（如Tokens、生成图片数量等）。仅适用于抵扣单个特定模型（例如 qwen-plus），且折扣通常不如 AI 通用型节省计划，可按需使用。
 
@@ -32,7 +32,7 @@
 
 模型覆盖
 
-覆盖全模型（阿里直供）
+覆盖绝大部分模型（阿里直供）
 
 仅适用单个特定模型
 
@@ -56,7 +56,7 @@
 
 AI 通用型节省计划是针对大模型按量付费使用场景设计的折扣方案。只需承诺在一定期限内（3 个月、6 个月、12 个月或 24 个月）的月消费金额，即可在保留按量付费灵活性的基础上，享受阶梯式折扣，优化模型调用成本。其核心优势如下：
 
--   **覆盖全面**：可抵扣[阿里直供](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#c14b3d84925t1)的全部模型，一次购买即可跨模型使用。
+-   **覆盖全面**：可抵扣[阿里直供](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#c14b3d84925t1)的绝大部分模型，一次购买即可跨模型使用。
 -   **成本优化显著**：承诺消费金额越高、周期越长，折扣力度越大，最高可享 5.3 折优惠。
 -   **管理流程便捷**：购买后可立即或按指定时间生效，无需手动激活或绑定，自动抵扣，支持自动续费。
 
@@ -1038,7 +1038,7 @@ qwen-max的实时推理服务（[非思考模式](https://help.aliyun.com/zh/mod
 
 详见[购买指引](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#nqdi1bsux4qx0)中的抵扣范围
 
-与 AI 通用型节省计划支持的模型范围相同，详见[购买指引](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#nqdi1bsux4qx0)中的抵扣范围
+与 AI 通用型节省计划支持的模型范围基本相同，但月承诺金额 1000 元以下（不含 1000 元）的档位不支持抵扣 kimi-k3。详见[购买指引](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#nqdi1bsux4qx0)中的抵扣范围
 
 **折扣方式**
 
@@ -1051,6 +1051,7 @@ qwen-max的实时推理服务（[非思考模式](https://help.aliyun.com/zh/mod
 -   **额度清零**：每月额度按动态月独立发放，当月未使用完的部分自动清零，不累积到下一周期。**包季**套餐（如 27 元抵 60 元）总额度分 3 个月按月发放（每月 20 元），不一次性到账。
 -   **退订政策**：一经支付，不支持退订，请在购买前确认档位和需求。
 -   **抵扣范围**：与 AI 通用型节省计划相同，仅支持抵扣阿里直供模型产生的调用费用，**不支持**第三方直供模型（C 类中的三方直供模型）。
+-   **模型限制**：月承诺金额 1000 元以下（不含 1000 元）的入门型 AI 通用节省计划，不支持抵扣 kimi-k3 模型的调用费用；月承诺金额 1000 元及以上档位支持抵扣。
 
 节省计划账单请参见[节省账单使用明细](https://billing-cost.console.aliyun.com/resource/spn/detail)。
 

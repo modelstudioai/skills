@@ -272,15 +272,7 @@ kling/kling-v3-omni-video-generation
 -   支持 HTTP 和 HTTPS 协议。
 -   示例值：[](https://xxx/xxx.mp4)[https://xxx/xxx.mp4](https://xxx/xxx.mp4)。
 
-**`kling/kling-v3-video-generation`视频限制：**
-
--   格式：mp4、mov。
--   时长：3～10s。
--   分辨率：宽和高的范围为\[720, 2160\]像素。
--   文件大小：不超过200MB。
--   帧率：24～60fps。
-
-**`kling/kling-v3-omni-video-generation`视频限制：**
+视频限制：
 
 -   格式：mp4、mov。
 -   文件大小：不超过200MB。
@@ -311,7 +303,6 @@ kling/kling-v3-omni-video-generation
 
 -   视频特征参考（feature）场景支持开启多镜头（`shot_type`仅支持`intelligence`）。
 -   视频编辑（base）场景不支持多镜头。
--   `kling/kling-v3-turbo-video-generation` 支持多镜头。
 
 **shot\_type** `string` （条件必填）
 

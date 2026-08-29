@@ -346,25 +346,23 @@ Function Calling
 
 输入
 
-2.827
+20
 
 每百万tokens
 
 输出
 
-14.133
+100
 
 每百万tokens
 
 输入（缓存命中）
 
-0.283
+2
 
 每百万tokens
 
 ## 限流
-
-本模型采用[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)机制，TPM 按百炼月消费分档调整。
 
 #### 华北2（北京）
 

@@ -50,7 +50,7 @@ Function Calling
 
 批量推理
 
-支持
+不支持
 
 模型调优
 
@@ -212,6 +212,58 @@ Function Calling
 
 不支持
 
+#### 美国（弗吉尼亚）
+
+部署范围：全球
+
+能力项
+
+支持情况
+
+能力项
+
+支持情况
+
+输入模态
+
+**Image** **Text** **Video**
+
+输出模态
+
+**Text**
+
+模型体验
+
+支持
+
+Function Calling
+
+支持
+
+结构化输出
+
+支持
+
+联网搜索
+
+不支持
+
+前缀续写
+
+支持
+
+上下文缓存
+
+支持
+
+批量推理
+
+不支持
+
+模型调优
+
+不支持
+
 ## 上下文限制
 
 参数
@@ -276,18 +328,6 @@ Function Calling
 
 每百万tokens
 
-输入（Batch File）
-
-0.4
-
-每百万tokens
-
-输出（Batch File）
-
-1.35
-
-每百万tokens
-
 显式缓存创建
 
 1.25
@@ -297,18 +337,6 @@ Function Calling
 显式缓存命中
 
 0.1
-
-每百万tokens
-
-输入（Batch Chat)
-
-0.8
-
-每百万tokens
-
-输出（Batch Chat)
-
-2.7
 
 每百万tokens
 
@@ -432,9 +460,47 @@ Function Calling
 
 每百万tokens
 
-## 限流
+#### 美国（弗吉尼亚）
 
-本模型采用[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)机制，TPM 按百炼月消费分档调整。
+部署范围：全球
+
+计费项
+
+价格（元）
+
+单位
+
+输入
+
+0.8
+
+每百万tokens
+
+输出
+
+2.7
+
+每百万tokens
+
+输入（缓存命中）
+
+0.1
+
+每百万tokens
+
+显式缓存创建
+
+1.25
+
+每百万tokens
+
+显式缓存命中
+
+0.1
+
+每百万tokens
+
+## 限流
 
 #### 华北2（北京）
 
@@ -483,6 +549,22 @@ TPM（每分钟tokens）
 5,000,000
 
 #### 日本（东京）
+
+部署范围：全球
+
+参数
+
+值
+
+RPM（每分钟请求数）
+
+30,000
+
+TPM（每分钟tokens）
+
+5,000,000
+
+#### 美国（弗吉尼亚）
 
 部署范围：全球
 

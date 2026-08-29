@@ -216,7 +216,7 @@ dict
 
 适用于临时性、会话级别的热词优化。
 
-与预编译热词同时配置时，仅即时热词生效。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
+与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
 
 **重要**仅`qwen-audio-3.0-asr-flash-filetrans`支持即时热词。
 

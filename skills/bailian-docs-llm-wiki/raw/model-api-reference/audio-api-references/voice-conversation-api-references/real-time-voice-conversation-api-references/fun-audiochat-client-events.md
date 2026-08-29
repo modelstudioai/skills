@@ -60,6 +60,24 @@ TTS 音色名称，默认值为 `longanqian`。支持两种类型，仅可在第
 
 允许单次请求的最大历史 QA 轮数。取值范围为 1-50，默认值为 20。
 
+**enable\_search**`boolean`（可选）
+
+**仅适用于 qwen-audio-3.0-realtime-plus 和 qwen-audio-3.0-realtime-flash 模型。**
+
+是否开启联网搜索。默认值：`false`。开启后，模型可根据实时问题自主判断是否进行联网搜索。
+
+> `tools` 与 `enable_search` 不可同时启用。
+
+**search\_options**`object`（可选）
+
+联网搜索配置，仅在 `enable_search` 为 `true` 时生效。
+
+属性
+
+**enable\_source**`boolean`（可选）
+
+是否返回搜索结果来源。设置为 `true` 时返回。
+
 **tools**`array`（可选）
 
 Function Calling 工具定义列表。配置后模型可根据用户输入自主决定是否调用工具。
