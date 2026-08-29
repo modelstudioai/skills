@@ -11,6 +11,65 @@
           "Image"
         ]
       },
+      "description": "专注做图片翻译的模型服务，能将中、英、日等55个语言的图片翻译到指定的语言，精准还原图片排版和内容信息，支持术语定义、敏感词过滤、商品主体检测等自定义功能，提供灵活、准确、高效的图像本地化服务。",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen-mt-image-2.0",
+      "prices": [
+        {
+          "priceUnit": "每张",
+          "price": "0.004",
+          "type": "image_number",
+          "priceName": "图片生成"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 1,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 1,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 2
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "IG"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-08-28T09:22:55.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-MT-Image-2.0",
+      "docUrl": "https://help.aliyun.com/document_detail/2977163.html",
+      "category": "Visual",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"qwen-mt-image-2.0\",\n    \"input\": {\n        \"image_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260817/jgnwiv/9367cff1-f8fd-9c97-8bf7-4c913a51ae6f_qwen_image3_serving_output_0.png\",\n        \"source_lang\": \"zh\",\n        \"target_lang\": \"en\"\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/2977163.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Image"
+        ],
+        "request_modality": [
+          "Image"
+        ]
+      },
       "description": "专注做图片翻译的模型服务，能将中、英、日等11个语言的图片翻译到指定的语言，精准还原图片排版和内容信息，支持术语定义、敏感词过滤、商品主体检测等自定义功能，提供灵活、准确、高效的图像本地化服务。",
       "features": [],
       "provider": "qwen-domain-model",

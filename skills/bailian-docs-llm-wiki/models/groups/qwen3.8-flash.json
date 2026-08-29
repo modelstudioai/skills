@@ -83,7 +83,6 @@
       "description": "Qwen3.8-Flash 是千问最新推出的多模态大模型，兼具强大的理解与生成能力和出色的响应速度。模型原生支持百万级上下文窗口，能够一次性处理超长文档、代码仓库和复杂对话。在编程辅助、智能体协作、图文理解等场景中表现尤为出色——无论是自动修复代码、操作桌面应用，还是分析图表与长视频，都能给出准确、高质量的结果。同时兼容 OpenAI 与 Anthropic 主流接口协议，可无缝接入 Claude Code、Codex 等开发者工具，轻松构建高并发应用与智能工作流。凭借优异的性能与极具竞争力的推理成本，Qwen3.8-Flash 是开发者和企业在 AI 应用中兼顾效果与效率的理想选择。",
       "collectionTag": "qwen3.8",
       "features": [
-        "batch",
         "cache",
         "function-calling",
         "model-experience",
@@ -117,20 +116,6 @@
         },
         {
           "priceUnit": "每百万tokens",
-          "price": "0.4",
-          "timeBand": "standard",
-          "type": "input_token_batch",
-          "priceName": "输入（Batch File）"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "1.35",
-          "timeBand": "standard",
-          "type": "output_token_batch",
-          "priceName": "输出（Batch File）"
-        },
-        {
-          "priceUnit": "每百万tokens",
           "price": "1.25",
           "timeBand": "standard",
           "type": "input_token_cache_creation_5m",
@@ -142,22 +127,6 @@
           "timeBand": "standard",
           "type": "input_token_cache_read",
           "priceName": "显式缓存命中"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "0.8",
-          "timeBand": "standard",
-          "discount": 0.5,
-          "type": "input_token_batch_chat",
-          "priceName": "输入（Batch Chat)"
-        },
-        {
-          "priceUnit": "每百万tokens",
-          "price": "2.7",
-          "timeBand": "standard",
-          "discount": 0.5,
-          "type": "output_token_batch_chat",
-          "priceName": "输出（Batch Chat)"
         }
       ],
       "qpmInfo": {

@@ -414,19 +414,19 @@ Function Calling
 
 输入
 
-1.65
+12
 
 每百万tokens
 
 输出
 
-3.301
+24
 
 每百万tokens
 
 输入（缓存命中）
 
-0.138
+1
 
 每百万tokens
 
@@ -608,8 +608,6 @@ Function Calling
 
 本文仅展示模型调用原价，不包含限时优惠等活动信息，请前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing?tab=model#/model-market/all)查看活动优惠。
 
-**说明**闲时为东八区 22:00 至次日 08:00，其余时段为忙时，以账单时间为准。
-
 #### 华北2（北京）
 
 计费项
@@ -642,13 +640,13 @@ Function Calling
 
 每百万tokens
 
-输入（缓存命中-闲时）
+输入（缓存命中，闲时）
 
 0.45
 
 每百万tokens
 
-输入（缓存命中-忙时）
+输入（缓存命中，忙时）
 
 0.9
 
@@ -688,13 +686,13 @@ Function Calling
 
 每百万tokens
 
-输入（缓存命中-闲时）
+输入（缓存命中，闲时）
 
 0.481
 
 每百万tokens
 
-输入（缓存命中-忙时）
+输入（缓存命中，忙时）
 
 0.963
 
@@ -734,13 +732,13 @@ Function Calling
 
 每百万tokens
 
-输入（缓存命中-闲时）
+输入（缓存命中，闲时）
 
 0.45
 
 每百万tokens
 
-输入（缓存命中-忙时）
+输入（缓存命中，忙时）
 
 0.9
 
@@ -780,13 +778,13 @@ Function Calling
 
 每百万tokens
 
-输入（缓存命中-闲时）
+输入（缓存命中，闲时）
 
 0.45
 
 每百万tokens
 
-输入（缓存命中-忙时）
+输入（缓存命中，忙时）
 
 0.9
 
@@ -804,43 +802,41 @@ Function Calling
 
 输入（闲时）
 
-0.636
+4.5
 
 每百万tokens
 
 输入（忙时）
 
-1.272
+9
 
 每百万tokens
 
 输出（闲时）
 
-1.908
+13.5
 
 每百万tokens
 
 输出（忙时）
 
-3.816
+27
 
 每百万tokens
 
-输入（缓存命中-闲时）
+输入（缓存命中，闲时）
 
-0.064
+0.45
 
 每百万tokens
 
-输入（缓存命中-忙时）
+输入（缓存命中，忙时）
 
-0.127
+0.9
 
 每百万tokens
 
 #### 限流
-
-本模型采用[动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)机制，TPM 按百炼月消费分档调整。
 
 #### 华北2（北京）
 

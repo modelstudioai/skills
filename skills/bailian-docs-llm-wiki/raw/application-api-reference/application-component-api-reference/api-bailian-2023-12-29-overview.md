@@ -314,7 +314,7 @@ API概述
 
 获取指定长期记忆体的描述信息。
 
-[UpdateMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-updatememory.md)
+[UpdateMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatememory)
 
 更新长期记忆体
 

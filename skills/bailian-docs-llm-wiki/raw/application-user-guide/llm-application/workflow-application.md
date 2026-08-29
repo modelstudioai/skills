@@ -749,7 +749,7 @@
     阿里云百炼预置了常用的 MCP 服务，您可以引用这些官方MCP服务，也可以引用开源社区或自己开发的自定义 MCP 服务。
     
     -   如果要引用官方MCP服务，您需要确认[已开通云部署 MCP 服务](https://help.aliyun.com/zh/model-studio/official-and-third-party-mcp#47ed5b5cff6hs)。
-    -   如果要引用自定义MCP服务，您需要先部署[自定义MCP服务](https://help.aliyun.com/zh/model-studio/custom-mcp)。
+    -   如果要引用自定义MCP服务，您需要先部署[自定义MCP服务](raw/application-user-guide/model-context-protocol/custom-mcp.md)。
 -   **参数配置**
     
     **参数名称**

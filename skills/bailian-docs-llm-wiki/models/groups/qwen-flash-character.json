@@ -15,7 +15,8 @@
       "features": [
         "model-experience",
         "cache",
-        "web-search"
+        "web-search",
+        "structured-outputs"
       ],
       "provider": "qwen",
       "model": "qwen-flash-character",
