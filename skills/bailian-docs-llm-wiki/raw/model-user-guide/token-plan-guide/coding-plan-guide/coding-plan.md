@@ -92,7 +92,7 @@ AI 终端编码助手，支持自然语言编程
 
 AI 原生代码编辑器
 
-![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/codex.svg)**[Codex](raw/model-user-guide/use-chat-client-or-development-tool/codex.md)**
+![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/codex.svg)**[Codex](https://help.aliyun.com/zh/model-studio/codex)**
 
 OpenAI 推出的命令行编程工具
 

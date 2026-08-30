@@ -44,7 +44,7 @@
 评测集选择支持**生成评测集**和**选择已有评测集**两种方式：
 
 -   生成评测集：基于上一步选中的知识库，由大模型自动生成评测集。所有生成的评测集均可在[评测集](https://bailian.console.aliyun.com/?&tab=app&scm=20140722.S_%E7%99%BE%E7%82%BCprompt._.RL_%E7%99%BE%E7%82%BCprompt-LOC_aillm-OR_chat-V_3-RC_llm#/efm/app_evaluate/tabs?tab=group)页面查看。
--   选择已有评测集：复用已有评测集，需确保所选评测集内各问题的参考答案，均能在当前指定的知识库中找到。否则将导致评测结果不准确。评测集格式请参考[评测集](https://help.aliyun.com/zh/model-studio/application-evaluation-dataset)。
+-   选择已有评测集：复用已有评测集，需确保所选评测集内各问题的参考答案，均能在当前指定的知识库中找到。否则将导致评测结果不准确。评测集格式请参考[评测集](raw/application-user-guide/application-evaluation/application-evaluation-dataset.md)。
 
 以下以生成评测集为例。
 

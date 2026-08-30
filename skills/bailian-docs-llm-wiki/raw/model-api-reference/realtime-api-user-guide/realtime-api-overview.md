@@ -140,7 +140,7 @@ qwen3.5-livetranslate-flash-realtime
 
 支持
 
-[多模态开发套件](raw/application-user-guide/application-gallery/multimodal-products/multimodal-products-overview.md)
+[多模态开发套件](https://help.aliyun.com/zh/model-studio/multimodal-products-overview)
 
 multimodal-dialog
 

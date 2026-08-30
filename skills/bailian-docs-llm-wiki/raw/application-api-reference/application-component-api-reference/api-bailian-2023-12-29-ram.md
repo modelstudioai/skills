@@ -257,7 +257,7 @@ get
 
 sfm:UpdateMemory
 
-[UpdateMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatememory)
+[UpdateMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-updatememory.md)
 
 update
 
@@ -719,7 +719,7 @@ delete
 
 sfm:UpdateMemory
 
-[UpdateMemory](https://help.aliyun.com/zh/model-studio/api-bailian-2023-12-29-updatememory)
+[UpdateMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-updatememory.md)
 
 update
 
