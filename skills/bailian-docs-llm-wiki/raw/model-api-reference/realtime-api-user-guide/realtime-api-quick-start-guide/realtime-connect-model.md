@@ -281,7 +281,7 @@ pc.ondatachannel = (event) => {
 
 -   [实时全模态](https://help.aliyun.com/zh/model-studio/realtime#bdaa43cdd7hsd)
 -   [实时语音翻译](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime)
--   [多模态开发套件](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/multimodal-interaction-protocol.md)
+-   [多模态开发套件](https://help.aliyun.com/zh/model-studio/multimodal-interaction-protocol)
 -   [实时语音识别](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/fun-asr-real-time-speech-recognition-api-reference/fun-asr-realtime-websocket-api.md)
 -   [实时语音合成](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis/cosyvoice-websocket-api.md)
 -   [实时语音对话](raw/model-api-reference/audio-api-references/voice-conversation-api-references/real-time-voice-conversation-api-references/fun-audiochat-realtime-websocket-api.md)

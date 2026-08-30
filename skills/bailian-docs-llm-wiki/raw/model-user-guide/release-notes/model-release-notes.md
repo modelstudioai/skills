@@ -179,7 +179,7 @@ qwen-turbo 资源包启动退市通知[了解详情](https://www.aliyun.com/noti
 
 新增 Codex 客户端接入
 
-新增 Codex 终端 AI 编程助手接入百炼，[了解详情](raw/model-user-guide/use-chat-client-or-development-tool/codex.md)
+新增 Codex 终端 AI 编程助手接入百炼，[了解详情](https://help.aliyun.com/zh/model-studio/codex)
 
 6月23日
 
@@ -431,7 +431,7 @@ Token Plan 团队版新增团队管理：支持 SSO/钉钉登录、席位分配�
 
 多模态交互开发套件移动端 Android SDK 上线
 
-新增移动端 Android SDK，含下载安装、关键接口与代码示例，[了解详情](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/multimodal-sdk-android.md)
+新增移动端 Android SDK，含下载安装、关键接口与代码示例，[了解详情](https://help.aliyun.com/zh/model-studio/multimodal-sdk-android)
 
 4月9日
 
@@ -439,7 +439,7 @@ Token Plan 团队版新增团队管理：支持 SSO/钉钉登录、席位分配�
 
 RTOS C SDK 新增 License 模式
 
-多模态交互开发套件 RTOS C SDK 新增 License 模式，覆盖嵌入式硬件半托管/全托管接入，[了解详情](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/mmi-rtos-sdk.md)
+多模态交互开发套件 RTOS C SDK 新增 License 模式，覆盖嵌入式硬件半托管/全托管接入，[了解详情](https://help.aliyun.com/zh/model-studio/mmi-rtos-sdk)
 
 4月7日
 
