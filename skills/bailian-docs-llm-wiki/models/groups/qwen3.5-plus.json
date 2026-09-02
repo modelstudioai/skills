@@ -124,6 +124,7 @@
               "priceUnit": "每百万tokens",
               "price": "0.8",
               "timeBand": "standard",
+              "ntmAmountType": "context_0-128k_input_token",
               "type": "input_token",
               "priceName": "输入"
             },
@@ -131,6 +132,7 @@
               "priceUnit": "每百万tokens",
               "price": "4.8",
               "timeBand": "standard",
+              "ntmAmountType": "context_0-128k_output_token",
               "type": "output_token",
               "priceName": "输出"
             },
@@ -138,6 +140,7 @@
               "priceUnit": "每百万tokens",
               "price": "0.4",
               "timeBand": "standard",
+              "ntmAmountType": "context_0-128k_input_token_batch",
               "type": "input_token_batch",
               "priceName": "输入（Batch File）"
             },
@@ -145,6 +148,7 @@
               "priceUnit": "每百万tokens",
               "price": "2.4",
               "timeBand": "standard",
+              "ntmAmountType": "context_0-128k_output_token_batch",
               "type": "output_token_batch",
               "priceName": "输出（Batch File）"
             },
@@ -152,6 +156,7 @@
               "priceUnit": "每百万tokens",
               "price": "1",
               "timeBand": "standard",
+              "ntmAmountType": "context_0-128k_input_token_cache_creation_5m",
               "type": "input_token_cache_creation_5m",
               "priceName": "显式缓存创建"
             },
@@ -159,6 +164,7 @@
               "priceUnit": "每百万tokens",
               "price": "0.08",
               "timeBand": "standard",
+              "ntmAmountType": "context_0-128k_input_token_cache_read",
               "type": "input_token_cache_read",
               "priceName": "显式缓存命中"
             },
@@ -167,6 +173,7 @@
               "price": "0.8",
               "timeBand": "standard",
               "discount": 0.5,
+              "ntmAmountType": "context_0-128k_input_token_batch",
               "type": "input_token_batch_chat",
               "priceName": "输入（Batch Chat)"
             },
@@ -175,6 +182,7 @@
               "price": "4.8",
               "timeBand": "standard",
               "discount": 0.5,
+              "ntmAmountType": "context_0-128k_output_token_batch",
               "type": "output_token_batch_chat",
               "priceName": "输出（Batch Chat)"
             }
@@ -189,6 +197,7 @@
               "priceUnit": "每百万tokens",
               "price": "2",
               "timeBand": "standard",
+              "ntmAmountType": "context_128k-256k_input_token",
               "type": "input_token",
               "priceName": "输入"
             },
@@ -196,6 +205,7 @@
               "priceUnit": "每百万tokens",
               "price": "12",
               "timeBand": "standard",
+              "ntmAmountType": "context_128k-256k_output_token",
               "type": "output_token",
               "priceName": "输出"
             },
@@ -203,6 +213,7 @@
               "priceUnit": "每百万tokens",
               "price": "1",
               "timeBand": "standard",
+              "ntmAmountType": "context_128k-256k_input_token_batch",
               "type": "input_token_batch",
               "priceName": "输入（Batch File）"
             },
@@ -210,6 +221,7 @@
               "priceUnit": "每百万tokens",
               "price": "6",
               "timeBand": "standard",
+              "ntmAmountType": "context_128k-256k_output_token_batch",
               "type": "output_token_batch",
               "priceName": "输出（Batch File）"
             },
@@ -217,6 +229,7 @@
               "priceUnit": "每百万tokens",
               "price": "2.5",
               "timeBand": "standard",
+              "ntmAmountType": "context_128k-256k_input_token_cache_creation_5m",
               "type": "input_token_cache_creation_5m",
               "priceName": "显式缓存创建"
             },
@@ -224,6 +237,7 @@
               "priceUnit": "每百万tokens",
               "price": "0.2",
               "timeBand": "standard",
+              "ntmAmountType": "context_128k-256k_input_token_cache_read",
               "type": "input_token_cache_read",
               "priceName": "显式缓存命中"
             },
@@ -232,6 +246,7 @@
               "price": "2",
               "timeBand": "standard",
               "discount": 0.5,
+              "ntmAmountType": "context_128k-256k_input_token_batch",
               "type": "input_token_batch_chat",
               "priceName": "输入（Batch Chat)"
             },
@@ -240,6 +255,7 @@
               "price": "12",
               "timeBand": "standard",
               "discount": 0.5,
+              "ntmAmountType": "context_128k-256k_output_token_batch",
               "type": "output_token_batch_chat",
               "priceName": "输出（Batch Chat)"
             }
@@ -254,6 +270,7 @@
               "priceUnit": "每百万tokens",
               "price": "4",
               "timeBand": "standard",
+              "ntmAmountType": "context_256k-1m_input_token",
               "type": "input_token",
               "priceName": "输入"
             },
@@ -261,6 +278,7 @@
               "priceUnit": "每百万tokens",
               "price": "24",
               "timeBand": "standard",
+              "ntmAmountType": "context_256k-1m_output_token",
               "type": "output_token",
               "priceName": "输出"
             },
@@ -268,6 +286,7 @@
               "priceUnit": "每百万tokens",
               "price": "2",
               "timeBand": "standard",
+              "ntmAmountType": "context_256k-1m_input_token_batch",
               "type": "input_token_batch",
               "priceName": "输入（Batch File）"
             },
@@ -275,6 +294,7 @@
               "priceUnit": "每百万tokens",
               "price": "12",
               "timeBand": "standard",
+              "ntmAmountType": "context_256k-1m_output_token_batch",
               "type": "output_token_batch",
               "priceName": "输出（Batch File）"
             },
@@ -282,6 +302,7 @@
               "priceUnit": "每百万tokens",
               "price": "5",
               "timeBand": "standard",
+              "ntmAmountType": "context_256k-1m_input_token_cache_creation_5m",
               "type": "input_token_cache_creation_5m",
               "priceName": "显式缓存创建"
             },
@@ -289,6 +310,7 @@
               "priceUnit": "每百万tokens",
               "price": "0.4",
               "timeBand": "standard",
+              "ntmAmountType": "context_256k-1m_input_token_cache_read",
               "type": "input_token_cache_read",
               "priceName": "显式缓存命中"
             },
@@ -297,6 +319,7 @@
               "price": "4",
               "timeBand": "standard",
               "discount": 0.5,
+              "ntmAmountType": "context_256k-1m_input_token_batch",
               "type": "input_token_batch_chat",
               "priceName": "输入（Batch Chat)"
             },
@@ -305,6 +328,7 @@
               "price": "24",
               "timeBand": "standard",
               "discount": 0.5,
+              "ntmAmountType": "context_256k-1m_output_token_batch",
               "type": "output_token_batch_chat",
               "priceName": "输出（Batch Chat)"
             }

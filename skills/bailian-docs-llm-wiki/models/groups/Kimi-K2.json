@@ -12,47 +12,6 @@
           "Text"
         ]
       },
-      "builtInToolMultiPrices": [
-        {
-          "supportedApi": "Responses API",
-          "name": "code_interpreter",
-          "docUrl": "https://help.aliyun.com/document_detail/2990719.html",
-          "type": "code_interpreter",
-          "prices": [
-            {
-              "priceUnit": "",
-              "price": "0",
-              "currency": "CNY"
-            }
-          ]
-        },
-        {
-          "supportedApi": "Responses API",
-          "name": "web_extractor",
-          "docUrl": "https://help.aliyun.com/document_detail/3016816.html",
-          "type": "web_extractor",
-          "prices": [
-            {
-              "priceUnit": "",
-              "price": "0",
-              "currency": "CNY"
-            }
-          ]
-        },
-        {
-          "supportedApi": "Responses API",
-          "name": "web_search",
-          "docUrl": "https://help.aliyun.com/document_detail/2867560.html",
-          "type": "web_search",
-          "prices": [
-            {
-              "priceUnit": "千次调用",
-              "price": "4",
-              "currency": "CNY"
-            }
-          ]
-        }
-      ],
       "description": "Kimi-K3 是 Kimi 迄今能力最强的旗舰模型，拥有 2.8 万亿参数，基于 KDA 混合线性注意力机制（Kimi Delta Attention）和注意力残差（Attention Residuals）技术构建，原生支持视觉理解，并拥有 100 万 token 上下文窗口。它是全球首个开源的 3 万亿级别模型，面向长程编程、知识工作和推理等前沿智能场景而设计。",
       "features": [
         "cache",
@@ -68,18 +27,21 @@
         {
           "priceUnit": "每百万tokens",
           "price": "20",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
         {
           "priceUnit": "每百万tokens",
           "price": "100",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
         {
           "priceUnit": "每百万tokens",
           "price": "2",
+          "ntmAmountType": "input_token_cache",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"
         }
@@ -159,6 +121,7 @@
           "priceUnit": "每百万tokens",
           "price": "6.5",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -166,6 +129,7 @@
           "priceUnit": "每百万tokens",
           "price": "27",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
@@ -173,6 +137,7 @@
           "priceUnit": "每百万tokens",
           "price": "1.3",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"
         },
@@ -180,6 +145,7 @@
           "priceUnit": "每百万tokens",
           "price": "8.125",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache_creation_5m",
           "type": "input_token_cache_creation_5m",
           "priceName": "显式缓存创建"
         },
@@ -187,6 +153,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.65",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache_read",
           "type": "input_token_cache_read",
           "priceName": "显式缓存命中"
         }
@@ -269,6 +236,7 @@
           "priceUnit": "每百万tokens",
           "price": "6.5",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -276,6 +244,7 @@
           "priceUnit": "每百万tokens",
           "price": "27",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
@@ -283,6 +252,7 @@
           "priceUnit": "每百万tokens",
           "price": "1.3",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"
         },
@@ -290,6 +260,7 @@
           "priceUnit": "每百万tokens",
           "price": "8.125",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache_creation_5m",
           "type": "input_token_cache_creation_5m",
           "priceName": "显式缓存创建"
         },
@@ -297,6 +268,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.65",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache_read",
           "type": "input_token_cache_read",
           "priceName": "显式缓存命中"
         }
@@ -378,6 +350,7 @@
           "priceUnit": "每百万tokens",
           "price": "4",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -385,6 +358,7 @@
           "priceUnit": "每百万tokens",
           "price": "21",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
@@ -392,6 +366,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.8",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"
         },
@@ -399,6 +374,7 @@
           "priceUnit": "每百万tokens",
           "price": "5",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache_creation_5m",
           "type": "input_token_cache_creation_5m",
           "priceName": "显式缓存创建"
         },
@@ -406,6 +382,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.4",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache_read",
           "type": "input_token_cache_read",
           "priceName": "显式缓存命中"
         }
@@ -484,6 +461,7 @@
           "priceUnit": "每百万tokens",
           "price": "4",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -491,6 +469,7 @@
           "priceUnit": "每百万tokens",
           "price": "16",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
@@ -498,6 +477,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.8",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"
         }
@@ -581,6 +561,7 @@
           "priceUnit": "每百万tokens",
           "price": "4",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -588,6 +569,7 @@
           "priceUnit": "每百万tokens",
           "price": "16",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
@@ -595,6 +577,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.8",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"
         }

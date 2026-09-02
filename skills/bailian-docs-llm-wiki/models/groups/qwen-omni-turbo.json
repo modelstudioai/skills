@@ -27,6 +27,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.4",
           "timeBand": "standard",
+          "ntmAmountType": "text_input_token",
           "type": "text_input_token",
           "priceName": "输入：文本"
         },
@@ -34,6 +35,7 @@
           "priceUnit": "每百万tokens",
           "price": "25",
           "timeBand": "standard",
+          "ntmAmountType": "audio_input_token",
           "type": "audio_input_token",
           "priceName": "输入：音频"
         },
@@ -41,6 +43,7 @@
           "priceUnit": "每百万tokens",
           "price": "1.5",
           "timeBand": "standard",
+          "ntmAmountType": "vision_input_token",
           "type": "vision_input_token",
           "priceName": "输入：图片/视频"
         },
@@ -48,6 +51,7 @@
           "priceUnit": "每百万tokens",
           "price": "1.6",
           "timeBand": "standard",
+          "ntmAmountType": "purein_text_output_token",
           "type": "purein_text_output_token",
           "priceName": "输出：文本（输入仅包含文本时）"
         },
@@ -55,6 +59,7 @@
           "priceUnit": "每百万tokens",
           "price": "4.5",
           "timeBand": "standard",
+          "ntmAmountType": "multiin_text_output_token",
           "type": "multiin_text_output_token",
           "priceName": "输出：文本（输入包含图片/音频/视频时）"
         },
@@ -62,6 +67,7 @@
           "priceUnit": "每百万tokens",
           "price": "50",
           "timeBand": "standard",
+          "ntmAmountType": "multi_output_token",
           "type": "multi_output_token",
           "priceName": "输出：文本+音频（输出的文本不计费）"
         },
@@ -69,6 +75,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.3",
           "timeBand": "standard",
+          "ntmAmountType": "vision_input_token_cache",
           "type": "vision_input_token_cache",
           "priceName": "输入：图片/视频（缓存命中）"
         },
@@ -76,6 +83,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.08",
           "timeBand": "standard",
+          "ntmAmountType": "text_input_token_cache",
           "type": "text_input_token_cache",
           "priceName": "输入：文本（缓存命中）"
         },
@@ -83,6 +91,7 @@
           "priceUnit": "每百万tokens",
           "price": "5",
           "timeBand": "standard",
+          "ntmAmountType": "audio_input_token_cache",
           "type": "audio_input_token_cache",
           "priceName": "输入：音频（缓存命中）"
         },
@@ -90,6 +99,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.2",
           "timeBand": "standard",
+          "ntmAmountType": "text_input_token_batch",
           "type": "text_input_token_batch",
           "priceName": "输入：文本（Batch File）"
         },
@@ -97,6 +107,7 @@
           "priceUnit": "每百万tokens",
           "price": "12.5",
           "timeBand": "standard",
+          "ntmAmountType": "audio_input_token_batch",
           "type": "audio_input_token_batch",
           "priceName": "输入：音频（Batch File）"
         },
@@ -104,6 +115,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.75",
           "timeBand": "standard",
+          "ntmAmountType": "vision_input_token_batch",
           "type": "vision_input_token_batch",
           "priceName": "输入：图片/视频（Batch File）"
         },
@@ -111,6 +123,7 @@
           "priceUnit": "每百万tokens",
           "price": "25",
           "timeBand": "standard",
+          "ntmAmountType": "multi_output_token_batch",
           "type": "multi_output_token_batch",
           "priceName": "输出：文本+音频（Batch File）"
         },
@@ -118,6 +131,7 @@
           "priceUnit": "每百万tokens",
           "price": "2.25",
           "timeBand": "standard",
+          "ntmAmountType": "multiin_text_output_token_batch",
           "type": "multiin_text_output_token_batch",
           "priceName": "输出：文本（Batch File，输入包含图片/音频/视频时）"
         },
@@ -125,6 +139,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.8",
           "timeBand": "standard",
+          "ntmAmountType": "purein_text_output_token_batch",
           "type": "purein_text_output_token_batch",
           "priceName": "输出：文本（Batch File，输入仅包含文本时）"
         }
@@ -202,6 +217,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.4",
           "timeBand": "standard",
+          "ntmAmountType": "text_input_token",
           "type": "text_input_token",
           "priceName": "输入：文本"
         },
@@ -209,6 +225,7 @@
           "priceUnit": "每百万tokens",
           "price": "25",
           "timeBand": "standard",
+          "ntmAmountType": "audio_input_token",
           "type": "audio_input_token",
           "priceName": "输入：音频"
         },
@@ -216,6 +233,7 @@
           "priceUnit": "每百万tokens",
           "price": "1.5",
           "timeBand": "standard",
+          "ntmAmountType": "vision_input_token",
           "type": "vision_input_token",
           "priceName": "输入：图片/视频"
         },
@@ -223,6 +241,7 @@
           "priceUnit": "每百万tokens",
           "price": "1.6",
           "timeBand": "standard",
+          "ntmAmountType": "purein_text_output_token",
           "type": "purein_text_output_token",
           "priceName": "输出：文本（输入仅包含文本时）"
         },
@@ -230,6 +249,7 @@
           "priceUnit": "每百万tokens",
           "price": "4.5",
           "timeBand": "standard",
+          "ntmAmountType": "multiin_text_output_token",
           "type": "multiin_text_output_token",
           "priceName": "输出：文本（输入包含图片/音频/视频时）"
         },
@@ -237,6 +257,7 @@
           "priceUnit": "每百万tokens",
           "price": "50",
           "timeBand": "standard",
+          "ntmAmountType": "multi_output_token",
           "type": "multi_output_token",
           "priceName": "输出：文本+音频（输出的文本不计费）"
         }

@@ -27,6 +27,7 @@
           "priceUnit": "每百万tokens",
           "price": "2",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_input_token",
           "type": "thinking_input_token",
           "priceName": "输入（思考）"
         },
@@ -34,6 +35,7 @@
           "priceUnit": "每百万tokens",
           "price": "20",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_output_token",
           "type": "thinking_output_token",
           "priceName": "输出（思考）"
         }
@@ -117,6 +119,7 @@
           "priceUnit": "每百万tokens",
           "price": "2",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -124,6 +127,7 @@
           "priceUnit": "每百万tokens",
           "price": "8",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         }
@@ -209,6 +213,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.75",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_input_token",
           "type": "thinking_input_token",
           "priceName": "输入（思考）"
         },
@@ -216,6 +221,7 @@
           "priceUnit": "每百万tokens",
           "price": "7.5",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_output_token",
           "type": "thinking_output_token",
           "priceName": "输出（思考）"
         }
@@ -302,6 +308,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.75",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -309,6 +316,7 @@
           "priceUnit": "每百万tokens",
           "price": "3",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         }
@@ -395,6 +403,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.5",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_input_token",
           "type": "thinking_input_token",
           "priceName": "输入（思考）"
         },
@@ -402,6 +411,7 @@
           "priceUnit": "每百万tokens",
           "price": "5",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_output_token",
           "type": "thinking_output_token",
           "priceName": "输出（思考）"
         },
@@ -502,6 +512,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.5",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -509,6 +520,7 @@
           "priceUnit": "每百万tokens",
           "price": "2",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
@@ -607,6 +619,7 @@
           "priceUnit": "每百万tokens",
           "price": "2",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_input_token",
           "type": "thinking_input_token",
           "priceName": "输入（思考）"
         },
@@ -614,6 +627,7 @@
           "priceUnit": "每百万tokens",
           "price": "20",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_output_token",
           "type": "thinking_output_token",
           "priceName": "输出（思考）"
         }
@@ -700,6 +714,7 @@
           "priceUnit": "每百万tokens",
           "price": "2",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -707,6 +722,7 @@
           "priceUnit": "每百万tokens",
           "price": "8",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         }
@@ -785,6 +801,7 @@
           "priceUnit": "每百万tokens",
           "price": "1",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -792,6 +809,7 @@
           "priceUnit": "每百万tokens",
           "price": "4",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         }
@@ -872,6 +890,7 @@
           "priceUnit": "每百万tokens",
           "price": "1",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_input_token",
           "type": "thinking_input_token",
           "priceName": "输入（思考）"
         },
@@ -879,6 +898,7 @@
           "priceUnit": "每百万tokens",
           "price": "10",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_output_token",
           "type": "thinking_output_token",
           "priceName": "输出（思考）"
         }
@@ -964,6 +984,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.75",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -971,6 +992,7 @@
           "priceUnit": "每百万tokens",
           "price": "3",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         }
@@ -1062,6 +1084,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.75",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_input_token",
           "type": "thinking_input_token",
           "priceName": "输入（思考）"
         },
@@ -1069,6 +1092,7 @@
           "priceUnit": "每百万tokens",
           "price": "7.5",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_output_token",
           "type": "thinking_output_token",
           "priceName": "输出（思考）"
         }
@@ -1150,6 +1174,7 @@
           "priceUnit": "每百万tokens",
           "price": "2",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_input_token",
           "type": "thinking_input_token",
           "priceName": "输入（思考）"
         },
@@ -1157,6 +1182,7 @@
           "priceUnit": "每百万tokens",
           "price": "20",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_output_token",
           "type": "thinking_output_token",
           "priceName": "输出（思考）"
         }
@@ -1239,6 +1265,7 @@
           "priceUnit": "每百万tokens",
           "price": "2",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -1246,6 +1273,7 @@
           "priceUnit": "每百万tokens",
           "price": "8",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         }
@@ -1331,6 +1359,7 @@
           "priceUnit": "每百万tokens",
           "price": "2",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -1338,6 +1367,7 @@
           "priceUnit": "每百万tokens",
           "price": "8",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
@@ -1345,6 +1375,7 @@
           "priceUnit": "每百万tokens",
           "price": "2",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_input_token",
           "type": "thinking_input_token",
           "priceName": "输入（思考）"
         },
@@ -1352,6 +1383,7 @@
           "priceUnit": "每百万tokens",
           "price": "20",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_output_token",
           "type": "thinking_output_token",
           "priceName": "输出（思考）"
         }
@@ -1438,6 +1470,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.75",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -1445,6 +1478,7 @@
           "priceUnit": "每百万tokens",
           "price": "3",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
@@ -1452,6 +1486,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.75",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_input_token",
           "type": "thinking_input_token",
           "priceName": "输入（思考）"
         },
@@ -1459,6 +1494,7 @@
           "priceUnit": "每百万tokens",
           "price": "7.5",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_output_token",
           "type": "thinking_output_token",
           "priceName": "输出（思考）"
         }
@@ -1546,6 +1582,7 @@
           "priceUnit": "每百万tokens",
           "price": "2",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -1553,6 +1590,7 @@
           "priceUnit": "每百万tokens",
           "price": "8",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
@@ -1560,6 +1598,7 @@
           "priceUnit": "每百万tokens",
           "price": "2",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_input_token",
           "type": "thinking_input_token",
           "priceName": "输入（思考）"
         },
@@ -1567,6 +1606,7 @@
           "priceUnit": "每百万tokens",
           "price": "20",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_output_token",
           "type": "thinking_output_token",
           "priceName": "输出（思考）"
         },
@@ -1674,6 +1714,7 @@
           "priceUnit": "每百万tokens",
           "price": "1",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -1681,6 +1722,7 @@
           "priceUnit": "每百万tokens",
           "price": "4",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
@@ -1688,6 +1730,7 @@
           "priceUnit": "每百万tokens",
           "price": "1",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_input_token",
           "type": "thinking_input_token",
           "priceName": "输入（思考）"
         },
@@ -1695,6 +1738,7 @@
           "priceUnit": "每百万tokens",
           "price": "10",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_output_token",
           "type": "thinking_output_token",
           "priceName": "输出（思考）"
         },
@@ -1799,6 +1843,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.5",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -1806,6 +1851,7 @@
           "priceUnit": "每百万tokens",
           "price": "2",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
@@ -1813,6 +1859,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.5",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_input_token",
           "type": "thinking_input_token",
           "priceName": "输入（思考）"
         },
@@ -1820,6 +1867,7 @@
           "priceUnit": "每百万tokens",
           "price": "5",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_output_token",
           "type": "thinking_output_token",
           "priceName": "输出（思考）"
         },
@@ -1945,6 +1993,7 @@
               "priceUnit": "每百万tokens",
               "price": "1",
               "timeBand": "standard",
+              "ntmAmountType": "context_0-32k_input_token",
               "type": "input_token",
               "priceName": "输入"
             },
@@ -1952,6 +2001,7 @@
               "priceUnit": "每百万tokens",
               "price": "4",
               "timeBand": "standard",
+              "ntmAmountType": "context_0-32k_output_token",
               "type": "output_token",
               "priceName": "输出"
             }
@@ -1966,6 +2016,7 @@
               "priceUnit": "每百万tokens",
               "price": "1.5",
               "timeBand": "standard",
+              "ntmAmountType": "context_32k-128k_input_token",
               "type": "input_token",
               "priceName": "输入"
             },
@@ -1973,6 +2024,7 @@
               "priceUnit": "每百万tokens",
               "price": "6",
               "timeBand": "standard",
+              "ntmAmountType": "context_32k-128k_output_token",
               "type": "output_token",
               "priceName": "输出"
             }
@@ -1987,6 +2039,7 @@
               "priceUnit": "每百万tokens",
               "price": "2.5",
               "timeBand": "standard",
+              "ntmAmountType": "context_128k-256k_input_token",
               "type": "input_token",
               "priceName": "输入"
             },
@@ -1994,6 +2047,7 @@
               "priceUnit": "每百万tokens",
               "price": "10",
               "timeBand": "standard",
+              "ntmAmountType": "context_128k-256k_output_token",
               "type": "output_token",
               "priceName": "输出"
             }

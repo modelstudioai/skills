@@ -21,6 +21,7 @@
           "priceUnit": "每百万tokens",
           "price": "15.8",
           "timeBand": "standard",
+          "ntmAmountType": "audio_input_token",
           "type": "audio_input_token",
           "priceName": "输入：音频"
         },
@@ -28,6 +29,7 @@
           "priceUnit": "每百万tokens",
           "price": "12.7",
           "timeBand": "standard",
+          "ntmAmountType": "multiin_text_output_token",
           "type": "multiin_text_output_token",
           "priceName": "输出：文本（输入包含图片/音频/视频时）"
         }

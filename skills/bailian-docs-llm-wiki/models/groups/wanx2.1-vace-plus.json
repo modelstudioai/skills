@@ -22,6 +22,7 @@
           "priceUnit": "每秒",
           "price": "0.7",
           "timeBand": "standard",
+          "ntmAmountType": "standard",
           "type": "video_ratio",
           "priceName": "视频生成（std）"
         }

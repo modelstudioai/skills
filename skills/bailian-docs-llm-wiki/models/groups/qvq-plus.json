@@ -25,6 +25,7 @@
           "priceUnit": "每百万tokens",
           "price": "2",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -32,6 +33,7 @@
           "priceUnit": "每百万tokens",
           "price": "5",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         }
@@ -69,7 +71,7 @@
       "offlineInfo": {
         "inference": {
           "announceUrl": "https://www.aliyun.com/notice/118177",
-          "offlineTime": "2026-07-13 23:59:59"
+          "offlineTime": "2026-10-10 00:00:00"
         }
       },
       "inferenceProvider": "aliyun-bailian",

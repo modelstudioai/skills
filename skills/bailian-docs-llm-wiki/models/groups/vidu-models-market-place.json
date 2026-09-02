@@ -218,6 +218,7 @@
           "priceUnit": "每秒",
           "price": "0.3125",
           "timeBand": "standard",
+          "ntmAmountType": "540P",
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
@@ -225,6 +226,7 @@
           "priceUnit": "每秒",
           "price": "0.78125",
           "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
@@ -232,6 +234,7 @@
           "priceUnit": "每秒",
           "price": "0.9375",
           "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -293,6 +296,7 @@
           "priceUnit": "每秒",
           "price": "0.3125",
           "timeBand": "standard",
+          "ntmAmountType": "540P",
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
@@ -300,6 +304,7 @@
           "priceUnit": "每秒",
           "price": "0.78125",
           "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
@@ -307,6 +312,7 @@
           "priceUnit": "每秒",
           "price": "0.9375",
           "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -371,6 +377,7 @@
           "priceUnit": "每秒",
           "price": "0.3125",
           "timeBand": "standard",
+          "ntmAmountType": "540P",
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
@@ -378,6 +385,7 @@
           "priceUnit": "每秒",
           "price": "0.78125",
           "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
@@ -385,6 +393,7 @@
           "priceUnit": "每秒",
           "price": "0.9375",
           "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -447,6 +456,7 @@
           "priceUnit": "每秒",
           "price": "0.25",
           "timeBand": "standard",
+          "ntmAmountType": "540P",
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
@@ -454,6 +464,7 @@
           "priceUnit": "每秒",
           "price": "0.375",
           "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
@@ -461,6 +472,7 @@
           "priceUnit": "每秒",
           "price": "0.4375",
           "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -522,6 +534,7 @@
           "priceUnit": "每秒",
           "price": "0.25",
           "timeBand": "standard",
+          "ntmAmountType": "540P",
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
@@ -529,6 +542,7 @@
           "priceUnit": "每秒",
           "price": "0.375",
           "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
@@ -536,6 +550,7 @@
           "priceUnit": "每秒",
           "price": "0.4375",
           "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -600,6 +615,7 @@
           "priceUnit": "每秒",
           "price": "0.25",
           "timeBand": "standard",
+          "ntmAmountType": "540P",
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
@@ -607,6 +623,7 @@
           "priceUnit": "每秒",
           "price": "0.375",
           "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
@@ -614,6 +631,7 @@
           "priceUnit": "每秒",
           "price": "0.4375",
           "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -676,6 +694,7 @@
           "priceUnit": "每秒",
           "price": "0.15625",
           "timeBand": "standard",
+          "ntmAmountType": "540P",
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
@@ -683,6 +702,7 @@
           "priceUnit": "每秒",
           "price": "0.34375",
           "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
@@ -690,6 +710,7 @@
           "priceUnit": "每秒",
           "price": "0.71875",
           "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -752,6 +773,7 @@
           "priceUnit": "每秒",
           "price": "0.15625",
           "timeBand": "standard",
+          "ntmAmountType": "540P",
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
@@ -759,6 +781,7 @@
           "priceUnit": "每秒",
           "price": "0.34375",
           "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
@@ -766,6 +789,7 @@
           "priceUnit": "每秒",
           "price": "0.71875",
           "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -829,6 +853,7 @@
           "priceUnit": "每秒",
           "price": "0.25",
           "timeBand": "standard",
+          "ntmAmountType": "540P",
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
@@ -836,6 +861,7 @@
           "priceUnit": "每秒",
           "price": "0.3125",
           "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
@@ -843,6 +869,7 @@
           "priceUnit": "每秒",
           "price": "0.78125",
           "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -905,6 +932,7 @@
           "priceUnit": "每秒",
           "price": "0.0875",
           "timeBand": "standard",
+          "ntmAmountType": "540P",
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
@@ -912,6 +940,7 @@
           "priceUnit": "每秒",
           "price": "0.25",
           "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
@@ -919,6 +948,7 @@
           "priceUnit": "每秒",
           "price": "0.46875",
           "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -980,6 +1010,7 @@
           "priceUnit": "每秒",
           "price": "0.1125",
           "timeBand": "standard",
+          "ntmAmountType": "540P",
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
@@ -987,6 +1018,7 @@
           "priceUnit": "每秒",
           "price": "0.21875",
           "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
@@ -994,6 +1026,7 @@
           "priceUnit": "每秒",
           "price": "0.375",
           "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -1058,6 +1091,7 @@
           "priceUnit": "每秒",
           "price": "0.0875",
           "timeBand": "standard",
+          "ntmAmountType": "540P",
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
@@ -1065,6 +1099,7 @@
           "priceUnit": "每秒",
           "price": "0.25",
           "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
@@ -1072,6 +1107,7 @@
           "priceUnit": "每秒",
           "price": "0.46875",
           "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -1134,6 +1170,7 @@
           "priceUnit": "每秒",
           "price": "0.21875",
           "timeBand": "standard",
+          "ntmAmountType": "540P",
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
@@ -1141,6 +1178,7 @@
           "priceUnit": "每秒",
           "price": "0.28125",
           "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
@@ -1148,6 +1186,7 @@
           "priceUnit": "每秒",
           "price": "0.71875",
           "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -1209,6 +1248,7 @@
           "priceUnit": "每秒",
           "price": "0.3125",
           "timeBand": "standard",
+          "ntmAmountType": "540P",
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
@@ -1216,6 +1256,7 @@
           "priceUnit": "每秒",
           "price": "0.625",
           "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
@@ -1223,6 +1264,7 @@
           "priceUnit": "每秒",
           "price": "0.78125",
           "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -1284,6 +1326,7 @@
           "priceUnit": "每秒",
           "price": "0.15625",
           "timeBand": "standard",
+          "ntmAmountType": "540P",
           "type": "video_ratio_540p",
           "priceName": "视频生成（540P）"
         },
@@ -1291,6 +1334,7 @@
           "priceUnit": "每秒",
           "price": "0.3125",
           "timeBand": "standard",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
@@ -1298,6 +1342,7 @@
           "priceUnit": "每秒",
           "price": "0.40625",
           "timeBand": "standard",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -1358,12 +1403,14 @@
         {
           "priceUnit": "每秒",
           "price": "0.78125",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.9375",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }
@@ -1422,12 +1469,14 @@
         {
           "priceUnit": "每秒",
           "price": "0.1",
+          "ntmAmountType": "|720P|1088*832|960*960|1280*720|720*1280|832*1088|",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
         },
         {
           "priceUnit": "每秒",
           "price": "0.2",
+          "ntmAmountType": "|1080P|1920*1080|1080*1920|1440*1440|1632*1248|1248*1632|",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"
         }

@@ -1,6 +1,6 @@
 {
   "name": "云知声文本模型",
-  "description": "由云知声提供的 Unisound U2 模型 API 服务",
+  "description": "由云知声提供的 Unisound U2 模型 API 服务.",
   "items": [
     {
       "inferenceMetadata": {

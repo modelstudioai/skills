@@ -336,7 +336,7 @@ String
 
 文件对象表示已上传到百炼平台的文件及其属性信息。通过[上传文件](raw/model-api-reference/file-management-api/upload-file-api.md)接口创建，可通过列举文件和查询文件详情接口获取。
 
-除 DashScope 原生接口外，您也可以通过 [OpenAI 兼容-File 接口](raw/model-api-reference/toolkits-and-frameworks/openai-file-interface.md)（`/compatible-mode/v1/files`）管理文件。
+除 DashScope 原生接口外，您也可以通过 [OpenAI 兼容-File 接口](https://help.aliyun.com/zh/model-studio/openai-file-interface)（`/compatible-mode/v1/files`）管理文件。
 
 > 当前文件管理 API 仅在北京 Region 开放。如您使用其他 Region，请通过该 Region 的百炼控制台完成文件管理操作。
 

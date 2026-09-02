@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 182 个模型家族 · 411 个主干模型 · 更新于 2026-08-31
+> 自动生成 · 共 181 个模型家族 · 410 个主干模型 · 更新于 2026-09-03
 
 **机器查询走结构化文件**：
 
@@ -28,7 +28,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Kimi](groups/Kimi-K2.json) — Kimi是由月之暗面提供的开源模型，包含k2.7-code、k2.6、k2.5、k2-thinking、k2-instruct等多模态和大语言模型。
   - 模型：`kimi-k2-thinking`, `kimi-k2.5`, `kimi-k2.6`, `kimi-k2.7-code`, `kimi-k3`, `Moonshot-Kimi-K2-Instruct`
 - [Kimi](groups/kimi-models-market-place.json) — 由月之暗面提供的Kimi系列模型的API服务。
-  - 模型：`kimi/kimi-k2.5`, `kimi/kimi-k2.6`, `kimi/kimi-k2.7-code`, `kimi/kimi-k2.7-code-highspeed`, `kimi/kimi-k3`
+  - 模型：`kimi/kimi-k2.6`, `kimi/kimi-k2.7-code`, `kimi/kimi-k2.7-code-highspeed`, `kimi/kimi-k3`
 - [MiMo文本模型](groups/xiaomi-models-market-place.json) — 由小米MiMo提供的MiMo文本模型API服务
   - 模型：`xiaomi/mimo-v2.5-pro`
 - [MiniMax文本模型](groups/minimax-models-market-place.json) — 由MiniMax提供的MiniMax-M系列文本模型API服务。
@@ -87,7 +87,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`stepfun/step-3.7-flash`
 - [Vanchin DeepSeek](groups/vanchin-models-market-place.json) — 由快手万擎提供的DeepSeek系列模型API服务。
   - 模型：`vanchin/deepseek-ocr`, `vanchin/deepseek-r1`, `vanchin/deepseek-v3`, `vanchin/deepseek-v3.1-terminus`, `vanchin/deepseek-v3.2-think`, `vanchin/deepseek-v4-pro`, `vanchin/deepseek-v4-pro-0813`
-- [云知声文本模型](groups/unisound-models-market-place.json) — 由云知声提供的 Unisound U2 模型 API 服务
+- [云知声文本模型](groups/unisound-models-market-place.json) — 由云知声提供的 Unisound U2 模型 API 服务.
   - 模型：`unisound/unisound-u2`
 - [伶鹊-对话分析-flash](groups/tongyi-xiaomi-analysis-flash.json) — 伶鹊-对话分析-flash是专注于日常任务，如对话信息抽取、场景分类等分析类需求的模型，自定义分析标准遵循与对话语义理解能力显著提升，适用于低时延的离线在线分析任务。
   - 模型：`tongyi-xiaomi-analysis-flash`
@@ -165,7 +165,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [鞋靴模特](groups/shoemodel-v1.json) — 鞋靴模特支持输入多视角鞋靴系列图片，同时对输入模特模板图的鞋子区域进行鞋靴AI试穿，实现模特鞋靴布局重绘生成，最终生成图片的效果, 布局自然、细节丰富、画面细腻、试穿结果逼真。可用于模特商品图设计、新…
   - 模型：`shoemodel-v1`
 
-## 视频生成 `VG` — 28 个家族
+## 视频生成 `VG` — 27 个家族
 
 - [HappyHorse-I2V](groups/happyhorse-i2v.json) — HappyHorse系列最新图生视频模型，具备高度还原的动态画面生成能力，能够稳定保持与图像一致性，输出流畅自然、细节丰富的高质量视频。
   - 模型：`happyhorse-1.0-i2v`, `happyhorse-1.1-i2v`
@@ -181,8 +181,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`pixverse/pixverse-c1-it2v`, `pixverse/pixverse-c1-kf2v`, `pixverse/pixverse-c1-r2v`, `pixverse/pixverse-c1-t2v`
 - [PixVerse Capabilities](groups/pixverse-capability-market-place.json) — 由爱诗科技提供的视频原子能力大模型API服务。
   - 模型：`pixverse/pixverse-lipsync`, `pixverse/pixverse-motioncontrol`, `pixverse/pixverse-upscale`
-- [PixVerse V5.6](groups/pixverse-market-place.json) — 由爱诗科技提供的PixVerse V系列视频大模型API服务。
-  - 模型：`pixverse/pixverse-v5.6-it2v`, `pixverse/pixverse-v5.6-kf2v`, `pixverse/pixverse-v5.6-r2v`, `pixverse/pixverse-v5.6-t2v`
 - [PixVerse V6](groups/pixverse-v6-market-place.json) — 由爱诗科技提供的PixVerse V系列视频大模型API服务。
   - 模型：`pixverse/pixverse-v6-it2v`, `pixverse/pixverse-v6-kf2v`, `pixverse/pixverse-v6-r2v`, `pixverse/pixverse-v6-r2v-omni`, `pixverse/pixverse-v6-t2v`
 - [Vidu AI生视频](groups/vidu-models-market-place.json) — 由生数科技提供Vidu系列视频生成API服务，电影级画质、一致性保持、精准可控。
@@ -288,9 +286,9 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen3.7-Max](groups/qwen3.7-max.json) — Qwen3.7系列中规模最大、综合能力最强的Max模型，当前开放纯文本模型能力供体验。Qwen3.7是面向智能体时代的新一代旗舰模型，核心优势在于智能体能力的广度与深度：在编程、办公与生产力、长周期自…
   - 模型：`qwen3.7-max`, `qwen3.7-max-preview`
 - [Qwen3.8-Max](groups/qwen3.8-max.json) — Qwen3.8原生视觉语言系列Max模型，是通义千问迄今能力最强的旗舰模型，拥有2.4万亿参数，采用MoE架构，展现出与当前顶尖前沿模型相媲美的卓越性能，模型效果相较3.7系列显著提升。
-  - 模型：`qwen3.8-max`
+  - 模型：`qwen3.8-max`, `qwen3.8-max-0902`
 - [智谱GLM系列文本模型](groups/zhipu-models-market-place.json) — 由智谱提供的GLM系列文本模型API服务
-  - 模型：`ZHIPU/GLM-5`, `ZHIPU/GLM-5.1`, `ZHIPU/GLM-5.2`, `ZHIPU/GLM-5.3`
+  - 模型：`ZHIPU/GLM-5`, `ZHIPU/GLM-5.1`, `ZHIPU/GLM-5.2`, `ZHIPU/GLM-5.3`, `ZHIPU/GLM-5.3-Flash`
 
 ## 语音识别 `ASR` — 14 个家族
 
@@ -420,9 +418,9 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 ## 翻译 `TR` — 2 个家族
 
 - [Qwen-Embedding](groups/qwen-embedding.json) — 基于Qwen模型基座训练的多语言文本统一向量模型，文本检索、聚类、分类性能大幅提升，多语言支持，适用于向量检索、向量化等等场景，可搭配检索增强、文档处理场景使用，支持64~2560维用户自定义向量维度…
-  - 模型：`qwen3.7-text-embedding`, `text-embedding-async-v1`, `text-embedding-async-v2`, `text-embedding-v1`, `text-embedding-v2`, `text-embedding-v3`, `text-embedding-v4`
+  - 模型：`qwen3.7-text-embedding`, `qwen3.7-text-embedding-flash`, `text-embedding-async-v1`, `text-embedding-async-v2`, `text-embedding-v1`, `text-embedding-v2`, `text-embedding-v3`, `text-embedding-v4`
 - [Qwen-Rerank](groups/qwen-rerank.json) — 基于Qwen LLM底座训练的文本排序模型，对输入的Query和候选Docs进行相关性排序，支持100+语种和长文本输入，适用于文本检索、RAG等场景，效果对齐Qwen家族开源Rerank系列模型。
-  - 模型：`gte-rerank-v2`, `qwen3-rerank`, `qwen3-vl-rerank`
+  - 模型：`gte-rerank-v2`, `qwen3-rerank`, `qwen3-vl-rerank`, `qwen3.7-text-rerank`
 
 ## 3D 生成 `3D-generation` — 1 个家族
 

@@ -68,30 +68,35 @@
         {
           "priceUnit": "每百万tokens",
           "price": "12",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
         {
           "priceUnit": "每百万tokens",
           "price": "36",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
         {
           "priceUnit": "每百万tokens",
           "price": "1.5",
+          "ntmAmountType": "input_token_cache",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"
         },
         {
           "priceUnit": "每百万tokens",
           "price": "15",
+          "ntmAmountType": "input_token_cache_creation_5m",
           "type": "input_token_cache_creation_5m",
           "priceName": "显式缓存创建"
         },
         {
           "priceUnit": "每百万tokens",
           "price": "1",
+          "ntmAmountType": "input_token_cache_read",
           "type": "input_token_cache_read",
           "priceName": "显式缓存命中"
         }
@@ -255,30 +260,35 @@
         {
           "priceUnit": "每百万tokens",
           "price": "3",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
         {
           "priceUnit": "每百万tokens",
           "price": "12",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
         {
           "priceUnit": "每百万tokens",
           "price": "0.6",
+          "ntmAmountType": "input_token_cache",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"
         },
         {
           "priceUnit": "每百万tokens",
           "price": "3.75",
+          "ntmAmountType": "input_token_cache_creation_5m",
           "type": "input_token_cache_creation_5m",
           "priceName": "显式缓存创建"
         },
         {
           "priceUnit": "每百万tokens",
           "price": "0.3",
+          "ntmAmountType": "input_token_cache_read",
           "type": "input_token_cache_read",
           "priceName": "显式缓存命中"
         }
@@ -308,6 +318,12 @@
       "latestOnlineAt": "2026-08-17T06:08:23.000+00:00",
       "contextWindow": 1000000,
       "maxInputTokens": 991808,
+      "trainingTypes": {
+        "sft": [
+          "full",
+          "lora"
+        ]
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen3.8-27B",
       "category": "Flagship",

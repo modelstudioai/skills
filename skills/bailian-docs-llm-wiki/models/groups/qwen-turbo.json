@@ -26,6 +26,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.3",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -33,6 +34,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.6",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
@@ -40,6 +42,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.3",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_input_token",
           "type": "thinking_input_token",
           "priceName": "输入（思考）"
         },
@@ -47,6 +50,7 @@
           "priceUnit": "每百万tokens",
           "price": "3",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_output_token",
           "type": "thinking_output_token",
           "priceName": "输出（思考）"
         },
@@ -54,6 +58,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.06",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"
         },
@@ -61,6 +66,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.06",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_input_token_cache",
           "type": "thinking_input_token_cache",
           "priceName": "输入（思考模式缓存命中）"
         },
@@ -68,6 +74,7 @@
           "priceUnit": "每百万tokens",
           "price": "1.5",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_output_token_batch",
           "type": "thinking_output_token_batch",
           "priceName": "思考模式输出（Batch File）"
         },
@@ -75,6 +82,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.15",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_batch",
           "type": "input_token_batch",
           "priceName": "输入（Batch File）"
         },
@@ -82,6 +90,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.3",
           "timeBand": "standard",
+          "ntmAmountType": "output_token_batch",
           "type": "output_token_batch",
           "priceName": "输出（Batch File）"
         },
@@ -89,6 +98,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.15",
           "timeBand": "standard",
+          "ntmAmountType": "thinking_input_token_batch",
           "type": "thinking_input_token_batch",
           "priceName": "输入（思考模式 Batch File）"
         },

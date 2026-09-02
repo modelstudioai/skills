@@ -53,6 +53,7 @@
               "priceUnit": "每百万tokens",
               "price": "9",
               "timeBand": "standard",
+              "ntmAmountType": "context_0-128k_input_token",
               "type": "input_token",
               "priceName": "输入"
             },
@@ -60,6 +61,7 @@
               "priceUnit": "每百万tokens",
               "price": "54",
               "timeBand": "standard",
+              "ntmAmountType": "context_0-128k_output_token",
               "type": "output_token",
               "priceName": "输出"
             },
@@ -67,6 +69,7 @@
               "priceUnit": "每百万tokens",
               "price": "11.25",
               "timeBand": "standard",
+              "ntmAmountType": "context_0-128k_input_token_cache_creation_5m",
               "type": "input_token_cache_creation_5m",
               "priceName": "显式缓存创建"
             },
@@ -74,6 +77,7 @@
               "priceUnit": "每百万tokens",
               "price": "0.9",
               "timeBand": "standard",
+              "ntmAmountType": "context_0-128k_input_token_cache_read",
               "type": "input_token_cache_read",
               "priceName": "显式缓存命中"
             }
@@ -88,6 +92,7 @@
               "priceUnit": "每百万tokens",
               "price": "15",
               "timeBand": "standard",
+              "ntmAmountType": "context_128k-256k_input_token",
               "type": "input_token",
               "priceName": "输入"
             },
@@ -95,6 +100,7 @@
               "priceUnit": "每百万tokens",
               "price": "90",
               "timeBand": "standard",
+              "ntmAmountType": "context_128k-256k_output_token",
               "type": "output_token",
               "priceName": "输出"
             },
@@ -102,6 +108,7 @@
               "priceUnit": "每百万tokens",
               "price": "18.75",
               "timeBand": "standard",
+              "ntmAmountType": "context_128k-256k_input_token_cache_creation_5m",
               "type": "input_token_cache_creation_5m",
               "priceName": "显式缓存创建"
             },
@@ -109,6 +116,7 @@
               "priceUnit": "每百万tokens",
               "price": "1.5",
               "timeBand": "standard",
+              "ntmAmountType": "context_128k-256k_input_token_cache_read",
               "type": "input_token_cache_read",
               "priceName": "显式缓存命中"
             }

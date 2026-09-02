@@ -22,12 +22,14 @@
         {
           "priceUnit": "每张",
           "price": "0.1",
+          "ntmAmountType": "image_standard",
           "type": "image_standard",
           "priceName": "图片生成（标准）"
         },
         {
           "priceUnit": "每张",
           "price": "0.2",
+          "ntmAmountType": "image_thinking",
           "type": "image_thinking",
           "priceName": "图片生成（思考）"
         }
