@@ -23,6 +23,7 @@
           "priceUnit": "每百万tokens",
           "price": "64",
           "timeBand": "standard",
+          "ntmAmountType": "audio_input_token",
           "type": "translate_audio_input_token",
           "priceName": "输入：音频"
         },
@@ -30,6 +31,7 @@
           "priceUnit": "每百万tokens",
           "price": "8",
           "timeBand": "standard",
+          "ntmAmountType": "vision_input_token",
           "type": "translate_vision_input_token",
           "priceName": "输入：图片"
         },
@@ -37,6 +39,7 @@
           "priceUnit": "每百万tokens",
           "price": "64",
           "timeBand": "standard",
+          "ntmAmountType": "multi_translate_text_output_token",
           "type": "translate_multi_text_output_token",
           "priceName": "输出：文本"
         },
@@ -44,6 +47,7 @@
           "priceUnit": "每百万tokens",
           "price": "240",
           "timeBand": "standard",
+          "ntmAmountType": "multi_output_token",
           "type": "translate_multi_output_token",
           "priceName": "输出：音频"
         }

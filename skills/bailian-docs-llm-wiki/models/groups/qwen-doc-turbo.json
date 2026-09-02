@@ -13,7 +13,8 @@
       },
       "description": "快速对文档进行精准信息抽取，打标分类，内容审核及摘要总结。",
       "features": [
-        "cache"
+        "cache",
+        "structured-outputs"
       ],
       "provider": "qwen-domain-model",
       "model": "qwen-doc-turbo",
@@ -22,6 +23,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.6",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -29,6 +31,7 @@
           "priceUnit": "每百万tokens",
           "price": "1",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
@@ -36,6 +39,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.12",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"
         },
@@ -43,6 +47,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.75",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache_creation_5m",
           "type": "input_token_cache_creation_5m",
           "priceName": "显式缓存创建"
         },
@@ -50,6 +55,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.06",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache_read",
           "type": "input_token_cache_read",
           "priceName": "显式缓存命中"
         }

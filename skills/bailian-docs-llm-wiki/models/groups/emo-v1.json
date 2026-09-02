@@ -20,6 +20,7 @@
           "priceUnit": "每秒",
           "price": "0.08",
           "timeBand": "standard",
+          "ntmAmountType": "video_duration_1-1",
           "type": "video_duration_1-1",
           "priceName": "视频生成（1:1画幅视频）"
         },
@@ -27,6 +28,7 @@
           "priceUnit": "每秒",
           "price": "0.16",
           "timeBand": "standard",
+          "ntmAmountType": "video_duration_3-4",
           "type": "video_duration_3-4",
           "priceName": "视频生成（3:4画幅视频）"
         }

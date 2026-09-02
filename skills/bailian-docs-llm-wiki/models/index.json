@@ -1,17 +1,17 @@
 {
-  "updatedAt": "2026-08-31",
-  "totalFamilies": 182,
-  "totalModels": 411,
+  "updatedAt": "2026-09-03",
+  "totalFamilies": 181,
+  "totalModels": 410,
   "profileCoverage": {
     "full": 0,
     "partial": 0,
-    "structured-only": 411,
+    "structured-only": 410,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 39,
     "IG": 32,
-    "VG": 28,
+    "VG": 27,
     "TTS": 16,
     "Reasoning": 15,
     "ASR": 14,
@@ -32,9 +32,9 @@
     "wan": 14,
     "mini-max": 4,
     "happyhorse": 4,
-    "pixverse": 4,
     "deepseek": 3,
     "zhipu-ai": 3,
+    "pixverse": 3,
     "moonshot-ai": 2,
     "vidu": 2,
     "kling": 1,
@@ -666,9 +666,8 @@
       "providers": [
         "moonshot-ai"
       ],
-      "itemCount": 5,
+      "itemCount": 4,
       "items": [
-        "kimi/kimi-k2.5",
         "kimi/kimi-k2.6",
         "kimi/kimi-k2.7-code",
         "kimi/kimi-k2.7-code-highspeed",
@@ -918,24 +917,6 @@
       ]
     },
     {
-      "slug": "pixverse-market-place",
-      "name": "PixVerse V5.6",
-      "primaryCapability": "VG",
-      "capabilities": [
-        "VG"
-      ],
-      "providers": [
-        "pixverse"
-      ],
-      "itemCount": 4,
-      "items": [
-        "pixverse/pixverse-v5.6-it2v",
-        "pixverse/pixverse-v5.6-kf2v",
-        "pixverse/pixverse-v5.6-r2v",
-        "pixverse/pixverse-v5.6-t2v"
-      ]
-    },
-    {
       "slug": "pixverse-v6-market-place",
       "name": "PixVerse V6",
       "primaryCapability": "VG",
@@ -1157,9 +1138,10 @@
         "qwen",
         "qwen-domain-model"
       ],
-      "itemCount": 7,
+      "itemCount": 8,
       "items": [
         "qwen3.7-text-embedding",
+        "qwen3.7-text-embedding-flash",
         "text-embedding-async-v1",
         "text-embedding-async-v2",
         "text-embedding-v1",
@@ -1551,16 +1533,17 @@
         "TR"
       ],
       "providers": [
-        "qwen-domain-model",
-        "qwen"
+        "qwen",
+        "qwen-domain-model"
       ],
-      "itemCount": 3,
+      "itemCount": 4,
       "items": [
         "gte-rerank-v2",
         "qwen3-rerank",
-        "qwen3-vl-rerank"
+        "qwen3-vl-rerank",
+        "qwen3.7-text-rerank"
       ],
-      "maxContextWindow": 30000
+      "maxContextWindow": 32768
     },
     {
       "slug": "qwen-tts-realtime",
@@ -2395,9 +2378,10 @@
       "providers": [
         "qwen"
       ],
-      "itemCount": 1,
+      "itemCount": 2,
       "items": [
-        "qwen3.8-max"
+        "qwen3.8-max",
+        "qwen3.8-max-0902"
       ],
       "maxContextWindow": 1000000
     },
@@ -3126,17 +3110,19 @@
       "primaryCapability": "Reasoning",
       "capabilities": [
         "Reasoning",
-        "TG"
+        "TG",
+        "VU"
       ],
       "providers": [
         "zhipu-ai"
       ],
-      "itemCount": 4,
+      "itemCount": 5,
       "items": [
         "ZHIPU/GLM-5",
         "ZHIPU/GLM-5.1",
         "ZHIPU/GLM-5.2",
-        "ZHIPU/GLM-5.3"
+        "ZHIPU/GLM-5.3",
+        "ZHIPU/GLM-5.3-Flash"
       ],
       "maxContextWindow": 1048576
     }

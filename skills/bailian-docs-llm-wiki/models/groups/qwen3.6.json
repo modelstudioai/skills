@@ -96,6 +96,7 @@
           "priceUnit": "每百万tokens",
           "price": "1.8",
           "timeBand": "standard",
+          "ntmAmountType": "context_0-256k_input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -103,6 +104,7 @@
           "priceUnit": "每百万tokens",
           "price": "10.8",
           "timeBand": "standard",
+          "ntmAmountType": "context_0-256k_output_token",
           "type": "output_token",
           "priceName": "输出"
         }
@@ -194,6 +196,7 @@
           "priceUnit": "每百万tokens",
           "price": "3",
           "timeBand": "standard",
+          "ntmAmountType": "context_0-256k_input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -201,6 +204,7 @@
           "priceUnit": "每百万tokens",
           "price": "18",
           "timeBand": "standard",
+          "ntmAmountType": "context_0-256k_output_token",
           "type": "output_token",
           "priceName": "输出"
         }

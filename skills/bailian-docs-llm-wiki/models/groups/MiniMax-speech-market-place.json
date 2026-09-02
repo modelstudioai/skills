@@ -21,6 +21,7 @@
           "priceUnit": "每次",
           "price": "9.9",
           "timeBand": "standard",
+          "ntmAmountType": "voice_enrollment_count",
           "type": "tts_vc_model",
           "priceName": "声音复刻及声音设计"
         },
@@ -28,6 +29,7 @@
           "priceUnit": "每万字符",
           "price": "2",
           "timeBand": "standard",
+          "ntmAmountType": "audio_tts",
           "type": "cosy_tts_number",
           "priceName": "语音合成"
         }
@@ -90,6 +92,7 @@
           "priceUnit": "每次",
           "price": "9.9",
           "timeBand": "standard",
+          "ntmAmountType": "voice_enrollment_count",
           "type": "tts_vc_model",
           "priceName": "声音复刻及声音设计"
         },
@@ -97,6 +100,7 @@
           "priceUnit": "每万字符",
           "price": "3.5",
           "timeBand": "standard",
+          "ntmAmountType": "audio_tts",
           "type": "cosy_tts_number",
           "priceName": "语音合成"
         }
@@ -159,6 +163,7 @@
           "priceUnit": "每次",
           "price": "9.9",
           "timeBand": "standard",
+          "ntmAmountType": "voice_enrollment_count",
           "type": "tts_vc_model",
           "priceName": "声音复刻及声音设计"
         },
@@ -166,6 +171,7 @@
           "priceUnit": "每万字符",
           "price": "2",
           "timeBand": "standard",
+          "ntmAmountType": "audio_tts",
           "type": "cosy_tts_number",
           "priceName": "语音合成"
         }
@@ -228,6 +234,7 @@
           "priceUnit": "每次",
           "price": "9.9",
           "timeBand": "standard",
+          "ntmAmountType": "voice_enrollment_count",
           "type": "tts_vc_model",
           "priceName": "声音复刻及声音设计"
         },
@@ -235,6 +242,7 @@
           "priceUnit": "每万字符",
           "price": "3.5",
           "timeBand": "standard",
+          "ntmAmountType": "audio_tts",
           "type": "cosy_tts_number",
           "priceName": "语音合成"
         }

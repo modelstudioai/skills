@@ -20,6 +20,7 @@
           "priceUnit": "每万字符",
           "price": "1.4",
           "timeBand": "standard",
+          "ntmAmountType": "audio_tts",
           "type": "cosy_tts_number",
           "priceName": "语音合成"
         }
@@ -77,6 +78,7 @@
           "priceUnit": "每万字符",
           "price": "1",
           "timeBand": "standard",
+          "ntmAmountType": "audio_tts",
           "type": "cosy_tts_number",
           "priceName": "语音合成"
         }

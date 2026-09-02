@@ -8,6 +8,71 @@
           "Text"
         ],
         "request_modality": [
+          "Text"
+        ]
+      },
+      "description": "基于 Qwen3.7底座训练的多语言通用文本重排序模型。相较 Qwen3-rerank，在通用与 Web 检索、代码检索、指令遵循、Agentic 与 Memory 检索等方面大幅提升；在 MTEB、websearch 等评测任务上均取得更优效果，其中 websearch 相对提升约 35%。",
+      "collectionTag": "qwen3.7",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen3.7-text-rerank",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.5",
+          "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token|embedding_token|text_total_tokens|",
+          "type": "embedding_token",
+          "priceName": "文本输入"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 900000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 300,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 900000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 300,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "TR"
+      ],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-08-17T04:46:54.000+00:00",
+      "contextWindow": 32768,
+      "maxInputTokens": 32768,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "千问3.7-通用文本重排序",
+      "docUrl": "https://help.aliyun.com/document_detail/2780056.html",
+      "category": "Embeddings",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"qwen3.7-text-rerank\",\n    \"input\": {\n        \"query\": \"什么是文本排序模型\",\n        \"documents\": [\n            \"文本排序模型广泛用于搜索引擎和推荐系统中，它们根据文本相关性对候选文本进行排序\",\n            \"量子计算是计算科学的一个前沿领域\",\n            \"预训练语言模型的发展给文本排序模型带来了新的进展\"\n        ]\n    },\n    \"parameters\": {\n        \"top_n\": 5,\n        \"return_documents\": true\n    }\n}'",
+            "docUrl": "https://help.aliyun.com/document_detail/2780056.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
           "Text",
           "Image",
           "Video"
@@ -20,15 +85,17 @@
       "prices": [
         {
           "priceUnit": "每百万tokens",
-          "price": "1.8",
+          "price": "0.5",
           "timeBand": "standard",
+          "ntmAmountType": "embedding_image_token",
           "type": "embedding_image_token",
           "priceName": "图片输入"
         },
         {
           "priceUnit": "每百万tokens",
-          "price": "0.7",
+          "price": "0.5",
           "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token|embedding_token|text_total_tokens|",
           "type": "embedding_token",
           "priceName": "文本输入"
         }
@@ -90,6 +157,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.5",
           "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token|embedding_token|text_total_tokens|",
           "type": "embedding_token",
           "priceName": "文本输入"
         }
@@ -153,6 +221,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.8",
           "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token|embedding_token|text_total_tokens|",
           "type": "embedding_token",
           "priceName": "文本输入"
         }

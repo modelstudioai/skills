@@ -20,6 +20,7 @@
           "priceUnit": "每张",
           "price": "0.004",
           "timeBand": "standard",
+          "ntmAmountType": "images",
           "type": "image_detect_number",
           "priceName": "图片检测"
         }

@@ -88,7 +88,8 @@
         "model-experience",
         "prefix-completion",
         "structured-outputs",
-        "web-search"
+        "web-search",
+        "batch"
       ],
       "provider": "qwen",
       "model": "qwen3.8-flash",
@@ -97,6 +98,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.8",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -104,6 +106,7 @@
           "priceUnit": "每百万tokens",
           "price": "2.7",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
@@ -111,13 +114,31 @@
           "priceUnit": "每百万tokens",
           "price": "0.1",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"
         },
         {
           "priceUnit": "每百万tokens",
+          "price": "0.4",
+          "timeBand": "standard",
+          "ntmAmountType": "input_token_batch",
+          "type": "input_token_batch",
+          "priceName": "输入（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1.35",
+          "timeBand": "standard",
+          "ntmAmountType": "output_token_batch",
+          "type": "output_token_batch",
+          "priceName": "输出（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
           "price": "1.25",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache_creation_5m",
           "type": "input_token_cache_creation_5m",
           "priceName": "显式缓存创建"
         },
@@ -125,8 +146,27 @@
           "priceUnit": "每百万tokens",
           "price": "0.1",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache_read",
           "type": "input_token_cache_read",
           "priceName": "显式缓存命中"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.8",
+          "timeBand": "standard",
+          "discount": 0.5,
+          "ntmAmountType": "input_token_batch",
+          "type": "input_token_batch_chat",
+          "priceName": "输入（Batch Chat)"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2.7",
+          "timeBand": "standard",
+          "discount": 0.5,
+          "ntmAmountType": "output_token_batch",
+          "type": "output_token_batch_chat",
+          "priceName": "输出（Batch Chat)"
         }
       ],
       "qpmInfo": {

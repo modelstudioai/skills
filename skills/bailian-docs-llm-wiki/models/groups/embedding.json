@@ -20,6 +20,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.15",
           "timeBand": "standard",
+          "ntmAmountType": "embedding_image_token",
           "type": "embedding_image_token",
           "priceName": "图片输入"
         },
@@ -27,6 +28,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.15",
           "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token|embedding_token|text_total_tokens|",
           "type": "embedding_token",
           "priceName": "文本输入"
         }
@@ -88,6 +90,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.5",
           "timeBand": "standard",
+          "ntmAmountType": "embedding_image_token",
           "type": "embedding_image_token",
           "priceName": "图片输入"
         },
@@ -95,6 +98,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.5",
           "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token|embedding_token|text_total_tokens|",
           "type": "embedding_token",
           "priceName": "文本输入"
         }
@@ -156,6 +160,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.9",
           "timeBand": "standard",
+          "ntmAmountType": "embedding_image_token",
           "type": "embedding_image_token",
           "priceName": "图片输入"
         },
@@ -163,6 +168,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.7",
           "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token|embedding_token|text_total_tokens|",
           "type": "embedding_token",
           "priceName": "文本输入"
         }

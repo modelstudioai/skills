@@ -21,6 +21,7 @@
           "priceUnit": "每秒",
           "price": "0.00033",
           "timeBand": "standard",
+          "ntmAmountType": "duration",
           "type": "content_duration",
           "priceName": "音频时长"
         }

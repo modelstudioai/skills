@@ -88,6 +88,92 @@
           "Text"
         ],
         "request_modality": [
+          "Text",
+          "Image",
+          "Video"
+        ]
+      },
+      "description": "GLM-5.3-Flash 是 GLM-5 系列首个原生多模态模型，以极致低成本架构实现超越 GLM-5.2 的更强智能。采用 320B 总参 / 18B 激活的稀疏+线性注意力混合架构，注意力计算量与 KV 缓存分别降低 3.01 倍和 4.44 倍。视觉能力原生融入 Coding 循环，可主动观察界面、渲染结果与交互反馈，跨代码、浏览器与图形界面协同完成任务。同时拓展至 Office、金融研究及专业文档场景，能自主拆解目标、调用工具并优化输出，交付 PPTX、PDF、DOCX、XLSX 等高质量成品。",
+      "features": [
+        "function-calling",
+        "structured-outputs",
+        "prefix-completion",
+        "cache"
+      ],
+      "provider": "zhipu-ai",
+      "model": "ZHIPU/GLM-5.3-Flash",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.8",
+          "discount": 0.5,
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2.8",
+          "discount": 0.5,
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.23",
+          "discount": 0.5,
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 3000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 200,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 3000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 200,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "TG",
+        "VU",
+        "Reasoning"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 131072,
+      "latestOnlineAt": "2026-08-29T08:28:18.000+00:00",
+      "contextWindow": 1048576,
+      "maxInputTokens": 1048576,
+      "inferenceProvider": "zhipu-ai",
+      "name": "ZHIPU/GLM-5.3-Flash",
+      "docUrl": "https://bailian.console.aliyun.com/cn-beijing?tab=doc#/doc/?type=model&url=3026315",
+      "category": "Third-party",
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"ZHIPU/GLM-5.3-Flash\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True, \"reasoning_effort\": \"max\"},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
+            "docUrl": "https://help.aliyun.com/document_detail/3026315.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
           "Text"
         ]
       },
@@ -270,6 +356,7 @@
           "priceUnit": "每百万tokens",
           "price": "6",
           "timeBand": "standard",
+          "ntmAmountType": "input_token",
           "type": "input_token",
           "priceName": "输入"
         },
@@ -277,6 +364,7 @@
           "priceUnit": "每百万tokens",
           "price": "22",
           "timeBand": "standard",
+          "ntmAmountType": "output_token",
           "type": "output_token",
           "priceName": "输出"
         },
@@ -284,6 +372,7 @@
           "priceUnit": "每百万tokens",
           "price": "1.5",
           "timeBand": "standard",
+          "ntmAmountType": "input_token_cache",
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"
         }

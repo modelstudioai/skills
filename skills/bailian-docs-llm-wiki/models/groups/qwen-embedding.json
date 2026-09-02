@@ -24,6 +24,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.25",
           "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token_batch|embedding_token_batch|text_total_tokens_batch|",
           "type": "embedding_token_batch",
           "priceName": "向量输入（Batch File）"
         },
@@ -31,6 +32,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.5",
           "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token|embedding_token|text_total_tokens|",
           "type": "embedding_token",
           "priceName": "文本输入"
         }
@@ -88,6 +90,81 @@
           "Text"
         ]
       },
+      "description": "基于 Qwen3.7 训练的轻量级多语言文本向量模型，面向成本和吞吐敏感场景。相较 text-embedding-v4，在多语言覆盖（100→201 种）、长文本处理（32K→128K）和 Sparse Embedding 等能力上大幅升级；在语义、跨语言及代码检索评测上整体效果基本持平，其中 AIRBench-zh 提升约 3%",
+      "collectionTag": "qwen3.7",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen3.7-text-embedding-flash",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.063",
+          "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token_batch|embedding_token_batch|text_total_tokens_batch|",
+          "type": "embedding_token_batch",
+          "priceName": "向量输入（Batch File）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.125",
+          "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token|embedding_token|text_total_tokens|",
+          "type": "embedding_token",
+          "priceName": "文本输入"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 2400,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 2400,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "TR"
+      ],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-08-16T09:26:16.000+00:00",
+      "contextWindow": 131072,
+      "maxInputTokens": 131072,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "千问3.7-通用文本向量-flash",
+      "docUrl": "https://help.aliyun.com/document_detail/2842587.html",
+      "category": "Embeddings",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"qwen3.7-text-embedding-flash\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
+            "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"qwen3.7-text-embedding-flash\",\ninput=input_texts\n)\nprint(resp)",
+            "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"qwen3.7-text-embedding-flash\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}",
+            "docUrl": "https://help.aliyun.com/document_detail/2712515.html"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
       "description": "通用文本向量V4版本，是通义实验室基于Qwen3训练的多语言文本统一向量模型，相较V3版本在文本检索、聚类、分类性能大幅提升；在MTEB多语言、中英、Code检索等评测任务上效果提升15%~40%；支持64~2048维用户自定义向量维度。",
       "features": [
         "model-experience"
@@ -99,6 +176,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.25",
           "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token_batch|embedding_token_batch|text_total_tokens_batch|",
           "type": "embedding_token_batch",
           "priceName": "向量输入（Batch File）"
         },
@@ -106,6 +184,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.5",
           "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token|embedding_token|text_total_tokens|",
           "type": "embedding_token",
           "priceName": "文本输入"
         }
@@ -168,6 +247,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.25",
           "timeBand": "standard",
+          "ntmAmountType": "embedding_token_batch",
           "type": "embedding_token_batch",
           "priceName": "向量输入（Batch File）"
         },
@@ -175,6 +255,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.5",
           "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token|embedding_token|text_total_tokens|",
           "type": "embedding_token",
           "priceName": "文本输入"
         }
@@ -235,6 +316,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.35",
           "timeBand": "standard",
+          "ntmAmountType": "embedding_token_batch",
           "type": "embedding_token_batch",
           "priceName": "向量输入（Batch File）"
         },
@@ -242,6 +324,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.7",
           "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token|embedding_token|text_total_tokens|",
           "type": "embedding_token",
           "priceName": "文本输入"
         }
@@ -302,6 +385,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.35",
           "timeBand": "standard",
+          "ntmAmountType": "embedding_token_batch",
           "type": "embedding_token_batch",
           "priceName": "向量输入（Batch File）"
         },
@@ -309,6 +393,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.7",
           "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token|embedding_token|text_total_tokens|",
           "type": "embedding_token",
           "priceName": "文本输入"
         }
@@ -369,6 +454,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.7",
           "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token|embedding_token|text_total_tokens|",
           "type": "embedding_token",
           "priceName": "文本输入"
         }
@@ -411,6 +497,7 @@
           "priceUnit": "每百万tokens",
           "price": "0.7",
           "timeBand": "standard",
+          "ntmAmountType": "|embedding_text_token|embedding_token|text_total_tokens|",
           "type": "embedding_token",
           "priceName": "文本输入"
         }

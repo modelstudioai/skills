@@ -22,6 +22,7 @@
           "priceUnit": "每张",
           "price": "0.2",
           "timeBand": "standard",
+          "ntmAmountType": "|images|times|",
           "type": "image_number",
           "priceName": "图片生成"
         }

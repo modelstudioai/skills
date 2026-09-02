@@ -24,6 +24,7 @@
           "priceUnit": "每张",
           "price": "0.2",
           "timeBand": "standard",
+          "ntmAmountType": "|images|times|",
           "type": "image_number",
           "priceName": "图片生成"
         }
@@ -90,6 +91,7 @@
           "priceUnit": "每张",
           "price": "0.5",
           "timeBand": "standard",
+          "ntmAmountType": "|images|times|",
           "type": "image_number",
           "priceName": "图片生成"
         }
@@ -158,6 +160,7 @@
           "priceUnit": "每张",
           "price": "0.2",
           "timeBand": "standard",
+          "ntmAmountType": "|images|times|",
           "type": "image_number",
           "priceName": "图片生成"
         }
@@ -221,6 +224,7 @@
           "priceUnit": "每张",
           "price": "0.2",
           "timeBand": "standard",
+          "ntmAmountType": "|images|times|",
           "type": "image_number",
           "priceName": "图片生成"
         }
@@ -280,6 +284,7 @@
           "priceUnit": "每张",
           "price": "0.14",
           "timeBand": "standard",
+          "ntmAmountType": "|images|times|",
           "type": "image_number",
           "priceName": "图片生成"
         }

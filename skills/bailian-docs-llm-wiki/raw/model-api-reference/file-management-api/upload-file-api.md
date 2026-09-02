@@ -78,7 +78,7 @@ multipart/form-data
 
 `batch`
 
-通过上传后的`file_id`来[创建Batch任务](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)。
+通过上传后的`file_id`来[创建Batch任务](https://help.aliyun.com/zh/model-studio/batch-interfaces-compatible-with-openai)。
 
 不传 purpose 时文件仍可上传成功，建议明确指定 purpose 以便后续按用途管理文件。
 
