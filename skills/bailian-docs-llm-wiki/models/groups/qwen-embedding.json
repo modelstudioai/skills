@@ -17,7 +17,7 @@
         "model-experience",
         "batch"
       ],
-      "provider": "qwen",
+      "provider": "qwen-domain-model",
       "model": "qwen3.7-text-embedding",
       "prices": [
         {

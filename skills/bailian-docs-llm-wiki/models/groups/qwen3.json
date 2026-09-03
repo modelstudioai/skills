@@ -1136,6 +1136,7 @@
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen3-30B-A3B-Thinking-2507",
       "docUrl": "https://help.aliyun.com/document_detail/2870973.html",
+      "category": "Cost-optimized",
       "samples": {
         "openai": {
           "default": {

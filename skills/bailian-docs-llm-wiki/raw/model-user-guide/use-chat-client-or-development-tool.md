@@ -6,7 +6,7 @@
 -   [OpenCode](https://help.aliyun.com/zh/model-studio/opencode)
 -   [Cursor](https://help.aliyun.com/zh/model-studio/cursor)
 -   [Codex](https://help.aliyun.com/zh/model-studio/codex)
--   [千问办公助理](https://help.aliyun.com/zh/model-studio/qwen-office-assistant)
+-   [千问](https://help.aliyun.com/zh/model-studio/qwen-office-assistant)
 -   [Qwen Code](https://help.aliyun.com/zh/model-studio/qwen-code)
 -   [DeepSeek Harness](https://help.aliyun.com/zh/model-studio/deepseek-harness)
 -   [QwenPaw](https://help.aliyun.com/zh/model-studio/qwenpaw)
