@@ -16,7 +16,6 @@
       "description": "千问VL-Plus（qwen-vl-plus），即千问大规模视觉语言模型增强版。大幅提升细节识别能力和文字识别能力，支持超百万像素分辨率和任意长宽比规格的图像。在广泛的视觉任务上提供卓越的性能。",
       "offlineAt": "2026-07-13T15:59:59.000+00:00",
       "features": [
-        "model-experience",
         "structured-outputs",
         "prefix-completion",
         "cache",

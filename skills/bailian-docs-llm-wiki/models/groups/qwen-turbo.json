@@ -15,7 +15,6 @@
       "offlineAt": "2026-07-13T15:59:59.000+00:00",
       "collectionTag": "qwen3",
       "features": [
-        "model-experience",
         "cache",
         "structured-outputs"
       ],

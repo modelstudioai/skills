@@ -107,7 +107,6 @@
       },
       "description": "MiniMax-M2.1是MiniMax推出的旗舰级开源大模型，聚焦真实世界复杂任务，以多语言编程与长链 Agent 能力为核心优势。",
       "features": [
-        "model-experience",
         "function-calling",
         "cache"
       ],

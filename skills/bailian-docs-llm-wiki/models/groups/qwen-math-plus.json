@@ -12,9 +12,7 @@
         ]
       },
       "description": "千问数学模型具有强大的数学解题能力,擅长处理中英文数学题，包括方程、计算、证明等方向。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen-domain-model",
       "model": "qwen-math-plus",
       "prices": [
@@ -102,9 +100,7 @@
         ]
       },
       "description": "千问系列数学模型是专门用于数学解题的语言模型，推理效果好，模型性能优秀本模型为2024年9月19日快照版本，预计维护到下个版本发布后一个月（待定）。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen-domain-model",
       "model": "qwen-math-plus-0919",
       "prices": [
@@ -193,9 +189,7 @@
         ]
       },
       "description": "千问系列数学模型是专门用于数学解题的语言模型，推理效果好，模型性能优秀，本模型是动态更新版本，模型更新不会提前通知。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen-domain-model",
       "model": "qwen-math-plus-latest",
       "prices": [
@@ -283,9 +277,7 @@
         ]
       },
       "description": "千问数学模型具有强大的数学解题能力,擅长处理中英文数学题，包括方程、计算、证明等方向。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen-domain-model",
       "model": "qwen-math-plus-0816",
       "prices": [

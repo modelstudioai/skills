@@ -841,9 +841,7 @@
         ]
       },
       "description": "千问系列能力均衡的模型，推理效果和速度介于千问-Max和千问-Turbo之间，适合中等复杂任务。相对于千问-Plus-1125版本，中英文整体能力有提升，中英常识知识类、阅读理解能力提升较为显著，codeswtich现象相比上一版有显著改善，中文指令遵循能力显著提升。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen",
       "model": "qwen-plus-1220",
       "prices": [
@@ -932,9 +930,7 @@
         ]
       },
       "description": "千问系列能力均衡的模型，推理效果和速度介于千问-Max和千问-Turbo之间，适合中等复杂任务。相对于千问-Plus-2024-1220版本，中英文整体能力有提升，中英常识知识类、阅读理解能力提升较为显著，codeswtich现象相比上一版有显著改善，中文指令遵循能力显著提升。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen",
       "model": "qwen-plus-0112",
       "prices": [

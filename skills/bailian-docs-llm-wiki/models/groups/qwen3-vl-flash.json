@@ -16,7 +16,6 @@
       "description": "Qwen3系列小尺寸视觉理解模型，实现思考模式和非思考模式的有效融合，效果优于开源版Qwen3-VL-30B-A3B，响应速度快。全面升级图像/视频理解，支持长视频长文档等超长上下文、空间感知与万物识别；具备视觉2D/3D定位能力，胜任复杂现实任务。",
       "collectionTag": "qwen3",
       "features": [
-        "model-experience",
         "function-calling",
         "structured-outputs",
         "prefix-completion",

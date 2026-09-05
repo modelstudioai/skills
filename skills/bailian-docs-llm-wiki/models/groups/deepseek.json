@@ -520,7 +520,6 @@
       "features": [
         "cache",
         "function-calling",
-        "model-experience",
         "web-search",
         "structured-outputs"
       ],
@@ -623,7 +622,6 @@
       },
       "description": "DeepSeek-V3.2是引入DeepSeek Sparse Attention（一种稀疏注意力机制）的正式版模型，也是DeepSeek推出的首个将思考融入工具使用的模型，同时支持思考模式与非思考模式的工具调用。",
       "features": [
-        "model-experience",
         "function-calling",
         "web-search",
         "cache",
@@ -776,7 +774,6 @@
       },
       "description": "引入了DeepSeek Sparse Attention（一种稀疏注意力机制）的实验性质版本，针对长文本的训练和推理效率进行了探索性的优化和验证。",
       "features": [
-        "model-experience",
         "function-calling",
         "web-search"
       ],
@@ -869,7 +866,6 @@
       },
       "description": "DeepSeek-V3.1为混合推理架构模型，同时支持思考模式与非思考模式，具备更高的推理效率和更强的Agent能力。",
       "features": [
-        "model-experience",
         "function-calling",
         "web-search",
         "cache"
@@ -971,7 +967,6 @@
       },
       "description": "DeepSeek-V3 为自研 MoE 模型，671B 参数，激活 37B，在 14.8T token 上进行了预训练，在长文本、代码、数学、百科、中文 能力上表现优秀。",
       "features": [
-        "model-experience",
         "function-calling",
         "web-search",
         "cache"
@@ -1089,7 +1084,6 @@
       },
       "description": "0528为R1模型的小版本升级，相较于旧版 R1，新版在复杂推理任务中的表现有了显著提升。在数学、编程与通用逻辑等多个基准测评中取得了优异成绩。",
       "features": [
-        "model-experience",
         "function-calling",
         "web-search"
       ],
@@ -1179,7 +1173,6 @@
       },
       "description": "DeepSeek-R1 在后训练阶段大规模使用了强化学习技术，在仅有极少标注数据的情况下，极大提升了模型推理能力。在数学、代码、自然语言推理等任务上，性能较高，能力较强。",
       "features": [
-        "model-experience",
         "function-calling",
         "web-search",
         "cache"
@@ -1293,9 +1286,7 @@
         ]
       },
       "description": "DeepSeek-R1-Distill-Qwen-7B是一个基于Qwen2.5-Math-7B的蒸馏大型语言模型，使用了 DeepSeek R1 的输出。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "deepseek",
       "model": "deepseek-r1-distill-qwen-7b",
       "prices": [
@@ -1381,9 +1372,7 @@
         ]
       },
       "description": "DeepSeek-R1-Distill-Qwen-32B是一个基于Qwen2.5-32B的蒸馏大型语言模型，使用了 DeepSeek R1 的输出。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "deepseek",
       "model": "deepseek-r1-distill-qwen-32b",
       "prices": [
@@ -1469,9 +1458,7 @@
         ]
       },
       "description": "DeepSeek-R1-Distill-Qwen-14B是一个基于Qwen2.5-14B的蒸馏大型语言模型，使用了 DeepSeek R1 的输出。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "deepseek",
       "model": "deepseek-r1-distill-qwen-14b",
       "prices": [

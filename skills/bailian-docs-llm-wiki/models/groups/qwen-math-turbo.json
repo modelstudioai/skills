@@ -13,9 +13,7 @@
       },
       "description": "千问系列数学模型是专门用于数学解题的语言模型，推理速度快，成本低。",
       "offlineAt": "2026-07-13T15:59:59.000+00:00",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen-domain-model",
       "model": "qwen-math-turbo",
       "prices": [
