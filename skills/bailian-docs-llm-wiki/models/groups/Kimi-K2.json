@@ -449,7 +449,6 @@
       },
       "description": "kimi-k2-thinking模型是月之暗面提供的具有通用 Agentic能力和推理能力的思考模型，它擅长深度推理，并可通过多步工具调用，帮助解决各类难题。",
       "features": [
-        "model-experience",
         "cache",
         "function-calling"
       ],
@@ -549,7 +548,6 @@
       },
       "description": "Kimi-K2是月之暗面提供的国内首个开源万亿参数MoE模型，激活参数达 320 亿，具有卓越的编码和工具调用能力。",
       "features": [
-        "model-experience",
         "cache",
         "function-calling"
       ],

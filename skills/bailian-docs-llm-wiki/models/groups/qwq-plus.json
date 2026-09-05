@@ -14,7 +14,6 @@
       "description": "千问QwQ推理模型增强版，基于Qwen2.5模型训练的QwQ推理模型，通过强化学习大幅度提升了模型推理能力。模型数学代码等核心指标（AIME 24/25、livecodebench）以及部分通用指标（IFEval、LiveBench等）达到DeepSeek-R1 满血版水平。",
       "offlineAt": "2026-07-13T15:59:59.000+00:00",
       "features": [
-        "model-experience",
         "function-calling",
         "web-search",
         "batch"

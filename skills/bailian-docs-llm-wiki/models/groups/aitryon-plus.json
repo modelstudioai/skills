@@ -12,9 +12,7 @@
         ]
       },
       "description": "aitryon-plus是一款效果出众的虚拟试衣图片生成模型，可基于服饰平拍图片以及人物正面全身照，输出服饰的人物试衣效果图片。 相较于aitryon模型，aitryon-plus模型在图片清晰度、服饰纹理细节和logo还原效果等方面均有提升，但生成耗时较长，适用于对时效性要求不高的场景。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen",
       "model": "aitryon-plus",
       "prices": [

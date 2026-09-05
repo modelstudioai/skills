@@ -12,9 +12,7 @@
         ]
       },
       "description": "Paraformer中英文语音识别模型，支持16kHz及以上采样率的音频或视频语音识别。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen",
       "model": "paraformer-v1",
       "prices": [

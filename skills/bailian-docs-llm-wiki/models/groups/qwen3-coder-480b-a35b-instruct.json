@@ -13,9 +13,7 @@
       },
       "description": "基于Qwen3的代码生成模型，具有强大的Coding Agent能力，代码能力达到开源模型 SOTA。",
       "collectionTag": "qwen3",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen-domain-model",
       "model": "qwen3-coder-480b-a35b-instruct",
       "qpmInfo": {

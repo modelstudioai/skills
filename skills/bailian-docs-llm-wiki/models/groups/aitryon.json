@@ -12,9 +12,7 @@
         ]
       },
       "description": "aitryon是一款性能出众的虚拟试衣图片生成模型，可基于服饰平拍图片以及人物正面全身照，输出服饰的人物试衣效果图片。aitryon模型可在较短时间内生成试衣图片，适用于对时效性要求较高的场景。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen",
       "model": "aitryon",
       "prices": [

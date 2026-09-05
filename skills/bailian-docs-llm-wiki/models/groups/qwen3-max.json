@@ -82,7 +82,6 @@
       "description": "千问3系列Max模型，相较preview版本在智能体编程与工具调用方向进行了专项升级。本次发布的正式版模型达到领域SOTA水平，适配场景更加复杂的智能体需求。",
       "collectionTag": "qwen3",
       "features": [
-        "model-experience",
         "function-calling",
         "structured-outputs",
         "web-search",
@@ -430,7 +429,6 @@
       "description": "Qwen3系列Max模型Preview版本，实现思考模式和非思考模式的有效融合。思考模式下在智能体编程能力、常识知识推理能力、数学/科学/通用类推理等能力上均有显著增强。",
       "collectionTag": "qwen3",
       "features": [
-        "model-experience",
         "cache"
       ],
       "provider": "qwen",

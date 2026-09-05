@@ -12,9 +12,7 @@
         ]
       },
       "description": "Paraformer语音识别提供的文件转写API，能够对常见的音频或音视频文件进行语音识别，并将结果返回给调用者。Paraformer中文语音识别模型，支持8kHz电话语音识别。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen",
       "model": "paraformer-8k-v1",
       "prices": [

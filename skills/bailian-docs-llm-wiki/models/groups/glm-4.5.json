@@ -453,7 +453,6 @@
       },
       "description": "智谱最新旗舰，具备更强的编程能力与更稳定的多步骤推理/执行能力。总参数355B，支持长程任务规划、编码、工具协同，问答自然、写作沉浸、创意角色扮演能力强。",
       "features": [
-        "model-experience",
         "function-calling",
         "cache"
       ],
@@ -592,7 +591,6 @@
       },
       "description": "GLM新一代旗舰模型，核心能力较4.5全面提升。总参数量为3550 亿，激活参数320亿，上下文窗口扩展至200K。",
       "features": [
-        "model-experience",
         "cache"
       ],
       "provider": "zhipu-ai",
@@ -729,9 +727,7 @@
         ]
       },
       "description": "GLM-4.5采用混合专家（MoE）架构，总参数量为3550 亿，激活参数320亿，在复杂推理、代码生成及智能体交互等通用能力上实现了能力融合与技术突破。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "zhipu-ai",
       "model": "glm-4.5",
       "qpmInfo": {
@@ -849,9 +845,7 @@
         ]
       },
       "description": "GLM-4.5-Air采用混合专家（MoE）架构，总参数量为1060亿，激活参数120亿，相较GLM-4.5更紧凑、轻量，适用于对模型规模和资源消耗有一定限制的场景。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "zhipu-ai",
       "model": "glm-4.5-air",
       "qpmInfo": {

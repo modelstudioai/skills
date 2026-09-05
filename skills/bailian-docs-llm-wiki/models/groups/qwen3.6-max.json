@@ -16,7 +16,6 @@
       "features": [
         "cache",
         "function-calling",
-        "model-experience",
         "prefix-completion",
         "structured-outputs",
         "web-search"

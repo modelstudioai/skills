@@ -12,9 +12,7 @@
         ]
       },
       "description": "多语言语音转写及翻译的多模态大模型。本模型支持60秒以内的实时语音识别，适用于语音搜索、设备指令等场景。提供10个混合语种的高准确率识别服务，同时支持中英日韩互译，以其他6个语种翻译成中文或英文。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen",
       "model": "gummy-chat-v1",
       "prices": [

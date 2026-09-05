@@ -97,7 +97,6 @@
           "priceUnit": "每秒",
           "price": "0.9",
           "timeBand": "standard",
-          "discount": 0.8,
           "ntmAmountType": "720P",
           "type": "video_ratio_720p",
           "priceName": "视频生成（720P）"
@@ -106,7 +105,6 @@
           "priceUnit": "每秒",
           "price": "1.6",
           "timeBand": "standard",
-          "discount": 0.8,
           "ntmAmountType": "1080P",
           "type": "video_ratio_1080p",
           "priceName": "视频生成（1080P）"

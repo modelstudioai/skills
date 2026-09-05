@@ -2,6 +2,8 @@
 
 上传文件到百炼平台，支持多文件上传，上传后可在多个任务中复用。
 
+**重要**当前接口主要用于兼容历史场景，推荐优先使用 [OpenAI 兼容的 File 接口](https://help.aliyun.com/zh/model-studio/openai-file-interface)。
+
 ## 使用限制
 
 当您使用本服务时，会有如下限制存在

@@ -99,7 +99,8 @@
         "standard"
       ],
       "capabilities": [
-        "Realtime-Text-to-Speech"
+        "Realtime-Text-to-Speech",
+        "TTS"
       ],
       "modelAlias": "",
       "versionTag": "MAJOR",

@@ -12,9 +12,7 @@
         ]
       },
       "description": "多语言语音转写及翻译的多模态大模型。本模型提供长时间、高准确率、实时转写中/英/日/韩等10个混合语种的服务。同时支持中英日韩互译，以其他6个语种翻译成中文或英文。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen",
       "model": "gummy-realtime-v1",
       "prices": [

@@ -13,9 +13,7 @@
       },
       "description": "基于Qwen3的代码生成模型，继承Qwen3-Coder-480B-A35B-Instruct的coding agent能力，代码能力达到同尺寸规模模型SOTA。",
       "collectionTag": "qwen3",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen-domain-model",
       "model": "qwen3-coder-30b-a3b-instruct",
       "qpmInfo": {

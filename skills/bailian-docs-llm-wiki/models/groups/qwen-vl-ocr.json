@@ -14,7 +14,6 @@
       },
       "description": "千问VL-OCR（qwen-vl-ocr），即基于Qwen-VL训练的OCR识别大模型。通过统一模型的方式聚合多种图文识别、解析、处理类任务，提供强大的图文识别能力。",
       "features": [
-        "model-experience",
         "batch"
       ],
       "provider": "qwen-domain-model",
@@ -119,9 +118,7 @@
         ]
       },
       "description": "千问VL-OCR（qwen-vl-ocr），即基于Qwen-VL训练的OCR识别大模型。通过统一模型的方式聚合多种图文识别、解析、处理类任务，提供强大的图文识别能力。本模型为2024年10月28日的快照版本。",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen-domain-model",
       "model": "qwen-vl-ocr-1028",
       "prices": [

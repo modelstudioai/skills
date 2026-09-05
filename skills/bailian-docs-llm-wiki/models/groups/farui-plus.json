@@ -12,9 +12,7 @@
         ]
       },
       "description": "通义法睿是以通义千问为基座经法律行业数据和知识专门训练的法律行业大模型产品，综合运用了模型精调、强化学习、 RAG检索增强、法律Agent技术，具有回答法律问题、推理法律适用、推荐裁判类案、辅助案情分析、生成法律文书、检索法律知识、审查合同条款等功能",
-      "features": [
-        "model-experience"
-      ],
+      "features": [],
       "provider": "qwen-domain-model",
       "model": "farui-plus",
       "prices": [

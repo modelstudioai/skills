@@ -2,6 +2,8 @@
 
 查询、列举和删除文件，并了解文件对象的属性信息。
 
+**重要**当前接口主要用于兼容历史场景，推荐优先使用 [OpenAI 兼容的 File 接口](https://help.aliyun.com/zh/model-studio/openai-file-interface)。
+
 ## 获取指定文件信息
 
 ```
