@@ -241,6 +241,12 @@
       "latestOnlineAt": "2026-04-22T12:50:52.000+00:00",
       "contextWindow": 262144,
       "maxInputTokens": 260096,
+      "trainingTypes": {
+        "sft": [
+          "full",
+          "lora"
+        ]
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen3.6-27B",
       "docUrl": "https://help.aliyun.com/document_detail/2712576.html",

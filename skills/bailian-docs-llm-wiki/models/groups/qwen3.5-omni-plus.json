@@ -35,7 +35,8 @@
       "features": [
         "web-search",
         "function-calling",
-        "batch"
+        "batch",
+        "model-experience"
       ],
       "provider": "qwen",
       "model": "qwen3.5-omni-plus",
