@@ -12,7 +12,9 @@
         ]
       },
       "description": "qwen-audio-3.0-asr-flash-filetrans是专为非实时、整段音视频文件设计的高性能转写模型。它不仅集成了 Context（上下文增强）能力，还强化了垂直行业热词的识别精度，非常适合短视频字幕、客服质检和金融双录场景。",
-      "features": [],
+      "features": [
+        "model-experience"
+      ],
       "provider": "qwen",
       "model": "qwen-audio-3.0-asr-flash-filetrans",
       "prices": [
@@ -42,7 +44,7 @@
       ],
       "modelAlias": "",
       "versionTag": "MAJOR",
-      "latestOnlineAt": "2026-07-30T07:18:33.374+00:00",
+      "latestOnlineAt": "2026-07-30T07:18:33.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "qwen-audio-3.0-asr-flash-filetrans",
       "docUrl": "https://help.aliyun.com/document_detail/2979031.html",

@@ -13,7 +13,9 @@
       },
       "description": "CosyVoice-v3.5-Flash是通义实验室CosyVoice系列的高性能语音合成大模型。对声音克隆和声音设计的语音合成效果进行全面升级，确保说话人高相似度的前提下，支持free-style指令控制，合成风格丰富多样。较之前版本大幅减少首包延迟，同时提高发音准确率，改善韵律和音质。支持跨多语种（中、英、德、法、俄、日、韩、葡、泰、印尼、越南）超自然听感实时语音合成。",
       "collectionTag": "",
-      "features": [],
+      "features": [
+        "model-experience"
+      ],
       "provider": "qwen",
       "model": "cosyvoice-v3.5-flash",
       "prices": [
@@ -70,7 +72,9 @@
         ]
       },
       "description": "CosyVoice-v3.5-Plus是通义实验室CosyVoice系列的超高表现力语音合成大模型。对声音克隆和声音设计的语音合成效果进行全面升级，确保说话人高相似度的前提下，支持free-style指令控制，合成风格丰富多样。较之前版本大幅减少首包延迟，同时提高发音准确率，改善韵律和音质。支持跨多语种（中、英、德、法、俄、日、韩、葡、泰、印尼、越南）超自然听感实时语音合成。",
-      "features": [],
+      "features": [
+        "model-experience"
+      ],
       "provider": "qwen",
       "model": "cosyvoice-v3.5-plus",
       "prices": [
