@@ -1,17 +1,17 @@
 {
-  "updatedAt": "2026-09-08",
-  "totalFamilies": 182,
-  "totalModels": 414,
+  "updatedAt": "2026-09-09",
+  "totalFamilies": 180,
+  "totalModels": 413,
   "profileCoverage": {
     "full": 0,
     "partial": 0,
-    "structured-only": 414,
+    "structured-only": 413,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 39,
-    "IG": 32,
-    "VG": 28,
+    "IG": 31,
+    "VG": 27,
     "TTS": 16,
     "Reasoning": 15,
     "ASR": 14,
@@ -27,7 +27,7 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 111,
+    "qwen": 109,
     "qwen-domain-model": 34,
     "wan": 14,
     "mini-max": 4,
@@ -176,21 +176,6 @@
       "itemCount": 1,
       "items": [
         "aitryon"
-      ]
-    },
-    {
-      "slug": "animate-anyone-detect-gen2",
-      "name": "舞动人像AnimateAnyone-detect",
-      "primaryCapability": "VG",
-      "capabilities": [
-        "VG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "animate-anyone-detect-gen2"
       ]
     },
     {
@@ -1233,21 +1218,6 @@
       ]
     },
     {
-      "slug": "qwen-image-3.0-pro",
-      "name": "Qwen-Image-3.0-Pro",
-      "primaryCapability": "IG",
-      "capabilities": [
-        "IG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-image-3.0-pro"
-      ]
-    },
-    {
       "slug": "qwen-image-3.0",
       "name": "Qwen-Image-3.0",
       "primaryCapability": "IG",
@@ -1257,9 +1227,10 @@
       "providers": [
         "qwen"
       ],
-      "itemCount": 1,
+      "itemCount": 2,
       "items": [
-        "qwen-image-3.0"
+        "qwen-image-3.0",
+        "qwen-image-3.0-pro"
       ]
     },
     {
@@ -2942,7 +2913,7 @@
     },
     {
       "slug": "wan-video",
-      "name": "Wan-Video",
+      "name": "Wan3.0-Video",
       "primaryCapability": "VG",
       "capabilities": [
         "VG"

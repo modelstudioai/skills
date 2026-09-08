@@ -6,4 +6,5 @@
 -   [配置 Agent 环境](https://help.aliyun.com/zh/model-studio/managed-agents-environment)
 -   [委派任务给 Agent](https://help.aliyun.com/zh/model-studio/managed-agents-session)
 -   [Agent 上下文管理](https://help.aliyun.com/zh/model-studio/managed-agents-context)
+-   [Webhook 事件订阅](https://help.aliyun.com/zh/model-studio/managed-agents-webhook)
 -   [计费](https://help.aliyun.com/zh/model-studio/managed-agents-billing)

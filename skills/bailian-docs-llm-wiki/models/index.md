@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 182 个模型家族 · 414 个主干模型 · 更新于 2026-09-08
+> 自动生成 · 共 180 个模型家族 · 413 个主干模型 · 更新于 2026-09-09
 
 **机器查询走结构化文件**：
 
@@ -25,7 +25,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`glm-4.5`, `glm-4.5-air`, `glm-4.6`, `glm-4.7`, `glm-5`, `glm-5.1`, `glm-5.2`
 - [GLM-5.2-Fast](groups/glm-fast.json) — GLM-5.2-Fast-Preview 是智谱 AI 旗舰模型 GLM-5.2 的高速版本，支持 1M 超长上下文，模型能力对齐 GLM-5.2 标准版，具备逻辑推理、长文本理解与代码生成能力。通过…
   - 模型：`glm-5.2-fast-preview`
-- [Kimi](groups/Kimi-K2.json) — Kimi是由月之暗面提供的开源模型，包含k2.7-code、k2.6、k2.5、k2-thinking、k2-instruct等多模态和大语言模型。
+- [Kimi](groups/Kimi-K2.json) — Kimi是由月之暗面提供的开源模型，包含k3、k2.7-code、k2.6、k2.5等多模态和大语言模型。
   - 模型：`kimi-k2-thinking`, `kimi-k2.5`, `kimi-k2.6`, `kimi-k2.7-code`, `kimi-k3`, `Moonshot-Kimi-K2-Instruct`
 - [Kimi](groups/kimi-models-market-place.json) — 由月之暗面提供的Kimi系列模型的API服务。
   - 模型：`kimi/kimi-k2.6`, `kimi/kimi-k2.7-code`, `kimi/kimi-k2.7-code-highspeed`, `kimi/kimi-k3`
@@ -98,7 +98,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [通义法睿-Plus-32K](groups/farui-plus.json) — 通义法睿是以通义千问为基座经法律行业数据和知识专门训练的法律行业大模型产品，综合运用了模型精调、强化学习、 RAG检索增强、法律Agent技术，具有回答法律问题、推理法律适用、推荐裁判类案、辅助案情分…
   - 模型：`farui-plus`
 
-## 图像生成 `IG` — 32 个家族
+## 图像生成 `IG` — 31 个家族
 
 - [AI试衣-Plus版](groups/aitryon-plus.json) — aitryon-plus是一款效果出众的虚拟试衣图片生成模型，可基于服饰平拍图片以及人物正面全身照，输出服饰的人物试衣效果图片。 相较于aitryon模型，aitryon-plus模型在图片清晰度、服…
   - 模型：`aitryon-plus`
@@ -116,10 +116,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen-image-2.0`
 - [Qwen-Image-2.0-Pro](groups/qwen-image-2.0-pro.json) — Qwen-Image-2.0系列满血版模型，实现了图片生成和图片编辑的融合；具备更专业的文字渲染1k token指令支持能力、更细腻的真实质感，细腻刻画写实场景、更强的语义遵循能力。满血版具备2.0系…
   - 模型：`qwen-image-2.0-pro`
-- [Qwen-Image-3.0](groups/qwen-image-3.0.json) — 指令理解清晰：支持最大 4.5k token 输入，复杂图文指令一次生成到位。 文字渲染稳定：10px 小字、12 国语言、20+ 字体清晰可辨，信息图和界面直接可用。 批量产出趁手：海报、网页、界面…
-  - 模型：`qwen-image-3.0`
-- [Qwen-Image-3.0-Pro](groups/qwen-image-3.0-pro.json) — 内容丰实：支持最大 4.5k token 输入，支持图中图密集信息排版，让报纸、分镜、菜单、试卷等复杂版面一次生成。 细节真实：支持 10px 小字精准渲染，微表情、毛孔、发丝等细节生动还原，逼近真实…
-  - 模型：`qwen-image-3.0-pro`
+- [Qwen-Image-3.0](groups/qwen-image-3.0.json) — Qwen-Image-3.0 系列支持最长 4.5K tokens 的复杂图文提示词，可一次生成包含图中图、密集信息排版和清晰文字的复杂画面，支持文生图、图生图及图像编辑。Standard 版兼顾生成…
+  - 模型：`qwen-image-3.0`, `qwen-image-3.0-pro`
 - [Qwen-Image-Edit-Max](groups/qwen-image-edit-max.json) — 千问图像编辑模型Max系列，提供更稳定、更丰富的编辑能力：提升工业设计与几何推理能力；提升角色一致性；减轻偏移问题；集成Lora能力，可以进行更多功能的图像编辑。此版本为2026年1月16日快照。
   - 模型：`qwen-image-edit-max`
 - [Qwen-Image-Edit-Plus](groups/qwen-image-edit.json) — 千问系列图像编辑Plus模型，在首版Edit模型基础上进一步优化了推理性能与系统稳定性，大幅缩短图像生成与编辑的响应时间；支持单次请求返回多张图片，显著提升用户体验。
@@ -165,7 +163,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [鞋靴模特](groups/shoemodel-v1.json) — 鞋靴模特支持输入多视角鞋靴系列图片，同时对输入模特模板图的鞋子区域进行鞋靴AI试穿，实现模特鞋靴布局重绘生成，最终生成图片的效果, 布局自然、细节丰富、画面细腻、试穿结果逼真。可用于模特商品图设计、新…
   - 模型：`shoemodel-v1`
 
-## 视频生成 `VG` — 28 个家族
+## 视频生成 `VG` — 27 个家族
 
 - [HappyHorse-I2V](groups/happyhorse-i2v.json) — HappyHorse系列最新图生视频模型，具备高度还原的动态画面生成能力，能够稳定保持与图像一致性，输出流畅自然、细节丰富的高质量视频。
   - 模型：`happyhorse-1.0-i2v`, `happyhorse-1.1-i2v`
@@ -193,12 +191,12 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`wan2.6-r2v`, `wan2.6-r2v-flash`, `wan2.7-r2v`
 - [Wan-T2V](groups/wan-text-to-video.json) — 文字生成视频内容，丝滑动态能力，电影美学控制，精准指令遵循
   - 模型：`wan2.2-t2v-plus`, `wan2.5-t2v-preview`, `wan2.6-t2v`, `wan2.7-t2v`, `wanx2.1-t2v-plus`, `wanx2.1-t2v-turbo`
-- [Wan-Video](groups/wan-video.json) — 多模态全能参考，灵活可控生成视频内容，轻松实现故事创作、创意表达、营销物料制作等
-  - 模型：`wan3.0-video`, `wan3.0-video-prime`
 - [Wan-VideoEdit](groups/wan-video-edit.json) — 通过指令对视频进行编辑，支持局部/整体编辑、视频重塑、视频复刻等
   - 模型：`wan2.7-videoedit`
 - [Wan2.1-VACE-Plus](groups/wanx2.1-vace-plus.json) — 万相2.1-VACE-Plus，视频编辑统一模型。支持局部编辑、视频重绘、背景扩展、时长延展、图片参考等多种视频编辑与生成任务，支持文本、图像、视频等多模态条件控制。
   - 模型：`wanx2.1-vace-plus`
+- [Wan3.0-Video](groups/wan-video.json) — 多模态全能参考，灵活可控生成视频内容，轻松实现故事创作、创意表达、营销物料制作等
+  - 模型：`wan3.0-video`, `wan3.0-video-prime`
 - [可灵AI](groups/kling-models-market-place.json) — 由可灵AI提供的高质量视频与图像生成及编辑模型。
   - 模型：`kling/kling-v3-image-generation`, `kling/kling-v3-omni-image-generation`, `kling/kling-v3-omni-video-generation`, `kling/kling-v3-turbo-video-generation`, `kling/kling-v3-video-generation`
 - [声动人像VideoRetalk](groups/videoretalk.json) — VideoRetalk是一个人物视频生成模型，可基于人物视频和人声音频，生成人物讲话口型与输入音频相匹配的新视频。
@@ -215,8 +213,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`video-style-transform`
 - [舞动人像AnimateAnyone](groups/animate-anyone-gen2.json) — AnimateAnyone是一款视频生成模型，可基于人物图片和动作模板生成人物全身动作视频。
   - 模型：`animate-anyone-gen2`
-- [舞动人像AnimateAnyone-detect](groups/animate-anyone-detect-gen2.json) — AnimateAnyone-detect是辅助AnimateAnyone的图像检测模型，用于检测图片中的人物形象是否符合视频生成要求。
-  - 模型：`animate-anyone-detect-gen2`
 - [舞动人像AnimateAnyone-template](groups/animate-anyone-template-gen2.json) — AnimateAnyone-Template是辅助AnimateAnyone的动作模板生成模型，可基于视频提取人物动作并制作模板。
   - 模型：`animate-anyone-template-gen2`
 - [表情包Emoji](groups/emoji-v1.json) — 表情包emoji是一款人脸动效视频生成模型，可基于人脸图片和预设的人脸动态模板，生成人脸动效视频。
