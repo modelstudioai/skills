@@ -1,6 +1,6 @@
 {
   "name": "Kimi",
-  "description": "Kimi是由月之暗面提供的开源模型，包含k2.7-code、k2.6、k2.5、k2-thinking、k2-instruct等多模态和大语言模型。",
+  "description": "Kimi是由月之暗面提供的开源模型，包含k3、k2.7-code、k2.6、k2.5等多模态和大语言模型。",
   "items": [
     {
       "inferenceMetadata": {

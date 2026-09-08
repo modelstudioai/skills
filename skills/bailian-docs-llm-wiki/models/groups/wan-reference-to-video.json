@@ -16,7 +16,9 @@
       },
       "description": "Wan2.7-R2V，更加稳定的角色、道具与场景参考，支持最大5个图/视频混合参考，支持音频音色参考，搭配基础能力升级实现更强表演能力。",
       "collectionTag": "wan2.7",
-      "features": [],
+      "features": [
+        "model-experience"
+      ],
       "provider": "wan",
       "model": "wan2.7-r2v",
       "prices": [
