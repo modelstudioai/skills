@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 180 个模型家族 · 413 个主干模型 · 更新于 2026-09-09
+> 自动生成 · 共 181 个模型家族 · 414 个主干模型 · 更新于 2026-09-10
 
 **机器查询走结构化文件**：
 
@@ -163,7 +163,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [鞋靴模特](groups/shoemodel-v1.json) — 鞋靴模特支持输入多视角鞋靴系列图片，同时对输入模特模板图的鞋子区域进行鞋靴AI试穿，实现模特鞋靴布局重绘生成，最终生成图片的效果, 布局自然、细节丰富、画面细腻、试穿结果逼真。可用于模特商品图设计、新…
   - 模型：`shoemodel-v1`
 
-## 视频生成 `VG` — 27 个家族
+## 视频生成 `VG` — 28 个家族
 
 - [HappyHorse-I2V](groups/happyhorse-i2v.json) — HappyHorse系列最新图生视频模型，具备高度还原的动态画面生成能力，能够稳定保持与图像一致性，输出流畅自然、细节丰富的高质量视频。
   - 模型：`happyhorse-1.0-i2v`, `happyhorse-1.1-i2v`
@@ -213,6 +213,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`video-style-transform`
 - [舞动人像AnimateAnyone](groups/animate-anyone-gen2.json) — AnimateAnyone是一款视频生成模型，可基于人物图片和动作模板生成人物全身动作视频。
   - 模型：`animate-anyone-gen2`
+- [舞动人像AnimateAnyone-detect](groups/animate-anyone-detect-gen2.json) — AnimateAnyone-detect是辅助AnimateAnyone的图像检测模型，用于检测图片中的人物形象是否符合视频生成要求。
+  - 模型：`animate-anyone-detect-gen2`
 - [舞动人像AnimateAnyone-template](groups/animate-anyone-template-gen2.json) — AnimateAnyone-Template是辅助AnimateAnyone的动作模板生成模型，可基于视频提取人物动作并制作模板。
   - 模型：`animate-anyone-template-gen2`
 - [表情包Emoji](groups/emoji-v1.json) — 表情包emoji是一款人脸动效视频生成模型，可基于人脸图片和预设的人脸动态模板，生成人脸动效视频。

@@ -106,21 +106,18 @@
         {
           "priceUnit": "每百万tokens",
           "price": "0.8",
-          "discount": 0.5,
           "type": "input_token",
           "priceName": "输入"
         },
         {
           "priceUnit": "每百万tokens",
           "price": "2.8",
-          "discount": 0.5,
           "type": "output_token",
           "priceName": "输出"
         },
         {
           "priceUnit": "每百万tokens",
           "price": "0.23",
-          "discount": 0.5,
           "type": "input_token_cache",
           "priceName": "输入（缓存命中）"
         }
