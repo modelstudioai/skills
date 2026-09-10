@@ -70,7 +70,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-TTS",
-      "docUrl": "https://help.aliyun.com/document_detail/2881635.html#dc02de8e5earc",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-tts-api",
       "samples": {
         "dashscope": {
           "default": {
@@ -148,7 +148,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-TTS-Latest",
-      "docUrl": "https://help.aliyun.com/document_detail/2881635.html#dc02de8e5earc",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-tts-api",
       "samples": {
         "dashscope": {
           "default": {

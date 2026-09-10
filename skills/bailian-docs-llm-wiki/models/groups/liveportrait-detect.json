@@ -39,7 +39,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "灵动人像LivePortrait-detect",
-      "docUrl": "https://help.aliyun.com/document_detail/2856727.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/liveportrait-detect-api",
       "samples": {
         "dashscope": {
           "default": {

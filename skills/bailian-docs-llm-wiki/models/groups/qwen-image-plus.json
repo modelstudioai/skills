@@ -11,7 +11,7 @@
           "Text"
         ]
       },
-      "description": "千问系列图像生成模型，参数规模200亿。具备卓越的文本渲染能力，在复杂文本渲染、各类生成与编辑任务重表现出色，在多个公开基准测试中获得SOTA，模型性能大幅提升。",
+      "description": "千问系列图像生成模型，参数规模200亿。具备卓越的文本渲染能力，在复杂文本渲染、各类生成与编辑任务中表现出色，在多个公开基准测试中获得SOTA，模型性能大幅提升。",
       "features": [],
       "provider": "qwen",
       "model": "qwen-image-plus",
@@ -63,7 +63,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-Image-Plus",
-      "docUrl": "https://help.aliyun.com/document_detail/2975126.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-image-api",
       "samples": {
         "dashscope": {
           "default": {
@@ -81,7 +81,7 @@
           "Text"
         ]
       },
-      "description": "千问系列首个图像生成模型，参数规模200亿。具备卓越的文本渲染能力，在复杂文本渲染、各类生成与编辑任务重表现出色，在多个公开基准测试中获得SOTA。",
+      "description": "千问系列首个图像生成模型，参数规模200亿。具备卓越的文本渲染能力，在复杂文本渲染、各类生成与编辑任务中表现出色，在多个公开基准测试中获得SOTA。",
       "features": [],
       "provider": "qwen",
       "model": "qwen-image",
@@ -133,7 +133,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-Image",
-      "docUrl": "https://help.aliyun.com/document_detail/2975126.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-image-api",
       "samples": {
         "dashscope": {
           "default": {

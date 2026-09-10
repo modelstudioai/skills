@@ -28,7 +28,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "图像画面扩展",
-      "docUrl": "https://help.aliyun.com/document_detail/2796845.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/image-scaling-api",
       "samples": {
         "dashscope": {
           "default": {

@@ -22,7 +22,7 @@
       "latestOnlineAt": "2024-06-21T02:49:20.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "创意海报生成",
-      "docUrl": "https://help.aliyun.com/document_detail/2807172.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/creative-poster-generation-api",
       "samples": {
         "dashscope": {
           "default": {

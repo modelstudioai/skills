@@ -71,7 +71,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen3-Omni-30b-a3b-Captioner",
-      "docUrl": "https://help.aliyun.com/document_detail/2980468.html"
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen3-omni-captioner"
     }
   ]
 }

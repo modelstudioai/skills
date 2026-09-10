@@ -22,7 +22,7 @@
       "latestOnlineAt": "2024-06-25T15:18:50.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "虚拟模特V2",
-      "docUrl": "https://help.aliyun.com/document_detail/2796985.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/virtual-model-api-details",
       "samples": {
         "dashscope": {
           "default": {

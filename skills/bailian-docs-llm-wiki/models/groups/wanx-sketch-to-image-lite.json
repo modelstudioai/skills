@@ -35,7 +35,7 @@
       "latestOnlineAt": "2024-06-11T11:21:09.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "万相-涂鸦作画",
-      "docUrl": "https://help.aliyun.com/document_detail/2712498.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/wanx-sketch-to-image-api-reference",
       "samples": {
         "dashscope": {
           "default": {

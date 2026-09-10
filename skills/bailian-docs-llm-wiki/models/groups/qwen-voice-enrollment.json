@@ -54,7 +54,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-Voice-Enrollment",
-      "docUrl": "https://help.aliyun.com/document_detail/2975034.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/voice-cloning-user-guide",
       "samples": {
         "dashscope": {
           "default": {

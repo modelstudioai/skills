@@ -89,7 +89,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "QwenVL-OCR-Latest",
-      "docUrl": "https://help.aliyun.com/document_detail/2712576.html#f4595a6e1aa7h",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-api-reference",
       "samples": {
         "openai": {
           "default": {
@@ -177,7 +177,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "QwenVL-OCR-2024-10-28",
-      "docUrl": "https://help.aliyun.com/document_detail/2712576.html#f4595a6e1aa7h",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-api-reference",
       "samples": {
         "openai": {
           "default": {
@@ -283,7 +283,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "QwenVL-OCR",
-      "docUrl": "https://help.aliyun.com/document_detail/2712576.html#f4595a6e1aa7h",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-api-reference",
       "samples": {
         "openai": {
           "default": {

@@ -64,13 +64,13 @@
       "latestOnlineAt": "2026-04-03T03:21:57.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Wan2.7-T2V",
-      "docUrl": "https://help.aliyun.com/document_detail/2865250.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-to-video-api-reference",
       "category": "Wan",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"wan2.7-t2v\",\n    \"input\": {\n        \"prompt\": \"一段紧张刺激的侦探追查故事，展现电影级叙事能力。第1个镜头[0-3秒] 全景：雨夜的纽约街头，霓虹灯闪烁，一位身穿黑色风衣的侦探快步行走。 第2个镜头[3-6秒] 中景：侦探进入一栋老旧建筑，雨水打湿了他的外套，门在他身后缓缓关闭。 第3个镜头[6-9秒] 特写：侦探的眼神坚毅专注，远处传来警笛声，他微微皱眉思考。 第4个镜头[9-12秒] 中景：侦探在昏暗走廊中小心前行，手电筒照亮前方。 第5个镜头[12-15秒] 特写：侦探发现关键线索，脸上露出恍然大悟的表情。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"ratio\": \"16:9\",\n        \"prompt_extend\": true,\n        \"watermark\": true,\n        \"duration\": 15\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/2865250.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-to-video-api-reference"
           }
         }
       }
@@ -137,7 +137,7 @@
       "latestOnlineAt": "2025-12-03T13:03:19.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Wan2.6-T2V",
-      "docUrl": "https://help.aliyun.com/document_detail/2865250.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-to-video-api-reference",
       "samples": {
         "dashscope": {
           "default": {
@@ -218,7 +218,7 @@
       "latestOnlineAt": "2025-09-19T06:10:15.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Wan2.5-T2V-Preview",
-      "docUrl": "https://help.aliyun.com/document_detail/2865250.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-to-video-api-reference",
       "samples": {
         "dashscope": {
           "default": {
@@ -285,7 +285,7 @@
       "latestOnlineAt": "2025-07-27T16:00:00.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Wan2.2-T2V-Plus",
-      "docUrl": "https://help.aliyun.com/document_detail/2865250.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-to-video-api-reference",
       "samples": {
         "dashscope": {
           "default": {
@@ -343,7 +343,7 @@
       "latestOnlineAt": "2025-01-08T16:13:12.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Wan2.1-T2V-Plus",
-      "docUrl": "https://help.aliyun.com/document_detail/2865250.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-to-video-api-reference",
       "samples": {
         "dashscope": {
           "default": {
@@ -409,7 +409,7 @@
       "latestOnlineAt": "2025-01-08T16:12:34.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Wan2.1-T2V-Turbo",
-      "docUrl": "https://help.aliyun.com/document_detail/2865250.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-to-video-api-reference",
       "samples": {
         "dashscope": {
           "default": {

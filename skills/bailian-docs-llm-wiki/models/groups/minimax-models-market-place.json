@@ -71,19 +71,19 @@
       ],
       "versionTag": "MAJOR",
       "latestOnlineAt": "2026-06-01T02:18:01.000+00:00",
-      "contextWindow": 1048576,
+      "contextWindow": 1000000,
       "maxInputTokens": 1048576,
       "offlineInfo": {},
       "inferenceProvider": "mini-max",
       "name": "MiniMax/MiniMax-M3",
-      "docUrl": "https://bailian.console.aliyun.com/cn-beijing?tab=doc#/doc/?type=model&url=3021647",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/minimax-api-by-minimax",
       "samples": {
         "openai": {
           "completionsAPI": {
             "curl": "curl --location 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n  \"model\": \"MiniMax/MiniMax-M3\",\n  \"messages\": [\n  {\n    \"role\": \"user\",\n    \"content\": [\n      {\"type\": \"image_url\", \"image_url\": {\"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"}},\n      {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"}\n    ]\n  }]\n}'",
             "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://dashscope-intl.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"MiniMax/MiniMax-M3\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\n                    \"type\": \"image_url\",\n                    \"image_url\": {\n                        \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n                    },\n                },\n                {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"},\n            ],\n        },\n    ],\n)\nprint(completion.choices[0].message.content)",
             "nodejs": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI({\n  // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: \"sk-xxx\"\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: \"https://dashscope-intl.aliyuncs.com/compatible-mode/v1\"\n});\n\nasync function main() {\n  const response = await openai.chat.completions.create({\n    model: \"MiniMax/MiniMax-M3\",\n    messages: [\n      {\n        role: \"user\",\n        content: [{\n            type: \"image_url\",\n            image_url: {\n              \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n            }\n          },\n          {\n            type: \"text\",\n            text: \"请仅输出图像中的文本内容。\"\n          }\n        ]\n      }\n    ]\n  });\n  console.log(response.choices[0].message.content);\n}\nmain()",
-            "docUrl": "https://help.aliyun.com/document_detail/3021620.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/kimi-api-by-moonshot-ai"
           }
         }
       }
@@ -164,12 +164,12 @@
       "offlineInfo": {},
       "inferenceProvider": "mini-max",
       "name": "MiniMax/MiniMax-M2.7",
-      "docUrl": "https://help.aliyun.com/document_detail/3021647.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/minimax-api-by-minimax",
       "samples": {
         "openai": {
           "completionsAPI": {
             "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"MiniMax/MiniMax-M2.7\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
-            "docUrl": "https://help.aliyun.com/document_detail/3021647.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/minimax-api-by-minimax"
           }
         }
       }
@@ -250,12 +250,12 @@
       "offlineInfo": {},
       "inferenceProvider": "mini-max",
       "name": "MiniMax/MiniMax-M2.5",
-      "docUrl": "https://help.aliyun.com/document_detail/3021647.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/minimax-api-by-minimax",
       "samples": {
         "openai": {
           "completionsAPI": {
             "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"MiniMax/MiniMax-M2.5\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
-            "docUrl": "https://help.aliyun.com/document_detail/3021647.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/minimax-api-by-minimax"
           }
         }
       }
@@ -336,12 +336,12 @@
       "offlineInfo": {},
       "inferenceProvider": "mini-max",
       "name": "MiniMax/MiniMax-M2.1",
-      "docUrl": "https://help.aliyun.com/document_detail/3021647.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/minimax-api-by-minimax",
       "samples": {
         "openai": {
           "completionsAPI": {
             "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"MiniMax/MiniMax-M2.1\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
-            "docUrl": "https://help.aliyun.com/document_detail/3021647.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/minimax-api-by-minimax"
           }
         }
       }

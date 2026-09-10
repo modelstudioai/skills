@@ -35,7 +35,7 @@
       "latestOnlineAt": "2025-03-18T02:17:01.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知悦",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -78,7 +78,7 @@
       "latestOnlineAt": "2025-03-20T09:14:08.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知媛",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -121,7 +121,7 @@
       "latestOnlineAt": "2025-03-18T02:17:43.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知颖",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -164,7 +164,7 @@
       "latestOnlineAt": "2025-03-18T02:17:07.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知晔",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -207,7 +207,7 @@
       "latestOnlineAt": "2025-03-18T02:17:55.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知雅",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -250,7 +250,7 @@
       "latestOnlineAt": "2025-03-18T02:18:00.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知笑",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -293,7 +293,7 @@
       "latestOnlineAt": "2025-03-18T02:18:13.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知祥",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -336,7 +336,7 @@
       "latestOnlineAt": "2025-03-18T02:18:04.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知薇",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -379,7 +379,7 @@
       "latestOnlineAt": "2025-03-18T02:18:16.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知婷",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -422,7 +422,7 @@
       "latestOnlineAt": "2025-03-18T02:19:54.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知莎",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -465,7 +465,7 @@
       "latestOnlineAt": "2025-03-18T02:18:18.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知硕",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -508,7 +508,7 @@
       "latestOnlineAt": "2025-03-18T02:20:05.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知树",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -551,7 +551,7 @@
       "latestOnlineAt": "2025-03-18T02:18:22.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知茹",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -594,7 +594,7 @@
       "latestOnlineAt": "2025-03-18T02:20:08.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知倩",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -637,7 +637,7 @@
       "latestOnlineAt": "2025-03-18T02:18:25.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知琪",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -680,7 +680,7 @@
       "latestOnlineAt": "2025-03-18T08:10:47.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知楠",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -723,7 +723,7 @@
       "latestOnlineAt": "2025-03-18T02:20:46.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知娜",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -766,7 +766,7 @@
       "latestOnlineAt": "2025-03-18T02:18:28.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知墨",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -809,7 +809,7 @@
       "latestOnlineAt": "2025-03-18T02:20:49.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知茗",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -852,7 +852,7 @@
       "latestOnlineAt": "2025-03-18T02:18:38.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知妙（多情感）",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -895,7 +895,7 @@
       "latestOnlineAt": "2025-03-18T02:18:34.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知猫",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -938,7 +938,7 @@
       "latestOnlineAt": "2025-03-18T02:20:12.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知伦",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -981,7 +981,7 @@
       "latestOnlineAt": "2025-03-18T02:18:41.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知婧",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1024,7 +1024,7 @@
       "latestOnlineAt": "2025-03-18T02:20:14.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知佳",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1067,7 +1067,7 @@
       "latestOnlineAt": "2025-03-18T02:18:45.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知浩",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1110,7 +1110,7 @@
       "latestOnlineAt": "2025-03-18T02:21:15.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知柜",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1153,7 +1153,7 @@
       "latestOnlineAt": "2025-03-18T02:18:49.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知飞",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1196,7 +1196,7 @@
       "latestOnlineAt": "2025-03-18T02:20:17.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知德",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1239,7 +1239,7 @@
       "latestOnlineAt": "2025-03-18T02:18:52.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知达",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1282,7 +1282,7 @@
       "latestOnlineAt": "2025-03-18T02:21:12.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-知厨",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1325,7 +1325,7 @@
       "latestOnlineAt": "2025-03-18T02:18:56.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-Waan",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1368,7 +1368,7 @@
       "latestOnlineAt": "2025-03-18T02:20:20.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-Perla",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1411,7 +1411,7 @@
       "latestOnlineAt": "2025-03-18T02:18:59.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-Indah",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1454,7 +1454,7 @@
       "latestOnlineAt": "2025-03-18T02:21:09.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-Hanna",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1497,7 +1497,7 @@
       "latestOnlineAt": "2025-03-18T02:21:02.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-Eva",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1540,7 +1540,7 @@
       "latestOnlineAt": "2025-03-18T02:20:23.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-Donna",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1583,7 +1583,7 @@
       "latestOnlineAt": "2025-03-18T02:21:06.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-Clara",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1626,7 +1626,7 @@
       "latestOnlineAt": "2025-03-18T02:20:26.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-Cindy",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1669,7 +1669,7 @@
       "latestOnlineAt": "2025-03-18T02:20:27.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-Camila",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1712,7 +1712,7 @@
       "latestOnlineAt": "2025-03-18T02:20:58.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-Cally",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1755,7 +1755,7 @@
       "latestOnlineAt": "2025-03-18T02:20:54.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-Brian",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1798,7 +1798,7 @@
       "latestOnlineAt": "2025-03-18T02:16:48.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-Betty",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {
@@ -1841,7 +1841,7 @@
       "latestOnlineAt": "2025-03-18T02:20:30.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Sambert语音合成-Beth",
-      "docUrl": "https://help.aliyun.com/document_detail/2712458.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/sambert-speech-synthesis",
       "samples": {
         "dashscope": {
           "default": {

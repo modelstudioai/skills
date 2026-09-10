@@ -48,7 +48,7 @@
       "latestOnlineAt": "2025-11-17T13:12:02.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen3-ASR-Flash-Filetrans",
-      "docUrl": "https://help.aliyun.com/document_detail/2979031.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide",
       "samples": {
         "dashscope": {
           "default": {

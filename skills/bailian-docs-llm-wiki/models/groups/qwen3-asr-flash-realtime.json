@@ -48,7 +48,7 @@
       "latestOnlineAt": "2025-10-27T10:00:46.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen3-ASR-Flash-Realtime",
-      "docUrl": "https://help.aliyun.com/document_detail/2989727.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide",
       "samples": {
         "dashscope": {
           "default": {

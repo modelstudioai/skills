@@ -41,7 +41,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "AI试衣-Plus版",
-      "docUrl": "https://help.aliyun.com/document_detail/2881846.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/aitryon-plus-api",
       "samples": {
         "dashscope": {
           "default": {

@@ -55,7 +55,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "qwen3-tts-vc-realtime-2026-01-15",
-      "docUrl": "https://help.aliyun.com/document_detail/2938790.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/realtime-tts-user-guide",
       "category": "Audio",
       "samples": {
         "dashscope": {

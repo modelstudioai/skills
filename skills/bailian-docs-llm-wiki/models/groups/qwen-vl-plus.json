@@ -110,7 +110,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "QwenVL-Plus",
-      "docUrl": "https://help.aliyun.com/document_detail/2845871.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vision",
       "category": "Older",
       "samples": {
         "openai": {

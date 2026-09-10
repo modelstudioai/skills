@@ -1,17 +1,17 @@
 {
-  "updatedAt": "2026-09-10",
-  "totalFamilies": 181,
-  "totalModels": 414,
+  "updatedAt": "2026-09-11",
+  "totalFamilies": 180,
+  "totalModels": 413,
   "profileCoverage": {
     "full": 0,
     "partial": 0,
-    "structured-only": 414,
+    "structured-only": 413,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 39,
     "IG": 31,
-    "VG": 28,
+    "VG": 27,
     "TTS": 16,
     "Reasoning": 15,
     "ASR": 14,
@@ -27,7 +27,7 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 110,
+    "qwen": 109,
     "qwen-domain-model": 34,
     "wan": 14,
     "mini-max": 4,
@@ -65,7 +65,7 @@
         "kimi-k3",
         "Moonshot-Kimi-K2-Instruct"
       ],
-      "maxContextWindow": 1048576
+      "maxContextWindow": 1000000
     },
     {
       "slug": "MiniMax-M2.1",
@@ -176,21 +176,6 @@
       "itemCount": 1,
       "items": [
         "aitryon"
-      ]
-    },
-    {
-      "slug": "animate-anyone-detect-gen2",
-      "name": "舞动人像AnimateAnyone-detect",
-      "primaryCapability": "VG",
-      "capabilities": [
-        "VG"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "animate-anyone-detect-gen2"
       ]
     },
     {
@@ -482,7 +467,7 @@
         "glm-5.1",
         "glm-5.2"
       ],
-      "maxContextWindow": 1048576
+      "maxContextWindow": 1000000
     },
     {
       "slug": "glm-fast",
@@ -498,7 +483,7 @@
       "items": [
         "glm-5.2-fast-preview"
       ],
-      "maxContextWindow": 1048576
+      "maxContextWindow": 1000000
     },
     {
       "slug": "gui-plus",
@@ -673,7 +658,7 @@
         "kimi/kimi-k2.7-code-highspeed",
         "kimi/kimi-k3"
       ],
-      "maxContextWindow": 1048576
+      "maxContextWindow": 1000000
     },
     {
       "slug": "kling-models-market-place",
@@ -744,7 +729,7 @@
         "MiniMax/MiniMax-M2.7",
         "MiniMax/MiniMax-M3"
       ],
-      "maxContextWindow": 1048576
+      "maxContextWindow": 1000000
     },
     {
       "slug": "paraformer-8k-v1",
@@ -2688,7 +2673,7 @@
         "vanchin/deepseek-v4-pro",
         "vanchin/deepseek-v4-pro-0813"
       ],
-      "maxContextWindow": 1048576
+      "maxContextWindow": 1000000
     },
     {
       "slug": "video-style-transform",
@@ -3091,7 +3076,7 @@
       "items": [
         "xiaomi/mimo-v2.5-pro"
       ],
-      "maxContextWindow": 1048576
+      "maxContextWindow": 1000000
     },
     {
       "slug": "z-image-turbo",
@@ -3128,7 +3113,7 @@
         "ZHIPU/GLM-5.3",
         "ZHIPU/GLM-5.3-Flash"
       ],
-      "maxContextWindow": 1048576
+      "maxContextWindow": 1000000
     }
   ]
 }

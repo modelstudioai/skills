@@ -45,13 +45,13 @@
       "latestOnlineAt": "2026-07-30T15:11:41.943+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-Audio-3.0-ASR-Flash-Streaming",
-      "docUrl": "https://help.aliyun.com/document_detail/2989727.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide",
       "category": "Audio",
       "samples": {
         "dashscope": {
           "default": {
             "python": "from http import HTTPStatus\nimport dashscope\nfrom dashscope.audio.asr import Recognition\nimport os\n\n\ndashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')\ndashscope.base_websocket_api_url='wss://[workspace-id].cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'\n\nrecognition = Recognition(model='qwen-audio-3.0-asr-flash-streaming',\n                          format='wav',\n                          sample_rate=16000,\n                          callback=None)\nresult = recognition.call('{YOUR_AUDIO_FILE}')\nif result.status_code == HTTPStatus.OK:\n    print('Recognition result: ')\n    print(result.get_sentence())\nelse:\n    print('Error: ', result.message)\n    \nprint(\n    '[Metric] requestId: {}, first package delay ms: {}, last package delay ms: {}'\n    .format(\n        recognition.get_last_request_id(),\n        recognition.get_first_package_delay(),\n        recognition.get_last_package_delay(),\n    ))",
-            "docUrl": "https://help.aliyun.com/document_detail/2989727.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide"
           }
         }
       }

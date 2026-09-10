@@ -48,12 +48,12 @@
       "latestOnlineAt": "2026-05-06T12:15:28.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "音乐生成",
-      "docUrl": "https://help.aliyun.com/document_detail/3030448.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/fun-music",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl -X POST 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"fun-music-v1\",\n    \"input\": {\n        \"prompt\": \"夏日清新民谣，木吉他与口琴伴奏，轻快节奏，适合旅行Vlog背景音乐\",\n        \"gender\": \"female\"\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3030448.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/fun-music"
           }
         }
       }
@@ -103,12 +103,12 @@
       "latestOnlineAt": "2026-06-01T07:20:31.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "音乐生成 Preview",
-      "docUrl": "https://help.aliyun.com/document_detail/3030448.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/fun-music",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl -X POST 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/audio/music/generation' \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"fun-music-preview\",\n    \"input\": {\n        \"prompt\": \"夏日清新民谣，木吉他与口琴伴奏，轻快节奏，适合旅行Vlog背景音乐\",\n        \"gender\": \"female\"\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3030448.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/fun-music"
           }
         }
       }

@@ -41,7 +41,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "Paraformer语音识别-v1",
-      "docUrl": "https://help.aliyun.com/document_detail/2712535.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-api-reference",
       "samples": {
         "dashscope": {
           "default": {

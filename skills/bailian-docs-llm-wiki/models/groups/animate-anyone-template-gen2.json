@@ -41,7 +41,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "舞动人像AnimateAnyone-template",
-      "docUrl": "https://help.aliyun.com/document_detail/2807955.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/animate-anyone-template-api",
       "samples": {
         "dashscope": {
           "default": {

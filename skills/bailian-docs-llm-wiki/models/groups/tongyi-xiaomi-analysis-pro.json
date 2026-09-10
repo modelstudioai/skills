@@ -67,7 +67,7 @@
       "maxInputTokens": 28672,
       "inferenceProvider": "aliyun-bailian",
       "name": "伶鹊-对话分析-pro",
-      "docUrl": "https://help.aliyun.com/document_detail/3015075.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/dialogue-analysis",
       "samples": {
         "openai": {
           "default": {

@@ -78,7 +78,7 @@
       "maxInputTokens": 196608,
       "inferenceProvider": "aliyun-bailian",
       "name": "MiniMax-M2.5",
-      "docUrl": "https://help.aliyun.com/document_detail/3017140.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/minimax-api",
       "samples": {
         "openai": {
           "default": {
@@ -159,7 +159,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "MiniMax-M2.1",
-      "docUrl": "https://help.aliyun.com/document_detail/3017140.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/minimax-api",
       "samples": {
         "openai": {
           "default": {

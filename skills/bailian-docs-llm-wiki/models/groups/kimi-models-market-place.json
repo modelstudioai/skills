@@ -70,11 +70,11 @@
       "versionTag": "MAJOR",
       "maxOutputTokens": 1048576,
       "latestOnlineAt": "2026-07-17T08:23:12.000+00:00",
-      "contextWindow": 1048576,
+      "contextWindow": 1000000,
       "maxInputTokens": 1048576,
       "inferenceProvider": "moonshot-ai",
       "name": "kimi/kimi-k3",
-      "docUrl": "https://bailian.console.aliyun.com/cn-beijing?tab=doc#/doc/?type=model&url=3021620",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/kimi-api-by-moonshot-ai",
       "category": "Third-party",
       "samples": {
         "openai": {
@@ -163,7 +163,7 @@
       "offlineInfo": {},
       "inferenceProvider": "moonshot-ai",
       "name": "kimi/kimi-k2.7-code-highspeed",
-      "docUrl": "https://bailian.console.aliyun.com/cn-beijing?tab=doc#/doc/?type=model&url=3021620",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/kimi-api-by-moonshot-ai",
       "samples": {
         "openai": {
           "default": {
@@ -251,7 +251,7 @@
       "offlineInfo": {},
       "inferenceProvider": "moonshot-ai",
       "name": "kimi/kimi-k2.7-code",
-      "docUrl": "https://bailian.console.aliyun.com/cn-beijing?tab=doc#/doc/?type=model&url=3021620",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/kimi-api-by-moonshot-ai",
       "samples": {
         "openai": {
           "default": {
@@ -343,7 +343,7 @@
       "offlineInfo": {},
       "inferenceProvider": "moonshot-ai",
       "name": "Kimi/Kimi K2.6",
-      "docUrl": "https://help.aliyun.com/document_detail/3021620.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/kimi-api-by-moonshot-ai",
       "samples": {
         "openai": {
           "default": {

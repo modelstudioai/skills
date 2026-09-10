@@ -56,7 +56,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen3-TTS-VD-2026-01-26",
-      "docUrl": "https://help.aliyun.com/document_detail/2879134.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/non-realtime-tts-user-guide",
       "samples": {
         "dashscope": {
           "default": {

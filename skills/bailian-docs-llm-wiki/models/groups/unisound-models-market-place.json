@@ -70,13 +70,13 @@
       "maxInputTokens": 159744,
       "inferenceProvider": "unisound",
       "name": "unisound/unisound-u2",
-      "docUrl": "https://help.aliyun.com/document_detail/1000000054170.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/unisound-cloud-sound",
       "category": "Third-party",
       "samples": {
         "openai": {
           "completionsAPI": {
             "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"unisound/unisound-u2\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"thinking\":{\"type\": \"enabled\"}, \"reasoning_effort\": \"xhigh\"},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
-            "docUrl": "https://help.aliyun.com/document_detail/1000000054170.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/unisound-cloud-sound"
           }
         }
       }

@@ -41,7 +41,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "图像背景生成",
-      "docUrl": "https://help.aliyun.com/document_detail/2712497.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/wanx-background-generation-api-reference",
       "samples": {
         "dashscope": {
           "default": {

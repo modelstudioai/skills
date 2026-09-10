@@ -78,11 +78,11 @@
       "inferenceSpeeds": [
         "prime"
       ],
-      "contextWindow": 1048576,
+      "contextWindow": 1000000,
       "maxInputTokens": 1048576,
       "inferenceProvider": "aliyun-bailian",
       "name": "GLM-5.2-Fast-Preview",
-      "docUrl": "https://help.aliyun.com/document_detail/2974045.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/glm",
       "category": "Third-party",
       "samples": {
         "openai": {

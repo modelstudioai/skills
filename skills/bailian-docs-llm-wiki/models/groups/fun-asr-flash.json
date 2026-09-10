@@ -47,12 +47,12 @@
       "latestOnlineAt": "2026-06-17T08:56:52.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Fun-ASR-Flash-2026-06-15",
-      "docUrl": "https://help.aliyun.com/document_detail/2979031.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location --request POST 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \\\n     --header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n     --header \"Content-Type: application/json\" \\\n     --header \"X-DashScope-SSE: enable\" \\\n     --data '{\n    \"model\": \"fun-asr-flash-2026-06-15\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"type\": \"input_audio\",\n                        \"input_audio\": {\n                            \"data\": \"https://xxx.wav\"\n                        }\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"format\": \"wav\",\n        \"sample_rate\": \"16000\"\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/2869541.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-restful-api"
           }
         }
       }

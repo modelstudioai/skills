@@ -47,7 +47,7 @@
       "latestOnlineAt": "2025-09-23T11:05:02.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Fun-ASR实时语音识别",
-      "docUrl": "https://help.aliyun.com/document_detail/2842554.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide",
       "samples": {
         "dashscope": {
           "default": {
@@ -104,7 +104,7 @@
       "latestOnlineAt": "2026-02-12T11:34:14.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Fun-ASR-Flash-8k实时语音识别",
-      "docUrl": "https://help.aliyun.com/document_detail/2842554.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide",
       "category": "Audio",
       "samples": {
         "dashscope": {

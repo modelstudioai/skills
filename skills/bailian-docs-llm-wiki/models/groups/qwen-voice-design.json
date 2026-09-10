@@ -55,7 +55,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-Voice-Design",
-      "docUrl": "https://help.aliyun.com/document_detail/3000986.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/voice-design-user-guide",
       "samples": {
         "dashscope": {
           "default": {

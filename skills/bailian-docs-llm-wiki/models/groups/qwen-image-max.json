@@ -60,7 +60,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-Image-Max",
-      "docUrl": "https://help.aliyun.com/document_detail/2975126.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-image-api",
       "samples": {
         "dashscope": {
           "default": {

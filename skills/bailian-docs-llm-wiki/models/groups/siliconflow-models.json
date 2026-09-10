@@ -69,12 +69,12 @@
       "maxInputTokens": 163840,
       "inferenceProvider": "siliconflow",
       "name": "SiliconFlow DeepSeek-V3.2",
-      "docUrl": "https://help.aliyun.com/document_detail/3014912.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/siliconflow-deepseek-api",
       "samples": {
         "openai": {
           "completionsAPI": {
             "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"siliconflow/deepseek-v3.2\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
-            "docUrl": "https://help.aliyun.com/document_detail/3014912.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/siliconflow-deepseek-api"
           }
         }
       }
@@ -146,12 +146,12 @@
       "maxInputTokens": 163840,
       "inferenceProvider": "siliconflow",
       "name": "SiliconFlow DeepSeek-V3.1-Terminus",
-      "docUrl": "https://help.aliyun.com/document_detail/3014912.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/siliconflow-deepseek-api",
       "samples": {
         "openai": {
           "completionsAPI": {
             "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"siliconflow/deepseek-v3.1-terminus\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
-            "docUrl": "https://help.aliyun.com/document_detail/3014912.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/siliconflow-deepseek-api"
           }
         }
       }
@@ -222,12 +222,12 @@
       "maxInputTokens": 163840,
       "inferenceProvider": "siliconflow",
       "name": "SiliconFlow DeepSeek-V3-0324",
-      "docUrl": "https://help.aliyun.com/document_detail/3014912.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/siliconflow-deepseek-api",
       "samples": {
         "openai": {
           "completionsAPI": {
             "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"siliconflow/deepseek-v3-0324\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
-            "docUrl": "https://help.aliyun.com/document_detail/3014912.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/siliconflow-deepseek-api"
           }
         }
       }
@@ -300,12 +300,12 @@
       "offlineInfo": {},
       "inferenceProvider": "siliconflow",
       "name": "SiliconFlow DeepSeek-R1-0528",
-      "docUrl": "https://help.aliyun.com/document_detail/3014912.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/siliconflow-deepseek-api",
       "samples": {
         "openai": {
           "completionsAPI": {
             "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"siliconflow/deepseek-r1-0528\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
-            "docUrl": "https://help.aliyun.com/document_detail/3014912.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/siliconflow-deepseek-api"
           }
         }
       }

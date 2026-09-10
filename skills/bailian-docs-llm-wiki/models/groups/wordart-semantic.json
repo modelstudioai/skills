@@ -41,7 +41,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "WordArt锦书-文字变形",
-      "docUrl": "https://help.aliyun.com/document_detail/2712513.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/word-transformer",
       "samples": {
         "dashscope": {
           "default": {

@@ -51,13 +51,13 @@
       "latestOnlineAt": "2026-08-28T09:22:55.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-MT-Image-2.0",
-      "docUrl": "https://help.aliyun.com/document_detail/2977163.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-mt-image-api",
       "category": "Visual",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"qwen-mt-image-2.0\",\n    \"input\": {\n        \"image_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260817/jgnwiv/9367cff1-f8fd-9c97-8bf7-4c913a51ae6f_qwen_image3_serving_output_0.png\",\n        \"source_lang\": \"zh\",\n        \"target_lang\": \"en\"\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/2977163.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-mt-image-api"
           }
         }
       }
@@ -116,7 +116,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-MT-Image",
-      "docUrl": "https://help.aliyun.com/document_detail/2977163.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-mt-image-api",
       "samples": {
         "dashscope": {
           "default": {

@@ -137,7 +137,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "AI试衣OutfitAnyone-图片精修",
-      "docUrl": "https://help.aliyun.com/document_detail/2796663.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/ai-fitting-picture-finishing-api-details",
       "samples": {
         "dashscope": {
           "default": {

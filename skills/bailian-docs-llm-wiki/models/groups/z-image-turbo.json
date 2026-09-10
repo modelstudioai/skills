@@ -54,7 +54,7 @@
       "latestOnlineAt": "2025-12-18T06:43:39.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Z-Image-Turbo",
-      "docUrl": "https://help.aliyun.com/document_detail/3002354.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/z-image-api-reference",
       "samples": {
         "dashscope": {
           "default": {

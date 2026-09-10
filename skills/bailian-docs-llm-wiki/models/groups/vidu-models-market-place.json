@@ -61,7 +61,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n   -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-ad_reference2video\",\n       \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"size\": \"1280*720\",\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026200.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference"
           }
         }
       }
@@ -125,7 +125,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n   -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-drama_reference2video\",\n       \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"size\": \"1280*720\",\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026200.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference"
           }
         }
       }
@@ -187,13 +187,13 @@
       "latestOnlineAt": "2026-07-09T07:29:54.000+00:00",
       "inferenceProvider": "vidu",
       "name": "ViduQ3-Pro-fast_img2video",
-      "docUrl": "https://help.aliyun.com/document_detail/3026198.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-to-video-api-reference",
       "category": "Third-party",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-pro-fast_img2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp\"\n            }\n        ],\n        \"prompt\": \"镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026198.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-to-video-api-reference"
           }
         }
       }
@@ -272,7 +272,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-pro_img2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp\"\n            }\n        ],\n        \"prompt\": \"镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026198.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-to-video-api-reference"
           }
         }
       }
@@ -352,7 +352,7 @@
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-pro_text2video\",\n    \"input\": {\n        \"prompt\": \"一只小猫在月光下奔跑\"\n    },\n    \"parameters\": {\n        \"size\": \"960*528\",\n        \"resolution\": \"540P\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
             "python": "from http import HTTPStatus\nfrom dashscope import VideoSynthesis\nimport dashscope\nimport os\n\n# 以下为北京地域URL\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\ndef sample_sync_call_t2v():\n    # call sync api, will return the result\n    print('please wait...')\n    rsp = VideoSynthesis.call(api_key=api_key,\n                              model='vidu/viduq3-turbo_text2video',\n                              prompt='一只小猫在月光下奔跑',\n                              size='960*528',\n                              duration=5,\n                              resolution='540P',\n                              watermark=True)\n    print(rsp)\n    if rsp.status_code == HTTPStatus.OK:\n        print(rsp.output.video_url)\n    else:\n        print('Failed, status_code: %s, code: %s, message: %s' %\n              (rsp.status_code, rsp.code, rsp.message))\n\n\nif __name__ == '__main__':\n    sample_sync_call_t2v()",
             "java": "// Copyright (c) Alibaba, Inc. and its affiliates.\n\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.JsonUtils;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Text2Video {\n\n    static {\n        // 以下为北京地域url\n        Constants.baseHttpApiUrl = \"https://dashscope.aliyuncs.com/api/v1\";\n    }\n\n    // 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\n    public static String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n    /**\n     * Create a video compositing task and wait for the task to complete.\n     */\n    public static void text2Video() throws ApiException, NoApiKeyException, InputRequiredException {\n        VideoSynthesis vs = new VideoSynthesis();\n        VideoSynthesisParam param =\n                VideoSynthesisParam.builder()\n                        .apiKey(apiKey)\n                        .model(\"vidu/viduq3-turbo_text2video\")\n                        .prompt(\"一只小猫在月光下奔跑\")\n                        .size(\"960*528\")\n                        .resolution(\"540P\")\n                        .duration(5)\n                        .watermark(true)\n                        .build();\n        System.out.println(\"please wait...\");\n        VideoSynthesisResult result = vs.call(param);\n        System.out.println(JsonUtils.toJson(result));\n    }\n\n    public static void main(String[] args) {\n        try {\n            text2Video();\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}",
-            "docUrl": "https://help.aliyun.com/document_detail/3026197.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-text-to-video-api-reference"
           }
         }
       }
@@ -431,7 +431,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-pro_start-end2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/first_frame.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/last_frame.png\"\n            }\n        ],\n        \"prompt\": \"一只小猫从窗台向下跳跃，轻盈地落在沙发上，然后好奇地环顾四周。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"540P\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026199.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-keyframe-to-video-api-reference"
           }
         }
       }
@@ -510,7 +510,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-turbo_img2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp\"\n            }\n        ],\n        \"prompt\": \"镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026198.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-to-video-api-reference"
           }
         }
       }
@@ -590,7 +590,7 @@
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-turbo_text2video\",\n    \"input\": {\n        \"prompt\": \"一只小猫在月光下奔跑\"\n    },\n    \"parameters\": {\n        \"size\": \"960*528\",\n        \"resolution\": \"540P\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
             "python": "from http import HTTPStatus\nfrom dashscope import VideoSynthesis\nimport dashscope\nimport os\n\n# 以下为北京地域URL\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\ndef sample_sync_call_t2v():\n    # call sync api, will return the result\n    print('please wait...')\n    rsp = VideoSynthesis.call(api_key=api_key,\n                              model='vidu/viduq3-turbo_text2video',\n                              prompt='一只小猫在月光下奔跑',\n                              size='960*528',\n                              duration=5,\n                              resolution='540P',\n                              watermark=True)\n    print(rsp)\n    if rsp.status_code == HTTPStatus.OK:\n        print(rsp.output.video_url)\n    else:\n        print('Failed, status_code: %s, code: %s, message: %s' %\n              (rsp.status_code, rsp.code, rsp.message))\n\n\nif __name__ == '__main__':\n    sample_sync_call_t2v()",
             "java": "// Copyright (c) Alibaba, Inc. and its affiliates.\n\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.JsonUtils;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Text2Video {\n\n    static {\n        // 以下为北京地域url\n        Constants.baseHttpApiUrl = \"https://dashscope.aliyuncs.com/api/v1\";\n    }\n\n    // 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\n    public static String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n    /**\n     * Create a video compositing task and wait for the task to complete.\n     */\n    public static void text2Video() throws ApiException, NoApiKeyException, InputRequiredException {\n        VideoSynthesis vs = new VideoSynthesis();\n        VideoSynthesisParam param =\n                VideoSynthesisParam.builder()\n                        .apiKey(apiKey)\n                        .model(\"vidu/viduq3-turbo_text2video\")\n                        .prompt(\"一只小猫在月光下奔跑\")\n                        .size(\"960*528\")\n                        .resolution(\"540P\")\n                        .duration(5)\n                        .watermark(true)\n                        .build();\n        System.out.println(\"please wait...\");\n        VideoSynthesisResult result = vs.call(param);\n        System.out.println(JsonUtils.toJson(result));\n    }\n\n    public static void main(String[] args) {\n        try {\n            text2Video();\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}",
-            "docUrl": "https://help.aliyun.com/document_detail/3026197.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-text-to-video-api-reference"
           }
         }
       }
@@ -669,7 +669,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-turbo_start-end2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/first_frame.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/last_frame.png\"\n            }\n        ],\n        \"prompt\": \"一只小猫从窗台向下跳跃，轻盈地落在沙发上，然后好奇地环顾四周。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"540P\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026199.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-keyframe-to-video-api-reference"
           }
         }
       }
@@ -748,7 +748,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq2-pro_img2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp\"\n            }\n        ],\n        \"prompt\": \"镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026198.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-to-video-api-reference"
           }
         }
       }
@@ -827,7 +827,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq2-pro_start-end2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/first_frame.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/last_frame.png\"\n            }\n        ],\n        \"prompt\": \"一只小猫从窗台向下跳跃，轻盈地落在沙发上，然后好奇地环顾四周。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"540P\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026199.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-keyframe-to-video-api-reference"
           }
         }
       }
@@ -907,7 +907,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n   -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq2-pro_reference2video\",\n       \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"size\": \"1280*720\",\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026200.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference"
           }
         }
       }
@@ -986,7 +986,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq2-turbo_img2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp\"\n            }\n        ],\n        \"prompt\": \"镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026198.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-to-video-api-reference"
           }
         }
       }
@@ -1066,7 +1066,7 @@
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq2_text2video\",\n    \"input\": {\n        \"prompt\": \"一只小猫在月光下奔跑\"\n    },\n    \"parameters\": {\n        \"size\": \"960*528\",\n        \"resolution\": \"540P\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
             "python": "from http import HTTPStatus\nfrom dashscope import VideoSynthesis\nimport dashscope\nimport os\n\n# 以下为北京地域URL\ndashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'\n\n# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\ndef sample_sync_call_t2v():\n    # call sync api, will return the result\n    print('please wait...')\n    rsp = VideoSynthesis.call(api_key=api_key,\n                              model='vidu/viduq3-turbo_text2video',\n                              prompt='一只小猫在月光下奔跑',\n                              size='960*528',\n                              duration=5,\n                              resolution='540P',\n                              watermark=True)\n    print(rsp)\n    if rsp.status_code == HTTPStatus.OK:\n        print(rsp.output.video_url)\n    else:\n        print('Failed, status_code: %s, code: %s, message: %s' %\n              (rsp.status_code, rsp.code, rsp.message))\n\n\nif __name__ == '__main__':\n    sample_sync_call_t2v()",
             "java": "// Copyright (c) Alibaba, Inc. and its affiliates.\n\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesis;\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisParam;\nimport com.alibaba.dashscope.aigc.videosynthesis.VideoSynthesisResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.InputRequiredException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.JsonUtils;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic class Text2Video {\n\n    static {\n        // 以下为北京地域url\n        Constants.baseHttpApiUrl = \"https://dashscope.aliyuncs.com/api/v1\";\n    }\n\n    // 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=\"sk-xxx\"\n    public static String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n    /**\n     * Create a video compositing task and wait for the task to complete.\n     */\n    public static void text2Video() throws ApiException, NoApiKeyException, InputRequiredException {\n        VideoSynthesis vs = new VideoSynthesis();\n        VideoSynthesisParam param =\n                VideoSynthesisParam.builder()\n                        .apiKey(apiKey)\n                        .model(\"vidu/viduq3-turbo_text2video\")\n                        .prompt(\"一只小猫在月光下奔跑\")\n                        .size(\"960*528\")\n                        .resolution(\"540P\")\n                        .duration(5)\n                        .watermark(true)\n                        .build();\n        System.out.println(\"please wait...\");\n        VideoSynthesisResult result = vs.call(param);\n        System.out.println(JsonUtils.toJson(result));\n    }\n\n    public static void main(String[] args) {\n        try {\n            text2Video();\n        } catch (ApiException | NoApiKeyException | InputRequiredException e) {\n            System.out.println(e.getMessage());\n        }\n        System.exit(0);\n    }\n}",
-            "docUrl": "https://help.aliyun.com/document_detail/3026197.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-text-to-video-api-reference"
           }
         }
       }
@@ -1145,7 +1145,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq2-turbo_start-end2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/first_frame.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/last_frame.png\"\n            }\n        ],\n        \"prompt\": \"一只小猫从窗台向下跳跃，轻盈地落在沙发上，然后好奇地环顾四周。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"540P\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026199.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-keyframe-to-video-api-reference"
           }
         }
       }
@@ -1224,7 +1224,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n   -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq2_reference2video\",\n       \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"size\": \"1280*720\",\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026200.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference"
           }
         }
       }
@@ -1302,7 +1302,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n   -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3_reference2video\",\n       \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"size\": \"1280*720\",\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026200.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference"
           }
         }
       }
@@ -1380,7 +1380,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n   -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-turbo_reference2video\",\n       \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"size\": \"1280*720\",\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026200.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference"
           }
         }
       }
@@ -1400,6 +1400,12 @@
       "provider": "vidu",
       "model": "vidu/viduq3-mix_reference2video",
       "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.46875",
+          "type": "video_ratio_540p",
+          "priceName": "视频生成（540P）"
+        },
         {
           "priceUnit": "每秒",
           "price": "0.78125",
@@ -1446,7 +1452,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n   -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq3-mix_reference2video\",\n       \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"size\": \"1280*720\",\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026200.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference"
           }
         }
       }
@@ -1512,7 +1518,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"vidu/viduq2-pro-fast_img2video\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp\"\n            }\n        ],\n        \"prompt\": \"镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。\"\n    },\n    \"parameters\": {\n        \"duration\": 5,\n        \"resolution\": \"720P\",\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3026198.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-to-video-api-reference"
           }
         }
       }

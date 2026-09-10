@@ -42,7 +42,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "WordArt锦书-文字纹理生成",
-      "docUrl": "https://help.aliyun.com/document_detail/2712510.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/fill-texture-effect-api",
       "samples": {
         "dashscope": {
           "default": {

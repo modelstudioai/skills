@@ -61,7 +61,7 @@
       "latestOnlineAt": "2025-09-23T09:09:49.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "视觉向量-flash",
-      "docUrl": "https://help.aliyun.com/document_detail/2712517.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/multimodal-embedding-api-reference",
       "samples": {
         "dashscope": {
           "default": {
@@ -131,7 +131,7 @@
       "latestOnlineAt": "2025-09-23T09:09:31.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "视觉向量-plus",
-      "docUrl": "https://help.aliyun.com/document_detail/2712517.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/multimodal-embedding-api-reference",
       "samples": {
         "dashscope": {
           "default": {
@@ -204,14 +204,14 @@
       "maxInputTokens": 512,
       "inferenceProvider": "aliyun-bailian",
       "name": "通用多模态向量",
-      "docUrl": "https://help.aliyun.com/document_detail/2712517.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/multimodal-embedding-api-reference",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"multimodal-embedding-v1\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
             "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"multimodal-embedding-v1\",\ninput=input_texts\n)\nprint(resp)",
             "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"multimodal-embedding-v1\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}",
-            "docUrl": "https://help.aliyun.com/document_detail/2712515.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-embedding-synchronous-api"
           }
         }
       }
