@@ -80,13 +80,13 @@
       "maxInputTokens": 16384,
       "inferenceProvider": "aliyun-bailian",
       "name": "千问实时语音大模型 （标准版）",
-      "docUrl": "https://help.aliyun.com/document_detail/3041584.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides",
       "category": "Audio",
       "samples": {
         "dashscope": {
           "default": {
             "python": "import asyncio\nimport base64\nimport json\nimport os\nimport pyaudio\nimport websockets\n\nAPI_KEY = os.environ[\"DASHSCOPE_API_KEY\"]\nURL = \"wss://[workspace-id].cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen-audio-3.0-realtime-plus\"\n\npya = pyaudio.PyAudio()\nmic = pya.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True)\nspk = pya.open(format=pyaudio.paInt16, channels=1, rate=24000, output=True)\n\nasync def main():\n    headers = {\"Authorization\": f\"Bearer {API_KEY}\"}\n    async with websockets.connect(URL, additional_headers=headers) as ws:\n        await ws.send(json.dumps({\n            \"type\": \"session.update\",\n            \"session\": {\n                \"modalities\": [\"text\", \"audio\"],\n                \"voice\": \"longanqian\",\n                \"turn_detection\": {\n                    \"type\": \"server_vad\",\n                    \"threshold\": 0.5,\n                    \"silence_duration_ms\": 500\n                }\n            }\n        }))\n\n        async def send_audio():\n            while True:\n                data = await asyncio.to_thread(mic.read, 3200, False)\n                await ws.send(json.dumps({\n                    \"type\": \"input_audio_buffer.append\",\n                    \"audio\": base64.b64encode(data).decode()\n                }))\n                await asyncio.sleep(0.02)\n\n        async def recv_events():\n            async for msg in ws:\n                event = json.loads(msg)\n                t = event[\"type\"]\n                if t == \"response.audio.delta\":\n                    audio = base64.b64decode(event[\"delta\"])\n                    await asyncio.to_thread(spk.write, audio)\n                elif t == \"conversation.item.input_audio_transcription.completed\":\n                    print(f\"[You] {event['transcript']}\")\n                elif t == \"response.audio_transcript.done\":\n                    print(f\"[AI] {event['transcript']}\")\n                elif t == \"error\":\n                    print(f\"[Error] {event['error']['message']}\")\n\n        await asyncio.gather(send_audio(), recv_events())\n\nif __name__ == \"__main__\":\n    try:\n        asyncio.run(main())\n    except KeyboardInterrupt:\n        mic.close()\n        spk.close()\n        pya.terminate()\n        print(\"\\nSession ended.\")",
-            "docUrl": "https://help.aliyun.com/document_detail/3041584.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides"
           }
         }
       }

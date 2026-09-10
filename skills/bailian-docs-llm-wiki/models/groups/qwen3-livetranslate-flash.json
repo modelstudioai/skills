@@ -87,7 +87,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen3-LiveTranslate-Flash",
-      "docUrl": "https://help.aliyun.com/document_detail/2999748.html"
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen3-livetranslate-flash"
     }
   ]
 }

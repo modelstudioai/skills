@@ -53,7 +53,7 @@
       "latestOnlineAt": "2026-04-22T16:00:00.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-Image-2.0-Pro",
-      "docUrl": "https://help.aliyun.com/document_detail/2976416.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-image-edit-api",
       "samples": {
         "dashscope": {
           "default": {

@@ -61,13 +61,13 @@
       "latestOnlineAt": "2026-07-09T07:27:07.000+00:00",
       "inferenceProvider": "vidu",
       "name": "Vidu-image_reference2image",
-      "docUrl": "https://help.aliyun.com/document_detail/3045893.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-generation-api-reference",
       "category": "Third-party",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"vidu/vidu-image_reference2image\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"一间有着精致窗户的花店,漂亮的木质门,摆放着花朵\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n      \"size\":\"1024*1024\"\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3045893.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-generation-api-reference"
           }
         }
       }
@@ -131,13 +131,13 @@
       "latestOnlineAt": "2026-08-24T02:33:08.000+00:00",
       "inferenceProvider": "vidu",
       "name": "Vidu-image-pro_reference2image",
-      "docUrl": "https://help.aliyun.com/document_detail/3045893.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-generation-api-reference",
       "category": "Third-party",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"vidu/vidu-image-pro_reference2image\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"一间有着精致窗户的花店,漂亮的木质门,摆放着花朵\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n      \"size\":\"1024*1024\"\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3045893.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-generation-api-reference"
           }
         }
       }
@@ -201,13 +201,13 @@
       "latestOnlineAt": "2026-08-24T02:33:21.000+00:00",
       "inferenceProvider": "vidu",
       "name": "Vidu-image-lite_reference2image",
-      "docUrl": "https://help.aliyun.com/document_detail/3045893.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-generation-api-reference",
       "category": "Third-party",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"vidu/vidu-image-lite_reference2image\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"一间有着精致窗户的花店,漂亮的木质门,摆放着花朵\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n      \"size\":\"1024*1024\"\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3045893.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-generation-api-reference"
           }
         }
       }
@@ -276,13 +276,13 @@
       "latestOnlineAt": "2026-07-09T07:27:39.000+00:00",
       "inferenceProvider": "vidu",
       "name": "ViduQ3-fast_reference2image",
-      "docUrl": "https://help.aliyun.com/document_detail/3045893.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-generation-api-reference",
       "category": "Third-party",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"vidu/viduq3-fast_reference2image\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"一间有着精致窗户的花店,漂亮的木质门,摆放着花朵\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n      \"size\":\"1024*1024\"\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3045893.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-generation-api-reference"
           }
         }
       }
@@ -351,13 +351,13 @@
       "latestOnlineAt": "2026-07-09T07:28:16.000+00:00",
       "inferenceProvider": "vidu",
       "name": "ViduQ2-Pro_reference2image",
-      "docUrl": "https://help.aliyun.com/document_detail/3045893.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-generation-api-reference",
       "category": "Third-party",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"vidu/viduq2-pro_reference2image\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"一间有着精致窗户的花店,漂亮的木质门,摆放着花朵\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n      \"size\":\"1024*1024\"\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3045893.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-generation-api-reference"
           }
         }
       }
@@ -412,13 +412,13 @@
       "latestOnlineAt": "2026-07-09T07:27:49.000+00:00",
       "inferenceProvider": "vidu",
       "name": "ViduQ2-fast_reference2image",
-      "docUrl": "https://help.aliyun.com/document_detail/3045893.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-generation-api-reference",
       "category": "Third-party",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"model\": \"vidu/viduq2-fast_reference2image\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"text\": \"一间有着精致窗户的花店,漂亮的木质门,摆放着花朵\"\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n      \"size\":\"1024*1024\"\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3045893.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-image-generation-api-reference"
           }
         }
       }

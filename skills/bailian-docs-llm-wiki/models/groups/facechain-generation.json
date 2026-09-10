@@ -41,7 +41,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "FaceChain人物写真生成",
-      "docUrl": "https://help.aliyun.com/document_detail/2712501.html"
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/facechain-generation"
     }
   ]
 }

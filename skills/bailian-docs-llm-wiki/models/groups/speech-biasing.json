@@ -34,7 +34,7 @@
       "latestOnlineAt": "2024-09-12T16:00:00.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "语音识别热词",
-      "docUrl": "https://help.aliyun.com/document_detail/2712535.html"
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-api-reference"
     }
   ]
 }

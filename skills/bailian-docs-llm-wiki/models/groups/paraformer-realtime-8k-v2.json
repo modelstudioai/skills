@@ -37,7 +37,7 @@
       "latestOnlineAt": "2024-12-31T08:01:43.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Paraformer实时语音识别-8k-v2",
-      "docUrl": "https://help.aliyun.com/document_detail/2712536.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-api-reference",
       "samples": {
         "dashscope": {
           "default": {

@@ -308,7 +308,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen3-VL-Flash",
-      "docUrl": "https://help.aliyun.com/document_detail/2845871.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vision",
       "samples": {
         "openai": {
           "default": {

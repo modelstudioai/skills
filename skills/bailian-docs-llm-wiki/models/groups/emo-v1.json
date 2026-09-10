@@ -49,7 +49,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "悦动人像EMO",
-      "docUrl": "https://help.aliyun.com/document_detail/2786461.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/emo-api",
       "samples": {
         "dashscope": {
           "default": {

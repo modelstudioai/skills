@@ -22,7 +22,7 @@
       "latestOnlineAt": "2024-06-21T02:47:24.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "鞋靴模特",
-      "docUrl": "https://help.aliyun.com/document_detail/2804662.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/shoe-model-api",
       "samples": {
         "dashscope": {
           "default": {

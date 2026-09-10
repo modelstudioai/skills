@@ -41,7 +41,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "表情包Emoji",
-      "docUrl": "https://help.aliyun.com/document_detail/2865374.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/emoji-api",
       "samples": {
         "dashscope": {
           "default": {

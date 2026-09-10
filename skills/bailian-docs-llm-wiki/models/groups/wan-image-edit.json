@@ -56,7 +56,7 @@
       "latestOnlineAt": "2026-04-01T03:48:10.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Wan2.7-Image",
-      "docUrl": "https://help.aliyun.com/document_detail/3026980.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/wan-image-generation-and-editing-api-reference",
       "category": "Wan",
       "samples": {
         "dashscope": {
@@ -64,7 +64,7 @@
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \\\n--header 'Content-Type: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--data '{\n    \"model\": \"wan2.7-image\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\"text\": \"电影感组图，记录同一只流浪橘猫，特征必须前后一致。第一张：春天，橘猫穿梭在盛开的樱花树下；第二张：夏天，橘猫在老街的树荫下乘凉避暑；第三张：秋天，橘猫踩在满地的金色落叶上；第四张：冬天，橘猫在雪地上走留下足迹。\"}\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"enable_sequential\": true,\n        \"n\": 4,\n        \"size\": \"2K\"\n    }\n}'\n",
             "python": "import os\nimport dashscope\nfrom dashscope.aigc.image_generation import ImageGeneration\nfrom dashscope.api_entities.dashscope_response import Message\n\ndashscope.base_http_api_url = 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1'\n\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\nmessage = Message(\n    role=\"user\",\n    content=[\n        {\n            \"text\": \"电影感组图，记录同一只流浪橘猫，特征必须前后一致。第一张：春天，橘猫穿梭在盛开的樱花树下；第二张：夏天，橘猫在老街的树荫下乘凉避暑；第三张：秋天，橘猫踩在满地的金色落叶上；第四张：冬天，橘猫在雪地上走留下足迹。\"\n        }\n    ]\n)\n\nprint(\"----sync call, please wait a moment----\")\nrsp = ImageGeneration.call(\n        model='wan2.7-image',\n        api_key=api_key,\n        messages=[message],\n        enable_sequential=True,\n        n=4,\n        size=\"2K\"\n    )\n\nprint(rsp)",
             "java": "import com.alibaba.dashscope.aigc.imagegeneration.*;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\nimport com.alibaba.dashscope.utils.Constants;\nimport com.alibaba.dashscope.utils.JsonUtils;\n\nimport java.util.Collections;\n\n\npublic class Main {\n\n    static {\n        Constants.baseHttpApiUrl = \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1\";\n    }\n    \n    static String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n    public static void basicCall() throws ApiException, NoApiKeyException, UploadFileException {\n        // 构建文本输入消息（支持文生组图以及图生组图，此处以文生组图为例）\n        ImageGenerationMessage message = ImageGenerationMessage.builder()\n                .role(\"user\")\n                .content(Collections.singletonList(\n                        Collections.singletonMap(\"text\", \"电影感组图，记录同一只流浪橘猫，特征必须前后一致。第一张：春天，橘猫穿梭在盛开的樱花树下；第二张：夏天，橘猫在老街的树荫下乘凉避暑；第三张：秋天，橘猫踩在满地的金色落叶上；第四张：冬天，橘猫在雪地上走留下足迹。\")\n                )).build();\n\n        ImageGenerationParam param = ImageGenerationParam.builder()\n                .apiKey(apiKey)\n                .model(\"wan2.7-image\")\n                .messages(Collections.singletonList(message))\n                .enableSequential(true)\n                .n(4)\n                .size(\"2K\")\n                .build();\n\n        ImageGeneration imageGeneration = new ImageGeneration();\n        ImageGenerationResult result = null;\n        try {\n            System.out.println(\"----sync call, please wait a moment----\");\n            result = imageGeneration.call(param);\n        } catch (ApiException | NoApiKeyException | UploadFileException e) {\n            throw new RuntimeException(e.getMessage());\n        }\n        System.out.println(JsonUtils.toJson(result));\n    }\n\n    public static void main(String[] args) {\n        try {\n            basicCall();\n        } catch (ApiException | NoApiKeyException | UploadFileException e) {\n            System.out.println(e.getMessage());\n        }\n    }\n}",
-            "docUrl": "https://help.aliyun.com/document_detail/3026980.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/wan-image-generation-and-editing-api-reference"
           }
         }
       }
@@ -126,7 +126,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "Wan2.7-Image-Pro",
-      "docUrl": "https://help.aliyun.com/document_detail/3026980.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/wan-image-generation-and-editing-api-reference",
       "category": "Wan",
       "samples": {
         "dashscope": {
@@ -134,7 +134,7 @@
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \\\n--header 'Content-Type: application/json' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--data '{\n    \"model\": \"wan2.7-image-pro\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\"text\": \"电影感组图，记录同一只流浪橘猫，特征必须前后一致。第一张：春天，橘猫穿梭在盛开的樱花树下；第二张：夏天，橘猫在老街的树荫下乘凉避暑；第三张：秋天，橘猫踩在满地的金色落叶上；第四张：冬天，橘猫在雪地上走留下足迹。\"}\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"enable_sequential\": true,\n        \"n\": 4,\n        \"size\": \"2K\"\n    }\n}'\n",
             "python": "import os\nimport dashscope\nfrom dashscope.aigc.image_generation import ImageGeneration\nfrom dashscope.api_entities.dashscope_response import Message\n\ndashscope.base_http_api_url = 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1'\n\napi_key = os.getenv(\"DASHSCOPE_API_KEY\")\n\nmessage = Message(\n    role=\"user\",\n    content=[\n        {\n            \"text\": \"电影感组图，记录同一只流浪橘猫，特征必须前后一致。第一张：春天，橘猫穿梭在盛开的樱花树下；第二张：夏天，橘猫在老街的树荫下乘凉避暑；第三张：秋天，橘猫踩在满地的金色落叶上；第四张：冬天，橘猫在雪地上走留下足迹。\"\n        }\n    ]\n)\n\nprint(\"----sync call, please wait a moment----\")\nrsp = ImageGeneration.call(\n        model='wan2.7-image-pro',\n        api_key=api_key,\n        messages=[message],\n        enable_sequential=True,\n        n=4,\n        size=\"2K\"\n    )\n\nprint(rsp)",
             "java": "import com.alibaba.dashscope.aigc.imagegeneration.*;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.exception.UploadFileException;\nimport com.alibaba.dashscope.utils.Constants;\nimport com.alibaba.dashscope.utils.JsonUtils;\n\nimport java.util.Collections;\n\n\npublic class Main {\n\n    static {\n        Constants.baseHttpApiUrl = \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1\";\n    }\n    \n    static String apiKey = System.getenv(\"DASHSCOPE_API_KEY\");\n\n    public static void basicCall() throws ApiException, NoApiKeyException, UploadFileException {\n        // 构建文本输入消息（支持文生组图以及图生组图，此处以文生组图为例）\n        ImageGenerationMessage message = ImageGenerationMessage.builder()\n                .role(\"user\")\n                .content(Collections.singletonList(\n                        Collections.singletonMap(\"text\", \"电影感组图，记录同一只流浪橘猫，特征必须前后一致。第一张：春天，橘猫穿梭在盛开的樱花树下；第二张：夏天，橘猫在老街的树荫下乘凉避暑；第三张：秋天，橘猫踩在满地的金色落叶上；第四张：冬天，橘猫在雪地上走留下足迹。\")\n                )).build();\n\n        ImageGenerationParam param = ImageGenerationParam.builder()\n                .apiKey(apiKey)\n                .model(\"wan2.7-image-pro\")\n                .messages(Collections.singletonList(message))\n                .enableSequential(true)\n                .n(4)\n                .size(\"2K\")\n                .build();\n\n        ImageGeneration imageGeneration = new ImageGeneration();\n        ImageGenerationResult result = null;\n        try {\n            System.out.println(\"----sync call, please wait a moment----\");\n            result = imageGeneration.call(param);\n        } catch (ApiException | NoApiKeyException | UploadFileException e) {\n            throw new RuntimeException(e.getMessage());\n        }\n        System.out.println(JsonUtils.toJson(result));\n    }\n\n    public static void main(String[] args) {\n        try {\n            basicCall();\n        } catch (ApiException | NoApiKeyException | UploadFileException e) {\n            System.out.println(e.getMessage());\n        }\n    }\n}",
-            "docUrl": "https://help.aliyun.com/document_detail/3026980.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/wan-image-generation-and-editing-api-reference"
           }
         }
       }
@@ -193,7 +193,7 @@
       "latestOnlineAt": "2025-12-15T11:55:32.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Wan2.6-Image",
-      "docUrl": "https://help.aliyun.com/document_detail/3001143.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/wan-image-generation-api-reference",
       "samples": {
         "dashscope": {
           "default": {
@@ -257,7 +257,7 @@
       "latestOnlineAt": "2025-09-23T13:38:14.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Wan2.5-I2I-Preview",
-      "docUrl": "https://help.aliyun.com/document_detail/2982258.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/wan2-5-image-edit-api-reference",
       "samples": {
         "dashscope": {
           "default": {
@@ -299,7 +299,7 @@
       "latestOnlineAt": "2025-03-25T07:22:03.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Wan2.1-ImageEdit",
-      "docUrl": "https://help.aliyun.com/document_detail/2868981.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/wanx-image-edit-api-reference",
       "samples": {
         "dashscope": {
           "default": {

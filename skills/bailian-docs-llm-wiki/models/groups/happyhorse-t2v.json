@@ -66,13 +66,13 @@
       "latestOnlineAt": "2026-06-16T06:14:47.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "HappyHorse-1.1-T2V",
-      "docUrl": "https://help.aliyun.com/document_detail/3029820.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/happyhorse-text-to-video-api-reference",
       "category": "Visual",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"happyhorse-1.1-t2v\",\n    \"input\": {\n        \"prompt\": \"一座由硬纸板和瓶盖搭建的微型城市，在夜晚焕发出生机。一列硬纸板火车缓缓驶过，小灯点缀其间，照亮前路。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"ratio\": \"16:9\",\n        \"duration\": 5\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3029820.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/happyhorse-text-to-video-api-reference"
           }
         }
       }
@@ -137,12 +137,12 @@
       "latestOnlineAt": "2026-04-21T09:03:16.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "HappyHorse-1.0-T2V",
-      "docUrl": "https://help.aliyun.com/document_detail/3029820.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/happyhorse-text-to-video-api-reference",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"happyhorse-1.0-t2v\",\n    \"input\": {\n        \"prompt\": \"一座由硬纸板和瓶盖搭建的微型城市，在夜晚焕发出生机。一列硬纸板火车缓缓驶过，小灯点缀其间，照亮前路。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"ratio\": \"16:9\",\n        \"duration\": 5\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3029820.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/happyhorse-text-to-video-api-reference"
           }
         }
       }

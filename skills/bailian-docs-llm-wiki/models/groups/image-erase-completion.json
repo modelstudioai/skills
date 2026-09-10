@@ -22,7 +22,7 @@
       "latestOnlineAt": "2024-08-19T01:17:02.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "图像擦除补全",
-      "docUrl": "https://help.aliyun.com/document_detail/2840907.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/image-erase-completion-api-reference",
       "samples": {
         "dashscope": {
           "default": {

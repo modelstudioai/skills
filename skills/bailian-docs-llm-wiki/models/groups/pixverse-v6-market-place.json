@@ -140,13 +140,13 @@
       "latestOnlineAt": "2026-08-11T10:09:32.000+00:00",
       "inferenceProvider": "pixverse",
       "name": "PixVerse-V6-r2v-omni",
-      "docUrl": "https://help.aliyun.com/document_detail/3025612.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/pixverse-reference-to-video-api-reference",
       "category": "Third-party",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v6-r2v-omni\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"video_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qigswt/wan-r2v-role2.mp4\",\n                \"ref_name\": \"参考视频\"\n            },\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\",\n                \"ref_name\": \"男人\"\n            },\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\",\n                \"ref_name\": \"咖啡厅\"\n            }\n        ],\n        \"prompt\": \"@男人 在@咖啡厅 中弹吉他 参考@参考视频\"\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"aspect_ratio\": \"16:9\",\n        \"duration\": 0,\n        \"audio\": true,\n        \"watermark\": false\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3025612.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/pixverse-reference-to-video-api-reference"
           }
         }
       }
@@ -257,12 +257,12 @@
       "latestOnlineAt": "2026-04-01T07:48:41.000+00:00",
       "inferenceProvider": "pixverse",
       "name": "PixVerse-V6-t2v",
-      "docUrl": "○ https://help.aliyun.com/document_detail/3025608.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/pixverse-text-to-video-api-reference",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v6-t2v\",\n    \"input\": {\n        \"prompt\": \"一只小猫在月光下奔跑\"\n    },\n    \"parameters\": {\n        \"size\": \"1280*720\",\n        \"duration\": 5,\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3025608.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/pixverse-text-to-video-api-reference"
           }
         }
       }
@@ -372,7 +372,7 @@
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v6-r2v\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260320/knsple/wan-r2v-role-frame.jpg\"\n            },\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/qpzxps/wan-r2v-object4.png\"\n            },\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260129/wfjikw/wan-r2v-backgroud5.png\"\n            }\n        ],\n        \"prompt\": \"男人坐在靠窗的椅子上，手持吉他，在咖啡厅旁演奏一首舒缓的美国乡村民谣\"\n    },\n    \"parameters\": {\n        \"size\": \"1280*720\",\n        \"duration\": 5,\n        \"audio\": false,\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3025612.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/pixverse-reference-to-video-api-reference"
           }
         }
       }
@@ -484,12 +484,12 @@
       "latestOnlineAt": "2026-04-01T07:48:31.000+00:00",
       "inferenceProvider": "pixverse",
       "name": "PixVerse-V6-kf2v",
-      "docUrl": "https://help.aliyun.com/document_detail/3025612.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/pixverse-reference-to-video-api-reference",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v6-kf2v\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"first_frame\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/first_frame.png\"\n            },\n            {\n                \"type\": \"last_frame\",\n                \"url\": \"https://wanx.alicdn.com/material/20250318/last_frame.png\"\n            }\n        ],\n        \"prompt\": \"一只小猫从窗台向下跳跃，轻盈地落在沙发上，然后好奇地环顾四周。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"duration\": 5,\n        \"watermark\": false\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3025611.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/pixverse-keyframe-to-video-api-reference"
           }
         }
       }
@@ -601,12 +601,12 @@
       "latestOnlineAt": "2026-04-01T07:48:50.000+00:00",
       "inferenceProvider": "pixverse",
       "name": "PixVerse-V6-it2v",
-      "docUrl": "https://help.aliyun.com/document_detail/3025609.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/pixverse-image-to-video-api-reference",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"pixverse/pixverse-v6-it2v\",\n    \"input\": {\n        \"media\": [\n            {\n                \"type\": \"image_url\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp\"\n            }\n        ],\n        \"prompt\": \"镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"duration\": 5,\n        \"audio\": false,\n        \"watermark\": true\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3025609.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/pixverse-image-to-video-api-reference"
           }
         }
       }

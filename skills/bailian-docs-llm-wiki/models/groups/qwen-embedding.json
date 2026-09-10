@@ -68,7 +68,7 @@
       "maxInputTokens": 131072,
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen3.7-通用文本向量",
-      "docUrl": "https://help.aliyun.com/document_detail/2842587.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/embedding",
       "category": "Embeddings",
       "samples": {
         "dashscope": {
@@ -76,7 +76,7 @@
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"qwen3.7-text-embedding\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
             "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"qwen3.7-text-embedding\",\ninput=input_texts\n)\nprint(resp)",
             "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"qwen3.7-text-embedding\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}",
-            "docUrl": "https://help.aliyun.com/document_detail/2712515.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-embedding-synchronous-api"
           }
         }
       }
@@ -143,7 +143,7 @@
       "maxInputTokens": 131072,
       "inferenceProvider": "aliyun-bailian",
       "name": "千问3.7-通用文本向量-flash",
-      "docUrl": "https://help.aliyun.com/document_detail/2842587.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/embedding",
       "category": "Embeddings",
       "samples": {
         "dashscope": {
@@ -151,7 +151,7 @@
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"qwen3.7-text-embedding-flash\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
             "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"qwen3.7-text-embedding-flash\",\ninput=input_texts\n)\nprint(resp)",
             "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"qwen3.7-text-embedding-flash\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}",
-            "docUrl": "https://help.aliyun.com/document_detail/2712515.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-embedding-synchronous-api"
           }
         }
       }
@@ -218,7 +218,7 @@
       "offlineInfo": {},
       "inferenceProvider": "aliyun-bailian",
       "name": "通用文本向量-v4",
-      "docUrl": "https://help.aliyun.com/document_detail/2842587.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/embedding",
       "category": "Embeddings",
       "samples": {
         "dashscope": {
@@ -226,7 +226,7 @@
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-v4\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
             "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-v4\",\ninput=input_texts\n)\nprint(resp)",
             "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-v4\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}",
-            "docUrl": "https://help.aliyun.com/document_detail/2712515.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-embedding-synchronous-api"
           }
         }
       }
@@ -288,14 +288,14 @@
       "latestOnlineAt": "2024-07-12T09:44:51.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "通用文本向量-v3",
-      "docUrl": "https://help.aliyun.com/document_detail/2712515.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-embedding-synchronous-api",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-v3\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
             "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-v3\",\ninput=input_texts\n)\nprint(resp)",
             "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-v3\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}",
-            "docUrl": "https://help.aliyun.com/document_detail/2712515.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-embedding-synchronous-api"
           }
         }
       }
@@ -357,14 +357,14 @@
       "latestOnlineAt": "2024-04-09T09:03:19.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "通用文本向量-v2",
-      "docUrl": "https://help.aliyun.com/document_detail/2712515.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-embedding-synchronous-api",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-v2\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
             "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-v2\",\ninput=input_texts\n)\nprint(resp)",
             "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-v2\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}",
-            "docUrl": "https://help.aliyun.com/document_detail/2712515.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-embedding-synchronous-api"
           }
         }
       }
@@ -426,14 +426,14 @@
       "latestOnlineAt": "2024-04-09T09:02:12.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "通用文本向量-v1",
-      "docUrl": "https://help.aliyun.com/document_detail/2712515.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-embedding-synchronous-api",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-v1\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
             "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-v1\",\ninput=input_texts\n)\nprint(resp)",
             "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-v1\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}",
-            "docUrl": "https://help.aliyun.com/document_detail/2712515.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-embedding-synchronous-api"
           }
         }
       }
@@ -469,14 +469,14 @@
       "latestOnlineAt": "2024-04-09T09:05:28.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "通用文本向量-async-v2",
-      "docUrl": "https://help.aliyun.com/document_detail/2712516.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-embedding-batch-api",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-async-v2\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
             "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-async-v2\",\ninput=input_texts\n)\nprint(resp)",
             "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-async-v2\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}",
-            "docUrl": "https://help.aliyun.com/document_detail/2712515.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-embedding-synchronous-api"
           }
         }
       }
@@ -512,14 +512,14 @@
       "latestOnlineAt": "2024-04-09T09:04:41.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "通用文本向量-async-v1",
-      "docUrl": "https://help.aliyun.com/document_detail/2712516.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-embedding-batch-api",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"text-embedding-async-v1\",\n\"input\": {\n\"texts\":[\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"] \n}'",
             "python": "import dashscope\nfrom http import HTTPStatus\ninput_texts = \"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\"\n\nresp = dashscope.TextEmbedding.call(\nmodel=\"text-embedding-async-v1\",\ninput=input_texts\n)\nprint(resp)",
             "java": "import java.util.Arrays;\nimport java.util.concurrent.Semaphore;\nimport com.alibaba.dashscope.common.ResultCallback;\nimport com.alibaba.dashscope.embeddings.TextEmbedding;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingParam;\nimport com.alibaba.dashscope.embeddings.TextEmbeddingResult;\nimport com.alibaba.dashscope.exception.ApiException;\nimport com.alibaba.dashscope.exception.NoApiKeyException;\nimport com.alibaba.dashscope.utils.Constants;\n\npublic final class Main {\npublic static void main(String[] args) {\ntry {\nTextEmbeddingParam param = TextEmbeddingParam\n.builder()\n.model(\"text-embedding-async-v1\") \n.texts(Arrays.asList(\"衣服的质量杠杠的，很漂亮，不枉我等了这么久啊，喜欢，以后还来这里买\")) \n.build();\nTextEmbedding textEmbedding = new TextEmbedding();\nTextEmbeddingResult result = textEmbedding.call(param);\n\nSystem.out.println(result);\n\n} catch (ApiException | NoApiKeyException e) {\nSystem.out.println(e.getMessage());\n}\n}\n}",
-            "docUrl": "https://help.aliyun.com/document_detail/2712515.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/text-embedding-synchronous-api"
           }
         }
       }

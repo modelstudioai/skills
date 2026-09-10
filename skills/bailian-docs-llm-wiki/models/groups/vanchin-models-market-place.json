@@ -65,17 +65,17 @@
       "versionTag": "MAJOR",
       "maxOutputTokens": 393216,
       "latestOnlineAt": "2026-08-24T02:11:05.000+00:00",
-      "contextWindow": 1048576,
+      "contextWindow": 1000000,
       "maxInputTokens": 1048576,
       "inferenceProvider": "vanchin",
       "name": "vanchin/deepseek-v4-pro-0813",
-      "docUrl": "https://help.aliyun.com/document_detail/3027089.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/deepseek-api-by-vanchin",
       "category": "Third-party",
       "samples": {
         "openai": {
           "completionsAPI": {
             "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"vanchin/deepseek-v4-pro-0813\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
-            "docUrl": "https://help.aliyun.com/document_detail/3027089.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/deepseek-api-by-vanchin"
           }
         }
       }
@@ -147,17 +147,17 @@
       "versionTag": "MAJOR",
       "maxOutputTokens": 393216,
       "latestOnlineAt": "2026-05-29T08:10:54.000+00:00",
-      "contextWindow": 1048576,
+      "contextWindow": 1000000,
       "maxInputTokens": 1048576,
       "offlineInfo": {},
       "inferenceProvider": "vanchin",
       "name": "vanchin/deepseek-v4-pro",
-      "docUrl": "https://help.aliyun.com/document_detail/3027089.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/deepseek-api-by-vanchin",
       "samples": {
         "openai": {
           "completionsAPI": {
             "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"vanchin/deepseek-v4-pro\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
-            "docUrl": "https://help.aliyun.com/document_detail/3027089.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/deepseek-api-by-vanchin"
           }
         }
       }
@@ -240,12 +240,12 @@
       "maxInputTokens": 98304,
       "inferenceProvider": "vanchin",
       "name": "Vanchin/DeepSeek-V3.2-think",
-      "docUrl": "https://help.aliyun.com/document_detail/3027089.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/deepseek-api-by-vanchin",
       "samples": {
         "openai": {
           "completionsAPI": {
             "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"vanchin/deepseek-v3.2-think\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
-            "docUrl": "https://help.aliyun.com/document_detail/3027089.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/deepseek-api-by-vanchin"
           }
         }
       }
@@ -326,12 +326,12 @@
       "maxInputTokens": 32768,
       "inferenceProvider": "vanchin",
       "name": "Vanchin/DeepSeek-V3.1-Terminus",
-      "docUrl": "https://help.aliyun.com/document_detail/3027089.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/deepseek-api-by-vanchin",
       "samples": {
         "openai": {
           "completionsAPI": {
             "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"vanchin/deepseek-v3.1-terminus\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
-            "docUrl": "https://help.aliyun.com/document_detail/3027089.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/deepseek-api-by-vanchin"
           }
         }
       }
@@ -413,12 +413,12 @@
       "maxInputTokens": 131072,
       "inferenceProvider": "vanchin",
       "name": "Vanchin/DeepSeek-V3",
-      "docUrl": "https://help.aliyun.com/document_detail/3027089.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/deepseek-api-by-vanchin",
       "samples": {
         "openai": {
           "completionsAPI": {
             "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"vanchin/deepseek-v3\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
-            "docUrl": "https://help.aliyun.com/document_detail/3027089.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/deepseek-api-by-vanchin"
           }
         }
       }
@@ -500,12 +500,12 @@
       "maxInputTokens": 98304,
       "inferenceProvider": "vanchin",
       "name": "Vanchin/DeepSeek-R1",
-      "docUrl": "https://help.aliyun.com/document_detail/3027089.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/deepseek-api-by-vanchin",
       "samples": {
         "openai": {
           "completionsAPI": {
             "python": "from openai import OpenAI\nimport os\n\nclient = OpenAI(\n    api_key=\"sk-xxx\",  # 替换为你的百炼API Key\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"vanchin/deepseek-r1\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁\"}],\n    extra_body={\"enable_thinking\": True},\n    stream=True,\n)\n\nfor chunk in completion:\n    if not chunk.choices:\n        continue\n    delta = chunk.choices[0].delta\n    if hasattr(delta, \"reasoning_content\") and delta.reasoning_content:\n        print(delta.reasoning_content, end=\"\", flush=True)\n    if hasattr(delta, \"content\") and delta.content:\n        print(delta.content, end=\"\", flush=True)",
-            "docUrl": "https://help.aliyun.com/document_detail/3027089.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/deepseek-api-by-vanchin"
           }
         }
       }
@@ -584,7 +584,7 @@
             "curl": "curl -X POST https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H \"Content-Type: application/json\" \\\n-d '{\n    \"model\": \"vanchin/deepseek-ocr\",\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\n                    \"type\": \"image_url\",\n                    \"image_url\": {\n                        \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\",\n                        \"detail\": \"high\"\n                    }\n                },\n                {\n                    \"type\": \"text\",\n                    \"text\": \"Read all the text in the image.\"\n                }\n            ]\n        }\n    ]\n}'",
             "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"vanchin/deepseek-ocr\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\n                    \"type\": \"image_url\",\n                    \"image_url\": {\n                        \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\",\n                        \"detail\": \"high\",\n                    },\n                },\n                {\n                    \"type\": \"text\",\n                    \"text\": \"Read all the text in the image.\",\n                },\n            ],\n        }\n    ],\n)\n\nprint(completion.choices[0].message.content)",
             "nodejs": "import OpenAI from \"openai\";\nimport process from 'process';\n\nconst openai = new OpenAI({\n    apiKey: process.env.DASHSCOPE_API_KEY,\n    baseURL: 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1'\n});\n\nasync function main() {\n    const completion = await openai.chat.completions.create({\n        model: 'vanchin/deepseek-ocr',\n        messages: [\n            {\n                role: 'user',\n                content: [\n                    {\n                        type: 'image_url',\n                        image_url: {\n                            url: 'https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg',\n                            detail: 'high',\n                        },\n                    },\n                    {\n                        type: 'text',\n                        text: 'Read all the text in the image.',\n                    },\n                ],\n            },\n        ],\n    });\n\n    console.log(completion.choices[0].message.content);\n}\n\nmain();",
-            "docUrl": "https://help.aliyun.com/document_detail/3027089.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/deepseek-api-by-vanchin"
           }
         }
       }

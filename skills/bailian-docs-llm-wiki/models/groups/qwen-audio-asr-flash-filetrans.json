@@ -47,13 +47,13 @@
       "latestOnlineAt": "2026-07-30T07:18:33.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "qwen-audio-3.0-asr-flash-filetrans",
-      "docUrl": "https://help.aliyun.com/document_detail/2979031.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide",
       "category": "Audio",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription' \\\n     --header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n     --header \"Content-Type: application/json\" \\\n     --header \"X-DashScope-Async: enable\" \\\n     --data '{\n    \"model\": \"qwen-audio-3.0-asr-flash-filetrans\",\n    \"input\": {\n        \"file_urls\": [\n            \"{YOUR_AUDIO_URL}\"\n        ]\n    },\n    \"parameters\": {\n        \"channel_id\": [0]\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/2979031.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide"
           }
         }
       }

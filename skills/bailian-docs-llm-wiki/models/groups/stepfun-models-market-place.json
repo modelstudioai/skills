@@ -78,7 +78,7 @@
       "offlineInfo": {},
       "inferenceProvider": "stepfun",
       "name": "stepfun/step-3.7-flash",
-      "docUrl": "https://help.aliyun.com/document_detail/3036697.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/stepfun",
       "samples": {
         "openai": {
           "default": {

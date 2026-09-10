@@ -50,7 +50,7 @@
       "latestOnlineAt": "2025-11-26T16:00:00.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen3-TTS-Flash-Realtime",
-      "docUrl": "https://help.aliyun.com/document_detail/2938790.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/realtime-tts-user-guide",
       "samples": {
         "dashscope": {
           "default": {

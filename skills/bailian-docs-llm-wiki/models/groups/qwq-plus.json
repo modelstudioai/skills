@@ -91,7 +91,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "QwQ-Plus",
-      "docUrl": "https://help.aliyun.com/document_detail/2870973.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/deep-thinking",
       "category": "Older",
       "samples": {
         "openai": {

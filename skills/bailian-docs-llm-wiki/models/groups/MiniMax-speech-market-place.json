@@ -68,7 +68,7 @@
         "dashscope": {
           "default": {
             "curl": "curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \\\n  -H \"Authorization: Bearer ${DASHSCOPE_API_KEY}\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"input\": {\n      \"action\": \"tts\",\n      \"text\": \"今天是不是很开心呀，当然了！\",\n      \"stream\": false,\n      \"voice_setting\": {\n        \"voice_id\": \"male-qn-qingse\",\n        \"speed\": 1,\n        \"vol\": 1,\n        \"pitch\": 0\n      },\n      \"audio_setting\": {\n        \"sample_rate\": 16000,\n        \"format\": \"mp3\",\n        \"channel\": 1\n      }\n    },\n    \"model\": \"MiniMax/speech-2.8-turbo\"\n  }'",
-            "docUrl": "https://help.aliyun.com/document_detail/3021951.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/minimax-synchronous-speech-synthesis-api"
           }
         }
       }
@@ -139,7 +139,7 @@
         "dashscope": {
           "default": {
             "curl": "curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \\\n  -H \"Authorization: Bearer ${DASHSCOPE_API_KEY}\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"input\": {\n      \"action\": \"tts\",\n      \"text\": \"今天是不是很开心呀，当然了！\",\n      \"stream\": false,\n      \"voice_setting\": {\n        \"voice_id\": \"male-qn-qingse\",\n        \"speed\": 1,\n        \"vol\": 1,\n        \"pitch\": 0\n      },\n      \"audio_setting\": {\n        \"sample_rate\": 16000,\n        \"format\": \"mp3\",\n        \"channel\": 1\n      }\n    },\n    \"model\": \"MiniMax/speech-2.8-hd\"\n  }'",
-            "docUrl": "https://help.aliyun.com/document_detail/3021951.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/minimax-synchronous-speech-synthesis-api"
           }
         }
       }
@@ -210,7 +210,7 @@
         "dashscope": {
           "default": {
             "curl": "curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \\\n  -H \"Authorization: Bearer ${DASHSCOPE_API_KEY}\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"input\": {\n      \"action\": \"tts\",\n      \"text\": \"今天是不是很开心呀，当然了！\",\n      \"stream\": false,\n      \"voice_setting\": {\n        \"voice_id\": \"male-qn-qingse\",\n        \"speed\": 1,\n        \"vol\": 1,\n        \"pitch\": 0\n      },\n      \"audio_setting\": {\n        \"sample_rate\": 16000,\n        \"format\": \"mp3\",\n        \"channel\": 1\n      }\n    },\n    \"model\": \"MiniMax/speech-02-turbo\"\n  }'",
-            "docUrl": "https://help.aliyun.com/document_detail/3021951.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/minimax-synchronous-speech-synthesis-api"
           }
         }
       }
@@ -281,7 +281,7 @@
         "dashscope": {
           "default": {
             "curl": "curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \\\n  -H \"Authorization: Bearer ${DASHSCOPE_API_KEY}\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"input\": {\n      \"action\": \"tts\",\n      \"text\": \"今天是不是很开心呀，当然了！\",\n      \"stream\": false,\n      \"voice_setting\": {\n        \"voice_id\": \"male-qn-qingse\",\n        \"speed\": 1,\n        \"vol\": 1,\n        \"pitch\": 0\n      },\n      \"audio_setting\": {\n        \"sample_rate\": 16000,\n        \"format\": \"mp3\",\n        \"channel\": 1\n      }\n    },\n    \"model\": \"MiniMax/speech-02-hd\"\n  }'",
-            "docUrl": "https://help.aliyun.com/document_detail/3021951.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/minimax-synchronous-speech-synthesis-api"
           }
         }
       }

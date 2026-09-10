@@ -67,13 +67,13 @@
       "latestOnlineAt": "2026-06-16T03:16:14.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "HappyHorse-1.1-I2V",
-      "docUrl": "https://help.aliyun.com/document_detail/3029821.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/happyhorse-image-to-video-api-reference",
       "category": "Visual",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"happyhorse-1.1-i2v\",\n    \"input\": {\n        \"prompt\": \"一只猫在草地上奔跑\",\n        \"media\": [\n            {\n                \"type\": \"first_frame\",\n                \"url\": \"https://cdn.translate.alibaba.com/r/wanx-demo-1.png\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"duration\": 5\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3029821.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/happyhorse-image-to-video-api-reference"
           }
         }
       }
@@ -141,12 +141,12 @@
       "latestOnlineAt": "2026-04-21T17:07:07.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "HappyHorse-1.0-I2V",
-      "docUrl": "https://help.aliyun.com/document_detail/3029821.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/happyhorse-image-to-video-api-reference",
       "samples": {
         "dashscope": {
           "default": {
             "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"happyhorse-1.0-i2v\",\n    \"input\": {\n        \"prompt\": \"一只猫在草地上奔跑\",\n        \"media\": [\n            {\n                \"type\": \"first_frame\",\n                \"url\": \"https://cdn.translate.alibaba.com/r/wanx-demo-1.png\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"duration\": 5\n    }\n}'",
-            "docUrl": "https://help.aliyun.com/document_detail/3029821.html"
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/happyhorse-image-to-video-api-reference"
           }
         }
       }

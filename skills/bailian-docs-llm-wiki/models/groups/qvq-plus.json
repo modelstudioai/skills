@@ -74,7 +74,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "QVQ-Plus",
-      "docUrl": "https://help.aliyun.com/document_detail/2877996.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/visual-reasoning",
       "category": "Older",
       "samples": {
         "openai": {

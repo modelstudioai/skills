@@ -20,7 +20,7 @@
       "latestOnlineAt": "2024-04-09T08:10:47.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "FaceChain人物图像检测",
-      "docUrl": "https://help.aliyun.com/document_detail/2712507.html"
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/facechain-face-detection-api"
     }
   ]
 }

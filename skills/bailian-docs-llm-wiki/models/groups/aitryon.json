@@ -41,7 +41,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "AI试衣-基础版",
-      "docUrl": "https://help.aliyun.com/document_detail/2796626.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/outfitanyone-api",
       "samples": {
         "dashscope": {
           "default": {

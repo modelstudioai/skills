@@ -41,7 +41,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "灵动人像LivePortrait",
-      "docUrl": "https://help.aliyun.com/document_detail/2856730.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/liveportrait-api",
       "samples": {
         "dashscope": {
           "default": {

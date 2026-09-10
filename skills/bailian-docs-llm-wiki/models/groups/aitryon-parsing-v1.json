@@ -41,7 +41,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "AI试衣OutfitAnyone-图片分割",
-      "docUrl": "https://help.aliyun.com/document_detail/2865249.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/aitryon-parsing-api",
       "samples": {
         "dashscope": {
           "default": {

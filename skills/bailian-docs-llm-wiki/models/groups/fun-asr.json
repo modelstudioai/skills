@@ -47,7 +47,7 @@
       "latestOnlineAt": "2025-11-20T16:00:00.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Fun-ASR语音识别",
-      "docUrl": "https://help.aliyun.com/document_detail/2880903.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide",
       "samples": {
         "dashscope": {
           "default": {
@@ -107,7 +107,7 @@
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "Fun-ASR-MTL",
-      "docUrl": "https://help.aliyun.com/document_detail/2978300.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/funauidio-asr-recorded-speech-recognition-python-sdk",
       "samples": {
         "dashscope": {
           "default": {
