@@ -55,7 +55,7 @@
       "latestOnlineAt": "2026-07-09T07:26:50.000+00:00",
       "inferenceProvider": "vidu",
       "name": "ViduQ3-Ad_reference2video",
-      "docUrl": "https://help.aliyun.com/document_detail/3045891.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference",
       "category": "Third-party",
       "samples": {
         "dashscope": {
@@ -119,7 +119,7 @@
       "latestOnlineAt": "2026-07-09T07:30:16.000+00:00",
       "inferenceProvider": "vidu",
       "name": "ViduQ3-Drama_reference2video",
-      "docUrl": "https://help.aliyun.com/document_detail/3045892.html",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/vidu-reference-to-video-api-reference",
       "category": "Third-party",
       "samples": {
         "dashscope": {
@@ -1400,12 +1400,6 @@
       "provider": "vidu",
       "model": "vidu/viduq3-mix_reference2video",
       "prices": [
-        {
-          "priceUnit": "每秒",
-          "price": "0.46875",
-          "type": "video_ratio_540p",
-          "priceName": "视频生成（540P）"
-        },
         {
           "priceUnit": "每秒",
           "price": "0.78125",

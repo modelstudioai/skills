@@ -1,0 +1,233 @@
+{
+  "name": "HappyHorse-1.1",
+  "description": "HappyHorse 新一代视频生成系列，支持文生、图生和参考生视频，全面提升画面质感、主体一致性和动态表现。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
+      "description": "HappyHorse-1.1-T2V支持文生视频，进一步提升文本语义理解、镜头调度与动态生成表现。模型能够更精准地还原创作意图，在人物动作、场景氛围、视觉美感和物理运动上生成更流畅自然、细节丰富且一致性更高的高质量视频。",
+      "features": [
+        "model-experience"
+      ],
+      "provider": "happyhorse",
+      "model": "happyhorse-1.1-t2v",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.45",
+          "ntmAmountType": "480P",
+          "type": "video_ratio_480p",
+          "priceName": "视频生成（480P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.9",
+          "ntmAmountType": "720P",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1.2",
+          "ntmAmountType": "1080P",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "VG"
+      ],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-06-16T06:14:47.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "HappyHorse-1.1-T2V",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/happyhorse-text-to-video-api-reference",
+      "category": "Visual",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"happyhorse-1.1-t2v\",\n    \"input\": {\n        \"prompt\": \"一座由硬纸板和瓶盖搭建的微型城市，在夜晚焕发出生机。一列硬纸板火车缓缓驶过，小灯点缀其间，照亮前路。\"\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"ratio\": \"16:9\",\n        \"duration\": 5\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/happyhorse-text-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Image",
+          "Text"
+        ]
+      },
+      "description": "HappyHorse-1.1-I2V支持图生视频，进一步提升画面质感、动态表现与跨片段一致性。模型能够更精准地理解输入图像并延续创作意图，在人物皮肤质感、ID跨片段保持、动作流畅度、文字渲染稳定性以及音画同步上带来显著改善，输出更真实自然、细节丰富且一致性更高的高质量视频。",
+      "features": [
+        "model-experience"
+      ],
+      "provider": "happyhorse",
+      "model": "happyhorse-1.1-i2v",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.45",
+          "ntmAmountType": "480P",
+          "type": "video_ratio_480p",
+          "priceName": "视频生成（480P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.9",
+          "ntmAmountType": "720P",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1.2",
+          "ntmAmountType": "1080P",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "VG"
+      ],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-06-16T03:16:14.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "HappyHorse-1.1-I2V",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/happyhorse-image-to-video-api-reference",
+      "category": "Visual",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"happyhorse-1.1-i2v\",\n    \"input\": {\n        \"prompt\": \"一只猫在草地上奔跑\",\n        \"media\": [\n            {\n                \"type\": \"first_frame\",\n                \"url\": \"https://cdn.translate.alibaba.com/r/wanx-demo-1.png\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"duration\": 5\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/happyhorse-image-to-video-api-reference"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Image",
+          "Text"
+        ]
+      },
+      "description": "HappyHorse-1.1-R2V支持参考生视频，进一步提升主体、场景风格与画面一致性的稳定保持。模型最多支持9张参考图片输入，能够更精准理解并延续创作意图，在人物、场景、风格和镜头表现上带来更强的可控性与表现力。",
+      "features": [
+        "model-experience"
+      ],
+      "provider": "happyhorse",
+      "model": "happyhorse-1.1-r2v",
+      "prices": [
+        {
+          "priceUnit": "每秒",
+          "price": "0.45",
+          "ntmAmountType": "480P",
+          "type": "video_ratio_480p",
+          "priceName": "视频生成（480P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.9",
+          "ntmAmountType": "720P",
+          "type": "video_ratio_720p",
+          "priceName": "视频生成（720P）"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "1.2",
+          "ntmAmountType": "1080P",
+          "type": "video_ratio_1080p",
+          "priceName": "视频生成（1080P）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "async_user_queue_limit": 500,
+          "count_limit": 5,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 5
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "VG"
+      ],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-06-16T03:16:08.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "HappyHorse-1.1-R2V",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/happyhorse-reference-to-video-api-reference",
+      "category": "Visual",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis' \\\n    -H 'X-DashScope-Async: enable' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"model\": \"happyhorse-1.1-r2v\",\n    \"input\": {\n        \"prompt\": \"[Image 1]中身着红色旗袍的女性，镜头先以侧面中景勾勒旗袍修身剪裁与S型曲线，随即切换至低角度仰拍，捕捉她轻抬玉手展开[Image 2]中的折扇的同时，[Image 3]中的流苏耳坠随头部转动轻盈摆动的细节，最后推近至面部特写，定格在她指尖轻点扇骨、眼波流转间的含蓄风情，多视角全方位展现东方韵味。\",\n        \"media\": [\n            {\n                \"type\": \"reference_image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260424/mvzfud/hh-v2v-girl.jpg\"\n            },\n            {\n                \"type\": \"reference_image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260424/fvuihk/hh-v2v2-folding-fan.jpg\"\n            },\n            {\n                \"type\": \"reference_image\",\n                \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260424/imerii/hh-v2v-earrings.jpg\"\n            }\n        ]\n    },\n    \"parameters\": {\n        \"resolution\": \"720P\",\n        \"ratio\": \"16:9\",\n        \"duration\": 5\n    }\n}'\n\n",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/happyhorse-reference-to-video-api-reference"
+          }
+        }
+      }
+    }
+  ]
+}

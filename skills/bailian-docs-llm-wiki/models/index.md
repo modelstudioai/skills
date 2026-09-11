@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 180 个模型家族 · 413 个主干模型 · 更新于 2026-09-11
+> 自动生成 · 共 179 个模型家族 · 414 个主干模型 · 更新于 2026-09-12
 
 **机器查询走结构化文件**：
 
@@ -163,16 +163,12 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [鞋靴模特](groups/shoemodel-v1.json) — 鞋靴模特支持输入多视角鞋靴系列图片，同时对输入模特模板图的鞋子区域进行鞋靴AI试穿，实现模特鞋靴布局重绘生成，最终生成图片的效果, 布局自然、细节丰富、画面细腻、试穿结果逼真。可用于模特商品图设计、新…
   - 模型：`shoemodel-v1`
 
-## 视频生成 `VG` — 27 个家族
+## 视频生成 `VG` — 26 个家族
 
-- [HappyHorse-I2V](groups/happyhorse-i2v.json) — HappyHorse系列最新图生视频模型，具备高度还原的动态画面生成能力，能够稳定保持与图像一致性，输出流畅自然、细节丰富的高质量视频。
-  - 模型：`happyhorse-1.0-i2v`, `happyhorse-1.1-i2v`
-- [HappyHorse-R2V](groups/happyhorse-r2v.json) — HappyHorse-R2V支持参考生视频，更加稳定的主体与场景参考，支持最多9张图片参考，能够精准保持创作意图，实现更强表现能力。
-  - 模型：`happyhorse-1.0-r2v`, `happyhorse-1.1-r2v`
-- [HappyHorse-T2V](groups/happyhorse-t2v.json) — HappyHorse系列最新文生视频模型，具备高度还原的动态画面生成能力，能够精准理解文本语义，输出流畅自然、细节丰富的高质量视频。
-  - 模型：`happyhorse-1.0-t2v`, `happyhorse-1.1-t2v`
-- [HappyHorse-Video-Edit](groups/happyhorse-video-edit.json) — HappyHorse-Video-Edit支持视频编辑，自然语言指令编辑视频，可参考最多5张图片局部或全局编辑视频元素，能够精准复刻视频动态过程，实现更强表现能力。
-  - 模型：`happyhorse-1.0-video-edit`
+- [HappyHorse-1.0](groups/happyhorse-1.0.json) — 视频生成与编辑系列，支持文生、图生、参考生及自然语言视频编辑，适合常规创作和局部调整。
+  - 模型：`happyhorse-1.0-i2v`, `happyhorse-1.0-r2v`, `happyhorse-1.0-t2v`, `happyhorse-1.0-video-edit`
+- [HappyHorse-1.1](groups/happyhorse-1.1.json) — HappyHorse 新一代视频生成系列，支持文生、图生和参考生视频，全面提升画面质感、主体一致性和动态表现。
+  - 模型：`happyhorse-1.1-i2v`, `happyhorse-1.1-r2v`, `happyhorse-1.1-t2v`
 - [MiniMax视频模型](groups/MiniMax-video-market-place.json) — 由MiniMax提供的MiniMax-H系列视频模型API服务。
   - 模型：`MiniMax/MiniMax-H3`
 - [PixVerse C1](groups/pixverse-c1-market-place.json) — 由爱诗科技提供的PixVerse C系列视频大模型API服务。
@@ -213,6 +209,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`video-style-transform`
 - [舞动人像AnimateAnyone](groups/animate-anyone-gen2.json) — AnimateAnyone是一款视频生成模型，可基于人物图片和动作模板生成人物全身动作视频。
   - 模型：`animate-anyone-gen2`
+- [舞动人像AnimateAnyone-detect](groups/animate-anyone-detect-gen2.json) — AnimateAnyone-detect是辅助AnimateAnyone的图像检测模型，用于检测图片中的人物形象是否符合视频生成要求。
+  - 模型：`animate-anyone-detect-gen2`
 - [舞动人像AnimateAnyone-template](groups/animate-anyone-template-gen2.json) — AnimateAnyone-Template是辅助AnimateAnyone的动作模板生成模型，可基于视频提取人物动作并制作模板。
   - 模型：`animate-anyone-template-gen2`
 - [表情包Emoji](groups/emoji-v1.json) — 表情包emoji是一款人脸动效视频生成模型，可基于人脸图片和预设的人脸动态模板，生成人脸动效视频。
