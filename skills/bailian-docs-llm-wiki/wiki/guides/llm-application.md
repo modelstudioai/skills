@@ -1,60 +1,39 @@
 # llm application
 
-`llm application` 是百炼平台提供的面向大语言模型应用的统一构建与部署能力，支持从低代码智能体到高代码定制化应用的全栈开发范式。开发者可通过可视化编排或代码集成方式快速创建生产级 LLM 应用，并复用平台提供的模型、工具、记忆与安全能力。该能力覆盖推理调用、状态管理、多轮交互等核心场景。
+`llm application` 是百炼平台中用于封装和部署大语言模型能力的核心应用类型，支持从低代码智能体到高代码定制化服务的多种形态。开发者可通过配置或编码方式快速构建面向终端用户的 LLM 服务，适用于对话、问答、工作流编排等场景。所有应用均运行在百炼统一的推理与调度基础设施之上。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- **应用类型**：支持五类应用形态：[新版智能体应用（Agent 2.0）](https://help.aliyun.com/zh/model-studio/new-single-agent-application)、[智能体应用（Agent 1.0）](https://help.aliyun.com/zh/model-studio/single-agent-application)、[工作流应用](https://help.aliyun.com/zh/model-studio/workflow-application)、[高代码应用](https://help.aliyun.com/zh/model-studio/rich-code-application) 和 [文件问答](https://help.aliyun.com/zh/model-studio/file-q-a)。  
-- **模型接入**：默认支持百炼托管的 Qwen 系列（如 qwen-max、qwen-plus）、GLM 系列及第三方 API 模型（需配置凭证）。所有模型均通过 `model_id` 字符串标识，详见 [应用开发](../../raw/application-user-guide/llm-application.md) 文档。  
-- **扩展能力**：内置工具调用（Function Calling）、RAG 检索增强、会话历史管理（`session_id` 驱动）、自定义 Prompt 模板及敏感词过滤策略。
+- **智能体应用（Agent）**：分为 Agent 1.0（基础单步调用）和 Agent 2.0（支持多工具协同、状态管理与异步执行），详见 [应用开发](../../raw/application-user-guide/llm-application.md)  
+- **工作流应用**：通过可视化节点编排实现多模型/多步骤逻辑，支持条件分支、循环与外部 API 集成  
+- **高代码应用**：允许开发者上传自定义 Python 代码（含 FastAPI 入口），完全控制输入/输出协议与业务逻辑  
+- **文件问答应用**：专用于文档解析与[检索增强生成](../concepts/rag.md)（RAG），支持 PDF/Word/Excel 等格式，底层调用百炼内置文档解析引擎  
+
+> **注意**：[应用开发](../../raw/application-user-guide/llm-application.md) 中提及的“新版智能体应用（Agent 2.0）”已全面替代 Agent 1.0，后者仅保留兼容性支持，新项目应优先使用 Agent 2.0。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `model_id` | string | 是 | 模型唯一标识，例如 `"qwen-max"`；取值范围见 [应用开发](../../raw/application-user-guide/llm-application.md) |
-| `input` | object | 是 | 用户输入，结构为 `{ "query": "..." }`，支持可选 `files` 字段（仅文件问答类应用） |
-| `parameters` | object | 否 | 推理参数，如 `temperature: 0.7`, `top_p: 0.9`, `max_tokens: 2048` |
-| `session_id` | string | 否 | 用于多轮对话上下文维护；若未提供，系统生成临时 session |
-
-> **注意**：`parameters` 中的 `stop` 字段在 Agent 2.0 应用中已被弃用，实际生效以应用后台配置为准；旧版文档中提及的 `stream` 参数需显式设为 `true` 才启用流式响应，但 [应用开发](../../raw/application-user-guide/llm-application.md) 未明确说明其默认行为，建议始终显式传入。
+- `model_id`：必需，指定后端使用的模型 ID（如 `qwen-max`, `qwen-plus`），需与应用类型兼容（例如 Agent 2.0 要求模型支持 function calling）  
+- `input_schema`：可选，JSON Schema 格式，用于声明输入字段结构与校验规则，影响前端表单生成与 API 参数校验  
+- `output_schema`：可选，同上，用于约束输出结构并支持自动 JSON 解析  
+- `timeout`：默认 30s，最大支持 300s；工作流应用中各节点可单独设置超时  
 
 ## 使用方式
 
-1. **API 调用（推荐）**：  
-   ```bash
-   curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/llm-application \
-     -H "Authorization: Bearer $API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "model_id": "qwen-max",
-           "input": {"query": "你好，请总结以下内容：..."},
-           "parameters": {"temperature": 0.5}
-         }'
-   ```
-
-2. **SDK 调用（Python）**：  
-   ```python
-   from dashscope import Application
-   resp = Application.call(
-       app_id='your-app-id',
-       api_key='your-api-key',
-       input={'query': '...'},
-       parameters={'temperature': 0.5}
-   )
-   ```
-
-3. **前端集成**：通过 `@alibaba/bailian-js-sdk` 初始化 `ApplicationClient` 实例，调用 `.run()` 方法（参考 [应用开发](../../raw/application-user-guide/llm-application.md) 中的 SDK 示例章节）。
+1. **控制台创建**：进入 Model Studio → 应用管理 → 新建应用 → 选择类型（如“智能体应用”）→ 配置模型、提示词、工具等 → 发布  
+2. **API 调用**：发布后获取 `app_id`，通过 `/v1/applications/{app_id}/chat` 接口发起请求（需携带 `Authorization: Bearer <api_key>`）  
+3. **SDK 集成**：推荐使用 `dashscope` Python SDK（v1.18.0+），调用 `Application.call()` 方法，自动处理鉴权、重试与流式响应解析，参考 [应用开发](../../raw/application-user-guide/llm-application.md) 中的示例代码片段  
 
 ## 限制和注意事项
 
-- 单次请求 `input.query` 最长支持 32768 字符；文件问答类应用单次上传文件总大小 ≤ 100 MB（PDF/TXT/DOCX 等格式）。
-- Agent 1.0 应用已进入维护期，新项目请优先使用 [新版智能体应用（Agent 2.0）](https://help.aliyun.com/zh/model-studio/new-single-agent-application)，其支持更完善的工具编排与错误恢复机制。
-- 所有应用调用均受配额限制（QPS/TPM），具体阈值取决于所选模型与账号等级，详情参见控制台「配额管理」页面。
-- 若使用自定义模型后端（如私有部署的 vLLM 服务），需确保其兼容 [OpenAI 兼容接口](../concepts/openai-compatibility.md)规范，否则可能触发解析失败——该兼容性要求未在 [应用开发](../../raw/application-user-guide/llm-application.md) 中明确说明，属隐式约束。
+- 单次请求最大上下文长度受所选模型限制（如 `qwen-max` 为 32768 tokens），应用层不额外截断，需自行控制输入长度  
+- 文件问答应用单次上传文件总数 ≤ 10，总大小 ≤ 50MB；解析后的文本块将按 chunk size（默认 512）切分并索引  
+- Agent 2.0 应用不支持直接调用非百炼托管的外部模型（如自部署 vLLM 实例），如需混合调度，须通过高代码应用封装  
+- 所有应用默认启用敏感词过滤与内容安全审核，不可关闭；若需绕过（如内部测试），需提交工单申请白名单，详见 [应用开发](../../raw/application-user-guide/llm-application.md) 的“安全策略”章节
 
 ## 来源文档
 
 - [应用开发](../../raw/application-user-guide/llm-application.md)
+
 
 

@@ -1,59 +1,64 @@
 # image generation
 
-百炼平台提供多种图像生成模型的统一 API 接口，支持文生图、图生图、局部重绘等核心能力，适用于内容创作、设计辅助与自动化视觉生产等场景。所有模型均通过标准 RESTful 接口调用，支持同步响应与异步任务模式。开发者需根据具体需求选择适配的模型及参数组合。
+百炼平台提供多种图像生成模型的统一 API 接口，支持文生图、图生图、图像编辑等核心能力。开发者可通过标准 HTTP 请求调用，所有模型均需指定 `model` 参数并遵循对应参数规范。详细模型能力与行为差异请参考 [图像生成 (raw/model-api-reference/image-generation.md)](../../raw/model-api-reference/image-generation.md)。
 
 ## 支持的模型/功能
 
-当前支持以下图像生成模型（按发布顺序与定位区分）：
-- **千问（Qwen-VL / Qwen2-VL 图像生成版）**：侧重多模态理解与可控生成，支持 [prompt](../guides/prompt.md) 中嵌入结构化指令；  
-- **万相（WanXiang）**：面向高保真艺术风格生成，支持 `style` 参数精细控制流派（如 `anime`, `oil_painting`, `cyberpunk`）；  
-- **Z-Image**：轻量级实时生成模型，适合低延迟场景，但不支持图生图；  
-- **可灵（Kling）**：支持长宽比自定义（1:1, 4:3, 16:9, 9:16）、高分辨率输出（最高 1024×1024），并兼容 ControlNet 类扩展；  
-- **Vidu**：虽以视频生成为主，但其静态帧生成能力已集成至 `/v1/images/generations` 路径，需显式指定 `model=vidu-image`；  
-- **创意工具（Creative Tools）**：提供图像增强、背景移除、主体抠图等后处理能力，作为独立子模块调用。  
+当前支持以下图像生成模型：
+- **Qwen-VL / Qwen2-VL 系列**（文生图、[多模态](../concepts/multi-modal.md)理解+生成）  
+- **WanX（万相）**：侧重艺术风格与高精度构图  
+- **Z-Image**：强调写实细节与物理一致性  
+- **Kling（可灵）**：支持长宽比自定义、高分辨率输出（最高 1024×1024）  
+- **Vidu 图像模型**：专为视频帧生成优化，亦支持单图生成（注意：其图像生成能力与 Vidu 视频模型接口分离）  
+- **创意工具（Creative Tools）**：提供局部重绘、涂鸦生成、背景替换等编辑类能力  
 
-> **注意**：[原文标题](../../raw/model-api-reference/image-generation.md) 中列出的 Vidu 链接指向视频模型文档，实际图像生成能力需参考 [原文标题](../../raw/model-api-reference/vidu-image.md)（该文档明确说明 `vidu-image` 是独立图像模型，非 Vidu 视频模型的降维使用）。另据 [原文标题](../../raw/model-api-reference/z-image.md)，Z-Image 已于 v2.3.0 起弃用图生图功能，与早期文档描述存在偏差。
+各模型具体输入格式、支持的 [prompt](../guides/prompt.md) 语法及风格控制方式存在差异，详见 [图像生成 (raw/model-api-reference/image-generation.md)](../../raw/model-api-reference/image-generation.md)。
 
 ## 关键参数
 
-通用必填参数：
-- `model`: 模型标识符（如 `wanx-v1`, `kling-v1`, `zimage-v2`），必须与所选模型严格匹配；  
-- `prompt`: 中文或英文文本提示词，长度 ≤ 512 字符；支持部分模型的负向提示（`negative_prompt`），但 Z-Image 不支持；  
-- `size`: 输出尺寸，格式为 `WIDTHxHEIGHT`（如 `1024x1024`），各模型支持范围不同（详见各模型文档）；  
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model` | string | 是 | 模型标识符，如 `"qwen-vl-plus"`、`"wanx-v1"`、`"zimage-v1"`、`"kling-v1"`、`"vidu-image-v1"` 或 `"creative-tools-v1"` |
+| `input.prompt` | string | 是 | 中文或英文提示词；部分模型（如 WanX）支持负向提示词，通过 `input.negative_prompt` 传入 |
+| `parameters.size` | string | 否 | 输出尺寸，格式为 `"WxH"`，如 `"1024x1024"`；Kling 和 Z-Image 支持 `"768x1024"` 等非正方形尺寸，WanX 仅支持 `"1024x1024"` |
+| `parameters.seed` | integer | 否 | 随机种子，用于结果复现；设为 `-1` 表示随机（默认） |
+| `parameters.steps` | integer | 否 | 采样步数（仅部分模型支持，如 Z-Image 默认 30，最大 50） |
 
-可选参数：
-- `n`: 生成图片数量（默认 1，最大 4）；  
-- `seed`: 随机种子，用于结果复现（仅部分模型稳定支持，万相与可灵效果最佳）；  
-- `style`: 仅万相与可灵支持，取值见对应模型文档枚举；  
-- `image` / `mask`: 图生图或局部重绘时需 base64 编码的 PNG/JPEG 图像数据（`image` 必填，`mask` 可选）。
+> **注意**：`parameters.guidance_scale` 在 WanX 和 Kling 中含义不同——WanX 中该值越高越贴近 [prompt](../guides/prompt.md)，而 Kling 中过高（>15）易导致过饱和失真。实际行为以 [图像生成 (raw/model-api-reference/image-generation.md)](../../raw/model-api-reference/image-generation.md) 中最新说明为准。
 
 ## 使用方式
 
-1. 发送 `POST` 请求至 `https://dashscope.aliyuncs.com/api/v1/images/generations`；  
-2. Header 中设置 `Authorization: Bearer YOUR_API_KEY` 和 `Content-Type: application/json`；  
-3. Body 示例（万相生成）：
+1. 发送 `POST` 请求至 `/v1/images/generations`  
+2. Header 中携带 `Authorization: Bearer <api_key>` 和 `Content-Type: application/json`  
+3. Body 示例（Kling 文生图）：
 ```json
 {
-  "model": "wanx-v1",
-  "prompt": "一只赛博朋克风格的机械猫坐在东京雨夜街头",
-  "size": "1024x1024",
-  "style": "cyberpunk",
-  "n": 1
+  "model": "kling-v1",
+  "input": {
+    "prompt": "一只赛博朋克风格的机械猫蹲在东京涩谷十字路口，霓虹雨夜，8k细节",
+    "negative_prompt": "文字、水印、模糊、畸变"
+  },
+  "parameters": {
+    "size": "1024x1024",
+    "seed": 42
+  }
 }
 ```
-4. 同步接口返回 `output.results[]` 数组，含 `url`（临时直链，有效期 1 小时）与 `task_id`（异步任务需轮询）；  
-5. 异步任务通过 `GET /api/v1/tasks/{task_id}` 查询状态，成功后返回相同结构结果。
+响应返回 `data[0].url`（直链 URL，有效期 24 小时）及 `data[0].base64`（可选，需在请求中显式设置 `response_format: "b64_json"`）。
 
 ## 限制和注意事项
 
-- 单次请求最大 `prompt` 长度为 512 字符，超长将被截断且不报错；  
-- 所有模型均禁止生成含暴力、色情、政治敏感或侵犯版权的内容，违规请求将被拦截并记录日志；  
-- Z-Image 模型不支持 `negative_prompt` 和图生图，若误传相关字段将被静默忽略；  
-- 可灵（Kling）对中文 [prompt](../guides/prompt.md) 的语义解析优于英文，建议优先使用中文描述；  
-- 临时 URL 有效期为 1 小时，如需长期存储，请及时下载并保存至自有对象存储。
+- 单次请求最多生成 4 张图像（`n` 参数最大为 4），超出将报错 `400 Bad Request`  
+- 输入 [prompt](../guides/prompt.md) 长度上限为 512 字符（含空格），超长截断不报错但可能影响效果  
+- 所有模型均**不支持**直接上传图像作为输入源（图生图、局部重绘等功能需通过 `creative-tools-v1` 模型并传入 `input.image_url` 或 `input.image_base64`）  
+- 免费试用额度仅适用于 `qwen-vl-plus` 和 `wanx-v1`；其他模型需开通对应服务并确认配额  
+- Vidu 图像模型与 Vidu 视频模型使用独立计费单元，不可混用配额  
+
+如遇生成内容异常（如结构崩坏、提示词忽略），建议优先检查 [prompt](../guides/prompt.md) 格式是否符合目标模型要求，并查阅 [常见问题 (raw/model-api-reference/image-generation.md)](../../raw/model-api-reference/image-generation.md) 中的排障指南。
 
 ## 来源文档
 
 - [图像生成](../../raw/model-api-reference/image-generation.md)
+
 
 

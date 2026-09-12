@@ -61,21 +61,21 @@
 
 ## 横切概念
 
-- [OpenAI 兼容接口](concepts/openai-compatibility.md) — 关联 6 个主题
-- [Prompt 工程](concepts/prompt-engineering.md) — 关联 6 个主题
-- [Token](concepts/token.md) — 关联 6 个主题
+- [OpenAI 兼容接口](concepts/openai-compatibility.md) — 关联 4 个主题
+- [Prompt 工程](concepts/prompt-engineering.md) — 关联 5 个主题
+- [Token](concepts/token.md) — 关联 5 个主题
 - [函数调用](concepts/function-calling.md) — 关联 6 个主题
-- [检索增强生成](concepts/rag.md) — 关联 6 个主题
-- [模型部署](concepts/model-deployment.md) — 关联 6 个主题
+- [多模态](concepts/multi-modal.md) — 关联 6 个主题
+- [检索增强生成](concepts/rag.md) — 关联 5 个主题
+- [模型部署](concepts/model-deployment.md) — 关联 5 个主题
 - [流式输出](concepts/streaming.md) — 关联 6 个主题
-- [记忆管理](concepts/memory.md) — 关联 5 个主题
 
 ## 对比分析
 
-- [Token 计划相关 API 对比](comparisons/token-plan-apis.md) — 对比 3 个主题
-- [图像、视频与3D生成能力对比](comparisons/image-vs-video-vs-3d-generation.md) — 对比 3 个主题
-- [应用全生命周期管理 API 对比](comparisons/application-lifecycle-apis.md) — 对比 4 个主题
-- [模型部署方式对比：托管代理、高速推理与模型生产](comparisons/model-deployment-options.md) — 对比 3 个主题
-- [知识检索与记忆能力方案对比](comparisons/knowledge-retrieval-methods.md) — 对比 3 个主题
+- [向量检索与数据连接能力对比](comparisons/vector-sort-vs-data-connection.md) — 对比 2 个主题
+- [图像、视频与3D生成能力对比](comparisons/image-video-3d-generation.md) — 对比 3 个主题
+- [应用调用与插件机制对比](comparisons/application-calling-vs-plug-in.md) — 对比 3 个主题
+- [模型部署方式对比：托管服务 vs 自定义生产部署](comparisons/model-deployment-options.md) — 对比 3 个主题
+- [知识库与记忆库功能对比](comparisons/knowledge-base-vs-memory-library.md) — 对比 2 个主题
 - [语音合成与语音识别对比](comparisons/speech-synth-vs-recognition.md) — 对比 3 个主题
 

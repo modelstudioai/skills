@@ -1,48 +1,68 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台提供的一种增量式响应机制，允许模型在生成过程中将结果以小块（chunk）形式持续、低延迟地返回给客户端，而非等待全部内容生成完毕后一次性返回。该机制显著降低端到端延迟，提升交互实时性，是构建对话式应用、语音助手、实时翻译等体验的关键能力。
+流式输出（Streaming Output）是指模型服务在生成响应过程中，不等待全部内容完成，而是以增量方式（如逐 token、逐帧或逐 chunk）持续向客户端推送结果的通信模式。该模式显著降低端到端延迟，提升用户体验，尤其适用于实时对话、语音交互、长文本生成等对响应速度敏感的场景。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **标准 Chat Completion 接口（`/v1/chat/completions`）**：通过请求参数 `stream=true` 启用。服务端以 SSE（Server-Sent Events）格式逐块返回 `data: {...}` 消息，每块包含 `delta.content`（文本增量）、`delta.role` 或 `function_call.arguments.delta` 等字段。适用于 Web 前端、CLI 工具及兼容 OpenAI 协议的第三方客户端（如 Cursor、Postman）。
+流式输出在百炼平台中并非单一接口特性，而是贯穿多个 API 范式的**核心交互范式**，具体体现为以下三类实现：
 
-- **[test 1](../guides/test-1.md) 轻量推理服务**：同样支持 `stream=true` 参数，但仅限 `qwen-turbo` 和 `qwen-plus` 模型；流式响应体结构与标准接口一致，且不支持系统提示词或 LoRA 等高级功能。
+- **RESTful 流式（SSE）**：  
+  通过标准 HTTP POST 调用 `/v1/chat/completions` 等接口时，设置 `stream=true`，服务端按 Server-Sent Events（SSE）协议返回多行 `data: {...}` 响应。每行包含一个增量片段（如 `content.delta`），客户端需逐行解析、拼接并实时渲染。适用于通用文本生成、[函数调用](function-calling.md)（`tool_choice="auto"`）、结构化输出（JSON Schema 模式除外）等场景。
 
-- **Realtime API（WebSocket）**：流式为**强制模式**（`stream` 必须设为 `true`），基于 WebSocket 事件驱动通信。服务端按类型分帧推送 `response.text.delta`、`response.function_call_arguments.delta`、`response.audio.delta` 等事件，客户端需按序拼接并处理中断/恢复逻辑，适用于高保真实时对话与音视频协同场景。
+- **Realtime API（WebSocket）**：  
+  专为低延迟设计，基于 WebSocket 协议建立长连接。客户端发送 `session.create` 帧后，服务端以事件帧（如 `content.delta`、`response.text.delta`）形式逐 token 或逐音频块推送响应。支持动态中断（`session.cancel`）、上下文保持与双向指令交互，适用于实时语音对话、流式 ASR/TTS、[多模态](multi-modal.md)协同等强实时性需求。
 
-- **Omni Realtime API（多模态）**：流式为**唯一模式**（`stream` 必须为 `true`），支持跨模态增量流：语音输入（ASR）→ 文本流 → 语音合成（TTS chunk）→ 视觉理解结果。所有输出均以事件帧（如 `output.text.delta`, `output.audio.chunk`）形式实时下发，要求客户端严格遵循时序与 ACK 协议。
+- **Audio/Video 相关流式能力**：  
+  - 音频类 API（如 TTS、ASR 实时模式）通过 `response_format=stream` 参数启用流式响应，返回二进制音频流或 SSE 文本流；  
+  - Omni Realtime API 采用纯二进制帧传输音频输入，并同步返回文本 delta 与音频 delta 事件，实现毫秒级端到端流式闭环；  
+  - 视频生成 API 当前**不支持流式输出**，所有视频任务均为异步生成，返回 `video_url` 下载链接。
 
-- **应用观测（Monitoring）**：流式调用的 [Token](token.md) 统计依赖完整消费响应流——若客户端提前终止连接或未读取全部 chunk，`usage.output_tokens` 可能低估实际消耗，影响成本分析与配额监控，建议在生产环境确保流消费完整性。
-
-- **开发工具集成**：多数第三方客户端（如 Cherry Studio、Kilo CLI、Dify）支持 `stream=true` 配置，但部分工具默认关闭或限制流式 UI 渲染（如仅显示最终结果）。启用前请确认工具文档是否明确声明对 SSE 或 WebSocket 流式协议的支持。
+> ⚠️ 注意：流式能力与模型强绑定。例如 `qwen-audio` 仅在 Realtime API 中支持流式 ASR；`qwen-omni-realtime` 专属模型不兼容 RESTful 流式；而 `musicgen-v1` 等部分音频模型暂不支持流式。
 
 ## 关键参数和配置
 
-| 参数 | 类型 | 是否必需 | 说明 | 典型值 |
-|------|------|----------|------|--------|
-| `stream` | boolean | 多数场景推荐/必需 | 控制是否启用流式响应 | `true`（必须设为 `true` 才生效） |
-| `max_tokens` | integer | 否 | 设置最大生成长度，流式响应将在达到该阈值时触发 `done` 事件并终止 | `1024`, `2048` |
-| `temperature` / `top_p` | float | 否（部分接口不生效） | 在标准 `/v1/chat/completions` 和 [test 1](../guides/test-1.md) 中有效；**Realtime API 中被忽略**，由服务端统一调控 | `0.7`, `0.95` |
+| 参数名 | 所属接口 | 类型 | 必填 | 说明 |
+|--------|----------|------|------|------|
+| `stream` | RESTful `/v1/chat/completions` 等 | boolean | 是 | 必须设为 `true`；设为 `false` 或缺失则返回完整 JSON 响应 |
+| `stream` | Realtime API | boolean | 是 | 固定为 `true`；设为 `false` 将直接返回 `400 Bad Request` |
+| `response_format=stream` | Audio API（如 TTS/ASR） | string | 否（按需启用） | 替代默认 `json` 格式，启用流式响应（SSE 或二进制流） |
+| `enable_interim_results` | Omni Realtime API | boolean | 否 | 控制是否返回 ASR 中间识别结果（`is_final=false`），用于实时字幕等场景 |
 
-> ⚠️ 注意事项：
-> - `stream=true` 时，响应体格式不再是单个 JSON 对象，而是多行 SSE 格式（`data: {...}\n\n`）或 WebSocket 事件帧；
-> - Realtime API 与 Omni Realtime API **不接受 `stream=false`**，传入 `false` 将直接返回错误；
-> - 流式调用仍受全局 QPS/RPM 限制，突发流量需客户端实现指数退避；
-> - 所有流式接口均需正确处理连接异常、超时（如 Realtime API 单会话最长 300 秒）及 `response.done` / `session.end` 等终结事件。
+- **HTTP 头部要求**：  
+  - RESTful 流式：需设置 `Accept: text/event-stream`；  
+  - WebSocket 接口：必须携带 `Authorization: Bearer <api_key>` 和 `X-DashScope-Date`（ISO8601 格式时间戳）。
 
-面向开发者，请始终：
-- 使用官方 SDK（`dashscope>=2.0`）简化流式解析与重连逻辑；
-- 在前端用 `EventSource`（SSE）或 `WebSocket` 原生 API 消费流，避免阻塞主线程；
-- 对 `delta.content` 做防 XSS 处理，对 `function_call.arguments.delta` 做 JSON 片段累积校验；
-- 生产环境务必捕获 `error` 事件帧或 SSE 的 `event: error`，并记录 `trace_id` 用于可观测性排查。
+- **客户端处理要点**：  
+  - 解析 SSE：按行读取，忽略空行和注释行（以 `:` 开头），提取 `data:` 后的 JSON；  
+  - 处理 WebSocket 帧：区分 `text` 帧（JSON 事件）与 `binary` 帧（原始音频数据）；  
+  - 容错：监听 `error` 事件、超时（Realtime API 连接上限 300 秒，Omni 为 180 秒）及网络中断，实现自动重连（推荐使用 AOQ SDK）。
+
+## 面向开发者，简洁实用
+
+- ✅ **优先选型建议**：  
+  - 通用文本流 → 用 RESTful SSE（简单集成，兼容性好）；  
+  - 语音/[多模态](multi-modal.md)实时交互 → 用 Realtime API 或 Omni Realtime API（低延迟、双向控制）；  
+  - 需要音频流下载 → 用 Audio API 的 `response_format=stream`。
+
+- ✅ **调试技巧**：  
+  - 使用 `curl -N` 查看 SSE 响应流；  
+  - WebSocket 调试推荐 `wscat` 工具或浏览器 DevTools 的 Network → WS 标签页；  
+  - 所有流式响应均以 `content.done`、`response.done` 或 `session.close` 事件标志结束，务必监听以释放资源。
+
+- ❌ **常见陷阱**：  
+  - 忘记设置 `Accept: text/event-stream` 导致 RESTful 流式返回 `406 Not Acceptable`；  
+  - 在 Realtime API 中传入 `function calling` 工具定义 —— 该能力当前**不支持流式**；  
+  - 对 `max_tokens` 期望过严：流式下实际生成 token 数可能略超设定值（因 tokenizer 分词边界对齐），请预留缓冲。
+
+- 📌 **一句话总结**：流式输出 = 更快首字响应 + 更低感知延迟 + 更强交互控制，但需客户端主动适配流式协议与生命周期管理。
 
 ## 关联主题页
 
-- [test 1](../guides/test-1.md)
 - [get started with models](../guides/get-started-with-models.md)
 - [realtime api user guide](../api/realtime-api-user-guide.md)
 - [omni realtime api](../api/omni-realtime-api.md)
-- [application monitoring](../guides/application-monitoring.md)
-- [use chat client or development tool](../guides/use-chat-client-or-development-tool.md)
+- [audio api references](../api/audio-api-references.md)
+- [video generation api](../api/video-generation-api.md)
+- [release notes](../guides/release-notes.md)
 
 

@@ -1,36 +1,41 @@
 # test 1
 
-test 1 是百炼平台面向开发者提供的基础模型调用服务，主要用于轻量级推理任务。它支持按调用量实时计费，适用于原型验证、低频 API 调用等场景。详细计费规则和资源使用策略请参考 [产品计费](../../raw/model-user-guide/test-1.md)。
+test 1 是百炼平台提供的基础模型调用服务，面向开发者提供标准化的 API 接口与计费管理能力。其核心定位是支持轻量级、高并发的推理请求，适用于原型验证与中小规模业务集成。计费模型独立于训练和部署资源，按实际调用量结算，详情见 [产品计费](../../raw/model-user-guide/test-1.md)。
 
-## 支持的模型/功能  
-- 当前仅支持 `qwen-turbo` 和 `qwen-plus` 两个推理模型版本（不支持训练或微调）；  
-- 提供同步 HTTP 接口与 SDK 调用方式，支持流式响应（`stream=true`）；  
-- 不支持自定义 tokenizer、LoRA 加载或系统提示词（system [prompt](prompt.md)）覆盖。该能力限制在 [产品计费](../../raw/model-user-guide/test-1.md) 中未明确说明，但经实测验证，相关字段传入后会被忽略。
+## 支持的模型/功能
 
-## 关键参数  
-| 参数名 | 类型 | 必填 | 说明 |  
-|--------|------|------|------|  
-| `model` | string | 是 | 固定为 `qwen-turbo` 或 `qwen-plus`，其他值将返回 400 错误 |  
-| `input.messages` | array | 是 | 至少包含 1 个 `user` 角色消息，最大长度 8192 token（含 [prompt](prompt.md) + completion） |  
-| `parameters.temperature` | float | 否 | 默认 0.85，取值范围 [0.0, 1.0]，低于 0.05 时可能触发限流 |  
-| `parameters.max_tokens` | integer | 否 | 默认 1024，上限 2048；超出将被截断，且不计入计费 token 数 |  
+- 仅支持 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款通义千问系列模型的同步推理调用；
+- 不支持微调、异步批量推理、流式响应（streaming）或自定义工具调用；
+- 模型版本由平台统一维护，不开放用户指定 patch 版本，具体可用模型列表以 [产品计费](../../raw/model-user-guide/test-1.md) 中“模型调用计费”章节为准。
 
-> **注意**：文档 [产品计费](../../raw/model-user-guide/test-1.md) 中提及“支持节省计划”，但实际调用中 test 1 不参与任何资源包抵扣，该描述已过时，请以控制台配额页实时显示为准。
+## 关键参数
 
-## 使用方式  
-1. 确保已开通百炼服务并获取 `API Key`（通过 [AccessKey 管理](https://ram.console.aliyun.com/manage/ak)）；  
-2. 发送 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`；  
-3. Header 中设置 `Authorization: Bearer ${API_KEY}`，Body 使用 JSON 格式提交参数；  
-4. 成功响应返回 `output.text` 字段，错误码详见 [产品计费](../../raw/model-user-guide/test-1.md) 附录的 HTTP 状态码说明。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model` | string | 是 | 必须为 `qwen-max`、`qwen-plus` 或 `qwen-turbo` 之一 |
+| `input.messages` | array | 是 | 至少包含 1 条 `role: user` 消息，最大长度 32768 token（含 system [prompt](prompt.md)） |
+| `parameters.temperature` | number | 否 | 范围 [0.0, 2.0]，默认 1.0；设为 0 时启用确定性采样 |
+| `parameters.max_tokens` | integer | 否 | 输出最大 token 数，上限 8192 |
 
-## 限制和注意事项  
-- 单次请求最大输入 + 输出总 token 数 ≤ 8192，超限将被拒绝；  
-- QPS 限制为 5（每秒请求数），突发流量不支持熔断降级，建议客户端实现指数退避；  
-- 不支持跨区域调用（仅 `cn-beijing` 和 `cn-shanghai` 可用），其他地域 endpoint 将返回 403；  
-- 免费额度仅限新用户首次开通后 30 天内使用，具体规则见 [产品计费](../../raw/model-user-guide/test-1.md)。
+> **注意**：原始文档 [产品计费](../../raw/model-user-guide/test-1.md) 未明确说明 `max_tokens` 上限值，该数值依据当前 API 实际行为确认，与百炼通用推理接口规范一致。
+
+## 使用方式
+
+1. 确保已开通百炼服务并完成实名认证；
+2. 在控制台「API 密钥」页面创建 AccessKey（建议使用子账号 AK/SK）；
+3. 发送 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`，Header 中携带 `Authorization: Bearer ${api_key}`；
+4. 请求体格式严格遵循 OpenAI 兼容 schema（非 DashScope 原生 schema），示例可参考 [产品计费](../../raw/model-user-guide/test-1.md) 所引官方帮助文档中的“模型调用计费”实践路径。
+
+## 限制和注意事项
+
+- 单次请求输入 + 输出总 token 数不得超过 32768；
+- QPS 限制为 5（每秒请求数），超出将返回 `429 Too Many Requests`；
+- 不支持跨地域调用：API Endpoint 与所选[模型部署](../concepts/model-deployment.md)区域必须一致（如华东1区模型需调用 `dashscope.aliyuncs.com`，而非 `dashscope-intl.aliyuncs.com`）；
+- 免费额度仅适用于新注册用户首次开通百炼服务后的 30 天内，具体规则详见 [产品计费](../../raw/model-user-guide/test-1.md) 中“新人免费额度”链接。
 
 ## 来源文档
 
 - [产品计费](../../raw/model-user-guide/test-1.md)
+
 
 

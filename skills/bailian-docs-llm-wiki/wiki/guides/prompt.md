@@ -1,29 +1,40 @@
 # prompt
 
-Prompt 是百炼平台中用于引导大模型生成预期输出的核心输入机制，支持模板化、自动化与反馈驱动的多种优化方式。开发者可通过结构化提示词控制模型行为、提升输出质量与稳定性。所有 Prompt 相关能力均依托于百炼统一的推理服务框架，与模型选型和部署配置深度协同。
+Prompt 是百炼平台中用于引导大模型生成预期输出的核心输入机制，支持模板化、自动化优化与人工反馈迭代。开发者可通过结构化 Prompt 设计提升模型响应的准确性、一致性与可控性。所有 Prompt 功能均依托于百炼统一的推理服务接口，与模型选型深度解耦。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-当前所有接入百炼平台的 LLM（包括 Qwen 系列、Baichuan、GLM 等）均原生支持 Prompt 输入，但**仅部分模型支持 Prompt 自动优化与反馈优化功能**，具体以 [Prompt自动优化](https://help.aliyun.com/zh/model-studio/optimize-prompt) 文档所列支持列表为准。模板功能（如变量占位、上下文注入）在全部模型上可用，详见 [Prompt模板概述](https://help.aliyun.com/zh/model-studio/prompt-template)。> **注意**：[Prompt样例库](https://help.aliyun.com/zh/model-studio/prompt-sample-optimization) 中部分示例基于旧版 Qwen-1.5，对 Qwen2/Qwen3 模型需手动验证 token 截断与角色标记兼容性。
+当前所有百炼托管模型（包括 Qwen 系列、Baichuan、GLM 等）均原生支持 Prompt 输入，无需额外适配。核心功能包括：  
+- **Prompt 模板管理**：提供预置模板库与自定义模板能力，支持变量占位符（如 `{{input}}`）和多轮上下文注入；  
+- **自动优化**：基于历史调用日志与反馈数据，对低效 Prompt 进行语义重写与结构精简；  
+- **反馈驱动优化**：允许用户对单次响应标注“有用/无用”，系统据此微调模板权重 [Prompt自动优化](../../raw/application-user-guide/prompt.md)；  
+- **样例库集成**：内置覆盖客服、摘要、代码生成等场景的 Prompt 样例，可一键复用或二次编辑 [Prompt样例库](../../raw/application-user-guide/prompt.md)。
 
 ## 关键参数
 
-调用时通过 `prompt_template` 字段传入模板字符串，支持 Jinja2 语法（如 `{{ input }}`、`{% if condition %}...{% endif %}`）；若启用自动优化，需额外设置 `enable_prompt_optimization: true`。参数 `prompt_version` 可指定模板版本（默认 latest），该字段在 [自定义Prompt模板](https://help.aliyun.com/zh/model-studio/prompt-custom-template) 中有明确定义。
+在 API 调用或控制台配置中，以下参数直接影响 Prompt 行为：  
+- `prompt_template_id`（string）：指定模板 ID，为空时使用默认模板；  
+- `variables`（object）：传入模板中占位符对应的键值对，如 `{"input": "总结下文", "context": "..."}`；  
+- `enable_optimization`（boolean）：启用后触发实时自动优化逻辑，仅对已标记为“生产环境”的模板生效；  
+- `temperature` / `top_p` 等采样参数仍独立作用于模型层，不改变 Prompt 解析逻辑。  
+> **注意**：`enable_optimization` 在 v3.2+ 版本中默认关闭，旧版文档中“默认开启”描述已过时，请以 [自定义Prompt模板](../../raw/application-user-guide/prompt.md) 中最新参数说明为准。
 
 ## 使用方式
 
-1. 在控制台创建 Prompt 模板，或直接在 API 请求体中内联 `prompt_template`；
-2. 若需运行时变量替换，确保请求 payload 包含对应 `variables` 对象（如 `{"input": "xxx", "context": [...]}`）；
-3. 启用自动优化需在请求头或参数中显式声明，且模型必须在 [Prompt自动优化](https://help.aliyun.com/zh/model-studio/optimize-prompt) 支持列表内。
+1. **控制台操作**：进入「应用开发」→「Prompt 管理」，创建/导入模板，设置变量映射后绑定至 API 端点；  
+2. **API 调用**：在 `/v1/chat/completions` 请求体中，将完整 Prompt 字符串（或模板 ID + variables）置于 `messages[0].content` 字段；  
+3. **SDK 集成**：Python SDK 提供 `PromptTemplate.render()` 方法渲染变量，返回标准消息格式，兼容所有百炼模型客户端。
 
 ## 限制和注意事项
 
-- 单次 Prompt 模板长度上限为 8192 token（含变量展开后），超长将触发截断并返回 warning；
-- 自动优化功能仅对同步调用生效，流式响应（stream=true）下不触发优化；
-- 所有 Prompt 操作均受项目级配额限制，详情参见 [Prompt反馈优化](https://help.aliyun.com/zh/model-studio/prompt-feedback-optimization) 中的速率控制说明。
+- 单次请求中 `messages[0].content` 的 Prompt 总长度（含变量展开后）不得超过 8192 token，超长将被截断并返回警告；  
+- 自动优化功能依赖至少 50 条有效反馈样本，新模板首次启用需预留冷启动周期；  
+- 模板中禁止嵌入可执行代码或外部 HTTP 调用指令，该类内容将被安全网关拦截；  
+- 所有 Prompt 操作均受项目级权限控制，`prompt:read` 和 `prompt:manage` 权限需显式授予。
 
 ## 来源文档
 
 - [Prompt](../../raw/application-user-guide/prompt.md)
+
 
 

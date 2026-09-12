@@ -1,48 +1,58 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台支持的一种结构化工具调度机制，允许大模型在推理过程中自主识别用户意图、生成符合规范的函数调用请求（含函数名与参数），并由平台安全执行外部工具或服务，最终将结果注入上下文继续生成。该能力无需开发者编写硬编码逻辑即可实现动态数据查询、业务系统集成与多步骤任务编排。
+函数调用（Function Calling）是百炼平台中模型主动触发外部工具执行能力的核心机制：大模型在推理过程中，根据用户输入和上下文，自主生成结构化的函数调用请求（含函数名、参数），由开发者或平台运行时解析并执行真实逻辑，再将结果回传以继续对话。该机制使模型突破纯文本生成边界，实现搜索、计算、数据库操作、API 集成等确定性任务。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **基础模型 API 调用**：在 `/v1/chat/completions` 请求中，通过 `tools` 字段声明可用函数（OpenAI 兼容格式），并设置 `tool_choice` 控制调用策略（如 `"auto"` 或指定函数名）。模型返回 `tool_calls` 数组，平台自动解析、校验并执行对应函数（如数据库查询、HTTP 请求），再将结果以 `tool_message` 形式回传给模型完成闭环。
+函数调用不是独立服务，而是深度嵌入多个能力层的标准化交互协议，具体使用方式依场景而异：
+
+- **Managed Agents（托管智能体）**：作为 Agent 自主规划（Plan-and-Execute）的执行环节。Agent 模型（如 `qwen-plus`）在多步推理中决定调用哪个工具（如 `search_knowledgebase`），平台自动解析 `tool_calls`、转发请求、注入结果到上下文，并支持 Webhook 事件（`tool_called`）通知开发者。
   
-- **Managed Agents（托管智能体）**：函数调用是 Agent 的核心执行单元。Agent 定义中声明的 `tools` 会自动注册为可调用函数；当 Agent 运行时，模型基于 `input_schema` 和会话上下文决定是否及如何调用这些函数，并支持异步等待、错误重试与状态透出（通过 `tool_called` Webhook 事件）。
+- **Plug-in（插件）**：面向通用模型调用的轻量级扩展机制。开发者在请求中声明 `tools` 数组（OpenAI 兼容格式），指定 `tool_choice` 策略（`auto`/`none`/强制指定），模型返回 `tool_calls` 后，**需客户端主动执行调用并提交 `tool_result`** 继续会话流。
 
-- **数据连接（Data Connection）**：函数调用可直接绑定已配置的数据连接。例如，在 `tools` 中定义一个 `query_database` 函数，其内部实现调用 `DataConnectionClient.invoke()` 并传入 `connection_id` 和参数化 SQL，实现 RAG 检索或实时数据增强。
+- **DashScope 原生 API（Qwen API Reference）**：最底层、最灵活的接入方式。通过 `/v1/chat/completions` 接口传入 `tools` 和 `tool_choice`，响应中明确返回 `tool_calls` 字段；支持流式响应（`stream: true`），但 `tool_calls` 仅在 `finish_reason: "tool_calls"` 的最终 chunk 中出现。
 
-- **插件（Plug-in）系统**：插件本质是预注册的标准化函数。启用 `enable_plugins: true` 后，模型可将插件视为内置函数进行调用；插件元数据（OpenAPI 描述）即为函数签名，平台负责协议转换、鉴权与超时控制。
+- **Model Context Protocol（MCP）**：平台级标准化协议，聚焦安全与上下文感知。要求显式传递 `tool_id`、`session_id` 和结构化 `input`，所有调用经百炼网关鉴权与审计；适用于需强治理、跨模型复用工具的生产环境。
 
-- **[Token](token.md) Plan 计费**：函数调用产生的 token 消耗（包括输入 [prompt](../guides/prompt.md)、tool call 请求、tool response 内容）全部纳入 [Token](token.md) Plan 抵扣范围，与普通文本生成同等计费，无需额外开通或配置。
+- **Application Calling（应用调用）**：对已发布的智能体或工作流应用进行端到端调用。函数调用发生在应用内部（如智能体的工具节点、工作流的函数节点），对外表现为 `POST /v1/applications/{app_id}/call` 的统一接口，开发者无需直接处理 `tool_calls`。
 
-- **模型兼容性**：当前仅 `qwen-max`、`qwen-plus`、`qwen-turbo` 及 `qwen2.5-*` 系列模型原生支持函数调用；`qwen-vl` 等多模态模型暂不支持（需使用 `qwen2.5-vl` 替代）。
+- **Release Notes 所述能力演进**：函数调用能力持续增强，例如 Qwen3 支持 1024K 上下文下的长链工具调用，`stream=true` 下 `tool_choice="auto"` 已稳定可用，`system` 消息可注入全局工具使用约束。
 
 ## 关键参数和配置
 
-| 参数名 | 类型 | 说明 |
-|--------|------|------|
-| `tools` | array of objects | 必填。函数定义列表，每个对象包含 `type: "function"`、`function: { name, description, parameters }`（JSON Schema 格式） |
-| `tool_choice` | string or object | 控制调用策略：<br>• `"none"`：禁用调用<br>• `"auto"`（默认）：由模型自主决策<br>• `{"type": "function", "function": {"name": "xxx"}}`：强制指定函数 |
-| `tool_choice_mode` | string | （可选）高级策略，如 `"parallel"`（并发调用多个函数）、`"sequential"`（串行链式调用），需模型版本支持 |
-| `tool_timeout_ms` | integer | 单次函数执行超时，默认 10000（10 秒），最大 30000；超时后返回 error message 并终止调用链 |
-| `enable_plugins` | boolean | 若同时使用插件，必须设为 `true` 才激活函数调度器；否则 `tools` 字段被忽略 |
+| 参数 | 类型 | 必填 | 说明 | 使用场景 |
+|------|------|------|------|----------|
+| `tools` | array | 是（启用调用时） | 工具定义数组，每个元素为 `{ "type": "function", "function": { "name", "description", "parameters" } }`；`parameters` 必须是合法 JSON Schema object（扁平结构优先，避免 `anyOf`/`oneOf`） | Plug-in、DashScope API、MCP、Managed Agents |
+| `tool_choice` | string / object | 否 | 控制策略：<br>• `"auto"`（默认，模型自主决策）<br>• `"none"`（禁用）<br>• `{"type": "function", "function": {"name": "xxx"}}`（强制指定） | Plug-in、DashScope API（MCP 和 Managed Agents 由平台策略控制，不暴露此参数） |
+| `tool_preview` | boolean | 否（仅调试） | 设为 `true` 时返回 `tool_calls` 预览但不触发真实调用，用于验证 schema 兼容性 | Plug-in（调试阶段） |
+| `session_id` | string | 否（会话续写必需） | 关联上下文的唯一标识，用于跨轮次保持工具执行状态和历史输入输出 | Managed Agents、MCP、Application Calling（智能体应用） |
+| `tool_id` | string | 是（MCP 调用） | MCP 注册时分配的工具唯一 ID，非 URL；必须与控制台注册一致 | MCP |
 
-> ⚠️ 注意：`tools` 中的 `parameters` 必须为严格 JSON Schema（支持 `string`/`number`/`boolean`/`object`/`array`/`null`），不支持 OpenAPI 的 `x-aliyun-*` 扩展字段；平台将校验参数类型与必填项，非法调用直接拒绝。
+> ⚠️ 注意：  
+> - 单次请求最多声明 **10 个 `tools`**，单次响应最多返回 **3 个 `tool_calls`**；  
+> - `tools` 中的 `parameters` Schema 深度不得超过 **5 层**，含二进制字段需显式声明 `"format": "binary"`；  
+> - 所有自定义工具 endpoint **必须使用 HTTPS**，且域名需在百炼控制台完成白名单备案。
 
 ## 面向开发者，简洁实用
 
-- **快速验证**：用 `curl` 发起一次带 `tools` 的请求，观察响应中是否出现 `finish_reason: "tool_calls"` 和 `message.tool_calls` 字段；若无，检查模型是否支持、`tool_choice` 是否正确、`parameters` 是否符合 Schema。
-- **调试技巧**：开启 `debug: true` 可在响应中获取 `tool_call_request` 原始内容与 `tool_call_result` 执行日志，便于定位参数拼接或权限问题。
-- **错误处理**：捕获 `tool_calls` 中的 `error` 字段（如 `tool_not_authorized`、`function_not_found`），并在业务层降级为文本回答或提示用户重试。
-- **性能优化**：单次最多并发 3 个函数调用；如需更高吞吐，请拆分为多个独立请求或使用 Managed Agents 的异步任务委派能力。
-- **安全边界**：所有函数执行均在百炼服务端沙箱内完成，原始凭证（如数据库密码）不透出至模型上下文；但 `tools` 定义中避免硬编码敏感值（如 `api_key: "xxx"`），应通过数据连接或插件授权机制管理。
+- ✅ **快速上手**：从 DashScope API 开始，用 `qwen-plus` + `tools` 数组 + `tool_choice="auto"` 发起首次调用，观察响应中的 `tool_calls` 字段；
+- ✅ **生产就绪**：  
+> - 敏感参数（如 token、密码）在 `parameters` Schema 中标记 `"x-sensitive": true`，平台自动脱敏；  
+> - 使用 SDK（v3.12.0+）调用 MCP 或 Managed Agents，自动处理重试、上下文注入与错误分类（如 `MCP_TOOL_NOT_FOUND`）；  
+> - 工作流应用中，勿依赖顶层 `parameters` 覆盖 LLM 节点采样参数，应在节点配置中单独设置；
+- ❌ **避坑指南**：  
+> - 不要混用 `functions`（[OpenAI 兼容接口](openai-compatibility.md)已弃用）与 `tools`；  
+> - 流式响应中，`tool_calls` 不在中间 chunk 出现，切勿提前解析；  
+> - 切换模型（如 `qwen-max` → `qwen2.5-7b`）后上下文不继承，`session_id` 无效；  
+> - 绕过百炼网关直连工具 endpoint 将触发风控拦截，必须走平台协议。
 
 ## 关联主题页
 
-- [token plan guide](../guides/token-plan-guide.md)
 - [managed agents](../guides/managed-agents.md)
-- [data connection overview](../guides/data-connection-overview.md)
 - [plug in](../guides/plug-in.md)
-- [more about models](../api/more-about-models.md)
-- [get started with models](../guides/get-started-with-models.md)
+- [qwen api reference](../api/qwen-api-reference.md)
+- [model context protocol](../guides/model-context-protocol.md)
+- [bailian application calling](../guides/bailian-application-calling.md)
+- [release notes](../guides/release-notes.md)
 
 

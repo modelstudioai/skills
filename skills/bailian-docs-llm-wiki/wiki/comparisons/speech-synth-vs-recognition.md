@@ -1,75 +1,53 @@
 # 语音合成与语音识别对比
 
-本文旨在帮助开发者清晰区分百炼平台中**语音合成（TTS）**与**语音识别（ASR）**两项核心音频能力的技术定位、使用边界与选型逻辑。二者虽同属“语音↔文本”双向转换范畴，但在数据流向、模型目标、接口设计及工程实践上存在本质差异。正确理解其异同，是构建稳定、低延迟、高可用语音应用（如智能客服、无障碍交互、会议纪要系统）的前提。
+本页旨在为开发者提供语音合成（TTS）与语音识别（ASR）两大核心音频能力的系统性对比，帮助在实际项目中快速理解二者的技术定位、接口差异与选型逻辑。随着智能语音交互场景日益丰富（如客服机器人、会议纪要、无障碍应用、有声内容生成等），准确区分 TTS 与 ASR 的能力边界、输入输出范式及工程约束，是构建稳定、低延迟、高可用音频链路的前提。
 
----
+以下对比基于百炼平台当前（2024年Q4）正式发布的 API 规范，涵盖标准 RESTful 接口与实时流式接口（Realtime API / Omni Realtime API），所有信息均以控制台可选模型和官方文档为准，不包含已下线或实验性功能。
 
-## 关键维度对比
+## 关键维度对比表
 
-| 维度 | 语音合成（TTS） | 语音识别（ASR） |
+| 维度 | 语音识别（ASR） | 语音合成（TTS） |
 |------|----------------|----------------|
-| **核心功能** | 将结构化文本（Text）转换为自然语音波形（Audio） | 将原始语音信号（Audio）转换为可读文本（Text） |
-| **输入格式** | `input.text`（UTF-8 字符串），支持带标点、停顿标记（如 `<break time="300ms"/>`）；部分模型支持 SSML（需参数启用） | `input.audio_url`（HTTPS 公开 URL）或 `input.audio_bytes`（Base64 编码 PCM/MP3/M4A，≤10 MB）；要求采样率 16kHz/44.1kHz，单声道优先 |
-| **输出格式** | `output.audio_url`（生成语音的临时 HTTPS 下载链接）或 `output.audio_bytes`（Base64 编码 WAV/MP3）；支持流式响应（`Accept: text/event-stream`）返回音频分块 | `output.text`（识别结果文本）、`output.words`（带时间戳的词级对齐）、`output.punctuation`（自动加标点结果）；支持流式返回增量识别结果（实时 ASR） |
-| **主流支持模型** | `cosyvoice-300m`（多音色、情感可控）、`qwen-tts-v1`（Qwen 系列原生 TTS）、`sambert-zh-cn`（中文高拟真） | `paraformer-realtime-v1`（低延迟流式）、`paraformer-v2`（高精度离线转写）、`whisper-large-v3`（多语种强泛化） |
-| **API 端点** | `POST https://dashscope.aliyuncs.com/api/v1/services/aigc/audio`（统一音频 API） | `POST https://dashscope.aliyuncs.com/api/v1/services/aigc/audio`（同一端点，通过 `model` 参数区分） |
-| **计费方式** | 按**合成语音时长（秒）**计费（例：1 分钟语音 = 60 秒 × 单价）；支持按字符数折算（仅限部分模型，详见定价页） | 按**识别音频时长（秒）**计费（例：1 分钟音频 = 60 秒 × 单价）；流式识别按实际处理时长累计，非请求时长 |
-| **典型场景** | • 智能播报（天气、新闻朗读）<br>• 有声书/课件自动配音<br>• IVR 语音导航提示<br>• 个性化语音助手回复 | • 会议录音转文字纪要<br>• 客服通话实时转写与质检<br>• 视频字幕自动生成<br>• 语音搜索与指令控制 |
-| **流式能力支持** | ✅ 支持（需设置 `Accept: text/event-stream`，返回 `audio.chunk` 事件）<br>• 适用于长文本分段合成、低延迟播放 | ✅ 支持（`paraformer-realtime-v1` 等模型专为流式优化）<br>• 支持 WebSocket 连接下实时音频帧输入与增量文本输出 |
-| **多模态集成路径** | • 在 `omni realtime api` 中作为 `output.audio.chunk` 输出环节<br>• 在 `realtime api` 中需配合 AOQ 模型 + 音频输出扩展启用 | • 在 `omni realtime api` 中作为 `input.audio` 输入环节<br>• 在 `realtime api` 中需启用 `input_audio_format` 并申请 ASR 权限 |
+| **核心任务** | 将**语音信号**转换为**结构化文本**（含标点、说话人标签、时间戳等） | 将**自然语言文本**转换为**高质量语音波形**（支持音色、语速、情感调节） |
+| **输入格式** | • `audio_url`（公开可访问的 WAV/MP3/PCM 链接）<br>• 或 `audio_bytes`（Base64 编码的原始音频数据）<br>• 强制要求：单声道，推荐采样率 `16000 Hz`，时长 ≤ 60 秒 | • `input.text`（UTF-8 文本字符串）<br>• 可选 `input.ssml`（支持简单 SSML 标签，如 `<prosody rate="1.2">`）<br>• 无音频输入要求 |
+| **输出格式** | • `json`：返回 `text`、`segments`（含 start/end 时间、speaker）、`punctuated_text` 等字段<br>• `stream`（仅实时 ASR）：SSE 流式返回中间结果（`is_final=false`）与终态结果（`is_final=true`） | • `json`：返回 `audio_url`（托管音频链接）或 `audio_bytes`（Base64 编码 WAV）<br>• `stream`（TTS 流式）：SSE 返回分块音频二进制数据（`audio.delta`），支持边生成边播放 |
+| **主流支持模型** | • `paraformer-v1`（通用高精度）<br>• `qwen-audio`（Realtime API 中的端到端语音理解模型）<br>• `qwen-omni-realtime-*`（Omni 实时接口中集成 ASR 子模块） | • `cosyvoice-v1`（多音色、高自然度）<br>• `qwen-omni-realtime-*`（Omni 接口中内置 TTS 引擎，支持声音复刻）<br>• *注：`qwen-audio` 仅支持 ASR，不提供 TTS 能力* |
+| **API 端点（RESTful）** | `POST /api/v1/audio/transcribe` | `POST /api/v1/audio/synthesize` |
+| **API 端点（实时流式）** | • Realtime API：`wss://.../realtime/v1/qwen-audio`（需传音频帧）<br>• Omni Realtime：`wss://.../api/v1/omni-realtime`（自动协同 ASR+TTS） | • Omni Realtime：`wss://.../api/v1/omni-realtime`（服务端直接推送 `response.audio.delta`）<br>• *标准 Realtime API 不提供独立 TTS 流式端点* |
+| **计费方式** | • 按**音频时长（秒）** 计费（向上取整）<br>• 支持并发调用，但单次请求音频 ≤ 60 秒 | • 按**生成语音时长（秒）** 计费（以最终输出音频时长为准）<br>• 声音复刻（Voice Cloning）另计「克隆实例」费用，与合成时长分离 |
+| **典型场景** | • 会议录音转文字纪要<br>• 客服通话语音质检<br>• 视频字幕自动生成<br>• 实时语音输入法 | • 有声书/播客内容生成<br>• IVR 语音导航播报<br>• AI 助手语音应答（配合 LLM）<br>• 个性化语音通知（如带姓名的快递提醒） |
+| **流式能力支持** | ✅ 全面支持：<br>– RESTful `response_format=stream`（适合短音频）<br>– Realtime API（WebSocket，低延迟音频帧流）<br>– Omni Realtime（端到端流式协同） | ✅ 支持，但路径受限：<br>– RESTful `response_format=stream`（返回分块 Base64）<br>– **仅 Omni Realtime API 提供原生二进制音频流（`audio.delta`）**，延迟最低（<300ms 端到端）<br>– Realtime API 无独立 TTS 流式能力 |
+| **特殊能力扩展** | • 多语种识别（中/英/日/韩等）<br>• 说话人分离（Speaker Diarization）<br>• 静音过滤与信噪比自适应 | • 多音色选择（男/女/童声/角色音）<br>• 语速/音调/停顿精细调节<br>• 声音复刻（需上传 30s+ 参考音频，生成专属音色） |
 
-> 💡 **注意**：  
-> - TTS 与 ASR **共用同一 RESTful 端点**，但模型标识符（`model`）互斥，不可混用；  
-> - `omni realtime api` 是唯一将 ASR+LLM+TTS **深度耦合为原子操作**的接口，适合端到端语音对话；而独立 TTS/ASR API 更适合解耦、可插拔的模块化架构；  
-> - 所有音频 API 均要求音频格式为 WAV（PCM）、MP3 或 M4A，**不支持 FLAC、AMR、OPUS 等格式**。
+## 各方案适用场景建议
 
----
+| 场景需求 | 推荐方案 | 理由说明 |
+|----------|-----------|-----------|
+| **离线批量处理长录音（如 45 分钟会议）** | RESTful ASR（`paraformer-v1` + `audio_url`） | 支持最大 60 秒分片上传，配合服务端自动拼接；计费清晰，无需维护长连接；适合后台异步任务队列。 |
+| **实时语音输入法（用户边说边出字）** | Realtime API（`qwen-audio`） | WebSocket 协议保障 <500ms 端到端延迟；支持音频帧级流式输入与中间结果（`interim_results`）；无需预切分音频。 |
+| **全双工语音助手（听—思—说闭环）** | Omni Realtime API（`qwen-omni-realtime-*`） | **唯一支持 ASR+LLM+TTS 全链路流式协同的接口**：语音输入 → 实时识别 → LLM 推理 → 语音合成 → 音频流直推，全程共享上下文与状态，避免多次 API 调用引入延迟与错误累积。 |
+| **生成高拟真有声内容（如企业宣传音频）** | RESTful TTS（`cosyvoice-v1` + `input.ssml`） | 支持 SSML 精细控制停顿与重音；输出高保真 WAV；适合对音质、节奏要求严苛的成品制作；可预生成并 CDN 分发。 |
+| **定制化语音播报（如银行APP客户专属语音）** | Omni Realtime API + `voice_clone_id` | 声音复刻能力仅在此接口开放；支持将客户授权语音克隆为播报音色，兼顾安全性与个性化；流式合成确保自然连贯。 |
+| **轻量级 Web 应用嵌入语音播报（无后端）** | RESTful TTS（`cosyvoice-v1` + `response_format=json`） | 前端可直接调用，获取 `audio_url` 后交由 `<audio>` 标签播放；免流式解析复杂度，开发成本最低。 |
 
-## 适用场景建议
+## 技术选型参考指南（面向开发者）
 
-### ✅ 推荐选择 **语音合成（TTS）** 当：
-- 你已有结构化文本内容（如知识库问答结果、通知消息、脚本台词），需将其转化为自然语音输出；
-- 应用对语音表现力有明确要求：需指定音色（如“知性女声”“儿童音”）、调节语速/语调/停顿，或启用情感渲染（`cosyvoice-300m`）；
-- 场景涉及个性化声音复刻（Voice Cloning）：需提前注册声纹并传入 `voice_id`（仅 `qwen-omni` 支持）；
-- 构建播客生成、AI 教师讲解、无障碍阅读等“文本→语音”单向服务。
+- **优先选择 Omni Realtime API 当且仅当**：您的场景需要 **“实时性” + “闭环交互” + “个性化音色”** 三者同时满足。它是目前百炼平台唯一能在一个 WebSocket 连接内完成“语音输入→识别→理解→生成→合成→播放”的方案。若仅需其中一环（如只做识别），请勿过度使用 Omni，以免增加不必要的连接管理与并发配额消耗。
 
-### ✅ 推荐选择 **语音识别（ASR）** 当：
-- 你拥有原始语音数据（如会议录音、用户语音指令、客服通话），需提取其中语义信息；
-- 要求高准确率与强鲁棒性：支持中英文混合、方言口音、背景噪音抑制（推荐 `paraformer-v2`）；
-- 需要实时交互反馈：如语音输入搜索、实时字幕、语音控制面板（推荐 `paraformer-realtime-v1` + 流式）；
-- 后续流程依赖文本：如转交 LLM 进行摘要、分析、翻译，或存入文本数据库检索。
+- **RESTful 接口仍是主力选择**：对于非实时、可容忍秒级延迟、需高稳定性和易调试性的场景（如后台批处理、管理后台字幕生成），RESTful `/transcribe` 和 `/synthesize` 接口成熟、文档完善、错误码明确，应作为默认起点。
 
-### ⚠️ 需谨慎评估或组合使用的场景：
-- **全双工语音对话系统**：  
-  → 不建议分别调用独立 TTS+ASR（存在状态同步、延迟叠加、上下文断裂风险）；  
-  → **首选 `omni realtime api`**：天然支持 ASR→LLM→TTS 全链路流式闭环，内置会话管理与音频编解码适配。  
-- **需同时处理语音输入与输出，但逻辑复杂（如多轮工具调用+语音反馈）**：  
-  → 可选用 `realtime api`（WebSocket），通过 `tools` + `output.audio.delta` 实现灵活编排，但需自行处理音频格式转换与流控。  
-- **批量离线处理（如万条录音转写）**：  
-  → 优先使用 RESTful ASR（`paraformer-v2`），避免 WebSocket 连接管理开销；TTS 同理，批量合成推荐异步任务队列模式。
+- **警惕 Realtime API 的能力边界**：`qwen-audio` 是 Realtime API 中唯一的语音模型，但它**只做 ASR，不做 TTS**。若你试图在 Realtime 中实现“语音问答”，必须自行调用 TTS 接口（或降级为 RESTful），这将破坏流式体验。此时请直接评估 Omni Realtime 是否更合适。
 
----
+- **计费敏感型项目注意**：  
+  - ASR 计费按**输入音频时长**，TTS 按**输出语音时长**。例如：输入 10 秒嘈杂录音 → ASR 输出 8 秒精简文本 → TTS 生成 12 秒润色后播报音频，则 ASR 计 10 秒，TTS 计 12 秒。  
+  - Omni Realtime 按**会话时长（秒）** 统一计费（从 `session.init` 到连接关闭），无论内部 ASR/TTS 调用多少次，适合高频短交互；而 RESTful 按每次调用独立计费，适合低频长任务。
 
-## 技术选型参考（面向开发者）
+- **音频工程注意事项**：  
+  - 两者均**强制单声道**。双声道音频需预处理（如 ffmpeg `-ac 1`），否则可能静音左/右通道导致识别失败或合成异常。  
+  - 采样率不匹配会触发自动重采样（可能轻微劣化音质），强烈建议前端统一采集/编码为 `16kHz PCM`，与平台最优实践对齐。  
+  - 流式场景下，Omni Realtime 要求音频帧 ≤20ms（即每帧 320 字节 @16kHz/16bit），需客户端严格分帧，不可整段发送。
 
-| 选型考量项 | 推荐方案 | 说明 |
-|------------|----------|------|
-| **入门级快速验证** | RESTful TTS / ASR | 无需 WebSocket 开发，标准 HTTP POST 即可调通；适合 PoC、脚本自动化、后台批处理 |
-| **低延迟实时交互（<500ms 端到端）** | `omni realtime api`（`qwen-omni`） | 最小化链路跳转，服务端统一调度 ASR/TTS 编解码与缓冲，实测平均首字延迟 <300ms |
-| **高定制化语音输出（音色/情感/节奏）** | `cosyvoice-300m`（RESTful）或 `qwen-omni`（实时） | `cosyvoice` 提供丰富 voice preset 与细粒度参数（`emotion`, `breathiness`）；`qwen-omni` 支持 voice_id 复刻 |
-| **强抗噪/多方言/高精度转写** | `paraformer-v2`（RESTful 离线）或 `paraformer-realtime-v1`（流式） | `paraformer-v2` 在嘈杂环境与专业术语场景准确率显著优于通用模型；流式版支持 16kHz 实时帧输入 |
-| **与大模型深度协同（如语音提问→文本思考→语音回答）** | `omni realtime api` > `realtime api` > 独立 API 串联 | `omni` 提供原生多模态事件总线；`realtime` 需手动桥接 audio/text 通道；独立 API 串联需自行维护 session state 与错误重试 |
-| **成本敏感型长文本合成（如电子书）** | `qwen-tts-v1`（RESTful） | 单位时长成本较低，基础音质满足通用播报需求；避免为高拟真音色支付溢价 |
-
-> 📌 **最后提醒**：  
-> - 所有音频 API 均受 **单次请求音频时长 ≤ 60 秒** 限制（音乐生成除外），超长内容请分段处理；  
-> - 音频 URL 必须支持 `HEAD` 请求且无鉴权跳转，否则返回 `400 InvalidAudioUrl`；  
-> - 生产环境务必配置重试机制（针对 `5xx` 服务端错误）与降级策略（如 TTS 失败时 fallback 文本提示）；  
-> - 调试建议开启 `debug: true` 参数（若模型支持），获取更详细的中间过程日志与 trace ID。
-
----  
-*文档更新日期：2024年6月*  
-*依据百炼平台 v2.3.0 音频 API 规范整理*
+如需进一步验证模型效果，建议使用百炼控制台「API 调试」工具，上传真实业务音频样本进行端到端测试，并结合 [语音识别](https://help.aliyun.com/zh/model-studio/speech-recognition-api-reference) 与 [语音合成](https://help.aliyun.com/zh/model-studio/speech-synthesis-api-reference) 的最新参数说明文档调整配置。
 
 ## 被对比主题页
 

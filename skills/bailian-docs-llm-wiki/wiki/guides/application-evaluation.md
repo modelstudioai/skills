@@ -1,40 +1,35 @@
 # application evaluation
 
-应用评测是百炼平台提供的核心质量保障能力，用于对部署后的 LLM 应用进行自动化或人工方式的效果验证与指标量化。支持基于预设评测集的批量打分、多维度指标（如准确性、安全性、流畅性）分析，以及结果可视化对比。该能力适用于模型迭代验证、A/B 测试及上线前合规审查等典型场景。
+应用评测是百炼平台提供的核心质量保障能力，用于系统性评估大模型应用在真实业务场景下的输出质量、稳定性与合规性。支持自动评测与人工评测双模式，可基于预置或自定义评测集对应用进行多维度打分。该能力深度集成于应用开发工作流，适用于上线前验证与迭代优化阶段。
 
 ## 支持的模型/功能
 
-- **自动评测**：调用平台内置评估模型（当前默认为 `qwen-plus-eval`）对应用响应进行零样本打分，支持自定义评分规则和阈值告警；详情见 [应用评测](../../raw/application-user-guide/application-evaluation.md)。  
-- **人工评测**：提供标注工作台，支持多人协同标注、标签管理与一致性校验，适用于需语义理解或主观判断的复杂场景；参考 [人工评测](../../raw/application-user-guide/application-evaluation.md)。  
-- **评测集管理**：支持上传结构化测试用例（JSONL 格式），包含输入、期望输出、权重与分类标签；评测集可复用、版本化，并与自动/人工流程绑定；详见 [评测集](../../raw/application-user-guide/application-evaluation.md)。
+- 支持所有已部署的百炼应用（包括基于 Qwen 系列、Qwen2 系列及第三方模型构建的应用）；
+- 提供两类评测模式：[自动评测](../../raw/application-user-guide/application-evaluation.md)（基于规则/模型打分）和 [人工评测](../../raw/application-user-guide/application-evaluation.md)（支持多人协同标注与审核）；
+- 支持评测集管理，包括导入/导出测试用例、设置期望输出、配置评测维度（如准确性、安全性、流畅性等），详见 [评测集](../../raw/application-user-guide/application-evaluation.md) 文档。
 
 ## 关键参数
 
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| `dataset_id` | string | 必填，评测集唯一标识（通过 `/v1/datasets` 接口创建后获取） |
-| `eval_mode` | string | 可选 `"auto"` 或 `"manual"`；自动模式下需指定 `eval_model`（如 `"qwen-plus-eval"`） |
-| `metrics` | array | 可选，指定计算的指标列表，如 `["accuracy", "toxicity", "latency"]`；未指定时使用默认指标集 |
-| `timeout_ms` | integer | 单条用例超时时间，默认 30000（30 秒），仅对自动评测生效 |
-
-> **注意**：文档 [新版应用评测](../../raw/application-user-guide/application-evaluation.md) 中提及的 `eval_mode: "hybrid"` 模式目前尚未在 API v1.2 中开放，实际调用将返回 `400 Unsupported mode` 错误，请暂勿使用。
+- `dataset_id`：必填，指定待评测的评测集 ID（可通过控制台或 API 获取）；
+- `evaluation_config`：JSON 对象，定义评测策略，含 `scoring_method`（`rule_based` / `llm_judge`）、`judge_model`（仅当 `scoring_method=llm_judge` 时生效，支持 `qwen-max`, `qwen-plus`）、`timeout_seconds`（默认 60）；
+- `concurrency`：并发请求数，最大值为 10（超出将被限流）。
 
 ## 使用方式
 
-1. **准备评测集**：通过控制台或 `/v1/datasets` 创建并上传测试数据；确保字段 `input` 和 `expected_output` 存在（人工评测可省略后者）。  
-2. **发起评测任务**：调用 `POST /v1/applications/{app_id}/evaluations`，传入 `dataset_id` 与 `eval_mode` 等参数；示例请求见 [应用评测](../../raw/application-user-guide/application-evaluation.md)。  
-3. **查询结果**：使用 `GET /v1/evaluations/{task_id}` 获取状态与聚合报告；原始明细可通过 `/v1/evaluations/{task_id}/results` 分页拉取。
+1. **控制台操作**：进入「应用详情页 → 评测」标签页，选择评测集并启动自动评测；人工评测需先分配任务至成员；
+2. **API 调用**：调用 `POST /applications/{app_id}/evaluations`，传入上述关键参数；
+3. **结果查看**：评测报告包含整体得分、各维度分布、失败用例详情及原始输入/输出对比。新版评测界面与能力已在 [新版应用评测](../../raw/application-user-guide/application-evaluation.md) 中统一说明。
 
 ## 限制和注意事项
 
-- 单次自动评测任务最多支持 500 条用例；超量需拆分提交。  
-- 评测集中的 `input` 字段长度上限为 8192 字符，超出部分将被截断且不触发报错。  
-- 人工评测任务一旦启动，不可中途修改评测集内容；若需更新，须新建任务并重新分配标注员。  
-- 所有评测任务默认保留 90 天，过期后原始响应与标注记录将被自动清理。  
-- 当前不支持跨地域评测（例如华东1应用调用华北2评测模型），必须保证应用与评测资源位于同一 Region。
+- 单次自动评测最多支持 500 条测试用例；超量需分批提交；
+- `llm_judge` 模式下，若未显式指定 `judge_model`，系统默认使用 `qwen-plus`，但部分旧版 SDK 默认回退至 `qwen-turbo`，> **注意**：该行为已在 v3.2.0+ SDK 中修正，旧版本可能产生不一致评分，请升级 SDK 或显式指定模型；
+- 人工评测任务一旦发布不可撤回，且标注结果不可批量修改；
+- 评测过程中应用必须处于「已发布」状态，草稿态应用无法触发评测流程。
 
 ## 来源文档
 
 - [应用评测](../../raw/application-user-guide/application-evaluation.md)
+
 
 

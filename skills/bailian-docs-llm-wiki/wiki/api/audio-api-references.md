@@ -1,58 +1,48 @@
 # audio api references
 
-百炼平台提供多种音频处理能力的 API 接口，覆盖语音识别、语音合成、音乐生成、语音翻译和语音对话五大核心场景。所有接口均通过统一的 RESTful API 调用，支持标准 HTTP 请求与 JSON 响应格式。开发者需使用有效的 API Key 并遵循各模型的输入/输出规范。
+百炼平台提供多种音频处理能力的 API 接口，覆盖语音识别、语音合成、音乐生成、语音翻译和语音对话五大核心场景。所有接口均通过统一的 RESTful API 形式调用，支持流式与非流式响应。开发者需根据具体任务选择对应模型，并注意各接口在输入格式、时长限制及计费维度上的差异。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-当前音频类 API 包含以下功能模块（按生产可用性排序）：
-- **语音识别（ASR）**：支持中英文混合识别、实时流式识别及离线音频转写  
-- **语音合成（TTS）**：提供多音色、多语种、可调节语速/语调的高质量语音生成  
-- **音乐生成**：支持文本描述驱动的短音乐片段生成（最长 30 秒），暂不支持歌词对齐  
-- **语音翻译（ST）**：支持语音输入→目标语言文本输出（如中文语音→英文文本），**暂不支持语音→语音直译**  
-- **语音对话（Voice Chat）**：端到端语音交互能力，集成 ASR + LLM + TTS 流程，适用于智能硬件场景  
+当前支持以下音频相关能力：
+- **语音识别（ASR）**：将音频转为文本，支持多语种、带标点和说话人分离选项  
+- **语音合成（TTS）**：文本转语音，提供多种音色与语速调节能力  
+- **音乐生成**：根据文本描述生成高质量背景音乐或完整乐曲片段  
+- **语音翻译**：实时将一种语言的语音识别并翻译为另一种语言的文本或语音  
+- **语音对话**：端到端语音交互，支持唤醒、语义理解与语音应答闭环  
 
-> **注意**：[语音对话](../../raw/model-api-reference/audio-api-references.md) 文档中提及的“支持双语实时互译”与 [语音翻译](../../raw/model-api-reference/audio-api-references.md) 的能力边界存在表述重叠；实际以 [语音翻译](../../raw/model-api-reference/audio-api-references.md) 定义的纯文本输出为准，语音对话模块输出为合成语音，不返回中间文本。
+各能力详情请参阅 [音频](../../raw/model-api-reference/audio-api-references.md) 文档中列出的官方链接。
 
 ## 关键参数
 
-通用必填参数（所有音频 API 共享）：
-- `model`: 模型标识符（如 `paraformer-realtime-v1`、`cosyvoice-300m`、`musicgen-small`）  
-- `input.audio_url` 或 `input.audio_bytes`: 音频数据源，推荐使用 `audio_url`（HTTPS 可公开访问的 URL）；若传 `audio_bytes`，需 Base64 编码且总大小 ≤ 10 MB  
-- `parameters`: 功能相关配置对象，例如：  
-  - ASR：`{ "language": "zh", "enable_punctuation": true }`  
-  - TTS：`{ "voice": "zhitian_emo", "speed": 1.0 }`  
-  - 音乐生成：`{ "duration": 15.0 }`（单位：秒，范围 5–30）  
+通用关键参数包括：
+- `model`：必需，指定模型标识符（如 `paraformer-v1`、`cosyvoice-v1`、`musicgen-v1`）  
+- `audio_url` 或 `audio_bytes`：二选一，音频源（远程 URL 或 base64 编码 PCM/WAV/MP3 数据）  
+- `format`：音频编码格式（`wav`、`mp3`、`pcm`），部分模型强制要求 `wav`（详见 [音频](../../raw/model-api-reference/audio-api-references.md)）  
+- `sample_rate`：采样率（Hz），常见值为 `16000`；不匹配将触发自动重采样或报错  
+- `response_format`：返回格式（`json` 或 `stream`），仅部分接口支持流式（如 TTS、ASR 实时模式）
+
+> **注意**：`musicgen-v1` 模型当前不支持 `sample_rate` 参数自定义，固定使用 32kHz 内部采样——该行为与 [音频](../../raw/model-api-reference/audio-api-references.md) 中“音乐生成”链接指向的文档描述存在不一致，以实际 API 行为为准。
 
 ## 使用方式
 
-1. 发起 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/services/aigc/audio`  
-2. Header 中设置：  
-   - `Authorization: Bearer <api_key>`  
-   - `Content-Type: application/json`  
-3. Body 示例（ASR）：
-```json
-{
-  "model": "paraformer-realtime-v1",
-  "input": {
-    "audio_url": "https://example.com/audio.wav"
-  },
-  "parameters": {
-    "language": "zh"
-  }
-}
-```
-完整请求示例与响应结构详见 [语音识别](../../raw/model-api-reference/audio-api-references.md) 和 [语音合成](../../raw/model-api-reference/audio-api-references.md) 的官方参考文档。
+1. 构造 POST 请求至 `/api/v1/audio/{task}`（如 `/api/v1/audio/transcribe`）  
+2. 设置 `Authorization: Bearer <api_key>` 与 `Content-Type: application/json`  
+3. 在请求体中传入上述关键参数（示例见 [音频](../../raw/model-api-reference/audio-api-references.md) 所引各子文档）  
+4. 解析响应：成功时返回 `200 OK` 及结构化 JSON；流式接口需按 SSE 协议解析事件流  
 
 ## 限制和注意事项
 
-- 单次请求音频时长上限：ASR/TTS ≤ 60 秒；音乐生成 ≤ 30 秒；语音对话单轮 ≤ 45 秒  
-- 音频格式要求：WAV（PCM, 16-bit, 16kHz/44.1kHz）、MP3、M4A；不支持 FLAC 或 AMR  
-- 所有音频 URL 必须支持 `HEAD` 请求且无鉴权跳转，否则返回 `400 InvalidAudioUrl`  
-- 语音对话接口默认启用流式响应（`Accept: text/event-stream`），若需完整 JSON 响应，需显式设置 `stream: false`  
-- 错误码统一遵循百炼平台标准（如 `InvalidParameter`、`AudioTooLong`），具体含义请查阅 [语音翻译](../../raw/model-api-reference/audio-api-references.md) 文档末尾的错误码附录
+- 单次请求音频时长上限：ASR/TTS ≤ 60 秒，音乐生成 ≤ 30 秒，语音翻译 ≤ 120 秒  
+- 音频文件大小上限：50 MB（URL 方式无此限制，但需确保可公开访问）  
+- 所有音频输入必须为单声道；双声道将被静音左/右通道之一（具体策略依模型而定）  
+- 语音对话接口需配合特定 SDK 初始化会话上下文，纯 HTTP 调用仅支持单轮问答  
+
+请务必查阅各子能力的最新接口规范，例如 [语音识别](https://help.aliyun.com/zh/model-studio/speech-recognition-api-reference) 和 [语音合成](https://help.aliyun.com/zh/model-studio/speech-synthesis-api-reference) 的官方说明，避免因版本迭代导致参数失效。
 
 ## 来源文档
 
 - [音频](../../raw/model-api-reference/audio-api-references.md)
+
 
 
