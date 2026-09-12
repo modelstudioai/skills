@@ -4,46 +4,43 @@
 
 ## 支持的模型/功能
 
-- 支持 Llama、Qwen、Phi 等基于 Transformer 架构的开源大模型（vLLM/llama.cpp 后端）
-- 提供 INT4/INT8 量化、KV Cache 剪枝、LoRA 微调后压缩三种模式
-- 输出兼容 ONNX Runtime、Triton 和百炼自研推理引擎的压缩模型包  
-- 不支持对已部署的在线服务实时压缩；需先导出原始模型权重，再调用压缩 API —— 具体流程详见 [模型压缩](../../raw/model-user-guide/model-compression.md)
+- 支持 Llama 系列（Llama-2/3、CodeLlama）、Qwen 系列（Qwen1.5、Qwen2、Qwen2.5）、Phi 系列（Phi-3）等 Hugging Face 格式模型  
+- 提供 INT4/INT5/FP16 三种量化精度选项；支持 AWQ、GPTQ、Bitsandbytes 后训练量化（PTQ）  
+- 支持导出为 ONNX、GGUF、Safetensors 格式，兼容 vLLM、llama.cpp 等推理引擎  
+- 压缩后模型可直接部署为百炼标准 API 服务，无需修改客户端调用逻辑，详见 [模型压缩](../../raw/model-user-guide/model-compression.md)
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `quantization_type` | string | 是 | 取值：`int4`, `int8`, `fp16`；`int4` 为默认且推荐选项 |
-| `calibration_dataset` | string | 否 | 校准数据集路径（OSS URI），若未提供则使用内置通用校准集 |
-| `target_device` | string | 否 | `cpu`, `cuda`, `aipu`；影响算子融合策略，缺省为 `cuda` |
-
-> **注意**：`target_device=aipu` 仅在 v2.3.0+ 版本 SDK 中可用；旧版文档中提及的 `npu` 设备类型已废弃，请以 [模型压缩](../../raw/model-user-guide/model-compression.md) 中最新参数列表为准。
+| `model_id` | string | 是 | 原始模型 ID（如 `qwen2-7b-instruct`），需在百炼模型仓库中可见 |
+| `quantization_method` | string | 是 | 可选 `awq`、`gptq`、`bitsandbytes`；`awq` 推荐用于 Llama/Qwen 系列 |
+| `compute_dtype` | string | 否 | 默认 `int4`；可设为 `int5` 或 `fp16`（仅 `bitsandbytes` 支持 fp16） |
+| `calibration_dataset` | string | 否 | 仅 PTQ 方法需指定校准数据集 ID（如 `alpaca-zh-1000`），详见 [模型压缩](../../raw/model-user-guide/model-compression.md) |
 
 ## 使用方式
 
-1. 安装支持压缩的 SDK：
-   ```bash
-   pip install alibabacloud-bailian20231219==2.3.0
-   ```
-2. 调用 `compress_model()` 方法：
+1. **控制台操作**：进入「模型管理」→「模型压缩」页，选择源模型、配置量化方法与精度，提交任务  
+2. **API 调用**（Python SDK）：
    ```python
-   from alibabacloud_bailian20231219.client import Client
-   client = Client(...)
-   resp = client.compress_model(
-       model_id="qwen2-7b",
-       quantization_type="int4",
-       calibration_dataset="oss://my-bucket/calib-1024.jsonl"
+   from alibabacloud_bailian20231219 import models as bailian_models
+   client.compress_model(
+       request=bailian_models.CompressModelRequest(
+           model_id="qwen2-7b-instruct",
+           quantization_method="awq",
+           compute_dtype="int4"
+       )
    )
-   print(resp.compressed_model_id)  # 返回可直接部署的压缩模型 ID
    ```
-3. 部署压缩模型（同标准[模型部署](../concepts/model-deployment.md)流程）：参考 [模型压缩](../../raw/model-user-guide/model-compression.md)
+3. 压缩任务完成后，生成新模型 ID（如 `qwen2-7b-instruct-awq-int4`），可像普通模型一样部署与调用
 
 ## 限制和注意事项
 
-- 单次压缩任务最大超时时间为 180 分钟，超时将终止并释放资源
-- 输入模型必须为 Hugging Face 格式（含 `config.json` + `pytorch_model.bin` 或 `model.safetensors`）
-- 不支持对多模态模型（如 Qwen-VL）进行 KV Cache 剪枝；该限制已在新版文档中明确，旧版指南存在遗漏，请以 [模型压缩](../../raw/model-user-guide/model-compression.md) 为准
-- 压缩后模型不支持梯度更新，仅用于推理；如需微调，请先压缩再加载至训练框架（需手动适配）
+- 单次压缩任务最大支持 30B 参数量模型；超大模型（>30B）需联系技术支持开通白名单  
+- `awq` 和 `gptq` 方法不支持动态 batch size，部署时需固定 `max_batch_size=1`（vLLM backend 下）  
+- > **注意**：原始文档中提及“支持 LoRA 微调后模型压缩”，但当前版本（v2.4.1）尚未实现该能力，实际调用将返回 `NotImplementedError`；此信息已过时，请以 SDK 错误提示为准  
+- 量化后模型不支持梯度计算与继续训练，仅限推理使用  
+- 校准数据集必须与目标领域一致（如中文模型应使用中文校准集），否则精度下降显著
 
 ## 来源文档
 

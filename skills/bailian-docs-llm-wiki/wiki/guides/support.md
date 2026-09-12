@@ -1,26 +1,27 @@
 # support
 
-`support` 是百炼平台为开发者提供的服务支持入口，涵盖模型能力覆盖范围、常见问题解答、服务协议及售后保障等核心信息。所有支持资源均通过官方帮助中心统一维护，确保信息权威性与时效性。开发者应优先查阅 [服务支持](../../raw/model-user-guide/support.md) 文档获取最新链接与范围说明。
+`support` 是百炼平台为开发者提供的服务支持入口，涵盖模型能力覆盖范围、常见问题解答、服务协议及售后保障等核心信息。所有支持资源均通过统一文档体系组织，便于快速定位技术细节与合规要求。开发者应优先查阅最新版原始文档以确保信息时效性。
 
 ## 支持的模型/功能
 
-当前支持的模型列表以 [服务支持](../../raw/model-user-guide/support.md) 中引用的 [模型列表](https://help.aliyun.com/zh/model-studio/model-studio-model-list) 为准，包含通义千问系列（Qwen1、Qwen2、Qwen3）、Qwen-VL、Qwen-Audio 等开源与闭源模型，以及部分第三方接入模型。功能支持范围包括 API 调用、控制台调试、批量推理、微调任务提交与监控。**注意：** 模型列表页面未明确标注各模型在百炼平台的具体可用性状态（如是否支持[流式输出](../concepts/streaming-output.md)、是否开放 Function Calling），实际能力请以控制台模型详情页或 [服务支持](../../raw/model-user-guide/support.md) 所列官方链接为准。
+当前 `support` 覆盖百炼平台上全部公开可调用的模型，包括通义千问系列（Qwen1、Qwen2、Qwen3）、Qwen-VL、Qwen-Audio 等多模态与语言模型，以及部分第三方合作模型。具体可用模型列表以 [服务支持](../../raw/model-user-guide/support.md) 中链接的[模型列表](https://help.aliyun.com/zh/model-studio/model-studio-model-list) 为准。功能层面，支持包括 API 调用、控制台调试、批量推理、微调任务提交及结果监控等全链路能力。
 
 ## 关键参数
 
-`support` 本身不涉及请求参数，但其关联的服务（如售后工单、问题反馈）依赖用户身份（阿里云主账号/子账号）、实例 ID、模型 ID 及错误日志等上下文信息。提交售后请求时，需按 [售后说明](https://help.aliyun.com/zh/model-studio/after-sales-service-scope) 要求提供完整复现步骤与 trace_id；相关协议约束详见 [相关协议](https://help.aliyun.com/zh/model-studio/related-agreements)，该内容亦被 [服务支持](../../raw/model-user-guide/support.md) 引用。
+`support` 本身不暴露独立 API 参数，但其关联的服务行为（如售后响应时效、SLA 承诺、配额调整申请）依赖用户身份类型（个人/企业）、套餐等级及调用场景。例如，企业实名用户可申请更高并发配额，该流程需在 [服务支持](../../raw/model-user-guide/support.md) 所述的[售后说明](https://help.aliyun.com/zh/model-studio/after-sales-service-scope) 页面中提交工单。关键字段如 `service_type`、`ticket_priority` 在工单系统中影响处理路径，详见 [服务支持](../../raw/model-user-guide/support.md) 提供的协议与范围定义。
 
 ## 使用方式
 
-- 访问百炼控制台 →「帮助与支持」→「常见问题」，直接检索关键词（如“鉴权失败”“429 错误”）；
-- 遇到技术问题，优先查阅 [服务支持](../../raw/model-user-guide/support.md) 提供的 [常见问题](https://help.aliyun.com/zh/model-studio/faq-about-alibaba-cloud-model-studio) 页面；
-- 需人工介入时，在控制台右上角点击「工单」，选择对应服务类型（如“模型服务”），并准确填写问题描述与环境信息。
+开发者可通过以下三种方式获取支持：  
+- **自助查阅**：访问 [服务支持](../../raw/model-user-guide/support.md) 页面中的[常见问题](https://help.aliyun.com/zh/model-studio/faq-about-alibaba-cloud-model-studio)，覆盖鉴权失败、限流触发、返回格式异常等高频问题；  
+- **协议确认**：调用前务必阅读 [服务支持](../../raw/model-user-guide/support.md) 指向的[相关协议](https://help.aliyun.com/zh/model-studio/related-agreements)，明确数据隐私、知识产权与责任边界；  
+- **人工介入**：当自助无法解决时，在控制台「帮助中心 → 提交工单」发起请求，并准确选择服务类型（如“模型调用异常”“配额扩容”），系统将依据 [售后说明](https://help.aliyun.com/zh/model-studio/after-sales-service-scope) 自动分派。
 
 ## 限制和注意事项
 
-- 售后响应时效依服务等级协议（SLA）执行，免费版用户工单响应时间为 5 个工作日，企业版为 2 小时（具体以 [售后说明](https://help.aliyun.com/zh/model-studio/after-sales-service-scope) 为准）；
-- 非百炼平台直接托管的模型（如通过自定义 API 接入的第三方模型）不在标准售后范围内；
-- > **注意**：[服务支持](../../raw/model-user-guide/support.md) 中列出的链接均为外部帮助中心页面，其内容更新频率独立于百炼 Wiki，若发现链接失效或信息矛盾（例如某模型在帮助中心显示“已下线”，但在控制台仍可选），请以控制台实时状态为准，并通过工单反馈。
+- 免费试用额度仅适用于新注册用户，且不可叠加或转让，具体规则以 [服务支持](../../raw/model-user-guide/support.md) 中的协议条款为准；  
+- 工单响应时效按服务等级协议（SLA）执行：P1 级故障（服务完全不可用）承诺 1 小时内首次响应，P3 级咨询（功能使用疑问）为 3 个工作日，详情见[售后说明](https://help.aliyun.com/zh/model-studio/after-sales-service-scope)；  
+> **注意**：原始文档中[模型列表](https://help.aliyun.com/zh/model-studio/model-studio-model-list) 页面已更新 Qwen3-32B 的商用许可状态，但 [服务支持](../../raw/model-user-guide/support.md) 文末的「相关协议」链接仍指向旧版通用协议（v2.1），实际生效协议应以控制台「账户设置 → 协议中心」中最新签署版本（v3.0）为准。
 
 ## 来源文档
 

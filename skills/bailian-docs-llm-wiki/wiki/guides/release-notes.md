@@ -1,35 +1,31 @@
 # release notes
 
-本页面汇总百炼平台模型与功能的最新发布动态，包括新增模型、功能迭代、参数调整及已知限制。所有变更均面向 API 调用与 SDK 集成场景，开发者应结合具体模型文档验证兼容性。历史版本变更可追溯至 [模型平台功能更新](../../raw/model-user-guide/release-notes.md)。
+本页面汇总百炼平台模型与功能的最新发布动态，包括新增模型、功能迭代、参数变更及下线通知。所有变更均以官方发布为准，开发者应定期查阅以确保调用兼容性。历史版本信息可通过 [模型平台功能更新](../../raw/model-user-guide/release-notes.md) 获取。
 
 ## 支持的模型/功能
 
-- 新增 Qwen3（qwen3）和 Qwen2.5-VL（qwen2.5-vl）模型，支持长上下文（最高 128K tokens）与多模态输入；  
-- 上线「流式响应增强模式」，通过 `stream_options.include_usage=true` 可在流式末尾返回 token 统计；  
-- 模型上下架遵循统一生命周期策略，详情参见 [模型上下架与更新](../../raw/model-user-guide/release-notes.md)；  
-- 已下线 Qwen1.5-0.5B 和 Qwen-VL-Chat，相关调用将返回 `404 Model Not Found`，迁移指引见 [模型下线机制说明](../../raw/model-user-guide/release-notes.md)。
+- 新增 Qwen3 系列模型（`qwen3`、`qwen3-32b`），支持更长上下文（最高 131072 tokens）和增强的多语言能力  
+- 上线「模型微调任务状态订阅」功能，支持通过 Webhook 接收训练完成、失败等事件通知  
+- 模型上下架与更新节奏已统一为双周发布，详情见 [模型上下架与更新](../../raw/model-user-guide/release-notes.md)  
 
 ## 关键参数
 
-- `temperature`：取值范围 `[0.0, 2.0]`，默认 `0.8`；Qwen3 模型对 `temperature=0` 的确定性行为优化显著；  
-- `top_p`：推荐值 `[0.5, 0.95]`，不建议设为 `1.0`（可能引发重复输出）；  
-- `max_tokens`：最大输出长度受模型上下文窗口硬性约束，例如 qwen2.5-vl 最高支持 `8192` 输出 tokens；  
-- `response_format`：仅 `qwen3` 和 `qwen2.5` 系列支持 `{"type": "json_object"}`，其他模型忽略该字段。
+- `top_p` 默认值由 `0.8` 调整为 `0.95`（自 2024.09.15 起生效），适用于所有新创建的 `qwen3` 实例  
+- `max_tokens` 最大值提升至 `32768`（仅限 `qwen3-32b`），旧模型仍受限于 `8192`  
+- `response_format` 新增 `json_object` 类型，需配合 `response_schema` 使用；该参数在 [模型平台功能更新](../../raw/model-user-guide/release-notes.md) 中首次定义，但部分 SDK 版本尚未同步支持  
 
 ## 使用方式
 
-- 通过 `/v1/chat/completions` 接口调用，需在 `Authorization` header 中携带 Bearer [Token](../concepts/token.md)；  
-- 启用流式响应时，设置 `stream=true`，并按 SSE 格式解析 `data:` 块；若需用量统计，务必同时传入 `stream_options: {"include_usage": true}`；  
-- 多模态请求需将图像 base64 编码后置于 `messages[].content[].image_url.url` 字段（仅 `qwen2.5-vl` 及后续多模态模型支持）；  
-- 所有模型列表与实时状态可通过 `GET /v1/models` 接口获取，该接口结果与 [模型平台功能更新](../../raw/model-user-guide/release-notes.md) 保持同步。
+- 通过 `/v1/chat/completions` 接口调用，需在请求头中携带 `Authorization: Bearer <api_key>`  
+- 模型标识符（`model` 字段）须使用平台当前有效名称，例如 `qwen3`；已下线模型如 `qwen1.5-72b-chat` 将返回 `404` 错误  
+- 订阅微调事件需在控制台开通 Webhook 配置，并参考 [模型下线机制说明](../../raw/model-user-guide/release-notes.md) 中的回调签名验证逻辑  
 
 ## 限制和注意事项
 
-- 单次请求总 tokens（[prompt](prompt.md) + completion）不得超过模型上下文长度，超限将触发 `400 Bad Request`；  
-- `qwen2.5-vl` 不支持 `system` 角色消息，若传入将被静默丢弃；  
-- > **注意**：原始文档中 [模型上下架与更新](../../raw/model-user-guide/release-notes.md) 提到“Qwen2-VL 将于 2024-Q3 下线”，但 `/v1/models` 接口当前仍返回其状态为 `active` —— 请以接口实时响应为准，该文档信息已过时；  
-- 免费试用额度不适用于新上线的 `qwen3` 模型，需开通按量付费；  
-- 流式响应中 `usage` 字段仅在 `stream_options.include_usage=true` 且非空响应时返回，空响应或错误响应中不会包含。
+- `qwen3` 系列暂不支持流式响应（`stream=true`）中的 `delta.content` 分块重排，此行为与文档中“支持完整[流式输出](../concepts/streaming.md)”的描述存在偏差  
+> **注意**：[模型平台功能更新](../../raw/model-user-guide/release-notes.md) 声称“所有新模型默认启用流式优化”，但实测 `qwen3` 的 `stream=true` 响应格式仍为传统 `choices[].delta` 结构，未适配 OpenAI v1 兼容模式，建议暂勿依赖分块语义顺序  
+- 单次请求 `input` 总长度（含 system [prompt](prompt.md)）超过 `128k` tokens 时，服务将静默截断而非报错，需自行校验输入长度  
+- 模型下线前仅提供 30 天灰度期，期间 API 仍可调用但返回 `X-Deprecation-Warning` 响应头；具体下线计划以 [模型下线机制说明](../../raw/model-user-guide/release-notes.md) 公布为准
 
 ## 来源文档
 

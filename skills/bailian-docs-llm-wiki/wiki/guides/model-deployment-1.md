@@ -1,40 +1,39 @@
 # model deployment 1
 
-`model deployment 1` 是百炼平台提供的基础[模型部署](../concepts/model-deployment.md)能力，面向开发者提供多种部署模式以适配不同性能、成本与隔离性需求。它支持从快速验证到生产级服务的全周期部署场景，覆盖模型导入、API 发布、流量路由等关键环节。该能力在 [模型部署 (raw/model-user-guide/model-deployment-1.md)](../../raw/model-user-guide/model-deployment-1.md) 中首次系统定义。
+[模型部署](../concepts/model-deployment.md)（model deployment）是百炼平台提供的一组能力，用于将训练/微调后的模型以服务化方式对外提供推理接口。支持多种部署模式，适配不同性能、成本与隔离性需求的生产场景。所有部署均通过统一 API 调用，兼容 [OpenAI 兼容接口](../concepts/openai-compatibility.md)规范。
 
 ## 支持的模型/功能
 
-- **部署模式**：支持专属部署、PTU 预置吞吐部署、独占算力部署（MU/DTU）、[Token](../concepts/token.md) 按量部署四类核心模式；  
-- **模型来源**：可部署平台预置模型、用户通过 [模型导入](https://help.aliyun.com/zh/model-studio/model-import) 上传的自定义模型，以及已发布的“我的模型”；  
-- **配套能力**：集成模型路由（[模型路由](https://help.aliyun.com/zh/model-studio/model-routing)），支持多版本灰度与 A/B 测试；  
-- 所有功能入口和概念说明均汇总于 [模型部署 (raw/model-user-guide/model-deployment-1.md)](../../raw/model-user-guide/model-deployment-1.md)。
+- **专属部署**：为单个模型分配独立实例，保障资源独占与低延迟，适用于高 SLA 要求场景  
+- **PTU 预置吞吐部署**：基于 PTU（Processing Throughput Unit）预设吞吐能力，自动弹性扩缩容，适合流量可预测的中高并发任务  
+- **独占算力部署（MU/DTU）**：按计算单元（MU）或数据吞吐单元（DTU）计费，提供硬件级隔离，适用于敏感数据或强确定性时延要求场景  
+- **[Token](../concepts/token.md) 按量部署**：按实际请求 token 数计费，无预置资源开销，适合低频、突发或测试验证类负载  
+- 同时支持 [模型导入](https://help.aliyun.com/zh/model-studio/model-import) 和 [我的模型](https://help.aliyun.com/zh/model-studio/my-model-center) 中已发布的模型，详见 [模型部署](../../raw/model-user-guide/model-deployment-1.md) 文档。
 
 ## 关键参数
 
-| 参数 | 说明 | 示例值 |
-|------|------|--------|
-| `deployment_type` | 部署类型，必填，取值为 `dedicated` / `ptu` / `mu` / `dtu` / `token` | `"ptu"` |
-| `instance_count` | 实例数量（仅 `dedicated`/`mu`/`dtu` 有效） | `2` |
-| `ptu_capacity` | PTU 预置吞吐单位（仅 `ptu` 有效），最小 100 | `200` |
-| `token_quota` | [Token](../concepts/token.md) 按量配额（仅 `token` 有效），单位：万 tokens/天 | `500` |
+- `model_id`：必填，模型唯一标识（如 `qwen-max-20240806`），需已在 [我的模型](https://help.aliyun.com/zh/model-studio/my-model-center) 中发布  
+- `deployment_type`：必填，取值为 `dedicated` / `ptu` / `dtu` / `token`，对应四种部署类型  
+- `instance_type`（仅 `dedicated`/`dtu` 需指定）：如 `ecs.gn7i-c16g1.4xlarge`，须在 [独占算力部署（MU/DTU）](https://help.aliyun.com/zh/model-studio/dtu-model-deployment) 所列规格范围内  
+- `ptu_count`（仅 `ptu` 类型需指定）：整数，最小值为 1，最大值受账户配额限制  
+- `max_tokens`、`temperature` 等推理参数与标准 API 一致，不因部署类型而异  
 
-> **注意**：`instance_count` 在 `ptu` 模式下无效，但部分旧版 SDK 文档仍将其列为可选参数——请以 [模型部署 (raw/model-user-guide/model-deployment-1.md)](../../raw/model-user-guide/model-deployment-1.md) 的接口定义为准，忽略过时字段。
+> **注意**：`deployment_type=token` 时不可设置 `instance_type` 或 `ptu_count`；若在 [API 部署指南](https://help.aliyun.com/zh/model-studio/model-deployment-quick-start) 示例中发现此类错误配置，请以本页为准。
 
 ## 使用方式
 
-1. 确认模型已发布至“我的模型”中心（参见 [我的模型](https://help.aliyun.com/zh/model-studio/my-model-center)）；  
-2. 调用 `POST /v1/deployments` 接口，传入 JSON 请求体（含 `model_id`、`deployment_type` 及对应参数）；  
-3. 获取返回的 `deployment_id`，调用 `/v1/deployments/{id}/status` 轮询部署状态；  
-4. 状态变为 `active` 后，使用 `endpoint` 和 `api_key` 发起推理请求（详见 [API 部署指南](https://help.aliyun.com/zh/model-studio/model-deployment-quick-start)）。  
-完整流程与示例代码见 [模型部署 (raw/model-user-guide/model-deployment-1.md)](../../raw/model-user-guide/model-deployment-1.md)。
+1. 确保目标模型已在 [模型导入](https://help.aliyun.com/zh/model-studio/model-import) 流程完成并发布至 [我的模型](https://help.aliyun.com/zh/model-studio/my-model-center)  
+2. 调用 `POST /v1/deployments` 接口，传入上述关键参数（参考 [API 部署指南](../../raw/model-user-guide/model-deployment-1.md) 中的 cURL 示例）  
+3. 部署成功后返回 `deployment_id`，后续推理请求使用该 ID 替代 `model_id`，路径为 `/v1/chat/completions?deployment_id=xxx`  
+4. 可通过 `/v1/deployments/{id}` 查询状态，或在控制台「[模型部署](../concepts/model-deployment.md)」页管理生命周期  
 
 ## 限制和注意事项
 
-- [Token](../concepts/token.md) 按量部署不支持流式响应（`stream=true`）；  
-- PTU 模式下模型最大上下文长度受限于所选 PTU 规格（如 PTU-200 支持最长 32k tokens）；  
-- 独占算力（MU/DTU）部署需提前申请配额，且不支持跨地域迁移；  
-- 所有部署操作均受项目级资源配额约束，超限将返回 `429 Too Many Requests`；  
-- 若发现文档中关于 DTU 内存规格的描述与控制台实际选项不一致，请以控制台实时配置为准——该差异已在新版 [模型部署 (raw/model-user-guide/model-deployment-1.md)](../../raw/model-user-guide/model-deployment-1.md) 中同步修正。
+- 单账户默认最多创建 5 个 `dedicated` 类型部署，如需提升请提交工单  
+- `ptu` 类型部署冷启动时间约 60–120 秒，首次请求可能超时，建议预热或配置重试逻辑  
+- `token` 类型不支持流式响应（`stream=true`），且最大 `max_tokens` 限制为 8192  
+- 所有部署均强制启用 [模型路由](https://help.aliyun.com/zh/model-studio/model-routing) 的基础路由策略，无法绕过  
+- 部署后模型权重不可变更；如需更新，须删除旧部署并新建——此行为与 [模型部署](../../raw/model-user-guide/model-deployment-1.md) 描述一致，但与早期文档中“热更新”表述存在冲突，请以本页为准。
 
 ## 来源文档
 

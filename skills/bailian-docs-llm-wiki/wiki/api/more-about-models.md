@@ -5,34 +5,29 @@
 ## 支持的模型与功能
 
 - 查询可用模型列表：调用 `GET /v1/models` 获取当前账号可访问的全部模型（含状态、类型、输入/输出限制）  
-- 管理模型授权：支持按子业务空间（sub-workspace）粒度配置模型可见性与调用权限，详见 [子业务空间的模型调用](../../raw/model-api-reference/more-about-models.md)  
-- 异步任务支持：对长耗时请求（如大文件解析、批量推理）启用异步模式，并可配置回调地址或轮询结果，参见 [管理异步任务](../../raw/model-api-reference/more-about-models.md) 和 [配置异步任务回调](../../raw/model-api-reference/more-about-models.md)  
-- 文件预处理：上传文件后获取临时可读 URL，用于 `file://` 输入（如 PDF、图片），见 [上传文件获取临时URL](../../raw/model-api-reference/more-about-models.md)
+- 管理模型权限：支持为子业务空间或 RAM 角色配置细粒度模型调用授权，详见 [原文标题](../../raw/model-api-reference/more-about-models.md) 中的“查询模型授权”与“更新模型授权”  
+- 异步任务支持：对长耗时模型（如视频生成、大文件解析）启用异步模式，配合回调配置实现可靠结果获取，相关接口见 [原文标题](../../raw/model-api-reference/more-about-models.md)
 
 ## 关键参数
 
-| 参数 | 说明 | 示例值 |
-|------|------|--------|
-| `model` | 必填，模型标识符（如 `qwen-max`, `qwen-plus`） | `qwen-max` |
-| `async` | 布尔值，启用异步模式（返回 task_id 而非直接响应） | `true` |
-| `callback_url` | 异步回调地址（需 HTTPS，且在白名单内） | `https://your.domain/callback` |
-| `workspace_id` | 指定子业务空间 ID，用于跨空间调用授权模型 | `ws-abc123` |
-| `enable_stream` | 流式响应开关（仅同步模式下生效） | `false` |
+- `model`: 必填，模型标识符（如 `qwen-max`, `qwen-vl-plus`），需与 [查询模型列表](https://help.aliyun.com/zh/model-studio/list-models) 返回值严格一致  
+- `async`: 布尔值，设为 `true` 启用异步模式；此时响应体返回 `task_id` 而非直接结果  
+- `callback_url`: 异步任务回调地址，需提前在控制台白名单中注册（参见 [配置异步任务回调](https://help.aliyun.com/zh/model-studio/async-task-api)）  
+- `rate_limit`: 限流配额单位为 QPS 或并发数，通过 [查询模型限流](https://help.aliyun.com/zh/model-studio/list-quotas) 获取当前值，支持按模型/子空间维度更新  
 
-> **注意**：`workspace_id` 在 [子业务空间的模型调用](../../raw/model-api-reference/more-about-models.md) 中为路径参数，但在 SDK v3.10+ 中已统一为请求体字段；旧版文档未明确此变更，请以 [DashScope SDK连接复用配置](../../raw/model-api-reference/more-about-models.md) 中的 SDK 示例为准。
+> **注意**：部分旧版文档将 `async` 参数描述为字符串 `"enable"`，实际应为布尔值 `true/false`；以 [原文标题](../../raw/model-api-reference/more-about-models.md) 及最新 OpenAPI Schema 为准。
 
 ## 使用方式
 
-- **API 调用**：所有接口均基于 RESTful 设计，需携带 `Authorization: Bearer <api_key>`，推荐使用临时 API Key（生成方式见 [生成临时API Key](../../raw/model-api-reference/more-about-models.md)）提升安全性  
-- **SDK 集成**：推荐使用 DashScope Python/Java SDK，支持连接复用、自动重试、异步任务封装；连接池配置详见 [DashScope SDK连接复用配置](../../raw/model-api-reference/more-about-models.md)  
-- **限流与配额**：通过 `GET /v1/quotas` 查询各模型当前余量，`PUT /v1/quotas/{model}` 更新配额（需主账号权限）
+1. **获取临时 API Key**：用于短期调试或第三方集成，有效期最长 24 小时（见 [生成临时API Key](https://help.aliyun.com/zh/model-studio/generate-temporary-api-key)）  
+2. **上传文件预处理**：调用 `/v1/files/upload` 获取临时 URL，再将该 URL 传入模型请求（如 `qwen-vl-plus` 的 `image_url` 字段），参考 [上传文件获取临时URL](https://help.aliyun.com/zh/model-studio/get-temporary-file-url)  
+3. **SDK 连接复用**：DashScope Python/Java SDK 默认启用连接池，可通过 `dashscope.api_key` + `dashscope.base_http_api_url` 全局配置，并设置 `httpx.AsyncClient(limits=...)` 控制并发（详见 [DashScope SDK连接复用配置](https://help.aliyun.com/zh/model-studio/connection-multiplexing-configuration)）
 
 ## 限制和注意事项
 
-- 异步任务最长保留 7 天，超时后结果不可查；任务状态仅支持 `PENDING`/`SUCCESS`/`FAILED`/`TIMEOUT` 四种  
-- 临时文件 URL 有效期默认 1 小时，不可续期；单次上传最大支持 512 MB  
-- 模型授权更新（`POST /v1/permissions`）为最终一致性，策略生效延迟 ≤ 30 秒  
-- 所有模型限流配置（[查询模型限流](../../raw/model-api-reference/more-about-models.md)、[更新模型限流](../../raw/model-api-reference/more-about-models.md)）均按「模型 + workspace」维度独立计费与限速，跨 workspace 不共享 quota
+- 子业务空间调用模型需显式授予对应模型权限，未授权时返回 `403 Forbidden`，不可依赖主账号默认继承（[子业务空间的模型调用](https://help.aliyun.com/zh/model-studio/model-calling-in-sub-workspace)）  
+- 异步任务回调失败重试策略为指数退避（初始 1s，最大 5 次），超时时间为 10 秒；若回调持续失败，需主动轮询 `GET /v1/tasks/{task_id}`  
+- 所有模型限流策略均为租户级硬限制，超出后立即拒绝请求（HTTP 429），不进入队列等待；更新限流需调用 [更新模型限流](https://help.aliyun.com/zh/model-studio/update-model-rate-limits) 接口，变更即时生效
 
 ## 来源文档
 

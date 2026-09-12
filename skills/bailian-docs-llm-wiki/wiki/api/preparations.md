@@ -1,38 +1,35 @@
 # preparations
 
-`preparations` 是调用百炼平台模型 API 前必需完成的环境与凭证配置步骤，涵盖 API Key 获取、SDK/CLI 工具安装及基础认证设置。这些操作是所有模型调用（包括 `preparations` 相关接口）的前提条件，未完成将导致 401 或连接失败。开发者应优先参考 [使用 API](../../raw/model-api-reference/preparations.md) 文档执行标准化初始化。
+`preparations` 是调用百炼平台模型 API 前必需完成的基础配置步骤，涵盖身份认证、开发环境搭建和客户端初始化。开发者需按顺序完成 API Key 获取、SDK 安装与配置，方可发起合法请求。所有操作均需遵循平台安全规范与配额策略。
 
 ## 支持的模型/功能
 
-`preparations` 本身不是模型，而是通用前置准备流程，适用于所有通过百炼 API 调用的模型（如 Qwen 系列、Qwen-VL、Qwen-Audio 等）。其核心功能包括：API 认证初始化、客户端实例构建、请求上下文配置（如 `base_url`、`timeout`）。具体支持的模型列表请查阅 [使用 API](../../raw/model-api-reference/preparations.md) 中的 SDK 初始化示例所覆盖的模型范围。
+当前 `preparations` 流程适用于所有通过百炼 API 提供的模型服务，包括但不限于 Qwen 系列大语言模型、embedding 模型及多模态模型。该准备流程不区分模型类型，统一采用 DashScope SDK 接入，详见 [使用 API](../../raw/model-api-reference/preparations.md)。
 
 ## 关键参数
 
-- `api_key`: 必填，用于身份认证，需通过 [获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key) 获取；
-- `model`: 非 `preparations` 接口自身参数，但在后续调用中必须指定，SDK 初始化时通常不强制要求，但首次 `call()` 时必须传入；
-- `base_url`: 可选，用于私有化部署或调试，若未设置则默认指向百炼公有云服务端点；
-- `max_retries`: 可选，SDK 默认重试策略，建议生产环境显式设置为 `2`～`3`；  
-> **注意**：部分旧版文档将 `api_key` 描述为“可选（当使用 CLI 时）”，但实际 CLI 所有命令均依赖 `DASHSCOPE_API_KEY` 环境变量或 `--api-key` 参数，因此 `api_key` 在所有使用场景下均为必需 —— 详见 [使用 API](../../raw/model-api-reference/preparations.md) 中的 CLI 和 SDK 示例。
+- `api_key`：必填，用于身份鉴权，需通过 [获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key) 页面申请并妥善保管  
+- `base_url`（可选）：仅在私有化部署或调试场景下覆盖默认 endpoint，生产环境通常无需设置  
+- `timeout`（推荐显式设置）：建议设为 60 秒以上，避免因网络波动导致连接中断；具体超时行为参见 [错误码](../../raw/model-api-reference/preparations.md) 中 `RequestTimeout` 的说明  
 
 ## 使用方式
 
-1. **获取 API Key**：访问 [获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)，在百炼控制台创建并复制密钥；  
-2. **安装 SDK**：运行 `pip install dashscope`（Python）或对应语言 SDK，参考 [安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)；  
-3. **初始化客户端**：  
+1. 访问 [获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key) 获取有效密钥  
+2. 执行 `pip install dashscope` 安装官方 SDK（Python），其他语言请参考 [安装SDK](https://help.aliyun.com/zh/model-studio/install-sdk)  
+3. 初始化客户端：  
    ```python
    import dashscope
    dashscope.api_key = "YOUR_API_KEY"
-   # 或使用环境变量：export DASHSCOPE_API_KEY=xxx
    ```  
-   其他语言 SDK 初始化方式见 [SDK Expert](https://help.aliyun.com/zh/model-studio/dashscope-sdk-expert)；  
-4. **验证连通性**：可调用任意轻量接口（如 `dashscope.models.list()`）确认配置生效。完整流程说明请参阅 [使用 API](../../raw/model-api-reference/preparations.md)。
+   如需高级能力（如异步调用、流式响应处理），应启用 [SDK Expert](https://help.aliyun.com/zh/model-studio/dashscope-sdk-expert)，其配置细节见 [使用 API](../../raw/model-api-reference/preparations.md)。
 
 ## 限制和注意事项
 
-- 单个 API Key 默认调用频率限制为 60 QPM（每分钟请求数），超出将返回 `429 Too Many Requests` 错误，详情见 [错误码](https://help.aliyun.com/zh/model-studio/error-code)；  
-- API Key 不可跨阿里云账号共享，且不支持子账号直接继承主账号权限（需主账号授权 RAM 策略）；  
-- CLI 工具需单独安装（`pip install dashscope-cli`），其配置逻辑与 SDK 独立，但共用同一 `DASHSCOPE_API_KEY` 环境变量 —— 具体命令用法见 [使用百炼CLI](https://help.aliyun.com/zh/model-studio/use-model-studio-cli)；  
-> **注意**：原始文档中 [错误码](https://help.aliyun.com/zh/model-studio/error-code) 页面未明确列出 `401 Unauthorized` 的常见原因（如 `api_key` 格式错误、过期、权限不足），开发者应结合 [使用 API](../../raw/model-api-reference/preparations.md) 中的认证排查章节交叉验证。
+- 单个 API Key 默认限速 10 QPS（每秒查询数），超出将返回 `429 Too Many Requests`；企业版用户可通过控制台调整配额  
+- API Key 不可硬编码于前端代码或公开仓库中，必须通过环境变量或密钥管理服务注入  
+- > **注意**：部分旧版文档提及 `dashscope.init(api_key=...)` 初始化方式，该接口已在 v1.18.0+ 版本中废弃，请统一使用 `dashscope.api_key = ...` 赋值，以确保与 [SDK Expert](https://help.aliyun.com/zh/model-studio/dashscope-sdk-expert) 兼容  
+- 首次调用前务必确认网络可访问 `https://dashscope.aliyuncs.com`，国内用户若使用代理需额外配置 `HTTP_PROXY` 环境变量  
+- 错误响应解析应依赖 [错误码](../../raw/model-api-reference/preparations.md) 文档中的标准定义，避免自行映射非标准状态码
 
 ## 来源文档
 

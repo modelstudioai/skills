@@ -1,40 +1,50 @@
 # video generation api
 
-视频生成 API 提供多种模型能力，支持文生视频、图生视频、人像驱动动画等场景。开发者可通过统一接口调用不同后端模型，按需选择适合任务的模型实例。所有模型均通过百炼平台统一鉴权与计费，具体能力边界和输入格式以各模型官方文档为准。
+视频生成 API 提供多种模型能力，支持文生视频、图生视频、人像驱动动画等场景。开发者可通过统一接口调用不同后端模型，按需选择适合任务的模型。所有模型均通过百炼平台统一鉴权与计费，具体能力细节请参考各模型官方文档。
 
 ## 支持的模型/功能
 
-当前支持以下视频生成模型：
-- **HappyHorse**：面向创意内容的文生视频模型，支持 4 秒标准时长输出  
-- **万相**：侧重艺术风格化视频生成，支持图像提示（image [prompt](../guides/prompt.md)）输入  
-- **人像驱动**：基于单张人像图+音频/文本驱动生成口型同步动画，适用于数字人场景  
-- **爱诗（PixVerse）**：强调高动态细节与运镜控制，支持 motion strength 参数调节  
-- **可灵（Kling）**：支持长时序连贯视频生成（最长 120 秒），需分段请求与拼接  
-- **Vidu**：国产自研多模态视频模型，对中文提示词理解优化明显  
-- **MiniMax**：提供低延迟轻量级视频生成选项，适用于实时交互场景  
+当前支持以下视频生成模型（按功能分类）：
+- **通用文生视频**：[可灵](https://help.aliyun.com/zh/model-studio/kling-api-reference)、[Vidu](https://help.aliyun.com/zh/model-studio/vidu-api-reference)、[爱诗](https://help.aliyun.com/zh/model-studio/pixverse-api-reference)  
+- **图像增强/图生视频**：[万相](https://help.aliyun.com/zh/model-studio/wan-api-reference)  
+- **人像驱动与口型同步**：[人像驱动](https://help.aliyun.com/zh/model-studio/portrait-animation-api-reference)  
+- **轻量级视频生成**：[HappyHorse](https://help.aliyun.com/zh/model-studio/happyhorse-api-reference)、[MiniMax](https://help.aliyun.com/zh/model-studio/minimax-video-api-reference)  
 
-> **注意**：`可灵（Kling）` 的最大时长在 [原文标题](../../raw/model-api-reference/video-generation-api.md) 中标注为 120 秒，但实际调用中受 `max_frames` 和 `fps` 参数共同约束；请以 [原文标题](../../raw/model-api-reference/video-generation-api.md) 中列出的模型链接跳转至对应帮助中心获取最新规格限制。
+> **注意**：[原文标题](../../raw/model-api-reference/video-generation-api.md) 中列出的模型链接均为外部帮助文档，实际可用模型列表以控制台「模型广场」中“视频生成”分类为准；部分链接（如 MiniMax）在控制台当前未开放公测，调用将返回 `ModelNotEnabled` 错误。
 
 ## 关键参数
 
-通用必填参数：
-- `model`: 模型标识符（如 `"kling-v1"`, `"vidu-1.0"`），必须与 [原文标题](../../raw/model-api-reference/video-generation-api.md) 中所列模型名称严格一致  
-- `input`: 包含 `prompt`（字符串）及可选 `image_url`（图生视频）、`audio_url`（人像驱动）等字段  
-- `parameters`: 控制生成质量与时长，常见字段包括 `duration`（秒）、`fps`（默认 8）、`seed`（可复现）、`motion_strength`（仅部分模型支持）  
+所有视频生成请求共用以下核心参数（JSON body）：
+- `model`: 模型标识符（如 `"kling-v1"`, `"wanx-v1"`），必须与 [原文标题](../../raw/model-api-reference/video-generation-api.md) 中模型命名规范一致  
+- `input`: 输入内容对象，结构因模型而异（如 `prompt` 字段为必填文生视频输入，`image_url` 为图生视频必需）  
+- `parameters`: 可选配置，常见字段包括 `duration`（秒，支持 2–8s）、`aspect_ratio`（如 `"16:9"`）、`seed`（整数，用于复现）  
+- `stream`: 布尔值，仅部分模型（如 Vidu）支持流式响应，详见各模型文档  
 
 ## 使用方式
 
-1. 通过 `POST /v1/videos/generations` 发起请求  
-2. 请求头携带 `Authorization: Bearer <api_key>`  
-3. 响应返回 `id`，用于轮询 `GET /v1/videos/generations/{id}` 获取结果（状态为 `succeeded` 后返回 `video_url`）  
-4. 所有模型均遵循该统一流程，差异仅体现在 `input` 和 `parameters` 结构上  
+1. 通过 HTTPS POST 请求调用 `/v1/videos/generations` 端点  
+2. Header 中携带 `Authorization: Bearer <api_key>` 和 `Content-Type: application/json`  
+3. 请求体示例（文生视频）：
+```json
+{
+  "model": "kling-v1",
+  "input": {
+    "prompt": "一只橘猫在太空舱里打太极，赛博朋克风格"
+  },
+  "parameters": {
+    "duration": 4,
+    "aspect_ratio": "16:9"
+  }
+}
+```
+4. 成功响应返回 `video_url`（直链，有效期 24 小时）及 `task_id`，可用于轮询状态。详细协议格式见 [原文标题](../../raw/model-api-reference/video-generation-api.md)。
 
 ## 限制和注意事项
 
-- 单次请求最大 `duration` 因模型而异：`kling-v1` 最高 120 秒，`vidu-1.0` 限 8 秒，`happyhorse-1.0` 限 4 秒  
-- 输入图像需为公网可访问 URL，且尺寸建议 ≥ 512×512（人像驱动要求正面清晰人像）  
-- 视频生成不支持跨模型参数混用（例如向 `wanxiang-1.0` 传 `audio_url` 将被忽略）  
-- 输出视频为 MP4 格式，H.264 编码，分辨率固定为 720p（部分模型支持 1080p，需显式指定 `parameters.resolution`）
+- 单次请求最大 `prompt` 长度为 512 字符；图生视频输入图尺寸建议 ≥ 512×512，格式仅支持 JPG/PNG  
+- 所有模型输出视频分辨率固定（如 Kling 输出 1024×576，Vidu 输出 1280×720），不支持自定义宽高  
+- 人像驱动模型要求输入人脸图像清晰、正向、无遮挡；若检测失败将返回 `InvalidInput.FaceNotFound`  
+- 免费额度仅限测试，生产环境需开通对应模型的商用授权，否则调用将被拒绝
 
 ## 来源文档
 

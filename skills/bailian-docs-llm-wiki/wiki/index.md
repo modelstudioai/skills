@@ -54,27 +54,28 @@
 - [preparations](api/preparations.md) — 1 篇源文档
 - [qwen api reference](api/qwen-api-reference.md) — 1 篇源文档
 - [realtime api user guide](api/realtime-api-user-guide.md) — 1 篇源文档
+- [token plan api](api/token-plan-api.md) — 1 篇源文档
 - [toolkits and frameworks](api/toolkits-and-frameworks.md) — 1 篇源文档
 - [vector and sort](api/vector-and-sort.md) — 1 篇源文档
 - [video generation api](api/video-generation-api.md) — 1 篇源文档
 
 ## 横切概念
 
-- [OpenAI 兼容接口](concepts/openai-compatible-api.md) — 关联 5 个主题
-- [Token](concepts/token.md) — 关联 5 个主题
-- [函数调用](concepts/function-calling.md) — 关联 5 个主题
-- [提示词工程](concepts/prompt-engineering.md) — 关联 5 个主题
-- [检索增强生成](concepts/rag.md) — 关联 5 个主题
-- [模型部署](concepts/model-deployment.md) — 关联 5 个主题
-- [流式输出](concepts/streaming-output.md) — 关联 5 个主题
-- [监控与可观测性](concepts/monitoring.md) — 关联 4 个主题
+- [OpenAI 兼容接口](concepts/openai-compatibility.md) — 关联 6 个主题
+- [Prompt 工程](concepts/prompt-engineering.md) — 关联 6 个主题
+- [Token](concepts/token.md) — 关联 6 个主题
+- [函数调用](concepts/function-calling.md) — 关联 6 个主题
+- [检索增强生成](concepts/rag.md) — 关联 6 个主题
+- [模型部署](concepts/model-deployment.md) — 关联 6 个主题
+- [流式输出](concepts/streaming.md) — 关联 6 个主题
+- [记忆管理](concepts/memory.md) — 关联 5 个主题
 
 ## 对比分析
 
-- [图像生成与视频生成对比](comparisons/image-vs-video-generation.md) — 对比 3 个主题
-- [应用构建方式对比](comparisons/application-building-approaches.md) — 对比 3 个主题
-- [模型评估与监控能力对比](comparisons/model-evaluation-and-monitoring.md) — 对比 4 个主题
-- [模型部署方式对比](comparisons/model-deployment-options.md) — 对比 3 个主题
-- [知识检索方案对比](comparisons/knowledge-retrieval-methods.md) — 对比 3 个主题
-- [语音合成与语音识别对比](comparisons/audio-synthesis-vs-recognition.md) — 对比 3 个主题
+- [Token 计划相关 API 对比](comparisons/token-plan-apis.md) — 对比 3 个主题
+- [图像、视频与3D生成能力对比](comparisons/image-vs-video-vs-3d-generation.md) — 对比 3 个主题
+- [应用全生命周期管理 API 对比](comparisons/application-lifecycle-apis.md) — 对比 4 个主题
+- [模型部署方式对比：托管代理、高速推理与模型生产](comparisons/model-deployment-options.md) — 对比 3 个主题
+- [知识检索与记忆能力方案对比](comparisons/knowledge-retrieval-methods.md) — 对比 3 个主题
+- [语音合成与语音识别对比](comparisons/speech-synth-vs-recognition.md) — 对比 3 个主题
 

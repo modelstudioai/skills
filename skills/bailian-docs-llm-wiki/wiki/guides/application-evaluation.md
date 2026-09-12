@@ -1,49 +1,37 @@
 # application evaluation
 
-应用评测（Application Evaluation）是百炼平台提供的用于量化评估大模型应用效果的核心能力，支持通过预设评测集或自定义样本对应用的输出质量、稳定性、安全性等维度进行自动化或人工打分。该功能适用于模型选型、提示词优化、服务迭代等典型研发场景。评测结果可导出为结构化报告，便于团队协作分析。
+应用评测是百炼平台提供的核心质量保障能力，用于对部署后的 LLM 应用进行自动化或人工方式的效果验证与指标量化。支持基于预设评测集的批量打分、多维度指标（如准确性、安全性、流畅性）分析，以及结果可视化对比。该能力适用于模型迭代验证、A/B 测试及上线前合规审查等典型场景。
 
 ## 支持的模型/功能
 
-- **自动评测**：基于规则或参考答案对应用输出进行批量打分，支持准确率、召回率、BLEU、ROUGE-L 等指标；需应用已部署为可调用服务（HTTP endpoint 或 SDK 调用）。  
-- **人工评测**：提供可视化标注界面，支持多人协同标注、标签管理与一致性校验，适用于主观性强或需领域专家判断的场景。  
-- **评测集管理**：支持上传 CSV/JSONL 格式评测数据（含 input、expected_output、metadata），并复用 [评测集](../../raw/application-user-guide/application-evaluation-dataset.md) 中定义的标准数据集。新版评测功能已在 [新版应用评测](../../raw/application-user-guide/application-evaluation.md) 中统一入口，旧版自动/人工评测页面将逐步下线。  
-> **注意**：[自动评测](../../raw/application-user-guide/application-evaluation.md) 文档中列出的旧版独立入口链接已失效，实际使用请以新版评测控制台为准。
+- **自动评测**：调用平台内置评估模型（当前默认为 `qwen-plus-eval`）对应用响应进行零样本打分，支持自定义评分规则和阈值告警；详情见 [应用评测](../../raw/application-user-guide/application-evaluation.md)。  
+- **人工评测**：提供标注工作台，支持多人协同标注、标签管理与一致性校验，适用于需语义理解或主观判断的复杂场景；参考 [人工评测](../../raw/application-user-guide/application-evaluation.md)。  
+- **评测集管理**：支持上传结构化测试用例（JSONL 格式），包含输入、期望输出、权重与分类标签；评测集可复用、版本化，并与自动/人工流程绑定；详见 [评测集](../../raw/application-user-guide/application-evaluation.md)。
 
 ## 关键参数
 
-- `dataset_id`：必填，指定评测所用数据集 ID（可通过 `/v1/datasets/list` 获取）；  
-- `model_id` 或 `app_id`：二选一，指定被评测的应用实例；  
-- `metrics`：数组，如 `["accuracy", "latency_ms", "safety_score"]`，部分指标需启用对应插件；  
-- `timeout_ms`：单条样本最大响应等待时间，默认 30000（30 秒）；  
-- `concurrency`：并发请求数，免费版上限为 5，企业版可配置至 50。  
-详细参数说明见 [新版应用评测](../../raw/application-user-guide/application-evaluation.md) 的 API 参考章节。
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `dataset_id` | string | 必填，评测集唯一标识（通过 `/v1/datasets` 接口创建后获取） |
+| `eval_mode` | string | 可选 `"auto"` 或 `"manual"`；自动模式下需指定 `eval_model`（如 `"qwen-plus-eval"`） |
+| `metrics` | array | 可选，指定计算的指标列表，如 `["accuracy", "toxicity", "latency"]`；未指定时使用默认指标集 |
+| `timeout_ms` | integer | 单条用例超时时间，默认 30000（30 秒），仅对自动评测生效 |
+
+> **注意**：文档 [新版应用评测](../../raw/application-user-guide/application-evaluation.md) 中提及的 `eval_mode: "hybrid"` 模式目前尚未在 API v1.2 中开放，实际调用将返回 `400 Unsupported mode` 错误，请暂勿使用。
 
 ## 使用方式
 
-1. 在控制台「应用管理 → 应用详情 → 评测」页创建评测任务；  
-2. 选择评测类型（自动/人工）、目标应用及评测集；  
-3. 配置参数（如指标、并发数），点击「启动评测」；  
-4. 自动评测任务完成后生成报告，人工评测需完成标注后手动发布结果。  
-SDK 调用示例（Python）：
-```python
-from alibabacloud_bailian20231229 import models as bailian_models
-client = BailianClient(...)
-req = bailian_models.CreateEvaluationJobRequest(
-    dataset_id="ds-xxx",
-    app_id="app-yyy",
-    metrics=["accuracy", "latency_ms"]
-)
-resp = client.create_evaluation_job(req)
-```
-完整调用规范参见 [新版应用评测](../../raw/application-user-guide/application-evaluation.md)。
+1. **准备评测集**：通过控制台或 `/v1/datasets` 创建并上传测试数据；确保字段 `input` 和 `expected_output` 存在（人工评测可省略后者）。  
+2. **发起评测任务**：调用 `POST /v1/applications/{app_id}/evaluations`，传入 `dataset_id` 与 `eval_mode` 等参数；示例请求见 [应用评测](../../raw/application-user-guide/application-evaluation.md)。  
+3. **查询结果**：使用 `GET /v1/evaluations/{task_id}` 获取状态与聚合报告；原始明细可通过 `/v1/evaluations/{task_id}/results` 分页拉取。
 
 ## 限制和注意事项
 
-- 单次自动评测最多支持 10,000 条样本；超量需分批提交；  
-- 人工评测任务不支持暂停/续标，创建后需一次性完成全部标注；  
-- 评测过程中若应用服务不可达或返回非 200 响应，该样本标记为 `failed`，不计入有效得分；  
-- 当前仅支持同地域内应用与评测服务通信（如华东1区应用只能被华东1区评测任务调用）；  
-> **注意**：[自动评测](../../raw/application-user-guide/application-evaluation.md) 文档中提及的“支持跨地域评测”为历史版本描述，已于 v2.3.0 版本移除，当前行为以控制台实际限制为准。
+- 单次自动评测任务最多支持 500 条用例；超量需拆分提交。  
+- 评测集中的 `input` 字段长度上限为 8192 字符，超出部分将被截断且不触发报错。  
+- 人工评测任务一旦启动，不可中途修改评测集内容；若需更新，须新建任务并重新分配标注员。  
+- 所有评测任务默认保留 90 天，过期后原始响应与标注记录将被自动清理。  
+- 当前不支持跨地域评测（例如华东1应用调用华北2评测模型），必须保证应用与评测资源位于同一 Region。
 
 ## 来源文档
 

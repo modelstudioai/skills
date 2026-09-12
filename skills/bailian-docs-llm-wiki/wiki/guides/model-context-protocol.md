@@ -1,43 +1,50 @@
 # model context protocol
 
-model context protocol（MCP）是百炼平台提供的标准化上下文交互协议，用于在大模型应用中安全、可控地接入外部工具与数据源。它定义了模型与外部服务之间结构化通信的接口规范，支持同步/异步调用、参数校验、权限控制和错误回传。开发者可通过官方 MCP 服务或自定义 MCP 服务快速集成业务能力。
+Model Context Protocol（MCP）是百炼平台提供的标准化上下文交互协议，用于在大模型应用中安全、可控地接入外部工具与数据源。它定义了模型请求上下文时的统一接口规范、参数结构和响应格式，支持同步/异步调用模式。开发者可通过官方服务或自定义服务实现上下文增强能力，详见 [MCP 简介](https://help.aliyun.com/zh/model-studio/mcp-introduction)。
 
 ## 支持的模型与功能
 
-MCP 当前支持所有百炼平台托管的推理模型（包括 Qwen 系列、Qwen2 系列及第三方兼容模型），但**不适用于训练任务或微调流程**。核心功能包括：  
-- 工具发现（`list_tools`）与元信息获取  
-- 上下文感知的工具调用（`invoke`）与结果流式返回  
-- 多轮会话状态透传（通过 `session_id` 和 `context` 字段）  
-- 安全沙箱执行（仅限官方 MCP 服务）  
-
-> **注意**：[原文标题](../../raw/application-user-guide/model-context-protocol.md) 中提及的“第三方 MCP 服务”需自行保障调用链路 TLS 加密与输入输出校验，该要求在 [原文标题](../../raw/application-user-guide/model-context-protocol.md) 的「外部调用」章节有明确说明，但未在「自定义MCP服务」章节强调，建议以「外部调用」为准。
+- 当前仅支持 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三类推理模型启用 MCP 上下文注入（`tools` 字段需显式声明）；
+- 支持两类上下文来源：  
+  - 官方 MCP 服务（如搜索、知识库、数据库查询等预置能力）；  
+  - 自定义 MCP 服务（需符合 [自定义MCP服务](https://help.aliyun.com/zh/model-studio/custom-mcp) 规范并完成鉴权注册）；  
+- 不支持在流式响应（`stream: true`）中动态触发 MCP 工具调用，该限制已在 [外部调用](https://help.aliyun.com/zh/model-studio/mcp-external-calls) 文档中明确说明。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `tool_id` | string | 是 | 工具唯一标识，由 MCP 服务注册时分配或自定义命名 |
-| `input` | object | 是 | 结构化输入，字段由工具 schema 定义，**不支持任意 JSON Schema，仅支持 OpenAPI 3.0 兼容子集** |
-| `session_id` | string | 否 | 用于关联多轮调用，长度 ≤ 64 字符，仅 ASCII 字母/数字/-/_ |
-| `context` | object | 否 | 可选上下文对象，最大嵌套深度 3 层，总大小 ≤ 16 KB |
+| `tools` | array | 是 | 工具描述列表，每个元素含 `type`（固定为 `"mcp"`）、`name`（服务标识符）、`description`（功能说明）及可选 `parameters`（JSON Schema 格式）； |
+| `tool_choice` | string / object | 否 | 控制调用策略：`"auto"`（默认）、`"none"` 或 `{ "type": "mcp", "name": "xxx" }`； |
+| `context` | object | 否 | 透传给 MCP 服务的上下文元数据，如 `{"user_id": "u123", "session_id": "s456"}`，字段需与服务端约定一致； |
 
-完整参数约束详见 [原文标题](../../raw/application-user-guide/model-context-protocol.md) 的「官方 MCP 服务」文档。
+> **注意**：`context` 参数在 [MCP 简介](https://help.aliyun.com/zh/model-studio/mcp-introduction) 中被描述为“可选且自由扩展”，但实际调用中若服务端校验严格，缺失必要字段将导致 400 错误——请以 [自定义MCP服务](https://help.aliyun.com/zh/model-studio/custom-mcp) 的服务契约为准。
 
 ## 使用方式
 
-1. **启用 MCP**：在应用配置中开启 `enable_mcp: true`；  
-2. **声明工具**：在 `tools` 列表中指定 `tool_id` 和 `mcp_server_url`（官方服务可省略）；  
-3. **触发调用**：模型输出符合 MCP 规范的 `tool_call` 指令后，平台自动路由并注入 `context`；  
-4. **处理响应**：MCP 服务须返回标准格式 `{ "result": ..., "error": null }` 或 `{ "error": { "code": "...", "message": "..." } }`。
+1. 在请求 payload 中声明 `tools` 数组，例如：
+   ```json
+   {
+     "model": "qwen-plus",
+     "messages": [...],
+     "tools": [{
+       "type": "mcp",
+       "name": "web_search",
+       "description": "实时网络搜索",
+       "parameters": { "type": "object", "properties": { "query": { "type": "string" } } }
+     }]
+   }
+   ```
+2. 发起标准 `/v1/chat/completions` 请求（HTTP POST）；
+3. 模型返回 `tool_calls` 后，平台自动调用对应 MCP 服务，并将结果注入后续上下文；  
+完整流程示例见 [外部调用](https://help.aliyun.com/zh/model-studio/mcp-external-calls)。
 
 ## 限制和注意事项
 
-- 单次 MCP 调用超时为 30 秒（官方服务）或 15 秒（自定义服务），不可配置；  
-- 自定义 MCP 服务必须提供 `/health` 健康检查端点，且响应头需含 `X-MCP-Version: 1.0`；  
-- 不支持跨域直接浏览器调用（CORS 需显式配置），仅限服务端间通信；  
-- `input` 中禁止包含敏感字段如 `password`、`api_key` —— 应通过平台凭证管理机制注入。  
-
-请严格遵循 [原文标题](../../raw/application-user-guide/model-context-protocol.md) 中「常见问题」章节关于错误码分类（如 `TOOL_NOT_FOUND`, `INPUT_VALIDATION_FAILED`）的定义，确保客户端健壮性。
+- 单次请求最多声明 5 个 `tools`，超出部分将被静默截断；
+- MCP 服务响应超时阈值为 15 秒，超时后视为调用失败，不重试；
+- 所有 MCP 调用均经过百炼网关鉴权与审计，**禁止在 `tools` 或 `context` 中传递敏感凭证（如 API Key、[Token](../concepts/token.md)）**，应通过服务端配置完成授权；
+- 自定义 MCP 服务必须使用 HTTPS 且支持 `application/json` 请求体，否则无法通过 [官方 MCP 服务](https://help.aliyun.com/zh/model-studio/official-and-third-party-mcp) 的连通性检测。
 
 ## 来源文档
 

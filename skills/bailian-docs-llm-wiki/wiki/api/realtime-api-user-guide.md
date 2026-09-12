@@ -1,44 +1,41 @@
 # realtime api user guide
 
-Realtime API 是百炼平台提供的低延迟、流式响应的模型调用接口，适用于对话交互、实时语音/文本生成等场景。它支持 WebSocket 和 HTTP/2 双协议，提供 token 级别[流式输出](../concepts/streaming-output.md)与事件驱动控制能力。详细设计目标和适用边界请参见 [Realtime API](../../raw/model-api-reference/realtime-api-user-guide.md)。
+Realtime API 是百炼平台提供的低延迟、流式响应的模型调用接口，适用于对话交互、实时语音/文本生成等场景。它基于 WebSocket 协议实现双向通信，支持增量式 token 返回与事件驱动控制。该接口不兼容传统 REST 同步调用模式，需使用专用客户端或 WebSocket 库接入。
 
 ## 支持的模型与功能
 
-- **当前支持模型**：`qwen-max`、`qwen-plus`、`qwen-turbo`（仅限 `stream=true` 模式）、`qwen2-audio`（音频流式输入/输出）  
-- **核心功能**：  
-  - 完整消息流（`message_start` → `content_block_delta` → `message_stop`）  
-  - 中断控制（`interrupt` event）与工具调用（`tool_use` + `tool_result`）  
-  - 多模态输入（文本+图像+音频，需对应模型支持）  
-  - 会话状态保持（通过 `session_id` 复用上下文，详见 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide.md)）
-
-> **注意**：文档中提及的 `qwen-vl` 已于 v2024.07 起停止维护，实际调用将自动降级为 `qwen-plus`；该行为与 [概述](../../raw/model-api-reference/realtime-api-user-guide.md) 中“支持全量视觉语言模型”的描述存在不一致，请以实际 API 响应为准。
+- 当前支持 `qwen-max`、`qwen-plus`、`qwen-turbo` 及部分 AOQ（Adaptive Output Quantization）优化模型，具体以 [Realtime API (raw/model-api-reference/realtime-api-user-guide.md)](../../raw/model-api-reference/realtime-api-user-guide.md) 中“支持的模型列表”章节为准。  
+- 功能包括：流式文本生成、工具调用（function calling）、多轮上下文维护、中断/暂停/恢复控制、音频输入（ASR）与输出（TTS）集成（需启用对应能力）。  
+- AOQ 模型需通过 `model` 参数显式指定（如 `qwen-plus-aoq`），其行为与标准版本存在差异，详见 [AOQ客户端SDK](https://help.aliyun.com/zh/model-studio/realtime-api-aoq-api) —— 该文档实际已整合进 [Realtime API (raw/model-api-reference/realtime-api-user-guide.md)](../../raw/model-api-reference/realtime-api-user-guide.md) 的“客户端 SDK”附录中，原独立链接内容已过时。
 
 ## 关键参数
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| `model` | string | 是 | 模型 ID，必须为实时 API 明确支持的型号（见上节） |
-| `messages` | array | 是 | 非空消息数组，首条 `role=system` 可选，后续 `user`/`assistant` 交替 |
-| `stream` | boolean | 是 | 必须为 `true`；`false` 将返回 400 错误 |
-| `temperature` | number | 否 | 范围 `[0.0, 2.0]`，默认 `0.8`；注意该值对[流式输出](../concepts/streaming-output.md)稳定性影响显著 |
-| `max_tokens` | integer | 否 | 单次响应最大 token 数，硬限制（含 [prompt](../guides/prompt.md)），默认 `4096` |
+| `model` | string | 是 | 模型标识符，如 `qwen-turbo`；AOQ 模型需带 `-aoq` 后缀 |
+| `messages` | array | 是 | 对话历史，格式同 Chat Completion，但 `role: "system"` 仅在首条消息生效 |
+| `stream` | boolean | 否，但建议设为 `true` | 必须为 `true` 才启用流式响应；设为 `false` 将返回错误 |
+| `tools` | array | 否 | 工具定义列表，启用 function calling 时必需 |
+| `tool_choice` | string / object | 否 | 控制工具调用策略，可选 `"auto"`、`"none"` 或指定工具 |
+| `max_tokens` | integer | 否 | 响应最大 token 数，硬性截断阈值 |
+
+> **注意**：`temperature` 和 `top_p` 在 Realtime API 中**不生效**，模型输出确定性由服务端统一调控——这与 [概述](https://help.aliyun.com/zh/model-studio/realtime-api-overview) 中早期示例存在矛盾，以 [Realtime API (raw/model-api-reference/realtime-api-user-guide.md)](../../raw/model-api-reference/realtime-api-user-guide.md) 的“参数说明”节为准。
 
 ## 使用方式
 
-1. **建立连接**：使用 `wss://dashscope.aliyuncs.com/realtime/v1/chat`（公网）或内网 endpoint  
-2. **发送初始化帧**：JSON 格式 `{"type": "session_update", "session": {...}}` + `{"type": "input", "content": [...]}`  
-3. **接收事件流**：按 `content_block_delta` 累积拼接 `text` 字段，监听 `message_stop` 判断完成  
-4. **调试建议**：优先使用官方 [AOQ客户端SDK](../../raw/model-api-reference/realtime-api-user-guide.md)，避免手动处理二进制帧与心跳逻辑  
+1. **建立 WebSocket 连接**：向 `wss://dashscope.aliyuncs.com/realtime/v1/chat` 发起连接，携带 `Authorization: Bearer <api_key>` 头（通过 query 参数传递不被支持）。  
+2. **发送初始化帧**：以 JSON 格式发送 `{"type": "session.update", "turn_id": "...", ...}` 或直接发送 `{"type": "conversation.item.create", ...}`。  
+3. **接收事件流**：服务端按事件类型（`response.text.delta`、`response.function_call_arguments.delta`、`response.audio.delta` 等）分帧推送，客户端需按序拼接。  
+4. **终止会话**：发送 `{"type": "response.cancel"}` 或关闭连接；主动关闭前建议发送 `{"type": "session.end"}` 释放资源。  
+完整交互流程见 [快速开始](https://help.aliyun.com/zh/model-studio/realtime-api-quick-start-guide)，但其中 Python 示例依赖旧版 `dashscope` SDK v1.x，推荐改用 v2.0+ 并参考 [Realtime API (raw/model-api-reference/realtime-api-user-guide.md)](../../raw/model-api-reference/realtime-api-user-guide.md) 的代码片段。
 
 ## 限制和注意事项
 
-- 单连接最长存活 30 分钟，超时后需重连并重建 session  
-- 每秒最多 5 个并发连接（按 AccessKey 统计），超出返回 `429 Too Many Requests`  
-- 图像输入仅支持 base64 编码（`data:image/png;base64,...`），不支持 URL 或 multipart  
-- 不支持 `response_format`（如 JSON mode）与 `parallel_tool_calls`，相关字段将被忽略  
-- 所有错误均通过 `error` 事件返回，**不会**混入 `content_block_delta` 流中  
-
-> **注意**：[快速开始](../../raw/model-api-reference/realtime-api-user-guide.md) 文档中给出的 Python 示例未处理 `tool_use` 的异步回调，实际集成时需自行实现 `tool_result` 插入逻辑，否则会导致会话卡死。
+- 单次会话最长持续 300 秒，超时自动断连；`max_tokens` 超限将触发 `response.done` 事件并终止。  
+- 每个连接仅支持一个并发请求（即不支持 multiplexing），需为每轮对话新建连接。  
+- 音频流（ASR/TTS）需额外申请权限，并在 `input_audio_format` / `output_audio_format` 中声明编码格式（如 `pcm16`）。  
+- 错误码统一为 WebSocket 状态码 + 自定义 `error.code` 字段（如 `InvalidParameter`、`RateLimitExceeded`），需解析 payload 中的 `error` 对象而非仅依赖 HTTP 状态。  
+- 日志与 trace ID 仅在 `response.done` 事件中返回，调试时请确保捕获该帧。
 
 ## 来源文档
 
