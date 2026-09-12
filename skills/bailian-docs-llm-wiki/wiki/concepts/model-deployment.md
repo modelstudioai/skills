@@ -1,46 +1,45 @@
 # 模型部署
 
-模型部署是将训练完成或调优后的模型（包括平台预置模型、用户导入模型、微调生成模型等）转化为可稳定提供推理服务的在线 API 的核心过程。它涵盖资源分配、服务发布、流量接入与生命周期管理，是模型从开发走向生产的关键环节。
+模型部署是百炼平台将训练或微调完成的模型封装为可稳定、安全、按需调用的推理服务的核心能力。它通过统一 API 接口对外提供标准化的 OpenAI 兼容调用方式，屏蔽底层资源差异，使开发者聚焦于业务逻辑而非基础设施运维。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **基础服务化**：通过 `model deployment 1` 能力，开发者可按需选择专属部署、PTU 预置吞吐、独占算力（MU/DTU）或 [Token](token.md) 按量等模式，快速发布模型为标准 RESTful API，适用于验证、测试及通用生产场景。  
-- **高性能低延迟场景**：启用 *High Speed Inference* 模式（需在部署时显式开启），通过 Prime 实例常驻、TPM 预留和队列调度机制，保障 P99 延迟 ≤ 300ms 和吞吐稳定性，适用于实时对话、搜索排序等严苛 SLA 场景。  
-- **轻量化与边缘适配**：结合 *模型压缩* 流程，先对模型进行 INT4/INT8 量化或 KV Cache 剪枝，生成体积更小、推理更快的压缩模型包，再以标准方式部署——压缩模型 ID 可直接作为 `model_id` 传入部署接口。  
-- **生产级规模化运营**：在 *[model production](../api/model-production.md)* 流程中，模型部署是“模型上线”的最终动作，需配合 TPM 预留、副本数（`replicas`）、网络类型（公网/VPC）等参数，实现高可用、可灰度、可监控的生产服务。  
-- **微调模型交付闭环**：所有 *[fine tuning](../guides/fine-tuning.md)* 任务成功后，生成的专属模型 ID 自动进入「我的模型」中心，可立即用于部署——无需导出权重，不依赖本地环境，真正实现“训练即服务”。
+- **模型上线交付**：完成微调（Fine-tuning）后，必须通过模型部署将生成的 `model_id`（如 `qwen2-7b-instruct-finetuned-20240806`）发布为可用服务，否则无法被 `ChatCompletion` 等接口调用；  
+- **生产环境服务化**：模型部署是「模型生产（Model Production）」流程的前提——只有已部署的模型才能配置 TPM 预留、灰度发布和自动扩缩容；  
+- **性能与成本精细化控制**：根据业务 SLA 要求选择部署类型：高确定性时延选 `dedicated` 或 `dtu`，可预测中高并发选 `ptu`，低频验证或 A/B 测试选 `token`；  
+- **安全合规落地**：私网访问（VPC）、AI 安全护栏等安全能力均作用于部署后的服务实例，`deployment_id` 是策略绑定与审计追踪的关键标识；  
+- **应用权限管控基础**：应用调用模型时，实际请求的是某个 `deployment_id` 对应的服务端点，RAM 权限策略中的 `Resource` 可精确到部署级（如 `.../deployment/{id}`），实现最小权限隔离。
 
 ## 关键参数和配置
 
-| 参数 | 所属场景 | 说明 | 必填 | 示例值 |
-|------|----------|------|------|--------|
-| `deployment_type` | [model deployment 1](../guides/model-deployment-1.md) | 部署模式：`dedicated`（专属）、`ptu`（预置吞吐）、`mu`/`dtu`（独占算力）、`token`（按量） | 是 | `"ptu"` |
-| `ptu_capacity` | [model deployment 1](../guides/model-deployment-1.md) | PTU 规格，决定最大上下文长度与并发能力（如 PTU-200 支持 32k tokens） | 仅 `ptu` 模式必填 | `200` |
-| `tpm_reservation` | High Speed Inference / [model production](../api/model-production.md) | 预留 [Token](token.md)s Per Minute 总量，保障吞吐 SLA | 否（但推荐设为 ≥1000） | `5000` |
-| `prime_enabled` | High Speed Inference | 是否启用实例常驻（消除冷启动），默认 `false` | 否 | `true` |
-| `replicas` | [model production](../api/model-production.md) | 初始服务副本数，默认 1；影响容灾与并发承载 | 否 | `3` |
-| `endpoint_type` | model production | 网络暴露类型：`public`（公网）或 `private`（VPC 内网） | 否 | `"private"` |
-| `quantization_type` | 模型压缩（前置步骤） | 压缩精度选项，影响部署后延迟与显存占用 | 是（压缩时） | `"int4"` |
+| 参数 | 类型 | 必填 | 说明 | 约束 |
+|------|------|------|------|------|
+| `model_id` | string | 是 | 模型唯一标识，须已在「我的模型」中发布成功 | 不支持未发布的微调任务 ID 直接部署 |
+| `deployment_type` | string | 是 | 部署模式：`dedicated` / `ptu` / `dtu` / `token` | 决定计费模型、资源隔离级别与功能限制 |
+| `instance_type` | string | 否（仅 `dedicated`/`dtu`） | ECS 实例规格（如 `ecs.gn7i-c16g1.4xlarge`） | 必须在[独占算力规格列表](https://help.aliyun.com/zh/model-studio/dtu-model-deployment)中 |
+| `ptu_count` | integer | 否（仅 `ptu`） | 预设吞吐单元数，1 PTU ≈ 100 tokens/sec 持续处理能力 | 最小值 1，受账户配额限制 |
+| `max_tokens` / `temperature` 等 | - | 否 | 标准推理参数 | 与部署类型无关，所有类型均完全兼容 |
 
 > ⚠️ 注意：  
-> - `instance_count` 已被弃用，请勿在新部署中使用；`model_id` 必须为百炼平台内发布的合法 ID（如 `qwen2-7b-20240801`），不支持 Hugging Face 格式路径；  
-> - High Speed Inference 与流式响应（`stream=true`）互斥；[Token](token.md) 按量部署亦不支持流式；  
-> - 所有部署均受项目级配额约束，超限返回 `429`；TPM 预留变更需重建部署。
+> - `deployment_type=token` 时禁止设置 `instance_type` 或 `ptu_count`；  
+> - 部署创建后，模型权重不可热更新——需删除旧部署并新建以生效新版本；  
+> - 所有部署默认启用模型路由，无法绕过；`token` 类型不支持流式响应（`stream=true`），且 `max_tokens ≤ 8192`。
 
 ## 面向开发者，简洁实用
 
-- ✅ **一步部署**：确认模型已发布 → 调用 `POST /v1/deployments` → 轮询状态 → 状态为 `active` 后即可调用 `endpoint`；  
-- ✅ **即用即扩**：部署后可通过更新 `replicas` 或 `tpm_reservation`（需重建）弹性伸缩，无需修改业务代码；  
-- ✅ **灰度无忧**：配合 [模型路由](https://help.aliyun.com/zh/model-studio/model-routing) 可对多版本部署做流量切分，支持 A/B 测试与平滑升级；  
-- ✅ **计费透明**：不同部署模式对应独立计费项（PTU 小时费、DTU 租赁费、Token 按量费、High Speed TPM 费），控制台实时展示用量；  
-- ✅ **错误速查**：常见失败原因包括 `InvalidModelId`（模型未发布）、`QuotaExceeded`（配额不足）、`UnsupportedModel`（如多模态模型不支持 High Speed Inference）——请优先检查模型状态与文档兼容性声明。
+- ✅ **快速上手**：确保模型已发布 → 调用 `POST /v1/deployments` → 记录返回的 `deployment_id` → 后续请求改用 `?deployment_id=xxx` 替代 `model_id`；  
+- ✅ **调试建议**：`ptu` 类型首次请求有 60–120 秒冷启动延迟，建议预热或添加指数退避重试；  
+- ✅ **权限控制**：若需限制某团队仅能调用特定部署，可在 RAM 策略中限定 `Resource` 为具体 `deployment_id`；  
+- ✅ **生产就绪检查**：高 SLA 场景务必选用 `dedicated` 或 `dtu`，并配合 `model production` 设置 `tpm_reserved` 和 `auto_scaling_enabled`；  
+- ❌ **避免踩坑**：不要尝试对 `token` 部署开启流式；不要在 `deployment_type=token` 请求中传入 `instance_type` —— 将直接返回 400 错误。
 
 ## 关联主题页
 
 - [model deployment 1](../guides/model-deployment-1.md)
-- [model high speed inference](../guides/model-high-speed-inference.md)
-- [model compression](../guides/model-compression.md)
 - [model production](../api/model-production.md)
+- [model high speed inference](../guides/model-high-speed-inference.md)
 - [fine tuning](../guides/fine-tuning.md)
+- [security and compliance](../guides/security-and-compliance.md)
+- [application permission management](../guides/application-permission-management.md)
 
 

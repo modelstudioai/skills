@@ -1,55 +1,58 @@
 # 检索增强生成
 
-检索增强生成（Retrieval-Augmented Generation，RAG）是一种将大语言模型（LLM）的生成能力与外部知识源的精准检索能力相结合的技术范式。它通过在模型推理前动态检索相关文档片段，并将其作为上下文注入提示（[prompt](../guides/prompt.md)），显著提升回答的事实准确性、领域专业性与可追溯性，同时降低幻觉风险。
+检索增强生成（Retrieval-Augmented Generation，简称 RAG）是一种将外部知识检索与大语言模型生成能力深度融合的技术范式。它通过在模型推理前动态检索相关知识片段，并将其作为上下文注入 LLM 提示词，从而显著提升回答的准确性、可溯源性与领域适配性，同时降低幻觉风险。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-在百炼平台中，RAG 不是独立功能模块，而是贯穿于多个能力层的**横切增强机制**，开发者可通过以下方式按需启用：
+在百炼平台中，RAG 不是独立功能模块，而是贯穿多个核心能力的**横切架构模式**，主要落地于以下三类场景：
 
-- **免代码问答应用**：在控制台创建“知识库问答”模板应用时，上传文档即自动构建向量知识库；发布后所有对话请求默认启用 RAG，无需修改提示词。
-- **API 调用（`/v1/chat/completions`）**：在请求体中传入 `retrieval: { "knowledge_id": "xxx" }` 参数，平台将自动执行检索 → 重排序 → 上下文拼接 → 模型生成全流程，返回带溯源信息的增强答案。
-- **数据连接（Data Connection）集成**：将 MySQL、Elasticsearch 或 OSS 等外部数据源注册为连接后，可在知识库配置中直接绑定，实现私有数据库内容的实时/定时同步与 RAG 调用。
-- **多模态与混合检索**：结合 `vector and sort` 服务，可自定义调用 `text-embedding-v1` 生成查询向量，并用 `rerank-v1` 对 BM25 初检结果进行精排，再送入 LLM——适用于对精度和可控性要求极高的场景。
-- **低代码嵌入式应用（如企业微信、钉钉机器人）**：在模板配置页启用“知识库增强”，选择已构建的知识库 ID，即可在 IM 消息流中无缝获得 RAG 支持的回答。
+- **知识库问答（最常用）**：通过 `/v1/knowledge_base/query` 接口，自动完成“向量检索 →（可选）重排序 → 拼接上下文 → 调用 Qwen 系列模型生成答案”全流程。适用于客服机器人、技术文档助手、内部知识查询等。
+- **智能体（Agent）与工作流**：在 Agent 的「检索节点」或工作流中的「Data Source 节点」中，可配置数据连接（如 MySQL、OSS、Elasticsearch），实现结构化/非结构化数据的动态检索，并将结果注入后续 LLM 步骤，支撑复杂决策与多跳推理。
+- **通用 LLM 应用（`/v1/chat/completions` 或 `llm-application` API）**：通过显式传入 `retrieval_config` 参数（含 `knowledge_base_id`、`top_k` 等），在标准对话接口中一键启用 RAG 增强，无需修改业务逻辑，适合快速集成到现有应用。
 
-> ✅ 提示：所有 RAG 路径最终都统一归结为向 LLM 注入高质量上下文（`input_documents` 字段），百炼平台自动处理切片、向量化、检索策略选择、敏感信息脱敏等底层细节。
+> ✅ 关键提示：所有 RAG 场景均**强制依赖百炼托管的 Qwen 系列模型**（`qwen-max`/`qwen-plus`/`qwen-turbo`）进行最终生成；不支持第三方或自定义 LLM 后端。向量嵌入与重排序也必须使用平台预置模型（`text-embedding-v1`、`rerank-v1`），不可替换。
 
 ## 关键参数和配置
 
-| 参数 | 类型 | 说明 | 推荐值 |
-|------|------|------|--------|
-| `retrieval` | `boolean` 或 `object` | 启用 RAG 的开关。设为 `true` 使用默认知识库；设为 `{ "knowledge_id": "kb-xxx", "top_k": 5 }` 指定知识库与检索数量 | `{ "knowledge_id": "kb-xxx" }` |
-| `top_k` | `integer` | 检索返回的最相关文档片段数 | `3`（平衡精度与 token 开销） |
-| `retrieval_strategy` | `string` | 检索模式：`"vector"`（纯向量）、`"keyword"`（BM25）、`"hybrid"`（默认，双路融合） | `"hybrid"` |
-| `enable_rerank` | `boolean` | 是否启用 RRF 重排序（提升 Top-K 结果质量） | `true`（生产环境建议开启） |
-| `query_rewrite` | `boolean` | 是否启用查询改写（如代词消解、同义扩展） | `false`（实验性功能，生产环境慎用） |
+RAG 行为由以下核心参数控制，需在请求中显式指定（无全局默认开启）：
 
-⚠️ 注意：
-- `retrieval` 参数仅在支持 RAG 的模型上生效（如 `qwen-max`、`qwen-plus`、`qwen-turbo`）；`qwen2.5-7b-instruct` 等开源模型需自行构造 `input_documents` 字段。
-- 知识库 ID（`knowledge_id`）需通过 `/v1/knowledge_bases` API 创建后获取，不可手动生成。
-- 若同时使用 `system` 角色和 RAG，`system` 内容会与检索片段共同构成上下文，注意总 token 不超模型限制（如 `qwen-max` 为 32768）。
+| 参数名 | 类型 | 说明 | 典型值 | 注意事项 |
+|--------|------|------|--------|----------|
+| `retrieval_strategy` | string | 检索方式：`"vector"`（语义向量）、`"fulltext"`（关键词）、`"hybrid"`（两者融合） | `"hybrid"` | `hybrid` 检索必须配合 `rerank: true` 才生效；`top_k ≤ 50`（API 指南强制限制） |
+| `top_k` | integer | 检索返回的最相关知识片段数 | `3`（推荐 2–5） | 过大会增加 token 开销与延迟；RAG 场景需预留足够 token 给 LLM 输出（如 `qwen-turbo` 总上限 8192） |
+| `rerank` | boolean | 是否启用内置重排序（RRF 算法） | `true` | 仅对 `hybrid` 有效；启用后会调用 `rerank-v1` 模型二次打分 |
+| `enable_citation` | boolean | 是否返回引用溯源信息（chunk ID、原始文档路径等） | `true` | 响应中新增 `citations` 字段，用于构建可验证、可审计的答案 |
+| `retrieval_config` | object | 通用 RAG 配置对象（用于 `/v1/chat/completions` 等接口） | `{"knowledge_base_id": "kb-xxx", "top_k": 3}` | 必须包含有效的 `knowledge_base_id`；不支持混合多个知识库 |
+
+> ⚠️ 注意：`retrieval_strategy` 和 `rerank` 是效果调优的关键开关，建议优先实测 `vector` vs `hybrid+rerank` 组合；`enable_citation` 对合规性要求高的场景（如金融、医疗）为必选项。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速验证**：控制台新建知识库 → 上传一份技术文档 → 创建“知识库问答”应用 → 直接提问测试，全程 2 分钟内完成。
-- ✅ **API 最小化集成**：只需在标准 chat 请求中增加一行：
-  ```json
-  "retrieval": { "knowledge_id": "kb-1234567890" }
-  ```
-- ✅ **调试技巧**：在请求中添加 `"debug": true`（部分模型支持），响应中将返回 `retrieved_documents` 原始片段，用于验证检索质量。
-- ⚠️ **避坑提醒**：
-  - 知识库更新后必须手动点击「重建索引」或等待定时同步任务，否则新内容不参与检索；
-  - `retrieval_strategy: "hybrid"` 在含大量专有名词的文档中效果更稳，纯 `vector` 易受语义漂移影响；
-  - 流式响应（`stream: true`）下，RAG 检索阶段无[流式输出](streaming-output.md)，首字节延迟 ≈ 检索+重排耗时（通常 < 800ms）。
+- **快速上手**：  
+  1. 控制台创建知识库 → 上传 PDF/TXT/MD 文档 → 等待向量化完成（状态变“可用”）；  
+  2. 调用 `/v1/knowledge_base/query`，传入 `knowledge_base_id` 和 `query`，加上 `{"retrieval_strategy": "hybrid", "rerank": true, "enable_citation": true}`；  
+  3. 解析响应：`answer` 是最终答案，`citations` 是来源列表（含 `chunk_id` 和 `document_path`）。
 
-如需深度定制（如自定义分块逻辑、替换 embedding 模型、接入自有向量库），请参考 [向量与排序](api/vector-and-sort.md) 和 [数据连接概述](guides/data-connection-overview.md) 文档。
+- **调试技巧**：  
+  - 若答案质量差，先检查 `citations` 是否为空或内容无关 → 优化知识库分块策略（避免过长/过短）或调整 `top_k`；  
+  - 若响应慢，禁用 `rerank` 或改用 `vector` 检索；  
+  - 使用数据连接时，在 RAG 节点中开启「试运行」，直接查看原始检索结果，确认数据格式符合预期。
+
+- **避坑指南**：  
+  - 知识库文档需为纯文本可提取格式（PDF/Word 中图片文字需 OCR 预处理）；  
+  - `retrieval_config` 仅在 `/v1/chat/completions` 中生效，**不适用于** `/v1/knowledge_base/query`（后者用专属参数）；  
+  - 所有 RAG 请求均计入知识库配额（按查询次数 + 向量维度计费），生产环境请监控用量。
+
+- **进阶组合**：  
+  将 RAG 与 Function Calling 结合：先检索知识库获取背景，再调用数据库插件查实时数据，最后由 LLM 综合生成——全部在单个 Agent 工作流中编排完成。
 
 ## 关联主题页
 
-- [start using](../guides/start-using.md)
 - [knowledge base](../guides/knowledge-base.md)
 - [data connection overview](../guides/data-connection-overview.md)
 - [vector and sort](../api/vector-and-sort.md)
+- [use cases](../guides/use-cases.md)
 - [application use cases](../guides/application-use-cases.md)
+- [llm application](../guides/llm-application.md)
 
 

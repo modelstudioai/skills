@@ -1,40 +1,48 @@
 # Token
 
-Token 是百炼平台中用于计量模型输入与输出文本（或多媒体内容）处理规模的最小语义单位，也是计费、限流和资源配额的核心度量基准。一个 token 通常对应一个子词（subword）、标点、空格或图像/音频编码后的基础单元；具体切分方式由底层模型的 tokenizer 决定，不直接等价于字符或字。
+Token 是百炼平台对模型输入与输出内容进行标准化计量的基本单位，用于精确衡量语言模型处理文本、多模态数据（图像、音频）时的计算资源消耗。1 个 token 通常对应一个子词（subword）或字节对编码（BPE）单元，在实际调用中，其数量由模型 tokenizer 动态计算得出，而非简单按字符或字数折算。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **API 调用计费**：所有模型服务（如 `test 1`、Realtime API、模型体验）均按实际消耗的 tokens 计费——包括输入 [prompt](../guides/prompt.md) 的 tokens 和模型生成的 output tokens。例如，一次请求若输入 320 tokens、输出 180 tokens，则总计费 500 tokens。
-- **资源包抵扣**：Token Plan 购买的资源以「token 数量」为单位，调用时自动按实际消耗抵扣；支持跨模型共享（如 `qwen-max` 和 `qwen-vl` 共用同一份 token 余额），但不适用于私有化或微调模型。
-- **能力边界控制**：
-  - 单请求总 tokens（input + output）受硬性限制（如 `test 1` 最高 4096，`qwen2.5-vl` 最高 128K）；
-  - `max_tokens` 参数仅限制输出长度，不包含输入 tokens；
-  - 超出限制将直接返回 `400 Bad Request`，不会截断后继续执行。
-- **流式响应监控**：启用 `stream_options.include_usage=true` 后，流式响应末尾会返回 `usage` 字段，精确给出本次请求的 `prompt_tokens`、`completion_tokens` 和 `total_tokens`。
-- **模型体验调试**：控制台「模型体验」页面实时显示每次运行的 token 消耗（含多模态输入的图像编码开销），便于快速评估成本与性能。
+- **计费与资源包管理**：Token 是 Token Plan 资源包的计量和抵扣单位。每次 API 调用产生的 `input_tokens` 和 `output_tokens` 总和将实时从已购 Token Plan 中扣除；余额不足时自动回退至后付费模式。
+- **高吞吐推理（TPM Reservation）**：吞吐预留以 **tokens per minute（TPM）** 为单位配置，用于保障每分钟可稳定处理的 token 总量（含输入+输出），是性能隔离与 QPS 稳定性的核心度量。
+- **实时流式接口（Realtime API / Omni Realtime API）**：token 是流式响应粒度的基础——服务端按 token 增量推送 `text.delta` 或 `audio.delta` 事件；`max_tokens` / `max_output_tokens` 等参数均以 token 为上限单位实施硬性截断。
+- **账单分析（Billing API）**：`GetBillingOverview` 和 `GetBillingTrend` 接口直接返回 `total_tokens_used` 及按模型/项目分组的 token 消耗明细，是用量审计与成本归因的核心指标。
+- **组织级配额治理（TokenPlan API）**：虽不直接暴露 token 数值，但席位（seat）分配与成员用量统计最终映射到 token 消耗行为上，支撑企业级资源分账与预算控制。
+
+> ⚠️ 注意：Token 不是认证凭证（如 API Key 或 Bearer Token），也不等同于 HTTP 请求中的 `Authorization` 头；它纯粹是**模型计算负载的计量单位**，全程由服务端 tokenizer 自动统计，开发者无需手动拆分或估算。
 
 ## 关键参数和配置
 
-- `max_tokens`（整型，可选）：指定模型最多生成的 tokens 数。默认值因模型而异（如 `test 1` 默认 1024，`qwen2.5-vl` 默认 8192），超出上下文窗口上限将报错。
-- `stream_options.include_usage`（布尔，仅流式请求）：设为 `true` 时，在流式响应结束事件（如 `data: {"type":"message_stop",...}`）后追加一条含 `usage` 字段的数据帧。
-- `X-DashScope-Token-Plan-ID`（HTTP Header）：显式指定用于抵扣的 Token Plan ID；未提供或无效时自动回退至后付费。
-- 无全局 token 配置项：token 切分逻辑完全由模型绑定的 tokenizer 决定，开发者不可自定义分词规则或修改 token 定义。
+| 参数名 | 所属场景 | 说明 | 典型取值示例 |
+|---------|-----------|------|----------------|
+| `input_tokens` / `output_tokens` | 所有模型 API 响应体 | 每次调用实际消耗的输入/输出 token 数，返回在 `usage` 字段中 | `"usage": {"input_tokens": 127, "output_tokens": 43}` |
+| `max_tokens` / `max_output_tokens` | Realtime API、Omni Realtime API | 强制截断响应长度的 token 上限（硬限制） | `2048`, `4096` |
+| `tpm_reservation` | 高速推理（Model High Speed Inference） | 预留吞吐量，单位为 tokens per minute | `5000`, `10000`（须为 1000 的整数倍） |
+| `X-DashScope-Token-Plan-ID` | 请求 Header | 指定本次调用优先使用的 Token Plan | `plan-abc123xyz` |
+| `remaining_tokens` | Token Plan 查询接口（`/v1/token_plan/balance`） | 当前资源包剩余可用 token 数 | `124890` |
+
+- 所有 token 计数均基于模型原生 tokenizer（如 Qwen 使用 QwenTokenizer），对中文、英文、符号、emoji、Base64 图像编码等均有统一且确定的切分逻辑；
+- 多模态输入（如图像 URL、base64 编码图）会经视觉 encoder 转换为固定数量的视觉 token，计入 `input_tokens`；
+- 流式响应中，每个 `text.delta` 事件携带的字符串可能对应 1~N 个 token，不可假设“1 字符 = 1 token”。
 
 ## 面向开发者，简洁实用
 
-- ✅ 始终检查 `usage` 字段（尤其在流式或批量调用中）来验证 token 消耗是否符合预期；
-- ✅ 使用 `/v1/models` 接口查询目标模型的 `context_length` 和 `max_output_length`，避免因超限导致 400 错误；
-- ✅ 图像/音频等多模态输入会产生额外 tokens（如一张 1024×1024 图像经 Qwen-VL tokenizer 编码后约消耗 1200 tokens），需在 `max_tokens` 预留余量；
-- ❌ 不要假设 token ≈ 字符数（中文平均 ~1.5 字/ token，英文平均 ~0.75 词/ token）；
-- ❌ 不要依赖 `top_p` 或 `temperature` 改变 token 总数——它们只影响生成内容，不影响计费 token 量；
-- ⚠️ 免费额度、Token Plan、后付费三者互斥：同一请求只能归属一种计费模式，无法拆分抵扣。
+- ✅ **必查响应字段**：所有同步/异步模型 API 响应中，务必解析 `usage.input_tokens` 和 `usage.output_tokens`，用于本地用量监控与预算预警；
+- ✅ **流式开发注意**：Realtime/Omni 接口不返回累计 token 数，需客户端自行累加 `text.delta` 事件长度（推荐用 SDK 内置计数器，避免 Unicode 边界错误）；
+- ✅ **调试技巧**：若需预估 token 消耗，可调用 `/v1/tokenizer/count`（需开通权限）对 [prompt](../guides/prompt.md) 进行离线计数，结果与线上一致；
+- ❌ **不要手动换算**：避免用字符数 × 系数估算 token —— 中文平均 ~1.5 字符/token，英文 ~0.75 字符/token，但受内容结构影响极大；
+- ❌ **不要复用 token 值做认证**：`X-DashScope-Token-Plan-ID` 是资源包 ID，不是密钥；API 认证始终使用独立的 `Authorization: Bearer <api_key>`。
+
+Token 是百炼平台资源计量的“原子单位”。理解它，就掌握了用量、成本、性能与配额控制的共同语言。
 
 ## 关联主题页
 
-- [test 1](../guides/test-1.md)
 - [token plan guide](../guides/token-plan-guide.md)
-- [model experience](../guides/model-experience.md)
+- [token plan api](../api/token-plan-api.md)
+- [billing api](../api/billing-api.md)
+- [model high speed inference](../guides/model-high-speed-inference.md)
 - [realtime api user guide](../api/realtime-api-user-guide.md)
-- [release notes](../guides/release-notes.md)
+- [omni realtime api](../api/omni-realtime-api.md)
 
 

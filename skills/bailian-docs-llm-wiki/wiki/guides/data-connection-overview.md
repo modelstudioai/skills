@@ -1,34 +1,37 @@
 # data connection overview
 
-数据连接（Data Connection）是百炼平台中用于安全、可控地将外部数据源接入模型应用的关键基础设施。它支持在不暴露原始凭证的前提下，为大模型应用提供结构化/非结构化数据的实时或批量访问能力。开发者可通过统一配置界面管理连接，并在[提示词工程](../concepts/prompt-engineering.md)、RAG 或[函数调用](../concepts/function-calling.md)等场景中引用已注册的数据源。
+数据连接是百炼平台中用于安全、高效地将外部数据源接入模型应用的关键基础设施，支持在推理、RAG、Agent 等场景中动态读取结构化与非结构化数据。它通过统一的连接管理、凭证隔离和权限控制机制，降低数据接入复杂度，同时保障敏感信息不泄露。该能力深度集成于百炼控制台与 SDK，适用于开发者构建生产级数据增强型 AI 应用。
 
 ## 支持的模型/功能
 
-- 支持在 RAG 应用中作为知识库数据源（如 MySQL、PostgreSQL、Elasticsearch、OSS 等）；
-- 支持在[函数调用](../concepts/function-calling.md)（Function Calling）中作为后端服务代理，将 LLM 请求自动转换为 SQL 查询或 API 调用；
-- 当前**不支持**直接用于训练微调任务的数据输入，仅面向推理阶段的数据接入；该限制详见 [数据连接](../../raw/application-user-guide/data-connection-overview.md)。
+- 支持在 **RAG 检索节点**、**自定义函数（Function Calling）** 和 **Agent 工作流中的 Data Source 节点** 中直接调用已配置的数据连接；
+- 兼容主流数据源类型：MySQL、PostgreSQL、SQL Server、Oracle、MongoDB、Elasticsearch、阿里云 Tablestore、OSS（CSV/JSON/Parquet 文件）、以及通过 JDBC 协议接入的任意关系型数据库；
+- 支持自动元数据发现（如表结构、字段注释）、SQL 查询预检、以及基于列级别的动态过滤（需配合 [原文标题](../../raw/application-user-guide/data-connection-overview.md) 中定义的参数模板）。
 
 ## 关键参数
 
-- `type`：数据源类型，必须为预定义枚举值（如 `mysql`, `postgresql`, `oss`, `elasticsearch`），大小写敏感；
-- `connection_id`：平台分配的唯一标识，创建后不可修改，用于在 Prompt 或 Function Schema 中引用；
-- `auth_mode`：认证方式，支持 `ak_sk`（AccessKey）、`ram_role`（角色扮演）和 `oauth2`（部分 SaaS 服务），其中 `ak_sk` 模式需通过密钥管理服务（KMS）加密存储，详情见 [数据连接](../../raw/application-user-guide/data-connection-overview.md)；
-- `timeout_ms`：默认 30000（30 秒），超时后返回 `ConnectionTimeoutError`，不可设为 0 或负数。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `type` | string | 是 | 数据源类型，如 `"mysql"`、`"oss"`、`"elasticsearch"`；必须与 [原文标题](../../raw/application-user-guide/data-connection-overview.md) 所列枚举值严格一致 |
+| `connection_id` | string | 是 | 平台分配的唯一连接标识，可在控制台「数据连接」列表中获取 |
+| `query` | string / object | 否 | SQL 查询语句（关系型）或 DSL/路径表达式（NoSQL/OSS）；若为对象格式，需符合 [原文标题](../../raw/application-user-guide/data-connection-overview.md) 中定义的 `query_template` 结构 |
+| `timeout_ms` | number | 否 | 默认 10000（10 秒），超时后返回错误，不可设为 0 |
+
+> **注意**：文档中曾提及支持 `redis` 类型，但当前 SDK v3.2.0+ 及控制台 v2.8.0 已移除此类型，实际调用将返回 `400 Unsupported type`；请以最新控制台可选类型下拉列表为准。
 
 ## 使用方式
 
-1. 在控制台「数据连接」页面完成配置并测试连通性；
-2. 在 RAG 应用中，于知识库配置页选择已启用的 `connection_id`；
-3. 在 Function Calling 场景中，在函数定义的 `parameters.schema` 中声明 `"type": "data_connection"`，并指定 `connection_id` 字段；
-4. 所有调用均经平台网关鉴权与审计，原始凭证**永不透出**至用户模型代码或日志，具体实现机制参见 [数据连接](../../raw/application-user-guide/data-connection-overview.md)。
+1. **配置连接**：在控制台「数据连接」页面创建并测试连接，确保网络可达性与权限正确（如 VPC 内网访问、RAM 授权等）；
+2. **引用连接**：在 RAG 检索节点或 Agent Data Source 节点中，选择已启用的 `connection_id`，并填写 `query`（支持 Jinja2 模板变量，如 `{{ input.query }}`）；
+3. **调试验证**：使用节点内置的「试运行」功能执行查询，检查返回数据结构是否符合下游模型输入要求；
+4. **代码调用（SDK）**：通过 `DataConnectionClient.invoke()` 方法传入参数对象，详见 [原文标题](../../raw/application-user-guide/data-connection-overview.md) 中的示例代码节。
 
 ## 限制和注意事项
 
-- 单账号最多创建 50 个数据连接实例；
-- OSS 类型连接仅支持 `bucket` + `prefix` 粒度授权，不支持单文件级 ACL 控制；
-- > **注意**：文档中提及“支持 MongoDB 连接”为历史遗留描述，当前版本（v2.3.0+）已移除该类型支持，实际可用列表以控制台下拉菜单为准；
-- 同一 `connection_id` 不可跨工作空间复用，迁移需重新创建；
-- 所有连接默认启用 TLS 加密，禁用明文传输（包括 MySQL 的 `skip-ssl` 参数被强制覆盖）。
+- 单次查询返回结果默认最多 1000 行（`limit` 参数可显式覆盖，但最大不超过 5000）；
+- OSS 连接仅支持公共读或 RAM 授权的私有 Bucket，不支持临时 STS [Token](../concepts/token.md) 动态鉴权（该能力计划 Q4 上线，当前需预置长期 AccessKey）；
+- 所有查询均在服务端执行，原始 SQL/DLS 不会透出至前端或日志（审计日志除外），但 `query` 字段若含硬编码敏感值（如 `WHERE api_key = 'xxx'`），仍构成安全风险；
+- 连接配置变更（如密码更新）后，**已有工作流不会自动热加载**，需手动触发节点重部署或重启 Agent 实例。
 
 ## 来源文档
 

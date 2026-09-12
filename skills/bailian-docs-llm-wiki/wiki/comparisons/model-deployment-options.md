@@ -1,63 +1,60 @@
-# [模型部署](../concepts/model-deployment.md)方式对比
+# [模型部署](../concepts/model-deployment.md)方式对比：托管代理、高速推理与模型生产
 
-为帮助开发者在百炼平台上高效、可靠地将模型投入生产，本文系统对比三种核心[模型部署](../concepts/model-deployment.md)能力：**Model Deployment 1（基础部署）**、**Model Production（生产级服务化）** 和 **Model High Speed Inference（高性能推理）**。三者定位互补，覆盖从快速验证、稳定服务到极致低延迟的全场景需求。本对比聚焦技术实现差异、资源语义、接口行为与成本模型，旨在为架构设计与技术选型提供客观、可落地的决策依据。
+为帮助开发者在百炼平台上高效、可靠地将 AI 能力投入实际业务，平台提供了三种面向不同抽象层级与运维诉求的模型服务化路径：**托管代理（Managed Agents）**、**高速推理（Model High-Speed Inference）** 和 **模型生产（Model Production）**。本文旨在系统性对比三者的核心能力边界、技术约束与适用场景，辅助团队基于业务目标（如是否需要多步编排、是否追求极致延迟、是否需自主模型迭代）做出精准的技术选型决策。
+
+---
 
 ## 关键维度对比
 
-| 维度 | Model Deployment 1 | Model Production | Model High Speed Inference |
-|------|---------------------|-------------------|----------------------------|
-| **输入格式** | 标准 OpenAI 兼容 JSON（`messages`, `model`, `temperature` 等），支持 `stream=true`（除 `token` 模式外） | DashScope 标准 JSON（`input`, `parameters`, `model`），**不支持 `stream=true`** | 同 Model Production 格式；**强制禁用流式响应**（`stream=true` 将被忽略或返回错误） |
-| **输出格式** | OpenAI 兼容格式（含 `choices[0].message.content`, `usage`），支持完整 token 统计 | DashScope 原生格式（`output.text`, `usage.input_tokens`/`output_tokens`），结构更扁平 | 同 Model Production 格式；额外返回 `x-bailian-latency-ms` 等性能标头，无流式 chunk |
-| **支持模型** | ✅ 平台预置模型<br>✅ 用户导入的自定义模型（PyTorch/ONNX）<br>✅ “我的模型”中所有已发布版本（含微调模型） | ✅ 百炼托管的已发布模型版本<br>❌ 不支持本地模型文件或 Hugging Face 路径（如 `hf://...`）<br>✅ 支持微调模型（需先发布） | ✅ Qwen1.5 / Qwen2 / Qwen2.5 / Qwen3 系列<br>✅ 白名单开通的定制 Llama3 模型<br>❌ 不支持微调模型直接部署（需权重合并至基础模型） |
-| **API 端点** | `/v1/deployments/{id}/chat/completions`（专属 endpoint）<br>端点生命周期绑定 deployment 实例 | `/api/v1/services/{service_id}/completions`（统一 service endpoint）<br>支持多 deployment 复用同一 service ID | `/api/v1/services/{service_id}/completions`（同 Model Production）<br>**必须显式声明模式**：<br>• HTTP Header: `X-Bailian-Mode: high-speed`<br>• SDK: `mode="high-speed"` |
-| **计费方式** | • `dedicated`/`mu`/`dtu`: 按实例规格 × 运行时长（小时）<br>• `ptu`: 按预购 PTU 单位 × 使用天数<br>• `token`: 按日 token 配额（万 tokens/天）+ 超额按量计费 | • 共享资源池：按 token 实际消耗计费（无保障）<br>• `tpm_capacity` 预留：按预留 TPM × 使用小时计费（保障 SLA）<br>• **不区分部署模式，统一 token 计费粒度** | • **独立计费项**：按 `tpm_reservation` × 使用小时 + Prime 常驻实例费<br>• 所有请求**不计入标准推理配额**，也不享受共享资源池折扣<br>• 无“按量 token”选项 |
-| **典型场景** | • 快速原型验证（`dedicated` 单实例）<br>• 成本敏感型批处理任务（`token` 模式）<br>• 多模型 A/B 测试（配合模型路由） | • 中高流量 Web 应用后端（如客服机器人 API）<br>• 需要明确 TPM SLA 的 SaaS 服务集成<br>• 自动扩缩容驱动的弹性业务（配合集群） | • 实时对话系统（P99 < 800ms 要求）<br>• 搜索排序/推荐重排等毫秒级响应场景<br>• 高并发压测与稳定性保障环境 |
+| 维度 | 托管代理（Managed Agents） | 高速推理（Model High-Speed Inference） | 模型生产（Model Production） |
+|------|-----------------------------|------------------------------------------|-------------------------------|
+| **定位与抽象层级** | **面向业务逻辑的智能体编排层**：封装多步推理、工具调用、会话状态管理等复杂流程，提供声明式 Agent 运行时 | **面向性能保障的推理加速层**：在标准模型 API 基础上叠加资源隔离与调度优化，提升吞吐与稳定性 | **面向 MLOps 的模型服务治理层**：支持自定义训练/调优模型的全生命周期部署、灰度、扩缩容与 SLA 保障 |
+| **输入格式** | JSON 对象，严格遵循 Agent 定义中 `input_schema` 的结构（如 `{"query": "…", "user_id": "…"}`） | 标准文本生成请求体（如 `{"model": "qwen-max", "input": {"messages": [...]}}`），支持 `parameters` 扩展字段 | 标准模型服务请求体（同高速推理），但必须通过 `/v1/model-productions/{id}` 创建的专属端点调用 |
+| **输出格式** | 同步返回含 `status`、`output`、`session_id` 的 JSON；异步场景下支持 Webhook 事件流（`tool_called`, `session_completed` 等） | 同步返回标准 `text-generation` 响应（含 `output.text`, `usage`）；**不支持流式响应（`stream: true`）与 Prime 模式共用** | 同步返回标准模型响应；支持灰度路由头（`X-Version-Alias`）和扩缩容指标透出（`X-Actual-TPM`） |
+| **支持模型** | 仅限平台预置 Qwen 系列：`qwen-max`、`qwen-plus`、`qwen-turbo`（不可替换或 BYOM） | 仅限百炼托管模型（Qwen 系列、Qwen-VL、Qwen-Audio），**不支持用户自定义模型** | ✅ 支持所有已完成调优/部署的百炼模型（含自定义微调模型 ID，如 `qwen-max-20240601-001`） |
+| **API 端点** | `POST /v1/agents/{agent_id}/sessions`（会话级入口） | `POST /v1/services/aigc/text-generation/generation`（需在 `parameters` 中启用 `enable_prime` 或 `tpm_reservation`） | `POST /v1/model-productions/{production_id}/inference`（专属生产实例端点） |
+| **计费方式** | 按 **Agent 会话执行时长（秒） + token 消耗量** 计费；会话超时（>600s）或上下文截断均触发计费 | 按 **实际 token 消耗量** 计费；**TPM 预留部分按小时单独计费（未用不退）** | 按 **实际 token 消耗量 + TPM 预留费用（可选）** 计费；自动扩缩容实例按实际运行时长计费 |
+| **核心能力** | ✅ 多轮会话上下文隔离（`session_id`）<br>✅ 内置工具调用与结果编排<br>✅ Webhook 事件驱动（`agent_started`, `tool_called`）<br>❌ 不支持模型替换、参数动态覆盖 | ✅ Prime 模式（降低首 token 延迟）<br>✅ TPM 预留（保障稳定 QPS）<br>❌ 不支持工具调用、无状态编排<br>❌ 不支持流式响应（启用 Prime 时） | ✅ TPM 预留（SLA 可承诺）<br>✅ 灰度发布（按 `version_alias` 流量分发）<br>✅ 自动扩缩容（基于 `actual_tpm`）<br>❌ 不提供内置工具链或会话管理 |
+| **典型场景** | 客服对话机器人（需查订单+改地址+发通知）、数据分析助手（需连 BI 工具+生成图表+总结结论）、审批工作流（多角色协同+状态持久化） | 高并发实时问答（如 App 内搜索补全）、批量内容生成（万级文案合成）、低延迟语音转写服务 | 金融风控模型 A/B 测试、电商推荐模型灰度上线、企业私有知识库微调模型的生产化部署 |
 
-## 适用场景建议
+---
 
-### ✅ 选择 **Model Deployment 1** 当：
-- 你需要**最小成本启动验证**：使用 `token` 模式按日配额起步，或 `dedicated` 单实例快速调试；
-- 你部署的是**非百炼托管模型**（如自行训练的 PyTorch 模型、私有 ONNX 模型）；
-- 你需要**精细的流量控制能力**：依赖模型路由实现灰度发布、多版本并行、动态权重切分；
-- 你的应用**强依赖流式响应**（如实时打字效果），且对 P99 延迟无严苛要求（< 2s 可接受）。
+## 适用场景建议（面向开发者）
 
-### ✅ 选择 **Model Production** 当：
-- 你已进入**生产环境交付阶段**，需通过 `tpm_capacity` 预留获得确定性吞吐保障（如承诺客户“1000 TPM 稳定可用”）；
-- 你希望复用**统一的服务治理体系**：自动扩缩容、VPC 内网隔离（`endpoint_type=private`）、DDoS/WAF 防护开箱即用；
-- 你的模型已在百炼完成调优并**正式发布为模型版本**，无需再管理底层文件；
-- 你追求**运维简洁性**：避免实例生命周期管理，由平台统一调度共享资源池（无预留时）。
+| 场景特征 | 推荐方案 | 关键理由 |
+|----------|-----------|-----------|
+| **需要“调用外部系统 + 多步决策 + 记住上下文”**（例如：用户说“帮我订明天去上海的高铁票，再查下酒店”，Agent 需依次调用购票 API、酒店搜索 API、汇总结果） | ✅ 托管代理 | 唯一支持声明式工具集成、会话状态自动维护、事件回调的方案；无需自行实现状态存储与错误重试逻辑。 |
+| **已有成熟 [Prompt 工程](../concepts/prompt-engineering.md)，仅需更高并发、更低延迟的纯文本生成服务**（例如：千人同时使用的写作助手、日均百万次的摘要生成任务） | ✅ 高速推理 | Prime 模式显著降低 P99 延迟，TPM 预留避免共享队列抖动；配置简单（仅加两个参数），零代码改造即可接入现有 SDK。 |
+| **使用了百炼模型调优功能，产出专属模型版本，需长期稳定服务并支持灰度/扩缩容**（例如：微调后的法律合同审查模型上线生产，要求 99.95% 可用率、支持 10% 流量灰度验证新版本） | ✅ 模型生产 | 唯一支持 `version_alias` 灰度、`auto_scaling_enabled` 动态扩缩、`tpm_reserved` SLA 承诺的方案；与调优/部署 API 深度打通，符合 MLOps 规范。 |
+| **需混合使用多种模型（如先用 qwen-vl 看图，再用 qwen-max 写报告），且要统一监控与计费** | ⚠️ 需组合方案 | 单一方案无法满足：托管代理不支持多模态模型；高速推理与模型生产虽支持 Qwen-VL，但缺乏跨模型编排能力。建议以 **模型生产部署各子模型 + 托管代理作为顶层编排层**（通过 HTTP 工具调用各 production 端点）。 |
+| **快速 PoC 验证模型效果，无长期运维诉求** | ✅ 高速推理（首选）或 托管代理（若需简单工具） | 高速推理开箱即用，控制台勾选即生效；托管代理适合需快速验证带工具链的 Agent 流程，避免从零搭建后端服务。 |
 
-### ✅ 选择 **Model High Speed Inference** 当：
-- 你的业务对**端到端延迟极度敏感**（P99 ≤ 800ms），且能接受牺牲流式能力换取确定性；
-- 你使用的是**Qwen 系列主流模型**，且可接受白名单机制启用定制 Llama3；
-- 你需要**消除冷启动抖动**：通过 Prime 模式保持实例常驻，首次请求即达最优性能；
-- 你愿意为**SLA 付出溢价**：TPM 预留费用高于 Model Production 同等级别，但延迟稳定性显著提升。
+---
 
-## 技术选型决策树（面向开发者）
+## 技术选型决策树（简明版）
 
 ```mermaid
 graph TD
-    A[开始选型] --> B{是否需部署非百炼托管模型？}
-    B -->|是| C[Model Deployment 1<br>（唯一支持自定义模型）]
-    B -->|否| D{是否要求 P99 ≤ 800ms？}
-    D -->|是| E{是否使用 Qwen 或白名单 Llama3？}
-    E -->|是| F[Model High Speed Inference]
-    E -->|否| G[不适用 — 降级至 Model Production]
-    D -->|否| H{是否需 TPM 级别 SLA 保障？}
-    H -->|是| I[Model Production<br>（tpm_capacity 预留）]
-    H -->|否| J[Model Production<br>（共享资源池）<br>或<br>Model Deployment 1<br>（dedicated/ptu）]
+    A[你的核心需求是什么？] --> B{是否需要多步推理<br>与外部工具交互？}
+    B -->|是| C[选 托管代理<br>✓ 会话管理 ✓ 工具调用 ✓ Webhook]
+    B -->|否| D{是否追求极致性能<br>与稳定性保障？}
+    D -->|是| E{是否有自定义微调模型？}
+    E -->|是| F[选 模型生产<br>✓ 灰度 ✓ 扩缩容 ✓ TPM SLA]
+    E -->|否| G[选 高速推理<br>✓ Prime 低延迟 ✓ TPM 预留]
+    D -->|否| H[标准推理接口即可<br>（非本文对比范围）]
 ```
 
-> **重要提醒**：  
-> - **不要混用模式**：同一模型版本不可同时启用 Model Production 的 TPM 预留与 Model High Speed Inference 的 TPM Reservation，二者计费与调度完全隔离；  
-> - **流式响应是关键分水岭**：若业务逻辑强依赖 `stream=true`（如前端逐字渲染），则 Model High Speed Inference 和 Model Production 均不可选；  
-> - **配额申请前置**：`mu`/`dtu` 部署需提前工单申请算力配额；`tpm_capacity > 10000` 或 `tpm_reservation ≥ 5000` 同样需配额审批；  
-> - **文档以最新版为准**：旧版 SDK 示例中可能包含已废弃参数（如 `instance_count` 在 PTU 模式下无效），请始终以 `/raw/` 路径下的最新用户指南与 API 参考为准。
+> 💡 **重要提醒**：  
+> - **不要混用概念**：托管代理 ≠ 模型生产 —— 前者是“运行时编排框架”，后者是“模型服务治理框架”；二者可协同（Agent 调用 production 端点），但不可替代。  
+> - **计费敏感场景请验证**：TPM 预留费用独立于 token 计费，高波动流量下可能成本高于标准推理；建议用 [百炼成本计算器](https://help.aliyun.com/zh/bailian/cost-calculator) 模拟。  
+> - **安全合规要求高时**：托管代理与模型生产均支持 VPC 内网访问与审计日志导出（需配置 Webhook 或 SLS），高速推理暂不支持内网专属 endpoint。  
+
+如需进一步评估具体业务负载下的性能基线或定制化部署方案，欢迎联系百炼技术支持团队获取《生产环境部署最佳实践白皮书》。
 
 ## 被对比主题页
 
-- [model deployment 1](../guides/model-deployment-1.md)
-- [model production](../api/model-production.md)
+- [managed agents](../guides/managed-agents.md)
 - [model high speed inference](../guides/model-high-speed-inference.md)
+- [model production](../api/model-production.md)
 
 

@@ -1,45 +1,42 @@
 # 3d generation
 
-百炼平台提供基于文本或图像输入的3D模型生成能力，当前由Tripo-3D模型支持，适用于快速生成中低复杂度的通用3D资产。该能力以API形式开放，需通过`/v1/3d/generation`端点调用，不支持实时流式响应。详细接口定义与字段说明见 [3D模型生成](../../raw/model-api-reference/3d-generation.md)。
+百炼平台提供基于文本或图像输入生成3D模型的能力，当前由Tripo模型支持，适用于快速原型设计、游戏资产创建等场景。该能力通过标准API调用，返回GLB格式的3D网格文件。所有请求需通过`/v1/3d/generation`端点发起。
 
 ## 支持的模型/功能
 
-- 当前仅支持 **Tripo-3D** 模型（v1.0），支持两种输入模态：
-  - 文本到3D：输入英文提示词（如 `"a minimalist ceramic vase on a wooden table"`），输出GLB格式3D模型；
-  - 图像到3D：输入单张RGB图像（JPG/PNG，≤4MB），输出对应几何重建的GLB文件。
-- 不支持多视角图、视频、点云或深度图输入；也不支持编辑已有3D模型（如重拓扑、UV调整等）。更多能力边界请参考 [3D模型生成](../../raw/model-api-reference/3d-generation.md)。
+- 当前仅支持 **Tripo-3D模型生成** 模型，暂不支持其他3D生成模型（如Luma、Stable 3D等）。
+- 支持两种输入模式：纯文本描述（text-to-3D）和单张图像+可选文本提示（image-to-3D）。
+- 输出为标准GLB（glTF Binary）格式，兼容主流渲染引擎与查看器。  
+  详细能力说明见 [3D模型生成](../../raw/model-api-reference/3d-generation.md)。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `input` | object | 是 | 包含 `type`（`text` 或 `image_url`）及对应值；`image_url` 需为公网可访问的HTTPS链接 |
-| `output_format` | string | 否 | 默认 `"glb"`；暂不支持 `"obj"` 或 `"fbx"` |
-| `seed` | integer | 否 | 控制生成随机性，范围 `[0, 2147483647]`；设为 `-1` 表示随机种子 |
+| `prompt` | string | 是（text-to-3D） | 中文或英文自然语言描述，建议≤200字符；避免模糊词（如“精美”“高质量”） |
+| `image_url` | string | 是（image-to-3D） | 可公开访问的JPEG/PNG图像URL；尺寸建议512×512或以上，宽高比应接近1:1 |
+| `negative_prompt` | string | 否 | 要排除的元素（如"low poly, text, watermark"） |
+| `seed` | integer | 否 | 随机种子，用于结果复现；设为-1表示随机 |
 
-> **注意**：原始文档 [3D模型生成](../../raw/model-api-reference/3d-generation.md) 中提及“支持中文提示词”，但实测仅英文提示词稳定生效；中文输入可能导致空输出或格式错误，建议始终使用英文描述。
+> **注意**：原始文档 [3D模型生成](../../raw/model-api-reference/3d-generation.md) 未明确说明`image_url`是否支持Base64编码，但实测仅接受HTTP(S) URL；若传入Base64将返回400错误。
 
 ## 使用方式
 
-1. 构造请求体（JSON），例如文本生成：
-   ```json
-   {
-     "input": { "type": "text", "data": "a sleek red sports car" },
-     "output_format": "glb"
-   }
-   ```
-2. 发送 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/3d/generation`，携带 `Authorization: Bearer <api_key>` 和 `Content-Type: application/json`；
-3. 解析响应中的 `output.model_url` 字段，该URL有效期为24小时，需及时下载。
-
-完整调用示例与错误码说明详见 [3D模型生成](../../raw/model-api-reference/3d-generation.md)。
+1. 确保已开通3D生成服务并获取有效API Key；
+2. 构造POST请求至 `https://dashscope.aliyuncs.com/api/v1/3d/generation`；
+3. 请求体为JSON，包含上述参数（根据输入模式选择`prompt`或`image_url`）；
+4. 同步返回任务ID（`task_id`），需轮询`/v1/tasks/{task_id}`获取结果（最长等待180秒）；
+5. 成功时响应中`output.model_url`字段指向可下载的GLB文件（有效期24小时）。  
+   完整调用示例与错误码详见 [3D模型生成](../../raw/model-api-reference/3d-generation.md)。
 
 ## 限制和注意事项
 
-- 单次请求最大等待时间 300 秒，超时返回 `504 Gateway Timeout`；
-- 输入图像分辨率建议 512×512 至 1024×1024，过低（<256px）或过高（>2048px）均显著降低重建质量；
-- 输出GLB文件大小通常为 2–15 MB，需确保客户端具备足够内存解压与渲染；
-- 暂不支持批量提交或多任务并发（即使使用不同`seed`）；
-- 所有生成内容须符合中国法律法规及百炼内容安全策略，禁止生成武器、暴力、成人相关内容。
+- 单次请求最大超时时间180秒，生成失败不重试；
+- 每日调用量受配额限制，超出后返回`429 Too Many Requests`；
+- 输入图像不得含人脸、敏感内容或版权受限素材（如品牌Logo、受保护角色）；
+- GLB文件不含材质贴图（PBR材质暂不支持），仅包含顶点、法线与基础UV；
+- 生成结果可能因提示歧义出现几何畸变或拓扑异常，建议对关键应用做人工校验。  
+  具体配额策略与内容安全规则参见 [3D模型生成](../../raw/model-api-reference/3d-generation.md)。
 
 ## 来源文档
 

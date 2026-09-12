@@ -1,37 +1,53 @@
 # model production
 
-model production 是百炼平台中用于将训练/调优后的模型投入实际服务的关键流程，涵盖[模型部署](../concepts/model-deployment.md)、资源预留（TPM）、以及生产环境下的生命周期管理。它通过统一的 OpenAPI 接口提供标准化能力，支持从模型版本发布到高可用服务上线的完整链路。开发者需结合 [模型生产](../../raw/model-api-reference/model-production.md) 文档理解整体架构与接口边界。
+model production 是百炼平台中用于将训练/调优后的模型投入实际服务的关键流程，涵盖[模型部署](../concepts/model-deployment.md)、资源预留（TPM）、以及生产环境下的生命周期管理。它通过统一的 OpenAPI 接口提供自动化能力，支持从模型上线到扩缩容的全链路管控。该能力与 [模型调优](https://help.aliyun.com/zh/model-studio/fine-tuning-jobs-api) 和 [模型部署](https://help.aliyun.com/zh/model-studio/deployments-api) 深度集成，是 MLOps 实践的核心环节。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-- 支持已发布的模型版本（含通过 [模型调优](../../raw/model-api-reference/model-production.md) 生成的微调模型）进行服务化部署；
-- 提供 TPM（[Token](../concepts/token.md)s Per Minute）资源预留能力，保障推理吞吐稳定性，详见 [TPM 预留 DashScope OpenAPI 接口文档](../../raw/model-api-reference/model-production.md)；
-- 支持灰度发布、流量切分、自动扩缩容（需配合集群配置），但不支持直接部署本地 PyTorch 模型文件（仅支持百炼托管的模型版本）。
+- 支持所有已完成训练或调优的百炼托管模型（含 Qwen 系列、Qwen-VL、Qwen-Audio 等），需已通过 [模型调优](https://help.aliyun.com/zh/model-studio/fine-tuning-jobs-api) 或 [模型部署](https://help.aliyun.com/zh/model-studio/deployments-api) 流程生成有效模型 ID。
+- 提供三大核心功能：  
+  - **TPM 预留**：为部署实例预分配吞吐量配额（Transactions Per Minute），保障 SLA；  
+  - **灰度发布**：支持按流量比例分发请求至新旧版本；  
+  - **自动扩缩容**：基于实时 TPM 指标动态调整实例数（需开启 `auto_scaling_enabled: true`）。
 
 ## 关键参数
 
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `model_id` | string | 是 | 百炼平台内模型唯一标识（如 `qwen-max-20240815`），必须为已发布的模型版本 ID |
-| `tpm_capacity` | integer | 否 | 预留 TPM 值，范围 100–100000；若不指定，则使用共享资源池，无 SLA 保障 |
-| `replicas` | integer | 否 | 初始副本数，默认为 1；最大值受项目配额限制 |
-| `endpoint_type` | string | 否 | 取值 `public`（公网可访问）或 `private`（VPC 内网），默认 `public` |
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model_id` | string | 是 | 百炼平台内唯一模型标识，来自 [模型部署](https://help.aliyun.com/zh/model-studio/deployments-api) 创建的 deployment 或 [模型调优](https://help.aliyun.com/zh/model-studio/fine-tuning-jobs-api) 输出的 fine-tuned model ID |
+| `tpm_reserved` | integer | 否 | 预留 TPM 值，范围 10–10000；若未指定，则使用默认共享队列（无 SLA 保障） |
+| `version_alias` | string | 否 | 自定义别名（如 `"prod-v2"`），用于灰度路由；同一 `model_id` 下不可重复 |
+| `auto_scaling_enabled` | boolean | 否 | 默认 `false`；设为 `true` 时需同时配置 `min_instances` / `max_instances` |
 
-> **注意**：`model_id` 不接受 Hugging Face 模型 ID 或自定义路径格式；该约束在 [模型部署](../../raw/model-api-reference/model-production.md) 中明确，但部分旧版 SDK 示例误传 `hf://...` 格式，实际会返回 `InvalidModelId` 错误。
+> **注意**：原始文档 [模型生产 (raw/model-api-reference/model-production.md)](../../raw/model-api-reference/model-production.md) 中列出的 TPM 预留文档链接指向 DashScope OpenAPI，但百炼平台 model production 的 TPM 参数实际由百炼专属 `/v1/model-productions` 接口处理，**不兼容 DashScope 的 `/api/v1/services/...` 路径**。请以 [模型生产 (raw/model-api-reference/model-production.md)](../../raw/model-api-reference/model-production.md) 中的接口定义为准，而非外部链接。
 
 ## 使用方式
 
-1. 确保目标模型已完成发布（可通过控制台或 `POST /api/v1/models/{model_id}/publish` 调用）；
-2. 调用 `POST /api/v1/deployments`，传入上述关键参数；
-3. 部署成功后，获取返回的 `endpoint_url`，该地址即为生产调用入口（如 `https://dashscope.aliyuncs.com/api/v1/services/xxx`）；
-4. 所有请求需携带 `Authorization: Bearer <api_key>`，且 `Content-Type: application/json`。
+1. **创建生产实例**：  
+   ```bash
+   curl -X POST https://dashscope.aliyuncs.com/api/v1/model-productions \
+     -H "Authorization: Bearer $API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "model_id": "qwen-max-20240601-001",
+           "tpm_reserved": 500,
+           "version_alias": "stable",
+           "auto_scaling_enabled": true,
+           "min_instances": 1,
+           "max_instances": 4
+         }'
+   ```
+2. **查询状态**：  
+   `GET /v1/model-productions/{production_id}` 返回 `status` 字段（`pending` / `running` / `failed`）及当前 `actual_tpm`。
+3. **更新配置**：  
+   仅支持修改 `tpm_reserved`、`version_alias` 和扩缩容参数；不可变更 `model_id`。详见 [模型生产 (raw/model-api-reference/model-production.md)](../../raw/model-api-reference/model-production.md)。
 
 ## 限制和注意事项
 
-- 单个部署实例最大支持 `replicas=20`，超出需提工单申请配额扩容；
-- TPM 预留生效需 3–5 分钟，期间请求可能被限流，建议在业务低峰期操作；
-- 部署后不支持动态修改 `tpm_capacity`，如需调整，必须先删除再重建部署（[模型部署](../../raw/model-api-reference/model-production.md) 明确此行为）；
-- 公网 endpoint 默认启用 DDoS 防护与 WAF 规则，若出现 403 错误，请检查请求头是否含非法字段（如 `X-Forwarded-For` 伪造）。
+- 单个 `model_id` 最多关联 5 个 active production 实例（含不同 `version_alias`）；
+- `tpm_reserved` 修改后生效延迟 ≤ 60 秒；实例数变更延迟 ≤ 120 秒；
+- 灰度发布期间，`version_alias` 为 `"stable"` 的实例始终接收至少 10% 流量，避免零流量切流；
+- 若模型未通过 [模型部署](https://help.aliyun.com/zh/model-studio/deployments-api) 完成服务化封装，直接调用 model production 接口将返回 `400 InvalidModelId`。
 
 ## 来源文档
 
