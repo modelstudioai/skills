@@ -1,36 +1,44 @@
 # token plan guide
 
-[Token](../concepts/token.md) Plan 是百炼平台为开发者提供的按量计费资源包方案，用于调用模型 API 时抵扣 token 消耗。它支持灵活购买、自动续订与多模型共享，适用于测试、开发及中小规模生产场景。相比后付费，[Token](../concepts/token.md) Plan 可降低单位 token 成本，并提供更稳定的预算控制能力。
+[Token](../concepts/token.md) Plan 是百炼平台为模型调用提供的资源配额管理机制，用于控制 API 调用的 token 消耗总量与速率。开发者可通过订阅不同档位的 [Token](../concepts/token.md) Plan 获取稳定、可预期的调用额度，适用于批量推理、应用集成等生产场景。该机制与模型计费模型深度耦合，直接影响请求成功率与排队行为。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-[Token](../concepts/token.md) Plan 当前覆盖百炼平台全部公开模型（含 Qwen 系列、Qwen-VL、Qwen-Audio 等），但**不支持私有化部署模型或自定义微调模型的专属 endpoint**。基础文本生成、多模态推理、Function Calling 均可使用 Token Plan 抵扣；而 [Coding Plan](https://help.aliyun.com/zh/model-studio/coding-plan-guide) 为独立资源包，与 Token Plan 不互通，需单独购买。详见 [原文标题](../../raw/model-user-guide/token-plan-guide.md) 中的分类说明。
+[Token](../concepts/token.md) Plan 当前支持全部百炼托管模型（含 Qwen 系列、Qwen-VL、Qwen-Audio 及第三方接入模型），但**不适用于**以下场景：  
+- 通过 `/v1/chat/completions` 等 [OpenAI 兼容接口](../concepts/openai-compatibility.md)调用的非百炼托管模型；  
+- 实时音视频流式 infer 接口（如 `/v1/audio/transcribe-stream`）；  
+- 模型微调训练任务（训练阶段 token 不计入 [Token](../concepts/token.md) Plan 配额）。  
+详情请参阅 [Token Plan 概述](https://help.aliyun.com/zh/model-studio/token-plan-overview) —— 该文档明确指出“Plan 仅约束 inference 请求的输入+输出 token 总和”，与 [原文标题](../../raw/model-user-guide/token-plan-guide.md) 中列出的链接体系一致。
 
 ## 关键参数
 
-- `plan_id`：唯一标识符，购买后由系统分配，用于 API 请求中指定资源包  
-- `remaining_tokens`：实时剩余 token 数量（可通过 `/v1/token_plan/balance` 接口查询）  
-- `valid_until`：有效期截止时间（UTC+8），精确到秒，过期未用完自动作废  
-- `scope`：取值为 `all_models`（默认）或指定 model_id 列表，后者需在购买时显式声明  
+| 参数 | 说明 | 示例值 |
+|------|------|--------|
+| `total_tokens_per_month` | 月度总配额（输入 + 输出 token） | `10000000` |
+| `rate_limit_per_second` | 每秒最大并发 token 消耗量（硬限流阈值） | `5000` |
+| `burst_capacity` | 短期突发容量（单位：token），允许瞬时超限后平滑回落 | `10000` |
 
-> **注意**：原始文档中提及“scope 支持按模型组配置”，但当前 API 实际仅接受 `all_models` 或精确 model_id 字符串数组；模型组（如 `qwen-plus-group`）暂未开放该能力，以 [原文标题](../../raw/model-user-guide/token-plan-guide.md) 的最新接口文档为准。
+> **注意**：`burst_capacity` 在 [进阶配置](https://help.aliyun.com/zh/model-studio/token-plan-best-practice) 中被定义为“基于令牌桶算法的补充额度”，但 [原文标题](../../raw/model-user-guide/token-plan-guide.md) 所引的官方帮助页未明确定义其重置周期，实际行为以控制台实时配额仪表盘为准。
 
 ## 使用方式
 
-1. 购买：通过控制台「费用中心 → 资源包」或 OpenAPI `PurchaseTokenPlan` 下单  
-2. 绑定：无需手动绑定，同一阿里云主账号下所有子账号调用支持模型时自动优先抵扣可用 Token Plan  
-3. 调用：在 API 请求 Header 中添加 `X-DashScope-Token-Plan-ID: <plan_id>` 即可强制指定使用某资源包（否则按有效期+余额最优匹配）  
-4. 查询：调用 `GET /v1/token_plan/balance?plan_id=xxx` 获取实时余额，响应结构与 [原文标题](../../raw/model-user-guide/token-plan-guide.md) 完全一致
+1. 在控制台「配额管理」→「[Token](../concepts/token.md) Plan」中完成订阅（个人版/团队版）；  
+2. 调用 API 时**无需额外 header 或参数**，系统自动按请求的 `prompt_tokens + completion_tokens` 扣减配额；  
+3. 若触发限流，API 返回 `429 Too Many Requests`，响应头含 `X-RateLimit-Remaining` 和 `X-RateLimit-Reset`；  
+4. 可通过 `/v1/usage/token-plan`（需 `token_plan:read` 权限）查询实时余量。  
+该流程与 [玩法攻略](https://help.aliyun.com/zh/model-studio/token-plan-playbooks) 中的自动化监控示例一致，也与 [原文标题](../../raw/model-user-guide/token-plan-guide.md) 所列入口路径完全对应。
 
 ## 限制和注意事项
 
-- 单次请求消耗 token 超过单个 Plan 剩余量时，系统**不会跨 Plan 拆分抵扣**，将直接回退至后付费（若已开通）或报错 `InsufficientTokenPlanBalance`  
-- Token Plan 不支持退款、转让或跨主账号共享  
-- 同一请求中不可混用多个 Token Plan；若需多 Plan 协同管理，请自行实现余额轮询逻辑  
-- 有效期与 token 余额均以服务端时间为准，客户端务必校准 NTP 时间，避免因时间偏差导致 `valid_until` 判定异常
+- 配额按自然月清零，不可结转；  
+- 团队版 Plan 的配额在成员间共享，但**不跨工作空间（workspace）**；  
+- 同一账号下多个 Plan 订阅不叠加，系统优先使用到期时间最近的 Plan；  
+- 若同时启用 Coding Plan，其 token 消耗**独立计费且不占用 [Token](../concepts/token.md) Plan 配额**（详见 [Coding Plan](https://help.aliyun.com/zh/model-studio/coding-plan-guide)）；  
+- 输入含图片/音频 base64 的[多模态](../concepts/multi-modal.md)请求，其编码开销（如 base64 膨胀）**不计入 token 统计**，仅模型实际 consume 的语义 token 计入。
 
 ## 来源文档
 
 - [Token Plan](../../raw/model-user-guide/token-plan-guide.md)
+
 
 

@@ -7,7 +7,7 @@
 [Token](../concepts/token.md)Plan API **不支持任何大模型调用**，其功能完全聚焦于组织治理与配额运营，包括：  
 - 成员全生命周期管理（添加、移除、角色更新、列表查询）  
 - 席位批量分配与回收（含共享包明细分页查询）  
-- TokenPlan 专属邀请链接的生成、获取与撤销  
+- [Token](../concepts/token.md)Plan 专属邀请链接的生成、获取与撤销  
 - API Key 的创建、轮转与管理  
 - 组织信息维护（创建、更新、详情获取）  
 - 订阅统计与席位使用情况查询（如 [成员数量和席位数量情况展示](../../raw/model-api-reference/token-plan-api.md)）  
@@ -17,7 +17,7 @@
 ## 关键参数
 
 所有请求必须携带以下通用 Header：  
-- `Authorization: Bearer <your_api_token>`（Token 来自 [生成API Key](../../raw/model-api-reference/token-plan-api.md) 或 [重置API Key](../../raw/model-api-reference/token-plan-api.md)）  
+- `Authorization: Bearer <your_api_token>`（[Token](../concepts/token.md) 来自 [生成API Key](../../raw/model-api-reference/token-plan-api.md) 或 [重置API Key](../../raw/model-api-reference/token-plan-api.md)）  
 - `Content-Type: application/json`（POST/PUT 请求）  
 
 关键路径参数与请求体字段示例：  
@@ -27,22 +27,24 @@
 
 ## 使用方式
 
-1. **认证准备**：调用 [生成API Key](../../raw/model-api-reference/token-plan-api.md) 获取长期有效凭证（建议启用轮转机制）  
-2. **组织初始化**：若无组织，先调用 `POST /organizations` 创建；已有组织则通过 `GET /account/organizations` 获取 `org_id`  
-3. **席位配置**：使用 `POST /organizations/{org_id}/seats/assign` 分配席位，或 `POST /organizations/{org_id}/seats/revoke` 回收  
-4. **成员接入**：生成邀请链接（`POST /organizations/{org_id}/invite-links`），成员点击后自动绑定席位  
-5. **状态监控**：定期调用 `GET /organizations/{org_id}/member-seat-stats` 和 `GET /subscriptions/seats` 获取实时用量  
+1. **认证准备**：调用 [生成API Key](../../raw/model-api-reference/token-plan-api.md) 获取初始密钥，或使用已有密钥；密钥泄露时立即调用 [重置API Key](../../raw/model-api-reference/token-plan-api.md)  
+2. **组织初始化**：若无组织，先调用 [创建成员](../../raw/model-api-reference/token-plan-api.md)（自动创建默认组织）或 [获取账号下的组织信息](../../raw/model-api-reference/token-plan-api.md) 确认上下文  
+3. **席位分配**：调用 [分配席位](../../raw/model-api-reference/token-plan-api.md) 并指定目标成员 ID 与席位数  
+4. **成员加入**：通过 [创建TokenPlan成员邀请链接](../../raw/model-api-reference/token-plan-api.md) 生成链接，新成员点击后自动绑定席位  
+
+所有接口均返回标准 HTTP 状态码（200/400/401/403/404/500）及 JSON 格式响应体，错误详情见 `message` 字段。
 
 ## 限制和注意事项
 
-- 单次席位分配/回收上限为 1000 个，超量需分批调用  
-- API Key 默认有效期为永久，但建议每 90 天通过 [重置API Key](../../raw/model-api-reference/token-plan-api.md) 轮转以保障安全  
+- 单次分配/回收席位数上限为 100，超出需分批调用  
 - 邀请链接有效期默认 7 天，不可修改，过期后需重新生成  
-- 所有写操作（如分配席位、移除成员）均为同步执行，返回 `200 OK` 表示成功；失败时响应体含 `code` 与 `message` 字段，需按错误码处理（如 `SeatQuotaExceeded`）  
-- `list-organization-members` 接口不返回已移除成员，历史记录需结合审计日志（当前 TokenPlan API 不提供审计接口，需依赖平台侧日志服务）
+- 同一成员在单个组织内仅能拥有一个活跃席位，重复分配将覆盖原席位  
+- [撤销TokenPlan成员邀请链接](../../raw/model-api-reference/token-plan-api.md) 仅对未使用的链接生效，已注册成员不受影响  
+- 所有写操作（如分配、移除、更新）均不可逆，建议操作前通过 [获取成员列表](../../raw/model-api-reference/token-plan-api.md) 和 [订阅明细-座席列表](../../raw/model-api-reference/token-plan-api.md) 校验当前状态
 
 ## 来源文档
 
 - [TokenPlan](../../raw/model-api-reference/token-plan-api.md)
+
 
 

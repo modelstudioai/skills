@@ -1,46 +1,47 @@
 # use chat client or development tool
 
-百炼平台支持通过多种第三方客户端与开发工具接入大模型服务，适用于快速原型验证、本地 IDE 集成、自动化工作流编排等场景。这些工具大多基于标准 OpenAI 兼容 API（`/v1/chat/completions`）或百炼专属协议对接，无需从零实现 SDK。具体支持范围、参数适配及调用约束需结合各工具文档与百炼 API 规范协同使用。
+百炼平台支持通过多种第三方客户端和开发工具调用大模型服务，适用于快速原型验证、本地 IDE 集成、自动化工作流等场景。所有工具均通过标准 API（如 [OpenAI 兼容接口](../concepts/openai-compatibility.md)或百炼专属 REST API）与平台交互，无需修改模型代码即可切换后端服务。具体能力取决于所选工具的协议兼容性及平台侧开放的模型权限。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-当前可接入的客户端/开发工具覆盖通用对话、代码生成、办公辅助、多模态编排等方向，包括但不限于：  
-- 通用智能体类：[Hermes Agent](https://help.aliyun.com/zh/model-studio/hermes-agent)、[Cherry Studio](https://help.aliyun.com/zh/model-studio/cherry-studio)、[Chatbox](https://help.aliyun.com/zh/model-studio/chatbox)  
-- 代码增强类：[Cursor](https://help.aliyun.com/zh/model-studio/cursor)、[Qwen Code](https://help.aliyun.com/zh/model-studio/qwen-code)、[Qoder](https://help.aliyun.com/zh/model-studio/qoder-agent)、[Codex](https://help.aliyun.com/zh/model-studio/codex)  
-- 办公与轻量应用类：[千问](https://help.aliyun.com/zh/model-studio/qwen-office-assistant)、[QwenPaw](https://help.aliyun.com/zh/model-studio/qwenpaw)  
-- CLI 与测试工具类：[Kilo CLI](https://help.aliyun.com/zh/model-studio/kilo-cli)、[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)、[Dify](https://help.aliyun.com/zh/model-studio/dify)  
+当前可接入的客户端与开发工具覆盖代码辅助、办公提效、[多模态](../concepts/multi-modal.md)交互、Agent 编排等方向，包括但不限于：  
+- 代码类：[Cursor](https://help.aliyun.com/zh/model-studio/cursor)、[Qwen Code](https://help.aliyun.com/zh/model-studio/qwen-code)、[Qoder](https://help.aliyun.com/zh/model-studio/qoder-agent)、[Codex](https://help.aliyun.com/zh/model-studio/codex)、[OpenCode](https://help.aliyun.com/zh/model-studio/opencode)  
+- Agent/低代码编排类：[Dify](https://help.aliyun.com/zh/model-studio/dify)、[Hermes Agent](https://help.aliyun.com/zh/model-studio/hermes-agent)、[Cherry Studio](https://help.aliyun.com/zh/model-studio/cherry-studio)  
+- 通用聊天/调试类：[Chatbox](https://help.aliyun.com/zh/model-studio/chatbox)、[Cline](https://help.aliyun.com/zh/model-studio/cline)、[Kilo CLI](https://help.aliyun.com/zh/model-studio/kilo-cli)、[Postman](https://help.aliyun.com/zh/model-studio/first-call-to-image-and-video-api)  
+- 办公增强类：[千问](https://help.aliyun.com/zh/model-studio/qwen-office-assistant)、[QwenPaw](https://help.aliyun.com/zh/model-studio/qwenpaw)  
 
-> **注意**：部分工具（如 [Claude Code](https://help.aliyun.com/zh/model-studio/claude-code) 和 [OpenClaw](https://help.aliyun.com/zh/model-studio/openclaw)）实际依赖百炼托管的 `qwen-max` 或 `qwen-plus` 模型，但其前端界面可能未暴露全部百炼原生能力（如 `tools` 调用、`stream` 分块控制），具体以 [原文标题](../../raw/model-user-guide/use-chat-client-or-development-tool.md) 中列出的工具链接为准。
+> **注意**：部分工具（如 [Claude Code](https://help.aliyun.com/zh/model-studio/claude-code) 和 [DeepSeek Harness](https://help.aliyun.com/zh/model-studio/deepseek-harness)）在 [原文标题](../../raw/model-user-guide/use-chat-client-or-development-tool.md) 中列出，但其官方文档已下线或迁移，实际接入前请以 [原文标题](../../raw/model-user-guide/use-chat-client-or-development-tool.md) 中最新链接为准；若链接跳转失败，建议优先选用 Dify、Cursor 或 Postman 等长期维护的工具。
 
 ## 关键参数
 
-使用任一客户端/开发工具时，必须正确配置以下核心参数：
+所有工具需配置以下基础参数才能成功调用百炼 API：
 
-| 参数 | 说明 | 示例值 |
-|------|------|--------|
-| `api_key` | 百炼平台生成的 API Key（非阿里云 AccessKey） | `sk-xxx` |
-| `base_url` | 百炼 [OpenAI 兼容接口](../concepts/openai-compatibility.md)地址 | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
-| `model` | 必须为百炼已开通的模型 ID，区分大小写 | `qwen-max`, `qwen-plus`, `qwen-turbo` |
-| `stream` | 是否启用流式响应（部分工具默认关闭，需显式开启） | `true` / `false` |
+- `api_key`：从百炼控制台「API 密钥管理」获取，具有作用域限制（如仅限某模型或某项目）  
+- `base_url`：统一为 `https://dashscope.aliyuncs.com/compatible-mode/v1`（OpenAI 兼容模式）或 `https://dashscope.aliyuncs.com/api/v1`（原生模式）  
+- `model`：必须显式指定，例如 `qwen-max`、`qwen-plus`、`qwen-coder-turbo`；不支持通配符或别名  
+- `stream`：部分工具（如 Cursor、Dify）默认启用流式响应，需确保前端能正确处理 SSE 或 chunked transfer encoding  
 
-不支持在客户端中直接设置 `top_p`、`temperature` 等采样参数的工具（如早期版本 [Qoder CN（原 Lingma）](https://help.aliyun.com/zh/model-studio/lingma-agent)），应优先查阅 [原文标题](../../raw/model-user-guide/use-chat-client-or-development-tool.md) 中对应工具的最新兼容性说明。
+详细参数说明见 [原文标题](../../raw/model-user-guide/use-chat-client-or-development-tool.md)。
 
 ## 使用方式
 
-1. 在百炼控制台「API 密钥管理」中创建并复制有效 `api_key`；  
-2. 在目标工具中配置 `base_url` 和 `model`（例如 Cursor 需在 Settings → AI → Custom Model 中填写）；  
-3. 验证调用：发送最简请求 `{"model":"qwen-turbo","messages":[{"role":"user","content":"你好"}]}`；  
-4. 如需[函数调用](../concepts/function-calling.md)（`tools`）、系统提示词（`system` role）或多轮上下文管理，请确认所选工具是否支持——[原文标题](../../raw/model-user-guide/use-chat-client-or-development-tool.md) 列出的所有工具均未声明对 `tools` 字段的完整支持，建议在生产环境中优先使用百炼官方 SDK 或自行封装 HTTP 请求。
+1. **确认工具兼容性**：检查目标工具是否支持 OpenAI 兼容 API（推荐）或百炼原生 REST API；不支持的工具需通过中间代理（如 `openai-proxy`）转换请求格式  
+2. **配置认证与端点**：在工具设置中填入 `api_key` 和 `base_url`，避免硬编码到项目源码中  
+3. **选择模型并发起请求**：在 UI 或配置文件中指定 `model` 名称，调用 `/chat/completions`（兼容模式）或 `/messages`（原生模式）  
+4. **验证响应结构**：注意百炼原生 API 的 `output.text` 字段与 OpenAI 兼容模式的 `choices[0].message.content` 语义一致，但字段路径不同  
 
 ## 限制和注意事项
 
-- 所有客户端工具均受百炼平台级配额与速率限制约束（如每分钟请求数、最大上下文长度），与工具自身限制叠加生效；  
-- 不支持通过客户端上传文件或调用多模态 API（如图像理解），此类能力需直接调用百炼 `/v1/multimodal` 接口；  
-- [DeepSeek Harness](https://help.aliyun.com/zh/model-studio/deepseek-harness) 名称易引发误解，其实际仅作为百炼模型的轻量前端代理，**不运行 DeepSeek 自研模型**；  
-- Postman 示例中使用的 `/v1/images/generations` 路径属于百炼图像生成 API，**不适用于 chat client 场景**，该路径未在 [原文标题](../../raw/model-user-guide/use-chat-client-or-development-tool.md) 的主列表中归类为 chat 工具，属文档归类偏差，使用时请严格按接口类型选择工具。
+- 单次请求最大上下文长度受模型本身限制（如 `qwen-max` 为 32768 tokens），工具层无法突破该上限  
+- 流式响应中，`delta.content` 可能为空字符串（表示 token 边界），需忽略空片段而非报错  
+- Postman 等 HTTP 客户端需手动设置 `Content-Type: application/json` 和 `Authorization: Bearer <api_key>`，遗漏任一将返回 `401 Unauthorized`  
+- 工具内置的模型列表（如 Cursor 的下拉菜单）可能包含未开通权限的模型，实际调用前请先在百炼控制台「模型服务」中开通对应模型的调用权限  
+
+> **注意**：[原文标题](../../raw/model-user-guide/use-chat-client-or-development-tool.md) 中列出的 [Lingma Agent](https://help.aliyun.com/zh/model-studio/lingma-agent) 已更名为 [Qoder CN](https://help.aliyun.com/zh/model-studio/qoder-agent)，旧名称在 API 层面已不可用，配置时务必使用新模型标识 `qoder-cn`。
 
 ## 来源文档
 
 - [接入客户端/开发工具](../../raw/model-user-guide/use-chat-client-or-development-tool.md)
+
 
 

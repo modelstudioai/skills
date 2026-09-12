@@ -1,45 +1,50 @@
 # Prompt 工程
 
-Prompt 工程是系统性设计、验证与优化提示词（Prompt）以精准引导大模型生成高质量、稳定、可复用输出的技术实践。它不仅是文本输入的简单编写，更涵盖模板结构化、变量注入、上下文编排、输出约束、A/B 测试及自动化反馈调优等全生命周期方法。
+Prompt 工程是指在百炼平台上系统性设计、验证、优化和复用提示词（Prompt）的方法论与实践体系，旨在通过结构化表达、变量抽象、反馈闭环和资产化管理，显著提升大模型输出的准确性、一致性、可控性与业务适配度。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **模型推理调用**：通过 `prompt_template` 字段在 API 请求中内联 Jinja2 模板（如 `{{ input }}`、`{% for item in context %}...{% endfor %}`），实现动态内容注入与逻辑分支控制；所有托管模型均支持该能力，是提升输出一致性的基础手段。  
-- **Skill 封装**：将 Prompt 模板作为独立 `type: "prompt"` 的 Skill 发布，配合 `output_schema` 强制结构化返回（如 JSON 格式），供工作流或外部系统标准化调用，避免重复开发与维护碎片化提示逻辑。  
-- **资产中心管理**：Prompt 模板作为一类核心 AI 资产（`asset_type = "prompt_template"`），支持版本化（`version`）、权限隔离（`visibility: private/org/public`）与跨项目复用；可一键部署为 API 服务或导入 Notebook 进行实验验证。  
-- **应用构建（LLM Application）**：在智能体（Agent 2.0）、工作流（Workflow）及高代码应用中，Prompt 工程是定义角色行为（`system_prompt`）、控制工具调用格式、约束多轮对话状态的关键配置项；RAG 场景下常与 `retrieval_config` 协同，将检索结果注入 Prompt 上下文。  
-- **用例落地**：在文生文、客服问答、AI 解题等典型场景中，需严格遵循平台提供的 [Prompt 工程指南](https://help.aliyun.com/zh/model-studio/prompt-engineering-guide)，例如使用角色标记（`<|system|>`/`<|user|>`）、权重语法（`[重要]`）、分隔符（`---`）等规范，否则生成质量显著下降。  
-- **持续优化闭环**：对支持自动优化的模型（见 [Prompt 自动优化支持列表](https://help.aliyun.com/zh/model-studio/optimize-prompt)），启用 `enable_prompt_optimization: true` 后，平台基于真实调用反馈（如人工评分、规则校验）自动迭代模板版本，无需人工重写。
+- **模型调试与体验**：在「模型体验」界面中，Prompt 工程体现为对输入文本的精细化构造——开发者可快速尝试不同表述、角色设定或约束指令，并结合 `temperature`/`top_p` 等参数观察输出变化，形成初步 [prompt](../guides/prompt.md) 迭代闭环。  
+- **应用开发与部署**：在「应用开发」中，Prompt 工程落地为模板化能力——通过「Prompt 管理」创建带占位符（如 `{{input}}`、`{{context}}`）的可复用模板，绑定至 API 端点后，由变量注入驱动多场景复用（如客服问答、合同摘要、代码解释）。  
+- **RAG 与智能体构建**：在 RAG 应用中，Prompt 工程决定检索结果如何被有效整合——需显式设计系统提示（`system_prompt`）引导模型“仅依据以下知识作答”，并控制上下文拼接格式；在智能体工作流中，各节点的 Prompt 需定义清晰的输入/输出契约与错误处理逻辑。  
+- **资产中心统一治理**：Prompt 模板作为一类核心 AI 资产，在「资产中心」中支持版本管理、权限控制、标签分类与跨项目共享，实现从单点优化到组织级沉淀的升级。  
+- **生产环境持续优化**：启用 `enable_optimization=true` 后，系统基于真实调用日志与人工标注（“有用/无用”）自动重写低效 Prompt，适用于已发布至生产环境的模板，形成数据驱动的 [prompt](../guides/prompt.md) 自进化能力。
 
 ## 关键参数和配置
 
-- `prompt_template`：字符串类型，Jinja2 语法模板，最大长度 8192 token（含变量展开后），超长将截断并返回 warning。  
-- `variables`：JSON 对象，与模板中变量名一一对应，用于运行时替换（如 `{"input": "xxx", "context": ["a", "b"]}`）。  
-- `enable_prompt_optimization`：布尔值，设为 `true` 时触发平台级自动优化（仅同步调用生效，流式响应不支持）。  
-- `prompt_version`：字符串，指定模板版本号（如 `"v2.1"`），默认取 `latest`；历史版本可用于 A/B 测试或回滚。  
-- `output_schema`：JSON Schema 对象（可选），定义期望输出结构，配合 `type: "prompt"` 的 Skill 使用，平台将自动校验并格式化返回结果。  
-- `system_prompt`：字符串（部分应用类型支持），用于全局角色设定，优先级高于模板内硬编码的 system 指令，适用于多轮对话一致性保障。
+| 参数名 | 类型 | 说明 | 推荐值/注意事项 |
+|--------|------|------|----------------|
+| `prompt_template_id` | string | 指定预存 Prompt 模板 ID；为空时使用默认模板 | 建议在生产环境显式指定，避免隐式依赖变更 |
+| `variables` | object | 模板中占位符对应的键值对，如 `{"input": "总结下文", "context": "..."}` | 变量值需经安全过滤，禁止传入可执行内容或外部 URL |
+| `enable_optimization` | boolean | 是否启用实时自动优化（语义重写+结构精简） | v3.2+ 默认关闭；仅对 `visibility=public` 或 `project` 且标记为“生产环境”的模板生效；需 ≥50 条有效反馈样本 |
+| `system_prompt` | string | （可选）全局行为约束，独立于用户输入，用于定义角色、格式、禁令等 | 企业级应用强烈建议设置，例如 `"你是一名银行合规客服，不提供投资建议，所有回答必须引用最新监管文件编号"` |
+| `max_tokens` / `temperature` 等 | — | 属于模型层采样参数，不影响 Prompt 解析逻辑，但共同决定最终输出质量 | 与 Prompt 协同调优：高 `temperature` 下需更强约束性 Prompt；长输出任务需预留足够 token 给 Prompt 本身 |
+
+> ⚠️ 注意：Prompt 总长度（含变量展开后）不得超过 8192 token；超长将被静默截断并返回警告头 `X-Prompt-Truncated: true`。
 
 ## 面向开发者，简洁实用
 
-- ✅ **起步建议**：从控制台「资产中心」→「Prompt 模板」创建首个模板，使用预置样例快速验证；调试阶段务必开启控制台「测试」功能，观察变量注入与 token 截断效果。  
-- ✅ **生产最佳实践**：  
-  - 所有线上 Prompt 模板必须绑定明确 `version` 并发布为 `published` 状态；  
-  - RAG 场景下，用 `{{ retrieved_chunks | join('\n---\n') }}` 安全拼接检索结果，避免越界；  
-  - 启用 `output_schema` 时，确保返回字段名与 Schema 中 `properties` 键完全一致（区分大小写）；  
-  - 避免在模板中硬编码敏感信息，通过 `variables` 注入并配合 RAM 权限管控。  
-- ⚠️ **避坑提醒**：  
-  - `stream=true` 时 `enable_prompt_optimization` 无效；  
-  - Qwen2/Qwen3 模型需手动验证旧版 Prompt 样例中的角色标记（如 `<|assistant|>`）兼容性；  
-  - `prompt_template` 中禁止使用未声明的变量，否则渲染失败返回空字符串而非报错。
+- ✅ **起步最快方式**：进入控制台「资产中心」→ 搜索“客服”“摘要”等关键词 → 复用已审核的 Prompt 样例 → 修改变量后一键部署到 API。  
+- ✅ **模板开发规范**：  
+  - 使用 `{{variable}}` 占位符，避免硬编码；  
+  - 在 `system_prompt` 中声明角色、边界与失败兜底逻辑（如“若信息不足，请明确回复‘暂无相关信息’”）；  
+  - 为多轮对话设计 `messages` 数组，首条 `role=user` 内容为完整 Prompt 模板，后续轮次保持上下文连贯。  
+- ✅ **调试技巧**：  
+  - 在「模型体验」页粘贴模板 + 示例变量，快速验证渲染效果；  
+  - 开启 `enable_optimization` 并标注 20+ 条反馈后，查看「Prompt 管理」页的“优化建议”卡片获取改写参考。  
+- ✅ **避坑提醒**：  
+  - 不要在 Prompt 中嵌入 `curl`、Python 代码或 `<script>` 标签——会被安全网关拦截；  
+  - 避免模糊指令（如“请好好回答”），改用具体动作（如“分三点列出，每点不超过20字”）；  
+  - RAG 场景中，`retrieval_config` 返回的 chunk 需在 Prompt 中显式标注来源（如 `[来源：2024年报P12]`），否则模型易幻觉。  
+
+Prompt 工程不是一次性配置，而是贯穿模型选型、应用上线与线上迭代的持续实践——善用模板、反馈、资产化与自动化，让每一次提示都更接近业务预期。
 
 ## 关联主题页
 
 - [prompt](../guides/prompt.md)
-- [skill](../guides/skill.md)
 - [asset center page](../guides/asset-center-page.md)
-- [use cases](../guides/use-cases.md)
+- [model experience](../guides/model-experience.md)
 - [application use cases](../guides/application-use-cases.md)
-- [llm application](../guides/llm-application.md)
+- [use cases](../guides/use-cases.md)
 
 

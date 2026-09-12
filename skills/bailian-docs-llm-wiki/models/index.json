@@ -3,9 +3,9 @@
   "totalFamilies": 179,
   "totalModels": 414,
   "profileCoverage": {
-    "full": 94,
-    "partial": 271,
-    "structured-only": 49,
+    "full": 77,
+    "partial": 337,
+    "structured-only": 0,
     "none": 0
   },
   "capabilityDistribution": {

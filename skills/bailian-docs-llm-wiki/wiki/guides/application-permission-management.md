@@ -1,36 +1,36 @@
 # application permission management
 
-应用权限管理用于控制不同用户或角色对百炼平台中模型应用的访问与操作权限，包括查看、调用、编辑和删除等能力。该机制基于阿里云RAM（资源访问管理）体系实现，支持细粒度的策略配置。开发者需结合应用部署模式（如API调用、Web UI嵌入）合理分配权限，避免越权访问或功能受限。
+百炼平台的应用权限管理用于控制不同用户或角色对应用（如模型调用、工作流执行、数据访问等）的操作权限。它基于 RBAC（基于角色的访问控制）模型实现，支持细粒度的权限分配与继承。开发者可通过控制台或 OpenAPI 管理权限策略，确保最小权限原则落地。
 
 ## 支持的模型/功能
 
-- 支持所有在百炼平台托管的模型应用（含自定义微调模型、RAG应用、Agent工作流等）  
-- 权限粒度覆盖：应用级读写、推理调用（`InvokeApplication`）、配置修改（`UpdateApplication`）、日志查看（`ListApplicationLogs`）及版本管理（`PublishApplicationVersion`）  
-- 支持通过RAM角色、用户组或直接为RAM用户附加自定义策略，详见 [权限管理](../../raw/application-user-guide/application-permission-management.md) 中的策略模板说明  
+- **角色类型**：内置 `Admin`（全权限）、`Developer`（可编辑应用配置与调试）、`Viewer`（仅查看运行日志与结果）三类系统角色；支持自定义角色并绑定细粒度权限项（如 `app:invoke`、`app:edit-prompt`、`app:manage-tracing`）。  
+- **作用范围**：权限可作用于整个工作空间（Workspace-level）、单个应用（App-level）或特定版本（Version-level），其中 Version-level 权限仅在 [原文标题](../../raw/application-user-guide/application-permission-management.md) 中明确说明支持。  
+- **集成能力**：支持与阿里云 RAM 角色同步，但需注意 RAM 同步策略不覆盖 Version-level 权限设置——该限制在 [原文标题](../../raw/application-user-guide/application-permission-management.md) 的“权限继承规则”小节中有明确定义。
 
 ## 关键参数
 
-- `Resource`: 必须指定具体应用ARN，格式为 `acs:baichuan:cn-shanghai:<account-id>:application/<app-id>`；通配符 `*` 仅在全局管理员策略中允许使用  
-- `Action`: 常用动作包括 `baichuan:InvokeApplication`、`baichuan:UpdateApplication`、`baichuan:ListApplications` 等，完整列表见 [权限管理](../../raw/application-user-guide/application-permission-management.md) 的“支持的Action”章节  
-- `Condition`: 可选，支持基于请求上下文（如`acs:SourceIp`、`acs:SecureTransport`）添加限制条件，但不支持对`applicationId`做字符串匹配类条件判断  
+调用 `/v1/apps/{app_id}/permissions` 接口时需指定以下关键参数：  
+- `principal_type`: `user` / `ram_role` / `workspace_group`  
+- `principal_id`: 对应主体的唯一标识（如阿里云 UID 或 RAM Role ARN）  
+- `effect`: `allow`（必填，暂不支持 `deny`）  
+- `actions`: 字符串数组，例如 `["app:invoke", "app:read-config"]`；完整动作列表见 [原文标题](../../raw/application-user-guide/application-permission-management.md) 附录 A。
 
 ## 使用方式
 
-1. 登录[RAM控制台](https://ram.console.aliyun.com/) → 创建自定义策略（JSON格式）  
-2. 将策略授权给目标RAM用户/用户组/角色  
-3. 应用调用时，SDK或API请求自动携带对应身份凭证，权限校验由百炼服务端完成  
-4. 推荐优先使用最小权限原则，例如仅授予`baichuan:InvokeApplication`而非`baichuan:*`；调试阶段可参考 [权限管理](../../raw/application-user-guide/application-permission-management.md) 提供的示例策略快速验证  
+1. **控制台操作**：进入「应用详情页 → 权限管理」标签页，点击「添加权限」，选择主体、作用域和权限动作后保存。  
+2. **OpenAPI 调用**：使用 `PUT /v1/apps/{app_id}/permissions` 提交 JSON body（含 `principal_type`, `principal_id`, `effect`, `actions`）；调用前需确保 AK/SK 具备 `bailian:UpdateAppPermission` 权限。  
+3. **批量配置**：通过 `POST /v1/workspaces/{workspace_id}/permissions/batch` 批量为多个应用设置相同权限策略（仅限 Workspace-level 和 App-level）。
 
 ## 限制和注意事项
 
-- 单个应用最多绑定100个RAM主体（用户/角色/用户组），超出需清理冗余授权  
-- 权限变更后最长5分钟内生效（受RAM策略缓存影响）  
-- **注意**：文档中提及的`baichuan:DeleteApplication`动作在v2.3.0+版本中已废弃，实际应使用`baichuan:ArchiveApplication`替代，该差异已在最新版 [权限管理](../../raw/application-user-guide/application-permission-management.md) 中修正，旧文档未同步更新  
-- 不支持跨地域权限复用：华东1（杭州）创建的应用ARN无法在华北2（北京）直接授权，需分别配置  
-- Web UI中“共享链接”生成的临时[Token](../concepts/token.md)不经过RAM权限系统，其访问控制独立于本机制，详见相关分享功能文档
+- 单个应用最多绑定 500 条权限策略（含继承策略），超出后 API 返回 `400 Bad Request`。  
+- Version-level 权限**不继承**父应用的权限，且无法通过控制台 UI 创建（仅 OpenAPI 支持），此行为与早期文档中“所有层级权限均支持图形化配置”的描述存在冲突；> **注意**：该过时描述已从最新版 [原文标题](../../raw/application-user-guide/application-permission-management.md) 中移除，请以当前 API 文档为准。  
+- 删除应用时，其绑定的所有权限策略将被级联清除，但 Workspace-level 权限不受影响。
 
 ## 来源文档
 
 - [权限管理](../../raw/application-user-guide/application-permission-management.md)
+
 
 

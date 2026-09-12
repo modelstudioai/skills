@@ -1,48 +1,46 @@
 # Token
 
-Token 是百炼平台对模型输入与输出内容进行标准化计量的基本单位，用于精确衡量语言模型处理文本、多模态数据（图像、音频）时的计算资源消耗。1 个 token 通常对应一个子词（subword）或字节对编码（BPE）单元，在实际调用中，其数量由模型 tokenizer 动态计算得出，而非简单按字符或字数折算。
+Token 是百炼平台中用于计量模型推理资源消耗的核心单位，表示模型在处理请求时实际消耗的语义级计算量。它统一涵盖输入（[prompt](../guides/prompt.md)）与输出（completion）两部分的文本/[多模态](multi-modal.md)语义单元，是配额管理、计费、限流与性能优化的基础度量标准。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **计费与资源包管理**：Token 是 Token Plan 资源包的计量和抵扣单位。每次 API 调用产生的 `input_tokens` 和 `output_tokens` 总和将实时从已购 Token Plan 中扣除；余额不足时自动回退至后付费模式。
-- **高吞吐推理（TPM Reservation）**：吞吐预留以 **tokens per minute（TPM）** 为单位配置，用于保障每分钟可稳定处理的 token 总量（含输入+输出），是性能隔离与 QPS 稳定性的核心度量。
-- **实时流式接口（Realtime API / Omni Realtime API）**：token 是流式响应粒度的基础——服务端按 token 增量推送 `text.delta` 或 `audio.delta` 事件；`max_tokens` / `max_output_tokens` 等参数均以 token 为上限单位实施硬性截断。
-- **账单分析（Billing API）**：`GetBillingOverview` 和 `GetBillingTrend` 接口直接返回 `total_tokens_used` 及按模型/项目分组的 token 消耗明细，是用量审计与成本归因的核心指标。
-- **组织级配额治理（TokenPlan API）**：虽不直接暴露 token 数值，但席位（seat）分配与成员用量统计最终映射到 token 消耗行为上，支撑企业级资源分账与预算控制。
-
-> ⚠️ 注意：Token 不是认证凭证（如 API Key 或 Bearer Token），也不等同于 HTTP 请求中的 `Authorization` 头；它纯粹是**模型计算负载的计量单位**，全程由服务端 tokenizer 自动统计，开发者无需手动拆分或估算。
+- **Token Plan 配额管理**：Token 是 Token Plan 的计量基准。系统自动统计每次推理请求的 `prompt_tokens + completion_tokens` 总和，并从月度总配额中实时扣减；突发流量通过令牌桶算法（含 `burst_capacity`）平滑承载。
+- **高速推理（High Speed Inference）**：TPM（Tokens Per Minute）预留机制以 Token 为单位预购吞吐能力，保障低延迟服务稳定性；`tpm_reservation` 值直接影响系统为该模型实例分配的最小并发处理能力。
+- **API 调用与计费**：所有百炼托管模型（Qwen 系列、Qwen-VL、Qwen-Audio 及第三方接入模型）的在线推理调用均按实际消耗 Token 计费；输入中的图片/音频 base64 编码开销不计入，仅模型内部 consume 的语义 Token 生效。
+- **模型评测**：评测任务执行期间，每条样本的推理请求同样消耗 Token，其总量计入当前账号的 Token Plan 配额（若已启用），影响评测并发规模与执行速度。
+- **身份认证与 API 管理**：注意区分——`api_key`、`Bearer <token>` 中的 “token” 是身份凭证（OAuth-style access token），与本概念无关；后者属于安全认证范畴，不参与资源计量。
 
 ## 关键参数和配置
 
-| 参数名 | 所属场景 | 说明 | 典型取值示例 |
-|---------|-----------|------|----------------|
-| `input_tokens` / `output_tokens` | 所有模型 API 响应体 | 每次调用实际消耗的输入/输出 token 数，返回在 `usage` 字段中 | `"usage": {"input_tokens": 127, "output_tokens": 43}` |
-| `max_tokens` / `max_output_tokens` | Realtime API、Omni Realtime API | 强制截断响应长度的 token 上限（硬限制） | `2048`, `4096` |
-| `tpm_reservation` | 高速推理（Model High Speed Inference） | 预留吞吐量，单位为 tokens per minute | `5000`, `10000`（须为 1000 的整数倍） |
-| `X-DashScope-Token-Plan-ID` | 请求 Header | 指定本次调用优先使用的 Token Plan | `plan-abc123xyz` |
-| `remaining_tokens` | Token Plan 查询接口（`/v1/token_plan/balance`） | 当前资源包剩余可用 token 数 | `124890` |
+| 参数 | 所属模块 | 说明 | 典型值示例 |
+|------|----------|------|------------|
+| `prompt_tokens` / `completion_tokens` | 推理响应头 | 每次 API 调用返回的 `X-Embedding-Usage` 或 `X-Usage` 响应头中提供，用于精确追踪单次消耗 | `"prompt_tokens": 128, "completion_tokens": 64` |
+| `total_tokens_per_month` | Token Plan | 月度总配额上限（输入+输出 Token 之和） | `10000000` |
+| `rate_limit_per_second` | Token Plan | 每秒最大允许消耗 Token 数（硬限流阈值） | `5000` |
+| `burst_capacity` | Token Plan | 短期突发容量（基于令牌桶算法），支持瞬时超限后平滑回落 | `10000` |
+| `tpm_reservation` | 高速推理 | 预留的每分钟 Token 处理量，需提前购买并显式传入请求体 | `5000` |
 
-- 所有 token 计数均基于模型原生 tokenizer（如 Qwen 使用 QwenTokenizer），对中文、英文、符号、emoji、Base64 图像编码等均有统一且确定的切分逻辑；
-- 多模态输入（如图像 URL、base64 编码图）会经视觉 encoder 转换为固定数量的视觉 token，计入 `input_tokens`；
-- 流式响应中，每个 `text.delta` 事件携带的字符串可能对应 1~N 个 token，不可假设“1 字符 = 1 token”。
+> ⚠️ 注意：  
+> - Token 统计不含 base64 编码膨胀、HTTP 协议开销或元数据字段长度；  
+> - [多模态](multi-modal.md)输入中，图像/音频经模型编码器映射后的语义 Token 才被计入；  
+> - 微调训练任务不消耗 Token Plan 配额；[OpenAI 兼容接口](openai-compatibility.md)调用非百炼托管模型亦不计入。
 
 ## 面向开发者，简洁实用
 
-- ✅ **必查响应字段**：所有同步/异步模型 API 响应中，务必解析 `usage.input_tokens` 和 `usage.output_tokens`，用于本地用量监控与预算预警；
-- ✅ **流式开发注意**：Realtime/Omni 接口不返回累计 token 数，需客户端自行累加 `text.delta` 事件长度（推荐用 SDK 内置计数器，避免 Unicode 边界错误）；
-- ✅ **调试技巧**：若需预估 token 消耗，可调用 `/v1/tokenizer/count`（需开通权限）对 [prompt](../guides/prompt.md) 进行离线计数，结果与线上一致；
-- ❌ **不要手动换算**：避免用字符数 × 系数估算 token —— 中文平均 ~1.5 字符/token，英文 ~0.75 字符/token，但受内容结构影响极大；
-- ❌ **不要复用 token 值做认证**：`X-DashScope-Token-Plan-ID` 是资源包 ID，不是密钥；API 认证始终使用独立的 `Authorization: Bearer <api_key>`。
+- ✅ **无需手动计算**：SDK 和 API 自动返回 `prompt_tokens` 与 `completion_tokens`，可直接用于监控与成本分析；
+- ✅ **配额自动生效**：订阅 Token Plan 后，所有兼容模型的推理请求即自动受控，无需额外 header 或参数；
+- ✅ **实时查询余量**：调用 `GET /v1/usage/token-plan`（需 `token_plan:read` 权限）获取当前剩余配额与重置时间；
+- ✅ **限流有据可依**：收到 `429 Too Many Requests` 时，检查响应头 `X-RateLimit-Remaining` 和 `X-RateLimit-Reset`，结合 `rate_limit_per_second` 优化请求节奏；
+- ❌ **避免常见误用**：不要将 `api_key` 或 `Bearer token` 与本概念混淆；不要对 base64 字符串长度做 Token 预估；不要在未启用 Token Plan 的账号下依赖配额保障。
 
-Token 是百炼平台资源计量的“原子单位”。理解它，就掌握了用量、成本、性能与配额控制的共同语言。
+如需进一步优化 Token 效率，建议：精简 [prompt](../guides/prompt.md) 模板、限制 `max_tokens`、启用 `stream=false`（尤其在 Prime 模式下）、优先选用 `qwen-turbo` 等高性价比模型。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
 - [token plan api](../api/token-plan-api.md)
-- [billing api](../api/billing-api.md)
+- [preparations](../api/preparations.md)
 - [model high speed inference](../guides/model-high-speed-inference.md)
-- [realtime api user guide](../api/realtime-api-user-guide.md)
-- [omni realtime api](../api/omni-realtime-api.md)
+- [model evaluation introduction](../guides/model-evaluation-introduction.md)
 
 

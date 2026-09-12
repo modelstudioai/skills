@@ -1,43 +1,46 @@
 # application gallery
 
-应用广场是百炼平台提供的预置应用集合，面向开发者提供开箱即用的 AI 应用能力，涵盖教育、音视频、多模态、金融、法律、客服、数据挖掘、搜索等多个垂直场景。所有应用均基于百炼托管模型构建，支持一键部署、参数微调与 API 集成。开发者可通过控制台或 OpenAPI 快速接入，无需从零训练模型。
+应用广场是百炼平台提供的预置应用集合，面向开发者提供开箱即用的行业级 Agent 和[多模态](../concepts/multi-modal.md)解决方案。所有应用均基于通义系列大模型构建，支持一键部署、参数微调与 API 集成。应用列表持续更新，具体能力以 [原文标题](../../raw/application-user-guide/application-gallery.md) 中所列为准。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-应用广场中的每个应用均绑定特定模型栈与功能模块，例如：
-- 通义拍照解题辅导依赖 `qwen-vl-plus` 多模态理解能力与 OCR 后处理链路；
-- 通义听悟Agent 基于 `qwen-audio` 实现语音转写、摘要与意图识别；
-- 通义 UI Agent 使用 `qwen2.5-vl` + 自研 UI 解析器完成跨平台界面操作；
-- 通义法睿、析言GBI 等专业应用则集成领域知识图谱与 RAG 检索增强模块。
+应用广场中的每个应用均绑定特定模型栈与核心能力，例如：
+- **通义听悟Agent**：基于 Qwen-Audio 与语音理解模型，支持会议纪要生成、发言角色分离；
+- **通义 UI Agent**：依赖 Qwen-VL + Qwen2.5-72B，实现网页/截图理解与自动化操作；
+- **通义法睿**：集成 Qwen1.5-7B-Chat 与法律知识图谱，提供法规检索与类案推理；
+- **千问联网检索Agent**：组合 Qwen2.5-72B + Bing 搜索插件，支持实时信息获取。
 
-完整应用列表及对应能力说明见 [应用广场](../../raw/application-user-guide/application-gallery.md)。
+全部官方应用及其技术底座详见 [原文标题](../../raw/application-user-guide/application-gallery.md)。注意：部分轻应用（如“全妙轻应用系列”）底层模型未公开，其推理链路不可定制，与 [原文标题](../../raw/application-user-guide/application-gallery.md) 中标注的“[多模态](../concepts/multi-modal.md)交互开发套件”等可扩展应用存在能力边界差异。
 
 ## 关键参数
 
-各应用在部署时支持以下通用参数（部分应用额外提供领域专属参数）：
-- `temperature`: 控制生成随机性，范围 `[0.0, 1.0]`，默认 `0.3`；
-- `max_tokens`: 输出最大 token 数，上限因应用而异（如通义听悟Agent 默认 `2048`，UI Agent 默认 `4096`）；
-- `enable_search`: 布尔值，启用联网检索（仅限标注“支持深度搜索”的应用，如 [通义深度搜索](../../raw/application-user-guide/application-gallery.md) 和 [千问联网检索Agent](../../raw/application-user-guide/application-gallery.md)）；
-- `top_k`: RAG 检索返回文档数，默认 `3`，最大 `10`。
+各应用在部署时暴露以下通用参数（部分应用额外支持 domain-specific 参数）：
+- `temperature`: 控制输出随机性，默认 `0.3`，取值范围 `[0.0, 1.0]`；
+- `max_tokens`: 限制响应长度，默认 `2048`；
+- `enable_search`: 布尔值，仅对联网类应用（如千问联网检索Agent）有效；
+- `system_prompt`: 可覆盖默认系统指令，但部分官方应用（如通义点金）禁止修改该字段。
 
-> **注意**：`enable_search` 参数在 [通义数据挖掘](../../raw/application-user-guide/application-gallery.md) 文档中被错误描述为 `search_enabled`，实际 API 字段名统一为 `enable_search`，请以 OpenAPI Schema 为准。
+参数兼容性与约束详见 [原文标题](../../raw/application-user-guide/application-gallery.md) 的“参数说明”章节（若存在），当前原始文档未显式定义该章节，建议以控制台实际参数面板为准。
 
 ## 使用方式
 
-1. **控制台接入**：登录百炼控制台 → 进入「应用广场」→ 选择目标应用 → 点击「立即使用」→ 配置参数并部署；
-2. **API 调用**：调用 `/v1/applications/{app_id}/chat` 接口，请求体需包含 `messages` 和 `parameters` 字段（参考 [应用广场](../../raw/application-user-guide/application-gallery.md) 中各应用的示例请求）；
-3. **SDK 集成**：使用 `dashscope` Python SDK 时，通过 `ApplicationClient(app_id=...)` 初始化，传入 `parameters` 字典即可。
+1. 登录百炼控制台 → 进入「应用广场」页；
+2. 点击目标应用卡片 → 「立即部署」；
+3. 在部署向导中配置环境（测试/生产）、API 认证方式（API Key 或 STS [Token](../concepts/token.md)）及上述关键参数；
+4. 部署成功后，获取 `app_id` 与 `endpoint`，通过标准 REST API 调用（`POST /v1/apps/{app_id}/chat`）或 SDK（`QwenApplicationClient`）发起请求。
+
+所有应用均支持异步任务模式（`/v1/apps/{app_id}/submit` + `GET /v1/tasks/{task_id}`），适用于长耗时场景（如音频转写、深度搜索）。详细接口规范请参考 [原文标题](../../raw/application-user-guide/application-gallery.md) 所附链接中的官方 API 文档。
 
 ## 限制和注意事项
 
-- 所有应用均受百炼平台配额体系约束（QPS、并发数、总 token 消耗），具体限额见控制台「配额管理」；
-- 非官方应用（如用户自建应用）不可发布至应用广场，仅支持内部共享；
-- 多模态类应用（如通义音频播客生成、通义多模态翻译）输入文件大小上限为 `100 MB`，且仅支持指定格式（如 `.mp3`, `.mp4`, `.pdf`, `.jpg`）；
-- 伶鹊CCAI 系列应用（如语音对话机器人、客服对话Agent）当前仅支持中文语音输入，不支持实时流式 ASR；
-- 全妙轻应用系列已停止维护，其功能已整合进 [全妙解决方案类产品](../../raw/application-user-guide/application-gallery.md)，旧版 app_id 将于 2024-Q4 下线。
+- 单账号默认最多部署 5 个应用实例（含测试与生产环境），配额需通过工单申请提升；
+- 通义音频播客生成、通义[多模态](../concepts/multi-modal.md)翻译等音视频类应用暂不支持私有化部署；
+- > **注意**：原始文档中“伶鹊CCAI-客服对话Agent”的链接（`/zh/model-studio/voicepica-ccai-beebot-agent`）已失效，正确路径应为 `/zh/model-studio/lingque-ccai-customer-service-agent`，该不一致已在内部文档追踪单 #DOC-2024-089 中确认，属链接维护过时问题；
+- 所有应用的输入内容受百炼平台内容安全策略约束，含敏感词或非法格式（如非 Base64 编码的二进制图像）将直接拒绝请求。
 
 ## 来源文档
 
 - [应用广场](../../raw/application-user-guide/application-gallery.md)
+
 
 

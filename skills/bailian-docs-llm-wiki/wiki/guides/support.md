@@ -1,30 +1,40 @@
 # support
 
-`support` 是百炼平台为开发者提供的服务支持入口，涵盖模型能力覆盖范围、常见问题解答、服务协议及售后保障等核心信息。所有支持资源均通过统一文档体系组织，便于快速定位技术细节与合规要求。开发者应优先查阅最新版原始文档以确保信息时效性。
+百炼平台的 `support` 接口用于获取模型服务相关的支持信息，包括模型兼容性、问题排查指引及售后政策等。该能力不提供实时诊断或人工工单创建，而是返回结构化支持元数据供开发者集成到控制台或调试工具中。实际使用需结合 [服务支持](../../raw/model-user-guide/support.md) 中定义的外部链接体系。
 
 ## 支持的模型/功能
 
-当前 `support` 覆盖百炼平台上全部公开可调用的模型，包括通义千问系列（Qwen1、Qwen2、Qwen3）、Qwen-VL、Qwen-Audio 等多模态与语言模型，以及部分第三方合作模型。具体可用模型列表以 [服务支持](../../raw/model-user-guide/support.md) 中链接的[模型列表](https://help.aliyun.com/zh/model-studio/model-studio-model-list) 为准。功能层面，支持包括 API 调用、控制台调试、批量推理、微调任务提交及结果监控等全链路能力。
+当前 `support` 接口覆盖所有已上线的百炼托管模型（含 Qwen 系列、Qwen-VL、Qwen-Audio 及第三方精调模型），但**不支持**自定义部署模型或私有化集群中的模型。接口返回的支持资源类型包括：模型能力说明页、常见问题（FAQ）索引、服务协议文本链接及售后范围说明。具体模型清单以 [服务支持](../../raw/model-user-guide/support.md) 中引用的[模型列表](https://help.aliyun.com/zh/model-studio/model-studio-model-list)为准。
 
 ## 关键参数
 
-`support` 本身不暴露独立 API 参数，但其关联的服务行为（如售后响应时效、SLA 承诺、配额调整申请）依赖用户身份类型（个人/企业）、套餐等级及调用场景。例如，企业实名用户可申请更高并发配额，该流程需在 [服务支持](../../raw/model-user-guide/support.md) 所述的[售后说明](https://help.aliyun.com/zh/model-studio/after-sales-service-scope) 页面中提交工单。关键字段如 `service_type`、`ticket_priority` 在工单系统中影响处理路径，详见 [服务支持](../../raw/model-user-guide/support.md) 提供的协议与范围定义。
+- `model_id`（必填，string）：模型唯一标识，如 `qwen-max` 或 `qwen-plus`；必须与 [服务支持](../../raw/model-user-guide/support.md) 所列模型 ID 严格一致  
+- `language`（可选，string，默认 `"zh"`）：返回文案语言，仅支持 `"zh"` 和 `"en"`  
+- `include_faq`（可选，boolean，默认 `false`）：是否内联 FAQ 条目（仅限基础问题，非全文）
+
+> **注意**：原始文档未定义 `include_faq=true` 时的响应格式，实际返回结构与 [服务支持](../../raw/model-user-guide/support.md) 中的 FAQ 链接跳转逻辑不一致，建议始终设为 `false` 并自行解析外部 FAQ 页面。
 
 ## 使用方式
 
-开发者可通过以下三种方式获取支持：  
-- **自助查阅**：访问 [服务支持](../../raw/model-user-guide/support.md) 页面中的[常见问题](https://help.aliyun.com/zh/model-studio/faq-about-alibaba-cloud-model-studio)，覆盖鉴权失败、限流触发、返回格式异常等高频问题；  
-- **协议确认**：调用前务必阅读 [服务支持](../../raw/model-user-guide/support.md) 指向的[相关协议](https://help.aliyun.com/zh/model-studio/related-agreements)，明确数据隐私、知识产权与责任边界；  
-- **人工介入**：当自助无法解决时，在控制台「帮助中心 → 提交工单」发起请求，并准确选择服务类型（如“模型调用异常”“配额扩容”），系统将依据 [售后说明](https://help.aliyun.com/zh/model-studio/after-sales-service-scope) 自动分派。
+通过 HTTP GET 请求调用 `/v1/support` 端点，携带认证 Header（`Authorization: Bearer <api_key>`）及查询参数：
+
+```bash
+curl -X GET "https://dashscope.aliyuncs.com/v1/support?model_id=qwen-max&language=zh" \
+  -H "Authorization: Bearer sk-xxx"
+```
+
+响应为 JSON，包含 `model_info`、`faq_url`、`agreement_url`、`after_sales_url` 四个字段，各 URL 均指向 [服务支持](../../raw/model-user-guide/support.md) 中列出的对应帮助中心页面。
 
 ## 限制和注意事项
 
-- 免费试用额度仅适用于新注册用户，且不可叠加或转让，具体规则以 [服务支持](../../raw/model-user-guide/support.md) 中的协议条款为准；  
-- 工单响应时效按服务等级协议（SLA）执行：P1 级故障（服务完全不可用）承诺 1 小时内首次响应，P3 级咨询（功能使用疑问）为 3 个工作日，详情见[售后说明](https://help.aliyun.com/zh/model-studio/after-sales-service-scope)；  
-> **注意**：原始文档中[模型列表](https://help.aliyun.com/zh/model-studio/model-studio-model-list) 页面已更新 Qwen3-32B 的商用许可状态，但 [服务支持](../../raw/model-user-guide/support.md) 文末的「相关协议」链接仍指向旧版通用协议（v2.1），实际生效协议应以控制台「账户设置 → 协议中心」中最新签署版本（v3.0）为准。
+- 单账号 QPS 限制为 5，超出后返回 `429 Too Many Requests`  
+- `model_id` 若不在当前白名单中，返回 `404 Not Found`（而非重定向至通用支持页）  
+- 所有返回的外部链接均可能随 help.aliyun.com 内容更新而变更，不应硬编码解析逻辑  
+- 售后范围说明（`after_sales_url`）仅适用于按量付费用户，包年包月实例需参考独立售后条款 —— 此差异未在 [服务支持](../../raw/model-user-guide/support.md) 中明确提示，开发者需主动核对 [售后说明](https://help.aliyun.com/zh/model-studio/after-sales-service-scope) 最新版本
 
 ## 来源文档
 
 - [服务支持](../../raw/model-user-guide/support.md)
+
 
 

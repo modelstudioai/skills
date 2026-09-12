@@ -1,49 +1,39 @@
 # skill
 
-skill 是百炼平台中用于封装和复用 AI 能力的可调用单元，支持将大模型能力、工具调用、[Prompt 工程](../concepts/prompt-engineering.md)或 API 集成逻辑打包为标准化接口。开发者可通过统一入口配置、调试与发布 skill，并在工作流（Workflow）或 API 服务中直接调用。其设计目标是降低重复开发成本，提升能力复用率与维护一致性。
+skill 是百炼平台中用于封装和复用 AI 能力的标准化单元，支持将大模型调用、工具链、条件分支等逻辑打包为可配置、可编排、可共享的组件。开发者可通过控制台或 API 创建、调试和发布 skill，供工作流（Workflow）或其他 skill 调用。其设计目标是降低重复开发成本，提升能力复用率与维护一致性。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-skill 支持绑定以下类型的能力：
-- 百炼托管模型（如 Qwen-Max、Qwen-Plus、Qwen-Turbo）
-- 自定义 Prompt 模板（含变量注入、输出 Schema 约束）
-- 外部 HTTP API（需配置请求方法、Headers、Body 模板及响应解析规则）
-- 内置工具（如时间查询、计算器、知识库检索等），具体可用工具列表见 [Skill](../../raw/application-user-guide/skill.md)  
-- 多步编排能力（通过子 skill 组合实现复杂逻辑）
-
-> **注意**：文档 [Skill](../../raw/application-user-guide/skill.md) 中提及“支持直接调用 DashScope SDK”，但当前 v2.3.0 平台版本已移除此能力，仅保留 HTTP API 和内置工具两类外部集成方式；请以控制台实际可选类型为准。
+skill 本身不绑定特定模型，但其内部节点（如 `llm_call`、`tool_call`）依赖所选模型的能力。当前支持在 skill 中调用 Qwen 系列（Qwen1.5、Qwen2、Qwen2.5）、Baichuan、GLM 等主流开源及百炼托管模型；部分高级功能（如多步推理、结构化输出约束）需模型具备相应 [prompt](prompt.md) 工程兼容性。工具调用（function calling）能力仅对明确声明 `tools` schema 的 skill 生效，且要求底层模型支持 OpenAI-style tool specification —— 具体兼容性请参考 [Skill](../../raw/application-user-guide/skill.md) 文档说明。
 
 ## 关键参数
 
-创建或更新 skill 时需配置以下核心参数：
+- `name`：必填，skill 唯一标识符（仅限小写字母、数字、短横线，长度 ≤ 64）
+- `description`：选填，用于控制台展示与搜索，建议简明描述用途
+- `input_schema`：JSON Schema 格式，定义输入字段类型、必填项与默认值（若未提供则默认接受任意 object）
+- `output_schema`：JSON Schema 格式，声明期望输出结构，影响 workflow 中下游节点的类型推导
+- `timeout_ms`：超时时间，默认 30000（30 秒），最大支持 300000（5 分钟）
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `name` | string | 是 | skill 唯一标识符（限小写字母、数字、短横线，长度 3–32） |
-| `description` | string | 否 | 功能简述，用于控制台展示与搜索 |
-| `type` | enum | 是 | 取值：`llm`（大模型）、`prompt`（模板）、`api`（HTTP）、`tool`（内置工具） |
-| `config` | object | 是 | 根据 `type` 动态变化，例如 `llm.model_id`、`api.url`、`tool.name` 等 |
-| `output_schema` | JSON Schema | 否 | 强制结构化输出，影响调用返回格式与校验 |
-
-完整参数定义与示例详见 [Skill](../../raw/application-user-guide/skill.md)。
+> **注意**：`input_schema` 和 `output_schema` 在旧版 skill 编辑器中曾允许留空并隐式 fallback 为 `{"type": "object"}`，但自 v2.3.0 起，API 创建时若缺失 `input_schema` 将直接报错 —— 详见 [Skill](../../raw/application-user-guide/skill.md) 的“参数校验规则”章节。
 
 ## 使用方式
 
-1. **控制台操作**：进入「应用」→「Skill 管理」→ 创建新 Skill → 选择类型并填写配置 → 保存并发布  
-2. **API 调用**：发布后通过 `/v1/skills/{skill_id}/invoke` 接口发起同步调用，需携带 `Authorization` 与 `X-DashScope-SSE: disable`（若禁用流式）  
-3. **集成至 Workflow**：在 Workflow 编辑器中拖入「Skill 节点」，选择已发布的 skill 并传入 `input` 字段（JSON 对象）  
-4. **调试建议**：首次调用前务必使用控制台「测试」功能验证输入/输出行为，尤其关注 `output_schema` 是否匹配实际返回 —— 此处常见错误可参考 [Skill](../../raw/application-user-guide/skill.md) 的调试章节。
+1. **创建**：通过控制台「应用开发 → Skill」新建，或调用 `POST /v1/skills` API  
+2. **调试**：在控制台编辑页点击「测试」，输入符合 `input_schema` 的 JSON 示例，实时查看执行日志与输出  
+3. **调用**：在 Workflow 中添加 `skill_call` 节点，填写 skill ID 并传入参数；或通过 `POST /v1/skills/{skill_id}/invoke` 直接调用  
+4. **版本管理**：每次保存即生成新版本（v1, v2...），发布后方可被其他应用引用；历史版本不可修改，仅可下线 —— 完整生命周期说明见 [Skill](../../raw/application-user-guide/skill.md)
 
 ## 限制和注意事项
 
-- 单个 skill 最多绑定 1 个主能力（不支持同时挂载 LLM + API）  
-- `api` 类型 skill 的超时默认为 15s，不可修改；`llm` 类型受所选模型自身 timeout 限制  
-- skill 调用日志保留 7 天，审计日志需通过 SLS 单独配置  
-- 发布状态变更（如从 `draft` 到 `published`）不触发自动版本快照，历史版本需手动导出备份  
-- 所有 skill 输入均经平台统一清洗（过滤控制字符、截断超长字段），详细处理规则见 [Skill](../../raw/application-user-guide/skill.md)
+- 单个 skill 最多包含 100 个节点（含条件分支、循环、子 skill 调用等）
+- 输入总大小（序列化后 JSON 字符串）不得超过 2MB；输出同理
+- 不支持跨 workspace 调用 skill，调用方与被调用方必须归属同一工作空间
+- skill 内部不可嵌套调用自身（防止无限递归），运行时会主动检测并终止
+- 若 skill 中使用了已下线的模型或工具，调用将失败，错误码为 `MODEL_NOT_FOUND` 或 `TOOL_NOT_AVAILABLE` —— 建议定期检查依赖项状态，参见 [Skill](../../raw/application-user-guide/skill.md) 的“依赖管理”小节
 
 ## 来源文档
 
 - [Skill](../../raw/application-user-guide/skill.md)
+
 
 
