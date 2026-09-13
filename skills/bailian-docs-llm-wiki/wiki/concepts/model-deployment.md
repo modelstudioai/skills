@@ -1,56 +1,56 @@
 # 模型部署
 
-模型部署是将训练或微调完成的模型（包括官方托管模型、自定义导入模型及微调产出模型）发布为可稳定调用的在线服务的关键环节。它封装了资源调度、API 网关、流量路由与运行时配置，使模型从“可用”走向“可生产”。
+模型部署是将训练或调优完成的模型（包括基础模型、微调模型、压缩模型等）发布为稳定、可扩展、生产就绪的 API 服务的过程。它在百炼平台中是连接模型能力与业务应用的关键环节，决定了服务的性能、成本、安全性和运维可控性。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-模型部署在百炼平台中并非单一操作，而是贯穿多个能力层级的横切枢纽：
+- **基础模型服务化**：直接部署通义千问系列（如 `qwen-max`、`qwen-plus`）等系统预置模型，适用于快速验证或通用能力接入。支持按需（`on_demand`）和 TPM 预留（`tpm_reserved`）两种模式，前者免预置、有冷启动；后者保障最低吞吐，适合流量可预期的线上服务。
 
-- **基础服务化**：通过「模型部署」功能（`model deployment 1`），开发者可一键将模型发布为标准 RESTful API endpoint，支持专属、PTU、DTU、[Token](token.md) 四类部署模式，覆盖验证、灰度、高稳、弹性等全阶段需求。  
-- **生产级保障**：在「模型生产」（`model production`）流程中，部署是前置依赖——必须先创建部署实例（获得 `deployment_id`），才能进一步申请 TPM 预留、启用自动扩缩容、配置 SLA 监控与版本回滚策略。  
-- **性能优化载体**：「高速推理」（`high speed inference`）能力不独立存在，其 Prime 模式与 TPM 预留均需作用于已部署的模型实例；参数如 `speed_mode` 和 `tpm_reservation` 在调用时生效，但前提是目标模型已处于 `Running` 状态。  
-- **轻量化落地入口**：经「模型压缩」生成的量化模型（如 `qwen2-7b-instruct-awq`），仍需通过标准模型部署流程发布为服务——压缩仅改变模型权重格式，不替代部署。  
-- **定制化服务起点**：「模型调优」产出的微调模型（如 `ft-qwen2-7b-abc123`），必须完成部署后才具备对外提供推理服务的能力；未部署的微调模型仅存在于模型中心，不可直接调用。
+- **微调模型上线**：Fine-tuning 任务成功完成后，生成的 `ft-xxx` 模型 ID 可一键部署为专属 API 服务。该过程继承微调时的领域适配能力，并支持灰度发布、多版本路由等生产级功能。
 
-简言之：**部署是模型从静态资产变为动态服务能力的临界点，所有上层能力（生产、加速、压缩、微调闭环）均以部署实例为运行载体。**
+- **压缩模型推理**：经 AWQ/GPTQ 量化压缩后的轻量模型（如 `qwen2-7b-int4-awq`）可作为独立模型 ID 直接部署，无需额外转换——部署后调用方式与原模型完全一致，仅需替换 `model` 参数。
+
+- **合规与安全集成**：所有部署实例默认启用 HTTPS 加密；通过配置 `enable_security_check: true` 和 `security_level`，可在 API 层实时触发内容安全护栏；开启私网访问后，服务 endpoint 仅限 VPC 内网调用，满足金融、政务等强合规场景要求。
+
+- **资源与成本精细化控制**：根据业务特征选择部署类型：  
+  - 流量平稳 → 选用 `ptu` 或 `dtu` 模式锁定吞吐/算力；  
+  - 突发或低频 → 选用 `token_based` 按量计费；  
+  - 高 SLA 要求 → 选用 `dedicated` 专属实例，保障独占 GPU 与低延迟。
 
 ## 关键参数和配置
 
-以下参数在调用部署 API 或控制台配置时最常使用，直接影响服务行为与成本：
-
-| 参数 | 类型 | 必填 | 说明 | 典型取值示例 |
-|------|------|------|------|--------------|
-| `model_id` | string | 是 | 模型唯一标识，来自「我的模型」或导入/微调成功后的 ID | `qwen2-7b-instruct`, `ft-xyz987` |
-| `deployment_type` | enum | 是 | 部署模式，决定资源隔离性、计费方式与弹性策略 | `dedicated`, `ptu`, `dtu`, `token` |
-| `instance_count` | int | 否（默认 1） | 实例数量，仅 `dedicated` / `dtu` 模式有效；影响并发容量与故障域 | `1`, `2`, `4` |
-| `ptu_capacity` | int | 仅 `ptu` 模式必需 | PTU 单位数（1 PTU ≈ 10 QPS@1k token），决定长上下文与缓存能力上限 | `10`, `50`, `200` |
-| `speed_mode` | string | 否（默认 `"none"`） | 是否启用高速推理 Prime 模式 | `"prime"`, `"none"` |
-| `tpm_reservation` | int | 否（TPM 模式必需） | 预留吞吐量（tokens/minute），用于保障低延迟 SLO | `1000`, `5000` |
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `deployment_type` | string | 是 | 取值：`dedicated`（专属）、`ptu`（预置吞吐）、`dtu`（独占算力）、`token_based`（按量）、`on_demand`（按需）、`tpm_reserved`（TPM 预留） |
+| `model_id` | string | 是 | 模型唯一标识，支持系统模型（`qwen-max`）、微调模型（`ft-xxx`）、压缩模型（`qwen2-7b-int4-awq`）等 |
+| `instance_type` | string | 否（`dedicated`/`dtu` 必填） | GPU 实例规格，如 `ecs.gn7i-c16g1.4xlarge`，需匹配模型显存需求 |
+| `ptu_capacity` / `tpm_capacity` | int | 按模式必填 | `ptu`: 最小 10（1 PTU ≈ 10 QPS 基准）；`tpm`: 最小 100（单位：tokens/minute） |
+| `min_replicas` / `max_replicas` | int | 否 | 仅 `dedicated` 支持固定副本数；其余类型自动扩缩容 |
+| `enable_security_check` | boolean | 否 | 默认 `false`；设为 `true` 启用输入输出 AI 安全护栏 |
+| `security_level` | string | 否（启用护栏时建议显式指定） | `"strict"` / `"balanced"`（默认） / `"relaxed"` |
 
 > ⚠️ 注意：  
-> - `deployment_type=mu` 已废弃，统一使用 `dtu`；  
-> - [Token](token.md) 按量模式（`token`）不支持流式响应（`stream=true` 会被静默忽略）；  
-> - 所有部署实例默认开启自动扩缩容（`dedicated` 模式除外），缩容冷却期为 5 分钟；  
-> - 压缩模型、微调模型、导入模型均需先完成「校验 + 构建」步骤，方可进入部署流程。
+> - 所有部署均要求模型状态为 `Published`；草稿或校验失败模型不可部署。  
+> - 模型版本更新后，已有部署**不会自动升级**，必须手动执行 `bailian deploy --update` 或重建。  
+> - `token_based` 不支持流式响应（`stream: true`）和长上下文（>32k token）；`on_demand` 存在 <3s 冷启动延迟。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速上手**：控制台「模型部署」页 → 选模型 → 选模式 → 填参数 → 点部署 → 复制 endpoint 调用。  
-- ✅ **API 优先**：推荐使用 OpenAPI `/v1/deployments` 创建部署，返回 `deployment_id` 和 `endpoint`，后续所有生产管理（如扩缩容、监控、下线）均基于此 ID。  
-- ✅ **参数组合建议**：  
-  - 验证/测试：`deployment_type=token` + 默认参数；  
-  - 高稳对话服务：`deployment_type=ptu` + `ptu_capacity=50` + `speed_mode="prime"`；  
-  - 金融/政务强隔离场景：`deployment_type=dtu` + `instance_count=2`；  
-  - 批量离线任务：`deployment_type=dedicated` + `instance_count=1` + 关闭自动扩缩容。  
-- ✅ **调试提示**：若调用返回 `404 Not Found`，检查模型是否已部署且状态为 `Running`；若返回 `429 Too Many Requests`，确认是否超出 `tpm_reservation` 或 PTU 容量上限。  
-- ✅ **清理习惯**：不再使用的部署请主动删除（`DELETE /v1/deployments/{deployment_id}`），避免持续计费。
+- ✅ **起步最快**：确认模型已发布 → 运行 `bailian deploy --model-id qwen-max --deployment-type ptu --ptu-capacity 30` → 获取 endpoint 直接调用。  
+- ✅ **调试友好**：部署后立即在控制台「模型部署」页查看实时 QPS、延迟、错误率；也可调用 `/v1/deployments/{id}/metrics` 接口集成监控系统。  
+- ✅ **灰度可控**：结合「模型路由」功能，将新部署的微调模型以 5% 流量接入，验证效果后再全量切换。  
+- ✅ **安全开箱即用**：只需在请求 body 中添加 `"enable_security_check": true`，即可启用国家网信办要求的 12 类内容风险识别。  
+- ❌ **避坑提示**：  
+  - 不要使用旧版 Quick Start CLI（参数已不兼容 v2.3+ SDK）；请统一使用 `bailian deploy` 命令；  
+  - `dtu` 部署绑定 GPU 型号，变更 `instance_type` 必须先删除再重建；  
+  - 私网访问需提前在控制台「网络配置」中绑定交换机，API 调用时无法动态开启。
 
 ## 关联主题页
 
 - [model deployment 1](../guides/model-deployment-1.md)
 - [model production](../api/model-production.md)
-- [model high speed inference](../guides/model-high-speed-inference.md)
-- [model compression](../guides/model-compression.md)
 - [fine tuning](../guides/fine-tuning.md)
+- [model compression](../guides/model-compression.md)
+- [security and compliance](../guides/security-and-compliance.md)
 
 

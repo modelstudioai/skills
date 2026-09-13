@@ -1,50 +1,45 @@
 # token plan api
 
-[Token](../concepts/token.md)Plan API 是百炼平台用于组织级资源配额管理的核心接口集合，主要面向企业客户实现席位（seat）分配、成员邀请、API Key 管理及订阅状态查询等能力。该 API 不直接参与模型推理调用，而是服务于 [Token](../concepts/token.md) 计量计划的生命周期管理。所有接口均需通过 `Bearer <token>` 认证，并遵循统一的 RESTful 设计规范。
+[Token](../concepts/token.md)Plan API 是百炼平台用于组织级资源配额与成员席位管理的核心接口集合，主要支撑 [Token](../concepts/token.md) 配额分配、成员邀请、API Key 生命周期管理及组织维度用量统计等能力。该 API 不直接参与模型推理调用，而是服务于企业客户对模型服务访问权限和资源消耗的精细化管控。所有接口均需通过阿里云 RAM 凭据或 [Token](../concepts/token.md)Plan 专属 API Key 进行鉴权，详见 [TokenPlan](../../raw/model-api-reference/token-plan-api.md)。
 
 ## 支持的模型/功能
 
-[Token](../concepts/token.md)Plan API **不支持任何大模型调用**，其功能完全聚焦于组织治理与配额运营，包括：  
-- 成员全生命周期管理（添加、移除、角色更新、列表查询）  
-- 席位批量分配与回收（含共享包明细分页查询）  
-- [Token](../concepts/token.md)Plan 专属邀请链接的生成、获取与撤销  
-- API Key 的创建、轮转与管理  
-- 组织信息维护（创建、更新、详情获取）  
-- 订阅统计与席位使用情况查询（如 [成员数量和席位数量情况展示](../../raw/model-api-reference/token-plan-api.md)）  
+TokenPlan API **不绑定具体大模型**（如 Qwen 系列），其功能完全独立于推理模型，聚焦于组织治理层：
+- 席位生命周期管理：分配、回收、移除成员（[TokenPlan](../../raw/model-api-reference/token-plan-api.md)）
+- 邀请机制控制：创建/获取/撤销邀请链接，配置邀请策略（[TokenPlan](../../raw/model-api-reference/token-plan-api.md)）
+- 凭据管理：生成、重置 TokenPlan API Key（[TokenPlan](../../raw/model-api-reference/token-plan-api.md)）
+- 组织状态查询：获取组织信息、成员与席位统计、订阅明细、共享包列表等只读接口
 
-> **注意**：原始文档中重复列出了两次“成员数量和席位数量情况展示”（对应不同路径），实际应以 [get-organization-member-seat-stats](../../raw/model-api-reference/token-plan-api.md) 为准；另一处 [get-subscription-stats](../../raw/model-api-reference/token-plan-api.md) 侧重订阅维度统计，二者语义不同，非冗余。
+> **注意**：原始文档中 `成员数量和席位数量情况展示` 出现两次（分别指向 `/get-organization-member-seat-stats` 和 `/get-subscription-stats`），但后者实际返回的是订阅层级用量汇总（含 Token 消耗趋势），前者仅返回实时计数；二者语义不同，开发时请按实际需求选择，避免误用。
 
 ## 关键参数
 
-所有请求必须携带以下通用 Header：  
-- `Authorization: Bearer <your_api_token>`（[Token](../concepts/token.md) 来自 [生成API Key](../../raw/model-api-reference/token-plan-api.md) 或 [重置API Key](../../raw/model-api-reference/token-plan-api.md)）  
-- `Content-Type: application/json`（POST/PUT 请求）  
-
-关键路径参数与请求体字段示例：  
-- `org_id`：组织唯一标识，可通过 [获取账号下的组织信息](../../raw/model-api-reference/token-plan-api.md) 获取  
-- `invite_code`：邀请链接中的唯一编码，用于 [获得TokenPlan成员邀请链接](../../raw/model-api-reference/token-plan-api.md) 后续操作  
-- `seat_count`：分配/回收席位数，须为正整数且不超过剩余可用席位  
+所有接口共用以下基础参数（部分接口有额外字段）：
+- `org_id`（路径参数）：目标组织唯一标识，必填。可通过 `/get-token-plan-account-detail` 获取当前账号下所有组织。
+- `Authorization`（Header）：支持两种格式：  
+  - `Bearer <token_plan_api_key>`（推荐，专用密钥）  
+  - `Bearer <ram_access_token>`（需具备 `tokenplan:FullAccess` 权限）
+- `page_size` / `page_number`（Query）：适用于列表类接口（如 `/list-organization-members`），默认分页大小为 20。
 
 ## 使用方式
 
-1. **认证准备**：调用 [生成API Key](../../raw/model-api-reference/token-plan-api.md) 获取初始密钥，或使用已有密钥；密钥泄露时立即调用 [重置API Key](../../raw/model-api-reference/token-plan-api.md)  
-2. **组织初始化**：若无组织，先调用 [创建成员](../../raw/model-api-reference/token-plan-api.md)（自动创建默认组织）或 [获取账号下的组织信息](../../raw/model-api-reference/token-plan-api.md) 确认上下文  
-3. **席位分配**：调用 [分配席位](../../raw/model-api-reference/token-plan-api.md) 并指定目标成员 ID 与席位数  
-4. **成员加入**：通过 [创建TokenPlan成员邀请链接](../../raw/model-api-reference/token-plan-api.md) 生成链接，新成员点击后自动绑定席位  
-
-所有接口均返回标准 HTTP 状态码（200/400/401/403/404/500）及 JSON 格式响应体，错误详情见 `message` 字段。
+1. **获取 API Key**：首次使用前，调用 `/create-token-plan-key` 生成专属密钥（响应含 `api_key` 和 `key_id`）；密钥可用于所有 TokenPlan 接口，**不可用于模型推理 API**。  
+2. **发起请求**：以 `/list-organization-members` 为例：  
+   ```bash
+   curl -X GET "https://dashscope.aliyuncs.com/api/v1/tokenplan/orgs/{org_id}/members" \
+     -H "Authorization: Bearer YOUR_TOKEN_PLAN_API_KEY"
+   ```  
+3. **处理响应**：成功响应均为 `200 OK`，数据结构统一包裹在 `result` 字段内（如 `{"result": {...}}`），错误码遵循阿里云标准（4xx/5xx + `code`/`message`）。
 
 ## 限制和注意事项
 
-- 单次分配/回收席位数上限为 100，超出需分批调用  
-- 邀请链接有效期默认 7 天，不可修改，过期后需重新生成  
-- 同一成员在单个组织内仅能拥有一个活跃席位，重复分配将覆盖原席位  
-- [撤销TokenPlan成员邀请链接](../../raw/model-api-reference/token-plan-api.md) 仅对未使用的链接生效，已注册成员不受影响  
-- 所有写操作（如分配、移除、更新）均不可逆，建议操作前通过 [获取成员列表](../../raw/model-api-reference/token-plan-api.md) 和 [订阅明细-座席列表](../../raw/model-api-reference/token-plan-api.md) 校验当前状态
+- 单组织最大成员数为 5000，单次分页最多返回 100 条记录（`page_size` 上限为 100）。  
+- API Key 无自动轮转机制，需主动调用 `/rotate-token-plan-key` 更新；旧密钥立即失效，**不影响已分配席位的有效性**。  
+- `/get-subscription-seat-details` 返回的席位状态可能滞后最多 5 分钟，实时性要求高的场景建议结合 `/get-organization-member-seat-stats` 的瞬时快照交叉验证。  
+- 所有写操作（如 `/assign-seats`、`/revoke-token-plan-invite-link`）均为同步执行，但席位生效依赖下游服务异步同步，通常在 30 秒内完成。
 
 ## 来源文档
 
 - [TokenPlan](../../raw/model-api-reference/token-plan-api.md)
-
 
 

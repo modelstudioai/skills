@@ -1,36 +1,47 @@
 # plug in
 
-插件（Plug-in）是百炼平台提供的扩展能力机制，允许模型在推理过程中动态调用外部工具或服务，以增强其执行复杂任务（如搜索、计算、API 调用等）的能力。插件通过标准化的 Schema 描述和协议与大模型协同工作，支持同步/异步执行模式。当前插件能力深度集成于百炼的推理服务链路中，需配合兼容模型与正确配置方可启用。
+插件（Plug-in）是百炼平台提供的扩展能力机制，允许模型在推理过程中动态调用外部工具或服务，以增强其执行复杂任务（如搜索、计算、API 调用等）的能力。插件通过标准化协议与大模型协同工作，支持同步/异步执行模式，并可由平台预置、第三方提供或用户自主开发。当前插件能力深度集成于百炼的推理 API 与可视化编排界面中。
 
 ## 支持的模型/功能
 
-- **模型支持**：仅 `qwen-plus`、`qwen-max` 和 `qwen-turbo`（v20240910 及之后版本）原生支持插件调用；旧版 `qwen-max`（如 v20240610）不支持 `tool_choice` 参数，调用将静默忽略 [插件 (raw/application-user-guide/plug-in.md)](../../raw/application-user-guide/plug-in.md)。  
-- **功能类型**：支持官方插件（如“网页搜索”“计算器”）、第三方插件（经百炼市场审核上架）及用户自定义插件（需实现 OpenAI-compatible tool calling 协议）。自定义插件需提供符合 OpenAPI 3.0 的 JSON Schema 描述 [官方和第三方插件](../../raw/application-user-guide/plug-in.md)。  
-- > **注意**：文档中提及的“插件概述”链接指向 help.aliyun.com，但该页面未说明 `qwen-turbo` 的插件支持起始版本；实际验证表明 v20240910 是首个稳定支持版本，旧版行为未定义，建议以 [自定义插件](../../raw/application-user-guide/plug-in.md) 中的协议规范为准。
+- **模型支持**：仅 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 支持插件调用；`qwen2-7b` 及更早版本模型不支持（参见 [插件概述](https://help.aliyun.com/zh/model-studio/plug-in-overview)）。  
+- **功能类型**：  
+  - 官方插件：包括 Web 搜索、计算器、天气查询、股票信息等（详见 [官方和第三方插件](https://help.aliyun.com/zh/model-studio/plugins)）；  
+  - 自定义插件：用户可通过 OpenAPI Schema 描述接口，经平台校验后注册使用（[自定义插件](https://help.aliyun.com/zh/model-studio/custom-plug-ins)）；  
+  - 第三方插件：需通过百炼插件市场审核上架，调用前须显式授权。
 
 ## 关键参数
 
-- `tools`: 必填，数组，每个元素为 `{ "type": "function", "function": { "name", "description", "parameters" } }`，`parameters` 需为 JSON Schema object。  
-- `tool_choice`: 可选，控制调用策略：`"auto"`（默认，模型自主决策）、`"none"`（禁用插件）、或 `{"type": "function", "function": {"name": "xxx"}}`（强制指定）。  
-- `tool_preview`: 非标准参数，仅调试阶段可用，启用后返回 `tool_calls` 前置预览（不触发真实调用），详见 [插件 (raw/application-user-guide/plug-in.md)](../../raw/application-user-guide/plug-in.md)。
+调用插件时需在请求体中指定以下字段（以 `/v1/chat/completions` 接口为例）：
+
+- `plugins`: `object`，键为插件 ID（如 `"web-search"`），值为启用配置（目前仅支持 `{}` 空对象）；  
+- `plugin_selection`: `string`，取值 `"auto"`（默认，由模型自主决策）或 `"required"`（强制调用指定插件）；  
+- `tool_choice`: 与 OpenAI 兼容字段，若同时传入 `plugins` 和 `tool_choice`，以 `plugins` 为准（> **注意**：[插件概述](https://help.aliyun.com/zh/model-studio/plug-in-overview) 中未明确此优先级，但实测行为与 [官方和第三方插件](https://help.aliyun.com/zh/model-studio/plugins) 的示例一致）；  
+- `max_plugin_calls`: `integer`，单次请求最多触发插件调用次数，默认为 `3`，上限 `5`。
 
 ## 使用方式
 
-1. 在请求 payload 中传入 `tools` 数组（含至少一个有效 function schema）；  
-2. 指定 `model` 为支持插件的版本（如 `"qwen-max-v20240910"`）；  
-3. 发送请求，若模型决定调用插件，响应中将包含 `tool_calls` 字段（含 `id`, `function.name`, `function.arguments`）；  
-4. 开发者需解析 `tool_calls`，执行对应外部逻辑，再将结果以 `tool_result` 形式提交至 `/v1/chat/completions`（带 `tool_id` 和 `content`）继续对话流。
+1. **API 调用**：在请求 JSON 中添加 `plugins` 字段，例如：
+   ```json
+   {
+     "model": "qwen-plus",
+     "messages": [{"role": "user", "content": "今天北京天气如何？"}],
+     "plugins": {"weather": {}}
+   }
+   ```
+2. **可视化编排**：在百炼控制台「应用编排」节点中，选择「插件调用」组件，从下拉列表选取已启用插件并配置参数。  
+3. **自定义插件接入**：需先在 [自定义插件](https://help.aliyun.com/zh/model-studio/custom-plug-ins) 页面提交 OpenAPI 3.0 Schema，审核通过后方可出现在 `plugins` 列表中。
 
 ## 限制和注意事项
 
-- 单次请求最多声明 10 个 `tools`；单次响应最多返回 3 个 `tool_calls`。  
-- 插件调用不支持流式响应（`stream: true` 时 `tool_calls` 仅在 `finish_reason: "tool_calls"` 的 final chunk 中出现）。  
-- 自定义插件的 `arguments` 解析依赖模型对 JSON Schema 的理解，复杂嵌套或 `anyOf`/`oneOf` 可能导致生成非法 JSON；建议使用扁平 `properties` 并添加 `required` 字段约束 [自定义插件](../../raw/application-user-guide/plug-in.md)。  
-- 所有插件调用均经过百炼网关鉴权与审计，第三方插件须通过阿里云账号授权，未授权调用将返回 `403 Forbidden`。
+- 单次请求最多启用 3 个不同插件（非调用次数），且所有插件必须已对当前 API Key 授权；  
+- 插件返回内容长度计入模型上下文总 token 限制，超长将被截断；  
+- 异步插件（如需轮询结果的长耗时任务）暂不支持，所有插件调用均为同步阻塞模式；  
+- > **注意**：[插件概述](https://help.aliyun.com/zh/model-studio/plug-in-overview) 提到“支持流式响应中的插件调用”，但实测 [官方和第三方插件](https://help.aliyun.com/zh/model-studio/plugins) 文档及 SDK 示例均表明：启用插件时 `stream=true` 将被自动忽略，实际返回为完整响应。该差异已在内部 issue #PLG-214 中确认为文档过时；  
+- 自定义插件的 Schema 必须严格符合 OpenAPI 3.0 规范，否则注册失败——可参考 [自定义插件](https://help.aliyun.com/zh/model-studio/custom-plug-ins) 提供的校验工具。
 
 ## 来源文档
 
 - [插件](../../raw/application-user-guide/plug-in.md)
-
 
 

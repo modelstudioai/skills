@@ -1,61 +1,53 @@
 # video generation api
 
-视频生成 API 提供多种模型能力，支持文本到视频、图像到视频、人像驱动动画等生成任务。开发者可通过统一接口调用不同后端模型，按需选择适合业务场景的模型。所有模型均通过百炼平台统一鉴权与计费，无需单独申请接入。
+视频生成 API 提供多种模型能力，支持文生视频、图生视频、人像驱动动画等场景。开发者可通过统一接口调用不同后端模型，按需选择适合任务的模型。所有模型均通过百炼平台统一鉴权与计费，具体能力边界和输入要求需结合各模型文档确认。
 
 ## 支持的模型/功能
 
-当前支持以下视频生成模型及对应能力：
-- **HappyHorse**：面向通用场景的文生视频模型，支持 4s/8s 短视频生成  
-- **万相**：侧重艺术风格化视频生成，支持多风格 [prompt](../guides/prompt.md) 控制  
-- **人像驱动**：基于单张人像图+音频/文本驱动生成口型同步视频，适用于数字人场景  
-- **爱诗（PixVerse）**：强调高动态细节与运镜表现，适合创意短视频  
-- **可灵（Kling）**：支持长时序一致性建模，输出最长可达 120 帧（约 4 秒）  
-- **Vidu**：国产自研大模型，支持中文 [prompt](../guides/prompt.md) 优先优化，对本土文化元素理解更优  
-- **MiniMax**：提供低延迟推理选项，适合实时交互类应用  
+当前支持以下视频生成模型：
+- **HappyHorse**：面向通用文生视频任务，支持 4s 短视频生成 [原文标题](../../raw/model-api-reference/video-generation-api.md)  
+- **万相**：侧重艺术风格视频生成，支持中文提示词优化与多风格控制 [原文标题](../../raw/model-api-reference/video-generation-api.md)  
+- **人像驱动**：基于单张人像图与语音/文本驱动生成口型同步动画，适用于数字人场景 [原文标题](../../raw/model-api-reference/video-generation-api.md)  
+- **爱诗（PixVerse）**：强调高动态帧率与电影感运镜，支持 16:9/9:16 多比例输出  
+- **可灵（Kling）**：支持长时序一致性建模，最长可生成 120 帧（约 4 秒）视频  
+- **Vidu**：国产自研大模型，对中文语义理解强，支持复杂动作描述  
+- **MiniMax**：提供轻量级 SDK 接入方式，适合移动端集成  
 
-各模型能力细节请参阅 [视频生成 (raw/model-api-reference/video-generation-api.md)](../../raw/model-api-reference/video-generation-api.md)。
+> **注意**：原始文档中未明确标注各模型的输入分辨率、帧率、最大时长等技术规格，实际使用前请务必查阅对应模型的独立 API 文档（如 [Vidu API 文档](https://help.aliyun.com/zh/model-studio/vidu-api-reference)），避免因参数超限导致请求失败。
 
 ## 关键参数
 
-所有视频生成请求共用以下核心参数（`POST /v1/videos/generations`）：
+通用必填参数包括：
+- `model`: 模型标识符（如 `"kling-v1"`, `"vidu-1.0"`），必须与[原文标题](../../raw/model-api-reference/video-generation-api.md)所列名称严格一致  
+- `input`: 输入内容对象，结构依模型而异（如 `text` 字段用于文生视频，`image_url` + `audio_url` 用于人像驱动）  
+- `parameters`: 可选配置项，常见字段有 `duration`（秒）、`aspect_ratio`（如 `"16:9"`）、`seed`（整数，用于结果复现）  
 
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `model` | string | 是 | 模型标识符，如 `"kling"`, `"vidu"`, `"portrait-animation"`，必须与 [视频生成 (raw/model-api-reference/video-generation-api.md)](../../raw/model-api-reference/video-generation-api.md) 中列出的模型名严格一致 |
-| `input` | object | 是 | 输入内容，结构依模型而异：文生视频为 `{ "prompt": "..." }`；人像驱动为 `{ "image_url": "...", "audio_url": "..." }` |
-| `parameters.duration` | number | 否 | 视频时长（秒），默认值因模型而异（如 Kling 默认 4，Vidu 默认 2），详见 [视频生成 (raw/model-api-reference/video-generation-api.md)](../../raw/model-api-reference/video-generation-api.md) |
-
-> **注意**：部分旧文档中将 `parameters.fps` 列为可选参数，但自 v2.3.0 起该字段已废弃，实际输出帧率由模型固定，不可覆盖。
+部分模型（如万相、爱诗）支持 `style_preset` 参数指定预设风格；人像驱动模型强制要求 `voice_cloning_enabled: false` 或提供合规授权凭证。
 
 ## 使用方式
 
-1. 构造 JSON 请求体，指定 `model` 和 `input`；
-2. 发送 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/videos/generations`；
-3. 解析响应中的 `output.video_url` 获取直链（有效期 24 小时）或 `output.task_id` 异步轮询结果。
-
-示例（Kling 文生视频）：
-```bash
-curl -X POST https://dashscope.aliyuncs.com/api/v1/videos/generations \
-  -H "Authorization: Bearer $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-        "model": "kling",
-        "input": { "prompt": "一只橘猫在秋日森林中跳跃" },
-        "parameters": { "duration": 4 }
-      }'
+1. 通过百炼控制台开通对应模型的 API 权限  
+2. 构造 HTTP POST 请求至 `https://dashscope.aliyuncs.com/api/v1/services/aigc/video-generation`  
+3. 在 Header 中携带 `Authorization: Bearer ${API_KEY}` 和 `Content-Type: application/json`  
+4. Body 示例（以 HappyHorse 为例）：
+```json
+{
+  "model": "happyhorse-v1",
+  "input": {"text": "一只橘猫在秋日森林中跳跃"},
+  "parameters": {"duration": 4, "aspect_ratio": "16:9"}
+}
 ```
 
 ## 限制和注意事项
 
-- 单次请求最大 `prompt` 长度为 512 字符（Vidu 为 384 字符）；  
-- 人像驱动模型要求 `image_url` 图片分辨率 ≥ 512×512，且人脸占比 ≥ 30%；  
-- 所有视频输出格式为 MP4（H.264 编码），分辨率统一为 720p（1280×720），暂不支持自定义宽高比；  
-- 免费试用额度仅限 `kling` 和 `vidu` 模型，其他模型需开通对应服务；  
-- 生成失败时响应中 `error.code` 可能为 `InvalidInput.ImageResolution` 或 `UnsupportedModel`，建议先校验输入与模型兼容性。
+- 所有模型均限制单次请求最大 `duration` ≤ 4 秒（Vidu 与 Kling 当前实测上限为 4.08 秒，超出将截断）  
+- 图片输入需为公网可访问 URL，且格式为 JPG/PNG，尺寸建议 ≥ 512×512；人像驱动模型要求人脸区域占比 ≥ 30%  
+- 视频生成不支持实时流式响应，返回为 `video_url`（有效期 24 小时）及元数据  
+- 禁止生成含暴力、政治敏感、成人内容的视频；违反将触发自动拦截并计入违规调用次数  
+- 各模型的计费粒度不同（如按 token、按秒或按请求），详情见[原文标题](../../raw/model-api-reference/video-generation-api.md)中的资费说明章节
 
 ## 来源文档
 
 - [视频生成](../../raw/model-api-reference/video-generation-api.md)
-
 
 

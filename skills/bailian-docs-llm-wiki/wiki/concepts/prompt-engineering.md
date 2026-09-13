@@ -1,50 +1,39 @@
 # Prompt 工程
 
-Prompt 工程是指在百炼平台上系统性设计、验证、优化和复用提示词（Prompt）的方法论与实践体系，旨在通过结构化表达、变量抽象、反馈闭环和资产化管理，显著提升大模型输出的准确性、一致性、可控性与业务适配度。
+Prompt 工程是系统性设计、迭代与优化模型输入（Prompt）以稳定提升大语言模型输出质量、可控性与业务适配性的工程实践方法。它不是一次性指令编写，而是融合任务建模、模板结构化、变量注入、自动优化与效果验证的闭环工作流。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **模型调试与体验**：在「模型体验」界面中，Prompt 工程体现为对输入文本的精细化构造——开发者可快速尝试不同表述、角色设定或约束指令，并结合 `temperature`/`top_p` 等参数观察输出变化，形成初步 [prompt](../guides/prompt.md) 迭代闭环。  
-- **应用开发与部署**：在「应用开发」中，Prompt 工程落地为模板化能力——通过「Prompt 管理」创建带占位符（如 `{{input}}`、`{{context}}`）的可复用模板，绑定至 API 端点后，由变量注入驱动多场景复用（如客服问答、合同摘要、代码解释）。  
-- **RAG 与智能体构建**：在 RAG 应用中，Prompt 工程决定检索结果如何被有效整合——需显式设计系统提示（`system_prompt`）引导模型“仅依据以下知识作答”，并控制上下文拼接格式；在智能体工作流中，各节点的 Prompt 需定义清晰的输入/输出契约与错误处理逻辑。  
-- **资产中心统一治理**：Prompt 模板作为一类核心 AI 资产，在「资产中心」中支持版本管理、权限控制、标签分类与跨项目共享，实现从单点优化到组织级沉淀的升级。  
-- **生产环境持续优化**：启用 `enable_optimization=true` 后，系统基于真实调用日志与人工标注（“有用/无用”）自动重写低效 Prompt，适用于已发布至生产环境的模板，形成数据驱动的 [prompt](../guides/prompt.md) 自进化能力。
+- **基础模型调用**：通过 `POST /v3/services/{service_id}/call` 直接传入结构化 Prompt（如 `"你是一名客服专家，请基于以下知识回答用户问题：{{knowledge}}\n用户问：{{query}}"`），配合 `variables` 动态填充，实现轻量级任务定制。  
+- **LLM 应用构建**：在智能体或工作流应用中，Prompt 是应用的核心配置项——控制台中可为每个节点（如“意图识别”“摘要生成”）独立设置 Prompt 模板，并与 RAG 检索结果、工具调用返回值自动拼接，形成多阶段上下文链。  
+- **Prompt 自动优化**：对支持的模型（如 `qwen-max`、`qwen-plus`），启用 `enable_optimization: true` 后，平台基于历史调用反馈与效果指标（如人工评分、格式合规率）在线重写 Prompt，无需人工干预即可持续提效。  
+- **评测驱动调优**：在应用评测（Application Evaluation）或模型评测（Model Evaluation）中，Prompt 作为关键变量参与 A/B 测试——可批量对比不同 Prompt 版本在相同数据集上的准确率、幻觉率等指标，定位优化方向。  
+- **[多模态](multi-modal.md)与实时场景**：在 `qwen3.5-omni-plus-realtime` 等实时音视频模型中，Prompt 需严格遵循时序约束（如分段注入语音转文本结果 + 历史对话摘要），并配合 `system` 角色指令控制响应风格与延迟敏感度。
 
 ## 关键参数和配置
 
-| 参数名 | 类型 | 说明 | 推荐值/注意事项 |
-|--------|------|------|----------------|
-| `prompt_template_id` | string | 指定预存 Prompt 模板 ID；为空时使用默认模板 | 建议在生产环境显式指定，避免隐式依赖变更 |
-| `variables` | object | 模板中占位符对应的键值对，如 `{"input": "总结下文", "context": "..."}` | 变量值需经安全过滤，禁止传入可执行内容或外部 URL |
-| `enable_optimization` | boolean | 是否启用实时自动优化（语义重写+结构精简） | v3.2+ 默认关闭；仅对 `visibility=public` 或 `project` 且标记为“生产环境”的模板生效；需 ≥50 条有效反馈样本 |
-| `system_prompt` | string | （可选）全局行为约束，独立于用户输入，用于定义角色、格式、禁令等 | 企业级应用强烈建议设置，例如 `"你是一名银行合规客服，不提供投资建议，所有回答必须引用最新监管文件编号"` |
-| `max_tokens` / `temperature` 等 | — | 属于模型层采样参数，不影响 Prompt 解析逻辑，但共同决定最终输出质量 | 与 Prompt 协同调优：高 `temperature` 下需更强约束性 Prompt；长输出任务需预留足够 token 给 Prompt 本身 |
+- `prompt`：必需字符串，支持纯文本或 Jinja2 模板语法（如 `{{system}}\n{{history}}\n{{user}}`），最大长度 32768 字符；禁止使用 `{% include %}` 等外部引入语句。  
+- `variables`：可选对象，用于运行时安全填充模板变量（如 `{"query": "杭州天气", "knowledge": "今日多云，15–22℃"}`）；变量名不可与保留字段（`system`、`history`、`tools`）冲突。  
+- `enable_optimization`：布尔值，默认 `false`；设为 `true` 时触发平台级 Prompt 自动优化（仅限白名单模型且账户已开通权限）。  
+- `template_id`：可选字符串，引用控制台已发布的 Prompt 模板 ID，实现跨应用/跨团队复用与版本管理。  
+- `render_only`（调试专用）：调用 `/v3/prompt/render` 接口时启用，仅返回变量渲染后的最终 Prompt 文本，不触发模型推理，用于快速验证模板逻辑。
 
-> ⚠️ 注意：Prompt 总长度（含变量展开后）不得超过 8192 token；超长将被静默截断并返回警告头 `X-Prompt-Truncated: true`。
+> 提示：所有 Prompt 渲染后总长度（含变量展开）不得超过目标模型的 context 长度（如 `qwen-max` 为 32K tokens），建议在正式调用前先执行渲染预检。
 
 ## 面向开发者，简洁实用
 
-- ✅ **起步最快方式**：进入控制台「资产中心」→ 搜索“客服”“摘要”等关键词 → 复用已审核的 Prompt 样例 → 修改变量后一键部署到 API。  
-- ✅ **模板开发规范**：  
-  - 使用 `{{variable}}` 占位符，避免硬编码；  
-  - 在 `system_prompt` 中声明角色、边界与失败兜底逻辑（如“若信息不足，请明确回复‘暂无相关信息’”）；  
-  - 为多轮对话设计 `messages` 数组，首条 `role=user` 内容为完整 Prompt 模板，后续轮次保持上下文连贯。  
-- ✅ **调试技巧**：  
-  - 在「模型体验」页粘贴模板 + 示例变量，快速验证渲染效果；  
-  - 开启 `enable_optimization` 并标注 20+ 条反馈后，查看「Prompt 管理」页的“优化建议”卡片获取改写参考。  
-- ✅ **避坑提醒**：  
-  - 不要在 Prompt 中嵌入 `curl`、Python 代码或 `<script>` 标签——会被安全网关拦截；  
-  - 避免模糊指令（如“请好好回答”），改用具体动作（如“分三点列出，每点不超过20字”）；  
-  - RAG 场景中，`retrieval_config` 返回的 chunk 需在 Prompt 中显式标注来源（如 `[来源：2024年报P12]`），否则模型易幻觉。  
-
-Prompt 工程不是一次性配置，而是贯穿模型选型、应用上线与线上迭代的持续实践——善用模板、反馈、资产化与自动化，让每一次提示都更接近业务预期。
+- ✅ **起步建议**：从控制台「Prompt 模板」创建一个带 `{{input}}` 变量的基础模板，再通过 SDK 调用 `call` 接口传入 `template_id` 和 `variables`，避免硬编码。  
+- ✅ **调试必做**：每次修改模板后，先调用 `/v3/prompt/render` 查看实际渲染结果，确认变量填充无空值、格式无错位。  
+- ✅ **优化进阶**：对高价值场景（如客服应答、合同审核），开启 `enable_optimization` 并配合应用评测收集人工反馈，让平台自动收敛最优 Prompt。  
+- ❌ **避坑提醒**：勿在模板中使用复杂逻辑（如嵌套循环）、禁止动态加载外部内容；`system` 指令需前置且简明，避免与 `user` 指令语义重叠。  
+- 📊 **效果度量**：将 Prompt 版本号写入请求 `metadata` 字段，在应用评测报告中按版本聚合分析指标，建立 Prompt 迭代基线。
 
 ## 关联主题页
 
 - [prompt](../guides/prompt.md)
-- [asset center page](../guides/asset-center-page.md)
-- [model experience](../guides/model-experience.md)
-- [application use cases](../guides/application-use-cases.md)
+- [llm application](../guides/llm-application.md)
 - [use cases](../guides/use-cases.md)
+- [application evaluation](../guides/application-evaluation.md)
+- [model evaluation introduction](../guides/model-evaluation-introduction.md)
 
 

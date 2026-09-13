@@ -8,6 +8,195 @@
           "Text"
         ],
         "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "builtInToolMultiPrices": [
+        {
+          "supportedApi": "Responses API",
+          "name": "code_interpreter",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-code-interpreter",
+          "type": "code_interpreter",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Responses API",
+          "name": "web_extractor",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-extractor",
+          "type": "web_extractor",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_fetch",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-extractor",
+          "type": "web_fetch",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Responses API",
+          "name": "web_search",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-search",
+          "type": "web_search",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_search",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-search",
+          "type": "web_search_anthropic",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY"
+            }
+          ]
+        }
+      ],
+      "description": "DeepSeek-V4.1-Flash 是 DeepSeek 全新架构系列中的轻量旗舰模型，以 552B 总参数 MoE 实现越级智能，在多项基准上超越包括 DeepSeek-V4-Pro 在内的主流旗舰模型。采用 Causal Encoder-Decoder 非对称架构，输入激活仅 8B、输出激活 16B，并具备原生多模态视觉理解能力。KV Cache 压缩至上一代 HBM 的 1/4、SSD 的 1/8，显著降低长上下文与 Agent 任务成本。支持 1M 上下文与 384K 最大输出，兼顾高吞吐、低延迟与极致性价比。",
+      "features": [
+        "cache",
+        "function-calling",
+        "structured-outputs",
+        "web-search"
+      ],
+      "provider": "deepseek",
+      "model": "deepseek-v4.1-flash",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "1",
+          "timeBand": "offpeak",
+          "ntmAmountType": "input_token_offpeak",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2",
+          "timeBand": "peak",
+          "ntmAmountType": "input_token_peak",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "4",
+          "timeBand": "offpeak",
+          "ntmAmountType": "output_token_offpeak",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "8",
+          "timeBand": "peak",
+          "ntmAmountType": "output_token_peak",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.1",
+          "timeBand": "offpeak",
+          "ntmAmountType": "input_token_cache_offpeak",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.2",
+          "timeBand": "peak",
+          "ntmAmountType": "input_token_cache_peak",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 1200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 15000,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 1200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 15000,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "offpeak",
+        "peak"
+      ],
+      "capabilities": [
+        "TG",
+        "Reasoning"
+      ],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 393216,
+      "latestOnlineAt": "2026-09-12T16:13:01.000+00:00",
+      "contextWindow": 1000000,
+      "maxInputTokens": 1000000,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "DeepSeek-V4.1-Flash",
+      "category": "Third-party",
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "curl": "curl -X POST \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions\" \\\n  -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"deepseek-v4.1-flash\",\n    \"messages\": [\n      {\n        \"role\": \"user\",\n        \"content\": [\n          {\"type\": \"image_url\", \"image_url\": {\"url\": \"https://example.com/image.jpg\"}},\n          {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"}\n        ]\n      }\n    ]\n  }'",
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"deepseek-v4.1-flash\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\"type\": \"image_url\", \"image_url\": {\"url\": \"https://example.com/image.jpg\"}},\n                {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"},\n            ],\n        }\n    ],\n)\nprint(completion.choices[0].message.content)",
+            "nodejs": "import OpenAI from \"openai\";\n\nconst client = new OpenAI({\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n});\n\nconst completion = await client.chat.completions.create({\n  model: \"deepseek-v4.1-flash\",\n  messages: [\n    {\n      role: \"user\",\n      content: [\n        { type: \"image_url\", image_url: { url: \"https://example.com/image.jpg\" } },\n        { type: \"text\", text: \"请仅输出图像中的文本内容。\" },\n      ],\n    },\n  ],\n});\nconsole.log(completion.choices[0].message.content);",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-api-via-openai-chat-completions"
+          }
+        },
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation\" \\\n  -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"deepseek-v4.1-flash\",\n    \"input\": {\n      \"messages\": [\n        {\n          \"role\": \"user\",\n          \"content\": [\n            {\"image\": \"https://example.com/image.jpg\"},\n            {\"text\": \"请仅输出图像中的文本内容。\"}\n          ]\n        }\n      ]\n    }\n  }'",
+            "python": "import os\nimport dashscope\nfrom dashscope import MultiModalConversation\n\ndashscope.base_http_api_url = \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1\"\n\nresponse = MultiModalConversation.call(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    model=\"deepseek-v4.1-flash\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\"image\": \"https://example.com/image.jpg\"},\n                {\"text\": \"请仅输出图像中的文本内容。\"},\n            ],\n        }\n    ],\n)\nprint(response.output.choices[0].message.content)",
+            "nodejs": "const response = await fetch(\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation\", {\n  method: \"POST\",\n  headers: {\n    \"Authorization\": `Bearer ${process.env.DASHSCOPE_API_KEY}`,\n    \"Content-Type\": \"application/json\",\n  },\n  body: JSON.stringify({\n    model: \"deepseek-v4.1-flash\",\n    input: {\n      messages: [\n        {\n          role: \"user\",\n          content: [\n            { image: \"https://example.com/image.jpg\" },\n            { text: \"请仅输出图像中的文本内容。\" },\n          ],\n        },\n      ],\n    },\n  }),\n});\nconst data = await response.json();\nconsole.log(JSON.stringify(data, null, 2));",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-api-via-dashscope"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
           "Text"
         ]
       },

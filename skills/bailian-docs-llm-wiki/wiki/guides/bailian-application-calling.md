@@ -1,51 +1,50 @@
 # bailian application calling
 
-百炼平台支持通过 API 方式调用已发布的智能体应用（Agent Application）和工作流应用（Workflow Application），实现与业务系统的集成。调用过程需使用有效的 API Key 和应用 ID，并遵循统一的 HTTP 接口规范。所有调用均通过 `POST /v1/applications/{app_id}/call` 端点发起，请求体为 JSON 格式。
+百炼平台支持通过 API 方式调用已发布的智能体（Agent）应用和工作流（Workflow）应用，实现与业务系统的集成。调用过程需指定应用 ID、传入输入参数，并处理返回结果。所有调用均基于 HTTPS POST 请求，遵循统一的鉴权与错误响应规范。
 
 ## 支持的模型/功能
 
-- **智能体应用**：支持单步推理、多轮对话（需显式维护 `session_id`）、工具调用（如知识库检索、代码解释器等）；适用于客服助手、技术问答等场景。  
-- **工作流应用**：支持多节点编排（如条件分支、并行执行、子流程嵌套），可接入自定义函数节点与外部 API；适用于审批流、数据处理流水线等复杂逻辑场景。  
-- 两类应用均支持流式响应（`stream: true`），但工作流应用的[流式输出](../concepts/streaming.md)粒度取决于节点配置，详见 [应用调用](../../raw/application-user-guide/bailian-application-calling.md)。
+- **智能体应用**：支持单步或多轮对话式调用，适用于客服助手、知识问答等场景；详见 [应用调用](../../raw/application-user-guide/bailian-application-calling.md)。
+- **工作流应用**：支持多节点编排任务（如数据清洗→模型推理→结果格式化），可透传参数至各子节点；调用方式与智能体类似，但需注意输入结构兼容性，参考 [调用工作流应用](../../raw/application-user-guide/bailian-application-calling.md)。
+- **参数透传能力**：支持将用户请求中的 `input` 字段以 JSON 对象形式完整传递至应用内部，也可通过 `parameters` 字段显式覆盖应用默认配置；具体规则见 [应用的参数传递](../../raw/application-user-guide/bailian-application-calling.md)。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `app_id` | string | 是 | 应用唯一标识，在控制台「应用管理」中获取 |
-| `input` | object | 是 | 用户输入内容，结构由应用定义；智能体应用通常为 `{ "query": "..." }`，工作流应用需严格匹配入参 Schema |
-| `session_id` | string | 否 | 用于维持多轮上下文；同一 `session_id` 下的历史消息将被自动注入（仅对智能体应用生效） |
-| `stream` | boolean | 否 | 默认 `false`；设为 `true` 时返回 SSE 流式响应，适用于长响应或实时渲染场景 |
-| `parameters` | object | 否 | 覆盖应用发布时设置的默认参数（如温度、最大 token 数），具体字段以 [应用的参数传递](../../raw/application-user-guide/bailian-application-calling.md) 为准 |
+| `application_id` | string | 是 | 百炼控制台发布后的应用唯一 ID（非模型 ID） |
+| `input` | object | 是 | 用户输入内容，结构由应用定义（如 `{ "query": "你好" }`） |
+| `parameters` | object | 否 | 运行时覆盖参数，例如 `{"temperature": 0.3, "max_output_tokens": 512}` |
+| `stream` | boolean | 否 | 是否启用流式响应，默认 `false`；仅部分工作流应用支持 |
 
-> **注意**：`parameters` 中的 `top_p`、`temperature` 等采样参数对工作流应用无效，仅作用于底层 LLM 节点；若工作流中包含多个 LLM 节点，需在节点级单独配置，而非通过顶层 `parameters` 统一覆盖 —— 此行为与 [调用工作流应用](../../raw/application-user-guide/bailian-application-calling.md) 文档描述一致，但与旧版文档中“全局参数透传”的说法存在偏差，请以当前控制台实际行为为准。
+> **注意**：`parameters` 中的字段必须与应用所绑定模型的实际可配置参数一致；若应用绑定的是 Qwen2-72B-Instruct，则 `temperature`、`top_p` 等有效，但 `presence_penalty` 不被识别（该参数仅适用于部分旧版模型）。请以 [应用调用](../../raw/application-user-guide/bailian-application-calling.md) 中最新支持列表为准。
 
 ## 使用方式
 
-1. 获取 API Key：在百炼控制台「API 密钥管理」中创建并启用密钥；
+1. 获取 `application_id`：在百炼控制台「应用管理」中复制已发布应用的 ID；
 2. 构造请求：
    ```bash
-   curl -X POST "https://dashscope.aliyuncs.com/v1/applications/{app_id}/call" \
+   curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/application \
      -H "Authorization: Bearer $API_KEY" \
      -H "Content-Type: application/json" \
      -d '{
-           "input": {"query": "今天北京天气如何？"},
-           "session_id": "sess_abc123",
-           "stream": false
+           "application_id": "app-xxx",
+           "input": {"query": "解释量子纠缠"},
+           "parameters": {"temperature": 0.5}
          }'
    ```
-3. 解析响应：成功时返回 `200 OK`，响应体含 `output` 字段（结构由应用定义）及 `usage`（token 消耗统计）；流式响应需按 SSE 协议解析 `data:` 行。
+3. 解析响应：成功时返回 `output` 字段（含 `text` 或结构化 `data`），错误时返回标准 `code` 和 `message`。
 
 ## 限制和注意事项
 
-- 单次请求 `input` 内容长度上限为 100,000 字符，超出将返回 `400 Bad Request`；
-- `session_id` 生命周期为 24 小时，超时后上下文自动清空；智能体应用不支持跨 `session_id` 追溯历史；
-- 工作流应用若含异步节点（如定时触发、人工审核），`/call` 接口默认同步等待至首个阻塞点完成，**不等待最终结果**；如需最终状态，须调用独立的查询接口（见 [调用工作流应用](../../raw/application-user-guide/bailian-application-calling.md)）；
-- 所有调用受账户 QPS 与总 [Token](../concepts/token.md) 配额限制，配额可在控制台「用量管理」中查看。
+- 单次调用 `input` 总长度（UTF-8 编码）不得超过 100 KB；
+- 智能体应用默认最大对话轮数为 10 轮（含系统初始化消息），超出后需重置会话；
+- 工作流应用不支持跨应用状态共享，每次调用均为无状态执行；
+- 流式响应（`stream=true`）仅对输出含 `text` 字段的场景生效，结构化输出（如 JSON 表格）不支持流式；
+- 应用调用频控策略独立于模型 API，具体配额请查阅 [应用调用](../../raw/application-user-guide/bailian-application-calling.md) 的限流说明。
 
 ## 来源文档
 
 - [应用调用](../../raw/application-user-guide/bailian-application-calling.md)
-
 
 

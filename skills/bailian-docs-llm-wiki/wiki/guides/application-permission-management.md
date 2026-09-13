@@ -1,36 +1,44 @@
 # application permission management
 
-百炼平台的应用权限管理用于控制不同用户或角色对应用（如模型调用、工作流执行、数据访问等）的操作权限。它基于 RBAC（基于角色的访问控制）模型实现，支持细粒度的权限分配与继承。开发者可通过控制台或 OpenAPI 管理权限策略，确保最小权限原则落地。
+应用权限管理用于控制不同用户或角色对百炼应用的访问与操作权限，包括调用、配置、调试、发布等关键能力。它基于 RBAC（基于角色的访问控制）模型实现，支持细粒度的权限策略配置。权限策略通过平台控制台或 OpenAPI 进行管理，适用于多租户协作场景。
 
 ## 支持的模型/功能
 
-- **角色类型**：内置 `Admin`（全权限）、`Developer`（可编辑应用配置与调试）、`Viewer`（仅查看运行日志与结果）三类系统角色；支持自定义角色并绑定细粒度权限项（如 `app:invoke`、`app:edit-prompt`、`app:manage-tracing`）。  
-- **作用范围**：权限可作用于整个工作空间（Workspace-level）、单个应用（App-level）或特定版本（Version-level），其中 Version-level 权限仅在 [原文标题](../../raw/application-user-guide/application-permission-management.md) 中明确说明支持。  
-- **集成能力**：支持与阿里云 RAM 角色同步，但需注意 RAM 同步策略不覆盖 Version-level 权限设置——该限制在 [原文标题](../../raw/application-user-guide/application-permission-management.md) 的“权限继承规则”小节中有明确定义。
+- 支持为应用分配 **Viewer（只读）**、**Editor（编辑）**、**Admin（管理员）** 三类内置角色，也可通过自定义策略扩展权限范围  
+- 支持按用户、用户组或 RAM 角色绑定权限策略  
+- 支持对单个应用实例独立授权，不跨应用继承权限  
+- 权限作用域覆盖：应用调用（`invoke`）、调试（`debug`）、配置修改（`update`）、版本发布（`publish`）、日志查看（`view-logs`）等操作  
+- 详细能力矩阵可参考 [权限管理](../../raw/application-user-guide/application-permission-management.md) 中的表格说明
 
 ## 关键参数
 
-调用 `/v1/apps/{app_id}/permissions` 接口时需指定以下关键参数：  
-- `principal_type`: `user` / `ram_role` / `workspace_group`  
-- `principal_id`: 对应主体的唯一标识（如阿里云 UID 或 RAM Role ARN）  
-- `effect`: `allow`（必填，暂不支持 `deny`）  
-- `actions`: 字符串数组，例如 `["app:invoke", "app:read-config"]`；完整动作列表见 [原文标题](../../raw/application-user-guide/application-permission-management.md) 附录 A。
+调用 `UpdateApplicationPermission` 或 `CreateApplicationPolicy` API 时需指定以下核心参数：
+
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `ApplicationId` | string | 是 | 应用唯一标识符（如 `app-xxx`） |
+| `Principal` | object | 是 | 授权主体，含 `Type`（`User`/`Group`/`RAMRole`）和 `Id`（如 `alice@aliyun.com`） |
+| `Actions` | string[] | 是 | 允许的操作列表，例如 `["invoke", "debug"]`；完整列表见 [权限管理](../../raw/application-user-guide/application-permission-management.md) |
+| `Effect` | string | 否 | 默认 `"Allow"`；暂不支持 `"Deny"` 策略（当前仅支持显式授权） |
+
+> **注意**：文档中提及的 `Effect: "Deny"` 在 v2.3.0+ 版本已移除支持，实际调用将返回 `InvalidParameter.EffectNotSupported` 错误；该信息在 [权限管理](../../raw/application-user-guide/application-permission-management.md) 中未同步更新，请以 OpenAPI 文档为准。
 
 ## 使用方式
 
-1. **控制台操作**：进入「应用详情页 → 权限管理」标签页，点击「添加权限」，选择主体、作用域和权限动作后保存。  
-2. **OpenAPI 调用**：使用 `PUT /v1/apps/{app_id}/permissions` 提交 JSON body（含 `principal_type`, `principal_id`, `effect`, `actions`）；调用前需确保 AK/SK 具备 `bailian:UpdateAppPermission` 权限。  
-3. **批量配置**：通过 `POST /v1/workspaces/{workspace_id}/permissions/batch` 批量为多个应用设置相同权限策略（仅限 Workspace-level 和 App-level）。
+1. **控制台操作**：进入「应用详情页 → 权限管理」标签页，点击「添加成员」，选择用户/用户组并勾选对应权限项  
+2. **OpenAPI 调用**：使用 `UpdateApplicationPermission`（批量更新）或 `CreateApplicationPolicy`（单策略创建）接口，推荐使用前者以避免策略冲突  
+3. **Terraform 集成**：通过 `alicloud_bailian_application_permission` 资源声明式管理（需 provider >= 1.15.0）  
+4. 权限变更后**立即生效**，无需重启应用或刷新缓存；调试界面中的「测试调用」按钮可见性由当前用户对该应用的 `invoke` + `debug` 权限共同决定  
 
 ## 限制和注意事项
 
-- 单个应用最多绑定 500 条权限策略（含继承策略），超出后 API 返回 `400 Bad Request`。  
-- Version-level 权限**不继承**父应用的权限，且无法通过控制台 UI 创建（仅 OpenAPI 支持），此行为与早期文档中“所有层级权限均支持图形化配置”的描述存在冲突；> **注意**：该过时描述已从最新版 [原文标题](../../raw/application-user-guide/application-permission-management.md) 中移除，请以当前 API 文档为准。  
-- 删除应用时，其绑定的所有权限策略将被级联清除，但 Workspace-level 权限不受影响。
+- 单个应用最多绑定 100 个权限策略（含用户级与组级）  
+- RAM 角色授权仅支持阿里云主账号下的可信实体角色，不支持外部身份提供商（IdP）映射的角色  
+- 删除用户账号后，其绑定的应用权限**不会自动清理**，需手动解除或通过 `DeleteApplicationPermission` 清理，否则可能造成权限残留  
+- 所有权限操作均记录于 ActionTrail 审计日志，事件名称为 `BaiLianApplicationPermissionModified`；审计字段细节参见 [权限管理](../../raw/application-user-guide/application-permission-management.md)
 
 ## 来源文档
 
 - [权限管理](../../raw/application-user-guide/application-permission-management.md)
-
 
 

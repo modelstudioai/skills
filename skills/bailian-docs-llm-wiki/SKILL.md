@@ -171,20 +171,6 @@ description: >-
 | **按家族筛选**：按 primaryCapability / providers / itemCount / maxContextWindow 找家族 | `models/families.jsonl`（一行一家族，含 items[] 摘要） |
 | 模型家族总览 / 按能力分桶浏览         | `models/index.md`                                        |
 | 主题页 / API 文档（按功能领域查找）    | `wiki/index.md`（完整索引入口）                          |
-| 函数调用 | `wiki/concepts/function-calling.md` |
-| 检索增强生成 | `wiki/concepts/rag.md` |
-| 流式输出 | `wiki/concepts/streaming.md` |
-| OpenAI 兼容接口 | `wiki/concepts/openai-compatibility.md` |
-| Token | `wiki/concepts/token.md` |
-| Prompt 工程 | `wiki/concepts/prompt-engineering.md` |
-| 多模态 | `wiki/concepts/multi-modal.md` |
-| 模型部署 | `wiki/concepts/model-deployment.md` |
-| 语音合成与语音识别对比 | `wiki/comparisons/speech-synth-vs-recognition.md` |
-| 图像、视频与3D生成能力对比 | `wiki/comparisons/image-video-3d-generation.md` |
-| 模型部署方式对比：托管服务 vs 自定义生产部署 | `wiki/comparisons/model-deployment-options.md` |
-| 知识库与记忆库功能对比 | `wiki/comparisons/knowledge-base-vs-memory-library.md` |
-| 应用调用与插件机制对比 | `wiki/comparisons/application-calling-vs-plug-in.md` |
-| 向量检索与数据连接能力对比 | `wiki/comparisons/vector-sort-vs-data-connection.md` |
 
 > 实际文件名以 `wiki/index.md` 为准；上表若有出入应回到索引页查找。
 
