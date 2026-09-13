@@ -1,39 +1,45 @@
 # llm application
 
-`llm application` 是百炼平台中用于封装和部署大语言模型能力的核心应用类型，支持从低代码智能体到高代码定制化服务的多种形态。开发者可通过配置或编码方式快速构建面向终端用户的 LLM 服务，适用于对话、问答、工作流编排等场景。所有应用均运行在百炼统一的推理与调度基础设施之上。
+`llm application` 是百炼平台提供的面向大语言模型应用的统一构建与部署能力，支持从低代码智能体到高代码定制化应用的全栈开发范式。开发者可通过可视化编排或代码集成方式快速构建生产级 LLM 应用，底层自动对接模型服务、RAG、工具调用等核心能力。该能力在 [应用开发](../../raw/application-user-guide/llm-application.md) 文档中有基础分类说明。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-- **智能体应用（Agent）**：分为 Agent 1.0（基础单步调用）和 Agent 2.0（支持多工具协同、状态管理与异步执行），详见 [应用开发](../../raw/application-user-guide/llm-application.md)  
-- **工作流应用**：通过可视化节点编排实现多模型/多步骤逻辑，支持条件分支、循环与外部 API 集成  
-- **高代码应用**：允许开发者上传自定义 Python 代码（含 FastAPI 入口），完全控制输入/输出协议与业务逻辑  
-- **文件问答应用**：专用于文档解析与[检索增强生成](../concepts/rag.md)（RAG），支持 PDF/Word/Excel 等格式，底层调用百炼内置文档解析引擎  
-
-> **注意**：[应用开发](../../raw/application-user-guide/llm-application.md) 中提及的“新版智能体应用（Agent 2.0）”已全面替代 Agent 1.0，后者仅保留兼容性支持，新项目应优先使用 Agent 2.0。
+- **应用类型**：支持五类应用形态，包括智能体应用（Agent 1.0 和 Agent 2.0）、工作流应用、高代码应用、文件问答应用；其中 Agent 2.0 为当前主推架构，具备更灵活的工具编排与状态管理能力。详细对比见 [应用开发](../../raw/application-user-guide/llm-application.md)。
+- **模型接入**：所有应用类型均支持调用百炼托管的主流开源及自研模型（如 Qwen 系列），也可通过 `custom_model` 参数接入用户自有 API 模型服务。
+- **扩展能力**：原生支持 RAG（知识库检索）、[函数调用](../concepts/function-calling.md)（Function Calling）、多轮对话上下文管理、异步流式响应等关键功能。
 
 ## 关键参数
 
-- `model_id`：必需，指定后端使用的模型 ID（如 `qwen-max`, `qwen-plus`），需与应用类型兼容（例如 Agent 2.0 要求模型支持 function calling）  
-- `input_schema`：可选，JSON Schema 格式，用于声明输入字段结构与校验规则，影响前端表单生成与 API 参数校验  
-- `output_schema`：可选，同上，用于约束输出结构并支持自动 JSON 解析  
-- `timeout`：默认 30s，最大支持 300s；工作流应用中各节点可单独设置超时  
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `app_id` | string | 是 | 百炼控制台创建应用后分配的唯一 ID，用于路由至对应应用实例 |
+| `input` | object | 是 | 用户输入，结构为 `{ "query": "..." }`；文件问答类需额外传入 `file_ids` 数组 |
+| `stream` | boolean | 否 | 默认 `false`；设为 `true` 时返回 SSE 流式响应 |
+| `parameters` | object | 否 | 覆盖应用配置中的推理参数，如 `temperature`, `top_p`, `max_tokens` 等 |
+
+> **注意**：`parameters` 中的 `max_tokens` 在工作流应用中实际受节点级限流约束，与 [应用开发](../../raw/application-user-guide/llm-application.md) 所述全局生效存在差异，应以节点配置为准。
 
 ## 使用方式
 
-1. **控制台创建**：进入 Model Studio → 应用管理 → 新建应用 → 选择类型（如“智能体应用”）→ 配置模型、提示词、工具等 → 发布  
-2. **API 调用**：发布后获取 `app_id`，通过 `/v1/applications/{app_id}/chat` 接口发起请求（需携带 `Authorization: Bearer <api_key>`）  
-3. **SDK 集成**：推荐使用 `dashscope` Python SDK（v1.18.0+），调用 `Application.call()` 方法，自动处理鉴权、重试与流式响应解析，参考 [应用开发](../../raw/application-user-guide/llm-application.md) 中的示例代码片段  
+1. **创建应用**：在百炼控制台「应用管理」中选择类型（如「智能体应用」），完成提示词、知识库、工具等配置并发布；
+2. **调用接口**：使用 SDK 或 HTTP POST 请求 `/v1/applications/{app_id}/chat`，示例：
+   ```bash
+   curl -X POST https://dashscope.aliyuncs.com/api/v1/applications/<app_id>/chat \
+     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{"input":{"query":"你好"},"stream":false}'
+   ```
+3. **调试与监控**：通过控制台「调用日志」查看 trace 详情，支持按 `app_id` + `request_id` 追踪完整链路。
 
 ## 限制和注意事项
 
-- 单次请求最大上下文长度受所选模型限制（如 `qwen-max` 为 32768 tokens），应用层不额外截断，需自行控制输入长度  
-- 文件问答应用单次上传文件总数 ≤ 10，总大小 ≤ 50MB；解析后的文本块将按 chunk size（默认 512）切分并索引  
-- Agent 2.0 应用不支持直接调用非百炼托管的外部模型（如自部署 vLLM 实例），如需混合调度，须通过高代码应用封装  
-- 所有应用默认启用敏感词过滤与内容安全审核，不可关闭；若需绕过（如内部测试），需提交工单申请白名单，详见 [应用开发](../../raw/application-user-guide/llm-application.md) 的“安全策略”章节
+- 单次请求 `input.query` 长度上限为 32768 字符；文件问答类单次最多上传 10 个文件（总大小 ≤ 512 MB）；
+- Agent 2.0 应用不兼容 Agent 1.0 的旧版工具定义格式，迁移需重写工具 Schema；
+- 高代码应用的自定义代码运行环境仅支持 Python 3.9，且禁止执行系统命令、网络外连（除白名单 API 外）；
+- 所有应用默认启用内容安全过滤，若需关闭需在应用配置中显式设置 `enable_safety_check: false` —— 此行为已在新版文档中明确，但部分旧版示例未同步更新，请以 [应用开发](../../raw/application-user-guide/llm-application.md) 最新描述为准。
 
 ## 来源文档
 
 - [应用开发](../../raw/application-user-guide/llm-application.md)
-
 
 

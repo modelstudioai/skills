@@ -64,18 +64,16 @@
 - [OpenAI 兼容接口](concepts/openai-compatibility.md) — 关联 4 个主题
 - [Prompt 工程](concepts/prompt-engineering.md) — 关联 5 个主题
 - [Token](concepts/token.md) — 关联 5 个主题
-- [函数调用](concepts/function-calling.md) — 关联 6 个主题
-- [多模态](concepts/multi-modal.md) — 关联 6 个主题
+- [函数调用](concepts/function-calling.md) — 关联 5 个主题
+- [多模态](concepts/multi-modal.md) — 关联 5 个主题
 - [检索增强生成](concepts/rag.md) — 关联 5 个主题
 - [模型部署](concepts/model-deployment.md) — 关联 5 个主题
-- [流式输出](concepts/streaming.md) — 关联 6 个主题
+- [流式输出](concepts/streaming-output.md) — 关联 5 个主题
 
 ## 对比分析
 
-- [向量检索与数据连接能力对比](comparisons/vector-sort-vs-data-connection.md) — 对比 2 个主题
-- [图像、视频与3D生成能力对比](comparisons/image-video-3d-generation.md) — 对比 3 个主题
-- [应用调用与插件机制对比](comparisons/application-calling-vs-plug-in.md) — 对比 3 个主题
-- [模型部署方式对比：托管服务 vs 自定义生产部署](comparisons/model-deployment-options.md) — 对比 3 个主题
-- [知识库与记忆库功能对比](comparisons/knowledge-base-vs-memory-library.md) — 对比 2 个主题
-- [语音合成与语音识别对比](comparisons/speech-synth-vs-recognition.md) — 对比 3 个主题
+- [实时 API 方案对比：Omni Realtime API vs Realtime API User Guide](comparisons/realtime-api-comparison.md) — 对比 2 个主题
+- [应用构建核心能力对比：Knowledge Base vs Memory Library vs Vector and Sort](comparisons/application-building-blocks.md) — 对比 3 个主题
+- [模型可观测性对比：Model Evaluation Introduction vs Model Monitoring vs Application Evaluation](comparisons/model-evaluation-monitoring.md) — 对比 3 个主题
+- [模型部署方式对比：Model Deployment 1 vs Model High Speed Inference vs Model Compression](comparisons/model-deployment-options.md) — 对比 3 个主题
 

@@ -1,46 +1,47 @@
 # 多模态
 
-多模态（Multimodal）指模型能够同时理解、生成或联合处理两种及以上类型的数据模态（如文本、图像、音频、视频、3D结构等），并建模其跨模态语义关联。在百炼平台中，多模态能力不是单一模型的专属特性，而是贯穿于多个模型族与服务层级的系统性设计原则。
+多模态（Multimodal）指模型能够同时理解、生成或协同处理两种及以上类型的数据模态（如文本、图像、音频、视频、3D 网格等），并建立跨模态语义关联的能力。在百炼平台中，多模态不是单一模型类别，而是贯穿于多个 AIGC 能力的核心设计范式，体现为输入支持混合模态、输出可跨模态对齐、以及底层模型具备统一的多模态表征空间。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **图像生成**：Qwen-VL / Qwen2-VL 系列模型原生支持“图文联合理解+生成”，可接受图文混合输入（如带标注图的 [prompt](../guides/prompt.md)）并输出符合语义一致性的图像；`creative-tools-v1` 则通过显式传入 `input.image_url` + `input.prompt` 实现图生图、局部重绘等强多模态编辑任务。  
-- **视频生成**：`kling`、`vidu`、`portrait-animation` 等模型均依赖文本+时序视觉信号的联合建模；人像驱动类模型更要求图像（人脸）与音频（语音）双输入对齐口型与表情，是典型的多模态对齐任务。  
-- **3D生成**：Tripo-3D 支持 `text-to-3D` 和 `image-to-3D` 两种输入路径，同一模型统一处理语言描述与单视角图像，输出结构化三维网格（GLB），体现跨模态到几何空间的映射能力。  
-- **音频处理**：`musicgen-v1` 接收纯文本 [prompt](../guides/prompt.md) 生成音乐，属文本→音频模态转换；`voice-translation` 则串联 ASR（音频→文本）与 TTS（文本→音频），构成端到端语音→语音多模态流水线。  
-- **模型体验界面**：提供统一入口支持图文混输（如上传图片+提问）、音视频上传+指令等交互方式，底层自动路由至适配的多模态模型，并可视化各模态输入/输出，便于快速验证跨模态行为。  
-- **应用广场**：通义 UI Agent（截图+自然语言指令→操作决策）、通义听悟Agent（会议录音+文本摘要→结构化纪要）等预置应用，均以多模态协同为默认工作模式，开发者无需自行拼接 pipeline。
+- **图像生成**：部分模型（如 Qwen-VL 系列）支持图文混合输入（text + image），实现条件化生成（例如“将这张草图渲染为写实风格”）；万相、Z-Image 等虽以文生图为主，但其编辑能力（局部重绘、风格迁移）隐式依赖图像特征与文本指令的对齐，属于多模态协同工作流。
+  
+- **视频生成**：Vidu、Kling、HappyHorse 等模型原生支持「文+图」双输入（如 `input: {text: "...", image_url: "..."}`），用于构图引导或动作锚定；人像驱动类模型则严格要求「图像 + 音频/文本」联合输入，实现口型-语音-表情的跨模态同步。
 
-> ⚠️ 注意：并非所有模型都支持任意模态组合。例如，WanX 图像模型仅支持文生图，不接受图像输入；ASR 模型仅接受音频输入，不理解 [prompt](../guides/prompt.md) 文本。务必查阅具体模型文档确认其支持的输入模态类型与格式约束。
+- **3D 生成**：Tripo-3D 明确提供 `text-to-3D` 和 `image-to-3D` 两种路径，同一模型共享底层多模态编码器，能将语言描述或单张 RGB 图映射至统一的 3D 潜在空间，是典型的多模态生成范例。
+
+- **音频生成**：音乐生成（`musicgen-2b`）接受文本 [prompt](../guides/prompt.md) + 风格标签（如 `"jazz, upbeat, piano solo"`），将语义意图转化为时序音频信号；语音对话（Voice Chat）则串联 ASR（语音→文本）、LLM（文本理解与推理）、TTS（文本→语音）三阶段，构成端到端多模态闭环。
+
+- **模型体验界面**：统一支持上传图片/音频/视频文件并配合文本 [prompt](../guides/prompt.md) 进行交互，自动识别输入模态组合，并路由至适配的全模态模型（如 `qwen2-vl`, `omni-modal`），开发者可零代码验证跨模态能力边界。
+
+> ✅ 关键判断标准：若一个 API 的 `input` 字段允许同时包含 `text` 和 `image_url`（或 `audio_url`、`video_url`），且文档明确标注“支持多模态输入”或“图文混合理解”，即属多模态能力；仅支持单一模态输入（如纯 text 或纯 image）的模型，即使输出为多模态（如文生图），也不属于本概念定义下的多模态模型。
 
 ## 关键参数和配置
 
-多模态调用本身无全局统一参数，但以下参数在跨模态任务中高频出现且需特别注意：
+多模态任务本身无全局独有参数，但以下参数在跨模态场景中尤为关键，需按模型文档严格校验：
 
-| 参数 | 所在接口 | 说明 | 实际影响示例 |
-|------|----------|------|--------------|
-| `input`（object） | `/v1/images/generations`, `/v1/videos/generations`, `/v1/models/tripo-3d:generate`, `/api/v1/audio/transcribe` 等 | **核心多模态输入容器**。结构完全由模型决定：<br>• 文生图：`{"prompt": "..."}`<br>• 图生图：`{"prompt": "...", "image_url": "..."}`<br>• 人像驱动：`{"image_url": "...", "audio_url": "..."}`<br>• ASR：`{"audio_url": "..."}` 或 `{"audio_bytes": "base64..."}` | 错误嵌套（如将 `image_url` 放在 `input.prompt` 下）将导致 `400 Bad Request` |
-| `response_format` | 多数 API | 控制返回内容形式：<br>• `"json"`（默认）：返回结构化结果（含 URL、文本等）<br>• `"b64_json"`：对图像/音频等二进制结果返回 base64 编码字符串（避免多次 HTTP 请求） | 调用 `creative-tools-v1` 时若需直接获取编辑后图像字节流，必须显式设置 `"response_format": "b64_json"` |
-| `seed` | 图像/视频/3D/音乐生成类 API | 随机种子，用于复现多模态生成结果。**跨模态任务中 seed 对所有输入模态生效**（如固定 seed 后，同一图文输入始终生成相同图像） | 在 A/B 测试多模态 prompt 效果时，建议固定 `seed` 以排除随机性干扰 |
-| `model` | 全局必填 | **决定多模态能力边界的关键标识符**。同一任务（如“生成图像”）下不同 model 支持的输入模态不同：<br>• `qwen-vl-plus`：支持图文输入<br>• `wanx-v1`：仅支持文本输入<br>• `creative-tools-v1`：强制要求图像+文本输入 | 误选 model 是多模态调用失败的最常见原因（如用 `wanx-v1` 传 `image_url` 将被拒绝） |
-
-> ✅ 最佳实践：调用前始终查阅目标 `model` 的官方文档（如 [图像生成](../../raw/model-api-reference/image-generation.md)），确认其支持的 `input` 字段结构、必填项及模态组合规则。不要依赖通用参数模板。
+| 参数名 | 说明 | 注意事项 |
+|--------|------|----------|
+| `input` | **核心多模态字段**：结构为 JSON 对象，必须显式声明模态类型及内容。常见形式：<br>• `{ "text": "..." }`<br>• `{ "text": "...", "image_url": "https://..." }`<br>• `{ "image_url": "...", "audio_url": "..." }` | • 所有 URL 必须为公网可访问 HTTPS 链接<br>• 图像建议 ≥512×512，宽高比接近 1:1（3D/视频场景）<br>• 音频需为 PCM/WAV/MP3，采样率匹配模型要求（如语音对话强制 16kHz） |
+| `model` | 必须选择明确支持多模态的模型标识符，例如：<br>• `qwen2-vl`（视觉语言理解）<br>• `vidu-1.0`（文图视频统一建模）<br>• `tripo-3d`（文图→3D）<br>• `kling-v1`（文图→视频） | ❌ 不支持将单模态模型（如 `qwen-turbo`）用于多模态输入，会返回 `400 InvalidInput` |
+| `seed` | 启用结果可复现性。多模态生成中，相同 `seed` + 相同 `input`（含图像/音频二进制哈希一致）可保证输出一致性。 | 部分轻量模型（如某些 TTS）可能不支持 `seed`，调用前请查阅对应模型文档 |
+| `parameters.guidance_scale` | 控制文本 [prompt](../guides/prompt.md) 对生成过程的约束强度（常见于扩散类多模态模型）。值越高，输出越贴近 prompt，但可能牺牲多样性。典型范围：3.0–15.0。 | 仅对支持 Classifier-Free Guidance 的模型生效（如 WanX、Kling），Qwen-VL 类理解模型不适用此参数 |
 
 ## 面向开发者，简洁实用
 
-- 多模态 ≠ 万能输入：每个模型只支持其训练所覆盖的模态组合，**严格按文档定义构造 `input` 对象**，不猜测、不试错。  
-- URL 优先：所有媒体文件（图像/音频/视频）首选 `xxx_url` 字段传公网可访问链接（HTTPS），避免 base64 编码带来的体积膨胀与解析开销。  
-- 安全合规：上传文件须符合平台白名单格式（PNG/JPEG/WAV/MP3/MP4），且不含可执行内容；多模态 prompt 中避免敏感词与违法信息。  
-- 调试技巧：在「模型体验」界面中先用真实图文/音视频样本测试，观察输入解析是否正确（如图像是否显示、音频波形是否加载），再迁移至代码调用。  
-- 错误定位：当多模态请求失败时，优先检查 `error.code`（如 `InvalidInput.ImageResolution`, `UnsupportedModel`, `InvalidInput.AudioFormat`），而非仅看 HTTP 状态码。
+- **第一步：确认模型能力** —— 查阅 [模型体验](../../raw/model-user-guide/model-experience.md) 或各领域 API 文档，认准 “支持多模态输入”、“图文混合理解”、“文图视频统一建模” 等明确表述，勿凭模型名称推测。
+- **第二步：构造 input 对象** —— 严格按文档要求组织 JSON 结构，避免混用字段（如向 `tripo-3d` 传 `audio_url`）；图像/音频 URL 请提前测试可访问性。
+- **第三步：调试与容错** —— 多模态请求失败常见原因：① `input` 字段格式错误（JSON 解析失败）；② URL 不可达或超时；③ 模态组合不被模型支持（如对 `paraformer-v1` 传 `image_url`）。优先检查响应中的 `error.code`（如 `invalid_input`、`unsupported_modality`）。
+- **第四步：生产集成建议** —— 对延迟敏感场景（如实时数字人），优先选用专有多模态模型（如人像驱动）而非拼接 ASR+LLM+TTS；对版权敏感内容，注意多模态输入中图像/音频也需符合《AIGC内容安全规范》。
+
+多模态是百炼平台实现“一个接口、多种输入、一致体验”的技术基座。善用它，即可用统一范式打通文本、视觉、听觉与空间智能的生成链路。
 
 ## 关联主题页
 
 - [image generation](../api/image-generation.md)
-- [audio api references](../api/audio-api-references.md)
 - [video generation api](../api/video-generation-api.md)
 - [3d generation](../api/3d-generation.md)
+- [audio api references](../api/audio-api-references.md)
 - [model experience](../guides/model-experience.md)
-- [application gallery](../guides/application-gallery.md)
 
 

@@ -1,40 +1,39 @@
 # prompt
 
-Prompt 是百炼平台中用于引导大模型生成预期输出的核心输入机制，支持模板化、自动化优化与人工反馈迭代。开发者可通过结构化 Prompt 设计提升模型响应的准确性、一致性与可控性。所有 Prompt 功能均依托于百炼统一的推理服务接口，与模型选型深度解耦。
+Prompt 是百炼平台中用于引导大模型生成预期输出的核心输入机制，支持模板化、自动化优化与人工反馈迭代。开发者可通过结构化文本明确任务目标、上下文约束和格式要求，从而提升模型响应的准确性与一致性。所有 Prompt 操作均需通过 API 或控制台调用，底层由百炼统一的推理服务调度执行。
 
 ## 支持的模型与功能
 
-当前所有百炼托管模型（包括 Qwen 系列、Baichuan、GLM 等）均原生支持 Prompt 输入，无需额外适配。核心功能包括：  
-- **Prompt 模板管理**：提供预置模板库与自定义模板能力，支持变量占位符（如 `{{input}}`）和多轮上下文注入；  
-- **自动优化**：基于历史调用日志与反馈数据，对低效 Prompt 进行语义重写与结构精简；  
-- **反馈驱动优化**：允许用户对单次响应标注“有用/无用”，系统据此微调模板权重 [Prompt自动优化](../../raw/application-user-guide/prompt.md)；  
-- **样例库集成**：内置覆盖客服、摘要、代码生成等场景的 Prompt 样例，可一键复用或二次编辑 [Prompt样例库](../../raw/application-user-guide/prompt.md)。
+当前所有接入百炼平台的模型（包括 Qwen 系列、Qwen-VL、Qwen-Audio 及第三方托管模型）均支持基础 Prompt 输入。高级功能如 Prompt 自动优化、模板版本管理、多轮上下文注入等，仅对 [Prompt自动优化](../../raw/application-user-guide/prompt.md) 和 [Prompt模板概述](../../raw/application-user-guide/prompt.md) 中声明的模型生效（如 qwen-max、qwen-plus）。非标模型或自定义部署实例可能不支持模板变量解析（如 `{{input}}`）与条件块语法。
 
 ## 关键参数
 
-在 API 调用或控制台配置中，以下参数直接影响 Prompt 行为：  
-- `prompt_template_id`（string）：指定模板 ID，为空时使用默认模板；  
-- `variables`（object）：传入模板中占位符对应的键值对，如 `{"input": "总结下文", "context": "..."}`；  
-- `enable_optimization`（boolean）：启用后触发实时自动优化逻辑，仅对已标记为“生产环境”的模板生效；  
-- `temperature` / `top_p` 等采样参数仍独立作用于模型层，不改变 Prompt 解析逻辑。  
-> **注意**：`enable_optimization` 在 v3.2+ 版本中默认关闭，旧版文档中“默认开启”描述已过时，请以 [自定义Prompt模板](../../raw/application-user-guide/prompt.md) 中最新参数说明为准。
+- `prompt`：必需字符串，可为纯文本或含 Jinja2 语法的模板（如 `{{system}}\n{{user}}`），最大长度 32768 字符  
+- `variables`：可选对象，用于运行时填充模板变量（如 `{"input": "杭州天气如何？"}`）  
+- `enable_optimization`：布尔值，默认 `false`；设为 `true` 时触发 [Prompt自动优化](../../raw/application-user-guide/prompt.md) 流程（仅限白名单模型）  
+- `template_id`：可选字符串，引用已发布的模板 ID（需提前在控制台创建）
+
+> **注意**：文档中提及的 `prompt_feedback_optimization` 参数在 v3.2+ SDK 中已弃用，实际应使用 `/v3/prompt/feedback` 独立接口提交反馈，详见 [Prompt反馈优化](../../raw/application-user-guide/prompt.md) 的最新说明。
 
 ## 使用方式
 
-1. **控制台操作**：进入「应用开发」→「Prompt 管理」，创建/导入模板，设置变量映射后绑定至 API 端点；  
-2. **API 调用**：在 `/v1/chat/completions` 请求体中，将完整 Prompt 字符串（或模板 ID + variables）置于 `messages[0].content` 字段；  
-3. **SDK 集成**：Python SDK 提供 `PromptTemplate.render()` 方法渲染变量，返回标准消息格式，兼容所有百炼模型客户端。
+1. **直接传入**：适用于简单场景，`prompt` 字段填入完整指令（如 `"请用中文总结以下文本：{text}"`）  
+2. **模板复用**：调用前通过控制台创建模板并获取 `template_id`，API 请求中指定该 ID 与 `variables`  
+3. **自动优化启用**：在请求中设置 `enable_optimization: true`，系统将基于历史效果数据重写 Prompt（需模型支持且账户开通权限）  
+
+所有方式均通过 `POST /v3/services/{service_id}/call` 接口提交，响应中 `optimized_prompt` 字段仅在启用优化且成功时返回。
 
 ## 限制和注意事项
 
-- 单次请求中 `messages[0].content` 的 Prompt 总长度（含变量展开后）不得超过 8192 token，超长将被截断并返回警告；  
-- 自动优化功能依赖至少 50 条有效反馈样本，新模板首次启用需预留冷启动周期；  
-- 模板中禁止嵌入可执行代码或外部 HTTP 调用指令，该类内容将被安全网关拦截；  
-- 所有 Prompt 操作均受项目级权限控制，`prompt:read` 和 `prompt:manage` 权限需显式授予。
+- 单次请求中 `prompt` + `variables` 渲染后总长度不得超过模型 context 长度（如 qwen-max 为 32K tokens）  
+- Jinja2 模板中禁止使用 `{% include %}`、`{% from %}` 等可能引入外部依赖的语句，否则触发安全拦截  
+- 启用 `enable_optimization` 后，首次调用延迟增加 200–500ms，且不保证每次优化结果可复现（依赖在线学习策略）  
+- 模板变量名不可与保留字段冲突（如 `system`、`history`、`tools`），否则行为未定义  
+
+如需调试模板渲染结果，建议先调用 `/v3/prompt/render` 接口预览输出，避免因变量缺失导致空渲染。
 
 ## 来源文档
 
 - [Prompt](../../raw/application-user-guide/prompt.md)
-
 
 

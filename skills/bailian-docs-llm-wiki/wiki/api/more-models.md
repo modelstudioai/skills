@@ -1,51 +1,59 @@
 # more models
 
-百炼平台持续扩展模型能力，除基础大语言模型外，还提供面向垂直场景的专用模型，覆盖法律、多语言翻译、深度研究、OCR识别、GUI交互等方向。所有模型均通过统一 API 接口调用，支持按需选用。开发者需注意各模型的输入格式、计费粒度及能力边界。
+百炼平台持续扩展模型能力，除基础大语言模型外，还提供面向垂直场景的专用模型服务，覆盖法律、多语言翻译、深度研究、OCR识别、GUI交互等方向。所有模型均通过统一 API 接口调用，支持按需选用与灵活集成。开发者需注意各模型的输入格式、计费粒度及能力边界。
 
 ## 支持的模型/功能
 
-当前支持以下专用模型：
-- **通义法睿**：面向法律领域的推理与问答模型，适用于合同审查、法规检索等场景；详见 [更多模型](../../raw/model-api-reference/more-models.md)。
-- **意图理解**：轻量级模型，专用于用户输入的意图分类与槽位提取，适合对话系统前置处理。
-- **Qwen-MT**：高质量多语言机器翻译模型，支持 100+ 语言对，输出为纯文本，不包含结构化元信息。
-- **Qwen-Deep-Research**：支持长上下文（最高 1M tokens）与多跳推理，适用于技术文档分析、论文精读等复杂任务；其能力说明见 [更多模型](../../raw/model-api-reference/more-models.md)。
-- **Qwen-OCR**：端到端文字识别模型，可直接从图像中提取结构化文本（含位置、行段、置信度），不依赖预处理；详细接口定义参见 [更多模型](../../raw/model-api-reference/more-models.md)。
-- **GUI-Plus**：针对截图/录屏图像的界面元素识别与操作意图理解模型，输出控件树及可执行动作建议。
+当前支持以下专用模型（按功能分类）：
 
-> **注意**：原始文档中 GUI-Plus 的描述未明确是否支持视频帧序列输入，而 [Qwen-Deep-Research 深入研究模型](https://help.aliyun.com/zh/model-studio/qwen-deep-research-api) 官方页面注明其支持“连续帧分析”，该能力在 [更多模型](../../raw/model-api-reference/more-models.md) 中未体现，建议以最新 API 文档为准。
+- **法律领域**：通义法睿，专为法律文书理解、条款分析与合规推理优化；详情见 [更多模型](../../raw/model-api-reference/more-models.md)  
+- **意图识别**：意图理解模型，适用于对话系统中的用户意图分类与槽位抽取；参考 [更多模型](../../raw/model-api-reference/more-models.md)  
+- **多语言机器翻译**：Qwen-MT，支持中英等 100+ 语种互译，提供流式响应与术语控制能力  
+- **深度研究辅助**：Qwen-Deep-Research，支持长文档解析、跨文档推理与结构化结论生成  
+- **视觉文本识别**：Qwen-OCR，专注高精度文字提取（含表格、手写体、低清图像），输出带坐标信息的结构化文本  
+- **GUI交互理解**：GUI-Plus，可解析截图/录屏中的界面元素、操作路径与交互逻辑，适用于自动化测试与无障碍辅助  
+
+> **注意**：Qwen-OCR 的实际识别精度受图像分辨率与背景复杂度显著影响，其能力描述与 [更多模型](../../raw/model-api-reference/more-models.md) 中链接指向的官方文档一致，但部分旧版 SDK 示例未启用坐标回归开关，建议以最新 API 文档为准。
 
 ## 关键参数
 
-- `model`: 必填，取值如 `qwen-farui`, `qwen-intent`, `qwen-mt`, `qwen-deep-research`, `qwen-ocr`, `gui-plus`。
-- `input`: 结构依模型而异：
-  - 法睿/意图/Qwen-MT：`{"text": "..."}`；
-  - Qwen-Deep-Research：支持 `{"text": "...", "files": [...]}`（文件为 PDF/DOCX 等）；
-  - Qwen-OCR/GUI-Plus：`{"image_url": "..."}` 或 `{"image_base64": "..."}`。
-- `parameters.top_k` 等通用参数对部分模型无效（如 OCR 不支持 temperature），具体以各模型文档为准。
+各模型共用以下核心参数（部分模型支持扩展字段）：
+
+- `model`: 必填，模型标识符（如 `qwen-farui`, `qwen-intent`, `qwen-mt-zh2en`）  
+- `input`: 必填，结构化输入对象，格式因模型而异（例如 Qwen-OCR 要求 `{"image_url": "..."}`，Qwen-MT 要求 `{"source_text": "...", "target_language": "en"}`）  
+- `parameters`: 可选，控制生成行为（如 `temperature`, `top_p` 仅对生成类模型生效；OCR 类模型不支持）  
+
+具体参数定义请严格参照对应模型的 API 文档，例如 Qwen-Deep-Research 的 `max_research_depth` 参数在 [更多模型](../../raw/model-api-reference/more-models.md) 中未展开说明，需查阅其独立接口文档。
 
 ## 使用方式
 
-所有模型均通过 `/v1/services/aigc/text-generation/generation` 统一入口调用（POST），鉴权方式与基础模型一致（Bearer [Token](../concepts/token.md)）。示例请求体：
+1. 确认模型开通权限（部分模型需单独申请配额）  
+2. 构造 HTTP POST 请求，Endpoint 为 `https://dashscope.aliyuncs.com/api/v1/services/aigc/<service>/call`（`<service>` 由模型类型决定，如 `farui`, `intent-detect`）  
+3. 设置 `Authorization: Bearer <api_key>` 与 `Content-Type: application/json`  
+4. 按模型要求组织 `input` 字段（严禁混用不同模型的 input schema）  
+
+示例（Qwen-MT）：
 ```json
 {
-  "model": "qwen-ocr",
+  "model": "qwen-mt-zh2en",
   "input": {
-    "image_url": "https://example.com/receipt.jpg"
+    "source_text": "你好，今天天气不错。",
+    "target_language": "en"
   }
 }
 ```
-响应结构统一为 `{ "output": { "text": "...", "extra": {...} } }`，其中 `extra` 字段内容因模型而异（如 OCR 返回 `{"boxes": [...], "confidence": 0.98}`）。
 
 ## 限制和注意事项
 
-- Qwen-Deep-Research 单次请求最大上下文长度为 1,048,576 tokens，但实际可用长度受文件解析开销影响，PDF 解析后文本可能膨胀 2–3 倍。
-- Qwen-OCR 对低分辨率（< 300dpi）或严重畸变图像识别准确率显著下降，建议预处理增强。
-- GUI-Plus 当前仅支持单张静态图像，不支持批量图像或视频流（与 [更多模型](../../raw/model-api-reference/more-models.md) 描述一致，但与部分内部测试文档存在出入，以正式发布版本为准）。
-- 所有模型均不支持 `stream: true` 流式响应，必须等待完整结果返回。
+- 所有模型均按 token 或请求次数计费，Qwen-OCR 按图片张数计费，Qwen-Deep-Research 按“研究步骤”计费，计费规则详见各模型文档  
+- 单次请求最大输入长度因模型而异：Qwen-Deep-Research 支持最长 128K tokens 上下文，而意图理解模型限制为 512 字符  
+- GUI-Plus 当前仅支持 PNG/JPEG 格式截图，不支持视频帧序列批量处理  
+- 部分模型（如通义法睿）返回结果含法律依据引用，但该引用不构成正式法律意见，不可直接用于司法程序  
+
+> **注意**：原始文档中列出的“意图理解”链接已更新至新版路径，旧版文档存在参数名不一致问题（如 `query` vs `text`），实际调用必须以 [更多模型](../../raw/model-api-reference/more-models.md) 中提供的最新链接为准。
 
 ## 来源文档
 
 - [更多模型](../../raw/model-api-reference/more-models.md)
-
 
 

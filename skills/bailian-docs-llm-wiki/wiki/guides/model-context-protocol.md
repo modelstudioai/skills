@@ -1,42 +1,47 @@
 # model context protocol
 
-Model Context Protocol（MCP）是百炼平台提供的标准化上下文交互协议，用于在大模型应用中安全、可控地接入外部工具、数据源或业务系统。它通过定义统一的请求/响应结构与生命周期语义，使模型能以结构化方式调用外部能力，同时保障上下文隔离与权限收敛。该协议已在百炼控制台和 SDK 中深度集成，开发者可快速启用或自建符合规范的服务。
+Model Context Protocol（MCP）是百炼平台提供的标准化上下文交互协议，用于在大模型应用中安全、可控地接入外部工具与数据源。它通过定义统一的请求/响应结构和生命周期语义，使 LLM 能够按需调用函数、检索知识或执行操作，同时保障上下文隔离与权限收敛。该协议已在百炼控制台、SDK 及 Agent 框架中深度集成。
 
 ## 支持的模型与功能
 
-MCP 当前支持所有百炼平台托管的 LLM 模型（包括 Qwen 系列、Qwen2 系列及第三方接入模型），但**仅在 `chat` 类型会话中生效**，不适用于 `completion` 或 `embedding` 场景。核心功能包括：工具发现（`list_tools`）、上下文感知工具调用（`call_tool`）、多轮状态保持（通过 `session_id` 绑定上下文），以及服务端自动注入的元信息（如 `tool_id`、`execution_id`）。详细能力边界请参阅 [MCP 简介](https://help.aliyun.com/zh/model-studio/mcp-introduction) —— 该文档明确指出 MCP 不替代传统 API 网关，而是聚焦于“模型驱动的上下文敏感调用”。
+MCP 当前支持所有百炼平台托管的 `qwen-max`、`qwen-plus`、`qwen-turbo` 等 Qwen 系列模型（含 v1/v2 接口），以及通过 [自定义MCP服务](https://help.aliyun.com/zh/model-studio/custom-mcp) 接入的第三方模型。核心功能包括：  
+- 工具调用（tool calling）与多轮上下文绑定  
+- 动态工具发现（通过 `/tools` 端点返回 OpenAPI 格式描述）  
+- 上下文感知的参数注入（如 `user_id`、`session_id` 等运行时上下文字段）  
+- 与百炼 Agent Runtime 的原生协同，支持自动 fallback 与错误重试逻辑  
+
+> **注意**：部分旧版文档称 MCP 仅支持 `qwen-max`，但实际已扩展至全部 Qwen 公共模型——请以 [官方 MCP 服务](https://help.aliyun.com/zh/model-studio/official-and-third-party-mcp) 的最新说明为准。
 
 ## 关键参数
 
-调用 MCP 服务时需在请求体中显式传递以下字段（均为必填）：
+MCP 请求需在 `messages` 中携带特殊 `tool_calls` 字段，并在 `tools` 数组中声明可用工具。关键参数如下：
 
-- `tool_id`: 字符串，注册时分配的唯一工具标识（非 URL 路径）；
-- `input`: 对象，结构由工具 schema 定义，**不支持嵌套过深（最大深度为 5）**；
-- `session_id`: 字符串，用于跨轮次上下文关联，长度限制 64 字符；
-- `trace_id`: 可选字符串，用于全链路追踪（建议与调用方 trace 一致）。
-
-注意：`input` 中若含二进制内容（如 base64 图片），必须在 schema 中声明 `"type": "string", "format": "binary"`，否则服务端将拒绝解析。此约束在 [自定义MCP服务](https://help.aliyun.com/zh/model-studio/custom-mcp) 文档中有明确定义，但 [外部调用](https://help.aliyun.com/zh/model-studio/mcp-external-calls) 文档未强调，实际实现应以 [自定义MCP服务](https://help.aliyun.com/zh/model-studio/custom-mcp) 为准。
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `tools[].function.name` | string | 是 | 工具唯一标识符，须与 MCP 服务注册名一致 |
+| `tools[].function.description` | string | 是 | 工具功能描述，供模型理解调用意图 |
+| `tools[].function.parameters` | JSON Schema | 否 | OpenAPI 3.0 兼容的参数定义，影响模型生成参数值的准确性 |
+| `tool_choice` | `"auto"` / `"required"` / `{"type": "function", "name": "xxx"}` | 否 | 控制调用策略；默认为 `"auto"`，详见 [MCP 简介](https://help.aliyun.com/zh/model-studio/mcp-introduction) |
 
 ## 使用方式
 
-1. **启用 MCP**：在百炼控制台「应用配置 → 高级设置」中开启「启用 Model Context Protocol」开关；  
-2. **注册工具**：通过控制台或 OpenAPI 提交工具描述（JSON Schema 格式），指定 `tool_id` 与 endpoint；  
-3. **发起调用**：在 `messages` 中插入 `{"role": "tool", "content": "...", "tool_call_id": "..."}` 类型消息，或使用 SDK 的 `client.chat(..., tools=[...])` 方法；  
-4. **处理响应**：模型返回 `tool_calls` 数组后，客户端需按 `tool_call_id` 并行调用对应 MCP 服务，并将结果以 `{"role": "tool", ...}` 形式回传。完整流程示例见 [外部调用](https://help.aliyun.com/zh/model-studio/mcp-external-calls)。
+1. **启用 MCP**：在百炼控制台创建应用时，于「模型配置」页勾选「启用 Model Context Protocol」；  
+2. **注册工具**：通过控制台「工具管理」上传 OpenAPI YAML/JSON，或调用 `POST /v1/mcp/tools` 接口注册（需携带 `Authorization: Bearer <token>`）；  
+3. **发起推理请求**：在 `/v1/chat/completions` 请求体中传入 `tools` 和 `tool_choice`，模型将返回 `tool_calls`；  
+4. **执行与回调**：客户端解析 `tool_calls`，调用对应 MCP 服务端点（如 `POST https://mcp.example.com/execute`），并将结果以 `tool_responses` 形式追加到后续请求的 `messages` 中。  
 
-> **注意**：SDK v3.12.0+ 默认启用 MCP 自动重试（最多 2 次），但若服务返回 HTTP 400，SDK 不重试且直接抛出异常；而 [MCP 简介](https://help.aliyun.com/zh/model-studio/mcp-introduction) 中描述的“失败自动降级为普通文本”属于旧版行为，已废弃，请以当前 SDK 行为为准。
+完整流程示例见 [外部调用](https://help.aliyun.com/zh/model-studio/mcp-external-calls) 文档。
 
 ## 限制和注意事项
 
-- 单次 `call_tool` 请求 payload 上限为 2 MB，响应上限为 1 MB；  
-- 工具执行超时默认为 15 秒，不可配置（[官方 MCP 服务](https://help.aliyun.com/zh/model-studio/official-and-third-party-mcp) 明确说明）；  
-- 同一 `session_id` 下并发调用同一 `tool_id` 的请求，服务端不保证执行顺序；  
-- 所有 MCP 流量经百炼网关鉴权，**禁止绕过平台直接访问工具 endpoint**，否则将触发风控拦截；  
-- 错误码 `MCP_TOOL_NOT_FOUND` 表示 `tool_id` 未注册或已下线，而非网络错误——该语义定义见 [常见问题](https://help.aliyun.com/zh/model-studio/mcp-faq)。
+- 单次请求最多声明 50 个工具，单次响应最多触发 5 次 `tool_calls`；  
+- 工具响应体必须为 JSON，且顶层字段 `content` 或 `result` 将被自动注入上下文（其他字段被忽略）；  
+- MCP 服务端点必须支持 HTTPS、CORS（`Access-Control-Allow-Origin: *`），且响应头需包含 `Content-Type: application/json`；  
+- 若使用自建 MCP 服务，请确保其符合 [MCP 协议规范](../../raw/application-user-guide/model-context-protocol.md)，否则可能触发 `invalid_tool_response` 错误；  
+- 调试时建议开启 `debug: true` 参数，可在响应中获取 `mcp_trace` 字段查看工具调度链路——该能力在 [常见问题](https://help.aliyun.com/zh/model-studio/mcp-faq) 中有详细说明。
 
 ## 来源文档
 
 - [MCP](../../raw/application-user-guide/model-context-protocol.md)
-
 
 

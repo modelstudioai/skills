@@ -10,27 +10,29 @@
 
 ## 关键参数
 
-- `model`: 必填，模型标识符（如 `qwen-max`, `qwen-vl-plus`），需与 [查询模型列表](https://help.aliyun.com/zh/model-studio/list-models) 返回的 `id` 严格一致  
-- `async`: 布尔值，设为 `true` 启用异步模式，此时响应体返回 `task_id` 而非直接结果  
-- `callback_url`: 异步任务回调地址，需提前在控制台配置白名单，且必须使用 HTTPS 协议  
-- `workspace_id`: 子业务空间调用时必填，用于路由至对应隔离环境（参见 [子业务空间的模型调用](https://help.aliyun.com/zh/model-studio/model-calling-in-sub-workspace)）
+- `model`: 必填，模型标识符（如 `qwen-max`, `qwen-vl-plus`），需与 [查询模型列表](https://help.aliyun.com/zh/model-studio/list-models) 返回值严格一致  
+- `async`: 布尔值，设为 `true` 启用异步模式；此时响应体返回 `task_id` 而非直接结果  
+- `callback_url`: 异步任务回调地址，需提前在控制台白名单中注册（参见 [配置异步任务回调](https://help.aliyun.com/zh/model-studio/async-task-api)）  
+- `rate_limit`: 限流配额单位为 QPS，可通过 `list-quotas` 和 `update-model-rate-limits` 接口动态调整  
+
+> **注意**：部分旧版文档将 `async` 参数描述为字符串 `"true"`/`"false"`，但实际 API 仅接受布尔类型；请以 [原文标题](../../raw/model-api-reference/more-about-models.md) 中链接的官方接口文档为准。
 
 ## 使用方式
 
-1. **获取临时 API Key**：推荐使用短期凭证降低密钥泄露风险，生成方式见 [原文标题](../../raw/model-api-reference/more-about-models.md)  
-2. **初始化 SDK**：启用连接复用可显著提升高并发场景性能，需显式配置 `connection_pool_size` 和 `keep_alive` 参数（参考 [DashScope SDK连接复用配置](https://help.aliyun.com/zh/model-studio/connection-multiplexing-configuration)）  
-3. **上传文件预处理**：对含图片/文档的[多模态](../concepts/multi-modal.md)请求，先调用 `POST /v1/files` 获取临时 URL，再将该 URL 传入模型请求（如 `{"image": "https://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/..."}`）
+- **同步调用**：直接发送 POST 请求至 `/v1/services/aigc/text-generation/generation` 等模型端点  
+- **异步调用**：在请求体中设置 `"async": true`，随后轮询 `GET /v1/tasks/{task_id}` 或监听回调  
+- **SDK 配置**：使用 DashScope Python SDK 时，启用连接复用需显式设置 `connection_pool=True`（见 [DashScope SDK连接复用配置](https://help.aliyun.com/zh/model-studio/connection-multiplexing-configuration)）  
+- **临时凭证**：敏感环境建议使用临时 API Key（有效期≤24h），生成方式见 [生成临时API Key](https://help.aliyun.com/zh/model-studio/generate-temporary-api-key)
 
 ## 限制和注意事项
 
-- 模型限流策略按 `model + workspace_id + caller_ip` 维度独立生效，需通过 [查询模型限流](https://help.aliyun.com/zh/model-studio/list-quotas) 接口确认当前配额  
-- 异步任务默认保留结果 7 天，超期后 `GET /v1/tasks/{task_id}` 将返回 `404`；若需延长，须联系技术支持  
-> **注意**：文档中“上传文件获取临时URL”接口返回的 URL 有效期为 15 分钟，但部分旧版 SDK 示例代码误设为 30 分钟，实际调用应以接口响应中的 `expires_at` 字段为准  
-- 所有回调请求均携带 `X-DashScope-Signature` 签名头，服务端必须校验以防范伪造请求
+- 子业务空间调用模型需单独授权，未配置时默认无权限（[子业务空间的模型调用](https://help.aliyun.com/zh/model-studio/model-calling-in-sub-workspace)）  
+- 文件类模型（如 `qwen-vl-plus`）需先调用 `POST /v1/files` 上传并获取临时 URL，不可直接传本地路径  
+- 模型限流策略按模型 ID 维度独立生效，修改后 30 秒内全量生效；超限请求返回 `429 Too Many Requests`  
+- 所有异步任务最长保留 7 天，过期后 `task_id` 不可查；建议业务侧及时消费回调或主动拉取结果
 
 ## 来源文档
 
 - [更多](../../raw/model-api-reference/more-about-models.md)
-
 
 

@@ -1,40 +1,38 @@
 # security and compliance
 
-百炼平台提供端到端的安全与合规能力，覆盖模型调用、数据传输、访问控制、内容安全及监管备案等关键环节。所有能力均基于阿里云统一安全体系构建，满足中国《生成式人工智能服务管理暂行办法》《个人信息保护法》等法规要求。开发者需结合自身业务场景，合理配置参数并完成必要备案流程。
+百炼平台提供端到端的安全与合规能力，覆盖模型调用、数据传输、访问控制、内容安全及监管备案等关键环节。所有能力均基于阿里云整体安全体系构建，并符合中国《生成式人工智能服务管理暂行办法》等法规要求。开发者需结合自身业务场景，在调用模型前完成必要的合规配置与备案。
 
 ## 支持的模型/功能
 
-以下安全与合规能力适用于所有百炼平台托管的模型（含 Qwen 系列、第三方精调模型及自定义部署模型）：
-- **输入输出 AI 安全护栏**：实时检测并拦截违法、违规、涉政、色情、暴力等高风险内容，支持自定义敏感词库和策略等级（[输⼊输出 AI 安全护栏](../../raw/model-user-guide/security-and-compliance.md)）；
-- **模型备案信息公示**：所有上线模型均已完成国家网信办备案，并在控制台及 API 响应头中返回备案编号（[模型备案信息公示](../../raw/model-user-guide/security-and-compliance.md)）；
-- **应用合规备案**：调用百炼模型构建的对外服务类应用（含 Web/App/小程序），须单独完成《AI 应用备案》（[应用合规备案](../../raw/model-user-guide/security-and-compliance.md)）。
+以下安全与合规能力适用于所有在百炼平台托管或调用的模型（包括通义千问系列、Qwen-VL、Qwen-Audio 等），但部分功能依赖[模型部署](../concepts/model-deployment.md)方式：
+- **输入输出 AI 安全护栏**：对请求 [prompt](prompt.md) 和响应 content 实时进行涉政、暴恐、色情、违禁等 12 类风险识别与拦截（详见 [原文标题](../../raw/model-user-guide/security-and-compliance.md)）；
+- **私网访问配置**：仅支持通过 VPC 内网调用模型服务，避免公网暴露（参见 [原文标题](../../raw/model-user-guide/security-and-compliance.md)）；
+- **模型备案信息公示**：所有上线模型均已完成国家网信办备案，备案号可在控制台「模型详情页 → 合规信息」查看（依据 [原文标题](../../raw/model-user-guide/security-and-compliance.md)）。
+
+> **注意**：应用合规备案（即 AI 应用上线前的备案）要求独立于模型备案，且仅适用于面向公众提供服务的 Web/App 应用；内部工具类应用无需备案，但需确保不绕过输入输出安全护栏。
 
 ## 关键参数
 
-| 参数名 | 类型 | 说明 | 默认值 |
-|--------|------|------|--------|
-| `enable_content_safety` | boolean | 启用输入输出安全护栏（仅对 `/v1/chat/completions` 和 `/v1/text-generation` 生效） | `true` |
-| `safety_level` | string | 安全策略强度，取值 `low` / `medium` / `high`；`high` 模式将更严格拦截模糊边界内容 | `medium` |
-| `disable_safety_cache` | boolean | 是否跳过安全策略缓存（用于调试或规避误拦截） | `false` |
-
-> **注意**：`safety_level=high` 可能导致合法但表述敏感的请求被拦截，建议灰度验证后上线；该行为与 [输⼊输出 AI 安全护栏](../../raw/model-user-guide/security-and-compliance.md) 文档描述一致，但与旧版 SDK v2.3.0 的默认行为存在差异（v2.3.0 默认为 `low`），请升级至 v3.1.0+ 并显式设置。
+调用模型 API 时，可通过以下参数启用/控制安全能力：
+- `enable_security_check: true`（默认 `false`）：启用输入输出 AI 安全护栏（仅对 `/v1/chat/completions` 等支持护栏的接口生效）；
+- `security_level: "strict" | "balanced" | "relaxed"`：指定护栏敏感度，默认为 `"balanced"`；
+- `private_network_only: true`：强制仅允许 VPC 内网调用（需提前在模型服务配置中开启私网访问）。
 
 ## 使用方式
 
-1. **API 调用时启用护栏**：在请求 Header 中添加 `X-DashScope-Safety: enabled`，或在 JSON body 中传入 `enable_content_safety=true`；
-2. **私网访问配置**：通过 VPC 绑定专属资源组，并在[模型部署](../concepts/model-deployment.md)时勾选「仅限私网访问」，详见 [私网访问配置](../../raw/model-user-guide/security-and-compliance.md)；
-3. **权限最小化实践**：使用 RAM 子账号 + 自定义策略（如 `AliyunBaiLianFullAccess` 需谨慎授予），推荐按 [权限管理](../../raw/model-user-guide/security-and-compliance.md) 文档配置细粒度 Action 级权限。
+1. **开通权限**：主账号需在 RAM 控制台为子账号授予 `AliyunBailianFullAccess` 或最小化策略 `AliyunBailianSecurityReadOnlyAccess`（参考 [权限管理](https://help.aliyun.com/zh/model-studio/permission-management-overview)）；  
+2. **配置私网访问**：在模型服务详情页 → 「网络配置」中开启 VPC 访问并绑定交换机（对应 [私网访问配置](https://help.aliyun.com/zh/model-studio/secure-storage)）；  
+3. **启用护栏**：在 API 请求 body 中显式设置 `enable_security_check: true`，否则默认不触发内容安全检测。
 
 ## 限制和注意事项
 
-- 安全护栏不支持异步批量推理接口（`/v1/batch`）和流式响应中的逐 chunk 检测，仅对完整请求/响应体生效；
-- 传输加密强制启用 TLS 1.2+，不支持降级；明文 HTTP 请求将被拒绝（参见 [传输安全](../../raw/model-user-guide/security-and-compliance.md)）；
-- 模型备案编号随模型版本自动更新，但应用备案需手动同步更新，否则可能被监管平台标记为“未备案应用”；
-- 所有日志默认脱敏存储，原始输入输出文本不落盘，符合 [合规资质与隐私说明](../../raw/model-user-guide/security-and-compliance.md) 中关于数据处理的承诺。
+- 输入输出安全护栏仅支持 UTF-8 编码文本，不支持二进制文件（如图片 base64）的内容级扫描；图像类风险需依赖前置鉴黄服务；
+- `security_level: "strict"` 可能导致合法但表述模糊的请求被误拦截，建议灰度验证后上线；
+- 模型备案信息由平台自动同步，但**应用合规备案需开发者自主完成**，未备案的公众应用可能被监管部门下架（依据 [应用合规备案](https://help.aliyun.com/zh/model-studio/compliance-and-launch-filing-guide-for-ai-apps-powered-by-the-tongyi-model)）；
+- 所有安全能力均不替代开发者自身的数据脱敏与隐私保护义务，敏感字段（如身份证号、手机号）须在调用前自行处理。
 
 ## 来源文档
 
 - [安全合规](../../raw/model-user-guide/security-and-compliance.md)
-
 
 

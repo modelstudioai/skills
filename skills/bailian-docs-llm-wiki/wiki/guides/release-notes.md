@@ -12,24 +12,23 @@
 ## 关键参数
 
 - `top_p`：取值范围 `[0.0, 1.0]`，默认 `0.8`；设为 `0.0` 时等效于 greedy search；  
-- `stop`：最多支持 4 个字符串，长度总和 ≤ 64 字符；  
-- `max_tokens`：实际生成 token 数可能略超该值（因 tokenizer 边界对齐），详情参见 [模型下线机制说明](../../raw/model-user-guide/release-notes.md)。
+- `stop`：支持最多 4 个字符串，长度总和 ≤ 64 字符；  
+- `response_format`：当前仅 `{"type": "text"}` 和 `{"type": "json_object"}` 受支持，`json_object` 模式需配合 `response_schema` 使用（参见 [模型平台功能更新](../../raw/model-user-guide/release-notes.md)）。
 
 ## 使用方式
 
 - 通过 `/v1/chat/completions` 接口调用，需在 `Authorization` header 中携带 Bearer [Token](../concepts/token.md)；  
 - 流式响应需设置 `stream=true`，并按 SSE 格式解析 `data:` 行；  
-- 工具调用需在 `messages` 中显式传入 `tools` 数组，并确保 `tool_choice` 与服务端策略匹配（参考 [模型平台功能更新](../../raw/model-user-guide/release-notes.md)）。
+- [多模态](../concepts/multi-modal.md)输入须将图像 base64 编码后置于 `content` 数组的 `image_url` 字段，格式要求详见原始文档说明。
 
 ## 限制和注意事项
 
-- 单次请求最大 `input_tokens + max_tokens ≤ 1024K`（Qwen3）或 `32K`（其余模型）；  
-- `system` 消息不支持在非 chat 接口（如 `/v1/completions`）中使用；  
-- 模型下线前 30 天将通过控制台公告及站内信通知，下线后 API 返回 `410 Gone`，具体策略见 [模型下线机制说明](../../raw/model-user-guide/release-notes.md)。
+- 单次请求最大 token 数受模型本身限制（如 Qwen3 为 1,048,576），超出将返回 `400 Bad Request`；  
+- `tool_choice="required"` 与 `response_format="json_object"` 不可同时使用，否则触发 `422 Unprocessable Entity`；  
+- 模型下线前 30 天仅保留推理能力，不再接受新训练任务——具体机制请参考 [模型下线机制说明](../../raw/model-user-guide/release-notes.md)。
 
 ## 来源文档
 
 - [产品动态](../../raw/model-user-guide/release-notes.md)
-
 
 

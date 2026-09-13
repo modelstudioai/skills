@@ -1,46 +1,41 @@
 # Token
 
-Token 是百炼平台中用于计量模型推理资源消耗的核心单位，表示模型在处理请求时实际消耗的语义级计算量。它统一涵盖输入（[prompt](../guides/prompt.md)）与输出（completion）两部分的文本/[多模态](multi-modal.md)语义单元，是配额管理、计费、限流与性能优化的基础度量标准。
+Token 是百炼平台中用于计量模型输入与输出文本长度的基本单位，也是资源配额、计费和限流的核心度量基准。一个 token 通常对应一个子词（subword）或标点符号，而非单个字符或字；实际切分由模型底层 tokenizer 决定，例如 `"Hello, world!"` 在 Qwen 系列模型中解析为 3 个 tokens。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **Token Plan 配额管理**：Token 是 Token Plan 的计量基准。系统自动统计每次推理请求的 `prompt_tokens + completion_tokens` 总和，并从月度总配额中实时扣减；突发流量通过令牌桶算法（含 `burst_capacity`）平滑承载。
-- **高速推理（High Speed Inference）**：TPM（Tokens Per Minute）预留机制以 Token 为单位预购吞吐能力，保障低延迟服务稳定性；`tpm_reservation` 值直接影响系统为该模型实例分配的最小并发处理能力。
-- **API 调用与计费**：所有百炼托管模型（Qwen 系列、Qwen-VL、Qwen-Audio 及第三方接入模型）的在线推理调用均按实际消耗 Token 计费；输入中的图片/音频 base64 编码开销不计入，仅模型内部 consume 的语义 Token 生效。
-- **模型评测**：评测任务执行期间，每条样本的推理请求同样消耗 Token，其总量计入当前账号的 Token Plan 配额（若已启用），影响评测并发规模与执行速度。
-- **身份认证与 API 管理**：注意区分——`api_key`、`Bearer <token>` 中的 “token” 是身份凭证（OAuth-style access token），与本概念无关；后者属于安全认证范畴，不参与资源计量。
+- **推理调用（Inference）**：所有 `/v1/chat/completions`、`/v1/completions` 等同步/异步推理接口均按 `input_tokens + output_tokens` 总和计费与限流。Token Plan、高速推理通道、QPM/QPS 限流等机制均以此为计量基础。
+- **配额管理（Token Plan）**：Token Plan 是面向推理请求的资源配额体系，其核心约束项（如 `tokens_per_minute`、`max_tokens_per_request`）全部以 token 为单位，不覆盖微调、向量嵌入（`/v1/embeddings`）或知识库索引等非推理类任务。
+- **高速推理优化**：`enable_high_speed` 模式对 token 总量有硬性限制（`input_tokens + max_tokens ≤ 8192`），超出即自动降级至普通通道；同时建议将 `max_tokens` 设为 ≤1024 以提升命中率。
+- **异步与批量任务**：`/v1/batch/invoke` 批量调用按每个子任务独立计算 tokens；异步任务（`async: true`）同样按最终生成的 tokens 计量，计入发起账号的 Token Plan 配额。
+- **用量监控与调试**：通过 `/v1/usage/token-plan` 可查询每小时粒度的 token 消耗明细；SDK 日志或响应头（如 `X-DashScope-Usage`）也常返回本次请求的 `input_tokens` 和 `output_tokens`，便于开发者精准归因。
+
+> ⚠️ 注意：token 数量以服务端 tokenizer 解析结果为准，与客户端字符数、UTF-8 字节数无关；不同模型（如 Qwen-VL、Qwen-Audio）的 tokenization 规则可能不同，不可跨模型直接换算。
 
 ## 关键参数和配置
 
-| 参数 | 所属模块 | 说明 | 典型值示例 |
-|------|----------|------|------------|
-| `prompt_tokens` / `completion_tokens` | 推理响应头 | 每次 API 调用返回的 `X-Embedding-Usage` 或 `X-Usage` 响应头中提供，用于精确追踪单次消耗 | `"prompt_tokens": 128, "completion_tokens": 64` |
-| `total_tokens_per_month` | Token Plan | 月度总配额上限（输入+输出 Token 之和） | `10000000` |
-| `rate_limit_per_second` | Token Plan | 每秒最大允许消耗 Token 数（硬限流阈值） | `5000` |
-| `burst_capacity` | Token Plan | 短期突发容量（基于令牌桶算法），支持瞬时超限后平滑回落 | `10000` |
-| `tpm_reservation` | 高速推理 | 预留的每分钟 Token 处理量，需提前购买并显式传入请求体 | `5000` |
-
-> ⚠️ 注意：  
-> - Token 统计不含 base64 编码膨胀、HTTP 协议开销或元数据字段长度；  
-> - [多模态](multi-modal.md)输入中，图像/音频经模型编码器映射后的语义 Token 才被计入；  
-> - 微调训练任务不消耗 Token Plan 配额；[OpenAI 兼容接口](openai-compatibility.md)调用非百炼托管模型亦不计入。
+| 参数名 | 所属场景 | 说明 | 典型取值范围 |
+|--------|----------|------|--------------|
+| `max_tokens` / `max_tokens_per_request` | 推理 API、Token Plan | 单次请求最大输出 token 数，硬性截断阈值 | `1–8192`（默认 `2048`） |
+| `tokens_per_minute` | Token Plan | 每分钟总 token 配额（input + output），超限返回 `429` | 按 Plan 版本设定，如 `10k–1M/min` |
+| `burst_ratio` + `burst_window_seconds` | Token Plan（进阶） | 突发流量弹性系数（需二者同时配置才生效），支持短时超额消耗 | `burst_ratio`: `1.0–3.0`；`burst_window_seconds`: `10–60` |
+| `input_tokens` / `output_tokens` | 响应头或用量 API | 实际消耗的 tokens 数，用于调试与成本分析 | 响应头示例：`X-DashScope-Usage: {"input_tokens": 42, "output_tokens": 17}` |
 
 ## 面向开发者，简洁实用
 
-- ✅ **无需手动计算**：SDK 和 API 自动返回 `prompt_tokens` 与 `completion_tokens`，可直接用于监控与成本分析；
-- ✅ **配额自动生效**：订阅 Token Plan 后，所有兼容模型的推理请求即自动受控，无需额外 header 或参数；
-- ✅ **实时查询余量**：调用 `GET /v1/usage/token-plan`（需 `token_plan:read` 权限）获取当前剩余配额与重置时间；
-- ✅ **限流有据可依**：收到 `429 Too Many Requests` 时，检查响应头 `X-RateLimit-Remaining` 和 `X-RateLimit-Reset`，结合 `rate_limit_per_second` 优化请求节奏；
-- ❌ **避免常见误用**：不要将 `api_key` 或 `Bearer token` 与本概念混淆；不要对 base64 字符串长度做 Token 预估；不要在未启用 Token Plan 的账号下依赖配额保障。
-
-如需进一步优化 Token 效率，建议：精简 [prompt](../guides/prompt.md) 模板、限制 `max_tokens`、启用 `stream=false`（尤其在 Prime 模式下）、优先选用 `qwen-turbo` 等高性价比模型。
+- ✅ **必查响应头**：每次推理请求后检查 `X-DashScope-Usage`，确认实际 token 消耗是否符合预期，避免隐性超限。
+- ✅ **合理设 `max_tokens`**：在满足业务需求前提下尽量降低该值——它既影响输出长度，也参与 Token Plan 配额计算和高速推理准入判断。
+- ✅ **Token Plan 绑定要显式声明**：调用 API 时务必在 Header 中添加 `X-DashScope-Token-Plan: <plan_id>`，否则走默认配额，可能导致突发流量被限。
+- ✅ **调试优先用 `qwen-turbo` 或 `qwen-plus`**：相同 [prompt](../guides/prompt.md) 下 token 数更少、成本更低；生产环境再按质量需求升级至 `qwen-max`。
+- ❌ **不要混淆 token 与字符**：中文平均约 1–2 字符/Token，英文单词常为 1 Token，但标点、空格、特殊符号均独立计数；务必以服务端返回的 `input_tokens` 为准做容量规划。
+- ❌ **不要在非推理场景误用 Token Plan**：微调、向量嵌入、知识库构建等任务不走 Token Plan，需单独购买资源包或按量计费。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
 - [token plan api](../api/token-plan-api.md)
-- [preparations](../api/preparations.md)
+- [test 1](../guides/test-1.md)
 - [model high speed inference](../guides/model-high-speed-inference.md)
-- [model evaluation introduction](../guides/model-evaluation-introduction.md)
+- [more about models](../api/more-about-models.md)
 
 

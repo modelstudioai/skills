@@ -1,40 +1,44 @@
 # support
 
-百炼平台的 `support` 接口用于获取模型服务相关的支持信息，包括模型兼容性、问题排查指引及售后政策等。该能力不提供实时诊断或人工工单创建，而是返回结构化支持元数据供开发者集成到控制台或调试工具中。实际使用需结合 [服务支持](../../raw/model-user-guide/support.md) 中定义的外部链接体系。
+百炼平台的 `support` 接口用于获取模型服务相关的支持信息，包括模型能力范围、售后政策及常见问题指引。该接口不提供实时诊断或人工工单创建能力，而是作为开发者集成支持资源的统一入口。所有返回链接均指向阿里云官方帮助中心的最新文档。
 
 ## 支持的模型/功能
 
-当前 `support` 接口覆盖所有已上线的百炼托管模型（含 Qwen 系列、Qwen-VL、Qwen-Audio 及第三方精调模型），但**不支持**自定义部署模型或私有化集群中的模型。接口返回的支持资源类型包括：模型能力说明页、常见问题（FAQ）索引、服务协议文本链接及售后范围说明。具体模型清单以 [服务支持](../../raw/model-user-guide/support.md) 中引用的[模型列表](https://help.aliyun.com/zh/model-studio/model-studio-model-list)为准。
+`support` 接口本身不绑定具体模型，但其返回的支持资源覆盖百炼平台当前全部商用模型，包括 Qwen 系列（Qwen1、Qwen2、Qwen3）、Qwen-VL、Qwen-Audio 及第三方托管模型。模型兼容性与能力边界以 [服务支持](../../raw/model-user-guide/support.md) 中引用的 [模型列表](https://help.aliyun.com/zh/model-studio/model-studio-model-list) 为准。注意：部分新发布模型（如 Qwen3-32B）可能在 [服务支持](../../raw/model-user-guide/support.md) 页面更新前已上线，实际可用性请以控制台模型市场为准。
 
 ## 关键参数
 
-- `model_id`（必填，string）：模型唯一标识，如 `qwen-max` 或 `qwen-plus`；必须与 [服务支持](../../raw/model-user-guide/support.md) 所列模型 ID 严格一致  
-- `language`（可选，string，默认 `"zh"`）：返回文案语言，仅支持 `"zh"` 和 `"en"`  
-- `include_faq`（可选，boolean，默认 `false`）：是否内联 FAQ 条目（仅限基础问题，非全文）
-
-> **注意**：原始文档未定义 `include_faq=true` 时的响应格式，实际返回结构与 [服务支持](../../raw/model-user-guide/support.md) 中的 FAQ 链接跳转逻辑不一致，建议始终设为 `false` 并自行解析外部 FAQ 页面。
+该接口为静态资源聚合接口，**无请求参数**。调用时仅需携带标准鉴权头（`Authorization: Bearer <token>`）和 `Content-Type: application/json`。响应体为 JSON 格式，包含四个固定字段：`model_list_url`、`faq_url`、`agreements_url`、`after_sales_url`，其值均来自 [服务支持](../../raw/model-user-guide/support.md) 文档中列出的对应链接。
 
 ## 使用方式
 
-通过 HTTP GET 请求调用 `/v1/support` 端点，携带认证 Header（`Authorization: Bearer <api_key>`）及查询参数：
-
+通过 HTTP GET 请求访问 `https://dashscope.aliyuncs.com/api/v1/support`（生产环境）或沙箱环境对应 endpoint。示例 cURL：
 ```bash
-curl -X GET "https://dashscope.aliyuncs.com/v1/support?model_id=qwen-max&language=zh" \
-  -H "Authorization: Bearer sk-xxx"
+curl -X GET \
+  https://dashscope.aliyuncs.com/api/v1/support \
+  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  -H "Content-Type: application/json"
 ```
-
-响应为 JSON，包含 `model_info`、`faq_url`、`agreement_url`、`after_sales_url` 四个字段，各 URL 均指向 [服务支持](../../raw/model-user-guide/support.md) 中列出的对应帮助中心页面。
+响应示例：
+```json
+{
+  "model_list_url": "https://help.aliyun.com/zh/model-studio/model-studio-model-list",
+  "faq_url": "https://help.aliyun.com/zh/model-studio/faq-about-alibaba-cloud-model-studio",
+  "agreements_url": "https://help.aliyun.com/zh/model-studio/related-agreements",
+  "after_sales_url": "https://help.aliyun.com/zh/model-studio/after-sales-service-scope"
+}
+```
 
 ## 限制和注意事项
 
-- 单账号 QPS 限制为 5，超出后返回 `429 Too Many Requests`  
-- `model_id` 若不在当前白名单中，返回 `404 Not Found`（而非重定向至通用支持页）  
-- 所有返回的外部链接均可能随 help.aliyun.com 内容更新而变更，不应硬编码解析逻辑  
-- 售后范围说明（`after_sales_url`）仅适用于按量付费用户，包年包月实例需参考独立售后条款 —— 此差异未在 [服务支持](../../raw/model-user-guide/support.md) 中明确提示，开发者需主动核对 [售后说明](https://help.aliyun.com/zh/model-studio/after-sales-service-scope) 最新版本
+- 接口调用频率限制为 100 次/分钟，超出将返回 `429 Too Many Requests`；
+- 所有返回 URL 均为外部跳转链接，平台不代理内容，也不缓存响应；
+- > **注意**：[服务支持](../../raw/model-user-guide/support.md) 中的 `售后说明` 链接（`after_sales_url`）明确限定“仅限按量付费用户享受 7×24 小时技术响应”，包年包月实例故障响应 SLA 以合同附件为准，二者存在服务等级差异；
+- > **注意**：原始文档未声明接口是否支持区域（Region）路由，但实测调用 `https://dashscope.aliyuncs.com/api/v1/support` 在 `cn-beijing` 和 `ap-southeast-1` 区域返回相同内容，建议默认使用全局 endpoint；
+- 链接有效期由阿里云帮助中心统一维护，若发生 404，请同步检查 [服务支持](../../raw/model-user-guide/support.md) 是否已更新。
 
 ## 来源文档
 
 - [服务支持](../../raw/model-user-guide/support.md)
-
 
 

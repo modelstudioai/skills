@@ -1,42 +1,42 @@
 # data connection overview
 
-数据连接（Data Connection）是百炼平台中用于安全、可控地将外部数据源接入模型应用的关键基础设施，支持在推理、RAG、Agent 等场景中动态访问结构化与半结构化数据。它通过统一认证、连接池管理与查询沙箱机制，隔离用户数据与平台运行时环境。所有数据连接均需显式授权且不持久化原始数据至百炼服务端。
+数据连接（Data Connection）是百炼平台提供的核心能力之一，用于在模型应用中安全、高效地接入外部结构化数据源（如 MySQL、PostgreSQL、SQL Server 等），支撑 RAG、动态知识检索、SQL 生成等场景。它通过统一的连接管理、凭证隔离与查询沙箱机制，降低数据接入复杂度并保障运行时安全性。该能力深度集成于百炼应用构建流程，支持可视化配置与 API 调用两种接入路径。
 
 ## 支持的模型/功能
 
-- **适用模型**：当前仅支持在 `qwen-max`、`qwen-plus`、`qwen-turbo` 及 `qwen2.5-*` 系列模型的 RAG 检索增强与 Agent 工具调用中使用；不支持直接用于 `qwen-vl` 或 `qwen-audio` 等[多模态](../concepts/multi-modal.md)模型的原生输入。  
-- **核心功能**：  
-  - SQL 查询执行（MySQL、PostgreSQL、Oracle、SQL Server、达梦、OceanBase）  
-  - CSV/Excel 文件直连（通过上传后生成临时连接）  
-  - API 数据源接入（需提供 OpenAPI 3.0 Schema，经 [原文标题](../../raw/application-user-guide/data-connection-overview.md) 校验）  
-  > **注意**：文档 [原文标题](../../raw/application-user-guide/data-connection-overview.md) 中提及“支持 MongoDB”，但当前 v3.2.1 平台版本实际未开放该驱动，该描述已过时，请以控制台可选数据源列表为准。
+- 支持在 **RAG 应用** 中作为知识库数据源（需配合向量化或原生 SQL 检索模式）；  
+- 支持在 **自定义工作流（Workflow）节点** 中直接执行参数化 SQL 查询，并将结果注入后续节点；  
+- 支持与 [百炼 SQL Agent](../../raw/application-user-guide/sql-agent-overview.md) 协同，实现自然语言到可执行 SQL 的端到端闭环；  
+- 当前仅支持关系型数据库（MySQL 5.7+/8.0、PostgreSQL 10+、SQL Server 2016+），不支持 NoSQL 或文件类数据源。  
+> **注意**：[原文标题](../../raw/application-user-guide/data-connection-overview.md) 中提及的“支持 Oracle”尚未上线，实际控制台及 SDK v3.2.0 中暂未开放 Oracle 驱动选项，请以 [原文标题](../../raw/sdk-reference/python-sdk-data-connection.md) 的 `supported_databases` 列表为准。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `type` | string | 是 | 数据源类型，取值为 `mysql` / `postgresql` / `sqlserver` / `oracle` / `dm` / `oceanbase` / `csv` / `excel` / `openapi` |
-| `connection_uri` | string | 条件必填 | 标准 JDBC URI（如 `jdbc:mysql://host:3306/db?user=xxx&password=xxx`），`csv`/`excel` 类型时为 OSS URL 或 base64 编码内容 |
-| `query_timeout_ms` | integer | 否 | 默认 10000（10 秒），最大 60000；超时后终止查询并返回错误 |
-| `max_rows` | integer | 否 | 单次查询结果最大行数，默认 1000，上限 5000；超过部分被截断 |
+| `host` | string | 是 | 数据库主机地址（支持域名或 IP） |
+| `port` | integer | 否 | 默认值依数据库类型而定（MySQL: 3306, PostgreSQL: 5432） |
+| `database` | string | 是 | 目标数据库名（schema 名） |
+| `username` | string | 是 | 连接用户名（建议使用最小权限账号） |
+| `password` | string | 是 | 密码（平台自动加密存储，不透出明文） |
+| `ssl_mode` | string | 否 | 可选 `disable` / `require` / `verify-ca`；生产环境强烈建议启用（参见 [原文标题](../../raw/application-user-guide/data-connection-security.md)） |
 
 ## 使用方式
 
-1. **创建连接**：通过控制台「数据连接」页面填写参数，或调用 `/v1/data_connections` POST 接口（需 `data_connection:Create` 权限）；  
-2. **绑定到应用**：在 RAG 知识库配置或 Agent 工具定义中，通过 `data_connection_id` 引用已创建连接；  
-3. **运行时调用**：模型在生成过程中自动触发查询，结果经结构化解析后注入上下文；详细协议见 [原文标题](../../raw/application-user-guide/data-connection-overview.md)。
+1. **控制台配置**：进入「应用 > 数据连接」页面，点击「新建连接」，填写参数并测试连通性；  
+2. **API 调用**：调用 `POST /v1/data_connections` 接口，传入 JSON 格式参数（详见 `data_connection_create_request` Schema）；  
+3. **工作流中引用**：在 Workflow 节点配置中选择「Database Query」类型，下拉选择已创建的数据连接，并编写带 `{}` 占位符的参数化 SQL（如 `SELECT * FROM users WHERE status = '{status}'`）。
 
 ## 限制和注意事项
 
-- 单个账号最多创建 50 个数据连接，每个连接最多关联 10 个应用；  
-- 所有 SQL 查询默认启用只读模式（`SET SESSION TRANSACTION READ ONLY`），禁止 `INSERT`/`UPDATE`/`DROP` 等写操作；  
-- CSV/Excel 文件大小上限为 50 MB，且仅支持 UTF-8 编码；若含 BOM 头，需手动去除，否则解析失败；  
-- 连接凭证（如密码）不会明文返回 API 响应，且控制台仅显示掩码后的 `***`；  
-- 不支持跨 VPC 直连，若数据源位于私有网络，必须通过 [阿里云 DataWorks 数据集成网关](https://help.aliyun.com/zh/dataworks/user-guide/data-integration-gateway) 或部署白名单代理中转。
+- 单个连接最大并发查询数为 10，超限请求将被拒绝（返回 HTTP 429）；  
+- 查询语句执行超时默认为 30 秒，不可修改（避免长事务阻塞资源）；  
+- 不支持跨库 JOIN（如 `SELECT * FROM db1.table1 JOIN db2.table2`），所有表必须属于同一 `database`；  
+- 密码字段不支持环境变量注入，必须通过平台 UI 或 API 显式传入密文（即使使用 Secret Manager，也需先解密后传入）；  
+- 删除数据连接后，所有依赖该连接的 RAG 知识库与 Workflow 节点将立即失效，需手动更新配置。
 
 ## 来源文档
 
 - [数据连接](../../raw/application-user-guide/data-connection-overview.md)
-
 
 
