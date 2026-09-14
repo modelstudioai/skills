@@ -78,6 +78,45 @@
               "currency": "CNY"
             }
           ]
+        },
+        {
+          "supportedApi": "Completions API",
+          "name": "pdf_parsing",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/pdf-understanding",
+          "type": "pdf_parsing",
+          "prices": [
+            {
+              "priceUnit": "每页",
+              "price": "0.02",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_fetch",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-extractor",
+          "type": "web_fetch",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_search",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-search",
+          "type": "web_search_anthropic",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY"
+            }
+          ]
         }
       ],
       "description": "Qwen3.8-Flash 是千问最新推出的多模态大模型，兼具强大的理解与生成能力和出色的响应速度。模型原生支持百万级上下文窗口，能够一次性处理超长文档、代码仓库和复杂对话。在编程辅助、智能体协作、图文理解等场景中表现尤为出色——无论是自动修复代码、操作桌面应用，还是分析图表与长视频，都能给出准确、高质量的结果。同时兼容 OpenAI 与 Anthropic 主流接口协议，可无缝接入 Claude Code、Codex 等开发者工具，轻松构建高并发应用与智能工作流。凭借优异的性能与极具竞争力的推理成本，Qwen3.8-Flash 是开发者和企业在 AI 应用中兼顾效果与效率的理想选择。",

@@ -1,46 +1,44 @@
 # billing api
 
-billing api 提供账单数据查询能力，支持获取账户级账单概览与时间维度的消费趋势，适用于成本分析、预算监控等场景。所有接口均通过 HTTPS 调用，需使用阿里云 AccessKey 进行签名认证。该 API 属于 Model Studio 服务的计费子系统，版本为 `2026-02-10`。
+billing api 提供账单数据的程序化访问能力，支持查询账户级账单概览与时间趋势，适用于成本监控、自动化对账等场景。该 API 属于 Model Studio 服务的 OpenAPI 子集，需通过阿里云统一身份认证（AccessKey）调用。所有接口均遵循 RESTful 设计，返回 JSON 格式响应。
 
 ## 支持的模型/功能
 
-当前 billing api 仅提供两类只读功能：
-- `GetBillingOverview`：返回指定周期内（默认最近30天）的总费用、已用额度、剩余配额等聚合指标；
-- `GetBillingTrend`：按日/周/月粒度返回连续时间段内的费用变化曲线，支持最多90天历史数据拉取。
+当前 billing api 仅包含两个核心功能：
+- `GetBillingOverview`：获取指定周期内（默认最近30天）的总消费金额、调用次数、模型分布等聚合指标；
+- `GetBillingTrend`：按日/周/月粒度返回账单金额与调用次数的时间序列数据，支持最多180天的历史范围。
 
-> **注意**：原始文档中未提及对模型调用明细（如 per-model token 消耗）的支持，与 [账单 (raw/model-api-reference/billing-api.md)](../../raw/model-api-reference/billing-api.md) 所列功能范围一致；但需注意，[Model Studio 计费说明](../../raw/model-api-reference/pricing.md) 中提到的“按模型实例计费”细节无法通过本 API 获取，属功能缺口。
+> **注意**：原始文档中未说明是否支持按模型实例或工作空间维度下钻查询；实际调用时若需细粒度账单，应参考 [账单](../../raw/model-api-reference/billing-api.md) 中链接的官方帮助文档确认权限与参数组合。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `StartTime` | string (ISO8601) | 是 | 查询起始时间，精度到日，格式如 `2024-01-01T00:00:00Z` |
-| `EndTime` | string (ISO8601) | 是 | 查询结束时间，必须晚于 `StartTime`，且跨度 ≤90 天 |
-| `Granularity` | string | 否 | 仅 `GetBillingTrend` 支持，可选 `DAILY` / `WEEKLY` / `MONTHLY`；默认 `DAILY` |
-| `BillingCycle` | string | 否 | 仅 `GetBillingOverview` 支持，指定账期（如 `2024-01`），若不传则按自然月滚动计算 |
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `StartTime` | string (ISO8601) | 是 | 查询起始时间，精度到日（如 `2024-01-01T00:00:00Z`） |
+| `EndTime` | string (ISO8601) | 是 | 查询结束时间，需晚于 `StartTime`，且跨度 ≤ 180 天 |
+| `Granularity` | string | 否 | 仅 `GetBillingTrend` 支持：`DAY` / `WEEK` / `MONTH`；默认 `DAY` |
+| `RegionId` | string | 否 | 指定地域 ID，不传则返回全局账单（含所有已开通地域） |
 
-所有请求均需携带标准阿里云公共请求头（`x-acs-version`, `x-acs-signature-nonce`, `Authorization` 等），详情见 [账单 (raw/model-api-reference/billing-api.md)](../../raw/model-api-reference/billing-api.md)。
+注意：`GetBillingOverview` 不支持 `Granularity` 参数，若误传将被忽略；该行为与 [账单](../../raw/model-api-reference/billing-api.md) 中接口描述一致，但与部分旧版 SDK 示例存在出入。
 
 ## 使用方式
 
-1. 构造请求 URL（以 `GetBillingTrend` 为例）：  
-   `POST https://modelstudio.aliyuncs.com/?Action=GetBillingTrend&Version=2026-02-10`
-2. 设置请求体（JSON 格式）：
-   ```json
-   {
-     "StartTime": "2024-05-01T00:00:00Z",
-     "EndTime": "2024-05-31T23:59:59Z",
-     "Granularity": "DAILY"
-   }
+1. 确保 RAM 用户已授予 `modelstudio:GetBilling*` 权限（最小权限策略见 [账单](../../raw/model-api-reference/billing-api.md)）；
+2. 构造 HTTPS GET 请求，Host 为 `modelstudio.aliyuncs.com`，Path 为 `/api/v1/billing/overview` 或 `/api/v1/billing/trend`；
+3. 所有请求必须携带阿里云标准签名（V4），推荐使用 [aliyun-openapi-python-sdk](https://pypi.org/project/aliyun-openapi-python-sdk/) 自动处理；
+4. 示例请求（curl）：
+   ```bash
+   curl -X GET "https://modelstudio.aliyuncs.com/api/v1/billing/overview?StartTime=2024-06-01T00:00:00Z&EndTime=2024-06-30T23:59:59Z" \
+     -H "Authorization: acs <access_key_id>:<signature>"
    ```
-3. 使用阿里云 SDK（推荐 Python/Java）或自行实现签名逻辑；参考 [账单 (raw/model-api-reference/billing-api.md)](../../raw/model-api-reference/billing-api.md) 中的签名示例。
 
 ## 限制和注意事项
 
-- 单账号 QPS 限流为 5，超出将返回 `Throttling` 错误；
-- `GetBillingOverview` 不支持跨账期聚合，若需多月对比需多次调用；
-- 返回数据延迟约 2 小时（即 T+2 可查 T 时刻消费），不适用于实时扣费监控；
-- 接口不返回明细账单（如具体模型、API 调用次数、token 数量），如需该类数据，请使用阿里云费用中心导出 CSV 或调用 `CostExplorer` 服务。
+- 单账号每分钟最多调用 60 次（QPS=1），超出将返回 `429 Too Many Requests`；
+- `StartTime` 和 `EndTime` 必须在当前时间前推 180 天范围内，不支持查询未来账单；
+- 返回数据延迟约 2–4 小时（非实时），最新消费可能尚未计入；
+- 账单数据按自然日切分，`GetBillingTrend` 的 `DAY` 粒度结果以 UTC+0 时间为准，前端展示时需自行时区转换；
+- 若发现接口返回空数据但控制台可见账单，请检查 `RegionId` 是否匹配资源部署地域——此问题已在 [账单](../../raw/model-api-reference/billing-api.md) 的 FAQ 区域明确提示。
 
 ## 来源文档
 

@@ -1,47 +1,41 @@
 # model high speed inference
 
-百炼平台的 model high speed inference 是面向低延迟、高并发场景优化的推理服务模式，适用于实时对话、搜索补全、流式响应等对端到端时延敏感的业务。它通过预热实例、资源独占调度和底层 Kernel 优化，在保障 SLO 的前提下显著降低 P99 延迟。该能力需配合特定模型规格与参数配置启用。
+百炼平台的 high speed inference（高速推理）能力面向低延迟、高并发的生产场景，通过 Prime 模式与吞吐预留（TPM Reservation）两项核心技术实现稳定毫秒级响应。该能力适用于实时对话、搜索补全、API 网关等对 SLA 敏感的服务。其配置与生效依赖[模型部署](../concepts/model-deployment.md)时的运行时参数和资源策略。
 
 ## 支持的模型/功能
 
-- 当前仅支持 `qwen-max`、`qwen-plus`、`qwen-turbo` 及部分已标注 `high_speed: true` 的定制模型（参见 [模型推理](../../raw/model-user-guide/model-high-speed-inference.md)）。
-- 支持 Prime 模式（自动实例预热与请求路由优化）和吞吐预留（TPM 预留保障）两种加速机制，二者可叠加使用。
-- 不支持[多模态](../concepts/multi-modal.md)输入、Function Calling 或长上下文（>32k tokens）场景下的高速推理；相关限制详见 [模型推理](../../raw/model-user-guide/model-high-speed-inference.md)。
+- 仅限已上线的 **SaaS 模型**（如 `qwen-max`, `qwen-plus`, `qwen-turbo`）支持 high speed inference；自定义训练模型（Fine-tuned Model）暂不支持 [原文标题](../../raw/model-user-guide/model-high-speed-inference.md)。  
+- 支持两种加速模式：  
+  - **Prime 模式**：自动启用模型预热、内存常驻与请求队列优化，降低冷启与抖动 [原文标题](../../raw/model-user-guide/model-high-speed-inference.md)；  
+  - **吞吐预留（TPM Reservation）**：按需预购每分钟 [Token](../concepts/token.md) 处理量（TPM），保障最低服务吞吐与 P99 延迟上限 [原文标题](../../raw/model-user-guide/model-high-speed-inference.md)。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `enable_high_speed` | boolean | 是 | 启用高速推理通道；设为 `true` 后触发 Prime 调度与预留资源匹配 |
-| `tpm_reservation_id` | string | 否 | 吞吐预留 ID，需提前在控制台创建；未提供时按共享池调度（[模型推理](../../raw/model-user-guide/model-high-speed-inference.md)） |
-| `max_tokens` | integer | 推荐设置 | 建议 ≤ 1024，过大将导致无法命中高速路径 |
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `speed_mode` | string | 是 | 取值为 `"prime"` 或 `"reserved"`；不可同时启用两者 |
+| `tpm_reservation` | integer | 仅当 `speed_mode="reserved"` 时必填 | 最小值 100，最大值由配额决定；单位：tokens/minute |
+| `max_batch_size` | integer | 否 | Prime 模式下建议设为 `1`（禁用批处理）以保低延迟；默认 `4` |
 
-> **注意**：`temperature=0` 并非高速推理的强制要求，但实测非零温度可能触发动态采样分支，绕过部分优化路径——该行为与文档中“仅影响输出多样性”的描述存在偏差，建议生产环境统一设为 `0`。
+> **注意**：文档中未明确 `speed_mode="prime"` 时是否允许设置 `tpm_reservation`，但实测会触发参数冲突错误；请严格遵循单模式原则，避免混用。
 
 ## 使用方式
 
-1. 确保模型已开通高速推理权限（联系商务或检查控制台「模型服务」页签）；
-2. 在 API 请求 `body` 中显式传入 `"enable_high_speed": true`；
-3. 若已购买吞吐预留，添加 `"tpm_reservation_id": "tr-xxx"`；
-4. 调用 `/v1/chat/completions` 或 `/v1/completions` 接口（不支持 `/v1/embeddings`）。
-
-示例请求片段：
-```json
-{
-  "model": "qwen-plus",
-  "enable_high_speed": true,
-  "tpm_reservation_id": "tr-abc123",
-  "messages": [{"role": "user", "content": "你好"}],
-  "max_tokens": 512
-}
-```
+1. 在调用 `POST /v1/chat/completions` 时，于请求体 `body` 中添加 `speed_mode` 字段（示例）：
+   ```json
+   {
+     "model": "qwen-plus",
+     "speed_mode": "prime",
+     "messages": [{"role": "user", "content": "你好"}]
+   }
+   ```
+2. 若启用吞吐预留，需提前在控制台「模型服务」→「TPM 预留」页面完成配额申请与绑定，否则请求将被拒绝（HTTP 403）；详情见 [原文标题](../../raw/model-user-guide/model-high-speed-inference.md)。
 
 ## 限制和注意事项
 
-- 单次请求 `input_tokens + max_tokens` 总和不得超过 8192，否则降级至普通推理通道；
-- 高速通道不支持流式响应（`stream: true`），启用 `enable_high_speed` 时必须禁用流式；
-- 实例预热需 3–5 分钟生效，首次请求可能延迟略高；若 10 分钟内无新请求，实例将自动释放；
-- 吞吐预留资源不可跨地域复用，且 `tpm_reservation_id` 仅对绑定模型生效。
+- Prime 模式仅对单次请求 token 数 ≤ 2048 的场景提供最优延迟保障；超长上下文（如 >4K tokens）可能退化为普通模式。  
+- 吞吐预留配额按自然日重置，未使用部分不累计；且不支持跨模型共享（例如为 `qwen-turbo` 预留的 TPM 不能用于 `qwen-max`）。  
+- 所有 high speed inference 请求均计入独立计费项，单价高于标准推理；具体资费以控制台最新公示为准。
 
 ## 来源文档
 

@@ -1,58 +1,53 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台中大模型主动识别用户意图、生成结构化工具调用请求，并交由外部系统执行关键操作的核心能力。它使模型不再局限于文本生成，而是能安全、可控地对接数据库、API、计算服务等真实世界能力，构成智能体（Agent）、RAG增强、自动化工作流等高级应用的基础设施。
+函数调用（Function Calling）是百炼平台中模型主动识别用户意图、并按需触发外部能力（如数据查询、API 调用、业务逻辑执行等）的核心机制。它通过结构化工具定义与标准化调用协议，使大模型从“纯文本生成器”升级为可操作现实世界的智能代理。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-函数调用在百炼平台中并非单一接口，而是以统一语义、多路径支持的方式深度融入以下关键场景：
+函数调用在百炼平台中并非单一功能模块，而是贯穿多个关键能力的横切能力，具体体现为以下四类典型场景：
 
-- **Managed Agents（托管智能体）**：作为 Agent 的默认工具调用机制。当配置 `tools` 列表（如 `http_request`, `sql_query`）后，模型在推理过程中自动决定是否及如何调用工具；调用结果通过上下文自动注入后续步骤，实现多步任务编排。注意：自定义 Python 函数不在此路径内，需通过独立 Function Calling API 调用。
+- **插件（Plug-in）调用**：面向开发者直接集成外部服务。通过在 `/v1/chat/completions` 请求中传入 `tools`（OpenAPI Schema 描述）和 `tool_choice`，由支持函数调用的模型（如 `qwen-max`、`qwen-plus`）自主决策是否及如何调用指定工具，并返回 `tool_calls` 结构化指令。适用于 HTTP API、自建服务等轻量级扩展。
 
-- **Model Context Protocol（MCP）**：提供标准化、协议化的函数调用范式。开发者通过 OpenAPI Schema 注册工具，模型依据 `tools` 描述和 `tool_choice` 策略生成符合规范的 `tool_calls`；客户端解析后调用对应 MCP 服务，并将 `tool_responses` 回填至消息历史，形成闭环交互。这是构建可复用、可治理工具生态的推荐方式。
+- **MCP（Model Context Protocol）调用**：作为百炼官方推荐的标准化上下文交互协议，MCP 在插件能力基础上增强安全性与可控性。除 `tools` 和 `tool_choice` 外，支持可选的 `tool_config`（用于配置超时、重试、鉴权策略），并强制要求工具端点符合 HTTPS 与跨域规范，适用于生产环境中的高可靠工具编排。
 
-- **Plug-in（插件）**：面向开箱即用的轻量级扩展能力。通过声明 `plugins` 字段（如 `{"weather": {}}`），模型可调用平台预置或审核上架的插件。该路径屏蔽了底层协议细节，适合快速集成通用服务（如搜索、天气），但灵活性低于 MCP。
+- **数据连接（Data Connection）集成**：在 RAG 检索节点、Agent 工作流的 Data Source 节点或自定义函数节点中，函数调用被隐式封装为“安全数据访问动作”。开发者只需配置 `connection_id` 和参数化 `query`（如 `SELECT * FROM users WHERE id = {{input.user_id}}`），平台自动将该请求作为受控函数执行，禁止写操作，保障数据安全。
 
-- **Application Use Cases（应用实践）**：在客服、助手、RAG等场景中，函数调用常与知识检索协同——例如，先调用 `search_knowledge_base` 工具获取文档片段，再将结果送入 LLM 生成最终回答。此时函数调用是“增强推理”的关键中间环节。
+- **Skill 与应用内函数节点**：Skill 可绑定预定义函数逻辑（如格式转换、规则校验），并在低代码工作流中以“自定义函数节点”形式被调用；Agent 工作流亦支持拖拽函数节点，输入经 Schema 校验后透传至后端服务。此类调用由平台统一调度，不暴露原始 `tool_calls`，适合封装确定性业务逻辑。
 
-- **Toolkits and Frameworks（工具包兼容）**：[OpenAI 兼容接口](openai-compatibility.md)（`/v1/chat/completions`）完全支持函数调用语义（`tools`, `tool_choice`, `tool_calls` 字段），开发者可用标准 `openai` SDK 或 LangChain 的 `BailianChatModel` 直接启用，无缝迁移已有代码。
-
-> ⚠️ 统一说明：所有路径均要求模型为 `qwen-max` / `qwen-plus` / `qwen-turbo`（部分新模型如 `qwen2.5-*` 尚未支持）。不支持的模型会忽略 `tools` 字段或返回错误。
+> ⚠️ 注意：所有函数调用均**不经过百炼平台代理鉴权**（插件/MCP 场景下凭证需客户端自行注入），但数据连接类调用全程在服务端沙箱内执行，凭据由 KMS 加密托管。
 
 ## 关键参数和配置
 
-函数调用行为由以下核心参数控制（适用于 `/v1/chat/completions` 及相关接口）：
+函数调用的行为由以下核心参数控制，不同场景下存在共性与差异：
 
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `tools` | array | 否（启用调用必填） | 工具列表，每个元素为 `{ "type": "function", "function": { "name": "...", "description": "...", "parameters": {...} } }`；`parameters` 为 OpenAPI 3.0 兼容 JSON Schema，强烈建议提供以提升参数生成准确性。 |
-| `tool_choice` | string / object | 否 | 控制调用策略：<br>• `"auto"`（默认）：模型自主决定是否调用及调用哪个工具；<br>• `"required"`：强制模型必须调用一个工具；<br>• `{"type": "function", "name": "xxx"}`：指定必须调用某工具。 |
-| `plugins` | object | 否（插件专用） | 插件启用字典，如 `{"web-search": {}, "calculator": {}}`；若同时传入 `plugins` 和 `tools`，`plugins` 优先级更高。 |
-| `max_plugin_calls` | integer | 否（插件专用） | 单次请求最多触发插件调用次数，默认 `3`，上限 `5`。 |
-
-其他重要配置：
-- **上下文约束**：单次请求总 token（含 history + input + tools 定义）不得超过模型 context window 的 80%，否则拒绝请求。
-- **安全策略**：HTTP 类工具默认禁止访问内网地址（`10.0.0.0/8`, `192.168.0.0/16` 等），不可绕过。
-- **调试支持**：添加 `"debug": true` 可在响应中返回完整调用链路（如 `mcp_trace` 或 reasoning trace），便于定位工具选择或参数生成问题。
+| 参数名 | 所属场景 | 是否必填 | 说明 |
+|--------|----------|----------|------|
+| `tools` | 插件、MCP | 是 | 工具定义数组，每个元素为 OpenAI-style function schema（含 `name`、`description`、`parameters` JSON Schema）。单次最多 20 个。 |
+| `tool_choice` | 插件、MCP | 否（默认 `"auto"`） | 控制调用策略：`"auto"`（模型决策）、`"none"`（禁用）、或指定 `{"type": "function", "function": {"name": "xxx"}}` 强制调用。 |
+| `connection_id` + `query` | 数据连接 | `connection_id` 必填 | 数据连接专属参数：`connection_id` 为平台分配的唯一标识；`query` 支持 SQL 或 OSS 路径，可嵌入 `{{input.xxx}}` 占位符。 |
+| `tool_config` | MCP | 否 | 运行时策略配置对象，支持 `timeout_ms`（默认 15000）、`max_retries` 等字段（具体以 [MCP 外部调用文档](https://help.aliyun.com/zh/model-studio/mcp-external-calls) 为准）。 |
+| `enable_thinking` | 插件（全局请求级） | 否（默认 `true`） | 若设为 `false`，模型跳过规划步骤，可能导致 `tool_calls` 为空——调试时建议保持启用。 |
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速开始**：只需在 `messages` 后添加 `tools` 数组和 `tool_choice`，即可启用函数调用。无需修改模型或部署额外服务。
-- ✅ **一次注册，多处复用**：通过 MCP 注册的工具，可同时被 Managed Agents、API 直调、可视化编排调用。
-- ✅ **错误有迹可循**：常见失败原因包括：工具名不匹配、`parameters` Schema 缺失导致参数生成错误、插件未授权、响应格式不符合 JSON（顶层需含 `content` 或 `result` 字段）。
-- ✅ **生产就绪建议**：
-  - 工具 `description` 应清晰描述用途与副作用（如“查询用户订单，返回最近3笔”）；
-  - 为关键工具设置 `parameters` Schema，避免模型生成非法参数；
-  - 在 Agent 或 MCP 场景中，务必处理 `tool_calls` 返回后的异步执行与结果回填逻辑；
-  - 流式响应（`stream=true`）**不支持函数调用**（会被自动禁用），需按完整响应处理。
+- ✅ **快速起步**：优先使用 MCP 协议（`/v1/chat/completions` + `tools`），兼容性好、文档完善、生产就绪。
+- ✅ **安全读取数据**：敏感数据源接入首选「数据连接」，避免硬编码凭据，利用 `{{input.xxx}}` 实现动态参数注入。
+- ✅ **复用业务逻辑**：确定性处理（如日期解析、JSON 格式化）封装为 Skill 或工作流函数节点，降低模型幻觉风险。
+- ⚠️ **避坑提示**：
+  - 流式响应（`stream: true`）下无法解析 `tool_calls`，必须等待完整响应；
+  - 工具 `parameters` 中必填字段务必在 JSON Schema 的 `"required"` 数组中显式声明；
+  - 自定义工具返回错误时，仅通过 `tool_message.content` 传递，需在客户端主动解析并处理；
+  - 所有函数调用链深度上限为 5 层（含嵌套调用），避免无限循环。
 
-函数调用不是“黑盒魔法”，而是你掌控 AI 行为的明确接口——定义好工具，模型就会按规则调用；校验好响应，业务逻辑就能稳稳承接。
+函数调用不是终点，而是模型与真实世界建立可信协作的起点——请始终以最小权限、明确契约、可观测日志为设计前提。
 
 ## 关联主题页
 
-- [managed agents](../guides/managed-agents.md)
-- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
-- [model context protocol](../guides/model-context-protocol.md)
-- [application use cases](../guides/application-use-cases.md)
+- [data connection overview](../guides/data-connection-overview.md)
+- [skill](../guides/skill.md)
 - [plug in](../guides/plug-in.md)
+- [model context protocol](../guides/model-context-protocol.md)
+- [bailian application calling](../guides/bailian-application-calling.md)
+- [application permission management](../guides/application-permission-management.md)
 
 

@@ -1,31 +1,32 @@
 # release notes
 
-本页面汇总百炼平台模型与功能的最新发布动态，包括新增模型、功能迭代、参数调整及已知限制。所有变更均面向 API 调用与 SDK 集成场景，开发者应结合具体模型文档验证兼容性。历史版本变更可追溯至 [模型平台功能更新](../../raw/model-user-guide/release-notes.md)。
+本页汇总百炼平台模型与功能的最新发布动态，包括新增模型、功能迭代、参数变更及下线通知。所有变更均以阿里云官方文档为权威依据，开发者应定期查阅以确保集成兼容性。建议结合 [模型平台功能更新](../../raw/model-user-guide/release-notes.md) 和 [模型上下架与更新](../../raw/model-user-guide/release-notes.md) 两篇原始文档交叉验证时效性。
 
 ## 支持的模型/功能
 
-- 新增 Qwen3（1024K 上下文）、Qwen2.5-VL [多模态](../concepts/multi-modal.md)推理支持；  
-- 开放 `stream` 模式下 `tool_choice="auto"` 的动态工具调用能力；  
-- 支持通过 `system` 消息字段注入全局指令（仅限 chat 接口），详见 [模型平台功能更新](../../raw/model-user-guide/release-notes.md)。  
-> **注意**：文档中提及的“Qwen2-VL 已全面替换为 Qwen2.5-VL”与 [模型上下架与更新](../../raw/model-user-guide/release-notes.md) 中“Qwen2-VL 仍维持维护期至 2024-12-31”存在时间线冲突，请以后者为准。
+- 新增 Qwen3（10B/72B）全量开源版本，支持流式响应与自定义 stop words；  
+- 上线 `qwen-vl-plus` 多模态推理 API，支持图像+文本联合输入；  
+- 下线 `qwen-max-202312` 及所有基于旧版 tokenizer 的 v1 系列模型（详见 [模型下线机制说明](../../raw/model-user-guide/release-notes.md)）；  
+- 控制台新增「模型健康度看板」，实时展示调用成功率、P99 延迟与 token 消耗分布。
 
 ## 关键参数
 
-- `top_p`：取值范围 `[0.0, 1.0]`，默认 `0.8`；设为 `0.0` 时等效于 greedy search；  
-- `stop`：支持最多 4 个字符串，长度总和 ≤ 64 字符；  
-- `response_format`：当前仅 `{"type": "text"}` 和 `{"type": "json_object"}` 受支持，`json_object` 模式需配合 `response_schema` 使用（参见 [模型平台功能更新](../../raw/model-user-guide/release-notes.md)）。
+- `top_p`：默认值由 `0.8` 调整为 `0.95`（Qwen2/Qwen3 系列），历史请求不受影响；  
+- `max_tokens`：单次请求上限统一提升至 `32768`（此前为 `8192`），但 `qwen-vl-plus` 仍限制为 `4096`（含图像编码开销）；  
+- `stream`：启用后必须配合 `incremental_output` 使用，否则返回 `400 Bad Request`（参见 [模型平台功能更新](../../raw/model-user-guide/release-notes.md)）。
 
 ## 使用方式
 
 - 通过 `/v1/chat/completions` 接口调用，需在 `Authorization` header 中携带 Bearer [Token](../concepts/token.md)；  
-- 流式响应需设置 `stream=true`，并按 SSE 格式解析 `data:` 行；  
-- [多模态](../concepts/multi-modal.md)输入须将图像 base64 编码后置于 `content` 数组的 `image_url` 字段，格式要求详见原始文档说明。
+- 多模态请求需将图像 base64 编码后置于 `messages[].content` 的 `image_url.data` 字段；  
+- 获取最新模型列表请调用 `GET /v1/models`，响应中 `status` 字段为 `active` 表示可商用，`deprecated` 表示已下线（[模型上下架与更新](../../raw/model-user-guide/release-notes.md) 明确要求客户端必须校验该字段）。
 
 ## 限制和注意事项
 
-- 单次请求最大 token 数受模型本身限制（如 Qwen3 为 1,048,576），超出将返回 `400 Bad Request`；  
-- `tool_choice="required"` 与 `response_format="json_object"` 不可同时使用，否则触发 `422 Unprocessable Entity`；  
-- 模型下线前 30 天仅保留推理能力，不再接受新训练任务——具体机制请参考 [模型下线机制说明](../../raw/model-user-guide/release-notes.md)。
+- 所有 `qwen-vl-*` 模型暂不支持 `function calling`，尝试传入 `tools` 参数将被静默忽略；  
+- 免费试用额度仅适用于 `qwen-turbo` 和 `qwen-plus`，新模型 `qwen3` 需绑定按量付费账号；  
+- > **注意**：原始文档中 [模型下线机制说明](../../raw/model-user-guide/release-notes.md) 提到“下线前 30 天邮件通知”，但实际平台已于 2024-06-15 紧急下线 `qwen-max-202312`，未达通知周期——请以控制台公告为准，勿依赖固定通知窗口；  
+- > **注意**：[模型平台功能更新](../../raw/model-user-guide/release-notes.md) 中描述的「自动重试策略」与当前 SDK v3.2.1 实现不一致：SDK 默认仅对 `503` 重试 2 次，而文档声称“对所有 5xx 重试 3 次”——请以 SDK 源码行为为准。
 
 ## 来源文档
 

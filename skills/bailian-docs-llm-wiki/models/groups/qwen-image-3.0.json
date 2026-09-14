@@ -22,6 +22,7 @@
         {
           "priceUnit": "每张",
           "price": "0.02",
+          "timeBand": "standard",
           "ntmAmountType": "qima_input_1k",
           "type": "qima_input_1k",
           "priceName": "1K图片输入"
@@ -29,6 +30,7 @@
         {
           "priceUnit": "每张",
           "price": "0.02",
+          "timeBand": "standard",
           "ntmAmountType": "qima_input_2k",
           "type": "qima_input_2k",
           "priceName": "2K图片输入"
@@ -36,6 +38,7 @@
         {
           "priceUnit": "每张",
           "price": "0.18",
+          "timeBand": "standard",
           "ntmAmountType": "qima_output_1k",
           "type": "qima_output_1k",
           "priceName": "1K图片生成"
@@ -43,6 +46,7 @@
         {
           "priceUnit": "每张",
           "price": "0.18",
+          "timeBand": "standard",
           "ntmAmountType": "qima_output_2k",
           "type": "qima_output_2k",
           "priceName": "2K图片生成"
@@ -64,7 +68,9 @@
           "async_user_concurrency_limit": 10
         }
       },
-      "priceTimeBands": [],
+      "priceTimeBands": [
+        "standard"
+      ],
       "capabilities": [
         "IG"
       ],
@@ -102,6 +108,7 @@
         {
           "priceUnit": "每张",
           "price": "0.02",
+          "timeBand": "standard",
           "ntmAmountType": "qima_input_1k",
           "type": "qima_input_1k",
           "priceName": "1K图片输入"
@@ -109,6 +116,7 @@
         {
           "priceUnit": "每张",
           "price": "0.02",
+          "timeBand": "standard",
           "ntmAmountType": "qima_input_2k",
           "type": "qima_input_2k",
           "priceName": "2K图片输入"
@@ -116,6 +124,7 @@
         {
           "priceUnit": "每张",
           "price": "0.25",
+          "timeBand": "standard",
           "ntmAmountType": "qima_output_1k",
           "type": "qima_output_1k",
           "priceName": "1K图片生成"
@@ -123,6 +132,7 @@
         {
           "priceUnit": "每张",
           "price": "0.5",
+          "timeBand": "standard",
           "ntmAmountType": "qima_output_2k",
           "type": "qima_output_2k",
           "priceName": "2K图片生成"
@@ -144,7 +154,9 @@
           "async_user_concurrency_limit": 10
         }
       },
-      "priceTimeBands": [],
+      "priceTimeBands": [
+        "standard"
+      ],
       "capabilities": [
         "IG"
       ],

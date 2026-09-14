@@ -91,6 +91,32 @@
               "currency": "CNY"
             }
           ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_fetch",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-extractor",
+          "type": "web_fetch",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_search",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-search",
+          "type": "web_search_anthropic",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY"
+            }
+          ]
         }
       ],
       "description": "2.4万亿参数MoE旗舰，编程与办公能力全面跃升，可自主编程十数天交付完整项目。胜任法律、金融、设计等数百种专业任务，一次对话端到端交付生产级成果。原生视觉理解贯穿规划、执行与验证全流程，支持超长文档与长视频的深度语义解析。长程任务中自主规划与闭环迭代，持续进化。",
@@ -297,6 +323,45 @@
           "name": "web_search",
           "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-search",
           "type": "web_search",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Completions API",
+          "name": "pdf_parsing",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/pdf-understanding",
+          "type": "pdf_parsing",
+          "prices": [
+            {
+              "priceUnit": "每页",
+              "price": "0.02",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_fetch",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-extractor",
+          "type": "web_fetch",
+          "prices": [
+            {
+              "priceUnit": "",
+              "price": "0",
+              "currency": "CNY"
+            }
+          ]
+        },
+        {
+          "supportedApi": "Anthropic API",
+          "name": "web_search",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-search",
+          "type": "web_search_anthropic",
           "prices": [
             {
               "priceUnit": "千次调用",

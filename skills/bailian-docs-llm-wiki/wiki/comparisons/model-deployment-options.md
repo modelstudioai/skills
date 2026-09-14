@@ -1,82 +1,65 @@
-# [模型部署](../concepts/model-deployment.md)方式对比：Model Deployment 1 vs Model High Speed Inference vs Model Compression
+# [模型部署](../concepts/model-deployment.md)方案对比：高并发推理、[模型部署](../concepts/model-deployment.md)基础与生产化部署
 
-## 对比目的与背景
-
-在百炼平台模型服务落地过程中，开发者常面临「如何选择最适配业务需求的模型交付形态」这一核心问题。`Model Deployment 1`（MD1）、`Model High Speed Inference`（HSI）和`Model Compression`（MC）虽均服务于模型推理，但设计目标、技术路径与适用边界存在本质差异：
-
-- **MD1** 是通用型**部署框架**，聚焦资源隔离、弹性伸缩与生产级运维保障；  
-- **HSI** 是面向时延敏感场景的**推理通道优化能力**，不改变部署形态，而是在已有服务上启用加速调度策略；  
-- **MC** 是模型层面的**轻量化预处理技术**，通过量化压缩降低硬件门槛，适用于资源受限或成本敏感环境。
-
-本页旨在从工程实践角度，系统对比三者的关键特性，帮助开发者基于性能、成本、灵活性与合规性等多维约束，做出可落地的技术选型决策。
+为帮助开发者在百炼平台上高效选型，本文系统对比三种核心模型服务能力：**High Speed Inference（高速推理）**、**Model Deployment 1（MD1，[模型部署](../concepts/model-deployment.md)基础方案）** 和 **Model Production（模型生产化部署）**。三者定位不同——高速推理聚焦 *已有SaaS模型的极致性能优化*，MD1 提供 *标准化、多策略的通用部署基座*，而 Model Production 则面向 *从微调模型到生产上线的全生命周期管理*。理解其差异对保障低延迟、控成本、提稳定性及加速 MLOps 落地至关重要。
 
 ---
 
-## 关键维度对比表
+## 关键维度对比
 
-| 维度 | Model Deployment 1 (MD1) | Model High Speed Inference (HSI) | Model Compression (MC) |
-|------|---------------------------|-----------------------------------|-------------------------|
-| **本质定位** | 生产级模型服务部署范式（Infrastructure-as-Code） | 已部署模型的低延迟推理加速通道（Runtime Optimization） | 模型离线轻量化处理技术（Model Transformation） |
-| **输入格式** | 支持标准 OpenAI 兼容格式（`messages`/`prompt`），支持 `stream: true`（除 `token_based` 模式外） | 同 MD1 输入格式，但强制要求 `stream: false`；`input_tokens + max_tokens ≤ 8192` | 无直接输入；作用于模型文件本身（Hugging Face 格式 `.safetensors` 或 `.bin`） |
-| **输出格式** | 完整 OpenAI 响应结构（含 `choices`, `usage`, `id` 等），支持流式（部分模式） | 同 MD1 输出结构，但**仅支持非流式响应**（`stream: false` 必须） | 不产生运行时输出；生成新模型 ID（如 `qwen2-7b-int4-awq`），供后续部署或调用 |
-| **支持模型** | 所有已发布至「我的模型」的模型（含自定义模型、Qwen 系列、Llama 等） | 仅限白名单模型：<br>• `qwen-max` / `qwen-plus` / `qwen-turbo`<br>• 标注 `high_speed: true` 的定制模型<br>（不支持[多模态](../concepts/multi-modal.md)、Function Calling） | 仅限 Qwen 系列开源模型：<br>• `qwen2-1.5b` / `qwen2-7b` 等<br>• **暂不支持 Llama、Phi、[多模态](../concepts/multi-modal.md)模型** |
-| **API 端点** | 独立部署端点（如 `https://dashscope.aliyuncs.com/api/v1/deployments/{id}/chat/completions`） | **复用原模型 API 端点**（如 `/v1/chat/completions`），通过请求体参数 `enable_high_speed: true` 触发 | 无独立端点；压缩后模型需**另行部署（如通过 MD1）或直接调用**（使用新 model_id） |
-| **计费方式** | 按部署类型差异化计费：<br>• `dedicated`/`dtu`：按实例时长（小时）+ GPU 资源规格<br>• `ptu`：按预置 PTU 数量（月结）<br>• `token_based`：按实际输入/输出 token 计费（实时扣费） | **不单独计费**，但需满足前置条件：<br>• 吞吐预留（TPM Reservation）需单独购买并计费<br>• Prime 预热实例消耗对应 GPU 资源（计入账号总用量） | **按压缩任务耗时计费**（GPU 小时）；压缩完成后的模型调用费用归属其部署方式（如部署为 MD1，则按 MD1 计费） |
-| **典型场景** | • 稳定中高流量 SaaS 服务<br>• 多版本灰度发布（配合模型路由）<br>• 合规强要求场景（独占物理 GPU）<br>• 突发流量业务（`token_based` 模式） | • 实时对话机器人（P99 < 300ms）<br>• 搜索联想/补全（毫秒级响应）<br>• 高并发低延迟批处理（如客服工单摘要） | • 边缘设备/低配云主机推理<br>• 成本敏感型 PoC 或内部工具<br>• 需快速验证模型效果的轻量项目 |
+| 维度 | High Speed Inference（高速推理） | Model Deployment 1（MD1） | Model Production（模型生产化部署） |
+|------|----------------------------------|----------------------------|-------------------------------------|
+| **定位目标** | 在标准 SaaS 模型调用链路上叠加毫秒级延迟保障与确定性吞吐 | 提供可配置、可隔离、可计费的模型服务实例部署能力，覆盖轻量到严苛 SLA 场景 | 将训练/调优后的模型（含自定义微调模型）正式投入生产环境，支持灰度、扩缩容与资源预留 |
+| **支持模型类型** | ✅ 仅限已上线 SaaS 模型（如 `qwen-max`, `qwen-plus`, `qwen-turbo`）<br>❌ 不支持 Fine-tuned 模型 | ✅ 所有已发布模型：SaaS 模型 + 导入的自定义模型（含 LoRA 微调模型） | ✅ 支持 Fine-tuned 模型（`fine_tuned_model_id`）<br>✅ 支持官方基础模型（如 `qwen-max`） |
+| **输入格式** | 标准 OpenAI 兼容请求体（`/v1/chat/completions`），需显式携带 `speed_mode` 字段 | 标准 OpenAI 兼容请求体（`/v1/chat/completions`），Endpoint 独立，无需额外字段 | DashScope OpenAPI 格式（`/v1/deployments/{id}/chat/completions`），需使用专属 endpoint 与 api_key |
+| **输出格式** | 完全兼容 OpenAI 标准响应结构（含 `choices`, `usage`, `id` 等） | 完全兼容 OpenAI 标准响应结构 | 兼容 OpenAI 标准响应结构，但部分字段（如 `system_fingerprint`）可能因部署模式略有差异 |
+| **API 端点** | 复用全局 SaaS 接口：<br>`POST https://dashscope.aliyuncs.com/api/v1/chat/completions` | 独立部署 endpoint：<br>`POST https://{deployment-id}.aliyuncs.com/v1/chat/completions` | 独立生产部署 endpoint：<br>`POST https://dashscope.aliyuncs.com/api/v1/deployments/{deployment_id}/chat/completions` |
+| **核心资源控制机制** | • `speed_mode`: `"prime"`（预热+常驻）或 `"reserved"`（TPM 预留）<br>• `tpm_reservation`（仅 reserved 模式） | • `deployment_type`: `dedicated` / `ptu` / `dtu` / `mu` / `pay_as_you_go`<br>• `instance_type`, `ptu_capacity`, `max_concurrent_requests` 等精细参数 | • `tpm_capacity`（TPM 预留上限）<br>• `replicas`（副本数）<br>• `timeout`（单请求超时） |
+| **计费方式** | ✅ 独立计费项，单价高于标准推理<br>✅ TPM 预留配额按自然日重置，不累计<br>❌ 不支持跨模型共享预留 | ✅ 按部署类型差异化计费：<br> - `dedicated`/`dtu`/`mu`: 按实例时长或算力单元计费<br> - `ptu`: 按预置吞吐量包年/包月<br> - `pay_as_you_go`: 按实际 token 数计费 | ✅ TPM 预留费用独立计费（与高速推理的 `tpm_reservation` 分开）<br>✅ 副本（`replicas`）按实例时长计费<br>✅ 不支持纯 token 按量模式（无 `pay_as_you_go` 类型） |
+| **典型场景** | • 实时对话机器人首响应（<300ms P99）<br>• 搜索下拉补全（高频短请求）<br>• API 网关后端强 SLA 服务 | • 内部工具后台服务（稳定中等流量）<br>• 客户侧集成 SDK（需专属 endpoint 与权限隔离）<br>• 成本敏感型 PoC 或灰度验证（`pay_as_you_go`） | • LoRA 微调模型上线交付客户<br>• 多版本模型 AB 测试（如 `v1` vs `v2` 微调版）<br>• 金融/政务类需审计追踪与副本冗余的生产系统 |
+| **冷启延迟保障** | ✅ Prime 模式：内存常驻 + 请求队列优化，首次调用无冷启<br>✅ Reserved 模式：TPM 预留保障最低吞吐，降低排队抖动 | ⚠️ `dedicated`/`dtu`/`mu`: 启动耗时 3–5 分钟，就绪后无冷启<br>⚠️ `ptu`: 自动扩缩，存在毫秒级弹性冷启<br>❌ `pay_as_you_go`: 存在显著冷启延迟（秒级） | ⚠️ 首次部署需 2–8 分钟（含加载、初始化），就绪后副本常驻；`replicas > 1` 可规避单点冷启风险 |
+| **动态调整能力** | ❌ `speed_mode` 与 `tpm_reservation` 不可运行时变更，需重发请求并满足配额 | ❌ `deployment_type` 与 `instance_type` 不可变更<br>✅ `max_concurrent_requests` 可热更新（部分模式）<br>✅ `pay_as_you_go` 可随时停用 | ❌ `tpm_capacity` 不可动态调整（需删除重建）<br>✅ `replicas` 支持运行时水平扩缩（1→10）<br>✅ 支持通过路由规则切换流量（灰度/回滚） |
 
 ---
 
 ## 适用场景建议
 
-### ✅ 推荐选择 **Model Deployment 1**
-- 你的模型需长期稳定在线，SLA 要求 ≥ 99.9%；
-- 流量模式可预测（如日均 500 QPS），或存在明显波峰波谷（需自动扩缩）；
-- 需要多模型/多版本统一管理、灰度发布、AB 测试；
-- 涉及金融、政务等对资源隔离与审计有硬性要求的场景。
-
-> ⚠️ 注意：若追求极致低延迟但流量不稳定，MD1 单独使用可能无法满足 P99 < 200ms 要求，建议叠加 HSI。
-
-### ✅ 推荐选择 **Model High Speed Inference**
-- 当前已通过 MD1 或百炼托管模型服务部署了 `qwen-plus` 等白名单模型；
-- 业务对首字延迟（Time to First [Token](../concepts/token.md)）极度敏感，且能接受非流式响应；
-- 可接受 3–5 分钟预热期，并确保请求持续活跃（避免实例释放）；
-- 已购买 TPM 预留资源，需保障确定性吞吐能力。
-
-> ⚠️ 注意：HSI **不是独立部署方案**，必须依附于一个已存在的模型服务（如 MD1 部署实例或百炼标准 API）。不可用于自定义模型（除非明确标注 `high_speed: true`）。
-
-### ✅ 推荐选择 **Model Compression**
-- 目标运行环境显存有限（如 < 8GB GPU 或 CPU-only 设备）；
-- 模型精度容忍小幅下降（INT4 压缩后 Qwen2-7B 在常规 QA 任务中 BLEU 下降约 1.2–2.5）；
-- 需快速验证多个小模型变体，或构建低成本内部工具链；
-- 无长期运维诉求，倾向“压缩→部署→使用”极简流程。
-
-> ⚠️ 注意：MC 生成的模型**不可微调**，且长上下文（>8K tokens）下可能出现逻辑连贯性退化，关键业务需增加后处理校验。
+| 场景描述 | 推荐方案 | 理由说明 |
+|----------|-----------|-----------|
+| **已上线 `qwen-plus`，需为客服对话接口提供 <200ms P99 延迟保障，且流量平稳可预测** | ✅ High Speed Inference（`speed_mode="reserved"` + `tpm_reservation=3000`） | 直接复用 SaaS 模型能力，无需部署新实例；TPM 预留提供硬性吞吐与延迟 SLA，成本低于独占实例，接入最快（改请求体即可）。 |
+| **需将内部微调的 `qwen-turbo-lora-v2` 模型封装为独立 API 供多个业务方调用，并要求权限隔离、独立监控与按调用量计费** | ✅ Model Deployment 1（`deployment_type="pay_as_you_go"`） | 支持自定义模型导入，`pay_as_you_go` 模式零预置成本、按 token 计费透明，专属 endpoint 满足权限与可观测性需求，适合多租户分发场景。 |
+| **某银行风控模型完成 LoRA 微调，需上线生产环境，要求双副本高可用、TPM 预留 5000、支持灰度发布至 5% 流量、并保留完整审计日志** | ✅ Model Production（`tpm_capacity=5000`, `replicas=2`） | 唯一支持 Fine-tuned 模型直接生产的方案；原生支持副本扩缩、TPM 预留、灰度路由（配合模型路由功能），且部署状态与生命周期受平台统一管控，符合金融合规要求。 |
+| **内部研发团队快速验证 `qwen-max` 在新 Prompt 下的效果，无 SLA 要求，预算有限，希望即开即用** | ✅ Model Deployment 1（`deployment_type="pay_as_you_go"`）或 ✅ High Speed Inference（标准模式，不启用 speed_mode） | `pay_as_you_go` 提供专属 endpoint 便于调试与埋点；若仅需临时测试，直接调用 SaaS 接口（无 speed_mode）成本最低、开通最快。 |
+| **构建企业级 AI 中台，需统一纳管 20+ 个模型（含 SaaS 与微调模型），支持自动扩缩容、流量调度、熔断降级与统一计费看板** | ✅ Model Production + ✅ MD1 协同使用 | Model Production 管理微调模型生产部署与 TPM/副本；MD1 管理 SaaS 模型的 PTU/DTU 部署；二者 endpoint 均可接入同一模型路由网关，实现中台级统一调度与治理。 |
 
 ---
 
 ## 技术选型参考（面向开发者）
 
-| 你的需求 | 推荐方案 | 关键理由 | 补充说明 |
-|----------|----------|----------|----------|
-| “我要上线一个企业客服机器人，要求 99.95% 可用率，支持灰度发布” | **MD1 + dedicated 模式** | 独占资源保障 SLA，支持模型路由实现灰度，控制台可观测性强 | 配合 `min_replicas=2` 防止单点故障 |
-| “我们的搜索补全接口 P99 延迟超标，当前用 qwen-plus 调用标准 API” | **HSI（启用 `enable_high_speed: true`）** | 无需改代码、不重建服务，5 分钟内生效，实测 P99 降低 40–60% | 务必设置 `max_tokens ≤ 512` 并禁用 `stream` |
-| “想在树莓派上跑一个轻量摘要模型，预算只有 100 元/月” | **MC（AWQ 量化） + MD1 token_based 部署** | INT4 模型显存占用降至 1/3，`token_based` 按量付费契合低频场景 | 建议选用 `qwen2-1.5b-int4-awq`，7B 模型在树莓派 5 上仍较吃力 |
-| “需要同时支持流式响应 + 低延迟 + 多模型切换” | **MD1（ptu 模式） + HSI（针对白名单模型）** | MD1 提供流式能力与弹性，HSI 为特定模型加速；二者正交叠加 | 注意：HSI 本身不支持流式，因此流式请求走普通通道，非流式请求走高速通道 |
-| “我们训练了一个私有 Llama-3-8B 模型，需部署到私有云 GPU 集群” | **MD1（dedicated 模式）** | MC 不支持 Llama 系列，HSI 不支持非白名单模型，MD1 是唯一可行路径 | 可结合 VPC 内网部署提升安全性与延迟 |
+- **优先检查模型来源**：  
+  → 若使用 **官方 SaaS 模型**（`qwen-*` 系列）且追求**极致低延迟/确定性吞吐** → 选 **High Speed Inference**；  
+  → 若使用 **Fine-tuned 自定义模型** → **Model Production 是唯一可行路径**；  
+  → 若需 **专属 endpoint、权限隔离或混合部署（SaaS + 自定义）** → 选 **MD1**。
 
-> 💡 **终极建议**：  
-> - **先压缩，再部署，最后加速**：对 Qwen 白名单模型，优先执行 MC（降低资源成本）→ 用 MD1 部署 → 在高优接口中启用 HSI；  
-> - **非 Qwen 模型请绕过 HSI 和 MC**：直接使用 MD1 的 `dedicated` 或 `ptu` 模式，确保功能完整性；  
-> - **所有方案均强制 HTTPS**：内网直连需额外配置 VPC 对等连接或 PrivateLink，不可跳过安全层。
+- **关注延迟与稳定性要求**：  
+  → P99 < 300ms 且请求长度 ≤2048 tokens → High Speed Inference Prime 模式最优；  
+  → 需毫秒级确定性延迟（如实时语音转写）→ MD1 的 `dtu`/`mu` 模式；  
+  → 可接受秒级冷启与波动延迟 → MD1 `pay_as_you_go` 或 Model Production（无 TPM）。
 
----  
-*文档更新时间：2024年6月*  
-*依据百炼平台 v2.5.0 版本功能矩阵整理，具体以控制台实时能力为准*
+- **评估成本结构**：  
+  → 流量高度可预测 → High Speed Inference Reserved 或 MD1 PTU；  
+  → 流量峰谷明显或处于验证期 → MD1 `pay_as_you_go`；  
+  → 需长期稳定运行且有副本冗余要求 → Model Production（按副本计费更清晰）。
+
+- **重视运维与扩展性**：  
+  → 需灰度、AB、自动扩缩、多地域部署 → **Model Production 是当前最成熟选择**；  
+  → 需与现有 DevOps 工具链（如 Terraform、CI/CD）深度集成 → 查阅各方案 OpenAPI 文档，Model Production 与 MD1 均提供完整 API，High Speed Inference 仅作为请求参数存在。
+
+> **最后提醒**：三者并非互斥，而是互补。例如：可对核心 SaaS 模型启用 High Speed Inference 保障主链路，同时用 Model Production 部署微调模型处理长尾场景，并通过 MD1 的模型路由能力统一接入——这才是百炼平台生产级架构的最佳实践。
 
 ## 被对比主题页
 
-- [model deployment 1](../guides/model-deployment-1.md)
 - [model high speed inference](../guides/model-high-speed-inference.md)
-- [model compression](../guides/model-compression.md)
+- [model deployment 1](../guides/model-deployment-1.md)
+- [model production](../api/model-production.md)
 
 

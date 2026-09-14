@@ -1,44 +1,37 @@
 # model context protocol
 
-Model Context Protocol（MCP）是百炼平台提供的标准化上下文交互协议，用于在大模型应用中安全、可控地接入外部工具与数据源。它通过定义统一的请求/响应结构和生命周期语义，使 LLM 能够按需调用函数、检索知识或执行操作，同时保障上下文隔离与权限收敛。该协议已在百炼控制台、SDK 及 Agent 框架中深度集成。
+model context protocol（MCP）是百炼平台提供的标准化上下文交互协议，用于在大模型应用中安全、可控地接入外部工具与数据源。它通过定义统一的请求/响应结构和生命周期管理机制，使模型能按需调用函数、检索知识或执行操作，同时保障上下文隔离与权限收敛。该协议已在百炼控制台、SDK 及 API 层面深度集成。
 
 ## 支持的模型与功能
 
-MCP 当前支持所有百炼平台托管的 `qwen-max`、`qwen-plus`、`qwen-turbo` 等 Qwen 系列模型（含 v1/v2 接口），以及通过 [自定义MCP服务](https://help.aliyun.com/zh/model-studio/custom-mcp) 接入的第三方模型。核心功能包括：  
-- 工具调用（tool calling）与多轮上下文绑定  
-- 动态工具发现（通过 `/tools` 端点返回 OpenAPI 格式描述）  
-- 上下文感知的参数注入（如 `user_id`、`session_id` 等运行时上下文字段）  
-- 与百炼 Agent Runtime 的原生协同，支持自动 fallback 与错误重试逻辑  
-
-> **注意**：部分旧版文档称 MCP 仅支持 `qwen-max`，但实际已扩展至全部 Qwen 公共模型——请以 [官方 MCP 服务](https://help.aliyun.com/zh/model-studio/official-and-third-party-mcp) 的最新说明为准。
+MCP 当前支持所有百炼平台托管的 `qwen-max`、`qwen-plus`、`qwen-turbo` 等 Qwen 系列模型（含 v1/v2 版本），以及通过 [自定义MCP服务](https://help.aliyun.com/zh/model-studio/custom-mcp) 接入的第三方模型。核心功能包括：工具发现（tool discovery）、上下文感知的[函数调用](../concepts/function-calling.md)（context-aware tool calling）、多轮会话中的状态保持（stateful session context），以及基于角色的工具访问控制。详细能力边界请参见 [MCP 简介](https://help.aliyun.com/zh/model-studio/mcp-introduction)。
 
 ## 关键参数
 
-MCP 请求需在 `messages` 中携带特殊 `tool_calls` 字段，并在 `tools` 数组中声明可用工具。关键参数如下：
+调用 MCP 时需在 `messages` 中显式声明 `tool_choice` 和 `tools` 字段，并在 `tools` 中提供符合 OpenAI-style function schema 的工具定义。关键字段包括：
 
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `tools[].function.name` | string | 是 | 工具唯一标识符，须与 MCP 服务注册名一致 |
-| `tools[].function.description` | string | 是 | 工具功能描述，供模型理解调用意图 |
-| `tools[].function.parameters` | JSON Schema | 否 | OpenAPI 3.0 兼容的参数定义，影响模型生成参数值的准确性 |
-| `tool_choice` | `"auto"` / `"required"` / `{"type": "function", "name": "xxx"}` | 否 | 控制调用策略；默认为 `"auto"`，详见 [MCP 简介](https://help.aliyun.com/zh/model-studio/mcp-introduction) |
+- `tools`: 工具列表，每个工具必须包含 `type: "function"`、`function.name`、`function.description` 和 `function.parameters`（JSON Schema 格式）  
+- `tool_choice`: 可选 `"auto"`、`"none"` 或 `{"type": "function", "function": {"name": "xxx"}}`  
+- `tool_config`: （可选）用于指定超时、重试、鉴权等运行时策略，详见 [外部调用](https://help.aliyun.com/zh/model-studio/mcp-external-calls)  
+
+> **注意**：`tool_config` 在 [raw/application-user-guide/model-context-protocol.md](../../raw/application-user-guide/model-context-protocol.md) 中未定义具体字段，实际可用参数以 SDK 文档和 [外部调用](https://help.aliyun.com/zh/model-studio/mcp-external-calls) 为准。
 
 ## 使用方式
 
-1. **启用 MCP**：在百炼控制台创建应用时，于「模型配置」页勾选「启用 Model Context Protocol」；  
-2. **注册工具**：通过控制台「工具管理」上传 OpenAPI YAML/JSON，或调用 `POST /v1/mcp/tools` 接口注册（需携带 `Authorization: Bearer <token>`）；  
-3. **发起推理请求**：在 `/v1/chat/completions` 请求体中传入 `tools` 和 `tool_choice`，模型将返回 `tool_calls`；  
-4. **执行与回调**：客户端解析 `tool_calls`，调用对应 MCP 服务端点（如 `POST https://mcp.example.com/execute`），并将结果以 `tool_responses` 形式追加到后续请求的 `messages` 中。  
-
-完整流程示例见 [外部调用](https://help.aliyun.com/zh/model-studio/mcp-external-calls) 文档。
+1. 在请求 payload 中构造 `tools` 数组并注入工具定义；  
+2. 设置 `tool_choice` 控制调用策略；  
+3. 发送请求至 `/v1/chat/completions`（需 `model` 参数为支持 MCP 的模型）；  
+4. 解析响应中的 `tool_calls` 字段，同步或异步执行对应工具逻辑；  
+5. 将工具执行结果以 `tool_message` 形式拼入下一轮 `messages` 并继续请求。  
+完整示例见 [官方 MCP 服务](https://help.aliyun.com/zh/model-studio/official-and-third-party-mcp) 及 [raw/application-user-guide/model-context-protocol.md](../../raw/application-user-guide/model-context-protocol.md)。
 
 ## 限制和注意事项
 
-- 单次请求最多声明 50 个工具，单次响应最多触发 5 次 `tool_calls`；  
-- 工具响应体必须为 JSON，且顶层字段 `content` 或 `result` 将被自动注入上下文（其他字段被忽略）；  
-- MCP 服务端点必须支持 HTTPS、CORS（`Access-Control-Allow-Origin: *`），且响应头需包含 `Content-Type: application/json`；  
-- 若使用自建 MCP 服务，请确保其符合 [MCP 协议规范](../../raw/application-user-guide/model-context-protocol.md)，否则可能触发 `invalid_tool_response` 错误；  
-- 调试时建议开启 `debug: true` 参数，可在响应中获取 `mcp_trace` 字段查看工具调度链路——该能力在 [常见问题](https://help.aliyun.com/zh/model-studio/mcp-faq) 中有详细说明。
+- 单次请求最多声明 20 个工具，单个工具 `parameters` Schema 深度不得超过 8 层；  
+- 工具调用链深度限制为 5 层（即最多嵌套 5 次 `tool_message` → 新 `tool_call`）；  
+- 不支持在流式响应（`stream: true`）中解析 `tool_calls`，必须等待完整响应；  
+- 所有工具端点必须启用 HTTPS 且响应头包含 `Access-Control-Allow-Origin: *`（浏览器场景）或通过百炼网关代理（服务端场景）。  
+常见兼容性问题与调试建议汇总于 [常见问题](https://help.aliyun.com/zh/model-studio/mcp-faq)，亦可对照 [raw/application-user-guide/model-context-protocol.md](../../raw/application-user-guide/model-context-protocol.md) 进行快速核验。
 
 ## 来源文档
 
