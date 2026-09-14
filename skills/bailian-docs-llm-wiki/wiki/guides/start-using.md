@@ -1,36 +1,26 @@
 # start using
 
-本文档介绍如何快速开始使用百炼平台构建和部署 AI 应用，涵盖模型调用、应用配置及基础开发流程。开发者可通过控制台或 API 快速接入，无需从零训练模型。所有操作均基于百炼提供的托管服务，需确保已开通对应模型的调用权限。
+百炼平台提供低门槛、高灵活性的模型调用与应用构建能力，开发者可通过控制台或 API 快速接入大模型服务。本文档汇总启动所需的核心信息，涵盖模型支持范围、关键参数配置、调用方式及常见约束，适用于首次集成或快速验证场景。所有功能均以 [开始使用](../../raw/application-user-guide/start-using.md) 为基础依据。
 
 ## 支持的模型/功能
 
-百炼平台当前支持通义千问系列（Qwen1.5、Qwen2、Qwen2.5、Qwen3）、Qwen-VL、Qwen-Audio 等开源模型，以及部分专属微调版本（如 qwen-max、qwen-plus）。应用层功能包括知识库问答、工作流编排、RAG 增强、多轮对话管理等。具体模型列表与能力说明详见 [开始使用](../../raw/application-user-guide/start-using.md)。注意：`qwen-max` 为闭源模型，其输入长度上限与公开 Qwen 系列不同，不可直接套用 Qwen2 的 token 计算逻辑 —— 详见 [开始使用](../../raw/application-user-guide/start-using.md) 中的“模型选型建议”章节（该章节在 2024-09 版本中已更新，旧版文档中未体现差异）。
+当前平台支持调用通义千问系列（Qwen1.5、Qwen2、Qwen2.5、Qwen3）、Qwen-VL、Qwen-Audio 等开源模型，以及部分闭源增强模型（如 qwen-max、qwen-plus）。应用层功能包括知识库问答、工作流编排、Agent 能力封装等，具体模型列表与能力矩阵请参考 [开始使用](../../raw/application-user-guide/start-using.md) 中的“可用模型”章节。> **注意**：文档中提及的“0代码构建问答应用”链接指向外部帮助中心页面，其功能范围可能滞后于控制台实际能力；建议以控制台「应用市场」实时模型列表为准。
 
 ## 关键参数
 
-调用模型时需关注以下核心参数：
-- `model`: 必填，如 `"qwen-max"` 或 `"qwen2-72b"`；
-- `input.messages`: 消息数组，格式为 `[{ "role": "user", "content": "..." }]`；
-- `parameters.temperature`: 控制输出随机性（0.0–1.0），默认 0.85；
-- `parameters.top_p`: 核采样阈值，默认 0.8；
-- `parameters.max_tokens`: 输出最大 token 数，各模型有硬性上限（例如 qwen2-72b 为 8192，qwen-max 为 32768）。
-
-参数兼容性请以 [开始使用](../../raw/application-user-guide/start-using.md) 中的“API 参数参考表”为准；该表已同步最新模型规格，旧版 SDK 文档中部分默认值存在滞后。
+调用模型时需指定 `model`（必填，如 `qwen-max`）、`input`（结构化输入，含 `messages` 或 `prompt` 字段）和 `parameters`（可选，含 `temperature`、`top_p`、`max_tokens` 等）。`stream` 参数控制流式响应，默认为 `false`。所有参数语义与 [OpenAI 兼容接口](../concepts/openai-compatibility.md)保持一致，详细说明见 [开始使用](../../raw/application-user-guide/start-using.md) 的“API 请求格式”小节。
 
 ## 使用方式
 
-1. **控制台快速启动**：登录百炼控制台 → 创建应用 → 选择模板（如“知识库问答”）→ 绑定知识库或配置 Prompt → 发布并获取 API Key；
-2. **API 直接调用**：使用 `POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`，携带 `Authorization: Bearer <api_key>`；
-3. **SDK 调用（推荐）**：安装 `dashscope` Python SDK（≥1.20.0），调用 `Generation.call()` 方法，示例见 [开始使用](../../raw/application-user-guide/start-using.md) 中的“代码示例”小节。
-
-> **注意**：自 2024-10-15 起，`/v1/chat/completions` 兼容 OpenAI 格式的 endpoint 已下线，仅保留百炼原生 `/v1/services/aigc/...` 路径。旧文档中提及的 OpenAI 兼容模式属于过时信息。
+- **控制台方式**：登录百炼控制台 → 创建应用 → 选择模型 → 配置提示词与参数 → 在调试面板发起测试请求  
+- **API 方式**：使用 `POST /v1/services/aigc/text-generation/generation` 接口，携带 `Authorization: Bearer <api_key>` 请求头。SDK 支持 Python/Java/Go，初始化示例见官方 SDK 文档  
+- **嵌入式集成**：通过 iframe 或 Web Component 加载预置组件（如知识库问答弹窗），需传入 `app_id` 与 `access_token`，配置细节参见 [开始使用](../../raw/application-user-guide/start-using.md)
 
 ## 限制和注意事项
 
-- 免费额度按账户粒度分配，不跨子账号共享；
-- 单次请求 `input.messages` 总长度（含 system [prompt](prompt.md)）不得超过模型 context 长度的 95%（预留空间用于生成）；
-- 知识库问答类应用需提前完成文档切片与向量化，延迟生效约 1–3 分钟；
-- 流式响应（`stream=true`）仅支持部分模型（如 qwen2-7b、qwen2-72b），`qwen-max` 暂不支持流式，详见 [开始使用](../../raw/application-user-guide/start-using.md) 的“功能支持矩阵”。
+- 单次请求 `input.messages` 最多支持 32 轮对话历史，总 token 数受所选模型上下文长度限制（如 qwen-max 为 32768）  
+- 免费额度仅限新用户首月，超出后按用量计费；API 调用频率默认限流 10 QPS（可提工单申请提升）  
+- 知识库问答类应用不支持直接上传 `.xlsx` 文件，仅接受 `.txt`、`.md`、`.pdf`、`.docx` 格式，该限制在 [开始使用](../../raw/application-user-guide/start-using.md) 中未明确说明，需以控制台上传界面提示为准
 
 ## 来源文档
 

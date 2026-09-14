@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 179 个模型家族 · 415 个主干模型 · 更新于 2026-09-14
+> 自动生成 · 共 179 个模型家族 · 415 个主干模型 · 更新于 2026-09-15
 
 **机器查询走结构化文件**：
 
@@ -19,7 +19,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 
 ## 文本生成 `TG` — 39 个家族
 
-- [DeepSeek](groups/deepseek.json) — DeepSeek是由深度求索提供的开源模型，包含 V3.1、V3、R1以及基于Qwen2.5系列蒸馏的大语言模型。
+- [DeepSeek](groups/deepseek.json) — DeepSeek 系列模型覆盖通用对话、复杂推理与多模态理解等场景，提供 Flash、Pro 等不同规格，可根据效果、响应速度和成本灵活选择。
   - 模型：`deepseek-r1`, `deepseek-r1-0528`, `deepseek-r1-distill-qwen-1.5b`, `deepseek-r1-distill-qwen-14b`, `deepseek-r1-distill-qwen-32b`, `deepseek-r1-distill-qwen-7b`, `deepseek-v3`, `deepseek-v3.1`, `deepseek-v3.2`, `deepseek-v3.2-exp`, `deepseek-v4-flash`, `deepseek-v4-flash-0731`, `deepseek-v4-pro`, `deepseek-v4-pro-0813`, `deepseek-v4.1-flash`
 - [GLM](groups/glm-4.5.json) — GLM是由智谱提供的开源模型。
   - 模型：`glm-4.5`, `glm-4.5-air`, `glm-4.6`, `glm-4.7`, `glm-5`, `glm-5.1`, `glm-5.2`

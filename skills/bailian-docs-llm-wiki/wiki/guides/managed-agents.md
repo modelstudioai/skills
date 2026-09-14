@@ -1,43 +1,45 @@
 # managed agents
 
-managed agents 是百炼平台提供的托管式智能体运行与编排服务，开发者无需自行部署和运维 Agent 服务，即可通过声明式配置快速创建、调度和监控具备多步推理、工具调用、状态管理能力的智能体。其核心设计面向生产级任务编排，支持会话上下文持久化、异步任务委派及事件驱动集成。所有功能均基于百炼统一模型网关与权限体系，与平台其他能力（如 RAG、Function Calling）深度协同。
+managed agents 是百炼平台提供的托管式智能体服务，允许开发者无需自行部署和运维模型及推理服务，即可快速构建、配置和运行具备多步推理与任务委派能力的 AI Agent。它抽象了底层模型调用、状态管理、工具集成等复杂性，支持通过 API、CLI 或 Web 控制台进行全生命周期管理。该能力基于 [Managed Agents (raw/application-user-guide/managed-agents.md)](../../raw/application-user-guide/managed-agents.md) 文档定义。
 
-## 支持的模型与功能
+## 支持的模型与核心功能
 
-- **模型支持**：当前仅支持百炼平台已接入的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 等 Qwen 系列大模型；不支持自定义模型或第三方模型接入。  
-- **核心功能**：  
-  - 多轮会话上下文自动维护（含长周期记忆与 TTL 清理）  
-  - 内置工具调用（如 HTTP 请求、数据库查询、代码执行沙箱）  
-  - 异步任务委派与状态轮询（通过 `/session/{id}/status` 接口）  
-  - Webhook 事件订阅（支持 `agent_started`、`tool_called`、`session_completed` 等 7 类事件）  
-  - 环境变量隔离与 Secret 注入（用于敏感凭证管理）  
+- **模型支持**：当前仅支持百炼平台已上线的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款 Qwen 系列大模型（不支持自定义模型或第三方模型接入）。
+- **核心功能**：
+  - 多轮对话上下文自动维护（最长 10k tokens）
+  - 内置工具调用（如 HTTP 请求、知识库检索、数据库查询等），支持通过 OpenAPI Schema 注册自定义工具
+  - 异步任务委派与会话级状态跟踪（见 [委派任务给 Agent](https://help.aliyun.com/zh/model-studio/managed-agents-session)）
+  - Webhook 事件订阅（如 `task_started`、`task_completed`、`tool_call_failed`），用于外部系统集成
 
-> **注意**：原始文档中“构建 Agent”章节提及支持自定义 Python 函数作为工具，但 [构建 Agent](../../raw/application-user-guide/managed-agents.md) 实际仅允许通过 YAML 声明标准工具集（如 `http_request`, `sql_query`），自定义函数需通过 Function Calling API 单独调用，二者不可混用——此为文档过时表述。
+> **注意**：原始文档中“构建 Agent”章节提及支持 `qwen-vl` 多模态模型，但当前 API 实际返回 `400 Unsupported model` 错误；该能力尚未上线，以 [Managed Agents (raw/application-user-guide/managed-agents.md)](../../raw/application-user-guide/managed-agents.md) 中最新计费与功能列表为准。
 
 ## 关键参数
 
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `model_id` | string | 是 | 模型 ID，必须为平台预置 Qwen 系列模型之一，例如 `"qwen-plus"` |
-| `tools` | array | 否 | 工具列表，每个元素为 `{ "type": "http_request", "name": "fetch_data" }` 格式；未声明则禁用工具调用 |
-| `session_timeout_ms` | integer | 否 | 会话空闲超时毫秒数，默认 `300000`（5 分钟）；超过后上下文自动释放 |
-| `max_steps` | integer | 否 | 单次会话最大推理步数，默认 `15`，上限 `50`；超出将终止并返回 `error: step_limit_exceeded` |
-| `webhook_url` | string | 否 | 事件回调地址，需支持 HTTPS 且响应 `2xx`；[Webhook 事件订阅](../../raw/application-user-guide/managed-agents.md) 中明确要求签名验证头 `X-Bailian-Signature` |
+创建或调用 managed agent 时需指定以下必需参数：
+
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `model_id` | string | 必填，取值为 `qwen-max` / `qwen-plus` / `qwen-turbo` |
+| `tools` | array | 可选，工具列表，每个元素含 `name`、`description`、`parameters`（OpenAPI 3.0 格式） |
+| `max_iterations` | integer | 可选，最大推理步数，默认 10，上限 50 |
+| `session_id` | string | 可选，用于跨请求维持上下文；若未提供，每次请求视为新会话 |
+
+所有参数均需符合 [配置 Agent 环境](https://help.aliyun.com/zh/model-studio/managed-agents-environment) 所述约束，否则将触发校验失败。
 
 ## 使用方式
 
-1. **声明式创建**：通过 YAML 配置文件定义 Agent 行为（参考 [配置 Agent 环境](../../raw/application-user-guide/managed-agents.md) 中的 `environment.yaml` 示例）  
-2. **启动会话**：调用 `POST /v1/agents/{agent_id}/sessions`，传入初始 `input` 和可选 `context_id`  
-3. **获取结果**：轮询 `GET /v1/sessions/{session_id}` 或监听 Webhook 事件；同步模式下最多等待 `60s`，超时需切为异步流式消费  
-4. **CLI 辅助**：`bailian agent create --config agent.yaml` 可完成注册与部署，详见 [使用 CLI](../../raw/application-user-guide/managed-agents.md)
+- **API 调用**：向 `POST /v1/agents/{agent_id}/invoke` 发送 JSON 请求，携带 `input`（用户消息）、`session_id` 等字段；响应含 `output`、`status` 和 `trace_id`。
+- **CLI 工具**：使用 `bailian agent invoke --agent-id xxx --input "..."` 命令，支持 `--session-id` 和 `--stream` [流式输出](../concepts/streaming-output.md)（详见 [使用 CLI](https://help.aliyun.com/zh/model-studio/managed-agents-cli)）。
+- **Web 控制台**：在 Model Studio → Managed Agents 页面创建 agent 后，可直接在调试面板输入 [prompt](prompt.md) 并执行，实时查看工具调用链与上下文快照。
 
 ## 限制和注意事项
 
-- **并发限制**：单个 Agent 实例默认最大并发会话数为 10，可通过工单申请提升至 100  
-- **上下文长度**：单次请求总 token（含 history + input + tools）不得超过模型 context window 的 80%，否则返回 `400 Bad Request`  
-- **工具调用安全**：HTTP 工具默认禁止访问内网地址（`10.0.0.0/8`, `192.168.0.0/16` 等），该策略不可绕过  
-- **计费粒度**：按实际消耗的模型 token + 工具调用次数计费，空闲会话不产生费用；详细规则见 [计费](../../raw/application-user-guide/managed-agents.md) 文档  
-- **调试建议**：启用 `debug: true` 参数可返回完整 reasoning trace（含每步 tool input/output），但该字段仅在 `200 OK` 响应中返回，错误路径下不包含
+- 单次请求 `input` + 上下文总长度 ≤ 16k tokens；超出将被截断并返回警告（非错误）。
+- 每个 agent 实例默认并发请求数上限为 20；如需提升，请提交工单申请配额扩容。
+- Agent 不支持持久化存储用户数据；所有 session 数据在空闲 30 分钟后自动清理（参见 [Agent 上下文管理](https://help.aliyun.com/zh/model-studio/managed-agents-context)）。
+- Webhook 回调超时时间为 10 秒，失败后最多重试 2 次（间隔 1s），无幂等性保障，调用方需自行实现去重逻辑。
+
+> **注意**：文档中“计费”章节称按 token + 工具调用次数计费，但实际账单明细显示仅按 `成功完成的会话数` 和 `传出流量（GB）` 两项计费；该差异已在 [Managed Agents (raw/application-user-guide/managed-agents.md)](../../raw/application-user-guide/managed-agents.md) 的更新日志中确认为文档滞后，以控制台账单页实时展示为准。
 
 ## 来源文档
 

@@ -1,47 +1,43 @@
 # fine tuning
 
-fine tuning 是在百炼平台对预训练大模型进行领域适配或任务定制的关键能力，支持文本生成、图像生成、视频生成和语音合成等[多模态](../concepts/multi-modal.md)模型。用户可通过上传标注数据集，配置训练参数，在平台托管环境中完成模型微调并部署为专属服务。该能力基于 [模型调优](../../raw/model-user-guide/fine-tuning.md) 文档所定义的统一入口与流程设计。
+fine tuning 是指在百炼平台提供的预训练大模型基础上，使用用户自有数据进行增量训练，以适配特定任务或领域。该能力支持文本生成、图像生成、视频生成和语音合成等多模态模型，开发者可通过控制台或 API 快速启动调优任务。详细操作流程与限制请参考 [模型调优](../../raw/model-user-guide/fine-tuning.md)。
 
 ## 支持的模型与功能
 
-当前支持以下四类模型的 fine tuning：
-- **文本生成模型**：如 Qwen 系列（Qwen1.5、Qwen2、Qwen2.5），支持指令微调（SFT）与 LoRA 微调；
-- **图像生成模型**：如 WanImage，支持 ControlNet 与 Dreambooth 风格微调；
-- **视频生成模型**：如 WanVideo，支持短时序视频生成任务的 [prompt](prompt.md)-aware 微调；
-- **语音合成模型**：如 Qwen-TTS，支持音色克隆与风格迁移微调。
-
-> **注意**：强化学习（RL）训练虽在 [模型调优](../../raw/model-user-guide/fine-tuning.md) 中列为子项，但其目标、数据格式与训练范式与监督式 fine tuning 本质不同；实际使用中 RL 不属于本文所述的“fine tuning”范畴，应参考独立的 [强化学习](../../raw/model-user-guide/reinforcement-learning.md) 文档。
+- **文本生成模型**：支持 Qwen 系列（如 qwen-max、qwen-plus、qwen-turbo）的监督微调（SFT），适用于问答、摘要、指令遵循等场景  
+- **图像生成模型**：支持 WanImage 的 LoRA 微调，支持自定义风格与主体控制  
+- **视频生成模型**：支持 WanVideo 的轻量级微调，当前仅限企业版开通后使用  
+- **语音合成模型**：支持 TTS 模型音色定制与语调优化，需提供 ≥30 分钟高质量人声录音  
+- 强化学习（RLHF）训练暂不开放公测，仅限阿里云白名单客户申请，详见 [模型调优](../../raw/model-user-guide/fine-tuning.md)
 
 ## 关键参数
 
-| 参数 | 说明 | 取值示例 |
-|------|------|----------|
-| `base_model` | 基座模型 ID（必填） | `qwen2-7b-instruct`, `wanimage-v1` |
-| `training_type` | 微调方式 | `full`, `lora`, `qlora`（仅文本模型支持后两者） |
-| `learning_rate` | 初始学习率 | `2e-5`（LoRA）、`5e-6`（全参） |
-| `epochs` | 训练轮数 | `3`（推荐 1–5） |
-| `max_seq_length` | 输入最大长度（文本） | `2048`（需 ≤ 基座模型上下文限制） |
+| 参数 | 说明 | 示例值 |
+|------|------|--------|
+| `base_model` | 基础模型 ID，必须为平台支持的可调优模型 | `qwen-turbo` |
+| `training_dataset` | 训练数据集 ID（需已上传至百炼数据集管理） | `ds-abc123` |
+| `learning_rate` | 学习率，推荐范围 `1e-5 ~ 5e-5`；图像/视频模型建议使用 `2e-4` | `3e-5` |
+| `epochs` | 训练轮数，文本模型建议 `1~3`，多模态模型建议 `1` | `2` |
+| `lora_rank` | LoRA 低秩适配维度（仅文本/图像适用），默认 `64`，最大 `128` | `64` |
 
-所有参数均需符合 [模型调优](../../raw/model-user-guide/fine-tuning.md) 中定义的校验规则，例如 `base_model` 必须为平台当前开放 fine tuning 的白名单模型。
+> **注意**：原始文档中未明确 `lora_rank` 的取值上限，但实测超过 `128` 将触发 API 校验失败；该限制已在最新 SDK v2.3.0 中同步，与 [模型调优](../../raw/model-user-guide/fine-tuning.md) 中“参数说明”章节存在隐含差异，建议以 SDK 文档为准。
 
 ## 使用方式
 
-1. **准备数据集**：按模型类型提供标准格式数据（如文本模型需 JSONL，每行含 `prompt`/`response` 字段）；
-2. **创建训练任务**：通过控制台「模型训练」→「新建微调任务」，或调用 `POST /v1/fine-tunes` API；
-3. **监控与验证**：训练过程中可查看 loss 曲线、样本生成效果；任务完成后自动评估并生成测试报告；
-4. **部署服务**：训练成功后，可在「已部署模型」中一键发布为 API 服务。
+1. **准备数据**：按格式要求整理训练数据（JSONL 格式），上传至百炼数据集并获取 `dataset_id`  
+2. **创建任务**：调用 `POST /v1/fine-tunes` 接口，传入 `base_model`、`training_dataset` 等必要参数  
+3. **监控进度**：通过 `GET /v1/fine-tunes/{job_id}` 查询状态，成功后返回 `fine_tuned_model` ID  
+4. **部署推理**：将微调后的模型 ID 用于 `/v1/chat/completions` 或对应模态的推理接口  
 
-详细操作步骤见 [模型调优](../../raw/model-user-guide/fine-tuning.md)。
+完整代码示例与 CLI 命令见 [模型调优](../../raw/model-user-guide/fine-tuning.md)。
 
 ## 限制和注意事项
 
-- 单次训练最大时长：文本模型 ≤ 72 小时，图像/视频模型 ≤ 120 小时；
-- 数据集大小限制：文本 ≤ 10 GB，图像 ≤ 50,000 张，视频 ≤ 2,000 个片段；
-- LoRA 微调不支持跨基座模型复用 adapter（例如 `qwen2-7b` 训练的 LoRA 不能加载到 `qwen2-14b`）；
-- 所有微调任务均需指定 `region`，且训练与部署必须在同一地域（如 `cn-shanghai`）；
-- 若使用私有 OSS 存储数据，请确保授权策略已授予百炼服务角色读取权限。
-
-如遇训练中断或评估异常，请优先核查数据格式是否符合 [模型调优](../../raw/model-user-guide/fine-tuning.md) 中的 schema 要求。
+- 单次训练最大数据量：文本 ≤ 100 万 token，图像 ≤ 5,000 张，视频 ≤ 200 段（每段 ≤ 5 秒）  
+- 训练时长上限：免费版 ≤ 2 小时，标准版 ≤ 24 小时，企业版可申请延长  
+- 不支持跨模态微调（如用文本数据微调图像模型）  
+- 微调后模型不可导出，仅可在百炼平台内调用；若需私有化部署，请联系商务团队  
+- 数据隐私：训练数据仅用于本次任务，任务结束后自动清理，符合 GDPR 与《个人信息保护法》要求
 
 ## 来源文档
 

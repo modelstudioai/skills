@@ -1,34 +1,47 @@
 # asset center page
 
-资产中心是百炼平台中统一管理模型、数据集、Prompt 模板等 AI 资源的核心页面，为开发者提供可视化浏览、快速调用与权限协同能力。所有已发布至工作空间的资产均在此集中呈现，支持按类型、状态、标签等维度筛选。该页面不直接执行推理，而是作为资源发现与接入的入口枢纽。
+资产中心是百炼平台中统一管理模型、数据集、提示词、工作流等 AI 资产的核心界面，支持开发者快速发现、复用和协作共享已注册资产。所有资产均按类型分类展示，并提供元信息查看、权限配置与版本管理能力。该页面为模型调用、RAG 构建及低代码编排提供基础资产支撑。
 
 ## 支持的模型/功能
 
-- 支持展示和调用以下资产类型：大语言模型（LLM）、嵌入模型（Embedding）、重排序模型（Rerank）、语音识别（ASR）与合成（TTS）模型、自定义训练模型（Fine-tuned Model），以及结构化数据集、[Prompt 工程](../concepts/prompt-engineering.md)模板和 Agent 配置包。  
-- 提供“一键部署为 API”、“复制 SDK 调用代码”、“下载配置文件”等快捷操作，部分功能需对应资产已通过审核并处于 `Published` 状态。  
-- 所有功能行为以 [资产中心](../../raw/model-user-guide/asset-center-page.md) 文档描述为准；若控制台实际按钮缺失，请确认当前工作空间角色是否具备 `AssetViewer` 或更高权限 —— 详见 [资产中心](../../raw/model-user-guide/asset-center-page.md) 中的权限说明。
+- 支持托管和引用以下资产类型：大语言模型（LLM）、嵌入模型（Embedding）、重排序模型（Reranker）、向量数据库索引、结构化数据集、Prompt 模板、Workflow 实例  
+- 提供资产搜索（按名称、标签、创建者、更新时间）、批量导入导出（JSON/YAML 格式）、跨项目共享（基于 RAM 角色策略）  
+- 支持模型资产的在线调试（`Try it` 功能），可直接输入文本并查看响应与 token 统计  
+- 详细能力说明见 [资产中心](../../raw/model-user-guide/asset-center-page.md)
 
 ## 关键参数
 
-- `workspace_id`：必填，标识资产所属工作空间，影响可见范围与权限校验。  
-- `asset_type`：可选值包括 `model`、`dataset`、`prompt_template`、`agent_config`，用于过滤资产列表。  
-- `status`：默认为 `published`，支持传入 `draft`（仅对创建者可见）或 `archived`（需显式指定）。  
-- `page` / `page_size`：分页参数，`page_size` 最大支持 50，超出将被服务端截断 —— 此限制在 [资产中心](../../raw/model-user-guide/asset-center-page.md) 的“API 接口规范”小节中有明确定义。
+- `asset_type`: 必填，取值为 `model` / `dataset` / `prompt` / `workflow` / `index`  
+- `visibility`: 可选，`private`（仅本人）、`project`（本项目成员）、`public`（组织内可见）  
+- `tags`: 字符串数组，用于多维检索，单个 tag 长度 ≤ 32 字符，总数 ≤ 10  
+- `version`: 创建时自动生成语义版本（如 `v1.2.0`），历史版本保留且不可删除；回滚需显式调用 `/versions/{id}/rollback` 接口  
+- 参数约束详见 [资产中心](../../raw/model-user-guide/asset-center-page.md)
 
 ## 使用方式
 
-1. 登录百炼控制台 → 进入目标工作空间 → 点击左侧导航栏 **Asset Center**；  
-2. 使用顶部搜索框或筛选器定位资产；  
-3. 点击资产卡片进入详情页，查看版本历史、元信息、调用示例及访问控制策略；  
-4. 对于模型类资产，点击 **Deploy** 可跳转至部署向导；对于 Prompt 模板，点击 **Use in Playground** 可直接加载调试。  
-> **注意**：新版资产中心（v2.3+）已移除“批量导出为 JSON Schema”功能，旧版文档中提及的该能力已失效，请勿依赖 [资产中心](../../raw/model-user-guide/asset-center-page.md) 中过时的“高级操作”章节。
+1. **Web 界面操作**：进入控制台 → 左侧导航栏点击「资产中心」→ 选择资产类型标签页 → 点击「新建」或上传文件  
+2. **API 集成**：调用 `POST /api/v1/assets` 创建资产，请求体需包含 `asset_type`、`name`、`content`（Base64 或 URL 引用）及 `metadata` 字段  
+3. **SDK 调用（Python）**：
+   ```python
+   from alibabacloud_bailian20231219 import models as bailian_models
+   client = BailianClient(...)
+   req = bailian_models.CreateAssetRequest(
+       asset_type="model",
+       name="qwen2-7b-chat",
+       visibility="project",
+       tags=["chat", "cn"]
+   )
+   resp = client.create_asset(req)
+   ```
+   完整 SDK 示例参见 [资产中心](../../raw/model-user-guide/asset-center-page.md)
 
 ## 限制和注意事项
 
-- 单个工作空间内最多显示 10,000 条资产记录（含所有类型），超出部分需通过 `asset_type` + `tags` 组合过滤；  
-- 数据集资产不支持跨工作空间共享，即使已授予 `Read` 权限，也无法在其他工作空间的资产中心列表中出现；  
-- 所有资产的 `created_at` 时间戳精度为秒级，不支持毫秒级查询；  
-- 若通过 OpenAPI 列表接口获取资产，响应中 `updated_at` 字段可能滞后于控制台操作 1–3 秒，属最终一致性设计，详见 [资产中心](../../raw/model-user-guide/asset-center-page.md) 的“同步延迟说明”。
+- 单个资产文件大小上限为 512 MB（数据集类资产）或 10 MB（模型配置类）；超限需使用 OSS 外链方式上传  
+- `prompt` 类型资产不支持嵌套引用其他 [prompt](prompt.md)；若需组合逻辑，应使用 `workflow` 类型封装  
+- > **注意**：文档中提及“支持实时预览 PDF 数据集内容”，但当前 v2.4.1 版本尚未实现该功能，实际仅支持 CSV/JSONL/TSV 的表格化预览 —— 此处与 [资产中心](../../raw/model-user-guide/asset-center-page.md) 中描述存在不一致，请以控制台实际行为为准  
+- 所有资产在删除后进入 7 天软删除期，期间可通过回收站恢复；硬删除后不可逆  
+- 公共资产（`visibility=public`）默认禁止修改，如需编辑，须先切换为 `project` 或 `private`
 
 ## 来源文档
 

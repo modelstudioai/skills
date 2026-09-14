@@ -1,34 +1,41 @@
 # knowledge base
 
-知识库（Knowledge Base）是百炼平台提供的 RAG（[检索增强生成](../concepts/rag.md)）核心能力，支持将私有文档注入模型上下文，实现基于领域知识的精准问答与内容生成。它通过向量检索与大模型协同工作，无需微调即可提升模型在垂直场景下的专业性与准确性。所有功能均通过 API 或控制台统一管理，适用于企业级知识管理、客服助手、内部文档智能查询等场景。
+知识库（Knowledge Base）是百炼平台提供的 RAG（[检索增强生成](../concepts/rag.md)）核心能力，用于将私有文档数据注入大模型推理流程，提升问答准确性与领域适配性。它支持结构化/非结构化文档的上传、切片、向量化与检索，并可与多种大模型协同完成问答、摘要等任务。知识库功能通过控制台和 API 两种方式接入，适用于企业级知识管理与智能客服等场景。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-- **支持模型**：当前知识库功能默认绑定百炼平台托管的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 系统模型；自定义部署的 `Qwen2` 系列模型需确保已启用 RAG 插件并完成向量模型对齐配置。  
-- **核心功能**：包括文档上传与解析（支持 PDF/Word/Excel/TXT/Markdown）、自动分块与向量化、多路召回（关键词+向量+重排序）、混合检索（语义+结构化元数据过滤）、以及端到端问答（[知识问答](https://help.aliyun.com/zh/model-studio/rag-knowledge-qa)）。  
-- **高级能力**：支持定时数据同步（[知识库定时数据同步指南](https://help.aliyun.com/zh/model-studio/data-sync-guide)）、细粒度权限控制、以及日志追踪与效果分析（[知识库日志与监控](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-log-monitoring)）。  
-> **注意**：原始文档中未明确说明是否支持第三方开源模型（如 Llama 3）直接接入知识库 pipeline；实际使用时请以 [知识库（RAG）](../../raw/application-user-guide/knowledge-base.md) 中最新 API 兼容列表为准，避免依赖过时文档描述。
+- **支持模型**：所有百炼平台已接入的文本生成类大模型（如 Qwen 系列、Baichuan、GLM 等）均可作为知识库的“生成端”；嵌入模型默认使用 `text-embedding-v1`，暂不支持用户自定义替换（参见 [知识库（RAG）](../../raw/application-user-guide/knowledge-base.md)）。
+- **核心功能**：
+  - 文档上传与自动解析（支持 PDF、Word、Excel、TXT、Markdown 等格式）
+  - 基于语义的向量检索（支持关键词+向量混合检索）
+  - 检索结果重排序（RRF）、上下文截断与 [prompt](prompt.md) 自动拼接
+  - 知识问答（QA）、知识检索（retrieval-only）、知识摘要等调用模式
 
 ## 关键参数
 
-- `top_k`：控制检索返回的文档片段数量，默认为 3，最大支持 10；过高可能引入噪声，影响生成质量。  
-- `score_threshold`：向量相似度阈值（0.0–1.0），低于该值的片段将被过滤；建议初始设为 0.35，结合 [知识库效果优化](https://help.aliyun.com/zh/model-studio/rag-optimization) 中的 A/B 测试方法调优。  
-- `enable_hybrid_search`：启用混合检索（默认 `true`），同时触发关键词匹配与向量检索，显著提升长尾 query 召回率。  
-- `retrieval_mode`：可选 `single`（单次检索）或 `multi`（多跳检索），后者适用于复杂推理类问题，但延迟增加约 40% —— 具体行为详见 [知识检索](https://help.aliyun.com/zh/model-studio/rag-knowledge-retrieval)。
+| 参数 | 类型 | 说明 | 默认值 |
+|------|------|------|--------|
+| `top_k` | int | 检索返回的最相关文档片段数 | `3` |
+| `score_threshold` | float | 检索相似度阈值（0.0–1.0），低于此值的片段被过滤 | `0.3` |
+| `enable_rerank` | bool | 是否启用重排序（需额外计费） | `false` |
+| `retrieval_mode` | string | 取值 `"vector"` / `"keyword"` / `"hybrid"` | `"hybrid"` |
+
+> **注意**：`score_threshold` 的实际生效逻辑依赖于所选嵌入模型的归一化方式；当前 `text-embedding-v1` 输出为余弦相似度，但部分旧版文档误标为点积结果（参见 [知识库（RAG）](../../raw/application-user-guide/knowledge-base.md) 中的 API 指南章节，该描述已过时，请以 [知识库API指南](../../raw/application-user-guide/knowledge-base.md) 实际响应字段为准）。
 
 ## 使用方式
 
-1. **控制台流程**：进入「知识库」模块 → 创建知识库 → 上传文件 → 启动构建（自动完成解析、分块、向量化）→ 发布后调用 `/v1/knowledge_base/query` 接口。  
-2. **API 调用**：使用 `POST /v1/knowledge_base/query`，请求体需包含 `knowledge_base_id`、`query` 及可选参数（如 `top_k`、`score_threshold`）；认证方式与百炼通用 API 一致（`Authorization: Bearer <api_key>`）。完整规范见 [知识库API指南](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide)。  
-3. **调试建议**：首次集成时，务必通过 [知识库（RAG）](../../raw/application-user-guide/knowledge-base.md) 提供的控制台「测试问答」功能验证分块逻辑与检索相关性，避免因文档格式异常导致静默失败。
+1. **控制台方式**：在 Model Studio → 知识库模块中创建知识库，上传文件并触发构建；构建完成后，可在“测试”页直接输入问题验证效果。
+2. **API 方式**：
+   - 先调用 `/knowledge_bases/{kb_id}/files` 上传并解析文档；
+   - 再调用 `/chat/completions` 或 `/knowledge_bases/{kb_id}/retrieve`，传入 `knowledge_base_id` 和上述关键参数；
+   - 完整请求示例与错误码详见 [知识库API指南](../../raw/application-user-guide/knowledge-base.md)。
 
 ## 限制和注意事项
 
-- **配额限制**：单知识库最大文档数 10,000 份，总原始文本容量上限 10 GB；超出需拆分知识库或启用 [知识库配额与限制](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-specifications) 中的升级流程。  
-- **文件限制**：PDF 文件需为可复制文本（非扫描图），否则 OCR 能力暂未开放；单文件大小上限 100 MB。  
-- **时效性**：知识库更新后，新文档需等待 2–5 分钟完成向量化生效；实时性要求高的场景应结合 [知识库定时数据同步指南](https://help.aliyun.com/zh/model-studio/data-sync-guide) 配置 Webhook 回调。  
-- **计费说明**：按调用量（每次 `/query` 请求）与存储量（GB/月）分别计费，详情参见 [知识库计费说明](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base)；注意免费额度不覆盖 API 调用频次。  
-> **注意**：原始文档中多处链接指向 help.aliyun.com 的旧版帮助页，部分页面已迁移至新版控制台文档体系；开发者应优先参考 [知识库（RAG）](../../raw/application-user-guide/knowledge-base.md) 中的最新链接锚点，避免点击失效 URL。
+- 单个知识库最大文档数：50,000 份；单文档最大体积：100 MB（PDF/Word）或 50 MB（其他格式）；
+- 向量索引构建耗时与文档总 token 数正相关，超 100 万 token 建议分批上传；
+- 知识库不支持实时流式更新：新增/修改文档后需手动触发“同步索引”或等待定时同步（默认每 24 小时一次，详情见 [知识库定时数据同步指南](../../raw/application-user-guide/knowledge-base.md)）；
+- 检索结果中若含敏感信息（如身份证号、手机号），知识库本身**不提供脱敏能力**，需在应用层自行处理。
 
 ## 来源文档
 

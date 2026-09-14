@@ -1,6 +1,6 @@
 {
   "name": "DeepSeek",
-  "description": "DeepSeek是由深度求索提供的开源模型，包含 V3.1、V3、R1以及基于Qwen2.5系列蒸馏的大语言模型。",
+  "description": "DeepSeek 系列模型覆盖通用对话、复杂推理与多模态理解等场景，提供 Flash、Pro 等不同规格，可根据效果、响应速度和成本灵活选择。",
   "items": [
     {
       "inferenceMetadata": {
@@ -141,17 +141,17 @@
       "qpmInfo": {
         "model-default-actual": {
           "count_limit_period": 6,
-          "usage_limit": 1200000,
+          "usage_limit": 120000,
           "usage_limit_field": "total_tokens",
-          "count_limit": 15000,
+          "count_limit": 1500,
           "usage_limit_period": 6,
           "type": "model-default"
         },
         "model-default": {
           "count_limit_period": 6,
-          "usage_limit": 1200000,
+          "usage_limit": 120000,
           "usage_limit_field": "total_tokens",
-          "count_limit": 15000,
+          "count_limit": 1500,
           "usage_limit_period": 6,
           "type": "model-default"
         }

@@ -1,38 +1,36 @@
 # skill
 
-skill 是百炼平台中用于封装和复用 AI 能力的标准化单元，支持将大模型调用、工具链、条件分支等逻辑打包为可配置、可编排、可共享的组件。开发者可通过控制台或 API 创建、调试和发布 skill，供工作流（Workflow）或其他 skill 调用。其设计目标是降低重复开发成本，提升能力复用率与交付一致性。
+Skill 是百炼平台中用于封装和复用 AI 能力的标准化单元，支持将大模型调用、工具集成、Prompt 编排等逻辑打包为可配置、可调试、可发布的服务接口。开发者可通过控制台或 API 管理 Skill 生命周期，并在应用中以统一方式调用。其设计目标是降低 AI 功能集成门槛，提升工程化复用效率。
 
 ## 支持的模型与功能
 
-skill 本身不绑定特定模型，但其内部节点（如 `llm_call`、`tool_call`）支持调用百炼平台当前全部公开模型，包括 Qwen 系列（Qwen1.5、Qwen2、Qwen2.5）、Qwen-VL、Qwen-Audio 等，以及已接入的第三方模型（如通过 Model Studio 接入的自定义模型）。技能可包含多步骤逻辑：LLM 推理、[函数调用](../concepts/function-calling.md)、变量赋值、条件判断（`if-else`）、循环（`for`）、HTTP 请求等。详细能力列表见 [Skill](../../raw/application-user-guide/skill.md)。
+Skill 当前支持绑定以下模型类型：Qwen-Max、Qwen-Plus、Qwen-Turbo（含对应多模态版本），以及通过 `tool_call` 方式接入的自定义工具（如 HTTP 工具、数据库查询插件等）。Skill 内部可组合系统 Prompt、用户输入模板、输出解析规则及后处理函数。不支持直接部署非百炼托管的私有模型权重，相关能力请参考 [Skill](../../raw/application-user-guide/skill.md) 文档说明。
 
 ## 关键参数
 
-- `name`（必填）：技能唯一标识符，仅支持小写字母、数字、下划线，长度 3–64 字符  
-- `description`（可选）：简明功能说明，用于控制台展示与搜索  
-- `input_schema`（可选）：JSON Schema 格式，定义输入参数结构与校验规则（如 `{"type": "object", "properties": {"query": {"type": "string"}}}`）  
-- `output_schema`（可选）：同上，定义输出结构，影响下游节点类型推断  
-- `timeout`（可选）：单位秒，默认 30，最大 300；超时后 skill 状态为 `failed`  
-
-> **注意**：`input_schema` 和 `output_schema` 在 [Skill](../../raw/application-user-guide/skill.md) 中被标记为“推荐配置”，但实际在 API v2.1+ 中已变为强校验字段——若未提供且 skill 被 Workflow 引用，将触发 schema 不匹配错误。请以最新 API 文档为准。
+创建或更新 Skill 时需配置以下核心字段：
+- `name`：唯一标识符（仅限字母、数字、下划线，长度 ≤ 64）
+- `description`：简要功能描述（≤ 512 字符）
+- `model_id`：指定模型 ID（必须为当前项目已开通的模型）
+- `prompt_template`：Jinja2 格式模板，支持 `{{ input }}`、`{{ history }}` 等上下文变量
+- `output_schema`：可选 JSON Schema，用于结构化输出校验与自动解析  
+详细字段约束见 [Skill](../../raw/application-user-guide/skill.md) 中“参数说明”章节。
 
 ## 使用方式
 
-1. **创建**：通过控制台「技能中心」→「新建技能」，或调用 `POST /v2/skills` API  
-2. **编辑**：在画布中拖入节点、连线、配置参数；支持实时调试（需填写测试输入）  
-3. **发布**：点击「发布」生成 `published_version`，仅已发布版本可被 Workflow 或其他 skill 调用  
-4. **调用**：  
-   - 控制台内：在 Workflow 编辑器中搜索并拖入 skill 节点  
-   - API：通过 `POST /v2/skills/{skill_id}/invoke`，传入 `input` JSON 对象  
-   - SDK：使用 `BailianClient.invoke_skill()` 方法（Python SDK v1.3.0+）  
-   完整调用示例参见 [Skill](../../raw/application-user-guide/skill.md)。
+Skill 可通过三种方式调用：
+1. **API 调用**：向 `/v1/skills/{skill_id}/invoke` 发送 POST 请求，携带 `input` 字段（字符串或对象）；
+2. **SDK 调用**：使用 `alibabacloud_bailian20231229` SDK 的 `InvokeSkillRequest`；
+3. **低代码集成**：在百炼应用画布中拖入 Skill 组件并绑定输入/输出节点。  
+调用时若未显式传入 `model_id`，则默认使用 Skill 创建时绑定的模型；该行为与 [Skill](../../raw/application-user-guide/skill.md) 所述一致。
 
 ## 限制和注意事项
 
-- 单个 skill 最多包含 100 个节点，总执行时间（含所有子调用）不得超过 `timeout` 设置值  
-- 不支持跨项目（project）直接引用 skill；如需共享，须导出为 `.skill.json` 文件后导入目标项目  
-- skill 内部不可递归调用自身（即禁止 A → A），但允许间接循环（A → B → A），此时需自行处理终止条件，否则可能触发平台级超时中断  
-- 所有敏感参数（如 API Key、数据库密码）必须通过「密钥管理」注入，禁止硬编码；密钥引用语法为 `{{secrets.MY_API_KEY}}`，该机制在 [Skill](../../raw/application-user-guide/skill.md) 中有明确说明。
+- 单个 Skill 最大 [Token](../concepts/token.md) 输入限制为 32768（受底层模型上下文窗口约束）；
+- Skill 不支持跨项目共享，权限隔离以项目为边界；
+- > **注意**：原始文档中提及“Skill 可继承父 Skill 的参数配置”，但该功能已于 v2.3.0 版本下线，实际行为以控制台最新 UI 和 [Skill](../../raw/application-user-guide/skill.md) 当前版本为准；
+- 异步调用（`invoke_async`）暂不支持流式响应，需等待完整结果返回；
+- 输出解析失败时（如 `output_schema` 校验不通过），默认返回原始模型输出而非抛出错误，建议在业务层增加容错处理。
 
 ## 来源文档
 

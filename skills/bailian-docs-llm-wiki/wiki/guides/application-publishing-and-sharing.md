@@ -1,38 +1,37 @@
 # application publishing and sharing
 
-应用发布与分享是百炼平台中将已构建的 Agent 或 Workflow 对外提供服务的关键能力，支持以链接形式共享、嵌入到第三方系统，或作为可复用组件被其他应用调用。该能力覆盖公开/私密分享、跨空间调用、UI 定制化等场景，适用于协作开发与生产集成。所有操作均通过控制台或 OpenAPI 完成，无需代码部署。
+应用发布与分享是百炼平台中将已构建的 Agent 或 Workflow 对外提供服务的关键能力，支持以独立应用、嵌入式组件或 API 接口等多种形式分发。开发者可通过控制台或 OpenAPI 完成发布配置，并设置访问权限与 UI 表现。该能力依赖于应用的运行时环境和模型绑定策略，需确保所选模型具备对应权限。
 
 ## 支持的模型/功能
 
-- **应用分享**：生成带权限控制的访问链接，支持“仅限成员可见”“指定用户可见”“公开链接（需空间管理员授权）”三种模式  
-- **发布为组件**：将 Workflow 或 Agent 发布为标准组件（Component），供同一工作空间内其他应用在编排画布中直接拖拽调用  
-- **UI 自定义**：通过 [UI设计](https://help.aliyun.com/zh/model-studio/ui-designer) 功能配置前端交互界面，包括输入表单、响应模板、主题色等，发布后生效  
-- **API 调用入口**：每个已发布应用自动获得唯一 `/v1/applications/{app_id}/invoke` OpenAPI 端点，支持 `POST` 请求调用（参见 [原文标题](../../raw/application-user-guide/application-publishing-and-sharing.md)）
+- 支持发布为**独立 Web 应用**（含自定义域名、UI 主题、登录鉴权等），适用于终端用户直接访问；
+- 支持发布为**可复用组件**（Component），供其他 Agent 或 Workflow 调用，详见 [发布为组件](../../raw/application-user-guide/application-publishing-and-sharing.md)；
+- 支持导出为 **OpenAPI v3 标准接口**，兼容主流集成工具（如 Postman、低代码平台）；
+- 所有发布形态均支持绑定百炼托管模型（如 qwen-max、qwen-plus）或用户自有模型（需已通过 [模型接入与管理](../../raw/model-management/model-registration.md) 完成注册）。
 
 ## 关键参数
 
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `visibility` | string | 是 | 取值：`private`（仅创建者）、`workspace`（同空间成员）、`public`（需空间开启公开发布白名单） |
-| `component_enabled` | boolean | 否 | 设为 `true` 时启用组件模式，发布后生成 `component_id` 用于跨应用引用 |
-| `ui_config` | object | 否 | JSON 结构，字段详见 [原文标题](../../raw/application-user-guide/application-publishing-and-sharing.md) 中 UI 设计文档链接说明 |
-| `callback_url` | string | 否 | 异步调用时接收结果回调的 HTTPS 地址（仅 `visibility=private` 或 `workspace` 时可用） |
+| 参数 | 说明 | 是否必填 | 示例 |
+|------|------|----------|------|
+| `publish_type` | 发布类型：`app`（Web 应用）、`component`（组件）、`api`（OpenAPI） | 是 | `"app"` |
+| `visibility` | 可见性：`public`（公开）、`org`（组织内）、`private`（仅自己） | 是 | `"org"` |
+| `ui_config` | UI 配置对象（仅 `app` 类型生效），含 `title`、`description`、`theme_color` 等字段 | 否 | `{"title": "客服助手", "theme_color": "#1677FF"}` |
+| `component_input_schema` | 组件输入 Schema（JSON Schema 格式），用于定义调用方传参结构（仅 `component` 类型生效） | 是（当 `publish_type=component`） | `{"type": "object", "properties": {"query": {"type": "string"}}}` |
+
+> **注意**：`component_input_schema` 的校验逻辑在 [发布为组件](../../raw/application-user-guide/application-publishing-and-sharing.md) 文档中未明确说明，但实际调用时若 schema 不匹配会导致 400 错误；建议严格遵循 JSON Schema Draft-07 规范。
 
 ## 使用方式
 
-1. 在应用详情页点击「发布」按钮，进入发布向导  
-2. 选择可见性策略并配置组件开关（如需）  
-3. （可选）进入 [UI设计](https://help.aliyun.com/zh/model-studio/ui-designer) 页面完成界面定制，保存后发布生效  
-4. 发布成功后，获取分享链接、`component_id` 或 API 调用凭证  
-> **注意**：使用 OpenAPI 发布时，`visibility=public` 参数需提前由空间管理员在「空间设置 → 应用管理」中开启白名单；控制台界面未显式提示该依赖，易导致发布失败 —— 详见 [原文标题](../../raw/application-user-guide/application-publishing-and-sharing.md) 中的权限说明章节。  
+1. **控制台操作**：进入应用详情页 → 点击「发布」→ 选择类型 → 填写参数 → 提交审核（组织管理员审批后生效）；
+2. **OpenAPI 调用**：使用 `POST /v1/applications/{app_id}/publish` 接口，请求体需符合上述关键参数结构，参考 [应用分享](../../raw/application-user-guide/application-publishing-and-sharing.md) 中的权限说明；
+3. **组件嵌入**：发布为 component 后，在目标 Agent 的节点配置中选择「外部组件」，输入 component ID 即可自动拉取输入/输出定义。
 
 ## 限制和注意事项
 
-- 单个工作空间内最多发布 100 个公开链接应用（`visibility=public`），超出需联系管理员扩容  
-- 已发布的组件不可直接修改 schema；如需变更输入/输出结构，须新建版本并重新发布  
-- UI 设计配置仅影响 Web 端分享链接的渲染效果，对 API 调用无影响  
-- `callback_url` 必须为有效 HTTPS 地址且响应超时 ≤ 10 秒，否则回调失败不重试  
-- 所有分享链接默认有效期为永久，但空间管理员可在后台统一禁用某应用的分享状态
+- 单个应用最多同时发布为 **1 种类型**（即不能同一时间既是 `app` 又是 `api`），如需多形态，须先下线再重新发布；
+- `public` 类型应用默认启用内容安全过滤（基于百炼内置审核模型），不可关闭；
+- 自有模型若未开启「跨应用调用」权限（见 [模型接入与管理](../../raw/model-management/model-registration.md)），则无法在 `component` 或 `api` 场景中被引用；
+- UI 设计能力（如拖拽布局、变量绑定）仅对 `app` 类型生效，且依赖 [UI设计](../../raw/application-user-guide/application-publishing-and-sharing.md) 模块启用状态，未开通组织将忽略 `ui_config` 字段。
 
 ## 来源文档
 
