@@ -1,51 +1,38 @@
 # application component api reference
 
-应用组件 API 提供了百炼平台中可复用业务能力的标准化调用接口，用于构建对话式 AI 应用（如智能客服、知识助手等）。该接口封装了模型推理、上下文管理、工具调用等核心能力，支持通过 HTTP 请求快速集成。开发者需通过 RAM 授权并使用指定 Endpoint 访问服务。
+应用组件 API 提供了百炼平台中可复用业务能力的标准化调用接口，用于在自定义应用中集成对话、知识检索、工作流编排等核心功能。该 API 采用 RESTful 设计，支持 HTTPS 调用与 RAM 凭据鉴权。所有接口均需通过指定服务接入点访问，并遵循统一的请求/响应结构。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-当前应用组件 API 支持以下模型与能力：
-- 基础大模型推理：`qwen-max`、`qwen-plus`、`qwen-turbo`（详见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)）
-- 多轮对话状态管理（含 history 透传与 session 生命周期控制）
-- 内置工具调用（如搜索、数据库查询、代码执行），需在 `tools` 字段中声明
-- 流式响应（`stream=true`）与非流式响应双模式支持
+当前应用组件 API 支持以下核心能力：
+- **对话交互**：调用 `chat` 接口发起多轮会话，支持流式响应（`stream=true`）；
+- **知识检索增强（RAG）**：通过 `retrieve` 接口对接已配置的知识库，返回相关文档片段；
+- **工作流执行**：使用 `run_workflow` 触发预设的可视化工作流，支持传入动态输入参数。
 
-> **注意**：`qwen-vl` 和 `qwen-audio` 等多模态模型暂未开放至应用组件 API，仅限独立多模态 API 调用；此限制在 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 中有明确标注，但 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 中未同步更新，以目录为准。
+> **注意**：`retrieve` 接口在 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 中列为 Beta 功能，但 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 明确标注其已于 v2.1.0 正式 GA，建议以 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 为准。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model` | string | 是 | 模型 ID，必须为白名单内值，如 `qwen-plus` |
-| `input.messages` | array | 是 | 对话消息列表，每项含 `role`（`user`/`assistant`/`system`）和 `content` |
-| `parameters.temperature` | number | 否 | 默认 0.85，取值范围 [0, 2] |
-| `parameters.top_p` | number | 否 | 默认 0.8，取值范围 [0, 1] |
-| `stream` | boolean | 否 | true 时返回 SSE 流，false 时返回 JSON 包体 |
-| `tools` | array | 否 | 工具定义数组，结构见 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 附录 |
+| `app_id` | string | 是 | 应用唯一标识，由控制台创建应用时生成 |
+| `model_id` | string | 否 | 指定后端模型（如 `qwen-max`），若不填则使用应用默认模型 |
+| `stream` | boolean | 否 | 默认 `false`；设为 `true` 时启用 SSE 流式响应 |
+| `input` | object | 是（除 `retrieve` 外） | 用户输入内容，结构依接口而异（如 `chat` 中为 `{ "messages": [...] }`） |
 
 ## 使用方式
 
-1. **鉴权**：使用阿里云 STS Token 或长期 AccessKey，通过 `Authorization: Bearer <token>` 头传递  
-2. **请求地址**：`POST https://dashscope.aliyuncs.com/api/v1/apps/{app_id}/chat`（Endpoint 具体值见 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)）  
-3. **示例请求体**：
-```json
-{
-  "model": "qwen-plus",
-  "input": {
-    "messages": [{"role": "user", "content": "你好"}]
-  },
-  "parameters": {"temperature": 0.5},
-  "stream": false
-}
-```
+1. 获取 `app_id` 和 `access_token`（通过 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md) 中描述的 RAM 角色凭证或短期 [Token](../concepts/token.md)）；  
+2. 构造请求 URL：`POST https://dashscope.aliyuncs.com/api/v1/apps/{app_id}/[chat|retrieve|run_workflow]`；  
+3. 设置 Header：`Authorization: Bearer {access_token}`，`Content-Type: application/json`；  
+4. 发送 JSON Body（参考 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中各接口示例）。
 
 ## 限制和注意事项
 
-- 单次请求 `input.messages` 最多支持 50 轮历史消息（含 system），总 token 数上限为模型 context length 的 90%  
-- `app_id` 必须已在百炼控制台创建并启用，且已绑定有效模型配额  
-- 流式响应下，`tool_calls` 字段可能分片返回，客户端需按 `delta` 顺序拼接解析  
-- RAM 授权策略需包含 `dashscope:ListApps` 和 `dashscope:InvokeApp` 权限（详见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)）  
-- 超时时间建议设为 120 秒（部分长上下文场景可能接近上限）
+- 单次 `chat` 请求最大 `messages` 数量为 50 条，总 token 上限取决于所选模型（详见对应模型文档）；  
+- `retrieve` 接口单次最多返回 10 个文档片段，且仅支持已发布状态的知识库；  
+- 所有接口均受百炼平台配额管控，超限将返回 `429 Too Many Requests`；  
+- 若未显式指定 `model_id`，系统将回退至应用创建时绑定的默认模型，该行为在 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 文档中有明确说明。
 
 ## 来源文档
 

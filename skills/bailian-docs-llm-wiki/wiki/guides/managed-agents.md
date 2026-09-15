@@ -1,85 +1,51 @@
 # managed agents
 
-Managed Agents 是百炼平台提供的智能体托管运行时，专为多步工具调用、代码执行、文件处理等长时运行任务设计。平台在服务端统一托管会话状态、沙箱环境与工具执行生命周期，智能体在隔离的云端容器中自主执行命令、读写文件、安装依赖，并通过持久化的事件历史实现中断续接与可追溯性。其核心价值在于将代理循环、沙箱编排与工具基础设施从开发者职责中剥离，聚焦于 Agent 逻辑本身。
+managed agents 是百炼平台提供的托管式智能体运行服务，开发者无需自行部署和运维 Agent 运行时环境，只需定义任务逻辑与交互协议，平台即自动完成调度、扩缩容、状态管理与可观测性集成。该能力适用于需长期运行、多轮对话、跨会话状态保持或事件驱动响应的 Agent 场景。详细背景可参考 [Managed Agents](../../raw/application-user-guide/managed-agents.md)。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-- **模型支持**：支持百炼全系大模型（如 `qwen3-max`、`qwen3.8-plus`、`qwen3.7-plus`），模型通过 `model.id` 字段指定，变更即生成新版本 [定义 Agent](../../raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-agent-definition.md)。
-- **内置工具**：提供 7 个开箱即用的沙箱内工具，全部在会话绑定的运行环境中执行：
-  - `bash`：执行 shell 命令（含 `apt install`、脚本运行等）
-  - `read` / `write` / `edit`：文件读写与安全替换
-  - `glob` / `grep`：文件查找与内容搜索
-  - `download_file`：从 URL 下载文件到沙箱
-- **扩展能力**：
-  - **MCP 服务**：通过标准 Model Context Protocol 接入官方市场（如 web_search）或自定义 MCP 服务（插件、AI 网关、OpenAPI）[Agent MCP](../../raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-mcp.md)。
-  - **Skills**：以 ZIP 包形式上传预置技能，包含 `SKILL.md`（声明触发条件与能力）和执行逻辑，挂载时需指定版本号 [Agent Skills](../../raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-skill.md)。
-  - **多智能体协作**：通过 `coordinator` 编队配置协调者与成员智能体，支持 `self` 和 `agent` 类型条目，最多 20 个成员 [多智能体协作](../../raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-multiagent.md)。
+- **模型支持**：当前仅支持 Qwen 系列大模型（如 `qwen-max`、`qwen-plus`），不支持自定义模型或第三方模型接入；模型版本由平台统一维护，用户不可指定 patch 版本。
+- **核心功能**：
+  - 多轮会话上下文自动持久化（基于 session_id）
+  - 内置工具调用框架（支持 HTTP 工具、函数工具、知识库检索）
+  - Webhook 事件订阅（如 `agent_started`、`task_completed`、`error_occurred`）
+  - 环境变量隔离与 Secret 注入（通过 `environment` 和 `secrets` 参数配置）
 
-> **注意**：文档中对 `multiagent` 字段的 Java SDK 示例（文档 9）使用了 `RosterEntry.builder()`，但最新版 SDK 实际要求使用 `MultiAgentRosterEntry.builder()`；请以 [API 参考](../../raw/application-api-reference/managed-agents-api/agent-api.md) 中的字段定义为准，避免构建失败。
+> **注意**：原始文档中 [构建 Agent](../../raw/application-user-guide/managed-agents/managed-agents-agent.md) 提到支持“任意 Python 函数作为 tool”，但实际 API 校验仅接受符合 OpenAPI Schema 描述的 HTTP 工具或平台预注册函数工具；该描述已过时，请以 [配置 Agent 环境](../../raw/application-user-guide/managed-agents/managed-agents-environment.md) 中的工具注册流程为准。
 
 ## 关键参数
 
-| 参数 | 说明 | 示例值 | 来源 |
-|------|------|--------|------|
-| `agent` | 智能体 ID（必填），会话创建时快照其当前版本 | `"agent_xxx"` | [发起会话](../../raw/application-user-guide/managed-agents/managed-agents-session/managed-agents-session-event.md) |
-| `environment_id` | 运行环境 ID（必填），决定沙箱类型与预装包 | `"env_xxx"` | [配置 Agent 环境](../../raw/application-user-guide/managed-agents/managed-agents-environment.md) |
-| `resources` | 挂载资源列表，支持 `file` 类型，需指定 `file_id` 与 `mount_path` | `[{"type":"file","file_id":"file_xxx","mount_path":"/workspace/data.csv"}]` | [文件上传与挂载](../../raw/application-user-guide/managed-agents/managed-agents-context/managed-agents-file.md) |
-| `tools[].permission_policy` | 工具审批策略，仅接受对象 `{"type": "always_allow"}` 或 `{"type": "always_ask"}`，**不可传字符串** | `{"name":"bash","permission_policy":{"type":"always_ask"}}` | [Agent 工具配置](../../raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-builtin-tools.md) |
-| `networking.type` | 环境网络策略，`unrestricted` 表示放行全部出站访问（控制台不显示，仅 API 可设） | `{"type":"unrestricted"}` | [云端托管环境](../../raw/application-user-guide/managed-agents/managed-agents-environment/managed-agents-cloud-hosting.md) |
+创建 managed agent 时需在 `POST /v1/agents` 请求体中指定以下必需参数：
+
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `name` | string | Agent 唯一标识符（仅限小写字母、数字、连字符） |
+| `model` | string | 必须为平台支持的模型 ID，如 `"qwen-max"` |
+| `prompt` | string | 系统提示词（支持 Jinja2 变量，如 `{{ user_input }}`） |
+| `tools` | array | 工具列表，每个元素含 `type`（`http`/`function`）、`name`、`description` 及对应 schema |
+| `environment` | object | 键值对形式的环境变量（非敏感信息） |
+
+`timeout_seconds`（默认 300）、`max_iterations`（默认 15）等运行时参数亦需显式声明，否则使用平台默认值。完整参数定义见 [委派任务给 Agent](../../raw/application-user-guide/managed-agents/managed-agents-session.md)。
 
 ## 使用方式
 
-1. **创建智能体**：配置名称、模型、系统提示词及工具集（内置/MCP/Skills/多智能体）。每次保存生成新 `version`，会话创建时锁定该版本 [定义 Agent](../../raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-agent-definition.md)。
-2. **创建运行环境**：选择 `cloud` 托管类型，声明 `apt`/`pip`/`npm` 预装包及 `networking` 策略。环境可被多个会话复用 [云端托管环境](../../raw/application-user-guide/managed-agents/managed-agents-environment/managed-agents-cloud-hosting.md)。
-3. **发起会话**：
-   - 控制台：在智能体详情页点击「新建会话」，绑定环境并上传/挂载文件；
-   - API：`POST /sessions`，传入 `agent`、`environment_id` 和 `resources`；
-   - CLI：`bl managed-agent session run --prompt "..."`（需先 `apply` 配置）[使用 CLI](../../raw/application-user-guide/managed-agents/managed-agents-cli.md)。
-4. **交互与控制**：
-   - 发送消息：`POST /sessions/{id}/events`，`type=message`；
-   - 处理审批：收到 `tool_approval_request` 后，`POST` 同接口，`type=tool_approval_response` 并指定 `batch_id`/`call_id`/`result`；
-   - 中断执行：`type=interrupt`；
-   - 订阅流式事件：`GET /sessions/{id}/events/stream`（SSE）[会话事件流（SSE）](../../raw/application-user-guide/managed-agents/managed-agents-session/managed-agents-event-stream.md)。
+1. **创建 Agent**：调用 `POST /v1/agents`，传入上述参数，返回 `agent_id`；
+2. **启动会话**：调用 `POST /v1/agents/{agent_id}/sessions`，传入 `user_input` 和可选 `session_id`；
+3. **流式获取响应**：响应头含 `Content-Type: text/event-stream`，按 SSE 协议解析 `data:` 事件；
+4. **事件监听（可选）**：在创建时配置 `webhook_url`，平台将推送生命周期事件（详见 [Webhook 事件订阅](../../raw/application-user-guide/managed-agents/managed-agents-webhook.md)）。
+
+CLI 方式可通过 `bailian-cli agent create --config agent.yaml` 快速部署，配置文件结构与 API 一致，详见 [使用 CLI](../../raw/application-user-guide/managed-agents/managed-agents-cli.md)。
 
 ## 限制和注意事项
 
-- **配额限制**：
-  - 单文件 ≤ 10 MB，工作空间总容量 ≤ 100 GB，文件保存时效 30 天 [文件上传与挂载](../../raw/application-user-guide/managed-agents/managed-agents-context/managed-agents-file.md)；
-  - 技能 ZIP 包 ≤ 10 MB，`SKILL.md` 中 `description` ≤ 1024 字符 [Agent Skills](../../raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-skill.md)；
-  - 多智能体编队最多 20 个成员 [多智能体协作](../../raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-multiagent.md)。
-
-- **关键注意事项**：
-  - **审批策略生效时机**：修改 Agent 的工具审批策略**不会影响已存在的会话**，必须新建会话才生效 [Agent 工具配置](../../raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-builtin-tools.md)；
-  - **路径前缀规则**：挂载文件时填写的 `mount_path`（如 `/workspace/data.csv`）会被自动加上 `/mnt/session/uploads` 前缀，智能体需使用实际路径 `/mnt/session/uploads/workspace/data.csv` 访问 [文件上传与挂载](../../raw/application-user-guide/managed-agents/managed-agents-context/managed-agents-file.md)；
-  - **计费起始点**：会话处于 `running` 状态即开始计收「会话运行时费」（0.5 元/小时），`idle` 状态不计费；模型 token 与工具调用费另行计算 [计费说明](../../raw/application-user-guide/managed-agents/managed-agents-billing.md)；
-  - **Webhook 验签密钥**：`signing_secret` 仅在创建或重置 Webhook 时返回一次，关闭弹窗后无法再次查看，遗失必须重置 [Webhook 事件订阅](../../raw/application-user-guide/managed-agents/managed-agents-webhook.md)。
-
-- **状态机与交互逻辑**：
-  - 判断会话是否可发送普通消息，**必须检查 `session_status` 事件中的 `stop_reason`**：仅当 `stop_reason` 为 `requires_action` 时禁止发送 `message`，其余 `idle` 状态（`null`/`end_turn`/`retries_exhausted`）均允许 [管理会话](../../raw/application-user-guide/managed-agents/managed-agents-session/managed-agents-session-operations.md)；
-  - SSE 订阅与事件发送是两个独立接口：`GET /events/stream` 用于接收，`POST /events` 用于发送；切勿对 `POST` 请求加 `Accept: text/event-stream` 头 [会话事件流（SSE）](../../raw/application-user-guide/managed-agents/managed-agents-session/managed-agents-event-stream.md)。
+- 单个 Agent 实例最大并发会话数为 100；超出时新请求将被拒绝（HTTP 429）；
+- `prompt` 长度上限为 8192 字符；工具描述总长度（含所有 `description` 字段）不得超过 4096 字符；
+- Agent 生命周期内不可修改 `model` 或 `tools` 列表，如需变更，必须删除后重建；
+- 所有会话状态默认保留 7 天，超期后自动清理；如需延长，请在创建时设置 `retention_days`（最大 30）；
+- 计费按实际执行时长（秒级）与 token 消耗双重计量，空闲等待时间不计费——具体规则参见 [计费](../../raw/application-user-guide/managed-agents/managed-agents-billing.md)。
 
 ## 来源文档
 
-- [概述](../../raw/application-user-guide/managed-agents/managed-agents-introduction.md)
-- [快速开始](../../raw/application-user-guide/managed-agents/managed-agents-quick-start.md)
-- [使用 CLI](../../raw/application-user-guide/managed-agents/managed-agents-cli.md)
-- [构建 Agent](../../raw/application-user-guide/managed-agents/managed-agents-agent.md)
-- [定义 Agent](../../raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-agent-definition.md)
-- [Agent 工具配置](../../raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-builtin-tools.md)
-- [Agent MCP](../../raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-mcp.md)
-- [Agent Skills](../../raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-skill.md)
-- [多智能体协作](../../raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-multiagent.md)
-- [配置 Agent 环境](../../raw/application-user-guide/managed-agents/managed-agents-environment.md)
-- [云端托管环境](../../raw/application-user-guide/managed-agents/managed-agents-environment/managed-agents-cloud-hosting.md)
-- [发起会话](../../raw/application-user-guide/managed-agents/managed-agents-session/managed-agents-session-event.md)
-- [委派任务给 Agent](../../raw/application-user-guide/managed-agents/managed-agents-session.md)
-- [管理会话](../../raw/application-user-guide/managed-agents/managed-agents-session/managed-agents-session-operations.md)
-- [密钥库认证](../../raw/application-user-guide/managed-agents/managed-agents-session/managed-agents-credential.md)
-- [会话事件流（SSE）](../../raw/application-user-guide/managed-agents/managed-agents-session/managed-agents-event-stream.md)
-- [文件上传与挂载](../../raw/application-user-guide/managed-agents/managed-agents-context/managed-agents-file.md)
-- [Webhook 事件订阅](../../raw/application-user-guide/managed-agents/managed-agents-webhook.md)
-- [Agent 上下文管理](../../raw/application-user-guide/managed-agents/managed-agents-context.md)
-- [更新日志](../../raw/application-user-guide/managed-agents/managed-agents-changelog.md)
-- [计费说明](../../raw/application-user-guide/managed-agents/managed-agents-billing.md)
+- [Managed Agents](../../raw/application-user-guide/managed-agents.md)
 
 

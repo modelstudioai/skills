@@ -582,7 +582,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ### 调用内置工具
 
-开启内置工具可在处理复杂任务时获得更佳效果，当前网页抓取与代码解释器工具限时免费，支持的工具请参见[工具调用](raw/model-user-guide/model-experience/text-generation-model/tool-calls.md)。
+开启内置工具可在处理复杂任务时获得更佳效果，当前网页抓取与代码解释器工具限时免费，支持的工具请参见[工具调用](https://help.aliyun.com/zh/model-studio/tool-calls)。
 
 Python
 
@@ -1128,7 +1128,7 @@ const res2 = await client.responses.create({
 
 ### 4\. 使用内置工具
 
-Responses API 内置了多种工具，无需自行实现。只需在 `tools` 参数中指定即可，当前代码解释器与网页抓取工具限时免费，详情请参见[工具调用](raw/model-user-guide/model-experience/text-generation-model/tool-calls.md)。
+Responses API 内置了多种工具，无需自行实现。只需在 `tools` 参数中指定即可，当前代码解释器与网页抓取工具限时免费，详情请参见[工具调用](https://help.aliyun.com/zh/model-studio/tool-calls)。
 
 #### Python
 

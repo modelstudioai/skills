@@ -8,5 +8,5 @@
 -   [OpenAI兼容-Batch（文件输入）](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)
 -   [OpenAI兼容-Batch Chat](raw/model-api-reference/toolkits-and-frameworks/openai-compatible-batch-chat.md)
 -   [OpenAI兼容-Embedding](raw/model-api-reference/toolkits-and-frameworks/embedding-interfaces-compatible-with-openai.md)
--   [OpenAI兼容-Conversations](raw/model-api-reference/toolkits-and-frameworks/openai-compatible-conversations.md)
+-   [OpenAI兼容-Conversations](https://help.aliyun.com/zh/model-studio/openai-compatible-conversations)
 -   [LangChain](raw/model-api-reference/toolkits-and-frameworks/use-bailian-in-langchain.md)

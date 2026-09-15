@@ -6,7 +6,7 @@
 -   [OpenCode](raw/model-user-guide/use-chat-client-or-development-tool/opencode.md)
 -   [Cursor](raw/model-user-guide/use-chat-client-or-development-tool/cursor.md)
 -   [Codex](raw/model-user-guide/use-chat-client-or-development-tool/codex.md)
--   [千问](raw/model-user-guide/use-chat-client-or-development-tool/qwen-office-assistant.md)
+-   [千问](https://help.aliyun.com/zh/model-studio/qwen-office-assistant)
 -   [Qwen Code](raw/model-user-guide/use-chat-client-or-development-tool/qwen-code.md)
 -   [DeepSeek Harness](raw/model-user-guide/use-chat-client-or-development-tool/deepseek-harness.md)
 -   [QwenPaw](raw/model-user-guide/use-chat-client-or-development-tool/qwenpaw.md)

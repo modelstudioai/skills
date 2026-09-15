@@ -298,7 +298,7 @@ CosyVoice 调优涉及两个子网络：**LM**（Language Model，将文本转�
 
 ### 模型产出（Checkpoint）
 
-单次调优任务可能产出多个 Checkpoint（候选模型，可通过[Checkpoint 管理](raw/model-api-reference/model-production/fine-tuning-jobs-api/list-checkpoints-api.md)接口查看），具体数量与排序由超参数中的 `lm_num`、`fm_num` 与 `*_step` 共同决定。
+单次调优任务可能产出多个 Checkpoint（候选模型，可通过[Checkpoint 管理](https://help.aliyun.com/zh/model-studio/list-checkpoints-api)接口查看），具体数量与排序由超参数中的 `lm_num`、`fm_num` 与 `*_step` 共同决定。
 
 1.  **选模型**：分别从 LM、FM 的最大轮次往回数，每隔 `*_step` 选一个，共选 `*_num` 个。
 2.  **组合**：LM 与 FM 的选择做全排列，候选 Checkpoint 数量 = `lm_num × fm_num`。
@@ -760,7 +760,7 @@ with open('output.mp3', 'wb') as f:
 
 [选用更优的 Checkpoint](https://help.aliyun.com/zh/model-studio/fine-tune-speech-synthesis-model-by-api#cv_prod_ckpt_t)
 
-[Checkpoint 管理](raw/model-api-reference/model-production/fine-tuning-jobs-api/list-checkpoints-api.md)
+[Checkpoint 管理](https://help.aliyun.com/zh/model-studio/list-checkpoints-api)
 
 查询可部署的模型
 

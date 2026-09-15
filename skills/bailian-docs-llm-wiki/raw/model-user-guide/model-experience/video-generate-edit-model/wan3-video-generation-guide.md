@@ -97,7 +97,19 @@ wan3.0-video / wan3.0-video-prime 是 All-in-One 模型，无需切换模型名�
 
 向前/向后/双向延长。`ratio` 建议 `adaptive`（自动保持原视频宽高比）
 
-## 核心能力
+## 提示词技巧
+
+平台提供万相3.0 提示词优化 Skill，方便您对提示词进行调优。
+
+**下载 Skill**：[wan3-pe.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9fc4.zip)（下载后解压）
+
+**使用方式**：在 AI 对话框输入 `/wan3-pe` + 您的提示词内容，开始调试提示词。例如：
+
+```
+/wan3-pe 基于skill对提示词进行完善，提示词为：一只猫在草地上奔跑
+```
+
+## 主要功能
 
 ### 文生视频
 
@@ -1265,18 +1277,6 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 -   **格式**：MP4，帧率30fps。
 -   **有声视频**：默认开启，可通过 `audio`\=false 关闭。
 -   视频URL有效期24小时，请及时保存。
-
-## 提示词技巧
-
-平台提供万相3.0 提示词优化 Skill，方便您对提示词进行调优。
-
-**下载 Skill**：[wan3-pe.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9fc4.zip)（下载后解压得到 `SKILL.md`）
-
-**使用方式**：在 AI 对话框输入 `/wan3-pe` + 您的提示词内容，开始调试提示词。例如：
-
-```
-/wan3-pe 基于skill对提示词进行完善，提示词为：一只猫在草地上奔跑
-```
 
 ## 计费与限流
 

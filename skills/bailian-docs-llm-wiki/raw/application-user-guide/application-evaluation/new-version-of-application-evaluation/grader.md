@@ -217,7 +217,7 @@ Code评估器使用Python脚本实现评估逻辑，适用于需要精确规则�
 
 ### 查看评估结果
 
-评测任务完成后，在任务详情页查看评估器结果。详情请查阅[评测任务](https://help.aliyun.com/zh/model-studio/evaluation-task)。
+评测任务完成后，在任务详情页查看评估器结果。详情请查阅[评测任务](raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/evaluation-task.md)。
 
 评测任务列表包含**评测状态**、**任务名称**、**评测集名称**、**应用及评分(通过率)**、**评估器详情 自动**、**标签详情 人工**、**token消耗**、**评测时间**和**操作**列。**评估器详情 自动**列展示各自动评估器的运行状态（进行中或完成）及通过率。**操作**列提供**详情**、**终止**和**删除**链接。
 

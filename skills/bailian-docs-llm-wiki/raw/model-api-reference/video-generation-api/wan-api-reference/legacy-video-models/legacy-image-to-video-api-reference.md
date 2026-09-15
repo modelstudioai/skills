@@ -4,7 +4,7 @@
 
 **相关文档**：[使用指南](raw/model-user-guide/model-experience/video-generate-edit-model/image-to-video-guide.md)
 
-**说明**全新推出的[万相2.7-图生视频](raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)支持首帧生视频、首尾帧生视频、视频续写三大任务，**推荐优先选用**。
+**说明**全新推出的[万相2.7-图生视频](https://help.aliyun.com/zh/model-studio/image-to-video-general-api-reference)支持首帧生视频、首尾帧生视频、视频续写三大任务，**推荐优先选用**。
 
 本文档的[图生视频-基于首帧](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-api-reference.md)（wan2.6及早期模型）仅支持首帧生视频。
 
@@ -1387,7 +1387,7 @@ public class Image2Video {
 
 ## 已知限制
 
-使用 **wan2.6-i2v-flash** 生成圆形物体连续旋转（如圆环、齿轮、表盘）的动画时，画面在约 3 秒后可能出现短暂卡顿（画面静止约 1 秒）。如需生成此类连续旋转效果，建议改用[万相2.7-图生视频](raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)模型以规避此问题。
+使用 **wan2.6-i2v-flash** 生成圆形物体连续旋转（如圆环、齿轮、表盘）的动画时，画面在约 3 秒后可能出现短暂卡顿（画面静止约 1 秒）。如需生成此类连续旋转效果，建议改用[万相2.7-图生视频](https://help.aliyun.com/zh/model-studio/image-to-video-general-api-reference)模型以规避此问题。
 
 ## 错误码
 

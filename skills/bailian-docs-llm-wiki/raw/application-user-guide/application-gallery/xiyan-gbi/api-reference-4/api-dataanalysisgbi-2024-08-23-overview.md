@@ -100,7 +100,7 @@ API概述
 
 获取当前指定业务空间下的同义词列表。
 
-[UpdateSynonyms](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-synonym-explanation/api-dataanalysisgbi-2024-08-23-updatesynonyms.md)
+[UpdateSynonyms](https://help.aliyun.com/zh/model-studio/api-dataanalysisgbi-2024-08-23-updatesynonyms)
 
 修改同义词
 

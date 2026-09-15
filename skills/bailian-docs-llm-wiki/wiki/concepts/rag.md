@@ -1,58 +1,58 @@
 # 检索增强生成
 
-检索增强生成（Retrieval-Augmented Generation，RAG）是一种将大语言模型（LLM）的生成能力与外部知识源的精准检索能力相结合的技术范式。它通过在模型推理前动态检索相关上下文片段，并将其注入提示词（Prompt），使模型能在私有、实时、结构化或非结构化知识基础上生成更准确、可溯源、领域适配的回答。
+检索增强生成（Retrieval-Augmented Generation，RAG）是一种将大语言模型（LLM）的生成能力与外部知识源的精准检索能力相结合的技术范式。它通过在模型推理前动态检索相关文档片段，并将其作为上下文注入提示（[prompt](../guides/prompt.md)），显著提升回答的事实准确性、领域专业性与时效性，同时降低幻觉风险。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-在百炼平台，RAG 不是单一功能，而是贯穿多个能力层的**横切架构模式**，开发者可根据业务需求选择不同抽象层级的实现方式：
+在百炼平台，RAG 不是单一功能，而是贯穿多个核心能力的横切技术底座，开发者可根据需求选择不同抽象层级的集成方式：
 
-- **知识库（RAG 核心载体）**：最常用场景。通过控制台或 API 构建文档、表格、图片、音视频等多模态知识库，系统自动完成分块、向量化、混合检索（向量+关键词）、重排（Rerank）和上下文拼接。适用于客服问答、内部知识助手、产品文档查询等。
-- **知识检索服务（语义搜索）**：面向需要**精准召回原始切片**的场景（如构建自有搜索引擎、调试 RAG 流程）。调用 `knowledge/search` 接口，返回带 `score` 和 `metadata` 的文本/图像切片列表，不触发生成，由业务侧自行编排后续逻辑。
-- **知识问答服务（端到端 RAG）**：面向开箱即用的对话体验。调用 `knowledge/chat` 接口，平台自动执行三阶段流程：`planning`（判断是否需检索）、`tool_calling`（调用 `semantic_search`/`execute_sql` 等工具）、`generating`（融合检索结果生成回答），支持[流式输出](streaming-output.md)。
-- **Model Context Protocol（MCP）**：面向**高度定制化上下文注入**的场景。开发者自建 MCP 服务，按需提供任意格式（文本、代码、表格）的上下文，与知识库检索并行或互补，适用于需集成实时 API、数据库快照或多源异构数据的复杂智能体。
-- **工作流与智能体节点**：在可视化工作流中，直接拖入“知识库”节点，配置检索参数后连接至大模型节点；在智能体中，通过“文档知识库”模块一键关联，系统自动在 `planning` 阶段决策是否调用及调用哪些知识库。
-- **应用评测（RAG 效果归因）**：通过评测集与评估器，可量化分析 RAG 各环节瓶颈——例如识别 BadCase 是因“检索未召回”（Recall 低）、“重排排序错误”（Rerank 准确率低）、“切片信息不全”（Chunking 策略问题），还是“模型未理解上下文”（Generation 阶段失效），驱动针对性优化。
+- **知识库（Knowledge Base）**：最常用、开箱即用的 RAG 实现。上传私有文档后，平台自动完成解析、分块、向量化与索引构建；调用时自动执行检索 → 重排 → 提示注入 → 生成全流程。适用于客服问答、内部知识助手、合规审查等需强可信度的场景。
 
-> ✅ 关键认知：百炼的 RAG 能力是**服务化、可组合、可观测**的。知识库是基础数据层，知识检索/问答是封装好的服务层，MCP 是开放扩展层，工作流/智能体是编排层，评测是诊断层——所有层共享同一套向量与排序模型底座。
+- **知识检索（Knowledge Search）与知识问答（Knowledge Chat）**：提供更细粒度的控制权。  
+  - `知识检索` 接口返回原始检索结果（含 `score`、`text`、`metadata`），适合需要自定义重排、融合多源结果或构建复杂工作流的开发者；  
+  - `知识问答` 接口则封装为端到端智能体，自动调度检索工具并生成回答，支持多轮对话与多模态输入（如图文混合查询），适合快速上线对话类应用。
+
+- **数据连接（Data Connection）**：为 RAG 提供数据源头。平台托管型连接器（如文件、表格）将数据导入后直接用于知识库构建；流处理型连接器（如 MySQL、语雀）则通过内置工具（如 `searchMySQL`）在智能体运行时实时查询，实现“检索增强”中的“实时数据增强”。
+
+- **框架集成（LlamaIndex / Spring AI Alibaba）**：面向希望保留本地开发灵活性的团队。通过 `DashScopeCloudRetriever` 或 `DashScopeDocumentRetriever`，可将百炼云端知识库无缝接入主流开源框架，复用已有 RAG 工程实践，同时享受百炼的向量模型、重排模型与智能解析能力。
+
+- **应用评测（Application Evaluation）**：RAG 效果可被系统化度量。评测体系支持对“检索环节”单独归因（如标记“检索失效”“切片不完整”），帮助定位 RAG 流程瓶颈，驱动针对性优化（如调整分块策略、优化 `score_threshold`）。
 
 ## 关键参数和配置
 
-RAG 效果高度依赖以下关键参数，需根据场景权衡精度、延迟与成本：
+RAG 行为主要由以下参数控制，具体可用性取决于所选接口或组件：
 
-| 类别 | 参数名 | 典型取值 | 说明 | 推荐实践 |
-|------|--------|----------|------|----------|
-| **召回控制** | `TopK`（向量/关键词） | 10–50 | 初步召回数量，影响后续重排成本与覆盖度 | 文档类建议 30–50；表格类建议 10–20（NL2SQL 对噪声敏感） |
-| | `最大召回数量` | 3–10 | 混排后最终返回给模型的切片数 | 默认 5；过高易引入噪声，过低可能遗漏关键信息 |
-| | `相似度阈值` | 0.4–0.7 | 过滤低分切片，避免噪声注入 | 从 0.5 开始测试，结合评测集调整；音视频因 ASR/OCR 误差建议设更低（0.3–0.4） |
-| **排序与融合** | `权重`（知识库间） | 0.1–1.0 | 同类型知识库间的相对优先级（仅同类型生效） | 多个文档库时，高频更新库设高权重；权威性库设高权重 |
-| | `instruct`（Rerank） | 字符串 | 排序模型的任务指令，如 `"Rank by factual accuracy for medical queries."` | 明确任务目标可显著提升重排质量，尤其对专业领域 |
-| **上下文注入** | `context.sources[].weight`（MCP） | 0.0–1.0 | 自定义上下文在总 Prompt 中的占比权重 | 与知识库检索结果并存时，建议 MCP 权重 ≤0.5，避免覆盖核心知识 |
-| **性能与成本** | `初步向量检索 TopK` | 1–100 | 直接影响 Rerank 调用次数与费用 | 每增加 10，Rerank Token 成本约增 15%；建议监控 `rerank_tokens_used` 指标 |
+| 参数名 | 所属模块 | 类型 | 默认值 | 说明 |
+|--------|----------|------|--------|------|
+| `top_k` | 知识库、LlamaIndex | integer | `3`（知识库） / `5`（`DashScopeCloudRetriever`） | 检索返回的最相关文档片段数，取值范围通常为 1–10。增大可提升召回率，但可能引入噪声。 |
+| `score_threshold` | 知识库 | float | `0.3` | 向量相似度（余弦）阈值，低于此值的片段被过滤；设为 `0` 表示关闭过滤。适用于抑制低质量匹配。 |
+| `enable_hybrid_search` | 知识库 | boolean | `true` | 是否启用关键词 + 向量混合检索，比纯向量检索更鲁棒，尤其对术语、缩写、数字敏感。 |
+| `retrieval_mode` | 知识库 | string | `"auto"` | 可选 `"auto"`（混合）、`"vector_only"`、`"keyword_only"`；`"auto"` 在 v2.3.0+ 生效。 |
+| `dense_similarity_top_k` | LlamaIndex (`DashScopeCloudRetriever`) | integer | `100` | 向量召回阶段返回的候选节点数，后续可由重排模型精筛。 |
+| `rerank_top_n` | LlamaIndex (`DashScopeCloudRetriever`) | integer | `5` | 重排后最终返回给 LLM 的节点数，直接影响上下文长度与生成质量。 |
+| `stream` | 知识问答、应用 API | boolean | `true`（强制） | 启用流式响应（SSE），必须显式设置为 `true`；RAG 生成过程天然支持增量输出。 |
 
-> ⚠️ 注意：所有参数均以**控制台配置为准**，API 请求中仅传递 `agent_id` 或 `context`，策略逻辑完全托管于平台。硬编码模型名（如 `qwen3.6-plus`）或参数值存在兼容风险，应通过控制台动态获取。
+> ⚠️ 注意：`knowledge chat` 接口不暴露检索参数（如 `top_k`、`score_threshold`），其检索策略完全由控制台发布的知识服务实例决定；如需精细控制，请使用 `knowledge search` 接口自行组装 RAG 流程。
 
 ## 面向开发者，简洁实用
 
-- **快速上手**：用控制台创建知识库 → 发布知识问答服务 → 调用 `/api/v2/apps/knowledge/chat`，5 分钟内跑通端到端 RAG。
-- **调试必做**：启用 `X-Bailian-Debug: true` 请求头，查看 `x-bailian-mcp-trace` 和 `x-bailian-rag-trace` 响应头，确认检索是否触发、召回了哪些切片、重排分数分布。
-- **效果优化闭环**：  
-  ① 用**应用评测**创建知识问答评测集；  
-  ② 运行评测任务，定位 BadCase 归因（如 “检索未召回” 占比高）；  
-  ③ 调整对应参数（如提高 `TopK`、降低 `相似度阈值`）或优化知识库（如调整分块大小、补充元数据标签）；  
-  ④ 复用同一评测集对比新旧版本效果。
-- **生产注意**：  
-  - 知识库仅华北2（北京）和新加坡地域可用，API endpoint 必须匹配；  
-  - 知识问答服务必须**发布后**才能调用，未发布返回 `Agent 未发布`；  
-  - 所有接口必须校验响应体中的 `success`（检索）或 `event` 类型（问答），**不可仅依赖 HTTP 状态码**；  
-  - `gte-rerank` 系列模型将于 2026 年 5 月 30 日下线，请立即迁移到 `qwen3-rerank`。
+- **快速验证**：优先使用控制台「知识库」模块，上传 3–5 份典型文档 → 创建并发布 → 在「测试问答」面板输入问题，5 分钟内验证 RAG 基础效果。
+- **生产集成**：  
+  - 简单场景：直接调用 `/v1/knowledge_bases/{kb_id}/query`（知识库 API）或 `/api/v2/apps/knowledge/chat`（知识问答 API）；  
+  - 复杂场景：用 `knowledge search` 获取原始结果 → 自行重排/过滤/融合 → 构造 [prompt](../guides/prompt.md) → 调用 `/api/v1/services/aigc/text-generation/generation` 生成答案。  
+- **调试技巧**：  
+  - 若答案不准，先检查 `score_threshold` 是否过高（导致无结果）或过低（引入噪声）；  
+  - 查看返回结果中的 `metadata` 字段（如 `_score_with_weight`），确认高分片段是否真正相关；  
+  - 使用应用评测的「BadCase 归因」报告，快速区分问题是出在检索、切片还是生成环节。  
+- **性能提示**：`top_k=3` 和 `rerank_top_n=5` 是平衡效果与延迟的常用起点；避免盲目增大 `top_k` 至 10 以上，除非明确需要宽泛召回并自行后处理。
 
 ## 关联主题页
 
 - [knowledge base](../guides/knowledge-base.md)
 - [knowledge](../api/knowledge.md)
-- [application evaluation](../guides/application-evaluation.md)
-- [vector and sort](../api/vector-and-sort.md)
 - [data connection overview](../guides/data-connection-overview.md)
-- [model context protocol](../guides/model-context-protocol.md)
+- [application evaluation](../guides/application-evaluation.md)
+- [application support](../guides/application-support.md)
+- [frameworks](../api/frameworks.md)
 
 

@@ -551,7 +551,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 ```
 **输入参数说明**
 
-**说明**调用微调后的 LoRA 模型时，wan2.7输入参数用法基本与[万相2.7-图生视频](raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)一致，wan2.5/wan2.2请参见[万相-图生视频-基于首帧（2.1-2.6）](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-api-reference.md)。
+**说明**调用微调后的 LoRA 模型时，wan2.7输入参数用法基本与[万相2.7-图生视频](https://help.aliyun.com/zh/model-studio/image-to-video-general-api-reference)一致，wan2.5/wan2.2请参见[万相-图生视频-基于首帧（2.1-2.6）](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-api-reference.md)。
 
 下表仅列出 LoRA 模型**特有的参数用法或特定限制**。对于未在下表中提及的通用参数（例如 `duration`），请参照 API 文档进行设置。
 
@@ -687,7 +687,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2video
 ```
 **输入参数说明**
 
-**说明**调用微调后的 LoRA 模型时，wan2.7输入参数用法基本与[万相2.7-图生视频](raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)一致，wan2.2请参见[图生视频-基于首尾帧API](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-by-first-and-last-frame-api-reference.md)。
+**说明**调用微调后的 LoRA 模型时，wan2.7输入参数用法基本与[万相2.7-图生视频](https://help.aliyun.com/zh/model-studio/image-to-video-general-api-reference)一致，wan2.2请参见[图生视频-基于首尾帧API](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-by-first-and-last-frame-api-reference.md)。
 
 下表仅列出 LoRA 模型**特有的参数用法或特定限制**。对于未在下表中提及的通用参数（例如 `duration`），请参照 API 文档进行设置。
 

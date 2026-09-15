@@ -273,7 +273,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
 
 **output\_cnt** `integer`
 
-当前任务已产出的 Checkpoint 数量。Checkpoint 详细列表可通过[Checkpoint 管理](raw/model-api-reference/model-production/fine-tuning-jobs-api/list-checkpoints-api.md)接口获取。
+当前任务已产出的 Checkpoint 数量。Checkpoint 详细列表可通过[Checkpoint 管理](https://help.aliyun.com/zh/model-studio/list-checkpoints-api)接口获取。
 
 **max\_output\_cnt** `integer`
 
