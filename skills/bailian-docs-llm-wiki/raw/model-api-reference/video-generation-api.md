@@ -1,9 +1,9 @@
 # 视频生成
 
--   [HappyHorse](https://help.aliyun.com/zh/model-studio/happyhorse-api-reference)
--   [万相](https://help.aliyun.com/zh/model-studio/wan-api-reference)
--   [人像驱动](https://help.aliyun.com/zh/model-studio/portrait-animation-api-reference)
--   [爱诗](https://help.aliyun.com/zh/model-studio/pixverse-api-reference)
--   [可灵](https://help.aliyun.com/zh/model-studio/kling-api-reference)
--   [Vidu](https://help.aliyun.com/zh/model-studio/vidu-api-reference)
--   [MiniMax](https://help.aliyun.com/zh/model-studio/minimax-video-api-reference)
+-   [HappyHorse](raw/model-api-reference/video-generation-api/happyhorse-api-reference.md)
+-   [万相](raw/model-api-reference/video-generation-api/wan-api-reference.md)
+-   [人像驱动](raw/model-api-reference/video-generation-api/portrait-animation-api-reference.md)
+-   [爱诗](raw/model-api-reference/video-generation-api/pixverse-api-reference.md)
+-   [可灵](raw/model-api-reference/video-generation-api/kling-api-reference.md)
+-   [Vidu](raw/model-api-reference/video-generation-api/vidu-api-reference.md)
+-   [MiniMax](raw/model-api-reference/video-generation-api/minimax-video-api-reference.md)

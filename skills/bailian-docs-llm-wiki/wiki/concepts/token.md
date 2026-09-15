@@ -1,46 +1,45 @@
-# Token
+# Token 管理
 
-Token 是百炼平台中用于度量和计量大模型服务资源消耗的核心计费与配额单位，表示模型处理文本、图像、音频等输入输出内容时所消耗的最小语义单元数量。一个 token 通常对应一个子词（subword）、标点、空格或特殊控制符号；其实际长度取决于模型分词器（tokenizer），而非字符数。
+Token 管理是百炼平台对模型调用过程中输入/输出文本、图像、音频等内容所消耗的计算资源（以 token 为计量单位）进行统一配额控制、实时计量、用量监控与成本治理的核心机制。它贯穿 API 调用、资源分配、可观测性与计费全链路，是保障服务稳定性、实现精细化资源治理和合规成本管控的基础能力。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **配额管理（Token Plan）**：Token 是 Token Plan 的计量基础。平台按小时为单位分配 token 配额（如 `team` 版每小时 100 万 tokens），所有受支持的 API 调用（`chat`、`completion`、`embedding`）均按实际消耗的输入 + 输出 token 总数实时扣减配额。流式响应（streaming）的 token 扣减发生在请求完成时，而非逐块累计。
-
-- **模型调用与推理**：每次 API 请求（标准 REST 或 Realtime API）均需明确指定 `model`，平台自动计算该次请求的输入 token 数（含 system [prompt](../guides/prompt.md)、messages、tools 等上下文）与输出 token 数（实际生成内容）。`max_tokens` 参数仅限制输出长度，不影响输入 token 计算。
-
-- **可观测性与监控**：
-  - **应用观测（Application Monitoring）**：自动采集并上报单次请求的 `input_tokens` 和 `output_tokens`，用于链路追踪、延迟归因与成本分析；
-  - **模型监控（Model Monitoring）**：在「监控中心」提供按模型、应用、环境维度聚合的 token 消耗趋势（输入/输出分离统计），支持 P99 延迟与 token 效率（tokens/sec）联合分析；
-  - **账单系统（Billing API）**：token 消耗是计费核心依据，账单明细中按模型类型、调用次数、总 token 数三者联动呈现，支撑成本分摊与用量审计。
-
-- **组织治理（TokenPlan API）**：TokenPlan API 不直接处理 token 计算，但通过席位（seat）分配、成员管理、订阅配置等方式，将 token 配额以组织为单位进行分发与隔离，实现企业级资源治理。
+- **配额控制（Token Plan）**：通过 `Token Plan` 机制为模型调用设置周期性配额（如日/月 quota）、突发弹性策略（burst_ratio）及模型白名单，实现按角色、场景、模型维度的资源隔离与分级管控。不指定 plan 的请求默认走共享池，易受全局限流影响。
+- **调用执行（API 请求）**：每次模型请求的实际 token 消耗（含 [prompt](../guides/prompt.md) + completion）由平台自动统计，并实时扣减对应 Token Plan 的剩余配额；超限行为由 `enforce_mode`（strict/soft）决定是否拒绝或短时容忍。
+- **可观测性（Monitoring）**：`应用观测` 和 `模型监控` 均将 token 用量作为核心指标——前者在 trace 中记录单次调用的 `input_tokens`/`output_tokens`，后者按模型、API Key、时间维度聚合统计，支撑用量分析、SLO 评估与账单对账。
+- **安全与调试（Preparations）**：`max_tokens` 等参数直接约束 token 消耗上限；输入总长度超模型最大上下文时，平台主动拦截并返回明确错误，避免无效 token 浪费；流式响应中 token 分块生成也纳入实时计量。
+- **组织治理（Token Plan API）**：企业级 Token 管理依赖组织账号体系——席位（Seat）分配隐式绑定 token 配额能力，成员角色（ORG_ADMIN/ORG_MEMBER）决定其可创建/修改 Token Plan 的权限范围，实现从组织到个人的配额继承与管控下沉。
 
 ## 关键参数和配置
 
-- `plan`（必填，字符串）：声明本次调用所归属的 Token Plan 类型（`"personal"` / `"team"` / `"advanced"`），决定配额池与扣减规则；
-- `max_tokens`（可选，整数）：硬性限制模型输出 token 上限（默认由模型决定），不参与配额计算，但影响实际 token 消耗；
-- `stream: true`（Realtime API 强制）：启用流式响应时，token 统计仍以完整请求为单位，非逐 chunk 扣减；
-- 监控相关参数（非调用参数，但影响 token 数据可见性）：
-  - `enable_monitoring: true`（应用级开关，开启后才采集 token 指标）；
-  - `trace_sampling_rate`（控制 token 级 trace 的采样比例，影响观测粒度与存储开销）。
+| 参数 | 所属模块 | 类型/取值 | 说明 |
+|------|----------|-----------|------|
+| `quota` | Token Plan | 整数或科学计数法（如 `5e5`） | 周期总配额（单位：token），单 plan 最大 `1e9` |
+| `burst_ratio` | Token Plan | float `[1.0, 3.0]`，默认 `1.5` | 突发流量倍率，修改后需 60 秒同步生效 |
+| `enforce_mode` | Token Plan | `"strict"`（默认）或 `"soft"`（已弃用） | 严格模式下超限立即返回 `429`；`soft` 模式已不推荐使用 |
+| `model_whitelist` | Token Plan | 字符串数组（如 `["qwen-plus"]`） | 空数组表示允许全部模型；同一账号下各 plan 白名单不可重叠 |
+| `X-Plan-ID` / `X-Task-ID` | API 请求头 | string | 调用时显式指定 Token Plan，否则走默认配额池 |
+| `input_tokens` / `output_tokens` | Monitoring | integer | 监控系统自动采集的单次调用实际消耗量，用于用量统计与告警 |
+| `time_granularity` | 模型监控 | `"1m"` / `"1h"` / `"1d"` | 用量统计的时间精度，影响数据延迟与查询粒度 |
 
-> ⚠️ 注意：所有 token 计算均基于百炼平台内置 tokenizer（与 Qwen 系列模型一致），开发者无需自行分词；输入内容（如 base64 图像、PCM 音频）经预处理后统一转换为 token 序列计入总量。
+> ⚠️ 注意：`enforce_mode=soft` 已标记为弃用；`burst_ratio > 3.0` 或单次请求 `> 1e6` tokens 将被强制拦截；所有 token 计量均基于百炼平台标准 tokenizer（非开源社区 tokenizer），结果具有一致性与平台内可比性。
 
 ## 面向开发者，简洁实用
 
-- **快速验证 token 消耗**：调用任意模型 API 后，检查响应头 `X-DashScope-Token-Usage`（格式为 `input:123,output:456,total:579`），该字段在所有成功响应中稳定返回。
-- **避免配额超限**：单次请求消耗不得超过当前 Plan 小时配额的 10%；若频繁触发 `429 Too Many Requests`，请检查 `max_tokens` 是否设置过大，或拆分长上下文。
-- **流式调用优化**：虽 token 扣减延迟至请求结束，但 `content_block_delta` 事件中 `delta.token_count` 字段可实时获知已生成 token 数，用于前端进度提示。
-- **成本控制建议**：优先使用 `qwen-turbo` 处理简单任务；对 RAG 应用，监控检索阶段 token 占比（应用观测中可下钻），避免冗余上下文注入。
-- **调试技巧**：在请求 Header 中添加 `X-Bailian-Trace-ID`，可在「观测」页精准定位某次高 token 消耗请求的完整链路与各阶段耗时。
+- ✅ **必做**：生产环境务必为每个关键业务路径创建专属 Token Plan，并在请求头中显式传入 `X-Plan-ID`，避免共享池争抢导致抖动。
+- ✅ **必查**：调用失败时，优先检查响应 Header 中的 `X-RateLimit-Remaining` 和 `X-RateLimit-Reset`，结合 `request_id` 在监控中定位 token 消耗峰值与超限原因。
+- ✅ **必配**：在模型监控中为高价值模型配置 `Token Usage Rate`（单位时间 token 消耗量）告警，及时发现异常刷量或 [prompt](../guides/prompt.md) 泄漏风险。
+- ❌ **禁用**：不要依赖 `enforce_mode=soft` 实现“柔性降级”——该模式已失效，应改用 `burst_ratio` + 重试退避策略。
+- 📊 **诊断工具**：使用 `dashscope` CLI 的 `/skill diagnose` 命令自动分析历史调用中的 token 分布、平均长度与截断比例，优化 [prompt](../guides/prompt.md) 设计。
+
+Token 管理不是静态配额开关，而是动态、可观测、可审计的资源治理闭环。从 Plan 定义 → 请求执行 → 实时计量 → 监控告警 → 成本归因，每一步都应纳入你的 SRE 与 FinOps 实践。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
 - [token plan api](../api/token-plan-api.md)
-- [realtime api user guide](../api/realtime-api-user-guide.md)
+- [preparations](../api/preparations.md)
 - [application monitoring](../guides/application-monitoring.md)
 - [model monitoring](../guides/model-monitoring.md)
-- [billing api](../api/billing-api.md)
 
 

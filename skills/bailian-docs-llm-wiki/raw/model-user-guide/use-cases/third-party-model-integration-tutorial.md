@@ -1,0 +1,15 @@
+# 三方模型调用教程
+
+-   [DeepSeek-阿里云](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/deepseek-api.md)
+-   [DeepSeek-硅基流动](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/siliconflow-deepseek-api.md)
+-   [DeepSeek-快手万擎](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/deepseek-api-by-vanchin.md)
+-   [Kimi-阿里云](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api.md)
+-   [Kimi-月之暗面](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/kimi-api-by-moonshot-ai.md)
+-   [GLM-阿里云](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/glm.md)
+-   [GLM-智谱](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/glm-zhipu.md)
+-   [MiniMax-阿里云](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/minimax-api.md)
+-   [MiniMax-稀宇科技](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/minimax-api-by-minimax.md)
+-   [Vidu视频生成Prompt指南](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/vidu-video-generation-prompt-guide.md)
+-   [MiMo-小米](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/mimo.md)
+-   [Stepfun-阶跃星辰](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/stepfun.md)
+-   [Unisound-云知声](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/unisound-cloud-sound.md)

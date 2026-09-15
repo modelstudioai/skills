@@ -1,0 +1,36 @@
+# Agent 上下文管理
+
+通过挂载资源扩展智能体在会话中可访问的数据。资源独立管理，可被多个会话复用。
+
+## 挂载资源
+
+挂载资源是上下文中唯一独立于会话管理的部分。资源通过控制台或 API 创建后，可挂载到一个或多个会话，生命周期与会话解耦。
+
+**资源类型**
+
+**说明**
+
+[文件上传与挂载](raw/application-user-guide/managed-agents/managed-agents-context/managed-agents-file.md)
+
+上传到平台的文件，挂载后以副本形式出现在会话沙箱的指定路径。单个文件不超过 10 MB
+
+## 资源与会话的关系
+
+### 挂载时机
+
+-   **创建会话时挂载**：在 `resources` 字段中指定资源列表和挂载路径。
+-   **运行时追加**：通过 **POST** `/sessions/{session_id}/resources` 追加，实时生效，无需重启会话。
+
+### 路径约定
+
+挂载资源统一放在 `/mnt/session/uploads` 前缀下。在系统提示词中可直接引用完整路径，智能体即可通过工具访问。
+
+### 会话隔离
+
+挂载资源时，平台做一份内部拷贝放入会话沙箱。会话内的修改不影响原始资源，也不影响挂载了同一资源的其他会话。卸载后会话内的副本被清理，原始资源不受影响。
+
+## 下一步
+
+-   [文件上传与挂载](raw/application-user-guide/managed-agents/managed-agents-context/managed-agents-file.md)：上传文件并挂载到会话。
+-   [发起会话](raw/application-api-reference/managed-agents-api/session-api/session-create.md)：创建会话时指定挂载资源。
+-   [定义 Agent](raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-agent-definition.md)：配置系统提示词和工具。

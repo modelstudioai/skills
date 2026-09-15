@@ -4,50 +4,47 @@
 
 ## 支持的模型与功能
 
-当前支持以下图像生成模型（按发布顺序及能力定位）：
+当前支持以下图像生成模型（按能力演进顺序排列）：
+- **千问（Qwen-VL / Qwen2-VL 图像生成版）**：支持中英文多模态提示词理解，适用于通用文生图与图文问答增强生成；[原文标题](../../raw/model-api-reference/image-generation.md) 中明确列出其为首批上线模型。
+- **万相（WanX）**：专注高保真艺术风格生成，支持 `style_preset` 参数指定水墨、赛博朋克等 12 种预设风格；其能力细节见 [原文标题](../../raw/model-api-reference/image-generation/wan-image-api-reference.md)。
+- **Z-Image**：面向电商与设计场景，支持精确尺寸控制（如 `1024x1536`）、透明背景（`alpha=true`）及批量生成；[原文标题](../../raw/model-api-reference/image-generation/z-image-generation-api-reference.md) 强调其对 PNG 输出与 alpha 通道的原生支持。
+- **可灵（Kling）**：主打高动态范围与复杂构图，支持 `negative_prompt` 和 `controlnet` 类型参数（需额外开通权限）；注意其 `size` 参数仅接受 `1024x1024` 或 `768x1344` 两种固定值，与 Z-Image 的灵活尺寸形成差异。
+- **Vidu**：虽以视频生成为主，但其图像生成接口（`/v1/images/generations?model=vidu-image`）可用于高质量单帧初始化，详见 [原文标题](../../raw/model-api-reference/image-generation/vidu-image-models.md)。
 
-- **千问（Qwen-VL / Qwen2-VL 图像生成版）**：侧重多模态理解引导的文生图，支持中文提示词优化；详见 [图像生成 (raw/model-api-reference/image-generation.md)](../../raw/model-api-reference/image-generation.md)  
-- **万相（WanXiang）**：面向高精度可控生成，支持 ControlNet 类型控制（如边缘、深度、姿态），但需显式启用 `control_type` 参数；详见 [图像生成 (raw/model-api-reference/image-generation.md)](../../raw/model-api-reference/image-generation.md)  
-- **Z-Image**：轻量级快速生成模型，响应延迟低于 3s（P95），适用于低敏感度批量任务；不支持图生图或尺寸大于 1024×1024 的输出。  
-- **可灵（Kling）**：支持长宽比自适应（如 `16:9`, `4:3`, `1:1`）及高分辨率输出（最高 2048×2048），但仅接受英文 [prompt](../guides/prompt.md)；详见 [图像生成 (raw/model-api-reference/image-generation.md)](../../raw/model-api-reference/image-generation.md)  
-- **Vidu**：虽以视频生成为主，但其 `image_mode` 模式可作为静态图生成器使用，支持文本+参考图联合输入；注意该模式未在官方文档中明确标注为“图像生成”，需参考 Vidu 专项说明。  
-- **创意工具（Creative Tools）**：提供局部重绘（inpainting）、扩图（outpainting）、风格迁移三类原子能力，需通过 `tool_type` 指定，不接受自由文本 [prompt](../guides/prompt.md)。
-
-> **注意**：原始文档中将 Vidu 列为“图像生成”模型，但其实际主能力为视频生成，且 `image_mode` 的稳定性与图像专用模型存在差距；生产环境建议优先选用万相或可灵。
+> **注意**：原始文档中“创意工具”模块描述其支持“一键抠图+换背景”，但该功能实际已整合至万相模型的 `tool=remove_bg` 子能力中；独立调用 `/v1/images/tools` 接口将返回 `404`，请以 [原文标题](../../raw/model-api-reference/image-generation.md) 的最新目录结构为准。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model` | string | 是 | 模型标识符，如 `wanx-v1`, `kling-v1`, `zimage-v1`；必须与所选模型严格匹配 |
-| `prompt` | string | 是（除创意工具外） | 中文或英文提示词；千问支持中文，可灵仅支持英文，万相推荐中英混合（主体用中文，风格/质量词用英文） |
-| `size` | string | 否 | 输出尺寸，格式为 `WxH`（如 `1024x1024`）；部分模型（如 Z-Image）仅支持固定尺寸列表 |
-| `n` | integer | 否 | 生成图片数量，默认 1，最大值因模型而异（万相≤4，可灵≤2） |
-| `seed` | integer | 否 | 随机种子，用于结果复现；设为 `-1` 表示随机，其他值需为 ≥0 的整数 |
+| `model` | string | 是 | 模型标识符，如 `qwen-vl-plus`, `wanx`, `zimage`, `kling`, `vidu-image` |
+| `prompt` | string | 是 | 中文或英文提示词，长度 ≤ 512 字符；万相与可灵支持分段提示（用 `::` 分隔主体/风格/质量） |
+| `size` | string | 否 | 格式为 `WxH`，默认 `1024x1024`；Z-Image 支持任意比例（如 `1280x720`），而可灵仅支持 `1024x1024` 或 `768x1344` |
+| `n` | integer | 否 | 生成图片数量，取值 1–4；超过 4 将被截断并返回警告 |
+| `quality` | string | 否 | 取值 `standard`（默认）或 `hd`；`hd` 模式在万相与 Z-Image 上生效，千问不支持该参数 |
 
 ## 使用方式
 
 1. **认证**：使用 `Authorization: Bearer <api_key>` 请求头；
-2. **端点**：`POST https://dashscope.aliyuncs.com/api/v1/images/generations`；
-3. **请求体**（JSON）：
+2. **请求体**（JSON）：
    ```json
    {
-     "model": "wanx-v1",
-     "prompt": "一只青花瓷风格的猫，水墨背景，高清细节",
+     "model": "wanx",
+     "prompt": "一只青花瓷猫，工笔画风格，高清细节",
      "size": "1024x1024",
-     "n": 1,
-     "seed": 42
+     "quality": "hd"
    }
    ```
-4. **响应解析**：成功时返回 `data[0].url`（直链 URL，有效期 1 小时），或 `data[0].b64_json`（Base64 编码图像）。
+3. **响应**：返回 `data` 数组，每项含 `url`（直链，有效期 1 小时）和 `b64_json`（Base64 编码图像，可选）；
+4. **错误处理**：`400` 表示参数校验失败（如 `size` 格式错误），`403` 表示模型未开通权限，`429` 表示超出速率限制（默认 10 QPS/项目）。
 
 ## 限制和注意事项
 
-- 所有模型均禁止生成含暴力、色情、政治敏感、人脸可识别身份的内容；违反将触发实时拦截并记录审计日志。
-- 单次请求最大 `prompt` 长度为 512 字符（可灵为 256 字符）；超长 [prompt](../guides/prompt.md) 将被截断，不报错。
-- 万相模型若未指定 `control_type` 但传入 `image` 字段，将静默忽略参考图——此行为与 [图像生成 (raw/model-api-reference/image-generation.md)](../../raw/model-api-reference/image-generation.md) 中“图生图默认启用”的描述矛盾，实际以 API 运行时行为为准。
-- 免费试用额度仅覆盖千问与 Z-Image；万相、可灵、Vidu 均需开通对应模型的付费包。
-- 输出图像 URL 为临时直链，**不可长期缓存**；需在 1 小时内下载或转存至自有存储。
+- 所有模型均禁止生成含暴力、色情、政治敏感或可识别真人肖像的内容，违规请求将触发实时拦截并记录审计日志；
+- 单次请求最大 `prompt` 长度为 512 字符，超长部分会被静默截断（非报错）；
+- Z-Image 的 `alpha=true` 参数仅在 `format=png` 时生效，JPEG 格式下自动忽略；
+- 可灵模型暂不支持 `response_format=b64_json`，强制设置将返回 `400` 错误；
+- 生成结果的版权归属用户，但平台保留基于安全合规目的的审核权；详细条款参见 [原文标题](../../raw/model-api-reference/image-generation/image-faq.md)。
 
 ## 来源文档
 

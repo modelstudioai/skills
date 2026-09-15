@@ -1,7 +1,7 @@
 # 模型调优
 
--   [千问模型调优](https://help.aliyun.com/zh/model-studio/fine-tune-text-generation-model)
--   [图像生成模型调优](https://help.aliyun.com/zh/model-studio/wan-image-generation-finetune-guide)
--   [视频生成模型调优](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-guide)
--   [语音合成模型调优](https://help.aliyun.com/zh/model-studio/fine-tune-speech-synthesis-model)
--   [强化学习](https://help.aliyun.com/zh/model-studio/rl-training-overview)
+-   [千问模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model.md)
+-   [图像生成模型调优](raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)
+-   [视频生成模型调优](raw/model-user-guide/fine-tuning/wan-video-generation-finetune-guide.md)
+-   [语音合成模型调优](raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model.md)
+-   [强化学习](raw/model-user-guide/fine-tuning/rl-training-overview.md)

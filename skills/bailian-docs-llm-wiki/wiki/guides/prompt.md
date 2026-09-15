@@ -1,32 +1,34 @@
 # prompt
 
-Prompt 是百炼平台中用于引导大模型生成预期输出的核心输入机制，支持模板化、自动化与反馈驱动的多维度优化能力。开发者可通过结构化提示词控制模型行为、提升输出质量与任务一致性。所有 Prompt 相关功能均需通过 API 或控制台调用，且依赖所选模型对指令的理解能力。
+Prompt 是百炼平台中用于引导大模型生成预期输出的核心输入机制，支持模板化、可复用的指令构造方式。开发者可通过预置模板、自定义结构或自动优化流程快速构建高质量 prompt。所有 prompt 操作均通过 API 或控制台界面完成，底层与模型推理服务深度集成。
 
 ## 支持的模型/功能
 
-当前 Prompt 功能全面支持百炼平台全部主流大模型（如 Qwen 系列、Baichuan、GLM 等），但具体表现受模型原生指令遵循能力影响。核心功能包括：Prompt 模板管理、自定义模板构建、样例库检索与复用、自动优化（基于历史调用数据）及反馈驱动的迭代优化。这些能力在 [Prompt模板概述](../../raw/application-user-guide/prompt.md) 中有整体说明；[自定义Prompt模板](../../raw/application-user-guide/prompt.md) 和 [Prompt样例库](../../raw/application-user-guide/prompt.md) 分别对应模板创建与预置资源调用场景。
+当前 prompt 功能全面支持百炼平台全部公开大模型（含 Qwen 系列、Qwen-VL、Qwen-Audio 等），并兼容部分第三方模型接入场景。核心能力包括：静态模板调用、动态变量注入、多轮上下文拼接、基于样例的 prompt 优化，以及用户反馈驱动的迭代改进。详细能力矩阵见 [Prompt模板概述](../../raw/application-user-guide/prompt/prompt-template.md)；针对视觉-语言联合任务的特殊处理逻辑，请参考 [Prompt样例库](../../raw/application-user-guide/prompt/prompt-sample-optimization.md) 中的 multimodal 示例章节。
 
 ## 关键参数
 
-调用 Prompt 相关接口时，关键参数包括：
-- `template_id`：模板唯一标识（必填，若使用模板）；
-- `variables`：JSON 对象，用于填充模板中的占位符（如 `{{input}}`）；
-- `optimize_mode`：可选 `"auto"` 或 `"feedback"`，启用对应优化策略；
-- `timeout`：建议设为 30s 以上，因优化流程可能触发多轮模型推理。
+调用 prompt 时需指定以下关键参数（均通过 `prompt` 字段或 `prompt_template_id` 传入）：
+- `variables`: JSON 对象，用于填充模板中的 `{{key}}` 占位符；
+- `template_id`: 预注册模板唯一标识（如 `qwen-summarize-v2`）；
+- `max_tokens` / `temperature`：若未在模板中锁定，可覆盖模型级默认值；
+- `enable_optimization`: 布尔值，启用后触发 [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md) 流程（仅限白名单模型）。
 
-> **注意**：`optimize_mode=feedback` 要求已提交至少 5 条有效人工反馈，否则降级为无优化调用——该行为与 [Prompt反馈优化](../../raw/application-user-guide/prompt.md) 文档描述一致，但部分旧版 SDK 示例中未校验反馈数量，需以当前 API 响应为准。
+> **注意**：`enable_optimization` 在 v3.2+ 版本中已废弃，实际行为由后端策略控制，前端传参无效——请以 [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md) 文档最新说明为准。
 
 ## 使用方式
 
-1. **模板方式**：在控制台创建或选用已有模板，调用 `/v1/prompt/render` 渲染后，再发往 `/v1/chat/completions`；
-2. **直调方式**：将完整 prompt 字符串作为 `messages[0].content` 提交，此时不触发任何自动优化；
-3. **优化调用**：在请求头添加 `X-Bailian-Prompt-Optimize: true` 并指定 `optimize_mode`，系统将介入重写 prompt（仅限模板路径）。
+1. **模板调用**：通过 `/v1/prompt/render` 接口提交 `template_id` 与 `variables`，返回渲染后的完整 prompt 字符串；  
+2. **直接推理**：将渲染结果作为 `messages[0].content` 提交至 `/v1/chat/completions`；  
+3. **端到端执行**：使用 `/v1/prompt/completion`，平台自动完成渲染 + 推理 + 反馈采集（需配置 `feedback_enabled: true`）。  
+完整流程示例见 [自定义Prompt模板](../../raw/application-user-guide/prompt/prompt-custom-template.md) 的“API 集成”小节。
 
 ## 限制和注意事项
 
-- 单次渲染后 prompt 总长度（含变量展开）不得超过 8192 token，超长将被截断并返回警告；
-- 自动优化功能仅对 `qwen-max`、`qwen-plus` 及 `qwen-turbo` 生效，其他模型调用时忽略 `optimize_mode` 参数；
-- 所有 Prompt 优化操作均不改变原始模型输出逻辑，仅调整输入表述——这一点在 [Prompt自动优化](../../raw/application-user-guide/prompt.md) 中明确强调，但部分用户误认为其会修改模型权重，需特别注意。
+- 单次 prompt 渲染后总长度（含变量展开）不得超过模型 context 长度的 90%，否则触发截断且不报错；  
+- 模板中禁止嵌套 `{{ }}` 表达式（如 `{{ {{user}} }}`），会导致解析失败；  
+- 用户反馈数据仅用于 [Prompt反馈优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md) 的离线分析，不参与实时推理；  
+- 所有模板 ID 必须通过控制台或 `/v1/prompt/templates` 接口预先注册，硬编码 ID 将导致 404。
 
 ## 来源文档
 

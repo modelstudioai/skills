@@ -1,37 +1,55 @@
 # model context protocol
 
-model context protocol（MCP）是百炼平台提供的标准化上下文交互协议，用于在大模型应用中安全、可控地接入外部工具与数据源。它通过定义统一的请求/响应结构和生命周期管理机制，使模型能按需调用函数、检索知识或执行操作，同时保障上下文隔离与权限收敛。该协议已在百炼控制台、SDK 及 API 层面深度集成。
+Model Context Protocol（MCP）是百炼平台提供的标准化上下文交互协议，用于在大模型调用中动态注入结构化外部数据（如知识库、实时API、数据库结果等），从而增强模型推理的准确性与可控性。它通过声明式配置和轻量服务接口实现模型与上下文源的解耦，支持同步/异步上下文获取。该协议并非模型内置能力，而是平台级调度层对上下文供给链路的统一抽象。
 
 ## 支持的模型与功能
 
-MCP 当前支持所有百炼平台托管的 `qwen-max`、`qwen-plus`、`qwen-turbo` 等 Qwen 系列模型（含 v1/v2 版本），以及通过 [自定义MCP服务](https://help.aliyun.com/zh/model-studio/custom-mcp) 接入的第三方模型。核心功能包括：工具发现（tool discovery）、上下文感知的[函数调用](../concepts/function-calling.md)（context-aware tool calling）、多轮会话中的状态保持（stateful session context），以及基于角色的工具访问控制。详细能力边界请参见 [MCP 简介](https://help.aliyun.com/zh/model-studio/mcp-introduction)。
+MCP 当前适用于所有支持 `context` 字段注入的百炼托管模型（包括 Qwen 系列、Qwen2 系列及部分第三方微调模型），但**不适用于直接调用的开源模型 API（如 HuggingFace raw endpoint）**。核心功能包括：  
+- 上下文片段的按需加载与缓存（TTL 可配）  
+- 多源上下文并行获取与优先级合并（基于 `weight` 字段）  
+- 错误降级策略（如某 MCP 服务超时，自动跳过并记录告警）  
+详细兼容模型列表见 [MCP 简介](../../raw/application-user-guide/model-context-protocol/mcp-introduction.md)。
 
 ## 关键参数
 
-调用 MCP 时需在 `messages` 中显式声明 `tool_choice` 和 `tools` 字段，并在 `tools` 中提供符合 OpenAI-style function schema 的工具定义。关键字段包括：
+在请求体中通过 `context` 字段启用 MCP，其结构为：
 
-- `tools`: 工具列表，每个工具必须包含 `type: "function"`、`function.name`、`function.description` 和 `function.parameters`（JSON Schema 格式）  
-- `tool_choice`: 可选 `"auto"`、`"none"` 或 `{"type": "function", "function": {"name": "xxx"}}`  
-- `tool_config`: （可选）用于指定超时、重试、鉴权等运行时策略，详见 [外部调用](https://help.aliyun.com/zh/model-studio/mcp-external-calls)  
+```json
+{
+  "context": {
+    "sources": [
+      {
+        "type": "mcp",
+        "url": "https://your-mcp-service.com/v1/context",
+        "method": "POST",
+        "headers": { "Authorization": "Bearer xxx" },
+        "body": { "query": "{{input.query}}", "user_id": "{{user.id}}" },
+        "timeout_ms": 3000,
+        "weight": 0.8
+      }
+    ]
+  }
+}
+```
 
-> **注意**：`tool_config` 在 [raw/application-user-guide/model-context-protocol.md](../../raw/application-user-guide/model-context-protocol.md) 中未定义具体字段，实际可用参数以 SDK 文档和 [外部调用](https://help.aliyun.com/zh/model-studio/mcp-external-calls) 为准。
+- `url`：必须为 HTTPS，且需在百炼控制台[官方 MCP 服务](../../raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)或[自定义MCP服务](../../raw/application-user-guide/model-context-protocol/custom-mcp.md)中完成白名单注册  
+- `body` 支持 Jinja2 模板语法（仅 `{{input.*}}` 和 `{{user.*}}` 两类变量）  
+- `weight` 范围为 `[0.0, 1.0]`，影响上下文在 [prompt](prompt.md) 中的相对长度占比  
+
+> **注意**：文档中提及的 `retry_policy` 参数已在 v2.3.0 版本移除，实际请求中设置将被忽略；请参考 [MCP 外部调用](../../raw/application-user-guide/model-context-protocol/mcp-external-calls.md) 的最新参数说明。
 
 ## 使用方式
 
-1. 在请求 payload 中构造 `tools` 数组并注入工具定义；  
-2. 设置 `tool_choice` 控制调用策略；  
-3. 发送请求至 `/v1/chat/completions`（需 `model` 参数为支持 MCP 的模型）；  
-4. 解析响应中的 `tool_calls` 字段，同步或异步执行对应工具逻辑；  
-5. 将工具执行结果以 `tool_message` 形式拼入下一轮 `messages` 并继续请求。  
-完整示例见 [官方 MCP 服务](https://help.aliyun.com/zh/model-studio/official-and-third-party-mcp) 及 [raw/application-user-guide/model-context-protocol.md](../../raw/application-user-guide/model-context-protocol.md)。
+1. **启用协议**：在调用 `chat/completions` 或 `completions` 接口时，于请求 JSON 中显式传入 `context` 对象（空对象 `{}` 不触发 MCP）  
+2. **服务部署**：自建 MCP 服务需遵循 [自定义MCP服务](../../raw/application-user-guide/model-context-protocol/custom-mcp.md) 定义的响应格式（HTTP 200 + JSON array of `{content: string, type: "text"|"code"|"table"}`）  
+3. **调试验证**：使用 `X-Bailian-Debug: true` 请求头可返回 `x-bailian-mcp-trace` 响应头，含各 source 的耗时与状态码  
 
 ## 限制和注意事项
 
-- 单次请求最多声明 20 个工具，单个工具 `parameters` Schema 深度不得超过 8 层；  
-- 工具调用链深度限制为 5 层（即最多嵌套 5 次 `tool_message` → 新 `tool_call`）；  
-- 不支持在流式响应（`stream: true`）中解析 `tool_calls`，必须等待完整响应；  
-- 所有工具端点必须启用 HTTPS 且响应头包含 `Access-Control-Allow-Origin: *`（浏览器场景）或通过百炼网关代理（服务端场景）。  
-常见兼容性问题与调试建议汇总于 [常见问题](https://help.aliyun.com/zh/model-studio/mcp-faq)，亦可对照 [raw/application-user-guide/model-context-protocol.md](../../raw/application-user-guide/model-context-protocol.md) 进行快速核验。
+- 单次请求最多配置 5 个 `sources`，总上下文 token 数上限为模型 `max_context_length` 的 30%（例如 Qwen2-72B 最高约 3k tokens）  
+- MCP 服务响应必须在 `timeout_ms` 内完成，超时后该 source 被丢弃，不阻塞主模型推理  
+- 所有上下文内容在进入 tokenizer 前会自动添加分隔符 `--- CONTEXT SOURCE: <id> ---`，不可禁用  
+- 若同时配置了 `retrieval`（向量检索）和 MCP，二者上下文将合并，但 `retrieval` 结果默认 `weight=1.0`，优先级高于 MCP；此行为与 [MCP 简介](../../raw/application-user-guide/model-context-protocol/mcp-introduction.md) 中“完全独立”的描述存在偏差，以实际运行逻辑为准
 
 ## 来源文档
 

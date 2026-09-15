@@ -1,53 +1,50 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台中模型主动识别用户意图、并按需触发外部能力（如数据查询、API 调用、业务逻辑执行等）的核心机制。它通过结构化工具定义与标准化调用协议，使大模型从“纯文本生成器”升级为可操作现实世界的智能代理。
+函数调用（Function Calling）是百炼平台中大模型主动识别用户意图、自主决策并触发外部工具执行的关键能力。它将自然语言请求转化为结构化函数调用请求，由模型生成符合规范的 `tool_calls`，再由平台调度执行、注入结果，最终生成自然语言响应，实现“规划—调用—推理—合成”的闭环。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-函数调用在百炼平台中并非单一功能模块，而是贯穿多个关键能力的横切能力，具体体现为以下四类典型场景：
+函数调用在百炼平台并非单一接口能力，而是贯穿多个核心服务的统一语义机制，具体体现为：
 
-- **插件（Plug-in）调用**：面向开发者直接集成外部服务。通过在 `/v1/chat/completions` 请求中传入 `tools`（OpenAPI Schema 描述）和 `tool_choice`，由支持函数调用的模型（如 `qwen-max`、`qwen-plus`）自主决策是否及如何调用指定工具，并返回 `tool_calls` 结构化指令。适用于 HTTP API、自建服务等轻量级扩展。
+- **Managed Agents（托管智能体）**：Agent 运行时，模型根据 `skills` 列表中注册的工具描述，自主决定是否调用及构造参数；调用事件以 `tool_call` 类型出现在 `/sessions/{id}/events` 流中，开发者需监听并同步回传 `tool_result` 事件完成闭环。
+- **Plug-in（插件）**：插件即标准化的函数封装单元。无论是官方 `calculator`、三方 `quark_search`，还是自定义 HTTP 工具，均通过 `tools` 字段声明，由模型按需触发；参数来源支持“大模型识别”（从对话中抽取）或“业务透传”（通过 `biz_params` 显式传入）。
+- **Omni Realtime API（实时多模态）**：在 WebSocket 会话中，通过 `session.update` 的 `tools` 参数启用函数调用；模型触发后，服务端推送 `tool.call` 事件，客户端必须在规定超时内返回 `tool.result`，否则会话中断；注意：`enable_search` 与 `tools` 互斥，不可同时启用。
+- **Application Call（应用调用）**：新版智能体/工作流应用调用时，可在 `tools`（Responses API）或 `biz_params.user_defined_params`（DashScope API）中声明可用函数；RAG 检索、[长期记忆](long-term-memory.md)等高级能力虽非传统函数，但其调用逻辑同样遵循“声明—触发—注入”范式，由平台自动编排。
+- **Qwen 原生 API（模型直连）**：仅 Responses API 和 Anthropic Messages 接口完整支持函数调用（含 `tool_choice`、`tool_calls`、`tool_result` 全生命周期）；OpenAI 兼容的 Chat Completions 接口**不支持**函数调用，切勿混用。
 
-- **MCP（Model Context Protocol）调用**：作为百炼官方推荐的标准化上下文交互协议，MCP 在插件能力基础上增强安全性与可控性。除 `tools` 和 `tool_choice` 外，支持可选的 `tool_config`（用于配置超时、重试、鉴权策略），并强制要求工具端点符合 HTTPS 与跨域规范，适用于生产环境中的高可靠工具编排。
-
-- **数据连接（Data Connection）集成**：在 RAG 检索节点、Agent 工作流的 Data Source 节点或自定义函数节点中，函数调用被隐式封装为“安全数据访问动作”。开发者只需配置 `connection_id` 和参数化 `query`（如 `SELECT * FROM users WHERE id = {{input.user_id}}`），平台自动将该请求作为受控函数执行，禁止写操作，保障数据安全。
-
-- **Skill 与应用内函数节点**：Skill 可绑定预定义函数逻辑（如格式转换、规则校验），并在低代码工作流中以“自定义函数节点”形式被调用；Agent 工作流亦支持拖拽函数节点，输入经 Schema 校验后透传至后端服务。此类调用由平台统一调度，不暴露原始 `tool_calls`，适合封装确定性业务逻辑。
-
-> ⚠️ 注意：所有函数调用均**不经过百炼平台代理鉴权**（插件/MCP 场景下凭证需客户端自行注入），但数据连接类调用全程在服务端沙箱内执行，凭据由 KMS 加密托管。
+> ✅ 统一行为：所有场景下，模型仅生成调用请求（不含执行），执行、鉴权、错误处理均由百炼平台完成；开发者只需关注工具定义、事件监听与结果回传。
 
 ## 关键参数和配置
 
-函数调用的行为由以下核心参数控制，不同场景下存在共性与差异：
+| 参数 | 位置 | 类型 | 说明 | 必填性 |
+|------|------|------|------|--------|
+| `tools` | 请求体（`tools` 字段） | `array` of `object` | 工具定义列表，每个对象含 `name`（全局唯一ID）、`description`（功能说明）、`parameters`（JSON Schema 描述输入结构） | 是（启用调用时） |
+| `tool_choice` | 请求体 | `string` 或 `object` | 控制调用策略：`"auto"`（默认，模型自主决策）、`"none"`（禁用）、`{"type": "function", "function": {"name": "xxx"}}`（强制指定） | 否（默认 auto） |
+| `name` | `tools[i]` 内 | `string` | 工具唯一标识符，如 `"code_interpreter"`、`"github_search"`；长度 ≤20 字符 | 是 |
+| `parameters` | `tools[i]` 内 | `object` (JSON Schema) | 定义输入参数名、类型、是否必需、描述；`Object` 类型子属性**不可为空**，需显式展开 | 是（若工具需参数） |
+| `biz_params` / `user_defined_params` | 请求体（DashScope）或 `extra_body`（Responses） | `object` | 用于透传业务上下文参数，可被模型在 `tool_calls` 中引用，或直接注入到工具请求体/Query/Header 中 | 否（按需） |
+| `tool_result` | 回传事件/请求体 | `object` | 包含 `tool_call_id`（匹配原始调用）和 `content`（字符串或 JSON 对象）；内容将被模型用于生成最终响应 | 是（响应调用事件时） |
 
-| 参数名 | 所属场景 | 是否必填 | 说明 |
-|--------|----------|----------|------|
-| `tools` | 插件、MCP | 是 | 工具定义数组，每个元素为 OpenAI-style function schema（含 `name`、`description`、`parameters` JSON Schema）。单次最多 20 个。 |
-| `tool_choice` | 插件、MCP | 否（默认 `"auto"`） | 控制调用策略：`"auto"`（模型决策）、`"none"`（禁用）、或指定 `{"type": "function", "function": {"name": "xxx"}}` 强制调用。 |
-| `connection_id` + `query` | 数据连接 | `connection_id` 必填 | 数据连接专属参数：`connection_id` 为平台分配的唯一标识；`query` 支持 SQL 或 OSS 路径，可嵌入 `{{input.xxx}}` 占位符。 |
-| `tool_config` | MCP | 否 | 运行时策略配置对象，支持 `timeout_ms`（默认 15000）、`max_retries` 等字段（具体以 [MCP 外部调用文档](https://help.aliyun.com/zh/model-studio/mcp-external-calls) 为准）。 |
-| `enable_thinking` | 插件（全局请求级） | 否（默认 `true`） | 若设为 `false`，模型跳过规划步骤，可能导致 `tool_calls` 为空——调试时建议保持启用。 |
+> ⚠️ 注意事项：
+> - 所有工具参数**必须填写完整描述**，缺失将导致发布失败（错误码 `130040`）；
+> - GET 类工具**不支持 `Object` 类型输入参数**（错误码 `130022`）；
+> - 自定义工具鉴权（Header/Query/Bearer）需在插件配置中预设，不可在运行时动态覆盖；
+> - 单次会话中，模型最多发起 5 次函数调用（受模型与环境限制，超限将终止流程）。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速起步**：优先使用 MCP 协议（`/v1/chat/completions` + `tools`），兼容性好、文档完善、生产就绪。
-- ✅ **安全读取数据**：敏感数据源接入首选「数据连接」，避免硬编码凭据，利用 `{{input.xxx}}` 实现动态参数注入。
-- ✅ **复用业务逻辑**：确定性处理（如日期解析、JSON 格式化）封装为 Skill 或工作流函数节点，降低模型幻觉风险。
-- ⚠️ **避坑提示**：
-  - 流式响应（`stream: true`）下无法解析 `tool_calls`，必须等待完整响应；
-  - 工具 `parameters` 中必填字段务必在 JSON Schema 的 `"required"` 数组中显式声明；
-  - 自定义工具返回错误时，仅通过 `tool_message.content` 传递，需在客户端主动解析并处理；
-  - 所有函数调用链深度上限为 5 层（含嵌套调用），避免无限循环。
-
-函数调用不是终点，而是模型与真实世界建立可信协作的起点——请始终以最小权限、明确契约、可观测日志为设计前提。
+- **定义工具，而非写胶水代码**：专注描述“做什么”（`description`）和“要什么”（`parameters` Schema），平台自动处理序列化、HTTP 调用、超时重试与错误注入。
+- **监听事件，而非轮询状态**：在 Managed Agents 和 Omni Realtime 中，使用 SSE 或 WebSocket 监听 `tool_call` 事件，立即响应 `tool_result`，避免阻塞。
+- **复用优先，避免重复造轮子**：优先选用官方插件（如 `code_interpreter`、`text_to_image`），它们已预置安全沙箱与性能优化；自定义工具应遵循 MCP 规范，便于跨应用复用。
+- **调试技巧**：开启 `enable_thinking`（新版智能体）或使用 Anthropic Messages 接口，可查看模型生成 `tool_calls` 的推理过程，快速定位描述歧义或参数缺失问题。
+- **生产就绪检查项**：确认工具 `name` 全局唯一、`parameters` Schema 无空嵌套、`biz_params` 透传路径与提示词中模板语法（如 `{{biz_params.xxx}}`）严格一致。
 
 ## 关联主题页
 
-- [data connection overview](../guides/data-connection-overview.md)
-- [skill](../guides/skill.md)
+- [managed agents api](../api/managed-agents-api.md)
 - [plug in](../guides/plug-in.md)
-- [model context protocol](../guides/model-context-protocol.md)
-- [bailian application calling](../guides/bailian-application-calling.md)
-- [application permission management](../guides/application-permission-management.md)
+- [omni realtime api](../api/omni-realtime-api.md)
+- [application call](../api/application-call.md)
+- [qwen api reference](../api/qwen-api-reference.md)
 
 

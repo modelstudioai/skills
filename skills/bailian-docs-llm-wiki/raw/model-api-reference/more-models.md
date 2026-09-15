@@ -1,8 +1,8 @@
 # 更多模型
 
--   [通义法睿](https://help.aliyun.com/zh/model-studio/tongyi-farui-api)
--   [意图理解](https://help.aliyun.com/zh/model-studio/intent-detect-capability)
--   [Qwen-MT API参考](https://help.aliyun.com/zh/model-studio/qwen-mt-api)
--   [Qwen-Deep-Research 深入研究模型](https://help.aliyun.com/zh/model-studio/qwen-deep-research-api)
--   [Qwen-OCR 文字提取模型](https://help.aliyun.com/zh/model-studio/qwen-vl-ocr-api-reference)
--   [GUI-Plus 界面交互专用模型](https://help.aliyun.com/zh/model-studio/gui-plus-interface-interaction-model)
+-   [通义法睿](raw/model-api-reference/more-models/tongyi-farui-api.md)
+-   [意图理解](raw/model-api-reference/more-models/intent-detect-capability.md)
+-   [Qwen-MT API参考](raw/model-api-reference/more-models/qwen-mt-api.md)
+-   [Qwen-Deep-Research 深入研究模型](raw/model-api-reference/more-models/qwen-deep-research-api.md)
+-   [Qwen-OCR 文字提取模型](raw/model-api-reference/more-models/qwen-vl-ocr-api-reference.md)
+-   [GUI-Plus 界面交互专用模型](raw/model-api-reference/more-models/gui-plus-interface-interaction-model.md)

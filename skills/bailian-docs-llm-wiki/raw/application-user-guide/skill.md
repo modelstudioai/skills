@@ -1,3 +1,3 @@
 # Skill
 
--   [Skill](https://help.aliyun.com/zh/model-studio/introduction-to-skill)
+-   [Skill](raw/application-user-guide/skill/introduction-to-skill.md)

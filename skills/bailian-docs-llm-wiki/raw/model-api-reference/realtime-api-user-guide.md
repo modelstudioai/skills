@@ -1,5 +1,5 @@
 # Realtime API
 
--   [概述](https://help.aliyun.com/zh/model-studio/realtime-api-overview)
--   [快速开始](https://help.aliyun.com/zh/model-studio/realtime-api-quick-start-guide)
--   [AOQ客户端SDK](https://help.aliyun.com/zh/model-studio/realtime-api-aoq-api)
+-   [概述](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)
+-   [快速开始](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide.md)
+-   [AOQ客户端SDK](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md)

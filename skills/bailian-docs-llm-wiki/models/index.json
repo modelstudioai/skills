@@ -1,10 +1,10 @@
 {
   "updatedAt": "2026-09-15",
   "totalFamilies": 179,
-  "totalModels": 415,
+  "totalModels": 416,
   "profileCoverage": {
-    "full": 73,
-    "partial": 342,
+    "full": 361,
+    "partial": 55,
     "structured-only": 0,
     "none": 0
   },
@@ -473,7 +473,7 @@
       "providers": [
         "zhipu-ai"
       ],
-      "itemCount": 7,
+      "itemCount": 8,
       "items": [
         "glm-4.5",
         "glm-4.5-air",
@@ -481,7 +481,8 @@
         "glm-4.7",
         "glm-5",
         "glm-5.1",
-        "glm-5.2"
+        "glm-5.2",
+        "glm-5.3"
       ],
       "maxContextWindow": 1000000
     },

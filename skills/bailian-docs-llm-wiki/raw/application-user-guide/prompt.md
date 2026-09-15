@@ -1,7 +1,7 @@
 # Prompt
 
--   [Prompt模板概述](https://help.aliyun.com/zh/model-studio/prompt-template)
--   [自定义Prompt模板](https://help.aliyun.com/zh/model-studio/prompt-custom-template)
--   [Prompt样例库](https://help.aliyun.com/zh/model-studio/prompt-sample-optimization)
--   [Prompt自动优化](https://help.aliyun.com/zh/model-studio/optimize-prompt)
--   [Prompt反馈优化](https://help.aliyun.com/zh/model-studio/prompt-feedback-optimization)
+-   [Prompt模板概述](raw/application-user-guide/prompt/prompt-template.md)
+-   [自定义Prompt模板](raw/application-user-guide/prompt/prompt-custom-template.md)
+-   [Prompt样例库](raw/application-user-guide/prompt/prompt-sample-optimization.md)
+-   [Prompt自动优化](raw/application-user-guide/prompt/optimize-prompt.md)
+-   [Prompt反馈优化](raw/application-user-guide/prompt/prompt-feedback-optimization.md)

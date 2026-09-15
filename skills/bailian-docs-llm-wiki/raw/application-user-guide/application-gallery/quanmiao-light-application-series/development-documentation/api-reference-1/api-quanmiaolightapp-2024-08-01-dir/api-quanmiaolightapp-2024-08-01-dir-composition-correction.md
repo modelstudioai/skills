@@ -1,0 +1,6 @@
+# 作文批改
+
+-   [RunEssayCorrection](raw/application-user-guide/application-gallery/quanmiao-light-application-series/development-documentation/api-reference-1/api-quanmiaolightapp-2024-08-01-dir/api-quanmiaolightapp-2024-08-01-dir-composition-correction/api-quanmiaolightapp-2024-08-01-runessaycorrection.md)
+-   [RunOcrParse - 图片OCR解析](raw/application-user-guide/application-gallery/quanmiao-light-application-series/development-documentation/api-reference-1/api-quanmiaolightapp-2024-08-01-dir/api-quanmiaolightapp-2024-08-01-dir-composition-correction/api-quanmiaolightapp-2024-08-01-runocrparse.md)
+-   [SubmitEssayCorrectionTask](raw/application-user-guide/application-gallery/quanmiao-light-application-series/development-documentation/api-reference-1/api-quanmiaolightapp-2024-08-01-dir/api-quanmiaolightapp-2024-08-01-dir-composition-correction/api-quanmiaolightapp-2024-08-01-submitessaycorrectiontask.md)
+-   [GetEssayCorrectionTask](raw/application-user-guide/application-gallery/quanmiao-light-application-series/development-documentation/api-reference-1/api-quanmiaolightapp-2024-08-01-dir/api-quanmiaolightapp-2024-08-01-dir-composition-correction/api-quanmiaolightapp-2024-08-01-getessaycorrectiontask.md)
