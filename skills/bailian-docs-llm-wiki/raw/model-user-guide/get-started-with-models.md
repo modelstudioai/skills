@@ -1,9 +1,9 @@
 # 开始使用
 
--   [产品简介](https://help.aliyun.com/zh/model-studio/what-is-model-studio)
--   [首次调用千问API](https://help.aliyun.com/zh/model-studio/first-api-call-to-qwen)
--   [选择模型](https://help.aliyun.com/zh/model-studio/models)
--   [动态限流](https://help.aliyun.com/zh/model-studio/quota-management)
--   [限流](https://help.aliyun.com/zh/model-studio/rate-limit)
--   [Base URL总览](https://help.aliyun.com/zh/model-studio/base-url)
--   [选择地域、服务部署范围和接入域名](https://help.aliyun.com/zh/model-studio/regions)
+-   [产品简介](raw/model-user-guide/get-started-with-models/what-is-model-studio.md)
+-   [首次调用千问API](raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md)
+-   [选择模型](raw/model-user-guide/get-started-with-models/models.md)
+-   [动态限流](raw/model-user-guide/get-started-with-models/quota-management.md)
+-   [限流](raw/model-user-guide/get-started-with-models/rate-limit.md)
+-   [Base URL总览](raw/model-user-guide/get-started-with-models/base-url.md)
+-   [选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)

@@ -1,6 +1,6 @@
 # 应用评测
 
--   [自动评测](https://help.aliyun.com/zh/model-studio/application-auto-evaluation)
--   [人工评测](https://help.aliyun.com/zh/model-studio/evaluate-manual-application)
--   [评测集](https://help.aliyun.com/zh/model-studio/application-evaluation-dataset)
--   [新版应用评测](https://help.aliyun.com/zh/model-studio/new-version-of-application-evaluation)
+-   [自动评测](raw/application-user-guide/application-evaluation/application-auto-evaluation.md)
+-   [人工评测](raw/application-user-guide/application-evaluation/evaluate-manual-application.md)
+-   [评测集](raw/application-user-guide/application-evaluation/application-evaluation-dataset.md)
+-   [新版应用评测](raw/application-user-guide/application-evaluation/new-version-of-application-evaluation.md)

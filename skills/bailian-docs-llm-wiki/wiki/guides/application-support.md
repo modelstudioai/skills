@@ -1,35 +1,45 @@
 # application [support](support.md)
 
-`application support` 是百炼平台为应用层调用提供的基础服务支持能力，涵盖模型接入、功能扩展、参数配置及售后保障等环节。开发者可通过该支持体系快速集成和调试应用，确保生产环境稳定运行。具体能力与约束详见下文。
+百炼平台的应用支持体系面向开发者提供从功能能力、API调用到售后保障的全链路支撑。核心覆盖插件集成、RAG增强、[流式输出](../concepts/streaming-output.md)等关键能力，同时明确服务边界与技术限制。开发者需结合官方文档与协议条款，在合规前提下进行应用开发与问题排查。
 
 ## 支持的模型/功能
 
-当前 `application support` 仅面向百炼平台已上线的**托管型应用（Managed Application）** 提供支持，不覆盖自定义推理服务或本地部署模型。支持的功能包括：应用生命周期管理（创建/更新/下线）、API 调用配额控制、请求日志回溯（7 天内）、基础错误码映射（如 `429`, `503` 的语义解释）。详细功能列表请参阅 [服务支持](../../raw/application-user-guide/application-support.md)。
+- **插件能力**：当前官方支持六类插件：Python代码解释器、计算器、图片生成、夸克搜索、生成二维码、GitHub搜索；其中部分需申请开通 [常见问题](../../raw/application-user-guide/application-support/application-faq.md)。  
+- **RAG（知识检索增强）**：支持并行多知识库检索，按配置策略打分后选取 topN 结果，广泛应用于问答系统、客户服务、教育等领域 [常见问题](../../raw/application-user-guide/application-support/application-faq.md)。  
+- **流式与增量输出**：通过 `stream=True` 启用流式响应；进一步设置 `incremental_output=True` 可实现增量式[流式输出](../concepts/streaming-output.md)（即每次返回新片段而非全量重传） [常见问题](../../raw/application-user-guide/application-support/application-faq.md)。  
+- **自定义插件**：支持基于 OpenAPI 规范的[函数调用](../concepts/function-calling.md)，模型可解析参数并生成调用请求；但**仅支持 `Authorization` header 透传，不支持其他自定义 header**（如 `X-User-ID` 等）。
+
+> **注意**：文档1中第4条称“Assistant API 可以提供各种类，方便调优”，但未明确定义“类”的具体含义（如 SDK 类、配置类或抽象接口类），且该表述与其他文档中对 Assistant API 的标准化描述（如 `messages` + `tools` 调用范式）存在语义模糊性，建议以最新版 [常见问题](../../raw/application-user-guide/application-support/application-faq.md) 中的参数与行为说明为准，避免依赖该模糊表述进行架构设计。
 
 ## 关键参数
 
-调用 `application support` 相关接口（如 `/v1/applications/{app_id}/support`）需传入以下必选参数：
-- `app_id`: 应用唯一标识，须与百炼控制台中显示的 ID 完全一致（区分大小写）；
-- `support_type`: 取值为 `debug`, `quota`, `log` 之一，决定支持类型；
-- `timestamp`: UNIX 时间戳（秒级），用于签名验证，误差不可超过 ±300 秒。  
-参数规范与示例见 [服务支持](../../raw/application-user-guide/application-support.md)。
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| `stream` | bool | 启用流式响应（逐 token 返回） |
+| `incremental_output` | bool | 在 `stream=True` 基础上启用增量模式（仅返回新增内容） |
+| `tool_choice` | string / object | 控制插件调用策略（如 `"auto"`、`{"type": "function", "function": {"name": "xxx"}}`） |
+| `retrieval_config` | object | RAG 检索配置，含 `top_k`、`score_threshold` 等（详见控制台知识库配置） |
+
+> **注意**：`incremental_output=True` 仅在流式场景下生效；若 `stream=False`，该参数无效。
 
 ## 使用方式
 
-1. 登录百炼控制台 → 进入「应用管理」→ 选择目标应用 → 点击右上角「技术支持」；
-2. 或通过 OpenAPI 调用 `POST /v1/applications/{app_id}/support`，需携带有效 AccessKey 及签名；
-3. 提交后，系统将在 2 小时内生成诊断报告（含请求链路、模型响应延迟分布、失败原因分类）。  
-完整操作流程与权限说明请参考 [服务支持](../../raw/application-user-guide/application-support.md)。
+- **插件调用**：需在应用配置中启用对应插件，并在 [prompt](prompt.md) 或 tool definition 中声明参数 schema；模型将根据上下文自主决定是否调用及传参。  
+- **RAG 集成**：上传文件至知识库（仅支持小写后缀 `.pdf`、`.doc`、`.docx`；空行会导致后续数据截断）[常见问题](../../raw/application-user-guide/application-support/application-faq.md)。  
+- **错误反馈**：RAG 输出不准确时，可通过测试页“问题反馈”按钮提交，或复制 `RequestId` 提交工单。  
+- **备案要求**：若应用上架至应用市场或小程序平台，须完成[应用合规备案](raw/model-user-guide/security-and-compliance/compliance-and-launch-filing-guide-for-ai-apps-powered-by-the-tongyi-model.md)，并申请通义千问合作协议。
 
 ## 限制和注意事项
 
-- 单个应用每月最多提交 5 次支持请求，超出后需联系商务升级；
-- 日志回溯仅保留最近 7 天原始请求体（含 `input` 和 `parameters`），超过时限不可恢复；
-- > **注意**：原始文档中提及的「[售后说明](https://help.aliyun.com/zh/model-studio/application-after-sales-service-scope)」链接已失效（HTTP 404），当前实际服务范围以控制台「技术支持」页内弹窗说明为准；  
-- 不支持对已下线应用发起支持请求，若需恢复，请先重新上线应用。
+- **文件上传**：单业务空间上限 10 万个文档；超限时需提交工单申请扩容 [常见问题](../../raw/application-user-guide/application-support/application-faq.md)。  
+- **第三方工具支持边界**：阿里云百炼仅保障自身服务端可用性、API 正确性及计费一致性；**不支持第三方工具（如 Cursor、Windsurf 等）的安装、配置、本地环境（代理/防火墙/VPN）、业务代码调试或其内部统计差异解释** [阿里云百炼平台售后服务范围说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md)。  
+- **协议约束**：所有使用须遵守《[阿里云百炼服务协议](https://terms.alicdn.com/legal-agreement/terms/common_platform_service/20230728213935489/20230728213935489.html?spm=5176.28197581.0.0.16e829a4HTC9FE)》及《[阿里云百炼体验功能特别说明](https://terms.alicdn.com/legal-agreement/terms/common_platform_service/20260716114753386/20260716114753386.html)》[相关协议](../../raw/application-user-guide/application-support/application-related-agreements.md)。  
+- **MD 渲染**：模型输出中的 `**text**` 等 Markdown 语法需由前端自行解析渲染，平台不提供富文本转换服务。
 
 ## 来源文档
 
-- [服务支持](../../raw/application-user-guide/application-support.md)
+- [常见问题](../../raw/application-user-guide/application-support/application-faq.md)
+- [阿里云百炼平台售后服务范围说明](../../raw/application-user-guide/application-support/application-after-sales-service-scope.md)
+- [相关协议](../../raw/application-user-guide/application-support/application-related-agreements.md)
 
 

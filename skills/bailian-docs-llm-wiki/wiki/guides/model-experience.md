@@ -1,49 +1,54 @@
 # model experience
 
-模型体验（Model Experience）是百炼平台提供的统一交互界面，用于快速试用、调试和评估各类大模型能力。开发者可通过该功能在不编写代码的前提下，直观验证模型输入输出行为、参数影响及多模态支持效果。所有体验均基于真实部署的在线服务，与生产调用保持一致行为。
+模型体验（Model Experience）是百炼平台面向开发者提供的统一模型调用入口，支持多模态模型的快速接入与实验。通过该能力，开发者可基于标准化接口调用文本、视觉、音视频、3D、语音及全模态等各类模型服务，无需单独配置底层基础设施。所有模型均通过 `model_id` 标识，并遵循一致的请求/响应结构。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-当前支持以下模型类型与功能模块：
-- 文本生成（包括对话、补全、摘要等）
-- 视觉理解（图像分类、OCR、图文理解等）
-- 图片生成与编辑（文生图、图生图、局部重绘等）
-- 视频生成与编辑（文生视频、视频风格迁移等）
-- 3D模型生成（TriPo 等结构化3D输出）
-- 语音合成（TTS）、语音识别（ASR）、语音转语音（V2V）
-- 音乐生成（FunMusic）
-- 全模态理解与生成（支持文本+图像+音频联合输入输出）
-- [向量嵌入](../concepts/embedding.md)（Embedding）与重排序（Rerank）
+当前支持以下模型类型及对应能力：
 
-详细能力说明请参阅 [模型体验](../../raw/model-user-guide/model-experience.md)。
+- 文本生成：支持通用对话、指令遵循、代码生成等任务，详见 [文本生成](../../raw/model-user-guide/model-experience/text-generation-model.md)  
+- 视觉理解：包括图像分类、OCR、图文理解等，详见 [视觉理解](../../raw/model-user-guide/model-experience/vision-model.md)  
+- 图片生成与编辑：支持文生图、图生图、局部重绘等，详见 [图片生成与编辑](../../raw/model-user-guide/model-experience/image-model.md)  
+- 视频生成与编辑：支持文生视频、视频扩时、关键帧控制等，详见 [视频生成与编辑](../../raw/model-user-guide/model-experience/video-generate-edit-model.md)  
+- 3D模型生成：集成 Tripo 模型，支持文生3D、图生3D，详见 [3D模型生成](../../raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)  
+- 向量与重排序：提供嵌入向量生成（embedding）和检索重排序（rerank）能力，详见 [向量与重排序](../../raw/model-user-guide/model-experience/embedding-rerank-model.md)  
+- 全模态：支持跨模态联合理解与生成（如图文音视频混合输入），详见 [全模态](../../raw/model-user-guide/model-experience/omni-modal.md)  
+
+> **注意**：语音合成、语音识别、语音转语音三类能力当前托管于 Model Studio 官方帮助中心，其 API 签名、鉴权方式与百炼主平台不一致，暂不支持通过 `/v1/models/{model_id}/invoke` 统一路径调用；请直接参考 [语音合成](https://help.aliyun.com/zh/model-studio/speech-synthesis) 等外部文档。音乐生成文档 [fun-music.md](../../raw/model-user-guide/model-experience/fun-music.md) 中描述的 `music_generate` 接口已下线，实际应使用 `model_id: qwen2-audio-music` 调用新版音频模型。
 
 ## 关键参数
 
-各模型体验页提供可调节的核心参数，常见参数包括：
-- `temperature`：控制输出随机性（0.0–2.0），默认值依模型而异；
-- `top_p`：核采样阈值（0.0–1.0），与 `temperature` 协同使用；
-- `max_tokens`：最大生成长度，上限受模型上下文窗口限制；
-- `seed`：固定随机种子以复现结果（部分模型支持）；
-- 多模态任务中额外支持 `image_size`、`audio_format`、`video_fps` 等专用参数。
+调用模型体验统一接口（`POST /v1/models/{model_id}/invoke`）时，必需参数包括：
 
-> **注意**：部分旧版文档中将 `top_k` 列为通用参数，但当前模型体验界面已统一采用 `top_p` 机制；`top_k` 仅在特定 ASR 或 TTS 模型的底层 API 中保留，[模型体验](../../raw/model-user-guide/model-experience.md) 页面未体现该参数，实际使用应以控制台实时选项为准。
+- `model_id`：模型唯一标识（如 `qwen2.5-plus`、`qwen-vl-plus`、`wanx-video-1.0`），必须与 [原文标题](../../raw/model-user-guide/model-experience/text-generation-model.md) 等子文档中声明的 ID 严格一致  
+- `input`：模型输入数据，结构因模型类型而异（如文本模型为 `{"prompt": "..."}`，视觉模型为 `{"image_url": "...", "prompt": "..."}`）  
+- `parameters`（可选）：控制生成行为，常见字段包括 `temperature`、`top_p`、`max_tokens`（文本类）、`seed`（生成类）、`quality`（图像/视频类）等，具体以各子模型文档为准  
 
 ## 使用方式
 
-1. 登录百炼控制台 → 进入「模型体验」页面；
-2. 在左侧导航栏选择目标模型类型（如「图片生成与编辑」），或通过搜索框输入模型 ID（如 `qwen-vl-plus`）；
-3. 输入提示词（Prompt）或上传媒体文件（图片/音频/视频），调整参数后点击「运行」；
-4. 查看实时响应结果，并可导出请求体（JSON）、复制 cURL 命令或跳转至 API 调用页。
+1. 在控制台「模型体验」页选择目标模型，获取 `model_id`  
+2. 构造 HTTP POST 请求，Header 中携带 `Authorization: Bearer <api_key>`  
+3. Body 使用 JSON 格式，按模型类型填充 `input` 和 `parameters`  
+4. 解析返回的 `output` 字段（结构化 JSON 或 base64 编码二进制内容）  
 
-该流程与正式 API 调用完全对齐，所见即所得。更多操作细节见 [模型体验](../../raw/model-user-guide/model-experience.md)。
+示例（文本生成）：
+```bash
+curl -X POST https://dashscope.aliyuncs.com/api/v1/models/qwen2.5-plus/invoke \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "input": {"prompt": "写一首关于春天的五言绝句"},
+        "parameters": {"temperature": 0.7}
+      }'
+```
 
 ## 限制和注意事项
 
-- 免费体验调用有额度限制（按 token/请求次数计），超出后需绑定付费账号；
-- 视频与 3D 生成类任务单次请求耗时较长（通常 10–60 秒），不支持中断；
-- 所有上传文件自动加密传输并临时存储（≤24 小时），不用于模型训练；
-- 全模态任务要求输入严格符合 schema（如图文混合需显式标注 `<image>` 标签），否则返回格式错误；
-- 部分小语种语音识别或音乐生成模型暂不支持自定义 [prompt](prompt.md)，具体能力边界请以 [模型体验](../../raw/model-user-guide/model-experience.md) 实际展示为准。
+- 单次请求最大 `input` 大小为 16MB（视频/3D 类模型建议 ≤8MB）  
+- 视频与3D生成任务默认异步执行，需轮询 `task_id` 获取结果，同步调用将返回 `400 UnsupportedOperation`  
+- 所有模型均受配额与并发数限制，超出时返回 `429 Too Many Requests`；配额详情见控制台「用量管理」  
+- 模型输出内容受阿里云内容安全策略约束，违规输入将被拦截并返回 `400 ContentBlocked`，具体规则参见 [原文标题](../../raw/model-user-guide/model-experience/vision-model.md) 中的安全说明章节  
+- 音频类模型（语音合成、音乐生成）暂不支持流式响应（`stream=true`），设置后将被忽略 —— 此行为与 [原文标题](../../raw/model-user-guide/model-experience/fun-music.md) 中旧版描述矛盾，以当前 API 实际行为为准
 
 ## 来源文档
 

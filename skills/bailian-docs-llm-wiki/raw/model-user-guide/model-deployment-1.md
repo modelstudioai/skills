@@ -1,10 +1,10 @@
 # 模型部署
 
--   [专属部署](https://help.aliyun.com/zh/model-studio/model-deployment-introduction)
--   [PTU 预置吞吐部署](https://help.aliyun.com/zh/model-studio/ptu-long-input-and-cache)
--   [独占算力部署（MU/DTU）](https://help.aliyun.com/zh/model-studio/dtu-model-deployment)
--   [Token 按量部署](https://help.aliyun.com/zh/model-studio/model-deployment-token)
--   [模型导入](https://help.aliyun.com/zh/model-studio/model-import)
--   [API 部署指南](https://help.aliyun.com/zh/model-studio/model-deployment-quick-start)
--   [我的模型](https://help.aliyun.com/zh/model-studio/my-model-center)
--   [模型路由](https://help.aliyun.com/zh/model-studio/model-routing)
+-   [专属部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)
+-   [PTU 预置吞吐部署](raw/model-user-guide/model-deployment-1/ptu-long-input-and-cache.md)
+-   [独占算力部署（MU/DTU）](raw/model-user-guide/model-deployment-1/dtu-model-deployment.md)
+-   [Token 按量部署](raw/model-user-guide/model-deployment-1/model-deployment-token.md)
+-   [模型导入](raw/model-user-guide/model-deployment-1/model-import.md)
+-   [API 部署指南](raw/model-user-guide/model-deployment-1/model-deployment-quick-start.md)
+-   [我的模型](raw/model-user-guide/model-deployment-1/my-model-center.md)
+-   [模型路由](raw/model-user-guide/model-deployment-1/model-routing.md)

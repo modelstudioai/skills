@@ -1,3 +1,3 @@
 # 数据连接
 
--   [数据连接](https://help.aliyun.com/zh/model-studio/data-connection)
+-   [数据连接](raw/application-user-guide/data-connection-overview/data-connection.md)

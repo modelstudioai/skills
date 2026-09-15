@@ -1,4 +1,4 @@
 # 模型推理
 
--   [Prime 模式](https://help.aliyun.com/zh/model-studio/fast-mode)
--   [吞吐预留](https://help.aliyun.com/zh/model-studio/tpm-reservation)
+-   [Prime 模式](raw/model-user-guide/model-high-speed-inference/fast-mode.md)
+-   [吞吐预留](raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)
