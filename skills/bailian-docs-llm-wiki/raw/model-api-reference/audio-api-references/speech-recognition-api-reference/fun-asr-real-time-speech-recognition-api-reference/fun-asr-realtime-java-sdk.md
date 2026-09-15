@@ -6,8 +6,7 @@
 
 ## 前提条件
 
-已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
-
+-   已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
 -   [安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ## 快速开始
@@ -1202,6 +1201,40 @@ public long getLastPackageDelay()
 
 **说明**该方法自2.18.0版本及以后的SDK中才开始提供。
 
+#### 更新对话上下文
+
+调用 `updateContext` 在识别任务运行过程中更新对话上下文，用于辅助后续音频的识别。该方法要求 DashScope Java SDK 2.23.0 及以上版本。
+
+```
+public void updateContext(Map<String, Object> payloadInput)
+```
+
+-   **调用时机：**调用 `call(param, callback)` 启动流式识别后、调用 `stop` 前。
+-   **参数：**`payloadInput` 为`Map<String, Object>`，传入 `continue-task` 事件的 `payload.input` 对象，包含 `context` 字段，不要额外包装 `payload` 或 `input` 层级。
+-   **支持范围与参数约束：**请参见 [continue-task](https://help.aliyun.com/zh/model-studio/fun-asr-client-events#h-continue-task)。
+
+以下示例复用已启动的 `recognizer` 实例，Java 集合类型通过 `import java.util.*;` 导入。
+
+```
+Map<String, Object> userContent = new HashMap<>();
+userContent.put("type", "input_text");
+userContent.put("text", "这是第 1 轮语音识别测试");
+Map<String, Object> userMessage = new HashMap<>();
+userMessage.put("role", "user");
+userMessage.put("content", Collections.singletonList(userContent));
+
+Map<String, Object> assistantContent = new HashMap<>();
+assistantContent.put("type", "text");
+assistantContent.put("text", "好的，请开始第 1 轮测试");
+Map<String, Object> assistantMessage = new HashMap<>();
+assistantMessage.put("role", "assistant");
+assistantMessage.put("content", Collections.singletonList(assistantContent));
+
+Map<String, Object> payloadInput = new HashMap<>();
+payloadInput.put("context", Arrays.asList(userMessage, assistantMessage));
+recognizer.updateContext(payloadInput);
+```
+
 ### 回调接口（`ResultCallback`）
 
 [双向流式调用](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/fun-asr-real-time-speech-recognition-api-reference/fun-asr-realtime-java-sdk.md)时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
@@ -1479,11 +1512,10 @@ ffmpeg -i input.flac -c:a libopus -b:a 128k -vbr on output.opus
     
     可以使用[ffprobe](https://ffmpeg.org/ffprobe.html)工具获取音频的容器、编码、采样率、声道等信息：
     
-
-```
-ffprobe -v error -show_entries format=format_name -show_entries stream=codec_name,sample_rate,channels -of default=noprint_wrappers=1 input.xxx
-```
-
+    ```
+    ffprobe -v error -show_entries format=format_name -show_entries stream=codec_name,sample_rate,channels -of default=noprint_wrappers=1 input.xxx
+    ```
+    
 2.  请检查`language_hints`设置的语言是否与音频实际语言一致。
     
     例如：音频实际为中文，但`language_hints`设置为`en`（英文）。

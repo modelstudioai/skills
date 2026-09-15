@@ -637,6 +637,7 @@ Schema 的名称。
 该参数的含义随模型不同，具体如下：
 
 -   deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash、deepseek-v4-flash-0731：模型回答与思维链内容之和的最大 Token 数。模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`。
+-   glm-5.3：`max_tokens` 为模型回答与思维链内容之和的最大 Token 数，模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`。glm-5.3 会忽略 `thinking_budget` 参数。
 -   glm-5.2：不传入 `thinking_budget` 参数时，`max_tokens` 为模型回答与思维链内容之和的最大 Token 数，模型输出超过此值时生成将提前停止，返回的 `finish_reason` 为 `length`；传入 `thinking_budget` 参数时，`max_tokens` 仅为模型回答的最大 Token 数，思维链部分的 Token 数由 `thinking_budget` 单独控制。
 -   其他模型：模型回答的最大 Token 数（不包含思维链）。若生成内容超过此值，生成将提前停止，返回的 `finish_reason` 为 `length`。
 
@@ -760,7 +761,7 @@ low和medium映射为high，xhigh映射为max。
 
 适用于glm-5.2、glm-5.1、glm-5、deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash（阿里云直供）（deepseek-v4-flash-0731 除外）、kimi/kimi-k3（月之暗面直供，仅支持 `max`）
 
-**ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash 与 kimi-k3（阿里云直供）模型：默认值为**`max`
+**glm-5.3、ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash 与 kimi-k3（阿里云直供）模型：默认值为**`max`
 
 可选值：
 
@@ -1061,7 +1062,7 @@ PPT模板ID。与`mode`为`general`或未设置`mode`时配合使用。可选值
 
 **clear\_thinking**`boolean`（可选）默认值为false
 
-用于控制多轮对话中是否将历史轮次的 `reasoning_content`（思考过程）作为上下文输入给模型。仅 GLM 系列glm-5.2、glm-5.1、glm-5、glm-4.7模型支持。
+用于控制多轮对话中是否将历史轮次的 `reasoning_content`（思考过程）作为上下文输入给模型。仅 GLM 系列glm-5.3、glm-5.2、glm-5.1、glm-5、glm-4.7模型支持。其中 glm-5.3 的默认值为 `true`，其余模型的默认值为 `false`。
 
 > 该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中。配置方式为：`extra_body={"enable_thinking": True,"clear_thinking": True}`。
 

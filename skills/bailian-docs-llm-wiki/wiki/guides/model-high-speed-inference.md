@@ -1,59 +1,51 @@
 # model high speed inference
 
-百炼平台提供模型高并发、低延迟推理能力，适用于对响应时间敏感的在线服务场景。其核心机制包括 Prime 模式（预热+常驻）和吞吐预留（TPM Reservation），可显著降低首 token 延迟并保障稳定 QPS。该能力需在创建应用或调用 API 时显式启用，并受模型类型与配额限制。
+百炼平台提供两种面向高吞吐、低延迟推理场景的加速能力：**Prime 模式**（轻量级性能增强）和**吞吐预留**（专属容量保障）。二者均通过模型标识符（`model` 参数）启用，无需修改 API 协议或 endpoint，但适用场景、资源隔离级别与计费模型存在本质差异。开发者应根据业务对稳定性、确定性及成本敏感度的要求进行选型。
 
 ## 支持的模型/功能
 
-- 当前仅支持部分 Qwen 系列模型（如 `qwen-max`, `qwen-plus`, `qwen-turbo`），其他模型开启后将自动降级为普通推理模式。  
-- 支持两种加速模式：  
-  - **Prime 模式**：通过模型预热与实例常驻，消除冷启动延迟，适合请求频率波动但要求首 token < 200ms 的场景 [原文标题](../../raw/model-user-guide/model-high-speed-inference/fast-mode.md)；  
-  - **吞吐预留（TPM Reservation）**：按分钟级预留固定 TPM（Tokens Per Minute）资源，保障最低服务水位，适用于 SLA 可承诺的生产流量 [原文标题](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。  
-- 不支持多模态模型（如 `qwen-vl`）、自定义微调模型及非 Qwen 系列开源模型。
+- **Prime 模式**：面向通用高速输出场景，提供 1.5~2 倍于标准 API 的 TPS，适用于 AI 编程助手、Agent 多步推理、实时对话等对首 token 延迟和输出流速敏感的用例。其本质是共享资源池内的调度优化，**不提供容量独占保障**。支持模型包括 `glm-5.2-fast-preview`、`qwen3.8-max-prime`、`wan3.0-video-prime` 等，具体列表见 [Prime 模式 (raw/model-user-guide/model-high-speed-inference/fast-mode.md)](../../raw/model-user-guide/model-high-speed-inference/fast-mode.md)。
+
+- **吞吐预留**：为指定模型锁定专属推理容量（以 kTPM 为单位），确保业务高峰期不受公共限流影响。支持「标准模式」（TPS 与标准 API 一致）和「高速模式」（TPS 提升 1.5~2 倍，即 PTU 部署形态），后者在功能上与 Prime 模式性能对标但具备刚性容量保障。支持模型范围更广，覆盖 Qwen、GLM、DeepSeek、Kimi 等系列主力模型，详见 [吞吐预留 (raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
+
+> **注意**：文档 1 中称 `glm-5.2-fast-preview` 是 Prime 模式专用模型 ID；而文档 2 在“性能模式”选项中明确指出「高速模式」对应 PTU 部署，且支持 `GLM-5.2`（非 `-fast-preview` 后缀）。这表明 `glm-5.2-fast-preview` 仅用于 Prime 模式调用，而 `GLM-5.2`（配合吞吐预留专属 model code）可用于同等性能的专属高速模式。二者路径不同，不可混用。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `enable_high_speed` | boolean | 是 | 启用高密推理开关，设为 `true` 才生效 |
-| `mode` | string | 否 | 可选 `"prime"` 或 `"tpm_reservation"`；未指定时默认为 `"prime"` |
-| `tpm_capacity` | integer | 仅 mode=tpm_reservation 时必填 | 预留 TPM 值，最小 1000，最大 50000（需审批） |
-| `timeout` | integer | 否 | 请求超时（毫秒），Prime 模式建议 ≤ 30000，TPM 预留模式建议 ≥ 60000 |
-
-> **注意**：文档 [原文标题](../../raw/model-user-guide/model-high-speed-inference.md) 中未明确 `tpm_capacity` 的上下限，实际取值应以控制台配额页或 `GET /v1/models/{model}/quota` 接口返回为准，避免因超限导致创建失败。
+| 参数 | Prime 模式 | 吞吐预留 |
+|------|------------|-----------|
+| **启用方式** | 直接使用预定义 model ID（如 `glm-5.2-fast-preview`） | 使用系统生成的专属 model code（如 `tpm-xxx`） |
+| **性能档位** | 固定高速（1.5~2× TPS） | 可选：标准模式 / 高速模式（PTU） |
+| **容量保障** | 无专属容量，依赖平台剩余资源；实际可用 TPS 不低于限流值 | 专属 kTPM 容量刚性兑付，溢出策略可配（自动降级 or 429） |
+| **计费单位** | 按 token 计费（输入/输出/缓存命中） | 预付费按天购买 kTPM（输入/输出分离），预留内调用不额外计费；溢出部分按 token 计费 |
+| **缓存折扣** | 支持（如 `glm-5.2-fast-preview` 输出单价含缓存命中优惠） | 支持，且不同模型缓存折扣率不同（如 `glm-5.2` 为 25%） |
 
 ## 使用方式
 
-1. **API 调用**：在 `/v1/chat/completions` 请求体中添加 `extra_parameters` 字段：
-   ```json
-   {
-     "model": "qwen-max",
-     "messages": [...],
-     "extra_parameters": {
-       "enable_high_speed": true,
-       "mode": "prime"
-     }
-   }
-   ```
-2. **控制台配置**：在「应用管理 → 创建应用」流程中，于「模型设置」页勾选「启用高速推理」并选择模式。  
-3. **SDK 示例（Python）**：
-   ```python
-   client.chat.completions.create(
-       model="qwen-max",
-       messages=[...],
-       extra_parameters={"enable_high_speed": True, "mode": "tpm_reservation", "tpm_capacity": 5000}
-   )
-   ```
+- **Prime 模式**：  
+  仅需将请求中的 `model` 字段设为对应 Prime 模型 ID，并使用兼容模式 endpoint：`https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`。无需额外 header 或 query 参数。[示例代码见 Prime 模式 (raw/model-user-guide/model-high-speed-inference/fast-mode.md)](../../raw/model-user-guide/model-high-speed-inference/fast-mode.md)。
+
+- **吞吐预留**：  
+  1. 在控制台创建预留实例，选择模型、性能模式（标准/高速）、输入/输出 kTPM 及溢出策略；  
+  2. 获取生成的专属 `model` code（如 `tpm-abc123`）；  
+  3. 将 API 请求中的 `model` 替换为该 code，endpoint 保持标准兼容模式地址（如 `https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions`）；  
+  4. **注意预热**：短时间内请求量快速拉升时，系统需短暂预热，期间可能出现延迟波动，建议客户端实现排队或重试机制。
 
 ## 限制和注意事项
 
-- 单账号默认最多同时启用 3 个 Prime 实例或 2 个 TPM 预留实例，超出需提交配额申请；  
-- Prime 模式下实例空闲 5 分钟后自动释放，再次请求将触发轻量级重预热（约 800ms 延迟）；  
-- TPM 预留资源按分钟计费，即使无请求也持续扣费，建议结合监控告警动态调整；  
-- 同一模型版本不可同时被 Prime 和 TPM 预留共用，否则后启用的模式会覆盖前者；  
-- > **注意**：原始文档 [原文标题](../../raw/model-user-guide/model-high-speed-inference.md) 将 Prime 模式归类为“Fast Mode”，但当前 API 字段名统一为 `mode: "prime"`，请勿使用 `"fast"` 等别名，否则将被忽略。
+- **模型能力一致性**：Prime 模式与吞吐预留所绑定的基础模型，在功能、上下文长度、输出格式（如 `reasoning_content` 字段）、错误码语义等方面，均与原版模型完全一致，详见两篇原始文档的“模型支持的能力、使用限制与原版模型相同”说明。
+  
+- **地域与模型可用性**：模型支持列表、价格、TPM 步长等均因地域（如华北2、新加坡）而异，且可能动态调整。**务必以百炼控制台实时展示为准**，文档中表格仅为参考快照。
+
+- **计费周期差异**：吞吐预留的「按天」计费按**自然日**结算（从生效时刻至次日 00:00:00），非连续 24 小时。例如 16:00 购买 1 天预留，实际有效期约 8 小时。强烈建议开启「到期自动续费」避免服务中断。
+
+- **专属 model code 生效前提**：吞吐预留实例状态必须为「运行中」，专属 model code 才有效；实例到期后 2 小时内仍可调用，但 14 小时后彻底释放且 code 失效。
+
+- **缩容与退订**：吞吐预留支持归零扩缩容（输入/输出 TPM 设为 0），code 保留但不再产生费用；退订后 code 立即失效，请求回退至公共资源处理。退费按 `max(0, 降量部分预付费 − 降量部分预付费 × 已用时长/购买时长 × 1.2)` 公式计算。
 
 ## 来源文档
 
-- [模型推理](../../raw/model-user-guide/model-high-speed-inference.md)
+- [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/fast-mode.md)
+- [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)
 
 

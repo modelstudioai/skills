@@ -664,7 +664,11 @@ if final_response and final_response.usage:
     print(f"输入 Token: {usage.input_tokens}")
     print(f"输出 Token: {usage.output_tokens}")
     print(f"思考 Token: {usage.output_tokens_details.reasoning_tokens}")
-    print(f"代码解释器调用次数: {usage.x_tools.get('code_interpreter', {}).get('count', 0)}")
+    # 若模型未实际调用代码解释器（如简单问题直接给出结果），响应不含 x_tools 字段
+    if hasattr(usage, 'x_tools'):
+        print(f"代码解释器调用次数: {usage.x_tools.get('code_interpreter', {}).get('count', 0)}")
+    else:
+        print("代码解释器调用次数: 0")
 ```
 
 #### DashScope

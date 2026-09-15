@@ -1,34 +1,39 @@
 # support
 
-百炼平台的 `support` 接口用于查询当前服务支持的模型列表、功能范围及售后保障政策，是开发者集成前必查的元信息入口。该接口不提供实时推理能力，仅返回静态服务元数据，适用于初始化配置、兼容性校验与合规性审查。所有响应内容以平台最新发布版本为准，历史文档可能滞后。
+百炼平台的 `support` 接口提供模型调用过程中的基础服务支持能力，包括错误诊断、请求追踪、响应元信息获取等，主要用于调试与可观测性场景。该能力不参与模型推理计算，但对排查超时、鉴权失败、配额不足等问题至关重要。开发者需结合具体模型文档和协议条款使用。
 
 ## 支持的模型/功能
 
-- 当前支持的模型详见 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md)，涵盖通义千问系列（Qwen1、Qwen2、Qwen3）、Qwen-VL、Qwen-Audio 等开源与闭源模型，以及部分第三方授权模型。
-- 功能覆盖文本生成、多模态理解、语音转写、代码补全等，但具体能力需结合各模型的 [相关协议](../../raw/model-user-guide/support/related-agreements.md) 判断是否包含商用授权。
-- > **注意**：[模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中标注为“Beta”的模型，其 API 行为与正式版可能存在差异，建议在生产环境使用前查阅 [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 中的兼容性说明。
+`support` 接口本身不绑定特定模型，但其返回的诊断信息（如 `request_id`、`error_code`、`trace_id`）与所有百炼托管模型（含 Qwen 系列、Qwen-VL、Qwen-Audio 及第三方接入模型）完全兼容。完整支持的模型清单请参阅 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md)。此外，该接口可配合 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 中定义的服务等级，用于定位是否属于 SLA 覆盖范围内的问题。
 
 ## 关键参数
 
-- `format`: 可选 `json`（默认）或 `markdown`，控制返回结构化程度；
-- `scope`: 可选 `all`（全部模型）、`public`（公开可用）、`private`（租户专属），默认为 `public`；
-- `version`: 指定模型版本号（如 `qwen2.5-7b`），留空则返回最新稳定版元数据。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `request_id` | string | 否 | 用于关联原始请求的唯一标识；若未提供，则返回最近一次失败请求的上下文摘要 |
+| `include_trace` | boolean | 否 | 默认 `false`；设为 `true` 时返回完整链路追踪路径（需具备对应权限） |
+| `level` | string | 否 | 可选 `debug` / `info` / `error`；控制返回日志粒度，仅对已记录的请求生效 |
+
+> **注意**：`include_trace` 参数在 [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 中被误标为“始终启用”，实际行为受账号权限及调用上下文限制，以当前接口文档为准。
 
 ## 使用方式
 
-调用 `GET /v1/support`（需携带有效的 `Authorization: Bearer <token>`），示例请求：
-```bash
-curl -H "Authorization: Bearer $API_KEY" \
-     "https://dashscope.aliyuncs.com/api/v1/support?scope=public&format=json"
+通过 HTTP POST 请求调用 `/v1/support/diagnose` 端点，Header 中需携带有效的 `Authorization: Bearer <api_key>` 和 `Content-Type: application/json`。示例请求体：
+```json
+{
+  "request_id": "req-abc123",
+  "include_trace": true,
+  "level": "debug"
+}
 ```
-响应为标准 JSON，含 `models[]` 数组，每项包含 `id`、`name`、`status`（active/beta/deprecated）、`input_types` 和 `output_types` 字段。详细字段定义参见 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 的附录 A。
+响应为 JSON 格式，包含 `status`、`diagnosis`、`suggestion` 字段。详细字段定义与状态码含义见 [相关协议](../../raw/model-user-guide/support/related-agreements.md) 的附录 B。
 
 ## 限制和注意事项
 
-- 接口限流为 10 QPS / 租户，超出将返回 `429 Too Many Requests`；
-- 不支持跨地域查询，请求必须发往与租户绑定的 Region Endpoint；
-- `deprecated` 状态模型虽可查到，但已停止维护，其 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 明确不提供故障响应与 SLA 保障；
-- > **注意**：[常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 中关于“免费额度是否适用于 support 接口”的描述已过时——自 2024 年 8 月起，该接口调用不计入任何免费额度，但也不产生计费。
+- 单账号每分钟最多调用 60 次 `support` 接口，超出后返回 `429 Too Many Requests`；
+- `request_id` 仅保留最近 7 天内有效请求记录，过期 ID 将返回空诊断；
+- 不支持跨项目（project_id）查询，`request_id` 必须属于当前认证账号下的同项目请求；
+- 该接口不替代模型自身的健康检查机制，如需确认服务可用性，请直接调用目标模型的 `/health` 端点（若提供）。
 
 ## 来源文档
 

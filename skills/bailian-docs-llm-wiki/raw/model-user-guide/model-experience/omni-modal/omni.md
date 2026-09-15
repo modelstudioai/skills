@@ -26,7 +26,7 @@ GPT-5.4-mini、Gemini 3.1 Flash
 
 Gemini 3.1 Live
 
-`qwen3.5-livetranslate-flash`
+`qwen3.5-livetranslate-flash-realtime`
 
 ## 使用场景
 

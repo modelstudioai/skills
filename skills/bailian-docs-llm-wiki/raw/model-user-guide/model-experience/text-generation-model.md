@@ -74,7 +74,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 -   Function Calling（自定义工具，模型调用）：所有通用模型均支持。
 -   内置工具（联网搜索、代码解释器、网页抓取等，无需复杂配置）。
 
-> 详情参见[工具调用](raw/model-user-guide/model-experience/text-generation-model/tool-calls.md)。
+> 详情参见[工具调用](https://help.aliyun.com/zh/model-studio/tool-calls)。
 
 ### 结构化输出
 
@@ -86,7 +86,7 @@ GPT-5.4-mini、Claude Haiku 4.5、Gemini 3.1 Flash
 
 适用于大量请求且对延迟要求不高的场景，可降低请求成本。
 
-> 详情参见[批量推理](raw/model-user-guide/model-experience/text-generation-model/batch-inference.md)。
+> 详情参见[批量推理](https://help.aliyun.com/zh/model-studio/batch-inference)。
 
 ## 推荐模型
 

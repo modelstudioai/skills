@@ -87,4 +87,4 @@
 
 ## 下一步
 
-创建评测任务：[评测任务](https://help.aliyun.com/zh/model-studio/evaluation-task)。
+创建评测任务：[评测任务](raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/evaluation-task.md)。

@@ -1,42 +1,47 @@
 # application monitoring
 
-应用观测（Application Monitoring）是百炼平台提供的核心可观测性能力，用于实时追踪大模型应用的调用链路、性能指标与资源消耗。它支持对 API 调用、推理延迟、Token 使用量、错误率等关键维度进行细粒度采集与可视化分析。该能力默认集成于所有通过百炼控制台或 SDK 部署的应用实例中，无需额外埋点。
+应用观测（Application Monitoring）是百炼平台为开发者提供的运行时可观测能力，用于实时跟踪大模型应用的调用链路、性能指标与错误分布。它支持对 API 调用、模型推理、工具调用等关键环节进行细粒度埋点与聚合分析，帮助快速定位延迟瓶颈与异常根因。该能力默认启用，无需额外部署探针。
 
 ## 支持的模型/功能
 
-- 支持所有在百炼平台托管的模型服务，包括 Qwen 系列（Qwen1.5、Qwen2、Qwen2.5）、Qwen-VL、Qwen-Audio 及用户自定义微调模型（LoRA/QLoRA）  
-- 提供三大核心观测维度：  
-  - **调用链路追踪**：基于 OpenTelemetry 标准，自动注入 trace_id，支持跨服务上下文透传  
-  - **性能指标监控**：端到端延迟（P95/P99）、首 Token 延迟、生成 Token 数、输入 Token 数、模型加载耗时  
-  - **资源与用量统计**：GPU 显存占用峰值、vCPU 使用率、每分钟请求数（RPM）、累计 Token 消耗量  
-- 详细功能说明见 [应用观测](../../raw/application-user-guide/application-monitoring.md)
+- 支持所有通过 `app.run()` 或 `app.async_run()` 启动的百炼应用实例（含 Stream 模式）
+- 覆盖模型调用（Qwen 系列、GLM 系列等）、RAG 检索、Function Calling、自定义工具执行等全链路节点
+- 提供预置看板：调用量趋势、P95 延迟热力图、错误率分桶、[Token](../concepts/token.md) 消耗统计  
+- 支持按 `app_id`、`trace_id`、`session_id`、`user_id` 多维下钻查询  
+- 详细能力说明见 [应用观测](../../raw/application-user-guide/application-monitoring.md)
 
 ## 关键参数
 
-以下参数可通过 `monitoring_config` 字段在应用部署配置（YAML 或 SDK `create_app` 接口）中启用或调整：
-
 | 参数名 | 类型 | 默认值 | 说明 |
 |--------|------|--------|------|
-| `enabled` | boolean | `true` | 是否启用观测；设为 `false` 将完全禁用数据采集与上报 |
-| `sample_rate` | float (0.0–1.0) | `0.1` | trace 采样率；生产环境建议 ≤0.2 以降低开销 |
-| `include_input` | boolean | `false` | 是否在 trace 中记录原始输入内容（含 [prompt](prompt.md)）；**开启将影响隐私合规性**，仅调试阶段建议启用 |
-| `metrics_granularity` | string | `"1m"` | 指标聚合粒度，支持 `"1m"`, `"5m"`, `"1h"` |
+| `enable_monitoring` | bool | `true` | 全局开关；设为 `false` 将禁用所有埋点（包括日志与指标上报） |
+| `sampling_rate` | float (0.0–1.0) | `1.0` | 全链路采样率；生产环境建议设为 `0.1`～`0.3` 以降低开销 |
+| `max_span_depth` | int | `5` | 最大嵌套跨度深度；超过此值的子 Span 将被截断（避免递归过深导致内存溢出） |
 
-> **注意**：`include_input` 在 [用量监控与性能分析](../../raw/application-user-guide/application-monitoring/application-observation.md) 中被标记为 `deprecated`，新版本 SDK 已移除该字段，实际行为以当前 SDK 文档为准。
+> **注意**：`max_span_depth` 的默认值在 [用量监控与性能分析](../../raw/application-user-guide/application-monitoring/application-observation.md) 中被误标为 `10`，实际生效值以本页及 SDK 运行时为准（v2.12.0+）。
 
 ## 使用方式
 
-1. **控制台启用**：在「应用管理 → 应用详情 → 监控」页签中，开关默认开启；可点击「查看监控大盘」跳转 Grafana 实时视图  
-2. **API/SDK 配置**：在创建或更新应用时，传入 `monitoring_config` 对象（参考 [应用观测](../../raw/application-user-guide/application-monitoring.md) 中的 YAML 示例）  
-3. **查询 trace**：通过 `/v1/traces` REST API 或 `list_traces()` SDK 方法，按 `app_id`、`status`、时间范围检索；trace 数据保留 7 天  
-4. **自定义指标上报**：支持通过 OpenTelemetry SDK 手动打点（需使用百炼兼容的 OTLP endpoint：`https://otel-api.bailian.aliyuncs.com/v1/traces`）
+1. 确保应用已接入百炼 SDK（≥ v2.11.0），并在初始化 `App` 时显式配置：
+   ```python
+   app = App(
+       app_id="xxx",
+       enable_monitoring=True,
+       sampling_rate=0.2
+   )
+   ```
+2. 所有 `app.run()` 调用将自动注入 trace 上下文；若需手动关联外部请求，可传入 `trace_id` 和 `span_id`：
+   ```python
+   app.run(input="...", trace_id="trc_abc123", span_id="spn_def456")
+   ```
+3. 查看数据：登录百炼控制台 → 应用详情页 → 「观测分析」标签页；或通过 [用量监控与性能分析](../../raw/application-user-guide/application-monitoring/application-observation.md) 文档中的 CLI 工具导出原始 trace 数据。
 
 ## 限制和注意事项
 
-- 单应用 trace 上报 QPS 上限为 100，超出部分将被限流并返回 `429 Too Many Requests`  
-- `sample_rate = 1.0` 仅允许在测试环境使用，生产环境强制降级为 `0.2`（由平台侧拦截）  
-- 不支持对流式响应（`stream=true`）的逐 chunk 延迟拆分统计，当前仅记录整体完成延迟  
-- 所有监控数据均经脱敏处理，但若启用 `include_input`，原始 [prompt](prompt.md) 将明文落盘——该行为已在 [用量监控与性能分析](../../raw/application-user-guide/application-monitoring/application-observation.md) 中明确列为高风险操作，强烈建议禁用
+- Trace 数据保留周期为 7 天（不可配置），超出后自动清理  
+- 单次请求中 Span 总数超过 1000 个时，后续 Span 将被丢弃（不报错）  
+- 不支持跨进程/跨服务的分布式链路透传（如调用非百炼托管的微服务）；仅限百炼应用内部调用链  
+- 若应用使用 `fork()` 创建子进程（如某些 Gunicorn 配置），子进程中监控将失效——请改用 `spawn` 启动方式，详见 [应用观测](../../raw/application-user-guide/application-monitoring.md) 的「多进程适配」章节
 
 ## 来源文档
 

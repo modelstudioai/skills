@@ -1,36 +1,40 @@
 # sandbox
 
-sandbox 是百炼平台提供的轻量级模型实验与调试环境，支持开发者快速验证提示词、参数配置及多轮对话逻辑，无需部署完整应用。它面向单次推理或短周期交互场景，适用于模型选型、Prompt 工程和 SDK 集成前的功能验证。所有操作均通过 API 或控制台触发，实例生命周期由平台自动管理。
+sandbox 是百炼平台提供的隔离式模型运行环境，用于安全、可控地测试和调试大模型应用逻辑。它支持按需创建独立实例，隔离资源与上下文，适用于开发验证、A/B 测试及敏感数据沙箱推理等场景。所有 sandbox 实例均基于平台统一的模型服务层构建，行为与线上部署一致。
 
 ## 支持的模型与功能
 
-sandbox 当前支持以下模型：`qwen-max`、`qwen-plus`、`qwen-turbo`（仅限文本生成），以及 `qwen-vl-plus`（多模态输入）。不支持微调模型或自定义 LoRA。功能上支持单次 completion、流式响应、system/user/assistant 角色消息结构，以及基础的 tool calling（需显式启用 `enable_tool_choice: true`）。图像上传仅限 base64 编码的 JPEG/PNG，最大 5MB。详细能力说明见 [Sandbox](../../raw/application-user-guide/sandbox.md)。
+- 支持全部已接入百炼平台的通用大模型（如 Qwen 系列、Qwen2-VL、Qwen3）及部分定制化微调模型（需开通白名单）  
+- 支持完整对话链路：流式响应、工具调用（Function Calling）、多轮上下文管理、系统提示词（system [prompt](prompt.md)）注入  
+- 支持模板化配置：可通过 [模版管理](../../raw/application-user-guide/sandbox/sandbox-templates.md) 预置 [prompt](prompt.md) 结构、参数组合与后处理规则  
+- 不支持模型训练、微调或权重导出；仅提供推理服务接口  
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model` | string | 是 | 模型 ID，必须为 sandbox 支持列表中的值 |
-| `input.messages` | array | 是 | 至少包含一条 `user` 消息，`system` 消息可选且仅首条生效 |
-| `parameters.temperature` | number | 否 | 范围 0.0–2.0，默认 1.0；设为 0 时启用确定性采样 |
-| `parameters.top_p` | number | 否 | 范围 0.0–1.0，默认 0.8 |
-| `stream` | boolean | 否 | 设为 `true` 启用 SSE 流式响应，此时 `output` 字段不返回完整结果 |
+| `sandbox_id` | string | 是 | 沙箱实例唯一标识，由 `POST /v1/sandboxes` 创建后返回 |
+| `model` | string | 是 | 模型 ID（如 `qwen-max`, `qwen-plus`），必须为 sandbox 环境已启用的模型列表中的项 |
+| `temperature` | float | 否 | 默认 `0.7`，取值范围 `[0.0, 2.0]`；注意该参数在 [实例管理与使用](../../raw/application-user-guide/sandbox/sandbox-sdk.md) 中明确要求不可超过 `1.5`，超出将被截断并静默修正为 `1.5` |
+| `max_tokens` | int | 否 | 默认 `2048`，最大允许 `8192`；超过限制将触发 `400 Bad Request` |
+| `enable_search` | bool | 否 | 默认 `false`；启用后可调用内置搜索插件（仅限部分模型支持） |
 
-> **注意**：`max_tokens` 参数在 [sandbox-quick-start.md](../../raw/application-user-guide/sandbox/sandbox-quick-start.md) 中被列为推荐设置，但实际 API 会忽略该字段——sandbox 使用动态 token 分配策略，由模型自身决定输出长度，此行为与 [sandbox-sdk.md](../../raw/application-user-guide/sandbox/sandbox-sdk.md) 中的说明一致。
+> **注意**：`temperature` 参数上限在 [概述](../../raw/application-user-guide/sandbox/sandbox-introduction.md) 中标注为 `2.0`，但实际 SDK 行为以 [实例管理与使用](../../raw/application-user-guide/sandbox/sandbox-sdk.md) 为准——该文档明确声明服务端强制截断至 `1.5`，开发者应以此为实际约束。
 
 ## 使用方式
 
-1. **API 调用**：向 `POST /v1/sandbox/completions` 发送 JSON 请求，需携带 `Authorization: Bearer <api_key>` 和 `Content-Type: application/json`；
-2. **控制台操作**：进入「应用开发」→「Sandbox」页面，选择模型、填写消息后点击「运行」，结果实时渲染并支持复制 raw response；
-3. **SDK 集成**：Python SDK 中调用 `client.sandbox.completions.create(...)`，参数结构与 API 完全对齐，详见 [sandbox-sdk.md](../../raw/application-user-guide/sandbox/sandbox-sdk.md)。
+1. **创建沙箱实例**：调用 `POST /v1/sandboxes`，传入模型 ID 与初始配置，获取 `sandbox_id`  
+2. **发起推理请求**：向 `POST /v1/sandboxes/{sandbox_id}/chat/completions` 提交消息数组（含 `system`/`user`/`assistant` 角色）  
+3. **销毁实例（可选）**：调用 `DELETE /v1/sandboxes/{sandbox_id}` 释放资源；未显式销毁的实例将在空闲 30 分钟后自动回收  
+详细流程见 [快速开始](../../raw/application-user-guide/sandbox/sandbox-quick-start.md)
 
 ## 限制和注意事项
 
-- 单次请求最大上下文长度为 32,768 tokens（含 input + output），超限将返回 `400 Bad Request`；
-- 每个 API Key 默认 QPS 限制为 5，可通过工单申请提升；
-- sandbox 实例无状态，不保存历史会话，连续多轮交互需客户端自行维护 `messages` 数组；
-- 不支持异步批量提交（`batch_size > 1`）或后台任务队列；
-- 所有请求日志保留 7 天，不用于训练或模型优化，符合百炼数据治理规范。
+- 单 sandbox 实例生命周期最长 24 小时，超时后自动终止且不可恢复  
+- 每个账号默认最多并发 5 个活跃 sandbox 实例；如需扩容，须提交工单申请  
+- 所有请求受平台全局速率限制（RPS）约束，与普通 API 共享配额，具体阈值参见 [更新日志](../../raw/application-user-guide/sandbox/sandbox-changelog.md) 中最新版本说明  
+- 不支持跨 sandbox 实例共享 session 或 state；每个实例完全隔离  
+- 日志仅保留最近 7 天，调试建议自行捕获 `request_id` 并关联业务日志
 
 ## 来源文档
 

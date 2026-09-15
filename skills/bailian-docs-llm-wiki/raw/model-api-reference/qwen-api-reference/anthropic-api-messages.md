@@ -105,13 +105,15 @@ temperature 取值范围
 
 **第三方模型**
 
-deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash、deepseek-v4-flash-0731、deepseek-v3.2、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5、kimi-k2-thinking、glm-5.2、glm-5.1、glm-5、glm-4.7、glm-4.6、MiniMax-M2.5、MiniMax-M2.1
+deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash、deepseek-v4-flash-0731、deepseek-v3.2、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5、kimi-k2-thinking、glm-5.3、glm-5.2、glm-5.1、glm-5、glm-4.7、glm-4.6、MiniMax-M2.5、MiniMax-M2.1
 
 **max\_tokens** `integer` **（必选）**
 
 -   deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash、deepseek-v4-flash-0731、qwen3.8-max、qwen3.8-flash：模型回复内容和思维链内容之和的最大Token数，模型输出超过此值时生成将提前停止，`stop_reason` 为 `max_tokens`。
     
     > `max_tokens` 限制模型回复内容+思考过程的长度。开启深度思考时，`max_tokens` > `thinking.budget_tokens`
+    
+-   glm-5.3：`max_tokens` 为模型回复内容和思维链内容之和的最大Token数，模型输出超过此值时生成将提前停止，`stop_reason` 为 `max_tokens`。glm-5.3 会忽略 `thinking.budget_tokens` 参数。
     
 -   glm-5.2：不传入 `thinking.budget_tokens` 参数时，`max_tokens` 为模型回复内容和思维链内容之和的最大Token数，模型输出超过此值时生成将提前停止，`stop_reason` 为 `max_tokens`；传入 `thinking.budget_tokens` 参数时，`max_tokens` 仅为模型回复内容的最大Token数，思考部分的 Token 数由 `thinking.budget_tokens` 单独控制。
     
@@ -355,6 +357,16 @@ tools 数组元素
 
 控制模型的推理力度。
 
+-   glm-5.3（默认值为 `max`）：
+    
+    可选值：
+    
+    -   `low`：低力度推理
+    -   `high`：高力度推理
+    -   `max`：最大力度推理
+    
+    传入其它取值会返回错误。
+    
 -   glm-5.2、deepseek-v4-pro、deepseek-v4-flash（阿里云直供）（默认值为 `max`）：
     
     可选值：

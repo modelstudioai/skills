@@ -1,70 +1,45 @@
 # OpenAI 兼容接口
 
-OpenAI 兼容接口是阿里云百炼平台提供的一套标准化 REST API 协议，完全遵循 OpenAI 的请求/响应格式（如 `/v1/chat/completions`）、参数命名、数据结构与错误码规范，使开发者无需修改业务逻辑即可将现有 OpenAI 应用无缝迁移至百炼，调用千问（Qwen）全系列及主流第三方大模型。
+OpenAI 兼容接口是百炼平台提供的一组标准化 RESTful API，严格遵循 OpenAI 官方 API 协议规范（如 `/v1/chat/completions`、`/v1/embeddings`、`/v1/responses` 等），使开发者能**零代码改造**复用现有 OpenAI SDK、LangChain 集成、CLI 工具或框架（如 Cursor、Dify、Cherry Studio），仅需替换 `base_url` 和 `api_key` 即可快速接入百炼的 Qwen 及第三方模型服务。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **快速接入与迁移**：开发者可直接复用 OpenAI Python SDK、Node.js SDK 或 curl 命令，仅需替换 `base_url` 和 `api_key`，数分钟内完成首次调用，适用于原型验证、PoC 开发和存量应用平滑升级。  
-- **多模态联合推理**：在 `chat/completions` 接口中，通过标准 `messages` 数组传入文本+图像/视频 URL（或 base64），即可调用 `qwen3.5-omni-plus`、`qwen-vl-plus` 等模型，无需适配私有协议。  
-- **生态工具集成**：LangChain、LlamaIndex、Dify、Cursor、Cherry Studio 等主流框架与客户端均原生支持 OpenAI 协议，配置百炼的兼容 endpoint 后即可开箱使用，大幅降低集成门槛。  
-- **生产级部署**：推荐使用业务空间专属域名（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`），该路径具备独立限流、低延迟、高吞吐与业务空间级隔离能力，是生产环境首选。  
-- **能力分层调用**：除基础 `chat/completions` 外，百炼还扩展了多个 OpenAI 兼容子接口，如：  
-  - `POST /responses`：增强版对话接口，支持内置工具调用（联网搜索、代码解释器）、自动上下文管理与深度思考；  
-  - `POST /embeddings`：调用 `qwen3.7-text-embedding` 等向量模型，兼容 `dimensions` 参数；  
-  - `POST /files` + `POST /batches`：实现文件上传与批量异步推理，符合 OpenAI Batch 规范。
+- **模型调用迁移**：已有 OpenAI 应用（如基于 `openai>=1.0` 的 Python 项目）可直接切换 `client = OpenAI(base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1", api_key="sk-xxx")`，无需修改 `chat.completions.create()` 调用逻辑，即支持 `qwen3.8-max`、`deepseek-v4-pro`、`glm-5.2` 等全部兼容模型。  
+- **多模态开发**：通过标准 `chat/completions` 接口传入含 `image_url` 或 `image_data` 的 `content` 数组，即可调用 `qwen-vl-plus`、`qwen3-vl-plus` 等视觉模型，完全兼容 OpenAI Vision 规范。  
+- **智能体与工具链**：使用 `/v1/responses` 接口（OpenAI 兼容的 Responses 协议），可声明 `tools: [{"type": "web_search"}]` 并自动触发联网搜索、代码解释、文件检索等内置能力，同时支持 `previous_response_id` 实现多轮上下文自动管理。  
+- **嵌入与批量处理**：`/v1/embeddings` 接口兼容 `text-embedding-v4`、`qwen3.7-text-embedding`；`/v1/batch`（同步批量）和 `/v1/chat/completions`（流式+批量混合）均支持 OpenAI 协议语义，适用于 RAG 向量构建或高并发推理。  
+- **应用集成**：已发布的百炼应用可通过 OpenAI 兼容的 `/v1/chat/completions` 端点调用（`model` 参数填应用 ID），复用[函数调用](function-calling.md)（`function_call`）、RAG 增强、会话状态等能力，与原生 `/api/v1/applications/{app_id}/call` 接口语义一致。
 
-> ⚠️ 注意：部分能力（如 `Qwen-Audio` 语音合成/识别、`wan3.0-video` 视频生成）**不支持 OpenAI 兼容协议**，必须使用 DashScope 原生 API；`completions`（FIM 填空）接口仅支持 `qwen-coder-turbo`，且路径为 `/v1/completions`，非标准 OpenAI 行为。
+> ⚠️ 注意：Qwen-Audio、QwQ、多模态 Embedding（如 `qwen3-vl-embedding`）**不支持** OpenAI 兼容协议，必须使用 DashScope 原生接口。
 
 ## 关键参数和配置
 
-| 参数 | 必填 | 类型 | 说明 | 示例 |
-|------|------|------|------|------|
-| `base_url` | ✅ | string | **必须使用业务空间专属域名**，格式为 `https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1`；旧域名（如 `dashscope.aliyuncs.com`）已逐步淘汰，性能与稳定性较低 | `https://ws-abc123.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` |
-| `api_key` | ✅ | string | 通过 [API Key 页面](https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key) 创建，**严格按地域绑定**，不可跨地域混用 | `sk-xxx`（北京地域 Key 不可用于调用新加坡 endpoint） |
-| `model` | ✅ | string | 模型 ID，需与所选地域支持列表一致；第三方模型名中 `.` 需替换为 `-`（如 `glm-5.2` → `glm-5-2`） | `"qwen3.8-max"`, `"deepseek-v4-pro"` |
-| `messages` | ✅ | array | 标准 OpenAI 格式：`[{ "role": "user", "content": "..." }]`；多模态输入时 `content` 可为字符串或 `{ "type": "image_url", "image_url": { "url": "..." } }` 数组 | `[{"role":"user","content":"描述这张图"}]` |
-| `stream` | ❌ | boolean | 是否启用流式响应，默认 `false`；设为 `true` 时返回 SSE 流 | `true` |
-| `stream_options` | ❌ | object | 流式增强选项，`{"include_usage": true}` 可在末尾 chunk 返回 token 统计 | `{"include_usage": true}` |
-| `enable_thinking` | ❌ | boolean | **Qwen 3.5+ 系列必需显式传入顶层字段**，控制是否启用深度思考模式（影响成本与延迟） | `true` |
-| `max_tokens` | ❌ | integer | 输出长度上限（仅回复内容，不含思考过程）；注意：Anthropic 接口含义不同，勿混用 | `1024` |
-
-> ✅ **最佳实践**：  
-> - 将 `DASHSCOPE_API_KEY` 设为环境变量，避免硬编码；  
-> - 使用 `WorkspaceId` 专属域名而非通用域名，确保生产稳定性；  
-> - 第三方模型（如 DeepSeek、Kimi）仅在特定地域（如华北2）开通，调用前请确认控制台实时列表。
+| 参数 | 说明 | 必填 | 示例值 | 注意事项 |
+|------|------|------|--------|----------|
+| `base_url` | 必须使用地域专属域名，格式为 `https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1` | 是 | `https://ws-abc123.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` | `{WorkspaceId}` 需从控制台获取；旧域名 `dashscope.aliyuncs.com` 性能较低，不推荐；**API Key 与地域必须严格匹配**（北京 Key 不可调用弗吉尼亚 endpoint） |
+| `api_key` | 百炼平台生成的 API Key，按计费方案隔离（[Token](token.md) Plan / Coding Plan / 按量计费） | 是 | `sk-xxx` | [Token](token.md) Plan 个人版 Key 无法用于 Dify；按量计费 Key 必须带 `WorkspaceId` |
+| `model` | 模型 ID，需从各接口支持列表中选择 | 是 | `"qwen3.8-max"`、`"qwen-vl-plus"`、`"text-embedding-v4"` | `responses` 接口仅支持特定模型（如 `qwen3.8-max`）；`completions` 接口仅支持 `qwen-coder-turbo` 等代码模型；命名需规范（如 `kimi-k2.6` → `kimi-k2-6`） |
+| `stream` | 是否启用流式响应（SSE） | 否 | `true` | 流式响应末尾默认不返回 token 统计，需显式添加 `stream_options={"include_usage": true}` |
+| `enable_thinking` | Qwen3 系列专属参数，顶层字段（与 `model` 同级），用于显式开启深度思考模式 | 否 | `true` | 若未设置且模型支持，可能隐式触发思考导致延迟与成本增加；部分客户端（如 `qwen-code`）需在 `extra_body` 中透传 |
+| `tools` / `tool_choice` | 仅 `/v1/responses` 和 `/v1/chat/completions` 支持 | 否 | `[{"type": "web_search"}]`, `"auto"` | `responses` 接口支持快捷工具声明（`{"type": "web_search"}`），无需完整 schema；`chat/completions` 需完整 `function` 定义 |
 
 ## 面向开发者，简洁实用
 
-- **一句话启动**：  
-  ```python
-  from openai import OpenAI
-  client = OpenAI(
-      api_key="sk-xxx",  # 替换为你的 API Key
-      base_url="https://ws-abc123.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
-  )
-  resp = client.chat.completions.create(
-      model="qwen3.8-max",
-      messages=[{"role": "user", "content": "你好"}],
-      stream=True
-  )
-  ```
+- ✅ **快速上手**：安装 `openai` SDK（Python）或 `@anthropic-ai/sdk`（Node.js），初始化时指定 `base_url` 和 `api_key`，其余代码 100% 复用。  
+- ✅ **调试友好**：所有请求支持标准 cURL 直调，Header 带 `Authorization: Bearer <api_key>`，Body 为纯 JSON，无额外封装。  
+- ✅ **生产就绪**：支持流式、批量、多模态、工具调用、结构化输出（JSON Schema）、显式缓存（`cache_control`）等企业级特性。  
+- ❌ **避坑提示**：  
+  - 切勿混用地域——`base_url` 地域 ≠ `api_key` 所属地域 → `invalid_api_key`；  
+  - `qwen-audio`、`qwq`、`qwen3-vl-embedding` 等模型**不在此协议支持范围内**；  
+  - `system` message 在 `qwen3-vl-plus` 中有效，在 `qvq` 中无效，请查阅具体模型文档。  
 
-- **调试技巧**：  
-  - 遇到 `401 Unauthorized`：检查 `api_key` 所属地域是否与 `base_url` 地域一致；  
-  - 遇到 `404 Not Found`：确认模型 ID 拼写正确，且该模型已在对应地域开通；  
-  - 遇到 `429 Rate Limited`：检查账户级限流配额（[查询模型限流](../../raw/model-api-reference/more-about-models/list-quotas.md)），或升级消费档位。
-
-- **避坑提醒**：  
-  - ❌ 不要使用带日期后缀的快照模型（如 `qwen-plus-2025-07-28`），其限流额度远低于稳定版；  
-  - ❌ 不要在 `extra_body` 中传 `enable_thinking`，必须作为请求体顶层字段；  
-  - ❌ 不要将 Token Plan/Coding Plan 的 API Key 用于 Dify 等工作流平台（违规行为）。
+> 提示：使用 LangChain？优先选用 `langchain_community.chat_models.alibaba_tongyi`（全功能支持），而非 `langchain_openai`（部分高级特性受限）。
 
 ## 关联主题页
 
-- [get started with models](../guides/get-started-with-models.md)
 - [qwen api reference](../api/qwen-api-reference.md)
 - [toolkits and frameworks](../api/toolkits-and-frameworks.md)
+- [application call](../api/application-call.md)
 - [use chat client or development tool](../guides/use-chat-client-or-development-tool.md)
-- [more about models](../api/more-about-models.md)
 
 
