@@ -16,7 +16,7 @@
 
 ## 支持的模型
 
-`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-max-2026-05-17`、`qwen3.7-max-preview`、`qwen3-max`、`qwen3-max-2026-01-23`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-04-20`、`qwen3.5-plus-2026-02-15`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`glm-5.3`、`glm-5.2`、`kimi-k3`
+`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-max-2026-05-17`、`qwen3.7-max-preview`、`qwen3-max`、`qwen3-max-2026-01-23`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-04-20`、`qwen3.5-plus-2026-02-15`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`deepseek-v4.1-flash`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`glm-5.3`、`glm-5.2`、`kimi-k3`
 
 **重要**非列表中阿里云百炼直供文本生成模型仅支持基础兼容能力，Agent 能力（内置工具等）受限。
 
@@ -582,7 +582,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ### 调用内置工具
 
-开启内置工具可在处理复杂任务时获得更佳效果，当前网页抓取与代码解释器工具限时免费，支持的工具请参见[工具调用](https://help.aliyun.com/zh/model-studio/tool-calls)。
+开启内置工具可在处理复杂任务时获得更佳效果，当前网页抓取与代码解释器工具限时免费，支持的工具请参见[工具调用](raw/model-user-guide/model-experience/text-generation-model/tool-calls.md)。
 
 Python
 
@@ -1128,7 +1128,7 @@ const res2 = await client.responses.create({
 
 ### 4\. 使用内置工具
 
-Responses API 内置了多种工具，无需自行实现。只需在 `tools` 参数中指定即可，当前代码解释器与网页抓取工具限时免费，详情请参见[工具调用](https://help.aliyun.com/zh/model-studio/tool-calls)。
+Responses API 内置了多种工具，无需自行实现。只需在 `tools` 参数中指定即可，当前代码解释器与网页抓取工具限时免费，详情请参见[工具调用](raw/model-user-guide/model-experience/text-generation-model/tool-calls.md)。
 
 #### Python
 

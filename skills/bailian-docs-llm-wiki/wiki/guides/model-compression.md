@@ -1,47 +1,47 @@
 # model compression
 
-模型压缩是百炼平台提供的轻量化能力，用于减小大语言模型的体积、降低推理显存占用并提升推理速度，适用于边缘部署、移动端或资源受限场景。该功能基于量化、剪枝等技术实现，支持在不显著损失精度的前提下生成更小的模型变体。所有压缩操作均在百炼控制台或 API 中完成，无需用户自行训练或修改模型结构。
+模型压缩是百炼平台提供的量化能力，用于将全精度微调模型转换为低精度版本，在可控精度损失下显著降低推理部署所需的 MU 规格与成本。该功能仅作用于平台内完成的微调模型，不支持结构剪枝或知识蒸馏等其他压缩范式。压缩操作不可逆，产出模型不可继续微调或二次压缩，需在任务创建前审慎选择量化模板。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-- 当前仅支持 Qwen 系列开源模型（如 `qwen2-7b`, `qwen2-1.5b`）的 INT4 量化压缩；  
-- 不支持 Llama、Phi 等非 Qwen 架构模型，亦不支持 LoRA 微调后模型的压缩（[模型压缩](../../raw/model-user-guide/model-compression.md)）；  
-- 压缩后模型保留原始 tokenizer 和生成接口兼容性，可直接用于 `model.chat()` 或 `model.generate()` 调用（[模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md)）。
+- **支持模型**：当前仅支持通过百炼平台完成微调训练的自定义模型（如 `qwen3.5-flash-2026-02-23`），不支持基础模型、第三方模型或 OSS 直接加载的模型。具体支持列表以控制台实时展示为准，详见 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 中的“支持压缩的模型”表格。
+- **核心功能**：仅提供后训练量化（Post-Training Quantization, PTQ），包括 INT4/INT8 等精度档位，通过量化模板封装不同部署规格（如 MU1→MU8）；支持可选校准数据提升量化鲁棒性；不提供量化感知训练（QAT）或混合精度自动搜索。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `target_format` | string | 是 | 目标格式，目前仅支持 `"awq"`（推荐）和 `"gptq"`；`"awq"` 压缩后精度损失更小且推理更快 |
-| `bits` | int | 是 | 量化位数，仅支持 `4`（INT4），不支持 2-bit 或 8-bit |
-| `group_size` | int | 否 | 分组大小，默认 `128`；设为 `-1` 表示全通道量化（仅 `awq` 支持） |
+| 参数 | 是否必填 | 说明 |
+|------|----------|------|
+| **任务名称** | 是 | ≤50 字符，建议含模型简称+量化方式+版本号（如 `qwen35-ft-awq-v1`） |
+| **量化产出模型名后缀** | 是 | 仅小写字母与数字，≤8 位，将拼接至源模型名后（如源模型 `my-qwen-ft` + 后缀 `awq4` → `my-qwen-ft-awq4`） |
+| **量化模板** | 是 | 卡片式选择，模板名中 MU 编号越大，部署规格越小、成本越低，但潜在精度损失越高；**切换源模型会自动清空已选模板**，因模板与模型强绑定 |
+| **校准数据** | 条件必填 | 仅当所选模板要求校准时显示；最多选 5 个已在[数据管理](https://help.aliyun.com/zh/model-studio/manage-data)中发布完成的数据集；不支持 OSS 挂载数据 |
 
-> **注意**：文档 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 中提及 `"bits: 8"` 示例已过时，实际 API 拒绝 `bits != 4` 的请求，以当前控制台文档为准。
+> **注意**：原始文档中“校准数据”字段标注为“条件选填”，但实际逻辑是“若模板声明需校准，则此字段强制出现且必须填写”，否则无法提交任务。该行为与 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 中“校准数据怎么选？”小节的说明一致，无矛盾。
 
 ## 使用方式
 
-1. 在百炼控制台「模型管理」→「模型压缩」页选择源模型；  
-2. 配置 `target_format` 和 `bits`，点击「开始压缩」；  
-3. 压缩任务完成后，系统生成新模型 ID（形如 `qwen2-7b-int4-awq-20240520`），可在模型列表中查看并部署；  
-4. SDK 调用示例：
-   ```python
-   from dashscope import Generation
-   response = Generation.call(
-       model="qwen2-7b-int4-awq-20240520",
-       input={"messages": [{"role": "user", "content": "你好"}]},
-       api_key="YOUR_API_KEY"
-   )
-   ```
+1. **前提**：确保工作空间中存在状态为「成功」的微调模型（参见 [模型调优](../../raw/model-user-guide/fine-tuning.md)）；
+2. 控制台导航至 **模型压缩** → **创建压缩任务**；
+3. 依次配置任务名称、源模型（仅展示可压缩微调模型）、后缀、量化模板（依赖源模型动态加载）、校准数据（按需）；
+4. 单击 **开始压缩** —— 创建后配置不可修改，务必确认再提交；
+5. 任务成功（`SUCCEEDED`）后，压缩模型自动出现在模型中心，可直接用于 [模型部署](../../raw/model-user-guide/model-deployment-1.md)。
+
+如需批量或自动化管理，可调用 [模型压缩 API 参考](../../raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/model-compression-api.md) 中的接口。
 
 ## 限制和注意事项
 
-- 单次压缩任务最长耗时 90 分钟，超时将自动终止；  
-- 压缩后模型不支持进一步微调（fine-tuning），仅限推理使用；  
-- 不同 `target_format` 的输出模型不可互换加载（例如 AWQ 格式模型不能用 GPTQ 加载器加载）；  
-- 原始模型需处于「已发布」状态，草稿或私有未发布模型无法触发压缩流程（[模型压缩](../../raw/model-user-guide/model-compression.md)）。
+- **地域限制**：仅华北2（北京）可用；
+- **模型来源限制**：仅支持百炼平台内微调产出的自定义模型，不支持导入模型、基础模型或外部训练模型；
+- **不可逆性**：压缩后模型**不支持继续微调、不支持二次压缩**，也不支持转回全精度格式；
+- **任务管理**：
+  - 仅 `PENDING` / `RUNNING` 状态可停止；
+  - 仅终态（`SUCCEEDED` / `FAILED` / `CANCELED`）可删除任务记录；
+  - 删除任务不影响已产出的压缩模型；
+- **计费**：压缩任务本身限时免费（截止时间以控制台公告为准）；压缩后模型的部署费用按 MU 规格单独计费，与压缩免费期无关；
+- **精度验证**：强烈建议在免费期内对同一源模型尝试多个量化模板，并使用**业务真实测试集**验证推理效果，避免仅依赖控制台指标。精度下降时优先尝试添加语义匹配的校准数据，其次更换模板——该实践指引与 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 中“压缩后模型精度下降怎么办？”章节完全一致。
 
 ## 来源文档
 
-- [模型压缩](../../raw/model-user-guide/model-compression.md)
+- [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md)
 
 

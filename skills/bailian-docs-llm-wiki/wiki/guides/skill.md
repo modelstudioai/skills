@@ -1,45 +1,43 @@
 # skill
 
-Skill 是百炼平台中用于扩展智能体任务处理能力的可插拔能力包，支持无需编码即可为智能体赋予文件处理、数据分析等专业功能。通过自然语言描述触发条件与能力边界，智能体可在对话中自动识别并调用匹配的 Skill 执行任务。官方 Skill 开箱即用，自定义 Skill 则通过 ZIP 包形式灵活适配业务场景，详见 [Skill (raw/application-user-guide/skill/introduction-to-skill.md)](../../raw/application-user-guide/skill/introduction-to-skill.md)。
+Skill 是百炼平台中用于扩展智能体任务处理能力的可插拔能力包，使智能体能在对话中自动识别并执行特定类型的任务（如文件解析、数据清洗、格式转换等），无需开发者编写集成代码或调用外部 API。Skill 分为平台预置的官方 Skill 和用户自主开发的自定义 Skill 两类，均通过语义描述驱动调用决策。其核心设计目标是降低专业能力接入门槛，同时保障调用准确性与可维护性。
 
 ## 支持的模型/功能
 
-- **适用模型**：Skill 与底层大模型解耦，所有支持智能体应用的模型（如 Qwen 系列、Qwen2 系列）均可调用 Skill，无需模型侧特殊适配。
-- **核心功能**：
-  - 自动识别用户意图并匹配 Skill（基于 `SKILL.md` 中的 `description` 字段语义理解）；
-  - 支持文件输入/输出（如 `.xlsx`, `.csv`, `.pdf`, `.docx` 等格式的读写、转换、清洗）；
-  - 支持结构化数据操作（行列计算、格式化、图表生成、脏数据修复）；
-  - 不支持非文件类外部服务调用（如数据库直连、HTTP API 调用、实时系统集成），此类能力需通过 Function Calling 或插件机制实现。
+Skill 本身不依赖特定大模型，而是作为独立于 LLM 推理链之外的能力模块，在智能体运行时由系统根据用户输入和 Skill 的 `description` 描述动态路由调用。当前所有 Skill 均面向**文件处理与结构化数据操作**场景，包括但不限于：  
+- 表格文件（`.xlsx`, `.csv`, `.tsv`, `.xlsm`）的读取、编辑、生成与格式转换；  
+- PDF 文档的文本提取与基础结构解析；  
+- 图像文件（`.png`, `.jpg`）的 OCR 与内容识别；  
+- JSON/YAML 配置文件的校验与字段提取。  
 
-> **注意**：原始文档中“支持文件处理、数据分析等专业能力”表述较宽泛；实际能力严格受限于 Skill ZIP 包内实现的 Python 逻辑及百炼沙箱环境权限。例如，[Skill (raw/application-user-guide/skill/introduction-to-skill.md)](../../raw/application-user-guide/skill/introduction-to-skill.md) 明确说明自定义 Skill 无法执行 Google Sheets API 集成或数据库管道任务——这些属于平台明确排除的场景。
+> **注意**：原始文档 [Skill (raw/application-user-guide/skill/introduction-to-skill.md)](../../raw/application-user-guide/skill/introduction-to-skill.md) 中提及“支持数据分析”，但实际当前所有官方 Skill 均不提供统计建模、机器学习推理或数据库查询能力——该表述易引发误解，应以控制台中实时显示的 Skill 功能列表为准。
 
 ## 关键参数
 
-| 参数 | 位置 | 必填 | 说明 |
-|------|------|------|------|
-| `name` | `SKILL.md` YAML frontmatter | 是 | Skill 唯一标识符，全账号范围内不可重复；仅支持小写字母、数字、连字符（`-`），长度 ≤ 64 字符。 |
-| `description` | `SKILL.md` YAML frontmatter | 是 | 决定智能体是否调用该 Skill 的核心依据。必须包含适用输入类型、支持操作、典型触发关键词、不适用场景四要素，详见 [Skill (raw/application-user-guide/skill/introduction-to-skill.md)](../../raw/application-user-guide/skill/introduction-to-skill.md) 示例。 |
-| `version` | `SKILL.md`（可选） | 否 | 若未声明，平台自动生成语义版本（如 `1.0.0`）；手动指定时需符合 SemVer 规范，用于版本管理与回滚。 |
+Skill 的行为完全由其元信息文件 `SKILL.md` 中的 YAML 字段定义，关键参数如下：
+
+| 字段 | 必填 | 说明 |
+|------|------|------|
+| `name` | 是 | 全局唯一标识符，仅允许小写字母、数字和连字符（如 `pdf-extractor`），不可与同账号下其他 Skill 冲突。 |
+| `description` | 是 | **决定调用准确性的核心字段**，必须明确包含：输入类型（如 “.pdf 文件”）、支持操作（如 “提取全部文本及表格”）、典型触发词（如 “把PDF转成文字”、“提取发票信息”）、排除场景（如 “不处理扫描件模糊度 >30% 的文件”）。该字段直接影响 LLM 的路由判断，详见 [Skill (raw/application-user-guide/skill/introduction-to-skill.md)](../../raw/application-user-guide/skill/introduction-to-skill.md) 中的完整示例。 |
+| `version` | 否 | 自定义 Skill 可选字段，用于显式标记版本；若未声明，系统按上传时间戳自动生成。 |
 
 ## 使用方式
 
-1. **创建 Skill**  
-   - 官方 Skill：直接在 [Skill 管理](https://bailian.console.aliyun.com/?tab=app#/skill) 页面查看并添加，无需配置。  
-   - 自定义 Skill：按规范编写 `SKILL.md`，打包为 ZIP（≤10 MB），通过控制台「组件 > Skill 管理 > 自定义 Skill」上传。
-
-2. **添加到智能体**  
-   - 方式一：从 Skill 详情页点击「添加到智能体」，选择目标应用；  
-   - 方式二：进入智能体「应用配置」→「技能」区域，点击 Skill 右侧 `+` 号添加。
-
-3. **测试调用**  
-   在应用配置页右侧对话窗格中发送符合 `description` 触发条件的请求（如“把附件里的 CSV 按销售额降序排列并导出为 Excel”），观察 Skill 是否被调用及输出是否符合预期。
+1. **添加 Skill**：  
+   - 在控制台 **组件 > Skill 管理** 页面，选择官方 Skill 卡片点击 **添加到智能体**；或进入目标智能体的 **应用配置 > 技能** 区域，点击 `+` 按钮从列表选取。  
+2. **测试调用**：  
+   - 在应用配置页右侧对话窗格中输入符合 `description` 触发条件的自然语言指令（如 `把附件里的销售报表.xlsx 按季度汇总并高亮超预算项`），观察是否自动调用对应 Skill 并返回预期文件。  
+3. **更新自定义 Skill**：  
+   - 修改本地 ZIP 包中的 `SKILL.md`（尤其优化 `description`），重新上传同名包即可创建新版本；已绑定该 Skill 的智能体会在下次请求时自动加载最新版，无需重启或重新配置——此机制已在 [Skill (raw/application-user-guide/skill/introduction-to-skill.md)](../../raw/application-user-guide/skill/introduction-to-skill.md) 中明确说明。
 
 ## 限制和注意事项
 
-- **沙箱限制**：所有 Skill 运行于隔离 Python 沙箱，禁用 `os.system`、`subprocess`、网络外连（除百炼内置文件服务外）、持久化磁盘写入等高危操作。
-- **版本更新**：重新上传同名 ZIP 包将创建新版本，已添加该 Skill 的智能体**自动切换至最新版本**（官方 Skill 强制同步，自定义 Skill 同步策略相同）。
-- **调试建议**：若 Skill 未被调用，优先检查 `description` 是否覆盖用户实际表达（如是否遗漏口语化触发词），而非修改代码逻辑；可参考 [Skill (raw/application-user-guide/skill/introduction-to-skill.md)](../../raw/application-user-guide/skill/introduction-to-skill.md) 中 xlsx Skill 的完整 description 示例优化表述。
-- **命名冲突**：同一账号下 `name` 字段全局唯一，上传重名 Skill 将被拒绝，错误提示明确指向 `SKILL.md` 中的 `name` 值。
+- **大小限制**：ZIP 包总大小 ≤ 10 MB，超出将导致上传失败。  
+- **审查延迟**：自定义 Skill 上传后需约 2 分钟完成内容审查（校验 `SKILL.md` 格式、字段完整性及 ZIP 结构），期间无法添加至应用。  
+- **描述质量强依赖**：`description` 缺乏具体触发词或未明确排除边界场景，将直接导致误调用或漏调用；建议严格遵循文档中列出的四项编写建议。  
+- **无状态执行**：每个 Skill 调用均为独立会话，不共享上下文或临时文件，多次调用间无隐式状态传递。  
+- **调试支持弱**：当前不提供 Skill 内部日志输出或单步执行追踪能力，问题定位主要依赖 `description` 重写与对话样本迭代测试。
 
 ## 来源文档
 

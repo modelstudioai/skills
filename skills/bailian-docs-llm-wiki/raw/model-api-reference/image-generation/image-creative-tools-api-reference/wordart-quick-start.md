@@ -8,7 +8,7 @@ WordArt锦书，围绕文字、特别是汉字的使用场景，通过简单的�
 
 ## 模型调用
 
-1.  WordArt锦书-文字变形：[文字变形API详情](raw/model-api-reference/image-generation/image-creative-tools-api-reference/wordart-quick-start/word-transformer.md)
+1.  WordArt锦书-文字变形：[文字变形API详情](https://help.aliyun.com/zh/model-studio/word-transformer)
 2.  WordArt锦书-文字纹理生成：[文字纹理生成API详情](raw/model-api-reference/image-generation/image-creative-tools-api-reference/wordart-quick-start/fill-texture-effect-api.md)
 
 ## 功能介绍
@@ -155,4 +155,4 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/wordart/tex
 
 ## API参考
 
-有关WordArt锦书API的详细调用请参见[文字纹理生成API详情](raw/model-api-reference/image-generation/image-creative-tools-api-reference/wordart-quick-start/fill-texture-effect-api.md)、[文字变形API详情](raw/model-api-reference/image-generation/image-creative-tools-api-reference/wordart-quick-start/word-transformer.md)。
+有关WordArt锦书API的详细调用请参见[文字纹理生成API详情](raw/model-api-reference/image-generation/image-creative-tools-api-reference/wordart-quick-start/fill-texture-effect-api.md)、[文字变形API详情](https://help.aliyun.com/zh/model-studio/word-transformer)。

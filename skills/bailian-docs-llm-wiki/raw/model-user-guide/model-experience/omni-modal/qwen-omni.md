@@ -1465,9 +1465,7 @@ const completion = await openai.chat.completions.create({
         include_usage: true
     },
     // 开启联网搜索
-    extra_body: {
-        enable_search: true
-    }
+    enable_search: true
 });
 
 console.log("模型回复（包含实时信息）：");
@@ -1577,7 +1575,7 @@ const completion = await openai.chat.completions.create({
         include_usage: true
     },
     // 开启/关闭思考模式，在思考模式下不支持输出音频；qwen-omni-turbo不支持设置enable_thinking。
-    extra_body:{'enable_thinking': true},
+    enable_thinking: true,
     //  设置输出数据的模态，非思考模式下当前支持两种：["text","audio"]、["text"]，思考模式仅支持：["text"]
     modalities: ["text"],
     // 设置音色，思考模式下不支持设置audio参数

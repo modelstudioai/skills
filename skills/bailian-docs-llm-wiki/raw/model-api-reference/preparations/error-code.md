@@ -781,7 +781,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 ### request timeout after 23 seconds.
 
-**原因：** 超过23秒未向服务发送数据。该报错信息在使用[实时语音合成（Sambert）](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/sambert-speech-synthesis.md)、[语音识别（Paraformer）](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/paraformer-real-time-speech-recognition-api-reference.md)和[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis.md)时产生。
+**原因：** 超过23秒未向服务发送数据。该报错信息在使用[实时语音合成（Sambert）](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/sambert-speech-synthesis.md)、[语音识别（Paraformer）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-api-reference)和[实时语音合成（Qwen-Audio-TTS/CosyVoice）](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis.md)时产生。
 
 **解决方案：** 请检查为什么长时间未向服务器发送数据。如果长时间（超过23秒）不向服务端发送消息，请及时结束任务。
 
@@ -1076,7 +1076,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 ### The audio file cannot be downloaded.
 
-**原因：** 使用[语音识别（Paraformer）](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/paraformer-real-time-speech-recognition-api-reference.md)录音文件识别，待识别文件下载失败。
+**原因：** 使用[语音识别（Paraformer）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-api-reference)录音文件识别，待识别文件下载失败。
 
 **解决方案：** 请检查待识别音频文件URL是否可通过公网访问。
 

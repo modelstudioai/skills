@@ -170,7 +170,7 @@ PTU 为预留资源，未满负荷使用也持续计费。建议根据实际峰�
 
 ### 异步批处理（Batch API）
 
-数据清洗、离线分析等无实时性要求的任务，可使用 [Batch API](https://help.aliyun.com/zh/model-studio/batch-inference) 批量提交。任务在低峰期异步执行，不受在线限流约束。
+数据清洗、离线分析等无实时性要求的任务，可使用 [Batch API](raw/model-user-guide/model-experience/text-generation-model/batch-inference.md) 批量提交。任务在低峰期异步执行，不受在线限流约束。
 
 适用场景：数据标注、日志分析、批量摘要等允许数小时至数天返回结果的任务。费用通常低于实时 API。
 

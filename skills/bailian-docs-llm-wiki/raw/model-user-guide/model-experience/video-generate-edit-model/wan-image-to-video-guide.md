@@ -6,7 +6,7 @@
 -   **音频能力**：支持自动配音或上传音频，实现声画同步。
 -   **多镜头叙事**：可生成包含多个镜头的视频，镜头切换时保持主体一致。
 
-**快速入口：**在线体验（[北京](https://bailian.console.aliyun.com/cn-beijing/model/experience/vision)｜[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/experience/vision)｜[弗吉尼亚](https://bailian.console.aliyun.com/us-east-1/model/experience/vision)）**｜**[API参考](https://help.aliyun.com/zh/model-studio/image-to-video-general-api-reference)
+**快速入口：**在线体验（[北京](https://bailian.console.aliyun.com/cn-beijing/model/experience/vision)｜[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/experience/vision)｜[弗吉尼亚](https://bailian.console.aliyun.com/us-east-1/model/experience/vision)）**｜**[API参考](raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)
 
 ## 快速开始
 
@@ -932,7 +932,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 ## API文档
 
-[万相-图生视频2.7 API参考](https://help.aliyun.com/zh/model-studio/image-to-video-general-api-reference)
+[万相-图生视频2.7 API参考](raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)
 
 ## 常见问题
 

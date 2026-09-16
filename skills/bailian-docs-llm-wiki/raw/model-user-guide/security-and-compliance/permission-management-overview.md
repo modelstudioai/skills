@@ -669,7 +669,7 @@ AliyunBSSOrderAccess
 2.  **若需要通过百炼的控制台调用**，需要在百炼控制台左侧导航栏中选择**账号管理**，找到目标 RAM 用户并单击**权限管理**，为该用户添加：（需要超级管理员或业务空间管理员操作）
     
     1.  **模型体验-操作** 权限，用于在控制台上调用模型。
-    2.  **批量推理-操作** 权限，用于支持 [批量推理](https://help.aliyun.com/zh/model-studio/batch-inference)功能。
+    2.  **批量推理-操作** 权限，用于支持 [批量推理](raw/model-user-guide/model-experience/text-generation-model/batch-inference.md)功能。
     3.  **模型监控-操作** 权限，用于查看模型调用、评测的 Token 消耗量。
 3.  **若需要通过百炼的 API 调用，**需要为 RAM 用户在对应业务空间创建或分配 API Key，更多细节请参考本文的：[API Key 权限](https://help.aliyun.com/zh/model-studio/permission-management-overview#f2704153a055r)。（需要超级管理员或业务空间管理员操作）
     

@@ -1,19 +1,19 @@
 {
   "updatedAt": "2026-09-16",
-  "totalFamilies": 177,
-  "totalModels": 408,
+  "totalFamilies": 179,
+  "totalModels": 416,
   "profileCoverage": {
-    "full": 367,
-    "partial": 41,
-    "structured-only": 0,
+    "full": 356,
+    "partial": 59,
+    "structured-only": 1,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 39,
     "IG": 31,
     "VG": 26,
+    "TTS": 16,
     "Reasoning": 15,
-    "TTS": 14,
     "ASR": 14,
     "VU": 9,
     "Realtime-ASR": 8,
@@ -27,8 +27,8 @@
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 108,
-    "qwen-domain-model": 33,
+    "qwen": 110,
+    "qwen-domain-model": 34,
     "wan": 14,
     "mini-max": 4,
     "pixverse": 4,
@@ -221,6 +221,28 @@
       "itemCount": 1,
       "items": [
         "animate-anyone-template-gen2"
+      ]
+    },
+    {
+      "slug": "cosyvoice",
+      "name": "CosyVoice大模型",
+      "primaryCapability": "TTS",
+      "capabilities": [
+        "TTS"
+      ],
+      "providers": [
+        "qwen",
+        "qwen-domain-model"
+      ],
+      "itemCount": 7,
+      "items": [
+        "cosyvoice-clone-v1",
+        "cosyvoice-v1",
+        "cosyvoice-v2",
+        "cosyvoice-v3-flash",
+        "cosyvoice-v3-plus",
+        "cosyvoice-v3.5-flash",
+        "cosyvoice-v3.5-plus"
       ]
     },
     {
@@ -1914,6 +1936,21 @@
       "itemCount": 1,
       "items": [
         "qwen3-tts-instruct-flash-realtime"
+      ]
+    },
+    {
+      "slug": "qwen3-tts-instruct-flash",
+      "name": "Qwen3-TTS-Instruct-Flash",
+      "primaryCapability": "TTS",
+      "capabilities": [
+        "TTS"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen3-tts-instruct-flash"
       ]
     },
     {

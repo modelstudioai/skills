@@ -9095,14 +9095,26 @@ Agent API 的 `instructions` 字段可通过提示词指定 JSON 输出格式，
 先调用检索接口获取知识库文本切片，再将切片作为上下文调用 DashScope 模型接口，并设置 `response_format={"type": "json_object"}`，即可得到结构化输出。
 
 ```
+import os
 import dashscope
 from alibabacloud_bailian20231229.client import Client
 from alibabacloud_bailian20231229 import models
+from alibabacloud_tea_openapi.models import Config
+from alibabacloud_tea_util.models import RuntimeOptions
+
+# 0. 初始化客户端
+client = Client(Config(
+    access_key_id=os.environ.get("ALIBABA_CLOUD_ACCESS_KEY_ID"),
+    access_key_secret=os.environ.get("ALIBABA_CLOUD_ACCESS_KEY_SECRET"),
+    endpoint="bailian.cn-beijing.aliyuncs.com"
+))
+workspace_id = "llm-xxx"  # 业务空间 ID
+runtime = RuntimeOptions()
 
 # 1. 检索知识库
 retrieve_req = models.RetrieveRequest(index_id="xxx", query="产品信息")
 retrieve_resp = client.retrieve_with_options(workspace_id, retrieve_req, {}, runtime)
-context = "\n".join([n.content for n in retrieve_resp.body.data.nodes])
+context = "\n".join([n.text for n in retrieve_resp.body.data.nodes])
 
 # 2. 调用模型设置 JSON 输出
 resp = dashscope.Generation.call(

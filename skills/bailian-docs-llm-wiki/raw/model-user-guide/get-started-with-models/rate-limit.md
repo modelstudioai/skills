@@ -145,7 +145,7 @@
     
 4.  **拆分任务**：长对话或大型文档会快速消耗大量 Token。将大批量任务拆分为小批次，分时段提交。
     
-5.  **批量推理**：无需实时响应时，使用[批量推理](https://help.aliyun.com/zh/model-studio/batch-inference)（Batch API）。批量请求不受实时限流约束，但需考虑排队和处理时间。
+5.  **批量推理**：无需实时响应时，使用[批量推理](raw/model-user-guide/model-experience/text-generation-model/batch-inference.md)（Batch API）。批量请求不受实时限流约束，但需考虑排队和处理时间。
     
 
 ### 如何控制 Token 用量或费用支出？

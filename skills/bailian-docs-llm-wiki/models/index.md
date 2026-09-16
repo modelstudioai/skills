@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 177 个模型家族 · 408 个主干模型 · 更新于 2026-09-16
+> 自动生成 · 共 179 个模型家族 · 416 个主干模型 · 更新于 2026-09-16
 
 **机器查询走结构化文件**：
 
@@ -218,6 +218,41 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [表情包Emoji-detect](groups/emoji-detect-v1.json) — 表情包Emoji-Detect是辅助表情包Emoji生成的图像检测模型，用于检测图片中的人物形象是否符合视频生成要求。
   - 模型：`emoji-detect-v1`
 
+## 语音合成 `TTS` — 16 个家族
+
+- [CosyVoice大模型](groups/cosyvoice.json) — 基于新一代生成式语音大模型，CosyVoice将文本理解和语音生成技术深度融合，能够精准解析并诠释各种文本内容，将其转化为如同真人发声般的自然语音，带来高度拟人化的自然语音合成体验。
+  - 模型：`cosyvoice-clone-v1`, `cosyvoice-v1`, `cosyvoice-v2`, `cosyvoice-v3-flash`, `cosyvoice-v3-plus`, `cosyvoice-v3.5-flash`, `cosyvoice-v3.5-plus`
+- [MiniMax-Speech系列语音模型](groups/MiniMax-speech-market-place.json) — 由MiniMax提供的MiniMax-Speech系列语音模型API服务。
+  - 模型：`MiniMax/speech-02-hd`, `MiniMax/speech-02-turbo`, `MiniMax/speech-2.8-hd`, `MiniMax/speech-2.8-turbo`
+- [Qwen-TTS](groups/qwen-tts.json) — 千问系列首个语音合成模型，支持中文、英文、中英混合输入。自适应根据输入文本调整输出语气，音色真实自然，支持输入输出全流式。
+  - 模型：`qwen-tts`, `qwen-tts-latest`
+- [Qwen-声音复刻](groups/qwen-voice-enrollment.json) — 千问voice-enrollment模型是千问语音模型的声音复刻系列模型，仅需5s以上的音频，即可迅速复刻高相似度声音。结合qwen3-tts-vc-realtime模型使用，可将一个人的声音高保真复…
+  - 模型：`qwen-voice-enrollment`
+- [Qwen-声音设计](groups/qwen-voice-design.json) — Qwen-Voice-Design模型是千问语音模型的声音设计系列模型，仅需输入简单的文字描述，即可迅速设计出符合要求的相关声音。结合qwen3-tts-vd-realtime模型使用，可设计输出11…
+  - 模型：`qwen-voice-design`
+- [Qwen3-TTS-Flash](groups/qwen3-tts-flash.json) — Qwen3-TTS-Flash模型是通义实验室最新推出的离线语音合成大模型，不仅拥有17种高表现力的拟人音色，且能低延迟高稳定地合成音频；同时支持多种语言，方言，支持同一音色多语言输出。该模型经过海量…
+  - 模型：`qwen3-tts-flash`
+- [Qwen3-TTS-Flash-Realtime](groups/qwen3-tts-flash-realtime.json) — Qwen3-TTS-Flash-Realtime模型是通义实验室最新的实时语音合成大模型，不仅拥有17种高表现力的拟人音色，且能低延迟高稳定地实时合成音频；同时支持多种语言，方言，支持同一音色多语言输…
+  - 模型：`qwen3-tts-flash-realtime`
+- [Qwen3-TTS-Instruct-Flash](groups/qwen3-tts-instruct-flash.json) — Qwen3-TTS-Flash模型是通义实验室最新推出的实时语音合成大模型，Instruct模型可通过自然语言进行合成效果的处理，确保在不同语境下，合成情感、表达高度贴合的语音。目前支持25个音色的中…
+  - 模型：`qwen3-tts-instruct-flash`
+- [qwen3-tts-instruct-flash-realtime](groups/qwen3-tts-instruct-flash-realtime.json) — 通义千问3-TTS-Flash模型是通义最新推出的实时语音合成大模型，Instruct模型可通过自然语言进行合成效果的处理，确保在不同语境下，合成情感、表达高度贴合的语音。目前支持25个音色的中英文I…
+  - 模型：`qwen3-tts-instruct-flash-realtime`
+- [Qwen3-TTS-VC](groups/qwen3-tts-vc.json) — Qwen3-TTS-Flash模型是通义实验室最新推出的实时语音合成大模型，可对qwen-voice-enrollment服务复刻的声音进行高保真实时语音合成，且同一音色支持11个语种的语音输出。该模…
+  - 模型：`qwen3-tts-vc-2026-01-22`
+- [Qwen3-TTS-VC-Realtime](groups/qwen3-tts-vc-realtime.json) — Qwen3-TTS-VC-Realtime模型是通义实验室最新推出的实时语音合成大模型，可对qwen3-voice-enrollment服务复刻的声音进行高保真实时语音合成，且同一音色支持11个语种的…
+  - 模型：`qwen3-tts-vc-realtime-2026-01-15`
+- [Qwen3-TTS-VD](groups/qwen3-tts-vd.json) — Qwen3-TTS-VD模型是通义实验室最新推出的实时语音合成大模型，可对qwen3-voice-design服务设计的声音进行高保真实时语音合成，且同一音色支持11个语种的语音输出。该模型经过海量数…
+  - 模型：`qwen3-tts-vd-2026-01-26`
+- [Qwen3-TTS-VD-Realtime](groups/qwen3-tts-vd-realtime.json) — Qwen3-TTS-VD模型是通义实验室最新推出的实时语音合成大模型，可对qwen3-voice-design服务设计的声音进行高保真实时语音合成，且同一音色支持11个语种的语音输出。该模型经过海量数…
+  - 模型：`qwen3-tts-vd-realtime-2026-01-15`
+- [Sambert语音合成](groups/sambert.json) — 提供高效的文字转语音服务。该技术具备推理速度快、合成效果卓越、读音精准、韵律自然、声音还原度高以及表现力强等优点。此外，用户可以选择开启字级别和音素级别的时间戳，用于生成字幕或驱动数字人的嘴型。
+  - 模型：`sambert-beth-v1`, `sambert-betty-v1`, `sambert-brian-v1`, `sambert-cally-v1`, `sambert-camila-v1`, `sambert-cindy-v1`, `sambert-clara-v1`, `sambert-donna-v1`, `sambert-eva-v1`, `sambert-hanna-v1`, `sambert-indah-v1`, `sambert-perla-v1`, `sambert-waan-v1`, `sambert-zhichu-v1`, `sambert-zhida-v1`, `sambert-zhide-v1`, `sambert-zhifei-v1`, `sambert-zhigui-v1`, `sambert-zhihao-v1`, `sambert-zhijia-v1`, `sambert-zhijing-v1`, `sambert-zhilun-v1`, `sambert-zhimao-v1`, `sambert-zhimiao-emo-v1`, `sambert-zhiming-v1`, `sambert-zhimo-v1`, `sambert-zhina-v1`, `sambert-zhinan-v1`, `sambert-zhiqi-v1`, `sambert-zhiqian-v1`, `sambert-zhiru-v1`, `sambert-zhishu-v1`, `sambert-zhishuo-v1`, `sambert-zhistella-v1`, `sambert-zhiting-v1`, `sambert-zhiwei-v1`, `sambert-zhixiang-v1`, `sambert-zhixiao-v1`, `sambert-zhiya-v1`, `sambert-zhiye-v1`, `sambert-zhiying-v1`, `sambert-zhiyuan-v1`, `sambert-zhiyue-v1`
+- [大模型声音复刻及声音设计](groups/voice-enrollment.json) — 大模型声音复刻服务依托先进的大模型技术进行特征提取，无需训练过程就可以完成声音的复刻。仅需提供极短的音频，即可迅速生成高度相似且听感自然的定制声音。 大模型声音设计使用FunAudioGen-VD模型…
+  - 模型：`voice-enrollment`
+- [音乐生成](groups/fun-music.json) — 百聆音乐生成大模型（Fun音乐大模型）支持输入开放性歌曲的创作要求或歌词，生成整首男/女声演唱的中文或英文歌曲。歌曲通俗易懂，情绪由浅入深，是人类灵感与大模型能力的完美结合。
+  - 模型：`fun-music-preview`, `fun-music-v1`
+
 ## 推理 `Reasoning` — 15 个家族
 
 - [MiniMax](groups/MiniMax-M2.1.json) — MiniMax推出的旗舰级开源大模型，聚焦真实世界复杂任务，包含MiniMax-M2.1、MiniMax-M2.5等开源模型。
@@ -250,37 +285,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen3.8-max`, `qwen3.8-max-0902`
 - [智谱GLM系列文本模型](groups/zhipu-models-market-place.json) — 由智谱提供的GLM系列文本模型API服务
   - 模型：`ZHIPU/GLM-5`, `ZHIPU/GLM-5.1`, `ZHIPU/GLM-5.2`, `ZHIPU/GLM-5.3`, `ZHIPU/GLM-5.3-Flash`
-
-## 语音合成 `TTS` — 14 个家族
-
-- [MiniMax-Speech系列语音模型](groups/MiniMax-speech-market-place.json) — 由MiniMax提供的MiniMax-Speech系列语音模型API服务。
-  - 模型：`MiniMax/speech-02-hd`, `MiniMax/speech-02-turbo`, `MiniMax/speech-2.8-hd`, `MiniMax/speech-2.8-turbo`
-- [Qwen-TTS](groups/qwen-tts.json) — 千问系列首个语音合成模型，支持中文、英文、中英混合输入。自适应根据输入文本调整输出语气，音色真实自然，支持输入输出全流式。
-  - 模型：`qwen-tts`, `qwen-tts-latest`
-- [Qwen-声音复刻](groups/qwen-voice-enrollment.json) — 千问voice-enrollment模型是千问语音模型的声音复刻系列模型，仅需5s以上的音频，即可迅速复刻高相似度声音。结合qwen3-tts-vc-realtime模型使用，可将一个人的声音高保真复…
-  - 模型：`qwen-voice-enrollment`
-- [Qwen-声音设计](groups/qwen-voice-design.json) — Qwen-Voice-Design模型是千问语音模型的声音设计系列模型，仅需输入简单的文字描述，即可迅速设计出符合要求的相关声音。结合qwen3-tts-vd-realtime模型使用，可设计输出11…
-  - 模型：`qwen-voice-design`
-- [Qwen3-TTS-Flash](groups/qwen3-tts-flash.json) — Qwen3-TTS-Flash模型是通义实验室最新推出的离线语音合成大模型，不仅拥有17种高表现力的拟人音色，且能低延迟高稳定地合成音频；同时支持多种语言，方言，支持同一音色多语言输出。该模型经过海量…
-  - 模型：`qwen3-tts-flash`
-- [Qwen3-TTS-Flash-Realtime](groups/qwen3-tts-flash-realtime.json) — Qwen3-TTS-Flash-Realtime模型是通义实验室最新的实时语音合成大模型，不仅拥有17种高表现力的拟人音色，且能低延迟高稳定地实时合成音频；同时支持多种语言，方言，支持同一音色多语言输…
-  - 模型：`qwen3-tts-flash-realtime`
-- [qwen3-tts-instruct-flash-realtime](groups/qwen3-tts-instruct-flash-realtime.json) — 通义千问3-TTS-Flash模型是通义最新推出的实时语音合成大模型，Instruct模型可通过自然语言进行合成效果的处理，确保在不同语境下，合成情感、表达高度贴合的语音。目前支持25个音色的中英文I…
-  - 模型：`qwen3-tts-instruct-flash-realtime`
-- [Qwen3-TTS-VC](groups/qwen3-tts-vc.json) — Qwen3-TTS-Flash模型是通义实验室最新推出的实时语音合成大模型，可对qwen-voice-enrollment服务复刻的声音进行高保真实时语音合成，且同一音色支持11个语种的语音输出。该模…
-  - 模型：`qwen3-tts-vc-2026-01-22`
-- [Qwen3-TTS-VC-Realtime](groups/qwen3-tts-vc-realtime.json) — Qwen3-TTS-VC-Realtime模型是通义实验室最新推出的实时语音合成大模型，可对qwen3-voice-enrollment服务复刻的声音进行高保真实时语音合成，且同一音色支持11个语种的…
-  - 模型：`qwen3-tts-vc-realtime-2026-01-15`
-- [Qwen3-TTS-VD](groups/qwen3-tts-vd.json) — Qwen3-TTS-VD模型是通义实验室最新推出的实时语音合成大模型，可对qwen3-voice-design服务设计的声音进行高保真实时语音合成，且同一音色支持11个语种的语音输出。该模型经过海量数…
-  - 模型：`qwen3-tts-vd-2026-01-26`
-- [Qwen3-TTS-VD-Realtime](groups/qwen3-tts-vd-realtime.json) — Qwen3-TTS-VD模型是通义实验室最新推出的实时语音合成大模型，可对qwen3-voice-design服务设计的声音进行高保真实时语音合成，且同一音色支持11个语种的语音输出。该模型经过海量数…
-  - 模型：`qwen3-tts-vd-realtime-2026-01-15`
-- [Sambert语音合成](groups/sambert.json) — 提供高效的文字转语音服务。该技术具备推理速度快、合成效果卓越、读音精准、韵律自然、声音还原度高以及表现力强等优点。此外，用户可以选择开启字级别和音素级别的时间戳，用于生成字幕或驱动数字人的嘴型。
-  - 模型：`sambert-beth-v1`, `sambert-betty-v1`, `sambert-brian-v1`, `sambert-cally-v1`, `sambert-camila-v1`, `sambert-cindy-v1`, `sambert-clara-v1`, `sambert-donna-v1`, `sambert-eva-v1`, `sambert-hanna-v1`, `sambert-indah-v1`, `sambert-perla-v1`, `sambert-waan-v1`, `sambert-zhichu-v1`, `sambert-zhida-v1`, `sambert-zhide-v1`, `sambert-zhifei-v1`, `sambert-zhigui-v1`, `sambert-zhihao-v1`, `sambert-zhijia-v1`, `sambert-zhijing-v1`, `sambert-zhilun-v1`, `sambert-zhimao-v1`, `sambert-zhimiao-emo-v1`, `sambert-zhiming-v1`, `sambert-zhimo-v1`, `sambert-zhina-v1`, `sambert-zhinan-v1`, `sambert-zhiqi-v1`, `sambert-zhiqian-v1`, `sambert-zhiru-v1`, `sambert-zhishu-v1`, `sambert-zhishuo-v1`, `sambert-zhistella-v1`, `sambert-zhiting-v1`, `sambert-zhiwei-v1`, `sambert-zhixiang-v1`, `sambert-zhixiao-v1`, `sambert-zhiya-v1`, `sambert-zhiye-v1`, `sambert-zhiying-v1`, `sambert-zhiyuan-v1`, `sambert-zhiyue-v1`
-- [大模型声音复刻及声音设计](groups/voice-enrollment.json) — 大模型声音复刻服务依托先进的大模型技术进行特征提取，无需训练过程就可以完成声音的复刻。仅需提供极短的音频，即可迅速生成高度相似且听感自然的定制声音。 大模型声音设计使用FunAudioGen-VD模型…
-  - 模型：`voice-enrollment`
-- [音乐生成](groups/fun-music.json) — 百聆音乐生成大模型（Fun音乐大模型）支持输入开放性歌曲的创作要求或歌词，生成整首男/女声演唱的中文或英文歌曲。歌曲通俗易懂，情绪由浅入深，是人类灵感与大模型能力的完美结合。
-  - 模型：`fun-music-preview`, `fun-music-v1`
 
 ## 语音识别 `ASR` — 14 个家族
 

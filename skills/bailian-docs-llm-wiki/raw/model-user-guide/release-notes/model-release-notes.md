@@ -589,7 +589,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 调优新增视觉理解模型类型支持
 
-模型调优新增视觉理解(VL)模型类型支持，可对多模态模型进行定制训练，[了解详情](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)
+模型调优新增视觉理解(VL)模型类型支持，可对多模态模型进行定制训练，[了解详情](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide)
 
 1月21日
 

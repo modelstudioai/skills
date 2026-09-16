@@ -1,47 +1,50 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台中模型主动识别用户意图、生成结构化工具调用请求，并交由系统或开发者后端执行外部操作的核心能力。它使大模型不仅能生成文本，还能安全、可控地与数据库、API、插件等外部系统交互，是构建 Agent、自动化工作流和增强型应用的关键机制。
+函数调用（Function Calling）是百炼平台中大模型主动识别用户意图、生成结构化工具调用指令，并交由平台执行外部操作的核心能力。它不是简单的 API 转发，而是模型在推理过程中基于上下文动态选择工具、填充参数、处理返回结果并决定是否继续调用的闭环机制。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **Sandbox 环境**：在沙箱中调试时，函数调用能力默认启用（需模型支持，如 `qwen-max`、`qwen-plus`）。模型会根据 system [prompt](../guides/prompt.md) 和对话上下文，输出符合 OpenAI-style `function_call` 格式的 JSON 结构；开发者可通过沙箱的 `chat/completions` 接口观察完整调用链路（含工具选择、参数填充、结果注入），用于验证工具 Schema 设计与 [prompt](../guides/prompt.md) 工程效果。
+函数调用在百炼平台并非单一接口功能，而是贯穿多个能力层的统一语义抽象，具体体现为以下四类场景：
 
-- **Application Call（应用调用）**：当应用配置了工具（内置插件或自定义函数），平台会在推理过程中自动启用函数调用流程。模型返回 `tool_calls` 后，百炼服务层自动执行对应插件（如夸克搜索、代码解释器）或转发至开发者注册的 Webhook；执行结果将作为 `tool_message` 注入下一轮上下文，实现多步推理闭环。该过程对调用方透明，无需手动解析/触发。
+- **Managed Agents（托管智能体）**：Agent 在 `Session` 中自动触发工具调用。当模型输出符合 `Skill` 定义的 JSON Schema 时，平台自动解析、校验参数、调用对应技能（如数据库查询、HTTP 请求），并将结果注入后续上下文。调用过程受 `max_iterations` 限制，且失败可通过 `Webhook` 实时通知。
 
-- **Application Monitoring（应用观测）**：函数调用被作为独立 Span 类型埋点上报，可观测字段包括 `tool_name`、`tool_input`（脱敏）、`execution_duration_ms`、`status`（success/failed/timeouted）及错误码（如 `TOOL_EXECUTION_TIMEOUT`）。开发者可通过 `trace_id` 下钻分析某次调用中函数调用是否被触发、耗时是否异常、失败是否源于参数校验或网络超时。
+- **Sandbox（沙箱环境）**：用于调试函数调用逻辑本身。通过 `POST /v1/sandbox/instances/{id}/chat/completions` 发起请求时，若传入 `tools`（OpenAI 兼容格式）或 `plugins` 参数，模型将尝试生成符合 schema 的调用指令；沙箱支持流式返回原始 `tool_calls` 字段，便于验证参数生成准确性与格式合规性。
 
-- **Application Support（应用支持）**：平台提供两类函数调用支持：  
-  - **内置插件**：开箱即用（如计算器、图片生成），无需注册，仅需在应用配置中启用；  
-  - **自定义函数**：需按 OpenAPI 3.0 Schema 注册函数元信息（名称、描述、参数类型与约束），百炼模型据此理解语义并生成合法参数。注意：调用时仅 `Authorization` Header 可透传，其余自定义 Header 将被丢弃。
+- **Plug-in（插件）与 Application Support（应用支持）**：以插件形式封装函数调用能力。启用 `enable_plugins=true` 后，模型可调用控制台已开通的官方或自定义插件（如“天气查询”“二维码生成”）。所有插件调用均遵循统一协议——输入经 `args` 透传，仅支持 `Authorization` header，响应需为合法 JSON，否则视为执行失败。
+
+- **Model Context Protocol（MCP）**：提供标准化、可扩展的函数调用基础设施。MCP 将各类外部服务（地图、搜索、私有知识库等）抽象为 `tool`，通过 `tool.name` 和 `inputSchema` 声明式注册。在智能体或工作流中启用 MCP 后，模型可跨服务组合调用（如“查天气 + 绘图”），平台负责协议适配、认证透传（`headers`/`env`）与错误降级。
+
+> ⚠️ 注意：纯千问 API（如 `/v1/chat/completions`）**不支持原生函数调用**；必须通过 Managed Agents、Sandbox、Plug-in 或 MCP 等平台级封装才能启用该能力。
 
 ## 关键参数和配置
 
-- **工具注册 Schema**（自定义函数必需）：  
-  - `name`（string，必填）：函数唯一标识，需符合 Python 变量命名规范（字母/数字/下划线，不以数字开头）；  
-  - `description`（string，必填）：简洁说明函数用途（影响模型调用准确性）；  
-  - `parameters`（object，必填）：JSON Schema 定义，建议显式声明 `type`、`description` 及 `required` 字段；避免使用过于宽泛的 `anyOf` 或嵌套过深结构。
+函数调用行为由以下关键参数协同控制，开发者需按场景显式配置：
 
-- **调用控制参数**（通过 `parameters` 透传至应用或沙箱）：  
-  - `enable_function_calling`: bool，默认 `true`；设为 `false` 可临时禁用所有工具调用（模型将纯文本响应）；  
-  - `max_function_calls`: int，默认 `3`；限制单次推理中最多触发的函数调用次数，防止无限循环；  
-  - `function_call_timeout_ms`: int，默认 `10000`（10 秒）；单个函数执行超时阈值，超时后标记为失败并注入错误消息。
+| 参数名 | 所属场景 | 类型 | 必填 | 说明 |
+|--------|----------|------|------|------|
+| `tools` | Sandbox、MCP（部分模式） | array | 否 | OpenAI 兼容格式：`[{ "type": "function", "function": { "name": "...", "parameters": {...} } }]`。模型据此生成 `tool_calls`。 |
+| `plugins` | Plug-in、Application Support | array | 否 | 百炼专有格式：`[{ "name": "plugin_id", "args": {...} }]`。需配合 `enable_plugins=true` 使用。 |
+| `skills` | Managed Agents | array | 是（若需工具能力） | Agent 创建时绑定：每个元素含 `id`（指向 Skill 资源）及可选 `config`，定义工具元信息与运行时配置。 |
+| `enable_plugins` | Plug-in | boolean | 是（启用插件时） | 显式开关，即使 `plugins` 非空，此字段为 `false` 时仍禁用调用。 |
+| `tool.name` / `inputSchema` | MCP | string / object | 是（注册 MCP 服务时） | 工具唯一标识与参数约束 Schema，直接影响模型能否正确生成调用指令。 |
+| `plugin_timeout_ms` / `timeout` | Plug-in / Sandbox | integer | 否 | 插件或沙箱实例超时时间（毫秒/秒），超时后自动降级，避免阻塞推理流。 |
 
-- **监控相关配置**（影响可观测性）：  
-  - `enable_monitoring`（全局开关）：必须开启才能采集函数调用 Span；  
-  - `sampling_rate`：建议生产环境设为 `0.1–0.3`，避免高并发下埋点开销过大。
+> ✅ 最佳实践：始终为工具定义清晰的 `inputSchema`（JSON Schema draft-07 子集），避免使用 `anyOf`/`not`；敏感参数（如 `api_key`）应通过 `env` 或 KMS 凭据注入，**切勿写入 `args` 明文传递**。
 
 ## 面向开发者，简洁实用
 
-- ✅ **调试建议**：在 Sandbox 中先用简单 [prompt](../guides/prompt.md)（如“查今天北京天气”）验证函数是否被触发；检查返回的 `tool_calls` 字段是否存在且 `name` 匹配注册名。  
-- ✅ **Schema 最佳实践**：参数名用小写+下划线（如 `city_name`），避免驼峰；必填参数明确声明 `required: ["city_name"]`；字符串参数加 `minLength`/`maxLength` 约束。  
-- ⚠️ **注意边界**：函数调用不支持跨 [sandbox](../guides/sandbox.md) 实例共享状态；自定义函数 Webhook 必须在 10 秒内返回 HTTP 2xx 响应，否则视为超时；返回体需为 JSON，且顶层字段 `content` 将作为模型下一轮输入。  
-- 🚀 **快速集成**：使用百炼 SDK 的 `App` 类时，直接传入 `tools=[...]` 即可自动注册并启用函数调用，无需手动处理 `tool_calls` 解析与回调。
+- **调试优先**：用 Sandbox 快速验证模型能否生成合法 `tool_calls`，再迁移到 Managed Agents 生产环境。
+- **统一 Schema**：无论使用 Plug-in、MCP 还是自定义 Skill，确保 `inputSchema` 严格匹配后端接口，这是调用成功率的关键。
+- **错误必捕获**：监听 `tool.error`（Webhook）、`plugin_execution_failed`（错误码）或 MCP 协议错误（如 11200058），及时降级或重试。
+- **安全红线**：所有凭证必须通过 `Vault`/`Credential` 或 `env` 注入；API 调用仅支持 `Authorization` header，其他头字段会被丢弃。
+- **性能意识**：单次请求最多 3 个插件 / 20 个 Skill / 5 个 MCP 服务；嵌套调用不支持，需在工具内部实现复合逻辑。
 
 ## 关联主题页
 
+- [managed agents api](../api/managed-agents-api.md)
 - [sandbox](../guides/sandbox.md)
-- [application call](../api/application-call.md)
-- [application monitoring](../guides/application-monitoring.md)
+- [plug in](../guides/plug-in.md)
 - [application support](../guides/application-support.md)
+- [model context protocol](../guides/model-context-protocol.md)
 
 

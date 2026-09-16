@@ -314,7 +314,7 @@ OpenClaw 个人任务管家
 
 把真实困境连同界面要求一起写进提示词，模型产出一个能长期用的用药管家网页。
 
-[查看攻略](https://help.aliyun.com/zh/model-studio/token-plan-playbook-med-reminder)
+[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-med-reminder.md)
 
 生活娱乐
 
