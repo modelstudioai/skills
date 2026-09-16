@@ -550,7 +550,7 @@ RL 数据约束：
 
 图片或视频文件名应在压缩包内全局唯一，即使分布在不同文件夹中。data.jsonl 内只需声明文件名而非文件路径——正确示例：image1.jpg；错误示例：jpg\_folder/image1.jpg。
 
-云存储挂载不支持 zip 压缩包。使用云存储挂载加载数据集时，须将未经压缩的数据集文件夹整体上传到 OSS Bucket，通过 MountStorage 的 file\_path 指定 data.jsonl 文件路径；包含多文件时只需指定 data.jsonl 路径，其余同目录文件自动挂载。云存储挂载详见[使用 API 进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。
+云存储挂载不支持 zip 压缩包。使用云存储挂载加载数据集时，须将未经压缩的数据集文件夹整体上传到 OSS Bucket，通过 MountStorage 的 file\_path 指定 data.jsonl 文件路径；包含多文件时只需指定 data.jsonl 路径，其余同目录文件自动挂载。云存储挂载详见[使用 API 进行模型调优](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide)。
 
 命名示例与目录结构见下文代码块。云存储挂载授权操作见[在控制台进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)，OSS 导入 Bucket 标签打标操作见[训练集与评测集](raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
 
@@ -648,7 +648,7 @@ max\_length 取值区间 500 至 131072 为训练序列长度配置参数，非�
 -   总配额超额：删除历史文件释放空间。
 -   导入数据自动启用 OSS 服务端加密（SSE-OSS，AES256）。
 
-API 调用、认证、SDK、错误码、MountStorage 字段细节见[使用 API 进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。
+API 调用、认证、SDK、错误码、MountStorage 字段细节见[使用 API 进行模型调优](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide)。
 
 API 上传调优文件配额如下：
 

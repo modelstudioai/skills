@@ -1002,7 +1002,7 @@ qwen-max的实时推理服务（[非思考模式](raw/model-user-guide/model-exp
 资源包的抵扣需要满足特定条件，常见原因如下：
 
 1.  模型不匹配：调用的模型与购买的资源包不一致。例如，购买 qwen-max 资源包却调用了 qwen-plus 模型。
-2.  使用了不支持的功能：资源包**不支持抵扣**这些功能产生的费用：[批量推理（Batch）](https://help.aliyun.com/zh/model-studio/batch-inference)、[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)、[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)、[模型部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)。
+2.  使用了不支持的功能：资源包**不支持抵扣**这些功能产生的费用：[批量推理（Batch）](raw/model-user-guide/model-experience/text-generation-model/batch-inference.md)、[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)、[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)、[模型部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)。
 3.  Token 长度超限：对于 qwen-plus 资源包，单次请求输入超过 128K Token 的部分无法抵扣。
 4.  免费额度未用完：系统抵扣顺序为：**免费额度 > 资源包**。资源包仅抵扣免费额度用尽后产生的账单。
 

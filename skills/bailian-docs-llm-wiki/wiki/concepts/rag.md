@@ -1,58 +1,57 @@
 # 检索增强生成
 
-检索增强生成（Retrieval-Augmented Generation，RAG）是一种将大语言模型（LLM）的生成能力与外部知识源的精准检索能力相结合的技术范式。它通过在模型推理前动态检索相关文档片段，并将其作为上下文注入提示（[prompt](../guides/prompt.md)），显著提升回答的事实准确性、领域专业性与时效性，同时降低幻觉风险。
+检索增强生成（Retrieval-Augmented Generation，简称 RAG）是一种将大语言模型（LLM）的生成能力与外部知识源的精准检索能力相结合的技术范式。它通过在模型推理前动态检索相关上下文片段，并将其注入提示词（[prompt](../guides/prompt.md)），使模型在生成回答时能基于最新、私有、领域特定的事实进行推理，从而显著提升回答的准确性、可解释性与可控性。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-在百炼平台，RAG 不是单一功能，而是贯穿多个核心能力的横切技术底座，开发者可根据需求选择不同抽象层级的集成方式：
+在百炼平台中，RAG 不是单一功能，而是贯穿多个能力模块的横切技术模式，开发者可根据需求选择不同抽象层级的实现方式：
 
-- **知识库（Knowledge Base）**：最常用、开箱即用的 RAG 实现。上传私有文档后，平台自动完成解析、分块、向量化与索引构建；调用时自动执行检索 → 重排 → 提示注入 → 生成全流程。适用于客服问答、内部知识助手、合规审查等需强可信度的场景。
+- **知识库（Knowledge Base）**：最完整的 RAG 开箱即用方案。支持文档/图片/音视频等多模态知识索引、混合检索（向量+关键词）、Rerank 排序、多库加权融合，并自动完成“检索→重排序→生成”全链路。适用于构建企业级问答助手、客服知识中枢、培训资料智能检索等场景。
+  
+- **数据连接（Data Connection）**：轻量级运行时 RAG 扩展机制。支持在 `chat` 请求中动态绑定结构化（SQL 查询）或非结构化（OSS 文件）数据源，将查询结果直接注入模型上下文。适用于需实时关联数据库、动态加载配置或临时注入业务数据的场景，但仅限 Qwen 系列模型且单次请求仅支持 1 个数据源。
 
-- **知识检索（Knowledge Search）与知识问答（Knowledge Chat）**：提供更细粒度的控制权。  
-  - `知识检索` 接口返回原始检索结果（含 `score`、`text`、`metadata`），适合需要自定义重排、融合多源结果或构建复杂工作流的开发者；  
-  - `知识问答` 接口则封装为端到端智能体，自动调度检索工具并生成回答，支持多轮对话与多模态输入（如图文混合查询），适合快速上线对话类应用。
+- **知识 API（`/knowledge/search` & `/knowledge/chat`）**：面向自定义 RAG 流程的底层能力接口。`search` 接口返回带分数和元信息的原始切片，供开发者自行编排检索逻辑；`chat` 接口则封装了 Agentic 规划、工具调用与流式生成，适合快速构建对话式知识应用。二者均基于已发布的 `agent_id`，模型与策略由控制台统一配置，API 层不暴露模型选择。
 
-- **数据连接（Data Connection）**：为 RAG 提供数据源头。平台托管型连接器（如文件、表格）将数据导入后直接用于知识库构建；流处理型连接器（如 MySQL、语雀）则通过内置工具（如 `searchMySQL`）在智能体运行时实时查询，实现“检索增强”中的“实时数据增强”。
+- **向量与排序服务（Vector & Rerank）**：RAG 的原子能力底座。开发者可独立调用 `text-embedding-*` 系列模型构建私有向量库，再结合 `qwen3-rerank` 等模型实现高精度重排序。适用于需要完全掌控索引构建、分片策略、混合召回逻辑的高级场景（如多阶段检索、跨模态对齐、自定义打分函数）。
 
-- **框架集成（LlamaIndex / Spring AI Alibaba）**：面向希望保留本地开发灵活性的团队。通过 `DashScopeCloudRetriever` 或 `DashScopeDocumentRetriever`，可将百炼云端知识库无缝接入主流开源框架，复用已有 RAG 工程实践，同时享受百炼的向量模型、重排模型与智能解析能力。
+- **应用层 RAG 增强（Application Support）**：在智能体（Agent）或助手（Assistant）应用中，通过配置知识库作为插件式能力，实现“检索结果自动注入提示词→触发模型生成”的无缝集成。支持多知识库并行检索、结果融合与引用溯源，是低代码构建 RAG 应用的推荐路径。
 
-- **应用评测（Application Evaluation）**：RAG 效果可被系统化度量。评测体系支持对“检索环节”单独归因（如标记“检索失效”“切片不完整”），帮助定位 RAG 流程瓶颈，驱动针对性优化（如调整分块策略、优化 `score_threshold`）。
+> ✅ **关键提示**：所有 RAG 能力均严格受限于地域——中国站仅支持华北2（北京），国际站仅支持新加坡。跨地域调用将失败。
 
 ## 关键参数和配置
 
-RAG 行为主要由以下参数控制，具体可用性取决于所选接口或组件：
+RAG 效果高度依赖以下核心参数，建议在控制台或 API 中按需调优：
 
-| 参数名 | 所属模块 | 类型 | 默认值 | 说明 |
-|--------|----------|------|--------|------|
-| `top_k` | 知识库、LlamaIndex | integer | `3`（知识库） / `5`（`DashScopeCloudRetriever`） | 检索返回的最相关文档片段数，取值范围通常为 1–10。增大可提升召回率，但可能引入噪声。 |
-| `score_threshold` | 知识库 | float | `0.3` | 向量相似度（余弦）阈值，低于此值的片段被过滤；设为 `0` 表示关闭过滤。适用于抑制低质量匹配。 |
-| `enable_hybrid_search` | 知识库 | boolean | `true` | 是否启用关键词 + 向量混合检索，比纯向量检索更鲁棒，尤其对术语、缩写、数字敏感。 |
-| `retrieval_mode` | 知识库 | string | `"auto"` | 可选 `"auto"`（混合）、`"vector_only"`、`"keyword_only"`；`"auto"` 在 v2.3.0+ 生效。 |
-| `dense_similarity_top_k` | LlamaIndex (`DashScopeCloudRetriever`) | integer | `100` | 向量召回阶段返回的候选节点数，后续可由重排模型精筛。 |
-| `rerank_top_n` | LlamaIndex (`DashScopeCloudRetriever`) | integer | `5` | 重排后最终返回给 LLM 的节点数，直接影响上下文长度与生成质量。 |
-| `stream` | 知识问答、应用 API | boolean | `true`（强制） | 启用流式响应（SSE），必须显式设置为 `true`；RAG 生成过程天然支持增量输出。 |
-
-> ⚠️ 注意：`knowledge chat` 接口不暴露检索参数（如 `top_k`、`score_threshold`），其检索策略完全由控制台发布的知识服务实例决定；如需精细控制，请使用 `knowledge search` 接口自行组装 RAG 流程。
+| 类别 | 参数名 | 说明 | 典型取值/建议 |
+|--------|--------|------|----------------|
+| **检索控制** | 相似度阈值（`similarity_threshold`） | 过滤低分切片，避免噪声干扰生成。值过高易漏召，过低引入无关内容。 | 初始设 `0.4–0.6`，通过[命中测试](raw/application-user-guide/knowledge-base/rag-optimization.md)验证调整 |
+| | 初步向量检索 TopK（`top_k`） | 向量库首轮召回数量，影响召回完整性与 Rerank 开销。 | 默认 `50`；若知识密度高可降至 `20–30`；需高召回时可增至 `80–100` |
+| | 最大召回数量（`max_retrieved`） | 最终送入大模型的切片数，直接影响输入 Token 消耗与回答质量。 | 推荐 `3–10`；超过 `15` 易导致模型注意力稀释或超上下文 |
+| **知识源控制** | 权重（`weight`） | 多知识库联合检索时，同类型库间的优先级系数（数值越大越靠前）。 | 仅在文档搜索类之间生效；例如：产品手册库 `weight=2`，FAQ 库 `weight=1` |
+| | 标签过滤 / Meta 信息 | 通过 `tags` 或 `metadata`（如 `filename`, `date`）实现结构化过滤，提升精准召回。 | 示例：`{"tags": ["2024Q2", "internal"], "metadata": {"category": "policy"}}` |
+| **向量与排序** | `instruct`（Rerank） | 自定义排序指令，明确任务目标（如 `"Rank by technical accuracy for engineering docs."`），显著影响打分逻辑。 | 必填推荐项，避免默认行为偏差 |
+| | `text_type`（异步向量） | 区分 `query`（用户问题）与 `document`（知识库文本），启用专用编码器提升检索匹配度。 | 对 `text-embedding-async-v2` 等模型必须显式设置 |
 
 ## 面向开发者，简洁实用
 
-- **快速验证**：优先使用控制台「知识库」模块，上传 3–5 份典型文档 → 创建并发布 → 在「测试问答」面板输入问题，5 分钟内验证 RAG 基础效果。
-- **生产集成**：  
-  - 简单场景：直接调用 `/v1/knowledge_bases/{kb_id}/query`（知识库 API）或 `/api/v2/apps/knowledge/chat`（知识问答 API）；  
-  - 复杂场景：用 `knowledge search` 获取原始结果 → 自行重排/过滤/融合 → 构造 [prompt](../guides/prompt.md) → 调用 `/api/v1/services/aigc/text-generation/generation` 生成答案。  
-- **调试技巧**：  
-  - 若答案不准，先检查 `score_threshold` 是否过高（导致无结果）或过低（引入噪声）；  
-  - 查看返回结果中的 `metadata` 字段（如 `_score_with_weight`），确认高分片段是否真正相关；  
-  - 使用应用评测的「BadCase 归因」报告，快速区分问题是出在检索、切片还是生成环节。  
-- **性能提示**：`top_k=3` 和 `rerank_top_n=5` 是平衡效果与延迟的常用起点；避免盲目增大 `top_k` 至 10 以上，除非明确需要宽泛召回并自行后处理。
+- **起步最快**：用控制台创建「知识库」→ 上传 PDF/DOCX → 绑定到「智能体应用」或「工作流」节点 → 在提示词中用 `{result}` 引用检索内容。
+- **调试必开**：API 调用时添加 `"debug": true`（数据连接）或启用 `stream=True` + 解析 `event: message`（知识问答），查看实际注入的上下文片段与中间步骤。
+- **性能优化**：  
+  - 减少无效 Token：用 `max_retrieved=5` + `similarity_threshold=0.5` 平衡精度与成本；  
+  - 避免超限：检查模型 `max_context_length`，预留 ≥200 token 给系统提示与输出；  
+  - 地域锁定：API Endpoint 必须匹配知识库地域（如北京：`bailian.cn-beijing.aliyuncs.com`）。
+- **错误排查重点**：  
+  - `Agent 未发布` → 控制台检查对应 `agent_id` 是否已在「知识检索服务」或「知识问答服务」页发布；  
+  - `400 UnsupportedModel` → 数据连接仅支持 Qwen 系列，确认模型名（如 `qwen3`）；  
+  - `429 Too Many Requests` → 默认 25 QPS，实现指数退避重试。
+- **计费注意**：RAG 涉及**多项独立计费**：知识库规格费（小时）、向量化 Token、Rerank Token、路由 Token、生成 Token —— 请在控制台「费用中心」按服务类型分别查看。
 
 ## 关联主题页
 
 - [knowledge base](../guides/knowledge-base.md)
-- [knowledge](../api/knowledge.md)
 - [data connection overview](../guides/data-connection-overview.md)
-- [application evaluation](../guides/application-evaluation.md)
+- [knowledge](../api/knowledge.md)
 - [application support](../guides/application-support.md)
-- [frameworks](../api/frameworks.md)
+- [vector and sort](../api/vector-and-sort.md)
 
 

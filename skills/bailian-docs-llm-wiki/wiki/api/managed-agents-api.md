@@ -1,34 +1,42 @@
 # [managed agents](../guides/managed-agents.md) api
 
-Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和管理具备[长期记忆](../concepts/long-term-memory.md)、工具调用、多步推理能力的 AI Agent。该 API 以 RESTful 形式提供，支持细粒度的生命周期控制与环境隔离。开发者可通过组合 Agent、Environment、Session、Skill 等资源构建生产级自动化工作流。
+Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和运行具备[长期记忆](../concepts/long-term-memory.md)、工具调用与多步推理能力的 AI Agent。该 API 将底层环境管理、会话状态、文件存储、技能编排等能力封装为标准化资源（如 `Agent`、`Environment`、`Session`、`Vault`），开发者可通过 RESTful 接口按需组合。所有操作均需通过平台认证，并遵循统一的请求/响应结构与错误码规范。
 
 ## 支持的模型与功能
 
-- **模型支持**：当前仅支持百炼平台托管的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三类大模型（详见 [Managed Agents](../../raw/application-api-reference/managed-agents-api.md)）；不支持自定义模型或外部模型接入。
-- **核心功能**：包括会话状态持久化（Session）、安全凭证管理（Credential）、私有知识库集成（Vault）、文件上传与解析（File）、可复用技能封装（Skill）、以及 Webhook 事件回调（Webhook）。所有功能均通过独立子资源 API 暴露，例如 [Environment](../../raw/application-api-reference/managed-agents-api/environment-api.md) 用于定义运行时沙箱，[Agent](../../raw/application-api-reference/managed-agents-api/agent-api.md) 用于声明行为逻辑。
+Managed Agents API 本身不直接绑定特定大模型，而是通过 `Environment` 资源指定运行时模型（如 `qwen-max`、`qwen-plus` 或自定义微调模型）。核心功能包括：  
+- 基于 `Agent` 定义行为逻辑（提示词、工具列表、终止条件）；  
+- 通过 `Environment` 配置模型、温度、最大 token 数等推理参数；  
+- 利用 `Session` 管理用户级上下文与历史事件流；  
+- 使用 `Vault` 和 `Credential` 安全存储敏感数据与外部服务凭据；  
+- 通过 `Webhook` 实现异步事件通知（如任务完成、工具调用失败）。  
+详细资源能力请参阅 [Managed Agents](../../raw/application-api-reference/managed-agents-api.md) 的子模块文档。
 
 ## 关键参数
 
-- `agent_id`：必填，Agent 实例唯一标识符，由 `/agents` 创建接口返回。
-- `session_id`：可选但推荐，用于关联用户会话；若未提供，系统将自动生成临时 session。
-- `tool_choice`：指定工具调用策略，可选值为 `"auto"`（默认）、`"none"` 或显式工具名称列表（如 `["search", "calculator"]`）。
-- `max_steps`：单次请求最大执行步数，取值范围 `1–50`，超出将被强制终止（参见 [Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md)）。
+所有写操作（如 `POST /v1/agents`）需在请求体中提供以下关键字段：  
+- `name`: 字符串，长度 ≤ 64，仅支持字母、数字、下划线、短横线；  
+- `environment_id`: 必填，指向已创建的 `Environment` 资源 ID；  
+- `skills`: 工具列表，每个元素含 `id`（对应 `Skill` 资源 ID）及可选 `config`；  
+- `session_ttl_seconds`: `Session` 默认存活时间，范围 300–86400（5 分钟至 24 小时）；  
+- `max_iterations`: 单次会话中 Agent 最大推理步数，默认 15，上限 50。  
+> **注意**：`max_iterations` 在 [agent-api.md](../../raw/application-api-reference/managed-agents-api/agent-api.md) 中定义为必填，但 [managed-agents-quickstart.md](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md) 示例中省略且仍可创建成功——实际以 API Schema 校验为准，建议显式设置。
 
 ## 使用方式
 
-1. 调用 `/agents` 创建 Agent，传入 `model`, `instructions`, `skills` 等配置；
-2. （可选）调用 `/environments` 创建隔离环境，并在 Agent 创建时通过 `environment_id` 绑定；
-3. 发起 `/sessions/{session_id}/messages` 请求，携带用户输入及上下文；
-4. 通过 `/webhooks` 配置事件监听，捕获 `agent_step_completed`、`tool_executed` 等生命周期事件。
-
-> **注意**：原始文档中 [Quick Start](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md) 示例使用了已废弃的 `tools` 字段顶层传参方式；实际应通过 `skills` 数组引用预注册 Skill ID，此差异已在 [Agent API](../../raw/application-api-reference/managed-agents-api/agent-api.md) 中明确修正。
+1. **初始化环境**：先调用 `POST /v1/environments` 创建 `Environment`，指定 `model` 和推理参数；  
+2. **注册技能**：通过 `POST /v1/skills` 注册工具（如 HTTP 请求、数据库查询），并关联 `Credential`（若需鉴权）；  
+3. **创建 Agent**：`POST /v1/agents`，传入 `environment_id` 和 `skills` 列表；  
+4. **启动会话**：`POST /v1/sessions` 获取 `session_id`，再向 `POST /v1/sessions/{id}/messages` 发送用户消息；  
+5. **监听结果**：配置 `Webhook` 接收 `session.completed` 或 `tool.error` 事件。  
+完整流程示例见 [Managed Agents Quickstart](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)。
 
 ## 限制和注意事项
 
-- 单个 Agent 最多绑定 10 个 Skill，单个 Vault 最多关联 100 个文件；
-- Session 默认 TTL 为 24 小时，超时后历史消息不可恢复（除非显式启用 Vault 持久化）；
-- 所有文件上传需先通过 `/files` 接口预注册，直接在 message 中附带二进制内容将被拒绝；
-- Credential 的 secret 值仅在创建时返回一次，后续无法再次读取，需自行安全存储。
+- 单个 `Agent` 最多绑定 20 个 `Skill`；单个 `Vault` 最多存储 100 条密钥；  
+- `Session` 生命周期内最多保留 100 条消息（含系统与用户消息），超出部分自动截断；  
+- 所有文件上传（`POST /v1/files`）须经 `Vault` 或 `Credential` 授权，禁止明文传递敏感内容；  
+- `Deployment` 资源目前仅支持灰度发布，生产环境部署需人工审批，详情见 [Deployment API](../../raw/application-api-reference/managed-agents-api/deployment-api.md)。
 
 ## 来源文档
 

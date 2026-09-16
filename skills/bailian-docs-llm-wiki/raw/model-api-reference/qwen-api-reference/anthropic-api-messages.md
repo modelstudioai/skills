@@ -105,11 +105,11 @@ temperature 取值范围
 
 **第三方模型**
 
-deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash、deepseek-v4-flash-0731、deepseek-v3.2、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5、kimi-k2-thinking、glm-5.3、glm-5.2、glm-5.1、glm-5、glm-4.7、glm-4.6、MiniMax-M2.5、MiniMax-M2.1
+deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash、deepseek-v4-flash-0731、deepseek-v3.2、kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5、kimi-k2-thinking、glm-5.3、glm-5.2、glm-5.1、glm-5、glm-4.7、glm-4.6、MiniMax-M2.5、MiniMax-M2.1
 
 **max\_tokens** `integer` **（必选）**
 
--   deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash、deepseek-v4-flash-0731、qwen3.8-max、qwen3.8-flash：模型回复内容和思维链内容之和的最大Token数，模型输出超过此值时生成将提前停止，`stop_reason` 为 `max_tokens`。
+-   deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-pro-0813、deepseek-v4-flash、deepseek-v4-flash-0731、qwen3.8-max、qwen3.8-flash：模型回复内容和思维链内容之和的最大Token数，模型输出超过此值时生成将提前停止，`stop_reason` 为 `max_tokens`。
     
     > `max_tokens` 限制模型回复内容+思考过程的长度。开启深度思考时，`max_tokens` > `thinking.budget_tokens`
     

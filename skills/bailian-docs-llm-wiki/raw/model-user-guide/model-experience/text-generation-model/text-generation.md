@@ -1473,7 +1473,7 @@ if __name__ == '__main__':
 
 -   **提示词工程（Prompt Engineering）**：通过设计和优化文本指令（Prompt），可以更精确地引导模型，使其输出更符合预期的结果。若想了解更多，可参考[文生文Prompt指南](raw/model-user-guide/use-cases/prompt-engineering-guide.md)、阿里云百炼 [提示词模板](https://bailian.console.aliyun.com/flow-agent/plugin-market/prompt)页面。
 -   [检索增强生成（RAG）](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)：适用于需要模型依据外部知识库（例如产品文档或技术手册）来回答问题的场景。
--   [工具调用（Tool）](https://help.aliyun.com/zh/model-studio/tool-calls)：允许模型获取实时信息（如查询天气、路况）或完成特定操作（如调用API、发送邮件）。
+-   [工具调用（Tool）](raw/model-user-guide/model-experience/text-generation-model/tool-calls.md)：允许模型获取实时信息（如查询天气、路况）或完成特定操作（如调用API、发送邮件）。
 -   **记忆机制（Memory）**：为模型建立长短期记忆，使其能够理解连续对话的历史信息。
 
 若想系统了解，可参考[阿里云大模型高级工程师ACP认证课程](https://atomgit.com/alibabaclouddocs/aliyun_acp_learning/blob/main/%E5%A4%A7%E6%A8%A1%E5%9E%8BACP%E8%AE%A4%E8%AF%81%E6%95%99%E7%A8%8B/p2_%E6%9E%84%E9%80%A0%E5%A4%A7%E6%A8%A1%E5%9E%8B%E9%97%AE%E7%AD%94%E7%B3%BB%E7%BB%9F/2_1_%E7%94%A8%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA%E6%96%B0%E4%BA%BA%E7%AD%94%E7%96%91%E6%9C%BA%E5%99%A8%E4%BA%BA.ipynb)。

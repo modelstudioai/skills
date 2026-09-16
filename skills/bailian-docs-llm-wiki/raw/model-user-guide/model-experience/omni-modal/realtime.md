@@ -1527,6 +1527,8 @@ pip install websockets==15.0.1
                         self._is_responding = False
                         self._current_response_id = None
                         self._current_item_id = None
+                        if event_type in self.extra_event_handlers:
+                            self.extra_event_handlers[event_type](event)
                     elif event_type == "input_audio_buffer.speech_started":
                         print("检测到语音开始")
                         if self._is_responding:
@@ -2926,7 +2928,7 @@ pip install aiortc aiohttp sounddevice numpy certifi av
     
               const escapedSdp = sdp.replace(/'/g, "'\\''");
               // 以下为华北2（北京）地域的URL。请将 {WorkspaceId} 替换为您的百炼业务空间ID，各地域的URL不同。
-              curlBox.value = `curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.5-omni-plus-realtime' \\\n  -H 'Content-Type: application/sdp' \\\n  -H 'Authorization: Bearer $DASHSCOPE_API_KEY' \\\n  --data-binary '${escapedSdp}'`;
+              curlBox.value = `curl -X POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime?model=qwen3.5-omni-plus-realtime' \\\n  -H 'Content-Type: application/sdp' \\\n  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \\\n  --data-binary '${escapedSdp}'`;
               copyCurlBtn.disabled = false;
     
               setStatus('Offer SDP 已生成，复制 curl 命令到终端获取 Answer SDP', 'connecting');

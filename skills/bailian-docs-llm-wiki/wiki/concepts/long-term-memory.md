@@ -1,54 +1,62 @@
 # 长期记忆
 
-长期记忆是百炼平台提供的**跨请求、跨会话的结构化信息持久化与语义检索能力**，用于在多轮对话或长时间运行的 AI 应用中可靠地存储、索引和召回用户偏好、对话上下文、业务实体等关键状态信息。它不依赖模型自身上下文窗口，而是通过独立的向量+元数据混合存储服务实现低延迟、高相关性的长期状态管理。
+长期记忆是百炼平台提供的**跨会话、持久化、语义驱动的用户状态管理能力**，用于突破大模型上下文窗口限制，实现用户偏好、历史事件、结构化属性等关键信息的自动提取、向量化存储与精准召回。它不是临时缓存或会话状态，而是独立于推理过程、可编程控制、按用户隔离的生产级记忆服务。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-长期记忆并非单一功能模块，而是以两种互补形态深度集成于平台核心能力中：
+长期记忆在百炼生态中存在**两套并行但定位互补的技术路径**，开发者需根据应用架构选择：
 
-- **记忆库（Memory Library）**：面向通用、自主可控的记忆管理需求。适用于客服助手、个性化推荐、知识增强型 Agent 等需灵活写入与复杂过滤的场景。开发者直接调用 `upsert`/`search` API，完全掌控数据结构、集合划分与检索逻辑；支持按 `user_id`、`session_id`、`tag` 等任意业务字段进行元数据过滤，适合构建多租户、多维度记忆体系。
+- **Memory Library（记忆库）—— 通用 SDK/API 方式**  
+  适用于任意自研应用、OpenClaw 框架、或需精细控制写入/检索时机的场景。通过 `AddMemory` / `SearchMemory` 等独立 API 显式操作，支持记忆片段（非结构化事件）、用户画像（结构化 Schema）、双策略（`pro`/`lite`）计费，且与模型调用完全解耦。OpenClaw 用户可通过插件实现零侵入自动捕获（`before_agent_start`/`agent_end` 钩子注入）。
 
-- **长期记忆（新）（Long Term Memory New）**：面向托管式、轻量级状态延续需求。深度耦合于 `qwen-max`/`qwen-plus`/`qwen-turbo` 模型调用链路，通过 `memory_id` 自动隔离用户级状态空间。适用于 Managed Agents、LLM Application 中的会话级上下文延续（如多步骤任务跟踪、用户意图沉淀），无需显式构造向量查询，仅需传入自然语言 `query` 即可触发语义召回。其设计强调开箱即用与模型协同，但功能粒度较粗（不支持单条更新/删除，仅支持整 `memory_id` 清空）。
+- **Long Term Memory (New) —— 模型原生集成方式**  
+  专为 `chat` 接口设计，仅支持 `qwen-max`/`qwen-plus`/`qwen-turbo` 模型。通过请求参数 `long_term_memory: true` 启用，配合 `memory_schema` 定义字段、`retrieve_memory` 触发召回，实现“一次配置、自动生效”的轻量集成。写入与检索由平台在模型调用链路中隐式完成，但**不自动注入 [prompt](../guides/prompt.md)**，需开发者手动拼接 `retrieved_memory` 字段。
 
-> ⚠️ 注意：二者**互不兼容**——Memory Library 的数据无法被 Long Term Memory New 的 `retrieve_memory` 接口访问，反之亦然。选择依据取决于你的架构模式：若需精细控制、多模型复用或自定义索引逻辑，请用 Memory Library；若构建基于 Qwen 系列的托管 Agent 或追求极简接入，请用 Long Term Memory New。
+- **Application Call（智能体/工作流调用）—— 应用层封装方式**  
+  在调用已发布的智能体或工作流时，通过 `memory_id` 参数关联预配置的长期记忆实例，由平台在应用运行时自动启用记忆能力。该方式无需修改业务代码，适合快速接入已有应用，但灵活性低于前两者。
+
+> ✅ 共同原则：所有路径均以 `user_id` 为隔离单位，确保多用户数据严格隔离；均支持元数据（`meta_data`）标注与条件过滤；均依赖统一后端记忆服务，具备一致的语义检索能力。
 
 ## 关键参数和配置
 
-| 场景 | 参数名 | 类型 | 必填 | 说明 |
-|------|--------|------|------|------|
-| **Memory Library** | `collection_name` | string | 是 | 记忆集合名称，全局唯一，命名须符合 `[a-z0-9_-]{3,64}` 正则；**缺失将导致 400 错误** |
-| | `content` | string | 是 | 待存文本（≤ 8192 字符） |
-| | `metadata` | object | 否 | 扁平键值对（≤10 个 key，单 value ≤1024 字符），用于后续 `filter` |
-| | `filter` | object | 否 | 检索时元数据条件，支持 `==`、`!=`、`in` 运算符 |
-| | `top_k` | int | 否 | 默认 5，范围 1–50；返回最相关条目数 |
-| **Long Term Memory New** | `memory_id` | string | 是 | 用户级唯一标识（1–64 字符，仅限字母/数字/`_`/`-`），首次 `write_memory` 时自动初始化空间 |
-| | `query` | string | 是（`retrieve_memory` 时） | 自然语言查询句（≤512 字符），系统自动嵌入，**不可替换 embedding 模型** |
-| | `top_k` | int | 否 | 默认 **3**（非文档旧示例中的 5），范围 1–10 |
-| | `filter` | object | 否 | 支持 `eq`/`in`/`contains` 操作符；字段名**不可以下划线 `_` 开头**（系统保留） |
+| 参数 | 所属路径 | 类型 | 说明 | 是否必填 |
+|------|----------|------|------|----------|
+| `user_id` | 全路径 | string | 用户唯一标识，决定记忆命名空间。**必须全局一致**（如登录态 ID），否则导致记忆碎片化。 | 是 |
+| `plan_version` | Memory Library | string | 检索/写入策略：`pro`（启用 Rerank，高精度低吞吐）、`lite`（禁用 Rerank，低成本高吞吐）。`SearchMemory` 中显式传入优先级最高。 | 否（Search 默认 `pro`；Add 由 `project_id` 决定） |
+| `expired_in_days` | Memory Library | integer | 记忆过期天数。**未设置则永不过期**（非默认 180 天）。创建 `MemoryProject` 时指定，影响所有关联记忆。 | 否 |
+| `memory_schema` | Long Term Memory (New) | object | JSON Schema 定义需提取的字段（如 `{"city": "string", "budget": "number"}`）。仅用于字段校验与结构化存储，**不参与向量化**。 | 否 |
+| `retrieve_memory` | Long Term Memory (New) | object | 控制召回行为：`top_k`（默认 3）、`filter`（KV 条件过滤，如 `{"city": "杭州"}`）。返回结果在响应顶层 `retrieved_memory` 字段。 | 否 |
+| `memory_id` | Application Call | string | 已配置的长期记忆实例 ID，在控制台应用设置中绑定。启用后由平台自动接管写入/检索逻辑。 | 否 |
 
-> 🔑 共同约束：  
-> - 所有 `content` 最大长度均为 **8192 字符**；  
-> - `metadata` 中**禁止存放明文敏感信息**（如手机号、身份证号），平台不提供字段级脱敏；  
-> - 向量索引更新存在约 **30 秒延迟**，高实时性场景需设计重试逻辑；  
-> - 无自动 TTL 过期机制（当前生产环境 v20240701 起仍为永久存储，需显式 `clear_memory` 或批量清理）。
+> ⚠️ 注意：  
+> - `memory_schema` 字段值长度上限 2048 字符，最多支持 10 个字段；  
+> - Memory Library 单 `user_id` 下无硬性条数限制（依赖 `expired_in_days` 或手动清理），而 Long Term Memory (New) 采用 LRU 策略，单用户上限 1000 条；  
+> - `plan_version` 在 Memory Library 中**写入与检索完全解耦**：可对 `lite` 写入的数据执行 `pro` 检索，反之亦然。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速上手**：优先使用 SDK（如 Python `baiyin.MemoryClient`）而非裸 API，自动处理鉴权、重试与序列化。  
-- ✅ **写入优化**：批量 upsert（≤100 条/次）；避免高频小写入（易触发限流）。  
-- ✅ **检索提效**：善用 `filter` 缩小搜索空间（如 `{"user_id": "u123", "category": "order"}`），比纯向量检索更快更准。  
-- ⚠️ **避坑指南**：  
-> - 不要混淆 `collection_name`（Memory Library）与 `memory_id`（Long Term Memory New）——它们属于不同服务，无映射关系；  
-> - 不要在 `metadata` 中存敏感字段；如需关联用户身份，用脱敏 ID（如 `user_id_hash`）代替原始 ID；  
-> - `top_k=10` 并不总比 `top_k=3` 更好，过多低分结果会增加 token 开销与后处理成本，建议先用默认值 3/5 基准测试；  
-> - 长期记忆 ≠ 会话历史缓存。Managed Agents 的“7 天会话保留”是平台自动维护的对话快照，与长期记忆的结构化存储无关，二者应分层使用：短期上下文走会话管理，长期状态走记忆库或 LTM New。
+- **选型建议**：  
+  - 要最大控制力、多模型兼容、或集成 OpenClaw → 用 **Memory Library**；  
+  - 要快速上线、仅用 Qwen 系列 `chat`、且接受结构化 Schema → 用 **Long Term Memory (New)**；  
+  - 要复用已有智能体/工作流、最小改造 → 用 **Application Call + `memory_id`**。
+
+- **最佳实践**：  
+  - ✅ 写入：`AddMemory` 建议每轮对话结束后异步调用（避免阻塞主流程）；`long_term_memory: true` 写入由平台自动触发，无需额外处理。  
+  - ✅ 检索：`SearchMemory` 的 `top_k` 推荐设为 `3–5`；`retrieve_memory.top_k` 默认 `3`，按需调整。  
+  - ✅ 过滤：善用 `meta_data`（Memory Library）或 `filter`（New）做业务维度隔离，如 `"category": "reminder"` 或 `"source": "app_a"`。  
+  - ❌ 避免：在 `system` 提示词中重复定义 `memory_schema` 字段名（易冲突）；跨 `user_id` 复用记忆；忽略 `user_id` 一致性导致记忆丢失。
+
+- **调试提示**：  
+  - 使用 `ListMemory`（Memory Library）或检查 `retrieved_memory` 字段（New）验证写入/召回是否生效；  
+  - 高延迟场景下，优先检查配额（Memory Library：`AddMemory ≤120 QPM`；`SearchMemory ≤300 QPM`）；  
+  - 记忆未命中？确认 `user_id` 完全一致、`expired_in_days` 未过期、`filter` 条件匹配。
 
 ## 关联主题页
 
 - [memory library overview](../guides/memory-library-overview.md)
 - [long term memory new](../api/long-term-memory-new.md)
 - [managed agents](../guides/managed-agents.md)
-- [llm application](../guides/llm-application.md)
-- [sandbox](../guides/sandbox.md)
+- [application call](../api/application-call.md)
+- [application support](../guides/application-support.md)
 
 

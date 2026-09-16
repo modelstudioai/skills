@@ -2,7 +2,7 @@
 
 阿里云百炼提供与 OpenAI 兼容的 Batch File API，支持通过文件批量提交请求。系统异步处理所有请求，在全部完成或达到最长等待时间后返回结果，费用仅为实时调用的 50% 。适用于数据分析、模型评测等时效性要求不高但需大批量处理的场景。
 
-如需在控制台操作，请参见[批量推理](https://help.aliyun.com/zh/model-studio/batch-inference)。
+如需在控制台操作，请参见[批量推理](raw/model-user-guide/model-experience/text-generation-model/batch-inference.md)。
 
 ## 工作流程
 

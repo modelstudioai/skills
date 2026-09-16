@@ -5,7 +5,7 @@
 -   **指令编辑**：通过文字指令修改视频内容，如替换人物服饰、更改场景元素、调整画面风格等。
 -   **指令+参考图编辑**：除指令外，还支持传入参考图像，将图像中的元素（如人物、服饰、道具）应用到视频中。
 
-**说明**视频编辑（尤其是复刻指定视频的动作/运镜/特效）推荐使用**视频编辑 2.7**。若需视频续写能力，推荐使用[万相2.7-图生视频](https://help.aliyun.com/zh/model-studio/image-to-video-general-api-reference)。
+**说明**视频编辑（尤其是复刻指定视频的动作/运镜/特效）推荐使用**视频编辑 2.7**。若需视频续写能力，推荐使用[万相2.7-图生视频](raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)。
 
 ## 快速开始
 

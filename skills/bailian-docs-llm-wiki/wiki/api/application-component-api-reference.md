@@ -1,38 +1,50 @@
 # application component api reference
 
-应用组件 API 提供了百炼平台中可复用业务能力的标准化调用接口，用于在自定义应用中集成对话、知识检索、工作流编排等核心功能。该 API 采用 RESTful 设计，支持 HTTPS 调用与 RAM 凭据鉴权。所有接口均需通过指定服务接入点访问，并遵循统一的请求/响应结构。
+应用组件 API 是百炼平台提供的核心能力接口，用于在自定义应用中集成大模型推理、工具调用、会话管理等能力。该 API 以 RESTful 形式提供，支持同步/异步调用模式，适用于构建对话机器人、智能助手、自动化工作流等场景。所有请求需通过 RAM 授权并使用指定服务接入点，具体细节请参考 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)。
 
 ## 支持的模型与功能
 
-当前应用组件 API 支持以下核心能力：
-- **对话交互**：调用 `chat` 接口发起多轮会话，支持流式响应（`stream=true`）；
-- **知识检索增强（RAG）**：通过 `retrieve` 接口对接已配置的知识库，返回相关文档片段；
-- **工作流执行**：使用 `run_workflow` 触发预设的可视化工作流，支持传入动态输入参数。
+当前支持的模型包括 `qwen-max`、`qwen-plus`、`qwen-turbo` 及部分专属微调模型（需开通白名单）。功能覆盖：
+- 单轮/多轮对话（含历史上下文维护）
+- [函数调用](../concepts/function-calling.md)（Function Calling）与工具编排
+- 流式响应（`stream=true`）
+- 输入内容校验与结构化输出（通过 `response_format` 指定 JSON Schema）
 
-> **注意**：`retrieve` 接口在 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 中列为 Beta 功能，但 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 明确标注其已于 v2.1.0 正式 GA，建议以 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 为准。
+> **注意**：文档中提及的 `qwen-vl` 和 `qwen-audio` 模型在 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 中已标记为“暂不开放公测”，与早期 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 中的描述存在不一致，请以最新 API 目录为准。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `app_id` | string | 是 | 应用唯一标识，由控制台创建应用时生成 |
-| `model_id` | string | 否 | 指定后端模型（如 `qwen-max`），若不填则使用应用默认模型 |
-| `stream` | boolean | 否 | 默认 `false`；设为 `true` 时启用 SSE 流式响应 |
-| `input` | object | 是（除 `retrieve` 外） | 用户输入内容，结构依接口而异（如 `chat` 中为 `{ "messages": [...] }`） |
+| `model` | string | 是 | 模型 ID，如 `qwen-plus`；必须与授权范围匹配 |
+| `messages` | array | 是 | 对话消息列表，每项含 `role`（`user`/`assistant`/`system`/`tool`）和 `content` |
+| `tools` | array | 否 | 工具定义数组，格式遵循 OpenAI Tool Specification |
+| `tool_choice` | string / object | 否 | 控制工具调用策略，可选 `"auto"`、`"none"` 或指定工具 |
+| `stream` | boolean | 否 | 默认 `false`；设为 `true` 时返回 SSE 流式响应 |
+| `max_tokens` | integer | 否 | 输出最大 token 数，范围 1–4096 |
 
 ## 使用方式
 
-1. 获取 `app_id` 和 `access_token`（通过 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md) 中描述的 RAM 角色凭证或短期 [Token](../concepts/token.md)）；  
-2. 构造请求 URL：`POST https://dashscope.aliyuncs.com/api/v1/apps/{app_id}/[chat|retrieve|run_workflow]`；  
-3. 设置 Header：`Authorization: Bearer {access_token}`，`Content-Type: application/json`；  
-4. 发送 JSON Body（参考 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中各接口示例）。
+1. **认证**：使用 RAM 用户 AccessKey（需授予 `bailian:InvokeApplicationComponent` 权限），通过 `Authorization: Bearer <access_token>` 或 `X-Acs-AccessKeyId` + `X-Acs-Signature` 方式鉴权  
+2. **请求地址**：`POST https://<region-id>.bailian.aliyuncs.com/api/v1/chat/completions`（区域 ID 见 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)）  
+3. **示例请求体**：
+```json
+{
+  "model": "qwen-plus",
+  "messages": [{"role": "user", "content": "你好"}],
+  "stream": false
+}
+```
 
 ## 限制和注意事项
 
-- 单次 `chat` 请求最大 `messages` 数量为 50 条，总 token 上限取决于所选模型（详见对应模型文档）；  
-- `retrieve` 接口单次最多返回 10 个文档片段，且仅支持已发布状态的知识库；  
-- 所有接口均受百炼平台配额管控，超限将返回 `429 Too Many Requests`；  
-- 若未显式指定 `model_id`，系统将回退至应用创建时绑定的默认模型，该行为在 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 文档中有明确说明。
+- 单次请求 `messages` 总长度不得超过 32768 tokens（含系统提示与工具描述）  
+- 异步任务（`/v1/jobs`）最长保留 7 天，超时自动清理  
+- 工具调用返回的 `tool_calls` 字段中，`function.arguments` 始终为字符串，需自行 JSON.parse  
+- 所有时间戳字段（如 `created`）均采用 Unix 时间戳（秒级）  
+- 跨区域调用不支持，务必确保 SDK 配置的 `region_id` 与接入点一致  
+
+请严格依据 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md) 配置权限，避免因策略缺失导致 `403 Forbidden` 错误。
 
 ## 来源文档
 

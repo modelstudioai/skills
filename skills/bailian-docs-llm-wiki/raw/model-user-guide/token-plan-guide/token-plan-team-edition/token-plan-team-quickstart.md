@@ -107,7 +107,7 @@ VS Code 扩展，智能代码补全和调试
 
 DeepSeek 开源 AI Agent 框架
 
-![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/qwen-color.svg)**[千问办公助理](https://help.aliyun.com/zh/model-studio/qwen-office-assistant)**
+![](https://unpkg.com/@lobehub/icons-static-svg@latest/icons/qwen-color.svg)**[千问办公助理](raw/model-user-guide/use-chat-client-or-development-tool/qwen-office-assistant.md)**
 
 千问 APP 办公助理，处理文档、表格等办公任务
 

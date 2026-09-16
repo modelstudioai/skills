@@ -1,45 +1,36 @@
 # start using
 
-阿里云百炼平台提供零代码与低代码方式快速构建 AI 应用的能力，支持智能体、工作流、高代码等多种应用类型。开发者可基于私有知识文档快速搭建问答助手，或通过 API 集成至自有系统。本文档聚焦“开始使用”路径，梳理核心能力、关键配置项及实践约束，帮助开发者高效启动首个应用。
+阿里云百炼平台提供零代码与低代码两种路径，帮助开发者快速构建具备私有知识问答、多模态理解、工作流编排等能力的智能体应用。本文档聚焦“开始使用”阶段的核心操作路径，涵盖模型与功能选型、关键参数配置、典型使用方式及重要限制，适用于首次接入的开发者。
 
 ## 支持的模型/功能
 
-- **智能体应用（Agent）**：支持 `qwen-max`、`qwq-plus`、`qwq-32b`、`qwen-vl-plus-latest`、`qwen-vl-plus-2025-01-25` 等模型；新版 Agent 2.0（2025年12月上线）统一将知识库、MCP 作为可自主规划调用的工具，并完整展示思考链与工具执行过程 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)。  
-- **工作流应用**：支持多模态生成节点（图像/视频/音频）、批量节点、条件判断节点；大模型节点兼容 DeepSeek 系列、QwQ 系列及 `text-embedding-v4` 模型；知识库节点支持必定调用、智能调用和旧版调用三种模式 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)。  
-- **知识库**：支持三类知识库——**文档**（含 PDF/DOCX/HTML/Excel/音视频）、**数据**（RDS、DMS、自建 MySQL）、**图片**；非结构化知识库支持自定义 metadata 与图文混合检索；结构化知识库支持图片索引，提问时可上传图片触发视觉内容召回 [0代码构建私有知识问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)。  
-- **[长期记忆](../concepts/long-term-memory.md)**：新版[长期记忆](../concepts/long-term-memory.md) & 用户画像管理 API（2026年1月上线）支持多应用共享记忆库、自动信息提取、语义检索及用户画像管理，显著优于旧版 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)。
+- **基础模型支持**：智能体应用（Agent 1.0）和工作流应用均支持 Qwen 系列（如 `qwen-max`、`qwen-vl-plus-latest`）、QwQ 系列（如 `qwq-plus`、`qwq-32b`）及 DeepSeek 系列模型；其中 QwQ 模型需注意其不支持插件、音视频交互等高级能力，详见 [智能体应用（Agent 1.0）](../../raw/application-user-guide/llm-application/single-agent-application.md)。
+- **知识库类型**：支持三类知识库——**文档型**（PDF/DOCX/HTML/Excel 等非结构化文本）、**数据型**（RDS、DMS、自建 MySQL 等结构化数据源）和**图片型**（含图文检索与图表解析能力），创建时可按场景直接选择，无需预导入数据 [创建和使用知识库](../../raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+- **增强能力**：新版智能体应用（Agent 2.0）已统一将知识库与 MCP 作为可自主规划调用的工具；[长期记忆](../concepts/long-term-memory.md)（2.0 版）提供语义检索、自动信息提取与用户画像管理能力，显著优于旧版 [长期记忆&用户画像管理 API](../../raw/application-user-guide/memory-library-overview/long-term-memory-2-0.md)。
 
-> **注意**：文档 1 中提及“智能体编排应用”已于 2024 年 12 月 12 日下线（见“2024年12月16日”条目），当前统一为“智能体应用（Agent 1.0/2.0）”和“工作流应用”，请勿再参考已下线的编排应用文档。
+> **注意**：文档 1 中推荐的“千问-Max”模型在文档 2 的 2025 年 12 月更新中已被更名或归入 Qwen 系列新命名体系（如 `qwen-max`），实际控制台中请以当前模型广场显示为准，避免依赖过时型号名称。
 
 ## 关键参数
 
-- **知识库检索参数**：可通过降低 `初步向量检索TopK` 和 `初步关键词检索TopK` 减少送入排序模型的 [Token](../concepts/token.md) 量，从而降低模型调用费用 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)。  
-- **权重设置**：当智能体应用关联多个知识库时，可为每个知识库单独设置权重，系统优先召回高权重知识库中的内容 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)。  
-- **多模态回复增强**：智能体应用中开启该开关后，可解析知识库中的图表与图像内容，实现结合视觉信息的精准回答（需关联支持多模态的 VL 模型） [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)。  
-- **异步运行模式**：工作流应用支持异步执行，请求立即返回 Task ID，后续通过 `/tasks/{task_id}` 查询结果；适用于耗时较长的任务 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)。
+- **知识库检索配置**：在智能体应用的“检索配置”中可调整 `初步向量检索TopK` 和 `初步关键词检索TopK`，降低该值可减少排序模型 Token 消耗，从而优化成本 [知识库计费说明](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base#e58a3fee888x8)。
+- **多知识库权重**：当应用关联多个知识库时，可通过权重设置控制召回优先级，权重越高，相关片段越可能被优先检索并送入大模型上下文。
+- **多模态增强开关**：在 Agent 1.0 的检索配置中启用“多模态回复增强”，可激活对知识库中图表、图像内容的解析能力，提升视觉信息融合回答的准确性。
 
 ## 使用方式
 
-1. **零代码入门（推荐）**：  
-   - 访问 [应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center) → 创建「智能体应用」→ 选择模型（如 `qwen-max`）→ 编写 System Prompt → 配置欢迎语与预设问题；  
-   - 在 [知识库](https://bailian.console.aliyun.com/?tab=app#/knowledge-base) 页面创建知识库，上传文档（支持 DOCX/PDF/HTML/Excel/音视频）→ 选择「智能切分」→ 完成解析；  
-   - 返回应用配置页，在「技能知识库」中添加已创建的知识库 → 发布应用。详细步骤见 [0代码构建私有知识问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)。  
-
-2. **API 调用**：  
-   - 同步调用：复用 [OpenAI 兼容接口](../concepts/openai-compatible-api.md)（`/v1/responses`），适用于实时交互场景；  
-   - 异步调用：在请求中设置 `background=true`，获取 Task ID 后轮询 `/v1/tasks/{id}`；  
-   - 知识库管理：支持 `POST /v1/knowledge_bases` 创建、`PATCH /v1/knowledge_bases/{id}` 更新、`GET /v1/knowledge_bases/{id}/monitor` 查询监控数据等 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)。
+1. **零代码快速启动**：访问 [应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)，点击“创建应用” → 选择“智能体应用” → 设置 Prompt（如“你是一位阿里云百炼手机导购…”）→ 配置欢迎语与预设问题 → 发布前绑定知识库（支持直接上传文件创建，无需预先走数据连接流程）[0代码构建私有知识问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)。
+2. **API 集成调用**：支持 OpenAI 兼容的 Responses API，提供同步调用（即时响应）与异步调用（返回 Task ID 后轮询）两种模式，适用于 Web/iOS/Android 等多端集成 [同步调用 API 参考](../../raw/application-api-reference/application-call/openai-responses-api/synchronous-call-api-reference.md)。
+3. **音视频与多模态扩展**：知识库支持上传音视频文件并启用智能切分；智能体应用可结合 `qwen-vl-plus` 等多模态模型实现图文/音视频混合问答；工作流应用新增多模态生成节点，支持根据提示词生成图像、视频或音频。
 
 ## 限制和注意事项
 
-- **计费生效时间**：知识库服务自 2026 年 1 月 4 日起正式计费，费用由规格费 + 模型调用费构成；资源包支持 RAG 标准版与旗舰版两种购买方式 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)。  
-- **模型兼容性**：QwQ 系列模型（如 `qwq-plus`）仅支持工作流应用与智能体应用（Agent 1.0），不支持插件、流程编排及音视频交互能力 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)。  
-- **文件限制**：音视频知识库支持 MP4/MOV/AVI/WAV/MP3 等格式，单文件大小上限为 2GB；非结构化知识库导入 HTML 文件需为离线本地文件，不支持远程 URL [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)。  
-- **调试与观测**：编辑智能体应用时可使用内置「调试面板」实时调整知识库参数并验证召回效果；端到端应用处理流程可通过 [应用观测](https://bailian.console.aliyun.com/knowledge-base#/app-observe) 查看 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)。
+- **知识库商业化计费**：自 2026 年 1 月 4 日起，知识库服务正式计费，费用由规格费（按版本：标准版/旗舰版）与模型调用费（含 embedding 与 rerank）两部分构成，免费额度已取消 [知识库商业化公告](https://www.aliyun.com/notice/117726)。
+- **模型能力边界**：QwQ 系列模型虽推理能力强，但明确不支持插件调用、音视频实时互动等交互能力；DeepSeek 系列模型在工作流与智能体中可用，但需确认具体版本是否支持 RAG 增强链路。
+- **调试与验证**：知识库编辑界面内置调试面板，可在配置智能体应用时实时调整参数并验证检索召回效果，避免发布后才发现语义偏差或切片失效问题。
 
 ## 来源文档
 
-- [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)
 - [0代码构建私有知识问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)
+- [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)
 
 
