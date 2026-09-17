@@ -407,7 +407,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 #### 德国（法兰克福）
 
-`POST https:// {WorkspaceId}.eu-central-1.maas.aliyuncs.com /api/v1/services/aigc/image-generation/generation`
+`POST https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
@@ -653,7 +653,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 #### 德国（法兰克福）
 
-`GET https:// {WorkspaceId}.eu-central-1.maas.aliyuncs.com /api/v1/tasks/{task_id}`
+`GET https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1/tasks/{task_id}`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
@@ -1412,7 +1412,7 @@ SDK 的参数命名与HTTP接口基本一致，参数结构根据语言特性进
 
 #### 德国（法兰克福）
 
-`https:// {WorkspaceId}.eu-central-1.maas.aliyuncs.com /api/v1`
+`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
@@ -1921,7 +1921,7 @@ SDK 的参数命名与HTTP接口基本一致，参数结构根据语言特性进
 
 #### 德国（法兰克福）
 
-`https:// {WorkspaceId}.eu-central-1.maas.aliyuncs.com /api/v1`
+`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/api/v1`
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 

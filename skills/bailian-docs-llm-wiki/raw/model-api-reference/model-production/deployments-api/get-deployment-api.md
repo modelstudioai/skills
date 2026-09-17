@@ -6,11 +6,11 @@
 
 -   **适用地域**：本文描述的功能仅在**华北2（北京）地域**可用，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
 -   已成功[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
--   已阅读[模型部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)和[使用 API 进行模型部署](raw/model-user-guide/model-deployment-1/model-deployment-quick-start.md)，了解模型部署的基本步骤。
+-   已阅读[模型部署](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)和[使用 API 进行模型部署](raw/model-user-guide/model-deployment-index/model-deployment-quick-start.md)，了解模型部署的基本步骤。
 
 **说明**DTU 计费模式的部署暂不支持通过本组 API 创建与管理，请在控制台操作，详见
 
-[独占算力部署（MU/DTU）](raw/model-user-guide/model-deployment-1/dtu-model-deployment.md)。
+[DTU 独占算力部署](raw/model-user-guide/model-deployment-index/dtu-model-deployment.md)。
 
 ## 查询部署模型状态
 

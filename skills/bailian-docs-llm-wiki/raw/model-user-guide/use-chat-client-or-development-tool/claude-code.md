@@ -56,17 +56,15 @@ npm install -g @anthropic-ai/claude-code
     "env": {
         "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY",
         "ANTHROPIC_BASE_URL": "https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic",
-        "ANTHROPIC_MODEL": "qwen3.8-max",
+        "ANTHROPIC_MODEL": "qwen3.8-flash",
         "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3.6-flash",
-        "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3.8-max",
-        "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.8-max",
-        "CLAUDE_CODE_SUBAGENT_MODEL": "qwen3.7-max",
+        "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3.8-flash",
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.8-flash",
+        "CLAUDE_CODE_SUBAGENT_MODEL": "qwen3.8-flash",
         "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "983616"
     }
 }
 ```
-
-**提示**：上述配置将 `CLAUDE_CODE_SUBAGENT_MODEL` 设为 `qwen3.7-max`，子任务（如文件搜索、Plan 模式）将使用该模型。如需子任务也使用 `qwen3.8-max`，可将 `CLAUDE_CODE_SUBAGENT_MODEL` 改为 `qwen3.8-max`。
 
 ### Token Plan 团队版
 
@@ -77,11 +75,11 @@ npm install -g @anthropic-ai/claude-code
     "env": {
         "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY",
         "ANTHROPIC_BASE_URL": "https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic",
-        "ANTHROPIC_MODEL": "qwen3.8-max",
+        "ANTHROPIC_MODEL": "qwen3.8-flash",
         "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3.6-flash",
-        "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3.8-max",
-        "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.8-max",
-        "CLAUDE_CODE_SUBAGENT_MODEL": "qwen3.7-max",
+        "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3.8-flash",
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.8-flash",
+        "CLAUDE_CODE_SUBAGENT_MODEL": "qwen3.8-flash",
         "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "983616"
     }
 }

@@ -26,7 +26,7 @@
 
 免费额度仅抵扣模型**实时推理**（调用）产生的费用。
 
-**警告**[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)、[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)、[模型部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)、自定义模型（调优后模型、已部署模型）、PAI-DSW、OSS 存储及请求费用不支持用免费额度抵扣。
+**警告**[Batch调用](raw/model-api-reference/toolkits-and-frameworks/batch-interfaces-compatible-with-openai.md)、[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)、[模型部署](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)、自定义模型（调优后模型、已部署模型）、PAI-DSW、OSS 存储及请求费用不支持用免费额度抵扣。
 
 ### 注意事项
 

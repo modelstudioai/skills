@@ -7,7 +7,7 @@
 -   **适用地域**：当前模型部署 API **仅在华北2（北京）地域**开放。如您使用其他地域，请通过该地域的百炼控制台完成模型部署操作。
 -   **开通账号权限**：若使用[阿里云子账号](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（[RAM用户](https://help.aliyun.com/zh/ram/user-guide/overview-of-ram-users)），需要为子账号授予模型调用、训练和部署[权限](https://help.aliyun.com/zh/model-studio/use-workspace)。
 -   **配置环境变量**：已成功[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
--   **阅读部署文档**：建议先阅读[模型部署概述](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)和[使用 API 创建模型部署任务](raw/model-user-guide/model-deployment-1/model-deployment-quick-start.md)，了解模型部署的使用方法和基本步骤。
+-   **阅读部署文档**：建议先阅读[专属部署概述](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)和[使用 API 创建模型部署任务](raw/model-user-guide/model-deployment-index/model-deployment-quick-start.md)，了解模型部署的使用方法和基本步骤。
 
 ## 部署模型
 

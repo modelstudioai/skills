@@ -366,7 +366,7 @@ qwen3.7-max
 
 36元
 
-qwen3.7-max-us
+qwen3.7-max
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
@@ -1458,7 +1458,7 @@ qwen3.7-plus
 
 原价24元**（限时8折）**
 
-qwen3.7-plus-us
+qwen3.7-plus
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
@@ -1632,7 +1632,7 @@ qwen-plus
 
 64元
 
-qwen-plus-us
+qwen-plus
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
@@ -1682,7 +1682,7 @@ qwen-plus-2025-12-01
 
 64元
 
-qwen-plus-2025-12-01-us
+qwen-plus-2025-12-01
 
 美国
 
@@ -2884,7 +2884,7 @@ qwen3.6-flash-2026-04-16
 
 28.8元
 
-qwen3.6-flash-us
+qwen3.6-flash
 
 美国
 
@@ -2984,7 +2984,7 @@ qwen-flash
 
 12元
 
-qwen-flash-us
+qwen-flash
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
@@ -3028,7 +3028,7 @@ qwen-flash-2025-07-28
 
 12元
 
-qwen-flash-2025-07-28-us
+qwen-flash-2025-07-28
 
 美国
 
@@ -4972,7 +4972,7 @@ qwen3-vl-flash
 
 6元
 
-qwen3-vl-flash-us
+qwen3-vl-flash
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
@@ -4998,7 +4998,7 @@ qwen3-vl-flash-us
 
 7.046元
 
-qwen3-vl-flash-2026-01-22-us
+qwen3-vl-flash-2026-01-22
 
 美国
 
@@ -5046,7 +5046,7 @@ qwen3-vl-flash-2025-10-15
 
 6元
 
-qwen3-vl-flash-2025-10-15-us
+qwen3-vl-flash-2025-10-15
 
 美国
 
@@ -6536,7 +6536,7 @@ qwen-mt-lite
 
 1.6元
 
-qwen-mt-lite-us
+qwen-mt-lite
 
 美国
 
@@ -9028,7 +9028,7 @@ deepseek-v4-pro-0813
 
 闲时 13.5元
 
-deepseek-v4-pro-us
+deepseek-v4-pro
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
@@ -9062,7 +9062,7 @@ deepseek-v4-flash
 
 2元
 
-deepseek-v4-flash-us
+deepseek-v4-flash
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
@@ -9072,7 +9072,7 @@ deepseek-v4-flash-us
 
 2.998元
 
-deepseek-v4-flash-0731-us
+deepseek-v4-flash-0731
 
 > [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)享有折扣
 
@@ -9980,7 +9980,7 @@ glm-5.2
 
 28元
 
-glm-5.2-us
+glm-5.2
 
 美国
 
@@ -13086,7 +13086,7 @@ qwen3-asr-flash-2025-09-08
 
 **输出单价**
 
-qwen3-asr-flash-us
+qwen3-asr-flash
 
 美国
 
@@ -13094,7 +13094,7 @@ qwen3-asr-flash-us
 
 不计费
 
-qwen3-asr-flash-2025-09-08-us
+qwen3-asr-flash-2025-09-08
 
 美国
 
@@ -14579,7 +14579,7 @@ wan2.6-t2v
 
 1元/秒
 
-wan2.6-t2v-us
+wan2.6-t2v
 
 美国
 
@@ -14969,7 +14969,7 @@ wan2.6-i2v
 
 1元/秒
 
-wan2.6-i2v-us
+wan2.6-i2v
 
 美国
 

@@ -105,6 +105,15 @@ kilo --version
             }
           }
         },
+        "glm-5.3": {
+          "name": "GLM-5.3",
+          "options": {
+            "thinking": {
+              "type": "enabled",
+              "budgetTokens": 8192
+            }
+          }
+        },
         "glm-5.2": {
           "name": "GLM-5.2",
           "options": {
@@ -262,6 +271,15 @@ kilo --version
         },
         "kimi-k2.5": {
           "name": "Kimi K2.5",
+          "options": {
+            "thinking": {
+              "type": "enabled",
+              "budgetTokens": 8192
+            }
+          }
+        },
+        "glm-5.3": {
+          "name": "GLM-5.3",
           "options": {
             "thinking": {
               "type": "enabled",

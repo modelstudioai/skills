@@ -131,7 +131,7 @@
     
     -   **按 Token 调用计费（后付费）**：[下线](https://bailian.console.aliyun.com/model/deploy)已部署的模型，或删除[API Key](https://bailian.console.aliyun.com/model/settings/api-key)防止意外调用。
     -   **按算力单元或模型单元计费（后付费）**：[下线](https://bailian.console.aliyun.com/model/deploy)已部署的模型。
-    -   **按预置吞吐单元计费（预付费）**：[下线](https://bailian.console.aliyun.com/model/deploy)已部署的模型，然后在[退订管理](https://usercenter2.aliyun.com/refund/refund)页面退订实例。退订时已使用部分按 1.2 倍系数结算（详见[退订说明](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)），退回剩余金额。
+    -   **按预置吞吐单元计费（预付费）**：[下线](https://bailian.console.aliyun.com/model/deploy)已部署的模型，然后在[退订管理](https://usercenter2.aliyun.com/refund/refund)页面退订实例。退订时已使用部分按 1.2 倍系数结算（详见[退订说明](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)），退回剩余金额。
 
 ## 常见问题
 

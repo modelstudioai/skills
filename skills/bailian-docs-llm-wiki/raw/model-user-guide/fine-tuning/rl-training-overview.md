@@ -389,7 +389,7 @@ Checkpoint 列表、发布状态，可将 Checkpoint 发布至"我的模型"后�
 
 训练完成后，最后一个 Checkpoint 会自动发布至**我的模型**。如需发布中间 Checkpoint，前往百炼控制台**模型调优** > **产出**页面手动操作，详见[在控制台进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
 
-发布后的模型可在**我的模型**页面进行部署。部署完成后即可通过 API 调用模型。详见[模型部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)。
+发布后的模型可在**我的模型**页面进行部署。部署完成后即可通过 API 调用模型。详见[模型部署](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)。
 
 ## 后续步骤
 

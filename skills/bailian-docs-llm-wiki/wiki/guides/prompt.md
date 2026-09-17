@@ -1,57 +1,57 @@
 # prompt
 
-Prompt 是百炼平台中用于引导大语言模型生成预期输出的核心机制，涵盖结构化模板、样例增强、自动优化及反馈式调优等多种能力。它支持开发者将业务逻辑与模型指令解耦，实现 Prompt 的集中管理、版本控制、团队协作与效果迭代。所有功能当前仅适用于华北2（北京）地域。
+Prompt 是百炼平台中驱动大语言模型行为的核心指令载体，支持通过模板化、样例增强、自动优化等多种工程化手段进行结构化设计与持续迭代。其核心目标是将业务逻辑、领域知识和输出约束精准注入模型推理过程，在保障效果稳定性的同时提升开发效率与可维护性。所有 Prompt 相关功能当前仅适用于华北2（北京）地域。
 
 ## 支持的模型/功能
 
-百炼平台提供四类 Prompt 相关能力，面向不同场景需求：
+百炼平台提供三类 [Prompt 工程](../concepts/prompt-engineering.md)能力，覆盖从基础指令构造到专业场景适配的全链路需求：
 
-- **Prompt 模板**：支持预置与自定义两类模板，覆盖文本生成、图片生成等任务类型。预置模板由阿里云提供并已优化，适用于通用场景（如营销文案、摘要抽取）；自定义模板支持通过控制台或 API 创建，适用于金融、医疗等强定制需求场景 [Prompt模板概述](../../raw/application-user-guide/prompt/prompt-template.md)。
-- **Prompt 样例库**：通过少样本（few-shot）方式注入高质量问答对，引导模型输出风格与结构一致性。但该功能**已停止维护**，官方明确推荐迁移到 RAG 表格库 [使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)。
-- **Prompt 自动优化**：基于大模型对原始 Prompt 进行结构重组、角色设定、指令增强与边界注入，提升清晰度与稳定性，**不计费且数据不用于训练** [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)。
-- **Prompt 反馈优化**：利用用户提供的输入-输出样例（5–10 条）和评测数据（建议 ≥20 条），在推理模型（推荐千问-max）上多轮评估、反思并生成优化 Prompt，效果优于纯自动优化 [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)。
-
-> **注意**：文档 3 和文档 6 明确指出 Prompt 样例库功能已下线，而文档 1 中仍将其列为可用功能之一。实际开发中应以文档 6 的迁移指引为准，**不得新建或依赖样例库**。
+- **Prompt 模板**：支持预置与自定义两类模板，适用于文本生成、图片生成等场景。预置模板由阿里云提供并已优化，开箱即用；自定义模板支持通过控制台或 API 创建，可基于 [Prompt工程框架详解](raw/application-user-guide/prompt/prompt-custom-template.md)（如 ICIO、CRISPE、RASCEF）进行结构化构建 [原文标题](../../raw/application-user-guide/prompt/prompt-custom-template.md)。
+- **Prompt 样例库**：通过少样本学习（Few-shot）注入高质量问答对，引导模型输出风格与格式一致性。但需注意：> **注意**：该功能[已停止维护](raw/application-user-guide/prompt/prompt-sample-optimization.md)，官方明确推荐迁移到 RAG 表格库 [原文标题](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)。
+- **Prompt 自动优化与反馈优化**：前者基于大模型重写原始 Prompt，提升指令清晰度与结构合理性；后者则结合用户提供的输入输出样例（query/answer 对）与评测数据集，进行多轮评估-反思-优化闭环，显著提升在特定任务上的准确率 [原文标题](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)。
 
 ## 关键参数
 
-| 参数 | 说明 | 取值范围/约束 | 来源 |
-|------|------|----------------|------|
-| `workspaceId` | 业务空间 ID，所有 Prompt 操作必需 | 由[获取APP ID 和 Workspace ID](../../raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)接口获取 | [Prompt模板概述](../../raw/application-user-guide/prompt/prompt-template.md) |
-| `promptTemplateId` | 模板唯一标识符，用于 GetPromptTemplate 等 API | 控制台模板卡片上直接复制；预置与自定义模板均适用 | [Prompt模板概述](../../raw/application-user-guide/prompt/prompt-template.md) |
-| `variables` | 模板中声明的占位符列表（如 `["topic", "platform"]`） | 由 `GetPromptTemplate` 接口返回，不可手动指定 | [Prompt模板概述](../../raw/application-user-guide/prompt/prompt-template.md) |
-| `recall_count` | RAG 表格库召回片段数（替代原样例库的“召回片段数”） | 默认 5，最大 10；需在应用配置中显式设置 | [Prompt 样例库迁移到 RAG 表格库](../../raw/application-user-guide/prompt/prompt-sample-optimization/migrate-sample-library-prompt-to-rag-table-library.md) |
-| `has_thoughts=true` | 启用调试模式，返回检索/思考过程详情 | 布尔值，仅限 API 调用时设置 | [使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md) |
+| 参数 | 说明 | 取值范围/约束 |
+|------|------|----------------|
+| `workspaceId` | 业务空间 ID，调用 Prompt 相关 API 的必需参数 | 通过 [获取APP ID 和 Workspace ID](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md) 获取 |
+| `promptTemplateId` | 模板唯一标识符，用于 `GetPromptTemplate` 等接口 | 在控制台模板卡片上直接复制 |
+| `variables` | 模板中声明的占位符列表（如 `["topic", "platform"]`） | 由 `GetPromptTemplate` 接口返回，不可手动指定 |
+| `has_thoughts` | API 调用时启用调试信息开关 | `true` / `false`；设为 `true` 时响应含 `thoughts` 字段，用于验证样例检索或 RAG 召回过程 |
+| 召回片段数 | 应用配置中控制注入上下文的样例/RAG 片段数量 | 默认 5，最多 10（样例库）；RAG 表格库中可通过“最大召回数量”调整 |
 
 ## 使用方式
 
-### 控制台操作路径
-- **模板管理**：`提示词` → `创建提示词`（支持文本/图片生成、自定义创建或基于 ICIO/CRISPE/RASCEF 框架创建）  
-- **自动优化**：`提示词` → `自动优化` 页面粘贴原始 Prompt 并执行  
-- **反馈优化**：`提示词` → `反馈优化` 页面上传样例与评测数据集  
-- **RAG 表格库替代样例库**：`知识库` → 创建 `数据查询` 类型知识库 → 导入 Excel → 配置索引（建议关闭 `answer` 字段参与检索）→ 在智能体应用中启用  
+### 控制台操作
+- **模板创建与管理**：访问 [提示词](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt) 页面，支持“自定义创建”或“基于Prompt工程创建”两种模式；图片生成模板需单独选择“图片生成”类型并分别填写正向/负向 Prompt。
+- **样例库迁移**：因样例库已停用，新项目应直接使用 RAG 表格库。迁移路径为：导出旧样例 → 创建 RAG 表格库 → 上传数据表 → 关闭样例库开关并添加表格知识 → 调试发布。
+- **自动优化**：在 [自动优化](https://bailian.console.aliyun.com/?tab=app#/component-manage/prompt/optimize) 页面粘贴原始 Prompt，点击“优化”后可直接复制或“保存为模板”。
 
-### API 调用要点
-- 获取模板：调用 `GetPromptTemplate`，传入 `workspaceId` 和 `promptTemplateId`，解析响应中的 `content` 与 `variables` 字段后填充变量生成最终 Prompt。
-- 使用模板：将填充后的 Prompt 作为 `system` 或 `user` 消息传入模型调用接口（如 `ChatCompletion`）。
-- 启用 RAG：在智能体应用 API 请求中，确保 `knowledge_config.tables` 包含目标表格库 ID，并可选设 `has_thoughts=true` 查看召回详情。
+### API/SDK 集成
+- 模板调用：使用 `GetPromptTemplate` 接口（需 `workspaceId` + `promptTemplateId`），响应体包含 `content` 与 `variables`，开发者需自行完成变量填充（如 `content.replace('${topic}', 'AI')`）。
+- 应用调用：在请求体中设置 `has_thoughts: true`，便于通过 `thoughts` 字段分析 RAG 或样例检索行为，辅助线上问题定位。
 
 ## 限制和注意事项
 
-- **地域限制**：所有 Prompt 功能（模板、优化、样例库/RAG）**仅支持华北2（北京）地域**，跨地域调用将失败。
-- **模板长度**：控制台编辑器最大支持 6144 字符；API 无显式长度限制，但受模型上下文窗口约束。
-- **样例库已弃用**：文档 3 明确声明“Prompt样例库功能已不再维护”，文档 6 提供完整迁移方案。继续使用将导致服务不可用或无法获得技术支持。
-- **RAG 表格库配置差异**：迁移后需主动关闭 `answer` 字段的“参与检索”开关，否则可能降低匹配精度；默认相似度阈值 `0.20` 和最大召回数 `5` 可按需调整。
-- **Token 成本影响**：启用 RAG 表格库或历史样例库会显著增加输入 Token（用户 query + 召回内容 + system prompt），需在成本与效果间权衡；计费项包含知识库运行时长、向量/排序模型调用（按 Token 计费）[Prompt 样例库迁移到 RAG 表格库](../../raw/application-user-guide/prompt/prompt-sample-optimization/migrate-sample-library-prompt-to-rag-table-library.md)。
-- **安全合规**：Prompt 自动优化过程中提交的数据**不会被存储或用于模型训练**，符合阿里云数据隐私政策 [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)。
+- **地域限制**：所有 Prompt 功能（模板、样例库、自动优化）均仅支持华北2（北京）地域，跨地域调用将失败。
+- **容量与配额**：
+  - 单个 Prompt 模板内容最大 6144 字符；
+  - 单个样例库最多 300 条样例（但该功能已废弃）；
+  - 单个智能体应用最多关联 5 个知识源（RAG 表格库或旧样例库）；
+  - RAG 表格库无条目上限，但单次召回受“最大召回数量”限制。
+- **计费影响**：
+  - Prompt 模板本身不额外计费；
+  - 启用样例库或 RAG 表格库会显著增加输入 [Token](../concepts/token.md)（样例/RAG 内容被拼入上下文），直接影响模型调用费用；
+  - RAG 表格库还产生向量模型（embedding）、排序模型（rerank）调用费用，按 [Token](../concepts/token.md) 用量计费。
+- > **注意**：文档中关于样例库的使用说明（如“每个应用最多关联5个样例库”）虽技术上仍可配置，但因功能已下线，**不应作为新系统设计依据**；所有新项目必须采用 RAG 表格库替代方案 [原文标题](../../raw/application-user-guide/prompt/prompt-sample-optimization/migrate-sample-library-prompt-to-rag-table-library.md)。
 
 ## 来源文档
 
 - [Prompt模板概述](../../raw/application-user-guide/prompt/prompt-template.md)
 - [自定义Prompt模板](../../raw/application-user-guide/prompt/prompt-custom-template.md)
 - [使用Prompt样例库优化模型输出](../../raw/application-user-guide/prompt/prompt-sample-optimization.md)
+- [Prompt 样例库迁移到 RAG 表格库](../../raw/application-user-guide/prompt/prompt-sample-optimization/migrate-sample-library-prompt-to-rag-table-library.md)
 - [Prompt自动优化](../../raw/application-user-guide/prompt/optimize-prompt.md)
 - [基于大模型输入输出样例的Prompt自动优化](../../raw/application-user-guide/prompt/prompt-feedback-optimization.md)
-- [Prompt 样例库迁移到 RAG 表格库](../../raw/application-user-guide/prompt/prompt-sample-optimization/migrate-sample-library-prompt-to-rag-table-library.md)
 
 

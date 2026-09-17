@@ -33,7 +33,7 @@ API Key鉴权，格式为`Bearer sk-xxxx`。
 
 **model** `string` **（必选）**
 
-用于调优的[基础模型ID](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide)或其他调优任务产出的模型ID（对已经调优了的模型进行再次调优）。
+用于调优的[基础模型ID](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)或其他调优任务产出的模型ID（对已经调优了的模型进行再次调优）。
 
 **training\_type** `string` （可选）
 

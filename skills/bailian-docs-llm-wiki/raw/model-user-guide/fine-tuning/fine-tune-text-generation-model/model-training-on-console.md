@@ -208,7 +208,7 @@ LoRA训练中的低秩矩阵的秩大小。秩越大调优效果会更好一点�
 
 用于冻结视觉主干网络的参数，使其在训练过程中不更新权重。仅适用于 千问-VL（视觉理解）模型。
 
-只有 freeze\_vit 设置为“true”时，模型才能进行按 [Token 用量](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)计费。
+只有 freeze\_vit 设置为“true”时，模型才能进行按 [Token 用量](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)计费。
 
 **说明**不同训练方式支持的参数有所不同：
 
@@ -336,7 +336,7 @@ LoRA训练中的低秩矩阵的秩大小。秩越大调优效果会更好一点�
 
 ## 步骤八：部署模型
 
-前往[我的模型](https://bailian.console.aliyun.com/cn-beijing/model/custom)页面中快速查询模型支持的部署模式、模型 ID 等相关信息，部署好后就可以对调优好的模型进行评测。模型部署相关信息请参见[模型部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)。
+前往[我的模型](https://bailian.console.aliyun.com/cn-beijing/model/custom)页面中快速查询模型支持的部署模式、模型 ID 等相关信息，部署好后就可以对调优好的模型进行评测。模型部署相关信息请参见[模型部署](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)。
 
 ## 步骤九：评测模型
 

@@ -1310,7 +1310,7 @@ if __name__ == "__main__":
     
 6.  单击**开始训练**，等待模型训练完毕。
     
-7.  在**模型推理** > [专属部署](https://bailian.console.aliyun.com/cn-beijing/model/deploy)中部署训练好的自定义模型，部署完成后即可对调优好的模型进行评测。详情请参见[专属部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)。
+7.  在**模型推理** > [专属部署](https://bailian.console.aliyun.com/cn-beijing/model/deploy)中部署训练好的自定义模型，部署完成后即可对调优好的模型进行评测。详情请参见[专属部署概述](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)。
     
 8.  在**模型训练** > [模型评测](https://bailian.console.aliyun.com/cn-beijing/model/evaluate)中评估自定义模型的训练效果，详情请参见[模型评测](raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)。
     
@@ -1434,4 +1434,4 @@ IT 信息、行政信息、HR 信息、员工福利解答、公司日历查询�
 
 ### 是否支持调优自己的模型呢？
 
-百炼不支持调优自己的模型，但可以通过[我的模型（北京地域）](https://bailian.console.aliyun.com/cn-beijing/model/custom)导入safetensor 格式的千问系列开源模型，详情请参考[模型导入](raw/model-user-guide/model-deployment-1/model-import.md)。模型导入后可以在百炼平台上部署使用。
+百炼不支持调优自己的模型，但可以通过[我的模型（北京地域）](https://bailian.console.aliyun.com/cn-beijing/model/custom)导入safetensor 格式的千问系列开源模型，详情请参考[模型导入](raw/model-user-guide/model-deployment-index/model-import.md)。模型导入后可以在百炼平台上部署使用。

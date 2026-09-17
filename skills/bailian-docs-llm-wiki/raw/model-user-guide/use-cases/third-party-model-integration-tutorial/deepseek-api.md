@@ -523,7 +523,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v
 
 ## 推理强度（reasoning\_effort）
 
-deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash 、 deepseek-v4-flash-0731 和 deepseek-v4-pro-0813默认开启思考模式。通过`reasoning_effort`参数可以调整推理强度，可选值为`low(仅deepseek-v4-flash-0731 和 deepseek-v4-pro-0813 支持)`、`high`和`max`，默认为`high`。
+deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash 、 deepseek-v4-flash-0731 和 deepseek-v4-pro-0813默认开启思考模式。通过`reasoning_effort`参数可以调整推理强度，可选值为`low(仅deepseek-v4.1-flash、deepseek-v4-flash-0731 和 deepseek-v4-pro-0813 支持)`、`high`和`max`，默认为`high`。
 
 #### OpenAI兼容
 

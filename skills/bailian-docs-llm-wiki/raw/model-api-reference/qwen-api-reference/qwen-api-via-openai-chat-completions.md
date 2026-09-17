@@ -759,7 +759,7 @@ Schema 的名称。
 
 low和medium映射为high，xhigh映射为max。
 
-适用于glm-5.2、glm-5.1、glm-5、deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash（阿里云直供）（deepseek-v4-flash-0731 除外）、kimi/kimi-k3（月之暗面直供，仅支持 `max`）
+适用于glm-5.2、glm-5.1、glm-5、deepseek-v4-pro、deepseek-v4-flash（阿里云直供）（deepseek-v4-flash-0731 除外）、kimi/kimi-k3（月之暗面直供，仅支持 `max`）
 
 **glm-5.3、ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash 与 kimi-k3（阿里云直供）模型：默认值为**`max`
 
@@ -780,6 +780,16 @@ low和medium映射为high，xhigh映射为max。
 -   `low`：低力度推理
 
 出于兼容性考虑，`medium` 映射为 high，`xhigh` 映射为 high。
+
+**deepseek-v4.1-flash 模型：默认值为**`high`
+
+可选值：
+
+-   `max`：最大力度推理
+-   `high`（默认）：高力度推理
+-   `low`：低力度推理
+
+`minimal` 映射为 `low`，`medium` 和 `xhigh` 映射为 `high`，`ultra` 映射为 `max`。
 
 **qwen3.8系列模型：默认值为**`xhigh`
 
@@ -2267,7 +2277,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 **completion\_tokens\_details** `object`（可选）
 
-输出 Token 的细粒度分类。部分模型返回该字段。
+输出 Token 的细粒度分类。部分模型返回该字段。其中 `text_tokens` 包含 `reasoning_tokens`——`reasoning_tokens` 是 `text_tokens` 中对应思考过程的子集，`text_tokens` 减去 `reasoning_tokens` 才是最终可见回复的 Token 数。该字段通常仅在模型输出思考过程时返回，未开启思考时可能为 `null` 或不返回。
 
 属性
 
@@ -2277,11 +2287,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 **reasoning\_tokens** `integer`（可选）
 
-思考过程 Token 数。
+思考过程 Token 数，是 `text_tokens` 的子集。
 
 **text\_tokens** `integer`（可选）
 
-输出文本的 Token 数。
+输出文本的 Token 数，已包含 `reasoning_tokens`。
 
 **prompt\_tokens\_details** `object`
 
@@ -2537,7 +2547,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 **completion\_tokens\_details** `object`（可选）
 
-输出 Token 的详细信息。部分模型返回该字段。
+输出 Token 的详细信息。部分模型返回该字段。其中 `text_tokens` 包含 `reasoning_tokens`——`reasoning_tokens` 是 `text_tokens` 中对应思考过程的子集，`text_tokens` 减去 `reasoning_tokens` 才是最终可见回复的 Token 数。该字段通常仅在模型输出思考过程时返回，未开启思考时可能为 `null` 或不返回。
 
 属性
 
@@ -2547,11 +2557,11 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 
 **reasoning\_tokens** `integer`（可选）
 
-思考过程 Token 数。
+思考过程 Token 数，是 `text_tokens` 的子集。
 
 **text\_tokens**`integer`（可选）
 
-输出文本 Token 数。
+输出文本 Token 数，已包含 `reasoning_tokens`。
 
 **prompt\_tokens\_details** `object`
 

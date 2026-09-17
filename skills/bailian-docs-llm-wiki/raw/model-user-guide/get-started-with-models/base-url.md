@@ -58,39 +58,39 @@ Base URL 是模型 API 的调用地址。Base URL必须与同一计费方案的 
 
 华北2（北京）
 
-`https:// {WorkspaceId} .cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
+`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 
-`https:// {WorkspaceId} .cn-beijing.maas.aliyuncs.com/apps/anthropic`
+`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic`
 
 新加坡
 
-`https:// {WorkspaceId} .ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
+`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
-`https:// {WorkspaceId} .ap-southeast-1.maas.aliyuncs.com/apps/anthropic`
+`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic`
 
 日本（东京）
 
-`https:// {WorkspaceId} .ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1`
+`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1`
 
-`https:// {WorkspaceId} .ap-northeast-1.maas.aliyuncs.com/apps/anthropic`
+`https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/apps/anthropic`
 
 德国（法兰克福）
 
-`https:// {WorkspaceId} .eu-central-1.maas.aliyuncs.com/compatible-mode/v1`
+`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1`
 
-`https:// {WorkspaceId} .eu-central-1.maas.aliyuncs.com/apps/anthropic`
+`https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/apps/anthropic`
 
 美国（弗吉尼亚）
 
-`https:// {WorkspaceId} .us-east-1.maas.aliyuncs.com/compatible-mode/v1`
+`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1`
 
-`https:// {WorkspaceId} .us-east-1.maas.aliyuncs.com/apps/anthropic`
+`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/apps/anthropic`
 
 中国香港
 
-`https:// {WorkspaceId} .cn-hongkong.maas.aliyuncs.com/compatible-mode/v1`
+`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1`
 
-`https:// {WorkspaceId} .cn-hongkong.maas.aliyuncs.com/apps/anthropic`
+`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/apps/anthropic`
 
 如需使用 DashScope 原生 API，请将上表 URL 中域名后的路径替换为`/api/v1`，例如北京地域为`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`。
 

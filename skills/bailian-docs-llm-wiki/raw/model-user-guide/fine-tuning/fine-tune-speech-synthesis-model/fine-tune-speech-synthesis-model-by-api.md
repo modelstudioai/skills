@@ -85,7 +85,7 @@ CosyVoice 模型调优涉及两部分费用：**训练费用**（按训练消耗
 
 调优后的模型部署后按**模型单元的使用时长**计费，公式为：费用 = 使用时长（小时） × 模型单元数量 × 模型单元单价。
 
-其中，模型单元数量 = 单副本模型单元 × 部署副本数，可选的模版及对应的模型单元类型参见[部署模版](raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)；各模型单元类型的单价、计费起止时刻请参见[模型部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)。
+其中，模型单元数量 = 单副本模型单元 × 部署副本数，可选的模版及对应的模型单元类型参见[部署模版](raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)；各模型单元类型的单价、计费起止时刻请参见[模型部署](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)。
 
 ## 前提条件
 
@@ -424,7 +424,7 @@ II 型模型单元
 
 ### 方式一：通过控制台部署（推荐日常使用）
 
-**操作入口**：前往[阿里云百炼控制台](https://bailian.console.aliyun.com/model/custom)的**我的模型**页面，找到调优成功的模型并提交部署。完整操作步骤请参见[模型部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)。
+**操作入口**：前往[阿里云百炼控制台](https://bailian.console.aliyun.com/model/custom)的**我的模型**页面，找到调优成功的模型并提交部署。完整操作步骤请参见[模型部署](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)。
 
 **关键参数**：仅需选择以下两项，其余字段由模版与副本数自动决定：
 

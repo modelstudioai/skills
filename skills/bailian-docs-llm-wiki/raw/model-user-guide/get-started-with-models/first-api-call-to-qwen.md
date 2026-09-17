@@ -1300,4 +1300,4 @@ A：请根据您的使用情况参考以下步骤：
 
 **调用自训练模型**
 
-如果您在百炼平台部署了自训练模型，调用时需使用**专属部署**页面生成的模型 code 作为`model`参数，而非模型 ID，否则将报错 Model not exist。详情请参见[模型部署简介](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)中的「部署后调用」章节。
+如果您在百炼平台部署了自训练模型，调用时需使用**专属部署**页面生成的模型 code 作为`model`参数，而非模型 ID，否则将报错 Model not exist。详情请参见[模型部署简介](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)中的「部署后调用」章节。

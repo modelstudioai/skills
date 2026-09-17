@@ -113,7 +113,7 @@ HTTP、SSE
 
 `cn-beijing`
 
-`{WorkspaceId} .cn-beijing.maas.aliyuncs.com`
+`{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 
 `dashscope.aliyuncs.com`
 
@@ -127,7 +127,7 @@ HTTP、SSE
 
 `ap-southeast-1`
 
-`{WorkspaceId} .ap-southeast-1.maas.aliyuncs.com`
+`{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
 `dashscope-intl.aliyuncs.com`
 
@@ -141,7 +141,7 @@ HTTP、SSE
 
 `eu-central-1`
 
-`{WorkspaceId} .eu-central-1.maas.aliyuncs.com`
+`{WorkspaceId}.eu-central-1.maas.aliyuncs.com`
 
 不支持
 
@@ -155,7 +155,7 @@ HTTP、SSE
 
 `ap-northeast-1`
 
-`{WorkspaceId} .ap-northeast-1.maas.aliyuncs.com`
+`{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com`
 
 不支持
 
@@ -169,7 +169,7 @@ HTTP、SSE
 
 `cn-hongkong`
 
-`{WorkspaceId} .cn-hongkong.maas.aliyuncs.com`
+`{WorkspaceId}.cn-hongkong.maas.aliyuncs.com`
 
 `cn-hongkong.dashscope.aliyuncs.com`
 
@@ -183,7 +183,7 @@ HTTP、SSE
 
 `us-east-1`
 
-`{WorkspaceId} .us-east-1.maas.aliyuncs.com`
+`{WorkspaceId}.us-east-1.maas.aliyuncs.com`
 
 `dashscope-us.aliyuncs.com`
 
@@ -193,10 +193,10 @@ HTTP、SSE
 
 [可用模型](https://bailian.console.aliyun.com/us-east-1/model/market)
 
--   **德国（法兰克福）、日本（东京）、中国香港**地域通过**业务空间（Workspace）**区分服务部署范围，开始调用前需前往业务空间管理页面创建业务空间并选择服务部署范围：[德国（法兰克福）](https://bailian.console.aliyun.com/eu-central-1/settings/workspace)（全球/欧盟）、[日本（东京）](https://bailian.console.aliyun.com/ap-northeast-1/settings/workspace)（全球/日本）、[中国香港](https://bailian.console.aliyun.com/cn-hongkong/settings/workspace)（全球/中国香港）。
--   **美国（弗吉尼亚）**地域使用带 `-us` 后缀的模型名称（如 `qwen-plus-us`）可限定美国境内推理，不带后缀的默认**全球**推理。
+-   **德国（法兰克福）、日本（东京）、中国香港、美国（弗吉尼亚）**地域通过**业务空间（Workspace）**区分服务部署范围，开始调用前需前往业务空间管理页面创建业务空间并选择服务部署范围：[德国（法兰克福）](https://bailian.console.aliyun.com/eu-central-1/settings/workspace)（全球/欧盟）、[日本（东京）](https://bailian.console.aliyun.com/ap-northeast-1/settings/workspace)（全球/日本）、[中国香港](https://bailian.console.aliyun.com/cn-hongkong/settings/workspace)（全球/中国香港）、[美国（弗吉尼亚）](https://bailian.console.aliyun.com/us-east-1/settings/workspace)（全球/美国）。
 -   **华北2（北京）**和**新加坡地域**各仅支持一种服务部署范围，无需选择。
--   **新加坡**地域支持中国站企业实名认证账号直接开通，无主体类型、行业或资格限制；按量付费，账单在百炼侧结算，支持人民币支付。
+
+**说明**美国（弗吉尼亚）地域的部署模式已升级。如果正在使用带 `-us` 后缀的模型，请尽快完成切换升级，详情请参见[升级公告](https://www.aliyun.com/notice/118646)。
 
 ## 迁移至业务空间专属域名
 

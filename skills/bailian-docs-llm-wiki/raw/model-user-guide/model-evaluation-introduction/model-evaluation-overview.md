@@ -173,7 +173,7 @@ Function Calling、NL2SQL
 
 ### 选择评测模型
 
-从控制台模型列表中选择要评测的目标模型。支持预置模型和调优后的模型，具体支持的模型请参见[预置模型列表](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)。
+从控制台模型列表中选择要评测的目标模型。支持预置模型和调优后的模型，具体支持的模型请参见[预置模型列表](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)。
 
 ### 配置数据来源
 
@@ -609,7 +609,7 @@ MedMCQA
 
 ## 计费说明
 
-模型评测的费用由两部分构成：被评测模型的推理费用和裁判模型的评分费用。具体模型单价请参见[预置模型列表](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)中的定价说明。
+模型评测的费用由两部分构成：被评测模型的推理费用和裁判模型的评分费用。具体模型单价请参见[预置模型列表](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)中的定价说明。
 
 不同维度类型的费用构成如下：
 

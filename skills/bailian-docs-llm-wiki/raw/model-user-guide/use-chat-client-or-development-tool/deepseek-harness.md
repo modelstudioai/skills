@@ -39,14 +39,14 @@ Token Plan 个人版专属 API Key
 
 **模型**
 
-填入模型 ID，如 `qwen3.8-max`
+填入模型 ID，如 `qwen3.8-flash`
 
 也可直接编辑 `~/.dsh/settings.yaml`：
 
 ```
 agent-default-model:
   provider: bailian-tpp
-  model: qwen3.8-max
+  model: qwen3.8-flash
 
 llm-pi-ai:
   providers:
@@ -56,6 +56,7 @@ llm-pi-ai:
       apiKeyEnv: BAILIAN_API_KEY
       models:
         - id: qwen3.8-max
+        - id: qwen3.8-flash
         - id: qwen3.7-max
         - id: qwen3.7-plus
         - id: qwen3.6-flash
@@ -91,14 +92,14 @@ Token Plan 团队版专属 API Key
 
 **模型**
 
-填入模型 ID，如 `qwen3.8-max`
+填入模型 ID，如 `qwen3.8-flash`
 
 对应 `~/.dsh/settings.yaml` 配置：
 
 ```
 agent-default-model:
   provider: bailian-tp
-  model: qwen3.8-max
+  model: qwen3.8-flash
 
 llm-pi-ai:
   providers:
@@ -108,6 +109,7 @@ llm-pi-ai:
       apiKeyEnv: BAILIAN_API_KEY
       models:
         - id: qwen3.8-max
+        - id: qwen3.8-flash
         - id: qwen3.7-max
         - id: qwen3.7-plus
         - id: qwen3.6-flash

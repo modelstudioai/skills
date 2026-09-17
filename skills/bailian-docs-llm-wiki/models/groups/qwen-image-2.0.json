@@ -51,6 +51,12 @@
       "versionTag": "MAJOR",
       "equivalentSnapshot": "qwen-image-2.0-2026-03-03",
       "latestOnlineAt": "2026-03-03T11:31:36.000+00:00",
+      "trainingTypes": {
+        "sft": [
+          "lora",
+          "full"
+        ]
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-Image-2.0",
       "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-image-edit-api",

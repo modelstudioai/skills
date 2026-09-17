@@ -110,7 +110,7 @@ echo $env:OPENAI_API_KEY
 
 ```
 model_provider = "Model_Studio_Token_Plan_Personal"
-model = "qwen3.8-max"
+model = "qwen3.8-flash"
 [model_providers.Model_Studio_Token_Plan_Personal]
 name = "Model_Studio_Token_Plan_Personal"
 base_url = "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
@@ -335,6 +335,49 @@ wire_api = "responses"
       }
     },
     {
+      "slug": "glm-5.3",
+      "display_name": "glm-5.3",
+      "description": "DashScope model: glm-5.3",
+      "default_reasoning_level": "medium",
+      "supported_reasoning_levels": [
+        {
+          "effort": "low",
+          "description": "Fast responses with lighter reasoning"
+        },
+        {
+          "effort": "medium",
+          "description": "Balances speed and reasoning depth"
+        },
+        {
+          "effort": "high",
+          "description": "Greater reasoning depth for complex problems"
+        },
+        {
+          "effort": "xhigh",
+          "description": "Extra high reasoning depth for complex problems"
+        }
+      ],
+      "context_window": 1000000,
+      "effective_context_window_percent": 95,
+      "supports_parallel_tool_calls": false,
+      "supports_image_detail_original": false,
+      "input_modalities": [
+        "text"
+      ],
+      "shell_type": "default",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 6,
+      "base_instructions": "",
+      "support_verbosity": false,
+      "supports_reasoning_summaries": false,
+      "experimental_supported_tools": [],
+      "truncation_policy": {
+        "mode": "bytes",
+        "limit": 10000
+      }
+    },
+    {
       "slug": "glm-5.2",
       "display_name": "glm-5.2",
       "description": "DashScope model: glm-5.2",
@@ -367,7 +410,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 6,
+      "priority": 7,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -411,7 +454,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 7,
+      "priority": 8,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -454,7 +497,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 8,
+      "priority": 9,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -497,7 +540,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 9,
+      "priority": 10,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -540,7 +583,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 10,
+      "priority": 11,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -560,7 +603,7 @@ wire_api = "responses"
 model_catalog_json = "~/.codex/model-catalog.local.json"
 ```
 
-配置完成后，可通过 `codex -m` 指定模型 ID（例如 `codex -m qwen3.8-max`），或在 TUI 中输入 `/model` 在已配置的模型间切换。
+配置完成后，可通过 `codex -m` 指定模型 ID（例如 `codex -m qwen3.8-flash`），或在 TUI 中输入 `/model` 在已配置的模型间切换。
 
 #### Chat/Completions API（其他模型）
 
@@ -668,7 +711,7 @@ echo $env:OPENAI_API_KEY
 
 ```
 model_provider = "Model_Studio_Token_Plan"
-model = "qwen3.8-max"
+model = "qwen3.8-flash"
 [model_providers.Model_Studio_Token_Plan]
 name = "Model_Studio_Token_Plan"
 base_url = "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
@@ -893,6 +936,49 @@ wire_api = "responses"
       }
     },
     {
+      "slug": "glm-5.3",
+      "display_name": "glm-5.3",
+      "description": "DashScope model: glm-5.3",
+      "default_reasoning_level": "medium",
+      "supported_reasoning_levels": [
+        {
+          "effort": "low",
+          "description": "Fast responses with lighter reasoning"
+        },
+        {
+          "effort": "medium",
+          "description": "Balances speed and reasoning depth"
+        },
+        {
+          "effort": "high",
+          "description": "Greater reasoning depth for complex problems"
+        },
+        {
+          "effort": "xhigh",
+          "description": "Extra high reasoning depth for complex problems"
+        }
+      ],
+      "context_window": 1000000,
+      "effective_context_window_percent": 95,
+      "supports_parallel_tool_calls": false,
+      "supports_image_detail_original": false,
+      "input_modalities": [
+        "text"
+      ],
+      "shell_type": "default",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 6,
+      "base_instructions": "",
+      "support_verbosity": false,
+      "supports_reasoning_summaries": false,
+      "experimental_supported_tools": [],
+      "truncation_policy": {
+        "mode": "bytes",
+        "limit": 10000
+      }
+    },
+    {
       "slug": "glm-5.2",
       "display_name": "glm-5.2",
       "description": "DashScope model: glm-5.2",
@@ -925,7 +1011,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 6,
+      "priority": 7,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -969,7 +1055,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 7,
+      "priority": 8,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -1012,7 +1098,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 8,
+      "priority": 9,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -1055,7 +1141,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 9,
+      "priority": 10,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -1098,7 +1184,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 10,
+      "priority": 11,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -1142,7 +1228,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 11,
+      "priority": 12,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -1185,7 +1271,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 12,
+      "priority": 13,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -1228,7 +1314,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 13,
+      "priority": 14,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -1272,7 +1358,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 14,
+      "priority": 15,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -1316,7 +1402,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 15,
+      "priority": 16,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -1360,7 +1446,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 16,
+      "priority": 17,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -1403,7 +1489,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 17,
+      "priority": 18,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -1446,7 +1532,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 18,
+      "priority": 19,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -1489,7 +1575,7 @@ wire_api = "responses"
       "shell_type": "default",
       "visibility": "list",
       "supported_in_api": true,
-      "priority": 19,
+      "priority": 20,
       "base_instructions": "",
       "support_verbosity": false,
       "supports_reasoning_summaries": false,
@@ -1509,7 +1595,7 @@ wire_api = "responses"
 model_catalog_json = "~/.codex/model-catalog.local.json"
 ```
 
-配置完成后，可通过 `codex -m` 指定模型 ID（例如 `codex -m qwen3.8-max`），或在 TUI 中输入 `/model` 在已配置的模型间切换。
+配置完成后，可通过 `codex -m` 指定模型 ID（例如 `codex -m qwen3.8-flash`），或在 TUI 中输入 `/model` 在已配置的模型间切换。
 
 #### Chat/Completions API（其他模型）
 

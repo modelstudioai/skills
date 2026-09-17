@@ -61,7 +61,7 @@ CPT
 -   **本地上传**：无前置条件，直接上传本地文件，适合小批量数据。
 -   **从 OSS 导入**：需在目标 Bucket 添加标签 `bailian-datahub-access=read`，适合大批量数据。评测集不支持此方式。
 -   **日志回流**：从 SLS 推理日志自动提取训练数据，需授权服务关联角色，形成推理→数据→微调增强回路。
--   **API 上传**：通过百炼 API 以编程方式上传数据文件，适合需要自动化集成的场景。详见[使用 API 或命令行进行模型调优](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide)。
+-   **API 上传**：通过百炼 API 以编程方式上传数据文件，适合需要自动化集成的场景。详见[使用 API 或命令行进行模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。
 
 日志回流仅支持最近 30 天内的日志，单次导入上限 10 万条，且需指定 API Key 和模型筛选条件。
 
