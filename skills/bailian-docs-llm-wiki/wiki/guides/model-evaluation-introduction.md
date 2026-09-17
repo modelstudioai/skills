@@ -1,36 +1,75 @@
 # model evaluation introduction
 
-模型评测是百炼平台提供的核心能力之一，用于系统性评估大语言模型在特定任务或数据集上的性能表现。它支持自动化指标计算、多模型横向对比及结果可视化，适用于模型选型、迭代优化与效果归因分析。该功能基于标准化评测框架构建，开发者可通过 API 或控制台快速接入。
+模型评测是百炼平台提供的核心模型能力评估功能，支持通过标准化流程对文本生成类模型进行量化打分与横向对比。它提供自定义评测（基于用户数据与自定义维度）和基线评测（基于公开标准数据集）两种模式，覆盖从模型选型、调优验证到持续质量监控的全生命周期场景。评测结果以综合得分、通过率及明细报告形式输出，为技术决策提供客观依据。
 
 ## 支持的模型/功能
 
-- 支持所有已接入百炼平台的 LLM（包括 Qwen 系列、第三方托管模型及用户自定义微调模型）；
-- 提供预置评测任务：文本生成质量（BLEU、ROUGE、BERTScore）、事实一致性（FactScore）、指令遵循度（AlpacaEval 风格）、安全性（ToxiGen 检测）等；
-- 支持自定义评测脚本与指标函数，通过 `custom_evaluator` 接口注入逻辑。详细维度说明见 [评测维度](../../raw/model-user-guide/model-evaluation-introduction/evaluation-metrics.md)。
+- **支持模型类型**：仅限文本生成类模型（Text Generation），包括百炼预置模型（如千问系列）及用户调优后的模型；不支持[多模态](../concepts/multi-modal.md)、语音、向量等非文本生成模型。  
+- **评测方式**：  
+  - **自定义评测**：支持用户上传评测数据集（EvaluationSet 类型，含 `Prompt` 和 `Completion` 列）或复用已有推理结果集；支持五种评测维度类型（见下文），可灵活组合。  
+  - **基线评测**：内置 5 大类、13 个公开 Benchmark（如 MMLU-Pro、GSM8K、HumanEval、LongBench-v2、FinanceQA），自动执行、无需准备数据或配置维度；> **注意**：基线评测[仅北京地域可用](../../raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)，其他地域控制台不显示该选项，属正常限制。  
+- **评分范式**：覆盖大模型评估（AI 自动打分）、规则评估（算法计算）和人工评估（人工标注）三大范式，详见[评测维度](../../raw/model-user-guide/model-evaluation-introduction/evaluation-metrics.md)文档。
 
 ## 关键参数
 
-- `dataset_id`: 必填，指定评测数据集 ID（需提前上传至数据管理模块）；
-- `model_ids`: 必填，支持单个或多个模型 ID 数组，用于横向对比；
-- `metrics`: 可选，指定计算的指标列表（如 `["bleu", "fact_score"]`），默认启用全部适配指标；
-- `timeout`: 可选，单样本推理超时（秒），默认 60，最大 300；
-- `max_samples`: 可选，限制评测样本数（防资源过载），默认全量，上限 10,000。参数详情请参考 [模型评测](../../raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)。
+| 参数类别 | 参数名 | 说明 | 必填性 | 约束 |
+|----------|--------|------|--------|------|
+| **通用** | 维度名称 | 模板标识符 | 是 | ≤20 字符 |
+| | 描述 | 补充说明 | 否 | ≤100 字符 |
+| **大模型评估** | 裁判模型 | 执行评判的 LLM（如千问-Max） | 是（仅大模型评估） | 从控制台下拉选择 |
+| | 评分器 Prompt | 指导裁判模型打分的提示词 | 是（仅大模型评估） | 必须含 `${prompt}` / `${output}` / `${completion}` 至少一个变量；≤50,000 字符 |
+| | 评分范围（数值型） | 整数区间，如 `0–5` | 是（仅数值型） | 最小值 ≥ 0，最大值 ≥ 1 |
+| | 通过阈值 | 判定 Pass 的最低分（数值型）或相似度（规则型） | 是（数值型/相似度型） | 步长 0.1（数值型）或 0.01（相似度型） |
+| | Pass/Fail 标签（分类型） | 分类标签集合 | 是（仅分类型） | Pass 与 Fail 标签互斥且不可重复 |
+| **规则评估** | 匹配规则（字符串匹配） | 相等 / 不相等 / 包含 | 是（仅字符串匹配） | — |
+| | 评估指标（文本相似度） | ROUGE-1/2/L、BLEU、Cosine、Fuzzy Match、Accuracy | 是（仅文本相似度） | — |
+
+> **注意**：维度类型（如“大模型评估-数值型”）创建后**不可修改**，选错需删除重建；已关联的评测任务不受影响，但排行榜绑定该维度后将阻止新任务创建——详见[模型评测](../../raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)。
 
 ## 使用方式
 
-1. **API 调用**：发送 POST 请求至 `/v1/evaluations`，Body 包含上述参数（JSON 格式）；
-2. **控制台操作**：进入「模型管理 → 评测中心」，选择模型与数据集，配置参数后启动；
-3. **异步获取结果**：提交后返回 `evaluation_id`，轮询 `/v1/evaluations/{id}` 获取状态与报告。完整流程说明见 [模型评测](../../raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)。
+1. **前置准备**：  
+   - 开通百炼账号并进入[北京地域控制台](https://bailian.console.aliyun.com/cn-beijing/model/evaluate/task/creation)；  
+   - 在**数据管理**模块上传评测数据集（类型为 `EvaluationSet`，含 `Prompt` 和 `Completion` 列）或准备推理结果集（含 `Prompt`、`Output`、`Completion`）。  
+
+2. **创建评测维度**：  
+   - 进入**模型评测 → 评测维度**页签，单击**创建评测维度**；  
+   - 根据场景选择类型（推荐：有标准答案→规则评估；需语义理解→大模型评估；主观判断→人工评估），完成对应参数配置；  
+   - 保存后维度即为可复用模板。详细配置逻辑参见[评测维度](../../raw/model-user-guide/model-evaluation-introduction/evaluation-metrics.md)。  
+
+3. **创建评测任务**：  
+   - 进入**评测任务**页签，单击**创建评测任务**；  
+   - 选择**自定义评测**或**基线评测**；  
+     - *自定义评测*：选择被评测模型、数据来源（评测数据集或推理结果集）、关联已创建的维度；可选开启排行榜参与；  
+     - *基线评测*：选择模型、勾选目标 Benchmark（支持多选及子维度筛选）、可选开启数据采样；  
+   - 单击**开始评测**提交。  
+
+4. **查看结果**：  
+   - 任务状态变为“评测完成”后，点击任务名进入详情页；  
+     - *自定义评测*：查看**指标统计**（综合得分、通过率、分布图）和**数据明细**（逐条 Prompt/Output/Completion/各维度评分）；  
+     - *基线评测*：查看**任务总览**（雷达图）、**基线评分明细**、**Case 分析**（含裁判模型评判依据）及**多任务对比**。  
 
 ## 限制和注意事项
 
-- 单次评测最多支持 5 个模型并发对比；
-- 自定义指标函数须符合 Python 3.9+ 语法，且执行时间 ≤ 5 秒/样本；
-- 数据集格式必须为 JSONL，每行含 `input` 和 `reference` 字段（`reference` 为可选，部分指标如 BLEU 强制要求）；
-- > **注意**：文档中提及的 `batch_size` 参数在 v2.3.0+ 版本已废弃，实际由系统自动调度，勿在请求中显式传入；旧版 [评测维度](../../raw/model-user-guide/model-evaluation-introduction/evaluation-metrics.md) 中仍存在该参数说明，属过时内容。
+- **地域限制**：基线评测仅在北京地域可用；自定义评测全地域支持。  
+- **模型限制**：当前**仅支持文本生成类模型**，不支持图像生成、语音合成、嵌入模型等；调优模型评测不额外收取推理费（费用已含在部署算力中）。  
+- **维度限制**：  
+  - 维度类型创建后不可更改；  
+  - 大模型评估维度会产生裁判模型 [Token](../concepts/token.md) 费用，规则评估与人工评估无此费用；  
+  - 人工评估任务需全部标注完成后才标记为“评测完成”。  
+- **数据要求**：  
+  - 评测数据集必须为 `EvaluationSet` 类型且已发布版本；  
+  - 推理结果集需严格按模板格式（含 `Prompt`、`Output`、`Completion` 列）上传；  
+  - 建议最小数据量：验证用 50–100 条，正式评测 ≥200 条。  
+- **成本优化建议**：  
+  - 首次使用小规模数据（50 条）验证配置正确性；  
+  - 评测完成后下载推理结果集，后续复用以避免重复推理；  
+  - 优先选用规则评估（零裁判模型费用）而非大模型评估。  
+- **结果解读提醒**：综合得分是各维度平均值，可能掩盖维度间差异；应结合分数分布与明细 Case 分析短板，1–3% 的分差通常属评测噪声，不宜作为决策唯一依据。
 
 ## 来源文档
 
-- [模型评测](../../raw/model-user-guide/model-evaluation-introduction.md)
+- [模型评测](../../raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)
+- [评测维度](../../raw/model-user-guide/model-evaluation-introduction/evaluation-metrics.md)
 
 

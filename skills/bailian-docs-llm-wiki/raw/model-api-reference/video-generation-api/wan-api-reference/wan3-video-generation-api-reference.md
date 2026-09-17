@@ -247,6 +247,7 @@
 生成视频的宽高比。可选值：
 
 -   `adaptive`（默认值）：自适应长宽比，根据输入媒体比例和意图自动推荐合适的长宽比。
+-   `21:9`
 -   `16:9`
 -   `4:3`
 -   `1:1`
@@ -317,58 +318,6 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
         "prompt_extend": true
     }
 }'
-```
-
-#### Python SDK
-
-```
-from http import HTTPStatus
-from dashscope import VideoSynthesis
-import dashscope
-import os
-
-# 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx"
-# 获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-api_key = os.getenv("DASHSCOPE_API_KEY")
-
-media = [{'type': 'file', 'url': 'https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260806/ebapmr/glass.pptx'}]
-
-def sample_async_call():
-    # 异步提交视频生成任务
-    rsp = VideoSynthesis.async_call(api_key=api_key,
-                                model='wan3.0-video',
-                                prompt='一支高端智能眼镜产品广告，整体风格极简、未来感、时尚高级，光影克制，画面以黑色、银灰色、冰蓝色为主色调，局部点缀柔和白光与参数UI图形。开场在纯黑背景中，一副智能眼镜从黑暗中缓缓浮现，镜腿边缘掠过精致高光，镜框轮廓在冷冽边缘光下被勾勒出来，镜头超近距离掠过镜片、鼻托、转轴、镜腿与材质细节，展现金属与高性能复合材料的细腻质感，表面处理高级克制，线条轻薄流畅。随后产品在空中缓慢旋转，画面以极简动态图形同步展示核心参数信息。随后镜头快速收拢，所有零件精准回归组装成完整产品，切换到年轻模特佩戴展示，模特五官立体、气质自信，穿着简洁高级的都市时尚服装，在极简空间和城市光影环境中自然转头、抬手、行走、微笑，镜头从正面、侧面、斜后方展示眼镜佩戴状态，突出轻薄贴合、时尚轮廓与日常百搭属性。结尾在纯色背景中，产品悬浮定格，镜头缓慢推进到品牌logo和核心slogan，整体音乐极简电子氛围配合精准鼓点，节奏干净有力，画面质感高级、克制、纯粹，具有强烈品牌记忆点和国际化科技审美。',
-                                media=media,
-                                resolution='480P',
-                                ratio='adaptive',
-                                duration=10,
-                                prompt_extend=True)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print("task_id: %s" % rsp.output.task_id)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
-
-    # 查询任务状态
-    status = VideoSynthesis.fetch(task=rsp, api_key=api_key)
-    if status.status_code == HTTPStatus.OK:
-        print(status.output.task_status)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (status.status_code, status.code, status.message))
-
-    # 等待任务完成
-    rsp = VideoSynthesis.wait(task=rsp, api_key=api_key)
-    print(rsp)
-    if rsp.status_code == HTTPStatus.OK:
-        print(rsp.output.video_url)
-    else:
-        print('Failed, status_code: %s, code: %s, message: %s' %
-              (rsp.status_code, rsp.code, rsp.message))
-
-if __name__ == '__main__':
-    sample_async_call()
 ```
 
 #### 参考生视频

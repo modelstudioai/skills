@@ -6066,7 +6066,7 @@ data:{"output":{"thoughts":[{"action":"reasoning","thought":"","action_type":"re
 
 **使用步骤**
 
-**步骤 1: 激活**[长期记忆](https://help.aliyun.com/zh/model-studio/long-term-memory)**功能**
+**步骤 1: 激活**[长期记忆](raw/application-user-guide/memory-library-overview/memory/long-term-memory.md)**功能**
 
 访问**[应用管理](https://bailian.console.aliyun.com/#/app-center)**页面，找到您的智能体应用，打开**长期记忆**功能开关，并**发布**应用。
 

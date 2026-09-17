@@ -37,7 +37,8 @@ API Key鉴权，格式为`Bearer sk-xxxx`。
 
 -   `wan2.7-image-pro`：推荐用于文生图/图生图微调。
 -   `wan2.7-image`
--   `qwen-image-2.0`：千问图像生成模型。支持的超参数与万相不同，请参见下方**超参数属性（qwen-image-2.0）**。
+-   `qwen-image-2.0`：千问图像生成模型。支持的超参数与万相不同，请参见下方**超参数属性（qwen-image-2.0、qwen-image-2.0-pro）**。
+-   `qwen-image-2.0-pro`：千问图像生成模型。超参数与 qwen-image-2.0 完全一致，请参见下方**超参数属性（qwen-image-2.0、qwen-image-2.0-pro）**。
 
 **training\_file\_ids** `array[string]` **（条件必选）**
 
@@ -53,7 +54,7 @@ API Key鉴权，格式为`Bearer sk-xxxx`。
 
 **hyper\_parameters** `object` （可选）
 
-**超参数配置**。初次训练时，推荐使用默认的超参数。若模型效果不佳或训练不收敛，可以尝试调整训练量（万相为 max\_steps，qwen-image-2.0 为 n\_epochs）或 learning\_rate 等参数。不同基准模型支持的超参数不同，请参见下方对应的超参数属性。
+**超参数配置**。初次训练时，推荐使用默认的超参数。若模型效果不佳或训练不收敛，可以尝试调整训练量（万相为 max\_steps，qwen-image-2.0、qwen-image-2.0-pro 为 n\_epochs）或 learning\_rate 等参数。不同基准模型支持的超参数不同，请参见下方对应的超参数属性。
 
 超参数属性（wan2.7-image-pro、wan2.7-image）
 
@@ -150,9 +151,9 @@ Checkpoint 保存数量上限。推荐值：10。限制最多保存的模型数�
 
 训练集划分比例。推荐值：0.9。取值范围为 (0, 1)。仅在未指定`validation_file_ids`或`validation_datasets`时生效。此参数用于从训练集中自动按比例拆分出验证集。例如，0.9表示90%训练集，10%验证集。
 
-超参数属性（qwen-image-2.0）
+超参数属性（qwen-image-2.0、qwen-image-2.0-pro）
 
-qwen-image-2.0 按**训练轮数**（n\_epochs）控制训练过程，不支持 max\_steps、eval\_steps 和 max\_token\_length 参数。
+qwen-image-2.0、qwen-image-2.0-pro 按**训练轮数**（n\_epochs）控制训练过程，不支持 max\_steps、eval\_steps 和 max\_token\_length 参数。两者的超参数一致，仅推荐学习率不同：qwen-image-2.0 为 5e-5，qwen-image-2.0-pro 为 1e-4。
 
 **n\_epochs** `int` **（必选）**
 
@@ -170,7 +171,7 @@ qwen-image-2.0 按**训练轮数**（n\_epochs）控制训练过程，不支持 
 
 **learning\_rate** `float` **（必选）**
 
-学习率。推荐值：5e-5。控制模型权重更新的幅度。过高可能导致模型变差，过低则变化不明显。
+学习率。推荐值：qwen-image-2.0 为 5e-5，qwen-image-2.0-pro 为 1e-4。控制模型权重更新的幅度。过高可能导致模型变差，过低则变化不明显。
 
 **generation\_type** `string` **（必选）**
 
@@ -335,6 +336,34 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
     "training_type": "efficient_sft",
     "hyper_parameters": {
         "learning_rate": 5e-5,
+        "n_epochs": 10,
+        "eval_epochs": 10,
+        "batch_size": 8,
+        "gradient_clip": 0.5,
+        "weight_decay": 0.02,
+        "max_pixels": "2k",
+        "val_img_size": "2k",
+        "generation_type": "t2i",
+        "lora_rank": 32,
+        "save_total_limit": 20
+    }
+}'
+```
+
+千问（qwen-image-2.0-pro）
+
+```
+curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
+--header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header 'Content-Type: application/json' \
+--data '{
+    "model": "qwen-image-2.0-pro",
+    "training_file_ids": [
+        "<替换为训练数据集的文件id>"
+    ],
+    "training_type": "efficient_sft",
+    "hyper_parameters": {
+        "learning_rate": 1e-4,
         "n_epochs": 10,
         "eval_epochs": 10,
         "batch_size": 8,

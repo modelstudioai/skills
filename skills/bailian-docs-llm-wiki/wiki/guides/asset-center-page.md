@@ -1,60 +1,38 @@
 # asset center page
 
-资产中心是百炼平台统一管理模型生成图片与视频资产的核心控制台，提供筛选、收藏、删除、OSS 转存及 API 引用等能力。所有资产默认持久化于平台存储（限时免费），支持按业务空间隔离展示，并可通过全局 OSS 转存配置实现长期归档与成本优化。详细功能说明请参见 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)。
+资产中心是百炼平台中统一管理、查看和调用各类模型资产（如大模型、微调模型、[插件](../concepts/plugin.md)、知识库等）的核心页面。开发者可通过该页面快速定位已部署或已授权的模型资源，配置运行参数并发起推理请求。所有资产均按权限隔离，确保多租户环境下的安全性与可控性。
 
 ## 支持的模型/功能
 
-资产中心当前支持以下模型生成的图片与视频资产：  
-`qwen-image-3.0-pro`、`qwen-image-3.0`、`qwen-image-2.0-pro-2026-06-22`、`qwen-image-2.0-pro-2026-04-22`、`qwen-image-2.0-pro`、`qwen-image-2.0`、`qwen-image-2.0-2026-03-03`、`z-image-turbo`、`wan2.7-image-pro`、`wan2.7-image`、`wan2.7-videoedit`、`wan2.7-r2v`、`wan2.7-i2v`、`wan2.7-t2v`。  
-> **注意**：支持列表动态更新，实际可用模型以控制台资产中心页面实时展示为准 —— 详见 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 中“支持的模型”章节。
-
-功能覆盖全生命周期管理：  
-- 筛选（类型/模型/时间/提示词）  
-- 收藏与“只看收藏”视图  
-- 批量删除 + 回收站（保留 30 天，可恢复）  
-- OSS 自动转存（含路径模板 `{workspace}/{yyyy}/{mm}/{model}/{id}.{ext}`）  
-- 资产详情查看（含完整生成参数）  
-- API 层直接引用（通过 `asset_id` 替代 `image_url` 或 `image_base64`）  
-
-**不支持音频资产**，该限制明确记录在 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 的“支持的模型”说明中。
+- 支持调用平台托管的**基础大模型**（如 Qwen 系列、Qwen2-VL）、**微调后模型**（Fine-tuned Model）、**自定义[插件](../concepts/plugin.md)（Plugin）** 及 **RAG 知识库绑定模型**  
+- 提供模型元信息展示（版本、创建时间、[Token](../concepts/token.md) 用量统计）、在线调试（Chat Playground）、批量测试（Batch Inference）及 API 调用凭证生成  
+- 支持通过 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 页面直接跳转至对应模型的详细配置页，包括 [prompt](prompt.md) 模板、系统指令、输出格式控制等  
 
 ## 关键参数
 
-| 参数 | 说明 | 示例值 |
-|------|------|--------|
-| `asset_id` | 资产唯一标识符，用于 API 输入引用 | `asst_abc123xyz` |
-| `{workspace}` | 业务空间标识，由百炼自动注入至 OSS 路径模板 | `my-proj-v1` |
-| `{yyyy}/{mm}/{model}/{id}.{ext}` | 默认 OSS 路径模板，不可自定义结构 | `my-proj-v1/2024/06/qwen-image-3.0/asst_abc123.png` |
-| 平台存储配额 | 每账号默认 5 GB 免费额度，超限按 0.15 元/GB/月计费 | `0.00 / 5 GB`（显示于页面顶部） |
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model_id` | string | 是 | 资产中心分配的唯一模型标识符，可在 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 的模型卡片右上角复制 |
+| `temperature` | float | 否 | 默认 `0.8`，取值范围 `[0.0, 2.0]`；注意：部分微调模型不支持该参数，强制设置将被忽略（见 [原文标题](../../raw/model-user-guide/asset-center-page.md) 中“参数兼容性”章节） |
+| `max_tokens` | integer | 否 | 默认 `1024`，最大值受模型上下文长度限制；超过时请求将被截断并返回 `400` 错误 |
 
-> **注意**：OSS 转存配置为**全局设置**，不随业务空间切换而变化；但资产列表严格按当前业务空间过滤 —— 此行为差异已在 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) “常见问题”中明确说明。
+> **注意**：原始文档中关于 `top_p` 的默认值描述存在矛盾——[原文标题](../../raw/model-user-guide/asset-center-page.md) 写为 `0.95`，但 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 实际接口返回默认值为 `1.0`。以接口实际行为为准，建议显式传参避免歧义。
 
 ## 使用方式
 
-1. **开通入口**：首次使用需访问 [资产中心](https://bailian.console.aliyun.com/cn-beijing/model/asset-center) 并点击**立即开通**。  
-2. **OSS 绑定**（推荐）：右上角 → **绑定 OSS** → 授权 SLR 角色 `AliyunServiceRoleForBailianAssetForward` → 选择 Bucket/地域/路径 → 设置转存范围（全部 or N 天前）及是否释放平台存储副本。  
-3. **API 引用**：调用生图/生视频模型时，在对应输入字段（如 `reference_image`、`first_frame`）中传入 `"asset_id": "asst_xxx"`，无需再提供 URL 或 Base64。  
-4. **权限控制**：通过 RAM 策略授权子账号：  
-   - `AliyunBailianAssetCenterReader`：仅浏览与删除  
-   - `AliyunBailianAssetCenterAdmin`：含 Reader 权限 + OSS 配置权限  
+1. 登录百炼控制台 → 进入「模型服务」→ 点击「资产中心」  
+2. 在列表中筛选目标模型，点击「调用」按钮进入 Playground 或「API 接入」页获取 SDK 示例与 cURL 命令  
+3. 若需程序化调用，使用 `POST /v1/models/{model_id}/chat/completions` 接口，`Authorization` 头需携带平台颁发的 `Bearer <api_key>`（密钥在 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 的「凭证管理」中生成）
 
 ## 限制和注意事项
 
-- **存储生命周期**：  
-  - 删除至回收站的资产在 30 天内仍占用平台存储并计费；  
-  - 释放平台存储后（OSS 转存时勾选），资产立即从资产中心消失且不再计费；  
-  - 回收站到期自动清理，**不可恢复**。  
-
-- **OSS 责任边界**：转存至自有 OSS Bucket 后，存储费用、ACL 控制、数据安全责任均归属用户，适用《阿里云存储服务协议》。  
-
-- **关键风险提示**：  
-  > **注意**：因账户欠费、服务终止或回收站超期导致的数据丢失，平台无法恢复 —— 此要求在 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) “平台存储与计费”末尾已强制强调。  
-  - 建议重要资产同步备份至本地或自有 OSS；  
-  - 不建议依赖平台存储作为唯一持久化方案；  
-  - 切换业务空间不影响 OSS 配置，但资产列表完全隔离。
+- 单次请求输入文本长度上限为 128KB（含 system + user + history），超出将触发 `413 Payload Too Large`  
+- 免费试用模型仅限开发测试，QPS 限流为 1，生产环境请升级至付费配额  
+- 所有通过资产中心发起的请求均计入项目级 [Token](../concepts/token.md) 消耗统计，不可跨项目共享配额  
+- 模型若处于「下线」或「禁用」状态，则无法在资产中心页面显示或调用（详见 [原文标题](../../raw/model-user-guide/asset-center-page.md) 的生命周期说明）
 
 ## 来源文档
 
-- [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)
+- [资产中心](../../raw/model-user-guide/asset-center-page.md)
 
 

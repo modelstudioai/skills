@@ -1,33 +1,33 @@
 # get started with models
 
-本文档指导开发者快速接入百炼平台的模型服务，涵盖模型选择、API 调用基础配置、关键参数设置及常见约束。适用于首次集成千问（Qwen）系列大模型或其它托管模型的场景。所有操作均基于标准 RESTful API 接口，无需额外 SDK 即可完成调用。
+本文档指导开发者快速接入百炼平台的模型服务，涵盖模型选择、API调用基础配置、关键参数设置及使用约束。所有操作均基于标准 RESTful API 接口，无需额外 SDK 即可完成集成。建议首次使用者按顺序阅读 [开始使用](../../raw/model-user-guide/get-started-with-models.md) 中的引导路径。
 
-## 支持的模型与核心功能
+## 支持的模型与功能
 
-百炼平台当前支持 Qwen 系列大语言模型（如 qwen-max、qwen-plus、qwen-turbo）、多模态模型（如 qwen-vl）及部分开源微调模型。模型能力覆盖文本生成、代码补全、多轮对话、图像理解等。完整模型列表及适用场景详见 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md)。动态限流与静态配额管理能力已统一整合至配额中心，具体策略请参考 [动态限流](../../raw/model-user-guide/get-started-with-models/quota-management.md) 文档。
-
-> **注意**：原始文档中同时存在 [动态限流](../../raw/model-user-guide/get-started-with-models/quota-management.md) 和 [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md) 两篇独立说明，但后者内容已过时，其描述的固定速率限制机制已被配额中心的弹性策略替代；实际接入应以 [动态限流](../../raw/model-user-guide/get-started-with-models/quota-management.md) 为准。
+百炼平台提供多类大语言模型（如 Qwen 系列）、[多模态](../concepts/multi-modal.md)模型及推理优化版本（如 `qwen-max`、`qwen-plus`、`qwen-turbo`），支持文本生成、[函数调用](../concepts/function-calling.md)（Function Calling）、流式响应（stream）、工具调用（tool_choice）等核心能力。完整模型列表及特性说明见 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md)。部分模型还支持图像输入（需配合 `messages[].content` 中的 `image_url` 字段），具体兼容性请以该文档为准。
 
 ## 关键参数
 
-调用模型 API 必须指定以下参数：
-- `model`：模型标识符（如 `"qwen-max"`），必须与 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md) 中公布的名称严格一致；
-- `input`：请求数据体，结构为 `{ "messages": [...] }`，`messages` 遵循标准 ChatML 格式；
-- `parameters`（可选）：控制生成行为，如 `temperature`（0.0–2.0）、`top_p`、`max_tokens` 等，详细取值范围见各模型文档。
+调用模型 API 时，必需参数包括：  
+- `model`: 模型标识符（如 `"qwen-max"`），必须与 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md) 中公布的名称严格一致；  
+- `messages`: 对话历史数组，格式为 `[{ "role": "user", "content": "..." }]`；  
+- `api_key`: 从控制台获取的密钥，需通过 `Authorization: Bearer <api_key>` 传递；  
+- `base_url`: 根据部署地域选择，例如 `https://dashscope.aliyuncs.com/api/v1`（公共云）或专有云定制地址，详见 [Base URL总览](../../raw/model-user-guide/get-started-with-models/base-url.md)。
+
+> **注意**：[选择地域、服务部署范围和接入域名](../../raw/model-user-guide/get-started-with-models/regions.md) 中列出的部分旧域名（如 `https://api-dashscope.aliyuncs.com`）已弃用，实际应优先采用 [Base URL总览](../../raw/model-user-guide/get-started-with-models/base-url.md) 中标注的当前有效地址。
 
 ## 使用方式
 
-1. 获取 API Key：在百炼控制台「API 密钥」页面创建并复制密钥；
-2. 构造请求：使用 `POST /v1/chat/completions` 端点，Header 中携带 `Authorization: Bearer <api_key>`；
-3. 设置 Base URL：根据部署地域选择对应接入域名，例如华东1（杭州）为 `https://dashscope.aliyuncs.com/api/v1`，完整列表见 [Base URL总览](../../raw/model-user-guide/get-started-with-models/base-url.md)；
-4. 地域与服务范围需提前确认，不同 Region 的模型可用性与延迟差异显著，配置方法详见 [选择地域、服务部署范围和接入域名](../../raw/model-user-guide/get-started-with-models/regions.md)。
+1. 登录百炼控制台，创建 API Key 并确认配额状态（参见 [动态限流](../../raw/model-user-guide/get-started-with-models/quota-management.md)）；  
+2. 根据目标模型和业务场景，参考 [首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md) 完成最小可行请求（cURL 或 Python 示例）；  
+3. 验证响应结构（含 `id`、`choices[0].message.content`、`usage` 等字段），并按需启用 `stream=true` 实现逐 token 返回。
 
 ## 限制和注意事项
 
-- 单次请求 `messages` 数量上限为 50 条，总 token 数（输入+输出）受模型自身限制及账户配额双重约束；
-- 免费试用额度仅限新用户首次开通后 30 天内有效，超出后需绑定付费账号；
-- 图像类请求（如 qwen-vl）需将 base64 编码图片置于 `messages.content` 的 `image_url` 字段，不支持本地文件路径；
-- 所有调用均需显式声明 `region`（通过 Base URL 或 `x-dashscope-region` Header），未声明可能导致 404 或路由失败 —— 此要求在 [选择地域、服务部署范围和接入域名](../../raw/model-user-guide/get-started-with-models/regions.md) 中明确强调。
+- 单次请求 `messages` 总长度（含 [prompt](prompt.md) + completion）受模型上下文窗口限制（如 `qwen-turbo` 为 8K tokens），超长将返回 `400 Bad Request`；  
+- 免费试用额度仅适用于指定模型（如 `qwen-turbo`），其他模型需开通后付费，详情见 [动态限流](../../raw/model-user-guide/get-started-with-models/quota-management.md)；  
+- 流式响应中 `delta.content` 可能为空字符串（尤其在 function call 场景），客户端需容错处理；  
+- 所有调用受账户级 QPS 和 TPS 限制，突发流量可能触发 [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)，建议实现指数退避重试逻辑。
 
 ## 来源文档
 

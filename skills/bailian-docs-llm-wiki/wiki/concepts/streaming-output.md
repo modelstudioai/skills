@@ -1,54 +1,42 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台提供的一种实时响应机制，允许模型在生成过程中持续、分块地将结果（如文本 token、音频片段或结构化事件）逐段返回给客户端，而非等待全部内容生成完毕后一次性返回。该机制显著降低端到端延迟，提升用户交互体验，并支持前端实时渲染、语音流式合成、长文本渐进式处理等关键场景。
+流式输出（Streaming Output）是百炼平台提供的一种实时响应机制，允许模型在生成结果过程中持续、分块地将内容（如文本 token、音频帧或结构化事件）逐段返回给客户端，而非等待全部推理完成后再一次性返回完整响应。该机制显著降低端到端延迟，提升用户交互沉浸感，是构建低延迟对话机器人、实时语音助手、长文本生成等场景的核心能力。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-流式输出在百炼平台中统一支持但语义与实现细节因调用路径而异，开发者需按实际接口类型选择对应模式：
-
-- **标准 Chat API（`/v1/chat/completions`）**：启用 `stream=true` 后，服务端以 SSE（Server-Sent Events）格式返回 `data: {...}` 事件流；每个事件含 `delta.content` 字段（增量文本），`delta.role`（首次出现时）、`finish_reason`（结束标识）等。适用于通用对话、RAG问答、[函数调用](function-calling.md)等场景。
-
-- **Application Call（智能体/工作流调用）**：  
-  - 新版/旧版智能体：支持 `stream=true` + `incremental_output=true` 组合，确保每次返回仅含新增 token（非全量重传），避免前端重复渲染；`delta.content` 可能为空（尤其在 function call 过渡阶段），需容错处理。  
-  - 工作流：通过 `flow_stream_mode` 控制流式行为，推荐 `message_format_plus`（返回结构化消息块，含 `type`、`content`、`tool_calls` 等字段），便于前端区分文本、工具调用、状态变更等事件类型。
-
-- **应用组件 API（`/services/aigc/text-generation/generation`）**：启用 `stream=true` 后响应体为 SSE 格式，字段命名与非流式一致（如 `output.text`），但值为增量内容；需按 `data:` 行解析并累积 `output.text` 字段。
-
-- **Realtime API（WebSocket/AOQ/WebRTC）**：本质即流式架构，不依赖 `stream` 参数。服务端通过标准化事件（如 `response.text.delta`、`response.audio.delta`、`response.function_call`）实时推送增量内容，客户端需监听对应事件类型并按需消费。适用于语音助手、实时音视频交互等低延迟场景。
-
-- **Omni Realtime API（WebSocket）**：基于事件驱动的原生流式协议，所有输出均为增量事件（如 `response.text.delta`、`response.audio.delta`），无需额外参数开启；`modalities` 配置决定是否同时输出文本与音频流。
+- **应用调用（`application call`）**：通过 `stream=true` 参数启用流式模式，配合 `incremental_output=true` 可获得增量式 delta 输出（即每块仅含本次新增内容），适用于智能体/工作流的对话流式渲染与前端打字机效果实现。
+- **Qwen 模型 API（`qwen api reference`）**：所有协议（OpenAI 兼容、Anthropic、DashScope 原生）均支持 `stream=true`，返回 `text/event-stream` 格式 SSE 响应；流式下每个 `data:` 行包含 `delta.content` 或 `finish_reason` 字段，便于前端实时拼接与状态判断。
+- **应用组件 API（`application component api reference`）**：`/v1/apps/{app_id}/chat` 等接口支持 `stream=true`，响应为标准 SSE；需按 `data:` 行解析，重点关注 `delta`（增量文本）、`finish_reason`（停止原因）及 `usage`（最终 token 统计）事件。
+- **Realtime API（`realtime api user guide`）**：面向音视频实时交互，流式是默认行为（无需显式设 `stream`），通过 AOQ/WebRTC/WebSocket 协议实现毫秒级音频流与文本流同步下发，支持 `response.text.delta` 和 `response.audio.delta` 事件分离处理。
+- **Omni Realtime API（`omni realtime api`）**：基于 WebSocket 的事件驱动流式接口，客户端通过 `session.update` 配置 `modalities: ["text", "audio"]` 后，服务端持续推送 `response.text.delta`、`response.audio.delta`、`response.tool_use` 等细粒度事件，支持语义级 VAD 触发与工具调用流式协同。
+- **第三方客户端集成（`use chat client or development tool`）**：Cursor、Hermes Agent、Postman（需手动配置）等工具均可通过设置 `stream=true` 启用流式，响应格式遵循 OpenAI SSE 规范（`data: {"delta": {"content": "..."}}`），开发者需在 SDK 或前端代码中实现事件解析与 UI 更新逻辑。
 
 ## 关键参数和配置
 
-| 参数名 | 类型 | 作用域 | 说明 |
-|--------|------|--------|------|
-| `stream` | boolean | 全局（Chat API、Application Call、应用组件 API） | 必须设为 `true` 以启用流式响应；默认 `false`（同步阻塞式）。 |
-| `incremental_output` | boolean | 智能体类 API（新版/旧版智能体） | 仅当 `stream=true` 时生效；设为 `true` 表示返回增量 delta（推荐），`false` 表示每次返回当前完整 content（不推荐，易导致重复渲染）。 |
-| `flow_stream_mode` | string | 工作流 API | 取值 `message_format_plus`（推荐，结构化消息块）、`message_format`（兼容旧版）、`full_thoughts`（含内部推理链，已不推荐）。 |
-| `X-DashScope-SSE: enable` | HTTP Header | DashScope 原生 Application Call | HTTP 直接调用时必需，用于显式声明启用 SSE 协议。 |
-| `x-dashscope-rtc-transport` | HTTP Header | Realtime API | 指定传输协议（`websocket`/`webrtc`/`moq`），决定底层流式通道类型。 |
+| 参数 | 类型 | 说明 | 使用位置 |
+|------|------|------|----------|
+| `stream` | `boolean` | 是否启用流式响应。设为 `true` 时，HTTP 响应头为 `Content-Type: text/event-stream`，响应体为 SSE 格式。 | 所有 API（HTTP 请求体或 SDK 参数） |
+| `incremental_output` | `boolean` | **仅应用调用支持**。控制流式输出是否为增量形式（`true`）或全量覆盖形式（`false`）。推荐始终设为 `true`，便于前端增量渲染。 | `application call` 的 `parameters.incremental_output` 字段 |
+| `X-DashScope-SSE: enable` | HTTP Header | **仅 DashScope 原生协议 HTTP 调用需显式设置**。用于标识流式请求，替代 `stream=true` 在请求体中的位置。 | `application call` / `qwen api reference`（DashScope 协议） |
+| `streamCall()` / `stream=True` | SDK 方法/参数 | 各语言 SDK（Python/Java/JS）提供的流式调用封装方法，自动处理连接、解析与事件分发。 | 所有 SDK 接入方式 |
 
-> ⚠️ 注意事项：  
-> - 所有流式响应均需按 **SSE 协议** 解析（以 `data:` 开头的行，忽略空行及 `event:`/`id:` 等可选字段）；  
-> - `delta.content` 可能为空字符串（尤其在 function call 或 tool call 过渡阶段），请勿直接拼接，应检查 `delta.content` 是否存在且非空；  
-> - 流式响应中 `finish_reason` 出现在最后一个事件，用于判断生成是否完成（如 `"stop"`、`"length"`、`"function_call"`）；  
-> - SDK 用户建议直接使用 `dashscope>=1.20.0`，其内置流式迭代器（如 `for chunk in response:`）已自动处理 SSE 解析与 delta 累积。
+> ⚠️ 注意：流式响应超时统一为 **60 秒**（应用组件 API 明确声明；其他场景未明示但遵循平台默认策略）。超时将关闭连接并返回 `504 Gateway Timeout`，建议客户端实现重连与断点续传逻辑。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速启用**：在请求 body 中添加 `"stream": true`，HTTP 请求头加 `X-DashScope-SSE: enable`（Application Call），即可获得流式响应。  
-- ✅ **安全消费**：用 `while` 循环读取响应流，对每个 `data:` 行 JSON 解析，提取 `delta.content` 并追加到本地 buffer；遇 `finish_reason` 则终止。  
-- ✅ **前端渲染建议**：使用 `<span id="output"></span>` + `element.textContent += chunk` 实现逐字显示；语音场景建议缓冲 `response.audio.delta` 后交由 Web Audio API 播放。  
-- ❌ **避免踩坑**：不要假设 `delta.content` 永不为空；不要用 `response.message.content` 替代 `delta.content`（流式下该字段不存在）；不要在未设置 `X-DashScope-SSE` 时调用 Application Call 流式接口（将返回 400 错误）。  
-- 📦 **SDK 推荐**：Python 使用 `dashscope.ChatCompletion.create(..., stream=True)`；Node.js 使用 `@alicloud/dashscope-sdk-js` 的 `stream()` 方法；所有 SDK 均自动处理 SSE 解析与错误重试。
+- ✅ **必做**：启用流式时，务必使用支持 SSE 解析的 HTTP 客户端（如 `fetch` + `ReadableStream`、`axios` + `onDownloadProgress`、或百炼官方 SDK）；避免用 `JSON.parse()` 直接解析整个响应体。
+- ✅ **推荐**：前端渲染时，对每个 `delta.content` 追加显示，并监听 `finish_reason` 判断生成结束（值为 `"stop"`、`"length"`、`"tool_calls"` 等）；流式下 `usage` 字段仅在最后一条事件中出现。
+- ✅ **调试技巧**：用 `curl -N` 或 Postman（开启 Stream）直接测试流式接口，观察原始 `data:` 行输出，快速验证服务端行为。
+- ❌ **避免**：在流式请求中混用非流式参数（如 `stream=false` 与 `X-DashScope-SSE` 共存）；不要假设流式响应顺序绝对严格（尤其[多模态](multi-modal.md)混合输出时，`text` 与 `audio` 事件可能交错）。
+- 📌 **性能提示**：流式不降低模型计算开销，但可显著改善用户体验延迟（首 token 时间 TTFB 更关键）。如需优化首 token 延迟，请优先选用 `qwen-turbo`、`qwen3.6-flash` 等轻量模型，并确保 `workspace` 地域与客户端就近部署。
 
 ## 关联主题页
 
-- [start using](../guides/start-using.md)
 - [application call](../api/application-call.md)
+- [qwen api reference](../api/qwen-api-reference.md)
 - [application component api reference](../api/application-component-api-reference.md)
-- [omni realtime api](../api/omni-realtime-api.md)
 - [realtime api user guide](../api/realtime-api-user-guide.md)
-- [application support](../guides/application-support.md)
+- [omni realtime api](../api/omni-realtime-api.md)
+- [use chat client or development tool](../guides/use-chat-client-or-development-tool.md)
 
 

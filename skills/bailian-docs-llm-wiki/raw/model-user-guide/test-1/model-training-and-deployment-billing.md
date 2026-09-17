@@ -317,6 +317,12 @@ qwen-image-2.0
 
 0.02元
 
+千问-图像生成
+
+qwen-image-2.0-pro
+
+0.02元
+
 计费示例
 
 假设使用 qwen-image-2.0 模型微调，训练集包含 1 张图片，n\_epochs = 1000，max\_pixels = "1k"，训练单价 = 0.02元/千Token，GPU系数按 8 计算：
@@ -2646,6 +2652,10 @@ wan2.7-image
 qwen-image-2.0
 
 0.20元/张
+
+qwen-image-2.0-pro
+
+0.50元/张
 
 ### 语音合成模型-CosyVoice
 

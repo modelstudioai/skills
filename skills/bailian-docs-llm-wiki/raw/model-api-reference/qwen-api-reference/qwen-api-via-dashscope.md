@@ -1044,6 +1044,12 @@ Schema 的名称。
     
     若在特定请求中希望临时禁用工具调用，可设定`tool_choice`参数为`none`；
     
+-   `required`
+    
+    若希望强制调用至少一个工具，可设定`tool_choice`参数为`required`，模型将始终返回工具调用信息。
+    
+    > Qwen 系列模型暂不支持`required`：非思考模式下无法保证一定调用工具，思考模式下当前不支持`required`。
+    
 -   `{"type": "function", "function": {"name": "the_function_to_call"}}`
     
     若希望强制调用某个工具，可设定`tool_choice`参数为`{"type": "function", "function": {"name": "the_function_to_call"}}`，其中`the_function_to_call`是指定的工具函数名称。

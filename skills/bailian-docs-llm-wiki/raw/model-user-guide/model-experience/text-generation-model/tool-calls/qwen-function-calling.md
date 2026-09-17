@@ -50,7 +50,7 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
     -   Qwen3.8开源系列
 -   **多模态模型**
     -   千问VL： Qwen3-VL-Plus系列、 Qwen3-VL-Flash系列
-    -   千问Omni：Qwen3.5-Omni-Plus系列、Qwen3.5-Omni-Flash系列、Qwen3-Omni-Flash系列
+    -   千问Omni：Qwen3.8-Omni-Flash、Qwen3.5-Omni-Plus系列、Qwen3.5-Omni-Flash系列、Qwen3-Omni-Flash系列
     -   千问Omni-Realtime：Qwen3.5-Omni-Plus-Realtime系列、Qwen3.5-Omni-Flash-Realtime系列
     -   Qwen3-VL 开源系列
 -   **语音对话模型**
@@ -1359,6 +1359,8 @@ const response = await functionCalling();
 
 某些需要使用工具的问题，大模型可能判断为无需调用。如需强制 Function Calling 始终进行工具调用（返回对象中`tool_calls`参数不为空），可以设定`tool_choice`参数为`"required"`，Function Calling 将始终返回工具与入参信息。
 
+> Qwen 系列模型暂不支持将`tool_choice`设为`"required"`：非思考模式下`required`无法保证一定调用工具，思考模式下当前不支持`"required"`。
+
 假设当前场景中的问题均需要调用工具，您可以修改 function\_calling 代码为：
 
 python
@@ -1366,8 +1368,7 @@ python
 ```
 def function_calling():
     completion = client.chat.completions.create(
-        model="qwen3.8-max",
-        extra_body={"enable_thinking": False},
+        model="kimi/kimi-k3",
         messages=messages,
         tools=tools,
         tool_choice="required"
@@ -1382,8 +1383,7 @@ javascript
 ```
 async function functionCalling() {
     const completion = await openai.chat.completions.create({
-        model: "qwen3.8-max",
-        enable_thinking: false,
+        model: "kimi/kimi-k3",
         messages: messages,
         tools: tools,
         tool_choice: "required"
@@ -1900,12 +1900,11 @@ main().catch(console.error);
 
 #### Qwen-Omni 系列
 
-Qwen3.5-Omni-Plus、Qwen3.5-Omni-Flash、Qwen3-Omni-Flash 系列支持工具调用，通过 OpenAI 兼容接口调用。获取工具信息阶段与其他模型有以下不同：
+文本工具调用使用 `qwen3.8-omni-flash`，可通过 Chat Completions 或 Responses 接入。以下 Python 和 JavaScript 示例使用 Chat Completions，关闭思考并流式读取文本和工具调用增量。音视频输入见 [Qwen3.8-Omni-Flash](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)。
 
--   **必须使用流式输出：**千问Omni仅支持流式输出，在获取工具信息时也必须设置 `stream=True`。
--   **建议仅输出文本：**模型在获取工具信息（函数的名称和参数）时仅需文本信息，为避免生成不必要的音频，建议设置 `modalities=["text"]`。当输出包含文本和音频两种模态时，获取工具信息时需要跳过音频数据块。
+示例设置 `reasoning_effort="none"` 关闭思考。需要结合思考进行工具调用时，可省略该参数，使用默认的 `xhigh`，并分别读取 `reasoning_content`、`content` 和 `tool_calls`。此时多轮请求需将上一轮 assistant 消息的思考内容、回复和工具调用一起加入历史，再传入工具结果；`preserve_thinking` 默认开启。详见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
 
-> 千问Omni详情参见： 非实时（Qwen-Omni） 。
+先[安装 OpenAI SDK](raw/model-api-reference/preparations/install-sdk.md)，配置 `DASHSCOPE_API_KEY`，并将 `DASHSCOPE_BASE_URL` 设置为业务空间的 [Chat Completions 地址](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)。API Key 与地址使用同一地域。
 
 python
 
@@ -1917,8 +1916,8 @@ client = OpenAI(
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key="sk-xxx",
     # 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-    base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
 )
 
 tools = [
@@ -1942,21 +1941,20 @@ tools = [
 ]
 
 completion = client.chat.completions.create(
-    model="qwen3.5-omni-plus",
+    model="qwen3.8-omni-flash",
+    reasoning_effort="none",
     messages=[{"role": "user", "content": "杭州天气?"}],
-
-    # 设置输出数据的模态，可取值：["text"]、["text","audio"]，建议设置为["text"]
-    modalities=["text"],
-
-    # stream 必须设置为 True，否则会报错
     stream=True,
     tools=tools
 )
 
 for chunk in completion:
-    # 如果输出包含音频模态，请将下列条件改为：if chunk.choices and not hasattr(chunk.choices[0].delta, "audio"):
-    if chunk.choices:
-        delta = chunk.choices[0].delta
+    if not chunk.choices:
+        continue
+    delta = chunk.choices[0].delta
+    if delta.content:
+        print("Text:", delta.content)
+    if delta.tool_calls:
         print(delta.tool_calls)
 ```
 
@@ -1970,8 +1968,8 @@ const openai = new OpenAI(
         // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: "sk-xxx",
         // 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
         apiKey: process.env.DASHSCOPE_API_KEY,
-        // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
-        baseURL: "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
+
+        baseURL: process.env.DASHSCOPE_BASE_URL
     }
 );
 
@@ -1996,34 +1994,35 @@ const tools = [
 ];
 
 const stream = await openai.chat.completions.create({
-    model: "qwen3-omni-flash",
+    model: "qwen3.8-omni-flash",
+    reasoning_effort: "none",
     messages: [
         {
             "role": "user",
             "content": "杭州天气"
         }],
     stream: true,
-    // 设置输出数据的模态，可取值：["text"]、["text","audio"]，建议设置为["text"]
-    modalities: ["text"],
     tools:tools
 });
 
 for await (const chunk of stream) {
-    // 如果输出包含音频，请将条件语句替换为：if (chunk.choices?.length && chunk.choices[0].delta && !('audio' in chunk.choices[0].delta))
-    const delta = chunk.choices[0].delta;
-    console.log(delta.tool_calls);
+    const delta = chunk.choices?.[0]?.delta;
+    if (!delta) continue;
+    if (delta.content) console.log("Text:", delta.content);
+    if (delta.tool_calls) console.log(delta.tool_calls);
 }
 ```
 
-运行后得到如下输出：
+Python 工具调用增量格式示意如下；实际内容由模型返回，函数名和参数可能分多个数据块到达：
 
 ```
 [ChoiceDeltaToolCall(index=0, id='call_391c8e5787bc4972a388aa', function=ChoiceDeltaToolCallFunction(arguments=None, name='get_current_weather'), type='function')]
 [ChoiceDeltaToolCall(index=0, id='call_391c8e5787bc4972a388aa', function=ChoiceDeltaToolCallFunction(arguments=' {"location": "杭州市"}', name=None), type='function')]
-None
 ```
 
-拼接入参信息（`arguments`）的代码请参见[流式输出](raw/model-user-guide/model-experience/text-generation-model/tool-calls/qwen-function-calling.md)。
+拼接入参信息（`arguments`）的代码请参见[流式输出](https://help.aliyun.com/zh/model-studio/qwen-function-calling#953d0d7b1ahuk)。
+
+> Qwen3.5-Omni-Plus、Qwen3.5-Omni-Flash 和 Qwen3-Omni-Flash 的既有调用必须设置 `stream=True`。获取工具信息时可使用 `modalities=["text"]`；Qwen3.5-Omni 同时输出音频时需跳过音频数据块。
 
 #### Qwen-Omni-Realtime 系列
 
@@ -3329,7 +3328,7 @@ asyncio.run(main())
 
 > 文本生成思考模型请参见： 深度思考 ；多模态思考模型请参见： 图像与视频理解 、 非实时（Qwen-Omni） 。
 
-> `tool_choice` 参数只支持设置为 `"auto"` （默认值，表示由模型自主选择工具）或 `"none"` （强制模型不选择工具）。开启思考模式（`enable_thinking=True`）时，`tool_choice` 不支持设置为 `"required"` 或 object 形式，同时设置会报错（`The tool_choice parameter does not support being set to required or object in thinking mode`），两者不兼容。因此不能将 `tool_choice="required"` 作为思考模式下保障 `tool_calls` 不为空的方案。如需在思考模式下稳定进行工具调用（如 MCP 调用），建议改用 Responses API 接入 MCP，参见 MCP。
+> 开启思考模式（`enable_thinking=True`）时，`tool_choice` 不支持设置为 `"required"` 或 object 形式，同时设置会报错（`The tool_choice parameter does not support being set to required or object in thinking mode`），两者不兼容。如需在思考模式下稳定进行工具调用（如 MCP 调用），建议改用 Responses API 接入 MCP，参见 MCP。
 
 #### OpenAI兼容
 

@@ -107,7 +107,7 @@ API Key 管理
 3.  对所有业务空间进行账号（用户）管理。
 4.  管理所有的 API Key。
 
-**说明**如需开通 [AI 安全护栏服务](https://help.aliyun.com/zh/document_detail/2923687.html)、[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)、[应用观测](https://help.aliyun.com/zh/model-studio/application-observation#343a0ac955xi7)等功能，建议使用**阿里云主账号**在控制台进行一次性授权和开通。
+**说明**如需开通 [AI 安全护栏服务](https://help.aliyun.com/zh/document_detail/2923687.html)、[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)、[应用观测](https://help.aliyun.com/zh/model-studio/agenteval-observation#h-agenteval-obs-start)等功能，建议使用**阿里云主账号**在控制台进行一次性授权和开通。
 
 ### 业务空间管理员
 

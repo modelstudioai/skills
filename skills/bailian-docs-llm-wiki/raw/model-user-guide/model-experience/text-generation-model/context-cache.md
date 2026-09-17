@@ -49,7 +49,7 @@
 
 **说明**预置吞吐（PTU）部署同样支持上下文缓存。命中缓存时，PTU 额度消耗按缓存折扣系数折算。详见[预置吞吐长输入与缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)。
 
-**说明**本文内容适用 OpenAI Chat Completions 、 DashScope 与 Anthropic 兼容接口。使用 Responses API 可通过 Session 缓存降低推理延迟与成本，详情参考[Session 缓存](raw/model-api-reference/toolkits-and-frameworks/compatibility-with-openai-responses-api.md)。
+**说明**下方示例使用 Chat Completions、DashScope 和 Anthropic 兼容接口。Responses API 另有 [Session 缓存](https://help.aliyun.com/zh/model-studio/compatibility-with-openai-responses-api#example-session-cache-title)配置。
 
 ## 显式缓存
 
@@ -917,6 +917,8 @@ while True:
 
 #### 华北2（北京）
 
+-   **全模态模型**
+    -   千问 Omni：`qwen3.8-omni-flash`
 -   **文本生成模型**
     -   千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3-max、qwen3-max-preview、qwen-max
     -   千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen-plus
@@ -945,6 +947,8 @@ while True:
 
 > 以下模型均为国际部署范围。
 
+-   **全模态模型**
+    -   千问 Omni：`qwen3.8-omni-flash`
 -   **文本生成模型**
     -   千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3-max、qwen-max
     -   千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen-plus
@@ -964,6 +968,9 @@ while True:
 不同服务部署范围支持的模型不同。
 
 -   **全球服务部署范围：**
+    -   全模态模型
+        
+        -   千问 Omni：`qwen3.8-omni-flash`
     -   文本生成模型
         
         -   千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3-max
@@ -991,6 +998,9 @@ while True:
 不同服务部署范围支持的模型不同。
 
 -   **全球服务部署范围：**
+    -   全模态模型
+        
+        -   千问 Omni：`qwen3.8-omni-flash`
     -   文本生成模型
         
         -   千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3-max
@@ -1022,6 +1032,9 @@ while True:
         -   千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26
         -   DeepSeek（阿里云百炼部署）：deepseek-v4-pro、deepseek-v4-flash
 -   **全球服务部署范围：**
+    -   全模态模型
+        
+        -   千问 Omni：`qwen3.8-omni-flash`
     -   文本生成模型
         
         -   千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20
@@ -1037,13 +1050,22 @@ while True:
 不同服务部署范围支持的模型不同。
 
 -   **全球服务部署范围：**
+    -   千问 Omni：`qwen3.8-omni-flash`
+        
     -   千问 Max：qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08
+        
     -   千问 Plus：qwen3.7-plus、qwen3.7-plus-2026-05-26
+        
     -   千问 Flash：qwen3.8-flash、qwen3.7-flash、qwen3.7-flash-2026-07-15
+        
     -   千问 Character：qwen-plus-character
+        
     -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4-pro-0813、deepseek-v4-flash-0731
+        
     -   GLM（阿里云百炼部署）：glm-5.2
+        
     -   KIMI（阿里云百炼部署）：kimi-k3、kimi-k2.7-code
+        
 -   **中国香港服务部署范围：**
     -   文本生成模型
         
@@ -1066,7 +1088,7 @@ while True:
 
 > 系统会定期清理长期未使用的缓存数据。上下文缓存命中概率并非100%，即使请求上下文完全一致，仍可能未命中，具体命中概率由系统判定。
 
-**说明**对于阿里云百炼部署的支持隐式缓存的模型，当请求之间存在不少于 1,024 Token 的相同前缀时，该公共前缀具备隐式缓存写入和命中的技术条件。智谱部署的GLM、稀宇科技部署的 MiniMax 模型为 512。
+**说明**对于阿里云百炼部署的支持隐式缓存的模型，当请求之间存在不少于 1024 Token 的相同前缀时，该公共前缀具备隐式缓存写入和命中的技术条件。智谱部署的GLM、稀宇科技部署的 MiniMax 模型为 512。
 
 达到最小 Token 数不代表请求必然命中缓存。实际是否命中还会受到缓存生成状态、缓存有效期及系统调度等因素影响，请以 API 响应中的缓存命中 Token 数为准。
 
@@ -1086,7 +1108,8 @@ while True:
 
 当请求命中缓存时，命中的输入 Token 按 `cached_token` 计费，折扣比例因模型来源不同而有差异；未被命中的输入 Token 按标准 `input_token`计费。输出 Token 仍按原价计费。
 
--   阿里云百炼部署的模型（deepseek-v4.1-flash、deepseek-v4-pro、qwen3.8-max、qwen3.8-flash、qwen3.8-2.4t-a95b 除外）：`cached_token` 单价为 `input_token` 单价的 **20%**
+-   阿里云百炼部署的模型（deepseek-v4.1-flash、deepseek-v4-pro、qwen3.8-max、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-omni-flash 除外）：`cached_token` 单价为 `input_token` 单价的 **20%**
+-   qwen3.8-omni-flash：命中缓存的输入 Token 按固定单价计费，各地域单价见[模型价格](https://help.aliyun.com/zh/model-studio/model-pricing#4c2e910ce4pcq)。
 -   deepseek-v4-pro：`cached_token` 单价不是 `input_token` 单价的 20%，具体价格请参见百炼控制台
 -   deepseek-v4.1-flash：`cached_token` 单价为 `input_token` 单价的 **10%**
 -   qwen3.8-max、qwen3.8-flash、qwen3.8-2.4t-a95b：`cached_token` 单价不是 `input_token` 单价的 20%，具体价格请参见百炼控制台

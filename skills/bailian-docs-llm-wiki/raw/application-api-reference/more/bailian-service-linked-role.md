@@ -32,7 +32,7 @@
 
 [AliyunServiceRoleForSFMTelemetry](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#31e88eb412d6c)
 
-[用量监控与性能分析](raw/application-user-guide/application-monitoring/application-observation.md)通过此服务关联角色访问您的[OpenTelemetry](https://help.aliyun.com/zh/opentelemetry/product-overview/what-is-managed-service-for-opentelemetry)实例。
+[用量监控与性能分析](raw/application-user-guide/agenteval/agenteval-observability/agenteval-observation.md)通过此服务关联角色访问您的[OpenTelemetry](https://help.aliyun.com/zh/opentelemetry/product-overview/what-is-managed-service-for-opentelemetry)实例。
 
 [AliyunServiceRoleForSFMAccessingCIP](https://help.aliyun.com/zh/model-studio/bailian-service-linked-role#e02fae3cf9x0q)
 
@@ -378,7 +378,7 @@
 
 ### 应用场景
 
-[用量监控与性能分析](raw/application-user-guide/application-monitoring/application-observation.md)通过此服务关联角色访问您的[OpenTelemetry](https://help.aliyun.com/zh/opentelemetry/product-overview/what-is-managed-service-for-opentelemetry)实例。
+[用量监控与性能分析](raw/application-user-guide/agenteval/agenteval-observability/agenteval-observation.md)通过此服务关联角色访问您的[OpenTelemetry](https://help.aliyun.com/zh/opentelemetry/product-overview/what-is-managed-service-for-opentelemetry)实例。
 
 ### 角色及权限说明
 

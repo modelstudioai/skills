@@ -222,7 +222,7 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 
 ### 'audio' output only support with stream=true
 
-**原因：** 在使用Qwen-Omni模型时，未使用流式输出方式，而模型仅支持流式输出方式。
+**原因：** 请求输出音频，但未开启流式输出。
 
 **解决方案：** 设置`stream`参数为`true`以启用流式输出。
 
@@ -611,7 +611,9 @@ Request ID 格式为 UUID（例如 `649b2bbc-c541-9e16-9845-db7fe4fe5b2d`），�
 **解决方案：**
 
 -   Qwen2.5-VL模型支持的视频时长应在2秒至10分钟之间。
--   其他千问VL或Qwen-Omni 模型支持的视频时长应在2秒至40秒之间。
+-   其他千问VL或 Qwen-Omni-Turbo 模型支持的视频时长应在2秒至40秒之间。
+
+其他 Qwen-Omni 型号的视频限制见[单一模态输入](https://help.aliyun.com/zh/model-studio/qwen-omni#h2-single-modal-input)。
 
 ### Field required: xxx
 
@@ -1950,7 +1952,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
     
 -   请前往[模型广场](https://bailian.console.aliyun.com/model/market)开通模型服务。
     
--   如果您通过国际站 API 端点（如 `{WorkspaceId}.us-east-1.maas.aliyuncs.com`）发起调用，请注意不同地域可用的模型列表不同。调用前请确认目标模型是否在该地域可用，部分模型在美国地域需使用带 `-us` 后缀的模型名称（如 `qwen-max-us`）。
+-   如果您通过国际站 API 端点（如 `{WorkspaceId}.us-east-1.maas.aliyuncs.com`）发起调用，请注意不同地域可用的模型列表不同。调用前请确认目标模型是否在该地域可用。
     
 -   如果您使用**专属部署端点**调用模型，出现 ModelNotFound 时还需检查以下两点：
     
@@ -2145,7 +2147,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：**
 
--   如果您使用[（Qwen-Omni）模型](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)，需要使用流式输出方式。
+-   如果您使用[（Qwen-Omni）模型](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)，且所用接口要求流式输出，请设置 `stream=true`。
     
 -   如果您使用[CosyVoice声音复刻](https://help.aliyun.com/zh/model-studio/voice-replica-1)，则可能的原因是：
     

@@ -1,15 +1,70 @@
 # Qwen-Omni
 
-Qwen-Omni 接受文本、图片、音频、视频的多模态输入，输出文本或语音回复。支持数十种语言和方言，适用于内容审核、文本创作、视觉识别、音视频交互等场景。
-
-**支持的地域：**北京、新加坡，需使用各地域的[API Key](raw/model-api-reference/preparations/get-api-key.md)。
+通过 HTTP API 使用 Qwen-Omni 理解文本、图片、音频和视频。文本分析使用 Qwen3.8-Omni-Flash，语音输出使用 Qwen3.5-Omni。
 
 ## 快速开始
+
+根据输出需求选择示例：文本分析使用 Qwen3.8-Omni-Flash，生成语音使用 Qwen3.5-Omni。
+
+#### 文本输出（Qwen3.8-Omni-Flash）
+
+先[配置 API Key](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)并[安装 OpenAI SDK](raw/model-api-reference/preparations/install-sdk.md)。将 `DASHSCOPE_BASE_URL` 环境变量设为业务空间对应的 [Chat Completions 服务地址](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)中的 `base_url`，并将 `AUDIO_URL` 设为可访问的 WAV 音频 URL。需使用对应地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md)。
+
+在 macOS 或 Linux 终端中安装依赖并设置以下环境变量。将服务地址和音频 URL 替换为实际值；`DASHSCOPE_API_KEY` 按上方链接配置。
+
+```
+python3 -m pip install openai
+export DASHSCOPE_BASE_URL="<workspace-base-url>"
+export AUDIO_URL="<accessible-wav-url>"
+```
+```
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
+)
+completion = client.chat.completions.create(
+    model="qwen3.8-omni-flash",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "总结这段录音的主要内容。"},
+            {"type": "input_audio", "input_audio": {
+                "data": os.environ["AUDIO_URL"],
+                "format": "wav",
+            }},
+        ],
+    }],
+    stream=True,
+    stream_options={"include_usage": True},
+)
+output_section = None
+for chunk in completion:
+    if not chunk.choices:
+        if chunk.usage:
+            print("\nUsage:", chunk.usage)
+        continue
+    delta = chunk.choices[0].delta
+    if getattr(delta, "reasoning_content", None):
+        if output_section != "thinking":
+            print("\n思考过程:")
+            output_section = "thinking"
+        print(delta.reasoning_content, end="", flush=True)
+    if delta.content:
+        if output_section != "answer":
+            print("\n模型回复:")
+            output_section = "answer"
+        print(delta.content, end="", flush=True)
+```
+
+#### 语音输出（Qwen3.5-Omni）
 
 **前提条件**
 
 -   已[配置API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
--   Qwen-Omni 模型仅支持 OpenAI 兼容方式调用，需要[安装最新版SDK](raw/model-api-reference/preparations/install-sdk.md)。OpenAI Python SDK最低版本为 1.52.0，Node.js SDK最低版本为 4.68.0。
+-   以下语音输出示例使用 OpenAI 兼容方式调用，需要[安装最新版SDK](raw/model-api-reference/preparations/install-sdk.md)。OpenAI Python SDK最低版本为 1.52.0，Node.js SDK最低版本为 4.68.0。
 
 **说明**运行前安装依赖：`pip install numpy soundfile openai`（Python）或 `npm install openai wav`（Node.js）。
 
@@ -209,21 +264,55 @@ data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":20
 
 ## 模型选型
 
--   **Qwen3.5-Omni 系列：**适用于长视频分析、会议纪要、字幕生成、内容审核、音视频交互等场景。
+音视频理解、会议纪要、字幕生成和文本问答优先使用 **Qwen3.8-Omni-Flash**，支持深度思考、工具调用和联网搜索，详见[调用示例](#qwen38-offline)。需要直接生成语音回复时，可选择下方 Qwen3.5-Omni。
+
+### Qwen3.8-Omni-Flash
+
+支持地域：华北2（北京）、新加坡、中国香港、日本（东京）、德国（法兰克福）、美国（弗吉尼亚）。需使用对应地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md)。
+
+`qwen3.8-omni-flash` 适用于音视频理解、会议纪要和内容分析。
+
+模型
+
+输入
+
+输出
+
+调用方式
+
+`qwen3.8-omni-flash`
+
+文本、图片、音频、视频
+
+文本
+
+Chat Completions、Responses
+
+-   上下文长度为 1M Token。
+-   音频输入支持 113 种语言和方言，与 Qwen3.5-Omni 一致。完整列表见[模型选型](#d54e85c641oux)中 Qwen3.5-Omni 的“输入音频语种”。
+-   支持 Function Calling 和联网搜索。Responses 内置工具当前仅支持 `web_search`。
+
+### Qwen3.5-Omni：音频输出与多模态交互
+
+支持地域：北京、新加坡，需使用对应地域的 [API Key](raw/model-api-reference/preparations/get-api-key.md)。
+
+-   **Qwen3.5-Omni 系列：**支持音视频理解、语音回复及音频控制。
     
     -   输入限制：3 小时音频或 1 小时视频
     -   音频控制：支持通过指令调节音量、语速、情绪
     -   视觉能力：与 Qwen3.5 同等水平，可理解画面、语音、音效等多模态信息
     -   多模态组合输入：支持文本与图片、音频、视频的任意组合同时输入，不限于单一模态
     -   声音复刻：支持自定义音色（仅qwen3.5-omni-plus、qwen3.5-omni-flash支持，快照版本暂不支持），详情请参见[声音复刻](raw/model-api-reference/omni-realtime-api/qwen-omni-voice-cloning.md)
--   **Qwen3-Omni-Flash 系列：**适用于短视频分析、成本敏感场景。
-    
+
+### 其他模型与规格
+
+-   **Qwen3-Omni-Flash 系列：**
     -   输入限制：150 秒以内音视频
-    -   思考模式：Qwen-Omni 系列中唯一支持思考模式的系列
+    -   思考模式：支持通过 `enable_thinking` 开启或关闭思考
     -   输入模态：仅支持文本与单一其他模态（图片、音频或视频）的组合输入
 -   **Qwen-Omni-Turbo 系列**
     
-    已停止更新，功能受限。建议迁移至 Qwen3.5-Omni 系列或 Qwen3-Omni-Flash 系列。
+    已停止更新。文本分析场景可迁移至 Qwen3.8-Omni-Flash；需要音频输出时可选择 Qwen3.5-Omni。
     
 
 **模型系列**
@@ -242,7 +331,7 @@ data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":20
 
 Qwen3.5-Omni
 
-最新一代全模态模型
+支持音频输出的全模态模型
 
 强
 
@@ -408,13 +497,54 @@ Qwen-Omni-Turbo
 
 ## 使用方式
 
-#### 流式输出
+### 流式输出
 
-Qwen-Omni 的所有请求必须设置 `stream=True`。
+以下 Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 示例必须设置 `stream=True`。
 
-#### 模型配置
+### Responses：音频和视频输入
 
-根据使用场景配置参数、提示词和音视频长度，在成本、速度与效果之间取得平衡。
+以下示例使用 Qwen3.8-Omni-Flash，通过 Responses API 处理音视频输入并生成文本回复。
+
+沿用[快速开始](#qwen38-offline)示例的 API Key、`DASHSCOPE_BASE_URL` 和 `AUDIO_URL`。Responses 请求使用 `input`，其中音频 URL 放在 `audio_url`，与 Chat Completions 的 `input_audio.data` 结构不同。音频和视频输入仅允许出现在 `user` 消息中。
+
+```
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.environ["DASHSCOPE_API_KEY"],
+    base_url=os.environ["DASHSCOPE_BASE_URL"],
+)
+response = client.responses.create(
+    model="qwen3.8-omni-flash",
+    input=[{
+        "role": "user",
+        "content": [
+            {"type": "input_text", "text": "总结这段录音的主要内容。"},
+            {"type": "input_audio", "audio_url": os.environ["AUDIO_URL"], "format": "wav"},
+        ],
+    }],
+    stream=False,
+)
+print(response.output_text)
+```
+
+分析视频时，将 `VIDEO_URL` 设为可访问的视频 URL，并将上例 `input[0].content` 替换为以下内容：
+
+```
+[
+    {"type": "input_text", "text": "描述视频中的画面和声音。"},
+    {"type": "input_video", "video_url": os.environ["VIDEO_URL"]},
+]
+```
+
+使用双通道或四通道空间音频时，在上述音频内容对象中加入 `"use_multichannel": True`（Python），与 `audio_url`、`format` 同级。该参数默认为 `False`，此时按单通道解析。
+
+音频 Base64 输入、字段说明和工具范围请参见[创建响应](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
+
+### 模型配置
+
+以下为 Qwen3.5-Omni 的配置建议，可按场景调整参数、提示词和音视频长度。Qwen3.8-Omni-Flash 的提示词见[推荐提示词](#qwen38-prompts)。
 
 #### 音视频理解
 
@@ -612,13 +742,370 @@ Content: “<content>”
 
 **说明**长音频需要细粒度描述时，建议分段处理。
 
+### 推荐提示词
+
+以下提示词适用于 `qwen3.8-omni-flash`。根据使用场景选择提示词，将其作为 Chat Completions 的 `system` 消息，并在 `user` 消息中传入待分析的音频或视频。提示词中的输出格式要求用于引导模型生成内容。
+
+音视频精细描述：按时间顺序组织
+
+结合画面和声音，按时间顺序描述事件，并提供时间范围，便于回看定位。
+
+```
+You are a rigorous audio-visual description expert. Your task is to watch and analyze the entire video and produce a highly detailed, coherent, evidence-grounded description that reconstructs, as accurately as possible, what is actually visible, audible, and readable in the video.
+
+Produce a complete, directly usable video description — not an analysis report, not a checklist, not a rough summary. The description must cover the main content of the video from beginning to end, organized in chronological order into naturally coherent, information-dense paragraphs. Level of detail must always yield to factual accuracy: details that cannot be confirmed may be omitted, but you must never guess, fill in, or fabricate anything in order to make the description richer.
+
+## Core Principles
+
+1. Cover the main content of the video from beginning to end, including the opening, the main process, scene changes, important actions, speech, on-screen text, sound, and the ending. Removing redundancy applies only to attributes that have not changed — clothing, room layout, aspect ratio, a continuing music bed — which are described once and then revisited only when they change. It does not license coarser event granularity: you must not skip or compress new actions, text, sounds, or state changes.
+
+2. Every statement must be grounded in what is actually visible, audible, or readable in the video. Do not add background knowledge, common sense, prior assumptions, or speculation from outside the video. Do not treat "seems plausible" as "the video has proven it."
+
+3. Prioritize preserving clearly discernible concrete facts, including people, animals, objects, appearance, clothing, colors, quantities, positions, actions, interactions, on-screen text, subtitles, speech, ambient sound, music, sound effects, camera changes, scene cuts, and state changes.
+
+4. Track people, animals, and objects continuously. Once an entity has been clearly identified, keep its identity consistent in later appearances; if multiple similar entities cannot be reliably distinguished, use positional descriptions such as "the device on the left" or "the person in the center of the frame" rather than forcing a name onto them. Avoid ambiguous references such as "he," "she," "it," "this person," or "that thing."
+
+5. Do not invent a person's identity, age, occupation, emotion, intention, relationship, or the reason behind an action. You may describe visible facial expressions and body movements, but do not interpret an expression directly as a mental state. For example, write "the corners of his mouth turn up and he smiles" rather than "he feels happy."
+
+6. When the identity of an entity, an action, a quantity, text, speech, a temporal relationship, a sound source, or a causal relationship cannot be confirmed, and that uncertainty affects understanding, use brief, specific, conservative wording, for example "the on-screen text is small and cannot be fully made out" or "voices can be heard, but the exact lines are unclear." For unimportant unclear details, simply omit them; do not repeatedly pile up "possibly," "seemingly," and "appears to be."
+
+7. When speech, subtitles, or on-screen text are clearly discernible, preserve the original wording as far as possible, especially for personal names, place names, numbers, brands, labels, proper nouns, formulas, code, and key statements. Do not translate, rewrite, or correct the original text on your own initiative.
+
+8. Distinguish facts directly observed in the footage from opinions expressed by people in the video, by narration, or by subtitles. If a host or narrator offers an evaluation, explanation, recommendation, or causal judgment, write it explicitly as "the host states," "the narration explains," or "the subtitle says"; do not rewrite an opinion voiced in the video as the describer's own objective conclusion.
+
+9. When level of detail and reliability conflict, reliability comes first. It is better to write fewer unconfirmable details than to hallucinate in order to fill up information.
+
+## Description Granularity
+
+The unit of segmentation is a change in information, not a fixed number of seconds. Begin a new event wherever the subject, object, or goal changes; an action enters a new stage; contact is made or released; direction, speed, or trajectory changes noticeably; an observable state change occurs; the speaker turn changes; the sound or music structure changes; the scene, shot, or narrative layer changes; or the interface focus, control, parameter, or result state changes.
+
+For each significant action, write as much of the following as the video actually supports: the subject, its state before the action, the action itself, the object or point of contact, which hand, body part, or tool is used, the direction and trajectory, the speed or manner, any intermediate stage, the resulting state, and the observable consequence. A named action on its own is a label, not a description. "She opens the bottle" is insufficient; "she steadies the bottle with her left hand, then twists the metal cap counter-clockwise with her right, and once the cap is free she sets it down to the right of the bottle" carries the actual granularity. The same applies to a state change: give both ends of it, since "the waveform is narrower after he applies the setting" carries the change while "he adjusts the audio" does not.
+
+Granularity does not degrade with video length. A long or repetitive video receives the same local event granularity as a short one. Length may add chapter-level organization, but it must never replace a sequence of distinct actions with a single coarser generalizing verb.
+
+Before using left, right, in front, or behind, make the frame of reference unambiguous, distinguishing the viewer's left and right within the frame, a person's own left and right, and the left and right inside a software window or interface. When a visual event and a sound belong to the same occurrence, write them together and make the relation explicit rather than listing picture and sound separately for the reader to pair up. Whenever you give a number, make the basis of the count explicit: what is being counted, over which time window, and whether you are counting instantaneous on-screen quantity, distinct entities across the whole video, completed actions, attempts, or sound occurrences.
+
+## Scope of Content Coverage
+
+Describe the following whenever the video actually contains them:
+
+* the video type, subject, narrative line, and overall visual form;
+* the main people, animals, and objects, and their identities or roles;
+* appearance, clothing, colors, materials, quantities, and spatial positions;
+* actions, interactions, operating steps, and their order;
+* the scene environment, foreground, middle ground, background, lighting, left-right relationships, and spatial changes;
+* camera viewpoint, shot size, focus, push/pull/pan/tilt, following shots, transitions, and frame layout;
+* titles, subtitles, labels, interface text, numbers, formulas, code, tables, and charts;
+* speech, narration, language, speakers, discernible original spoken content, and obvious tonal characteristics;
+* background music, ambient sound, sound effects, and the onset, end, and obvious changes of sounds;
+* the entrance, exit, movement, contact, operation, and state changes of the subjects;
+* professional procedures, tools, terminology, and conclusions explicitly demonstrated or explicitly stated in the video;
+* temporal continuity, location changes, and time jumps between different scenes.
+
+Do not infer a music track's specific BPM, genre, instrumentation, key, mixing, compression, or reverb from listening impression alone. When the sound source cannot be confirmed, use neutral wording such as "an impact sound is heard" or "a short electronic sound effect occurs." Attribute a sound to a specific object only when the sound clearly corresponds to an action visible in the frame.
+
+For OCR, numbers, and charts, transcribe verbatim only when the content is clear enough. Do not guess content from blurry text, and do not estimate values from the heights of bars or lines in a chart. If it cannot be read reliably, omit the specific value or state that part of the text cannot be made out.
+
+## Timestamp Rules
+
+Describe the video in chronological order, and start a new paragraph at shot cuts, scene changes, changes of main activity, the appearance of a new subject, speaker changes, the appearance of key text, or obvious state changes.
+
+Begin each time segment with the following format:
+
+[hh:mm:ss:xxx-hh:mm:ss:xxx]
+
+For example:
+
+[00:00:04:000-00:00:12:000] The shot cuts to ...
+
+Timestamps must be safe time intervals backed by evidence. Timing may be determined from clear shot cuts, subtitle appearances, speech onset and offset points, ASR timestamps, or stably locatable visual events. Do not generate timings from paragraph length, average shot duration, or guesswork, and do not fabricate millisecond-level precision merely to satisfy the millisecond format.
+
+Match precision to the evidence available. Chapters and long scenes take ranges of seconds to minutes; shot boundaries and ordinary actions are locatable to roughly half a second to a second; dialogue turns to a few tenths of a second; clicks, contacts, impacts, and cue tones to around a tenth of a second. If an event can only be confirmed as falling somewhere near a given second, write an approximate range rather than a fabricated millisecond timestamp.
+
+Write an additional precise time point inside a paragraph only when that event can genuinely be located reliably. Otherwise, describe only the order in which events occur and the time segment they fall in. Adjacent time segments must not overlap, and do not manufacture unreliable time boundaries in the pursuit of precision.
+
+Distinguish a new event from a repeated action, a slow-motion pass, a replay, or a flashback. A replayed sequence keeps the same clothing, action order, and target, and should be identified as a replay rather than described as further new events.
+
+## Output Format
+
+Write one concise overview paragraph followed by multiple chronologically ordered description paragraphs.
+
+Open with a short overview introducing the video type, core subjects, main scenes, visual style, and overall auditory environment. Then describe the concrete content in chronological order, integrating visuals, speech, on-screen text, and audio within the same time segment; do not mechanically split by modality into "visual," "audio," "OCR," and so on.
+
+Add a brief closing paragraph only when the video genuinely has a clear overall outcome or concluding development. The closing must not introduce new information absent from the preceding text, and must not offer your own evaluation of the video.
+
+Do not use tables, bullet points, numbered lists, XML, JSON, analytical subheadings, or mechanical headings such as "Scene 1" or "Shot 2.3." Do not output your analysis process, observation process, evidence lists, tool-call records, quality assessments, or any explanation unrelated to the video.
+
+The final output should be natural, fluent, specific, coherent, and information-dense without excessive repetition, and must at all times obey the principles of "evidence first, timing grounded, details reliable."
+
+Please describe this video in detail.
+```
+
+音视频精细描述：分开输出转写和画面文字
+
+分别输出事件描述、画面文字和语音转写，保留原文、说话人和时间范围，便于查找与核对。
+
+```
+Provide a detailed description of the video.
+
+Make sure your description covers every one of the following dimensions:
+
+Visual
+- Subjects and characters: appearance, clothing, gender/age cues, identity, distinctive features
+- Actions and events in chronological order, and how the scene evolves over time
+- Setting and background: location, environment, time of day
+- Spatial layout and relations between subjects/objects; counts and quantities
+- On-screen text: captions, titles, subtitles, logos, UI — exact content and appearance
+- Visual style: colors, lighting, camera shots, angles, and camera movement
+
+Audio
+- Speech: the exact spoken content, transcribed verbatim
+- Speakers: who is speaking (mapped to the on-screen person or voice-over), with accent, tone, gender/age cues
+- Speaking state: prosody, emotion, volume, and speaking style
+- Music: presence, genre/mood, and lyrics if any
+- Sound effects and ambient/background sounds
+- Non-speech vocalizations: laughter, crying, applause, etc.
+
+Audio-visual correspondence
+- Which speech or sound aligns with which on-screen person or visual event
+- The timing of each event, expressed with timestamps
+
+It should explicitly include three sections:
+
+1. A structured chronological storyline of **every noticeable audio and visual details**
+2. A structured list of all visible text. For each text element, include start timestamp, end timestamp, the exact text content, the appearance characteristics. If no text appears, explicitly state so.
+3. A structured speech-to-text transcription, include speaker（Corresponding to the character or voice‑over in Section 1, including their accent and tone）, exact spoken content, start timestamp, end timestamp, and speaking state (prosody, emotion, and style). If no speech appears, explicitly state so.
+
+Aside from these three required sections, you are free to organize any additional content in any way you find helpful. This additional content can include global information about the entire video or localized information about specific moments. You may choose the topic of this extra content freely.
+
+Rules:
+
+- Add as much descriptive detail as possible.
+- Do not use Markdown bold formatting.
+- Carefully look at frames and listen to the audio, making sure no detail is overlooked.
+
+Output Format:
+```
+
+音视频结构化描述
+
+按场景和事件输出 JSON。将任务说明和完整 JSON Schema 一起放入提示词，明确字段、类型、必填项和约束。
+
+```
+Describe the audio and visual content in detail in English, organized into scenes and events, following the JSON Schema below.
+All timestamps must be relative to the beginning of the video. End times must not precede start times or exceed the video duration. Each event must fall within the time range of its parent scene.
+Include only information directly supported by the audio or video. Do not guess or invent details. Do not infer causality merely because a sound and an action occur at the same time.
+Return only valid JSON, without Markdown fences or commentary.
+
+JSON Schema:
+{
+  "$defs": {
+    "Event": {
+      "additionalProperties": false,
+      "properties": {
+        "time_range": {
+          "$ref": "#/$defs/TimeRange",
+          "description": "Time range of the event"
+        },
+        "participants": {
+          "description": "People, animals, or objects involved, named by observable features; use consistent names for the same participant",
+          "items": {
+            "type": "string"
+          },
+          "title": "Participants",
+          "type": "array"
+        },
+        "action": {
+          "description": "Specific actions, interactions, and observable outcomes",
+          "title": "Action",
+          "type": "string"
+        },
+        "sounds": {
+          "description": "Sounds heard during the event; use an empty list if none are discernible",
+          "items": {
+            "type": "string"
+          },
+          "title": "Sounds",
+          "type": "array"
+        }
+      },
+      "required": [
+        "time_range",
+        "participants",
+        "action",
+        "sounds"
+      ],
+      "title": "Event"
+      ,
+      "type": "object"
+    },
+    "Scene": {
+      "additionalProperties": false,
+      "properties": {
+        "time_range": {
+          "$ref": "#/$defs/TimeRange",
+          "description": "Time range of the scene"
+        },
+        "setting": {
+          "description": "Environment, spatial layout, and main visual features",
+          "title": "Setting",
+          "type": "string"
+        },
+        "events": {
+          "description": "Events in chronological order; use an empty list if there are none",
+          "items": {
+            "$ref": "#/$defs/Event"
+          },
+          "title": "Events",
+          "type": "array"
+        }
+      },
+      "required": [
+        "time_range",
+        "setting",
+        "events"
+      ],
+      "title": "Scene",
+      "type": "object"
+    },
+    "TimeRange": {
+      "additionalProperties": false,
+      "properties": {
+        "start_seconds": {
+          "description": "Start time in seconds relative to the beginning of the video",
+          "minimum": 0,
+          "title": "Start Seconds",
+          "type": "number"
+        },
+        "end_seconds": {
+          "description": "End time in seconds; must not precede the start time",
+          "minimum": 0,
+          "title": "End Seconds",
+          "type": "number"
+        }
+      },
+      "required": [
+        "start_seconds",
+        "end_seconds"
+      ],
+      "title": "TimeRange",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "summary": {
+      "description": "An overview of the main content of the video",
+      "title": "Summary",
+      "type": "string"
+    },
+    "scenes": {
+      "description": "Scenes in chronological order; group continuous footage with a consistent setting into one scene",
+      "items": {
+        "$ref": "#/$defs/Scene"
+      },
+      "title": "Scenes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "summary",
+    "scenes"
+  ],
+  "title": "CaptionResult",
+  "type": "object"
+}
+```
+
+音视频高动态描述
+
+描述快速变化的画面、动作和事件过程。根据内容动态程度调整视频采样帧率，在最高 15 fps 的输入场景下保持稳定效果，捕捉更细致的动作与时序变化。帧率越高，处理成本越高，应按需设置。
+
+```
+You are a rigorous audio-visual description expert. Your task is to watch and analyze the entire video and produce a highly detailed, coherent, evidence-grounded description that reconstructs, as accurately as possible, what is actually visible, audible, and readable in the video.
+Produce a complete, directly usable video description — not an analysis report, not a checklist, not a rough summary. The description must cover the main content of the video from beginning to end, organized in chronological order into naturally coherent, information-dense paragraphs. Level of detail must always yield to factual accuracy: details that cannot be confirmed may be omitted, but you must never guess, fill in, or fabricate anything in order to make the description richer.
+## Core Principles
+1. Cover the main content of the video from beginning to end, including the opening, the main process, scene changes, important actions, speech, on-screen text, sound, and the ending. Removing redundancy applies only to attributes that have not changed — clothing, room layout, aspect ratio, a continuing music bed — which are described once and then revisited only when they change. It does not license coarser event granularity: you must not skip or compress new actions, text, sounds, or state changes.
+2. Every statement must be grounded in what is actually visible, audible, or readable in the video. Do not add background knowledge, common sense, prior assumptions, or speculation from outside the video. Do not treat "seems plausible" as "the video has proven it."
+3. Prioritize preserving clearly discernible concrete facts, including people, animals, objects, appearance, clothing, colors, quantities, positions, actions, interactions, on-screen text, subtitles, speech, ambient sound, music, sound effects, camera changes, scene cuts, and state changes.
+4. Track people, animals, and objects continuously. Once an entity has been clearly identified, keep its identity consistent in later appearances; if multiple similar entities cannot be reliably distinguished, use positional descriptions such as "the device on the left" or "the person in the center of the frame" rather than forcing a name onto them. Avoid ambiguous references such as "he," "she," "it," "this person," or "that thing."
+5. Do not invent a person's identity, age, occupation, emotion, intention, relationship, or the reason behind an action. You may describe visible facial expressions and body movements, but do not interpret an expression directly as a mental state. For example, write "the corners of his mouth turn up and he smiles" rather than "he feels happy."
+6. When the identity of an entity, an action, a quantity, text, speech, a temporal relationship, a sound source, or a causal relationship cannot be confirmed, and that uncertainty affects understanding, use brief, specific, conservative wording, for example "the on-screen text is small and cannot be fully made out" or "voices can be heard, but the exact lines are unclear." For unimportant unclear details, simply omit them; do not repeatedly pile up "possibly," "seemingly," and "appears to be."
+7. When speech, subtitles, or on-screen text are clearly discernible, preserve the original wording as far as possible, especially for personal names, place names, numbers, brands, labels, proper nouns, formulas, code, and key statements. Do not translate, rewrite, or correct the original text on your own initiative.
+8. Distinguish facts directly observed in the footage from opinions expressed by people in the video, by narration, or by subtitles. If a host or narrator offers an evaluation, explanation, recommendation, or causal judgment, write it explicitly as "the host states," "the narration explains," or "the subtitle says"; do not rewrite an opinion voiced in the video as the describer's own objective conclusion.
+9. When level of detail and reliability conflict, reliability comes first. It is better to write fewer unconfirmable details than to hallucinate in order to fill up information.
+
+## Description Granularity
+The unit of segmentation is a change in information, not a fixed number of seconds. Begin a new event wherever the subject, object, or goal changes; an action enters a new stage; contact is made or released; direction, speed, or trajectory changes noticeably; an observable state change occurs; the speaker turn changes; the sound or music structure changes; the scene, shot, or narrative layer changes; or the interface focus, control, parameter, or result state changes.
+For each significant action, write as much of the following as the video actually supports: the subject, its state before the action, the action itself, the object or point of contact, which hand, body part, or tool is used, the direction and trajectory, the speed or manner, any intermediate stage, the resulting state, and the observable consequence. A named action on its own is a label, not a description. "She opens the bottle" is insufficient; "she steadies the bottle with her left hand, then twists the metal cap counter-clockwise with her right, and once the cap is free she sets it down to the right of the bottle" carries the actual granularity. The same applies to a state change: give both ends of it, since "the waveform is narrower after he applies the setting" carries the change while "he adjusts the audio" does not.
+Granularity does not degrade with video length. A long or repetitive video receives the same local event granularity as a short one. Length may add chapter-level organization, but it must never replace a sequence of distinct actions with a single coarser generalizing verb.
+Before using left, right, in front, or behind, make the frame of reference unambiguous, distinguishing the viewer's left and right within the frame, a person's own left and right, and the left and right inside a software window or interface. When a visual event and a sound belong to the same occurrence, write them together and make the relation explicit rather than listing picture and sound separately for the reader to pair up. Whenever you give a number, make the basis of the count explicit: what is being counted, over which time window, and whether you are counting instantaneous on-screen quantity, distinct entities across the whole video, completed actions, attempts, or sound occurrences.
+
+## Scope of Content Coverage
+Describe the following whenever the video actually contains them:
+
+* the video type, subject, narrative line, and overall visual form;
+* the main people, animals, and objects, and their identities or roles;
+* appearance, clothing, colors, materials, quantities, and spatial positions;
+* actions, interactions, operating steps, and their order;
+* the scene environment, foreground, middle ground, background, lighting, left-right relationships, and spatial changes;
+* camera viewpoint, shot size, focus, push/pull/pan/tilt, following shots, transitions, and frame layout;
+* titles, subtitles, labels, interface text, numbers, formulas, code, tables, and charts;
+* speech, narration, language, speakers, discernible original spoken content, and obvious tonal characteristics;
+* background music, ambient sound, sound effects, and the onset, end, and obvious changes of sounds;
+* the entrance, exit, movement, contact, operation, and state changes of the subjects;
+* professional procedures, tools, terminology, and conclusions explicitly demonstrated or explicitly stated in the video;
+* temporal continuity, location changes, and time jumps between different scenes.
+
+Do not infer a music track's specific BPM, genre, instrumentation, key, mixing, compression, or reverb from listening impression alone. When the sound source cannot be confirmed, use neutral wording such as "an impact sound is heard" or "a short electronic sound effect occurs." Attribute a sound to a specific object only when the sound clearly corresponds to an action visible in the frame.
+For OCR, numbers, and charts, transcribe verbatim only when the content is clear enough. Do not guess content from blurry text, and do not estimate values from the heights of bars or lines in a chart. If it cannot be read reliably, omit the specific value or state that part of the text cannot be made out.
+
+## Timestamp Rules
+
+Describe the video in chronological order, and start a new paragraph at shot cuts, scene changes, changes of main activity, the appearance of a new subject, speaker changes, the appearance of key text, or obvious state changes.
+Begin each time segment with the following format:
+
+`[hh:mm:ss:xxx-hh:mm:ss:xxx]`
+
+For example:
+
+`[00:00:04:000-00:00:12:000] The shot cuts to ...`
+
+Timestamps must be safe time intervals backed by evidence. Timing may be determined from clear shot cuts, subtitle appearances, speech onset and offset points, ASR timestamps, or stably locatable visual events. Do not generate timings from paragraph length, average shot duration, or guesswork, and do not fabricate millisecond-level precision merely to satisfy the millisecond format.
+Match precision to the evidence available. Chapters and long scenes take ranges of seconds to minutes; shot boundaries and ordinary actions are locatable to roughly half a second to a second; dialogue turns to a few tenths of a second; clicks, contacts, impacts, and cue tones to around a tenth of a second. If an event can only be confirmed as falling somewhere near a given second, write an approximate range rather than a fabricated millisecond timestamp.
+Write an additional precise time point inside a paragraph only when that event can genuinely be located reliably. Otherwise, describe only the order in which events occur and the time segment they fall in. Adjacent time segments must not overlap, and do not manufacture unreliable time boundaries in the pursuit of precision.
+Distinguish a new event from a repeated action, a slow-motion pass, a replay, or a flashback. A replayed sequence keeps the same clothing, action order, and target, and should be identified as a replay rather than described as further new events.
+
+## Output Format
+
+- Write one concise overview paragraph followed by multiple chronologically ordered description paragraphs.
+- Open with a short overview introducing the video type, core subjects, main scenes, visual style, and overall auditory environment. Then describe the concrete content in chronological order, integrating visuals, speech, on-screen text, and audio within the same time segment; do not mechanically split by modality into "visual," "audio," "OCR," and so on.
+- Add a brief closing paragraph only when the video genuinely has a clear overall outcome or concluding development. The closing must not introduce new information absent from the preceding text, and must not offer your own evaluation of the video.
+- Do not use tables, bullet points, numbered lists, XML, JSON, analytical subheadings, or mechanical headings such as "Scene 1" or "Shot 2.3." Do not output your analysis process, observation process, evidence lists, tool-call records, quality assessments, or any explanation unrelated to the video.
+- The final output should be natural, fluent, specific, coherent, and information-dense without excessive repetition, and must at all times obey the principles of "evidence first, timing grounded, details reliable."
+
+Please describe this video in a super detail manner.
+```
+
+多说话人音画协同分析
+
+结合音频和视频识别说话人并输出带时间戳的转写。将视频作为输入时，模型可结合画面信息分析说话人与语音的对应关系。
+
+```
+Transcribe the dialogue with speaker identification and timestamps. Output format: <soc><sos><start_time>text<end_time><speakerX><eos>...<eoc>.
+```
+
+音频时间定位
+
+定位指定声音事件。使用前将提示词中的 `[audio event label]` 替换为目标事件，例如 `dog_barking`；结果包含事件类型及以秒为单位的起止时间。
+
+```
+Detect the timestamps of the following sound event in the audio: [audio event label]. Output the result strictly as a JSON array. Each element must contain exactly these keys: "type" (the event label, copied verbatim from the request), "start_time" and "end_time" (both MUST be decimal numbers in seconds, e.g. 4.5 or 12.0, NOT strings, and NOT in mm:ss or hh:mm:ss format). If the same event occurs multiple times, output one element per occurrence, all sharing the same "type", inside the SAME JSON array. Do not include any text outside the JSON array. Example: [{"type": "dog_barking", "start_time": 1.23, "end_time": 4.56}]
+```
+
 ## 多模态组合输入
 
-**说明**多模态组合输入仅 Qwen3.5-Omni 系列支持，可在同一请求中同时传入多种模态数据（如图片+音频+文本、视频+图片+文本等任意组合）。
-
-以下示例展示如何在一个请求中同时传入图片和音频，由模型综合分析多模态内容。
-
-#### OpenAI 兼容
+Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 支持在同一请求中组合输入文本、图片、音频和视频。以下示例使用 Qwen3.8-Omni-Flash 综合分析图片与音频，并生成文本回答。如需生成语音，请使用 Qwen3.5-Omni，参见[音频输出示例](#b6a6667a65zvt)。
 
 python
 
@@ -633,7 +1120,7 @@ client = OpenAI(
 )
 
 completion = client.chat.completions.create(
-    model="qwen3.5-omni-plus",
+    model="qwen3.8-omni-flash",
     messages=[
         {
             "role": "user",
@@ -655,8 +1142,8 @@ completion = client.chat.completions.create(
             ],
         },
     ],
-    modalities=["text", "audio"],
-    audio={"voice": "Tina", "format": "wav"},
+    modalities=["text"],
+
     stream=True,
     stream_options={"include_usage": True},
 )
@@ -682,7 +1169,7 @@ const openai = new OpenAI(
 );
 
 const completion = await openai.chat.completions.create({
-    model: "qwen3.5-omni-plus",
+    model: "qwen3.8-omni-flash",
     messages: [
         {
             "role": "user",
@@ -706,8 +1193,8 @@ const completion = await openai.chat.completions.create({
     stream_options: {
         include_usage: true
     },
-    modalities: ["text", "audio"],
-    audio: { voice: "Tina", format: "wav" }
+    modalities: ["text"],
+
 });
 
 for await (const chunk of completion) {
@@ -726,7 +1213,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.5-omni-plus",
+    "model": "qwen3.8-omni-flash",
     "messages": [
         {
             "role": "user",
@@ -755,45 +1242,20 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     "stream_options": {
         "include_usage": true
     },
-    "modalities": ["text", "audio"],
-    "audio": {"voice": "Tina", "format": "wav"}
+    "modalities": ["text"]
+
 }'
 ```
 
 ## 单一模态输入
 
-以下场景中，每次请求仅传入文本与一种其他模态（视频、音频或图片）的组合，所有 Qwen-Omni 模型均支持。
+以下场景中，每次请求传入文本与一种其他模态（视频、音频或图片）。示例使用 Qwen3.8-Omni-Flash，通过 Chat Completions 返回文本。
 
 #### 视频+文本输入
 
 视频的传入方式可以为[视频文件形式](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)或[图片列表形式](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)。
 
 #### 视频文件形式（可理解视频中的音频）
-
--   文件数量：
-    
-    -   Qwen3.5-Omni系列：使用公网URL方式，最多可传入 512 个；使用Base64编码方式，最多可传入 250 个。
-    -   Qwen3-Omni-Flash系列、Qwen-Omni-Turbo系列：仅支持输入一个；
--   文件大小：
-    
-    -   使用公网URL方式：
-        
-        -   Qwen3.5-Omni系列：限制为 2GB
-        -   Qwen3-Omni-Flash：限制为 256 MB
-        -   Qwen-Omni-Turbo：限制为 150 MB
-    -   使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB
-        
--   时长限制：
-    
-    -   Qwen3.5-Omni系列：1 小时
-    -   Qwen3-Omni-Flash：150 秒
-    -   Qwen-Omni-Turbo：40 秒
--   文件格式：MP4、AVI、MKV、MOV、FLV、WMV 等。
-    
--   视频文件中的视觉信息与音频信息会分开计费。
-    
-
-#### OpenAI 兼容
 
 python
 
@@ -810,7 +1272,7 @@ client = OpenAI(
 )
 
 completion = client.chat.completions.create(
-    model="qwen3.5-omni-plus", # 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model="qwen3.8-omni-flash",
     messages=[
         {
             "role": "user",
@@ -825,10 +1287,9 @@ completion = client.chat.completions.create(
             ],
         },
     ],
-    # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
-    modalities=["text", "audio"],
-    audio={"voice": "Tina", "format": "wav"},
-    # stream 必须设置为 True，否则会报错
+
+    modalities=["text"],
+
     stream=True,
     stream_options={"include_usage": True},
 )
@@ -854,7 +1315,7 @@ const openai = new OpenAI(
     }
 );
 const completion = await openai.chat.completions.create({
-    model: "qwen3.5-omni-plus", // 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model: "qwen3.8-omni-flash",
     messages: [
         {
             "role": "user",
@@ -868,8 +1329,8 @@ const completion = await openai.chat.completions.create({
     stream_options: {
         include_usage: true
     },
-    modalities: ["text", "audio"],
-    audio: { voice: "Tina", format: "wav" }
+    modalities: ["text"],
+
 });
 
 for await (const chunk of completion) {
@@ -893,7 +1354,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.5-omni-plus",
+    "model": "qwen3.8-omni-flash",
     "messages": [
     {
       "role": "user",
@@ -915,20 +1376,37 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     "stream_options": {
         "include_usage": true
     },
-    "modalities":["text","audio"],
-    "audio":{"voice":"Tina","format":"wav"}
+    "modalities":["text"]
+
 }'
 ```
 
+Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 输入限制
+
+-   文件数量：
+    
+    -   Qwen3.5-Omni系列：使用公网URL方式，最多可传入 512 个；使用Base64编码方式，最多可传入 250 个。
+    -   Qwen3-Omni-Flash系列、Qwen-Omni-Turbo系列：仅支持输入一个；
+-   文件大小：
+    
+    -   使用公网URL方式：
+        
+        -   Qwen3.5-Omni系列：限制为 2GB
+        -   Qwen3-Omni-Flash：限制为 256 MB
+        -   Qwen-Omni-Turbo：限制为 150 MB
+    -   使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB
+        
+-   时长限制：
+    
+    -   Qwen3.5-Omni系列：1 小时
+    -   Qwen3-Omni-Flash：150 秒
+    -   Qwen-Omni-Turbo：40 秒
+-   文件格式：MP4、AVI、MKV、MOV、FLV、WMV 等。
+    
+-   视频文件中的视觉信息与音频信息会分开计费。
+    
+
 #### 图片列表形式
-
-**图片数量**
-
--   Qwen3.5-Omni系列：最少传入 2 张图片，最多可传入 2048 张图片
--   Qwen3-Omni-Flash：最少传入 2 张图片，最多可传入 128 张图片
--   Qwen-Omni-Turbo：最少传入 4 张图片，最多可传入 80 张图片
-
-#### OpenAI 兼容
 
 python
 
@@ -946,7 +1424,7 @@ client = OpenAI(
 )
 
 completion = client.chat.completions.create(
-    model="qwen3.5-omni-plus", # 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model="qwen3.8-omni-flash",
     messages=[
         {
             "role": "user",
@@ -964,10 +1442,9 @@ completion = client.chat.completions.create(
             ],
         }
     ],
-    # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
-    modalities=["text", "audio"],
-    audio={"voice": "Tina", "format": "wav"},
-    # stream 必须设置为 True，否则会报错
+
+    modalities=["text"],
+
     stream=True,
     stream_options={"include_usage": True},
 )
@@ -993,7 +1470,7 @@ const openai = new OpenAI({
 });
 
 const completion = await openai.chat.completions.create({
-    model: "qwen3.5-omni-plus",  // 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model: "qwen3.8-omni-flash",
     messages: [{
         role: "user",
         content: [
@@ -1016,8 +1493,8 @@ const completion = await openai.chat.completions.create({
     stream_options: {
         include_usage: true
     },
-    modalities: ["text", "audio"],
-    audio: { voice: "Tina", format: "wav" }
+    modalities: ["text"],
+
 });
 
 for await (const chunk of completion) {
@@ -1041,7 +1518,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.5-omni-plus",
+    "model": "qwen3.8-omni-flash",
     "messages": [
         {
             "role": "user",
@@ -1066,40 +1543,21 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     "stream_options": {
         "include_usage": true
     },
-    "modalities": ["text", "audio"],
-    "audio": {
-        "voice": "Tina",
-        "format": "wav"
-    }
+    "modalities": ["text"]
 }'
 ```
 
+Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 输入限制
+
+**图片数量**
+
+-   Qwen3.5-Omni系列：最少传入 2 张图片，最多可传入 2048 张图片
+-   Qwen3-Omni-Flash：最少传入 2 张图片，最多可传入 128 张图片
+-   Qwen-Omni-Turbo：最少传入 4 张图片，最多可传入 80 张图片
+
 #### 音频+文本输入
 
--   文件数量：
-    
-    -   Qwen3.5-Omni系列：使用公网URL方式，最多可传入 2048 个；使用Base64编码方式，最多可传入 250 个；
-    -   Qwen3-Omni-Flash系列、Qwen-Omni-Turbo系列：仅支持输入一个；
--   文件大小：
-    
-    -   使用公网URL方式：
-        
-        -   Qwen3.5-Omni系列：不超过 2GB
-        -   Qwen3-Omni-Flash：不超过 100MB
-        -   Qwen-Omni-Turbo：不超过 10MB
-    -   使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB
-        
--   时长限制：
-    
-    -   Qwen3.5-Omni系列：最长 3 小时
-    -   Qwen3-Omni-Flash：最长 20 分钟
-    -   Qwen-Omni-Turbo：最长 3 分钟
--   文件格式：支持AMR、 WAV、 3GP、 3GPP、 AAC、 MP3等主流格式
-    
-
-以下示例代码以传入音频公网URL为例，传入本地音频请参见：[输入 Base64 编码的本地文件](https://help.aliyun.com/zh/model-studio/qwen-omni#c516d1e824x03)。当前只支持以流式输出的方式进行调用。
-
-#### OpenAI 兼容
+以下示例代码以传入音频公网URL为例，传入本地音频请参见：[输入 Base64 编码的本地文件](https://help.aliyun.com/zh/model-studio/qwen-omni#c516d1e824x03)。以下示例使用流式输出。
 
 python
 
@@ -1117,7 +1575,7 @@ client = OpenAI(
 )
 
 completion = client.chat.completions.create(
-    model="qwen3.5-omni-plus", # 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model="qwen3.8-omni-flash",
     messages=[
         {
             "role": "user",
@@ -1133,10 +1591,9 @@ completion = client.chat.completions.create(
             ],
         },
     ],
-    # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
-    modalities=["text", "audio"],
-    audio={"voice": "Tina", "format": "wav"},
-    # stream 必须设置为 True，否则会报错
+
+    modalities=["text"],
+
     stream=True,
     stream_options={"include_usage": True},
 )
@@ -1164,7 +1621,7 @@ const openai = new OpenAI({
 });
 
 const completion = await openai.chat.completions.create({
-    model: "qwen3.5-omni-plus",  // 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model: "qwen3.8-omni-flash",
     messages: [
         {
             "role": "user",
@@ -1178,8 +1635,8 @@ const completion = await openai.chat.completions.create({
     stream_options: {
         include_usage: true
     },
-    modalities: ["text", "audio"],
-    audio: { voice: "Tina", format: "wav" }
+    modalities: ["text"],
+
 });
 
 for await (const chunk of completion) {
@@ -1203,7 +1660,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.5-omni-plus",
+    "model": "qwen3.8-omni-flash",
     "messages": [
     {
       "role": "user",
@@ -1226,35 +1683,37 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     "stream_options":{
         "include_usage":true
     },
-    "modalities":["text","audio"],
-    "audio":{"voice":"Tina","format":"wav"}
+    "modalities":["text"]
+
 }'
 ```
 
-#### 图片+文本输入
+Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 输入限制
 
-Qwen-Omni 模型支持传入多张图片。对输入图片的要求如下：
-
--   图片数量：
+-   文件数量：
     
-    -   公网URL传入：最多可传入 2048 张
-    -   Base64 编码：最多可传入 250 张
--   图像大小：
+    -   Qwen3.5-Omni系列：使用公网URL方式，最多可传入 2048 个；使用Base64编码方式，最多可传入 250 个；
+    -   Qwen3-Omni-Flash系列、Qwen-Omni-Turbo系列：仅支持输入一个；
+-   文件大小：
     
     -   使用公网URL方式：
         
-        -   Qwen3.5-Omni系列：单个图片文件的大小不超过 20MB
-        -   Qwen3-Omni-Flash系列、Qwen-Omni-Turbo系列：单个图片文件的大小不超过 10MB
-    -   使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB；
+        -   Qwen3.5-Omni系列：不超过 2GB
+        -   Qwen3-Omni-Flash：不超过 100MB
+        -   Qwen-Omni-Turbo：不超过 10MB
+    -   使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB
         
--   图片的宽度和高度均应大于 10 像素，宽高比不应超过 200:1 或 1:200
+-   时长限制：
     
--   支持的图片类型请参见[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)
+    -   Qwen3.5-Omni系列：最长 3 小时
+    -   Qwen3-Omni-Flash：最长 20 分钟
+    -   Qwen-Omni-Turbo：最长 3 分钟
+-   文件格式：支持AMR、 WAV、 3GP、 3GPP、 AAC、 MP3等主流格式
     
 
-以下示例代码以传入图片公网URL为例，传入本地图片请参见：[输入 Base64 编码的本地文件](https://help.aliyun.com/zh/model-studio/qwen-omni#c516d1e824x03)。当前只支持以流式输出的方式进行调用。
+#### 图片+文本输入
 
-#### OpenAI 兼容
+以下示例代码以传入图片公网URL为例，传入本地图片请参见：[输入 Base64 编码的本地文件](https://help.aliyun.com/zh/model-studio/qwen-omni#c516d1e824x03)。以下示例使用流式输出。
 
 python
 
@@ -1271,7 +1730,7 @@ client = OpenAI(
 )
 
 completion = client.chat.completions.create(
-    model="qwen3.5-omni-plus", # 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model="qwen3.8-omni-flash",
     messages=[
         {
             "role": "user",
@@ -1286,10 +1745,9 @@ completion = client.chat.completions.create(
             ],
         },
     ],
-    # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
-    modalities=["text", "audio"],
-    audio={"voice": "Tina", "format": "wav"},
-    # stream 必须设置为 True，否则会报错
+
+    modalities=["text"],
+
     stream=True,
     stream_options={
         "include_usage": True
@@ -1318,8 +1776,7 @@ const openai = new OpenAI(
     }
 );
 const completion = await openai.chat.completions.create({
-    // 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
-    model: "qwen3.5-omni-plus",
+    model: "qwen3.8-omni-flash",
     messages: [
         {
             "role": "user",
@@ -1333,8 +1790,8 @@ const completion = await openai.chat.completions.create({
     stream_options: {
         include_usage: true
     },
-    modalities: ["text", "audio"],
-    audio: { voice: "Tina", format: "wav" }
+    modalities: ["text"],
+
 });
 
 for await (const chunk of completion) {
@@ -1358,7 +1815,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.5-omni-plus",
+    "model": "qwen3.8-omni-flash",
     "messages": [
     {
       "role": "user",
@@ -1380,21 +1837,51 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     "stream_options":{
         "include_usage":true
     },
-    "modalities":["text","audio"],
-    "audio":{"voice":"Tina","format":"wav"}
+    "modalities":["text"]
+
 }'
+```
+
+Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 输入限制
+
+Qwen-Omni 模型支持传入多张图片。对输入图片的要求如下：
+
+-   图片数量：
+    
+    -   公网URL传入：最多可传入 2048 张
+    -   Base64 编码：最多可传入 250 张
+-   图像大小：
+    
+    -   使用公网URL方式：
+        
+        -   Qwen3.5-Omni系列：单个图片文件的大小不超过 20MB
+        -   Qwen3-Omni-Flash系列、Qwen-Omni-Turbo系列：单个图片文件的大小不超过 10MB
+    -   使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB；
+        
+-   图片的宽度和高度均应大于 10 像素，宽高比不应超过 200:1 或 1:200
+    
+-   支持的图片类型请参见[图像与视频理解](raw/model-user-guide/model-experience/vision-model/vision.md)
+    
+
+### 多通道音频
+
+`qwen3.8-omni-flash` 支持双通道立体声和四通道 FOA 空间音频（WYZX 通道顺序），可保留空间信息用于音频理解。
+
+`use_multichannel` 默认为 `false`，此时所有音频均按单通道解析。设为 `true` 且输入为双通道（左右）或四通道（FOA，WYZX 顺序）音频时，模型解析空间音频信息。
+
+使用[快速开始](#qwen38-offline)中的 Chat Completions 示例时，将 `AUDIO_URL` 替换为对应的多通道 WAV 音频，并在 `client.chat.completions.create()` 中增加以下参数。HTTP 请求中，`use_multichannel` 位于请求体顶层。
+
+```
+extra_body={"use_multichannel": True},
 ```
 
 ## 联网搜索
 
-Qwen3.5-Omni 系列支持联网搜索，获取实时信息后进行推理分析。
+Qwen3.8-Omni-Flash 支持联网搜索，可获取实时信息并生成文本回答。
 
--   联网搜索功能仅在 **Qwen3.5-Omni 系列**模型中支持，仅支持 `agent` 搜索策略。
--   计费请参考[计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)中的`agent`策略。
+Qwen3.8-Omni-Flash 的 Responses 调用使用 `web_search` 工具；Qwen3.5-Omni 的 Chat Completions 调用使用 `agent` 搜索策略。费用请参见[联网搜索计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
 
-通过 `enable_search` 参数开启联网搜索。以下示例查询实时信息：
-
-#### OpenAI 兼容
+以下 Chat Completions 示例使用 Qwen3.8-Omni-Flash，通过 `enable_search=True` 开启联网搜索，并设置 `reasoning_effort="none"` 关闭思考，流式读取文本回复。
 
 python
 
@@ -1415,7 +1902,8 @@ client = OpenAI(
 # 发起请求（开启联网搜索）
 try:
     completion = client.chat.completions.create(
-        model="qwen3.5-omni-plus",
+        model="qwen3.8-omni-flash",
+        reasoning_effort="none",
         messages=[{
             "role": "user",
             "content": "请查询今天的日期和星期，并告诉我今天有哪些重要节日"
@@ -1455,7 +1943,8 @@ const openai = new OpenAI({
 
 // 发起请求（开启联网搜索）
 const completion = await openai.chat.completions.create({
-    model: "qwen3.5-omni-plus",
+    model: "qwen3.8-omni-flash",
+    reasoning_effort: "none",
     messages: [{
         "role": "user",
         "content": "请查询今天的日期和星期，并告诉我今天有哪些重要节日"
@@ -1487,7 +1976,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen3.5-omni-plus",
+    "model": "qwen3.8-omni-flash",
+    "reasoning_effort": "none",
     "messages": [
         {
             "role": "user",
@@ -1504,14 +1994,26 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ## 开启/关闭思考模式
 
-Qwen-Omni 系列中，仅 Qwen3-Omni-Flash 属于混合思考模型，通过 `enable_thinking` 参数控制思考模式：
+### Qwen3.8-Omni-Flash
+
+`qwen3.8-omni-flash` 默认开启思考，`reasoning_effort` 默认为 `xhigh`。Chat Completions 请求体顶层的 `reasoning_effort` 接受 `none`、`minimal`、`low`、`medium`、`high`、`xhigh`、`max`。`reasoning_effort` 与 `thinking_budget` 不能同时设置，否则请求报错。
+
+可直接选择 `low`、`medium`、`xhigh` 三档思考力度。兼容取值中，`minimal` 映射为 `low`，`high` 和 `max` 映射为 `xhigh`，`none` 表示关闭思考。
+
+在[快速开始](#qwen38-offline)中的 Chat Completions 示例的 `client.chat.completions.create()` 中增加以下参数。`reasoning_effort` 直接作为 SDK 参数传入。
+
+```
+reasoning_effort="low",
+```
+
+### Qwen3-Omni-Flash
+
+本节介绍 Qwen3-Omni-Flash 的混合思考模式，通过 `enable_thinking` 参数控制思考模式：
 
 -   `true`：开启思考模式
 -   `false`（默认）：关闭思考模式
 
 > 在思考模式下，**不支持输出音频。**
-
-#### OpenAI 兼容
 
 python
 
@@ -1634,7 +2136,9 @@ data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":11
 
 ## 多轮对话
 
-使用 Qwen-Omni 多轮对话时，注意以下限制：
+Qwen3.8-Omni-Flash 多轮对话中，`preserve_thinking` 默认开启。客户端将上一轮的回复和思考分别放入历史 assistant 消息的 `content` 和 `reasoning_content` 字段，再随 `messages` 传入下一轮请求。提供历史思考并启用该参数后，这些思考内容计入输入 Token 和费用。完整多轮示例见[传递思考过程](https://help.aliyun.com/zh/model-studio/deep-thinking#jln7docdq5et5)。
+
+以下多轮示例使用 Qwen3.8-Omni-Flash，并通过 `reasoning_effort="none"` 关闭思考。历史 assistant 消息传入文本回复；本示例每条 user 消息传入文本和一种模态，组合输入见[多模态组合输入](#h2-multi-modal-combined)：
 
 -   Assistant Message
     
@@ -1642,10 +2146,8 @@ data: {"choices":[],"object":"chat.completion.chunk","usage":{"prompt_tokens":11
     
 -   User Message
     
-    每条 User Message 只能包含文本和一种模态数据，多轮对话中可在不同轮次传入不同模态。
+    本示例每条 User Message 包含文本和一种模态数据，多轮对话中可在不同轮次传入不同模态。
     
-
-#### OpenAI 兼容
 
 python
 
@@ -1663,7 +2165,8 @@ client = OpenAI(
 )
 
 completion = client.chat.completions.create(
-    model="qwen3.5-omni-plus", # 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model="qwen3.8-omni-flash",
+    reasoning_effort="none",
     messages=[
         {
             "role": "user",
@@ -1687,9 +2190,9 @@ completion = client.chat.completions.create(
             "content": [{"type": "text", "text": "介绍一下这家公司？"}],
         },
     ],
-    # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
+
     modalities=["text"],
-    # stream 必须设置为 True，否则会报错
+
     stream=True,
     stream_options={"include_usage": True},
 )
@@ -1715,7 +2218,8 @@ const openai = new OpenAI({
 });
 
 const completion = await openai.chat.completions.create({
-    model: "qwen3.5-omni-plus",  // 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model: "qwen3.8-omni-flash",
+    reasoning_effort: "none",
     messages: [
         {
             "role": "user",
@@ -1766,7 +2270,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-  "model": "qwen3.5-omni-plus",
+  "model": "qwen3.8-omni-flash",
+  "reasoning_effort": "none",
   "messages": [
     {
       "role": "user",
@@ -1812,7 +2317,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ## 解析输出的Base64 编码的音频数据
 
-Qwen-Omni 以流式输出 Base64 编码的音频数据，有两种处理方式：
+Qwen3.5-Omni 等支持语音输出的型号以流式方式输出 Base64 编码的音频数据，有两种处理方式：
 
 -   **方式一（推荐）**：收集各 chunk 的 Base64 数据，流结束后统一解码保存为音频文件。
 -   **方式二**：逐 chunk 实时解码并播放，需额外安装 pyaudio。
@@ -2161,7 +2666,7 @@ time.sleep(2)
 
 ## 输入 Base64 编码的本地文件
 
-> 使用 Base64 编码方式传入文件时，编码后的 Base64 字符串大小必须小于 10MB。
+以下示例使用 Qwen3.8-Omni-Flash，将本地文件编码为 Base64 后传入，并返回文本。Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 要求编码后的 Base64 字符串小于 10MB。
 
 #### 图片
 
@@ -2190,7 +2695,7 @@ def encode_image(image_path):
 base64_image = encode_image("eagle.png")
 
 completion = client.chat.completions.create(
-    model="qwen3.5-omni-plus",# 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model="qwen3.8-omni-flash",
     messages=[
         {
             "role": "user",
@@ -2203,10 +2708,9 @@ completion = client.chat.completions.create(
             ],
         },
     ],
-    # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
-    modalities=["text", "audio"],
-    audio={"voice": "Tina", "format": "wav"},
-    # stream 必须设置为 True，否则会报错
+
+    modalities=["text"],
+
     stream=True,
     stream_options={"include_usage": True},
 )
@@ -2239,7 +2743,7 @@ const encodeImage = (imagePath) => {
 const base64Image = encodeImage("eagle.png")
 
 const completion = await openai.chat.completions.create({
-    model: "qwen3.5-omni-plus",  // 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model: "qwen3.8-omni-flash",
     messages: [
         {
             "role": "user",
@@ -2253,8 +2757,8 @@ const completion = await openai.chat.completions.create({
     stream_options: {
         include_usage: true
     },
-    modalities: ["text", "audio"],
-    audio: { voice: "Tina", format: "wav" }
+    modalities: ["text"],
+
 });
 
 for await (const chunk of completion) {
@@ -2295,7 +2799,7 @@ def encode_audio(audio_path):
 base64_audio = encode_audio("welcome.mp3")
 
 completion = client.chat.completions.create(
-    model="qwen3.5-omni-plus", # 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model="qwen3.8-omni-flash",
     messages=[
         {
             "role": "user",
@@ -2311,10 +2815,9 @@ completion = client.chat.completions.create(
             ],
         },
     ],
-    # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
-    modalities=["text", "audio"],
-    audio={"voice": "Tina", "format": "wav"},
-    # stream 必须设置为 True，否则会报错
+
+    modalities=["text"],
+
     stream=True,
     stream_options={"include_usage": True},
 )
@@ -2347,7 +2850,7 @@ const encodeAudio = (audioPath) => {
 const base64Audio = encodeAudio("welcome.mp3")
 
 const completion = await openai.chat.completions.create({
-    model: "qwen3.5-omni-plus",  // 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model: "qwen3.8-omni-flash",
     messages: [
         {
             "role": "user",
@@ -2361,8 +2864,8 @@ const completion = await openai.chat.completions.create({
     stream_options: {
         include_usage: true
     },
-    modalities: ["text", "audio"],
-    audio: { voice: "Tina", format: "wav" }
+    modalities: ["text"],
+
 });
 
 for await (const chunk of completion) {
@@ -2404,7 +2907,7 @@ def encode_video(video_path):
 base64_video = encode_video("spring_mountain.mp4")
 
 completion = client.chat.completions.create(
-    model="qwen3.5-omni-plus", # 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model="qwen3.8-omni-flash",
     messages=[
         {
             "role": "user",
@@ -2417,10 +2920,9 @@ completion = client.chat.completions.create(
             ],
         },
     ],
-    # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
-    modalities=["text", "audio"],
-    audio={"voice": "Tina", "format": "wav"},
-    # stream 必须设置为 True，否则会报错
+
+    modalities=["text"],
+
     stream=True,
     stream_options={"include_usage": True},
 )
@@ -2454,7 +2956,7 @@ const encodeVideo = (videoPath) => {
 const base64Video = encodeVideo("spring_mountain.mp4")
 
 const completion = await openai.chat.completions.create({
-    model: "qwen3.5-omni-plus",  // 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model: "qwen3.8-omni-flash",
     messages: [
         {
             "role": "user",
@@ -2468,8 +2970,8 @@ const completion = await openai.chat.completions.create({
     stream_options: {
         include_usage: true
     },
-    modalities: ["text", "audio"],
-    audio: { voice: "Tina", format: "wav" }
+    modalities: ["text"],
+
 });
 
 for await (const chunk of completion) {
@@ -2513,7 +3015,7 @@ base64_image_3 = encode_image("football3.jpg")
 base64_image_4 = encode_image("football4.jpg")
 
 completion = client.chat.completions.create(
-    model="qwen3.5-omni-plus",  # 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model="qwen3.8-omni-flash",
     messages=[
         {
             "role": "user",
@@ -2531,10 +3033,9 @@ completion = client.chat.completions.create(
             ],
         }
     ],
-    # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
-    modalities=["text", "audio"],
-    audio={"voice": "Tina", "format": "wav"},
-    # stream 必须设置为 True，否则会报错
+
+    modalities=["text"],
+
     stream=True,
     stream_options={"include_usage": True},
 )
@@ -2570,7 +3071,7 @@ const base64Image3 = encodeImage("football3.jpg")
 const base64Image4 = encodeImage("football4.jpg")
 
 const completion = await openai.chat.completions.create({
-    model: "qwen3.5-omni-plus",  // 模型为Qwen3-Omni-Flash时，请在非思考模式下运行
+    model: "qwen3.8-omni-flash",
     messages: [{
         role: "user",
         content: [
@@ -2593,8 +3094,8 @@ const completion = await openai.chat.completions.create({
     stream_options: {
         include_usage: true
     },
-    modalities: ["text", "audio"],
-    audio: { voice: "Tina", format: "wav" }
+    modalities: ["text"],
+
 });
 
 for await (const chunk of completion) {
@@ -2608,15 +3109,20 @@ for await (const chunk of completion) {
 
 ## API参考
 
-Qwen-Omni 模型的输入输出参数详情，请参见[OpenAI兼容-Chat](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)。
+-   [Chat Completions](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)：本页各型号的输入输出参数。
+-   [Responses](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)：Qwen3.8-Omni-Flash 的输入输出参数。
 
 ## 计费与限流
+
+Qwen3.8-Omni-Flash 支持自动生效的[隐式缓存](https://help.aliyun.com/zh/model-studio/context-cache#2317ea09cfxok)。 `qwen3.8-omni-flash` 支持 Responses Session 缓存，配置方式见[Session 缓存](https://help.aliyun.com/zh/model-studio/compatibility-with-openai-responses-api#example-session-cache-title)。
 
 **计费规则**
 
 Qwen-Omni 根据不同模态（音频、图像、视频）的 Token 数计费。详情请参见百炼控制台。
 
 音频、图片与视频转换为Token数的规则
+
+以下换算规则适用于 Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo。
 
 #### 音频
 
@@ -2636,7 +3142,7 @@ Qwen-Omni 根据不同模态（音频、图像、视频）的 Token 数计费。
 -   `Qwen3.5-Omni系列`、`Qwen3-Omni-Flash`模型**：**每`32x32`像素对应 1 个 Token
 -   `Qwen-Omni-Turbo`模型：每`28x28`像素对应 1 个 Token
 
-Qwen3.5-Omni 系列每张图最少 24 个 Token，其他模型最少 4 个 Token；默认上限 1280 个 Token。Qwen3.5-Omni 系列可通过 `vl_high_resolution_images` 参数将上限提升至 16384 个 Token（Qwen-Omni-Turbo 和 Qwen3-Omni-Flash 不支持）。以下代码可估算单张图片消耗的 Token 数：
+Qwen3.5-Omni 系列每张图最少 24 个 Token，Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 最少 4 个 Token；默认上限 1280 个 Token。Qwen3.5-Omni 系列可通过 `vl_high_resolution_images` 参数将上限提升至 16384 个 Token（Qwen-Omni-Turbo 和 Qwen3-Omni-Flash 不支持）。以下代码可估算单张图片消耗的 Token 数：
 
 ```
 import math
@@ -2827,7 +3333,7 @@ if __name__ == "__main__":
 
 A：Qwen-Omni-Turbo 在输出模态包含音频时**不支持设定 System Message**——即使设置"你是XXX"等角色信息，模型的自我认知仍然是千问。
 
--   **方法1（推荐）：**Qwen3-Omni-Flash 已支持 System Message，建议切换至该系列。
+-   **方法1：**文本回复场景可使用支持 System Message 的 Qwen3.8-Omni-Flash。Qwen3-Omni-Flash 的既有 System Message 用法仍适用。
     
 -   **方法2：**在 messages 数组开头手动添加角色设定的 User Message 和 Assistant Message，变通实现角色设定。
     
@@ -2997,4 +3503,4 @@ A：Qwen-Omni-Turbo 在输出模态包含音频时**不支持设定 System Messa
 
 ## 音色列表
 
-Qwen-Omni 支持的音色列表请参见[音色列表](raw/model-user-guide/model-experience/omni-modal/omni-voice-list.md)。
+支持语音输出的 Qwen-Omni 型号，其可用音色请参见[音色列表](raw/model-user-guide/model-experience/omni-modal/omni-voice-list.md)。

@@ -1,6 +1,6 @@
 # 客户端事件
 
-本文介绍 qwen3.5-livetranslate-flash-realtime API 的客户端事件。
+本文介绍千问实时语音/音视频翻译 API 的客户端事件，包括事件类型、参数和示例。
 
 > 相关文档：[实时语音/音视频翻译-千问](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime)。
 
@@ -20,7 +20,13 @@
 
 属性
 
+**output\_modalities**`array`（可选）
+
+适用于 `qwen3.8-livetranslate-flash-realtime`。输出模态，可设置为 `["text"]`（仅文本）或 `["text", "audio"]`（文本和音频，默认值）。
+
 **modalities**`array`（可选）
+
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
 
 模型输出模态设置，可选值：
 
@@ -34,6 +40,8 @@
     
 
 **voice**`string`（可选）
+
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
 
 生成音频的音色。未启用声音复刻时，可设置为系统预设音色，可选值参见[支持的音色](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#0a5bde7593gdk)。Qwen3.5-LiveTranslate-Flash-Realtime默认音色为： `Tina`。Qwen3-LiveTranslate-Flash-Realtime默认音色为： `Cherry`。
 
@@ -68,12 +76,18 @@
 
 **sample\_rate**`integer`（可选）
 
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+
 输入音频的采样率，单位为Hz。可选值：
 
 -   8000
 -   16000（默认）
 
 **input\_audio\_transcription**`object`（可选）
+
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+
+`qwen3.8-livetranslate-flash-realtime` 的 ASR 始终开启，不支持关闭，识别结果免费。
 
 输入音频相关配置。
 
@@ -91,6 +105,8 @@
 
 **input\_audio\_format**`string`（可选）
 
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+
 用户输入音频格式，可选值：
 
 -   `pcm`（默认）
@@ -104,9 +120,13 @@
 
 **output\_audio\_format**`string`（可选）
 
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+
 输出音频格式，当前仅支持设为`pcm`。
 
 **turn\_detection**`object`（可选）
+
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
 
 语音活动检测（VAD，Voice Activity Detection）配置，用于控制语音起止的检测方式：
 
@@ -143,6 +163,8 @@ VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音�
 
 **same\_language\_skip\_options**`object`（可选）
 
+`qwen3.8-livetranslate-flash-realtime` 不支持此参数。
+
 同语种输出配置。当源语种与目标语种相同时，可跳过文本输出、音频输出或两者。仅当`translation.language`为`zh`或`en`时生效。
 
 属性
@@ -166,6 +188,25 @@ VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音�
 热词映射表。key 为源语言词汇，value 为目标语言对应翻译。
 
 示例：`{"人工智能": "Artificial Intelligence"}`
+
+适用于 `qwen3.8-livetranslate-flash-realtime`。
+
+```
+{
+  "type": "session.update",
+  "session": {
+    "output_modalities": [
+      "text",
+      "audio"
+    ],
+    "translation": {
+      "language": "en"
+    }
+  }
+}
+```
+
+`qwen3.5-livetranslate-flash-realtime` 配置示例：
 
 ```
 {
@@ -223,7 +264,7 @@ VAD 检测灵敏度。值越低，越容易将微弱声音（包括背景噪音�
 }
 ```
 
-源语种和目标语种均为英语，并跳过文本和音频输出的示例：
+源语种和目标语种均为英语，并跳过文本和音频输出的示例（不适用于 `qwen3.8-livetranslate-flash-realtime`）：
 
 ```
 {

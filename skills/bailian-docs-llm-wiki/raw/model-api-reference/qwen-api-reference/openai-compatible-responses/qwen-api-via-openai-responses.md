@@ -75,7 +75,7 @@ HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/co
 
 支持的模型
 
-`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-max-2026-05-17`、`qwen3.7-max-preview`、`qwen3-max`、`qwen3-max-2026-01-23`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-04-20`、`qwen3.5-plus-2026-02-15`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`deepseek-v4.1-flash`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`glm-5.3`、`glm-5.2`、`kimi-k3`
+`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-max-2026-05-17`、`qwen3.7-max-preview`、`qwen3-max`、`qwen3-max-2026-01-23`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-04-20`、`qwen3.5-plus-2026-02-15`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`deepseek-v4.1-flash`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`glm-5.3`、`glm-5.2`、`kimi-k3`
 
 **重要**非列表中阿里云百炼直供文本生成模型仅支持基础兼容能力，Agent 能力（内置工具等）受限。
 
@@ -100,15 +100,13 @@ array 输入项类型
 
 **content** `string 或 array` **（必选）**
 
-消息内容。若输入为纯文本，则为 string 类型；若输入为结构化内容数组，则为 array 类型。role 为 `system`/`developer` 时，array 元素类型为 `input_text`；role 为 `user` 时，array 元素类型为 `input_text`、`input_image` 或 `input_file`；role 为 `assistant` 时，array 元素类型为 `output_text`。
-
-> 当前 Responses API 暂不支持传入视频或语音，您可以通过[Chat Completions API](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)或[DashScope API](raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)传入。
+消息内容。若输入为纯文本，则为 string 类型；若输入为结构化内容数组，则为 array 类型。role 为 `system`/`developer` 时，array 元素类型为 `input_text`；role 为 `user` 时，array 元素类型为 `input_text`、`input_image` 或 `input_file`，`qwen3.8-omni-flash` 还支持下文所述的 `input_audio` 和 `input_video`；role 为 `assistant` 时，array 元素类型为 `output_text`。
 
 content 数组元素
 
 **type** `string` **（必选）**
 
-可选值：`input_text`（文本输入）、`input_image`（图片输入，仅 user 角色）、`input_file`（文件输入，仅 user 角色，支持 PDF 和图片）、`output_text`（助手回复，仅 assistant 角色）。
+内容类型。可选值：`input_text`（文本输入）、`input_image`（图片输入，仅 user 角色）、`input_file`（文件输入，仅 user 角色，支持 PDF 和图片）、`output_text`（助手回复，仅 assistant 角色）。`qwen3.8-omni-flash` 的 user 消息还支持 `input_audio` 和 `input_video`，字段说明见下文。
 
 **text** `string`
 
@@ -123,6 +121,34 @@ content 数组元素
 文件的公网 URL。当 type 为 `input_file` 时必填。支持 PDF 文件（最大 100 MB）和图片文件（最大 20 MB）。目前仅 `qwen3.5-ocr` 支持此类型。
 
 PDF 的页数上限取决于 `ocr_options` 中的 `task`：设置为 `document_parsing` 时最大 50 页；未设置 `task` 或设置为其他任务时，最大 10 页。
+
+**音视频输入字段**
+
+以下 `input_audio`、`input_video` 类型仅适用于 `qwen3.8-omni-flash` 的 `user` 消息。字段直接放在 content 数组元素中：
+
+type
+
+字段
+
+说明
+
+`input_audio`
+
+`format`、`audio_url` 或 `data`
+
+`format` 必填，例如 `wav` 或 `mp3`。`audio_url` 为音频 URL，`data` 为 Base64 编码的音频内容，两者必须二选一，不能同时传入。
+
+`input_video`
+
+`video_url`、`fps`
+
+`video_url` 必填，传入视频 URL。`fps` 为可选的数字类型（`number`）抽帧参数，表示每秒抽取的帧数，例如 `2` 表示每秒抽取 2 帧，不要传字符串。
+
+**use\_multichannel** `boolean`（可选），默认 `false`。设为 `true` 时，对双通道或四通道音频进行空间音频解析；设为 `false` 时，按单通道音频解析。在 `type="input_audio"` 的 content 数组元素中传入，与 `type`、`audio_url`、`format` 同级。
+
+音视频输入沿用普通文本响应格式和流式事件，流式文本使用 `response.output_text.delta`、`response.output_text.done`。
+
+音视频输入、文本输出示例见[Qwen3.8-Omni-Flash](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)。
 
 **type** `string` （可选）
 
@@ -329,7 +355,7 @@ Function Call Output 的唯一标识。
 
 模型在生成响应时可调用的工具数组。支持内置工具和自定义 function 工具，可混合使用。
 
-> 为了获得最佳回复效果，建议同时开启 `code_interpreter`、`web_search` 和 `web_extractor` 工具。
+`qwen3.8-omni-flash` 的内置工具仅支持 `web_search`，同时支持自定义 `function` 工具。
 
 属性
 
@@ -584,7 +610,7 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 
 其余档位的映射
 
-Qwen3.8系列
+`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`
 
 `xhigh`
 
@@ -606,7 +632,7 @@ Qwen3.8系列
 
 `none`、`low`、`high`、`max`
 
-`minimal` 映射为 `low`，`medium` 和 `xhigh` 映射为 `high`，`ultra` 映射为 `max`
+`minimal` 映射为 `low`，`medium` 和 `xhigh` 映射为 `high`，传入 `ultra` 会返回错误
 
 `glm-5.3`
 
@@ -628,6 +654,8 @@ Qwen3.8系列
 
 > `reasoning.effort` 的优先级高于 `enable_thinking`，建议优先使用 `reasoning.effort`，`enable_thinking` 后续将不再支持。
 
+> 本页所列的 Qwen3.8 系列，Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-Max、DeepSeek、GLM 和 Kimi 型号通过 `reasoning.effort` 控制思考强度，不支持使用 `thinking_budget` 控制最大思考长度。
+
 **ocr\_options** `object` （可选）
 
 OCR 定制任务参数。仅适用于 `qwen3.5-ocr` 模型。通过此参数可调用内置的 OCR 任务（如信息抽取、文字定位等），定制任务结果通过响应中的 `ocr_result` 字段返回。
@@ -638,10 +666,12 @@ OCR 定制任务参数。仅适用于 `qwen3.5-ocr` 模型。通过此参数可�
 
 **max\_output\_tokens** `integer`（可选）
 
--   Qwen3.8系列：模型回复内容和思维链内容之和的最大Token数。
--   其余模型：模型回复内容的最大Token数。
+限制生成输出的 Token 数量。
 
-最小值为16，模型输出超过此值时生成将提前停止，状态为`incomplete`。
+-   Qwen3.8 系列：模型回复内容和思维链内容之和的最大Token数。
+-   Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-Max、DeepSeek、GLM 和 Kimi：模型回复内容的最大Token数。
+
+上述型号的最小值为16。生成的 Token 数达到所设置的上限时，生成将提前停止，状态为`incomplete`。
 
 #### 基础调用
 
@@ -1218,6 +1248,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 #### Session 缓存
 
+`qwen3.8-omni-flash` 支持 Responses Session 缓存，配置方式见[Session 缓存](https://help.aliyun.com/zh/model-studio/compatibility-with-openai-responses-api#example-session-cache-title)。
+
+自动生效的隐式缓存另见[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)。
+
 Python
 
 ```
@@ -1586,7 +1620,7 @@ MCP 服务标签。仅当 `type` 为 `mcp_call` 时存在。标识本次调用�
 
 **input\_tokens\_details** `object`
 
-输入 Token 的细粒度分类。多模态输入时返回，目前仅区分 `text_tokens` 与 `image_tokens`，不返回视频/音频 Token 拆分。
+输入 Token 的细粒度分类，返回字段取决于模型和输入模态。`qwen3.8-omni-flash` 的音频输入可返回 `audio_tokens`。
 
 属性
 
@@ -1597,6 +1631,10 @@ MCP 服务标签。仅当 `type` 为 `mcp_call` 时存在。标识本次调用�
 **image\_tokens** `integer`
 
 图像输入的 Token 数。
+
+**audio\_tokens** `integer`
+
+音频输入的 Token 数，完整路径为 `usage.x_details[].input_tokens_details.audio_tokens`。可选字段，是否返回取决于模型及输入。
 
 **output\_tokens\_details** `object`
 

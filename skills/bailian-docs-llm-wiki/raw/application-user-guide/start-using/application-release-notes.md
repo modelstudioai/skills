@@ -34,7 +34,7 @@
 
 新版应用评测
 
-支持智能体、工作流和自定义三种类型的评测集，构建适合业务需求的评测体系。详情请参见[新版评测集](raw/application-user-guide/application-evaluation/new-version-of-application-evaluation/new-version-of-evaluation-set.md)。
+支持智能体、工作流和自定义三种类型的评测集，构建适合业务需求的评测体系。详情请参见[新版评测集](raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-evaluation-set.md)。
 
 **1月**
 
@@ -622,7 +622,7 @@ MCP
 
 新增应用观测能力
 
--   新增的[应用观测](https://bailian.console.aliyun.com/knowledge-base#/app-observe)支持端到端查看阿里云百炼应用的处理流程，详情请参见[用量监控与性能分析](raw/application-user-guide/application-monitoring/application-observation.md)。
+-   新增的[应用观测](https://bailian.console.aliyun.com/knowledge-base#/app-observe)支持端到端查看阿里云百炼应用的处理流程，详情请参见[用量监控与性能分析](raw/application-user-guide/agenteval/agenteval-observability/agenteval-observation.md)。
     
 
 10月24日

@@ -152,7 +152,7 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
 
 #### 应用评测
 
-建议在正式上线 AI 智能客服前，组织业务人员一起参与[人工评测](raw/application-user-guide/application-evaluation/evaluate-manual-application.md)，确保大模型应用的回答效果符合预期。
+建议在正式上线 AI 智能客服前，组织业务人员一起参与[人工评测](raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-evaluation-task.md)，确保大模型应用的回答效果符合预期。
 
 ### 持续改进
 

@@ -3786,9 +3786,29 @@ qwen-long-2025-01-25
 
 计费规则：按输入Token和输出Token计费。不同模态的Token计算规则请参见[计费与限流](https://help.aliyun.com/zh/model-studio/qwen-omni#a9018938d3niq)。
 
-**说明**以下模型仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
+**说明**Qwen3.5-Omni、Qwen3-Omni 和 Qwen-Omni-Turbo 系列仅在华北2（北京）地域下有免费额度，其他地域均无免费额度。
 
 #### 华北2（北京）
+
+模型 ID（Model ID）
+
+服务部署范围
+
+输入单价（每百万Token）
+
+缓存命中输入单价（每百万Token）
+
+输出单价（每百万Token）
+
+`qwen3.8-omni-flash`
+
+中国内地
+
+0.8元
+
+0.1元
+
+2.7元
 
 **模型 ID（Model ID）**
 
@@ -4028,6 +4048,26 @@ qwen-omni-turbo-2025-01-19
 
 #### 新加坡
 
+模型 ID（Model ID）
+
+服务部署范围
+
+输入单价（每百万Token）
+
+缓存命中输入单价（每百万Token）
+
+输出单价（每百万Token）
+
+`qwen3.8-omni-flash`
+
+国际
+
+1.094元
+
+0.117元
+
+3.427元
+
 **模型 ID（Model ID）**
 
 **服务部署范围**
@@ -4241,6 +4281,94 @@ qwen-omni-turbo-2025-03-26
 4.624元
 
 65.246元
+
+#### 中国香港
+
+模型 ID（Model ID）
+
+服务部署范围
+
+输入单价（每百万Token）
+
+缓存命中输入单价（每百万Token）
+
+输出单价（每百万Token）
+
+`qwen3.8-omni-flash`
+
+全球
+
+0.8元
+
+0.1元
+
+2.7元
+
+#### 日本（东京）
+
+模型 ID（Model ID）
+
+服务部署范围
+
+输入单价（每百万Token）
+
+缓存命中输入单价（每百万Token）
+
+输出单价（每百万Token）
+
+`qwen3.8-omni-flash`
+
+全球
+
+0.8元
+
+0.1元
+
+2.7元
+
+#### 德国（法兰克福）
+
+模型 ID（Model ID）
+
+服务部署范围
+
+输入单价（每百万Token）
+
+缓存命中输入单价（每百万Token）
+
+输出单价（每百万Token）
+
+`qwen3.8-omni-flash`
+
+全球
+
+0.8元
+
+0.1元
+
+2.7元
+
+#### 美国（弗吉尼亚）
+
+模型 ID（Model ID）
+
+服务部署范围
+
+输入单价（每百万Token）
+
+缓存命中输入单价（每百万Token）
+
+输出单价（每百万Token）
+
+`qwen3.8-omni-flash`
+
+全球
+
+0.8元
+
+0.1元
+
+2.7元
 
 ### 千问Omni-Realtime
 
@@ -12711,6 +12839,18 @@ MiniMax/speech-02-turbo
 **输出：文本**
 
 **输出：音频**
+
+[qwen3.8-livetranslate-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/qwen3-8-livetranslate-flash-realtime.md)
+
+40元
+
+3.3元
+
+100元
+
+160元
+
+100万Token
 
 qwen3.5-livetranslate-flash-realtime
 
