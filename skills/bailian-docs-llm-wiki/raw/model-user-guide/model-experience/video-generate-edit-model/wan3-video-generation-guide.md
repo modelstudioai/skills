@@ -101,7 +101,7 @@ wan3.0-video / wan3.0-video-prime 是 All-in-One 模型，无需切换模型名�
 
 平台提供万相3.0 提示词优化 Skill，方便您对提示词进行调优。
 
-**下载 Skill**：[wan3-pe.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9fc4.zip)（下载后解压）
+**下载 Skill**：[wan3-pe.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f32.zip)（下载后解压）
 
 **使用方式**：在 AI 对话框输入 `/wan3-pe` + 您的提示词内容，开始调试提示词。例如：
 
@@ -1108,7 +1108,7 @@ rsp = VideoSynthesis.call(
     model='wan3.0-video',
     prompt='将视频1向后延长，面包师端上刷好的面包，将刷子放到一旁，镜头跟随面包师，去斜后方的烤炉进行烤制',
     media=[
-        {"type": "reference_video", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260402/ldnfdf/wan2.7-videoedit-style-change.mp4"}
+        {"type": "reference_video", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260414/rptnhd/wan2.7-i2v-video-continuation-2.mp4"}
     ],
     resolution="720P",
     ratio="adaptive",
@@ -1151,7 +1151,7 @@ public class VideoExtend {
         VideoSynthesis videoSynthesis = new VideoSynthesis();
         List<VideoSynthesisParam.Media> media = new ArrayList<>();
         media.add(VideoSynthesisParam.Media.builder()
-                    .url("https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260402/ldnfdf/wan2.7-videoedit-style-change.mp4")
+                    .url("https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260414/rptnhd/wan2.7-i2v-video-continuation-2.mp4")
                     .type("reference_video")
                     .build());
         
@@ -1198,7 +1198,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
         "media": [
             {
                 "type": "reference_video",
-                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260402/ldnfdf/wan2.7-videoedit-style-change.mp4"
+                "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260414/rptnhd/wan2.7-i2v-video-continuation-2.mp4"
             }
         ]
     },

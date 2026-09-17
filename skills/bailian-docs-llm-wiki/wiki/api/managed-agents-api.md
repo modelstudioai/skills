@@ -1,42 +1,40 @@
 # [managed agents](../guides/managed-agents.md) api
 
-Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和运行具备[长期记忆](../concepts/long-term-memory.md)、工具调用与多步推理能力的 AI Agent。该 API 将底层环境管理、会话状态、文件存储、技能编排等能力封装为标准化资源（如 `Agent`、`Environment`、`Session`、`Vault`），开发者可通过 RESTful 接口按需组合。所有操作均需通过平台认证，并遵循统一的请求/响应结构与错误码规范。
+Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和管理具备[长期记忆](../concepts/long-term-memory.md)、工具调用与多步推理能力的 AI Agent。该 API 以 RESTful 形式提供，支持细粒度的环境隔离、会话生命周期控制及安全凭证管理。开发者可通过组合 Agent、Environment、Session、Skill 等核心资源构建生产级自动化工作流。
 
 ## 支持的模型与功能
 
-Managed Agents API 本身不直接绑定特定大模型，而是通过 `Environment` 资源指定运行时模型（如 `qwen-max`、`qwen-plus` 或自定义微调模型）。核心功能包括：  
-- 基于 `Agent` 定义行为逻辑（提示词、工具列表、终止条件）；  
-- 通过 `Environment` 配置模型、温度、最大 token 数等推理参数；  
-- 利用 `Session` 管理用户级上下文与历史事件流；  
-- 使用 `Vault` 和 `Credential` 安全存储敏感数据与外部服务凭据；  
-- 通过 `Webhook` 实现异步事件通知（如任务完成、工具调用失败）。  
-详细资源能力请参阅 [Managed Agents](../../raw/application-api-reference/managed-agents-api.md) 的子模块文档。
+- **模型支持**：当前仅支持百炼平台托管的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款 Qwen 系列模型（详见 [Agent](../../raw/application-api-reference/managed-agents-api/agent-api.md) 文档中 `model_id` 字段说明）。
+- **核心功能**：
+  - 基于 Environment 的沙箱化执行环境（含网络策略、超时与资源配额控制）
+  - Session 级持久化上下文与事件流（支持 `event_type: "tool_call"` / `"tool_result"` 回调）
+  - 内置 Skill 注册与调用（如 `web_search`、`code_interpreter`、`file_read`），技能行为由 Vault 中的 Credential 驱动
+  - 文件上传与引用（通过 `/files` 接口上传后，可在 Session 中以 `file://<file_id>` 方式传入）
+
+> **注意**：原始文档中 [Environment](../../raw/application-api-reference/managed-agents-api/environment-api.md) 提到支持自定义 Docker 镜像，但该能力已在 v2.3.0 后下线；实际仅支持平台预置的 runtime（Python 3.11 + 工具 SDK），请以 [Deployment](../../raw/application-api-reference/managed-agents-api/deployment-api.md) 中的 `runtime_type` 字段为准。
 
 ## 关键参数
 
-所有写操作（如 `POST /v1/agents`）需在请求体中提供以下关键字段：  
-- `name`: 字符串，长度 ≤ 64，仅支持字母、数字、下划线、短横线；  
-- `environment_id`: 必填，指向已创建的 `Environment` 资源 ID；  
-- `skills`: 工具列表，每个元素含 `id`（对应 `Skill` 资源 ID）及可选 `config`；  
-- `session_ttl_seconds`: `Session` 默认存活时间，范围 300–86400（5 分钟至 24 小时）；  
-- `max_iterations`: 单次会话中 Agent 最大推理步数，默认 15，上限 50。  
-> **注意**：`max_iterations` 在 [agent-api.md](../../raw/application-api-reference/managed-agents-api/agent-api.md) 中定义为必填，但 [managed-agents-quickstart.md](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md) 示例中省略且仍可创建成功——实际以 API Schema 校验为准，建议显式设置。
+| 参数 | 位置 | 必填 | 说明 |
+|------|------|------|------|
+| `agent_id` | Path | 是 | 通过 POST `/agents` 创建后返回的唯一标识 |
+| `environment_id` | Body (Agent creation) | 否 | 若不指定，将自动绑定默认环境；建议显式传入以保障一致性（见 [Environment](../../raw/application-api-reference/managed-agents-api/environment-api.md)） |
+| `session_id` | Header (`X-Session-ID`) 或 Body | 否（首次请求可省略） | 用于关联会话状态；若缺失，API 将自动生成新 session 并返回 `X-Session-ID` 响应头 |
+| `tools` | Body (Session create) | 否 | 显式声明本次会话可用的 Skill 列表，格式为 `["web_search", "file_read"]`；未声明则仅启用 Agent 默认启用的工具 |
 
 ## 使用方式
 
-1. **初始化环境**：先调用 `POST /v1/environments` 创建 `Environment`，指定 `model` 和推理参数；  
-2. **注册技能**：通过 `POST /v1/skills` 注册工具（如 HTTP 请求、数据库查询），并关联 `Credential`（若需鉴权）；  
-3. **创建 Agent**：`POST /v1/agents`，传入 `environment_id` 和 `skills` 列表；  
-4. **启动会话**：`POST /v1/sessions` 获取 `session_id`，再向 `POST /v1/sessions/{id}/messages` 发送用户消息；  
-5. **监听结果**：配置 `Webhook` 接收 `session.completed` 或 `tool.error` 事件。  
-完整流程示例见 [Managed Agents Quickstart](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)。
+1. **创建 Agent**：`POST /agents`，指定 `model_id`、`name` 及可选 `environment_id`
+2. **启动会话**：`POST /agents/{agent_id}/sessions`，携带用户输入 `input` 和可选 `tools`
+3. **流式响应处理**：响应为 Server-Sent Events（SSE），需监听 `event: message`、`event: tool_call` 等类型，并按需调用对应 Skill 接口（如 `/skills/web_search`）
+4. **文件上传与引用**：先 `POST /files` 上传二进制文件，获取 `file_id` 后，在 `input` 中以 `file://<file_id>` 形式引用（参见 [File](../../raw/application-api-reference/managed-agents-api/files-api.md)）
 
 ## 限制和注意事项
 
-- 单个 `Agent` 最多绑定 20 个 `Skill`；单个 `Vault` 最多存储 100 条密钥；  
-- `Session` 生命周期内最多保留 100 条消息（含系统与用户消息），超出部分自动截断；  
-- 所有文件上传（`POST /v1/files`）须经 `Vault` 或 `Credential` 授权，禁止明文传递敏感内容；  
-- `Deployment` 资源目前仅支持灰度发布，生产环境部署需人工审批，详情见 [Deployment API](../../raw/application-api-reference/managed-agents-api/deployment-api.md)。
+- 单次 Session 最大 token 数为 32768（含 [prompt](../guides/prompt.md) + completion），超出将触发 `400 Bad Request`
+- 每个 Agent 最多关联 100 个活跃 Session；超过后需显式 `DELETE /sessions/{id}` 清理
+- Skill 调用结果必须在 60 秒内通过 `POST /sessions/{session_id}/tool_results` 回传，超时将导致会话中断
+- 所有 Credential（如 API Key）必须预先存入 Vault 并授权给对应 Environment，否则 Skill 调用将返回 `403 Forbidden`（详见 [Credential](../../raw/application-api-reference/managed-agents-api/credential-api.md)）
 
 ## 来源文档
 

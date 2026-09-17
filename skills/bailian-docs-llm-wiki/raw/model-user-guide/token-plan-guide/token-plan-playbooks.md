@@ -146,7 +146,7 @@ AI Coding / 开发
 
 一个动物词生成儿童童话与三拍脚本，再文生视频出 5 秒动画。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-kids-animal-video.md)
+[查看攻略](https://help.aliyun.com/zh/model-studio/token-plan-playbook-kids-animal-video)
 
 自媒体 / 内容创作
 
@@ -258,7 +258,7 @@ AI Coding / 开发
 
 把公司制度、个人笔记做成能问的知识库，用大白话就能问出正确那一条。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-knowledge-rag.md)
+[查看攻略](https://help.aliyun.com/zh/model-studio/token-plan-playbook-knowledge-rag)
 
 资料与数据处理
 

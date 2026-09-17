@@ -534,7 +534,7 @@ qwen3.7-max
 
 5,000,000
 
-qwen3.7-max-us
+qwen3.7-max
 
 美国
 
@@ -590,7 +590,7 @@ qwen3.7-plus
 
 5,000,000
 
-qwen3.7-plus-us
+qwen3.7-plus
 
 美国
 
@@ -654,7 +654,7 @@ qwen3.6-flash-2026-04-16
 
 1,000,000
 
-qwen3.6-flash-us
+qwen3.6-flash
 
 美国
 
@@ -686,7 +686,7 @@ qwen-plus
 
 5,000,000
 
-qwen-plus-us
+qwen-plus
 
 美国
 
@@ -718,7 +718,7 @@ qwen-plus-2025-07-28
 
 1,000,000
 
-qwen-plus-2025-12-01-us
+qwen-plus-2025-12-01
 
 美国
 
@@ -750,7 +750,7 @@ qwen-flash
 
 10,000,000
 
-qwen-flash-us
+qwen-flash
 
 美国
 
@@ -766,7 +766,7 @@ qwen-flash-2025-07-28
 
 1,000,000
 
-qwen-flash-2025-07-28-us
+qwen-flash-2025-07-28
 
 美国
 
@@ -1742,7 +1742,7 @@ qwen3-vl-flash
 
 1,000,000
 
-qwen3-vl-flash-us
+qwen3-vl-flash
 
 美国
 
@@ -1758,7 +1758,7 @@ qwen3-vl-flash-2025-10-15
 
 100,000
 
-qwen3-vl-flash-2025-10-15-us
+qwen3-vl-flash-2025-10-15
 
 美国
 
@@ -2882,7 +2882,7 @@ qwen-mt-lite
 
 100,000
 
-qwen-mt-lite-us
+qwen-mt-lite
 
 美国
 
@@ -4336,7 +4336,7 @@ deepseek-v4-pro-0813
 
 1,200,000
 
-deepseek-v4-pro-us
+deepseek-v4-pro
 
 美国
 
@@ -4360,7 +4360,7 @@ deepseek-v4-flash
 
 1,200,000
 
-deepseek-v4-flash-us
+deepseek-v4-flash
 
 美国
 
@@ -4368,7 +4368,7 @@ deepseek-v4-flash-us
 
 1,200,000
 
-deepseek-v4-flash-0731-us
+deepseek-v4-flash-0731
 
 美国
 
@@ -5090,7 +5090,7 @@ glm-5.2
 
 1,000,000
 
-glm-5.2-us
+glm-5.2
 
 美国
 
@@ -7234,13 +7234,13 @@ qwen3-asr-flash-2025-09-08
 
 **每分钟调用次数（RPM）**
 
-qwen3-asr-flash-us
+qwen3-asr-flash
 
 美国
 
 100
 
-qwen3-asr-flash-2025-09-08-us
+qwen3-asr-flash-2025-09-08
 
 美国
 
@@ -8042,7 +8042,7 @@ wan2.6-r2v
 
 5
 
-wan2.6-t2v-us
+wan2.6-t2v
 
 美国
 
@@ -8050,7 +8050,7 @@ wan2.6-t2v-us
 
 5
 
-wan2.6-i2v-us
+wan2.6-i2v
 
 美国
 

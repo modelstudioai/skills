@@ -6,7 +6,7 @@
 
 ## 适用范围
 
--   **支持的模型**：模型列表中的所有模型均支持查看用量，包括基于它们[调优后的模型](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)。
+-   **支持的模型**：模型列表中的所有模型均支持查看用量，包括基于它们[调优后的模型](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)。
 
 ## 查看免费额度使用情况
 

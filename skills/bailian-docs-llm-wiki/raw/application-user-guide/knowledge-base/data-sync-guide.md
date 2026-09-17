@@ -183,7 +183,7 @@ OSS 能增量同步吗？
 -   **语雀**：适合使用语雀管理文档和知识库的用户。仅需提供 Token 和 URL，配置简单。
 -   **SharePoint**：适合使用 Microsoft 365 / SharePoint 管理企业文档的用户。需注册 Azure AD 应用。目前仅对白名单用户开放。
 
-如果您不需要实时同步功能，也可以通过文件连接器**直接上传本地文件**。直接上传的文件不经过公网链路，直接写入阿里云内网的安全存储。详见[导入文件](raw/application-user-guide/data-connection-overview/data-connection.md)。
+如果您不需要实时同步功能，也可以通过文件连接器**直接上传本地文件**。直接上传的文件不经过公网链路，直接写入阿里云内网的安全存储。详见[导入文件](raw/application-user-guide/overview/data-connection-overview/data-connection.md)。
 
 ### 同步问题排查
 

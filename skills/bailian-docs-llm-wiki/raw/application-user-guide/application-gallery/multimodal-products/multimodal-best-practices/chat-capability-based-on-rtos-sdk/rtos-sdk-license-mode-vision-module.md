@@ -38,13 +38,16 @@
 获取SDK包可以参考文档：[RTOS C SDK（License模式）](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/mmi-rtos-sdk.md)
 
 ```
-aliyun_sdk/
+qwen_sdk/
 ├── include
 │   ├── c_utils
 │   │   └── ...
-│   ├── lib_c_mmi_vl.h
+│   ├── c_visual
+│   │   └── c_visual.h
 │   └── ...
-├── libc_visual.a
+├── libs
+│   ├── libc_visual.a
+│   └── ...
 └── ...
 ```
 
@@ -60,7 +63,7 @@ int32_t app_visual_init(void)
     c_visual_config_t config = {
         // mode设置采用多重设置，即可以设置为 C_VISUAL_MODE_VQA ｜ C_VISUAL_MODE_LIVE_AI,
         // 设置为如上形式时可以同时使用VQA和LIVE AI，
-        // C_VISUAL_MODE_NONE模式优先级最低仅为占位作用。
+        // C_VISUAL_MODE_NONE 表示不启用任何视觉功能，不能作为 visual_mode 的取值（配置会被拒绝）。
         .visual_mode = C_VISUAL_MODE_VQA | C_VISUAL_MODE_LIVE_AI | C_VISUAL_MODE_OMNI,
         // 图片格式设置，该参数目前不影响实际功能，目前支持的图片格式为头文件枚举项
         .image_format = C_VISUAL_PIC_FORMAT_JPG,
@@ -87,12 +90,6 @@ int32_t app_visual_init(void)
 [UT][D][c_visual_config]VISUAL set params success
 [UT][D][c_mmi_set_upstream_type]upstream_type[AudioAndVideo]
 [UT][I][c_visual_config]upgrade to video stream
-[UT][I][c_visual_config]malloc image buffer [184320]
-[UT][I][util_malloc]ptr[0x150008000], size 184336
-[UT][I][util_malloc]ptr[0x140008000], size 184336
-[UT][D][util_double_buffer_init]buffer [0x150008008/0x140008008]
-[UT][I][c_visual_config]create base64 buffer [245760]
-[UT][I][util_malloc]ptr[0x140038000], size 245776
 [UT][D][c_mm_cmd_register]create new domain [visual_qa]
 [UT][D][c_mm_cmd_register]domain [visual_qa] add [visual_qa]
 [UT][D][c_mm_cmd_register]create new domain [video_chat]
@@ -106,26 +103,32 @@ int32_t app_visual_init(void)
 [UT][I][c_visual_config]done
 ```
 
+`c_visual_config` 仅保存配置并注册指令回调，不分配图像缓冲区；PSRAM 图像缓冲区由 SDK 在收到云端视觉启动指令时自动分配，也可在会话前调用 `c_visual_malloc` 显式预分配。分配完成前，`c_visual_task_handle`、`c_visual_image_get_buffer` 等接口返回 `UTIL_ERR_NO_INIT` 或 `NULL`。此外，`c_visual_config` 必须在 `c_mmi_init` 之前调用，否则返回错误。
+
 ### 2.3. c\_visual事件说明
 
 ```
 enum {
-    C_VISUAL_EVENT_VQA_START,       // 此事件在开启拍照问答时触发，可以在该事件回调中激活摄像头并开始拍照
-    C_VISUAL_EVENT_VQA_END,         // 此事件在结束拍照问答时触发，建议在该事件回调关闭摄像头
-    C_VISUAL_EVENT_LIVEAI_START,    // 此事件在开启视频通话时触发（含极速），建议在该事件回调触开启摄像头
-    C_VISUAL_EVENT_LIVEAI_ACTION,   // 此事件在触发视频通话抽帧时触发，可以在该事件回调中进行图片采集
-    C_VISUAL_EVENT_LIVEAI_STOP,     // 此事件在关闭视频通话时触发，建议在该事件回调关闭摄像头
+    C_VISUAL_EVENT_MALLOC_PREPARE,  // 分配 PSRAM 资源前触发，可在回调中腾挪资源；返回非 0 则中止本次分配（回调在模块锁内执行，禁止调用本模块锁相关接口）
+    C_VISUAL_EVENT_VQA_START,       // 开启拍照问答时触发，可在该事件回调中激活摄像头并开始拍照
+    C_VISUAL_EVENT_VQA_END,         // 结束拍照问答时触发，建议在该事件回调中关闭摄像头
+    C_VISUAL_EVENT_LIVEAI_START,    // 开启视频通话时触发（含极速），建议在该事件回调中开启摄像头
+    C_VISUAL_EVENT_LIVEAI_ACTION,   // 视频通话抽帧时触发，可在该事件回调中进行图片采集
+    C_VISUAL_EVENT_LIVEAI_STOP,     // 关闭视频通话时触发，建议在该事件回调中关闭摄像头
+    C_VISUAL_EVENT_PROACTOR_START,  // 开始主动交互时触发，建议在该事件回调中开启摄像头
+    C_VISUAL_EVENT_PROACTOR_STOP,   // 退出主动交互时触发，建议在该事件回调中关闭摄像头
 };
 ```
 
-#### 2.4.1. 拍照问答 & 拍照翻译
+#### 2.3.1. 拍照问答 & 拍照翻译
 
 拍照问答 & 拍照翻译事件响应示例如下：
 
 ```
-static int32_t _visual_callback(uint32_t event, void* param)
+static int32_t _visual_callback(uint32_t event, char *req_id, void *params)
 {
-    (void)param;
+    (void)req_id;
+    (void)params;
     switch (event) {
     case C_VISUAL_EVENT_VQA_START:
         UTIL_LOG_I("vqa start");
@@ -143,14 +146,15 @@ static int32_t _visual_callback(uint32_t event, void* param)
 }
 ```
 
-#### 2.4.2. 视频通话 & 极速视频通话
+#### 2.3.2. 视频通话 & 极速视频通话
 
 视频通话 & 极速视频通话事件响应示例如下：
 
 ```
-static int32_t _visual_callback(uint32_t event, void* param)
+static int32_t _visual_callback(uint32_t event, char *req_id, void *params)
 {
-    (void)param;
+    (void)req_id;
+    (void)params;
     switch (event) {
     case C_VISUAL_EVENT_LIVEAI_START:
         UTIL_LOG_I("liveai start");
@@ -207,7 +211,7 @@ int32_t hal_camera_capture_callback(uint8_t *image, uint32_t image_size)
 ```
 void hal_camera_task_handle(void *param)
 {
-  (void)params;
+  (void)param;
   int32_t err;
   uint8_t *buffer;
   uint32_t buffer_size;

@@ -88,6 +88,7 @@
 -   [kimi-k2.5](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k2-5.md)
 -   [Moonshot-Kimi-K2-Instruct](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/moonshot-kimi-k2-instruct.md)
 -   [kimi-k2-thinking](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/kimi-k2-thinking.md)
+-   [glm-5.3](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/glm-5-3.md)
 -   [glm-5.2-fast-preview](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/glm-5-2-fast.md)
 -   [glm-5.2](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/glm-5-2.md)
 -   [glm-5.2-us](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/glm-5-2-us.md)

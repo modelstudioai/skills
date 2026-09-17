@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 179 个模型家族 · 416 个主干模型 · 更新于 2026-09-16
+> 自动生成 · 共 179 个模型家族 · 417 个主干模型 · 更新于 2026-09-17
 
 **机器查询走结构化文件**：
 
@@ -28,7 +28,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Kimi](groups/Kimi-K2.json) — Kimi是由月之暗面提供的开源模型，包含k3、k2.7-code、k2.6、k2.5等多模态和大语言模型。
   - 模型：`kimi-k2-thinking`, `kimi-k2.5`, `kimi-k2.6`, `kimi-k2.7-code`, `kimi-k3`, `Moonshot-Kimi-K2-Instruct`
 - [Kimi](groups/kimi-models-market-place.json) — 由月之暗面提供的Kimi系列模型的API服务。
-  - 模型：`kimi/kimi-k2.6`, `kimi/kimi-k2.7-code`, `kimi/kimi-k2.7-code-highspeed`, `kimi/kimi-k3`
+  - 模型：`kimi/kimi-k2.6`, `kimi/kimi-k2.7-code`, `kimi/kimi-k2.7-code-highspeed`, `kimi/kimi-k2.8-preview`, `kimi/kimi-k3`
 - [MiMo文本模型](groups/xiaomi-models-market-place.json) — 由小米MiMo提供的MiMo文本模型API服务
   - 模型：`xiaomi/mimo-v2.5-pro`
 - [MiniMax文本模型](groups/minimax-models-market-place.json) — 由MiniMax提供的MiniMax-M系列文本模型API服务。

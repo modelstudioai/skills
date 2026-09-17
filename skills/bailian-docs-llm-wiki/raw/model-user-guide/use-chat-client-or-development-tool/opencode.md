@@ -114,6 +114,15 @@ opencode -v
             }
           }
         },
+        "glm-5.3": {
+          "name": "GLM-5.3",
+          "options": {
+            "thinking": {
+              "type": "enabled",
+              "budgetTokens": 8192
+            }
+          }
+        },
         "glm-5.2": {
           "name": "GLM-5.2",
           "options": {
@@ -287,6 +296,15 @@ opencode -v
             "input": ["text", "image"],
             "output": ["text"]
           },
+          "options": {
+            "thinking": {
+              "type": "enabled",
+              "budgetTokens": 8192
+            }
+          }
+        },
+        "glm-5.3": {
+          "name": "GLM-5.3",
           "options": {
             "thinking": {
               "type": "enabled",

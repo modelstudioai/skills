@@ -6,7 +6,7 @@
 
 在工作流中通过文件连接器搜索文件并获取下载链接，将结果传递给后续节点处理。
 
-> 使用数据连接器节点前，需先在数据连接页面创建连接器并导入数据。创建方法参见[数据连接](raw/application-user-guide/data-connection-overview/data-connection.md)。
+> 使用数据连接器节点前，需先在数据连接页面创建连接器并导入数据。创建方法参见[数据连接](raw/application-user-guide/overview/data-connection-overview/data-connection.md)。
 
 ## 节点接入
 
@@ -50,7 +50,7 @@
 
 `fileId`（String，必填）：目标文件的 ID。
 
-其他类型连接器的工具和参数说明，参见[数据连接](raw/application-user-guide/data-connection-overview/data-connection.md)。
+其他类型连接器的工具和参数说明，参见[数据连接](raw/application-user-guide/overview/data-connection-overview/data-connection.md)。
 
 ### 输入
 

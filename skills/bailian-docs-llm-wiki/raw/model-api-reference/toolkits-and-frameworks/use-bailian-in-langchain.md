@@ -44,7 +44,7 @@ print(response.model_dump_json())
 
 #### DashScope
 
-支持阿里云百炼所有的文本生成模型，完整列表与调用费用请参考：[选择模型](raw/model-user-guide/get-started-with-models/models.md)。（也支持[部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)后的模型）
+支持阿里云百炼所有的文本生成模型，完整列表与调用费用请参考：[选择模型](raw/model-user-guide/get-started-with-models/models.md)。（也支持[部署](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)后的模型）
 
 使用前需要安装以下依赖：
 
@@ -120,7 +120,7 @@ console.log(aiMsg.content);
 
 #### DashScope
 
-支持阿里云百炼所有的文本生成模型，完整列表与调用费用请参考：[选择模型](raw/model-user-guide/get-started-with-models/models.md)。（也支持[部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)后的模型）
+支持阿里云百炼所有的文本生成模型，完整列表与调用费用请参考：[选择模型](raw/model-user-guide/get-started-with-models/models.md)。（也支持[部署](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)后的模型）
 
 使用前需要安装以下依赖：
 
@@ -274,7 +274,7 @@ public class ChatLanguageModelController {
 
 #### DashScope
 
-支持阿里云百炼所有的文本生成模型，完整列表与调用费用请参考：[选择模型](raw/model-user-guide/get-started-with-models/models.md)。（也支持[部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)后的模型）
+支持阿里云百炼所有的文本生成模型，完整列表与调用费用请参考：[选择模型](raw/model-user-guide/get-started-with-models/models.md)。（也支持[部署](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)后的模型）
 
 借助LangChain4j开源库，您可以使用Java编码以实现相关功能。有Plain Java（纯Java）和Spring Boot这两种实现方式，更多的接口细节和代码示例，请参见[LangChain4j DashScope官网](https://docs.langchain4j.dev/integrations/language-models/dashscope)。
 

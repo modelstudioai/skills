@@ -8,28 +8,30 @@
 
 ## 关键参数
 
-- `api_key`：必填，用于身份鉴权，需通过 [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md) 获取并安全存储  
-- `base_url`（可选）：用于私有化部署场景，覆盖默认百炼服务地址；若未设置，SDK 自动使用 `https://dashscope.aliyuncs.com/api/v1`  
-- `max_retries`（可选）：SDK 默认重试 2 次，建议生产环境显式设为 `3` 以提升容错性；该行为在 [SDK Expert](../../raw/model-api-reference/preparations/dashscope-sdk-expert.md) 中有详细说明  
+- `api_key`：必填，用于身份鉴权，需通过 [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md) 获取并安全存储；
+- `base_url`（可选）：用于私有化部署场景，覆盖默认百炼服务地址；
+- `timeout`（推荐设置）：建议显式设置 HTTP 超时（如 60s），避免因网络波动导致阻塞；
+- `max_retries`（推荐设置）：SDK 默认重试策略可能不满足生产要求，应依据 [SDK Expert](../../raw/model-api-reference/preparations/dashscope-sdk-expert.md) 指南定制。
 
-> **注意**：部分旧版文档示例中将 `api_key` 作为请求头 `Authorization: Bearer <key>` 直接传递，但当前主流 SDK（v4.0+）已强制要求通过初始化 Client 传入，不再支持 header 方式——请以 [SDK Expert](../../raw/model-api-reference/preparations/dashscope-sdk-expert.md) 的最新初始化方式为准。
+> **注意**：部分旧版文档中提及 `secret_key` 参数，该字段已于 v3.2.0 SDK 起废弃，仅保留 `api_key`；请以 [SDK Expert](../../raw/model-api-reference/preparations/dashscope-sdk-expert.md) 的最新说明为准。
 
 ## 使用方式
 
-1. 访问 [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md) 页面，创建并复制有效 API Key  
-2. 执行 `pip install dashscope`（Python）或对应语言 SDK（见 [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)）  
-3. 初始化 Client 并调用模型接口，例如：
+1. 访问 [获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md) 页面，创建并复制有效 API Key；
+2. 执行 `pip install dashscope`（Python）或对应语言 SDK（参见 [安装SDK](../../raw/model-api-reference/preparations/install-sdk.md)）；
+3. 初始化客户端时传入 `api_key`，例如：
    ```python
    import dashscope
-   dashscope.api_key = "YOUR_API_KEY"  # 或传入 dashscope.Client(api_key=...)
+   dashscope.api_key = "sk-xxx"
    ```
+   或使用 `dashscope.Client(api_key="sk-xxx")` 实例化方式（推荐，便于多 key 隔离）。
 
 ## 限制和注意事项
 
-- 单个 API Key 默认限流 5 QPS（每秒查询数），超出将返回 `429 Too Many Requests` 错误，具体策略详见 [错误码](../../raw/model-api-reference/preparations/error-code.md)  
-- API Key 不可跨阿里云账号共享，且不支持子账号独立生成（需主账号操作）  
-- 本地调试时禁止硬编码 API Key，应使用环境变量（如 `DASHSCOPE_API_KEY`）或密钥管理服务  
-- 若使用代理或内网环境，需确保 `base_url` 可达且 TLS 证书有效；否则初始化 Client 会静默失败——该问题在 [使用 API](../../raw/model-api-reference/preparations.md) 的“常见故障”章节有复现路径说明
+- 单个 API Key 默认限流为 10 QPS（具体值以控制台配额页为准），超限返回 `429 Too Many Requests`，错误详情见 [错误码](../../raw/model-api-reference/preparations/error-code.md)；
+- API Key 不可跨区域复用（如 cn-beijing Key 无法调用 us-west-2 endpoint），区域信息需与 endpoint 严格匹配；
+- 严禁在前端代码、Git 仓库或日志中硬编码 `api_key`，必须通过环境变量或密钥管理服务注入；
+- 若使用代理或内网环境，需确保 SDK 可访问 `https://dashscope.aliyuncs.com`（或对应私有 endpoint），防火墙策略须放行。
 
 ## 来源文档
 

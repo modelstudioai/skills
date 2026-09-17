@@ -203,7 +203,7 @@ qwen-turbo 资源包启动退市通知[了解详情](https://www.aliyun.com/noti
 
 PTU 长输入与缓存
 
-预置吞吐部署新增长输入与前缀缓存能力，[了解详情](raw/model-user-guide/model-deployment-1/ptu-long-input-and-cache.md)
+预置吞吐部署新增长输入与前缀缓存能力，[了解详情](raw/model-user-guide/model-deployment-index/ptu-long-input-and-cache.md)
 
 6月12日
 
@@ -235,7 +235,7 @@ Skill 能力包上线
 
 数据连接模块上线
 
-新增数据连接模块，支持 MySQL/语雀/OSS 等数据源，[了解详情](raw/application-user-guide/data-connection-overview/data-connection.md)
+新增数据连接模块，支持 MySQL/语雀/OSS 等数据源，[了解详情](raw/application-user-guide/overview/data-connection-overview/data-connection.md)
 
 6月9日
 
@@ -251,7 +251,7 @@ Skill 能力包上线
 
 模型导入功能国际站上线
 
-模型导入功能在国际站上线，支持从 OSS 导入 LoRA 微调模型，[了解详情](raw/model-user-guide/model-deployment-1/model-import.md)
+模型导入功能在国际站上线，支持从 OSS 导入 LoRA 微调模型，[了解详情](raw/model-user-guide/model-deployment-index/model-import.md)
 
 6月3日
 
@@ -581,7 +581,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 使用 API 部署新增预置模型与按模型单元时长计费
 
-模型部署 API 新增 qwen-flash/qwen-plus 等预置模型部署，并新增按模型单元 (MU) 时长计费模式，[了解详情](raw/model-user-guide/model-deployment-1/model-deployment-quick-start.md)
+模型部署 API 新增 qwen-flash/qwen-plus 等预置模型部署，并新增按模型单元 (MU) 时长计费模式，[了解详情](raw/model-user-guide/model-deployment-index/model-deployment-quick-start.md)
 
 1月22日
 
@@ -589,7 +589,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 调优新增视觉理解模型类型支持
 
-模型调优新增视觉理解(VL)模型类型支持，可对多模态模型进行定制训练，[了解详情](https://help.aliyun.com/zh/model-studio/fine-tuning-api-guide)
+模型调优新增视觉理解(VL)模型类型支持，可对多模态模型进行定制训练，[了解详情](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)
 
 1月21日
 
@@ -677,7 +677,7 @@ Retrieve 接口新增排序模型选项与指令干预模式，平台检索能�
 
 新增按模型单元的部署方式（按时间计费）
 
-[模型单元](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)**部署的核心优势：**
+[模型单元](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)**部署的核心优势：**
 
 -   可灵活调整模型性能。
     

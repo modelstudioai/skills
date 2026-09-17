@@ -201,57 +201,79 @@
 
 **模型**
 
-**计费次数**
+**推送次数**
+
+**换算成实际价**
 
 语音识别
 
-语音识别
+语音识别 0.75
 
-Fun-ASR、通义千问3-ASR-Flash-Realtime、Qwen-Audio-3.0-ASR-Flash-Streaming
+Fun-ASR、qwen3-asr-flash、Qwen-Audio-3.0-ASR-Flash-Streaming
 
 3x
+
+2.25
 
 语音合成
 
-语音合成
+语音合成 1.7
 
-Qwen-Audio-3.0-TTS-Plus、Qwen-Audio-3.0-TTS-Flash、CosyVoice-v3.5-Plus、CosyVoice-v3.5-Flash、CosyVoice-v3-Plus、通义千问3-TTS 系列
+cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-plus、qwen3-tts 系列、qwen-audio-3.0-tts
 
 3x
+
+5.1
 
 大模型对话
 
-闲聊及插件
+闲聊及插件 2.2
 
-Qwen3.7-Plus、Qwen3.6-Plus、Qwen-Max、Qwen3-Coder-Plus
+qwen3.7-plus、qwen3.6-plus、qwen-max、Qwen3-Coder-Plus、qwen-mt-plus
 
 2x
 
-deepseek 除v4pro外的系列、GLM、Kimi、MiniMax、Qwen3.5-Omni-Flash
+4.4
+
+deepseek 除v4pro外的系列、glm-5/5.1、kimi、MiniMax、qwen3.5-omni-flash
 
 4x
 
-Qwen3.6-Max
+8.8
+
+qwen3.6-max
 
 6x
 
-Qwen3.7-Max、Qwen3.5-Omni-Plus（文本输出）、deepseek-v4-pro
+13.2
+
+qwen3.8-Max、qwen3.7-Max、qwen3.5-omni-plus-textout、deepseek-v4-pro、qvq-72b-preview
 
 8x
 
-Qwen3.5-Omni-Plus（音频输出），farui-plus
+17.6
+
+qwen3.5-omni-plus-audioout，farui-plus
 
 13x
 
-Qwen-Deep-Research
+28.6
+
+qwen-deep-research
 
 32x
 
-知识库问答
+70.4
 
 知识库问答
 
-与LLM所选大模型推送次数一致
+知识库问答 3.7
+
+跟随LLM选择，用的同样规格的模型
+
+与所选 LLM 倍率一致
+
+3.7 × 对应 LLM 倍率
 
 ### 知识库计费说明
 

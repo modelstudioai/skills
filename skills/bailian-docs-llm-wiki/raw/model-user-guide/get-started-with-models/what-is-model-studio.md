@@ -64,12 +64,14 @@ main()
 
 不同地域的 Base URL不通用（以下示例是北京地域 Base URL）
 
--   华北2（北京）： `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`，请将&#123;WorkspaceId&#125;替换为业务空间ID
+-   华北2（北京）： `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 -   美国（弗吉尼亚）： `https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
--   新加坡： `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`，请将&#123;WorkspaceId&#125;替换为业务空间ID
--   德国（法兰克福）： `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`，请将&#123;WorkspaceId&#125;替换为业务空间ID
--   中国香港： `https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/chat/completions`，请将&#123;WorkspaceId&#125;替换为业务空间ID
--   日本（东京）： `https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`，请将&#123;WorkspaceId&#125;替换为业务空间ID
+-   新加坡： `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+-   德国（法兰克福）： `https://{WorkspaceId}.eu-central-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+-   中国香港： `https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+-   日本（东京）： `https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
+
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
@@ -123,7 +125,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ### 模型调优、部署和评测
 
 -   [模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)：支持有监督微调（SFT）、继续预训练（CPT）和直接偏好优化（DPO），满足特定业务需求。
--   [模型部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)：将预置模型或调优后的自定义模型部署为资源专享的推理服务，满足高并发、低延迟等性能要求。支持按时长、包月、按 Token 量等多种计费方式。
+-   [模型部署](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)：将预置模型或调优后的自定义模型部署为资源专享的推理服务，满足高并发、低延迟等性能要求。支持按时长、包月、按 Token 量等多种计费方式。
 -   [模型评测](raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)：提供人工评测、自动评测和基线评测，支持快速对比不同模型表现，验证调优效果，提前发现潜在调用风险。
 
 ## 应用构建

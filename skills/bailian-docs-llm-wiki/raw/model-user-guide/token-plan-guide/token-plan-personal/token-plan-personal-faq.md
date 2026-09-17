@@ -173,7 +173,7 @@ Token Plan 套餐本身不提供试用额度，也不包含免费赠送的 Token
 
 等待一分钟后重试，降低请求频率
 
-429 Allocated quota exceeded
+429 insufficient\_quota: Your token-plan 1-week quota has been exhausted.
 
 7 天限额用尽
 

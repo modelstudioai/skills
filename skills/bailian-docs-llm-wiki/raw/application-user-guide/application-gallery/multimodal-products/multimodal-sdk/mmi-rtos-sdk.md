@@ -11,7 +11,7 @@
 3.  根据[应用配置](raw/application-user-guide/application-gallery/multimodal-products/multimodal-guidelines/multimodal-app-configuration.md)的文档完成应用的配置。
 4.  License模式[产品计费](raw/application-user-guide/application-gallery/multimodal-products/product-billing.md)
 
-**说明**当前最新SDK版本：v1.3.0
+**说明**当前最新SDK版本：v1.3.1
 
 -   已适配的硬件列表
 
@@ -31,7 +31,7 @@
 
 V500
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/yswomu/qwen_sdk_core_anykav500_v1.3.0_22bcf3f_830783.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f19.tar)
 
 2
 
@@ -39,7 +39,7 @@ V500
 
 AiW626X
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/sjneed/qwen_sdk_core_aiw626x_v1.3.0_22bcf3f_830783.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1a.tar)
 
 3
 
@@ -47,7 +47,7 @@ AiW626X
 
 ASR1606
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/guivxo/qwen_sdk_core_asr1606_v1.3.0_22bcf3f_830776.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f18.tar)
 
 4
 
@@ -55,7 +55,7 @@ ASR1606
 
 BL616CL
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/gwcgji/qwen_sdk_core_bl616cl_v1.3.0_22bcf3f_830783.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f13.tar)
 
 5
 
@@ -63,11 +63,11 @@ BL616CL
 
 BK7252
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/rvauch/qwen_sdk_core_bk7252_v1.3.0_22bcf3f_830783.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1d.tar)
 
 BK7258
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/fwewrl/qwen_sdk_core_bk7258_v1.3.0_22bcf3f_830783.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1c.tar)
 
 6
 
@@ -75,11 +75,11 @@ BK7258
 
 LM600
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/dqvuce/qwen_sdk_core_lm600_v1.3.0_22bcf3f_830783.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f14.tar)
 
 LM620
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/bsfrap/qwen_sdk_core_lm620_v1.3.0_22bcf3f_830783.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2b.tar)
 
 7
 
@@ -87,15 +87,15 @@ LM620
 
 AV100
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/rxcore/qwen_sdk_core_av100_v1.3.0_22bcf3f_830783.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1f.tar)
 
 AV200
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/yftpur/qwen_sdk_core_av200_v1.3.0_22bcf3f_830784.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1e.tar)
 
 Hi3516CV610
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/dxezrf/qwen_sdk_core_hi3516cv610_v1.3.0_22bcf3f_830784.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f16.tar)
 
 8
 
@@ -103,183 +103,191 @@ Hi3516CV610
 
 WS53
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/fwonme/qwen_sdk_core_ws53_v1.3.0_22bcf3f_830784.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3e.tar)
 
 9
+
+匠芯创
+
+D121
+
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f12.tar)
+
+10
 
 杰理
 
 AC7911
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/occlwd/qwen_sdk_core_ac7911_v1.3.0_22bcf3f_830784.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f04.tar)
 
 AC792X
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/oehxov/qwen_sdk_core_ac792x_v1.3.0_22bcf3f_830784.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f1b.tar)
 
 JL7014
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/nxmvis/qwen_sdk_core_jl7014_v1.3.0_22bcf3f_830784.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f15.tar)
 
-10
+11
 
 君正
 
 G32S10M
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/ryzfbc/qwen_sdk_core_g32s10m_v1.3.0_22bcf3f_830784.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f17.tar)
 
 T23
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/yuphho/qwen_sdk_core_t23_v1.3.0_22bcf3f_830784.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f20.tar)
 
 T41
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/qiwwdq/qwen_sdk_core_t41_v1.3.0_22bcf3f_830784.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f27.tar)
 
-11
+12
 
 乐鑫
 
 ESP32
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/qahtbd/qwen_sdk_core_esp32_v1.3.0_22bcf3f_833235.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f30.tar)
 
 ESP32S3
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/wjeblr/qwen_sdk_core_esp32s3_v1.3.0_22bcf3f_833235.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f37.tar)
 
-12
+13
 
 全志
 
 F133
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/bkskvs/qwen_sdk_core_f133_v1.3.0_22bcf3f_830784.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f10.tar)
 
 R128
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/zzjedt/qwen_sdk_core_r128_v1.3.0_22bcf3f_830784.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f28.tar)
 
 V821
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/soaatk/qwen_sdk_core_v821_v1.3.0_22bcf3f_830784.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3b.tar)
 
 V853
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/lmfflv/qwen_sdk_core_v853_v1.3.0_22bcf3f_830785.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3a.tar)
 
 XR872
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/rovsjq/qwen_sdk_core_xr872_v1.3.0_22bcf3f_830785.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3c.tar)
 
-13
+14
 
 瑞芯微
 
 RK3506
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/qogizw/qwen_sdk_core_rk3506_v1.3.0_22bcf3f_830785.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2f.tar)
 
 RK3588
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/ahmkbd/qwen_sdk_core_rk3588_v1.3.0_22bcf3f_830785.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2e.tar)
 
 RV1103
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/nljzny/qwen_sdk_core_rv1103_v1.3.0_22bcf3f_830785.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f23.tar)
 
-14
+15
 
 瑞昱
 
 RTL8711
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/vplboh/qwen_sdk_core_rtl8711_v1.3.0_22bcf3f_830785.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2d.tar)
 
 RTL8721
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/xwyrct/qwen_sdk_core_rtl8721_v1.3.0_22bcf3f_830785.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2c.tar)
 
-15
+16
 
 小米
 
 VELA\_V7A
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/psjnsu/qwen_sdk_core_vela_v7a_v1.3.0_22bcf3f_830785.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f39.tar)
 
 VELA\_V8A
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/khbmch/qwen_sdk_core_vela_v8a_v1.3.0_22bcf3f_830785.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f38.tar)
 
-16
+17
 
 芯迈微
 
 XMW718
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/psfwlw/qwen_sdk_core_xmw718_v1.3.0_22bcf3f_830785.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3d.tar)
 
-17
+18
 
 星宸科技
 
 SSC305DE
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/clyiun/qwen_sdk_core_ssc305de_v1.3.0_22bcf3f_830785.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f22.tar)
 
 SSC309QL
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/zfuiix/qwen_sdk_core_ssc309ql_v1.3.0_22bcf3f_830785.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f21.tar)
 
-18
+19
 
 星翼科技
 
 XY4100LC
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/nsxavi/qwen_sdk_core_xy4100lc_v1.3.0_22bcf3f_830778.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f33.tar)
 
-19
+20
 
 移芯
 
 EC718PM
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/pqjitg/qwen_sdk_core_ec718pm_v1.3.0_22bcf3f_830782.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f11.tar)
 
-20
+21
 
 中国移动
 
 ML307H
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/varhsw/qwen_sdk_core_ml307h_v1.3.0_22bcf3f_830786.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f2a.tar)
 
 ML307N
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/afqoaw/qwen_sdk_core_ml307n_v1.3.0_22bcf3f_830780.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f29.tar)
 
-21
+22
 
 紫光展锐
 
 UIS8910(ARMCC)
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/rjdxqr/qwen_sdk_core_uis8910_v1.3.0_22bcf3f_830783.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f25.tar)
 
 UIS8910(GCC)
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/wbqgdm/qwen_sdk_core_uis8910_bn_v1.3.0_22bcf3f_830786.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f26.tar)
 
 UMS9117
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/yqkscr/qwen_sdk_core_ums9117_v1.3.0_22bcf3f_830784.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f24.tar)
 
 W217
 
-[SDK下载链接](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260706/medzgn/qwen_sdk_core_w217_v1.3.0_22bcf3f_830786.tar.gz)
+[SDK下载链接](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f3f.tar)
 
 ## 1\. 接入模式说明
 
@@ -1817,25 +1825,32 @@ server: istio-envoy
 ```
 enum {
     C_MMI_EVENT_USER_CONFIG,        // 用户对于sdk的配置应该在该事件回调中实现，如音频缓冲区大小、工作模式、音色等
-    C_MMI_EVENT_DATA_INIT,	    // 当SDK完成初始化后触发该事件，可在该事件回调中开始建立业务连接
-    C_MMI_EVENT_SPEECH_READY,	    // 当正确建立WSS连接后触发该事件，在push和tap模式下仅在该事件后才可以调用speech start
+    C_MMI_EVENT_STATE_CHANGE,       // 当SDK主状态发生切换时触发该事件，param指向新的状态值
+
+    C_MMI_EVENT_DATA_INIT,          // 当SDK完成初始化后触发该事件，可在该事件回调中开始建立业务连接
+    C_MMI_EVENT_DATA_DEINIT,        // 当SDK注销后触发此事件
+
+    C_MMI_EVENT_SPEECH_READY,       // 当正确建立WSS连接后触发该事件，在push和tap模式下仅在该事件后才可以调用speech start
     C_MMI_EVENT_SPEECH_PREPARE,     // 当SDK已准备好可以开始新一轮对话时触发此事件
     C_MMI_EVENT_SPEECH_START,       // 当SDK开始进行音频上行时触发此事件
-    C_MMI_EVENT_SPEECH_RESTART,     // 当SDK重新开始进行音频上行时触发此事件
-    C_MMI_EVENT_DATA_DEINIT,	    // 当SDK注销后触发此事件
+    C_MMI_EVENT_SPEECH_INTERRUPT,   // 当当前会话被打断时触发该事件，如对话进行中被按键打断或有其他请求等
 
-    C_MMI_EVENT_ASR_START,	    // 当ASR开始返回数据时触发此事件
-    C_MMI_EVENT_ASR_INCOMPLETE,	    // 此事件返回尚未完成ASR的文本数据（全量）
-    C_MMI_EVENT_ASR_COMPLETE,	    // 此事件返回完成ASR的全部文本数据（全量）
-    C_MMI_EVENT_ASR_END,	    // 当ASR结束时触发此事件
+    C_MMI_EVENT_ASR_START,          // 当ASR开始返回数据时触发此事件
+    C_MMI_EVENT_ASR_INCOMPLETE,     // 此事件返回尚未完成ASR的文本数据（全量）
+    C_MMI_EVENT_ASR_COMPLETE,       // 此事件返回完成ASR的全部文本数据（全量）
+    C_MMI_EVENT_ASR_END,            // 当ASR结束时触发此事件
 
-    C_MMI_EVENT_LLM_INCOMPLETE,	    // 此事件返回尚未处理完成的LLM文本数据（全量）
-    C_MMI_EVENT_LLM_COMPLETE,	    // 此事件返回处理完成的LLM全部文本数据（全量）
+    C_MMI_EVENT_LLM_INCOMPLETE,     // 此事件返回尚未处理完成的LLM文本数据（全量）
+    C_MMI_EVENT_LLM_COMPLETE,       // 此事件返回处理完成的LLM全部文本数据（全量）
+    C_MMI_EVENT_WORD_TIMESTAMP,     // 使能word_timestamp后，此事件返回TTS文本时间戳数据（流式更新），param仅在回调期间有效
+    C_MMI_EVENT_LATENCY,            // 当收到云端下发的延迟统计时触发此事件，param指向uint32_t毫秒值，仅在回调期间有效
 
     C_MMI_EVENT_TTS_START,          // 当开始音频下行时触发此事件
-    C_MMI_EVENT_TTS_END,	    // 当音频完成下行时触发此事件
+    C_MMI_EVENT_TTS_END,            // 当音频完成下行时触发此事件
 
-    C_MMI_EVENT_HEARTBEAT,	    // 当SDK收到云端心跳回复时触发此事件
+    C_MMI_EVENT_HEARTBEAT,          // 当SDK收到云端心跳回复时触发此事件
+
+    C_MMI_EVENT_ERROR,              // 当SDK收到云端返回错误时触发此事件
 };
 
 /**
@@ -1879,7 +1894,7 @@ uint32_t c_mmi_get_player_data(uint8_t *data, uint32_t size);
  * 本函数用于根据指定的类型获取数据，准备通过websocket进行发送
  * 它会根据传入的类型参数，将相应类型的数据填充到提供的数据缓冲区中
  *
- * @param opcode 用于返回websocket数据类型，如：WS_DATA_TYPE_TEXT、WS_DATA_TYPE_BINARY
+ * @param opcode 用于返回websocket数据类型，如：WEBSOCKET_OPCODE_TEXT、WEBSOCKET_OPCODE_BINARY
  * @param data 指向一个uint8_t数组的指针，该数组用于存储获取的数据
  * @param size 表示数据数组的最大容量，以字节为单位
  * @return 返回实际填充到数据数组中的字节数
@@ -1892,7 +1907,7 @@ uint32_t c_mmi_get_send_data(uint8_t *opcode, uint8_t *data, uint32_t size);
  * 此函数根据提供的数据类型和数据内容，分析接收到的数据包
  * 它的主要作用是解析数据内容，以便进一步处理或使用
  *
- * @param opcode websocket数据类型，如：WS_DATA_TYPE_TEXT、WS_DATA_TYPE_BINARY
+ * @param opcode websocket数据类型，如：WEBSOCKET_OPCODE_TEXT、WEBSOCKET_OPCODE_BINARY
  * @param data 指向接收到的数据的指针，数据的内容将根据type参数进行解析
  * @param size 数据的长度，以字节为单位，用于确定数据的范围
  * @return 返回实际解析的字节数
@@ -1934,7 +1949,7 @@ int dummy_wss_task_send(void)
             util_msleep(10);
         } else {
             // 将payload数据传入websocket发送函数，自行打包帧头进行发送
-            dummy_wss_send(opcode, data, size);
+            dummy_wss_send(opcode, payload_data, size);
         }
     }
     return 0;

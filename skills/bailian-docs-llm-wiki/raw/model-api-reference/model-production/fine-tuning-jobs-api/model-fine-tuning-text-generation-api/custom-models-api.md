@@ -13,8 +13,8 @@
 ## 前提条件
 
 -   已配置百炼的 API-KEY，请参考[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
--   已创建 OSS Bucket，并完成百炼平台的 OSS 授权。详见[模型导入](raw/model-user-guide/model-deployment-1/model-import.md)中的使用前提。
--   模型文件已上传至 OSS Bucket，并符合[模型导入](raw/model-user-guide/model-deployment-1/model-import.md)。
+-   已创建 OSS Bucket，并完成百炼平台的 OSS 授权。详见[模型导入](raw/model-user-guide/model-deployment-index/model-import.md)中的使用前提。
+-   模型文件已上传至 OSS Bucket，并符合[模型导入](raw/model-user-guide/model-deployment-index/model-import.md)。
 
 ## 公共请求头
 
@@ -170,7 +170,7 @@ body
 
 是
 
-基础模型的名称。对应控制台**基础模型**字段。当前支持的模型请参见[模型导入](raw/model-user-guide/model-deployment-1/model-import.md)。示例：`qwen3-32b`。
+基础模型的名称。对应控制台**基础模型**字段。当前支持的模型请参见[模型导入](raw/model-user-guide/model-deployment-index/model-import.md)。示例：`qwen3-32b`。
 
 display\_name
 

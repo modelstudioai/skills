@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-09-16",
+  "updatedAt": "2026-09-17",
   "totalFamilies": 179,
-  "totalModels": 416,
+  "totalModels": 417,
   "profileCoverage": {
-    "full": 356,
-    "partial": 59,
+    "full": 382,
+    "partial": 34,
     "structured-only": 1,
     "none": 0
   },
@@ -640,14 +640,15 @@
       "providers": [
         "moonshot-ai"
       ],
-      "itemCount": 4,
+      "itemCount": 5,
       "items": [
         "kimi/kimi-k2.6",
         "kimi/kimi-k2.7-code",
         "kimi/kimi-k2.7-code-highspeed",
+        "kimi/kimi-k2.8-preview",
         "kimi/kimi-k3"
       ],
-      "maxContextWindow": 1000000
+      "maxContextWindow": 1048576
     },
     {
       "slug": "kling-models-market-place",

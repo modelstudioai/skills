@@ -162,7 +162,7 @@ curl -X POST "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
 
 ### 预置吞吐单元（PTU）
 
-[PTU 服务](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)提供独立预留的专享算力，可避免公共资源池的竞争，是保障实时高吞吐的首选。
+[PTU 服务](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)提供独立预留的专享算力，可避免公共资源池的竞争，是保障实时高吞吐的首选。
 
 适用场景：业务对吞吐量有确定性要求（如 SLA 承诺），或希望免去客户端流控开发，直接获得稳定高吞吐。
 

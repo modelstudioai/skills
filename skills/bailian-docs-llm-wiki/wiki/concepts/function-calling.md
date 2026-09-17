@@ -1,50 +1,47 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台中大模型主动识别用户意图、生成结构化工具调用指令，并交由平台执行外部操作的核心能力。它不是简单的 API 转发，而是模型在推理过程中基于上下文动态选择工具、填充参数、处理返回结果并决定是否继续调用的闭环机制。
+函数调用（Function Calling）是百炼平台支持的一种关键能力，允许大语言模型在推理过程中自主识别用户意图、生成结构化工具调用请求，并将结果交由外部系统执行，最终融合返回自然语言响应。它不是简单的 API 封装，而是模型原生具备的语义理解与动作规划能力，是构建可执行智能体（Agent）、自动化工作流和生产级 RAG 应用的核心机制。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-函数调用在百炼平台并非单一接口功能，而是贯穿多个能力层的统一语义抽象，具体体现为以下四类场景：
+函数调用在百炼平台中并非独立服务，而是深度集成于多个核心能力模块，其触发、定义、执行与响应流程因场景而异：
 
-- **Managed Agents（托管智能体）**：Agent 在 `Session` 中自动触发工具调用。当模型输出符合 `Skill` 定义的 JSON Schema 时，平台自动解析、校验参数、调用对应技能（如数据库查询、HTTP 请求），并将结果注入后续上下文。调用过程受 `max_iterations` 限制，且失败可通过 `Webhook` 实时通知。
+- **智能体（Agent）应用**：在新版/旧版智能体中，函数调用作为「工具调用（tool_calling）」阶段自动发生。模型根据 `system` 提示词中声明的工具列表（`tools`）及当前对话上下文，输出符合 OpenAI Function Calling Schema 的 JSON 结构（含 `function.name` 和 `function.arguments`）。平台自动解析、路由并调用开发者配置的后端函数（如知识库检索、数据库查询、第三方 API），再将结果注入后续生成阶段。该过程对开发者透明，仅需在控制台或 API 中声明工具即可。
 
-- **Sandbox（沙箱环境）**：用于调试函数调用逻辑本身。通过 `POST /v1/sandbox/instances/{id}/chat/completions` 发起请求时，若传入 `tools`（OpenAI 兼容格式）或 `plugins` 参数，模型将尝试生成符合 schema 的调用指令；沙箱支持流式返回原始 `tool_calls` 字段，便于验证参数生成准确性与格式合规性。
+- **知识问答（RAG Agent）**：在 `/api/v2/apps/knowledge/chat` 接口中，函数调用体现为内置工具链（如 `semantic_search`、`execute_sql`、`obtain_file`）的自动调度。模型无需显式定义 `tools`，而是基于知识库元数据和用户问题动态选择并调用合适工具，实现多跳推理与证据整合。开发者通过知识库配置和 agent_options 控制工具可用性，不直接编写函数定义。
 
-- **Plug-in（插件）与 Application Support（应用支持）**：以插件形式封装函数调用能力。启用 `enable_plugins=true` 后，模型可调用控制台已开通的官方或自定义插件（如“天气查询”“二维码生成”）。所有插件调用均遵循统一协议——输入经 `args` 透传，仅支持 `Authorization` header，响应需为合法 JSON，否则视为执行失败。
+- **实时语音交互（Omni Realtime API）**：在 WebSocket 会话中，通过 `session.update` 事件传入 `tools` 数组启用函数调用。模型在语音或文本输入后，可主动触发工具（如查天气、订会议室），客户端需监听 `response.function_call` 事件、执行本地逻辑、并通过 `function_call.result` 事件回传结果。此模式要求全双工、低延迟处理，适用于语音助手等强交互场景。
 
-- **Model Context Protocol（MCP）**：提供标准化、可扩展的函数调用基础设施。MCP 将各类外部服务（地图、搜索、私有知识库等）抽象为 `tool`，通过 `tool.name` 和 `inputSchema` 声明式注册。在智能体或工作流中启用 MCP 后，模型可跨服务组合调用（如“查天气 + 绘图”），平台负责协议适配、认证透传（`headers`/`env`）与错误降级。
+- **标准模型 API（`/v1/chat/completions`）**：当使用支持 `function-calling` 能力的模型（如 `qwen-max`、`qwen-plus`、`qwen3.5-omni-plus-realtime`）时，开发者需在请求 `messages` 外显式传入 `tools` 参数（OpenAI 格式）及可选 `tool_choice`（`auto`/`required`/`{"type":"function","function":{"name":"xxx"}}`）。模型返回 `finish_reason: "tool_calls"`，响应体中包含 `message.tool_calls` 字段，开发者需自行解析、调用、拼接并发起下一轮请求（若需继续生成）。
 
-> ⚠️ 注意：纯千问 API（如 `/v1/chat/completions`）**不支持原生函数调用**；必须通过 Managed Agents、Sandbox、Plug-in 或 MCP 等平台级封装才能启用该能力。
+- **工作流（Workflow）**：函数调用以「节点」形式显式编排。开发者在控制台拖拽「函数调用」节点，配置目标函数 URL、认证方式、输入映射（Jinja2 模板）和错误重试策略。模型本身不参与决策，而是由工作流引擎根据上一节点输出（如 LLM 生成的 JSON 参数）驱动函数执行。此模式强调确定性与可观测性，适合需要人工审核或复杂错误处理的业务流程。
 
 ## 关键参数和配置
 
-函数调用行为由以下关键参数协同控制，开发者需按场景显式配置：
+| 参数 | 位置 | 类型 | 说明 | 是否必需 |
+|------|------|------|------|----------|
+| `tools` | 请求体（`/v1/chat/completions`、Omni `session.update`、Agent `parameters.tools`） | array | 工具定义数组，每个元素为 OpenAI Function Calling Schema 对象，含 `function.name`、`description`、`parameters`（JSON Schema） | 启用函数调用时必需 |
+| `tool_choice` | 请求体（仅 `/v1/chat/completions`） | string / object | 控制模型行为：`"auto"`（默认，由模型决定）、`"none"`（禁用）、`"required"`（必须调用）、或指定具体函数名的对象 | 否（但推荐显式设置以提升可控性） |
+| `parameters.tools` | 知识问答/智能体请求体 `parameters` 内 | array | 同 `tools`，用于覆盖应用级默认工具集 | 否（应用内已配置则可省略） |
+| `function_call.result` | Omni Realtime API 客户端事件 | object | 客户端执行完工具后，通过此事件回传结果，格式为 `{ "tool_call_id": "...", "result": ... }` | 工具调用后必需 |
+| `X-DashScope-SSE: enable` | HTTP Header（流式场景） | string | 启用 Server-Sent Events 流式响应，函数调用相关事件（如 `tool_calling`）通过 `event: tool_calling` 帧推送 | 流式调用时必需 |
 
-| 参数名 | 所属场景 | 类型 | 必填 | 说明 |
-|--------|----------|------|------|------|
-| `tools` | Sandbox、MCP（部分模式） | array | 否 | OpenAI 兼容格式：`[{ "type": "function", "function": { "name": "...", "parameters": {...} } }]`。模型据此生成 `tool_calls`。 |
-| `plugins` | Plug-in、Application Support | array | 否 | 百炼专有格式：`[{ "name": "plugin_id", "args": {...} }]`。需配合 `enable_plugins=true` 使用。 |
-| `skills` | Managed Agents | array | 是（若需工具能力） | Agent 创建时绑定：每个元素含 `id`（指向 Skill 资源）及可选 `config`，定义工具元信息与运行时配置。 |
-| `enable_plugins` | Plug-in | boolean | 是（启用插件时） | 显式开关，即使 `plugins` 非空，此字段为 `false` 时仍禁用调用。 |
-| `tool.name` / `inputSchema` | MCP | string / object | 是（注册 MCP 服务时） | 工具唯一标识与参数约束 Schema，直接影响模型能否正确生成调用指令。 |
-| `plugin_timeout_ms` / `timeout` | Plug-in / Sandbox | integer | 否 | 插件或沙箱实例超时时间（毫秒/秒），超时后自动降级，避免阻塞推理流。 |
-
-> ✅ 最佳实践：始终为工具定义清晰的 `inputSchema`（JSON Schema draft-07 子集），避免使用 `anyOf`/`not`；敏感参数（如 `api_key`）应通过 `env` 或 KMS 凭据注入，**切勿写入 `args` 明文传递**。
+> **注意**：所有工具参数（`parameters` 字段）必须严格遵循 JSON Schema 规范，平台不校验运行时值合法性；`function.name` 必须与后端函数标识完全一致（区分大小写）；`tool_call_id` 由平台生成，客户端回传时必须原样复用，否则视为无效响应。
 
 ## 面向开发者，简洁实用
 
-- **调试优先**：用 Sandbox 快速验证模型能否生成合法 `tool_calls`，再迁移到 Managed Agents 生产环境。
-- **统一 Schema**：无论使用 Plug-in、MCP 还是自定义 Skill，确保 `inputSchema` 严格匹配后端接口，这是调用成功率的关键。
-- **错误必捕获**：监听 `tool.error`（Webhook）、`plugin_execution_failed`（错误码）或 MCP 协议错误（如 11200058），及时降级或重试。
-- **安全红线**：所有凭证必须通过 `Vault`/`Credential` 或 `env` 注入；API 调用仅支持 `Authorization` header，其他头字段会被丢弃。
-- **性能意识**：单次请求最多 3 个插件 / 20 个 Skill / 5 个 MCP 服务；嵌套调用不支持，需在工具内部实现复合逻辑。
+- **快速验证**：用 `qwen-plus` 模型 + 最小 `tools` 定义（一个带 `name` 和 `description` 的空参函数）调用 `/v1/chat/completions`，观察响应中是否出现 `tool_calls` 字段。
+- **错误容错**：流式响应中 `delta.content` 可能为空（尤其在 `tool_calling` 帧），务必检查 `delta.tool_calls`；非流式响应需判断 `finish_reason === "tool_calls"` 再解析 `message.tool_calls`。
+- **安全边界**：函数调用不自动执行，所有 `tool_calls` 输出均为模型建议，必须由你（开发者）完成鉴权、参数校验、网络调用与结果清洗，严禁直接 `eval()` 或反射执行。
+- **调试技巧**：在 `system` 消息中加入明确指令，如“你只能调用以下工具，禁止自行编造工具名”，可显著降低幻觉调用率。
+- **性能提示**：函数调用会增加端到端延迟，单次请求中避免定义过多工具（建议 ≤10 个），高频场景优先考虑预计算或缓存结果。
 
 ## 关联主题页
 
-- [managed agents api](../api/managed-agents-api.md)
-- [sandbox](../guides/sandbox.md)
-- [plug in](../guides/plug-in.md)
-- [application support](../guides/application-support.md)
-- [model context protocol](../guides/model-context-protocol.md)
+- [start using](../guides/start-using.md)
+- [more about models](../api/more-about-models.md)
+- [knowledge](../api/knowledge.md)
+- [application call](../api/application-call.md)
+- [omni realtime api](../api/omni-realtime-api.md)
 
 

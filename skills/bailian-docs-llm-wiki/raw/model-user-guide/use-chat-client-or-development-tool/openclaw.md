@@ -175,6 +175,16 @@ Token Plan 个人版[支持的模型](raw/model-user-guide/token-plan-guide/toke
             "compat": { "thinkingFormat": "openai" }
           },
           {
+            "id": "glm-5.3",
+            "name": "glm-5.3",
+            "reasoning": false,
+            "input": ["text"],
+            "contextWindow": 1000000,
+            "maxTokens": 16384,
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "compat": { "thinkingFormat": "openai" }
+          },
+          {
             "id": "glm-5.2",
             "name": "glm-5.2",
             "reasoning": false,
@@ -227,7 +237,7 @@ Token Plan 个人版[支持的模型](raw/model-user-guide/token-plan-guide/toke
   "agents": {
     "defaults": {
       "model": {
-        "primary": "bailian-token-plan/qwen3.8-max"
+        "primary": "bailian-token-plan/qwen3.8-flash"
       },
       "models": {
         "bailian-token-plan/qwen3.8-max": {},
@@ -235,6 +245,7 @@ Token Plan 个人版[支持的模型](raw/model-user-guide/token-plan-guide/toke
         "bailian-token-plan/qwen3.7-max": {},
         "bailian-token-plan/qwen3.7-plus": {},
         "bailian-token-plan/qwen3.6-flash": {},
+        "bailian-token-plan/glm-5.3": {},
         "bailian-token-plan/glm-5.2": {},
         "bailian-token-plan/deepseek-v4.1-flash": {},
         "bailian-token-plan/deepseek-v4-pro": {},
@@ -449,6 +460,16 @@ nano ~/.openclaw/openclaw.json
             "compat": { "thinkingFormat": "openai" }
           },
           {
+            "id": "glm-5.3",
+            "name": "glm-5.3",
+            "reasoning": false,
+            "input": ["text"],
+            "contextWindow": 1000000,
+            "maxTokens": 16384,
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "compat": { "thinkingFormat": "openai" }
+          },
+          {
             "id": "glm-5.2",
             "name": "glm-5.2",
             "reasoning": false,
@@ -494,7 +515,7 @@ nano ~/.openclaw/openclaw.json
   "agents": {
     "defaults": {
       "model": {
-        "primary": "bailian-token-plan/qwen3.8-max"
+        "primary": "bailian-token-plan/qwen3.8-flash"
       },
       "models": {
         "bailian-token-plan/qwen3.8-max": {},
@@ -513,6 +534,7 @@ nano ~/.openclaw/openclaw.json
         "bailian-token-plan/kimi-k2.7-code": {},
         "bailian-token-plan/kimi-k2.6": {},
         "bailian-token-plan/kimi-k2.5": {},
+        "bailian-token-plan/glm-5.3": {},
         "bailian-token-plan/glm-5.2": {},
         "bailian-token-plan/glm-5.1": {},
         "bailian-token-plan/glm-5": {},
@@ -718,6 +740,16 @@ openclaw dashboard
             "compat": { "thinkingFormat": "openai" }
           },
           {
+            "id": "glm-5.3",
+            "name": "glm-5.3",
+            "reasoning": false,
+            "input": ["text"],
+            "contextWindow": 1000000,
+            "maxTokens": 16384,
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+            "compat": { "thinkingFormat": "openai" }
+          },
+          {
             "id": "glm-5.2",
             "name": "glm-5.2",
             "reasoning": false,
@@ -763,7 +795,7 @@ openclaw dashboard
   "agents": {
     "defaults": {
       "model": {
-        "primary": "bailian-token-plan/qwen3.8-max"
+        "primary": "bailian-token-plan/qwen3.8-flash"
       },
       "models": {
         "bailian-token-plan/qwen3.8-max": {},
@@ -782,6 +814,7 @@ openclaw dashboard
         "bailian-token-plan/kimi-k2.7-code": {},
         "bailian-token-plan/kimi-k2.6": {},
         "bailian-token-plan/kimi-k2.5": {},
+        "bailian-token-plan/glm-5.3": {},
         "bailian-token-plan/glm-5.2": {},
         "bailian-token-plan/glm-5.1": {},
         "bailian-token-plan/glm-5": {},

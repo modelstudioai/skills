@@ -126,6 +126,12 @@ qwen --version
         }
       },
       {
+        "id": "glm-5.3",
+        "name": "[Token Plan 个人版] glm-5.3",
+        "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY"
+      },
+      {
         "id": "glm-5.2",
         "name": "[Token Plan 个人版] glm-5.2",
         "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
@@ -154,10 +160,21 @@ qwen --version
         "name": "[Token Plan 个人版] deepseek-v4-flash-0731",
         "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
         "envKey": "BAILIAN_TOKEN_PLAN_API_KEY"
-      },
-
+      }
     ]
-  }
+  },
+  "security": {
+    "auth": {
+      "selectedType": "openai"
+    }
+  },
+  "tokenPlan": {
+    "region": "china"
+  },
+  "model": {
+    "name": "qwen3.8-flash"
+  },
+  "$version": 3
 }
 ```
 
@@ -316,6 +333,17 @@ qwen --version
         }
       },
       {
+        "id": "glm-5.3",
+        "name": "[Token Plan 团队版] glm-5.3",
+        "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY",
+        "generationConfig": {
+          "extra_body": {
+            "enable_thinking": true
+          }
+        }
+      },
+      {
         "id": "glm-5.2",
         "name": "[Token Plan 团队版] glm-5.2",
         "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
@@ -365,7 +393,7 @@ qwen --version
     "region": "china"
   },
   "model": {
-    "name": "qwen3.8-max"
+    "name": "qwen3.8-flash"
   },
   "$version": 3
 }

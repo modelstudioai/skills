@@ -51,7 +51,7 @@
 
 ### 数据处理节点
 
--   [变量处理节点](raw/application-user-guide/llm-application/workflow-application/variable-processing-node.md)
+-   [变量处理节点](https://help.aliyun.com/zh/model-studio/workflow/variable-processing-node)
 -   [变量赋值节点](raw/application-user-guide/llm-application/workflow-application/variable-assignment-node.md)
 -   [文档解析节点](raw/application-user-guide/llm-application/workflow-application/document-extraction-node.md)
 -   [图片解析节点](raw/application-user-guide/llm-application/workflow-application/image-extraction-node.md)

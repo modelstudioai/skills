@@ -56,7 +56,7 @@ print(response)
 
 ## DashScope 方式调用
 
-支持百炼所有的文本生成模型，完整列表与调用费用请参考：[选择模型](raw/model-user-guide/get-started-with-models/models.md)。（也支持[部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)后的模型）
+支持百炼所有的文本生成模型，完整列表与调用费用请参考：[选择模型](raw/model-user-guide/get-started-with-models/models.md)。（也支持[部署](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)后的模型）
 
 使用前需要安装 LlamaIndex 核心组件和 DashScopeLLM：
 

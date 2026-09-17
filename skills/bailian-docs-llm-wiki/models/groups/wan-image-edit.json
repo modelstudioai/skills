@@ -54,6 +54,11 @@
       "modelAlias": "",
       "versionTag": "MAJOR",
       "latestOnlineAt": "2026-04-01T03:48:10.000+00:00",
+      "trainingTypes": {
+        "sft": [
+          "lora"
+        ]
+      },
       "inferenceProvider": "aliyun-bailian",
       "name": "Wan2.7-Image",
       "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/wan-image-generation-and-editing-api-reference",
@@ -122,7 +127,9 @@
       "versionTag": "MAJOR",
       "latestOnlineAt": "2026-04-01T05:32:16.000+00:00",
       "trainingTypes": {
-        "sft": []
+        "sft": [
+          "lora"
+        ]
       },
       "inferenceProvider": "aliyun-bailian",
       "name": "Wan2.7-Image-Pro",

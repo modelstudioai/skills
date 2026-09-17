@@ -6,7 +6,7 @@
 
 模型压缩通过量化技术将全精度微调模型转换为低精度版本，在保持模型能力的前提下降低部署所需的 MU 规格，从而减少推理部署成本。百炼平台的模型压缩特指量化，不涉及结构剪枝或知识蒸馏。
 
-模型压缩是模型生产链路中的可选环节，完整链路为：[模型调优](raw/model-user-guide/fine-tuning.md) → 模型压缩 → [模型部署](raw/model-user-guide/model-deployment-1.md)。您需要先完成模型微调训练，再对产出的微调模型执行压缩，最后将压缩后的模型部署为推理服务。
+模型压缩是模型生产链路中的可选环节，完整链路为：[模型调优](raw/model-user-guide/fine-tuning.md) → 模型压缩 → [模型部署](raw/model-user-guide/model-deployment-index.md)。您需要先完成模型微调训练，再对产出的微调模型执行压缩，最后将压缩后的模型部署为推理服务。
 
 **重要**压缩不可逆。压缩后的模型不支持继续微调，也不支持二次压缩。请在压缩前确认量化模板选择。
 
@@ -200,7 +200,7 @@ MU8\*1（¥47/小时）
 ## 计费说明
 
 -   压缩任务本身限时免费，截止时间以控制台公告为准。
--   压缩后的模型在部署阶段按 MU 规格计费。详细的部署计费信息，请参见[模型部署](raw/model-user-guide/model-deployment-1.md)。
+-   压缩后的模型在部署阶段按 MU 规格计费。详细的部署计费信息，请参见[模型部署](raw/model-user-guide/model-deployment-index.md)。
 
 以 qwen3.5-flash-2026-02-23 微调模型为例，压缩前后的部署规格与价格请参见[支持压缩的模型](https://help.aliyun.com/zh/model-studio/model-compression-introduction#y1v7eq6mi3ph7)，部署成本节省约 56%。建议在免费期内对比多个量化模板的压缩效果，选择最优方案后再正式部署。
 

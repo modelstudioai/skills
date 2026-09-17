@@ -184,7 +184,7 @@
         -   **适用场景：**
             -   适用于企业内部文档、产品手册等非结构化数据（即未按预定义表结构组织的数据，包含文本、表格和图片）的检索。
             -   若[文件包含图片，且需阿里云百炼应用在回答中返回](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)，请选择**文档搜索**。
-        -   **选择连接器：**选择指定数据连接器。如未创建数据连接器，请参阅[数据连接](raw/application-user-guide/data-connection-overview/data-connection.md)。
+        -   **选择连接器：**选择指定数据连接器。如未创建数据连接器，请参阅[数据连接](raw/application-user-guide/overview/data-connection-overview/data-connection.md)。
             
         -   **数据来源：**支持本地上传文件或从阿里云对象存储OSS导入。
             
@@ -475,7 +475,7 @@
                 
             -   支持导入单份xlsx、xls格式的文档，文件大小限制20MB以内。
                 
-        -   **选择连接器：**选择指定的数据连接器。如尚未创建数据连接器，请参阅[数据连接](raw/application-user-guide/data-connection-overview/data-connection.md)。
+        -   **选择连接器：**选择指定的数据连接器。如尚未创建数据连接器，请参阅[数据连接](raw/application-user-guide/overview/data-connection-overview/data-connection.md)。
             
         -   **数据源接入：**支持本地上传 XLS 或 XLSX 文件，或从阿里云数据库RDS导入数据。
             
@@ -560,7 +560,7 @@
     -   **图片问答（图搜场景）**
         -   **适用场景：**
             -   适合构建以图搜图、以图搜"图文"的多模态检索应用，如商品导购助手、视觉问答助手等。
-        -   **选择连接器：**选择指定的数据连接器。如尚未创建数据连接器，请参阅[数据连接](raw/application-user-guide/data-connection-overview/data-connection.md)。
+        -   **选择连接器：**选择指定的数据连接器。如尚未创建数据连接器，请参阅[数据连接](raw/application-user-guide/overview/data-connection-overview/data-connection.md)。
             
         -   **数据源接入：**支持本地上传 XLS 或 XLSX 文件，或从阿里云数据库RDS导入数据。
             
@@ -653,7 +653,7 @@
         -   **适用场景：**
             -   构建基于音视频内容的智能检索与问答应用，如直播回放问答、课程助教、客服质检等。
             -   基于多模态内容进行二次创作（根据文字需求从知识库检索音视频片段，生成脚本、字幕或剪辑建议）。
-        -   **选择连接器：**选择指定的数据连接器。如尚未创建数据连接器，请参阅[数据连接](raw/application-user-guide/data-connection-overview/data-connection.md)。
+        -   **选择连接器：**选择指定的数据连接器。如尚未创建数据连接器，请参阅[数据连接](raw/application-user-guide/overview/data-connection-overview/data-connection.md)。
             
         -   **数据源接入：**支持本地上传音视频文件，或[从阿里云对象存储OSS导入](https://help.aliyun.com/zh/model-studio/data-import-instructions)。支持的音频格式：MP3、WAV、AAC、FLAC、OGG、M4A、WMA；支持的视频格式：MP4、AVI、MOV、MKV、FLV、WMV。
             

@@ -210,7 +210,7 @@ Token Plan 团队版存在并发限制。平台会根据整体资源负载动态
 
 等待一分钟后重试，降低请求频率；多 Agent 并行时减少并发的 Agent 数量
 
-429 Allocated quota exceeded
+429 insufficient\_quota: Your token-plan quota has been exhausted.
 
 坐席月度额度用尽
 

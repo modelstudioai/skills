@@ -1,45 +1,54 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台中一种实时、增量返回模型响应内容的通信模式，适用于需要低延迟交互、长文本生成或实时语音合成等场景。它通过持续发送分块数据（如 token、音频帧、文本片段），使客户端能在模型推理过程中逐步消费结果，而非等待整个响应完成。
+流式输出（Streaming Output）是百炼平台提供的一种实时响应机制，允许模型在生成过程中持续、分块地将结果（如文本 token、音频片段或结构化事件）逐段返回给客户端，而非等待全部内容生成完毕后一次性返回。该机制显著降低端到端延迟，提升用户交互体验，并支持前端实时渲染、语音流式合成、长文本渐进式处理等关键场景。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **Application Call（智能体/工作流调用）**：支持 DashScope 原生 API 和 OpenAI 兼容 Responses API。启用后，服务端以 Server-Sent Events（SSE）格式逐块返回 `content`、`tool_calls`、`thought`（若开启思考模式）等字段；适用于客服对话、RAG 实时检索反馈、多步骤 Agent 执行过程可视化等场景。注意：Responses API 的异步调用（`background=true`）不支持流式输出。
+流式输出在百炼平台中统一支持但语义与实现细节因调用路径而异，开发者需按实际接口类型选择对应模式：
 
-- **Omni Realtime API（多模态实时语音交互）**：基于 WebSocket 的原生流式协议，同时输出文本增量（`conversation.item.output.text.delta`）和音频流（`conversation.item.output.audio.delta`），支持 VAD 触发下的实时打断与重写，是构建语音助手、智能座舱等低延迟应用的核心能力。
+- **标准 Chat API（`/v1/chat/completions`）**：启用 `stream=true` 后，服务端以 SSE（Server-Sent Events）格式返回 `data: {...}` 事件流；每个事件含 `delta.content` 字段（增量文本），`delta.role`（首次出现时）、`finish_reason`（结束标识）等。适用于通用对话、RAG问答、[函数调用](function-calling.md)等场景。
 
-- **Realtime API（ASR/TTS 专用）**：同样基于 WebSocket，提供 ASR 中间识别结果（`response.text.delta`）和 TTS 合成音频流（`response.audio.delta`），支持毫秒级端到端延迟，适用于实时字幕、语音会议转录等强实时性需求。
+- **Application Call（智能体/工作流调用）**：  
+  - 新版/旧版智能体：支持 `stream=true` + `incremental_output=true` 组合，确保每次返回仅含新增 token（非全量重传），避免前端重复渲染；`delta.content` 可能为空（尤其在 function call 过渡阶段），需容错处理。  
+  - 工作流：通过 `flow_stream_mode` 控制流式行为，推荐 `message_format_plus`（返回结构化消息块，含 `type`、`content`、`tool_calls` 等字段），便于前端区分文本、工具调用、状态变更等事件类型。
 
-- **Sandbox（沙箱调试环境）**：支持流式推理，返回 `choices[0].delta.content` 格式的增量文本，便于开发者在本地快速验证提示词效果、token 消耗节奏及结构化输出稳定性，无需等待完整响应即可观察模型行为。
+- **应用组件 API（`/services/aigc/text-generation/generation`）**：启用 `stream=true` 后响应体为 SSE 格式，字段命名与非流式一致（如 `output.text`），但值为增量内容；需按 `data:` 行解析并累积 `output.text` 字段。
 
-- **Toolkits & Frameworks（[OpenAI 兼容接口](openai-compatible-api.md)）**：`chat/completions` 和 `responses` 接口完全兼容 OpenAI 的 `stream=true` 参数；部分视觉模型（如 `QVQ`）**仅支持流式输出**，必须启用该模式才能正常调用。`completions` 和 `embeddings` 接口则不支持流式。
+- **Realtime API（WebSocket/AOQ/WebRTC）**：本质即流式架构，不依赖 `stream` 参数。服务端通过标准化事件（如 `response.text.delta`、`response.audio.delta`、`response.function_call`）实时推送增量内容，客户端需监听对应事件类型并按需消费。适用于语音助手、实时音视频交互等低延迟场景。
+
+- **Omni Realtime API（WebSocket）**：基于事件驱动的原生流式协议，所有输出均为增量事件（如 `response.text.delta`、`response.audio.delta`），无需额外参数开启；`modalities` 配置决定是否同时输出文本与音频流。
 
 ## 关键参数和配置
 
-| 接口类型 | 启用方式 | 关键参数/头信息 | 增量控制 | 注意事项 |
-|----------|-----------|------------------|------------|------------|
-| **Application Call (DashScope)** | Header 控制 | `X-DashScope-SSE: enable` | `incremental_output=true`（返回 delta）<br>`false`（返回全量追加） | `stream` 字段在请求体中不生效，仅靠 Header 控制；`incremental_output` 仅在流式下有效 |
-| **Application Call (Responses API)** | 请求体字段 | `"stream": true` | 默认 delta 输出（OpenAI 兼容） | 异步调用（`"background": true`）禁止设置 `stream=true`，否则报错 |
-| **Omni Realtime / Realtime API** | WebSocket 协议内建 | 无显式参数，连接即启用流式 | 由事件类型天然区分（`.delta` 事件即为增量） | 必须维持 WebSocket 长连接；需按帧解析 `delta` 事件并拼接 |
-| **Sandbox** | 请求体字段 | `"stream": true` | OpenAI 兼容 delta 格式（`choices[0].delta.content`） | 不支持 `stream=false` 与 `stream=true` 混合调用同一实例；超时销毁逻辑不受流式影响 |
-| **[OpenAI 兼容接口](openai-compatible-api.md)（chat/responses）** | 请求体字段 | `"stream": true` | 完全遵循 OpenAI streaming JSON Lines 格式 | 使用 `base_url` 必须为业务空间专属域名（如 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`），否则流式响应可能中断 |
+| 参数名 | 类型 | 作用域 | 说明 |
+|--------|------|--------|------|
+| `stream` | boolean | 全局（Chat API、Application Call、应用组件 API） | 必须设为 `true` 以启用流式响应；默认 `false`（同步阻塞式）。 |
+| `incremental_output` | boolean | 智能体类 API（新版/旧版智能体） | 仅当 `stream=true` 时生效；设为 `true` 表示返回增量 delta（推荐），`false` 表示每次返回当前完整 content（不推荐，易导致重复渲染）。 |
+| `flow_stream_mode` | string | 工作流 API | 取值 `message_format_plus`（推荐，结构化消息块）、`message_format`（兼容旧版）、`full_thoughts`（含内部推理链，已不推荐）。 |
+| `X-DashScope-SSE: enable` | HTTP Header | DashScope 原生 Application Call | HTTP 直接调用时必需，用于显式声明启用 SSE 协议。 |
+| `x-dashscope-rtc-transport` | HTTP Header | Realtime API | 指定传输协议（`websocket`/`webrtc`/`moq`），决定底层流式通道类型。 |
 
-> ⚠️ 通用限制：所有流式接口均不支持 HTTP 重定向；客户端需正确处理 chunked transfer encoding 或 WebSocket message 分片；建议设置合理的连接超时（推荐 ≥ 120s）以应对长生成任务。
+> ⚠️ 注意事项：  
+> - 所有流式响应均需按 **SSE 协议** 解析（以 `data:` 开头的行，忽略空行及 `event:`/`id:` 等可选字段）；  
+> - `delta.content` 可能为空字符串（尤其在 function call 或 tool call 过渡阶段），请勿直接拼接，应检查 `delta.content` 是否存在且非空；  
+> - 流式响应中 `finish_reason` 出现在最后一个事件，用于判断生成是否完成（如 `"stop"`、`"length"`、`"function_call"`）；  
+> - SDK 用户建议直接使用 `dashscope>=1.20.0`，其内置流式迭代器（如 `for chunk in response:`）已自动处理 SSE 解析与 delta 累积。
 
 ## 面向开发者，简洁实用
 
-- ✅ **优先启用流式**：只要前端能处理增量数据（如 React useEffect + useState 追加渲染、WebSocket onmessage 解析），就应默认开启 `stream=true` —— 它显著降低首字节延迟（TTFB），提升用户体验。
-- ✅ **拼接 delta 而非依赖 finish_reason**：`delta.content` 可能为空（如工具调用前的空格），请始终检查 `delta.content` 是否存在且非空再追加；最终响应以 `event: done` 或 `finish_reason` 字段为准。
-- ✅ **错误处理要流式感知**：流式响应中可能夹杂 `error` 事件（如 Omni Realtime 的 `error` 事件、Responses 的 `{"error":{...}}` chunk），需在接收循环中实时捕获并中断。
-- ❌ **勿在流式中混用同步语义**：例如 Application Call 的 `stream=true` 与 `background=true` 冲突；Realtime API 不支持 HTTP GET 轮询模拟流式。
-- 🛠️ **调试建议**：使用 `curl -N`（禁用缓冲）测试 SSE；用 `wscat` 连接 Realtime API 查看原始事件；Sandbox 流式响应可直接用 `openai` Python SDK 的 `stream=True` 复用现有逻辑。
+- ✅ **快速启用**：在请求 body 中添加 `"stream": true`，HTTP 请求头加 `X-DashScope-SSE: enable`（Application Call），即可获得流式响应。  
+- ✅ **安全消费**：用 `while` 循环读取响应流，对每个 `data:` 行 JSON 解析，提取 `delta.content` 并追加到本地 buffer；遇 `finish_reason` 则终止。  
+- ✅ **前端渲染建议**：使用 `<span id="output"></span>` + `element.textContent += chunk` 实现逐字显示；语音场景建议缓冲 `response.audio.delta` 后交由 Web Audio API 播放。  
+- ❌ **避免踩坑**：不要假设 `delta.content` 永不为空；不要用 `response.message.content` 替代 `delta.content`（流式下该字段不存在）；不要在未设置 `X-DashScope-SSE` 时调用 Application Call 流式接口（将返回 400 错误）。  
+- 📦 **SDK 推荐**：Python 使用 `dashscope.ChatCompletion.create(..., stream=True)`；Node.js 使用 `@alicloud/dashscope-sdk-js` 的 `stream()` 方法；所有 SDK 均自动处理 SSE 解析与错误重试。
 
 ## 关联主题页
 
+- [start using](../guides/start-using.md)
 - [application call](../api/application-call.md)
+- [application component api reference](../api/application-component-api-reference.md)
 - [omni realtime api](../api/omni-realtime-api.md)
 - [realtime api user guide](../api/realtime-api-user-guide.md)
-- [sandbox](../guides/sandbox.md)
-- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
+- [application support](../guides/application-support.md)
 
 

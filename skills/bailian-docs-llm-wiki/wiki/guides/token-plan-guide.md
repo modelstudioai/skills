@@ -1,38 +1,35 @@
 # token plan guide
 
-Token Plan 是百炼平台为模型调用提供的资源配额管理机制，用于控制 API 调用量、保障服务稳定性并支持按需弹性伸缩。开发者可通过 Token Plan 统一分配和监控不同模型、环境或团队的调用额度。其设计兼顾灵活性与可审计性，适用于个人开发、团队协作及生产级部署场景。
+[Token](../concepts/token.md) Plan 是百炼平台为模型调用提供的资源配额管理机制，用于控制 API 调用的 token 消耗总量与速率。它适用于不同规模的应用场景，支持按模型、调用路径和用户身份进行精细化配额分配。开发者需结合业务负载合理配置，避免因超限导致请求被拒绝。
 
 ## 支持的模型/功能
 
-Token Plan 当前覆盖全部百炼托管模型（含 Qwen 系列、Qwen-VL、Qwen-Audio 及第三方接入模型），并支持以下核心能力：  
-- 按模型 ID 或模型别名（如 `qwen-max`）设置独立配额  
-- 区分同步调用（`/v1/chat/completions`）与异步任务（`/v1/batch`）的额度控制  
-- 与百炼工作区（Workspace）权限体系深度集成，支持子账号继承父级 Plan 配置  
-详细支持列表请参见 [Token Plan 概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md)。
+[Token](../concepts/token.md) Plan 当前覆盖全部百炼托管模型（含 Qwen 系列、Qwen-VL、Qwen-Audio）及部分第三方模型接入通道。基础能力包括：按请求计费（input + output tokens）、并发数限制、突发流量缓冲（burst allowance），以及跨模型共享配额池（仅限团队版）。[Token Plan 概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md) 中明确指出，Coding Plan 作为独立子计划，仅对 `/v1/coding/*` 接口生效，不参与通用 token 配额统计。
 
 ## 关键参数
 
-创建或更新 Token Plan 时需指定以下必填/关键字段：  
-- `model`: 字符串，模型标识（如 `qwen-plus`），支持通配符 `*` 表示全部模型（仅限企业版）  
-- `limit`: 整数，单位为千 tokens/日（例如 `500` 表示每日 50 万 tokens）  
-- `window`: 字符串，时间窗口类型，仅支持 `"day"`（不支持 `"hour"` 或 `"month"`，该限制在 [进阶配置](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice.md) 中有明确说明）  
-- `scope`: 字符串，作用域，可选 `"user"`（当前账号）、`"workspace"`（当前工作区）或 `"team"`（团队版专属）  
-> **注意**：原始文档中 [个人版](../../raw/model-user-guide/token-plan-guide/token-plan-personal.md) 提到 `window: "hour"` 为合法值，但该描述已过时；实际 API 仅接受 `"day"`，否则返回 `400 Bad Request`。
+- `max_tokens_per_request`：单次请求最大输出 token 数（默认 2048，不可超过模型原生上限）  
+- `tokens_per_minute`：每分钟总 token 配额（含 input + output）  
+- `requests_per_minute`：每分钟最大请求数（硬性限流阈值）  
+- `burst_capacity`：突发令牌桶容量（单位：tokens），默认为 `tokens_per_minute / 60 * 5`  
+- `model_whitelist`：显式指定生效模型列表（如 `qwen-max`, `qwen-plus`），空值表示全部支持模型  
+
+> **注意**：[个人版](../../raw/model-user-guide/token-plan-guide/token-plan-personal.md) 文档中列出的 `burst_capacity` 默认值为固定 100，但 [进阶配置](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice.md) 明确说明该值动态计算且可覆盖，以后者为准。
 
 ## 使用方式
 
-1. **创建 Plan**：调用 `POST /v1/token-plans`，传入 JSON body（含 `model`, `limit`, `window`, `scope`）  
-2. **绑定调用**：在请求 Header 中添加 `X-Token-Plan-ID: <plan_id>` 即可启用配额校验  
-3. **查询用量**：调用 `GET /v1/token-plans/{id}/usage?date=2024-06-01` 获取指定日期用量  
-完整示例与错误码说明见 [玩法攻略](../../raw/model-user-guide/token-plan-guide/token-plan-playbooks.md)。
+1. 在控制台「模型服务 → [Token](../concepts/token.md) Plan」创建新计划，或通过 OpenAPI `POST /v1/token-plans` 提交 JSON 配置；  
+2. 将计划绑定至具体模型服务（Service ID）或 API Key；  
+3. 发起调用时，HTTP Header 中需携带 `x-bailian-token-plan-id: <plan_id>`（服务端绑定模式下可省略）；  
+4. 实时用量可通过 `GET /v1/token-plans/{id}/usage` 查询，响应包含 `used_tokens_this_minute` 和 `remaining_burst` 字段。[玩法攻略](../../raw/model-user-guide/token-plan-guide/token-plan-playbooks.md) 提供了灰度发布、AB 测试等典型绑定策略示例。
 
 ## 限制和注意事项
 
-- 单个 Plan 仅能绑定一个 `model`（不支持多模型聚合配额）  
-- 配额按自然日（UTC+8）重置，不可跨日累计或借用  
-- 若未显式指定 `X-Token-Plan-ID`，请求将走默认无配额通道（受全局速率限制约束）  
-- 团队版用户需通过 [团队版](../../raw/model-user-guide/token-plan-guide/token-plan-team-edition.md) 文档了解成员继承规则与管理员审批流  
-> **注意**：`Coding Plan` 是 Token Plan 的专用子集，仅适用于 `/v1/coding` 接口，其配额不与通用模型 Plan 互通；相关细节请参考 [Coding Plan](../../raw/model-user-guide/token-plan-guide/coding-plan-guide.md)。
+- 单个 Token Plan 最多绑定 50 个 Service 或 API Key；  
+- 修改 `tokens_per_minute` 后，新配额在下一个整分钟生效（非实时）；  
+- 输出 token 统计以模型实际返回的 `usage.output_tokens` 为准，若模型未返回该字段（如部分旧版兼容接口），将按响应长度粗略估算；  
+- 免费额度不叠加 Token Plan 配额，优先消耗免费 quota，超出后才触发 Plan 限流；  
+- [团队版](../../raw/model-user-guide/token-plan-guide/token-plan-team-edition.md) 支持配额继承与子账户隔离，但子账户无法单独创建 Plan，必须由管理员分配。
 
 ## 来源文档
 

@@ -63,7 +63,7 @@
 
 替换 model 参数即可
 
-PTU（[模型部署](raw/model-user-guide/model-deployment-1/model-deployment-introduction.md)）
+PTU（[模型部署](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)）
 
 按 kTPM 预付费
 
@@ -274,100 +274,76 @@ DeepSeek-v4-Pro-0813
 
 **模型**
 
+**类型**
+
 **输入长度上限**
 
 **缓存折扣**
 
 **长输入阶梯系数**
 
-Qwen3.8-max
+qwen3.8-max
 
-1 Million
+TPM 预留
+
+（0,1M）
 
 0.125
 
-无阶梯（1.0）
+1
 
-Qwen3.6-flash-2026-04-16
+qwen3.7-flash-2026-07-15
 
-256K
+TPM 预留
 
-不支持缓存
+（0,1M）
 
-无阶梯（1.0）
+0.2
 
-其他 Qwen 系列
+输入输出相同  
+(0,32k\] 1x  
+(32k,256k\] 3x  
+(256,1m\] 6x
 
-256K
+deepseek-v4-flash-0731
 
-0.2（缓存命中部分按 20% 折算容量）
+TPM 预留
 
-无阶梯（1.0）
+（0,1M）
+
+0.1
+
+1
+
+deepseek-v4-pro-0813
+
+TPM 预留
+
+（0,1M）
+
+0.1
+
+1
+
+glm-5.3
+
+TPM 预留
+
+（0,1M）
+
+0.25
+
+1
 
 glm-5.2
 
-1 Million
+TPM 预留
 
-0.25（缓存命中部分按 25% 折算容量）
+（0,1M）
 
-无阶梯（1.0）
+0.25
 
-GLM-5.3
-
-1 Million
-
-0.25（缓存命中部分按 25% 折算容量）
-
-无阶梯（1.0）
-
-glm-5.1
-
-200K
-
-0.2（缓存命中部分按 20% 折算容量）
-
-\[0, 32K)：输入 1.0 / 输出 1.0  
-\[32K, 200K\]：输入 1.33 / 输出 1.17  
-
-DeepSeek-v4-Pro-0813
-
-1 Million
-
-0.1（缓存命中部分按 10% 折算容量）
-
-无阶梯（1.0）
-
-DeepSeek-v4-Pro
-
-256K
-
-0.08（缓存命中部分按 8% 折算容量）
-
-无阶梯（1.0）
-
-DeepSeek-v4-Flash-0731
-
-1 Million
-
-0.1（缓存命中部分按 10% 折算容量）
-
-无阶梯（1.0）
-
-DeepSeek-v4-Flash
-
-256K
-
-0.2（缓存命中部分按 20% 折算容量）
-
-无阶梯（1.0）
-
-Kimi-K2.6
-
-256K
-
-0.2（缓存命中部分按 20% 折算容量）
-
-无阶梯（1.0）
+1
 
 ## 创建 吞吐预留
 
