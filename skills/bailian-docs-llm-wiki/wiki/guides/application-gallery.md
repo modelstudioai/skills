@@ -1,46 +1,37 @@
 # application gallery
 
-应用广场是百炼平台提供的预置应用集合，面向开发者提供开箱即用的行业级 Agent 和多模态能力封装。所有应用均基于平台统一的 Runtime 执行环境部署，支持快速集成、参数化调用与轻量定制。开发者可通过 API 或控制台直接调用，无需从零构建底层模型链路。
+应用广场是百炼平台提供的预置应用集合，面向开发者提供开箱即用的 AI 能力封装，覆盖教育、音视频、法律、金融、客服、数据挖掘、[多模态](../concepts/multi-modal.md)交互等多个垂直场景。所有应用均基于百炼托管模型构建，支持快速集成与二次开发。开发者可通过控制台或 API 直接调用，无需自行部署底层模型。
 
 ## 支持的模型与功能
 
-应用广场中的每个应用均已绑定特定模型栈与功能边界，例如：
-- `通义听悟Agent` 依赖 ASR + LLM + TTS 多阶段流水线，专用于会议纪要生成与语音内容结构化；
-- `通义 UI Agent` 基于视觉语言模型（VLM）与动作规划模块，支持网页/APP 界面理解与自动化操作；
-- `千问联网检索Agent` 集成 Qwen-72B + RAG 检索增强模块，实时调用搜索引擎接口补充知识。
+应用广场中的每个应用均绑定特定模型栈与能力组合，例如：
+- 通义法睿（[官方应用-通义法睿](../../raw/application-user-guide/application-gallery/tongyi-farui.md)）基于 Qwen2.5-72B-Instruct + 法律知识图谱；
+- 通义听悟Agent（[官方应用-通义听悟Agent](../../raw/application-user-guide/application-gallery/official-application-tingwu-agent.md)）依赖 ASR + LLM + TTS 多阶段流水线；
+- 通义 UI Agent（[官方应用-通义 UI Agent](../../raw/application-user-guide/application-gallery/ui-agent.md)）使用 Qwen-VL 系列[多模态](../concepts/multi-modal.md)模型解析界面截图并生成操作指令。
 
-全部官方应用清单及对应能力说明详见 [应用广场](../../raw/application-user-guide/application-gallery.md)。
+> **注意**：部分轻应用（如全妙轻应用系列）实际调用的是共享推理实例，不独占模型资源，其响应延迟与并发能力不同于独立部署的官方应用（参见 [官方应用-全妙轻应用系列](../../raw/application-user-guide/application-gallery/quanmiao-light-application-series.md)）。
 
 ## 关键参数
 
-调用任一应用时，需传入以下通用参数（部分应用支持扩展参数）：
+调用任一应用时，需在请求体中指定以下必选参数：
+- `app_id`：应用唯一标识（可在控制台「应用广场」页获取）；
+- `input`：结构化输入对象，schema 因应用而异（详见各应用文档，如 [通义深度搜索](../../raw/application-user-guide/application-gallery/tongyi-deepsearch.md) 要求 `query` + `filters`）；
+- `timeout`：最大等待毫秒数（默认 30000，部分长任务应用如析言GBI建议设为 120000）。
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `app_id` | string | 是 | 应用唯一标识，如 `tingwu-agent`、`ui-agent`，可在 [应用广场](../../raw/application-user-guide/application-gallery.md) 中查得 |
-| `input` | object | 是 | 输入数据结构，格式因应用而异（如 `tingwu-agent` 接受音频 URL，`ui-agent` 接受截图 base64） |
-| `parameters` | object | 否 | 可选配置项，例如 `max_steps`（UI Agent 最大操作步数）、`enable_web_search`（联网检索 Agent 开关） |
-
-具体参数定义请参考各应用子文档，例如 [官方应用-通义听悟Agent](../../raw/application-user-guide/application-gallery/official-application-tingwu-agent.md) 和 [通义 UI Agent](../../raw/application-user-guide/application-gallery/ui-agent.md)。
+所有应用统一支持 `stream: true` 启用流式响应，但仅限文本类输出应用（[多模态](../concepts/multi-modal.md)输出如音频/图像暂不支持流式）。
 
 ## 使用方式
 
-1. **获取 app_id**：从 [应用广场](../../raw/application-user-guide/application-gallery.md) 列表中确认目标应用 ID（如 `web-search-agent`）；  
-2. **构造请求体**：按对应子文档要求组织 `input` 与 `parameters`；  
-3. **调用 API**：向 `/v1/applications/{app_id}/invoke` 发送 POST 请求（需携带有效 `Authorization` 头）；  
-4. **处理响应**：返回为标准 JSON，含 `output` 字段（结构化结果）与 `trace_id`（用于问题排查）。
-
-> **注意**：部分旧版文档（如 [官方应用-伶鹊CCAI-客服对话Agent](../../raw/application-user-guide/application-gallery/official-application-voicepica-ccai-beebot-agent.md)）中仍标注使用 `/v1/agents/{id}/run` 路径，该路径已废弃，请统一使用 `/v1/applications/{app_id}/invoke`。
+1. **控制台调用**：进入「应用广场」→ 选择目标应用 → 点击「调试」，填写 input 示例后执行；
+2. **API 调用**：向 `POST /v1/applications/{app_id}/invoke` 发送请求（需携带 `Authorization: Bearer <api_key>`）；
+3. **SDK 集成**：使用 `BailianAppClient.invoke(app_id, input)`（Python SDK v1.8.0+ 支持自动重试与错误码映射）。
 
 ## 限制和注意事项
 
-- 单次调用最大输入长度受限于底层模型上下文窗口（如 `tongyi-farui` 为 32k tokens，`web-search-agent` 为 8k tokens），超长内容将被截断；
-- 音频类应用（如 `tingwu-agent`、`aipodcast`）仅支持 MP3/WAV 格式，且单文件 ≤ 100MB；
-- 所有应用默认启用流式响应（`stream=true`），若需完整响应请显式设置 `stream=false`；
-- 应用间不共享会话状态，如需持久化上下文，须由调用方自行维护 `session_id` 并传入 `parameters.session_id`（部分应用支持，详见对应子文档，例如 [通义法睿](../../raw/application-user-guide/application-gallery/tongyi-farui.md)）。
-
----  
-*注：本文档依据截至 2024Q3 的平台能力编写，具体行为以实际 API 响应为准。*
+- 单应用默认 QPS 限制为 5，可通过工单申请提升；
+- 所有应用输入 `input` 字段总大小不得超过 2MB（含 base64 编码图像等二进制内容）；
+- 应用间**不共享上下文**：连续多次调用同一 `app_id` 不构成会话，如需状态保持，须自行维护 session_id 并传入（部分应用如伶鹊CCAI-客服对话Agent 显式支持 `session_id` 字段）；
+- > **注意**：[通义点金](../../raw/application-user-guide/application-gallery/tongyi-dianjin.md) 文档中提及的“支持实时行情订阅”功能当前仅限金融云专有版，公有云用户调用将返回 `403 Forbidden`，该差异未在 [通义数据挖掘](../../raw/application-user-guide/application-gallery/tongyi-docmining.md) 文档中同步说明。
 
 ## 来源文档
 

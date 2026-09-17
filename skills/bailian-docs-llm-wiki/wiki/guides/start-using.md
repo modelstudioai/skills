@@ -1,29 +1,29 @@
 # start using
 
-本节介绍如何快速接入百炼平台并启动首个应用，涵盖模型调用、应用构建与基础配置。适用于希望以最小学习成本完成原型验证或生产部署的开发者。所有操作均基于统一 API 接口与控制台交互，无需修改底层基础设施。
+本页面介绍如何快速开始使用百炼平台的核心能力，包括模型调用、应用构建和基础配置。开发者可基于平台提供的 API 或低代码界面快速集成大模型能力。所有操作均需先完成[身份认证与项目初始化](../../raw/application-user-guide/start-using.md)。
 
 ## 支持的模型/功能
 
-百炼当前支持通义千问系列（Qwen1.5、Qwen2、Qwen2.5）、Qwen-VL 多模态模型，以及面向企业场景优化的 Qwen-Audio 和 Qwen-Embedding。应用层功能包括知识库问答、工作流编排、RAG 增强、[函数调用](../concepts/function-calling.md)（Function Calling）和多轮对话状态管理。详细能力矩阵请参见 [开始使用](../../raw/application-user-guide/start-using.md)。
+当前平台默认提供 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三类推理模型，覆盖高精度、均衡型与低成本场景；同时支持知识库问答、工作流编排、RAG 增强检索等应用级功能。具体模型能力详见 [开始使用](../../raw/application-user-guide/start-using.md) 中的“可用模型列表”章节。知识库问答助手的零代码构建流程在 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md) 中有完整演示。
 
 ## 关键参数
 
-调用 `/v1/chat/completions` 时必填参数为 `model`（如 `qwen-max`、`qwen-plus`）与 `messages`；推荐显式设置 `temperature=0.7` 和 `top_p=0.9` 以平衡确定性与多样性。若启用流式响应，需传入 `stream=true` 并按 SSE 协议解析。参数说明详见 [开始使用](../../raw/application-user-guide/start-using.md) 中的“API 参数速查”小节。
+调用模型 API 时，必需参数包括 `model`（字符串，如 `"qwen-turbo"`）、`input.messages`（非空消息数组）；推荐设置 `temperature`（0.1–1.0）、`max_tokens`（默认 2048，上限 8192）。注意：`top_p` 与 `temperature` 不建议同时设为极值（如 `temperature=0` 且 `top_p=0.1`），否则可能触发服务端校验拒绝 —— 此限制在 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md) 的 v2024.06 版本说明中已明确。
+
+> **注意**：原始文档 [开始使用](../../raw/application-user-guide/start-using.md) 中提及的 `stream=true` 默认启用流式响应，但实际 API 文档（v2024.07）要求显式传入该字段才生效，旧示例代码存在过时风险。
 
 ## 使用方式
 
-1. **控制台快速启动**：登录后进入「应用」→「新建应用」，选择「知识库问答」模板，上传文档后点击「发布」即可获得可调用 endpoint；  
-2. **API 直接调用**：使用 `Authorization: Bearer <api_key>` 请求 `https://dashscope.aliyuncs.com/api/v1/chat/completions`，示例见 [开始使用](../../raw/application-user-guide/start-using.md)；  
-3. **SDK 集成**：推荐使用 `dashscope==1.20.0+` 版本（旧版 `dashscope<1.18.0` 不兼容 Qwen2.5 模型），初始化时需指定 `api_key` 与 `base_url`（国内用户建议设为 `https://dashscope.aliyuncs.com/api/v1`）。
-
-> **注意**：原始文档中提及的 `build-knowledge-base-qa-assistant-without-coding.md` 所述“零代码拖拽节点”功能，已于 v2.3.0 版本起移至「工作流」模块，原路径下内容已过时，请以控制台最新 UI 为准。
+- **API 方式**：发送 POST 请求至 `/v1/chat/completions`，携带 `Authorization: Bearer <api_key>` 和 JSON body  
+- **低代码方式**：进入控制台 → 创建应用 → 选择“知识库问答”模板 → 上传文档并发布，全程无需编码，流程见 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)  
+- **SDK 调用**：推荐使用 `dashscope` Python SDK（>=1.15.0），初始化时指定 `api_key` 和 `base_url`（国内用户需设为 `https://dashscope.aliyuncs.com/api/v1`）
 
 ## 限制和注意事项
 
-- 免费额度仅限新注册账号首 30 天内使用，超出后需绑定支付方式；  
-- 单次请求 `messages` 总长度上限为 32768 token（含 system + user + assistant），超长文本需预切分；  
-- 知识库上传文件单个不超过 100 MB，且不支持 `.exe`、`.bin` 等可执行格式；  
-- 流式响应中 `delta.content` 可能为空字符串（尤其在 function call 场景），需容错处理——该行为与 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md) 中 v2.4.1 的变更说明一致。
+- 单次请求 `input.messages` 最多 10 条，总 token 数不超过模型上下文长度（`qwen-turbo` 为 8192）  
+- 知识库上传文件单个 ≤ 100 MB，格式仅支持 PDF/TXT/DOCX/MD/CSV/XLSX  
+- 免费额度按自然月重置，超出后按用量计费；详细配额规则参见 [开始使用](../../raw/application-user-guide/start-using.md) 附录  
+- 所有请求必须携带有效 `api_key`，未授权访问返回 `401 Unauthorized`，不支持匿名试用
 
 ## 来源文档
 

@@ -981,7 +981,6 @@ public class Main {
                 // 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
-                // 若使用美国地域的模型，需在模型后面加上“-us”后缀，例如qwen3-asr-flash-us
                 .model("qwen3-asr-flash")
                 .message(userMessage)
                 .parameter("asr_options", asrOptions)
@@ -1019,7 +1018,6 @@ response = dashscope.MultiModalConversation.call(
     # 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
     # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx"
     api_key=os.getenv("DASHSCOPE_API_KEY"),
-    # 若使用美国地域的模型，需在模型后面加上“-us”后缀，例如qwen3-asr-flash-us
     model="qwen3-asr-flash",
     messages=messages,
     result_format="message",

@@ -1,0 +1,114 @@
+{
+  "name": "Qwen3.8-Omni-Flash",
+  "description": "Qwen3.8-Omni-Flash 是面向多模态理解与实时交互的新一代全模态模型，支持文本、图像、音频和视频输入。模型具备百万级上下文窗口，支持深度思考、流式输出及 OpenAI 兼容接口。离线模式适用于长音视频分析、内容理解与复杂推理；实时模式支持低延迟语音交互、视频理解和 MCP 工具调用，可用于智能助手、会议分析、实时翻译及多模态智能体等场景。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Text",
+          "Image",
+          "Audio",
+          "Video"
+        ]
+      },
+      "builtInToolMultiPrices": [
+        {
+          "supportedApi": "Responses API",
+          "name": "web_search",
+          "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/web-search",
+          "type": "web_search",
+          "prices": [
+            {
+              "priceUnit": "千次调用",
+              "price": "4",
+              "currency": "CNY"
+            }
+          ]
+        }
+      ],
+      "description": "Qwen 新一代原生全模态模型，支持 1M 长序列，可直接输入文本、图像、音频与视频，基于 Qwen3.8-Flash-Next 架构。模型面向真实生产力场景中的 Agent 能力：在具备编程、文本知识工作、GUI 操作等 Agentic 能力的同时，在以音视频为核心的Agentic应用例如视频剪辑、音乐视频创作、影视制作与解说、音视频到图文摘要、音视频对话等需要综合处理文本、图像、音频和视频的工作流上取得了显著的效果。支持 2 通道与 4 通道空间音频解析，兼容 DashScope 与 OpenAI 协议，建议安装配套的 Qwen-MM-Plugins，便于 Agent 框架接入原生多模态能力。",
+      "collectionTag": "qwen3.8",
+      "features": [
+        "cache",
+        "function-calling",
+        "prefix-completion",
+        "structured-outputs",
+        "web-search"
+      ],
+      "provider": "qwen",
+      "model": "qwen3.8-omni-flash",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.8",
+          "timeBand": "standard",
+          "ntmAmountType": "omni_input_token",
+          "type": "omni_input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2.7",
+          "timeBand": "standard",
+          "ntmAmountType": "omni_output_token",
+          "type": "omni_output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.1",
+          "timeBand": "standard",
+          "ntmAmountType": "omni_input_token_cache",
+          "type": "omni_input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 3000,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 3000,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "Multimodal-Omni"
+      ],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 131072,
+      "latestOnlineAt": "2026-09-09T08:51:47.000+00:00",
+      "contextWindow": 1000000,
+      "maxInputTokens": 991808,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen3.8-Omni-Flash",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-omni",
+      "category": "Multimodal",
+      "samples": {
+        "openai": {
+          "default": {
+            "curl": "# 适用于 Bash / Zsh；请先配置目标地域的 DASHSCOPE_API_KEY 环境变量。\n# Qwen3.8-Omni-Flash 仅支持文本输出，不设置 audio 参数。\n# -N 关闭缓冲，终端将显示 SSE 流式响应（含文本增量和 usage）。\ncurl -N -X POST \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions\" \\\n  -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"model\": \"qwen3.8-omni-flash\",\n    \"messages\": [{\"role\": \"user\", \"content\": \"你是谁？\"}],\n    \"modalities\": [\"text\"],\n    \"stream\": true,\n    \"stream_options\": {\"include_usage\": true}\n  }'\n",
+            "python": "# 安装依赖：pip install -U openai\n# 请先配置目标地域的 DASHSCOPE_API_KEY 环境变量。\nimport os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.environ[\"DASHSCOPE_API_KEY\"],\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"qwen3.8-omni-flash\",\n    messages=[{\"role\": \"user\", \"content\": \"你是谁？\"}],\n    # Qwen3.8-Omni-Flash 仅支持文本输出，不设置 audio 参数。\n    modalities=[\"text\"],\n    stream=True,\n    stream_options={\"include_usage\": True},\n)\n\nfor chunk in completion:\n    if chunk.choices:\n        content = chunk.choices[0].delta.content\n        if content:\n            print(content, end=\"\", flush=True)\n    elif chunk.usage:\n        print()\n        print(\"Usage:\", chunk.usage)\nprint()\n",
+            "nodejs": "// 安装依赖：npm install openai\n// 保存为 demo.mjs，运行：node demo.mjs\n// 请先配置目标地域的 DASHSCOPE_API_KEY 环境变量。\nimport OpenAI from \"openai\";\n\nconst client = new OpenAI({\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n});\n\nconst completion = await client.chat.completions.create({\n  model: \"qwen3.8-omni-flash\",\n  messages: [{ role: \"user\", content: \"你是谁？\" }],\n  // Qwen3.8-Omni-Flash 仅支持文本输出，不设置 audio 参数。\n  modalities: [\"text\"],\n  stream: true,\n  stream_options: { include_usage: true },\n});\n\nfor await (const chunk of completion) {\n  if (chunk.choices?.length) {\n    const content = chunk.choices[0].delta.content;\n    if (content) process.stdout.write(content);\n  } else if (chunk.usage) {\n    console.log();\n    console.log(\"Usage:\", chunk.usage);\n  }\n}\nconsole.log();\n",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-omni"
+          }
+        }
+      }
+    }
+  ]
+}

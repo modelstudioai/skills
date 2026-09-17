@@ -13,7 +13,7 @@
 -   **支持微调的模型**：
     
     -   万相图像生成（文生图/图生图）：wan2.7-image-pro、wan2.7-image。
-    -   千问图像生成（文生图/图生图）：qwen-image-2.0。
+    -   千问图像生成（文生图/图生图）：qwen-image-2.0、qwen-image-2.0-pro。
 
 **说明**万相与千问的微调流程、数据集格式完全一致，仅**超参数**和**训练计费公式**不同：万相按训练步数（`max_steps`）控制训练过程，千问按训练轮数（`n_epochs`）控制。两类模型均支持文生图、图生图（含多图生图）训练任务。本文示例默认以万相模型演示，千问的差异点已在对应章节中标注。
 
@@ -243,7 +243,7 @@ float
 
 #### 千问
 
-qwen-image-2.0 按**训练轮数**（`n_epochs`）控制训练过程，不支持万相的 `max_steps`、`eval_steps` 和 `max_token_length` 参数。
+qwen-image-2.0、qwen-image-2.0-pro 按**训练轮数**（`n_epochs`）控制训练过程，不支持万相的 `max_steps`、`eval_steps` 和 `max_token_length` 参数。两者的超参数一致，仅推荐学习率不同：qwen-image-2.0 为 `5e-5`，qwen-image-2.0-pro 为 `1e-4`。
 
 **字段**
 
@@ -301,7 +301,8 @@ float
 
 **学习率**。控制模型权重更新的幅度。过高可能导致模型变差，过低则变化不明显。推荐使用默认值。
 
-5e-5
+qwen-image-2.0：5e-5  
+qwen-image-2.0-pro：1e-4
 
 —
 
@@ -449,6 +450,37 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
     "training_type": "efficient_sft",
     "hyper_parameters": {
         "learning_rate": 5e-5,
+        "n_epochs": 10,
+        "eval_epochs": 10,
+        "batch_size": 8,
+        "gradient_clip": 0.5,
+        "weight_decay": 0.02,
+        "max_pixels": "2k",
+        "val_img_size": "2k",
+        "generation_type": "t2i",
+        "lora_rank": 32,
+        "save_total_limit": 20
+    }
+}'
+```
+
+#### 千问（qwen-image-2.0-pro）
+
+```
+curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes' \
+--header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+--header 'Content-Type: application/json' \
+--data '{
+    "model": "qwen-image-2.0-pro",
+    "training_datasets": [
+        {
+            "data_source_type": "file_id",
+            "file_id": "<替换为训练数据集的文件id>"
+        }
+    ],
+    "training_type": "efficient_sft",
+    "hyper_parameters": {
+        "learning_rate": 1e-4,
         "n_epochs": 10,
         "eval_epochs": 10,
         "batch_size": 8,
@@ -635,7 +667,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/deployments/<替换为dep
 **说明**
 
 -   **万相**：当前部署后的图像模型仅支持**异步调用**，且返回响应的`message.content`中无`type`字段。以下示例以万相模型演示。
--   **千问**：qwen-image-2.0 微调模型的调用方式与基础模型一致，仅支持**同步接口**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`。请求体与响应格式请参见[千问-文生图API参考](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-api.md)，仅需将其中的 `model` 替换为部署输出的 `deployed_model` 值。
+-   **千问**：qwen-image-2.0、qwen-image-2.0-pro 微调模型的调用方式与基础模型一致，仅支持**同步接口**：`POST https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation`。请求体与响应格式请参见[千问-文生图API参考](raw/model-api-reference/image-generation/qwen-image-api-reference/legacy-qwen-image-models/qwen-image-api.md)，仅需将其中的 `model` 替换为部署输出的 `deployed_model` 值。
 
 步骤4.1：创建图像生成任务，并获取task\_id
 
@@ -900,7 +932,7 @@ wan-image-i2i-training-dataset.zip
 
 #### 多图生图
 
-训练集包括**多张参考图像（输入）、训练目标图像（输出）和标注文件（data.jsonl）**。与单图生图不同，多图生图支持同时输入多张参考图像（如人物照片+姿态图），模型基于多张参考图的综合信息生成目标图像。参考图数量上限因模型而异：万相最多支持**9张**，千问（qwen-image-2.0）最多支持**3张**，与基础模型一致。
+训练集包括**多张参考图像（输入）、训练目标图像（输出）和标注文件（data.jsonl）**。与单图生图不同，多图生图支持同时输入多张参考图像（如人物照片+姿态图），模型基于多张参考图的综合信息生成目标图像。参考图数量上限因模型而异：万相最多支持**9张**，千问（qwen-image-2.0、qwen-image-2.0-pro）最多支持**3张**，与基础模型一致。
 
 **说明**
 
@@ -975,7 +1007,7 @@ wan-image-i2i-valid-dataset.zip
     
     #### 多图生图
     
-    多图生图验证集使用`input_imgs`（数组）传入多张参考图像路径，数量上限与训练集一致：万相最多**9张**，千问（qwen-image-2.0）最多**3张**。
+    多图生图验证集使用`input_imgs`（数组）传入多张参考图像路径，数量上限与训练集一致：万相最多**9张**，千问（qwen-image-2.0、qwen-image-2.0-pro）最多**3张**。
     
     ```
     {
@@ -1422,9 +1454,9 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
     
     5,120
     
-    qwen-image-2.0 的训练 Token 总量按 **n\_epochs × 训练集图片数 × (max\_pixels / 压缩率) × GPU系数** 计算，训练单价为 0.02 元/千 Token。其中压缩率为 VAE 固定压缩比例（1024），GPU系数根据任务调度情况动态调整，`batch_size` 不参与计费、不影响训练 Token 总量。完整公式与计算示例请参见[模型训练计费](raw/model-user-guide/test-1/model-training-and-deployment-billing.md)。
+    qwen-image-2.0、qwen-image-2.0-pro 的训练 Token 总量按 **n\_epochs × 训练集图片数 × (max\_pixels / 压缩率) × GPU系数** 计算，训练单价为 0.02 元/千 Token。其中压缩率为 VAE 固定压缩比例（1024），GPU系数根据任务调度情况动态调整，`batch_size` 不参与计费、不影响训练 Token 总量。完整公式与计算示例请参见[模型训练计费](raw/model-user-guide/test-1/model-training-and-deployment-billing.md)。
     
-    下表列出了 qwen-image-2.0 在 GPU系数按 8 计算时，**每 1 张训练图片**的 Token 消耗与预估费用。训练集包含 N 张图片时，将表中数值乘以 N 即可。该数据仅供参考，费用请以正式账单为准。
+    下表列出了 qwen-image-2.0、qwen-image-2.0-pro 在 GPU系数按 8 计算时，**每 1 张训练图片**的 Token 消耗与预估费用。训练集包含 N 张图片时，将表中数值乘以 N 即可。该数据仅供参考，费用请以正式账单为准。
     
     **max\_pixels**
     
@@ -1491,6 +1523,10 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
     qwen-image-2.0
     
     0.20元/张
+    
+    qwen-image-2.0-pro
+    
+    0.50元/张
     
 
 ## API文档

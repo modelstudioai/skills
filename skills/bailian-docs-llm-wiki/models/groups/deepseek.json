@@ -326,6 +326,7 @@
       "maxInputTokens": 1000000,
       "inferenceProvider": "aliyun-bailian",
       "name": "DeepSeek-V4-Pro-0813",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/deepseek-api",
       "category": "Third-party",
       "samples": {
         "openai": {

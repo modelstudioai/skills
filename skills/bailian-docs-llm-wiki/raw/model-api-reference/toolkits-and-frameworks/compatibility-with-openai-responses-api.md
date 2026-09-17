@@ -16,9 +16,11 @@
 
 ## 支持的模型
 
-`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-max-2026-05-17`、`qwen3.7-max-preview`、`qwen3-max`、`qwen3-max-2026-01-23`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-04-20`、`qwen3.5-plus-2026-02-15`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`deepseek-v4.1-flash`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`glm-5.3`、`glm-5.2`、`kimi-k3`
+`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-max-2026-05-17`、`qwen3.7-max-preview`、`qwen3-max`、`qwen3-max-2026-01-23`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-04-20`、`qwen3.5-plus-2026-02-15`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`deepseek-v4.1-flash`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`glm-5.3`、`glm-5.2`、`kimi-k3`
 
 **重要**非列表中阿里云百炼直供文本生成模型仅支持基础兼容能力，Agent 能力（内置工具等）受限。
+
+使用 `qwen3.8-omni-flash` 处理音视频输入并生成文本回复，示例见[Omni 调用指南](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)。
 
 ## 服务地址
 
@@ -332,15 +334,9 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ### 深度思考
 
-通过 `reasoning` 参数控制模型的推理强度。设置 `reasoning.effort` 后，模型会在回复前进行思考，思考内容通过 `reasoning` 类型的输出项返回。`effort` 支持以下取值：
+通过 `reasoning.effort` 控制思考强度，支持的档位及默认值因模型而异，详见 [reasoning 参数说明](raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。思考内容通过 `reasoning` 类型的输出项返回。
 
--   `none`：关闭思考，直接回答
--   `minimal`：最小化思考，最快速响应
--   `low`：轻度思考，侧重快速响应
--   `medium`（默认值）：中度思考，平衡速度与思考深度
--   `high`：深度思考，侧重处理复杂专业问题
-
-> 不支持 `thinking_budget` 参数控制最大思维长度。`reasoning.effort` 的优先级高于 `enable_thinking`，建议优先使用 `reasoning.effort`，`enable_thinking` 后续将不再支持。
+下方 `qwen3.8-max` 示例使用 `reasoning.effort`，该参数的优先级高于 `enable_thinking`；不支持通过 `thinking_budget` 控制最大思考长度。
 
 Python
 
@@ -584,6 +580,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 开启内置工具可在处理复杂任务时获得更佳效果，当前网页抓取与代码解释器工具限时免费，支持的工具请参见[工具调用](raw/model-user-guide/model-experience/text-generation-model/tool-calls.md)。
 
+`qwen3.8-omni-flash` 的内置工具仅支持 `web_search`，同时支持自定义 `function` 工具。
+
 Python
 
 ```
@@ -760,6 +758,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ### Session 缓存
 
 在多轮对话场景中，开启 Session 缓存可让服务端自动缓存对话上下文，降低推理延迟与使用成本。您无需手动管理缓存，只需按正常多轮对话方式调用即可。
+
+`qwen3.8-omni-flash` 支持本节介绍的 Session 缓存。
+
+自动生效的隐式缓存另见[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)。
 
 **使用方式**：在请求 Header 中添加 `x-dashscope-session-cache: enable` 开启，或设置为 `disable` 关闭。默认值为 `disable`。
 

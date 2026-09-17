@@ -10,33 +10,35 @@
 
 **百炼推荐**
 
-高能力
+音视频理解与文本生成
 
-GPT-5.5、Gemini 3.1 Pro
+[Gemini 3.8 Flash](https://ai.google.dev/gemini-api/docs/audio)
 
-`qwen3.5-omni-plus`
-
-轻量低成本
-
-GPT-5.4-mini、Gemini 3.1 Flash
-
-`qwen3-omni-flash`
+[qwen3.8-omni-flash](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)
 
 实时翻译
 
-Gemini 3.1 Live
+Gemini 3.5 Live Translate
 
 `qwen3.5-livetranslate-flash-realtime`
 
+**说明**如需语音输出，请使用 [qwen3.5-omni-plus](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)。
+
 ## 使用场景
 
-全模态模型能同时理解文本、音频、图片和视频，并输出文本和语音。当前提供三个模型系列：**Qwen3.5-Omni**（旗舰，能力最全）、**Qwen3-Omni-Flash**（轻量，成本更低，支持深度推理）、**Qwen3.5-Livetranslate**（专业翻译，开箱即用）。根据您的场景选择合适的模型：
+全模态模型支持文本、音频、图片和视频理解。Qwen3.8-Omni-Flash 适用于音视频内容分析、会议纪要和字幕生成，支持思考模式、工具调用和联网搜索。根据您的场景选择合适的模型：
 
 **场景**
 
 **推荐模型**
 
 **用户指南**
+
+**音视频理解与文本生成**：分析音视频内容，生成会议纪要、字幕和文本答复
+
+Qwen3.8-Omni-Flash（Chat Completions / Responses）
+
+[Qwen3.8-Omni-Flash 调用指南](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)
 
 **实时语音/视频对话**：通过麦克风和摄像头与AI实时交互（语音助手、智能客服、视觉问答、直播分析）
 
@@ -50,15 +52,9 @@ Qwen-Audio（WebSocket）
 
 [实时语音对话（Qwen-Audio-Realtime）](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides)
 
-**音视频内容分析**：上传音频或视频文件，AI分析内容并生成文本或语音回复（视频审核、会议纪要、字幕生成）
+**离线音频输出**：上传音频或视频文件，生成语音回复
 
-Qwen3.5-Omni（HTTP）
-
-[非实时（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)
-
-**轻量音视频分析**：上传音频或视频文件进行分析，成本更低（单次输入限150秒）。支持深度推理（思考模式），仅输出文本
-
-Qwen3-Omni-Flash（HTTP）
+Qwen3.5-Omni（Chat Completions）
 
 [非实时（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)
 
@@ -70,25 +66,25 @@ Qwen3.5-Livetranslate（WebSocket）
 
 **音视频文件翻译**：上传音频/视频文件翻译为目标语言（视频配音、播客翻译）
 
-Qwen3-Livetranslate（HTTP）
+Qwen3-Livetranslate（Chat Completions）
 
 [音视频文件翻译-千问](https://help.aliyun.com/zh/model-studio/qwen3-livetranslate-flash)
 
 **声音复刻**：提供参考音频，AI用该音色生成语音回复
 
-Qwen3.5-Omni Plus / Flash（HTTP / WebSocket）
+Qwen3.5-Omni Plus / Flash（Chat Completions / Realtime API）
 
-[非实时（Qwen-Omni）](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)
+[声音复刻](raw/model-api-reference/omni-realtime-api/qwen-omni-voice-cloning.md)
 
--   内容分析场景中，Qwen3.5-Omni支持音频最长3小时、视频最长1小时。
--   支持工具调用（Function Calling）：Qwen3-Omni-Flash（仅HTTP）、Qwen-Audio Realtime（WebSocket）。
--   支持联网搜索：仅Qwen3.5-Omni（HTTP / WebSocket）。联网搜索与Function Calling不可同时开启。
+-   使用 Qwen3.5-Omni 分析内容时，支持音频最长3小时、视频最长1小时。
+-   支持工具调用（Function Calling）：Qwen3.8-Omni-Flash（Chat Completions / Responses）、Qwen3.5-Omni Plus / Flash（Chat Completions，文本输出）、Qwen3-Omni-Flash（Chat Completions）、Qwen-Audio Realtime（WebSocket）。
+-   支持联网搜索：Qwen3.8-Omni-Flash（Chat Completions / Responses）、Qwen3.5-Omni（Chat Completions / Realtime API）。Qwen3.5-Omni 的联网搜索与 Function Calling 不可同时开启。
 
 ## 翻译
 
-全模态模型支持语音翻译，不同模型适用于不同翻译场景。
+音视频翻译为文本或字幕时，推荐使用 [Qwen3.8-Omni-Flash](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)。需要输出翻译后的语音时，可按下方说明选择适合时延和语音输出需求的模型。
 
-**说明**快速搭建翻译应用推荐Qwen3.5-Livetranslate（60种语言，约3秒延迟，开箱即用）；最高质量和最广语言覆盖推荐Qwen3.5-Omni（29种输出语言，支持联网搜索和术语注入）；成本敏感场景推荐Qwen3-Omni-Flash（11种输出语言，成本更低）。
+**说明**快速搭建翻译应用推荐Qwen3.5-Livetranslate（60种语言，约3秒延迟，开箱即用）；需要语音输出、联网搜索和术语注入时，可选择Qwen3.5-Omni（29种输出语言，支持联网搜索和术语注入）。
 
 支持的语言
 
@@ -774,7 +770,7 @@ Qwen3.5-Omni Plus / Flash（HTTP / WebSocket）
 
 “支持”表示同时输出语音和文本。“仅文本”表示该语言不输出语音。
 
-Qwen3.5-Omni支持113种输入语言/方言。
+Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 均支持113种输入语言/方言，完整输入语种列表见[模型选型](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)。
 
 Qwen3.5-Livetranslate支持60种语言（29种音频+文本，31种仅文本）。
 
@@ -782,139 +778,83 @@ Qwen3.5-Livetranslate支持60种语言（29种音频+文本，31种仅文本）�
 
 ## 推荐模型
 
-**模型ID**
+模型
 
-**API**
+API
 
-**输入**
+适用场景
 
-**Function Calling**
+qwen3.8-omni-flash
 
-**联网搜索**
+Chat Completions / Responses
 
-**思考模式**
+音视频理解、文本生成、思考、Function Calling、联网搜索
 
-`qwen3.5-omni-plus-realtime`
+qwen3.5-omni-plus-realtime / qwen3.5-omni-flash-realtime
 
-WebSocket
+Realtime API（WebSocket）
 
-文本、音频、图片、视频
+实时音视频对话
 
-支持
+qwen3.5-omni-plus / qwen3.5-omni-flash
 
-支持
+Chat Completions
 
-不支持
+离线语音输出、声音复刻
 
-`qwen3.5-omni-plus`
+qwen3.5-livetranslate-flash-realtime
 
-HTTP
+Realtime API（WebSocket）
 
-文本、音频、图片、视频
+实时翻译
 
-不支持
+qwen3-livetranslate-flash
 
-支持
+Chat Completions
 
-不支持
+音视频文件翻译
 
-`qwen3.5-omni-flash-realtime`
+qwen-audio-3.0-realtime-plus / qwen-audio-3.0-realtime-flash
 
-WebSocket
+Realtime API（WebSocket）
 
-文本、音频、图片、视频
-
-支持
-
-支持
-
-不支持
-
-`qwen3.5-omni-flash`
-
-HTTP
-
-文本、音频、图片、视频
-
-不支持
-
-支持
-
-不支持
-
-`qwen3-omni-flash-realtime`
-
-WebSocket
-
-文本、音频、图片、视频
-
-不支持
-
-不支持
-
-不支持
-
-`qwen3-omni-flash`
-
-HTTP
-
-文本、音频、图片、视频
-
-支持
-
-不支持
-
-支持
-
-`qwen3.5-livetranslate-flash-realtime`
-
-WebSocket
-
-音频、图片
-
-不支持
-
-不支持
-
-不支持
-
-`qwen3.5-livetranslate-flash`
-
-HTTP
-
-音频、视频
-
-不支持
-
-不支持
-
-不支持
-
-`qwen-audio-3.0-realtime-plus`
-
-WebSocket
-
-音频、文本
-
-支持
-
-不支持
-
-不支持
-
-`qwen-audio-3.0-realtime-flash`
-
-WebSocket
-
-音频、文本
-
-支持
-
-不支持
-
-不支持
+实时语音对话
 
 ## 所有模型
+
+### Qwen3.8-Omni
+
+`qwen3.8-omni-flash` 支持文本、图片、音频和视频输入，**仅输出文本**，可通过 Chat Completions 或 Responses 调用。音视频理解和内容分析请参见 [Qwen3.8-Omni-Flash 调用说明](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)。
+
+模型ID
+
+API
+
+输入
+
+输出
+
+Function Calling
+
+联网搜索
+
+思考模式
+
+`qwen3.8-omni-flash`
+
+Chat Completions / Responses
+
+文本、音频、图片、视频
+
+文本
+
+支持
+
+支持
+
+默认开启
+
+支持 1M Token 上下文、多通道空间音频、隐式缓存和 Responses Session 缓存。支持地域、限制及能力专题入口见[模型详情](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)。
 
 ### Qwen3.5-Omni
 
@@ -932,7 +872,7 @@ WebSocket
 
 `qwen3.5-omni-plus-realtime`
 
-WebSocket
+Realtime API（WebSocket）
 
 文本、音频、图片、视频
 
@@ -944,7 +884,7 @@ WebSocket
 
 `qwen3.5-omni-plus-realtime-2026-03-15`
 
-WebSocket
+Realtime API（WebSocket）
 
 文本、音频、图片、视频
 
@@ -956,11 +896,11 @@ WebSocket
 
 `qwen3.5-omni-plus`
 
-HTTP
+Chat Completions
 
 文本、音频、图片、视频
 
-不支持
+支持（北京，文本输出）
 
 支持
 
@@ -968,11 +908,11 @@ HTTP
 
 `qwen3.5-omni-plus-2026-03-15`
 
-HTTP
+Chat Completions
 
 文本、音频、图片、视频
 
-不支持
+支持（北京，文本输出）
 
 支持
 
@@ -980,7 +920,7 @@ HTTP
 
 `qwen3.5-omni-flash-realtime`
 
-WebSocket
+Realtime API（WebSocket）
 
 文本、音频、图片、视频
 
@@ -992,7 +932,7 @@ WebSocket
 
 `qwen3.5-omni-flash-realtime-2026-03-15`
 
-WebSocket
+Realtime API（WebSocket）
 
 文本、音频、图片、视频
 
@@ -1004,11 +944,11 @@ WebSocket
 
 `qwen3.5-omni-flash`
 
-HTTP
+Chat Completions
 
 文本、音频、图片、视频
 
-不支持
+支持（北京，文本输出）
 
 支持
 
@@ -1016,11 +956,11 @@ HTTP
 
 `qwen3.5-omni-flash-2026-03-15`
 
-HTTP
+Chat Completions
 
 文本、音频、图片、视频
 
-不支持
+支持（北京，文本输出）
 
 支持
 
@@ -1042,7 +982,7 @@ HTTP
 
 `qwen3-omni-flash-realtime`
 
-WebSocket
+Realtime API（WebSocket）
 
 文本、音频、图片、视频
 
@@ -1054,7 +994,7 @@ WebSocket
 
 `qwen3-omni-flash-realtime-2025-12-01`
 
-WebSocket
+Realtime API（WebSocket）
 
 文本、音频、图片、视频
 
@@ -1066,7 +1006,7 @@ WebSocket
 
 `qwen3-omni-flash-realtime-2025-09-15`
 
-WebSocket
+Realtime API（WebSocket）
 
 文本、音频、图片、视频
 
@@ -1078,7 +1018,7 @@ WebSocket
 
 `qwen3-omni-flash`
 
-HTTP
+Chat Completions
 
 文本、音频、图片、视频
 
@@ -1090,7 +1030,7 @@ HTTP
 
 `qwen3-omni-flash-2025-12-01`
 
-HTTP
+Chat Completions
 
 文本、音频、图片、视频
 
@@ -1102,7 +1042,7 @@ HTTP
 
 `qwen3-omni-flash-2025-09-15`
 
-HTTP
+Chat Completions
 
 文本、音频、图片、视频
 
@@ -1124,15 +1064,15 @@ HTTP
 
 `qwen3.5-livetranslate-flash-realtime`
 
-WebSocket
+Realtime API（WebSocket）
 
-音频
+音频、图片
 
 60
 
 `qwen3.5-livetranslate-flash-realtime-2026-05-19`
 
-WebSocket
+Realtime API（WebSocket）
 
 音频
 
@@ -1140,7 +1080,7 @@ WebSocket
 
 `qwen3.5-livetranslate-flash`
 
-HTTP
+Chat Completions
 
 音频、视频
 
@@ -1158,7 +1098,7 @@ HTTP
 
 `qwen3-livetranslate-flash-realtime`
 
-WebSocket
+Realtime API（WebSocket）
 
 音频
 
@@ -1166,7 +1106,7 @@ WebSocket
 
 `qwen3-livetranslate-flash-realtime-2025-09-22`
 
-WebSocket
+Realtime API（WebSocket）
 
 音频
 
@@ -1174,7 +1114,7 @@ WebSocket
 
 `qwen3-livetranslate-flash`
 
-HTTP
+Chat Completions
 
 音频、视频
 
@@ -1182,7 +1122,7 @@ HTTP
 
 `qwen3-livetranslate-flash-2025-12-01`
 
-HTTP
+Chat Completions
 
 音频、视频
 
@@ -1204,7 +1144,7 @@ HTTP
 
 `qwen-audio-3.0-realtime-plus`
 
-WebSocket
+Realtime API（WebSocket）
 
 音频、文本
 
@@ -1216,7 +1156,7 @@ WebSocket
 
 `qwen-audio-3.0-realtime-flash`
 
-WebSocket
+Realtime API（WebSocket）
 
 音频、文本
 
@@ -1228,7 +1168,7 @@ WebSocket
 
 ### 旧版模型
 
-以下模型不再更新，新项目建议使用Qwen3.5-Omni。
+以下模型不再更新，新项目的音视频理解与文本生成推荐 Qwen3.8-Omni-Flash；离线语音输出可选择 Qwen3.5-Omni。
 
 **模型ID**
 
@@ -1240,40 +1180,40 @@ WebSocket
 
 文本、音频、图片、视频
 
-HTTP
+Chat Completions
 
 `qwen-omni-turbo`
 
 文本、音频、图片、视频
 
-HTTP
+Chat Completions
 
 `qwen-omni-turbo-latest`
 
 文本、音频、图片、视频
 
-HTTP
+Chat Completions
 
 `qwen-omni-turbo-2025-03-26`
 
 文本、音频、图片、视频
 
-HTTP
+Chat Completions
 
 `qwen-omni-turbo-realtime`
 
 文本、音频
 
-WebSocket
+Realtime API（WebSocket）
 
 `qwen-omni-turbo-realtime-latest`
 
 文本、音频
 
-WebSocket
+Realtime API（WebSocket）
 
 `qwen-omni-turbo-realtime-2025-05-08`
 
 文本、音频
 
-WebSocket
+Realtime API（WebSocket）

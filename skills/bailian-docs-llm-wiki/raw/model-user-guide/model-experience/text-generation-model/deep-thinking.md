@@ -36,7 +36,7 @@
 
 百炼深度思考模型分为两种模式：
 
--   **混合思考模式**：通过`enable_thinking`参数控制思考开关：
+-   **混合思考模式**：可按请求开启或关闭思考，控制参数因模型而异。以下示例使用 `enable_thinking`，取值如下：
     
     -   设为`true`：模型先思考再回复；
     -   设为`false`：模型直接回复；
@@ -94,6 +94,8 @@
 **千问3.8 开源系列**（混合思考模式，**默认开启思考模式**）：qwen3.8-27b
 
 **千问3.8 开源系列**（**仅支持思考模式**）：qwen3.8-2.4t-a95b
+
+**千问3.8 Omni系列**（混合思考模式，**默认开启思考模式**）：qwen3.8-omni-flash。通过 `reasoning_effort` 调节思考力度，详见[思考模式配置](https://help.aliyun.com/zh/model-studio/qwen-omni#bc67a9a2bd2of)。
 
 #### Qwen3.7
 
@@ -1631,11 +1633,11 @@ data:{"output":{"choices":[{"message":{"content":"","reasoning_content":"","role
 
 ### 传递思考过程
 
-多轮对话中，模型默认不会读取历史消息里的`messages`数组中的`reasoning_content`。将`preserve_thinking`设为`true`后，assistant 消息中的`reasoning_content`将被拼接到下一轮输入，让模型参考之前的推理过程。
+多轮对话中，`preserve_thinking` 控制模型是否读取历史 assistant 消息中的 `reasoning_content`。设为 `true` 后，这些思考内容会拼接到下一轮输入。客户端需在请求的 `messages` 中提供历史 assistant 消息及其 `reasoning_content`。各型号的默认值以[Chat Completions 参数说明](raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)为准。
 
-**重要**`preserve_thinking`参数仅支持 qwen3.8-max、qwen3.8-max-0902、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3.7-max-preview、qwen3.7-max-2026-05-17、qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-max-preview、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.7-flash、qwen3.7-flash-2026-07-15、kimi-k2.7-code（阿里云百炼部署）、kimi-k2.6（阿里云百炼部署）、kimi/kimi-k3（月之暗面部署）、kimi/kimi-k2.7-code-highspeed（月之暗面部署）、kimi/kimi-k2.7-code（月之暗面部署）、kimi/kimi-k2.6（月之暗面部署）。
+**重要**`preserve_thinking`参数仅支持 qwen3.8-max、qwen3.8-max-0902、qwen3.8-omni-flash（默认开启）、qwen3.7-max、qwen3.7-max-2026-05-20、qwen3.7-max-2026-06-08、qwen3.7-max-preview、qwen3.7-max-2026-05-17、qwen3.7-plus、qwen3.7-plus-2026-05-26、qwen3.6-max-preview、qwen3.6-plus、qwen3.6-plus-2026-04-02、qwen3.7-flash、qwen3.7-flash-2026-07-15、kimi-k2.7-code（阿里云百炼部署）、kimi-k2.6（阿里云百炼部署）、kimi/kimi-k3（月之暗面部署）、kimi/kimi-k2.7-code-highspeed（月之暗面部署）、kimi/kimi-k2.7-code（月之暗面部署）、kimi/kimi-k2.6（月之暗面部署）。
 
-> 若历史消息中不包含 `reasoning_content` ，开启此参数不会报错。
+> 对于上述支持此参数的 Qwen3.8 Max、Qwen3.7、Qwen3.6 和 Kimi 型号，若历史消息中不包含 `reasoning_content`，开启此参数不会报错。
 
 > 开启后，历史对话中的 `reasoning_content` 会计入输入 Token 数量和计费。
 

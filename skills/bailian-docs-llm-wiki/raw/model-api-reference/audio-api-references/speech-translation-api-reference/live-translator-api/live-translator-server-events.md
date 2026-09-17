@@ -1,6 +1,6 @@
 # 服务端事件
 
-本文介绍 qwen3.5-livetranslate-flash-realtime API 的服务端事件。
+本文介绍千问实时语音/音视频翻译 API 的服务端事件，包括事件类型、参数和示例。
 
 > 相关文档：[实时语音/音视频翻译-千问](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime)。
 
@@ -81,27 +81,69 @@
 
 使用的模型。
 
+**input\_modalities**`array`
+
+适用于 `qwen3.8-livetranslate-flash-realtime`。输入模态，例如 `["audio"]`。
+
+**output\_modalities**`array`
+
+适用于 `qwen3.8-livetranslate-flash-realtime`。输出模态：`["text"]` 或 `["text", "audio"]`。
+
+**audio**`object`
+
+适用于 `qwen3.8-livetranslate-flash-realtime`。音频输入与输出配置。
+
+属性
+
+**input.format**`object`
+
+输入格式。`type` 默认值为 `pcm`，`sample_rate` 默认值为 `16000`（Hz）。
+
+**input.turn\_detection**`object`
+
+断句配置。默认 `type` 为 `speaker_detection`，`threshold` 为 `0.5`，`silence_duration_ms` 为 `1000`。
+
+**output.format**`object`
+
+输出格式。`type` 默认值为 `pcm`，`sample_rate` 默认值为 `24000`（Hz）。
+
+**output.voice**`string`
+
+输出音色，默认值为 `Tina`。
+
 **modalities**`array`
+
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
 
 模型输出模态设置。
 
 **voice**`string`
 
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+
 模型生成音频的音色。
 
 **input\_audio\_format**`string`
+
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
 
 输入音频的格式，默认为`pcm`。
 
 **sample\_rate**`integer`
 
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+
 输入音频的采样率，单位为Hz。
 
 **output\_audio\_format**`string`
 
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+
 输出音频的格式，默认为`pcm`。
 
 **turn\_detection**`object`
+
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
 
 VAD（语音活动检测）配置。
 
@@ -124,6 +166,52 @@ VAD（语音活动检测）配置。
 **corpus.phrases**`object` （可选）
 
 热词映射表。key 为源语言词汇，value 为目标语言对应翻译，参见[支持的语种](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime#4ffd192226f0s) 。
+
+适用于 `qwen3.8-livetranslate-flash-realtime`。
+
+```
+{
+  "event_id": "event_example",
+  "type": "session.created",
+  "session": {
+    "id": "sess_example",
+    "object": "realtime.session",
+    "model": "qwen3.8-livetranslate-flash-realtime",
+    "input_modalities": [
+      "audio"
+    ],
+    "output_modalities": [
+      "text",
+      "audio"
+    ],
+    "audio": {
+      "input": {
+        "format": {
+          "type": "pcm",
+          "sample_rate": 16000
+        },
+        "turn_detection": {
+          "type": "speaker_detection",
+          "threshold": 0.5,
+          "silence_duration_ms": 1000
+        }
+      },
+      "output": {
+        "format": {
+          "type": "pcm",
+          "sample_rate": 24000
+        },
+        "voice": "Tina"
+      }
+    },
+    "translation": {
+      "language": "en"
+    }
+  }
+}
+```
+
+`qwen3.5-livetranslate-flash-realtime` 示例：
 
 ```
 {
@@ -189,27 +277,69 @@ VAD（语音活动检测）配置。
 
 使用的模型。
 
+**input\_modalities**`array`
+
+适用于 `qwen3.8-livetranslate-flash-realtime`。输入模态，例如 `["audio"]`。
+
+**output\_modalities**`array`
+
+适用于 `qwen3.8-livetranslate-flash-realtime`。输出模态：`["text"]` 或 `["text", "audio"]`。
+
+**audio**`object`
+
+适用于 `qwen3.8-livetranslate-flash-realtime`。音频输入与输出配置。
+
+属性
+
+**input.format**`object`
+
+输入格式。`type` 默认值为 `pcm`，`sample_rate` 默认值为 `16000`（Hz）。
+
+**input.turn\_detection**`object`
+
+断句配置。默认 `type` 为 `speaker_detection`，`threshold` 为 `0.5`，`silence_duration_ms` 为 `1000`。
+
+**output.format**`object`
+
+输出格式。`type` 默认值为 `pcm`，`sample_rate` 默认值为 `24000`（Hz）。
+
+**output.voice**`string`
+
+输出音色，默认值为 `Tina`。
+
 **modalities**`array`
+
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
 
 模型输出模态设置。
 
 **voice**`string`
 
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+
 模型生成音频的音色。
 
 **sample\_rate**`integer`（可选）
+
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
 
 输入音频的采样率。
 
 **input\_audio\_format**`string`
 
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+
 输入音频的格式，固定为`pcm`。
 
 **output\_audio\_format**`string`
 
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
+
 输出音频的格式，固定为`pcm`。
 
 **input\_audio\_transcription**`object`
+
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
 
 输入音频转录配置。仅在会话配置了`input_audio_transcription.model`参数时返回。
 
@@ -224,6 +354,8 @@ VAD（语音活动检测）配置。
 设置的语音识别语种。
 
 **turn\_detection**`object`
+
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。
 
 VAD（语音活动检测）配置。Manual 模式下（客户端在`session.update`中将该参数设为`null`）不返回此字段。
 
@@ -286,6 +418,52 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 **frequency**`string`
 
 音色复刻频率。
+
+适用于 `qwen3.8-livetranslate-flash-realtime`。
+
+```
+{
+  "event_id": "event_example",
+  "type": "session.updated",
+  "session": {
+    "id": "sess_example",
+    "object": "realtime.session",
+    "model": "qwen3.8-livetranslate-flash-realtime",
+    "input_modalities": [
+      "audio"
+    ],
+    "output_modalities": [
+      "text",
+      "audio"
+    ],
+    "audio": {
+      "input": {
+        "format": {
+          "type": "pcm",
+          "sample_rate": 16000
+        },
+        "turn_detection": {
+          "type": "speaker_detection",
+          "threshold": 0.5,
+          "silence_duration_ms": 1000
+        }
+      },
+      "output": {
+        "format": {
+          "type": "pcm",
+          "sample_rate": 24000
+        },
+        "voice": "Tina"
+      }
+    },
+    "translation": {
+      "language": "en"
+    }
+  }
+}
+```
+
+`qwen3.5-livetranslate-flash-realtime` 示例：
 
 ```
 {
@@ -569,7 +747,53 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 }
 ```
 
+## response.text.delta
+
+适用于 `qwen3.8-livetranslate-flash-realtime`。 仅输出文本时，返回译文的新增文本片段。
+
+**event\_id**`string`
+
+事件唯一标识符。
+
+**type**`string`
+
+`response.text.delta`。
+
+**response\_id**`string`
+
+响应 ID。
+
+**item\_id**`string`
+
+消息 ID。
+
+**output\_index**`integer`
+
+输出项索引。
+
+**content\_index**`integer`
+
+内容片段索引。
+
+**delta**`string`
+
+本次新增的文本片段。按接收顺序累加，不覆盖已收到的文本。
+
+```
+{
+  "event_id": "event_example",
+  "type": "response.text.delta",
+  "response_id": "resp_example",
+  "item_id": "item_example",
+  "output_index": 0,
+  "content_index": 0,
+  "delta": "Hello"
+}
+```
+
 ## response.text.text
+
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。 使用 `qwen3.8-livetranslate-flash-realtime` 时，请处理 [response.text.delta](#text-delta) 事件。
 
 当输出模态仅包含文本，且模型增量生成新的文本时，服务端将返回此事件。
 
@@ -914,7 +1138,43 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 }
 ```
 
+## conversation.item.input\_audio\_transcription.delta
+
+适用于 `qwen3.8-livetranslate-flash-realtime`。 返回输入语音的原文识别增量。
+
+**event\_id**`string`
+
+事件唯一标识符。
+
+**type**`string`
+
+`conversation.item.input_audio_transcription.delta`。
+
+**item\_id**`string`
+
+消息 ID。
+
+**content\_index**`integer`
+
+内容片段索引。
+
+**delta**`string`
+
+本次新增的文本片段。按接收顺序累加，不覆盖已收到的文本。
+
+```
+{
+  "event_id": "event_example",
+  "type": "conversation.item.input_audio_transcription.delta",
+  "item_id": "item_example",
+  "content_index": 0,
+  "delta": "Hello"
+}
+```
+
 ## conversation.item.input\_audio\_transcription.text
+
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。 使用 `qwen3.8-livetranslate-flash-realtime` 时，请处理 [conversation.item.input\_audio\_transcription.delta](#transcription-delta) 事件。
 
 当配置了`input_audio_transcription.model`参数时，服务端会流式返回输入音频的语音识别结果（源语言原文）。
 
@@ -1061,7 +1321,53 @@ Manual 模式（`turn_detection`为`null`）下，客户端发送`input_audio_bu
 }
 ```
 
+## response.audio\_transcript.delta
+
+适用于 `qwen3.8-livetranslate-flash-realtime`。输出文本和音频时，返回译文的新增文本片段。
+
+**event\_id**`string`
+
+事件唯一标识符。
+
+**type**`string`
+
+`response.audio_transcript.delta`。
+
+**response\_id**`string`
+
+响应 ID。
+
+**item\_id**`string`
+
+消息 ID。
+
+**output\_index**`integer`
+
+输出项索引。
+
+**content\_index**`integer`
+
+内容片段索引。
+
+**delta**`string`
+
+本次新增的文本片段。按接收顺序累加，不覆盖已收到的文本。
+
+```
+{
+  "event_id": "event_example",
+  "type": "response.audio_transcript.delta",
+  "response_id": "resp_example",
+  "item_id": "item_example",
+  "output_index": 0,
+  "content_index": 0,
+  "delta": "Hello"
+}
+```
+
 ## response.audio\_transcript.text
+
+适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。 使用 `qwen3.8-livetranslate-flash-realtime` 时，请处理 [response.audio\_transcript.delta](#audio-transcript-delta) 事件。
 
 当输出模态包含音频时，服务端可能返回此事件，用于展示实时翻译内容。
 

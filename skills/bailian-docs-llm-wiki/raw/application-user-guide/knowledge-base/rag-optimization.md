@@ -21,7 +21,7 @@ RAG（Retrieval Augmented Generation，检索增强生成）是一种结合了�
 1.  **创建评测集**
     -   **目的：**定义一套标准、可重复执行的测试用例。每个用例应包含一个问题和对应的预期结果。
         
-    -   **操作：**借助阿里云百炼提供的[自动评测](raw/application-user-guide/application-evaluation/application-auto-evaluation.md)功能，创建至少包含 100 组问题的评测集，须覆盖核心真实提问场景，建议包含以下类型：
+    -   **操作：**借助阿里云百炼提供的[自动评测](raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-evaluation-task.md)功能，创建至少包含 100 组问题的评测集，须覆盖核心真实提问场景，建议包含以下类型：
         
         -   **事实型：**“产品X”的保修期是多久？
         -   **比较型：**对比“产品X”和“产品Y”的主要差异。

@@ -1779,6 +1779,8 @@ A：{"info":{"name":"王五","age":"40岁","email":"wangwu@example.com"}}"""))).
 
 将`response_format`的`type`设为`json_object`，可返回标准 JSON 字符串，但内容结构可能不符合预期，适用于简单场景。对于自动化解析、API 互操作等需要严格类型约束的复杂场景，可将 `type` 设置为 `json_schema`，强制大模型输出严格符合指定格式的内容。`response_format` 格式与示例如下：
 
+**说明**多模态输入（图像、视频、音频等）不支持 `json_schema`，会自动降级为 `json_object`，schema 约束不生效。
+
 格式
 
 ```

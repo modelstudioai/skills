@@ -93,9 +93,9 @@ message = client.messages.create(
 
 ### 多模态模型的联网搜索
 
-Qwen3.8 系列、Qwen3.7-Flash、Qwen3.7-Plus、Qwen3.6 系列、Qwen3.5 系列（含 qwen3.5-plus、qwen3.5-flash、qwen3.5-omni 系列与千问开源模型）等模型支持图片、视频等多模态输入，属于多模态模型。这类模型需通过**多模态接口**（`multimodal-generation` 端点）调用：Python 与 Java 使用 `MultiModalConversation`，而不能使用面向纯文本模型的 `Generation`（`text-generation` 端点）。多模态模型的基础调用方式可参见《视觉推理》《图像与视频理解》文档。
+Qwen3.8 Max、Flash 与开源系列、Qwen3.7-Flash、Qwen3.7-Plus、Qwen3.6 系列、Qwen3.5 系列（含 qwen3.5-plus、qwen3.5-flash、qwen3.5-omni 系列与千问开源模型）等模型支持图片、视频等多模态输入，属于多模态模型。这类模型需通过**多模态接口**（`multimodal-generation` 端点）调用：Python 与 Java 使用 `MultiModalConversation`，而不能使用面向纯文本模型的 `Generation`（`text-generation` 端点）。多模态模型的基础调用方式可参见《视觉推理》《图像与视频理解》文档。
 
-搜索策略因系列而异：qwen3.5-omni 系列仅支持 `agent` 策略；Qwen3.8 系列在多模态接口下不支持 `agent` 策略（使用默认的 `turbo` 或 `max`），如需对 Qwen3.8 使用 agent 检索，请改用 [Responses API 的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)；其余模型支持 `turbo`、`max`、`agent` 策略。
+搜索策略因系列而异：qwen3.5-omni 系列仅支持 `agent` 策略；`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b` 和 `qwen3.8-27b` 在多模态接口下不支持 `agent` 策略（使用默认的 `turbo` 或 `max`），如需对 Qwen3.8 使用 agent 检索，请改用 [Responses API 的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y)；本节列出的其余模型支持 `turbo`、`max`、`agent` 策略。
 
 > 若使用 `Generation`（`text-generation` 端点）调用上述多模态模型，会返回 `400 url error, please check url`，请改用 `MultiModalConversation`（`multimodal-generation` 端点）。Java SDK 的 `MultiModalConversationParam` 提供 `enableSearch(true)` 用于开启联网搜索，但未提供 `searchOptions()` 方法，需通过通用参数 `parameter("search_options", ...)` 注入搜索策略等配置；Python 的 `MultiModalConversation.call` 可直接传入 `search_options`。多模态模型开启联网搜索时需使用**流式调用**（Java 使用 `streamCall`，Python 设置 `stream=True`），否则会返回 `Non-streaming mode does not support Web Search` 报错。
 
@@ -177,7 +177,9 @@ public class Main {
 
 ## 支持的模型
 
-支持联网搜索的模型如下。支持多模态输入的模型（Qwen3.8 系列、Qwen3.7-Flash/Plus、Qwen3.6 系列、Qwen3.5 系列及千问开源模型等）需通过多模态接口调用，参见[多模态模型的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#ws_mm_search_h3a)。
+`qwen3.8-omni-flash` 支持通过 Chat Completions 和 Responses API 联网搜索。Chat Completions 使用 `enable_search`；Responses 使用 `tools=[{"type": "web_search"}]`。
+
+支持联网搜索的模型如下。支持多模态输入的模型（Qwen3.8 Max、Flash 与开源系列、Qwen3.7-Flash/Plus、Qwen3.6 系列、Qwen3.5 系列及千问开源模型等）需通过多模态接口调用，参见[多模态模型的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#ws_mm_search_h3a)。
 
 #### 华北2（北京）
 
@@ -589,7 +591,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
     
 -   `agent`：可多次调用联网搜索工具与大模型，实现多轮信息检索与内容整合。
     
-    > 该策略适用于 Qwen3-Max 系列（qwen3-max、qwen3-max-preview、qwen3-max-2025-09-23及之后的快照版本）、Qwen3.5 系列（含开源模型与 Omni 系列）、Qwen3.6 系列、Qwen3.7 系列模型，通过 text 端点调用时需使用流式调用。Qwen3.8 系列在 Chat Completions/DashScope 协议下不支持 `search_strategy: agent`，但可通过 [Responses API 的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y) 使用 `web_search` 工具实现 agent 式多轮检索。MiniMax-M2.1、Moonshot-Kimi-K2-Instruct 与角色扮演模型不支持 `agent` 策略。
+    > 该策略适用于 Qwen3-Max 系列（qwen3-max、qwen3-max-preview、qwen3-max-2025-09-23及之后的快照版本）、Qwen3.5 系列（含开源模型与 Omni 系列）、Qwen3.6 系列、Qwen3.7 系列模型，通过 text 端点调用时需使用流式调用。`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b` 和 `qwen3.8-27b` 在 Chat Completions/DashScope 协议下不支持 `search_strategy: agent`，但可通过 [Responses API 的联网搜索](https://help.aliyun.com/zh/model-studio/web-search#7b82860922v0y) 使用 `web_search` 工具实现 agent 式多轮检索。MiniMax-M2.1、Moonshot-Kimi-K2-Instruct 与角色扮演模型不支持 `agent` 策略。
     
     > 启用该策略时，仅支持 **返回搜索来源** （ `enable_source: true` ），其他联网搜索功能不可用。
     
@@ -3311,13 +3313,13 @@ curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services
 
 > 通过 `web_search` 工具启用时，模型以 **agent 式多轮检索** 运行——根据问题自主发起多次 `web_search_call`（必要时配合 `web_extractor_call`），最终整合结果作答。
 
-> 支持以下模型：Qwen3.8、Qwen3.7、Qwen3.5 系列模型（含开源模型，不含Omni）、Qwen3.6-Plus、Qwen3.6-Flash 系列及 qwen3.6-35b-a3b；qwen3-max、qwen3-max-2026-01-23；deepseek-v4-flash、deepseek-v4-flash-0731、deepseek-v4-pro、deepseek-v4-pro-0813；glm-5.2；kimi-k3。
+> 支持以下模型：Qwen3.8 Max、Flash 与开源系列、`qwen3.8-omni-flash`；Qwen3.7、Qwen3.5 系列模型（含开源模型，不含Omni）、Qwen3.6-Plus、Qwen3.6-Flash 系列及 qwen3.6-35b-a3b；qwen3-max、qwen3-max-2026-01-23；deepseek-v4-flash、deepseek-v4-flash-0731、deepseek-v4-pro、deepseek-v4-pro-0813；glm-5.2；kimi-k3。
 
 > **Qwen3.8 系列的 agent 式检索**：Qwen3.8 系列（qwen3.8-max、qwen3.8-max-0902、qwen3.8-flash、qwen3.8-2.4t-a95b、qwen3.8-27b）在 Chat Completions/DashScope 协议下不支持 `search_strategy: agent`，但通过本节的 Responses API `web_search` 工具即可实现同等的 agent 式多轮检索能力。
 
 > **Responses API 不使用 `search_strategy` 参数**。是否发起联网搜索、以及是否进行多轮检索，均由是否挂载 `web_search` 工具及模型自主决策决定；传入 `search_options.search_strategy` 会被静默忽略，不会触发搜索。
 
-> 为了获得最佳回复效果，建议同时开启 `web_search` 、 `web_extractor` 和 `code_interpreter` 工具。
+> 对于支持以下工具的模型，建议同时开启 `web_search`、`web_extractor` 和 `code_interpreter`。`qwen3.8-omni-flash` 的内置工具仅支持 `web_search`。
 
 > 关于Responses API的使用说明、代码示例和迁移指南，请参见 [OpenAI兼容-Responses](raw/model-api-reference/toolkits-and-frameworks/compatibility-with-openai-responses-api.md) 。
 
@@ -3464,7 +3466,7 @@ for item in response.output:
 
 ## 计费说明
 
-**说明**本文所述“联网搜索”为模型内置的联网搜索功能，其计费如下方所示，本身不提供免费调用额度。它与百炼 MCP 广场提供的“联网搜索 MCP”服务是相互独立的两个功能，计费也相互独立：联网搜索 MCP 全部用户前 2000 次调用免费，免费额度用尽后按 29 元/千次计费，详情请参见[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)。
+**说明**本文所述“联网搜索”为模型内置的联网搜索功能，其计费如下方所示，本身不提供免费调用额度。它与百炼 MCP 广场提供的“联网搜索 MCP”服务是相互独立的两个功能，计费也相互独立：联网搜索 MCP 全部用户前 2000 次调用免费，免费额度用尽后按 29 元/千次计费，详情请参见[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-harness-tool.md)。
 
 联网搜索的费用包含两部分：
 
@@ -3545,7 +3547,7 @@ A：使用 qwen3-max 或更新版本的模型。qwen3-max 能识别非交易日�
 
 ### Q：调用 Kimi 系列模型时联网搜索为何不生效？
 
-A：Kimi 系列模型不支持 `enable_search` 参数，无法使用本文所述的模型内置联网搜索。如需让 Kimi 模型获取实时信息，请在百炼控制台创建智能体应用，并通过**工具 > MCP 服务**添加联网搜索 MCP 工具（如 `bailian_web_search`）。添加后，模型将通过该 MCP 工具检索并返回实时搜索结果。联网搜索 MCP 与内置联网搜索是相互独立的两个功能，计费也相互独立，详情请参见[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)。
+A：Kimi 系列模型不支持 `enable_search` 参数，无法使用本文所述的模型内置联网搜索。如需让 Kimi 模型获取实时信息，请在百炼控制台创建智能体应用，并通过**工具 > MCP 服务**添加联网搜索 MCP 工具（如 `bailian_web_search`）。添加后，模型将通过该 MCP 工具检索并返回实时搜索结果。联网搜索 MCP 与内置联网搜索是相互独立的两个功能，计费也相互独立，详情请参见[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-harness-tool.md)。
 
 ## 错误信息
 

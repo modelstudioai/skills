@@ -44,6 +44,8 @@ GPT-5.4-mini、Gemini 3.1 Flash
 -   最长1小时 / 2GB：`qwen3-vl-plus`、`qwen3-vl-flash`
 -   最长1小时 / 2GB：`qwen3.5-omni-plus`、`qwen3.5-omni-flash`（同时支持音频输入）
 
+如果还需要理解视频中的声音或单独输入音频，可使用 `qwen3.8-omni-flash`，输出为文本。调用方式见 [Qwen3.8-Omni-Flash](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)。
+
 ### Function Calling与内置工具
 
 让模型根据图像或视频中的内容执行操作。

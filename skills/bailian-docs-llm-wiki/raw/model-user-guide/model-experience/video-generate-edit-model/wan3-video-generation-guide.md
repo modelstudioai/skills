@@ -101,7 +101,7 @@ wan3.0-video / wan3.0-video-prime 是 All-in-One 模型，无需切换模型名�
 
 平台提供万相3.0 提示词优化 Skill，方便您对提示词进行调优。
 
-**下载 Skill**：[wan3-pe.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f32.zip)（下载后解压）
+**下载 Skill**：[wan3-pe.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9f66.zip)（下载后解压）
 
 **使用方式**：在 AI 对话框输入 `/wan3-pe` + 您的提示词内容，开始调试提示词。例如：
 
@@ -119,11 +119,11 @@ wan3.0-video / wan3.0-video-prime 是 All-in-One 模型，无需切换模型名�
 -   有声视频：原生生成人声台词、环境音效和背景音乐，无需后期配音。
 -   智能时长：`duration` 设为 `-1` 时模型自动推荐合适时长。
 
-**参数配置**：`resolution`\=480P/720P/1080P（默认），`ratio`\=16:9/4:3/1:1/3:4/9:16，`duration`\=2~30秒或-1（智能时长）。
+**参数配置**：`resolution`\=480P/720P/1080P（默认），`ratio`\=21:9/16:9/4:3/1:1/3:4/9:16，`duration`\=2~30秒或-1（智能时长）。
 
 示例1提示词
 
-20秒21:9超宽银幕毛绒宇宙冒险片段，整体采用超精细毛绒材质、电影级太空尺度、可爱外形与强烈动作反差、夸张FPV运镜和真实软体物理。一艘由毛绒布、纽扣、拉链与填充棉制成的宇宙飞船，载着兔子、狐狸和乌鸦三只小型毛绒动物，在由巨大毛线行星、绒毛星云和布偶巨兽组成的宇宙中高速逃亡。一只覆盖深蓝长绒毛、眼睛像两枚玻璃纽扣的巨大星际鲸兽从星云中追赶飞船。动态包括拉链飞船弹射起航、贴着毛线行星高速绕行、巨鲸从后方冲出、穿越纽扣小行星带、被鲸兽吞入体内、沿金色拉链从背部逃出、巨鲸如泄掉填充棉般缓慢变扁、最终穿越粉紫色绒毛星云向彩色纽扣太阳飞去。
+20秒超宽银幕毛绒宇宙冒险片段，整体采用超精细毛绒材质、电影级太空尺度、可爱外形与强烈动作反差、夸张FPV运镜和真实软体物理。一艘由毛绒布、纽扣、拉链与填充棉制成的宇宙飞船，载着兔子、狐狸和乌鸦三只小型毛绒动物，在由巨大毛线行星、绒毛星云和布偶巨兽组成的宇宙中高速逃亡。一只覆盖深蓝长绒毛、眼睛像两枚玻璃纽扣的巨大星际鲸兽从星云中追赶飞船。动态包括拉链飞船弹射起航、贴着毛线行星高速绕行、巨鲸从后方冲出、穿越纽扣小行星带、被鲸兽吞入体内、沿金色拉链从背部逃出、巨鲸如泄掉填充棉般缓慢变扁、最终穿越粉紫色绒毛星云向彩色纽扣太阳飞去。
 
 示例2提示词
 
@@ -230,7 +230,7 @@ print('please wait...')
 rsp = VideoSynthesis.call(
     api_key=api_key,
     model='wan3.0-video',
-    prompt='20秒21:9超宽银幕毛绒宇宙冒险片段，整体采用超精细毛绒材质、电影级太空尺度、可爱外形与强烈动作反差、夸张FPV运镜和真实软体物理。一艘由毛绒布、纽扣、拉链与填充棉制成的宇宙飞船，载着兔子、狐狸和乌鸦三只小型毛绒动物，在由巨大毛线行星、绒毛星云和布偶巨兽组成的宇宙中高速逃亡。一只覆盖深蓝长绒毛、眼睛像两枚玻璃纽扣的巨大星际鲸兽从星云中追赶飞船。动态包括拉链飞船弹射起航、贴着毛线行星高速绕行、巨鲸从后方冲出、穿越纽扣小行星带、被鲸兽吞入体内、沿金色拉链从背部逃出、巨鲸如泄掉填充棉般缓慢变扁、最终穿越粉紫色绒毛星云向彩色纽扣太阳飞去。',
+    prompt='20秒超宽银幕毛绒宇宙冒险片段，整体采用超精细毛绒材质、电影级太空尺度、可爱外形与强烈动作反差、夸张FPV运镜和真实软体物理。一艘由毛绒布、纽扣、拉链与填充棉制成的宇宙飞船，载着兔子、狐狸和乌鸦三只小型毛绒动物，在由巨大毛线行星、绒毛星云和布偶巨兽组成的宇宙中高速逃亡。一只覆盖深蓝长绒毛、眼睛像两枚玻璃纽扣的巨大星际鲸兽从星云中追赶飞船。动态包括拉链飞船弹射起航、贴着毛线行星高速绕行、巨鲸从后方冲出、穿越纽扣小行星带、被鲸兽吞入体内、沿金色拉链从背部逃出、巨鲸如泄掉填充棉般缓慢变扁、最终穿越粉紫色绒毛星云向彩色纽扣太阳飞去。',
     resolution="480P",
     ratio="adaptive",
     duration=20,
@@ -272,7 +272,7 @@ public class Text2Video {
                 VideoSynthesisParam.builder()
                         .apiKey(apiKey)
                         .model("wan3.0-video")
-                        .prompt("20秒21:9超宽银幕毛绒宇宙冒险片段，整体采用超精细毛绒材质、电影级太空尺度、可爱外形与强烈动作反差、夸张FPV运镜和真实软体物理。一艘由毛绒布、纽扣、拉链与填充棉制成的宇宙飞船，载着兔子、狐狸和乌鸦三只小型毛绒动物，在由巨大毛线行星、绒毛星云和布偶巨兽组成的宇宙中高速逃亡。")
+                        .prompt("20秒超宽银幕毛绒宇宙冒险片段，整体采用超精细毛绒材质、电影级太空尺度、可爱外形与强烈动作反差、夸张FPV运镜和真实软体物理。一艘由毛绒布、纽扣、拉链与填充棉制成的宇宙飞船，载着兔子、狐狸和乌鸦三只小型毛绒动物，在由巨大毛线行星、绒毛星云和布偶巨兽组成的宇宙中高速逃亡。")
                         .resolution("480P")
                         .ratio("adaptive")
                         .duration(20)
@@ -307,7 +307,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     -d '{
     "model": "wan3.0-video",
     "input": {
-        "prompt": "20秒21:9超宽银幕毛绒宇宙冒险片段，整体采用超精细毛绒材质、电影级太空尺度、可爱外形与强烈动作反差、夸张FPV运镜和真实软体物理。一艘由毛绒布、纽扣、拉链与填充棉制成的宇宙飞船，载着兔子、狐狸和乌鸦三只小型毛绒动物，在由巨大毛线行星、绒毛星云和布偶巨兽组成的宇宙中高速逃亡。一只覆盖深蓝长绒毛、眼睛像两枚玻璃纽扣的巨大星际鲸兽从星云中追赶飞船。动态包括拉链飞船弹射起航、贴着毛线行星高速绕行、巨鲸从后方冲出、穿越纽扣小行星带、被鲸兽吞入体内、沿金色拉链从背部逃出、巨鲸如泄掉填充棉般缓慢变扁、最终穿越粉紫色绒毛星云向彩色纽扣太阳飞去。"
+        "prompt": "20秒超宽银幕毛绒宇宙冒险片段，整体采用超精细毛绒材质、电影级太空尺度、可爱外形与强烈动作反差、夸张FPV运镜和真实软体物理。一艘由毛绒布、纽扣、拉链与填充棉制成的宇宙飞船，载着兔子、狐狸和乌鸦三只小型毛绒动物，在由巨大毛线行星、绒毛星云和布偶巨兽组成的宇宙中高速逃亡。一只覆盖深蓝长绒毛、眼睛像两枚玻璃纽扣的巨大星际鲸兽从星云中追赶飞船。动态包括拉链飞船弹射起航、贴着毛线行星高速绕行、巨鲸从后方冲出、穿越纽扣小行星带、被鲸兽吞入体内、沿金色拉链从背部逃出、巨鲸如泄掉填充棉般缓慢变扁、最终穿越粉紫色绒毛星云向彩色纽扣太阳飞去。"
     },
     "parameters": {
         "resolution": "480P",
@@ -412,7 +412,8 @@ rsp = VideoSynthesis.call(
     media=[{"type": "first_frame", "url": "https://cdn.translate.alibaba.com/r/wanx-demo-1.png"}],
     resolution="720P",
     ratio="adaptive",
-    duration=5)
+    duration=5,
+    prompt_extend=True)
 print(rsp)
 if rsp.status_code == HTTPStatus.OK:
     print("video_url:", rsp.output.video_url)
@@ -464,6 +465,7 @@ public class FirstFrame2Video {
                         .resolution("720P")
                         .ratio("adaptive")
                         .duration(5)
+                        .promptExtend(true)
                         .build();
         VideoSynthesisResult result = null;
         try {
@@ -505,7 +507,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     "parameters": {
         "resolution": "720P",
         "ratio": "adaptive",
-        "duration": 5
+        "duration": 5,
+        "prompt_extend": true
     }
 }'
 ```
@@ -592,7 +595,8 @@ rsp = VideoSynthesis.call(
     ],
     resolution="720P",
     ratio="adaptive",
-    duration=5)
+    duration=5,
+    prompt_extend=True)
 print(rsp)
 if rsp.status_code == HTTPStatus.OK:
     print("video_url:", rsp.output.video_url)
@@ -660,6 +664,7 @@ public class Reference2Video {
                         .resolution("720P")
                         .ratio("adaptive")
                         .duration(5)
+                        .promptExtend(true)
                         .build();
         VideoSynthesisResult result = null;
         try {
@@ -702,7 +707,8 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     "parameters": {
         "resolution": "720P",
         "ratio": "adaptive",
-        "duration": 5
+        "duration": 5,
+        "prompt_extend": true
     }
 }'
 ```
@@ -952,6 +958,7 @@ rsp = VideoSynthesis.call(
         {"type": "reference_video", "url": "https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260402/ldnfdf/wan2.7-videoedit-style-change.mp4"}
     ],
     resolution="720P",
+    duration=-1,
     prompt_extend=True)
 print(rsp)
 if rsp.status_code == HTTPStatus.OK:
@@ -1002,6 +1009,7 @@ public class VideoEdit {
                         .prompt("将整个画面转换为黏土风格")
                         .media(media)
                         .resolution("720P")
+                        .duration(-1)
                         .promptExtend(true)
                         .build();
         VideoSynthesisResult result = null;
@@ -1043,6 +1051,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     },
     "parameters": {
         "resolution": "720P",
+        "duration": -1,
         "prompt_extend": true
     }
 }'
@@ -1061,7 +1070,10 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 -   **向前延长**：以视频第一帧为终点生成前序内容。
 -   **双向延长**：以视频为中间段，同时向前和向后延长。
 
-**参数配置**：`ratio` 建议设为 `adaptive`（保持原视频宽高比）。输入时长+输出时长总计≤30秒。提示词中需包含延长意图关键词（如"延长""延续""向前/向后延长"等）。
+**参数配置**：`ratio` 建议设为 `adaptive`（保持原视频宽高比）。提示词中需包含延长意图关键词（如"延长""延续""向前/向后延长"等）。
+
+-   `duration` 建议设为 `-1`（模型根据输入内容自动推荐合适时长），或指定生成视频的时长，即输入视频时长 + 预期延长的时长总和。如原始视频5秒、预期向后延长2秒，`duration` 可设为 `-1` 或 `7`。
+-   需注意输入时长 + 输出时长总计≤30秒。
 
 **能力**
 
@@ -1112,6 +1124,7 @@ rsp = VideoSynthesis.call(
     ],
     resolution="720P",
     ratio="adaptive",
+    duration=5,
     prompt_extend=True)
 print(rsp)
 if rsp.status_code == HTTPStatus.OK:
@@ -1163,6 +1176,7 @@ public class VideoExtend {
                         .media(media)
                         .resolution("720P")
                         .ratio("adaptive")
+                        .duration(5)
                         .promptExtend(true)
                         .build();
         VideoSynthesisResult result = null;
@@ -1205,6 +1219,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
     "parameters": {
         "resolution": "720P",
         "ratio": "adaptive",
+        "duration": 5,
         "prompt_extend": true
     }
 }'

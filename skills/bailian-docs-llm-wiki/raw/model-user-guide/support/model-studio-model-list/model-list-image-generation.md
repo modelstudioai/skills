@@ -18,7 +18,7 @@
 -   [wan2.6-t2i](raw/model-user-guide/support/model-studio-model-list/model-list-image-generation/wan2-6-t2i.md)
 -   [wan2.5-i2i-preview](raw/model-user-guide/support/model-studio-model-list/model-list-image-generation/wan2-5-i2i.md)
 -   [wan2.5-t2i-preview](raw/model-user-guide/support/model-studio-model-list/model-list-image-generation/wan2-5-t2i.md)
--   [wan2.2-t2i-flash](https://help.aliyun.com/zh/model-studio/wan2-2-t2i-flash)
+-   [wan2.2-t2i-flash](raw/model-user-guide/support/model-studio-model-list/model-list-image-generation/wan2-2-t2i-flash.md)
 -   [wan2.2-t2i-plus](raw/model-user-guide/support/model-studio-model-list/model-list-image-generation/wan2-2-t2i-plus.md)
 -   [wanx2.1-imageedit](raw/model-user-guide/support/model-studio-model-list/model-list-image-generation/wanx2-1-imageedit.md)
 -   [wan2.1-t2i-plus](raw/model-user-guide/support/model-studio-model-list/model-list-image-generation/wan2-1-t2i-plus.md)

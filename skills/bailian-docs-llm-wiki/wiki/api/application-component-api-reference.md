@@ -5,45 +5,35 @@
 ## 支持的模型/功能
 
 当前应用组件 API 支持以下核心能力：  
-- 基于百炼托管模型的对话推理（如 `qwen-max`、`qwen-plus`、`qwen-turbo`）；  
-- 结合知识库的增强问答（需提前配置 KnowledgeBase ID）；  
-- 工具调用（Tool Calling），支持自定义函数描述与自动参数提取；  
-- 多轮会话状态管理（通过 `session_id` 维持上下文）。  
-详细能力列表及对应模型版本请参见 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)。
+- 基于大模型的多轮对话（`chat` 类型任务）  
+- 结构化知识库检索（`retrieval` 类型任务，依赖已配置的知识空间 ID）  
+- 内置工具链调用（如日期计算、网页摘要、代码解释等，详见 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)）  
+- 自定义[插件](../concepts/plugin.md)扩展（需提前在控制台注册并发布）  
+
+> **注意**：部分文档中提及的 `code_generation` 功能模块已在 v2024.03 版本中合并至通用 `chat` 接口，旧版独立 endpoint 已废弃；请以 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 中的变更日志为准。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model` | string | 是 | 模型标识符，如 `qwen-max`；必须与 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中公布的可用模型一致 |
-| `input.messages` | array | 是 | 消息数组，格式为 `[{ "role": "user", "content": "..." }]`；支持 `user`/`assistant`/`system` 角色 |
-| `parameters.temperature` | number | 否 | 采样温度，默认 `0.8`；范围 `[0.0, 2.0]` |
-| `parameters.top_p` | number | 否 | 核采样阈值，默认 `0.95`；范围 `[0.0, 1.0]` |
-| `parameters.max_tokens` | integer | 否 | 最大生成 token 数，默认 `2048`，上限 `8192` |
-
-> **注意**：`parameters.stop` 当前仅支持字符串数组（如 `["\n"]`），不支持正则或复杂表达式——该限制在 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 中未明确提及，但实测 v2023-12-29 及后续版本均不生效，建议避免使用。
+| `app_id` | string | 是 | 应用唯一标识，由控制台创建应用时生成 |
+| `messages` | array | 是 | 对话消息列表，格式同 OpenAI `messages`，支持 `user`/`assistant`/`system` 角色 |
+| `model` | string | 否 | 指定后端模型，可选值包括 `qwen-max`、`qwen-plus`、`qwen-turbo`；未指定时使用应用默认模型 |
+| `stream` | boolean | 否 | 是否启用流式响应，默认 `false`；流式模式下响应为 SSE 格式 |
+| `retrieval_config` | object | 否 | 知识检索配置，含 `knowledge_id` 和 `top_k` 字段，详见 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 中的请求体示例 |
 
 ## 使用方式
 
-1. 获取服务接入点：从 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 获取对应 Region 的 endpoint URL（如 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`）；  
-2. 构造请求头：包含 `Authorization: Bearer <api_key>` 和 `Content-Type: application/json`；  
-3. 发送 POST 请求，body 示例：
-```json
-{
-  "model": "qwen-max",
-  "input": {
-    "messages": [{"role": "user", "content": "你好"}]
-  },
-  "parameters": {"temperature": 0.5}
-}
-```
+1. 获取访问凭证：通过 RAM 角色或 AccessKey 进行签名认证，授权流程参见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)  
+2. 构造请求：向 `POST /v1/apps/{app_id}/chat`（或 `/v1/apps/{app_id}/retrieval`）发送 JSON 请求  
+3. 处理响应：非流式返回标准 JSON；流式响应需按 `data:` 行解析，每条事件含 `delta` 或 `finish_reason` 字段  
 
 ## 限制和注意事项
 
-- 单次请求 `input.messages` 总长度不得超过 32768 tokens（含 system [prompt](../guides/prompt.md)）；  
-- 流式响应需设置 `stream: true`，此时响应体为 SSE 格式，字段名与非流式保持一致（如 `output.text`）；  
-- 调用失败时，HTTP 状态码非 `2xx`，错误结构遵循百炼统一规范，详见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)；  
-- RAM 授权策略需显式授予 `dashscope:InvokeApplication` 权限，具体配置参考 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)。
+- 单次请求 `messages` 总长度上限为 32768 token（按 Qwen 分词器统计）  
+- 流式响应超时时间为 60 秒，超时将关闭连接并返回 `504 Gateway Timeout`  
+- `app_id` 必须与调用方 RAM 权限绑定的应用完全一致，跨应用调用将返回 `403 Forbidden`  
+- 所有请求必须携带 `X-Bailian-Date` 和 `Authorization` 头，签名算法与阿里云通用一致，细节见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)
 
 ## 来源文档
 

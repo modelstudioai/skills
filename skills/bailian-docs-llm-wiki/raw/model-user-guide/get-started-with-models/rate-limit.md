@@ -1982,6 +1982,12 @@ qwen3-vl-plus-2025-12-19
 
 > **含输入与输出Token**
 
+qwen3.8-omni-flash
+
+30000
+
+[动态限流](https://help.aliyun.com/zh/model-studio/quota-management#sec-tier-h2)
+
 qwen3.5-omni-plus
 
 60
@@ -2069,6 +2075,14 @@ qwen-omni-turbo-2025-01-19
 **每分钟消耗Token数（TPM）**
 
 > **含输入与输出Token**
+
+qwen3.8-omni-flash
+
+国际
+
+30000
+
+[动态限流](https://help.aliyun.com/zh/model-studio/quota-management#sec-tier-h2)
 
 qwen3.5-omni-plus
 
@@ -2166,13 +2180,85 @@ qwen-omni-turbo-2025-03-26
 
 > **含输入与输出Token**
 
-text-embedding-v4
+qwen3.8-omni-flash
 
-中国香港
+全球
 
-1,800
+30000
 
-1,200,000
+2000000
+
+#### 日本（东京）
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+qwen3.8-omni-flash
+
+全球
+
+30000
+
+2000000
+
+#### 德国（法兰克福）
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+qwen3.8-omni-flash
+
+全球
+
+30000
+
+2000000
+
+#### 美国（弗吉尼亚）
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+qwen3.8-omni-flash
+
+全球
+
+30000
+
+2000000
 
 ### 千问Omni-Realtime
 
@@ -7028,11 +7114,13 @@ qwen3-livetranslate-flash-2025-12-01
 
 > **含输入与输出Token**
 
-qwen3.5-livetranslate-flash-realtime
+qwen3.8-livetranslate-flash-realtime
 
 10
 
 100,000
+
+qwen3.5-livetranslate-flash-realtime
 
 qwen3.5-livetranslate-flash-realtime-2026-05-19
 
@@ -8871,6 +8959,30 @@ text-embedding-v3
 6,000
 
 24,000,000
+
+#### 中国香港
+
+**模型名称**
+
+**服务部署范围**
+
+**限流条件（超出任一数值时触发限流）**
+
+> **以下为每分钟限流条件，服务可能按 RPS（RPM/60）与 TPS（TPM/60）限制**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+> **含输入与输出Token**
+
+text-embedding-v4
+
+中国香港
+
+1,800
+
+1,200,000
 
 ### 多模态向量
 

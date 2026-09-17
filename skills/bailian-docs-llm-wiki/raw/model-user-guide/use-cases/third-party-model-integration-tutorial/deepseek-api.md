@@ -717,20 +717,6 @@ deepseek-v4-pro
 
 不支持
 
-deepseek-v4-pro-us
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-不支持
-
 deepseek-v4-flash-0731
 
 支持
@@ -746,20 +732,6 @@ deepseek-v4-flash-0731
 不支持
 
 deepseek-v4-flash
-
-支持
-
-支持
-
-支持
-
-支持
-
-支持
-
-不支持
-
-deepseek-v4-flash-us
 
 支持
 
@@ -917,18 +889,6 @@ deepseek-v4-pro
 
 共393,216
 
-deepseek-v4-pro-us
-
-1.0
-
-1.0
-
-\-
-
-\-
-
-共393,216
-
 deepseek-v4-flash-0731
 
 1.0
@@ -942,18 +902,6 @@ deepseek-v4-flash-0731
 共393,216
 
 deepseek-v4-flash
-
-1.0
-
-1.0
-
-\-
-
-\-
-
-共393,216
-
-deepseek-v4-flash-us
 
 1.0
 

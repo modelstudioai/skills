@@ -22,7 +22,7 @@
 
 调用协议
 
-仅 OpenAI 兼容接口（不支持 DashScope 协议）
+仅支持 OpenAI 兼容接口（Chat Completions），不支持 DashScope 协议与 Anthropic 协议
 
 访问域名
 
@@ -309,7 +309,7 @@ console.log(resp.model); // 实际执行的模型名
 
 调用协议
 
-仅 OpenAI 兼容接口（不支持 DashScope 协议）
+仅 OpenAI 兼容接口
 
 请求类型
 
@@ -322,24 +322,6 @@ console.log(resp.model); // 实际执行的模型名
 限流
 
 按实际路由模型在账号和业务空间的 RPM/TPM 限流；故障自动切换时只计最终成功模型的消耗
-
-协议支持明细：
-
-协议
-
-支持
-
-OpenAI 兼容接口（Chat Completions）
-
-✓
-
-DashScope 协议
-
-✗
-
-Anthropic 协议
-
-✗
 
 ### 参数说明
 

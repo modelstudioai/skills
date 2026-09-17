@@ -38,7 +38,7 @@
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.7-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.7-plus)**
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.5-omni-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.5-omni-plus)**
+![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.8-omni-flash](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)**
 
 ![](https://img.alicdn.com/imgextra/i4/O1CN01KzHLBW1LISVEUaotl_!!6000000001276-2-tps-56-56.png)**[kimi/kimi-k3](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/kimi%2Fkimi-k3)**
 
@@ -104,7 +104,7 @@
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.5-omni-plus-realtime](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.5-omni-plus-realtime)**
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.5-omni-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.5-omni-plus)**
+![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.8-omni-flash](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)**
 
 [查看更多](https://help.aliyun.com/zh/model-studio/asr-model)
 
@@ -120,11 +120,13 @@
 
 ## 全模态
 
-融合文本、图像、音频、视频等多种模态的理解与生成能力
+融合文本、图像、音频、视频等多种模态的理解与生成能力。音视频分析与文本生成选择 [qwen3.8-omni-flash](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)，通过 Chat Completions 或 Responses 调用；实时音视频对话选择 [qwen3.5-omni-plus-realtime](raw/model-user-guide/model-experience/omni-modal/realtime.md)。
+
+**说明**如需离线语音输出，请使用 [qwen3.5-omni-plus](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-5-omni-plus.md)。
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.5-omni-plus-realtime](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.5-omni-plus-realtime)**
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.5-omni-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.5-omni-plus)**
+![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.8-omni-flash](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)**
 
 [查看更多](raw/model-user-guide/model-experience/omni-modal/omni.md)
 

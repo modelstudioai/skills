@@ -207,7 +207,7 @@ AppFlow 无需代码即可连接网页与模型服务平台。
 
 ### 应用评测
 
-建议在正式上线 AI 助手前，组织业务人员一起参与[人工评测](raw/application-user-guide/application-evaluation/evaluate-manual-application.md)，确保大模型应用的回答效果符合预期。如果不符合预期，可以通过[优化提示词](raw/model-user-guide/use-cases/prompt-engineering-guide.md)、完善补充私有知识、调整文档切分策略等方法来改进回答效果。
+建议在正式上线 AI 助手前，组织业务人员一起参与[人工评测](raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-evaluation-task.md)，确保大模型应用的回答效果符合预期。如果不符合预期，可以通过[优化提示词](raw/model-user-guide/use-cases/prompt-engineering-guide.md)、完善补充私有知识、调整文档切分策略等方法来改进回答效果。
 
 ### 持续改进
 
