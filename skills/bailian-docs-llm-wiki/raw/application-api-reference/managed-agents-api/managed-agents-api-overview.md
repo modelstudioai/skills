@@ -159,6 +159,60 @@ java
 
 删除 File
 
+[Memory Store](raw/application-api-reference/managed-agents-api/memory-store-api.md)
+
+`POST /memory_stores`
+
+创建 Memory Store
+
+`GET /memory_stores`
+
+列出 Memory Store
+
+`GET /memory_stores/{memory_store_id}`
+
+获取 Memory Store
+
+`POST /memory_stores/{memory_store_id}`
+
+更新 Memory Store
+
+`POST /memory_stores/{memory_store_id}/archive`
+
+归档 Memory Store
+
+`POST /memory_stores/{memory_store_id}/memories`
+
+创建 Memory（记忆文件）
+
+`GET /memory_stores/{memory_store_id}/memories`
+
+列出 Memory
+
+`GET /memory_stores/{memory_store_id}/memories/{memory_id}`
+
+获取 Memory
+
+`POST /memory_stores/{memory_store_id}/memories/{memory_id}`
+
+更新 Memory
+
+`DELETE /memory_stores/{memory_store_id}/memories/{memory_id}`
+
+删除 Memory
+
+`GET /memory_stores/{memory_store_id}/memory_versions`
+
+列出 Memory Version（历史版本）
+
+`GET /memory_stores/{memory_store_id}/memory_versions/{memory_version_id}`
+
+获取 Memory Version
+
+`POST /memory_stores/{memory_store_id}/memory_versions/{memory_version_id}/redact`
+
+擦除 Memory Version 正文
+
 [Skill](raw/application-api-reference/managed-agents-api/skills-api.md)
 
 `POST /skills`

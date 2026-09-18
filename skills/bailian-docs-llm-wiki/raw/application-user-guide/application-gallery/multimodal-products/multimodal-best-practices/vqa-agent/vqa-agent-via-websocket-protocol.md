@@ -4,7 +4,7 @@
 
 直通Agent是指不经过语音识别（ASR）、意图识别，将请求直接传递到Agent的方式。
 
-实时多模态交互的标准流程通常如下：如果需要在该完整链路中使用拍照问答Agent（例如智能眼镜场景，直接问“帮我看看这是什么”），请阅读[拍照问答](https://help.aliyun.com/zh/model-studio/official-agent#d7ae29429ek0s)和[RTOS SDK (License模式) 视觉模块接入](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/chat-capability-based-on-rtos-sdk/rtos-sdk-license-mode-vision-module.md)
+实时多模态交互的标准流程通常如下：如果需要在该完整链路中使用拍照问答Agent（例如智能眼镜场景，直接问“帮我看看这是什么”），请阅读[拍照问答](https://help.aliyun.com/zh/model-studio/official-agent#d7ae29429ek0s)和[设备端C SDK视觉模块接入](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/rtos-c-sdk-best-practices/rtos-sdk-license-mode-vision-module.md)
 
 ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5088379671/p1049999.png)
 

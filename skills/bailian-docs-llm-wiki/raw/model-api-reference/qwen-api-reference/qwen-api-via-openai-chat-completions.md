@@ -189,13 +189,13 @@ Qwen-VL 只可理解视频文件的视觉信息，Qwen-Omni 可理解视频文�
 
 fps有两个功能：
 
--   输入视频文件时，控制抽帧频率，每 f p s 1 ​ 秒抽取一帧。
+-   输入视频文件时，控制抽帧频率，每 `1/fps` 秒抽取一帧。
     
     > 适用于 [Qwen-VL](raw/model-user-guide/model-experience/vision-model/vision.md)、[MiniMax/MiniMax-M3](raw/model-user-guide/use-cases/third-party-model-integration-tutorial/minimax-api-by-minimax.md) 与[QVQ 模型](raw/model-user-guide/model-experience/vision-model/visual-reasoning.md)。
     
 -   告知模型相邻帧之间的时间间隔，帮助其更好地理解视频的时间动态。同时适用于输入视频文件与图像列表时。该功能同时支持视频文件和图像列表输入，适用于事件时间定位或分段内容摘要等场景。
     
-    > 支持Qwen3.7、Qwen3.6、Qwen3.5、`Qwen3-VL`、`Qwen2.5-VL`、Qwen3.5-Omni与QVQ模型。
+    > 支持Qwen3.7、Qwen3.6、Qwen3.5、`Qwen3-VL`、`Qwen2.5-VL`、Qwen3.8-Omni-Flash、Qwen3.5-Omni与QVQ模型。
     
 
 较大的`fps`适合高速运动的场景（如体育赛事、动作电影等），较小的`fps`适合长视频或内容偏静态的场景。
@@ -433,26 +433,49 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 temperature默认值
 
 -   qwen3.8-max/qwen3.8-flash（思考模式）：视觉理解0.6，文本输入1.0，0.6以下的temperature值会默认改为0.6
+    
 -   非思考模式下的以下型号（`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen-turbo系列（非思考模式）、qwen开源系列、qwen-coder系列、qwen-doc-turbo、Qwen3-VL（非思考）：0.7；
+    
 -   QVQ系列 : 0.5；
+    
 -   qwen-audio-turbo系列：0.00001；
+    
 -   qwen-vl系列、qwen2.5-omni-7b：0.01；
+    
 -   qwen-math系列：0；
+    
 -   Qwen3.7（思考模式）、Qwen3.6（思考模式）、Qwen3.5（思考模式）、Qwen3（思考模式）、Qwen3-Thinking、Qwen3-Omni-Captioner、QwQ 系列：0.6；
+    
 -   qwen3-max-preview（思考模式）、qwen-long系列： 1.0；
+    
 -   qwen-plus-character：0.92
+    
 -   qwen3-omni-flash系列：0.9
+    
 -   Qwen3-VL（思考模式）：0.8
+    
 -   DeepSeek系列（阿里云直供）：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash、deepseek-v3.2（非思考模式）: 1.0；deepseek-v3.2（思考模式）、deepseek-v3.2-exp、deepseek-v3.1、deepseek-r1、deepseek-r1-0528、deepseek-r1-distill-qwen 蒸馏版: 0.6；deepseek-v3: 0.7；
+    
 -   DeepSeek系列（硅基流动直供）：siliconflow/deepseek-v3.2、siliconflow/deepseek-v3.1-terminus、siliconflow/deepseek-r1-0528、siliconflow/deepseek-v3-0324: 1.0；
+    
 -   DeepSeek系列（快手万擎直供）：vanchin/deepseek-v3.2-think（思考模式）: 0.6；vanchin/deepseek-v3.1-terminus: 0.7；vanchin/deepseek-v3.2-speciale、vanchin/deepseek-r1、vanchin/deepseek-v3、vanchin/deepseek-ocr: 1.0；
+    
 -   Kimi系列（阿里云直供）：kimi-k2.7-code、kimi-k2.6（思考模式）、kimi-k2.5（思考模式）、kimi-k2-thinking: 1.0；kimi-k2.6（非思考模式）、kimi-k2.5（非思考模式）、Moonshot-Kimi-K2-Instruct: 0.6；
+    
 -   Kimi系列（月之暗面直供）：kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6（思考模式）、kimi/kimi-k2.5（思考模式）: 1.0；kimi/kimi-k2.6（非思考模式）、kimi/kimi-k2.5（非思考模式）: 0.6；
+    
 -   GLM系列（阿里云直供）：glm-5.1、glm-5、glm-4.7、glm-4.6: 1.0；glm-4.5、glm-4.5-air: 0.6；
+    
 -   GLM系列（智谱直供）：ZHIPU/GLM-5.1、ZHIPU/GLM-5: 0.6；
+    
 -   MiniMax系列（阿里云直供）：MiniMax-M2.5、MiniMax-M2.1: 1.0；
+    
 -   MiniMax系列（稀宇科技直供）：MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1: 1.0。
+    
 -   MiMo系列（小米直供）：mimo-v2.5-pro: 1.0，范围 \[0, 1.5\]。
+    
+-   Qwen3.8-Omni-Flash：思考模式为 0.6，非思考模式为 0.7；
+    
 
 > 不建议修改QVQ模型的默认temperature值 。
 
@@ -500,6 +523,8 @@ MiniMax系列（稀宇科技直供）：MiniMax/MiniMax-M3: 0.95；MiniMax/MiniM
 
 MiMo系列（小米直供）：xiaomi/mimo-v2.5-pro: 0.95，范围 \[0.01, 1.0\]。
 
+Qwen3.8-Omni-Flash：思考模式为 0.95，非思考模式为 0.8；
+
 > 不建议修改QVQ模型的默认 top\_p 值。
 
 **top\_k**`integer` （可选）
@@ -522,6 +547,8 @@ GLM系列（阿里云直供）：20；
 
 DeepSeek/Kimi/MiniMax系列均不支持top\_k参数。
 
+Qwen3.8-Omni-Flash（思考和非思考模式）：20；
+
 > 该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中。配置方式为：extra\_body={"top\_k":xxx}。
 
 > 不建议修改QVQ模型的默认 top\_k 值。
@@ -533,12 +560,21 @@ DeepSeek/Kimi/MiniMax系列均不支持top\_k参数。
 repetition\_penalty默认值
 
 -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、qwen-max、qwen-math系列、qwen-vl-max系列、qwen-audio-turbo系列、QVQ系列、QwQ系列、Qwen3-VL： 1.0；
+    
 -   qwen-coder系列、qwen2-1.5b-instruct、qwen2-0.5b-instruct、qwen2.5-omni-7b：1.1；
+    
 -   qwen-vl-plus：1.2；
+    
 -   其余模型为1.05。
+    
 -   DeepSeek系列（阿里云直供）：deepseek-v3.2-exp:1.0、deepseek-v3.1:1.0；
+    
 -   GLM系列（阿里云直供）：1.0；
+    
 -   Kimi系列（月之暗面直供）：0.0。
+    
+-   Qwen3.8-Omni-Flash（思考和非思考模式）：1.05；
+    
 
 > 该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中。配置方式为：extra\_body={"repetition\_penalty":xxx}。
 
@@ -571,6 +607,8 @@ Kimi系列（月之暗面直供）：0.0；
 MiniMax系列（阿里云直供）：MiniMax-M2.5、MiniMax-M2.1: 0.0；
 
 其余DeepSeek/Kimi/GLM/MiniMax模型无默认值。
+
+Qwen3.8-Omni-Flash：思考模式为 0.0，非思考模式为 1.5；
 
 原理介绍
 
@@ -1017,6 +1055,8 @@ qwen-vl-max-2024-02-01、qwen-vl-plus：无默认值；
 
 搜索量级策略，仅当`enable_search`为`true`时生效。
 
+`qwen3.8-omni-flash` 开启联网搜索时，需将此参数设为 `agent`。
+
 可选值：
 
 -   `turbo` （默认）: 兼顾响应速度与搜索效果，适用于大多数场景。
@@ -1025,7 +1065,7 @@ qwen-vl-max-2024-02-01、qwen-vl-plus：无默认值；
     
 -   `agent`：可多次调用联网搜索工具与大模型，实现多轮信息检索与内容整合。
     
-    > 该策略仅适用于 qwen3.5-plus、qwen3.5-plus-2026-02-15、qwen3.5-flash、qwen3.5-flash-2026-02-23、qwen3-max、qwen3-max-2026-01-23、qwen3-max-2025-09-23、qwen3.5-omni-plus、qwen3.5-omni-plus-2026-03-15、qwen3.5-omni-flash、qwen3.5-omni-flash-2026-03-15。
+    > 该策略仅适用于 qwen3.5-plus、qwen3.5-plus-2026-02-15、qwen3.5-flash、qwen3.5-flash-2026-02-23、qwen3-max、qwen3-max-2026-01-23、qwen3-max-2025-09-23、qwen3.8-omni-flash、qwen3.5-omni-plus、qwen3.5-omni-plus-2026-03-15、qwen3.5-omni-flash、qwen3.5-omni-flash-2026-03-15。
     
 -   `agent_max`：在`agent`策略基础上支持网页抓取，参见：[网页抓取](raw/model-user-guide/model-experience/text-generation-model/tool-calls/web-extractor.md)。
     

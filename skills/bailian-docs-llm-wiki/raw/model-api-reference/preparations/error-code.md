@@ -2302,6 +2302,30 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 请检查任务执行情况，或联系技术支持。
 
+## 500- InternalError.Configuration
+
+### Internal configuration error.
+
+**原因：** 服务端配置异常。
+
+**解决方案：** 请稍后重试，或联系技术支持。
+
+## 500- InternalError.DataInspection
+
+### Content moderation service unavailable.
+
+**原因：** 内容审核服务暂时不可用。
+
+**解决方案：** 请稍后重试。
+
+## 500- InternalError.TranslationFailed
+
+### Translation failed.
+
+**原因：** 翻译处理失败。
+
+**解决方案：** 请稍后重试；如仍失败，请检查输入内容或联系技术支持。
+
 ## 500- SystemError
 
 ### An system error has occured, please try again later.
@@ -2391,6 +2415,14 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 **原因：** 模型暂时无法提供服务。
 
 **解决方案：** 请稍后重试。
+
+## 504- GatewayTimeout.InputDownload
+
+### Input file download timed out.
+
+**原因：** 服务端下载 `fileUrl` 指向的输入文件超时。
+
+**解决方案：** 请检查 URL 可访问性、文件大小及所在服务的网络状况，或改用更稳定的下载地址后重试。
 
 ## SDK 报错
 

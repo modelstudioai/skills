@@ -31,7 +31,7 @@ RAM 用户需要主账号先授权。由主账号在 RAM 控制台为该用户�
 
 ### 连接对话框里只有一个下拉框
 
-这个 App 需要先有身份验证配置。展开 **选择身份验证配置** 下拉框，如果显示暂无配置，单击下方的 **创建身份验证配置** 先建一个。流程见[创建身份验证配置](raw/application-user-guide/overview/overview/create-config.md)。
+这个 App 需要先有身份验证配置。展开 **选择身份验证配置** 下拉框，如果显示暂无配置，单击下方的 **创建身份验证配置** 先建一个。流程见[创建身份验证配置](raw/application-user-guide/overview/auth-guide/create-config.md)。
 
 ### 下拉框里看不到已建好的配置
 
@@ -81,7 +81,7 @@ MCP 地址路径填写有误。确认路径为 `/api/v2/connector/mcp`，注意�
 
 ### JSON、CSV、YAML 文件无法导入
 
-目前不支持直接导入这三种格式。请先用相应工具转换为 XLSX 或 XLS 格式，再通过[表格连接器](raw/application-user-guide/overview/overview/table.md)导入。
+目前不支持直接导入这三种格式。请先用相应工具转换为 XLSX 或 XLS 格式，再通过[表格连接器](raw/application-user-guide/overview/apps-guide/table.md)导入。
 
 ### 扫描件解析效果不好
 

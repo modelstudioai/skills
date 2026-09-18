@@ -64,6 +64,18 @@
 
 [查看更多](raw/model-user-guide/model-experience/image-model.md)
 
+## 世界模型
+
+实时交互的开放式世界模型，覆盖世界探索、实时导演、角色演绎三种模式
+
+![](https://img.alicdn.com/imgextra/i2/O1CN01N42VGT1JLXyFq3Et1_!!6000000001012-0-tps-400-400.jpg)**[happyoyster-1.0-adventure](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/detail/happyoyster-1.0-adventure)**
+
+![](https://img.alicdn.com/imgextra/i2/O1CN01N42VGT1JLXyFq3Et1_!!6000000001012-0-tps-400-400.jpg)**[happyoyster-1.0-directing](https://bailian.console.aliyun.com/ap-southeast-1/?tab=model#/model-market/detail/happyoyster-1.0-directing)**
+
+![](https://img.alicdn.com/imgextra/i2/O1CN01N42VGT1JLXyFq3Et1_!!6000000001012-0-tps-400-400.jpg)**happyoyster-1.0-acting**邀测
+
+[查看更多](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-overview.md)
+
 ## 3D模型生成
 
 文生3D模型或图生3D模型，构建三维资产

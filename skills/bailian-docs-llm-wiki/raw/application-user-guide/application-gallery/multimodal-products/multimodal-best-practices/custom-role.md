@@ -17,7 +17,7 @@
 
 ### 配置自定义变量
 
-自定义变量允许在Prompt 中使用标准占位符（如 ${name}），在运行时由客户端传入实际值，实现不同用户、不同角色展示个性化内容的效果。参考文档：[RTOS SDK (License模式) 提示词变量设置](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/chat-capability-based-on-rtos-sdk/rtos-license-prompt-params.md)。
+自定义变量允许在Prompt 中使用标准占位符（如 ${name}），在运行时由客户端传入实际值，实现不同用户、不同角色展示个性化内容的效果。参考文档：[设备端C SDK提示词变量设置](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/rtos-c-sdk-best-practices/rtos-license-prompt-params.md)。
 
 -   在百炼控制台创建应用
 -   修改「提示词」新增「自定义变量」

@@ -1,0 +1,60 @@
+{
+  "name": "HappyOyster-1.0",
+  "description": "Happyoyster 系列首个实时交互的开放式世界模型。只需输入一句话，即可生成一个完整、可演绎、可探索、可互动的数字世界。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Video"
+        ],
+        "request_modality": [
+          "Text",
+          "Image"
+        ]
+      },
+      "description": "HappyOyster Adventure 是实时交互、可探索互动的开放式世界模型。基于多模态（文本/图像）输入即可生成的世界场景，通过实时交互、位移和镜头控制进行沉浸式无边探索。",
+      "collectionTag": "happyoyster-1.0",
+      "features": [],
+      "provider": "happyoyster",
+      "model": "happyoyster-1.0-adventure",
+      "prices": [
+        {
+          "priceUnit": "每次",
+          "price": "0.05",
+          "timeBand": "standard",
+          "ntmAmountType": "ct_wld_adven_user_frame",
+          "type": "ct_wld_adven_user_frame",
+          "priceName": "世界创建"
+        },
+        {
+          "priceUnit": "每秒",
+          "price": "0.2",
+          "timeBand": "standard",
+          "ntmAmountType": "HO_adventure_480P",
+          "type": "HO_adventure_480P",
+          "priceName": "世界体验（480P）"
+        }
+      ],
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "World-Model"
+      ],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-09-11T07:08:40.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "HappyOyster-1.0-Adventure",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/happyoyster-adventure-create-world-api-reference",
+      "category": "World Model",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-adventure/openapi/v1/worlds' \\\n    -H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n    \"async\": true,\n    \"perspective\": \"third_person\",\n    \"prompt\": \"第三人称跟拍：一名身穿黑色防寒服、头戴黑色头盔的骑手骑着黑色雪地摩托驶向远方，履带扬起细雪。前方是积雪覆盖的针叶林，更远处是日照岩壁的陡峭雪山与蓝天白云。冬日晴空，雪地高光强烈，开阔冷冽。\",\n    \"eventStyle\": \"dramatic\",\n    \"firstFrameImage\": {\n        \"url\": \"https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9fc6.png\",\n        \"referenceType\": \"default\"\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/happyoyster-adventure-create-world-api-reference"
+          }
+        }
+      }
+    }
+  ]
+}

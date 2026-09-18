@@ -50,7 +50,7 @@ string
 
 array
 
-创建时挂载的文件列表。每项含 `type`（固定为 `file`）、`file_id`（已上传的文件 ID）、`mount_path`（挂载路径，必须以 `/uploads/` 开头，实际路径会加上 `/mnt/session` 前缀）
+创建时挂载的资源列表。文件项含 `type`（固定为 `file`）、`file_id`（已上传的文件 ID）、`mount_path`（挂载路径，必须以 `/uploads/` 开头，实际路径会加上 `/mnt/session` 前缀）；记忆库项含 `type`（固定为 `memory_store`）、`memory_store_id`、`access`（`read_only` / `read_write`，默认 `read_write`）、`instructions`（挂载说明，最长 4096 字符），挂载路径由服务端按记忆库名称生成。详见[记忆库](raw/application-user-guide/managed-agents/managed-agents-context/managed-agents-memory-store.md)
 
 `vault_ids`
 
@@ -224,7 +224,7 @@ string
 
 array
 
-挂载的文件列表。每项含 `id`（资源 ID）、`type`、`file_id`（内部副本 ID）、`mount_path`（含前缀的完整路径）
+挂载的资源列表。文件项含 `id`（资源 ID）、`type`、`file_id`（内部副本 ID）、`mount_path`（含前缀的完整路径）；记忆库项含 `id`、`type`、`file_id`（固定为 `null`）、`memory_store_id`、`name` / `description`（记忆库元数据）、`access`、`instructions`、`mount_path`（服务端生成，如 `/mnt/memory/<名称>`）
 
 `title` / `metadata`
 

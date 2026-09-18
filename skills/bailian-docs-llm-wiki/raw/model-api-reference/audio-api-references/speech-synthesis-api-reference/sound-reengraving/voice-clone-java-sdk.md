@@ -300,7 +300,7 @@ boolean
 
 否
 
-仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash和v3-flash模型支持。
+仅适用于Qwen-Audio-TTS/CosyVoice声音复刻（model为`voice-enrollment`时），且仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、v3.5-flash和v3-flash模型支持。
 
 是否开启音频预处理（降噪、音频增强、音量规整）。有背景噪音时建议开启；安静环境建议关闭以最大程度还原音色。
 

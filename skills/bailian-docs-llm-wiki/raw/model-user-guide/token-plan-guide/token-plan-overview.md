@@ -8,12 +8,14 @@ Token Plan 是阿里云百炼推出的 AI 大模型订阅服务，以 Credits �
 
 Token Plan 采用 Credits 统一抵扣机制，一份订阅即可在 Claude Code、Cursor、Qwen Code、Codex、Qoder、Qoder CN、OpenClaw 等主流 AI 编程和智能体工具中使用。支持文本生成、图像生成、视频生成、语音识别、实时语音对话等多种模型，以及联网搜索、代码解释器等模型内置工具。
 
--   **个人版**：面向个人开发者，提供 Lite、Standard、Pro 三档套餐，设有 7 天的 Credits 限额，档位越高额度越大。
+-   **个人版**：面向个人开发者，提供 Lite、Essential、Standard、Pro 四档套餐，设有 7 天的 Credits 限额，档位越高额度越大。
 -   **团队版**：面向团队和企业，提供标准座席、高级座席、尊享座席三个档位，支持多席位管理、用量分析，承诺不使用数据训练模型。
 
 ## 个人版
 
 **Lite 套餐**
+
+**Essential 套餐**
 
 **Standard 套餐**
 
@@ -25,6 +27,9 @@ Token Plan 采用 Credits 统一抵扣机制，一份订阅即可在 Claude Code
 
 原价 60 元/月  
 限时 **39 元/月**
+
+原价 120 元/月  
+限时 **79 元/月**
 
 原价 180 元/月  
 限时 **139 元/月**
@@ -39,6 +44,8 @@ Token Plan 采用 Credits 统一抵扣机制，一份订阅即可在 Claude Code
 
 2,500 Credits
 
+5,625 Credits
+
 10,000 Credits
 
 40,000 Credits
@@ -48,6 +55,8 @@ Token Plan 采用 Credits 统一抵扣机制，一份订阅即可在 Claude Code
 **并发 Agent**
 
 1-2 个
+
+2-3 个
 
 3-4 个
 

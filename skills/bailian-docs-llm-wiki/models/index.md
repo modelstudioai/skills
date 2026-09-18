@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 181 个模型家族 · 419 个主干模型 · 更新于 2026-09-18
+> 自动生成 · 共 183 个模型家族 · 421 个主干模型 · 更新于 2026-09-19
 
 **机器查询走结构化文件**：
 
@@ -218,12 +218,14 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [表情包Emoji-detect](groups/emoji-detect-v1.json) — 表情包Emoji-Detect是辅助表情包Emoji生成的图像检测模型，用于检测图片中的人物形象是否符合视频生成要求。
   - 模型：`emoji-detect-v1`
 
-## 语音合成 `TTS` — 16 个家族
+## 语音合成 `TTS` — 17 个家族
 
 - [CosyVoice大模型](groups/cosyvoice.json) — 基于新一代生成式语音大模型，CosyVoice将文本理解和语音生成技术深度融合，能够精准解析并诠释各种文本内容，将其转化为如同真人发声般的自然语音，带来高度拟人化的自然语音合成体验。
   - 模型：`cosyvoice-clone-v1`, `cosyvoice-v1`, `cosyvoice-v2`, `cosyvoice-v3-flash`, `cosyvoice-v3-plus`, `cosyvoice-v3.5-flash`, `cosyvoice-v3.5-plus`
 - [MiniMax-Speech系列语音模型](groups/MiniMax-speech-market-place.json) — 由MiniMax提供的MiniMax-Speech系列语音模型API服务。
   - 模型：`MiniMax/speech-02-hd`, `MiniMax/speech-02-turbo`, `MiniMax/speech-2.8-hd`, `MiniMax/speech-2.8-turbo`
+- [Qwen-Audio-3.1-TTS](groups/qwen-audio-3.1-tts.json) — Qwen-Audio-3.1-TTS-Flash是面向实时交互场景的高性能语音合成大模型，支持多种语言和方言，支持流式语音合成。该模型具有free-style指令遵循能力和细粒度标签控制能力，可更灵活…
+  - 模型：`qwen-audio-3.1-tts-flash`
 - [Qwen-TTS](groups/qwen-tts.json) — 千问系列首个语音合成模型，支持中文、英文、中英混合输入。自适应根据输入文本调整输出语气，音色真实自然，支持输入输出全流式。
   - 模型：`qwen-tts`, `qwen-tts-latest`
 - [Qwen-声音复刻](groups/qwen-voice-enrollment.json) — 千问voice-enrollment模型是千问语音模型的声音复刻系列模型，仅需5s以上的音频，即可迅速复刻高相似度声音。结合qwen3-tts-vc-realtime模型使用，可将一个人的声音高保真复…
@@ -421,6 +423,11 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen3.7-text-embedding`, `qwen3.7-text-embedding-flash`, `text-embedding-async-v1`, `text-embedding-async-v2`, `text-embedding-v1`, `text-embedding-v2`, `text-embedding-v3`, `text-embedding-v4`
 - [Qwen-Rerank](groups/qwen-rerank.json) — 基于Qwen LLM底座训练的文本排序模型，对输入的Query和候选Docs进行相关性排序，支持100+语种和长文本输入，适用于文本检索、RAG等场景，效果对齐Qwen家族开源Rerank系列模型。
   - 模型：`gte-rerank-v2`, `qwen3-rerank`, `qwen3-vl-rerank`, `qwen3.7-text-rerank`
+
+## World-Model `World-Model` — 1 个家族
+
+- [HappyOyster-1.0](groups/happyoyster-1.0.json) — Happyoyster 系列首个实时交互的开放式世界模型。只需输入一句话，即可生成一个完整、可演绎、可探索、可互动的数字世界。
+  - 模型：`happyoyster-1.0-adventure`
 
 ## 3D 生成 `3D-generation` — 1 个家族
 

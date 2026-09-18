@@ -30,7 +30,7 @@ Managed Agents 的费用由三部分组成，分别独立计费。
 
 按所调用工具或 MCP 的实际标准
 
-调用工具或 MCP 服务产生的费用，单独计费
+调用工具或 MCP 服务产生的费用，单独计费。例如内置工具 `web_search` 按 0.03 元/次计费，`web_fetch` 限时免费
 
 **说明**会话处于运行中状态即产生运行时费，空闲状态不收取。及时终止不再使用的会话可减少运行时费。会话状态管理详见 [管理会话](raw/application-user-guide/managed-agents/managed-agents-session/managed-agents-session-operations.md)。
 

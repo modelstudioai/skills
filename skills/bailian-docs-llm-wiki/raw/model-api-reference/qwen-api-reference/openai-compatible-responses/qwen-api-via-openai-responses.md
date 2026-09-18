@@ -19,6 +19,7 @@
 
 -   **部分参数不支持**：不支持部分 OpenAI Responses API 参数，例如异步执行参数`background`（当前仅支持同步调用）等。
 -   **思考强度控制**：通过 `reasoning.effort` 参数控制模型的思考强度，具体用法请参考相应参数的说明。
+-   **上下文限制**：为预留内置工具调用与推理生成空间，Responses API 的最大输入上下文约为模型窗口大小的 80%（预留约 20% 缓冲区），超出部分将自动触发截断，不会报错中断。
 
 #### 华北2（北京）
 
@@ -75,7 +76,7 @@ HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/co
 
 支持的模型
 
-`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-max-2026-05-17`、`qwen3.7-max-preview`、`qwen3-max`、`qwen3-max-2026-01-23`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-04-20`、`qwen3.5-plus-2026-02-15`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`deepseek-v4.1-flash`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`glm-5.3`、`glm-5.2`、`kimi-k3`
+`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、`qwen3.8-omni-flash`（支持 Session 缓存）、`qwen3.7-max`、`qwen3.7-max-2026-05-20`、`qwen3.7-max-2026-06-08`、`qwen3.7-max-2026-05-17`、`qwen3.7-max-preview`、`qwen3-max`、`qwen3-max-2026-01-23`、`qwen3.7-plus`、`qwen3.7-plus-2026-05-26`、`qwen3.6-plus`、`qwen3.6-plus-2026-04-02`、`qwen3.5-plus`、`qwen3.5-plus-2026-04-20`、`qwen3.5-plus-2026-02-15`、`qwen3.7-flash`、`qwen3.7-flash-2026-07-15`、`qwen3.6-flash`、`qwen3.6-flash-2026-04-16`、`qwen3.5-flash`、`qwen3.5-flash-2026-02-23`、`qwen3.6-35b-a3b`、`qwen3.5-397b-a17b`、`qwen3.5-122b-a10b`、`qwen3.5-27b`、`qwen3.5-35b-a3b`、`deepseek-v4.1-flash`、`deepseek-v4-pro`、`deepseek-v4-pro-0813`、`deepseek-v4-flash`、`deepseek-v4-flash-0731`、`glm-5.3`、`glm-5.2`、`kimi-k3`
 
 **重要**非列表中阿里云百炼直供文本生成模型仅支持基础兼容能力，Agent 能力（内置工具等）受限。
 
@@ -136,7 +137,7 @@ type
 
 `format`、`audio_url` 或 `data`
 
-`format` 必填，例如 `wav` 或 `mp3`。`audio_url` 为音频 URL，`data` 为 Base64 编码的音频内容，两者必须二选一，不能同时传入。
+`format` 必填，例如 `wav` 或 `mp3`。`audio_url` 为音频 URL，`data` 为包含 MIME 类型前缀和 Base64 编码音频的完整 Data URI，例如 `data:audio/wav;base64,UklGR...`，两者必须二选一，不能同时传入。
 
 `input_video`
 
@@ -1248,7 +1249,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 #### Session 缓存
 
-`qwen3.8-omni-flash` 支持 Responses Session 缓存，配置方式见[Session 缓存](https://help.aliyun.com/zh/model-studio/compatibility-with-openai-responses-api#example-session-cache-title)。
+在请求 Header 中设置 `x-dashscope-session-cache: enable` 开启 Session 缓存，多轮对话通过 `previous_response_id` 关联上下文。详细说明见[Session 缓存](https://help.aliyun.com/zh/model-studio/compatibility-with-openai-responses-api#example-session-cache-title)。
 
 自动生效的隐式缓存另见[上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)。
 

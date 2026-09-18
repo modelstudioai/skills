@@ -744,7 +744,7 @@ Content: “<content>”
 
 ### 推荐提示词
 
-以下提示词适用于 `qwen3.8-omni-flash`。根据使用场景选择提示词，将其作为 Chat Completions 的 `system` 消息，并在 `user` 消息中传入待分析的音频或视频。提示词中的输出格式要求用于引导模型生成内容。
+以下提示词适用于 `qwen3.8-omni-flash`。根据使用场景选择提示词，将其放入 Chat Completions 的 `user` 消息中，作为 `content` 数组内 `type="text"` 项的 `text` 字段值，并在同一条消息中传入待分析的音频或视频。提示词中的输出格式要求用于引导模型生成内容。
 
 音视频精细描述：按时间顺序组织
 
@@ -1381,23 +1381,25 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 输入限制
+输入限制
 
 -   文件数量：
     
+    -   Qwen3.8-Omni-Flash：最多可传入 64 个。
     -   Qwen3.5-Omni系列：使用公网URL方式，最多可传入 512 个；使用Base64编码方式，最多可传入 250 个。
     -   Qwen3-Omni-Flash系列、Qwen-Omni-Turbo系列：仅支持输入一个；
 -   文件大小：
     
     -   使用公网URL方式：
         
-        -   Qwen3.5-Omni系列：限制为 2GB
+        -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：限制为 2GB
         -   Qwen3-Omni-Flash：限制为 256 MB
         -   Qwen-Omni-Turbo：限制为 150 MB
     -   使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB
         
 -   时长限制：
     
+    -   Qwen3.8-Omni-Flash：2 小时
     -   Qwen3.5-Omni系列：1 小时
     -   Qwen3-Omni-Flash：150 秒
     -   Qwen-Omni-Turbo：40 秒
@@ -1547,11 +1549,11 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 输入限制
+输入限制
 
 **图片数量**
 
--   Qwen3.5-Omni系列：最少传入 2 张图片，最多可传入 2048 张图片
+-   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：最少传入 2 张图片，最多可传入 2048 张图片
 -   Qwen3-Omni-Flash：最少传入 2 张图片，最多可传入 128 张图片
 -   Qwen-Omni-Turbo：最少传入 4 张图片，最多可传入 80 张图片
 
@@ -1688,24 +1690,24 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 输入限制
+输入限制
 
 -   文件数量：
     
-    -   Qwen3.5-Omni系列：使用公网URL方式，最多可传入 2048 个；使用Base64编码方式，最多可传入 250 个；
+    -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：使用公网URL方式，最多可传入 2048 个；使用Base64编码方式，最多可传入 250 个；
     -   Qwen3-Omni-Flash系列、Qwen-Omni-Turbo系列：仅支持输入一个；
 -   文件大小：
     
     -   使用公网URL方式：
         
-        -   Qwen3.5-Omni系列：不超过 2GB
+        -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：不超过 2GB
         -   Qwen3-Omni-Flash：不超过 100MB
         -   Qwen-Omni-Turbo：不超过 10MB
     -   使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB
         
 -   时长限制：
     
-    -   Qwen3.5-Omni系列：最长 3 小时
+    -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：最长 3 小时
     -   Qwen3-Omni-Flash：最长 20 分钟
     -   Qwen-Omni-Turbo：最长 3 分钟
 -   文件格式：支持AMR、 WAV、 3GP、 3GPP、 AAC、 MP3等主流格式
@@ -1842,7 +1844,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 }'
 ```
 
-Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 输入限制
+输入限制
 
 Qwen-Omni 模型支持传入多张图片。对输入图片的要求如下：
 
@@ -1854,9 +1856,9 @@ Qwen-Omni 模型支持传入多张图片。对输入图片的要求如下：
     
     -   使用公网URL方式：
         
-        -   Qwen3.5-Omni系列：单个图片文件的大小不超过 20MB
+        -   Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：单个图片文件的大小不超过 20MB
         -   Qwen3-Omni-Flash系列、Qwen-Omni-Turbo系列：单个图片文件的大小不超过 10MB
-    -   使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB；
+    -   Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 使用 Base64 编码方式：编码后的 Base64 字符串大小必须小于 10MB；
         
 -   图片的宽度和高度均应大于 10 像素，宽高比不应超过 200:1 或 1:200
     
@@ -1879,9 +1881,9 @@ extra_body={"use_multichannel": True},
 
 Qwen3.8-Omni-Flash 支持联网搜索，可获取实时信息并生成文本回答。
 
-Qwen3.8-Omni-Flash 的 Responses 调用使用 `web_search` 工具；Qwen3.5-Omni 的 Chat Completions 调用使用 `agent` 搜索策略。费用请参见[联网搜索计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
+Qwen3.8-Omni-Flash 的 Responses 调用使用 `web_search` 工具；Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 的 Chat Completions 调用使用 `agent` 搜索策略。费用请参见[联网搜索计费说明](https://help.aliyun.com/zh/model-studio/web-search#92ce83df3a599)。
 
-以下 Chat Completions 示例使用 Qwen3.8-Omni-Flash，通过 `enable_search=True` 开启联网搜索，并设置 `reasoning_effort="none"` 关闭思考，流式读取文本回复。
+以下 Chat Completions 示例使用 Qwen3.8-Omni-Flash，通过 `enable_search=True` 和 `search_options={"search_strategy": "agent"}` 开启联网搜索，并设置 `reasoning_effort="none"` 关闭思考，流式读取文本回复。
 
 python
 
@@ -1912,7 +1914,8 @@ try:
         stream_options={"include_usage": True},
         # 开启联网搜索
         extra_body={
-            "enable_search": True
+            "enable_search": True,
+            "search_options": {"search_strategy": "agent"}
         }
     )
 
@@ -1954,7 +1957,8 @@ const completion = await openai.chat.completions.create({
         include_usage: true
     },
     // 开启联网搜索
-    enable_search: true
+    enable_search: true,
+    search_options: { search_strategy: "agent" }
 });
 
 console.log("模型回复（包含实时信息）：");
@@ -1988,7 +1992,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     "stream_options": {
         "include_usage": true
     },
-    "enable_search": true
+    "enable_search": true,
+    "search_options": {"search_strategy": "agent"}
 }'
 ```
 
@@ -2666,7 +2671,7 @@ time.sleep(2)
 
 ## 输入 Base64 编码的本地文件
 
-以下示例使用 Qwen3.8-Omni-Flash，将本地文件编码为 Base64 后传入，并返回文本。Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 要求编码后的 Base64 字符串小于 10MB。
+以下示例使用 Qwen3.8-Omni-Flash，将本地文件编码为 Base64 后传入，并返回文本。音频和视频编码后的 Base64 字符串必须小于 10MB；Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 的图片输入也有此限制。
 
 #### 图片
 
@@ -3122,10 +3127,12 @@ Qwen-Omni 根据不同模态（音频、图像、视频）的 Token 数计费。
 
 音频、图片与视频转换为Token数的规则
 
-以下换算规则适用于 Qwen3.5-Omni、Qwen3-Omni-Flash 和 Qwen-Omni-Turbo。
+各模态的 Token 换算规则及适用型号如下。
 
 #### 音频
 
+-   `Qwen3.8-Omni-Flash`：输入音频计算公式为 `总 Tokens 数 = 音频时长（单位：秒）* 7`。
+    
 -   `Qwen3.5-Omni系列`：
     
     -   输入音频计算公式：`总 Tokens 数 = 音频时长（单位：秒）* 7`
@@ -3139,10 +3146,10 @@ Qwen-Omni 根据不同模态（音频、图像、视频）的 Token 数计费。
 
 #### 图片
 
--   `Qwen3.5-Omni系列`、`Qwen3-Omni-Flash`模型**：**每`32x32`像素对应 1 个 Token
+-   `Qwen3.8-Omni-Flash`、`Qwen3.5-Omni系列`、`Qwen3-Omni-Flash`模型**：**每`32x32`像素对应 1 个 Token
 -   `Qwen-Omni-Turbo`模型：每`28x28`像素对应 1 个 Token
 
-Qwen3.5-Omni 系列每张图最少 24 个 Token，Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 最少 4 个 Token；默认上限 1280 个 Token。Qwen3.5-Omni 系列可通过 `vl_high_resolution_images` 参数将上限提升至 16384 个 Token（Qwen-Omni-Turbo 和 Qwen3-Omni-Flash 不支持）。以下代码可估算单张图片消耗的 Token 数：
+Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 系列每张图最少 24 个 Token，Qwen3-Omni-Flash 和 Qwen-Omni-Turbo 最少 4 个 Token；默认上限 1280 个 Token。Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 系列可通过 `vl_high_resolution_images` 参数将上限提升至 16384 个 Token（Qwen-Omni-Turbo 和 Qwen3-Omni-Flash 不支持）。以下代码可估算单张图片消耗的 Token 数：
 
 ```
 import math
@@ -3150,13 +3157,13 @@ from PIL import Image  # pip install Pillow
 
 # ============ 模型参数配置（按需修改） ============
 
-# 图像因子：Qwen3.5-Omni系列、Qwen3-Omni-Flash 为 32；Qwen-Omni-Turbo 为 28
+# 图像因子：Qwen3.8-Omni-Flash、Qwen3.5-Omni系列、Qwen3-Omni-Flash 为 32；Qwen-Omni-Turbo 为 28
 IMAGE_FACTOR = 32
 
-# Token 下限：Qwen3.5-Omni系列为 24；Qwen-Omni-Turbo、Qwen3-Omni-Flash 为 4
+# Token 下限：Qwen3.8-Omni-Flash、Qwen3.5-Omni系列为 24；Qwen-Omni-Turbo、Qwen3-Omni-Flash 为 4
 MIN_TOKENS = 24
 
-# 高分辨率模式（仅 Qwen3.5-Omni 系列支持，Qwen-Omni-Turbo 和 Qwen3-Omni-Flash 不支持）
+# 高分辨率模式（Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 系列支持，Qwen-Omni-Turbo 和 Qwen3-Omni-Flash 不支持）
 # True  → Token 上限 16384
 # False → Token 上限 1280（默认）
 VL_HIGH_RESOLUTION_IMAGES = False
@@ -3198,7 +3205,7 @@ if __name__ == "__main__":
 
 -   `video_tokens`
     
-    计算过程较为复杂。请参见以下代码：
+    以下代码可估算视频视觉部分的 Token 数。Qwen3.8-Omni-Flash 与 Qwen3.5-Omni 使用相同的计算方法和模型参数：
     
 
 ```
@@ -3208,7 +3215,7 @@ import cv2
 
 # ============ 模型参数配置（按需修改） ============
 
-# 图像因子：Qwen3.5-Omni系列、Qwen3-Omni-Flash 为 32；Qwen-Omni-Turbo 为 28
+# 图像因子：Qwen3.8-Omni-Flash、Qwen3.5-Omni系列、Qwen3-Omni-Flash 为 32；Qwen-Omni-Turbo 为 28
 IMAGE_FACTOR = 32
 
 FRAME_FACTOR = 2
@@ -3219,19 +3226,19 @@ MAX_RATIO = 200
 VIDEO_MIN_PIXELS = 64 * IMAGE_FACTOR * IMAGE_FACTOR
 
 # 视频帧的像素上限
-# Qwen3.5-Omni系列：640 * 32 * 32
+# Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：640 * 32 * 32
 # Qwen3-Omni-Flash：768 * 32 * 32
 # Qwen-Omni-Turbo：768 * 28 * 28
 VIDEO_MAX_PIXELS = 640 * IMAGE_FACTOR * IMAGE_FACTOR
 
-# 最少抽取帧数：Qwen3.5-Omni系列、Qwen3-Omni-Flash 为 2；Qwen-Omni-Turbo 为 4
+# 最少抽取帧数：Qwen3.8-Omni-Flash、Qwen3.5-Omni系列、Qwen3-Omni-Flash 为 2；Qwen-Omni-Turbo 为 4
 FPS_MIN_FRAMES = 2
 
-# 最大抽取帧数：Qwen3.5-Omni系列为 2048；Qwen3-Omni-Flash 为 128；Qwen-Omni-Turbo 为 80
+# 最大抽取帧数：Qwen3.8-Omni-Flash、Qwen3.5-Omni系列为 2048；Qwen3-Omni-Flash 为 128；Qwen-Omni-Turbo 为 80
 FPS_MAX_FRAMES = 2048
 
 # 视频输入的最大像素值
-# Qwen3.5-Omni系列：180224 * 32 * 32
+# Qwen3.8-Omni-Flash、Qwen3.5-Omni系列：180224 * 32 * 32
 # Qwen3-Omni-Flash：16384 * 32 * 32
 # Qwen-Omni-Turbo：16384 * 28 * 28
 VIDEO_TOTAL_PIXELS = 180224 * IMAGE_FACTOR * IMAGE_FACTOR
@@ -3307,6 +3314,8 @@ if __name__ == "__main__":
 
 -   `audio_tokens`
     
+    -   `Qwen3.8-Omni-Flash`：输入音频计算公式为 `总 Tokens 数 = 音频时长（单位：秒）* 7`。
+        
     -   `Qwen3.5-Omni系列`：
         
         -   输入音频计算公式：`总 Tokens 数 = 音频时长（单位：秒）* 7`

@@ -84,9 +84,9 @@ type
 
 `image`
 
-`image_url` / `file_id` / `image_data` + `media_type`（三选一）
+`image_url` / `file_id`（二选一）
 
-图片，进入模型视觉通道：公网 URL、已上传文件 ID（解引用为临时 URL，仅本轮渲染、不持久化）、或 base64 数据（须带 `media_type`，如 `image/png`）
+图片，进入模型视觉通道：公网 URL 或已上传文件 ID（解引用为临时 URL，仅本轮渲染、不持久化）
 
 `video`
 

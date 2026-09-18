@@ -230,6 +230,27 @@ curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
     5.  **模型参数调优**：降低`temperature`、`top_k`、`top_p`等随机性参数，使输出更保守，避免离奇生成，但可能牺牲创造力。降低`max_tokens`在某些场景下可以防止模型回复关键信息后继续捏造内容。
     6.  **后处理验证**：模型推理完成之后，通过后续步骤验证回复内容的正确性。通常是通过AI的能力再去校验一次回答过程是否有幻觉。该方法会增加成本并降低模型请求处理速度。
 
+## CLI 相关
+
+1.  **为什么 CLI 调用模型没有扣减 Token Plan？**
+    
+    当前生效的凭据是普通 API Key（`default` Profile）。Token Plan 需使用订阅的 API Key 登录 `token-plan` Profile；可用 `bl auth status --output json` 查看当前生效的凭据来源。
+    
+2.  **如何让 CLI 调用模型时使用 Token Plan？**
+    
+    使用订阅 API Key 登录 Token Plan Profile：`bl auth login --config token-plan --api-key <sk-sp-Key>`；已有该 Profile 时，用 `bl config use --name token-plan` 切换为当前生效配置。
+    
+3.  **只配置 Token Plan API Key 能否使用全部 CLI 功能？**
+    
+    不能。模型调用类命令可用；控制台类命令（如 `app list`、`usage free`、`workspace`）需要先完成控制台登录（`bl auth login --console`），Token Plan 席位管理等命令还需要阿里云 OpenAPI AK/SK 凭据。
+    
+4.  **如何查看和切换当前生效的 API Key？**
+    
+    执行 `bl auth status --output json` 查看当前凭据（脱敏输出）；执行 `bl config list` 查看全部 Profile，`bl config use --name <profile>` 切换当前 Profile。
+    
+
+CLI 安装、Skills 与报错排查的更多问答见 [安装与鉴权](https://help.aliyun.com/zh/model-studio/cli/installation) 页的「常见问题」。
+
 ## 如何联系我们
 
 1.  **如有业务合作方面的场景，应该怎么联系？**

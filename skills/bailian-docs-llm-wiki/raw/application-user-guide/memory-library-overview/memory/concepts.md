@@ -107,6 +107,6 @@ Rerank
 
 **相似度阈值**
 
-0.01.0，过滤低相关性记忆，建议 0.50.7
+`0.0~1.0`，过滤低相关性记忆，建议 `0.5~0.7`
 
 **重要**了解概念后，从[快速开始](raw/application-user-guide/memory-library-overview/memory/quickstart.md)开始体验。

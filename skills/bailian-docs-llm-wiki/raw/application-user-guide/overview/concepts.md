@@ -6,20 +6,7 @@ Connector 的模型只有几层，弄清它们之间的关系，后面所有操�
 
 ## 整体关系
 
-```
-业务空间
-└── App（语雀、Salesforce、MySQL、文件连接器 …）
-    ├── 身份验证配置（认证方式与凭证，部分 App 需要）
-    │   └── 连接器（一次具体的连接）
-    └── 连接器（一次具体的连接）
-        └── 工具（自动生成，供智能体调用）
-```
-
 数据的流向是：
-
-```
-外部系统或本地文件 → 连接器 → 工具 → 智能体
-```
 
 ## App
 
@@ -45,7 +32,7 @@ Salesforce、MaxCompute、语雀
 
 在连接对话框里一次填完
 
-完整清单见[Apps 目录](raw/application-user-guide/overview/overview.md)。
+完整清单见[Apps 目录](raw/application-user-guide/overview/apps-guide/overview.md)。
 
 ## 身份验证配置
 
@@ -57,23 +44,23 @@ App 本身支持哪些身份验证方法，主要取决于 App 服务提供方�
 
 方法
 
-控制台说明
+说明
 
 OAuth 2.0
 
-通过 OAuth 2.0 授权流程实现安全、用户友好的登录
+跳转到服务提供方页面完成登录与授权，适合成员各自使用自己账号的场景
 
 API Key
 
-使用 API Key 完成身份验证
+粘贴服务提供方签发的密钥，适合团队共用一份凭证的场景
 
 一个身份验证配置可以被多个连接器共享，一个连接器只能选择一个配置。
 
-详见[身份验证概览](raw/application-user-guide/overview/overview.md)。
+详见[身份验证概览](raw/application-user-guide/overview/auth-guide/overview.md)。
 
 ## 连接器
 
-连接器是一次具体的连接，也就是 App 卡片下的一个实例。控制台在 App 详情页把它们列在 **已连接的用户** 区域。
+连接器是 App 下的一个连接实例，保存访问该系统所需的凭证或存储配置。建好的连接器列在 App 详情页的 **已连接的用户** 区域。
 
 同一个 App 下可以创建多个连接器。例如两个文件连接器分别存放产品文档和内部制度，或者两个 MySQL 连接器分别指向测试库和生产库。
 
@@ -153,4 +140,4 @@ Connector
 
 需要从大量文档里归纳答案时用知识库；需要在业务系统里查一条记录、写一份文档、发一条消息时用 Connector。两者可以并用。
 
-**重要**概念清楚之后，去[Apps 目录](raw/application-user-guide/overview/overview.md)挑一个真实的业务系统连上。
+**重要**概念清楚之后，去[Apps 目录](raw/application-user-guide/overview/apps-guide/overview.md)挑一个真实的业务系统连上。

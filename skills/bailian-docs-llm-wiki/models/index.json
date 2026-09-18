@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026-09-18",
-  "totalFamilies": 181,
-  "totalModels": 419,
+  "updatedAt": "2026-09-19",
+  "totalFamilies": 183,
+  "totalModels": 421,
   "profileCoverage": {
-    "full": 375,
-    "partial": 37,
-    "structured-only": 7,
+    "full": 355,
+    "partial": 56,
+    "structured-only": 10,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 39,
     "IG": 31,
     "VG": 26,
-    "TTS": 16,
+    "TTS": 17,
     "Reasoning": 15,
     "ASR": 14,
     "VU": 9,
@@ -24,10 +24,11 @@
     "Realtime-Chatting": 2,
     "Realtime-Text-to-Speech": 2,
     "TR": 2,
+    "World-Model": 1,
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 112,
+    "qwen": 113,
     "qwen-domain-model": 34,
     "wan": 14,
     "mini-max": 4,
@@ -37,6 +38,7 @@
     "moonshot-ai": 2,
     "happyhorse": 2,
     "vidu": 2,
+    "happyoyster": 1,
     "kling": 1,
     "stepfun": 1,
     "tripo": 1,
@@ -584,6 +586,21 @@
       ]
     },
     {
+      "slug": "happyoyster-1.0",
+      "name": "HappyOyster-1.0",
+      "primaryCapability": "World-Model",
+      "capabilities": [
+        "World-Model"
+      ],
+      "providers": [
+        "happyoyster"
+      ],
+      "itemCount": 1,
+      "items": [
+        "happyoyster-1.0-adventure"
+      ]
+    },
+    {
       "slug": "image-erase-completion",
       "name": "图像擦除补全",
       "primaryCapability": "IG",
@@ -961,6 +978,21 @@
         "qvq-plus"
       ],
       "maxContextWindow": 131072
+    },
+    {
+      "slug": "qwen-audio-3.1-tts",
+      "name": "Qwen-Audio-3.1-TTS",
+      "primaryCapability": "TTS",
+      "capabilities": [
+        "TTS"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen-audio-3.1-tts-flash"
+      ]
     },
     {
       "slug": "qwen-audio-asr-flash-filetrans",

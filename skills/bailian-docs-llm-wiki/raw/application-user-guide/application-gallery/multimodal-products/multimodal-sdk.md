@@ -8,4 +8,4 @@
 -   [移动端Android Lite SDK](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/multimodal-sdk-android-lite.md)
 -   [移动端iOS Lite SDK](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/multimodal-sdk-ios-lite.md)
 -   [Linux C++ SDK](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/multimodal-sdk-linux.md)
--   [RTOS C SDK（License模式）](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/mmi-rtos-sdk.md)
+-   [设备端C SDK](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/mmi-rtos-sdk.md)

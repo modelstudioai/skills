@@ -8373,11 +8373,11 @@ API方式操作请参阅以下内容。
 
 为提高数据传输的安全性和效率，您可通过私网调用阿里云百炼平台的应用。
 
-1.  [创建终端节点](raw/model-user-guide/security-and-compliance/transmission-security/access-model-studio-through-privatelink.md)：在阿里云控制台为您的VPC创建一个私网终端节点。
+1.  [添加私网连接并关联业务空间](raw/model-user-guide/security-and-compliance/transmission-security/access-model-studio-through-privatelink.md)：在百炼控制台为您的VPC添加私网连接（PrivateLink），并将目标业务空间与该私网连接关联。
     
-2.  **替换域名**：将API请求URL中的公网域名`dashscope.aliyuncs.com`替换为您获取到的私网终端节点服务域名。例如：
+2.  **替换域名**：将API请求URL中的公网域名`dashscope.aliyuncs.com`替换为关联业务空间后生成的私网域名。例如：
     
-    `https://ep-2zei6917b47eed******.dashscope.cn-beijing.privatelink.aliyuncs.com/api/v1/`
+    `https://{WorkspaceId}-{VpcId}.cn-beijing.maas.aliyuncs.com/api/v1/`
     
 3.  发起请求：示例代码如下。
     
@@ -8387,8 +8387,8 @@ API方式操作请参阅以下内容。
     import os
     from http import HTTPStatus
     from dashscope import Application
-    # 配置私网终端节点
-    os.environ['DASHSCOPE_HTTP_BASE_URL'] = 'https://ep-2zei6917b47eed******.dashscope.cn-beijing.privatelink.aliyuncs.com/api/v1/'
+    # 配置私网域名
+    os.environ['DASHSCOPE_HTTP_BASE_URL'] = 'https://{WorkspaceId}-{VpcId}.cn-beijing.maas.aliyuncs.com/api/v1/'
     response = Application.call(
         # 若没有配置环境变量，可用阿里云百炼API Key将下行替换为：api_key="sk-xxx"。但不建议在生产环境中直接将API Key硬编码到代码中，以减少API Key泄露风险。
         api_key=os.getenv("DASHSCOPE_API_KEY"),
@@ -8422,8 +8422,8 @@ API方式操作请参阅以下内容。
                     .appId("APP_ID")
                     .prompt("你是谁？")
                     .build();
-            // 配置私网终端节点
-            Application application = new Application("https://ep-2zei6917b47eed******.dashscope.cn-beijing.privatelink.aliyuncs.com/api/v1/");
+            // 配置私网域名
+            Application application = new Application("https://{WorkspaceId}-{VpcId}.cn-beijing.maas.aliyuncs.com/api/v1/");
             ApplicationResult result = application.call(param);
     
             System.out.printf("text: %s\n",
@@ -8447,7 +8447,7 @@ API方式操作请参阅以下内容。
     这里给出curl代码示例。
     
     ```
-    curl -X POST https://ep-2zei6917b47eed******.dashscope.cn-beijing.privatelink.aliyuncs.com/api/v1/apps/APP_ID/completion \
+    curl -X POST https://{WorkspaceId}-{VpcId}.cn-beijing.maas.aliyuncs.com/api/v1/apps/APP_ID/completion \
     --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header 'Content-Type: application/json' \
     --data '{

@@ -126,6 +126,7 @@ description: >-
 | `ME` | 多模态嵌入 |
 | `TR` | 翻译 |
 | `3D-generation` | 3D 生成 |
+| `World-Model` | World-Model |
 | `Realtime-Chatting` | Realtime-Chatting |
 
 一个模型常常带多个 capability，`index.md` 中按 `capabilities[0]`（主能力）归类，

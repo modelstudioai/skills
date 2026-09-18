@@ -12,4 +12,4 @@
 -   [自定义指令实践](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/custom-directive.md)
 -   [声音复刻及声音设计实践](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/voice-cloning-and-voice-design.md)
 -   [音频采集和播放说明](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/audio-capture-and-playback-instructions.md)
--   [基于RTOS SDK (License模式) 实现聊天能力](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/chat-capability-based-on-rtos-sdk.md)
+-   [设备端C SDK最佳实践](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/rtos-c-sdk-best-practices.md)

@@ -83,7 +83,7 @@ Qwen 大部分模型、Kimi、GLM、DeepSeek、Stepfun
     -   Qwen2.5开源系列（不含math与coder模型）
 -   **多模态模型**
     -   千问VL（非思考模式）：Qwen3-VL-Plus系列、Qwen3-VL-Flash系列、Qwen-VL-Max系列（不包括最新版与快照版模型）、Qwen-VL-Plus系列（不包括最新版与快照版模型）
-    -   千问Omni：Qwen3.5-Omni-Plus系列
+    -   千问Omni：Qwen3.8-Omni-Flash、Qwen3.5-Omni-Plus系列
     -   Qwen3-VL 开源系列（非思考模式）
 
 **说明**标注为"非思考模式"的模型，在思考模式下设置 `response_format` 为 `{"type": "json_object"}` 不会报错，但结构化输出可能失效，如需稳定获取标准 JSON，可参考"常见问题"中的处理方式。

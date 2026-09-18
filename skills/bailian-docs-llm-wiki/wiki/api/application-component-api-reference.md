@@ -1,39 +1,40 @@
 # application component api reference
 
-应用组件 API 提供了在百炼平台中集成和调用预置能力（如对话、知识检索、工具调用等）的标准接口，适用于构建企业级 AI 应用。该 API 以 RESTful 形式提供，支持同步响应与[流式输出](../concepts/streaming-output.md)，并与百炼统一身份认证体系深度集成。开发者需通过 RAM 授权获取访问凭证，方可调用相关接口。
+应用组件 API 提供了在百炼平台中集成和调用预置能力（如对话、知识检索、工具调用等）的标准接口，适用于构建企业级 AI 应用。该 API 以 RESTful 形式提供，支持同步响应与[流式输出](../concepts/streaming-output.md)，需通过 RAM 授权访问。所有接口均基于统一的服务接入点，版本演进遵循语义化规范。
 
 ## 支持的模型/功能
 
 当前应用组件 API 支持以下核心能力：  
-- 基于大模型的多轮对话（`chat` 类型任务）  
-- 结构化知识库检索（`retrieval` 类型任务，依赖已配置的知识空间 ID）  
-- 内置工具链调用（如日期计算、网页摘要、代码解释等，详见 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)）  
-- 自定义[插件](../concepts/plugin.md)扩展（需提前在控制台注册并发布）  
-
-> **注意**：部分文档中提及的 `code_generation` 功能模块已在 v2024.03 版本中合并至通用 `chat` 接口，旧版独立 endpoint 已废弃；请以 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 中的变更日志为准。
+- 基于 `bailian-v1` 模型的多轮对话（含上下文管理）；  
+- 知识库增强问答（RAG），支持向量检索与重排；  
+- 工具调用（Tool Calling），可对接自定义 HTTP 工具或平台内置函数；  
+- 输出结构化 JSON（需显式设置 `response_format: "json_object"`）。  
+详细能力列表见 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `app_id` | string | 是 | 应用唯一标识，由控制台创建应用时生成 |
-| `messages` | array | 是 | 对话消息列表，格式同 OpenAI `messages`，支持 `user`/`assistant`/`system` 角色 |
-| `model` | string | 否 | 指定后端模型，可选值包括 `qwen-max`、`qwen-plus`、`qwen-turbo`；未指定时使用应用默认模型 |
-| `stream` | boolean | 否 | 是否启用流式响应，默认 `false`；流式模式下响应为 SSE 格式 |
-| `retrieval_config` | object | 否 | 知识检索配置，含 `knowledge_id` 和 `top_k` 字段，详见 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 中的请求体示例 |
+必填参数包括：  
+- `model`: 必须为 `bailian-v1`（暂不支持其他模型别名）；  
+- `input.messages`: 非空消息数组，格式同 OpenAI ChatML；  
+- `parameters.temperature`: 范围 `[0.0, 2.0]`，默认 `0.8`；  
+- `parameters.top_p`: 范围 `[0.0, 1.0]`，默认 `0.95`；  
+- `parameters.max_tokens`: 最大输出 token 数，上限 `4096`（超出将被截断）。  
+授权与端点配置详见 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 和 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)。
 
 ## 使用方式
 
-1. 获取访问凭证：通过 RAM 角色或 AccessKey 进行签名认证，授权流程参见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)  
-2. 构造请求：向 `POST /v1/apps/{app_id}/chat`（或 `/v1/apps/{app_id}/retrieval`）发送 JSON 请求  
-3. 处理响应：非流式返回标准 JSON；流式响应需按 `data:` 行解析，每条事件含 `delta` 或 `finish_reason` 字段  
+1. 通过 RAM 角色获取 `bailian:InvokeApplicationComponent` 权限；  
+2. 构造 POST 请求至 `/v1/applications/{app_id}/chat/completions`（`app_id` 为控制台创建的应用唯一标识）；  
+3. 设置 `Content-Type: application/json` 与 `Authorization: Bearer <access_token>`；  
+4. 示例请求体参考 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中的 `curl` 片段。
 
 ## 限制和注意事项
 
-- 单次请求 `messages` 总长度上限为 32768 token（按 Qwen 分词器统计）  
-- 流式响应超时时间为 60 秒，超时将关闭连接并返回 `504 Gateway Timeout`  
-- `app_id` 必须与调用方 RAM 权限绑定的应用完全一致，跨应用调用将返回 `403 Forbidden`  
-- 所有请求必须携带 `X-Bailian-Date` 和 `Authorization` 头，签名算法与阿里云通用一致，细节见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)
+- 单次请求最大 `input.messages` 长度为 32768 tokens（含 system + user + assistant 消息）；  
+- 流式响应（`stream: true`）仅支持 SSE 格式，不兼容 WebSocket；  
+- `tool_choice` 参数若设为 `"auto"`，系统可能忽略部分工具描述字段 —— 此行为与 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 中 v2024.03 的变更描述存在偏差；  
+> **注意**：文档 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中示例使用的 `model: qwen-max` 已过时，实际仅接受 `bailian-v1`，请以 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 为准；  
+> **注意**：[授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md) 中列出的 `bailian:ListApplications` 权限非调用必需，仅用于控制台管理。
 
 ## 来源文档
 
