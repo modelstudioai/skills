@@ -1,58 +1,48 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台中模型主动识别用户意图、生成结构化工具请求，并交由系统或外部服务执行的关键能力。它不是简单的 API 请求转发，而是模型在推理过程中自主完成“规划—参数提取—调用触发”闭环的智能行为，是构建可行动 Agent 的核心机制。
+函数调用（Function Calling）是百炼平台中让大模型在推理过程中**自主识别用户意图、生成结构化工具请求，并安全执行外部能力**的核心机制。它不是简单的 API 转发，而是模型基于语义理解主动决策“何时调用、调用哪个、传什么参数”的闭环过程，支撑智能体实现文件处理、实时搜索、代码执行、图像生成等超越纯语言生成的复合任务。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-函数调用在百炼平台中并非单一接口能力，而是贯穿多个层级的统一语义抽象，具体体现为：
+函数调用在百炼平台以三种形态落地，面向不同开发粒度和控制需求：
 
-- **Qwen API（OpenAI 兼容 Responses / Anthropic Messages 协议）**：通过 `tools` 数组声明可用函数（含内置工具如 `web_search`、`code_interpreter` 及自定义 function），模型在 `tool_use` 消息中返回 JSON 格式的调用请求（含 `name` 和 `input`）。开发者需解析响应、执行实际逻辑、再将结果以 `tool_result` 形式回传继续对话。
+- **Managed Agents（托管智能体）**：通过 Skill 注册自定义函数（HTTP 或内部服务），Agent 在会话中自动触发调用；`tool_choice` 参数控制策略（`"auto"`/`"none"`/指定 Skill ID），调用事件（如 `tool_call_started`）可通过 Webhook 实时监听。
+- **Application Component API（应用组件）**：在 `/v1/applications/{app_id}/chat/completions` 请求中，通过 `tools` 数组声明函数 schema，配合 `tool_choice: "auto"` 启用自动调用；模型返回 `tool_calls` 字段，含 `function.name` 和 `function.arguments`（JSON 字符串），需开发者自行解析并执行。
+- **Plug-in（插件）与 Skill（技能）**：  
+  - *插件*：面向通用能力（如 `calculator`、`text_to_image`），通过 `tool_id` 显式标识，支持 Header/Query/Bearer 等鉴权方式，输入参数需严格按 `SKILL.md` 或插件配置定义；  
+  - *Skill*：面向文件与数据操作（如 CSV 清洗、Excel 公式计算），依赖 `SKILL.md` 中 `description` 的语义匹配触发，无需显式命名调用，但要求 ZIP 包内规范定义输入/输出行为。
 
-- **Managed Agents API（托管智能体）**：函数调用被封装为 `tool_call` 和 `tool_result` 事件类型，通过 `/v1/sessions/{session_id}/events` SSE 流实时推送。Agent 运行时自动调度已绑定的 Skill（即注册的函数），无需开发者手动解析或拼接消息——平台完成从模型输出到 Skill 执行、结果注入的全链路托管。
-
-- **LLM 应用（智能体应用 Agent 2.0）**：函数调用与知识库、MCP [插件](plugin.md)等统一抽象为“工具”，由模型自主决策调用顺序与时机。控制台配置中启用[插件](plugin.md)即等效于向模型暴露对应函数；运行时所有工具调用均展示在“规划-执行-反思”链路中，支持调试与审计。
-
-- **[插件](plugin.md)（Plug-in）**：每个插件本质上是一个可注册、可发现、可调用的函数。无论是官方 `calculator` 还是自定义 MCP 服务，其输入/输出参数、鉴权方式、错误处理均由插件元数据严格定义，确保模型生成的调用请求可被安全、确定性地执行。
-
-- **Omni Realtime API（实时[多模态](multi-modal.md)）**：通过 `session.update` 设置 `tools` 后，模型可在语音或文本交互中动态触发函数（如搜索、计算），并以 `tool_call` 事件形式实时下发。该场景强调低延迟响应，调用与结果反馈均通过 WebSocket 事件流完成，不依赖传统 HTTP 轮询。
-
-> ✅ 统一原则：无论在哪一场景，**函数调用的发起方始终是模型（而非开发者代码）**；开发者职责是提供清晰的工具定义、可靠的服务实现、以及合规的结果回传机制。
+> ✅ 统一原则：所有场景下，函数调用均由模型**主动发起**，开发者负责提供清晰的函数描述（schema 或 description）、安全执行函数逻辑、并将结果按约定格式返回给模型继续推理。
 
 ## 关键参数和配置
 
-函数调用行为由以下关键参数协同控制，需在对应 API 或配置界面中显式设置：
+| 参数 | 所属场景 | 说明 | 示例值 |
+|------|----------|------|--------|
+| `tool_choice` | Managed Agents / Application Component | 控制调用策略 | `"auto"`（默认）、`"none"`、`{"type": "function", "function": {"name": "calculator"}}` |
+| `tools` | Application Component / Assistant API | 声明可用函数的 OpenAPI-like schema 数组 | `[{"type": "function", "function": {"name": "search_web", "description": "...", "parameters": {...}}}]` |
+| `tool_id` | Plug-in | 插件内具体工具的唯一标识符，必须显式传递 | `"quark_search"`, `"code_interpreter"` |
+| `name` | Skill | `SKILL.md` 中定义的 Skill 唯一标识，小写+连字符 | `"csv-cleaner"` |
+| `description` | Skill / Plug-in | 决定是否触发调用的核心语义描述字段，需包含输入类型、支持操作、触发词、不适用场景 | `"清洗上传的 CSV 文件：去除空行、标准化列名、处理缺失值。不支持 Excel 或 JSON 格式。"` |
 
-- `tools`（必填数组）：定义可用函数列表，每项包含：
-  - `type`: 当前仅支持 `"function"`；
-  - `function.name`: 工具唯一标识符（如 `"web_search"`、`"text_to_image"`），必须与插件 ID 或 Skill ID 严格一致；
-  - `function.description`: 供模型理解用途的自然语言描述（影响调用准确性）；
-  - `function.parameters`: JSON Schema 格式，明确定义输入字段名、类型、是否必需、示例值等（**Schema 必须有效且无空 Object**）。
-
-- `tool_choice`（可选）：控制模型调用策略：
-  - `"auto"`（默认）：模型按需自主决定是否及何时调用；
-  - `"none"`：禁用所有函数调用；
-  - `{"type": "function", "name": "xxx"}`：强制指定调用某函数（适用于确定性流程）。
-
-- `enable_search`（Omni Realtime 特有）：布尔开关，启用后模型可自动触发联网搜索（底层复用夸克搜索能力），**与 `tools` 互斥，不可同时启用**。
-
-- 鉴权与透传（自定义插件/MCP）：
-  - `biz_params`：用于传递业务级参数（如用户 ID、会话上下文），在 API 调用时透传至插件后端；
-  - Header/Query 鉴权：在插件配置中预设 `Authorization`、`X-Api-Key` 等，由平台自动注入请求头或查询参数。
+> ⚠️ 注意：`function.arguments` 始终为 JSON 字符串（非对象），需 `JSON.parse()` 后使用；所有参数值必须符合 schema 定义的类型与约束，否则调用将失败。
 
 ## 面向开发者，简洁实用
 
-- ✅ **定义优先**：写好 `function.description` 和精准的 `parameters` Schema，比调整 temperature 更能提升调用准确率。
-- ✅ **验证必做**：自定义插件发布前务必完成在线调试；Qwen API 中首次使用新工具，建议先用 `stream=false` 测试非流式响应。
-- ✅ **错误要捕获**：模型可能生成非法参数（如类型错误、缺失必填字段）。你的工具实现必须校验输入，并返回符合 `tool_result` 格式的结构化错误（如 `{"error": "Invalid URL format"}`）。
-- ✅ **结果需精简**：`tool_result` 内容将计入模型上下文。避免返回原始 HTML、长日志或二进制数据；提取关键字段（如搜索摘要、计算结果）即可。
-- ⚠️ **注意兼容性**：`qwen-turbo` 等轻量模型函数调用稳定性低于 `qwen-max`；`qwen-vl` 系列图像理解模型暂不支持工具调用；`QwQ`/`QVQ` 模型不支持 `system` 消息，影响工具描述可见性——请以[各模型文档](raw/model-api-reference/qwen-api-reference.md)为准。
+- **不要硬编码调用逻辑**：模型负责“判断要不要调”，你负责“确保能正确执行”。把精力放在写准 `description`、定义好 `parameters`、验证好函数返回格式上。
+- **调试优先级**：  
+  1. 检查 `description` 是否覆盖典型用户表达（如“画一只猫” vs “生成猫咪图片”）；  
+  2. 验证 `parameters` 中 Object 类型的子属性是否全部填写（空属性会导致 Skill 审查失败）；  
+  3. 确保函数返回结果是模型可理解的简洁文本或结构化 JSON（避免原始二进制、长日志）。
+- **安全底线**：  
+  - 自定义函数/插件必须做输入校验与沙箱隔离（尤其 `code_interpreter` 不允许外网访问）；  
+  - 敏感凭证（如 API Key）务必通过 Vault 加密存储，禁止写死在代码或配置中。
+- **性能提示**：单次请求最大上下文为 32768 tokens，函数调用本身不额外计费，但调用产生的云资源（如函数计算实例、图像生成）按实际用量计费。
 
 ## 关联主题页
 
-- [qwen api reference](../api/qwen-api-reference.md)
 - [managed agents api](../api/managed-agents-api.md)
-- [llm application](../guides/llm-application.md)
+- [application component api reference](../api/application-component-api-reference.md)
 - [plug in](../guides/plug-in.md)
-- [omni realtime api](../api/omni-realtime-api.md)
+- [skill](../guides/skill.md)
 
 

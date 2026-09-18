@@ -601,7 +601,7 @@ string
 }
 ```
 
-## 通过RTOS C SDK(license)接入示例
+## 通过设备端C SDK接入示例
 
 初始化配置
 

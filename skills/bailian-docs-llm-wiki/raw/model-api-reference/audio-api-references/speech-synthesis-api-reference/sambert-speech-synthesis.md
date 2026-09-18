@@ -7,4 +7,4 @@
 -   [Python SDK](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/sambert-speech-synthesis/sambert-python-sdk.md)
 -   [Android SDK](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/sambert-speech-synthesis/sambert-android-sdk.md)
 -   [iOS SDK](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/sambert-speech-synthesis/sambert-ios-sdk.md)
--   [HarmonyOS SDK](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/sambert-harmonyos-sdk.md)
+-   [HarmonyOS SDK](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/sambert-speech-synthesis/sambert-harmonyos-sdk.md)

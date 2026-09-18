@@ -336,11 +336,11 @@ ModelCode 状态，不代表每个容量实例的状态
 
 `pre_paid_gmt_expired`
 
-预付费到期时间。存在多个容量实例时，请通过目标实例详情的 `gmt_expired` 获取其到期时间。
+预付费到期时间。存在多个容量实例时，请通过目标实例详情的 `gmt_expired` 获取其到期时间。到期时刻计算规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-rules-h2)。
 
 `overflow_strategy`
 
-溢出策略，`enable` 表示允许溢出按量计费，`disable` 表示超出容量时限流。
+溢出策略，`enable` 表示允许溢出按量计费，`disable` 表示超出容量时限流。溢出计费口径详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-overflow-h2)。
 
 `fail_reason`
 
@@ -483,7 +483,7 @@ ModelCode 状态，不代表每个容量实例的状态
 }
 ```
 
-`overflow_strategy` 必填，仅支持小写 `enable` / `disable`。`enable` 表示超出 PTU 容量的流量允许溢出公共池按量计费；`disable` 表示超出后限流。配置作用于整个 ModelCode，容量包不单独配置溢出策略。
+`overflow_strategy` 必填，仅支持小写 `enable` / `disable`。`enable` 表示超出 PTU 容量的流量允许溢出公共池按量计费；`disable` 表示超出后限流。配置作用于整个 ModelCode，容量包不单独配置溢出策略。溢出计费口径详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-overflow-h2)。
 
 响应包含 `request_id` 和 `output`。修改后可通过 [查询 吞吐预留](#h2-sec-query) 获取 `overflow_strategy`，确认配置已更新。
 
@@ -506,7 +506,7 @@ ModelCode 状态，不代表每个容量实例的状态
 }
 ```
 
-**警告**开启溢出策略后，超出容量的流量按量计费，会产生额外费用。关闭后，超出容量的请求会被限流。更多说明参见[预置吞吐长输入与缓存](raw/model-user-guide/model-deployment-index/ptu-long-input-and-cache.md)。
+**警告**开启溢出策略后，超出容量的流量按量计费，会产生额外费用。关闭后，超出容量的请求会被限流。溢出计费口径详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-overflow-h2)；更多说明参见[预置吞吐长输入与缓存](raw/model-user-guide/model-deployment-index/ptu-long-input-and-cache.md)。
 
 ## 容量实例接口
 
@@ -711,7 +711,7 @@ String 列表
 -   已生效的预付费：不能用本接口代替退订，直接调用返回 `PREPAID_UNSUBSCRIBE_REQUIRED`。完成退订并释放容量后，最终同样返回 `deleted=true`、`status=STOPPED`。
 -   `can_delete=true` 表示当前状态允许进入删除 / 退订流程，不表示预付费可跳过退订直接 DELETE。对于尚无关联订单的失败实例，请根据接口返回结果处理。
 
-退订释放为异步操作。同一 ModelCode 正在处理其他操作时，已受理的释放操作会排队等待，完成前查询可能仍返回原状态和生效容量。退订已受理不代表容量已释放，请通过操作结果及实例 `deleted` 字段确认完成。
+退订释放为异步操作。同一 ModelCode 正在处理其他操作时，已受理的释放操作会排队等待，完成前查询可能仍返回原状态和生效容量。退订已受理不代表容量已释放，请通过操作结果及实例 `deleted` 字段确认完成。退订退费公式详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-unsubscribe-h3)。
 
 ### 查询容量操作
 
@@ -813,7 +813,7 @@ Object
 
 String
 
-预付费实例到期时间。
+预付费实例到期时间。到期时刻计算规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-rules-h2)。
 
 `can_scale`
 

@@ -21,7 +21,7 @@
     
     文件连接器用于托管非结构化文档，例如 PDF、Word、Markdown。它不需要外部系统的凭证，最适合用来跑通第一次流程。
     
-    **说明**语雀、Salesforce、MaxCompute 等 App 的连接对话框里只有一个身份验证配置下拉框，需要先创建配置才能连接。流程见[身份验证概览](raw/application-user-guide/overview/overview.md)。
+    **说明**语雀、Salesforce、MaxCompute 等 App 的连接对话框里只有一个身份验证配置下拉框，需要先创建配置才能连接。流程见[身份验证概览](raw/application-user-guide/overview/auth-guide/overview.md)。
     
 3.  **填写连接信息**。在弹出的对话框中填写：
     
@@ -82,7 +82,7 @@
 
 `fileId`（string，必填）：文件 ID
 
-**说明**工具是连接建立后自动生成的，数量和参数由 App 类型决定，不需要也无法手动配置。不同 App 生成的工具不同，详见[各 App 的说明](raw/application-user-guide/overview/overview.md)。
+**说明**工具是连接建立后自动生成的，数量和参数由 App 类型决定，不需要也无法手动配置。不同 App 生成的工具不同，详见[各 App 的说明](raw/application-user-guide/overview/apps-guide/overview.md)。
 
 ## 第 3 步：导入几个文件
 
@@ -163,6 +163,6 @@ MCP 地址填写有误，检查路径是否为 `/api/v2/connector/mcp`
 ## 下一步
 
 -   [核心概念](raw/application-user-guide/overview/concepts.md)：理解 App、连接器实例与工具的层级关系。
--   [连接更多 App](raw/application-user-guide/overview/overview.md)：连接钉钉、语雀、数据库等真实业务系统。
--   [身份验证](raw/application-user-guide/overview/overview.md)：连接语雀、Salesforce 前，先建好身份验证配置。
--   [管理文件与类目](raw/application-user-guide/overview/overview/file.md)：用类目组织文件，按需从本地或 OSS 批量导入。
+-   [连接更多 App](raw/application-user-guide/overview/apps-guide/overview.md)：连接钉钉、语雀、数据库等真实业务系统。
+-   [身份验证](raw/application-user-guide/overview/auth-guide/overview.md)：连接语雀、Salesforce 前，先建好身份验证配置。
+-   [管理文件与类目](raw/application-user-guide/overview/apps-guide/file.md)：用类目组织文件，按需从本地或 OSS 批量导入。

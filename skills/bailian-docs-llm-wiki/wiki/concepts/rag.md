@@ -1,51 +1,61 @@
 # 检索增强生成
 
-检索增强生成（Retrieval-Augmented Generation，RAG）是百炼平台的核心能力范式，指在大语言模型生成响应前，先从私有或领域知识库中语义检索相关片段，并将检索结果作为上下文注入模型提示词，从而提升回答的准确性、专业性与事实一致性。该机制有效弥补了大模型固有的知识时效性差、幻觉率高、领域适应弱等局限。
+检索增强生成（Retrieval-Augmented Generation，简称 RAG）是一种将大语言模型（LLM）与外部知识源动态结合的技术范式：在生成回答前，先从结构化或非结构化知识库中检索相关片段，再将检索结果作为上下文注入模型提示（[prompt](../guides/prompt.md)），从而提升回答的准确性、时效性与可溯源性。该技术有效缓解了模型幻觉、知识过时和领域泛化不足等问题，是百炼平台支撑私有知识问答、智能客服、专业助手等场景的核心能力底座。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-RAG 在百炼中不是单一 API，而是贯穿多个能力层的统一技术底座，按使用深度和控制粒度分为三类典型形态：
+RAG 在百炼平台并非单一接口，而是贯穿多个能力层级的**统一技术架构**，开发者可根据需求选择不同抽象级别的使用方式：
 
-- **开箱即用的知识问答（Knowledge Chat）**：面向业务终端用户，通过 `POST /api/v2/apps/knowledge/chat` 接口调用。平台自动完成「查询理解 → 多库路由 → 向量+关键词混合检索 → Rerank 精排 → 模型上下文拼接 → 流式生成」全链路，开发者仅需传入 `agent_id` 和对话历史，无需感知底层 RAG 细节。适用于客服助手、内部知识库问答等零代码/低代码场景。
+- **零代码应用构建（推荐入门）**：在控制台创建「知识库问答」模板应用，上传 PDF/DOCX/TXT 等文档 → 自动完成解析、切分、向量化与索引 → 配置相似度阈值、召回数量等参数 → 发布后即获得 RAG 服务。所有 RAG 流程（检索 + 生成）由平台全自动编排，无需编写代码。
 
-- **可编排的 RAG 工作流（Workflow RAG）**：面向需要确定性控制的开发者，在工作流画布中显式拖入「知识库节点」，配置 `topK`、`相似度阈值`、`标签过滤` 等参数，再将检索结果（如 `{知识库1/result}`）注入下游大模型节点的提示词。支持多知识库并行检索、条件分支、批处理等复杂逻辑，适用于合规审查、招投标应答等强流程场景。
+- **API 直接调用（精准控制）**：
+  - 使用 `/api/v2/apps/knowledge/chat`（知识问答 API）：传入 `agent_id`（已发布的问答服务 ID）和用户消息，平台执行完整 RAG 三阶段流程（Query 改写 → 多库混合检索 → 基于检索结果的流式生成），返回带引用标记的回答。
+  - 使用 `/api/v1/indices/knowledge/search`（知识检索 API）：仅执行检索阶段，返回原始文本切片（含 `score`、`text`、`metadata`），开发者可自行拼接 [prompt](../guides/prompt.md) 并调用基础模型 API（如 `qwen-plus`）完成生成，适用于需自定义生成逻辑或集成到现有系统的情况。
 
-- **框架级自定义 RAG（Framework RAG）**：面向专业开发者，通过 LlamaIndex 等 SDK 集成 `DashScopeCloudRetriever` 或 `DashScopeCloudIndex`，在代码中精细控制检索策略（如启用 `gte-rerank-hybrid` 重排、设置 `rerank_min_score` 过滤低分切片）。适用于需与本地向量库混合、或需定制解析/切分逻辑（注：云端知识库不支持自定义切分）的混合架构场景。
+- **框架集成（灵活扩展）**：通过 LlamaIndex 或 Spring AI Alibaba 等框架接入百炼能力：
+  - 使用 `DashScopeCloudRetriever` + `DashScopeLLM` 构建端到端 RAG 流水线，支持本地重排（`DashScopeRerank`）、智能切分（`DashScopeJsonNodeParser`）等高级能力；
+  - 利用 `DashScopeCloudIndex` 复用百炼云端索引，避免重复构建向量库，兼顾效果与运维效率。
 
-> ⚠️ 注意：所有 RAG 能力均依赖已发布的知识库服务（`agent_id`），模型选型（如 embedding 模型、rerank 模型）、索引结构、路由策略等均由控制台统一配置并发布，**API 层不可动态覆盖**。
+- **工作流与智能体编排（复杂逻辑）**：在工作流应用中，将「知识库」节点与「大模型」节点串联，通过变量（如 `{知识库1/result}`）将检索结果注入模型提示；在智能体应用中，启用知识库后，模型自动根据用户问题决定是否触发检索，并融合结果生成回答，支持多轮对话中的上下文感知 RAG。
+
+- **跨平台分发（业务落地）**：通过 AppFlow 连接流，将已配置 RAG 的百炼应用一键发布至企业微信、钉钉、微信公众号或网站，终端用户提问即触发后台 RAG 流程，实现“零改造接入”。
 
 ## 关键参数和配置
 
-RAG 行为主要由以下参数控制，其生效位置取决于使用方式：
+RAG 效果高度依赖以下关键参数，均在控制台或 API 中可配（部分参数在不同调用路径下名称略有差异，但语义一致）：
 
-| 参数名 | 生效位置 | 类型 | 常用值 | 说明 |
-|--------|----------|------|--------|------|
-| `agent_id` | 所有 RAG 接口必填 | `string` | `aid-xxx` | 绑定已发布的知识服务 ID；检索服务与问答服务 ID 不互通，须分别创建。 |
-| `top_k` / `max_retrieval_count` | 工作流知识库节点、`DashScopeCloudRetriever` | `int` | `5`–`20` | 最终返回给模型的切片总数（非初步召回数），直接影响上下文长度与 token 消耗。 |
-| `score_threshold` | 控制台知识库配置页、工作流节点、`retrieval_config` | `float` | `0.3`–`0.5` | 过滤低于该相似度分数的切片，值越高结果越精准但可能漏召。 |
-| `dense_similarity_top_k` | `DashScopeCloudRetriever` SDK | `int` | `50`–`100` | 向量检索阶段初步召回数，决定 Rerank 模型输入规模（影响费用）。 |
-| `enable_reranking` | `DashScopeCloudRetriever` SDK | `boolean` | `true` | 是否启用重排模型（默认开启），对初步召回结果进行语义精排。 |
-| `tags` / `metadata_filter` | 控制台调试界面、工作流节点、SDK | `object` | `{"department": "legal"}` | 基于上传时设置的标签或元数据字段进行前置过滤，提升精度与效率。 |
+| 参数名 | 所在层级 | 说明 | 典型取值 | 注意事项 |
+|--------|----------|------|-----------|-----------|
+| `top_k` / `最大召回数量` | 检索层 | 最终返回给模型的文本切片总数 | `3–10`（默认 `5`） | 控制上下文长度与信息密度；过高易引入噪声，过低可能遗漏关键信息 |
+| `similarity_threshold` / `相似度阈值` | 检索层 | 过滤低于该分数的检索结果 | `0.0–1.0`（默认 `0`，即不过滤） | 设为 `0.3–0.6` 可显著降低幻觉，但需结合业务测试调优 |
+| `dense_similarity_top_k`（LlamaIndex） | 框架层 | 向量检索初始召回数 | `50–100` | 此值影响 Rerank 计费（按实际召回切片数计费，非最终返回数） |
+| `enable_reranking`（LlamaIndex） | 框架层 | 是否启用语义重排 | `true`（推荐） | 开启后使用 `gte-rerank` 等模型对初检结果二次排序，大幅提升相关性 |
+| `retrieval_mode`（应用配置） | 应用层 | 知识库调用策略 | `必定调用`（推荐） / `按需调用` | `必定调用` 保证每次问答都注入知识，适合强领域场景；`按需调用` 由模型自主判断，适合通用问答 |
+| `knowledge_base_ids`（工作流节点） | 工作流层 | 显式指定参与检索的知识库列表 | `["kb-xxx", "kb-yyy"]` | 支持多库联合检索，可配置权重实现业务路由 |
 
-- **全局约束**：单次 RAG 调用中，所有检索切片总 token 数计入模型上下文限制（如 `qwen-turbo` 上下文上限 8192），需合理设置 `top_k` 避免超限。
-- **配置入口**：核心参数（相似度阈值、权重、标签过滤等）均在控制台「知识库详情页 → 检索配置」中设置并发布，API 仅通过 `agent_id` 绑定生效。
+> **重要提醒**：  
+> - 所有 RAG 调用均**必须先在控制台创建并发布知识库服务**（检索服务或问答服务），获取 `agent_id` 后方可调用 API；  
+> - 知识库内容更新后，需重新触发索引构建任务，新内容才会生效；  
+> - 检索质量受文档预处理（如元数据抽取、标签标注）和模型选型（如 `qwen-plus` 优于 `qwen-turbo` 的 RAG 理解能力）共同影响，建议优先选用 `qwen-plus` 或 `qwen-max`。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速验证**：用控制台「知识库调试」功能，输入 query 实时查看原始切片、相似度分数及元数据，无需写代码。
-- ✅ **生产集成**：优先使用 `knowledge/chat` 接口（SSE 流式）或工作流知识库节点，避免自行拼接 [prompt](../guides/prompt.md) 导致上下文溢出。
-- ✅ **调试技巧**：若回答不准确，检查响应中的 `docs` 数组（问答接口）或工作流节点输出，确认检索是否命中关键文档；复制 `request_id` 提交工单时务必附上。
-- ❌ **避免踩坑**：不要尝试在 API 请求体中传入 `model`、`embedding_model` 等模型参数——这些由 `agent_id` 对应的控制台配置决定，强行传入将被忽略。
-- 📦 **SDK 推荐**：Python 开发者首选 `llama-index-indices-managed-dashscope` + `llama-index-postprocessor-dashscope-rerank`，一行代码接入云端 RAG 全能力。
+- ✅ **快速验证**：用控制台「知识库问答」模板 + 3 份测试文档，5 分钟内跑通端到端 RAG 流程；  
+- ✅ **调试技巧**：开启「引用溯源」功能，输出中会标注 `[1]`、`[2]` 等来源序号，方便快速定位检索结果；  
+- ✅ **性能优化**：对高并发场景，优先使用极速模式（单轮检索→生成）；对复杂意图，启用多轮智能模式（Agentic 规划）；  
+- ✅ **成本控制**：监控 `dense_similarity_top_k` 和 `rerank_top_n`，避免过度召回；知识库路由（`knowledge_base_routing`）虽增强效果，但会增加 `qwen-plus` 调用次数；  
+- ✅ **避坑指南**：  
+> - 不要直接拼接 `query` 字符串进 [prompt](../guides/prompt.md) —— 百炼已内置 Query 改写与混合检索（向量+关键词），手动拼接反而降低效果；  
+> - 不要忽略 `stream: true` —— 知识问答 API 强制流式响应，非流式调用将失败；  
+> - 不要复用 `agent_id` —— 检索服务 ID 与问答服务 ID 严格隔离，混用导致 `404` 错误。
 
 ## 关联主题页
 
-- [knowledge](../api/knowledge.md)
 - [start using](../guides/start-using.md)
+- [knowledge](../api/knowledge.md)
 - [knowledge base](../guides/knowledge-base.md)
-- [llm application](../guides/llm-application.md)
 - [frameworks](../api/frameworks.md)
-- [use cases](../guides/use-cases.md)
-- [application support](../guides/application-support.md)
+- [more models](../api/more-models.md)
+- [application use cases](../guides/application-use-cases.md)
 
 

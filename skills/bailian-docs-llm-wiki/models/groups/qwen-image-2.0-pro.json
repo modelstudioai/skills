@@ -60,6 +60,7 @@
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-Image-2.0-Pro",
       "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-image-edit-api",
+      "category": "Visual",
       "samples": {
         "dashscope": {
           "default": {

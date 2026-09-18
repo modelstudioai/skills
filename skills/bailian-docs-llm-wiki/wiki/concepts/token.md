@@ -1,42 +1,41 @@
-# Token
+# Token 计量与管理
 
-Token 是百炼平台中用于计量模型输入与输出文本单元的最小计费与配额单位，其本质是模型分词器（Tokenizer）对原始文本进行切分后产生的离散符号。一个 Token 可能对应一个汉字、一个英文单词、一个标点，或子词（subword）片段；具体数量取决于模型所用分词器（如 Qwen 系列使用 QwenTokenizer），而非字符数或字节数。Token 是平台进行用量统计、配额控制、计费结算和性能监控的核心度量基准。
+Token 计量与管理是百炼平台对模型调用资源进行精准计费、配额控制与用量治理的核心机制，以输入/输出 Token 为统一计量单位，贯穿推理、训练、监控与成本优化全链路。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **API 调用配额管理（Token Plan）**：Token 是 Token Plan 的计量基础。每次请求的 `input_tokens` 与 `output_tokens` 实时计入所选 plan（如 `"team-pro"`）的总配额池，并受 `max_tokens` 单次硬限流约束。流式响应中，token 消耗仅在 final chunk 返回时统一扣减。
-- **模型部署计费模式**：在 Token 按量部署（`plan=lora`）模式下，服务按实际消耗的 input/output token 总数精确计费；而 PTU（预置吞吐）和 MU（独占算力）模式虽不按 token 实时扣费，但其容量规格（如 `input_tpm`）仍以 token/分钟为单位定义吞吐能力。
-- **用量监控与告警**：模型监控中的 `TotalToken 数`、`TPM`（Tokens Per Minute）、`平均单次请求调用量` 等核心指标均基于 token 统计，支持按模型、API Key、时间维度精细化分析用量趋势与异常。
-- **[异步任务](asynchronous-task.md)与[多模态](multi-modal.md)处理**：图像/视频/语音类[异步任务](asynchronous-task.md)最终返回的文本结果（如 OCR 文本、语音转写内容、图生文描述）同样计入 token 消耗；[多模态](multi-modal.md)模型（如 Qwen-VL）对图像编码后的视觉 token 与文本 token 统一纳入总量统计。
-- **SDK 与调试辅助**：DashScope SDK Expert 及 CLI 工具默认在响应中返回 `usage` 字段（含 `input_tokens`/`output_tokens`），开发者可直接获取 token 消耗明细，用于成本估算与 [prompt](../guides/prompt.md) 优化。
+- **模型推理调用**：所有同步（`/v1/chat/completions`）、异步（`/v1/batch`）和流式响应请求均按实际消耗的输入 Token 和输出 Token 分别计量；计费与限流均基于此结果，系统提示词（system [prompt](../guides/prompt.md)）不计入 Token 消耗。
+- **Token Plan 配额管控**：通过 `X-Plan-ID` 绑定计划，实现按分钟（`per_minute`）与按日（`per_day`）双维度的累计 Token 配额控制，支持 API Key 级隔离、多环境分配及团队成员权限继承。
+- **成本抵扣与账单溯源**：免费额度（100 万 Token/模型/90 天）、资源包、节省计划等均以 Token 为抵扣单位；账单中 `实例 ID` 字段明确标识 `ApiKeyID;业务空间ID;模型名称;输入/输出类型`，支撑精确费用归因。
+- **模型训练与部署**：训练任务按训练 Token 总量计费；部署类服务（如 PTU、TPM Reservation）虽以吞吐单位（kTPM/TPU）呈现，但底层容量换算、溢出计费仍锚定于 Token 处理能力（含长输入阶梯系数与缓存折算）。
+- **监控与可观测性**：`/v1/monitoring/metrics` 等接口返回的用量统计严格对齐计费逻辑，提供按模型、应用、时间粒度聚合的 Token 消耗数据，并支持导出用于成本分析与容量规划。
 
 ## 关键参数和配置
 
-- `max_tokens`（请求级）：可选整数，限制单次响应最大生成 token 数，优先级高于 Token Plan 总配额，超限将截断输出并返回 `finish_reason="length"`。
-- `X-Qwen-Plan`（Header）：必填字符串，指定生效的 Token Plan（如 `"personal"`、`"team-pro"`），决定本次请求从哪个配额池扣减 token。
-- `enable_thinking=true`（思考模式）：启用后，模型内部推理过程产生的“思考 token”将额外计费（计入 `output_tokens`），且必须配合 `incremental_output=true` 使用。
-- `stream=true`：流式调用时，`usage` 仅在最后一个 chunk 中返回完整 token 统计，中间 chunk 不触发配额扣减。
-- `response_format={"type": "json_object"}`：结构化输出不改变 token 计算逻辑，但需注意：思考模式模型不支持该格式，须关闭 `enable_thinking` 才可启用。
+| 参数 | 说明 | 注意事项 |
+|------|------|----------|
+| `X-Plan-ID`（Header） | 指定生效的 Token Plan，必需 | 未提供或无效时回退至账户默认 plan；单个 plan 最多绑定 100 个 API Key |
+| `max_tokens`（Request Body） | 单次请求最大输出 token 数 | 受模型原生限制与 plan 配额双重约束；仅部分模型支持动态覆盖 |
+| `token_quota`（Token Plan API） | 周期内累计 Token 配额上限（非并发限制） | 按 `plan_type`（月/年）重置；旧版“每分钟限额”描述已过时 |
+| `effective_at`（Token Plan API） | 配额变更生效时间戳 | 支持未来时间点生效；变更通常 30 秒内同步，高并发下延迟 ≤2 分钟 |
+| 免费额度标识（账单字段） | `实例 ID` 中的 `免费额度用完即停标识` | 是判断服务中断原因的关键依据；欠费状态下即使有剩余额度，服务亦暂停 |
 
-> ⚠️ 注意：`free` plan 已下线；所有新应用默认绑定 `"personal"` plan。Token 消耗不可跨模型共享（如 `qwen-plus` 与 `qwen3-235b` 分别计费），也不跨部署模式混用（Token 按量部署的消耗不计入 PTU 配额）。
+> ⚠️ 提示：所有 Token 计量均以 UTF-8 编码下的实际 tokenization 结果为准（基于对应模型 tokenizer），不依赖客户端估算；流式响应中，`finish_reason="length"` 截断情形下的 completion tokens 仍全额计费。
 
 ## 面向开发者，简洁实用
 
-- ✅ **查用量**：调用后检查响应 `response.usage.input_tokens` 和 `response.usage.output_tokens`；或通过 `/v1/usage` 接口、控制台「用量中心」实时查询剩余配额。
-- ✅ **控成本**：对长 [prompt](../guides/prompt.md) 场景，先用 `qwen-turbo` 或 `qwen-plus` 估算 token 数（`Generation.call(model="qwen-plus", messages=[...], top_p=0.01, max_tokens=1)`），再决定是否升级模型。
-- ✅ **避踩坑**：
-  - [多模态](multi-modal.md)输入中，一张高分辨率图经视觉编码可能产生数千 token，务必在测试阶段验证 `usage`；
-  - 启用 `enable_thinking` 时，`output_tokens` 显著增加，建议开启 `incremental_output` 并监控首 token 延迟；
-  - 使用临时文件（`oss://` URL）调用多模态模型时，需显式添加 Header `X-DashScope-OssResourceResolve: enable`，否则解析失败导致 token 计费异常。
-- ✅ **调优建议**：精简 system [prompt](../guides/prompt.md)、压缩历史对话（如用 summary 替代全量 history）、禁用非必要功能（如 `tool_calls` 中未使用的工具），可直接降低 input token 消耗。
+- ✅ **必做**：在生产调用中始终传入 `X-Plan-ID`，并通过 `/v1/usage/plan/{plan_id}` 实时检查剩余配额，避免突发限流。
+- ✅ **推荐**：启用「免费额度用完即停」开关，配合监控告警（如 `error_rate > 0.05` 或 `quota_usage_ratio > 0.9`）实现主动成本干预。
+- ✅ **避坑**：模型版本带日期后缀（如 `qwen3.7-plus-2026-05-26`）视为独立模型，其 Token 额度、资源包、节省计划均不与无后缀版本互通。
+- ✅ **调试技巧**：使用 `X-Trace-ID` 透传调用上下文，确保监控中的 Token 消耗、延迟、错误率能准确关联至具体请求链路。
+- ✅ **成本优化**：长期稳定调用优先选 AI 通用型节省计划（最高 5.3 折）；高并发低延迟场景选用 TPM Reservation，避免按量溢出计费。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
 - [token plan api](../api/token-plan-api.md)
-- [preparations](../api/preparations.md)
-- [model deployment index](../guides/model-deployment-index.md)
+- [test 1](../guides/test-1.md)
 - [model monitoring](../guides/model-monitoring.md)
-- [more about models](../api/more-about-models.md)
+- [model data overview](../guides/model-data-overview.md)
 
 

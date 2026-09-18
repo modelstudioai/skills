@@ -6,6 +6,7 @@
 -   [Environment](raw/application-api-reference/managed-agents-api/environment-api.md)
 -   [Session and Event](raw/application-api-reference/managed-agents-api/session-api.md)
 -   [File](raw/application-api-reference/managed-agents-api/files-api.md)
+-   [Memory Store](raw/application-api-reference/managed-agents-api/memory-store-api.md)
 -   [Skill](raw/application-api-reference/managed-agents-api/skills-api.md)
 -   [Vault](raw/application-api-reference/managed-agents-api/vault-api.md)
 -   [Credential](raw/application-api-reference/managed-agents-api/credential-api.md)

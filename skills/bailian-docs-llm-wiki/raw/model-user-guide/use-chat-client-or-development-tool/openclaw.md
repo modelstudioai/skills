@@ -2132,7 +2132,7 @@ openclaw skills list
 
 ### 接入 MCP 服务
 
-OpenClaw 支持通过 MCP（Model Context Protocol）插件扩展 Agent 的工具调用能力，例如联网搜索、网页抓取等。具体案例可以参考[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-harness-tool.md)。
+OpenClaw 支持通过 MCP（Model Context Protocol）插件扩展 Agent 的工具调用能力，例如联网搜索、网页抓取等。具体案例可以参考[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)。
 
 ## 常见问题
 

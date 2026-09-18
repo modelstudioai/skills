@@ -20,6 +20,10 @@ Lite 套餐
 
 2,500 Credits
 
+Essential 套餐
+
+5,625 Credits
+
 Standard 套餐
 
 10,000 Credits
@@ -209,6 +213,10 @@ Token Plan 套餐本身不提供试用额度，也不包含免费赠送的 Token
 Lite 套餐
 
 可同时支持 1-2 个 Agent 并发运行
+
+Essential 套餐
+
+可同时支持 2-3 个 Agent 并发运行
 
 Standard 套餐
 

@@ -10,7 +10,7 @@ Standard 与 Pro 套餐在模型 Credits 之外，额外附赠 Harness 权益：
 -   **后付费 88 折**：免费额度用尽后，超出部分按原目录价 88 折继续计费。
 -   **不占用 Credits**：Harness 权益消耗独立计量，不从套餐 Credits 或用量包抵扣。
 
-Lite 套餐不包含 Harness 权益；团队版不支持 Harness 权益。
+Lite 与 Essential 套餐不包含 Harness 权益；团队版不支持 Harness 权益。
 
 ## 工具与每月免费额度
 
@@ -133,7 +133,7 @@ Lite 套餐不包含 Harness 权益；团队版不支持 Harness 权益。
 
 ## 接入方式
 
-接入流程详见[快速开始](https://help.aliyun.com/zh/model-studio/token-plan-personal-quick-start#tpp02-h-optional-tool)或[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-harness-tool.md)。在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal)我的订阅 Harness 权益页签可查看可用工具与额度。
+接入流程详见[快速开始](https://help.aliyun.com/zh/model-studio/token-plan-personal-quick-start#tpp02-h-optional-tool)或[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)。在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/subscription/token-plan/personal)我的订阅 Harness 权益页签可查看可用工具与额度。
 
 ## 注意事项
 

@@ -1,5 +1,9 @@
 # 强化学习训练概述
 
+-   [RL 功能开发指南](raw/model-user-guide/fine-tuning/rl-training-overview/rl-function-development-guide.md)
+-   [RL 训练配置与监控](raw/model-user-guide/fine-tuning/rl-training-overview/rl-training-config-monitoring.md)
+-   [强化学习可观测性配置](raw/model-user-guide/fine-tuning/rl-training-overview/observable-configuration-for-reinforcement-learning.md)
+
 本文通过端到端示例帮助您快速完成第一个强化学习（RL） 训练任务的提交与监控。
 
 如需了解 RL 训练的基本概念和适用场景，请点击这里。

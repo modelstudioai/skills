@@ -1,6 +1,6 @@
 # Agent 工具配置
 
-Managed Agents 提供 7 个内置工具，覆盖命令执行、文件操作与网络访问，全部在会话绑定的运行环境中执行。
+Managed Agents 提供 9 个内置工具，覆盖命令执行、文件操作、网络访问与产出物标记，全部在会话绑定的运行环境中执行。
 
 ## 工具列表
 
@@ -48,11 +48,25 @@ Managed Agents 提供 7 个内置工具，覆盖命令执行、文件操作与�
 
 日志排查、关键词定位
 
-`download_file`
+`web_search`
 
-从 URL 下载文件到沙箱
+搜索互联网信息，返回相关网页的标题、链接和内容摘要
 
-拉取外部数据集、依赖包
+查询实时资讯与时效性信息（如天气、新闻）、检索外部资料
+
+`web_fetch`
+
+读取指定网页地址的正文内容，转换为文本
+
+结合搜索结果深入阅读网页、提取页面正文
+
+`mark_artifacts`
+
+标记智能体产出的结果文件，返回其 `file_id`
+
+供业务侧按需下载或展示最终交付物
+
+**说明**`web_search` 与 `web_fetch` 单独计费：`web_search` 按调用次数计费（0.03 元/次）；`web_fetch` 限时免费，后续收费计划以控制台展示为准。计费口径详见[计费说明](raw/application-user-guide/managed-agents/managed-agents-billing.md)。
 
 ## 执行机制
 
@@ -76,7 +90,7 @@ Managed Agents 提供 7 个内置工具，覆盖命令执行、文件操作与�
 
 每次调用前暂停，等待在会话中确认后才继续执行
 
-对高风险工具（如 `bash`、`download_file`）设为**每次询问**，可在保留自动化能力的同时，对敏感操作保留人工闸门。当工具被设为每次询问时，智能体在会话中调用它会先暂停并等待确认。通过 API 集成时，如何在事件流中接收审批请求并回应，详见[会话事件流](https://help.aliyun.com/zh/model-studio/managed-agents-event-stream#%E5%B7%A5%E5%85%B7%E5%AE%A1%E6%89%B9)。
+对高风险工具（如 `bash`）设为**每次询问**，可在保留自动化能力的同时，对敏感操作保留人工闸门。当工具被设为每次询问时，智能体在会话中调用它会先暂停并等待确认。通过 API 集成时，如何在事件流中接收审批请求并回应，详见[会话事件流](https://help.aliyun.com/zh/model-studio/managed-agents-event-stream#%E5%B7%A5%E5%85%B7%E5%AE%A1%E6%89%B9)。
 
 ### 审批的适用范围
 

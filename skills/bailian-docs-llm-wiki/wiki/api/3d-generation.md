@@ -1,57 +1,42 @@
 # 3d generation
 
-百炼平台提供基于 Tripo 模型的 3D 模型生成能力，支持文生3D、单图生3D 和多图生3D 三种输入模式。该能力为[异步任务](../concepts/asynchronous-task.md)型 API，需通过“创建任务 → 轮询查询”两步完成，适用于华北2（北京）地域。所有调用均需配置有效的 API Key 并显式声明 `X-DashScope-Async: enable` 请求头。
+百炼平台提供基于文本或图像输入生成三维网格模型（.glb 格式）的 API 能力，适用于快速原型设计、游戏资产创建和电商可视化等场景。当前仅支持 Tripo 模型，通过异步任务方式返回结果，需轮询获取生成状态与下载链接。该能力处于公测阶段，接口行为与参数可能随模型迭代调整。
 
 ## 支持的模型/功能
 
-- **模型列表**：
-  - `Tripo/Tripo-H3.1`：高精度模型，输出面数最高 200 万，支持 `geometry_quality=ultra`；详见 [Tripo-3D模型生成](../../raw/model-api-reference/3d-generation/tripo-3d-generation-api-reference.md)。
-  - `Tripo/Tripo-P1.0`：专业级模型，输出面数最高 2 万，推理速度更快，适合快速原型验证。
-- **输入模式（三者互斥）**：
-  - 文生3D：通过 `input.prompt` 提供中文/英文提示词（≤1024 字符）；
-  - 单图生3D：通过 `input.image` 提供单张 JPEG/PNG 图像 URL（分辨率 20–6000px，≤20MB）；
-  - 多图生3D：通过 `input.images` 提供长度为 4 的数组，按**前、左、后、右**顺序传入图像对象（空视角可填 `{}`），有效图像数须为 2–4 张。
-
-> **注意**：[Tripo-3D模型生成](../../raw/model-api-reference/3d-generation/tripo-3d-generation-api-reference.md) 明确要求仅支持华北2（北京）地域，且 URL 中的 `{WorkspaceId}` 必须与该地域绑定；跨地域调用将失败，不可复用其他地域的 Workspace ID。
+- 当前唯一支持的模型为 **Tripo-3D**，支持两种输入模式：
+  - 文本到 3D（text-to-3D）：根据自然语言描述生成三维模型；
+  - 图像到 3D（image-to-3D）：以单张正面视角图像（如 PNG/JPEG）为输入生成带纹理的网格。
+- 功能细节与模型能力边界详见 [Tripo-3D模型生成](../../raw/model-api-reference/3d-generation/tripo-3d-generation-api-reference.md)。
 
 ## 关键参数
 
-| 参数 | 类型 | 是否必填 | 说明 |
-|------|------|----------|------|
-| `texture_quality` | string | 否 | 贴图质量：`standard`（默认）、`detailed`；影响 `pbr_model_url` 输出效果 |
-| `geometry_quality` | string | 否 | 仅 `Tripo-H3.1` 支持：`standard`（≤150 万面）、`ultra`（≤200 万面） |
-| `pbr` | boolean | 否 | 是否生成 PBR 材质模型（默认 `true`）；设为 `true` 时自动启用贴图 |
-| `texture` | boolean | 否 | 是否生成贴图（默认 `true`）；**如需无贴图模型，必须同时设 `texture=false` 且 `pbr=false`**，此时返回 `base_model_url` |
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `input` | object | 是 | 包含 `text`（字符串）或 `image_url`（字符串）字段，二者不可同时为空；若同时提供，以 `image_url` 优先 |
+| `output_format` | string | 否 | 目前仅支持 `"glb"`（默认值），不支持 `"obj"` 或 `"fbx"` |
+| `seed` | integer | 否 | 随机种子（0–4294967295），用于结果可复现；未指定时服务端自动生成 |
 
-所有结果 URL（如 `pbr_model_url`、`base_model_url`、`rendered_image_url`）有效期均为 **2 小时**，请务必及时下载。任务 ID（`task_id`）有效期为 **24 小时**，超期后查询返回 `UNKNOWN` 状态。
+> **注意**：原始文档 [3D模型生成](../../raw/model-api-reference/3d-generation.md) 中提及“支持多视角图像输入”，但最新 [Tripo-3D模型生成](../../raw/model-api-reference/3d-generation/tripo-3d-generation-api-reference.md) 明确限定仅接受**单张正面图像**，多视角输入暂未开放，以后者为准。
 
 ## 使用方式
 
-1. **前置准备**：
-   - 在 [百炼控制台（华北2）](https://bailian.console.aliyun.com/cn-beijing/model/market) 开通 Tripo 服务；
-   - 配置 [API Key](../../raw/model-api-reference/preparations/get-api-key.md) 至环境变量或请求头；
-2. **创建任务（POST）**：
-   - 地域专属 URL：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation`
-   - 必须携带请求头：`Content-Type: application/json`、`Authorization: Bearer <key>`、`X-DashScope-Async: enable`
-   - 响应中提取 `output.task_id`，用于后续轮询；
-3. **轮询查询（GET）**：
-   - URL：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task_id}`
-   - 建议轮询间隔 ≥15 秒；状态流转为 `PENDING` → `RUNNING` → `SUCCEEDED`/`FAILED`
-   - 成功响应中，`output.results` 包含 `pbr_model_url` 或 `base_model_url`（取决于参数组合）
+1. 发起异步请求：`POST /v1/models/tripo-3d:generate`，传入 `input` 等参数；
+2. 解析响应中的 `task_id`；
+3. 轮询 `GET /v1/tasks/{task_id}` 获取状态（`status: "succeeded"` 表示完成）；
+4. 成功后从 `output.model_url` 下载 `.glb` 文件（有效期 24 小时）。
 
-完整调用示例（文生3D）见 [Tripo-3D模型生成](../../raw/model-api-reference/3d-generation/tripo-3d-generation-api-reference.md) 中的 cURL 片段。
+完整调用示例与错误码说明见 [Tripo-3D模型生成](../../raw/model-api-reference/3d-generation/tripo-3d-generation-api-reference.md)。
 
 ## 限制和注意事项
 
-- **地域强约束**：仅支持华北2（北京）地域，其他地域调用将报错，且 Workspace ID 不可跨地域复用；
-- **异步强制性**：同步调用不被支持，缺失 `X-DashScope-Async: enable` 头将返回 `"current user api does not support synchronous calls"` 错误；
-- **输入互斥性**：`prompt`、`image`、`images` 三者不可共存，同时传入将导致 `InvalidParameter` 错误；
-- **多图格式要求**：`images` 数组长度必须为 4，视角顺序固定为【前、左、后、右】；空视角必须显式传 `{}`，不可省略或传 `null`；
-- **RPS 限制**：任务查询接口默认限流 20 RPS，高频轮询建议改用 [异步任务回调](../../raw/model-api-reference/more-about-models/async-task-api.md) 机制；
-- **资源时效性**：所有结果 URL 2 小时过期，`task_id` 24 小时过期，超期后无法重试或补查。
+- 输入图像分辨率建议 512×512 至 1024×1024，过低（<384px）或过高（>2048px）可能导致生成失败或失真；
+- 文本提示词长度上限为 200 字符，避免使用模糊描述（如“好看”“高质量”），推荐具体形状、材质、风格关键词（如“low-poly red ceramic mug with handle”）；
+- 单次请求最大等待时间为 300 秒，超时任务将被终止，需检查 `status` 是否为 `"failed"` 并关注 `error_code`；
+- 生成结果不含物理属性（如碰撞体、骨骼），如需进一步编辑，请导入 Blender 或 Unity 等 DCC 工具处理。
 
 ## 来源文档
 
-- [Tripo-3D模型生成](../../raw/model-api-reference/3d-generation/tripo-3d-generation-api-reference.md)
+- [3D模型生成](../../raw/model-api-reference/3d-generation.md)
 
 

@@ -3064,6 +3064,32 @@ qwen-mt-lite
 
 100,000
 
+### Qwen-MT-Uni
+
+#### 华北2（北京）
+
+**模型名称**
+
+**限流条件（超出任一数值时触发限流）**
+
+**每分钟调用次数（RPM）**
+
+**每分钟消耗Token数（TPM）**
+
+**异步并发数**
+
+**异步排队数**
+
+qwen-mt-uni
+
+162
+
+2,592,000
+
+3
+
+500
+
 ### 千问数据挖掘模型
 
 #### 华北2（北京）
@@ -6518,6 +6544,10 @@ qwen-audio-3.0-realtime-flash
 
 **每秒钟调用次数（RPS）**
 
+qwen-audio-3.1-tts-flash
+
+3
+
 qwen-audio-3.0-tts-plus
 
 3
@@ -7144,13 +7174,17 @@ qwen3-livetranslate-flash-realtime-2025-09-22
 
 > **含输入与输出Token**
 
-qwen3.5-livetranslate-flash-realtime
+qwen3.8-livetranslate-flash-realtime
 
 国际
 
 10
 
 100,000
+
+qwen3.5-livetranslate-flash-realtime
+
+国际
 
 qwen3.5-livetranslate-flash-realtime-2026-05-19
 

@@ -6,6 +6,7 @@
 
 ## 前提条件
 
+-   首次使用需开通记忆库服务：进入[百炼控制台记忆库页面](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)，点击**立即开通**
 -   已获取 `DASHSCOPE_API_KEY`，获取方式见[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)
 -   如使用 Python SDK，先安装：`pip install agentscope-runtime`
 

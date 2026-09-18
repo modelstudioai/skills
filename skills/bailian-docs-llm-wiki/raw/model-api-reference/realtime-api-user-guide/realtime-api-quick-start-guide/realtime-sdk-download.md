@@ -14,6 +14,67 @@
 
 **更新说明**
 
+v1.3.0
+
+Android
+
+[AoqClientSdk-release.aar](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c37.aar)
+
+[libPluginOpus.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c34.zip)
+
+2026-09-18
+
+1.  新增屏幕共享能力。
+    
+2.  废弃 bitcode。
+    
+3.  支持远程加载 .so 库。
+    
+4.  支持从外部设置编码帧最大值。
+    
+5.  将默认编解码器调整为 Opus。
+    
+6.  优化性能。
+    
+7.  修复已知的稳定性问题。
+    
+
+iOS
+
+[AoqClientSdk.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c4a.zip)
+
+[AoqScreenShare.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c4b.zip)
+
+[PluginOpus.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c49.zip)
+
+HarmonyOS
+
+[AoqClientSdk.har](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c36.har)
+
+[libPluginOpus.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c48.zip)
+
+Windows
+
+[AoqClientSdk-windows-x64.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c4f.zip)
+
+macOS
+
+[AoqClientSdk.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c4e.zip)
+
+[PluginOpus.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c4d.zip)
+
+Electron
+
+[aoq-electron-sdk-1.3.0-58586345.tgz](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c35.tgz)
+
+也可以通过 npm 安装：`npm install aoq-electron-sdk@1.3.0-58586345`
+
+Linux
+
+x86\_64: [AoqClientSdk.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c4c.zip)
+
+arm64: [AoqClientSdk.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c43.zip)
+
 v1.2.2
 
 iOS

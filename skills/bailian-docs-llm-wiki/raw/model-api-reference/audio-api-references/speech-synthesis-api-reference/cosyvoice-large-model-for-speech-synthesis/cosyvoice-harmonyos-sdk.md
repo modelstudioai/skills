@@ -283,7 +283,7 @@ MP3或Opus码率（kbps），默认值为 `32`，取值范围为 `[6, 510]`。`c
 
 否
 
-是否返回字级时间戳，默认值为 `false`，仅在流式输出模式下可用。支持qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)和[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色；其他模型的复刻音色不支持。时间戳结果位于 `INativeStreamInputTtsCallback` 的 `all_response` 中。
+是否返回字级时间戳，默认值为 `false`，仅在流式输出模式下可用。支持qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)和[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色；其他模型的复刻音色不支持。时间戳结果位于 `INativeStreamInputTtsCallback` 的 `all_response` 中。
 
 `seed`
 
@@ -315,7 +315,7 @@ MP3或Opus码率（kbps），默认值为 `32`，取值范围为 `[6, 510]`。`c
 
 否
 
-是否嵌入AIGC隐性标识，默认值为 `false`。仅qwen-audio-3.0-tts-plus、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2支持。
+是否嵌入AIGC隐性标识，默认值为 `false`。仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2支持。
 
 `aigc_propagator`
 

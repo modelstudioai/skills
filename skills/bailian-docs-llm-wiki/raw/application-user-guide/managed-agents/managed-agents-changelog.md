@@ -6,6 +6,18 @@ Managed Agent 的版本更新记录。
 
 * * *
 
+## 2026-09-18
+
+### 新功能
+
+-   内置工具新增 `web_search` 与 `web_fetch`：`web_search` 搜索互联网信息，返回相关网页的标题、链接和内容摘要（0.03 元/次）；`web_fetch` 读取指定网页地址的正文内容并转换为文本（限时免费）。详见[Agent 工具配置](raw/application-user-guide/managed-agents/managed-agents-agent/managed-agents-builtin-tools.md)。
+
+## 2026-09-17
+
+### 新功能
+
+-   记忆库（Memory Store）上线：跨会话持久化的挂载资源，记忆库—记忆—版本三层模型，创建会话时挂载（只读/读写），智能体通过文件工具读写，历史版本自动记录并支持查询与擦除。控制台**记忆库**页面与 Memory Store API 同步开放。详见[记忆库](raw/application-user-guide/managed-agents/managed-agents-context/managed-agents-memory-store.md)与 [Memory Store API](raw/application-api-reference/managed-agents-api/memory-store-api.md)。
+
 ## 2026-09-07
 
 ### 新功能

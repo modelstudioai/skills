@@ -10,17 +10,17 @@ Connector 把这些系统收敛成一个统一的连接层：在控制台完成�
 
 ## 功能特性
 
--   **连接 20 类系统**：钉钉、语雀、Salesforce on Alibaba Cloud、数据库、OSS 等，开箱可连，见[Apps 目录](raw/application-user-guide/overview/overview.md)。
+-   **连接 20 类系统**：钉钉、语雀、Salesforce on Alibaba Cloud、数据库、OSS 等，开箱可连，见[Apps 目录](raw/application-user-guide/overview/apps-guide/overview.md)。
 -   **自动生成工具**：连接完成后自动生成可调用的工具，不需要自己写接口封装，见[核心概念](raw/application-user-guide/overview/concepts.md)。
--   **凭证配置一次复用**：同一个 App 下的所有连接共用一套身份验证配置，轮转凭证只改一处，见[身份验证概览](raw/application-user-guide/overview/overview.md)。
--   **托管文件与表格**：上传的文档与表格由平台托管解析，供智能体检索引用，见[文件连接器](raw/application-user-guide/overview/overview/file.md)。
+-   **凭证配置一次复用**：同一个 App 下的所有连接共用一套身份验证配置，轮转凭证只改一处，见[身份验证概览](raw/application-user-guide/overview/auth-guide/overview.md)。
+-   **托管文件与表格**：上传的文档与表格由平台托管解析，供智能体检索引用，见[文件连接器](raw/application-user-guide/overview/apps-guide/file.md)。
 
 ## 从这里开始
 
 -   [快速开始](raw/application-user-guide/overview/quickstart.md)：连接第一个 App，并在你的智能体里调用它的工具，全程约 10 分钟。
 -   [核心概念](raw/application-user-guide/overview/concepts.md)：弄清 App、连接器、工具与 MCP 之间的关系。
--   [Apps 目录](raw/application-user-guide/overview/overview.md)：查看全部可连接的 App 以及各自的准备条件。
--   [身份验证](raw/application-user-guide/overview/overview.md)：配置一次凭证，同一个 App 下的所有连接复用。
+-   [Apps 目录](raw/application-user-guide/overview/apps-guide/overview.md)：查看全部可连接的 App 以及各自的准备条件。
+-   [身份验证](raw/application-user-guide/overview/auth-guide/overview.md)：配置一次凭证，同一个 App 下的所有连接复用。
 
 ## 旧版数据连接迁移
 
