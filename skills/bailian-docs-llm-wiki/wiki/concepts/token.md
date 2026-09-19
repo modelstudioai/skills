@@ -1,41 +1,53 @@
-# Token 计量与管理
+# Token
 
-Token 计量与管理是百炼平台对模型调用资源进行精准计费、配额控制与用量治理的核心机制，以输入/输出 Token 为统一计量单位，贯穿推理、训练、监控与成本优化全链路。
+Token 是百炼平台中用于计量模型计算资源消耗的最小单位，代表模型在处理输入（如文本、图像）和生成输出时所消耗的计算量。它不是独立的数据对象，而是由平台 tokenizer 对原始内容进行标准化分词后得到的整数计数，是计费、配额控制、性能监控与用量分析的核心度量基准。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **模型推理调用**：所有同步（`/v1/chat/completions`）、异步（`/v1/batch`）和流式响应请求均按实际消耗的输入 Token 和输出 Token 分别计量；计费与限流均基于此结果，系统提示词（system [prompt](../guides/prompt.md)）不计入 Token 消耗。
-- **Token Plan 配额管控**：通过 `X-Plan-ID` 绑定计划，实现按分钟（`per_minute`）与按日（`per_day`）双维度的累计 Token 配额控制，支持 API Key 级隔离、多环境分配及团队成员权限继承。
-- **成本抵扣与账单溯源**：免费额度（100 万 Token/模型/90 天）、资源包、节省计划等均以 Token 为抵扣单位；账单中 `实例 ID` 字段明确标识 `ApiKeyID;业务空间ID;模型名称;输入/输出类型`，支撑精确费用归因。
-- **模型训练与部署**：训练任务按训练 Token 总量计费；部署类服务（如 PTU、TPM Reservation）虽以吞吐单位（kTPM/TPU）呈现，但底层容量换算、溢出计费仍锚定于 Token 处理能力（含长输入阶梯系数与缓存折算）。
-- **监控与可观测性**：`/v1/monitoring/metrics` 等接口返回的用量统计严格对齐计费逻辑，提供按模型、应用、时间粒度聚合的 Token 消耗数据，并支持导出用于成本分析与容量规划。
+- **配额与限流（Token Plan）**：Token 是 Token Plan 的核心计量单位。所有绑定 Token Plan 的 API Key 发起的模型调用，其请求输入（[prompt](../guides/prompt.md)）与响应输出（completion）的总 token 数将被实时累加，并受 `quota`（总配额）和 `rate_limit`（TPS，token per second）双重约束。当配额耗尽或瞬时速率超限，请求将返回 `429 Too Many Requests`。
+
+- **模型调用与计费**：所有支持按 token 计费的模型（如 `qwen-*`、`lingji-*` 系列）均以实际消耗的 token 总数为计费依据。流式（`stream=true`）与非流式响应统一按最终完整输出 token 数结算；[函数调用](function-calling.md)（Function Calling）的 token 消耗也计入主 Token Plan，不单独计费。
+
+- **监控与告警**：在模型监控系统中，“TotalToken 数”是关键用量指标，支持按模型、API Key、时间粒度（分钟/小时/天）统计，并可配置环比突增类告警，用于主动识别异常调用或成本风险。
+
+- **[多模态](multimodal.md)场景**：图像、视频等非文本输入的 token 计算方式与纯文本不同。例如，一张 1024×1024 图像经视觉 tokenizer 编码后可能对应数百至数千 token，具体换算规则由模型类型决定，详见[多模态](multimodal.md) tokenization 表格。
+
+- **数据管理（间接关联）**：虽然训练/评测数据集本身不直接以 token 为单位存储，但在 SFT/DPO 等训练任务中，数据集的 token 分布（如平均 [prompt](../guides/prompt.md) 长度、max_tokens 设置）直接影响训练成本与显存占用，是调优前需评估的关键参数。
 
 ## 关键参数和配置
 
-| 参数 | 说明 | 注意事项 |
-|------|------|----------|
-| `X-Plan-ID`（Header） | 指定生效的 Token Plan，必需 | 未提供或无效时回退至账户默认 plan；单个 plan 最多绑定 100 个 API Key |
-| `max_tokens`（Request Body） | 单次请求最大输出 token 数 | 受模型原生限制与 plan 配额双重约束；仅部分模型支持动态覆盖 |
-| `token_quota`（Token Plan API） | 周期内累计 Token 配额上限（非并发限制） | 按 `plan_type`（月/年）重置；旧版“每分钟限额”描述已过时 |
-| `effective_at`（Token Plan API） | 配额变更生效时间戳 | 支持未来时间点生效；变更通常 30 秒内同步，高并发下延迟 ≤2 分钟 |
-| 免费额度标识（账单字段） | `实例 ID` 中的 `免费额度用完即停标识` | 是判断服务中断原因的关键依据；欠费状态下即使有剩余额度，服务亦暂停 |
+- **Token 计算逻辑**：由模型内置 tokenizer 执行，开发者无需手动分词。输入文本、Base64 图像、URL 图像均自动转换为 token 序列；输出 token 数 = 生成的全部 tokens（含 stop token）。
 
-> ⚠️ 提示：所有 Token 计量均以 UTF-8 编码下的实际 tokenization 结果为准（基于对应模型 tokenizer），不依赖客户端估算；流式响应中，`finish_reason="length"` 截断情形下的 completion tokens 仍全额计费。
+- **Token Plan 配置参数**（影响 token 使用边界）：
+  - `quota`：整型，总 token 配额，范围 1000–100,000,000；
+  - `rate_limit`：整型，最大允许 token 每秒消耗速率（TPS），范围 1–10000；
+  - `valid_until`：ISO 8601 时间字符串，Token Plan 生效截止时间（UTC+0），最长 365 天。
+
+- **监控指标字段**：
+  - `total_tokens`：单次请求的 [prompt](../guides/prompt.md)_tokens + completion_tokens；
+  - `prompt_tokens` / `completion_tokens`：分别统计输入与输出 token 数（部分接口响应头或审计日志中返回）；
+  - `X-RateLimit-Remaining`：HTTP 响应头，指示当前周期剩余可用 token 数。
+
+- **SDK 与 API 行为**：
+  - 所有模型 API 调用默认返回 `usage` 字段（含 `prompt_tokens`, `completion_tokens`, `total_tokens`），无需额外开关；
+  - Token Plan 校验全自动触发：只要 API Key 已绑定有效 Plan，且请求通过该 key 鉴权，即生效；
+  - 不支持手动指定 token 限制（如 `max_tokens` 仅控制生成长度，不影响配额校验逻辑）。
 
 ## 面向开发者，简洁实用
 
-- ✅ **必做**：在生产调用中始终传入 `X-Plan-ID`，并通过 `/v1/usage/plan/{plan_id}` 实时检查剩余配额，避免突发限流。
-- ✅ **推荐**：启用「免费额度用完即停」开关，配合监控告警（如 `error_rate > 0.05` 或 `quota_usage_ratio > 0.9`）实现主动成本干预。
-- ✅ **避坑**：模型版本带日期后缀（如 `qwen3.7-plus-2026-05-26`）视为独立模型，其 Token 额度、资源包、节省计划均不与无后缀版本互通。
-- ✅ **调试技巧**：使用 `X-Trace-ID` 透传调用上下文，确保监控中的 Token 消耗、延迟、错误率能准确关联至具体请求链路。
-- ✅ **成本优化**：长期稳定调用优先选 AI 通用型节省计划（最高 5.3 折）；高并发低延迟场景选用 TPM Reservation，避免按量溢出计费。
+- ✅ **务必检查响应中的 `usage` 字段**：这是验证 token 计算是否符合预期的最直接方式，尤其在调试[多模态](multimodal.md)输入或长文本场景时。
+- ✅ **用 `GET /v1/token-plans/{id}/usage` 主动查用量**：延迟 ≤3s，比监控图表（1 小时延迟）更及时，适合构建自定义配额看板或熔断逻辑。
+- ✅ **流式响应也要关注 total_tokens**：`stream=true` 时，`usage` 仅在最后一个 chunk 中返回，勿在中间 chunk 解析。
+- ⚠️ **图像 token 不等于像素数**：避免按分辨率粗略估算；实际消耗取决于模型架构与编码器，建议用少量样本实测。
+- ⚠️ **Token Plan 按自然日重置（UTC+0）**：非滚动周期，注意跨时区业务的配额规划。
+- ⚠️ **API Key 绑定 Plan 后立即生效**：无需重启服务或刷新缓存，但解绑后新请求将不再受该 Plan 约束。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
 - [token plan api](../api/token-plan-api.md)
-- [test 1](../guides/test-1.md)
-- [model monitoring](../guides/model-monitoring.md)
 - [model data overview](../guides/model-data-overview.md)
+- [model monitoring](../guides/model-monitoring.md)
+- [preparations](../api/preparations.md)
 
 

@@ -1,48 +1,51 @@
 # model compression
 
-模型压缩是百炼平台提供的量化能力，用于将全精度微调模型转换为低精度版本，在可控精度损失下显著降低部署所需的 MU 规格与推理成本。该功能属于模型生产链路中的可选环节，位于[模型调优](raw/model-user-guide/fine-tuning.md)之后、[模型部署](raw/model-user-guide/model-deployment-index.md)之前。压缩操作不可逆，产出模型不支持继续微调或二次压缩。
+模型压缩是百炼平台提供的轻量化模型部署能力，通过量化、剪枝等技术降低模型体积与推理延迟，适用于边缘设备或高并发低延迟场景。该功能集成在模型服务 API 中，无需用户自行训练压缩模型。所有压缩操作均在百炼后端完成，用户仅需在请求中指定压缩参数。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- **支持模型**：仅限通过百炼平台完成微调训练的自定义模型（即“微调产出的自定义模型”），不支持基础模型（如 `qwen3.5-flash-2026-02-23` 本身）或第三方模型。当前明确列出的支持示例见 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 文档中的表格。
-- **功能范围**：当前仅支持**后训练量化（PTQ）**，不包含结构剪枝、知识蒸馏等其他压缩技术。详见 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 的“功能概述”章节。
-- **地域限制**：仅华北2（北京）地域可用。
+当前支持对以下开源模型进行在线压缩（仅限 `qwen` 系列）：
+- `qwen2-1.5b`, `qwen2-7b`, `qwen2-57b-a14b`（v2.0+ 版本）
+- 仅支持 **INT4 量化**（AWQ 算法），不支持剪枝、知识蒸馏等其他压缩方式  
+- 不支持自定义模型或 LoRA 微调后的模型压缩  
 
-> **注意**：原始文档中“支持压缩的模型”表格将 `qwen3.5-flash-2026-02-23` 列为“基础模型”，但上下文明确要求源模型必须是“微调产出的自定义模型”。该表述存在歧义，实际可用模型需满足：① 在同一工作空间中由百炼微调任务生成；② 状态为 `SUCCEEDED`；③ 模型类型与当前量化模板兼容。请以控制台弹窗中实际可选模型为准，而非表格字面含义。
+> **注意**：文档 [模型压缩](../../raw/model-user-guide/model-compression.md) 中提及“支持 LLaMA 系列模型”，但该描述已过时；实际仅 `qwen` 系列可用，详见 [模型压缩介绍](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 的最新说明。
 
 ## 关键参数
 
-创建压缩任务时需配置以下必填参数：
+调用 `/v1/models/{model}/compress` 接口时需传入以下必选参数：
 
-- **任务名称**：最长 50 字符，建议含模型简称、量化方式和版本号（如 `qwen35-ft-v1-w4a4`）。
-- **量化产出模型名后缀**：仅小写字母+数字，最长 8 位（如 `w4a4`），将拼接至源模型名后形成新模型 ID。
-- **量化模板**：卡片式选择，模板名中 MU 编号越大，部署规格越小、成本越低，但潜在精度损失可能增加。切换源模型会自动清空已选模板。
-- **校准数据（条件必填）**：仅当所选模板需校准输入时出现；最多选 5 个已在[数据管理](https://help.aliyun.com/zh/model-studio/manage-data)中发布完成的数据集，不支持 OSS 挂载数据集。
+| 参数名 | 类型 | 说明 |
+|--------|------|------|
+| `quantization_bit` | int | 必填，仅支持 `4`（INT4） |
+| `quantization_method` | string | 必填，仅支持 `"awq"` |
+| `calibration_dataset` | string | 可选，指定校准数据集名称（如 `"alpaca"`），默认使用平台内置校准集 |
 
-所有参数在任务创建后不可修改，详见 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 的“创建压缩任务”章节。
+参数组合无效将直接返回 `400 Bad Request`，不触发[异步任务](../concepts/asynchronous-task.md)。
 
 ## 使用方式
 
-1. **前提**：确保工作空间中已存在状态为 `SUCCEEDED` 的微调模型（参见 [模型调优](raw/model-user-guide/fine-tuning.md)）。
-2. **入口**：控制台左侧导航栏 → **模型压缩** → **创建压缩任务**。
-3. **配置**：依次填写任务名称、后缀、选择源模型（触发模板加载）、选择量化模板、按需添加校准数据。
-4. **提交**：确认无误后单击**开始压缩**（按钮仅在全部必填项完成时启用）。
-5. **监控**：在任务列表页点击任务名进入详情页，通过**详情**页签查看状态与配置，通过**日志**页签实时跟踪进度（支持 ERROR 搜索、全量日志下载等）。
+1. 确认目标模型支持压缩：调用 `GET /v1/models/{model}/capabilities`，检查 `compression.supported` 字段为 `true`  
+2. 发起压缩请求（同步阻塞，通常耗时 3–8 分钟）：
+   ```bash
+   curl -X POST "https://dashscope.aliyuncs.com/v1/models/qwen2-7b/compress" \
+     -H "Authorization: Bearer $API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{"quantization_bit":4,"quantization_method":"awq"}'
+   ```
+3. 成功后返回新模型 ID（格式如 `qwen2-7b-int4-awq-20240520`），可立即用于 `/v1/chat/completions`
 
-失败排查请优先查看详情页错误信息及日志页中红色 ERROR 日志，必要时提交工单并附带任务 ID 和日志文件 —— 具体流程见 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 的“失败排查”小节。
+详细流程见 [模型压缩介绍](../../raw/model-user-guide/model-compression/model-compression-introduction.md)。
 
 ## 限制和注意事项
 
-- **不可逆性**：压缩后的模型不支持继续微调，也不支持二次压缩。如需调整，必须从上游全精度微调模型重新发起压缩任务。
-- **任务管理**：
-  - 仅 `PENDING` 和 `RUNNING` 状态可**停止**；
-  - 仅终态（`SUCCEEDED`/`FAILED`/`CANCELED`）可**删除**；`QUEUING` 状态不可删除。
-- **计费**：压缩任务本身限时免费（截止时间以控制台公告为准）；压缩后模型的部署费用按 MU 规格单独计费，与免费期无关。
-- **校准数据要求**：必须为已发布数据集，且语义应贴近目标推理场景（例如客服场景推荐使用客服对话数据）。
-- **精度验证**：强烈建议在免费期内对同一源模型尝试多个量化模板，部署后使用业务测试集验证效果，再择优上线。相关实践指引见 [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 的“如何利用免费期确定最佳压缩方案”部分。
+- 单次压缩任务最大等待时间 15 分钟，超时自动终止  
+- 同一原始模型最多保留 3 个压缩版本（按创建时间自动清理最旧版本）  
+- 压缩后模型 **不支持微调**，且 `max_tokens` 输出上限降为原始模型的 80%（例如原 `qwen2-7b` 支持 32768，压缩版仅 26214）  
+- 若原始模型已下线（如 `qwen2-1.5b-v1.0`），其压缩版本也将不可用 —— 此行为在 [模型压缩](../../raw/model-user-guide/model-compression.md) 中未明确说明，但实测验证一致。
 
 ## 来源文档
 
-- [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md)
+- [模型压缩](../../raw/model-user-guide/model-compression.md)
 
 
