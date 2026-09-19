@@ -1,50 +1,42 @@
 # knowledge
 
-百炼平台的 `knowledge` 能力提供两种核心服务：**知识检索（语义搜索）** 和 **知识问答（RAG 对话）**，分别面向精准切片召回与多阶段推理生成场景。二者均基于已发布的知识库服务（`agent_id`）运行，策略配置在控制台完成，API 层仅需传入意图与服务标识。所有调用均需有效的 API Key 与业务空间上下文。
+知识检索与问答功能提供基于向量语义的跨知识库联合检索与端到端智能问答能力，适用于构建 RAG 应用。该能力通过 DashScope 应用网关统一暴露 HTTP REST 接口，与底层 OpenAPI（如 `CreateIndex`、`Retrieve`）在调用方式、鉴权机制和路由层级上存在明确区分。所有接口均需使用业务空间 ID 拼接 Base URL 并携带 API Key 进行 Bearer 鉴权。
 
 ## 支持的模型/功能
 
-- **知识检索**：跨知识库联合语义检索，支持纯文本、纯图像及图文混合查询，返回按相关性排序的切片列表（含 `score`、`text`、`metadata`）。检索策略（如多库权重、混排模型）完全由控制台发布的 `agent_config` 决定，[知识检索 (raw/application-api-reference/knowledge/knowledgesearch.md)](../../raw/application-api-reference/knowledge/knowledgesearch.md) 中明确说明“其余检索策略一律配置于 `agent_config`，不在请求中暴露”。
-- **知识问答**：基于知识库的流式对话接口，执行三阶段 RAG 流程（规划 → 工具调用 → 生成），支持 `semantic_search`、`obtain_file`、`execute_sql` 等内置工具调用，并可串联使用。该能力依赖控制台发布的知识问答服务，[知识问答 (raw/application-api-reference/knowledge/knowledgechat.md)](../../raw/application-api-reference/knowledge/knowledgechat.md) 强调“当前版本仅支持流式响应”，且 `stream` 必须为 `true`。
-
-> **注意**：两文档对 `agent_id` 的描述存在术语差异——文档 1 称其为“知识检索服务（agent）实例 ID”，文档 2 称其为“问答服务（agent）应用 ID”。实际使用中，二者均为控制台对应服务类型（检索/问答）发布后生成的唯一 ID，不可混用。请严格依据服务创建页面（[知识检索服务页面](https://bailian.console.aliyun.com/cn-beijing?tab=app#/knowledge-base/list?activeKey=retrieval) 或 [知识问答服务页面](https://bailian.console.aliyun.com/cn-beijing?tab=app#/knowledge-base/list?activeKey=qa)）获取对应 ID。
+- **知识检索**：支持跨多个知识库执行联合语义检索，返回按相关性排序的文本切片，适用于预检、召回等场景。详见 [知识检索与问答](../../raw/application-api-reference/knowledge.md)。
+- **知识问答（Knowledge Chat）**：支持流式多阶段推理（规划 → 工具调用 → 生成），自动协调知识检索与大模型生成，输出结构化响应。该能力封装了 RAG 全链路逻辑，开发者无需自行编排检索+LLM调用流程，具体行为参见 [知识问答](../../raw/application-api-reference/knowledge/knowledgechat.md)。
+- 注意：该能力**不依赖用户显式指定模型名称**，底层模型由平台根据知识库配置与请求上下文动态调度；当前不开放模型切换开关，与 [知识库管理文档](../../raw/application-user-guide/knowledge-base/overview.md) 中提及的“自定义 LLM”描述存在不一致 —— 后者指知识库创建时的 embedding 模型配置，而非问答阶段的生成模型。
 
 ## 关键参数
 
-| 参数 | 类型 | 必填 | 说明 | 来源 |
-|------|------|------|------|------|
-| `agent_id` | string | 是 | 服务 ID，对应控制台发布的知识检索或问答服务实例。**不可跨类型复用**。 | 两文档均强制要求 |
-| `query` | string | 条件必填 | 文本检索意图；与 `images` 至少传一个；非纯图搜时必填。 | [知识检索 (raw/application-api-reference/knowledge/knowledgesearch.md)](../../raw/application-api-reference/knowledge/knowledgesearch.md) |
-| `images` | array<string> | 条件必填 | 图片 URL 数组（公网可访问）；支持多模态检索。 | 同上 |
-| `input.messages` | array<object> | 是（问答） | DashScope 标准消息格式，含 `role`（`user`/`assistant`）与 `content`（支持文本或多模态数组）。 | [知识问答 (raw/application-api-reference/knowledge/knowledgechat.md)](../../raw/application-api-reference/knowledge/knowledgechat.md) |
-| `stream` | boolean | 是（问答） | 必须为 `true`；不支持非流式调用。 | 同上 |
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `knowledge_ids` | string[] | 是 | 目标知识库 ID 列表，最多支持 10 个；空数组或缺失将导致 400 错误 |
+| `query` | string | 是 | 用户原始查询文本，长度 ≤ 2048 字符 |
+| `top_k` | integer | 否 | 检索阶段返回切片数，默认 5，取值范围 1–20 |
+| `stream` | boolean | 否 | 是否启用 SSE 流式响应，默认 `false`；仅对 `/api/v2/apps/knowledge/chat` 生效 |
 
-> **注意**：知识检索接口不支持 `stream` 参数；知识问答接口**不接受** `query`/`images` 等检索直连参数，所有意图必须封装在 `input.messages` 中。
+> **注意**：`top_k` 作用于检索阶段，不影响问答生成长度；生成阶段的 `max_tokens` 等参数**不可控**，由服务端统一管理，与 [知识检索与问答](../../raw/application-api-reference/knowledge.md) 中“支持自定义生成参数”的旧版描述矛盾，以当前接口实际行为为准。
 
 ## 使用方式
 
-- **知识检索**：  
-  `POST /api/v1/indices/knowledge/search`，`Content-Type: application/json`，`Authorization: Bearer <API-Key>`。  
-  请求体仅含 `agent_id`、`query`、`images`（三者至少提供有效意图）。示例见 [知识检索 (raw/application-api-reference/knowledge/knowledgesearch.md)](../../raw/application-api-reference/knowledge/knowledgesearch.md)。
-
-- **知识问答**：  
-  `POST /api/v2/apps/knowledge/chat`，`Content-Type: application/json`，`Accept: text/event-stream`，`Authorization: Bearer <API-Key>`。  
-  请求体为三层结构：`input`（含 `messages`）、`parameters`（含 `agent_options.agent_id`）、`stream: true`。必须处理 SSE 流式响应，解析 `event: message` 与 `event: error` 帧。示例见 [知识问答 (raw/application-api-reference/knowledge/knowledgechat.md)](../../raw/application-api-reference/knowledge/knowledgechat.md)。
+1. **构造 Base URL**：`https://{workspaceId}.cn-beijing.maas.aliyuncs.com`，其中 `{workspaceId}` 需从控制台 [业务空间管理](https://bailian.console.aliyun.com/cn-beijing?tab=globalset#/efm/business_management) 获取；
+2. **设置请求头**：`Authorization: Bearer <API-Key>`，API Key 须从 [API Key 页面](https://rag.console.aliyun.com/settings/apikey) 创建并复制；
+3. **发送请求**：
+   - 检索：`POST /api/v1/indices/knowledge/search`，Body 为 JSON，含 `knowledge_ids` 和 `query`；
+   - 问答：`POST /api/v2/apps/knowledge/chat`，Body 同上，可选加 `"stream": true`；
+4. 响应格式遵循标准 HTTP 状态码，错误详情见 [知识检索与问答](../../raw/application-api-reference/knowledge.md) 的“错误码”章节。
 
 ## 限制和注意事项
 
-- **权限与前置条件**：两者均需有效 API Key 及业务空间 ID；服务必须**先在控制台创建并发布**，否则返回 `Agent 未发布` 错误。
-- **限流**：默认用户维度 25 QPS，超限需重试。
-- **响应校验**：  
-  - 知识检索：**必须校验 `success` 字段**（而非 HTTP 状态码），失败时 `request_id` 用于排查。  
-  - 知识问答：错误以 `event: error` 帧返回（含 `code`/`message`/`request_id`），HTTP 401 仅用于鉴权失败。
-- **元数据稳定性**：`data.nodes[].metadata` 中以下划线 `_` 开头的字段（如 `_score`, `_rc_v_score`）为内部打分字段，**版本间可能变更，禁止写入业务逻辑**。
-- **上下文管理**：知识问答不维护会话状态，`messages` 需传入完整历史，建议限制轮次（如 ≤10）避免超上下文窗口。
-- **文件处理**：临时文件上传需在控制台开启“文件预解析”，并通过 `addFile` 接口获取 `file_id` 后，再通过 `parameters.agent_options.session_files` 传入。
+- **限流策略**：默认按用户维度限流 25 QPS，超限返回 `429 Too Many Requests`，需客户端实现退避重试；
+- **知识库状态要求**：所有 `knowledge_ids` 对应的知识库必须处于 `ACTIVE` 状态，否则请求失败；
+- **字符限制**：`query` 超过 2048 字符将被截断并返回 400，不支持分块提交；
+- **调试建议**：首次集成时，建议先用非流式问答接口验证知识库召回效果，再启用 `stream=true`；流式响应中各阶段事件类型（`plan`/`tool_call`/`content`）定义见 [知识问答](../../raw/application-api-reference/knowledge/knowledgechat.md)。
 
 ## 来源文档
 
-- [知识检索](../../raw/application-api-reference/knowledge/knowledgesearch.md)
-- [知识问答](../../raw/application-api-reference/knowledge/knowledgechat.md)
+- [知识检索与问答](../../raw/application-api-reference/knowledge.md)
 
 

@@ -1,35 +1,30 @@
 # security guide
 
-百炼平台提供多层次的安全防护能力，覆盖模型调用、Agent 资产管理、策略配置与风险审计等关键环节。开发者可通过控制台、CLI 或 API 配置安全策略，实现细粒度访问控制与敏感操作留痕。所有安全能力均默认启用基础防护，高级功能需按需开启并遵循最小权限原则。
+百炼平台提供多层次安全防护能力，覆盖模型调用、Agent 资产管理、策略配置与风险审计等关键环节。开发者可通过控制台、CLI 或 API 集成安全策略，确保生产环境符合企业合规要求。所有安全功能均默认启用基础防护，高级策略需显式配置。
 
 ## 支持的模型/功能
 
-- 所有百炼托管模型（包括 Qwen 系列、Qwen-VL、Qwen-Audio）均支持请求级内容安全检测（含涉政、暴恐、色情、违禁等维度）  
-- Agent 开发场景下，支持对工具调用输入/输出、记忆存储、知识库检索结果进行实时内容过滤与脱敏  
-- 安全策略可作用于模型 API、Agent SDK、工作流编排节点三类入口，具体能力详见 [Security (raw/application-user-guide/security-guide.md)](../../raw/application-user-guide/security-guide.md)  
+- 所有百炼托管模型（包括 Qwen 系列、Qwen-VL、Qwen-Audio）均支持请求级内容安全检测（含敏感词过滤、涉政/暴恐/色情识别）  
+- Agent 框架内置资产隔离机制，支持按工作空间粒度划分敏感数据访问边界  
+- 安全策略模块支持自定义规则组，可联动 [防护总览](../../raw/application-user-guide/security-guide.md) 中的实时风险仪表盘进行闭环响应  
 
 ## 关键参数
 
-| 参数名 | 类型 | 说明 | 默认值 |
-|--------|------|------|--------|
-| `security_policy_id` | string | 指定已创建的安全策略 ID，用于绑定到模型服务或 Agent 实例 | `default`（基础过滤策略） |
-| `enable_audit_log` | boolean | 是否开启操作审计日志（含输入 [prompt](prompt.md)、输出响应、策略匹配结果） | `false` |
-| `sensitive_word_masking` | boolean | 是否对检测出的敏感词执行掩码（如 `***`）而非拦截 | `true`（仅限非阻断型策略） |
-
-> **注意**：`sensitive_word_masking` 在 [Security (raw/application-user-guide/security-guide.md)](../../raw/application-user-guide/security-guide.md) 的 CLI 示例中被标记为必填项，但实际 API 文档 [API 参考](https://help.aliyun.com/zh/model-studio/security/api) 明确其为可选字段，以 API 文档为准。
+- `security_level`: 可选 `basic` / `standard` / `strict`，控制内容检测强度（默认 `basic`）  
+- `audit_enabled`: 布尔值，启用后记录完整请求/响应日志至审计中心（见 [风险与审计](../../raw/application-user-guide/security-guide.md)）  
+- `policy_id`: 引用已创建的安全策略 ID，需通过 [安全策略](../../raw/application-user-guide/security-guide.md) 接口预配置  
 
 ## 使用方式
 
-- **控制台**：在「模型服务」或「Agent 管理」页面，编辑实例 → 「安全设置」页签 → 选择策略并启用审计  
-- **CLI**：使用 `bailian security attach --model-id <id> --policy-id <pid>` 绑定策略，详情见 [使用 CLI](https://help.aliyun.com/zh/model-studio/security/cli) —— 该文档路径已在 [Security (raw/application-user-guide/security-guide.md)](../../raw/application-user-guide/security-guide.md) 中列出  
-- **API**：调用 `UpdateModelService` 或 `UpdateAgent` 接口，传入 `SecurityConfig` 对象（参考 [API 参考](https://help.aliyun.com/zh/model-studio/security/api)）
+- **API 调用**：在请求 Header 中添加 `X-Bailian-Security-Level: strict`，或在 JSON body 中传入 `security_level` 字段  
+- **CLI 工具**：使用 `bailian security enable --policy-id pol-xxx --workspace ws-yyy` 启用策略（详见 [使用 CLI](../../raw/application-user-guide/security-guide.md)）  
+- **Agent 配置**：在 `agent.yaml` 中声明 `security: { policy_id: "pol-xxx" }`，策略将自动应用于该 Agent 全部[函数调用](../concepts/function-calling.md)  
 
 ## 限制和注意事项
 
-- 单个安全策略最多关联 50 个模型服务或 Agent 实例  
-- 审计日志保留周期为 90 天，不可延长；日志内容不包含原始 token 流，仅记录最终输入/输出文本  
-- 启用 `enable_audit_log` 后，单次请求延迟增加约 50–200ms（取决于策略复杂度），高并发场景需评估性能影响  
-- 策略中的自定义关键词库大小上限为 10MB，且仅支持 UTF-8 编码纯文本文件上传
+- 单次请求最大文本长度受安全检测引擎限制：`strict` 模式下不超过 8192 字符，超长内容将被截断并返回警告  
+- `audit_enabled=true` 时，日志保留周期为 90 天，不支持自定义延长（计费细节见 [计费说明](../../raw/application-user-guide/security-guide.md)）  
+- > **注意**：原始文档中 [API 参考](../../raw/application-user-guide/security-guide.md) 列出的 `v1/security/scan` 接口已于 v2.3.0 版本废弃，当前统一由 `/v1/chat/completions` 的 `security_level` 参数替代，旧接口调用将返回 `410 Gone`。
 
 ## 来源文档
 

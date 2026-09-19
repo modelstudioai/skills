@@ -2,7 +2,7 @@
 
 快速了解 Evolution 的各种功能
 
-通过本文档，方便你快速了解 Evolution 的观测、评测等功能。
+通过本文档，方便你快速了解 Evolution 的观测、评测、优化等功能。
 
 ## 前置准备
 
@@ -30,3 +30,13 @@ Evolution 为开发者提供系统化的评测能力，能够对应用的输出�
 3.  创建评测任务&查看评测结果，批量运行并生成评分，分析得分分布与回归对比。
 
 更多详细说明，参考[评测任务](raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-evaluation-task.md)。
+
+## 优化
+
+Evolution 为开发者提供系统化的评测与优化闭环，能够基于调试结果、评测集数据与线上 Trace 反馈，对应用 Prompt 进行智能优化与人工调试。支持多版本效果对比与一键采纳，持续提升应用输出质量。
+
+1.  多版本效果对比调试优化应用 Prompt。
+2.  基于调试结果&反馈优化应用 Prompt。
+3.  基于优质评测集 & 评测任务结果，优化应用 Prompt。
+
+更多详细说明，参考[应用优化](raw/application-user-guide/agenteval/agenteval-optimization.md)。

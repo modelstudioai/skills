@@ -1,5 +1,8 @@
 # 语音合成
 
+-   [qwen-audio-3.1-tts-flash](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/qwen-audio-3-1-tts-flash.md)
+-   [qwen-audio-3.0-tts-flash](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/qwen-audio-3-0-tts-flash.md)
+-   [qwen-audio-3.0-tts-plus](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/qwen-audio-3-0-tts-plus.md)
 -   [qwen3-tts-flash](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/qwen3-tts-flash.md)
 -   [qwen3-tts-instruct-flash](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/qwen3-tts-instruct-flash.md)
 -   [qwen3-tts-vc-2026-01-22](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis/qwen3-tts-vc.md)

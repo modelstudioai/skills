@@ -1,40 +1,45 @@
 # application component api reference
 
-应用组件 API 提供了在百炼平台中集成和调用预置能力（如对话、知识检索、工具调用等）的标准接口，适用于构建企业级 AI 应用。该 API 以 RESTful 形式提供，支持同步响应与[流式输出](../concepts/streaming-output.md)，需通过 RAM 授权访问。所有接口均基于统一的服务接入点，版本演进遵循语义化规范。
+应用组件 API 是百炼平台提供的核心能力封装，用于在自定义应用中集成大模型推理、知识检索、工具调用等能力。该接口以标准化 RESTful 形式提供，支持同步响应与[流式输出](../concepts/streaming-output.md)，适用于构建对话机器人、智能助手、自动化工作流等场景。所有调用需通过 RAM 授权并使用指定服务接入点 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-当前应用组件 API 支持以下核心能力：  
-- 基于 `bailian-v1` 模型的多轮对话（含上下文管理）；  
-- 知识库增强问答（RAG），支持向量检索与重排；  
-- 工具调用（Tool Calling），可对接自定义 HTTP 工具或平台内置函数；  
-- 输出结构化 JSON（需显式设置 `response_format: "json_object"`）。  
-详细能力列表见 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)。
+当前支持以下能力模块：
+- **大模型推理**：`qwen-max`、`qwen-plus`、`qwen-turbo`（具体支持列表见 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)）
+- **增强功能**：RAG 检索（需配置知识库 ID）、[函数调用](../concepts/function-calling.md)（Function Calling）、多轮上下文管理（最大 16K tokens 上下文窗口）
+
+> **注意**：文档中提及的 `qwen-vl` 和 `qwen-audio` 模型在最新 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 中已明确标记为“暂不开放公测”，实际调用将返回 `400 UnsupportedModel` 错误。
 
 ## 关键参数
 
-必填参数包括：  
-- `model`: 必须为 `bailian-v1`（暂不支持其他模型别名）；  
-- `input.messages`: 非空消息数组，格式同 OpenAI ChatML；  
-- `parameters.temperature`: 范围 `[0.0, 2.0]`，默认 `0.8`；  
-- `parameters.top_p`: 范围 `[0.0, 1.0]`，默认 `0.95`；  
-- `parameters.max_tokens`: 最大输出 token 数，上限 `4096`（超出将被截断）。  
-授权与端点配置详见 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 和 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model` | string | 是 | 模型标识符，如 `qwen-plus`；必须与 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 中列出的值严格一致 |
+| `input.messages` | array | 是 | 对话消息数组，格式为 `[{ "role": "user", "content": "..." }]`；`role` 仅支持 `user`/`assistant`/`system` |
+| `parameters.temperature` | number | 否 | 取值范围 [0.0, 2.0]，默认 1.0；低于 0.1 时可能触发确定性解码（详见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)） |
 
 ## 使用方式
 
-1. 通过 RAM 角色获取 `bailian:InvokeApplicationComponent` 权限；  
-2. 构造 POST 请求至 `/v1/applications/{app_id}/chat/completions`（`app_id` 为控制台创建的应用唯一标识）；  
-3. 设置 `Content-Type: application/json` 与 `Authorization: Bearer <access_token>`；  
-4. 示例请求体参考 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中的 `curl` 片段。
+1. 获取 RAM 凭据（AccessKey ID/Secret），确保策略包含 `bailian:InvokeApplicationComponent` 权限  
+2. 构造 HTTPS POST 请求，Endpoint 请参考 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)  
+3. 设置 Header：`Authorization: Bearer <access_token>`（或使用 AK/SK 签名）  
+4. Body 示例（JSON）：
+```json
+{
+  "model": "qwen-plus",
+  "input": {
+    "messages": [{"role": "user", "content": "你好"}]
+  },
+  "parameters": {"temperature": 0.8}
+}
+```
 
 ## 限制和注意事项
 
-- 单次请求最大 `input.messages` 长度为 32768 tokens（含 system + user + assistant 消息）；  
-- 流式响应（`stream: true`）仅支持 SSE 格式，不兼容 WebSocket；  
-- `tool_choice` 参数若设为 `"auto"`，系统可能忽略部分工具描述字段 —— 此行为与 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 中 v2024.03 的变更描述存在偏差；  
-> **注意**：文档 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中示例使用的 `model: qwen-max` 已过时，实际仅接受 `bailian-v1`，请以 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 为准；  
-> **注意**：[授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md) 中列出的 `bailian:ListApplications` 权限非调用必需，仅用于控制台管理。
+- 单次请求 `input.messages` 总长度不得超过 32768 字符（UTF-8 编码）  
+- 流式响应（`stream=true`）需设置 `Accept: text/event-stream`，且不支持重试机制  
+- 跨区域调用（如杭州 AK 调用上海 Endpoint）将失败，务必匹配 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 的地域标识  
+- 所有参数名区分大小写，`model` 不可写作 `Model` 或 `MODEL`，否则返回 `400 InvalidParameter`
 
 ## 来源文档
 
