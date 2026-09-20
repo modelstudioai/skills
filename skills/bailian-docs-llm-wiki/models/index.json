@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-09-20",
-  "totalFamilies": 183,
+  "updatedAt": "2026-09-21",
+  "totalFamilies": 184,
   "totalModels": 421,
   "profileCoverage": {
-    "full": 370,
-    "partial": 41,
-    "structured-only": 10,
+    "full": 364,
+    "partial": 51,
+    "structured-only": 6,
     "none": 0
   },
   "capabilityDistribution": {
@@ -17,11 +17,11 @@
     "ASR": 14,
     "VU": 9,
     "Realtime-ASR": 8,
-    "Multimodal-Omni": 6,
+    "Multimodal-Omni": 7,
     "Realtime-Audio-Translate": 4,
-    "Realtime-Omni": 4,
+    "Realtime-Chatting": 3,
+    "Realtime-Omni": 3,
     "ME": 2,
-    "Realtime-Chatting": 2,
     "Realtime-Text-to-Speech": 2,
     "TR": 2,
     "World-Model": 1,
@@ -29,7 +29,7 @@
   },
   "providerDistribution": {
     "qwen": 113,
-    "qwen-domain-model": 34,
+    "qwen-domain-model": 35,
     "wan": 14,
     "mini-max": 4,
     "pixverse": 4,
@@ -980,6 +980,22 @@
       "maxContextWindow": 131072
     },
     {
+      "slug": "qwen-audio-3.1-realtime",
+      "name": "Qwen-Audio-3.1-Realtime",
+      "primaryCapability": "Realtime-Chatting",
+      "capabilities": [
+        "Realtime-Chatting"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen-audio-3.1-realtime-plus"
+      ],
+      "maxContextWindow": 262144
+    },
+    {
       "slug": "qwen-audio-3.1-tts",
       "name": "Qwen-Audio-3.1-TTS",
       "primaryCapability": "TTS",
@@ -1053,7 +1069,7 @@
       "items": [
         "qwen-audio-3.0-realtime-flash"
       ],
-      "maxContextWindow": 40960
+      "maxContextWindow": 65535
     },
     {
       "slug": "qwen-audio-realtime-plus",
@@ -1069,7 +1085,7 @@
       "items": [
         "qwen-audio-3.0-realtime-plus"
       ],
-      "maxContextWindow": 40960
+      "maxContextWindow": 65535
     },
     {
       "slug": "qwen-audio-tts",
@@ -1467,21 +1483,20 @@
       "maxContextWindow": 16384
     },
     {
-      "slug": "qwen-omni-turbo-realtime",
-      "name": "Qwen-Omni-Turbo-Realtime",
-      "primaryCapability": "Realtime-Omni",
+      "slug": "qwen-mt-uni",
+      "name": "Qwen-MT-Uni",
+      "primaryCapability": "Multimodal-Omni",
       "capabilities": [
-        "Realtime-Omni"
+        "Multimodal-Omni"
       ],
       "providers": [
-        "qwen"
+        "qwen-domain-model"
       ],
-      "itemCount": 2,
+      "itemCount": 1,
       "items": [
-        "qwen-omni-turbo-realtime",
-        "qwen-omni-turbo-realtime-latest"
+        "qwen-mt-uni"
       ],
-      "maxContextWindow": 32768
+      "maxContextWindow": 1000000
     },
     {
       "slug": "qwen-omni-turbo",

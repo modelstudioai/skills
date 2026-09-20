@@ -110,6 +110,18 @@ SDK 以全局单例方式持有引擎实例，通过 `AoqClientEngine` 类对外
 
 设置或移除远端视频渲染窗口
 
+getScreenSourceList
+
+获取屏幕和窗口源
+
+startScreenCapture:
+
+开始屏幕采集
+
+stopScreenCapture
+
+停止屏幕采集
+
 ### 视频编码与外部输入
 
 **接口**
@@ -299,6 +311,29 @@ SDK 以全局单例方式持有引擎实例，通过 `AoqClientEngine` 类对外
 收到实时数据消息回调
 
 ## 接口详情
+
+### 屏幕采集
+
+```
+- (int)startScreenCapture:(AoqScreenCaptureConfig * _Nonnull)config;
+- (int)stopScreenCapture;
+```
+
+`config` 为屏幕采集配置。屏幕画面通过 `AoqTrackTypeScreen` 轨道发送。
+
+返回值：0 表示成功；非 0 表示失败。 接口同步返回，不提供 `onScreenCaptureStateChanged` 回调。
+
+先调用 `getScreenSourceList` 获取屏幕或窗口源，再将选定的 `sourceId` 和 `sourceType` 传入采集配置。
+
+外部原始帧：设置 `isExternal=YES` 后，通过 `pushExternalVideoCapturedFrame` 输入 Screen 轨道的原始帧，由 SDK 编码。外部已编码帧：先通过 `setVideoEncoderConfig` 将 Screen 轨道设置为外部编码，再调用 `pushExternalVideoEncodedFrame`。
+
+#### getScreenSourceList
+
+```
+- (AoqScreenSourceList * _Nullable)getScreenSourceList;
+```
+
+返回屏幕源列表，失败返回 nil。
 
 ### 引擎生命周期
 
@@ -802,6 +837,8 @@ SDK 以全局单例方式持有引擎实例，通过 `AoqClientEngine` 类对外
 
 路由目标，传 `AoqTrackTypeVideo`
 
+；也支持 AoqTrackTypeScreen
+
 `frame`
 
 `AoqVideoFrame *`
@@ -832,6 +869,8 @@ SDK 以全局单例方式持有引擎实例，通过 `AoqClientEngine` 类对外
 `AoqTrackType`
 
 路由目标，传 `AoqTrackTypeVideo`
+
+；也支持 AoqTrackTypeScreen
 
 `frame`
 
@@ -864,6 +903,8 @@ SDK 以全局单例方式持有引擎实例，通过 `AoqClientEngine` 类对外
 `AoqTrackType`
 
 路由目标，支持 `AoqTrackTypeAudio` / `AoqTrackTypeVideo`
+
+；支持 AoqTrackTypeScreen
 
 `enable`
 
@@ -1816,7 +1857,7 @@ SDK 以全局单例方式持有引擎实例，通过 `AoqClientEngine` 类对外
 本地采集后裸数据回调（前处理前）。通过 `enableVideoFrameObserver:` 设置 `videoSource = AoqVideoSourceCaptured` 开启。
 
 ```
-- (BOOL)onCapturedVideoFrame:(AoqVideoFrame * _Nonnull)frame;
+- (BOOL)onCapturedVideoFrame:(AoqTrackType)trackType frame:(AoqVideoFrame * _Nonnull)frame;
 ```
 
 参数
@@ -1832,6 +1873,12 @@ SDK 以全局单例方式持有引擎实例，通过 `AoqClientEngine` 类对外
 `AoqVideoFrame *`
 
 采集视频帧数据，详见 `AoqVideoFrame`
+
+trackType
+
+AoqTrackType
+
+视频轨道类型，支持 Video / Screen。
 
 返回值：`YES` 数据已修改、需写回 SDK；`NO` 只读。
 
@@ -1899,6 +1946,116 @@ SDK 以全局单例方式持有引擎实例，通过 `AoqClientEngine` 类对外
 
 ## 数据类型与枚举
 
+### AoqScreenSourceList
+
+字段
+
+类型
+
+说明
+
+sourceList
+
+NSArray<AoqScreenSourceInfo \*> \*
+
+屏幕源数组
+
+### AoqScreenSourceInfo
+
+字段
+
+类型
+
+默认值
+
+说明
+
+sourceType
+
+AoqScreenShareSourceType
+
+Desktop
+
+源类型
+
+sourceId
+
+int64\_t
+
+0
+
+源 ID
+
+sourceName
+
+NSString \*
+
+—
+
+源名称
+
+sourceIsSelf
+
+BOOL
+
+—
+
+是否为自身进程窗口
+
+### AoqScreenShareSourceType
+
+枚举值
+
+值
+
+说明
+
+AoqScreenShareSourceTypeDesktop
+
+0
+
+整个桌面
+
+AoqScreenShareSourceTypeWindow
+
+1
+
+指定窗口
+
+### AoqScreenCaptureConfig
+
+字段
+
+类型
+
+默认值
+
+说明
+
+isExternal
+
+BOOL
+
+NO
+
+是否由应用提供屏幕原始帧。
+
+sourceId
+
+int64\_t
+
+0
+
+屏幕源 ID。
+
+sourceType
+
+AoqScreenShareSourceType
+
+AoqScreenShareSourceTypeWindow
+
+屏幕源类型。
+
 ### 通用类型
 
 #### AoqCreateConfig
@@ -1936,6 +2093,22 @@ SDK 工作目录
 `""`
 
 扩展参数
+
+maxEncodedVideoFrameBytes
+
+NSInteger
+
+190 × 1024
+
+编码后单帧大小上限（字节），仅用于 SDK 内部 JPEG 编码。0 表示关闭限制。
+
+enableDropOversizedVideoFrame
+
+BOOL
+
+NO
+
+仅用于 SDK 内部 JPEG 编码：降至最低质量后仍超限时，是否允许丢弃该帧。
 
 #### AoqConnectConfig
 
@@ -2024,6 +2197,14 @@ Relay 接入点。
 `0`
 
 服务端端口
+
+tcpPort
+
+NSInteger
+
+0
+
+TCP 降级端口；0 表示使用 SDK 默认端口 443。
 
 #### AoqTrackParam
 
@@ -2669,6 +2850,12 @@ track 类型
 
 数据消息轨道
 
+AoqTrackTypeScreen
+
+3
+
+屏幕共享轨道，支持上行。
+
 #### AoqEncoderType
 
 编码器类型。
@@ -2853,7 +3040,7 @@ track 类型
 
 `AoqEncoderType`
 
-`AudioPCM`
+`AudioOpus`
 
 编码格式
 
@@ -3489,45 +3676,65 @@ PCM 输入轮次
 
 本地音量提示配置。
 
-**字段**
+字段
 
-**类型**
+类型
 
-**默认值**
+默认值
 
-**说明**
+说明
 
-`interval`
+reportSpeech
 
-`NSInteger`
+BOOL
 
-`0`
+NO
 
-回调间隔（ms）；<=0 关闭回调，>0 且 <10 时按 10 处理
+是否检测人声。
 
-`smooth`
+interval
 
-`NSInteger`
+NSInteger
 
-`3`
+0
 
-音量平滑系数，范围 \[0, 10\]，取值越大越平滑
+回调间隔（毫秒）；小于等于 0 时关闭，大于 0 且小于 10 时按 10 处理。
+
+smooth
+
+NSInteger
+
+3
+
+平滑系数，范围 0～10；越大越平滑。
 
 #### AoqAudioVolume
 
 本地音量信息。
 
-**字段**
+字段
 
-**类型**
+类型
 
-**说明**
+默认值
 
-`volume`
+说明
 
-`NSInteger`
+isSpeech
 
-平滑后的瞬时音量，范围 \[0, 255\]
+BOOL
+
+NO
+
+是否为人声。
+
+volume
+
+NSInteger
+
+0
+
+平滑后的瞬时音量，范围 0～255。
 
 ### 视频类型
 
@@ -4156,6 +4363,14 @@ JPEG
 `NO`
 
 是否对回调数据应用镜像
+
+trackType
+
+AoqTrackType
+
+AoqTrackTypeVideo
+
+需要观察的视频轨道；仅支持 Video / Screen。
 
 #### AoqRenderView
 

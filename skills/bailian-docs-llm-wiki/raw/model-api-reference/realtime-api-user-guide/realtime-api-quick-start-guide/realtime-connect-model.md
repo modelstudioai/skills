@@ -23,6 +23,8 @@ AOQ 基于 QUIC 协议深度定制，适合移动端原生应用，支持音频/
 
 ![AOQ中文1](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5755914871/p1088073.jpg)
 
+开始前，请从[SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)获取 AOQ Client SDK 和 Opus 插件，将 `AoqClientSdk.framework` 与 `PluginOpus.framework` 导入 Xcode 工程，并选择 **Embed & Sign**。
+
 ### 创建引擎并设置回调
 
 ```
@@ -64,7 +66,7 @@ engine.startVideoCapture(vidCfg)
 ```
 // 音频编解码配置
 let encCfg = AoqAudioCodecConfig()
-encCfg.codecType = .audioPCM; encCfg.sampleRate = 16000; encCfg.channel = 1
+encCfg.codecType = .audioOpus; encCfg.sampleRate = 16000; encCfg.channel = 1
 engine.setAudioEncoderConfig(encCfg)
 engine.setAudioDecoderConfig(encCfg)
 

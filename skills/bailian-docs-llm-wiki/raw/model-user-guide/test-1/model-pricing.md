@@ -13651,6 +13651,18 @@ paraformer-realtime-8k-v1
 
 **音频**
 
+qwen-audio-3.1-realtime-plus
+
+5元
+
+40元
+
+40元
+
+150元
+
+100万Token
+
 qwen-audio-3.0-realtime-plus
 
 5元
@@ -13692,6 +13704,18 @@ qwen-audio-3.0-realtime-flash
 **文本**
 
 **音频**
+
+qwen-audio-3.1-realtime-plus
+
+国际
+
+5.995元
+
+47.963元
+
+47.963元
+
+179.861元
 
 qwen-audio-3.0-realtime-plus
 

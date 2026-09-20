@@ -255,7 +255,7 @@ codecType
 
 AoqEncoderType
 
-AudioPCM
+AudioOpus
 
 编码类型：AudioPCM(1) 或 AudioOpus(2)
 

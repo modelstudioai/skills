@@ -30,7 +30,7 @@
 
 #### 请求参数
 
-查询World详情
+#### 查询World详情
 
 ```
 curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-acting/openapi/v1/worlds/detail?encryptedWorldId={encryptedWorldId}' \

@@ -28,7 +28,7 @@
 
 #### 请求参数
 
-查询Travel列表
+#### 查询Travel列表
 
 ```
 curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-acting/openapi/v1/travels?page=1&pageSize=20&status=completed&encryptedWorldId={encryptedWorldId}' \
@@ -56,7 +56,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 -   `init`：正在初始化会话资源
 -   `pending`：排队或等待服务资源
 -   `running`：正在运行
--   `failed`：Travel 失败
+-   `failed`：Travel 失败；原因见 `errorCode` / `errorMessage`
 -   `completed`：Travel 已结束，可查询产物
 
 **encryptedWorldId** `string` **（可选）**
@@ -65,7 +65,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 
 #### 响应参数
 
-查询成功
+#### 查询成功
 
 ```
 {
@@ -90,12 +90,23 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
                 "durationSec": null,
                 "createdAt": "2026-09-09T09:10:00Z",
                 "endedAt": null
+            },
+            {
+                "encryptedTravelId": "trvl_m3n4****",
+                "status": "failed",
+                "mode": 3,
+                "encryptedWorldId": "enc_a1b2****",
+                "durationSec": null,
+                "createdAt": "2026-09-09T10:10:00Z",
+                "endedAt": "2026-09-09T10:10:05Z",
+                "errorCode": "TRAVEL_SESSION_INIT_FAILED",
+                "errorMessage": "Failed to allocate inference resources."
             }
         ],
         "pagination": {
             "page": 1,
             "pageSize": 20,
-            "total": 2,
+            "total": 3,
             "hasMore": false
         }
     }
@@ -118,7 +129,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 
 **items** `array`
 
-当前页 Travel 列表；无结果时为空数组。每项含 `encryptedTravelId`、`status`、`mode`（恒为 `3`）、`encryptedWorldId`、`durationSec`（进行中、失败或时长尚不可用时为 `null`）、`createdAt`、`endedAt`（进行中时为 `null`）。
+当前页 Travel 列表；无结果时为空数组。每项含 `encryptedTravelId`、`status`、`mode`（恒为 `3`）、`encryptedWorldId`、`durationSec`（进行中、失败或时长尚不可用时为 `null`）、`createdAt`、`endedAt`（进行中时为 `null`）；`status=failed` 的条目额外携带 `errorCode`（结构化失败原因，取值见[查询Travel状态](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference/happyoyster-acting-query-travel-status-api-reference.md)）和 `errorMessage`（英文说明），其它状态没有这两个键。
 
 **pagination** `object`
 
@@ -129,6 +140,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 -   接口自动只返回 Acting Travel，`items[].mode` 恒为 `3`。
 -   使用 `encryptedWorldId` 筛选时，该 World 必须属于当前主账号和 Acting 模型；其它模型的 World 返回 `403001`。
 -   进行中 Travel 的 `durationSec` 和 `endedAt` 通常为 `null`。
+-   `failed` 条目额外携带 `errorCode` / `errorMessage`，其它状态的条目没有这两个键；历史列表展示失败原因时以 `errorCode` 为准。
 -   未知 `status` 不会报错，而是按不筛选状态处理；查询单个 Travel 的实时 `paused` 状态应使用[查询Travel状态](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference/happyoyster-acting-query-travel-status-api-reference.md)。
 -   空结果不是错误，返回 `items=[]` 和对应分页信息。
 

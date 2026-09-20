@@ -162,22 +162,6 @@ qwen2.5-vl-7b-instruct
 
 ¥5
 
-Qwen2.5-VL-3B-Instruct 邀测中
-
-qwen2.5-vl-3b-instruct
-
-¥1.2
-
-¥3.6
-
-Qwen2-开源版-7B 邀测中
-
-qwen2-7b-instruct
-
-¥1
-
-¥2
-
 #### 新加坡
 
 **基础模型**
@@ -319,14 +303,6 @@ qwen2.5-vl-7b-instruct
 ¥2.569
 
 ¥7.706
-
-Qwen2.5-VL-3B-Instruct 邀测中
-
-qwen2.5-vl-3b-instruct
-
-¥1.541
-
-¥4.624
 
 ## LoRA 部署
 

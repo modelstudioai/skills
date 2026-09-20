@@ -34,7 +34,7 @@
 
 #### 请求参数
 
-普通模式·纯文本（异步创建）
+#### 普通模式·纯文本（异步创建）
 
 ```
 curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-directing/openapi/v1/worlds' \
@@ -51,7 +51,7 @@ curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/a
 }'
 ```
 
-普通模式·文本+参考图（异步创建）
+#### 普通模式·文本+参考图（异步创建）
 
 ```
 curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-directing/openapi/v1/worlds' \
@@ -103,7 +103,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 
 **eventStyle** `string` **（可选）**
 
-事件风格，用于选择剧本生成模板。默认 `normal`。可选值：
+仅 `creationModel=simple` 生效：选择剧本生成模板。默认 `normal`。可选值：
 
 -   `normal`：常规 / 标准风格（默认）。按用户意图补全 4–5 幕，节奏相对平稳，不强行加入冲突、反转或三幕高潮。
 -   `dramatic`：戏剧 / 冲突风格。按约 180 秒三幕骨架生成剧本：开场钩子、上升冲突、转折、高潮收束；开放演绎时按类型安排反转（悬疑 / 惊悚 / 逆袭等），节奏更密、戏剧性更强。
@@ -205,7 +205,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 
 #### 请求参数
 
-剧本模式（异步创建）
+#### 剧本模式（异步创建）
 
 ```
 curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-directing/openapi/v1/worlds' \
@@ -214,7 +214,6 @@ curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/a
     -d '{
     "async": true,
     "creationModel": "scriptlist",
-    "eventStyle": "normal",
     "resolution": "720p",
     "firstFrameImage": {
         "url": "https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9fc7.png",
@@ -292,13 +291,9 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 
 不支持 `instruct`（发送文本过程指令）。各接口说明见[补充说明](#ho-dir-cw-notes-title)。
 
-**eventStyle** `string` **（可选）**
+**说明**
 
-事件风格，用于选择剧本生成模板。默认 `normal`。可选值：
-
--   `normal`：常规 / 标准风格（默认）。按用户意图补全 4–5 幕，节奏相对平稳，不强行加入冲突、反转或三幕高潮。
--   `dramatic`：戏剧 / 冲突风格。按约 180 秒三幕骨架生成剧本：开场钩子、上升冲突、转折、高潮收束；开放演绎时按类型安排反转（悬疑 / 惊悚 / 逆袭等），节奏更密、戏剧性更强。
--   `regular`：旧值，仅为兼容历史入参保留，服务端按 `normal` 处理；新调用请勿使用。
+`eventStyle` 不参与 scriptlist 创建，请勿传入。
 
 **refWorldId** `string` **（可选）**
 
@@ -508,7 +503,7 @@ turn 序号。1–45，不可重复，默认按数组顺序从 1 递增。
 
 #### 响应参数
 
-异步创建
+#### 异步创建
 
 ```
 {

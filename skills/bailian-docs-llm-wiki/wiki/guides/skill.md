@@ -1,46 +1,41 @@
 # skill
 
-Skill 是百炼平台中用于扩展智能体任务处理能力的可插拔能力包，使智能体能在对话中自动识别并执行特定类型任务（如文件解析、数据清洗等），无需开发者编写集成代码或调用外部 API。Skill 分为官方预置与用户自定义两类，均通过语义描述驱动调用决策。其核心机制依赖于 `SKILL.md` 中的 `description` 字段对触发条件、输入输出和边界场景的精确刻画，详见 [Skill (raw/application-user-guide/skill/introduction-to-skill.md)](../../raw/application-user-guide/skill/introduction-to-skill.md)。
+Skill 是百炼平台中用于扩展智能体任务处理能力的可插拔能力包，使智能体能在对话中自动识别并执行特定类型任务（如文件解析、数据清洗等），无需开发者编写集成代码或调用外部 API。官方 Skill 开箱即用，自定义 Skill 支持 ZIP 包上传，通过 `SKILL.md` 定义元信息与触发逻辑。其核心机制依赖 description 字段的语义描述质量来驱动智能体的自动调用决策。
 
 ## 支持的模型/功能
 
-- **适用模型**：所有支持 Skill 调用的百炼大模型（当前为 Qwen 系列 2.5 及以上版本），具体兼容性以控制台 Skill 管理页显示为准。
-- **核心功能**：
-  - 自动识别用户意图与 Skill 描述匹配度，触发调用；
-  - 支持文件上传、解析、生成、格式转换等 I/O 操作（如 xlsx、csv、pdf、docx 等）；
-  - 官方 Skill 提供开箱即用能力（如 `xlsx`、`pdf-extractor`、`csv-cleaner`）；
-  - 自定义 Skill 支持 ZIP 包封装任意 Python 逻辑（需符合运行时沙箱约束）。
-
-> **注意**：部分旧版文档提及“Skill 可调用任意 HTTP 接口”，该描述已过时；当前自定义 Skill 运行于隔离沙箱中，**不支持网络外连**，仅可通过内置 SDK 访问百炼平台提供的文件系统与基础工具链。请以 [Skill (raw/application-user-guide/skill/introduction-to-skill.md)](../../raw/application-user-guide/skill/introduction-to-skill.md) 中“上传并创建”章节的运行环境说明为准。
+- **适用模型**：Skill 与百炼平台所有支持智能体（Agent）模式的大模型兼容，包括 Qwen 系列（如 qwen-max、qwen-plus）、以及接入的第三方模型（需启用 Agent 模式）。Skill 本身不绑定具体模型，而是由智能体运行时根据 `description` 的语义匹配动态选择调用。
+- **功能范围**：当前仅支持**文件处理类任务**（如读取、编辑、生成、转换 `.xlsx`, `.csv`, `.pdf`, `.docx` 等格式），不支持纯文本生成、API 调用、数据库连接或长期状态维护等通用 Agent 功能。该限制在 [原文标题](../../raw/application-user-guide/skill/introduction-to-skill.md) 中明确界定为“以文件为输入/输出的确定性操作”。
 
 ## 关键参数
 
 | 参数 | 位置 | 必填 | 说明 |
 |------|------|------|------|
-| `name` | `SKILL.md` YAML frontmatter | 是 | Skill 唯一标识符，须小写英文+连字符（如 `invoice-parser`），同一账号下不可重复。 |
-| `description` | `SKILL.md` YAML frontmatter | 是 | 决定调用准确性的关键字段，需明确输入类型、支持操作、触发关键词及**不适用场景**（避免误触发）。示例见 [Skill (raw/application-user-guide/skill/introduction-to-skill.md)](../../raw/application-user-guide/skill/introduction-to-skill.md) 中 xlsx Skill 的完整描述。 |
-| `version` | `SKILL.md`（可选） | 否 | 若未声明，系统自动生成时间戳版本号；建议显式声明便于追踪。 |
+| `name` | `SKILL.md` YAML frontmatter | 是 | Skill 唯一标识符，须全小写+连字符（如 `pdf-extractor`），同一账号下不可重复。详见 [原文标题](../../raw/application-user-guide/skill/introduction-to-skill.md) 中“SKILL.md 编写规范”章节。 |
+| `description` | `SKILL.md` YAML frontmatter | 是 | 决定 Skill 是否被调用的核心字段。必须包含适用输入类型、支持操作、典型触发关键词及明确的**不适用场景**（例如：“Do NOT trigger when output is HTML”）。描述质量直接影响召回准确率，[原文标题](../../raw/application-user-guide/skill/introduction-to-skill.md) 提供了完整示例和编写建议。 |
+| ZIP 包大小 | 上传时校验 | — | ≤ 10 MB，超限将直接拒绝上传。 |
+
+> **注意**：文档中未提及 `version` 字段为必填项，且 `SKILL.md` 示例中也未出现该字段；但部分旧版控制台 UI 曾显示版本号。实际行为以 [原文标题](../../raw/application-user-guide/skill/introduction-to-skill.md) 为准：系统通过 ZIP 文件哈希或上传时间自动管理版本，`SKILL.md` 中无需声明 `version`。
 
 ## 使用方式
 
 1. **创建 Skill**  
-   - 官方 Skill：直接在 [Skill 管理](https://bailian.console.aliyun.com/?tab=app#/skill) 页面添加；  
-   - 自定义 Skill：打包含 `SKILL.md` 的 ZIP（≤10 MB），通过控制台「组件 > Skill 管理 > 自定义 Skill」上传。
+   - 官方 Skill：直接在 [Skill 管理](https://bailian.console.aliyun.com/?tab=app#/skill) 页面查看并添加，无需配置。  
+   - 自定义 Skill：按规范编写 `SKILL.md`，打包为 ZIP（根目录含 `SKILL.md`，无嵌套文件夹），在控制台「组件 > Skill 管理 > 自定义 Skill」上传。
 
 2. **添加到智能体**  
-   - 方式一：从 Skill 详情页点击「添加到智能体」；  
-   - 方式二：在目标应用的「应用配置 > 技能」区域点击 `+` 添加。
+   - 方式一：从 Skill 详情页点击「添加到智能体」，选择目标应用；  
+   - 方式二：进入智能体「应用配置」→「技能」区域，点击 `+` 号勾选所需 Skill。
 
 3. **测试与验证**  
-   - 在应用配置页右侧对话窗格输入典型触发语句（如“把附件里的 CSV 按销售额排序并导出 Excel”）；  
-   - 观察是否自动调用对应 Skill 并返回预期结果（如生成 .xlsx 文件）。
+   在应用配置页右侧对话窗格中发送符合 `description` 触发条件的自然语言指令（如“把附件里的 CSV 按销售额排序并导出新表格”），观察是否自动调用并返回预期文件。
 
 ## 限制和注意事项
 
-- **大小限制**：ZIP 包总大小 ≤ 10 MB；解压后文件数建议 ≤ 100 个，避免加载超时。
-- **运行时限制**：自定义 Skill 运行在无网络、无持久存储的轻量沙箱中，单次执行超时为 60 秒，内存上限 1 GB。
-- **版本管理**：重新上传同名 ZIP 即创建新版本；已添加该 Skill 的智能体会**自动升级至最新通过审查的版本**（官方 Skill 强制同步，自定义 Skill 需手动重传）。
-- **调试提示**：若 Skill 未被调用，请优先检查 `description` 是否覆盖用户实际表达（如缺少口语化触发词）、输入文件类型是否在声明范围内，以及 ZIP 结构是否合规（`SKILL.md` 必须位于根目录）。
+- **文件类型限制**：仅支持平台白名单内的文件格式（如 `.xlsx`, `.csv`, `.pdf`, `.docx`, `.txt`），不支持 `.exe`, `.zip`, `.bin` 等可执行或二进制非文档格式。上传非法格式 ZIP 包将导致审查失败。
+- **无状态性**：每个 Skill 执行是独立的，不保留跨轮次上下文或临时文件。无法实现“先读取 A 表，再基于结果修改 B 表”的链式操作（需拆分为多个 Skill 或改用 Function Calling）。
+- **审查延迟**：自定义 Skill 上传后需约 2 分钟自动审查，期间不可用；审查失败时需根据错误提示修改 `SKILL.md` 后重新上传。
+- **版本更新逻辑**：重新上传同名 Skill ZIP 包即创建新版本，已添加该 Skill 的智能体会**自动切换至最新版本**（官方 Skill 同理）。旧版本不可回滚，历史版本仅用于查看（见「更新记录」标签）。
 
 ## 来源文档
 

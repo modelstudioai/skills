@@ -1018,7 +1018,7 @@ deepseek-v3
 
 ## 模型列表与计费
 
--   混合思考模型（通过`enable_thinking`参数控制是否思考）：deepseek-v4-pro、deepseek-v4-flash、deepseek-v4-flash-0731、deepseek-v3.2、deepseek-v3.2-exp、deepseek-v3.1
+-   混合思考模型（通过`enable_thinking`参数控制是否思考）：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash、deepseek-v4-flash-0731、deepseek-v3.2、deepseek-v3.2-exp、deepseek-v3.1
 -   仅思考模型（回复前总会思考）：deepseek-r1、deepseek-r1-0528
 -   非思考模型：deepseek-v3
 

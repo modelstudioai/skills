@@ -10,7 +10,7 @@
     -   **阿里云账号（主账号）**：默认拥有权限，可直接调用。
 -   **调用方式**：推荐使用最新版[阿里云百炼 SDK](https://api.aliyun.com/api-tools/sdk/bailian?version=2023-12-29)调用，SDK 已封装复杂的签名计算逻辑，可简化您的调用过程。
     
--   **后续操作**：本接口仅初始化知识库创建作业。完成调用后，必须调用 **SubmitIndexJob** 接口以完成创建（否则，您将得到一个空的知识库）。相应代码示例请参见[知识库 API 指南](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)。
+-   **后续操作**：本接口仅初始化知识库创建作业。完成调用后，必须调用 **SubmitIndexJob** 接口以完成创建（否则，您将得到一个空的知识库）。相应代码示例请参见[知识库 API 指南](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)。
     
 -   **幂等性**：本接口不具有幂等性，重复调用可能会创建多个同名知识库。建议通过“先查询、后创建”的逻辑实现幂等调用。
     
@@ -333,7 +333,7 @@ string
 
 是
 
-知识库的向量存储类型。更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。取值范围：
+知识库的向量存储类型。更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。取值范围：
 
 -   BUILT\_IN：将向量数据托管在阿里云百炼平台中。
     
@@ -476,7 +476,7 @@ array<object>
 
 否
 
-元数据提取配置。元数据是与非结构化数据内容相关的一系列附加属性，这些属性以 key-value 键值对的形式集成到文本切片中。更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+元数据提取配置。元数据是与非结构化数据内容相关的一系列附加属性，这些属性以 key-value 键值对的形式集成到文本切片中。更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
 
 object
 
@@ -650,7 +650,7 @@ string
 
 否
 
-启用自定义切分，并指定切分策略。更多说明，请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+启用自定义切分，并指定切分策略。更多说明，请参见[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
 
 可能取值（不支持同时传入多个值）：
 
@@ -736,7 +736,7 @@ string
 
 否
 
-知识库的[规格类型](raw/application-user-guide/knowledge-base/billing-for-knowledge-base.md)。取值范围：
+知识库的[规格类型](raw/application-user-guide/knowledge-base/reference/billing-for-knowledge-base.md)。取值范围：
 
 -   standard：标准版
     

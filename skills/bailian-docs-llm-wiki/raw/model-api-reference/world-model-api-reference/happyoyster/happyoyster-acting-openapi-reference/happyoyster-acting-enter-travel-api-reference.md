@@ -26,7 +26,7 @@
 
 #### 请求参数
 
-客户端进入房间
+#### 客户端进入房间
 
 ```
 curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-acting/openapi/v1/travels/enter-travel' \
@@ -54,19 +54,11 @@ API Key 鉴权。不强制主 API Key，主 API Key 或临时 API Key 均可调�
 
 未过期且未使用的一次性凭证。由[获取体验凭证](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference/happyoyster-acting-get-travel-credential-api-reference.md)接口换取。同一 `ticket` 再次使用返回 `401011`。
 
-**maxExperienceTimeSec** `integer` **（可选）**
-
-最大体验时长。Acting 业务不使用该值，成功响应仍为 `null`。若传入，只能为当前配置档位：
-
--   `60`
--   `90`
--   `120`
-
-参数会在模型分流前校验；非法档位返回 `400000`。建议省略。
+**说明**Acting 进房不消费 `maxExperienceTimeSec`，请勿传入。若仍传入非法档位，会在模型分流前返回 `400000`。
 
 #### 响应参数
 
-进房成功
+#### 进房成功
 
 ```
 {
@@ -166,7 +158,7 @@ Acting 不使用最大体验时长，固定返回 `null`。
 -   Acting 功能或规格未开通时返回 `403007`，且不会创建 Travel。
 -   `version` 必须按 `actingV2` 处理；不要按其它能力版本调用控制接口。
 -   客户端应在建立拉流或渲染容器前读取 `aspectRatio`：`9:16` 使用竖屏容器，`16:9` 使用横屏容器。
--   `maxExperienceTimeSec` 对 Acting 不生效，客户端不能据此实现自动结束倒计时。
+-   不要传 `maxExperienceTimeSec`。Acting 不按该字段自动结束，客户端不能据此做倒计时。
 -   `rtcConfig=null` 表示当前没有可用推流频道，客户端不能据此开始播放。
 
 ## 错误码

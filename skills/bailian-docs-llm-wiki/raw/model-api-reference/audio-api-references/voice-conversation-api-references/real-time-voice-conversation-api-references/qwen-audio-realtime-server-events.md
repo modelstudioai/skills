@@ -109,9 +109,9 @@ Qwen-Audio Realtime API 的服务端事件参考。所有服务端事件均包�
     "type": "session.created",
     "session": {
         "object": "realtime.session",
-        "model": "qwen-audio-3.0-realtime-plus",
+        "model": "qwen-audio-3.1-realtime-plus",
         "modalities": ["text", "audio"],
-        "voice": "longanqian",
+        "voice": "longanqian_v3.1",
         "input_audio_transcription": {
             "model": "fun-asr"
         },

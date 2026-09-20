@@ -2,7 +2,7 @@
 
 在终端用百炼 CLI 以基础设施即代码方式管理 Agent 与会话。
 
-[百炼 CLI](https://help.aliyun.com/zh/model-studio/cli) 支持以基础设施即代码的方式管理智能体，从声明配置到运行会话一气呵成。
+[阿里云百炼 CLI](https://help.aliyun.com/zh/model-studio/cli) 支持以基础设施即代码的方式管理智能体，从声明配置到运行会话一气呵成。
 
 **说明**Managed Agent 相关 CLI 能力目前仅对中国站（aliyun.com）账号开放。
 
@@ -40,6 +40,14 @@ Agent 状态
 
 `--id` 资源 ID
 
+Agent 定时任务
+
+`bl managed-agent deployment list` / `get` / `search` / `create` / `run` / `pause` / `unpause` / `runs list` / `runs get`
+
+管理定时任务、触发与运行记录
+
+—
+
 Agent 技能
 
 `bl managed-agent skill-list`
@@ -56,4 +64,4 @@ bl managed-agent apply                                   # 应用配置，创建
 bl managed-agent session run --prompt "分析 sales.csv 的 Q3 销售趋势"
 ```
 
-任意命令追加 `--help` 查看完整参数。更多命令见 [Managed Agent 命令参考](https://help.aliyun.com/zh/model-studio/cli)。
+任意命令追加 `--help` 查看完整参数。更多命令见 [Managed Agent 命令参考](https://help.aliyun.com/zh/model-studio/cli/managed-agent)。

@@ -53,11 +53,11 @@ turn\_detection 为 null
 
 ### 导入 SDK
 
-根据开发平台导入对应 SDK。后续客户端代码以 iOS Swift 为例，其他平台使用相同的接口设计和事件流程。本文以 PCM 音频流为例。Opus 编码由插件提供；如果需要使用 Opus 编码上行，请导入 Opus 插件。
+根据开发平台导入对应 SDK。后续客户端代码以 iOS Swift 为例，其他平台使用相同的接口设计和事件流程。本文以 Opus 音频流为例，请先导入 Opus 插件。
 
 #### Android
 
-1.  将 AoqClientSdk-release.aar 放入 app/libs，并在 app/build.gradle 中配置依赖和 SDK 支持的 ABI：
+1.  将 Opus 插件中的 libPluginOpus.so 按 ABI 放入 app/src/main/jniLibs/armeabi-v7a/ 和 app/src/main/jniLibs/arm64-v8a/，将 AoqClientSdk-release.aar 放入 app/libs，并在 app/build.gradle 中配置依赖和 SDK 支持的 ABI：
 
 ```
 android {
@@ -86,13 +86,13 @@ dependencies {
 
 #### iOS
 
-1.  将 AoqClientSdk.framework 拖入 Xcode 工程，在 Target > General > Frameworks, Libraries, and Embedded Content 中选择 Embed & Sign。SDK 支持 iOS 13.0 及以上 arm64 设备。
+1.  将 AoqClientSdk.framework 与 PluginOpus.framework 拖入 Xcode 工程，在 Target > General > Frameworks, Libraries, and Embedded Content 中选择 Embed & Sign。SDK 支持 iOS 13.0 及以上 arm64 设备。
 2.  在 Info.plist 中添加 NSMicrophoneUsageDescription、NSCameraUsageDescription，并在使用相应设备前请求用户授权。
 3.  Swift 工程使用 import AoqClientSdk；Objective-C 工程使用 #import <AoqClientSdk/AoqClientSdk.h>。
 
 #### HarmonyOS
 
-1.  将 AoqClientSdk.har 放入 entry/libs，并在 entry/oh-package.json5 中声明依赖。该 SDK 兼容 API 12，支持 arm64-v8a：
+1.  将 Opus 插件中的 libPluginOpus.so 放入 entry/libs/arm64-v8a/，将 AoqClientSdk.har 放入 entry/libs，并在 entry/oh-package.json5 中声明依赖。该 SDK 兼容 API 12，支持 arm64-v8a：
 
 ```
 {
@@ -234,14 +234,14 @@ engine.startAudioPlayer(playbackConfig)
 ```
 let audioEncoderConfig = AoqAudioCodecConfig()
 audioEncoderConfig.trackType = .audio
-audioEncoderConfig.codecType = .audioPCM
+audioEncoderConfig.codecType = .audioOpus
 audioEncoderConfig.sampleRate = 16_000
 audioEncoderConfig.channel = 1
 engine.setAudioEncoderConfig(audioEncoderConfig)
 
 let audioDecoderConfig = AoqAudioCodecConfig()
 audioDecoderConfig.trackType = .audio
-audioDecoderConfig.codecType = .audioPCM
+audioDecoderConfig.codecType = .audioOpus
 audioDecoderConfig.sampleRate = 24_000
 audioDecoderConfig.channel = 1
 engine.setAudioDecoderConfig(audioDecoderConfig)
@@ -276,14 +276,14 @@ connectConfig.subscribeTracks = [subscribeAudioTrack, subscribeDataTrack]
 ```
 let audioEncoderConfig = AoqAudioCodecConfig()
 audioEncoderConfig.trackType = .audio
-audioEncoderConfig.codecType = .audioPCM
+audioEncoderConfig.codecType = .audioOpus
 audioEncoderConfig.sampleRate = 16_000
 audioEncoderConfig.channel = 1
 engine.setAudioEncoderConfig(audioEncoderConfig)
 
 let audioDecoderConfig = AoqAudioCodecConfig()
 audioDecoderConfig.trackType = .audio
-audioDecoderConfig.codecType = .audioPCM
+audioDecoderConfig.codecType = .audioOpus
 audioDecoderConfig.sampleRate = 24_000
 audioDecoderConfig.channel = 1
 engine.setAudioDecoderConfig(audioDecoderConfig)
@@ -438,14 +438,14 @@ final class ManualPushToTalkClient: NSObject, AoqEngineDelegate {
         // 示例参数，请按接入模型和业务音频格式调整。
         let audioEncoderConfig = AoqAudioCodecConfig()
         audioEncoderConfig.trackType = .audio
-        audioEncoderConfig.codecType = .audioPCM
+        audioEncoderConfig.codecType = .audioOpus
         audioEncoderConfig.sampleRate = 16_000
         audioEncoderConfig.channel = 1
         engine.setAudioEncoderConfig(audioEncoderConfig)
 
         let audioDecoderConfig = AoqAudioCodecConfig()
         audioDecoderConfig.trackType = .audio
-        audioDecoderConfig.codecType = .audioPCM
+        audioDecoderConfig.codecType = .audioOpus
         audioDecoderConfig.sampleRate = 24_000
         audioDecoderConfig.channel = 1
         engine.setAudioDecoderConfig(audioDecoderConfig)

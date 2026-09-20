@@ -76,6 +76,10 @@ isSpeakerphoneEnabled
 
 查询当前是否使用扬声器输出
 
+enableLocalAudioVolumeIndication
+
+配置本地采集音量提示
+
 ### 音频编码配置
 
 **接口**
@@ -116,6 +120,14 @@ setRemoteView
 
 设置或移除远端视频渲染窗口
 
+startScreenCapture
+
+开始屏幕采集
+
+stopScreenCapture
+
+停止屏幕采集
+
 ### 视频编码与外部输入
 
 **接口**
@@ -133,6 +145,10 @@ pushExternalVideoCapturedFrame
 pushExternalVideoEncodedFrame
 
 推送外部已编码视频帧
+
+setVideoDecoderConfig
+
+设置视频解码参数
 
 ### 媒体流发送控制 / 实时消息
 
@@ -292,7 +308,72 @@ onDataMsg
 
 收到实时数据消息回调
 
+onLocalAudioVolumeIndication
+
+本地采集音量回调
+
+onScreenCaptureStateChanged
+
+屏幕采集状态回调
+
 ## 接口详情
+
+### 外部视频输入约束
+
+`pushExternalVideoCapturedFrame` 支持 Video / Screen，需先开启对应轨道的外部采集；未开启时返回 `AoqECVideoExternalCaptureNotEnabled`（211）。
+
+### 屏幕采集
+
+```
+public abstract int startScreenCapture(@NonNull AoqScreenCaptureConfig config)
+public abstract int stopScreenCapture()
+```
+
+`trackType` 支持 `AoqTrackTypeAudio`、`AoqTrackTypeVideo` 和 `AoqTrackTypeScreen`。
+
+`config` 为屏幕采集配置。屏幕画面通过 `AoqTrackTypeScreen` 轨道发送。
+
+启动返回 0 表示请求已受理，最终状态通过 `onScreenCaptureStateChanged` 通知；非 0 表示同步拒绝。停止返回 0 表示成功，非 0 表示失败，停止结果由该回调通知。
+
+`isExternal=false` 时通过 MediaProjection 采集；重复启动返回 `AoqECStateInvalid`，停止可重复调用。
+
+外部原始帧：设置 `isExternal=true` 后，通过 `pushExternalVideoCapturedFrame` 输入 Screen 轨道的原始帧，由 SDK 编码。外部已编码帧：先通过 `setVideoEncoderConfig` 将 Screen 轨道设置为外部编码，再调用 `pushExternalVideoEncodedFrame`；不需要调用 `startScreenCapture`。
+
+#### onScreenCaptureStateChanged
+
+```
+public void onScreenCaptureStateChanged(@NonNull AoqScreenCaptureState state) {}
+```
+
+`state` 为屏幕采集状态。Started 表示采集或外部输入已就绪，不代表媒体已发送。屏幕采集失败不重复通过 `onError` 上报。Fail 和 Stopped 均为清理完成后的终态。
+
+### setVideoDecoderConfig
+
+```
+public abstract int setVideoDecoderConfig(@NonNull AoqVideoCodecConfig config)
+```
+
+`config` 为视频解码配置。仅以下字段生效：`trackType`, `codecType`, `width`, `height`, `fps`, `bitrate`. 其余字段仅用于编码。
+
+Screen 不支持下行解码。`config.trackType` 为 Screen 时返回 `AoqECUnSupport`，配置不下发。
+
+返回值：0 表示成功；非 0 表示失败。
+
+### enableLocalAudioVolumeIndication
+
+```
+public abstract int enableLocalAudioVolumeIndication(@NonNull AoqAudioVolumeIndicationConfig config)
+```
+
+`config` 为音量提示配置。开启后按 `config.interval` 周期回调；需在 `startAudioCapture` 之后调用此接口。
+
+返回值：0 表示成功；非 0 表示失败。
+
+```
+public void onLocalAudioVolumeIndication(@NonNull AoqAudioVolume volume) {}
+```
+
+回调参数 `volume` 为本地采集音量。
 
 ### 引擎生命周期
 
@@ -413,7 +494,7 @@ public abstract int pushExternalVideoCapturedFrame(@NonNull AoqTrackType trackTy
 public abstract int pushExternalVideoEncodedFrame(@NonNull AoqTrackType trackType, @NonNull AoqVideoEncodedFrame frame)
 ```
 
-**说明**pushExternalVideoCapturedFrame 仅在 startVideoCapture(isExternal=true) 后消费。若缓冲区满返回 AoqErrorCodeVideoExternalBufferFull(210)。
+**说明**pushExternalVideoCapturedFrame Video 轨道需先调用 startVideoCapture(isExternal=true)，Screen 轨道需先调用 startScreenCapture(isExternal=true)。若缓冲区满返回 AoqECVideoExternalBufferFull(210)。
 
 ### 媒体流发送控制
 
@@ -448,7 +529,7 @@ public abstract int getAudioExternalStreamVolume(@NonNull String streamId, @NonN
 public abstract void clearAudioExternalStreamBuffer(@NonNull String streamId, int fadeoutMs)
 ```
 
-**说明**pushAudioExternalStreamData 缓冲区满时返回 AoqErrorCodeAudioExternalBufferFull(110)，建议 Sleep 30ms 后重试。
+**说明**pushAudioExternalStreamData 缓冲区满时返回 AoqECAudioExternalBufferFull(110)，建议 Sleep 30ms 后重试。
 
 ### 实时消息
 
@@ -505,7 +586,7 @@ public interface AoqAudioFrameListener {
 
 ```
 public interface AoqVideoFrameListener {
-    default boolean onCapturedVideoFrame(@NonNull AoqVideoFrameData frame) { return false; }
+    default boolean onCapturedVideoFrame(@NonNull AoqTrackType trackType, @NonNull AoqVideoFrameData frame) { return false; }
     default boolean onPreEncodeVideoFrame(@NonNull AoqTrackType trackType, @NonNull AoqVideoFrameData frame) { return false; }
     default boolean onRemoteVideoFrame(@NonNull AoqTrackType trackType, @NonNull AoqVideoFrameData frame) { return false; }
 }
@@ -514,6 +595,218 @@ public interface AoqVideoFrameListener {
 返回 true 表示数据已修改需写回 SDK（仅 I420 写回生效）。frame 中 ByteBuffer/textureId 仅在回调期间有效，异步使用需自行拷贝。
 
 ## 数据类型与枚举
+
+### AoqScreenCaptureState
+
+字段
+
+类型
+
+默认值
+
+说明
+
+state
+
+AoqScreenCaptureStateCode
+
+AoqScreenCaptureNone
+
+屏幕采集状态。
+
+reason
+
+int
+
+0
+
+正常为 0；失败时为 AoqErrorCode 错误码。
+
+### AoqScreenCaptureStateCode
+
+枚举值
+
+值
+
+说明
+
+AoqScreenCaptureNone
+
+0
+
+无
+
+AoqScreenCaptureStarting
+
+1
+
+启动中
+
+AoqScreenCaptureStarted
+
+2
+
+输入已就绪，不表示媒体已发送
+
+AoqScreenCaptureStopping
+
+3
+
+停止中
+
+AoqScreenCaptureStopped
+
+4
+
+已停止
+
+AoqScreenCaptureFail
+
+5
+
+启动或运行失败
+
+### AoqScreenShareNotificationFactory
+
+```
+public interface AoqScreenShareNotificationFactory {
+    @Nullable Notification createNotification(@NonNull Context serviceContext);
+}
+```
+
+返回 null 使用 SDK 默认通知。自定义通知关联的 NotificationChannel 必须先通过 `createNotificationChannel` 创建，否则前台服务启动失败。
+
+### AoqScreenCaptureConfig
+
+字段
+
+类型
+
+默认值
+
+说明
+
+isExternal
+
+boolean
+
+false
+
+是否由应用提供屏幕原始帧。
+
+mediaProjectionIntent
+
+Intent
+
+null
+
+已有 MediaProjection 授权时传入；null 由 SDK 申请。外部采集时无效。
+
+notificationFactory
+
+AoqScreenShareNotificationFactory
+
+null
+
+前台服务通知工厂；null 使用默认通知。外部采集时无效。
+
+### AoqAudioVolume
+
+字段
+
+类型
+
+默认值
+
+说明
+
+isSpeech
+
+boolean
+
+false
+
+是否为人声。
+
+volume
+
+int
+
+0
+
+平滑后的瞬时音量，范围 0～255。
+
+### AoqAudioVolumeIndicationConfig
+
+字段
+
+类型
+
+默认值
+
+说明
+
+reportSpeech
+
+boolean
+
+false
+
+是否检测人声。
+
+interval
+
+int
+
+0
+
+回调间隔（毫秒）；小于等于 0 时关闭，大于 0 且小于 10 时按 10 处理。
+
+smooth
+
+int
+
+3
+
+平滑系数，范围 0～10；越大越平滑。
+
+### AoqTrackParam.trackMode
+
+字段
+
+类型
+
+默认值
+
+说明
+
+trackMode
+
+AoqTrackMode
+
+AoqTrackModeSegment
+
+仅对音频下行生效。
+
+### AoqTrackMode
+
+枚举值
+
+值
+
+说明
+
+AoqTrackModeSegment
+
+0
+
+分段：按语义片段（如一句话）交付数据；仅对音频下行生效。
+
+AoqTrackModeStream
+
+1
+
+流式：连续交付数据；仅对音频下行生效。
 
 ### 通用类型
 
@@ -559,7 +852,25 @@ String
 
 扩展参数字符串
 
+maxEncodedVideoFrameBytes
+
+int
+
+190 × 1024
+
+编码后单帧大小上限（字节），仅用于 SDK 内部 JPEG 编码。
+
+enableDropOversizedVideoFrame
+
+boolean
+
+false
+
+仅用于 SDK 内部 JPEG 编码：降至最低质量后仍超限时，是否允许丢弃该帧。
+
 **AoqConnectConfig**
+
+`subscribeTracks` 不能包含 `AoqTrackTypeScreen`，否则 `connect` 返回 `AoqECUnSupport`，不发起连接。`setRemoteView` 不支持 Screen，传入时返回 `AoqECUnSupport`。
 
 **字段**
 
@@ -681,179 +992,197 @@ int
 
 **说明**
 
-AoqErrorCodeOK
+AoqECOK
 
 0
 
 成功
 
-AoqErrorCodeParamInvalid
+AoqECParamInvalid
 
 1
 
 参数非法
 
-AoqErrorCodeStateInvalid
+AoqECStateInvalid
 
 2
 
 状态非法
 
-AoqErrorCodeUnSupport
+AoqECUnSupport
 
 3
 
 不支持
 
-AoqErrorCodeAudio
+AoqECAudio
 
 100
 
 音频通用错误
 
-AoqErrorCodeAudioExternalBufferFull
+AoqECAudioExternalBufferFull
 
 110
 
 外部音频缓冲区满
 
-AoqErrorCodeAudioDevice
+AoqECAudioDevice
 
 120
 
 音频设备通用错误
 
-AoqErrorCodeAudioDeviceRecordingAuthFailed
+AoqECAudioDeviceRecordingAuthFailed
 
 121
 
 录音权限未获取
 
-AoqErrorCodeAudioDeviceRecordingOccupied
+AoqECAudioDeviceRecordingOccupied
 
 122
 
 录音设备被占用
 
-AoqErrorCodeAudioDeviceRecordingBackgroundStart
+AoqECAudioDeviceRecordingBackgroundStart
 
 123
 
 后台启动录音失败
 
-AoqErrorCodeAudioDeviceRecordingStartFail
+AoqECAudioDeviceRecordingStartFail
 
 124
 
 录音启动失败
 
-AoqErrorCodeAudioDevicePlayoutOccupied
+AoqECAudioDevicePlayoutOccupied
 
 125
 
 播放设备被占用
 
-AoqErrorCodeAudioDevicePlayoutBackgroundStart
+AoqECAudioDevicePlayoutBackgroundStart
 
 126
 
 后台启动播放失败
 
-AoqErrorCodeAudioDevicePlayoutStartFail
+AoqECAudioDevicePlayoutStartFail
 
 127
 
 播放启动失败
 
-AoqErrorCodeAudioDeviceEarpieceRequiresVoipMode
+AoqECAudioDeviceEarpieceRequiresVoipMode
 
 128
 
 听筒需要 VoIP 模式
 
-AoqErrorCodeVideo
+AoqECVideo
 
 200
 
 视频通用错误
 
-AoqErrorCodeVideoExternalBufferFull
+AoqECVideoExternalBufferFull
 
 210
 
 外部视频缓冲区满
 
-AoqErrorCodeVideoExternalCaptureNotEnabled
+AoqECVideoExternalCaptureNotEnabled
 
 211
 
 外部视频采集未启用
 
-AoqErrorCodeVideoExternalEncoderNotEnabled
+AoqECVideoExternalEncoderNotEnabled
 
 212
 
 外部视频编码未启用
 
-AoqErrorCodeVideoDevice
+AoqECVideoDevice
 
 220
 
 视频设备通用错误
 
-AoqErrorCodeVideoDeviceCameraOpenFail
+AoqECVideoDeviceCameraOpenFail
 
 221
 
 摄像头打开失败
 
-AoqErrorCodeVideoDeviceCameraAuthFailed
+AoqECVideoDeviceCameraAuthFailed
 
 222
 
 摄像头权限未获取
 
-AoqErrorCodeVideoDeviceCameraOccupied
+AoqECVideoDeviceCameraOccupied
 
 223
 
 摄像头被占用
 
-AoqErrorCodeVideoDeviceCameraRunningError
+AoqECVideoDeviceCameraRunningError
 
 224
 
 摄像头运行异常
 
-AoqErrorCodeVideoCodec
+AoqECVideoCodec
 
 230
 
 视频编解码通用错误
 
-AoqErrorCodeVideoCodecEncoderInitFail
+AoqECVideoCodecEncoderInitFail
 
 231
 
 视频编码器初始化失败
 
-AoqErrorCodeVideoRender
+AoqECVideoRender
 
 240
 
 视频渲染通用错误
 
-AoqErrorCodeVideoRenderCreateFail
+AoqECVideoRenderCreateFail
 
 241
 
 视频渲染创建失败
 
-AoqErrorCodeVideoRenderDrawError
+AoqECVideoRenderDrawError
 
 242
 
 视频渲染绘制错误
+
+AoqECScreen
+
+300
+
+屏幕共享通用错误
+
+AoqECScreenAuthFailed
+
+310
+
+屏幕共享授权失败
+
+AoqECScreenStartFailed
+
+311
+
+屏幕共享启动失败
 
 **AoqWarningCode**
 
@@ -972,6 +1301,12 @@ AoqTrackTypeData
 2
 
 数据消息轨道
+
+AoqTrackTypeScreen
+
+3
+
+屏幕共享轨道，仅支持上行。
 
 **AoqEncoderType**
 
@@ -1149,7 +1484,7 @@ codecType
 
 AoqEncoderType
 
-AudioPCM
+AudioOpus
 
 编码格式
 
@@ -1259,7 +1594,7 @@ width
 
 int
 
-720
+540
 
 编码宽度（像素）
 
@@ -1267,7 +1602,7 @@ height
 
 int
 
-1280
+960
 
 编码高度（像素）
 

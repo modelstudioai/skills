@@ -70,7 +70,7 @@ Managed Agents 提供 9 个内置工具，覆盖命令执行、文件操作、�
 
 ## 执行机制
 
-全部内置工具在会话绑定的[配置 Agent 环境](raw/application-user-guide/managed-agents/managed-agents-environment.md)中执行，工具产生的文件、安装的依赖在该会话生命周期内持久保留。
+全部内置工具在会话绑定的[运行环境](raw/application-user-guide/managed-agents/managed-agents-environment.md)中执行，工具产生的文件、安装的依赖在该会话生命周期内持久保留。
 
 智能体根据系统提示词和当前消息自主决定调用哪个工具，调用过程通过事件面板实时可见。
 

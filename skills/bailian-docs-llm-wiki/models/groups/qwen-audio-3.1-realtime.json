@@ -1,0 +1,100 @@
+{
+  "name": "Qwen-Audio-3.1-Realtime",
+  "description": "Qwen-Audio-3.1-Realtime 是新一代实时全双工语音大模型，进一步增强口语推理、多轮指令遵循、共情表达与角色扮演能力，兼顾智能应答与自然对话节奏。模型优化噪声拒识、多人对话理解与动态语义感知，让开放场景下的打断、等待与接话更自然；支持多语言交流与智能工具调用，可连接知识库及业务系统，将任务执行结果自然融入对话。同时强化安全拒答与边界控制，为智能客服、办公协作、语音陪伴等应用提供更智能、自然、可靠的交互体验",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text",
+          "Audio"
+        ],
+        "request_modality": [
+          "Text",
+          "Audio"
+        ]
+      },
+      "description": "Qwen-Audio-3.1-Realtime 是新一代实时全双工语音大模型，进一步增强口语推理、多轮指令遵循、共情表达与角色扮演能力，兼顾智能应答与自然对话节奏。模型优化噪声拒识、多人对话理解与动态语义感知，让开放场景下的打断、等待与接话更自然；支持多语言交流与智能工具调用，可连接知识库及业务系统，将任务执行结果自然融入对话。同时强化安全拒答与边界控制，为智能客服、办公协作、语音陪伴等应用提供更智能、自然、可靠的交互体验",
+      "features": [
+        "function-calling",
+        "web-search"
+      ],
+      "provider": "qwen",
+      "model": "qwen-audio-3.1-realtime-plus",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "40",
+          "timeBand": "standard",
+          "ntmAmountType": "audio_input_token",
+          "type": "audio_input_token",
+          "priceName": "输入：音频"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "5",
+          "timeBand": "standard",
+          "ntmAmountType": "audio_text_input_token",
+          "type": "audio_text_input_token",
+          "priceName": "输入：文本"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "40",
+          "timeBand": "standard",
+          "ntmAmountType": "audio_text_output_token",
+          "type": "audio_text_output_token",
+          "priceName": "输出：文本"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "150",
+          "timeBand": "standard",
+          "ntmAmountType": "audio_output_token",
+          "type": "audio_output_token",
+          "priceName": "输出：文本+音频（输出的文本不计费）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 100000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 60,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "Realtime-Chatting"
+      ],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 16384,
+      "latestOnlineAt": "2026-09-20T09:03:33.702+00:00",
+      "contextWindow": 262144,
+      "maxInputTokens": 245760,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Audio-3.1-Realtime-Plus",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides",
+      "category": "Audio",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "import asyncio\nimport base64\nimport json\nimport os\nimport pyaudio\nimport websockets\n\nAPI_KEY = os.environ[\"DASHSCOPE_API_KEY\"]\nURL = \"wss://[workspace-id].cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen-audio-3.1-realtime-plus\"\n\npya = pyaudio.PyAudio()\nmic = pya.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True)\nspk = pya.open(format=pyaudio.paInt16, channels=1, rate=24000, output=True)\n\nasync def main():\n    headers = {\"Authorization\": f\"Bearer {API_KEY}\"}\n    async with websockets.connect(URL, additional_headers=headers) as ws:\n        await ws.send(json.dumps({\n            \"type\": \"session.update\",\n            \"session\": {\n                \"modalities\": [\"text\", \"audio\"],\n                \"voice\": \"longanqian\",\n                \"turn_detection\": {\n                    \"type\": \"server_vad\",\n                    \"threshold\": 0.5,\n                    \"silence_duration_ms\": 500\n                }\n            }\n        }))\n\n        async def send_audio():\n            while True:\n                data = await asyncio.to_thread(mic.read, 3200, False)\n                await ws.send(json.dumps({\n                    \"type\": \"input_audio_buffer.append\",\n                    \"audio\": base64.b64encode(data).decode()\n                }))\n                await asyncio.sleep(0.02)\n\n        async def recv_events():\n            async for msg in ws:\n                event = json.loads(msg)\n                t = event[\"type\"]\n                if t == \"response.audio.delta\":\n                    audio = base64.b64decode(event[\"delta\"])\n                    await asyncio.to_thread(spk.write, audio)\n                elif t == \"conversation.item.input_audio_transcription.completed\":\n                    print(f\"[You] {event['transcript']}\")\n                elif t == \"response.audio_transcript.done\":\n                    print(f\"[AI] {event['transcript']}\")\n                elif t == \"error\":\n                    print(f\"[Error] {event['error']['message']}\")\n\n        await asyncio.gather(send_audio(), recv_events())\n\nif __name__ == \"__main__\":\n    try:\n        asyncio.run(main())\n    except KeyboardInterrupt:\n        mic.close()\n        spk.close()\n        pya.terminate()\n        print(\"\\nSession ended.\")",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides"
+          }
+        }
+      }
+    }
+  ]
+}

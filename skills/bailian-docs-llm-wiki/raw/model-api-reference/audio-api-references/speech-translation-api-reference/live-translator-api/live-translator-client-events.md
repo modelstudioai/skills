@@ -24,6 +24,24 @@
 
 适用于 `qwen3.8-livetranslate-flash-realtime`。输出模态，可设置为 `["text"]`（仅文本）或 `["text", "audio"]`（文本和音频，默认值）。
 
+**audio**`object`（可选）
+
+适用于 `qwen3.8-livetranslate-flash-realtime`。音频配置。
+
+属性
+
+**input.turn\_detection**`object`（可选）
+
+语音检测配置。
+
+**input.turn\_detection.type**`string`（可选）
+
+可选值：`speaker_detection`（默认，开启实时说话人分离）、`server_vad`（语音活动检测）。
+
+**input.turn\_detection.threshold**`number`（可选）
+
+检测阈值。使用 `speaker_detection` 时固定为 `0.5`。
+
 **modalities**`array`（可选）
 
 适用于 `qwen3.5-livetranslate-flash-realtime` 等模型。

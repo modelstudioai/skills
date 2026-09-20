@@ -227,7 +227,7 @@ vad\_params.save\_audio
 {
     "service_type": 4,
     "nls_config": {
-        "model": "qwen-audio-3.0-realtime-plus",
+        "model": "qwen-audio-3.1-realtime-plus",
         "sr_format": "pcm"
     }
 }
@@ -264,7 +264,7 @@ vad\_params.save\_audio
 
 是
 
-指定模型名。支持qwen-audio-3.0-realtime-plus和qwen-audio-3.0-realtime-flash系列模型。
+指定模型名。支持qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus和qwen-audio-3.0-realtime-flash系列模型。
 
 `nls_config.sr_format`
 
@@ -291,10 +291,12 @@ nls\_config.voice
 
 否
 
-TTS 音色名称，默认值为 `longanqian`。支持两种类型，仅可在第一次 `session.update` 中设置，后续传入将被忽略。
+TTS 音色名称，3.1 Plus 的默认值为 `longanqian_v3.1`，3.0 Plus/Flash 的默认值为 `longanqian`。支持两种类型，仅可在第一次 `session.update` 中设置，后续传入将被忽略。
 
 -   **系统音色**：可选值：`longanqian`、`longanlingxin`、`longanlingxi`、`longanxiaoxin`、`longanlufeng`。
 -   **声音复刻音色**：通过声音复刻 API 创建，将返回的 `voice_id` 填入此参数。详见[音色配置](https://help.aliyun.com/zh/model-studio/qwen-audio-realtime-user-guides#fc60h311)。
+
+3.1 Plus 还支持 `longanqian_v3.1`、`longanhuan_v3.1`、`longanlingxin_v3.1`、`longanfengyue_v3.1`、`xunanchuan`、`beth_v3.1`、`betty_v3.1`、`cally_v3.1`。
 
 nls\_config.enable\_speech\_emotion
 

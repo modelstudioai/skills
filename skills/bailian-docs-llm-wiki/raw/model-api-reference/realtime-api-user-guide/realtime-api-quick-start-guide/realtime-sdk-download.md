@@ -18,9 +18,9 @@ v1.3.0
 
 Android
 
-[AoqClientSdk-release.aar](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c37.aar)
+[AoqClientSdk-release.aar](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9dab.aar)
 
-[libPluginOpus.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c34.zip)
+[libPluginOpus.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9d8c.zip)
 
 2026-09-18
 
@@ -41,39 +41,39 @@ Android
 
 iOS
 
-[AoqClientSdk.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c4a.zip)
+[AoqClientSdk.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9d83.zip)
 
-[AoqScreenShare.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c4b.zip)
+[AoqScreenShare.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9d82.zip)
 
-[PluginOpus.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c49.zip)
+[PluginOpus.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9d81.zip)
 
 HarmonyOS
 
-[AoqClientSdk.har](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c36.har)
+[AoqClientSdk.har](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9d80.har)
 
-[libPluginOpus.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c48.zip)
+[libPluginOpus.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9d87.zip)
 
 Windows
 
-[AoqClientSdk-windows-x64.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c4f.zip)
+[AoqClientSdk-windows-x64.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9d86.zip)
 
 macOS
 
-[AoqClientSdk.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c4e.zip)
+[AoqClientSdk.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9d85.zip)
 
-[PluginOpus.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c4d.zip)
+[PluginOpus.framework.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9d84.zip)
 
 Electron
 
-[aoq-electron-sdk-1.3.0-58586345.tgz](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c35.tgz)
+[aoq-electron-sdk-1.3.0-58586345.tgz](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9d9b.tgz)
 
 也可以通过 npm 安装：`npm install aoq-electron-sdk@1.3.0-58586345`
 
 Linux
 
-x86\_64: [AoqClientSdk.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c4c.zip)
+x86\_64: [AoqClientSdk.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9d9a.zip)
 
-arm64: [AoqClientSdk.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9c43.zip)
+arm64: [AoqClientSdk.zip](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9d99.zip)
 
 v1.2.2
 

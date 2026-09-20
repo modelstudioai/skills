@@ -12,33 +12,29 @@
 
 ## 下载安装
 
-**最新SDK包**
+最新 SDK 包
 
-**平台**
+平台
 
-**MD5**
+MD5
 
-[V1.4.9-02E-20260623\_Linux.tar.gz](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260629/qoxuwi/V1.4.9-02E-20260623_Linux.tar.gz)
+[V1.4.10-02E-20260920\_Linux.tar.gz](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9dfa.gz)
 
 Linux x86\_64
 
-a2f1935e29d7db70021e2c5c7e5c3db8
+`eed1091b64c2ec60ab28bec873531e59`
 
-[V1.4.9-02E-20260623\_Linux\_aarch64\_10.tar.gz](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260629/jrjcxt/V1.4.9-02E-20260623_Linux_aarch64_10.tar.gz)
+[V1.4.10-02E-20260920\_Linux\_aarch64\_10.tar.gz](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9df9.gz)
 
-Linux aarch64
+Linux aarch64 (gcc-arm-10.2)
 
-(gcc-arm-10.2)
+`dfdb9bd7e8e6f7c48dfc04bc5b8bc452`
 
-efeb135230fc36f2aa51afa64ab97e6b
+[V1.4.10-02E-20260920\_Linux\_aarch64\_11.tar.gz](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/files/6a4b3c2d1e0f9df8.gz)
 
-[V1.4.9-02E-20260623\_Linux\_aarch64\_11.tar.gz](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260629/tebtjw/V1.4.9-02E-20260623_Linux_aarch64_11.tar.gz)
+Linux aarch64 (gcc-arm-11.2)
 
-Linux aarch64
-
-(gcc-arm-11.2)
-
-fd01741ce3c285e3a8bd602dc30bed67
+`d62c213f19f4a183c522eb32a80d7207`
 
 ## 音频格式说明
 
@@ -672,14 +668,28 @@ JSONArray
 
 否
 
-自定义唤醒词的设置，默认无需设置。
+自定义唤醒词设置。默认无需设置，未设置时使用唤醒资源文件中的默认配置。
+
+-   `activation`：是否启用此唤醒词。
+-   `name`：唤醒词。
+-   `type`：唤醒词类型，取值为 `wakeup` 或 `main`。
+-   `threshold1`：唤醒阈值。
 
 ```
 {
-	"word_list": [{
-		"name": "小云",
-		"type": "main"
-	}]
+  "word_list": [
+    {
+      "activation": true,
+      "name": "小白小白",
+      "type": "wakeup",
+      "threshold1": 0.01
+    },
+    {
+      "activation": false,
+      "name": "小云小云",
+      "type": "wakeup"
+    }
+  ]
 }
 ```
 
@@ -858,7 +868,7 @@ String
 
 是
 
-终端用户id，用来做用户相关的处理。
+终端用户 ID，由客户根据业务规则生成，用于针对不同终端用户实现定制化功能。最大长度为 36 个字符。
 
 device
 
@@ -874,7 +884,7 @@ String
 
 否
 
-客户端全局唯一的id，需要用户自己生成，传入SDK。
+客户端全局唯一的 ID，需要用户自行生成并传入 SDK，最大长度为 40 个字符。同一终端用户可以有多个设备，各设备的 uuid 不同，但 user\_id 相同。
 
 network
 

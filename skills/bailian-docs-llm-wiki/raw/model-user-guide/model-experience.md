@@ -4,6 +4,7 @@
 -   [视觉理解](raw/model-user-guide/model-experience/vision-model.md)
 -   [图片生成与编辑](raw/model-user-guide/model-experience/image-model.md)
 -   [视频生成与编辑](raw/model-user-guide/model-experience/video-generate-edit-model.md)
+-   [世界模型](raw/model-user-guide/model-experience/world-model.md)
 -   [3D模型生成](raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)
 -   [语音合成](https://help.aliyun.com/zh/model-studio/speech-synthesis)
 -   [音乐生成](raw/model-user-guide/model-experience/fun-music.md)

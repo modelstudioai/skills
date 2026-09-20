@@ -78,6 +78,10 @@ isSpeakerphoneEnabled
 
 查询当前是否使用扬声器输出
 
+enableLocalAudioVolumeIndication
+
+配置本地采集音量提示
+
 ## 音频编码配置
 
 **接口**
@@ -118,6 +122,14 @@ setRemoteView
 
 设置或移除远端视频渲染窗口
 
+startScreenCapture
+
+开始屏幕采集
+
+stopScreenCapture
+
+停止屏幕采集
+
 ## 视频编码与外部输入
 
 **接口**
@@ -135,6 +147,10 @@ pushExternalVideoCapturedFrame
 pushExternalVideoEncodedFrame
 
 推送外部已编码视频帧
+
+setVideoDecoderConfig
+
+设置视频解码参数
 
 ## 媒体流发送控制
 
@@ -310,7 +326,70 @@ IVideoFrameObserver
 
 视频帧数据观察者接口
 
+onLocalAudioVolumeIndication
+
+本地采集音量回调
+
+onScreenCaptureStateChanged
+
+屏幕采集状态回调
+
 ## 接口详情
+
+### 外部视频输入约束
+
+`pushExternalVideoCapturedFrame` 支持 Video / Screen，需先开启对应轨道的外部采集；未开启时返回 `AoqECVideoExternalCaptureNotEnabled`（211）。`pushExternalVideoEncodedFrame` 需先配置对应轨道的外部编码，未开启时返回 `AoqECVideoExternalEncoderNotEnabled`（212）。
+
+### 屏幕采集
+
+```
+startScreenCapture(config: AoqScreenCaptureConfig): number
+stopScreenCapture(): number
+```
+
+`config` 为屏幕采集配置。屏幕画面通过 `AoqTrackTypeScreen` 轨道发送。
+
+启动返回 0 表示请求已受理，最终状态通过 `onScreenCaptureStateChanged` 通知；非 0 表示同步拒绝，不重复报告失败事件。停止返回 0 表示成功，非 0 表示失败，停止结果由该回调通知。
+
+`isExternal=false` 时由 SDK 内部采集，系统展示授权交互。无需等待 Started 才开启发送或生产外部帧。
+
+外部原始帧：设置 `isExternal=true` 后，通过 `pushExternalVideoCapturedFrame` 输入 Screen 轨道的原始帧，由 SDK 编码。外部已编码帧：先通过 `setVideoEncoderConfig` 将 Screen 轨道设置为外部编码，再调用 `pushExternalVideoEncodedFrame`；不需要调用 `startScreenCapture`。
+
+#### onScreenCaptureStateChanged
+
+```
+onScreenCaptureStateChanged?: (state: AoqScreenCaptureState) => void;
+```
+
+`state` 为屏幕采集状态。Started 表示采集或外部输入已就绪，不代表媒体已发送。屏幕采集失败不重复通过 `onError` 上报。回调在 JS 线程异步通知。
+
+### setVideoDecoderConfig
+
+```
+setVideoDecoderConfig(config: AoqVideoCodecConfig): number
+```
+
+`config` 为视频解码配置。仅以下字段生效：`trackType`, `codecType`, `width`, `height`, `fps`, `bitrate`. 其余字段仅用于编码。
+
+Screen 不支持下行解码。`config.trackType` 为 Screen 时返回 `AoqECUnSupport`，配置不下发。
+
+返回值：0 表示成功；非 0 表示失败。
+
+### enableLocalAudioVolumeIndication
+
+```
+enableLocalAudioVolumeIndication(config: AoqAudioVolumeIndicationConfig): number
+```
+
+`config` 为音量提示配置。开启后按 `config.interval` 周期回调；需在 `startAudioCapture` 之后调用此接口。
+
+返回值：0 表示成功；非 0 表示失败。
+
+```
+onLocalAudioVolumeIndication?: (volume: AoqAudioVolume) => void;
+```
+
+回调参数 `volume` 为本地采集音量。
 
 ## 引擎生命周期
 
@@ -319,7 +398,7 @@ IVideoFrameObserver
 创建引擎实例。SDK 内部以全局单例方式持有引擎，重复调用会返回已创建的实例。native 创建失败时返回 null。
 
 ```
-static createEngine(config: AoqCreateConfig, listener: AoqEngineEventListener, context: common.Context): AoqClientEngine | null
+static createEngine(config: AoqCreateConfig, listener: AoqEngineEventListener | null, context: common.Context): AoqClientEngine | null
 ```
 
 **参数**
@@ -336,9 +415,9 @@ AoqCreateConfig
 
 listener
 
-AoqEngineEventListener
+AoqEngineEventListener | null
 
-引擎事件回调监听（interface，所有回调均为可选）
+引擎事件回调监听（interface，所有回调均为可选）；可为 null
 
 context
 
@@ -720,13 +799,15 @@ AoqTrackType
 
 AoqTrackTypeVideo
 
+；也支持 AoqTrackTypeScreen
+
 frame
 
 AoqVideoFrame
 
 视频帧数据
 
-**路由规则**：仅在 startVideoCapture(isExternal=true) 后消费。支持格式：NV12 / NV21 / BGRA / RGBA / I420。
+**路由规则**：Video 轨道需先调用 startVideoCapture(isExternal=true)，Screen 轨道需先调用 startScreenCapture(isExternal=true)。支持格式：NV12 / NV21 / BGRA / RGBA / I420。
 
 若缓冲区满，会返回错误码 AoqECVideoExternalBufferFull(210)，调用方需 sleep 后重试，禁止 busy loop。
 
@@ -749,6 +830,8 @@ trackType
 AoqTrackType
 
 AoqTrackTypeVideo
+
+；也支持 AoqTrackTypeScreen
 
 frame
 
@@ -779,6 +862,8 @@ trackType
 AoqTrackType
 
 AoqTrackTypeAudio / AoqTrackTypeVideo
+
+；支持 AoqTrackTypeScreen
 
 enable
 
@@ -971,7 +1056,7 @@ frame.dataPtr 是 native 内存的 Uint8Array 拷贝，当前 ReadOnly（修改�
 
 ```
 export interface IVideoFrameObserver {
-  onCapturedVideoFrame?: (frame: AoqVideoFrame) => boolean;
+  onCapturedVideoFrame?: (trackType: AoqTrackType, frame: AoqVideoFrame) => boolean;
   onPreEncodeVideoFrame?: (trackType: AoqTrackType, frame: AoqVideoFrame) => boolean;
   onRemoteVideoFrame?: (trackType: AoqTrackType, frame: AoqVideoFrame) => boolean;
 }
@@ -980,6 +1065,173 @@ export interface IVideoFrameObserver {
 frame 各 buffer 是 native 内存的 Uint8Array 拷贝，回调期间有效。当前等效 ReadOnly，P2 实现真写回。
 
 ## 数据类型与枚举
+
+v1.3.0 的 `Index.ets` 对外导出以下枚举和接口：
+
+-   枚举：`AoqTrackMode`、`AoqScreenCaptureStateCode`。
+-   接口：`AoqAudioVolumeIndicationConfig`、`AoqAudioVolume`、`AoqScreenCaptureConfig`、`AoqScreenCaptureState`。
+
+### AoqScreenCaptureState
+
+字段
+
+类型
+
+默认值
+
+说明
+
+state
+
+AoqScreenCaptureStateCode
+
+—
+
+屏幕采集状态。
+
+reason
+
+number
+
+—
+
+正常为 0；失败时为 AoqErrorCode 错误码。
+
+### AoqScreenCaptureStateCode
+
+枚举值
+
+值
+
+说明
+
+AoqScreenCaptureNone
+
+0
+
+无
+
+AoqScreenCaptureStarting
+
+1
+
+启动中
+
+AoqScreenCaptureStarted
+
+2
+
+输入已就绪，不表示媒体已发送
+
+AoqScreenCaptureStopping
+
+3
+
+停止中
+
+AoqScreenCaptureStopped
+
+4
+
+已停止
+
+AoqScreenCaptureFail
+
+5
+
+启动或运行失败
+
+### AoqScreenCaptureConfig
+
+字段
+
+类型
+
+默认值
+
+说明
+
+isExternal
+
+boolean
+
+false
+
+是否由应用提供屏幕原始帧。
+
+### AoqAudioVolume
+
+字段
+
+类型
+
+说明
+
+isSpeech
+
+boolean
+
+是否为人声。
+
+volume
+
+number
+
+平滑后的瞬时音量，范围 0～255。
+
+### AoqAudioVolumeIndicationConfig
+
+字段
+
+类型
+
+默认值
+
+说明
+
+reportSpeech
+
+boolean
+
+false
+
+是否检测人声。
+
+interval
+
+number
+
+0
+
+回调间隔（毫秒）；小于等于 0 时关闭，大于 0 且小于 10 时按 10 处理。
+
+smooth
+
+number
+
+3
+
+平滑系数，范围 0～10；越大越平滑。
+
+### AoqTrackMode
+
+枚举值
+
+值
+
+说明
+
+AoqTrackModeSegment
+
+0
+
+分段：按语义片段（如一句话）交付数据；仅对音频下行生效。
+
+AoqTrackModeStream
+
+1
+
+流式：连续交付数据；仅对音频下行生效。
 
 ## 通用类型
 
@@ -1017,9 +1269,27 @@ string
 
 扩展参数字符串
 
+maxEncodedVideoFrameBytes
+
+number
+
+190 × 1024
+
+编码后单帧大小上限（字节），仅用于 SDK 内部 JPEG 编码。
+
+enableDropOversizedVideoFrame
+
+boolean
+
+false
+
+仅用于 SDK 内部 JPEG 编码：降至最低质量后仍超限时，是否允许丢弃该帧。
+
 与 Android 不同：OHOS 无 isBTScoMode 字段。
 
 ## AoqConnectConfig
+
+`subscribeTracks` 不能包含 `AoqTrackTypeScreen`，否则 `connect` 返回 `AoqECUnSupport`，不发起连接。`setRemoteView` 不支持 Screen，传入时返回 `AoqECUnSupport`。
 
 **字段**
 
@@ -1105,6 +1375,18 @@ number
 
 Relay 服务器端口
 
+routeIndex
+
+number
+
+路径序号，默认值为 -1。
+
+tcpPort
+
+number
+
+默认值为 0。TCP 降级端口；0 表示使用 SDK 默认端口 443。
+
 ## AoqTrackParam
 
 **字段**
@@ -1118,6 +1400,12 @@ trackType
 AoqTrackType
 
 轨道类型
+
+trackMode
+
+AoqTrackMode
+
+默认 AoqTrackModeSegment，仅对音频下行生效。
 
 ## AoqErrorCode
 
@@ -1301,6 +1589,24 @@ AoqECVideoRenderDrawError
 
 视频渲染绘制错误
 
+AoqECScreen
+
+300
+
+屏幕共享通用错误
+
+AoqECScreenAuthFailed
+
+310
+
+屏幕共享授权失败
+
+AoqECScreenStartFailed
+
+311
+
+屏幕共享启动失败
+
 ## AoqWarningCode
 
 **枚举值**
@@ -1418,6 +1724,12 @@ AoqTrackTypeData
 2
 
 数据消息轨道
+
+AoqTrackTypeScreen
+
+3
+
+屏幕共享轨道，仅支持上行。
 
 与 Android 不同：OHOS 当前不包含 AoqTrackTypeScreen(3)，屏幕采集功能暂未对外开放。
 
@@ -1557,7 +1869,7 @@ codecType
 
 AoqEncoderType
 
-AoqEncoderTypeAudioPCM
+AoqEncoderTypeAudioOpus
 
 编码格式
 
@@ -1667,7 +1979,7 @@ width
 
 number
 
-720
+540
 
 编码宽度
 
@@ -1675,7 +1987,7 @@ height
 
 number
 
-1280
+960
 
 编码高度
 
@@ -1683,7 +1995,7 @@ fps
 
 number
 
-15
+5
 
 帧率
 
@@ -1691,17 +2003,17 @@ bitrate
 
 number
 
-500
+500000
 
-码率(kbps)
+码率(bps)
 
 minBitrate
 
 number
 
-128
+128000
 
-最小码率(kbps)
+最小码率(bps)
 
 keyframeInterval
 
@@ -1734,8 +2046,6 @@ boolean
 false
 
 true 时 SDK 不做二次编码
-
-与 Android 不同：OHOS 码率单位为 kbps（默认 500/128），Android 为 bps（默认 500000/128000）。
 
 ## AoqVideoCanvas
 
@@ -2169,6 +2479,14 @@ false
 
 是否应用镜像
 
+trackType
+
+AoqTrackType
+
+AoqTrackTypeVideo
+
+需要观察的视频轨道；仅支持 Video / Screen。
+
 ## 统计数据类型
 
 ## AoqStats
@@ -2285,12 +2603,6 @@ AoqCreateConfig
 
 不含 isBTScoMode
 
-AoqAudioPlaybackConfig
-
-无 isVoipMode
-
-含 isVoipMode，采集/播放参数先到为准
-
 onAudioDeviceFocusChanged
 
 提供
@@ -2321,24 +2633,6 @@ byte\[\] / ByteBuffer
 
 ArrayBuffer / Uint8Array
 
-视频编码码率单位
-
-bps（默认 500000/128000）
-
-kbps（默认 500/128）
-
-AoqTrackType
-
-含 AoqTrackTypeScreen(3)
-
-不含 AoqTrackTypeScreen，屏幕采集暂未开放
-
-屏幕采集 API
-
-startScreenCapture / stopScreenCapture
-
-暂未提供
-
 Observer ReadWrite
 
 I420 支持写回
@@ -2356,12 +2650,6 @@ UAF 防护墓地模式
 Java 侧隐含
 
 AoqDeviceMonitor(内部模块)自动启动
-
-枚举命名空间
-
-AoqErrorCodeXxx
-
-AoqECXxx (如 AoqECOK、AoqECParamInvalid)
 
 ## 主要设计要点
 

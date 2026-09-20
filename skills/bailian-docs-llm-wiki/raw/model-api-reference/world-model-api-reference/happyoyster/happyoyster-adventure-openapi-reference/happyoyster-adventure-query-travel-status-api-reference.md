@@ -32,7 +32,7 @@
 
 #### 请求参数
 
-查询Travel状态
+#### 查询Travel状态
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-adventure/openapi/v1/travels/status?encryptedTravelId={encryptedTravelId}&clientStreamStatus=PLAYING&clientStreamStatusTimeMs=1788940800000' \
@@ -70,7 +70,7 @@ Adventure 加密 Travel ID。由[客户端进入房间](raw/model-api-reference/
 
 #### 响应参数
 
-Travel运行中
+#### Travel运行中
 
 ```
 {
@@ -93,6 +93,29 @@ Travel运行中
             "ride_motorcycle",
             "enter_exit_car"
         ]
+    }
+}
+```
+
+#### Travel失败
+
+`errorCode` 取值见[错误码](https://help.aliyun.com/zh/model-studio/happyoyster-error-code#ho-ec-travel-errorcode-title)。
+
+```
+{
+    "code": 0,
+    "message": null,
+    "data": {
+        "encryptedTravelId": "trvl_a1b2****",
+        "status": "failed",
+        "rtcStatus": null,
+        "updateTime": null,
+        "userInstructions": null,
+        "chapters": null,
+        "characterActions": null,
+        "environmentActions": null,
+        "errorCode": "TRAVEL_SESSION_INIT_FAILED",
+        "errorMessage": "Failed to allocate inference resources."
     }
 }
 ```
@@ -122,7 +145,7 @@ Travel 生命周期状态：
 -   `init`：正在初始化会话资源
 -   `pending`：排队或等待服务资源
 -   `running`：正在运行，可以通过 SDK `sendCommand` 实时操控
--   `failed`：Travel 失败
+-   `failed`：Travel 失败；原因见 `errorCode` / `errorMessage`
 -   `completed`：Travel 已结束，可查询产物
 
 Adventure 产品能力没有 `paused` 状态，不要围绕暂停 / 恢复构建状态机。
@@ -135,26 +158,26 @@ Adventure 产品能力没有 `paused` 状态，不要围绕暂停 / 恢复构建
 
 最近更新时间，ISO 8601 格式。
 
-**userInstructions** `array`
+**userInstructions** `null | array`
 
-用户文本指令列表；Adventure 不支持 HTTP `instruct`，通常为 `null`。
+Adventure 不支持 HTTP `instruct`，探索动作也不会回显到该字段；通常为 `null` 或 `[]`，请忽略。
 
 **chapters** `array`
 
 章节列表；未生成章节数据时为 `null`。
 
-**characterActions** `array`
+**characterActions** `array<string> | null`
 
-当前角色 / 主体可用动作 ID；无推荐时为 `[]`。通常返回 2–4 个。常见动作：
+当前角色 / 主体可用动作 ID；无推荐时为 `[]`；`failed` 时为 `null`。通常返回 2–4 个。常见动作：
 
 -   `dash`：前冲
 -   `jump`：跳跃
 -   `crouch`：下蹲 / 下趴
 -   `attack`：攻击
 
-**environmentActions** `array`
+**environmentActions** `array<string> | null`
 
-当前场景可用环境交互动作 ID；无推荐时为 `[]`。服务端按场景从固定动作池中选择 0–3 个，可返回空数组。常见动作：
+当前场景可用环境交互动作 ID；无推荐时为 `[]`；`failed` 时为 `null`。服务端按场景从固定动作池中选择 0–3 个，可返回空数组。常见动作：
 
 -   `ride_horse`：骑马
 -   `ride_bicycle`：骑自行车
@@ -165,6 +188,14 @@ Adventure 产品能力没有 `paused` 状态，不要围绕暂停 / 恢复构建
 -   `car_light`：开车灯；仅当同时返回 `enter_exit_car` 时可能出现
 -   `car_horn`：按车喇叭；仅当同时返回 `enter_exit_car` 时可能出现
 
+**errorCode** `string`
+
+仅 `status=failed` 时返回；结构化失败原因代码，取值见[错误码](https://help.aliyun.com/zh/model-studio/happyoyster-error-code#ho-ec-travel-errorcode-title)。
+
+**errorMessage** `string`
+
+与 `errorCode` 同时返回；英文失败说明。请按 `errorCode` 分支处理，不要匹配 `errorMessage` 文案。
+
 ## 前置状态与调用注意事项
 
 -   建议每 2–5 秒轮询。
@@ -173,6 +204,7 @@ Adventure 产品能力没有 `paused` 状态，不要围绕暂停 / 恢复构建
 -   本接口不返回 `mode`、`playUrl`、`bgmUrl` 或 `sessionId`；播流配置以[进入房间](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference/happyoyster-adventure-enter-travel-api-reference.md)响应为准。
 -   `clientStreamStatus` 是客户端播放侧心跳，`rtcStatus` 是服务端推流侧状态，两者不可互相替代。
 -   Adventure 不支持 HTTP `instruct`、`pause`、`resume`、`rewind`、`update-script`；不要把以下路径作为可用 HTTP 能力集成：`/travels/instruct`、`/travels/pause`、`/travels/resume`、`/travels/rewind`、`/travels/update-script`。
+-   `failed` 是终态，不会再产生成片；请按 `errorCode` 展示失败原因，不要展示为「尚未完成」。
 
 ## 错误码
 

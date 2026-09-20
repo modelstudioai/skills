@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 183 个模型家族 · 421 个主干模型 · 更新于 2026-09-20
+> 自动生成 · 共 184 个模型家族 · 421 个主干模型 · 更新于 2026-09-21
 
 **机器查询走结构化文件**：
 
@@ -359,8 +359,10 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen3-LiveTranslate-Flash](groups/qwen3-livetranslate-flash.json) — Qwen3-LiveTranslate-Flash，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen3-Omni强大的基座能力、海量多模态数据、跨语言跨模态对齐和视觉增强等技术，…
   - 模型：`qwen3-livetranslate-flash`
 
-## 全模态 `Multimodal-Omni` — 6 个家族
+## 全模态 `Multimodal-Omni` — 7 个家族
 
+- [Qwen-MT-Uni](groups/qwen-mt-uni.json) — Qwen-MT-Uni 是 Qwen-MT 系列最新一代全模态翻译模型，除了提供文本和图片翻译之外，以文档与音频翻译为核心，覆盖 152 个语种互译：文档侧支持 Txt / Excel / PDF /…
+  - 模型：`qwen-mt-uni`
 - [Qwen-Omni-Turbo](groups/qwen-omni-turbo.json) — 千问全新多模态理解生成大模型，支持文本, 图像，语音，视频输入理解和混合输入理解，具备文本和语音同时流式生成能力，多模态内容理解速度显著提升，提供了4种自然对话音色。
   - 模型：`qwen-omni-turbo`, `qwen-omni-turbo-latest`
 - [Qwen2.5-开源模型](groups/qwen2.5.json) — Qwen2.5系列开源模型，包含文本生成模型、视觉理解模型、多模态模型等多个领域领先模型。
@@ -385,10 +387,17 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [实时语音识别及翻译V1.0](groups/gummy-realtime-v1.json) — 多语言语音转写及翻译的多模态大模型。本模型提供长时间、高准确率、实时转写中/英/日/韩等10个混合语种的服务。同时支持中英日韩互译，以其他6个语种翻译成中文或英文。
   - 模型：`gummy-realtime-v1`
 
-## 实时全模态 `Realtime-Omni` — 4 个家族
+## Realtime-Chatting `Realtime-Chatting` — 3 个家族
 
-- [Qwen-Omni-Turbo-Realtime](groups/qwen-omni-turbo-realtime.json) — 千问全新多模态理解生成大模型实时版，适合实时音频交互场景。支持音频伴随文本、图像、视频混合输入理解，具备语音和文本同时流式生成能力，提供了4种自然对话音色。
-  - 模型：`qwen-omni-turbo-realtime`, `qwen-omni-turbo-realtime-latest`
+- [Qwen-Audio-3.1-Realtime](groups/qwen-audio-3.1-realtime.json) — Qwen-Audio-3.1-Realtime 是新一代实时全双工语音大模型，进一步增强口语推理、多轮指令遵循、共情表达与角色扮演能力，兼顾智能应答与自然对话节奏。模型优化噪声拒识、多人对话理解与动态…
+  - 模型：`qwen-audio-3.1-realtime-plus`
+- [Qwen-Audio-Realtime-Flash](groups/qwen-audio-realtime-flash.json) — Qwen-Audio-Realtime 是一款登顶全球权威评测的下一代实时双工语音大模型，模型兼顾了模型智商与双工对话节奏,在保持流畅、自然的实时交互体验的同时,语音推理能力不打折扣;并通过并行推理和…
+  - 模型：`qwen-audio-3.0-realtime-flash`
+- [Qwen-Audio-Realtime-Plus](groups/qwen-audio-realtime-plus.json) — Qwen-Audio-Realtime 是一款登顶全球权威评测的下一代实时双工语音大模型，模型兼顾了模型智商与双工对话节奏,在保持流畅、自然的实时交互体验的同时,语音推理能力不打折扣;并通过并行推理和…
+  - 模型：`qwen-audio-3.0-realtime-plus`
+
+## 实时全模态 `Realtime-Omni` — 3 个家族
+
 - [Qwen3-Omni-Flash-Realtime](groups/qwen3-omni-flash-realtime.json) — Qwen3-Omni-Flash-Realtime多模态大模型的实时版，基于Thinker–Talker混合专家（MoE）架构，支持文本、图像、音频、视频的高效理解与语音生成能力，可进行119种语言文…
   - 模型：`qwen3-omni-flash-realtime`
 - [Qwen3.5-Omni-Flash-Realtime](groups/qwen3.5-omni-flash-realtime.json) — Qwen3.5-Omni是Qwen最新一代全模态大模型，支持文本，图片，音频，音视频理解与交互。作为 Qwen3-Omni 的全面进化版本，支持60+种语言音频输入，30+语言语音输出以及可控语音对话…
@@ -402,13 +411,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen2.5-vl-embedding`, `qwen3-vl-embedding`
 - [通义多模态向量](groups/embedding.json) — 基于LLM底座的通用多模态表征模型，支持文本、图像、视频3种模态，具有以视觉为中心、全场景性能优异、高性价比的特点，适用于以图搜图、以文搜图、以文搜视频、以视频搜视频、以文搜文等下游多样化任务场景。
   - 模型：`multimodal-embedding-v1`, `tongyi-embedding-vision-flash`, `tongyi-embedding-vision-plus`
-
-## Realtime-Chatting `Realtime-Chatting` — 2 个家族
-
-- [Qwen-Audio-Realtime-Flash](groups/qwen-audio-realtime-flash.json) — Qwen-Audio-Realtime 是一款登顶全球权威评测的下一代实时双工语音大模型，模型兼顾了模型智商与双工对话节奏,在保持流畅、自然的实时交互体验的同时,语音推理能力不打折扣;并通过并行推理和…
-  - 模型：`qwen-audio-3.0-realtime-flash`
-- [Qwen-Audio-Realtime-Plus](groups/qwen-audio-realtime-plus.json) — Qwen-Audio-Realtime 是一款登顶全球权威评测的下一代实时双工语音大模型，模型兼顾了模型智商与双工对话节奏,在保持流畅、自然的实时交互体验的同时,语音推理能力不打折扣;并通过并行推理和…
-  - 模型：`qwen-audio-3.0-realtime-plus`
 
 ## 实时语音合成 `Realtime-Text-to-Speech` — 2 个家族
 

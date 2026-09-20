@@ -1,45 +1,53 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台中模型主动识别用户意图、结构化提取参数，并按约定协议触发外部工具或服务执行的关键能力。它不是简单的 API 转发，而是由大模型在推理过程中自主决策“何时调用、调用哪个、传什么参数”，再将结果注入后续生成流程，实现模型能力的动态扩展。
+函数调用（Function Calling）是百炼平台中大模型主动识别用户意图、自主选择并执行外部工具能力的核心机制。它通过结构化描述工具接口（名称、参数、语义），使模型能在推理过程中动态生成工具调用请求，而非仅输出文本，从而实现对实时信息、精确计算、多模态生成等模型原生能力之外任务的可靠闭环。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-函数调用在百炼平台中并非单一接口，而是贯穿多个能力层的统一语义机制，具体体现为以下三类实践路径：
+函数调用在百炼平台中并非单一 API 特性，而是贯穿多个能力层级的统一交互范式，具体体现为：
 
-- **Assistant API 场景（推荐首选）**：通过 `tools` 数组注册函数定义（含 `tool_id`、`description`、`parameters`），模型自动解析用户输入、生成符合 OpenAPI Schema 的参数对象，并返回 `tool_calls` 字段；开发者需按 `tool_call.id` 和 `function.name` 执行对应逻辑，再将结果以 `tool_results` 形式回传给 `/v1/threads/runs` 继续执行。适用于智能体编排、RAG+工具混合调度等复杂工作流。
+- **Omni Realtime API（实时语音交互）**：模型在流式语音对话中可自主触发 `function` 类型工具（如查天气、订机票），调用结果需由客户端通过 `conversation.item.create` 回传，并显式发送 `response.create` 以驱动后续响应。适用于低延迟语音助手、智能座舱等强交互场景。
 
-- **Managed Agents（托管智能体）场景**：底层封装为 `Skill` 能力，通过 `/v1/agents/{agent_id}/skills` 注册自定义工具后，在运行时由 `qwen-max` 等托管模型触发 `tool_call` 事件；响应需通过 `POST /v1/agents/{agent_id}/sessions/{session_id}/tool_results` 提交，平台自动处理上下文注入与多步编排。优势在于免运维状态管理与跨 Session Memory 持久化。
+- **Application Component API（基础模型 API）**：通过 `tools` 数组声明工具集，配合 `tool_choice` 控制策略（`"auto"`/`"none"`/指定工具），模型在单次 `/v1/chat/completions` 请求中返回 `tool_calls`，开发者需解析 `function.name` 和 `function.arguments` 并同步执行，再将结果以 `role: "tool"` 消息形式拼入下一轮 `messages` 继续调用。
 
-- **插件（Plug-in）场景**：面向控制台快速集成，本质是预置的函数调用封装。官方插件（如 `calculator`、`quark_search`）和自定义插件均需配置 `tool_id` 与参数契约，调用时模型输出 `tool_calls` 后，平台自动透传 `biz_params` 并注入 `Authorization` header（唯一支持透传的 header），无需开发者手动发起 HTTP 请求。
+- **Application Call（智能体/工作流调用）**：插件（Plug-in）和 MCP 服务均以函数调用语义集成。智能体应用中，模型自动规划是否调用及调用哪个插件；工作流应用中，MCP 节点作为显式工具节点被编排执行。`biz_params.user_defined_params` 可透传插件所需业务参数。
 
-> ⚠️ 注意：所有场景下，函数调用均由模型自主触发，**不支持客户端强制指定调用**；模型是否触发、触发哪个工具，取决于其对 `description` 和 `parameters` 的理解质量，建议保持描述简洁精准、参数类型明确（避免嵌套过深）。
+- **Plug-in（插件系统）**：所有插件本质是封装后的函数——每个工具（Tool）对应一个标准化的 HTTP 接口，其 `tool_name`、`tool_description` 和 `in_params` 共同构成模型可理解的“函数签名”。模型依据自然语言描述匹配工具，生成符合 `in_params` 结构的 JSON 参数。
+
+- **Model Context Protocol（MCP）**：MCP 是函数调用的协议层抽象。官方或自定义 MCP 服务提供符合 Streamable HTTP 规范的工具端点，百炼平台将其统一注册为可调用函数。模型无需感知底层是 REST 还是 SSE，仅按 `name` 和 `parameters` 发起调用，平台负责协议转换与安全代理。
+
+> ✅ 关键共识：无论在哪一层，函数调用都遵循“声明 → 触发 → 执行 → 注入”四步闭环，且模型始终只负责 *决策* 和 *参数生成*，不执行实际逻辑。
 
 ## 关键参数和配置
 
 | 参数 | 位置 | 类型 | 说明 |
 |------|------|------|------|
-| `tool_id` | `tools[].tool_id`（Assistant API）、`skills[].id`（Managed Agents）、插件配置页 | string | 工具唯一标识，必须与注册时完全一致；大小写敏感，不可含空格 |
-| `parameters` | `tools[].parameters`（OpenAPI 3.0 JSON Schema） | object | 定义输入参数结构，**必需包含 `type` 和 `description`**；GET 类型插件不支持 `object` 类型入参（报错 `130022`） |
-| `biz_params` | Assistant API 请求体 `input.biz_params` 或 Managed Agents `input` 中 | object | 业务透传参数（如用户 ID、会话上下文），仅当插件配置为“业务透传”模式时生效 |
-| `stream` | 请求体顶层参数 | boolean | 启用后，函数调用过程中的 `tool_call`、`tool_result` 等事件将以 SSE 流式返回，便于前端实时渲染中间状态 |
-| `Authorization` | 请求 header | string | **唯一允许透传的 header**，用于携带 Bearer [Token](token.md) 或 AppCode，其他自定义 header 将被平台过滤 |
+| `tools` | Omni Realtime、Application Component、Application Call（DashScope）、Plug-in、MCP 配置页 | array | 工具定义列表，每项含 `name`（必填，英文标识符）、`description`（必填，自然语言功能说明）、`parameters`（JSON Schema 格式，含 `properties` 和 `required`） |
+| `tool_choice` | Application Component API、Application Call（DashScope） | string / object | 控制调用策略：`"auto"`（默认，模型自主决定）、`"none"`（禁用）、`{"type": "function", "function": {"name": "xxx"}}`（强制指定） |
+| `function.name` | 所有调用响应中 | string | 模型生成的工具名称，必须与 `tools` 中某项 `name` 完全一致（区分大小写） |
+| `function.arguments` | 所有调用响应中 | string (JSON) | 模型生成的参数字符串，需 `JSON.parse()` 后校验是否符合对应工具的 `parameters` Schema |
+| `tool_id` | Plug-in 系统 | string | 插件内工具的唯一 ID，用于调试和日志追踪（控制台悬停复制），不参与模型推理 |
+| `env` / `KMS 加密凭证` | MCP 自定义服务配置 | object / secret | 工具执行所需的敏感参数（如 API Key），必须通过 KMS 加密注入，禁止明文 |
+
+> ⚠️ 注意事项：
+> - `parameters` 中 Object 类型的子属性 **不能为空**，否则工具发布失败；
+> - GET 方法的插件 **不支持 Object 类型输入参数**，复杂结构请改用 POST + `application/json`；
+> - 所有工具调用返回结果将作为上下文注入模型输入，显著增加 Token 消耗，请评估响应长度；
+> - 单次请求最多触发 **10 个工具调用**（跨插件/跨 MCP 均计入）。
 
 ## 面向开发者，简洁实用
 
-- ✅ **必做**：所有函数定义必须提供完整、无歧义的 `description` 和 `parameters` Schema；缺失 `description` 将导致发布失败（错误码 `130040`）。  
-- ✅ **推荐**：优先使用 Assistant API 进行开发——它提供最标准的 [OpenAI 兼容接口](openai-compatible-api.md)、最灵活的工具注册方式，且 SDK（Python/Java）已内置 `tool_calls` 解析与 `tool_results` 回传逻辑。  
-- ⚠️ **避坑**：  
-  - 不要尝试在 `GET` 请求中传递复杂对象参数；改用 `POST` + `application/json`；  
-  - 不要依赖模型自动填充未声明的参数字段；所有需传参字段必须显式定义在 `parameters` 中；  
-  - 自定义插件调试阶段务必完成“测试成功→发布”闭环，草稿状态无法被模型调用；  
-  - 文件类工具（如 `text_to_image`）需单独申请开通，且限时免费，勿用于生产环境长期调用。  
-- 🚀 **进阶提示**：结合 RAG 使用时，可将知识库检索结果作为 `biz_params` 注入函数调用，实现“先查知识，再调工具”的确定性编排；Managed Agents 的 `Memory Store` 可自动缓存历史 `tool_result`，供后续 Session 复用。
+- **快速验证**：从控制台「插件市场」添加一个 `calculator` 插件到智能体，发送“37 × 89 等于多少？”，观察日志中 `tool_calls` 和 `tool` 消息即可确认函数调用通路。
+- **调试要点**：优先检查 `function.name` 是否拼写一致、`function.arguments` 是否为合法 JSON、参数值是否满足 `parameters` 中 `type` 和 `required` 约束。
+- **错误处理**：若模型未触发调用，检查 `description` 是否足够清晰（建议含示例）；若调用失败，先验证工具 URL 和鉴权配置，再检查 `in_params` 的 `passing_method`（`model_recognition` 表示由模型填充，`biz_pass_through` 表示由业务代码透传）。
+- **生产建议**：对高并发场景，MCP 服务请启用「极速模式」避免冷启动延迟；涉及敏感操作的工具，务必在 `out_params` 中明确定义返回字段，防止模型误读冗余信息。
 
 ## 关联主题页
 
-- [more about models](../api/more-about-models.md)
+- [omni realtime api](../api/omni-realtime-api.md)
+- [application component api reference](../api/application-component-api-reference.md)
+- [application call](../api/application-call.md)
 - [plug in](../guides/plug-in.md)
-- [application support](../guides/application-support.md)
-- [managed agents api](../api/managed-agents-api.md)
+- [model context protocol](../guides/model-context-protocol.md)
 
 

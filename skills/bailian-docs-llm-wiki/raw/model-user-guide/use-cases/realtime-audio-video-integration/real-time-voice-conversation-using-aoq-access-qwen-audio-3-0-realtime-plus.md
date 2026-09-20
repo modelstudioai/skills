@@ -1,10 +1,10 @@
-# 使用 AOQ 接入 qwen-audio-3.0-realtime-plus 实现实时语音对话
+# 使用 AOQ 接入 qwen-audio-3.1-realtime-plus 实现实时语音对话
 
-通过 AOQ 接入 qwen-audio-3.0-realtime-plus，使用服务端 VAD 自动划分轮次，实现低延迟的实时语音对话。客户端代码以 Android Java 为例。
+通过 AOQ 接入 qwen-audio-3.1-realtime-plus，使用服务端 VAD 自动划分轮次，实现低延迟的实时语音对话。客户端代码以 Android Java 为例。
 
 ## 方案概述
 
-Qwen-Audio 是端到端实时语音交互模型，适用于语音助手、智能客服和 AI 伴侣等需要低延迟语音交互的场景。AOQ SDK 将音频与事件分轨传输：Audio 轨负责上行麦克风 PCM 和下行模型 PCM，Data 轨负责 Realtime 协议事件。
+Qwen-Audio 是端到端实时语音交互模型，适用于语音助手、智能客服和 AI 伴侣等需要低延迟语音交互的场景。AOQ SDK 将音频与事件分轨传输：Audio 轨负责上行麦克风音频和下行模型音频，Data 轨负责 Realtime 协议事件。
 
 本教程使用 server\_vad：客户端持续上行音频，服务端自动识别用户开始和停止说话，并触发模型回复。
 
@@ -17,11 +17,11 @@ Qwen-Audio 是端到端实时语音交互模型，适用于语音助手、智能
 
 ### 导入 SDK
 
-根据开发平台导入对应 SDK。后续客户端代码以 Android Java 为例，其他平台使用相同的接口设计和事件流程。本文以 PCM 音频流为例。Opus 编码由插件提供；如果需要使用 Opus 编码上行，请导入 Opus 插件。
+根据开发平台导入对应 SDK。后续客户端代码以 Android Java 为例，其他平台使用相同的接口设计和事件流程。本文以 Opus 音频流为例，请先导入 Opus 插件。
 
 #### Android
 
-1.  将 AoqClientSdk-release.aar 放入 app/libs，并在 app/build.gradle 中配置依赖和 SDK 支持的 ABI：
+1.  将 Opus 插件中的 libPluginOpus.so 按 ABI 放入 app/src/main/jniLibs/armeabi-v7a/ 和 app/src/main/jniLibs/arm64-v8a/，将 AoqClientSdk-release.aar 放入 app/libs，并在 app/build.gradle 中配置依赖和 SDK 支持的 ABI：
 
 ```
 android {
@@ -49,13 +49,13 @@ dependencies {
 
 #### iOS
 
-1.  将 AoqClientSdk.framework 拖入 Xcode 工程，在 Target > General > Frameworks, Libraries, and Embedded Content 中选择 Embed & Sign。SDK 支持 iOS 13.0 及以上 arm64 设备。
+1.  将 AoqClientSdk.framework 与 PluginOpus.framework 拖入 Xcode 工程，在 Target > General > Frameworks, Libraries, and Embedded Content 中选择 Embed & Sign。SDK 支持 iOS 13.0 及以上 arm64 设备。
 2.  在 Info.plist 中添加 NSMicrophoneUsageDescription，并在使用相应设备前请求用户授权。
 3.  Swift 工程使用 import AoqClientSdk；Objective-C 工程使用 #import <AoqClientSdk/AoqClientSdk.h>。
 
 #### HarmonyOS
 
-1.  将 AoqClientSdk.har 放入 entry/libs，并在 entry/oh-package.json5 中声明依赖。该 SDK 兼容 API 12，支持 arm64-v8a：
+1.  将 Opus 插件中的 libPluginOpus.so 放入 entry/libs/arm64-v8a/，将 AoqClientSdk.har 放入 entry/libs，并在 entry/oh-package.json5 中声明依赖。该 SDK 兼容 API 12，支持 arm64-v8a：
 
 ```
 {
@@ -100,7 +100,7 @@ export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 
 ## 实现流程
 
-1.  AppServer 通过 Realtime Token 地址获取 qwen-audio-3.0-realtime-plus 的本次 AOQ 连接凭证。
+1.  AppServer 通过 Realtime Token 地址获取 qwen-audio-3.1-realtime-plus 的本次 AOQ 连接凭证。
 2.  客户端根据接入模型和业务音频格式配置 SDK 的上行编码与下行解码参数。
 3.  客户端初始化录音和播放设备，创建 AoqConnectConfig，将本次连接凭证写入对应字段，并配置需要发布和订阅的 Audio、Data 轨。保持 Audio 轨发送关闭，调用 connect 建立 AOQ 连接。
 4.  连接成功后发送 session.update；收到 session.updated 后才开启 Audio 轨发送。
@@ -115,7 +115,7 @@ export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 
 ```
 curl -X POST \
-  "https://{endpoint}/api/v1/webrtc/realtime?model=qwen-audio-3.0-realtime-plus" \
+  "https://{endpoint}/api/v1/webrtc/realtime?model=qwen-audio-3.1-realtime-plus" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
   -H "x-dashscope-rtc-transport: moq" \
@@ -180,13 +180,13 @@ engine = AoqClientEngine.createEngine(context, createConfig, listener);
 
 ### 2\. 配置音频编解码
 
-根据接入模型和业务音频格式配置 SDK 的上行编码与下行解码参数。以下数值仅为本教程的 PCM 示例配置，不限制客户的业务音频格式。
+根据接入模型和业务音频格式配置 SDK 的上行编码与下行解码参数。以下数值仅为本教程的 Opus 示例配置，不限制客户的业务音频格式。
 
 ```
 AoqClientEngine.AoqAudioCodecConfig audioEncoderConfig =
         new AoqClientEngine.AoqAudioCodecConfig();
 audioEncoderConfig.trackType = AoqClientEngine.AoqTrackType.AoqTrackTypeAudio;
-audioEncoderConfig.codecType = AoqClientEngine.AoqEncoderType.AoqEncoderTypeAudioPCM;
+audioEncoderConfig.codecType = AoqClientEngine.AoqEncoderType.AoqEncoderTypeAudioOpus;
 audioEncoderConfig.sampleRate = 16000; // 示例值，请按接入模型和业务音频格式调整。
 audioEncoderConfig.channel = 1;
 engine.setAudioEncoderConfig(audioEncoderConfig);
@@ -194,7 +194,7 @@ engine.setAudioEncoderConfig(audioEncoderConfig);
 AoqClientEngine.AoqAudioCodecConfig audioDecoderConfig =
         new AoqClientEngine.AoqAudioCodecConfig();
 audioDecoderConfig.trackType = AoqClientEngine.AoqTrackType.AoqTrackTypeAudio;
-audioDecoderConfig.codecType = AoqClientEngine.AoqEncoderType.AoqEncoderTypeAudioPCM;
+audioDecoderConfig.codecType = AoqClientEngine.AoqEncoderType.AoqEncoderTypeAudioOpus;
 audioDecoderConfig.sampleRate = 24000; // 示例值，应与模型下行音频格式一致。
 audioDecoderConfig.channel = 1;
 engine.setAudioDecoderConfig(audioDecoderConfig);
@@ -250,7 +250,7 @@ JSONObject vad = new JSONObject()
         .put("silence_duration_ms", 800);
 JSONObject session = new JSONObject()
         .put("modalities", new JSONArray().put("text").put("audio"))
-        .put("voice", "longanqian")
+        .put("voice", "longanqian_v3.1")
         .put("input_audio_format", "pcm")
         .put("output_audio_format", "pcm")
         .put("instructions", "You are a helpful voice assistant.")
@@ -407,7 +407,7 @@ public final class RealtimeVoiceChatClient {
         AoqClientEngine.AoqAudioCodecConfig audioEncoderConfig =
                 new AoqClientEngine.AoqAudioCodecConfig();
         audioEncoderConfig.trackType = AoqClientEngine.AoqTrackType.AoqTrackTypeAudio;
-        audioEncoderConfig.codecType = AoqClientEngine.AoqEncoderType.AoqEncoderTypeAudioPCM;
+        audioEncoderConfig.codecType = AoqClientEngine.AoqEncoderType.AoqEncoderTypeAudioOpus;
         audioEncoderConfig.sampleRate = 16000;
         audioEncoderConfig.channel = 1;
         engine.setAudioEncoderConfig(audioEncoderConfig);
@@ -415,7 +415,7 @@ public final class RealtimeVoiceChatClient {
         AoqClientEngine.AoqAudioCodecConfig audioDecoderConfig =
                 new AoqClientEngine.AoqAudioCodecConfig();
         audioDecoderConfig.trackType = AoqClientEngine.AoqTrackType.AoqTrackTypeAudio;
-        audioDecoderConfig.codecType = AoqClientEngine.AoqEncoderType.AoqEncoderTypeAudioPCM;
+        audioDecoderConfig.codecType = AoqClientEngine.AoqEncoderType.AoqEncoderTypeAudioOpus;
         audioDecoderConfig.sampleRate = 24000;
         audioDecoderConfig.channel = 1;
         engine.setAudioDecoderConfig(audioDecoderConfig);
@@ -465,7 +465,7 @@ public final class RealtimeVoiceChatClient {
                     .put("silence_duration_ms", 800);
             JSONObject session = new JSONObject()
                     .put("modalities", new JSONArray().put("text").put("audio"))
-                    .put("voice", "longanqian")
+                    .put("voice", "longanqian_v3.1")
                     .put("input_audio_format", "pcm")
                     .put("output_audio_format", "pcm")
                     .put("turn_detection", vad);

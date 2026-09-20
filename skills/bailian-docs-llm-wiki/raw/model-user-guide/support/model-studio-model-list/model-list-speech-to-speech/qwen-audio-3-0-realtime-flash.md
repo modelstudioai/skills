@@ -38,7 +38,7 @@ Function Calling
 
 联网搜索
 
-不支持
+支持
 
 前缀续写
 

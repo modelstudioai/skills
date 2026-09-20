@@ -1,53 +1,73 @@
-# [knowledge](../api/knowledge.md) base
+# knowledge base
 
-知识库是阿里云百炼平台提供的 RAG（[检索增强生成](../concepts/rag.md)）核心能力，用于为大语言模型注入私有、领域专属或时效性强的结构化与非结构化数据，从而提升回答的准确性、专业性和事实一致性。其本质是将用户自有数据（文档、表格、音视频等）经解析、切片、向量化后构建可语义检索的索引，并在模型生成前动态注入相关上下文。
+阿里云百炼知识库（Knowledge Base）是 RAG（[检索增强生成](../concepts/rag.md)）能力的核心载体，提供文档解析、智能切片、向量化索引、多模态检索与大模型问答一体化服务。它支持从本地文件、OSS、语雀、飞书等数据源接入结构化与非结构化数据，并通过统一 API 或低代码服务配置对外提供可集成的检索与问答能力。
 
 ## 支持的模型/功能
 
-知识库支持两类模型调用：**向量/排序模型**（用于检索流程）和**问答生成模型**（用于最终回答）。  
-- **向量模型**：`text-embedding-v4`（文档/音视频搜索类）、`qwen3-vl-embedding`（图片问答类及「视觉理解」场景）；  
-- **排序模型**：`qwen3-rerank`（文本类）、`qwen3-vl-rerank`（[多模态](../concepts/multimodal.md)类）；  
-- **问答生成模型**：所有支持 RAG 的预置与自定义模型，包括千问全系（QwQ/Long/Max/Plus/Turbo/Coder/Deep-Research）、千问VL系列、Qwen3/Qwen2.5/Qwen2 开源版，以及第三方模型（DeepSeek-R1、Llama3.1、Yi-Large 等）[配置千问使用知识库教程](../../raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。  
+知识库本身不直接运行大模型，但深度集成以下模型能力以支撑完整 RAG 链路：
 
-功能上，知识库支持**文档搜索**（含基础问答、视觉理解、极速问答三类场景）、**数据查询**（结构化表格）、**图片问答**和**音视频搜索**四类知识库类型，并提供**知识检索服务**（多库联合检索）与**知识问答服务**（端到端问答）两种封装形态 [知识检索](../../raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)。
+- **嵌入模型**：默认使用 `text-embedding-v4`（中英文语义向量模型），创建知识库时选定且不可更改；[创建知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)中明确说明该参数为创建时固定项。
+- **重排（Rerank）模型**：支持 `qwen3-rerank`（纯文本）、`qwen3-vl-rerank`（多模态）等，可在[知识检索](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)或[知识问答](raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md)服务中按需启用，用于对召回结果进行精排。
+- **生成模型**：问答阶段支持 Qwen 系列模型（如 `qwen3.6-plus`），在[知识问答](raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md)服务配置中选择，支持调节 `temperature` 与 `enable_thinking` 等参数。
+- **多模态能力**：图片知识库依赖 `Qwen-VL` 解析与 `qwen3-vl-rerank` 重排；音视频知识库依赖语音转写与时间戳定位模型，详见[核心概念](raw/application-user-guide/knowledge-base/concepts.md)中对知识库类型的定义。
+
+> **注意**：文档 4 与文档 3 对“知识库类型”的描述存在细微差异：文档 4 将“图片问答”列为独立类型，而文档 3 归类为“图片知识库”，二者实质一致，但术语应以文档 4 的控制台实际选项为准。
 
 ## 关键参数
 
-| 参数类别 | 参数名 | 说明 | 取值范围/默认值 |
-|----------|--------|------|-----------------|
-| **检索控制** | 初步向量检索 TopK | 向量召回切片数（影响 Rerank 费用） | 1–100，默认 50 |
-| | 初步关键词检索 TopK | 关键词召回切片数 | 1–100，默认 50 |
-| | 相似度阈值 | 过滤重排后低分切片 | 0.01–1.0，默认 0.3 |
-| | 最大召回数量 | 单次查询返回的最终切片数 | 1–20，默认 5 |
-| **高级能力** | 多轮对话改写 | 基于历史会话自动补全 Query | 创建时启用，后续不可修改 [RAG效果优化](../../raw/application-user-guide/knowledge-base/rag-optimization.md) |
-| | 标签过滤 / Meta 信息 | 结构化过滤，提升召回精度 | 标签最多 32 个/文件；Meta 需创建知识库时配置，不可追加 |
+所有关键参数均在知识库创建或服务配置阶段设定，部分参数创建后不可修改：
 
-> **注意**：文档 7 中“召回文本切片数量”上限为 20，但文档 8 和文档 9 明确允许将“最大召回数量”设为 1–20，且文档 1 的工作原理图示及实测案例均基于该参数生效。因此以文档 8/9 的 1–20 为准，文档 7 的“20”应理解为单次请求的硬性上限，而非配置项限制。
+- **切片参数**：`最大分段长度`（10–6000 token，默认 600）、`切片方式`（智能切分/按长度/按页/按标题等），在[导入数据](raw/application-user-guide/knowledge-base/data-connection-overview/documents.md)步骤中配置，**创建后不可更改**。
+- **检索服务参数**：`知识库路由`（开/关）、`混排模型`（如 `qwen3-rerank`）、`最大召回数量`（1–20）、各知识库独立的 `初步向量检索 TopK`（1–100）与 `相似度阈值`（0.01–1.0），详见[知识检索](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)。
+- **问答服务参数**：`检索模式`（极速/多轮智能检索）、`拒答`/`防泄漏`/`引用`等生成控制开关，以及 `文件预解析` 模式（全文引用/切片检索），详见[知识问答](raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md)。
 
 ## 使用方式
 
-知识库可通过三种方式集成：  
-1. **控制台零代码集成**：在[应用管理](https://bailian.console.aliyun.com/#/app-center)中为智能体或工作流应用添加「文档知识库」节点，配置相似度阈值、权重及 TopK；工作流中需显式连接知识库节点与大模型节点，并在提示词中引用 `{result}` 变量 [知识库](../../raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。  
-2. **API 调用**：通过 `bailian20231229` SDK 调用 `CreateIndex`、`SubmitIndexJob`、`Retrieve` 等接口实现自动化知识库生命周期管理与检索，适用于外部系统对接 [知识库API指南](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)。  
-3. **定时同步**：通过「数据连接器」配置 OSS/飞书/钉钉等来源的同步规则，按分钟/小时/天自动拉取更新文件，确保知识库内容实时性 [知识库定时数据同步指南](../../raw/application-user-guide/knowledge-base/data-sync-guide.md)。
+知识库可通过控制台、API、CLI 或第三方平台三种主要路径接入：
+
+- **控制台快速验证**：通过 [Playground](raw/application-user-guide/knowledge-base/playground.md) 实时调试单库或多库的检索与问答效果，适合效果调优与质量验收。
+- **API 集成**：
+  - 底层单库检索：`POST /api/v1/indices/rag/index/retrieve`，需传 `index_id` 和 `query`；
+  - 应用级联合检索：`POST /api/v1/indices/knowledge/search`，需传 `agent_id`（对应已发布的检索服务），策略由服务配置驱动；
+  - 流式问答：`POST /api/v2/apps/knowledge/chat`，返回 SSE 事件，详见[服务渠道](raw/application-user-guide/knowledge-base/integration/channels.md)。
+- **CLI 与第三方**：`bl knowledge search` 和 `bl knowledge chat` 命令分别调用检索与问答服务；Dify、Coze、n8n、LangChain 等平台可通过 REST API 或 MCP 协议接入，具体示例见[第三方平台接入](raw/application-user-guide/knowledge-base/integration/third-party.md)。
 
 ## 限制和注意事项
 
-- **地域限制**：知识库功能仅在中国站**华北2（北京）**和国际站**新加坡**地域可用，其他地域（如德国法兰克福）不支持 [知识库](../../raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。  
-- **配额限制**：单账号最多创建 100 个知识库（若使用 RDS 数据源）；标准版知识库存储上限 100 GB，旗舰版 9,999 GB；单次导入文件数上限 50 个（API 批量无此限）[知识库配额与限制](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-specifications.md)。  
-- **计费要点**：费用 = **规格费**（标准版 0.03 元/小时，旗舰版按 RCU 计费） + **模型调用费**（向量化、Rerank、问答生成独立计费，[Token](../concepts/token.md) 按实际用量计算）；多个知识库并行检索时，模型费用线性叠加 [知识库计费说明](../../raw/application-user-guide/knowledge-base/billing-for-knowledge-base.md)。  
-- **关键约束**：知识库类型（文档搜索/数据查询等）创建后不可更改；Meta 信息抽取必须在创建时配置，无法事后补充；权重仅在同类型知识库间生效（如文档搜索类之间），跨类型无效。
+- **地域与规格限制**：知识库功能仅在中国站（华北2 北京）和国际站（新加坡）可用；标准版知识库限 1 QPS，旗舰版按 RCU（1 RCU ≈ 50 QPS）弹性伸缩，详见[容量与限制](raw/application-user-guide/knowledge-base/reference/rag-knowledge-base-specifications.md)。
+- **文件与切片约束**：单文件最大 150 MB（PDF/DOCX）或 512 MB（音视频）；单知识库最多 100,000 文档；切片内容上限 6000 字，标题上限 50 字；所有切片配置在导入时锁定，不可事后修改。
+- **计费与生命周期**：自 2026 年 1 月 4 日起正式计费，费用含规格费（按小时）与模型调用费；免费额度（720 小时）仅抵扣标准版规格费，且老用户额度有效期截至 2026 年 2 月 3 日；删除知识库将**永久清除数据且不可恢复**，详见[知识库计费说明](raw/application-user-guide/knowledge-base/reference/billing-for-knowledge-base.md)。
+- **数据同步时效性**：OSS、飞书、钉钉等外部数据源通过[知识库定时数据同步指南](raw/application-user-guide/knowledge-base/data-connection-overview/data-sync-guide.md)自动拉取，最小同步周期为 1 分钟，但同步后仍需等待解析与索引构建完成方可检索。
 
 ## 来源文档
 
-- [知识库](../../raw/application-user-guide/knowledge-base/rag-knowledge-base.md)
-- [RAG效果优化](../../raw/application-user-guide/knowledge-base/rag-optimization.md)
-- [知识库定时数据同步指南](../../raw/application-user-guide/knowledge-base/data-sync-guide.md)
-- [知识库API指南](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)
-- [知识库日志与监控](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-log-monitoring.md)
-- [知识库计费说明](../../raw/application-user-guide/knowledge-base/billing-for-knowledge-base.md)
-- [知识库配额与限制](../../raw/application-user-guide/knowledge-base/rag-knowledge-base-specifications.md)
-- [知识检索](../../raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)
-- [知识问答](../../raw/application-user-guide/knowledge-base/rag-knowledge-qa.md)
+- [快速开始](../../raw/application-user-guide/knowledge-base/quickstart.md)
+- [Playground](../../raw/application-user-guide/knowledge-base/playground.md)
+- [核心概念](../../raw/application-user-guide/knowledge-base/concepts.md)
+- [创建知识库](../../raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)
+- [数据集](../../raw/application-user-guide/knowledge-base/data-connection-overview/data-connection.md)
+- [数据接入](../../raw/application-user-guide/knowledge-base/data-connection-overview.md)
+- [文档管理与解析](../../raw/application-user-guide/knowledge-base/data-connection-overview/documents.md)
+- [知识库定时数据同步指南](../../raw/application-user-guide/knowledge-base/data-connection-overview/data-sync-guide.md)
+- [切片与向量化](../../raw/application-user-guide/knowledge-base/data-connection-overview/chunking.md)
+- [知识服务](../../raw/application-user-guide/knowledge-base/service.md)
+- [知识检索](../../raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)
+- [知识问答](../../raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md)
+- [最佳实践](../../raw/application-user-guide/knowledge-base/best-practices.md)
+- [多轮对话：正确传递工具调用历史](../../raw/application-user-guide/knowledge-base/best-practices/multi-turn-chat.md)
+- [RAG效果优化](../../raw/application-user-guide/knowledge-base/best-practices/rag-optimization.md)
+- [文件自动打标：用大模型生成文档标签](../../raw/application-user-guide/knowledge-base/best-practices/auto-tag.md)
+- [应用集成](../../raw/application-user-guide/knowledge-base/integration.md)
+- [接入 AgentScope](../../raw/application-user-guide/knowledge-base/best-practices/knowledge-as-memory.md)
+- [快速配置到 Agent](../../raw/application-user-guide/knowledge-base/integration/agent-cli.md)
+- [服务渠道](../../raw/application-user-guide/knowledge-base/integration/channels.md)
+- [知识库API指南](../../raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)
+- [第三方平台接入](../../raw/application-user-guide/knowledge-base/integration/third-party.md)
+- [使用 CLI](../../raw/application-user-guide/knowledge-base/integration/cli.md)
+- [参考](../../raw/application-user-guide/knowledge-base/reference.md)
+- [知识库日志与监控](../../raw/application-user-guide/knowledge-base/reference/rag-knowledge-base-log-monitoring.md)
+- [知识库计费说明](../../raw/application-user-guide/knowledge-base/reference/billing-for-knowledge-base.md)
+- [容量与限制](../../raw/application-user-guide/knowledge-base/reference/rag-knowledge-base-specifications.md)
+- [更新日志](../../raw/application-user-guide/knowledge-base/changelog.md)
 
 

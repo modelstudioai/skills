@@ -155,7 +155,7 @@
 
 -   阿里云百炼部署
     
-    -   混合思考模式，默认开启思考模式：deepseek-v4-pro、deepseek-v4-flash
+    -   混合思考模式，默认开启思考模式：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash
     -   混合思考模式，默认不开启思考模式：deepseek-v3.2、deepseek-v3.2-exp、deepseek-v3.1
     -   仅思考模式：deepseek-r1、deepseek-r1-0528、deepseek-r1蒸馏模型
 -   硅基流动部署
@@ -170,7 +170,7 @@
 #### GLM
 
 -   仅思考模式：glm-5.3
--   混合思考模式，默认开启思考模式：glm-5.2、glm-5.2-us、glm-5.2-fast-preview、glm-5.1、glm-5、glm-4.7、glm-4.6、glm-4.5、glm-4.5-air
+-   混合思考模式，默认开启思考模式：glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5、glm-4.7、glm-4.6、glm-4.5、glm-4.5-air
 
 #### MiniMax
 

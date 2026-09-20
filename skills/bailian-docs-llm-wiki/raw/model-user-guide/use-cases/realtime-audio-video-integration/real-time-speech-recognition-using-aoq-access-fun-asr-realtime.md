@@ -17,7 +17,7 @@ fun-asr-realtime 将音频流实时转写为带标点的文本。AOQ SDK 将媒�
 
 1.  开通阿里云百炼，并按[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
 2.  根据业务部署地域确认 AOQ Endpoint。地域和接入地址的选择方法请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
-3.  从[SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)获取最新版 AOQ Client SDK。本文传输 PCM 音频，不需要额外集成 Opus 插件。
+3.  从[SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)获取最新版 AOQ Client SDK。本文传输 Opus 音频，需先导入 Opus 插件。
 4.  搭建业务 AppServer，并按[Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)实现 AOQ Inference 协议的服务端代理鉴权。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
 
 ### 导入 SDK
@@ -26,7 +26,7 @@ fun-asr-realtime 将音频流实时转写为带标点的文本。AOQ SDK 将媒�
 
 #### Android
 
-1.  将 AoqClientSdk-release.aar 放入 app/libs 目录，并在 app/build.gradle 中配置依赖和 ABI：
+1.  将 Opus 插件中的 libPluginOpus.so 按 ABI 放入 app/src/main/jniLibs/armeabi-v7a/ 和 app/src/main/jniLibs/arm64-v8a/，将 AoqClientSdk-release.aar 放入 app/libs 目录，并在 app/build.gradle 中配置依赖和 ABI：
 
 ```
 android {
@@ -54,13 +54,13 @@ dependencies {
 
 #### iOS
 
-1.  将 AoqClientSdk.framework 拖入 Xcode 工程，在 Target > General > Frameworks, Libraries, and Embedded Content 中选择 Embed & Sign。SDK 支持 iOS 13.0 及以上 arm64 设备。
+1.  将 AoqClientSdk.framework 与 PluginOpus.framework 拖入 Xcode 工程，在 Target > General > Frameworks, Libraries, and Embedded Content 中选择 Embed & Sign。SDK 支持 iOS 13.0 及以上 arm64 设备。
 2.  在 Info.plist 中添加 NSMicrophoneUsageDescription。纯语音识别不需要 NSCameraUsageDescription。
 3.  Swift 工程使用 import AoqClientSdk；Objective-C 工程使用 #import <AoqClientSdk/AoqClientSdk.h>。
 
 #### HarmonyOS
 
-1.  将 AoqClientSdk.har 放入 entry/libs，并在 entry/oh-package.json5 中声明依赖。该 SDK 兼容 API 12，支持 arm64-v8a：
+1.  将 Opus 插件中的 libPluginOpus.so 放入 entry/libs/arm64-v8a/，将 AoqClientSdk.har 放入 entry/libs，并在 entry/oh-package.json5 中声明依赖。该 SDK 兼容 API 12，支持 arm64-v8a：
 
 ```
 {
@@ -189,13 +189,13 @@ engine = AoqClientEngine.createEngine(context, createConfig, listener);
 
 ### 2\. 配置音频编码
 
-配置发送给模型的音频编码。请根据业务需求和模型要求设置格式、采样率和声道数。以下代码以 16 kHz 单声道 PCM 为例；支持范围请参见[客户端事件](https://help.aliyun.com/zh/model-studio/fun-asr-client-events#9cae7e7b85ebm)中的 run-task 参数。
+配置发送给模型的音频编码。请根据业务需求和模型要求设置格式、采样率和声道数。以下代码以 16 kHz 单声道 Opus 为例；支持范围请参见[客户端事件](https://help.aliyun.com/zh/model-studio/fun-asr-client-events#9cae7e7b85ebm)中的 run-task 参数。
 
 ```
 AoqClientEngine.AoqAudioCodecConfig encoder =
         new AoqClientEngine.AoqAudioCodecConfig();
 encoder.trackType = AoqClientEngine.AoqTrackType.AoqTrackTypeAudio;
-encoder.codecType = AoqClientEngine.AoqEncoderType.AoqEncoderTypeAudioPCM;
+encoder.codecType = AoqClientEngine.AoqEncoderType.AoqEncoderTypeAudioOpus;
 encoder.sampleRate = 16000;
 encoder.channel = 1;
 encoder.bitrate = 24000;
@@ -372,7 +372,7 @@ public final class AsrClient {
     private void configureAudioEncoder() {
         AoqClientEngine.AoqAudioCodecConfig encoder = new AoqClientEngine.AoqAudioCodecConfig();
         encoder.trackType = AoqClientEngine.AoqTrackType.AoqTrackTypeAudio;
-        encoder.codecType = AoqClientEngine.AoqEncoderType.AoqEncoderTypeAudioPCM;
+        encoder.codecType = AoqClientEngine.AoqEncoderType.AoqEncoderTypeAudioOpus;
         encoder.sampleRate = 16000;
         encoder.channel = 1;
         encoder.bitrate = 24000;

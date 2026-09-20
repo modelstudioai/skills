@@ -657,7 +657,7 @@ qwen3.8-max
 
 ¥103.68
 
-Qwen3.7-Flash-2026-07-15 联系商务经理开通
+Qwen3.7-Flash-2026-07-15
 
 qwen3.7-flash-2026-07-15
 
@@ -815,7 +815,7 @@ DeepSeek-v4-Flash-0731
 
 deepseek-v4-flash-0731
 
-64K
+256K
 
 ¥7.2
 
@@ -969,7 +969,7 @@ qwen3.8-max
 
 ¥129.5
 
-Qwen3.7-Flash-2026-07-15 联系商务经理开通
+Qwen3.7-Flash-2026-07-15
 
 qwen3.7-flash-2026-07-15
 
@@ -1081,7 +1081,7 @@ DeepSeek-v4-Flash-0731
 
 deepseek-v4-flash-0731
 
-64K
+256K
 
 ¥10.79
 
@@ -1673,22 +1673,6 @@ qwen2.5-vl-7b-instruct
 
 ¥5
 
-Qwen2.5-VL-3B-Instruct 邀测中
-
-qwen2.5-vl-3b-instruct
-
-¥1.2
-
-¥3.6
-
-Qwen2-开源版-7B 邀测中
-
-qwen2-7b-instruct
-
-¥1
-
-¥2
-
 #### 新加坡
 
 **基础模型**
@@ -1830,14 +1814,6 @@ qwen2.5-vl-7b-instruct
 ¥2.569
 
 ¥7.706
-
-Qwen2.5-VL-3B-Instruct 邀测中
-
-qwen2.5-vl-3b-instruct
-
-¥1.541
-
-¥4.624
 
 #### 按使用时长计费（模型单元）
 

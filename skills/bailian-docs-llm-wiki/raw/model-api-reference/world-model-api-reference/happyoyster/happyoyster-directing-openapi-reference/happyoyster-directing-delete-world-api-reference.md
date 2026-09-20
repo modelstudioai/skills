@@ -30,7 +30,7 @@
 
 #### 请求参数
 
-删除World
+#### 删除World
 
 ```
 curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-directing/openapi/v1/worlds/delete' \
@@ -57,7 +57,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 
 #### 响应参数
 
-删除成功
+#### 删除成功
 
 ```
 {
@@ -70,7 +70,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 }
 ```
 
-World 已不存在
+#### World 已不存在
 
 ```
 {

@@ -735,7 +735,7 @@ Schema 的名称。
 
 **enable\_thinking** `boolean` （可选）
 
-使用混合思考（回复前既可思考也可不思考）模型时，是否开启思考模式。适用于 Qwen3.7、Qwen3.6、Qwen3.5、Qwen3、Qwen3-Omni-Flash、Qwen3-VL模型，以及 DeepSeek-V4-Pro/V4-Flash 系列（阿里云直供）、DeepSeek-V3.2/V3.2-exp/V3.1 系列（阿里云直供、硅基流动直供、快手万擎直供）、Kimi-K2.7-code（仅思考模型）、Kimi-K2.6/K2.5 系列（阿里云直供、月之暗面直供）、GLM 系列。DeepSeek-V4 系列默认开启思考，可通过 `reasoning_effort` 参数调整推理力度。
+使用混合思考（回复前既可思考也可不思考）模型时，是否开启思考模式。适用于 Qwen3.7、Qwen3.6、Qwen3.5、Qwen3、Qwen3-Omni-Flash、Qwen3-VL模型，以及 DeepSeek-V4.1-Flash、DeepSeek-V4-Pro/V4-Flash 系列（阿里云直供）、DeepSeek-V3.2/V3.2-exp/V3.1 系列（阿里云直供、硅基流动直供、快手万擎直供）、Kimi-K2.7-code（仅思考模型）、Kimi-K2.6/K2.5 系列（阿里云直供、月之暗面直供）、GLM 系列。DeepSeek-V4 系列默认开启思考，可通过 `reasoning_effort` 参数调整推理力度。
 
 可选值：
 

@@ -170,4 +170,4 @@ client.files().delete("file_xxx");
 ## 下一步
 
 -   [发起会话](raw/application-api-reference/managed-agents-api/session-api/session-create.md)：在会话中观察工具如何使用挂载的文件。
--   [配置 Agent 环境](raw/application-user-guide/managed-agents/managed-agents-environment.md)：配置工具调用的执行沙箱。
+-   [运行环境](raw/application-user-guide/managed-agents/managed-agents-environment.md)：配置工具调用的执行沙箱。

@@ -547,7 +547,8 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis/' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"wan2.2-animate-move\",\n\"input\": {\n\"image_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/adsyrp/move_input_image.jpeg\",\n\"video_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/kaakcn/move_input_video.mp4\"\n},\n\"parameters\": {\n\"check_image\": true,\n\"mode\": \"wan-std\"\n}\n}'\n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/13b1848b-5493-4c0e-8c44-xxxxxxxxxxxx \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\""
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"wan2.2-animate-move\",\n\"input\": {\n\"image_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/adsyrp/move_input_image.jpeg\",\n\"video_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/kaakcn/move_input_video.mp4\"\n},\n\"parameters\": {\n\"check_image\": true,\n\"mode\": \"wan-std\"\n}\n}'\n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/13b1848b-5493-4c0e-8c44-xxxxxxxxxxxx \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\"",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/wan-animate-move-api"
           }
         }
       }
@@ -617,7 +618,8 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis/' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"wan2.2-animate-mix\",\n\"input\": {\n\"image_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/bhkfor/mix_input_image.jpeg\",\n\"video_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/wqefue/mix_input_video.mp4\"\n},\n\"parameters\": {\n\"check_image\": true,\n\"mode\": \"wan-std\"\n}\n}'\n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/13b1848b-5493-4c0e-8c44-xxxxxxxxxxxx \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\""
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis' \\\n--header 'X-DashScope-Async: enable' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n\"model\": \"wan2.2-animate-mix\",\n\"input\": {\n\"image_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/bhkfor/mix_input_image.jpeg\",\n\"video_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250919/wqefue/mix_input_video.mp4\"\n},\n\"parameters\": {\n\"check_image\": true,\n\"mode\": \"wan-std\"\n}\n}'\n\ncurl -X GET https://dashscope.aliyuncs.com/api/v1/tasks/13b1848b-5493-4c0e-8c44-xxxxxxxxxxxx \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\"",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/wan-animate-mix-api"
           }
         }
       }
@@ -709,7 +711,8 @@
       "samples": {
         "dashscope": {
           "default": {
-            "curl": "curl 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis/' \\\n --header 'X-DashScope-Async: enable' \\\n --header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n --header 'Content-Type: application/json' \\\n --data '{\n     \"model\": \"wan2.2-s2v\",\n     \"input\": {\n            \"image_url\": \"https://img.alicdn.com/imgextra/i3/O1CN011FObkp1T7Ttowoq4F_!!6000000002335-0-tps-1440-1797.jpg\",\n            \"audio_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250825/iaqpio/input_audio.MP3\"\n        },\n        \"parameters\": {\n            \"resolution\": \"480P\"\n        }\n    }'"
+            "curl": "curl 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image2video/video-synthesis' \\\n --header 'X-DashScope-Async: enable' \\\n --header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n --header 'Content-Type: application/json' \\\n --data '{\n     \"model\": \"wan2.2-s2v\",\n     \"input\": {\n            \"image_url\": \"https://img.alicdn.com/imgextra/i3/O1CN011FObkp1T7Ttowoq4F_!!6000000002335-0-tps-1440-1797.jpg\",\n            \"audio_url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250825/iaqpio/input_audio.MP3\"\n        },\n        \"parameters\": {\n            \"resolution\": \"480P\"\n        }\n    }'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/wan-s2v-api"
           }
         }
       }

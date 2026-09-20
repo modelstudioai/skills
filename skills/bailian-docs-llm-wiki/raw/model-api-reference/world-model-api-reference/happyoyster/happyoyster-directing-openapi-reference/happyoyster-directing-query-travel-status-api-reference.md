@@ -26,7 +26,7 @@
 
 #### 请求参数
 
-查询Travel状态
+#### 查询Travel状态
 
 ```
 curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-directing/openapi/v1/travels/status?encryptedTravelId={encryptedTravelId}&clientStreamStatus=PLAYING&clientStreamStatusTimeMs=1788940800000' \
@@ -64,7 +64,7 @@ Directing 加密 Travel ID。由[客户端进入房间](raw/model-api-reference/
 
 #### 响应参数
 
-Travel运行中
+#### Travel运行中
 
 ```
 {
@@ -102,6 +102,29 @@ Travel运行中
 }
 ```
 
+#### Travel失败
+
+`errorCode` 取值见[错误码](https://help.aliyun.com/zh/model-studio/happyoyster-error-code#ho-ec-travel-errorcode-title)。
+
+```
+{
+    "code": 0,
+    "message": null,
+    "data": {
+        "encryptedTravelId": "trvl_a1b2****",
+        "status": "failed",
+        "rtcStatus": null,
+        "updateTime": null,
+        "userInstructions": null,
+        "chapters": null,
+        "characterActions": null,
+        "environmentActions": null,
+        "errorCode": "TRAVEL_SESSION_INIT_FAILED",
+        "errorMessage": "Failed to allocate inference resources."
+    }
+}
+```
+
 **code** `integer`
 
 返回码。`0` 表示成功，非 0 为错误码。
@@ -128,7 +151,7 @@ Travel 生命周期状态：
 -   `pending`：排队或等待服务资源
 -   `running`：正在运行，可按创建子模式调用支持的控制接口
 -   `paused`：已完成服务端暂停；可恢复或回溯
--   `failed`：Travel 失败
+-   `failed`：Travel 失败；原因见 `errorCode` / `errorMessage`
 -   `completed`：Travel 已结束，可查询产物
 
 **rtcStatus** `string`
@@ -147,13 +170,21 @@ Travel 生命周期状态：
 
 章节列表；尚未触发章节检测时为 `null`。每项含 `chapterId`、`title`、`brief`、`actRange`、`startTime`、`endTime`、`chapterImage`。
 
-**characterActions** `array`
+**characterActions** `array<string> | null`
 
-Directing 模型固定为空数组。
+Directing 不支持 SDK 动作控制，固定返回空数组；`failed` 时为 `null`。
 
-**environmentActions** `array`
+**environmentActions** `array<string> | null`
 
-Directing 模型固定为空数组。
+Directing 不支持 SDK 环境动作控制，固定返回空数组；`failed` 时为 `null`。
+
+**errorCode** `string`
+
+仅 `status=failed` 时返回；结构化失败原因代码，取值见[错误码](https://help.aliyun.com/zh/model-studio/happyoyster-error-code#ho-ec-travel-errorcode-title)。
+
+**errorMessage** `string`
+
+与 `errorCode` 同时返回；英文失败说明。请按 `errorCode` 分支处理，不要匹配 `errorMessage` 文案。
 
 ## 前置状态与调用注意事项
 
@@ -161,6 +192,7 @@ Directing 模型固定为空数组。
 -   `running` 状态可按 `creationModel` 调用支持的控制接口：普通模式可 `instruct`、`pause`、`resume`、`rewind`、`end`；剧本模式可 `update-script`、`pause`、`resume`、`rewind`、`end`。
 -   本接口不返回 `mode`、`aspectRatio`、`playUrl`、`bgmUrl` 或 `sessionId`；播流配置以[进入房间](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference/happyoyster-directing-enter-travel-api-reference.md)响应为准。
 -   `clientStreamStatus` 是客户端播放侧心跳，`rtcStatus` 是服务端推流侧状态，两者不可互相替代。
+-   `failed` 是终态，不会再产生成片；请按 `errorCode` 展示失败原因，不要展示为「尚未完成」。
 
 ## 错误码
 

@@ -112,6 +112,18 @@ SDK 以全局单例方式持有引擎实例，通过 `AoqClientEngine` 类对外
 
 设置或移除远端视频渲染窗口
 
+getScreenSourceList
+
+获取屏幕和窗口源
+
+startScreenCapture
+
+开始屏幕采集
+
+stopScreenCapture
+
+停止屏幕采集
+
 ### 视频编码与外部输入
 
 **接口**
@@ -301,6 +313,29 @@ SDK 以全局单例方式持有引擎实例，通过 `AoqClientEngine` 类对外
 收到实时数据消息回调
 
 ## 接口详情
+
+### 屏幕采集
+
+```
+virtual int startScreenCapture(const AoqScreenCaptureConfig& config);
+virtual int stopScreenCapture();
+```
+
+`config` 为屏幕采集配置。屏幕画面通过 `AoqTrackTypeScreen` 轨道发送。
+
+返回值：0 表示成功；非 0 表示失败。 接口同步返回，不提供 `onScreenCaptureStateChanged` 回调。
+
+先调用 `getScreenSourceList` 获取屏幕或窗口源，再将选定的 `sourceId` 和 `sourceType` 传入采集配置。
+
+外部原始帧：设置 `isExternal=true` 后，通过 `pushExternalVideoCapturedFrame` 输入 Screen 轨道的原始帧，由 SDK 编码。外部已编码帧：先通过 `setVideoEncoderConfig` 将 Screen 轨道设置为外部编码，再调用 `pushExternalVideoEncodedFrame`。
+
+#### getScreenSourceList
+
+```
+virtual AoqScreenSourceList getScreenSourceList();
+```
+
+返回屏幕源列表。使用后必须调用 `AoqScreenSourceList::screenSourceListFree(list)` 释放列表内存。
 
 ### 引擎生命周期
 
@@ -803,6 +838,8 @@ virtual int pushExternalVideoCapturedFrame(AoqTrackType trackType, const AoqVide
 
 路由目标，传 `AoqTrackTypeVideo`
 
+；也支持 AoqTrackTypeScreen
+
 `frame`
 
 `const AoqVideoFrame&`
@@ -832,6 +869,8 @@ virtual int pushExternalVideoEncodedFrame(AoqTrackType trackType, const AoqVideo
 `AoqTrackType`
 
 路由目标，传 `AoqTrackTypeVideo`
+
+；也支持 AoqTrackTypeScreen
 
 `frame`
 
@@ -864,6 +903,8 @@ virtual int enableSendMediaStream(AoqTrackType trackType, bool enable);
 `AoqTrackType`
 
 路由目标，支持 `AoqTrackTypeAudio` / `AoqTrackTypeVideo`
+
+；支持 AoqTrackTypeScreen
 
 `enable`
 
@@ -1802,7 +1843,7 @@ virtual void onPlaybackAudioFrame(const AoqAudioFrameData& data) = 0;
 本地采集后裸数据回调（前处理前）。通过 `enableVideoFrameObserver` 设置 `videoSource = AoqVideoSourceCaptured` 开启。
 
 ```
-virtual bool onCapturedVideoFrame(AoqVideoFrame& frame) = 0;
+virtual bool onCapturedVideoFrame(AoqTrackType trackType, AoqVideoFrame& frame) = 0;
 ```
 
 参数
@@ -1818,6 +1859,12 @@ virtual bool onCapturedVideoFrame(AoqVideoFrame& frame) = 0;
 `AoqVideoFrame&`
 
 采集视频帧数据，详见 `AoqVideoFrame`
+
+trackType
+
+AoqTrackType
+
+视频轨道类型，支持 Video / Screen。
 
 返回值：`true` 数据已修改、需写回 SDK；`false` 只读。
 
@@ -1883,6 +1930,202 @@ virtual bool onRemoteVideoFrame(AoqTrackType trackType, AoqVideoFrame& frame) = 
 
 ## 数据类型与枚举
 
+### AoqScreenCaptureStateCode
+
+屏幕采集状态枚举。当前 SDK 已定义该类型，但没有对应的状态回调。
+
+枚举值
+
+值
+
+说明
+
+AoqScreenCaptureNone
+
+0
+
+无
+
+AoqScreenCaptureStarting
+
+1
+
+启动中
+
+AoqScreenCaptureStarted
+
+2
+
+已启动
+
+AoqScreenCaptureStopping
+
+3
+
+停止中
+
+AoqScreenCaptureStopped
+
+4
+
+已停止
+
+AoqScreenCaptureFail
+
+5
+
+失败
+
+### AoqScreenCaptureState
+
+字段
+
+类型
+
+说明
+
+state
+
+AoqScreenCaptureStateCode
+
+屏幕采集状态码。
+
+reason
+
+int
+
+错误码，对应 AoqErrorCode；正常为 0。
+
+### AoqScreenSourceList
+
+字段/方法
+
+类型
+
+说明
+
+sourceCount
+
+int
+
+源数量
+
+sourceList
+
+const AoqScreenSourceInfo\*
+
+源数组；使用后调用 screenSourceListFree(list) 释放。
+
+screenSourceListFree(list)
+
+static void
+
+释放列表内存。调用方必须调用，否则会发生内存泄漏。
+
+### AoqScreenSourceInfo
+
+字段
+
+类型
+
+默认值
+
+说明
+
+sourceType
+
+AoqScreenShareSourceType
+
+Desktop
+
+源类型
+
+sourceId
+
+int64\_t
+
+0
+
+源 ID
+
+sourceName
+
+const char\*
+
+nullptr
+
+源名称
+
+sourceIsSelf
+
+bool
+
+false
+
+是否为自身进程窗口
+
+### AoqScreenShareSourceType
+
+枚举值
+
+值
+
+说明
+
+AoqScreenShareSourceTypeDesktop
+
+0
+
+整个桌面
+
+AoqScreenShareSourceTypeWindow
+
+1
+
+指定窗口
+
+### AoqScreenCaptureConfig
+
+字段
+
+类型
+
+默认值
+
+说明
+
+isExternal
+
+bool
+
+false
+
+是否由应用提供屏幕原始帧。
+
+sourceId
+
+int64\_t
+
+0
+
+屏幕源 ID。
+
+sourceType
+
+AoqScreenShareSourceType
+
+AoqScreenShareSourceTypeDesktop
+
+屏幕源类型。
+
+appGroup
+
+const char\*
+
+nullptr
+
+iOS 专用，本平台不使用。
+
 ### 通用类型
 
 #### AoqCreateConfig
@@ -1920,6 +2163,22 @@ SDK 工作目录
 `nullptr`
 
 扩展参数（JSON 字符串）
+
+maxEncodedVideoFrameBytes
+
+int
+
+190 × 1024
+
+编码后单帧大小上限（字节），仅用于 SDK 内部 JPEG 编码。0 表示关闭限制。
+
+enableDropOversizedVideoFrame
+
+bool
+
+false
+
+仅用于 SDK 内部 JPEG 编码：降至最低质量后仍超限时，是否允许丢弃该帧。
 
 #### AoqConnectConfig
 
@@ -2026,6 +2285,14 @@ Relay 接入点。
 `0`
 
 服务端端口
+
+tcp\_port
+
+int
+
+0
+
+TCP 降级端口；0 表示使用 SDK 默认端口 443。
 
 #### AoqTrackParam
 
@@ -2561,6 +2828,24 @@ track 类型
 
 渲染绘制错误
 
+AoqECScreen
+
+300
+
+屏幕共享通用错误
+
+AoqECScreenAuthFailed
+
+310
+
+屏幕共享授权失败
+
+AoqECScreenStartFailed
+
+311
+
+屏幕共享启动失败
+
 #### AoqWarningCode
 
 警告码枚举。
@@ -2682,6 +2967,12 @@ track 类型
 2
 
 数据消息轨道
+
+AoqTrackTypeScreen
+
+3
+
+屏幕共享轨道，仅支持上行。
 
 #### AoqEncoderType
 
@@ -2867,7 +3158,7 @@ track 类型
 
 `AoqEncoderType`
 
-`AudioPCM`
+`AudioOpus`
 
 编码格式
 
@@ -3503,45 +3794,65 @@ PCM 输入轮次（用于 `pushAudioExternalStreamData` 消费完通知）
 
 本地音量提示配置。
 
-**字段**
+字段
 
-**类型**
+类型
 
-**默认值**
+默认值
 
-**说明**
+说明
 
-`interval`
+reportSpeech
 
-`int`
+bool
 
-`0`
+false
 
-回调间隔（ms）；<=0 关闭回调，>0 且 <10 时按 10 处理
+是否检测人声。
 
-`smooth`
+interval
 
-`int`
+int
 
-`3`
+0
 
-音量平滑系数，范围 \[0, 10\]，取值越大越平滑
+回调间隔（毫秒）；小于等于 0 时关闭，大于 0 且小于 10 时按 10 处理。
+
+smooth
+
+int
+
+3
+
+平滑系数，范围 0～10；越大越平滑。
 
 #### AoqAudioVolume
 
 本地音量信息。
 
-**字段**
+字段
 
-**类型**
+类型
 
-**说明**
+默认值
 
-`volume`
+说明
 
-`int`
+isSpeech
 
-平滑后的瞬时音量，范围 \[0, 255\]
+bool
+
+false
+
+是否为人声。
+
+volume
+
+int
+
+0
+
+平滑后的瞬时音量，范围 0～255。
 
 ### 视频类型
 
@@ -3754,6 +4065,24 @@ I420 三平面步长
 `int64_t`
 
 时间戳（ms）；0 时 SDK 用本地时钟补
+
+`nativePixelBuffer`
+
+`void*`
+
+跨平台保留字段，Windows 不使用。
+
+`textureId`
+
+`int`
+
+跨平台保留字段，Windows 不使用。
+
+`transformMatrix`
+
+`float[16]`
+
+跨平台保留字段，Windows 不使用。
 
 #### AoqVideoEncodedFrame
 
@@ -4168,3 +4497,11 @@ JPEG
 `false`
 
 是否对回调数据应用镜像
+
+trackType
+
+AoqTrackType
+
+AoqTrackTypeVideo
+
+需要观察的视频轨道；仅支持 Video / Screen。

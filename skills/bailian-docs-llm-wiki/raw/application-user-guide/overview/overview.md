@@ -1,27 +1,105 @@
-# 参考
+# 服务渠道
 
-迁移指引、配额限制与常见问题的入口。
+了解已定稿但生产入口待发布的 REST 字段协议，以及 Skill 的产品规划状态。
 
-这一章是查阅性质的内容，不需要按顺序读。
+## 接入方式对比
 
-你要找什么
+渠道
 
-看哪一页
+类型
 
-以前在阿里云百炼建过数据连接，想搬到新版
+适用场景
 
-[数据连接迁移](raw/application-user-guide/overview/overview/migration.md)
+说明
 
-能存多少、能建多少、字段多长
+**REST API**
 
-[配额与限制](raw/application-user-guide/overview/overview/limits.md)
+REST
 
-报错了，或者某个操作没反应
+自有后端服务
 
-[常见问题](raw/application-user-guide/overview/overview/faq.md)
+DashScope HTTP 接口
 
-**警告**旧版数据连接的迁移入口开放至 **2026 年 9 月 30 日**。如果你有旧版连接，先看[数据连接迁移](raw/application-user-guide/overview/overview/migration.md)。
+**Agent Skill**
 
-## 还是没找到答案
+技能包
 
-[常见问题](raw/application-user-guide/overview/overview/faq.md)里没有覆盖的情况，在阿里云百炼控制台提交工单，附上连接器名称和出错时间。需要扩容配额也走同一个入口。
+Qoder / Claude Code / Codex
+
+以技能包形式接入，AI 编码工具自动加载
+
+## REST API
+
+所有文档解析与信息抽取能力通过 DashScope API 提供，服务地址为：
+
+```
+https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/parse-x
+```
+
+鉴权方式使用百炼的 API-KEY：
+
+```
+Authorization: Bearer <DASHSCOPE_API_KEY>
+```
+
+API Key 在[**控制台 API Key 页**](raw/model-api-reference/preparations/get-api-key.md)创建，系统根据 API Key 自动路由到对应业务空间
+
+接口
+
+方法
+
+业务路径
+
+用途
+
+解析任务提交
+
+`POST`
+
+`/api/v2/apps/parse-x/parse/submit`
+
+提交 Parse 任务
+
+解析任务查询
+
+`POST`
+
+`/api/v2/apps/parse-x/parse/result`
+
+查询 Parse 状态、结果或分片
+
+抽取任务提交
+
+`POST`
+
+`/api/v2/apps/parse-x/extract/submit`
+
+提交 Extract 任务
+
+抽取任务查询
+
+`POST`
+
+`/api/v2/apps/parse-x/extract/result`
+
+查询 Extract 状态与结果
+
+完整接口列表见 [**API 参考**](raw/application-api-reference/overview.md)。
+
+## **Agent Skill**
+
+> 在终端中执行命令安装，请确保已安装 [Node.js](https://nodejs.org/) (≥18) 和 [skills](https://www.npmjs.com/package/skills/v/1.5.12) (≥1.5.12)
+
+支持Agent：qoder、qwen-code、claude-code、openclaw、codex、cursor、gemini-cli、github-copilot
+
+项目安装：
+
+```
+npx skills add "https://agenthub.aliyun-inc.com/api/skill-sources/alibabacloud-parse-x" --yes
+```
+
+全局安装：
+
+```
+npx skills add "https://agenthub.aliyun-inc.com/api/skill-sources/alibabacloud-parse-x" --yes -g
+```

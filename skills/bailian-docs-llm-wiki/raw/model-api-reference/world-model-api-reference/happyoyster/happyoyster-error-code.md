@@ -158,9 +158,46 @@ Travel 状态查询、控制、结束、产物查询。
 
 进房。稍后重试。
 
-## 模型隔离
+跨模型访问不泄露资源是否存在，World 统一返回 `code=403001`，Travel 统一返回 `code=404000`。
 
-为避免通过响应泄露其它模型资源是否存在，跨模型访问统一按“不存在”处理：
+## Travel 失败 errorCode
 
--   World 侧统一返回 `403001`。
--   Travel 侧统一返回 `404000`。
+查询 Travel 状态或列表时，`status=failed` 的条目会额外返回结构化字段 `errorCode` 与英文说明 `errorMessage`（失败响应结构见对应接口文档）。同一 `errorCode` 在查询接口和结束 Travel 响应中的 `errorMessage` 文案可能不同；请按 `errorCode` 分支处理，不要匹配 `errorMessage`。
+
+errorCode
+
+errorMessage
+
+说明
+
+`TRAVEL_SESSION_INIT_FAILED`
+
+`Failed to allocate inference resources.`
+
+进房时推理会话初始化失败，多为推理资源不足
+
+`TRAVEL_NO_STREAM_AUTO_END`
+
+`No video stream was received before timeout.`
+
+客户端超时未收到推流，通过结束 Travel 传入 `failCode` 结束
+
+`TRAVEL_STREAM_CREATE_FAILED`
+
+`Failed to create the video stream.`
+
+推流通道创建失败
+
+`CONTENT_VIDEO_MODERATION_REJECTED`
+
+`Something went wrong.`
+
+体验画面被内容安全策略中止
+
+`TRAVEL_RUNTIME_FAILED`
+
+`The experience was interrupted by a runtime error.`
+
+其它运行期失败，或服务端未记录具体原因
+
+未列出的 `errorCode` 按未知失败处理即可。

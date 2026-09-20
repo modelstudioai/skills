@@ -80,6 +80,10 @@ setAudioSessionRestriction:
 
 设置 AVAudioSession 控制权限
 
+enableLocalAudioVolumeIndication:
+
+配置本地采集音量提示
+
 ### 音频编码配置
 
 **接口**
@@ -120,6 +124,14 @@ setRemoteView:canvas:
 
 设置或移除远端视频渲染窗口
 
+startScreenCapture:
+
+开始屏幕采集
+
+stopScreenCapture
+
+停止屏幕采集
+
 ### 视频编码与外部输入
 
 **接口**
@@ -137,6 +149,10 @@ pushExternalVideoCapturedFrame:frame:
 pushExternalVideoEncodedFrame:frame:
 
 推送外部已编码视频帧
+
+setVideoDecoderConfig:
+
+设置视频解码参数
 
 ### 媒体流发送控制
 
@@ -312,7 +328,67 @@ AoqVideoFrameDelegate
 
 视频帧数据监听协议
 
+onLocalAudioVolumeIndication
+
+本地采集音量回调
+
+onScreenCaptureStateChanged
+
+屏幕采集状态回调
+
 ## 接口详情
+
+### 屏幕采集
+
+```
+- (int)startScreenCapture:(AoqScreenCaptureConfig * _Nonnull)config;
+- (int)stopScreenCapture;
+```
+
+`config` 为屏幕采集配置。屏幕画面通过 `AoqTrackTypeScreen` 轨道发送。
+
+启动返回 0 表示请求已受理，最终状态通过 `onScreenCaptureStateChanged` 通知；非 0 表示同步拒绝，不重复报告失败事件。停止返回 0 表示成功，非 0 表示失败，停止结果由该回调通知。
+
+`isExternal=NO` 时使用 Broadcast Upload Extension。应用需集成并配置 `AoqScreenShare.framework`，展示系统广播选择器；等待超时通过 `onScreenCaptureStateChanged:` 回调报告失败，错误码为 `AoqECScreenStartFailed`。无需等待 Started 才启用发送。
+
+外部原始帧：设置 `isExternal=YES` 后，不启用 Extension 接收通道，通过 `pushExternalVideoCapturedFrame` 输入 Screen 轨道的原始帧，由 SDK 编码。外部已编码帧：先通过 `setVideoEncoderConfig` 将 Screen 轨道设置为外部编码，再调用 `pushExternalVideoEncodedFrame`；不需要调用 `startScreenCapture`。
+
+#### onScreenCaptureStateChanged
+
+```
+@optional
+- (void)onScreenCaptureStateChanged:(AoqScreenCaptureState * _Nonnull)state;
+```
+
+`state` 为屏幕采集状态。Started 表示采集或外部输入已就绪，不代表媒体已发送。屏幕采集失败不重复通过 `onError` 上报。
+
+### setVideoDecoderConfig:
+
+```
+- (int)setVideoDecoderConfig:(AoqVideoCodecConfig * _Nonnull)config;
+```
+
+`config` 为视频解码配置。仅以下字段生效：`trackType`, `codecType`, `width`, `height`, `fps`, `bitrate`. 其余字段仅用于编码。
+
+Screen 不支持下行解码。`config.trackType` 为 Screen 时返回 `AoqECUnSupport`，配置不下发。
+
+返回值：0 表示成功；非 0 表示失败。
+
+### enableLocalAudioVolumeIndication:
+
+```
+- (int)enableLocalAudioVolumeIndication:(AoqAudioVolumeIndicationConfig * _Nonnull)config;
+```
+
+`config` 为音量提示配置。开启后按 `config.interval` 周期回调；需在 `startAudioCapture` 之后调用此接口。
+
+返回值：0 表示成功；非 0 表示失败。
+
+```
+- (void)onLocalAudioVolumeIndication:(AoqAudioVolume * _Nonnull)volume;
+```
+
+回调参数 `volume` 为本地采集音量。
 
 ### 引擎生命周期
 
@@ -400,7 +476,7 @@ trackType 参数传 AoqTrackTypeVideo。
 - (int)enableSendMediaStream:(AoqTrackType)trackType enable:(BOOL)enable;
 ```
 
-trackType 支持 AoqTrackTypeAudio / AoqTrackTypeVideo。
+trackType 支持 AoqTrackTypeAudio / AoqTrackTypeVideo / AoqTrackTypeScreen。
 
 ### 音频文件播放
 
@@ -449,7 +525,7 @@ trackType 支持 AoqTrackTypeAudio / AoqTrackTypeVideo。
 
 ### AoqEngineDelegate 回调
 
-所有回调方法均为 @required。
+`onScreenCaptureStateChanged:` 为 `@optional`，其余 `AoqEngineDelegate` 回调方法为 `@required`。
 
 ```
 - (void)onError:(NSInteger)code message:(NSString * _Nonnull)message;
@@ -476,12 +552,330 @@ trackType 支持 AoqTrackTypeAudio / AoqTrackTypeVideo。
 #### AoqVideoFrameDelegate (@optional)
 
 ```
-- (BOOL)onCapturedVideoFrame:(AoqVideoFrame * _Nonnull)frame;
+- (BOOL)onCapturedVideoFrame:(AoqTrackType)trackType frame:(AoqVideoFrame * _Nonnull)frame;
 - (BOOL)onPreEncodeVideoFrame:(AoqTrackType)trackType frame:(AoqVideoFrame * _Nonnull)frame;
 - (BOOL)onRemoteVideoFrame:(AoqTrackType)trackType frame:(AoqVideoFrame * _Nonnull)frame;
 ```
 
 ## 数据类型与枚举
+
+### AoqScreenCaptureState
+
+字段
+
+类型
+
+默认值
+
+说明
+
+state
+
+AoqScreenCaptureStateCode
+
+AoqScreenCaptureNone
+
+屏幕采集状态。
+
+reason
+
+NSInteger
+
+0
+
+正常为 0；失败时为 AoqErrorCode 错误码。
+
+### AoqScreenCaptureStateCode
+
+枚举值
+
+值
+
+说明
+
+AoqScreenCaptureNone
+
+0
+
+无
+
+AoqScreenCaptureStarting
+
+1
+
+启动中
+
+AoqScreenCaptureStarted
+
+2
+
+输入已就绪，不表示媒体已发送
+
+AoqScreenCaptureStopping
+
+3
+
+停止中
+
+AoqScreenCaptureStopped
+
+4
+
+已停止
+
+AoqScreenCaptureFail
+
+5
+
+启动或运行失败
+
+### AoqScreenCaptureConfig
+
+字段
+
+类型
+
+默认值
+
+说明
+
+isExternal
+
+BOOL
+
+NO
+
+是否由应用提供屏幕原始帧。
+
+appGroup
+
+NSString \*
+
+nil
+
+可选的主 App 与 Broadcast Extension 共享 AppGroup 标识。为空时通过 Socket 握手传递配置，两者均无需申请 App Groups 能力；外部采集时无效。
+
+### AoqVideoCodecConfig
+
+字段
+
+类型
+
+默认值
+
+说明
+
+trackType
+
+AoqTrackType
+
+AoqTrackTypeVideo
+
+轨道类型
+
+codecType
+
+AoqEncoderType
+
+AoqEncoderTypeVideoH264
+
+编解码格式
+
+width
+
+NSInteger
+
+540
+
+宽度（像素）
+
+height
+
+NSInteger
+
+960
+
+高度（像素）
+
+fps
+
+NSInteger
+
+5
+
+帧率
+
+bitrate
+
+NSInteger
+
+500000
+
+码率（bps）
+
+minBitrate
+
+NSInteger
+
+128000
+
+最小码率（bps）
+
+keyframeInterval
+
+NSInteger
+
+2
+
+关键帧间隔（秒）
+
+mirrorMode
+
+AoqMirrorMode
+
+AoqMirrorModeDisabled
+
+镜像模式
+
+orientationMode
+
+AoqOrientationMode
+
+AoqOrientationModeAuto
+
+方向模式
+
+isExternal
+
+BOOL
+
+NO
+
+是否由应用输入已编码帧。
+
+### AoqAudioVolume
+
+字段
+
+类型
+
+默认值
+
+说明
+
+isSpeech
+
+BOOL
+
+NO
+
+是否为人声。
+
+volume
+
+NSInteger
+
+0
+
+平滑后的瞬时音量，范围 0～255。
+
+### AoqAudioVolumeIndicationConfig
+
+字段
+
+类型
+
+默认值
+
+说明
+
+reportSpeech
+
+BOOL
+
+NO
+
+是否检测人声。
+
+interval
+
+NSInteger
+
+0
+
+回调间隔（毫秒）；小于等于 0 时关闭，大于 0 且小于 10 时按 10 处理。
+
+smooth
+
+NSInteger
+
+3
+
+平滑系数，范围 0～10；越大越平滑。
+
+### AoqTrackParam.trackMode
+
+字段
+
+类型
+
+默认值
+
+说明
+
+trackMode
+
+AoqTrackMode
+
+AoqTrackModeSegment
+
+仅对音频下行生效。
+
+### AoqTrackMode
+
+枚举值
+
+值
+
+说明
+
+AoqTrackModeSegment
+
+0
+
+分段：按语义片段（如一句话）交付数据；仅对音频下行生效。
+
+AoqTrackModeStream
+
+1
+
+流式：连续交付数据；仅对音频下行生效。
+
+### AoqCreateConfig（v1.3.0 新增字段）
+
+字段
+
+类型
+
+默认值
+
+说明
+
+maxEncodedVideoFrameBytes
+
+NSInteger
+
+190 × 1024
+
+编码后单帧大小上限（字节），仅用于 SDK 内部 JPEG 编码。
+
+enableDropOversizedVideoFrame
+
+BOOL
+
+NO
+
+仅用于 SDK 内部 JPEG 编码：降至最低质量后仍超限时，是否允许丢弃该帧。
 
 ### AoqErrorCode
 
@@ -491,179 +885,197 @@ trackType 支持 AoqTrackTypeAudio / AoqTrackTypeVideo。
 
 **说明**
 
-AoqErrorCodeOK
+AoqECOK
 
 0
 
 成功
 
-AoqErrorCodeParamInvalid
+AoqECParamInvalid
 
 1
 
 参数非法
 
-AoqErrorCodeStateInvalid
+AoqECStateInvalid
 
 2
 
 状态非法
 
-AoqErrorCodeUnSupport
+AoqECUnSupport
 
 3
 
 不支持的操作
 
-AoqErrorCodeAudio
+AoqECAudio
 
 100
 
 音频通用错误
 
-AoqErrorCodeAudioExternalBufferFull
+AoqECAudioExternalBufferFull
 
 110
 
 外部音频缓冲区满
 
-AoqErrorCodeAudioDevice
+AoqECAudioDevice
 
 120
 
 音频设备通用错误
 
-AoqErrorCodeAudioDeviceRecordingAuthFailed
+AoqECAudioDeviceRecordingAuthFailed
 
 121
 
 录音权限未获取
 
-AoqErrorCodeAudioDeviceRecordingOccupied
+AoqECAudioDeviceRecordingOccupied
 
 122
 
 录音设备被占用
 
-AoqErrorCodeAudioDeviceRecordingBackgroundStart
+AoqECAudioDeviceRecordingBackgroundStart
 
 123
 
 后台启动录音失败
 
-AoqErrorCodeAudioDeviceRecordingStartFail
+AoqECAudioDeviceRecordingStartFail
 
 124
 
 录音启动失败
 
-AoqErrorCodeAudioDevicePlayoutOccupied
+AoqECAudioDevicePlayoutOccupied
 
 125
 
 播放设备被占用
 
-AoqErrorCodeAudioDevicePlayoutBackgroundStart
+AoqECAudioDevicePlayoutBackgroundStart
 
 126
 
 后台启动播放失败
 
-AoqErrorCodeAudioDevicePlayoutStartFail
+AoqECAudioDevicePlayoutStartFail
 
 127
 
 播放启动失败
 
-AoqErrorCodeAudioDeviceEarpieceRequiresVoipMode
+AoqECAudioDeviceEarpieceRequiresVoipMode
 
 128
 
 听筒输出需要 VoIP 模式
 
-AoqErrorCodeVideo
+AoqECVideo
 
 200
 
 视频通用错误
 
-AoqErrorCodeVideoExternalBufferFull
+AoqECVideoExternalBufferFull
 
 210
 
 外部视频缓冲区满
 
-AoqErrorCodeVideoExternalCaptureNotEnabled
+AoqECVideoExternalCaptureNotEnabled
 
 211
 
 外部视频采集未启用
 
-AoqErrorCodeVideoExternalEncoderNotEnabled
+AoqECVideoExternalEncoderNotEnabled
 
 212
 
 外部视频编码未启用
 
-AoqErrorCodeVideoDevice
+AoqECVideoDevice
 
 220
 
 视频设备通用错误
 
-AoqErrorCodeVideoDeviceCameraOpenFail
+AoqECVideoDeviceCameraOpenFail
 
 221
 
 摄像头打开失败
 
-AoqErrorCodeVideoDeviceCameraAuthFailed
+AoqECVideoDeviceCameraAuthFailed
 
 222
 
 摄像头权限未获取
 
-AoqErrorCodeVideoDeviceCameraOccupied
+AoqECVideoDeviceCameraOccupied
 
 223
 
 摄像头被占用
 
-AoqErrorCodeVideoDeviceCameraRunningError
+AoqECVideoDeviceCameraRunningError
 
 224
 
 摄像头运行异常
 
-AoqErrorCodeVideoCodec
+AoqECVideoCodec
 
 230
 
 视频编解码通用错误
 
-AoqErrorCodeVideoCodecEncoderInitFail
+AoqECVideoCodecEncoderInitFail
 
 231
 
 视频编码器初始化失败
 
-AoqErrorCodeVideoRender
+AoqECVideoRender
 
 240
 
 视频渲染通用错误
 
-AoqErrorCodeVideoRenderCreateFail
+AoqECVideoRenderCreateFail
 
 241
 
 视频渲染创建失败
 
-AoqErrorCodeVideoRenderDrawError
+AoqECVideoRenderDrawError
 
 242
 
 视频渲染绘制错误
+
+AoqECScreen
+
+300
+
+屏幕共享通用错误
+
+AoqECScreenAuthFailed
+
+310
+
+屏幕共享授权失败
+
+AoqECScreenStartFailed
+
+311
+
+屏幕共享启动失败
 
 ### AoqTrackType
 
@@ -691,7 +1103,15 @@ AoqTrackTypeData
 
 数据消息轨道
 
+AoqTrackTypeScreen
+
+3
+
+屏幕共享轨道，仅支持上行。
+
 ### AoqConnectConfig
+
+`subscribeTracks` 不能包含 `AoqTrackTypeScreen`，否则 `connect` 返回 `AoqECUnSupport`，不发起连接。`setRemoteView` 不支持 Screen，传入时返回 `AoqECUnSupport`。
 
 **字段**
 
