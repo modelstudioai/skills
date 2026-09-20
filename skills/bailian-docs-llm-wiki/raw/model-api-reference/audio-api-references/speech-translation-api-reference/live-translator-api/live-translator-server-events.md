@@ -995,6 +995,10 @@ VAD 检测到新一轮语音开始时，是否打断当前正在生成的翻译�
 
 关联的消息项唯一标识符。
 
+**speaker\_id**`integer`
+
+适用于 `qwen3.8-livetranslate-flash-realtime`。启用 `speaker_detection` 时返回的说话人标识。可通过本事件的 `item_id` 关联语音识别结果，并通过翻译消息项的 `previous_item_id` 关联译文。
+
 ```
 {
     "event_id": "event_xxx",

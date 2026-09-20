@@ -32,7 +32,7 @@
 
 #### 请求参数
 
-客户端进入房间
+#### 客户端进入房间
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-adventure/openapi/v1/travels/enter-travel' \
@@ -73,7 +73,7 @@ API Key 鉴权。不强制主 API Key，主 API Key 或临时 API Key 均可调�
 
 #### 响应参数
 
-进房成功
+#### 进房成功
 
 ```
 {

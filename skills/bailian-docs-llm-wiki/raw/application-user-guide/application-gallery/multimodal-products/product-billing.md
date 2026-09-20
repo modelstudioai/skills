@@ -301,7 +301,7 @@ qwen-deep-research
 
 知识库运行、向量化、检索等服务成本
 
-知识库服务（详情请参见[知识库计费说明](raw/application-user-guide/knowledge-base/billing-for-knowledge-base.md)）
+知识库服务（详情请参见[知识库计费说明](raw/application-user-guide/knowledge-base/reference/billing-for-knowledge-base.md)）
 
 关键区别：
 

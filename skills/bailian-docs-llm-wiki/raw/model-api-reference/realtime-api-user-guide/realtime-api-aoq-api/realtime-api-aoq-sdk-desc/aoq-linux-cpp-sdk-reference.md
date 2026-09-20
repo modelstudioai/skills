@@ -104,6 +104,14 @@ setRemoteView
 
 设置或移除远端视频渲染窗口（Linux 无渲染实现）
 
+startScreenCapture
+
+开始屏幕采集
+
+stopScreenCapture
+
+停止屏幕采集
+
 ### 视频编解码与外部输入
 
 **接口**
@@ -318,6 +326,21 @@ IVideoFrameObserver
 
 ## 接口详情
 
+### 屏幕采集
+
+```
+virtual int startScreenCapture(const AoqScreenCaptureConfig& config);
+virtual int stopScreenCapture();
+```
+
+`config` 为屏幕采集配置。屏幕画面通过 `AoqTrackTypeScreen` 轨道发送。
+
+返回值：0 表示成功；非 0 表示失败。 接口同步返回，不提供 `onScreenCaptureStateChanged` 回调。
+
+Linux 仅支持外部原始帧输入，必须设置 `isExternal=true`。不支持内部屏幕采集或屏幕源枚举，配置中不存在 `sourceId` 和 `sourceType` 字段。
+
+外部原始帧：设置 `isExternal=true` 后，通过 `pushExternalVideoCapturedFrame` 输入 Screen 轨道的原始帧，由 SDK 编码。外部已编码帧：先通过 `setVideoEncoderConfig` 将 Screen 轨道设置为外部编码，再调用 `pushExternalVideoEncodedFrame`；不需要调用 `startScreenCapture`。
+
 ### 引擎生命周期
 
 #### createEngine
@@ -528,7 +551,7 @@ AoqVideoFrame / AoqVideoEncodedFrame
 注意：
 
 -   `setVideoDecoderConfig` 为订阅侧 codec 提议，需在 `connect` 之前调用；解码时仅 `trackType/codecType/width/height/fps/bitrate` 生效。
--   `pushExternalVideoCapturedFrame` 需先 `startVideoCapture(isExternal=true)`；未启动外部采集时返回 `AoqECVideoExternalCaptureNotEnabled(211)`，格式不支持时返回 `AoqECParamInvalid`，缓冲区满时返回 `AoqECVideoExternalBufferFull(210)`。
+-   `pushExternalVideoCapturedFrame` Video 轨道需先调用 `startVideoCapture(isExternal=true)`，Screen 轨道需先调用 `startScreenCapture(isExternal=true)`；未启动外部采集时返回 `AoqECVideoExternalCaptureNotEnabled(211)`，格式不支持时返回 `AoqECParamInvalid`，缓冲区满时返回 `AoqECVideoExternalBufferFull(210)`。
 -   `pushExternalVideoEncodedFrame` 需先 `setVideoEncoderConfig(isExternal=true)`，SDK 不做二次编码直接打包发送，当前仅支持 JPEG。
 -   `frame.timeStamp` 为 `0` 时由 SDK 使用本地时间补齐。
 
@@ -538,7 +561,7 @@ AoqVideoFrame / AoqVideoEncodedFrame
 virtual int enableSendMediaStream(AoqTrackType trackType, bool enable);
 ```
 
-控制本地某路媒体流是否发送，`trackType` 取 `AoqTrackTypeAudio` / `AoqTrackTypeVideo`。返回 `0` 表示调用已下发（异步执行）。建议初始化后先关闭发送，待 `onConnectionStatusChange` 上报 `AoqConnectionStatusConnected` 后再开启。
+控制本地某路媒体流是否发送，`trackType` 取 `AoqTrackTypeAudio` / `AoqTrackTypeVideo` 或 `AoqTrackTypeScreen`。返回 `0` 表示调用已下发（异步执行）。建议初始化后先关闭发送，待 `onConnectionStatusChange` 上报 `AoqConnectionStatusConnected` 后再开启。
 
 ### 音频文件播放
 
@@ -909,7 +932,7 @@ AoqAudioSourcePlayback
 class AOQ_API IVideoFrameObserver {
 public:
     virtual ~IVideoFrameObserver() {}
-    virtual bool onCapturedVideoFrame(AoqVideoFrame& frame) = 0;
+    virtual bool onCapturedVideoFrame(AoqTrackType trackType, AoqVideoFrame& frame) = 0;
     virtual bool onPreEncodeVideoFrame(AoqTrackType trackType, AoqVideoFrame& frame) = 0;
     virtual bool onRemoteVideoFrame(AoqTrackType trackType, AoqVideoFrame& frame) = 0;
 };
@@ -943,7 +966,99 @@ AoqVideoSourceRemote
 
 ## 数据类型与枚举
 
-全部类型定义于 `AoqClientEngine.h`，命名空间 `AoqClientSdk`。结构体均为 POD 并带默认值，直接声明即可获得表中默认值。标注「移动端专有」的字段在 Linux 下被条件编译屏蔽，**不存在于结构体中**。
+### AoqScreenCaptureStateCode
+
+屏幕采集状态枚举。当前 SDK 已定义该类型，但没有对应的状态回调。
+
+枚举值
+
+值
+
+说明
+
+AoqScreenCaptureNone
+
+0
+
+无
+
+AoqScreenCaptureStarting
+
+1
+
+启动中
+
+AoqScreenCaptureStarted
+
+2
+
+已启动
+
+AoqScreenCaptureStopping
+
+3
+
+停止中
+
+AoqScreenCaptureStopped
+
+4
+
+已停止
+
+AoqScreenCaptureFail
+
+5
+
+失败
+
+### AoqScreenCaptureState
+
+字段
+
+类型
+
+说明
+
+state
+
+AoqScreenCaptureStateCode
+
+屏幕采集状态码。
+
+reason
+
+int
+
+错误码，对应 AoqErrorCode；正常为 0。
+
+### AoqScreenCaptureConfig
+
+字段
+
+类型
+
+默认值
+
+说明
+
+isExternal
+
+bool
+
+false
+
+Linux 必须设置为 true，由应用采集屏幕并输入原始帧。
+
+appGroup
+
+const char\*
+
+nullptr
+
+iOS 专用，本平台不使用。
+
+全部类型定义于 `AoqClientEngine.h`，命名空间 `AoqClientSdk`。结构体均为 POD 并带默认值，直接声明即可获得表中默认值。字段是否在 Linux 下存在及适用范围，以各结构体的说明为准。`AoqScreenCaptureConfig.appGroup` 保留在结构体中，但仅供 iOS 使用；`sourceId` 和 `sourceType` 则在 Linux 下被条件编译屏蔽，不存在于结构体中。
 
 ### 通用类型
 
@@ -980,6 +1095,22 @@ const char\\\*
 nullptr
 
 扩展参数（JSON 字符串）
+
+maxEncodedVideoFrameBytes
+
+int
+
+190 × 1024
+
+编码后单帧大小上限（字节），仅用于 SDK 内部 JPEG 编码。0 表示关闭限制。
+
+enableDropOversizedVideoFrame
+
+bool
+
+false
+
+仅用于 SDK 内部 JPEG 编码：降至最低质量后仍超限时，是否允许丢弃该帧。
 
 **说明**字符串字段至少需保持到 `createEngine` 返回后，引擎内部按需拷贝。Android 的 `isBTScoMode` 为移动端专有，Linux 无此字段。
 
@@ -1106,6 +1237,14 @@ int
 0
 
 Relay 服务器端口
+
+tcp\_port
+
+int
+
+0
+
+TCP 降级端口；0 表示使用 SDK 默认端口 443。
 
 **说明**注意字段名为下划线风格 `route_index`，与其余字段的 camelCase 不同。
 
@@ -1549,6 +1688,12 @@ AoqTrackTypeData
 
 数据消息轨道
 
+AoqTrackTypeScreen
+
+3
+
+屏幕共享轨道，仅支持上行。
+
 #### AoqTrackMode
 
 **枚举值**
@@ -1646,8 +1791,6 @@ AoqConnectionStatusFailed
 连接失败
 
 #### AoqErrorCode
-
-**说明****命名注意**：C++ 头中枚举字面量为 `AoqEC*` 缩写形式（与 Android 的 `AoqErrorCode*` 全写不同），数值完全一致。
 
 **枚举值**
 
@@ -1828,6 +1971,24 @@ AoqECVideoRenderDrawError
 242
 
 视频渲染绘制错误
+
+AoqECScreen
+
+300
+
+屏幕采集通用错误
+
+AoqECScreenAuthFailed
+
+310
+
+屏幕采集授权失败
+
+AoqECScreenStartFailed
+
+311
+
+屏幕采集启动失败
 
 #### AoqWarningCode
 
@@ -2123,7 +2284,7 @@ codecType
 
 AoqEncoderType
 
-AoqEncoderTypeAudioPCM
+AoqEncoderTypeAudioOpus
 
 编码类型
 
@@ -3458,3 +3619,11 @@ bool
 false
 
 是否对回调数据应用镜像
+
+trackType
+
+AoqTrackType
+
+AoqTrackTypeVideo
+
+需要观察的视频轨道；仅支持 Video / Screen。

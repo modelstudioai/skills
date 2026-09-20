@@ -34,7 +34,7 @@ Managed Agent 的版本更新记录。
 
 ### 新功能
 
--   Webhook 事件订阅上线，支持将会话、智能体、部署等资源的状态变更事件推送到指定回调地址。接入方式见 [Webhook 事件订阅](raw/application-user-guide/managed-agents/managed-agents-webhook.md)，接口契约见 [Webhook API](raw/application-api-reference/managed-agents-api/webhook-api.md)。
+-   Webhook 通知上线，支持将会话、智能体、定时任务等资源的状态变更事件推送到指定回调地址。接入方式见 [Webhook 通知](raw/application-user-guide/managed-agents/managed-agents-session/managed-agents-webhook.md)，接口契约见 [Webhook API](raw/application-api-reference/managed-agents-api/webhook-api.md)。
 
 ## 2026-08-17
 

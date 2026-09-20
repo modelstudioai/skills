@@ -1,0 +1,106 @@
+{
+  "name": "Qwen-MT-Uni",
+  "description": "Qwen-MT-Uni 是 Qwen-MT 系列最新一代全模态翻译模型，除了提供文本和图片翻译之外，以文档与音频翻译为核心，覆盖 152 个语种互译：文档侧支持 Txt / Excel / PDF / PPT / Word 等多种格式，音频侧支持语音及视频音频翻译，均可直接输出保留原版式与时间轴的成品文件。模型针对翻译忠实度深度对齐，译文与原文严格对应、不增译漏译；并提供术语定制、版式重构、音频对齐等生产级交付能力，适用于文档出海、跨境电商、客服语音翻译等多语言场景。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text",
+          "Image",
+          "Audio"
+        ],
+        "request_modality": [
+          "Text",
+          "Image",
+          "Audio"
+        ]
+      },
+      "description": "Qwen-MT-Uni 是 Qwen-MT 系列最新一代全模态翻译模型，除了提供文本和图片翻译之外，以文档与音频翻译为核心，覆盖 152 个语种互译：文档侧支持 Txt / Excel / PDF / PPT / Word 等多种格式，音频侧支持离线语音翻译，均可直接输出保留原版式与时间轴的成品文件。模型针对翻译忠实度深度对齐，译文与原文严格对应、不增译漏译；并提供术语定制、版式重构、音频对齐等生产级交付能力，适用于文档出海、跨境电商、语音翻译等多语言场景。",
+      "features": [
+        "cache",
+        "model-experience"
+      ],
+      "provider": "qwen-domain-model",
+      "model": "qwen-mt-uni",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "65",
+          "timeBand": "standard",
+          "ntmAmountType": "mt_character_input_token",
+          "type": "mt_character_input_token",
+          "priceName": "输入：文本"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "20",
+          "timeBand": "standard",
+          "ntmAmountType": "mt_document_input_token",
+          "type": "mt_document_input_token",
+          "priceName": "输入：文档"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "32",
+          "timeBand": "standard",
+          "ntmAmountType": "mt_image_input_token",
+          "type": "mt_image_input_token",
+          "priceName": "输入：图片"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "400",
+          "timeBand": "standard",
+          "ntmAmountType": "mt_audio_input_token",
+          "type": "mt_audio_input_token",
+          "priceName": "输入：音频"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "async_user_queue_limit": 500,
+          "usage_limit": 259200,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 17,
+          "usage_limit_period": 6,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 3
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "async_user_queue_limit": 500,
+          "usage_limit": 259200,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 17,
+          "usage_limit_period": 6,
+          "async_task_timeout": 180,
+          "type": "model-default",
+          "async_user_concurrency_limit": 3
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "Multimodal-Omni"
+      ],
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 800000,
+      "latestOnlineAt": "2026-09-20T02:13:27.029+00:00",
+      "contextWindow": 1000000,
+      "maxInputTokens": 800000,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-MT-Uni",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl -X POST https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation \\\n-H \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n-H 'Content-Type: application/json' \\\n-d '{\n    \"model\": \"qwen-mt-uni\",\n    \"input\": {\n      \"fileUrl\": \"https://maas-infra-public.oss-cn-hangzhou.aliyuncs.com/lzhe/test/03bc3a6a-a02b-11f1-8874-00163e79676e.jpg\",\n      \"target_lang\": \"ko\"\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-mt-uni-api"
+          }
+        }
+      }
+    }
+  ]
+}

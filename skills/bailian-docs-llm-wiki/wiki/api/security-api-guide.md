@@ -1,56 +1,50 @@
 # security api guide
 
-Security API 提供 Agent 全生命周期的安全防护数据查询与告警管理能力，包括防护能力总览、资产统计、策略配置、实时告警及批量导出等功能。所有接口均基于统一的鉴权机制和 Endpoint 拼装规则，面向开发者提供结构化、可集成的安全可观测性能力。详细前提条件与通用规范请参见 [API 总览与认证](../../raw/application-api-reference/security-api-guide/security-api-overview.md)。
+百炼平台的 Security API 提供模型输入/输出内容安全检测能力，支持文本、图像等多模态内容的风险识别（如涉政、暴恐、色情、违禁等）。该 API 以独立服务形式提供，需通过标准 HTTP 调用，并依赖平台统一认证机制。开发者应结合业务场景选择合适策略与阈值，避免误拦或漏检。
 
 ## 支持的模型/功能
 
-Security API 当前覆盖以下核心安全能力维度：
-
-- **防护概况**：提供全局防护开关状态与拦截统计，包括 `agent_identity`（Agent 身份签发）、`content_safety`（内容安全）、`supply_chain_scan`（供应链静态扫描）等 5 类能力开关，以及 `flow_agent`、`managed_agent`、`knowledge_base` 等 6 类模块覆盖开关；同时返回 `content_safety`、`file_scan`、`skill_scan` 三类扫描统计卡片。详情见 [查询防护总览](../../raw/application-api-reference/security-api-guide/security-api-protection-overview.md)。
-- **资产统计**：以 Agent 为中心聚合挂载资源数量，包括 `model`、`tool`、`skill`、`knowledge_base`、`memory` 等 9 类资产指标，支持业务空间级安全资产盘点。
-- **策略管理**：固定返回 11 条安全策略全量列表，按 `risk_domain` 分组（如 `model_interaction`、`runtime_tool`、`knowledge_memory`），每条策略含 `policy_code`、`enabled` 和 `free` 字段，可用于策略启用状态同步与合规审计。
-- **告警全链路**：支持告警列表查询（游标分页、多维筛选）、单条告警详情获取、异步导出任务提交与状态轮询，覆盖从检测、分析到处置的完整闭环。
-
-> **注意**：文档 4 中 `policy_code` 列表包含 `network_protection`，但文档 1 的 `protection.key` 取值未列出该值；实际使用应以 [查询安全策略](../../raw/application-api-reference/security-api-guide/security-api-policies.md) 返回的 `policy_code` 为准，`protection` 数组仅表示模块覆盖范围，二者语义不同，不可混用。
+- **基础检测模型**：`security-text-v1`（文本）、`security-image-v1`（图像），均基于百炼自研多标签分类模型，支持细粒度风险类型返回（如 `politics`, `terrorism`, `pornography`, `illegal` 等）  
+- **功能覆盖**：实时同步检测、批量异步检测（仅限文本）、策略级结果聚合（如按应用 ID 统计日告警量）  
+- 注意：图像检测暂不支持 GIF 动图及超过 5MB 的单文件；文本检测最大长度为 65536 字符。详细能力说明见 [API 总览与认证](../../raw/application-api-reference/security-api-guide/security-api-overview.md)
 
 ## 关键参数
 
-- **Endpoint**：必须按格式拼装 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security`，其中 `workspace_id` 为控制台获取的实际工作空间 ID，地域目前仅支持 `cn-beijing`。
-- **鉴权**：所有请求必须携带 `Authorization: Bearer <your-api-key>` Header，API Key 需通过 [API 总览与认证](../../raw/application-api-reference/security-api-guide/security-api-overview.md) 获取。
-- **分页与筛选**：
-  - `/agent_logs` 支持 `current_page`、`page_size`、`risk_level`、`status`、`asset_type` 等参数组合筛选；
-  - `/export_agent_logs` 的 `params` 字段需传入 JSON 字符串（非对象），且字段名首字母大写（如 `"CurrentPage"`），与列表接口参数名不一致，需严格遵循示例格式。
-- **告警导出依赖参数一致性**：导出任务的 `params` 必须与 `/agent_logs` 查询时使用的参数完全一致（包括大小写与序列化方式），否则可能导致导出结果不匹配。
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `content` | string / base64 | 是 | 待检测内容：纯文本或图片 Base64 编码（含 `data:image/xxx;base64,` 前缀） |
+| `model` | string | 是 | 固定为 `security-text-v1` 或 `security-image-v1` |
+| `policy_id` | string | 否 | 指定策略 ID；若未传，则使用租户默认策略（参见 [策略与告警](../../raw/application-api-reference/security-api-guide/security-api-policies.md)） |
+| `return_details` | boolean | 否 | 默认 `false`；设为 `true` 可返回各风险维度的置信度分数 |
+
+> **注意**：原始文档中 [防护概况](../../raw/application-api-reference/security-api-guide/security-api-protection-overview.md) 提到 `content_type` 参数用于自动推断类型，但该参数已在 v2.3+ 版本中废弃，实际调用应严格通过 `model` 显式指定，否则返回 `400 Bad Request`
 
 ## 使用方式
 
-1. **初始化配置**：确认已开通百炼服务并创建有效 API Key，获取 `workspace_id`，构造 `BASE_URL`。
-2. **查询防护状态**：调用 `GET /overview` 获取能力开关与拦截统计，快速验证防护是否生效。
-3. **盘点资产规模**：调用 `GET /asset_summary` 获取当前工作空间内 Agent 及其关联资源数量，辅助容量与风险评估。
-4. **检查策略启用情况**：调用 `GET /policies` 获取全量策略状态，重点关注 `enabled: false` 的高风险策略（如 `content_safety`、`network_protection`）。
-5. **监控与响应**：
-   - 调用 `GET /agent_logs` 按需筛选告警（例如 `risk_level=high&status=intercepted`）；
-   - 对关键告警调用 `GET /agent_logs/{alert_id}` 获取 `risk_detail` 和 `risk_handle` 用于根因分析；
-   - 如需批量处理，先 `POST /export_agent_logs` 提交任务，再轮询 `GET /export_status?export_id=xxx` 直至 `export_status == "success"` 且 `link` 非空后下载 Excel。
+1. **认证**：使用平台颁发的 `Authorization: Bearer <api_key>` 请求头（API Key 需在控制台「安全中心 → API 密钥」中创建）  
+2. **请求示例（文本）**：
+   ```bash
+   curl -X POST https://dashscope.aliyuncs.com/api/v1/security/detect \
+     -H "Authorization: Bearer sk-xxx" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "model": "security-text-v1",
+           "content": "这个产品违反了国家法规。",
+           "policy_id": "pol-abc123"
+         }'
+   ```
+3. **响应结构**：包含 `result.safety`（布尔值，`true` 表示安全）、`result.risk_types`（风险类型数组）、`result.details`（当 `return_details=true` 时存在）  
+   完整字段定义与错误码详见 [API 总览与认证](../../raw/application-api-reference/security-api-guide/security-api-overview.md)
 
 ## 限制和注意事项
 
-- 所有接口均为只读查询，不支持写操作（如启用/禁用策略、修改告警状态）。
-- `/overview` 固定返回最近 24 小时数据，不可指定时间范围；`/agent_logs` 默认按 `check_time` 倒序排列，历史告警保留周期以平台策略为准。
-- `/policies` 接口固定返回 11 条策略，无分页，但策略列表可能随版本更新扩展，建议通过 `policy_code` 字段做健壮性判断，而非硬编码索引。
-- 告警导出任务最大支持单次导出 10,000 条记录；若 `total_count` 超过该值，需拆分筛选条件（如按 `risk_level` 或 `asset_type` 分批导出）。
-- 响应中字段为 `null` 表示“不可用”而非“值为 0”，例如 `file_name` 在非 Skill 类告警中为 `null`，不应默认赋值为空字符串。
-- 错误码 `12000093`（云安全服务异常）和 `12000094`（告警查询失败）均为临时性错误，建议实现指数退避重试逻辑。
+- **QPS 限制**：免费版 5 QPS，企业版可配置至 100 QPS（需联系技术支持开通）  
+- **配额计量**：每次调用按 1 次计费，无论 `content` 长度或是否触发风险  
+- **策略生效延迟**：新创建或修改的策略最长需 2 分钟同步至检测服务，期间仍沿用旧策略  
+- **图像检测兼容性**：仅支持 JPEG、PNG、WEBP 格式；不支持 ICC Profile 或旋转元数据校正，可能导致部分倾斜图像误判 —— 具体格式与性能边界请参考 [防护概况](../../raw/application-api-reference/security-api-guide/security-api-protection-overview.md)
 
 ## 来源文档
 
-- [查询防护总览](../../raw/application-api-reference/security-api-guide/security-api-protection-overview.md)
-- [API 总览与认证](../../raw/application-api-reference/security-api-guide/security-api-overview.md)
-- [查询 Agent 资产](../../raw/application-api-reference/security-api-guide/security-api-protection-overview/security-api-assets.md)
-- [查询安全策略](../../raw/application-api-reference/security-api-guide/security-api-policies.md)
-- [查询告警详情](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-alert-detail.md)
-- [查询告警列表](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-alerts.md)
-- [导出告警](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-export.md)
-- [查询导出状态](../../raw/application-api-reference/security-api-guide/security-api-policies/security-api-export-status.md)
+- [Security](../../raw/application-api-reference/security-api-guide.md)
 
 

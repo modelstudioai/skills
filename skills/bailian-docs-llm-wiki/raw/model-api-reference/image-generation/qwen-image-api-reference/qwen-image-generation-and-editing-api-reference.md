@@ -190,7 +190,7 @@ SDK调用配置的base\_url：`https://{WorkspaceId}.ap-northeast-1.maas.aliyunc
 
 **说明**`image`、`negative_prompt`、`seed`、`prompt_extend`、`prompt_extend_mode`、`enable_thinking`、`watermark`为阿里云百炼扩展字段，不属于 OpenAI 官方参数。直接发送HTTP请求时放在请求体顶层即可；使用 OpenAI SDK 时需通过`extra_body`传入。
 
-文生图（T2I）
+文生图
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/images/generations' \
@@ -205,7 +205,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-m
 }'
 ```
 
-图生图/图像编辑（I2I）
+图生图
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/images/generations' \
@@ -339,7 +339,7 @@ pip install -U openai
 
 **重要**图像生成耗时较长，请显式设置足够大的客户端超时时间。多图输出（较大的`n`）或并发场景建议从600秒起配置，避免客户端提前断开。
 
-文生图（T2I）
+文生图
 
 ```
 import os
@@ -364,7 +364,7 @@ for item in response.data:
 print(f"request_id: {response._request_id}")
 ```
 
-图生图/图像编辑（I2I）
+图生图
 
 ```
 import os
@@ -395,7 +395,7 @@ for item in response.data:
 print(f"request_id: {response._request_id}")
 ```
 
-读取失败请求的request\_id
+读取request\_id
 
 ```
 import os
@@ -557,7 +557,7 @@ except APIStatusError as exc:
 
 是否添加水印，默认值为 `false`。
 
-文生图（T2I）
+文生图
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
@@ -583,7 +583,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-图生图/图像编辑（I2I）
+图生图
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
@@ -1019,7 +1019,7 @@ public class ImageEditExample {
 
 是否添加水印，默认值为 `false`。
 
-文生图（T2I）
+文生图
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \
@@ -1046,7 +1046,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 }'
 ```
 
-图生图/图像编辑（I2I）
+图生图
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/image-generation/generation' \

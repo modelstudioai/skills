@@ -2,6 +2,8 @@
 
 HappyOyster 是实时交互的开放式世界模型。输入一段自然语言 Prompt 和一张首帧图，即可生成一个可实时演绎、探索、互动的数字世界，输出为可进房的实时视频流。适用于互动剧、影视预演、AI 陪伴、可玩世界等场景。
 
+模型效果展示和提示词编写参见[HappyOyster 使用指南](raw/model-user-guide/model-experience/world-model/happyoyster-guide.md)。
+
 ## 简介
 
 HappyOyster 提供三种体验模式，各自独立部署，覆盖不同业务场景：

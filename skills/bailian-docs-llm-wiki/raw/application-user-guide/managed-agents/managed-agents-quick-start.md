@@ -29,7 +29,7 @@
 
 工具
 
-7 个内置工具默认全选：`bash`、`read`、`write`、`edit`、`glob`、`grep`、`download_file`。按需取消勾选
+7 个内置工具默认全选：`bash`、`read`、`write`、`edit`、`glob`、`grep`、`mark_artifacts`。按需取消勾选
 
 Skill / MCP
 
@@ -110,7 +110,7 @@ System.out.println(agent.getVersion());  // 1
 
 托管类型
 
-默认**云端托管**（百炼托管的沙箱容器）
+默认**云端托管**（阿里云百炼托管的沙箱容器）
 
 也可通过 API 完成，指定沙箱类型与预装包（详见[创建 Environment API](raw/application-api-reference/managed-agents-api/environment-api/environment-create.md)）：
 

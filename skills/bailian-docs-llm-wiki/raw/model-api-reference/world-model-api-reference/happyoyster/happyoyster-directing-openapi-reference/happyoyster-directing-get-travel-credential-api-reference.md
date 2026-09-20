@@ -30,7 +30,7 @@
 
 #### 请求参数
 
-获取体验凭证
+#### 获取体验凭证
 
 ```
 curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-directing/openapi/v1/worlds/get-travel-credential' \
@@ -57,7 +57,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 
 #### 响应参数
 
-换取成功
+#### 换取成功
 
 ```
 {

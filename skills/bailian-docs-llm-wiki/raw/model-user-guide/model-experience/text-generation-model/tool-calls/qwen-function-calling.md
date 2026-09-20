@@ -54,7 +54,7 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
     -   千问Omni-Realtime：Qwen3.5-Omni-Plus-Realtime系列、Qwen3.5-Omni-Flash-Realtime系列
     -   Qwen3-VL 开源系列
 -   **语音对话模型**
-    -   千问Audio-Realtime：Qwen-Audio-3.0-Realtime-Plus系列、Qwen-Audio-3.0-Realtime-Flash系列
+    -   千问Audio-Realtime：Qwen-Audio-3.1-Realtime-Plus、Qwen-Audio-3.0-Realtime-Plus系列、Qwen-Audio-3.0-Realtime-Flash系列
 
 #### DeepSeek
 

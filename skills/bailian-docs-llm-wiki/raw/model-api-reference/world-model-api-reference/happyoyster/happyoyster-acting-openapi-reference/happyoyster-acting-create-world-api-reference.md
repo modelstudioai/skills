@@ -32,7 +32,7 @@
 
 #### 请求参数
 
-首帧图（异步创建）
+#### 首帧图（异步创建）
 
 ```
 curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-acting/openapi/v1/worlds' \
@@ -50,7 +50,9 @@ curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/a
 }'
 ```
 
-首帧图base64（异步创建）
+#### 首帧图base64（异步创建）
+
+实际调用时 `base64` 需传入完整的 data URI，下面示例中的字符串已截断，仅用于演示格式。
 
 ```
 curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-acting/openapi/v1/worlds' \
@@ -149,7 +151,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 
 #### 响应参数
 
-异步创建
+#### 异步创建
 
 ```
 {
@@ -163,7 +165,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 }
 ```
 
-请求失败
+#### 请求失败
 
 ```
 {

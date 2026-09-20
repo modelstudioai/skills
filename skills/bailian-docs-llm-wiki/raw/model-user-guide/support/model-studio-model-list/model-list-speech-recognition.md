@@ -4,7 +4,7 @@
 -   [qwen-audio-3.0-asr-flash-filetrans](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/qwen-audio-3-0-asr-flash-filetrans.md)
 -   [qwen-audio-3.0-asr-flash-streaming](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/qwen-audio-3-0-asr-flash-streaming.md)
 -   [qwen3-asr-flash](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/qwen3-asr-flash.md)
--   [qwen3-asr-flash-us](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/qwen3-asr-flash-us.md)
+-   [qwen3-asr-flash-us](https://help.aliyun.com/zh/model-studio/qwen3-asr-flash-us)
 -   [qwen3-asr-flash-filetrans](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/qwen3-asr-flash-filetrans.md)
 -   [qwen3-asr-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/qwen3-asr-flash-realtime.md)
 -   [fun-asr](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/fun-asr.md)

@@ -26,7 +26,7 @@
 
 #### 请求参数
 
-剧本全量更新
+#### 剧本全量更新
 
 ```
 curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-directing/openapi/v1/travels/update-script' \
@@ -96,7 +96,7 @@ SDK 或客户端版本标识。非空字符串，优先于 HTTP `User-Agent`。
 
 #### 响应参数
 
-更新已接受
+#### 更新已接受
 
 ```
 {

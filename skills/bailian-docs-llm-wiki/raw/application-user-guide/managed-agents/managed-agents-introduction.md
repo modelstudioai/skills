@@ -46,7 +46,7 @@ Managed Agents 是百炼提供的智能体托管运行时，适用于多步工�
 
 运行环境（Environment）
 
-会话运行的沙箱配置，由百炼托管的云端容器。
+会话运行的沙箱配置，由阿里云百炼托管的云端容器。
 
 会话（Session）
 
@@ -59,6 +59,10 @@ Managed Agents 是百炼提供的智能体托管运行时，适用于多步工�
 记忆库（Memory Store）
 
 跨会话持久化的挂载资源，智能体通过文件工具读写，内容跨会话保留。
+
+定时任务（Scheduled Task）
+
+绑定智能体并配置触发方式的资源，定时或手动触发运行，每次触发产生一条运行记录。
 
 ## 支持的工具
 
@@ -92,3 +96,6 @@ Managed Agents 是百炼提供的智能体托管运行时，适用于多步工�
 -   [管理会话与事件](raw/application-user-guide/managed-agents/managed-agents-session.md)：创建会话、发送消息与事件流
 -   [智能体](raw/application-user-guide/managed-agents/managed-agents-agent.md)：配置模型、提示词与工具
 -   [API 总览与认证](raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)：接口总览、认证与可用 API
+-   [记忆库](raw/application-user-guide/managed-agents/managed-agents-context/managed-agents-memory-store.md)：跨会话保留智能体的工作笔记
+-   [定时任务](raw/application-user-guide/managed-agents/managed-agents-session/managed-agents-deployment.md)：定时或手动触发智能体运行
+-   [CLI](raw/application-user-guide/managed-agents/managed-agents-cli.md)：以基础设施即代码方式在终端管理 Agent 与会话

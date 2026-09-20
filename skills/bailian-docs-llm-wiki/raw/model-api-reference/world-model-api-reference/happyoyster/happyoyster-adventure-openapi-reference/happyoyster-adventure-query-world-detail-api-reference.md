@@ -36,7 +36,7 @@
 
 #### 请求参数
 
-查询World详情
+#### 查询World详情
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-adventure/openapi/v1/worlds/detail?encryptedWorldId={encryptedWorldId}' \
@@ -55,7 +55,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 
 #### 响应参数
 
-查询成功
+#### 查询成功
 
 ```
 {
@@ -68,7 +68,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
         "mode": 1,
         "creationModel": "simple",
         "prompt": "黄昏的江南水乡，石桥与乌篷船",
-        "eventStyle": "normal",
+        "eventStyle": null,
         "perspective": "third_person",
         "uploadMode": "first_frame",
         "resolution": null,
@@ -131,9 +131,9 @@ Adventure 恒为 `simple`。
 
 创建时提交的顶层 Prompt。
 
-**eventStyle** `string`
+**eventStyle** `null`
 
-创建时的事件风格：`normal` / `dramatic` / `regular`。
+Adventure 不使用该创建参数，通常为 `null`。该字段仅 Directing `creationModel=simple` 生效。
 
 **perspective** `string`
 

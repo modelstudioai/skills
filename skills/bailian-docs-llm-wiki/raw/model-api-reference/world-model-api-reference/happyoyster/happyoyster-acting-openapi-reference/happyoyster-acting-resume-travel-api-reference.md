@@ -26,7 +26,7 @@
 
 #### 请求参数
 
-恢复Travel
+#### 恢复Travel
 
 ```
 curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-acting/openapi/v1/travels/resume' \
@@ -61,7 +61,7 @@ SDK 或客户端版本标识。非空字符串，优先于 HTTP `User-Agent`，�
 
 #### 响应参数
 
-恢复成功
+#### 恢复成功
 
 ```
 {

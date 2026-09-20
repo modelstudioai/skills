@@ -32,7 +32,7 @@
 
 #### 请求参数
 
-查询World构建状态
+#### 查询World构建状态
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-adventure/openapi/v1/worlds/build-status?encryptedWorldId={encryptedWorldId}' \
@@ -54,7 +54,7 @@ API Key 鉴权。不强制主 API Key，主 API Key 或临时 API Key 均可调�
 
 #### 响应参数
 
-构建中
+#### 构建中
 
 ```
 {
@@ -68,7 +68,7 @@ API Key 鉴权。不强制主 API Key，主 API Key 或临时 API Key 均可调�
 }
 ```
 
-构建完成
+#### 构建完成
 
 ```
 {

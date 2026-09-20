@@ -1,53 +1,46 @@
-# Token
+# Token 计量与配额
 
-Token 是百炼平台中用于计量模型计算资源消耗的最小单位，代表模型在处理输入（如文本、图像）和生成输出时所消耗的计算量。它不是独立的数据对象，而是由平台 tokenizer 对原始内容进行标准化分词后得到的整数计数，是计费、配额控制、性能监控与用量分析的核心度量基准。
+Token 计量与配额是百炼平台对模型调用资源进行精细化管控的核心机制，指系统按实际消耗的输入与输出 token 总量进行实时统计，并依据预设的配额策略（如速率上限、突发容量、模型白名单等）实施动态限流与用量隔离。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **配额与限流（Token Plan）**：Token 是 Token Plan 的核心计量单位。所有绑定 Token Plan 的 API Key 发起的模型调用，其请求输入（[prompt](../guides/prompt.md)）与响应输出（completion）的总 token 数将被实时累加，并受 `quota`（总配额）和 `rate_limit`（TPS，token per second）双重约束。当配额耗尽或瞬时速率超限，请求将返回 `429 Too Many Requests`。
-
-- **模型调用与计费**：所有支持按 token 计费的模型（如 `qwen-*`、`lingji-*` 系列）均以实际消耗的 token 总数为计费依据。流式（`stream=true`）与非流式响应统一按最终完整输出 token 数结算；[函数调用](function-calling.md)（Function Calling）的 token 消耗也计入主 Token Plan，不单独计费。
-
-- **监控与告警**：在模型监控系统中，“TotalToken 数”是关键用量指标，支持按模型、API Key、时间粒度（分钟/小时/天）统计，并可配置环比突增类告警，用于主动识别异常调用或成本风险。
-
-- **[多模态](multimodal.md)场景**：图像、视频等非文本输入的 token 计算方式与纯文本不同。例如，一张 1024×1024 图像经视觉 tokenizer 编码后可能对应数百至数千 token，具体换算规则由模型类型决定，详见[多模态](multimodal.md) tokenization 表格。
-
-- **数据管理（间接关联）**：虽然训练/评测数据集本身不直接以 token 为单位存储，但在 SFT/DPO 等训练任务中，数据集的 token 分布（如平均 [prompt](../guides/prompt.md) 长度、max_tokens 设置）直接影响训练成本与显存占用，是调优前需评估的关键参数。
+- **API 调用控制**：每次模型请求（含文本、图像、音频等多模态输入）均触发 token 计量，系统自动计算 `input_tokens + output_tokens` 总和，从绑定的 Token Plan 中实时扣减，并校验 `max_tokens_per_minute` 与 `burst_capacity`。超限即返回 `429 Too Many Requests`，响应头中包含 `X-RateLimit-Remaining` 和 `Retry-After` 供客户端退避。
+- **多环境/团队协作**：通过为不同 API Key 绑定独立 Token Plan（如 dev/staging/prod），实现开发、测试、生产环境间的用量完全隔离；团队版支持按成员分配席位（`standard`/`pro`/`max`），每个席位可关联专属 Plan，保障资源归属清晰。
+- **成本与稳定性管理**：Token Plan 是计费与用量监控的统一锚点——费用中心账单、模型监控中的「TotalToken 数」、告警规则（如“Token 消耗突增”）均基于同一计量结果；结合吞吐预留（TPM）可进一步保障高并发下的延迟稳定性。
+- **安全与合规约束**：通过 `model_whitelist` 限制可调用模型范围（如仅允许 `qwen-plus`），避免误用高成本模型；自定义训练模型的推理 endpoint 不受 Token Plan 约束，需单独配置资源配额。
+- **可观测性支撑**：模型监控页面的「Token 消耗」指标、限流错误次数（429）、审计日志中的 token 统计字段，均直接来源于该计量系统，但注意：监控数据延迟 ≤ 2 秒（实时性），而用量统计报表延迟约 1 小时（用于账单与分析）。
 
 ## 关键参数和配置
 
-- **Token 计算逻辑**：由模型内置 tokenizer 执行，开发者无需手动分词。输入文本、Base64 图像、URL 图像均自动转换为 token 序列；输出 token 数 = 生成的全部 tokens（含 stop token）。
+| 参数 | 说明 | 典型值 | 注意事项 |
+|------|------|--------|----------|
+| `max_tokens_per_minute` | 每分钟最大 token 消耗硬阈值 | `100000`（团队版默认） | 超过立即限流；单位为 token/分钟，非请求/分钟 |
+| `burst_capacity` | 突发容量（token），允许短时超额 | `0`（v2.3+ 默认禁用） | 设为 `0` 表示严格限流；启用后需配合客户端退避逻辑 |
+| `model_whitelist` | 允许调用的模型 ID 列表 | `["qwen-max", "qwen-plus"]` | 未配置则默认允许所有支持模型；不支持通配符 |
+| `enable_quota_isolation` | 是否启用 Plan 间配额隔离 | `true` | 启用后各 Plan 余额互不影响，推荐开启 |
+| `X-Parameter-Token-Plan-ID` | 请求头中显式指定 Plan | `tp-abc123` | 优先级高于 API Key 默认绑定的 Plan |
 
-- **Token Plan 配置参数**（影响 token 使用边界）：
-  - `quota`：整型，总 token 配额，范围 1000–100,000,000；
-  - `rate_limit`：整型，最大允许 token 每秒消耗速率（TPS），范围 1–10000；
-  - `valid_until`：ISO 8601 时间字符串，Token Plan 生效截止时间（UTC+0），最长 365 天。
-
-- **监控指标字段**：
-  - `total_tokens`：单次请求的 [prompt](../guides/prompt.md)_tokens + completion_tokens；
-  - `prompt_tokens` / `completion_tokens`：分别统计输入与输出 token 数（部分接口响应头或审计日志中返回）；
-  - `X-RateLimit-Remaining`：HTTP 响应头，指示当前周期剩余可用 token 数。
-
-- **SDK 与 API 行为**：
-  - 所有模型 API 调用默认返回 `usage` 字段（含 `prompt_tokens`, `completion_tokens`, `total_tokens`），无需额外开关；
-  - Token Plan 校验全自动触发：只要 API Key 已绑定有效 Plan，且请求通过该 key 鉴权，即生效；
-  - 不支持手动指定 token 限制（如 `max_tokens` 仅控制生成长度，不影响配额校验逻辑）。
+> ⚠️ 提示：`burst_capacity` 默认值已更新为 `0`（禁用突发模式），请以 SDK 初始化返回的 schema 或最新 API 文档为准；删除 Token Plan 后，API Key 自动回退至账户默认配额，历史用量保留 90 天。
 
 ## 面向开发者，简洁实用
 
-- ✅ **务必检查响应中的 `usage` 字段**：这是验证 token 计算是否符合预期的最直接方式，尤其在调试[多模态](multimodal.md)输入或长文本场景时。
-- ✅ **用 `GET /v1/token-plans/{id}/usage` 主动查用量**：延迟 ≤3s，比监控图表（1 小时延迟）更及时，适合构建自定义配额看板或熔断逻辑。
-- ✅ **流式响应也要关注 total_tokens**：`stream=true` 时，`usage` 仅在最后一个 chunk 中返回，勿在中间 chunk 解析。
-- ⚠️ **图像 token 不等于像素数**：避免按分辨率粗略估算；实际消耗取决于模型架构与编码器，建议用少量样本实测。
-- ⚠️ **Token Plan 按自然日重置（UTC+0）**：非滚动周期，注意跨时区业务的配额规划。
-- ⚠️ **API Key 绑定 Plan 后立即生效**：无需重启服务或刷新缓存，但解绑后新请求将不再受该 Plan 约束。
+- ✅ **快速上手**：在控制台「配额管理」创建 Token Plan → 绑定到 API Key → 正常发起模型请求即可生效，无需修改业务代码。
+- ✅ **精准调试**：检查响应头 `X-Usage-Token-Count`（本次消耗 token 数）、`X-RateLimit-Limit`（当前 Plan 的每分钟限额）、`X-RateLimit-Remaining`（剩余配额），快速定位限流原因。
+- ✅ **规避风险**：  
+  - 不要硬编码 `api_key`，务必通过环境变量注入；  
+  - 免费额度用户注意：自 2024 年 7 月起，所有免费 Plan 强制 30 天有效期，需手动续订；  
+  - 单个 API Key 最多绑定 3 个 Plan（按环境区分），超出需先解绑。
+- ✅ **最佳实践**：  
+  - 生产环境务必启用 `enable_quota_isolation`；  
+  - 高并发场景建议搭配 TPM 预留使用（二者不互斥，TPM 保底，Token Plan 控总量）；  
+  - 监控告警中配置「TotalToken 数」突增告警，及时发现异常调用或 Prompt 注入攻击。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
 - [token plan api](../api/token-plan-api.md)
-- [model data overview](../guides/model-data-overview.md)
-- [model monitoring](../guides/model-monitoring.md)
+- [test 1](../guides/test-1.md)
 - [preparations](../api/preparations.md)
+- [model monitoring](../guides/model-monitoring.md)
 
 

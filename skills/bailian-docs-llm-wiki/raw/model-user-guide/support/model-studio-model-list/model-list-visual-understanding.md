@@ -1,7 +1,7 @@
 # 视觉理解
 
 -   [qwen3-vl-flash](raw/model-user-guide/support/model-studio-model-list/model-list-visual-understanding/qwen3-vl-flash.md)
--   [qwen3-vl-flash-us](raw/model-user-guide/support/model-studio-model-list/model-list-visual-understanding/qwen3-vl-flash-us.md)
+-   [qwen3-vl-flash-us](https://help.aliyun.com/zh/model-studio/qwen3-vl-flash-us)
 -   [qwen3-vl-plus](raw/model-user-guide/support/model-studio-model-list/model-list-visual-understanding/qwen3-vl-plus.md)
 -   [qwen-vl-max](raw/model-user-guide/support/model-studio-model-list/model-list-visual-understanding/qwen-vl-max.md)
 -   [qwen-vl-ocr](raw/model-user-guide/support/model-studio-model-list/model-list-visual-understanding/qwenvl-ocr.md)

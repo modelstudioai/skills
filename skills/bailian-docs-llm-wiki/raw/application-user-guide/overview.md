@@ -1,29 +1,104 @@
-# Connector
+# 产品概览
 
-阿里云百炼 Connector 是把企业系统与数据接入智能体的统一连接层，在控制台完成一次授权后，即可将外部系统的能力封装为 MCP 工具供智能体调用。
+了解 ParseX 平台包含的功能，包含Parse、Extract、配置等相关能力。
 
-智能体要回答企业内部的问题，前提是能读到企业的数据。这些数据分散在钉钉文档、语雀、OSS、数据库和各类 SaaS 系统里，逐个对接既费时又难维护。
+ParseX 面向开发者和 Agent 提供文档智能能力，将文档、图片和音视频转换为可读取的内容，或从图文材料中取得指定字段，帮助 Agent 应用完成文档相关任务。
 
-Connector 把这些系统收敛成一个统一的连接层：在控制台完成一次授权，Connector 就把对应系统的能力封装成标准工具，通过 MCP 协议暴露给智能体。智能体不需要关心数据存在哪里，直接调用工具即可。
+![ParseX 与 Agent 的分工。应用接收材料和任务；ParseX 通过文档解析提供可读取的内容，或通过信息抽取提供指定字段；Agent 应用使用结果完成问答、分析或信息核验。后续业务判断由应用组织。](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9db5.jpg)
 
-**说明**Connector 目前处于 Beta 阶段，功能与支持的 App 列表仍在持续扩充。
+例如，合同核验 Agent 可以先使用 ParseX 取得合同金额和付款期限，再结合业务规则检查这些条款。
 
-## 功能特性
+## 两种核心能力
 
--   **连接 20 类系统**：钉钉、语雀、Salesforce on Alibaba Cloud、数据库、OSS 等，开箱可连，见[Apps 目录](raw/application-user-guide/overview/apps-guide/overview.md)。
--   **自动生成工具**：连接完成后自动生成可调用的工具，不需要自己写接口封装，见[核心概念](raw/application-user-guide/overview/concepts.md)。
--   **凭证配置一次复用**：同一个 App 下的所有连接共用一套身份验证配置，轮转凭证只改一处，见[身份验证概览](raw/application-user-guide/overview/auth-guide/overview.md)。
--   **托管文件与表格**：上传的文档与表格由平台托管解析，供智能体检索引用，见[文件连接器](raw/application-user-guide/overview/apps-guide/file.md)。
+-   [Parse 文档解析](raw/application-user-guide/overview/overview.md)：将文件解析为便于阅读、检索与下游处理的内容。
+-   [Extract 信息提取](raw/application-user-guide/overview/overview.md)：根据业务字段定义，从文档中提取关键字段结果。
 
-## 从这里开始
+## 选择解析还是抽取
 
--   [快速开始](raw/application-user-guide/overview/quickstart.md)：连接第一个 App，并在你的智能体里调用它的工具，全程约 10 分钟。
--   [核心概念](raw/application-user-guide/overview/concepts.md)：弄清 App、连接器、工具与 MCP 之间的关系。
--   [Apps 目录](raw/application-user-guide/overview/apps-guide/overview.md)：查看全部可连接的 App 以及各自的准备条件。
--   [身份验证](raw/application-user-guide/overview/auth-guide/overview.md)：配置一次凭证，同一个 App 下的所有连接复用。
+**比较项**
 
-## 旧版数据连接迁移
+**文档解析**
 
-如果此前在阿里云百炼控制台创建过数据连接，这些连接器需要迁移到新版 Connector 后才能在新版控制台中管理。
+**信息抽取**
 
-**警告**旧版数据连接的一键迁移入口开放至 **2026 年 9 月 30 日**，请在此之前完成迁移。详见[数据连接迁移](raw/application-user-guide/overview/overview/migration.md)。
+目标
+
+读取并整理材料中的内容
+
+获得你指定的信息
+
+输入
+
+文档、图片、音频或视频
+
+图文材料，或可复用的图文解析结果
+
+需要说明的要求
+
+内容范围、图片和媒体处理等要求
+
+字段名称、类型和含义
+
+输出
+
+正文、表格、图片描述，或媒体内容及时间位置
+
+字段值和原文来源等结构化信息
+
+选择依据
+
+Agent 需要阅读材料、理解上下文
+
+应用已经明确要取哪些数据
+
+## 面向 Agent 的典型场景
+
+**Agent 要完成的任务**
+
+**ParseX 提供的内容**
+
+**应用如何继续使用**
+
+回答产品手册中的问题
+
+手册正文、表格和图示说明
+
+建立检索内容，查找相关段落并组织回答
+
+分析经营报告
+
+报告内容，或预先指定的期间、金额和指标
+
+结合历史数据计算变化、解释原因
+
+核验合同信息
+
+合同主体、金额、期限及原文来源
+
+按业务规则逐项检查，并向用户展示依据
+
+查找培训视频中的操作步骤
+
+视频片段内容及对应时间位置
+
+检索相关步骤，引导用户回看片段
+
+整理访谈录音
+
+语音内容和对应时间位置
+
+围绕研究问题归纳观点，并回听原话
+
+## 标准工作流
+
+1.  **选择 Parse 或 Extract**
+    
+    需要文档内容和结构时使用 Parse；需要固定业务字段时使用 Extract。
+    
+2.  **在控制台验证结果**
+    
+    提交样本并检查结果。Parse 重点核对内容完整性与结构，Extract 重点核对字段定义、字段值和缺失情况。
+    
+3.  **固定并复用配置**
+    
+    将验证通过的定义保存为配置，后续调用时可以复用该配置

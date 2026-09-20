@@ -19,7 +19,7 @@
 
 ### 步骤 2：创建 RAG 表格库并导入数据
 
-> 相关文档：[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+> 相关文档：[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
 
 1.  **填写基础信息**
     
@@ -74,7 +74,7 @@
 
 **规格费用**
 
-`标准版` 或 `旗舰版` 知识库的实际运行时长费用，价格详见[知识库计费说明](raw/application-user-guide/knowledge-base/billing-for-knowledge-base.md)。变更配置按变更时间点[分段计费](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base#d90304901atdb)。
+`标准版` 或 `旗舰版` 知识库的实际运行时长费用，价格详见[知识库计费说明](raw/application-user-guide/knowledge-base/reference/billing-for-knowledge-base.md)。变更配置按变更时间点[分段计费](https://help.aliyun.com/zh/model-studio/billing-for-knowledge-base#d90304901atdb)。
 
 **向量、排序模型调用费用**
 

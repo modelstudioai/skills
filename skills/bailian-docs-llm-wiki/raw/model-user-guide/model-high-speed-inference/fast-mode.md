@@ -43,21 +43,13 @@ curl -X POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode
 
 **缓存命中**
 
-qwen3.8-max-prime
-
-24元
-
-72元
-
-3元
-
 glm-5.2-fast-preview
 
-16元
+¥16
 
-56元
+¥56
 
-4元
+¥4
 
 **视频生成模型**
 
@@ -91,11 +83,11 @@ wan3.0-video-prime
 
 glm-5.2-fast-preview
 
-20.98元
+¥20.984
 
-65.95元
+¥65.948
 
-4.20元
+¥4.196
 
 **视频生成模型**
 

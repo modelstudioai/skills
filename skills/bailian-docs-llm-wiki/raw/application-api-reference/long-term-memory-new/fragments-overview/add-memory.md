@@ -6,6 +6,8 @@
 
 **说明**调用前请确保已获取 API Key，详见[鉴权](raw/application-api-reference/long-term-memory-new/overview/authentication.md)。
 
+**重要**对话轮次多、提取耗时长的场景，可使用[异步添加记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)，后台执行提取，通过事件 ID 查询状态与结果。
+
 ## 请求参数
 
 参数

@@ -34,7 +34,7 @@
 
 #### 请求参数
 
-查询World列表
+#### 查询World列表
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-adventure/openapi/v1/worlds?page=1&pageSize=20&status=ready' \
@@ -69,7 +69,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 
 #### 响应参数
 
-查询成功
+#### 查询成功
 
 ```
 {

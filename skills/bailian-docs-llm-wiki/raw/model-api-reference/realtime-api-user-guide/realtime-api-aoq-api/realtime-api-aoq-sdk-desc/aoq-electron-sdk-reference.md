@@ -102,6 +102,18 @@ stopVideoCapture
 
 关闭视频采集设备
 
+getScreenSourceList
+
+获取屏幕和窗口源
+
+startScreenCapture
+
+开始屏幕采集
+
+stopScreenCapture
+
+停止屏幕采集
+
 ### 视频编解码与外部输入
 
 **接口**
@@ -352,6 +364,29 @@ onRemoteVideoFrame
 
 ## 接口详情
 
+### 屏幕采集
+
+```
+startScreenCapture(config: AoqScreenCaptureConfig): number
+stopScreenCapture(): number
+```
+
+`config` 为屏幕采集配置。屏幕画面通过 `AoqTrackTypeScreen` 轨道发送。
+
+返回值：0 表示成功；非 0 表示失败。
+
+先调用 `getScreenSourceList` 获取屏幕或窗口源，再将选定的 `sourceId` 和 `sourceType` 传入采集配置。
+
+外部原始帧：设置 `isExternal=true` 后，通过 `pushExternalVideoCapturedFrame` 输入 Screen 轨道的原始帧，由 SDK 编码。外部已编码帧：先通过 `setVideoEncoderConfig` 将 Screen 轨道设置为外部编码，再调用 `pushExternalVideoEncodedFrame`。
+
+#### getScreenSourceList
+
+```
+getScreenSourceList(): AoqScreenSourceInfo[]
+```
+
+返回屏幕源数组，仅支持 Electron macOS/Windows。
+
 ### 引擎入口与生命周期
 
 #### createAoqClientEngine
@@ -560,7 +595,7 @@ Uint8Array
 
 注意：
 
--   `pushExternalVideoCapturedFrame` 仅在 `startVideoCapture({ isExternal: true })` 后被消费；未开启时返回 `211`，缓冲区满时返回 `210`。
+-   `pushExternalVideoCapturedFrame` Video 轨道需先调用 `startVideoCapture({ isExternal: true })`，Screen 轨道需先调用 `startScreenCapture({ isExternal: true })`；未开启时返回 `211`，缓冲区满时返回 `210`。
 -   支持 `AoqVideoPixelFormatI420` 与打包格式（NV12 / NV21 / BGRA / RGBA）；I420 时 `buffer` 必须为紧凑布局（stride = width），Y / U / V 三平面顺序拼接。
 -   `pushExternalVideoEncodedFrame` 需先 `setVideoEncoderConfig({ isExternal: true })`；未开启时返回 `212`。当前仅支持 JPEG。
 -   `meta.timeStamp` 为 `0` 时由 SDK 使用本地时间补齐。
@@ -570,6 +605,8 @@ Uint8Array
 ```
 enableSendMediaStream(trackType: AoqTrackType, enable: boolean): number
 ```
+
+`trackType` 支持 `AoqTrackTypeAudio`、`AoqTrackTypeVideo` 和 `AoqTrackTypeScreen`。
 
 控制本地某路媒体流是否发送。建议初始化后先 `enableSendMediaStream(trackType, false)`，待 `onConnectionStatusChange` 上报 `AoqConnectionStatusConnected` 后再开启。
 
@@ -945,7 +982,95 @@ onRemoteVideoFrame:    (frame: AoqVideoFrameEvent) => void  /* 远端解码后�
 
 ## 数据类型与枚举
 
-所有类型均从包根导出，可直接 `import { ... } from 'aoq-electron-sdk'`。枚举为 TypeScript `enum`，运行时可用；接口（`interface`）仅类型约束。标记为可选的字段缺省时取表中默认值。
+### AoqScreenSourceInfo
+
+字段
+
+类型
+
+说明
+
+sourceType
+
+AoqScreenShareSourceType
+
+源类型
+
+sourceId
+
+string
+
+源 ID，以字符串返回以避免 int64 精度丢失。
+
+sourceName
+
+string
+
+源名称
+
+sourceIsSelf
+
+boolean
+
+是否为自身进程窗口
+
+### AoqScreenShareSourceType
+
+枚举值
+
+值
+
+说明
+
+AoqScreenShareSourceTypeDesktop
+
+0
+
+整个桌面
+
+AoqScreenShareSourceTypeWindow
+
+1
+
+指定窗口
+
+### AoqScreenCaptureConfig
+
+所有字段均可选，`isExternal` 默认 false。
+
+字段
+
+类型
+
+默认值
+
+说明
+
+isExternal
+
+boolean
+
+false
+
+是否由应用提供屏幕原始帧。
+
+sourceId
+
+string | number
+
+—
+
+屏幕源 ID。可选；推荐字符串，number 必须为安全整数。
+
+sourceType
+
+AoqScreenShareSourceType
+
+—
+
+屏幕源类型。
+
+除用于对照底层错误码、未由 TypeScript 导出的 `AoqErrorCode` 外，本节类型均从包根导出，可直接 `import { ... } from 'aoq-electron-sdk'`。已导出的枚举为 TypeScript `enum`，运行时可用；接口（`interface`）仅类型约束。标记为可选的字段缺省时取表中默认值。
 
 ### 通用类型
 
@@ -1116,6 +1241,16 @@ number
 \-
 
 Relay 服务器端口
+
+tcpPort
+
+number
+
+否
+
+0
+
+TCP 降级端口；0 表示使用 SDK 默认端口 443。
 
 #### AoqTrackParam
 
@@ -1435,6 +1570,12 @@ AoqTrackTypeData
 
 数据消息轨道
 
+AoqTrackTypeScreen
+
+3
+
+屏幕共享轨道，仅支持上行。
+
 #### AoqTrackMode
 
 **枚举值**
@@ -1579,6 +1720,8 @@ AoqOrientationModeLandscape
 
 #### AoqErrorCode
 
+下表列出底层 C++ 引擎的错误码名称。Electron TypeScript 层不导出此枚举，`onError` 的 `code` 类型为 `number`。
+
 错误码为 native 层定义，`onError` 的 `code` 与接口返回值均使用该数值（TS 层未将其导出为 `enum`）。
 
 **枚举值**
@@ -1587,173 +1730,197 @@ AoqOrientationModeLandscape
 
 **说明**
 
-AoqErrorCodeOK
+AoqECOK
 
 0
 
 成功
 
-AoqErrorCodeParamInvalid
+AoqECParamInvalid
 
 1
 
 参数非法
 
-AoqErrorCodeStateInvalid
+AoqECStateInvalid
 
 2
 
 状态非法
 
-AoqErrorCodeUnSupport
+AoqECUnSupport
 
 3
 
 当前平台 / 模式不支持
 
-AoqErrorCodeAudio
+AoqECAudio
 
 100
 
 音频通用错误
 
-AoqErrorCodeAudioExternalBufferFull
+AoqECAudioExternalBufferFull
 
 110
 
 外部音频缓冲区满
 
-AoqErrorCodeAudioDevice
+AoqECAudioDevice
 
 120
 
 音频设备通用错误
 
-AoqErrorCodeAudioDeviceRecordingAuthFailed
+AoqECAudioDeviceRecordingAuthFailed
 
 121
 
 录音权限未获取
 
-AoqErrorCodeAudioDeviceRecordingOccupied
+AoqECAudioDeviceRecordingOccupied
 
 122
 
 录音设备被占用
 
-AoqErrorCodeAudioDeviceRecordingBackgroundStart
+AoqECAudioDeviceRecordingBackgroundStart
 
 123
 
 后台启动录音失败
 
-AoqErrorCodeAudioDeviceRecordingStartFail
+AoqECAudioDeviceRecordingStartFail
 
 124
 
 录音启动失败
 
-AoqErrorCodeAudioDevicePlayoutOccupied
+AoqECAudioDevicePlayoutOccupied
 
 125
 
 播放设备被占用
 
-AoqErrorCodeAudioDevicePlayoutBackgroundStart
+AoqECAudioDevicePlayoutBackgroundStart
 
 126
 
 后台启动播放失败
 
-AoqErrorCodeAudioDevicePlayoutStartFail
+AoqECAudioDevicePlayoutStartFail
 
 127
 
 播放启动失败
 
-AoqErrorCodeVideo
+AoqECVideo
 
 200
 
 视频通用错误
 
-AoqErrorCodeVideoExternalBufferFull
+AoqECVideoExternalBufferFull
 
 210
 
 外部视频缓冲区满
 
-AoqErrorCodeVideoExternalCaptureNotEnabled
+AoqECVideoExternalCaptureNotEnabled
 
 211
 
 外部视频采集未启用
 
-AoqErrorCodeVideoExternalEncoderNotEnabled
+AoqECVideoExternalEncoderNotEnabled
 
 212
 
 外部视频编码未启用
 
-AoqErrorCodeVideoDevice
+AoqECVideoDevice
 
 220
 
 视频设备通用错误
 
-AoqErrorCodeVideoDeviceCameraOpenFail
+AoqECVideoDeviceCameraOpenFail
 
 221
 
 摄像头打开失败
 
-AoqErrorCodeVideoDeviceCameraAuthFailed
+AoqECVideoDeviceCameraAuthFailed
 
 222
 
 摄像头权限未获取
 
-AoqErrorCodeVideoDeviceCameraOccupied
+AoqECVideoDeviceCameraOccupied
 
 223
 
 摄像头被占用
 
-AoqErrorCodeVideoDeviceCameraRunningError
+AoqECVideoDeviceCameraRunningError
 
 224
 
 摄像头运行异常
 
-AoqErrorCodeVideoCodec
+AoqECVideoCodec
 
 230
 
 视频编解码通用错误
 
-AoqErrorCodeVideoCodecEncoderInitFail
+AoqECVideoCodecEncoderInitFail
 
 231
 
 视频编码器初始化失败
 
-AoqErrorCodeVideoRender
+AoqECVideoRender
 
 240
 
 视频渲染通用错误
 
-AoqErrorCodeVideoRenderCreateFail
+AoqECVideoRenderCreateFail
 
 241
 
 视频渲染创建失败
 
-AoqErrorCodeVideoRenderDrawError
+AoqECVideoRenderDrawError
 
 242
 
 视频渲染绘制错误
+
+AoqECScreen
+
+300
+
+屏幕共享通用错误
+
+AoqECScreenAuthFailed
+
+310
+
+屏幕共享授权失败
+
+AoqECScreenStartFailed
+
+311
+
+屏幕共享启动失败
+
+AoqECAudioDeviceEarpieceRequiresVoipMode
+
+128
+
+听筒需要 VoIP 模式（移动端场景，Electron 一般不会触发）。
 
 **说明**除上述 native 错误码外，Electron 层还会在引擎未创建 / 已销毁、或参数不是合法 JSON 时返回 `-1`。
 
@@ -1945,7 +2112,7 @@ AoqEncoderType
 
 否
 
-AoqEncoderTypeAudioPCM
+AoqEncoderTypeAudioOpus
 
 编码格式
 
@@ -2969,6 +3136,8 @@ AoqTrackTypeVideo
 
 轨道类型
 
+；支持 Video / Screen 路由
+
 format
 
 AoqVideoPixelFormat
@@ -3048,6 +3217,8 @@ AoqTrackType
 AoqTrackTypeVideo
 
 轨道类型
+
+；支持 Video / Screen 路由
 
 codec
 
@@ -3280,6 +3451,16 @@ boolean
 false
 
 是否对回调数据应用镜像
+
+trackType
+
+AoqTrackType
+
+否
+
+AoqTrackTypeVideo
+
+需要观察的视频轨道；仅支持 Video / Screen。
 
 **说明**回调模式固定为只读，Electron 不开放读写模式。使用内置 `YUVCanvasRenderer` 渲染时需选 I420。
 

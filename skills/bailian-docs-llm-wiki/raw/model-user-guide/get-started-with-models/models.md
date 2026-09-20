@@ -124,7 +124,7 @@
 
 端到端语音对话，无需分别调用 ASR 和 TTS
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen-audio-3.0-realtime-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.0-realtime-plus)**
+![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen-audio-3.1-realtime-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen-audio-3.1-realtime-plus)**
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[qwen3.5-omni-plus](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/qwen3.5-omni-plus)**
 

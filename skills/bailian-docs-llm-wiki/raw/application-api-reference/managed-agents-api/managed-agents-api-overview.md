@@ -1,11 +1,11 @@
 # API 总览与认证
 
-Managed Agents API 是百炼提供的智能体托管运行时，由平台托管会话、沙箱、工具执行与事件流。
+Managed Agents API 是阿里云百炼提供的智能体托管运行时，由平台托管会话、沙箱、工具执行与事件流。
 
 ## 前提条件
 
-1.  **开通百炼并创建 API Key**：通过[控制台](https://bailian.console.aliyun.com/?tab=model#/api-key)获取，并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
-2.  **获取工作空间 ID**：百炼控制台右上角下拉菜单查看，形如 `ws_xxxxxxxxxxxx`。
+1.  **开通阿里云百炼并创建 API Key**：通过[控制台](https://bailian.console.aliyun.com/?tab=model#/api-key)获取，并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
+2.  **获取工作空间 ID**：阿里云百炼控制台右上角下拉菜单查看，形如 `ws_xxxxxxxxxxxx`。
 
 ## Endpoint
 
@@ -73,7 +73,7 @@ java
 
 列出 Agent
 
-`PATCH /agents/{agent_id}`
+`POST /agents/{agent_id}`
 
 更新 Agent（自动生成新版本号）
 
@@ -95,7 +95,7 @@ java
 
 列出 Environment
 
-`PATCH /environments/{environment_id}`
+`POST /environments/{environment_id}`
 
 更新 Environment
 
@@ -121,7 +121,7 @@ java
 
 列出 Session
 
-`PATCH /sessions/{session_id}`
+`POST /sessions/{session_id}`
 
 更新 Session（如重命名）
 
@@ -243,6 +243,100 @@ java
 
 列出 Skill 版本
 
-`GET /skills/{skill_id}/versions/{version}/download`
+`GET /skills/{skill_id}/versions/{version}/content`
 
 下载 Skill 包
+
+[Vault](raw/application-api-reference/managed-agents-api/vault-api.md)
+
+`POST /vaults`
+
+创建 Vault
+
+`GET /vaults/{vault_id}`
+
+获取 Vault
+
+`GET /vaults`
+
+列出 Vault
+
+`POST /vaults/{vault_id}`
+
+更新 Vault
+
+`DELETE /vaults/{vault_id}`
+
+删除 Vault
+
+`POST /vaults/{vault_id}/archive`
+
+归档 Vault
+
+[Credential](raw/application-api-reference/managed-agents-api/credential-api.md)
+
+`POST /vaults/{vault_id}/credentials`
+
+创建 Credential
+
+`GET /vaults/{vault_id}/credentials/{credential_id}`
+
+获取 Credential
+
+`GET /vaults/{vault_id}/credentials`
+
+列出 Credential
+
+`POST /vaults/{vault_id}/credentials/{credential_id}`
+
+更新 Credential
+
+`DELETE /vaults/{vault_id}/credentials/{credential_id}`
+
+删除 Credential
+
+`POST /vaults/{vault_id}/credentials/{credential_id}/archive`
+
+归档 Credential
+
+[Webhook](raw/application-api-reference/managed-agents-api/webhook-api.md)
+
+`POST /webhook_endpoints`
+
+创建 Webhook
+
+`GET /webhook_endpoints/{id}`
+
+查询 Webhook 详情
+
+`GET /webhook_endpoints`
+
+查询 Webhook 列表
+
+`PUT /webhook_endpoints/{id}`
+
+更新 Webhook
+
+`DELETE /webhook_endpoints/{id}`
+
+删除 Webhook
+
+`POST /webhook_endpoints/{id}/enable`
+
+启用 Webhook
+
+`POST /webhook_endpoints/{id}/disable`
+
+禁用 Webhook
+
+`POST /webhook_endpoints/{id}/test`
+
+测试 Webhook
+
+`POST /webhook_endpoints/{id}/reset_secret`
+
+重置 Signing Secret
+
+`GET /webhook_endpoints/{id}/events`
+
+查询 Webhook 事件

@@ -286,6 +286,18 @@ load\_library
 
 ## 接口详情
 
+### set\_video\_decoder\_config
+
+```
+def set_video_decoder_config(self, config: AoqVideoCodecConfig) -> int
+```
+
+`config` 为视频解码配置。仅以下字段生效：`track_type`、`codec_type`、`width`、`height`、`fps`、`bitrate`。 其余字段仅用于编码。
+
+在 `connect` 之前调用，作为订阅侧编解码参数提议。
+
+返回值：0 表示成功；非 0 表示失败。
+
 ### 引擎生命周期
 
 #### create\_engine
@@ -572,7 +584,7 @@ class IAudioFrameObserver:
 
 ```
 class IVideoFrameObserver:
-    def on_captured_video_frame(self, frame: AoqVideoFrame) -> bool: ...
+    def on_captured_video_frame(self, track_type: AoqTrackType, frame: AoqVideoFrame) -> bool: ...
     def on_pre_encode_video_frame(self, track_type: AoqTrackType, frame: AoqVideoFrame) -> bool: ...
     def on_remote_video_frame(self, track_type: AoqTrackType, frame: AoqVideoFrame) -> bool: ...
 ```
@@ -628,6 +640,22 @@ str
 ""
 
 扩展参数字符串
+
+max\_encoded\_video\_frame\_bytes
+
+int
+
+190 × 1024
+
+编码后单帧大小上限（字节），仅用于 SDK 内部 JPEG 编码。
+
+enable\_drop\_oversized\_video\_frame
+
+bool
+
+False
+
+仅用于 SDK 内部 JPEG 编码：降至最低质量后仍超限时，是否允许丢弃该帧。
 
 #### AoqConnectConfig
 
@@ -728,6 +756,14 @@ int
 \-1
 
 路径序号，与其他平台 SDK 的 routeIndex 对齐；<0 时 SDK 按数组下标自动填充
+
+tcp\_port
+
+int
+
+0
+
+TCP 降级端口；0 表示使用 SDK 默认端口 443。
 
 #### AoqTrackParam
 
@@ -1173,7 +1209,7 @@ codec\_type
 
 AoqEncoderType
 
-AUDIO\_PCM
+AUDIO\_OPUS
 
 编码格式
 

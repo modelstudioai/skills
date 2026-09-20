@@ -17,11 +17,11 @@ qwen-audio-3.0-tts-flash 支持 AOQ Inference 事件协议。本教程选择该�
 
 ### 导入 SDK
 
-根据开发平台导入对应 SDK。后续客户端代码以 Android Java 为例，其他平台使用相同的接口设计和事件流程。本文以 PCM 音频流为例；如果业务选择 Opus，请按 SDK 下载文档导入对应插件。
+根据开发平台导入对应 SDK。后续客户端代码以 Android Java 为例，其他平台使用相同的接口设计和事件流程。本文以 Opus 音频流为例，请先按 SDK 下载文档导入对应插件。
 
 #### Android
 
-1.  将 AoqClientSdk-release.aar 放入 app/libs，并在 app/build.gradle 中配置依赖和 SDK 支持的 ABI：
+1.  将 Opus 插件中的 libPluginOpus.so 按 ABI 放入 app/src/main/jniLibs/armeabi-v7a/ 和 app/src/main/jniLibs/arm64-v8a/，将 AoqClientSdk-release.aar 放入 app/libs，并在 app/build.gradle 中配置依赖和 SDK 支持的 ABI：
 
 ```
 android {
@@ -47,13 +47,13 @@ dependencies {
 
 #### iOS
 
-1.  将 AoqClientSdk.framework 拖入 Xcode 工程，在 Target > General > Frameworks, Libraries, and Embedded Content 中选择 Embed & Sign。SDK 支持 iOS 13.0 及以上 arm64 设备。
+1.  将 AoqClientSdk.framework 与 PluginOpus.framework 拖入 Xcode 工程，在 Target > General > Frameworks, Libraries, and Embedded Content 中选择 Embed & Sign。SDK 支持 iOS 13.0 及以上 arm64 设备。
 2.  本场景不使用麦克风或摄像头，无需声明对应权限。
 3.  Swift 工程使用 import AoqClientSdk；Objective-C 工程使用 #import <AoqClientSdk/AoqClientSdk.h>。
 
 #### HarmonyOS
 
-1.  将 AoqClientSdk.har 放入 entry/libs，并在 entry/oh-package.json5 中声明依赖。该 SDK 兼容 API 12，支持 arm64-v8a：
+1.  将 Opus 插件中的 libPluginOpus.so 放入 entry/libs/arm64-v8a/，将 AoqClientSdk.har 放入 entry/libs，并在 entry/oh-package.json5 中声明依赖。该 SDK 兼容 API 12，支持 arm64-v8a：
 
 ```
 {
@@ -96,7 +96,7 @@ export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 ## 实现流程
 
 1.  AppServer 通过 Inference Token 地址获取 qwen-audio-3.0-tts-flash 的 AOQ 连接参数。
-2.  客户端发布 Data 轨，订阅 Audio 和 Data 轨，并按 run-task 中选择的输出音频格式配置 SDK 解码参数。
+2.  客户端发布 Data 轨，订阅 Audio 和 Data 轨，并配置 SDK 的音频解码参数。
 3.  客户端启动本地播放器并建立 AOQ 连接；连接成功后使用新的 task\_id 发送 run-task。
 4.  收到 task-started 后，按业务节奏发送一个或多个 continue-task 文本片段。
 5.  所有文本发送完成后发送 finish-task。服务端继续返回剩余音频，最终返回 task-finished。
@@ -186,13 +186,13 @@ engine.startAudioPlayer(playbackConfig);
 
 ### 3\. 配置解码器、轨道并建立连接
 
-按 run-task 中选择的输出音频格式配置 SDK 解码参数，然后发布 Data 轨、订阅 Audio 和 Data 轨。以下数值仅为本教程的 PCM 示例配置。AoqConnectConfig 的连接字段由客户根据 AppServer Token 响应填写。
+配置 SDK 的音频解码参数，然后发布 Data 轨、订阅 Audio 和 Data 轨。以下数值仅为本教程的 Opus 示例配置。AoqConnectConfig 的连接字段由客户根据 AppServer Token 响应填写。
 
 ```
 AoqClientEngine.AoqAudioCodecConfig audioDecoderConfig =
         new AoqClientEngine.AoqAudioCodecConfig();
 audioDecoderConfig.trackType = AoqClientEngine.AoqTrackType.AoqTrackTypeAudio;
-audioDecoderConfig.codecType = AoqClientEngine.AoqEncoderType.AoqEncoderTypeAudioPCM;
+audioDecoderConfig.codecType = AoqClientEngine.AoqEncoderType.AoqEncoderTypeAudioOpus;
 audioDecoderConfig.sampleRate = 24000; // 示例值，应与 run-task.sample_rate 一致。
 audioDecoderConfig.channel = 1;
 engine.setAudioDecoderConfig(audioDecoderConfig);
@@ -391,7 +391,7 @@ public final class TtsClient {
         AoqClientEngine.AoqAudioCodecConfig audioDecoderConfig =
                 new AoqClientEngine.AoqAudioCodecConfig();
         audioDecoderConfig.trackType = AoqClientEngine.AoqTrackType.AoqTrackTypeAudio;
-        audioDecoderConfig.codecType = AoqClientEngine.AoqEncoderType.AoqEncoderTypeAudioPCM;
+        audioDecoderConfig.codecType = AoqClientEngine.AoqEncoderType.AoqEncoderTypeAudioOpus;
         audioDecoderConfig.sampleRate = 24000;
         audioDecoderConfig.channel = 1;
         engine.setAudioDecoderConfig(audioDecoderConfig);

@@ -26,7 +26,7 @@
 
 #### 请求参数
 
-客户端进入房间
+#### 客户端进入房间
 
 ```
 curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-directing/openapi/v1/travels/enter-travel' \
@@ -54,15 +54,9 @@ API Key 鉴权。不强制主 API Key，主 API Key 或临时 API Key 均可调�
 
 未过期且未使用的一次性凭证。由[获取体验凭证](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference/happyoyster-directing-get-travel-credential-api-reference.md)接口换取。同一 `ticket` 再次使用返回 `401011`。
 
-**maxExperienceTimeSec** `integer` **（可选）**
+**说明**Directing 进房不消费
 
-Directing 业务不使用该值，成功响应仍为 `null`。若传入，只能为当前配置档位：
-
--   `60`
--   `90`
--   `120`
-
-参数会在模型分流前校验；非法档位返回 `400000`。建议省略。
+`maxExperienceTimeSec`，请勿传入。该字段仅 Adventure 生效；若仍传入非法档位，会在模型分流前返回 `400000`。成功响应仍为 `null`。
 
 #### 响应参数
 
@@ -160,7 +154,7 @@ Directing 模型固定为 `null`。
 ## 前置状态与调用注意事项
 
 -   `ticket` 对应的 World 必须为 `ready`，且 ticket 未过期、未使用。
--   Directing 不需要传 `maxExperienceTimeSec`；若统一客户端必须传入，也只能使用服务端当前允许的档位，否则返回 `400000`。
+-   不要传 `maxExperienceTimeSec`。Directing 不按该字段限制体验时长。
 -   调用成功即创建 Travel；同一 `ticket` 再次使用返回 `401011`。
 -   `creationModel=scriptlist` 时不要调用 `instruct`，应使用[剧本全量更新](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference/happyoyster-directing-update-script-api-reference.md)。
 -   `rtcConfig=null` 表示当前没有可用推流频道，客户端不能据此开始播放。

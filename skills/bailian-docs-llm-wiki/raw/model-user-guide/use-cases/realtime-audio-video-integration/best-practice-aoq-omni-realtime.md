@@ -4,7 +4,7 @@
 
 ## SDK 获取
 
-AOQ Client SDK 及音频 Opus 插件请参见[SDK下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)。Opus 编码以独立插件形式提供，请根据您的场景按需引入。
+AOQ Client SDK 及音频 Opus 插件请参见[SDK下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)。本示例使用 Opus 编码，需导入对应插件。
 
 ## SDK 导入
 
@@ -208,7 +208,7 @@ engine.setLocalView(AoqTrackType.AoqTrackTypeVideo, canvas);
 ```
 // 音频编解码配置
 let encCfg = AoqAudioCodecConfig()
-encCfg.codecType = .audioPCM; encCfg.sampleRate = 16000; encCfg.channel = 1
+encCfg.codecType = .audioOpus; encCfg.sampleRate = 16000; encCfg.channel = 1
 engine.setAudioEncoderConfig(encCfg)
 engine.setAudioDecoderConfig(encCfg)
 
@@ -232,7 +232,7 @@ engine.connect(conn)
 ```
 // 音频编解码配置
 AoqAudioCodecConfig encCfg = new AoqAudioCodecConfig();
-encCfg.codecType = AoqEncoderType.AoqEncoderTypeAudioPCM;
+encCfg.codecType = AoqEncoderType.AoqEncoderTypeAudioOpus;
 encCfg.sampleRate = 16000; encCfg.channel = 1;
 engine.setAudioEncoderConfig(encCfg);
 engine.setAudioDecoderConfig(encCfg);
@@ -260,7 +260,7 @@ engine.connect(conn);
 ```
 // 音频编解码配置
 const encCfg: AoqAudioCodecConfig = {
-  codecType: AoqEncoderType.AoqEncoderTypeAudioPCM,
+  codecType: AoqEncoderType.AoqEncoderTypeAudioOpus,
   sampleRate: 16000, channel: 1
 };
 engine.setAudioEncoderConfig(encCfg);

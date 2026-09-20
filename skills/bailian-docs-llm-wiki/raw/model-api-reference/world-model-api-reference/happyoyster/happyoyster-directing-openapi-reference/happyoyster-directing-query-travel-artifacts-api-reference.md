@@ -30,7 +30,7 @@
 
 #### 请求参数
 
-查询Travel产物
+#### 查询Travel产物
 
 ```
 curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-directing/openapi/v1/travels/artifacts?encryptedTravelId={encryptedTravelId}' \
@@ -49,7 +49,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 
 #### 响应参数
 
-四路产物全部就绪
+#### 四路产物全部就绪
 
 ```
 {
@@ -88,7 +88,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 }
 ```
 
-合成仍在处理
+#### 合成仍在处理
 
 ```
 {
@@ -186,10 +186,40 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 
 ## 前置状态与调用注意事项
 
--   Travel 不是 `completed`、不存在、不归属或不是 Directing、原片不可用时，均返回 `404000`；原片可用是返回产物响应的前提。
 -   需要全部合成版本时，可在 `composeStatus != ready` 时继续轮询。
 -   `video.withInstructionAndWatermark` 是推荐的对外交付版本。
 -   四个视频变体共用同一时长解析结果，因此同一次响应中已就绪且时长可解析的变体会返回一致的 `durationSec`。
+-   不要将 `404000` 一律展示为「尚未完成」：请先通过[查询Travel状态](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference/happyoyster-directing-query-travel-status-api-reference.md)或[查询Travel列表](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference/happyoyster-directing-query-travel-list-api-reference.md)读取 `status` 与 `errorCode`；对 `failed` 的 Travel 展示失败原因。
+
+##### 404000 场景
+
+场景
+
+接口表现
+
+Travel 仍在进行中（`init` / `pending` / `running` / `paused`）
+
+返回业务码 `404000`，`message` = `Video is still being generated, please try again once the process is complete`
+
+Travel 处于 `failed`
+
+返回业务码 `404000`，`message` = `Experience failed and no video was produced (errorCode=<errorCode>): <errorMessage>`；失败是终态，不会再产出视频
+
+Travel 不存在、不归属或不是 Directing
+
+返回业务码 `404000`
+
+原片 URL 不可用
+
+返回业务码 `404000`；原片是整个接口的硬门槛
+
+原片已就绪、合成仍在处理
+
+HTTP 200；对应合成条目 `status=processing`、`url=null`
+
+合成失败或 URL 暂不可用
+
+HTTP 200；对应合成条目 `status=unavailable`、`url=null`
 
 ## 错误码
 

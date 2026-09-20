@@ -35,10 +35,22 @@ Qwen-Audio Realtime API的客户端事件参考。
 
 **voice**`string`（可选）
 
-TTS 音色名称，默认值为 `longanqian`。支持两种类型，仅可在第一次 `session.update` 中设置，后续传入将被忽略。
+TTS 音色名称，3.1 Plus 的默认值为 `longanqian_v3.1`，3.0 Plus/Flash 的默认值为 `longanqian`。支持系统音色和声音复刻音色，仅可在第一次 `session.update` 中设置，后续传入将被忽略。
 
--   **系统音色**：可选值：`longanqian`、`longanlingxin`、`longanlingxi`、`longanxiaoxin`、`longanlufeng`。
+-   **3.1 Plus 新增系统音色**：`longanqian_v3.1`、`longanhuan_v3.1`、`longanlingxin_v3.1`、`longanfengyue_v3.1`、`xunanchuan`、`beth_v3.1`、`betty_v3.1`、`cally_v3.1`。
+-   **3.1 Plus、3.0 Plus/Flash 共有系统音色**：可选值：`longanqian`、`longanlingxin`、`longanlingxi`、`longanxiaoxin`、`longanlufeng`。
 -   **声音复刻音色**：通过声音复刻 API 创建，将返回的 `voice_id` 填入此参数。详见[音色配置](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime#fc60h311)。
+
+连接 `qwen-audio-3.1-realtime-plus` 后，在首次 `session.update` 中设置音色，例如：
+
+```
+{
+    "type": "session.update",
+    "session": {
+        "voice": "longanqian_v3.1"
+    }
+}
+```
 
 **enable\_speech\_emotion**`boolean`（可选）
 
@@ -62,7 +74,7 @@ TTS 音色名称，默认值为 `longanqian`。支持两种类型，仅可在第
 
 **enable\_search**`boolean`（可选）
 
-**仅适用于 qwen-audio-3.0-realtime-plus 和 qwen-audio-3.0-realtime-flash 模型。**
+**适用于 qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus 和 qwen-audio-3.0-realtime-flash 模型。**
 
 是否开启联网搜索。默认值：`false`。开启后，模型可根据实时问题自主判断是否进行联网搜索。
 

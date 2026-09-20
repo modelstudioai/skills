@@ -38,7 +38,7 @@
 
 #### 请求参数
 
-首帧图（异步创建）
+#### 首帧图（异步创建）
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-adventure/openapi/v1/worlds' \
@@ -48,15 +48,13 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/
     "async": true,
     "perspective": "third_person",
     "prompt": "第三人称跟拍：一名身穿黑色防寒服、头戴黑色头盔的骑手骑着黑色雪地摩托驶向远方，履带扬起细雪。前方是积雪覆盖的针叶林，更远处是日照岩壁的陡峭雪山与蓝天白云。冬日晴空，雪地高光强烈，开阔冷冽。",
-    "eventStyle": "dramatic",
     "firstFrameImage": {
-        "url": "https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9fc6.png",
-        "referenceType": "default"
+        "url": "https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f9fc6.png"
     }
 }'
 ```
 
-首帧图base64（异步创建）
+#### 首帧图base64（异步创建）
 
 ```
 curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-adventure/openapi/v1/worlds' \
@@ -67,8 +65,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/
     "perspective": "third_person",
     "prompt": "第三人称跟拍：一名身穿黑色防寒服、头戴黑色头盔的骑手骑着黑色雪地摩托驶向远方，履带扬起细雪。前方是积雪覆盖的针叶林，更远处是日照岩壁的陡峭雪山与蓝天白云。冬日晴空，雪地高光强烈，开阔冷冽。",
     "firstFrameImage": {
-        "base64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...",
-        "referenceType": "default"
+        "base64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ..."
     }
 }'
 ```
@@ -111,14 +108,6 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 
 图片上传模式。默认 `first_frame`，Adventure 仅支持 `first_frame`。
 
-**eventStyle** `string` （可选）
-
-事件风格，用于选择剧本生成模板。默认 `normal`。可选值：
-
--   `normal`：常规 / 标准风格（默认）。按用户意图补全 4–5 幕，节奏相对平稳，不强行加入冲突、反转或三幕高潮。
--   `dramatic`：戏剧 / 冲突风格。按约 180 秒三幕骨架生成剧本：开场钩子、上升冲突、转折、高潮收束；开放演绎时按类型安排反转（悬疑 / 惊悚 / 逆袭等），节奏更密、戏剧性更强。
--   `regular`：旧值，等同 `normal`。仅用于兼容历史入参，服务端按 `normal` 解析，行为与 `normal` 完全一致；新调用请勿再使用。
-
 **refWorldId** `string` （可选）
 
 基于已有 Adventure World 衍生创建。必须是当前主账号名下的 Adventure 加密 World ID；其它模型或其它主账号的 World 返回 `403001`。
@@ -155,7 +144,7 @@ API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。�
 
 #### 响应参数
 
-异步创建
+#### 异步创建
 
 ```
 {

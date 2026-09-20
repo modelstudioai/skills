@@ -6490,6 +6490,12 @@ fun-music-v1
 
 > **含输入与输出Token**
 
+qwen-audio-3.1-realtime-plus
+
+60
+
+100,000
+
 qwen-audio-3.0-realtime-plus
 
 60
@@ -6517,6 +6523,14 @@ qwen-audio-3.0-realtime-flash
 **每分钟消耗Token数（TPM）**
 
 > **含输入与输出Token**
+
+qwen-audio-3.1-realtime-plus
+
+国际
+
+60
+
+100,000
 
 qwen-audio-3.0-realtime-plus
 

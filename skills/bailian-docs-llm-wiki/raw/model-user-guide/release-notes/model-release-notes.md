@@ -187,7 +187,7 @@ qwen-turbo 资源包启动退市通知[了解详情](https://www.aliyun.com/noti
 
 知识检索服务上线
 
-新增知识检索服务，支持多知识库联合检索与混合排序，[了解详情](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)
+新增知识检索服务，支持多知识库联合检索与混合排序，[了解详情](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)
 
 6月23日
 
@@ -195,7 +195,7 @@ qwen-turbo 资源包启动退市通知[了解详情](https://www.aliyun.com/noti
 
 知识问答服务上线
 
-新增知识问答服务，基于大模型结合检索生成回答，[了解详情](raw/application-user-guide/knowledge-base/rag-knowledge-qa.md)
+新增知识问答服务，基于大模型结合检索生成回答，[了解详情](raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md)
 
 6月15日
 
@@ -235,7 +235,7 @@ Skill 能力包上线
 
 数据连接模块上线
 
-新增数据连接模块，支持 MySQL/语雀/OSS 等数据源，[了解详情](raw/application-user-guide/overview/data-connection-overview/data-connection.md)
+新增数据连接模块，支持 MySQL/语雀/OSS 等数据源，[了解详情](raw/application-user-guide/knowledge-base/data-connection-overview/data-connection.md)
 
 6月9日
 
@@ -415,7 +415,7 @@ Token Plan 团队版新增团队管理：支持 SSO/钉钉登录、席位分配�
 
 知识库新增日志与监控
 
-知识库检索调用全量投递至 SLS 日志服务，支持审计/排查/统计/告警，[了解详情](raw/application-user-guide/knowledge-base/rag-knowledge-base-log-monitoring.md)
+知识库检索调用全量投递至 SLS 日志服务，支持审计/排查/统计/告警，[了解详情](raw/application-user-guide/knowledge-base/reference/rag-knowledge-base-log-monitoring.md)
 
 4月23日
 
@@ -758,7 +758,7 @@ DPO 偏好训练通过引入负反馈，从而降低幻觉，使得模型输出�
 
 知识检索与问答 API 上线
 
-新增知识检索与问答 API，SSE 流式返回三阶段，[了解详情](raw/application-api-reference/knowledge.md)
+新增知识检索与问答 API，SSE 流式返回三阶段，[了解详情](raw/application-api-reference/rag-api/knowledge.md)
 
 **6月**
 
