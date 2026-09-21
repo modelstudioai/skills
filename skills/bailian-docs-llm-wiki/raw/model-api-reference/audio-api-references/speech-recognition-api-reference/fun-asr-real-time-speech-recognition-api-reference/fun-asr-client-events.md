@@ -1,6 +1,6 @@
-# 实时语音识别（Qwen-Audio-3.0-ASR-Flash-Streaming/Fun-ASR-Realtime）客户端事件
+# 实时语音识别（Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime）客户端事件
 
-本文介绍 Qwen-Audio-3.0-ASR-Flash-Streaming/Fun-ASR-Realtime 实时语音识别服务中客户端通过 WebSocket 发送给服务端的客户端事件，包括 run-task（启动任务）、 continue-task（更新上下文）、 finish-task（结束任务）等指令的数据结构与字段含义。
+本文介绍 Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime 实时语音识别服务中客户端通过 WebSocket 发送给服务端的客户端事件，包括 run-task（启动任务）、 continue-task（更新上下文）、 finish-task（结束任务）等指令的数据结构与字段含义。
 
 **用户指南：**关于模型介绍和选型建议请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model)。
 
@@ -48,13 +48,13 @@
 
 **model**`string`**（必选）**
 
-指定模型名。支持Qwen-Audio-3.0-ASR-Flash-Streaming和Fun-ASR-Realtime系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
+指定模型名。支持Qwen-Audio-3.x-ASR-Flash-Streaming和Fun-ASR-Realtime系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
 
 **input**`object`**（必选）**
 
 输入对象。不携带上下文时传入`{}`。
 
-**重要**仅 `qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持上下文。
+**重要**仅 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持上下文。
 
 属性
 
@@ -96,7 +96,20 @@
 
 语音识别参数。
 
+**说明**`qwen-audio-3.1-asr-flash-message` 模型不支持 `language_hints`、`semantic_punctuation_enabled`、`multi_threshold_mode_enabled`、`special_word_filter` 参数。
+
 属性
+
+**keep\_dialect** `boolean`（可选）
+
+仅 `qwen-audio-3.1-asr-flash-streaming` 支持。是否保留方言表达，默认值为 `false`。`false`：将方言转写为普通话文本；`true`：保留方言表达。
+
+**vad\_model** `string`（可选）
+
+仅 `qwen-audio-3.1-asr-flash-streaming` 支持。VAD 模型，默认值为 `far_field_meeting_16k`。
+
+-   `near_meeting_16k`：近场场景。
+-   `far_field_meeting_16k`：远场场景。
 
 **format**`string`**（必选）**
 
@@ -144,17 +157,17 @@ amr：仅支持AMR-NB类型。
 
 与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
 
-**重要**仅`qwen-audio-3.0-asr-flash-streaming`支持即时热词。
+**重要**仅`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`支持即时热词。
 
 **language\_hints**`array[string]`（可选）
 
 待识别音频语种。无默认值，不设置时模型自动识别。
 
-对于 Qwen-Audio-3.0-ASR-Flash-Streaming 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR-Realtime 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。
+对于 Qwen-Audio-3.x-ASR-Flash-Streaming 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR-Realtime 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。
 
 点击查看支持的语言代码
 
--   qwen-audio-3.0-asr-flash-streaming、fun-asr-realtime、fun-asr-realtime-2025-11-07：
+-   qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming、fun-asr-realtime、fun-asr-realtime-2025-11-07：
     
     -   zh: 中文
     -   en: 英文
@@ -270,7 +283,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
         "task_group": "audio",
         "task": "asr",
         "function": "recognition",
-        "model": "qwen-audio-3.0-asr-flash-streaming",
+        "model": "qwen-audio-3.1-asr-flash-streaming",
         "parameters": {
             "format": "pcm",
             "sample_rate": 16000
@@ -293,7 +306,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
         "task_group": "audio",
         "task": "asr",
         "function": "recognition",
-        "model": "qwen-audio-3.0-asr-flash-streaming",
+        "model": "qwen-audio-3.1-asr-flash-streaming",
         "parameters": {
             "format": "pcm",
             "sample_rate": 16000
@@ -337,7 +350,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
         "task_group": "audio",
         "task": "asr",
         "function": "recognition",
-        "model": "qwen-audio-3.0-asr-flash-streaming",
+        "model": "qwen-audio-3.1-asr-flash-streaming",
         "parameters": {
             "format": "pcm",
             "sample_rate": 16000,
@@ -354,7 +367,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 **发送时机**：任务运行中，需要更新对话上下文时发送。
 
-**重要**仅 `qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持该事件。
+**重要**仅 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持该事件。
 
 **header**`object`**（必选）**
 

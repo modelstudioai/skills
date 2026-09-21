@@ -1,0 +1,71 @@
+{
+  "name": "Qwen-Audio-3.1-TTS-Next",
+  "description": "qwen-audio-3.1-tts-next 是一款面向统一音频生成的 Audiogen 模型，不再局限于传统 TTS 的单一语音合成，而是能够围绕文本、时间戳和参考音频等输入，一次生成完整的音频内容，包括人声、音效、环境音、背景音乐等。模型支持多语种 TTS、单人说话、多人对话、Podcast 播客、影视剧声景、音乐、环境音与音效等任务。其核心亮点在于更自然的人声表达、稳定的音色保持、灵活的时间控制，以及高质量音乐与综合声景生成能力，适用于内容创作、短视频、播客、影视和游戏音频制作等场景。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Audio"
+        ],
+        "request_modality": [
+          "Text",
+          "Audio"
+        ]
+      },
+      "description": "Qwen-Audio-3.1-TTS-Next  是一款面向统一音频生成的 Audiogen 模型，不再局限于传统 TTS 的单一语音合成，而是能够围绕文本、时间戳和参考音频等输入，一次生成完整的音频内容，包括人声、音效、环境音、背景音乐等。模型支持多语种 TTS、单人说话、多人对话、Podcast 播客、影视剧声景、音乐、环境音与音效等任务。其核心亮点在于更自然的人声表达、稳定的音色保持、灵活的时间控制，以及高质量音乐与综合声景生成能力，适用于内容创作、短视频、播客、影视和游戏音频制作等场景。",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen-audio-3.1-tts-next",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "6",
+          "timeBand": "standard",
+          "ntmAmountType": "tts_input_token",
+          "type": "tts_input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "12",
+          "timeBand": "standard",
+          "ntmAmountType": "tts_output_token",
+          "type": "tts_output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 3,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "TTS"
+      ],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-09-21T15:55:25.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Audio-3.1-TTS-Next",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/audio-generation",
+      "category": "Audio",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "# coding=utf-8\n\nimport dashscope\nfrom dashscope.audio.tts_v2 import *\n\n# If the API Key is not configured in the environment variable, your-api-key needs to be replaced with your own API Key\n# dashscope.api_key = \"your-api-key\"\n\ndashscope.base_websocket_api_url='wss://[workspace-id].cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'\n\nmodel = \"qwen-audio-3.1-tts-next\"\n\n#Please enter the correct voice below.\nvoice = \"\"\n\nsynthesizer = SpeechSynthesizer(model=model, voice=voice)\naudio = synthesizer.call(\"How is the weather today?\")\n\nwith open('output.mp3', 'wb') as f:\n    f.write(audio)",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/realtime-tts-user-guide"
+          }
+        }
+      }
+    }
+  ]
+}

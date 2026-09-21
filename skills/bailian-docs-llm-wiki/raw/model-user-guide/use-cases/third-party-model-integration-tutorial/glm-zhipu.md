@@ -246,7 +246,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ## 流式工具调用
 
-ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5支持`tool_stream`参数（boolean，默认`false`），仅在`stream`为`true`时生效。开启后，Function Calling 返回的 tool\_call 参数（arguments）会以流式增量方式逐步返回。
+ZHIPU/GLM-5.3-FlashX、ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5支持`tool_stream`参数（boolean，默认`false`），仅在`stream`为`true`时生效。开启后，Function Calling 返回的 tool\_call 参数（arguments）会以流式增量方式逐步返回。
 
 `stream`与`tool_stream`的组合行为如下：
 
@@ -449,7 +449,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ## 思考控制（thinking.type 与 reasoning\_effort）
 
-ZHIPU/GLM-5.3 与 ZHIPU/GLM-5.3-Flash 始终以思考模式运行，不支持关闭思考，请保持 `thinking.type` 为 `enabled`（使用 `enable_thinking` 时保持为 `true`），并通过 `reasoning_effort` 控制推理深度。
+ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash 与 ZHIPU/GLM-5.3-FlashX 始终以思考模式运行，不支持关闭思考，请保持 `thinking.type` 为 `enabled`（使用 `enable_thinking` 时保持为 `true`），并通过 `reasoning_effort` 控制推理深度。
 
 **参数**
 
@@ -459,7 +459,7 @@ ZHIPU/GLM-5.3 与 ZHIPU/GLM-5.3-Flash 始终以思考模式运行，不支持关
 
 `thinking.type`
 
-控制是否开启思考，默认为 `enabled`。ZHIPU/GLM-5.3 与 ZHIPU/GLM-5.3-Flash 不再支持 `disabled`，传入 `disabled` 会导致 API 请求失败。
+控制是否开启思考，默认为 `enabled`。ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash 与 ZHIPU/GLM-5.3-FlashX 不再支持 `disabled`，传入 `disabled` 会导致 API 请求失败。
 
 `enabled`
 
@@ -546,7 +546,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 ## 多模态理解
 
-ZHIPU/GLM-5.3-Flash 原生支持图像、视频与文件输入，文本参数与 ZHIPU/GLM-5.3 一致。传入图片时，在 `messages[].content` 数组中添加 `type` 为 `image_url` 的内容块，通过 `image_url.url` 传入图片 URL（推荐）或 Base64 Data URL；传入多张图片时添加多个 `image_url` 内容块。
+ZHIPU/GLM-5.3-Flash 与 ZHIPU/GLM-5.3-FlashX 原生支持图像、视频与文件输入，文本参数与 ZHIPU/GLM-5.3 一致。传入图片时，在 `messages[].content` 数组中添加 `type` 为 `image_url` 的内容块，通过 `image_url.url` 传入图片 URL（推荐）或 Base64 Data URL；传入多张图片时添加多个 `image_url` 内容块。
 
 #### OpenAI兼容
 
@@ -666,6 +666,24 @@ ZHIPU/GLM-5.3-Flash
 
 > reasoning\_effort
 
+ZHIPU/GLM-5.3-FlashX
+
+支持
+
+支持
+
+支持
+
+不支持
+
+支持
+
+支持
+
+支持
+
+> reasoning\_effort
+
 ZHIPU/GLM-5.2
 
 支持
@@ -764,6 +782,18 @@ true（不可关闭）
 
 \-
 
+ZHIPU/GLM-5.3-FlashX
+
+true（不可关闭）
+
+1.0
+
+0.95
+
+\-
+
+\-
+
 ZHIPU/GLM-5.2
 
 true
@@ -804,7 +834,7 @@ true
 
 ## 模型列表与计费
 
-GLM 系列模型是智谱AI专为智能体设计的混合推理模型，提供思考与非思考两种模式，其中 ZHIPU/GLM-5.3 与 ZHIPU/GLM-5.3-Flash 仅支持思考模式，ZHIPU/GLM-5.3-Flash 还原生支持图像、视频与文件输入。
+GLM 系列模型是智谱AI专为智能体设计的混合推理模型，提供思考与非思考两种模式，其中 ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash 与 ZHIPU/GLM-5.3-FlashX 仅支持思考模式，ZHIPU/GLM-5.3-Flash 与 ZHIPU/GLM-5.3-FlashX 还原生支持图像、视频与文件输入。
 
 模型上下文长度与价格信息请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)。
 

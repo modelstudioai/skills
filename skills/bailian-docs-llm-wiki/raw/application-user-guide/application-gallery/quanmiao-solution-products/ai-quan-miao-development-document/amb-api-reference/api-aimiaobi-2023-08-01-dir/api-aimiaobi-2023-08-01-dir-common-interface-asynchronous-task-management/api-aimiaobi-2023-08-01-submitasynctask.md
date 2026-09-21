@@ -97,7 +97,7 @@ string
 
 任务提交参数
 
-{"fileUrl":"[](https://www.example.com/aaa.doc)[https://www.example.com/aaa.doc](https://www.example.com/aaa.doc)","fileName":"文件名称","shareAttr":1}
+{"fileUrl":"[https://www.example.com/aaa.doc","fileName":"文件名称","shareAttr":1](https://www.example.com/aaa.doc%22,%22fileName%22:%22%E6%96%87%E4%BB%B6%E5%90%8D%E7%A7%B0%22,%22shareAttr%22:1)}
 
 TaskExecuteTime
 

@@ -6,7 +6,7 @@
 
 ## 快速开始
 
-stepfun/step-3.7-flash 是阶跃星辰直供的多模态推理模型，**默认关闭思考模式**，您可以通过设置 `enable_thinking` 为 `true` 开启思考模式。开启后，模型的推理过程通过 `reasoning_content` 字段返回，您可以通过 `reasoning_effort` 参数（可选值：`low`、`medium`、`high`）控制推理深度。运行以下代码快速调用 stepfun/step-3.7-flash 模型。
+stepfun/step-3.7-flash 和 stepfun/step-5-preview 是阶跃星辰直供的多模态推理模型，**默认关闭思考模式**，您可以通过设置 `enable_thinking` 为 `true` 开启思考模式。开启后，模型的推理过程通过 `reasoning_content` 字段返回，您可以通过 `reasoning_effort` 参数（可选值：`low`、`medium`、`high`）控制推理深度。运行以下代码快速调用模型（示例使用 stepfun/step-3.7-flash，可替换为 stepfun/step-5-preview）。
 
 需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并完成[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。如果通过SDK调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
@@ -500,7 +500,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 支持图像（URL/Base64）和视频（URL）输入
 
-stepfun/step-3.7-flash 不支持以下参数：`tool_choice`、`thinking_budget`、`top_k`、`modalities`、`repetition_penalty`、`vl_high_resolution_images`、`preserve_thinking`、`enable_search`、`search_options`、`seed`、`logprobs`、`top_logprobs`、`n`。
+stepfun/step-3.7-flash 和 stepfun/step-5-preview 不支持以下参数：`tool_choice`、`thinking_budget`、`top_k`、`modalities`、`repetition_penalty`、`vl_high_resolution_images`、`preserve_thinking`、`enable_search`、`search_options`、`seed`、`logprobs`、`top_logprobs`、`n`。
 
 支持的参数中，部分参数取值范围与功能与百炼不一致：
 

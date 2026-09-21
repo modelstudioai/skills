@@ -22,11 +22,11 @@ Content-Type
 
 `application/json`
 
-协议约定、通用请求/响应格式与分页说明参见 [API 概览](raw/application-api-reference/long-term-memory-new/overview.md)，鉴权细节参见[鉴权](raw/application-api-reference/long-term-memory-new/overview/authentication.md)，错误响应参见[错误码](raw/application-api-reference/long-term-memory-new/overview/errors.md)。
+协议约定、通用请求/响应格式与分页说明参见 [API 概览](raw/application-api-reference/long-term-memory-new/api-overview.md)，鉴权细节参见[鉴权](raw/application-api-reference/long-term-memory-new/api-overview/authentication.md)，错误响应参见[错误码](raw/application-api-reference/long-term-memory-new/api-overview/errors.md)。
 
 ## 接口概览
 
-**重要**记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式商业化计费。Add 和 Search 调用均区分 **Pro** 和 **Lite** 版本：Add 的版本对应不同质量的记忆抽取模型，Search 的版本决定是否开启 Rerank。详见[计费说明](raw/application-user-guide/memory-library-overview/overview/billing.md)。
+**重要**记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式商业化计费。Add 和 Search 调用均区分 **Pro** 和 **Lite** 版本：Add 的版本对应不同质量的记忆抽取模型，Search 的版本决定是否开启 Rerank。详见[计费说明](raw/application-user-guide/memory-library-overview/integration-overview/billing.md)。
 
 **事实记忆**：
 
@@ -156,4 +156,4 @@ API 接口
 
 300 QPM
 
-生成的记忆片段与用户画像暂无失效日期。如需扩容限流额度，请[提交工单](https://smartservice.console.aliyun.com/service/create-ticket)申请，详见[限流说明](raw/application-user-guide/memory-library-overview/overview/limits.md)。
+生成的记忆片段与用户画像暂无失效日期。如需扩容限流额度，请[提交工单](https://smartservice.console.aliyun.com/service/create-ticket)申请，详见[限流说明](raw/application-user-guide/memory-library-overview/integration-overview/limits.md)。

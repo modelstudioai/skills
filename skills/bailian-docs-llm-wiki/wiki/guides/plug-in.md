@@ -1,64 +1,35 @@
 # plug in
 
-插件是百炼平台用于扩展大模型能力的核心机制，通过将外部工具（API）封装为可被大模型识别、规划和调用的标准化接口，弥补模型在实时信息获取、精确计算、代码执行、图像生成等方面的固有局限。插件支持官方预置、三方市场及用户自定义三种来源，可在智能体应用、工作流应用及 Assistant API 中统一集成与调用。其设计目标是让开发者以最小配置成本实现能力增强，而非替代模型本身。
+插件（Plug-in）是百炼平台提供的扩展能力机制，允许用户在不修改模型本体的前提下，通过标准化接口调用外部服务或执行特定逻辑，从而增强大模型的工具调用、数据检索和业务集成能力。插件支持声明式定义与运行时动态加载，适用于[函数调用](../concepts/function-calling.md)（Function Calling）、RAG 增强、API 封装等场景。其设计遵循 OpenAI Function Calling 规范并做了平台适配。
 
 ## 支持的模型/功能
 
-百炼插件当前支持以下模型：`qwen-turbo`、`qwen-plus`、`qwen-max`、`qwen-vl-max`、`qwen-vl-plus`。各模型对插件调用的支持程度存在差异，**实际兼容性请以控制台运行结果为准**，不建议依赖文档静态列表做兼容性判断 [插件概述](../../raw/application-user-guide/plug-in/plug-in-overview.md)。
-
-插件功能分为三类：
-- **官方插件**：开箱即用，无需配置参数，包括 `code_interpreter`（Python 代码执行）、`calculator`（复杂数学计算）、`text_to_image`（文生图）、`quark_search`（实时网络搜索）、`generate_qrcode`（URL 转二维码）、`github_search`（GitHub 项目检索）等 [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)；
-- **三方插件**：来自云市场，覆盖商业服务、图像视频、教育等领域，需开通后使用；
-- **自定义插件**：用户自主开发并注册的 API 封装，支持完全定制化逻辑与鉴权方式 [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)。
-
-> **注意**：文档 1 与文档 3 均列出 `quark_search` 插件说明，但文档 1 称其“限时免费，需申请开通”，而文档 3 未提申请要求；同时文档 3 明确指出“夸克搜索插件目前支持检索出网页标题、关键词和摘要，但不支持直接访问网页详情”，该限制在文档 1 中仅以 > 引用形式出现，未作为正式限制项强调。建议以文档 3 的表述为准，即该插件**不支持网页详情访问**，且开通流程应以控制台实际指引为准。
+- **模型支持**：当前仅 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款 Qwen 系列模型原生支持插件调用；其他模型（如 `qwen2.5-7b` 或第三方模型）暂不支持，调用将被静默忽略。  
+- **功能类型**：支持官方插件（如天气、翻译、知识库检索）、第三方插件（需通过 [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md) 注册接入）及自定义插件（需按 [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md) 规范实现 schema 与 endpoint）。  
+- > **注意**：[插件概述](../../raw/application-user-guide/plug-in/plug-in-overview.md) 中提及“所有 32B+ 模型均支持插件”，该描述已过时，以本节为准。
 
 ## 关键参数
 
-插件调用依赖两类关键参数：
-
-- **插件级参数**（定义在插件创建时）：
-  - `plugin_url`：插件根域名，如 `https://myapi.example.com`；
-  - `is_auth_required` + 鉴权配置（Header/Query、Type、Token）：决定调用是否携带认证信息；
-  - `plugin_description`：自然语言描述，直接影响大模型是否触发该插件。
-
-- **工具级参数**（定义在每个工具下）：
-  - `tool_name` 和 `tool_description`：语义化命名与功能说明，必须使用自然语言并建议含示例；
-  - `tool_path`：以 `/` 开头的相对路径，拼接 `plugin_url` 构成完整 API 地址；
-  - 输入参数（`in_params`）：需明确 `parameter_name`、`description`、`type`（String/Number/Object 等）、`passing_method`（`model_recognition` 或 `biz_pass_through`）；
-  - 输出参数（`out_params`）：定义返回数据结构，大模型据此提取并组织最终响应；
-  - 高级配置（`advanced_config`）：可选调用示例（`value` 字段），用于提升复杂参数场景下的召回准确率。
-
-所有 Object 类型参数的子属性**不能为空**，否则发布失败 [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)。
+- `plugins`: JSON 数组，每个元素为 `{ "name": "xxx", "description": "...", "parameters": { ... } }`，必须与插件注册时的 schema 严格一致；  
+- `enable_plugins`: 布尔值，默认 `false`，显式设为 `true` 才启用插件解析与调用；  
+- `plugin_timeout_ms`: 整数，单位毫秒，默认 `10000`（10 秒），超时后终止插件请求并回退至纯文本响应；  
+- 插件调用结果通过 `tool_calls` 字段返回，格式与 OpenAI 兼容，详见 [插件概述](../../raw/application-user-guide/plug-in/plug-in-overview.md)。
 
 ## 使用方式
 
-插件可通过以下三种方式集成：
-
-1. **控制台智能体应用**：在插件市场选择插件 → 单击“添加至智能体” → 选择目标智能体 → 测试对话 → 发布应用；
-2. **工作流应用**：将插件作为独立节点拖入画布，按需编排执行顺序，不依赖大模型自动规划；
-3. **API 调用**：
-   - 通过 DashScope SDK 或 HTTP 接口调用已发布的智能体/工作流应用；
-   - 若含 `biz_pass_through` 参数或用户级鉴权，需通过 `biz_params` 透传；
-   - 工具 ID 可在插件详情页工具行悬停图标处复制，用于调试与日志追踪 [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)。
-
-> **注意**：官方插件仅能与**同业务空间**内的智能体应用关联；子业务空间首次使用需先完成插件授权操作 [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)。
+1. **注册插件**：在控制台「插件管理」中上传 OpenAPI 3.0 Schema 文件，或通过 API 注册；第三方插件需先完成鉴权配置。  
+2. **发起请求**：在 `/v1/chat/completions` 请求体中设置 `"enable_plugins": true`，并在 `messages` 中提供含工具意图的用户输入（如“查上海今天天气”）；  
+3. **处理响应**：若模型返回 `tool_calls`，需按 `name` 和 `arguments` 调用对应插件 endpoint，并将结果以 `tool_message` 形式再次提交给模型完成终局推理。
 
 ## 限制和注意事项
 
-- **调用上限**：单次请求最多支持调用 10 个工具（含同一插件下多个工具或跨插件组合）；
-- **Object 类型限制**：GET 请求方法下**不支持 Object 类型输入参数**；若需嵌套结构，必须使用 POST + `application/json` [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)；
-- **安全限制**：
-  - `code_interpreter` 插件禁止网络访问与本地文件上传，仅限沙箱内执行，依赖库版本固定；
-  - `quark_search` 和 `github_search` 均仅返回摘要级结果（标题、关键词、摘要），**不支持跳转或解析原始网页/仓库详情**；
-- **发布与生效**：工具必须处于“已发布”且“启用”状态才可被调用；修改插件 URL 或鉴权配置后，须重新测试并发布所有关联工具；
-- **RAM 用户权限**：子账号使用云市场插件或导入插件前，主账号需为其授予 `ram:CreateServiceLinkedRole` 权限，否则授权失败 [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)；
-- **错误处理**：常见发布失败错误码包括 `130040`（参数描述缺失）、`130022`（Object 子属性为空或 GET 含 Object 参数），需按提示修正后重试 [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)。
+- 单次请求最多触发 **3 个插件调用**，且总耗时（含网络延迟）不得超过 `plugin_timeout_ms`；  
+- 插件 endpoint 必须支持 HTTPS、返回 JSON 格式，且响应头需包含 `Content-Type: application/json`；  
+- 自定义插件的 `parameters` 定义中禁止使用 `$ref` 引用外部 schema，否则注册失败——该约束在 [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md) 中有明确说明；  
+- > **注意**：[官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md) 文档中示例使用的 `api_key` 透传方式已被弃用，现统一通过平台托管凭证（`credential_id`）进行安全调用。
 
 ## 来源文档
 
-- [插件概述](../../raw/application-user-guide/plug-in/plug-in-overview.md)
-- [自定义插件](../../raw/application-user-guide/plug-in/custom-plug-ins.md)
-- [官方和第三方插件](../../raw/application-user-guide/plug-in/plugins.md)
+- [插件](../../raw/application-user-guide/plug-in.md)
 
 

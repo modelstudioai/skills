@@ -116,7 +116,7 @@
 2.  一个月内不使用将自动释放。
     
 
-如需查看单次调用的 Token 使用量及调用次数历史统计，请前往：[模型监控](https://bailian.console.aliyun.com/model/telemetry)。
+如需查看单次调用的 Token 使用量及调用次数历史统计，请前往：[模型监控](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)。
 
 DTU 是模型单元(MU)的继任方案（计量粒度由单元数改为输入/输出TPM），新购独占部署优先选 DTU，详见[独占算力部署](raw/model-user-guide/model-deployment-index/dtu-model-deployment.md)。
 

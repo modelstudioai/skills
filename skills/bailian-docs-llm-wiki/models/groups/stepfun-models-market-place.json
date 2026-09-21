@@ -13,6 +13,91 @@
           "Video"
         ]
       },
+      "description": "Step 5 Preview，一款面向真实世界 Agentic 任务的旗舰基座模型。Step 5 Preview 在 AI 编程、软件工程、专业知识工作等任务上达到前沿水平，并在金融领域展现出尤为突出的能力。Step 5 Preview 采用稀疏 MoE 架构，总参数量 600B，每个 Token 激活 27B 参数，支持 1M Token 上下文窗口和视觉输入。",
+      "features": [
+        "function-calling",
+        "structured-outputs",
+        "prefix-completion",
+        "cache"
+      ],
+      "provider": "stepfun",
+      "model": "stepfun/step-5-preview",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "7",
+          "type": "input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "20",
+          "type": "output_token",
+          "priceName": "输出"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.35",
+          "type": "input_token_cache",
+          "priceName": "输入（缓存命中）"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 60,
+          "usage_limit": 10000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 500,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 60,
+          "usage_limit": 10000000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 500,
+          "usage_limit_period": 60,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "TG",
+        "VU",
+        "Reasoning"
+      ],
+      "modelAlias": "",
+      "versionTag": "MAJOR",
+      "maxOutputTokens": 1048576,
+      "latestOnlineAt": "2026-09-20T07:58:15.000+00:00",
+      "contextWindow": 1048576,
+      "maxInputTokens": 1048576,
+      "inferenceProvider": "stepfun",
+      "name": "stepfun/step-5-preview",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/stepfun",
+      "category": "Third-party",
+      "samples": {
+        "openai": {
+          "completionsAPI": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions' \\\n--header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n--header 'Content-Type: application/json' \\\n--data '{\n  \"model\": \"stepfun/step-5-preview\",\n  \"messages\": [\n  {\n    \"role\": \"user\",\n    \"content\": [\n      {\"type\": \"image_url\", \"image_url\": {\"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"}},\n      {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"}\n    ]\n  }]\n}'",
+            "python": "import os\nfrom openai import OpenAI\n\nclient = OpenAI(\n    api_key=os.getenv(\"DASHSCOPE_API_KEY\"),\n    base_url=\"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\",\n)\n\ncompletion = client.chat.completions.create(\n    model=\"stepfun/step-5-preview\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": [\n                {\n                    \"type\": \"image_url\",\n                    \"image_url\": {\n                        \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n                    },\n                },\n                {\"type\": \"text\", \"text\": \"请仅输出图像中的文本内容。\"},\n            ],\n        },\n    ],\n)\nprint(completion.choices[0].message.content)",
+            "nodejs": "import OpenAI from \"openai\";\n\nconst openai = new OpenAI({\n  // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey: \"sk-xxx\"\n  apiKey: process.env.DASHSCOPE_API_KEY,\n  baseURL: \"https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1\"\n});\n\nasync function main() {\n  const response = await openai.chat.completions.create({\n    model: \"stepfun/step-5-preview\",\n    messages: [\n      {\n        role: \"user\",\n        content: [{\n            type: \"image_url\",\n            image_url: {\n              \"url\": \"https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20241108/ctdzex/biaozhun.jpg\"\n            }\n          },\n          {\n            type: \"text\",\n            text: \"请仅输出图像中的文本内容。\"\n          }\n        ]\n      }\n    ]\n  });\n  console.log(response.choices[0].message.content);\n}\nmain()",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/stepfun"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Text",
+          "Image",
+          "Video"
+        ]
+      },
       "description": "Step 3.7 Flash 是阶跃星辰最新推出的生产级 Agent 高效率 Flash 模型，专为 Agent、Coding、Search 与多模态工作流打造，在速度、成本、执行可靠性与复杂任务完成能力之间实现了更优平衡。具备多模态感知与执行、视觉搜索与工具增强、高可靠工具调用与编排，以及 Agent 生态兼容优化等核心能力。",
       "features": [
         "function-calling",

@@ -188,4 +188,4 @@ async def manage_memory_example():
 asyncio.run(manage_memory_example())
 ```
 
-**重要**接口参数详情参见 [API 参考](raw/application-api-reference/long-term-memory-new/overview.md)，计费和限流参见[计费与限流](raw/application-user-guide/memory-library-overview/overview/billing.md)。
+**重要**接口参数详情参见 [API 参考](raw/application-api-reference/long-term-memory-new/api-overview.md)，计费和限流参见[计费与限流](raw/application-user-guide/memory-library-overview/integration-overview/billing.md)。

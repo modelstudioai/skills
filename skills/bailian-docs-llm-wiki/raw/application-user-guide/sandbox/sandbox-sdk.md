@@ -14,6 +14,8 @@ pip install "e2b==2.31.0"
 pip install "e2b-code-interpreter==2.8.1"
 ```
 
+更高版本的 SDK（Python 与 Node.js 均含）创建实例时返回 405，安装时固定上述版本。
+
 ## 鉴权与接入
 
 **参数**

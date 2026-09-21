@@ -80,7 +80,7 @@ gender
 export DASHSCOPE_API_KEY="sk-xxx"
 ```
 
-**说明**以下示例代码中的 `{WorkspaceId}` 需要替换为您的业务空间ID。获取方式请参见[业务空间管理](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)。
+**说明**以下示例代码中的 `{WorkspaceId}` 需要替换为您的业务空间ID。获取方式请参见[业务空间管理](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 ## 快速开始
 

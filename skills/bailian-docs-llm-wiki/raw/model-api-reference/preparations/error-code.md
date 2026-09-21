@@ -2107,6 +2107,16 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **原因：** 模型推理商品已失效。
 
+## 429-BudgetLimitExceeded
+
+### The budget configured in Budget Management has been exhausted. You will be unable to make further API calls until the budget limit is increased or reset.
+
+**原因：** 您在[预算管理](raw/model-user-guide/test-1/budget-management.md)中设置的预算额度已用尽，且开启了「达预算即停」。
+
+**解决方案：** 在[预算管理](https://bailian.console.aliyun.com/cn-beijing/costing-balance/budget)页面提高预算额度或关闭「达预算即停」，即可恢复调用。
+
+**警告**服务停止存在一定延迟，延迟时段内产生的费仍将正常收取。
+
 ## 430-Audio.DecoderError
 
 ### Decoder audio file failed.

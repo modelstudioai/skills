@@ -292,7 +292,7 @@ String
 
 生成文件的 URL 地址
 
-[https://dashscope-result](https://dashscope-result)...
+`https://dashscope-result...`
 
 usage
 
@@ -316,7 +316,7 @@ Array<String>
 
 生成文件的 URL 列表，可直接访问或下载生成的图像/视频/音频文件
 
-\["[https://dashscope-result](https://dashscope-result)..."\]
+`["https://dashscope-result..."]`
 
 ## 常见用法
 

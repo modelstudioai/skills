@@ -126,7 +126,7 @@ boolean
 
 否
 
-是否开启重排序。更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。取值范围：
+是否开启重排序。更多信息，请参见[知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。取值范围：
 
 -   true：开启。
     

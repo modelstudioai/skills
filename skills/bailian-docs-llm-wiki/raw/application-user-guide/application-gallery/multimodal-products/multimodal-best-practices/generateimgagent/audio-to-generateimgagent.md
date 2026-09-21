@@ -25,33 +25,32 @@
 ## 管控台配置
 
 1.  在[多模态开发套件](https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.394f1b92MoDMrb&tab=app#/app/app-market/multi-modal-app)中创建多模态交互应用，选择全能版（不要选择视觉版），打开语音识别，关闭语音合成。
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3487352771/p1056324.png)
-
-1.  保持意图识别、文本模型开启。
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3487352771/p1056326.png)
-
-**重要**意图识别配置、文本模型配置均需打开（按照本文配置方式下，使用图像生成不产生意图识别和文本模型的费用）。
-
-1.  关闭对话承接语、知识库、联网搜索、长期记忆。
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3487352771/p1056323.png)
-
-1.  技能、MCP服务全部清空，Agent只保留图像生成Agent。
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3487352771/p1056329.png)
-
-1.  配置图像生成Agent，**目前语音请求直通生图Agent只支持文生图模式，不支持涂鸦生图、生图助手**。
-2.  每种功能支持模型选择、提示词、正向提示词智能优化，反向提示词等选项。提示词可以添加变量，用于动态传入不同提示词。
-
-![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3487352771/p1056328.png) ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3487352771/p1056327.png)
-
-**重要**语音直通生图Agent必须在提示词中自定义 query 变量 ，用户只负责定义此变量，不需设置此变量值，系统会使用此变量将语音请求的ASR结果注入到生图的prompt中。如果用户没有在自定义变量中定义 query 变量，语音请求的query将无法注入到prompt。
-
-比如用户设置的文生图提示词如图为：${query}，二次元风格。用户语音请求的ASR结果为：一只可爱小狗，则生图模型收到的完整提示词为：一只可爱的小狗，二次元风格。
-
-1.  配置完成后请点击右上角发布按键进行发布（必须发布后才能测试）。
+    
+    ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3487352771/p1056324.png)
+2.  保持意图识别、文本模型开启。
+    
+    ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3487352771/p1056326.png)
+    
+    **重要**意图识别配置、文本模型配置均需打开（按照本文配置方式下，使用图像生成不产生意图识别和文本模型的费用）。
+    
+3.  关闭对话承接语、知识库、联网搜索、长期记忆。
+    
+    ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3487352771/p1056323.png)
+4.  技能、MCP服务全部清空，Agent只保留图像生成Agent。
+    
+    ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3487352771/p1056329.png)
+5.  配置图像生成Agent，**目前语音请求直通生图Agent只支持文生图模式，不支持涂鸦生图、生图助手**。
+    
+6.  每种功能支持模型选择、提示词、正向提示词智能优化，反向提示词等选项。提示词可以添加变量，用于动态传入不同提示词。
+    
+    ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3487352771/p1056328.png) ![image.png](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3487352771/p1056327.png)
+    
+    **重要**语音直通生图Agent必须在提示词中自定义 query 变量 ，用户只负责定义此变量，不需设置此变量值，系统会使用此变量将语音请求的ASR结果注入到生图的prompt中。如果用户没有在自定义变量中定义 query 变量，语音请求的query将无法注入到prompt。
+    
+    比如用户设置的文生图提示词如图为：${query}，二次元风格。用户语音请求的ASR结果为：一只可爱小狗，则生图模型收到的完整提示词为：一只可爱的小狗，二次元风格。
+    
+7.  配置完成后请点击右上角发布按键进行发布（必须发布后才能测试）。
+    
 
 ## websocket协议接入
 

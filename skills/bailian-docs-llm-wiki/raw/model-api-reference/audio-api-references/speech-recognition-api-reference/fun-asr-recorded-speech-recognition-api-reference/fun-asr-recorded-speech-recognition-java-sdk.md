@@ -1,6 +1,6 @@
-# Qwen-Audio-3.0-ASR-Flash-Filetrans/Fun-ASR非实时语音识别Java SDK
+# Qwen-Audio-3.x-ASR-Flash-Filetrans/Fun-ASR非实时语音识别Java SDK
 
-本文介绍Qwen-Audio-3.0-ASR-Flash-Filetrans/Fun-ASR非实时语音识别Java SDK的参数和接口细节。
+本文介绍Qwen-Audio-3.x-ASR-Flash-Filetrans/Fun-ASR非实时语音识别Java SDK的参数和接口细节。
 
 **用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
 
@@ -64,7 +64,7 @@ public class Main {
                         // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                         // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                         //.apiKey("apikey")
-                        .model("qwen-audio-3.0-asr-flash-filetrans") // 此处以qwen-audio-3.0-asr-flash-filetrans为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+                        .model("qwen-audio-3.1-asr-flash-filetrans") // 此处以qwen-audio-3.1-asr-flash-filetrans为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
                         .fileUrls(
                                 Arrays.asList(
                                         "{YOUR_AUDIO_URL}"))
@@ -129,7 +129,7 @@ public class Main {
                         // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                         // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                         //.apiKey("apikey")
-                        .model("qwen-audio-3.0-asr-flash-filetrans") // 此处以qwen-audio-3.0-asr-flash-filetrans为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
+                        .model("qwen-audio-3.1-asr-flash-filetrans") // 此处以qwen-audio-3.1-asr-flash-filetrans为例，可按需更换模型名称。模型列表：https://help.aliyun.com/zh/model-studio/models
                         .fileUrls(
                                 Arrays.asList(
                                         "{YOUR_AUDIO_URL}"))
@@ -165,20 +165,20 @@ SDK 默认使用**北京地域**的接口地址。如需切换到其他地域，
 
 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 #### 新加坡
 
 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 **重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。现有域名仍可正常使用。
+`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
 
 **切换到新加坡地域**：
 
@@ -202,7 +202,7 @@ Constants.baseHttpApiUrl = "https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.c
 
 ```
 TranscriptionParam param = TranscriptionParam.builder()
-  .model("qwen-audio-3.0-asr-flash-filetrans")
+  .model("qwen-audio-3.1-asr-flash-filetrans")
   .fileUrls(
           Arrays.asList(
                   "{YOUR_AUDIO_URL}"))
@@ -223,7 +223,7 @@ String
 
 是
 
-指定模型名。支持Qwen-Audio-3.0-ASR-Flash-Filetrans和Fun-ASR系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#4a43cc1bb7kxg)。
+指定模型名。支持Qwen-Audio-3.x-ASR-Flash-Filetrans和Fun-ASR系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#4a43cc1bb7kxg)。
 
 fileUrls
 
@@ -247,6 +247,14 @@ List<String>
     
     SDK不支持对请求头进行配置。
     
+
+keep\_dialect
+
+boolean
+
+否
+
+仅 `qwen-audio-3.1-asr-flash-filetrans` 支持。默认 `false`，将方言转写为普通话；设为 `true` 时保留方言表达。通过 `.parameter("keep_dialect", value)` 设置。完整参数说明请参见[API 参考](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/fun-asr-recorded-speech-recognition-api-reference/fun-asr-recorded-speech-recognition-http-api.md)。
 
 vocabularyId
 
@@ -276,7 +284,7 @@ Map<String, Integer>
 
 与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
 
-**重要**仅`qwen-audio-3.0-asr-flash-filetrans`支持即时热词。
+**重要**仅`qwen-audio-3.1-asr-flash-filetrans`、`qwen-audio-3.0-asr-flash-filetrans`支持即时热词。
 
 **说明**`vocabulary`需要通过`TranscriptionParam`实例的`parameter`方法或者`parameters`方法进行设置：
 
@@ -288,7 +296,7 @@ vocab.put("张三", 5);
 vocab.put("李四", 5);
 
 TranscriptionParam param = TranscriptionParam.builder()
-  .model("qwen-audio-3.0-asr-flash-filetrans")
+  .model("qwen-audio-3.1-asr-flash-filetrans")
   .parameter("vocabulary", vocab)
   .build();
 ```
@@ -301,7 +309,7 @@ vocab.put("张三", 5);
 vocab.put("李四", 5);
 
 TranscriptionParam param = TranscriptionParam.builder()
-  .model("qwen-audio-3.0-asr-flash-filetrans")
+  .model("qwen-audio-3.1-asr-flash-filetrans")
   .parameters(Collections.singletonMap("vocabulary", vocab))
   .build();
 ```
@@ -366,11 +374,11 @@ String\[\]
 
 设置待识别语言代码。如果无法提前确定语种，可不设置，模型会自动识别语种。
 
-对于 Qwen-Audio-3.0-ASR-Flash-Filetrans 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。
+对于 Qwen-Audio-3.x-ASR-Flash-Filetrans 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。
 
 点击查看支持的语言代码
 
--   qwen-audio-3.0-asr-flash-filetrans、fun-asr、fun-asr-2025-11-07、fun-asr-mtl、fun-asr-mtl-2025-08-25：
+-   qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans、fun-asr、fun-asr-2025-11-07、fun-asr-mtl、fun-asr-mtl-2025-08-25：
     
     -   zh: 中文
     -   en: 英文
@@ -413,7 +421,7 @@ String\[\]
 
 ```
 TranscriptionParam param = TranscriptionParam.builder()
-  .model("qwen-audio-3.0-asr-flash-filetrans")
+  .model("qwen-audio-3.1-asr-flash-filetrans")
   .parameter("language_hints", new String[]{"zh"})
   .build();
 ```
@@ -422,7 +430,7 @@ TranscriptionParam param = TranscriptionParam.builder()
 
 ```
 TranscriptionParam param = TranscriptionParam.builder()
-  .model("qwen-audio-3.0-asr-flash-filetrans")
+  .model("qwen-audio-3.1-asr-flash-filetrans")
   .parameters(Collections.singletonMap("language_hints", new String[]{"zh"}))
   .build();
 ```

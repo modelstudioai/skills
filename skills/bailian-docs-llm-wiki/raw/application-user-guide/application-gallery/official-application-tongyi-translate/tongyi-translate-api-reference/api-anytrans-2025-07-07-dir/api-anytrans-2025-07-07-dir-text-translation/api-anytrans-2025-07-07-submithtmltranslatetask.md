@@ -113,7 +113,7 @@ string
 
 待翻译的 html 内容
 
-<!DOCTYPE html> <html lang="zh-CN"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>我的第一个网页</title> </head> <body> <h1>欢迎来到我的网页！</h1> <p>这是一个简单的 HTML 页面。</p> <p>学习 HTML 是进入网页开发的第一步。</p> <a href="[](https://www.example.com)[https://www.example.com](https://www.example.com)">点击这里访问示例网站</a> </body> </html>
+<!DOCTYPE html> <html lang="zh-CN"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>我的第一个网页</title> </head> <body> <h1>欢迎来到我的网页！</h1> <p>这是一个简单的 HTML 页面。</p> <p>学习 HTML 是进入网页开发的第一步。</p> <a href="[https://www.example.com"&gt;点击这里访问示例网站&lt;&#47;a](https://www.example.com%22&gt;%E7%82%B9%E5%87%BB%E8%BF%99%E9%87%8C%E8%AE%BF%E9%97%AE%E7%A4%BA%E4%BE%8B%E7%BD%91%E7%AB%99&lt;&#47;a)\> </body> </html>
 
 scene
 

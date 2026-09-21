@@ -113,11 +113,11 @@ qwenpaw app
 
 **基础 URL**
 
-根据模型部署地域，在下拉菜单选择对应 URL（请将 URL 中的 `{WorkspaceId}` 替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)）：
+根据模型部署地域，在下拉菜单选择对应 URL（请将 URL 中的 `{WorkspaceId}` 替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)）：
 
 -   China (Beijing)：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
     
--   International (Singapore)：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`，将 `WorkspaceId` 替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+-   International (Singapore)：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`，将 `WorkspaceId` 替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
     
 -   US (Virginia)：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1`
     

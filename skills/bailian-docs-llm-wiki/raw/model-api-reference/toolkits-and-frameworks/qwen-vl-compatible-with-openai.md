@@ -4,7 +4,7 @@
 
 -   base\_url：
     
-    -   华北2（北京）地域：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1调用时请将 `WorkspaceId` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+    -   华北2（北京）地域：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1调用时请将 `WorkspaceId` 替换为真实的[业务空间 ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
     -   新加坡地域：https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1
     -   日本（东京）：https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1
     -   美国（弗吉尼亚）：https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/compatible-mode/v1

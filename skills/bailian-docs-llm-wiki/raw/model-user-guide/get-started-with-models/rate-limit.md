@@ -50,11 +50,9 @@
 
 ### 如何查看模型调用量？
 
-模型调用完**一小时后**，在模型监控（[北京](https://bailian.console.aliyun.com/model/telemetry)或[新加坡](https://bailian.console.aliyun.com/model/telemetry)）页面设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**操作**列的**监控**，即可查看该模型的调用统计结果。具体请参见[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)文档。
+模型调用发生后**分钟级**即可在监控图表查看。登录模型监控页面（[北京](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry)），在左侧导航栏选择**运维管理** > **模型监控**进入监控概览页，设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**查看详情**，即可查看该模型的调用统计结果。具体请参见[监控告警](raw/model-user-guide/model-monitoring/model-telemetry.md)文档。
 
-> 数据按小时更新，高峰期可能有小时级延迟，请您耐心等待。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6923304571/p992753.png)
+> 监控数据按分钟级更新，仅供参考，不作为计费依据。
 
 ### 遇到限流后多久恢复？
 
@@ -2276,6 +2274,12 @@ qwen3.8-omni-flash
 
 > **含输入与输出Token**
 
+qwen3.8-omni-flash-realtime
+
+60
+
+1,000,000
+
 qwen3.5-omni-plus-realtime
 
 60
@@ -2345,6 +2349,14 @@ qwen-omni-turbo-realtime-2025-05-08
 **每分钟消耗Token数（TPM）**
 
 > **含输入与输出Token**
+
+qwen3.8-omni-flash-realtime
+
+国际
+
+60
+
+1,000,000
 
 qwen3.5-omni-plus-realtime
 
@@ -4832,6 +4844,12 @@ vanchin/deepseek-v4-pro-0813
 
 600,000
 
+vanchin/deepseek-v4.1-flash
+
+30
+
+600,000
+
 ### Kimi
 
 #### 华北2（北京）
@@ -5382,6 +5400,12 @@ ZHIPU/GLM-5.3-Flash
 
 3,000,000
 
+ZHIPU/GLM-5.3-FlashX
+
+200
+
+3,000,000
+
 ZHIPU/GLM-5.2
 
 200
@@ -5511,6 +5535,12 @@ stepfun/step-3.7-flash
 500
 
 20,000,000
+
+stepfun/step-5-preview
+
+500
+
+10,000,000
 
 ### Unisound-云知声直供
 
@@ -6456,6 +6486,18 @@ vidu/viduq2-pro\_reference2image
 
 vidu/viduq2-fast\_reference2image
 
+## 音频生成
+
+#### 华北2（北京）
+
+模型名称
+
+每秒钟调用次数（RPS）
+
+qwen-audio-3.1-tts-next
+
+3
+
 ## 音乐生成
 
 #### 华北2（北京）
@@ -7212,7 +7254,33 @@ qwen3-livetranslate-flash-realtime-2025-09-22
 
 国际
 
-### Qwen-Audio-3.0-ASR-Flash-Streaming
+### Qwen-Audio-3.1-ASR-Flash-Message
+
+#### 华北2（北京）
+
+模型名称
+
+每分钟调用次数（RPM）
+
+qwen-audio-3.1-asr-flash-message
+
+1200
+
+#### 新加坡
+
+模型名称
+
+服务部署范围
+
+每分钟调用次数（RPM）
+
+qwen-audio-3.1-asr-flash-message
+
+国际
+
+1200
+
+### Qwen-Audio-3.x-ASR-Flash-Streaming
 
 #### 华北2（北京）
 
@@ -7220,9 +7288,19 @@ qwen3-livetranslate-flash-realtime-2025-09-22
 
 **每秒钟调用次数（RPS）**
 
+每分钟调用次数（RPM）
+
+qwen-audio-3.1-asr-flash-streaming
+
+—
+
+600
+
 qwen-audio-3.0-asr-flash-streaming
 
 20
+
+—
 
 #### 新加坡
 
@@ -7232,19 +7310,35 @@ qwen-audio-3.0-asr-flash-streaming
 
 **每秒钟调用次数（RPS）**
 
+每分钟调用次数（RPM）
+
+qwen-audio-3.1-asr-flash-streaming
+
+国际
+
+—
+
+600
+
 qwen-audio-3.0-asr-flash-streaming
 
 国际
 
 20
 
-### Qwen-Audio-3.0-ASR-Flash-Filetrans
+—
+
+### Qwen-Audio-3.x-ASR-Flash-Filetrans
 
 #### 华北2（北京）
 
 **模型名称**
 
 **每分钟调用次数（RPM）**
+
+qwen-audio-3.1-asr-flash-filetrans
+
+600
 
 qwen-audio-3.0-asr-flash-filetrans
 
@@ -7258,19 +7352,29 @@ qwen-audio-3.0-asr-flash-filetrans
 
 **每分钟调用次数（RPM）**
 
+qwen-audio-3.1-asr-flash-filetrans
+
+国际
+
+600
+
 qwen-audio-3.0-asr-flash-filetrans
 
 国际
 
 600
 
-### Qwen-Audio-3.0-ASR-Flash
+### Qwen-Audio-3.x-ASR-Flash
 
 #### 华北2（北京）
 
 **模型名称**
 
 **每分钟调用次数（RPM）**
+
+qwen-audio-3.1-asr-flash
+
+600
 
 qwen-audio-3.0-asr-flash
 
@@ -7283,6 +7387,12 @@ qwen-audio-3.0-asr-flash
 **服务部署范围**
 
 **每分钟调用次数（RPM）**
+
+qwen-audio-3.1-asr-flash
+
+国际
+
+600
 
 qwen-audio-3.0-asr-flash
 

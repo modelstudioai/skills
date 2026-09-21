@@ -1,0 +1,70 @@
+{
+  "name": "Qwen-Audio-3.1-ASR-Message",
+  "description": "Qwen-Audio-3.1-ASR-Flash-Message是一款基于大语言模型的高精度、长上下文、高灵活性的多语种语音识别模型。ASR-Flash-Message模型不仅支持超长音频上下文的无缝转录，还赋予用户自由指定多语种与深度行业词的能力。通过融合两种自定义热词权重机制，模型能在复杂及专业场景下实现精准对齐，大幅提升特定领域语音识别的准确率。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Audio"
+        ]
+      },
+      "description": "Qwen-Audio-3.1-ASR-Flash-Message是一款基于大语言模型的高精度、长上下文、高灵活性的多语种语音识别模型。asr-flash-message模型不仅支持超长音频上下文的无缝转录，还赋予用户自由指定多语种与深度行业词的能力。通过融合两种自定义热词权重机制，模型能在复杂及专业场景下实现精准对齐，大幅提升特定领域语音识别的准确率。",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen-audio-3.1-asr-flash-message",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "6",
+          "timeBand": "standard",
+          "ntmAmountType": "asr_input_token",
+          "type": "asr_input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "4.5",
+          "timeBand": "standard",
+          "ntmAmountType": "asr_output_token",
+          "type": "asr_output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 20,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 20,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "ASR"
+      ],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-09-21T14:36:15.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Audio-3.1-ASR-Flash-Message",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-audio-3-1-asr-flash-message",
+      "category": "Audio",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location --request POST 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \\\n     --header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n     --header \"Content-Type: application/json\" \\\n     --header \"X-DashScope-SSE: disable\" \\\n     --data '{\n    \"model\": \"qwen-audio-3.1-asr-flash-message\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"type\": \"input_audio\",\n                        \"input_audio\": {\n                            \"data\": \"{YOUR_AUDIO_URL}\"\n                        }\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"format\": \"wav\",\n        \"sample_rate\": \"16000\"\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide"
+          }
+        }
+      }
+    }
+  ]
+}

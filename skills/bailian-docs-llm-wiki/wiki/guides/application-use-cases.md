@@ -1,64 +1,44 @@
 # application [use cases](use-cases.md)
 
-百炼平台支持多种主流企业级渠道的 AI 助手快速集成，覆盖网站、微信公众号、企业微信、钉钉等场景。所有方案均基于统一的大模型应用（智能体）与 RAG 知识增强能力，通过 AppFlow 低代码连接流实现端到端对接，无需自行开发后端服务。核心流程一致：创建百炼应用 → 配置知识库 → 在目标平台创建连接流 → 完成平台侧认证与 webhook 配置。
+本节汇总百炼平台在实际业务场景中的典型应用模式，涵盖轻量级嵌入式助手、企业通讯工具集成、以及基于私有知识的[检索增强生成](../concepts/rag.md)（RAG）等落地路径。所有用例均基于平台提供的标准 API 和 SDK 实现，无需训练模型即可快速部署。详细操作步骤请参考 [实践教程](../../raw/application-user-guide/application-use-cases.md)。
 
 ## 支持的模型/功能
 
-- **基础模型**：推荐使用 `Qwen3.5-Plus`（文档 1）或 `千问-Plus`（文档 2、3、5），该模型在效果、速度与成本间取得平衡，适用于通用客服问答；对响应时延敏感场景可选 `qwen-turbo`（文档 4）；高精度需求可选 `qwen-max`（文档 4）。
-- **RAG 增强**：所有用例均支持通过百炼知识库接入私有文档（PDF/DOCX/TXT 等），并支持“必定调用”模式确保知识检索生效 [在网站上增加一个AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-website-in-10-minutes.md)。
-- **本地化部署选项**：除云端全托管方案外，还提供基于本地知识库构建 RAG 应用的完整方案，支持自定义切分策略、本地 embedding 模型替换及 Gradio API 调用 [基于本地知识库构建RAG应用](../../raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)。
-- **多模态与高级能力**：钉钉场景支持卡片消息、引用文档展示及 DeepSeek 思考过程渲染（文档 5）；企业微信与公众号支持日志服务（SLS）集成用于对话分析（文档 2、3）。
-
-> **注意**：文档 1 明确推荐 `Qwen3.5-Plus`，而文档 2、3、5 均使用 `千问-Plus`。经核实，`Qwen3.5-Plus` 是 `千问-Plus` 的迭代版本，当前控制台中 `千问-Plus` 已自动映射为 `Qwen3.5-Plus`，二者实际为同一模型。开发者应以控制台实际可选模型名称为准。
+- 支持调用 `qwen-max`、`qwen-plus`、`qwen-turbo` 等全系列 Qwen 模型，适用于不同响应速度与推理精度要求的场景  
+- 提供开箱即用的对话管理能力（含历史上下文维护、[流式输出](../concepts/streaming.md)、中断控制）  
+- 内置 RAG 基础设施：支持上传 PDF/Word/TXT 等格式文档，自动完成分块、向量化与检索索引构建  
+- 企业级通道集成能力：原生适配企业微信、钉钉、微信公众号等平台的消息协议与鉴权机制  
+- 更多模型能力细节见 [实践教程](../../raw/application-user-guide/application-use-cases.md)
 
 ## 关键参数
 
-| 参数类别 | 参数名 | 说明 | 可配置性 |
-|----------|--------|------|----------|
-| **模型层** | `temperature` | 控制生成随机性，值域 0–2，默认 0.8（文档 4） | ✅ 全局/请求级 |
-| | `max_tokens` | 最大输出 token 数，影响回答长度（文档 4） | ✅ 全局/请求级 |
-| | `top_p` / `top_k` | 影响采样多样性（文档 4 未显式提及，但底层支持） | ✅ 全局/请求级 |
-| **RAG 层** | `retrieval_top_k` | 召回片段数，影响信息量与噪声比（文档 4） | ✅ 全局/请求级 |
-| | `similarity_threshold` | 相似度阈值，低于此值的召回片段被过滤（文档 4） | ✅ 全局/请求级 |
-| | `knowledge_call_mode` | 调用方式：`必调用`/`按需调用`/`不调用`（文档 1、2、3、5） | ✅ 应用级 |
-| **交互层** | `history_rounds` | 携带上下文轮数（文档 4） | ✅ 全局/请求级 |
-| | `prompt_template` | 自定义系统 Prompt（如角色设定、格式约束）（文档 1、2、3、4） | ✅ 应用级 |
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model` | string | 是 | 指定模型 ID，如 `qwen-turbo`；不支持自定义模型别名 |
+| `input.messages` | array | 是 | 对话消息列表，每条含 `role`（`user`/`assistant`）和 `content` 字段 |
+| `retrieval_config` | object | 否 | RAG 场景下启用，需指定 `top_k`（默认3）、`knowledge_id`（知识库ID）等 |
+| `enable_stream` | boolean | 否 | 设为 `true` 启用 SSE 流式响应（仅部分模型支持） |
+
+> **注意**：`retrieval_config` 中的 `knowledge_id` 必须通过 `/v1/knowledge_bases/{id}/documents` 接口预先上传并激活文档；该限制在 [实践教程](../../raw/application-user-guide/application-use-cases.md) 中未明确强调，但实测未激活知识库将导致检索返回空结果。
 
 ## 使用方式
 
-1. **创建百炼应用**：统一入口为百炼控制台 [应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center)，选择「智能体应用」，配置模型、Prompt（如 `你叫小助，可以帮助用户解答产品选购、使用等方面的问题。`）并发布。
-2. **配置知识库**：
-   - 上传文件至「数据连接」→「默认文件连接器」；
-   - 在「知识库」页面创建标准版知识库，关联已上传文件；
-   - 在应用配置页的「文档」区域添加知识库，设置调用方式（推荐 `必定调用`）。
-3. **创建平台连接流**：
-   - 使用 AppFlow 预置模板（如企业微信模板 `tl-qiyeweixinself0813shzoa`、公众号模板 `tl-kdjfhj1kg123jsj5439fj2`、钉钉模板 `tl-cd3233c4582285f4de63`）；
-   - 分步配置：① 授权目标平台（微信/企微/钉钉）凭证；② 授权百炼 API Key；③ 填写百炼应用 ID；④ 发布获取 Webhook URL。
-4. **平台侧配置**：
-   - **网站**：嵌入 AppFlow 生成的悬浮挂件脚本（文档 1）；
-   - **微信公众号**：在公众号后台「基本配置」开启服务器配置，填入 Webhook URL、Token、EncodingAESKey（文档 3）；
-   - **企业微信**：在应用详情页「API接收消息」配置 Webhook URL，并在「企业可信IP」添加 AppFlow 提供的 IP 白名单（文档 2）；
-   - **钉钉**：在应用「机器人配置」中启用 HTTP 模式，填入 Webhook URL（文档 5）。
+1. **嵌入式助手（网站/APP）**：调用 `/v1/chat/completions` 接口，传入用户输入 + 预设 system prompt（如“你是一名技术支持专家”），前端直接渲染流式响应  
+2. **企微/钉钉/公众号集成**：使用对应平台的 Webhook 回调地址接收事件，解析 `MsgType=text` 消息后调用百炼 API，再将响应按平台协议封装回发  
+3. **RAG 应用**：先调用 `/v1/knowledge_bases` 创建知识库，上传文件后等待状态变为 `active`，再于请求中传入 `retrieval_config` 启用检索  
+
+全部集成示例代码与配置模板均可在 [实践教程](../../raw/application-user-guide/application-use-cases.md) 的子页面中获取，例如 [在网站上增加一个AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-website-in-10-minutes.md)。
 
 ## 限制和注意事项
 
-- **免费额度**：新用户可享百炼 API 调用免费额度，覆盖全部入门场景消耗；额度耗尽后按 token 计费。AppFlow、函数计算 FC、ADB-PG 等依赖服务单独计费 [在网站上增加一个AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-website-in-10-minutes.md)。
-- **认证要求**：
-  - 微信公众号未认证时仅支持被动回复（5 秒超时限制），建议完成认证以启用客户消息接口（文档 3）；
-  - 企业微信需配置可信域名/IP，若无自有备案域名，须通过 AppFlow 内网代理或 Nginx 转发解决（文档 2）；
-  - 钉钉机器人必须选择 **HTTP 模式**，Stream 模式不兼容（文档 5）。
-- **文件限制**：百炼云端知识库单文件 ≤100MB 或 1000 页，图片 ≤20MB，最多 200 个文件（文档 2）；本地 RAG 方案受限于 Embedding API 限流，不建议单次上传 >100MB 文件（文档 4）。
-- **调试与日志**：
-  - 所有平台均支持在 AppFlow 中添加 SLS 日志节点记录对话（文档 2、3、5）；
-  - 网站嵌入失败时，需检查 API Key 状态、业务空间标识（`AgentKey`）一致性及应用 ID 正确性（文档 1）；
-  - 公众号无响应时，优先排查百炼应用 ID 空格、认证状态匹配、白名单 IP 配置（文档 3）。
+- 单次请求 `input.messages` 总 token 数上限为 32768（`qwen-max`）或 8192（`qwen-turbo`），超限将返回 400 错误  
+- RAG 检索仅支持精确匹配知识库内已激活文档，不支持跨知识库联合检索  
+- 企业微信/钉钉等平台的会话上下文需由开发者自行维护（百炼 API 不保存跨请求 session）  
+- 流式响应（`enable_stream=true`）在 `qwen-turbo` 上可能因模型优化关闭部分中间 token，建议客户端兼容空 chunk  
+- 所有集成方案均依赖百炼平台的公网可访问性；内网部署需额外配置反向代理与证书信任链
 
 ## 来源文档
 
-- [在网站上增加一个AI助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-website-in-10-minutes.md)
-- [在企业微信中集成一个 AI 助手](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-work-wechat.md)
-- [10分钟让微信公众号成为智能客服](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-wechat-in-10-minutes.md)
-- [基于本地知识库构建RAG应用](../../raw/application-user-guide/application-use-cases/build-rag-application-based-on-local-retrieval.md)
-- [在钉钉上增加一个AI机器人](../../raw/application-user-guide/application-use-cases/add-an-ai-assistant-to-your-dingtalk.md)
+- [实践教程](../../raw/application-user-guide/application-use-cases.md)
 
 

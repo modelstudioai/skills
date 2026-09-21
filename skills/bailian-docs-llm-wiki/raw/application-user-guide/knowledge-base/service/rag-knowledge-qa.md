@@ -8,13 +8,11 @@
     
 2.  点击右上角 **创建**，在弹窗中填写 **服务名称**（必填，最多 40 个字符）和 **描述信息**（可选，最多 200 个字符），点击 **确认** 完成创建。
     
-3.  创建成功后自动进入配置页面。选择生成回答的 **模型**（如 qwen3.6-plus），点击模型右侧的 ![设置](https://img.alicdn.com/imgextra/i4/O1CN01gJ8AT41N30Ohh8tCa_!!6000000001513-2-tps-82-76.png) 图标可配置 `temperature` 和 `enable_thinking` 参数；**提示词**（可选，最多 500 个字符）用于指导模型的回答风格和行为。
+3.  创建成功后自动进入配置页面。选择生成回答的 **模型**（如 qwen3.6-plus），点击模型右侧的 **设置** 图标可配置 `temperature` 和 `enable_thinking` 参数；**提示词**（可选，最多 500 个字符）用于指导模型的回答风格和行为。
     
 4.  选择检索策略，见下方[检索模式](https://help.aliyun.com/zh/model-studio/rag-knowledge-qa#h-ragqa-mode)。
     
 5.  点击 **\+ 添加**，绑定一个或多个知识库（最多 15 个）。开启 **优先级** 开关后，每个知识库会显示优先级选项，可选择 **高/中/低** 设置该知识库的检索优先级。
-    
-    ![知识库优先级设置](https://img.alicdn.com/imgextra/i3/O1CN01RXu95K1fjI31JEoG4_!!6000000004042-2-tps-1478-760.png)
     
     如需为单个知识库设置独立参数，点击知识库右侧的展开图标，展开该知识库的配置面板，见下方[知识库独立配置](https://help.aliyun.com/zh/model-studio/rag-knowledge-qa#h-ragqa-kb-config)。
     
@@ -50,7 +48,7 @@
 
 复杂问题、模糊问题、需要跨库综合回答的场景
 
-点击检索模式下拉框右侧的 ![设置](https://img.alicdn.com/imgextra/i4/O1CN018RFsKz21Te43FLkKZ_!!6000000006986-2-tps-36-36.png) 图标可配置检索模式的高级参数。
+点击检索模式下拉框右侧的 **设置** 图标可配置检索模式的高级参数。
 
 ## 知识库独立配置
 

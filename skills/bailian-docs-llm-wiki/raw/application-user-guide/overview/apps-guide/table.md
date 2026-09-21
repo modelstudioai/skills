@@ -30,7 +30,7 @@
     
     说明表格内容与用途，例如月度销售报表与客户台账
     
-3.  **确认存储位置**：**存储位置** 目前只有 **使用平台存储** 一个选项，选中即可。数据存储在阿里云百炼平台提供的存储空间中，提供最大 200,000 个文件、1 TB 存储额度，限时免费，详见[配额与限制](raw/application-user-guide/overview/overview/limits.md)。
+3.  **确认存储位置**：**存储位置** 目前只有 **使用平台存储** 一个选项，选中即可。数据存储在阿里云百炼平台提供的存储空间中，提供最大 200,000 个文件、1 TB 存储额度，限时免费，详见[配额与限制](raw/application-user-guide/overview/reference-overview/limits.md)。
     
 4.  **确认创建**：单击 **确认**。创建后连接器类型不可更改。
     
@@ -64,7 +64,7 @@
 
 ## 导入数据
 
-表格同样通过类目组织，导入方式与文件一致，见文件连接器页的[类目](https://help.aliyun.com/zh/model-studio/connector/apps/file#%E7%B1%BB%E7%9B%AE)与[导入数据](https://help.aliyun.com/zh/model-studio/connector/apps/file#%E5%AF%BC%E5%85%A5%E6%95%B0%E6%8D%AE)。
+表格同样通过类目组织，导入方式与文件一致，见文件连接器页的[类目](https://help.aliyun.com/zh/model-studio/connector/file#%E7%B1%BB%E7%9B%AE)与[导入数据](https://help.aliyun.com/zh/model-studio/connector/file#%E5%AF%BC%E5%85%A5%E6%95%B0%E6%8D%AE)。
 
 ## 和数据库连接器的区别
 

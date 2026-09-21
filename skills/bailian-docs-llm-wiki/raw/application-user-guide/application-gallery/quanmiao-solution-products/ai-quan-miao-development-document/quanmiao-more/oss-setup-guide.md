@@ -52,7 +52,7 @@
 
 **说明**此步骤必须配置，否则控制台预览/上传将失败。
 
--   入口：oss控制台 > Bucket > 数据安全 > CORS设置，也可以点击下面的链接进行访问：[https://oss.console.aliyun.com/bucket/oss-{region}/{bucket}/data-security/cors](https://oss.console.aliyun.com/bucket/oss-%7Bregion%7D/%7Bbucket%7D/data-security/cors)；
+-   入口：oss控制台 > Bucket > 数据安全 > CORS设置，也可以按以下格式拼接地址访问（将 {region} 与 {bucket} 替换为实际值）：`https://oss.console.aliyun.com/bucket/oss-{region}/{bucket}/data-security/cors`；
 -   CORS规则配置（严格按此填写）。
 
 **字段**

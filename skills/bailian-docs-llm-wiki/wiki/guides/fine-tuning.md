@@ -1,61 +1,63 @@
 # fine tuning
 
-百炼平台的 fine tuning（模型调优）是提升大模型在特定业务、行业或安全合规场景下表现的核心能力，支持文本生成、视觉理解、图像/视频生成及语音合成等多种模态。它通过 SFT（监督微调）、CPT（持续预训练）、DPO（直接偏好优化）和 RL（强化学习）等方法，将领域知识、任务指令、人类偏好或奖励信号注入模型参数，实现效果对齐与性能优化。所有调优任务均需在华北2（北京）地域执行，且不同模态与训练方式对应差异化的数据格式、超参体系与计费规则。
+模型调优是提升大模型在特定业务、行业或价值观对齐方面表现的核心技术手段，适用于 Prompt 工程等轻量级优化无法满足效果要求的场景。百炼平台支持 SFT（监督微调）、CPT（持续预训练）、DPO（直接偏好优化）、RL（强化学习）及 OPD（在线策略蒸馏）等多种调优范式，覆盖文本、图像、视频、语音等多模态模型。调优过程需结合数据质量、模型能力边界与训练资源配置进行系统性设计。
 
 ## 支持的模型/功能
 
-百炼支持多模态、多阶段的模型调优能力：
+百炼支持全系列千问（Qwen）文本生成模型、千问 VL 视觉理解模型、万相（Wan）图像/视频生成模型及 CosyVoice 语音合成模型的调优，但各模型支持的调优方式存在显著差异：
 
-- **文本生成**：覆盖 Qwen3 系列（如 `qwen3-8b`, `qwen3-32b`）、Qwen2.5 系列及千问-Plus-Character 等数十个预置模型，支持 CPT、SFT（全参/高效）、DPO 和 RL 四种训练方式 [模型调优简介](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。
-- **视觉理解（千问 VL）**：支持 `qwen3-vl-8b-instruct` 等模型，仅限 SFT 和 DPO 高效训练，不支持 CPT 或全参训练。
-- **图像/视频生成**：万相（`wan2.7-image-pro`）、千问图像（`qwen-image-2.0`）及万相视频（`wan2.7-i2v`）模型仅支持 SFT-LoRA 高效微调，不支持 CPT/DPO/RL [微调图像生成模型](../../raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)。
-- **语音合成**：CosyVoice 模型（`cosyvoice-v3-flash`）仅支持 `efficient_sft` 方式，且必须通过 API 发起，控制台暂不支持 [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)。
-- **强化学习（RL）**：作为高级调优方式，支持 `qwen3.5-9b` 等指定模型，但需商务经理开通权限，并强制使用模型训练单元（MTU）计费，不支持按 Token 计费 [强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-training-overview.md)。
+- **文本生成模型**：全面支持 CPT、SFT、DPO、RL 和 OPD。其中 Qwen3-32B、Qwen3-14B 等中大型模型支持全部训练模式（含全参与高效训练），而 Qwen3.7-Plus-2026-05-26 等部分 Plus 版本仅支持 CPT 全参训练，不支持 SFT 或 DPO [模型调优简介](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。
+- **视觉理解模型（千问 VL）**：仅支持 SFT 全参与高效训练，不支持 CPT 或 DPO [模型调优简介](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)。
+- **图像/视频生成模型（万相）**：仅支持 SFT 高效微调（LoRA），且训练控制参数与文本模型不同——万相按 `max_steps` 控制训练时长，千问文本模型则按 `n_epochs` 控制 [微调图像生成模型](../../raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)。
+- **语音合成模型（CosyVoice）**：仅支持 `efficient_sft` 方式，且必须使用 `cosyvoice-v3-flash` 基础模型；不支持 CPT、DPO 或 RL [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)。
 
-> **注意**：文档 1 中表格显示 `Qwen3.7-Plus-2026-05-26` 支持 CPT 全参训练，但文档 4 明确指出“CPT（继续预训练）：仅支持批次大小、学习率、循环次数……不支持 LoRA 相关参数、学习率预热比例和权重衰减”，且其训练方式字段为 `✓`；而文档 1 同行中该模型的 “CPT全参训练” 列为 `×`。经交叉验证，文档 1 的表格存在笔误，应以文档 4 的参数约束为准：CPT 仅支持全参训练（无 LoRA），且不兼容 LoRA 参数。实际训练时若选择 CPT，控制台不会展示 LoRA 相关配置项。
+> **注意**：文档 1 明确指出“Qwen3.7-Plus-2026-05-26 调优后部署请联系商务经理”，而文档 20 的目录结构未体现该限制，实际使用中应以文档 1 的模型支持矩阵为准，避免选择不支持的训练方式导致任务创建失败。
 
 ## 关键参数
 
-不同调优方式与模态的关键参数差异显著，开发者需严格匹配：
+不同调优方式的核心参数差异较大，开发者需严格匹配模型能力与任务目标：
 
-- **通用超参（文本生成 SFT/DPO）**：`learning_rate`（高效训练推荐 `1e-4` 量级，全参/CPT 推荐 `1e-5`）、`n_epochs`（数据量 <10k 时建议 3–5 轮）、`max_length`（建议设为模型支持最大值，SFT 超长数据会被丢弃，DPO 自动截断）、`lora_rank`（高效训练推荐设为模型支持的最大值）[在控制台进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
-- **图像/视频生成专用参数**：万相模型使用 `max_steps`（训练总步数，≥500）、`eval_steps`（验证间隔）、`max_pixels`（训练图最大分辨率）；千问图像模型则使用 `n_epochs` 和 `eval_epochs`，且学习率不同（`qwen-image-2.0`: `5e-5`, `qwen-image-2.0-pro`: `1e-4`）[微调图像生成模型](../../raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)。
-- **语音合成（CosyVoice）参数**：`lm_max_epoch` 与 `fm_max_epoch`（LM/FM 训练轮次），Token 消耗公式为 `(lm_max_epoch + fm_max_epoch) × 25 × 总音频秒数`，直接影响训练费用 [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)。
-- **强化学习（RL）必填参数**：`algorithm`（如 `gspo`）、`batch_size`、`n_rollouts`（每条 [prompt](prompt.md) 采样数）、`kl_loss_coef`（KL 散度惩罚系数）、`learning_rate`（通常 `2e-6` 量级），且 `resources` 必须指定 `mtu_spec_code`（如 `MTU4`）与 `mtu_capacity`（如 `24`）[强化学习训练配置 — 提交与配置](../../raw/model-user-guide/fine-tuning/rl-training-overview/rl-training-config-monitoring.md)。
+- **通用超参**（SFT/CPT/DPO）：`learning_rate`、`n_epochs`、`batch_size`、`max_length`、`lora_rank`（高效训练专用）等。其中 `learning_rate` 推荐值因训练方式而异：高效训练为 `1e-4` 量级，全参训练为 `1e-5` 量级，CPT 同样为 `1e-5` 量级 [在控制台进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
+- **图像/视频生成模型特有参数**：`max_steps`（总训练步数）、`generation_type`（`t2i`/`i2i`/`i2v`）、`max_pixels`（训练图片最大分辨率）等，无 `n_epochs` 概念 [微调图像生成模型](../../raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)。
+- **RL/OPD 特有参数**：`algorithm`（如 `gspo`）、`kl_loss_coef`、`n_rollouts`、`ppo_mini_batch_size` 等，且必须配置 `resources`（MTU 计费资源）[强化学习训练配置 — 提交与配置](../../raw/model-user-guide/fine-tuning/rl-training-overview/rl-training-config-monitoring.md)；OPD 需额外指定 `teacher_model` 字段触发蒸馏 [在线策略蒸馏训练配置](../../raw/model-user-guide/fine-tuning/opd-overview/opd-training-config.md)。
+- **语音合成模型特有参数**：`lm_max_epoch` 与 `fm_max_epoch`，其取值直接影响 Token 消耗与训练费用 [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)。
 
 ## 使用方式
 
-调优可通过控制台或 API 两种方式发起，适用场景不同：
+调优任务可通过控制台或 API 两种方式发起，选择依据在于自动化程度与灵活性需求：
 
-- **控制台方式**：适用于快速验证、低代码需求。流程为：创建训练任务 → 选择模型与训练方法（SFT/CPT/DPO）→ 上传/选择已准备好的数据集 → 配置超参（默认值可直接使用）→ 提交。支持实时查看损失曲线（Training/Validation Loss）辅助判断是否过拟合或欠拟合 [在控制台进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
-- **API 方式**：适用于自动化流水线、大规模批量任务或非文本模态（如图像、视频、语音）。需先调用 `/api/v1/files` 上传 `.jsonl`（文本）或 `.zip`（图像/视频/语音）文件获取 `file_id`，再调用 `/api/v1/fine-tunes` 创建任务。语音与 RL 任务**仅支持 API**，控制台不可用 [使用 API 或命令行进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。
-- **数据准备规范**：
-  - 文本 SFT：`jsonl` 格式，`messages` 数组含 `system`/`user`/`assistant` 角色，支持 `loss_weight`（Qwen3.5+）与 `<think>` 深度思考标签 [调优数据上传规则](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/text-generation-tuning-data-upload-rules.md)。
-  - 图像/视频：`.zip` 包含 `data.jsonl`（描述样本）与对应图片/视频文件，文生图需 `prompt` 字段，图生图需 `image_url` 字段 [微调图像生成模型](../../raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)。
-  - RL：`jsonl` 格式，每行含 `messages`（用户问题）与 `rollout_extra`（参考答案等业务数据），`rollout_extra` 会透传至 Reward 函数 [强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-training-overview.md)。
+- **控制台方式**：面向快速验证与低代码场景，提供可视化向导。用户需依次完成任务命名、模型选择、训练方式（SFT/CPT/DPO）、数据集绑定、超参配置（可使用默认值）等步骤。该方式天然支持训练费用预估与实时日志查看 [在控制台进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)。
+- **API 方式**：面向生产环境集成与批量任务管理，需通过 HTTP 请求提交。关键步骤包括：1）调用 `/api/v1/files` 上传训练数据（支持本地文件或 OSS 挂载）；2）调用 `/api/v1/fine-tunes` 创建训练任务，传入 `model`、`training_datasets`、`hyper_parameters` 等必填字段。API 方式仅支持按 Token 计费，不支持训练单元预付费 [使用 API 或命令行进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。
+- **特殊流程**：RL 和 OPD 训练需额外环境准备，包括 OpenTelemetry 授权、函数计算（FC）与日志服务（SLS）开通、SDK 安装及 `DASHSCOPE_API_KEY` 等环境变量配置 [强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-training-overview.md)；CosyVoice 调优则强制要求通过 API 发起，控制台暂不支持 [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)。
 
 ## 限制和注意事项
 
-- **地域与权限限制**：所有调优功能（除部分文本 SFT 外）仅在华北2（北京）地域可用；CPT/DPO/OSS 导入仅支持北京地域；RL 训练需完成 OpenTelemetry、函数计算（FC）和日志服务（SLS）三项云服务授权 [微调图像生成模型](../../raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)、[强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-training-overview.md)。
-- **数据与文件限制**：SFT/DPO 数据单文件上限 200 MB；API 上传单文件上限 300 MB，总空间配额 100 GB；图像分辨率长宽比不得超过 `200:1`，推荐控制在 `8K` 以内以防超时 [模型调优简介](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)、[使用 API 或命令行进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。
-- **计费差异**：文本生成调优支持按 Token、训练单元预付费/后付费三种方式；但 API 创建的任务**仅支持按 Token 计费**；RL 训练**强制使用训练单元（MTU）**，不支持按 Token 计费；CosyVoice 调优训练费用为 `0.2 元/千 Tokens`，部署费用另计 [使用 API 或命令行进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)、[CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)。
-- **模型与训练方式绑定**：并非所有模型都支持全部训练方式。例如，千问 VL 模型不支持 CPT；CosyVoice 仅支持 `efficient_sft`；RL 模型需商务经理开通权限且仅限指定型号 [模型调优简介](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)、[强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-training-overview.md)。
+- **地域限制**：绝大多数调优功能（除纯文本 SFT 外）仅在华北2（北京）地域可用，包括 DPO、CPT、OSS 导入、云存储挂载、万相/视频生成模型调优及 CosyVoice 调优 [调优数据上传规则](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/text-generation-tuning-data-upload-rules.md)。
+- **数据格式强约束**：SFT 必须使用 JSONL 格式，每条记录为 `{"messages": [...]}` 结构；DPO 要求 `{"chosen": [...], "rejected": [...]}`；CPT 为纯文本 `{"text": "..."}`；图像/视频调优必须打包为 ZIP 文件 [调优数据上传规则](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/text-generation-tuning-data-upload-rules.md)。
+- **计费差异**：文本模型训练支持按 Token、训练单元预付费/后付费三种方式；而 RL 训练**仅支持训练单元计费**，不支持按 Token 计费 [强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-training-overview.md)；CosyVoice 训练费用由 `(lm_max_epoch + fm_max_epoch) × 25 × 总时长（秒）` 精确估算 [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)。
+- **产物与部署**：调优产物为独立模型，非基础模型下的音色 ID 或插件；CosyVoice 调优产物固定 `voice="default"`，不可切换音色 [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)；RL/OPD 产物需通过控制台“发布”后才能部署为 API 服务 [强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-training-overview.md)。
 
 ## 来源文档
 
 - [模型调优简介](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)
-- [千问模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model.md)
 - [调优数据上传规则](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/text-generation-tuning-data-upload-rules.md)
 - [在控制台进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-on-console.md)
-- [0 代码强化大模型安全合规能力](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/enhance-the-security-compliance-of-large-models.md)
 - [使用 API 或命令行进行模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)
+- [0 代码强化大模型安全合规能力](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/enhance-the-security-compliance-of-large-models.md)
 - [微调图像生成模型](../../raw/model-user-guide/fine-tuning/wan-image-generation-finetune-guide.md)
 - [微调视频生成模型](../../raw/model-user-guide/fine-tuning/wan-video-generation-finetune-guide.md)
-- [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)
 - [语音合成模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model.md)
+- [CosyVoice模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-speech-synthesis-model/fine-tune-speech-synthesis-model-by-api.md)
 - [强化学习训练概述](../../raw/model-user-guide/fine-tuning/rl-training-overview.md)
-- [强化学习训练配置 — 提交与配置](../../raw/model-user-guide/fine-tuning/rl-training-overview/rl-training-config-monitoring.md)
 - [强化学习开发指南](../../raw/model-user-guide/fine-tuning/rl-training-overview/rl-function-development-guide.md)
+- [强化学习训练配置 — 提交与配置](../../raw/model-user-guide/fine-tuning/rl-training-overview/rl-training-config-monitoring.md)
 - [强化学习的可观测配置与指标参考](../../raw/model-user-guide/fine-tuning/rl-training-overview/observable-configuration-for-reinforcement-learning.md)
+- [在线策略蒸馏概览](../../raw/model-user-guide/fine-tuning/opd-overview.md)
+- [在线策略蒸馏训练概述](../../raw/model-user-guide/fine-tuning/opd-overview/opd-training-overview.md)
+- [Model OPD 开发](../../raw/model-user-guide/fine-tuning/opd-overview/opd-model-development-guide.md)
+- [Agentic OPD 开发](../../raw/model-user-guide/fine-tuning/opd-overview/opd-agentic-development-guide.md)
+- [在线策略蒸馏训练配置](../../raw/model-user-guide/fine-tuning/opd-overview/opd-training-config.md)
+- [在线策略蒸馏可观测配置与指标参考](../../raw/model-user-guide/fine-tuning/opd-overview/opd-observable-config.md)
+- [千问模型调优](../../raw/model-user-guide/fine-tuning/fine-tune-text-generation-model.md)
 
 

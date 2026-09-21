@@ -2,8 +2,6 @@
 
 本文介绍 Qwen-Omni-Realtime API 的服务端事件，包括工具调用（Function Calling）相关事件。
 
-> 相关文档：[实时（Qwen-Omni-Realtime）](raw/model-user-guide/model-experience/omni-modal/realtime.md)。
-
 ## error
 
 服务端返回的错误信息。
@@ -127,7 +125,7 @@ VAD检测阈值。
 
 **enable\_search**`boolean`
 
-是否启用联网搜索功能。仅 Qwen3.5-Omni-Realtime 系列模型支持。
+是否启用联网搜索功能。Qwen3.8-Omni-Flash-Realtime 和 Qwen3.5-Omni-Realtime 系列模型支持。
 
 **search\_options**`object`
 
@@ -155,7 +153,7 @@ VAD检测阈值。
             "model": "qwen3-asr-flash-realtime"
         },
         "turn_detection": {
-            // 取值为server_vad或semantic_vad（仅qwen3.5-omni-realtime支持）
+            // 取值为server_vad或semantic_vad（qwen3.8-omni-flash-realtime和qwen3.5-omni-realtime系列支持）
             "type": "server_vad",
             "threshold": 0.5,
             "prefix_padding_ms": 300,
@@ -270,7 +268,7 @@ VAD检测阈值。
 
 **enable\_search**`boolean`（可选）
 
-是否启用联网搜索功能。仅 Qwen3.5-Omni-Realtime 系列模型支持。
+是否启用联网搜索功能。Qwen3.8-Omni-Flash-Realtime 和 Qwen3.5-Omni-Realtime 系列模型支持。
 
 **search\_options**`object`（可选）
 
@@ -370,7 +368,7 @@ VAD检测阈值。
             "model": "qwen3-asr-flash-realtime"
         },
         "turn_detection": {
-            // 取值为server_vad或semantic_vad（仅qwen3.5-omni-realtime支持）
+            // 取值为server_vad或semantic_vad（qwen3.8-omni-flash-realtime和qwen3.5-omni-realtime系列支持）
             "type": "server_vad",
             "threshold": 0.1,
             "prefix_padding_ms": 500,
@@ -560,7 +558,7 @@ VAD检测阈值。
 
 **type**`string`
 
-对话项的类型。可选值为 `message`（常规消息）或 `function_call`（工具调用）。
+对话项的类型包括 `message`（常规消息）和 `function_call`（工具调用）。Qwen3.8-Omni-Flash-Realtime 还可返回 `mcp_list_tools`、`mcp_call`、`mcp_approval_request`，对应结构见[MCP Item](#qwen38-server)。
 
 **name**`string`
 
@@ -952,7 +950,7 @@ T7
 
 **type** `string`
 
-输出项的类型，可选值为 `message`（常规消息）或 `function_call`（工具调用）。
+输出项的类型，可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 [`mcp_call`](#qwen38-server)。
 
 **object** `string`
 
@@ -1490,7 +1488,7 @@ T7
 
 ## response.output\_item.added
 
-在响应生成过程中创建新项目时，服务端返回此事件。项目类型可以是 `message`（常规消息）或 `function_call`（工具调用）。
+在响应生成过程中创建新项目时，服务端返回此事件。项目类型可以是 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 [`mcp_call`](#qwen38-server)。
 
 **event\_id**`string`
 
@@ -1536,7 +1534,7 @@ T7
 
 **type**`string`
 
-输出项的类型。可选值为 `message`（常规消息）或 `function_call`（工具调用）。
+输出项的类型。可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 [`mcp_call`](#qwen38-server)。
 
 **name**`string`
 
@@ -1631,7 +1629,7 @@ T7
 
 **type**`string`
 
-输出项的类型。可选值为 `message`（常规消息）或 `function_call`（工具调用）。
+输出项的类型。可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 [`mcp_call`](#qwen38-server)。
 
 **name**`string`
 
@@ -1796,3 +1794,815 @@ T7
     }
 }
 ```
+
+## Qwen3.8-Omni-Flash-Realtime MCP
+
+本节介绍 `qwen3.8-omni-flash-realtime` 的 WebSocket 事件与字段。基础事件与字段见前述事件说明。表中“必填”表示所属对象出现时必须提供。ID 均为不透明字符串，不应依赖其长度、前缀或生成规则。`arguments`、`output` 的外层类型为 string，读取内容时需要再次解析 JSON。MCP 连接、工具发现和调用受服务配额及超时限制。
+
+### MCP 工具发现状态事件
+
+以下三个事件具有相同的字段结构：
+
+事件 type
+
+触发时机
+
+mcp\_list\_tools.in\_progress
+
+开始发现某个 MCP Server 的工具
+
+mcp\_list\_tools.completed
+
+工具发现成功并完成 allowed\_tools 过滤
+
+mcp\_list\_tools.failed
+
+工具发现失败、超时或结果超过服务限制
+
+字段路径
+
+类型
+
+必填
+
+说明
+
+event\_id
+
+string
+
+是
+
+本条服务端事件的唯一 ID
+
+type
+
+string
+
+是
+
+上表中的固定事件类型
+
+item\_id
+
+string
+
+是
+
+本次工具发现对应的 mcp\_list\_tools item ID
+
+`mcp_list_tools.in_progress` 可能早于 `session.updated` 到达。对于 completed 和 failed，服务端会先发送包含最终工具列表或错误的 `conversation.item.created`，再发送相同 item\_id 的状态事件。
+
+示例：
+
+```
+{
+  "event_id": "opaque_event_id",
+  "type": "mcp_list_tools.completed",
+  "item_id": "opaque_item_id"
+}
+```
+
+### response.mcp\_call\_arguments.delta
+
+字段路径
+
+类型
+
+必填
+
+说明
+
+event\_id
+
+string
+
+是
+
+本条服务端事件的唯一 ID
+
+type
+
+string
+
+是
+
+固定为 response.mcp\_call\_arguments.delta
+
+response\_id
+
+string
+
+是
+
+父 Response ID
+
+item\_id
+
+string
+
+是
+
+当前 mcp\_call item ID
+
+output\_index
+
+integer
+
+是
+
+当前 item 在父 Response output 数组中的零基索引
+
+delta
+
+string
+
+是
+
+工具参数 JSON 字符串的本次增量片段，按事件顺序拼接
+
+obfuscation
+
+string
+
+否
+
+可选混淆字符串；客户端可以忽略，不影响 delta 拼接和参数解析
+
+示例：
+
+```
+{
+  "event_id": "opaque_event_id",
+  "type": "response.mcp_call_arguments.delta",
+  "response_id": "opaque_response_id",
+  "item_id": "opaque_item_id",
+  "output_index": 0,
+  "delta": "{\"city\":\"杭",
+  "obfuscation": "opaque-value"
+}
+```
+
+### response.mcp\_call\_arguments.done
+
+字段路径
+
+类型
+
+必填
+
+说明
+
+event\_id
+
+string
+
+是
+
+本条服务端事件的唯一 ID
+
+type
+
+string
+
+是
+
+固定为 response.mcp\_call\_arguments.done
+
+response\_id
+
+string
+
+是
+
+父 Response ID
+
+item\_id
+
+string
+
+是
+
+当前 mcp\_call item ID
+
+output\_index
+
+integer
+
+是
+
+当前 item 在父 Response output 数组中的零基索引
+
+arguments
+
+string
+
+是
+
+完整工具参数，内容为 JSON 字符串；客户端应以本字段为准
+
+示例：
+
+```
+{
+  "event_id": "opaque_event_id",
+  "type": "response.mcp_call_arguments.done",
+  "response_id": "opaque_response_id",
+  "item_id": "opaque_item_id",
+  "output_index": 0,
+  "arguments": "{\"city\":\"杭州\"}"
+}
+```
+
+### MCP 调用状态事件
+
+事件 type
+
+触发时机
+
+response.mcp\_call.in\_progress
+
+参数生成完成，且审批通过或无需审批，开始调用 MCP Server
+
+response.mcp\_call.completed
+
+MCP 工具调用成功
+
+response.mcp\_call.failed
+
+连接、协议、工具业务错误、审批拒绝、审批超时、调用超时或取消
+
+三个事件均使用以下字段：
+
+字段路径
+
+类型
+
+必填
+
+说明
+
+event\_id
+
+string
+
+是
+
+本条服务端事件的唯一 ID
+
+type
+
+string
+
+是
+
+上表中的固定事件类型
+
+item\_id
+
+string
+
+是
+
+当前 mcp\_call item ID
+
+output\_index
+
+integer
+
+是
+
+当前 item 在父 Response output 数组中的零基索引
+
+示例：
+
+```
+{
+  "event_id": "opaque_event_id",
+  "type": "response.mcp_call.in_progress",
+  "item_id": "opaque_item_id",
+  "output_index": 0
+}
+```
+
+### mcp\_list\_tools
+
+该对象通过 `conversation.item.created.item` 返回。
+
+字段路径
+
+类型
+
+必填
+
+说明
+
+item.id
+
+string
+
+是
+
+工具列表 item 的唯一 ID，与工具发现状态事件的 item\_id 相同
+
+item.type
+
+string
+
+是
+
+固定为 mcp\_list\_tools
+
+item.server\_label
+
+string
+
+是
+
+对应 MCP Server 的标识
+
+item.tools
+
+array\[object\]
+
+是
+
+校验并完成 allowed\_tools 过滤后的工具定义；失败时为空数组
+
+item.error
+
+object
+
+否
+
+工具发现失败时出现，结构见本节 MCP error
+
+工具数组元素：
+
+字段路径
+
+类型
+
+必填
+
+说明
+
+name
+
+string
+
+是
+
+MCP Server 声明的原始工具名；1～64 位，仅允许字母、数字、下划线、点和连字符
+
+description
+
+string
+
+否
+
+MCP Server 提供的工具说明
+
+input\_schema
+
+object
+
+是
+
+映射自 MCP Server 的 inputSchema，根节点 type 必须为 object
+
+annotations
+
+object
+
+否
+
+MCP Server 提供的 ToolAnnotations
+
+`input_schema` 为 JSON Schema 对象，根节点 `type` 必须为 `object`。服务会保留并传递 `properties`、`required`、`additionalProperties`、$defs、`oneOf`、`anyOf`、`allOf` 等标准 JSON Schema 字段。服务端不执行完整的 JSON Schema 语义校验，工具参数的最终合法性由 MCP Server 校验。
+
+示例：
+
+```
+{
+  "event_id": "opaque_event_id",
+  "type": "conversation.item.created",
+  "item": {
+    "id": "opaque_item_id",
+    "type": "mcp_list_tools",
+    "server_label": "amap",
+    "tools": [
+      {
+        "name": "maps_weather",
+        "description": "查询天气",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "city": {
+              "type": "string",
+              "description": "城市名"
+            }
+          },
+          "required": ["city"]
+        }
+      }
+    ]
+  }
+}
+```
+
+### 初始 mcp\_call
+
+模型选择 MCP 工具时，该对象出现在 `response.output_item.added.item` 中，也可能通过 `conversation.item.created.item` 返回。
+
+字段路径
+
+类型
+
+必填
+
+说明
+
+item.id
+
+string
+
+是
+
+本次 MCP 调用 item 的唯一 ID
+
+item.object
+
+string
+
+是
+
+固定为 realtime.item
+
+item.type
+
+string
+
+是
+
+固定为 mcp\_call
+
+item.status
+
+string
+
+是
+
+初始固定为 in\_progress
+
+item.call\_id
+
+string
+
+是
+
+本次工具调用的唯一 ID
+
+item.server\_label
+
+string
+
+是
+
+实际执行工具的 MCP Server 标识
+
+item.name
+
+string
+
+是
+
+被调用工具的原始名称
+
+item.arguments
+
+string
+
+是
+
+初始通常为空字符串；完整参数以 arguments.done 和最终 item 为准
+
+`response.output_item.added` 示例：
+
+```
+{
+  "event_id": "opaque_event_id",
+  "type": "response.output_item.added",
+  "response_id": "opaque_response_id",
+  "output_index": 0,
+  "item": {
+    "id": "opaque_item_id",
+    "object": "realtime.item",
+    "type": "mcp_call",
+    "status": "in_progress",
+    "call_id": "opaque_call_id",
+    "server_label": "amap",
+    "name": "maps_weather",
+    "arguments": ""
+  }
+}
+```
+
+### mcp\_approval\_request
+
+该对象通过 `conversation.item.created` 返回。
+
+事件顶层字段：
+
+字段路径
+
+类型
+
+必填
+
+说明
+
+event\_id
+
+string
+
+是
+
+本条服务端事件的唯一 ID
+
+type
+
+string
+
+是
+
+固定为 conversation.item.created
+
+response\_id
+
+string
+
+是
+
+生成本次 MCP 调用的父 Response ID
+
+item\_id
+
+string
+
+是
+
+审批请求 item ID，与 item.id 相同
+
+previous\_item\_id
+
+string
+
+是
+
+被审批的 mcp\_call item ID
+
+item
+
+object
+
+是
+
+审批请求对象
+
+item 字段：
+
+字段路径
+
+类型
+
+必填
+
+说明
+
+item.id
+
+string
+
+是
+
+审批请求 ID；回复时原样填入 approval\_request\_id
+
+item.type
+
+string
+
+是
+
+固定为 mcp\_approval\_request
+
+item.server\_label
+
+string
+
+是
+
+待执行工具所属的 MCP Server 标识
+
+item.name
+
+string
+
+是
+
+待执行工具的原始名称
+
+item.arguments
+
+string
+
+是
+
+待审批调用的完整参数 JSON 字符串
+
+item.call\_id
+
+string
+
+是
+
+被审批的工具调用 ID
+
+示例：
+
+```
+{
+  "event_id": "opaque_event_id",
+  "type": "conversation.item.created",
+  "response_id": "opaque_response_id",
+  "item_id": "opaque_approval_id",
+  "previous_item_id": "opaque_item_id",
+  "item": {
+    "id": "opaque_approval_id",
+    "type": "mcp_approval_request",
+    "server_label": "amap",
+    "name": "maps_weather",
+    "arguments": "{\"city\":\"杭州\"}",
+    "call_id": "opaque_call_id"
+  }
+}
+```
+
+### 最终 mcp\_call
+
+MCP 调用进入终态后，该对象出现在 `response.output_item.done.item` 中，并进入父 `response.done.response.output` 的最终快照。
+
+字段路径
+
+类型
+
+必填
+
+说明
+
+item.id
+
+string
+
+是
+
+本次 MCP 调用 item 的唯一 ID
+
+item.type
+
+string
+
+是
+
+固定为 mcp\_call
+
+item.status
+
+string
+
+是
+
+completed 或 failed
+
+item.call\_id
+
+string
+
+是
+
+本次工具调用的唯一 ID
+
+item.server\_label
+
+string
+
+是
+
+实际执行工具的 MCP Server 标识
+
+item.name
+
+string
+
+是
+
+被调用工具的原始名称
+
+item.arguments
+
+string
+
+是
+
+完整工具参数的 JSON 字符串
+
+item.output
+
+string
+
+否
+
+MCP tools/call.result 对象序列化后的 JSON 字符串；部分失败场景也可能出现
+
+item.error
+
+object
+
+否
+
+调用失败时出现，结构见本节 MCP error
+
+成功示例：
+
+```
+{
+  "event_id": "opaque_event_id",
+  "type": "response.output_item.done",
+  "response_id": "opaque_response_id",
+  "output_index": 0,
+  "item": {
+    "id": "opaque_item_id",
+    "type": "mcp_call",
+    "status": "completed",
+    "call_id": "opaque_call_id",
+    "server_label": "amap",
+    "name": "maps_weather",
+    "arguments": "{\"city\":\"杭州\"}",
+    "output": "{\"content\":[{\"type\":\"text\",\"text\":\"...\"}],\"isError\":false}"
+  }
+}
+```
+
+失败示例：
+
+```
+{
+  "event_id": "opaque_event_id",
+  "type": "response.output_item.done",
+  "response_id": "opaque_response_id",
+  "output_index": 0,
+  "item": {
+    "id": "opaque_item_id",
+    "type": "mcp_call",
+    "status": "failed",
+    "call_id": "opaque_call_id",
+    "server_label": "amap",
+    "name": "maps_weather",
+    "arguments": "{\"city\":\"杭州\"}",
+    "error": {
+      "type": "tool_execution_error",
+      "message": "MCP tool call failed (call_timeout)."
+    }
+  }
+}
+```
+
+### MCP error
+
+字段路径
+
+类型
+
+必填
+
+说明
+
+error.type
+
+string
+
+是
+
+固定为 tool\_execution\_error
+
+error.message
+
+string
+
+是
+
+面向客户端的安全错误描述，不包含上游敏感响应体
+
+MCP Server 返回 `isError=true` 时，最终 mcp\_call 的 status 为 failed，并可能同时包含原始 output 和结构化 error。
+
+> 相关文档：[实时（Qwen-Omni-Realtime）](raw/model-user-guide/model-experience/omni-modal/realtime.md)。

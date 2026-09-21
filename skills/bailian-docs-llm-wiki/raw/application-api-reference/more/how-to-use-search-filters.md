@@ -112,7 +112,7 @@ SearchFilters可以包含一个或多个子分组（如下方示例包含了两�
     
 -   [获取并配置AccessKey和AccessKey Secret到环境变量](https://help.aliyun.com/zh/sdk/developer-reference/configure-the-alibaba-cloud-accesskey-environment-variable-on-linux-macos-and-windows-systems)。
     
--   准备员工信息表[员工信息表.xlsx](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250224/ghwuqu/%E5%91%98%E5%B7%A5%E4%BF%A1%E6%81%AF%E8%A1%A8.xlsx)（包含三条记录），用于创建知识库（下文示例中会用到）。[创建和使用知识库说明](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)
+-   准备员工信息表[员工信息表.xlsx](https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20250224/ghwuqu/%E5%91%98%E5%B7%A5%E4%BF%A1%E6%81%AF%E8%A1%A8.xlsx)（包含三条记录），用于创建知识库（下文示例中会用到）。[创建和使用知识库说明](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)
     
     -   **知识库配置：**
         
@@ -1950,7 +1950,7 @@ public class WildcardQueryExample {
 
 ### 标签（Tag）查询示例
 
-检索文档搜索、音视频搜索类知识库时，可通过[标签](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)筛选文件，提高检索效率与准确性。
+检索文档搜索、音视频搜索类知识库时，可通过[标签](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)筛选文件，提高检索效率与准确性。
 
 **示例：**创建一个文档搜索类知识库，其中包含张三、李四和王五三人的信息。
 
@@ -2547,7 +2547,7 @@ public class TagQueryExample2 {
 
 **知识库用户指南**
 
-请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
+请参见[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
 
 **检索知识库**
 

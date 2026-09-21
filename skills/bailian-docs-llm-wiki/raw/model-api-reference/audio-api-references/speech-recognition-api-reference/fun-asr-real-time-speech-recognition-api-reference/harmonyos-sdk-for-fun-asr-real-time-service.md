@@ -1,4 +1,4 @@
-# Qwen-Audio-3.0-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别HarmonyOS SDK
+# Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别HarmonyOS SDK
 
 了解实时语音识别HarmonyOS SDK的集成方法、请求参数、接口、回调和示例代码。
 
@@ -79,7 +79,7 @@
 
 是
 
-服务地址。可使用公共地址 `wss://dashscope.aliyuncs.com/api-ws/v1/inference`，或业务空间专属地址 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`（北京）和 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`（新加坡）。将 `{WorkspaceId}` 替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+服务地址。可使用公共地址 `wss://dashscope.aliyuncs.com/api-ws/v1/inference`，或业务空间专属地址 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`（北京）和 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`（新加坡）。将 `{WorkspaceId}` 替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 `service_mode`
 
@@ -253,6 +253,8 @@ SDK拉取音频时的采集配置，仅在 `audio_update_manually` 为 `"false"`
 
 通过 [setParams](#setparams) 的 `params` 参数传入JSON字符串。
 
+**说明**`qwen-audio-3.1-asr-flash-message` 模型不支持 `nls_config.language_hints`、`nls_config.semantic_punctuation_enabled`、`nls_config.multi_threshold_mode_enabled`、`nls_config.special_word_filter` 参数。
+
 ```
 {
   "service_type": 4,
@@ -294,7 +296,7 @@ SDK拉取音频时的采集配置，仅在 `audio_update_manually` 为 `"false"`
 
 是
 
-模型名称。支持Qwen-Audio-3.0-ASR-Flash-Streaming和Fun-ASR-Realtime系列模型，参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
+指定示例调用的模型。模型信息请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
 
 `nls_config.sr_format`
 
@@ -358,7 +360,7 @@ VAD断句静音阈值（毫秒）。一段语音后的静音时长超过该阈�
 
 否
 
-即时热词，键为热词文本，值为整数权重，无需提前创建热词列表，适用于临时性、会话级热词优化。权重取值为 `[1, 5]` 或 `50`；取 `[1, 5]` 时值越大，模型越倾向输出该词；权重为50的超级热词最多50个。与预编译热词同时配置时，两类热词会合并；超过2000个时随机选择2000个使用。仅 `qwen-audio-3.0-asr-flash-streaming` 支持即时热词。参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
+即时热词，键为热词文本，值为整数权重，无需提前创建热词列表，适用于临时性、会话级热词优化。权重取值为 `[1, 5]` 或 `50`；取 `[1, 5]` 时值越大，模型越倾向输出该词；权重为50的超级热词最多50个。与预编译热词同时配置时，两类热词会合并；超过2000个时随机选择2000个使用。参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
 
 `nls_config.language_hints`
 
@@ -366,7 +368,7 @@ VAD断句静音阈值（毫秒）。一段语音后的静音时长超过该阈�
 
 否
 
-待识别音频的语种，无默认值；不设置时由模型自动识别。Qwen-Audio-3.0-ASR-Flash-Streaming系列最多使用前4个值；Fun-ASR-Realtime系列仅使用第1个值。支持的语言代码参见[实时语音识别用户指南](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)。
+待识别音频的语种，无默认值；不设置时由模型自动识别。Qwen-Audio-3.x-ASR-Flash-Streaming系列最多使用前4个值；Fun-ASR-Realtime系列仅使用第1个值。支持的语言代码参见[实时语音识别用户指南](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)。
 
 `nls_config.speech_noise_threshold`
 

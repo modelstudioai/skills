@@ -1,49 +1,53 @@
 # billing api
 
-billing api 提供账单数据查询能力，支持按时间维度的趋势分析和指定月份的总览统计。当前开放两个核心接口：`GetBillingTrend` 用于获取指定时间范围内（按天/月粒度）的费用趋势与分组明细；`GetBillingOverview` 用于获取单月账单的聚合概览。所有接口均基于 RESTful 设计，需通过 HTTPS 调用，并遵循统一的鉴权与参数规范。
+Billing API 提供账单数据的聚合查询能力，支持按月总览和时间趋势两种视角。开发者可通过 `GetBillingOverview` 获取指定月份的费用分组概览，或通过 `GetBillingTrend` 查询指定时间范围内（按日/月粒度）的费用变化趋势。所有接口均基于 RESTful 设计，需使用标准 HTTP GET 请求，并通过 query 参数传递过滤与分组逻辑。
 
 ## 支持的模型/功能
 
-- **趋势分析**：通过 [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md) 获取连续时间段内的费用变化趋势，支持 `DAY` 或 `MONTH` 粒度聚合，返回含时间序列、分组汇总及周期内明细的三层结构数据。
-- **月度总览**：通过 [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md) 获取单月（`YYYY-MM` 格式）账单整体情况，返回币种、总金额、各分组金额及占比，适用于快速成本盘点。
-- **多维分组与筛选**：两个接口均支持相同维度 Code（如 `MAAS_TYPE`、`BASE_MODEL`、`API_KEY_ID` 等）进行 `groupBy` 和 `filter`，且 `filter.dimensions.values` 均支持传入 `DIMENSION_FILTER_NULL_VALUE` 表示匹配空值 —— 此行为在两份文档中定义一致，详见 [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md) 补充说明。
+Billing API 当前提供两个核心接口：
+- `GetBillingOverview`：用于获取**单个月份**的账单总览，返回按指定维度（如 `MAAS_TYPE`、`BASE_MODEL`）聚合的 TopN 分组及金额占比。详见 [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md)。
+- `GetBillingTrend`：用于获取**连续时间段内**的账单趋势，支持 `DAY` 或 `MONTH` 粒度，返回各周期内分组费用明细及整体趋势分布。详见 [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md)。
+
+两个接口均支持相同的维度体系（如 `MAAS_TYPE`、`API_KEY_ID`、`WORKSPACE_ID` 等），且 `filter.dimensions[].values` 均可传入 `DIMENSION_FILTER_NULL_VALUE` 表示匹配空值或 NULL 字段。
+
+> **注意**：两篇原始文档中对 `filter.dimensions.selectType` 的取值描述完全一致（仅支持 `IN`/`NOT`），但 [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md) 的示例未展示该字段用法，而 [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md) 明确列出其为必填项之一 —— 实际调用时应以参数定义为准，`selectType` 为必填字段，不可省略。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `granularity`（仅 `GetBillingTrend`） | string | 是 | 取值 `DAY` 或 `MONTH`；决定时间轴聚合粒度 |
-| `timePeriod.start` / `timePeriod.end`（仅 `GetBillingTrend`） | string | 是 | 格式 `YYYY-MM-DD`，闭区间，最大跨度 366 天 |
-| `billMonth`（仅 `GetBillingOverview`） | string | 是 | 格式 `YYYY-MM`，仅支持查询已出账的自然月 |
-| `groupBy` | array<object> | 是 | 必须且仅允许 1 个元素；`code` 字段需从[支持维度列表](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md)中选择 |
-| `filter.dimensions` | array<object> | 否 | 支持多维组合过滤，每个 `dimensions` 对象含 `code`、`values`（string 数组）、`selectType`（`IN`/`NOT`） |
-| `topNum` | integer | 否 | 1–20，默认 20；超出 TopN 的分组合并为“其他” |
-| `zeroFilter` | boolean | 否 | 是否排除金额为 0 的分组，默认 `true` |
-
-> **注意**：`GetBillingTrend` 的 `timePeriod.end` 为闭区间，而 `GetBillingOverview` 的 `billMonth` 为整月粒度；二者时间语义不同，不可混用。此外，`GetBillingOverview` 返回 `data.currency` 示例为 `"USD"`，但实际值取决于账户结算币种，该字段行为以 [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md) 文档为准，而非硬编码。
+| 参数名 | 类型 | 必填 | 说明 | 示例值 |
+|--------|------|------|------|--------|
+| `billMonth`（仅 `GetBillingOverview`） | string | 是 | 账单月份，格式 `YYYY-MM` | `2026-08` |
+| `granularity`（仅 `GetBillingTrend`） | string | 是 | 时间粒度：`DAY` 或 `MONTH` | `DAY` |
+| `timePeriod.start` / `.end`（仅 `GetBillingTrend`） | string | 是 | 查询起止日期，格式 `YYYY-MM-DD` | `2026-08-01`, `2026-08-31` |
+| `groupBy` | array<object> | 是 | 分组维度，**必须且仅能含一个元素**；`code` 值须从标准维度列表中选取 | `[{"code": "MAAS_TYPE"}]` |
+| `filter.dimensions` | array<object> | 否 | 维度过滤条件，每个元素含 `code`、`values`、`selectType` | `[{"code":"BASE_MODEL","values":["qwen-max"],"selectType":"IN"}]` |
+| `topNum` | integer | 否 | 返回 TopN 分组数，范围 1–20，默认 20 | `10` |
+| `zeroFilter` | boolean | 否 | 是否过滤金额为 0 的分组，默认 `true` | `false` |
+| `regionId` | string | 否 | 地域 ID，影响数据范围 | `cn-beijing` |
+| `locale` | string | 否 | 返回语言，`zh-CN` 或 `en-US`，影响 `name` 字段展示 | `zh-CN` |
 
 ## 使用方式
 
-- **HTTP 方法与路径**：
-  - `GET /modelstudio/billing/trend` → `GetBillingTrend`
-  - `GET /modelstudio/billing/overview` → `GetBillingOverview`
-- **认证**：需在请求 Header 中携带有效的 `Authorization`（如 Bearer Token）及 `x-acs-region-id`（若未通过 `regionId` 参数显式指定）。
-- **语言控制**：通过 `locale=zh-CN` 可使 `name` 字段返回中文（如 `模型调用`），默认 `en-US`。
-- **典型场景示例**：  
-  查询 2026-08 全月按基础模型分组的费用总览：  
-  `GET /modelstudio/billing/overview?billMonth=2026-08&groupBy[0].code=BASE_MODEL&filter.dimensions[0].code=MAAS_TYPE&filter.dimensions[0].values[0]=inference`
+1. **认证**：所有请求需携带有效的 Bearer Token（通过百炼平台 AccessKey 鉴权，具体鉴权方式见平台通用认证文档）。
+2. **构造 URL**：
+   - `GetBillingOverview`: `GET https://<endpoint>/modelstudio/billing/overview?billMonth=2026-08&groupBy[0].code=MAAS_TYPE&locale=zh-CN`
+   - `GetBillingTrend`: `GET https://<endpoint>/modelstudio/billing/trend?granularity=DAY&timePeriod.start=2026-08-01&timePeriod.end=2026-08-31&groupBy[0].code=BASE_MODEL`
+3. **响应解析**：
+   - 成功响应 `success: true`，数据位于 `data` 字段；
+   - `data.currency` 标识币种（可能为 `CNY` 或 `USD`），所有金额字段均为字符串类型，需转为数值处理；
+   - 分组键值（如 `key`）为空时统一返回 `DIMENSION_FILTER_NULL_VALUE`。
 
 ## 限制和注意事项
 
-- 时间范围限制：`GetBillingTrend` 最大支持 366 天查询跨度；`GetBillingOverview` 仅支持已生成账单的自然月，不支持未来月份或非标准月格式。
-- 分组约束：`groupBy` 必须且只能传入一个维度对象，传入多个将返回参数错误（`InvalidParameter.GroupByCount`）。
-- 空值处理：所有维度的 `filter.dimensions.values` 均支持 `DIMENSION_FILTER_NULL_VALUE` 字符串字面量，用于匹配数据库中 NULL 或空字符串字段，该机制在两份文档中定义完全一致。
-- 货币一致性：响应中 `currency` 字段由账户主结算币种决定，非固定值；开发者应以返回值为准，不可预设为 `CNY` 或 `USD`。
-- 性能提示：高频调用建议缓存 `locale=zh-CN` 的分组名称映射，避免重复请求。
+- **分组限制**：`groupBy` 数组长度**严格限定为 1**，不支持多维嵌套分组。
+- **时间范围限制**：`GetBillingTrend` 的 `timePeriod.end` 与 `start` 间隔不得超过 90 天（`DAY` 粒度）或 24 个月（`MONTH` 粒度），超出将返回 400 错误。
+- **空值处理**：`filter.dimensions[].values` 中传入 `DIMENSION_FILTER_NULL_VALUE` 可匹配数据库中为 NULL 或空字符串的记录，该行为在两篇文档中定义一致，是唯一推荐的空值筛选方式。
+- **精度说明**：所有金额字段（如 `amount`, `pretaxAmount`）均为字符串格式，保留两位小数，**不可直接 JSON.parse() 转 number 后运算**，建议使用 `parseFloat()` 或高精度库处理。
+- **地域一致性**：若同时指定 `regionId` 和 `filter.dimensions` 中含 `BUSINESS_REGION`，以 `regionId` 为准，后者将被忽略。
 
 ## 来源文档
 
-- [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md)
 - [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md)
+- [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md)
 
 

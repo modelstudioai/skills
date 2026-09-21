@@ -182,11 +182,9 @@ ASR 类模型需在百炼控制台业务空间逐一开通权限后方可调用�
 
 ### 如何查看模型调用记录？
 
-模型调用完**一小时后**，在模型监控（[北京](https://bailian.console.aliyun.com/model/telemetry)或[新加坡](https://bailian.console.aliyun.com/model/telemetry)）页面设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**操作**列的**监控**，即可查看该模型的调用统计结果。具体请参见[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)文档。
+模型调用发生后**分钟级**即可在监控图表查看。登录模型监控页面（[北京](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)或[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/telemetry)），在左侧导航栏选择**运维管理** > **模型监控**进入监控概览页，设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**查看详情**，即可查看该模型的调用统计结果。具体请参见[监控告警](raw/model-user-guide/model-monitoring/model-telemetry.md)文档。
 
-> 数据按小时更新，高峰期可能有小时级延迟，请您耐心等待。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6923304571/p992753.png)
+> 监控数据按分钟级更新，仅供参考，不作为计费依据。
 
 ### 如何避免扣费？
 

@@ -139,7 +139,7 @@
 
 -   URL地址：url；
     
-    [](http://xxxx)[http://xxxx](http://xxxx)：要求公网可以直接访问。
+    `http://xxxx`：要求公网可以直接访问。
     
 -   http请求头：headers；
     

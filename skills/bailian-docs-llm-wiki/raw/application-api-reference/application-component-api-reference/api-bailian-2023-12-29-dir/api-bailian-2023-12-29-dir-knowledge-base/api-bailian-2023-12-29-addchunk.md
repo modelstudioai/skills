@@ -96,7 +96,7 @@ object
 
 数据查询类、图片问答类知识库 key 不固定，由该知识库的数据源表格决定：key 为 Excel 列标题，value 为对应列的值。
 
-{ "content": "The Bailian platform supports parsing multiple document formats including PDF, Word, and PPT.", "title": "Document Parsing and Chunking", "image\_urls": \[ "[](https://example.com/images/chunk-flow.png)[https://example.com/images/chunk-flow.png](https://example.com/images/chunk-flow.png)", "[](https://example.com/images/parsing-result.png)[https://example.com/images/parsing-result.png](https://example.com/images/parsing-result.png)" \] }
+{ "content": "The Bailian platform supports parsing multiple document formats including PDF, Word, and PPT.", "title": "Document Parsing and Chunking", "image\_urls": \[ "[https://example.com/images/chunk-flow.png](https://example.com/images/chunk-flow.png)", "[https://example.com/images/parsing-result.png](https://example.com/images/parsing-result.png)" \] }
 
 any
 
@@ -115,7 +115,7 @@ any
 -   **image\_url 类型**：最多 5 张，多张用英文逗号拼接为一个字符串
     
 
-{"Product Name": "Wireless Bluetooth Headphones", "Publish Time": 1752624000000, "Stock Quantity": 1580, "Unit Price": 299.99, "image\_url":"[](https://example.com/images/headphones-front.jpg,https://example.com/images/headphones-side.jpg,https://example.com/images/headphones-package.jpg)[https://example.com/images/headphones-front.jpg,https://example.com/images/headphones-side.jpg,https://example.com/images/headphones-package.jpg](https://example.com/images/headphones-front.jpg,https://example.com/images/headphones-side.jpg,https://example.com/images/headphones-package.jpg)" }
+{"Product Name": "Wireless Bluetooth Headphones", "Publish Time": 1752624000000, "Stock Quantity": 1580, "Unit Price": 299.99, "image\_url":"[https://example.com/images/headphones-front.jpg,https://example.com/images/headphones-side.jpg,https://example.com/images/headphones-package.jpg](https://example.com/images/headphones-front.jpg,https://example.com/images/headphones-side.jpg,https://example.com/images/headphones-package.jpg)" }
 
 ## 返回参数
 

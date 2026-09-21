@@ -55,7 +55,7 @@ Header的值，根据引用方式选择变量或直接输入。
 
 ### Param设置
 
-配置URL中的查询参数。查询参数位于URL中问号（?）之后，用于向API传递额外的信息。例如，在 [https://api.example.com/files?limit=5](https://api.example.com/files?limit=5) 中，limit 是参数名，5 是参数值，表示限制返回 5 条数据。
+配置URL中的查询参数。查询参数位于URL中问号（?）之后，用于向API传递额外的信息。例如，在 `https://api.example.com/files?limit=5` 中，limit 是参数名，5 是参数值，表示限制返回 5 条数据。
 
 列名
 

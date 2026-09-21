@@ -151,7 +151,7 @@ string
 
 翻译结果
 
-<!DOCTYPE html> <html lang="zh-CN"> <head> <meta charset="utf-8"/> <meta content="width=device-width, initial-scale=1.0" name="viewport"/> <title>My First Webpage</title> </head> <body> <h1>Welcome to my webpage!</h1> <p>This is a simple HTML page.</p> <p>Learning HTML is the first step to entering web development.</p> <a href="[](https://www.example.com)[https://www.example.com](https://www.example.com)">Click here to visit the sample website</a> </body> </html>
+<!DOCTYPE html> <html lang="zh-CN"> <head> <meta charset="utf-8"/> <meta content="width=device-width, initial-scale=1.0" name="viewport"/> <title>My First Webpage</title> </head> <body> <h1>Welcome to my webpage!</h1> <p>This is a simple HTML page.</p> <p>Learning HTML is the first step to entering web development.</p> <a href="[https://www.example.com"&gt;Click](https://www.example.com%22&gt;Click) here to visit the sample website</a> </body> </html>
 
 usage
 

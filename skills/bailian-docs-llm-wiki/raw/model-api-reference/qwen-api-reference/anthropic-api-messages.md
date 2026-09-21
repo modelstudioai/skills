@@ -45,7 +45,7 @@ SDK 调用配置的 `base_url`：`https://{WorkspaceId}.ap-northeast-1.maas.aliy
 
 HTTP 请求地址：`POST https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/apps/anthropic/v1/messages`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 认证方式：通过 `x-api-key` 请求头或 `Authorization: Bearer` 请求头传入[百炼 API Key](raw/model-api-reference/preparations/get-api-key.md)，二者选其一即可。
 

@@ -1,95 +1,77 @@
 # overview
 
-百炼平台的 `overview` 模块涵盖两大核心能力：面向非结构化/音视频内容的文档解析（Parse）与面向结构化业务字段的信息抽取（Extract），以及统一的数据连接中枢 Connector。它为开发者提供控制台交互、REST API 和 Agent Skill 三种集成方式，支持从快速体验到生产级异步任务编排的全链路流程。
+Connector 是阿里云百炼平台提供的企业数据连接中枢，通过统一的 MCP 协议将各类外部系统（如文件、数据库、SaaS 应用）的能力暴露给智能体与客户端。它不拉取、不索引原始数据，而是按需实时调用目标系统 API，确保数据新鲜度与权限一致性。核心设计围绕 App（系统类型）、身份验证配置（凭证模板）、连接器（实例）、工具（能力单元）和 MCP（服务入口）五层展开。
 
 ## 支持的模型/功能
 
-- **文档解析（Parse）**：支持 PDF、Word、PPT、图片、HTML、EPUB 等图文格式，以及 MP3、MP4 等音视频格式，输出结构化 Markdown、JSON 及分片结果。详见 [使用文档解析控制台](../../raw/application-user-guide/overview/overview/parse.md)。
-- **信息抽取（Extract）**：仅支持图文输入，基于用户定义的 JSON Schema 抽取强类型业务字段，返回字段值、状态（`present`/`missing`/`conflict`）、原文定位（Citation）及推理依据。Schema 规则严格遵循 [Schema规则参考](../../raw/application-user-guide/overview/overview/schema.md)，嵌套深度与字段数受平台限制。
-- **Connector 数据连接**：提供统一 MCP 协议接入层，支持文件、表格、OSS、MySQL、PostgreSQL、PolarDB-X、语雀、Salesforce on Alibaba Cloud、MaxCompute、钉钉系列、云效、腾讯文档、网易邮箱、QQ邮箱等 20+ 类 App。所有连接器均按业务空间隔离，工具由 Connector 自动发现并暴露给智能体调用。
+Connector 本身不提供模型，而是为大模型智能体提供结构化工具调用能力。其功能由所连接的 App 类型决定，当前支持以下几类：
 
-> **注意**：文档中多处提及“支持 CSV 导入”，但 [常见问题](../../raw/application-user-guide/overview/overview/faq.md) 明确指出“JSON、CSV、YAML 文件无法导入”，需先转换为 XLSX/XLS；[配额与限制](../../raw/application-user-guide/overview/overview/limits.md) 亦重申“不支持直接导入 JSON、CSV、YAML”。因此，CSV 为**不支持格式**，该矛盾信息以 FAQ 和 limits 文档为准。
+- **平台托管类**：文件连接器（PDF/Word/Markdown）、表格连接器（XLSX/XLS），数据上传至平台存储，自动生成 `搜索文件`/`获取文件` 或 `获取表结构` 工具；详见[文件连接器](../../raw/application-user-guide/overview/apps-guide/file.md)。
+- **阿里云服务类**：OSS（对象存储）、MaxCompute（大数据计算）、MySQL/PostgreSQL/PolarDB-X 2.0（数据库），数据保留在原系统，通过服务关联角色或 DMS 接入，实时读取；其中 MaxCompute 无需填写凭证，仅需 OAuth 授权，见[MaxCompute](../../raw/application-user-guide/overview/apps-guide/maxcompute.md)。
+- **第三方 SaaS 类**：语雀（API Key）、Salesforce on Alibaba Cloud（OAuth 2.0）、钉钉系列（MCP 接入地址）、云效/腾讯文档（授权窗口），均通过标准协议完成身份认证与能力封装；例如钉钉系列需从[钉钉 AI 应用服务市场](../../raw/application-user-guide/overview/apps-guide/dingtalk.md)获取含密钥的 StreamableHttp URL。
+- **邮箱类**：QQ邮箱、网易邮箱，使用 IMAP/SMTP 授权码连接，凭证加密存储。
+
+> **注意**：文档 17 中 Salesforce 的 OAuth 配置说明要求 Callback URL 必须严格匹配 `https://connector.aliyuncs.com/api/v1/bailian/connector/runtime/oauth/callback`，而文档 7 中同名文档给出的 Callback URL 缺少末尾斜杠（`/`），以文档 17 为准。
 
 ## 关键参数
 
-- **`config_id`**：保存的 Parse 或 Extract 配置唯一标识，用于复用已验证的处理规则。必须通过 [配置](../../raw/application-user-guide/overview/configurations.md) 页面创建并获取，不可自行构造。
-- **`biz_id`**：异步任务唯一标识，由 `/submit` 接口返回，用于轮询 `/result` 查询状态与结果。历史任务在 [任务记录](../../raw/application-user-guide/overview/configurations/tasks.md) 中可追溯。
-- **`workspaceId`**：业务空间 ID，决定 MCP 地址（`https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/connector/mcp`）和 API 路由，所有资源（连接器、配置、任务）均归属且隔离于该空间。
-- **`file_url` / `parsed_file_biz_id`**：Extract 输入二选一。前者为可公开访问的文件 URL；后者为已成功完成的图文 Parse 任务 `biz_id`，用于复用解析结果，避免重复解析（计费更优）。
+所有连接器共用基础字段，App 特定参数由类型决定：
+
+- **连接器名称**（必填，≤64 字符）：用于区分同一 App 下的多个实例，建议体现环境与用途（如 `订单库-生产`）。
+- **连接器描述**（选填）：直接影响智能体工具选择准确率，需明确数据内容与适用场景（如“产品手册与发布说明，供回答产品功能问题时引用”）。
+- **身份验证配置**（部分 App 必填）：Salesforce、MaxCompute、语雀三类 App 必须预先创建，见[身份验证概览](../../raw/application-user-guide/overview/auth-guide/auth-overview.md)；其余 App（如文件、OSS、数据库）在连接对话框中直接填写凭证或选择数据源。
+- **MCP 配置参数**（客户端侧）：
+  - `url`: `https://${workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/connector/mcp`
+  - `headers.Authorization`: `Bearer ${DASHSCOPE_API_KEY}`
 
 ## 使用方式
 
-1. **控制台快速体验**：  
-   - 进入 [ParseX 控制台](https://bailian.console.aliyun.com/cn-beijing/parsex/document-parse)，选择「文档解析」或「字段抽取」工作区。  
-   - 上传文件或选用样例 → 配置 Schema 或解析选项 → 点击「运行」→ 在结果区核验 Markdown/JSON 视图。  
-   - 成功后可点击「保存配置」生成 `config_id`，供后续复用。
+完整流程分四步：
 
-2. **REST API 集成**：  
-   - 使用 DashScope API Key 鉴权（`Authorization: Bearer <API_KEY>`）。  
-   - 基础路径：`https://{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/parse-x`。  
-   - 提交与查询端点见 [REST API 接入](../../raw/application-user-guide/overview/overview/rest-api.md)，必须严格遵循 `snake_case` 字段命名与 JSON 格式。
-
-3. **Agent Skill 集成**：  
-   - 适用于 Qoder、Claude Code 等支持 Skill 的 Agent 客户端。  
-   - 安装命令为 `npx skills add "https://agenthub.aliyun-inc.com/api/skill-sources/alibabacloud-parse-x" --yes`，但 [Skill 接入要求](../../raw/application-user-guide/overview/overview/skill.md) 强调：**当前无正式发布名称或安装地址，禁止虚构或猜测**，须从官方发布入口确认。
+1. **准备前置条件**：确认阿里云账号已开通百炼、拥有业务空间 ID 与 DashScope API Key；RAM 用户需主账号提前授权。
+2. **创建连接**：
+   - 若 App 需身份验证配置（Salesforce/MaxCompute/语雀），先在 **身份验证配置** 页面创建（如语雀只需粘贴 Token）；
+   - 在 **Apps** 页面选择目标 App，按提示填写连接信息（如文件连接器填名称与描述，OSS 选 Bucket 并完成 SLR 授权）。
+3. **验证工具**：进入 App 详情页，在 **可用的工具** 区域查看自动生成的工具及其入参（如 `搜索文件` 需 `keyWord`，`获取表结构` 可传 `fuzzyTableName`）。
+4. **接入客户端**：将 MCP 地址与 API Key 配置到支持 MCP 的客户端（如 Qoder），重启后即可调用工具。首次调用建议用自然语言提问，如“帮我在产品文档里找一下和计费相关的文件”。
 
 ## 限制和注意事项
 
-- **文件限制**：控制台体验页单文件上限 200 MB；API 支持更大尺寸（如视频 10 GB），但需确保 `file_url` 可稳定访问。音视频仅支持 Parse，Extract 不接受其作为输入。
-- **存储配额**：平台托管的文件/表格连接器共享 1 TB 存储与 200,000 文件额度，限时免费；OSS、数据库等连接器数据保留在源系统，不占用此配额，但会产生 OSS 下行流量费。
-- **Connector 注意事项**：  
-  - OAuth 2.0 类 App（Salesforce、MaxCompute）需先建 [身份验证配置](../../raw/application-user-guide/overview/auth-guide.md)，凭证轮转后必须新建配置并重建连接，**切勿在源系统删除仍在使用的 OAuth 应用**。  
-  - API Key 类 App（语雀）的 Token 泄露风险极高，务必按 [API Key 配置](../../raw/application-user-guide/overview/auth-guide/api-key.md) 建议保管与轮转。  
-  - OSS 连接依赖 Bucket 标签 `bailian-datahub-access=read`，缺失将导致 Bucket 不可见，此为常见报错根源。
-- **计费说明**：图文按页、音视频按秒计量；直接抽取新文档（¥0.06/页）包含解析成本，复用 ParseResult 抽取（¥0.04/页）更经济；免费额度仅首次开通赠送，用尽后自动按量计费。
+- **配额限制**：平台托管存储（文件/表格连接器）上限为 200,000 个文件、1 TB，且仅支持查看最近 90 天内导入的文件；类目上限 500 个/业务空间；单个文件标签最多 100 个，总长度 ≤700 字符；详见[配额与限制](../../raw/application-user-guide/overview/reference-overview/limits.md)。
+- **格式限制**：文件连接器不支持直接导入 JSON/CSV/YAML；表格连接器仅支持 XLSX/XLS，不支持 CSV/JSON/YAML。
+- **安全注意事项**：
+  - API Key、OAuth Client Secret、钉钉 MCP URL 中的 `key`、邮箱授权码均为敏感凭证，禁止明文提交至代码仓库或聊天工具；
+  - 语雀 Token 建议按用途单独生成，避免使用管理员账号；钉钉接入地址泄露后需在钉钉市场重置服务。
+- **状态管理**：连接器状态为“已过期”时，需更新身份验证配置中的凭证并重建连接；删除连接不可撤销，且会立即中断依赖它的智能体与客户端调用。
+- **迁移截止**：旧版数据连接的一键迁移入口将于 2026 年 9 月 30 日关闭，逾期需手动重建。
 
 ## 来源文档
 
-- [快速开始](../../raw/application-user-guide/overview/quickstart.md)
 - [核心概念](../../raw/application-user-guide/overview/concepts.md)
+- [快速开始](../../raw/application-user-guide/overview/quickstart.md)
 - [身份验证配置](../../raw/application-user-guide/overview/auth-guide.md)
-- [身份验证概览](../../raw/application-user-guide/overview/auth-guide/overview.md)
+- [身份验证概览](../../raw/application-user-guide/overview/auth-guide/auth-overview.md)
 - [创建身份验证配置](../../raw/application-user-guide/overview/auth-guide/create-config.md)
+- [API Key 配置](../../raw/application-user-guide/overview/auth-guide/api-key.md)
 - [OAuth 2.0 配置](../../raw/application-user-guide/overview/auth-guide/oauth.md)
 - [连接的账户](../../raw/application-user-guide/overview/auth-guide/connected-accounts.md)
-- [API Key 配置](../../raw/application-user-guide/overview/auth-guide/api-key.md)
-- [Apps 目录](../../raw/application-user-guide/overview/apps-guide/overview.md)
-- [文件连接器](../../raw/application-user-guide/overview/apps-guide/file.md)
+- [Apps 目录](../../raw/application-user-guide/overview/apps-guide/apps-overview.md)
 - [连接 Apps](../../raw/application-user-guide/overview/apps-guide.md)
+- [文件连接器](../../raw/application-user-guide/overview/apps-guide/file.md)
 - [钉钉系列](../../raw/application-user-guide/overview/apps-guide/dingtalk.md)
-- [表格连接器](../../raw/application-user-guide/overview/apps-guide/table.md)
-- [网易邮箱](../../raw/application-user-guide/overview/apps-guide/netease-mail.md)
 - [QQ邮箱](../../raw/application-user-guide/overview/apps-guide/qq-mail.md)
-- [腾讯文档](../../raw/application-user-guide/overview/apps-guide/tencent-docs.md)
+- [网易邮箱](../../raw/application-user-guide/overview/apps-guide/netease-mail.md)
 - [云效](../../raw/application-user-guide/overview/apps-guide/yunxiao.md)
-- [OSS](../../raw/application-user-guide/overview/apps-guide/oss.md)
+- [腾讯文档](../../raw/application-user-guide/overview/apps-guide/tencent-docs.md)
 - [Salesforce on Alibaba Cloud](../../raw/application-user-guide/overview/apps-guide/salesforce.md)
+- [OSS](../../raw/application-user-guide/overview/apps-guide/oss.md)
 - [MaxCompute](../../raw/application-user-guide/overview/apps-guide/maxcompute.md)
 - [数据库](../../raw/application-user-guide/overview/apps-guide/database.md)
-- [数据连接迁移](../../raw/application-user-guide/overview/overview/migration.md)
-- [参考](../../raw/application-user-guide/overview/overview.md)
-- [常见问题](../../raw/application-user-guide/overview/overview/faq.md)
-- [配额与限制](../../raw/application-user-guide/overview/overview/limits.md)
-- [快速开始](../../raw/application-user-guide/overview/quickstart.md)
-- [文档解析概览](../../raw/application-user-guide/overview/overview.md)
-- [使用文档解析控制台](../../raw/application-user-guide/overview/overview/parse.md)
-- [配置文档解析](../../raw/application-user-guide/overview/overview/configuration.md)
-- [获取文档解析结果](../../raw/application-user-guide/overview/overview/results-and-best-practices.md)
-- [字段抽取概览](../../raw/application-user-guide/overview/overview.md)
-- [使用字段抽取控制台](../../raw/application-user-guide/overview/overview/extract.md)
-- [配置字段抽取](../../raw/application-user-guide/overview/overview/configuration.md)
-- [Schema规则参考](../../raw/application-user-guide/overview/overview/schema.md)
-- [获取字段抽取结果](../../raw/application-user-guide/overview/overview/results.md)
+- [参考](../../raw/application-user-guide/overview/reference-overview.md)
+- [数据连接迁移](../../raw/application-user-guide/overview/reference-overview/migration.md)
+- [配额与限制](../../raw/application-user-guide/overview/reference-overview/limits.md)
+- [常见问题](../../raw/application-user-guide/overview/reference-overview/faq.md)
 - [语雀](../../raw/application-user-guide/overview/apps-guide/yuque.md)
-- [服务渠道](../../raw/application-user-guide/overview/overview.md)
-- [REST API 接入](../../raw/application-user-guide/overview/overview/rest-api.md)
-- [Skill 接入要求](../../raw/application-user-guide/overview/overview/skill.md)
-- [OSS 托管使用](../../raw/application-user-guide/overview/overview/parse-x-oss-integration.md)
-- [配置](../../raw/application-user-guide/overview/configurations.md)
-- [任务记录](../../raw/application-user-guide/overview/configurations/tasks.md)
-- [用量](../../raw/application-user-guide/overview/configurations/usage.md)
-- [支持的文件与限制](../../raw/application-user-guide/overview/configurations/supported-files-and-limits.md)
-- [计量与计费](../../raw/application-user-guide/overview/configurations/pricing.md)
-- [常见问题](../../raw/application-user-guide/overview/configurations/faq.md)
+- [表格连接器](../../raw/application-user-guide/overview/apps-guide/table.md)
 
 

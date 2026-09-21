@@ -1,65 +1,74 @@
 # model context protocol
 
-模型上下文协议（Model Context Protocol, MCP）是阿里云百炼平台提供的标准化工具集成机制，用于在大模型推理过程中安全、高效地调用外部能力（如地图、天气、网页爬取、知识图谱等）。它屏蔽了底层接口差异，使开发者无需为每个工具单独开发适配逻辑，即可在智能体、工作流或第三方客户端中统一接入和管理工具服务。
+[模型上下文协议](../concepts/mcp.md)（Model Context Protocol, MCP）是阿里云百炼平台提供的标准化机制，用于在大模型与外部工具（如地图、搜索、数据库等）之间建立安全、可扩展的信息通道。它屏蔽了底层接口差异，使开发者无需为每个工具单独编写适配逻辑，即可在智能体或工作流中声明式接入多种能力。该协议基于 Anthropic 提出的开源标准 [MCP 官网](https://modelcontextprotocol.io/) 实现，并已升级为 Streamable HTTP 协议以支持更稳定的外部集成。
 
 ## 支持的模型/功能
 
-MCP 本身不绑定特定大模型，而是作为上下文增强通道与百炼平台内所有支持工具调用的模型协同工作，包括通义千问系列（如 Qwen-Max、Qwen-Plus）等。其核心能力体现在三类服务接入方式：
+MCP 服务**不直接绑定特定大模型**，而是通过百炼平台的智能体（Agent）和工作流（Workflow）两类应用承载调用能力：
 
-- **官方 MCP 服务**：由阿里云预部署并托管的即开即用服务，例如 Amap Maps（地理信息）、WebSearch（联网搜索）、Sequential Thinking（逻辑推理）、QuickChart（图表生成）等，开通后可直接在智能体或工作流中配置使用 [官方 MCP 服务](../../raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)。
-- **自定义 MCP 服务**：支持三种部署路径：
-  - *使用脚本部署*：通过 `npx`（Node.js）或 `uvx`（Python）一键托管开源或自研 MCP Server（如 Knowledge Graph Memory）；
-  - *从 AI 网关导入*：将现有 RESTful API 封装为 MCP 工具；
-  - *从阿里云 OpenAPI 导入*：将 OSS、ECS 等云产品能力暴露为可调用工具 [自定义 MCP 服务](../../raw/application-user-guide/model-context-protocol/custom-mcp.md)。
-- **外部客户端兼容**：遵循标准 Streamable HTTP 协议，支持与 Cherry Studio、Cursor 等主流 MCP 客户端集成，实现跨平台工具复用 [外部调用](../../raw/application-user-guide/model-context-protocol/mcp-external-calls.md)。
+- **智能体应用**：支持自动决策调用（基于对话上下文触发），最多可同时配置 5 个 MCP 服务；典型场景包括路径规划（Amap Maps）、逻辑推理（Sequential Thinking）、多工具协同（如天气查询 + 图表生成）[官方 MCP 服务](../../raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)。
+- **工作流应用**：需手动指定 MCP 节点使用的具体工具（如 `maps_weather`），并显式连接输入/输出参数；适用于确定性编排任务，例如“自然语言解析 → 天气查询 → 结果总结”链路 [官方 MCP 服务](../../raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)。
+- **外部调用**：支持通过 MCP SDK 或集成至 Cherry Studio/Cursor 等第三方客户端，使用 Streamable HTTP 协议（`/mcp` 端点）或 SSE（`/sse` 端点）进行调用 [外部调用](../../raw/application-user-guide/model-context-protocol/mcp-external-calls.md)。
 
-> **注意**：文档 2 中提到“智能体和工作流应用已支持接入两种 MCP 服务”，该表述已过时；实际支持官方、自定义（含三种方式）及外部客户端接入，详见文档 1 和文档 3。
+> **注意**：文档 4 明确指出“MCP 服务不能在调用千问 API 时直接接入”，而文档 5 的 FAQ 第 3 条却称“MCP 服务能否在调用千问 API 时接入？不可以”，二者一致；但需强调：MCP 仅在百炼平台内建应用（智能体/工作流）或通过 SDK 外部调用生效，**不支持作为参数透传至 `dashscope` [OpenAI 兼容接口](../concepts/openai-compatible-api.md)的 `tools` 字段中直接使用**。
 
 ## 关键参数
 
-MCP 服务配置与调用涉及以下关键参数：
+MCP 服务配置与调用涉及以下核心参数：
 
-- **服务类型标识**：`type` 字段必须与接入端点严格匹配——`"sse"` 对应 `/sse` 端点（GET），`"streamableHttp"` 对应 `/mcp` 端点（POST），配置错误将导致 `MCP_SERVER_HTTP_METHOD_NOT_ALLOWED`（错误码 11200058）等协议级失败 [MCP 常见问题](../../raw/application-user-guide/model-context-protocol/mcp-faq.md)。
-- **环境变量与密钥**：
-  - 敏感凭证（如 `AMAP_MAPS_API_KEY`）需通过 KMS 凭据加密，不可明文配置；
-  - 外部调用需设置 `DASHSCOPE_API_KEY` 环境变量；
-  - 自定义服务中 `env` 字段用于注入运行时环境变量（如 `YOUR_ENV_KEY`）。
-- **部署模式参数**：
-  - `基础模式`：按调用时长计费（0.000156 元/秒），无部署费用，适合低频场景，但存在冷启动延迟；
-  - `极速模式`：额外收取部署时长费用（0.000036 元/秒），服务常驻，适用于高并发、低延迟要求场景。
+| 参数类别 | 参数名 | 说明 | 示例值 |
+|---------|--------|------|--------|
+| **服务元信息** | `服务名称` / `描述` | 仅用于控制台识别，不影响模型调用逻辑 | `"长期记忆"`, `"该服务使大模型能够记录个性化信息..."` |
+| **部署配置** | `安装方式` | 决定启动方式：`npx`（Node.js）、`uvx`（Python）、`http`（远程 SSE/Streamable HTTP） | `"npx"` |
+| | `部署方式` | `基础模式`（按调用时长计费，有冷启动延迟）或 `极速模式`（按部署+调用双计费，常驻内存） | `"基础模式：按次计费"` |
+| | `MCP 服务配置` | JSON 格式，必须符合 `mcpServers` 结构，`type` 需与端点协议匹配 | `{ "memory": { "command": "npx", "args": ["@modelcontextprotocol/server-memory"] } }` |
+| **调用参数** | `tool.name` | 工具唯一标识，由 MCP Server 声明，模型调用时必须精确匹配 | `"maps_weather"` |
+| | `tool.inputSchema` | JSON Schema 描述输入参数结构，影响模型参数生成准确性 | `{"type": "object", "properties": {"city": {"type": "string"}}}` |
+
+> **注意**：文档 5 的错误码 `11200058` 明确要求 `type`（如 `"sse"`）必须与接入路径（如 `/sse`）严格匹配，否则返回 `HTTP 405`；而文档 3 的配置模板未强调此约束，实际部署时须严格校验。
 
 ## 使用方式
 
-### 平台内集成（智能体/工作流）
-- **智能体应用**：在创建智能体时，最多可添加 5 个 MCP 服务；大模型根据对话自动判断是否调用及选择工具（如发送“从杭州萧山国际机场到杭州西湖景区”触发 Amap Maps 路径规划）[官方 MCP 服务](../../raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)。
-- **工作流应用**：每个 MCP 节点仅支持一个工具，需手动指定输入参数（如通过前置大模型节点提取城市名传入 `maps_weather` 工具），并串联输出至后续节点完成结果整合。
+### 1. 接入官方 MCP 服务
+- 前往 [MCP 广场](https://bailian.console.aliyun.com/?tab=mcp#/mcp-market)，选择服务（如 Amap Maps）→ **立即开通**；
+- 在智能体/工作流编辑器中，从 MCP 服务列表添加，无需配置密钥（试用版已预置）；
+- 敏感参数（如自定义 API Key）需通过 KMS 凭据加密管理 [官方 MCP 服务](../../raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)。
 
-### 外部调用
-- **第三方应用集成**：支持 Cherry Studio、Cursor 一键自动配置，或手动导入 JSON 配置（含服务名称、URL、认证方式）。
-- **SDK 编码集成**：使用 `mcp` Python SDK 连接 `streamablehttp_client`，结合 [OpenAI 兼容接口](../concepts/openai-compatible-interface.md)实现多轮工具调用循环，适用于深度定制场景 [外部调用](../../raw/application-user-guide/model-context-protocol/mcp-external-calls.md)。
+### 2. 部署自定义 MCP 服务
+支持三种方式：
+- **脚本部署**：上传符合 MCP 协议的代码包（npm/PyPI），通过函数计算 FC 托管；
+- **AI 网关导入**：将现有 RESTful API 封装为 MCP 工具；
+- **OpenAPI 导入**：将阿里云产品（OSS/ECS）操作发布为 MCP 服务 [自定义 MCP 服务](../../raw/application-user-guide/model-context-protocol/custom-mcp.md)。
+
+### 3. 外部 SDK 调用
+- 使用 `mcp` Python SDK 连接 `streamablehttp_client`；
+- 通过 `session.list_tools()` 获取工具列表，转换为 OpenAI `tools` 格式；
+- 在 `chat.completions.create` 中启用 `tools`，并处理 `tool_calls` 循环调用 [外部调用](../../raw/application-user-guide/model-context-protocol/mcp-external-calls.md)。
 
 ## 限制和注意事项
 
-- **网络与资源限制**：
-  - 自定义 MCP 服务托管于函数计算 FC，**无法访问用户本地数据库或硬件资源**；
-  - 访问远程云资源（如 RDS）需配置 FC IP 白名单或 VPC 打通；
-  - 云部署 MCP 服务默认限流 15 QPS（主账号与 RAM 子账号共享）。
-  
-- **协议与兼容性**：
-  - 百炼 MCP 已全面升级为 **Streamable HTTP 协议**，旧版 SSE 协议服务需重新开通以完成升级 [外部调用](../../raw/application-user-guide/model-context-protocol/mcp-external-calls.md)；
-  - 不支持私有 npm/PyPI 仓库部署，自研包须发布至公共仓库（npm/PyPI）或改用 SSE 远程连接。
+- **网络与权限限制**：  
+  - MCP 服务运行于函数计算 FC，**无法访问用户本地资源（文件、硬件）或本地数据库**；  
+  - 访问远程云资源（如 RDS）需配置 FC IP 白名单或 VPC 打通 [MCP 常见问题](../../raw/application-user-guide/model-context-protocol/mcp-faq.md)。
 
-- **安全与运维**：
-  - 敏感参数（API Key、Token）必须通过 KMS 加密，禁止硬编码；
-  - 自定义服务版本更新后需**手动重新部署**，不会自动同步；
-  - 推荐启用函数计算日志服务，便于排查 `MCP_CONNECTION_REFUSED`（11200044）、`MCP_INIT_TIMEOUT`（11200057）等常见错误 [MCP 常见问题](../../raw/application-user-guide/model-context-protocol/mcp-faq.md)。
+- **协议与兼容性**：  
+  - 百炼已全面升级至 **Streamable HTTP 协议**（`/mcp`），旧版 SSE（`/sse`）需手动重新开通以完成升级 [外部调用](../../raw/application-user-guide/model-context-protocol/mcp-external-calls.md)；  
+  - 自定义服务若使用 `npx`/`uvx` 部署，**版本更新后必须手动重新部署**，不会自动同步 [MCP 常见问题](../../raw/application-user-guide/model-context-protocol/mcp-faq.md)。
 
-- **Token 开销**：MCP 返回结果将作为上下文注入模型输入，**显著增加输入 Token 数量**；复杂响应也可能间接提升输出 Token 消耗。
+- **调用与计费**：  
+  - 智能体/工作流中调用 MCP 会增加模型输入 Token（返回结果作为上下文）和潜在输出 Token（更详细响应）；  
+  - 云部署服务限流为 **15 QPS（主账号与 RAM 子账号共享）**，超出将返回 `HTTP 429` 错误码 `11200051`；  
+  - 自定义服务计费分两档：基础模式（0.000156 元/秒，仅调用时计费）与极速模式（0.000156 元/秒调用 + 0.000036 元/秒部署）[模型上下文协议（MCP）](../../raw/application-user-guide/model-context-protocol/mcp-introduction.md)。
+
+- **调试建议**：  
+  - 模型无法调用 MCP 时，优先检查提示词是否明确工具名称与能力；  
+  - 部署失败请按文档 5 的错误码表排查（如 `11200044` 表示连接拒绝，需验证下游服务可达性）；  
+  - 生产环境建议启用 FC 日志服务，实时捕获启动与运行日志。
 
 ## 来源文档
 
-- [官方 MCP 服务](../../raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)
 - [模型上下文协议（MCP）](../../raw/application-user-guide/model-context-protocol/mcp-introduction.md)
+- [官方 MCP 服务](../../raw/application-user-guide/model-context-protocol/official-and-third-party-mcp.md)
 - [自定义 MCP 服务](../../raw/application-user-guide/model-context-protocol/custom-mcp.md)
 - [外部调用](../../raw/application-user-guide/model-context-protocol/mcp-external-calls.md)
 - [MCP 常见问题](../../raw/application-user-guide/model-context-protocol/mcp-faq.md)

@@ -62,16 +62,15 @@
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3440607471/p953751.png)
 4.  单击**优化Prompt**，系统将对输入的内容进行智能润色和增强。
     
-
-**优化前**
-
-**优化后**
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0332300471/p907909.png)
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0332300471/p907913.png)
-
-1.  优化完成后，单击**保存**，即创建成功。
+    **优化前**
+    
+    **优化后**
+    
+    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0332300471/p907909.png)
+    
+    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0332300471/p907913.png)
+    
+5.  优化完成后，单击**保存**，即创建成功。
     
     ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/4212191371/p853680.png)
     

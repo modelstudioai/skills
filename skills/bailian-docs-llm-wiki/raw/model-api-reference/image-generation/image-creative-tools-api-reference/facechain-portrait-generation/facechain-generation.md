@@ -130,7 +130,7 @@ facechain-generation
 
 POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/album/gen\_potrait
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 ### 入参描述
 
@@ -492,7 +492,7 @@ curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/servi
 
 GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{task\_id}
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 ### 入参描述
 

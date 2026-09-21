@@ -1,6 +1,6 @@
-# 使用 AOQ 接入 qwen3.5-omni-plus-realtime 实现按键语音对话
+# 使用 AOQ 接入 qwen3.8-omni-flash-realtime 实现按键语音对话
 
-通过 AOQ 接入 qwen3.5-omni-plus-realtime，由客户端控制语音起止，实现按键通话和可选的拍照提问。客户端代码以 iOS Swift 为例。
+通过 AOQ 接入 qwen3.8-omni-flash-realtime，由客户端控制语音起止，实现按键通话和可选的拍照提问。客户端代码以 iOS Swift 为例。
 
 ## 方案概述
 
@@ -47,7 +47,7 @@ turn\_detection 为 null
 ## 准备工作
 
 1.  开通阿里云百炼，并按[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。API Key 只保存在业务 AppServer，不要写入客户端代码或提交到代码仓库。
-2.  根据业务部署地域确认 AOQ Endpoint。地域和接入地址的选择方法请参见[选择地域、服务部署范围和接入域名](raw/model-user-guide/get-started-with-models/regions.md)。
+2.  `{endpoint}` 使用华北2（北京）的 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 或新加坡的 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，替换为实际业务空间 ID，并使用对应地域和业务空间的 API Key。
 3.  从[SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)获取最新版 AOQ Client SDK。
 4.  搭建业务 AppServer，并按[Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)实现服务端代理鉴权。每次建立新连接前，客户端都应从 AppServer 获取新的连接凭证。
 
@@ -132,7 +132,7 @@ export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 
 ## 实现流程
 
-1.  AppServer 通过 Realtime Token 地址获取 qwen3.5-omni-plus-realtime 的 AOQ 连接参数。
+1.  AppServer 通过 Realtime Token 地址获取 qwen3.8-omni-flash-realtime 的 AOQ 连接参数。
 2.  客户端创建引擎，配置音频编解码与轨道；如需持续视觉理解，再配置 Video 轨。
 3.  客户端启动本地采集和播放，默认关闭 Audio 轨发送，然后建立 AOQ 连接并发送 session.update。
 4.  收到 session.updated 后，持续视频方案开启 Video 轨；Audio 轨仍保持关闭，直到用户按下说话按钮。
@@ -157,7 +157,7 @@ export LD_LIBRARY_PATH="$PWD/AoqClientSdk:$LD_LIBRARY_PATH"
 
 ```
 curl -X POST \
-  "https://{endpoint}/api/v1/webrtc/realtime?model=qwen3.5-omni-plus-realtime" \
+  "https://{endpoint}/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
   -H "x-dashscope-rtc-transport: moq" \
@@ -310,7 +310,7 @@ private func sendSessionUpdate() {
         "type": "session.update",
         "session": [
             "modalities": ["text", "audio"],
-            "voice": "Ethan",
+            "voice": "Tina",
             "audio": [
                 "input": ["format": ["type": "pcm", "sample_rate": 16_000]],
                 "output": ["format": ["type": "pcm", "sample_rate": 24_000]]
@@ -539,7 +539,7 @@ final class ManualPushToTalkClient: NSObject, AoqEngineDelegate {
             "type": "session.update",
             "session": [
                 "modalities": ["text", "audio"],
-                "voice": "Ethan",
+                "voice": "Tina",
                 "audio": [
                     "input": ["format": ["type": "pcm", "sample_rate": 16_000]],
                     "output": ["format": ["type": "pcm", "sample_rate": 24_000]]

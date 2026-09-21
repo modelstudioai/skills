@@ -16,8 +16,6 @@ OpenClaw Agent 默认无法跨会话记忆用户偏好。阿里云百炼提供�
 
 Agent：好的，FastAPI 是一个高性能的 Web 框架。需要什么帮助？
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8105093771/p1060560.png)
-
 **第二次对话（新会话）：**
 
 用户：帮我写个接口。
@@ -26,15 +24,11 @@ Agent：使用的是什么语言和接口？
 
 Agent 无法记住上一轮的对话内容。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8105093771/p1060578.png)
-
 **第一次对话：**
 
 用户：我在做一个 Python 项目，用的是 FastAPI 框架。
 
 Agent：好的，FastAPI 是一个高性能的 Web 框架。需要什么帮助？
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8105093771/p1060560.png)
 
 **第二次对话（新会话）：**
 
@@ -42,11 +36,7 @@ Agent：好的，FastAPI 是一个高性能的 Web 框架。需要什么帮助�
 
 Agent 检索到相关记忆： “用户正在做一个 FastAPI 框架的 Python 项目。”
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8105093771/p1060574.png)
-
 Agent 开始帮助写接口。
-
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/8105093771/p1060575.png)
 
 ## 工作原理
 

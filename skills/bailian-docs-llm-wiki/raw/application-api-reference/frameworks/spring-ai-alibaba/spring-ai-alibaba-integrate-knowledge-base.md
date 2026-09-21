@@ -125,4 +125,4 @@ public class CloudRagService implements RagService {
 ## 了解更多
 
 -   [Spring AI Alibaba](https://java2ai.com/?spm=4347728f.638c0b20.0.0.23f87982NTcSMy)：提供文档教程、实战博客和开发者社区，帮助您快速开发 Java 生成式 AI 应用。
--   [创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)：深入了解阿里云百炼知识库的核心功能与最佳实践。
+-   [创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)：深入了解阿里云百炼知识库的核心功能与最佳实践。

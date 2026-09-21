@@ -1,6 +1,6 @@
-# Qwen-Audio-3.0-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Android SDK
+# Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Android SDK
 
-本文档提供了Qwen-Audio-3.0-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Android SDK的详细使用指南，帮助您将语音转换为文本。
+本文档提供了Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Android SDK的详细使用指南，帮助您将语音转换为文本。
 
 **用户指南：**关于模型介绍和选型建议请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model)。
 
@@ -69,7 +69,7 @@
     -   新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
         
     
-    调用时，请将 `{WorkspaceId}` 替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+    调用时，请将 `{WorkspaceId}` 替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
     
     `apikey`
     
@@ -260,6 +260,8 @@
 
 通过在[setParams](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#a23e0d85d7ymt)接口的`params`参数中传入一个JSON字符串来配置。
 
+**说明**`qwen-audio-3.1-asr-flash-message` 模型不支持 `nls_config.language_hints`、`nls_config.semantic_punctuation_enabled`、`nls_config.multi_threshold_mode_enabled`、`nls_config.special_word_filter` 参数。
+
 -   **参数示例：**以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
 
 ```
@@ -305,7 +307,7 @@
     
     是
     
-    指定模型名。支持Qwen-Audio-3.0-ASR-Flash-Streaming和Fun-ASR-Realtime系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
+    指定示例调用的模型。模型信息请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
     
     `nls_config.sr_format`
     
@@ -416,7 +418,7 @@
     
     与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
     
-    **重要**仅`qwen-audio-3.0-asr-flash-streaming`支持即时热词。
+    **重要**即时热词的适用模型及限制请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
     
     `nls_config.language_hints`
     
@@ -426,11 +428,11 @@
     
     待识别音频语种。无默认值，不设置时模型自动识别。
     
-    对于 Qwen-Audio-3.0-ASR-Flash-Streaming 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR-Realtime 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。
+    对于 Qwen-Audio-3.x-ASR-Flash-Streaming 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR-Realtime 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。
     
     点击查看支持的语言代码
     
-    -   qwen-audio-3.0-asr-flash-streaming、fun-asr-realtime、fun-asr-realtime-2025-11-07：
+    -   Qwen-Audio-3.x-ASR-Flash-Streaming、fun-asr-realtime、fun-asr-realtime-2025-11-07：
         
         -   zh: 中文
         -   en: 英文

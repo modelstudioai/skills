@@ -80,7 +80,7 @@
       ],
       "versionTag": "MAJOR",
       "maxOutputTokens": 16384,
-      "latestOnlineAt": "2026-09-20T09:03:33.702+00:00",
+      "latestOnlineAt": "2026-09-20T09:03:33.000+00:00",
       "contextWindow": 262144,
       "maxInputTokens": 245760,
       "inferenceProvider": "aliyun-bailian",

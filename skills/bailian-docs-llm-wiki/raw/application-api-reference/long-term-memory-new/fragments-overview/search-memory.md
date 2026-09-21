@@ -86,7 +86,7 @@ array
 
 事实记忆规则 ID 数组，传入多个可混合检索。不传使用默认规则
 
-**说明**Pro 版开启 Rerank，检索质量更高，但可能过滤掉低相关结果；Lite 版关闭 Rerank，成本更低。详见[计费说明](raw/application-user-guide/memory-library-overview/overview/billing.md)。
+**说明**Pro 版开启 Rerank，检索质量更高，但可能过滤掉低相关结果；Lite 版关闭 Rerank，成本更低。详见[计费说明](raw/application-user-guide/memory-library-overview/integration-overview/billing.md)。
 
 ## 代码示例
 

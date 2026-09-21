@@ -160,7 +160,7 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 ## 快速开始
 
@@ -1453,7 +1453,7 @@ GLM 系列模型是智谱AI专为智能体设计的混合推理模型，提供�
 
 -   glm-5.3：GLM 系列最新模型，上下文长度 1M，支持 Function Calling、结构化输出及隐式缓存。支持 OpenAI 兼容、DashScope 及 Anthropic 兼容接口调用。
 -   glm-5.2：上下文长度 1M，支持 Function Calling、结构化输出及隐式缓存。支持 OpenAI 兼容、DashScope 及 Anthropic 兼容接口调用。
--   glm-5.2-fast-preview：glm-5.2模型的快速模式，详情请参考[优速模式（Prime）](raw/model-user-guide/model-high-speed-inference/fast-mode.md)。
+-   glm-5.2-fast-preview：glm-5.2模型的快速模式，详情请参考[优速模式（Prime）](raw/model-user-guide/model-high-speed-inference/prime-mode.md)。
 
 模型上下文长度与价格信息请参见百炼控制台。
 

@@ -1,6 +1,6 @@
-# 通过AOQ使用qwen3.5-omni-plus-realtime实现实时通话
+# 通过AOQ使用qwen3.8-omni-flash-realtime实现实时通话
 
-本文档说明如何在 Android、iOS、HarmonyOS 平台接入 AOQ Client SDK，实现 AOQ+qwen3.5-omni-plus-realtime 音视频通话功能。
+本文档说明如何在 Android、iOS、HarmonyOS 平台接入 AOQ Client SDK，实现 AOQ+qwen3.8-omni-flash-realtime 音视频通话功能。
 
 ## SDK 获取
 
@@ -90,9 +90,11 @@ dependencies {
 
 扫描以下二维码下载并安装 Android Demo：
 
-![Demo 下载二维码](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7714207871/p1095700.png)
+![Demo 下载二维码](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f92cd.png)
 
 ## AppServer获取Token
+
+`{endpoint}` 使用华北2（北京）的 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 或新加坡的 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，替换为实际业务空间 ID，并使用对应地域和业务空间的 API Key。
 
 请按照[Token鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)的 AOQ 章节搭建获取 Token 的 AppServer。每次通话前，客户端需要向业务侧 AppServer 请求一次 Token。
 
@@ -202,7 +204,7 @@ engine.setLocalView(AoqTrackType.AoqTrackTypeVideo, canvas);
 
 设置编解码参数后调用 `connect`。
 
-注意：qwen3.5-omni-plus-realtime 要求客户端在收到服务端的 `session.updated` 之后才能开始发送媒体数据。为避免 `connect` 建联成功到 `session.updated` 到达之间的空档期误推媒体，在 `connect` 之前对上行音频与视频轨道分别调用 `enableSendMediaStream(trackType, false)`，将上行推流暂时关闭。WebSocket事件说明详见[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)。
+注意：qwen3.8-omni-flash-realtime 要求客户端在收到服务端的 `session.updated` 之后才能开始发送媒体数据。为避免 `connect` 建联成功到 `session.updated` 到达之间的空档期误推媒体，在 `connect` 之前对上行音频与视频轨道分别调用 `enableSendMediaStream(trackType, false)`，将上行推流暂时关闭。WebSocket事件说明详见[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)。
 
 **iOS：**
 ```
@@ -315,7 +317,7 @@ private func sendSessionUpdate() {
               "audio"
           ],
           // 输出音频的音色
-          "voice": "Ethan",
+          "voice": "Tina",
           // 输入音频格式，当前仅支持设置为pcm。输入音频为16 kHz采样率的PCM音频流。
           "input_audio_format": "pcm",
           // 输出音频格式，当前仅支持设置为pcm。输出音频为24 kHz采样率的PCM音频流。
@@ -325,7 +327,7 @@ private func sendSessionUpdate() {
           // 是否开启语音活动检测。若需启用，需传入一个配置对象，服务端将据此自动检测语音起止。
           // 设置为null表示由客户端决定何时发起模型响应。
           "turn_detection": {
-              // VAD类型，取值为server_vad或semantic_vad。使用qwen3.5-omni-realtime模型时推荐设为semantic_vad。
+              // VAD类型，取值为server_vad或semantic_vad。推荐设为semantic_vad。
               "type": "semantic_vad",
               // VAD检测阈值。建议在嘈杂的环境中增加，在安静的环境中降低。
               "threshold": 0.5,
@@ -489,5 +491,5 @@ engine.switchCamera(AoqCameraDirection.AoqCameraDirectionBack);
 ## 相关文档
 
 -   AOQ Client SDK 详细 API：[SDK简介](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api/realtime-api-aoq-sdk-desc.md)
--   qwen3.5-omni-plus-realtime 模型客户端事件：[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)
--   qwen3.5-omni-plus-realtime 模型服务端事件：[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
+-   qwen3.8-omni-flash-realtime 模型客户端事件：[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)
+-   qwen3.8-omni-flash-realtime 模型服务端事件：[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)

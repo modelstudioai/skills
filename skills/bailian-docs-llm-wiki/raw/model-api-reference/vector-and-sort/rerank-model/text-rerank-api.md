@@ -102,7 +102,7 @@ MP4, AVI, MOV（仅支持URL）
 -   **qwen3-rerank**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-api/v1/reranks`
 -   **qwen3.7-text-rerank / qwen3-vl-rerank / gte-rerank-v2**：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/rerank/text-rerank/text-rerank`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 > 两种接口的请求体结构和响应格式不同，请参考对应模型的请求示例和响应示例。
 

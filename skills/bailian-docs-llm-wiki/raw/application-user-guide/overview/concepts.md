@@ -32,7 +32,7 @@ Salesforce、MaxCompute、语雀
 
 在连接对话框里一次填完
 
-完整清单见[Apps 目录](raw/application-user-guide/overview/apps-guide/overview.md)。
+完整清单见[Apps 目录](raw/application-user-guide/overview/apps-guide/apps-overview.md)。
 
 ## 身份验证配置
 
@@ -56,7 +56,7 @@ API Key
 
 一个身份验证配置可以被多个连接器共享，一个连接器只能选择一个配置。
 
-详见[身份验证概览](raw/application-user-guide/overview/auth-guide/overview.md)。
+详见[身份验证概览](raw/application-user-guide/overview/auth-guide/auth-overview.md)。
 
 ## 连接器
 
@@ -140,4 +140,4 @@ Connector
 
 需要从大量文档里归纳答案时用知识库；需要在业务系统里查一条记录、写一份文档、发一条消息时用 Connector。两者可以并用。
 
-**重要**概念清楚之后，去[Apps 目录](raw/application-user-guide/overview/apps-guide/overview.md)挑一个真实的业务系统连上。
+**重要**概念清楚之后，去[Apps 目录](raw/application-user-guide/overview/apps-guide/apps-overview.md)挑一个真实的业务系统连上。

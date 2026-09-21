@@ -69,7 +69,7 @@ Rerank
 -   **Add 调用**的版本由事实记忆规则的 `plan_version` 决定，创建规则时选择。
 -   **Search 调用**的版本由请求参数 `plan_version` 独立控制，不传时默认 Pro。
 
-详见[计费说明](raw/application-user-guide/memory-library-overview/overview/billing.md)。
+详见[计费说明](raw/application-user-guide/memory-library-overview/integration-overview/billing.md)。
 
 ## 关键术语
 

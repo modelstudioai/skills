@@ -1,44 +1,50 @@
 # application component api reference
 
-应用组件 API 是百炼平台提供的核心能力接口，用于在自定义应用中集成大模型推理、工具调用、会话管理等能力。该 API 以 RESTful 形式提供，支持同步/[异步调用](../concepts/asynchronous-invocation.md)模式，适用于构建对话型、任务型及工作流类 AI 应用。所有接口均需通过 RAM 授权并使用指定服务接入点访问。
+应用组件 API 提供了在百炼平台中集成和调用预置能力（如对话、知识检索、工具调用等）的标准接口，适用于构建企业级 AI 应用。该 API 以 RESTful 形式提供，支持同步响应与[流式输出](../concepts/streaming.md)，并与百炼统一身份认证体系深度集成。开发者需通过 RAM 授权后方可调用，具体权限粒度详见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)。
 
 ## 支持的模型与功能
 
-当前支持调用百炼平台托管的全部公开模型（如 qwen-max、qwen-plus、qwen-turbo），以及用户已部署的私有模型。功能覆盖文本生成、多轮对话（含 history 管理）、[函数调用](../concepts/function-calling.md)（function calling）、流式响应（stream=true）和输出格式约束（response_format）。部分高级功能（如 long-context 模式或结构化输出校验）仅对特定模型版本开放，详见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中的功能矩阵表。
+当前应用组件 API 支持以下核心能力：
+- 基于百炼托管模型的对话生成（如 `qwen-max`、`qwen-plus`、`qwen-turbo`）
+- 多源知识库检索增强（RAG）调用
+- 预置工具链执行（如网页搜索、数据库查询、代码解释器）
+- 自定义插件（Plugin）的注册与触发（需提前在控制台配置）
 
-> **注意**：[API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 中列出的 `/v1/chat/completions` 接口当前实际支持 `tools` 字段，但文档中未明确标注其兼容性；请以 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 所附最新 OpenAPI 3.0 Schema 为准。
+所有可用能力均按服务类型归类在 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 中，该目录持续同步最新上线接口，建议开发前优先查阅。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model` | string | 是 | 模型 ID，必须为已授权且可用的模型（如 `qwen-max`） |
-| `messages` | array | 是 | 对话消息列表，每项含 `role`（system/user/assistant/tool）和 `content` |
-| `stream` | boolean | 否 | true 时返回 SSE 流式响应；默认 false |
-| `tools` | array | 否 | 工具定义列表，格式遵循 OpenAI tool schema |
-| `tool_choice` | string/object | 否 | 控制工具调用策略，可选 `"auto"`、`"none"` 或指定 tool |
-| `max_tokens` | integer | 否 | 输出最大 token 数，范围 1–4096 |
+| `model` | string | 是 | 模型标识符，必须为平台已启用的模型 ID；不支持自定义模型别名 |
+| `input.messages` | array | 是 | 对话消息列表，格式同 OpenAI Chat Completion，但 `role` 仅支持 `user`/`assistant`/`system` |
+| `parameters.temperature` | number | 否 | 取值范围 [0.0, 2.0]，默认 1.0；注意：部分模型（如 `qwen-turbo`）对温度敏感度较低，实际效果可能弱于 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 所述典型行为 |
+| `parameters.top_p` | number | 否 | 取值范围 [0.0, 1.0]，默认 0.8 |
+| `enable_search` | boolean | 否 | 启用知识库检索，默认 `false`；若为 `true`，需确保应用已绑定有效知识库 |
+
+> **注意**：`input.messages` 中 `system` 角色消息仅在会话首条消息中生效，后续 `system` 消息将被忽略——此行为与 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中旧版描述存在差异，以当前运行时逻辑为准。
 
 ## 使用方式
 
-1. **鉴权**：使用阿里云 STS Token 或长期 AK/SK，通过 `Authorization: Bearer <token>` 或 `X-Aliyun-ACS-AccessKey-ID` + `X-Aliyun-ACS-AccessKey-Secret` 头传递凭证；具体授权流程见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)。  
-2. **请求示例**（cURL）：
-   ```bash
-   curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
-     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "model": "qwen-max",
-           "messages": [{"role": "user", "content": "你好"}]
-         }'
+1. 获取服务接入点：调用前需从 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 获取对应 Region 的 endpoint URL（如 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`）  
+2. 构造请求头：包含 `Authorization: Bearer <api_key>` 和 `Content-Type: application/json`  
+3. 发送 POST 请求，Body 示例：
+   ```json
+   {
+     "model": "qwen-plus",
+     "input": {
+       "messages": [{"role": "user", "content": "你好"}]
+     },
+     "parameters": {"temperature": 0.5}
+   }
    ```
-3. **响应解析**：成功响应包含 `output.text`（非流式）或 `output.choices[0].delta.content`（流式），错误码遵循标准 HTTP 状态码及 `code` 字段（如 `InvalidParameter.ModelNotAuthorized`）。
 
 ## 限制和注意事项
 
-- 单次请求 `messages` 总长度上限为 32768 tokens（含 system [prompt](../guides/prompt.md)）；超出将返回 `400 Bad Request`。
-- 异步任务（`/v1/async_tasks`）最长保留结果 7 天，超期后不可查询。
-- `tools` 调用返回的 `tool_calls` 中 `id` 字段在部分旧版 SDK 中可能为空，建议始终校验 `function.name` 和 `function.arguments`；此行为差异已在 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 的 v20240315 更新中明确修复。
+- 单次请求 `input.messages` 最多支持 50 条消息，总 token 数上限为 32768（含 prompt + completion）  
+- 流式响应（`stream: true`）仅支持 `text-generation` 类型接口，不适用于工具调用类接口  
+- 调用频率受应用级 QPS 限制（默认 5 QPS），超出将返回 `429 Too Many Requests`；配额可在控制台调整  
+- 所有 API 版本变更均记录于 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md)，重大不兼容更新将提前 30 天公告
 
 ## 来源文档
 

@@ -2,7 +2,7 @@
 
 数据集（原数据连接）是阿里云百炼 RAG 管理外部数据源的统一入口。通过创建数据集，应用可以安全地访问企业数据库、文档系统和对象存储中的数据，在对话中实时查询和引用这些数据。
 
-**说明**本页介绍的是 RAG 数据集（原数据连接）。面向智能体（Agent）场景的新版 [Connector](raw/application-user-guide/overview.md) 已上线，可连接的系统更多，并支持通过 MCP 供智能体调用。旧版数据连接需在 **2026 年 9 月 30 日**前完成[数据连接迁移](raw/application-user-guide/overview/overview/migration.md)。
+**说明**本页介绍的是 RAG 数据集（原数据连接）。面向智能体（Agent）场景的新版 [Connector](raw/application-user-guide/overview.md) 已上线，可连接的系统更多，并支持通过 MCP 供智能体调用。旧版数据连接需在 **2026 年 9 月 30 日**前完成[数据连接迁移](raw/application-user-guide/overview/reference-overview/migration.md)。
 
 数据集是 RAG 管理外部数据源的统一入口。创建数据集时按数据来源选择数据集类型，应用即可安全地访问企业数据库、文档系统和对象存储中的数据，在对话中实时查询和引用。
 
@@ -280,7 +280,7 @@
 
 点击文件数据集卡片的**详情**，进入文件管理页面。
 
-1.  在左侧**类目**下，选择一个现有类目，或点击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0077764271/p839829.png)图标新建类目。
+1.  在左侧**类目**下，选择一个现有类目，或点击\*\*+\*\*图标新建类目。
     
     > 阿里云百炼通过类目管理导入的文件。
     
@@ -335,7 +335,7 @@
 
 点击表格数据集卡片的**详情**，进入数据管理页面。
 
-在左侧**数据表管理**下，选择一个现有数据表，或点击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0077764271/p839829.png)图标新建数据表。
+在左侧**数据表管理**下，选择一个现有数据表，或点击\*\*+\*\*图标新建数据表。
 
 > 阿里云百炼通过数据表管理导入的数据。
 
@@ -357,12 +357,12 @@
             
         -   若字段类型设为 `image_url`，请确保链接是**公开可访问**的图片URL。知识库会用此链接抓取图片并为其生成向量索引，用于以图搜图等场景。
             
-            > image\_url格式示例：[https://example.com/downloads/pic.jpg](https://example.com/downloads/pic.jpg)
+            > image\_url格式示例：`https://example.com/downloads/pic.jpg`
             
             > 创建知识库时，image\_url类型字段用于生成**图片索引**。阿里云百炼会访问目标图片并提取其特征，然后通过图片Embedding转换为向量并保存。知识库检索时，会用该向量与用户上传图片的向量进行相似度比对。
             
         
-2.  点击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2312799171/p816622.png)图标选择并上传文件（XLSX或XLS格式）。
+2.  点击**上传**图标选择并上传文件（XLSX或XLS格式）。
     
     > 文件必须包含表头，否则会导入失败。
     
@@ -379,7 +379,7 @@
     
     > 点击界面上的**下载模板**，可获取一个仅包含表头的空白文件。您可直接在该文件中插入新数据，然后将其用于覆盖上传或增量上传。
     
-3.  点击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2312799171/p816622.png)图标选择并上传文件（XLSX或XLS格式）。
+3.  点击**上传**图标选择并上传文件（XLSX或XLS格式）。
     
     > 文件必须包含表头，且与当前数据表的表头结构一致，否则会导入失败。
     
@@ -390,7 +390,7 @@
 
 -   **文件数据集**或**表格数据集**：点击卡片**详情**，进入文件或表格管理页面。
     
-    1.  在左侧**类目**下，选择一个现有类目，或点击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0077764271/p839829.png)图标新建类目。
+    1.  在左侧**类目**下，选择一个现有类目，或点击\*\*+\*\*图标新建类目。
         
         > 阿里云百炼通过类目管理导入的文件。
         
@@ -1499,7 +1499,7 @@ VSwitch ID
 
 ## 相关文档
 
-创建知识库导入数据源内容，用于后续检索：[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
+创建知识库导入数据源内容，用于后续检索：[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
 
 应用配置和使用指南：[应用类型介绍](raw/application-user-guide/llm-application/application-introduction.md)。
 
@@ -1549,7 +1549,7 @@ VSwitch ID
     > 该标签用于标记阿里云百炼可访问的 Bucket，未标记的 Bucket 阿里云百炼无法访问。
     
     1.  访问[OSS管理控制台](https://oss.console.aliyun.com/)，点击左侧导航栏中的**Bucket 列表**，找到目标 Bucket。
-    2.  悬停鼠标在其![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0707990571/p978639.png)图标上，点击**编辑**（若未设置过标签）或**前往编辑**。
+    2.  悬停鼠标在其**标签**图标上，点击**编辑**（若未设置过标签）或**前往编辑**。
     3.  在Bucket标签页面，点击**创建标签**（若未设置过标签）或**设置**。
     4.  点击**标签**，添加标签名为`bailian-datahub-access`，标签值为`read`的标签，然后点击**保存**。
 4.  返回**导入数据**页面，重新选择目标 Bucket 再尝试导入。
@@ -1600,7 +1600,7 @@ VSwitch ID
     > 该标签用于标记阿里云百炼可访问的 Bucket，未标记的 Bucket 阿里云百炼无法访问。
     
     1.  访问[OSS管理控制台](https://oss.console.aliyun.com/)，点击左侧导航栏中的****Bucket 列表****，找到目标Bucket。
-    2.  悬停鼠标在其![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0707990571/p978639.png)图标上，点击**编辑**（若未设置过标签）或**前往编辑**。
+    2.  悬停鼠标在其**标签**图标上，点击**编辑**（若未设置过标签）或**前往编辑**。
     3.  在Bucket标签页面，点击**创建标签**（若未设置过标签）或**设置**。
     4.  点击**标签**，添加标签名为`bailian-datahub-access`，标签值为`read`的标签，然后点击**保存**。
 8.  返回**导入数据**页面，重新选择目标 Bucket 再尝试导入。

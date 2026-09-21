@@ -605,7 +605,7 @@ string
 
 ## 回调参数说明
 
-假设调用方传入的回调地址是：[](http://aliyun.com/callback)[http://aliyun.com/callback](http://aliyun.com/callback)，那么回调时的完整 URL 为 [](http://aliyun.com/callback?taskId=xxx&timestamp=xxx&taskType=xxx&signature=YOUR_SIGNATURE&&success=xxx)[http://aliyun.com/callback?taskId=xxx&amp;timestamp=xxx&amp;taskType=xxx&amp;signature=YOUR\_SIGNATURE&amp;&amp;success=xxx](http://aliyun.com/callback?taskId=xxx&amp;timestamp=xxx&amp;taskType=xxx&amp;signature=YOUR_SIGNATURE&amp;&amp;success=xxx)，其中：
+假设调用方传入的回调地址是：[http://aliyun.com/callback，那么回调时的完整](http://aliyun.com/callback%EF%BC%8C%E9%82%A3%E4%B9%88%E5%9B%9E%E8%B0%83%E6%97%B6%E7%9A%84%E5%AE%8C%E6%95%B4) URL 为 [http://aliyun.com/callback?taskId=xxx&amp;timestamp=xxx&amp;taskType=xxx&amp;signature=YOUR\_SIGNATURE&amp;&amp;success=xxx，其中：](http://aliyun.com/callback?taskId=xxx&amp;timestamp=xxx&amp;taskType=xxx&amp;signature=YOUR_SIGNATURE&amp;&amp;success=xxx%EF%BC%8C%E5%85%B6%E4%B8%AD%EF%BC%9A)
 
 -   taskId：为任务 ID
 -   timestamp：为调用时的时间戳，单位：毫秒

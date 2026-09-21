@@ -13,7 +13,7 @@
 
 扫描以下二维码下载 Demo：
 
-![Demo 下载二维码](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7714207871/p1095700.png)
+![Demo 下载二维码](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/common/images/6a4b3c2d1e0f92cd.png)
 
 ## AOQ 接入
 
@@ -110,7 +110,7 @@ private func sendSessionUpdate() {
               "audio"
           ],
           // 输出音频的音色
-          "voice": "Ethan",
+          "voice": "Tina",
           // 输入音频格式，当前仅支持设置为pcm。输入音频为16 kHz采样率的PCM音频流。
           "input_audio_format": "pcm",
           // 输出音频格式，当前仅支持设置为pcm。输出音频为24 kHz采样率的PCM音频流。
@@ -120,7 +120,7 @@ private func sendSessionUpdate() {
           // 是否开启语音活动检测。若需启用，需传入一个配置对象，服务端将据此自动检测语音起止。
           // 设置为null表示由客户端决定何时发起模型响应。
           "turn_detection": {
-              // VAD类型，取值为server_vad或semantic_vad。使用qwen3.5-omni-realtime系列模型时推荐设为semantic_vad。
+              // VAD类型，取值为server_vad或semantic_vad。Qwen3.8-Omni-Flash-Realtime和Qwen3.5-Omni-Realtime系列推荐设为semantic_vad。
               "type": "semantic_vad",
               // VAD检测阈值。建议在嘈杂的环境中增加，在安静的环境中降低。
               "threshold": 0.5,

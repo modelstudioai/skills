@@ -56,11 +56,11 @@ npm install -g @anthropic-ai/claude-code
     "env": {
         "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY",
         "ANTHROPIC_BASE_URL": "https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic",
-        "ANTHROPIC_MODEL": "qwen3.8-flash",
+        "ANTHROPIC_MODEL": "auto",
         "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3.6-flash",
         "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3.8-flash",
-        "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.8-flash",
-        "CLAUDE_CODE_SUBAGENT_MODEL": "qwen3.8-flash",
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.8-max",
+        "CLAUDE_CODE_SUBAGENT_MODEL": "auto",
         "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "983616"
     }
 }
@@ -75,11 +75,11 @@ npm install -g @anthropic-ai/claude-code
     "env": {
         "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY",
         "ANTHROPIC_BASE_URL": "https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic",
-        "ANTHROPIC_MODEL": "qwen3.8-flash",
+        "ANTHROPIC_MODEL": "auto",
         "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3.6-flash",
         "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3.8-flash",
-        "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.8-flash",
-        "CLAUDE_CODE_SUBAGENT_MODEL": "qwen3.8-flash",
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3.8-max",
+        "CLAUDE_CODE_SUBAGENT_MODEL": "auto",
         "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "983616"
     }
 }
@@ -107,7 +107,7 @@ npm install -g @anthropic-ai/claude-code
 
 将 YOUR\_API\_KEY 替换为[阿里云百炼API Key](raw/model-api-reference/preparations/get-api-key.md)。可用模型参见[Anthropic 兼容 API](raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)。
 
-`ANTHROPIC_BASE_URL` 按地域设置，API Key 需与所选地域对应，并将`WorkspaceId`替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)：
+`ANTHROPIC_BASE_URL` 按地域设置，API Key 需与所选地域对应，并将`WorkspaceId`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)：
 
 -   华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic`
 -   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic`

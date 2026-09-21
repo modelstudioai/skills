@@ -10,6 +10,7 @@
 -   专属模型 code：创建 吞吐预留后，系统自动生成专属模型 code，您需要将 API 请求中的 `model` 参数替换为该 code。
 -   溢出策略：创建时可选超额处理方式——自动溢出至按量计费（默认，业务不中断）或仅使用预留容量（超出返回 429，不产生额外费用）。
 -   叠加容量包：在已有预留基础上追加购买容量实例，新实例沿用同一专属模型 code，叠加后预留总容量相应增加。详见[管理操作](#tpm-ops-h3)。
+-   8 小时时段预留：标准模式下可选预付费（按 8 小时时段），固定 8 小时、立即生效，适用于负载集中于特定时段的场景。详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-8h-h2)。
 
 ## 方案对比与选型
 
@@ -112,15 +113,12 @@ PTU（[模型部署](raw/model-user-guide/model-deployment-index/model-deploymen
 
 ## 计费与使用说明
 
-**重要**完整的计费规则、价格明细、扩缩容与退订退费公式、自动续费执行规则等，请参见[吞吐预留计费](raw/model-user-guide/test-1/tpm-reservation-billing.md)。
+**重要**完整的计费规则、价格、扩缩容与退订退费、自动续费、容量换算等，详见[吞吐预留计费](raw/model-user-guide/test-1/tpm-reservation-billing.md)。
 
--   部署成功即开始计费，预留容量内的调用不额外收费。
--   预付费一次性支付，从购买成功起连续生效。详细费用以百炼控制台为准。
--   新购容量到期时间、续订与自动续费执行规则等计费规则，详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-rules-h2)。
--   扩容、缩容（含归 0）与退订的退费公式详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-scaledown-h3)。
--   溢出策略为「自动溢出」时：超出保障额度自动降级为标准按量计费，服务不中断，可在详情页**超额降级统计**查看降级次数；为「仅使用预留容量」时：超出返回 429，不产生额外费用。
--   服务到期后 2 小时内：实例仍为运行中，可继续调用，可续费；到期后 2~14 小时：实例已停止，不可调用，仍可续费；到期 14 小时后：实例已释放，不可恢复。
--   容量换算（长输入阶梯系数、缓存折扣）详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-price-h2)。
+-   部署成功即开始计费，预留容量内的调用不额外收费；预付费一次性支付，从购买成功起连续生效，详细费用以百炼控制台为准。
+-   8 小时时段预留（按 8 小时时段付费）的计费规则与售卖约束，详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-8h-h2)。
+-   溢出策略为「自动溢出」时：超出降级为标准按量计费，服务不中断，可在详情页**超额降级统计**查看降级次数；为「仅使用预留容量」时：超出返回 429，不产生额外费用。
+-   服务到期后 2 小时内实例仍可调用、可续费；2~14 小时已停止、不可调用仍可续费；14 小时后已释放、不可恢复。（按天预留口径；8 小时时段预留不适用此宽限，详见[8 小时时段预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-8h-h2)）
 
 ## 创建 吞吐预留
 
@@ -170,7 +168,7 @@ PTU（[模型部署](raw/model-user-guide/model-deployment-index/model-deploymen
     
     是
     
-    按天
+    按天；按 8 小时时段（仅标准模式，固定 8 小时、立即生效，详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-8h-h2)）
     
     输入TPM
     
@@ -198,7 +196,7 @@ PTU（[模型部署](raw/model-user-guide/model-deployment-index/model-deploymen
     
     到期自动续费
     
-    到期前 1 天自动扣款续费（执行规则详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-rules-h2)）。默认开启。
+    到期前 1 天自动扣款续费（执行规则详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-rules-h2)）。默认开启。按 8 小时时段不支持续订，该参数不适用。
     
     否
     
@@ -255,6 +253,8 @@ curl -X POST https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions 
   -d '{"model":"your-dedicated-model-code","messages":[{"role":"user","content":"你好"}]}'
 ```
 
+选择按 8 小时时段付费周期后，创建页面展开 8 小时时段容量配置区：生效窗口只读展示（起点按购买时刻向下取整至当前整点、不可自定义，固定 8 小时，可跨自然日；不足 1 小时按 1 小时计算），并实时展示供给状态；下单时刻须在每日 22:00–次日 00:00 内方可购买（00:00–22:00 间不可下单），时段到期后容量自动失效、不适用 2h/14h 宽限，详见[8 小时时段预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-8h-h2)。
+
 ### TPM 容量计算器
 
 创建页面右侧提供 TPM 容量计算器，帮助您根据业务负载估算需要购买的 TPM 额度。填写以下参数后，计算器自动输出推荐的输入 TPM 和输出 TPM。
@@ -295,7 +295,7 @@ RPM 越大，建议购买的输入和输出 TPM 同比增大。
 
 前往[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/tpm-reservation)，在预留列表页。列表以模型卡片形式展示所有预留实例，支持按模型、时间、状态筛选。
 
-在吞吐预留页，每个模型卡片展示生效预留数、已预留输入/输出 TPM、峰值占比；预留列表表格含预留 ID、输入/输出 TPM、状态、付费方式·到期时间等列，支持按模型、时间、状态筛选。
+在吞吐预留页，每个模型卡片展示生效预留数、已预留输入/输出 TPM、峰值占比；预留列表表格含预留 ID、输入/输出 TPM、状态、付费方式（按天、按 8 小时时段、按小时等）·到期时间等列，支持按模型、时间、状态筛选。
 
 ### 预留详情
 
@@ -312,7 +312,7 @@ RPM 越大，建议购买的输入和输出 TPM 同比增大。
 
 #### 监控
 
-提供详细的运行监控数据：利用率、配额用量（输入/输出）、配额内/外调用次数、缓存命中量。更多详细信息请参考：[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)。
+提供详细的运行监控数据：利用率、配额用量（输入/输出）、配额内/外调用次数、缓存命中量；按 8 小时时段预留另展示该 8 小时窗口内的包利用率。更多详细信息请参考：[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)。
 
 #### API 接入
 
@@ -320,7 +320,7 @@ RPM 越大，建议购买的输入和输出 TPM 同比增大。
 
 ### 管理操作
 
-在预留列表页的目标卡片或详情页中，可对预留实例执行以下管理操作：
+在预留列表页的目标卡片或详情页中，可对预留实例执行以下管理操作。8 小时时段预留实例不支持扩缩容与续退订（时段到期后容量自动失效）。
 
 #### 叠加容量包
 
@@ -343,11 +343,11 @@ RPM 越大，建议购买的输入和输出 TPM 同比增大。
 
 付费周期
 
-叠加容量包的计费周期。高速模式可选后付费或预付费，标准模式仅预付费。
+叠加容量包的计费周期受基础预留付费方式约束：基础预付费则仅可选预付费叠加包，基础后付费则可选预付费或后付费叠加包。高速模式可选后付费或预付费，标准模式仅预付费（按天或按 8 小时时段）。
 
 是
 
-后付费/按小时 / 预付费/按天（标准模式仅 预付费/按天）
+后付费/按小时 / 预付费/按天 / 预付费/按 8 小时时段（仅标准模式，窗口内增容、窗口外失效，规则详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-8h-h2)）
 
 输入容量
 

@@ -71,7 +71,7 @@ main()
 -   中国香港： `https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 -   日本（东京）： `https://{WorkspaceId}.ap-northeast-1.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
@@ -131,7 +131,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ## 应用构建
 
 -   **应用类型**：提供可视化和高代码两种开发模式。可视化模式可快速创建[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)和[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)；[高代码应用](raw/application-user-guide/llm-application/rich-code-application.md)则支持将 Python 项目部署为后端服务，具备自动化运维、可观测、日志服务等能力。
--   **功能拓展**：通过[知识库（RAG）](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)接入私有数据和专业领域知识；通过[插件](raw/application-user-guide/plug-in/plug-in-overview.md)和[模型上下文协议（MCP）](raw/application-user-guide/model-context-protocol/mcp-introduction.md)调用外部服务。
+-   **功能拓展**：通过[知识库（RAG）](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)接入私有数据和专业领域知识；通过[插件](raw/application-user-guide/plug-in/plug-in-overview.md)和[模型上下文协议（MCP）](raw/application-user-guide/model-context-protocol/mcp-introduction.md)调用外部服务。
 -   **分享与发布**：支持将应用发布至网页、钉钉机器人、微信公众号及音视频互动智能体等多种平台，详见[应用分享](raw/application-user-guide/application-publishing-and-sharing/share-an-application.md)。
 
 ## 产品计费
@@ -154,7 +154,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 ### 查看账单与用量
 
 -   **消费明细**：前往[账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)和[成本分析](https://usercenter2.aliyun.com/expense-manage/expense-analyze)页面查看。
--   **调用统计**：模型调用完约**一小时后**，前往[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)，在页面右上角选择目标地域，进入[模型监控](https://bailian.console.aliyun.com/model/telemetry)页面并设置查询条件，点击目标模型**操作**列的**监控**，即可查看调用量、Token 消耗、成功率等统计数据。详情请参见[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)。
+-   **调用统计**：模型调用发生后**分钟级**即可在监控图表查看。前往[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)，在左侧导航栏选择**运维管理** > **模型监控**进入监控概览页，设置查询条件（例如，选择时间范围、业务空间等），在**模型列表**区域找到目标模型并单击**查看详情**，即可查看调用量、Token 消耗、成功率等统计数据。详情请参见[监控告警](raw/model-user-guide/model-monitoring/model-telemetry.md)。
 -   **Coding Plan 用量**：如已订阅 Coding Plan（AI 编码套餐），可在[Coding Plan 页面](https://bailian.console.aliyun.com/cn-beijing/subscription/coding-plan)查看当前套餐的请求消耗情况。Coding Plan 采用固定月费，提供月度请求额度，支持在 AI 编码工具中使用，详情请参见[Coding Plan概述](raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan.md)。
 
 ### 模型推理与知识库的计费区分
@@ -198,7 +198,7 @@ A：百炼采用按量付费，本身**没有"自动扣费"开关**。以下措�
 -   **停止所有调用**：停止应用程序、智能体、工作流中的模型调用，并排查定时任务和后台进程。
 -   **清理计费资源**：删除不再使用的知识库；前往[专属部署](https://bailian.console.aliyun.com/model/deploy)页面，下线按算力时长计费的部署实例。
 -   **开启**"[免费额度用完即停](https://help.aliyun.com/zh/model-studio/new-free-quota#d1cb80ac11i92)"**（仅限新用户且在免费额度有效期内）**：在模型详情页开启此开关，免费额度耗尽后服务自动停止，不会转为付费。仅适用于华北2（北京）地域，且须在免费额度有效期内。
--   **设置费用监控和预警**：查看 [账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)和[模型监控](https://bailian.console.aliyun.com/model/telemetry)，并设置[高额消费预警](https://usercenter2.aliyun.com/home/alarm-threshold)，及时发现异常消费。
+-   **设置费用监控和预警**：查看 [账单详情](https://usercenter2.aliyun.com/finance/expense-report/expense-detail)和[模型监控](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)，并设置[高额消费预警](https://usercenter2.aliyun.com/home/alarm-threshold)，及时发现异常消费。
 -   **订阅 Coding Plan（AI 编码套餐）**：固定月费，提供月度请求额度，无按量扣费风险。注意需使用 Coding Plan 专属的 Base URL和API Key 进行调用，否则模型调用将按量付费。详情请参见[Coding Plan概述](raw/model-user-guide/token-plan-guide/coding-plan-guide/coding-plan.md)。
 
 Q：如何使用 Qwen3 系列模型或 DeepSeek？

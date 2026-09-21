@@ -209,6 +209,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 deepseek-v4-pro 和 deepseek-v4-flash 默认开启思考模式。通过`reasoning_effort`参数可以调整推理强度，可选值为`high`和`max`，默认为`high`。
 
+vanchin/deepseek-v4.1-flash 默认开启思考模式，`reasoning_effort`可选值为`low`、`high`和`max`，默认为`high`。
+
 **说明**设为`low`或`medium`时会映射为`high`，设为`xhigh`时会映射为`max`。
 
 Python
@@ -456,6 +458,22 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
 
 [上下文缓存](raw/model-user-guide/model-experience/text-generation-model/context-cache.md)
 
+vanchin/deepseek-v4.1-flash
+
+支持
+
+支持
+
+支持
+
+支持
+
+不支持
+
+不支持
+
+支持
+
 vanchin/deepseek-v4-pro-0813
 
 支持
@@ -586,6 +604,7 @@ vanchin/deepseek-v4-pro 不支持以下参数：`repetition_penalty`、`preserve
 
 -   除 vanchin/deepseek-ocr 外，其他模型均支持上下文缓存（隐式缓存，自动开启），缓存命中时的输入价格折扣为：
     
+    -   vanchin/deepseek-v4.1-flash：按输入价格的 2% 计费
     -   vanchin/deepseek-v4-pro、vanchin/deepseek-v4-pro-0813：按输入价格的 8.33% 计费
     -   vanchin/deepseek-v3.2-think：按输入价格的 10% 计费
     -   vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3：按输入价格的 40% 计费
@@ -601,6 +620,16 @@ vanchin/deepseek-v4-pro 不支持以下参数：`repetition_penalty`、`preserve
 **enable\_thinking**
 
 **detail**
+
+vanchin/deepseek-v4.1-flash
+
+0.6
+
+0.95
+
+true
+
+\-
 
 vanchin/deepseek-v4-pro-0813
 

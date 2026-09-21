@@ -39,14 +39,14 @@ Token Plan 个人版专属 API Key
 
 **模型**
 
-填入模型 ID，如 `qwen3.8-flash`
+填入模型 ID，如 `auto`
 
 也可直接编辑 `~/.dsh/settings.yaml`：
 
 ```
 agent-default-model:
   provider: bailian-tpp
-  model: qwen3.8-flash
+  model: auto
 
 llm-pi-ai:
   providers:
@@ -55,6 +55,7 @@ llm-pi-ai:
       baseURL: https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
       apiKeyEnv: BAILIAN_API_KEY
       models:
+        - id: auto
         - id: qwen3.8-max
         - id: qwen3.8-flash
         - id: qwen3.7-max
@@ -92,14 +93,14 @@ Token Plan 团队版专属 API Key
 
 **模型**
 
-填入模型 ID，如 `qwen3.8-flash`
+填入模型 ID，如 `auto`
 
 对应 `~/.dsh/settings.yaml` 配置：
 
 ```
 agent-default-model:
   provider: bailian-tp
-  model: qwen3.8-flash
+  model: auto
 
 llm-pi-ai:
   providers:
@@ -108,6 +109,7 @@ llm-pi-ai:
       baseURL: https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
       apiKeyEnv: BAILIAN_API_KEY
       models:
+        - id: auto
         - id: qwen3.8-max
         - id: qwen3.8-flash
         - id: qwen3.7-max
@@ -161,7 +163,7 @@ llm-pi-ai:
 
 将 YOUR\_API\_KEY 替换为[阿里云百炼 API Key](raw/model-api-reference/preparations/get-api-key.md)。可用模型参见[OpenAI 兼容 - 支持的模型](raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)。
 
-`Base URL` 按地域设置，请将 URL 中的 `{WorkspaceId}` 替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)：
+`Base URL` 按地域设置，请将 URL 中的 `{WorkspaceId}` 替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)：
 
 -   华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 -   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`
