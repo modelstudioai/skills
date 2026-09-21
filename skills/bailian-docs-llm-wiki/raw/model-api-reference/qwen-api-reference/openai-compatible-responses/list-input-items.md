@@ -2,7 +2,7 @@
 
 获取生成指定 Response 时所使用的输入项列表。在多轮对话（使用 previous\_response\_id 串联）中，会一并返回历史轮次的用户输入和模型回复。仅当原创建请求中 store=true 时，返回的 Response ID 才支持查询。
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 #### 华北2（北京）
 

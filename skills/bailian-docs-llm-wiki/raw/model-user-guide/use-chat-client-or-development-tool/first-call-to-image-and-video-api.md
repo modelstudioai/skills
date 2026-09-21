@@ -84,7 +84,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
 2.  在请求方法下拉菜单中选择**POST**，并根据您的模型所在地域填入对应的 URL：
     
     -   华北2（北京）：`https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
-    -   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`，请将`WorkspaceId`替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)
+    -   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`，请将`WorkspaceId`替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)
     -   美国（弗吉尼亚）：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
     
     > 各地域支持的模型请参见百炼控制台，当前地域与服务部署范围为[系统预设绑定关系](raw/model-user-guide/get-started-with-models/regions.md)，不支持自由组合。
@@ -153,7 +153,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
 获取到 task\_id 后，需要通过查询接口来获取最终结果。
 
 -   华北2（北京）：`https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
--   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`，请将`WorkspaceId`替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)
+-   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`，请将`WorkspaceId`替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)
 -   美国（弗吉尼亚）：`https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis`
 
 ```

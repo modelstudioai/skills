@@ -114,9 +114,7 @@
 
 **说明****选择数据**步骤最下方的**新增标签**会对本次上传的所有文件批量生效，不适用于单文档定位；单文档的唯一标签在下一步单独添加。标签为自由文本，无需在此预先创建业务标签。
 
-![建库选择数据步骤：连接器、数据来源、配置类目、文件上传](https://img.alicdn.com/imgextra/i4/O1CN01UW4LmG1cYo8VBTv3b_!!6000000003613-2-tps-2530-1384.png)
-
-详见[创建知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)、[文档管理](raw/application-user-guide/knowledge-base/data-connection-overview/documents.md)。
+详见[创建知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)、[文档管理](raw/application-user-guide/knowledge-base/data-connection-overview/documents.md)。
 
 ### 2\. 为目标文档添加唯一标签
 
@@ -167,8 +165,6 @@
 
 使尽可能多的切片进入最终召回
 
-![知识库配置：标签过滤选唯一标签、TopK 调大、排序模型选不使用模型、最大召回数量调到 20](https://img.alicdn.com/imgextra/i4/O1CN01j1PsRj1xLAGkjWXth_!!6000000006426-2-tps-1670-898.png)
-
 **警告**打标的核心是让模型读取尽量完整的文档。需将排序模型设为**不使用模型**，并将最大召回数量调至 20。受 20 上限约束，切片数超过 20 的文档需拆分或分批打标。
 
 ### 4\. 设置打标提示词
@@ -202,8 +198,6 @@
 
 在配置页右侧**调试**面板输入打标指令（例如 `请为这篇文档抽取标签`），发送后确认模型输出的标签数组是否符合预期。
 
-![调试面板：输入打标指令，模型返回标签数组](https://img.alicdn.com/imgextra/i4/O1CN015S0dhH27T5H8Fre3X_!!6000000007797-2-tps-1568-1390.png)
-
 批量打标多篇文档时，确认效果后点击**发布**获取服务 ID（`agent_id`），通过[知识问答 API](raw/application-api-reference/rag-api/knowledge/knowledgechat.md) 发起打标请求（响应为 SSE 流式输出，解析方式见接口文档），再按下一步写回标签。批量场景下每篇文档的打标顺序见[注意事项](#h-autotag-notes)。
 
 ### 6\. 标签写入及检索
@@ -226,8 +220,6 @@ curl -X POST 'https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/connect
 ```
 
 `fileId` 通过 [`listFile`](raw/application-api-reference/rag-api/rag-api-data-import/rag-api-list-file.md) 获取，也可在控制台文档列表中通过 **更多 → 标签** 手工写回。写回后，在知识检索或问答服务的**知识库配置 → 标签过滤**中选择对应标签，即可按标签精准召回。
-
-![文档列表展示已写入标签，知识库配置标签过滤实现精准召回](https://img.alicdn.com/imgextra/i3/O1CN01dn4Asv1LPKTI7Ov1d_!!6000000001291-2-tps-1482-924.png)
 
 ## 注意事项
 

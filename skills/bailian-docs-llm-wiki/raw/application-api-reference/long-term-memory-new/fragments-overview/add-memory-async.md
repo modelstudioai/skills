@@ -4,7 +4,7 @@
 
 异步将用户对话存储为记忆。接口立即返回事件 ID，记忆提取在后台执行，通过 [GetEvent](raw/application-api-reference/long-term-memory-new/fragments-overview/get-event.md) 查询执行状态与结果。与同步的 [AddMemory](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory.md) 相比，异步接口不会在请求内等待提取完成，适合对话轮次多、提取耗时长的场景。
 
-**说明**调用前请确保已获取 API Key，详见[鉴权](raw/application-api-reference/long-term-memory-new/overview/authentication.md)。
+**说明**调用前请确保已获取 API Key，详见[鉴权](raw/application-api-reference/long-term-memory-new/api-overview/authentication.md)。
 
 ## 请求参数
 

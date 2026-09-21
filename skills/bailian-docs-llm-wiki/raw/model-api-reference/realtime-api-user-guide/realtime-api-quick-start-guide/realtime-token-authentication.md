@@ -63,11 +63,13 @@ AOQ 采用**服务端代理鉴权**模式：API Key 仅在业务 AppServer 侧�
 
 ![Token鉴权](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3935914871/p1088069.jpg)
 
+以下 Realtime 示例使用 `qwen3.8-omni-flash-realtime`。`{endpoint}` 使用华北2（北京）的 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 或新加坡的 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，替换为实际业务空间 ID，并使用对应地域和业务空间的 API Key。
+
 Realtime 协议
 
 ```
 curl -X POST \
-  "https://{endpoint}/api/v1/webrtc/realtime?model=qwen3.5-omni-plus-realtime" \
+  "https://{endpoint}/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${DASHSCOPE_API_KEY}" \
   -H "x-dashscope-rtc-transport: moq" \

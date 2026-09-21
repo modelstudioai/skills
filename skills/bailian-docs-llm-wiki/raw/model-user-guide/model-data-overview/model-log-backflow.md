@@ -21,7 +21,7 @@
 
 ## 开通并授权相关服务
 
-使用日志回流前，请确认当前 Region 为华北2（北京）或新加坡（其他 Region 不显示日志回流入口），并在[模型监控](https://bailian.console.aliyun.com/model/telemetry)页面完成以下服务开通和权限授权。全部完成后授权配置抽屉自动关闭，进入日志回流表单。
+使用日志回流前，请确认当前 Region 为华北2（北京）或新加坡（其他 Region 不显示日志回流入口），并在[模型监控](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)页面完成以下服务开通和权限授权。全部完成后授权配置抽屉自动关闭，进入日志回流表单。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3463064871/p1086527.png)
 
@@ -86,7 +86,7 @@ DataHub 数据导入
 
 #### 模型监控列表页
 
-在[**模型监控**列表页](https://bailian.console.aliyun.com/model/telemetry)顶部，单击**日志回流**。首次使用时先完成授权配置，授权通过后自动展示日志回流表单。
+在[**模型监控**列表页](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)顶部，单击**日志回流**。首次使用时先完成授权配置，授权通过后自动展示日志回流表单。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3463064871/p1086529.png)
 

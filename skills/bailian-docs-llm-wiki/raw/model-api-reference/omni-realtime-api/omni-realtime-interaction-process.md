@@ -4,7 +4,7 @@
 
 ## VAD 模式
 
-将[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)事件的`session.turn_detection` 设为`"server_vad"`以启用 VAD 模式。在 VAD 模式下，服务端对传入的音频进行语音活动检测，并在检测到作出响应。此模式适用于客户端到服务器始终发送音频的情况，也是当前的默认模式。
+将[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)事件的`session.turn_detection.type` 设为`"server_vad"`以启用 VAD 模式。在 VAD 模式下，服务端对传入的音频进行语音活动检测，并在检测到作出响应。此模式适用于客户端到服务器始终发送音频的情况，也是当前的默认模式。
 
 ![server\_vad](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/0520773571/p991064.svg)
 
@@ -25,7 +25,7 @@
 -   服务端发送 `response.function_call_arguments.done` 事件，表示工具调用参数传递完成。
 -   客户端执行工具调用并获取结果。
 -   客户端通过 `conversation.item.create` 事件发送工具调用结果。
--   服务端自动基于工具调用结果生成响应。
+-   客户端发送 `response.create` 事件，触发服务端基于工具调用结果生成响应。
 
 ## Manual 模式
 
@@ -52,3 +52,79 @@
 -   客户端通过 `conversation.item.create` 事件发送工具调用结果。
 -   客户端发送 `response.create` 事件，触发模型生成最终响应。
 -   服务端基于工具调用结果生成响应，并通过 `response.audio.delta` 或 `response.text.delta` 事件返回给客户端。
+
+## Qwen3.8-Omni-Flash-Realtime MCP
+
+Function Calling 与 MCP 可以在同一会话的 `session.tools` 中配置，不能同时启用联网搜索（`enable_search`）。百炼不额外收取 MCP 工具调用费，模型推理仍按模型价格计费。
+
+MCP 由服务端执行工具，前述 Function Calling 流程则由客户端执行工具，两者的结果回传方式不同。
+
+### 工具发现
+
+-   `session.updated` 仅表示 MCP 配置已接受，不表示工具已经可用。
+-   `mcp_list_tools.in_progress` 可能早于 `session.updated` 到达。
+-   客户端可以在工具发现完成前继续发送音频或 `response.create`；但只有发现完成后的 Response 才能使用对应 MCP 工具。
+-   工具发现成功时，服务端先发送包含最终工具列表的 `conversation.item.created`，再发送 `mcp_list_tools.completed`。
+-   工具发现失败时，服务端先发送包含 error 的 `conversation.item.created`，再发送 `mcp_list_tools.failed`。
+
+### MCP 调用
+
+审批拒绝或超时会直接触发 `response.mcp_call.failed`，不执行工具，也不会经过 `response.mcp_call.in_progress`。无需审批或审批通过时，典型事件顺序如下：
+
+```
+response.output_item.added（mcp_call）
+→ response.mcp_call_arguments.delta
+→ response.mcp_call_arguments.done
+→ 可选：conversation.item.created（mcp_approval_request）
+→ 可选：conversation.item.create（mcp_approval_response）
+→ response.mcp_call.in_progress
+→ response.mcp_call.completed 或 response.mcp_call.failed
+→ response.output_item.done（最终 mcp_call）
+→ response.done（父 Response）
+```
+
+服务端会在同一父 Response 的全部 MCP item 进入终态后发送 `response.done`。其中 `response.output` 已包含最终 mcp\_call 快照：成功项为 completed 并包含 output；失败项为 failed 并包含 error。
+
+如果需要模型基于 MCP 结果继续生成回答，客户端应在收到父 `response.done` 后发送一次不附带 MCP 结果的 `response.create`。
+
+参见[客户端配置字段](https://help.aliyun.com/zh/model-studio/client-events#qwen38-client)、[审批回复](https://help.aliyun.com/zh/model-studio/client-events#qwen38-mcp-approval-response)和[服务端事件与 Item](https://help.aliyun.com/zh/model-studio/server-events#qwen38-server)。
+
+### 使用限制
+
+以下为每个会话的 MCP 默认约束：
+
+项目
+
+默认值
+
+MCP 服务数
+
+8
+
+MCP 工具数
+
+128
+
+工具发现超时
+
+30 秒
+
+审批超时
+
+60 秒
+
+工具执行超时
+
+30 秒
+
+单次上游响应大小
+
+2 MB
+
+累计工具结果大小
+
+8 MB
+
+累计工具调用数
+
+256

@@ -2,11 +2,9 @@
 
 Qwen-Omni-Realtime API的客户端事件参考。
 
-> 另请参见： [实时（Qwen-Omni-Realtime）](raw/model-user-guide/model-experience/omni-modal/realtime.md) 。
-
 ## session.update
 
-建立 WebSocket 连接后，发送此事件更新会话的默认配置。服务端收到 `session.update` 事件后校验参数，若参数不合法则返回错误，若参数合法则应用更改并返回完整配置。
+建立 WebSocket 连接后，发送此事件更新会话的默认配置。服务端收到 `session.update` 事件后校验参数，若参数不合法则返回错误，若参数合法则应用更改并返回会话配置。Qwen3.8-Omni-Flash-Realtime 的 MCP 连接地址与凭证不回显，详见[Qwen3.8 客户端事件](#qwen38-client)。
 
 **type**`string`**（必选）**
 
@@ -110,7 +108,7 @@ Qwen-Omni-Realtime API的客户端事件参考。
 
 输入和输出音频配置。未配置时沿用现有默认行为。
 
-**适用模型：`qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime`。**
+**以下格式和采样率选项适用于 `qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime`。**Qwen3.8-Omni-Flash-Realtime 的输入格式字段和约束见[Qwen3.8 客户端事件](#qwen38-client)，未列出的字段沿用基础协议。
 
 属性
 
@@ -184,7 +182,7 @@ Qwen-Omni-Realtime API的客户端事件参考。
 VAD 类型，可选值：
 
 -   `server_vad`（默认值）：基于声学特征检测语音结束。
--   `semantic_vad`：基于语义有效性检测语音结束，可过滤回应语、背景音等无意义声音。仅 Qwen3.5-Omni-Realtime 系列模型支持。
+-   `semantic_vad`：基于语义有效性检测语音结束，可过滤回应语、背景音等无意义声音。Qwen3.8-Omni-Flash-Realtime 和 Qwen3.5-Omni-Realtime 系列模型支持。
 
 **threshold**`float`（可选）
 
@@ -208,7 +206,7 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 **enable\_search**`boolean`（可选）
 
-**仅在使用 Qwen3.5-Omni-Realtime 系列模型时生效。**
+适用于 Qwen3.8-Omni-Flash-Realtime 和 Qwen3.5-Omni-Realtime 系列模型。
 
 是否启用联网搜索。设为 `true` 启用，默认为 `false`。启用后，模型可自主判断是否需要联网搜索来回答用户问题。
 
@@ -228,11 +226,13 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 工具定义列表。配置后模型可根据用户输入自主决定是否调用工具。
 
+以下属性描述自定义 Function Calling 工具。Qwen3.8-Omni-Flash-Realtime 的 MCP 工具配置见[3.8 客户端事件](#qwen38-client)。
+
 属性
 
 **type**`string`（必选）
 
-固定为 `function`。
+自定义 Function Calling 工具固定为 `function`。
 
 **function.name**`string`（必选）
 
@@ -270,6 +270,7 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 默认值：
 
+-   `qwen3.8-omni-flash-realtime`：0.6
 -   Qwen3.5-Omni-Realtime 系列模型：0.7
 -   `qwen3-omni-flash-realtime` 系列：0.9
 -   `qwen-omni-turbo-realtime` 系列：1.0
@@ -286,6 +287,7 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 默认值：
 
+-   `qwen3.8-omni-flash-realtime`：0.95
 -   Qwen3.5-Omni-Realtime 系列模型：0.8
 -   `qwen3-omni-flash-realtime` 系列：1.0
 -   `qwen-omni-turbo-realtime` 系列：0.01
@@ -300,6 +302,7 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 默认值：
 
+-   `qwen3.8-omni-flash-realtime`：20
 -   Qwen3.5-Omni-Realtime 系列模型：20
 -   `qwen3-omni-flash-realtime` 系列：50
 -   `qwen-omni-turbo-realtime` 系列：20
@@ -312,7 +315,7 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 > `max_tokens` 不影响模型的生成过程。若模型生成的 Token 数超过 `max_tokens`，响应将被截断。
 
-默认值和最大值均为模型的最大输出长度，各模型的最大输出长度参见[模型列表](raw/model-user-guide/get-started-with-models/models.md)。
+`qwen3.8-omni-flash-realtime` 的取值范围为 \[1, 65536\]。其他模型的默认值和最大值均为模型的最大输出长度，各模型的最大输出长度参见[模型列表](raw/model-user-guide/get-started-with-models/models.md)。
 
 适用于需要限制输出长度的场景，如生成摘要或关键词、控制成本、缩短响应时间等。
 
@@ -320,10 +323,11 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 **repetition\_penalty**`float`（可选）
 
-控制生成内容中连续序列的重复度。值越高，重复惩罚越强；1.0 表示不做惩罚。取值需大于 0，无严格上限。
+控制生成内容中连续序列的重复度。值越高，重复惩罚越强；1.0 表示不做惩罚。`qwen3.8-omni-flash-realtime` 支持取值 0；其他模型取值需大于 0，无严格上限。
 
 默认值：
 
+-   `qwen3.8-omni-flash-realtime`：0
 -   Qwen3.5-Omni-Realtime 系列模型：1.0
 -   `qwen3-omni-flash-realtime` 系列：1.05
 -   `qwen-omni-turbo-realtime` 系列：1.05
@@ -338,6 +342,7 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 默认值：
 
+-   `qwen3.8-omni-flash-realtime`：1
 -   Qwen3.5-Omni-Realtime 系列模型：1.5
 -   `qwen3-omni-flash-realtime` 系列：0.0
 -   `qwen-omni-turbo-realtime` 系列：0.0
@@ -359,6 +364,390 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 取值范围：0 到 231−1，默认值为 -1。
 
 > `qwen-omni-turbo` 系列模型**不支持修改**。
+
+### Qwen3.8-Omni-Flash-Realtime
+
+本节介绍 `qwen3.8-omni-flash-realtime` 的 `session.update` 配置字段。表中“必填”表示所属对象出现时必须提供。ID 均为不透明字符串，不应依赖其长度、前缀或生成规则。MCP 连接、工具发现和调用受服务配额及超时限制。
+
+`qwen3.8-omni-flash-realtime` 的全部输入 Token 总数上限为 196608，输入长度计算规则与 Qwen3.5-Omni-Realtime 一致。
+
+事件顶层包含以下字段：
+
+字段路径
+
+类型
+
+必填
+
+说明
+
+type
+
+string
+
+是
+
+固定为 session.update
+
+session
+
+object
+
+是
+
+本次更新的会话配置
+
+#### session.audio.input.format
+
+以下多通道音频配置适用于 WebSocket 接入。
+
+字段路径
+
+类型
+
+必填与默认值
+
+允许值与约束
+
+说明
+
+type
+
+string
+
+可选，默认 pcm
+
+多通道输入只能为 pcm
+
+输入音频编码类型
+
+sample\_rate
+
+integer
+
+可选，默认 16000
+
+多通道输入只能为 16000
+
+采样率，单位 Hz
+
+sample\_format
+
+string
+
+可选，默认 s16le
+
+只能为 s16le
+
+PCM 采样格式
+
+channels
+
+integer
+
+可选，默认 1
+
+仅支持 1、2、4
+
+输入声道数；2、4 声道空间音频的输入 Token 数均为普通音频的 2 倍，详见[Token 计算](https://help.aliyun.com/zh/model-studio/realtime#cfba3898e4d0h)
+
+packing
+
+string
+
+可选，默认 interleaved
+
+只能为 interleaved
+
+多通道样本排列方式
+
+channel\_layout
+
+string
+
+可选，按 channels 确定默认值
+
+1 声道为 mono；2 声道为 raw\_mic\_array；4 声道为 foa\_ambix
+
+显式提供时必须与 channels 匹配
+
+使用限制：
+
+-   多通道输入必须使用 PCM、16000 Hz、s16le 和 interleaved。
+-   多通道配置应在发送首段音频数据前完成；音频输入开始后，不得修改上述音频格式配置。
+-   字段省略时使用表中默认值；字段一旦出现，其类型和值必须满足约束，不得传入 null 代替省略。
+
+双通道示例：
+
+```
+{
+  "type": "session.update",
+  "session": {
+    "audio": {
+      "input": {
+        "format": {
+          "type": "pcm",
+          "sample_rate": 16000,
+          "sample_format": "s16le",
+          "channels": 2,
+          "packing": "interleaved",
+          "channel_layout": "raw_mic_array"
+        }
+      }
+    }
+  }
+}
+```
+
+四通道示例：
+
+```
+{
+  "type": "session.update",
+  "session": {
+    "audio": {
+      "input": {
+        "format": {
+          "type": "pcm",
+          "sample_rate": 16000,
+          "sample_format": "s16le",
+          "channels": 4,
+          "packing": "interleaved",
+          "channel_layout": "foa_ambix"
+        }
+      }
+    }
+  }
+}
+```
+
+单通道兼容示例：
+
+```
+{
+  "type": "session.update",
+  "session": {
+    "audio": {
+      "input": {
+        "format": {
+          "type": "pcm",
+          "sample_rate": 16000
+        }
+      }
+    }
+  }
+}
+```
+
+#### session.video.input.representation\_compact
+
+字段路径
+
+类型
+
+必填与默认值
+
+允许值
+
+说明
+
+representation\_compact
+
+string
+
+可选；会话初始默认 none
+
+none、normal
+
+视频输入表征聚合方式
+
+取值说明：
+
+-   none：保留完整的细粒度视频输入表征。
+-   normal：聚合视频输入表征，使用后会降低计算开销，适用于对视觉细节要求不高的场景。相同视频输入的 Token 数为 `none` 模式的 1/4，详见[Token 计算](https://help.aliyun.com/zh/model-studio/realtime#cfba3898e4d0h)。
+
+该字段应在发送首段音频数据前设置；音频输入开始后不得修改。
+
+示例：
+
+```
+{
+  "type": "session.update",
+  "session": {
+    "video": {
+      "input": {
+        "representation_compact": "normal"
+      }
+    }
+  }
+}
+```
+
+#### session.audio.output.voice
+
+字段路径
+
+类型
+
+必填
+
+说明
+
+session.audio.output.voice
+
+string
+
+否
+
+输出音色；默认为 Tina；新增支持 longanlingxin
+
+session.voice
+
+string
+
+否
+
+兼容字段；建议新接入使用 session.audio.output.voice
+
+如果两个字段同时出现，以 `session.audio.output.voice` 为准。音色效果可参考[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)。
+
+示例：
+
+```
+{
+  "type": "session.update",
+  "session": {
+    "audio": {
+      "output": {
+        "voice": "longanlingxin"
+      }
+    }
+  }
+}
+```
+
+#### session.tools 数组元素
+
+当 `session.tools` 中的元素满足 `type="mcp"` 时，该元素表示一个 MCP Server 配置。同一会话可同时配置 Function Calling 和 MCP 工具；`tools` 与 `enable_search` 不可同时开启，该限制也适用于 MCP。服务数量、工具数量、超时及结果大小限制见[MCP 调用限制](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-flow)。
+
+字段路径
+
+类型
+
+必填与默认值
+
+允许值与约束
+
+说明
+
+type
+
+string
+
+必填
+
+新增支持mcp
+
+工具配置类型
+
+server\_label
+
+string
+
+必填
+
+会话内唯一；1～64 位；仅允许字母、数字、下划线和连字符
+
+MCP Server 的会话内标识
+
+server\_url
+
+string
+
+必填
+
+公网 HTTPS 443 地址；最长 4096 字符
+
+MCP Streamable HTTP 地址
+
+authorization
+
+string
+
+可选
+
+最长 8192 字符；仅允许可打印 ASCII 字符
+
+出站 Authorization 值
+
+headers
+
+object
+
+可选
+
+最多 16 个键值对；键和值均为 string
+
+额外出站 HTTP Header
+
+allowed\_tools
+
+array\[string\]
+
+可选；省略表示允许全部；空数组表示不暴露任何工具
+
+每个工具名 1～64 位；仅允许字母、数字、下划线、点和连字符
+
+工具发现后的白名单过滤
+
+require\_approval
+
+string
+
+可选，默认 always
+
+always、never
+
+工具调用审批策略
+
+`server_url` 还必须满足以下要求：
+
+-   不得包含用户名或密码。
+-   不得包含 URL fragment。
+-   域名解析结果必须为公网地址。
+
+`headers` 的名称长度为 1～128 位，仅允许标准 HTTP Header 名称字符；值最长 8192 字符且仅允许可打印 ASCII 字符。以下 Header 不允许设置：
+
+```
+前缀：mcp-、proxy-、x-forwarded-
+
+名称：host、authorization、connection、content-length、transfer-encoding、
+accept、content-type、forwarded、cookie、origin、upgrade、te、trailer
+```
+
+每次新增或更新 MCP 配置时，都必须同时提供 `server_label` 和 `server_url`，不支持只传 `server_label` 复用已有配置。MCP 配置只能在当前没有活动 Response 时更新。
+
+`server_url`、`authorization` 和 `headers` 仅用于服务端连接 MCP Server，不会在 `session.updated` 中回显。客户端不应依赖 `session.updated` 重建这些敏感配置。
+
+配置示例：将 `server_url` 替换为可访问的 MCP 服务地址，`authorization` 替换为该服务要求的认证信息；`allowed_tools` 中填写该服务实际提供的工具名。
+
+```
+{
+  "type": "session.update",
+  "session": {
+    "tools": [
+      {
+        "type": "mcp",
+        "server_label": "amap",
+        "server_url": "https://example.com/mcp",
+        "authorization": "Bearer ***",
+        "allowed_tools": ["maps_weather"],
+        "require_approval": "always"
+      }
+    ]
+  }
+}
+```
 
 ## response.create
 
@@ -483,7 +872,7 @@ Base64 编码的图像数据。
 
 客户端发送此事件，将工具函数的执行结果回传给服务端。模型触发工具调用后，客户端在本地执行工具函数，通过此事件将结果发回，再发送 `response.create` 触发模型生成最终响应。
 
-**说明**当前仅支持 `function_call_output` 类型的 item。
+**说明**此处说明 `function_call_output` 类型的 item；Qwen3.8-Omni-Flash-Realtime 还支持[审批回复 `mcp_approval_response`](#qwen38-mcp-approval-response)。
 
 **type**`string`（必选）
 
@@ -514,7 +903,7 @@ Base64 编码的图像数据。
 
 **type**`string`（必选）
 
-对话项类型，当前仅支持 `function_call_output`。
+此处对话项类型为 `function_call_output`；MCP 审批回复的结构见[审批回复](#qwen38-mcp-approval-response)。
 
 **call\_id**`string`（必选）
 
@@ -523,3 +912,91 @@ Base64 编码的图像数据。
 **output**`string`（必选）
 
 工具函数的执行结果。
+
+### MCP 审批回复（Qwen3.8-Omni-Flash-Realtime）
+
+当 MCP 配置的 `require_approval` 为 always 或省略时，服务端可能发送 `mcp_approval_request`。客户端使用既有 `conversation.item.create` 事件回复审批结果。
+
+事件字段：
+
+字段路径
+
+类型
+
+必填
+
+说明
+
+event\_id
+
+string
+
+否
+
+客户端生成的事件 ID，用于日志追踪
+
+type
+
+string
+
+是
+
+固定为 conversation.item.create
+
+item
+
+object
+
+是
+
+MCP 审批回复对象
+
+item 字段：
+
+字段路径
+
+类型
+
+必填
+
+说明
+
+item.type
+
+string
+
+是
+
+固定为 mcp\_approval\_response
+
+item.approval\_request\_id
+
+string
+
+是
+
+必须精确匹配一个尚未处理的 mcp\_approval\_request 的 item.id
+
+item.approve
+
+boolean
+
+是
+
+true 表示允许执行；false 表示拒绝，本次调用进入 failed
+
+示例：
+
+```
+{
+  "event_id": "event_client_xxx",
+  "type": "conversation.item.create",
+  "item": {
+    "type": "mcp_approval_response",
+    "approval_request_id": "opaque_approval_id",
+    "approve": true
+  }
+}
+```
+
+> 另请参见： [实时（Qwen-Omni-Realtime）](raw/model-user-guide/model-experience/omni-modal/realtime.md) 。

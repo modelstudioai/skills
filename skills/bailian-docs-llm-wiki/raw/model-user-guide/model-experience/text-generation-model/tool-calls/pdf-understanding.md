@@ -51,7 +51,9 @@ completion = client.chat.completions.create(
         }
     ],
     stream=True,
-    stream_options={"include_usage": True}
+    stream_options={"include_usage": True},
+    # 需要开启该参数才会在 usage 中返回 x_tools.pdf_page_parser.count（PDF解析页数）
+    extra_body={"include_tool_usage": True}
 )
 
 for chunk in completion:
@@ -99,7 +101,9 @@ async function main() {
             }
         ],
         stream: true,
-        stream_options: { include_usage: true }
+        stream_options: { include_usage: true },
+        // 需要开启该参数才会在 usage 中返回 x_tools.pdf_page_parser.count（PDF解析页数）
+        include_tool_usage: true
     });
 
     for await (const chunk of stream) {
@@ -148,7 +152,8 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/
     "stream": true,
     "stream_options": {
         "include_usage": true
-    }
+    },
+    "include_tool_usage": true
 }'
 ```
 
@@ -386,3 +391,41 @@ string
 -   **文档解析费用**：按PDF文档解析的页数计费，各地域单价不同：华北2（北京）0.02元/页，新加坡0.024元/页。
 
 各模型的输入输出单价请参见[模型调用计费](raw/model-user-guide/test-1/model-pricing.md)。
+
+### 查看PDF解析页数
+
+如需在响应中查看本次请求的 PDF 解析页数，可通过 `usage` 字段中的 `pdf_page_parser.count` 获取，两种协议的行为略有不同：
+
+OpenAI 兼容
+
+```
+// 需在请求体顶层传入 "include_tool_usage": true 后才会返回。
+// OpenAI Python SDK 请通过 extra_body={"include_tool_usage": True} 传入，
+// 直接使用 HTTP/curl 时放在请求体顶层，不要嵌套到 extra_body 或 stream_options。
+{
+    "usage": {
+        "x_tools": {
+            "pdf_page_parser": {
+                "count": 10,
+                "strategy": "normal"
+            }
+        }
+    }
+}
+```
+
+DashScope
+
+```
+// 默认返回，无需额外参数。
+{
+    "usage": {
+        "plugins": {
+            "pdf_page_parser": {
+                "count": 10,
+                "strategy": "normal"
+            }
+        }
+    }
+}
+```

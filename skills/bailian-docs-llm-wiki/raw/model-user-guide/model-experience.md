@@ -7,6 +7,7 @@
 -   [世界模型](raw/model-user-guide/model-experience/world-model.md)
 -   [3D模型生成](raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)
 -   [语音合成](https://help.aliyun.com/zh/model-studio/speech-synthesis)
+-   [音频生成](raw/model-user-guide/model-experience/audio-generation.md)
 -   [音乐生成](raw/model-user-guide/model-experience/fun-music.md)
 -   [语音识别](https://help.aliyun.com/zh/model-studio/speech-recognition)
 -   [语音转语音](https://help.aliyun.com/zh/model-studio/speech-to-speech)

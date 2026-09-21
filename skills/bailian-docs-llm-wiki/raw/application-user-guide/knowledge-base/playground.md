@@ -31,22 +31,13 @@ Playground 是知识库的交互式调试面板。选择一个或多个知识库
 ## 使用步骤
 
 1.  **进入 Playground**：登录控制台，进入 [**Playground**](https://bailian.console.aliyun.com/cn-beijing/rag/playground)。
-    
 2.  **选择知识库**：在知识库列表中点击选择一个知识库卡片。
-    
-    ![选择知识库](https://img.alicdn.com/imgextra/i1/O1CN01vp86x523GwJFIgSFu_!!6000000007229-2-tps-2202-1188.png)
 3.  **选择检索或问答模式**：在顶部切换 **知识问答**（检索后生成自然语言回答）或 **知识检索**（仅返回相关切片列表）。
-    
-    ![检索与问答模式切换](https://img.alicdn.com/imgextra/i2/O1CN01rxMQ2c1FgpuqP4cPM_!!6000000000517-2-tps-2238-1156.png)
 4.  **输入问题**：在底部输入框输入问题，按回车发送。系统会先检索相关切片，再调用大模型生成回答。
-    
 5.  **查看结果**：结果区域会展示：
-    
     -   模型生成的回答文本
     -   引用标注（如 \[1\] \[2\]），点击可展开原文
     -   命中的切片列表与相关性分数
-    
-    ![问答结果与引用标注](https://img.alicdn.com/imgextra/i1/O1CN01CMwhwB1YmJLka6fea_!!6000000003101-2-tps-2594-1026.png)
 
 ## 使用建议
 

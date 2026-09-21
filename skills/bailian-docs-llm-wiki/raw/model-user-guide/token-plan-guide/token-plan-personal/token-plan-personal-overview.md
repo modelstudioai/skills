@@ -113,13 +113,14 @@ Standard 全部权益
 
 ## 支持的模型
 
-**重要**个人版部分模型享有以下限时权益：
+**重要**
 
--   **限时夜间五折**：每晚 22:00 - 次日 08:00 期间调用以下模型，Credits 消耗享 5 折优惠：qwen3.8-max、deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash。
+-   **auto 模型**：平台提供的智能模型，按请求内容自动匹配底层模型，兼顾效果与成本。
+-   **限时夜间四折**：每晚 22:00 - 次日 08:00 调用 qwen3.8-max、qwen3.8-flash，Credits 消耗享 4 折优惠。
+-   **限时夜间五折**：每晚 22:00 - 次日 08:00 调用 deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash，Credits 消耗享 5 折优惠。
+-   **qwen3.8-max-preview 已下线**：原模型 ID 仍可正常调用，请求自动路由至 qwen3.8-max，Credits 抵扣和用量统计均按 qwen3.8-max 计算，建议将配置中的模型 ID 更新为 qwen3.8-max。
 
 阿里云百炼有权根据运营情况对活动进行变更或调整，包括不限于活动内容和有效期等，请以页面最新内容或阿里云通知为准。
-
-qwen3.8-max-preview 已结束预览并正式下线。原有的模型 ID qwen3.8-max-preview 仍可正常调用，请求会自动路由至正式版 qwen3.8-max，Credits 抵扣和用量统计均按 qwen3.8-max 计算。建议将配置中的模型 ID 更新为 qwen3.8-max。
 
 **品牌**
 
@@ -128,6 +129,10 @@ qwen3.8-max-preview 已结束预览并正式下线。原有的模型 ID qwen3.8-
 **模型能力**
 
 千问
+
+auto
+
+推理模型、文本生成
 
 qwen3.8-max
 

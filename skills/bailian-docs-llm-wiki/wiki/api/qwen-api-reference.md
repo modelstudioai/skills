@@ -1,65 +1,73 @@
 # qwen api reference
 
-阿里云百炼平台提供多种兼容标准协议的 Qwen 模型调用方式，包括 OpenAI 兼容 Chat 和 Responses API、Anthropic 兼容 Messages API，以及原生 DashScope API。所有接口均支持多地域部署与业务空间专属域名，推荐使用 `https://{WorkspaceId}.{region}.maas.aliyuncs.com` 格式 endpoint 以获得更优性能和稳定性。开发者需先[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，并根据所选协议安装对应 SDK（如 OpenAI Python SDK 或 Anthropic SDK）。
+阿里云百炼平台提供多种 API 接口调用 Qwen 系列大模型，包括 [OpenAI 兼容接口](../concepts/openai-compatible-api.md)（Chat 和 Responses）、Anthropic 兼容接口（Messages）以及原生 DashScope 接口。所有接口均支持多地域部署、业务空间专属域名及统一的认证机制，开发者可根据技术栈和功能需求选择最适配的协议。
 
 ## 支持的模型/功能
 
-Qwen 系列模型（含 `qwen3.8-*`、`qwen3.7-*`、`qwen3.6-*`、`qwen3.5-*`、`qwen-plus`、`qwen-flash`、`qwen-turbo`、`qwen-coder-*`、`qwen-vl-*`、`qwen-omni-*`）是核心支持对象，同时兼容部分第三方模型（如 DeepSeek、Kimi、GLM、MiniMax），但功能支持程度因模型类型和接入协议而异：
+Qwen API 支持全系列千问模型及主流第三方模型，覆盖文本生成、多模态理解（图像/视频/音频）、代码生成、数学推理、Agent 工具调用等能力。
 
-- **OpenAI 兼容 Chat API**（[OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)）支持 Qwen 大语言模型、Qwen-VL、Qwen-Coder、Qwen-Omni、Qwen-Math 等，但明确不支持 Qwen-Audio（仅 DashScope 协议支持）。
-- **OpenAI 兼容 Responses API**（[创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)）提供增强能力：内置工具链（联网搜索、网页抽取、代码解释器、文搜图、知识库搜索等）、`previous_response_id` 多轮上下文管理、Session 缓存（通过 `x-dashscope-session-cache: enable` 启用）及结构化输出支持。
-- **Anthropic 兼容 Messages API**（[Anthropic兼容-Messages](../../raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)）支持 `output_config.effort` 控制推理强度、`format.json_schema` 结构化输出（严格模式适用于 qwen3.8/3.7/DeepSeek/GLM 系列），并支持显式缓存断点（`cache_control: {type: "ephemeral"}`）。
-- **DashScope 原生 API**（[DashScope API 参考](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)）为最底层协议，区分文本生成（`/text-generation/generation`）与多模态生成（`/multimodal-generation/generation`）端点，支持 `max_frames` 等细粒度视频参数，但 OpenAI 兼容 API 不支持该参数。
+- **OpenAI 兼容 Chat 接口**：支持 `qwen3.8-max`、`qwen3.7-plus`、`qwen-vl-plus`、`qwen3.8-omni-flash` 等全部 Qwen 商业版与开源版模型，也支持 DeepSeek（硅基流动直供）、Kimi（月之暗面直供）、GLM、MiniMax 等三方模型。但需注意：**Qwen-Audio 不支持 OpenAI 兼容协议，仅支持 DashScope 协议**，详见 [OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)。
+- **OpenAI 兼容 Responses 接口**：在 Chat 基础上增强 Agent 能力，内置联网搜索、网页抓取、代码解释器、文搜图、知识库搜索等工具，并支持 `previous_response_id` 上下文自动管理与 Session 缓存。该接口对模型有明确限制——仅列表中阿里云百炼直供的文本生成模型（如 `qwen3.8-max`、`qwen3.7-plus` 等）完整支持 Agent 功能，非直供模型仅支持基础兼容能力，详见 [创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)。
+- **Anthropic 兼容 Messages 接口**：支持结构化输出（JSON Schema）、深度思考（`output_config.effort`）、显式缓存（`cache_control`）等高级特性，适用于需要强约束输出或复杂推理链的场景。其 `temperature` 取值范围为 `[0, 2)`，与 Anthropic 官方 `[0.0, 1.0]` 不同，迁移时需校准，详见 [Anthropic兼容-Messages](../../raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)。
+- **DashScope 原生接口**：提供最底层控制能力，区分 `text-generation` 与 `multimodal-generation` 服务端点，支持 `max_frames` 等细粒度视频参数，且是目前**唯一支持 Qwen-Audio 的接口**，详见 [DashScope API 参考](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)。
 
-> **注意**：文档 1 与文档 8 对 `min_pixels`/`max_pixels` 的默认值描述存在细微差异（如 `qwen-vl-plus` 图像输入默认值，文档 1 写为 `4096`，文档 8 写为 `4096`；但 `Qwen2.5-VL` 视频输入默认值，文档 1 写为 `50176`，文档 8 写为 `50176` —— 实际一致）。经交叉核对，两处数值无实质性矛盾，属表述口径差异，以最新发布模型规格为准。
+> **注意**：文档 1 与文档 8 在 `min_pixels`/`max_pixels` 默认值描述上存在细微差异（如 `qwen-vl-plus` 图像输入默认值，文档 1 写为 `4096`，文档 8 写为 `4096`，一致；但文档 1 中 `Qwen2.5-VL` 视频输入默认值为 `50176`，文档 8 同样为 `50176`，无矛盾）。经交叉核验，两文档参数定义实质一致，差异源于示例写法而非规范冲突，无需修正。
 
 ## 关键参数
 
-| 参数 | 协议支持 | 说明 | 示例/范围 |
+| 参数 | 适用接口 | 说明 | 示例/约束 |
 |------|----------|------|-----------|
-| `model` | 全部 | 必填，模型 ID。Responses API 支持列表最全（含 `qwen3.8-omni-flash` 等新模型），Chat API 列表较宽泛（含三方模型），DashScope 与 Anthropic 列表居中。 | `"qwen3.8-max"`, `"qwen3.8-omni-flash"` |
-| `messages` / `input` | Chat/Responses/DashScope | 对话消息数组（Chat/DashScope）或字符串/数组混合输入（Responses）。Responses 支持 `previous_response_id` 自动拼接历史。 | `[{"role":"user","content":"你好"}]` |
-| `system` | Chat/Anthropic/DashScope | 系统指令。Anthropic 支持字符串或带 `cache_control` 的数组；Chat 中 QwQ 不建议设置，QVQ 无效。 | `"你是一个专业助手"` |
-| `stream` | 全部 | 是否流式响应。Responses API 流式事件格式为 `response.output_text.delta`。 | `true` |
-| `temperature` | 全部 | 采样温度。**Anthropic 协议取值范围为 [0, 2)，与官方 [0.0, 1.0] 不同**，迁移时需校验。 | `0.8` |
-| `max_tokens` | Anthropic/Responses | Anthropic 中含义依模型而异（如 qwen3.8-max 限制回复+思考总长）；Responses 中该参数未定义，由 `max_output_tokens`（非文档提及）或模型自身窗口隐式约束。 | `2048` |
-| `vl_high_resolution_images` | DashScope/Chat | 布尔值，启用后 `max_pixels` 失效，图像最大像素固定为 `16777216`（Qwen3 系列）或 `12845056`（Qwen2.5-VL/QVQ）。 | `true` |
-| `fps` / `max_frames` | Chat/DashScope | 视频抽帧参数。`fps` 控制频率（[0.1,10]），`max_frames` 限制总数（DashScope 支持，OpenAI 兼容 API 不支持）。 | `fps: 2.0`, `max_frames: 2000` |
+| `model` | 全部 | 模型 ID，必填 | `qwen3.8-max`, `qwen3.8-omni-flash`, `deepseek-v4-pro` |
+| `messages` / `input` | Chat / Responses | 对话上下文，支持 `system`/`user`/`assistant` 角色 | Chat 要求数组格式；Responses 支持 `string` 或 `array` |
+| `stream` | 全部 | 是否流式响应 | `true` 或 `false`，默认 `false` |
+| `temperature` | 全部 | 采样温度 | OpenAI/Responses 接口：`[0, 2)`；Anthropic 接口：明确标注范围 `[0, 2)`，与官方不同 |
+| `max_tokens` | Responses / Anthropic | 输出长度上限 | Anthropic 接口下，对 `qwen3.8-max` 等模型，该值限制“回复+思考”总 token；对 `glm-5.2`，若传 `thinking.budget_tokens`，则仅限回复部分 |
+| `reasoning.effort` / `output_config.effort` | Responses / Anthropic | 思考强度控制 | Responses 使用 `reasoning.effort`（`low`/`high`/`max`）；Anthropic 使用 `output_config.effort`（`xhigh`/`medium`/`low` 等，各模型映射规则不同） |
+| `min_pixels` / `max_pixels` / `total_pixels` | Chat / DashScope | 多模态输入像素控制 | 仅对视觉/视频模型生效；`total_pixels` 为视频总像素上限，单位为 32×32 像素块数（即图像 token 数） |
+| `fps` | Chat / DashScope | 视频抽帧频率 | 取值 `[0.1, 10]`，默认 `2.0`；MiniMax 系列为 `[0.2, 5]`，默认 `1` |
+| `previous_response_id` | Responses | 多轮对话历史 ID | 仅当创建请求 `store=true` 时生成，有效期 7 天 |
+| `tools` | Responses / Anthropic | 工具定义数组 | Responses 支持 `web_search`、`code_interpreter` 等内置工具；Anthropic 需通过 `input_schema` 定义自定义工具 |
 
 ## 使用方式
 
-### 终端地址（Endpoint）
-所有协议均按地域提供专属域名，**必须替换 `{WorkspaceId}` 为真实业务空间 ID**：
-- 华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
-- 新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-- 中国香港：`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com`
-- 其他地域（美东、德法兰克福、日东京）同理。
+### 1. 基础配置
+- **认证**：通过 `Authorization: Bearer <API_KEY>` 请求头或 SDK 配置 `api_key`。
+- **Endpoint**：必须使用业务空间专属域名（推荐），格式为 `https://{WorkspaceId}.{region}.maas.aliyuncs.com`，其中 `{WorkspaceId}` 需替换为控制台获取的真实 ID。旧域名（如 `dashscope.aliyuncs.com`）仍可用，但性能与稳定性较低。
+- **SDK 初始化示例（OpenAI SDK）**：
+  ```python
+  from openai import OpenAI
+  client = OpenAI(
+      api_key=os.getenv("DASHSCOPE_API_KEY"),
+      base_url="https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
+  )
+  ```
 
-> **注意**：文档 1、4、7、8 均强调应从旧域名（如 `dashscope.aliyuncs.com`）迁移至上述业务空间专属域名，因其“提供卓越的性能和更高的稳定性”。旧域名虽仍可用，但非长期推荐路径。
+### 2. 接口选择指南
+- 若已使用 OpenAI SDK 且需快速迁移，优先选用 **Chat 接口**（`/chat/completions`），适合标准对话场景。
+- 若需 Agent 能力（如自动调用搜索、执行代码）、简化多轮上下文管理或启用 Session 缓存，选用 **Responses 接口**（`/responses`），并注意其 `store` 参数控制持久化。
+- 若需结构化 JSON 输出、深度思考控制或显式缓存，且项目已集成 Anthropic SDK，选用 **Messages 接口**（`/v1/messages`）。
+- 若需最高控制精度（如 `max_frames`）、调用 Qwen-Audio，或对接老版 DashScope SDK，选用 **DashScope 原生接口**（`/api/v1/services/aigc/.../generation`）。
 
-### 协议选择指南
-- **快速迁移 OpenAI 应用**：优先选用 [OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)（简单对话）或 [创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)（需工具、多轮、缓存）。
-- **需要深度思考控制或结构化 JSON 输出**：选用 [Anthropic兼容-Messages](../../raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)，利用 `output_config.effort` 和 `format.json_schema`。
-- **需精细控制视频帧数或使用千问Audio等特殊模型**：必须使用 [DashScope API 参考](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-dashscope.md)，因其支持 `max_frames` 和 `audio` 字段。
-
-### 认证与 SDK
-- 认证：统一使用百炼 API Key，通过 `Authorization: Bearer <API_KEY>` 或 `x-api-key`（Anthropic 协议）头传递。
-- SDK：OpenAI 协议用 `openai` 包，Anthropic 协议用 `anthropic` 包，DashScope 协议用 `dashscope` 包。各协议 SDK 初始化时均需显式设置 `base_url`（见各文档示例）。
+### 3. 多模态输入
+- **图像**：支持 URL、Base64 Data URI（`data:image/png;base64,...`）或本地文件路径（DashScope SDK）。
+- **视频**：支持 URL、Base64、图像列表（`["url1.jpg", "url2.jpg"]`）或本地文件；需配合 `fps`、`min_pixels` 等参数优化处理。
+- **音频**：仅 `qwen3.8-omni-flash`（Responses）与 `qwen-audio`（DashScope）支持；需指定 `format`（如 `wav`）及 `audio_url` 或 `data`。
 
 ## 限制和注意事项
 
-- **地域可用性**：三方直供模型（如 SiliconFlow DeepSeek、月之暗面 Kimi）**仅在中国站华北2（北京）地域可用**，且需在百炼控制台手动开通服务（见 [OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)）。
-- **协议差异**：OpenAI Responses API **不支持 `background` 异步参数**（当前仅同步），且会忽略任何未在文档中明确列出的 OpenAI 参数（见 [创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)）。
-- **缓存与计费**：Session 缓存（`x-dashscope-session-cache`）和显式缓存（`cache_control: {type: "ephemeral"}`）均影响 Token 计费，命中缓存的 Token 在 `usage.input_tokens_details.cached_tokens` 中体现。
-- **响应存储与生命周期**：`store=true` 的 Responses 才可被 `retrieve`、`delete` 或作为 `previous_response_id` 引用，且 `previous_response_id` 有效期为 **7 天**（见 [获取响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/retrieve-a-response.md)）。
-- **视频处理限制**：`total_pixels`（视频总像素上限）在 Chat API 文档中定义详尽，但 Responses API 文档未提及此参数，实际调用时以 Chat API 行为为准；`max_frames` 仅 DashScope API 支持，OpenAI 兼容 API 会自动应用模型默认值。
+- **地域与模型可用性**：三方直供模型（如 SiliconFlow DeepSeek、月之暗面 Kimi）**仅在中国站华北2（北京）地域可用**，调用前须在百炼控制台开通对应服务。
+- **API 路径弃用**：OpenAI 兼容 Responses 的旧路径 `/api/v2/apps/protocols/compatible-mode/v1/responses` 已停止维护，必须迁移至新版 `/compatible-mode/v1/responses`。
+- **参数兼容性**：[OpenAI 兼容接口](../concepts/openai-compatible-api.md)**仅处理本文档明确列出的参数**，未提及的 OpenAI 参数（如 `background`）将被忽略；Anthropic 接口不提供 `/v1/models` 列表接口，客户端模型发现请求将返回 404。
+- **上下文截断**：Responses 接口为预留工具调用空间，最大输入上下文约为模型窗口大小的 80%，超出部分自动截断，不报错。
+- **缓存与计费**：Session 缓存（`x-dashscope-session-cache: enable`）可降低多轮延迟，但命中缓存的 token 仍会计费；显式缓存（`cache_control: {type: "ephemeral"}`）需在内容块中声明，且仅对命中缓存的请求按缓存计费。
+- **错误处理**：`GET /responses/{id}` 或 `DELETE /responses/{id}` 仅对 `store=true` 创建的响应有效；若 ID 不存在，返回 `{"error": {"message": "Response with id 'resp_xxx' not found.", "type": "InvalidParameter"}}`。
 
 ## 来源文档
 
 - [OpenAI兼容-Chat](../../raw/model-api-reference/qwen-api-reference/qwen-api-via-openai-chat-completions.md)
+- [创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)
 - [OpenAI兼容-Responses](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses.md)
 - [获取响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/retrieve-a-response.md)
-- [创建响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md)
 - [删除响应](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/delete-a-response.md)
 - [获取输入项列表](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/list-input-items.md)
 - [Anthropic兼容-Messages](../../raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)

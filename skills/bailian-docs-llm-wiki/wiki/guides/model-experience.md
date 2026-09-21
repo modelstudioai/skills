@@ -1,56 +1,49 @@
 # model experience
 
-模型体验（Model Experience）是百炼平台面向开发者提供的统一模型调用入口，支持多模态模型的快速接入与实验。通过该能力，开发者可基于标准化接口调用文本、视觉、语音、视频、3D、世界模型等各类模型，无需单独配置底层服务。所有模型均遵循统一的鉴权、计费与监控机制，详见 [模型体验](../../raw/model-user-guide/model-experience.md)。
+模型体验（Model Experience）是百炼平台面向开发者提供的统一模型调用入口，支持多模态模型的快速接入与实验。通过该能力，开发者可基于标准 API 或 Web 控制台直接调用各类预置模型，无需自行部署或管理底层推理服务。所有模型均经过平台统一封装，提供一致的请求格式、鉴权机制与错误码体系。
 
 ## 支持的模型与功能
 
-当前支持以下核心模型类型及对应能力：
+当前支持以下模型类别及对应能力：
 
-- **文本生成**：支持通用对话、指令遵循、代码生成等，模型如 qwen-max、qwen-plus  
-- **视觉理解**：图像分类、OCR、图文理解，支持多图输入与结构化输出  
-- **图片生成与编辑**：文生图（SDXL、Qwen-VL+）、局部重绘、尺寸扩展等  
-- **视频生成与编辑**：支持 2s~10s 短视频生成、关键帧控制、跨帧一致性优化  
-- **世界模型**：具备环境建模与推理能力，适用于仿真交互场景  
-- **3D模型生成**：通过 TriPo 3D 模型实现单图/多图生成带纹理的 GLB 文件  
-- **语音与音乐**：语音合成（TTS）、语音识别（ASR）、语音转语音（S2S）、音乐生成（FunMusic）  
-- **向量与重排序**：支持文本嵌入（embedding）与跨文档相关性重排序（rerank）  
+- **文本生成**：通用对话、长文本续写、指令遵循等，详见 [模型体验](../../raw/model-user-guide/model-experience.md)  
+- **视觉理解**：图像分类、OCR、图文问答等多任务理解能力  
+- **图片生成与编辑**：文生图、图生图、局部重绘等，相关参数与示例见 [图片生成与编辑](../../raw/model-user-guide/model-experience/image-model.md)  
+- **视频生成与编辑**：支持短视频生成、帧插值与基础剪辑  
+- **世界模型**：具备环境建模与动态推理能力，适用于仿真与决策场景  
+- **3D 模型生成**：通过文本或草图生成可导出的 3D 网格，参考 [3D模型生成](../../raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)  
+- **语音与音频处理**：涵盖语音合成（TTS）、语音识别（ASR）、语音转语音（S2S）、音乐生成及通用音频生成  
+- **全模态**：支持文本、图像、音频、视频等多模态输入联合推理  
+- **向量与重排序**：提供嵌入（embedding）与检索重排序（rerank）两类基础模型服务  
 
-> **注意**：语音合成与语音识别的官方文档已迁移至阿里云帮助中心，[模型体验](../../raw/model-user-guide/model-experience.md) 中保留的链接为历史引用，实际配置请以 [语音合成](https://help.aliyun.com/zh/model-studio/speech-synthesis) 和 [语音识别](https://help.aliyun.com/zh/model-studio/speech-recognition) 最新文档为准。
+> **注意**：语音合成与语音识别的官方文档分别托管在 help.aliyun.com，其 API 接口路径、认证方式与百炼统一 SDK 存在差异；实际集成时请以 [模型体验](../../raw/model-user-guide/model-experience.md) 中列出的百炼封装接口为准，避免直接调用 help.aliyun.com 的旧版 endpoint。
 
 ## 关键参数
 
-调用模型体验 API 时，需在请求体中指定以下必选或常用参数：
+所有模型调用均需指定 `model`（模型标识符）与 `input`（输入数据结构）。通用关键参数包括：
 
-- `model`: 模型标识符（如 `qwen-vl-plus`、`wanx-video-1.0`），必须与所选能力匹配  
-- `input`: 输入数据结构，格式依模型类型而异（如 `text` 字段用于文本生成，`images` 数组用于视觉理解）  
-- `parameters`: 可选参数对象，常见字段包括：  
-  - `temperature`: 控制输出随机性（0.0–2.0，默认 1.0）  
-  - `top_p`: 核采样阈值（0.0–1.0）  
-  - `max_tokens`: 输出最大 token 数（部分模型强制限制）  
-  - `seed`: 固定随机种子（确保结果可复现）  
-- `stream`: 布尔值，启用流式响应（仅部分模型支持，详见各子文档）
+- `model`: 必填，如 `qwen-max`, `wanx-v1`, `speech-tts-16k-zh-cn` 等，具体取值见各子文档  
+- `input`: 结构依模型类型而异（如文本模型为 `{"prompt": "..."}`，视觉模型为 `{"image_url": "...", "prompt": "..."}`）  
+- `parameters`: 可选，控制生成行为（如 `temperature`, `top_p`, `max_tokens`），部分模型支持专属参数（如图像模型的 `size`, `style`）  
+- `stream`: 布尔值，启用流式响应（仅部分模型支持）
 
-具体参数约束与默认值请参考对应模型的专项指南，例如 [视觉理解](../../raw/model-user-guide/model-experience/vision-model.md) 和 [图片生成与编辑](../../raw/model-user-guide/model-experience/image-model.md)。
+参数细节与默认值请查阅对应模型的子文档，例如 [视觉理解](../../raw/model-user-guide/model-experience/vision-model.md) 中明确列出了 `detail` 和 `quality` 参数的合法范围。
 
 ## 使用方式
 
-1. **API 调用**：使用 `POST /v1/models/{model}/invoke` 接口，携带 `Authorization` 头（Bearer + API Key）  
-2. **SDK 调用**：推荐使用 `dashscope` Python SDK（≥1.18.0）或 `@alibabacloud/pop-core` Node.js SDK  
-   ```python
-   from dashscope import MultiModalConversation
-   response = MultiModalConversation.call(model='qwen-vl-plus', input={'messages': [...]})
-   ```
-3. **控制台调试**：登录百炼控制台 →「模型体验」页 → 选择模型 → 填写输入 → 实时查看响应与 Token 统计  
+1. **API 调用**：使用百炼 SDK（Python/Java/Go）或直接发送 HTTP POST 请求至 `/v1/models/{model}/invoke`  
+2. **Web 控制台**：登录百炼控制台 →「模型体验」页 → 选择模型 → 输入内容 → 实时调试  
+3. **批量测试**：通过 `/v1/batch/invoke` 提交 JSONL 格式任务列表（需开通权限）  
 
-所有调用均计入项目级配额，支持按模型、按 Token 粒度查看用量明细，详情见 [模型体验](../../raw/model-user-guide/model-experience.md)。
+所有方式均复用同一套鉴权逻辑（`Authorization: Bearer <api_key>`），且返回结构标准化（含 `output`, `usage`, `request_id` 字段）。
 
 ## 限制和注意事项
 
-- 单次请求最大输入长度因模型而异：文本类模型上限为 32768 tokens，视觉类模型单图分辨率不超过 4096×4096，视频类模型单次最长生成 10 秒  
-- 图片/视频/3D 类模型暂不支持批量并发调用（即 `batch_size > 1`），需串行处理  
-- 世界模型与 TriPo 3D 模型处于 Beta 阶段，接口稳定性与输出质量可能随版本迭代调整，建议关注 [世界模型](../../raw/model-user-guide/model-experience/world-model.md) 和 [3D模型生成](../../raw/model-user-guide/model-experience/tripo-3d-generation-guide.md) 的更新日志  
-- 全模态（Omni-Modal）模型暂不开放自定义 [prompt](prompt.md) 工程，仅支持预设任务模板（如“图文问答”“多图对比分析”）  
-- 向量与重排序模型要求输入文本长度 ≤ 512 字符，超长文本需截断或分块处理
+- 单次请求最大输入长度因模型而异：文本类模型通常上限为 32K tokens，视觉类模型图像分辨率建议 ≤ 1536×1536 像素  
+- 视频与 3D 模型暂不支持流式响应，且生成耗时较长（秒级至分钟级），需合理设置客户端超时  
+- 音频类模型（如 TTS、ASR）的输入/输出格式严格限定为 PCM/WAV（16-bit, 16kHz），不支持 MP3 直接上传  
+- 全模态模型对输入模态组合有约束（如不支持同时传入视频 + 音频 + 3D 网格），具体兼容性见 [全模态](../../raw/model-user-guide/model-experience/omni-modal.md) 文档  
+- 向量模型（embedding/rerank）仅接受文本输入，不支持图像或音频嵌入 —— 此限制与部分早期内部文档描述不符，请以 [向量与重排序](../../raw/model-user-guide/model-experience/embedding-rerank-model.md) 为准
 
 ## 来源文档
 

@@ -93,7 +93,7 @@ OSS 连接器
 
 一次性把 Bucket 里已有的文件导进平台
 
-后者见[文件连接器](https://help.aliyun.com/zh/model-studio/connector/apps/file#%E5%AF%BC%E5%85%A5%E6%95%B0%E6%8D%AE)。
+后者见[文件连接器](https://help.aliyun.com/zh/model-studio/connector/file#%E5%AF%BC%E5%85%A5%E6%95%B0%E6%8D%AE)。
 
 ## 关于流量费用
 

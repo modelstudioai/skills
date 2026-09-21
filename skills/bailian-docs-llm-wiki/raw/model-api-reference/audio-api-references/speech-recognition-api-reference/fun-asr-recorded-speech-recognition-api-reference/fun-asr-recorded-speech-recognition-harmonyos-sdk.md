@@ -1,6 +1,6 @@
-# Qwen-Audio-3.0-ASR-Flash-Filetrans/Fun-ASR非实时语音识别HarmonyOS SDK
+# Qwen-Audio-3.x-ASR-Flash-Filetrans/Fun-ASR非实时语音识别HarmonyOS SDK
 
-使用Qwen-Audio-3.0-ASR-Flash-Filetrans/Fun-ASR非实时语音识别HarmonyOS SDK将音视频文件转换为文本。
+使用Qwen-Audio-3.x-ASR-Flash-Filetrans/Fun-ASR非实时语音识别HarmonyOS SDK将音视频文件转换为文本。
 
 **用户指南：** 参见[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)。关于支持的音频格式、文件大小限制和时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
 
@@ -63,7 +63,7 @@
 
 是
 
-服务地址，固定为 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription`。调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+服务地址，固定为 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription`。调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 `apikey`
 
@@ -181,7 +181,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 是
 
-指定模型名。支持Qwen-Audio-3.0-ASR-Flash-Filetrans和Fun-ASR系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#4a43cc1bb7kxg)。
+指定示例调用的模型。模型信息请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#4a43cc1bb7kxg)。
 
 `nls_config.special_word_filter`
 
@@ -239,7 +239,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 否
 
-设置待识别语言代码。如果无法提前确定语种，可不设置，模型会自动识别语种。 对于 Qwen-Audio-3.0-ASR-Flash-Filetrans 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。 点击查看支持的语言代码 - qwen-audio-3.0-asr-flash-filetrans、fun-asr、fun-asr-2025-11-07、fun-asr-mtl、fun-asr-mtl-2025-08-25： - zh: 中文 - en: 英文 - ja: 日语 - ko：韩语 - vi：越南语 - th：泰语 - id：印尼语 - ms：马来语 - tl：菲律宾语 - hi：印地语 - ar：阿拉伯语 - fr：法语 - de：德语 - es：西班牙语 - pt：葡萄牙语 - ru：俄语 - it：意大利语 - nl：荷兰语 - sv：瑞典语 - da：丹麦语 - fi：芬兰语 - no：挪威语 - el：希腊语 - pl：波兰语 - cs：捷克语 - hu：匈牙利语 - ro：罗马尼亚语 - bg：保加利亚语 - hr：克罗地亚语 - sk：斯洛伐克语 - fun-asr-2025-08-25： - zh: 中文 - en: 英文
+设置待识别语言代码。如果无法提前确定语种，可不设置，模型会自动识别语种。 对于 Qwen-Audio-3.x-ASR-Flash-Filetrans 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。 点击查看支持的语言代码 - Qwen-Audio-3.x-ASR-Flash-Filetrans、fun-asr、fun-asr-2025-11-07、fun-asr-mtl、fun-asr-mtl-2025-08-25： - zh: 中文 - en: 英文 - ja: 日语 - ko：韩语 - vi：越南语 - th：泰语 - id：印尼语 - ms：马来语 - tl：菲律宾语 - hi：印地语 - ar：阿拉伯语 - fr：法语 - de：德语 - es：西班牙语 - pt：葡萄牙语 - ru：俄语 - it：意大利语 - nl：荷兰语 - sv：瑞典语 - da：丹麦语 - fi：芬兰语 - no：挪威语 - el：希腊语 - pl：波兰语 - cs：捷克语 - hu：匈牙利语 - ro：罗马尼亚语 - bg：保加利亚语 - hr：克罗地亚语 - sk：斯洛伐克语 - fun-asr-2025-08-25： - zh: 中文 - en: 英文
 
 `nls_config.parameters`
 

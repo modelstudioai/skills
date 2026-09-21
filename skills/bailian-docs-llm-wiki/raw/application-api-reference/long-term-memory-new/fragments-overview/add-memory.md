@@ -4,7 +4,7 @@
 
 将用户对话存储为事实记忆，自动提取关键信息。也支持直接指定自定义内容存储。若需同时提取用户画像，需传入 `profile_schema`。
 
-**说明**调用前请确保已获取 API Key，详见[鉴权](raw/application-api-reference/long-term-memory-new/overview/authentication.md)。
+**说明**调用前请确保已获取 API Key，详见[鉴权](raw/application-api-reference/long-term-memory-new/api-overview/authentication.md)。
 
 **重要**对话轮次多、提取耗时长的场景，可使用[异步添加记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)，后台执行提取，通过事件 ID 查询状态与结果。
 

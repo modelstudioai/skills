@@ -52,7 +52,7 @@ integer
 
 string
 
-基础镜像，缺省时使用平台默认镜像
+基础镜像，填写完整镜像地址。官方镜像位于 `fc-e2b-registry.cn-beijing.cr.aliyuncs.com/runtime/` 下，可选 `code-interpreter-v1`、`browser`、`all-in-one`。缺省时使用平台默认镜像（代码解释器镜像）
 
 `imageName`
 

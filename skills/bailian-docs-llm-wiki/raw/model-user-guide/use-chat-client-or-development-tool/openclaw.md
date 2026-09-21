@@ -125,6 +125,15 @@ Token Plan 个人版[支持的模型](raw/model-user-guide/token-plan-guide/toke
         "api": "anthropic-messages",
         "models": [
           {
+            "id": "auto",
+            "name": "auto",
+            "reasoning": false,
+            "input": ["text"],
+            "contextWindow": 1000000,
+            "maxTokens": 393216,
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+          },
+          {
             "id": "qwen3.8-max",
             "name": "qwen3.8-max",
             "reasoning": true,
@@ -237,9 +246,10 @@ Token Plan 个人版[支持的模型](raw/model-user-guide/token-plan-guide/toke
   "agents": {
     "defaults": {
       "model": {
-        "primary": "bailian-token-plan/qwen3.8-flash"
+        "primary": "bailian-token-plan/auto"
       },
       "models": {
+        "bailian-token-plan/auto": {},
         "bailian-token-plan/qwen3.8-max": {},
         "bailian-token-plan/qwen3.8-flash": {},
         "bailian-token-plan/qwen3.7-max": {},
@@ -313,6 +323,15 @@ nano ~/.openclaw/openclaw.json
         "apiKey": "YOUR_API_KEY",
         "api": "anthropic-messages",
         "models": [
+          {
+            "id": "auto",
+            "name": "auto",
+            "reasoning": false,
+            "input": ["text"],
+            "contextWindow": 1000000,
+            "maxTokens": 393216,
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+          },
           {
             "id": "qwen3.8-max",
             "name": "qwen3.8-max",
@@ -515,9 +534,10 @@ nano ~/.openclaw/openclaw.json
   "agents": {
     "defaults": {
       "model": {
-        "primary": "bailian-token-plan/qwen3.8-flash"
+        "primary": "bailian-token-plan/auto"
       },
       "models": {
+        "bailian-token-plan/auto": {},
         "bailian-token-plan/qwen3.8-max": {},
         "bailian-token-plan/qwen3.8-flash": {},
         "bailian-token-plan/qwen3.7-max": {},
@@ -594,6 +614,15 @@ openclaw dashboard
         "api": "anthropic-messages",
         "models": [
           {
+            "id": "auto",
+            "name": "auto",
+            "reasoning": false,
+            "input": ["text"],
+            "contextWindow": 1000000,
+            "maxTokens": 393216,
+            "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+          },
+          {
             "id": "qwen3.8-max",
             "name": "qwen3.8-max",
             "reasoning": true,
@@ -795,9 +824,10 @@ openclaw dashboard
   "agents": {
     "defaults": {
       "model": {
-        "primary": "bailian-token-plan/qwen3.8-flash"
+        "primary": "bailian-token-plan/auto"
       },
       "models": {
+        "bailian-token-plan/auto": {},
         "bailian-token-plan/qwen3.8-max": {},
         "bailian-token-plan/qwen3.8-flash": {},
         "bailian-token-plan/qwen3.7-max": {},
@@ -1198,7 +1228,7 @@ openclaw dashboard
 
 **Base URL**
 
-请确保 Base URL、API Key 和模型归属同一地域，并将 `WorkspaceId`替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)
+请确保 Base URL、API Key 和模型归属同一地域，并将 `WorkspaceId`替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)
 
 -   华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic`
     
@@ -2132,7 +2162,7 @@ openclaw skills list
 
 ### 接入 MCP 服务
 
-OpenClaw 支持通过 MCP（Model Context Protocol）插件扩展 Agent 的工具调用能力，例如联网搜索、网页抓取等。具体案例可以参考[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)。
+OpenClaw 支持通过 MCP（Model Context Protocol）插件扩展 Agent 的工具调用能力，例如联网搜索、网页抓取等。具体案例可以参考[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-harness-tool.md)。
 
 ## 常见问题
 

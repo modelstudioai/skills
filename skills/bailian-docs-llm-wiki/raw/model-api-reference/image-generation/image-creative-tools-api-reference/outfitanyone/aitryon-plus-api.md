@@ -240,7 +240,7 @@ API提供一个异步接口，调用分为两步：
 POST https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image/image-synthesis
 ```
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 **说明**
 
@@ -643,7 +643,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2image
 
 ### 步骤2：根据任务ID查询结果
 
-使用上一步获取的 `task_id`，发送 GET 请求查询任务状态和结果。请将 URL 中的`{task_id}` 替换为您的实际任务ID，将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+使用上一步获取的 `task_id`，发送 GET 请求查询任务状态和结果。请将 URL 中的`{task_id}` 替换为您的实际任务ID，将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 ```
 GET https://dashscope.aliyuncs.com/api/v1/tasks/{task_id}

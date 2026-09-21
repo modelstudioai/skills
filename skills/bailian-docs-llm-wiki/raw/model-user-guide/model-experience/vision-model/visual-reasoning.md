@@ -50,7 +50,7 @@
         
 -   **输出方式：**视觉推理模型包含详细的思考过程，为避免因响应内容过长导致超时，建议使用流式输出。
     
-    -   Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、kimi-k2.6、kimi-k2.5、stepfun/step-3.7-flash系列支持**流式和非流式**两种方式。
+    -   Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL、kimi-k2.6、kimi-k2.5、stepfun/step-3.7-flash、stepfun/step-5-preview系列支持**流式和非流式**两种方式。
     -   QVQ系列仅支持**流式输出。**
 -   **System Prompt使用建议：**
     -   **对于单次或简单的对话调用**：为获得最佳推理效果，建议不设置 `System Message`。可将模型角色设定、输出格式要求等指令通过 `User Message` 传入。

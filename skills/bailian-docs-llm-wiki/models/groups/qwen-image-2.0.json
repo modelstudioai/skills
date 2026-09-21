@@ -53,8 +53,7 @@
       "latestOnlineAt": "2026-03-03T11:31:36.000+00:00",
       "trainingTypes": {
         "sft": [
-          "lora",
-          "full"
+          "lora"
         ]
       },
       "inferenceProvider": "aliyun-bailian",

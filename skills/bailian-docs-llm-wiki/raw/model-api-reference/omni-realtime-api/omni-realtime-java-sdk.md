@@ -8,6 +8,8 @@
 
 ## 快速开始
 
+使用 `qwen3.8-omni-flash-realtime` 时，将会话构造参数 `model` 设为该模型名，默认音色为 `Tina`。Java SDK 会话配置和视频聚合参数示例见[实时调用指南](https://help.aliyun.com/zh/model-studio/realtime#6905316411elw)。
+
 请访问[github](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/omni)下载示例代码。我们提供了三种调用方式的示例代码：
 
 1.  [音频对话示例](https://github.com/aliyun/alibabacloud-bailian-speech-demo/tree/master/samples/conversation/omni/java)：麦克风采集实时音频输入，开启[VAD 模式](raw/model-user-guide/model-experience/omni-modal/realtime.md)（自动检测语音起止），支持语音打断。
@@ -54,6 +56,31 @@ String
 -   北京地域：wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime
     
 
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+
+**参数**
+
+**类型**
+
+**说明**
+
+model
+
+String
+
+Qwen-Omni 实时模型的名称。参见[模型列表](raw/model-user-guide/get-started-with-models/models.md)。
+
+url
+
+String
+
+调用地址：
+
+-   新加坡地域：wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime
+    
+-   北京地域：wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime
+    
+
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
 **重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
@@ -61,7 +88,7 @@ String
 -   华北2（北京）地域：从 `wss://dashscope.aliyuncs.com` 迁移至 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `wss://dashscope-intl.aliyuncs.com` 迁移至 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
-其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。现有域名仍可正常使用。
+其中 `{WorkspaceId}` 为您的业务空间 ID，可在阿里云百炼控制台的**业务空间详情**页面查看。Qwen3.8-Omni-Flash-Realtime 必须使用上述业务空间专属域名；旧型号可继续使用原域名。
 
 下述请求参数可以通过`OmniRealtimeConfig`对象的链式方法或setter配置、之后作为参数传入updateSession接口完成配置。
 
@@ -166,7 +193,7 @@ String
 VAD类型，取值如下：
 
 -   `server_vad`（默认值）：基于声学特征检测用户语音结束。
--   `semantic_vad`：基于语义有效性检测用户语音结束，可过滤无意义语音（如回应语、背景音）。仅`qwen3.5-omni-realtime`系列模型支持。
+-   `semantic_vad`：基于语义有效性检测用户语音结束，可过滤无意义语音（如回应语、背景音）。Qwen3.8-Omni-Flash-Realtime 和 Qwen3.5-Omni-Realtime 系列模型支持。
 
 turnDetectionThreshold
 
@@ -197,7 +224,7 @@ enable\_search
 
 Boolean
 
-**仅在使用 Qwen3.5-Omni-Realtime 系列模型时生效。**
+适用于 Qwen3.8-Omni-Flash-Realtime 和 Qwen3.5-Omni-Realtime 系列模型。
 
 是否启用联网搜索功能。设置为 `true` 启用，默认为 `false`。启用后，模型可自主判断是否需要搜索来回应用户的即时问题。
 
@@ -217,11 +244,13 @@ tools
 
 List<Map<String, Object>>
 
-**仅在使用 Qwen3.5-Omni-Realtime 系列模型时生效。**
+适用于 Qwen3.8-Omni-Flash-Realtime 和 Qwen3.5-Omni-Realtime 系列模型。
 
-工具定义列表。启用后，模型可自主判断是否需要调用外部工具来回应用户的问题。命中工具调用时，模型不生成音频，仅返回工具调用参数。
+工具定义列表。启用后，模型可自主判断是否需要调用外部工具来回应用户的问题。命中 Function Calling 时，模型不生成音频，仅返回工具调用参数。
 
-每个工具为一个 Map，包含以下字段：
+Qwen3.8-Omni-Flash-Realtime 可在同一会话中配置 Function Calling 和 MCP 工具。MCP 配置字段见[客户端事件](https://help.aliyun.com/zh/model-studio/client-events#qwen38-client)，调用限制见[MCP 调用限制](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-flow)。`tools` 与 `enable_search` 不可同时开启，该限制也适用于 MCP。
+
+以下字段描述 Function Calling 工具。每个工具为一个 Map，包含以下字段：
 
 -   `type`（String，必选）：固定为 "function"。
     
@@ -253,6 +282,7 @@ temperature越高，生成的内容更多样，反之，生成的内容更确定
 
 temperature默认值：
 
+-   `qwen3.8-omni-flash-realtime`：0.6
 -   `qwen3.5-omni-realtime`系列：0.7
 -   `qwen3-omni-flash-realtime`系列：0.9
 -   `qwen-omni-turbo-realtime`系列：1.0
@@ -275,6 +305,7 @@ top\_p越高，生成的内容更多样。反之，生成的内容更确定。
 
 top\_p默认值：
 
+-   `qwen3.8-omni-flash-realtime`：0.95
 -   `qwen3.5-omni-realtime`系列：0.8
 -   `qwen3-omni-flash-realtime`系列：1.0
 -   `qwen-omni-turbo-realtime`系列：0.01
@@ -293,6 +324,7 @@ Integer
 
 top\_k默认值：
 
+-   `qwen3.8-omni-flash-realtime`：20
 -   `qwen3.5-omni-realtime`系列：20
 -   `qwen3-omni-flash-realtime`系列：50
 -   `qwen-omni-turbo-realtime`系列：20
@@ -309,7 +341,7 @@ Integer
 
 > `max_tokens` 的设置不会影响大模型的生成过程，如果模型生成的 Token 数超过`max_tokens`，本次请求会返回截断后的内容。
 
-默认值和最大值都是模型的最大输出长度。关于各模型的最大输出长度，请参见[模型列表](raw/model-user-guide/get-started-with-models/models.md)。
+`qwen3.8-omni-flash-realtime` 的取值范围为 \[1, 65536\]。其他模型的默认值和最大值都是模型的最大输出长度。关于各模型的最大输出长度，请参见[模型列表](raw/model-user-guide/get-started-with-models/models.md)。
 
 max\_tokens参数适用于需要限制字数（如生成摘要、关键词）、控制成本或减少响应时间的场景。
 
@@ -321,10 +353,11 @@ repetition\_penalty
 
 Float
 
-模型生成时连续序列中的重复度。提高repetition\_penalty时可以降低模型生成的重复度，1.0表示不做惩罚。没有严格的取值范围，只要大于0即可。
+模型生成时连续序列中的重复度。提高repetition\_penalty时可以降低模型生成的重复度，1.0表示不做惩罚。`qwen3.8-omni-flash-realtime` 支持取值 0；其他模型没有严格的取值范围，只要大于0即可。
 
 repetition\_penalty默认值：
 
+-   `qwen3.8-omni-flash-realtime`：0
 -   `qwen3.5-omni-realtime`系列：1.0
 -   其他模型：1.05
 
@@ -342,6 +375,7 @@ Float
 
 presence\_penalty默认值：
 
+-   `qwen3.8-omni-flash-realtime`：1
 -   `qwen3.5-omni-realtime`系列：1.5
 -   其他模型：0.0
 

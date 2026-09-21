@@ -30,7 +30,7 @@ PTU 还支持长输入阶梯容量系数和缓存折扣，详见[长输入与前
 当模型输入超过最长输入 Token 时，相关调用将自动切换为当前模型的按量计费模式；超出购买的 TPM 量时，按创建时选择的溢出策略处理（「自动溢出」切换为按量计费，「仅使用 PTU 容量」返回 429）。此时，推理性能可能下降，将受业务空间中当前快照模型的公共流量的管控，[费用](raw/model-user-guide/test-1/model-pricing.md)按模型调用（按量计费）标准计收。
 
 -   此时（仅「自动溢出」策略下），调用 API 返回 Header 将包含：`x-dashscope-ptu-overflow:true`。
--   TPM 统计请前往：[模型监控（北京）](https://bailian.console.aliyun.com/model/telemetry)。
+-   TPM 统计请前往：[模型监控（北京）](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)。
 
 缩容场景（降配）的具体降费退费规则请参考：[降配退款规则说明](https://help.aliyun.com/zh/user-center/description-of-downgrade-refund-rules)。
 

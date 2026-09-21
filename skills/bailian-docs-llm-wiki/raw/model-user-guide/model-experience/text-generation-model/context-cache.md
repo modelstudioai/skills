@@ -111,6 +111,8 @@
 
 千问 VL：qwen3-vl-plus、qwen3-vl-flash
 
+千问 Character：qwen-plus-character
+
 DeepSeek：deepseek-v3.2
 
 Kimi：kimi-k2.6、kimi-k2.5、kimi-k2.7-code
@@ -928,15 +930,15 @@ while True:
     -   千问 Character：qwen-plus-character、qwen-flash-character
     -   千问开源：qwen3.8-2.4t-a95b、qwen3.8-27b
     -   DeepSeek（阿里云百炼部署）：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash、deepseek-v3.2、deepseek-v3.1、deepseek-v3、deepseek-r1
-    -   DeepSeek（快手万擎部署）：vanchin/deepseek-v4-pro、vanchin/deepseek-v3.2-think、vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3
+    -   DeepSeek（快手万擎部署）：vanchin/deepseek-v4.1-flash、vanchin/deepseek-v4-pro、vanchin/deepseek-v3.2-think、vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3
     -   Kimi（阿里云百炼部署）：kimi-k3、kimi-k2.7-code、kimi-k2.6、kimi-k2.5、kimi-k2-thinking、Moonshot-Kimi-K2-Instruct
     -   Kimi（月之暗面部署）：kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6、kimi/kimi-k2.5
     -   GLM（阿里云百炼部署）：glm-5.3、glm-5.2、glm-5.2-fast-preview、glm-5.1、glm-5、glm-4.7、glm-4.6
-    -   GLM（智谱部署）：ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5
+    -   GLM（智谱部署）：ZHIPU/GLM-5.3-FlashX、ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5
     -   MiniMax（阿里云百炼部署）：MiniMax-M2.5、MiniMax-M2.1
     -   MiniMax（稀宇科技部署）：MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1
     -   MiMo（小米部署）：xiaomi/mimo-v2.5-pro
-    -   Stepfun（阶跃星辰部署）：stepfun/step-3.7-flash
+    -   Stepfun（阶跃星辰部署）：stepfun/step-3.7-flash、stepfun/step-5-preview
 -   **视觉理解模型**
     -   千问 VL：qwen3-vl-plus、qwen3-vl-flash、qwen-vl-max、qwen-vl-plus
 -   **行业模型**
@@ -1113,12 +1115,12 @@ while True:
 -   deepseek-v4-pro：`cached_token` 单价不是 `input_token` 单价的 20%，具体价格请参见百炼控制台
 -   deepseek-v4.1-flash：`cached_token` 单价为 `input_token` 单价的 **10%**
 -   qwen3.8-max、qwen3.8-flash、qwen3.8-2.4t-a95b：`cached_token` 单价不是 `input_token` 单价的 20%，具体价格请参见百炼控制台
--   DeepSeek（快手万擎部署）：vanchin/deepseek-v4-pro 为 **8.33%**；vanchin/deepseek-v3.2-think 为 **10%**；vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3 为 **40%**
+-   DeepSeek（快手万擎部署）：vanchin/deepseek-v4.1-flash 为 **2%**；vanchin/deepseek-v4-pro 为 **8.33%**；vanchin/deepseek-v3.2-think 为 **10%**；vanchin/deepseek-v3.1-terminus、vanchin/deepseek-r1、vanchin/deepseek-v3 为 **40%**
 -   Kimi（阿里云百炼部署）：kimi-k3 为 **10%**
 -   Kimi（月之暗面部署）：kimi/kimi-k3 为 **10%**；kimi/kimi-k2.6 为 **16.9%**；kimi/kimi-k2.5 为 **17.5%**
 -   GLM（阿里云百炼部署）：glm-5.3、glm-5.2、glm-5.2-fast-preview 为 **25%**，其余glm系列模型均为 **20%**
 -   MiniMax（稀宇科技部署）：MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7 为 **20%**，MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1 为 **10%**
--   GLM（智谱部署）：ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5均为 **25%**
+-   GLM（智谱部署）：ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3、ZHIPU/GLM-5.2、ZHIPU/GLM-5.1、ZHIPU/GLM-5均为 **25%**；ZHIPU/GLM-5.3-FlashX 为 **28.5%**
 
 示例：某请求包含 10,000 个输入 Token，其中 5,000 个命中缓存。费用计算如下：
 

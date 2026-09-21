@@ -1,6 +1,6 @@
 # 连接 Apps
 
--   [Apps 目录](raw/application-user-guide/overview/apps-guide/overview.md)
+-   [Apps 目录](raw/application-user-guide/overview/apps-guide/apps-overview.md)
 -   [文件连接器](raw/application-user-guide/overview/apps-guide/file.md)
 -   [表格连接器](raw/application-user-guide/overview/apps-guide/table.md)
 -   [语雀](raw/application-user-guide/overview/apps-guide/yuque.md)

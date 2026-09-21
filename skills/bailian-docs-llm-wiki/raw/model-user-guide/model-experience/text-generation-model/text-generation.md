@@ -1472,7 +1472,7 @@ if __name__ == '__main__':
 向大模型直接输入大量原始数据，会因上下文容量的限制导致成本增加与效果下降。上下文工程（Context Engineering）通过动态加载精准知识，显著提升生成质量与效率。核心技术包括：
 
 -   **提示词工程（Prompt Engineering）**：通过设计和优化文本指令（Prompt），可以更精确地引导模型，使其输出更符合预期的结果。若想了解更多，可参考[文生文Prompt指南](raw/model-user-guide/use-cases/prompt-engineering-guide.md)、阿里云百炼 [提示词模板](https://bailian.console.aliyun.com/flow-agent/plugin-market/prompt)页面。
--   [检索增强生成（RAG）](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)：适用于需要模型依据外部知识库（例如产品文档或技术手册）来回答问题的场景。
+-   [检索增强生成（RAG）](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)：适用于需要模型依据外部知识库（例如产品文档或技术手册）来回答问题的场景。
 -   [工具调用（Tool）](raw/model-user-guide/model-experience/text-generation-model/tool-calls.md)：允许模型获取实时信息（如查询天气、路况）或完成特定操作（如调用API、发送邮件）。
 -   **记忆机制（Memory）**：为模型建立长短期记忆，使其能够理解连续对话的历史信息。
 

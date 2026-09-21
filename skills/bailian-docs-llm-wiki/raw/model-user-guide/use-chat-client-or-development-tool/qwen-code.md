@@ -71,6 +71,12 @@ qwen --version
   "modelProviders": {
     "openai": [
       {
+        "id": "auto",
+        "name": "[Token Plan 个人版] auto",
+        "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY"
+      },
+      {
         "id": "qwen3.8-max",
         "name": "[Token Plan 个人版] qwen3.8-max",
         "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
@@ -172,7 +178,7 @@ qwen --version
     "region": "china"
   },
   "model": {
-    "name": "qwen3.8-flash"
+    "name": "auto"
   },
   "$version": 3
 }
@@ -196,6 +202,12 @@ qwen --version
   },
   "modelProviders": {
     "openai": [
+      {
+        "id": "auto",
+        "name": "[Token Plan 团队版] auto",
+        "baseUrl": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+        "envKey": "BAILIAN_TOKEN_PLAN_API_KEY"
+      },
       {
         "id": "qwen3.8-max",
         "name": "[Token Plan 团队版] qwen3.8-max",
@@ -393,7 +405,7 @@ qwen --version
     "region": "china"
   },
   "model": {
-    "name": "qwen3.8-flash"
+    "name": "auto"
   },
   "$version": 3
 }
@@ -530,7 +542,7 @@ qwen --version
 -   macOS/Linux：`~/.qwen/settings.json`
 -   Windows：`C:\Users\<Windows用户名>\.qwen\settings.json`
 
-`baseUrl` 按地域设置（URL 中的 `{WorkspaceId}` 需替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)），API Key 需与所选地域对应：
+`baseUrl` 按地域设置（URL 中的 `{WorkspaceId}` 需替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)），API Key 需与所选地域对应：
 
 -   华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 -   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`

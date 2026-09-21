@@ -1,34 +1,34 @@
 {
-  "updatedAt": "2026-09-21",
-  "totalFamilies": 184,
-  "totalModels": 421,
+  "updatedAt": "2026-09-22",
+  "totalFamilies": 187,
+  "totalModels": 432,
   "profileCoverage": {
-    "full": 364,
+    "full": 376,
     "partial": 51,
-    "structured-only": 6,
+    "structured-only": 5,
     "none": 0
   },
   "capabilityDistribution": {
     "TG": 39,
     "IG": 31,
     "VG": 26,
-    "TTS": 17,
+    "TTS": 18,
+    "ASR": 16,
     "Reasoning": 15,
-    "ASR": 14,
     "VU": 9,
     "Realtime-ASR": 8,
     "Multimodal-Omni": 7,
     "Realtime-Audio-Translate": 4,
-    "Realtime-Chatting": 3,
-    "Realtime-Omni": 3,
+    "Realtime-Omni": 4,
     "ME": 2,
+    "Realtime-Chatting": 2,
     "Realtime-Text-to-Speech": 2,
     "TR": 2,
     "World-Model": 1,
     "3D-generation": 1
   },
   "providerDistribution": {
-    "qwen": 113,
+    "qwen": 116,
     "qwen-domain-model": 35,
     "wan": 14,
     "mini-max": 4,
@@ -475,7 +475,7 @@
       "providers": [
         "zhipu-ai"
       ],
-      "itemCount": 8,
+      "itemCount": 9,
       "items": [
         "glm-4.5",
         "glm-4.5-air",
@@ -484,7 +484,8 @@
         "glm-5",
         "glm-5.1",
         "glm-5.2",
-        "glm-5.3"
+        "glm-5.3",
+        "glm-5.3-prime"
       ],
       "maxContextWindow": 1000000
     },
@@ -980,6 +981,88 @@
       "maxContextWindow": 131072
     },
     {
+      "slug": "qwen-audio-3.0-asr",
+      "name": "Qwen-Audio-3.0-ASR",
+      "primaryCapability": "ASR",
+      "capabilities": [
+        "ASR"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen-audio-3.0-asr-flash"
+      ]
+    },
+    {
+      "slug": "qwen-audio-3.0-realtime",
+      "name": "Qwen-Audio-3.0-Realtime",
+      "primaryCapability": "Realtime-Chatting",
+      "capabilities": [
+        "Realtime-Chatting"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 2,
+      "items": [
+        "qwen-audio-3.0-realtime-flash",
+        "qwen-audio-3.0-realtime-plus"
+      ],
+      "maxContextWindow": 65535
+    },
+    {
+      "slug": "qwen-audio-3.0-tts",
+      "name": "Qwen-Audio-3.0-TTS",
+      "primaryCapability": "Realtime-Text-to-Speech",
+      "capabilities": [
+        "Realtime-Text-to-Speech",
+        "TTS"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 2,
+      "items": [
+        "qwen-audio-3.0-tts-flash",
+        "qwen-audio-3.0-tts-plus"
+      ]
+    },
+    {
+      "slug": "qwen-audio-3.1-asr-message",
+      "name": "Qwen-Audio-3.1-ASR-Message",
+      "primaryCapability": "ASR",
+      "capabilities": [
+        "ASR"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen-audio-3.1-asr-flash-message"
+      ]
+    },
+    {
+      "slug": "qwen-audio-3.1-asr",
+      "name": "Qwen-Audio-3.1-ASR",
+      "primaryCapability": "ASR",
+      "capabilities": [
+        "ASR",
+        "Realtime-ASR"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 3,
+      "items": [
+        "qwen-audio-3.1-asr-flash",
+        "qwen-audio-3.1-asr-flash-filetrans",
+        "qwen-audio-3.1-asr-flash-streaming"
+      ]
+    },
+    {
       "slug": "qwen-audio-3.1-realtime",
       "name": "Qwen-Audio-3.1-Realtime",
       "primaryCapability": "Realtime-Chatting",
@@ -994,6 +1077,21 @@
         "qwen-audio-3.1-realtime-plus"
       ],
       "maxContextWindow": 262144
+    },
+    {
+      "slug": "qwen-audio-3.1-tts-next",
+      "name": "Qwen-Audio-3.1-TTS-Next",
+      "primaryCapability": "TTS",
+      "capabilities": [
+        "TTS"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen-audio-3.1-tts-next"
+      ]
     },
     {
       "slug": "qwen-audio-3.1-tts",
@@ -1038,70 +1136,6 @@
       "itemCount": 1,
       "items": [
         "qwen-audio-3.0-asr-flash-streaming"
-      ]
-    },
-    {
-      "slug": "qwen-audio-asr-flash",
-      "name": "Qwen-Audio-ASR-Flash",
-      "primaryCapability": "ASR",
-      "capabilities": [
-        "ASR"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-audio-3.0-asr-flash"
-      ]
-    },
-    {
-      "slug": "qwen-audio-realtime-flash",
-      "name": "Qwen-Audio-Realtime-Flash",
-      "primaryCapability": "Realtime-Chatting",
-      "capabilities": [
-        "Realtime-Chatting"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-audio-3.0-realtime-flash"
-      ],
-      "maxContextWindow": 65535
-    },
-    {
-      "slug": "qwen-audio-realtime-plus",
-      "name": "Qwen-Audio-Realtime-Plus",
-      "primaryCapability": "Realtime-Chatting",
-      "capabilities": [
-        "Realtime-Chatting"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen-audio-3.0-realtime-plus"
-      ],
-      "maxContextWindow": 65535
-    },
-    {
-      "slug": "qwen-audio-tts",
-      "name": "Qwen-Audio-TTS",
-      "primaryCapability": "Realtime-Text-to-Speech",
-      "capabilities": [
-        "Realtime-Text-to-Speech",
-        "TTS"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 2,
-      "items": [
-        "qwen-audio-3.0-tts-flash",
-        "qwen-audio-3.0-tts-plus"
       ]
     },
     {
@@ -1497,6 +1531,23 @@
         "qwen-mt-uni"
       ],
       "maxContextWindow": 1000000
+    },
+    {
+      "slug": "qwen-omni-turbo-realtime",
+      "name": "Qwen-Omni-Turbo-Realtime",
+      "primaryCapability": "Realtime-Omni",
+      "capabilities": [
+        "Realtime-Omni"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 2,
+      "items": [
+        "qwen-omni-turbo-realtime",
+        "qwen-omni-turbo-realtime-latest"
+      ],
+      "maxContextWindow": 32768
     },
     {
       "slug": "qwen-omni-turbo",
@@ -1906,22 +1957,6 @@
       "itemCount": 1,
       "items": [
         "qwen3-omni-30b-a3b-captioner"
-      ],
-      "maxContextWindow": 65536
-    },
-    {
-      "slug": "qwen3-omni-flash-realtime",
-      "name": "Qwen3-Omni-Flash-Realtime",
-      "primaryCapability": "Realtime-Omni",
-      "capabilities": [
-        "Realtime-Omni"
-      ],
-      "providers": [
-        "qwen"
-      ],
-      "itemCount": 1,
-      "items": [
-        "qwen3-omni-flash-realtime"
       ],
       "maxContextWindow": 65536
     },
@@ -2428,6 +2463,21 @@
       "maxContextWindow": 1000000
     },
     {
+      "slug": "qwen3.8-omni-flash-realtime",
+      "name": "Qwen3.8-Omni-Flash-Realtime",
+      "primaryCapability": "Realtime-Omni",
+      "capabilities": [
+        "Realtime-Omni"
+      ],
+      "providers": [
+        "qwen"
+      ],
+      "itemCount": 1,
+      "items": [
+        "qwen3.8-omni-flash-realtime"
+      ]
+    },
+    {
       "slug": "qwen3.8-omni-flash",
       "name": "Qwen3.8-Omni-Flash",
       "primaryCapability": "Multimodal-Omni",
@@ -2628,16 +2678,18 @@
       "primaryCapability": "TG",
       "capabilities": [
         "TG",
-        "VU"
+        "VU",
+        "Reasoning"
       ],
       "providers": [
         "stepfun"
       ],
-      "itemCount": 1,
+      "itemCount": 2,
       "items": [
-        "stepfun/step-3.7-flash"
+        "stepfun/step-3.7-flash",
+        "stepfun/step-5-preview"
       ],
-      "maxContextWindow": 262144
+      "maxContextWindow": 1048576
     },
     {
       "slug": "tongyi-intent-detect-v3",
@@ -2726,13 +2778,13 @@
       "primaryCapability": "TG",
       "capabilities": [
         "TG",
-        "Reasoning",
-        "VU"
+        "VU",
+        "Reasoning"
       ],
       "providers": [
         "deepseek"
       ],
-      "itemCount": 7,
+      "itemCount": 8,
       "items": [
         "vanchin/deepseek-ocr",
         "vanchin/deepseek-r1",
@@ -2740,9 +2792,10 @@
         "vanchin/deepseek-v3.1-terminus",
         "vanchin/deepseek-v3.2-think",
         "vanchin/deepseek-v4-pro",
-        "vanchin/deepseek-v4-pro-0813"
+        "vanchin/deepseek-v4-pro-0813",
+        "vanchin/deepseek-v4.1-flash"
       ],
-      "maxContextWindow": 1000000
+      "maxContextWindow": 1048576
     },
     {
       "slug": "video-style-transform",
@@ -3174,15 +3227,16 @@
       "providers": [
         "zhipu-ai"
       ],
-      "itemCount": 5,
+      "itemCount": 6,
       "items": [
         "ZHIPU/GLM-5",
         "ZHIPU/GLM-5.1",
         "ZHIPU/GLM-5.2",
         "ZHIPU/GLM-5.3",
-        "ZHIPU/GLM-5.3-Flash"
+        "ZHIPU/GLM-5.3-Flash",
+        "ZHIPU/GLM-5.3-FlashX"
       ],
-      "maxContextWindow": 1000000
+      "maxContextWindow": 1048576
     }
   ]
 }

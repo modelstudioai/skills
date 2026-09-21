@@ -1,6 +1,6 @@
-# 通过WebRTC使用qwen3.5-omni-plus-realtime实现实时通话
+# 通过WebRTC使用qwen3.8-omni-flash-realtime实现实时通话
 
-本文档说明如何在浏览器端通过 WebRTC + JavaScript 接入百炼 Realtime API，实现与 qwen3.5-omni-plus-realtime 模型的实时音视频通话。
+本文档说明如何在浏览器端通过 WebRTC + JavaScript 接入百炼 Realtime API，实现与 qwen3.8-omni-flash-realtime 模型的实时音视频通话。
 
 **说明**WebRTC 适合浏览器端、低延迟语音场景，音频通过 UDP 直接传输，内置回声消除和降噪。WebRTC 仅支持服务端 VAD 模式（`server_vad` 或 `semantic_vad`），不支持手动模式。
 
@@ -173,13 +173,13 @@ await pc.setLocalDescription(offer);
 将 Offer SDP 发送到百炼服务端，获取 Answer SDP。Demo 中通过 curl 命令完成：
 
 ```
-curl -X POST 'https://{endpoint}/api/v1/webrtc/realtime?model=qwen3.5-omni-plus-realtime' \
+curl -X POST 'https://{endpoint}/api/v1/webrtc/realtime?model=qwen3.8-omni-flash-realtime' \
   -H 'Content-Type: application/sdp' \
   -H 'Authorization: Bearer $DASHSCOPE_API_KEY' \
   --data-binary '<Offer SDP 内容>'
 ```
 
-**说明**生产环境中，此步骤应由业务 AppServer 代理完成，避免前端暴露 API Key。`{endpoint}` 为 Realtime API 接入地址。
+**说明**生产环境中，此步骤应由业务 AppServer 代理完成，避免前端暴露 API Key。`{endpoint}` 使用华北2（北京）的 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 或新加坡的 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，替换为实际业务空间 ID，并使用对应地域和业务空间的 API Key。
 
 ### 设置 Answer SDP 建立连接
 
@@ -345,6 +345,6 @@ function endSession(silent = false) {
 
 -   [WebRTC API (MDN)](https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API)
 -   [RTCPeerConnection (MDN)](https://developer.mozilla.org/zh-CN/docs/Web/API/RTCPeerConnection)
--   qwen3.5-omni-plus-realtime 模型客户端事件：[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)
--   qwen3.5-omni-plus-realtime 模型服务端事件：[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
+-   qwen3.8-omni-flash-realtime 模型客户端事件：[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)
+-   qwen3.8-omni-flash-realtime 模型服务端事件：[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
 -   [WebRTC 接入模型/应用](https://help.aliyun.com/zh/model-studio/realtime-connect-model#conn-rtc-title)

@@ -40,7 +40,7 @@ GPT-5.4-mini、Gemini 3.1 Flash
 
 ### 视频支持
 
--   最长2小时 / 2GB：`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
+-   最长2小时 / 2GB：`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-omni-flash`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
 -   最长1小时 / 2GB：`qwen3-vl-plus`、`qwen3-vl-flash`
 -   最长1小时 / 2GB：`qwen3.5-omni-plus`、`qwen3.5-omni-flash`（同时支持音频输入）
 
@@ -51,13 +51,13 @@ GPT-5.4-mini、Gemini 3.1 Flash
 让模型根据图像或视频中的内容执行操作。
 
 -   Function Calling：Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列模型均支持
--   内置工具（联网搜索、代码执行，无需额外配置）：仅`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`
+-   内置工具（联网搜索、代码执行，无需额外配置）：仅`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.7-max-2026-06-08`、`qwen3.7-plus`、`qwen3.6-plus`、`qwen3.7-flash`、`qwen3.6-flash`、`qwen3.5-plus`、`qwen3.5-flash`；`qwen3.8-omni-flash` 支持 `web_search` 内置工具。
 
 ### 结构化输出
 
 从视觉输入中获取有效的JSON输出，例如从照片中提取商品信息。
 
-Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列支持此功能。
+Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列支持此功能。 Qwen3.8-Omni-Flash 在思考和非思考模式下均支持 JSON Object 模式。
 
 ## OCR与文档提取
 
@@ -144,6 +144,26 @@ Qwen3.8、Qwen3.7、Qwen3.6、Qwen3.5和Qwen3-VL系列支持此功能。
 支持
 
 支持
+
+`qwen3.8-omni-flash`
+
+1M
+
+16M
+
+2小时
+
+2GB
+
+2048
+
+64
+
+支持
+
+web\_search
+
+JSON Object
 
 `qwen3.7-plus`
 

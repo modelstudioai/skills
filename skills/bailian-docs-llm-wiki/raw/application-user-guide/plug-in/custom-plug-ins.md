@@ -66,7 +66,7 @@
         
         -   **Header**：将鉴权信息放在HTTP请求头的Authorization字段中，这些信息在URL中不可见。
             
-        -   **Query**：将鉴权信息放在URL中，例如[](https://example.com?api_key=123456)[https://example.com?api\_key=123456](https://example.com?api_key=123456)。
+        -   **Query**：将鉴权信息放在URL中，例如https://example.com?api\_key=123456。
             
     -   **参数名**：如果将鉴权信息放在Query中需填写鉴权时使用的参数，如“api\_key”。如果将鉴权信息放在Header中将默认此参数为“Authorization”。
         

@@ -90,7 +90,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/imag
 -   计费项：只对模型成功生成的输出图片进行收费，其余情况暂不计费。
 -   付费方式：由阿里云主账号统一付费。RAM子账号不能独立计量计费，必须由所属的主账号付费。如果您需要查询账单信息，请前往阿里云控制台[账单概览](https://billing-cost.console.aliyun.com/finance/month-bill/account)。
 -   充值途径：您可以在阿里云控制台[费用与成本](https://billing-cost.console.aliyun.com/home?spm=a2c4g.11186623.0.0.2d543048F4KRQP)页面进行充值。
--   模型调用情况：您可以前往阿里云百炼平台的[模型监控](https://bailian.console.aliyun.com/model/telemetry)查看模型调用量及调用次数。
+-   模型调用情况：您可以前往阿里云百炼平台的[模型监控](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)查看模型调用量及调用次数。
 -   更多计费问题请参见[计费项](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)。
 
 **限流**

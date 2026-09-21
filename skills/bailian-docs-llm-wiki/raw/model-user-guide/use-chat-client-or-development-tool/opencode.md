@@ -49,6 +49,13 @@ opencode -v
         "apiKey": "YOUR_API_KEY"
       },
       "models": {
+        "auto": {
+          "name": "Auto",
+          "modalities": {
+            "input": ["text"],
+            "output": ["text"]
+          }
+        },
         "qwen3.8-max": {
           "name": "Qwen3.8 Max",
           "reasoning": true,
@@ -168,6 +175,13 @@ opencode -v
         "apiKey": "YOUR_API_KEY"
       },
       "models": {
+        "auto": {
+          "name": "Auto",
+          "modalities": {
+            "input": ["text"],
+            "output": ["text"]
+          }
+        },
         "qwen3.8-max": {
           "name": "Qwen3.8 Max",
           "reasoning": true,
@@ -450,7 +464,7 @@ opencode -v
 
 将 `YOUR_API_KEY` 替换为[阿里云百炼 API Key](raw/model-api-reference/preparations/get-api-key.md)。可用模型请参考[Anthropic 兼容 API](raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)。
 
-`baseURL` 按地域设置（将 `{WorkspaceId}` 替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)），API Key 需与所选地域对应：
+`baseURL` 按地域设置（将 `{WorkspaceId}` 替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)），API Key 需与所选地域对应：
 
 -   华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic/v1`
 -   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic/v1`

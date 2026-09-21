@@ -110,7 +110,7 @@ echo $env:OPENAI_API_KEY
 
 ```
 model_provider = "Model_Studio_Token_Plan_Personal"
-model = "qwen3.8-flash"
+model = "auto"
 [model_providers.Model_Studio_Token_Plan_Personal]
 name = "Model_Studio_Token_Plan_Personal"
 base_url = "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
@@ -123,6 +123,49 @@ wire_api = "responses"
 ```
 {
   "models": [
+    {
+      "slug": "auto",
+      "display_name": "auto",
+      "description": "DashScope model: auto",
+      "default_reasoning_level": "medium",
+      "supported_reasoning_levels": [
+        {
+          "effort": "low",
+          "description": "Fast responses with lighter reasoning"
+        },
+        {
+          "effort": "medium",
+          "description": "Balances speed and reasoning depth"
+        },
+        {
+          "effort": "high",
+          "description": "Greater reasoning depth for complex problems"
+        },
+        {
+          "effort": "xhigh",
+          "description": "Extra high reasoning depth for complex problems"
+        }
+      ],
+      "context_window": 1000000,
+      "effective_context_window_percent": 95,
+      "supports_parallel_tool_calls": false,
+      "supports_image_detail_original": false,
+      "input_modalities": [
+        "text"
+      ],
+      "shell_type": "default",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 1,
+      "base_instructions": "",
+      "support_verbosity": false,
+      "supports_reasoning_summaries": false,
+      "experimental_supported_tools": [],
+      "truncation_policy": {
+        "mode": "bytes",
+        "limit": 10000
+      }
+    },
     {
       "slug": "qwen3.8-max",
       "display_name": "qwen3.8-max",
@@ -711,7 +754,7 @@ echo $env:OPENAI_API_KEY
 
 ```
 model_provider = "Model_Studio_Token_Plan"
-model = "qwen3.8-flash"
+model = "auto"
 [model_providers.Model_Studio_Token_Plan]
 name = "Model_Studio_Token_Plan"
 base_url = "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"
@@ -724,6 +767,49 @@ wire_api = "responses"
 ```
 {
   "models": [
+    {
+      "slug": "auto",
+      "display_name": "auto",
+      "description": "DashScope model: auto",
+      "default_reasoning_level": "medium",
+      "supported_reasoning_levels": [
+        {
+          "effort": "low",
+          "description": "Fast responses with lighter reasoning"
+        },
+        {
+          "effort": "medium",
+          "description": "Balances speed and reasoning depth"
+        },
+        {
+          "effort": "high",
+          "description": "Greater reasoning depth for complex problems"
+        },
+        {
+          "effort": "xhigh",
+          "description": "Extra high reasoning depth for complex problems"
+        }
+      ],
+      "context_window": 1000000,
+      "effective_context_window_percent": 95,
+      "supports_parallel_tool_calls": false,
+      "supports_image_detail_original": false,
+      "input_modalities": [
+        "text"
+      ],
+      "shell_type": "default",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 1,
+      "base_instructions": "",
+      "support_verbosity": false,
+      "supports_reasoning_summaries": false,
+      "experimental_supported_tools": [],
+      "truncation_policy": {
+        "mode": "bytes",
+        "limit": 10000
+      }
+    },
     {
       "slug": "qwen3.8-max",
       "display_name": "qwen3.8-max",
@@ -1720,7 +1806,7 @@ Coding Plan 不支持 Responses API（仅 Chat/Completions API），因此不配
 
 将`OPENAI_API_KEY`环境变量设置为[百炼 API Key](raw/model-api-reference/preparations/get-api-key.md)。可用模型参见[支持的模型](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope#7f9c78ae99pwz)。
 
-根据地域设置`base_url`，API Key 须与所选地域对应，请将 URL 中的 `{WorkspaceId}` 替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)：
+根据地域设置`base_url`，API Key 须与所选地域对应，请将 URL 中的 `{WorkspaceId}` 替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)：
 
 -   华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`
 -   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1`

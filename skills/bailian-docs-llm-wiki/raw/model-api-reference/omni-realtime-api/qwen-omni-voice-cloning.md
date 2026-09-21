@@ -108,7 +108,7 @@ WAV (16bit)、MP3、M4A
 Python
 
 ```
-# 依赖：dashscope >= 1.23.9，pyaudio
+# 依赖：dashscope >= 1.26.5，pyaudio
 import os
 import requests
 import base64
@@ -119,7 +119,7 @@ from dashscope.audio.qwen_omni import MultiModality, OmniRealtimeCallback, OmniR
 import dashscope
 
 # ======= 常量配置 =======
-DEFAULT_TARGET_MODEL = "qwen3.5-omni-plus-realtime"  # 声音复刻、实时对话要使用相同的模型
+DEFAULT_TARGET_MODEL = "qwen3.8-omni-flash-realtime"  # 声音复刻、实时对话要使用相同的模型
 DEFAULT_PREFERRED_NAME = "guanyu"
 DEFAULT_AUDIO_MIME_TYPE = "audio/mpeg"
 VOICE_FILE_PATH = "voice.mp3"  # 用于声音复刻的本地音频文件的相对路径
@@ -144,6 +144,7 @@ def create_voice(file_path: str,
     data_uri = f"data:{audio_mime_type};base64,{base64_str}"
     payload = {
         "model": "qwen-voice-enrollment",
+        "parameters": {"voice_clone_mode": "normal"},
         "input": {
             "action": "create",
             "target_model": target_model,
@@ -244,7 +245,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Main {
     // ===== 常量定义 =====
     // 声音复刻、实时对话要使用相同的模型
-    private static final String TARGET_MODEL = "qwen3.5-omni-plus-realtime";
+    private static final String TARGET_MODEL = "qwen3.8-omni-flash-realtime";
     private static final String PREFERRED_NAME = "guanyu";
     // 用于声音复刻的本地音频文件的相对路径
     private static final String AUDIO_FILE = "voice.mp3";
@@ -268,6 +269,7 @@ public class Main {
         String jsonPayload =
                 "{"
                         + "\"model\": \"qwen-voice-enrollment\","
+                        + "\"parameters\": {\"voice_clone_mode\": \"normal\"},"
                         + "\"input\": {"
                         +     "\"action\": \"create\","
                         +     "\"target_model\": \"" + TARGET_MODEL + "\","
@@ -756,7 +758,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     "model": "qwen-voice-enrollment",
     "input": {
         "action": "create",
-        "target_model": "qwen3.5-omni-plus-realtime",
+        "target_model": "qwen3.8-omni-flash-realtime",
         "preferred_name": "guanyu",
         "audio": {
             "data": "https://xxx.wav"
@@ -951,7 +953,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     {
         "output": {
             "voice": "yourVoice",
-            "target_model": "qwen3.5-omni-plus-realtime"
+            "target_model": "qwen3.8-omni-flash-realtime"
         },
         "usage": {
             "count": 1
@@ -1029,9 +1031,10 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     -H "Content-Type: application/json" \
     -d '{
         "model": "qwen-voice-enrollment",
+        "parameters": {"voice_clone_mode": "normal"},
         "input": {
             "action": "create",
-            "target_model": "qwen3.5-omni-plus-realtime",
+            "target_model": "qwen3.8-omni-flash-realtime",
             "preferred_name": "guanyu",
             "audio": {
                 "data": "https://xxx.wav"
@@ -1076,7 +1079,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     import requests
     import base64, pathlib
     
-    target_model = "qwen3.5-omni-plus-realtime"
+    target_model = "qwen3.8-omni-flash-realtime"
     preferred_name = "guanyu"
     audio_mime_type = "audio/mpeg"
     
@@ -1092,6 +1095,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     
     payload = {
         "model": "qwen-voice-enrollment", # 不要修改这个值
+        "parameters": {"voice_clone_mode": "normal"},
         "input": {
             "action": "create",
             "target_model": target_model,
@@ -1131,7 +1135,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     import java.util.Base64;
     
     public class Main {
-        private static final String TARGET_MODEL = "qwen3.5-omni-plus-realtime";
+        private static final String TARGET_MODEL = "qwen3.8-omni-flash-realtime";
         private static final String PREFERRED_NAME = "guanyu";
         private static final String AUDIO_FILE = "input.mp3";
         private static final String AUDIO_MIME_TYPE = "audio/mpeg";
@@ -1154,6 +1158,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
                 String jsonPayload =
                         "{"
                                 + "\"model\": \"qwen-voice-enrollment\"," // 不要修改该值
+                                + "\"parameters\": {\"voice_clone_mode\": \"normal\"},"
                                 + "\"input\": {"
                                 +     "\"action\": \"create\","
                                 +     "\"target_model\": \"" + TARGET_MODEL + "\","

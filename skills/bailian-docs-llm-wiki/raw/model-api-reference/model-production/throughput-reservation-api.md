@@ -125,6 +125,10 @@ Object
 
 `ptu_default` 支持预付费；`ptu_fast` 支持预付费和后付费。新增容量实例沿用 ModelCode 的性能档位。
 
+`ptu_default` 标速支持按天与 8 小时时段两种付费周期：按天对应 `pricing_cycle=Day`，8 小时时段对应 `pricing_cycle=Hour` 且 `duration=8`。8 小时时段仅 `ptu_default` 标速支持，`ptu_fast` 高速不支持。
+
+按天预付费示例：
+
 ```
 {
   "model_name": "<base_model>",
@@ -138,6 +142,26 @@ Object
   },
   "pre_paid_info": {
     "duration": 30,
+    "auto_renewal": false
+  }
+}
+```
+
+8 小时时段预付费示例（仅 `ptu_default` 标速）：
+
+```
+{
+  "model_name": "<base_model>",
+  "plan": "ptu",
+  "service_tier": "ptu_default",
+  "charge_type": "pre_paid",
+  "ptu_capacity": {
+    "input_tpm": 10000,
+    "output_tpm": 1000
+  },
+  "pre_paid_info": {
+    "pricing_cycle": "Hour",
+    "duration": 8,
     "auto_renewal": false
   }
 }
@@ -175,29 +199,35 @@ Long
 
 **说明**
 
+`pricing_cycle`
+
+String
+
+付费周期：`Day` 为按天（默认），`Hour` 为 8 小时时段；`Hour` 仅 `ptu_default` 标速支持，大小写敏感
+
 `duration`
 
 Integer
 
-购买 / 续订时长，单位天，必须大于 0
+购买 / 续订时长，单位随 `pricing_cycle`：`Day` 为天，`Hour` 为小时且固定 8，必须大于 0
 
 `auto_renewal`
 
 Boolean
 
-显式指定是否自动续费
+显式指定是否自动续费；`Hour` 场景必须为 `false`
 
 `auto_renewal_duration`
 
 Integer
 
-自动续费开启时必填且大于 0，单位天
+自动续费开启时必填且大于 0，单位天；`Hour` 场景不传
 
 `auto_renewal_cycle`
 
 String
 
-可选续费周期单位，按产品支持的值传入，例如 `Day` 表示天
+可选续费周期单位，按产品支持的值传入，例如 `Day` 表示天；`Hour` 场景不传
 
 ### 创建响应
 
@@ -328,7 +358,7 @@ ModelCode 状态，不代表每个容量实例的状态
 
 `pre_paid_info`
 
-预付费购买及续订配置。存在多个容量实例时，请通过实例详情查询目标实例的 `pre_paid_info`。
+预付费购买及续订配置，含 `pricing_cycle`（`Day` 按天 / `Hour` 为 8 小时时段）、`duration` 等。存在多个容量实例时，请通过实例详情查询目标实例的 `pre_paid_info`。
 
 `pre_paid_instance_id`
 
@@ -556,6 +586,25 @@ ModelCode 状态，不代表每个容量实例的状态
 }
 ```
 
+8 小时时段增购示例（仅 `ptu_default` 标速，`billing_method` 固定 `PRE_PAY`，`pre_paid_info` 传 `pricing_cycle=Hour` / `duration=8` / `auto_renewal=false`）：
+
+```
+{
+  "billing_method": "PRE_PAY",
+  "ptu_capacity": {
+    "input_tpm": 10000,
+    "output_tpm": 1000
+  },
+  "pre_paid_info": {
+    "pricing_cycle": "Hour",
+    "duration": 8,
+    "auto_renewal": false
+  }
+}
+```
+
+8 小时时段实例创建成功后，通过 [查询容量实例详情](#instance-detail) 可获取以下字段：`pricing_cycle` 为 `Hour`；`gmt_effective` 为北京时间整点生效时间；`gmt_expired` 与 `gmt_effective` 相差 8 小时；`can_scale`、`can_renew`、`can_enable_auto_renew`、`can_disable_auto_renew`、`can_delete` 均为 `false`。
+
 后付费示例：
 
 ```
@@ -666,7 +715,7 @@ String 列表
 }
 ```
 
-参数语义同 [扩缩容](#h2-sec-scale)，实例 ID 由路径确定，请求体无需重复。返回操作对象。调用前读取 `can_scale`；预付费到期挂起的实例不能直接扩缩容，应先续订。
+参数语义同 [扩缩容](#h2-sec-scale)，实例 ID 由路径确定，请求体无需重复。返回操作对象。调用前读取 `can_scale`；预付费到期挂起的实例不能直接扩缩容，应先续订。8 小时时段实例不支持扩缩容，调用返回 `CAPACITY_INSTANCE_OPERATION_UNSUPPORTED`。
 
 ### 续订指定容量实例
 
@@ -699,7 +748,7 @@ String 列表
 }
 ```
 
-参数约束同 [续订](#h2-sec-renew)，不传 `order_type`。仅预付费可续订，先检查 `can_renew`；返回操作对象。
+参数约束同 [续订](#h2-sec-renew)，不传 `order_type`。仅预付费可续订，先检查 `can_renew`；返回操作对象。8 小时时段实例不支持续订和自动续费，调用返回 `CAPACITY_INSTANCE_OPERATION_UNSUPPORTED`。
 
 ### 删除 / 释放容量实例
 
@@ -709,6 +758,7 @@ String 列表
 
 -   后付费：按删除流程释放，完成后 `deleted=true`、`status=STOPPED`，生效容量为零。
 -   已生效的预付费：不能用本接口代替退订，直接调用返回 `PREPAID_UNSUBSCRIBE_REQUIRED`。完成退订并释放容量后，最终同样返回 `deleted=true`、`status=STOPPED`。
+-   8 小时时段实例不支持直接删除，调用返回 `PREPAID_UNSUBSCRIBE_REQUIRED`，需走商业化退订流程。
 -   `can_delete=true` 表示当前状态允许进入删除 / 退订流程，不表示预付费可跳过退订直接 DELETE。对于尚无关联订单的失败实例，请根据接口返回结果处理。
 
 退订释放为异步操作。同一 ModelCode 正在处理其他操作时，已受理的释放操作会排队等待，完成前查询可能仍返回原状态和生效容量。退订已受理不代表容量已释放，请通过操作结果及实例 `deleted` 字段确认完成。退订退费公式详见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-unsubscribe-h3)。
@@ -807,31 +857,49 @@ Object
 
 Object
 
-该实例的预付费购买及续订配置，见 [预付费参数](#prepaid-fields)。
+该实例的预付费购买及续订配置，含 `pricing_cycle`（`Day` 按天 / `Hour` 为 8 小时时段），见 [预付费参数](#prepaid-fields)。
+
+`gmt_effective`
+
+String
+
+预付费实例生效时间；8 小时时段实例按北京时间整点生效。按时区偏移解析，不要把 `+00:00` 的小时数字直接当北京时间。
 
 `gmt_expired`
 
 String
 
-预付费实例到期时间。到期时刻计算规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-rules-h2)。
+预付费实例到期时间；8 小时时段实例与 `gmt_effective` 相差 8 小时。到期时刻计算规则见[吞吐预留计费](https://help.aliyun.com/zh/model-studio/tpm-reservation-billing#tpm-billing-rules-h2)。
 
 `can_scale`
 
 Boolean
 
-当前是否允许对实例扩缩容。
+当前是否允许对实例扩缩容；8 小时时段实例固定 `false`。
 
 `can_renew`
 
 Boolean
 
-当前是否允许续订实例。
+当前是否允许续订实例；8 小时时段实例固定 `false`。
+
+`can_enable_auto_renew`
+
+Boolean
+
+当前是否允许开启自动续费；8 小时时段实例固定 `false`。
+
+`can_disable_auto_renew`
+
+Boolean
+
+当前是否允许关闭自动续费；8 小时时段实例固定 `false`。
 
 `can_delete`
 
 Boolean
 
-当前是否允许删除或退订实例；预付费实例仍需完成退订流程。
+当前是否允许删除或退订实例；预付费实例仍需完成退订流程，8 小时时段实例固定 `false`。
 
 `fail_reason`
 

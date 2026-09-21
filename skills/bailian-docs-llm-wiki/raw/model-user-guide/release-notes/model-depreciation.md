@@ -27,7 +27,7 @@
 
 ## 操作建议
 
-1.  前往[模型监控](https://bailian.console.aliyun.com/model/telemetry)页面，检查您的账号是否正在使用待下线的模型。
+1.  前往[模型监控](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)页面，检查您的账号是否正在使用待下线的模型。
 2.  如果再使用，建议您先测试替代模型的业务效果，再切换至替代模型。
 
 ## 下线模型列表

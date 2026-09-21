@@ -12,7 +12,7 @@
 
 [文件上传与挂载](raw/application-user-guide/managed-agents/managed-agents-context/managed-agents-file.md)
 
-上传到平台的文件，挂载后以副本形式出现在会话沙箱的指定路径。单个文件不超过 10 MB
+上传到平台的文件，挂载后以副本形式出现在会话沙箱的指定路径。单个文件不超过 50 MB
 
 [记忆库](raw/application-user-guide/managed-agents/managed-agents-context/managed-agents-memory-store.md)
 

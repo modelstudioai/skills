@@ -21,17 +21,9 @@
 同步数据规则功能位于**文件连接器**的文件管理页面中。按以下步骤进入同步规则创建页面：
 
 1.  访问[百炼控制台 — 数据集](https://bailian.console.aliyun.com/cn-beijing/rag/connector/list)页面，查看已创建的数据集列表。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2536285871/p1092952.png)
 2.  在数据集列表中，找到目标**文件连接器**，点击卡片上的**详情**，进入文件管理页面。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2536285871/p1092953.png)
 3.  在文件管理页面中，点击右上角的**同步数据规则**按钮，打开同步规则列表。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2536285871/p1092955.png)
 4.  在弹出的**同步规则列表**对话框中，点击**创建同步规则**按钮，进入规则创建表单。
-    
-    ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2536285871/p1092958.png)
 
 创建完成后，同步规则将显示在同步规则列表中。您可以在列表中**启用**、**禁用**或**删除**规则，也可以在文件管理页面查看已同步的文件。
 

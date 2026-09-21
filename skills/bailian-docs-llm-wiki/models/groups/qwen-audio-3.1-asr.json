@@ -1,0 +1,198 @@
+{
+  "name": "Qwen-Audio-3.1-ASR",
+  "description": "Qwen-Audio-3.1-ASR是一款支持短语音高效识别的大模型，面向高质量、多语种及文化内容转写场景。模型支持多语种与多地区中文方言识别，同时针对中文古诗词的韵律、节奏与文言表达进行优化。具备上下文增强、标点预测与文本规范化能力。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Audio"
+        ]
+      },
+      "description": "Qwen-Audio-3.1-ASR-Flash是一款支持短语音高效识别的大模型，面向高质量、多语种及文化内容转写场景。模型支持多语种与多地区中文方言识别，同时针对中文古诗词的韵律、节奏与文言表达进行优化。具备上下文增强、标点预测与文本规范化能力。同时该版本支持多种方言 ASR/AST 可控输出。原生转写润色能力及工业级多人对话分角色转写能力。\n",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen-audio-3.1-asr-flash",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.8",
+          "timeBand": "standard",
+          "ntmAmountType": "asr_input_token",
+          "type": "asr_input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2.7",
+          "timeBand": "standard",
+          "ntmAmountType": "asr_output_token",
+          "type": "asr_output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "ASR"
+      ],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-09-10T14:32:20.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Audio-3.1-ASR-Flash",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide",
+      "category": "Audio",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location --request POST 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \\\n     --header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n     --header \"Content-Type: application/json\" \\\n     --header \"X-DashScope-SSE: disable\" \\\n     --data '{\n    \"model\": \"qwen-audio-3.1-asr-flash\",\n    \"input\": {\n        \"messages\": [\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"type\": \"input_audio\",\n                        \"input_audio\": {\n                            \"data\": \"{YOUR_AUDIO_URL}\"\n                        }\n                    }\n                ]\n            }\n        ]\n    },\n    \"parameters\": {\n        \"format\": \"wav\",\n        \"sample_rate\": \"16000\"\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Audio"
+        ]
+      },
+      "description": "Qwen-Audio-3.1-ASR-Flash-Streaming端到端实时语音识别大模型，面向实时会议、直播字幕与智能交互等场景，具备低延迟、高精度的流式语音转写能力。模型支持多语种与多地区中文方言识别、中英文自由切换、热词及上下文增强、标点预测与文本规范化，并具备较强的噪声鲁棒性，可适应复杂声学环境。同时该版本支持多种方言 ASR/AST 可控输出。",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen-audio-3.1-asr-flash-streaming",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "6",
+          "timeBand": "standard",
+          "ntmAmountType": "asr_input_token",
+          "type": "asr_input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "4.5",
+          "timeBand": "standard",
+          "ntmAmountType": "asr_output_token",
+          "type": "asr_output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 20,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 20,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "Realtime-ASR"
+      ],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-09-10T14:34:22.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Audio-3.1-ASR-Flash-Streaming",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide",
+      "category": "Audio",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "python": "from http import HTTPStatus\nimport dashscope\nfrom dashscope.audio.asr import Recognition\nimport os\n\n\ndashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')\ndashscope.base_websocket_api_url='wss://[workspace-id].cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'\n\nrecognition = Recognition(model='qwen-audio-3.1-asr-flash-streaming',\n                          format='wav',\n                          sample_rate=16000,\n                          callback=None)\nresult = recognition.call('{YOUR_AUDIO_FILE}')\nif result.status_code == HTTPStatus.OK:\n    print('Recognition result: ')\n    print(result.get_sentence())\nelse:\n    print('Error: ', result.message)\n    \nprint(\n    '[Metric] requestId: {}, first package delay ms: {}, last package delay ms: {}'\n    .format(\n        recognition.get_last_request_id(),\n        recognition.get_first_package_delay(),\n        recognition.get_last_package_delay(),\n    ))",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide"
+          }
+        }
+      }
+    },
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Audio"
+        ]
+      },
+      "description": "Qwen-Audio-3.1-ASR-Flash-Filetrans端到端离线语音识别大模型，面向会议转写、内容生产与通话分析等场景，支持多语种与多地区中文方言识别。模型具备高精度转写、热词及上下文增强、说话人分离、标点预测和文本规范化能力，在复杂噪声环境下仍能保持稳定表现，是用户进行长音频转写的优选。同时该版本支持多种方言 ASR/AST 可控输出。",
+      "features": [],
+      "provider": "qwen",
+      "model": "qwen-audio-3.1-asr-flash-filetrans",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0.8",
+          "timeBand": "standard",
+          "ntmAmountType": "asr_input_token",
+          "type": "asr_input_token",
+          "priceName": "输入"
+        },
+        {
+          "priceUnit": "每百万tokens",
+          "price": "2.7",
+          "timeBand": "standard",
+          "ntmAmountType": "asr_output_token",
+          "type": "asr_output_token",
+          "priceName": "输出"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 1,
+          "count_limit": 10,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [
+        "standard"
+      ],
+      "capabilities": [
+        "ASR"
+      ],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-09-10T14:40:01.000+00:00",
+      "inferenceProvider": "aliyun-bailian",
+      "name": "Qwen-Audio-3.1-ASR-Flash-Filetrans",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide",
+      "category": "Audio",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl --location 'https://[workspace-id].cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription' \\\n     --header \"Authorization: Bearer $DASHSCOPE_API_KEY\" \\\n     --header \"Content-Type: application/json\" \\\n     --header \"X-DashScope-Async: enable\" \\\n     --data '{\n    \"model\": \"qwen-audio-3.1-asr-flash-filetrans\",\n    \"input\": {\n        \"file_urls\": [\n            \"{YOUR_AUDIO_URL}\"\n        ]\n    },\n    \"parameters\": {\n        \"channel_id\": [0]\n    }\n}'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide"
+          }
+        }
+      }
+    }
+  ]
+}

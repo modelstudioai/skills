@@ -220,7 +220,7 @@ aitryon-refiner
 
 ## 用量监控
 
-模型调用完一小时后，您可以在阿里云百炼的[模型监控](https://bailian.console.aliyun.com/model/telemetry)页面，查看模型的调用次数、成功率等详细指标。
+模型调用完成后数分钟内，您可以在阿里云百炼的[模型监控](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)页面，查看模型的调用次数、成功率等详细指标。
 
 **操作指引**：[如何查看模型调用记录？](https://help.aliyun.com/zh/model-studio/new-free-quota#ab6ba5c538rn3)
 

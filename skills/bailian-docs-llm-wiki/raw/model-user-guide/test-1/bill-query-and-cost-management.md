@@ -119,6 +119,10 @@
 
 不再使用百炼时，按以下方式关停对应服务即可停止计费。
 
+**重要**如需在按量付费场景中主动控制费用上限，可前往
+
+[预算管理](raw/model-user-guide/test-1/budget-management.md)设置月度预算并开启「达到预算后立即停止」。
+
 -   **停止模型推理**：停止代码中的 API 调用、关闭控制台体验中心的调用，即不再产生费用。为防止意外调用，可在[**API Key**](https://bailian.console.aliyun.com/model/settings/api-key)页面删除已创建的 Key。
     
 -   **停止模型训练**：没有正在进行的训练任务时即不产生费用。

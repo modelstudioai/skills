@@ -38,7 +38,7 @@ SDK 调用配置的`base_url`：`https://{WorkspaceId}.cn-hongkong.maas.aliyuncs
 
 HTTP 请求地址：`POST https://{WorkspaceId}.cn-hongkong.maas.aliyuncs.com/compatible-mode/v1/chat/completions`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 您需要先[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。若通过OpenAI SDK进行调用，需要[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
@@ -213,7 +213,7 @@ fps有两个功能：
 
 -   **输入图像：**
     -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、Qwen3.6、Qwen3.5、Qwen3-VL：默认值和最小值均为：`65536`
-    -   Qwen3.5-Omni、`qwen3.8-omni-flash` ：默认值和最小值均为： `24576`
+    -   `qwen3.8-omni-flash`、Qwen3.5-Omni ：默认值和最小值均为： `24576`
     -   `qwen-vl-max`、`qwen-vl-max-0813`、`qwen-vl-plus`、`qwen-vl-plus-0815``、qwen-vl-plus-0710`：默认值和最小值均为`4096`
     -   其他`qwen-vl-plus`模型、其他`qwen-vl-max`模型、`Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值和最小值均为`3136`
 -   **输入视频文件或图像列表：**
@@ -239,7 +239,7 @@ fps有两个功能：
     -   当`vl_high_resolution_images`为`False`时：
         
         -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、 Qwen3.6 、 Qwen3.5 、 Qwen3-VL ：默认值为 `2621440` ，最大值为： `16777216`
-        -   Qwen3.5-Omni、`qwen3.8-omni-flash` ：默认值为 `1310720` ，最大值为： `16777216`
+        -   `qwen3.8-omni-flash`、Qwen3.5-Omni ：默认值为 `1310720` ，最大值为： `16777216`
         -   `qwen-vl-max` 、 `qwen-vl-max-0813` 、 `qwen-vl-plus` 、 `qwen-vl-plus-0815``、qwen-vl-plus-0710` ：默认值为 `1310720` ，最大值为： `16777216`
         -   其他 `qwen-vl-plus` 模型、其他 `qwen-vl-max` 模型、 `Qwen2.5-VL` 开源系列及 `QVQ` 系列模型：默认值为 `1003520` ，最大值为 `12845056`
     -   当`vl_high_resolution_images`为`True`时：
@@ -267,7 +267,7 @@ fps有两个功能：
 
 -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、Qwen3.7、Qwen3.6、Qwen3.5系列 ：默认值和最大值均为 `819200000` ，该值对应 `800000` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
 -   Qwen3-VL闭源系列 、 `qwen3-vl-235b-a22b-thinking` 、 `qwen3-vl-235b-a22b-instruct` ：默认值和最大值均为 `134217728` ，该值对应 `131072` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
--   `Qwen3.5-Omni`、`qwen3.8-omni-flash` ：默认值和最小值均为 `184549376` ，该值对应 `180224` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
+-   `qwen3.8-omni-flash`、`Qwen3.5-Omni` ：默认值和最小值均为 `184549376` ，该值对应 `180224` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
 -   其他`Qwen3-VL`开源模型、`qwen-vl-max`、`qwen-vl-max-0813`、`qwen-vl-plus`、`qwen-vl-plus-0815``、qwen-vl-plus-0710`：默认值和最小值均为`67108864`，该值对应 `65536` 个图像 Token（每 32×32 像素对应 1 个图像 Token）。
 -   其他`qwen-vl-plus`模型、其他`qwen-vl-max`模型、`Qwen2.5-VL`开源系列及`QVQ`系列模型：默认值和最小值均为`51380224`，该值对应 `65536` 个图像 Token（每 28×28 像素对应 1 个图像 Token）。
 
@@ -433,49 +433,27 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 temperature默认值
 
 -   qwen3.8-max/qwen3.8-flash（思考模式）：视觉理解0.6，文本输入1.0，0.6以下的temperature值会默认改为0.6
-    
--   非思考模式下的以下型号（`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen-turbo系列（非思考模式）、qwen开源系列、qwen-coder系列、qwen-doc-turbo、Qwen3-VL（非思考）：0.7；
-    
--   QVQ系列 : 0.5；
-    
--   qwen-audio-turbo系列：0.00001；
-    
--   qwen-vl系列、qwen2.5-omni-7b：0.01；
-    
--   qwen-math系列：0；
-    
--   Qwen3.7（思考模式）、Qwen3.6（思考模式）、Qwen3.5（思考模式）、Qwen3（思考模式）、Qwen3-Thinking、Qwen3-Omni-Captioner、QwQ 系列：0.6；
-    
--   qwen3-max-preview（思考模式）、qwen-long系列： 1.0；
-    
--   qwen-plus-character：0.92
-    
--   qwen3-omni-flash系列：0.9
-    
--   Qwen3-VL（思考模式）：0.8
-    
--   DeepSeek系列（阿里云直供）：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash、deepseek-v3.2（非思考模式）: 1.0；deepseek-v3.2（思考模式）、deepseek-v3.2-exp、deepseek-v3.1、deepseek-r1、deepseek-r1-0528、deepseek-r1-distill-qwen 蒸馏版: 0.6；deepseek-v3: 0.7；
-    
--   DeepSeek系列（硅基流动直供）：siliconflow/deepseek-v3.2、siliconflow/deepseek-v3.1-terminus、siliconflow/deepseek-r1-0528、siliconflow/deepseek-v3-0324: 1.0；
-    
--   DeepSeek系列（快手万擎直供）：vanchin/deepseek-v3.2-think（思考模式）: 0.6；vanchin/deepseek-v3.1-terminus: 0.7；vanchin/deepseek-v3.2-speciale、vanchin/deepseek-r1、vanchin/deepseek-v3、vanchin/deepseek-ocr: 1.0；
-    
--   Kimi系列（阿里云直供）：kimi-k2.7-code、kimi-k2.6（思考模式）、kimi-k2.5（思考模式）、kimi-k2-thinking: 1.0；kimi-k2.6（非思考模式）、kimi-k2.5（非思考模式）、Moonshot-Kimi-K2-Instruct: 0.6；
-    
--   Kimi系列（月之暗面直供）：kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6（思考模式）、kimi/kimi-k2.5（思考模式）: 1.0；kimi/kimi-k2.6（非思考模式）、kimi/kimi-k2.5（非思考模式）: 0.6；
-    
--   GLM系列（阿里云直供）：glm-5.1、glm-5、glm-4.7、glm-4.6: 1.0；glm-4.5、glm-4.5-air: 0.6；
-    
--   GLM系列（智谱直供）：ZHIPU/GLM-5.1、ZHIPU/GLM-5: 0.6；
-    
--   MiniMax系列（阿里云直供）：MiniMax-M2.5、MiniMax-M2.1: 1.0；
-    
--   MiniMax系列（稀宇科技直供）：MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1: 1.0。
-    
--   MiMo系列（小米直供）：mimo-v2.5-pro: 1.0，范围 \[0, 1.5\]。
-    
 -   Qwen3.8-Omni-Flash：思考模式为 0.6，非思考模式为 0.7；
-    
+-   非思考模式下的以下型号（`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen-turbo系列（非思考模式）、qwen开源系列、qwen-coder系列、qwen-doc-turbo、Qwen3-VL（非思考）：0.7；
+-   QVQ系列 : 0.5；
+-   qwen-audio-turbo系列：0.00001；
+-   qwen-vl系列、qwen2.5-omni-7b：0.01；
+-   qwen-math系列：0；
+-   Qwen3.7（思考模式）、Qwen3.6（思考模式）、Qwen3.5（思考模式）、Qwen3（思考模式）、Qwen3-Thinking、Qwen3-Omni-Captioner、QwQ 系列：0.6；
+-   qwen3-max-preview（思考模式）、qwen-long系列： 1.0；
+-   qwen-plus-character：0.92
+-   qwen3-omni-flash系列：0.9
+-   Qwen3-VL（思考模式）：0.8
+-   DeepSeek系列（阿里云直供）：deepseek-v4.1-flash、deepseek-v4-pro、deepseek-v4-flash、deepseek-v3.2（非思考模式）: 1.0；deepseek-v3.2（思考模式）、deepseek-v3.2-exp、deepseek-v3.1、deepseek-r1、deepseek-r1-0528、deepseek-r1-distill-qwen 蒸馏版: 0.6；deepseek-v3: 0.7；
+-   DeepSeek系列（硅基流动直供）：siliconflow/deepseek-v3.2、siliconflow/deepseek-v3.1-terminus、siliconflow/deepseek-r1-0528、siliconflow/deepseek-v3-0324: 1.0；
+-   DeepSeek系列（快手万擎直供）：vanchin/deepseek-v3.2-think（思考模式）: 0.6；vanchin/deepseek-v3.1-terminus: 0.7；vanchin/deepseek-v3.2-speciale、vanchin/deepseek-r1、vanchin/deepseek-v3、vanchin/deepseek-ocr: 1.0；
+-   Kimi系列（阿里云直供）：kimi-k2.7-code、kimi-k2.6（思考模式）、kimi-k2.5（思考模式）、kimi-k2-thinking: 1.0；kimi-k2.6（非思考模式）、kimi-k2.5（非思考模式）、Moonshot-Kimi-K2-Instruct: 0.6；
+-   Kimi系列（月之暗面直供）：kimi/kimi-k3、kimi/kimi-k2.7-code-highspeed、kimi/kimi-k2.7-code、kimi/kimi-k2.6（思考模式）、kimi/kimi-k2.5（思考模式）: 1.0；kimi/kimi-k2.6（非思考模式）、kimi/kimi-k2.5（非思考模式）: 0.6；
+-   GLM系列（阿里云直供）：glm-5.1、glm-5、glm-4.7、glm-4.6: 1.0；glm-4.5、glm-4.5-air: 0.6；
+-   GLM系列（智谱直供）：ZHIPU/GLM-5.1、ZHIPU/GLM-5: 0.6；
+-   MiniMax系列（阿里云直供）：MiniMax-M2.5、MiniMax-M2.1: 1.0；
+-   MiniMax系列（稀宇科技直供）：MiniMax/MiniMax-M3、MiniMax/MiniMax-M2.7、MiniMax/MiniMax-M2.5、MiniMax/MiniMax-M2.1: 1.0。
+-   MiMo系列（小米直供）：mimo-v2.5-pro: 1.0，范围 \[0, 1.5\]。
 
 > 不建议修改QVQ模型的默认temperature值 。
 
@@ -492,6 +470,8 @@ temperature与top\_p均可以控制生成文本的多样性，建议只设置其
 top\_p默认值
 
 非思考模式下的以下型号（`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列、Qwen3-Coder系列、qwen-max系列、qwen-plus系列（非思考模式）、qwen-flash系列（非思考模式）、qwen-turbo系列（非思考模式）、Qwen 2.5开源系列、qwen-coder系列、qwen-long、qwen-doc-turbo、Qwen3-VL（非思考）：0.8；
+
+Qwen3.8-Omni-Flash：思考模式为 0.95，非思考模式为 0.8；
 
 qwen-omni-turbo 系列：0.01；
 
@@ -523,8 +503,6 @@ MiniMax系列（稀宇科技直供）：MiniMax/MiniMax-M3: 0.95；MiniMax/MiniM
 
 MiMo系列（小米直供）：xiaomi/mimo-v2.5-pro: 0.95，范围 \[0.01, 1.0\]。
 
-Qwen3.8-Omni-Flash：思考模式为 0.95，非思考模式为 0.8；
-
 > 不建议修改QVQ模型的默认 top\_p 值。
 
 **top\_k**`integer` （可选）
@@ -547,8 +525,6 @@ GLM系列（阿里云直供）：20；
 
 DeepSeek/Kimi/MiniMax系列均不支持top\_k参数。
 
-Qwen3.8-Omni-Flash（思考和非思考模式）：20；
-
 > 该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中。配置方式为：extra\_body={"top\_k":xxx}。
 
 > 不建议修改QVQ模型的默认 top\_k 值。
@@ -560,21 +536,12 @@ Qwen3.8-Omni-Flash（思考和非思考模式）：20；
 repetition\_penalty默认值
 
 -   `qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`、qwen-max、qwen-math系列、qwen-vl-max系列、qwen-audio-turbo系列、QVQ系列、QwQ系列、Qwen3-VL： 1.0；
-    
 -   qwen-coder系列、qwen2-1.5b-instruct、qwen2-0.5b-instruct、qwen2.5-omni-7b：1.1；
-    
 -   qwen-vl-plus：1.2；
-    
 -   其余模型为1.05。
-    
 -   DeepSeek系列（阿里云直供）：deepseek-v3.2-exp:1.0、deepseek-v3.1:1.0；
-    
 -   GLM系列（阿里云直供）：1.0；
-    
 -   Kimi系列（月之暗面直供）：0.0。
-    
--   Qwen3.8-Omni-Flash（思考和非思考模式）：1.05；
-    
 
 > 该参数非OpenAI标准参数。通过 Python SDK调用时，请放入 **extra\_body** 对象中。配置方式为：extra\_body={"repetition\_penalty":xxx}。
 
@@ -594,6 +561,8 @@ presence\_penalty默认值
 
 非思考模式下的以下型号（`qwen3.8-max`、`qwen3.8-max-0902`、`qwen3.8-flash`、`qwen3.8-2.4t-a95b`、`qwen3.8-27b`）、Qwen3.7（非思考模式）、Qwen3.6（非思考模式）、Qwen3.5-Omni、Qwen3.5（非思考模式）、qwen3-max-preview（思考模式）、Qwen3（非思考模式）、Qwen3-Instruct系列/1.7b/4b（思考模式）、QVQ系列、qwen-max、qwen2.5-vl系列、qwen-vl-max系列、qwen-vl-plus、Qwen3-VL（非思考）：1.5；
 
+Qwen3.8-Omni-Flash：思考模式为 0.0，非思考模式为 1.5；
+
 qwen3-8b/14b/32b/30b-a3b/235b-a22b（思考模式）、qwen-plus/qwen-plus-latest/2025-04-28（思考模式）、qwen-turbo/qwen-turbo/2025-04-28（思考模式）：0.5；
 
 其余均为0.0。
@@ -607,8 +576,6 @@ Kimi系列（月之暗面直供）：0.0；
 MiniMax系列（阿里云直供）：MiniMax-M2.5、MiniMax-M2.1: 0.0；
 
 其余DeepSeek/Kimi/GLM/MiniMax模型无默认值。
-
-Qwen3.8-Omni-Flash：思考模式为 0.0，非思考模式为 1.5；
 
 原理介绍
 
@@ -807,7 +774,7 @@ low和medium映射为high，xhigh映射为max。
 
 适用于glm-5.2、glm-5.1、glm-5、deepseek-v4-pro、deepseek-v4-flash（阿里云直供）（deepseek-v4-flash-0731 除外）、kimi/kimi-k3（月之暗面直供，仅支持 `max`）
 
-**glm-5.3、ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash 与 kimi-k3（阿里云直供）模型：默认值为**`max`
+**glm-5.3、ZHIPU/GLM-5.3、ZHIPU/GLM-5.3-Flash、ZHIPU/GLM-5.3-FlashX 与 kimi-k3（阿里云直供）模型：默认值为**`max`
 
 可选值：
 

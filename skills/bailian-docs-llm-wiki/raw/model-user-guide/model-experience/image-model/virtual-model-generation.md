@@ -133,7 +133,7 @@ good face, beautiful face, best quality.
 
 您需要已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。请将示例代码中的 `DASHSCOPE_API_HOST` 替换为获取的 API Host。
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 #### curl
 
@@ -195,7 +195,7 @@ wanx-virtualmodel，输入真人模特实拍图和中英文任务描述，模型
 
 由于模型计算耗时较长，示例代码展示异步处理的调用方式，以避免请求超时。API调用准备可参考[虚拟模特](raw/model-api-reference/image-generation/image-creative-tools-api-reference/virtual-model-api-details.md)。
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 #### curl
 

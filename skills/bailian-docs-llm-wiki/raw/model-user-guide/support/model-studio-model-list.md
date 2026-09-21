@@ -8,6 +8,7 @@
 -   [世界模型](raw/model-user-guide/support/model-studio-model-list/model-list-world-model.md)
 -   [3D生成](raw/model-user-guide/support/model-studio-model-list/model-list-3d-generation.md)
 -   [语音合成](raw/model-user-guide/support/model-studio-model-list/model-list-speech-synthesis.md)
+-   [音频生成](raw/model-user-guide/support/model-studio-model-list/model-list-audio-generation.md)
 -   [语音识别](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition.md)
 -   [语音转语音](raw/model-user-guide/support/model-studio-model-list/model-list-speech-to-speech.md)
 -   [向量与重排序](raw/model-user-guide/support/model-studio-model-list/model-list-embedding-reranking.md)

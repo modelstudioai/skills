@@ -2,7 +2,7 @@
 
 RAG Agent 实例的全生命周期管理 API。
 
-RAG Agent 是[知识检索](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)（[`knowledge/search`](raw/application-api-reference/rag-api/knowledge/knowledgesearch.md)）和[知识问答](raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md)（[`knowledge/chat`](raw/application-api-reference/rag-api/knowledge/knowledgechat.md)）服务的运行主体，`agent_config` 承载检索策略。Agent 管理 API 支持通过代码完成 Agent 的创建、配置、发布、查询和删除，无需前往控制台手动操作。
+RAG Agent 是[知识检索](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)（[`knowledge/search`](raw/application-api-reference/rag-api/knowledge/knowledgesearch.md)）和[知识问答](raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md)（[`knowledge/chat`](raw/application-api-reference/rag-api/knowledge/knowledgechat.md)）服务的运行主体，`agent_config` 承载检索策略。Agent 管理 API 支持通过代码完成 Agent 的创建、配置、发布、查询和删除，无需前往控制台手动操作。
 
 ## 和运行时 API 的关系
 

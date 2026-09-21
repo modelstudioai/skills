@@ -1,6 +1,6 @@
-# Qwen-Audio-3.0-ASR-Flash-Filetrans/Fun-ASR非实时语音识别Python SDK
+# Qwen-Audio-3.x-ASR-Flash-Filetrans/Fun-ASR非实时语音识别Python SDK
 
-本文介绍Qwen-Audio-3.0-ASR-Flash-Filetrans/Fun-ASR非实时语音识别Python SDK的参数和接口细节。
+本文介绍Qwen-Audio-3.x-ASR-Flash-Filetrans/Fun-ASR非实时语音识别Python SDK的参数和接口细节。
 
 **用户指南：**[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)。关于支持的音频格式、文件大小限制、时长限制等输入要求，请参见[音频规格](https://help.aliyun.com/zh/model-studio/asr-model#asr_audio_spec02)。
 
@@ -58,7 +58,7 @@ dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.co
 dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
 
 task_response = Transcription.async_call(
-    model='qwen-audio-3.0-asr-flash-filetrans',
+    model='qwen-audio-3.1-asr-flash-filetrans',
     file_urls=['{YOUR_AUDIO_URL}']
 )
 
@@ -103,7 +103,7 @@ dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.co
 dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
 
 transcribe_response = Transcription.async_call(
-    model='qwen-audio-3.0-asr-flash-filetrans',
+    model='qwen-audio-3.1-asr-flash-filetrans',
     file_urls=['{YOUR_AUDIO_URL}']
 )
 
@@ -125,13 +125,13 @@ SDK 默认使用**北京地域**的接口地址。如需切换到其他地域，
 
 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 #### 新加坡
 
 `https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
+调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 **切换到新加坡地域**：
 
@@ -165,7 +165,7 @@ str
 
 是
 
-指定模型名。支持Qwen-Audio-3.0-ASR-Flash-Filetrans和Fun-ASR系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#4a43cc1bb7kxg)。
+指定模型名。支持Qwen-Audio-3.x-ASR-Flash-Filetrans和Fun-ASR系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#4a43cc1bb7kxg)。
 
 file\_urls
 
@@ -189,6 +189,14 @@ list\[str\]
     
     SDK不支持对请求头进行配置。
     
+
+keep\_dialect
+
+bool
+
+否
+
+仅 `qwen-audio-3.1-asr-flash-filetrans` 支持。默认 `false`，将方言转写为普通话；设为 `true` 时保留方言表达。作为同名关键字参数传入。完整参数说明请参见[API 参考](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/fun-asr-recorded-speech-recognition-api-reference/fun-asr-recorded-speech-recognition-http-api.md)。
 
 vocabulary\_id
 
@@ -218,7 +226,7 @@ dict
 
 与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
 
-**重要**仅`qwen-audio-3.0-asr-flash-filetrans`支持即时热词。
+**重要**仅`qwen-audio-3.1-asr-flash-filetrans`、`qwen-audio-3.0-asr-flash-filetrans`支持即时热词。
 
 示例：
 
@@ -227,7 +235,7 @@ from dashscope.audio.asr import Transcription
 
 vocab = {"张三": 5, "李四": 5}
 result = Transcription.async_call(
-    model="qwen-audio-3.0-asr-flash-filetrans",
+    model="qwen-audio-3.1-asr-flash-filetrans",
     vocabulary=vocab,
     file_urls=['{YOUR_AUDIO_URL}']
 )
@@ -293,11 +301,11 @@ list\[str\]
 
 设置待识别语言代码。如果无法提前确定语种，可不设置，模型会自动识别语种。
 
-对于 Qwen-Audio-3.0-ASR-Flash-Filetrans 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。
+对于 Qwen-Audio-3.x-ASR-Flash-Filetrans 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。
 
 点击查看支持的语言代码
 
--   qwen-audio-3.0-asr-flash-filetrans、fun-asr、fun-asr-2025-11-07、fun-asr-mtl、fun-asr-mtl-2025-08-25：
+-   qwen-audio-3.1-asr-flash-filetrans、qwen-audio-3.0-asr-flash-filetrans、fun-asr、fun-asr-2025-11-07、fun-asr-mtl、fun-asr-mtl-2025-08-25：
     
     -   zh: 中文
     -   en: 英文

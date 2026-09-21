@@ -42,7 +42,7 @@ Qwen3.8-Omni-Flash（Chat Completions / Responses）
 
 **实时语音/视频对话**：通过麦克风和摄像头与AI实时交互（语音助手、智能客服、视觉问答、直播分析）
 
-Qwen3.5-Omni Realtime（WebSocket）
+Qwen3.8-Omni-Flash-Realtime（WebSocket / WebRTC / AOQ）
 
 [实时（Qwen-Omni-Realtime）](raw/model-user-guide/model-experience/omni-modal/realtime.md)
 
@@ -72,19 +72,19 @@ Qwen3-Livetranslate（Chat Completions）
 
 **声音复刻**：提供参考音频，AI用该音色生成语音回复
 
-Qwen3.5-Omni Plus / Flash（Chat Completions / Realtime API）
+Qwen3.8-Omni-Flash-Realtime（WebSocket / WebRTC / AOQ）；Qwen3.5-Omni Plus / Flash（Chat Completions）
 
 [声音复刻](raw/model-api-reference/omni-realtime-api/qwen-omni-voice-cloning.md)
 
 -   使用 Qwen3.5-Omni 分析内容时，支持音频最长3小时、视频最长1小时。
--   支持工具调用（Function Calling）：Qwen3.8-Omni-Flash（Chat Completions / Responses）、Qwen3.5-Omni Plus / Flash（Chat Completions，文本输出）、Qwen3-Omni-Flash（Chat Completions）、Qwen-Audio Realtime（WebSocket）。
--   支持联网搜索：Qwen3.8-Omni-Flash（Chat Completions / Responses）、Qwen3.5-Omni（Chat Completions / Realtime API）。Qwen3.5-Omni 的联网搜索与 Function Calling 不可同时开启。
+-   支持工具调用（Function Calling）：Qwen3.8-Omni-Flash-Realtime（WebSocket / WebRTC / AOQ）、Qwen3.8-Omni-Flash（Chat Completions / Responses）、Qwen3.5-Omni Plus / Flash（Chat Completions，文本输出）、Qwen3-Omni-Flash（Chat Completions）、Qwen-Audio Realtime（WebSocket）。
+-   支持联网搜索：Qwen3.8-Omni-Flash-Realtime（Realtime API）、Qwen3.8-Omni-Flash（Chat Completions / Responses）、Qwen3.5-Omni（Chat Completions / Realtime API）。Qwen3.5-Omni 的联网搜索与 Function Calling 不可同时开启；Qwen3.8-Omni-Flash-Realtime 的联网搜索与 `tools`（Function Calling 或 MCP）不可同时开启。
 
 ## 翻译
 
 音视频翻译为文本或字幕时，推荐使用 [Qwen3.8-Omni-Flash](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)。需要输出翻译后的语音时，可按下方说明选择适合时延和语音输出需求的模型。
 
-**说明**快速搭建翻译应用推荐Qwen3.5-Livetranslate（60种语言，约3秒延迟，开箱即用）；需要语音输出、联网搜索和术语注入时，可选择Qwen3.5-Omni（29种输出语言，支持联网搜索和术语注入）。
+**说明**快速搭建翻译应用推荐 Qwen3.5-Livetranslate（60种语言，约3秒延迟，开箱即用）；需要语音输出、联网搜索和术语注入时，实时对话可选择 Qwen3.8-Omni-Flash-Realtime，文件调用可选择 Qwen3.5-Omni。Qwen3.8-Omni-Flash-Realtime 的语音生成语种与 Qwen3.5-Omni-Realtime 一致，各音色支持范围见[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)。
 
 支持的语言
 
@@ -770,7 +770,7 @@ Qwen3.5-Omni Plus / Flash（Chat Completions / Realtime API）
 
 “支持”表示同时输出语音和文本。“仅文本”表示该语言不输出语音。
 
-Qwen3.8-Omni-Flash 和 Qwen3.5-Omni 均支持113种输入语言/方言，完整输入语种列表见[模型选型](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)。
+Qwen3.8-Omni-Flash、Qwen3.8-Omni-Flash-Realtime 和 Qwen3.5-Omni 均支持113种输入语言/方言，完整输入语种列表见[模型选型](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)。
 
 Qwen3.5-Livetranslate支持60种语言（29种音频+文本，31种仅文本）。
 
@@ -790,11 +790,11 @@ Chat Completions / Responses
 
 音视频理解、文本生成、思考、Function Calling、联网搜索
 
-qwen3.5-omni-plus-realtime / qwen3.5-omni-flash-realtime
+qwen3.8-omni-flash-realtime
 
-Realtime API（WebSocket）
+Realtime API（WebSocket / WebRTC / AOQ）
 
-实时音视频对话
+实时音视频对话、Function Calling、MCP、声音复刻
 
 qwen3.5-omni-plus / qwen3.5-omni-flash
 
@@ -824,7 +824,7 @@ Realtime API（WebSocket）
 
 ### Qwen3.8-Omni
 
-`qwen3.8-omni-flash` 支持文本、图片、音频和视频输入，**仅输出文本**，可通过 Chat Completions 或 Responses 调用。音视频理解和内容分析请参见 [Qwen3.8-Omni-Flash 调用说明](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)。
+`qwen3.8-omni-flash` 适用于音视频理解和内容分析，思考模式默认开启；`qwen3.8-omni-flash-realtime` 适用于实时音视频对话。
 
 模型ID
 
@@ -838,23 +838,31 @@ Function Calling
 
 联网搜索
 
-思考模式
-
-`qwen3.8-omni-flash`
+[qwen3.8-omni-flash](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)
 
 Chat Completions / Responses
 
 文本、音频、图片、视频
 
-文本
+仅文本
 
 支持
 
 支持
 
-默认开启
+[qwen3.8-omni-flash-realtime](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash-realtime.md)
 
-支持 1M Token 上下文、多通道空间音频、隐式缓存和 Responses Session 缓存。支持地域、限制及能力专题入口见[模型详情](raw/model-user-guide/support/model-studio-model-list/model-list-omni/qwen3-8-omni-flash.md)。
+Realtime API
+
+文本、音频、图片、视频
+
+文本、音频
+
+支持
+
+支持
+
+离线模型支持 1M Token 上下文、多通道空间音频、隐式缓存和 Responses Session 缓存，参见[调用说明](https://help.aliyun.com/zh/model-studio/qwen-omni#qwen38-offline)。实时模型还支持 MCP、多通道音频和声音复刻，参见[实时调用指南](raw/model-user-guide/model-experience/omni-modal/realtime.md)。
 
 ### Qwen3.5-Omni
 
@@ -1180,7 +1188,7 @@ Realtime API（WebSocket）
 
 ### 旧版模型
 
-以下模型不再更新，新项目的音视频理解与文本生成推荐 Qwen3.8-Omni-Flash；离线语音输出可选择 Qwen3.5-Omni。
+以下模型不再更新，新项目的音视频理解与文本生成推荐 Qwen3.8-Omni-Flash；离线语音输出可选择 Qwen3.5-Omni。实时音视频对话推荐 Qwen3.8-Omni-Flash-Realtime。
 
 **模型ID**
 

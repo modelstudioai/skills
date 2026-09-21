@@ -38,7 +38,7 @@ content
 
 imageList
 
-需要检索的图片信息。可输入公网可访问的图片链接（如 [https://xxx.xxx.com/xxx/xxx.jpeg），或在编辑框中输入](https://xxx.xxx.com/xxx/xxx.jpeg%EF%BC%89%EF%BC%8C%E6%88%96%E5%9C%A8%E7%BC%96%E8%BE%91%E6%A1%86%E4%B8%AD%E8%BE%93%E5%85%A5) / 触发变量选择，引用上游节点的输出变量。
+需要检索的图片信息。可输入公网可访问的图片链接（如 `https://xxx.xxx.com/xxx/xxx.jpeg`），或在编辑框中输入 / 触发变量选择，引用上游节点的输出变量。
 
 ### 知识库选择方式
 

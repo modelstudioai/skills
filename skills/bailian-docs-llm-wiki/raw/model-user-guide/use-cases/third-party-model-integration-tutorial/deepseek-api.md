@@ -6,7 +6,7 @@
 
 ## 服务接入地址
 
-不同地域的服务接入地址不同，请根据您选择的地域配置对应的 Base URL（调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)）。各地域可调用的模型及限流不同，请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)文档。
+不同地域的服务接入地址不同，请根据您选择的地域配置对应的 Base URL（调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)）。各地域可调用的模型及限流不同，请参见[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)文档。
 
 #### OpenAI兼容
 
@@ -1060,9 +1060,9 @@ DeepSeek 模型仅支持文本输入，不支持图片或文档输入。如需�
 
 ### 如何查看Token消耗量及调用次数？
 
-模型调用完**一小时后**，在[模型监控](https://bailian.console.aliyun.com/model/telemetry)页面设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**操作**列的**监控**，即可查看该模型的调用统计结果。具体请参见[模型监控](raw/model-user-guide/model-monitoring/model-telemetry.md)文档。
+模型调用发生后**分钟级**即可在监控图表查看。登录[模型监控](https://bailian.console.aliyun.com/cn-beijing/model/telemetry)页面，在左侧导航栏选择**运维管理** > **模型监控**进入监控概览页，设置查询条件（例如，选择时间范围、业务空间等），再在**模型列表**区域找到目标模型并单击**查看详情**，即可查看该模型的调用统计结果。具体请参见[监控告警](raw/model-user-guide/model-monitoring/model-telemetry.md)文档。
 
-> 数据按小时更新，高峰期可能有小时级延迟，请您耐心等待。
+> 监控数据按分钟级更新，仅供参考，不作为计费依据。
 
 ### 还有哪些使用DeepSeek的方式？
 

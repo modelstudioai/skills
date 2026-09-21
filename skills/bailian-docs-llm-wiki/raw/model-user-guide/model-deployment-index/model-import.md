@@ -1,12 +1,12 @@
 # 模型导入
 
-介绍百炼平台从阿里云 OSS 导入 LoRA 模型的全流程操作，涵盖首次 OSS 授权、模型文件准备、导入表单填写、导入模型管理与常见问题排查。
+介绍百炼从阿里云 OSS 导入 LoRA 模型的全流程操作，涵盖首次 OSS 授权、模型文件准备、导入表单填写、导入模型管理与常见问题排查。
 
 ## 模型导入概述
 
-本篇介绍将本地训练的 LoRA 模型从阿里云对象存储 OSS 导入到百炼平台的全流程，覆盖首次 OSS 授权、模型文件准备、导入表单填写、模型查看管理与删除，以及导入失败、已失效等常见问题排查。导入成功后即可部署服务，部署、扩缩容与下线操作详见[部署运维](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)，通过 API 完成部署与调用详见[使用 API 进行模型部署](raw/model-user-guide/model-deployment-index/model-deployment-quick-start.md)，部署前置概念与计费方案对比详见[模型部署简介](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)，本篇与三者构成概念、导入、部署、调用的完整链路。
+本篇介绍将本地训练的 LoRA 模型从阿里云对象存储 OSS 导入到百炼的全流程，覆盖首次 OSS 授权、模型文件准备、导入表单填写、模型查看管理与删除，以及导入失败、已失效等常见问题排查。导入成功后即可部署服务，部署、扩缩容与下线操作详见[部署运维](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)，通过 API 完成部署与调用详见[使用 API 进行模型部署](raw/model-user-guide/model-deployment-index/model-deployment-quick-start.md)，部署前置概念与计费方案对比详见[模型部署简介](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)，本篇与三者构成概念、导入、部署、调用的完整链路。
 
-导入页基础模型字段由平台接口动态返回当前支持导入的基础模型清单，可能随版本更新，请以控制台可选列表为准。当前支持的基础模型如下：
+导入页基础模型字段由百炼接口动态返回当前支持导入的基础模型清单，可能随版本更新，请以控制台可选列表为准。当前支持的基础模型如下：
 
 当前支持的基础模型清单（点击展开）
 
@@ -60,9 +60,9 @@
 
 千问2.5-VL-7B-Instruct
 
-训练方式可选项取决于所选基础模型的声明，选择基础模型后训练方式字段自动渲染可选项并默认选中第一项。当前版本仅支持导入 LoRA 模型，全参微调模型不可导入。
+训练方式可选项取决于所选基础模型的声明，选择基础模型后训练方式字段自动渲染可选项并默认选中第一项。当前版本支持导入 LoRA 模型，全参微调模型不可导入。
 
-导入来源仅支持「从 OSS 导入」一项，表单中默认选中且无其他选项，暂不支持从其他渠道导入模型。
+导入来源为「从 OSS 导入」，表单中默认选中，暂不支持从其他渠道导入模型。
 
 导入成功后的模型状态为创建成功，可在[我的模型](https://bailian.console.aliyun.com/cn-beijing/model/custom)列表中部署服务；从 OSS 导入的模型不支持增量训练，如需迭代请重新训练后再次导入。导入后将使用百炼提供的免费存储空间存放模型记录。
 
@@ -113,7 +113,7 @@
 
 授权后须为目标 OSS Bucket 添加标签：标签名为 bailian-datahub-access，标签值为 read。该标签用于标记百炼可访问的 Bucket，未添加此标签的 Bucket 在下拉列表中不可选，须到[OSS 管理控制台](https://oss.console.aliyun.com/)添加标签后重新选择。
 
-OSS Bucket 存储类型不支持归档、冷归档或深度冷归档，支持内容加密的 Bucket 与私有 Bucket。百炼不支持访问 Bucket 根目录下的文件，须选择 Bucket 下已有的子目录或新建子目录。
+OSS Bucket 存储类型不支持归档、冷归档或深度冷归档，服务端加密方式支持 OSS 完全托管，不支持 KMS 托管密钥（SSE-KMS）等其他服务端加密方式。支持私有 Bucket。百炼不支持访问 Bucket 根目录下的文件，须选择 Bucket 下已有的子目录或新建子目录。
 
 ### 旧授权方式升级
 
@@ -127,7 +127,7 @@ OSS Bucket 存储类型不支持归档、冷归档或深度冷归档，支持内
 
 导入前须将 LoRA 模型文件按以下要求存放在 OSS Bucket 的子目录中（不支持 Bucket 根目录），并在提交前通过系统的自动校验。模型文件须直接放在所选子目录下，系统会自动识别。
 
-**Important**当前版本仅支持导入 LoRA 模型，不支持导入全参微调模型。
+**Important**当前版本支持导入 LoRA 模型，不支持导入全参微调模型。
 
 ### 必需文件与目录结构
 
@@ -214,7 +214,7 @@ if __name__ == "__main__":
 
 导入来源
 
-当前仅支持「从 OSS 导入」，无其他选项。
+为「从 OSS 导入」，无其他选项。
 
 只读，默认选中
 
@@ -232,9 +232,9 @@ Bucket
 
 模型加密
 
-平台自动为导出的模型文件开启 OSS 服务端加密（SSE-OSS），使用 OSS 完全托管密钥，加密算法为 AES256。
+百炼自动为导出的模型文件开启 OSS 服务端加密（SSE-OSS），使用 OSS 完全托管密钥，加密算法为 AES256。
 
-只读，平台强制
+只读，百炼强制
 
 若尚未完成 OSS 授权，确定按钮不可用，须先完成[首次导入前完成 OSS 授权](https://help.aliyun.com/zh/model-studio/model-import#h2-authorize-oss)后再提交。导入成功后即可部署，部署操作详见[部署运维](raw/model-user-guide/model-deployment-index/model-deployment-introduction.md)。
 

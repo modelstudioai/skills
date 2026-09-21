@@ -51,7 +51,7 @@ Function Calling 通过应用程序与大模型之间的多步骤交互实现：
 -   **多模态模型**
     -   千问VL： Qwen3-VL-Plus系列、 Qwen3-VL-Flash系列
     -   千问Omni：Qwen3.8-Omni-Flash、Qwen3.5-Omni-Plus系列、Qwen3.5-Omni-Flash系列、Qwen3-Omni-Flash系列
-    -   千问Omni-Realtime：Qwen3.5-Omni-Plus-Realtime系列、Qwen3.5-Omni-Flash-Realtime系列
+    -   千问Omni-Realtime：Qwen3.8-Omni-Flash-Realtime、Qwen3.5-Omni-Plus-Realtime系列、Qwen3.5-Omni-Flash-Realtime系列
     -   Qwen3-VL 开源系列
 -   **语音对话模型**
     -   千问Audio-Realtime：Qwen-Audio-3.1-Realtime-Plus、Qwen-Audio-3.0-Realtime-Plus系列、Qwen-Audio-3.0-Realtime-Flash系列
@@ -2026,7 +2026,9 @@ Python 工具调用增量格式示意如下；实际内容由模型返回，函�
 
 #### Qwen-Omni-Realtime 系列
 
-Qwen3.5-Omni-Plus-Realtime、Qwen3.5-Omni-Flash-Realtime 系列支持工具调用，适用于语音对话场景。可通过 DashScope SDK或 WebSocket 原生协议调用。
+Qwen3.8-Omni-Flash-Realtime、Qwen3.5-Omni-Plus-Realtime 和 Qwen3.5-Omni-Flash-Realtime 支持自定义 Function Calling，适用于语音对话场景。以下流程通过 DashScope SDK 或 WebSocket 原生协议调用，接入方式与 SDK 配置见[实时调用指南](raw/model-user-guide/model-experience/omni-modal/realtime.md)。
+
+Qwen3.8-Omni-Flash-Realtime 的服务端 MCP 工具调用与审批流程见[MCP 交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-flow)。
 
 **工作流程**：
 

@@ -50,7 +50,7 @@ string
 
 string
 
-`cloud` 云端容器。创建后不可修改。默认不设置配置类型
+`cloud` 云端容器。创建后不可修改。未传入 `config` 时服务端默认补全为 `cloud`
 
 `config.packages`
 

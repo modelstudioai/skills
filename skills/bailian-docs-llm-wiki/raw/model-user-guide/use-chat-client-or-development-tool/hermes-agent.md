@@ -46,7 +46,7 @@ hermes config set model.provider custom
 hermes config set model.base_url https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic
 hermes config set model.api_mode anthropic_messages
 hermes config set model.api_key YOUR_API_KEY
-hermes config set model.default qwen3.8-flash
+hermes config set model.default auto
 ```
 
 以上命令将配置写入 `~/.hermes/config.yaml`。也可以直接编辑该文件，写入以下内容：
@@ -55,7 +55,7 @@ config.yaml 配置示例
 
 ```
 model:
-  default: qwen3.8-flash
+  default: auto
   provider: custom
   base_url: https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic
   api_mode: anthropic_messages
@@ -71,7 +71,7 @@ hermes config set model.provider custom
 hermes config set model.base_url https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic
 hermes config set model.api_mode anthropic_messages
 hermes config set model.api_key YOUR_API_KEY
-hermes config set model.default qwen3.8-flash
+hermes config set model.default auto
 ```
 
 以上命令将配置写入 `~/.hermes/config.yaml`。也可以直接编辑该文件，写入以下内容：
@@ -80,7 +80,7 @@ config.yaml 配置示例
 
 ```
 model:
-  default: qwen3.8-flash
+  default: auto
   provider: custom
   base_url: https://token-plan.cn-beijing.maas.aliyuncs.com/apps/anthropic
   api_mode: anthropic_messages
@@ -116,7 +116,7 @@ model:
 
 将 `YOUR_API_KEY` 替换为[阿里云百炼 API Key](raw/model-api-reference/preparations/get-api-key.md)。可用模型请参考[Anthropic 兼容 API](raw/model-api-reference/qwen-api-reference/anthropic-api-messages.md)。
 
-`base_url` 按地域设置，API Key 需与所选地域对应，并将`WorkspaceId`替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)：
+`base_url` 按地域设置，API Key 需与所选地域对应，并将`WorkspaceId`替换为真实的[获取Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)：
 
 -   华北2（北京）：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/apps/anthropic`
 -   新加坡：`https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/apps/anthropic`
