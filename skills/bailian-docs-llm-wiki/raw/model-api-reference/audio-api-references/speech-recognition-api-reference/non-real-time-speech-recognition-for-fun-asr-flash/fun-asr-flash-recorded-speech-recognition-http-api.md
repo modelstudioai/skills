@@ -600,6 +600,18 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 
 已处理的音频时长，单位秒。
 
+**input\_tokens**`integer`
+
+本次调用消耗的输入 Token 数。仅适用于 `qwen-audio-3.1-asr-flash`。
+
+**output\_tokens**`integer`
+
+本次调用消耗的输出 Token 数。仅适用于 `qwen-audio-3.1-asr-flash`。
+
+**total\_tokens**`integer`
+
+本次调用消耗的总 Token 数，等于 `input_tokens` 与 `output_tokens` 之和。仅适用于 `qwen-audio-3.1-asr-flash`。
+
 #### 非流式
 
 ```
@@ -656,6 +668,6 @@ data:{"output":{"sentence":{"sentence_id":1,"sentence_end":true,"end_time":3800,
 
 1.  每收到一个SSE事件，解析`data`字段中的JSON。
 2.  对于 Qwen-Audio-3.0-ASR-Flash 和 Fun-ASR-Flash，通过`output.sentence.sentence_end`判断当前句子是否结束：当该值为`true`时，该句识别完成，词级时间戳已稳定，可作为最终结果使用；当该值为`false`时，识别仍在进行中，文本和时间戳可能在后续事件中更新。
-3.  `usage`信息仅在句子结束事件中返回，可用于计量音频处理时长。
+3.  `usage`信息仅在句子结束事件中返回，包含音频处理时长。对于 `qwen-audio-3.1-asr-flash`，还包含本次调用的输入、输出和总 Token 数，该模型按 Token 计费。
 
 对于 `qwen-audio-3.1-asr-flash`，未开启说话人分离时，词级时间戳在 `output.sentence.words[i].fixed` 为 `true` 后才固定；在此之前，时间戳仍可能调整。开启说话人分离时，应读取 `output.sentences` 中当前及历史句子的结果。

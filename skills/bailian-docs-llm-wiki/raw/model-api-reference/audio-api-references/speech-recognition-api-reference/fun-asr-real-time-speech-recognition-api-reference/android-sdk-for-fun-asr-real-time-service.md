@@ -1,6 +1,6 @@
-# Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Android SDK
+# Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime实时语音识别Android SDK
 
-本文档提供了Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Android SDK的详细使用指南，帮助您将语音转换为文本。
+本文档提供了Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime实时语音识别Android SDK的详细使用指南，帮助您将语音转换为文本。
 
 **用户指南：**关于模型介绍和选型建议请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model)。
 
@@ -389,6 +389,22 @@
     -   false（默认）：即使持续发送静音音频，连接也将在一定时间后因超时而断开。
     
     静音音频指的是在音频文件或数据流中没有声音信号的内容。静音音频可以通过多种方法生成，例如使用音频编辑软件如Audacity或Adobe Audition，或者通过命令行工具如FFmpeg。
+    
+    `nls_config.disfluency_removal_enabled`
+    
+    `boolean`
+    
+    否
+    
+    仅 `qwen-audio-3.1-asr-flash-message` 支持。是否过滤语气词并对输出结果进行润色，默认值为 `false`。设置为 `true` 时启用。
+    
+    `nls_config.intermediate_result_enabled`
+    
+    `boolean`
+    
+    否
+    
+    仅 `qwen-audio-3.1-asr-flash-message` 支持。是否返回流式中间结果，默认值为 `false`。设置为 `true` 时返回流式中间结果。
     
     `nls_config.vocabulary_id`
     

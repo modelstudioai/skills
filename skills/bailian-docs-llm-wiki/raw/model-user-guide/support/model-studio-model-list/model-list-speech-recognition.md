@@ -3,6 +3,7 @@
 -   [qwen-audio-3.1-asr-flash](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/qwen-audio-3-1-asr-flash.md)
 -   [qwen-audio-3.1-asr-flash-filetrans](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/qwen-audio-3-1-asr-flash-filetrans.md)
 -   [qwen-audio-3.1-asr-flash-streaming](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/qwen-audio-3-1-asr-flash-streaming.md)
+-   [qwen-audio-3.1-asr-flash-message](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/qwen-audio-3-1-asr-flash-message.md)
 -   [qwen-audio-3.0-asr-flash](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/qwen-audio-3-0-asr-flash.md)
 -   [qwen-audio-3.0-asr-flash-filetrans](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/qwen-audio-3-0-asr-flash-filetrans.md)
 -   [qwen-audio-3.0-asr-flash-streaming](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition/qwen-audio-3-0-asr-flash-streaming.md)

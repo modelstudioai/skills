@@ -1,52 +1,64 @@
 # 模型上下文协议
 
-模型上下文协议（Model Context Protocol, MCP）是阿里云百炼平台实现大模型与外部能力安全、标准化集成的核心通信机制。它定义了一套统一的工具发现、调用与响应规范，使大模型能在推理过程中按需、可验证地调用地图、数据库、知识库、SaaS 应用等外部服务，而无需硬编码适配逻辑。
+模型上下文协议（Model Context Protocol, MCP）是阿里云百炼平台提供的标准化、安全、可扩展的工具调用协议，用于在大模型与外部能力（如地图、搜索、数据库、SaaS 应用等）之间建立统一通信通道。它基于开源 MCP 标准（[modelcontextprotocol.io](https://modelcontextprotocol.io/)）实现，并深度集成百炼平台的权限、网络、计费与运维体系，使开发者无需编写底层适配代码，即可声明式接入和编排各类外部工具。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-MCP 不是独立运行的服务，而是贯穿百炼多个能力层的**协议层基础设施**，其使用方式因场景而异：
+MCP 是百炼平台级能力，**仅适用于智能体应用和工作流应用内部**，不支持直接在调用 `qwen-*` 系列 API 的独立 SDK 场景中使用（例如通过 DashScope SDK 直接发起 MCP 调用会失败）。
 
-- **智能体（Agent）应用**：在编辑器中直接添加已开通的 MCP 服务（如 Amap Maps、[长期记忆](memory.md)），模型基于对话上下文自动决策是否调用、调用哪个工具及传入参数。最多支持同时配置 5 个 MCP 服务，适用于动态、多跳的自主任务（如“规划从杭州到上海的路线并查沿途天气”）。
+- **智能体应用**：  
+  大模型根据自然语言对话内容自主判断是否调用 MCP 工具（如“查北京地铁末班车时间” → 自动触发 `Amap Maps` 的 `maps_subway` 工具）。开发者只需在智能体配置中「添加已开通的 MCP 服务」，最多支持同时启用 5 个服务。工具调用完全由模型规划，输入参数自动提取，输出结果无缝融入对话上下文。
 
-- **工作流（Workflow）应用**：以显式节点形式接入 MCP 工具（如 `maps_weather`），需手动连接输入字段（如 `city`）与上游输出，并配置失败重试策略。适用于确定性、可审计的编排链路（如“用户提问 → 解析城市名 → 调用天气 MCP → 生成摘要”）。
+- **工作流应用**：  
+  需显式拖入「MCP 节点」，手动选择工具（如 `WebSearch` 的 `search`），并配置输入参数。参数必须引用上游节点（如大模型节点或变量节点）的结构化输出（例如 `"引用：信息提取/result"`），支持 JSON Schema 校验。输出可传递至下游节点进行格式转换、条件判断或聚合，适合确定性高、需精确控制执行路径的业务流程。
 
-- **Connector（数据连接中枢）**：所有第三方系统（OSS、Salesforce、钉钉、语雀等）和平台托管资源（文件、表格）均通过 MCP 协议暴露为标准化工具。创建连接器后，系统自动生成符合 MCP 规范的工具列表（如 `search_file`、`get_table_schema`），供智能体或工作流直接调用。
+- **Connector（数据连接器）**：  
+  所有 Connector（如 OSS、Salesforce、语雀、钉钉、文件/表格连接器）均通过 MCP 协议统一暴露工具。创建连接后，系统自动生成标准化工具（如“列出 OSS Bucket 中的 PDF 文件”“查询 Salesforce 中的客户线索”），无需额外开发。这些工具可被智能体或工作流直接调用，实现“零数据迁移、实时访问原系统”。
 
-- **知识库（Knowledge Base）**：知识检索能力可通过 MCP Server 形式对外提供（如供 Qoder、Claude Code 等客户端调用）。此时知识库不作为 RAG 后端被动响应，而是作为主动可发现、可调用的 MCP 工具，支持 `search_knowledge` 等语义化操作。
+- **插件（Plug-in）生态**：  
+  官方插件（如 `quark_search`、`code_interpreter`）和三方/自定义插件，均可发布为 MCP 服务供智能体或工作流调用。自定义插件需先完成「发布为 MCP 服务」操作，才能在智能体的 MCP 配置列表或工作流的 MCP 节点中被发现和选用。
 
-- **外部 SDK 集成**：开发者可使用官方 `mcp` Python SDK 连接百炼 MCP 服务端点（`/mcp` 或 `/sse`），调用 `list_tools()` 获取工具元信息，并将结果转换为 OpenAI 兼容的 `tools` 格式，嵌入自有 LLM 调用流程中，实现跨平台能力复用。
-
-> ⚠️ 注意：MCP **不支持**在直接调用千问 API（如 `dashscope` [OpenAI 兼容接口](openai-compatible-api.md)）时，通过 `tools` 参数透传使用。它仅在百炼原生应用（智能体/工作流）或通过 MCP SDK 外部调用两种模式下生效。
+> ⚠️ 注意：MCP 服务不能在调用千问 API（如 `qwen-max`）的纯推理请求中直接接入；它必须依托于百炼平台的应用容器（智能体/工作流）运行。
 
 ## 关键参数和配置
 
-MCP 的配置与调用围绕三个核心层级展开，开发者需重点关注以下参数：
+MCP 配置分为两类，需分别关注：
 
-| 层级 | 参数 | 说明 | 示例值 |
-|------|------|------|--------|
-| **服务注册** | `type` | 协议类型，必须与接入路径严格匹配：`sse` → `/sse`，`streamablehttp` → `/mcp` | `"sse"` |
-| | `mcpServers`（JSON） | 控制台部署配置主体，声明服务名称、启动命令与参数 | `{ "weather": { "command": "npx", "args": ["@mcp/server-weather"] } }` |
-| **工具调用** | `tool.name` | 工具唯一标识符，由 MCP Server 声明，模型调用时必须精确匹配 | `"maps_weather"` |
-| | `tool.inputSchema` | JSON Schema 描述输入参数结构，直接影响模型生成参数的准确性与合法性 | `{"type":"object","properties":{"city":{"type":"string"}}}` |
-| **客户端连接** | `url` | MCP 服务端点地址（Streamable HTTP 或 SSE） | `https://xxx.cn-beijing.maas.aliyuncs.com/api/v2/connector/mcp` |
-| | `headers.Authorization` | 认证头，固定为 `Bearer ${DASHSCOPE_API_KEY}` | `Bearer sk-xxx` |
+### 服务级参数（部署/开通时配置）
+| 参数 | 类型 | 说明 | 示例 |
+|------|------|------|------|
+| `type` | string | 必填。指定 MCP 服务端点类型，决定协议行为。当前仅支持 `"streamableHttp"`（对应 `/mcp` 端点），旧版 `"sse"` 已停用。 | `"streamableHttp"` |
+| `url` | string | 可选（官方服务无需填写）。自定义服务的远程地址，需 HTTPS、TLS 证书有效且网络可达。 | `"https://my-mcp-server.example.com/mcp"` |
+| `env` | object | 敏感环境变量（如 API Key、[Token](token.md)），**必须通过 KMS 凭据加密注入**，禁止明文填写。 | `{"AMAP_MAPS_API_KEY": "kms://xxx"}` |
+| `command` / `args` | string / array | 仅自定义服务（脚本部署）需配置，用于启动本地 MCP Server。 | `"npx"` + `["@modelcontextprotocol/server-memory"]` |
 
-> ✅ 实践提示：部署自定义 MCP 服务时，务必校验 `type` 与端点路径的一致性，否则将返回 `HTTP 405 Method Not Allowed`（错误码 `11200058`）。
+### 调用级参数（运行时传递）
+| 参数 | 说明 | 注意事项 |
+|------|------|----------|
+| `tool.name` | 工具唯一标识符，由 MCP Server 声明，客户端必须严格匹配。 | 如 `amap_maps.maps_weather`、`oss.list_objects` |
+| `tool.inputSchema` | JSON Schema 定义的输入参数结构，客户端须按此格式构造 `input` 字段。 | 不符合 Schema 将导致 400 错误；工作流中需确保变量引用类型匹配（如字符串字段不可传入对象） |
+| `DASHSCOPE_API_KEY` | 所有 MCP 请求必须携带的鉴权凭证，置于 `Authorization: Bearer <key>` 请求头。 | 该 Key 需具备对应业务空间的 `bailian:McpInvoke` 权限 |
+| `workspaceId` | 业务空间 ID（形如 `llm-xxxxxxxxxxxx`），用于构造 MCP 服务根地址及权限隔离。 | 控制台自动注入；外部 SDK 集成时需显式配置 |
 
 ## 面向开发者，简洁实用
 
-- **快速上手**：优先使用 [MCP 广场](https://bailian.console.aliyun.com/?tab=mcp#/mcp-market) 中的官方服务（如“[长期记忆](memory.md)”“Amap Maps”），开通即用，免密钥配置。
-- **调试技巧**：在智能体 Playground 中开启「工具调用日志」，实时查看模型生成的 `tool_calls` 及实际返回结果，快速定位 schema 不匹配或参数缺失问题。
-- **安全红线**：MCP 服务运行于函数计算（FC），**无法访问本地文件、硬件或未授权的远程数据库**；敏感凭证（API Key、OAuth Token）必须通过 KMS 加密管理，禁止硬编码。
-- **性能选择**：对低延迟要求高的场景（如实时对话），选用“极速模式”（常驻内存）；对成本敏感且调用量低的场景，选“基础模式”（按次计费+冷启动）。
-- **扩展建议**：若需将自有 RESTful API 接入 MCP，推荐使用百炼 AI 网关的「API 封装」功能，自动注入认证、限流与协议转换逻辑，无需修改业务代码。
+- ✅ **快速上手**：前往 [MCP 广场](https://bailian.console.aliyun.com/?tab=mcp#/mcp-market)，一键开通 Amap Maps、WebSearch 等官方服务，3 分钟内即可在智能体中测试“杭州天气”类 query。
+- ✅ **自定义服务三步走**：① 用 `npx @modelcontextprotocol/server-memory` 启动本地服务；② 在控制台「自定义 MCP 服务」中填写 URL 和环境变量（KMS 加密）；③ 发布后，在智能体或工作流中选择使用。
+- ✅ **调试技巧**：开启智能体/工作流的「详细日志」，查看 `mcp_call` 日志条目，确认工具名、输入参数、HTTP 状态码（如 11200048 表示 URL 不可达，11200058 表示 `type` 配置错误）。
+- ✅ **安全红线**：所有敏感凭证（API Key、[Token](token.md)、OAuth Secret）必须通过 KMS 加密；禁止硬编码、禁止提交至 Git；轮转凭证时需重建连接器或身份验证配置。
+- ✅ **避坑提示**：  
+  - 自定义服务升级后需**手动重新部署**，不会自动同步；  
+  - 工作流中 MCP 节点的输入必须为合法 JSON，空字符串、`null` 或未定义变量将导致调用失败；  
+  - 函数计算（FC）托管的自定义服务无固定出口 IP，访问 VPC 内资源需配置 VPC 打通而非 IP 白名单。
+
+MCP 的本质是「让大模型像调用函数一样调用世界」——你只需关注「要什么能力」，百炼负责「怎么安全、稳定、合规地拿到它」。
 
 ## 关联主题页
 
 - [model context protocol](../guides/model-context-protocol.md)
 - [overview](../guides/overview.md)
-- [knowledge base](../guides/knowledge-base.md)
+- [plug in](../guides/plug-in.md)
 - [application component api reference](../api/application-component-api-reference.md)
-- [rag api](../api/rag-api.md)
+- [frameworks](../api/frameworks.md)
 
 

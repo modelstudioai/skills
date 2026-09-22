@@ -8,9 +8,9 @@ Linux 平台通过 Python 模块 `aoq_client_sdk` 提供 API。所有回调在 n
 
 ### 引擎生命周期
 
-**接口**
+接口
 
-**简介**
+简介
 
 create\_engine
 
@@ -34,37 +34,37 @@ disconnect
 
 ### 音频设备管理
 
-**接口**
+接口
 
-**简介**
+简介
 
 start\_audio\_capture
 
-启动音频采集（Linux 为空实现，不会打开麦克风）
+打开音频采集设备（麦克风）
 
 stop\_audio\_capture
 
-停止音频采集（Linux 无实际效果）
+关闭音频采集设备
 
 mute\_audio\_capture
 
-静音或取消静音音频采集（Linux 无设备采集能力）
+静音或取消静音音频采集
 
 start\_audio\_player
 
-启动音频播放（Linux 为空实现，不会打开扬声器）
+开始音频渲染（播放远端音频）
 
 stop\_audio\_player
 
-停止音频播放（Linux 无实际效果）
+停止音频渲染
 
 pause\_audio\_player
 
-暂停音频播放（Linux 无设备播放能力）
+暂停音频渲染，支持淡出
 
 resume\_audio\_player
 
-恢复音频播放（Linux 无设备播放能力）
+恢复音频渲染，支持淡入
 
 interrupt\_audio\_player
 
@@ -72,9 +72,9 @@ interrupt\_audio\_player
 
 ### 音频编码配置
 
-**接口**
+接口
 
-**简介**
+简介
 
 set\_audio\_encoder\_config
 
@@ -86,31 +86,31 @@ set\_audio\_decoder\_config
 
 ### 视频设备管理
 
-**接口**
+接口
 
-**简介**
+简介
 
 start\_video\_capture
 
-启动视频采集（Linux 仅支持外部采集模式）
+打开视频采集设备（摄像头）
 
 stop\_video\_capture
 
-停止视频采集（Linux 仅适用于外部采集模式）
+关闭视频采集设备
 
 set\_local\_view
 
-设置或移除本地视频渲染窗口（Linux 无渲染实现）
+设置或移除本地视频渲染窗口
 
 set\_remote\_view
 
-设置或移除远端视频渲染窗口（Linux 无渲染实现）
+设置或移除远端视频渲染窗口
 
 ### 视频编解码与外部输入
 
-**接口**
+接口
 
-**简介**
+简介
 
 set\_video\_encoder\_config
 
@@ -130,9 +130,9 @@ push\_external\_video\_encoded\_frame
 
 ### 媒体流发送控制
 
-**接口**
+接口
 
-**简介**
+简介
 
 enable\_send\_media\_stream
 
@@ -140,9 +140,9 @@ enable\_send\_media\_stream
 
 ### 音频文件播放
 
-**接口**
+接口
 
-**简介**
+简介
 
 start\_audio\_file
 
@@ -182,9 +182,9 @@ get\_audio\_file\_volume
 
 ### 外部音频流
 
-**接口**
+接口
 
-**简介**
+简介
 
 add\_audio\_external\_stream
 
@@ -212,9 +212,9 @@ clear\_audio\_external\_stream\_buffer
 
 ### 实时消息
 
-**接口**
+接口
 
-**简介**
+简介
 
 send\_data\_msg
 
@@ -222,9 +222,9 @@ send\_data\_msg
 
 ### 音频帧回调
 
-**接口**
+接口
 
-**简介**
+简介
 
 set\_audio\_frame\_observer
 
@@ -236,9 +236,9 @@ enable\_audio\_frame\_observer
 
 ### 视频帧回调
 
-**接口**
+接口
 
-**简介**
+简介
 
 set\_video\_frame\_observer
 
@@ -250,9 +250,9 @@ enable\_video\_frame\_observer
 
 ### 回调接口
 
-**回调**
+接口
 
-**简介**
+简介
 
 on\_error
 
@@ -266,37 +266,57 @@ on\_data\_msg
 
 收到实时数据消息回调
 
-IAudioFrameObserver
+### IAudioFrameObserver 回调
 
-音频帧数据监听基类
+接口
 
-IVideoFrameObserver
+简介
 
-视频帧数据监听基类
+on\_captured\_audio\_frame
+
+采集到原始音频帧时触发。数据为采集后的原始 PCM，未经任何处理。
+
+on\_process\_captured\_audio\_frame
+
+3A 处理后的音频帧回调。数据经过 3A（AEC/AGC/ANS）处理。
+
+on\_publish\_audio\_frame
+
+推流前的音频帧回调。数据为即将编码发送的音频帧。
+
+on\_playback\_audio\_frame
+
+播放前的远端音频帧回调。数据为远端解码后、即将播放的音频帧。
+
+### IVideoFrameObserver 回调
+
+接口
+
+简介
+
+on\_captured\_video\_frame
+
+采集到原始视频帧时触发（前处理前）。数据为采集后的裸帧，尚未经过前处理。
+
+on\_pre\_encode\_video\_frame
+
+编码前的视频帧回调（前处理后）。数据为前处理完成、即将编码的裸帧。
+
+on\_remote\_video\_frame
+
+远端解码后、渲染前的视频帧回调。数据为远端解码完成、即将渲染的裸帧。
 
 ### 工具函数
 
-**接口**
+接口
 
-**简介**
+简介
 
 load\_library
 
 手动指定并加载 native 共享库
 
 ## 接口详情
-
-### set\_video\_decoder\_config
-
-```
-def set_video_decoder_config(self, config: AoqVideoCodecConfig) -> int
-```
-
-`config` 为视频解码配置。仅以下字段生效：`track_type`、`codec_type`、`width`、`height`、`fps`、`bitrate`。 其余字段仅用于编码。
-
-在 `connect` 之前调用，作为订阅侧编解码参数提议。
-
-返回值：0 表示成功；非 0 表示失败。
 
 ### 引擎生命周期
 
@@ -455,6 +475,18 @@ Linux 版不支持摄像头采集，也没有视频渲染后端。调用 `start_
 
 ### 视频编解码与外部输入
 
+#### set\_video\_decoder\_config
+
+```
+def set_video_decoder_config(self, config: AoqVideoCodecConfig) -> int
+```
+
+`config` 为视频解码配置。仅以下字段生效：`track_type`、`codec_type`、`width`、`height`、`fps`、`bitrate`。 其余字段仅用于编码。
+
+在 `connect` 之前调用，作为订阅侧编解码参数提议。
+
+返回值：0 表示成功；非 0 表示失败。
+
 ```
 def set_video_encoder_config(self, config: AoqVideoCodecConfig) -> int
 def set_video_decoder_config(self, config: AoqVideoCodecConfig) -> int
@@ -462,11 +494,11 @@ def push_external_video_frame(self, frame: AoqVideoFrame, track_type: AoqTrackTy
 def push_external_video_encoded_frame(self, track_type: AoqTrackType, frame: AoqVideoEncodedFrame) -> int
 ```
 
-注意：
+**说明**
 
 -   set\_video\_decoder\_config 仅 track\_type/codec\_type/width/height/fps/bitrate 字段生效。
 -   push\_external\_video\_frame 仅在 start\_video\_capture(is\_external=True) 后消费；打包格式（NV12/NV21/BGRA/RGBA）填 `frame.data`，I420 三平面填 `frame.data_y/u/v` 与对应 stride；若缓冲区满返回 AoqErrorCode.VIDEO\_EXTERNAL\_BUFFER\_FULL(210)。
--   push\_external\_video\_encoded\_frame 要求 start\_video\_capture(is\_external=True) 且 set\_video\_encoder\_config(codec\_type=VIDEO\_JPEG)，直接走旁路通路不做二次编码。
+-   push\_external\_video\_encoded\_frame 要求已调用 set\_video\_encoder\_config(is\_external=True, codec\_type=VIDEO\_JPEG)，否则返回 AoqErrorCode.VIDEO\_EXTERNAL\_ENCODER\_NOT\_ENABLED(212)；直接走旁路通路不做二次编码，**无需依赖** start\_video\_capture。
 
 ### 媒体流发送控制
 
@@ -501,7 +533,7 @@ def get_audio_external_stream_volume(self, stream_id: str, type_: AoqAudioStream
 def clear_audio_external_stream_buffer(self, stream_id: str, fadeout_ms: int = -1) -> None
 ```
 
-注意：push\_audio\_external\_stream\_data 缓冲区满时返回 AoqErrorCode.AUDIO\_EXTERNAL\_BUFFER\_FULL(110)，建议等待约 20ms 后重试同一帧。
+**说明**push\_audio\_external\_stream\_data 缓冲区满时返回 AoqErrorCode.AUDIO\_EXTERNAL\_BUFFER\_FULL(110)，建议等待约 20ms 后重试同一帧。
 
 ### 实时消息
 
@@ -564,7 +596,7 @@ def on_data_msg(self, msg: AoqDataMsg) -> None
 
 收到实时数据消息回调。
 
-#### IAudioFrameObserver
+### IAudioFrameObserver 回调
 
 音频帧数据监听基类。所有方法均为可选 override，默认空实现。
 
@@ -578,7 +610,109 @@ class IAudioFrameObserver:
 
 回调在 native 音频线程触发，禁止在其中做任何耗时操作。`AoqAudioFrameData.data` 已是 bytes 拷贝，可安全异步使用。
 
-#### IVideoFrameObserver
+#### on\_captured\_audio\_frame
+
+采集到原始音频帧时触发。数据为采集后的原始 PCM，未经任何处理。
+
+```
+def on_captured_audio_frame(self, data: AoqAudioFrameData) -> None: ...
+```
+
+参数
+
+类型
+
+说明
+
+data
+
+AoqAudioFrameData
+
+采集的音频帧数据
+
+返回值：无（None）。
+
+**说明**帧数据已是 bytes 拷贝，可安全异步使用。
+
+#### on\_process\_captured\_audio\_frame
+
+3A 处理后的音频帧回调。数据经过 3A（AEC/AGC/ANS）处理。
+
+```
+def on_process_captured_audio_frame(self, data: AoqAudioFrameData) -> None: ...
+```
+
+参数
+
+类型
+
+说明
+
+data
+
+AoqAudioFrameData
+
+3A 处理后的音频帧数据
+
+返回值：无（None）。
+
+**说明**帧数据已是 bytes 拷贝，可安全异步使用。
+
+#### on\_publish\_audio\_frame
+
+推流前的音频帧回调。数据为即将编码发送的音频帧。
+
+```
+def on_publish_audio_frame(self, track_type: AoqTrackType, data: AoqAudioFrameData) -> None: ...
+```
+
+参数
+
+类型
+
+说明
+
+track\_type
+
+AoqTrackType
+
+音频轨道类型
+
+data
+
+AoqAudioFrameData
+
+推流前的音频帧数据
+
+返回值：无（None）。
+
+**说明**帧数据已是 bytes 拷贝，可安全异步使用。 此回调仅支持只读模式。
+
+#### on\_playback\_audio\_frame
+
+播放前的远端音频帧回调。数据为远端解码后、即将播放的音频帧。
+
+```
+def on_playback_audio_frame(self, data: AoqAudioFrameData) -> None: ...
+```
+
+参数
+
+类型
+
+说明
+
+data
+
+AoqAudioFrameData
+
+播放前的远端音频帧数据
+
+返回值：无（None）。
+
+**说明**帧数据已是 bytes 拷贝，可安全异步使用。
+
+### IVideoFrameObserver 回调
 
 视频帧数据监听基类。所有方法均为可选 override，默认返回 False。
 
@@ -590,6 +724,96 @@ class IVideoFrameObserver:
 ```
 
 回调在 native 视频线程触发，禁止在其中做任何耗时操作。帧中像素数据已是 bytes 拷贝；当前 Python 层为拷贝语义，修改写回暂不支持，建议始终返回 False。
+
+#### on\_captured\_video\_frame
+
+采集到原始视频帧时触发（前处理前）。数据为采集后的裸帧，尚未经过前处理。
+
+```
+def on_captured_video_frame(self, track_type: AoqTrackType, frame: AoqVideoFrame) -> bool: ...
+```
+
+参数
+
+类型
+
+说明
+
+track\_type
+
+AoqTrackType
+
+帧所属轨道（Video / Screen）
+
+frame
+
+AoqVideoFrame
+
+采集的视频帧数据
+
+返回值：True 表示数据已修改需写回 SDK（仅 I420 生效），False 表示只读。当前 Python 层为拷贝语义，建议始终返回 False。
+
+**说明**帧数据已是 bytes 拷贝，可安全异步使用。
+
+#### on\_pre\_encode\_video\_frame
+
+编码前的视频帧回调（前处理后）。数据为前处理完成、即将编码的裸帧。
+
+```
+def on_pre_encode_video_frame(self, track_type: AoqTrackType, frame: AoqVideoFrame) -> bool: ...
+```
+
+参数
+
+类型
+
+说明
+
+track\_type
+
+AoqTrackType
+
+帧所属轨道（Video / Screen）
+
+frame
+
+AoqVideoFrame
+
+编码前的视频帧数据
+
+返回值：True 表示数据已修改需写回 SDK（仅 I420 生效），False 表示只读。当前 Python 层为拷贝语义，建议始终返回 False。
+
+**说明**帧数据已是 bytes 拷贝，可安全异步使用。
+
+#### on\_remote\_video\_frame
+
+远端解码后、渲染前的视频帧回调。数据为远端解码完成、即将渲染的裸帧。
+
+```
+def on_remote_video_frame(self, track_type: AoqTrackType, frame: AoqVideoFrame) -> bool: ...
+```
+
+参数
+
+类型
+
+说明
+
+track\_type
+
+AoqTrackType
+
+帧所属轨道（Video / Screen）
+
+frame
+
+AoqVideoFrame
+
+远端解码后的视频帧数据
+
+返回值：True 表示数据已修改需写回 SDK（仅 I420 生效），False 表示只读。当前 Python 层为拷贝语义，建议始终返回 False。
+
+**说明**帧数据已是 bytes 拷贝，可安全异步使用。
 
 ### 工具函数
 
@@ -755,7 +979,7 @@ int
 
 \-1
 
-路径序号，与其他平台 SDK 的 routeIndex 对齐；<0 时 SDK 按数组下标自动填充
+路径序号；<0 时 SDK 按数组下标自动填充
 
 tcp\_port
 
@@ -888,6 +1112,102 @@ VIDEO\_EXTERNAL\_BUFFER\_FULL
 210
 
 外部视频缓冲区满
+
+#### AoqWarningCode
+
+警告码枚举。
+
+枚举值
+
+值
+
+说明
+
+OK
+
+0
+
+无警告
+
+AUDIO
+
+100
+
+音频通用警告
+
+AUDIO\_HOWLING
+
+101
+
+音频啸叫检测
+
+AUDIO\_DEVICE
+
+120
+
+音频设备通用警告
+
+AUDIO\_DEVICE\_MIC\_ENUMERATE\_ERROR
+
+121
+
+麦克风枚举错误
+
+AUDIO\_DEVICE\_MIC\_START\_TIMEOUT
+
+122
+
+麦克风启动超时
+
+AUDIO\_DEVICE\_RECORDING\_ERROR
+
+123
+
+录音过程错误
+
+AUDIO\_DEVICE\_SPEAKER\_ENUMERATE\_ERROR
+
+124
+
+扬声器枚举错误
+
+AUDIO\_DEVICE\_SPEAKER\_START\_TIMEOUT
+
+125
+
+扬声器启动超时
+
+AUDIO\_DEVICE\_PLAYOUT\_ERROR
+
+126
+
+播放过程错误
+
+VIDEO
+
+200
+
+视频通用警告
+
+VIDEO\_CAMERA\_ENUMERATE\_ERROR
+
+201
+
+摄像头枚举错误
+
+VIDEO\_ENCODER\_SWITCHED
+
+202
+
+视频编码器已切换
+
+VIDEO\_RENDER\_DOWNGRADE
+
+203
+
+视频渲染降级
+
+**说明**`AoqEngineEventListener` 基类未声明 `on_warning`，但 C 桥接层会以 `getattr(listener, "on_warning")` 动态转发，业务侧可自行在 listener 上实现该方法接收警告。
 
 #### AoqConnectionStatus
 
@@ -1112,6 +1432,12 @@ RGBA
 5
 
 RGBA（32 位）
+
+CV\_PIXEL\_BUFFER
+
+6
+
+Apple 平台零拷贝路径，Linux 不使用
 
 #### AoqCameraDirection
 
@@ -1627,6 +1953,14 @@ FRONT
 
 **说明**
 
+is\_external
+
+bool
+
+False
+
+外部编码模式；True 时由调用方推送已编码帧，SDK 不做采集和编码（仅编码生效）
+
 track\_type
 
 AoqTrackType
@@ -1832,6 +2166,14 @@ int
 0
 
 时间戳（毫秒）；0 时 SDK 用本地时钟补齐
+
+native\_pixel\_buffer
+
+int
+
+0
+
+Apple 零拷贝句柄，Linux 保留为 0
 
 #### AoqVideoEncodedFrame
 

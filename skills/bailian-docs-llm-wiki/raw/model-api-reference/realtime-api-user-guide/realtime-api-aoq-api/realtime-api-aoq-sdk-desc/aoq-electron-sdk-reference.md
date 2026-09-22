@@ -8,9 +8,9 @@
 
 ### 引擎入口与生命周期
 
-**接口**
+接口
 
-**简介**
+简介
 
 createAoqClientEngine
 
@@ -38,9 +38,9 @@ disconnect
 
 ### 音频设备管理
 
-**接口**
+接口
 
-**简介**
+简介
 
 startAudioCapture
 
@@ -76,9 +76,9 @@ interruptAudioPlayer
 
 ### 音频编解码配置
 
-**接口**
+接口
 
-**简介**
+简介
 
 setAudioEncoderConfig
 
@@ -90,9 +90,9 @@ setAudioDecoderConfig
 
 ### 视频设备管理
 
-**接口**
+接口
 
-**简介**
+简介
 
 startVideoCapture
 
@@ -102,23 +102,11 @@ stopVideoCapture
 
 关闭视频采集设备
 
-getScreenSourceList
-
-获取屏幕和窗口源
-
-startScreenCapture
-
-开始屏幕采集
-
-stopScreenCapture
-
-停止屏幕采集
-
 ### 视频编解码与外部输入
 
-**接口**
+接口
 
-**简介**
+简介
 
 setVideoEncoderConfig
 
@@ -136,11 +124,29 @@ pushExternalVideoEncodedFrame
 
 推送外部已编码视频帧
 
+### 屏幕采集
+
+接口
+
+简介
+
+getScreenSourceList
+
+获取可共享的桌面和窗口列表
+
+startScreenCapture
+
+启动屏幕采集
+
+stopScreenCapture
+
+停止屏幕采集
+
 ### 媒体流发送控制
 
-**接口**
+接口
 
-**简介**
+简介
 
 enableSendMediaStream
 
@@ -148,9 +154,9 @@ enableSendMediaStream
 
 ### 音频文件播放
 
-**接口**
+接口
 
-**简介**
+简介
 
 startAudioFile
 
@@ -190,9 +196,9 @@ getAudioFileVolume
 
 ### 外部音频流
 
-**接口**
+接口
 
-**简介**
+简介
 
 addAudioExternalStream
 
@@ -220,9 +226,9 @@ clearAudioExternalStreamBuffer
 
 ### 实时消息
 
-**接口**
+接口
 
-**简介**
+简介
 
 sendDataMsg
 
@@ -230,9 +236,9 @@ sendDataMsg
 
 ### 音频帧回调
 
-**接口**
+接口
 
-**简介**
+简介
 
 setAudioFrameObserver
 
@@ -244,9 +250,9 @@ enableAudioFrameObserver
 
 ### 本地音量提示
 
-**接口**
+接口
 
-**简介**
+简介
 
 enableLocalAudioVolumeIndication
 
@@ -254,9 +260,9 @@ enableLocalAudioVolumeIndication
 
 ### 视频帧回调
 
-**接口**
+接口
 
-**简介**
+简介
 
 setVideoFrameObserver
 
@@ -268,9 +274,9 @@ enableVideoFrameObserver
 
 ### 视频渲染（YUVCanvasRenderer）
 
-**接口**
+接口
 
-**简介**
+简介
 
 bind
 
@@ -290,9 +296,9 @@ drawFrame
 
 ### 引擎事件（IAoqEngineEvents）
 
-**事件**
+接口
 
-**简介**
+简介
 
 onError
 
@@ -334,58 +340,47 @@ onDataMsg
 
 收到实时数据消息回调
 
+### 音频帧事件
+
+接口
+
+简介
+
 onCapturedAudioFrame
 
-采集裸音频数据回调
+采集到原始音频帧时触发。数据为采集后的原始 PCM，未经任何处理。
 
 onProcessCapturedAudioFrame
 
-3A 处理后音频数据回调
+3A 处理后的音频帧回调。数据经过回声消除、噪声抑制、自动增益等 3A 处理。
 
 onPublishAudioFrame
 
-推流音频数据回调
+推流前的音频帧回调。数据即将通过编码后发送到 Relay 服务器。
 
 onPlaybackAudioFrame
 
-播放音频数据回调
+播放前的远端音频帧回调。数据为远端解码后、混音前即将播放的音频。
+
+### 视频帧事件
+
+接口
+
+简介
 
 onCapturedVideoFrame
 
-本地采集后裸视频数据回调
+采集到原始视频帧时触发（前处理前）。数据为摄像头或屏幕采集后的原始帧，未经前处理。
 
 onPreEncodeVideoFrame
 
-本地编码前裸视频数据回调
+编码前的视频帧回调（前处理后）。数据经过前处理后、编码前。
 
 onRemoteVideoFrame
 
-远端解码后、渲染前视频数据回调
+远端解码后、渲染前的视频帧回调。数据为远端接收并解码后的视频帧。
 
 ## 接口详情
-
-### 屏幕采集
-
-```
-startScreenCapture(config: AoqScreenCaptureConfig): number
-stopScreenCapture(): number
-```
-
-`config` 为屏幕采集配置。屏幕画面通过 `AoqTrackTypeScreen` 轨道发送。
-
-返回值：0 表示成功；非 0 表示失败。
-
-先调用 `getScreenSourceList` 获取屏幕或窗口源，再将选定的 `sourceId` 和 `sourceType` 传入采集配置。
-
-外部原始帧：设置 `isExternal=true` 后，通过 `pushExternalVideoCapturedFrame` 输入 Screen 轨道的原始帧，由 SDK 编码。外部已编码帧：先通过 `setVideoEncoderConfig` 将 Screen 轨道设置为外部编码，再调用 `pushExternalVideoEncodedFrame`。
-
-#### getScreenSourceList
-
-```
-getScreenSourceList(): AoqScreenSourceInfo[]
-```
-
-返回屏幕源数组，仅支持 Electron macOS/Windows。
 
 ### 引擎入口与生命周期
 
@@ -593,12 +588,35 @@ Uint8Array
 
 帧数据（像素数据或已编码数据）
 
-注意：
+**说明**
 
 -   `pushExternalVideoCapturedFrame` Video 轨道需先调用 `startVideoCapture({ isExternal: true })`，Screen 轨道需先调用 `startScreenCapture({ isExternal: true })`；未开启时返回 `211`，缓冲区满时返回 `210`。
 -   支持 `AoqVideoPixelFormatI420` 与打包格式（NV12 / NV21 / BGRA / RGBA）；I420 时 `buffer` 必须为紧凑布局（stride = width），Y / U / V 三平面顺序拼接。
 -   `pushExternalVideoEncodedFrame` 需先 `setVideoEncoderConfig({ isExternal: true })`；未开启时返回 `212`。当前仅支持 JPEG。
 -   `meta.timeStamp` 为 `0` 时由 SDK 使用本地时间补齐。
+
+### 屏幕采集
+
+```
+startScreenCapture(config: AoqScreenCaptureConfig): number
+stopScreenCapture(): number
+```
+
+`config` 为屏幕采集配置。屏幕画面通过 `AoqTrackTypeScreen` 轨道发送。
+
+返回值：0 表示成功；非 0 表示失败。
+
+先调用 `getScreenSourceList` 获取屏幕或窗口源，再将选定的 `sourceId` 和 `sourceType` 传入采集配置。
+
+外部原始帧：设置 `isExternal=true` 后，通过 `pushExternalVideoCapturedFrame` 输入 Screen 轨道的原始帧，由 SDK 编码。外部已编码帧：先通过 `setVideoEncoderConfig` 将 Screen 轨道设置为外部编码，再调用 `pushExternalVideoEncodedFrame`。
+
+#### getScreenSourceList
+
+```
+getScreenSourceList(): AoqScreenSourceInfo[]
+```
+
+返回屏幕源数组，仅支持 Electron macOS/Windows。
 
 ### 媒体流发送控制
 
@@ -715,7 +733,7 @@ number
 
 清空缓存时的淡出时长（毫秒）
 
-注意：
+**说明**
 
 -   `pushAudioExternalStreamData` 缓存时长超过 `maxBufferDuration` 时返回 `110`（外部音频缓冲区满）。
 -   `getAudioExternalStreamVolume` 返回当前音量值；引擎未创建时返回 `-1`。
@@ -806,7 +824,7 @@ AoqVideoObserverParams
 
 ### 视频渲染（YUVCanvasRenderer）
 
-SDK 内置的软渲染器，承担移动端 `setLocalView / setRemoteView` 的预览职责。
+SDK 内置的软渲染器。
 
 ```
 import { YUVCanvasRenderer } from 'aoq-electron-sdk';
@@ -957,7 +975,7 @@ onDataMsg: (data: Uint8Array) => void
 
 收到实时数据消息回调。`data` 为 native 侧拷贝后的 `Buffer`，可安全异步持有；文本消息用 `Buffer.from(data).toString()` 转字符串。
 
-#### 音频帧事件
+### 音频帧事件
 
 ```
 onCapturedAudioFrame:        (frame: AoqAudioFrameEvent) => void  /* 采集裸数据 */
@@ -968,7 +986,103 @@ onPlaybackAudioFrame:        (frame: AoqAudioFrameEvent) => void  /* 播放数�
 
 需先调 `setAudioFrameObserver(true)` 与 `enableAudioFrameObserver` 开启。
 
-#### 视频帧事件
+#### onCapturedAudioFrame
+
+采集到原始音频帧时触发。数据为采集后的原始 PCM，未经任何处理。
+
+```
+engine.on('onCapturedAudioFrame', (frame: AoqAudioFrameEvent) => { ... })
+```
+
+参数
+
+类型
+
+说明
+
+frame
+
+AoqAudioFrameEvent
+
+采集的音频帧数据，PCM 在 frame.buffer 字段
+
+返回值：无（void）。Electron 侧为只读模式。
+
+**说明**frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+
+#### onProcessCapturedAudioFrame
+
+3A 处理后的音频帧回调。数据经过回声消除、噪声抑制、自动增益等 3A 处理。
+
+```
+engine.on('onProcessCapturedAudioFrame', (frame: AoqAudioFrameEvent) => { ... })
+```
+
+参数
+
+类型
+
+说明
+
+frame
+
+AoqAudioFrameEvent
+
+3A 处理后的音频帧数据，PCM 在 frame.buffer 字段
+
+返回值：无（void）。Electron 侧为只读模式。
+
+**说明**frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+
+#### onPublishAudioFrame
+
+推流前的音频帧回调。数据即将通过编码后发送到 Relay 服务器。
+
+```
+engine.on('onPublishAudioFrame', (frame: AoqAudioFrameEvent) => { ... })
+```
+
+参数
+
+类型
+
+说明
+
+frame
+
+AoqAudioFrameEvent
+
+推流前的音频帧数据，PCM 在 frame.buffer 字段
+
+返回值：无（void）。Electron 侧为只读模式。
+
+**说明**frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+
+#### onPlaybackAudioFrame
+
+播放前的远端音频帧回调。数据为远端解码后、混音前即将播放的音频。
+
+```
+engine.on('onPlaybackAudioFrame', (frame: AoqAudioFrameEvent) => { ... })
+```
+
+参数
+
+类型
+
+说明
+
+frame
+
+AoqAudioFrameEvent
+
+播放前的远端音频帧数据，PCM 在 frame.buffer 字段
+
+返回值：无（void）。Electron 侧为只读模式。
+
+**说明**frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+
+### 视频帧事件
 
 ```
 onCapturedVideoFrame:  (frame: AoqVideoFrameEvent) => void  /* 采集后（前处理前） */
@@ -980,97 +1094,79 @@ onRemoteVideoFrame:    (frame: AoqVideoFrameEvent) => void  /* 远端解码后�
 
 **说明**事件回调中避免重计算：native 回调经异步线程投递到 JS 主线程，高频帧事件中做耗时操作会造成堆积。
 
+#### onCapturedVideoFrame
+
+采集到原始视频帧时触发（前处理前）。数据为摄像头或屏幕采集后的原始帧，未经前处理。
+
+```
+engine.on('onCapturedVideoFrame', (frame: AoqVideoFrameEvent) => { ... })
+```
+
+参数
+
+类型
+
+说明
+
+frame
+
+AoqVideoFrameEvent
+
+采集的视频帧数据
+
+返回值：无（void）。Electron 侧为只读模式。
+
+**说明**frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+
+#### onPreEncodeVideoFrame
+
+编码前的视频帧回调（前处理后）。数据经过前处理后、编码前。
+
+```
+engine.on('onPreEncodeVideoFrame', (frame: AoqVideoFrameEvent) => { ... })
+```
+
+参数
+
+类型
+
+说明
+
+frame
+
+AoqVideoFrameEvent
+
+编码前的视频帧数据
+
+返回值：无（void）。Electron 侧为只读模式。
+
+**说明**frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+
+#### onRemoteVideoFrame
+
+远端解码后、渲染前的视频帧回调。数据为远端接收并解码后的视频帧。
+
+```
+engine.on('onRemoteVideoFrame', (frame: AoqVideoFrameEvent) => { ... })
+```
+
+参数
+
+类型
+
+说明
+
+frame
+
+AoqVideoFrameEvent
+
+远端解码后的视频帧数据
+
+返回值：无（void）。Electron 侧为只读模式。
+
+**说明**frame.buffer 为 Uint8Array，引用 SDK 内部内存，仅在回调期间有效，异步使用需自行拷贝。
+
 ## 数据类型与枚举
-
-### AoqScreenSourceInfo
-
-字段
-
-类型
-
-说明
-
-sourceType
-
-AoqScreenShareSourceType
-
-源类型
-
-sourceId
-
-string
-
-源 ID，以字符串返回以避免 int64 精度丢失。
-
-sourceName
-
-string
-
-源名称
-
-sourceIsSelf
-
-boolean
-
-是否为自身进程窗口
-
-### AoqScreenShareSourceType
-
-枚举值
-
-值
-
-说明
-
-AoqScreenShareSourceTypeDesktop
-
-0
-
-整个桌面
-
-AoqScreenShareSourceTypeWindow
-
-1
-
-指定窗口
-
-### AoqScreenCaptureConfig
-
-所有字段均可选，`isExternal` 默认 false。
-
-字段
-
-类型
-
-默认值
-
-说明
-
-isExternal
-
-boolean
-
-false
-
-是否由应用提供屏幕原始帧。
-
-sourceId
-
-string | number
-
-—
-
-屏幕源 ID。可选；推荐字符串，number 必须为安全整数。
-
-sourceType
-
-AoqScreenShareSourceType
-
-—
-
-屏幕源类型。
-
-除用于对照底层错误码、未由 TypeScript 导出的 `AoqErrorCode` 外，本节类型均从包根导出，可直接 `import { ... } from 'aoq-electron-sdk'`。已导出的枚举为 TypeScript `enum`，运行时可用；接口（`interface`）仅类型约束。标记为可选的字段缺省时取表中默认值。
 
 ### 通用类型
 
@@ -1115,8 +1211,6 @@ string
 ""
 
 扩展参数（JSON 字符串）
-
-**说明**Android 的 `isBTScoMode` 为移动端字段，Electron 不提供。
 
 #### AoqConnectConfig
 
@@ -2082,8 +2176,6 @@ number
 
 音频播放通道数，支持 1 / 2
 
-**说明**`isVoipMode` / `isDefaultSpeaker` 为移动端字段，Electron 不提供。
-
 #### AoqAudioCodecConfig
 
 **字段**
@@ -2940,8 +3032,6 @@ false
 
 是否外部采集，true 时不打开摄像头
 
-**说明**`cameraDirection` 为移动端字段，桌面端无此字段。
-
 #### AoqVideoCodecConfig
 
 编码与解码共用同一结构（`setVideoEncoderConfig` / `setVideoDecoderConfig`）。
@@ -3068,7 +3158,7 @@ AoqOrientationModeAuto
 
 #### AoqVideoPixelFormat
 
-Electron 侧支持的像素格式（不包含移动端的纹理 / CVPixelBuffer 格式）。
+Electron 支持的像素格式。
 
 **枚举值**
 
@@ -3323,6 +3413,96 @@ reason
 number
 
 错误原因代码（参考 AoqErrorCode）
+
+#### AoqScreenShareSourceType
+
+枚举值
+
+值
+
+说明
+
+AoqScreenShareSourceTypeDesktop
+
+0
+
+整个桌面
+
+AoqScreenShareSourceTypeWindow
+
+1
+
+指定窗口
+
+#### AoqScreenSourceInfo
+
+字段
+
+类型
+
+说明
+
+sourceType
+
+AoqScreenShareSourceType
+
+源类型
+
+sourceId
+
+string
+
+源 ID，以字符串返回以避免 int64 精度丢失。
+
+sourceName
+
+string
+
+源名称
+
+sourceIsSelf
+
+boolean
+
+是否为自身进程窗口
+
+#### AoqScreenCaptureConfig
+
+所有字段均可选，`isExternal` 默认 false。
+
+字段
+
+类型
+
+默认值
+
+说明
+
+isExternal
+
+boolean
+
+false
+
+是否由应用提供屏幕原始帧。
+
+sourceId
+
+string | number
+
+—
+
+屏幕源 ID。可选；推荐字符串，number 必须为安全整数。
+
+sourceType
+
+AoqScreenShareSourceType
+
+—
+
+屏幕源类型。
+
+除用于对照底层错误码、未由 TypeScript 导出的 `AoqErrorCode` 外，本节类型均从包根导出，可直接 `import { ... } from 'aoq-electron-sdk'`。已导出的枚举为 TypeScript `enum`，运行时可用；接口（`interface`）仅类型约束。标记为可选的字段缺省时取表中默认值。
 
 ### 视频帧回调类型
 

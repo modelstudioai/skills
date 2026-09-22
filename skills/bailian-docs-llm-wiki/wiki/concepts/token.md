@@ -1,45 +1,41 @@
-# Token 管理
+# Token
 
-Token 管理是百炼平台对模型调用中 **输入与输出 token 消耗量** 进行计量、配额控制、计费结算与监控分析的统一机制。它贯穿 API 调用全生命周期，是保障服务稳定性、优化成本、实现精细化资源治理的核心横切能力。
+Token 是百炼平台中用于计量模型调用资源消耗的最小计费与配额单位，表示模型处理文本、图像、音频等内容时实际解析或生成的基本语义单元（如子词、视觉 patch 或音频帧）。一个请求的总 Token 数 = 输入 Token（[prompt](../guides/prompt.md) + history + system message 等） + 输出 Token（模型生成内容），该数值直接决定计费金额、配额扣减和限流判断。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **配额控制（Token Plan）**：通过 Token Plan 为 App 或 API Key 设置 `token_quota`（日/月总 token 配额）、`rate_limit`（RPS）、`burst_capacity`（突发缓冲）等硬性限制，超限即返回 `429 Too Many Requests`。适用于生产环境流量治理与多租户隔离。
-- **计费计量**：所有模型调用（同步 `/v1/chat/completions`、异步 `/v1/async-tasks`、批量 `/v1/batch`、Embedding、Rerank、TTS 等）均按 **实际消耗的输入 token + 输出 token 总和** 计费，含 system prompt、function call schema 等隐式内容；流式响应按实际返回 token 实时扣减。
-- **成本管理（[test 1](../guides/test-1.md)）**：免费额度、资源包、节省计划、吞吐预留（PTU）等付费模式均以 token 为基本计量单位进行抵扣与结算；PTU 容量也需按 token 消耗速率（TPM）换算使用。
-- **监控与诊断（[model monitoring](../guides/model-monitoring.md)）**：监控系统按小时/天粒度聚合 token 消耗（分输入/输出），支持按 `api_key_id`、`app_id` 等维度下钻分析，辅助定位高消耗请求、验证配额策略有效性。
-- **认证与初始化（[preparations](../api/preparations.md)）**：API Key 是触发 token 计量的前提——未配置有效 `api_key` 的请求无法通过鉴权，自然不进入 token 计量流水线；单个 API Key 默认受 10 QPS 限流保护，本质是轻量级 token 管理前置守门员。
+- **计费计量**：所有按量付费模型（LLM、Embedding、多模态、语音等）均以实际消耗的 Token 数为计费基础。输入/输出 Token 分开计价，部分功能（如上下文缓存命中）支持折扣计费。
+- **Token Plan 配额控制**：通过 `X-Token-Plan-ID` 绑定 Token Plan 后，每次 API 调用（`/v1/chat/completions`、`/v1/embeddings` 等）的总 Token 消耗将实时扣减对应 Plan 的 `max_tokens_per_day` 配额，并受 `max_qps` 速率限制约束。
+- **监控与可观测性**：模型监控系统自动采集并聚合 `token_usage_input` 和 `token_usage_output` 指标，支持按小时/分钟粒度分析用量趋势、识别异常 Token 暴增或低效 [prompt](../guides/prompt.md)。
+- **异步任务与文件处理**：图像/视频生成等异步任务在结果返回时一次性上报总 Token 消耗；上传文件（如图片、音频）用于多模态推理时，其编码后产生的 Token 也计入本次请求总量。
+- **免费额度与成本优化**：新人免费额度、节省计划抵扣、吞吐预留（TPM）等均以 Token 为核算基准；额度优先级为「免费额度 > 资源包 > 节省计划 > 按量付费」。
+
+> ⚠️ 注意：Token 统计不含硬编码的系统提示词（system [prompt](../guides/prompt.md)）模板部分；流式响应（`stream=true`）的 Token 在整个响应结束时一次性扣减，非逐 chunk 扣减；Token Plan 不适用于模型微调训练、异步批量（`/v1/batch`）及 Coding Plan 独立通道。
 
 ## 关键参数和配置
 
-| 参数 | 所属模块 | 说明 | 开发者须知 |
-|------|----------|------|------------|
-| `token_quota` | Token Plan | 每日/每月总 token 配额（单位：千 token），滚动窗口计费 | 建议设为业务峰值日消耗量的 1.5–2 倍；个人版默认值 `5000`（5M tokens/day）已过时，以控制台为准 |
-| `burst_capacity` | Token Plan | 突发流量缓冲容量（token 单位） | 推荐设为 `token_quota` 的 5%–10%，用于平滑瞬时高峰，避免误拒合法请求 |
-| `max_tokens` | Token Plan / 模型 API | 单次请求最大输出 token 数（硬限制） | 超出将被模型截断并返回 `context_length_exceeded` 错误；不影响输入 token 计费 |
-| `input_tokens` / `output_tokens` | 监控 & 账单 | 实际消耗的输入/输出 token 数（由服务端精确解析） | **不等于客户端估算值**；流式响应中 `output_tokens` 在 `done` 事件后才最终确定；账单以此为准 |
-| `X-Token-Quota-Used` / `X-RateLimit-Remaining` | 响应 Header | 当前周期已用 token 量、剩余 RPS 配额 | 开发者应在关键路径中记录该头信息，用于自助诊断配额异常 |
-
-> ⚠️ 注意：  
-> - 免费额度、节省计划、PTU 均**严格按地域隔离**，华北2（北京）的 token 配额/额度不可用于新加坡地域调用；  
-> - Batch 调用产生的 token **不享受新人免费额度抵扣**；  
-> - 异步任务重试不重复计费，但其状态轮询（`GET /v1/async-tasks/{task_id}`）单独计入 RPS 限额；  
-> - 所有 token 计量以模型服务层解析结果为准，客户端应避免自行估算用于配额判断。
+| 参数 | 说明 | 典型值/范围 | 使用位置 |
+|------|------|-------------|----------|
+| `input_tokens` / `output_tokens` | 响应体中返回的实际消耗 Token 数（只读） | 整数，≥0 | API 响应字段（如 `/v1/chat/completions`） |
+| `max_tokens` | 控制模型最大输出长度，直接影响 `output_tokens` 上限 | 1–8192（依模型而异） | 请求 body 参数 |
+| `token_plan_id` | Token Plan 唯一标识符 | 字符串（如 `tp-abc123`） | 请求 Header：`X-Token-Plan-ID` |
+| `max_tokens_per_day` | 每日 Token 总量上限（单位：千 Token） | 1–100000 → 实际为 1,000–100,000,000 tokens/天 | Token Plan 创建参数 |
+| `X-RateLimit-Remaining-Tokens` | 当前 Plan 剩余可用 Token 数（Header 返回） | 整数，单位：千 Token | 响应 Header（启用 Token Plan 时） |
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速验证配额生效**：发起一次测试请求，检查响应头 `X-Token-Quota-Used` 是否递增、`X-RateLimit-Remaining` 是否减少。  
-- ✅ **精准排查超限**：若遇 `429`，优先检查 `X-RateLimit-Remaining: 0`（RPS 超限）还是 `X-Token-Quota-Used` 接近 `token_quota`（总量超限）。  
-- ✅ **成本优化建议**：高频小请求 → 优先调优 `max_tokens` 并启用 PTU；长上下文场景 → 关注缓存折算系数与长输入阶梯系数（见 [test 1](../guides/test-1.md) 文档），合理使用 `cache_prompt`。  
-- ✅ **安全实践**：API Key 必须通过环境变量注入（如 `DASHSCOPE_API_KEY`），禁止硬编码；Token Plan 绑定应遵循最小权限原则（一个 App 仅绑定必需的 Plan）。  
-- ❌ **避免踩坑**：不要依赖客户端 token 估算做限流；不要在前端暴露 API Key；不要开启“安心模式”（免费额度用完即停）于生产环境。
+- ✅ **务必校验响应 Header**：若看到 `X-RateLimit-Remaining-Tokens`，说明 Token Plan 已生效；若返回 `429 Too Many Requests` 且错误码为 `"TOKEN_EXHAUSTED"`，即当日配额已用尽。
+- ✅ **流式调用需预估总量**：`stream=true` 不降低 Token 消耗，仅改变传输方式；请用 `max_tokens` 合理约束输出长度，避免意外超支。
+- ✅ **监控排查首选 Token 维度**：在控制台「模型监控」中筛选 `token_usage_input` 和 `token_usage_output`，快速定位高 Token 消耗请求（如过长 history、重复 prompt、未截断的文档输入）。
+- ✅ **跨地域/子空间独立计费**：同一 `token_plan_id` 在不同 project 或地域下不共享配额；子业务空间调用需单独绑定 Plan。
+- ✅ **调试建议**：首次集成 Token Plan 时，在沙箱环境用小配额（如 `max_tokens_per_day=10` → 10,000 tokens/天）验证扣减逻辑，再逐步放大。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
 - [token plan api](../api/token-plan-api.md)
-- [preparations](../api/preparations.md)
 - [test 1](../guides/test-1.md)
 - [model monitoring](../guides/model-monitoring.md)
+- [more about models](../api/more-about-models.md)
 
 

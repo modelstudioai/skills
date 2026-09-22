@@ -1,42 +1,36 @@
 # application gallery
 
-应用广场是百炼平台提供的预置应用集合，面向开发者提供开箱即用的 AI 能力封装，覆盖教育、音视频、法律、金融、客服、数据处理、多模态交互等多个垂直场景。所有应用均基于百炼统一模型服务底座构建，支持快速集成与二次定制。开发者可通过控制台或 API 直接调用，无需从零训练模型。
+应用广场是百炼平台提供的预置应用集合，面向开发者提供开箱即用的行业级 Agent 和多模态能力封装。所有应用均基于平台统一 Runtime 运行，支持快速集成、参数化配置与轻量定制。开发者可通过控制台或 OpenAPI 直接调用，无需从零构建底层模型链路。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-应用广场中的每个应用均绑定特定模型能力与业务逻辑，例如：
-- 通义拍照解题辅导依赖多模态理解（图文识别+数学推理）模型；
-- 通义听悟Agent 基于语音识别（ASR）、说话人分离与会议摘要模型；
-- 通义法睿 使用法律领域微调的大语言模型与判例检索增强模块；
-- 通义 UI Agent 集成视觉理解（VLM）与动作规划模型，支持网页/APP 自动化操作。
+应用广场中的每个应用已绑定适配的底层模型（如 Qwen-VL、Qwen-Audio、Qwen2.5-72B 等）及配套工具集，覆盖教育辅导、语音对话分析、客服机器人、数据挖掘、深度搜索、UI 自动化等场景。例如，[官方应用-通义拍照解题辅导](../../raw/application-user-guide/application-gallery/edu-tutor.md) 基于多模态理解模型实现图像+文本联合推理；[通义法睿](../../raw/application-user-guide/application-gallery/tongyi-farui.md) 集成法律垂类微调模型与法规知识图谱；[通义 UI Agent](../../raw/application-user-guide/application-gallery/ui-agent.md) 则依赖视觉定位与动作规划双模块协同。
 
-具体能力细节请参阅各应用文档，如 [官方应用-通义拍照解题辅导](../../raw/application-user-guide/application-gallery/edu-tutor.md)、[官方应用-通义听悟Agent](../../raw/application-user-guide/application-gallery/official-application-tingwu-agent.md) 和 [通义法睿](../../raw/application-user-guide/application-gallery/tongyi-farui.md)。
+> **注意**：部分文档中提及的“支持 Qwen1.5-32B”已过时——当前所有新上线应用默认使用 Qwen2.5 系列模型，旧版模型仅在兼容模式下可选，详见 [官方应用-通义深度搜索](../../raw/application-user-guide/application-gallery/tongyi-deepsearch.md) 的 runtime 版本说明。
 
 ## 关键参数
 
-调用应用广场应用时，需传入以下通用参数（部分应用支持扩展参数）：
+调用任一应用时，需传入以下通用参数：
+- `app_id`：应用唯一标识（如 `edu-tutor`, `tongyi-farui`），可在控制台应用列表页获取；
+- `input`：结构化输入对象，schema 因应用而异（如 `edu-tutor` 要求 `{"image_url": "...", "question": "..."}`，`web-search-agent` 要求 `{"query": "...", "max_results": 5}`）；
+- `parameters`（可选）：覆盖应用默认配置，常见字段包括 `temperature`、`max_tokens`、`enable_citation`（是否返回引用来源）等。
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `app_id` | string | 是 | 应用唯一标识，可在控制台「应用广场」页获取 |
-| `input` | object | 是 | 输入数据结构，格式因应用而异（如 `image_url`、`audio_url`、`text` 等） |
-| `parameters` | object | 否 | 可选配置项，例如 `max_output_tokens`、`temperature`、`enable_rag` 等 |
-
-> **注意**：部分旧版文档（如 [官方应用-通义音频播客生成](../../raw/application-user-guide/application-gallery/official-application-aipodcast.md)）中仍列出已弃用的 `voice_style` 参数，实际应使用 `voice_config` 对象；请以最新 SDK 示例和 API 文档为准。
+所有参数定义以各应用子文档为准，例如 [官方应用-伶鹊CCAI-对话分析AIO](../../raw/application-user-guide/application-gallery/official-application-lingque-ccai-dialogue-analysis-aio.md) 明确要求 `input` 必须包含 `transcript` 字段且长度 ≤ 10000 字符。
 
 ## 使用方式
 
-1. **控制台调用**：进入百炼控制台 →「应用广场」→ 选择目标应用 → 点击「在线调试」填写输入后执行；
-2. **API 调用**：通过 `POST /v1/applications/{app_id}/invoke` 接口发起请求，需携带有效 `Authorization` 头；
-3. **SDK 集成**：使用 `BailianClient.invoke_application()` 方法（Python SDK v1.8.0+），示例见 [通义 UI Agent](../../raw/application-user-guide/application-gallery/ui-agent.md) 文档。
+1. **控制台调用**：进入「应用广场」页面 → 选择目标应用 → 点击「调试」，填写 input 并提交；
+2. **OpenAPI 调用**：POST `/v1/applications/{app_id}/invoke`，Header 中携带 `Authorization: Bearer <api_key>`；
+3. **嵌入 SDK**：使用 `@alibaba/bailian-sdk` 的 `invokeApplication()` 方法，传入 `app_id` 与 `input` 对象。
+
+所有方式均共享同一鉴权体系与配额限制，无需额外开通权限。
 
 ## 限制和注意事项
 
-- 单次调用 `input` 总大小上限为 20 MB（含图片、音频等二进制内容 Base64 编码后长度）；
-- 音频类应用（如听悟Agent、语音对话机器人）仅支持 WAV/MP3/AMR 格式，采样率须为 8kHz 或 16kHz；
-- 所有应用默认启用流式响应（`stream=true`），若需完整响应请显式设置 `stream=false`；
-- 应用权限受项目空间（Project）隔离，跨空间调用需申请授权；
-- [官方应用-伶鹊CCAI-客服对话Agent](../../raw/application-user-guide/application-gallery/official-application-voicepica-ccai-beebot-agent.md) 当前仅支持中文语境下的意图识别与槽位填充，不支持多语言混合输入。
+- 单次请求 `input` 总大小上限为 10 MB（含 base64 图片/音频）；
+- 音频类应用（如 [官方应用-通义听悟Agent](../../raw/application-user-guide/application-gallery/official-application-tingwu-agent.md)）仅支持 WAV/MP3 格式，采样率须为 16kHz；
+- 应用间不共享会话状态，如需上下文连续，须自行维护 `session_id` 并在每次请求中显式传递（部分应用如 `lingque-ccai-voice-dialogue-robot` 已支持该字段）；
+- 免费试用额度仅适用于首次部署的前 3 个应用实例，超出后按实际 token 消耗计费。
 
 ## 来源文档
 

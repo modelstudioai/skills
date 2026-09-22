@@ -10,9 +10,9 @@ SDK 以全局单例方式持有引擎实例，通过 `AoqClientEngine` 类对外
 
 ### 引擎生命周期
 
-**接口**
+接口
 
-**简介**
+简介
 
 `createEngine`
 
@@ -36,9 +36,9 @@ SDK 以全局单例方式持有引擎实例，通过 `AoqClientEngine` 类对外
 
 ### 音频设备管理
 
-**接口**
+接口
 
-**简介**
+简介
 
 `startAudioCapture`
 
@@ -78,9 +78,9 @@ SDK 以全局单例方式持有引擎实例，通过 `AoqClientEngine` 类对外
 
 ### 音频编码配置
 
-**接口**
+接口
 
-**简介**
+简介
 
 `setAudioEncoderConfig`
 
@@ -92,9 +92,9 @@ SDK 以全局单例方式持有引擎实例，通过 `AoqClientEngine` 类对外
 
 ### 视频设备管理
 
-**接口**
+接口
 
-**简介**
+简介
 
 `startVideoCapture`
 
@@ -112,23 +112,11 @@ SDK 以全局单例方式持有引擎实例，通过 `AoqClientEngine` 类对外
 
 设置或移除远端视频渲染窗口
 
-getScreenSourceList
-
-获取屏幕和窗口源
-
-startScreenCapture
-
-开始屏幕采集
-
-stopScreenCapture
-
-停止屏幕采集
-
 ### 视频编码与外部输入
 
-**接口**
+接口
 
-**简介**
+简介
 
 `setVideoEncoderConfig`
 
@@ -146,11 +134,29 @@ stopScreenCapture
 
 推送外部已编码视频帧
 
+### 屏幕采集
+
+接口
+
+简介
+
+`getScreenSourceList`
+
+获取屏幕采集源列表（桌面端独有）
+
+`startScreenCapture`
+
+启动屏幕采集
+
+`stopScreenCapture`
+
+停止屏幕采集
+
 ### 媒体流发送控制
 
-**接口**
+接口
 
-**简介**
+简介
 
 `enableSendMediaStream`
 
@@ -158,9 +164,9 @@ stopScreenCapture
 
 ### 音频文件播放
 
-**接口**
+接口
 
-**简介**
+简介
 
 `startAudioFile`
 
@@ -200,9 +206,9 @@ stopScreenCapture
 
 ### 外部音频流
 
-**接口**
+接口
 
-**简介**
+简介
 
 `addAudioExternalStream`
 
@@ -230,9 +236,9 @@ stopScreenCapture
 
 ### 实时消息
 
-**接口**
+接口
 
-**简介**
+简介
 
 `sendDataMsg`
 
@@ -240,9 +246,9 @@ stopScreenCapture
 
 ### 音频帧回调
 
-**接口**
+接口
 
-**简介**
+简介
 
 `setAudioFrameObserver`
 
@@ -254,9 +260,9 @@ stopScreenCapture
 
 ### 视频帧回调
 
-**接口**
+接口
 
-**简介**
+简介
 
 `setVideoFrameObserver`
 
@@ -266,11 +272,11 @@ stopScreenCapture
 
 开启或关闭指定位置的视频帧回调
 
-### AoqEngineEventListener 回调
+### AoqEngineEventListener
 
-**回调**
+接口
 
-**简介**
+简介
 
 `onError`
 
@@ -312,30 +318,47 @@ stopScreenCapture
 
 收到实时数据消息回调
 
+### IAudioFrameObserver
+
+接口
+
+简介
+
+onCapturedAudioFrame
+
+采集裸数据回调。通过 `enableAudioFrameObserver` 设置 `audioSource = AoqAudioSourceCaptured` 开启，支持设置采样率、声道数，支持读写模式。
+
+onProcessCapturedAudioFrame
+
+3A 后数据回调。通过 `enableAudioFrameObserver` 设置 `audioSource = AoqAudioSourceProcessCaptured` 开启，支持设置采样率、声道数，支持读写模式。
+
+onPublishAudioFrame
+
+推流数据回调。通过 `enableAudioFrameObserver` 设置 `audioSource = AoqAudioSourcePublish` 开启，支持设置采样率、声道数，仅支持只读模式。
+
+onPlaybackAudioFrame
+
+播放数据回调。通过 `enableAudioFrameObserver` 设置 `audioSource = AoqAudioSourcePlayback` 开启，支持设置采样率、声道数，支持读写模式。
+
+### IVideoFrameObserver
+
+接口
+
+简介
+
+onCapturedVideoFrame
+
+本地采集后裸数据回调（前处理前）。通过 `enableVideoFrameObserver` 设置 `videoSource = AoqVideoSourceCaptured` 开启。
+
+onPreEncodeVideoFrame
+
+本地编码前裸数据回调（前处理后）。通过 `enableVideoFrameObserver` 设置 `videoSource = AoqVideoSourcePreEncode` 开启。
+
+onRemoteVideoFrame
+
+远端解码后、渲染前裸数据回调。通过 `enableVideoFrameObserver` 设置 `videoSource = AoqVideoSourceRemote` 开启。
+
 ## 接口详情
-
-### 屏幕采集
-
-```
-virtual int startScreenCapture(const AoqScreenCaptureConfig& config);
-virtual int stopScreenCapture();
-```
-
-`config` 为屏幕采集配置。屏幕画面通过 `AoqTrackTypeScreen` 轨道发送。
-
-返回值：0 表示成功；非 0 表示失败。 接口同步返回，不提供 `onScreenCaptureStateChanged` 回调。
-
-先调用 `getScreenSourceList` 获取屏幕或窗口源，再将选定的 `sourceId` 和 `sourceType` 传入采集配置。
-
-外部原始帧：设置 `isExternal=true` 后，通过 `pushExternalVideoCapturedFrame` 输入 Screen 轨道的原始帧，由 SDK 编码。外部已编码帧：先通过 `setVideoEncoderConfig` 将 Screen 轨道设置为外部编码，再调用 `pushExternalVideoEncodedFrame`。
-
-#### getScreenSourceList
-
-```
-virtual AoqScreenSourceList getScreenSourceList();
-```
-
-返回屏幕源列表。使用后必须调用 `AoqScreenSourceList::screenSourceListFree(list)` 释放列表内存。
 
 ### 引擎生命周期
 
@@ -879,6 +902,29 @@ virtual int pushExternalVideoEncodedFrame(AoqTrackType trackType, const AoqVideo
 外部已编码帧数据，详见 `AoqVideoEncodedFrame`
 
 返回值：0 表示成功；非 0 表示失败。
+
+### 屏幕采集
+
+```
+virtual int startScreenCapture(const AoqScreenCaptureConfig& config);
+virtual int stopScreenCapture();
+```
+
+`config` 为屏幕采集配置。屏幕画面通过 `AoqTrackTypeScreen` 轨道发送。
+
+返回值：0 表示成功；非 0 表示失败。 接口同步返回，不提供 `onScreenCaptureStateChanged` 回调。
+
+先调用 `getScreenSourceList` 获取屏幕或窗口源，再将选定的 `sourceId` 和 `sourceType` 传入采集配置。
+
+外部原始帧：设置 `isExternal=true` 后，通过 `pushExternalVideoCapturedFrame` 输入 Screen 轨道的原始帧，由 SDK 编码。外部已编码帧：先通过 `setVideoEncoderConfig` 将 Screen 轨道设置为外部编码，再调用 `pushExternalVideoEncodedFrame`。
+
+#### getScreenSourceList
+
+```
+virtual AoqScreenSourceList getScreenSourceList();
+```
+
+返回屏幕源列表。使用后必须调用 `AoqScreenSourceList::screenSourceListFree(list)` 释放列表内存。
 
 ### 媒体流发送控制
 
@@ -1498,8 +1544,6 @@ virtual int enableVideoFrameObserver(bool enabled, AoqVideoSource videoSource,
 
 返回值：0 表示成功；非 0 表示失败。
 
-## 回调
-
 ### AoqEngineEventListener
 
 `AoqEngineEventListener` 是 SDK 所有异步事件通知的统一出口，为抽象类，由调用方继承实现并在 `createEngine` 时传入。所有回调可能在内部线程触发，实现者需自行处理线程安全。连接状态流转：`Disconnected → Connecting → Connected/Failed → Disconnected`。
@@ -1929,202 +1973,6 @@ virtual bool onRemoteVideoFrame(AoqTrackType trackType, AoqVideoFrame& frame) = 
 返回值：`true` 数据已修改、需写回 SDK；`false` 只读。
 
 ## 数据类型与枚举
-
-### AoqScreenCaptureStateCode
-
-屏幕采集状态枚举。当前 SDK 已定义该类型，但没有对应的状态回调。
-
-枚举值
-
-值
-
-说明
-
-AoqScreenCaptureNone
-
-0
-
-无
-
-AoqScreenCaptureStarting
-
-1
-
-启动中
-
-AoqScreenCaptureStarted
-
-2
-
-已启动
-
-AoqScreenCaptureStopping
-
-3
-
-停止中
-
-AoqScreenCaptureStopped
-
-4
-
-已停止
-
-AoqScreenCaptureFail
-
-5
-
-失败
-
-### AoqScreenCaptureState
-
-字段
-
-类型
-
-说明
-
-state
-
-AoqScreenCaptureStateCode
-
-屏幕采集状态码。
-
-reason
-
-int
-
-错误码，对应 AoqErrorCode；正常为 0。
-
-### AoqScreenSourceList
-
-字段/方法
-
-类型
-
-说明
-
-sourceCount
-
-int
-
-源数量
-
-sourceList
-
-const AoqScreenSourceInfo\*
-
-源数组；使用后调用 screenSourceListFree(list) 释放。
-
-screenSourceListFree(list)
-
-static void
-
-释放列表内存。调用方必须调用，否则会发生内存泄漏。
-
-### AoqScreenSourceInfo
-
-字段
-
-类型
-
-默认值
-
-说明
-
-sourceType
-
-AoqScreenShareSourceType
-
-Desktop
-
-源类型
-
-sourceId
-
-int64\_t
-
-0
-
-源 ID
-
-sourceName
-
-const char\*
-
-nullptr
-
-源名称
-
-sourceIsSelf
-
-bool
-
-false
-
-是否为自身进程窗口
-
-### AoqScreenShareSourceType
-
-枚举值
-
-值
-
-说明
-
-AoqScreenShareSourceTypeDesktop
-
-0
-
-整个桌面
-
-AoqScreenShareSourceTypeWindow
-
-1
-
-指定窗口
-
-### AoqScreenCaptureConfig
-
-字段
-
-类型
-
-默认值
-
-说明
-
-isExternal
-
-bool
-
-false
-
-是否由应用提供屏幕原始帧。
-
-sourceId
-
-int64\_t
-
-0
-
-屏幕源 ID。
-
-sourceType
-
-AoqScreenShareSourceType
-
-AoqScreenShareSourceTypeDesktop
-
-屏幕源类型。
-
-appGroup
-
-const char\*
-
-nullptr
-
-iOS 专用，本平台不使用。
 
 ### 通用类型
 
@@ -4505,3 +4353,201 @@ AoqTrackType
 AoqTrackTypeVideo
 
 需要观察的视频轨道；仅支持 Video / Screen。
+
+### 屏幕采集类型
+
+#### AoqScreenCaptureStateCode
+
+屏幕采集状态枚举。当前 SDK 已定义该类型，但没有对应的状态回调。
+
+枚举值
+
+值
+
+说明
+
+AoqScreenCaptureNone
+
+0
+
+无
+
+AoqScreenCaptureStarting
+
+1
+
+启动中
+
+AoqScreenCaptureStarted
+
+2
+
+已启动
+
+AoqScreenCaptureStopping
+
+3
+
+停止中
+
+AoqScreenCaptureStopped
+
+4
+
+已停止
+
+AoqScreenCaptureFail
+
+5
+
+失败
+
+#### AoqScreenCaptureState
+
+字段
+
+类型
+
+说明
+
+state
+
+AoqScreenCaptureStateCode
+
+屏幕采集状态码。
+
+reason
+
+int
+
+错误码，对应 AoqErrorCode；正常为 0。
+
+#### AoqScreenSourceList
+
+字段/方法
+
+类型
+
+说明
+
+sourceCount
+
+int
+
+源数量
+
+sourceList
+
+const AoqScreenSourceInfo\*
+
+源数组；使用后调用 screenSourceListFree(list) 释放。
+
+screenSourceListFree(list)
+
+static void
+
+释放列表内存。调用方必须调用，否则会发生内存泄漏。
+
+#### AoqScreenSourceInfo
+
+字段
+
+类型
+
+默认值
+
+说明
+
+sourceType
+
+AoqScreenShareSourceType
+
+Desktop
+
+源类型
+
+sourceId
+
+int64\_t
+
+0
+
+源 ID
+
+sourceName
+
+const char\*
+
+nullptr
+
+源名称
+
+sourceIsSelf
+
+bool
+
+false
+
+是否为自身进程窗口
+
+#### AoqScreenShareSourceType
+
+枚举值
+
+值
+
+说明
+
+AoqScreenShareSourceTypeDesktop
+
+0
+
+整个桌面
+
+AoqScreenShareSourceTypeWindow
+
+1
+
+指定窗口
+
+#### AoqScreenCaptureConfig
+
+字段
+
+类型
+
+默认值
+
+说明
+
+isExternal
+
+bool
+
+false
+
+是否由应用提供屏幕原始帧。
+
+sourceId
+
+int64\_t
+
+0
+
+屏幕源 ID。
+
+sourceType
+
+AoqScreenShareSourceType
+
+AoqScreenShareSourceTypeDesktop
+
+屏幕源类型。
+
+appGroup
+
+const char\*
+
+nullptr
+
+iOS 专用，本平台不使用。

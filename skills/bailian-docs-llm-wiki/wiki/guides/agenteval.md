@@ -1,69 +1,65 @@
 # agenteval
 
-`agenteval` 是百炼平台 Evolution 体系中面向 AI Agent 全生命周期评测与优化的核心模块，提供可观测性、自动化评测、智能 Prompt 优化三大能力。它支持对智能体/工作流应用的执行链路进行端到端追踪，基于评测集与多类型评估器量化输出质量，并通过版本对比与调试反馈驱动 Prompt 持续迭代。所有功能均通过控制台界面操作，暂未开放 API 接口 [应用观测](../../raw/application-user-guide/agenteval/agenteval-observability/agenteval-observation.md)。
+`agenteval` 是百炼 Evolution 平台中面向 AI Agent 全生命周期管理的核心能力模块，提供可观测性（Observability）、自动化评测（Evaluation）与 Prompt 智能优化（Optimization）三位一体的闭环能力。它不依赖特定开发框架，基于 OpenTelemetry GenAI 标准实现链路接入，支持从线上 Trace 沉淀到评测集、从多维评估到版本化 Prompt 迭代的完整工程化路径，专为开发者设计，聚焦问题定位、质量量化与效果提升。
 
 ## 支持的模型/功能
 
-- **可观测性**：支持智能体（Agent 1.0 / 2.0）和工作流应用的全链路 Trace 追踪，覆盖 Prompt 解析、大模型调用、MCP 工具执行、向量检索、记忆读写等环节；支持延时（TTFT、总耗时）、Token 消耗、QPM、错误率等监控与限流指标 [应用观测](../../raw/application-user-guide/agenteval/agenteval-observability/agenteval-observation.md)。
-- **评测能力**：
+- **观测能力**：支持智能体应用（Agent 1.0 / 2.0）和工作流应用的全链路追踪，覆盖 Prompt 解析、大模型调用（含 TTFT、[Token](../concepts/token.md) 消耗）、工具执行（MCP）、向量检索、记忆读写等节点；但**暂不支持通过 Assistant API 创建的智能体应用** [应用观测](../../raw/application-user-guide/agenteval/agenteval-observability/agenteval-observation.md)。
+- **评测能力**：支持多维度自动化评估，包括准确性、相关性、合规性、简洁性、格式规范性等。提供两类核心组件：
   - **预置评估器**：按「通用质量」「智能体」「文本匹配」「文本相似度」「格式校验」分类，开箱即用；
-  - **自定义评估器**：支持 LLM 评估器（需指定模型，限时免费）和 Code 评估器（Python 3.10 脚本），可配置评分范围（如 0–100）、通过阈值及参数映射；
-  - **基于评测任务创建评估器**：从已完成标注的历史评测任务中自动抽象 LLM 评估规则 [评估器](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-grader.md)。
-- **优化能力**：支持多版本 Prompt 对比调试、基于调试对话与人工反馈的智能优化，以及一键采纳最优配置；优化结果需手动发布才生效 [应用优化](../../raw/application-user-guide/agenteval/agenteval-optimization.md)。
+  - **自定义评估器**：支持 LLM 评估器（调用大模型语义评分）和 Code 评估器（Python 脚本规则判断），可基于历史评测任务的标注结果自动反演生成 LLM 评估器 [评估器](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-grader.md)。
+- **优化能力**：提供 Prompt 多版本对比调试、基于调试对话+人工反馈的智能优化、以及基于优质评测集数据的定向优化。所有优化操作均作用于草稿态 Prompt，**不会自动发布应用**，需人工验证后显式发布 [应用优化](../../raw/application-user-guide/agenteval/agenteval-optimization.md)。
 
-> **注意**：文档 13 明确指出“应用观测目前暂无 API”，但文档 1 中“观测”章节未提及该限制，易引发误解；以文档 13 为准。
+> **注意**：文档 1 中称“支持任意框架、任意运行时快速接入”，但文档 3 明确指出“应用观测目前暂不支持通过 Assistant API 创建的智能体应用”。该限制适用于整个 `agenteval` 观测链路，属实际运行约束，非文档过时，应以文档 3 为准。
 
 ## 关键参数
 
-| 参数类别 | 关键字段 | 说明 |
-|----------|----------|------|
-| **评估器通用** | `评分范围` | 决定打分尺度（如 0–1、1–5、0–100），需与 Prompt 中的评分指令严格一致；精细评估推荐 0–100，快速分类推荐 0–1 或 1–5 [评估器](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-grader.md)。 |
-| | `通过阈值` | 评分 ≥ 阈值为 Pass；建议设为评分范围中位数（如 0–100 时设为 50）。 |
-| **LLM 评估器** | `模型选择` | 支持多种大模型，评估模型限时免费；建议选用 32B 以上参数量模型提升准确性。 |
-| | `Prompt` | 必须明确评分标准、步骤、输出格式；可导入预置模板或基于历史评测任务生成。 |
-| **Code 评估器** | `入参设置` | 必须包含 `query` 和 `response`（默认），可添加自定义变量；函数签名须与入参完全一致。 |
-| | `执行函数` | 必须返回数值类型结果（在评分范围内），建议含异常处理逻辑。 |
-| **评测任务** | `评测集字段映射` | 所有评估器参数（如 `query`, `reference`, `response`）必须显式映射到评测集字段或模型输出；映射错误将导致评估失败 [评测任务](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-evaluation-task.md)。 |
+| 参数类别 | 关键项 | 说明 |
+|----------|--------|------|
+| **评估器配置** | 评分范围、通过阈值 | 决定打分尺度（如 0–100 或 1–5）与 Pass/Fail 判定基准；LLM 评估器中需确保 Prompt 与评分范围一致 [评估器](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-grader.md) |
+| **评测任务** | 字段映射 | 必须将评估器所需参数（如 `query`, `response`, `reference`）准确映射至评测集字段或模型输出；映射错误将导致评估失败 [评测任务](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-evaluation-task.md) |
+| **标签管理** | 标签类型（分类/布尔/数字/文本） | 影响标注方式与筛选能力；例如分类标签支持多选，数字标签支持范围筛选，文本标签用于自由备注 [标签管理](../../raw/application-user-guide/agenteval/agenteval-tags/agenteval-tag-management.md) |
+| **告警规则** | 持续时间、检查周期、阈值、统计周期 | 告警触发依赖指标在指定统计周期内持续满足阈值条件；预置模板已覆盖 QPM、错误率、TTFT 等常见场景 [告警管理](../../raw/application-user-guide/agenteval/agenteval-observability/agenteval-alert-management.md) |
 
 ## 使用方式
 
-1. **准备阶段**  
-   - 创建并**发布**评测集（草稿不可用）[评测集](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-evaluation-set.md)；  
-   - 创建评估器（预置/LLM/Code/基于评测任务），完成试运行验证（LLM/Code 类型支持，基于评测任务类型不支持）；  
-   - 开启目标应用的观测（需主账号完成 OpenTelemetry 权限与服务开通）。
+1. **观测接入**：  
+   - 主账号完成可观测链路 OpenTelemetry 服务授权、开通与 LogStore 初始化；  
+   - 在应用观测页面开启目标应用的观测，Trace 数据分钟级同步；  
+   - 可直接将 Span 数据批量导入评测集，构建真实业务评测样本 [应用观测](../../raw/application-user-guide/agenteval/agenteval-observability/agenteval-observation.md)。
 
-2. **评测执行**  
-   - 创建评测任务：选择已发布评测集、关联应用（或选“不关联应用”用于纯人工标注）、添加 ≤10 个评估器并完成**全部参数映射**；  
-   - 启动任务后，可在详情页查看自动评分结果、人工标签、数据明细及指标统计（综合得分、通过率、Token 消耗等）。
+2. **评测构建**：  
+   - 创建评测集（需发布后方可使用），选择类型（智能体/工作流/自定义）并规划表结构；  
+   - 创建或选用评估器，严格按其必选参数（如 `query`+`response`）设计评测集字段；  
+   - 创建评测任务，关联评测集、应用及 ≥1 个评估器，完成参数映射后发起批量评测。
 
-3. **优化迭代**  
-   - 在应用优化页面发起调试，输入问题观察多版本 Prompt 输出差异；  
-   - 或基于调试结果+人工反馈（描述“问题现象+缺失内容+期望行为”）生成优化 Prompt；  
-   - **采纳**后仍需手动调试验证原场景、正常场景、边界场景，确认无退化再点击**发布**。
+3. **Prompt 优化**：  
+   - 在应用优化页面发起任务，支持两种路径：  
+     - **版本对比**：设置基准组与对照组 Prompt，输入问题并对比输出差异，一键采纳最优配置；  
+     - **调试反馈**：输入测试问题 → 选择代表性调试结果 → 描述具体问题与期望行为 → 生成优化 Prompt → 采纳并验证。
 
 ## 限制和注意事项
 
-- **评测集**：仅支持 `.xls`/`.xlsx` 格式，单文件 ≤20 MB；草稿状态不可用于评测任务 [评测集](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-evaluation-set.md)。  
-- **评估器**：被评测任务引用的评估器无法删除；基于评测任务创建的评估器不支持试运行，需实际运行评测任务验证效果。  
-- **观测能力**：不支持通过 Assistant API 创建的智能体应用；Trace 数据同步延迟为分钟级，关闭观测后历史数据不再更新。  
-- **计费**：评测任务中 LLM 评估器调用产生的 Token 按标准计费；Code 评估器无额外费用。  
-- **权限**：OpenTelemetry 服务开通需主账号操作，子账号需被授予对应权限。  
-- **版本控制**：评测集最多保留最近 10 个版本；评估器编辑支持版本回溯，但采纳优化仅更新当前 Prompt 草稿，不自动发布。
+- **API 缺失**：应用观测模块当前**无公开 API**，所有操作需通过控制台完成 [应用观测](../../raw/application-user-guide/agenteval/agenteval-observability/agenteval-observation.md)。  
+- **评测集状态约束**：评测集必须处于**已发布**状态才能用于评测任务；草稿状态不可用，且发布后无法直接编辑表结构 [评测集](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-evaluation-set.md)。  
+- **评估器依赖限制**：自定义评估器被评测任务引用后，**无法删除**；删除前需确认无任务依赖 [评估器](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-grader.md)。  
+- **优化生效流程**：所有 Prompt 采纳操作仅更新草稿，**必须手动调试验证 + 点击发布**才生效；未发布版本对线上流量无影响 [应用优化](../../raw/application-user-guide/agenteval/agenteval-optimization.md)。  
+- **告警通知渠道**：告警历史列表中**不展示具体通知渠道（如邮箱、短信）信息**，仅显示联系人/联系人组 [告警管理](../../raw/application-user-guide/agenteval/agenteval-observability/agenteval-alert-management.md)。
 
 ## 来源文档
 
+- [概览](../../raw/application-user-guide/agenteval/agenteval-introduction.md)
 - [快速开始](../../raw/application-user-guide/agenteval/agenteval-quick-start.md)
+- [应用观测](../../raw/application-user-guide/agenteval/agenteval-observability/agenteval-observation.md)
 - [应用观测](../../raw/application-user-guide/agenteval/agenteval-observability.md)
+- [应用评测](../../raw/application-user-guide/agenteval/agenteval-evaluation.md)
 - [告警管理](../../raw/application-user-guide/agenteval/agenteval-observability/agenteval-alert-management.md)
+- [评测集](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-evaluation-set.md)
 - [评估器](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-grader.md)
 - [评测任务](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-evaluation-task.md)
 - [应用优化](../../raw/application-user-guide/agenteval/agenteval-optimization.md)
-- [评测集](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-evaluation-set.md)
 - [标签管理](../../raw/application-user-guide/agenteval/agenteval-tags.md)
-- [标签管理](../../raw/application-user-guide/agenteval/agenteval-tags/agenteval-tag-management.md)
 - [更新日志](../../raw/application-user-guide/agenteval/agenteval-changelog.md)
-- [应用评测](../../raw/application-user-guide/agenteval/agenteval-evaluation.md)
-- [概览](../../raw/application-user-guide/agenteval/agenteval-introduction.md)
-- [应用观测](../../raw/application-user-guide/agenteval/agenteval-observability/agenteval-observation.md)
+- [标签管理](../../raw/application-user-guide/agenteval/agenteval-tags/agenteval-tag-management.md)
 
 

@@ -1,53 +1,45 @@
 # release notes
 
-百炼平台的 Release Notes 汇总了模型上下架、功能迭代、参数变更及平台级调整等关键更新，面向开发者提供可落地的版本演进信息。内容涵盖新增模型能力、API 行为变更、计费与部署模式升级、以及模型生命周期管理规则。所有变更均以实际生效日期为准，建议开发者定期查阅并及时适配。
+百炼平台的 Release Notes 汇总了模型上下架、平台功能迭代、计费策略调整等关键变更，面向开发者提供可操作的版本演进信息。所有变更均以实际生效日期为准，建议通过控制台「模型监控」和「通知中心」及时获取最新动态。本文档不包含营销性描述，仅聚焦技术影响与接入要点。
 
 ## 支持的模型/功能
 
-- **新模型上架**：2026年6月起密集发布多模态与垂直场景模型，包括 `qwen3.8-flash`（原生百万上下文多模态模型）、`ZHIPU/GLM-5.3-FlashX`（200 tokens/s 高速推理）、`qwen-mt-uni`（全模态翻译统一接口）、`kling/kling-v3-turbo-video-generation`（极速文生视频）等；视觉理解类新增 `qwen3.5-ocr`，语音类新增 `qwen-audio-3.0-asr-flash-streaming`（支持7大方言+30语种实时ASR）[原文标题](../../raw/model-user-guide/release-notes/newly-released-models.md)。
-- **功能模块扩展**：
-  - 知识库 RAG 新增「知识检索服务」与「知识问答服务」，支持多知识库联合检索与混合排序 [原文标题](../../raw/model-user-guide/release-notes/model-release-notes.md)；
-  - 模型调优新增强化学习训练（RL）、图像/视频/视觉理解（VL）模型类型支持；
-  - 智能体托管运行时 API 上线，支持平台托管会话与工具执行；
-  - 多模态交互开发套件覆盖 Android/iOS Lite SDK、Linux C++ SDK、RTOS C SDK 及 JSSDK；
-  - 记忆库升级至 Memory 2.0，支持[长期记忆](../concepts/memory.md)提取与多应用共享。
+- **新增模型（2026年8月起）**：`stepfun/step-5-preview`（1M上下文、稀疏MoE）、`qwen3.8-omni-flash-realtime`（实时音视频+WebSocket/WebRTC）、`ZHIPU/GLM-5.3-FlashX`（200 tokens/s推理速度）、`deepseek-v4.1-flash`（552B MoE，KV Cache压缩至HBM 1/4）、`kimi-k3`（2.8T参数，开源3T级模型）等，详见[模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)。
+- **新增能力模块**：2026年6月上线智能体托管运行时 API（[了解详情](../../raw/application-api-reference/managed-agents-api/managed-agents-api-overview.md)）；2026年6月23日上线知识检索与知识问答双服务（[了解详情](../../raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)）；2026年5月31日开放强化学习（RL）训练（邀约制）。
+- **多模态专项支持**：2026年7月起，`qwen3.7-flash`、`qwen3.8-flash` 等系列全面强化视觉理解与Agent执行能力；`qwen-mt-uni` 支持文档/PDF/图片/音频混合输入的端到端翻译；`vidu/viduq3-ad_reference2video` 提供广告级切镜与直出音效。
 
-> **注意**：文档2中“2026年6月15日”条目提及“PTU 长输入与缓存”能力，但文档3未在对应时间点列出该能力所依赖的新模型；实际使用需以控制台模型详情页或 [PTU 长输入与缓存](../../raw/model-user-guide/model-deployment-index/ptu-long-input-and-cache.md) 文档为准。
+> **注意**：文档2中 `kimi/kimi-k3` 出现两次（2026-07-17 和 2026-09-17），但模型ID、参数量、上下文窗口等核心描述完全一致，属重复录入，以首次发布日期（2026-07-17）为准。
 
 ## 关键参数
 
-- **上下文窗口**：主流新模型（如 `qwen3.8-max`、`GLM-5.3`、`deepseek-v4.1-flash`）普遍支持 **1M Token** 输入，部分模型（如 `qwen3.8-2.4t-a95b`）明确标注支持 100 万 Token。
-- **输出长度**：`GLM-5.3-FlashX` 支持 128K 输出，`deepseek-v4.1-flash` 支持 384K 输出。
-- **推理性能**：`GLM-5.3-FlashX` 达 200 tokens/s；`kimi-k2.7-code-highspeed` 输出速度约 180–260 tokens/s；`qwen-audio-3.0-realtime-flash` 强调低延迟端到端响应。
-- **模型单元（MU）计费**：自2026年1月起，模型部署 API 新增按模型单元时长计费模式，适用于 `qwen-flash`/`qwen-plus` 等预置模型 [原文标题](../../raw/model-user-guide/release-notes/model-release-notes.md)。
+- **上下文窗口**：主流新模型（如 `qwen3.8-max`、`GLM-5.3`、`kimi-k3`）统一支持 **1,000,000 [Token](../concepts/token.md)**；部分轻量模型（如 `qwen-audio-3.1-realtime-plus`）为 262,144 [Token](../concepts/token.md)。
+- **输出长度**：`GLM-5.3-FlashX` / `deepseek-v4.1-flash` 支持 **128K–384K 输出**；`qwen3.8-2.4t-a95b` 在 GPQA Diamond 等基准达 92.6 分。
+- **推理性能**：`GLM-5.2-Fast-Preview` TPS 较标准版提升 1.5–2 倍；`deepseek-v4-flash-0731` 输出速度约 180–260 tokens/s；`qwen-audio-3.0-tts-flash` 专为低延迟交互优化。
+- **多模态输入**：`qwen3.8-omni-flash`、`GLM-5.3-Flash`、`deepseek-v4.1-flash` 均原生支持文本/图像/音频/视频混合输入。
 
 ## 使用方式
 
-- **API 调用**：
-  - 文本生成 API 入口已聚合 OpenAI Responses 与 Anthropic Messages 接口分类；
-  - Responses API 新增异步调用（`background=true`），适用于长耗时任务；
-  - 新增生成临时 API Key 文档，用于不可信环境规避永久密钥泄露风险；
-  - 异步任务支持通过事件总线 EventBridge 主动推送完成事件，替代轮询。
-- **模型部署**：支持预置模型一键部署（含 `qwen-flash`/`qwen-plus`），亦可通过模型导入 API 导入 LoRA 微调模型（国际站已上线）。
-- **模型调优**：支持文本生成、视觉理解（VL）、图像生成（Wan/Wanx）、视频生成（Wan）四类模型类型；强化学习训练当前为邀约制。
-- **SDK 接入**：多模态交互开发套件提供 Android/iOS Lite、Linux C++、RTOS C、JSSDK 等多端支持；Kilo CLI 支持 Token Plan/Coding Plan/按量三种接入方式。
+- **模型调用**：所有新模型均兼容 OpenAI（`/v1/chat/completions`）与 Anthropic（`/messages`）协议；实时语音类模型（如 `qwen-audio-3.0-realtime-plus`）需使用 WebSocket 或 WebRTC 接入。
+- **功能启用**：
+  - 新增 Responses API 异步调用：在请求参数中添加 `background=true`，轮询 `/v1/async/{task_id}` 获取结果（2026年6月1日上线）；
+  - 智能体托管运行时：通过 `POST /v1/agents/{agent_id}/runs` 启动托管会话（2026年6月29日上线）；
+  - 多模态翻译：同步调用 `/api/v1/multimodal/translate`，异步任务返回 `task_id`（2026年5月26日上线）。
+- **部署与调优**：预置模型（如 `qwen-flash`）支持 API 直接部署（2026年1月23日）；模型调优已覆盖文本生成、视觉理解（VL）、图像生成、视频生成四类模型（2026年1月22日、5月28日、5月21日）。
 
 ## 限制和注意事项
 
-- **模型下线机制**：
-  - 快照模型（如 `qwen-max-2025-01-25`）下线前 **30天** 发布通知；
-  - 主线模型下线前 **3个月** 发布通知；
-  - 自通知发布日起逐步缩减 QPM/TPM，正式下线后停止推理服务，且不再支持新调优与新部署（已训练/部署模型不受影响）[原文标题](../../raw/model-user-guide/release-notes/model-depreciation.md)。
-- **地域与服务范围**：2026年6月12日起新增美国、德国、日本地域部署，调用需指定对应 endpoint。
-- **兼容性说明**：
-  - `qwen3.8-flash` 兼容 OpenAI 与 Anthropic 主流协议，但 `qwen3.8-omni-flash` 明确支持 Function Calling、联网搜索与上下文缓存，而 `qwen3.8-2.4t-a95b` 未提及其对 Function Calling 的支持，实际调用前请验证；
-  - 文档2中“2026年7月16日”企业知识库（旧）下线通知与文档3无直接关联，但开发者需确认当前知识库服务是否已迁移至新版 RAG 架构。
-- **免费额度**：2025年12月22日起上线免费额度与用量统计看板，集中展示各模型剩余额度及调用量，但额度有效期受 [新人免费额度有效期调整通知](https://help.aliyun.com/zh/model-studio/new-free-quota-validity-adjustment) 约束。
+- **模型下线机制**：快照模型（如 `qwen-max-2025-01-25`）下线前 **30天** 通知，主线模型（如 `qwen3.8-max`）下线前 **3个月** 通知；通知后逐步限流，正式下线后推理、调优、部署全部停止（[模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)）。
+- **地域与接入限制**：2026年6月12日新增美国、德国、日本地域支持，但部分模型（如 `happyoyster-1.0-adventure`）当前仅限华北2（北京）可用。
+- **功能兼容性**：
+  - 企业知识库（旧）已于 2026年7月16日下线，需迁移至新版知识库（[了解详情](../../raw/model-user-guide/release-notes/model-release-notes.md)）；
+  - `qwen-turbo` 资源包于 2026年6月28日启动退市，存量资源包到期后不可续购；
+  - 部分老旧长尾模型（如 `qwen-turbo` 衍生型号）已在 2026年7月9日下线（[部分老旧长尾模型下线通知](https://www.aliyun.com/notice/118427)）。
+- > **注意**：文档3中“2026年6月12日新增美国、德国、日本地域”与文档2中所有新模型发布记录均未注明地域限制，但文档3明确指出“新增地域与部署范围”，因此默认新模型**不自动全球可用**，需确认模型详情页的「支持地域」字段。
 
 ## 来源文档
 
 - [模型下线机制说明](../../raw/model-user-guide/release-notes/model-depreciation.md)
-- [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)
 - [模型上下架与更新](../../raw/model-user-guide/release-notes/newly-released-models.md)
+- [模型平台功能更新](../../raw/model-user-guide/release-notes/model-release-notes.md)
 
 
