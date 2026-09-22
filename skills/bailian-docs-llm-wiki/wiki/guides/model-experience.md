@@ -1,49 +1,55 @@
 # model experience
 
-模型体验（Model Experience）是百炼平台面向开发者提供的统一模型调用入口，支持多模态模型的快速接入与实验。通过该能力，开发者可基于标准 API 或 Web 控制台直接调用各类预置模型，无需自行部署或管理底层推理服务。所有模型均经过平台统一封装，提供一致的请求格式、鉴权机制与错误码体系。
+`model experience` 是百炼平台面向开发者提供的统一模型调用入口，支持多模态模型的快速体验与集成。用户可通过标准 API 或控制台界面直接调用各类预置模型，无需自行部署或管理底层基础设施。该能力覆盖文本、视觉、语音、音视频、3D 及全模态等主流 AI 任务类型，详见 [模型体验](../../raw/model-user-guide/model-experience.md)。
 
 ## 支持的模型与功能
 
-当前支持以下模型类别及对应能力：
+当前支持以下模型类别（按功能域组织）：
 
-- **文本生成**：通用对话、长文本续写、指令遵循等，详见 [模型体验](../../raw/model-user-guide/model-experience.md)  
-- **视觉理解**：图像分类、OCR、图文问答等多任务理解能力  
-- **图片生成与编辑**：文生图、图生图、局部重绘等，相关参数与示例见 [图片生成与编辑](../../raw/model-user-guide/model-experience/image-model.md)  
-- **视频生成与编辑**：支持短视频生成、帧插值与基础剪辑  
-- **世界模型**：具备环境建模与动态推理能力，适用于仿真与决策场景  
-- **3D 模型生成**：通过文本或草图生成可导出的 3D 网格，参考 [3D模型生成](../../raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)  
-- **语音与音频处理**：涵盖语音合成（TTS）、语音识别（ASR）、语音转语音（S2S）、音乐生成及通用音频生成  
-- **全模态**：支持文本、图像、音频、视频等多模态输入联合推理  
-- **向量与重排序**：提供嵌入（embedding）与检索重排序（rerank）两类基础模型服务  
+- **文本生成**：包括通用大语言模型（如 Qwen 系列）、代码生成、结构化输出等  
+- **视觉理解**：图文理解、OCR、目标检测、图像分类等  
+- **图片生成与编辑**：文生图、图生图、局部重绘、风格迁移  
+- **视频生成与编辑**：文生视频、视频扩帧、时序编辑  
+- **世界模型**：具身智能、环境建模与推理（实验性功能）  
+- **3D 模型生成**：基于文本/图像生成可导出的 3D 网格（参见 [TriPo 3D 生成指南](../../raw/model-user-guide/model-experience/tripo-3d-generation-guide.md)）  
+- **语音与音频**：语音合成（TTS）、语音识别（ASR）、语音转语音（S2S）、音频生成、音乐生成（部分能力跳转至阿里云 Model Studio 文档）  
+- **向量与重排序**：文本嵌入（embedding）、语义重排序（rerank）  
+- **全模态**：跨模态联合理解与生成（如图文音视频混合输入输出），详见 [全模态模型](../../raw/model-user-guide/model-experience/omni-modal.md)
 
-> **注意**：语音合成与语音识别的官方文档分别托管在 help.aliyun.com，其 API 接口路径、认证方式与百炼统一 SDK 存在差异；实际集成时请以 [模型体验](../../raw/model-user-guide/model-experience.md) 中列出的百炼封装接口为准，避免直接调用 help.aliyun.com 的旧版 endpoint。
+> **注意**：原始文档中语音合成、语音识别、语音转语音三类能力均指向外部 help.aliyun.com 链接，而其他能力均指向 `raw/` 下的本地文档。实际 SDK 和 API 接口已统一纳管至百炼平台，建议优先使用 `dashscope` Python SDK 或 `/v1/models/{model-id}/call` 标准 API 调用，避免依赖外部文档路径。该不一致已在 [模型体验](../../raw/model-user-guide/model-experience.md) 中体现，需以平台控制台「模型广场」实时列表为准。
 
 ## 关键参数
 
-所有模型调用均需指定 `model`（模型标识符）与 `input`（输入数据结构）。通用关键参数包括：
+所有模型调用共用以下核心参数（部分模型支持扩展参数）：
 
-- `model`: 必填，如 `qwen-max`, `wanx-v1`, `speech-tts-16k-zh-cn` 等，具体取值见各子文档  
-- `input`: 结构依模型类型而异（如文本模型为 `{"prompt": "..."}`，视觉模型为 `{"image_url": "...", "prompt": "..."}`）  
-- `parameters`: 可选，控制生成行为（如 `temperature`, `top_p`, `max_tokens`），部分模型支持专属参数（如图像模型的 `size`, `style`）  
-- `stream`: 布尔值，启用流式响应（仅部分模型支持）
+- `model`: 模型 ID（如 `qwen-max`, `wanx-v1`, `qwen-audio-tts`），必须  
+- `input`: 输入数据结构，格式依模型类型而异（如 `{"text": "..."}` 或 `{"image_url": "..."}`）  
+- `parameters`: 可选，控制生成行为（如 `temperature`, `top_p`, `max_output_tokens`）  
+- `enable_search`: 仅文本模型支持，启用联网搜索（需开通对应权限）  
 
-参数细节与默认值请查阅对应模型的子文档，例如 [视觉理解](../../raw/model-user-guide/model-experience/vision-model.md) 中明确列出了 `detail` 和 `quality` 参数的合法范围。
+具体参数说明请参考各子模型文档，例如 [文本生成模型](../../raw/model-user-guide/model-experience/text-generation-model.md) 中对 `stop` 和 `repetition_penalty` 的定义。
 
 ## 使用方式
 
-1. **API 调用**：使用百炼 SDK（Python/Java/Go）或直接发送 HTTP POST 请求至 `/v1/models/{model}/invoke`  
-2. **Web 控制台**：登录百炼控制台 →「模型体验」页 → 选择模型 → 输入内容 → 实时调试  
-3. **批量测试**：通过 `/v1/batch/invoke` 提交 JSONL 格式任务列表（需开通权限）  
+1. **控制台体验**：登录百炼控制台 → 进入「模型广场」→ 搜索并选择模型 → 在「体验页」填写输入并提交  
+2. **API 调用**：使用 DashScope SDK（推荐 v4.0+）或直接调用 REST API  
+   ```python
+   from dashscope import Generation
+   response = Generation.call(model='qwen-max', input={'text': '你好'}, api_key='YOUR_KEY')
+   ```
+3. **批量/异步调用**：对视频、3D、长音频等耗时任务，需使用 `/v1/jobs` 异步接口，并轮询 `job_id` 获取结果  
 
-所有方式均复用同一套鉴权逻辑（`Authorization: Bearer <api_key>`），且返回结构标准化（含 `output`, `usage`, `request_id` 字段）。
+完整调用示例和错误码说明见 [文本生成模型](../../raw/model-user-guide/model-experience/text-generation-model.md)。
 
 ## 限制和注意事项
 
-- 单次请求最大输入长度因模型而异：文本类模型通常上限为 32K tokens，视觉类模型图像分辨率建议 ≤ 1536×1536 像素  
-- 视频与 3D 模型暂不支持流式响应，且生成耗时较长（秒级至分钟级），需合理设置客户端超时  
-- 音频类模型（如 TTS、ASR）的输入/输出格式严格限定为 PCM/WAV（16-bit, 16kHz），不支持 MP3 直接上传  
-- 全模态模型对输入模态组合有约束（如不支持同时传入视频 + 音频 + 3D 网格），具体兼容性见 [全模态](../../raw/model-user-guide/model-experience/omni-modal.md) 文档  
-- 向量模型（embedding/rerank）仅接受文本输入，不支持图像或音频嵌入 —— 此限制与部分早期内部文档描述不符，请以 [向量与重排序](../../raw/model-user-guide/model-experience/embedding-rerank-model.md) 为准
+- 单次请求最大输入长度因模型而异：文本模型默认 32768 tokens，视觉模型图像分辨率上限为 1536×1536 像素（超限将自动缩放）  
+- 视频与 3D 生成任务暂不支持流式响应，必须等待完整结果返回  
+- 免费额度仅适用于部分模型（如 `qwen-turbo`），`qwen-max`、`wanx-v1` 等高性能模型需按 token 计费  
+- 所有模型调用受百炼平台 [服务等级协议（SLA）](https://help.aliyun.com/product/42041.html) 约束，超时阈值为 120 秒（同步）或 24 小时（异步）  
+- 用户上传的图像、音频、视频文件在处理完成后 24 小时内自动清理，不长期存储  
+
+如遇模型不可用或返回 `ModelNotSupported` 错误，请确认模型 ID 是否在 [模型体验](../../raw/model-user-guide/model-experience.md) 列表中且处于「上线」状态。
 
 ## 来源文档
 

@@ -2237,9 +2237,9 @@ codex
 **原因**：429 错误有以下两种情形：
 
 -   **请求超频**（`429 Requests rate limit exceeded`）：短时间内请求过于密集。
--   **限额用尽**（`429 Allocated quota exceeded` 或 `Your token-plan 1-week quota has been exhausted`）：Token Plan 个人版的 7 天限额触顶。
+-   **限额用尽**（`429 Allocated quota exceeded` 或 `Your token-plan quota has been exhausted`）：Token Plan 个人版的套餐月额度用尽。
 
 **解决方案**：
 
 -   请求超频：等待一分钟后重试，降低请求频率。
--   限额用尽：等待 7 天窗口周期结束后额度自动重置；或购买用量包（用量包额度不受窗口限额约束）；或升级套餐。注意：报错信息中的重置时间（如 `The quota will reset at HH:MM:SS UTC`）以协调世界时（UTC）为准，换算为北京时间（CST）需加 8 小时。
+-   限额用尽：等待下一个订阅月额度自动重置；或购买用量包（套餐月额度用尽后自动抵扣用量包额度）；或升级套餐。注意：报错信息中的重置时间（如 `The quota will reset at HH:MM:SS UTC`）以协调世界时（UTC）为准，换算为北京时间（CST）需加 8 小时。

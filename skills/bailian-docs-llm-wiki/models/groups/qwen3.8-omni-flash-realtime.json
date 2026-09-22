@@ -18,7 +18,8 @@
       "description": "Qwen3.8-Omni-Flash-Realtime 通过多种实时协议提供音视频双工交互，面向智能硬件、机器人与实时交互 Agent。支持多通道音频输入与多种通道布局，视频表征可在细粒度与聚合之间按精度与开销选择，支持 60+ 语言音频输入和 30+ 语言语音输出；工具侧支持 Function Call 与 MCP 服务接入，具备工具发现、调用审批与结果续轮的完整事件链。可以在高速实时响应的同时，编排复杂业务逻辑和支持上百个工具的调用，同时拥有生动、多样的声音生成能力。",
       "collectionTag": "qwen3.8",
       "features": [
-        "web-search"
+        "web-search",
+        "function-calling"
       ],
       "provider": "qwen",
       "model": "qwen3.8-omni-flash-realtime",

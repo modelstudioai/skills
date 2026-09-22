@@ -6,9 +6,9 @@
 
 ### 引擎生命周期
 
-**接口**
+接口
 
-**简介**
+简介
 
 createEngine
 
@@ -32,9 +32,9 @@ disconnect
 
 ### 音频设备管理
 
-**接口**
+接口
 
-**简介**
+简介
 
 startAudioCapture
 
@@ -70,9 +70,9 @@ interruptAudioPlayer
 
 ### 音频编解码配置
 
-**接口**
+接口
 
-**简介**
+简介
 
 setAudioEncoderConfig
 
@@ -84,9 +84,9 @@ setAudioDecoderConfig
 
 ### 视频设备管理
 
-**接口**
+接口
 
-**简介**
+简介
 
 startVideoCapture
 
@@ -104,19 +104,11 @@ setRemoteView
 
 设置或移除远端视频渲染窗口（Linux 无渲染实现）
 
-startScreenCapture
-
-开始屏幕采集
-
-stopScreenCapture
-
-停止屏幕采集
-
 ### 视频编解码与外部输入
 
-**接口**
+接口
 
-**简介**
+简介
 
 setVideoEncoderConfig
 
@@ -134,11 +126,25 @@ pushExternalVideoEncodedFrame
 
 推送外部已编码视频帧
 
+### 屏幕采集
+
+接口
+
+简介
+
+startScreenCapture
+
+启动屏幕采集
+
+stopScreenCapture
+
+停止屏幕采集
+
 ### 媒体流发送控制
 
-**接口**
+接口
 
-**简介**
+简介
 
 enableSendMediaStream
 
@@ -146,9 +152,9 @@ enableSendMediaStream
 
 ### 音频文件播放
 
-**接口**
+接口
 
-**简介**
+简介
 
 startAudioFile
 
@@ -188,9 +194,9 @@ getAudioFileVolume
 
 ### 外部音频流
 
-**接口**
+接口
 
-**简介**
+简介
 
 addAudioExternalStream
 
@@ -218,9 +224,9 @@ removeAudioExternalStream
 
 ### 实时消息
 
-**接口**
+接口
 
-**简介**
+简介
 
 sendDataMsg
 
@@ -228,9 +234,9 @@ sendDataMsg
 
 ### 音频帧回调
 
-**接口**
+接口
 
-**简介**
+简介
 
 setAudioFrameObserver
 
@@ -242,9 +248,9 @@ enableAudioFrameObserver
 
 ### 本地音量提示
 
-**接口**
+接口
 
-**简介**
+简介
 
 enableLocalAudioVolumeIndication
 
@@ -252,9 +258,9 @@ enableLocalAudioVolumeIndication
 
 ### 视频帧回调
 
-**接口**
+接口
 
-**简介**
+简介
 
 setVideoFrameObserver
 
@@ -266,9 +272,9 @@ enableVideoFrameObserver
 
 ### AoqEngineEventListener 回调
 
-**回调**
+接口
 
-**简介**
+简介
 
 onError
 
@@ -310,36 +316,47 @@ onDataMsg
 
 收到实时数据消息回调
 
-### 帧数据监听接口
+### IAudioFrameObserver 回调
 
-**接口**
+接口
 
-**简介**
+简介
 
-IAudioFrameObserver
+onCapturedAudioFrame
 
-音频帧数据监听接口（4 个纯虚回调）
+采集到原始音频帧时触发。数据为采集后的原始 PCM，未经任何处理。
 
-IVideoFrameObserver
+onProcessCapturedAudioFrame
 
-视频帧数据监听接口（3 个纯虚回调）
+3A 处理后的音频帧回调。数据经过 3A（AEC/AGC/ANS）处理。
+
+onPublishAudioFrame
+
+推流前的音频帧回调。数据为即将编码发送的音频帧。
+
+onPlaybackAudioFrame
+
+播放前的远端音频帧回调。数据为远端解码后、即将播放的音频帧。
+
+### IVideoFrameObserver 回调
+
+接口
+
+简介
+
+onCapturedVideoFrame
+
+采集到原始视频帧时触发（前处理前）。数据为采集后的裸帧，尚未经过前处理。
+
+onPreEncodeVideoFrame
+
+编码前的视频帧回调（前处理后）。数据为前处理完成、即将编码的裸帧。
+
+onRemoteVideoFrame
+
+远端解码后、渲染前的视频帧回调。数据为远端解码完成、即将渲染的裸帧。
 
 ## 接口详情
-
-### 屏幕采集
-
-```
-virtual int startScreenCapture(const AoqScreenCaptureConfig& config);
-virtual int stopScreenCapture();
-```
-
-`config` 为屏幕采集配置。屏幕画面通过 `AoqTrackTypeScreen` 轨道发送。
-
-返回值：0 表示成功；非 0 表示失败。 接口同步返回，不提供 `onScreenCaptureStateChanged` 回调。
-
-Linux 仅支持外部原始帧输入，必须设置 `isExternal=true`。不支持内部屏幕采集或屏幕源枚举，配置中不存在 `sourceId` 和 `sourceType` 字段。
-
-外部原始帧：设置 `isExternal=true` 后，通过 `pushExternalVideoCapturedFrame` 输入 Screen 轨道的原始帧，由 SDK 编码。外部已编码帧：先通过 `setVideoEncoderConfig` 将 Screen 轨道设置为外部编码，再调用 `pushExternalVideoEncodedFrame`；不需要调用 `startScreenCapture`。
 
 ### 引擎生命周期
 
@@ -469,7 +486,7 @@ AoqTrackType
 
 轨道类型
 
-**说明****Linux 重要约束**：`startAudioCapture` / `startAudioPlayer` 在 Linux 构建下为空实现（直接返回 `0`，不打开任何声卡设备），`stopAudioCapture` / `stopAudioPlayer` 因内部状态未置位同样无实际效果。Linux 上音频输入请使用外部音频流（2.8），音频输出请使用音频帧回调（2.10）自行播放。详见 4.3。
+**说明****Linux 重要约束**：`startAudioCapture` / `startAudioPlayer` 在 Linux 构建下为空实现（直接返回 `0`，不打开任何声卡设备），`stopAudioCapture` / `stopAudioPlayer` 因内部状态未置位同样无实际效果。Linux 上音频输入请使用外部音频流（2.8），音频输出请使用音频帧回调（2.10）自行播放。
 
 ### 音频编解码配置
 
@@ -513,7 +530,7 @@ AoqVideoCanvas
 
 渲染画布；`canvas.view == nullptr` 表示解绑
 
-**说明****Linux 重要约束**：Linux 摄像头采集为占位实现，不会产出帧，请使用 `startVideoCapture({.isExternal = true})` + `pushExternalVideoCapturedFrame` 送帧；`setLocalView` / `setRemoteView` 在 Linux 无渲染后端（`AoqVideoCanvas.view` 仅支持 Apple NSView\* / Windows HWND / Android 渲染视图），预览请通过视频帧回调（2.12）自行渲染。详见 4.3。
+**说明****Linux 重要约束**：Linux 摄像头采集为占位实现，不会产出帧，请使用 `startVideoCapture({.isExternal = true})` + `pushExternalVideoCapturedFrame` 送帧；`setLocalView` / `setRemoteView` 在 Linux 无渲染后端，预览请通过视频帧回调（2.12）自行渲染。
 
 ### 视频编解码与外部输入
 
@@ -548,12 +565,27 @@ AoqVideoFrame / AoqVideoEncodedFrame
 
 裸帧 / 已编码帧数据
 
-注意：
+**说明**
 
 -   `setVideoDecoderConfig` 为订阅侧 codec 提议，需在 `connect` 之前调用；解码时仅 `trackType/codecType/width/height/fps/bitrate` 生效。
 -   `pushExternalVideoCapturedFrame` Video 轨道需先调用 `startVideoCapture(isExternal=true)`，Screen 轨道需先调用 `startScreenCapture(isExternal=true)`；未启动外部采集时返回 `AoqECVideoExternalCaptureNotEnabled(211)`，格式不支持时返回 `AoqECParamInvalid`，缓冲区满时返回 `AoqECVideoExternalBufferFull(210)`。
 -   `pushExternalVideoEncodedFrame` 需先 `setVideoEncoderConfig(isExternal=true)`，SDK 不做二次编码直接打包发送，当前仅支持 JPEG。
 -   `frame.timeStamp` 为 `0` 时由 SDK 使用本地时间补齐。
+
+### 屏幕采集
+
+```
+virtual int startScreenCapture(const AoqScreenCaptureConfig& config);
+virtual int stopScreenCapture();
+```
+
+`config` 为屏幕采集配置。屏幕画面通过 `AoqTrackTypeScreen` 轨道发送。
+
+返回值：0 表示成功；非 0 表示失败。 接口同步返回，不提供 `onScreenCaptureStateChanged` 回调。
+
+Linux 仅支持外部原始帧输入，必须设置 `isExternal=true`。不支持内部屏幕采集或屏幕源枚举，配置中不存在 `sourceId` 和 `sourceType` 字段。
+
+外部原始帧：设置 `isExternal=true` 后，通过 `pushExternalVideoCapturedFrame` 输入 Screen 轨道的原始帧，由 SDK 编码。外部已编码帧：先通过 `setVideoEncoderConfig` 将 Screen 轨道设置为外部编码，再调用 `pushExternalVideoEncodedFrame`；不需要调用 `startScreenCapture`。
 
 ### 媒体流发送控制
 
@@ -673,7 +705,7 @@ int
 
 淡出时长；`-1` 用 SDK 默认淡出，`0` 全部清空无淡出，`>0` 保留指定毫秒淡出
 
-注意：
+**说明**
 
 -   `pushAudioExternalStreamData` 返回 `AoqECAudioExternalBufferFull(110)` 表示 SDK 内部缓冲区已满，**建议等待 20ms 后重新送当前数据帧**。
     
@@ -796,7 +828,7 @@ AoqVideoObserverConfig
 
 `AoqEngineEventListener` 是 SDK 所有异步事件通知的统一出口，由调用方继承实现并在 `createEngine` 时传入。
 
-**说明****与 Android 的关键差异**：该类所有回调均为**纯虚函数**（`= 0`），无默认空实现，Linux 下必须完整实现下列 10 个方法，否则派生类无法实例化。回调可能在 SDK 内部线程触发。
+**说明**该类所有回调均为**纯虚函数**（`= 0`），无默认空实现，Linux 下必须完整实现下列 10 个方法，否则派生类无法实例化。回调可能在 SDK 内部线程触发。
 
 ```
 class AOQ_API AoqEngineEventListener {
@@ -855,7 +887,7 @@ AoqStats
 
 音频输出路由变化回调。`routeType` 对应 `AoqAudioDeviceRouteType` 枚举值（见 3.4）。
 
-**说明****Linux 不会触发**：Linux 构建未包含平台设备监听器（`AOQ_HAS_NATIVE_DEVICE_MONITOR` 仅在 Windows / macOS 定义），且服务端音频设备不产生路由事件；仍需实现此方法（纯虚），但可空实现。
+**说明****Linux 不会触发**：Linux 构建未包含平台设备监听器，且服务端音频设备不产生路由事件；仍需实现此方法（纯虚），但可空实现。
 
 #### onAudioFileState
 
@@ -873,9 +905,7 @@ AoqStats
 
 收到实时数据消息回调。`msg.data`**仅保证回调期间有效**，如需异步使用请自行拷贝。
 
-### 帧数据监听接口
-
-#### IAudioFrameObserver
+### IAudioFrameObserver 回调
 
 音频数据监听接口。**请不要在回调中做任何耗时操作，否则可能导致声音异常**。全部为纯虚函数，需完整实现。
 
@@ -922,9 +952,111 @@ AoqAudioSourcePlayback
 
 以上回调均支持通过 `AoqAudioObserverConfig` 设置采样率与声道数。
 
-**说明**Linux 上 `onPlaybackAudioFrame` 是取远端下行 PCM 的主链路；`onProcessCapturedAudioFrame`（3A 后数据）因 Linux 未编译 3A 模块，数据与采集原始数据无实质差异，详见 4.3。
+**说明**Linux 上 `onPlaybackAudioFrame` 是取远端下行 PCM 的主链路；`onProcessCapturedAudioFrame`（3A 后数据）因 Linux 未编译 3A 模块，数据与采集原始数据无实质差异。
 
-#### IVideoFrameObserver
+#### onCapturedAudioFrame
+
+采集到原始音频帧时触发。数据为采集后的原始 PCM，未经任何处理。
+
+```
+virtual void onCapturedAudioFrame(const AoqAudioFrameData& data) = 0;
+```
+
+参数
+
+类型
+
+说明
+
+data
+
+const AoqAudioFrameData&
+
+采集的音频帧数据
+
+返回值：无（void）。
+
+**说明**data 中的指针仅在回调期间有效，异步使用需自行拷贝。Linux 上无真实采集设备，此回调的数据来自外部音频流或混音链路。
+
+#### onProcessCapturedAudioFrame
+
+3A 处理后的音频帧回调。数据经过 3A（AEC/AGC/ANS）处理。
+
+```
+virtual void onProcessCapturedAudioFrame(const AoqAudioFrameData& data) = 0;
+```
+
+参数
+
+类型
+
+说明
+
+data
+
+const AoqAudioFrameData&
+
+3A 处理后的音频帧数据
+
+返回值：无（void）。
+
+**说明**data 中的指针仅在回调期间有效，异步使用需自行拷贝。Linux 上未编译 3A 模块，数据与采集原始数据无实质差异。
+
+#### onPublishAudioFrame
+
+推流前的音频帧回调。数据为即将编码发送的音频帧。
+
+```
+virtual void onPublishAudioFrame(AoqTrackType trackType, const AoqAudioFrameData& data) = 0;
+```
+
+参数
+
+类型
+
+说明
+
+trackType
+
+AoqTrackType
+
+音频轨道类型
+
+data
+
+const AoqAudioFrameData&
+
+推流前的音频帧数据
+
+返回值：无（void）。
+
+**说明**data 中的指针仅在回调期间有效，异步使用需自行拷贝。此回调仅支持只读模式。
+
+#### onPlaybackAudioFrame
+
+播放前的远端音频帧回调。数据为远端解码后、即将播放的音频帧。
+
+```
+virtual void onPlaybackAudioFrame(const AoqAudioFrameData& data) = 0;
+```
+
+参数
+
+类型
+
+说明
+
+data
+
+const AoqAudioFrameData&
+
+播放前的远端音频帧数据
+
+返回值：无（void）。
+
+**说明**data 中的指针仅在回调期间有效，异步使用需自行拷贝。Linux 上此回调是取远端下行 PCM 的主链路。
+
+### IVideoFrameObserver 回调
 
 视频数据监听接口。**请不要在回调中做任何耗时操作，否则可能导致画面卡顿**。全部为纯虚函数。
 
@@ -964,101 +1096,97 @@ AoqVideoSourceRemote
 
 返回值：`true` 表示数据已修改、需写回 SDK（仅 I420 / CVPixelBuffer 生效）；`false` 表示只读。`frame` 中的指针仅回调期间有效，异步使用需自行拷贝。
 
+#### onCapturedVideoFrame
+
+采集到原始视频帧时触发（前处理前）。数据为采集后的裸帧，尚未经过前处理。
+
+```
+virtual bool onCapturedVideoFrame(AoqTrackType trackType, AoqVideoFrame& frame) = 0;
+```
+
+参数
+
+类型
+
+说明
+
+trackType
+
+AoqTrackType
+
+帧所属轨道（Video / Screen）
+
+frame
+
+AoqVideoFrame&
+
+采集的视频帧数据
+
+返回值：true 表示数据已修改需写回 SDK（仅 I420/CVPixelBuffer 生效），false 表示只读。
+
+**说明**frame 中的指针仅在回调期间有效，异步使用需自行拷贝。
+
+#### onPreEncodeVideoFrame
+
+编码前的视频帧回调（前处理后）。数据为前处理完成、即将编码的裸帧。
+
+```
+virtual bool onPreEncodeVideoFrame(AoqTrackType trackType, AoqVideoFrame& frame) = 0;
+```
+
+参数
+
+类型
+
+说明
+
+trackType
+
+AoqTrackType
+
+帧所属轨道（Video / Screen）
+
+frame
+
+AoqVideoFrame&
+
+编码前的视频帧数据
+
+返回值：true 表示数据已修改需写回 SDK（仅 I420/CVPixelBuffer 生效），false 表示只读。
+
+**说明**frame 中的指针仅在回调期间有效，异步使用需自行拷贝。
+
+#### onRemoteVideoFrame
+
+远端解码后、渲染前的视频帧回调。数据为远端解码完成、即将渲染的裸帧。
+
+```
+virtual bool onRemoteVideoFrame(AoqTrackType trackType, AoqVideoFrame& frame) = 0;
+```
+
+参数
+
+类型
+
+说明
+
+trackType
+
+AoqTrackType
+
+帧所属轨道（Video / Screen）
+
+frame
+
+AoqVideoFrame&
+
+远端解码后的视频帧数据
+
+返回值：true 表示数据已修改需写回 SDK（仅 I420/CVPixelBuffer 生效），false 表示只读。
+
+**说明**frame 中的指针仅在回调期间有效，异步使用需自行拷贝。Linux 无内置渲染，此回调是获取远端视频画面的唯一途径。
+
 ## 数据类型与枚举
-
-### AoqScreenCaptureStateCode
-
-屏幕采集状态枚举。当前 SDK 已定义该类型，但没有对应的状态回调。
-
-枚举值
-
-值
-
-说明
-
-AoqScreenCaptureNone
-
-0
-
-无
-
-AoqScreenCaptureStarting
-
-1
-
-启动中
-
-AoqScreenCaptureStarted
-
-2
-
-已启动
-
-AoqScreenCaptureStopping
-
-3
-
-停止中
-
-AoqScreenCaptureStopped
-
-4
-
-已停止
-
-AoqScreenCaptureFail
-
-5
-
-失败
-
-### AoqScreenCaptureState
-
-字段
-
-类型
-
-说明
-
-state
-
-AoqScreenCaptureStateCode
-
-屏幕采集状态码。
-
-reason
-
-int
-
-错误码，对应 AoqErrorCode；正常为 0。
-
-### AoqScreenCaptureConfig
-
-字段
-
-类型
-
-默认值
-
-说明
-
-isExternal
-
-bool
-
-false
-
-Linux 必须设置为 true，由应用采集屏幕并输入原始帧。
-
-appGroup
-
-const char\*
-
-nullptr
-
-iOS 专用，本平台不使用。
-
-全部类型定义于 `AoqClientEngine.h`，命名空间 `AoqClientSdk`。结构体均为 POD 并带默认值，直接声明即可获得表中默认值。字段是否在 Linux 下存在及适用范围，以各结构体的说明为准。`AoqScreenCaptureConfig.appGroup` 保留在结构体中，但仅供 iOS 使用；`sourceId` 和 `sourceType` 则在 Linux 下被条件编译屏蔽，不存在于结构体中。
 
 ### 通用类型
 
@@ -1112,7 +1240,7 @@ false
 
 仅用于 SDK 内部 JPEG 编码：降至最低质量后仍超限时，是否允许丢弃该帧。
 
-**说明**字符串字段至少需保持到 `createEngine` 返回后，引擎内部按需拷贝。Android 的 `isBTScoMode` 为移动端专有，Linux 无此字段。
+**说明**字符串字段至少需保持到 `createEngine` 返回后，引擎内部按需拷贝。Linux 无 `isBTScoMode` 字段。
 
 #### AoqConnectConfig
 
@@ -2232,8 +2360,6 @@ int
 
 音频采集通道数，支持 1 / 2
 
-**说明**`isVoipMode` 为移动端专有字段，Linux 下不存在。
-
 #### AoqAudioPlaybackConfig
 
 **字段**
@@ -2259,8 +2385,6 @@ int
 1
 
 音频播放通道数，支持 1 / 2
-
-**说明**`isVoipMode` / `isDefaultSpeaker` 为移动端专有字段，Linux 下不存在。
 
 #### AoqAudioCodecConfig
 
@@ -2656,13 +2780,21 @@ AoqAudioObserverModeReadOnly
 
 #### AoqAudioVolumeIndicationConfig
 
-**字段**
+字段
 
-**类型**
+类型
 
-**默认值**
+默认值
 
-**说明**
+说明
+
+reportSpeech
+
+bool
+
+false
+
+是否检测人声
 
 interval
 
@@ -2682,13 +2814,21 @@ int
 
 #### AoqAudioVolume
 
-**字段**
+字段
 
-**类型**
+类型
 
-**默认值**
+默认值
 
-**说明**
+说明
+
+isSpeech
+
+bool
+
+false
+
+是否为人声
 
 volume
 
@@ -2946,7 +3086,7 @@ bool
 
 false
 
-对输入 PCM 做 3A 处理（**Linux 不生效**，见 4.3）
+对输入 PCM 做 3A 处理（**Linux 不生效**）
 
 采样率支持：8 / 12 / 16 / 24 / 32 / 44.1 / 48 / 64 / 88.2 / 96 / 176.4 / 192K。
 
@@ -2980,7 +3120,7 @@ AoqRenderModeAuto
 
 渲染填充模式
 
-`view` 的平台含义：Apple 为 `NSView*`，Windows 为 `HWND`，Android 为 SDK 内部渲染视图适配对象。调用方需保证 `view` 生命周期长于 `setLocalView` / `setRemoteView` 设置期间。
+调用方需保证 `view` 生命周期长于 `setLocalView` / `setRemoteView` 设置期间。
 
 **说明****Linux 无对应平台实现**，该结构在 Linux 上无实际用途。
 
@@ -3026,7 +3166,7 @@ false
 
 是否外部采集；true 时不打开摄像头，由 pushExternalVideoCapturedFrame 喂帧
 
-**说明**`cameraDirection` 为移动端专有字段，桌面端（含 Linux）不存在。Linux 上建议**始终置** `isExternal = true`。
+**说明**Linux 上建议**始终置** `isExternal = true`。
 
 #### AoqVideoCodecConfig
 
@@ -3627,3 +3767,99 @@ AoqTrackType
 AoqTrackTypeVideo
 
 需要观察的视频轨道；仅支持 Video / Screen。
+
+### 屏幕采集类型
+
+#### AoqScreenCaptureConfig
+
+字段
+
+类型
+
+默认值
+
+说明
+
+isExternal
+
+bool
+
+false
+
+Linux 必须设置为 true，由应用采集屏幕并输入原始帧。
+
+appGroup
+
+const char\*
+
+nullptr
+
+iOS 专用，本平台不使用。
+
+全部类型定义于 `AoqClientEngine.h`，命名空间 `AoqClientSdk`。结构体均为 POD 并带默认值，直接声明即可获得表中默认值。字段是否在 Linux 下存在及适用范围，以各结构体的说明为准。`AoqScreenCaptureConfig.appGroup` 保留在结构体中，但仅供 iOS 使用；`sourceId` 和 `sourceType` 则在 Linux 下被条件编译屏蔽，不存在于结构体中。
+
+#### AoqScreenCaptureStateCode
+
+屏幕采集状态枚举。当前 SDK 已定义该类型，但没有对应的状态回调。
+
+枚举值
+
+值
+
+说明
+
+AoqScreenCaptureNone
+
+0
+
+无
+
+AoqScreenCaptureStarting
+
+1
+
+启动中
+
+AoqScreenCaptureStarted
+
+2
+
+已启动
+
+AoqScreenCaptureStopping
+
+3
+
+停止中
+
+AoqScreenCaptureStopped
+
+4
+
+已停止
+
+AoqScreenCaptureFail
+
+5
+
+失败
+
+#### AoqScreenCaptureState
+
+字段
+
+类型
+
+说明
+
+state
+
+AoqScreenCaptureStateCode
+
+屏幕采集状态码。
+
+reason
+
+int
+
+错误码，对应 AoqErrorCode；正常为 0。

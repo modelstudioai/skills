@@ -129,6 +129,61 @@ async function main() {
 main();
 ```
 
+java
+
+```
+// 百炼 MCP 工具要求 server_protocol 字段，OpenAI 官方 Java SDK 的 Tool.Mcp 暂未提供该字段，
+// 可通过 putAdditionalProperty 补齐。兼容 JDK 8+ / Spring Boot 2.x。
+// Maven 依赖：com.openai:openai-java:4.67.0（或更新版本）
+import com.openai.client.OpenAIClient;
+import com.openai.client.okhttp.OpenAIOkHttpClient;
+import com.openai.core.JsonValue;
+import com.openai.models.responses.*;
+
+public class McpResponsesDemo {
+    public static void main(String[] args) {
+        // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey = "sk-xxx"（不建议）
+        String apiKey = System.getenv("DASHSCOPE_API_KEY");
+        // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
+        OpenAIClient client = OpenAIOkHttpClient.builder()
+                .apiKey(apiKey)
+                .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
+                .build();
+
+        Tool mcpTool = Tool.ofMcp(Tool.Mcp.builder()
+                .serverLabel("WebParser")
+                .serverDescription("网页解析（WebParser）MCP 服务，一个专用于网页内容解析的工具包。")
+                .serverUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/mcps/WebParser/sse")
+                .headers(Tool.Mcp.Headers.builder()
+                        .putAdditionalProperty("Authorization", JsonValue.from("Bearer " + apiKey))
+                        .build())
+                .putAdditionalProperty("server_protocol", JsonValue.from("sse"))
+                .build());
+
+        ResponseCreateParams params = ResponseCreateParams.builder()
+                .model("qwen3.8-max")
+                .input("https://help.aliyun.com/zh/model-studio/mcp 里支持哪些模型？")
+                .addTool(mcpTool)
+                .build();
+
+        // 调用 Responses API
+        Response response = client.responses().create(params);
+
+        System.out.println("[模型回复]");
+        response.output().stream()
+                .flatMap(item -> item.message().stream())
+                .flatMap(message -> message.content().stream())
+                .flatMap(content -> content.outputText().stream())
+                .forEach(text -> System.out.println(text.text()));
+
+        response.usage().ifPresent(u ->
+                System.out.println("\n[Token 用量] 输入: " + u.inputTokens()
+                        + ", 输出: " + u.outputTokens()
+                        + ", 合计: " + u.totalTokens()));
+    }
+}
+```
+
 bash
 
 ```
@@ -269,6 +324,67 @@ async function main() {
 }
 
 main();
+```
+
+java
+
+```
+// 百炼 MCP 工具要求 server_protocol 字段，OpenAI 官方 Java SDK 的 Tool.Mcp 暂未提供该字段，
+// 可通过 putAdditionalProperty 补齐。兼容 JDK 8+ / Spring Boot 2.x。
+// Maven 依赖：com.openai:openai-java:4.67.0（或更新版本）
+import com.openai.client.OpenAIClient;
+import com.openai.client.okhttp.OpenAIOkHttpClient;
+import com.openai.core.JsonValue;
+import com.openai.core.http.StreamResponse;
+import com.openai.models.responses.*;
+
+public class McpResponsesStreamDemo {
+    public static void main(String[] args) {
+        // 若没有配置环境变量，请用百炼API Key将下行替换为：apiKey = "sk-xxx"（不建议）
+        String apiKey = System.getenv("DASHSCOPE_API_KEY");
+        // 以下为华北2（北京）地域的URL，调用时请将 {WorkspaceId} 替换为真实的业务空间ID，各地域的URL不同。
+        OpenAIClient client = OpenAIOkHttpClient.builder()
+                .apiKey(apiKey)
+                .baseUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1")
+                .build();
+
+        Tool mcpTool = Tool.ofMcp(Tool.Mcp.builder()
+                .serverLabel("WebParser")
+                .serverDescription("网页解析（WebParser）MCP 服务，一个专用于网页内容解析的工具包。")
+                .serverUrl("https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/mcps/WebParser/sse")
+                .headers(Tool.Mcp.Headers.builder()
+                        .putAdditionalProperty("Authorization", JsonValue.from("Bearer " + apiKey))
+                        .build())
+                .putAdditionalProperty("server_protocol", JsonValue.from("sse"))
+                .build());
+
+        ResponseCreateParams params = ResponseCreateParams.builder()
+                .model("qwen3.8-max")
+                .input("https://help.aliyun.com/zh/model-studio/mcp 里支持哪些模型？")
+                .addTool(mcpTool)
+                .build();
+
+        // 调用 Responses API（流式输出）
+        System.out.println("[模型回复]");
+        try (StreamResponse<ResponseStreamEvent> stream = client.responses().createStreaming(params)) {
+            stream.stream().forEach(event -> {
+                // 流式文本输出
+                event.outputTextDelta().ifPresent(delta -> {
+                    System.out.print(delta.delta());
+                    System.out.flush();
+                });
+                // 响应完成，输出用量
+                if (event.isCompleted()) {
+                    event.completed().ifPresent(completed ->
+                            completed.response().usage().ifPresent(u ->
+                                    System.out.println("\n\n[Token 用量] 输入: " + u.inputTokens()
+                                            + ", 输出: " + u.outputTokens()
+                                            + ", 合计: " + u.totalTokens())));
+                }
+            });
+        }
+    }
+}
 ```
 
 bash

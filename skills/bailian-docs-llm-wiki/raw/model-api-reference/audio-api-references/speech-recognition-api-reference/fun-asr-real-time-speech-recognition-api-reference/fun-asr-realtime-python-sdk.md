@@ -1,6 +1,6 @@
-# Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Python SDK
+# Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime实时语音识别Python SDK
 
-本文介绍Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Python SDK的参数和接口细节。
+本文介绍Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime实时语音识别Python SDK的参数和接口细节。
 
 **用户指南：**关于模型介绍和选型建议请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model)。
 
@@ -348,7 +348,7 @@ str
 
 是
 
-指定模型名。支持Qwen-Audio-3.x-ASR-Flash-Streaming和Fun-ASR-Realtime系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
+指定模型名。支持 Qwen-Audio-3.1-ASR-Flash-Message、Qwen-Audio-3.x-ASR-Flash-Streaming 和 Fun-ASR-Realtime 系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
 
 sample\_rate
 
@@ -384,13 +384,29 @@ wav：必须为PCM编码；
 
 amr：仅支持AMR-NB类型。
 
+disfluency\_removal\_enabled
+
+bool
+
+否
+
+仅 `qwen-audio-3.1-asr-flash-message` 支持。是否过滤语气词并对输出结果进行润色，默认值为 `false`。设置为 `true` 时启用。作为同名关键字参数传入。
+
+intermediate\_result\_enabled
+
+bool
+
+否
+
+仅 `qwen-audio-3.1-asr-flash-message` 支持。是否返回流式中间结果，默认值为 `false`。设置为 `true` 时返回流式中间结果。作为同名关键字参数传入。
+
 keep\_dialect
 
 bool
 
 否
 
-仅 `qwen-audio-3.1-asr-flash-streaming` 支持。默认 `false`，将方言转写为普通话；设为 `true` 时保留方言表达。作为同名关键字参数传入。完整参数说明请参见[API 参考](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/fun-asr-real-time-speech-recognition-api-reference/fun-asr-client-events.md)。
+仅 `qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming` 支持。默认 `false`，将方言转写为普通话；设为 `true` 时保留方言表达。作为同名关键字参数传入。完整参数说明请参见[API 参考](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/fun-asr-real-time-speech-recognition-api-reference/fun-asr-client-events.md)。
 
 vad\_model
 
@@ -398,7 +414,7 @@ str
 
 否
 
-仅 `qwen-audio-3.1-asr-flash-streaming` 支持。可选 `near_meeting_16k`（近场）或 `far_field_meeting_16k`（远场，默认值）。作为同名关键字参数传入。完整参数说明请参见[API 参考](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/fun-asr-real-time-speech-recognition-api-reference/fun-asr-client-events.md)。
+仅 `qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming` 支持。可选 `near_meeting_16k`（近场）或 `far_field_meeting_16k`（远场，默认值）。作为同名关键字参数传入。完整参数说明请参见[API 参考](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/fun-asr-real-time-speech-recognition-api-reference/fun-asr-client-events.md)。
 
 vocabulary\_id
 
@@ -428,7 +444,7 @@ dict
 
 与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
 
-**重要**仅`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`支持即时热词。
+**重要**仅`qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`支持即时热词。
 
 示例：
 
@@ -621,7 +637,7 @@ dict
 
 输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见[快速开始](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。
 
-**重要**仅 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持 context 参数。
+**重要**仅 `qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持 context 参数。
 
 dict 中需包含 `context` 键，值为消息列表（list\[dict\]），每条消息包含以下字段：
 

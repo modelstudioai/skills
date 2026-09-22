@@ -1,37 +1,34 @@
 # application component api reference
 
-应用组件 API 提供了在百炼平台中集成和调用预置能力（如对话、知识检索、工具调用等）的标准接口，适用于构建企业级 AI 应用。该 API 以 RESTful 形式提供，支持同步响应与[流式输出](../concepts/streaming.md)，并与百炼统一身份认证体系深度集成。开发者需通过 RAM 授权后方可调用，具体权限粒度详见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)。
+应用组件 API 是百炼平台提供的核心能力接口，用于在自定义应用中集成大模型推理、知识库检索、工作流编排等能力。该 API 采用 RESTful 设计，支持标准 HTTP 请求与 JSON 数据格式，适用于服务端调用场景。所有接口均需通过 RAM 授权及 API Key 鉴权，具体接入方式和参数规范详见下文。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
 当前应用组件 API 支持以下核心能力：
-- 基于百炼托管模型的对话生成（如 `qwen-max`、`qwen-plus`、`qwen-turbo`）
-- 多源知识库检索增强（RAG）调用
-- 预置工具链执行（如网页搜索、数据库查询、代码解释器）
-- 自定义插件（Plugin）的注册与触发（需提前在控制台配置）
+- 同步/异步大模型推理（含 Qwen 系列、Qwen2 系列及部分第三方模型）
+- 基于向量库的知识检索（需提前配置知识库 ID）
+- 多步骤工作流执行（通过 `workflow_id` 触发预设流程）
+- 模型输出结构化解析（启用 `response_format` 参数可返回 JSON Schema 校验结果）
 
-所有可用能力均按服务类型归类在 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 中，该目录持续同步最新上线接口，建议开发前优先查阅。
+> **注意**：文档 [API概览](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中列出的 `qwen-vl-plus` 模型已下线，实际可用模型请以 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 中最新 `model_id` 列表为准。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model` | string | 是 | 模型标识符，必须为平台已启用的模型 ID；不支持自定义模型别名 |
-| `input.messages` | array | 是 | 对话消息列表，格式同 OpenAI Chat Completion，但 `role` 仅支持 `user`/`assistant`/`system` |
-| `parameters.temperature` | number | 否 | 取值范围 [0.0, 2.0]，默认 1.0；注意：部分模型（如 `qwen-turbo`）对温度敏感度较低，实际效果可能弱于 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 所述典型行为 |
-| `parameters.top_p` | number | 否 | 取值范围 [0.0, 1.0]，默认 0.8 |
-| `enable_search` | boolean | 否 | 启用知识库检索，默认 `false`；若为 `true`，需确保应用已绑定有效知识库 |
-
-> **注意**：`input.messages` 中 `system` 角色消息仅在会话首条消息中生效，后续 `system` 消息将被忽略——此行为与 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中旧版描述存在差异，以当前运行时逻辑为准。
+| `model_id` | string | 是 | 模型唯一标识，如 `qwen-max`、`qwen-plus`；取值必须来自 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) |
+| `input` | object | 是 | 输入内容，结构为 `{ "messages": [...] }` 或 `{ "query": "...", "retrieval": { "knowledge_id": "..." } }` |
+| `parameters` | object | 否 | 推理参数，如 `temperature`（0.0–2.0）、`max_tokens`（1–8192）等；详见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) |
+| `response_format` | object | 否 | 指定结构化输出格式，需提供 `type: "json_schema"` 及 `schema` 定义 |
 
 ## 使用方式
 
-1. 获取服务接入点：调用前需从 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 获取对应 Region 的 endpoint URL（如 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`）  
-2. 构造请求头：包含 `Authorization: Bearer <api_key>` 和 `Content-Type: application/json`  
-3. 发送 POST 请求，Body 示例：
+1. **获取接入点**：调用前需从 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 获取对应 Region 的 endpoint URL（如 `https://dashscope.aliyuncs.com/api/v1/apps/{app_id}/chat`）  
+2. **构造请求**：使用 `POST` 方法，Header 中携带 `Authorization: Bearer <api_key>` 和 `Content-Type: application/json`  
+3. **发送调用**：Body 示例：
    ```json
    {
-     "model": "qwen-plus",
+     "model_id": "qwen-max",
      "input": {
        "messages": [{"role": "user", "content": "你好"}]
      },
@@ -41,10 +38,10 @@
 
 ## 限制和注意事项
 
-- 单次请求 `input.messages` 最多支持 50 条消息，总 token 数上限为 32768（含 prompt + completion）  
-- 流式响应（`stream: true`）仅支持 `text-generation` 类型接口，不适用于工具调用类接口  
-- 调用频率受应用级 QPS 限制（默认 5 QPS），超出将返回 `429 Too Many Requests`；配额可在控制台调整  
-- 所有 API 版本变更均记录于 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md)，重大不兼容更新将提前 30 天公告
+- 单次请求 `input.messages` 最多支持 10 条消息，总 token 数上限为 32768（含 system [prompt](../guides/prompt.md)）  
+- 异步任务（`/v1/apps/{app_id}/chat/async`）最长保留结果 24 小时，超时后无法查询  
+- 知识库检索仅支持已发布状态的知识库，草稿或已删除知识库将返回 `404` 错误  
+- > **注意**：[授权信息](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md) 文档中描述的旧版 STS [Token](../concepts/token.md) 方式已废弃，现仅支持 API Key 或 RAM Role Assume 方式鉴权，请以 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 中 v2024-03-01 起的变更为准。
 
 ## 来源文档
 

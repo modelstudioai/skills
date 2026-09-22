@@ -1,6 +1,6 @@
-# 实时语音识别（Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime）客户端事件
+# 实时语音识别（Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime）客户端事件
 
-本文介绍 Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime 实时语音识别服务中客户端通过 WebSocket 发送给服务端的客户端事件，包括 run-task（启动任务）、 continue-task（更新上下文）、 finish-task（结束任务）等指令的数据结构与字段含义。
+本文介绍 Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime 实时语音识别服务中客户端通过 WebSocket 发送给服务端的客户端事件，包括 run-task（启动任务）、 continue-task（更新上下文）、 finish-task（结束任务）等指令的数据结构与字段含义。
 
 **用户指南：**关于模型介绍和选型建议请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model)。
 
@@ -48,13 +48,13 @@
 
 **model**`string`**（必选）**
 
-指定模型名。支持Qwen-Audio-3.x-ASR-Flash-Streaming和Fun-ASR-Realtime系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
+指定模型名。支持 Qwen-Audio-3.1-ASR-Flash-Message、Qwen-Audio-3.x-ASR-Flash-Streaming 和 Fun-ASR-Realtime 系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
 
 **input**`object`**（必选）**
 
 输入对象。不携带上下文时传入`{}`。
 
-**重要**仅 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持上下文。
+**重要**仅 `qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持上下文。
 
 属性
 
@@ -100,13 +100,21 @@
 
 属性
 
+**disfluency\_removal\_enabled** `boolean`（可选）
+
+仅 `qwen-audio-3.1-asr-flash-message` 支持。是否过滤语气词并对输出结果进行润色，默认值为 `false`。设置为 `true` 时启用。
+
+**intermediate\_result\_enabled** `boolean`（可选）
+
+仅 `qwen-audio-3.1-asr-flash-message` 支持。是否返回流式中间结果，默认值为 `false`。设置为 `true` 时返回流式中间结果。
+
 **keep\_dialect** `boolean`（可选）
 
-仅 `qwen-audio-3.1-asr-flash-streaming` 支持。是否保留方言表达，默认值为 `false`。`false`：将方言转写为普通话文本；`true`：保留方言表达。
+仅 `qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming` 支持。是否保留方言表达，默认值为 `false`。`false`：将方言转写为普通话文本；`true`：保留方言表达。
 
 **vad\_model** `string`（可选）
 
-仅 `qwen-audio-3.1-asr-flash-streaming` 支持。VAD 模型，默认值为 `far_field_meeting_16k`。
+仅 `qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming` 支持。VAD 模型，默认值为 `far_field_meeting_16k`。
 
 -   `near_meeting_16k`：近场场景。
 -   `far_field_meeting_16k`：远场场景。
@@ -157,7 +165,7 @@ amr：仅支持AMR-NB类型。
 
 与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
 
-**重要**仅`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`支持即时热词。
+**重要**仅`qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`支持即时热词。
 
 **language\_hints**`array[string]`（可选）
 
@@ -367,7 +375,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 **发送时机**：任务运行中，需要更新对话上下文时发送。
 
-**重要**仅 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持该事件。
+**重要**仅 `qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持该事件。
 
 **header**`object`**（必选）**
 

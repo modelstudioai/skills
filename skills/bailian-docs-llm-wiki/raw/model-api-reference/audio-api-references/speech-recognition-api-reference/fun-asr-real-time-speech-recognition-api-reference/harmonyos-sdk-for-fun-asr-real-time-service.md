@@ -1,6 +1,6 @@
-# Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别HarmonyOS SDK
+# Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime实时语音识别HarmonyOS SDK
 
-了解实时语音识别HarmonyOS SDK的集成方法、请求参数、接口、回调和示例代码。
+本文介绍 Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime 实时语音识别 HarmonyOS SDK 的集成方法、请求参数、接口、回调和示例代码。
 
 关于模型介绍和选型建议，请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model)。
 
@@ -345,6 +345,22 @@ VAD断句静音阈值（毫秒）。一段语音后的静音时长超过该阈�
 否
 
 是否启用心跳包，默认值为 `false`。启用后，在持续发送静音音频时可保持连接；未启用时，连接会在一定时间后因超时而断开。静音音频是音频文件或数据流中不包含声音信号的内容。
+
+`nls_config.disfluency_removal_enabled`
+
+`boolean`
+
+否
+
+仅 `qwen-audio-3.1-asr-flash-message` 支持。是否过滤语气词并对输出结果进行润色，默认值为 `false`。设置为 `true` 时启用。
+
+`nls_config.intermediate_result_enabled`
+
+`boolean`
+
+否
+
+仅 `qwen-audio-3.1-asr-flash-message` 支持。是否返回流式中间结果，默认值为 `false`。设置为 `true` 时返回流式中间结果。
 
 `nls_config.vocabulary_id`
 

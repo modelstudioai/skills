@@ -2278,7 +2278,7 @@ qwen3.8-omni-flash-realtime
 
 60
 
-1,000,000
+2,000,000
 
 qwen3.5-omni-plus-realtime
 
@@ -2356,7 +2356,7 @@ qwen3.8-omni-flash-realtime
 
 60
 
-1,000,000
+2,000,000
 
 qwen3.5-omni-plus-realtime
 

@@ -8,332 +8,361 @@ SDK 以全局单例方式持有引擎实例，通过 `AoqClientEngine` 类对外
 
 ### 引擎生命周期
 
-**接口**
+接口
 
-**简介**
+简介
 
-`createEngine:delegate:`
+createEngine
 
 创建引擎实例（单例模式）
 
-`destroy`
+destroy
 
 销毁引擎实例
 
-`getVersion`
+getVersion
 
 获取 SDK 版本号
 
-`connect:`
+connect
 
 连接 Relay 服务器
 
-`disconnect`
+disconnect
 
 断开服务器连接
 
 ### 音频设备管理
 
-**接口**
+接口
 
-**简介**
+简介
 
-`startAudioCapture:`
+startAudioCapture
 
 打开音频采集设备（麦克风）
 
-`stopAudioCapture`
+stopAudioCapture
 
 关闭音频采集设备
 
-`muteAudioCapture:`
+muteAudioCapture
 
 静音或取消静音音频采集
 
-`startAudioPlayer:`
+startAudioPlayer
 
 开始音频渲染（播放远端音频）
 
-`stopAudioPlayer`
+stopAudioPlayer
 
 停止音频渲染
 
-`pauseAudioPlayer:`
+pauseAudioPlayer
 
-暂停音频渲染（支持淡出）
+暂停音频渲染，支持淡出
 
-`resumeAudioPlayer:`
+resumeAudioPlayer
 
-恢复音频渲染（支持淡入）
+恢复音频渲染，支持淡入
 
-`interruptAudioPlayer:fadeMs:`
+interruptAudioPlayer
 
 打断本轮音频通话
 
-`enableLocalAudioVolumeIndication:`
-
-开启或关闭本地采集音量提示
-
 ### 音频编码配置
 
-**接口**
+接口
 
-**简介**
+简介
 
-`setAudioEncoderConfig:`
+setAudioEncoderConfig
 
 设置音频编码参数
 
-`setAudioDecoderConfig:`
+setAudioDecoderConfig
 
 设置音频解码参数
 
-### 视频设备管理
-
-**接口**
-
-**简介**
-
-`startVideoCapture:`
-
-打开视频采集设备（摄像头）
-
-`stopVideoCapture`
-
-关闭视频采集设备
-
-`setLocalView:canvas:`
-
-设置或移除本地视频渲染窗口
-
-`setRemoteView:canvas:`
-
-设置或移除远端视频渲染窗口
-
-getScreenSourceList
-
-获取屏幕和窗口源
-
-startScreenCapture:
-
-开始屏幕采集
-
-stopScreenCapture
-
-停止屏幕采集
-
-### 视频编码与外部输入
-
-**接口**
-
-**简介**
-
-`setVideoEncoderConfig:`
-
-设置视频编码参数
-
-`setVideoDecoderConfig:`
-
-设置视频解码参数
-
-`pushExternalVideoCapturedFrame:frame:`
-
-推送外部采集视频帧
-
-`pushExternalVideoEncodedFrame:frame:`
-
-推送外部已编码视频帧
-
-### 媒体流发送控制
-
-**接口**
-
-**简介**
-
-`enableSendMediaStream:enable:`
-
-控制本地媒体流的发送开关
-
 ### 音频文件播放
 
-**接口**
+接口
 
-**简介**
+简介
 
-`startAudioFile:config:`
+startAudioFile
 
 开始推流播放本地音频文件
 
-`stopAudioFile:`
+stopAudioFile
 
 停止音频文件播放
 
-`pauseAudioFile:`
+pauseAudioFile
 
 暂停音频文件播放
 
-`resumeAudioFile:`
+resumeAudioFile
 
 恢复音频文件播放
 
-`getAudioFileDuration:`
+getAudioFileDuration
 
 获取音频文件总时长
 
-`getAudioFileCurrentPosition:`
+getAudioFileCurrentPosition
 
 获取音频文件当前播放位置
 
-`setAudioFilePositionMillis:positionMillis:`
+setAudioFilePositionMillis
 
 设置音频文件播放位置（seek）
 
-`setAudioFileVolume:type:volume:`
+setAudioFileVolume
 
 设置音频文件音量
 
-`getAudioFileVolume:type:`
+getAudioFileVolume
 
 获取音频文件当前音量
 
 ### 外部音频流
 
-**接口**
+接口
 
-**简介**
+简介
 
-`addAudioExternalStream:config:`
+addAudioExternalStream
 
 新增一条外部音频流
 
-`pushAudioExternalStreamData:data:`
+pushAudioExternalStreamData
 
 输入外部音频 PCM 数据
 
-`setAudioExternalStreamVolume:type:volume:`
+setAudioExternalStreamVolume
 
 设置外部音频流音量
 
-`getAudioExternalStreamVolume:type:`
+getAudioExternalStreamVolume
 
 获取外部音频流音量
 
-`clearAudioExternalStreamBuffer:fadeoutMs:`
+clearAudioExternalStreamBuffer
 
 清空外部音频流缓存
 
-`removeAudioExternalStream:`
+removeAudioExternalStream
 
 移除外部音频流
 
-### 实时消息
-
-**接口**
-
-**简介**
-
-`sendDataMsg:`
-
-发送实时数据消息
-
 ### 音频帧回调
 
-**接口**
+接口
 
-**简介**
+简介
 
-`setAudioFrameObserver:`
+setAudioFrameObserver
 
-设置音频帧数据回调监听
+设置音频帧数据回调 delegate
 
-`enableAudioFrameObserver:audioSource:config:`
+enableAudioFrameObserver
 
 开启或关闭指定位置的音频帧回调
 
-### 视频帧回调
+### 本地音量提示
 
-**接口**
+接口
 
-**简介**
+简介
 
-`setVideoFrameObserver:`
+enableLocalAudioVolumeIndication
 
-设置视频帧数据回调监听
+开启或关闭本地采集音量提示
 
-`enableVideoFrameObserver:videoSource:config:`
+### 视频设备管理
 
-开启或关闭指定位置的视频帧回调
+接口
 
-### AoqEngineDelegate 回调
+简介
 
-**回调**
+startVideoCapture
 
-**简介**
+打开视频采集设备（摄像头）
 
-`onError:message:`
+stopVideoCapture
 
-引擎错误回调
+关闭视频采集设备
 
-`onWarning:message:`
+setLocalView
 
-引擎警告回调
+设置或移除本地视频渲染窗口
 
-`onConnectionStatusChange:`
+setRemoteView
 
-连接状态变化回调
+设置或移除远端视频渲染窗口
 
-`onStats:`
+### 视频编码与外部输入
 
-引擎统计信息回调
+接口
 
-`onAudioDeviceStateChanged:`
+简介
 
-音频设备操作状态变化回调
+setVideoEncoderConfig
 
-`onAudioDeviceRouteChanged:`
+设置视频编码参数
 
-音频输出路由变化回调
+setVideoDecoderConfig
 
-`onAudioFileState:`
+设置视频解码参数
 
-音频文件播放状态回调
+pushExternalVideoCapturedFrame
 
-`onLocalAudioVolumeIndication:`
+推送外部采集视频帧
 
-本地采集音量提示回调
+pushExternalVideoEncodedFrame
 
-`onVideoDeviceStateChanged:`
-
-视频设备操作状态变化回调
-
-`onDataMsg:`
-
-收到实时数据消息回调
-
-## 接口详情
+推送外部已编码视频帧
 
 ### 屏幕采集
 
-```
-- (int)startScreenCapture:(AoqScreenCaptureConfig * _Nonnull)config;
-- (int)stopScreenCapture;
-```
+接口
 
-`config` 为屏幕采集配置。屏幕画面通过 `AoqTrackTypeScreen` 轨道发送。
+简介
 
-返回值：0 表示成功；非 0 表示失败。 接口同步返回，不提供 `onScreenCaptureStateChanged` 回调。
+getScreenSourceList
 
-先调用 `getScreenSourceList` 获取屏幕或窗口源，再将选定的 `sourceId` 和 `sourceType` 传入采集配置。
+获取屏幕采集源列表（Mac 桌面端独有）
 
-外部原始帧：设置 `isExternal=YES` 后，通过 `pushExternalVideoCapturedFrame` 输入 Screen 轨道的原始帧，由 SDK 编码。外部已编码帧：先通过 `setVideoEncoderConfig` 将 Screen 轨道设置为外部编码，再调用 `pushExternalVideoEncodedFrame`。
+startScreenCapture
 
-#### getScreenSourceList
+启动屏幕采集
 
-```
-- (AoqScreenSourceList * _Nullable)getScreenSourceList;
-```
+stopScreenCapture
 
-返回屏幕源列表，失败返回 nil。
+停止屏幕采集
+
+### 媒体流发送控制
+
+接口
+
+简介
+
+enableSendMediaStream
+
+控制本地媒体流的发送开关
+
+### 视频帧回调
+
+接口
+
+简介
+
+setVideoFrameObserver
+
+设置视频帧数据回调 delegate
+
+enableVideoFrameObserver
+
+开启或关闭指定位置的视频帧回调
+
+### 实时消息
+
+接口
+
+简介
+
+sendDataMsg
+
+发送实时数据消息
+
+### AoqEngineDelegate
+
+接口
+
+简介
+
+onError
+
+引擎错误回调
+
+onWarning
+
+引擎警告回调
+
+onConnectionStatusChange
+
+连接状态变化回调
+
+onStats
+
+引擎统计信息回调
+
+onAudioDeviceStateChanged
+
+音频设备操作状态变化回调
+
+onAudioDeviceRouteChanged
+
+音频输出路由变化回调
+
+onAudioFileState
+
+音频文件播放状态回调
+
+onLocalAudioVolumeIndication
+
+本地采集音量提示回调
+
+onVideoDeviceStateChanged
+
+视频设备操作状态变化回调
+
+onDataMsg
+
+收到实时数据消息回调
+
+### AoqAudioFrameDelegate
+
+接口
+
+简介
+
+onCapturedAudioFrame
+
+采集到原始音频帧时触发。数据为采集后的原始 PCM，未经任何处理。
+
+onProcessCapturedAudioFrame
+
+3A 处理后的音频帧触发。数据已经过回声消除、降噪等处理。
+
+onPublishAudioFrame
+
+推流前的音频帧触发。数据为最终编码发送前的音频。
+
+onPlaybackAudioFrame
+
+播放前的远端音频帧触发。数据为解码后、混音后待播放的音频。
+
+### AoqVideoFrameDelegate
+
+接口
+
+简介
+
+onCapturedVideoFrame
+
+采集到原始视频帧时触发（前处理前）。trackType 用于区分 Video / Screen 轨道。
+
+onPreEncodeVideoFrame
+
+编码前的视频帧触发（前处理后）。
+
+onRemoteVideoFrame
+
+远端解码后、渲染前的视频帧触发。
+
+## 接口详情
 
 ### 引擎生命周期
 
@@ -594,30 +623,6 @@ stopScreenCapture
 
 返回值：0 表示成功；非 0 表示失败。
 
-#### enableLocalAudioVolumeIndication:
-
-开启或关闭本地采集音量提示。开启后按 `config.interval` 周期触发 `onLocalAudioVolumeIndication:` 回调；`config.interval <= 0` 时关闭回调。需在 `startAudioCapture:` 之后调用才有音量数据。
-
-```
-- (int)enableLocalAudioVolumeIndication:(AoqAudioVolumeIndicationConfig * _Nonnull)config;
-```
-
-参数
-
-**参数**
-
-**类型**
-
-**说明**
-
-`config`
-
-`AoqAudioVolumeIndicationConfig *`
-
-音量提示配置，详见 `AoqAudioVolumeIndicationConfig`
-
-返回值：0 表示成功；非 0 表示失败。
-
 ### 音频编码配置
 
 #### setAudioEncoderConfig:
@@ -667,252 +672,6 @@ stopScreenCapture
 音频编解码配置，详见 `AoqAudioCodecConfig`
 
 返回值：0 表示成功；非 0 表示失败。
-
-### 视频设备管理
-
-#### startVideoCapture:
-
-打开视频采集设备（摄像头）。配置 `isExternal=YES` 时不打开摄像头，由 `pushExternalVideoCapturedFrame:frame:` 喂帧。
-
-```
-- (int)startVideoCapture:(AoqVideoCaptureConfig * _Nonnull)config;
-```
-
-参数
-
-**参数**
-
-**类型**
-
-**说明**
-
-`config`
-
-`AoqVideoCaptureConfig *`
-
-视频采集配置，详见 `AoqVideoCaptureConfig`
-
-返回值：0 表示成功；非 0 表示失败。
-
-#### stopVideoCapture
-
-关闭视频采集设备。
-
-```
-- (int)stopVideoCapture;
-```
-
-返回值：0 表示成功；非 0 表示失败。
-
-#### setLocalView:canvas:
-
-设置或移除本地视频渲染窗口。`canvas` 传 nil 或 `canvas.view` 为 nil 表示解绑。
-
-```
-- (int)setLocalView:(AoqTrackType)trackType canvas:(AoqVideoCanvas * _Nullable)canvas;
-```
-
-参数
-
-**参数**
-
-**类型**
-
-**说明**
-
-`trackType`
-
-`AoqTrackType`
-
-视频轨道，传 `AoqTrackTypeVideo`
-
-`canvas`
-
-`AoqVideoCanvas *`
-
-渲染画布，详见 `AoqVideoCanvas`；传 nil 表示解绑
-
-返回值：0 表示成功；非 0 表示失败。
-
-#### setRemoteView:canvas:
-
-设置或移除远端视频渲染窗口。`canvas` 传 nil 或 `canvas.view` 为 nil 表示解绑。
-
-```
-- (int)setRemoteView:(AoqTrackType)trackType canvas:(AoqVideoCanvas * _Nullable)canvas;
-```
-
-参数
-
-**参数**
-
-**类型**
-
-**说明**
-
-`trackType`
-
-`AoqTrackType`
-
-视频轨道，传 `AoqTrackTypeVideo`
-
-`canvas`
-
-`AoqVideoCanvas *`
-
-渲染画布，详见 `AoqVideoCanvas`；传 nil 表示解绑
-
-返回值：0 表示成功；非 0 表示失败。
-
-### 视频编码与外部输入
-
-#### setVideoEncoderConfig:
-
-设置视频编码参数，按 `config.trackType` 路由。
-
-```
-- (int)setVideoEncoderConfig:(AoqVideoCodecConfig * _Nonnull)config;
-```
-
-参数
-
-**参数**
-
-**类型**
-
-**说明**
-
-`config`
-
-`AoqVideoCodecConfig *`
-
-视频编解码配置，详见 `AoqVideoCodecConfig`
-
-返回值：0 表示成功；非 0 表示失败。
-
-#### setVideoDecoderConfig:
-
-设置视频解码参数（订阅侧 codec 提议，需在 `connect:` 之前调用），按 `config.trackType` 路由。
-
-```
-- (int)setVideoDecoderConfig:(AoqVideoCodecConfig * _Nonnull)config;
-```
-
-参数
-
-**参数**
-
-**类型**
-
-**说明**
-
-`config`
-
-`AoqVideoCodecConfig *`
-
-视频编解码配置，详见 `AoqVideoCodecConfig`
-
-返回值：0 表示成功；非 0 表示失败。
-
-#### pushExternalVideoCapturedFrame:frame:
-
-推送外部视频帧。需先调用 `startVideoCapture:` 且配置 `isExternal=YES`，未启动外部视频采集或格式不支持时返回 `AoqECParamInvalid`。
-
-```
-- (int)pushExternalVideoCapturedFrame:(AoqTrackType)trackType
-                                frame:(AoqVideoFrame * _Nonnull)frame;
-```
-
-参数
-
-**参数**
-
-**类型**
-
-**说明**
-
-`trackType`
-
-`AoqTrackType`
-
-路由目标，传 `AoqTrackTypeVideo`
-
-；也支持 AoqTrackTypeScreen
-
-`frame`
-
-`AoqVideoFrame *`
-
-外部视频帧数据，详见 `AoqVideoFrame`
-
-返回值：0 表示成功；`AoqECVideoExternalBufferFull`（210）表示缓冲区满；<0 表示其他错误。
-
-#### pushExternalVideoEncodedFrame:frame:
-
-推送外部已编码视频帧，bypass 编码器直推。需先调用 `setVideoEncoderConfig:` 且配置 `isExternal=YES`，当前仅支持 JPEG。
-
-```
-- (int)pushExternalVideoEncodedFrame:(AoqTrackType)trackType
-                               frame:(AoqVideoEncodedFrame * _Nonnull)frame;
-```
-
-参数
-
-**参数**
-
-**类型**
-
-**说明**
-
-`trackType`
-
-`AoqTrackType`
-
-路由目标，传 `AoqTrackTypeVideo`
-
-；也支持 AoqTrackTypeScreen
-
-`frame`
-
-`AoqVideoEncodedFrame *`
-
-外部已编码帧数据，详见 `AoqVideoEncodedFrame`
-
-返回值：0 表示成功；非 0 表示失败。
-
-### 媒体流发送控制
-
-#### enableSendMediaStream:enable:
-
-控制本地媒体流的发送开关。建议初始化后先关闭发送，待 `onConnectionStatusChange:` 回调 `AoqConnectionStatusConnected` 后再开启。
-
-```
-- (int)enableSendMediaStream:(AoqTrackType)trackType enable:(BOOL)enable;
-```
-
-参数
-
-**参数**
-
-**类型**
-
-**说明**
-
-`trackType`
-
-`AoqTrackType`
-
-路由目标，支持 `AoqTrackTypeAudio` / `AoqTrackTypeVideo`
-
-；支持 AoqTrackTypeScreen
-
-`enable`
-
-`BOOL`
-
-`YES` 启用发送；`NO` 停用发送
-
-返回值：0 表示调用已下发（异步执行）；非 0 表示失败。
 
 ### 音频文件播放
 
@@ -1357,32 +1116,6 @@ stopScreenCapture
 
 返回值：0 表示成功；非 0 表示失败。
 
-### 实时消息
-
-#### sendDataMsg:
-
-发送实时数据消息。
-
-```
-- (int)sendDataMsg:(AoqDataMsg * _Nonnull)msg;
-```
-
-参数
-
-**参数**
-
-**类型**
-
-**说明**
-
-`msg`
-
-`AoqDataMsg *`
-
-消息内容，详见 `AoqDataMsg`
-
-返回值：0 表示成功；非 0 表示失败。
-
 ### 音频帧回调
 
 #### setAudioFrameObserver:
@@ -1446,6 +1179,301 @@ stopScreenCapture
 回调参数设置，详见 `AoqAudioObserverConfig`
 
 返回值：0 表示成功；非 0 表示失败。
+
+### 本地音量提示
+
+#### enableLocalAudioVolumeIndication:
+
+开启或关闭本地采集音量提示。开启后按 `config.interval` 周期触发 `onLocalAudioVolumeIndication:` 回调；`config.interval <= 0` 时关闭回调。需在 `startAudioCapture:` 之后调用才有音量数据。
+
+```
+- (int)enableLocalAudioVolumeIndication:(AoqAudioVolumeIndicationConfig * _Nonnull)config;
+```
+
+参数
+
+**参数**
+
+**类型**
+
+**说明**
+
+`config`
+
+`AoqAudioVolumeIndicationConfig *`
+
+音量提示配置，详见 `AoqAudioVolumeIndicationConfig`
+
+返回值：0 表示成功；非 0 表示失败。
+
+### 视频设备管理
+
+#### startVideoCapture:
+
+打开视频采集设备（摄像头）。配置 `isExternal=YES` 时不打开摄像头，由 `pushExternalVideoCapturedFrame:frame:` 喂帧。
+
+```
+- (int)startVideoCapture:(AoqVideoCaptureConfig * _Nonnull)config;
+```
+
+参数
+
+**参数**
+
+**类型**
+
+**说明**
+
+`config`
+
+`AoqVideoCaptureConfig *`
+
+视频采集配置，详见 `AoqVideoCaptureConfig`
+
+返回值：0 表示成功；非 0 表示失败。
+
+#### stopVideoCapture
+
+关闭视频采集设备。
+
+```
+- (int)stopVideoCapture;
+```
+
+返回值：0 表示成功；非 0 表示失败。
+
+#### setLocalView:canvas:
+
+设置或移除本地视频渲染窗口。`canvas` 传 nil 或 `canvas.view` 为 nil 表示解绑。
+
+```
+- (int)setLocalView:(AoqTrackType)trackType canvas:(AoqVideoCanvas * _Nullable)canvas;
+```
+
+参数
+
+**参数**
+
+**类型**
+
+**说明**
+
+`trackType`
+
+`AoqTrackType`
+
+视频轨道，传 `AoqTrackTypeVideo`
+
+`canvas`
+
+`AoqVideoCanvas *`
+
+渲染画布，详见 `AoqVideoCanvas`；传 nil 表示解绑
+
+返回值：0 表示成功；非 0 表示失败。
+
+#### setRemoteView:canvas:
+
+设置或移除远端视频渲染窗口。`canvas` 传 nil 或 `canvas.view` 为 nil 表示解绑。
+
+```
+- (int)setRemoteView:(AoqTrackType)trackType canvas:(AoqVideoCanvas * _Nullable)canvas;
+```
+
+参数
+
+**参数**
+
+**类型**
+
+**说明**
+
+`trackType`
+
+`AoqTrackType`
+
+视频轨道，传 `AoqTrackTypeVideo`
+
+`canvas`
+
+`AoqVideoCanvas *`
+
+渲染画布，详见 `AoqVideoCanvas`；传 nil 表示解绑
+
+返回值：0 表示成功；非 0 表示失败。
+
+### 视频编码与外部输入
+
+#### setVideoEncoderConfig:
+
+设置视频编码参数，按 `config.trackType` 路由。
+
+```
+- (int)setVideoEncoderConfig:(AoqVideoCodecConfig * _Nonnull)config;
+```
+
+参数
+
+**参数**
+
+**类型**
+
+**说明**
+
+`config`
+
+`AoqVideoCodecConfig *`
+
+视频编解码配置，详见 `AoqVideoCodecConfig`
+
+返回值：0 表示成功；非 0 表示失败。
+
+#### setVideoDecoderConfig:
+
+设置视频解码参数（订阅侧 codec 提议，需在 `connect:` 之前调用），按 `config.trackType` 路由。
+
+```
+- (int)setVideoDecoderConfig:(AoqVideoCodecConfig * _Nonnull)config;
+```
+
+参数
+
+**参数**
+
+**类型**
+
+**说明**
+
+`config`
+
+`AoqVideoCodecConfig *`
+
+视频编解码配置，详见 `AoqVideoCodecConfig`
+
+返回值：0 表示成功；非 0 表示失败。
+
+#### pushExternalVideoCapturedFrame:frame:
+
+推送外部视频帧。需先调用 `startVideoCapture:` 且配置 `isExternal=YES`，未启动外部视频采集或格式不支持时返回 `AoqECParamInvalid`。
+
+```
+- (int)pushExternalVideoCapturedFrame:(AoqTrackType)trackType
+                                frame:(AoqVideoFrame * _Nonnull)frame;
+```
+
+参数
+
+**参数**
+
+**类型**
+
+**说明**
+
+`trackType`
+
+`AoqTrackType`
+
+路由目标，传 `AoqTrackTypeVideo`
+
+；也支持 AoqTrackTypeScreen
+
+`frame`
+
+`AoqVideoFrame *`
+
+外部视频帧数据，详见 `AoqVideoFrame`
+
+返回值：0 表示成功；`AoqECVideoExternalBufferFull`（210）表示缓冲区满；<0 表示其他错误。
+
+#### pushExternalVideoEncodedFrame:frame:
+
+推送外部已编码视频帧，bypass 编码器直推。需先调用 `setVideoEncoderConfig:` 且配置 `isExternal=YES`，当前仅支持 JPEG。
+
+```
+- (int)pushExternalVideoEncodedFrame:(AoqTrackType)trackType
+                               frame:(AoqVideoEncodedFrame * _Nonnull)frame;
+```
+
+参数
+
+**参数**
+
+**类型**
+
+**说明**
+
+`trackType`
+
+`AoqTrackType`
+
+路由目标，传 `AoqTrackTypeVideo`
+
+；也支持 AoqTrackTypeScreen
+
+`frame`
+
+`AoqVideoEncodedFrame *`
+
+外部已编码帧数据，详见 `AoqVideoEncodedFrame`
+
+返回值：0 表示成功；非 0 表示失败。
+
+### 屏幕采集
+
+```
+- (int)startScreenCapture:(AoqScreenCaptureConfig * _Nonnull)config;
+- (int)stopScreenCapture;
+```
+
+`config` 为屏幕采集配置。屏幕画面通过 `AoqTrackTypeScreen` 轨道发送。
+
+返回值：0 表示成功；非 0 表示失败。 接口同步返回，不提供 `onScreenCaptureStateChanged` 回调。
+
+先调用 `getScreenSourceList` 获取屏幕或窗口源，再将选定的 `sourceId` 和 `sourceType` 传入采集配置。
+
+外部原始帧：设置 `isExternal=YES` 后，通过 `pushExternalVideoCapturedFrame` 输入 Screen 轨道的原始帧，由 SDK 编码。外部已编码帧：先通过 `setVideoEncoderConfig` 将 Screen 轨道设置为外部编码，再调用 `pushExternalVideoEncodedFrame`。
+
+#### getScreenSourceList
+
+```
+- (AoqScreenSourceList * _Nullable)getScreenSourceList;
+```
+
+返回屏幕源列表，失败返回 nil。
+
+### 媒体流发送控制
+
+#### enableSendMediaStream:enable:
+
+控制本地媒体流的发送开关。建议初始化后先关闭发送，待 `onConnectionStatusChange:` 回调 `AoqConnectionStatusConnected` 后再开启。
+
+```
+- (int)enableSendMediaStream:(AoqTrackType)trackType enable:(BOOL)enable;
+```
+
+参数
+
+**参数**
+
+**类型**
+
+**说明**
+
+`trackType`
+
+`AoqTrackType`
+
+路由目标，支持 `AoqTrackTypeAudio` / `AoqTrackTypeVideo`
+
+；支持 AoqTrackTypeScreen
+
+`enable`
+
+`BOOL`
+
+`YES` 启用发送；`NO` 停用发送
+
+返回值：0 表示调用已下发（异步执行）；非 0 表示失败。
 
 ### 视频帧回调
 
@@ -1511,7 +1539,31 @@ stopScreenCapture
 
 返回值：0 表示成功；非 0 表示失败。
 
-## 回调
+### 实时消息
+
+#### sendDataMsg:
+
+发送实时数据消息。
+
+```
+- (int)sendDataMsg:(AoqDataMsg * _Nonnull)msg;
+```
+
+参数
+
+**参数**
+
+**类型**
+
+**说明**
+
+`msg`
+
+`AoqDataMsg *`
+
+消息内容，详见 `AoqDataMsg`
+
+返回值：0 表示成功；非 0 表示失败。
 
 ### AoqEngineDelegate
 
@@ -1945,116 +1997,6 @@ AoqTrackType
 返回值：`YES` 数据已修改、需写回 SDK；`NO` 只读。
 
 ## 数据类型与枚举
-
-### AoqScreenSourceList
-
-字段
-
-类型
-
-说明
-
-sourceList
-
-NSArray<AoqScreenSourceInfo \*> \*
-
-屏幕源数组
-
-### AoqScreenSourceInfo
-
-字段
-
-类型
-
-默认值
-
-说明
-
-sourceType
-
-AoqScreenShareSourceType
-
-Desktop
-
-源类型
-
-sourceId
-
-int64\_t
-
-0
-
-源 ID
-
-sourceName
-
-NSString \*
-
-—
-
-源名称
-
-sourceIsSelf
-
-BOOL
-
-—
-
-是否为自身进程窗口
-
-### AoqScreenShareSourceType
-
-枚举值
-
-值
-
-说明
-
-AoqScreenShareSourceTypeDesktop
-
-0
-
-整个桌面
-
-AoqScreenShareSourceTypeWindow
-
-1
-
-指定窗口
-
-### AoqScreenCaptureConfig
-
-字段
-
-类型
-
-默认值
-
-说明
-
-isExternal
-
-BOOL
-
-NO
-
-是否由应用提供屏幕原始帧。
-
-sourceId
-
-int64\_t
-
-0
-
-屏幕源 ID。
-
-sourceType
-
-AoqScreenShareSourceType
-
-AoqScreenShareSourceTypeWindow
-
-屏幕源类型。
 
 ### 通用类型
 
@@ -3068,28 +3010,6 @@ AoqTrackTypeScreen
 
 比特率（bps）
 
-#### AoqAudioDeviceState
-
-音频设备状态。
-
-**字段**
-
-**类型**
-
-**说明**
-
-`state`
-
-`AoqAudioDeviceStateCode`
-
-状态码
-
-`reason`
-
-`NSInteger`
-
-错误码（`AoqErrorCode`）
-
 #### AoqAudioDeviceStateCode
 
 音频设备状态码。
@@ -3166,6 +3086,28 @@ AoqTrackTypeScreen
 
 播放失败
 
+#### AoqAudioDeviceState
+
+音频设备状态。
+
+**字段**
+
+**类型**
+
+**说明**
+
+`state`
+
+`AoqAudioDeviceStateCode`
+
+状态码
+
+`reason`
+
+`NSInteger`
+
+错误码（`AoqErrorCode`）
+
 #### AoqAudioDeviceRouteType
 
 音频设备路由类型。
@@ -3224,6 +3166,8 @@ USB
 
 蓝牙 A2DP
 
+### 音频文件类型
+
 #### AoqAudioFileMixConfig
 
 音频文件推流播放配置。
@@ -3275,34 +3219,6 @@ USB
 `100`
 
 播放音量，范围 \[0, 100\]
-
-#### AoqAudioFileState
-
-音频文件状态。
-
-**字段**
-
-**类型**
-
-**说明**
-
-`fileId`
-
-`NSString *`
-
-文件 ID
-
-`stateCode`
-
-`AoqAudioFileStateCode`
-
-状态码
-
-`errorCode`
-
-`AoqAudioFileErrorCode`
-
-错误码
 
 #### AoqAudioFileStateCode
 
@@ -3395,6 +3311,80 @@ USB
 2
 
 解码文件失败
+
+#### AoqAudioFileState
+
+音频文件状态。
+
+**字段**
+
+**类型**
+
+**说明**
+
+`fileId`
+
+`NSString *`
+
+文件 ID
+
+`stateCode`
+
+`AoqAudioFileStateCode`
+
+状态码
+
+`errorCode`
+
+`AoqAudioFileErrorCode`
+
+错误码
+
+### 外部音频流与音量类型
+
+#### AoqAudioStreamDirection
+
+外部音频流方向。
+
+**枚举值**
+
+**值**
+
+**说明**
+
+`AoqAudioStreamPublish`
+
+0
+
+推流音频
+
+`AoqAudioStreamPlayout`
+
+1
+
+播放音频
+
+#### AoqAudioExternalStreamToggle
+
+外部音频流切换状态。
+
+**枚举值**
+
+**值**
+
+**说明**
+
+`AoqAudioExternalStreamToggleNormal`
+
+0
+
+恢复正常
+
+`AoqAudioExternalStreamTogglePause`
+
+1
+
+暂停
 
 #### AoqAudioExternalStreamConfig
 
@@ -3535,50 +3525,6 @@ PCM 输入轮次
 `BOOL`
 
 数据回调有效，`YES` 表示 SDK 生成的静音数据
-
-#### AoqAudioStreamDirection
-
-外部音频流方向。
-
-**枚举值**
-
-**值**
-
-**说明**
-
-`AoqAudioStreamPublish`
-
-0
-
-推流音频
-
-`AoqAudioStreamPlayout`
-
-1
-
-播放音频
-
-#### AoqAudioExternalStreamToggle
-
-外部音频流切换状态。
-
-**枚举值**
-
-**值**
-
-**说明**
-
-`AoqAudioExternalStreamToggleNormal`
-
-0
-
-恢复正常
-
-`AoqAudioExternalStreamTogglePause`
-
-1
-
-暂停
 
 #### AoqAudioSource
 
@@ -3846,6 +3792,62 @@ NSInteger
 
 裁剪模式，宽高比不一致时裁剪宽或高，画面内容会丢失
 
+#### AoqRenderView
+
+渲染视图控件，继承自 `NSView`，可作为 `AoqVideoCanvas.view` 使用。
+
+**属性**
+
+**类型**
+
+**说明**
+
+`engineDisplayView`
+
+`NSView *`（只读）
+
+引擎内部显示视图
+
+`renderWidth`
+
+`int`（只读）
+
+渲染宽度
+
+`renderHeight`
+
+`int`（只读）
+
+渲染高度
+
+`enableMetal`
+
+`BOOL`（只读）
+
+是否启用 Metal 渲染
+
+`delegate`
+
+`id<AoqRenderViewDelegate>`
+
+渲染视图事件委托
+
+#### AoqRenderViewDelegate
+
+渲染视图事件委托协议。
+
+```
+- (void)onRenderViewSizeChanged:(AoqRenderView * _Nonnull)view;
+```
+
+**回调**
+
+**说明**
+
+`onRenderViewSizeChanged:`
+
+渲染视图尺寸变化回调
+
 #### AoqVideoPixelFormat
 
 视频像素格式。
@@ -3956,6 +3958,22 @@ I420 三平面步长
 
 时间戳（ms）；0 时 SDK 用本地时钟补
 
+#### AoqVideoCodecType
+
+外部编码帧 codec 类型。
+
+**枚举值**
+
+**值**
+
+**说明**
+
+`AoqVideoCodecTypeJPEG`
+
+0
+
+JPEG
+
 #### AoqVideoEncodedFrame
 
 外部已编码视频帧。调用方自行完成编码，SDK 不做二次编码，直接打包发送。
@@ -3995,140 +4013,6 @@ I420 三平面步长
 `int64_t`
 
 时间戳（ms）；0 时 SDK 用本地时钟补
-
-#### AoqVideoCodecType
-
-外部编码帧 codec 类型。
-
-**枚举值**
-
-**值**
-
-**说明**
-
-`AoqVideoCodecTypeJPEG`
-
-0
-
-JPEG
-
-#### AoqVideoDeviceState
-
-视频设备状态。
-
-**字段**
-
-**类型**
-
-**说明**
-
-`state`
-
-`AoqVideoDeviceStateCode`
-
-状态码
-
-`reason`
-
-`NSInteger`
-
-错误码（`AoqErrorCode`）
-
-#### AoqVideoDeviceStateCode
-
-视频设备状态码。
-
-**枚举值**
-
-**值**
-
-**说明**
-
-`AoqVideoDeviceNone`
-
-0
-
-无状态
-
-`AoqVideoDeviceCaptureStarting`
-
-1
-
-摄像头正在启动
-
-`AoqVideoDeviceCaptureStarted`
-
-2
-
-摄像头已启动
-
-`AoqVideoDeviceCaptureStopping`
-
-3
-
-摄像头正在停止
-
-`AoqVideoDeviceCaptureStopped`
-
-4
-
-摄像头已停止
-
-`AoqVideoDeviceCaptureFail`
-
-5
-
-摄像头启动失败
-
-#### AoqMirrorMode
-
-镜像模式。
-
-**枚举值**
-
-**值**
-
-**说明**
-
-`AoqMirrorModeDisabled`
-
-0
-
-关闭镜像
-
-`AoqMirrorModeEnabled`
-
-1
-
-开启镜像
-
-#### AoqOrientationMode
-
-方向模式。
-
-**枚举值**
-
-**值**
-
-**说明**
-
-`AoqOrientationModeAuto`
-
-0
-
-自动
-
-`AoqOrientationModePortrait`
-
-1
-
-竖屏
-
-`AoqOrientationModeLandscape`
-
-2
-
-横屏
 
 #### AoqVideoCodecConfig
 
@@ -4229,6 +4113,124 @@ JPEG
 `Auto`
 
 方向模式
+
+#### AoqMirrorMode
+
+镜像模式。
+
+**枚举值**
+
+**值**
+
+**说明**
+
+`AoqMirrorModeDisabled`
+
+0
+
+关闭镜像
+
+`AoqMirrorModeEnabled`
+
+1
+
+开启镜像
+
+#### AoqOrientationMode
+
+方向模式。
+
+**枚举值**
+
+**值**
+
+**说明**
+
+`AoqOrientationModeAuto`
+
+0
+
+自动
+
+`AoqOrientationModePortrait`
+
+1
+
+竖屏
+
+`AoqOrientationModeLandscape`
+
+2
+
+横屏
+
+#### AoqVideoDeviceStateCode
+
+视频设备状态码。
+
+**枚举值**
+
+**值**
+
+**说明**
+
+`AoqVideoDeviceNone`
+
+0
+
+无状态
+
+`AoqVideoDeviceCaptureStarting`
+
+1
+
+摄像头正在启动
+
+`AoqVideoDeviceCaptureStarted`
+
+2
+
+摄像头已启动
+
+`AoqVideoDeviceCaptureStopping`
+
+3
+
+摄像头正在停止
+
+`AoqVideoDeviceCaptureStopped`
+
+4
+
+摄像头已停止
+
+`AoqVideoDeviceCaptureFail`
+
+5
+
+摄像头启动失败
+
+#### AoqVideoDeviceState
+
+视频设备状态。
+
+**字段**
+
+**类型**
+
+**说明**
+
+`state`
+
+`AoqVideoDeviceStateCode`
+
+状态码
+
+`reason`
+
+`NSInteger`
+
+错误码（`AoqErrorCode`）
 
 #### AoqVideoSource
 
@@ -4372,58 +4374,114 @@ AoqTrackTypeVideo
 
 需要观察的视频轨道；仅支持 Video / Screen。
 
-#### AoqRenderView
+### 屏幕采集类型
 
-渲染视图控件，继承自 `NSView`，可作为 `AoqVideoCanvas.view` 使用。
+#### AoqScreenShareSourceType
 
-**属性**
+枚举值
 
-**类型**
+值
 
-**说明**
+说明
 
-`engineDisplayView`
+AoqScreenShareSourceTypeDesktop
 
-`NSView *`（只读）
+0
 
-引擎内部显示视图
+整个桌面
 
-`renderWidth`
+AoqScreenShareSourceTypeWindow
 
-`int`（只读）
+1
 
-渲染宽度
+指定窗口
 
-`renderHeight`
+#### AoqScreenSourceInfo
 
-`int`（只读）
+字段
 
-渲染高度
+类型
 
-`enableMetal`
+默认值
 
-`BOOL`（只读）
+说明
 
-是否启用 Metal 渲染
+sourceType
 
-`delegate`
+AoqScreenShareSourceType
 
-`id<AoqRenderViewDelegate>`
+Desktop
 
-渲染视图事件委托
+源类型
 
-#### AoqRenderViewDelegate
+sourceId
 
-渲染视图事件委托协议。
+int64\_t
 
-```
-- (void)onRenderViewSizeChanged:(AoqRenderView * _Nonnull)view;
-```
+0
 
-**回调**
+源 ID
 
-**说明**
+sourceName
 
-`onRenderViewSizeChanged:`
+NSString \*
 
-渲染视图尺寸变化回调
+—
+
+源名称
+
+sourceIsSelf
+
+BOOL
+
+—
+
+是否为自身进程窗口
+
+#### AoqScreenSourceList
+
+字段
+
+类型
+
+说明
+
+sourceList
+
+NSArray<AoqScreenSourceInfo \*> \*
+
+屏幕源数组
+
+#### AoqScreenCaptureConfig
+
+字段
+
+类型
+
+默认值
+
+说明
+
+isExternal
+
+BOOL
+
+NO
+
+是否由应用提供屏幕原始帧。
+
+sourceId
+
+int64\_t
+
+0
+
+屏幕源 ID。
+
+sourceType
+
+AoqScreenShareSourceType
+
+AoqScreenShareSourceTypeWindow
+
+屏幕源类型。

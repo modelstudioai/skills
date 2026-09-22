@@ -1,59 +1,43 @@
 # OpenAI 兼容接口
 
-OpenAI 兼容接口是阿里云百炼平台提供的一套标准化 RESTful API 协议，完全遵循 OpenAI 官方 API 的路径、请求/响应格式、参数命名与语义（如 `/chat/completions`、`messages` 数组、`stream` 流式开关等），使开发者能**零代码改造**复用现有 OpenAI SDK（如 `openai==1.0+`）、工具链（Dify、LlamaIndex、Cursor）及业务逻辑，快速接入千问（Qwen）全系列及主流第三方模型。
+OpenAI 兼容接口是百炼平台提供的一套标准化 API 协议层，通过复用 OpenAI RESTful 接口规范（如 `/v1/chat/completions`、`/v1/embeddings` 等），使开发者无需修改现有代码即可调用百炼托管的 Qwen 系列模型、Embedding 模型、Rerank 模型及多模态能力。该接口本质是 DashScope 底层能力的语义映射层，不依赖 OpenAI 服务，完全运行于阿里云基础设施。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **快速原型开发**：使用标准 `openai` Python SDK 或 `curl` 直接调用，5 分钟完成首次推理（如 `qwen3.7-plus` 文本生成）；  
-- **多模态推理**：通过 `chat/completions` 接口传入 Base64 图片（`qwen3-vl-plus`）、视频帧（`qwen3.8-omni-flash`），无需切换协议；  
-- **智能体（Agent）构建**：选用 `/responses` 子路径（仍属 OpenAI 兼容体系），启用内置 `web_search`、`code_interpreter` 等工具，支持 `previous_response_id` 自动管理多轮上下文；  
-- **向量化与检索**：调用 `/embeddings` 接口（如 `text-embedding-v4`），与 LangChain/LlamaIndex 的 `OpenAIEmbeddings` 无缝对接；  
-- **批量处理**：使用 `/batches`（异步）或切换 `base_url` 至 `batch.dashscope.aliyuncs.com`（同步批处理），复用 OpenAI Batch 工作流；  
-- **会话生命周期管理**：通过 `/conversations` 创建、查询、追加消息，实现跨设备上下文延续（替代自建 Session 存储）；  
-- **代码补全**：调用 `/completions`（FIM 模式），专用于 `qwen-coder-turbo` 模型，兼容 OpenAI Code Completion 语义。
-
-> ⚠️ 注意：并非所有能力都 100% 兼容。以下场景**必须使用 DashScope 原生接口**：  
-> - 音频模型（`qwen-audio-*`）  
-> - 多模态 Embedding（`qwen3-vl-embedding`）  
-> - 视频生成、文生图（`wan2.6-t2i`）等非 Chat 类任务  
-> - 需要 `max_frames`、`fps` 等细粒度视频参数的场景  
+- **模型调用**：支持 `chat/completions`（文本对话）、`completions`（补全）、`embeddings`（向量生成）、`reranks`（重排序）、`vision`（图像理解）等核心端点，覆盖 `qwen3.8-max`、`qwen3-vl-plus`、`text-embedding-v4`、`qwen3-rerank` 等主流模型；Qwen-Audio 和 QwQ 模型除外（仅支持 DashScope 原生协议）。
+- **工具与框架集成**：可直接用于 LangChain（通过 `BailianLLM` / `BailianEmbeddings`）、LlamaIndex、Hermes Agent、Cursor、Dify 等工具——只需将 `OPENAI_BASE_URL` 指向百炼兼容地址，并传入 DashScope API Key。
+- **客户端接入**：支持 Postman、cURL、VS Code 插件等通用开发工具；不同计费方案（[Token](token.md) Plan、Coding Plan、按量计费）对应独立 Base URL，需严格匹配。
+- **应用调用**：智能体（Agent）和工作流（Workflow）可通过 OpenAI 兼容的 Responses API（`/compatible-mode/v1/responses`）调用，支持 `input_image`、`input_file`、`previous_response_id` 等扩展字段，实现多轮上下文管理与多模态输入。
+- **批量处理**：`batches` 端点支持 JSONL 格式批量请求（如批量 embedding），但暂不支持 `conversations` 类型任务。
 
 ## 关键参数和配置
 
-| 参数 | 必填 | 说明 | 示例值 |
-|------|------|------|--------|
-| `base_url` | ✅ | **必须严格匹配地域、计费方案与功能模块**：<br>• 业务空间专属（推荐）：`https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1`<br>• Token Plan（北京）：`https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`<br>• Batch 同步：`https://batch.dashscope.aliyuncs.com/compatible-mode/v1` | `https://llm-abc123.cn-beijing.maas.aliyuncs.com/compatible-mode/v1` |
-| `api_key` | ✅ | 与 `base_url` 所属地域及计费方案**强绑定**（北京 Key 不能调用弗吉尼亚 endpoint） | `sk-xxx`（从控制台创建） |
-| `model` | ✅ | 必须为[文档明确列出的兼容模型名](../../raw/model-user-guide/get-started-with-models/models.md)，大小写敏感、不可拼错 | `qwen3.7-plus`, `qwen3-vl-plus`, `text-embedding-v4` |
-| `messages` | ✅（Chat/Responses） | 标准数组格式，支持 `system`/`user`/`assistant` 角色；视觉模型需在 `content` 中嵌入 `{"type": "image_url", "image_url": {"url": "data:image/png;base64,..."}}` | `[{"role":"user","content":"你好"}]` |
-| `stream` | ❌（默认 `false`） | 设为 `true` 启用 SSE 流式响应；部分模型（如 QVQ）**仅支持流式** | `true` |
-| `temperature` | ❌（默认 `0.8`） | 取值范围 `[0, 2)`，非 OpenAI 官方 `[0, 1]`，迁移时需校准 | `0.5` |
-| `max_tokens` | ❌（默认由模型决定） | 输出 token 上限；对 Responses 接口，该值限制“回复+思考”总长度 | `1024` |
-| `tools` | ❌（Responses 专用） | 启用 Agent 工具时必填，支持 `web_search`, `code_interpreter`, `knowledge_search` 等内置工具 | `[{"type":"web_search"}]` |
+| 参数 | 说明 | 注意事项 |
+|------|------|----------|
+| `base_url` | 必须设置为对应方案的兼容地址：<br>• 按量计费：`https://{WorkspaceId}.{region}.maas.aliyuncs.com/compatible-mode/v1`<br>• [Token](token.md) Plan：`https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`<br>• Coding Plan：`https://coding.dashscope.aliyuncs.com/v1` | `{WorkspaceId}` 和 `{region}` 需从控制台获取并替换；地域必须与[模型部署](model-deployment.md)地一致（如华北2）。 |
+| `api_key` | 使用 DashScope API Key（`sk-xxx`），**非 OpenAI Key**；不同计费方案 Key 不互通。 | [Token](token.md) Plan/Coding Plan 的 Key 仅在对应 Base URL 下有效，混用返回 401。 |
+| `model` | 必填，值为百炼平台发布的模型 ID，如 `qwen3.8-max`、`text-embedding-v4`、`qwen3-rerank`。不支持 `gpt-3.5-turbo` 等 OpenAI 原生名。 | 模型名中的 `.` 在部分工具（如 Cursor）中需替换为 `-`（如 `glm-5.3` → `glm-5-3`）。 |
+| `stream` | 控制是否流式响应，默认 `false`；`chat/completions` 支持，但 `completions` 等非 Chat 端点暂不生效。 | 流式响应默认启用（工具包层面），但实际行为以接口文档为准。 |
+| `messages` | OpenAI 标准格式数组，含 `role`（`system`/`user`/`assistant`）和 `content`；`system` 消息在 QwQ/QVQ 模型中无效。 | 多模态输入需在 `content` 中嵌入 `image_url` 或 `input_image` 字段（非 base64 图片需带 `data:image/xxx;base64,` 前缀）。 |
+| `input`（Responses API） | 替代 `messages`，支持字符串或结构化数组（含 `input_text`、`input_image`、`input_file`）。 | 与 `previous_response_id` 配合可构建无状态多轮对话。 |
 
 ## 面向开发者，简洁实用
 
-- ✅ **立即上手**：复制粘贴示例代码，仅替换 `base_url` 和 `api_key` 即可运行；  
-- ✅ **平滑迁移**：95% 的 OpenAI SDK 调用（含 `client.chat.completions.create()`、`client.embeddings.create()`）可直接复用；  
-- ✅ **按需选型**：  
-  - 通用对话 → `/chat/completions`  
-  - 智能体 → `/responses`（需直供模型）  
-  - 向量检索 → `/embeddings`  
-  - 批量处理 → `/batches` 或 `batch.dashscope.aliyuncs.com`  
-- ❌ **避坑提示**：  
-  - 不要跨地域混用 `api_key` 与 `base_url`（报错 `invalid_api_key`）；  
-  - 不要对 `qwen-audio` 或 `wan2.6-t2i` 使用 OpenAI 兼容接口；  
-  - `qwen-coder-turbo` 仅支持华北2（北京）地域；  
-  - 试用域名（`trial.cn-beijing.maas...`）RPM 仅为 1000，生产请务必使用业务空间专属域名。  
-
-> 💡 提示：所有 OpenAI 兼容接口均位于 `compatible-mode/v1` 路径下，统一认证、统一限流、统一配额管理。调试时建议优先使用 [API Explorer](https://help.aliyun.com/zh/model-studio/api-explorer) 实时验证请求结构。
+- ✅ **开箱即用**：安装 `openai>=1.40.0`，设置环境变量 `OPENAI_API_KEY`（DashScope Key）和 `OPENAI_BASE_URL`，即可复用原有 OpenAI SDK 代码。
+- ✅ **功能对齐但有边界**：支持 `temperature`、`top_p`、`max_tokens` 等常用参数，语义一致；但**不支持 `functions` / `tools` [函数调用](function-calling.md)**，也**不返回 OpenAI 的限流 Header**（如 `x-ratelimit-*`），请以 DashScope 控制台配额为准。
+- ⚠️ **注意兼容性例外**：
+  - Vision 接口仅兼容 Qwen-VL 系列，不支持 `gpt-4o` 图像格式；
+  - Embedding 最大输入长度为 8192 tokens，超长自动截断（无警告）；
+  - `conversations` 接口需显式传 `session_id`，且 session 生命周期为 24 小时；
+  - 所有 OpenAI 兼容接口均**不支持缓存控制头（如 `Cache-Control`）**，上下文管理依赖 `previous_response_id` 或 `session_id`。
+- 🔗 **调试建议**：优先使用 `curl -v` 查看完整请求/响应；遇到 401 错误，请核验 Key 与 Base URL 方案是否匹配；遇到 400，请检查模型名、`image_url` 格式、JSONL 文件 schema 是否符合文档要求。
 
 ## 关联主题页
 
-- [get started with models](../guides/get-started-with-models.md)
 - [qwen api reference](../api/qwen-api-reference.md)
 - [toolkits and frameworks](../api/toolkits-and-frameworks.md)
 - [use chat client or development tool](../guides/use-chat-client-or-development-tool.md)
-- [frameworks](../api/frameworks.md)
+- [vector and sort](../api/vector-and-sort.md)
+- [application call](../api/application-call.md)
 
 

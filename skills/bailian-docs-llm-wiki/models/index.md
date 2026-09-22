@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 187 个模型家族 · 432 个主干模型 · 更新于 2026-09-22
+> 自动生成 · 共 187 个模型家族 · 432 个主干模型 · 更新于 2026-09-23
 
 **机器查询走结构化文件**：
 
@@ -17,7 +17,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 `notSuitableFor: []` 表示无已知限制。`profileCompleteness` 为 `structured-only` 时该画像未读过文档，仅机械字段可信。
 硬规格（价格/QPM/contextWindow/openSource）一律看行内顶层字段，不要从 profile 里找。
 
-## 文本生成 `TG` — 39 个家族
+## 文本生成 `TG` — 38 个家族
 
 - [DeepSeek](groups/deepseek.json) — DeepSeek 系列模型覆盖通用对话、复杂推理与多模态理解等场景，提供 Flash、Pro 等不同规格，可根据效果、响应速度和成本灵活选择。
   - 模型：`deepseek-r1`, `deepseek-r1-0528`, `deepseek-r1-distill-qwen-1.5b`, `deepseek-r1-distill-qwen-14b`, `deepseek-r1-distill-qwen-32b`, `deepseek-r1-distill-qwen-7b`, `deepseek-v3`, `deepseek-v3.1`, `deepseek-v3.2`, `deepseek-v3.2-exp`, `deepseek-v4-flash`, `deepseek-v4-flash-0731`, `deepseek-v4-pro`, `deepseek-v4-pro-0813`, `deepseek-v4.1-flash`
@@ -89,8 +89,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`vanchin/deepseek-ocr`, `vanchin/deepseek-r1`, `vanchin/deepseek-v3`, `vanchin/deepseek-v3.1-terminus`, `vanchin/deepseek-v3.2-think`, `vanchin/deepseek-v4-pro`, `vanchin/deepseek-v4-pro-0813`, `vanchin/deepseek-v4.1-flash`
 - [云知声文本模型](groups/unisound-models-market-place.json) — 由云知声提供的 Unisound U2 模型 API 服务.
   - 模型：`unisound/unisound-u2`
-- [伶鹊-对话分析-flash](groups/tongyi-xiaomi-analysis-flash.json) — 伶鹊-对话分析-flash是专注于日常任务，如对话信息抽取、场景分类等分析类需求的模型，自定义分析标准遵循与对话语义理解能力显著提升，适用于低时延的离线在线分析任务。
-  - 模型：`tongyi-xiaomi-analysis-flash`
 - [伶鹊-对话分析-pro](groups/tongyi-xiaomi-analysis-pro.json) — 伶鹊-对话分析-pro是专注于高阶复杂分析，如针对具备复杂业务逻辑的复杂质检规则等分析需求的模型，支持自定义更细粒度的分析标准，具备更强的多轮上下文建模、深层语义理解与推理能力。
   - 模型：`tongyi-xiaomi-analysis-pro`
 - [意图分类模型](groups/tongyi-intent-detect-v3.json) — 意图识别和槽位填充是对话系统中的基础任务。本模型实现了一个基于 API的意图（intent）和槽位参数（slots）联合预测。在一次模型输出中，同时完成多个指令API的返回和槽位参数的填充。返回的结果…
@@ -382,6 +380,19 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 - [Qwen3.8-Omni-Flash](groups/qwen3.8-omni-flash.json) — Qwen3.8-Omni-Flash 是面向多模态理解与实时交互的新一代全模态模型，支持文本、图像、音频和视频输入。模型具备百万级上下文窗口，支持深度思考、流式输出及 OpenAI 兼容接口。离线模式…
   - 模型：`qwen3.8-omni-flash`
 
+## 实时全模态 `Realtime-Omni` — 5 个家族
+
+- [Qwen-Omni-Turbo-Realtime](groups/qwen-omni-turbo-realtime.json) — 千问全新多模态理解生成大模型实时版，适合实时音频交互场景。支持音频伴随文本、图像、视频混合输入理解，具备语音和文本同时流式生成能力，提供了4种自然对话音色。
+  - 模型：`qwen-omni-turbo-realtime`, `qwen-omni-turbo-realtime-latest`
+- [Qwen3-Omni-Flash-Realtime](groups/qwen3-omni-flash-realtime.json) — Qwen3-Omni-Flash-Realtime多模态大模型的实时版，基于Thinker–Talker混合专家（MoE）架构，支持文本、图像、音频、视频的高效理解与语音生成能力，可进行119种语言文…
+  - 模型：`qwen3-omni-flash-realtime`
+- [Qwen3.5-Omni-Flash-Realtime](groups/qwen3.5-omni-flash-realtime.json) — Qwen3.5-Omni是Qwen最新一代全模态大模型，支持文本，图片，音频，音视频理解与交互。作为 Qwen3-Omni 的全面进化版本，支持60+种语言音频输入，30+语言语音输出以及可控语音对话…
+  - 模型：`qwen3.5-omni-flash-realtime`
+- [Qwen3.5-Omni-Plus-Realtime](groups/qwen3.5-omni-plus-realtime.json) — Qwen3.5-Omni是Qwen最新一代全模态大模型，支持文本，图片，音频，音视频理解与交互。作为 Qwen3-Omni 的全面进化版本，支持60+种语言音频输入，30+语言语音输出以及可控语音对话…
+  - 模型：`qwen3.5-omni-plus-realtime`
+- [Qwen3.8-Omni-Flash-Realtime](groups/qwen3.8-omni-flash-realtime.json) — Qwen3.8-Omni-Flash-Realtime 通过多种实时协议提供音视频双工交互，面向智能硬件、机器人与实时交互 Agent。支持多通道音频输入与多种通道布局，视频表征可在细粒度与聚合之间按…
+  - 模型：`qwen3.8-omni-flash-realtime`
+
 ## 实时音频翻译 `Realtime-Audio-Translate` — 4 个家族
 
 - [Qwen3-LiveTranslate-Flash-Realtime](groups/qwen3-livetranslate-flash-realtime.json) — Qwen3-LiveTranslate-Flash-Realtime的实时版本，一款高精度、高响应、高鲁棒性的多语言实时音视频同传大模型。依托Qwen3-Omni强大的基座能力、海量多模态数据、跨语言…
@@ -392,17 +403,6 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`qwen3.8-livetranslate-flash-realtime`
 - [实时语音识别及翻译V1.0](groups/gummy-realtime-v1.json) — 多语言语音转写及翻译的多模态大模型。本模型提供长时间、高准确率、实时转写中/英/日/韩等10个混合语种的服务。同时支持中英日韩互译，以其他6个语种翻译成中文或英文。
   - 模型：`gummy-realtime-v1`
-
-## 实时全模态 `Realtime-Omni` — 4 个家族
-
-- [Qwen-Omni-Turbo-Realtime](groups/qwen-omni-turbo-realtime.json) — 千问全新多模态理解生成大模型实时版，适合实时音频交互场景。支持音频伴随文本、图像、视频混合输入理解，具备语音和文本同时流式生成能力，提供了4种自然对话音色。
-  - 模型：`qwen-omni-turbo-realtime`, `qwen-omni-turbo-realtime-latest`
-- [Qwen3.5-Omni-Flash-Realtime](groups/qwen3.5-omni-flash-realtime.json) — Qwen3.5-Omni是Qwen最新一代全模态大模型，支持文本，图片，音频，音视频理解与交互。作为 Qwen3-Omni 的全面进化版本，支持60+种语言音频输入，30+语言语音输出以及可控语音对话…
-  - 模型：`qwen3.5-omni-flash-realtime`
-- [Qwen3.5-Omni-Plus-Realtime](groups/qwen3.5-omni-plus-realtime.json) — Qwen3.5-Omni是Qwen最新一代全模态大模型，支持文本，图片，音频，音视频理解与交互。作为 Qwen3-Omni 的全面进化版本，支持60+种语言音频输入，30+语言语音输出以及可控语音对话…
-  - 模型：`qwen3.5-omni-plus-realtime`
-- [Qwen3.8-Omni-Flash-Realtime](groups/qwen3.8-omni-flash-realtime.json) — Qwen3.8-Omni-Flash-Realtime 通过多种实时协议提供音视频双工交互，面向智能硬件、机器人与实时交互 Agent。支持多通道音频输入与多种通道布局，视频表征可在细粒度与聚合之间按…
-  - 模型：`qwen3.8-omni-flash-realtime`
 
 ## 多模态嵌入 `ME` — 2 个家族
 

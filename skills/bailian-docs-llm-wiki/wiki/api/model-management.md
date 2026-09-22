@@ -1,42 +1,56 @@
 # model management
 
-模型管理是百炼平台为开发者提供的核心能力，用于发现、授权、限流和监控模型的使用。通过统一的 RESTful API，开发者可程序化地查询可用模型列表、配置模型访问权限、设置调用配额，并实时查看限额状态。所有操作均基于业务空间（Workspace）维度进行隔离与管控。
+模型管理是百炼平台为开发者提供的核心能力，用于统一发现、授权、限流和监控所用模型。通过 RESTful API，开发者可程序化地查询可用模型列表、设置模型调用权限、配置限流策略，并实时获取配额使用情况。所有操作均基于业务空间（Workspace）维度进行隔离与管控。
 
 ## 支持的模型/功能
 
-百炼平台支持多模态、多供应商的模型生态，涵盖文本生成（`TG`）、视觉理解（`VU`）、图片/视频生成（`IG`/`VG`）、语音识别与合成（`ASR`/`TTS`）、3D 生成（`3D-generation`）等能力。模型来源包括 `qwen`（通义千问）、`zhipu-ai`（智谱AI）、`moonshot-ai`（月之暗面）、`deepseek`、`kling`、`vidu` 等十余家供应商，同时支持 `aliyun-bailian`（百炼自研推理服务）及 `siliconflow`、`vanchin` 等第三方推理提供商。详细能力矩阵与供应商列表请参见 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md)。
+百炼平台支持多模态、多供应商的模型生态，涵盖文本生成（`TG`）、深度思考（`Reasoning`）、视觉理解（`VU`）、图片/视频生成（`IG`/`VG`）、语音识别与合成（`ASR`/`TTS`）、3D 生成、实时全模态等能力。模型来源包括 `qwen`（通义千问）、`zhipu-ai`（智谱AI）、`moonshot-ai`（月之暗面）、`deepseek`、`kling`、`vidu` 等十余家供应商，且支持按 `capabilities`、`providers`、`features`（如 `function-calling`、`structured-outputs`、`web-search`）等多维条件筛选。完整模型能力矩阵详见 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md)。
 
-> **注意**：文档 1 中 `inference_providers` 列表包含 `moonshot`（Kimi），但文档 4 的 `update-model-permissions.md` 中未列出该值作为合法 `model` ID；实际调用时应以 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md) 返回的 `model` 字段为准，避免硬编码供应商别名。
+模型管理功能覆盖三大核心场景：  
+- **授权控制**：支持逐模型粒度的 `inference`（推理）、`finetune`（微调）、`deploy`（部署）权限开关，也支持 `access_all_entities=OPEN` 的一键授权模式；  
+- **流量治理**：提供 QPM（请求次数）与 TPM（[Token](../concepts/token.md) 用量）双维度限流，支持 `OVERLAY`（合并覆盖）与 `DELETE`（清除）两种操作类型；  
+- **配额洞察**：可实时查询各模型在账号级（`model_limit`）与业务空间级（`workspace_limit`）的限流配置及异步任务并发/排队限制。
+
+> **注意**：文档中 `models[].finetune` 字段在 [更新模型授权](../../raw/model-api-reference/model-management/update-model-permissions.md) 的请求示例中误写为 `fine_tune`（下划线），但实际 API 仅接受 `finetune`（驼峰无下划线）。请以接口定义为准，避免因字段名不一致导致 400 错误。
 
 ## 关键参数
 
-模型管理涉及三类关键参数体系：
-
-- **筛选参数**（GET `/models` 和 `/models/permissions`）：`name`（模糊匹配）、`model`（精确 ID）、`capabilities`（如 `TG`, `VU`）、`features`（如 `function-calling`, `web-search`）、`providers`（作者）、`service_site`（部署地域）等，支持组合过滤。
-- **权限参数**（POST `/models/permissions`）：`inference`（推理）、`finetune`（微调）、`deploy`（部署），布尔值控制开关；另支持 `access_all_entities=OPEN` 实现一键全量授权。
-- **限流参数**（POST `/models/limits` 和 GET `/models/limits`）：`request_limit`（QPM/QPS）、`request_limit_period`（秒，默认 `60` 为分钟级）、`usage_limit`（TPM）、`usage_limit_field`（如 `total_tokens`）。注意：设置 `usage_limit` 前必须已存在 `request_limit`（见 [更新模型限流](../../raw/model-api-reference/model-management/update-model-rate-limits.md) 错误码说明）。
+| 参数类别 | 参数名 | 类型 | 说明 |
+|----------|--------|------|------|
+| **通用筛选** | `model` / `name` | `String` | 精确匹配模型 ID 或模糊搜索模型名称 |
+| | `page_no` / `page_size` | `Integer` | 分页控制，默认 `page_no=1`, `page_size=20` |
+| **能力筛选** | `capabilities` | `Array[String]` | 如 `TG`, `Reasoning`, `VU`；支持多值 `&capabilities=TG&capabilities=Reasoning` |
+| | `features` | `Array[String]` | 如 `function-calling`, `web-search`, `cache` |
+| | `providers` | `Array[String]` | 模型作者，如 `qwen`, `zhipu-ai`；注意与 `inference_providers`（推理服务方）区分 |
+| **限流配置** | `request_limit` / `usage_limit` | `Number` | QPM 与 TPM 数值，`null` 表示不变更；`usage_limit` 为 `null` 即豁免 [Token](../concepts/token.md) 用量限制 |
+| | `request_limit_period` / `usage_limit_period` | `Number` | 时间周期（秒），`60` = 每分钟，`1` = 每秒（即 QPS） |
+| **授权控制** | `inference` / `finetune` / `deploy` | `Boolean` | 权限开关，`null` 表示保持现状；[更新模型授权](../../raw/model-api-reference/model-management/update-model-permissions.md) 中明确要求此三字段为布尔值 |
 
 ## 使用方式
 
-- **发现模型**：调用 `GET /api/v1/models` 查询全量或筛选后的模型列表，推荐优先使用 HTTP API（而非 SDK）以支持完整参数过滤；Python SDK 的 `Models.list()` 仅支持分页，不支持 `capabilities` 或 `providers` 等条件筛选（详见 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md)）。
-- **授权模型**：先调用 `GET /api/v1/models/permissions?authorization_scope=AUTHORIZABLE` 获取可授权模型列表，再通过 `POST /api/v1/models/permissions` 设置 `inference`/`finetune` 权限；对新业务空间，建议使用 `access_all_entities=OPEN` 快速启用全部推理模型。
-- **配置限流**：使用 `GET /api/v1/models/limits` 查看当前配额，再通过 `POST /api/v1/models/limits` 更新。若需“仅限 QPM、不限 TPM”，须分两步：先 `DELETE` 全部限流，再 `OVERLAY` 仅设 `request_limit`（见 [更新模型限流](../../raw/model-api-reference/model-management/update-model-rate-limits.md) 的 TPM 豁免说明）。
-- **监控限额**：定期轮询 `GET /api/v1/models/limits`，解析 `output.quotas[].model_limit` 和 `workspace_limit` 字段，注意 `request_limit_period=1` 表示 QPS，`=60` 表示 RPM。
+- **查询模型列表**：调用 `GET /api/v1/models`，推荐使用 HTTP 直接请求（而非 Python SDK 的 `Models.list()`），因其支持全部筛选参数（SDK 仅支持分页）；  
+- **查询授权状态**：调用 `GET /api/v1/models/permissions?authorization_scope=AUTHORIZED` 获取当前已开通推理权限的模型；  
+- **设置权限**：调用 `POST /api/v1/models/permissions`，传入 `models` 数组或 `access_all_entities=OPEN`；  
+- **配置限流**：调用 `POST /api/v1/models/limits`，注意 `operation_type=DELETE` 时需清空所有限流字段；  
+- **查询限额**：调用 `GET /api/v1/models/limits`，返回含 `model_limit`（账号级上限）与 `workspace_limit`（业务空间级配置）的嵌套结构。
+
+所有接口均需在 Header 中携带 `Authorization: Bearer ${DASHSCOPE_API_KEY}`，Endpoint 需替换 `{WorkspaceId}` 并选择对应地域（如华北2：`https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`）。
 
 ## 限制和注意事项
 
-- 单次请求最多返回 200 条记录（`page_size` 上限），模型列表需分页遍历；权限与限额接口同理。
-- 模型授权变更非实时生效，通常在 30 秒内同步至推理网关；限流配置变更亦有秒级延迟。
-- `POST /models/permissions` 中 `finetune` 字段在文档 4 中拼写为 `finetune`，但文档 3 的返回字段名为 `fine_tune`（带下划线）；实际请求体应使用 `finetune`，响应体中为 `fine_tune`，二者语义一致。
-- 所有 API 均需在 Header 中携带 `Authorization: Bearer {API_KEY}`，且 Endpoint 中 `{WorkspaceId}` 必须替换为真实业务空间 ID；国际站用户需使用 `dashscope-intl.aliyuncs.com` 等对应域名（见 [查询模型列表](../../raw/model-api-reference/model-management/list-models.md) 地域说明）。
-- 模型下线信息通过 `inference_offline_info.offline_time` 字段返回，调用方应主动检查并做好降级预案。
+- 模型列表接口单页最多返回 200 条（`page_size` 最大值），需分页遍历获取全量；  
+- 限流更新接口 `models` 数组长度限制为 1~200，批量操作建议分批提交；  
+- TPM 豁免不可直接设为 0，须先 `DELETE` 再仅设 `request_limit`（见 [更新模型限流](../../raw/model-api-reference/model-management/update-model-rate-limits.md) 中“TPM 豁免场景”说明）；  
+- 一键授权 `access_all_entities=OPEN` 仅对**当前业务空间内已上架且支持推理的模型**生效，不包含后续新增模型（除非平台策略更新）；  
+- `inference_metadata.request_modality` 和 `response_modality` 字段用于判断 I/O 模态兼容性（如 `["Text"]` → `["Image"]` 表示文生图），调用前务必校验，避免 `400 Bad Request`；  
+- 所有模型的 `context_window`、`max_input_tokens` 等长度限制以 `model_info` 字段返回，部分图像/视频模型该值为 `null`，需参考其 `prices` 中的计费单元（如 `image_number`）而非 [Token](../concepts/token.md) 数。
 
 ## 来源文档
 
 - [查询模型列表](../../raw/model-api-reference/model-management/list-models.md)
 - [更新模型限流](../../raw/model-api-reference/model-management/update-model-rate-limits.md)
-- [查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md)
-- [更新模型授权](../../raw/model-api-reference/model-management/update-model-permissions.md)
 - [查询模型限额](../../raw/model-api-reference/model-management/list-quotas.md)
+- [更新模型授权](../../raw/model-api-reference/model-management/update-model-permissions.md)
+- [查询模型授权](../../raw/model-api-reference/model-management/list-model-permissions.md)
 
 

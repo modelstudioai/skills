@@ -61,6 +61,12 @@ MCP 由服务端执行工具，前述 Function Calling 流程则由客户端执�
 
 ### 工具发现
 
+客户端通过 `session.update` 配置 MCP 服务后，由 Realtime 服务异步发现工具，交互流程如下：
+
+![MCP 工具发现时序图](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f92df.png)
+
+本节时序图中，`opt` 表示满足条件时执行，`alt` 表示按条件选择不同分支，`par` 表示并行处理。
+
 -   `session.updated` 仅表示 MCP 配置已接受，不表示工具已经可用。
 -   `mcp_list_tools.in_progress` 可能早于 `session.updated` 到达。
 -   客户端可以在工具发现完成前继续发送音频或 `response.create`；但只有发现完成后的 Response 才能使用对应 MCP 工具。
@@ -68,6 +74,10 @@ MCP 由服务端执行工具，前述 Function Calling 流程则由客户端执�
 -   工具发现失败时，服务端先发送包含 error 的 `conversation.item.created`，再发送 `mcp_list_tools.failed`。
 
 ### MCP 调用
+
+模型选择 MCP 工具后，由 Realtime 服务执行工具调用；需要审批时，客户端先回复审批结果。交互流程如下：
+
+![MCP 工具调用、审批与续答时序图](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f92de.png)
 
 审批拒绝或超时会直接触发 `response.mcp_call.failed`，不执行工具，也不会经过 `response.mcp_call.in_progress`。无需审批或审批通过时，典型事件顺序如下：
 
