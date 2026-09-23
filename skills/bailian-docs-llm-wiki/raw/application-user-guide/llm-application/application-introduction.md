@@ -63,7 +63,7 @@ AI 工程师、开发者
 -   **智能体应用**
     -   如何创建和配置？请参考：[新版智能体应用（Agent 2.0）](raw/application-user-guide/llm-application/new-single-agent-application.md)（推荐）、[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)。
     -   如何快速上手实际案例？请参考：[创建智能问答 AI 电商客服助手](https://www.aliyun.com/solution/tech-solution/build-ai-applications-based-on-alibaba-cloud-model-studio#0a9fbaf6a71q7)、[集成高德 MCP 的旅行规划智能体](https://help.aliyun.com/zh/model-studio/use-cases/integrate-amap-mcp-travel-planning-agent)。
-    -   如何通过 API 调用？请参考：[新版智能体应用 API](raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md)、[调用智能体应用](raw/application-user-guide/bailian-application-calling/call-single-agent-application.md)。
+    -   如何通过 API 调用？请参考：[新版智能体应用 API](raw/_short/new-agent-application-api-reference-d745b325d97fcf2e.md)、[调用智能体应用](raw/application-user-guide/bailian-application-calling/call-single-agent-application.md)。
 -   **工作流应用**
     -   如何创建和配置？请参考：[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)。
     -   如何快速上手实际案例？请参考：[创建处理复杂流程的 AI 电商客服助手](https://www.aliyun.com/solution/tech-solution/build-ai-applications-based-on-alibaba-cloud-model-studio#6f801f75f371t)、[零代码搭建数据标注工作流](https://www.aliyun.com/solution/tech-solution-deploy/2977204)。

@@ -4,6 +4,10 @@
 
 分页查询当前用户的所有画像模板。
 
+## 请求方法与路径
+
+`GET https://dashscope.aliyuncs.com/api/v2/apps/memory/profile_schemas`
+
 ## 请求参数
 
 参数
@@ -12,23 +16,95 @@
 
 必填
 
+位置
+
 说明
-
-`page_size`
-
-number
-
-否
-
-每页数量
 
 `page_num`
 
-number
+integer
 
 否
 
-页码，从 1 开始
+Query
+
+页码，默认 1
+
+`page_size`
+
+integer
+
+否
+
+Query
+
+每页数量，默认 10
+
+`memory_library_id`
+
+string
+
+否
+
+Query
+
+记忆库 ID
+
+## 返回结果
+
+字段
+
+类型
+
+说明
+
+`profile_schemas`
+
+array
+
+画像模板列表
+
+`profile_schemas[].profile_schema_id`
+
+string
+
+画像模板 ID
+
+`profile_schemas[].name`
+
+string
+
+画像模板名称
+
+`profile_schemas[].description`
+
+string
+
+画像模板描述
+
+`profile_schemas[].plan_version`
+
+string
+
+收费计划
+
+`profile_schemas[].extract_scene`
+
+string
+
+提取场景
+
+`request_id`
+
+string
+
+请求 ID
+
+`total`
+
+integer
+
+画像模板总数
 
 ## 代码示例
 

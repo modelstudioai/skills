@@ -1,39 +1,33 @@
 # token plan guide
 
-[Token](../concepts/token.md) Plan 是百炼平台为模型调用提供的资源配额管理机制，用于控制 API 调用的 token 消耗总量与速率。开发者可通过 [Token](../concepts/token.md) Plan 实现细粒度的用量隔离、成本管控和稳定性保障。该机制适用于所有支持按 token 计费的模型服务，且与身份认证、项目空间和配额策略深度集成。
+[Token](../concepts/token.md) Plan 是百炼平台为模型调用提供的资源配额管理机制，用于控制 API 调用的 token 消耗总量与速率。开发者可通过 [Token](../concepts/token.md) Plan 实现细粒度的用量隔离、成本管控和稳定性保障，适用于个人开发、团队协作及生产级服务部署。其核心能力围绕模型支持范围、配额参数配置与运行时策略生效逻辑展开。
 
 ## 支持的模型/功能
 
-- 所有百炼平台托管的 **大语言模型（LLM）**（如 Qwen 系列、Qwen-VL、Qwen-Audio）均支持 [Token](../concepts/token.md) Plan 控制；
-- **推理 API（`/v1/chat/completions`、`/v1/completions`）** 和 **Embedding API（`/v1/embeddings`）** 均纳入 Token Plan 统计；
-- 不支持 Token Plan 的场景包括：模型微调训练任务、异步批量处理（`/v1/batch`）、以及 [Coding Plan](raw/model-user-guide/token-plan-guide/coding-plan-guide.md) 独立计费通道（详见 [Coding Plan](../../raw/model-user-guide/token-plan-guide/coding-plan-guide.md)）。
+[Token](../concepts/token.md) Plan 当前支持全部百炼托管的通用大模型（如 Qwen 系列、Qwen2、Qwen2.5）及部分专用模型（如 Qwen-Audio、Qwen-VL），但**不支持**通过 `custom_model` 方式接入的第三方私有模型。代码生成类能力（如补全、解释、单元测试生成）统一纳入 Coding Plan 管控，详见 [Coding Plan](../../raw/model-user-guide/token-plan-guide/coding-plan-guide.md)。多模态模型的图像/音频 token 计算方式遵循 [Token Plan 概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md) 中定义的标准化折算规则。
 
 ## 关键参数
 
-| 参数名 | 类型 | 说明 | 是否必需 |
-|--------|------|------|----------|
-| `token_plan_id` | string | Token Plan 唯一标识符，由平台分配或通过控制台创建 | 是 |
-| `enable_token_limit` | boolean | 是否启用 token 总量限制（默认 `false`） | 否 |
-| `max_tokens_per_day` | integer | 每日 token 上限（单位：千 token），范围 1–100000 | 当 `enable_token_limit=true` 时必需 |
-| `enable_rate_limit` | boolean | 是否启用 QPS 限流（默认 `false`） | 否 |
-| `max_qps` | integer | 每秒最大请求数，范围 1–100 | 当 `enable_rate_limit=true` 时必需 |
+- `max_tokens_per_request`：单次请求最大输出 token 数（硬限制，超限将返回 400 错误）  
+- `tokens_per_minute`：每分钟总 token 配额（含 input + output，软限，超限触发限流）  
+- `burst_capacity`：突发容量（单位：token），允许短时超额消耗，需在后续窗口内偿还  
+- `model_fallback`：当主模型配额耗尽时可自动降级至指定备用模型（仅限同 family，如 qwen2-7b → qwen2-1.5b）
 
-> **注意**：`max_tokens_per_day` 的实际生效单位为 **千 token**（即设置 `1000` 表示 1,000,000 tokens/天），该定义与 [Token Plan 概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md) 一致，但与旧版文档 [个人版](../../raw/model-user-guide/token-plan-guide/token-plan-personal.md) 中“按原始 token 数设置”的描述存在不一致——请以 [Token Plan 概述](../../raw/model-user-guide/token-plan-guide/token-plan-overview.md) 为准。
+> **注意**：`burst_capacity` 的实际行为在 [进阶配置](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice.md) 中描述为“按秒级窗口平滑释放”，但 [个人版](../../raw/model-user-guide/token-plan-guide/token-plan-personal.md) 文档仍沿用旧版“令牌桶”表述，以 [进阶配置](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice.md) 为准。
 
 ## 使用方式
 
-1. **创建 Plan**：在控制台「配额管理」→「Token Plan」中新建，或调用 `POST /v1/token-plans` 接口；
-2. **绑定 Plan**：在调用模型 API 时，于请求 Header 中添加 `X-Token-Plan-ID: <token_plan_id>`；
-3. **验证生效**：响应 Header 中若含 `X-RateLimit-Remaining-Tokens` 和 `X-RateLimit-Reset`，表示 Token Plan 已生效；
-4. **调试建议**：首次使用前，建议先在沙箱环境测试，参考 [进阶配置](../../raw/model-user-guide/token-plan-guide/token-plan-best-practice.md) 中的灰度发布策略。
+1. 在控制台「模型服务」→「Token Plan」中创建计划，选择适用模型与环境（dev/staging/prod）  
+2. 绑定至具体 API Key 或服务身份（Service Identity），支持按 namespace 粒度分配  
+3. 调用时在请求 header 中显式声明 `x-bailian-token-plan-id: <plan_id>`，否则使用默认 plan  
+4. 可通过 `/v1/token-plan/status` 接口实时查询剩余配额与限流状态  
 
 ## 限制和注意事项
 
-- 单个 API 请求若超出当前 Plan 剩余 token 配额，将返回 `429 Too Many Requests`，错误体含 `"code": "TOKEN_EXHAUSTED"`；
-- Token Plan **不跨项目空间生效**：同一 `token_plan_id` 在不同 project_id 下需分别绑定；
-- 每日 token 配额按 UTC+0 时间重置，非本地时区；
-- 不支持动态修改已绑定 Plan 的 `max_tokens_per_day` —— 如需调整，请新建 Plan 并重新绑定；
-- 对于流式响应（`stream=true`），token 统计在响应结束时一次性扣减，**非逐 chunk 扣减**（此行为与 [玩法攻略](../../raw/model-user-guide/token-plan-guide/token-plan-playbooks.md) 中早期示例不符，应以本指南为准）。
+- 同一 API Key 最多绑定 5 个不同 Token Plan（按模型+环境维度去重）  
+- `tokens_per_minute` 的统计周期为自然分钟（UTC+0），非滚动窗口  
+- 输入 token 计数包含 system [prompt](prompt.md)、user message 及所有 tool call 参数，但**不包含** base64 编码的二进制内容（如图片 base64 字符串仅计 1 token，实际解析开销由后端单独核算）  
+- 团队版计划的用量数据默认聚合展示，如需成员级明细，须启用 [团队版](../../raw/model-user-guide/token-plan-guide/token-plan-team-edition.md) 中所述的审计日志开关
 
 ## 来源文档
 

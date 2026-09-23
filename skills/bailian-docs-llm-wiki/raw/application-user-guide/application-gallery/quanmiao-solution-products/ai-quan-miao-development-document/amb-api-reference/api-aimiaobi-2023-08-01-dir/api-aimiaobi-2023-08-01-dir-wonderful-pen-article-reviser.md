@@ -1,6 +1,0 @@
-# 妙笔-文章审校
-
--   [SubmitSmartAudit](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-article-reviser/api-aimiaobi-2023-08-01-submitsmartaudit.md)
--   [GetSmartAuditResult - 查询智能审校结果](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-article-reviser/api-aimiaobi-2023-08-01-getsmartauditresult.md)
--   [ListAuditContentErrorTypes - 获取审校维度列表](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-article-reviser/api-aimiaobi-2023-08-01-listauditcontenterrortypes.md)
--   [ExportAuditContentResult - 导出智能审校报告](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-wonderful-pen-article-reviser/api-aimiaobi-2023-08-01-exportauditcontentresult.md)

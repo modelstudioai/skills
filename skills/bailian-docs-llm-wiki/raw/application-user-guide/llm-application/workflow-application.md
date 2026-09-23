@@ -129,7 +129,7 @@
 关于 API 调用的相关问题总结：
 
 -   关于调用方式（HTTP/SDK），请参见[调用工作流应用](raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md)。
--   关于调用接口的详细参数信息，请参见[应用调用参数信息](raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)。
+-   关于调用接口的详细参数信息，请参见[应用调用参数信息](raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)。
 -   关于调用参数传递问题，请参见[应用的参数传递](raw/application-user-guide/bailian-application-calling/pass-through-of-application-parameters.md)。
 -   关于调用报错信息，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行解决。
 -   关于调用并发数限制问题，应用本身不限流，主要与内部调用的模型有关，有关模型内容请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=model#/model-market/all)。

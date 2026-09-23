@@ -54,7 +54,7 @@
 
 支持接入非百炼的自有知识库作为搜索来源，开启选项后可进行配置，点击添加知识库配置
 
-输入知识库名称、知识库描述、服务地址、授权信息，点击“服务测试”，验证通过后点击“保存”以完成添加。可参考[示例文档](raw/application-user-guide/application-gallery/tongyi-deepsearch/deepsearch-api-reference/deepsearch-api-list/docking-self-built-database.md)进行知识库对接配置。
+输入知识库名称、知识库描述、服务地址、授权信息，点击“服务测试”，验证通过后点击“保存”以完成添加。可参考[示例文档](raw/_short/docking-self-built-database-7cd8a65a0f0fe28e.md)进行知识库对接配置。
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3171121671/p1017934.png)
 

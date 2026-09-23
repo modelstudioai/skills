@@ -632,7 +632,7 @@ final_response = None
 
 for event in response:
     # 思考过程增量输出
-    if event.type == "response.reasoning_summary_text.delta":
+    if event.type == "response.reasoning_text.delta":
         if current_section != "reasoning":
             print_section("思考过程")
             current_section = "reasoning"

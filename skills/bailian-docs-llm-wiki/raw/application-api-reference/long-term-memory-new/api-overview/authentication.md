@@ -24,9 +24,13 @@ export DASHSCOPE_API_KEY="sk-xxxxxxxxxxxxxxxx"
 每个请求携带 `Authorization` Header：
 
 ```
-curl https://dashscope.aliyuncs.com/api/v2/apps/memory/add \
-  -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-  -H "Content-Type: application/json"
+curl --location 'https://dashscope.aliyuncs.com/api/v2/apps/memory/add' \
+  --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "user_id": "user_001",
+    "custom_content": "用户喜欢简洁的技术示例。"
+  }'
 ```
 
 ## 权限说明

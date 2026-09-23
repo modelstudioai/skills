@@ -20,7 +20,7 @@
 
 ### 配置数据库
 
-首次使用时，您需要在数据源管理中进行数据库授权，关联您的数据库。析言GBI支持关联公网可访问的MySQL或PostgreSQL协议数据库，VPC可访问的AnalyticDB PostgreSQL版数据库，以及仅能通过[API](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-virtual-data-source.md)连接的虚拟数据库（MySQL或PostgreSQL）。
+首次使用时，您需要在数据源管理中进行数据库授权，关联您的数据库。析言GBI支持关联公网可访问的MySQL或PostgreSQL协议数据库，VPC可访问的AnalyticDB PostgreSQL版数据库，以及仅能通过[API](raw/_short/api-dataanalysisgbi-2024-08-23-dir-virtual-data--99e8605e82d32ca2.md)连接的虚拟数据库（MySQL或PostgreSQL）。
 
 1.  在左侧导航栏点击**数据表管理**。
     

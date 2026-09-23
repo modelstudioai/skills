@@ -1138,7 +1138,7 @@ string
 
 图片地址，支持两种格式：
 
-1\. URL 格式（[推荐](raw/application-user-guide/application-gallery/web-search-agent/web-search-agent-api/web-search-agent-api-chat-multimodal-file.md)）：[https://example.com/image.jpg](https://example.com/image.jpg)
+1\. URL 格式（[推荐](raw/_short/web-search-agent-api-chat-multimodal-file-060ef6520fb104fe.md)）：[https://example.com/image.jpg](https://example.com/image.jpg)
 
 2\. Base64 格式：data:<content\_type>;base64,<base64\_data>，其中 content\_type 为图片 MIME 类型（如 image/jpeg）
 

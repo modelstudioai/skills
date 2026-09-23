@@ -4,7 +4,7 @@
 
 本文档将指引您通过模板搭建百炼应用并在多模态交互开发套件控制台完成配置和运行体验，同时推荐了部分适合学习机、穿戴设备等场景的典型应用。
 
-完整的开发集成说明请参考：[接入百炼智能体应用](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/bailian-and-tripartite-agent/multimodal-call-app.md)。
+完整的开发集成说明请参考：[接入百炼智能体应用](raw/_short/multimodal-call-app-d11090cf03380692.md)。
 
 **说明**多模态交互开发套件的计费不包含您在百炼上自主搭建业务应用产生的费用，该部分费用由您与阿里云百炼平台另行结算，若涉及第三方服务，相关费用由第三方决定。
 

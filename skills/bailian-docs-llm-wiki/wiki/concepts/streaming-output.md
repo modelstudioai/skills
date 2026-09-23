@@ -1,50 +1,41 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台中一种实时、增量返回模型响应内容的能力，允许客户端在模型生成过程中持续接收部分结果（如 token、文本片段、音频帧或思考步骤），而非等待整个响应完成后再一次性返回。该机制显著降低端到端延迟，提升用户体验，并为前端实现打字机效果、实时语音合成、渐进式思考链展示等交互场景提供底层支持。
+流式输出（Streaming Output）是百炼平台提供的一种增量式响应机制，允许模型在推理过程中将生成结果分块、实时推送至客户端，而非等待全部内容完成后再一次性返回。该机制显著降低端到端延迟，提升用户交互体验，尤其适用于长文本生成、语音合成、实时对话等对响应速度敏感的场景。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-流式输出在百炼平台中并非单一功能，而是贯穿多个 API 层级和产品形态的通用能力，其启用方式与行为表现因场景而异：
+- **RAG API**：通过 `stream=true` 参数启用 SSE（Server-Sent Events）流式响应，服务端按 token 或语义片段逐批返回 `answer` 的增量内容（如 `{"delta": "百炼平台支持..."}`），便于前端实现打字机效果或提前渲染引用切片；适用于知识库问答中答案较长、需快速首屏反馈的场景。
 
-- **Application Call（智能体/工作流调用）**：  
-  通过 `stream=true` 参数开启流式模式。此时响应以 Server-Sent Events（SSE）格式逐块返回；若为工作流应用，还需配合 `flow_stream_mode=message_format_plus`（推荐）并在控制台对应节点开启“流式输出”开关，才能确保各节点输出被正确组装并流式下发。
+- **Realtime API（WebSocket 协议）**：原生基于流式设计，所有输出均为事件驱动的增量消息（如 `text_delta`、`audio_delta`）。客户端可实时接收文本片段、音频 PCM 数据块，并支持在任意时刻发送 `interrupt` 事件中断当前生成，实现真正的双向实时交互。
 
-- **Qwen 系列模型直调（DashScope / OpenAI 兼容 / Anthropic 兼容协议）**：  
-  统一使用 `stream=true` 参数。DashScope 协议下可进一步通过 `incremental_output=true` 控制是否以 delta 增量方式返回（`true` 时每 chunk 仅含新增 token；`false` 时为全量追加，需客户端自行拼接）；OpenAI 兼容协议中 `stream=true` 即默认 delta 模式，符合标准 OpenAI Streaming 格式。
+- **Qwen API（OpenAI/DashScope 兼容协议）**：通过 `stream=true` 启用 SSE 流式响应，返回符合 OpenAI 格式的 `chunk` 对象（含 `response.output_text.delta` 字段），兼容主流 SDK（如 `openai-python`）的流式处理逻辑，适用于通用文本生成、多轮对话等场景。
 
-- **Omni Realtime API（多模态实时交互）**：  
-  基于 WebSocket 双向流，天然支持流式。服务端主动推送 `output.text.delta`、`output.audio.delta`、`output.vision.delta` 等事件，无需显式传参开启——只要建立连接即默认启用全链路流式处理（ASR→LLM→TTS）。
+- **Omni Realtime API（WebSocket + AOQ）**：流式能力深度集成于会话生命周期中，`session.updated` 后持续推送 `output` 事件，包含 `text`、`audio` 等多模态增量数据；支持细粒度控制（如 `semantic_vad` 触发的流式分段），是语音助手、实时会议摘要等低延迟应用的基础支撑。
 
-- **Realtime API（统一实时接入层）**：  
-  同样默认流式，不依赖 `stream` 参数。具体行为由所选协议（AOQ/WebRTC/WebSocket）和 `session.modalities` 配置决定。例如设置 `["text", "audio"]` 后，服务端将并行推送文本增量和音频 PCM 片段。
-
-> ⚠️ 注意：`stream=true` 在 Responses API 中与 `background=true` 互斥——后台异步任务不支持流式；`flow_stream_mode` 仅对工作流应用生效，且与 `incremental_output` 作用域不同，不可混用。
+- **应用组件 API（RESTful）**：通过 `parameters.stream=true` 开启流式模式，返回标准 SSE 格式响应，每条事件携带 `delta` 字段；注意该模式下不支持 `system` 消息，且请求必须包含至少一条 `user` 消息，适合嵌入自定义应用中构建轻量级流式 UI。
 
 ## 关键参数和配置
 
-| 参数 | 所属场景 | 类型 | 说明 | 推荐值 |
-|------|----------|------|------|--------|
-| `stream` | 全部同步 API（Application Call / Qwen / Omni Realtime 初始化） | `boolean` | 启用流式响应的核心开关 | `true` |
-| `incremental_output` | DashScope 协议专属（Application Call / Qwen 直调） | `boolean` | 控制流式 chunk 内容格式：`true` → delta（仅新增内容）；`false` → full（全量追加） | `true`（推荐，减少带宽与解析开销） |
-| `flow_stream_mode` | Application Call 中的工作流应用专用 | `string` | 工作流节点级流式策略：`message_format_plus`（推荐）、`message_format`、`full_thoughts`（不推荐） | `"message_format_plus"` |
-| `enable_interim_results` | Omni Realtime API | `boolean` | 是否推送 ASR 中间识别结果（非最终文本） | `false`（按需开启，用于实时字幕等场景） |
+- **通用开关参数**：  
+  - `stream`（布尔值）：所有支持流式的 API 均通过此参数控制是否启用。默认为 `false`；设为 `true` 后，响应头 `Content-Type` 变为 `text/event-stream`，响应体为 SSE 格式（如 `data: {"delta":"hello"}\n\n`）。
 
-- **HTTP Header 补充**：所有流式请求建议设置 `Accept: text/event-stream`（SSE）或使用 WebSocket 协议，避免被网关缓存或截断。
-- **超时配置**：流式请求需延长 `read_timeout`（如设为 300 秒），防止连接因长时间无数据而中断。
+- **协议与传输要求**：  
+  - RESTful 类 API（RAG、Qwen、应用组件）：使用 HTTP/1.1，需客户端正确处理 SSE 解析（自动重连、event/id 字段解析等）；推荐使用百炼官方 SDK 或成熟 SSE 客户端库。  
+  - WebSocket 类 API（Realtime、Omni Realtime）：无需额外参数，流式为默认行为；客户端需监听 `output` 事件并按 `delta` / `final_text` / `audio_delta` 等字段区分内容类型。
 
-## 面向开发者，简洁实用
+- **注意事项**：  
+  - 流式响应不改变模型推理逻辑，仅影响输出传输方式；`max_tokens`、`temperature` 等生成参数仍生效。  
+  - 流式模式下，部分功能受限（如 RAG API 中 `system` 消息不可用；应用组件 API 中 `system` 消息被忽略）。  
+  - 错误仍通过标准 HTTP 状态码（如 `429`）或 WebSocket 错误事件抛出，流式本身不掩盖业务异常。
 
-- ✅ **必做**：始终检查响应 Content-Type 是否为 `text/event-stream`（SSE）或确认 WebSocket 连接已就绪；使用官方 SDK（如 `dashscope` Python SDK 的 `Stream` 迭代器）自动处理 chunk 解析与重连。
-- ✅ **推荐**：前端优先采用 `incremental_output=true` + delta 解析，避免手动拼接；对工作流应用，务必在控制台节点配置页勾选“启用流式输出”。
-- ❌ **避免**：在 `background=true`（异步任务）中设置 `stream=true`（将被忽略）；混用 `flow_stream_mode` 和 `incremental_output` 控制同一请求；在未启用流式开关的节点上调用工作流流式接口（返回空或错误）。
-- 🛠️ **调试技巧**：用 `curl -N` 或浏览器 DevTools 的 Network → EventStream 查看原始 SSE 流；WebSocket 场景使用 `wscat` 工具快速验证连接与事件收发。
+面向开发者，请优先使用百炼官方 SDK（如 `dashscope` Python SDK、AOQ 客户端库），它们已封装流式连接管理、事件解析、重试与超时逻辑，避免手动处理底层协议细节。
 
 ## 关联主题页
 
-- [application call](../api/application-call.md)
+- [rag api](../api/rag-api.md)
 - [omni realtime api](../api/omni-realtime-api.md)
 - [realtime api user guide](../api/realtime-api-user-guide.md)
 - [qwen api reference](../api/qwen-api-reference.md)
-- [more about models](../api/more-about-models.md)
+- [application component api reference](../api/application-component-api-reference.md)
 
 

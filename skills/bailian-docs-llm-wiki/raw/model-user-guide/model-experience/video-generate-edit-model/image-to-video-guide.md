@@ -7,7 +7,7 @@
 -   **多镜头叙事**：可生成包含多个镜头的视频，镜头切换时保持主体一致。**（仅wan2.6支持）**
 -   **视频特效**：部分模型内置“魔法悬浮”、“气球膨胀”等模板，可直接使用。
 
-**快速入口：**在线体验（[北京](https://bailian.console.aliyun.com/cn-beijing/model/experience/vision)｜[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/experience/vision)｜[弗吉尼亚](https://bailian.console.aliyun.com/us-east-1/model/experience/vision)）**｜**[API参考](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-api-reference.md)**｜** [视频特效列表](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-api-reference/wanx-video-effects.md)
+**快速入口：**在线体验（[北京](https://bailian.console.aliyun.com/cn-beijing/model/experience/vision)｜[新加坡](https://bailian.console.aliyun.com/ap-southeast-1/model/experience/vision)｜[弗吉尼亚](https://bailian.console.aliyun.com/us-east-1/model/experience/vision)）**｜**[API参考](raw/_short/legacy-image-to-video-api-reference-8b02dd673da405f1.md)**｜** [视频特效列表](raw/_short/wanx-video-effects-5b23bdd72b8e7944.md)
 
 ## 快速开始
 
@@ -748,7 +748,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 **参数设置：**
 
--   `template`：**必填**，指定特效名称（例如 "flying" 表示魔法悬浮）。调用前请查阅[视频特效列表](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-api-reference/wanx-video-effects.md)，确认模型是否支持，以免调用失败。
+-   `template`：**必填**，指定特效名称（例如 "flying" 表示魔法悬浮）。调用前请查阅[视频特效列表](raw/_short/wanx-video-effects-5b23bdd72b8e7944.md)，确认模型是否支持，以免调用失败。
 -   `prompt`：**忽略**，在使用特效时，prompt 字段无效，建议留空或不传。
 
 **提示词**
@@ -1229,7 +1229,7 @@ public class Image2Video {
 
 ## API文档
 
-[图生视频-基于首帧API参考](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-api-reference.md)
+[图生视频-基于首帧API参考](raw/_short/legacy-image-to-video-api-reference-8b02dd673da405f1.md)
 
 ## 常见问题
 

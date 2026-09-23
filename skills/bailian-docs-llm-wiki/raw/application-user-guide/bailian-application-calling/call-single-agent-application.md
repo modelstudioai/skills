@@ -4309,7 +4309,7 @@ func main() {
         > 这种情况只会检索调用时传入的知识库。例如，网页端的**智能体应用**里关联了知识库A，而API调用时只指定了知识库B，那么不会检索知识库A，只会检索知识库B。
         
     
-    获取知识库ID（pipeline\_ids）：可以在[知识库](https://bailian.console.aliyun.com/?tab=app#/knowledge-base)页面获取，也可以使用[CreateIndex](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-createindex.md)接口（仅支持非结构化知识库）返回的`Data.Id`。
+    获取知识库ID（pipeline\_ids）：可以在[知识库](https://bailian.console.aliyun.com/?tab=app#/knowledge-base)页面获取，也可以使用[CreateIndex](raw/_short/api-bailian-2023-12-29-createindex-8bc613c75f8af371.md)接口（仅支持非结构化知识库）返回的`Data.Id`。
     
     可以是**智能体应用**已经关联的知识库，也可以是没有关联的知识库。
     
@@ -4777,8 +4777,8 @@ func main() {
     
     -   获取方式：
         
-        -   文档ID（file\_ids）：可以在[应用数据](https://bailian.console.aliyun.com/#/data-center)页面的文档列表中获取，也可以使用[AddFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addfile.md)接口导入文档返回的ID。
-        -   文档标签（tags）：可以在[应用数据](https://bailian.console.aliyun.com/#/data-center)页面查看非结构化文档的标签。也可以通过[DescribeFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-describefile.md)接口获取。
+        -   文档ID（file\_ids）：可以在[应用数据](https://bailian.console.aliyun.com/#/data-center)页面的文档列表中获取，也可以使用[AddFile](raw/_short/api-bailian-2023-12-29-addfile-8c254b3500bc50bc.md)接口导入文档返回的ID。
+        -   文档标签（tags）：可以在[应用数据](https://bailian.console.aliyun.com/#/data-center)页面查看非结构化文档的标签。也可以通过[DescribeFile](raw/_short/api-bailian-2023-12-29-describefile-020886c28a208bf2.md)接口获取。
         -   文档元数据（metadata）：在[知识库](https://bailian.console.aliyun.com/#/knowledge-base)页面，进入某个知识库后可以查看非结构化文档的元数据（**Meta信息**）。
     -   可以传入多个文档ID，仅支持已建立知识索引的文档。
         
@@ -6072,7 +6072,7 @@ data:{"output":{"thoughts":[{"action":"reasoning","thought":"","action_type":"re
 
 **步骤 2: 创建长期记忆体**
 
-调用[CreateMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-creatememory.md)接口，创建一个长期记忆体，从响应中获得一个唯一的`memoryId`。
+调用[CreateMemory](raw/_short/api-bailian-2023-12-29-creatememory-b8e710cdd3512a87.md)接口，创建一个长期记忆体，从响应中获得一个唯一的`memoryId`。
 
 **步骤 3: 保存对话信息**
 
@@ -8464,7 +8464,7 @@ API方式操作请参阅以下内容。
 
 ## API参考
 
-通过[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)查看完整的参数列表。
+通过[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)查看完整的参数列表。
 
 ## 错误码
 
@@ -8518,6 +8518,6 @@ implementation group: 'com.alibaba', name: 'dashscope-sdk-java', version: '请�
 多轮对话 （session\_id） 与长期记忆 （memory\_id ）有什么区别？
 
 -   `session_id`： 用于云端托管的多轮对话，自动维护对话上下文。 有效期1小时，最大历史轮数50。 无需调用者自行维护上下文，但需在下一轮对话中传入上一轮对话的`session_id`。
--   `memory_id`： 用于创建长期记忆体，存储特定信息。 需调用[CreateMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-creatememory.md)接口创建，获取`memoryId`。 在后续对话中引用特定信息，需传入`memoryId`。
+-   `memory_id`： 用于创建长期记忆体，存储特定信息。 需调用[CreateMemory](raw/_short/api-bailian-2023-12-29-creatememory-b8e710cdd3512a87.md)接口创建，获取`memoryId`。 在后续对话中引用特定信息，需传入`memoryId`。
 
 两者分别服务于短期对话和长期信息存储。

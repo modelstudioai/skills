@@ -18,6 +18,7 @@
 千问工作助理支持以下模型：
 
 -   Qwen3.8-Max
+-   Qwen3.8-Flash
 -   Qwen3.7-Max
 -   Qwen3.7-Plus
 -   Qwen3.6-Flash

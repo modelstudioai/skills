@@ -2,11 +2,13 @@
 
 将对话存储为事实记忆，自动提取关键信息
 
-将用户对话存储为事实记忆，自动提取关键信息。也支持直接指定自定义内容存储。若需同时提取用户画像，需传入 `profile_schema`。
+将对话记录或自定义内容同步保存为记忆，并在响应中直接返回提取结果。当前主推[异步添加记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)；同步接口适合在 `efficient` 模式下对实时性要求较高的场景，在 `intelligent` 模式下可能超时。
 
 **说明**调用前请确保已获取 API Key，详见[鉴权](raw/application-api-reference/long-term-memory-new/api-overview/authentication.md)。
 
-**重要**对话轮次多、提取耗时长的场景，可使用[异步添加记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)，后台执行提取，通过事件 ID 查询状态与结果。
+## 请求方法与路径
+
+`POST https://dashscope.aliyuncs.com/api/v2/apps/memory/add`
 
 ## 请求参数
 
@@ -18,37 +20,133 @@
 
 说明
 
+`messages`
+
+array
+
+二选一
+
+对话消息列表。`messages` 与 `custom_content` 至少传入一个
+
+`messages[].role`
+
+string
+
+否
+
+消息角色，支持 `user`、`assistant` 和 `tool`
+
+`messages[].content`
+
+string / array
+
+否
+
+消息内容。可传文本字符串，或传入包含文本和图片的多模态内容数组
+
+`messages[].content[].type`
+
+string
+
+否
+
+内容类型：`text` 或 `image_url`。仅支持多模态能力的项目会解析图片，其他项目不进行多模态解析
+
+`messages[].content[].text`
+
+string
+
+条件必填
+
+文本内容。`type` 为 `text` 时传入
+
+`messages[].content[].image_url`
+
+object
+
+条件必填
+
+图片信息。`type` 为 `image_url` 时传入
+
+`messages[].content[].image_url.url`
+
+string
+
+条件必填
+
+图片 URL
+
+`messages[].tool_calls`
+
+array
+
+否
+
+`assistant` 发起的工具调用，采用 OpenAI 格式。工具消息仅用于 skill 抽取，其他抽取类型会过滤工具消息
+
+`messages[].tool_calls[].id`
+
+string
+
+否
+
+工具调用 ID
+
+`messages[].tool_calls[].type`
+
+string
+
+否
+
+工具调用类型，固定为 `function`
+
+`messages[].tool_calls[].function`
+
+object
+
+条件必填
+
+函数调用信息。存在 `tool_calls` 时必须传入
+
+`messages[].tool_calls[].function.name`
+
+string
+
+条件必填
+
+函数名称。存在工具调用时必须传入
+
+`messages[].tool_calls[].function.arguments`
+
+string
+
+否
+
+函数参数，必须是 JSON 字符串，而不是对象
+
+`messages[].tool_call_id`
+
+string
+
+条件必填
+
+`role` 为 `tool` 时，传入对应的工具调用 ID。工具消息仅用于 skill 抽取
+
+`custom_content`
+
+string
+
+二选一
+
+自定义内容。传入后直接保存，不再基于 `messages` 抽取
+
 `user_id`
 
 string
 
 是
 
-记忆实体 ID，用于标识归属对象，最大 64 字符
-
-`messages`
-
-array
-
-是\*
-
-对话消息列表，最多 50 条。每条含 `role`（user/assistant）和 `content`
-
-`custom_content`
-
-string
-
-是\*
-
-自定义内容，最大 512 字符。与 `messages` 互斥
-
-`profile_schema`
-
-string
-
-否
-
-画像模板 ID。**不传则不提取用户画像**，仅写入事实记忆
+子用户 ID，用于隔离记忆
 
 `memory_library_id`
 
@@ -64,7 +162,23 @@ string
 
 否
 
-事实记忆规则 ID，不传则使用默认规则
+自定义项目 ID，用于记忆二级隔离
+
+`profile_schema`
+
+string
+
+否
+
+用户画像模板 ID；需要提取用户画像时传入
+
+`extract_mode`
+
+string
+
+否
+
+抽取模式。`profile_only` 表示仅抽取画像，此时必须同时传入 `profile_schema` 和 `messages`
 
 `meta_data`
 
@@ -72,11 +186,7 @@ object
 
 否
 
-用户自定义信息
-
-**说明**`messages` 和 `custom_content` 互斥，填 `custom_content` 后会忽略 `messages`。
-
-**警告****调用成功但用户画像属性为空？** 事实记忆与用户画像是两条独立的提取链路。不传 `profile_schema` 时，接口只会返回 `memory_nodes`，画像属性保持为空。请传入画像模板 ID 后重新调用，ID 可通过 [ListProfileSchemas](raw/application-api-reference/long-term-memory-new/profiles-overview/list-schemas.md) 获取，或在控制台记忆库详情页的**记忆规则 > 用户画像规则**中查看。
+自定义元信息
 
 ## 返回结果
 
@@ -96,47 +206,47 @@ string
 
 array
 
-变更的事实记忆列表
+发生变更的记忆列表
 
 `memory_nodes[].memory_node_id`
 
 string
 
-事实记忆 ID
+记忆节点 ID
 
 `memory_nodes[].content`
 
 string
 
-提取的记忆内容
+记忆内容
 
 `memory_nodes[].event`
 
 string
 
-操作类型：ADD / UPDATE / DELETE
+记忆事件：`ADD`、`UPDATE` 或 `DELETE`，存在时返回
 
 `memory_nodes[].old_content`
 
 string
 
-更新前内容，仅 event 为 UPDATE 时有效
+更新前的内容，仅 `event` 为 `UPDATE` 时返回
 
-## 代码示例
+## 请求示例
 
 cURL
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/add \
+curl --location 'https://dashscope.aliyuncs.com/api/v2/apps/memory/add' \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
-  --header "Content-Type: application/json" \
+  --header 'Content-Type: application/json' \
   --data '{
+    "user_id": "user_001",
     "messages": [
-      {"role": "user", "content": "每天上午9点提醒我喝水"},
-      {"role": "assistant", "content": "好的，已记录"},
-      {"role": "user", "content": "明天10点提醒我整理会议纪要。"}
+      {"role": "user", "content": "每天上午11点提醒我点外卖。"},
+      {"role": "assistant", "content": "没问题。"}
     ],
-    "user_id": "user_001"
+    "meta_data": {"location_name": "北京"}
   }'
 ```
 
@@ -170,11 +280,14 @@ asyncio.run(main())
 
 ```
 {
+  "request_id": "048983ff-ed50-96e0-b0a6-482cce26cbe3",
   "memory_nodes": [
-    {"content": "用户每天上午9点需要喝水提醒", "event": "ADD", "memory_node_id": "91e628e811134e5598154a1719791a68"},
-    {"content": "用户需要明天10点提醒整理会议纪要", "event": "ADD", "memory_node_id": "56d43a6ec74548bcb0ad59fdedd28569"}
-  ],
-  "request_id": "d0917d55-6677-9be4-b7d3-caf347e572c0"
+    {
+      "memory_node_id": "42dfc089dfa7409889966960a95c3b7e",
+      "content": "用户需要每天上午11点被提醒点外卖",
+      "event": "ADD"
+    }
+  ]
 }
 ```
 

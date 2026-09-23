@@ -18,17 +18,17 @@ SDK 封装了 RTC 连接与 Travel 控制，开箱即用。请根据您的目标
 
 Android
 
-[接入指南](raw/model-api-reference/world-model-api-reference/happyoyster/client-sdk/android-sdk/happyoyster-android-sdk-integration-guide.md)
+[接入指南](raw/_short/happyoyster-android-sdk-integration-guide-0ec60cb58a01b74a.md)
 
-[API 参考](raw/model-api-reference/world-model-api-reference/happyoyster/client-sdk/android-sdk/happyoyster-android-sdk-api-reference.md)
+[API 参考](raw/_short/happyoyster-android-sdk-api-reference-2e55bd454caa0124.md)
 
 [Maven：cn.happyoyster:opensdk](https://central.sonatype.com/artifact/cn.happyoyster/opensdk)（最新稳定版）
 
-[源码](https://github.com/Future-Living-Lab/happyoyster-sdk-demo-android/blob/main/README.zh-CN.md) ｜ [Playground体验](raw/model-api-reference/world-model-api-reference/happyoyster/client-sdk/android-sdk/happyoyster-android-playground-guide.md)
+[源码](https://github.com/Future-Living-Lab/happyoyster-sdk-demo-android/blob/main/README.zh-CN.md) ｜ [Playground体验](raw/_short/happyoyster-android-playground-guide-9f72e5f97e240161.md)
 
 iOS
 
-[接入指南](raw/model-api-reference/world-model-api-reference/happyoyster/client-sdk/ios-sdk-2/happyoyster-ios-sdk-integration-guide.md)
+[接入指南](raw/_short/happyoyster-ios-sdk-integration-guide-41ea7eabc2facd22.md)
 
 [API 参考](raw/model-api-reference/world-model-api-reference/happyoyster/client-sdk/ios-sdk-2/happyoyster-ios-sdk-api-reference.md)
 
@@ -38,7 +38,7 @@ iOS
 
 Web
 
-[接入指南](raw/model-api-reference/world-model-api-reference/happyoyster/client-sdk/web-sdk/happyoyster-web-sdk-integration-guide.md)
+[接入指南](raw/_short/happyoyster-web-sdk-integration-guide-b01827224f96aa20.md)
 
 [API 参考](raw/model-api-reference/world-model-api-reference/happyoyster/client-sdk/web-sdk/happyoyster-web-sdk-api-reference.md)
 

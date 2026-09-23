@@ -17,7 +17,7 @@
 
 ### 配置自定义变量
 
-自定义变量允许在Prompt 中使用标准占位符（如 ${name}），在运行时由客户端传入实际值，实现不同用户、不同角色展示个性化内容的效果。参考文档：[设备端C SDK提示词变量设置](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/rtos-c-sdk-best-practices/rtos-license-prompt-params.md)。
+自定义变量允许在Prompt 中使用标准占位符（如 ${name}），在运行时由客户端传入实际值，实现不同用户、不同角色展示个性化内容的效果。参考文档：[设备端C SDK提示词变量设置](raw/_short/rtos-license-prompt-params-15f3abcec09007e9.md)。
 
 -   在百炼控制台创建应用
 -   修改「提示词」新增「自定义变量」
@@ -137,7 +137,7 @@ Prompt 定义了角色的人设、风格和行为规则。在 prompt 中用 ${�
 ```
 **带表情/动作的Prompt示例（可选）**
 
-如设备支持表情或动作，可在 prompt 中声明对应标识符，模型输出时会携带这些标签供客户端解析执行，参考文档：[动作情绪控制实践](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/action-emotion-control-practice.md)。
+如设备支持表情或动作，可在 prompt 中声明对应标识符，模型输出时会携带这些标签供客户端解析执行，参考文档：[动作情绪控制实践](raw/_short/action-emotion-control-practice-4504b07b334d651e.md)。
 
 ```
 ##表情和动作

@@ -97,11 +97,11 @@
 
 妙笔配套功能
 
--   政务公文配套工具（智能审校、公文套红、政务公文库）：[计费说明（政务公文配套工具）](raw/application-user-guide/application-gallery/quanmiao-solution-products/miaobi-miaoce-shenjiao/government-document-tool-billing.md)；
+-   政务公文配套工具（智能审校、套红、政务公文库）：[计费说明（政务公文配套工具）](raw/_short/government-document-tool-billing-fd852f5e4302b920.md)；
     
--   PPT生成：[计费说明（PPT生成）](raw/application-user-guide/application-gallery/quanmiao-solution-products/miaobi-miaoce-shenjiao/ppt-generation-billing.md)；
+-   PPT生成：[计费说明（PPT生成）](raw/_short/ppt-generation-billing-2c2c356b535abe00.md)；
     
--   自定义数据源：[计费说明（妙策-自定义数据源）](raw/application-user-guide/application-gallery/quanmiao-solution-products/miaobi-miaoce-shenjiao/billing-document-miaoce-custom-data-source.md)。
+-   自定义数据源：[计费说明（妙策-自定义数据源）](raw/_short/billing-document-miaoce-custom-data-source-41934b77380474b4.md)。
     
 
 **说明**
@@ -260,9 +260,9 @@
 
 支持。
 
--   如果您的内部知识库已完成数据切片、向量化及检索能力（例如已构建RAG系统），可直接通过 API对接。具体接入方式请参考：[妙搜-通过API引入数据源](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/quanmiao-more/miaosou-introduce-data-source-through-api.md)。
+-   如果您的内部知识库已完成数据切片、向量化及检索能力（例如已构建RAG系统），可直接通过 API对接。具体接入方式请参考：[妙搜-通过API引入数据源](raw/_short/miaosou-introduce-data-source-through-api-0dcfe8b545d9a547.md)。
     
 -   如果尚未完成文件存储、索引构建，或缺乏对多模态文件（如文本、PDF、图片等）的预处理与向量化能力，建议开通“妙搜”产品，以快速实现知识库的结构化处理与高效检索。
     
-    -   开通方式及计费详情，请参考：《[计费说明（妙搜和妙读）](raw/application-user-guide/application-gallery/quanmiao-solution-products/miaosou-and-miaodu/miaosou-miaodu-api-billing.md)》；
-    -   具体对接流程与技术文档，请参考：《[妙笔写作信源对接](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/quanmiao-more/miaobi-writing-source-docking.md)》。
+    -   开通方式及计费详情，请参考：《[计费说明（妙搜和妙读）](raw/_short/miaosou-miaodu-api-billing-ef8dfbbfa6d4026e.md)》；
+    -   具体对接流程与技术文档，请参考：《[妙笔写作信源对接](raw/_short/miaobi-writing-source-docking-49276603466439e0.md)》。

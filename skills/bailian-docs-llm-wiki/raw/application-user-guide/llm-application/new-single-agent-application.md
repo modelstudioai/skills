@@ -281,7 +281,7 @@
 
 ### 通过 API 调用
 
-您可以在智能体应用**发布渠道**页签，单击 **API 调用**右侧的**查看 API**，查看通过 API 调用新版智能体应用的方法。详情请参见[新版智能体应用 API](raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md)。
+您可以在智能体应用**发布渠道**页签，单击 **API 调用**右侧的**查看 API**，查看通过 API 调用新版智能体应用的方法。详情请参见[新版智能体应用 API](raw/_short/new-agent-application-api-reference-d745b325d97fcf2e.md)。
 
 ## 应用管理
 

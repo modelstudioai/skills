@@ -2,7 +2,11 @@
 
 查询异步添加记忆事件的执行状态与结果
 
-查询[异步添加记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)所生成事件的执行状态与结果。
+查询[异步添加记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)生成的事件，获取执行状态和抽取结果。
+
+## 请求方法与路径
+
+`GET https://dashscope.aliyuncs.com/api/v2/apps/memory/events/{event_id}`
 
 ## 请求参数
 
@@ -12,6 +16,8 @@
 
 必填
 
+位置
+
 说明
 
 `event_id`
@@ -20,7 +26,9 @@ string
 
 是
 
-事件 ID（路径参数）
+Path
+
+事件 ID
 
 ## 返回结果
 
@@ -42,6 +50,12 @@ array
 
 事件列表
 
+`events[].created_at`
+
+integer
+
+创建时间
+
 `events[].event_id`
 
 string
@@ -52,121 +66,120 @@ string
 
 string
 
-事件类型，例如 ADD\_ASYNC
-
-`events[].resource_type`
-
-string
-
-任务来源类型：observation / skill / profile
-
-`events[].resource_id`
-
-string
-
-任务来源 ID
+事件类型
 
 `events[].memory_library_id`
 
 string
 
-任务对应的记忆库 ID
+记忆库 ID
 
-`events[].user_id`
+`events[].resource_id`
 
 string
 
-任务对应的记忆实体 ID
+资源 ID
+
+`events[].resource_type`
+
+string
+
+资源类型：`observation`、`skill`、`user_profile`、`custom_observation` 或 `custom_skill`
 
 `events[].status`
 
 string
 
-任务状态：PENDING / SUCCEEDED / FAILED / UNRECORDED
-
-`events[].created_at`
-
-integer
-
-任务创建时间戳
+事件状态：`PENDING`、`RUNNING`、`SUCCEEDED`、`FAILED` 或 `UNRECORDED`
 
 `events[].updated_at`
 
 integer
 
-任务状态最后更新时间戳
+更新时间
+
+`events[].user_id`
+
+string
+
+子用户 ID
 
 `events[].result`
 
 array
 
-执行结果，`status` 为 SUCCEEDED 后出现
+执行结果。任务成功后返回抽取结果
 
 `events[].result[].memory_type`
 
 string
 
-记忆类型：observation / skill / user\_profile
+记忆类型：`observation`、`skill` 或 `user_profile`
 
 `events[].result[].content`
 
 string
 
-event 为 ADD 时为添加内容，UPDATE 时为新内容，DELETE 时为旧内容
+`ADD` 或 `UPDATE` 时为新内容，`DELETE` 时为旧内容
+
+`events[].result[].name`
+
+string
+
+用户画像属性名称，仅画像结果存在时返回
 
 `events[].result[].event`
 
 string
 
-操作类型：ADD / UPDATE / DELETE
+操作类型：`ADD`、`UPDATE` 或 `DELETE`
 
 `events[].result[].memory_node_id`
 
 string
 
-记忆节点 ID。memory\_type 为 user\_profile 时不存在
+observation 或 skill 的记忆节点 ID；user\_profile 结果不返回
 
 `events[].result[].old_content`
 
 string
 
-更新前内容，仅 event 为 UPDATE 时存在
+更新前的内容，仅 `event` 为 `UPDATE` 时返回
 
-## 代码示例
+## 请求示例
 
 ```
-curl -X GET "https://dashscope.aliyuncs.com/api/v2/apps/memory/events/{event_id}" \
+curl --location 'https://dashscope.aliyuncs.com/api/v2/apps/memory/events/07c054c438584f279ff7db7c3243fa51' \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY"
+```
 
-# response
+## 响应示例
+
+```
 {
+  "request_id": "bb499327-79c6-9a65-9f2d-c0c6abda6419",
   "events": [
     {
-      "event_id": "07c054c4...",
-      "event_type": "ADD_ASYNC",
-      "resource_type": "profile",
-      "resource_id": "profile_schema_001",
-      "status": "PENDING",
       "created_at": 1784602119,
-      "updated_at": 1784602161,
-      "user_id": "user_001"
-    },
-    {
-      "event_id": "07c054c4...",
+      "event_id": "07c054c438584f279ff7db7c3243fa51",
       "event_type": "ADD_ASYNC",
-      "resource_type": "observation",
+      "memory_library_id": "memory_library_001",
       "resource_id": "project_001",
+      "resource_type": "observation",
       "status": "SUCCEEDED",
-      "result": [
-        {"content": "用户想去非洲", "event": "DELETE", "memory_node_id": "3127d744..."}
-      ],
-      "created_at": 1784602119,
       "updated_at": 1784602150,
-      "user_id": "user_001"
+      "user_id": "user_001",
+      "result": [
+        {
+          "memory_type": "observation",
+          "content": "用户想去非洲",
+          "event": "DELETE",
+          "memory_node_id": "3127d7445a57442d9f700d534b1b14e3"
+        }
+      ]
     }
-  ],
-  "request_id": "bb499327-79c6-..."
+  ]
 }
 ```
 
-**重要**`status` 为 PENDING 时后台仍在执行，稍后重新查询即可。
+**重要**`status` 为 `PENDING` 或 `RUNNING` 时任务仍在后台执行，请稍后重新查询。

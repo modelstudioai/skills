@@ -33,7 +33,7 @@
 
 #### 步骤2：实现智能数据问答功能
 
-基于析言GBI的[Chat对话接口](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-intelligent-asking-number/api-dataanalysisgbi-2024-08-23-dir-cloud-sql-execution-mode/api-dataanalysisgbi-2024-08-23-rundataanalysis.md)（例如：本示例中的`RunDataAnalysisRequest`类），通过实现智能数问场景来帮助您熟悉API的使用。
+基于析言GBI的[Chat对话接口](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-697fa2953fc095a1.md)（例如：本示例中的`RunDataAnalysisRequest`类），通过实现智能数问场景来帮助您熟悉API的使用。
 
 请将代码示例中的`accessKeyId`、`accessKeySecret`及`workspaceId`替换为实际值，以确保代码正常运行并返回正确的结果。
 
@@ -116,7 +116,7 @@ public class CommonExample {
 
 #### 返回结果示例
 
-参数说明请参见[Chat对话接口](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-intelligent-asking-number/api-dataanalysisgbi-2024-08-23-dir-cloud-sql-execution-mode/api-dataanalysisgbi-2024-08-23-rundataanalysis.md)的**返回参数**。
+参数说明请参见[Chat对话接口](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-697fa2953fc095a1.md)的**返回参数**。
 
 ```
 {"event":"rewrite","requestId":"8499A3E6-C1B2-5D2E-845F-2F63F8795B4D","rewrite":"查询销量最高的五个产品及其销量","sessionId":"8db26af8-721c-49bd-95f5-cceb0053ecf6"}
@@ -186,7 +186,7 @@ pip install alibabacloud-tea-openapi-sse==1.0.2
 
 #### 步骤2：实现智能数据问答功能
 
-基于析言GBI的[Chat对话接口](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-intelligent-asking-number/api-dataanalysisgbi-2024-08-23-dir-cloud-sql-execution-mode/api-dataanalysisgbi-2024-08-23-rundataanalysis.md)的API代码示例如下。
+基于析言GBI的[Chat对话接口](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-697fa2953fc095a1.md)的API代码示例如下。
 
 请将代码示例中的`accessKeyId`、`accessKeySecret`及`workspaceId`替换为实际值，以确保代码正常运行并返回正确的结果。
 
@@ -289,7 +289,7 @@ if __name__ == '__main__':
 
 #### 返回结果示例
 
-参数说明请参见[Chat对话接口](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-intelligent-asking-number/api-dataanalysisgbi-2024-08-23-dir-cloud-sql-execution-mode/api-dataanalysisgbi-2024-08-23-rundataanalysis.md)的**返回参数**。
+参数说明请参见[Chat对话接口](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-697fa2953fc095a1.md)的**返回参数**。
 
 ```
 {'data': {'requestId': '93DE1D26-153E-5386-BA8F-9D2E2F8B3381', 'sessionId': '10148716_1f8ebf09-df4b-4b0c-9493-66a1895a9ba4', 'event': 'rewrite', 'rewrite': '查询user表中的全部数据，并用饼图展示'}}
@@ -324,7 +324,7 @@ require (
 
 #### 步骤2：实现智能数据问答功能
 
-基于析言GBI的[Chat对话接口](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-intelligent-asking-number/api-dataanalysisgbi-2024-08-23-dir-cloud-sql-execution-mode/api-dataanalysisgbi-2024-08-23-rundataanalysis.md)的API代码示例如下。
+基于析言GBI的[Chat对话接口](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-697fa2953fc095a1.md)的API代码示例如下。
 
 请将代码示例中的`accessKeyId`、`accessKeySecret`及`workspaceId`替换为实际值，以确保代码正常运行并返回正确的结果。
 
@@ -425,7 +425,7 @@ func main() {
 
 #### 返回结果示例
 
-参数说明请参见[Chat对话接口](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-intelligent-asking-number/api-dataanalysisgbi-2024-08-23-dir-cloud-sql-execution-mode/api-dataanalysisgbi-2024-08-23-rundataanalysis.md)的**返回参数**。
+参数说明请参见[Chat对话接口](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-697fa2953fc095a1.md)的**返回参数**。
 
 ```
 -------------------------------------

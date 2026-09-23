@@ -1,47 +1,41 @@
-# 提示词工程
+# Prompt 工程
 
-提示词工程（Prompt Engineering）是百炼平台上系统性设计、迭代与管理大语言模型输入指令（Prompt）的方法论与实践体系。它超越简单的文本输入，涵盖模板化构建、样例增强、自动重写、反馈驱动优化及多版本对比调试等工程化手段，目标是提升模型输出的准确性、一致性、可控性与业务适配性。
+Prompt 工程是系统化设计、测试、优化和管理提示词（Prompt）的技术实践，旨在通过结构化指令、上下文注入、角色设定、格式约束与迭代反馈等手段，稳定提升大模型在特定任务上的输出质量、一致性、可控性与可维护性。它既是调用大模型的起点，也是 AI 应用效果调优的核心杠杆。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-提示词工程在百炼平台中不是孤立能力，而是贯穿 AI 应用全生命周期的核心实践，具体体现在以下场景：
-
-- **智能体应用开发**：在创建智能体时，通过「角色设定 + 任务描述 + 约束条件 + 示例」结构化编写 Prompt（支持 ICIO/CRISPE/RASCEF 等框架），直接决定模型行为边界与响应风格；变量（如 `${topic}`）可动态注入，实现一次配置、多处复用。
-- **Prompt 模板管理**：在资产中心统一维护结构化 Prompt 模板（文本生成、图片生成），支持版本控制、权限配置与调用统计；模板可被智能体、工作流或 API 直接引用，保障跨应用一致性。
-- **RAG 增强链路**：Prompt 作为检索后处理的关键环节，用于引导模型融合知识库召回片段与用户问题；配合 `has_thoughts=true` 参数，可调试检索内容是否被有效利用。
-- **Agenteval 闭环优化**：基于真实线上 Trace 数据沉淀评测集，通过多维度评估器（如准确性、格式合规性）量化 Prompt 效果；再通过「版本对比」或「调试反馈」路径，生成优化建议并作用于草稿态 Prompt，完成“观测 → 评测 → 优化”工程闭环。
-- **自动化提效工具**：  
-  - **Prompt 自动优化**：无需样例，一键对原始 Prompt 进行角色强化、指令澄清、结构重组，不计费且数据不出域；  
-  - **Prompt 反馈优化**：上传 5–10 条高质量 I/O 样例 + ≥20 条评测数据，驱动大模型（推荐千问-max）多轮迭代生成更优 Prompt。
-
-> ⚠️ 注意：Prompt 样例库功能已停止维护，官方明确要求迁移到 RAG 表格库。新项目请避免依赖该能力。
+- **智能体（Agent）与工作流（Workflow）**：Prompt 是智能体行为逻辑的“大脑指令”，直接决定其角色定位、工具调用策略、响应风格与输出结构；在工作流中，大模型节点的 Prompt 可绑定变量（如 `{{query}}`、`{{context}}`），实现动态上下文注入，配合 RAG 检索结果完成精准生成。
+- **模板化生产**：通过「Prompt 模板」功能，将高频任务（如客服应答、报告摘要、代码评审）封装为可复用、可版本化、可跨应用共享的资产；支持基于 ICIO/CRISPE/RASCEF 等工程框架快速创建，降低人工编写门槛。
+- **多模态生成**：文生图（万相）、文生视频（Vidu、万相视频）严格区分 `prompt`（正向描述）与 `negative_prompt`（负向排除），并支持 `prompt_extend=true` 自动扩写，提升画面完整性与美学表现力。
+- **AI 应用可观测与优化闭环（[agenteval](../guides/agenteval.md)）**：Prompt 工程深度融入 `agenteval` 体系——通过 Trace 沉淀真实用户 Prompt → 自动归集至评测集 → 多评估器打分 → 基于人工反馈（如“缺少步骤说明”“未按 JSON 格式输出”）驱动 Prompt 智能重构 → 调试验证后发布生效，形成“观测→评测→优化”闭环。
+- **RAG 替代演进**：原 Prompt 样例库（few-shot）已下线，其能力由 RAG 表格库承接；此时 Prompt 工程重点转向设计高质量检索增强指令（如 `"请严格依据以下知识片段回答，禁止编造"`），并控制 `recall_count`（默认 5，最大 10）平衡相关性与噪声。
 
 ## 关键参数和配置
 
-| 参数 | 说明 | 典型取值/约束 | 使用位置 |
-|------|------|----------------|-----------|
-| `workspaceId` | 业务空间 ID，所有 Prompt 相关 API 的必需身份标识 | 由控制台或接口获取 | API 调用（如 `GetPromptTemplate`） |
-| `promptTemplateId` | 模板唯一 ID，用于精准定位与调用 | 控制台模板卡片上复制；预置模板 ID 不可修改 | 模板引用、API 请求体 |
-| `has_thoughts` | 启用后在响应中返回 `thoughts` 字段，展示检索/思考过程 | `true` / `false` | RAG 调试、Agenteval 观测分析 |
-| `召回片段数` | 注入 Prompt 上下文的样例或知识片段数量 | 默认 5，最多 10（RAG 表格库支持滑块调节） | RAG 配置页、Prompt 反馈优化任务设置 |
-| `version` | Prompt 模板语义化版本号 | 如 `v1.0.0`，发布后不可修改 | 资产中心模板详情页、API 版本切换 |
+| 参数名 | 说明 | 开发者须知 |
+|--------|------|------------|
+| `promptTemplateId` | 模板唯一 ID，用于 API 调用时指定模板 | 必须通过 `GetPromptTemplate` 接口获取，不可硬编码；模板内容变更后 ID 不变，但需重新发布才生效。 |
+| `workspaceId` | 业务空间 ID，所有 Prompt 操作均需显式传入 | 控制台调试页可自动填充；跨 workspace 调用将鉴权失败，务必校验当前环境。 |
+| `variables` | 模板中声明的占位符列表（如 `["topic", "format"]`） | 由 `GetPromptTemplate` 返回，开发者需据此构造 `inputVariables` 对象，**不可自行拼接字符串**，避免注入风险。 |
+| `has_thoughts` | 是否返回思考链/检索过程详情（含 `thoughts` 字段） | 调试阶段设为 `true`；上线前必须设为 `false`，避免泄露内部逻辑或敏感上下文。 |
+| `recall_count` | RAG 表格库召回片段数（替代原样例库） | 默认 5，建议根据知识密度调整：高精度问答可设为 3–5；开放摘要类任务可设为 8–10。 |
+| `enable_thinking` / `preserve_thinking` | 控制模型是否启用推理链及是否跨轮次保留 | 仅部分模型（如 `qwen-max`, `kimi-k2.6+`, `glm-5.2+`）支持；开启后需解析 `reasoning_content` 字段，且 `preserve_thinking=true` 时需确保 `historyList` 正确传递。 |
 
 ## 面向开发者，简洁实用
 
-- ✅ **起步建议**：从控制台「提示词 > 创建提示词」开始，使用预置模板快速验证效果，再逐步替换为自定义变量与业务逻辑。  
-- ✅ **调试必开**：在 RAG 或 Agenteval 场景中，始终开启 `has_thoughts=true`，直观查看模型是否正确理解指令、是否合理使用知识片段。  
-- ✅ **优化有据**：拒绝凭感觉改 Prompt —— 先用 Agenteval 构建真实评测集，用预置评估器打分，再启动反馈优化；每次变更都应有指标对比。  
-- ✅ **安全底线**：所有自动优化服务均不训练模型、不存储用户数据；敏感业务 Prompt 建议设为 `visibility=workspace`，避免误共享。  
-- ❌ **避坑提醒**：勿新建 Prompt 样例库；勿在未发布状态下运行评测任务；勿直接修改已发布 Prompt 模板的 `version` 字段。  
-
-提示词工程的本质是“用工程思维驯服不确定性”。在百炼平台，它已被深度产品化——从模板创建、自动优化到闭环评测，每一步都提供可度量、可回溯、可协作的基础设施支持。
+- ✅ **优先用模板，而非硬编码 Prompt**：所有生产环境 Prompt 必须走 `CreatePromptTemplate` → `GetPromptTemplate` → 变量替换流程，保障可灰度、可回滚、可审计。
+- ✅ **调试必开 `has_thoughts=true`**：在控制台或 SDK 调试时开启，快速定位是 Prompt 表达不清、RAG 检索不准，还是模型理解偏差。
+- ✅ **优化不靠直觉，靠 `agenteval` 闭环**：从线上 Trace 抽取 bad case → 创建评测任务 → 人工标注问题 → 发起反馈优化 → **必须验证回归**（原问题+正常流程+边界输入）→ 再发布。
+- ⚠️ **地域强约束**：全部 Prompt 功能（模板、优化、RAG 集成）**仅支持华北2（北京）地域**，跨地域调用会返回 `InvalidRegionId` 错误。
+- ⚠️ **字符上限严守**：单个自定义 Prompt 模板内容 ≤ 6144 字符（含空格与换行），超长需精简指令或拆分为多阶段工作流。
+- ⚠️ **负向 Prompt 不是万能**：万相图生图中 `negative_prompt` 对抽象概念（如“低质量”“不专业”）效果有限，应聚焦具体可识别元素（如 `"blurry, deformed hands, extra fingers, text, watermark"`）。
 
 ## 关联主题页
 
 - [prompt](../guides/prompt.md)
 - [agenteval](../guides/agenteval.md)
-- [asset center page](../guides/asset-center-page.md)
-- [application use cases](../guides/application-use-cases.md)
-- [model evaluation introduction](../guides/model-evaluation-introduction.md)
+- [llm application](../guides/llm-application.md)
+- [application support](../guides/application-support.md)
+- [use cases](../guides/use-cases.md)
 
 

@@ -52,7 +52,7 @@
 
 上线新版 长期记忆&用户画像管理 API
 
-[长期记忆 API](raw/application-user-guide/memory-library-overview/long-term-memory-2-0.md)相比[长期记忆（旧）](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory.md)的改进：
+[长期记忆 API](raw/application-user-guide/memory-library-overview/long-term-memory-2-0.md)相比[长期记忆（旧）](raw/_short/api-bailian-2023-12-29-dir-long-term-memory-d47ff49ea4c20bc0.md)的改进：
 
 -   通过开放的 API 接口，可接入任意应用，也支持多应用共享同一记忆库。
     
@@ -71,7 +71,7 @@
 
 支持通过API创建音视频知识库
 
-使用此API可创建两类知识库：基于文档或音视频的非结构化知识库，以及用于数据查询或图片问答的结构化知识库。详情请参见[创建知识库](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-createindex.md)。
+使用此API可创建两类知识库：基于文档或音视频的非结构化知识库，以及用于数据查询或图片问答的结构化知识库。详情请参见[创建知识库](raw/_short/api-bailian-2023-12-29-createindex-8bc613c75f8af371.md)。
 
 1月23日
 
@@ -87,7 +87,7 @@
 
 增加知识库监控API
 
-查询指定知识库在特定时间范围内的监控数据。详情请参见[获取知识库监控数据](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-getindexmonitor.md)。
+查询指定知识库在特定时间范围内的监控数据。详情请参见[获取知识库监控数据](raw/_short/api-bailian-2023-12-29-getindexmonitor-3a609181d5c9c034.md)。
 
 1月19日
 
@@ -95,7 +95,7 @@
 
 增加更新知识库API
 
-更新指定知识库的部分配置。详情请参见[更新知识库](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-updateindex.md)。
+更新指定知识库的部分配置。详情请参见[更新知识库](raw/_short/api-bailian-2023-12-29-updateindex-551997e1d335e340.md)。
 
 1月15日
 
@@ -755,7 +755,7 @@ SFM服务关联角色
 
 新增传媒/零售文章风格与格式学习、电商零售推广文案写作应用
 
--   点击[应用广场](https://bailian.console.aliyun.com/#/app-market)进行体验，点击[传媒/零售文章风格与格式学习](raw/application-user-guide/application-gallery/quanmiao-light-application-series/light-application-guidelines-for-use/media-retail-article-style-and-format-learning.md)、[电商文案智能可控生成](raw/application-user-guide/application-gallery/quanmiao-light-application-series/light-application-guidelines-for-use/intelligent-and-controllable-generation-of-e-commerce-copywriting.md)查看完整信息。
+-   点击[应用广场](https://bailian.console.aliyun.com/#/app-market)进行体验，点击[传媒/零售文章风格与格式学习](raw/_short/media-retail-article-style-and-format-learning-892389247e359995.md)、[电商文案智能可控生成](raw/_short/intelligent-and-controllable-generation-of-e-com-4866323d55439263.md)查看完整信息。
     
 
 8月22日

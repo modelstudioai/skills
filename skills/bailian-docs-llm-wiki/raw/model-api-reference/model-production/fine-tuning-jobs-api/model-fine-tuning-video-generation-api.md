@@ -1,3 +1,3 @@
 # 视频生成
 
--   [创建调优任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-video-generation-api/video-generation-create-fine-tuning-job-api.md)
+-   [创建调优任务](raw/_short/video-generation-create-fine-tuning-job-api-2357b2afaa3e843c.md)

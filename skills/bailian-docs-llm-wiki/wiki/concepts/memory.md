@@ -1,60 +1,56 @@
 # 长期记忆
 
-长期记忆是百炼平台提供的结构化、跨会话的记忆管理服务，用于持久化存储用户关键事实与画像信息，并在后续对话中基于语义检索自动注入上下文，从而突破模型上下文窗口限制，实现个性化、连贯的智能体交互。
+长期记忆（Long Term Memory, LTM）是百炼平台提供的结构化、跨会话持久化记忆管理服务，用于突破大模型单次对话的上下文窗口限制，实现用户状态、行为模式、关键事件和结构化属性的自动沉淀与语义化召回。它不是简单的缓存或日志存储，而是通过模型驱动的信息抽取、向量化索引与策略化检索，构建可演进、可治理、可复用的用户认知基座。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **智能体（Agent）场景**：在 Managed Agents 中，可通过 `resources.memory_store` 挂载记忆库，赋予智能体“记住用户偏好”“延续多轮任务状态”的能力；调用时自动触发 `autoRecall`（检索注入）与 `autoCapture`（对话结束提取），无需手动拼接 Prompt。  
-- **应用调用（Application Call）场景**：新版智能体应用支持 `memory_id` 参数，启用后平台自动关联用户 `user_id`，完成记忆写入与检索闭环，开发者仅需传参，无需调用底层 Memory API。  
-- **工作流与插件场景**：通过 OpenClaw 等插件集成，可将长期记忆作为独立节点嵌入流程，支持条件触发（如仅当用户首次提问时写入画像）、多规则混合检索（`project_ids`）等高级编排。  
-- **RAG 增强场景**：与知识库协同使用——RAG 提供领域知识，长期记忆提供用户专属上下文（如“张三讨厌咖啡因”），二者共同注入 [prompt](../guides/prompt.md)，提升响应准确性与个性化水平。  
-- **安全防护场景**：所有记忆读写操作默认经过内容安全检测（含敏感词、PPI 识别等），确保存储与检索过程符合数据合规要求。
+- **智能体（Agent）应用**：在 Agent 1.0/2.0 中，长期记忆作为“隐式上下文增强层”自动启用（需开通记忆库并配置 `autoRecall=true`）。系统在每次推理前自动调用 `SearchMemory`，将匹配的事实记忆（如“用户过敏花生”）和用户画像（如“职业=医生，偏好=简洁回复”）注入 [prompt](../guides/prompt.md)，无需开发者手动拼接上下文。
+  
+- **工作流（Workflow）系统**：通过「长期记忆插件」嵌入任意节点（如智能体群组、大模型节点前），支持 `autoCapture`（自动从输入消息提取记忆）与 `autoRecall`（自动检索并注入当前上下文），实现记忆能力与业务逻辑解耦。适用于客服工单流转、销售跟进等需跨步骤维持用户意图的场景。
+
+- **高代码应用（Serverless/K8s）**：开发者直接调用记忆库 REST API（如 `/add-async`、`/memory_nodes/search`），将记忆写入与检索深度集成至自定义业务逻辑中。例如，在订单履约服务中，将用户历史退换货原因作为 `observation` 类型事实记忆写入，并在新订单咨询时优先召回相似案例辅助决策。
+
+- **Managed Agents 托管服务**：通过 `context_id` 参数关联预存的长期记忆快照（由记忆库生成），使托管智能体在无 session 状态下仍能复用用户长期特征，适用于异步任务、Webhook 回调等非连续交互场景。
+
+- **RAG 增强场景**：与知识库检索正交协同——知识库解决“通用领域知识”，长期记忆解决“专属用户事实”。二者可并行检索后融合排序（如加权合并 score），显著提升个性化回答准确率（例如：“根据您的过往投诉记录（LTM）和《售后服务条例》（知识库），本次可全额退款”）。
 
 ## 关键参数和配置
 
-| 参数 | 说明 | 必填 | 典型值/约束 |
-|------|------|------|-------------|
-| `user_id` | 记忆归属唯一标识，用于隔离用户数据，所有接口必需 | ✓ | 字符串，≤64 字符，建议业务侧生成（如 `uid_12345`） |
-| `plan_version` | 控制检索质量策略 | ✗ | `"Pro"`（默认，启用 Rerank，精度高）、`"Lite"`（跳过 Rerank，延迟低）；大小写不敏感 |
-| `min_score` | 相似度阈值，过滤低相关结果 | ✗ | `0.0–1.0`，推荐 `0.5–0.7`；设为 `0.3` 可放宽召回，`0.8` 适用于高精度场景 |
-| `top_k` | 单次检索最大返回条数 | ✗ | `1–100`，默认 `10`；智能体场景建议 `5–15`，平衡信息量与 token 开销 |
-| `project_id` / `project_ids` | 记忆规则作用域标识 | ✗ | 单规则用 `project_id`，多规则混合检索用 `project_ids: ["p1","p2"]` |
-| `profile_schema` | 用户画像模板 ID（仅写入时生效） | ✗ | 传入则触发结构化抽取；不传仅存事实记忆 |
+| 参数 | 作用域 | 说明 | 推荐值 | 注意事项 |
+|------|--------|------|--------|----------|
+| `user_id` | 全局必填 | 记忆隔离主键，必须唯一标识终端用户（如手机号哈希、OpenID）。同一 `user_id` 下所有记忆自动聚合、跨应用共享。 | 业务侧稳定 ID，避免使用临时 token | 不传或为空将导致写入失败；不同 `user_id` 的记忆完全隔离，不可交叉检索 |
+| `top_k` | `SearchMemory` 请求体 | 检索返回的最大记忆条数 | `5–10`（平衡效果与 token 开销） | 超过 100 将被截断；值过大易引入噪声，建议结合业务场景压测确定 |
+| `min_score` | `SearchMemory`（仅 `plan_version=pro` 生效） | 相似度阈值（0.0–1.0），低于此值的记忆不返回 | `0.5–0.7`（查准率优先）或 `0.3–0.5`（查全率优先） | `Lite` 版本忽略该参数；默认 `0.3`，生产环境务必显式设置以规避低质召回 |
+| `plan_version` | `SearchMemory` / `CreateProfileSchema` / `AddMemoryAsync` 路径 | 控制策略版本：`pro` 启用高级重排（Rerank）与高精度抽取；`lite` 为轻量级低延迟版本 | `pro`（默认，推荐） | `AddMemory` 同步接口**不支持**该参数；切换版本仅影响新写入/新检索行为，已存记忆不受影响 |
+| `profile_schema` | `AddMemoryAsync` 请求体 | 用户画像模板 ID，指定结构化属性提取规则（如 `schema_abc123`） | 模板创建后获取的实际 ID | 缺失则跳过画像抽取；一个 `user_id` 可绑定多个 schema，但单次调用仅支持一个 |
+| `memory_library_id` | 全局可选 | 自定义记忆库 ID，用于多租户、多业务线隔离 | 由控制台创建后分配 | 不传则使用账号默认记忆库；默认库不可删除，仅可编辑元信息 |
 
-> ⚠️ 注意：`user_id` 是记忆隔离的唯一维度，**不支持按 session_id 或 app_id 隔离**；同一 `user_id` 下所有应用共享该用户记忆（除非显式配置多 project 隔离）。
+> ⚠️ 重要提示：`extract_mode`（如 `profile_only`）仅在 `AddMemoryAsync` 中有效；`AddMemory` 同步接口不支持该参数，也不支持 `plan_version`。所有参数均区分大小写，且 `user_id` 是强制维度，缺失将返回 `400` 错误。
 
 ## 面向开发者，简洁实用
 
-- **快速上手**：3 行代码完成闭环  
-  ```python
-  # 1. 写入（同步）
-  client.add_memory(user_id="u123", messages=[{"role":"user","content":"每天9点提醒喝水"}])
-  # 2. 检索（带当前对话上下文）
-  res = client.search_memory(user_id="u123", messages=[{"role":"user","content":"今天要做什么？"}], top_k=5)
-  # 3. 注入 prompt（示例）
-  prompt = f"用户历史偏好：{res['memory_nodes'][0]['content']}\n当前问题：今天要做什么？"
-  ```
+- **快速上手三步走**：  
+  1. 控制台开通记忆库 → 获取 `DASHSCOPE_API_KEY`；  
+  2. 调用 `POST /add-async` 写入对话（带 `user_id` + `messages`），若需画像同步传 `profile_schema`；  
+  3. 调用 `POST /memory_nodes/search` 检索（带 `user_id` + 当前 `messages`），将 `result.memory_nodes` 注入 [prompt](../guides/prompt.md) 即可。
 
-- **异步写入适用长对话/多模态**：对 >50 轮对话或含图像/文件的输入，优先用 `/add-async`，通过 `event_id` 轮询结果，避免超时。
+- **调试黄金法则**：  
+  - 在控制台「记忆检索」标签页实时调整 `top_k`/`min_score`，观察召回内容变化；  
+  - 使用 `ListMemory?user_id=xxx` 查看已写入记忆，确认抽取是否符合预期；  
+  - 用户画像首次查询可能为空 → 实现指数退避重试（建议 1s/2s/4s 三次）。
 
-- **用户画像需主动创建模板**：先调用 `CreateProfileSchema` 定义字段（如 `{"name":"age","description":"用户年龄"}`），再在 `AddMemory` 中传 `profile_schema`，约 3 秒后调 `GetUserProfile` 获取结果。
-
-- **调试技巧**：  
-  - 控制台「记忆检索」页实时调参（`top_k`/`min_score`/开启改写），立即验证效果；  
-  - 所有 API 响应含 `request_id`，错误时结合 [错误码文档](https://help.aliyun.com/zh/bailian/developer-reference/error-codes) 排障；  
-  - 限流失败（HTTP 429）必须实现指数退避重试（建议 base=100ms，max=2s）。
-
-- **生产注意事项**：  
-  - 记忆默认永不过期，**务必为时效性信息显式设置过期时间**（如“会议预约”设 7 天）；  
-  - 删除记忆库将**永久清除所有内容且不可恢复**，删除前请确认；  
-  - 免费额度将于 **2026 年 8 月 20 日 10:00（北京时间）** 结束，之后按实际调用量计费。
+- **避坑指南**：  
+  - ❌ 不要混用旧版术语（如 “MemoryNode”、“记忆变量”），统一使用 **事实记忆**（动态事件）和 **用户画像**（结构化属性）；  
+  - ❌ 不要在 `AddMemory` 中传 `plan_version` 或 `profile_schema`（无效且可能报错）；  
+  - ✅ 异步写入（`/add-async`）是生产环境首选——支持 [skill](../guides/skill.md) + profile 混合提取，吞吐更高；  
+  - ✅ 记忆库 QPM 限流严格（`Add` ≤120 QPM，`Search` ≤300 QPM），高频场景务必加本地缓存或批量聚合请求。
 
 ## 关联主题页
 
 - [memory library overview](../guides/memory-library-overview.md)
 - [long term memory new](../api/long-term-memory-new.md)
+- [llm application](../guides/llm-application.md)
 - [managed agents](../guides/managed-agents.md)
-- [application call](../api/application-call.md)
-- [security guide](../guides/security-guide.md)
+- [application support](../guides/application-support.md)
 
 

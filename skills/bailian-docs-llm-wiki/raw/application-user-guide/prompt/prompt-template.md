@@ -104,7 +104,7 @@ Prompt模板分为[预置Prompt模板](https://bailian.console.aliyun.com/?tab=a
 #### API
 
 1.  **获取业务空间ID：**[获取APP ID 和 Workspace ID](raw/application-api-reference/application-call/obtain-the-app-id-and-workspace-id.md)。
-2.  **创建自定义Prompt模板：**使用[CreatePromptTemplate - 创建Prompt模板](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-createprompttemplate.md)接口。
+2.  **创建自定义Prompt模板：**使用[CreatePromptTemplate - 创建Prompt模板](raw/_short/api-bailian-2023-12-29-createprompttemplate-1194e536beb0529a.md)接口。
 
 #### 2\. 查看与管理
 
@@ -134,7 +134,7 @@ Prompt模板分为[预置Prompt模板](https://bailian.console.aliyun.com/?tab=a
 
 #### API
 
-1.  打开[获取Prompt模板](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-getprompttemplate.md)接口调用文档，单击**调试**。
+1.  打开[获取Prompt模板](raw/_short/api-bailian-2023-12-29-getprompttemplate-584c357dd7cb48d6.md)接口调用文档，单击**调试**。
     
 2.  在**参数配置**界面分别输入 workspaceId 和 promptTemplateId。
     
@@ -162,7 +162,7 @@ Prompt模板分为[预置Prompt模板](https://bailian.console.aliyun.com/?tab=a
 
 #### SDK
 
-1.  打开[获取Prompt模板](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-getprompttemplate.md)接口调用文档，单击**调试**。
+1.  打开[获取Prompt模板](raw/_short/api-bailian-2023-12-29-getprompttemplate-584c357dd7cb48d6.md)接口调用文档，单击**调试**。
     
 2.  在**参数配置**界面分别输入workspaceId和promptTemplateId。配置完成后，workspaceId和promptTemplateId将自动填充至SDK示例中。
     

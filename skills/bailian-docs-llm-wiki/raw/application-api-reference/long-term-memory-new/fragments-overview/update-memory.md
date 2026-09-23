@@ -2,7 +2,11 @@
 
 更新一条事实记忆的内容
 
-修改已有事实记忆的内容。通过 `memory_node_id` 指定要更新的记忆。
+更新指定记忆节点的内容。接口会自动识别节点类型并格式化内容。
+
+## 请求方法与路径
+
+`PATCH https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/{memory_node_id}`
 
 ## 请求参数
 
@@ -12,6 +16,8 @@
 
 必填
 
+位置
+
 说明
 
 `memory_node_id`
@@ -20,35 +26,96 @@ string
 
 是
 
-记忆节点 ID（路径参数）
+Path
 
-`user_id`
-
-string
-
-是
-
-记忆实体 ID
+记忆节点 ID
 
 `custom_content`
 
 string
 
-否
+是
+
+Body
 
 更新后的记忆内容
 
-## 代码示例
+`memory_library_id`
+
+string
+
+否
+
+Body
+
+记忆库 ID
+
+`meta_data`
+
+object
+
+否
+
+Body
+
+元信息。增量更新，未指定的键保持不变
+
+`skill_name`
+
+string
+
+条件必填
+
+Body
+
+节点为 skill 类型时，必须同时传入 `skill_name`、`skill_description` 和 `skill_tags`
+
+`skill_description`
+
+string
+
+条件必填
+
+Body
+
+skill 描述。必填条件同 `skill_name`
+
+`skill_tags`
+
+array\[string\]
+
+条件必填
+
+Body
+
+skill 标签。必填条件同 `skill_name`
+
+## 返回结果
+
+字段
+
+类型
+
+说明
+
+`request_id`
+
+string
+
+请求 ID
+
+## 请求示例
 
 cURL
 
 ```
-curl -X PATCH "https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/{memory_node_id}" \
+curl --location --request PATCH 'https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/42dfc089dfa7409889966960a95c3b7e' \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
-  --header "Content-Type: application/json" \
+  --header 'Content-Type: application/json' \
   --data '{
-    "user_id": "user_001",
-    "custom_content": "还要提醒我上午10点吃药。"
+    "custom_content": "更新后的记忆内容",
+    "memory_library_id": "memory_library_001",
+    "meta_data": {"location_name": "杭州"}
   }'
 ```
 
@@ -77,7 +144,7 @@ asyncio.run(main())
 
 ```
 {
-  "request_id": "e7954ee7-f0df-9895-9b44-39b4b395eac1"
+  "request_id": "cc2690f9f2b3485a93013e5705c91241"
 }
 ```
 

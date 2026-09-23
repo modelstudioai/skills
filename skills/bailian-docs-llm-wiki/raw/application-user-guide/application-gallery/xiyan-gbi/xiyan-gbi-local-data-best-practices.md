@@ -26,7 +26,7 @@
 
 ### 步骤三：调API生成SQL
 
-基于析言GBI的[运行sql生成](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-intelligent-asking-number/api-dataanalysisgbi-2024-08-23-dir-local-sql-execution-mode/api-dataanalysisgbi-2024-08-23-runsqlgeneration.md)（例如：本示例中的`RunSqlGenerationRequest`类），通过实现智能数问场景来帮助您熟悉API的使用。
+基于析言GBI的[运行sql生成](raw/_short/api-dataanalysisgbi-2024-08-23-runsqlgeneration-0b7792527692fa16.md)（例如：本示例中的`RunSqlGenerationRequest`类），通过实现智能数问场景来帮助您熟悉API的使用。
 
 #### Java
 
@@ -353,7 +353,7 @@ cnx.close()
 
 ### 步骤五：调API进行结果分析
 
-基于析言GBI的[执行结果分析](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-intelligent-asking-number/api-dataanalysisgbi-2024-08-23-dir-local-sql-execution-mode/api-dataanalysisgbi-2024-08-23-rundataresultanalysis.md)（例如：本示例中的`RunDataResultAnalysisRequest`类），通过实现智能数问场景来帮助您熟悉API的使用。
+基于析言GBI的[执行结果分析](raw/_short/api-dataanalysisgbi-2024-08-23-rundataresultanal-896d63efdafddc42.md)（例如：本示例中的`RunDataResultAnalysisRequest`类），通过实现智能数问场景来帮助您熟悉API的使用。
 
 **说明**入参中的RequestId参数，需要填入步骤三的结果中返回的RequestId，以此来满足上下文一致。
 

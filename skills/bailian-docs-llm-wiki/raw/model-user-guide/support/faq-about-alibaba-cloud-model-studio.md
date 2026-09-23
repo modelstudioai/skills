@@ -69,7 +69,9 @@ curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
     
 3.  **如何安装SDK?**
     
-    阿里云百炼目前支持Java和Python语言的SDK。详情请参见[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+    DashScope SDK 支持 Java 和 Python。详情请参见[安装SDK](raw/model-api-reference/preparations/install-sdk.md)。
+    
+    多模态交互模型的 SDK 详情请参见 [Realtime API](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)。
     
 4.  **Assistant API 调用 function call ，用户需要依次调用两个本地函数，现在支持吗？**
     
@@ -110,7 +112,7 @@ curl --location 'https://bailian.aliyuncs.com/v2/app/completions' \
     
 5.  **我的产品接入了千问大模型，需要上架到微信小程序等其他应用商店，需要提供合作协议用于上架产品，应该怎么申请？**
     
-    a.备案号获取流程请查看[应用合规备案](raw/model-user-guide/security-and-compliance/compliance-and-launch-filing-guide-for-ai-apps-powered-by-the-tongyi-model.md)；
+    a.备案号获取流程请查看[应用合规备案](raw/_short/compliance-and-launch-filing-guide-for-ai-apps-p-d8d98ba3cff2bf6f.md)；
     
     b.如需申请千问系列模型的合作协议，请联系您的商务经理获取。如需商业化算法/模型备案指导服务，请前往[算法/模型备案咨询](https://page.aliyun.com/form/act1311146645/index.htm)页面提交申请。
     

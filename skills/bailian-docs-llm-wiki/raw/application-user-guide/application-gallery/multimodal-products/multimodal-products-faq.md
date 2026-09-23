@@ -30,7 +30,7 @@ Duplex（全双工）模式：支持同时双向通信，可实现边听边说�
 
 #### 音频数据采集和播放的格式要求是什么？
 
-详情参见：[音频采集和播放说明](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/audio-capture-and-playback-instructions.md)。
+详情参见：[音频采集和播放说明](raw/_short/audio-capture-and-playback-instructions-334cf22feeb64190.md)。
 
 #### 调用接口时 task\_id 需要每次生成新的吗？
 
@@ -60,7 +60,7 @@ Duplex（全双工）模式：支持同时双向通信，可实现边听边说�
 
 检查音频文件格式：
 
--   建议您检查待测试的语音格式是否符合语音识别输入格式要求，格式要求请参见[音频采集和播放说明](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/audio-capture-and-playback-instructions.md)。
+-   建议您检查待测试的语音格式是否符合语音识别输入格式要求，格式要求请参见[音频采集和播放说明](raw/_short/audio-capture-and-playback-instructions-334cf22feeb64190.md)。
 -   将待测试语音转换成16kHz、16 bit采样位数、单声道（mono）无压缩的WAV文件。
 
 #### Tap2Talk/Duplex 模式下，发送音频没有最终结果返回？

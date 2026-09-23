@@ -255,5 +255,5 @@ public class BailianAgentApplication {
 ## 了解更多
 
 -   [Spring AI Alibaba](https://java2ai.com/?spm=4347728f.638c0b20.0.0.23f87982NTcSMy)：提供文档教程、实战博客和开发者社区，帮助您快速开发Java生成式AI应用。
--   [工作流与旧版智能体应用 API应用 DashScope API 参考](raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)：提供应用调用相关的接口说明与调用示例。
+-   [工作流与旧版智能体应用 API应用 DashScope API 参考](raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)：提供应用调用相关的接口说明与调用示例。
 -   [spring-ai-alibaba-examples](https://github.com/springaialibaba/spring-ai-alibaba-examples/tree/main/spring-ai-alibaba-rag-example?spm=4347728f.4b30b334.0.0.63ed66f4GcFkdj)：更多Spring AI Alibaba示例代码的Github仓库地址。

@@ -1,0 +1,18 @@
+# 知识库
+
+-   [CreateIndex](raw/_short/api-bailian-2023-12-29-createindex-8bc613c75f8af371.md)
+-   [GetIndexJobStatus](raw/_short/api-bailian-2023-12-29-getindexjobstatus-1e88b6ccfffe0fe4.md)
+-   [SubmitIndexJob - 提交知识库创建任务](raw/_short/api-bailian-2023-12-29-submitindexjob-63b38294171880d4.md)
+-   [SubmitIndexAddDocumentsJob](raw/_short/api-bailian-2023-12-29-submitindexadddocumentsjo-ec4f5cf285e2c447.md)
+-   [Retrieve](raw/_short/api-bailian-2023-12-29-retrieve-c8e6b8d718a30a84.md)
+-   [ListIndexDocuments](raw/_short/api-bailian-2023-12-29-listindexdocuments-9f0db0388c421903.md)
+-   [ListIndexFileDetails](raw/_short/api-bailian-2023-12-29-listindexfiledetails-0e2036d0ef0d8fe8.md)
+-   [UpdateIndex - 更新知识库](raw/_short/api-bailian-2023-12-29-updateindex-551997e1d335e340.md)
+-   [DeleteIndexDocument - 删除知识库下的文件](raw/_short/api-bailian-2023-12-29-deleteindexdocument-0792a83f5a741348.md)
+-   [ListIndices](raw/_short/api-bailian-2023-12-29-listindices-c555173be752eaaf.md)
+-   [DeleteIndex - 删除知识库](raw/_short/api-bailian-2023-12-29-deleteindex-500502bd6df1c49c.md)
+-   [ListChunks - 查询索引下的分片列表](raw/_short/api-bailian-2023-12-29-listchunks-30a6c87b93a583c6.md)
+-   [AddChunk](raw/_short/api-bailian-2023-12-29-addchunk-1607bcddf6713fd9.md)
+-   [UpdateChunk - 修改切片](raw/_short/api-bailian-2023-12-29-updatechunk-589b46fcc24261f8.md)
+-   [DeleteChunk - 删除切片](raw/_short/api-bailian-2023-12-29-deletechunk-d249422088735d90.md)
+-   [GetIndexMonitor - 获取知识库监控数据](raw/_short/api-bailian-2023-12-29-getindexmonitor-3a609181d5c9c034.md)

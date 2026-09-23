@@ -151,4 +151,4 @@ RPM（每分钟请求数）
 ## 调用方式
 
 -   [非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)
--   [HTTP API](raw/model-api-reference/audio-api-references/speech-recognition-api-reference/fun-asr-recorded-speech-recognition-api-reference/fun-asr-recorded-speech-recognition-http-api.md)
+-   [HTTP API](raw/_short/fun-asr-recorded-speech-recognition-http-api-52f7db644c1e5209.md)

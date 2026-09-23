@@ -327,7 +327,7 @@
 2.  将鼠标悬浮于工具名称旁边的![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p902180.png)图标上。
 3.  单击![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/1891396371/p902183.png)图标，复制工具ID。
 
--   当通过API调用应用时，如果应用中关联的插件存在业务透传参数或开启了**用户级鉴权**，则需要通过参数`biz_params`传递鉴权信息或透传参数信息。具体操作请参见[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)。
+-   当通过API调用应用时，如果应用中关联的插件存在业务透传参数或开启了**用户级鉴权**，则需要通过参数`biz_params`传递鉴权信息或透传参数信息。具体操作请参见[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)。
 -   通过Assistant API调用工具。请在[Assistant API文档](https://help.aliyun.com/zh/model-studio/quick-start-of-assistant-api)中搜索`tools`关键字，查看如何使用Assistant API调用工具。
 
 ## 管理自定义插件与工具

@@ -2,9 +2,13 @@
 
 删除一条事实记忆，删除后不可恢复
 
-删除指定的事实记忆条目。删除后不可恢复。
+删除指定的记忆节点。
 
 **警告**删除操作不可逆，请谨慎操作。
+
+## 请求方法与路径
+
+`DELETE https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/{memory_node_id}`
 
 ## 请求参数
 
@@ -14,6 +18,8 @@
 
 必填
 
+位置
+
 说明
 
 `memory_node_id`
@@ -22,16 +28,41 @@ string
 
 是
 
-记忆节点 ID（路径参数）
+Path
 
-## 代码示例
+记忆节点 ID
+
+`memory_library_id`
+
+string
+
+否
+
+Query
+
+记忆库 ID。不传时按默认记忆库解析
+
+## 返回结果
+
+字段
+
+类型
+
+说明
+
+`request_id`
+
+string
+
+请求 ID
+
+## 请求示例
 
 cURL
 
 ```
-curl -X DELETE "https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/{memory_node_id}" \
-  --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
-  --header "Content-Type: application/json"
+curl --location --request DELETE 'https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/42dfc089dfa7409889966960a95c3b7e?memory_library_id=memory_library_001' \
+  --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
 Python
@@ -60,7 +91,7 @@ asyncio.run(main())
 
 ```
 {
-  "request_id": "8e7bf48d-91ea-9ed1-a2b3-6266e3071e44"
+  "request_id": "a1b2c3d4-5678-90ab-cdef-1234567890ab"
 }
 ```
 

@@ -2,7 +2,11 @@
 
 分页查看用户的所有事实记忆
 
-分页查看指定用户的所有事实记忆。支持通过 `user_id` 筛选。
+分页列出指定子用户的记忆节点，可按记忆库和项目筛选。
+
+## 请求方法与路径
+
+`GET https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes`
 
 ## 请求参数
 
@@ -12,6 +16,8 @@
 
 必填
 
+位置
+
 说明
 
 `user_id`
@@ -20,32 +26,161 @@ string
 
 是
 
-记忆实体 ID
+Query
 
-`page_size`
+子用户 ID，用于隔离记忆
 
-number
+`memory_library_id`
+
+string
 
 否
 
-每页数量
+Query
+
+记忆库 ID
+
+`project_id`
+
+string
+
+否
+
+Query
+
+项目 ID
 
 `page_num`
 
-number
+integer
 
 否
 
-页码，从 1 开始
+Query
 
-## 代码示例
+页码，默认值为 `1`
+
+`page_size`
+
+integer
+
+否
+
+Query
+
+每页数量，默认值为 `10`
+
+## 返回结果
+
+字段
+
+类型
+
+说明
+
+`request_id`
+
+string
+
+请求 ID
+
+`memory_nodes`
+
+array
+
+记忆节点列表
+
+`memory_nodes[].memory_node_id`
+
+string
+
+记忆节点 ID
+
+`memory_nodes[].content`
+
+string
+
+记忆内容
+
+`memory_nodes[].timestamp`
+
+integer
+
+消息时间戳
+
+`memory_nodes[].created_at`
+
+integer
+
+创建时间
+
+`memory_nodes[].updated_at`
+
+integer
+
+更新时间
+
+`memory_nodes[].media_desc`
+
+string
+
+多模态信息描述
+
+`memory_nodes[].meta_data`
+
+object
+
+自定义元信息
+
+`memory_nodes[].project_id`
+
+string
+
+添加或更新时指定的项目 ID，可能为空
+
+`memory_nodes[].memory_type`
+
+string
+
+记忆节点类型
+
+`memory_nodes[].status`
+
+string
+
+记忆节点状态
+
+`memory_nodes[].multimodal_medias`
+
+array
+
+多模态资源，存在时返回
+
+`page_num`
+
+integer
+
+当前页码
+
+`page_size`
+
+integer
+
+每页数量
+
+`total`
+
+integer
+
+记忆节点总数
+
+## 请求示例
 
 cURL
 
 ```
-curl -X GET "https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes?user_id=user_001&page_size=10&page_num=1" \
-  --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
-  --header "Content-Type: application/json"
+curl --location 'https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes?user_id=user_001&memory_library_id=memory_library_001&project_id=project_001&page_size=10&page_num=1' \
+  --header "Authorization: Bearer $DASHSCOPE_API_KEY"
 ```
 
 Python
@@ -76,36 +211,25 @@ asyncio.run(main())
 
 ```
 {
+  "request_id": "c04d36e2-8fe8-9aad-b7ae-be40d5852c35",
   "memory_nodes": [
     {
-      "content": "用户每天上午9点需要喝水提醒",
-      "created_at": 1789614241,
+      "memory_node_id": "4fe7ea3b791a4453b5e1d117da6b7483",
+      "content": "用户后天要坐汽车去上海出差，记得带身份证",
+      "timestamp": 1781765684,
+      "created_at": 1781765715,
+      "updated_at": 1781765715,
       "media_desc": "",
-      "memory_node_id": "91e628e811134e5598154a1719791a68",
-      "memory_type": "observation",
       "meta_data": {},
-      "project_id": "774b2f671e3c447ab7f5d02b1e2b9453",
-      "status": "valid",
-      "timestamp": 1789606800,
-      "updated_at": 1789614241
-    },
-    {
-      "content": "用户需要明天10点提醒整理会议纪要",
-      "created_at": 1789614241,
-      "media_desc": "",
-      "memory_node_id": "56d43a6ec74548bcb0ad59fdedd28569",
+      "project_id": "project_001",
       "memory_type": "observation",
-      "meta_data": {},
-      "project_id": "774b2f671e3c447ab7f5d02b1e2b9453",
       "status": "valid",
-      "timestamp": 1789696800,
-      "updated_at": 1789614241
+      "multimodal_medias": []
     }
   ],
   "page_num": 1,
   "page_size": 10,
-  "request_id": "1c1c41bf-a375-9ad0-b870-8d41b20a3a67",
-  "total": 2
+  "total": 1
 }
 ```
 

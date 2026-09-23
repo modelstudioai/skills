@@ -1,3 +1,3 @@
 # 视频生成
 
--   [部署模型](raw/model-api-reference/model-production/deployments-api/model-deployment-video-generation-api/video-generation-deploy-model-api.md)
+-   [部署模型](raw/_short/video-generation-deploy-model-api-83485cc2bfb54b4c.md)

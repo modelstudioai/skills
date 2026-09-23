@@ -50,7 +50,7 @@
 -   通义千问3-实时语音合成：通义千问3-TTS-Flash-Realtime、通义千问3-TTS-instruct-Flash-Realtime、通义千问3-TTS-声音设计、通义千问3-TTS-声音复刻。
 -   其他语音合成模型：Sambert语音合成模型、多模态交互轻量版语音合成、多模态交互推荐TTS。
 
-三方语音模型：支持接入三方语音模型，具体方法参见[调用三方语音模型](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/third-party-voice-integration.md)。
+三方语音模型：支持接入三方语音模型，具体方法参见[调用三方语音模型](raw/_short/third-party-voice-integration-541ba7ea88013a0d.md)。
 
 **语音合成**下拉菜单中各 CosyVoice 模型的特点标签：
 
@@ -362,7 +362,7 @@
             -   **启动指令**：如"拍照看看前边的猫是什么品种"
             -   **视觉理解模型**：选择推荐模型（视觉理解高级版或均衡版）
             -   **系统提示词**：包含人物设定（如"你是小云，AI 多模态交互助手"）和风格设定（如"亲切友好口语化"）
-    -   支持IPC模式：将图片直接送入Agent进行识别，适用于带摄像头产品的图片理解、拍学机或学习机内的拍照识图等功能。详情可查看：[通过HTTP协议接入拍照问答Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/vqa-agent/vqa-agent-through-the-http-protocol.md)。
+    -   支持IPC模式：将图片直接送入Agent进行识别，适用于带摄像头产品的图片理解、拍学机或学习机内的拍照识图等功能。详情可查看：[通过HTTP协议接入拍照问答Agent](raw/_short/vqa-agent-through-the-http-protocol-e9b4e3c30a32e238.md)。
         
         **说明**直通链路：是指不通过语音识别（ASR）、意图识别、语音合成（TTS）等节点，直接将请求送入Agent，并将Agent的回答直接返回的链路。
         
@@ -399,13 +399,13 @@
         -   在[听悟-智能纪要Agent](https://bailian.console.aliyun.com/?spm=a2ty02.31808181.d_app-market.1.27b274a1lPyXvF&tab=app#/app/app-market/tingwu/tingwu-meeting-summary)中创建应用并发布，按需配置总结能力
         -   在多模态应用中勾选录音纪要Agent，并选择配置好的通义听悟应用
         -   支持设置语音指令，退出、暂停需要配置唤醒词，避免在会议中误打断录音
-        -   开发接入，请查看文档：[接入听悟智能纪要Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/fast-integrate-tingwu-meeting-agent.md)
+        -   开发接入，请查看文档：[接入听悟智能纪要Agent](raw/_short/fast-integrate-tingwu-meeting-agent-5f46fa3053dd1530.md)
     -   单击**通义听悟-录音**Agent 右侧的设置图标打开配置弹窗，配置项分为**实时录音总结设置**（启动指令、退出/暂停唤醒词、恢复指令）和**录音文件总结设置**（启动指令、退出指令）两部分。
         
 -   音乐电台：推荐和随机播放舒缓的轻音乐（无人声）。
     
     -   在**添加应用**对话框的**推荐应用**页签中，勾选**音乐电台**应用，单击**确定**完成添加。
--   图像生成：适用于壁纸生成、涂鸦作画、照片美化、图像风格化等各类图像生成场景。目前仅支持直通链路。接入方式请参考：[通过HTTP协议接入图像生成Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/generateimgagent/image-agent.md)。
+-   图像生成：适用于壁纸生成、涂鸦作画、照片美化、图像风格化等各类图像生成场景。目前仅支持直通链路。接入方式请参考：[通过HTTP协议接入图像生成Agent](raw/_short/image-agent-6be6c01a059e7f03.md)。
     
     -   在多模态应用配置页的**Agent**页签中，找到**百炼应用**区域，单击**+**按钮打开**添加应用**弹窗，在**推荐应用**列表中勾选需要的应用（如**图像生成**），然后单击**确定**完成添加。
     -   点开右侧设置，可配置三种图像生成模式：**涂鸦生图**、**图生图**、**文生图**，通过开关分别启用或关闭。以**文生图**为例，展开后可选择模型（如**文生图高级版**）并填写提示词（上限 800 字符）。
@@ -426,7 +426,7 @@
             
             -   **启动指令**：如`拍照看看前边的猫是什么品种`
             -   **系统提示词**：包含人物设定（如"你是小云，AI 多模态交互助手"）和风格要求（如"亲切友好口语化"）
-    -   支持IPC模式：将图片直接送入Agent进行识别，适用于带摄像头产品的图片理解、拍学机或学习机内的拍照识图等功能。详情可查看：[通过HTTP协议接入拍照问答Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/vqa-agent/vqa-agent-through-the-http-protocol.md)。
+    -   支持IPC模式：将图片直接送入Agent进行识别，适用于带摄像头产品的图片理解、拍学机或学习机内的拍照识图等功能。详情可查看：[通过HTTP协议接入拍照问答Agent](raw/_short/vqa-agent-through-the-http-protocol-e9b4e3c30a32e238.md)。
         
         **说明**直通链路：是指不通过语音识别（ASR）、意图识别、语音合成（TTS）等节点，直接将请求送入Agent，并将Agent的回答直接返回的链路。
         
@@ -463,7 +463,7 @@
         -   在[听悟-智能纪要Agent](https://bailian.console.aliyun.com/?spm=a2ty02.31808181.d_app-market.1.27b274a1lPyXvF&tab=app#/app/app-market/tingwu/tingwu-meeting-summary)中创建应用并发布，按需配置总结能力
         -   在多模态应用中勾选录音纪要Agent，并选择配置好的通义听悟应用
         -   支持设置语音指令，退出、暂停需要配置唤醒词，避免在会议中误打断录音
-        -   开发接入，请查看文档：[接入听悟智能纪要Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/fast-integrate-tingwu-meeting-agent.md)
+        -   开发接入，请查看文档：[接入听悟智能纪要Agent](raw/_short/fast-integrate-tingwu-meeting-agent-5f46fa3053dd1530.md)
     -   单击**通义听悟-录音**Agent 右侧的设置图标打开配置面板，在**选择通义听悟应用**下拉框中选择已发布的智能纪要应用，然后分别配置：
         
         -   **实时录音总结设置**：启动指令、退出/暂停唤醒词、恢复指令
@@ -471,7 +471,7 @@
 -   音乐电台：推荐和随机播放舒缓的轻音乐（无人声）。
     
     -   在**添加应用**对话框的**推荐应用**页签中，勾选**音乐电台**应用卡片，单击**确定**完成添加。
--   图像生成：适用于壁纸生成、涂鸦作画、照片美化、图像风格化等各类图像生成场景。目前仅支持直通链路。接入方式请参考：[通过HTTP协议接入图像生成Agent](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/generateimgagent/image-agent.md)。
+-   图像生成：适用于壁纸生成、涂鸦作画、照片美化、图像风格化等各类图像生成场景。目前仅支持直通链路。接入方式请参考：[通过HTTP协议接入图像生成Agent](raw/_short/image-agent-6be6c01a059e7f03.md)。
     
     -   在多模态应用的**Agent**配置页签中，找到**百炼应用**区域，单击**+**按钮打开**添加应用**弹窗，在**推荐应用**或**我的应用**列表中勾选需要接入的应用（如**图像生成**），然后单击**确定**完成添加。
     -   在**配置应用**面板中，图像生成包含三个子功能开关：**涂鸦生图**、**图生图**和**文生图**。开启**文生图**后，需选择模型（如**文生图高级版**）并填写**提示词**（必填，最多 800 字符），完成后单击**确定**。

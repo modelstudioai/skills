@@ -18,7 +18,7 @@
 
 ### TingWuRealtimeParam.java
 
-参数配置类。以[工业生产指令转写交互协议（WebSocket）](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-industrial-instruction/tingwu-industrial-instruction-api/tingwu-industrial-instruction-api-websocket.md)为例，创建任务主要参数如下：
+参数配置类。以[工业生产指令转写交互协议（WebSocket）](raw/_short/tingwu-industrial-instruction-api-websocket-08c1283fedfe256b.md)为例，创建任务主要参数如下：
 
 **名称**
 
@@ -186,7 +186,7 @@ public abstract class TingWuRealtimeCallback {
 
 ## 响应结果说明
 
-以[工业生产指令转写交互协议（WebSocket）](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-industrial-instruction/tingwu-industrial-instruction-api/tingwu-industrial-instruction-api-websocket.md)为例，在指令或音频发送后，服务端会向您发送不同种类的事件，每个事件代表不同的处理阶段，请严格遵循时序图对不同事件做相应处理。
+以[工业生产指令转写交互协议（WebSocket）](raw/_short/tingwu-industrial-instruction-api-websocket-08c1283fedfe256b.md)为例，在指令或音频发送后，服务端会向您发送不同种类的事件，每个事件代表不同的处理阶段，请严格遵循时序图对不同事件做相应处理。
 
 事件总共分为四种，分别是speech-listen事件、recognize-result事件、ai-result事件及speech-end事件。
 
@@ -752,7 +752,7 @@ task-failed事件的示例如下：
 }
 ```
 
-具体错误码及其含义，可以参考[错误码](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-industrial-instruction/tingwu-industrial-instruction-api/tingwu-industrial-instruction-api-websocket.md)。
+具体错误码及其含义，可以参考[错误码](raw/_short/tingwu-industrial-instruction-api-websocket-08c1283fedfe256b.md)。
 
 ### 错误码说明
 

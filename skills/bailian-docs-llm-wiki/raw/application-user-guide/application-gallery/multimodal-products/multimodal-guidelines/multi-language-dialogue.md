@@ -107,7 +107,7 @@
 
 -   不同语言可使用、推荐使用的语音模型如下表：
     
-    -   表格为空，代表当前语种无语音模型可支持，需[接入三方模型能力](raw/application-user-guide/application-gallery/multimodal-products/multimodal-api-references/third-party-voice-integration.md)。
+    -   表格为空，代表当前语种无语音模型可支持，需[接入三方模型能力](raw/_short/third-party-voice-integration-541ba7ea88013a0d.md)。
 
 **语种**
 

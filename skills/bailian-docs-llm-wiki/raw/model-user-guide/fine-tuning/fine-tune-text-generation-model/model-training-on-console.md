@@ -18,7 +18,7 @@
 
 CPT（继续预训练，Continual Pre-Training）目的是通过海量的无标记训练数据，**提升模型在特定行业的表现。**
 
-除了 CPT、SFT、DPO 三种训练方式外，百炼还支持**RL（强化学习）**训练方式。RL 通过奖励信号优化模型行为，适用于需要通过人类反馈或自动评分持续提升模型表现的场景。RL 训练的详细操作请参见[强化学习](raw/model-user-guide/fine-tuning/rl-training-overview.md)。
+除了 CPT、SFT、DPO 三种训练方式外，百炼还支持**RL（强化学习）**训练方式。RL 通过奖励信号优化模型行为，适用于需要通过人类反馈或自动评分持续提升模型表现的场景。RL 训练的详细操作请参见[强化学习](raw/model-user-guide/fine-tuning/rl-overview/rl-training-overview.md)。
 
 SFT-有监督-模型微调（_Supervised Fine-Tuning_）目的是通过针对性的数据集和训练，**提升模型在特定业务的表现。**
 

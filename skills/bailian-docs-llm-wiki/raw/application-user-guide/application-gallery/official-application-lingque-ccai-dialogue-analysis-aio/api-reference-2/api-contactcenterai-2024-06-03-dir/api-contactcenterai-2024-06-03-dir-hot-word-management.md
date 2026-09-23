@@ -1,7 +1,0 @@
-# 热词管理
-
--   [CreateVocab - 创建热词](raw/application-user-guide/application-gallery/official-application-lingque-ccai-dialogue-analysis-aio/api-reference-2/api-contactcenterai-2024-06-03-dir/api-contactcenterai-2024-06-03-dir-hot-word-management/api-contactcenterai-2024-06-03-createvocab.md)
--   [UpdateVocab - 修改热词](raw/application-user-guide/application-gallery/official-application-lingque-ccai-dialogue-analysis-aio/api-reference-2/api-contactcenterai-2024-06-03-dir/api-contactcenterai-2024-06-03-dir-hot-word-management/api-contactcenterai-2024-06-03-updatevocab.md)
--   [ListVocab - 获取热词列表](raw/application-user-guide/application-gallery/official-application-lingque-ccai-dialogue-analysis-aio/api-reference-2/api-contactcenterai-2024-06-03-dir/api-contactcenterai-2024-06-03-dir-hot-word-management/api-contactcenterai-2024-06-03-listvocab.md)
--   [DeleteVocab - 删除热词](raw/application-user-guide/application-gallery/official-application-lingque-ccai-dialogue-analysis-aio/api-reference-2/api-contactcenterai-2024-06-03-dir/api-contactcenterai-2024-06-03-dir-hot-word-management/api-contactcenterai-2024-06-03-deletevocab.md)
--   [GetVocab - 获取热词](raw/application-user-guide/application-gallery/official-application-lingque-ccai-dialogue-analysis-aio/api-reference-2/api-contactcenterai-2024-06-03-dir/api-contactcenterai-2024-06-03-dir-hot-word-management/api-contactcenterai-2024-06-03-getvocab.md)

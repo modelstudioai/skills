@@ -58,7 +58,7 @@ AI Coding · 给现有系统加功能
 
 一句话描述需求，AI 读入现有代码增量加功能不动老逻辑。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-ai-coding-feature.md)
+[查看攻略](raw/_short/token-plan-playbook-ai-coding-feature-962a0be896620b8d.md)
 
 AI Coding / 开发
 
@@ -82,7 +82,7 @@ AI 代码安全审计 · 定位到修复
 
 把代码交给模型做安全审计，逐条给出漏洞、风险等级与可替换的修复代码。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-code-security.md)
+[查看攻略](raw/_short/token-plan-playbook-code-security-af91bc8ad7db26cd.md)
 
 AI Coding / 开发
 
@@ -90,7 +90,7 @@ AI Coding / 开发
 
 写一份《技术文档》讲清功能与验收标准，模型一次性交付可运行系统，门槛从会写代码变成会写需求。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-doc-driven-dev.md)
+[查看攻略](raw/_short/token-plan-playbook-doc-driven-dev-bc0afcb2198d909b.md)
 
 AI Coding / 开发
 
@@ -114,7 +114,7 @@ AI Coding / 开发
 
 上传数据看板截图，Qwen3.8-flash 视觉理解照结构还原，图表用纯 CSS 绘制、数字照抄，产出零外部依赖的单文件 HTML。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-screenshot-to-code.md)
+[查看攻略](raw/_short/token-plan-playbook-screenshot-to-code-79f072caf03bea35.md)
 
 AI Coding / 开发
 
@@ -130,7 +130,7 @@ AI Coding / 开发
 
 输入未提交的 git diff，模型自动拆成多条 commit，写出符合 Conventional Commits 的标题正文并标注破坏性改动。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-coding/token-plan-playbook-commit-writer.md)
+[查看攻略](raw/_short/token-plan-playbook-commit-writer-1b7713f2df96c882.md)
 
 AI Coding / 开发
 
@@ -146,7 +146,7 @@ AI Coding / 开发
 
 一个动物词生成儿童童话与三拍脚本，再文生视频出 5 秒动画。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-kids-animal-video.md)
+[查看攻略](raw/_short/token-plan-playbook-kids-animal-video-bc4af3ec8fbb11c4.md)
 
 自媒体 / 内容创作
 
@@ -154,7 +154,7 @@ AI Coding / 开发
 
 语音合成模型把童话文本念成温柔人声，输出睡前故事音频。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-bedtime-story-tts.md)
+[查看攻略](raw/_short/token-plan-playbook-bedtime-story-tts-403633337202387f.md)
 
 自媒体 / 内容创作
 
@@ -162,7 +162,7 @@ AI Coding / 开发
 
 一句话描述形象，文生图出头像，再用参考图编辑出角色一致的表情包。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-ip-avatar-sticker.md)
+[查看攻略](raw/_short/token-plan-playbook-ip-avatar-sticker-0ccd0b05e153900f.md)
 
 自媒体 / 内容创作
 
@@ -170,7 +170,7 @@ AI Coding / 开发
 
 文本模型写标题正文与标签，文生图出竖版封面并把标题渲染进画面。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-redbook-cover.md)
+[查看攻略](raw/_short/token-plan-playbook-redbook-cover-3657f5691342dfce.md)
 
 自媒体 / 内容创作
 
@@ -178,7 +178,7 @@ AI Coding / 开发
 
 深度思考模型把干货稿改成 60 秒口播脚本，按 JSON 逐镜输出。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-drama-script.md)
+[查看攻略](raw/_short/token-plan-playbook-drama-script-bdc000a82b7e1a0b.md)
 
 自媒体 / 内容创作
 
@@ -186,7 +186,7 @@ AI Coding / 开发
 
 一张商品图，让产品不动、只有光影流转，生成主图展示短视频。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-product-video.md)
+[查看攻略](raw/_short/token-plan-playbook-product-video-da5a6d367da9050d.md)
 
 自媒体 / 内容创作
 
@@ -194,7 +194,7 @@ AI Coding / 开发
 
 把运动写成可测量的数字，让图生视频真正走位而不原地踏步。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-motion-control.md)
+[查看攻略](raw/_short/token-plan-playbook-motion-control-290c5078fe965fa1.md)
 
 自媒体 / 内容创作
 
@@ -202,7 +202,7 @@ AI Coding / 开发
 
 把身份锁定写在第一句，只让模型改服装场景，批量出同一个人的不同造型。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-content/token-plan-playbook-outfit-change.md)
+[查看攻略](raw/_short/token-plan-playbook-outfit-change-85c7d75191ee2aa6.md)
 
 资料与数据处理
 
@@ -210,7 +210,7 @@ AI Coding / 开发
 
 不把整表塞给模型，只发表头与样本让它写清洗分析脚本，数据留在本地跑。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-sheet-analysis.md)
+[查看攻略](raw/_short/token-plan-playbook-sheet-analysis-0eb92a365e8a7276.md)
 
 资料与数据处理
 
@@ -226,7 +226,7 @@ AI Coding / 开发
 
 让模型把关联条款串起来看，挑出对己方不利的组合型风险。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-data/token-plan-playbook-contract-review.md)
+[查看攻略](raw/_short/token-plan-playbook-contract-review-bfdb57c72f806c64.md)
 
 资料与数据处理
 
@@ -298,7 +298,7 @@ OpenClaw 个人任务管家
 
 一句话交办，OpenClaw 自动编排文本、图片生成与联网搜索，端到端办成一件事。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-openclaw-agent.md)
+[查看攻略](raw/_short/token-plan-playbook-openclaw-agent-e1fc7b651dc22aee.md)
 
 生活娱乐
 
@@ -306,7 +306,7 @@ OpenClaw 个人任务管家
 
 一句话交办，模型一次调用里自主编排联网、算账、排程，跑完多步出游规划。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-life/token-plan-playbook-weekend-planner.md)
+[查看攻略](raw/_short/token-plan-playbook-weekend-planner-068d8e8c60ea6f9d.md)
 
 生活娱乐
 
@@ -338,7 +338,7 @@ OpenClaw 个人任务管家
 
 对着 JD 先诊断简历差距，再用 STAR 法则重写经历。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-career/token-plan-playbook-resume-doctor.md)
+[查看攻略](raw/_short/token-plan-playbook-resume-doctor-c0eacf5b580d7227.md)
 
 求职职场
 
@@ -346,7 +346,7 @@ AI 面试教练 · 出题追问打分
 
 模型扮演面试官出题、追问、打分，帮你逐轮复盘提分。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-career/token-plan-playbook-interview-coach.md)
+[查看攻略](raw/_short/token-plan-playbook-interview-coach-c89e8809bd6937aa.md)
 
 求职职场
 
@@ -362,7 +362,7 @@ AI 面试教练 · 出题追问打分
 
 文本模型把群聊素材转成 story.json，本地离线渲染成 HTML 与 PNG 长图。
 
-[查看攻略](raw/model-user-guide/token-plan-guide/token-plan-playbooks/token-plan-playbook-career/token-plan-playbook-group-daily-report.md)
+[查看攻略](raw/_short/token-plan-playbook-group-daily-report-daf2b3fe92f5b3e4.md)
 
 求职职场
 

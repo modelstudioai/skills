@@ -1,36 +1,42 @@
 # application gallery
 
-应用广场是百炼平台提供的预置应用集合，面向开发者提供开箱即用的行业级 Agent 和多模态能力封装。所有应用均基于平台统一 Runtime 运行，支持快速集成、参数化配置与轻量定制。开发者可通过控制台或 OpenAPI 直接调用，无需从零构建底层模型链路。
+应用广场是百炼平台提供的预置应用集合，面向开发者提供开箱即用的行业级 Agent 和多模态能力封装。所有应用均基于平台统一的 Runtime 执行环境部署，支持快速集成、参数化调用与轻量定制。开发者可通过控制台或 OpenAPI 直接访问，无需从零构建底层模型链路。
 
 ## 支持的模型与功能
 
-应用广场中的每个应用已绑定适配的底层模型（如 Qwen-VL、Qwen-Audio、Qwen2.5-72B 等）及配套工具集，覆盖教育辅导、语音对话分析、客服机器人、数据挖掘、深度搜索、UI 自动化等场景。例如，[官方应用-通义拍照解题辅导](../../raw/application-user-guide/application-gallery/edu-tutor.md) 基于多模态理解模型实现图像+文本联合推理；[通义法睿](../../raw/application-user-guide/application-gallery/tongyi-farui.md) 集成法律垂类微调模型与法规知识图谱；[通义 UI Agent](../../raw/application-user-guide/application-gallery/ui-agent.md) 则依赖视觉定位与动作规划双模块协同。
+应用广场中的每个应用均已绑定特定模型栈与工作流逻辑，例如：
+- 通义法睿（`tongyi-farui`）基于法律垂域微调模型 + 法规知识图谱检索；
+- 通义 UI Agent 依赖 `qwen-vl-plus` 多模态模型 + 页面 DOM 解析与操作引擎；
+- 千问联网检索Agent 使用 `qwen-max` + 实时网页抓取与摘要模块。
 
-> **注意**：部分文档中提及的“支持 Qwen1.5-32B”已过时——当前所有新上线应用默认使用 Qwen2.5 系列模型，旧版模型仅在兼容模式下可选，详见 [官方应用-通义深度搜索](../../raw/application-user-guide/application-gallery/tongyi-deepsearch.md) 的 runtime 版本说明。
+全部官方应用列表及对应能力说明详见 [应用广场](../../raw/application-user-guide/application-gallery.md)。部分应用（如 [官方应用-通义听悟Agent](../../raw/application-user-guide/application-gallery/official-application-tingwu-agent.md)）还额外集成了语音转写、语义摘要与会议纪要生成等复合功能。
 
 ## 关键参数
 
-调用任一应用时，需传入以下通用参数：
-- `app_id`：应用唯一标识（如 `edu-tutor`, `tongyi-farui`），可在控制台应用列表页获取；
-- `input`：结构化输入对象，schema 因应用而异（如 `edu-tutor` 要求 `{"image_url": "...", "question": "..."}`，`web-search-agent` 要求 `{"query": "...", "max_results": 5}`）；
-- `parameters`（可选）：覆盖应用默认配置，常见字段包括 `temperature`、`max_tokens`、`enable_citation`（是否返回引用来源）等。
+调用任一应用时，需传入标准化请求体，核心字段包括：
+- `application_id`：应用唯一标识（如 `tongyi-farui`, `web-search-agent`），可在 [应用广场](../../raw/application-user-guide/application-gallery.md) 文档中查得；
+- `input`：字符串或结构化对象，格式依应用而异（例如 `tongyi-dianjin` 要求 `{"query": "...", "industry": "finance"}`）；
+- `parameters`（可选）：覆盖应用默认配置，如 `max_iterations=3`、`enable_web_search=true`；
+- `stream`（布尔值）：控制是否启用流式响应，仅部分应用支持（参见 [官方应用-通义深度搜索](../../raw/application-user-guide/application-gallery/tongyi-deepsearch.md) 的流式说明）。
 
-所有参数定义以各应用子文档为准，例如 [官方应用-伶鹊CCAI-对话分析AIO](../../raw/application-user-guide/application-gallery/official-application-lingque-ccai-dialogue-analysis-aio.md) 明确要求 `input` 必须包含 `transcript` 字段且长度 ≤ 10000 字符。
+> **注意**：`parameters` 字段的合法键名与取值范围因应用而异，部分文档（如 `xiyan-gbi.md`）未完整列出可覆盖参数，建议以实际 API Schema 或 SDK 类型定义为准。
 
 ## 使用方式
 
-1. **控制台调用**：进入「应用广场」页面 → 选择目标应用 → 点击「调试」，填写 input 并提交；
-2. **OpenAPI 调用**：POST `/v1/applications/{app_id}/invoke`，Header 中携带 `Authorization: Bearer <api_key>`；
-3. **嵌入 SDK**：使用 `@alibaba/bailian-sdk` 的 `invokeApplication()` 方法，传入 `app_id` 与 `input` 对象。
+1. **控制台接入**：在百炼控制台「应用广场」页选择目标应用 → 点击「调试」或「集成」→ 获取 `application_id` 与示例请求；
+2. **OpenAPI 调用**：向 `/v1/applications/{application_id}/invoke` 发送 POST 请求，携带认证 Header 与 JSON body；
+3. **SDK 集成**：使用 `alibabacloud-bailian20231219` Python/Java SDK，调用 `InvokeApplicationRequest` 方法。
 
-所有方式均共享同一鉴权体系与配额限制，无需额外开通权限。
+所有应用均遵循统一鉴权与限流策略，详细调用流程与错误码说明请参考 [应用广场](../../raw/application-user-guide/application-gallery.md)。
 
 ## 限制和注意事项
 
-- 单次请求 `input` 总大小上限为 10 MB（含 base64 图片/音频）；
-- 音频类应用（如 [官方应用-通义听悟Agent](../../raw/application-user-guide/application-gallery/official-application-tingwu-agent.md)）仅支持 WAV/MP3 格式，采样率须为 16kHz；
-- 应用间不共享会话状态，如需上下文连续，须自行维护 `session_id` 并在每次请求中显式传递（部分应用如 `lingque-ccai-voice-dialogue-robot` 已支持该字段）；
-- 免费试用额度仅适用于首次部署的前 3 个应用实例，超出后按实际 token 消耗计费。
+- 每个应用有独立的 QPS 与并发数限制（如 `web-search-agent` 默认 5 QPS），超出将返回 `429 Too Many Requests`；
+- 输入文本长度上限为 32768 tokens（含系统提示词），超长内容将被截断，不触发自动分块；
+- 应用间**不共享上下文状态**：连续多次调用同一 `application_id` 不构成会话，如需对话管理，须由客户端维护 `session_id` 并传入（部分应用如 `lingque-ccai-voice-dialogue-robot.md` 明确支持该字段）；
+- 非官方应用（用户自建应用）不可通过应用广场目录发现，仅能通过 `ListApplications` API 查询。
+
+> **注意**：文档中部分轻应用（如 [官方应用-全妙轻应用系列](../../raw/application-user-guide/application-gallery/quanmiao-light-application-series.md)）标注“支持私有化部署”，但当前平台版本仅开放 SaaS 模式调用，私有化能力尚未上线，该描述已过时。
 
 ## 来源文档
 

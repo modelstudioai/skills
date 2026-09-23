@@ -48,7 +48,7 @@ string
 
 是
 
-调优任务ID，可通过[创建训练任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)或列举训练任务接口获取。
+调优任务ID，可通过[创建训练任务](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)或列举训练任务接口获取。
 
 ft-202511111122-xxxx
 
@@ -164,7 +164,7 @@ string
 
 ### 请求示例
 
-请将 URL 中的 `<替换为调优任务job_id>` 完整替换为[创建训练任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)输出参数`job_id`的值。
+请将 URL 中的 `<替换为调优任务job_id>` 完整替换为[创建训练任务](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)输出参数`job_id`的值。
 
 > Windows CMD 请将`${DASHSCOPE_API_KEY}`替换为 `%DASHSCOPE_API_KEY%`，PowerShell 请替换为 `$env:DASHSCOPE_API_KEY`
 
@@ -238,7 +238,7 @@ string
 
 是
 
-调优任务ID，可通过[创建训练任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)或列举训练任务接口获取。
+调优任务ID，可通过[创建训练任务](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)或列举训练任务接口获取。
 
 ft-202511111122-xxxx
 
@@ -303,7 +303,7 @@ true
 
 ### 请求示例
 
--   `<替换为调优任务job_id>`：完整替换为[创建训练任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)输出参数`job_id`的值。
+-   `<替换为调优任务job_id>`：完整替换为[创建训练任务](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)输出参数`job_id`的值。
 -   `<替换为待导出的checkpoint>`：完整替换为checkpoint的值，例如“checkpoint-160”。
 -   `<替换为控制台展示的导出模型名称>`：完整替换为自定义的模型名称，仅用于控制台展示。
 
@@ -357,7 +357,7 @@ string
 
 是
 
-调优任务ID，可通过[创建训练任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)或列举训练任务接口获取。
+调优任务ID，可通过[创建训练任务](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)或列举训练任务接口获取。
 
 ft-202511111122-xxxx
 
@@ -397,7 +397,7 @@ checkpoint-160
 
 ### 请求示例
 
-请将 URL 中的 `<替换为调优任务job_id>` 完整替换为[创建训练任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)输出参数`job_id`的值。
+请将 URL 中的 `<替换为调优任务job_id>` 完整替换为[创建训练任务](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)输出参数`job_id`的值。
 
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为调优任务job_id>/validation-results' \

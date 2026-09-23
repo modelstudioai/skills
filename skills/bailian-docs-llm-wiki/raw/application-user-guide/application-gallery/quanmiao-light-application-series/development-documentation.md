@@ -1,4 +1,4 @@
 # 开发文档
 
--   [最佳实践](raw/application-user-guide/application-gallery/quanmiao-light-application-series/development-documentation/light-application-best-practices.md)
--   [API参考](raw/application-user-guide/application-gallery/quanmiao-light-application-series/development-documentation/api-reference-1.md)
+-   [最佳实践](raw/_short/light-application-best-practices-96db86be77d04898.md)
+-   [API参考](raw/_short/api-reference-1-5a23ca43bd921942.md)

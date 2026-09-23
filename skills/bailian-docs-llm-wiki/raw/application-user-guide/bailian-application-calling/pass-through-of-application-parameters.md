@@ -1446,4 +1446,4 @@ func main() {
 
 [调用智能体应用](raw/application-user-guide/bailian-application-calling/call-single-agent-application.md)、[调用工作流应用](raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md)：应用的调用方式及更多用法。
 
-[应用调用API](raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)：完整的参数列表和调用示例。
+[应用调用API](raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)：完整的参数列表和调用示例。

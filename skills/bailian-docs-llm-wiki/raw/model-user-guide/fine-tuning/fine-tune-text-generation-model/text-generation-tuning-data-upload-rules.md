@@ -538,7 +538,7 @@ RL 数据约束：
 
 -   数据量需大于 `batch_size`（默认 64）。几十至几百条可验证方案；正式训练数学推理 500~2000 条、Agent ≥1000 条、代码 ≥1000 题，数据量越大效果越优。
 -   训练集与验证集为两个独立 jsonl 文件，分别通过 `TrainingDataset`/`ValidationDataset` 上传（验证集可选）。
--   RL 通过 SDK 上传（`AgenticRL.run()`），非控制台打包通道；计费按 MTU 模型训练单元，非 Token。SDK 字段与提交方式详见[强化学习训练配置](raw/model-user-guide/fine-tuning/rl-training-overview/rl-training-config-monitoring.md)。
+-   RL 通过 SDK 上传（`AgenticRL.run()`），非控制台打包通道；计费按 MTU 模型训练单元，非 Token。SDK 字段与提交方式详见[强化学习训练配置](raw/model-user-guide/fine-tuning/rl-overview/rl-training-config-monitoring.md)。
 
 ## 多模态压缩包打包规则
 

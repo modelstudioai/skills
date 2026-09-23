@@ -395,5 +395,5 @@ speaker\_1\_voice
 
 需要用户的端侧和后台服务侧配合进行完整的体验来使用，完整的集成参考：
 
--   [实时转写能力集成](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/fast-integrate-tingwu-meeting-agent/realtime-tingwu-meeting-agent-integration.md)
--   [离线转写能力集成](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/fast-integrate-tingwu-meeting-agent/fast-integrate-offline-tingwu-meeting-agent.md)
+-   [实时转写能力集成](raw/_short/realtime-tingwu-meeting-agent-integration-08dbfb6b0961c68e.md)
+-   [离线转写能力集成](raw/_short/fast-integrate-offline-tingwu-meeting-agent-0c5f25d91e845fd6.md)

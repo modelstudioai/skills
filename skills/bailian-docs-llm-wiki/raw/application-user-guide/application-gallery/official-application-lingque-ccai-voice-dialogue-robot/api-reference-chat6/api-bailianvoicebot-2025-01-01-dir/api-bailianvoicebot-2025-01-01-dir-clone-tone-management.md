@@ -1,7 +1,0 @@
-# 克隆音管理
-
--   [ListCloneVoiceModels](raw/application-user-guide/application-gallery/official-application-lingque-ccai-voice-dialogue-robot/api-reference-chat6/api-bailianvoicebot-2025-01-01-dir/api-bailianvoicebot-2025-01-01-dir-clone-tone-management/api-bailianvoicebot-2025-01-01-listclonevoicemodels.md)
--   [DeleteCloneVoice](raw/application-user-guide/application-gallery/official-application-lingque-ccai-voice-dialogue-robot/api-reference-chat6/api-bailianvoicebot-2025-01-01-dir/api-bailianvoicebot-2025-01-01-dir-clone-tone-management/api-bailianvoicebot-2025-01-01-deleteclonevoice.md)
--   [ListCloneVoice](raw/application-user-guide/application-gallery/official-application-lingque-ccai-voice-dialogue-robot/api-reference-chat6/api-bailianvoicebot-2025-01-01-dir/api-bailianvoicebot-2025-01-01-dir-clone-tone-management/api-bailianvoicebot-2025-01-01-listclonevoice.md)
--   [UpdateCloneVoice](raw/application-user-guide/application-gallery/official-application-lingque-ccai-voice-dialogue-robot/api-reference-chat6/api-bailianvoicebot-2025-01-01-dir/api-bailianvoicebot-2025-01-01-dir-clone-tone-management/api-bailianvoicebot-2025-01-01-updateclonevoice.md)
--   [CreateCloneVoice](raw/application-user-guide/application-gallery/official-application-lingque-ccai-voice-dialogue-robot/api-reference-chat6/api-bailianvoicebot-2025-01-01-dir/api-bailianvoicebot-2025-01-01-dir-clone-tone-management/api-bailianvoicebot-2025-01-01-createclonevoice.md)

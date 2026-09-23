@@ -302,7 +302,7 @@ Chat Completions、Responses
     -   音频控制：支持通过指令调节音量、语速、情绪
     -   视觉能力：与 Qwen3.5 同等水平，可理解画面、语音、音效等多模态信息
     -   多模态组合输入：支持文本与图片、音频、视频的任意组合同时输入，不限于单一模态
-    -   声音复刻：支持自定义音色（仅qwen3.5-omni-plus、qwen3.5-omni-flash支持，快照版本暂不支持），详情请参见[声音复刻](raw/model-api-reference/omni-realtime-api/qwen-omni-voice-cloning.md)
+    -   声音复刻：支持自定义音色（仅qwen3.5-omni-plus、qwen3.5-omni-flash支持，快照版本暂不支持），详情请参见[声音复刻](raw/_short/qwen-omni-voice-cloning-717550bc449e9e29.md)
 
 ### 其他模型与规格
 

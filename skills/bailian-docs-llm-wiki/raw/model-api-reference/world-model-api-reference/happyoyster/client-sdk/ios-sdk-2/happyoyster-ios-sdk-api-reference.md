@@ -4,7 +4,7 @@ HappyOyster iOS SDK 入口为进程级单例 HappyOysterEngine.shared ，业务�
 
 本文档是 HappyOyster iOS SDK 的**对外功能描述 + 接口细节参考**：逐个说明公开类型与方法的**参数、使用时机、用法与简单示例**。
 
-**完整接入流程**（工程搭建、依赖配置、服务端配合、端到端跑通）见 [HappyOyster iOS SDK 接入指南](raw/model-api-reference/world-model-api-reference/happyoyster/client-sdk/ios-sdk-2/happyoyster-ios-sdk-integration-guide.md)，本文不再重复。
+**完整接入流程**（工程搭建、依赖配置、服务端配合、端到端跑通）见 [HappyOyster iOS SDK 接入指南](raw/_short/happyoyster-ios-sdk-integration-guide-41ea7eabc2facd22.md)，本文不再重复。
 
 ## 核心概念
 

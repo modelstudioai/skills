@@ -5,7 +5,7 @@
 -   **基础能力**：固定视频时长（5秒）、指定视频分辨率（480P/720P/1080P）、智能改写prompt、添加水印。
 -   **特效模板**：仅需输入首帧图片，再选择一个特效模板，生成具有特定动态效果的视频。
 
-**快速入口：**[API参考](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-by-first-and-last-frame-api-reference.md)**｜**[Prompt指南](raw/model-user-guide/use-cases/text-to-video-prompt.md)**｜** [万相-图生视频-视频特效列表](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-api-reference/wanx-video-effects.md)
+**快速入口：**[API参考](raw/_short/legacy-image-to-video-by-first-and-last-frame-ap-524bb66cfed1f5de.md)**｜**[Prompt指南](raw/model-user-guide/use-cases/text-to-video-prompt.md)**｜** [万相-图生视频-视频特效列表](raw/_short/wanx-video-effects-5b23bdd72b8e7944.md)
 
 ## 快速开始
 
@@ -341,7 +341,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 **参数设置：**
 
--   `template`：**必填**，指定特效名称（例如 "mech1" 表示机械觉醒特效）。调用前请查阅[万相-图生视频-视频特效列表](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-api-reference/wanx-video-effects.md)，确认模型是否支持，以免调用失败。
+-   `template`：**必填**，指定特效名称（例如 "mech1" 表示机械觉醒特效）。调用前请查阅[万相-图生视频-视频特效列表](raw/_short/wanx-video-effects-5b23bdd72b8e7944.md)，确认模型是否支持，以免调用失败。
 -   `first_frame_url`：**必填**，必须传入首帧图像。
 -   `last_frame_url`：**忽略**，在使用特效时，last\_frame\_url 字段无效，建议留空或不传。
 -   `prompt`：**忽略**，在使用特效时，prompt 字段无效，建议留空或不传。
@@ -709,7 +709,7 @@ public class Kf2vSync {
 
 ## API文档
 
-[图生视频-基于首尾帧API参考](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-by-first-and-last-frame-api-reference.md)
+[图生视频-基于首尾帧API参考](raw/_short/legacy-image-to-video-by-first-and-last-frame-ap-524bb66cfed1f5de.md)
 
 ## 常见问题
 

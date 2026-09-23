@@ -22,13 +22,13 @@ API
 
 API概述
 
-[CutQuestions](raw/application-user-guide/application-gallery/edu-tutor/api-reference-edututor/api-edututor-2025-07-07-dir/api-edututor-2025-07-07-cutquestions.md)
+[CutQuestions](raw/_short/api-edututor-2025-07-07-cutquestions-d5b18a90dbfc8283.md)
 
 试卷切题
 
 切题及题目结构化接口，客户输入试卷或整页题目图片，算法返回每个题目的位置信息以及结构化（题干、选项、答案等）信息。
 
-[AnswerSSE](raw/application-user-guide/application-gallery/edu-tutor/api-reference-edututor/api-edututor-2025-07-07-dir/api-edututor-2025-07-07-answersse.md)
+[AnswerSSE](raw/_short/api-edututor-2025-07-07-answersse-163eaa3a5e62c600.md)
 
 解题辅导
 

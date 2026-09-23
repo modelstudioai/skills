@@ -6815,11 +6815,11 @@ func CreateClient() (_result *bailian20231229.Client, _err error) {
 
 #### 2.1. 申请文件上传租约
 
-在创建知识库前，您需先将文件上传至**同一业务空间**，作为知识库的知识来源。上传文件前，需调用[ApplyFileUploadLease接口](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-applyfileuploadlease.md)申请一个文件上传租约。该租约是一个临时的授权，允许您在限定时间内（有效期为分钟级）上传文件。
+在创建知识库前，您需先将文件上传至**同一业务空间**，作为知识库的知识来源。上传文件前，需调用[ApplyFileUploadLease接口](raw/_short/api-bailian-2023-12-29-applyfileuploadlease-39e8ca15e0e9561a.md)申请一个文件上传租约。该租约是一个临时的授权，允许您在限定时间内（有效期为分钟级）上传文件。
 
 -   **workspace\_id：**[如何获取业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)
     
--   **category\_id：**本示例中，请传入`default`。阿里云百炼使用类目管理您上传的文件，系统会自动创建一个默认类目。您亦可调用[AddCategory接口](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addcategory.md)创建新类目，并获取对应的`category_id`。
+-   **category\_id：**本示例中，请传入`default`。阿里云百炼使用类目管理您上传的文件，系统会自动创建一个默认类目。您亦可调用[AddCategory接口](raw/_short/api-bailian-2023-12-29-addcategory-e2fe0e0435ed504e.md)创建新类目，并获取对应的`category_id`。
     
 -   **file\_name：**请传入上传文件的名称（包括后缀）。其值必须与实际文件名一致。例如，实际上传文件的文件名为 `阿里云百炼系列手机产品介绍.docx` 时，`file_name` 传入 `阿里云百炼系列手机产品介绍.docx`。
     
@@ -7999,7 +7999,7 @@ func main() {
 
 #### 2.3. 添加文件到类目中
 
-阿里云百炼使用类目管理您上传的文件。因此，接下来您需要调用[AddFile接口](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addfile.md)将已上传的文件添加到同一业务空间下的类目中。
+阿里云百炼使用类目管理您上传的文件。因此，接下来您需要调用[AddFile接口](raw/_short/api-bailian-2023-12-29-addfile-8c254b3500bc50bc.md)将已上传的文件添加到同一业务空间下的类目中。
 
 -   **parser：**请传入`DASHSCOPE_DOCMIND`。
     
@@ -8205,7 +8205,7 @@ func AddFile(client *bailian20231229.Client, leaseId, parser, categoryId, worksp
 
 #### 2.4. 查询文件的解析状态
 
-未解析完成的文件无法用于知识库，在请求高峰时段，该过程可能需要数小时。您可以调用[DescribeFile接口](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-describefile.md)查询文件的解析状态。
+未解析完成的文件无法用于知识库，在请求高峰时段，该过程可能需要数小时。您可以调用[DescribeFile接口](raw/_short/api-bailian-2023-12-29-describefile-020886c28a208bf2.md)查询文件的解析状态。
 
 -   **file\_id：**请传入[添加文件到类目中](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)时接口返回的`FileId`。
 
@@ -8366,7 +8366,7 @@ func DescribeFile(client *bailian20231229.Client, workspaceId, fileId string) (_
 
 #### 3.1. 初始化知识库
 
-文件解析完成后，您即可将其导入同一业务空间下的知识库。初始化（非最终提交）一个文档搜索类知识库，可以调用[CreateIndex接口](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-createindex.md)。
+文件解析完成后，您即可将其导入同一业务空间下的知识库。初始化（非最终提交）一个文档搜索类知识库，可以调用[CreateIndex接口](raw/_short/api-bailian-2023-12-29-createindex-8bc613c75f8af371.md)。
 
 -   **workspace\_id：**[如何获取业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)
     
@@ -8609,7 +8609,7 @@ func CreateIndex(client *bailian20231229.Client, workspaceId, fileId, name, stru
 
 #### 3.2. 提交索引任务
 
-初始化知识库后，您需要调用[SubmitIndexJob接口](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-submitindexjob.md)提交索引任务，以启动知识库的索引构建。
+初始化知识库后，您需要调用[SubmitIndexJob接口](raw/_short/api-bailian-2023-12-29-submitindexjob-63b38294171880d4.md)提交索引任务，以启动知识库的索引构建。
 
 -   **index\_id：**请传入[初始化知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)时接口返回的`Data.Id`。
 
@@ -8778,7 +8778,7 @@ func SubmitIndex(client *bailian20231229.Client, workspaceId, indexId string) (_
 
 #### 3.3. 等待索引任务完成
 
-索引任务的执行需要一定时间，在请求高峰时段，该过程可能需要数小时。查询其执行状态可以调用[GetIndexJobStatus接口](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-getindexjobstatus.md)。
+索引任务的执行需要一定时间，在请求高峰时段，该过程可能需要数小时。查询其执行状态可以调用[GetIndexJobStatus接口](raw/_short/api-bailian-2023-12-29-getindexjobstatus-1e88b6ccfffe0fe4.md)。
 
 -   **job\_id：**请传入[提交索引任务](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)时接口返回的`Data.Id`。
 
@@ -8976,7 +8976,7 @@ func GetIndexJobStatus(client *bailian20231229.Client, workspaceId, jobId, index
 目前，检索知识库支持以下方式：
 
 -   **使用阿里云百炼应用：**[调用应用](https://help.aliyun.com/zh/model-studio/application-calling-guide)时，通过`rag_options`传入知识库ID`index_id`，为您的大模型应用补充私有知识和提供最新信息。
--   **使用阿里云API：**调用[Retrieve接口](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-retrieve.md)在指定的知识库中检索信息并返回原始文本切片。
+-   **使用阿里云API：**调用[Retrieve接口](raw/_short/api-bailian-2023-12-29-retrieve-c8e6b8d718a30a84.md)在指定的知识库中检索信息并返回原始文本切片。
 -   **使用知识检索服务（推荐）：**调用[Search接口](raw/application-api-reference/rag-api/knowledge/knowledgesearch.md)跨多个知识库执行联合语义检索，返回按相关性排序的文本切片。检索策略预先在控制台配置并发布，调用方只需传入检索意图（`query`/`images`）与`agent_id`。
 
 三者的区别在于：第一种方式先将检索到的相关文本切片传给您配置的大模型，模型再结合这些切片与用户的原始查询生成最终回答并返回；后两种方式则是直接返回文本切片。其中**知识检索服务（Search接口）**为推荐方式，支持跨多库联合检索与多模态检索，且检索策略在控制台统一配置管理，无需在请求中维护。
@@ -9150,7 +9150,7 @@ print(resp.output.text)
 
 #### 2.1. 提交追加文件任务
 
-上传文件解析完成后，请调用[SubmitIndexAddDocumentsJob接口](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-submitindexadddocumentsjob.md)将新文件追加至知识库，并重新构建知识库索引。
+上传文件解析完成后，请调用[SubmitIndexAddDocumentsJob接口](raw/_short/api-bailian-2023-12-29-submitindexadddocumentsjo-ec4f5cf285e2c447.md)将新文件追加至知识库，并重新构建知识库索引。
 
 -   **client：**[如何获取client](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#a8ce8e7788gmh)
 -   **workspace\_id：**[如何获取业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)
@@ -9359,7 +9359,7 @@ func SubmitIndexAddDocumentsJob(client *bailian20231229.Client, workspaceId, ind
 
 #### 2.2. 等待追加任务完成
 
-索引任务的执行需要一定时间，在请求高峰时段，该过程可能需要数小时。查询其执行状态可以调用[GetIndexJobStatus接口](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-getindexjobstatus.md)。
+索引任务的执行需要一定时间，在请求高峰时段，该过程可能需要数小时。查询其执行状态可以调用[GetIndexJobStatus接口](raw/_short/api-bailian-2023-12-29-getindexjobstatus-1e88b6ccfffe0fe4.md)。
 
 -   **job\_id：**请传入[提交追加文件任务](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)时接口返回的`Data.Id`。
 
@@ -9554,11 +9554,11 @@ func GetIndexJobStatus(client *bailian20231229.Client, workspaceId, jobId, index
 
 ### 3\. 删除旧文件
 
-最后，从指定知识库中永久删除旧版本的文件（避免旧的知识被错误检索），可以调用[DeleteIndexDocument接口](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-deleteindexdocument.md)。
+最后，从指定知识库中永久删除旧版本的文件（避免旧的知识被错误检索），可以调用[DeleteIndexDocument接口](raw/_short/api-bailian-2023-12-29-deleteindexdocument-0792a83f5a741348.md)。
 
 -   **file\_id：**请传入旧版本文件的`FileId`。
 
-**说明**仅能删除知识库中状态为导入失败（INSERT\_ERROR）或导入成功（FINISH）的文件。如需查询知识库中的文件状态，可调用[ListIndexDocuments接口](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-listindexdocuments.md)。
+**说明**仅能删除知识库中状态为导入失败（INSERT\_ERROR）或导入成功（FINISH）的文件。如需查询知识库中的文件状态，可调用[ListIndexDocuments接口](raw/_short/api-bailian-2023-12-29-listindexdocuments-9f0db0388c421903.md)。
 
 **重要**
 
@@ -9746,7 +9746,7 @@ func DeleteIndexDocument(client *bailian20231229.Client, workspaceId, indexId, f
 
 ### 查看知识库
 
-要查看给定业务空间下的一个或多个知识库的信息，可以调用[ListIndices接口](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-listindices.md)。
+要查看给定业务空间下的一个或多个知识库的信息，可以调用[ListIndices接口](raw/_short/api-bailian-2023-12-29-listindices-c555173be752eaaf.md)。
 
 -   **client：**[如何获取client](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#a8ce8e7788gmh)
     
@@ -9919,7 +9919,7 @@ func listIndices(client *bailian20231229.Client, workspaceId string) (_result *b
 
 ### 删除知识库
 
-要永久性删除某个知识库，可以调用[DeleteIndex接口](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-deleteindex.md)。删除前，请[解除该知识库关联的所有阿里云百炼应用](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)（仅可通过阿里云百炼控制台操作），否则会删除失败。
+要永久性删除某个知识库，可以调用[DeleteIndex接口](raw/_short/api-bailian-2023-12-29-deleteindex-500502bd6df1c49c.md)。删除前，请[解除该知识库关联的所有阿里云百炼应用](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)（仅可通过阿里云百炼控制台操作），否则会删除失败。
 
 -   **client：**[如何获取client](https://help.aliyun.com/zh/model-studio/rag-knowledge-base-api-guide#a8ce8e7788gmh)
     
@@ -10388,7 +10388,7 @@ func deleteChunk(client *bailian20231229.Client, workspaceId, pipelineId string,
 
 ## API参考
 
-请参阅[API目录（知识库）](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base.md)获取最新完整的知识库API列表及输入输出参数。
+请参阅[API目录（知识库）](raw/_short/api-bailian-2023-12-29-dir-knowledge-base-f6f202ad9694348f.md)获取最新完整的知识库API列表及输入输出参数。
 
 ## 常见问题
 
@@ -10408,11 +10408,11 @@ func deleteChunk(client *bailian20231229.Client, workspaceId, pipelineId string,
     
 2.  **为什么我新建的知识库里没有内容？**
     
-    一般是由于没有执行或未能成功执行[提交索引任务](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)这一步导致。若调用[CreateIndex](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-createindex.md)接口后未成功调用[SubmitIndexJob](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-submitindexjob.md)接口，您将得到一个空知识库。此时，您只需重新执行[提交索引任务](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)并[等待索引任务完成](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)即可。
+    一般是由于没有执行或未能成功执行[提交索引任务](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)这一步导致。若调用[CreateIndex](raw/_short/api-bailian-2023-12-29-createindex-8bc613c75f8af371.md)接口后未成功调用[SubmitIndexJob](raw/_short/api-bailian-2023-12-29-submitindexjob-63b38294171880d4.md)接口，您将得到一个空知识库。此时，您只需重新执行[提交索引任务](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)并[等待索引任务完成](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)即可。
     
 3.  **遇到报错Access your uploaded file failed. Please check if your upload action was successful，应该如何处理？**
     
-    一般是由于没有执行或未能成功执行[上传文件到临时存储](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)这一步导致。请在确认该步骤成功执行后，再调用[AddFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addfile.md)接口。
+    一般是由于没有执行或未能成功执行[上传文件到临时存储](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)这一步导致。请在确认该步骤成功执行后，再调用[AddFile](raw/_short/api-bailian-2023-12-29-addfile-8c254b3500bc50bc.md)接口。
     
 4.  **遇到报错Access denied: Either you are not authorized to access this workspace, or the workspace does not exist，应该如何处理？**
     

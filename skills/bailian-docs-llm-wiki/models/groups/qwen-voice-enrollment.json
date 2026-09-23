@@ -48,8 +48,7 @@
       "latestOnlineAt": "2025-11-27T05:44:15.000+00:00",
       "offlineInfo": {
         "inference": {
-          "announceUrl": "https://www.aliyun.com/notice/118331",
-          "offlineTime": "2026-10-10 00:00:00"
+          "announceUrl": ""
         }
       },
       "inferenceProvider": "aliyun-bailian",

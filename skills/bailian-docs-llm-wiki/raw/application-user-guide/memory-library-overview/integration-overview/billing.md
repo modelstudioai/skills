@@ -186,7 +186,6 @@ Rerank
 
 -   **Add 调用**的版本由事实记忆规则（project）的 `plan_version` 决定。创建规则时选择 Pro 或 Lite，不传时默认 Pro。
 -   **Search 调用**的版本由请求参数 `plan_version` 独立控制，与 project 的版本无关。不传时默认 Pro。
--   当 Search 同时传入 `plan_version` 和 `enable_rerank` 时，`plan_version` 优先级更高。仅当未传 `plan_version` 时 `enable_rerank` 生效。
 -   更新规则的 `plan_version` 后，新写入的记忆遵循更新后的策略版本规则，已写入的记忆不受影响。
 -   商业化前已存在的规则，`plan_version` 默认为 Pro。
 

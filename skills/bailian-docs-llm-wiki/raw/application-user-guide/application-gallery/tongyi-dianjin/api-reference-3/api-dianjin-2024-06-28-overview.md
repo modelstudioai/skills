@@ -22,133 +22,133 @@ API
 
 API概述
 
-[UpdateDocumentChunk](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-updatedocumentchunk.md)
+[UpdateDocumentChunk](raw/_short/api-dianjin-2024-06-28-updatedocumentchunk-aa1fa6c9fe4c2618.md)
 
 更新文档块内容
 
 更新文档中的文档块文本内容。
 
-[GetAppConfig](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getappconfig.md)
+[GetAppConfig](raw/_short/api-dianjin-2024-06-28-getappconfig-493fe5a694a1cdc0.md)
 
 获取配置信息
 
 获取app配置。
 
-[CreateLibrary](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-createlibrary.md)
+[CreateLibrary](raw/_short/api-dianjin-2024-06-28-createlibrary-41e580c81262aa83.md)
 
 创建文档库
 
 创建文档库。创建一个新的文档库，文档库用作隔离文档信息、索引信息，如果使用场景中需要经常按类别去做自然语言检索，建议创建多个文档库，来隔离不同类型的数据。支持按照格式自定义向量索引和文本索引。
 
-[GetLibraryList](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getlibrarylist.md)
+[GetLibraryList](raw/_short/api-dianjin-2024-06-28-getlibrarylist-7f15dede0f988ab0.md)
 
 获取文档库列表
 
 获取文档库列表，包含文档名称、描述、唯一标识等信息。
 
-[GetLibrary](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getlibrary.md)
+[GetLibrary](raw/_short/api-dianjin-2024-06-28-getlibrary-fa28d970d73cf944.md)
 
 获取文档库详情
 
 查看文档库的详细配置，包括文档库名称、描述以及索引等详细配置信息。
 
-[UploadDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-uploaddocument.md)
+[UploadDocument](raw/_short/api-dianjin-2024-06-28-uploaddocument-a87b051dc9961d86.md)
 
 上传文档
 
 上传文档至文档库，会对文档进行解析、分块、构建索引等一系列操作。
 
-[GetDocumentUrl](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getdocumenturl.md)
+[GetDocumentUrl](raw/_short/api-dianjin-2024-06-28-getdocumenturl-ef124c074d6ab9fa.md)
 
 获取文档的下载链接
 
 获取文档的下载链接，链接过期时间为1小时。
 
-[PreviewDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-previewdocument.md)
+[PreviewDocument](raw/_short/api-dianjin-2024-06-28-previewdocument-8c55690988faecdd.md)
 
 预览文档
 
 预览文档，可获取文档的下载链接，文档类型、标题等信息，可用于文档预览。
 
-[GetFilterDocumentList](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getfilterdocumentlist.md)
+[GetFilterDocumentList](raw/_short/api-dianjin-2024-06-28-getfilterdocumentlist-bd6838be9decd0b7.md)
 
 按元信息过滤查询文档列表
 
 获取文档列表（可按元信息过滤查询，也支持分页查询）。
 
-[GetDocumentList](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getdocumentlist.md)
+[GetDocumentList](raw/_short/api-dianjin-2024-06-28-getdocumentlist-8c64b5f73a3d397d.md)
 
 获取文档列表
 
 获取文档库内文档列表，可分页查询，也根据文档状态进行过滤查询。
 
-[DeleteDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-deletedocument.md)
+[DeleteDocument](raw/_short/api-dianjin-2024-06-28-deletedocument-53502bae8139481f.md)
 
 删除文档
 
 删除文档，删除后将无法查看原始文档，无法召回该文档。
 
-[UpdateDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-updatedocument.md)
+[UpdateDocument](raw/_short/api-dianjin-2024-06-28-updatedocument-62af14b3aafbd006.md)
 
 更新文档
 
 更新文档，用于更新文档的标题、元数据等信息。
 
-[CreatePredefinedDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-createpredefineddocument.md)
+[CreatePredefinedDocument](raw/_short/api-dianjin-2024-06-28-createpredefineddocument-a6dc0f48fd9f94f3.md)
 
 创建预定义文档
 
 根据业务场景灵活构建文档块。
 
-[GetDocumentChunkList](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getdocumentchunklist.md)
+[GetDocumentChunkList](raw/_short/api-dianjin-2024-06-28-getdocumentchunklist-d16101f8854a50e4.md)
 
 获取文档块列表
 
 获取文档块列表，可根据查询条件过滤。
 
-[RecallDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-recalldocument.md)
+[RecallDocument](raw/_short/api-dianjin-2024-06-28-recalldocument-1ab8ab89e9dcd579.md)
 
 文档召回
 
 文档召回，可根据文本从文档库中召回文档块。并可设置召回文档块数量、也可根据元信息条件进行过滤，同时可选择是否进行文档块的补全。
 
-[GetParseResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getparseresult.md)
+[GetParseResult](raw/_short/api-dianjin-2024-06-28-getparseresult-cee7e355a6d23912.md)
 
 获取文档解析结果
 
 获取文档解析结果。可查询文档的解析状态以及获取文档的解析结果。
 
-[ReIndex](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-reindex.md)
+[ReIndex](raw/_short/api-dianjin-2024-06-28-reindex-b253554c9c087004.md)
 
 重建索引
 
 重建索引，会对指定文档重新进行文档解析、分块、构建索引等流程。
 
-[UpdateLibrary](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-updatelibrary.md)
+[UpdateLibrary](raw/_short/api-dianjin-2024-06-28-updatelibrary-0a0d6db97e2d3487.md)
 
 更新文档库
 
 更新文档库，可用于更新文档库的名称、描述、索引配置等信息。
 
-[DeleteLibrary](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-deletelibrary.md)
+[DeleteLibrary](raw/_short/api-dianjin-2024-06-28-deletelibrary-1014340b912e1802.md)
 
 删除文档库
 
 删除文档库，注意⚠️，此接口将会删除文档库及其关联的所有文档。
 
-[RunLibraryChatGeneration](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-runlibrarychatgeneration.md)
+[RunLibraryChatGeneration](raw/_short/api-dianjin-2024-06-28-runlibrarychatgeneration-404dfc22be5a54b0.md)
 
 文档库会话生成
 
 文档库会话生成，用自然语言提问，检索文档库相关信息，总结回答。
 
-[GetHistoryListByBizType](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-gethistorylistbybiztype.md)
+[GetHistoryListByBizType](raw/_short/api-dianjin-2024-06-28-gethistorylistbybiztype-094e0fd700f60449.md)
 
 根据业务类型获取对话历史记录
 
 根据业务类型获取对话历史记录。
 
-[InvokePlugin](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-invokeplugin.md)
+[InvokePlugin](raw/_short/api-dianjin-2024-06-28-invokeplugin-1dad02a60f565377.md)
 
 调用插件
 
@@ -162,163 +162,163 @@ API
 
 API概述
 
-[EndToEndRealTimeDialog](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-endtoendrealtimedialog.md)
+[EndToEndRealTimeDialog](raw/_short/api-dianjin-2024-06-28-endtoendrealtimedialog-cf7033bc8e9b66ad.md)
 
 语音实时对话
 
 本接口通过 WebSocket 协议实现实时语音对话转写、意图识别、话术语音合成返回等功能，支持多种音频格式的输入输出，满足实时性与高兼容性需求。
 
-[RunDialogAnalysis](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-rundialoganalysis.md)
+[RunDialogAnalysis](raw/_short/api-dianjin-2024-06-28-rundialoganalysis-a9e9c74f75b4c904.md)
 
 会话分析结果生成
 
 流式接口，获取会话分析结果。
 
-[RunAgent](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-runagent.md)
+[RunAgent](raw/_short/api-dianjin-2024-06-28-runagent-5da99dfbb5ebb6fc.md)
 
 运行智能体
 
 运行智能体，支持流式和非流式。
 
-[CreateDialog](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createdialog.md)
+[CreateDialog](raw/_short/api-dianjin-2024-06-28-createdialog-3eacc140f2ccfd23.md)
 
 创建外呼会话
 
 创建外呼会话。
 
-[RealTimeDialog](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-realtimedialog.md)
+[RealTimeDialog](raw/_short/api-dianjin-2024-06-28-realtimedialog-1724ffb10bd69761.md)
 
 实时会话
 
 实时会话，通过API CreateDialog创建会话后，可使用该API进行实时会话。
 
-[RealtimeDialogAssist](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-realtimedialogassist.md)
+[RealtimeDialogAssist](raw/_short/api-dianjin-2024-06-28-realtimedialogassist-e263257cf24e3127.md)
 
 实时会话辅助
 
 实时会话辅助，使用CreateDialog创建会话后，可进行实时的会话辅助。注意：与实时会话不同，会话辅助可返回多个意图、标签和SOP流程等，但不支持流式返回。
 
-[GetDialogDetail](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getdialogdetail.md)
+[GetDialogDetail](raw/_short/api-dianjin-2024-06-28-getdialogdetail-6dfcf43438066b60.md)
 
 获取会话详情
 
 获取会话详情信息。
 
-[GetDialogLog](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getdialoglog.md)
+[GetDialogLog](raw/_short/api-dianjin-2024-06-28-getdialoglog-853687666dc3cba7.md)
 
 获取对话日志
 
 用于获取实时对话的记录及意图分析结果。
 
-[GetDialogAnalysisResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getdialoganalysisresult.md)
+[GetDialogAnalysisResult](raw/_short/api-dianjin-2024-06-28-getdialoganalysisresult-af77b60dab70f1db.md)
 
 获取会话分析结果
 
 获取会话分析结果。可批量获取，根据会话ID列表或时间范围。
 
-[CreateDialogAnalysisTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createdialoganalysistask.md)
+[CreateDialogAnalysisTask](raw/_short/api-dianjin-2024-06-28-createdialoganalysistask-28fef79b887624dd.md)
 
 创建会话分析任务
 
 创建会话分析任务，创建成功后可根据会话ID使用GetDialogAnalysisResult查询结果
 
-[RebuildTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-rebuildtask.md)
+[RebuildTask](raw/_short/api-dianjin-2024-06-28-rebuildtask-a8b4ee41523ac3fb.md)
 
 重建任务
 
 对已有任务进行重建，但在队列中或执行中的任务不可重建。
 
-[EvictTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-evicttask.md)
+[EvictTask](raw/_short/api-dianjin-2024-06-28-evicttask-11939924bb8c12d1.md)
 
 取消任务
 
 中断任务。
 
-[GetTaskStatus](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-gettaskstatus.md)
+[GetTaskStatus](raw/_short/api-dianjin-2024-06-28-gettaskstatus-d3b9b23ec42792e0.md)
 
 获取任务状态
 
 获取任务状态。
 
-[CreateDocsSummaryTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createdocssummarytask.md)
+[CreateDocsSummaryTask](raw/_short/api-dianjin-2024-06-28-createdocssummarytask-ebf0276013590879.md)
 
 创建多文档总结任务
 
 创建多文档总结任务。
 
-[CreateAnnualDocSummaryTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createannualdocsummarytask.md)
+[CreateAnnualDocSummaryTask](raw/_short/api-dianjin-2024-06-28-createannualdocsummarytas-351fd85aa94ffbaa.md)
 
 创建按年份总结文档任务
 
 创建按年份总结文档任务。
 
-[CreatePdfTranslateTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createpdftranslatetask.md)
+[CreatePdfTranslateTask](raw/_short/api-dianjin-2024-06-28-createpdftranslatetask-44b47ee418a0abd2.md)
 
 创建pdf文档翻译任务
 
 创建pdf文档翻译任务。提交翻译任务，异步执行翻译过程。
 
-[CreateFinReportSummaryTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createfinreportsummarytask.md)
+[CreateFinReportSummaryTask](raw/_short/api-dianjin-2024-06-28-createfinreportsummarytas-6c944687f50f0e0d.md)
 
 创建财报总结任务
 
 创建财报总结接口。
 
-[GetSummaryTaskResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getsummarytaskresult.md)
+[GetSummaryTaskResult](raw/_short/api-dianjin-2024-06-28-getsummarytaskresult-baf9b62231f3fc7d.md)
 
 获取财报总结任务结果
 
 获取财报总结任务结果。
 
-[GetTaskResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-gettaskresult.md)
+[GetTaskResult](raw/_short/api-dianjin-2024-06-28-gettaskresult-e502eaecf467735d.md)
 
 获取结果
 
 获取异步任务结果。
 
-[CreateQualityCheckTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createqualitychecktask.md)
+[CreateQualityCheckTask](raw/_short/api-dianjin-2024-06-28-createqualitychecktask-a97404112319d946.md)
 
 创建质检任务
 
 创建质检任务。
 
-[GetQualityCheckTaskResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getqualitychecktaskresult.md)
+[GetQualityCheckTaskResult](raw/_short/api-dianjin-2024-06-28-getqualitychecktaskresult-6b221fa3c50b4bf2.md)
 
 获取质检结果
 
 获取质检结果。
 
-[RecognizeIntention](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-recognizeintention.md)
+[RecognizeIntention](raw/_short/api-dianjin-2024-06-28-recognizeintention-cbc3739e363b12fe.md)
 
 意图识别
 
 意图识别，支持意图识别（全局+分层）、态度识别、企业识别。
 
-[GenDocQaResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-gendocqaresult.md)
+[GenDocQaResult](raw/_short/api-dianjin-2024-06-28-gendocqaresult-ea4e4da85dcec9b7.md)
 
 根据文档解析问答QA
 
 根据文档解析问答QA，可在API UpdateQaLibrary进行QA对的更新。
 
-[UpdateQaLibrary](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-updateqalibrary.md)
+[UpdateQaLibrary](raw/_short/api-dianjin-2024-06-28-updateqalibrary-f59478ca344e0602.md)
 
 更新QA问答库
 
 更新QA问答库。更新后，可通过API GenDocQaResult来解析QA。
 
-[SubmitChatQuestion](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-submitchatquestion.md)
+[SubmitChatQuestion](raw/_short/api-dianjin-2024-06-28-submitchatquestion-33eb2d3583fa7d91.md)
 
 提交问题列表
 
 提交问题列表，通过API GetChatQuestionResp获取结果。
 
-[GetChatQuestionResp](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getchatquestionresp.md)
+[GetChatQuestionResp](raw/_short/api-dianjin-2024-06-28-getchatquestionresp-582ec2d8484e6216.md)
 
 获取问答结果
 
 获取问答结果，即API SubmitChatQuestion的结果。
 
-[RunChatResultGeneration](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-runchatresultgeneration.md)
+[RunChatResultGeneration](raw/_short/api-dianjin-2024-06-28-runchatresultgeneration-7ffa922f4f82a17c.md)
 
 对话结果生成
 
@@ -332,7 +332,7 @@ API
 
 API概述
 
-[DashscopeAsyncTaskFinishEvent](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-other/api-dianjin-2024-06-28-dashscopeasynctaskfinishevent.md)
+[DashscopeAsyncTaskFinishEvent](raw/_short/api-dianjin-2024-06-28-dashscopeasynctaskfinishe-cf84eae8f5382c7a.md)
 
 Dashscope异步任务完成回调事件
 

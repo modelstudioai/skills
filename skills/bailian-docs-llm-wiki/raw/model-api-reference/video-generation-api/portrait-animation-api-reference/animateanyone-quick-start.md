@@ -112,11 +112,11 @@ animate-anyone
     
 -   调用时，需按模型名称调用对应模型，并请参照以下调用顺序：
     
-    a. 调用“舞动人像AnimateAnyone-detect”模型确认输入的人物图像符合规范（可参考文档：[AnimateAnyone 图像检测](raw/model-api-reference/video-generation-api/portrait-animation-api-reference/animateanyone-quick-start/animate-anyone-detect-api.md)）；
+    a. 调用“舞动人像AnimateAnyone-detect”模型确认输入的人物图像符合规范（可参考文档：[AnimateAnyone 图像检测](raw/_short/animate-anyone-detect-api-55e09ae4e0a18b6e.md)）；
     
-    b. 调用“舞动人像AnimateAnyone-template”模型输入人物运动视频以生成人物动作模板（可参考文档：[AnimateAnyone 动作模板生成](raw/model-api-reference/video-generation-api/portrait-animation-api-reference/animateanyone-quick-start/animate-anyone-template-api.md)）。
+    b. 调用“舞动人像AnimateAnyone-template”模型输入人物运动视频以生成人物动作模板（可参考文档：[AnimateAnyone 动作模板生成](raw/_short/animate-anyone-template-api-e8864f515e08488f.md)）。
     
-    c. 调用“舞动人像AnimateAnyone”模型输入通过检测的人物图像和人物动作模板ID以生成视频（可参考文档：[AnimateAnyone 视频生成](raw/model-api-reference/video-generation-api/portrait-animation-api-reference/animateanyone-quick-start/animateanyone-video-generation-api.md)）。
+    c. 调用“舞动人像AnimateAnyone”模型输入通过检测的人物图像和人物动作模板ID以生成视频（可参考文档：[AnimateAnyone 视频生成](raw/_short/animateanyone-video-generation-api-5a2827f4de69f8c0.md)）。
     
 
 ### 模型部署与调用
@@ -129,9 +129,9 @@ animate-anyone
     
 -   模型调用时，需在入参的“model”字段中填入**部署成功的模型名称**，并参照以下调用顺序：
     
-    a. 调用“舞动人像AnimateAnyone-detect”模型确认输入的人物图像符合规范（可参考文档：[AnimateAnyone 图像检测](raw/model-api-reference/video-generation-api/portrait-animation-api-reference/animateanyone-quick-start/animate-anyone-detect-api.md)）；
+    a. 调用“舞动人像AnimateAnyone-detect”模型确认输入的人物图像符合规范（可参考文档：[AnimateAnyone 图像检测](raw/_short/animate-anyone-detect-api-55e09ae4e0a18b6e.md)）；
     
-    b. 调用“舞动人像AnimateAnyone”模型输入通过检测的人物图像和预设动作模板文件以生成视频（可参考文档：[AnimateAnyone 视频生成](raw/model-api-reference/video-generation-api/portrait-animation-api-reference/animateanyone-quick-start/animateanyone-video-generation-api.md)）。
+    b. 调用“舞动人像AnimateAnyone”模型输入通过检测的人物图像和预设动作模板文件以生成视频（可参考文档：[AnimateAnyone 视频生成](raw/_short/animateanyone-video-generation-api-5a2827f4de69f8c0.md)）。
     
 
 **说明**

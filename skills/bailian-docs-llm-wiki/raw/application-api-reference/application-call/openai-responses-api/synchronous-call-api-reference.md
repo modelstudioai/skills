@@ -5,7 +5,7 @@
 **相关参考**
 
 -   **异步调用**：对于**耗时较长**的任务（如生成报告、多步骤工具调用），为避免请求超时，请参阅[异步调用 API 参考](raw/application-api-reference/application-call/openai-responses-api/asynchronous-call-api-reference.md)。
--   **DashScope API**：如需获取更全面的功能与更高的性能，请参阅[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)。
+-   **DashScope API**：如需获取更全面的功能与更高的性能，请参阅[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)。
 
 **重要**本文档仅适用于华北2（北京）地域。
 

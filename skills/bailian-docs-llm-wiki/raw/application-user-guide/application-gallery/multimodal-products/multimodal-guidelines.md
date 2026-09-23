@@ -2,7 +2,7 @@
 
 -   [应用创建](raw/application-user-guide/application-gallery/multimodal-products/multimodal-guidelines/multimodal-app-creation.md)
 -   [应用配置](raw/application-user-guide/application-gallery/multimodal-products/multimodal-guidelines/multimodal-app-configuration.md)
--   [应用体验与发布](raw/application-user-guide/application-gallery/multimodal-products/multimodal-guidelines/multimodal-app-experience-and-publishing.md)
+-   [应用体验与发布](raw/_short/multimodal-app-experience-and-publishing-f282bb2a35fece37.md)
 -   [百炼应用推荐模板](raw/application-user-guide/application-gallery/multimodal-products/multimodal-guidelines/agent-template.md)
 -   [指令列表](raw/application-user-guide/application-gallery/multimodal-products/multimodal-guidelines/instruction-list.md)
 -   [音色列表](raw/application-user-guide/application-gallery/multimodal-products/multimodal-guidelines/multimodal-timbre-list.md)

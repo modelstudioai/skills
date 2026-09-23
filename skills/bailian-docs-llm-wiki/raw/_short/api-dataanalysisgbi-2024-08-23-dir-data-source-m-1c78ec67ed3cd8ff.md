@@ -1,0 +1,15 @@
+# 数据源管理
+
+-   [CreateDatasourceAuthorization - 数据源关联关系授权](raw/_short/api-dataanalysisgbi-2024-08-23-createdatasourcea-b2713b77aa940397.md)
+-   [CancelDatasourceAuthorization - 取消数据源关联关系授权](raw/_short/api-dataanalysisgbi-2024-08-23-canceldatasourcea-c26849155216aab1.md)
+-   [SyncRemoteTables - 从数据源同步数据表](raw/_short/api-dataanalysisgbi-2024-08-23-syncremotetables-a2d885e516165b9a.md)
+-   [ListSelectedTables - 选择的数据表集合](raw/_short/api-dataanalysisgbi-2024-08-23-listselectedtable-33bc99f128b2d60c.md)
+-   [UpdateTableInfo - 修改数据表信息](raw/_short/api-dataanalysisgbi-2024-08-23-updatetableinfo-35547fe5dd1820b9.md)
+-   [DeleteSelectedTable - 删除所选择的数据表](raw/_short/api-dataanalysisgbi-2024-08-23-deleteselectedtab-5ec52366d9be507f.md)
+-   [ResyncTable - 刷新当前所关联的数](raw/_short/api-dataanalysisgbi-2024-08-23-resynctable-dafb54e35b50dcc3.md)
+-   [ListColumn - 数据表下的数据列集合](raw/_short/api-dataanalysisgbi-2024-08-23-listcolumn-ed13158873c319b0.md)
+-   [UpdateColumn - 修改数据列信息](raw/_short/api-dataanalysisgbi-2024-08-23-updatecolumn-30125dbe8bc1f8f5.md)
+-   [RecoverColumn - 还原数据列信息](raw/_short/api-dataanalysisgbi-2024-08-23-recovercolumn-67351032c3511e62.md)
+-   [DeleteColumn - 删除数据表中的列](raw/_short/api-dataanalysisgbi-2024-08-23-deletecolumn-98dc040bcd269a9a.md)
+-   [ListEnumMapping - 枚举值映射列表](raw/_short/api-dataanalysisgbi-2024-08-23-listenummapping-0eb61189c7e900e5.md)
+-   [UpdateEnumMapping - 修改枚举值映射关系](raw/_short/api-dataanalysisgbi-2024-08-23-updateenummapping-8780cc08c737d6cf.md)

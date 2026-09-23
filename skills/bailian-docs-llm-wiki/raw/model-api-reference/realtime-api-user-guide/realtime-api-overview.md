@@ -2,6 +2,8 @@
 
 Realtime API 提供多种传输协议，针对性能、延迟、弱网对抗、接入成本等不同需求进行优化，供开发者灵活选择。
 
+## 协议选型
+
 Realtime API 支持 **AOQ（AI over QUIC）**、**WebRTC** 和 **WebSocket** 三种传输协议，开发者可以根据业务场景灵活选择。
 
 **维度**
@@ -138,6 +140,44 @@ qwen3.5-omni-flash-realtime
 
 支持
 
+[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)
+
+qwen-audio-3.0-tts-flash、qwen-audio-3.0-tts-plus
+
+支持
+
+不支持
+
+支持
+
+CosyVoice系列模型
+
+支持
+
+不支持
+
+支持
+
+[实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)
+
+Qwen-Audio-3.0-ASR-Flash-Streaming、Fun-ASR-Realtime系列模型
+
+支持
+
+不支持
+
+支持
+
+[实时语音对话](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime)
+
+qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
+
+支持
+
+支持
+
+支持
+
 [实时语音翻译](https://help.aliyun.com/zh/model-studio/qwen3-5-livetranslate-flash-realtime)
 
 qwen3.5-livetranslate-flash-realtime
@@ -158,52 +198,14 @@ multimodal-dialog
 
 支持
 
-[实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)
-
-Qwen-Audio-3.0-ASR-Flash-Streaming、Fun-ASR-Realtime系列模型
-
-支持
-
-不支持
-
-支持
-
-[实时语音合成](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide)
-
-CosyVoice系列模型
-
-支持
-
-不支持
-
-支持
-
-qwen-audio-3.0-tts-flash、qwen-audio-3.0-tts-plus
-
-支持
-
-不支持
-
-支持
-
-[实时语音对话](https://help.aliyun.com/zh/model-studio/fun-audiochat-realtime)
-
-qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
-
-支持
-
-支持
-
-支持
-
 **说明**模型的名称、上下文、价格、快照版本等信息请参见[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/)；并发限流条件请参考[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
 
 ## 最佳实践
 
--   [通过WebRTC使用多模态交互套件实现实时通话](raw/model-user-guide/use-cases/realtime-audio-video-integration/best-practice-webrtc-multimodal-dialog.md)
 -   [通过WebRTC使用qwen3.8-omni-flash-realtime实现实时通话](raw/model-user-guide/use-cases/realtime-audio-video-integration/best-practice-webrtc-omni-realtime.md)
 -   [通过AOQ使用qwen3.8-omni-flash-realtime实现实时通话](raw/model-user-guide/use-cases/realtime-audio-video-integration/best-practice-aoq-omni-realtime.md)
--   [使用 AOQ 接入 qwen3.8-omni-flash-realtime 实现按键语音对话](raw/model-user-guide/use-cases/realtime-audio-video-integration/use-aoq-to-access-qwen3-5-omni-plus-realtime-to-realize-key-voice-dialogue.md)
--   [使用 AOQ 接入 qwen-audio-3.1-realtime-plus 实现实时语音对话](raw/model-user-guide/use-cases/realtime-audio-video-integration/real-time-voice-conversation-using-aoq-access-qwen-audio-3-0-realtime-plus.md)
--   [使用 AOQ 接入 qwen-audio-3.0-tts-flash 实现语音合成](raw/model-user-guide/use-cases/realtime-audio-video-integration/speech-synthesis-using-aoq-access-qwen-audio-3-0-tts-flash.md)
--   [使用 AOQ 接入 fun-asr-realtime 实现实时语音识别](raw/model-user-guide/use-cases/realtime-audio-video-integration/real-time-speech-recognition-using-aoq-access-fun-asr-realtime.md)
+-   [使用 AOQ 接入 qwen3.8-omni-flash-realtime 实现按键语音对话](raw/_short/use-aoq-to-access-qwen3-5-omni-plus-realtime-to--dee7ca70112bd23e.md)
+-   [使用 AOQ 接入 qwen-audio-3.0-tts-flash 实现语音合成](raw/_short/speech-synthesis-using-aoq-access-qwen-audio-3-0-43022e91dedcb0c1.md)
+-   [使用 AOQ 接入 fun-asr-realtime 实现实时语音识别](raw/_short/real-time-speech-recognition-using-aoq-access-fu-1f528aaba4a8fd1b.md)
+-   [使用 AOQ 接入 qwen-audio-3.1-realtime-plus 实现实时语音对话](raw/_short/real-time-voice-conversation-using-aoq-access-qw-7e2ab540f9ffd31d.md)
+-   [通过WebRTC使用多模态交互套件实现实时通话](raw/model-user-guide/use-cases/realtime-audio-video-integration/best-practice-webrtc-multimodal-dialog.md)
