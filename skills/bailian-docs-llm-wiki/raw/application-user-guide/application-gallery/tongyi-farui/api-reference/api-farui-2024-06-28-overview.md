@@ -22,7 +22,7 @@ API
 
 API概述
 
-[RunLegalAdviceConsultation](raw/application-user-guide/application-gallery/tongyi-farui/api-reference/api-farui-2024-06-28-dir/api-farui-2024-06-28-dir-legal-advice/api-farui-2024-06-28-runlegaladviceconsultation.md)
+[RunLegalAdviceConsultation](raw/_short/api-farui-2024-06-28-runlegaladviceconsultation-f6b745f026f07da1.md)
 
 法律咨询
 
@@ -36,19 +36,19 @@ API
 
 API概述
 
-[CreateTextFile](raw/application-user-guide/application-gallery/tongyi-farui/api-reference/api-farui-2024-06-28-dir/api-farui-2024-06-28-dir-contract-review/api-farui-2024-06-28-createtextfile.md)
+[CreateTextFile](raw/_short/api-farui-2024-06-28-createtextfile-c5ef14cc30d137b8.md)
 
 上传合同审查文件
 
 该接口用于将文档上传到合同审查模块中，添加成功之后，系统会自动启动文件的解析，并返回对应的文件ID用于后续生成审查规则和审查结果。文件解析有排队机制，如果队列较长，文件可能需要等待一段时间才能解析完成。
 
-[RunContractRuleGeneration](raw/application-user-guide/application-gallery/tongyi-farui/api-reference/api-farui-2024-06-28-dir/api-farui-2024-06-28-dir-contract-review/api-farui-2024-06-28-runcontractrulegeneration.md)
+[RunContractRuleGeneration](raw/_short/api-farui-2024-06-28-runcontractrulegeneration-89d61f102cf1cd59.md)
 
 生成合同审查规则
 
 该接口用于合同审查模块的智能规则生成，调用大模型返回合同的审查规则和对应风险。传入合同审查文件的ID、审查立场，会通过sse的方式增量式返回模型生成的审查规则。
 
-[RunContractResultGeneration](raw/application-user-guide/application-gallery/tongyi-farui/api-reference/api-farui-2024-06-28-dir/api-farui-2024-06-28-dir-contract-review/api-farui-2024-06-28-runcontractresultgeneration.md)
+[RunContractResultGeneration](raw/_short/api-farui-2024-06-28-runcontractresultgeneration-84be6504e528f227.md)
 
 生成合同审查结果
 
@@ -62,13 +62,13 @@ API
 
 API概述
 
-[RunSearchLawQuery](raw/application-user-guide/application-gallery/tongyi-farui/api-reference/api-farui-2024-06-28-dir/api-farui-2024-06-28-dir-search-services/api-farui-2024-06-28-runsearchlawquery.md)
+[RunSearchLawQuery](raw/_short/api-farui-2024-06-28-runsearchlawquery-d74ec48ff3125bb0.md)
 
 法规检索
 
 该接口用于检索用户描述的问题对应的相关法规。用户输入问题后，会调用大模型分析并检索对应的法规法条。
 
-[RunSearchCaseFullText](raw/application-user-guide/application-gallery/tongyi-farui/api-reference/api-farui-2024-06-28-dir/api-farui-2024-06-28-dir-search-services/api-farui-2024-06-28-runsearchcasefulltext.md)
+[RunSearchCaseFullText](raw/_short/api-farui-2024-06-28-runsearchcasefulltext-36aacb09f5d109b8.md)
 
 案例检索
 
@@ -82,7 +82,7 @@ API
 
 API概述
 
-[RunContractExtract](raw/application-user-guide/application-gallery/tongyi-farui/api-reference/api-farui-2024-06-28-dir/api-farui-2024-06-28-dir-contract-extraction/api-farui-2024-06-28-runcontractextract.md)
+[RunContractExtract](raw/_short/api-farui-2024-06-28-runcontractextract-f7f7546aa22d49ee.md)
 
 合同抽取
 

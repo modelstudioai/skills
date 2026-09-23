@@ -178,7 +178,7 @@
 
 录音纪要
 
-按通义听悟结算，详见[产品概述](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-meeting/tingwu-meeting-summary-overview.md)
+按通义听悟结算，详见[产品概述](raw/_short/tingwu-meeting-summary-overview-0b5b5de854839ad1.md)
 
 海外加速服务
 

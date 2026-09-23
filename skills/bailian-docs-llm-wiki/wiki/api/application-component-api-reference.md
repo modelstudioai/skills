@@ -1,47 +1,35 @@
 # application component api reference
 
-应用组件 API 是百炼平台提供的核心能力接口，用于在自定义应用中集成大模型推理、知识库检索、工作流编排等能力。该 API 采用 RESTful 设计，支持标准 HTTP 请求与 JSON 数据格式，适用于服务端调用场景。所有接口均需通过 RAM 授权及 API Key 鉴权，具体接入方式和参数规范详见下文。
+应用组件 API 是百炼平台提供的核心能力封装，用于在自定义应用中集成大模型推理、工具调用、会话管理等能力。该接口面向开发者提供统一的 RESTful 接口规范，支持同步响应与[流式输出](../concepts/streaming-output.md)两种模式。所有请求需通过 RAM 授权并使用指定服务接入点发起。
 
-## 支持的模型/功能
+## 支持的模型与功能
 
-当前应用组件 API 支持以下核心能力：
-- 同步/异步大模型推理（含 Qwen 系列、Qwen2 系列及部分第三方模型）
-- 基于向量库的知识检索（需提前配置知识库 ID）
-- 多步骤工作流执行（通过 `workflow_id` 触发预设流程）
-- 模型输出结构化解析（启用 `response_format` 参数可返回 JSON Schema 校验结果）
-
-> **注意**：文档 [API概览](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中列出的 `qwen-vl-plus` 模型已下线，实际可用模型请以 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 中最新 `model_id` 列表为准。
+当前支持调用百炼平台托管的全部公开模型（如 `qwen-max`、`qwen-plus`、`qwen-turbo`）及用户私有微调模型（需已部署为服务）。功能覆盖文本生成、多轮对话（含历史上下文维护）、[函数调用](../concepts/function-calling.md)（Function Calling）、结构化输出（JSON Schema 约束）及文件内容解析（PDF/DOCX/TXT 等）。详细能力列表见 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model_id` | string | 是 | 模型唯一标识，如 `qwen-max`、`qwen-plus`；取值必须来自 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) |
-| `input` | object | 是 | 输入内容，结构为 `{ "messages": [...] }` 或 `{ "query": "...", "retrieval": { "knowledge_id": "..." } }` |
-| `parameters` | object | 否 | 推理参数，如 `temperature`（0.0–2.0）、`max_tokens`（1–8192）等；详见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) |
-| `response_format` | object | 否 | 指定结构化输出格式，需提供 `type: "json_schema"` 及 `schema` 定义 |
+| `model` | string | 是 | 模型 ID，必须为已开通权限的模型，如 `qwen-max`；私有模型需使用完整服务路径（如 `acs:baichuan:cn-hangzhou:123456789:service/qwen-finetuned-v1`） |
+| `input.messages` | array | 是 | 对话消息数组，每项含 `role`（`user`/`assistant`/`system`）和 `content`（字符串或 `file` 对象） |
+| `parameters.temperature` | number | 否 | 采样温度，默认 `0.8`；取值范围 `[0.0, 2.0]`，详见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) |
+| `parameters.stream` | boolean | 否 | 是否启用流式响应，默认 `false`；设为 `true` 时返回 SSE 格式数据 |
+
+> **注意**：`input.messages` 中 `system` 角色仅支持首条消息，后续出现将被忽略——该行为与 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 文档中“多轮 system 指令支持”的描述存在不一致，以实际 API 行为为准（2024 Q2 版本已确认移除多 system 支持）。
 
 ## 使用方式
 
-1. **获取接入点**：调用前需从 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 获取对应 Region 的 endpoint URL（如 `https://dashscope.aliyuncs.com/api/v1/apps/{app_id}/chat`）  
-2. **构造请求**：使用 `POST` 方法，Header 中携带 `Authorization: Bearer <api_key>` 和 `Content-Type: application/json`  
-3. **发送调用**：Body 示例：
-   ```json
-   {
-     "model_id": "qwen-max",
-     "input": {
-       "messages": [{"role": "user", "content": "你好"}]
-     },
-     "parameters": {"temperature": 0.5}
-   }
-   ```
+1. 获取 RAM 凭据（AccessKey ID/Secret），确保已授予 `AliyunBaiChuanFullAccess` 或最小权限策略（参见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)）  
+2. 构造 HTTPS POST 请求，Endpoint 为 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`（中国内地）或对应区域接入点  
+3. 设置 Header：`Authorization: Bearer ${api_key}`（推荐）或 `X-DashScope-Access-Key: ${access_key_id}` + 签名  
+4. 发送 JSON body，示例见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)
 
 ## 限制和注意事项
 
-- 单次请求 `input.messages` 最多支持 10 条消息，总 token 数上限为 32768（含 system [prompt](../guides/prompt.md)）  
-- 异步任务（`/v1/apps/{app_id}/chat/async`）最长保留结果 24 小时，超时后无法查询  
-- 知识库检索仅支持已发布状态的知识库，草稿或已删除知识库将返回 `404` 错误  
-- > **注意**：[授权信息](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md) 文档中描述的旧版 STS [Token](../concepts/token.md) 方式已废弃，现仅支持 API Key 或 RAM Role Assume 方式鉴权，请以 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 中 v2024-03-01 起的变更为准。
+- 单次请求 `input.messages` 总长度上限为 32768 token（按模型 tokenizer 计算）；超限将返回 `400 Bad Request`  
+- 流式响应（`stream=true`）下，`system` 消息不可用，且 `messages` 数组长度必须 ≥ 1（不允许空会话）  
+- 私有模型调用需确保模型服务处于 `ACTIVE` 状态，状态查询请参考 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 中的健康检查章节  
+- 所有请求受账户级 QPS 与并发数限制，具体配额请在控制台「API 调用配额」页查看
 
 ## 来源文档
 

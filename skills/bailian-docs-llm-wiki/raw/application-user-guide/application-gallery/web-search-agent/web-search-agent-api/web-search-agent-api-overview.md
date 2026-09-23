@@ -16,6 +16,6 @@
 
 千问联网检索Agent提供的 agent\_id 与 agent\_version 信息，提供联网知识检索、场景化对话等能力，支持多模态图像理解问答
 
-[多模态文件操作](raw/application-user-guide/application-gallery/web-search-agent/web-search-agent-api/web-search-agent-api-chat-multimodal-file.md)
+[多模态文件操作](raw/_short/web-search-agent-api-chat-multimodal-file-060ef6520fb104fe.md)
 
 使用联网搜索多模态能力时，可以通过如下文件接口，将需要与联网搜索 agent 交互的图片提前上传到 OSS 处，在进行联网问答时，使用已经提前上传到 OSS 图片 url， 可以提供更流畅的问答体验。

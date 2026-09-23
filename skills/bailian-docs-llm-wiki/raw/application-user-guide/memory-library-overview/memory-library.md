@@ -44,7 +44,7 @@
 
 在记忆库详情页的**记忆详情**标签页，可查看记忆库基本信息、统计数据和记忆实体列表，支持通过记忆实体 ID（`user_id`）筛选并查看记忆详情。
 
-在**记忆检索**标签页可调试检索效果：调整最大召回数量、相似度阈值（建议 0.5~0.7），按需开启意图判别召回、改写和排序，优化召回准确性和相关性。
+在**记忆检索**标签页可调试检索效果。通过 API 调试时，调用 `/memory_nodes/search`，用 `messages` 提供对话记录，使用 `top_k` 控制最大召回数量；`min_score` 是 Pro 版本生效的最小分数阈值，默认值为 0.3。
 
 通过 API 管理记忆（列表、更新、删除）参见[管理记忆](raw/application-user-guide/memory-library-overview/create-memory/manage-memory.md)。
 

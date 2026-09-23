@@ -324,7 +324,7 @@ async function connect() {
 
 #### AOQ
 
-AOQ 通过业务 AppServer 发起 HTTP 请求获取连接参数，再由客户端 SDK 建立媒体连接。鉴权步骤见[Token 鉴权](https://help.aliyun.com/zh/model-studio/realtime-token-authentication#tkauth-aoq-title)。使用 `qwen3.8-omni-flash-realtime` 的完整示例见[实时通话](raw/model-user-guide/use-cases/realtime-audio-video-integration/best-practice-aoq-omni-realtime.md)或[按键语音对话](raw/model-user-guide/use-cases/realtime-audio-video-integration/use-aoq-to-access-qwen3-5-omni-plus-realtime-to-realize-key-voice-dialogue.md)。
+AOQ 通过业务 AppServer 发起 HTTP 请求获取连接参数，再由客户端 SDK 建立媒体连接。鉴权步骤见[Token 鉴权](https://help.aliyun.com/zh/model-studio/realtime-token-authentication#tkauth-aoq-title)。使用 `qwen3.8-omni-flash-realtime` 的完整示例见[实时通话](raw/model-user-guide/use-cases/realtime-audio-video-integration/best-practice-aoq-omni-realtime.md)或[按键语音对话](raw/_short/use-aoq-to-access-qwen3-5-omni-plus-realtime-to--dee7ca70112bd23e.md)。
 
 ### 2\. 配置会话
 
@@ -529,7 +529,7 @@ Qwen3.5-Omni-Realtime 系列模型是千问的实时多模态模型，相比于�
     
 -   **声音复刻**
     
-    qwen3.5-omni-plus-realtime 和 qwen3.5-omni-flash-realtime 支持声音复刻功能，可使用自定义音色进行实时对话。详见[声音复刻](raw/model-api-reference/omni-realtime-api/qwen-omni-voice-cloning.md)。
+    qwen3.5-omni-plus-realtime 和 qwen3.5-omni-flash-realtime 支持声音复刻功能，可使用自定义音色进行实时对话。详见[声音复刻](raw/_short/qwen-omni-voice-cloning-717550bc449e9e29.md)。
     
 
 > 模型的名称、上下文、价格、快照版本等信息请参见百炼控制台；并发限流条件请参考[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
@@ -3863,9 +3863,10 @@ ws.run_forever()
 
 ## API 参考
 
+通过 AOQ 接入的流程和示例，请参见[AOQ 接入](raw/model-api-reference/realtime-api-user-guide/realtime-model-connection/realtime-aoq-access.md)。支持的模型及版本请参见[模型与协议支持范围](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-s02h2)。
+
 -   [客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)
 -   [服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
--   [AOQ客户端API](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md)
 -   [Realtime API 概述](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)（WebRTC 协议说明）
 
 ## 计费与限流

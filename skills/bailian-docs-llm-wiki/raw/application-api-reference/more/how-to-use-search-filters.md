@@ -2,7 +2,7 @@
 
 如果您在请求 Retrieve 接口时返回的结果包含较多干扰信息，可以参考本文示例，在请求时传入SearchFilters设置个性化的检索条件，对语义检索结果进行过滤，以排除与查询Query无关的信息（该方法尤其适合结构化数据）。
 
-> 指知识库的[Retrieve](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-retrieve.md)接口。
+> 指知识库的[Retrieve](raw/_short/api-bailian-2023-12-29-retrieve-c8e6b8d718a30a84.md)接口。
 
 ## 效果对比
 
@@ -2551,11 +2551,11 @@ public class TagQueryExample2 {
 
 **检索知识库**
 
-可调用[Retrieve](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-retrieve.md)接口检索知识库并返回文本切片。
+可调用[Retrieve](raw/_short/api-bailian-2023-12-29-retrieve-c8e6b8d718a30a84.md)接口检索知识库并返回文本切片。
 
 **子账号调用**
 
-RAM用户（子账号）请先获取阿里云百炼的数据权限再调用[Retrieve](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-retrieve.md)接口，请参见[授权RAM用户API权限](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)。
+RAM用户（子账号）请先获取阿里云百炼的数据权限再调用[Retrieve](raw/_short/api-bailian-2023-12-29-retrieve-c8e6b8d718a30a84.md)接口，请参见[授权RAM用户API权限](https://help.aliyun.com/zh/model-studio/grant-data-access-permission-to-ram-user)。
 
 ## 错误码
 

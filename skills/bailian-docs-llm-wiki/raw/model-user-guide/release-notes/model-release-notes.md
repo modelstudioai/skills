@@ -309,7 +309,7 @@ Spring AI Alibaba 调用百炼应用文档上线
 
 模型调优新增强化学习训练 (邀约制)
 
-提供强化学习 (RL) 训练能力, 支持基于奖励信号优化模型策略, 当前邀约制开放, [了解详情](raw/model-user-guide/fine-tuning/rl-training-overview.md)
+提供强化学习 (RL) 训练能力, 支持基于奖励信号优化模型策略, 当前邀约制开放, [了解详情](raw/model-user-guide/fine-tuning/rl-overview/rl-training-overview.md)
 
 5月28日
 
@@ -325,7 +325,7 @@ Spring AI Alibaba 调用百炼应用文档上线
 
 通义多模态翻译 API 参考上线
 
-通义多模态翻译 API 目录上线, 覆盖文本翻译、图片翻译、文档翻译、网页翻译等接口，[了解详情](raw/application-user-guide/application-gallery/official-application-tongyi-translate/tongyi-translate-api-reference/api-anytrans-2025-07-07-dir.md)
+通义多模态翻译 API 目录上线, 覆盖文本翻译、图片翻译、文档翻译、网页翻译等接口，[了解详情](raw/_short/api-anytrans-2025-07-07-dir-33b7c88c69a89df2.md)
 
 5月25日
 
@@ -341,7 +341,7 @@ Spring AI Alibaba 调用百炼应用文档上线
 
 数据连接新增 ListCategory 接口
 
-数据连接新增 ListCategory 接口, 查询原应用数据类目列表，[了解详情](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-listcategory.md)
+数据连接新增 ListCategory 接口, 查询原应用数据类目列表，[了解详情](raw/_short/api-bailian-2023-12-29-listcategory-2521532ef3e828b3.md)
 
 5月21日
 
@@ -357,7 +357,7 @@ Spring AI Alibaba 调用百炼应用文档上线
 
 数据连接新增 ChangeParseSetting 接口
 
-数据连接新增 ChangeParseSetting 接口, 支持按文件类型配置解析方式，[了解详情](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-changeparsesetting.md)
+数据连接新增 ChangeParseSetting 接口, 支持按文件类型配置解析方式，[了解详情](raw/_short/api-bailian-2023-12-29-changeparsesetting-59a7c69675f499ad.md)
 
 5月15日
 
@@ -373,7 +373,7 @@ Spring AI Alibaba 调用百炼应用文档上线
 
 新版智能体应用 DashScope API 首发
 
-发布新版智能体应用 DashScope API 参考，支持单轮/多轮、流式、文件问答、视觉理解，[了解详情](raw/application-api-reference/application-call/application-dashscope-api-reference/new-agent-application-api-reference.md)
+发布新版智能体应用 DashScope API 参考，支持单轮/多轮、流式、文件问答、视觉理解，[了解详情](raw/_short/new-agent-application-api-reference-d745b325d97fcf2e.md)
 
 5月8日
 
@@ -431,7 +431,7 @@ Token Plan 团队版新增团队管理：支持 SSO/钉钉登录、席位分配�
 
 多模态交互开发套件移动端 Android SDK 上线
 
-新增移动端 Android SDK，含下载安装、关键接口与代码示例，[了解详情](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/multimodal-sdk-android.md)
+新增移动端 Android SDK，含下载安装、关键接口与代码示例，[了解详情](raw/_short/multimodal-sdk-android-c788089f36353934.md)
 
 4月9日
 
@@ -439,7 +439,7 @@ Token Plan 团队版新增团队管理：支持 SSO/钉钉登录、席位分配�
 
 RTOS C SDK 新增 License 模式
 
-多模态交互开发套件 RTOS C SDK 新增 License 模式，覆盖嵌入式硬件半托管/全托管接入，[了解详情](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/mmi-rtos-sdk.md)
+多模态交互开发套件 RTOS C SDK 新增 License 模式，覆盖嵌入式硬件半托管/全托管接入，[了解详情](raw/application-user-guide/application-gallery/multimodal-products/multimodal-sdk/multimodal-mobile-sdk/mmi-rtos-sdk.md)
 
 4月7日
 
@@ -447,7 +447,7 @@ RTOS C SDK 新增 License 模式
 
 应用组件 Prompt 工程 API 上线
 
-应用组件新增 Prompt 工程模块及其 API，提供 Prompt 模板管理能力，[了解详情](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering.md)
+应用组件新增 Prompt 工程模块及其 API，提供 Prompt 模板管理能力，[了解详情](raw/_short/api-bailian-2023-12-29-dir-prompt-engineering-11ee962a5f5d5d1e.md)
 
 4月1日
 
@@ -489,7 +489,7 @@ UI 设计器上线
 
 全妙 PPT 生成 API 模块上线
 
-全妙解决方案-PPT 生成模块开放完整 API：模板、文档、作品等接口，[了解详情](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-ppt-generation.md)
+全妙解决方案-PPT 生成模块开放完整 API：模板、文档、作品等接口，[了解详情](raw/_short/api-aimiaobi-2023-08-01-dir-ppt-generation-bedccbc06ae5974a.md)
 
 **2月**
 

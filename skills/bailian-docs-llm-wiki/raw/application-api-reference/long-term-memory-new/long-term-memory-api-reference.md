@@ -46,13 +46,21 @@ POST
 
 添加事实记忆
 
-[SearchMemory](raw/application-api-reference/long-term-memory-new/fragments-overview/search-memory.md)
+[AddMemoryAsync](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)
 
 POST
 
-`/memory_nodes/search`
+`/add-async`
 
-搜索事实记忆
+异步提交记忆抽取任务
+
+[GetEvent](raw/application-api-reference/long-term-memory-new/fragments-overview/get-event.md)
+
+GET
+
+`/events/{event_id}`
+
+查询异步任务事件详情
 
 [ListMemory](raw/application-api-reference/long-term-memory-new/fragments-overview/list-memory.md)
 
@@ -61,6 +69,30 @@ GET
 `/memory_nodes`
 
 列出事实记忆
+
+[SearchMemory](raw/application-api-reference/long-term-memory-new/fragments-overview/search-memory.md)
+
+POST
+
+`/memory_nodes/search`
+
+搜索事实记忆
+
+[GetMemoryNode](raw/application-api-reference/long-term-memory-new/fragments-overview/get-memory-node.md)
+
+GET
+
+`/memory_nodes/{memory_node_id}`
+
+获取单个记忆节点详情
+
+[GetSkillExport](raw/application-api-reference/long-term-memory-new/fragments-overview/get-skill-export.md)
+
+GET
+
+`/skill/export/{memory_node_id}`
+
+导出技能记忆节点
 
 [UpdateMemory](raw/application-api-reference/long-term-memory-new/fragments-overview/update-memory.md)
 
@@ -119,14 +151,6 @@ PATCH
 `/profile_schemas/{profile_schema_id}`
 
 更新画像模板
-
-[DeleteProfileSchema](raw/application-api-reference/long-term-memory-new/profiles-overview/delete-schema.md)
-
-DELETE
-
-`/profile_schemas/{profile_schema_id}`
-
-删除画像模板
 
 [GetUserProfile](raw/application-api-reference/long-term-memory-new/profiles-overview/get-user-profile.md)
 

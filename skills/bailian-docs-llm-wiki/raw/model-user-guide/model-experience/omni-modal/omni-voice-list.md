@@ -6,7 +6,7 @@ Qwen-Omni（非实时）和 Qwen-Omni-Realtime（实时）模型支持的音色�
 
 > 默认音色为：`Tina`
 
-通过 `session.audio.output.voice` 设置音色，详见[音色配置](https://help.aliyun.com/zh/model-studio/client-events#qwen38-client)；自定义音色参见[声音复刻](raw/model-api-reference/omni-realtime-api/qwen-omni-voice-cloning.md)。
+通过 `session.audio.output.voice` 设置音色，详见[音色配置](https://help.aliyun.com/zh/model-studio/client-events#qwen38-client)；自定义音色参见[声音复刻](raw/_short/qwen-omni-voice-cloning-717550bc449e9e29.md)。
 
 支持 36 种语种和方言的语音生成，与 Qwen3.5-Omni-Realtime 一致；完整语种范围见[支持的语言](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)。
 

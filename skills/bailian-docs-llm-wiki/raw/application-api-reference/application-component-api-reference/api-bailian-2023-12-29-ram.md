@@ -75,7 +75,7 @@
 
 sfm:ListCategory
 
-[ListCategory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-listcategory.md)
+[ListCategory](raw/_short/api-bailian-2023-12-29-listcategory-2521532ef3e828b3.md)
 
 list
 
@@ -89,7 +89,7 @@ list
 
 sfm:GetIndexJobStatus
 
-[GetIndexJobStatus](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-getindexjobstatus.md)
+[GetIndexJobStatus](raw/_short/api-bailian-2023-12-29-getindexjobstatus-1e88b6ccfffe0fe4.md)
 
 get
 
@@ -103,7 +103,7 @@ get
 
 sfm:AddCategory
 
-[AddCategory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addcategory.md)
+[AddCategory](raw/_short/api-bailian-2023-12-29-addcategory-e2fe0e0435ed504e.md)
 
 create
 
@@ -117,7 +117,7 @@ create
 
 sfm:GetAlipayUrl
 
-[GetAlipayUrl](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-getalipayurl.md)
+[GetAlipayUrl](raw/_short/api-bailian-2023-12-29-getalipayurl-e6e9715d5164f74a.md)
 
 none
 
@@ -131,7 +131,7 @@ none
 
 sfm:DeleteMemoryNode
 
-[DeleteMemoryNode](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-deletememorynode.md)
+[DeleteMemoryNode](raw/_short/api-bailian-2023-12-29-deletememorynode-d7919fd53d316466.md)
 
 delete
 
@@ -145,7 +145,7 @@ delete
 
 sfm:GetParseSettings
 
-[GetParseSettings](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-getparsesettings.md)
+[GetParseSettings](raw/_short/api-bailian-2023-12-29-getparsesettings-522514560c54f49f.md)
 
 get
 
@@ -159,7 +159,7 @@ get
 
 sfm:SubmitIndexJob
 
-[SubmitIndexJob](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-submitindexjob.md)
+[SubmitIndexJob](raw/_short/api-bailian-2023-12-29-submitindexjob-63b38294171880d4.md)
 
 create
 
@@ -173,7 +173,7 @@ create
 
 sfm:DeleteCategory
 
-[DeleteCategory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-deletecategory.md)
+[DeleteCategory](raw/_short/api-bailian-2023-12-29-deletecategory-9838436bd2db3113.md)
 
 delete
 
@@ -187,7 +187,7 @@ delete
 
 sfm:ListIndexFileDetails
 
-[ListIndexFileDetails](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-listindexfiledetails.md)
+[ListIndexFileDetails](raw/_short/api-bailian-2023-12-29-listindexfiledetails-0e2036d0ef0d8fe8.md)
 
 list
 
@@ -201,7 +201,7 @@ list
 
 sfm:UpdateConnector
 
-[UpdateConnector](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-updateconnector.md)
+[UpdateConnector](raw/_short/api-bailian-2023-12-29-updateconnector-6a24905a7d201597.md)
 
 update
 
@@ -215,7 +215,7 @@ update
 
 sfm:ChangeParseSetting
 
-[ChangeParseSetting](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-changeparsesetting.md)
+[ChangeParseSetting](raw/_short/api-bailian-2023-12-29-changeparsesetting-59a7c69675f499ad.md)
 
 update
 
@@ -229,7 +229,7 @@ update
 
 sfm:GetMemory
 
-[GetMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-getmemory.md)
+[GetMemory](raw/_short/api-bailian-2023-12-29-getmemory-c25d3815c2b70f40.md)
 
 get
 
@@ -243,7 +243,7 @@ get
 
 sfm:GetAvailableParserTypes
 
-[GetAvailableParserTypes](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-getavailableparsertypes.md)
+[GetAvailableParserTypes](raw/_short/api-bailian-2023-12-29-getavailableparsertypes-09561c4e0fb505d5.md)
 
 get
 
@@ -257,7 +257,7 @@ get
 
 sfm:UpdateMemory
 
-[UpdateMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-updatememory.md)
+[UpdateMemory](raw/_short/api-bailian-2023-12-29-updatememory-b5fdfa9f480e94bb.md)
 
 update
 
@@ -271,7 +271,7 @@ update
 
 sfm:CreateMemory
 
-[CreateMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-creatememory.md)
+[CreateMemory](raw/_short/api-bailian-2023-12-29-creatememory-b8e710cdd3512a87.md)
 
 create
 
@@ -285,7 +285,7 @@ create
 
 sfm:ApplyFileUploadLease
 
-[ApplyFileUploadLease](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-applyfileuploadlease.md)
+[ApplyFileUploadLease](raw/_short/api-bailian-2023-12-29-applyfileuploadlease-39e8ca15e0e9561a.md)
 
 none
 
@@ -299,7 +299,7 @@ none
 
 sfm:ListFile
 
-[ListFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-listfile.md)
+[ListFile](raw/_short/api-bailian-2023-12-29-listfile-360209e3a2479f14.md)
 
 list
 
@@ -327,7 +327,7 @@ delete
 
 sfm:BatchUpdateFileTag
 
-[BatchUpdateFileTag](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-batchupdatefiletag.md)
+[BatchUpdateFileTag](raw/_short/api-bailian-2023-12-29-batchupdatefiletag-34a8f009de66cb8b.md)
 
 update
 
@@ -341,7 +341,7 @@ update
 
 sfm:AddFile
 
-[AddFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addfile.md)
+[AddFile](raw/_short/api-bailian-2023-12-29-addfile-8c254b3500bc50bc.md)
 
 create
 
@@ -355,7 +355,7 @@ create
 
 sfm:DeleteChunk
 
-[DeleteChunk](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-deletechunk.md)
+[DeleteChunk](raw/_short/api-bailian-2023-12-29-deletechunk-d249422088735d90.md)
 
 delete
 
@@ -369,7 +369,7 @@ delete
 
 sfm:DeleteMemory
 
-[DeleteMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-deletememory.md)
+[DeleteMemory](raw/_short/api-bailian-2023-12-29-deletememory-ffa5f461924db8f6.md)
 
 delete
 
@@ -383,7 +383,7 @@ delete
 
 sfm:DeletePromptTemplate
 
-[DeletePromptTemplate](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-deleteprompttemplate.md)
+[DeletePromptTemplate](raw/_short/api-bailian-2023-12-29-deleteprompttemplate-b441fa1b9c777b81.md)
 
 delete
 
@@ -397,7 +397,7 @@ delete
 
 sfm:ListMemories
 
-[ListMemories](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-listmemories.md)
+[ListMemories](raw/_short/api-bailian-2023-12-29-listmemories-3411c870627f174b.md)
 
 list
 
@@ -411,7 +411,7 @@ list
 
 sfm:AddConnector
 
-[AddConnector](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addconnector.md)
+[AddConnector](raw/_short/api-bailian-2023-12-29-addconnector-7a3c9650409710fe.md)
 
 create
 
@@ -425,7 +425,7 @@ create
 
 sfm:GetConnector
 
-[GetConnector](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-getconnector.md)
+[GetConnector](raw/_short/api-bailian-2023-12-29-getconnector-cb2e485a0efd52f7.md)
 
 get
 
@@ -439,7 +439,7 @@ get
 
 sfm:UpdatePromptTemplate
 
-[UpdatePromptTemplate](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-updateprompttemplate.md)
+[UpdatePromptTemplate](raw/_short/api-bailian-2023-12-29-updateprompttemplate-519fb4af5ea50522.md)
 
 update
 
@@ -453,7 +453,7 @@ update
 
 sfm:DeleteFiles
 
-[DeleteFiles](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-deletefiles.md)
+[DeleteFiles](raw/_short/api-bailian-2023-12-29-deletefiles-96ef0815114e4e37.md)
 
 delete
 
@@ -467,7 +467,7 @@ delete
 
 sfm:GetMemoryNode
 
-[GetMemoryNode](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-getmemorynode.md)
+[GetMemoryNode](raw/_short/api-bailian-2023-12-29-getmemorynode-59d0d4efa0e86d78.md)
 
 get
 
@@ -481,7 +481,7 @@ get
 
 sfm:ApplyTempStorageLease
 
-[ApplyTempStorageLease](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-applytempstoragelease.md)
+[ApplyTempStorageLease](raw/_short/api-bailian-2023-12-29-applytempstoragelease-5a38ce0eefc66408.md)
 
 none
 
@@ -495,7 +495,7 @@ none
 
 sfm:DeleteFile
 
-[DeleteFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-deletefile.md)
+[DeleteFile](raw/_short/api-bailian-2023-12-29-deletefile-7e0409a458195fe2.md)
 
 delete
 
@@ -509,7 +509,7 @@ delete
 
 sfm:AddFilesFromAuthorizedOss
 
-[AddFilesFromAuthorizedOss](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addfilesfromauthorizedoss.md)
+[AddFilesFromAuthorizedOss](raw/_short/api-bailian-2023-12-29-addfilesfromauthorizedoss-879556d685a301b3.md)
 
 create
 
@@ -523,7 +523,7 @@ create
 
 sfm:CreateMemoryNode
 
-[CreateMemoryNode](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-creatememorynode.md)
+[CreateMemoryNode](raw/_short/api-bailian-2023-12-29-creatememorynode-c6cd91f25e1f7997.md)
 
 create
 
@@ -537,7 +537,7 @@ create
 
 sfm:UpdateChunk
 
-[UpdateChunk](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-updatechunk.md)
+[UpdateChunk](raw/_short/api-bailian-2023-12-29-updatechunk-589b46fcc24261f8.md)
 
 update
 
@@ -551,7 +551,7 @@ update
 
 sfm:ListCategory
 
-[ListCategory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-listcategory.md)
+[ListCategory](raw/_short/api-bailian-2023-12-29-listcategory-2521532ef3e828b3.md)
 
 list
 
@@ -565,7 +565,7 @@ list
 
 sfm:GetIndexJobStatus
 
-[GetIndexJobStatus](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-getindexjobstatus.md)
+[GetIndexJobStatus](raw/_short/api-bailian-2023-12-29-getindexjobstatus-1e88b6ccfffe0fe4.md)
 
 get
 
@@ -579,7 +579,7 @@ get
 
 sfm:GetParseSettings
 
-[GetParseSettings](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-getparsesettings.md)
+[GetParseSettings](raw/_short/api-bailian-2023-12-29-getparsesettings-522514560c54f49f.md)
 
 get
 
@@ -593,7 +593,7 @@ get
 
 sfm:GetAlipayUrl
 
-[GetAlipayUrl](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-getalipayurl.md)
+[GetAlipayUrl](raw/_short/api-bailian-2023-12-29-getalipayurl-e6e9715d5164f74a.md)
 
 none
 
@@ -607,7 +607,7 @@ none
 
 sfm:AddCategory
 
-[AddCategory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addcategory.md)
+[AddCategory](raw/_short/api-bailian-2023-12-29-addcategory-e2fe0e0435ed504e.md)
 
 create
 
@@ -621,7 +621,7 @@ create
 
 sfm:SubmitIndexJob
 
-[SubmitIndexJob](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-submitindexjob.md)
+[SubmitIndexJob](raw/_short/api-bailian-2023-12-29-submitindexjob-63b38294171880d4.md)
 
 create
 
@@ -635,7 +635,7 @@ create
 
 sfm:ChangeParseSetting
 
-[ChangeParseSetting](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-changeparsesetting.md)
+[ChangeParseSetting](raw/_short/api-bailian-2023-12-29-changeparsesetting-59a7c69675f499ad.md)
 
 update
 
@@ -649,7 +649,7 @@ update
 
 sfm:DeleteMemoryNode
 
-[DeleteMemoryNode](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-deletememorynode.md)
+[DeleteMemoryNode](raw/_short/api-bailian-2023-12-29-deletememorynode-d7919fd53d316466.md)
 
 delete
 
@@ -663,7 +663,7 @@ delete
 
 sfm:UpdateConnector
 
-[UpdateConnector](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-updateconnector.md)
+[UpdateConnector](raw/_short/api-bailian-2023-12-29-updateconnector-6a24905a7d201597.md)
 
 update
 
@@ -677,7 +677,7 @@ update
 
 sfm:GetMemory
 
-[GetMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-getmemory.md)
+[GetMemory](raw/_short/api-bailian-2023-12-29-getmemory-c25d3815c2b70f40.md)
 
 get
 
@@ -691,7 +691,7 @@ get
 
 sfm:ListIndexFileDetails
 
-[ListIndexFileDetails](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-listindexfiledetails.md)
+[ListIndexFileDetails](raw/_short/api-bailian-2023-12-29-listindexfiledetails-0e2036d0ef0d8fe8.md)
 
 list
 
@@ -719,7 +719,7 @@ delete
 
 sfm:UpdateMemory
 
-[UpdateMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-updatememory.md)
+[UpdateMemory](raw/_short/api-bailian-2023-12-29-updatememory-b5fdfa9f480e94bb.md)
 
 update
 
@@ -733,7 +733,7 @@ update
 
 sfm:CreateMemory
 
-[CreateMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-creatememory.md)
+[CreateMemory](raw/_short/api-bailian-2023-12-29-creatememory-b8e710cdd3512a87.md)
 
 create
 
@@ -747,7 +747,7 @@ create
 
 sfm:ListFile
 
-[ListFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-listfile.md)
+[ListFile](raw/_short/api-bailian-2023-12-29-listfile-360209e3a2479f14.md)
 
 list
 
@@ -761,7 +761,7 @@ list
 
 sfm:DeleteChunk
 
-[DeleteChunk](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-deletechunk.md)
+[DeleteChunk](raw/_short/api-bailian-2023-12-29-deletechunk-d249422088735d90.md)
 
 delete
 
@@ -775,7 +775,7 @@ delete
 
 sfm:GetAvailableParserTypes
 
-[GetAvailableParserTypes](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-getavailableparsertypes.md)
+[GetAvailableParserTypes](raw/_short/api-bailian-2023-12-29-getavailableparsertypes-09561c4e0fb505d5.md)
 
 get
 
@@ -789,7 +789,7 @@ get
 
 sfm:DeleteCategory
 
-[DeleteCategory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-deletecategory.md)
+[DeleteCategory](raw/_short/api-bailian-2023-12-29-deletecategory-9838436bd2db3113.md)
 
 delete
 
@@ -803,7 +803,7 @@ delete
 
 sfm:ListMemories
 
-[ListMemories](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-listmemories.md)
+[ListMemories](raw/_short/api-bailian-2023-12-29-listmemories-3411c870627f174b.md)
 
 list
 
@@ -817,7 +817,7 @@ list
 
 sfm:ApplyFileUploadLease
 
-[ApplyFileUploadLease](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-applyfileuploadlease.md)
+[ApplyFileUploadLease](raw/_short/api-bailian-2023-12-29-applyfileuploadlease-39e8ca15e0e9561a.md)
 
 none
 
@@ -831,7 +831,7 @@ none
 
 sfm:BatchUpdateFileTag
 
-[BatchUpdateFileTag](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-batchupdatefiletag.md)
+[BatchUpdateFileTag](raw/_short/api-bailian-2023-12-29-batchupdatefiletag-34a8f009de66cb8b.md)
 
 update
 
@@ -845,7 +845,7 @@ update
 
 sfm:GetConnector
 
-[GetConnector](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-getconnector.md)
+[GetConnector](raw/_short/api-bailian-2023-12-29-getconnector-cb2e485a0efd52f7.md)
 
 get
 
@@ -859,7 +859,7 @@ get
 
 sfm:GetMemoryNode
 
-[GetMemoryNode](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-getmemorynode.md)
+[GetMemoryNode](raw/_short/api-bailian-2023-12-29-getmemorynode-59d0d4efa0e86d78.md)
 
 get
 
@@ -873,7 +873,7 @@ get
 
 sfm:AddFile
 
-[AddFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addfile.md)
+[AddFile](raw/_short/api-bailian-2023-12-29-addfile-8c254b3500bc50bc.md)
 
 create
 
@@ -887,7 +887,7 @@ create
 
 sfm:AddConnector
 
-[AddConnector](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addconnector.md)
+[AddConnector](raw/_short/api-bailian-2023-12-29-addconnector-7a3c9650409710fe.md)
 
 create
 
@@ -901,7 +901,7 @@ create
 
 sfm:DeleteFiles
 
-[DeleteFiles](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-deletefiles.md)
+[DeleteFiles](raw/_short/api-bailian-2023-12-29-deletefiles-96ef0815114e4e37.md)
 
 delete
 
@@ -915,7 +915,7 @@ delete
 
 sfm:DeleteFile
 
-[DeleteFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-deletefile.md)
+[DeleteFile](raw/_short/api-bailian-2023-12-29-deletefile-7e0409a458195fe2.md)
 
 delete
 
@@ -929,7 +929,7 @@ delete
 
 sfm:DeletePromptTemplate
 
-[DeletePromptTemplate](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-deleteprompttemplate.md)
+[DeletePromptTemplate](raw/_short/api-bailian-2023-12-29-deleteprompttemplate-b441fa1b9c777b81.md)
 
 delete
 
@@ -943,7 +943,7 @@ delete
 
 sfm:UpdatePromptTemplate
 
-[UpdatePromptTemplate](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-updateprompttemplate.md)
+[UpdatePromptTemplate](raw/_short/api-bailian-2023-12-29-updateprompttemplate-519fb4af5ea50522.md)
 
 update
 
@@ -957,7 +957,7 @@ update
 
 sfm:AddFilesFromAuthorizedOss
 
-[AddFilesFromAuthorizedOss](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addfilesfromauthorizedoss.md)
+[AddFilesFromAuthorizedOss](raw/_short/api-bailian-2023-12-29-addfilesfromauthorizedoss-879556d685a301b3.md)
 
 create
 
@@ -971,7 +971,7 @@ create
 
 sfm:CreateMemoryNode
 
-[CreateMemoryNode](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-creatememorynode.md)
+[CreateMemoryNode](raw/_short/api-bailian-2023-12-29-creatememorynode-c6cd91f25e1f7997.md)
 
 create
 
@@ -985,7 +985,7 @@ create
 
 sfm:DeleteMemory
 
-[DeleteMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-deletememory.md)
+[DeleteMemory](raw/_short/api-bailian-2023-12-29-deletememory-ffa5f461924db8f6.md)
 
 delete
 
@@ -999,7 +999,7 @@ delete
 
 sfm:UpdateChunk
 
-[UpdateChunk](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-updatechunk.md)
+[UpdateChunk](raw/_short/api-bailian-2023-12-29-updatechunk-589b46fcc24261f8.md)
 
 update
 
@@ -1013,7 +1013,7 @@ update
 
 sfm:ApplyTempStorageLease
 
-[ApplyTempStorageLease](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-applytempstoragelease.md)
+[ApplyTempStorageLease](raw/_short/api-bailian-2023-12-29-applytempstoragelease-5a38ce0eefc66408.md)
 
 none
 
@@ -1027,7 +1027,7 @@ none
 
 sfm:GetIndexMonitor
 
-[GetIndexMonitor](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-getindexmonitor.md)
+[GetIndexMonitor](raw/_short/api-bailian-2023-12-29-getindexmonitor-3a609181d5c9c034.md)
 
 get
 
@@ -1041,7 +1041,7 @@ get
 
 sfm:Retrieve
 
-[Retrieve](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-retrieve.md)
+[Retrieve](raw/_short/api-bailian-2023-12-29-retrieve-c8e6b8d718a30a84.md)
 
 none
 
@@ -1055,7 +1055,7 @@ none
 
 sfm:DeleteIndex
 
-[DeleteIndex](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-deleteindex.md)
+[DeleteIndex](raw/_short/api-bailian-2023-12-29-deleteindex-500502bd6df1c49c.md)
 
 none
 
@@ -1069,7 +1069,7 @@ none
 
 sfm:ListMemoryNodes
 
-[ListMemoryNodes](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-listmemorynodes.md)
+[ListMemoryNodes](raw/_short/api-bailian-2023-12-29-listmemorynodes-4f1cc5232bdc67a5.md)
 
 list
 
@@ -1083,7 +1083,7 @@ list
 
 sfm:ListIndex
 
-[ListIndices](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-listindices.md)
+[ListIndices](raw/_short/api-bailian-2023-12-29-listindices-c555173be752eaaf.md)
 
 list
 
@@ -1097,7 +1097,7 @@ list
 
 sfm:UpdateMemoryNode
 
-[UpdateMemoryNode](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-updatememorynode.md)
+[UpdateMemoryNode](raw/_short/api-bailian-2023-12-29-updatememorynode-f2d05378b761b201.md)
 
 update
 
@@ -1111,7 +1111,7 @@ update
 
 sfm:GetPromptTemplate
 
-[GetPromptTemplate](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-getprompttemplate.md)
+[GetPromptTemplate](raw/_short/api-bailian-2023-12-29-getprompttemplate-584c357dd7cb48d6.md)
 
 get
 
@@ -1125,7 +1125,7 @@ get
 
 sfm:CreateIndex
 
-[CreateIndex](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-createindex.md)
+[CreateIndex](raw/_short/api-bailian-2023-12-29-createindex-8bc613c75f8af371.md)
 
 create
 
@@ -1139,7 +1139,7 @@ create
 
 sfm:ListPromptTemplates
 
-[ListPromptTemplates](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-listprompttemplates.md)
+[ListPromptTemplates](raw/_short/api-bailian-2023-12-29-listprompttemplates-ab5ba5362e93cfcd.md)
 
 list
 
@@ -1153,7 +1153,7 @@ list
 
 sfm:DeleteIndexDocument
 
-[DeleteIndexDocument](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-deleteindexdocument.md)
+[DeleteIndexDocument](raw/_short/api-bailian-2023-12-29-deleteindexdocument-0792a83f5a741348.md)
 
 delete
 
@@ -1167,7 +1167,7 @@ delete
 
 sfm:SubmitIndexAddDocumentsJob
 
-[SubmitIndexAddDocumentsJob](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-submitindexadddocumentsjob.md)
+[SubmitIndexAddDocumentsJob](raw/_short/api-bailian-2023-12-29-submitindexadddocumentsjo-ec4f5cf285e2c447.md)
 
 create
 
@@ -1181,7 +1181,7 @@ create
 
 sfm:UpdateFileTag
 
-[UpdateFileTag](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-updatefiletag.md)
+[UpdateFileTag](raw/_short/api-bailian-2023-12-29-updatefiletag-f84d2af6a45d6553.md)
 
 update
 
@@ -1195,7 +1195,7 @@ update
 
 sfm:UpdateTableFromAuthorizedOss
 
-[UpdateTableFromAuthorizedOss](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-updatetablefromauthorizedoss.md)
+[UpdateTableFromAuthorizedOss](raw/_short/api-bailian-2023-12-29-updatetablefromauthorized-d7436828bcf51602.md)
 
 update
 
@@ -1209,7 +1209,7 @@ update
 
 sfm:ListIndexFiles
 
-[ListIndexDocuments](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-listindexdocuments.md)
+[ListIndexDocuments](raw/_short/api-bailian-2023-12-29-listindexdocuments-9f0db0388c421903.md)
 
 list
 
@@ -1223,7 +1223,7 @@ list
 
 sfm:UpdateIndex
 
-[UpdateIndex](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-updateindex.md)
+[UpdateIndex](raw/_short/api-bailian-2023-12-29-updateindex-551997e1d335e340.md)
 
 update
 
@@ -1237,7 +1237,7 @@ update
 
 sfm:DescribeFile
 
-[DescribeFile](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-describefile.md)
+[DescribeFile](raw/_short/api-bailian-2023-12-29-describefile-020886c28a208bf2.md)
 
 none
 
@@ -1251,7 +1251,7 @@ none
 
 sfm:ChunkList
 
-[ListChunks](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-listchunks.md)
+[ListChunks](raw/_short/api-bailian-2023-12-29-listchunks-30a6c87b93a583c6.md)
 
 list
 
@@ -1265,7 +1265,7 @@ list
 
 sfm:AddTable
 
-[AddTable](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addtable.md)
+[AddTable](raw/_short/api-bailian-2023-12-29-addtable-6726351659db288d.md)
 
 create
 
@@ -1279,7 +1279,7 @@ create
 
 sfm:CreatePromptTemplate
 
-[CreatePromptTemplate](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-prompt-engineering/api-bailian-2023-12-29-createprompttemplate.md)
+[CreatePromptTemplate](raw/_short/api-bailian-2023-12-29-createprompttemplate-1194e536beb0529a.md)
 
 create
 
@@ -1293,7 +1293,7 @@ create
 
 sfm:GetAlipayTransferStatus
 
-[GetAlipayTransferStatus](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-getalipaytransferstatus.md)
+[GetAlipayTransferStatus](raw/_short/api-bailian-2023-12-29-getalipaytransferstatus-04aa88852762fd85.md)
 
 none
 

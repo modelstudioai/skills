@@ -107,7 +107,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/sear
     "messages": [{"role": "user", "content": "我需要做什么？"}],
     "top_k": 10,
     "min_score": 0.3,
-    "plan_version": "Lite"
+    "plan_version": "pro"
   }'
 ```
 
@@ -146,7 +146,6 @@ curl -X PATCH "https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/{m
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
   --header "Content-Type: application/json" \
   --data '{
-    "user_id": "user_001",
     "custom_content": "还要提醒我上午10点吃药。"
   }'
 

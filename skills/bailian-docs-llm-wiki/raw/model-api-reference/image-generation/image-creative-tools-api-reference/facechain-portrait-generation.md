@@ -6,7 +6,7 @@
 
 开发者可以通过以下链接，了解如何通过大模型服务平台调用FaceChain人物写真API。
 
--   [快速开始](raw/model-api-reference/image-generation/image-creative-tools-api-reference/facechain-portrait-generation/facechain-quick-start.md)
--   [人物图像检测API详情](raw/model-api-reference/image-generation/image-creative-tools-api-reference/facechain-portrait-generation/facechain-face-detection-api.md)
--   [人物形象训练API详情](raw/model-api-reference/image-generation/image-creative-tools-api-reference/facechain-portrait-generation/facechain-finetune-api.md)
--   [人物写真生成API详情](raw/model-api-reference/image-generation/image-creative-tools-api-reference/facechain-portrait-generation/facechain-generation.md)
+-   [快速开始](raw/_short/facechain-quick-start-20c922b5dddad051.md)
+-   [人物图像检测API详情](raw/_short/facechain-face-detection-api-3fa0c8f9a08beb3a.md)
+-   [人物形象训练API详情](raw/_short/facechain-finetune-api-98000a80fe5f2fef.md)
+-   [人物写真生成API详情](raw/_short/facechain-generation-e11b15fa1f0ad97a.md)

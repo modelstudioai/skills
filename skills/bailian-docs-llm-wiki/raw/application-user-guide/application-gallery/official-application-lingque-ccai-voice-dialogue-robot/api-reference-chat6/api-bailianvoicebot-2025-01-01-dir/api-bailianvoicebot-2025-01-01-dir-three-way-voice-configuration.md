@@ -1,7 +1,0 @@
-# 三方语音配置
-
--   [ListVoiceEngines - 获取三方语音引擎列表](raw/application-user-guide/application-gallery/official-application-lingque-ccai-voice-dialogue-robot/api-reference-chat6/api-bailianvoicebot-2025-01-01-dir/api-bailianvoicebot-2025-01-01-dir-three-way-voice-configuration/api-bailianvoicebot-2025-01-01-listvoiceengines.md)
--   [UpdateVoiceAccessProfile](raw/application-user-guide/application-gallery/official-application-lingque-ccai-voice-dialogue-robot/api-reference-chat6/api-bailianvoicebot-2025-01-01-dir/api-bailianvoicebot-2025-01-01-dir-three-way-voice-configuration/api-bailianvoicebot-2025-01-01-updatevoiceaccessprofile.md)
--   [ListVoiceAccessProfile](raw/application-user-guide/application-gallery/official-application-lingque-ccai-voice-dialogue-robot/api-reference-chat6/api-bailianvoicebot-2025-01-01-dir/api-bailianvoicebot-2025-01-01-dir-three-way-voice-configuration/api-bailianvoicebot-2025-01-01-listvoiceaccessprofile.md)
--   [DeleteVoiceAccessProfile](raw/application-user-guide/application-gallery/official-application-lingque-ccai-voice-dialogue-robot/api-reference-chat6/api-bailianvoicebot-2025-01-01-dir/api-bailianvoicebot-2025-01-01-dir-three-way-voice-configuration/api-bailianvoicebot-2025-01-01-deletevoiceaccessprofile.md)
--   [CreateVoiceAccessProfile](raw/application-user-guide/application-gallery/official-application-lingque-ccai-voice-dialogue-robot/api-reference-chat6/api-bailianvoicebot-2025-01-01-dir/api-bailianvoicebot-2025-01-01-dir-three-way-voice-configuration/api-bailianvoicebot-2025-01-01-createvoiceaccessprofile.md)

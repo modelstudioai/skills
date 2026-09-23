@@ -9,7 +9,7 @@
 -   **前置条件**：调用前须在百炼控制台 [知识问答服务页面](https://bailian.console.aliyun.com/cn-beijing/rag/qa/list) 创建并发布知识问答服务，获取应用 ID（`agent_id`），否则报 Agent 未发布。
 -   **多轮上下文**：平台不保存对话状态，每次请求需传入完整 `messages` 历史。建议限制历史长度（如最近 10 轮），避免超出模型上下文窗口。响应不返回 `session_id`。
 -   **流式要求**：`stream` 必须为 `true`，当前版本仅支持流式响应；若为 `false` 或为空将导致请求失败。
--   **临时文件**：开启控制台文件预解析后，可在对话时通过 `parameters.agent_options.session_files` 临时传入文件（最多 10 个），文件 ID 通过[添加文件](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-addfile.md)接口获取。
+-   **临时文件**：开启控制台文件预解析后，可在对话时通过 `parameters.agent_options.session_files` 临时传入文件（最多 10 个），文件 ID 通过[添加文件](raw/_short/api-bailian-2023-12-29-addfile-8c254b3500bc50bc.md)接口获取。
 -   **限流**：默认用户维度 25 QPS。如遇限流，请稍后重试。
 
 ## 请求语法

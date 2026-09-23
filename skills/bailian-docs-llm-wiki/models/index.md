@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 187 个模型家族 · 432 个主干模型 · 更新于 2026-09-23
+> 自动生成 · 共 188 个模型家族 · 433 个主干模型 · 更新于 2026-09-24
 
 **机器查询走结构化文件**：
 
@@ -17,7 +17,7 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 `notSuitableFor: []` 表示无已知限制。`profileCompleteness` 为 `structured-only` 时该画像未读过文档，仅机械字段可信。
 硬规格（价格/QPM/contextWindow/openSource）一律看行内顶层字段，不要从 profile 里找。
 
-## 文本生成 `TG` — 38 个家族
+## 文本生成 `TG` — 39 个家族
 
 - [DeepSeek](groups/deepseek.json) — DeepSeek 系列模型覆盖通用对话、复杂推理与多模态理解等场景，提供 Flash、Pro 等不同规格，可根据效果、响应速度和成本灵活选择。
   - 模型：`deepseek-r1`, `deepseek-r1-0528`, `deepseek-r1-distill-qwen-1.5b`, `deepseek-r1-distill-qwen-14b`, `deepseek-r1-distill-qwen-32b`, `deepseek-r1-distill-qwen-7b`, `deepseek-v3`, `deepseek-v3.1`, `deepseek-v3.2`, `deepseek-v3.2-exp`, `deepseek-v4-flash`, `deepseek-v4-flash-0731`, `deepseek-v4-pro`, `deepseek-v4-pro-0813`, `deepseek-v4.1-flash`
@@ -89,6 +89,8 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
   - 模型：`vanchin/deepseek-ocr`, `vanchin/deepseek-r1`, `vanchin/deepseek-v3`, `vanchin/deepseek-v3.1-terminus`, `vanchin/deepseek-v3.2-think`, `vanchin/deepseek-v4-pro`, `vanchin/deepseek-v4-pro-0813`, `vanchin/deepseek-v4.1-flash`
 - [云知声文本模型](groups/unisound-models-market-place.json) — 由云知声提供的 Unisound U2 模型 API 服务.
   - 模型：`unisound/unisound-u2`
+- [伶鹊-对话分析-flash](groups/tongyi-xiaomi-analysis-flash.json) — 伶鹊-对话分析-flash是专注于日常任务，如对话信息抽取、场景分类等分析类需求的模型，自定义分析标准遵循与对话语义理解能力显著提升，适用于低时延的离线在线分析任务。
+  - 模型：`tongyi-xiaomi-analysis-flash`
 - [伶鹊-对话分析-pro](groups/tongyi-xiaomi-analysis-pro.json) — 伶鹊-对话分析-pro是专注于高阶复杂分析，如针对具备复杂业务逻辑的复杂质检规则等分析需求的模型，支持自定义更细粒度的分析标准，具备更强的多轮上下文建模、深层语义理解与推理能力。
   - 模型：`tongyi-xiaomi-analysis-pro`
 - [意图分类模型](groups/tongyi-intent-detect-v3.json) — 意图识别和槽位填充是对话系统中的基础任务。本模型实现了一个基于 API的意图（intent）和槽位参数（slots）联合预测。在一次模型输出中，同时完成多个指令API的返回和槽位参数的填充。返回的结果…

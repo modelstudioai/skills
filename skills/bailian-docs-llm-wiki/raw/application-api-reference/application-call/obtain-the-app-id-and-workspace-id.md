@@ -42,7 +42,7 @@
 
 ## 下一步
 
-获取凭证后，即可参考[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)或[Responses API](raw/application-api-reference/application-call/openai-responses-api.md)文档，构建并发送 API 请求。
+获取凭证后，即可参考[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)或[Responses API](raw/application-api-reference/application-call/openai-responses-api.md)文档，构建并发送 API 请求。
 
 ## 常见问题
 

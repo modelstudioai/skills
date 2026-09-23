@@ -251,9 +251,9 @@ curl --location --request POST 'https://dashscope.aliyuncs.com/api/v1/fine-tunes
 }'
 ```
 
-关键请求字段：`model` 固定为 `cosyvoice-v3-flash`，`training_type` 固定为 `efficient_sft`，`training_file_ids` 仅支持挂载一个训练文件 ID，`hyper_parameters` 内 8 个 LM / FM 子字段全部必填。每个字段的取值范围、类型、传参方式请参见 [创建调优任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)。
+关键请求字段：`model` 固定为 `cosyvoice-v3-flash`，`training_type` 固定为 `efficient_sft`，`training_file_ids` 仅支持挂载一个训练文件 ID，`hyper_parameters` 内 8 个 LM / FM 子字段全部必填。每个字段的取值范围、类型、传参方式请参见 [创建调优任务](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)。
 
-**说明**请求成功后，请保存响应中的两个关键字段：`output.job_id`（任务 ID，下一步查询任务状态与日志时使用）与 `output.finetuned_output`（调优后模型 ID，训练完成后用于部署模型）。任务创建后 `status` 初始为 `PENDING`，将随训练进度变化。响应字段的完整说明请参见[创建调优任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)中的返回参数。
+**说明**请求成功后，请保存响应中的两个关键字段：`output.job_id`（任务 ID，下一步查询任务状态与日志时使用）与 `output.finetuned_output`（调优后模型 ID，训练完成后用于部署模型）。任务创建后 `status` 初始为 `PENDING`，将随训练进度变化。响应字段的完整说明请参见[创建调优任务](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)中的返回参数。
 
 ### 超参数说明
 
@@ -264,7 +264,7 @@ CosyVoice 调优涉及两个子网络：**LM**（Language Model，将文本转�
 -   **LM 网络**：`lm_max_epoch=60`，`lm_step=5`，`lm_num=3`，`lm_batch_size=1000`。
 -   **FM 网络**：`fm_max_epoch=100`，`fm_step=10`，`fm_num=3`，`fm_batch_size=2000`。
 
-其中 `*_max_epoch` 为训练总轮次，`*_step` 为保存 Checkpoint 的步长，`*_num` 为最多保留的 Checkpoint 个数，`*_batch_size` 为训练批次大小。各字段的完整取值范围请参见 [CosyVoice 语音合成模型 hyper\_parameters](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)。
+其中 `*_max_epoch` 为训练总轮次，`*_step` 为保存 Checkpoint 的步长，`*_num` 为最多保留的 Checkpoint 个数，`*_batch_size` 为训练批次大小。各字段的完整取值范围请参见 [CosyVoice 语音合成模型 hyper\_parameters](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)。
 
 **说明**提高 `lm_max_epoch` 或 `fm_max_epoch` 会按计费公式线性增加 Token 消耗与训练时长（详见[训练费用](https://help.aliyun.com/zh/model-studio/fine-tune-speech-synthesis-model-by-api#cv_billing_train_title)）。同时，**训练轮次越高，基础模型原有能力的"遗忘"越严重**，可能导致长文本稳定性、多音字准确率等方面退化。推荐值（`lm_max_epoch=60`、`fm_max_epoch=100`）为兼顾音色还原度与基础能力保留的经验值。
 
@@ -730,7 +730,7 @@ with open('output.mp3', 'wb') as f:
 
 [创建调优任务](https://help.aliyun.com/zh/model-studio/fine-tune-speech-synthesis-model-by-api#cv_create_title)
 
-[创建调优任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)
+[创建调优任务](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)
 
 查询任务详情
 
@@ -820,7 +820,7 @@ with open('output.mp3', 'wb') as f:
 
 [调用模型](https://help.aliyun.com/zh/model-studio/fine-tune-speech-synthesis-model-by-api#cv_deploy_sub_call_t)
 
-[非实时语音合成-CosyVoice API参考](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/non-realtime-cosyvoice-api.md)
+[非实时语音合成-CosyVoice API参考](raw/_short/non-realtime-cosyvoice-api-685311b646d9ca3f.md)
 
 语音合成（WebSocket）
 
@@ -830,4 +830,4 @@ with open('output.mp3', 'wb') as f:
 
 [调用模型](https://help.aliyun.com/zh/model-studio/fine-tune-speech-synthesis-model-by-api#cv_deploy_sub_call_t)
 
-[实时语音合成-CosyVoice API参考](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis.md)
+[实时语音合成-CosyVoice API参考](raw/_short/cosyvoice-large-model-for-speech-synthesis-c25d07a9b3ba6047.md)

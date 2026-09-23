@@ -10,7 +10,7 @@
 https://dashscope.aliyuncs.com/api/v2/apps/memory/
 ```
 
-所有接口使用统一的服务地址，路径前缀为 `/memory/`。
+所有接口使用统一的服务地址。将各接口页面列出的路径拼接到服务地址后即可得到完整请求地址，例如 `/add` 对应 `https://dashscope.aliyuncs.com/api/v2/apps/memory/add`。
 
 ## 协议约定
 
@@ -34,25 +34,19 @@ Header
 
 `Content-Type`
 
-是
+仅含请求体的接口必填
 
 `application/json`
 
 ## 通用响应格式
 
-所有接口返回统一的 JSON 结构。
+成功响应的公共字段只有 `request_id`，其他业务字段因接口而异，请以对应接口页面为准。
 
 **成功响应：**
 
 ```
 {
-  "request_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-  "memory_nodes": [
-    {
-      "memory_node_id": "node_xxx",
-      "content": "用户每天上午9点需要喝水提醒"
-    }
-  ]
+  "request_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 }
 ```
 
@@ -66,7 +60,7 @@ Header
 }
 ```
 
-排查问题时，请提供 `request_id`，以便技术支持快速定位。完整错误码见[错误码参考](raw/application-api-reference/long-term-memory-new/api-overview/errors.md)。
+排查问题时，请提供 `request_id`，以便技术支持快速定位。错误处理建议见[错误码](raw/application-api-reference/long-term-memory-new/api-overview/errors.md)。
 
 ## 分页
 

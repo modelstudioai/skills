@@ -6,7 +6,7 @@ AI试衣-基础版模型支持使用服饰平拍图片以及人物正面全身�
 
 **快速入口：** [在线体验](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate?modelId=aitryon) ｜ [AI试衣模型总览](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone.md) ｜ [计费与限流](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/billing-for-outfitanyone.md) ｜ [免费额度](raw/model-user-guide/test-1/new-free-quota.md) ｜ [新手API调用入门指南](raw/model-user-guide/use-chat-client-or-development-tool/first-call-to-image-and-video-api.md)
 
-**相关API**：![api](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824099.png) [AI试衣-Plus版](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/aitryon-plus-api.md)｜![api](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824099.png)[](https://www.google.com/url?sa=E&q=t2725305.md)[https://www.google.com/url?sa=E&q=t2725305.md](https://www.google.com/url?sa=E&q=t2725305.md)[AI试衣-图片精修](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/ai-fitting-picture-finishing-api-details.md)｜![api](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824099.png) [AI试衣-图片分割](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/aitryon-parsing-api.md)
+**相关API**：![api](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824099.png) [AI试衣-Plus版](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/aitryon-plus-api.md)｜![api](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824099.png)[](https://www.google.com/url?sa=E&q=t2725305.md)[https://www.google.com/url?sa=E&q=t2725305.md](https://www.google.com/url?sa=E&q=t2725305.md)[AI试衣-图片精修](raw/_short/ai-fitting-picture-finishing-api-details-8c8f980f48b3085f.md)｜![api](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824099.png) [AI试衣-图片分割](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/aitryon-parsing-api.md)
 
 ## 模型能力
 
@@ -413,7 +413,7 @@ Body
 -   1280：表示 720x1280 分辨率。
     
 
-若后续还需调用[AI试衣-图片精修API](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/ai-fitting-picture-finishing-api-details.md)，此值必须设为 -1。
+若后续还需调用[AI试衣-图片精修API](raw/_short/ai-fitting-picture-finishing-api-details-8c8f980f48b3085f.md)，此值必须设为 -1。
 
 \-1
 
@@ -432,7 +432,7 @@ Body
 -   false：随机生成一张新的人脸。
     
 
-若后续还需调用[AI试衣-图片精修API](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/ai-fitting-picture-finishing-api-details.md)，此值必须设为true。
+若后续还需调用[AI试衣-图片精修API](raw/_short/ai-fitting-picture-finishing-api-details-8c8f980f48b3085f.md)，此值必须设为true。
 
 true
 

@@ -8,7 +8,7 @@
 
 **操作**
 
-[CreateIndex](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-createindex.md)
+[CreateIndex](raw/_short/api-bailian-2023-12-29-createindex-8bc613c75f8af371.md)
 
 请求参数发生变更
 
@@ -24,7 +24,7 @@
 
 **操作**
 
-[Retrieve](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-retrieve.md)
+[Retrieve](raw/_short/api-bailian-2023-12-29-retrieve-c8e6b8d718a30a84.md)
 
 请求参数发生变更
 

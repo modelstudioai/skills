@@ -89,5 +89,5 @@ liveportrait
     
 -   模型调用时，参照以下顺序：
     
-    1.  调用“灵动人像LivePortrait-detect”模型确认输入的人物图像符合规范（可参考文档：[LivePortrait 图像检测](raw/model-api-reference/video-generation-api/portrait-animation-api-reference/liveportrait-quick-start/liveportrait-detect-api.md)）；
-    2.  调用“灵动人像LivePortrait”模型，输入经检测通过的人物图像以及包含清晰人声的音频文件，生成人物肖像动态视频（可参考文档：[LivePortrait 视频生成](raw/model-api-reference/video-generation-api/portrait-animation-api-reference/liveportrait-quick-start/liveportrait-api.md)）。
+    1.  调用“灵动人像LivePortrait-detect”模型确认输入的人物图像符合规范（可参考文档：[LivePortrait 图像检测](raw/_short/liveportrait-detect-api-21701ab5bd145794.md)）；
+    2.  调用“灵动人像LivePortrait”模型，输入经检测通过的人物图像以及包含清晰人声的音频文件，生成人物肖像动态视频（可参考文档：[LivePortrait 视频生成](raw/_short/liveportrait-api-aed61e9b5a74b8a5.md)）。

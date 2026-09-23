@@ -7,7 +7,7 @@
 -   **适用地域**：本文描述的功能仅在**华北2（北京）地域**可用，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
 -   **开通账号权限**：若使用[阿里云子账号](raw/model-user-guide/security-and-compliance/permission-management-overview.md)（[RAM用户](https://help.aliyun.com/zh/ram/user-guide/overview-of-ram-users)），需要为子账号授予模型调用、训练和部署[权限](raw/model-user-guide/security-and-compliance/permission-management-overview.md)。
 -   **配置环境变量**：已成功[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)，并[配置到环境变量](raw/model-api-reference/preparations/get-api-key.md)。
--   **前提条件**：已完成模型微调训练。请先调用[查询调优任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)接口，确认任务状态 `status` 为 **SUCCEEDED** 后再进行部署。
+-   **前提条件**：已完成模型微调训练。请先调用[查询调优任务](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)接口，确认任务状态 `status` 为 **SUCCEEDED** 后再进行部署。
 
 ## 部署模型
 
@@ -35,8 +35,8 @@ API Key鉴权，格式为`Bearer sk-xxxx`。
 
 待部署的模型ID（非基础模型名称，而是微调或导出后生成的模型标识）。获取方式：
 
--   微调产出的模型：使用[创建调优任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)响应中 `output.finetuned_output` 的值。
--   导出的模型：使用[查询导出的模型详情](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)响应中 `output[].model_name` 的值。
+-   微调产出的模型：使用[创建调优任务](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)响应中 `output.finetuned_output` 的值。
+-   导出的模型：使用[查询导出的模型详情](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)响应中 `output[].model_name` 的值。
 
 **plan** `string` **（必选）**
 

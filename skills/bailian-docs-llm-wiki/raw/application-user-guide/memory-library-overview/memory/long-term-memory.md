@@ -47,9 +47,9 @@
 
 #### 通过API创建
 
-方式一：调用[CreateMemory - 创建长期记忆体](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-creatememory.md)接口新建长期记忆体，并记录返回参数中的`memoryId`（即长期记忆体ID）用于后续调用。
+方式一：调用[CreateMemory - 创建长期记忆体](raw/_short/api-bailian-2023-12-29-creatememory-b8e710cdd3512a87.md)接口新建长期记忆体，并记录返回参数中的`memoryId`（即长期记忆体ID）用于后续调用。
 
-方式二：调用[ListMemories - 获取长期记忆体列表](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-listmemories.md)接口获取已有的长期记忆体，并记录返回参数中的`memoryId`（即长期记忆体ID）用于后续调用。
+方式二：调用[ListMemories - 获取长期记忆体列表](raw/_short/api-bailian-2023-12-29-listmemories-3411c870627f174b.md)接口获取已有的长期记忆体，并记录返回参数中的`memoryId`（即长期记忆体ID）用于后续调用。
 
 ### 步骤2：在长期记忆体中创建记忆变量和记忆片段
 
@@ -160,7 +160,7 @@
 
 #### 通过API创建
 
-**方式一：**调用[CreateMemoryNode - 创建记忆片段](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-creatememorynode.md)接口，在参数`content`中分别输入下述示例创建记忆片段。如果传入的长期记忆体ID已经绑定了控制台中的应用，则创建后可在控制台的记忆片段中查看其内容。否则只能通过[GetMemoryNode - 获取记忆片段](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-getmemorynode.md)或[ListMemoryNodes - 获取记忆片段列表](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-listmemorynodes.md)接口进行查看。
+**方式一：**调用[CreateMemoryNode - 创建记忆片段](raw/_short/api-bailian-2023-12-29-creatememorynode-c6cd91f25e1f7997.md)接口，在参数`content`中分别输入下述示例创建记忆片段。如果传入的长期记忆体ID已经绑定了控制台中的应用，则创建后可在控制台的记忆片段中查看其内容。否则只能通过[GetMemoryNode - 获取记忆片段](raw/_short/api-bailian-2023-12-29-getmemorynode-59d0d4efa0e86d78.md)或[ListMemoryNodes - 获取记忆片段列表](raw/_short/api-bailian-2023-12-29-listmemorynodes-4f1cc5232bdc67a5.md)接口进行查看。
 
 示例：
 
@@ -170,7 +170,7 @@
 -   用户习惯每周末都去打羽毛球。
 -   用户今年20岁。
 
-**方式二：**在[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)时，传入长期记忆体ID，在`prompt`中输入下述示例，系统会根据`prompt`，在指定长期记忆体下自动创建记忆片段。请在[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)中搜索“长期记忆”查看代码示例及详细的调用方法。创建后，可在控制台的记忆片段中查看其内容。
+**方式二：**在[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)时，传入长期记忆体ID，在`prompt`中输入下述示例，系统会根据`prompt`，在指定长期记忆体下自动创建记忆片段。请在[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)中搜索“长期记忆”查看代码示例及详细的调用方法。创建后，可在控制台的记忆片段中查看其内容。
 
 示例：
 
@@ -203,7 +203,7 @@
     
     获取方法请参见[步骤1：创建长期记忆体并获取长期记忆体ID](https://help.aliyun.com/zh/model-studio/long-term-memory#09a3b95cb2gp8)。
     
-2.  在[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/application-api-reference/application-call/application-dashscope-api-reference/agent-and-workflow-application-api-reference.md)中搜索参数“长期记忆”查看代码示例及详细的调用方法。
+2.  在[工作流与旧版智能体应用 API应用 DashScope API 参考](raw/_short/agent-and-workflow-application-api-reference-81f0d3ecfd878b1f.md)中搜索参数“长期记忆”查看代码示例及详细的调用方法。
     
     调用智能体应用时，系统会根据传入的长期记忆体ID，自动召回相关记忆体内容，然后将其与当前用户提问一起传递给模型生成答案。
     
@@ -212,7 +212,7 @@
 
 ## 相关API
 
-您可以使用[长期记忆（旧）](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory.md)中的API来管理长期记忆体及记忆体内容。
+您可以使用[长期记忆（旧）](raw/_short/api-bailian-2023-12-29-dir-long-term-memory-d47ff49ea4c20bc0.md)中的API来管理长期记忆体及记忆体内容。
 
 ## 常见问题
 
@@ -220,8 +220,8 @@
     
     阿里云百炼不会保存原始对话记录，仅按照客户配置的记忆变量字段进行内容提取，该信息目前暂无失效日期。您可以自行删除不需要的记忆体内容：
     
-    -   仅删除一条记忆片段：使用[CreateMemoryNode](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-creatememorynode.md)创建的记忆片段可通过[DeleteMemoryNode](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-deletememorynode.md)删除。在阿里云百炼控制台界面创建的记忆片段和记忆变量，仅支持在界面上逐条删除。
-    -   删除记忆体中的所有内容：使用[CreateMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-creatememory.md)创建的长期记忆体，可通过[DeleteMemory](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-deletememory.md)删除该记忆体，从而移除其中的所有内容。
+    -   仅删除一条记忆片段：使用[CreateMemoryNode](raw/_short/api-bailian-2023-12-29-creatememorynode-c6cd91f25e1f7997.md)创建的记忆片段可通过[DeleteMemoryNode](raw/_short/api-bailian-2023-12-29-deletememorynode-d7919fd53d316466.md)删除。在阿里云百炼控制台界面创建的记忆片段和记忆变量，仅支持在界面上逐条删除。
+    -   删除记忆体中的所有内容：使用[CreateMemory](raw/_short/api-bailian-2023-12-29-creatememory-b8e710cdd3512a87.md)创建的长期记忆体，可通过[DeleteMemory](raw/_short/api-bailian-2023-12-29-deletememory-ffa5f461924db8f6.md)删除该记忆体，从而移除其中的所有内容。
 2.  **长期记忆功能如何收费？**
     
     数据存储不收费。
@@ -232,4 +232,4 @@
     
     记忆片段信息（MemoryNode）的存储以Memory ID作为隔离。
     
-    您可使用[CreateMemory - 创建长期记忆体](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-others/api-bailian-2023-12-29-dir-long-term-memory/api-bailian-2023-12-29-creatememory.md)创建长期记忆体，获取新的Memory ID。通过API调用时传入指定Memory ID，即可实现记忆隔离。如不传入，则默认使用应用所绑定的默认Memory ID。
+    您可使用[CreateMemory - 创建长期记忆体](raw/_short/api-bailian-2023-12-29-creatememory-b8e710cdd3512a87.md)创建长期记忆体，获取新的Memory ID。通过API调用时传入指定Memory ID，即可实现记忆隔离。如不传入，则默认使用应用所绑定的默认Memory ID。

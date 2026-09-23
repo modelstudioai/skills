@@ -7,7 +7,7 @@
 1.  [新增权限](https://help.aliyun.com/zh/model-studio/xiyan-gbi-permission-management#42843e554bygi)：为数据表或数据表的列与值设置权限，通过权限来约束用户可查询的数据表、列和值的范围。
 2.  [为角色关联权限](https://help.aliyun.com/zh/model-studio/xiyan-gbi-permission-management#a7b50faed0zk8)：您可以通过设置角色并为其关联权限，来约束使用析言的用户可访问的数据范围。
 3.  [验证权限是否生效](https://help.aliyun.com/zh/model-studio/xiyan-gbi-permission-management#c3dbec64a9ky5)：析言GBI会根据角色权限验证并处理提交的问题，确保只有符合权限范围的查询才能被执行并展示查询结果。
-4.  [实现权限隔离](https://help.aliyun.com/zh/model-studio/xiyan-gbi-permission-management#e4be989fbas4c)：通过[API](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-intelligent-asking-number/api-dataanalysisgbi-2024-08-23-dir-cloud-sql-execution-mode/api-dataanalysisgbi-2024-08-23-rundataanalysis.md)进行问答和数据分析时，可以为不同用户分配业务空间和角色，以实现权限隔离。请注意，控制台上不支持此功能。
+4.  [实现权限隔离](https://help.aliyun.com/zh/model-studio/xiyan-gbi-permission-management#e4be989fbas4c)：通过[API](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-697fa2953fc095a1.md)进行问答和数据分析时，可以为不同用户分配业务空间和角色，以实现权限隔离。请注意，控制台上不支持此功能。
 
 ## 前提条件
 
@@ -104,4 +104,4 @@
 
 ### 步骤四：实现权限隔离
 
-目前仅支持通过[Chat对话接口](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-intelligent-asking-number/api-dataanalysisgbi-2024-08-23-dir-cloud-sql-execution-mode/api-dataanalysisgbi-2024-08-23-rundataanalysis.md)调用析言GBI时实现权限隔离。
+目前仅支持通过[Chat对话接口](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-697fa2953fc095a1.md)调用析言GBI时实现权限隔离。

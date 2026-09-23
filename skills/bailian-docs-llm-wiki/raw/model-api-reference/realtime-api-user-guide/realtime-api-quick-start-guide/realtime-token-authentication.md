@@ -2,6 +2,8 @@
 
 介绍 Realtime API 的 Token 鉴权机制，包括 API Key 的获取方式以及 WebSocket、WebRTC、AOQ 三种协议的建连鉴权方法。
 
+## 鉴权方式
+
 Realtime API 使用 API Key 进行身份认证。无论选择 AOQ、WebRTC 还是 WebSocket 协议接入，均通过 HTTP 请求头中的 `Authorization` 字段携带 Bearer Token 完成身份验证。
 
 鉴权仅发生在**建连阶段**，连接建立后的数据传输无需重复鉴权。
@@ -62,6 +64,32 @@ HTTP Header `Authorization: Bearer <API_KEY>`
 AOQ 采用**服务端代理鉴权**模式：API Key 仅在业务 AppServer 侧使用，客户端通过网关返回的临时 Token 建连，避免 API Key 暴露在客户端。
 
 ![Token鉴权](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3935914871/p1088069.jpg)
+
+通过 AOQ 接入时，根据目标模型选择建连请求路径：实时全模态、实时语音对话和实时语音翻译使用 `/api/v1/webrtc/realtime`；下表所列的语音合成和实时语音识别模型使用 `/api/v1/webrtc/inference`。
+
+模型
+
+建连请求路径
+
+qwen3.8-omni-flash-realtime、qwen3.5-omni-plus-realtime、qwen3.5-omni-flash-realtime
+
+`/api/v1/webrtc/realtime`
+
+qwen-audio-3.0-tts-flash、qwen-audio-3.0-tts-plus、CosyVoice 系列
+
+`/api/v1/webrtc/inference`
+
+Qwen-Audio-3.0-ASR-Flash-Streaming、Fun-ASR-Realtime 系列
+
+`/api/v1/webrtc/inference`
+
+qwen-audio-3.1-realtime-plus、qwen-audio-3.0-realtime-plus、qwen-audio-3.0-realtime-flash
+
+`/api/v1/webrtc/realtime`
+
+qwen3.5-livetranslate-flash-realtime
+
+`/api/v1/webrtc/realtime`
 
 以下 Realtime 示例使用 `qwen3.8-omni-flash-realtime`。`{endpoint}` 使用华北2（北京）的 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com` 或新加坡的 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`，替换为实际业务空间 ID，并使用对应地域和业务空间的 API Key。
 

@@ -172,4 +172,4 @@ private func createVideoChatParams() -> [String: Any]{
 
 ## 使用图片序列实现视频通话
 
-接入方法参见[三方RTC接入视频通话](raw/application-user-guide/application-gallery/multimodal-products/multimodal-best-practices/live-api-integration/third-party-rtc-invoke-liveai.md)。
+接入方法参见[三方RTC接入视频通话](raw/_short/third-party-rtc-invoke-liveai-cdc1e1ea34e442d1.md)。

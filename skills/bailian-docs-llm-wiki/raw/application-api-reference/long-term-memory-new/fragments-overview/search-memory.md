@@ -2,7 +2,11 @@
 
 基于语义检索返回与查询最相关的历史记忆
 
-基于语义检索返回与当前查询最相关的历史记忆。支持查询改写、结果重排和相似度过滤。
+根据对话消息进行相似度检索，返回与查询相关的记忆节点。
+
+## 请求方法与路径
+
+`POST https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/search`
 
 ## 请求参数
 
@@ -14,29 +18,101 @@
 
 说明
 
-`user_id`
-
-string
-
-是
-
-记忆实体 ID
-
 `messages`
 
 array
 
 是
 
-对话消息列表，每条含 `role`（user/assistant）和 `content`
+查询所使用的对话消息列表
 
-`top_k`
+`messages[].role`
 
-number
+string
 
 否
 
-最大召回数量（1~100，默认 10）
+消息角色
+
+`messages[].content`
+
+string / array
+
+否
+
+消息内容，支持文本字符串或多模态内容数组
+
+`messages[].content[].type`
+
+string
+
+否
+
+内容类型：`text` 或 `image_url`。仅支持多模态能力的项目会解析图片
+
+`messages[].content[].text`
+
+string
+
+条件必填
+
+文本内容。`type` 为 `text` 时传入
+
+`messages[].content[].image_url`
+
+object
+
+条件必填
+
+图片信息。`type` 为 `image_url` 时传入
+
+`messages[].content[].image_url.url`
+
+string
+
+条件必填
+
+图片 URL
+
+`user_id`
+
+string
+
+是
+
+子用户 ID，用于隔离记忆
+
+`memory_library_id`
+
+string
+
+否
+
+记忆库 ID
+
+`project_id`
+
+string
+
+否
+
+项目 ID，用于二级隔离，与 `project_ids` 互斥
+
+`project_ids`
+
+array\[string\]
+
+否
+
+多个项目 ID，与 `project_id` 互斥
+
+`top_k`
+
+integer
+
+否
+
+最大召回数量，默认值为 `10`
 
 `min_score`
 
@@ -44,31 +120,15 @@ number
 
 否
 
-最小相似度阈值（0.0~1.0，默认 0.3）
+最小分数阈值，低于该分数的结果会被过滤。默认值为 `0.3`，仅 `plan_version` 为 `pro` 时生效
 
-`enable_rerank`
+`memory_types`
 
-boolean
-
-否
-
-是否开启结果重排（默认 false）。`plan_version` 优先级更高
-
-`enable_judge`
-
-boolean
+array\[string\]
 
 否
 
-是否开启意图判别（默认 false）
-
-`enable_rewrite`
-
-boolean
-
-否
-
-是否开启查询改写（默认 false）
+记忆类型筛选。可选值为 `observation`、`skill`，默认值为 `["observation"]`
 
 `plan_version`
 
@@ -76,32 +136,127 @@ string
 
 否
 
-`Pro`（默认，开启 Rerank）或 `Lite`（关闭 Rerank），大小写不敏感。传入后忽略 `enable_rerank`
+收费计划：`pro` 或 `lite`，默认值为 `pro`。不区分大小写，传入其他值会报错
 
-`project_ids`
+**说明**`pro` 计划支持按 `min_score` 过滤结果；`lite` 计划不使用该参数。计费信息请参见[计费说明](raw/application-user-guide/memory-library-overview/integration-overview/billing.md)。
+
+## 返回结果
+
+字段
+
+类型
+
+说明
+
+`request_id`
+
+string
+
+请求 ID
+
+`plan_version`
+
+string
+
+本次搜索生效的收费计划：`pro` 或 `lite`
+
+`memory_nodes`
 
 array
 
-否
+记忆节点列表
 
-事实记忆规则 ID 数组，传入多个可混合检索。不传使用默认规则
+`memory_nodes[].memory_node_id`
 
-**说明**Pro 版开启 Rerank，检索质量更高，但可能过滤掉低相关结果；Lite 版关闭 Rerank，成本更低。详见[计费说明](raw/application-user-guide/memory-library-overview/integration-overview/billing.md)。
+string
 
-## 代码示例
+记忆节点 ID
+
+`memory_nodes[].content`
+
+string
+
+记忆内容
+
+`memory_nodes[].timestamp`
+
+integer
+
+记忆相关时间
+
+`memory_nodes[].created_at`
+
+integer
+
+创建时间
+
+`memory_nodes[].updated_at`
+
+integer
+
+更新时间
+
+`memory_nodes[].media_desc`
+
+string
+
+多模态信息描述
+
+`memory_nodes[].meta_data`
+
+object
+
+自定义元信息
+
+`memory_nodes[].memory_type`
+
+string
+
+记忆类型
+
+`memory_nodes[].status`
+
+string
+
+记忆状态
+
+`memory_nodes[].score`
+
+number
+
+搜索分数
+
+`memory_nodes[].project_id`
+
+string
+
+项目 ID，存在时返回
+
+`memory_nodes[].multimodal_medias`
+
+array
+
+多模态资源，存在时返回
+
+## 请求示例
 
 cURL
 
 ```
-curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/search \
+curl --location 'https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/search' \
   --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
-  --header "Content-Type: application/json" \
+  --header 'Content-Type: application/json' \
   --data '{
     "user_id": "user_001",
-    "messages": [{"role": "user", "content": "我需要做什么？"}],
+    "memory_library_id": "memory_library_001",
+    "project_ids": ["project_001"],
+    "messages": [
+      {"role": "user", "content": "明天上午十一点我有什么日程安排？"}
+    ],
     "top_k": 10,
     "min_score": 0.3,
-    "plan_version": "Lite"
+    "memory_types": ["observation"],
+    "plan_version": "pro"
   }'
 ```
 
@@ -134,35 +289,25 @@ asyncio.run(main())
 
 ```
 {
+  "request_id": "416f3d78-2bba-9852-ac15-4b3bcee6c7e4",
+  "plan_version": "pro",
   "memory_nodes": [
     {
-      "content": "用户需要明天10点提醒整理会议纪要",
-      "created_at": 1789614241,
-      "memory_node_id": "56d43a6ec74548bcb0ad59fdedd28569",
+      "memory_node_id": "cafff28fd3a44c04ac5a65d1ea0858b7",
+      "content": "用户需要明天上午十一点被提醒点外卖",
+      "timestamp": 1783267200,
+      "created_at": 1783254720,
+      "updated_at": 1783254720,
+      "media_desc": "",
+      "meta_data": {"location_name": "北京"},
       "memory_type": "observation",
-      "meta_data": {},
-      "project_id": "774b2f671e3c447ab7f5d02b1e2b9453",
-      "score": 0.731,
       "status": "valid",
-      "timestamp": 1789696800,
-      "updated_at": 1789614241
-    },
-    {
-      "content": "用户每天上午9点需要喝水提醒",
-      "created_at": 1789614241,
-      "memory_node_id": "91e628e811134e5598154a1719791a68",
-      "memory_type": "observation",
-      "meta_data": {},
-      "project_id": "774b2f671e3c447ab7f5d02b1e2b9453",
-      "score": 0.5,
-      "status": "valid",
-      "timestamp": 1789606800,
-      "updated_at": 1789614241
+      "score": 0.651,
+      "project_id": "project_001",
+      "multimodal_medias": []
     }
-  ],
-  "plan_version": "lite",
-  "request_id": "a8fc5647-6ed6-9b4e-ae08-e2252b688655"
+  ]
 }
 ```
 
-**重要**查看所有记忆使用 [ListMemory](raw/application-api-reference/long-term-memory-new/fragments-overview/list-memory.md)。
+**重要**查看分页记忆列表使用 [ListMemory](raw/application-api-reference/long-term-memory-new/fragments-overview/list-memory.md)。

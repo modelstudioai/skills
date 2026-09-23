@@ -508,7 +508,7 @@ CPT 之后，DPO 之前
 
 通常在 SFT 之后，作为对齐的最后一步
 
-除上述三种方式外，百炼还支持**RL（强化学习）**训练方式。RL 通过奖励信号持续优化模型行为，适用于需要通过人类反馈或自动评分提升模型表现的场景。控制台训练方法列可选「RL - 全参训练」。RL 训练的完整操作流程和配置说明请参见[强化学习](raw/model-user-guide/fine-tuning/rl-training-overview.md)。
+除上述三种方式外，百炼还支持**RL（强化学习）**训练方式。RL 通过奖励信号持续优化模型行为，适用于需要通过人类反馈或自动评分提升模型表现的场景。控制台训练方法列可选「RL - 全参训练」。RL 训练的完整操作流程和配置说明请参见[强化学习](raw/model-user-guide/fine-tuning/rl-overview/rl-training-overview.md)。
 
 #### 训练模式对比
 

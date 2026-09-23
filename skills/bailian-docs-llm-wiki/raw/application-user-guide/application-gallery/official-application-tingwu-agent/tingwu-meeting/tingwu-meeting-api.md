@@ -1,4 +1,4 @@
 # API参考
 
--   [离线会议](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-meeting/tingwu-meeting-api/tingwu-meeting-offline-api-usage.md)
--   [实时会议](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-meeting/tingwu-meeting-api/tingwu-meeting-api-usage.md)
+-   [离线会议](raw/_short/tingwu-meeting-offline-api-usage-231637627b1b1326.md)
+-   [实时会议](raw/_short/tingwu-meeting-api-usage-bc4c1ca718d0e73c.md)

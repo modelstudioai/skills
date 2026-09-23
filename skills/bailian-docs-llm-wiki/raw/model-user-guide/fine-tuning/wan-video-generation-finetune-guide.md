@@ -551,7 +551,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/video-gener
 ```
 **输入参数说明**
 
-**说明**调用微调后的 LoRA 模型时，wan2.7输入参数用法基本与[万相2.7-图生视频](raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)一致，wan2.5/wan2.2请参见[万相-图生视频-基于首帧（2.1-2.6）](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-api-reference.md)。
+**说明**调用微调后的 LoRA 模型时，wan2.7输入参数用法基本与[万相2.7-图生视频](raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)一致，wan2.5/wan2.2请参见[万相-图生视频-基于首帧（2.1-2.6）](raw/_short/legacy-image-to-video-api-reference-8b02dd673da405f1.md)。
 
 下表仅列出 LoRA 模型**特有的参数用法或特定限制**。对于未在下表中提及的通用参数（例如 `duration`），请参照 API 文档进行设置。
 
@@ -585,11 +585,11 @@ string
 
 文本提示词。
 
-此参数是否生效，取决于[aigc\_config.use\_input\_prompt](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-video-generation-api/video-generation-create-fine-tuning-job-api.md) 的配置：
+此参数是否生效，取决于[aigc\_config.use\_input\_prompt](raw/_short/video-generation-create-fine-tuning-job-api-2357b2afaa3e843c.md) 的配置：
 
 -   当`use_input_prompt=true`时：此参数生效。系统将根据这段提示词来生成视频。
     
--   当`use_input_prompt=false`时：此参数会被忽略。系统将使用预置模板[aigc\_config.prompt](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-video-generation-api/video-generation-create-fine-tuning-job-api.md)自动生成提示词。
+-   当`use_input_prompt=false`时：此参数会被忽略。系统将使用预置模板[aigc\_config.prompt](raw/_short/video-generation-create-fine-tuning-job-api-2357b2afaa3e843c.md)自动生成提示词。
     
 
 \-
@@ -687,7 +687,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/services/aigc/image2video
 ```
 **输入参数说明**
 
-**说明**调用微调后的 LoRA 模型时，wan2.7输入参数用法基本与[万相2.7-图生视频](raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)一致，wan2.2请参见[图生视频-基于首尾帧API](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-by-first-and-last-frame-api-reference.md)。
+**说明**调用微调后的 LoRA 模型时，wan2.7输入参数用法基本与[万相2.7-图生视频](raw/model-api-reference/video-generation-api/wan-api-reference/image-to-video-general-api-reference.md)一致，wan2.2请参见[图生视频-基于首尾帧API](raw/_short/legacy-image-to-video-by-first-and-last-frame-ap-524bb66cfed1f5de.md)。
 
 下表仅列出 LoRA 模型**特有的参数用法或特定限制**。对于未在下表中提及的通用参数（例如 `duration`），请参照 API 文档进行设置。
 
@@ -721,11 +721,11 @@ string
 
 文本提示词。
 
-此参数是否生效，取决于[aigc\_config.use\_input\_prompt](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-video-generation-api/video-generation-create-fine-tuning-job-api.md) 的配置：
+此参数是否生效，取决于[aigc\_config.use\_input\_prompt](raw/_short/video-generation-create-fine-tuning-job-api-2357b2afaa3e843c.md) 的配置：
 
 -   当`use_input_prompt=true`时：此参数生效。系统将根据这段提示词来生成视频。
     
--   当`use_input_prompt=false`时：此参数会被忽略，无需传入。系统将使用预置模板[aigc\_config.prompt](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-video-generation-api/video-generation-create-fine-tuning-job-api.md)自动生成提示词。
+-   当`use_input_prompt=false`时：此参数会被忽略，无需传入。系统将使用预置模板[aigc\_config.prompt](raw/_short/video-generation-create-fine-tuning-job-api-2357b2afaa3e843c.md)自动生成提示词。
     
 
 \-
@@ -753,7 +753,7 @@ string
 
 首帧图像URL（Wan2.2模型使用）。
 
-传入方式请参见[first\_frame\_url参数](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-api-reference.md)。
+传入方式请参见[first\_frame\_url参数](raw/_short/legacy-image-to-video-api-reference-8b02dd673da405f1.md)。
 
 [https://help-static-aliyun-doc.aliyuncs.com/xxx.jpg](https://help-static-aliyun-doc.aliyuncs.com/xxx.jpg)
 
@@ -765,7 +765,7 @@ string
 
 尾帧图像URL（Wan2.2模型使用）。
 
-传入方式请参见[last\_frame\_url参数](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-api-reference.md)。
+传入方式请参见[last\_frame\_url参数](raw/_short/legacy-image-to-video-api-reference-8b02dd673da405f1.md)。
 
 [https://help-static-aliyun-doc.aliyuncs.com/xxx.jpg](https://help-static-aliyun-doc.aliyuncs.com/xxx.jpg)
 
@@ -1203,7 +1203,7 @@ s86b5p 或 m01aa
 
 ##### 方式一：未上传验证集（系统自动划分）
 
-在[创建微调任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-video-generation-api/video-generation-create-fine-tuning-job-api.md)时，如果没有单独上传验证集，即未传入`validation_datasets`参数，系统将根据以下两个[超参数](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-video-generation-api/video-generation-create-fine-tuning-job-api.md)，自动从**训练集**中划分出一部分作为验证集：
+在[创建微调任务](raw/_short/video-generation-create-fine-tuning-job-api-2357b2afaa3e843c.md)时，如果没有单独上传验证集，即未传入`validation_datasets`参数，系统将根据以下两个[超参数](raw/_short/video-generation-create-fine-tuning-job-api-2357b2afaa3e843c.md)，自动从**训练集**中划分出一部分作为验证集：
 
 -   `split`：训练集划分比例。例如，0.9 表示将90%的数据用于训练，剩余的10%用作验证。
 -   `max_split_val_dataset_sample`：自动划分验证集的最大样本数。
@@ -1224,8 +1224,8 @@ s86b5p 或 m01aa
 操作步骤：主动上传验证集
 
 1.  **准备验证集**：将验证数据打包成一个独立的 `.zip` 文件，请参见[验证集格式](raw/model-user-guide/fine-tuning/wan-video-generation-finetune-guide.md)。
-2.  **上传验证集**：调用[上传数据集](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-video-generation-api/video-generation-create-fine-tuning-job-api.md)接口，上传这个验证集 `.zip` 文件，获得一个专属的文件ID。
-3.  **创建任务时指定验证集**：在调用[创建微调任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-video-generation-api/video-generation-create-fine-tuning-job-api.md)接口时，将这个文件ID填入 `validation_datasets` 参数中。
+2.  **上传验证集**：调用[上传数据集](raw/_short/video-generation-create-fine-tuning-job-api-2357b2afaa3e843c.md)接口，上传这个验证集 `.zip` 文件，获得一个专属的文件ID。
+3.  **创建任务时指定验证集**：在调用[创建微调任务](raw/_short/video-generation-create-fine-tuning-job-api-2357b2afaa3e843c.md)接口时，将这个文件ID填入 `validation_datasets` 参数中。
 
 ```
 {
@@ -1248,7 +1248,7 @@ s86b5p 或 m01aa
 
 在训练过程中，系统会定期保存模型的“快照”（即 Checkpoint）。默认情况下，系统会输出**最后一个Checkpoint**作为最终的微调模型。但中间过程产出的Checkpoint效果可能优于最终版本，您可以从中挑选出最满意的一个进行部署。
 
-系统将按照[超参数](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-video-generation-api/video-generation-create-fine-tuning-job-api.md)`eval_epochs`设定的间隔，在**验证集**上运行Checkpoint并生成预览视频。
+系统将按照[超参数](raw/_short/video-generation-create-fine-tuning-job-api-2357b2afaa3e843c.md)`eval_epochs`设定的间隔，在**验证集**上运行Checkpoint并生成预览视频。
 
 -   **如何评估**：通过直接观察生成的预览视频来判断效果。
 -   **挑选标准**：找到效果最好、且没有动作变形的那个 Checkpoint 。
@@ -1263,7 +1263,7 @@ s86b5p 或 m01aa
 
 **请求示例**
 
--   `<替换为微调任务job_id>`：完整替换为[创建微调任务接口](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-video-generation-api/video-generation-create-fine-tuning-job-api.md)的输出参数`job_id`。
+-   `<替换为微调任务job_id>`：完整替换为[创建微调任务接口](raw/_short/video-generation-create-fine-tuning-job-api-2357b2afaa3e843c.md)的输出参数`job_id`。
 
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微调任务job_id>/validation-results' \
@@ -1331,7 +1331,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
 
 -   `<替换为微调任务job_id>`： 完整替换为[创建微调任务](https://help.aliyun.com/zh/model-studio/wan-video-generation-finetune-guide#bc825b6ec11y2)输出参数`job_id`的值。
 -   `<替换为待导出的checkpoint>`：完整替换为checkpoint的值，例如“checkpoint-160”。
--   `<替换为控制台展示的导出模型名称>`：完整替换为自定义的模型名称，仅用于控制台展示，例如“wan2.5-checkpoint-160”。该名称必须全局唯一，不支持重复名称多次导出，参数填写请参见[导出Checkpoint](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-video-generation-api/video-generation-create-fine-tuning-job-api.md)。
+-   `<替换为控制台展示的导出模型名称>`：完整替换为自定义的模型名称，仅用于控制台展示，例如“wan2.5-checkpoint-160”。该名称必须全局唯一，不支持重复名称多次导出，参数填写请参见[导出Checkpoint](raw/_short/video-generation-create-fine-tuning-job-api-2357b2afaa3e843c.md)。
 
 ```
 curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微调任务job_id>/export/<替换为待导出的checkpoint>?model_name=<替换为控制台展示的导出模型名称>' \
@@ -1431,7 +1431,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
 
 -   **模型训练：收费。**
     -   费用 = 训练 Tokens 总量 × 单价。请参见[模型训练计费](raw/model-user-guide/test-1/model-training-and-deployment-billing.md)。
-    -   训练结束后，在[查询微调任务状态](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-video-generation-api/video-generation-create-fine-tuning-job-api.md)接口 `usage` 字段查看训练消耗的总 Token 数。
+    -   训练结束后，在[查询微调任务状态](raw/_short/video-generation-create-fine-tuning-job-api-2357b2afaa3e843c.md)接口 `usage` 字段查看训练消耗的总 Token 数。
 -   **模型部署**：**免费**。
     
 -   **模型调用：收费。**
@@ -1439,7 +1439,7 @@ curl --location 'https://dashscope.aliyuncs.com/api/v1/fine-tunes/<替换为微�
 
 ## API文档
 
-[视频生成模型微调API参考](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-video-generation-api/video-generation-create-fine-tuning-job-api.md)
+[视频生成模型微调API参考](raw/_short/video-generation-create-fine-tuning-job-api-2357b2afaa3e843c.md)
 
 ## 常见问题
 

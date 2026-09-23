@@ -28,7 +28,7 @@ pcm、wav、mp3、opus
 
 8kHz、16kHz、22.05kHz、24kHz、44.1kHz、48kHz
 
-[CosyVoice-v3-plus](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis.md)
+[CosyVoice-v3-plus](raw/_short/cosyvoice-large-model-for-speech-synthesis-c25d07a9b3ba6047.md)
 
 合成效果最佳，音色持续上新中。支持声音复刻。
 
@@ -40,7 +40,7 @@ pcm、wav、mp3、opus
 
 8kHz、16kHz、22.05kHz、24kHz、44.1kHz、48kHz
 
-[CosyVoice-v2](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/cosyvoice-large-model-for-speech-synthesis.md)
+[CosyVoice-v2](raw/_short/cosyvoice-large-model-for-speech-synthesis-c25d07a9b3ba6047.md)
 
 70+音色可选，一句话声音复刻，支持中英日韩粤等音色。
 
@@ -88,7 +88,7 @@ pcm、wav、mp3、opus
 
 16kHz、24kHz、48kHz
 
-[Sambert语音合成模型](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/sambert-speech-synthesis.md)
+[Sambert语音合成模型](raw/_short/sambert-speech-synthesis-60d77f54e64567a1.md)
 
 合成速度快、音色丰富，支持中英意西印法德泰等语言。
 

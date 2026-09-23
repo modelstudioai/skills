@@ -1,50 +1,81 @@
 # llm application
 
-`llm application` 是百炼平台提供的 LLM 应用构建能力，支持开发者快速创建面向终端用户的可部署应用，涵盖智能体、工作流、高代码及文件问答等多种形态。所有应用均基于平台统一的推理服务与上下文管理机制，可通过 API 或嵌入式 SDK 集成。详细背景和设计目标见 [应用开发](../../raw/application-user-guide/llm-application.md)。
+百炼平台的 LLM Application 是面向真实业务场景的 AI 应用构建体系，提供智能体（Agent）、工作流（Workflow）和高代码应用三类核心范式，分别覆盖零代码决策、低代码编排与专业级工程化部署需求。所有类型均深度集成知识库检索增强（RAG）、MCP 工具调用、多模态解析等能力，支持从私有数据接入到复杂任务规划的端到端闭环。
 
-## 支持的模型与功能
+## 支持的模型/功能
 
-- **模型兼容性**：支持百炼全量托管模型（如 Qwen 系列、Qwen2-VL、Qwen3）及用户自定义模型（需通过 `model_id` 显式指定）。不支持直接调用非百炼托管的第三方模型 API。
-- **应用类型**：
-  - 新版智能体应用（Agent 2.0）：支持多工具动态编排、状态感知与自主决策，推荐用于复杂任务场景；
-  - 工作流应用：基于可视化节点编排，适合确定性逻辑强、需人工审核或外部系统集成的流程；
-  - 高代码应用：允许编写 Python 脚本控制完整执行链路，适用于算法定制或私有协议对接；
-  - 文件问答：支持上传 PDF/DOCX/TXT 等格式，自动切片、向量化与[检索增强生成](../concepts/rag.md)（RAG），但仅限单次会话内生效；
-  - （已弃用）智能体应用（Agent 1.0）：功能已被 Agent 2.0 全面覆盖，[新版智能体应用（Agent 2.0）](../../raw/application-user-guide/llm-application/new-single-agent-application.md) 文档明确建议迁移。
+- **智能体（Agent）**：支持 Agent 1.0 和 Agent 2.0 两代架构。Agent 2.0 将知识库、MCP 等统一为工具，支持自主规划与完整过程回溯；Agent 1.0 采用分阶段调度（先检索后决策），适合意图单一的轻量场景。推荐优先使用 [新版智能体应用（Agent 2.0）](../../raw/application-user-guide/llm-application/new-single-agent-application.md)。
+- **工作流（Workflow）**：提供 20+ 类节点，覆盖逻辑控制（条件判断、循环、批处理）、AI 处理（大模型、意图分类、参数提取）、多模态解析（文档、图片、音频、视频）、外部集成（API、函数计算、MCP、AppFlow、数据连接器）及组件复用（应用组件、智能体群组）。其中 [智能体群组节点](../../raw/application-user-guide/llm-application/workflow-application/agent-group-node.md) 支持多智能体协同调度，[参数提取节点](../../raw/application-user-guide/llm-application/workflow-application/parameter-extraction-node.md) 支持 VL 模型对图片/视频的结构化信息抽取。
+- **高代码应用**：基于 Python 的 Serverless Function 或 K8s 部署模式，支持 MCP 协议接入知识库、MCP 服务、应用组件和数据连接器，并提供 `AgentScope-AI` CLI 工具链实现本地开发→打包→一键部署全流程。
 
-> **注意**：原始文档中 [智能体应用（Agent 1.0）](../../raw/application-user-guide/llm-application/single-agent-application.md) 的接口路径 `/v1/applications/agent1/run` 已于 v2024.07 起返回 `410 Gone`，实际调用应使用 Agent 2.0 的 `/v1/applications/agent2/run`。
+> **注意**：文档 33 中关于“文件问答”支持模型的列表存在大量重复占位符（如 `[选择模型](...)`），且未明确标注是否适用于所有智能体版本；实际可用模型请以控制台实时下拉菜单为准，该文档已过时，不可作为选型依据。
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `application_id` | string | 是 | 应用唯一标识，创建后由平台分配，可在控制台或 API 响应中获取 |
-| `inputs` | object | 否 | 用户输入数据，结构由应用 schema 定义；Agent 2.0 和工作流应用支持 `files` 字段传入 Base64 编码文件内容 |
-| `stream` | boolean | 否 | 默认 `false`；设为 `true` 时返回 SSE 流式响应（仅限非工作流类应用） |
-| `user_id` | string | 否 | 用于会话隔离与审计，建议传入业务侧用户 ID |
+| 参数类别 | 适用范围 | 关键说明 |
+|----------|----------|----------|
+| **模型参数** | 所有含模型选择的节点（大模型、意图分类、参数提取、智能体创建、智能体群组等） | `temperature`（默认 0.7）、`top_p`（默认 0.8）、`enable_thinking`（开启思考链）、`thinking_budget`（思考 token 上限，默认 4000）；`result_format` 默认为 `message`；`enable_search` 仅部分模型支持。 |
+| **上下文控制** | 智能体（Agent 1.0）、大模型节点（单次模式） | Agent 1.0 支持配置“携带的上下文轮数”（1–50）；大模型节点支持“本节点缓存”或“自定义缓存”（如 `historyList`）；工作流中需显式传递 `historyList` 变量以维持多轮对话状态。 |
+| **文件处理** | 智能体、文档/图片/音频/视频解析节点 | 智能体支持“全文引用”“切片检索（RAG）”“自定义处理”三种模式；解析节点有严格格式与大小限制（如文档 ≤150 MB、图片 ≤20 MB、音频 ≤512 MB、视频 ≤512 MB）。 |
+| **执行控制** | 循环、批处理、API、脚本、插件、MCP 等节点 | 循环节点支持“数组循环”与“指定次数”，并提供中间变量实现跨轮次状态传递；批处理节点支持并行数量（默认 5）与批处理上限（默认 30）；API 节点超时默认 5 秒，可重试；所有支持失败重试的节点默认最大重试 3–5 次。 |
 
 ## 使用方式
 
-1. **创建应用**：在控制台「应用开发」页选择类型，配置 [prompt](prompt.md)、工具集（Agent）、节点逻辑（Workflow）或代码（Rich Code）；
-2. **发布应用**：点击「发布」生成 `application_id`，仅已发布应用可被 API 调用；
-3. **调用 API**：
-   ```bash
-   curl -X POST https://dashscope.aliyuncs.com/api/v1/applications/{application_id}/run \
-     -H "Authorization: Bearer $API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{"inputs": {"query": "今天北京天气如何？"}}'
-   ```
-   更多请求示例与错误码说明见 [应用开发](../../raw/application-user-guide/llm-application.md)。
+- **创建入口**：统一通过百炼控制台 [应用管理](https://bailian.console.aliyun.com/?tab=app#/app-center) → “创建应用” 进入，按类型选择模板。
+- **智能体配置重点**：在 Agent 2.0 中，模型选择器支持 `AUTO`（自动路由）、`性能`、`均衡`、`经济` 四档，`AUTO` 按任务复杂度动态匹配模型，计费统一；系统提示词支持嵌入 `/` 自定义变量；预解析文件开关决定是否由系统主动解析上传文件。
+- **工作流编排要点**：
+  - 开始节点定义 `query`（必填）、`historyList`（多轮必需）、`imageList`（多模态必需）等内置变量；
+  - 条件判断节点分支间为“或”关系，每个条件组内可设“所有/任一”逻辑；
+  - 循环体与批处理体均禁止嵌套同类节点，且不支持添加流程输出节点；
+  - 流程输出节点用于中间结果流式返回，结束节点用于最终结果输出（仅一个）。
+- **高代码部署流程**：控制台创建 → 选择 Serverless/K8s → 提交模版代码或 `.whl` 包 → 授权 FC/API 网关 → 启动；入口文件必须为 `main.py`，需暴露 `/health` 健康检查接口；工具接入需在代码中通过 `fastmcp.Client` 实现，控制台配置仅作展示。
 
 ## 限制和注意事项
 
-- 单次请求最大 `inputs` 大小为 1MB；文件问答类应用单次上传文件总大小 ≤ 50MB；
-- Agent 2.0 默认最大工具调用深度为 8 层，超限时返回 `TOOL_CALL_DEPTH_EXCEEDED` 错误，可通过 `max_iterations` 参数调整（上限 20）；
-- 所有应用默认启用敏感词过滤与输出长度截断（max_tokens=4096），不可关闭；
-- 工作流应用不支持流式响应（`stream=true` 将被忽略），且 `inputs.files` 中的文件不会自动解析为文本——需显式添加「文件解析」节点。该行为与 [文件问答](../../raw/application-user-guide/llm-application/file-q-a.md) 的自动处理逻辑不同，请按场景选型。
+- **资源与配额**：单个会话文件上传上限 10 个且单文件 ≤10 MB（智能体）；文档解析单文件 ≤150 MB；图片 ≤20 MB；音视频 ≤512 MB；循环次数上限 1000；批处理数组长度受“批处理次数上限”约束（默认 30）。
+- **模型兼容性**：非多模态模型（如纯文本千问系列）无法直接解析图片/视频，必须开启“预解析文件”；千问-VL 系列模型即使关闭预解析，也能直接解析图片/视频，但对非图像/视频文件仍依赖预解析开关。
+- **节点行为差异**：
+  - 大模型节点（批量模式）不支持记忆、失败重试与异常处理；
+  - 智能体创建节点生成的智能体仅运行时存在，不创建独立应用；
+  - 智能体群组节点的决策模型不生成最终答案，仅调度子智能体，`result.agResult` 才是最终输出；
+  - AppFlow 节点不支持[流式输出](../concepts/streaming-output.md)，如需流式效果需接大模型节点二次处理。
+- **安全与网络**：调用外部 API 时，需将百炼服务 IP（`47.93.216.17` 和 `39.105.109.77`）加入目标服务白名单；函数计算、AppFlow、MCP 等云资源节点要求账号归属同一主账号或已授权。
 
 ## 来源文档
 
-- [应用开发](../../raw/application-user-guide/llm-application.md)
+- [应用类型介绍](../../raw/application-user-guide/llm-application/application-introduction.md)
+- [新版智能体应用（Agent 2.0）](../../raw/application-user-guide/llm-application/new-single-agent-application.md)
+- [智能体应用（Agent 1.0）](../../raw/application-user-guide/llm-application/single-agent-application.md)
+- [工作流应用](../../raw/application-user-guide/llm-application/workflow-application.md)
+- [开始和结束节点](../../raw/application-user-guide/llm-application/workflow-application/start-end-node.md)
+- [循环节点](../../raw/application-user-guide/llm-application/workflow-application/loop-node.md)
+- [条件判断节点](../../raw/application-user-guide/llm-application/workflow-application/conditional-node.md)
+- [批处理节点](../../raw/application-user-guide/llm-application/workflow-application/batch-node.md)
+- [流程输出节点](../../raw/application-user-guide/llm-application/workflow-application/process-output-node.md)
+- [大模型节点](../../raw/application-user-guide/llm-application/workflow-application/llm-node.md)
+- [知识库节点](../../raw/application-user-guide/llm-application/workflow-application/knowledge-base-node.md)
+- [意图分类节点](../../raw/application-user-guide/llm-application/workflow-application/intent-node.md)
+- [参数提取节点](../../raw/application-user-guide/llm-application/workflow-application/parameter-extraction-node.md)
+- [智能体创建节点](../../raw/application-user-guide/llm-application/workflow-application/agent-create-node.md)
+- [API节点](../../raw/application-user-guide/llm-application/workflow-application/api-node.md)
+- [函数计算节点](../../raw/application-user-guide/llm-application/workflow-application/fc-node.md)
+- [脚本节点](../../raw/application-user-guide/llm-application/workflow-application/script-node.md)
+- [插件节点](../../raw/application-user-guide/llm-application/workflow-application/plugin-node.md)
+- [MCP节点](../../raw/application-user-guide/llm-application/workflow-application/mcp-node.md)
+- [AppFlow节点](../../raw/application-user-guide/llm-application/workflow-application/appflow-node.md)
+- [应用组件节点](../../raw/application-user-guide/llm-application/workflow-application/component-node.md)
+- [变量处理节点](../../raw/application-user-guide/llm-application/workflow-application/variable-processing-node.md)
+- [变量赋值节点](../../raw/application-user-guide/llm-application/workflow-application/variable-assignment-node.md)
+- [文档解析节点](../../raw/application-user-guide/llm-application/workflow-application/document-extraction-node.md)
+- [图片解析节点](../../raw/application-user-guide/llm-application/workflow-application/image-extraction-node.md)
+- [多模态生成节点](../../raw/application-user-guide/llm-application/workflow-application/multimodal-generation-node.md)
+- [音频解析节点](../../raw/application-user-guide/llm-application/workflow-application/audio-extraction-node.md)
+- [视频解析节点](../../raw/application-user-guide/llm-application/workflow-application/video-extraction-node.md)
+- [数据连接器节点](../../raw/application-user-guide/llm-application/workflow-application/data-connector-node.md)
+- [高代码应用](../../raw/application-user-guide/llm-application/rich-code-application.md)
+- [工具接入](../../raw/application-user-guide/llm-application/rich-code-application/rich-code-application-mcp.md)
+- [API 开发指南](../../raw/application-user-guide/llm-application/rich-code-application/rich-code-app-develop-guide.md)
+- [文件问答](../../raw/application-user-guide/llm-application/file-q-a.md)
+- [智能体群组节点](../../raw/application-user-guide/llm-application/workflow-application/agent-group-node.md)
 
 

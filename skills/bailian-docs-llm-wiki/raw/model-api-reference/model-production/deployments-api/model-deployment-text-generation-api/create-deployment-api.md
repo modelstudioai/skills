@@ -33,7 +33,7 @@ API Key鉴权，格式为`Bearer sk-xxxx`。
 
 **model\_name** `string` **（必选）**
 
-待部署的模型名称，对应[我的模型](https://bailian.console.aliyun.com/model/custom)中的模型 ID。也可通过[创建训练任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)接口的输出获取。
+待部署的模型名称，对应[我的模型](https://bailian.console.aliyun.com/model/custom)中的模型 ID。也可通过[创建训练任务](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)接口的输出获取。
 
 **plan** `string` **（必选）**
 

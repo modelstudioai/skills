@@ -2,9 +2,13 @@
 
 查询指定用户已提取的画像属性
 
-获取指定用户的画像属性。需在调用 AddMemory 添加对话后等待约 3 秒，待画像提取完成。
+获取指定用户的画像属性。画像提取为异步过程；调用 AddMemory 添加对话后，首次查询可能尚未返回属性值，请按业务重试策略再次查询。
 
 **说明**若返回的属性值均为空，请确认调用 [AddMemory](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory.md) 时已传入相同的 `profile_schema`。未传该参数时不会触发画像提取。
+
+## 请求方法与路径
+
+`GET https://dashscope.aliyuncs.com/api/v2/apps/memory/profile_schemas/{profile_schema_id}/user_profile`
 
 ## 请求参数
 
@@ -14,6 +18,8 @@
 
 必填
 
+位置
+
 说明
 
 `profile_schema_id`
@@ -22,7 +28,9 @@ string
 
 是
 
-画像模板 ID（路径参数）
+Path
+
+画像模板 ID
 
 `user_id`
 
@@ -30,7 +38,19 @@ string
 
 是
 
+Query
+
 记忆实体 ID
+
+`memory_library_id`
+
+string
+
+否
+
+Query
+
+记忆库 ID
 
 ## 返回结果
 

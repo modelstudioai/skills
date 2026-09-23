@@ -691,7 +691,7 @@ curl -X GET https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{tas
 
 **duration** `float`
 
-生成视频的时长，单位为秒。
+总视频时长，单位为秒。无输入参考视频时，等于输出视频的时长；有输入参考视频时，等于输入视频时长与输出视频时长之和。
 
 **input\_video\_duration** `float`
 

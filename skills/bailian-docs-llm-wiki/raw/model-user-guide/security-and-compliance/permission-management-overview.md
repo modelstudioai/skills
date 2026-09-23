@@ -268,7 +268,7 @@ RAM 用户默认无权调用百炼**应用**的数据、知识库、Prompt工程
 若需调用，需要**阿里云主账号**在 [RAM 控制台](https://ram.console.aliyun.com/users)为 RAM 用户添加以下**权限之一**：
 
 -   [AliyunBailianDataFullAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailiandatafullaccess)：可调用百炼应用 [API目录](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)下的所有API。
--   [AliyunBailianDataReadOnlyAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailiandatareadonlyaccess)：可调用百炼应用 [API目录](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)下的**只读类**API，例如[查询文件状态](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-data-connection-original-application-data/api-bailian-2023-12-29-describefile.md)、[查询知识库创建任务状态](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir/api-bailian-2023-12-29-dir-knowledge-base/api-bailian-2023-12-29-getindexjobstatus.md)等。
+-   [AliyunBailianDataReadOnlyAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailiandatareadonlyaccess)：可调用百炼应用 [API目录](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)下的**只读类**API，例如[查询文件状态](raw/_short/api-bailian-2023-12-29-describefile-020886c28a208bf2.md)、[查询知识库创建任务状态](raw/_short/api-bailian-2023-12-29-getindexjobstatus-1e88b6ccfffe0fe4.md)等。
 
 如需对**知识库**和**记忆库**实现更细粒度的权限控制，可在 [RAM 控制台](https://ram.console.aliyun.com/users)创建**自定义策略**，仅授予所需操作的权限。
 

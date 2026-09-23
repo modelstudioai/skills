@@ -74,7 +74,7 @@ Qwen3-Livetranslate（Chat Completions）
 
 Qwen3.8-Omni-Flash-Realtime（WebSocket / WebRTC / AOQ）；Qwen3.5-Omni Plus / Flash（Chat Completions）
 
-[声音复刻](raw/model-api-reference/omni-realtime-api/qwen-omni-voice-cloning.md)
+[声音复刻](raw/_short/qwen-omni-voice-cloning-717550bc449e9e29.md)
 
 -   使用 Qwen3.5-Omni 分析内容时，支持音频最长3小时、视频最长1小时。
 -   支持工具调用（Function Calling）：Qwen3.8-Omni-Flash-Realtime（WebSocket / WebRTC / AOQ）、Qwen3.8-Omni-Flash（Chat Completions / Responses）、Qwen3.5-Omni Plus / Flash（Chat Completions，文本输出）、Qwen3-Omni-Flash（Chat Completions）、Qwen-Audio Realtime（WebSocket）。

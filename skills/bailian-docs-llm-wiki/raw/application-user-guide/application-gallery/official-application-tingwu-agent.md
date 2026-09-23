@@ -6,31 +6,31 @@
     
 -   汽车销售服务洞察
     
-    -   [产品概述](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-automotive-service-insights/tingwu-automotive-service-insights-overview.md)
-    -   [使用指南](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-automotive-service-insights/tingwu-automotive-service-insights-guidelines.md)
-    -   [业务流程](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-automotive-service-insights/tingwu-automotive-service-insights-process.md)
-    -   [API参考](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-automotive-service-insights/tingwu-automotive-service-insights-api.md)
+    -   [产品概述](raw/_short/tingwu-automotive-service-insights-overview-6cc5d04ff9adb0ee.md)
+    -   [使用指南](raw/_short/tingwu-automotive-service-insights-guidelines-d070b174f51441e2.md)
+    -   [业务流程](raw/_short/tingwu-automotive-service-insights-process-807c9f03d8d8d3f6.md)
+    -   [API参考](raw/_short/tingwu-automotive-service-insights-api-bd40f6442abd84b5.md)
 -   购车客户画像
     
-    -   [产品概述](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-automotive-customer-profile/tingwu-automotive-customer-profile-overview.md)
-    -   [使用指南](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-automotive-customer-profile/tingwu-automotive-customer-profile-guidelines.md)
-    -   [业务流程](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-automotive-customer-profile/tingwu-automotive-customer-profile-process.md)
-    -   [API参考](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-automotive-customer-profile/tingwu-automotive-customer-profile-api.md)
+    -   [产品概述](raw/_short/tingwu-automotive-customer-profile-overview-17782f3e0c4d23cb.md)
+    -   [使用指南](raw/_short/tingwu-automotive-customer-profile-guidelines-b5bfaecff16b1647.md)
+    -   [业务流程](raw/_short/tingwu-automotive-customer-profile-process-63ccd224a867aa28.md)
+    -   [API参考](raw/_short/tingwu-automotive-customer-profile-api-cf3538cc3525d65a.md)
 -   通用服务洞察
     
-    -   [产品概述](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-service-insights/tingwu-service-insights-overview.md)
-    -   [使用指南](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-service-insights/tingwu-service-insights-guidelines.md)
-    -   [业务流程](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-service-insights/tingwu-service-insights-process.md)
-    -   [API参考](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-service-insights/tingwu-service-insights-api.md)
+    -   [产品概述](raw/_short/tingwu-service-insights-overview-2d95cbc9111f7a10.md)
+    -   [使用指南](raw/_short/tingwu-service-insights-guidelines-eaba51796f55ef98.md)
+    -   [业务流程](raw/_short/tingwu-service-insights-process-dd90b7c1ae91074d.md)
+    -   [API参考](raw/_short/tingwu-service-insights-api-d0b302c6a93bcfc3.md)
 -   工业生产指令转写
     
-    -   [产品概述](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-industrial-instruction/tingwu-industrial-instruction-overview.md)
-    -   [使用指南](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-industrial-instruction/tingwu-industrial-instruction-guidelines.md)
-    -   [业务流程](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-industrial-instruction/tingwu-industrial-instruction-process.md)
-    -   [API参考](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-industrial-instruction/tingwu-industrial-instruction-api.md)
+    -   [产品概述](raw/_short/tingwu-industrial-instruction-overview-9cd4b2fcb896ea76.md)
+    -   [使用指南](raw/_short/tingwu-industrial-instruction-guidelines-7245a2345653f3f3.md)
+    -   [业务流程](raw/_short/tingwu-industrial-instruction-process-9762ecff55a41d51.md)
+    -   [API参考](raw/_short/tingwu-industrial-instruction-api-2ccf05ad4e5be18c.md)
 -   智能纪要
     
-    -   [产品概述](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-meeting/tingwu-meeting-summary-overview.md)
-    -   [使用指南](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-meeting/tingwu-meeting-summary-guidelines.md)
-    -   [业务流程](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-meeting/tingwu-meeting-summary-process.md)
+    -   [产品概述](raw/_short/tingwu-meeting-summary-overview-0b5b5de854839ad1.md)
+    -   [使用指南](raw/_short/tingwu-meeting-summary-guidelines-7dcac8c9006a7cbd.md)
+    -   [业务流程](raw/_short/tingwu-meeting-summary-process-ef1e486ad816f793.md)
     -   [API参考](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-meeting/tingwu-meeting-api.md)

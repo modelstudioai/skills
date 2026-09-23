@@ -1,3 +1,3 @@
 # 语音合成
 
--   [创建调优任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-speech-synthesis-api/voice-synthesis-create-fine-tuning-job-api.md)
+-   [创建调优任务](raw/_short/voice-synthesis-create-fine-tuning-job-api-0ff3893c65aef5a2.md)

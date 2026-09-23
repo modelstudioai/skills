@@ -26,7 +26,7 @@ API概述
 
 云端执行SQL方式
 
-[RunDataAnalysis](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-intelligent-asking-number/api-dataanalysisgbi-2024-08-23-dir-cloud-sql-execution-mode/api-dataanalysisgbi-2024-08-23-rundataanalysis.md)
+[RunDataAnalysis](raw/_short/api-dataanalysisgbi-2024-08-23-rundataanalysis-697fa2953fc095a1.md)
 
 Chat对话接口
 
@@ -36,13 +36,13 @@ Chat对话接口
 
 本地执行SQL方式
 
-[RunDataResultAnalysis](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-intelligent-asking-number/api-dataanalysisgbi-2024-08-23-dir-local-sql-execution-mode/api-dataanalysisgbi-2024-08-23-rundataresultanalysis.md)
+[RunDataResultAnalysis](raw/_short/api-dataanalysisgbi-2024-08-23-rundataresultanal-896d63efdafddc42.md)
 
 执行结果分析
 
 对结构化数据类型的执行结果进行分析、可视化信息生成。
 
-[RunSqlGeneration](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-intelligent-asking-number/api-dataanalysisgbi-2024-08-23-dir-local-sql-execution-mode/api-dataanalysisgbi-2024-08-23-runsqlgeneration.md)
+[RunSqlGeneration](raw/_short/api-dataanalysisgbi-2024-08-23-runsqlgeneration-0b7792527692fa16.md)
 
 运行sql生成
 
@@ -56,25 +56,25 @@ API
 
 API概述
 
-[UpdateBusinessLogic](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-business-logic-explanation/api-dataanalysisgbi-2024-08-23-updatebusinesslogic.md)
+[UpdateBusinessLogic](raw/_short/api-dataanalysisgbi-2024-08-23-updatebusinesslog-1b36c3e77ba044fc.md)
 
 修改业务逻辑解释
 
 修改当前指定业务空间下所指定的业务逻辑解释。
 
-[CreateBusinessLogic](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-business-logic-explanation/api-dataanalysisgbi-2024-08-23-createbusinesslogic.md)
+[CreateBusinessLogic](raw/_short/api-dataanalysisgbi-2024-08-23-createbusinesslog-6116fecece83537d.md)
 
 创建业务逻辑解释
 
 在指定的业务空间下创建新的业务逻辑解释。
 
-[ListBusinessLogic](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-business-logic-explanation/api-dataanalysisgbi-2024-08-23-listbusinesslogic.md)
+[ListBusinessLogic](raw/_short/api-dataanalysisgbi-2024-08-23-listbusinesslogic-6d503586d8441b31.md)
 
 业务逻辑解释列表
 
 获取当前指定业务空间下的企业知识名词解释列表。
 
-[DeleteBusinessLogic](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-business-logic-explanation/api-dataanalysisgbi-2024-08-23-deletebusinesslogic.md)
+[DeleteBusinessLogic](raw/_short/api-dataanalysisgbi-2024-08-23-deletebusinesslog-ad665a2f31d5b8c5.md)
 
 删除业务逻辑解释
 
@@ -88,25 +88,25 @@ API
 
 API概述
 
-[CreateSynonyms](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-synonym-explanation/api-dataanalysisgbi-2024-08-23-createsynonyms.md)
+[CreateSynonyms](raw/_short/api-dataanalysisgbi-2024-08-23-createsynonyms-e19d49628ce47c95.md)
 
 创建同义词
 
 在当前指定的业务空间下面，新建同义词。
 
-[ListSynonyms](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-synonym-explanation/api-dataanalysisgbi-2024-08-23-listsynonyms.md)
+[ListSynonyms](raw/_short/api-dataanalysisgbi-2024-08-23-listsynonyms-d0a805a8626c5a56.md)
 
 同义词列表
 
 获取当前指定业务空间下的同义词列表。
 
-[UpdateSynonyms](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-synonym-explanation/api-dataanalysisgbi-2024-08-23-updatesynonyms.md)
+[UpdateSynonyms](raw/_short/api-dataanalysisgbi-2024-08-23-updatesynonyms-08b7e74197ffc92e.md)
 
 修改同义词
 
 修改当前业务空间指定的同义词信息。
 
-[BatchDeleteSynonyms](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-synonym-explanation/api-dataanalysisgbi-2024-08-23-batchdeletesynonyms.md)
+[BatchDeleteSynonyms](raw/_short/api-dataanalysisgbi-2024-08-23-batchdeletesynony-ce09b77ee392d033.md)
 
 批量删除同义词
 
@@ -120,79 +120,79 @@ API
 
 API概述
 
-[CreateDatasourceAuthorization](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-data-source-management/api-dataanalysisgbi-2024-08-23-createdatasourceauthorization.md)
+[CreateDatasourceAuthorization](raw/_short/api-dataanalysisgbi-2024-08-23-createdatasourcea-b2713b77aa940397.md)
 
 数据源关联关系授权
 
 创建数据库关联授权，在您指定的业务空间，对指定的数据源进行关联关系的创建，创建后可以对数据源下的表结构进行采集。
 
-[CancelDatasourceAuthorization](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-data-source-management/api-dataanalysisgbi-2024-08-23-canceldatasourceauthorization.md)
+[CancelDatasourceAuthorization](raw/_short/api-dataanalysisgbi-2024-08-23-canceldatasourcea-c26849155216aab1.md)
 
 取消数据源关联关系授权
 
 取消关联的数据源授权。
 
-[SyncRemoteTables](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-data-source-management/api-dataanalysisgbi-2024-08-23-syncremotetables.md)
+[SyncRemoteTables](raw/_short/api-dataanalysisgbi-2024-08-23-syncremotetables-a2d885e516165b9a.md)
 
 从数据源同步数据表
 
 更新当前业务空间所关联的数据表，从远程数据源（虚拟数据源）同步最近的表并关联到您所指定的业务空间。
 
-[ListSelectedTables](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-data-source-management/api-dataanalysisgbi-2024-08-23-listselectedtables.md)
+[ListSelectedTables](raw/_short/api-dataanalysisgbi-2024-08-23-listselectedtable-33bc99f128b2d60c.md)
 
 选择的数据表集合
 
 获取当前业务空间处于以关联状态的数据表。
 
-[UpdateTableInfo](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-data-source-management/api-dataanalysisgbi-2024-08-23-updatetableinfo.md)
+[UpdateTableInfo](raw/_short/api-dataanalysisgbi-2024-08-23-updatetableinfo-35547fe5dd1820b9.md)
 
 修改数据表信息
 
 修改当前所指定的数据表的信息。
 
-[DeleteSelectedTable](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-data-source-management/api-dataanalysisgbi-2024-08-23-deleteselectedtable.md)
+[DeleteSelectedTable](raw/_short/api-dataanalysisgbi-2024-08-23-deleteselectedtab-5ec52366d9be507f.md)
 
 删除所选择的数据表
 
 将当前指定数据表从指定业务空间管控中删除。
 
-[ResyncTable](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-data-source-management/api-dataanalysisgbi-2024-08-23-resynctable.md)
+[ResyncTable](raw/_short/api-dataanalysisgbi-2024-08-23-resynctable-dafb54e35b50dcc3.md)
 
 刷新当前所关联的数
 
 从远程数据库刷新当前所关联的数据表信息。
 
-[ListColumn](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-data-source-management/api-dataanalysisgbi-2024-08-23-listcolumn.md)
+[ListColumn](raw/_short/api-dataanalysisgbi-2024-08-23-listcolumn-ed13158873c319b0.md)
 
 数据表下的数据列集合
 
 获取当前指定业务空间，指定表下面的列信息。
 
-[UpdateColumn](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-data-source-management/api-dataanalysisgbi-2024-08-23-updatecolumn.md)
+[UpdateColumn](raw/_short/api-dataanalysisgbi-2024-08-23-updatecolumn-30125dbe8bc1f8f5.md)
 
 修改数据列信息
 
 修改当前指定业务空间中，指定列的信息。
 
-[RecoverColumn](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-data-source-management/api-dataanalysisgbi-2024-08-23-recovercolumn.md)
+[RecoverColumn](raw/_short/api-dataanalysisgbi-2024-08-23-recovercolumn-67351032c3511e62.md)
 
 还原数据列信息
 
 将指定数据表的数据列恢复到初始化关联时的状态。
 
-[DeleteColumn](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-data-source-management/api-dataanalysisgbi-2024-08-23-deletecolumn.md)
+[DeleteColumn](raw/_short/api-dataanalysisgbi-2024-08-23-deletecolumn-98dc040bcd269a9a.md)
 
 删除数据表中的列
 
 从当前所指定的业务空间中，删除所指定的列。
 
-[ListEnumMapping](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-data-source-management/api-dataanalysisgbi-2024-08-23-listenummapping.md)
+[ListEnumMapping](raw/_short/api-dataanalysisgbi-2024-08-23-listenummapping-0eb61189c7e900e5.md)
 
 枚举值映射列表
 
 获取当前业务空间，指定表、列下的枚举值。
 
-[UpdateEnumMapping](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-data-source-management/api-dataanalysisgbi-2024-08-23-updateenummapping.md)
+[UpdateEnumMapping](raw/_short/api-dataanalysisgbi-2024-08-23-updateenummapping-8780cc08c737d6cf.md)
 
 修改枚举值映射关系
 
@@ -206,31 +206,31 @@ API
 
 API概述
 
-[CreateVirtualDatasourceInstance](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-virtual-data-source/api-dataanalysisgbi-2024-08-23-createvirtualdatasourceinstance.md)
+[CreateVirtualDatasourceInstance](raw/_short/api-dataanalysisgbi-2024-08-23-createvirtualdata-9c634b02353ed7f7.md)
 
 创建虚拟数据源实例
 
 在您指定的业务空间创建虚拟数据源实例，虚拟数据源实例代表着一个虚拟的数据库，可以向虚拟数据源中添加ddl语句，来完成您构建虚拟数据库，数据表的能力。
 
-[ListVirtualDatasourceInstance](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-virtual-data-source/api-dataanalysisgbi-2024-08-23-listvirtualdatasourceinstance.md)
+[ListVirtualDatasourceInstance](raw/_short/api-dataanalysisgbi-2024-08-23-listvirtualdataso-653746f37c8c187d.md)
 
 虚拟数据源实例列表
 
 获取当前业务空间下的数据源实例列表。
 
-[UpdateVirtualDatasourceInstance](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-virtual-data-source/api-dataanalysisgbi-2024-08-23-updatevirtualdatasourceinstance.md)
+[UpdateVirtualDatasourceInstance](raw/_short/api-dataanalysisgbi-2024-08-23-updatevirtualdata-9ff7fe1d4df1874f.md)
 
 修改虚拟数据源实例信息
 
 修改指定业务空间下所指定的虚拟数据源的信息。
 
-[DeleteVirtualDatasourceInstance](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-virtual-data-source/api-dataanalysisgbi-2024-08-23-deletevirtualdatasourceinstance.md)
+[DeleteVirtualDatasourceInstance](raw/_short/api-dataanalysisgbi-2024-08-23-deletevirtualdata-1ba0482b387202c6.md)
 
 删除虚拟数据源实例
 
 删除指定业务空间下面的虚拟数据源实例。
 
-[SaveVirtualDatasourceDdl](raw/application-user-guide/application-gallery/xiyan-gbi/api-reference-4/api-dataanalysisgbi-2024-08-23-dir/api-dataanalysisgbi-2024-08-23-dir-virtual-data-source/api-dataanalysisgbi-2024-08-23-savevirtualdatasourceddl.md)
+[SaveVirtualDatasourceDdl](raw/_short/api-dataanalysisgbi-2024-08-23-savevirtualdataso-b495ed60bf1b6e27.md)
 
 向虚拟数据源中添加ddl语句
 

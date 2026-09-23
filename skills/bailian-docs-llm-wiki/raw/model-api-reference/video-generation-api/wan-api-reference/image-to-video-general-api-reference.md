@@ -6,7 +6,7 @@
 
 **说明**全新推出的**图生视频 API**（wan2.7模型）支持上述三大任务，**推荐优先选用**。
 
-原[图生视频-基于首帧](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-api-reference.md)（wan2.6及早期模型）仅支持首帧生视频。
+原[图生视频-基于首帧](raw/_short/legacy-image-to-video-api-reference-8b02dd673da405f1.md)（wan2.6及早期模型）仅支持首帧生视频。
 
 ## 适用范围
 

@@ -940,5 +940,5 @@ String
 
 至此，您已经完成了自研Agent与多模态交互套件的基础集成，如需进一步集成，请参见：
 
--   [Protocol扩展](raw/application-user-guide/application-gallery/multimodal-products/multimodal-guidelines/multimodal-integration-a2a/multimodal-integration-a2a-protocol.md)
--   [Intent扩展](raw/application-user-guide/application-gallery/multimodal-products/multimodal-guidelines/multimodal-integration-a2a/multimodal-integration-a2a-intent.md)
+-   [Protocol扩展](raw/_short/multimodal-integration-a2a-protocol-16eb3a1349138ba1.md)
+-   [Intent扩展](raw/_short/multimodal-integration-a2a-intent-bee6423282217bc3.md)

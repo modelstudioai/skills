@@ -150,7 +150,7 @@ kling/kling-v3-omni-image-generation
 
 **element\_id** `integer` （条件必填）
 
-传`element_list`时必填，表示主体ID。请在[可灵-主体ID列表](raw/model-api-reference/video-generation-api/kling-api-reference/kling-video-generation-api-reference/kling-object-ids.md)获取主体ID。
+传`element_list`时必填，表示主体ID。请在[可灵-主体ID列表](raw/_short/kling-object-ids-274408d9d9ebc585.md)获取主体ID。
 
 数量限制：参考图片数量和参考主体数量（element\_list数组长度）之和**不得超过10**。
 

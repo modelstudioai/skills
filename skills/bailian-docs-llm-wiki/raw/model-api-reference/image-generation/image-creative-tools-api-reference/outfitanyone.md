@@ -6,7 +6,7 @@ AI试衣包含 试衣模型 和 辅助模型 。通过灵活组合，可以满�
 
 **快速入口：**[在线体验](https://bailian.console.aliyun.com/model/experience/vision/imageGenerate) ｜ [计费与限流](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/billing-for-outfitanyone.md) ｜ [免费额度](raw/model-user-guide/test-1/new-free-quota.md)
 
-**相关API：**![api](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824099.png) [AI试衣-基础版](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/outfitanyone-api.md)｜![api](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824099.png) [AI试衣-Plus版](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/aitryon-plus-api.md)｜![api](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824099.png) [AI试衣-图片精修](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/ai-fitting-picture-finishing-api-details.md)｜![api](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824099.png) [AI试衣-图片分割](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/aitryon-parsing-api.md)
+**相关API：**![api](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824099.png) [AI试衣-基础版](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/outfitanyone-api.md)｜![api](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824099.png) [AI试衣-Plus版](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/aitryon-plus-api.md)｜![api](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824099.png) [AI试衣-图片精修](raw/_short/ai-fitting-picture-finishing-api-details-8c8f980f48b3085f.md)｜![api](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6710872271/p824099.png) [AI试衣-图片分割](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/aitryon-parsing-api.md)
 
 ## 模型概览
 
@@ -42,7 +42,7 @@ aitryon-plus
 
 **辅助模型**
 
-[AI试衣-图片精修](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/ai-fitting-picture-finishing-api-details.md)
+[AI试衣-图片精修](raw/_short/ai-fitting-picture-finishing-api-details-8c8f980f48b3085f.md)
 
 aitryon-refiner
 
@@ -79,7 +79,7 @@ aitryon-parsing-v1
 **调用步骤**：
 
 1.  调用试衣模型：按照[场景一：基础试衣](https://help.aliyun.com/zh/model-studio/outfitanyone#fced826e3fojt)的步骤，调用试衣模型，获得一张试衣效果图。
-2.  调用图片精修模型：调用[AI试衣-图片精修](raw/model-api-reference/image-generation/image-creative-tools-api-reference/outfitanyone/ai-fitting-picture-finishing-api-details.md)，将上一步生成的基础试衣效果图和原始的输入图（模特图和服装图）作为参数传入。
+2.  调用图片精修模型：调用[AI试衣-图片精修](raw/_short/ai-fitting-picture-finishing-api-details-8c8f980f48b3085f.md)，将上一步生成的基础试衣效果图和原始的输入图（模特图和服装图）作为参数传入。
 3.  获取结果：API 将返回精修后的试衣效果图。
 
 ### 场景三：局部试衣

@@ -72,9 +72,9 @@ API Host 与主 API Key 均从百炼控制台获取，临时 API Key 与 `ticket
 
 服务端使用主 API Key，根据世界模式调用对应的获取体验凭证接口，取得一次性进房凭证 `ticket` 后下发给客户端：
 
--   世界探索（Adventure）：[HappyOyster-Adventure-获取体验凭证](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference/happyoyster-adventure-get-travel-credential-api-reference.md)
--   实时导演（Directing）：[HappyOyster-Directing-获取体验凭证](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference/happyoyster-directing-get-travel-credential-api-reference.md)
--   角色演绎（Acting）：[HappyOyster-Acting-获取体验凭证](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference/happyoyster-acting-get-travel-credential-api-reference.md)
+-   世界探索（Adventure）：[HappyOyster-Adventure-获取体验凭证](raw/_short/happyoyster-adventure-get-travel-credential-api--d269f4908c7288f2.md)
+-   实时导演（Directing）：[HappyOyster-Directing-获取体验凭证](raw/_short/happyoyster-directing-get-travel-credential-api--3e983dc0416050b9.md)
+-   角色演绎（Acting）：[HappyOyster-Acting-获取体验凭证](raw/_short/happyoyster-acting-get-travel-credential-api-ref-dfc7dc5832959ca8.md)
 
 `ticket` 与 Travel 一一绑定，30 分钟内一次性使用；每次开始新的 Travel 需重新换取。
 

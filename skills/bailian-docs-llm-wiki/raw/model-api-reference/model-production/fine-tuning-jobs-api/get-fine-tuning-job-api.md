@@ -6,7 +6,7 @@
 
 -   **适用地域**：本文描述的功能仅在华北2（北京）地域可用，且必须使用该地域的[API Key](https://bailian.console.aliyun.com/model/settings/api-key)。
 -   已成功[获取 API Key](raw/model-api-reference/preparations/get-api-key.md)并[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
--   已通过[创建调优任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)接口创建了调优任务。
+-   已通过[创建调优任务](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)接口创建了调优任务。
 
 ## 查询调优任务状态
 
@@ -46,7 +46,7 @@ Url Path
 
 是
 
-要查询的调优任务的ID。即[创建调优任务返回参数](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)中的job\_id。
+要查询的调优任务的ID。即[创建调优任务返回参数](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)中的job\_id。
 
 ### 响应示例
 
@@ -206,7 +206,7 @@ output.status
 
 String
 
-本次调优[任务的状态](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)。
+本次调优[任务的状态](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)。
 
 output.finetuned\_output
 
@@ -362,7 +362,7 @@ Url Path
 
 是
 
-要取消的调优任务ID，可通过[创建训练任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)或列举训练任务接口获取。
+要取消的调优任务ID，可通过[创建训练任务](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)或列举训练任务接口获取。
 
 ### 响应示例
 
@@ -433,7 +433,7 @@ Url Path
 
 是
 
-要删除的调优任务ID，可通过[创建训练任务](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)或列举训练任务接口获取。
+要删除的调优任务ID，可通过[创建训练任务](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)或列举训练任务接口获取。
 
 ### 响应示例
 
@@ -695,7 +695,7 @@ output.status
 
 String
 
-本次调优[任务的状态](raw/model-api-reference/model-production/fine-tuning-jobs-api/model-fine-tuning-text-generation-api/create-fine-tuning-job-api.md)。
+本次调优[任务的状态](raw/_short/create-fine-tuning-job-api-ec89a5612f9a9ba9.md)。
 
 output.finetuned\_output
 

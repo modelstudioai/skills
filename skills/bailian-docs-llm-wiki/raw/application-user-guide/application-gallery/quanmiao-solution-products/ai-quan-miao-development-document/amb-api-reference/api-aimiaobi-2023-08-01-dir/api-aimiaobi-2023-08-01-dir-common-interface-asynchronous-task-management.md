@@ -1,6 +1,0 @@
-# 通用接口-异步任务管理
-
--   [SubmitAsyncTask - 提交异步任务](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-asynchronous-task-management/api-aimiaobi-2023-08-01-submitasynctask.md)
--   [CancelAsyncTask - 取消异步任务](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-asynchronous-task-management/api-aimiaobi-2023-08-01-cancelasynctask.md)
--   [QueryAsyncTask - 查询异步任务明细](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-asynchronous-task-management/api-aimiaobi-2023-08-01-queryasynctask.md)
--   [ListAsyncTasks - 获取异步任务列表](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-asynchronous-task-management/api-aimiaobi-2023-08-01-listasynctasks.md)

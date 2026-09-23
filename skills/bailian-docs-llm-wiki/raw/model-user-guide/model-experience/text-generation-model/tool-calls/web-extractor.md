@@ -295,7 +295,7 @@ output_started = False
 
 for chunk in stream:
     # 打印思考过程
-    if chunk.type == 'response.reasoning_summary_text.delta':
+    if chunk.type == 'response.reasoning_text.delta':
         if not reasoning_started:
             print("="*20 + "思考过程" + "="*20)
             reasoning_started = True
@@ -355,7 +355,7 @@ async function main() {
 
     for await (const chunk of stream) {
         // 打印思考过程
-        if (chunk.type === 'response.reasoning_summary_text.delta') {
+        if (chunk.type === 'response.reasoning_text.delta') {
             if (!reasoningStarted) {
                 console.log("====================思考过程====================");
                 reasoningStarted = true;

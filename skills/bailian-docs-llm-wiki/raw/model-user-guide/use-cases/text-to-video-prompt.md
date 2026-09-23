@@ -5,8 +5,8 @@
 适用范围：
 
 -   [文生视频API参考](raw/model-api-reference/video-generation-api/wan-api-reference/text-to-video-api-reference.md)
--   [图生视频-首帧生视频API参考](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-api-reference.md)
--   [图生视频-首尾帧生视频API参考](raw/model-api-reference/video-generation-api/wan-api-reference/legacy-video-models/legacy-image-to-video-by-first-and-last-frame-api-reference.md)
+-   [图生视频-首帧生视频API参考](raw/_short/legacy-image-to-video-api-reference-8b02dd673da405f1.md)
+-   [图生视频-首尾帧生视频API参考](raw/_short/legacy-image-to-video-by-first-and-last-frame-ap-524bb66cfed1f5de.md)
 -   [参考生视频API参考](raw/model-api-reference/video-generation-api/wan-api-reference/wan-video-to-video-api-reference.md)
 
 ## 提示词公式

@@ -201,7 +201,7 @@ Body
 
 `dpo_lora`
 
-`rl`（强化学习，详见[强化学习](raw/model-user-guide/fine-tuning/rl-training-overview.md)）
+`rl`（强化学习，详见[强化学习](raw/model-user-guide/fine-tuning/rl-overview/rl-training-overview.md)）
 
 job\_name
 

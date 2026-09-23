@@ -1,7 +1,0 @@
-# 通用接口-通用配置
-
--   [CreateGeneralConfig - 通用配置-创建](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-common-configuration/api-aimiaobi-2023-08-01-creategeneralconfig.md)
--   [ListGeneralConfigs - 通用配置-列表](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-common-configuration/api-aimiaobi-2023-08-01-listgeneralconfigs.md)
--   [GetGeneralConfig - 通用配置-详情](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-common-configuration/api-aimiaobi-2023-08-01-getgeneralconfig.md)
--   [UpdateGeneralConfig - 通用配置-修改](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-common-configuration/api-aimiaobi-2023-08-01-updategeneralconfig.md)
--   [DeleteGeneralConfig - 通用配置-删除](raw/application-user-guide/application-gallery/quanmiao-solution-products/ai-quan-miao-development-document/amb-api-reference/api-aimiaobi-2023-08-01-dir/api-aimiaobi-2023-08-01-dir-common-interface-common-configuration/api-aimiaobi-2023-08-01-deletegeneralconfig.md)

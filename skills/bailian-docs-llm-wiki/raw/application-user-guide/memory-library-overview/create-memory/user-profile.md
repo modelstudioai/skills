@@ -25,6 +25,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/profile_schemas \
   --data '{
     "name": "用户基础画像",
     "description": "包含年龄和兴趣的用户信息",
+    "extract_scene": "efficient",
     "attributes": [
       {"name": "年龄", "description": "用户年龄"},
       {"name": "爱好", "description": "用户的兴趣爱好"},
@@ -106,6 +107,6 @@ async def profile_example():
 asyncio.run(profile_example())
 ```
 
-**说明**画像提取是异步过程，添加对话后需等待约 3 秒再获取画像。
+**说明**画像提取是异步过程。添加对话后，首次查询可能尚未返回属性值，请按业务重试策略再次查询。
 
 **重要**画像配置完成后，继续[管理记忆](raw/application-user-guide/memory-library-overview/create-memory/manage-memory.md)查看和检索已有记忆。

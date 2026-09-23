@@ -1,0 +1,141 @@
+# HappyOyster-Acting-查询World列表 API参考
+
+分页查询当前主账号名下的 Acting World。接口自动按模型隔离，不会返回 Directing 或 Adventure World。
+
+## 适用范围
+
+分页查询当前主账号名下的 Acting World。调用前请确认以下事项：
+
+-   **鉴权要求**：仅支持**主 API Key**调用，临时 API Key 不可用（错误码 `403003`）。
+    
+    -   获取主 API Key：[获取与配置 API Key](https://help.aliyun.com/zh/model-studio/get-api-key#c38fb45bc6sje)。
+-   **调用方**：您的服务端调用。
+    
+
+## HTTP调用
+
+#### 新加坡
+
+`GET https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-acting/openapi/v1/worlds`
+
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+
+#### 美国（弗吉尼亚）
+
+`GET https://{WorkspaceId}.us-east-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-acting/openapi/v1/worlds`
+
+调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+
+#### 请求参数
+
+#### 查询World列表
+
+```
+curl --location 'https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v2/apps/happyoyster-1.0-acting/openapi/v1/worlds?page=1&pageSize=20&status=ready' \
+    -H "Authorization: Bearer $DASHSCOPE_API_KEY"
+```
+
+**Authorization** `string` **（必选）**
+
+API Key 鉴权。仅支持**主 API Key**，以 `sk-` 开头，如 `sk-xxx`。通常配置为环境变量 `$DASHSCOPE_API_KEY`。临时 API Key（`st-` 开头）调用返回 `403003`。
+
+##### Query 参数
+
+**page** `integer` **（可选）**
+
+页码，默认 `1`。`page <= 0` 时按 `1` 处理。
+
+**pageSize** `integer` **（可选）**
+
+每页条数，默认 `20`。`pageSize <= 0` 时按 `20`，大于 `100` 时按 `100` 处理。
+
+**status** `string` **（可选）**
+
+按构建状态筛选。未知值不筛选。可选值：
+
+-   `generating`：构建中
+-   `ready`：就绪
+-   `failed`：构建失败
+
+**mode** `integer` **（可选）**
+
+无需传入。列表已按 Acting 模型过滤，`items[].mode` 恒为 `3`。若仍传入且非 `3` 返回 `400000`。
+
+#### 响应参数
+
+```
+{
+    "code": 0,
+    "message": null,
+    "data": {
+        "items": [
+            {
+                "encryptedWorldId": "enc_a1b2****",
+                "name": "深夜视频通话",
+                "status": "ready",
+                "mode": 3,
+                "previewUrl": null,
+                "createdAt": "2026-09-09T08:00:00Z",
+                "perspective": null,
+                "creationModel": "simple",
+                "uploadMode": "first_frame"
+            },
+            {
+                "encryptedWorldId": "enc_g7h8****",
+                "name": "客厅轻松对谈",
+                "status": "ready",
+                "mode": 3,
+                "previewUrl": null,
+                "createdAt": "2026-09-09T09:00:00Z",
+                "perspective": null,
+                "creationModel": "simple",
+                "uploadMode": "first_frame"
+            }
+        ],
+        "pagination": {
+            "page": 1,
+            "pageSize": 20,
+            "total": 2,
+            "hasMore": false
+        }
+    }
+}
+```
+
+**code** `integer`
+
+返回码。`0` 表示成功，非 0 为错误码。
+
+**message** `string`
+
+错误信息。成功时为 `null`。
+
+**data** `object`
+
+响应数据。失败时为 `null`。
+
+属性
+
+**items** `array`
+
+当前页 World 列表；无结果时为空数组。每项含 `encryptedWorldId`、`name`、`status`（`generating` / `ready` / `failed`）、`mode`（恒为 `3`）、`previewUrl`（通常为 `null`）、`createdAt`、`perspective`（通常为 `null`）、`creationModel`（恒为 `simple`）、`uploadMode`（固定为 `first_frame`）。
+
+**pagination** `object`
+
+分页信息。含 `page`（当前页码）、`pageSize`（实际每页条数）、`total`（总记录数）、`hasMore`（`page × pageSize < total` 时为 `true`）。
+
+## 前置状态与调用注意事项
+
+-   模型过滤自动生效，列表不会混入其它模型的 World，且 `items[].mode` 恒为 `3`。
+-   列表项是轻量快照，不返回图片、Prompt、`resolution`、`aspectRatio` 或 `refWorldId`；需要完整配置时调用[查询World详情](raw/_short/happyoyster-acting-query-world-detail-api-refere-e3d3323e9887a0c6.md)。
+-   翻页时应使用响应中的 `pagination.pageSize` 和 `hasMore`，不要假设请求值一定原样采用。
+-   空结果不是错误，返回 `items=[]` 和对应分页信息。
+
+## 错误码
+
+如果模型调用失败并返回报错信息，请参见[HappyOyster 错误码](raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-error-code.md)进行解决。
+
+## 下一步
+
+-   [查询World详情](raw/_short/happyoyster-acting-query-world-detail-api-refere-e3d3323e9887a0c6.md)：查看单个 World 完整元数据。
+-   [删除World](raw/_short/happyoyster-acting-delete-world-api-reference-e7a48c5a6f87668c.md)：删除不再使用的 World。

@@ -1,0 +1,16 @@
+# 其他
+
+-   [GenerateBroadcastNews - 播报单（热榜）热点推荐](raw/_short/api-quanmiaolightapp-2024-08-01-generatebroadcas-6e7bd5682786df82.md)
+-   [SubmitTagMiningAnalysisTask](raw/_short/api-quanmiaolightapp-2024-08-01-submittagmininga-eabde3195d1c1874.md)
+-   [ListHotTopicSummaries - 查询完整播报单（热榜）](raw/_short/api-quanmiaolightapp-2024-08-01-listhottopicsumm-af4bc9f53028c127.md)
+-   [GetTagMiningAnalysisTask - 获取标签挖掘分析任务结果](raw/_short/api-quanmiaolightapp-2024-08-01-gettagmininganal-497c89589b454fbc.md)
+-   [HotNewsRecommend - 新闻热点推荐](raw/_short/api-quanmiaolightapp-2024-08-01-hotnewsrecommend-0a088ad24e050727.md)
+-   [GetFileContent - 获取文件内容](raw/_short/api-quanmiaolightapp-2024-08-01-getfilecontent-48412fee90a0e9fb.md)
+-   [BatchCancelTasks](raw/_short/api-quanmiaolightapp-2024-08-01-batchcanceltasks-ef3f48cf220ca3c2.md)
+-   [BatchQueryTaskStatus](raw/_short/api-quanmiaolightapp-2024-08-01-batchquerytaskst-6b601b9a82ec7a80.md)
+-   [CancelAsyncTask - 根据任务ID取消异步任务的执行](raw/_short/api-quanmiaolightapp-2024-08-01-cancelasynctask-f66d7204d5bf9fc3.md)
+-   [ExportAnalysisTagDetailByTaskId - 根据任务ID导出分析明细](raw/_short/api-quanmiaolightapp-2024-08-01-exportanalysista-5075b64a6087bfc3.md)
+-   [GetEnterpriseVocAnalysisTask - 获取企业VOC分析任务结果](raw/_short/api-quanmiaolightapp-2024-08-01-getenterprisevoc-de33977d4ff9fe15.md)
+-   [GetTaskExecutionStatistics](raw/_short/api-quanmiaolightapp-2024-08-01-gettaskexecution-ef6594032acc7563.md)
+-   [ListAnalysisTagDetailByTaskId - 获取挖掘结果明细列表](raw/_short/api-quanmiaolightapp-2024-08-01-listanalysistagd-d1a8671dfa849d1a.md)
+-   [SubmitEnterpriseVocAnalysisTask](raw/_short/api-quanmiaolightapp-2024-08-01-submitenterprise-54486bbb5b48f75a.md)

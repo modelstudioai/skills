@@ -75,7 +75,7 @@
 
 dianjin:GetHistoryListByBizType
 
-[GetHistoryListByBizType](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-gethistorylistbybiztype.md)
+[GetHistoryListByBizType](raw/_short/api-dianjin-2024-06-28-gethistorylistbybiztype-094e0fd700f60449.md)
 
 get
 
@@ -89,7 +89,7 @@ get
 
 dianjin:DeleteLibrary
 
-[DeleteLibrary](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-deletelibrary.md)
+[DeleteLibrary](raw/_short/api-dianjin-2024-06-28-deletelibrary-1014340b912e1802.md)
 
 delete
 
@@ -103,7 +103,7 @@ delete
 
 dianjin:ReIndex
 
-[ReIndex](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-reindex.md)
+[ReIndex](raw/_short/api-dianjin-2024-06-28-reindex-b253554c9c087004.md)
 
 none
 
@@ -117,7 +117,7 @@ none
 
 dianjin:GetTaskStatus
 
-[GetTaskStatus](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-gettaskstatus.md)
+[GetTaskStatus](raw/_short/api-dianjin-2024-06-28-gettaskstatus-d3b9b23ec42792e0.md)
 
 get
 
@@ -131,7 +131,7 @@ get
 
 dianjin:RealtimeDialogAssist
 
-[RealtimeDialogAssist](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-realtimedialogassist.md)
+[RealtimeDialogAssist](raw/_short/api-dianjin-2024-06-28-realtimedialogassist-e263257cf24e3127.md)
 
 none
 
@@ -145,7 +145,7 @@ none
 
 dianjin:GetDocumentUrl
 
-[GetDocumentUrl](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getdocumenturl.md)
+[GetDocumentUrl](raw/_short/api-dianjin-2024-06-28-getdocumenturl-ef124c074d6ab9fa.md)
 
 get
 
@@ -159,7 +159,7 @@ get
 
 dianjin:GetQualityCheckTaskResult
 
-[GetQualityCheckTaskResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getqualitychecktaskresult.md)
+[GetQualityCheckTaskResult](raw/_short/api-dianjin-2024-06-28-getqualitychecktaskresult-6b221fa3c50b4bf2.md)
 
 get
 
@@ -173,7 +173,7 @@ get
 
 dianjin:RunLibraryChatGeneration
 
-[RunLibraryChatGeneration](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-runlibrarychatgeneration.md)
+[RunLibraryChatGeneration](raw/_short/api-dianjin-2024-06-28-runlibrarychatgeneration-404dfc22be5a54b0.md)
 
 none
 
@@ -187,7 +187,7 @@ none
 
 dianjin:GetLibrary
 
-[GetLibrary](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getlibrary.md)
+[GetLibrary](raw/_short/api-dianjin-2024-06-28-getlibrary-fa28d970d73cf944.md)
 
 get
 
@@ -201,7 +201,7 @@ get
 
 dianjin:InvokePlugin
 
-[InvokePlugin](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-invokeplugin.md)
+[InvokePlugin](raw/_short/api-dianjin-2024-06-28-invokeplugin-1dad02a60f565377.md)
 
 none
 
@@ -215,7 +215,7 @@ none
 
 dianjin:GetDialogLog
 
-[GetDialogLog](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getdialoglog.md)
+[GetDialogLog](raw/_short/api-dianjin-2024-06-28-getdialoglog-853687666dc3cba7.md)
 
 none
 
@@ -229,7 +229,7 @@ none
 
 dianjin:CreateFinReportSummaryTask
 
-[CreateFinReportSummaryTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createfinreportsummarytask.md)
+[CreateFinReportSummaryTask](raw/_short/api-dianjin-2024-06-28-createfinreportsummarytas-6c944687f50f0e0d.md)
 
 create
 
@@ -243,7 +243,7 @@ create
 
 dianjin:GetTaskResult
 
-[GetTaskResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-gettaskresult.md)
+[GetTaskResult](raw/_short/api-dianjin-2024-06-28-gettaskresult-e502eaecf467735d.md)
 
 get
 
@@ -257,7 +257,7 @@ get
 
 dianjin:RecognizeIntention
 
-[RecognizeIntention](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-recognizeintention.md)
+[RecognizeIntention](raw/_short/api-dianjin-2024-06-28-recognizeintention-cbc3739e363b12fe.md)
 
 none
 
@@ -271,7 +271,7 @@ none
 
 dianjin:SubmitChatQuestion
 
-[SubmitChatQuestion](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-submitchatquestion.md)
+[SubmitChatQuestion](raw/_short/api-dianjin-2024-06-28-submitchatquestion-33eb2d3583fa7d91.md)
 
 none
 
@@ -285,7 +285,7 @@ none
 
 dianjin:CreateDocsSummaryTask
 
-[CreateDocsSummaryTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createdocssummarytask.md)
+[CreateDocsSummaryTask](raw/_short/api-dianjin-2024-06-28-createdocssummarytask-ebf0276013590879.md)
 
 create
 
@@ -299,7 +299,7 @@ create
 
 dianjin:RunAgent
 
-[RunAgent](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-runagent.md)
+[RunAgent](raw/_short/api-dianjin-2024-06-28-runagent-5da99dfbb5ebb6fc.md)
 
 none
 
@@ -313,7 +313,7 @@ none
 
 dianjin:RebuildTask
 
-[RebuildTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-rebuildtask.md)
+[RebuildTask](raw/_short/api-dianjin-2024-06-28-rebuildtask-a8b4ee41523ac3fb.md)
 
 none
 
@@ -327,7 +327,7 @@ none
 
 dianjin:GetParseResult
 
-[GetParseResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getparseresult.md)
+[GetParseResult](raw/_short/api-dianjin-2024-06-28-getparseresult-cee7e355a6d23912.md)
 
 none
 
@@ -341,7 +341,7 @@ none
 
 dianjin:UpdateLibrary
 
-[UpdateLibrary](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-updatelibrary.md)
+[UpdateLibrary](raw/_short/api-dianjin-2024-06-28-updatelibrary-0a0d6db97e2d3487.md)
 
 update
 
@@ -355,7 +355,7 @@ update
 
 dianjin:UpdateDocumentChunk
 
-[UpdateDocumentChunk](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-updatedocumentchunk.md)
+[UpdateDocumentChunk](raw/_short/api-dianjin-2024-06-28-updatedocumentchunk-aa1fa6c9fe4c2618.md)
 
 update
 
@@ -369,7 +369,7 @@ update
 
 dianjin:PreviewDocument
 
-[PreviewDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-previewdocument.md)
+[PreviewDocument](raw/_short/api-dianjin-2024-06-28-previewdocument-8c55690988faecdd.md)
 
 get
 
@@ -383,7 +383,7 @@ get
 
 dianjin:CreateDialogAnalysisTask
 
-[CreateDialogAnalysisTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createdialoganalysistask.md)
+[CreateDialogAnalysisTask](raw/_short/api-dianjin-2024-06-28-createdialoganalysistask-28fef79b887624dd.md)
 
 create
 
@@ -397,7 +397,7 @@ create
 
 dianjin:CreateLibrary
 
-[CreateLibrary](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-createlibrary.md)
+[CreateLibrary](raw/_short/api-dianjin-2024-06-28-createlibrary-41e580c81262aa83.md)
 
 create
 
@@ -411,7 +411,7 @@ create
 
 dianjin:GetDialogDetail
 
-[GetDialogDetail](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getdialogdetail.md)
+[GetDialogDetail](raw/_short/api-dianjin-2024-06-28-getdialogdetail-6dfcf43438066b60.md)
 
 get
 
@@ -425,7 +425,7 @@ get
 
 dianjin:RealTimeDialog
 
-[RealTimeDialog](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-realtimedialog.md)
+[RealTimeDialog](raw/_short/api-dianjin-2024-06-28-realtimedialog-1724ffb10bd69761.md)
 
 none
 
@@ -439,7 +439,7 @@ none
 
 dianjin:GetAppConfig
 
-[GetAppConfig](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getappconfig.md)
+[GetAppConfig](raw/_short/api-dianjin-2024-06-28-getappconfig-493fe5a694a1cdc0.md)
 
 get
 
@@ -453,7 +453,7 @@ get
 
 dianjin:DeleteDocument
 
-[DeleteDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-deletedocument.md)
+[DeleteDocument](raw/_short/api-dianjin-2024-06-28-deletedocument-53502bae8139481f.md)
 
 none
 
@@ -467,7 +467,7 @@ none
 
 dianjin:EvictTask
 
-[EvictTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-evicttask.md)
+[EvictTask](raw/_short/api-dianjin-2024-06-28-evicttask-11939924bb8c12d1.md)
 
 none
 
@@ -481,7 +481,7 @@ none
 
 dianjin:UpdateDocument
 
-[UpdateDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-updatedocument.md)
+[UpdateDocument](raw/_short/api-dianjin-2024-06-28-updatedocument-62af14b3aafbd006.md)
 
 none
 
@@ -495,7 +495,7 @@ none
 
 dianjin:CreatePredefinedDocument
 
-[CreatePredefinedDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-createpredefineddocument.md)
+[CreatePredefinedDocument](raw/_short/api-dianjin-2024-06-28-createpredefineddocument-a6dc0f48fd9f94f3.md)
 
 create
 
@@ -509,7 +509,7 @@ create
 
 dianjin:GetDocumentChunkList
 
-[GetDocumentChunkList](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getdocumentchunklist.md)
+[GetDocumentChunkList](raw/_short/api-dianjin-2024-06-28-getdocumentchunklist-d16101f8854a50e4.md)
 
 none
 
@@ -523,7 +523,7 @@ none
 
 dianjin:GetSummaryTaskResult
 
-[GetSummaryTaskResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getsummarytaskresult.md)
+[GetSummaryTaskResult](raw/_short/api-dianjin-2024-06-28-getsummarytaskresult-baf9b62231f3fc7d.md)
 
 get
 
@@ -537,7 +537,7 @@ get
 
 dianjin:RecallDocument
 
-[RecallDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-recalldocument.md)
+[RecallDocument](raw/_short/api-dianjin-2024-06-28-recalldocument-1ab8ab89e9dcd579.md)
 
 none
 
@@ -551,7 +551,7 @@ none
 
 dianjin:GetDialogAnalysisResult
 
-[GetDialogAnalysisResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getdialoganalysisresult.md)
+[GetDialogAnalysisResult](raw/_short/api-dianjin-2024-06-28-getdialoganalysisresult-af77b60dab70f1db.md)
 
 none
 
@@ -565,7 +565,7 @@ none
 
 dianjin:GenDocQaResult
 
-[GenDocQaResult](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-gendocqaresult.md)
+[GenDocQaResult](raw/_short/api-dianjin-2024-06-28-gendocqaresult-ea4e4da85dcec9b7.md)
 
 create
 
@@ -579,7 +579,7 @@ create
 
 dianjin:GetDocumentList
 
-[GetDocumentList](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getdocumentlist.md)
+[GetDocumentList](raw/_short/api-dianjin-2024-06-28-getdocumentlist-8c64b5f73a3d397d.md)
 
 get
 
@@ -593,7 +593,7 @@ get
 
 dianjin:EndToEndRealTimeDialog
 
-[EndToEndRealTimeDialog](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-endtoendrealtimedialog.md)
+[EndToEndRealTimeDialog](raw/_short/api-dianjin-2024-06-28-endtoendrealtimedialog-cf7033bc8e9b66ad.md)
 
 none
 
@@ -607,7 +607,7 @@ none
 
 dianjin:CreateDialog
 
-[CreateDialog](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createdialog.md)
+[CreateDialog](raw/_short/api-dianjin-2024-06-28-createdialog-3eacc140f2ccfd23.md)
 
 create
 
@@ -621,7 +621,7 @@ create
 
 dianjin:DashscopeAsyncTaskFinishEvent
 
-[DashscopeAsyncTaskFinishEvent](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-other/api-dianjin-2024-06-28-dashscopeasynctaskfinishevent.md)
+[DashscopeAsyncTaskFinishEvent](raw/_short/api-dianjin-2024-06-28-dashscopeasynctaskfinishe-cf84eae8f5382c7a.md)
 
 none
 
@@ -635,7 +635,7 @@ none
 
 dianjin:CreateQualityCheckTask
 
-[CreateQualityCheckTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createqualitychecktask.md)
+[CreateQualityCheckTask](raw/_short/api-dianjin-2024-06-28-createqualitychecktask-a97404112319d946.md)
 
 create
 
@@ -649,7 +649,7 @@ create
 
 dianjin:GetLibraryList
 
-[GetLibraryList](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getlibrarylist.md)
+[GetLibraryList](raw/_short/api-dianjin-2024-06-28-getlibrarylist-7f15dede0f988ab0.md)
 
 get
 
@@ -663,7 +663,7 @@ get
 
 dianjin:GetFilterDocumentList
 
-[GetFilterDocumentList](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-getfilterdocumentlist.md)
+[GetFilterDocumentList](raw/_short/api-dianjin-2024-06-28-getfilterdocumentlist-bd6838be9decd0b7.md)
 
 none
 
@@ -677,7 +677,7 @@ none
 
 dianjin:GetChatQuestionResp
 
-[GetChatQuestionResp](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-getchatquestionresp.md)
+[GetChatQuestionResp](raw/_short/api-dianjin-2024-06-28-getchatquestionresp-582ec2d8484e6216.md)
 
 none
 
@@ -691,7 +691,7 @@ none
 
 dianjin:RunDialogAnalysis
 
-[RunDialogAnalysis](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-rundialoganalysis.md)
+[RunDialogAnalysis](raw/_short/api-dianjin-2024-06-28-rundialoganalysis-a9e9c74f75b4c904.md)
 
 none
 
@@ -705,7 +705,7 @@ none
 
 dianjin:CreatePdfTranslateTask
 
-[CreatePdfTranslateTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createpdftranslatetask.md)
+[CreatePdfTranslateTask](raw/_short/api-dianjin-2024-06-28-createpdftranslatetask-44b47ee418a0abd2.md)
 
 create
 
@@ -719,7 +719,7 @@ create
 
 dianjin:UpdateQaLibrary
 
-[UpdateQaLibrary](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-updateqalibrary.md)
+[UpdateQaLibrary](raw/_short/api-dianjin-2024-06-28-updateqalibrary-f59478ca344e0602.md)
 
 create
 
@@ -733,7 +733,7 @@ create
 
 dianjin:RunChatResultGeneration
 
-[RunChatResultGeneration](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-runchatresultgeneration.md)
+[RunChatResultGeneration](raw/_short/api-dianjin-2024-06-28-runchatresultgeneration-7ffa922f4f82a17c.md)
 
 none
 
@@ -747,7 +747,7 @@ none
 
 dianjin:CreateAnnualDocSummaryTask
 
-[CreateAnnualDocSummaryTask](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-application/api-dianjin-2024-06-28-createannualdocsummarytask.md)
+[CreateAnnualDocSummaryTask](raw/_short/api-dianjin-2024-06-28-createannualdocsummarytas-351fd85aa94ffbaa.md)
 
 create
 
@@ -761,7 +761,7 @@ create
 
 dianjin:UploadDocument
 
-[UploadDocument](raw/application-user-guide/application-gallery/tongyi-dianjin/api-reference-3/api-dianjin-2024-06-28-dir/api-dianjin-2024-06-28-dir-platform-capabilities-document-library/api-dianjin-2024-06-28-uploaddocument.md)
+[UploadDocument](raw/_short/api-dianjin-2024-06-28-uploaddocument-a87b051dc9961d86.md)
 
 none
 

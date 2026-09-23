@@ -50,7 +50,7 @@ def call(
 """
 ```
 
-以[汽车销售服务洞察](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-automotive-service-insights.md)为例，关键参数说明如下，更多参数请参见[汽车销售服务洞察API参考](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-automotive-service-insights/tingwu-automotive-service-insights-api.md)或[购车客户画像API参考](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-automotive-customer-profile/tingwu-automotive-customer-profile-api.md)：
+以[汽车销售服务洞察](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-automotive-service-insights.md)为例，关键参数说明如下，更多参数请参见[汽车销售服务洞察API参考](raw/_short/tingwu-automotive-service-insights-api-bd40f6442abd84b5.md)或[购车客户画像API参考](raw/_short/tingwu-automotive-customer-profile-api-cf3538cc3525d65a.md)：
 
 -   model
     
@@ -169,7 +169,7 @@ print(resp)
 
 ## 响应结果
 
-以[汽车销售服务洞察](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-automotive-service-insights.md)为例，主要返回参数如下，更多说明请参见[汽车销售服务洞察API参考](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-automotive-service-insights/tingwu-automotive-service-insights-api.md)或[购车客户画像API参考](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-automotive-customer-profile/tingwu-automotive-customer-profile-api.md)：
+以[汽车销售服务洞察](raw/application-user-guide/application-gallery/official-application-tingwu-agent/tingwu-automotive-service-insights.md)为例，主要返回参数如下，更多说明请参见[汽车销售服务洞察API参考](raw/_short/tingwu-automotive-service-insights-api-bd40f6442abd84b5.md)或[购车客户画像API参考](raw/_short/tingwu-automotive-customer-profile-api-cf3538cc3525d65a.md)：
 
 **名称**
 

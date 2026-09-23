@@ -4,6 +4,10 @@
 
 创建用户画像模板，定义画像包含的字段及描述。
 
+## 请求方法与路径
+
+`POST https://dashscope.aliyuncs.com/api/v2/apps/memory/profile_schemas`
+
 ## 请求参数
 
 参数
@@ -11,6 +15,8 @@
 类型
 
 必填
+
+位置
 
 说明
 
@@ -20,7 +26,9 @@ string
 
 是
 
-画像模板名称
+Body
+
+画像模板名称，最多 32 个字符
 
 `description`
 
@@ -28,15 +36,9 @@ string
 
 否
 
-模板描述，用于指导智能体调用
+Body
 
-`attributes`
-
-array
-
-是
-
-画像字段列表，每项含 `name` 和 `description`
+画像模板描述
 
 `plan_version`
 
@@ -44,7 +46,59 @@ string
 
 否
 
-`Pro` 或 `Lite`，不传默认 Pro
+Body
+
+收费计划：`pro` 或 `lite`
+
+`extract_scene`
+
+string
+
+否
+
+Body
+
+提取场景：`efficient` 或 `intelligent`，默认 `efficient`
+
+`attributes`
+
+array
+
+是
+
+Body
+
+画像属性定义列表，不能为空数组
+
+`attributes[].name`
+
+string
+
+是
+
+Body
+
+属性名称
+
+`attributes[].description`
+
+string
+
+否
+
+Body
+
+属性描述
+
+`memory_library_id`
+
+string
+
+否
+
+Body
+
+记忆库 ID，不传则使用默认记忆库
 
 ## 代码示例
 
@@ -57,6 +111,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/profile_schemas \
   --data '{
     "name": "用户基础画像",
     "description": "包含年龄和兴趣的用户信息",
+    "extract_scene": "efficient",
     "attributes": [
       {"name": "年龄", "description": "用户年龄"},
       {"name": "爱好", "description": "用户的兴趣爱好"},
