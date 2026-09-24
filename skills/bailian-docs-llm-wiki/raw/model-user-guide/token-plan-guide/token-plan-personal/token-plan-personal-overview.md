@@ -66,17 +66,11 @@ Token Plan 个人版 是面向个人开发者的 AI 大模型订阅服务，以 
 
 Lite 全部权益
 
-2.25x Lite 套餐用量
-
 Lite 全部权益
-
-4x Lite 套餐用量
 
 赠送 Harness 权益
 
 Standard 全部权益
-
-16x Lite 套餐用量
 
 更高的并发上限
 
@@ -89,7 +83,7 @@ Standard 全部权益
 
 ## Credits 计费机制
 
-**说明**不同模型按分档抵扣系数计费，视频生成等多模态模型的单次消耗明显高于文本对话，使用时需重点关注以下两点：
+**说明**视频生成等多模态模型的单次消耗明显高于文本对话，使用时需重点关注以下两点：
 
 -   **单次消耗高**：视频生成的 Credits 随时长和分辨率上升，可能在短时间内占用较多限额。建议首次使用时以较短时长、较低分辨率试跑，通过控制台订阅页用量详情确认单次实际消耗后，再决定后续用量。
 -   **异步任务集中结算**：视频生成等异步任务的 Credits 在任务完成后统一结算，而非提交时立即扣除。短时间内提交多个异步任务时，集中结算的 Credits 可能导致限额快速触顶。
@@ -116,6 +110,7 @@ Standard 全部权益
 -   **auto 模型**：平台提供的智能模型，按请求内容自动匹配底层模型，兼顾效果与成本。
 -   **限时夜间四折**：每晚 22:00 - 次日 08:00 调用 qwen3.8-max、qwen3.8-flash，Credits 消耗享 4 折优惠。
 -   **限时夜间五折**：每晚 22:00 - 次日 08:00 调用 deepseek-v4-pro-0813、deepseek-v4-flash-0731、deepseek-v4.1-flash，Credits 消耗享 5 折优惠。
+-   **decision-model-preview 限时免费**：调用不消耗 Credits。接入方法参见[接入决策模型](raw/model-user-guide/token-plan-guide/token-plan-best-practice/token-plan-decision-model.md)。
 -   **qwen3.8-max-preview 已下线**：原模型 ID 仍可正常调用，请求自动路由至 qwen3.8-max，Credits 抵扣和用量统计均按 qwen3.8-max 计算，建议将配置中的模型 ID 更新为 qwen3.8-max。
 
 阿里云百炼有权根据运营情况对活动进行变更或调整，包括不限于活动内容和有效期等，请以页面最新内容或阿里云通知为准。
@@ -219,6 +214,12 @@ happyhorse-1.1-t2v
 happyhorse-1.1-r2v
 
 视频生成
+
+领域模型
+
+decision-model-preview
+
+决策模型
 
 ## 支持的模型内置工具
 

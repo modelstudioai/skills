@@ -1,6 +1,6 @@
-# Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime 模型接入方式
+# Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime 模型接入方式
 
-介绍 Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime 的接入入口、SDK 和事件参考。
+介绍 Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime 的接入入口、SDK 和事件参考。
 
 ## 接入方式
 

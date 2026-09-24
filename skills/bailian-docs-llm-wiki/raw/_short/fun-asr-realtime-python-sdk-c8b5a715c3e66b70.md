@@ -1,12 +1,10 @@
-# Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime实时语音识别Python SDK
+# Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Python SDK
 
-本文介绍Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime实时语音识别Python SDK的参数和接口细节。
-
-**用户指南：**关于模型介绍和选型建议请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model)。
+本文介绍Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Python SDK的参数和接口细节。
 
 ## 前提条件
 
--   已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)，而非硬编码在代码中，防范因代码泄露导致的安全风险。
+-   已开通服务并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。请配置API Key到环境变量，而非硬编码在代码中，防范因代码泄露导致的安全风险。
 -   [安装最新版DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。
 
 ## 快速开始
@@ -16,13 +14,11 @@
 -   非流式调用：针对本地文件进行识别，并一次性返回完整的处理结果。适合处理录制好的音频。
 -   双向流式调用：可直接对音频流进行识别，并实时输出结果。音频流可以来自外部设备（如麦克风）或从本地文件读取。适合需要即时反馈的场景。
 
-### 非流式调用
+#### 非流式调用
 
 提交单个语音实时转写任务，通过传入本地文件的方式同步阻塞地拿到转写结果。
 
-实例化[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#d6bc1f133f871)绑定[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#555007db2033f)，调用`call`进行识别/翻译并最终获取[识别结果（RecognitionResult）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#bc3e1a43d6hhy)。
-
-点击查看完整示例
+实例化Recognition类绑定请求参数，调用`call`进行识别/翻译并最终获取识别结果（RecognitionResult）。
 
 ```
 from http import HTTPStatus
@@ -57,30 +53,28 @@ print(
     ))
 ```
 
-### 双向流式调用
+#### 双向流式调用
 
 提交单个语音实时转写任务，通过实现回调接口的方式流式输出实时识别结果。
 
 1.  启动流式语音识别
     
-    实例化[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#d6bc1f133f871)绑定[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#555007db2033f)和[回调接口（RecognitionCallback）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#85d698b9f9g8s)，调用`start`方法启动流式语音识别。
+    实例化Recognition类绑定请求参数和回调接口（RecognitionCallback），调用`start`方法启动流式语音识别。
     
 2.  流式传输
     
-    循环调用[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#d6bc1f133f871)的`send_audio_frame`方法，将从本地文件或设备（如麦克风）读取的二进制音频流分段发送至服务端。
+    循环调用Recognition类的`send_audio_frame`方法，将从本地文件或设备（如麦克风）读取的二进制音频流分段发送至服务端。
     
-    在发送音频数据的过程中，服务端会通过[回调接口（RecognitionCallback）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#85d698b9f9g8s)的`on_event`方法，将识别结果实时返回给客户端。
+    在发送音频数据的过程中，服务端会通过回调接口（RecognitionCallback）的`on_event`方法，将识别结果实时返回给客户端。
     
     建议每次发送的音频时长约为100毫秒，数据大小保持在1KB至16KB之间。
     
 3.  结束处理
     
-    调用[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#d6bc1f133f871)的`stop`方法结束语音识别。
+    调用Recognition类的`stop`方法结束语音识别。
     
-    该方法会阻塞当前线程，直到[回调接口（RecognitionCallback）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#85d698b9f9g8s)的`on_complete`或者`on_error`回调触发后才会释放线程阻塞。
+    该方法会阻塞当前线程，直到回调接口（RecognitionCallback）的`on_complete`或者`on_error`回调触发后才会释放线程阻塞。
     
-
-点击查看完整示例
 
 识别传入麦克风的语音
 
@@ -312,27 +306,14 @@ SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
-**切换到新加坡地域**：
-
-```
-import dashscope
-
-# 调用时请将"{WorkspaceId}"替换为真实的业务空间ID
-dashscope.base_websocket_api_url = 'wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference'
-```
-
 **重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
-
 ## 请求参数
 
 请求参数通过[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#d6bc1f133f871)的构造方法（_init_）进行设置。
-
-**说明**`qwen-audio-3.1-asr-flash-message` 模型不支持 `language_hints`、`semantic_punctuation_enabled`、`multi_threshold_mode_enabled`、`special_word_filter`、`punctuation_prediction_enabled` 参数。
 
 **参数**
 
@@ -342,17 +323,17 @@ dashscope.base_websocket_api_url = 'wss://{WorkspaceId}.ap-southeast-1.maas.aliy
 
 **说明**
 
-model
+`model`
 
-str
+`str`
 
 是
 
-指定模型名。支持 Qwen-Audio-3.1-ASR-Flash-Message、Qwen-Audio-3.x-ASR-Flash-Streaming 和 Fun-ASR-Realtime 系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
+指定模型名。支持 Qwen-Audio-3.x-ASR-Flash-Streaming 和 Fun-ASR-Realtime 系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
 
-sample\_rate
+`sample_rate`
 
-int
+`int`
 
 是
 
@@ -360,9 +341,9 @@ int
 
 取值范围：8k模型仅支持 8000 Hz，其他模型支持任意采样率。
 
-format
+`format`
 
-str
+`str`
 
 是
 
@@ -384,41 +365,25 @@ wav：必须为PCM编码；
 
 amr：仅支持AMR-NB类型。
 
-disfluency\_removal\_enabled
+`keep_dialect`
 
-bool
-
-否
-
-仅 `qwen-audio-3.1-asr-flash-message` 支持。是否过滤语气词并对输出结果进行润色，默认值为 `false`。设置为 `true` 时启用。作为同名关键字参数传入。
-
-intermediate\_result\_enabled
-
-bool
+`bool`
 
 否
 
-仅 `qwen-audio-3.1-asr-flash-message` 支持。是否返回流式中间结果，默认值为 `false`。设置为 `true` 时返回流式中间结果。作为同名关键字参数传入。
+仅 `qwen-audio-3.1-asr-flash-streaming` 支持。默认 `false`，将方言转写为普通话；设为 `true` 时保留方言表达。作为同名关键字参数传入。完整参数说明请参见[客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)。
 
-keep\_dialect
+`vad_model`
 
-bool
-
-否
-
-仅 `qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming` 支持。默认 `false`，将方言转写为普通话；设为 `true` 时保留方言表达。作为同名关键字参数传入。完整参数说明请参见[API 参考](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)。
-
-vad\_model
-
-str
+`str`
 
 否
 
-仅 `qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming` 支持。可选 `near_meeting_16k`（近场）或 `far_field_meeting_16k`（远场，默认值）。作为同名关键字参数传入。完整参数说明请参见[API 参考](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)。
+仅 `qwen-audio-3.1-asr-flash-streaming` 支持。可选 `near_meeting_16k`（近场）或 `far_field_meeting_16k`（远场，默认值）。作为同名关键字参数传入。完整参数说明请参见[客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)。
 
-vocabulary\_id
+`vocabulary_id`
 
-str
+`str`
 
 否
 
@@ -430,9 +395,9 @@ str
 
 使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
 
-vocabulary
+`vocabulary`
 
-dict
+`dict`
 
 否
 
@@ -444,7 +409,7 @@ dict
 
 与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
 
-**重要**仅`qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`支持即时热词。
+**重要**仅`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`支持即时热词。
 
 示例：
 
@@ -460,9 +425,9 @@ recognition = Recognition(
     callback=None)
 ```
 
-semantic\_punctuation\_enabled
+`semantic_punctuation_enabled`
 
-bool
+`bool`
 
 否
 
@@ -475,9 +440,9 @@ bool
 
 语义断句准确性更高，适合会议转写场景；VAD（Voice Activity Detection，语音活动检测）断句延迟较低，适合交互场景。
 
-max\_sentence\_silence
+`max_sentence_silence`
 
-int
+`int`
 
 否
 
@@ -487,9 +452,9 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 取值范围：\[200, 6000\]。
 
-multi\_threshold\_mode\_enabled
+`multi_threshold_mode_enabled`
 
-bool
+`bool`
 
 否
 
@@ -499,9 +464,9 @@ bool
 
 默认值：False。
 
-punctuation\_prediction\_enabled
+`punctuation_prediction_enabled`
 
-bool
+`bool`
 
 否
 
@@ -509,9 +474,9 @@ bool
 
 -   True（默认）：是，不支持修改。
 
-heartbeat
+`heartbeat`
 
-bool
+`bool`
 
 否
 
@@ -526,9 +491,9 @@ bool
 
 使用该字段时，SDK版本不能低于1.23.1。
 
-language\_hints
+`language_hints`
 
-list\[str\]
+`list[str]`
 
 否
 
@@ -583,9 +548,9 @@ list\[str\]
     
     -   zh: 中文
 
-speech\_noise\_threshold
+`speech_noise_threshold`
 
-float
+`float`
 
 否
 
@@ -603,17 +568,17 @@ float
 -   调整前充分测试验证效果
 -   根据实际音频环境小幅度调整（建议步长 0.1）
 
-special\_word\_filter
+`special_word_filter`
 
-str
+`str`
 
 否
 
 指定在语音识别过程中需要处理的敏感词，并支持对不同敏感词设置不同的处理方式。详情请参见[敏感词过滤](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#rt03_sensitive_h3)。
 
-callback
+`callback`
 
-RecognitionCallback
+`RecognitionCallback`
 
 否
 
@@ -629,28 +594,26 @@ RecognitionCallback
 
 **说明**
 
-raw\_input
+`raw_input`
 
-dict
+`dict`
 
 否
 
-输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见[快速开始](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。
+输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见[提升识别准确率](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。
 
-**重要**仅 `qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持 context 参数。
+**重要**仅 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持 context 参数。
 
 dict 中需包含 `context` 键，值为消息列表（list\[dict\]），每条消息包含以下字段：
 
 -   `role`（str，必选）：消息角色。`user` 表示前几轮用户语音的识别结果或领域相关的词表；`assistant` 表示前几轮大语言模型的回复内容。
 -   `content`（list\[dict\]，必选）：消息内容列表。每个元素包含 `type`（str，role 为 user 时填 `input_text`，role 为 assistant 时填 `text`）和 `text`（str，文本内容）。
 
-**重要**约束：上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度不超过 400 个字符，超出部分从末尾截断。
+**重要**上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度不超过 400 个字符，超出部分从末尾截断。
 
 **重要**携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
 
 **说明**使用该字段时，SDK版本不能低于1.25.23。
-
-`raw_input`通过`Recognition`实例的`start`或`call`方法传入：
 
 ```
 # 构建 input 传入数据
@@ -687,7 +650,7 @@ recognition.call(raw_input=input_context)
 
 ### `Recognition`类
 
-`Recognition`通过“`from dashscope.audio.asr import *`”方式引入。
+`Recognition`通过`from dashscope.audio.asr import *`方式引入。
 
 **成员方法**
 
@@ -695,7 +658,7 @@ recognition.call(raw_input=input_context)
 
 **说明**
 
-call
+`call`
 
 ```
 def call(self, file: str, phrase_id: str = None, **kwargs) -> RecognitionResult
@@ -705,7 +668,7 @@ def call(self, file: str, phrase_id: str = None, **kwargs) -> RecognitionResult
 
 识别结果以`RecognitionResult`类型数据返回。
 
-start
+`start`
 
 ```
 def start(self, phrase_id: str = None, **kwargs)
@@ -715,7 +678,7 @@ def start(self, phrase_id: str = None, **kwargs)
 
 基于回调形式的流式实时识别，该方法不会阻塞当前线程。需要配合`send_audio_frame`和`stop`使用。
 
-send\_audio\_frame
+`send_audio_frame`
 
 ```
 def send_audio_frame(self, buffer: bytes)
@@ -725,7 +688,7 @@ def send_audio_frame(self, buffer: bytes)
 
 识别结果通过[回调接口（RecognitionCallback）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#85d698b9f9g8s)的on\_event方法获取。
 
-stop
+`stop`
 
 ```
 def stop(self)
@@ -733,7 +696,7 @@ def stop(self)
 
 停止语音识别，阻塞到服务将收到的音频都识别后结束任务。
 
-get\_last\_request\_id
+`get_last_request_id`
 
 ```
 def get_last_request_id(self)
@@ -741,7 +704,7 @@ def get_last_request_id(self)
 
 获取request\_id，在构造函数调用（创建对象）后可以使用。
 
-get\_first\_package\_delay
+`get_first_package_delay`
 
 ```
 def get_first_package_delay(self)
@@ -749,7 +712,7 @@ def get_first_package_delay(self)
 
 获取首包延迟，从发送第一包音频到收到首包识别结果延迟，在任务完成后使用。
 
-get\_last\_package\_delay
+`get_last_package_delay`
 
 ```
 def get_last_package_delay(self)
@@ -757,7 +720,7 @@ def get_last_package_delay(self)
 
 获得尾包延迟，发送`stop`指令到最后一包识别结果下发耗时，在任务完成后使用。
 
-get\_response
+`get_response`
 
 ```
 def get_response(self)
@@ -798,8 +761,6 @@ recognition.update_context(payload_input=payload_input)
 ### 回调接口（`RecognitionCallback`）
 
 [双向流式调用](raw/_short/fun-asr-realtime-python-sdk-c8b5a715c3e66b70.md)时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
-
-点击查看示例
 
 ```
 class Callback(RecognitionCallback):
@@ -844,7 +805,7 @@ def on_open(self) -> None
 def on_event(self, result: RecognitionResult) -> None
 ```
 
-`result`：[识别结果（RecognitionResult）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#bc3e1a43d6hhy)
+`result`：[识别结果（RecognitionResult）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#bc3e1a43d6hhy)
 
 无
 
@@ -864,7 +825,7 @@ def on_complete(self) -> None
 def on_error(self, result: RecognitionResult) -> None
 ```
 
-`result`：[识别结果（RecognitionResult）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#bc3e1a43d6hhy)
+`result`：[识别结果（RecognitionResult）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#bc3e1a43d6hhy)
 
 无
 
@@ -884,7 +845,7 @@ def on_close(self) -> None
 
 ### 识别结果（`RecognitionResult`）
 
-`RecognitionResult`代表[双向流式调用](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#9d1e5f6852jr8)中一次实时识别或[非流式调用](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#8341058094tc3)的识别结果。
+`RecognitionResult`代表[双向流式调用](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#9d1e5f6852jr8)中一次实时识别或[非流式调用](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#8341058094tc3)的识别结果。
 
 **成员方法**
 
@@ -892,7 +853,7 @@ def on_close(self) -> None
 
 **说明**
 
-get\_sentence
+`get_sentence`
 
 ```
 def get_sentence(self) -> Union[Dict[str, Any], List[Any]]
@@ -900,9 +861,9 @@ def get_sentence(self) -> Union[Dict[str, Any], List[Any]]
 
 获取当前识别的句子及时间戳信息。回调中返回的是单句信息，所以此方法返回类型为Dict\[str, Any\]。
 
-详情请参见[单句信息（Sentence）](https://help.aliyun.com/zh/model-studio/paraformer-real-time-speech-recognition-python-sdk#f28f50b035qtn)。
+详情请参见[单句信息（Sentence）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#f28f50b035qtn)。
 
-get\_request\_id
+`get_request_id`
 
 ```
 def get_request_id(self) -> str
@@ -910,7 +871,7 @@ def get_request_id(self) -> str
 
 获取请求的request\_id。
 
-is\_sentence\_end
+`is_sentence_end`
 
 ```
 @staticmethod
@@ -929,25 +890,25 @@ Sentence类成员如下：
 
 **说明**
 
-begin\_time
+`begin_time`
 
-int
+`int`
 
 句子开始时间，单位为ms。
 
-end\_time
+`end_time`
 
-int
+`int`
 
 句子结束时间，单位为ms。
 
-text
+`text`
 
-str
+`str`
 
 识别文本。
 
-words
+`words`
 
 [字时间戳信息（Word）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#b55a7391caxxe)的list集合
 
@@ -963,27 +924,27 @@ Word类成员如下：
 
 **说明**
 
-begin\_time
+`begin_time`
 
-int
+`int`
 
 字开始时间，单位为ms。
 
-end\_time
+`end_time`
 
-int
+`int`
 
 字结束时间，单位为ms。
 
-text
+`text`
 
-str
+`str`
 
 字。
 
-punctuation
+`punctuation`
 
-str
+`str`
 
 标点。
 
@@ -991,7 +952,7 @@ str
 
 如遇报错问题，请参见[错误码](raw/model-api-reference/preparations/error-code.md)进行排查。
 
-若问题仍未解决，请加入[开发者群](https://github.com/aliyun/alibabacloud-bailian-speech-demo)反馈遇到的问题，并提供Request ID，以便进一步排查问题。
+若问题仍未解决，可加入[语音 SDK 示例仓库](https://github.com/aliyun/alibabacloud-bailian-speech-demo)中列出的开发者群反馈问题，并提供Request ID，以便进一步排查问题。
 
 ## 常见问题
 

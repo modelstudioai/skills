@@ -1,36 +1,30 @@
 # start using
 
-本文档指导开发者快速接入百炼平台，完成基础环境配置、模型调用与应用构建。适用于希望基于百炼 API 或控制台快速启动知识库问答、Agent 应用等场景的工程师。所有操作均需通过百炼控制台或 OpenAPI 完成，不依赖本地 SDK 封装。
+本文档介绍如何快速开始使用百炼平台的核心能力，包括模型调用、应用构建和基础配置。开发者可通过控制台或 API 快速接入，无需从零搭建基础设施。所有操作均基于百炼统一的模型服务与应用框架 [开始使用](../../raw/application-user-guide/start-using.md)。
 
 ## 支持的模型/功能
 
-当前平台默认开放以下能力：  
-- 通用大语言模型（如 Qwen-Max、Qwen-Plus）及轻量模型（Qwen-Turbo），支持文本生成、多轮对话；  
-- 知识库增强问答（RAG）功能，可对接自有文档（PDF/Word/TXT/Markdown）并自动切片向量化；  
-- 基础 Agent 框架，支持工具调用（HTTP 请求、数据库查询等）与流程编排。  
-详细模型列表与能力矩阵请参见 [开始使用](../../raw/application-user-guide/start-using.md) 中的“应用功能动态”链接，该页面持续同步各模型的可用性与灰度范围。
+- 当前支持 Qwen 系列大语言模型（Qwen1.5、Qwen2、Qwen2.5）、Qwen-VL 多模态模型及 Qwen-Audio；部分模型需申请开通权限。
+- 应用层提供开箱即用的能力：知识库问答、Agent 工作流、RAG 增强检索、多轮对话管理。具体功能演进详见 [应用功能动态](../../raw/application-user-guide/start-using/application-release-notes.md)。
+- 0 代码构建能力仅限控制台「应用构建」模块，支持拖拽式编排知识库+LLM+提示词链路，详细流程见 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md)。
 
 ## 关键参数
 
-调用 API 时必需指定以下参数：  
-- `model`: 模型 ID（如 `qwen-max`），必须与控制台开通权限一致；  
-- `input.messages`: 至少包含一条 `user` 角色消息，`system` 角色为可选；  
-- `parameters.temperature`: 推荐值 0.1–0.8，生产环境建议 ≤0.3 以保障确定性；  
-- `parameters.top_p` 和 `parameters.max_tokens` 需显式设置，否则使用平台默认值（详见 [开始使用](../../raw/application-user-guide/start-using.md) 的参数说明章节）。  
-> **注意**：原始文档中 `parameters.stop` 的示例值为字符串数组（如 `["\n"]`），但当前 API 实际仅接受字符串类型（如 `"\n"`），该差异已在 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md) 的最新版本中修正。
+- `model`: 必填，取值如 `qwen-max`、`qwen-plus`、`qwen-turbo`，区分推理性能与成本；不支持传入未在控制台已授权列表中的模型 ID。
+- `input.messages`: 至少包含一个 `role: user` 的消息对象；系统提示词（system [prompt](prompt.md)）需显式传入，不可依赖模型内置默认行为。
+- `parameters.temperature`: 范围 0.0–1.0，默认 0.8；设为 0 时启用确定性解码（top_k=1），但部分模型（如 qwen-max）在 temperature=0 下可能返回空响应 —> **注意**：该行为与 [开始使用](../../raw/application-user-guide/start-using.md) 中“默认参数稳定可靠”的描述存在偏差，建议生产环境显式设置 `temperature=0.1` 并配合 `top_p=0.95` 使用。
 
 ## 使用方式
 
-1. **控制台快速启动**：登录百炼控制台 → 创建应用 → 选择“知识库问答”模板 → 上传文档 → 发布；  
-2. **API 直接调用**：使用 `POST /v1/chat/completions`，Header 中携带 `Authorization: Bearer <api_key>`；  
-3. **集成开发**：参考 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md) 提供的 Postman 集合与 cURL 示例，可跳过前端开发直接验证后端链路。
+1. **API 调用**：通过 `POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation` 发起请求，需携带 `Authorization: Bearer <api_key>` 及正确 `Content-Type: application/json`。
+2. **SDK 调用**：推荐使用 `dashscope==1.20.0+` 版本，初始化时指定 `api_key` 和 `model`，调用 `Generation.call()` 即可。
+3. **控制台快速验证**：登录百炼控制台 → 进入「模型服务」→ 选择模型 → 在「调试」页填写输入并执行，结果实时返回；该流程与 [0代码构建问答应用](../../raw/application-user-guide/start-using/build-knowledge-base-qa-assistant-without-coding.md) 中的调试入口一致。
 
 ## 限制和注意事项
 
-- 单次请求 `input.messages` 总长度上限为 32768 token（含 system [prompt](prompt.md)）；  
-- 知识库文档单文件大小不得超过 50 MB，且不支持加密 PDF；  
-- 免费额度仅限新注册账号首 30 天，超限后需绑定支付方式（具体计费规则见 [开始使用](../../raw/application-user-guide/start-using.md) 底部说明）；  
-- 所有日志与 trace 数据默认保留 7 天，如需长期审计，须主动调用 `/v1/logs/export` 接口导出。
+- 单次请求 `input.messages` 总长度上限为 32768 token（含 system + user + assistant 消息），超长将触发 `400 Bad Request`。
+- 免费额度仅覆盖 `qwen-turbo` 和 `qwen-plus` 的基础调用量，`qwen-max` 及多模态模型需单独开通配额；配额策略以控制台「用量管理」页实时显示为准。
+- 所有请求必须携带 `X-DashScope-Source: aliyun` 标头（SDK 自动注入，手动调用需显式添加），否则返回 `403 Forbidden` —> **注意**：该要求未在 [开始使用](../../raw/application-user-guide/start-using.md) 中明确说明，属近期安全策略更新，务必检查请求头完整性。
 
 ## 来源文档
 

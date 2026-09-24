@@ -1,42 +1,42 @@
-# Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime实时语音识别HarmonyOS SDK
+# Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别HarmonyOS SDK
 
-本文介绍 Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime 实时语音识别 HarmonyOS SDK 的集成方法、请求参数、接口、回调和示例代码。
-
-关于模型介绍和选型建议，请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model)。
+本文介绍 Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime 实时语音识别 HarmonyOS SDK 的集成方法、请求参数、接口、回调和示例代码。
 
 ## 快速开始
 
 1.  [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。端侧应用请勿硬编码长期有效的API Key。建议由自建服务端获取[临时API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，再下发到端侧。
+    
 2.  [下载最新SDK整合包](https://help.aliyun.com/zh/model-studio/sdk-selection-and-download)，解压后将 `entry/libs/neonui.har` 复制到应用工程的 `entry/libs` 目录，并在 `entry/oh-package.json5` 中添加依赖：
-
-```
-{
-  "dependencies": {
-    "neonui": "file:libs/neonui.har"
-  }
-}
-```
-
-如需通过HarmonyOS C++接口接入，可使用整合包 `native/libs` 目录中的动态库和 `native/include` 目录中的头文件。
-
+    
+    ```
+    {
+      "dependencies": {
+        "neonui": "file:libs/neonui.har"
+      }
+    }
+    ```
+    
+    如需通过HarmonyOS C++接口接入，可使用整合包 `native/libs` 目录中的动态库和 `native/include` 目录中的头文件。
+    
 3.  在应用的 `module.json5` 中声明网络和麦克风权限，并在运行时申请麦克风权限。`reason_internet` 和 `reason_microphone` 为示例资源名，请在应用资源中定义对应说明。
-
-```
-"requestPermissions": [
-  {
-    "name": "ohos.permission.INTERNET",
-    "reason": "$string:reason_internet",
-    "usedScene": { "abilities": ["EntryAbility"], "when": "always" }
-  },
-  {
-    "name": "ohos.permission.MICROPHONE",
-    "reason": "$string:reason_microphone",
-    "usedScene": { "abilities": ["EntryAbility"], "when": "always" }
-  }
-]
-```
-
+    
+    ```
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.INTERNET",
+        "reason": "$string:reason_internet",
+        "usedScene": { "abilities": ["EntryAbility"], "when": "always" }
+      },
+      {
+        "name": "ohos.permission.MICROPHONE",
+        "reason": "$string:reason_microphone",
+        "usedScene": { "abilities": ["EntryAbility"], "when": "always" }
+      }
+    ]
+    ```
+    
 4.  使用DevEco Studio打开整合包中的示例工程。示例页面位于 `entry/src/main/ets/pages/dashscope/DashFunAsrSpeechTranscriberPage.ets`。配置API Key后即可运行。
+    
 
 ### 调用步骤
 
@@ -79,7 +79,13 @@
 
 是
 
-服务地址。可使用公共地址 `wss://dashscope.aliyuncs.com/api-ws/v1/inference`，或业务空间专属地址 `wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`（北京）和 `wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`（新加坡）。将 `{WorkspaceId}` 替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
+服务地址：
+
+-   公共地址：`wss://dashscope.aliyuncs.com/api-ws/v1/inference`
+-   北京业务空间专属地址：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
+-   新加坡业务空间专属地址：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
+
+将 `{WorkspaceId}` 替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
 `service_mode`
 
@@ -253,8 +259,6 @@ SDK拉取音频时的采集配置，仅在 `audio_update_manually` 为 `"false"`
 
 通过 [setParams](#setparams) 的 `params` 参数传入JSON字符串。
 
-**说明**`qwen-audio-3.1-asr-flash-message` 模型不支持 `nls_config.language_hints`、`nls_config.semantic_punctuation_enabled`、`nls_config.multi_threshold_mode_enabled`、`nls_config.special_word_filter` 参数。
-
 ```
 {
   "service_type": 4,
@@ -345,22 +349,6 @@ VAD断句静音阈值（毫秒）。一段语音后的静音时长超过该阈�
 否
 
 是否启用心跳包，默认值为 `false`。启用后，在持续发送静音音频时可保持连接；未启用时，连接会在一定时间后因超时而断开。静音音频是音频文件或数据流中不包含声音信号的内容。
-
-`nls_config.disfluency_removal_enabled`
-
-`boolean`
-
-否
-
-仅 `qwen-audio-3.1-asr-flash-message` 支持。是否过滤语气词并对输出结果进行润色，默认值为 `false`。设置为 `true` 时启用。
-
-`nls_config.intermediate_result_enabled`
-
-`boolean`
-
-否
-
-仅 `qwen-audio-3.1-asr-flash-message` 支持。是否返回流式中间结果，默认值为 `false`。设置为 `true` 时返回流式中间结果。
 
 `nls_config.vocabulary_id`
 

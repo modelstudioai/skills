@@ -558,7 +558,7 @@ VAD检测阈值。
 
 **type**`string`
 
-对话项的类型包括 `message`（常规消息）和 `function_call`（工具调用）。Qwen3.8-Omni-Flash-Realtime 还可返回 `mcp_list_tools`、`mcp_call`、`mcp_approval_request`，对应结构见[MCP Item](#qwen38-server)。
+对话项的类型包括 `message`（常规消息）和 `function_call`（工具调用）。Qwen3.8-Omni-Flash-Realtime 还可返回 `mcp_list_tools`、`mcp_call`、`mcp_approval_request`，对应结构见[MCP Item](#mcp-items)。
 
 **name**`string`
 
@@ -950,7 +950,7 @@ T7
 
 **type** `string`
 
-输出项的类型，可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 [`mcp_call`](#qwen38-server)。
+输出项的类型，可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 [`mcp_call`](#mcp-items)。
 
 **object** `string`
 
@@ -1488,7 +1488,7 @@ T7
 
 ## response.output\_item.added
 
-在响应生成过程中创建新项目时，服务端返回此事件。项目类型可以是 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 [`mcp_call`](#qwen38-server)。
+在响应生成过程中创建新项目时，服务端返回此事件。项目类型可以是 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 [`mcp_call`](#mcp-items)。
 
 **event\_id**`string`
 
@@ -1534,7 +1534,7 @@ T7
 
 **type**`string`
 
-输出项的类型。可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 [`mcp_call`](#qwen38-server)。
+输出项的类型。可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 [`mcp_call`](#mcp-items)。
 
 **name**`string`
 
@@ -1629,7 +1629,7 @@ T7
 
 **type**`string`
 
-输出项的类型。可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 [`mcp_call`](#qwen38-server)。
+输出项的类型。可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 [`mcp_call`](#mcp-items)。
 
 **name**`string`
 
@@ -1795,11 +1795,11 @@ T7
 }
 ```
 
-## Qwen3.8-Omni-Flash-Realtime MCP
+## MCP 事件
 
 本节介绍 `qwen3.8-omni-flash-realtime` 的 WebSocket 事件与字段。基础事件与字段见前述事件说明。表中“必填”表示所属对象出现时必须提供。ID 均为不透明字符串，不应依赖其长度、前缀或生成规则。`arguments`、`output` 的外层类型为 string，读取内容时需要再次解析 JSON。MCP 连接、工具发现和调用受服务配额及超时限制。
 
-### MCP 工具发现状态事件
+### mcp\_list\_tools.\*
 
 以下三个事件具有相同的字段结构：
 
@@ -2014,7 +2014,7 @@ string
 }
 ```
 
-### MCP 调用状态事件
+### response.mcp\_call.\*
 
 事件 type
 
@@ -2084,6 +2084,10 @@ integer
   "output_index": 0
 }
 ```
+
+## MCP 对话项
+
+以下对象是事件中 `item` 的取值类型，适用于 Qwen3.8-Omni-Flash-Realtime。
 
 ### mcp\_list\_tools
 

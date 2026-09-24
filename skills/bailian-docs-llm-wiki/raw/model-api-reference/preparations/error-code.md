@@ -2087,6 +2087,22 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 等待片刻后重试即可。平台会根据整体资源负载动态调整并发上限，高峰时段可能触发此限制。
 
+## 429-Throttling.ServiceOverloaded
+
+### InternalError.Algo: An error occurred in model serving, error message is: \[Too many requests.\]
+
+**原因：** 网络资源目前处于过载状态，暂时无法处理您的请求。
+
+**解决方案：** 请稍后再试。
+
+## 429-Throttling.ResourceExhausted
+
+### InternalError.Algo: An error occurred in model serving, error message is: \[Too many requests.\]
+
+**原因：** 网络资源目前处于饱和状态，暂时无法处理您的请求。
+
+**解决方案：** 请稍后再试。
+
 ## 429-CommodityNotPurchased
 
 ### Commodity has not purchased yet.

@@ -1,8 +1,6 @@
-# 实时语音识别（Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime）客户端事件
+# 实时语音识别（Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime）客户端事件
 
-本文介绍 Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime 实时语音识别服务中客户端通过 WebSocket 发送给服务端的客户端事件，包括 run-task（启动任务）、 continue-task（更新上下文）、 finish-task（结束任务）等指令的数据结构与字段含义。
-
-**用户指南：**关于模型介绍和选型建议请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model)。
+本文介绍 Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime 实时语音识别服务中客户端通过 WebSocket 发送给服务端的客户端事件，包括 run-task（启动任务）、 continue-task（更新上下文）、 finish-task（结束任务）等指令的数据结构与字段含义。
 
 **事件交互流程**：如需了解事件交互时序，请参见[WebSocket API](raw/_short/fun-asr-realtime-websocket-api-d80484c92992191d.md)。
 
@@ -48,13 +46,13 @@
 
 **model**`string`**（必选）**
 
-指定模型名。支持 Qwen-Audio-3.1-ASR-Flash-Message、Qwen-Audio-3.x-ASR-Flash-Streaming 和 Fun-ASR-Realtime 系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
+指定模型名。支持 Qwen-Audio-3.x-ASR-Flash-Streaming 和 Fun-ASR-Realtime 系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
 
 **input**`object`**（必选）**
 
 输入对象。不携带上下文时传入`{}`。
 
-**重要**仅 `qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持上下文。
+**重要**仅 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持上下文。
 
 属性
 
@@ -62,7 +60,7 @@
 
 对话上下文，用于辅助识别、提升专有词汇的识别准确率。使用方法详见[上下文增强](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#ctx_enhance_h2)。
 
-**重要****约束**：上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度（`user` 和 `assistant` 的 `text` 字段长度之和）不超过 400 个字符（按字符数计算，每个字符计为 1），超出部分从末尾截断。
+**重要**上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度（`user` 和 `assistant` 的 `text` 字段长度之和）不超过 400 个字符（按字符数计算，每个字符计为 1），超出部分从末尾截断。
 
 **重要**携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
 
@@ -96,25 +94,15 @@
 
 语音识别参数。
 
-**说明**`qwen-audio-3.1-asr-flash-message` 模型不支持 `language_hints`、`semantic_punctuation_enabled`、`multi_threshold_mode_enabled`、`special_word_filter` 参数。
-
 属性
-
-**disfluency\_removal\_enabled** `boolean`（可选）
-
-仅 `qwen-audio-3.1-asr-flash-message` 支持。是否过滤语气词并对输出结果进行润色，默认值为 `false`。设置为 `true` 时启用。
-
-**intermediate\_result\_enabled** `boolean`（可选）
-
-仅 `qwen-audio-3.1-asr-flash-message` 支持。是否返回流式中间结果，默认值为 `false`。设置为 `true` 时返回流式中间结果。
 
 **keep\_dialect** `boolean`（可选）
 
-仅 `qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming` 支持。是否保留方言表达，默认值为 `false`。`false`：将方言转写为普通话文本；`true`：保留方言表达。
+仅 `qwen-audio-3.1-asr-flash-streaming` 支持。是否保留方言表达，默认值为 `false`。`false`：将方言转写为普通话文本；`true`：保留方言表达。
 
 **vad\_model** `string`（可选）
 
-仅 `qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming` 支持。VAD 模型，默认值为 `far_field_meeting_16k`。
+仅 `qwen-audio-3.1-asr-flash-streaming` 支持。VAD 模型，默认值为 `far_field_meeting_16k`。
 
 -   `near_meeting_16k`：近场场景。
 -   `far_field_meeting_16k`：远场场景。
@@ -165,7 +153,7 @@ amr：仅支持AMR-NB类型。
 
 与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
 
-**重要**仅`qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`支持即时热词。
+**重要**仅`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`支持即时热词。
 
 **language\_hints**`array[string]`（可选）
 
@@ -375,7 +363,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 **发送时机**：任务运行中，需要更新对话上下文时发送。
 
-**重要**仅 `qwen-audio-3.1-asr-flash-message`、`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持该事件。
+**重要**仅 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持该事件。
 
 **header**`object`**（必选）**
 
@@ -407,7 +395,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 对话上下文，用于辅助识别、提升专有词汇的识别准确率。使用方法详见[上下文增强](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#ctx_enhance_h2)。
 
-**重要****约束**：上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度（`user` 和 `assistant` 的 `text` 字段长度之和）不超过 400 个字符（按字符数计算，每个字符计为 1），超出部分从末尾截断。
+**重要**上下文消息（`input_text` 和 `text` 类型）各最多 5 条，超出时保留最近的 5 条。每轮上下文文本总长度（`user` 和 `assistant` 的 `text` 字段长度之和）不超过 400 个字符（按字符数计算，每个字符计为 1），超出部分从末尾截断。
 
 **重要**携带上下文时，`context` 中的消息顺序有要求：上下文消息必须按对话轮次排列，每轮中 `user`（`input_text` 类型）必须在对应的 `assistant`（`text` 类型）之前。
 

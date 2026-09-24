@@ -1,42 +1,40 @@
 # application gallery
 
-应用广场是百炼平台提供的预置应用集合，面向开发者提供开箱即用的行业级 Agent 和多模态能力封装。所有应用均基于平台统一的 Runtime 执行环境部署，支持快速集成、参数化调用与轻量定制。开发者可通过控制台或 OpenAPI 直接访问，无需从零构建底层模型链路。
+应用广场是百炼平台提供的预置应用集合，面向开发者提供开箱即用的行业级 Agent 和多模态能力封装。所有应用均基于平台统一 Runtime 运行，支持快速集成、参数化配置与轻量定制。开发者可通过控制台或 OpenAPI 直接调用，无需从零构建底层模型链路。
 
 ## 支持的模型与功能
 
-应用广场中的每个应用均已绑定特定模型栈与工作流逻辑，例如：
-- 通义法睿（`tongyi-farui`）基于法律垂域微调模型 + 法规知识图谱检索；
-- 通义 UI Agent 依赖 `qwen-vl-plus` 多模态模型 + 页面 DOM 解析与操作引擎；
-- 千问联网检索Agent 使用 `qwen-max` + 实时网页抓取与摘要模块。
-
-全部官方应用列表及对应能力说明详见 [应用广场](../../raw/application-user-guide/application-gallery.md)。部分应用（如 [官方应用-通义听悟Agent](../../raw/application-user-guide/application-gallery/official-application-tingwu-agent.md)）还额外集成了语音转写、语义摘要与会议纪要生成等复合功能。
+应用广场中的每个应用已绑定适配的底层模型（如 Qwen-VL、Qwen-Audio、Qwen2.5-72B 等）及配套工具集，覆盖教育辅导、语音对话分析、客服机器人、数据挖掘、深度搜索、UI 自动化等场景。例如，[官方应用-通义听悟Agent](../../raw/application-user-guide/application-gallery/official-application-tingwu-agent.md) 集成 ASR + NLU + 摘要生成流水线；[通义 UI Agent](../../raw/application-user-guide/application-gallery/ui-agent.md) 依赖多模态视觉理解与动作规划模型；[通义深度搜索](../../raw/application-user-guide/application-gallery/tongyi-deepsearch.md) 则组合检索增强与推理模型。所有应用的功能边界和输入输出格式以对应子文档为准。
 
 ## 关键参数
 
-调用任一应用时，需传入标准化请求体，核心字段包括：
-- `application_id`：应用唯一标识（如 `tongyi-farui`, `web-search-agent`），可在 [应用广场](../../raw/application-user-guide/application-gallery.md) 文档中查得；
-- `input`：字符串或结构化对象，格式依应用而异（例如 `tongyi-dianjin` 要求 `{"query": "...", "industry": "finance"}`）；
-- `parameters`（可选）：覆盖应用默认配置，如 `max_iterations=3`、`enable_web_search=true`；
-- `stream`（布尔值）：控制是否启用流式响应，仅部分应用支持（参见 [官方应用-通义深度搜索](../../raw/application-user-guide/application-gallery/tongyi-deepsearch.md) 的流式说明）。
-
-> **注意**：`parameters` 字段的合法键名与取值范围因应用而异，部分文档（如 `xiyan-gbi.md`）未完整列出可覆盖参数，建议以实际 API Schema 或 SDK 类型定义为准。
+各应用通过 `app_id` 唯一标识，调用时需传入标准化参数：  
+- `input`: JSON 对象，结构由具体应用定义（如 `{"query": "...", "image_url": "..."}`）；  
+- `parameters`: 可选运行时配置，常见字段包括 `temperature`（仅部分文本类应用支持）、`max_output_tokens`、`enable_citation`（用于深度搜索类应用）；  
+- `stream`: 布尔值，控制是否启用流式响应（当前仅 [千问联网检索Agent](../../raw/application-user-guide/application-gallery/web-search-agent.md) 和 [通义 UI Agent](../../raw/application-user-guide/application-gallery/ui-agent.md) 完全支持）。  
+> **注意**：`temperature` 参数在 [通义法睿](../../raw/application-user-guide/application-gallery/tongyi-farui.md) 文档中标注为“不生效”，但 [通义点金](../../raw/application-user-guide/application-gallery/tongyi-dianjin.md) 文档仍列出其为可调项——实际调用中该参数对法睿类法律推理应用无效，请以运行时返回的 `supported_parameters` 字段为准。
 
 ## 使用方式
 
-1. **控制台接入**：在百炼控制台「应用广场」页选择目标应用 → 点击「调试」或「集成」→ 获取 `application_id` 与示例请求；
-2. **OpenAPI 调用**：向 `/v1/applications/{application_id}/invoke` 发送 POST 请求，携带认证 Header 与 JSON body；
-3. **SDK 集成**：使用 `alibabacloud-bailian20231219` Python/Java SDK，调用 `InvokeApplicationRequest` 方法。
-
-所有应用均遵循统一鉴权与限流策略，详细调用流程与错误码说明请参考 [应用广场](../../raw/application-user-guide/application-gallery.md)。
+1. 在百炼控制台「应用广场」页浏览并复制目标应用的 `app_id`；  
+2. 调用 `POST /v1/applications/{app_id}/chat` 接口（需携带 `Authorization: Bearer <api_key>`）；  
+3. 请求体示例：
+   ```json
+   {
+     "input": {"query": "解释牛顿第一定律"},
+     "parameters": {"max_output_tokens": 512}
+   }
+   ```
+4. 响应含 `output` 字段（结构化结果）及 `usage` 字段（token 消耗统计）。  
+详细接口规范见 [官方应用-通义拍照解题辅导](../../raw/application-user-guide/application-gallery/edu-tutor.md) 的「API 调用示例」章节。
 
 ## 限制和注意事项
 
-- 每个应用有独立的 QPS 与并发数限制（如 `web-search-agent` 默认 5 QPS），超出将返回 `429 Too Many Requests`；
-- 输入文本长度上限为 32768 tokens（含系统提示词），超长内容将被截断，不触发自动分块；
-- 应用间**不共享上下文状态**：连续多次调用同一 `application_id` 不构成会话，如需对话管理，须由客户端维护 `session_id` 并传入（部分应用如 `lingque-ccai-voice-dialogue-robot.md` 明确支持该字段）；
-- 非官方应用（用户自建应用）不可通过应用广场目录发现，仅能通过 `ListApplications` API 查询。
-
-> **注意**：文档中部分轻应用（如 [官方应用-全妙轻应用系列](../../raw/application-user-guide/application-gallery/quanmiao-light-application-series.md)）标注“支持私有化部署”，但当前平台版本仅开放 SaaS 模式调用，私有化能力尚未上线，该描述已过时。
+- 单次请求 `input` 总大小上限为 10 MB（含文本+图像+音频 base64）；  
+- 多模态应用（如 [官方应用-多模态交互开发套件](../../raw/application-user-guide/application-gallery/multimodal-products.md)）要求图像尺寸 ≤ 2048×2048，音频时长 ≤ 300 秒；  
+- 所有应用默认启用平台级风控，敏感词过滤与内容安全校验不可绕过；  
+- 应用 ID 全局唯一但**不跨环境复用**：测试环境 `app_id` 无法在生产环境直接调用，需重新发布；  
+- 部分应用（如 [伶鹊CCAI-语音对话机器人](../../raw/application-user-guide/application-gallery/official-application-lingque-ccai-voice-dialogue-robot.md)）依赖实时语音流，仅支持 WebSocket 接入，不支持 HTTP 同步调用。
 
 ## 来源文档
 

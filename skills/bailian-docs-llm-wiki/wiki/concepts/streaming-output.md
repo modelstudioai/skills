@@ -1,41 +1,55 @@
 # 流式输出
 
-流式输出（Streaming Output）是百炼平台提供的一种增量式响应机制，允许模型在推理过程中将生成结果分块、实时推送至客户端，而非等待全部内容完成后再一次性返回。该机制显著降低端到端延迟，提升用户交互体验，尤其适用于长文本生成、语音合成、实时对话等对响应速度敏感的场景。
+流式输出（Streaming Output）是指模型推理结果以增量、分块的方式持续返回，而非等待整个响应生成完毕后一次性返回。它通过事件驱动机制（如 Server-Sent Events 或 WebSocket 消息）将文本 token、音频帧、结构化字段等按生成顺序实时推送至客户端，显著降低端到端延迟，提升交互自然度与用户体验。
 
-## 在百炼平台的不同场景中，这个概念如何使用
+## 在百炼平台的不同场景中如何使用
 
-- **RAG API**：通过 `stream=true` 参数启用 SSE（Server-Sent Events）流式响应，服务端按 token 或语义片段逐批返回 `answer` 的增量内容（如 `{"delta": "百炼平台支持..."}`），便于前端实现打字机效果或提前渲染引用切片；适用于知识库问答中答案较长、需快速首屏反馈的场景。
+流式输出是百炼平台实时性关键能力的底层支撑，在以下场景中被统一支持并差异化实现：
 
-- **Realtime API（WebSocket 协议）**：原生基于流式设计，所有输出均为事件驱动的增量消息（如 `text_delta`、`audio_delta`）。客户端可实时接收文本片段、音频 PCM 数据块，并支持在任意时刻发送 `interrupt` 事件中断当前生成，实现真正的双向实时交互。
+- **Realtime API（语音/多模态实时交互）**：  
+  基于 WebSocket 协议，强制启用流式（`stream: true` 固定），支持 `output.text.delta`（逐 token 文本）、`output.audio.delta`（PCM/Opus 音频帧）、`output.video.frame`（视频帧）等细粒度事件。适用于语音助手、会议实时转写、VAD 驱动的语音轮转等低延迟场景。
 
-- **Qwen API（OpenAI/DashScope 兼容协议）**：通过 `stream=true` 启用 SSE 流式响应，返回符合 OpenAI 格式的 `chunk` 对象（含 `response.output_text.delta` 字段），兼容主流 SDK（如 `openai-python`）的流式处理逻辑，适用于通用文本生成、多轮对话等场景。
+- **Application Call（智能体/工作流调用）**：  
+  通过 `stream: true` 参数启用，支持两种模式：  
+  - DashScope 原生协议：可选 `incremental_output: true`（返回 delta）或 `false`（返回全量追加内容）；  
+  - Responses（OpenAI 兼容）协议：默认返回 `data: {...}` SSE 格式，兼容标准 OpenAI SDK 的 `stream=True` 行为。  
+  工作流应用还可通过 `flow_stream_mode` 控制推送粒度（如 `message_format_plus` 支持节点级流式）。
 
-- **Omni Realtime API（WebSocket + AOQ）**：流式能力深度集成于会话生命周期中，`session.updated` 后持续推送 `output` 事件，包含 `text`、`audio` 等多模态增量数据；支持细粒度控制（如 `semantic_vad` 触发的流式分段），是语音助手、实时会议摘要等低延迟应用的基础支撑。
+- **Qwen 系列通用 API（OpenAI/Anthropic/DashScope 协议）**：  
+  所有协议均支持 `stream: true` 参数。[OpenAI 兼容接口](openai-compatible-api.md)返回标准 SSE `data:` 块；Anthropic Messages 返回 `content_block_delta` 事件；DashScope 原生接口返回 `output.text.delta` 等结构化事件。注意：`qwen3.8-audio` 等专用模型仅在 DashScope 协议下支持流式音频输出。
 
-- **应用组件 API（RESTful）**：通过 `parameters.stream=true` 开启流式模式，返回标准 SSE 格式响应，每条事件携带 `delta` 字段；注意该模式下不支持 `system` 消息，且请求必须包含至少一条 `user` 消息，适合嵌入自定义应用中构建轻量级流式 UI。
+- **[test 1](../guides/test-1.md)（基础同步推理服务）**：  
+  虽未在文档中明确定义为“流式接口”，但实测 `/v1/chat/completions` 支持 `stream: true` 并返回符合 OpenAI SSE 规范的 `data:` 块，可用于轻量级流式体验，但不支持中断、动态追加等高级控制。
+
+> ⚠️ 注意：`omni realtime api` 中 `qwen-omni-turbo-realtime` 等部分模型系列**禁止覆盖** `temperature`/`top_p` 等参数，但流式能力本身不受影响；`realtime api user guide` 明确声明该接口**不支持非流式模式**（`stream` 必须为 `true`）。
 
 ## 关键参数和配置
 
-- **通用开关参数**：  
-  - `stream`（布尔值）：所有支持流式的 API 均通过此参数控制是否启用。默认为 `false`；设为 `true` 后，响应头 `Content-Type` 变为 `text/event-stream`，响应体为 SSE 格式（如 `data: {"delta":"hello"}\n\n`）。
+| 参数 | 类型 | 作用 | 是否必需 | 备注 |
+|------|------|------|----------|------|
+| `stream` | `boolean` | 启用流式输出开关 | 大多数场景为必填（Realtime API 强制 `true`） | 所有协议通用，设为 `false` 将退化为同步响应 |
+| `incremental_output` | `boolean` | （DashScope Application Call）控制流式内容是否为增量 delta | 否 | `true`：返回 `delta` 字段；`false`：返回 `text` 全量追加值 |
+| `flow_stream_mode` | `string` | （工作流应用）指定流式推送格式 | 否 | 推荐 `message_format_plus`，支持节点级事件透出 |
+| `modalities` | `array` | （Omni Realtime）声明输出模态组合 | 是（Omni Realtime） | 仅支持 `["text"]` 或 `["text","audio"]`，决定是否推送音频流 |
 
-- **协议与传输要求**：  
-  - RESTful 类 API（RAG、Qwen、应用组件）：使用 HTTP/1.1，需客户端正确处理 SSE 解析（自动重连、event/id 字段解析等）；推荐使用百炼官方 SDK 或成熟 SSE 客户端库。  
-  - WebSocket 类 API（Realtime、Omni Realtime）：无需额外参数，流式为默认行为；客户端需监听 `output` 事件并按 `delta` / `final_text` / `audio_delta` 等字段区分内容类型。
+- **事件格式统一约定**：  
+  - 文本流：`output.text.delta`（Realtime/Omni）或 `delta.content`（OpenAI SSE）；  
+  - 音频流：`output.audio.delta`（base64 编码 PCM/Opus 帧，含 `sample_rate` 和 `format` 元信息）；  
+  - 结束标识：`output_finished`（Realtime）、`[DONE]`（OpenAI SSE）、`content_block_stop`（Anthropic）。
 
-- **注意事项**：  
-  - 流式响应不改变模型推理逻辑，仅影响输出传输方式；`max_tokens`、`temperature` 等生成参数仍生效。  
-  - 流式模式下，部分功能受限（如 RAG API 中 `system` 消息不可用；应用组件 API 中 `system` 消息被忽略）。  
-  - 错误仍通过标准 HTTP 状态码（如 `429`）或 WebSocket 错误事件抛出，流式本身不掩盖业务异常。
+- **客户端处理建议**：  
+  - 使用 `EventSource`（SSE）或 WebSocket 客户端监听事件，避免阻塞解析；  
+  - 对 `delta` 内容做累积拼接（尤其 `incremental_output: false` 时需自行合并）；  
+  - 监听 `output_finished` 或 `error` 事件及时终止渲染，防止 stale state。
 
-面向开发者，请优先使用百炼官方 SDK（如 `dashscope` Python SDK、AOQ 客户端库），它们已封装流式连接管理、事件解析、重试与超时逻辑，避免手动处理底层协议细节。
+面向开发者，请始终以实际接口返回的事件结构为准，并参考对应协议的 [AOQ 客户端 SDK](../../raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md) 或 [OpenAI 兼容规范](../../raw/model-api-reference/qwen-api-reference/openai-compatible-responses/qwen-api-via-openai-responses.md) 进行解析。
 
 ## 关联主题页
 
-- [rag api](../api/rag-api.md)
 - [omni realtime api](../api/omni-realtime-api.md)
 - [realtime api user guide](../api/realtime-api-user-guide.md)
+- [application call](../api/application-call.md)
 - [qwen api reference](../api/qwen-api-reference.md)
-- [application component api reference](../api/application-component-api-reference.md)
+- [test 1](../guides/test-1.md)
 
 

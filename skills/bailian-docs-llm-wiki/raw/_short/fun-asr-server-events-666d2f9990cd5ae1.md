@@ -1,8 +1,6 @@
-# 实时语音识别（Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime）服务端事件
+# 实时语音识别（Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime）服务端事件
 
-本文介绍 Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime 实时语音识别服务通过 WebSocket 推送给客户端的服务端事件，包括 task-started、result-generated、task-finished、task-failed 四类事件的数据结构与字段含义。
-
-**用户指南：**关于模型介绍和选型建议请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model)。
+本文介绍 Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime 实时语音识别服务通过 WebSocket 推送给客户端的服务端事件，包括 task-started、result-generated、task-finished、task-failed 四类事件的数据结构与字段含义。
 
 **事件交互流程**：如需了解事件交互时序，请参见[WebSocket API](raw/_short/fun-asr-realtime-websocket-api-d80484c92992191d.md)。
 

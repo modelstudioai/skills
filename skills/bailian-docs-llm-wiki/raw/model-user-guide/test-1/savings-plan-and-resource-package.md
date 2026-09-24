@@ -77,7 +77,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 -   **不支持抵扣**：模型调优、模型部署的费用；**联网搜索插件**（独立计费，以实际账单为准）、**MCP 广场**、**通义深度搜索**、**案例检索**等插件或工具产生的费用；**Qoder** CN 产品当前仅支持通过 **Credits** 调用，不支持使用 AI 通用型节省计划抵扣。第三方工具可通过 API 接入百炼，但相关联网搜索费用不在节省计划抵扣范围内；通过**百炼 API** 调用模型产生的费用仍属于支持抵扣范围。
     
 
-**知识库（RAG）费用与节省计划说明**：知识库使用过程中产生的向量模型（Embedding）和排序模型（Rerank）调用费用，属于 A 类模型调用范畴，可被 AI 通用型节省计划抵扣；如需专项抵扣，也可单独购买[向量及排序模型节省计划](raw/model-user-guide/test-1/savings-plan-and-resource-package.md)。知识库的规格费用（运行时长，标准版 0.03 元/知识库/小时、旗舰版 0.2 元/RCU/小时）不属于模型调用费用，不在节省计划抵扣范围内，需通过资源包或按量付费结算。
+**知识库（RAG）费用与节省计划说明**：知识库使用过程中产生的向量模型（Embedding）和排序模型（Rerank）调用费用，属于 A 类模型调用范畴，可被 AI 通用型节省计划抵扣；如需专项抵扣，也可单独购买[向量及排序模型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#0d5644e5e3su8)。知识库的规格费用（运行时长，标准版 0.03 元/知识库/小时、旗舰版 0.2 元/RCU/小时）不属于模型调用费用，不在节省计划抵扣范围内，需通过资源包或按量付费结算。
 
 **抵扣逻辑**：
 
@@ -649,7 +649,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
 -   领域模型：千问Coder、千问翻译模型、千问数据挖掘模型、千问深入研究模型
     
 
-不支持向量模型（embedding）和排序模型（rerank）。如需抵扣这些模型，请参考[AI 通用型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#ghoteqo7uv9wa)或[向量及排序模型节省计划](raw/model-user-guide/test-1/savings-plan-and-resource-package.md)。
+不支持向量模型（embedding）和排序模型（rerank）。如需抵扣这些模型，请参考[AI 通用型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#ghoteqo7uv9wa)或[向量及排序模型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#0d5644e5e3su8)。
 
 #### 千问语音模型
 
@@ -1012,7 +1012,7 @@ qwen-max的实时推理服务（[非思考模式](raw/model-user-guide/model-exp
 
 ### 购买了大语言模型节省计划，能抵扣向量模型（embedding）和排序模型（rerank）吗？
 
-不能。大语言模型推理节省计划仅适用于文本生成模型，不支持抵扣向量模型和排序模型。如果您的业务同时涉及大语言模型与向量、排序模型（例如 RAG 场景），建议选择[AI 通用型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#ghoteqo7uv9wa)，或单独购买[向量及排序模型节省计划](raw/model-user-guide/test-1/savings-plan-and-resource-package.md)。
+不能。大语言模型推理节省计划仅适用于文本生成模型，不支持抵扣向量模型和排序模型。如果您的业务同时涉及大语言模型与向量、排序模型（例如 RAG 场景），建议选择[AI 通用型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#ghoteqo7uv9wa)，或单独购买[向量及排序模型节省计划](https://help.aliyun.com/zh/model-studio/savings-plan-and-resource-package#0d5644e5e3su8)。
 
 ### 入门型AI通用节省计划和 AI 通用型节省计划有什么区别？
 

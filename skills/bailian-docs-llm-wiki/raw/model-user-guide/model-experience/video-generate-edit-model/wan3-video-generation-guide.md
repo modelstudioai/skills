@@ -2,6 +2,8 @@
 
 wan3.0系列是All-in-One视频生成模型，在有声视频生成、多模态参考和视频编辑能力上全面升级。单次生成时长最长30秒、输出帧率30fps，并原生输出台词、BGM和音效，单次支持最多20个多模态素材参考（图片、视频、音频、文档、网页），支持首帧/首尾帧控制和视频编辑与延长。
 
+提示词写作请参见[万相3.0视频生成Prompt指南](raw/model-user-guide/use-cases/wan3-video-generation-prompt-guide.md)。
+
 ## 适用范围
 
 -   各地域支持的模型有所差异，且资源相互独立。各地域支持的模型请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)。
@@ -1289,7 +1291,7 @@ curl -X GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/{ta
 ## 输出视频
 
 -   **分辨率**：480P、720P、1080P（默认）。
--   **宽高比**：16:9、4:3、1:1、3:4、9:16、adaptive（默认，自适应输入素材）。
+-   **宽高比**：21:9、16:9、4:3、1:1、3:4、9:16、adaptive（默认，自适应输入素材）。
 -   **时长**：2~30秒；-1（智能时长，默认5秒）。有视频输入时，输入+输出总时长≤30秒。
 -   **格式**：MP4，帧率30fps。
 -   **有声视频**：默认开启，可通过 `audio`\=false 关闭。

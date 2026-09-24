@@ -1031,26 +1031,6 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     -H "Content-Type: application/json" \
     -d '{
         "model": "qwen-voice-enrollment",
-        "parameters": {"voice_clone_mode": "normal"},
-        "input": {
-            "action": "create",
-            "target_model": "qwen3.8-omni-flash-realtime",
-            "preferred_name": "guanyu",
-            "audio": {
-                "data": "https://xxx.wav"
-            }
-        }
-    }'
-    ```
-    
-    以下示例使用qwen3.8-omni-flash-realtime模型，需在`parameters`中传入`voice_clone_mode`参数：
-    
-    ```
-    curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization \
-    -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-    -H "Content-Type: application/json" \
-    -d '{
-        "model": "qwen-voice-enrollment",
         "input": {
             "action": "create",
             "target_model": "qwen3.8-omni-flash-realtime",
@@ -1380,6 +1360,8 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     
     驱动音色的全模态模型：
     
+    -   qwen3.8-omni-flash-realtime
+        
     -   qwen3.5-omni-plus-realtime
         
     -   qwen3.5-omni-flash-realtime
@@ -1420,7 +1402,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     # === 执行时请删除该注释 ===
     
     curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization' \
-    --header 'Authorization: Bearer $DASHSCOPE_API_KEY' \
+    --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header 'Content-Type: application/json' \
     --data '{
         "model": "qwen-voice-enrollment",
@@ -1709,7 +1691,7 @@ POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/services/audi
     # === 执行时请删除该注释 ===
     
     curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/tts/customization' \
-    --header 'Authorization: Bearer $DASHSCOPE_API_KEY' \
+    --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header 'Content-Type: application/json' \
     --data '{
         "model": "qwen-voice-enrollment",

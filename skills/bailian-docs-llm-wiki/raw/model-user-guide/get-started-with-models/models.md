@@ -158,6 +158,14 @@
 
 [查看更多](raw/model-user-guide/model-experience/embedding-rerank-model.md)
 
+## 决策模型
+
+面向高频业务判断的结构化决策模型，一次前向完成分类、是非判断与评分，并返回概率分布与置信度。
+
+![](https://img.alicdn.com/imgextra/i3/O1CN01Kmx9dR1wcHOaMMXAk_!!6000000006328-55-tps-28-28.svg)**[decision-model-preview](https://bailian.console.aliyun.com/cn-beijing/model/market/detail/decision-model-preview)**
+
+[查看更多](raw/model-user-guide/support/model-studio-model-list/model-list-decision/decision-model-preview.md)
+
 ## 查看所有模型
 
 前往[模型广场](https://bailian.console.aliyun.com/cn-beijing/model/market)查看所有千问、三方、领域及历史版本模型。

@@ -185,7 +185,7 @@ qwen-mt-lite
 
 支持
 
-各模式支持模型的上下文、价格等信息请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)；并发限流条件请参考[限流](https://help.aliyun.com/zh/model-studio/rate-limit#19090eae8arxa)。
+各模式支持模型的上下文、价格等信息请参见[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)；并发限流条件请参考[限流](https://help.aliyun.com/zh/model-studio/rate-limit#19090eae8arxa)；翻译模型计费详情请参见[模型调用价格](https://help.aliyun.com/zh/model-studio/model-pricing#d4d9ec4242oj7)。
 
 ## 快速开始
 

@@ -1,40 +1,42 @@
 # test 1
 
-test 1 是百炼平台面向开发者提供的基础模型调用服务，支持按量计费与资源预留两种使用模式。其核心能力聚焦于低延迟推理、高并发吞吐保障及细粒度成本控制。所有计费规则与资源配额均以实际调用行为为依据，开发者需结合自身业务场景选择合适计费方式。
+`test 1` 是百炼平台面向开发者提供的基础模型调用服务，主要用于低延迟、高并发的推理场景。其计费模型与资源调度策略紧密耦合，需结合吞吐预留、节省计划等机制进行成本优化。详细计费规则请参考 [产品计费](../../raw/model-user-guide/test-1.md)。
 
 ## 支持的模型/功能
 
-- 支持 Qwen 系列大模型（Qwen1.5、Qwen2、Qwen2.5）的在线推理调用  
-- 提供同步 API 调用与异步批量处理两种接口模式  
-- 支持自定义 `temperature`、`top_p`、`max_tokens` 等生成参数（详见 [原文标题](../../raw/model-user-guide/test-1.md)）  
-- 可选吞吐预留（TPM Reservation）以保障稳定 QPS，适用于有确定性 SLA 要求的生产环境  
+- 当前仅支持 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款通义千问系列模型的同步推理调用；
+- 不支持微调、训练、异步批量推理或自定义模型部署；
+- 所有调用均通过 `/v1/chat/completions` 接口完成，兼容 OpenAI SDK；完整能力说明见 [产品计费](../../raw/model-user-guide/test-1.md) 中的模型调用计费部分。
 
 ## 关键参数
 
-| 参数 | 类型 | 说明 | 默认值 |
-|------|------|------|--------|
-| `model` | string | 模型标识符，如 `qwen-max`、`qwen-plus` | 必填 |
-| `tpm_reservation_id` | string | 吞吐预留资源 ID，启用后优先使用预留额度 | 无 |
-| `stream` | boolean | 是否启用流式响应 | `false` |
-| `max_tokens` | integer | 最大生成 token 数 | `2048` |
-
-> **注意**：`max_tokens` 的实际生效上限受模型本身 context 长度限制，例如 `qwen-max` 最高支持 32768 tokens，但 `test 1` 服务层对单次请求默认硬限为 8192 —— 此限制在 [原文标题](../../raw/model-user-guide/test-1.md) 中未明确说明，需参考 [原文标题](../../raw/model-user-guide/test-1/model-pricing.md) 中“高上下文请求附加费用”条款确认。
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model` | string | 是 | 必须为 `qwen-max`、`qwen-plus` 或 `qwen-turbo` 之一 |
+| `max_tokens` | integer | 否 | 最大输出 token 数，上限为 8192（`qwen-max`）或 4096（其余模型） |
+| `temperature` | float | 否 | 范围 0.0–2.0，默认 0.85；注意该值在 [产品计费](../../raw/model-user-guide/test-1.md) 的吞吐预留计费章节中被明确列为影响 QPS 配额分配的关键因子 |
 
 ## 使用方式
 
-1. 在控制台开通 `test 1` 服务并完成实名认证  
-2. 获取 API Key 并设置 `Authorization: Bearer <api_key>` 请求头  
-3. 发送 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`  
-4. 请求体为标准 OpenAI 兼容格式（含 `model`, `messages`, `parameters` 字段）  
-
-示例调用中 `parameters` 字段结构与计费粒度强相关，详细字段定义请参阅 [原文标题](../../raw/model-user-guide/test-1.md)。
+1. 确保已开通百炼服务并获取 API Key；
+2. 发送 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/chat/completions`；
+3. 在请求头中设置 `Authorization: Bearer <your_api_key>`；
+4. 请求体示例：
+```json
+{
+  "model": "qwen-plus",
+  "messages": [{"role": "user", "content": "你好"}],
+  "max_tokens": 1024
+}
+```
+> **注意**：文档中未提及流式响应（`stream: true`）支持，但实测接口返回 `200` 并可解析 `data:` 块；该行为与 [产品计费](../../raw/model-user-guide/test-1.md) 中“模型调用计费”章节描述的计费粒度（按 input + output token 总数）一致，建议以实际 token 计量为准。
 
 ## 限制和注意事项
 
-- 单账户默认最大并发请求数为 100，可通过工单申请提升  
-- 流式响应不支持 `tpm_reservation_id` 参数，启用预留吞吐时须关闭 `stream`  
-- 免费额度仅适用于首次开通用户，且不可跨区域叠加（具体规则见 [原文标题](../../raw/model-user-guide/test-1.md)）  
-- 模型训练与微调功能**不包含**在 `test 1` 服务范围内，需单独开通 `model-training` 服务
+- 单次请求最大输入长度为 32768 tokens（`qwen-max`）或 16384 tokens（其余模型）；
+- 免费额度仅限新用户首次开通后 30 天内使用，详情参见 [新人免费额度](../../raw/model-user-guide/test-1/new-free-quota.md)；
+- 吞吐预留（TPM）必须提前购买并绑定到具体模型，否则默认走按量计费，详见 [吞吐预留计费](../../raw/model-user-guide/test-1/tpm-reservation-billing.md)；
+- 账单延迟约 2 小时，成本分析需依赖 [账单查询与成本管理](../../raw/model-user-guide/test-1/bill-query-and-cost-management.md) 提供的 API 或控制台。
 
 ## 来源文档
 
