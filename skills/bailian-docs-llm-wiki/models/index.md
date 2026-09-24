@@ -1,6 +1,6 @@
 # 百炼模型市场索引
 
-> 自动生成 · 共 188 个模型家族 · 433 个主干模型 · 更新于 2026-09-24
+> 自动生成 · 共 189 个模型家族 · 434 个主干模型 · 更新于 2026-09-25
 
 **机器查询走结构化文件**：
 
@@ -17,8 +17,10 @@ join：`models.jsonl[].family == families.jsonl[].slug == index.json.families[].
 `notSuitableFor: []` 表示无已知限制。`profileCompleteness` 为 `structured-only` 时该画像未读过文档，仅机械字段可信。
 硬规格（价格/QPM/contextWindow/openSource）一律看行内顶层字段，不要从 profile 里找。
 
-## 文本生成 `TG` — 39 个家族
+## 文本生成 `TG` — 40 个家族
 
+- [Decision Model](groups/decision-model.json) — 面向高频业务判断的结构化决策模型，可根据文本或业务状态并行完成分类、是非判断与评分，并返回概率分布和置信度，适用于工单分流、内容审核、智能体路由与结果校验等场景。
+  - 模型：`decision-model-preview`
 - [DeepSeek](groups/deepseek.json) — DeepSeek 系列模型覆盖通用对话、复杂推理与多模态理解等场景，提供 Flash、Pro 等不同规格，可根据效果、响应速度和成本灵活选择。
   - 模型：`deepseek-r1`, `deepseek-r1-0528`, `deepseek-r1-distill-qwen-1.5b`, `deepseek-r1-distill-qwen-14b`, `deepseek-r1-distill-qwen-32b`, `deepseek-r1-distill-qwen-7b`, `deepseek-v3`, `deepseek-v3.1`, `deepseek-v3.2`, `deepseek-v3.2-exp`, `deepseek-v4-flash`, `deepseek-v4-flash-0731`, `deepseek-v4-pro`, `deepseek-v4-pro-0813`, `deepseek-v4.1-flash`
 - [GLM](groups/glm-4.5.json) — GLM是由智谱提供的开源模型。

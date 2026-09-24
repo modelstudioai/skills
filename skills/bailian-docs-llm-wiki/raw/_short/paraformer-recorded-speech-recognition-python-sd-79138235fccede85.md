@@ -139,7 +139,7 @@ if transcribe_response.status_code == HTTPStatus.OK:
 
 请求参数通过[核心类（Transcription）](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-python-sdk#adcb5e9bddbyq)的`async_call`方法进行设置。
 
-**重要**说话人分离功能（`diarization_enabled`）仅适用于单声道音频，多声道音频不支持说话人分离。如果您的音频为多声道格式，需先将其转换为单声道后再启用说话人分离。可使用ffmpeg进行转换：`ffmpeg -i input.wav -ac 1 output_mono.wav`。
+**重要**如果多声道音频的说话人分离结果不符合预期，可尝试将音频转换为单声道后重新识别。可使用ffmpeg进行转换：`ffmpeg -i input.wav -ac 1 output_mono.wav`。
 
 **参数**
 
@@ -1013,9 +1013,9 @@ def fetch(cls,
 
 请按以下步骤排查：
 
-1.  检查音频是否为单声道格式。说话人分离功能仅支持单声道音频，多声道音频不支持说话人分离。可使用ffprobe查看音频声道数：`ffprobe -i input.wav -show_entries stream=channels -of default=noprint_wrappers=1`。
-2.  如果音频为多声道，需先转换为单声道：`ffmpeg -i input.wav -ac 1 output_mono.wav`。
-3.  确认已正确设置说话人分离参数：`diarization_enabled=true`，并根据实际说话人数设置`speaker_count`参数（取值范围2至100）。
+1.  检查音频声道数。可使用ffprobe查看：`ffprobe -i input.wav -show_entries stream=channels -of default=noprint_wrappers=1`。
+2.  如果音频为多声道，可尝试转换为单声道后重新识别：`ffmpeg -i input.wav -ac 1 output_mono.wav`。
+3.  确认已设置`diarization_enabled=true`。`speaker_count`为可选参数，默认自动判断说话人数；如需设置，取值范围为2至100，但不保证结果中的说话人数与设置值一致。
 
 ### 更多问题
 

@@ -115,7 +115,7 @@ array\[string\]
 
 音视频文件转写的URL列表，支持HTTP / HTTPS协议，单次请求仅支持1个URL。
 
-**重要**URL中如果包含空格、中文或其他特殊字符，必须先进行URL编码（例如将空格替换为`%20`），否则可能导致文件下载失败，返回`InvalidFile.DownloadFailed`错误。
+**重要**文件URL的路径中如果包含空格、中文或其他需要编码的字符，请先进行URL编码（例如将空格编码为`%20`），避免文件下载失败。已编码的URL请勿重复编码。
 
 若录音文件存储在阿里云OSS，使用RESTful API方式支持使用以 oss://为前缀的临时 URL。
 
@@ -854,9 +854,9 @@ print("transcription result: ", result)
 
 将[请求参数](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-restful-api#493b0f8f2ap0y)`timestamp_alignment_enabled`设为`true`将启用时间戳校准功能，能够让识别结果和语音播放同步。
 
-#### Q：提交任务后返回InvalidFile.DownloadFailed错误怎么办？
+#### Q：文件URL包含特殊字符时如何处理？
 
-请检查文件URL中是否包含空格、中文等特殊字符。如果文件名包含空格（例如"第八节 学生伤害事故处理办法.mp4"），需要将空格替换为`%20`进行URL编码后再传入`file_urls`参数。
+如果文件URL的路径中包含空格、中文等需要编码的字符，请对相应路径进行URL编码后再传入`file_urls`参数。例如，将文件名中的空格编码为`%20`。已编码的URL请勿重复编码。
 
 #### Q：录音文件URL设置成OSS临时公网访问不通该如何处理？
 

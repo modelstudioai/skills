@@ -4,7 +4,7 @@ Qwen-Omni-Realtime API的客户端事件参考。
 
 ## session.update
 
-建立 WebSocket 连接后，发送此事件更新会话的默认配置。服务端收到 `session.update` 事件后校验参数，若参数不合法则返回错误，若参数合法则应用更改并返回会话配置。Qwen3.8-Omni-Flash-Realtime 的 MCP 连接地址与凭证不回显，详见[Qwen3.8 客户端事件](#qwen38-client)。
+建立 WebSocket 连接后，发送此事件更新会话的默认配置。服务端收到 `session.update` 事件后校验参数，若参数不合法则返回错误，若参数合法则应用更改并返回会话配置。Qwen3.8-Omni-Flash-Realtime 的 MCP 连接地址与凭证不回显，详见[Qwen3.8 客户端事件](#session-tools-mcp)。
 
 **type**`string`**（必选）**
 
@@ -79,6 +79,8 @@ Qwen-Omni-Realtime API的客户端事件参考。
 
 会话配置。
 
+Qwen3.8-Omni-Flash-Realtime 更新会话时必须提供 `session`。全部输入 Token 总数上限为 196608，输入长度计算规则与 Qwen3.5-Omni-Realtime 一致。
+
 属性
 
 **modalities**`array`（可选）
@@ -104,45 +106,11 @@ Qwen-Omni-Realtime API的客户端事件参考。
 -   Qwen3-Omni-Flash-Realtime：`Cherry`
 -   Qwen-Omni-Turbo-Realtime：`Chelsie`
 
+Qwen3.8-Omni-Flash-Realtime 默认使用 `Tina`；嵌套字段的优先级与示例见[输出音色](#session-audio-voice)。
+
 **audio**`object`（可选）
 
-输入和输出音频配置。未配置时沿用现有默认行为。
-
-**以下格式和采样率选项适用于 `qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime`。**Qwen3.8-Omni-Flash-Realtime 的输入格式字段和约束见[Qwen3.8 客户端事件](#qwen38-client)，未列出的字段沿用基础协议。
-
-属性
-
-**audio.input**`object`（可选）
-
-用户输入音频配置。
-
-**audio.input.format**`object`（可选）
-
-用户输入音频的格式和采样率。建议在会话 IDLE 阶段（首次发送音频前）完成配置，发送音频后不可再修改。
-
-**audio.input.format.type**`string`（可选）
-
-用户输入音频格式。可选值：`pcm`（默认值，单声道、16 bit 裸 PCM）、`wav`（WAV 容器封装的单声道、16 bit PCM）。
-
-**audio.input.format.sample\_rate**`integer`（可选）
-
-用户输入音频采样率，单位为 Hz。可选值：`8000`、`16000`（默认值）、`24000`、`48000`。
-
-**audio.output**`object`（可选）
-
-模型输出音频配置。
-
-**audio.output.format**`object`（可选）
-
-模型输出音频的格式和采样率。建议在会话建立初期、尚未开始音频交互前完成配置。
-
-**audio.output.format.type**`string`（可选）
-
-模型输出音频格式。可选值：`pcm`（默认值，单声道、16 bit 裸 PCM）、`wav`（WAV 容器封装的单声道、16 bit PCM）。
-
-**audio.output.format.sample\_rate**`integer`（可选）
-
-模型输出音频采样率，单位为 Hz。可选值：`8000`、`16000`、`24000`（默认值）、`48000`。
+输入和输出音频配置，详见[音频配置](#session-audio)。
 
 **input\_audio\_format**`string`（可选）
 
@@ -222,11 +190,15 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 是否在响应中返回搜索结果来源列表。设为 `true` 启用。
 
+**video**`object`（可选）
+
+视频输入配置，`video.input.representation_compact` 用于视频聚合，详见[视频配置](#session-video)。
+
 **tools**`array`（可选）
 
 工具定义列表。配置后模型可根据用户输入自主决定是否调用工具。
 
-以下属性描述自定义 Function Calling 工具。Qwen3.8-Omni-Flash-Realtime 的 MCP 工具配置见[3.8 客户端事件](#qwen38-client)。
+以下属性描述自定义 Function Calling 工具。Qwen3.8-Omni-Flash-Realtime 的 MCP 工具配置见[MCP 工具配置](#session-tools-mcp)。
 
 属性
 
@@ -365,41 +337,51 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 > `qwen-omni-turbo` 系列模型**不支持修改**。
 
-### Qwen3.8-Omni-Flash-Realtime
+### 音频配置
 
-本节介绍 `qwen3.8-omni-flash-realtime` 的 `session.update` 配置字段。表中“必填”表示所属对象出现时必须提供。ID 均为不透明字符串，不应依赖其长度、前缀或生成规则。MCP 连接、工具发现和调用受服务配额及超时限制。
+**audio**`object`（可选）
 
-`qwen3.8-omni-flash-realtime` 的全部输入 Token 总数上限为 196608，输入长度计算规则与 Qwen3.5-Omni-Realtime 一致。
+输入和输出音频配置。未配置时沿用现有默认行为。
 
-事件顶层包含以下字段：
+**以下格式和采样率选项适用于 `qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime`。**多通道输入的字段和约束见[多通道音频输入](#session-audio-multichannel)。
 
-字段路径
+属性
 
-类型
+**audio.input**`object`（可选）
 
-必填
+用户输入音频配置。
 
-说明
+**audio.input.format**`object`（可选）
 
-type
+用户输入音频的格式和采样率。建议在会话 IDLE 阶段（首次发送音频前）完成配置，发送音频后不可再修改。
 
-string
+**audio.input.format.type**`string`（可选）
 
-是
+用户输入音频格式。可选值：`pcm`（默认值，单声道、16 bit 裸 PCM）、`wav`（WAV 容器封装的单声道、16 bit PCM）。
 
-固定为 session.update
+**audio.input.format.sample\_rate**`integer`（可选）
 
-session
+用户输入音频采样率，单位为 Hz。可选值：`8000`、`16000`（默认值）、`24000`、`48000`。
 
-object
+**audio.output**`object`（可选）
 
-是
+模型输出音频配置。
 
-本次更新的会话配置
+**audio.output.format**`object`（可选）
 
-#### session.audio.input.format
+模型输出音频的格式和采样率。建议在会话建立初期、尚未开始音频交互前完成配置。
 
-以下多通道音频配置适用于 WebSocket 接入。
+**audio.output.format.type**`string`（可选）
+
+模型输出音频格式。可选值：`pcm`（默认值，单声道、16 bit 裸 PCM）、`wav`（WAV 容器封装的单声道、16 bit PCM）。
+
+**audio.output.format.sample\_rate**`integer`（可选）
+
+模型输出音频采样率，单位为 Hz。可选值：`8000`、`16000`、`24000`（默认值）、`48000`。
+
+#### 多通道音频输入
+
+以下多通道音频配置适用于 Qwen3.8-Omni-Flash-Realtime 的 WebSocket 接入。
 
 字段路径
 
@@ -539,7 +521,54 @@ string
 }
 ```
 
-#### session.video.input.representation\_compact
+#### 输出音色
+
+以下配置适用于 Qwen3.8-Omni-Flash-Realtime。
+
+字段路径
+
+类型
+
+必填
+
+说明
+
+session.audio.output.voice
+
+string
+
+否
+
+输出音色；默认为 Tina；新增支持 longanlingxin
+
+session.voice
+
+string
+
+否
+
+兼容字段；建议新接入使用 session.audio.output.voice
+
+如果两个字段同时出现，以 `session.audio.output.voice` 为准。音色效果可参考[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)。
+
+示例：
+
+```
+{
+  "type": "session.update",
+  "session": {
+    "audio": {
+      "output": {
+        "voice": "longanlingxin"
+      }
+    }
+  }
+}
+```
+
+### 视频配置
+
+以下配置适用于 Qwen3.8-Omni-Flash-Realtime。
 
 字段路径
 
@@ -583,50 +612,11 @@ none、normal
 }
 ```
 
-#### session.audio.output.voice
+### MCP 工具配置
 
-字段路径
+以下配置适用于 Qwen3.8-Omni-Flash-Realtime。
 
-类型
-
-必填
-
-说明
-
-session.audio.output.voice
-
-string
-
-否
-
-输出音色；默认为 Tina；新增支持 longanlingxin
-
-session.voice
-
-string
-
-否
-
-兼容字段；建议新接入使用 session.audio.output.voice
-
-如果两个字段同时出现，以 `session.audio.output.voice` 为准。音色效果可参考[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)。
-
-示例：
-
-```
-{
-  "type": "session.update",
-  "session": {
-    "audio": {
-      "output": {
-        "voice": "longanlingxin"
-      }
-    }
-  }
-}
-```
-
-#### session.tools 数组元素
+字段表中的“必填”表示所属对象出现时必须提供。ID 为不透明字符串，不应依赖其长度、前缀或生成规则。MCP 连接、工具发现和调用受服务配额及超时限制。
 
 当 `session.tools` 中的元素满足 `type="mcp"` 时，该元素表示一个 MCP Server 配置。同一会话可同时配置 Function Calling 和 MCP 工具；`tools` 与 `enable_search` 不可同时开启，该限制也适用于 MCP。服务数量、工具数量、超时及结果大小限制见[MCP 调用限制](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-flow)。
 

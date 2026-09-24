@@ -13,7 +13,7 @@
 
 为确保调用成功，请务必保证**模型、Endpoint URL 和 API Key 均属于同一地域**。跨地域调用将会失败。
 
--   [**选择模型**](https://help.aliyun.com/zh/model-studio/use-video-generation#2b27937a3anl8)：确认模型所属的地域。
+-   [**选择模型**](raw/model-user-guide/model-experience/video-generate-edit-model.md)：确认模型所属的地域。
 -   **选择 URL**：选择对应的地域 Endpoint URL，支持HTTP URL或 DashScope SDK URL。
 -   **配置 API Key**：选择地域并[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 
@@ -54,7 +54,7 @@
 
 **model** `string` **（必选）**
 
-模型名称。模型输出规格请参见[模型列表](https://help.aliyun.com/zh/model-studio/use-video-generation#2b27937a3anl8)。
+模型名称。模型输出规格请参见[模型列表](raw/model-user-guide/model-experience/video-generate-edit-model.md)。
 
 可选值：
 

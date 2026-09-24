@@ -68,6 +68,80 @@ TTS 音色名称，3.1 Plus 的默认值为 `longanqian_v3.1`，3.0 Plus/Flash �
 
 输出音频格式。当前仅支持 `pcm`（24kHz 16bit 单声道），为默认值。
 
+**input\_audio\_transcription**`object`（可选）
+
+输入音频转写配置。适用于 `qwen-audio-3.1-realtime-plus`。
+
+属性
+
+**language**`string`（可选）
+
+输入音频的源语种。
+
+可选值：
+
+-   `zh`：中文
+-   `en`：英语
+-   `ja`：日语
+-   `ko`：韩语
+-   `vi`：越南语
+-   `th`：泰语
+-   `id`：印尼语
+-   `ms`：马来语
+-   `tl`：菲律宾语
+-   `hi`：印地语
+-   `ar`：阿拉伯语
+-   `fr`：法语
+-   `de`：德语
+-   `es`：西班牙语
+-   `pt`：葡萄牙语
+-   `ru`：俄语
+-   `it`：意大利语
+-   `nl`：荷兰语
+-   `sv`：瑞典语
+-   `da`：丹麦语
+-   `fi`：芬兰语
+-   `no`：挪威语
+-   `el`：希腊语
+-   `pl`：波兰语
+-   `cs`：捷克语
+-   `hu`：匈牙利语
+-   `ro`：罗马尼亚语
+-   `bg`：保加利亚语
+-   `hr`：克罗地亚语
+-   `sk`：斯洛伐克语
+
+**output\_audio**`object`（可选）
+
+输出音频配置。适用于 `qwen-audio-3.1-realtime-plus`。
+
+属性
+
+**language**`string`（可选）
+
+输出音频的目标语种。
+
+该参数作用于语音合成（TTS）：会尽可能让语音输出使用目标语种，但不保证一定生效，也不会改变模型回复文本的语种。如需模型生成目标语种的文本，请在提示词中明确要求，例如通过 `instructions` 指定回答语言。
+
+可选值：
+
+-   `zh`：中文
+-   `en`：英语
+-   `fr`：法语
+-   `de`：德语
+-   `ja`：日语
+-   `ko`：韩语
+-   `ru`：俄语
+-   `pt`：葡萄牙语
+-   `th`：泰语
+-   `id`：印尼语
+-   `vi`：越南语
+-   `es`：西班牙语
+-   `it`：意大利语
+-   `ms`：马来语
+-   `fil`：菲律宾语
+-   `ar`：阿拉伯语
+
 **max\_history\_turns**`integer`（可选）
 
 允许单次请求的最大历史 QA 轮数。取值范围为 1-50，默认值为 20。
@@ -170,6 +244,23 @@ VAD灵敏度，仅在 server\_vad 模式下生效（smart\_turn 模式下无效�
             "type": "server_vad",
             "threshold": 0.5,
             "silence_duration_ms": 800
+        }
+    }
+}
+```
+**语言配置（qwen-audio-3.1-realtime-plus）**
+
+连接 `qwen-audio-3.1-realtime-plus` 后，可发送以下 `session.update` 事件，分别将输入音频源语种设置为中文、输出音频目标语种设置为英语。
+
+```
+{
+    "type": "session.update",
+    "session": {
+        "input_audio_transcription": {
+            "language": "zh"
+        },
+        "output_audio": {
+            "language": "en"
         }
     }
 }

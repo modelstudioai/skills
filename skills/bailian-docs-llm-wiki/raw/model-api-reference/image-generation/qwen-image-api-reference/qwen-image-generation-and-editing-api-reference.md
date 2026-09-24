@@ -33,7 +33,7 @@ qwen-image-3.0
 
 为确保调用成功，请务必保证模型、endpoint URL 和 API Key 均属于**同一地域**。跨地域调用将会失败。
 
--   [**选择模型**](https://help.aliyun.com/zh/model-studio/use-video-generation#0754655d5ej0j)：确认模型所属的地域。
+-   [**选择模型**](raw/model-user-guide/model-experience/video-generate-edit-model.md)：确认模型所属的地域。
 -   **选择 URL**：选择对应的地域 Endpoint URL，支持HTTP URL或 DashScope SDK URL。
 -   **配置 API Key**：获取该地域的[API Key](raw/model-api-reference/preparations/get-api-key.md)，再[配置API Key到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)。
 -   **安装 SDK**：如需通过SDK进行调用，请[安装DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。

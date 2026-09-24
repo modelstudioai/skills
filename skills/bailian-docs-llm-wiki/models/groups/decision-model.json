@@ -1,0 +1,67 @@
+{
+  "name": "Decision Model",
+  "description": "面向高频业务判断的结构化决策模型，可根据文本或业务状态并行完成分类、是非判断与评分，并返回概率分布和置信度，适用于工单分流、内容审核、智能体路由与结果校验等场景。",
+  "items": [
+    {
+      "inferenceMetadata": {
+        "response_modality": [
+          "Text"
+        ],
+        "request_modality": [
+          "Text"
+        ]
+      },
+      "description": "面向高频业务判断的结构化决策模型，可根据文本或业务状态并行完成分类、是非判断与评分，并返回概率分布和置信度，适用于工单分流、内容审核、智能体路由与结果校验等场景。",
+      "features": [],
+      "provider": "qwen-domain-model",
+      "model": "decision-model-preview",
+      "prices": [
+        {
+          "priceUnit": "每百万tokens",
+          "price": "0",
+          "discount": 0,
+          "type": "input_token",
+          "priceName": "输入"
+        }
+      ],
+      "qpmInfo": {
+        "model-default-actual": {
+          "count_limit_period": 6,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 120,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        },
+        "model-default": {
+          "count_limit_period": 6,
+          "usage_limit": 200000,
+          "usage_limit_field": "total_tokens",
+          "count_limit": 120,
+          "usage_limit_period": 6,
+          "type": "model-default"
+        }
+      },
+      "priceTimeBands": [],
+      "capabilities": [
+        "TG"
+      ],
+      "versionTag": "MAJOR",
+      "latestOnlineAt": "2026-09-24T07:24:10.000+00:00",
+      "contextWindow": 65536,
+      "maxInputTokens": 65536,
+      "inferenceProvider": "aliyun-bailian",
+      "name": "决策模型（预览版）",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/decision-model-api",
+      "category": "Cost-optimized",
+      "samples": {
+        "dashscope": {
+          "default": {
+            "curl": "curl -sS -X POST https://[workspace-id].cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone \\\n  -H \"Authorization: $DASHSCOPE_API_KEY\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"model\": \"decision-model-preview\",\n    \"state\": {\"ticket_id\": \"T-1001\", \"content\": \"订单支付后超过 24 小时仍未到账，用户无法继续使用核心服务，要求立即处理。\"},\n    \"questions\": {\n      \"department\": {\"type\": \"choice\", \"instructions\": \"应该由哪个团队处理？\",\n                     \"criteria\": {\"billing\": \"支付、退款和账单问题\", \"technical\": \"产品故障和集成问题\"}},\n      \"escalate\":   {\"type\": \"noul\",  \"instructions\": \"是否需要立即通知值班人员？\"},\n      \"severity\":   {\"type\": \"score\", \"instructions\": \"这个问题有多严重？\",\n                     \"criteria\": [\"轻微问题，不影响功能\", \"部分功能受影响，但存在替代方案\",\n                                  \"核心功能不可用，没有替代方案\", \"造成严重业务或安全影响\"]}\n    }\n  }'",
+            "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/decision-model-api"
+          }
+        }
+      }
+    }
+  ]
+}

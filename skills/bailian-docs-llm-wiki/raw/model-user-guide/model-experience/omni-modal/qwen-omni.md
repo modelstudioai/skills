@@ -2567,106 +2567,83 @@ client = OpenAI(
 # 方式2: 边生成边解码(使用方式2请将方式1的代码进行注释)
 # # 初始化 PyAudio
 import pyaudio
-import time
-# 创建一个队列用于存储音频数据
+# 创建一个队列用于存储音频数据，None 表示音频流结束
 audio_queue = queue.Queue()
-# 设置是否已经开始播放
-started_playing = False
-# 设置缓冲时间（秒）
+playback_errors = []
 buffer_time = 5
 
-# 音频播放函数（将在单独线程中运行）
 def play_audio():
-    global started_playing
-
-    p = pyaudio.PyAudio()
-    stream = p.open(format=pyaudio.paInt16,
-                    channels=1,
-                    rate=24000,
-                    output=True)
-
-    # 收集的音频数据（用于缓冲）
+    p = None
+    stream = None
     buffer_data = bytearray()
-
+    started_playing = False
+    samples_per_second = 24000 * 2  # 采样率 * 每个样本的字节数
+    buffer_size_threshold = int(samples_per_second * buffer_time)
+    chunk_size = int(samples_per_second * 0.1)
     try:
+        p = pyaudio.PyAudio()
+        stream = p.open(format=pyaudio.paInt16, channels=1,
+                        rate=24000, output=True)
         while True:
-            # 如果队列为空且已经开始播放，等待一小段时间
-            if audio_queue.empty():
-                if started_playing:
-                    time.sleep(0.1)
-                    # 如果队列持续为空，可能意味着音频结束了
-                    if audio_queue.empty():
-                        # 播放剩余的缓冲数据
-                        if buffer_data:
-                            stream.write(bytes(buffer_data))
-                            buffer_data = bytearray()
-                        continue
-                else:
-                    time.sleep(0.1)
-                    continue
-
-            # 从队列获取音频数据
             audio_np = audio_queue.get()
-
-            # 将数据添加到缓冲区
+            if audio_np is None:
+                # 即使总时长不足 5 秒，也播放全部剩余数据
+                if buffer_data:
+                    stream.write(bytes(buffer_data))
+                break
             buffer_data.extend(audio_np.tobytes())
-
-            # 如果还没开始播放且缓冲区大小足够，开始播放
-            samples_per_second = 24000 * 2  # 采样率 * 每个样本的字节数（16位=2字节）
-            buffer_size_threshold = int(samples_per_second * buffer_time)
-
-            if not started_playing and len(buffer_data) >= buffer_size_threshold:
+            if len(buffer_data) >= buffer_size_threshold:
                 started_playing = True
-
-            # 如果已经开始播放，按块播放数据
             if started_playing:
-                # 每次播放一小块数据（例如0.1秒的数据）
-                chunk_size = int(samples_per_second * 0.1)
                 while len(buffer_data) >= chunk_size:
-                    chunk = buffer_data[:chunk_size]
-                    buffer_data = buffer_data[chunk_size:]
-                    stream.write(bytes(chunk))
-
-            # 标记任务完成
-            audio_queue.task_done()
+                    stream.write(bytes(buffer_data[:chunk_size]))
+                    del buffer_data[:chunk_size]
+    except Exception as exc:
+        playback_errors.append(exc)
     finally:
-        # 清理资源
-        stream.stop_stream()
-        stream.close()
-        p.terminate()
+        cleanup_actions = []
+        if stream is not None:
+            cleanup_actions.extend([stream.stop_stream, stream.close])
+        if p is not None:
+            cleanup_actions.append(p.terminate)
+        for cleanup in cleanup_actions:
+            try:
+                cleanup()
+            except Exception as exc:
+                playback_errors.append(exc)
 
-# 启动播放线程
-audio_thread = threading.Thread(target=play_audio, daemon=True)
+# 主线程等待播放线程退出，避免程序提前结束
+audio_thread = threading.Thread(target=play_audio)
 audio_thread.start()
 
-completion = client.chat.completions.create(
-    model="qwen3.5-omni-plus",
-    messages=[{"role": "user", "content": "你是谁"}],
-    # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
-    modalities=["text", "audio"],
-    audio={"voice": "Tina", "format": "wav"},
-    # stream 必须设置为 True，否则会报错
-    stream=True,
-    stream_options={"include_usage": True},
-)
+try:
+    completion = client.chat.completions.create(
+        model="qwen3.5-omni-plus",
+        messages=[{"role": "user", "content": "你是谁"}],
+        # 设置输出数据的模态，当前支持两种：["text","audio"]、["text"]
+        modalities=["text", "audio"],
+        audio={"voice": "Tina", "format": "wav"},
+        # stream 必须设置为 True，否则会报错
+        stream=True,
+        stream_options={"include_usage": True},
+    )
 
-# 接收音频数据并放入队列
-for chunk in completion:
-    if chunk.choices:
-        if hasattr(chunk.choices[0].delta, "audio"):
-            try:
-                audio_string = chunk.choices[0].delta.audio["data"]
-                wav_bytes = base64.b64decode(audio_string)
-                audio_np = np.frombuffer(wav_bytes, dtype=np.int16)
-                # 将音频数据放入队列，而不是直接播放
-                audio_queue.put(audio_np)
-            except Exception as e:
-                print(chunk.choices[0].delta.audio["transcript"])
+    for chunk in completion:
+        if chunk.choices:
+            audio = getattr(chunk.choices[0].delta, "audio", None)
+            if audio:
+                if audio.get("data"):
+                    pcm_bytes = base64.b64decode(audio["data"])
+                    audio_queue.put(np.frombuffer(pcm_bytes, dtype=np.int16))
+                if audio.get("transcript"):
+                    print(audio["transcript"], end="", flush=True)
+finally:
+    # 正常结束或请求异常时都通知播放线程退出，并等待尾部音频播放完成
+    audio_queue.put(None)
+    audio_thread.join()
 
-# 等待所有音频数据播放完毕
-audio_queue.join()
-# 额外等待一段时间，确保最后的音频都播放完毕
-time.sleep(2)
+if playback_errors:
+    raise RuntimeError("音频播放失败") from playback_errors[0]
 ```
 
 ## 输入 Base64 编码的本地文件
@@ -3490,7 +3467,7 @@ A：Qwen-Omni-Turbo 在输出模态包含音频时**不支持设定 System Messa
     
     ```
     curl --location 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation' \
-    --header 'Authorization: Bearer $DASHSCOPE_API_KEY' \
+    --header "Authorization: Bearer $DASHSCOPE_API_KEY" \
     --header 'Content-Type: application/json' \
     --header 'X-DashScope-SSE: enable' \
     --data '{

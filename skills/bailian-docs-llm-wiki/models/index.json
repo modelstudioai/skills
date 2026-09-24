@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026-09-24",
-  "totalFamilies": 188,
-  "totalModels": 433,
+  "updatedAt": "2026-09-25",
+  "totalFamilies": 189,
+  "totalModels": 434,
   "profileCoverage": {
-    "full": 395,
-    "partial": 38,
-    "structured-only": 0,
+    "full": 365,
+    "partial": 62,
+    "structured-only": 7,
     "none": 0
   },
   "capabilityDistribution": {
-    "TG": 39,
+    "TG": 40,
     "IG": 31,
     "VG": 26,
     "TTS": 18,
@@ -29,7 +29,7 @@
   },
   "providerDistribution": {
     "qwen": 117,
-    "qwen-domain-model": 35,
+    "qwen-domain-model": 36,
     "wan": 14,
     "mini-max": 4,
     "pixverse": 4,
@@ -246,6 +246,22 @@
         "cosyvoice-v3.5-flash",
         "cosyvoice-v3.5-plus"
       ]
+    },
+    {
+      "slug": "decision-model",
+      "name": "Decision Model",
+      "primaryCapability": "TG",
+      "capabilities": [
+        "TG"
+      ],
+      "providers": [
+        "qwen-domain-model"
+      ],
+      "itemCount": 1,
+      "items": [
+        "decision-model-preview"
+      ],
+      "maxContextWindow": 65536
     },
     {
       "slug": "deepseek",

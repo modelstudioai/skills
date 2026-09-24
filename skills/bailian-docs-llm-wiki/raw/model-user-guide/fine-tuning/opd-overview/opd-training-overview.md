@@ -296,7 +296,7 @@ IV 型（MTU4）× 24
 python -m pip install ./dashscope-*.whl
 ```
 
-**工作区目录** 从示例获取，含 wheel（Python 打包安装文件）、函数代码、数据、依赖、提交脚本，结构如下；获取与提交脚本的完整实现见[训练配置](opd-training-config.md)：
+**工作区目录** 从[示例代码包](https://g-adoc.alcasset.com/media/maas_docs/sfm/zh/files/6a4b3c2d1e0f92ef.zip)获取，含 wheel（Python 打包安装文件）、函数代码、数据、依赖、提交脚本，结构如下；获取与提交脚本的完整实现见[训练配置](opd-training-config.md)：
 
 ```
 workspace/

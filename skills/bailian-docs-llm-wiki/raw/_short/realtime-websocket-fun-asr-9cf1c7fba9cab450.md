@@ -1,4 +1,4 @@
-# Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime
+# Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime
 
 -   [接入指南](raw/_short/fun-asr-realtime-websocket-api-d80484c92992191d.md)
 -   [Python SDK](raw/_short/fun-asr-realtime-python-sdk-c8b5a715c3e66b70.md)

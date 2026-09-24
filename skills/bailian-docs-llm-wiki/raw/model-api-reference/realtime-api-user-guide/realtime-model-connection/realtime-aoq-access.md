@@ -1,165 +1,399 @@
 # AOQ 接入
 
-介绍通过 AOQ 接入 Realtime API 的连接流程和示例。
+本文介绍通过 AOQ Client SDK 接入 Realtime API 的通用流程：获取连接凭证、初始化 SDK、配置媒体方向、建立连接、按目标模型协议交互，以及释放资源。
 
-**说明**开始前，请先查看[接入概览](raw/model-api-reference/realtime-api-user-guide/realtime-model-connection/realtime-connect-model.md)中的前提条件。
+AOQ 将音视频媒体与模型事件分轨传输。SDK 负责媒体采集、编解码、传输和播放；应用通过 Data 轨发送模型事件并处理回复。接入不同模型时，需要分别选择媒体方向和模型事件协议。
 
-AOQ 基于 QUIC 协议深度定制，适合移动端原生应用，支持音频/视频/数据混合传输，内置极致抗弱网能力。以下以实时全模态（Omni）的 iOS Demo 为例介绍 AOQ 接入流程。AOQ SDK API 详情请参见[AOQ客户端SDK](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md)。
+## 前提条件
 
-## 整体流程时序图
+-   已完成[接入概览](raw/model-api-reference/realtime-api-user-guide/realtime-model-connection/realtime-connect-model.md)中的准备工作，并确认目标模型、地域和 AOQ 支持范围。
+    
+-   已从 [SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)导入对应平台 SDK；使用 Opus 时，导入对应插件。
+    
+-   业务 AppServer 已实现 [Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)。API Key 保存在 AppServer，客户端使用临时连接凭证。
+    
 
-![AOQ中文1](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5755914871/p1088073.jpg)
+**说明**仅在需要采集时申请麦克风或摄像头权限。例如，语音合成不需要这两项权限。
 
-开始前，请从[SDK 下载](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-sdk-download.md)获取 AOQ Client SDK 和 Opus 插件，将 `AoqClientSdk.framework` 与 `PluginOpus.framework` 导入 Xcode 工程，并选择 **Embed & Sign**。
+## 整体流程
 
-## 创建引擎并设置回调
+![AOQ 接入时序图](https://g-adoc.alcasset.com/media/maas_docs/sfm-cn/zh/images/6a4b3c2d1e0f92fa.png)
+
+1.  客户端通过业务 AppServer 获取连接凭证。
+2.  创建 SDK 引擎并注册回调。
+3.  配置媒体和 Data 轨道，关闭上行媒体发送。
+4.  建立 AOQ 连接，等待连接成功。
+5.  按模型协议完成配置，收到确认后开启所需媒体发送。
+6.  完成交互后断开连接并释放资源。
+
+**说明**
+
+-   音视频媒体数据由 AOQ SDK 接管，负责采集、处理、发送、接收和播放；Data 数据需要调用方遵循目标模型的事件定义进行发送和接收。
+    
+-   连接成功表示与模型的传输通道已建立。如果业务需要配置音色等前置操作，应先完成模型配置，再启动媒体发送。例如，Realtime 模型需要等待 `session.updated`，Inference 模型需要等待 `task-started`。因此，客户端应在模型初始化成功后，才能开启所需的上行媒体。
+    
+
+## 1\. 获取连接凭证
+
+客户端向业务 AppServer 请求凭证。AppServer 根据目标模型选择 Realtime 或 Inference 建连地址，并携带 API Key 和 `x-dashscope-rtc-transport: moq` 请求网关。完整地址、请求和字段说明见 [Token 鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)。
+
+将响应映射到 `AoqConnectConfig`：
+
+网关响应
+
+SDK 配置
+
+`aoqTokenForClient`
+
+`token`
+
+`sid`
+
+`sid`
+
+`clientRelayCertFingerprint`
+
+`certFingerprint`
+
+`clientRelayEndpoints`
+
+`relayEndpoints`，按结构转换各接入点
+
+`extraInfo.workspaceIdHash`
+
+`workspaceIdHash`
+
+新建连接时获取新的连接凭证。同一连接内能否复用会话或启动下一轮任务，由目标模型协议决定。
+
+## 2\. 初始化 SDK 并注册回调
+
+创建引擎并注册连接状态、Data 消息和错误回调。以 iOS Swift 为例：
 
 ```
-let config = AoqCreateConfig()
-config.workDir = workDir
-config.enableDumpAudio = false
-engine = AoqClientEngine.createEngine(config, delegate: self)
+let createConfig = AoqCreateConfig()
+createConfig.workDir = workDir
+createConfig.enableDumpAudio = false
+engine = AoqClientEngine.createEngine(createConfig, delegate: self)
 ```
 
-实现 `AoqEngineDelegate` 协议监听 `onConnectionStatusChange`、`onDataMsg`、`onError` 等回调。
+实现 `AoqEngineDelegate`，在 `onConnectionStatusChange` 中维护连接状态，在 `onDataMsg` 中解析目标模型事件，在 `onError` 中处理 SDK 错误。模型返回的错误事件也需要在 Data 消息处理逻辑中单独处理。SDK 接口及错误说明请参见 [AOQ 客户端 SDK](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api.md)。
 
-## 启动音频采集与播放
+## 3\. 配置 SDK
+
+### 选择四个媒体方向
+
+以下“推”和“拉”均以客户端为视角。按业务实际使用的输入、输出模态配置，不需要的方向不添加媒体轨道。
+
+方向
+
+配置内容
+
+典型用途
+
+推音频
+
+发布 Audio 轨，设置音频编码器，配置内置或外部采集
+
+语音识别、语音对话、语音翻译
+
+拉音频
+
+订阅 Audio 轨，设置音频解码器，配置播放器或外部播放
+
+语音合成、语音回复
+
+推视频
+
+发布 Video 轨，配置摄像头或外部视频输入及编码参数
+
+向支持视觉输入的模型发送画面
+
+拉视频
+
+仅当目标模型/应用明确支持视频输出时配置订阅及接收处理
+
+以目标模型/应用文档为准
+
+Data 轨独立于这四个方向：发布 Data 轨用于发送模型事件，订阅 Data 轨用于接收回复。纯文本输入或输出也需要 Data 轨。
+
+### 各模型如何选择
+
+下表是典型场景的媒体配置建议。具体模型及版本的支持范围以 [Realtime API 概述](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)和模型文档为准。
+
+模型/应用
+
+推音频
+
+拉音频
+
+推视频
+
+拉视频
+
+Qwen-Omni-Realtime
+
+语音输入时开启
+
+需要语音回复时开启
+
+需要视觉输入时开启
+
+不支持开启
+
+Qwen-Audio-Realtime
+
+语音对话时开启
+
+需要语音回复时开启
+
+不支持开启
+
+不支持开启
+
+Qwen-Audio-TTS、CosyVoice
+
+不支持开启
+
+开启
+
+不支持开启
+
+不支持开启
+
+Qwen-Audio-ASR-Flash-Streaming、Fun-ASR-Realtime
+
+开启
+
+不支持开启
+
+不支持开启
+
+不支持开启
+
+Qwen-LiveTranslate-Realtime
+
+语音输入时开启
+
+需要语音译文时开启
+
+按所选版本及场景配置
+
+不支持开启
+
+multimodal-dialog
+
+按应用输入配置
+
+按应用输出配置
+
+按应用能力配置
+
+仅在应用明确支持时配置
+
+### 配置媒体参数和轨道
+
+音频上行和下行应分别配置：上行使用 `setAudioEncoderConfig`，下行使用 `setAudioDecoderConfig`。这些参数用于网络传输，网关会将音频转换为模型所需的格式。传输编码配置与模型事件中的音频格式参数应分别按 SDK 和目标模型的要求设置。
+
+按方向启动 `startAudioCapture`、`startAudioPlayer` 或 `startVideoCapture`。自定义输入输出见下文高阶能力。
+
+`publishTracks` 表示客户端发送的轨道，`subscribeTracks` 表示客户端接收的轨道：
+
+场景
+
+`publishTracks`
+
+`subscribeTracks`
+
+语音对话
+
+Audio、Data
+
+Audio、Data
+
+带画面输入的语音对话
+
+Audio、Video、Data
+
+Audio、Data
+
+语音识别
+
+Audio、Data
+
+Data
+
+语音合成
+
+Data
+
+Audio、Data
+
+在建连前关闭上行媒体发送，避免模型尚未就绪时收到输入：
 
 ```
-// 音频采集
-let capCfg = AoqAudioCaptureConfig()
-capCfg.channel = 1; capCfg.isExternal = false
-engine.startAudioCapture(capCfg)
-
-// 音频播放
-let playCfg = AoqAudioPlaybackConfig()
-playCfg.channel = 1; playCfg.isExternal = false
-engine.startAudioPlayer(playCfg)
-
-// 视频采集（可选）
-let vidCfg = AoqVideoCaptureConfig()
-vidCfg.width = 720; vidCfg.height = 1280; vidCfg.fps = 15
-engine.startVideoCapture(vidCfg)
-```
-
-## 获取连接凭证
-
-由业务 AppServer 代理百炼请求，参见[Token鉴权](raw/model-api-reference/realtime-api-user-guide/realtime-api-quick-start-guide/realtime-token-authentication.md)。
-
-## 设置编解码及建立连接
-
-设置编解码参数后调用 `connect`：
-
-```
-// 音频编解码配置
-let encCfg = AoqAudioCodecConfig()
-encCfg.codecType = .audioOpus; encCfg.sampleRate = 16000; encCfg.channel = 1
-engine.setAudioEncoderConfig(encCfg)
-engine.setAudioDecoderConfig(encCfg)
-
-// connect 前关闭媒体发送，待 session.updated 后再开启
 engine.enableSendMediaStream(.audio, enable: false)
-
-let config = AoqConnectConfig()
-config.token = token
-config.sid = sid
-config.certFingerprint = certificate
-config.relayEndpoints = relayEndpoints
-config.workspaceIdHash = workspaceIdHash
-config.publishTracks = [audioTrack, dataTrack]
-config.subscribeTracks = [audioTrack, dataTrack]
-engine.connect(config)
+engine.enableSendMediaStream(.video, enable: false)
 ```
 
-**重要****重要**：AOQ SDK 在建连后会默认发送媒体数据，此示例演示了在连接模型时先关闭媒体发送，待会话就绪后再开启的流程。
+采集、发布轨道和允许发送是不同的操作。关闭发送不等于停止本地采集，也不影响 Data 轨事件收发。未添加的轨道不会因开启发送而自动创建。
 
-## 配置 AI 会话
+## 4\. 建立连接
 
-连接成功后发送 `session.update` 的示例，详见[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)：
-
-```
-func onConnectionStatusChange(_ status: AoqConnectionStatus) {
-    if status == .connected { sendSessionUpdate() }
-}
-
-private func sendSessionUpdate() {
-    let json = """
-    {
-      // 该事件的id，由客户端生成
-      "event_id": "event_ToPZqeobitzUJnt3QqtWg",
-      // 事件类型，固定为session.update
-      "type": "session.update",
-      // 会话配置
-      "session": {
-          // 输出模态，支持设置为["text"]（仅输出文本）或["text","audio"]（输出文本与音频）。
-          "modalities": [
-              "text",
-              "audio"
-          ],
-          // 输出音频的音色
-          "voice": "Tina",
-          // 输入音频格式，当前仅支持设置为pcm。输入音频为16 kHz采样率的PCM音频流。
-          "input_audio_format": "pcm",
-          // 输出音频格式，当前仅支持设置为pcm。输出音频为24 kHz采样率的PCM音频流。
-          "output_audio_format": "pcm",
-          // 系统消息，用于设定模型的目标或角色。
-          "instructions": "你是某五星级酒店的AI客服专员，请准确且友好地解答客户关于房型、设施、价格、预订政策的咨询。请始终以专业和乐于助人的态度回应，杜绝提供未经证实或超出酒店服务范围的信息。",
-          // 是否开启语音活动检测。若需启用，需传入一个配置对象，服务端将据此自动检测语音起止。
-          // 设置为null表示由客户端决定何时发起模型响应。
-          "turn_detection": {
-              // VAD类型，取值为server_vad或semantic_vad。Qwen3.8-Omni-Flash-Realtime和Qwen3.5-Omni-Realtime系列推荐设为semantic_vad。
-              "type": "semantic_vad",
-              // VAD检测阈值。建议在嘈杂的环境中增加，在安静的环境中降低。
-              "threshold": 0.5,
-              // 检测语音停止的静音持续时间，超过此值后会触发模型响应
-              "silence_duration_ms": 800
-          }
-      }
-    }
-    """
-    let msg = AoqDataMsg()
-    msg.data = json.data(using: .utf8)!
-    engine.send(msg)
-}
-```
-
-## 收到 session.updated 后开启媒体发送
-
-收到模型回复 `session.updated` 的示例，详见[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)：
+将凭证与轨道配置填入 `AoqConnectConfig`，调用：
 
 ```
-func onDataMsg(_ msg: AoqDataMsg) {
-    guard let obj = try? JSONSerialization.jsonObject(with: msg.data) as? [String: Any],
-          let type = obj["type"] as? String else { return }
-    if type == "session.updated" {
-        engine.enableSendMediaStream(.audio, enable: true)
-        engine.enableSendMediaStream(.video, enable: true)
-    }
-}
+engine.connect(connectConfig)
 ```
 
-**重要**
+等待 `onConnectionStatusChange` 返回 `.connected`，再进入模型初始化流程。`connect` 调用返回不等于连接成功。
 
-1.  必须在收到 `session.updated` 后才开启媒体流发送，否则服务端可能尚未准备好接收数据。
-    
-2.  建连时添加的音频轨道和视频轨道（即 AOQ 媒体通道）会自动将数据传输到服务端。
-    
-    1.  音频：通过音频轨道直接传输，无需发送 `input_audio_buffer.append` 事件。
-    2.  视频：通过视频轨道发送画面帧，无需发送 `input_image_buffer.append` 事件。
-3.  建连时添加的 DATA 轨道（即 AOQ 文本通道）用于客户端和服务端的文本通信。客户端通过此通道发送客户端事件、接收服务端事件。
-    
+## 5\. 按模型协议交互并收发媒体
 
-## 断开连接与销毁引擎
+### 发送和解析模型事件
+
+客户端通过 Data 轨发送事件。iOS Swift 示例：
+
+```
+// eventJSON 由目标模型的客户端事件协议构造。
+let msg = AoqDataMsg()
+msg.data = eventJSON.data(using: .utf8)!
+engine.send(msg)
+```
+
+在 `onDataMsg` 中解析回复。不要统一假定事件类型位于 `type`：Realtime 事件通常使用 `type`，Inference 服务端事件使用 `header.event`。完整字段、参数及结束条件应遵循目标模型文档。
+
+### 就绪后开启所需媒体
+
+满足当前模型、当前会话或任务的就绪条件后，仅开启已配置的上行方向。例如，需要语音输入时调用：
+
+```
+engine.enableSendMediaStream(.audio, enable: true)
+```
+
+需要视频输入时再开启 `.video`。TTS 场景输入文本，无需开启上行音视频。
+
+音视频通过对应媒体轨道传输；模型事件和文本通过 Data 轨传输。例如，Omni 的 AOQ 接入无需使用 `input_audio_buffer.append` 或 `input_image_buffer.append` 重复发送媒体。下行音频由已配置的播放器或外部播放逻辑处理。
+
+## 6\. 结束交互并释放资源
+
+不再使用连接时，由客户端业务层调用AOQ SDK 的断开连接和释放资源接口：
 
 ```
 engine.disconnect()
 AoqClientEngine.destroy()
 ```
 
-## 模型接入最佳实践
+异常断开后清理业务层就绪状态，按[连接状态管理](raw/_short/aoq-connection-management-1b4d3fa8fd3026ca.md)处理后续连接；重新建连后按模型协议重新初始化。
 
--   [通过AOQ使用qwen3.8-omni-flash-realtime实现实时通话](raw/model-user-guide/use-cases/realtime-audio-video-integration/best-practice-aoq-omni-realtime.md)
--   [使用 AOQ 接入 qwen3.8-omni-flash-realtime 实现按键语音对话](raw/_short/use-aoq-to-access-qwen3-5-omni-plus-realtime-to--dee7ca70112bd23e.md)
--   [使用 AOQ 接入 qwen-audio-3.1-realtime-plus 实现实时语音对话](raw/_short/real-time-voice-conversation-using-aoq-access-qw-7e2ab540f9ffd31d.md)
--   [使用 AOQ 接入 qwen-audio-3.0-tts-flash 实现语音合成](raw/_short/speech-synthesis-using-aoq-access-qwen-audio-3-0-43022e91dedcb0c1.md)
--   [使用 AOQ 接入 fun-asr-realtime 实现实时语音识别](raw/_short/real-time-speech-recognition-using-aoq-access-fu-1f528aaba4a8fd1b.md)
+## Data 通道发送和接收事件
+
+客户端通过AOQ SDK 的 Data 轨发送和接收模型事件。连接时需要发布和订阅 Data 轨；发送时将模型事件序列化后放入 `AoqDataMsg`，调用 `engine.send(msg)`；接收时在 `onDataMsg` 回调中解析消息。
+
+发送事件的名称、字段、参数和调用时机遵循目标模型的**客户端事件定义**；收到消息后的解析方式、状态变更、结果和错误处理遵循该模型的**服务端事件定义**。初始化事件根据模型要求按需发送，后续文本和控制事件按照业务需要发送。
+
+模型/应用
+
+客户端事件定义（发送）
+
+服务端事件定义（接收）
+
+Qwen-Omni-Realtime
+
+[客户端事件](raw/model-api-reference/omni-realtime-api/client-events.md)
+
+[服务端事件](raw/model-api-reference/omni-realtime-api/server-events.md)
+
+Qwen-Audio-Realtime
+
+[客户端事件](raw/_short/fun-audiochat-client-events-613371219df1f107.md)
+
+[服务端事件](raw/_short/qwen-audio-realtime-server-events-570d84e54a56325a.md)
+
+Qwen-Audio-TTS、CosyVoice
+
+[客户端事件](raw/_short/cosyvoice-client-events-a63a525ab07e6693.md)
+
+[服务端事件](raw/_short/cosyvoice-server-events-388da422580d5c78.md)
+
+Qwen-Audio-ASR-Flash-Streaming、Fun-ASR-Realtime
+
+[客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)
+
+[服务端事件](raw/_short/fun-asr-server-events-666d2f9990cd5ae1.md)
+
+Qwen-LiveTranslate-Realtime
+
+[客户端事件](raw/_short/live-translator-client-events-666da53ef8b3942d.md)
+
+[服务端事件](raw/_short/live-translator-server-events-e9db9578a7b303d5.md)
+
+multimodal-dialog
+
+[交互协议中的 Input Message](raw/_short/multimodal-interaction-protocol-8062cfbb96fec75a.md)
+
+[交互协议中的 Output Message](raw/_short/multimodal-interaction-protocol-8062cfbb96fec75a.md)
+
+多模态交互套件的双向事件定义在同一篇交互协议中。请按实际接入的模型版本选择事件定义，不同模型之间不共用一套固定事件。
+
+模型事件的发送与接收还应遵循以下规则：
+
+-   按模型定义识别事件类型和关联标识。例如，Realtime 事件通常使用 `type`；Inference 客户端使用 `header.action`、服务端使用 `header.event`，通过 `task_id` 关联任务。
+    
+-   模型要求的初始化确认、输入提交、响应取消和任务结束等操作，均在 Data 通道中按对应协议处理；它们属于模型交互语义，与断开传输连接是不同操作。
+    
+-   例如，Inference 模型使用 `finish-task` 结束任务，并通过 `task-finished` 确认任务结束；如需完整结果，应在收到剩余结果后再释放连接，需要完整播放时还应处理完本地待播音频。
+    
+-   音视频数据通过媒体轨道传输。引用模型事件文档时，媒体封装和可用交互模式仍遵循本文的接入方式，不直接套用 WebSocket 的媒体发送方式。
+    
+
+## 高阶能力
+
+能力
+
+使用场景
+
+文档
+
+独立控制音视频发送
+
+等待模型就绪、暂停上行、按需开启视频
+
+[媒体流发送管理](raw/_short/aoq-media-stream-control-ee51df1e99ae444e.md)
+
+音频设备与处理
+
+编解码、扬声器、文件混音、音频帧回调
+
+[音频常用功能](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-audio-features.md)
+
+外部音频输入
+
+使用业务侧音频源
+
+[自定义音频采集](raw/_short/aoq-custom-audio-capture-b5c393b1189eafb2.md)
+
+外部音频输出
+
+由业务侧处理或播放输出音频
+
+[自定义音频播放](raw/_short/aoq-custom-audio-playback-958fa1af0f51a187.md)
+
+视频采集与输入
+
+摄像头及业务侧画面输入
+
+[视频常用功能](raw/model-api-reference/realtime-api-user-guide/realtime-api-aoq-api/realtime-api-aoq-sdk-function/aoq-video-features.md)、[自定义视频输入](raw/_short/aoq-custom-video-input-c4e12ddc33067bac.md)
+
+媒体发送控制只控制媒体传输。模型响应取消、轮次提交等行为仍需使用目标模型的事件协议。
+
+## 最佳实践
+
+-   [Omni 实时通话](raw/model-user-guide/use-cases/realtime-audio-video-integration/best-practice-aoq-omni-realtime.md)：音视频输入、语音回复和会话事件。
+    
+-   [Omni 按键语音对话](raw/_short/use-aoq-to-access-qwen3-5-omni-plus-realtime-to--dee7ca70112bd23e.md)：按键控制输入及手动轮次。
+    
+-   [Qwen-Audio 实时语音对话](raw/_short/real-time-voice-conversation-using-aoq-access-qw-7e2ab540f9ffd31d.md)：双向音频交互。
+    
+-   [Qwen-Audio 语音合成](raw/_short/speech-synthesis-using-aoq-access-qwen-audio-3-0-43022e91dedcb0c1.md)：Data 轨输入文本，Audio 轨输出语音。
+    
+-   [Fun-ASR 实时语音识别](raw/_short/real-time-speech-recognition-using-aoq-access-fu-1f528aaba4a8fd1b.md)：Audio 轨输入语音，Data 轨输出识别结果。

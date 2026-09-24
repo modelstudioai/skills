@@ -266,7 +266,16 @@ Qwen-Audio-TTS/CosyVoice 使用 `run-task → task-started → continue-task →
 
 ### 实时语音识别
 
-#### Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime
+#### Qwen-Audio-3.1-ASR-Flash-Message
+
+-   [WebSocket 接入指南](raw/_short/qwen-asr-message-websocket-api-a1cfd459a83a1a77.md)
+-   [Python SDK](raw/_short/qwen-asr-message-python-sdk-8d2a1f21522cbc2a.md)
+-   [Java SDK](raw/_short/qwen-asr-message-java-sdk-52d0c0e627247c00.md)
+-   [Android SDK](raw/_short/qwen-asr-message-android-sdk-a3fe6fbdd49103c0.md)
+-   [iOS SDK](raw/_short/qwen-asr-message-ios-sdk-6a30fe5bf295f423.md)
+-   [HarmonyOS SDK](raw/_short/qwen-asr-message-harmonyos-sdk-672831878f5443bb.md)
+
+#### Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime
 
 -   [WebSocket 接入指南](raw/_short/fun-asr-realtime-websocket-api-d80484c92992191d.md)
 -   [Python SDK](raw/_short/fun-asr-realtime-python-sdk-c8b5a715c3e66b70.md)

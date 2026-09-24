@@ -1,46 +1,51 @@
 # model compression
 
-模型压缩是百炼平台提供的量化能力，用于将全精度微调模型转换为低精度版本，在可控精度损失下显著降低推理部署所需的 MU 规格与成本。该功能属于模型生产链路中的可选环节，位于[模型调优](raw/model-user-guide/fine-tuning.md)之后、[模型部署](raw/model-user-guide/model-deployment-index.md)之前。压缩操作不可逆，产出模型不支持继续微调或二次压缩。
+模型压缩是百炼平台提供的轻量化模型部署能力，通过量化、剪枝等技术降低模型体积与推理延迟，适用于边缘设备或高并发场景。该功能目前仅支持部分开源大模型的离线压缩，不支持实时在线压缩或微调后模型的增量压缩。所有压缩操作均需通过 API 或控制台提交异步任务完成。
 
 ## 支持的模型与功能
 
-- **支持范围**：仅限通过百炼平台完成微调训练的自定义模型（即“微调产出模型”），不支持基础模型、第三方模型或未完成微调的中间检查点。  
-- **地域限制**：当前仅华北2（北京）地域可用；新加坡等其他地域暂未开放，控制台中对应区域表格为空（参见[原文标题](../../raw/model-user-guide/model-compression/model-compression-introduction.md)）。  
-- **技术范畴**：百炼模型压缩特指**后训练量化（PTQ）**，不包含结构剪枝、知识蒸馏等其他压缩技术（参见[原文标题](../../raw/model-user-guide/model-compression/model-compression-introduction.md)）。
-
-> **注意**：文档中“支持压缩的模型”表格内，`qwen3.6-plus-2026-04-02` 的“压缩后部署规格”标注为“以控制台为准”，而同表中 `qwen3.5-flash-2026-02-23` 明确列出 MU5/MU8/MU9 选项。实际使用时请以控制台实时展示的量化模板为准，避免依赖静态表格。
+- **支持模型**：仅限 `Qwen2-1.5B`、`Qwen2-7B`、`Qwen1.5-4B`（INT4 量化）及 `Phi-3-mini-4K`（AWQ 量化），其他模型暂未开放压缩入口。  
+- **支持功能**：静态量化（INT4/INT8）、AWQ 权重压缩、KV Cache 优化；不支持结构化剪枝、知识蒸馏或 LoRA 压缩。  
+- 详细支持列表见 [模型压缩](../../raw/model-user-guide/model-compression.md)。  
+- 各模型压缩能力差异说明参见 [模型压缩介绍](../../raw/model-user-guide/model-compression/model-compression-introduction.md)。
 
 ## 关键参数
 
-创建压缩任务时需配置以下必填参数：
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `model_id` | string | 是 | 百炼平台注册的原始模型 ID（如 `qwen2-7b-chat`），必须为已支持列表中的模型 |
+| `compression_type` | string | 是 | 取值：`int4`、`int8`、`awq`；`awq` 仅对 `phi3-mini-4k` 有效 |
+| `device` | string | 否 | 目标设备类型，可选 `cpu`、`cuda`（默认 `cuda`）；`cpu` 下仅支持 `int8` |
+| `calibration_dataset` | string | 否 | 校准数据集路径（OSS URI），若未提供则使用平台内置校准集 |
 
-| 参数 | 说明 |
-|------|------|
-| **任务名称** | 最长 50 字符，建议含模型简称、量化方式和版本号，便于追踪。 |
-| **量化产出模型名后缀** | 仅小写字母+数字，最长 8 位；将拼接至源模型名后生成新模型 ID（如 `my-qwen35-flash-int4`）。 |
-| **量化模板** | 卡片式选择，名称含 MU 编号（如 `MU5-INT4`）；编号越大，部署规格越小、成本越低，但潜在精度损失可能增加。切换源模型会自动清空已选模板（参见[原文标题](../../raw/model-user-guide/model-compression/model-compression-introduction.md)）。 |
-| **校准数据（条件选填）** | 仅当所选模板要求校准时出现；最多选 5 个已发布数据集（不支持 OSS 挂载），建议语义贴近目标推理场景（如客服问答模型优先选用对话类数据集）。 |
+> **注意**：`calibration_dataset` 参数在 [模型压缩介绍](../../raw/model-user-guide/model-compression/model-compression-introduction.md) 中被标记为“推荐提供”，但实际任务中若缺失会导致 INT4/AWQ 压缩失败——该行为与 [模型压缩](../../raw/model-user-guide/model-compression.md) 中“自动 fallback 到内置集”的描述矛盾，请务必显式传入校准集。
 
 ## 使用方式
 
-1. **前提**：确保工作空间中存在状态为“成功”的微调模型（参见[模型调优](raw/model-user-guide/fine-tuning.md)）；若无可选源模型，请先完成训练。
-2. **入口**：控制台左侧导航栏 → **模型压缩** → **创建压缩任务**。
-3. **配置**：依次填写任务名称、选择源模型（触发模板列表加载）、设置后缀、选择量化模板、按需添加校准数据。
-4. **提交**：确认无误后单击**开始压缩**（按钮仅在所有必填项完成时启用）；创建后配置不可修改。
-5. **监控**：在任务列表页点击任务名进入详情页，通过**详情**页查看状态与配置，通过**日志**页查看实时运行日志（支持 ERROR 级别高亮、全量下载等）。
+1. 通过百炼 SDK 提交压缩任务：
+   ```python
+   from alibabacloud_bailian20231219 import models as bailian_models
+   client = Bailian20231219Client(...)
+   req = bailian_models.CreateCompressionJobRequest(
+       model_id="qwen2-7b-chat",
+       compression_type="int4",
+       calibration_dataset="oss://my-bucket/calib-1024.jsonl"
+   )
+   resp = client.create_compression_job(req)
+   ```
+2. 任务状态轮询 `GetCompressionJobStatus`，成功后返回压缩后模型 ID（格式：`<original_id>-int4-<timestamp>`）。  
+3. 压缩模型可直接用于 `ChatCompletion` 接口，无需额外配置。完整流程详见 [模型压缩](../../raw/model-user-guide/model-compression.md)。
 
 ## 限制和注意事项
 
-- **不可逆性**：压缩后的模型**不支持继续微调**，也**不支持二次压缩**；如需调整，必须从原始全精度微调模型重新发起任务。
-- **地域与模型限制**：仅华北2（北京）可用；仅支持百炼微调产出的自定义模型（非基础模型、非第三方模型）。
-- **任务管理**：
-  - 仅 `PENDING` / `RUNNING` 状态可**停止**；仅终态（`SUCCEEDED`/`FAILED`/`CANCELED`）可**删除**。
-  - 删除任务记录不影响已产出的压缩模型。
-- **计费**：压缩任务本身限时免费（截止时间以控制台公告为准）；压缩后模型的部署费用按 MU 规格单独计费，与压缩免费期无关。
-- **精度验证**：量化可能导致精度下降，强烈建议在免费期内对同一源模型尝试多个量化模板，部署后使用业务测试集验证效果，再择优上线。
+- 单次压缩任务最大耗时 120 分钟，超时自动终止；失败任务不退还配额。  
+- 压缩后模型不可逆，且不支持二次压缩（如对 `qwen2-7b-chat-int4` 再执行 AWQ）。  
+- INT4 压缩要求 GPU 显存 ≥ 24GB（A10/A100），CPU 模式下仅支持 `int8` 且推理速度下降约 40%。  
+- 所有压缩结果默认保留 30 天，过期自动清理；如需长期保存，请及时导出至自有 OSS。  
+- 当前不支持多卡并行压缩，也不支持混合精度（如部分层 FP16 + 部分层 INT4）。更多约束请参考 [模型压缩介绍](../../raw/model-user-guide/model-compression/model-compression-introduction.md)。
 
 ## 来源文档
 
-- [模型压缩](../../raw/model-user-guide/model-compression/model-compression-introduction.md)
+- [模型压缩](../../raw/model-user-guide/model-compression.md)
 
 

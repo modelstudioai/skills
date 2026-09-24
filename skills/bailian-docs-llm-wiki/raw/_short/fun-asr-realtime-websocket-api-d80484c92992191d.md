@@ -1,8 +1,6 @@
 # WebSocket 接入指南
 
-本文介绍通过 WebSocket 连接访问 Qwen-Audio-3.x-ASR-Flash-Streaming/Qwen-Audio-3.1-ASR-Flash-Message/Fun-ASR-Realtime 实时语音识别服务的接口地址、请求头和交互流程。
-
-**用户指南：**关于模型介绍和选型建议请参见[语音识别](https://help.aliyun.com/zh/model-studio/asr-model)，示例代码请参见[实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)。
+本文介绍通过 WebSocket 连接访问 Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime 实时语音识别服务的接口地址、请求头和交互流程。
 
 DashScope SDK 目前仅支持 Java 和 Python。使用其他编程语言时，可通过 WebSocket 连接与服务进行通信。
 
@@ -26,8 +24,6 @@ WebSocket URL 固定如下：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
 
 **重要**URL 必须使用 `wss://` 协议，且固定不变。Authorization 在请求头中设置（参见[请求头](raw/_short/fun-asr-realtime-websocket-api-d80484c92992191d.md)）。
 

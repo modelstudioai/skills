@@ -1,34 +1,36 @@
 # model high speed inference
 
-百炼平台提供多种面向高吞吐、低延迟推理场景的加速能力，主要包括 Prime 模式（轻量级性能增强）和吞吐预留（专属容量保障）。二者均通过模型标识符（`model` 参数）触发，无需修改 API 协议或 SDK，适用于对响应速度、稳定性有明确要求的生产环境。选择时需根据业务负载特征（如可预测性、峰值强度、容错能力）权衡成本与确定性。
+百炼平台提供多种面向高吞吐、低延迟推理场景的加速能力，主要包括 Prime 模式（轻量级性能增强）和吞吐预留（专属容量保障）。二者均通过模型标识符（`model` 参数）切换，无需修改 API 接口或 SDK，适用于对响应速度、稳定性有明确要求的生产级 AI 应用。核心目标是提升实际可用 TPS，同时兼顾计费透明性与接入简易性。
 
 ## 支持的模型/功能
 
-- **Prime 模式**：面向通用高速输出场景，提供 1.5~2 倍于标准 API 的 TPS 提升，适用于 AI 编程助手、Agent 多步推理、实时对话等对输出速度敏感的场景。支持模型包括 `glm-5.3-prime`、`glm-5.2-fast-preview`、`wan3.0-video-prime` 等，具体以 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md) 文档所列为准。  
-- **吞吐预留**：为指定模型锁定专属 TPM（[Token](../concepts/token.md)s Per Minute）容量，实现刚性容量保障，适用于流量可预估、不能接受限流的关键业务。支持模型覆盖 Qwen、GLM、DeepSeek、Kimi 等主流系列，详见 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md) 文档列表。  
-- > **注意**：`glm-5.2-fast-preview` 在 Prime 模式中作为独立模型 ID 使用，而吞吐预留文档中仅列出 `GLM-5.2`（无 `-fast-preview` 后缀），二者是否等价未明确说明；实际调用时请以控制台生成的专属模型 code 或 Prime 模式文档中确认的 model ID 为准。
+- **Prime 模式**：面向通用高速输出场景，提供 1.5~2 倍于标准 API 的 TPS，适用于 AI 编程助手、Agent 多步推理、实时对话等对首 token 和后续 token 延迟敏感的业务。其模型为独立命名的优化版本（如 `glm-5.2-fast-preview`、`glm-5.3-prime`、`wan3.0-video-prime`），能力与对应原版模型一致，详见 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)。
+- **吞吐预留**：面向流量可预估、不可接受限流的高保障场景，为指定模型锁定专属 TPM 容量（输入/输出分离计量），支持标准模式与高速模式（即 PTU 部署档位）。支持模型包括 Qwen 系列（如 `Qwen3.8-Max`）、GLM 系列（如 `GLM-5.3`）、DeepSeek 系列（如 `DeepSeek-v4-Pro`）等，具体以控制台实时列表为准，详见 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
+
+> **注意**：文档 1 中 `glm-5.2-fast-preview` 被列为 Prime 模式专属模型；而文档 2 中 `GLM-5.2` 列为吞吐预留支持模型，但未标注是否兼容 Prime 性能档位。实际使用中，若需 Prime 级别 TPS 且要求容量刚性保障，应选择吞吐预留的「高速模式」而非标准模式，并确认该模型在控制台创建页中“性能模式”选项可用。
 
 ## 关键参数
 
 | 参数 | Prime 模式 | 吞吐预留 |
 |------|------------|-----------|
-| **触发方式** | 直接指定 model ID（如 `"glm-5.2-fast-preview"`） | 使用控制台生成的专属 model code（如 `"tpm-reserved-xxx"`） |
-| **性能档位** | 固定高速档（TPS 提升 1.5~2×） | 可选「标准模式」或「高速模式」（后者等效于 PTU 部署，TPS 同样提升 1.5~2×） |
-| **容量单位** | 无显式容量配置；实际可用 TPS 不低于限流值（见 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)） | 按 kTPM（千 tokens/分钟）预设输入/输出吞吐量，支持叠加扩容 |
-| **溢出策略** | 不适用（无预留概念） | 可选「自动溢出至按量计费」（默认）或「仅使用预留容量（返回 429）」 |
+| **性能提升** | 固定 1.5~2× TPS（相比同模型标准 API） | 可选「标准模式」（同标准 API）或「高速模式」（1.5~2× TPS） |
+| **容量保障** | 无专属容量，依赖平台剩余资源（特殊限流逻辑） | 专属 kTPM 容量，刚性兑付，不与其他用户共享 |
+| **计费单位** | 按实际输入/输出 token 计费（与标准 API 一致） | 预付费购买 kTPM（按天或 8 小时时段），预留内调用不额外计费；溢出部分按 token 计费（若启用自动溢出） |
+| **模型标识** | 使用预定义 Prime 模型 ID（如 `glm-5.2-fast-preview`） | 使用系统生成的专属 `model code`（如 `tpm-xxx`），不可复用原模型名 |
+| **溢出行为** | 达限流值后仍可能继续服务（不触发 429），但延迟可能上升 | 可配置：「自动溢出」（降级为按量，返回 200）或「仅预留容量」（超限返回 429） |
 
 ## 使用方式
 
-- **Prime 模式**：无需额外参数，仅需将 `model` 设为对应 Prime 模型 ID，并使用兼容模式域名（如 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`）。流式响应中需分别处理 `delta.reasoning_content` 和 `delta.content` 字段。示例见 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md)。  
-- **吞吐预留**：创建成功后，在控制台详情页复制专属 `model code`，替换 API 请求中的 `model` 参数即可生效。首次调用可能存在短暂预热延迟，建议客户端实现请求排队或重试机制。接入示例见 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。  
-- > **注意**：吞吐预留的「高速模式」与 Prime 模式在性能提升幅度上描述一致（1.5~2× TPS），但底层资源隔离级别不同（前者为专属容量，后者为共享池优化），不可混用或叠加；两者属于正交能力，应按业务 SLA 需求单独选用。
+- **Prime 模式**：直接将请求中的 `model` 参数设为对应 Prime 模型 ID（如 `"model": "glm-5.2-fast-preview"`），调用域名与标准 API 相同（`https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`），无需额外 header 或 query 参数。流式响应中需分别处理 `delta.reasoning_content` 与 `delta.content` 字段。
+- **吞吐预留**：创建成功后，在控制台详情页复制专属 `model code`，替换 API 请求中的 `model` 参数。接入示例与标准调用完全一致，仅模型名不同。注意：短时间内请求量快速拉升时，系统需短暂预热，建议客户端实现请求排队或重试机制，详见 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md)。
 
 ## 限制和注意事项
 
-- **计费差异**：Prime 模式按实际输入/输出 token 计费，与标准 API 完全一致；吞吐预留为预付费模式，预留容量内调用不额外计费，超额部分按策略处理（自动溢出则转按量，仅预留则返回 429）。详细规则参见 [Prime 模式](../../raw/model-user-guide/model-high-speed-inference/prime-mode.md) 与 [吞吐预留](../../raw/model-user-guide/model-high-speed-inference/tpm-reservation.md) 的计费说明。  
-- **模型能力一致性**：Prime 模式下模型的功能、限制、输出格式与原版模型完全相同；吞吐预留亦继承基础模型全部能力，但部分参数（如 GLM-5.2 的 `thinking_budget`）在预留实例中不生效。  
-- **地域与模型绑定**：两类能力均按地域（如华北2、新加坡）独立开通与配置，模型支持列表、价格、API 域名均因地域而异，不可跨地域复用 model ID 或 code。  
-- **状态管理**：吞吐预留实例存在「运行中→已停止→已释放」状态迁移，服务到期后有 2 小时宽限期；Prime 模式无状态概念，依赖账号级限流与平台资源动态调度。
+- **模型能力一致性**：Prime 模式下模型的功能、上下文长度、输入/输出格式、错误码等均与对应原版模型完全一致，无能力降级或扩展。
+- **地域与模型绑定**：Prime 模型与吞吐预留支持的模型均按地域（如华北2、新加坡）独立发布，价格与可用性存在差异，需按实际部署地域查阅控制台或文档。
+- **缓存行为**：两者均支持 token 缓存（`cached_tokens` 字段可见于 usage），但 Prime 模式未明确说明缓存命中对 TPS 的影响；吞吐预留监控中可查看缓存命中量，命中率直接影响输入 TPM 消耗速率。
+- **调试与监控**：Prime 模式无专属监控视图；吞吐预留提供完整的「概览」「监控」「API 接入」三页签，支持用量趋势、超额降级统计、配额内外调用分离分析，推荐高保障场景必用。
+- **退订与失效**：吞吐预留退订后专属 `model code` 立即失效，请求回退至公共资源；Prime 模式无生命周期管理，只要模型在服务中即可持续调用。
 
 ## 来源文档
 

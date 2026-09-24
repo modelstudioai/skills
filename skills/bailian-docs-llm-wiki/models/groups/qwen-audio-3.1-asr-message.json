@@ -55,7 +55,7 @@
       "latestOnlineAt": "2026-09-21T14:36:15.000+00:00",
       "inferenceProvider": "aliyun-bailian",
       "name": "Qwen-Audio-3.1-ASR-Flash-Message",
-      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-audio-3-1-asr-flash-message",
+      "docUrl": "https://docs.bailian.console.aliyun.com/zh/model-studio/qwen-asr-message-model-access",
       "category": "Audio",
       "samples": {
         "dashscope": {

@@ -173,43 +173,11 @@ SDP 交换的配置项：
 
 新加坡地域：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/webrtc/realtime`
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
-
-查询参数
-
-查询参数为model，需指定为访问的模型名。示例：`?model=qwen3.5-omni-plus-realtime`
-
-Content-Type
-
-application/sdp
-
-请求头
-
-Authorization: Bearer DASHSCOPE\_API\_KEY
-
-请求体
-
-客户端生成的 Offer SDP 字符串
-
-响应
-
-成功：HTTP 200，返回服务端 Answer SDP 字符串。失败：HTTP 4xx，返回 JSON 错误信息。
-
-**配置项**
-
-**说明**
-
-请求地址
-
-华北2（北京）地域：`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/webrtc/realtime`
-
-新加坡地域：`POST https://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api/v1/webrtc/realtime`
-
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
 查询参数
 
-查询参数为model，需指定为访问的模型名。示例：`?model=qwen3.8-omni-flash-realtime`
+查询参数为model，需指定为访问的模型名。示例：`?model=qwen3.8-omni-flash-realtime`；旧型号示例：`?model=qwen3.5-omni-plus-realtime`
 
 Content-Type
 
@@ -330,63 +298,41 @@ AOQ 通过业务 AppServer 发起 HTTP 请求获取连接参数，再由客户�
 
 发送客户端事件[session.update](https://help.aliyun.com/zh/model-studio/client-events#26a8302028sjm)：
 
-#### Qwen3.8-Omni-Flash-Realtime
-
-Qwen3.8-Omni-Flash-Realtime 的会话配置见[调用示例](#qwen38-realtime)。
-
--   **多通道音频（WebSocket 接入）**：在首段音频前设置 `session.audio.input.format`。支持 1、2、4 声道；多通道必须为 PCM、16000 Hz、s16le、interleaved。2 声道使用 `raw_mic_array`，4 声道使用 `foa_ambix`。字段约束和 JSON 片段见[客户端事件](https://help.aliyun.com/zh/model-studio/client-events#qwen38-client)。
--   **视频聚合**：`session.video.input.representation_compact` 默认为 `none`；设为 `normal` 可聚合视频表征，降低计算开销，适用于不依赖细粒度视觉信息的场景。也必须在首段音频前配置，开始输入后不得修改。
--   **音色**：默认音色为 `Tina`。新接入使用 `session.audio.output.voice`，它优先于兼容字段 `session.voice`。支持 `longanlingxin`（龙安灵心，知心温暖音）等音色。使用方式和声音复刻入口见[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)。
--   **MCP**：在 `session.tools` 中配置公网 HTTPS MCP Streamable HTTP 服务；默认需要审批。先确认工具发现完成，再发起需要该工具的 Response。执行结果、拒绝和失败处理以及续答步骤见[MCP 交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-flow)。
-
-##### SDK 配置视频聚合
-
-Qwen3.8-Omni-Flash-Realtime 使用 DashScope Python SDK 1.26.5 及以上版本，或 Java SDK 2.22.15 及以上版本。视频聚合参数通过 SDK 透传：Python 在 `update_session` 中传入 `video`，Java 通过 `OmniRealtimeConfig.builder().parameters(...)` 传入。
-
-以下示例配置一个 Manual 模式会话：文本与音频输出、`Tina` 音色、关闭输入转写，并启用视频聚合。先按下方 SDK 示例建立连接，将模型设为 `qwen3.8-omni-flash-realtime`，用本例替换该示例的会话配置调用，在首段音频输入前调用一次。`conversation` 为已连接的 SDK 会话。SDK 会同时发送音色、VAD 等配置；如需其他音色、VAD 或转写设置，在同一次调用中完整设置。Java 需导入 `java.util.Arrays`、`java.util.Map`、`java.util.HashMap`、`com.alibaba.dashscope.audio.omni.OmniRealtimeConfig` 和 `com.alibaba.dashscope.audio.omni.OmniRealtimeModality`。
-
-Python
+通过 `session.update` 配置输出模态、音色、音频格式和 VAD。下面是 Qwen3.8-Omni-Flash-Realtime 的 WebSocket Manual 模式配置，与[最小音频问答](#qwen38-realtime)示例一致：
 
 ```
-from dashscope.audio.qwen_omni import MultiModality
-
-conversation.update_session(
-    output_modalities=[MultiModality.AUDIO, MultiModality.TEXT],
-    voice="Tina",
-    enable_turn_detection=False,
-    enable_input_audio_transcription=False,
-    video={
-        "input": {
-            "representation_compact": "normal",
-        },
-    },
-)
+{
+  "type": "session.update",
+  "session": {
+    "modalities": [
+      "text",
+      "audio"
+    ],
+    "turn_detection": null,
+    "audio": {
+      "input": {
+        "format": {
+          "type": "pcm",
+          "sample_rate": 16000,
+          "sample_format": "s16le",
+          "channels": 1,
+          "packing": "interleaved",
+          "channel_layout": "mono"
+        }
+      },
+      "output": {
+        "voice": "longanlingxin",
+        "format": {
+          "type": "pcm",
+          "sample_rate": 24000
+        }
+      }
+    }
+  }
+}
 ```
 
-Java
-
-```
-Map<String, Object> videoInput = new HashMap<>();
-videoInput.put("representation_compact", "normal");
-
-Map<String, Object> video = new HashMap<>();
-video.put("input", videoInput);
-
-Map<String, Object> parameters = new HashMap<>();
-parameters.put("video", video);
-
-OmniRealtimeConfig config =
-    OmniRealtimeConfig.builder()
-        .modalities(Arrays.asList(OmniRealtimeModality.AUDIO, OmniRealtimeModality.TEXT))
-        .voice("Tina")
-        .enableTurnDetection(false)
-        .enableInputAudioTranscription(false)
-        .parameters(parameters)
-        .build();
-conversation.updateSession(config);
-```
-
-#### Qwen3.5-Omni-Realtime
+Qwen3.5-Omni-Realtime 配置示例
 
 以下示例使用 Qwen3.5-Omni-Realtime 的 Ethan 音色和 `semantic_vad` 配置。
 
@@ -438,9 +384,11 @@ conversation.updateSession(config);
 }
 ```
 
-> 本段列举的音频格式与采样率选项适用于 `qwen3.5-omni-plus-realtime` 和 `qwen3.5-omni-flash-realtime` 模型，历史兼容字段 `input_audio_format` / `output_audio_format` 仍有效，建议采用 `audio.input.format` / `audio.output.format` 字段。Qwen3.8-Omni-Flash-Realtime 的输入格式约束见[客户端事件](https://help.aliyun.com/zh/model-studio/client-events#qwen38-client)，接入示例见[本页 3.8 章节](#qwen38-realtime)。
+> 本段列举的音频格式与采样率选项适用于 `qwen3.5-omni-plus-realtime` 和 `qwen3.5-omni-flash-realtime` 模型，历史兼容字段 `input_audio_format` / `output_audio_format` 仍有效，建议采用 `audio.input.format` / `audio.output.format` 字段。
 
 每通会话结束后，发送 `session.finish` 事件关闭会话，或直接断开 WebSocket 连接。同一会话不关闭会导致上下文持续累积。
+
+多通道音频、视频聚合和 MCP 的配置及 SDK 示例见[扩展会话配置](#realtime-advanced-config)。
 
 ### 3\. 输入音频与图片
 
@@ -489,13 +437,11 @@ conversation.updateSession(config);
 
 ## 模型选型
 
-### Qwen3.8-Omni-Flash-Realtime
-
 实时音视频对话优先使用 **Qwen3.8-Omni-Flash-Realtime**，接收流式音视频输入，返回文本与音频，支持自定义 Function Calling、MCP、多通道音频和声音复刻。接入方式见[建立连接](#bdaa43cdd7hsd)。
 
 支持 [113 种语种和方言](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)的语音识别，以及 [36 种语种和方言](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)的语音生成；音色及试听见[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)。
 
-### Qwen3.5-Omni-Realtime
+Qwen3.5-Omni-Realtime 系列能力
 
 Qwen3.5-Omni-Realtime 系列模型是千问的实时多模态模型，相比于上一代的 Qwen3-Omni-Flash-Realtime：
 
@@ -3537,6 +3483,62 @@ pip install aiortc aiohttp sounddevice numpy certifi av
 [response.done](https://help.aliyun.com/zh/model-studio/server-events#f2333c777d9s4)
 
 > 响应完成
+
+## 多通道音频、视频聚合与 MCP
+
+以下配置适用于 Qwen3.8-Omni-Flash-Realtime，按需在首次输入音频前配置。
+
+-   **多通道音频（WebSocket 接入）**：在首段音频前设置 `session.audio.input.format`。支持 1、2、4 声道；多通道必须为 PCM、16000 Hz、s16le、interleaved。2 声道使用 `raw_mic_array`，4 声道使用 `foa_ambix`。字段约束和 JSON 片段见[客户端事件](https://help.aliyun.com/zh/model-studio/client-events#session-audio-multichannel)。
+-   **视频聚合**：`session.video.input.representation_compact` 默认为 `none`；设为 `normal` 可聚合视频表征，降低计算开销，适用于不依赖细粒度视觉信息的场景。也必须在首段音频前配置，开始输入后不得修改。
+-   **音色**：默认音色为 `Tina`。新接入使用 `session.audio.output.voice`，它优先于兼容字段 `session.voice`。支持 `longanlingxin`（龙安灵心，知心温暖音）等音色。使用方式和声音复刻入口见[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)。
+-   **MCP**：在 `session.tools` 中配置公网 HTTPS MCP Streamable HTTP 服务；默认需要审批。先确认工具发现完成，再发起需要该工具的 Response。执行结果、拒绝和失败处理以及续答步骤见[MCP 交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-flow)。
+
+### SDK 配置视频聚合
+
+Qwen3.8-Omni-Flash-Realtime 使用 DashScope Python SDK 1.26.5 及以上版本，或 Java SDK 2.22.15 及以上版本。视频聚合参数通过 SDK 透传：Python 在 `update_session` 中传入 `video`，Java 通过 `OmniRealtimeConfig.builder().parameters(...)` 传入。
+
+以下示例配置一个 Manual 模式会话：文本与音频输出、`Tina` 音色、关闭输入转写，并启用视频聚合。先按下方 SDK 示例建立连接，将模型设为 `qwen3.8-omni-flash-realtime`，用本例替换该示例的会话配置调用，在首段音频输入前调用一次。`conversation` 为已连接的 SDK 会话。SDK 会同时发送音色、VAD 等配置；如需其他音色、VAD 或转写设置，在同一次调用中完整设置。Java 需导入 `java.util.Arrays`、`java.util.Map`、`java.util.HashMap`、`com.alibaba.dashscope.audio.omni.OmniRealtimeConfig` 和 `com.alibaba.dashscope.audio.omni.OmniRealtimeModality`。
+
+Python
+
+```
+from dashscope.audio.qwen_omni import MultiModality
+
+conversation.update_session(
+    output_modalities=[MultiModality.AUDIO, MultiModality.TEXT],
+    voice="Tina",
+    enable_turn_detection=False,
+    enable_input_audio_transcription=False,
+    video={
+        "input": {
+            "representation_compact": "normal",
+        },
+    },
+)
+```
+
+Java
+
+```
+Map<String, Object> videoInput = new HashMap<>();
+videoInput.put("representation_compact", "normal");
+
+Map<String, Object> video = new HashMap<>();
+video.put("input", videoInput);
+
+Map<String, Object> parameters = new HashMap<>();
+parameters.put("video", video);
+
+OmniRealtimeConfig config =
+    OmniRealtimeConfig.builder()
+        .modalities(Arrays.asList(OmniRealtimeModality.AUDIO, OmniRealtimeModality.TEXT))
+        .voice("Tina")
+        .enableTurnDetection(false)
+        .enableInputAudioTranscription(false)
+        .parameters(parameters)
+        .build();
+conversation.updateSession(config);
+```
 
 ## 联网搜索
 

@@ -77,9 +77,9 @@ RPM 为1000（主账号维度），TPM 按模型区分
 
 **协议支持**
 
-HTTP、SSE、WebSocket、WebRTC、AOQ（AI over QUIC）
+HTTP、SSE、[WebSocket](raw/_short/realtime-websocket-overview-e7e35d558a9abd93.md)、[WebRTC](raw/model-api-reference/realtime-api-user-guide/realtime-model-connection/realtime-webrtc-access.md)、[AOQ](raw/model-api-reference/realtime-api-user-guide/realtime-model-connection/realtime-aoq-access.md)（AI over QUIC）
 
-HTTP、SSE、WebSocket
+HTTP、SSE、[WebSocket](raw/_short/realtime-websocket-overview-e7e35d558a9abd93.md)
 
 HTTP、SSE
 
@@ -376,4 +376,4 @@ HTTP、SSE
 -   [限流](raw/model-user-guide/get-started-with-models/rate-limit.md)— RPM、TPM 限制
 -   [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md) — 创建和管理 Key
 -   [Base URL总览](raw/model-user-guide/get-started-with-models/base-url.md) — 模型服务调用地址
--   [概述](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)
+-   [Realtime API 协议选型](https://help.aliyun.com/zh/model-studio/realtime-api-overview#rtov-protocol-selection)

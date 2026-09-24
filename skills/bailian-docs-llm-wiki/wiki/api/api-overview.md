@@ -1,68 +1,52 @@
 # api [overview](../guides/overview.md)
 
-ParseX API 提供文档与音视频的结构化解析、以及基于 Schema 的字段抽取能力，所有接口均采用异步调用模式：先提交任务获取 `biz_id`，再轮询查询结果。API 以 RESTful 形式提供，统一通过 `Authorization: Bearer <API Key>` 鉴权，并遵循标准 HTTP 状态码与错误响应规范。
+ParseX API 提供文档与音视频的结构化解析、以及基于 Schema 的字段抽取能力，采用异步任务模型。所有接口均需通过 API Key 鉴权，调用流程统一为：提交任务 → 轮询结果 → 获取结构化输出。核心能力覆盖 PDF/图片/音视频多模态输入，支持内联配置与预存配置双模式。
 
 ## 支持的模型/功能
 
-ParseX 当前提供两类核心能力：
-
-- **文档解析 API**：支持 PDF、Word、Excel、PPT、图片（JPG/PNG）、音视频（MP4/MOV/AVI/WAV/MP3）等格式，输出结构化布局（`layouts`）、Markdown 内容、表格/段落/页眉页脚识别、音视频人声分离（`diarization`）、剧情解析（`synopsis_parse`）、抽帧（`frame_extraction`）等。详见 [文档解析 API](../../raw/application-api-reference/api-overview/document-parsing.md)。
-
-- **字段解析 API**：支持基于 JSON Schema 从已解析或原始文档中抽取结构化字段，返回带引用溯源（`citations`）和推断状态（`inferred`/`found`/`miss`）的结果。**注意：字段解析不支持直接输入音视频文件**，仅支持 `file_url`（文档类）或复用 `parsed_file_biz_id`（需在 7 天保留期内且类型匹配），详见 [字段解析 API](../../raw/application-api-reference/api-overview/field-extraction.md)。
-
-> **注意**：文档 8 明确指出“抽取不支持音视频输入”，而文档 2 和 3 中文档解析 API 明确支持音视频；二者功能边界清晰，但需开发者严格区分使用场景——音视频必须先经 `/parse/submit` 解析，再将生成的 `biz_id` 作为 `parsed_file_biz_id` 提交至 `/extract/submit`，不可跳过解析步骤直传音视频 URL。
+- **文档解析**：支持 PDF、Word、Excel、PPT、图片（JPG/PNG）等格式，输出 Markdown、布局信息（`layouts`）、表格、段落、页眉页脚、坐标位置等；支持指定页码范围、抽帧（音视频）、人声分离、剧情解析等高级处理 [提交解析任务](../../raw/application-api-reference/api-overview/document-parsing/parse-submit.md)。
+- **音视频解析**：支持 MP4、MOV 等主流格式，可生成 ASR 文本、分段音频/视频、关键帧图像、剧情摘要（`synopsis_summary`）、剧情分段（`synopsis_segments`）及视觉描述（`text_info`）[查询解析结果](../../raw/application-api-reference/api-overview/document-parsing/parse-result.md)。
+- **字段抽取**：支持从已解析文档（`parsed_file_biz_id`）或原始文件 URL 中，按 JSON Schema 抽取结构化字段；支持引用溯源（`citations`）、推断开关（`allow_inference`）和自定义 Prompt [提交抽取任务](../../raw/application-api-reference/api-overview/field-extraction/extract-submit.md)。
+- > **注意**：字段抽取明确不支持音视频直接输入（见文档 7），且复用解析结果时要求其未超 7 天保留期；而文档解析文档（文档 4）中音视频示例表明其原生支持，二者边界清晰，无矛盾。
 
 ## 关键参数
 
-所有提交接口均依赖以下关键参数组合，且存在明确互斥关系：
-
-- **文件来源**（二选一）：
-  - `file_url`：公开可访问的文件 URL（HTTP/HTTPS），适用于首次解析或独立抽取；
-  - `parsed_file_biz_id`：此前 `/parse/submit` 返回的 `biz_id`，用于复用解析结果进行字段抽取（仅限文档类解析结果，且需 ≤7 天）。
-
-- **处理定义**（二选一，内联优先）：
-  - `config_id`：控制台预存的配置 ID（如 `config_xxx`）；
-  - `processing`：内联 JSON 对象，当两者共存时 `processing` 优先生效（见 [提交解析任务](../../raw/application-api-reference/api-overview/document-parsing/parse-submit.md) 和 [提交抽取任务](../../raw/application-api-reference/api-overview/field-extraction/extract-submit.md)）。
-
-- **核心内联配置字段**：
-  - 文档解析：`processing.doc_processing_config`（页码范围、坐标、页眉页脚等）或 `processing.media_processing_config`（人声分离、剧情解析、抽帧参数）；
-  - 字段抽取：`processing.extract_processing_config.extract_schema`（必需 JSON Schema）、`citation_required`、`allow_inference`；
-  - 公共输出：`output.output_file_format`（如 `["markdown"]`）、`output.oss_config`（用于持久化到客户 OSS）。
+| 参数 | 说明 | 示例/约束 |
+|------|------|-----------|
+| `file_url` / `parsed_file_biz_id` | 二选一：原始文件 URL 或已解析任务 ID | `https://example.com/doc.pdf` 或 `parseX-2026xxxx-xxxxxxx` |
+| `processing` | 内联处理配置，优先级高于 `config_id` | 包含 `doc_processing_config`（文档）、`media_processing_config`（音视频）、`extract_processing_config`（抽取）三类子对象 |
+| `processing.extract_processing_config.extract_schema` | 抽取必需的 JSON Schema 对象（非字符串） | `{ "type": "object", "properties": { "name": { "type": "string" } } }`（注意：文档 7 示例中误将 `extract_schema` 写为字符串并要求转义，实际应为原生 JSON 对象；以 [查询抽取结果](../../raw/application-api-reference/api-overview/field-extraction/extract-result.md) 返回结构为准） |
+| `output.output_file_format` | 输出格式数组 | `["markdown"]`（仅文档解析支持） |
+| `step_start` / `step_size` | 分片查询参数（仅 `/parse/result` 支持） | 默认 `0`，用于分页获取 `layouts` 或 `segments` |
 
 ## 使用方式
 
-1. **鉴权准备**：获取 `DASHSCOPE_API_KEY` 并通过环境变量或 `Authorization` Header 传递，详见 [鉴权](../../raw/application-api-reference/api-overview/authentication.md)；
+1. **鉴权**：设置环境变量 `DASHSCOPE_API_KEY`，并在每个请求 Header 中携带 `Authorization: Bearer $DASHSCOPE_API_KEY` [鉴权](../../raw/application-api-reference/api-overview/authentication.md)。
 2. **提交任务**：
-   - 解析任务：调用 `/api/v2/apps/parse-x/parse/submit`，获取 `biz_id`；
-   - 抽取任务：调用 `/api/v2/apps/parse-x/extract/submit`，获取 `biz_id`；
+   - 解析：调用 `/api/v2/apps/parse-x/parse/submit`，获取 `biz_id`；
+   - 抽取：调用 `/api/v2/apps/parse-x/extract/submit`，获取 `biz_id`。
 3. **轮询结果**：
-   - 解析结果：调用 `/api/v2/apps/parse-x/parse/result`，检查 `data.status`（`init` → `processing` → `success`/`failed`）；
-   - 抽取结果：调用 `/api/v2/apps/parse-x/extract/result`，逻辑同上；
-4. **错误处理**：根据返回的 `code`（如 `ResultNotReady`、`NotExistBizId`、`UnsupportedFileType`）按 [错误码](../../raw/application-api-reference/api-overview/errors.md) 文档指导重试或修正。
+   - 解析结果：调用 `/api/v2/apps/parse-x/parse/result`，检查 `data.status`（`success`/`failed`/`processing`）；
+   - 抽取结果：调用 `/api/v2/apps/parse-x/extract/result`，同上。
+4. **错误处理**：收到 `ResultNotReady`（409）需重试；`FileDownloadTimeout`（400）可重试，`FileDownloadFailed`（400）不可重试；失败时参考 [错误码](../../raw/application-api-reference/api-overview/errors.md) 定位原因。
 
 ## 限制和注意事项
 
-- **异步时效性**：解析/抽取均为异步任务，需主动轮询；`ResultNotReady`（HTTP 409）表示任务未就绪，应指数退避重试。
-- **文件限制**：
-  - 单文件大小、页数、音视频时长等受配额约束，具体以控制台实际配置为准；
-  - `FileFormatNotSupported`、`FileSizeExceeded`、`PageCountExceeded` 等错误码对应明确限制（见 [错误码](../../raw/application-api-reference/api-overview/errors.md)）；
-- **复用限制**：
-  - `parsed_file_biz_id` 仅支持文档类解析结果，音视频解析结果不可用于字段抽取；
-  - 复用有效期为 **7 天**（非文档 7 中提到的解析结果 30 天保留期），超期返回 `ParseResultNotReusable`；
-- **安全要求**：
-  - API Key 必须通过环境变量管理，禁止硬编码或提交至代码仓库；
-  - OSS 凭据（`access_key_id`/`access_key_secret`）若需透传，应确保传输与存储安全；
-- **Schema 与引用**：字段抽取的 `extract_schema` 必须为合法 JSON Schema；启用 `citation_required` 可获取原文定位（页码、坐标 `bbox`），对审计与可解释性至关重要。
+- **文件限制**：单文件大小、页数、时长均有上限，具体配额以控制台实时页面为准；`FileSizeExceeded`、`PageCountExceeded`、`PageRangeInvalid` 等错误码对应明确阈值 [错误码](../../raw/application-api-reference/api-overview/errors.md)。
+- **保留期**：解析结果默认保留 30 天（`ParseResultExpired`），但字段抽取复用时仅支持 7 天内结果（`ParseResultNotReusable`）。
+- **安全实践**：API Key 必须通过环境变量管理，禁止硬编码或提交至仓库；建议按应用分配独立 Key 并定期轮转 [鉴权](../../raw/application-api-reference/api-overview/authentication.md)。
+- **配置优先级**：`processing` 内联配置始终优先生效于 `config_id`，二者同时提供时后者被忽略（所有提交接口均明确说明）。
+- > **注意**：文档 7 中“`extract_schema` 是字符串，因此其中的 JSON 需要转义”的表述与实际返回结构（`extract_result_json` 为 object）及 OpenAPI 规范冲突，开发者应直接传入合法 JSON 对象，而非字符串化转义形式。
 
 ## 来源文档
 
 - [鉴权](../../raw/application-api-reference/api-overview/authentication.md)
+- [错误码](../../raw/application-api-reference/api-overview/errors.md)
 - [文档解析 API](../../raw/application-api-reference/api-overview/document-parsing.md)
 - [提交解析任务](../../raw/application-api-reference/api-overview/document-parsing/parse-submit.md)
 - [查询解析结果](../../raw/application-api-reference/api-overview/document-parsing/parse-result.md)
 - [字段解析 API](../../raw/application-api-reference/api-overview/field-extraction.md)
-- [查询抽取结果](../../raw/application-api-reference/api-overview/field-extraction/extract-result.md)
-- [错误码](../../raw/application-api-reference/api-overview/errors.md)
 - [提交抽取任务](../../raw/application-api-reference/api-overview/field-extraction/extract-submit.md)
+- [查询抽取结果](../../raw/application-api-reference/api-overview/field-extraction/extract-result.md)
 
 

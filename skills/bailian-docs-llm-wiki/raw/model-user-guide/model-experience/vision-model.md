@@ -207,7 +207,7 @@ JSON Object
 
 `qwen3.5-omni-plus`
 
-64k
+256k
 
 \--
 
@@ -223,7 +223,7 @@ JSON Object
 
 \--
 
-支持
+JSON Object
 
 ### Qwen3.7
 

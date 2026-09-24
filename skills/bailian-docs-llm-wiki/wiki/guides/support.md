@@ -1,30 +1,35 @@
 # support
 
-百炼平台的 `support` 模块提供模型调用过程中的基础服务支持能力，包括模型可用性查询、错误诊断辅助、服务范围界定及售后响应机制。开发者可通过该模块快速确认所用模型是否在官方支持范围内，并获取与服务等级、协议约束和问题排查相关的权威信息。所有支持策略均以 [服务支持](../../raw/model-user-guide/support.md) 文档为基准。
+百炼平台的 `support` 接口用于查询当前服务支持的模型能力、功能范围及基础服务策略，是开发者集成前必查的元信息入口。该接口不执行推理，仅返回结构化元数据，适用于运行时动态适配模型选型与权限校验。所有响应字段均以 JSON 格式返回，符合 OpenAPI v3 规范。
 
 ## 支持的模型/功能
 
-- 官方支持的模型列表详见 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md)，该列表按模型类型（如文本生成、多模态、嵌入）和上线状态（GA / Beta / Deprecated）分类，**每季度更新一次**。
-- 支持的功能包括：模型健康状态查询（`/v1/models/{model_id}/health`）、错误码语义映射（如 `429` 对应配额超限而非模型不可用）、以及基础服务 SLA 查询（仅限 GA 模型）。
-- > **注意**：[模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中标注为 `Beta` 的模型不提供 7×24 小时技术支持，其错误响应可能包含实验性字段，与 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 中定义的服务范围不一致。
+- 当前支持的模型列表详见 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md)，涵盖 Qwen 系列（如 qwen-max、qwen-plus）、开源微调模型及部分第三方托管模型。
+- 功能覆盖文本生成、[函数调用](../concepts/function-calling.md)（Function Calling）、流式响应、多轮对话上下文管理，但**不支持图像输入、语音转写或实时音视频流处理**。
+- 模型能力标识（如 `supports_streaming: true` 或 `supports_tools: true`）直接映射至 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中的 `capabilities` 字段，开发者应以该文档为准进行能力判断。
 
 ## 关键参数
 
-- `model_id`：必需，必须严格匹配 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中公布的 ID（区分大小写，含版本后缀如 `-v1`）。
-- `timeout_ms`：可选，默认 30000（30 秒），若设为 `0` 则使用服务端默认超时；超过 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 承诺的 P99 延迟阈值时，不触发自动重试。
-- `trace_id`：建议提供，用于关联日志与工单，格式需符合 RFC 7231，否则 [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 中的诊断工具将无法准确定位。
+- `model`: 必填，字符串，取值必须来自 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中的 `model_id` 字段。
+- `with_capabilities`: 可选布尔值，默认 `false`；设为 `true` 时返回模型细粒度能力（如 token 限制、最大上下文长度、工具调用支持状态）。
+- `region`: 可选，指定服务地域（如 `cn-beijing`），影响可用模型集合；若未指定，返回全局默认区域支持的模型。
 
 ## 使用方式
 
-- 通过 HTTP GET 请求 `/v1/support/models/{model_id}` 可获取该模型当前支持状态、维护窗口及最近变更摘要。
-- 错误响应体中若含 `support_link` 字段，其值为指向 [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 对应章节的绝对 URL，开发者应优先查阅该链接内容再提工单。
-- 所有支持接口均要求 `Authorization: Bearer <api_key>`，且 `api_key` 必须具备 `model:read` 权限，否则返回 `403 Forbidden` 并附带指向 [相关协议](../../raw/model-user-guide/support/related-agreements.md) 第 3.2 条的提示。
+通过 HTTP GET 请求访问 `https://dashscope.aliyuncs.com/api/v1/support`，需携带有效的 `Authorization: Bearer <api_key>` 头。示例请求：
+
+```bash
+curl -X GET "https://dashscope.aliyuncs.com/api/v1/support?model=qwen-max&with_capabilities=true" \
+  -H "Authorization: Bearer sk-xxx"
+```
+
+> **注意**：原始文档中 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 提到“支持 7×24 小时工单响应”，但该描述与当前 SLA 协议（见 [相关协议](../../raw/model-user-guide/support/related-agreements.md)）中定义的“工作日 5×8 小时响应”存在冲突；请以 [相关协议](../../raw/model-user-guide/support/related-agreements.md) 的正式条款为准。
 
 ## 限制和注意事项
 
-- 单账户每分钟最多调用支持接口 60 次，超出后返回 `429 Too Many Requests`，**不计入配额消耗**，但会触发风控临时限流（持续 5 分钟）。
-- 不支持跨地域查询：请求必须发往与目标模型部署区域一致的 endpoint（如杭州模型需调用 `dashscope.aliyuncs.com` 而非 `dashscope.cn-shanghai.aliyuncs.com`）。
-- > **注意**：[售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 中声明“模型输出质量不属支持范围”，但 [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 第 4.7 条明确列出可申诉的典型质量缺陷场景（如系统性 token 截断、重复输出），二者存在解释差异，以 [常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 为准。
+- 单 IP 每分钟限频 60 次，超限返回 `429 Too Many Requests`。
+- `model` 参数不校验是否存在——若传入无效 model_id，接口仍返回 200，但 `supported` 字段为 `false`，需主动检查响应体中的 `supported` 和 `error` 字段。
+- 不支持跨区域批量查询；如需获取多 region 支持情况，须分别调用并合并结果。
 
 ## 来源文档
 
