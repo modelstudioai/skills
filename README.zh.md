@@ -97,6 +97,7 @@ npx skills add modelstudioai/skills
 | 🛠️ 技能管理 | [gptzero-mcp](./AWESOME_SKILLS.md#gptzero-mcp) | 帮我检测这段文字是不是 AI 生成的 | [louis030195/gptzero-mcp](https://github.com/louis030195/gptzero-mcp) |
 | 💻 代码开发 | [mcp-builder](./AWESOME_SKILLS.md#mcp-builder) | 帮我写一个 MCP Server，让 Claude 能调用天气相关服务 | [anthropics/skills](https://github.com/anthropics/skills) |
 | 💻 代码开发 | [goframe-v2](./AWESOME_SKILLS.md#goframe-v2) | 帮我用 GoFrame v2 写一个登录的 API 接口 | [gogf/skills](https://github.com/gogf/skills) |
+| 💻 代码开发 | [plan-ledger-tasks-yylo](./AWESOME_SKILLS.md#plan-ledger-tasks-yylo) | 帮我把这个功能需求规划成实现粒度的开发任务，交给我的编码 Agent 执行 | [yylo-dev/yylo-skills](https://github.com/yylo-dev/yylo-skills) |
 | 🎨 设计创意 | [shadcn-ui](./AWESOME_SKILLS.md#shadcn-ui) | 帮我用 shadcn-ui 组件库搭建聊天室页面 | [google-labs-code/stitch-skills](https://github.com/google-labs-code/stitch-skills) |
 | 🎨 设计创意 | [ui-ux-pro-max](./AWESOME_SKILLS.md#ui-ux-pro-max) | 帮我设计个人博客的网站 UI，要 50 种风格之一 | [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) |
 | 🎨 设计创意 | [canvas-design](./AWESOME_SKILLS.md#canvas-design) | 帮我设计一幅自由与蝴蝶为主题的视觉海报 | [anthropics/skills](https://github.com/anthropics/skills) |
