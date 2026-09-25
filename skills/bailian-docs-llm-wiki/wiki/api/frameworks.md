@@ -1,66 +1,67 @@
 # frameworks
 
-百炼平台提供对主流 AI 开发框架的原生集成支持，重点覆盖 LlamaIndex 和 Spring AI Alibaba 两大生态。开发者可基于这些框架快速构建 RAG 应用、调用大模型、管理知识库及集成智能体/工作流应用，无需从零实现底层能力。所有集成均通过官方 SDK 封装，统一使用 `DASHSCOPE_API_KEY` 认证，并与百炼控制台的业务空间、知识库、应用等资源深度协同。
+百炼平台提供对主流 AI 开发框架的原生集成支持，重点覆盖 LlamaIndex 和 Spring AI Alibaba 两大生态。开发者可基于这些框架快速构建 RAG 应用、知识库检索服务及智能体工作流，无需从零实现底层模型调用、向量索引或文档解析逻辑。所有集成均通过官方 SDK 封装，统一使用 `DASHSCOPE_API_KEY` 认证，并与百炼控制台中的业务空间、知识库、应用等资源深度协同。
 
 ## 支持的模型与功能
 
-- **大模型（LLM）调用**：支持全部百炼文本生成模型（如 `qwen-max`、`qwen-plus`），可通过 LlamaIndex 的 `DashScope` 或 `OpenAILike` 封装调用；Spring AI Alibaba 则通过 `DashScopeAgent` 调用已部署的[智能体应用（Agent 1.0）](raw/application-user-guide/llm-application/single-agent-application.md)或[工作流应用](raw/application-user-guide/llm-application/workflow-application.md)。
-- **Embedding 模型**：支持 `text-embedding-v1`/`v2`/`v3`，其中 `v3` 在 CMTEB Retrieval 任务上达 73.23 分，推荐用于高精度语义检索 [使用 Embedding 模型](../../raw/application-api-reference/frameworks/llamaindex/dashscopeembedding-in-llamaindex.md)。
-- **重排序（Rerank）**：提供 `gte-rerank` 和 `gte-rerank-hybrid` 模型，用于对向量检索结果进行语义精排，提升 Top-K 相关性。
-- **文档解析与切分**：`DashScopeParse` 基于“文档智能（Document Mind）”服务，支持 PDF/DOCX/DOC 格式智能化解析；`DashScopeJsonNodeParser` 对解析结果进行规则+模型驱动的中文切分，支持自定义分隔符与重叠策略。
-- **云端知识库管理**：`DashScopeCloudIndex` 实现知识库的创建、增删文档及索引更新；`DashScopeCloudRetriever` 提供稠密/稀疏混合检索、重排开关、分数阈值过滤等生产级参数控制。
+- **大模型（LLM）**：支持全部百炼文本生成模型（如 `qwen-max`、`qwen-plus`），可通过 `DashScope` 或 OpenAI-like 兼容接口调用 [使用百炼大模型](../../raw/application-api-reference/frameworks/llamaindex/dashscopellm-in-llamaindex.md)。
+- **Embedding 模型**：支持 `text-embedding-v1`/`v2`/`v3`，其中 `v3` 在 CMTEB Retrieval 任务上达 73.23 分，为当前最优 [使用 Embedding 模型](../../raw/application-api-reference/frameworks/llamaindex/dashscopeembedding-in-llamaindex.md)。
+- **重排序（Rerank）模型**：提供 `gte-rerank` 和 `gte-rerank-hybrid`，用于对检索结果进行语义精排 [DashScopeRerank](../../raw/application-api-reference/frameworks/llamaindex/dashscopererank.md)。
+- **文档解析与切分**：`DashScopeParse` 支持 PDF/DOCX/DOC 智能解析（基于 Document Mind），`DashScopeJsonNodeParser` 提供基于通义模型的语义切分能力 [DashScopeParse](../../raw/application-api-reference/frameworks/llamaindex/dashscopeparse.md)。
+- **云端知识库管理**：`DashScopeCloudIndex` 实现文件上传、智能切分、向量索引构建与托管；`DashScopeCloudRetriever` 提供稠密/稀疏混合检索与重排能力 [通过 DashScopeCloudIndex（DashScopeCloudRetriever）构建阿里云百炼云端知识库并使用云端知识索引服务](../../raw/application-api-reference/frameworks/llamaindex/dashscopecloudindex-and-dashscopecloudretriever.md)。
+- **Spring 生态集成**：`spring-ai-alibaba-starter-dashscope` 支持非流式/流式调用百炼智能体应用与知识库 RAG 服务 [使用Spring AI Alibaba集成阿里云百炼大模型应用](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-llm-application.md)。
+
+> **注意**：文档 1 明确指出“本方案将知识库部署在云端，使用默认的智能文档切分与官方向量模型，**不支持自定义文档切分方式或自定义嵌入模型**”，而文档 4 和文档 6 分别提供了 `DashScopeEmbedding` 和 `DashScopeJsonNodeParser` 的自定义配置能力。该矛盾表明：**云端知识库（DashScopeCloudIndex）强制使用平台预置策略，而本地索引（VectorStoreIndex）才支持完全自定义 Embedding 与切分**。
 
 ## 关键参数
 
 | 组件 | 参数名 | 类型 | 默认值 | 说明 |
-|--------|---------|------|---------|------|
-| `DashScopeLLM` | `model_name` | string | — | 必填，如 `"qwen-max"`；完整列表见[选择模型](raw/model-user-guide/get-started-with-models/models.md) |
-| `DashScopeEmbedding` | `model_name` | string | `"text-embedding-v2"` | 推荐显式指定，`v3` 为当前最优 [使用 Embedding 模型](../../raw/application-api-reference/frameworks/llamaindex/dashscopeembedding-in-llamaindex.md) |
-| `DashScopeRerank` | `top_n`, `model` | int, string | `5`, `"gte-rerank"` | `top_n` 控制返回节点数；`model` 可选 `gte-rerank-hybrid`（混合检索重排） |
-| `DashScopeCloudRetriever` | `dense_similarity_top_k`, `sparse_similarity_top_k` | int | `100`, `100` | 分别控制向量/关键词召回数量；`enable_reranking=True` 时生效 |
-| `DashScopeCloudRetriever` | `rerank_min_score` | float | `0.0` | 仅当 `enable_reranking=True` 时生效，过滤重排后低于该分的节点 |
-| `DashScopeJsonNodeParser` | `chunk_size`, `separator` | int, string | `500`, `" \|,\|，\|。\|？\|！\|\n\|\?\|!"` | 中文场景建议保留默认分隔符，避免切碎语义单元 |
-
-> **注意**：`DashScopeCloudIndex` 的 `from_documents()` 方法在[通过 DashScopeCloudIndex（DashScopeCloudRetriever）构建阿里云百炼云端知识库并使用云端知识索引服务](../../raw/application-api-reference/frameworks/llamaindex/dashscopecloudindex-and-dashscopecloudretriever.md)中明确要求必须设置 `DASHSCOPE_WORKSPACE_ID` 环境变量，而[通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)示例代码中未体现该约束，实际部署时需补全，否则初始化失败。
+|--------|--------|------|--------|------|
+| `DashScopeEmbedding` | `model_name` | string | `text-embedding-v2` | 必填，取值见[支持的模型](../../raw/application-api-reference/frameworks/llamaindex/dashscopeembedding-in-llamaindex.md)表格 |
+| `DashScopeRerank` | `top_n`, `model` | int, string | `5`, `gte-rerank` | `top_n` 控制返回结果数；`model` 可选 `gte-rerank` 或 `gte-rerank-hybrid` |
+| `DashScopeCloudRetriever` | `dense_similarity_top_k`, `enable_reranking`, `rerank_top_n` | int, bool, int | `100`, `True`, `5` | `dense_similarity_top_k` 控制向量召回数；`rerank_top_n` 是重排后最终返回数，二者不可混淆 |
+| `DashScopeJsonNodeParser` | `chunk_size`, `overlap_size`, `separator` | int, int, string | `500`, `100`, `" \|,\|，\|。\|？\|！\|\n\|\?\|!"` | `separator` 为正则表达式，需注意转义 |
 
 ## 使用方式
 
-### LlamaIndex 集成
-1. **安装依赖**：按组件选择安装，例如：
-   ```bash
-   pip install llama-index-llms-dashscope  # LLM
-   pip install llama-index-embeddings-dashscope  # Embedding
-   pip install llama-index-postprocessor-dashscope-rerank  # Rerank
-   pip install llama-index-indices-managed-dashscope  # CloudIndex
-   ```
-2. **认证配置**：设置环境变量 `DASHSCOPE_API_KEY`；若使用子业务空间，**必须**设置 `DASHSCOPE_WORKSPACE_ID`。
-3. **核心调用模式**：
-   - LLM：`DashScope(model_name="qwen-plus")` 或全局 `Settings.llm = ...`
-   - Embedding：`DashScopeEmbedding(model_name="text-embedding-v3")`
-   - Rerank：`DashScopeRerank(top_n=3, model="gte-rerank-hybrid")`
-   - 云端知识库：`DashScopeCloudIndex("my_index").as_retriever(...)`  
-   完整示例见 [通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)。
+1. **环境准备**  
+   - 获取 `DASHSCOPE_API_KEY` 并设为环境变量（[获取与配置 API Key](../../raw/model-api-reference/preparations/get-api-key.md)）；
+   - 若使用子业务空间，还需设置 `DASHSCOPE_WORKSPACE_ID`；
+   - 安装对应 SDK（如 `pip install llama-index-llms-dashscope llama-index-embeddings-dashscope`）。
 
-### Spring AI Alibaba 集成
-1. **添加 Maven 依赖**：引入 `spring-ai-alibaba-starter-dashscope`（版本 `1.0.0.2`）。
-2. **配置参数**：在 `application.yml` 中声明 `spring.ai.dashscope.api-key` 和 `spring.ai.dashscope.agent.app-id`（调用应用时）或 `spring.ai.dashscope.workspace-id`（操作子空间知识库时）。
-3. **调用方式**：
-   - 调用应用：注入 `DashScopeAgent`，传入 `Prompt` 和 `DashScopeAgentOptions.withAppId(...)`
-   - 检索知识库：使用 `DashScopeDocumentRetriever` + `DocumentRetrievalAdvisor` 构建 `ChatClient`，自动注入上下文 [通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)。
+2. **LlamaIndex 集成示例**  
+   ```python
+   from llama_index.llms.dashscope import DashScope
+   from llama_index.embeddings.dashscope import DashScopeEmbedding
+   from llama_index.indices.managed.dashscope import DashScopeCloudIndex
+
+   # 全局设置（可选）
+   Settings.llm = DashScope(model_name="qwen-max")
+   Settings.embed_model = DashScopeEmbedding(model_name="text-embedding-v3")
+
+   # 构建云端知识库
+   index = DashScopeCloudIndex.from_documents(documents, name="my_kb")
+   retriever = index.as_retriever(rerank_top_n=3)
+   ```
+
+3. **Spring AI Alibaba 集成示例**  
+   - `pom.xml` 添加 `spring-ai-alibaba-starter-dashscope` 依赖；
+   - `application.yml` 配置 `spring.ai.dashscope.api-key` 和 `spring.ai.dashscope.agent.app-id`；
+   - 使用 `DashScopeAgent` 调用智能体，或 `DashScopeDocumentRetriever` 检索知识库 [通过Spring AI Alibaba检索阿里云百炼知识库](../../raw/application-api-reference/frameworks/spring-ai-alibaba/spring-ai-alibaba-integrate-knowledge-base.md)。
 
 ## 限制和注意事项
 
-- **文件解析限制**：`DashScopeParse` 仅对 PDF/DOC/DOCX 进行智能化解析（提取结构化文本、表格、公式），其他格式（TXT/MD/PPT等）仅原样上传，不解析 [通过 DashScopeCloudIndex（DashScopeCloudRetriever）构建阿里云百炼云端知识库并使用云端知识索引服务](../../raw/application-api-reference/frameworks/llamaindex/dashscopecloudindex-and-dashscopecloudretriever.md)。
-- **云端知识库能力边界**：`DashScopeCloudIndex` 方案**不支持自定义文档切分逻辑或嵌入模型**，其切分与向量化由百炼平台统一完成；如需完全自控，应选用本地知识库方案 [通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)。
-- **环境变量一致性**：LlamaIndex 示例多使用 `DASHSCOPE_API_KEY`，而 Spring AI Alibaba 文档中知识库示例使用 `AI_DASHSCOPE_API_KEY`；为简化维护，**统一推荐使用 `DASHSCOPE_API_KEY`**，并在 Spring Boot 配置中映射：`spring.ai.dashscope.api-key: ${DASHSCOPE_API_KEY}`。
-- **Python 版本兼容性**：所有 LlamaIndex 相关组件要求 `python>=3.9,<=3.12`，超出范围可能导致安装失败或运行异常 [DashScopeRerank](../../raw/application-api-reference/frameworks/llamaindex/dashscopererank.md)。
+- **文件解析限制**：`DashScopeParse` 仅对 `.pdf`/`.docx`/`.doc` 进行智能解析，其他格式（如 `.txt`, `.md`）仅原样上传，不触发 Document Mind [通过 DashScopeCloudIndex（DashScopeCloudRetriever）构建阿里云百炼云端知识库并使用云端知识索引服务](../../raw/application-api-reference/frameworks/llamaindex/dashscopecloudindex-and-dashscopecloudretriever.md)。
+- **云端知识库不可定制**：如前所述，`DashScopeCloudIndex` 强制使用平台预置的切分与嵌入策略，无法替换为自定义模型或规则。
+- **API Key 环境变量名不一致**：LlamaIndex 文档普遍使用 `DASHSCOPE_API_KEY`，但 Spring AI Alibaba 的知识库示例（文档 10）要求 `AI_DASHSCOPE_API_KEY`。实际使用时需按 SDK 要求配置，避免因变量名错误导致认证失败。
+- **Python 版本约束**：所有 LlamaIndex 相关组件（`dashscopeparse`, `dashscopererank`, `dashscopecloudindex`）明确要求 `python>=3.9,<=3.12`，超出范围可能引发兼容性问题。
 
 ## 来源文档
 
 - [通过LlamaIndex API构建RAG应用](../../raw/application-api-reference/frameworks/llamaindex.md)
 - [使用百炼大模型](../../raw/application-api-reference/frameworks/llamaindex/dashscopellm-in-llamaindex.md)
-- [使用 Embedding 模型](../../raw/application-api-reference/frameworks/llamaindex/dashscopeembedding-in-llamaindex.md)
 - [DashScopeRerank](../../raw/application-api-reference/frameworks/llamaindex/dashscopererank.md)
+- [使用 Embedding 模型](../../raw/application-api-reference/frameworks/llamaindex/dashscopeembedding-in-llamaindex.md)
 - [DashScopeParse](../../raw/application-api-reference/frameworks/llamaindex/dashscopeparse.md)
 - [DashScopeJsonNodeParser](../../raw/application-api-reference/frameworks/llamaindex/dashscopejsonnodeparser.md)
 - [通过 DashScopeCloudIndex（DashScopeCloudRetriever）构建阿里云百炼云端知识库并使用云端知识索引服务](../../raw/application-api-reference/frameworks/llamaindex/dashscopecloudindex-and-dashscopecloudretriever.md)

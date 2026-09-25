@@ -1,86 +1,84 @@
 # llm application
 
-百炼平台的 LLM Application 是面向业务场景的 AI 应用构建体系，提供智能体（Agent）、工作流（Workflow）和高代码应用三类范式，分别对应零代码、低代码和专业代码开发路径。其核心目标是突破大模型在私有知识访问、实时信息获取、流程控制与复杂任务规划等方面的原生局限，通过知识库检索增强（RAG）、外部工具调用（MCP/插件）、多步推理与[记忆](../concepts/memory.md)等能力，支撑真实业务落地。
+百炼平台的 LLM Application 是面向真实业务场景的 AI 应用构建体系，提供智能体（Agent）、工作流（Workflow）和高代码应用三种范式，分别对应零代码、低代码和专业代码开发路径。其核心能力包括知识库检索增强（RAG）、外部工具调用（MCP/插件）、多模态解析与生成，以及端到端的部署运维支持，旨在突破大模型在私有知识、实时信息、流程控制和复杂任务规划上的原生局限。
 
 ## 支持的模型/功能
 
-LLM Application 支持三大类能力载体：
+- **智能体（Agent）**：支持 Agent 1.0 和 Agent 2.0 两代架构。Agent 2.0 将知识库、MCP 等统一为工具，支持自主规划与完整过程回溯；Agent 1.0 则采用分阶段调度（先检索后决策）。推荐新项目使用 [新版智能体应用（Agent 2.0）](../../raw/application-user-guide/llm-application/new-single-agent-application.md)。  
+- **工作流（Workflow）**：提供可视化节点编排能力，覆盖基础逻辑（开始/结束、条件判断、循环、批处理）、AI 能力（大模型、意图分类、参数提取、知识库、多模态生成）、工具集成（API、函数计算、脚本、插件、MCP、AppFlow、数据连接器）及数据处理（文档/图片/音频/视频解析、变量处理、变量赋值）。  
+- **高代码应用**：基于 Python 的 Serverless Function 或 K8s 部署，支持通过 MCP 协议接入知识库、MCP 服务、应用组件和数据连接器，并提供 `main.py` 入口、`/health` 健康检查及 `/process` 对话接口标准。详细开发规范见 [API 开发指南](../../raw/application-user-guide/llm-application/rich-code-application/rich-code-app-develop-guide.md)。  
+- **多模态能力**：支持文档（PDF/DOCX等）、图片（PNG/JPG等）、音频（MP3/WAV等）、视频（MP4/MKV等）的结构化解析；支持图像、视频、音频的生成；参数提取节点在选用 Qwen-VL 系列模型时可直接从图片/视频中提取结构化参数。
 
-- **智能体（Agent）**：以提示词驱动，具备自主意图理解、任务规划与工具调度能力。新版 Agent 2.0 将知识库、MCP 等统一为工具，支持完整“规划-执行-反思”链路回溯，推荐用于开放式对话与复杂任务场景 [新版智能体应用（Agent 2.0）](../../raw/application-user-guide/llm-application/new-single-agent-application.md)。旧版 Agent 1.0 仍可用，但规划逻辑较线性，适用于意图单一的简单任务 [智能体应用（Agent 1.0）](../../raw/application-user-guide/llm-application/single-agent-application.md)。
-  
-- **工作流（Workflow）**：通过可视化节点编排实现确定性流程控制，包含基础节点（开始/结束、条件判断、循环、批处理）、AI 节点（大模型、知识库、意图分类、参数提取、多模态生成）、工具节点（API、函数计算、插件、MCP、AppFlow、数据连接器）及解析节点（文档、图片、音频、视频）。各节点可组合使用，例如 `知识库节点 → 大模型节点` 实现 RAG 增强问答，或 `参数提取节点 → API节点` 构建结构化服务调用链 [工作流应用](../../raw/application-user-guide/llm-application/workflow-application.md)。
-
-- **高代码应用**：面向开发者，基于 Python 项目结构部署 Serverless 或 K8s 后端服务，支持 MCP 协议接入知识库、MCP 服务、应用组件与数据连接器，并提供自动化运维与可观测能力 [高代码应用](../../raw/application-user-guide/llm-application/rich-code-application.md)。
-
-> **注意**：文档中提及的“智能模式”（AUTO/性能/均衡/经济）仅适用于 Agent 2.0 的模型选择器；Agent 1.0 和工作流中的大模型节点不支持该模式，需显式指定模型或档位。
+> **注意**：文档 33 中声明“单个会话支持上传文件上限 10 个，且单文件不超过 10MB”，但文档 25（文档解析节点）明确限制“单文件大小不超过 150 MB”，文档 26（图片解析节点）为“20 MB”，文档 27/28（音视频解析节点）为“512 MB”。实际限制以各解析节点的独立规格为准，而非全局统一上限。
 
 ## 关键参数
 
-不同应用类型的关键参数配置存在差异：
-
-- **Agent 应用**：核心参数包括 `temperature`（控制输出随机性）、`enable_thinking`（开启思考模式以提升反思效果，非所有模型支持）、`最长回复长度`；Agent 2.0 新增 `AUTO` 档位，由平台根据任务复杂度与上下文长度（≥200K tokens 时至少路由至“性能”档）自动路由 [新版智能体应用（Agent 2.0）](../../raw/application-user-guide/llm-application/new-single-agent-application.md)。
-
-- **Workflow 节点**：
-  - 大模型节点：支持 `top_p`、`temperature`、`enable_thinking`、`thinking_budget` 及 `enable_search`（若模型支持）；
-  - 知识库节点：关键参数为 `topK`（召回片段数，默认10）与 `知识库描述`（影响智能调用准确性）；
-  - 条件判断节点：依赖 `变量`、`比较运算符`（如“包含”、“为空”）与 `比较值` 进行分支控制；
-  - 循环节点：需配置 `循环类型`（数组循环/指定次数）、`中间变量`（跨轮次状态传递）与 `终止条件`（基于中间变量判断）。
-
-- **高代码应用**：参数主要通过代码控制，环境变量（如 `DASHSCOPE_API_KEY`）由控制台注入，工具调用逻辑需在 `main.py` 中通过 `fastmcp.Client` 实现 [工具接入](../../raw/application-user-guide/llm-application/rich-code-application/rich-code-application-mcp.md)。
+- **模型通用参数**（适用于大模型节点、意图分类节点、参数提取节点等）：  
+  - `temperature`：控制输出随机性（范围通常为 [0, 2)，默认 0.7）；  
+  - `top_p`：控制输出多样性（默认 0.8）；  
+  - `max_tokens`（或 `最长回复长度`）：模型生成内容的最大 token 数（默认 1024）；  
+  - `enable_thinking`：是否启用深度思考模式（需模型支持）；  
+  - `thinking_budget`：思考模式下的最大推理 token 数（默认 4000）。  
+- **智能体专属参数**：  
+  - `enable_search`：启用联网搜索（仅部分模型支持）；  
+  - `预解析文件` 开关：控制文件是否由系统预解析为文本（千问-VL 系列模型即使关闭亦可直解图片/视频）。  
+- **工作流节点特有参数**：  
+  - 循环节点的 `中间变量` 和 `终止条件`；  
+  - 批处理节点的 `并行运行数量`（默认 5）和 `批处理次数上限`（默认 30）；  
+  - API 节点的 `超时时间`（默认 5 秒）和重试策略；  
+  - 多模态生成节点的 `随机种子`、`prompt_extend`（提示词智能改写）等。
 
 ## 使用方式
 
-- **创建与配置**：
-  - Agent：控制台选择“智能体应用 > Agent 2.0”，配置模型、系统提示词、知识库与内置工具（如 `bash`、`write`）；
-  - Workflow：拖拽节点至画布，按需配置输入/输出变量、条件逻辑与参数，例如在 `开始节点` 定义 `query` 变量，在 `大模型节点` 的用户提示词中引用 `${开始/query}`；
-  - 高代码：控制台选择“高代码应用”，上传 `.whl` 包或使用模板，通过 `requirements.txt` 固定依赖版本，并确保 `GET /health` 接口可用 [API 开发指南](../../raw/application-user-guide/llm-application/rich-code-application/rich-code-app-develop-guide.md)。
-
-- **文件处理**：
-  - Agent 支持三种模式：`全文引用`（适合短文档总结）、`切片检索`（RAG，适合长文档精准问答）、`自定义处理`（依赖配置的插件/MCP 工具） [文件问答](../../raw/application-user-guide/llm-application/file-q-a.md)；
-  - Workflow 提供专用解析节点：`文档解析节点`（支持 PDF/DOCX/Excel）、`图片解析节点`（区分文档类与通用图片）、`音频/视频解析节点`（输出 ASR 文本与关键帧描述），解析结果可直接被下游节点引用。
-
-- **调用与集成**：
-  - 所有应用发布后均可通过 API 调用，Agent 应用参考 [新版智能体应用 API](../../raw/application-user-guide/llm-application/new-single-agent-application.md)，Workflow 应用参考 [调用工作流应用](../../raw/application-user-guide/bailian-application-calling/invoke-workflow-application.md)；
-  - 高代码应用默认暴露 `/process` 对话接口，支持流式响应，需在代码中实现 `@trace` 装饰器以启用观测 [API 开发指南](../../raw/application-user-guide/llm-application/rich-code-application/rich-code-app-develop-guide.md)。
+- **创建与配置**：  
+  - 智能体：在控制台选择“智能体应用 > Agent 2.0”，配置模型（推荐 `千问-Max` 系列）、系统提示词、知识库与内置工具（如 `bash`、`write`）。  
+  - 工作流：从节点库拖拽或通过 `+` 按钮添加节点，按需连接。关键节点如 [开始和结束节点](../../raw/application-user-guide/llm-application/workflow-application/start-end-node.md) 定义输入/输出，条件判断节点实现分支路由，循环/批处理节点处理数组数据。  
+  - 高代码应用：选择“高代码应用”模板，提交 `main.py` 及依赖，通过 MCP 协议在代码中调用已配置的工具。  
+- **文件处理**：  
+  - 智能体中支持三种模式：`全文引用`（适合短文档总结）、`切片检索`（RAG，适合长文档问答）、`自定义处理`（依赖插件/MCP 工具）。  
+  - 工作流中使用专用解析节点（文档/图片/音频/视频解析），输出结构化变量供下游节点（如大模型、变量处理）消费。  
+- **调试与观测**：  
+  - 工作流可在测试面板中逐轮查看循环/批处理节点的输入输出；  
+  - 高代码应用可通过 [应用观测](https://bailian.console.aliyun.com/?tab=app#/app-observe) 查看调用次数、[Token](../concepts/token.md) 消耗、延时等指标，需在部署时启用 `--telemetry enable`。
 
 ## 限制和注意事项
 
-- **资源与配额**：
-  - 文件上传：Agent 单会话最多 10 个文件，单文件 ≤10MB；Workflow 解析节点有独立限制（如文档 ≤150MB/1.5万页，图片 ≤20MB，音视频 ≤512MB）；
-  - 循环与批处理：循环次数上限 1000，批处理默认并行数 5，需根据下游节点并发能力调整；
-  - API 节点：需将百炼服务 IP（47.93.216.17、39.105.109.77）加入目标服务白名单。
-
-- **功能边界**：
-  - Agent 1.0 与 Agent 2.0 不兼容：Agent 1.0 的知识库与插件调用逻辑独立，而 Agent 2.0 统一为工具，迁移需重构；
-  - Workflow 的 JSON 输出模式仅支持单层键值对，无法生成嵌套 JSON，需下游节点二次处理 [变量处理节点](../../raw/application-user-guide/llm-application/workflow-application/variable-processing-node.md)；
-  - 高代码应用的 MCP 工具需在代码中显式调用，控制台添加仅用于展示与环境变量注入。
-
-- **调试与可观测性**：
-  - Workflow 支持在测试面板中翻页查看循环/批处理各轮次的详细输入输出；
-  - 高代码应用可通过 [应用观测](https://bailian.console.aliyun.com/?tab=app#/app-observe) 查看调用次数、[Token](../concepts/token.md) 总量与延时，需部署时启用 `--telemetry enable`。
+- **资源与配额**：  
+  - 智能体单次会话文件上传上限为 10 个，但各解析节点有独立大小限制（如文档解析 ≤150 MB，图片 ≤20 MB，音视频 ≤512 MB）；  
+  - 批处理节点默认并行数为 5，过高可能触发下游服务并发限流；  
+  - 循环节点最大循环次数为 1000，批处理节点批处理次数上限默认 30。  
+- **兼容性与依赖**：  
+  - Agent 2.0 的 `AUTO` 模式按统一刊例价计费，与实际路由模型无关；手动选择性能/均衡/经济档则按对应档位计费；  
+  - MCP 节点调用前需确保目标服务已开通，且百炼服务 IP（`47.93.216.17` 和 `39.105.109.77`）已加入目标服务白名单；  
+  - 函数计算（FC）和 AppFlow 节点要求服务账号与百炼账号归属同一主账号。  
+- **开发约束**：  
+  - 高代码应用必须提供 `GET /health` 接口，入口文件必须为 `main.py`，代码包推荐 `.whl` 格式；  
+  - JSON 输出模式（变量处理节点）仅支持单层键值对，不支持嵌套结构；  
+  - 插件节点一次仅支持一个工具，如需多个工具需添加多个插件节点。
 
 ## 来源文档
 
 - [应用类型介绍](../../raw/application-user-guide/llm-application/application-introduction.md)
 - [新版智能体应用（Agent 2.0）](../../raw/application-user-guide/llm-application/new-single-agent-application.md)
-- [工作流应用](../../raw/application-user-guide/llm-application/workflow-application.md)
 - [智能体应用（Agent 1.0）](../../raw/application-user-guide/llm-application/single-agent-application.md)
 - [开始和结束节点](../../raw/application-user-guide/llm-application/workflow-application/start-end-node.md)
+- [工作流应用](../../raw/application-user-guide/llm-application/workflow-application.md)
 - [条件判断节点](../../raw/application-user-guide/llm-application/workflow-application/conditional-node.md)
 - [循环节点](../../raw/application-user-guide/llm-application/workflow-application/loop-node.md)
-- [批处理节点](../../raw/application-user-guide/llm-application/workflow-application/batch-node.md)
-- [大模型节点](../../raw/application-user-guide/llm-application/workflow-application/llm-node.md)
 - [流程输出节点](../../raw/application-user-guide/llm-application/workflow-application/process-output-node.md)
-- [知识库节点](../../raw/application-user-guide/llm-application/workflow-application/knowledge-base-node.md)
+- [批处理节点](../../raw/application-user-guide/llm-application/workflow-application/batch-node.md)
 - [意图分类节点](../../raw/application-user-guide/llm-application/workflow-application/intent-node.md)
-- [参数提取节点](../../raw/application-user-guide/llm-application/workflow-application/parameter-extraction-node.md)
+- [大模型节点](../../raw/application-user-guide/llm-application/workflow-application/llm-node.md)
 - [多模态生成节点](../../raw/application-user-guide/llm-application/workflow-application/multimodal-generation-node.md)
 - [智能体创建节点](../../raw/application-user-guide/llm-application/workflow-application/agent-create-node.md)
-- [API节点](../../raw/application-user-guide/llm-application/workflow-application/api-node.md)
 - [智能体群组节点](../../raw/application-user-guide/llm-application/workflow-application/agent-group-node.md)
-- [脚本节点](../../raw/application-user-guide/llm-application/workflow-application/script-node.md)
+- [API节点](../../raw/application-user-guide/llm-application/workflow-application/api-node.md)
 - [函数计算节点](../../raw/application-user-guide/llm-application/workflow-application/fc-node.md)
+- [脚本节点](../../raw/application-user-guide/llm-application/workflow-application/script-node.md)
 - [插件节点](../../raw/application-user-guide/llm-application/workflow-application/plugin-node.md)
+- [MCP节点](../../raw/application-user-guide/llm-application/workflow-application/mcp-node.md)
+- [AppFlow节点](../../raw/application-user-guide/llm-application/workflow-application/appflow-node.md)
+- [知识库节点](../../raw/application-user-guide/llm-application/workflow-application/knowledge-base-node.md)
 - [应用组件节点](../../raw/application-user-guide/llm-application/workflow-application/component-node.md)
 - [变量处理节点](../../raw/application-user-guide/llm-application/workflow-application/variable-processing-node.md)
 - [变量赋值节点](../../raw/application-user-guide/llm-application/workflow-application/variable-assignment-node.md)
@@ -92,8 +90,7 @@ LLM Application 支持三大类能力载体：
 - [高代码应用](../../raw/application-user-guide/llm-application/rich-code-application.md)
 - [工具接入](../../raw/application-user-guide/llm-application/rich-code-application/rich-code-application-mcp.md)
 - [API 开发指南](../../raw/application-user-guide/llm-application/rich-code-application/rich-code-app-develop-guide.md)
-- [AppFlow节点](../../raw/application-user-guide/llm-application/workflow-application/appflow-node.md)
 - [文件问答](../../raw/application-user-guide/llm-application/file-q-a.md)
-- [MCP节点](../../raw/application-user-guide/llm-application/workflow-application/mcp-node.md)
+- [参数提取节点](../../raw/application-user-guide/llm-application/workflow-application/parameter-extraction-node.md)
 
 

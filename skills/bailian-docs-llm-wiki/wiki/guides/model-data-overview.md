@@ -18,34 +18,35 @@
 | 数据集名称 | 全局唯一标识符 | 是 | ≤50 字符，支持中文、英文、数字、下划线、连字符、点（文档 1）或斜杠（文档 3） |
 | 数据集类型 | 创建后不可变更 | 是 | `训练集` / `评测集` |
 | 训练场景 | 仅训练集需选 | 是 | `文本生成` / `视觉理解` / `图生视频（首帧）` / `图生视频（首尾帧）`；评测集固定为文本生成 |
-| 训练方法 | 仅训练集需选 | 是 | `SFT`（全站点）、`DPO` / `CPT`（仅北京） |
-| 数据格式 | 导入文件格式 | 是 | `Jsonl 格式` / `Excel 格式` |
-| 存储位置 | 影响计费与权限 | 是 | `平台 OSS 存储`（免费，自动发布） / `云存储挂载`（需 OSS 标签 `bailian-datahub-access=read`，仅训练集可用） |
-| 导入方式 | 决定前置条件 | 是 | `本地上传`（无依赖）、`从 OSS 导入`（需 Bucket 标签）、`日志回流`（需 SLS 授权）、`API 上传` |
-
-- **日志回流特有参数**：时间范围（最近 30 天）、API Key 过滤（全部/其他/指定）、模型选择（最多 10 个）、OSS 数据路径（仅挂载模式）——修改时间范围会联动重置 API Key 和模型选择 [日志回流](../../raw/model-user-guide/model-data-overview/model-log-backflow.md)。
+| 训练方法 | 仅训练集需选 | 是 | `SFT`（全站）、`DPO` / `CPT`（仅北京） |
+| 数据格式 | 导入文件格式 | 是 | `Jsonl 格式` 或 `Excel 格式` |
+| 存储位置 | 影响计费与操作权限 | 是 | `平台 OSS 存储`（免费，支持新增版本）或 `云存储挂载`（OSS 挂载，需额外授权，评测集不支持，且不支持新增版本） |
+| 导入方式 | 决定前置条件与流程 | 是 | `本地上传`（无依赖）、`从 OSS 导入`（Bucket 需标签 `bailian-datahub-access=read`）、`日志回流`（需完成 SLS 审计+推理日志授权）、`API 上传` |
 
 ## 使用方式
 
-1. **创建数据集**：进入 [数据管理 > 数据集](https://bailian.console.aliyun.com/cn-beijing/model/data)，点击**创建数据集**，按向导填写参数并选择导入方式。
-2. **导入数据**：
-   - *本地上传*：直接拖拽或选择文件，SFT/DPO 文本生成支持多文件；
-   - *OSS 导入*：目标 Bucket 需添加标签 `bailian-datahub-access=read`，评测集不支持；
-   - *日志回流*：需先完成 SLS 审计日志+推理日志授权（顺序不可逆），再配置时间、API Key、模型等筛选条件 [日志回流](../../raw/model-user-guide/model-data-overview/model-log-backflow.md)；
-   - *API 上传*：通过 `training_file_ids` 引用已发布数据集 ID，详见[模型调优 API 指南](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/fine-tuning-api-guide.md)。
-3. **数据处理（可选）**：仅适用于已发布的 SFT-文本生成训练集（ChatML 格式），在 [数据管理 > 数据流](https://bailian.console.aliyun.com/cn-beijing/model/data?tab=data_flow) 中创建清洗/增强任务，输出为新版本 [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)。
-4. **下游使用**：发布后的训练集用于[模型调优](raw/model-user-guide/fine-tuning/fine-tune-text-generation-model/model-training-overview.md)，评测集用于[模型评测](raw/model-user-guide/model-evaluation-introduction/model-evaluation-overview.md)。
+1. **创建数据集**：进入 [数据管理](https://bailian.console.aliyun.com/cn-beijing/model/data) > **数据集** > **创建数据集**，按向导填写上述关键参数，并选择导入方式上传数据。提交即发布，不再保留草稿状态（历史草稿仍可编辑）。
+2. **日志回流专用流程**：需先在 [模型监控](https://bailian.console.aliyun.com/cn-beijing/model/telemetry) 完成审计日志与推理日志的**分步开通与角色授权**（顺序不可逆），再通过任一入口（监控页、详情页、数据管理页）配置时间范围、API Key、模型等筛选条件创建任务 [日志回流](../../raw/model-user-guide/model-data-overview/model-log-backflow.md)。
+3. **数据处理**：仅适用于已发布的 SFT-文本生成训练集（ChatML 格式）。在数据管理 > **数据流** 页签，通过画布搭建含“数据清洗”和/或“数据增强”节点的工作流，再基于该数据流创建任务，指定目标训练集触发处理。处理结果自动生成新版本，原版本不受影响 [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)。
+4. **版本管理**：所有数据集支持多版本。新增版本需重新导入全部数据（非增量），平台存储数据集支持“新增版本”按钮；OSS 挂载数据集仅能通过“导入数据”页追加 [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
 
 ## 限制和注意事项
 
-- **地域限制**：DPO/CPT 训练、数据处理、日志回流（除新加坡外）均仅在北京地域可用；OSS 挂载存储也仅限北京 [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
-- **不可变性**：数据集类型、训练场景、训练方法、存储位置、数据格式创建后均不可修改；发布操作不可逆，已发布版本不可编辑 [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
-- **容量与配额**：
-  - 单次日志回流上限 10 万条（可多次追加至不同版本）；
-  - 数据集数量无上限，但单次导入数据量无硬性上限（平台 OSS 存储）；
-  - 数据处理节点中，“数据增强-通用”每次最多生成 2000 条样本 [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)。
-- **格式强约束**：SFT/DPO/CPT/评测集均有严格数据格式要求（如 ChatML），建议下载模板校验；非标准格式导入将失败 [训练集与评测集](../../raw/model-user-guide/model-data-overview/training-set-and-evaluation-set.md)。
-- **安全与合规**：所有导入数据默认启用 OSS 服务端加密（SSE-OSS）；敏感信息打码等清洗操作需人工验证结果完整性，避免误删关键字段 [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)。
+- **地域限制**：DPO/CPT 训练、数据处理功能、日志回流（除新加坡外）均仅在北京（华北2）地域可用；OSS 挂载存储要求 Bucket 与百炼服务同 Region。
+- **数据量限制**：
+  - 日志回流单次上限 10 万条（可多次回流累积）；
+  - 数据增强-通用节点单次最多生成 2000 条样本；
+  - 评测集不支持从 OSS 导入；
+  - 不支持创建或发布空数据集。
+- **格式与兼容性**：
+  - 数据处理严格限定输入为 SFT-文本生成训练集的 ChatML 格式（`.jsonl`），其他类型（如 DPO、视觉类）无法使用 [数据清洗或增强](../../raw/model-user-guide/model-data-overview/data-processing.md)；
+  - 所有导入数据自动启用 OSS 服务端加密（SSE-OSS）；
+  - 训练集/评测集创建后，类型、场景、训练方法、存储位置均不可变更。
+- **操作风险**：
+  - 发布与删除操作**不可逆**，已发布版本不可编辑，仅历史草稿版本可删除；
+  - OSS 挂载数据集不支持“新增版本”，误删需重建；
+  - 日志回流任务执行中不可手动终止，失败需提工单排查。
+- **计费提示**：数据管理功能本身免费，但平台 OSS 存储、OSS 挂载、SLS 日志读写等下游资源按各自产品计费。
 
 ## 来源文档
 

@@ -1,61 +1,61 @@
 # long term memory new
 
-长期[记忆](../concepts/memory.md)（Long Term Memory）是百炼平台提供的结构化[记忆](../concepts/memory.md)管理服务，支持事实[记忆](../concepts/memory.md)（observation/[skill](../guides/skill.md)）与用户画像（profile）两类核心能力。通过统一的 RESTful API，开发者可编程式地写入、检索、更新和删除记忆节点，并支持多模态内容、异步抽取、多项目隔离等高级特性。所有接口均通过 DashScope 网关提供，需使用 `DASHSCOPE_API_KEY` 鉴权。
+长期[记忆](../concepts/memory.md)（Long Term Memory, LTM）新版本是百炼平台提供的结构化[记忆](../concepts/memory.md)管理能力，支持事实[记忆](../concepts/memory.md)（observation/[skill](../guides/skill.md)）与用户画像（user profile）两类核心数据的写入、检索、更新与生命周期管理。所有操作通过统一的 RESTful API 接口完成，基于 DashScope 网关鉴权，适用于构建具备持续上下文理解能力的智能体应用。
 
 ## 支持的模型/功能
 
-- **事实记忆**：支持两种类型  
-  - `observation`：从对话中提取的用户行为、偏好、计划等客观事实（如“用户每天上午11点提醒点外卖”），通过 [AddMemory](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory.md) 或 [AddMemoryAsync](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md) 写入；  
-  - `skill`：从工具调用或结构化指令中提取的可复用操作流程（如“会议纪要整理”），支持导出完整元信息（名称、描述、标签），详见 [导出技能记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/get-skill-export.md)。  
-- **用户画像**：基于预定义模板（`profile_schema`）从对话中异步抽取结构化属性（如年龄、爱好、职业）。需先调用 [CreateProfileSchema](raw/application-api-reference/long-term-memory-new/profiles-overview/create-schema.md) 创建模板，再在 `AddMemory` 中传入 `profile_schema` 参数触发抽取，最终通过 [GetUserProfile](raw/application-api-reference/long-term-memory-new/profiles-overview/get-user-profile.md) 获取结果。  
-- **多模态支持**：`messages[].content` 可包含 `text` 和 `image_url` 类型，但仅启用多模态能力的项目会解析图片；其他项目将忽略图片字段 [添加记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory.md)。
+长期记忆新版本提供两类独立但可协同的数据模型：
 
-> **注意**：文档 5（添加记忆）称同步接口在 `intelligent` 模式下“可能超时”，而文档 20（异步添加记忆）明确推荐异步方式用于技能和画像抽取。二者不矛盾，但表明 `intelligent` 模式下的同步抽取稳定性不足，生产环境应优先选用 `add-async`。
+- **事实记忆**：包括 `observation`（用户行为/意图片段）和 `skill`（可复用的执行流程），支持同步添加（`/add`）、异步批量抽取（`/add-async`）、语义搜索（`/memory_nodes/search`）、分页列表（`/memory_nodes`）及 CRUD 操作。异步接口支持多项目并行、工具消息解析与多模态内容处理（仅限启用多模态能力的项目）[原文标题](../../raw/application-api-reference/long-term-memory-new/fragments-overview.md)。
+- **用户画像**：通过预定义模板（`profile_schema`）约束属性结构，支持创建、更新、查询模板，并基于对话自动提取属性值。画像提取为异步过程，需在 `AddMemory` 或 `AddMemoryAsync` 中显式传入 `profile_schema` 才会触发 [原文标题](../../raw/application-api-reference/long-term-memory-new/profiles-overview.md)。
+
+> **注意**：文档 6（`add-memory.md`）称“同步接口适合在 `efficient` 模式下对实时性要求较高的场景”，但文档 14（`create-schema.md`）中 `extract_scene` 参数默认值为 `efficient`，且未说明该参数是否影响事实记忆抽取。实际调用中，`extract_scene` 仅作用于用户画像模板，与事实记忆无关；事实记忆的抽取质量由 `plan_version`（`pro`/`lite`）决定，而非 `extract_scene`。
 
 ## 关键参数
 
-| 参数 | 作用 | 说明 |
-|------|------|------|
-| `user_id` | 记忆隔离主键 | 所有读写接口必填，用于逻辑隔离不同用户的数据 |
-| `memory_library_id` | 记忆库隔离 | 可选，不传则使用默认记忆库；配合 `project_id`/`project_ids` 实现二级隔离 |
-| `plan_version` | 计费与能力策略 | `pro`（默认）支持 `min_score` 过滤、Rerank、高精度抽取；`lite` 仅基础语义检索与抽取。`pro`/`lite` 同时影响 Add 和 Search 接口行为 [长期记忆API 参考](raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md) |
-| `extract_mode` | 抽取范围控制 | `profile_only` 时仅执行画像抽取（需同时传 `profile_schema` 和 `messages`），跳过事实记忆生成 |
-| `min_score` | 检索结果过滤 | 仅 `plan_version=pro` 时生效，默认阈值 `0.3`，低于此分的 `memory_nodes` 将被过滤 [搜索记忆](raw/application-api-reference/long-term-memory-new/fragments-overview/search-memory.md) |
+| 参数 | 位置 | 类型 | 说明 | 必填 |
+|------|------|------|------|------|
+| `user_id` | Body / Query | string | 子用户 ID，用于跨用户记忆隔离 | 是 |
+| `messages` / `custom_content` | Body | array / string | 对话消息列表或自定义文本内容，二者至少传其一 | 二选一 |
+| `memory_library_id` | Body / Query | string | 记忆库 ID，不传则使用默认库 | 否 |
+| `project_id` / `project_ids` | Body | string / array | 项目 ID 或 ID 列表，用于二级隔离，互斥 | 否 |
+| `profile_schema` | Body | string | 用户画像模板 ID，仅画像抽取时需传入 | 条件必填 |
+| `plan_version` | Body | string | 收费策略：`pro`（支持 `min_score` 过滤、Rerank）或 `lite`（基础检索） | 否，默认 `pro` |
+| `top_k`, `min_score`, `memory_types` | Body | integer / number / array | 搜索控制参数，仅 `SearchMemory` 接口有效 | 否 |
 
 ## 使用方式
 
-1. **鉴权准备**：在[百炼控制台](https://bailian.console.aliyun.com)获取 `DASHSCOPE_API_KEY`，并设置为环境变量或请求头 `Authorization: Bearer $DASHSCOPE_API_KEY` [鉴权](raw/application-api-reference/long-term-memory-new/api-overview/authentication.md)。  
-2. **写入记忆**：  
-   - 实时性要求高且内容简单 → 用同步 `POST /add`；  
-   - 需抽取 [skill](../guides/skill.md)/画像/多项目并行 → 用异步 `POST /add-async`，立即获得 `event_id`，再轮询 [GetEvent](raw/application-api-reference/long-term-memory-new/fragments-overview/get-event.md) 查询状态与结果。  
-3. **检索记忆**：`POST /memory_nodes/search` 传入 `messages`（如用户当前提问）和 `user_id`，返回带 `score` 的相关记忆列表。  
-4. **管理记忆**：  
-   - 列表：`GET /memory_nodes?user_id=xxx`；  
-   - 单查：`GET /memory_nodes/{id}`；  
-   - 更新：`PATCH /memory_nodes/{id}`（支持增量更新 `meta_data` 及 [skill](../guides/skill.md) 元信息）；  
-   - 删除：`DELETE /memory_nodes/{id}`（不可逆）。  
-5. **用户画像工作流**：创建 schema → 调用 `AddMemory` 传 `profile_schema` → 轮询 `GetUserProfile` 直至 `attributes[].value` 非空。
+1. **准备凭证**：在[百炼控制台](https://bailian.console.aliyun.com)获取 `DASHSCOPE_API_KEY`，并通过环境变量或 Header 传递：`Authorization: Bearer $DASHSCOPE_API_KEY` [原文标题](../../raw/application-api-reference/long-term-memory-new/api-overview/authentication.md)。
+2. **写入记忆**：
+   - 实时性要求高 → 用 `POST /add`（同步，响应含抽取结果）；
+   - 高吞吐/多模态/技能抽取 → 用 `POST /add-async`（异步，返回 `event_id`，再调 `GET /events/{event_id}` 查询状态）。
+3. **检索记忆**：用 `POST /memory_nodes/search`，传入 `messages` 和 `user_id`，按需设置 `top_k`、`min_score`（`plan_version=pro` 时生效）。
+4. **管理画像**：
+   - 先调 `POST /profile_schemas` 创建模板；
+   - 写入时在 `AddMemory` 中传 `profile_schema`；
+   - 查询用 `GET /profile_schemas/{schema_id}/user_profile?user_id=xxx`。
+5. **调试与排障**：所有响应均含 `request_id`，错误时参考 [错误码文档](../../raw/application-api-reference/long-term-memory-new/api-overview/errors.md) 处理（如 `429` 限流需指数退避重试）。
 
 ## 限制和注意事项
 
-- **限流**：阿里云账号级总限流 3000 QPM；其中 `add` 接口 120 QPM，`search` 接口 300 QPM [长期记忆API 参考](raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md)。  
-- **计费时间点**：记忆库将于 **2026 年 8 月 20 日** 正式商业化计费，Add/Search 调用按 `plan_version` 区分 Pro/Lite 计费策略 [API 概览](raw/application-api-reference/long-term-memory-new/api-overview.md)。  
-- **异步任务重试**：`GetEvent` 返回 `status=PENDING` 或 `RUNNING` 时，需客户端主动轮询；`status=FAILED` 时需检查 `messages` 格式或权限配置 [查询事件](raw/application-api-reference/long-term-memory-new/fragments-overview/get-event.md)。  
-- **画像抽取延迟**：`GetUserProfile` 首次调用可能返回空值，因抽取为异步过程；需按业务逻辑实现重试（建议指数退避） [获取用户画像](raw/application-api-reference/long-term-memory-new/profiles-overview/get-user-profile.md)。  
-- **安全红线**：API Key 必须通过环境变量注入，严禁硬编码或提交至代码仓库 [鉴权](raw/application-api-reference/long-term-memory-new/api-overview/authentication.md)。
+- **限流**：阿里云账号级总限流 3000 QPM；`/add` 接口 120 QPM；`/memory_nodes/search` 接口 300 QPM。扩容需[提交工单](https://smartservice.console.aliyun.com/service/create-ticket) [原文标题](../../raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md)。
+- **计费**：服务将于 **2026 年 8 月 20 日 10:00（北京时间）** 正式商业化，`Add` 和 `Search` 均区分 `Pro`/`Lite` 版本，详见计费说明。
+- **数据持久性**：生成的记忆片段与用户画像暂无自动失效机制，需业务侧自行管理生命周期。
+- **安全**：API Key 具有账号级权限，严禁硬编码或提交至公开仓库；建议按应用拆分 Key 并定期轮转。
+- **异步任务**：`/add-async` 返回 `PENDING` 或 `RUNNING` 时，需轮询 `/events/{event_id}` 获取最终结果；`/get-user-profile` 首次可能为空，需按业务逻辑重试。
 
 ## 来源文档
 
-- [API 概览](../../raw/application-api-reference/long-term-memory-new/api-overview.md)
 - [长期记忆API 参考](../../raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md)
+- [API 概览](../../raw/application-api-reference/long-term-memory-new/api-overview.md)
 - [鉴权](../../raw/application-api-reference/long-term-memory-new/api-overview/authentication.md)
 - [错误码](../../raw/application-api-reference/long-term-memory-new/api-overview/errors.md)
+- [事实记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview.md)
 - [添加记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory.md)
 - [查询事件](../../raw/application-api-reference/long-term-memory-new/fragments-overview/get-event.md)
-- [列出记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/list-memory.md)
+- [异步添加记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)
 - [搜索记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/search-memory.md)
 - [查询记忆节点](../../raw/application-api-reference/long-term-memory-new/fragments-overview/get-memory-node.md)
-- [导出技能记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/get-skill-export.md)
 - [更新记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/update-memory.md)
 - [删除记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/delete-memory.md)
 - [用户画像](../../raw/application-api-reference/long-term-memory-new/profiles-overview.md)
@@ -63,8 +63,8 @@
 - [列出画像模板](../../raw/application-api-reference/long-term-memory-new/profiles-overview/list-schemas.md)
 - [获取画像模板](../../raw/application-api-reference/long-term-memory-new/profiles-overview/get-schema.md)
 - [更新画像模板](../../raw/application-api-reference/long-term-memory-new/profiles-overview/update-schema.md)
+- [列出记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/list-memory.md)
+- [导出技能记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/get-skill-export.md)
 - [获取用户画像](../../raw/application-api-reference/long-term-memory-new/profiles-overview/get-user-profile.md)
-- [事实记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview.md)
-- [异步添加记忆](../../raw/application-api-reference/long-term-memory-new/fragments-overview/add-memory-async.md)
 
 

@@ -4290,7 +4290,7 @@ func main() {
 
 ### 检索知识库
 
-知识库功能作为百炼的RAG能力，能有效地为大模型补充私有知识、提供最新信息。调用**智能体应用**时指定检索范围，可提高大模型的回答准确性。更多知识库功能请参考：[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+知识库功能作为百炼的RAG能力，能有效地为大模型补充私有知识、提供最新信息。调用**智能体应用**时指定检索范围，可提高大模型的回答准确性。更多知识库功能请参考：[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
 
 #### 前提条件
 
@@ -4298,7 +4298,7 @@ func main() {
 
 #### 指定检索范围
 
-1.  检索指定的[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)，有以下三种方式：
+1.  检索指定的[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)，有以下三种方式：
     
     1.  在应用内单击**配置知识库**以关联指定知识库，并**发布**应用；
         
@@ -7932,7 +7932,7 @@ API方式操作请参阅以下内容。
 5.  完成有效的会话文件ID获取后，可进入上述步骤三：API调用应用。
     
 
-如需查看上述获取ID步骤中的接口参数详细说明请参阅[API上传文件](raw/application-user-guide/knowledge-base/rag-knowledge-base-api-guide.md)。
+如需查看上述获取ID步骤中的接口参数详细说明请参阅[API上传文件](raw/application-user-guide/knowledge-base/integration/rag-knowledge-base-api-guide.md)。
 
 #### 视觉理解
 

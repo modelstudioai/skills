@@ -204,7 +204,7 @@ CSV / Excel / RDS 表格
     
     详见[切片与向量化](raw/application-user-guide/knowledge-base/data-connection-overview/chunking.md)。
     
-    **说明**排序模型、TopK、相似度阈值等检索参数在检索服务中配置，详见[知识检索](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)。
+    **说明**排序模型、TopK、相似度阈值等检索参数在检索服务中配置，详见[知识检索](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)。
     
 6.  **完成创建**：点击 **创建知识库**，系统自动完成解析、切片、向量化与索引构建。知识库状态变为 **已就绪** 即可检索，处理进度可在文档列表查看。
     
@@ -228,6 +228,6 @@ curl -X POST https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/indices/
   }'
 ```
 
-**说明**切片策略创建后可调整，但调整嵌入模型会触发全量重建索引。完整的容量上限见[容量与限制](raw/application-user-guide/knowledge-base/rag-knowledge-base-specifications.md)。
+**说明**切片策略创建后可调整，但调整嵌入模型会触发全量重建索引。完整的容量上限见[容量与限制](raw/application-user-guide/knowledge-base/reference/rag-knowledge-base-specifications.md)。
 
 **重要**知识库创建完成后，继续[上传文档](raw/application-user-guide/knowledge-base/data-connection-overview/documents.md)。

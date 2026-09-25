@@ -100,7 +100,7 @@ console.log(JSON.stringify(completion));
 
 #### curl
 
-各地域的[请求地址](raw/model-api-reference/more-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
+各地域的[请求地址](raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
@@ -216,7 +216,7 @@ console.log(JSON.stringify(completion));
 
 #### curl
 
-各地域的[请求地址](raw/model-api-reference/more-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
+各地域的[请求地址](raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
@@ -347,7 +347,7 @@ console.log(JSON.stringify(completion));
 
 #### curl
 
-各地域的[请求地址](raw/model-api-reference/more-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
+各地域的[请求地址](raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
@@ -439,7 +439,7 @@ console.log(JSON.stringify(completion));
 
 #### curl
 
-各地域的[请求地址](raw/model-api-reference/more-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
+各地域的[请求地址](raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions \
@@ -1040,7 +1040,7 @@ public class Main {
 
 #### curl
 
-各地域的[请求地址](raw/model-api-reference/more-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
+各地域的[请求地址](raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
@@ -1179,7 +1179,7 @@ public class Main {
 
 #### curl
 
-各地域的[请求地址](raw/model-api-reference/more-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
+各地域的[请求地址](raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
@@ -1326,7 +1326,7 @@ public class Main {
 
 #### curl
 
-各地域的[请求地址](raw/model-api-reference/more-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
+各地域的[请求地址](raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \
@@ -1443,7 +1443,7 @@ public class Main {
 
 #### curl
 
-各地域的[请求地址](raw/model-api-reference/more-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
+各地域的[请求地址](raw/model-api-reference/qwen-mt-translation-models/qwen-mt-api.md)和API Key不同，以下是北京地域的请求地址。
 
 ```
 curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/text-generation/generation \

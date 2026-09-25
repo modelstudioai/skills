@@ -114,7 +114,7 @@
 
 **说明****选择数据**步骤最下方的**新增标签**会对本次上传的所有文件批量生效，不适用于单文档定位；单文档的唯一标签在下一步单独添加。标签为自由文本，无需在此预先创建业务标签。
 
-详见[创建知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)、[文档管理](raw/application-user-guide/knowledge-base/data-connection-overview/documents.md)。
+详见[创建知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)、[文档管理](raw/application-user-guide/knowledge-base/data-connection-overview/documents.md)。
 
 ### 2\. 为目标文档添加唯一标签
 
