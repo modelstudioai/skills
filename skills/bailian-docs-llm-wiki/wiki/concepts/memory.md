@@ -1,48 +1,55 @@
 # 记忆
 
-记忆是百炼平台提供的跨会话、结构化、可检索的长期记忆服务，用于持久化存储用户事实性信息（如行为偏好、临时计划）与结构化画像（如年龄、职业、兴趣），并在后续对话中基于语义自动召回，使智能体具备持续理解用户的能力。
+记忆是百炼平台为大模型应用提供的结构化、跨会话长期上下文管理能力，通过自动提取、持久化存储与语义检索用户相关事实信息和结构化画像，使智能体具备持续理解用户意图、偏好与历史行为的能力。它不是简单的对话缓存，而是以 `user_id` 为隔离单元、支持策略化生命周期管理的可编程记忆服务。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **智能体（Agent）应用**：通过 Agent Harness 原生集成，无需代码即可启用记忆。系统在每次对话结束时自动提取关键信息，写入事实记忆或触发用户画像抽取；下一次对话开始前，自动检索并注入相关记忆到上下文，提升个性化响应质量。  
-- **工作流（Workflow）应用**：通过「记忆库插件」节点（如 `memory_search` / `memory_store`）在流程中显式调用，支持在条件判断、工具调用前后动态读写记忆，实现状态驱动的流程控制（例如：“若用户历史有健身记录，则推荐运动计划”）。  
-- **Managed Agents**：以挂载资源形式接入「记忆库（Memory Store）」，智能体可在沙箱内直接通过 `read`/`write` 工具操作记忆文件树（如 `/mnt/memory/profile.json`），适用于需强一致性、多轮协同或文件级记忆管理的复杂任务。  
-- **高代码应用**：通过 RESTful API（如 `POST /add`, `POST /search`）编程式控制记忆生命周期，支持自定义抽取逻辑、多模态内容写入、异步事件处理（`add-async` + `get-event`），适合对时效性、精度和隔离粒度有精细要求的场景。  
-- **安全体系**：记忆的读写内容默认接受内容安全检测（如敏感信息识别、提示词注入防护），所有 `AddMemory` 和 `SearchMemory` 请求均被审计留痕，确保记忆数据合规可控。
+- **Managed Agents（托管智能体）**：记忆作为默认启用的上下文增强模块，自动在会话开始前（`autoRecall`）检索匹配该 `user_id` 的事实记忆与用户画像，并注入系统提示词；无需修改 Agent 配置，即可让 `qwen-max` 等模型天然“记得”用户习惯（如“每天9点喝水提醒”或“职业是设计师”）。  
+- **Workflow（工作流）与 OpenClaw**：通过「长期记忆插件」集成，开发者可在任意节点调用 `AddMemory` 写入关键事件，或用 `SearchMemory` 检索结果参与条件判断/变量赋值，实现业务逻辑驱动的记忆闭环（例如：订单完成 → 写入“已履约”事实；下次咨询 → 检索并主动告知“上次订单已签收”）。  
+- **LLM Application（高代码应用）**：通过 DashScope SDK 或直接调用 RESTful API（`POST /add`, `POST /memory_nodes/search`），在 Python 函数中精细控制记忆写入时机、内容格式与检索策略，适用于需与自有数据库/CRM 对接的定制化场景。  
+- **安全体系中**：所有记忆的读写操作均经过内生内容安全引擎检测，自动拦截含敏感信息、违规表述或潜在投毒风险的记忆内容，保障长期记忆库的数据合规性与可信度。  
+- **统一抽象层**：无论使用 Agent Harness 零配置、插件拖拽，还是 SDK 编码，底层均基于同一套记忆模型——即 **事实记忆**（动态、时效性事件，如行为/技能/观测）与 **用户画像**（静态、结构化属性，如年龄/职业/偏好），二者可独立使用，亦可协同增强上下文精度。
 
 ## 关键参数和配置
 
-| 参数 | 说明 | 开发建议 |
-|------|------|----------|
-| `user_id` | **必填**，记忆隔离的核心维度。同一 `user_id` 下的所有记忆自动聚合、跨会话共享；不同用户间完全隔离。 | 建议从登录态或业务 ID（如 `uid_123456`）稳定生成，避免使用临时 session_id。 |
-| `memory_library_id` | 可选，指定自定义记忆库 ID；不传则使用默认记忆库。配合 `project_id` 可实现项目级隔离。 | 生产环境推荐创建独立记忆库（如 `prod-user-profile`），便于权限管控与监控。 |
-| `plan_version` | `pro`（默认）：启用 Rerank、`min_score` 过滤、高精度抽取；`lite`：仅基础向量检索，成本更低。Add 与 Search 可独立设置。 | 对画像抽取、技能提取、高相关性检索等场景，务必使用 `pro`；高频轻量检索（如状态查询）可用 `lite` 降本。 |
-| `top_k` | 检索最多返回条数，默认 `10`（API），取值范围 `1–100`。 | 根据下游模型上下文长度合理设置（如 Qwen3-32B 支持 32K tokens，`top_k=20` 通常足够）；避免盲目设大导致噪声注入。 |
-| `min_score` | 相似度阈值（0.0–1.0），仅 `plan_version=pro` 时生效，默认 `0.3`。低于此值的记忆将被过滤。 | 初期建议设为 `0.5`，上线后根据召回准确率（Precision@K）逐步下调；`0.7+` 适用于强确定性场景（如身份核验）。 |
-| `profile_schema` | 用户画像模板 ID，传入后触发结构化字段抽取（如 `age`, `occupation`）。需先调用 `CreateProfileSchema` 创建。 | 模板字段应精简、明确、有业务价值；避免过度抽取（如 `favorite_color`），每个 schema 字段数建议 ≤15。 |
-| `extract_mode` | 可选值：`profile_only`（仅抽画像）、`observation_only`（仅抽事实）、`all`（默认）。 | 当只需更新画像（如用户修改资料）时，显式设为 `profile_only`，跳过冗余事实提取，提升性能。 |
+| 参数 | 说明 | 建议值 | 注意事项 |
+|------|------|--------|----------|
+| `user_id` | 记忆隔离主键，**必填**。同一 `user_id` 下所有记忆互通；不同 `user_id` 完全隔离。 | 业务侧稳定标识（如用户手机号哈希、OpenID） | 不可为空；不建议使用临时 session_id |
+| `plan_version` | 检索策略版本：`pro`（启用 Rerank + `min_score` 过滤，质量高）、`lite`（基础向量检索，延迟低、成本低） | 实时性要求高用 `lite`；精度优先用 `pro`（默认） | `Add` 接口由规则决定；`Search` 接口由请求参数控制 |
+| `top_k` | 单次检索最大返回条数 | 3–10（适配 Prompt 上下文容量） | 范围 1–100；过大易超 token 限制 |
+| `min_score` | 相似度阈值（0.0–1.0），仅 `plan_version=pro` 时生效 | 0.55–0.65（平衡召回率与准确率） | 低于此值的结果被过滤，不计入 `top_k` |
+| `profile_schema` | 用户画像模板 ID，**仅当写入结构化画像时必填** | 通过 `POST /profile_schemas` 创建后获取 | 不传则仅触发事实记忆抽取 |
+| `memory_library_id` | 指定自定义记忆库 ID；不传则使用默认库 | 自定义库 ID（如 `mlib-prod-user`） | 默认库不可删除，自定义库可随时清理 |
 
-> ⚠️ 注意：用户画像抽取为**异步过程**，首次 `GetUserProfile` 可能返回空；建议轮询（间隔 ≥3 秒，最多 5 次）或监听 `event_id` 状态。事实记忆写入为同步（`add`）或最终一致（`add-async`），无延迟等待需求。
+> ⚠️ 注意：`extract_scene` 参数**仅作用于用户画像模板**，与事实记忆无关；事实记忆质量由 `plan_version` 控制。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速起步**：开通服务 → 设置 `DASHSCOPE_API_KEY` → 调用 `AddMemory` 写入一条带 `user_id` 的对话消息 → 立即用 `SearchMemory` 检索验证。  
-- ✅ **生产就绪**：  
-  - 创建自定义记忆库，配置事实记忆规则（设过期时间防堆积）和画像规则（设默认值防空）；  
-  - 使用 `add-async` 处理含图片/长文本/多技能的记忆写入；  
-  - 在 `meta_data` 中添加业务标签（如 `"source": "workflow_order"`），提升后续定向检索精度。  
-- ✅ **避坑指南**：  
-  - 不要复用 `user_id` 表示不同用户（如用测试账号 ID 给正式用户）；  
-  - `DeleteMemory` 不可逆，删除前务必确认 `id` 或用 `ListMemory?user_id=xxx` 核查；  
-  - 默认记忆库不可删除，但可重命名；自定义记忆库删除后数据**永久丢失**；  
-  - 免费试用期后按 `Add`/`Search` 次数计费，注意限流（全账号 3000 QPM，`Add` ≤120 QPM）。
+- ✅ **快速验证三步走**：  
+  1. `curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/add \  
+     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \  
+     -d '{"user_id":"u123","messages":[{"role":"user","content":"我下周要出差去杭州"}]}'`  
+  2. 控制台查看是否生成“出差”事实记忆；  
+  3. 再次调用 `/search`，传相同 `user_id` 和新 query（如“我最近有什么安排？”），确认结果被注入 Prompt。  
+
+- ✅ **生产就绪要点**：  
+  - 限流防护：账号级总限流 3000 QPM，`SearchMemory` ≤ 300 QPM —— 务必实现指数退避重试（HTTP 429）；  
+  - 异步画像：`AddMemory` 后立即查 `GetUserProfile` 可能为空，建议等待 3 秒后重试；  
+  - 数据隔离：`user_id` 是唯一隔离维度，跨业务共享需应用层聚合，**不支持跨 `user_id` 查询**；  
+  - 免费额度：上线前确认免费额度（Add 1500次/3个月，Search 5000次/3个月，存储 10,000 条永久免费）；  
+  - 安全合规：所有记忆内容自动过检，但敏感字段（如身份证号）仍需业务侧脱敏后再写入。  
+
+- ❌ **避免踩坑**：  
+  - 不要将 `user_id` 设为随机字符串（导致记忆无法复用）；  
+  - 不要在 `SearchMemory` 中传 `messages` 为空数组（将返回空结果）；  
+  - 不要依赖默认库的“自动清理”——记忆无自动过期机制，需按业务规则显式管理生命周期（如调用 `/memory_nodes/{id}` 删除）。
 
 ## 关联主题页
 
 - [memory library overview](../guides/memory-library-overview.md)
 - [long term memory new](../api/long-term-memory-new.md)
-- [llm application](../guides/llm-application.md)
 - [managed agents](../guides/managed-agents.md)
 - [security guide](../guides/security-guide.md)
+- [llm application](../guides/llm-application.md)
 
 

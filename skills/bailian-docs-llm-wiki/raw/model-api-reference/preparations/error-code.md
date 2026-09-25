@@ -2131,7 +2131,7 @@ A：请核对资源包的可抵扣范围。以qwen-plus/qwen-plus-latest系列�
 
 **解决方案：** 在[预算管理](https://bailian.console.aliyun.com/cn-beijing/costing-balance/budget)页面提高预算额度或关闭「达预算即停」，即可恢复调用。
 
-**警告**服务停止存在一定延迟，延迟时段内产生的费仍将正常收取。
+**警告**服务停止存在一定延迟，延迟时段内产生的费仍将正常收取。若已达预算阈值触发停机后，又发放了免费额度，停机不会自动恢复，需手动调整预算阈值。
 
 ## 430-Audio.DecoderError
 

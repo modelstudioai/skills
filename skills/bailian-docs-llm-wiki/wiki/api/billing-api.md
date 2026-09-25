@@ -1,46 +1,50 @@
 # billing api
 
-Billing API 提供账单数据查询能力，支持按月汇总和按时间趋势两种视角，帮助开发者监控和分析模型服务的费用分布。当前开放两个核心接口：`GetBillingOverview` 用于获取单月账单总览（含分组聚合），`GetBillingTrend` 用于查询指定时间范围内按天或按月的费用变化趋势。所有接口均基于 RESTful 设计，需通过 HTTPS 调用，并受统一鉴权与配额控制。
+Billing API 提供账单数据查询能力，支持按月获取费用总览（`GetBillingOverview`）和按时间范围获取费用趋势（`GetBillingTrend`）。所有接口均基于 RESTful 设计，使用 HTTPS 协议，需通过 API Key 进行身份认证。返回数据包含金额、税费、币种及多维度分组统计，适用于成本分析、用量监控与财务对账等场景。
 
 ## 支持的模型/功能
 
-- **账单总览**：通过 [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md) 获取指定月份（`billMonth`）的费用合计、税费、分组明细（如按 `MAAS_TYPE` 或 `BASE_MODEL` 聚合）。
-- **账单趋势**：通过 [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md) 查询连续时间段（`timePeriod.start` 至 `timePeriod.end`）内的费用走势，支持 `DAY` 或 `MONTH` 粒度，并返回各周期内分组费用详情。
-- 两接口均支持多维度筛选（`filter.dimensions`）、语言本地化（`locale`）、地域限定（`regionId`）及空值匹配（使用 `DIMENSION_FILTER_NULL_VALUE`）。
+Billing API 当前提供两个核心功能：
 
-> **注意**：文档 1 中 `GetBillingOverview` 的 `filter.dimensions.selectType` 仅列出 `IN` 和 `NOT`，但实际调用中若传入 `NOT` 且 `values` 为空数组，行为未明确定义；建议优先使用 `IN` 配合显式值列表，该限制在 [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md) 文档中亦未补充说明，需以实测为准。
+- `GetBillingOverview`：查询**单个月份**的账单总览，返回按指定维度聚合的 TopN 分组及其金额占比。适用于快速掌握某月费用构成。详见 [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md)。
+- `GetBillingTrend`：查询**连续时间范围内**（按天或按月粒度）的费用趋势，返回各周期内分组明细及累计汇总。适用于用量波动分析与预算跟踪。详见 [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md)。
+
+> **注意**：两文档均声明 `groupBy` 必须且只能传入一个维度，但未明确禁止空数组或重复 code；实际调用时若传入多个 `groupBy` 元素将返回 400 错误。该约束在 [GetBillingTrend](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingtrend.md) 的“请求参数”中被显式强调，而 [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md) 仅在描述中提及，建议以 `GetBillingTrend` 文档为准并严格校验输入。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 | 示例值 |
 |--------|------|------|------|--------|
-| `billMonth`（仅 Overview） | string | 是 | 账单月份，格式 `YYYY-MM` | `"2026-08"` |
-| `granularity`（仅 Trend） | string | 是 | 时间粒度：`DAY` 或 `MONTH` | `"DAY"` |
-| `timePeriod`（仅 Trend） | object | 是 | 含 `start`（`YYYY-MM-DD`）和 `end`（`YYYY-MM-DD`） | `{"start":"2026-08-01","end":"2026-08-31"}` |
-| `groupBy` | array<object> | 是 | 分组维度，**必须且仅能传 1 个**；`code` 值见下表 | `[{"code":"MAAS_TYPE"}]` |
-| `filter.dimensions` | array<object> | 否 | 筛选条件，每个元素含 `code`、`values`、`selectType` | `[{"code":"BASE_MODEL","values":["qwen-plus"],"selectType":"IN"}]` |
-| `topNum` | integer | 否 | 返回 TopN 分组数（1–20，默认 20） | `10` |
-| `zeroFilter` | boolean | 否 | 是否过滤金额为 0 的分组（默认 `true`） | `false` |
+| `billMonth`（仅 `GetBillingOverview`） | string | 是 | 账单月份，格式 `YYYY-MM` | `2026-08` |
+| `granularity`（仅 `GetBillingTrend`） | string | 是 | 时间粒度：`DAY` 或 `MONTH` | `DAY` |
+| `timePeriod.start` / `.end`（仅 `GetBillingTrend`） | string | 是 | 查询起止日期，格式 `YYYY-MM-DD` | `2026-08-01`, `2026-08-31` |
+| `groupBy[].code` | string | 是 | 分组维度 Code，统一使用大写。支持值包括：`MAAS_TYPE`, `BASE_MODEL`, `API_KEY_ID`, `WORKSPACE_ID`, `FEE_TYPE`, `CHARGE_TYPE`, `BUSINESS_REGION`, `SERVICE_SITE`, `ARTICLE_CODE` | `BASE_MODEL` |
+| `filter.dimensions[]` | array | 否 | 维度过滤条件，每个元素含 `code`, `values`, `selectType` | `[{"code":"BASE_MODEL","values":["qwen-max"],"selectType":"IN"}]` |
+| `topNum` | integer | 否 | 返回分组数量（1–20），默认 20；超出部分合并为“其他” | `10` |
+| `zeroFilter` | boolean | 否 | 是否过滤金额为 0 的分组，默认 `true` | `false` |
+| `regionId` | string | 否 | 地域 ID，用于限定账单数据范围 | `cn-beijing` |
+| `locale` | string | 否 | 返回语言：`zh-CN`（中文）或 `en-US`（英文），影响 `name` 字段展示 | `zh-CN` |
 
-**支持的维度 Code（通用）**：  
-`MAAS_TYPE`, `BASE_MODEL`, `API_KEY_ID`, `WORKSPACE_ID`, `FEE_TYPE`, `CHARGE_TYPE`, `BUSINESS_REGION`, `SERVICE_SITE`, `ARTICLE_CODE`。所有维度均支持 `DIMENSION_FILTER_NULL_VALUE` 表示匹配空值。
+> **注意**：`filter.dimensions[].values` 可传特殊值 `DIMENSION_FILTER_NULL_VALUE` 表示匹配 NULL 或空字符串，该行为在两篇原始文档的“补充说明”中一致定义，但实际调用时需确保服务端已启用该特性（参见 [GetBillingOverview](../../raw/model-api-reference/billing-api/api-modelstudio-2026-02-10-getbillingoverview.md) 补充说明）。
 
 ## 使用方式
 
-1. **认证**：请求需携带有效的 `Authorization` 头（如 Bearer [Token](../concepts/token.md)），具体鉴权方式参见平台通用认证文档。
+1. **认证**：在 HTTP Header 中携带 `Authorization: Bearer <API_KEY>`。
 2. **构造请求**：
-   - 总览：`GET /modelstudio/billing/overview?billMonth=2026-08&groupBy[0].code=MAAS_TYPE&locale=zh-CN`
-   - 趋势：`GET /modelstudio/billing/trend?granularity=DAY&timePeriod.start=2026-08-01&timePeriod.end=2026-08-31&groupBy[0].code=BASE_MODEL`
-3. **响应解析**：
+   - `GetBillingOverview`：`GET /modelstudio/billing/overview?billMonth=2026-08&groupBy[0].code=MAAS_TYPE&locale=zh-CN`
+   - `GetBillingTrend`：`GET /modelstudio/billing/trend?granularity=DAY&timePeriod.start=2026-08-01&timePeriod.end=2026-08-31&groupBy[0].code=BASE_MODEL`
+3. **解析响应**：
    - 成功时 `success: true`，费用金额均为字符串类型（含两位小数），需转为数值处理；
-   - `data.groups`（Overview）和 `data.resultByTime`（Trend）按金额降序排列，`percentage` 为相对占比（非百分比整数）。
+   - `data.currency` 标识币种（如 `CNY`, `USD`），不同账单周期可能混用；
+   - `data.groups`（`GetBillingOverview`）与 `data.resultByTime`（`GetBillingTrend`）是核心业务数据结构，注意 `percentage` 为字符串格式的小数（如 `"0.10"`）。
 
 ## 限制和注意事项
 
-- **时间范围限制**：`GetBillingTrend` 的 `timePeriod.end` 不能晚于当前日期，且 `end - start` 最大跨度为 90 天（`DAY` 粒度）或 24 个月（`MONTH` 粒度）。
-- **分组约束**：两接口均强制要求 `groupBy` 数组长度为 1，传入多个元素将返回参数错误；`filter.dimensions` 中同一 `code` 不可重复出现。
-- **币种差异**：`GetBillingOverview` 示例返回 `USD`，而 `GetBillingTrend` 示例返回 `CNY`；实际币种由账户结算货币决定，接口不支持跨币种转换。
-- **空值处理**：当 `filter.dimensions.values` 包含 `DIMENSION_FILTER_NULL_VALUE` 时，匹配数据库中该字段为 `NULL` 或空字符串的记录，此行为在两篇原始文档中定义一致。
+- **时间范围限制**：`GetBillingTrend` 的 `timePeriod.end` 不能晚于当前日期；`timePeriod.start` 与 `end` 间隔最长支持 90 天（`DAY` 粒度）或 24 个月（`MONTH` 粒度）。
+- **分组与筛选一致性**：`groupBy[].code` 和 `filter.dimensions[].code` 必须属于同一维度集合，不可跨类组合（例如不能 `groupBy.code=MAAS_TYPE` 同时 `filter.dimensions.code=WORKSPACE_ID`）。
+- **空值处理**：当分组 key 为空时，返回 `DIMENSION_FILTER_NULL_VALUE`（如 `"key": "DIMENSION_FILTER_NULL_VALUE"`），前端需做兼容渲染。
+- **精度与税额**：金额字段（`amount`, `pretaxAmount`, `taxAmount`）均为字符串，避免浮点运算误差；税费可能因地域政策动态计算，不可简单相减推导。
+- **错误响应**：通用错误码（如 `400 Bad Request`, `401 Unauthorized`, `429 Too Many Requests`）遵循标准 HTTP 规范，具体业务错误见 `code` 与 `message` 字段。
 
 ## 来源文档
 

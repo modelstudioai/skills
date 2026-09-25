@@ -138,7 +138,7 @@ qwen-mt-image
 
 配置敏感词，以在翻译前过滤图片中**完全匹配**的文本，**对大小写敏感**。
 
-敏感词的语种可与源语种不一致，支持全部的[源语种](raw/model-api-reference/image-generation/qwen-image-api-reference/qwen-mt-image-api.md)和[目标语种](https://help.aliyun.com/zh/model-studio/qwen-mt-image-api#d2aa4b03d2kco)。为确保翻译效果，建议单次请求添加的敏感词不超过50个。
+敏感词的语种可与源语种不一致，支持全部的[源语种](raw/model-api-reference/qwen-mt-translation-models/qwen-mt-image-api.md)和[目标语种](https://help.aliyun.com/zh/model-studio/qwen-mt-image-api#d2aa4b03d2kco)。为确保翻译效果，建议单次请求添加的敏感词不超过50个。
 
 **示例：**\["全场9折", "七天无理由退换"\]
 
@@ -372,7 +372,7 @@ print(f"翻译完成，图像URL: {image_url}")
 
 配置敏感词，以在翻译前过滤图片中**完全匹配**的文本，**对大小写敏感**。
 
-敏感词的语种可与源语种不一致，支持全部的[源语种](raw/model-api-reference/image-generation/qwen-image-api-reference/qwen-mt-image-api.md)和[目标语种](https://help.aliyun.com/zh/model-studio/qwen-mt-image-api#d2aa4b03d2kco)。为确保翻译效果，建议单次请求添加的敏感词不超过50个。
+敏感词的语种可与源语种不一致，支持全部的[源语种](raw/model-api-reference/qwen-mt-translation-models/qwen-mt-image-api.md)和[目标语种](https://help.aliyun.com/zh/model-studio/qwen-mt-image-api#d2aa4b03d2kco)。为确保翻译效果，建议单次请求添加的敏感词不超过50个。
 
 **示例：**\["全场9折", "七天无理由退换"\]
 
@@ -1212,7 +1212,7 @@ ar
 
 #### Q：为什么图中的内容没有被翻译？
 
-A：因为启用了[主体分割](raw/model-api-reference/image-generation/qwen-image-api-reference/qwen-mt-image-api.md)功能，模型不会翻译图片中人物、商品、Logo等主体上的文字。若需翻译所有文字，请将`ext.config.imgSegment`参数设置为`false`。
+A：因为启用了[主体分割](raw/model-api-reference/qwen-mt-translation-models/qwen-mt-image-api.md)功能，模型不会翻译图片中人物、商品、Logo等主体上的文字。若需翻译所有文字，请将`ext.config.imgSegment`参数设置为`false`。
 
 #### Q：如何将临时的图像链接转为永久链接？
 

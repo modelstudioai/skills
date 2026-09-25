@@ -1499,7 +1499,7 @@ VSwitch ID
 
 ## 相关文档
 
-创建知识库导入数据源内容，用于后续检索：[创建和使用知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)。
+创建知识库导入数据源内容，用于后续检索：[创建和使用知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)。
 
 应用配置和使用指南：[应用类型介绍](raw/application-user-guide/llm-application/application-introduction.md)。
 

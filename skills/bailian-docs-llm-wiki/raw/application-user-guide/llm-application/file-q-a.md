@@ -18,7 +18,7 @@
 
 简单直接，但受限于模型的上下文长度。
 
-**切片检索**（[RAG](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)）
+**切片检索**（[RAG](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)）
 
 通过内置解析器解析文件内容，将文件切分成小片段，提问时，系统会从文件切片中检索最相关的内容片段，并将其与用户问题一并提供给模型以生成回答。
 

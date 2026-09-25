@@ -79,7 +79,7 @@ RAG（Retrieval Augmented Generation）的效果由三个阶段决定：
 
 **示例**：用户输入 `手机X1`，系统改写为 `请提供产品库中所有在售版本的手机X1及其参数信息`。
 
-在[知识检索](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)或[知识问答](raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md)的知识库独立配置中启用 **Query 改写** 开关。
+在[知识检索](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)或[知识问答](raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md)的知识库独立配置中启用 **Query 改写** 开关。
 
 ### 2.2 检索无效：召回知识不相关
 
@@ -98,7 +98,7 @@ RAG（Retrieval Augmented Generation）的效果由三个阶段决定：
 
 使用方式：
 
--   在[知识检索](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)或[知识问答](raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md)的知识库独立配置中设置**标签过滤**
+-   在[知识检索](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)或[知识问答](raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md)的知识库独立配置中设置**标签过滤**
 -   通过 API 调用时在请求参数中指定 `tags`
 
 启用元数据抽取
@@ -152,7 +152,7 @@ RAG（Retrieval Augmented Generation）的效果由三个阶段决定：
 1.  系统先利用内置分句标识符将文档划分为段落
 2.  再根据段落间的语义相关性决定切片边界
 
-适用于大部分场景，在[创建知识库](raw/application-user-guide/knowledge-base/rag-knowledge-base.md)或[导入数据](raw/application-user-guide/knowledge-base/data-connection-overview/documents.md)时选择。
+适用于大部分场景，在[创建知识库](raw/application-user-guide/knowledge-base/data-connection-overview/rag-knowledge-base.md)或[导入数据](raw/application-user-guide/knowledge-base/data-connection-overview/documents.md)时选择。
 
 人工检查和修正切片
 
@@ -184,7 +184,7 @@ RAG（Retrieval Augmented Generation）的效果由三个阶段决定：
 
 没有通用的最佳阈值，需要通过调试窗口反复测试，观察不同阈值下的召回结果。建议从 0.2 开始调整。
 
-配置位置：[知识检索](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)或[知识问答](raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md)的知识库独立配置中的**相似度阈值**（0.01~1.0）。
+配置位置：[知识检索](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)或[知识问答](raw/application-user-guide/knowledge-base/service/rag-knowledge-qa.md)的知识库独立配置中的**相似度阈值**（0.01~1.0）。
 
 增加最大召回数量
 
@@ -215,7 +215,7 @@ RAG（Retrieval Augmented Generation）的效果由三个阶段决定：
 需要特殊排序规则，如"优先返回最近一年的内容"
 
 -   **知识库独立配置**：在检索服务或问答服务中，展开知识库配置面板选择排序模型和模式
--   **全局混排模型**：在[知识检索](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)的全局检索配置中配置，对所有绑定知识库统一排序
+-   **全局混排模型**：在[知识检索](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)的全局检索配置中配置，对所有绑定知识库统一排序
 
 ### 2.5 模型理解有误
 
@@ -308,7 +308,7 @@ RAG（Retrieval Augmented Generation）的效果由三个阶段决定：
 
 启用知识库路由
 
-系统根据查询意图自动判断需要检索哪些库，减少无关库的干扰。在[知识检索](raw/application-user-guide/knowledge-base/rag-knowledge-retrieval.md)的全局检索配置中配置
+系统根据查询意图自动判断需要检索哪些库，减少无关库的干扰。在[知识检索](raw/application-user-guide/knowledge-base/service/rag-knowledge-retrieval.md)的全局检索配置中配置
 
 选择混排模型模式
 
