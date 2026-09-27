@@ -1,75 +1,51 @@
-# 安全与合规
+# 内容安全与合规
 
-安全与合规是百炼平台内生、统一、可配置的核心横切能力，贯穿模型调用、Agent 运行、知识管理、工具集成与数据流转全生命周期。它既提供开箱即用的默认防护（如输入输出内容过滤、运行时沙箱隔离），也支持企业级精细化管控（如传输加密、私网访问、权限策略、模型备案与审计留痕），确保开发者在满足《生成式人工智能服务管理暂行办法》等监管要求的前提下，安全、可控、可追溯地构建和运营 AI 应用。
+内容安全与合规是百炼平台面向生成式AI应用提供的核心横切能力，指对用户输入、模型输出、知识库内容、记忆数据等全链路文本/图像内容进行实时风险识别（如涉黄、暴恐、政治敏感、违法违禁等），并确保整体技术栈满足《生成式人工智能服务管理暂行办法》等监管要求的综合防护机制。该能力默认启用、深度集成，覆盖开发、运行、数据与交付各阶段，无需额外编码即可获得基础防护，同时支持按需增强审计与策略管控。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-安全与合规不是独立模块，而是深度嵌入以下关键场景的底层能力：
+内容安全与合规能力在百炼平台中以“分层嵌入、按需激活”方式落地，贯穿以下关键场景：
 
-- **Agent 开发与运行**：  
-  - Flow Agent 自动启用输入/输出内容安全检测（含提示词注入识别）；  
-  - Managed Agent 默认启用运行时沙箱、工具调用拦截、凭证隔离与 Session 生命周期治理；  
-  - 所有 Agent 的[记忆](memory.md)（Memory）读写内容均经安全检测，防止恶意[记忆](memory.md)污染。
+- **Flow Agent 与 Managed Agent**：自动对用户输入（Prompt）和模型输出（Response）执行双路内容安全检测；Managed Agent 还在工具调用前拦截高风险指令（如含恶意 payload 的 Shell 命令），保障运行时行为安全。  
+- **RAG 知识库**：上传文件时自动预扫描（PDF/DOCX 等格式 OCR+文本分析），入库后持续检测知识片段风险；检索阶段同步校验召回内容安全性，防止投毒数据污染响应。  
+- **Memory 模块**：对记忆的读写操作进行内容安全过滤，避免敏感信息被意外存储或泄露，保障对话上下文安全。  
+- **模型调用 API 层**：通过 `X-DashScope-DataInspection` 请求头显式启用 AI 安全护栏，实现输入/输出双通道实时风控，适用于自建前端、SDK 或直连 HTTP 调用。  
+- **安全存储业务空间**：在高敏专属环境中，内容安全检测与私网隔离、传输加密协同工作，确保数据“不出域、不裸传、不越界”。
 
-- **RAG 与知识管理**：  
-  - 文件上传时自动预扫描（病毒、敏感信息、格式异常）；  
-  - 知识库内容入库前执行安全检测，阻断投毒风险；  
-  - RAG 检索结果返回前进行输出合规性校验。
-
-- **模型调用与推理**：  
-  - 支持 AES-256+RSA 混合加密传输（通过 `X-DashScope-EncryptionKey` 头），保护 `input` 和 `output`；  
-  - 启用 `X-DashScope-DataInspection` 请求头，触发双路（输入/输出）AI 安全护栏，实时拦截违法、违规、高危内容；  
-  - 所有上架模型均完成国家网信办算法备案与大模型备案，并公示备案号。
-
-- **网络与数据访问**：  
-  - 通过 PrivateLink 实现 VPC 内网直连，流量全程不经过公网；  
-  - 安全存储业务空间支持反向终端节点 + MSE 网关，实现对客户私有 OSS/ADB/ES 等资源的安全、可控访问。
-
-- **权限与治理**：  
-  - 基于 RBAC 的细粒度应用权限管理，支持按模型、RAG、Workflow 等资源维度授权 `invoke`/`configure`/`update_knowledge` 等操作；  
-  - 全链路审计日志（含工具调用、知识库访问、模型请求）统一归集至「风险与审计」中心，支持按风险等级、资产类型、时间范围检索与导出。
+> ⚠️ 注意：默认防护自动生效，但高级策略（如自定义关键词库、细粒度风险等级处置）需在控制台 **Security > 高级防护 > 安全策略** 中手动开启；当前高级防护仅提供监测与告警，**不支持自动阻断**，风险事件需人工确认处理。
 
 ## 关键参数和配置
 
-| 参数/配置项 | 作用域 | 说明 | 开发者须知 |
-|-------------|--------|------|------------|
-| `X-DashScope-DataInspection` | HTTP 请求头（模型/Agent 调用） | 启用增强版内容安全检测，值为 JSON 字符串（如 `'{"input":"cip","output":"cip"}'`） | 需先在控制台开通高级防护并完成服务授权；检测失败返回 `400` + `data_inspection_failed` 错误码，无模型响应体 |
-| `enable_encryption` / `enableEncrypt` | SDK 调用参数（Python/Java） | 启用传输加密开关 | 推荐使用 SDK 自动模式（≥Python 1.14.0 / Java 2.12.0），SDK 自动处理密钥获取、AES 加密、RSA 封装与解密 |
-| `X-DashScope-EncryptionKey` | HTTP 请求头 | RSA 加密后的 AES 密钥（Base64 编码） | 仅当手动实现加密时需设置；公钥 ID 通过 `/api/v1/public-keys/latest` 获取 |
-| 全局安全策略开关 | 控制台 / API（`/policies`） | 控制 11 条高级策略（含内容安全、工具调用拦截、知识库扫描等）的启用状态 | 策略对账号下所有 Agent 全局生效；默认防护不可关闭，高级策略需显式开通 |
-| `risk_level`（`high`/`medium`/`low`） | API 查询参数（`/agent_logs`）、CLI 命令选项 | 筛选告警风险等级 | 高风险事件需优先处置；CLI 示例：`bl agents security alerts --risk-level high` |
-| `asset_type`（`agent`/`tool`/`knowledge_base`/`channel`） | API 查询参数（`/agent_logs`, `/export_agent_logs`） | 按资产类型过滤告警或导出范围 | `channel` 表示发布渠道（排除已删除、已过期），非通用资产类型，慎用于告警筛选 |
-
-> ⚠️ 注意：  
-> - 默认防护无开关，随功能模块（RAG、Memory、Managed Agent）自动启用；  
-> - 高级防护当前**不支持自动拦截/阻断**，仅提供监测、告警与审计能力；  
-> - 所有 Security API Endpoint 必须使用 `cn-beijing` 地域，格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security`；  
-> - API Key 需绑定对应地域，且必须携带 `Authorization: Bearer <API_KEY>` 头。
+| 参数/配置项 | 类型 | 说明 | 使用位置 |
+|-------------|------|------|----------|
+| `X-DashScope-DataInspection` | HTTP Header（string） | 启用 AI 安全护栏的开关，值为 `{"input":"cip","output":"cip"}`（字符串格式，非 JSON 对象） | HTTP API 调用、DashScope SDK（低层封装） |
+| `scene` | string（可选） | 检测场景标识，影响策略权重，如 `"chat"`（对话）、`"search"`（搜索）、`"generation"`（生成），默认 `"general"` | Security API `/v1/security/text` 或 `/v1/security/image` |
+| `enable_ocr` | boolean（可选） | 图像检测时是否启用 OCR 文本识别，默认 `false`；启用后延迟增加约 300ms | Security API 图像检测请求体 |
+| `risk_level` | integer（响应字段） | 检测结果风险等级：`0`=安全，`1`=低危，`2`=中危，`3`=高危（**非字符串枚举**） | 所有 Security API 同步/异步响应体 |
+| `content` / `image_url` | string | 待检测文本（≤65536 字符）或图片公网 HTTPS URL（≤10MB，支持防盗链白名单） | Security API 必填参数 |
+| 高级防护策略开关 | 控制台配置 | 包括“内容安全”、“RAG 投毒识别”、“记忆内容检测”等独立开关，默认关闭，需手动开启 | 控制台 **Security > 高级防护 > 安全策略** |
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速启用基础防护**：无需任何配置，只要使用 RAG、Memory 或发布 Managed Agent，即自动获得输入输出检测、沙箱隔离、文件扫描等默认防护。  
-- ✅ **一键开通增强能力**：进入控制台 **Security > 高级防护 > 安全策略**，点击“立即开通”并完成服务授权，即可配置自定义敏感词库、细粒度拦截规则。  
-- ✅ **程序化监控与响应**：用 CLI 或 API 实时拉取高风险告警：  
-  ```bash
-  bl agents security alerts --risk-level high
-  # 或
-  curl -H "Authorization: Bearer sk-xxx" \
-       "https://your-workspace.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/security/agent_logs?risk_level=high&order_by=check_time&order=desc"
-  ```  
-- ✅ **安全集成到生产调用链**：  
-  - 用 SDK 自动加密：`client.chat.completions.create(..., enable_encryption=True)`；  
-  - 用请求头启用护栏：`headers={"X-DashScope-DataInspection": '{"input":"cip","output":"cip"}'}`；  
-  - 用私网域名替换 base_url，实现 VPC 内网调用。  
-- ✅ **审计闭环**：所有风险事件自动留痕，支持通过 `/export_agent_logs` 提交导出任务，轮询 `/export_status` 获取 Excel 下载链接，满足合规报告需求。
+- ✅ **快速启用**：HTTP 调用时加一行 Header 即可启用双路风控：  
+  ```http
+  X-DashScope-DataInspection: {"input":"cip","output":"cip"}
+  ```
+- ✅ **SDK 更省心**：Python 使用 `dashscope.Generation.call(..., extra_headers={"X-DashScope-DataInspection": '{"input":"cip","output":"cip"}'})`；Java 同理，无需改业务逻辑。  
+- ✅ **批量/大图用异步**：对多图或高并发场景，优先调用 `/v1/security/async/submit` 提交任务，再轮询 `/v1/security/async/result` 获取结果（超时 30 分钟）。  
+- ✅ **调试看日志**：开启推理日志（需先授权 SLS 投递）后，可在日志中查看原始 `input`/`output` 及对应 `risk_level`，精准复现风控决策依据。  
+- ⚠️ **避坑提醒**：  
+  - `risk_level` 是整数，不是 `"high"` 字符串；  
+  - 图像检测需确保 `image_url` 公网可访问且在白名单内；  
+  - 高级防护不拦截，仅告警——高风险响应仍会返回，务必在业务侧做 `if response.risk_level > 2: reject()` 判断；  
+  - 所有检测结果仅保留 7 天，关键审计需自行落库。
 
 ## 关联主题页
 
 - [security guide](../guides/security-guide.md)
 - [security api guide](../api/security-api-guide.md)
 - [security and compliance](../guides/security-and-compliance.md)
-- [managed agents](../guides/managed-agents.md)
-- [llm application](../guides/llm-application.md)
-- [application permission management](../guides/application-permission-management.md)
+- [application support](../guides/application-support.md)
+- [model monitoring](../guides/model-monitoring.md)
 
 

@@ -1,45 +1,50 @@
 # Token
 
-Token 是百炼平台中用于计量模型调用资源消耗的核心单位，代表模型处理文本、图像、音频等内容时所消耗的最小语义或计算粒度。在百炼的计费、配额控制、性能监控与模型服务治理中，Token 是统一的计量基准，直接关联成本、限流、用量统计与服务等级保障。
+Token 是百炼平台中用于度量模型计算资源消耗的最小计量单位，代表模型在处理文本、图像、音频等输入输出时所消耗的语义单元（如子词、字节对、视觉 patch 等）。它既是计费与配额控制的核心依据，也是性能监控、用量分析和成本优化的基础指标。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **模型调用与计费**：所有按 token 计费的模型（如 Qwen 系列、Qwen-VL、Qwen-Audio 及兼容 OpenAI 格式的第三方模型）均以实际消耗的 Token 数为计费依据。Token 数由输入（[prompt](../guides/prompt.md)）和输出（completion）共同构成，具体计算遵循各模型的 tokenizer 规则（如 Qwen 使用 `qwen-tokenizer`，按子词切分）。
+- **计费与配额控制（Token Plan）**：所有支持 Token Plan 的模型（如 `qwen-turbo`、`text-embedding-v3`、`bge-reranker-v2-m3`）均按实际消耗的 Token 数计费。调用时需显式指定 `plan` 参数（如 `"personal"`），其配额上限（如日总 Token 限额、单次 `max_tokens`）直接约束模型响应长度与调用频次。多模态模型（如 `qwen-vl-plus`）暂不纳入 Token Plan，仍按请求次数计费。
 
-- **Token Plan 配额管理**：Token Plan 通过 `quota`（日 token 总配额）和 `max_tokens`（单次请求最大 token 数）实现细粒度资源管控。配额按 UTC 每日 00:00 重置，超限请求返回 HTTP 429；单次超 `max_tokens` 则截断并返回 400 错误。Token Plan 绑定到具体模型 ID，不同模型间 quota 不共享。
+- **模型监控与用量统计**：监控系统中的 `TotalToken 数` 指标即为该模型在选定时间范围内所有成功请求的输入 Token 与输出 Token 之和。该数据延迟约 1 小时，用于成本归因、API-Key 级用量审计及告警（如“单日 TotalToken 超阈值”），但**不作为最终计费凭证**——费用中心账单为准。
 
-- **模型监控与可观测性**：在「模型用量」和「实时监控」中，“TotalToken 数”是核心成本指标，支持按模型、API Key、时间维度聚合分析；告警可基于该指标配置（如“单日 TotalToken 超过阈值”），但注意：监控数据仅作参考，**不作为计费依据**，最终账单以费用中心为准。
+- **向量与排序服务（Embedding / Rerank）**：文本[向量化](embedding.md)（如 `text-embedding-v4`）按输入文本的 Token 数计费；Rerank 服务（如 `qwen3-rerank`）则按 Query + 所有 Document 的总 Token 数计费。批处理接口（如异步 Embedding）同样以原始文本 Token 总量为计费基准，与是否压缩、编码格式（`float`/`base64`）无关。
 
-- **TPM（Tokens Per Minute）预留**：吞吐能力预留以 token 为单位（非请求数），例如设置 `tpm=6000` 表示每分钟最多处理 6000 tokens 的请求流量，适用于高并发、低延迟生产场景。
+- **生成类模型（LLM / Multimodal）**：`input.tokens` 和 `output.tokens` 分别记录 Prompt 与响应的 Token 消耗，可在审计日志中查看（不含内容本身）。流式响应中，`output.tokens` 为最终累计值。`max_tokens` 参数限制的是模型最多生成的 Token 数，受当前 Token Plan 配额硬性约束。
 
-- **数据处理与日志回流**：SFT 训练集清洗/增强等数据处理任务本身不直接消耗推理 Token，但其产出的数据集若用于模型训练或评测，后续训练/推理过程仍按实际 token 消耗计费；日志回流生成的 JSONL 数据集内容（如 [prompt](../guides/prompt.md)/response）在导入后，其 token 统计可用于效果分析，但不触发计费。
-
-> ⚠️ 注意：Token 是计量单位，**不是认证凭证**。百炼平台中用于身份认证的是 API Key（`Authorization: Bearer <api_key>`）或阿里云 AccessKey（用于 Token Plan API），二者与 Token 概念正交，不可混淆。
+- **RAG 与缓存场景**：显式缓存（`cache_control`）可显著降低重复 Prompt 的 Token 消耗（降幅达 90%），因其跳过模型推理，直接返回缓存向量或响应——此时仅产生极小的元数据 Token 开销，不计入主计费流水。
 
 ## 关键参数和配置
 
-| 参数 | 所属场景 | 说明 | 单位 | 约束 |
-|------|----------|------|------|------|
-| `max_tokens` | 模型 API 请求头 / SDK 参数 | 单次请求允许生成的最大 token 数（不含 [prompt](../guides/prompt.md)） | token（整数） | ≤ 模型上下文长度 × 0.8；超出返回 400 |
-| `quota` | Token Plan 控制台 / API | 每日可用 token 总配额（含 prompt + completion） | token（整数，v2.3.0+ 已取消“千 token”单位） | 需在控制台显式设置；超限返回 429 |
-| `X-Task-Plan-ID` | 模型 API 请求头 | 指定生效的 Token Plan | string（plan_id） | 必填（若启用 Token Plan）；SDK 中通过 `task_plan_id` 传入 |
-| `X-RateLimit-Remaining` / `X-RateLimit-Limit` | 模型 API 响应头 | 实时剩余配额与总配额 | token | 用于客户端自主限流，值与所设 `quota` 一致 |
-| `tpm` | 服务实例创建参数 | 吞吐预留能力，即每分钟最大 token 处理量 | tokens/minute | 创建服务实例时指定，影响资源调度与计费 |
+| 参数名 | 所属场景 | 说明 | 是否影响 Token 计费 |
+|--------|----------|------|---------------------|
+| `max_tokens` | 所有生成类 API | 单次响应最大生成 Token 数，受 Token Plan 配额限制；设为 0 或省略时由模型自动决定上限 | ✅ 是（上限约束） |
+| `plan` | Token Plan | Plan 标识符（如 `"team"`），决定本次调用的 Token 配额池与计费规则 | ✅ 是（绑定计费主体） |
+| `input.tokens` / `output.tokens` | 审计日志、监控指标 | 响应头或日志中返回的实际消耗 Token 数，用于调试与用量分析 | ——（只读，非配置项） |
+| `dimensions` | Embedding API | 向量维度（如 `1024`），**不影响 Token 消耗**，仅改变向量大小与存储开销 | ❌ 否 |
+| `encoding_format: base64` | Embedding API | 输出编码方式，**不改变 Token 计费逻辑**，仅影响传输体积 | ❌ 否 |
+
+> ⚠️ 注意：Token 计费基于原始输入文本（含 system [prompt](../guides/prompt.md)、messages、[prompt](../guides/prompt.md) 字段等）与模型实际输出的完整 tokenization 结果，与 `stream`、`temperature`、`top_p` 等采样参数无关；也与是否启用缓存、日志投递、监控告警等平台功能无关。
 
 ## 面向开发者，简洁实用
 
-- ✅ **务必校验响应头**：调用带 Token Plan 的接口后，检查 `X-RateLimit-Remaining` 是否递减，确认配额已生效。
-- ✅ **Token 计算可预估**：使用百炼提供的 [Tokenizer 工具](https://bailian.console.aliyun.com/cn-beijing/model/tokenizer) 或 `dashscope` SDK 的 `count_tokens()` 方法，提前估算 prompt + expected completion 的 token 数，避免 400 截断。
-- ✅ **监控与计费分离**：用量统计（监控页）有约 1 小时延迟，且不用于计费；真实账单请以「费用中心」为准；若需精确对账，建议开启 SLS 日志投递并解析 `usage.total_tokens` 字段。
-- ❌ **不要混淆认证与计量**：`Authorization: Bearer <api_key>` 用于身份认证；`X-Task-Plan-ID` 用于配额绑定；二者需同时携带才能既鉴权又控量。
-- ⚠️ **免费额度独立**：新用户赠送的免费 quota 与 Token Plan 的 `quota` 互不影响，也不计入其统计，无需额外配置即可叠加使用。
+- **查用量**：登录控制台 → **费用与成本 > 模型用量**，按模型、API-Key、时间粒度（天/小时/分钟）查看 `TotalToken` 统计。
+- **控成本**：
+  - 对高频固定 Prompt，务必启用 [显式缓存](../../raw/model-user-guide/use-cases/explicit-cache-guide.md)；
+  - Embedding 场景优先选用 `text-embedding-lite` 等轻量模型；
+  - Rerank 任务避免传入超长 Document，预截断至关键段落。
+- **排问题**：
+  - 若收到 `429 Too Many Requests`，检查 Token Plan 配额是否耗尽（而非单纯 RPM 限流）；
+  - 若 `max_tokens` 设置未生效，确认 `plan` 与 `model` 兼容性（如 `coding` Plan 不支持 `qwen-max`）；
+  - 审计日志中 `input.tokens` 异常偏高？检查是否误将 Base64 图片、大段 JSON Schema 等非文本内容直传至文本模型。
+- **写代码**：始终在 SDK 调用中显式传入 `plan`（推荐全局客户端配置 + 单次覆盖），避免依赖旧版默认 fallback 行为。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
 - [token plan api](../api/token-plan-api.md)
-- [test 1](../guides/test-1.md)
-- [model data overview](../guides/model-data-overview.md)
 - [model monitoring](../guides/model-monitoring.md)
+- [vector and sort](../api/vector-and-sort.md)
+- [use cases](../guides/use-cases.md)
 
 

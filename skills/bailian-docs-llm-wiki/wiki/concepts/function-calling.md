@@ -1,44 +1,42 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台支持的一种结构化工具编排能力，指模型在生成响应时，主动识别用户意图并按预定义 Schema 生成标准 JSON 格式的函数调用请求（而非自由文本），交由开发者后端执行真实动作（如查数据库、调第三方 API、控制设备等），再将结果注入上下文继续推理。该机制是构建可靠 AI Agent 的核心基础设施。
+函数调用（Function Calling）是百炼平台中大模型主动识别用户意图、生成结构化工具调用请求，并交由外部系统执行的关键能力。它使模型能脱离纯文本生成，安全、可控地接入真实业务系统（如数据库、API、计算器、搜索服务等），是构建生产级 AI Agent 的核心机制。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-函数调用能力在百炼平台中并非所有模型默认启用，而是**按模型类型和调用方式差异化支持**，主要应用于以下三类场景：
+函数调用在百炼平台中并非单一接口能力，而是贯穿多个模型与协议的**统一语义能力**，具体体现为以下四类典型场景：
 
-- **意图理解专用模型（`tongyi-intent-detect-v3`）**：这是百炼最轻量、最高效的函数调用入口。它不生成自然语言回复，而是专精于毫秒级意图识别与函数名+参数的精准提取。需在 `system` 消息中明确声明 `Response in INTENT_MODE.`，并在 `messages` 中提供工具定义（JSON Schema）或意图字典。适用于对话路由、客服工单分派、智能硬件指令解析等低延迟决策场景。
+- **OpenAI 兼容 `chat/completions` 接口**：通过 `tools` 数组声明可用函数（含 `name`、`description`、`parameters` JSON Schema），模型在 `tool_calls` 字段中返回结构化调用请求；开发者需解析并执行后，将结果以 `tool_message` 形式回传继续对话。
+- **Omni Realtime 实时语音 API**：在 `session.update` 配置中传入 `tools`（支持标准 Function Calling 和 MCP 协议），模型可在语音交互流中动态触发工具，但需注意：`tools` 与 `enable_search` 互斥，不可同时启用。
+- **意图识别专用模型（如 `tongyi-intent-detect-v3`）**：在 `INTENT_MODE` 下，模型直接输出 `<intent>` 标签包裹的函数名与参数 JSON，无需 `tool_calls` 封装，适合轻量级路由与快速决策场景。
+- **应用编排中的插件调用（Application Support）**：在低代码应用中配置插件节点后，模型自动理解插件能力并生成调用逻辑；自定义插件需符合 OpenAPI 3.0 规范，平台仅透传 `Authorization` Header，其余请求头不支持自定义。
 
-- **Qwen3 系列大模型（如 `qwen3.8-max`, `qwen3.7-plus`）通过 Responses API**：在 OpenAI 兼容的 `responses.create()` 接口中启用。模型可自主判断是否需要调用函数，并返回符合 OpenAI Function Calling 规范的 `tool_calls` 字段（含 `function.name` 和 `function.arguments`）。开发者需自行解析、执行、构造 `tool_result` 并再次提交给模型完成闭环。支持多轮工具调用与上下文自动关联（通过 `previous_response_id` 维持会话状态）。
-
-- **GUI 自动化模型（`gui-plus` 系列）**：结合 `computer_use` 工具函数，实现“截图→理解→生成鼠标/键盘操作指令”的端到端自动化。调用时需在 `extra_body` 中传入非标参数（如 `enable_thinking=true`），并确保 `messages[0].content` 包含有效截图 URL。该场景下函数调用结果直接驱动操作系统行为，属于高权限、强领域耦合的专用能力。
-
-> ⚠️ 注意：  
-> - `qwen-deep-research`、OCR、嵌入等模型**不支持函数调用**；  
-> - Java SDK 当前**不支持 OpenAI 兼容的 function calling 流程**，仅 Python DashScope SDK 和 OpenAI SDK（配合 `base_url`）可用；  
-> - 所有函数调用均依赖 `model` 参数严格匹配已开通服务的模型名，且必须使用业务空间专属域名（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1`）。
+> ⚠️ 注意：函数调用能力**依赖模型本身支持**。例如 `qwen3-audio`（仅 DashScope 协议）和 `qwen-deep-research` 不支持函数调用；而 `qwen3.8-omni-flash-realtime`、`qwen3.7-plus`、`tongyi-intent-detect-v3` 等明确支持，调用前请确认模型文档说明。
 
 ## 关键参数和配置
 
-| 参数 | 作用 | 说明 | 是否必需 |
+| 参数 | 类型 | 说明 | 所属场景 |
 |------|------|------|----------|
-| `tools` | 定义可用函数列表 | OpenAI 兼容格式数组，每个元素为 `{ "type": "function", "function": { "name": "...", "description": "...", "parameters": { ... } } }`。Schema 必须合法，否则模型无法解析。 | 是（启用函数调用时） |
-| `tool_choice` | 控制调用策略 | 可选 `"auto"`（默认，模型自主决定）、`"none"`（禁用）、或 `{"type": "function", "function": {"name": "xxx"}}`（强制指定）。 | 否（默认 `auto`） |
-| `system` message 内容 | 触发意图识别模式 | 对 `tongyi-intent-detect-v3`，必须包含 `Response in INTENT_MODE.`；可附加工具描述或意图枚举（如 `"intent_options": ["search_order", "cancel_subscription"]`）。 | 是（对该模型） |
-| `previous_response_id` | 维持多轮工具交互上下文 | 传入上一轮 `responses.create()` 返回的顶层 `id`（非 `output` 中消息 ID），用于自动注入历史工具调用结果。 | 是（多轮调用时） |
-| `enable_thinking` | 启用混合推理模式（部分模型） | 如 `gui-plus-2026-02-26` 需通过 `extra_body` 传入 `{"enable_thinking": true}` 才激活 `reasoning_content` 输出，辅助调试函数选择逻辑。 | 否（按需） |
+| `tools` | `array` | 必填。函数定义列表，每个元素包含 `type`（`function` 或 `mcp`）、`function.name`、`description`、`parameters`（JSON Schema） | [OpenAI 兼容接口](openai-compatible-api.md)、Omni Realtime |
+| `tool_choice` | `string` / `object` | 控制调用策略：`"auto"`（默认，由模型决定）、`"none"`（禁用）、`{"type": "function", "function": {"name": "xxx"}}`（强制指定） | [OpenAI 兼容接口](openai-compatible-api.md) |
+| `reasoning.effort` | `string` | 在 `OpenAI兼容-Responses` 接口中，设为 `"high"` 可提升工具调用准确性（尤其复杂参数组合） | Responses 接口 |
+| `INTENT_MODE` | — | 在 `tongyi-intent-detect-v3` 的 `system` message 中声明，触发意图+参数直出模式，响应格式为 `<intent>{"name":"xxx","args":{...}}</intent>` | 意图识别模型 |
+| `extra_body.tools` | `array` | 使用 OpenAI SDK 调用非标模型（如 `farui-plus`）时，需将 `tools` 放入 `extra_body` 透传 | 更多模型（More Models） |
 
-## 面向开发者：快速上手建议
+- 所有函数调用均要求 `parameters` 使用严格 JSON Schema 定义（支持 `string`、`number`、`boolean`、`object`、`array` 及嵌套），模型据此生成合法参数；建议避免过度复杂 schema，优先使用 `required` 字段明确必填项。
+- 工具执行结果必须以正确格式（如 OpenAI 的 `tool_message` 或意图模型的 `<intent>` 块）回传，否则会导致上下文断裂或循环调用。
 
-- ✅ **首选 `tongyi-intent-detect-v3` 做轻量路由**：延迟 <50ms，无需流式处理，适合高频、确定性意图场景；  
-- ✅ **用 Responses API + `qwen3.8-max` 构建通用 Agent**：兼容 OpenAI 生态，支持 `tool_result` 注入与上下文延续，推荐搭配 LangChain 或自研 Orchestrator；  
-- ✅ **始终校验 `function.arguments` JSON 合法性**：模型可能输出语法错误的 JSON，务必用 `json.loads()` 包裹并捕获异常；  
-- ❌ **避免在异步任务（如图像生成）中混用函数调用**：异步接口不支持 `tools` 参数，函数调用仅适用于同步文本/多模态推理；  
-- 🔐 **生产环境禁用前端直调函数调用**：因涉及后端敏感操作，必须通过可信服务层做参数校验、权限控制与审计日志。
+## 面向开发者，简洁实用
+
+- ✅ **推荐实践**：优先使用 `qwen3.7-plus` 或 `qwen3.8-max` 等通用强模型进行函数调用；对高确定性任务（如客服意图识别），选用 `tongyi-intent-detect-v3` + `INTENT_MODE` 可降低解析开销、提升首响速度。
+- ✅ **调试技巧**：开启 `stream=False` 获取完整响应，检查 `tool_calls` 或 `<intent>` 内容是否符合预期；若调用失败，先验证 `parameters` Schema 是否与实际传参一致（如 `number` vs `"number"` 字符串）。
+- ❌ **避坑提示**：不要在同一个请求中混用 `tools` 和 `enable_search`（Omni Realtime）；不要为不支持函数调用的模型（如 `qwen3-audio`）配置 `tools`，将被静默忽略；自定义插件注册后，须在控制台完成鉴权测试再上线。
 
 ## 关联主题页
 
-- [more about models](../api/more-about-models.md)
-- [toolkits and frameworks](../api/toolkits-and-frameworks.md)
+- [qwen api reference](../api/qwen-api-reference.md)
+- [omni realtime api](../api/omni-realtime-api.md)
 - [more models](../api/more-models.md)
+- [application support](../guides/application-support.md)
 
 

@@ -1,67 +1,53 @@
 # 检索增强生成
 
-检索增强生成（Retrieval-Augmented Generation，RAG）是一种将大语言模型（LLM）的生成能力与外部知识源的精准检索能力相结合的技术范式。它通过在生成前动态检索相关上下文片段，并将其注入提示词（Prompt），使模型能在私有、实时或结构化知识约束下输出更准确、可溯源、低幻觉的响应。
+检索增强生成（Retrieval-Augmented Generation，RAG）是一种将大语言模型（LLM）的生成能力与外部知识源的精准检索能力相结合的技术范式。它通过在生成前动态检索相关上下文片段，并将其作为提示（[prompt](../guides/prompt.md)）的一部分输入模型，从而显著提升回答的事实准确性、领域专业性和时效性，同时降低幻觉风险。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-在百炼平台中，RAG 不是单一功能，而是贯穿多个产品层级的**核心增强机制**，具体体现为以下四类协同场景：
+在百炼平台，RAG 不是独立功能，而是贯穿多个核心能力的**基础增强机制**，具体体现为以下三类典型应用路径：
 
-- **知识库服务（Knowledge Base）**：RAG 的标准化落地形态。用户上传文档/表格/图片/音视频后，平台自动完成解析→智能切片→向量化→索引构建；调用时，系统执行混合检索（向量 + 关键词）→重排精筛→拼接高相关切片→注入大模型生成，支持流式响应、引用标注与拒答控制。
+- **知识库问答服务（云上 RAG）**：以「知识库」为统一载体，支持上传 PDF/DOCX/MD/XLSX 等格式文档，经自动解析、智能切片、[向量化](embedding.md)（默认 `text-embedding-v4`）后构建可检索索引；用户提问时，系统执行混合检索（向量 + 关键词）、可选重排（`qwen3-rerank`），再将 TopK 切片注入 LLM（如 `qwen3.6-plus`）生成带引用来源的回答。适用于客服知识库、产品文档助手等开箱即用场景。
 
-- **LLM 应用（LLM Application）**：RAG 作为可编排的“能力节点”嵌入应用逻辑。在智能体（Agent 2.0）中，知识库被抽象为工具，由模型自主决策是否调用；在工作流（Workflow）中，可通过“知识库检索”或“知识库问答”节点显式接入，与其他 AI 节点（如意图识别、参数提取）串联；在高代码应用中，通过 MCP 协议调用已发布的 RAG Agent 实例。
+- **智能体应用（Agent + RAG）**：在「应用管理」中创建的智能体（Agent）可绑定一个或多个知识库，并配置为「必定调用」。此时 RAG 成为 Agent 的隐式工具链环节——无需编写代码，即可让大模型在多轮对话中自动检索私域知识并融合生成回复，广泛用于企业微信/钉钉/网站嵌入的 AI 助手。
 
-- **API 集成（RAG API）**：提供面向生产环境的 RAG 服务接口。开发者可调用 `/api/v2/apps/knowledge/chat` 发起端到端问答，或调用 `/api/v1/indices/knowledge/search` 仅执行检索，所有请求均基于预发布的 `agent_id`，实现模型、检索策略与知识源的解耦部署。
+- **本地化 RAG 集成（开发者自控 RAG）**：通过 `DashScopeCloudIndex` 或 `DashScopeParse` SDK，开发者可在自有服务中构建端到端 RAG 流程：自主控制文档解析、切片策略、嵌入模型（如 `GTE-Chinese-Large`）、向量存储及检索逻辑，再调用百炼 API 进行生成。适合对数据主权、延迟、定制化有强要求的生产系统。
 
-- **框架集成（Frameworks）**：面向熟悉 LlamaIndex/Spring AI 的开发者，提供 `DashScopeCloudRetriever` 等 SDK 组件，屏蔽底层向量索引与 API 封装细节，支持在本地代码中直接复用百炼云端知识库与重排能力，快速构建定制化 RAG 应用。
-
-> ✅ 共同特点：所有场景均默认启用**混合检索**（语义向量 + 精确关键词）、**两级排序**（初检 TopK → 重排精筛）和**生成可控性**（引用标注、防泄漏、拒答开关）。
+> ✅ 提示：所有 RAG 调用均返回结构化结果，包含 `answer`（生成内容）和 `references`（来源切片 ID、高亮文本、原始文档名），便于前端渲染引用标记与溯源审计。
 
 ## 关键参数和配置
 
-RAG 行为由三类关键参数协同控制，均支持在控制台或 API 中配置：
+RAG 效果高度依赖以下可调参数，按作用层分类如下：
 
-| 类别 | 参数名 | 说明 | 典型取值 | 配置位置 |
-|--------|--------|------|-----------|------------|
-| **检索控制** | `dense_similarity_top_k` | 向量初检召回数量（影响召回广度与延迟） | `10–100`（默认 `100`） | 知识库服务配置页 / `DashScopeCloudRetriever` SDK |
-| | `rerank_top_n` | 重排后最终返回给大模型的切片数（影响生成精度与 token 开销） | `1–20`（默认 `5`） | 同上；API 中对应 `max_retrieved_results` |
-| | `similarity_threshold` | 过滤低分切片的相似度阈值（避免噪声注入） | `0.3–0.8`（默认 `0.4`） | 知识库服务配置页 |
-| **切片与索引** | `chunk_size` | 单切片最大 token 数（决定语义单元粒度） | `10–6000`（默认 `600`） | 创建知识库时设定（不可变） |
-| | `chunk_overlap` | 相邻切片重叠 token 数（缓解边界信息丢失） | `50–200`（默认 `100`） | `DashScopeJsonNodeParser` SDK 或本地切分工具 |
-| **生成增强** | `enable_citation` | 是否在生成结果中标注引用来源（显示切片 ID 与原文高亮） | `true` / `false`（默认 `true`） | 知识问答服务配置页 / API 请求体 |
-| | `enable_refusal` | 是否启用拒答策略（对无依据问题返回“无法回答”） | `true` / `false`（默认 `true`） | 同上 |
+| 层级 | 参数名 | 类型 | 说明 | 典型取值 | 可修改性 |
+|------|--------|------|------|-----------|------------|
+| **检索层** | `top_k` | integer | 检索返回给 LLM 的最相关切片数量 | `3`（默认）、`5`、`10` | ✅ 控制台/Playground/API 均可设 |
+| | `similarity_threshold` | float | 过滤低于该相似度的切片（0.01–1.0） | `0.3`（推荐）、`0.5`（严格） | ✅ 同上 |
+| | `enable_rerank` | boolean | 是否启用重排模型精排（提升相关性，增加延迟） | `false`（默认）、`true` | ✅ API 中显式传参 |
+| **切片层** | `chunk_size` | integer | 单切片最大 token 数（影响召回粒度） | `600`（默认）、`1000` | ❌ 创建知识库时设定，不可更改 |
+| | `chunk_strategy` | string | 切片方式：`auto`（智能）、`by_title`（Markdown 标题）、`by_page` 等 | `auto` | ❌ 同上 |
+| **生成层** | `model` | string | 指定生成模型（覆盖知识库默认模型） | `qwen3.6-plus`, `qwen-max` | ✅ API 中指定；控制台可全局配置 |
+| | `temperature` | float | 控制生成随机性（0.0–2.0） | `0.1`（生产推荐） | ✅ 仅本地 RAG 方案支持；云上服务默认由模型自身策略控制 |
 
-> ⚠️ 注意：`chunk_size` 和 `chunk_overlap` 在知识库创建时固化，修改需重建知识库；其他参数均可运行时动态调整。
+> ⚠️ 注意：`top_k` 和 `similarity_threshold` 是调优 RAG 效果的两个最常用参数——增大 `top_k` 可提升信息覆盖度但可能引入噪声；提高 `similarity_threshold` 可过滤低质片段但可能导致召回不足。建议从 `(top_k=5, threshold=0.3)` 开始，在 Playground 中对比测试。
 
 ## 面向开发者，简洁实用
 
-- **快速验证**：直接使用控制台 Playground，选择知识库 → 切换“知识问答”模式，输入问题即可查看检索切片、引用高亮与生成结果，无需写一行代码。
-- **API 调用最小集**：
-  ```bash
-  curl -X POST "https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v2/apps/knowledge/chat" \
-    -H "Authorization: Bearer {API_KEY}" \
-    -H "Content-Type: application/json" \
-    -d '{
-          "agent_id": "your_agent_id",
-          "query": "阿里云百炼的RAG支持哪些文件类型？",
-          "enable_citation": true,
-          "rerank_top_n": 3
-        }'
-  ```
-- **SDK 推荐路径**：  
-  - 新项目 → 用 `DashScopeCloudRetriever`（免运维，直接复用百炼索引）  
-  - 需深度定制 → 用 `DashScopeEmbedding` + `DashScopeParse` 构建本地 `VectorStoreIndex`  
-- **调试黄金法则**：  
-  1. 若结果不准，先查 **Playground 中的检索切片** —— 若切片不相关，问题在知识库质量（切片/嵌入）；  
-  2. 若切片相关但生成错误，再查 **生成参数与系统提示词** —— 检查 `system_prompt` 是否覆盖了检索内容空间；  
-  3. 勿跳过 `similarity_threshold` 调优 —— 过低引入噪声，过高导致漏召，建议从 `0.5` 起步测试。
+- **快速验证**：直接进入 [知识库 Playground](https://dashscope.console.aliyun.com/knowledge-base/playground)，选择知识库 → 输入问题 → 实时查看检索切片高亮与生成答案，5 分钟完成效果评估。
+- **API 集成**：调用 `/v1/knowledge/query` 接口（同步）或 `/api/v2/apps/knowledge/chat`（流式），只需传 `knowledge_id` 和 `query`，其他参数均可省略使用默认值。
+- **错误排查**：若返回空结果或无关回答，优先检查：
+  - 文档是否已完成同步（状态为 `completed`）；
+  - `similarity_threshold` 是否过高导致无切片通过；
+  - 查询语句是否含模糊词（如“那个东西”），建议开启 `Query 改写`（控制台开启或 API 传 `rewrite_query=true`）。
+- **性能提示**：启用 `enable_rerank=true` 可提升 Top3 结果准确率约 20%，但平均延迟增加 300–500ms；高并发场景建议权衡精度与吞吐。
+
+RAG 是百炼平台连接私域知识与大模型能力的核心桥梁。掌握其参数含义与调试路径，即可高效构建可信、可控、可解释的企业级 AI 应用。
 
 ## 关联主题页
 
 - [knowledge base](../guides/knowledge-base.md)
-- [llm application](../guides/llm-application.md)
 - [rag api](../api/rag-api.md)
-- [frameworks](../api/frameworks.md)
-- [application support](../guides/application-support.md)
+- [use cases](../guides/use-cases.md)
 - [application use cases](../guides/application-use-cases.md)
+- [application support](../guides/application-support.md)
 
 

@@ -1,55 +1,58 @@
 # sandbox
 
-Sandbox 是阿里云百炼提供的云端安全沙箱，为 AI 智能体提供隔离的代码执行、浏览器操作与文件处理环境，兼容 E2B SDK/API 协议。每个实例拥有独立的计算资源、文件系统与网络，支持按需创建、暂停、恢复与释放。其核心抽象为「模版（Template）」与「实例（Sandbox）」，模版定义运行时配置，实例基于模版启动并承载实际任务 [概述](../../raw/application-user-guide/sandbox/sandbox-introduction.md)。
+Sandbox 是阿里云百炼提供的云端安全沙箱服务，为 AI 智能体提供隔离的代码执行、浏览器操作与文件处理环境，兼容 E2B SDK/API 协议。每个实例拥有独立的计算资源、文件系统与网络隔离，支持按需创建、暂停、恢复与释放。其核心设计目标是保障多租户任务间的数据隔离与运行时安全，适用于数据分析、网页自动化、多工具协同等典型 Agent 场景 [概述](../../raw/application-user-guide/sandbox/sandbox-introduction.md)。
 
 ## 支持的模型/功能
 
-Sandbox 本身不提供大模型推理能力，而是作为**运行时环境**，支撑智能体调用多种能力：
+Sandbox 本身不提供大语言模型，而是作为**运行时环境**支撑各类 Agent 能力，通过三种预置基础镜像实现不同功能组合：
 
-- **代码执行**：通过 `code-interpreter-v1` 镜像支持 Python / Node.js 脚本运行、数据分析与结构化输出，推荐搭配 `e2b-code-interpreter` SDK 使用 [使用 Code Interpreter Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-code-interpreter.md)。
-- **浏览器自动化**：通过 `browser` 镜像提供 Chromium 浏览器服务（端口 3000），支持 Puppeteer、Playwright 或 BrowserUse 通过 CDP 连接，完成网页访问、交互、截图与下载 [使用 Browser Use Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-browser-use.md)。
-- **一体化任务（AIO）**：通过 `all-in-one` 镜像同时暴露浏览器（3000 端口）与 Code Interpreter（5000 端口），支持在单个沙箱中串联网页采集、文件下载与后续数据清洗/报告生成 [使用 AIO Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-aio.md)。
+- **代码解释器（`code-interpreter-v1`）**：轻量 Python/Node.js 执行环境，适用于数据分析、脚本运行与结构化结果生成。推荐用于智能问答、运营分析等场景 [使用 Code Interpreter Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-code-interpreter.md)。
+- **浏览器（`browser`）**：基于 Chromium 的浏览器执行环境，暴露 CDP 接口（`wss://<host>/ws/automation`），支持 Puppeteer、Playwright 或 BrowserUse 连接，适用于网页采集、UI 测试与截图归档 [使用 Browser Use Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-browser-use.md)。
+- **全能型（`all-in-one`）**：集成浏览器（3000 端口）与 Code Interpreter（5000 端口）的复合环境，支持“访问网页 → 下载/截图 → 本地清洗 → 导出报告”端到端流水线 [使用 AIO Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-aio.md)。
 
-> **注意**：文档 5、6、7 中均强调 `e2b` SDK 必须固定为 `2.31.0` 版本，更高版本创建实例时返回 HTTP 405 错误；而文档 3 的“推荐版本”节也明确验证了该约束。此为当前强制要求，非可选建议。
+> **注意**：文档中多次强调 `e2b-code-interpreter` SDK 在 Node.js 侧需固定版本（如 `@e2b/code-interpreter@2.6.1`），而 Python 侧示例使用 `e2b-code-interpreter==2.8.1`。但文档 5 和文档 7 均明确指出：**更高版本的 `e2b` SDK（Python 与 Node.js）创建实例时返回 HTTP 405 错误**。因此必须统一锁定 `e2b==2.31.0`，否则无法完成实例创建。
 
 ## 关键参数
 
-| 参数 | 说明 | 来源/备注 |
-|------|------|-----------|
-| `api_url` | 百炼沙箱接入地址，格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/sandbox` | 所有 SDK 示例均使用此格式 [实例管理与使用](../../raw/application-user-guide/sandbox/sandbox-sdk.md) |
-| `Authorization` | 真实鉴权头，值为 `Bearer <阿里云百炼 API Key>`（`sk-...`） | 鉴权由百炼侧完成，`api_key` 字段仅用于 SDK 格式校验 [快速开始](../../raw/application-user-guide/sandbox/sandbox-quick-start.md) |
-| `api_key` | E2B SDK 必填字段，**仅格式校验用**，必须以 `e2b_` 开头且后缀为十六进制字符（如 `e2b_${ALIYUN_UID}`） | 文档 2 和 3 均明确说明百炼侧不使用该字段鉴权 [快速开始](../../raw/application-user-guide/sandbox/sandbox-quick-start.md) |
-| `template` | 控制台创建模版后生成的 `templateCode`，用于指定基础镜像与资源配置 | 模版管理页面直接展示该字段 [模版管理](../../raw/application-user-guide/sandbox/sandbox-templates.md) |
-| `timeoutMs` | 实例创建超时（如文档 6 推荐设为 `300_000` ms）、命令执行超时（如文档 5 示例设为 `30_000` ms）等 | 不同场景需差异化设置，AIO 场景因含浏览器冷启动，建议设为 `900_000` ms [使用 AIO Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-aio.md) |
+| 参数 | 说明 | 来源与约束 |
+|------|------|------------|
+| `template` | 模版唯一标识符（`templateCode`），控制台创建模版后生成，必填 | 来自 [模版管理](../../raw/application-user-guide/sandbox/sandbox-templates.md)；模版定义镜像、资源、网络策略等全部运行时配置 |
+| `api_url` | 阿里云百炼沙箱接入地址，格式为 `https://{workspace_id}.cn-beijing.maas.aliyuncs.com/api/v1/agentstudio/sandbox` | 必须与工作区地域匹配；详见 [实例管理与使用](../../raw/application-user-guide/sandbox/sandbox-sdk.md) |
+| `Authorization` | 真实鉴权头，值为 `Bearer <阿里云百炼 API Key>`（`sk-...`） | **唯一生效的鉴权方式**；`api_key` 参数仅用于满足 E2B SDK 格式要求（见下条） |
+| `api_key` | E2B SDK 必填字段，格式需为 `e2b_` + 十六进制字符串（如 `e2b_${ALIYUN_UID}`） | 阿里云 UID 为纯数字，天然满足校验；**百炼侧完全忽略该值，不用于业务鉴权** [快速开始](../../raw/application-user-guide/sandbox/sandbox-quick-start.md) |
+| `timeoutMs` | 实例创建或命令执行超时（毫秒）。浏览器类任务建议 ≥600000（10 分钟） | AIO/Browser 场景需显著延长，因含浏览器冷启动、页面加载与脚本执行三阶段耗时 |
 
 ## 使用方式
 
-1. **前置准备**：开通百炼服务并完成 SLR 授权（角色名 `AliyunServiceRoleForSFMSandbox`）[快速开始](../../raw/application-user-guide/sandbox/sandbox-quick-start.md)。
-2. **创建模版**：在控制台选择镜像（`code-interpreter-v1`/`browser`/`all-in-one`）、资源配置（1C2G 或 4C8G）、高级配置（网络白名单、生命周期等），获取 `templateCode`。
-3. **获取密钥**：在控制台 API Key 页面创建或复制 `sk-...` 格式的百炼 API Key。
-4. **SDK 调用**：
-   - 安装固定版本：`pip install "e2b==2.31.0"`（Python）或 `npm install e2b@2.31.0`（Node.js）；
-   - 创建实例：传入 `api_url`、`api_key`（占位）、`headers={"Authorization": "Bearer <sk-...>"}` 和 `template`；
-   - 执行操作：调用 `sbx.commands.run()`、`sbx.files.write()`、`sbx.run_code()`（需额外安装 `e2b-code-interpreter`）或 `sbx.getHost(3000)` 获取 CDP 地址；
-   - 生命周期管理：`sbx.pause()` 暂停、`Sandbox.connect()` 恢复、`sbx.kill()` 释放。
+1. **前置准备**：在百炼控制台完成[服务授权](../../raw/application-user-guide/sandbox/sandbox-quick-start.md)，获取具备 Sandbox 权限的账号及 API Key（`sk-...`）。
+2. **创建模版**：在控制台选择镜像（`code-interpreter-v1`/`browser`/`all-in-one`）、资源配置（1C2G 或 4C8G）、高级配置（如网络白名单、生命周期），生成 `templateCode`。
+3. **初始化 SDK**：
+   ```bash
+   pip install "e2b==2.31.0" "e2b-code-interpreter==2.8.1"  # Python
+   npm install e2b@2.31.0 @e2b/code-interpreter@2.6.1      # Node.js
+   ```
+4. **创建并使用实例**：
+   - 代码类任务：调用 `sbx.commands.run()` 或 `sbx.run_code()`；
+   - 浏览器类任务：先调用 `sbx.getHost(3000)` 获取 host，再通过 `wss://<host>/ws/automation` 连接 CDP；
+   - AIO 类任务：组合上述两种模式，共享同一 `sandbox_id` 文件系统；
+   - 所有任务结束必须调用 `sbx.kill()` 释放资源。
 
 ## 限制和注意事项
 
-- **生命周期限制**：实例最大存活时间与空闲超时二选一，**最长不超过 7 天**，超时后自动释放 [概述](../../raw/application-user-guide/sandbox/sandbox-introduction.md)。
-- **SDK 版本强约束**：`e2b` SDK 必须使用 `2.31.0`，`e2b-code-interpreter` 必须使用 `2.8.1`（Python）或 `2.6.1`（Node.js），更高版本创建实例返回 405 [实例管理与使用](../../raw/application-user-guide/sandbox/sandbox-sdk.md)。
-- **公网 URL 即凭证**：沙箱暴露的浏览器 CDP 地址（`wss://<host>/ws/automation`）或 noVNC 地址（`https://<host>/static/vnc.html?path=/ws/livestream`）**等同于访问密钥**，未加应用层鉴权时，持有者可完全控制浏览器会话（含 Cookie、登录态），严禁公开分享或写入日志 [使用 Browser Use Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-browser-use.md)。
-- **文件路径安全**：noVNC 的 `path` 参数**必须以 `/` 开头**（如 `/ws/livestream`），相对路径会被错误解析至 `/static/ws/livestream` 导致连接失败；根路径 `/vnc.html` 返回 404 [使用 Browser Use Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-browser-use.md)。
-- **模版删除依赖**：模版存在运行中或已暂停的实例时，无法删除，需先调用 `sbx.kill()` 或 `sbx.pause()` 后再操作 [模版管理](../../raw/application-user-guide/sandbox/sandbox-templates.md)。
+- **生命周期限制**：实例最大存活时间与空闲超时二选一，**最长不超过 7 天**；超时后自动释放，数据不可恢复 [概述](../../raw/application-user-guide/sandbox/sandbox-introduction.md)。
+- **URL 安全警告**：沙箱公网 URL（如 `https://xxx.cn-beijing.maas.aliyuncs.com`）等同于访问凭证，**未启用应用层鉴权时，持有者可完全控制浏览器会话（含 Cookie 与登录态）**。严禁公开分享、写入日志或前端代码 [使用 Browser Use Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-browser-use.md)。
+- **文件与资源限制**：上传文件数 ≤5 个（模版挂载）；单次命令/代码执行建议设置 `timeoutMs`（默认 30s 易中断）；生产环境需对输入文件大小、类型、输出路径做校验，避免磁盘耗尽或路径遍历 [使用 Code Interpreter Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-code-interpreter.md)。
+- **noVNC 调试路径**：需使用完整路径 `https://<sandbox-host>/static/vnc.html?path=/ws/livestream&autoconnect=true`，`path` 参数**不可省略且必须以 `/` 开头**；相对路径或 `/vnc.html` 均导致连接失败 [使用 Browser Use Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-browser-use.md)。
 
 ## 来源文档
 
 - [概述](../../raw/application-user-guide/sandbox/sandbox-introduction.md)
 - [快速开始](../../raw/application-user-guide/sandbox/sandbox-quick-start.md)
-- [实例管理与使用](../../raw/application-user-guide/sandbox/sandbox-sdk.md)
 - [模版管理](../../raw/application-user-guide/sandbox/sandbox-templates.md)
 - [使用 Code Interpreter Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-code-interpreter.md)
+- [实例管理与使用](../../raw/application-user-guide/sandbox/sandbox-sdk.md)
+- [更新日志](../../raw/application-user-guide/sandbox/sandbox-changelog.md)
 - [使用 Browser Use Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-browser-use.md)
 - [使用 AIO Sandbox](../../raw/application-user-guide/sandbox/sandbox-best-practice-aio.md)
-- [更新日志](../../raw/application-user-guide/sandbox/sandbox-changelog.md)
 
 
