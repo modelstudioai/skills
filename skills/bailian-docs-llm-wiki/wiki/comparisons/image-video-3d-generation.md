@@ -1,58 +1,69 @@
-# 图像、视频与3D内容生成能力对比
+# 图像、视频与3D生成能力对比
 
-为帮助开发者快速理解百炼平台在多模态AIGC领域的技术布局与能力边界，本文系统对比图像生成（Image Generation）、视频生成（Video Generation）与3D内容生成（3D Generation）三大核心能力。对比聚焦实际工程落地的关键维度——包括输入输出规范、模型生态、调用协议、地域约束、计费逻辑及典型适用场景，旨在为技术选型提供客观、可执行的决策依据。所有信息均基于当前（2024年Q3）百炼平台正式发布的API文档与运行时行为。
+为帮助开发者快速理解百炼平台在多模态生成领域的技术布局与能力边界，本文档系统对比图像生成（Image Generation）、视频生成（Video Generation）与3D生成（3D Generation）三大核心能力。对比聚焦于**工程落地关键维度**，包括调用方式、输入输出约束、模型生态、计费逻辑及典型适用场景，旨在为技术选型提供客观、可执行的决策依据。
 
-## 关键能力维度对比
+---
 
-| 维度 | 图像生成（Image Generation） | 视频生成（Video Generation） | 3D内容生成（3D Generation） |
-|------|------------------------------|------------------------------|------------------------------|
-| **核心输入格式** | `text` + 可选 `image`（Base64 或 HTTPS URL），支持多图混合输入（如 `wan2.5-i2i-preview`）；`input.messages` 结构化数组 | `prompt`（文生视频）或 `image_url`/`image`（图生视频）或 `image`（人像驱动）；`portrait-animation` 模型需将驱动文本置于 `input.text` | 三者**严格互斥**：<br>• `prompt`（文生3D，≤1024字符）<br>• `image`（单图，JPEG/PNG，≤20MB）<br>• `images`（固定4元素数组：前/左/后/右，空视角需显式传 `{}`） |
-| **核心输出格式** | PNG/JPEG 图像（URL直链），分辨率灵活（512×512 至 4K）；部分模型支持多张并行输出（`n=1–9`） | MP4 视频（H.264编码，无音频）；`portrait-animation` 例外，支持TTS合成音频；时长2–8秒（依模型而定） | GLB 格式3D模型：<br>• `pbr_model_url`（含PBR材质与贴图）<br>• `base_model_url`（无贴图基础网格）<br>• `rendered_image_url`（WebP预览图） |
-| **主流支持模型** | • 千问系列：`qwen-image-3.0-pro`（全栈能力）<br>• 万相系列：`wan2.7-image-pro`（4K文生图）、`wan2.5-i2i-preview`（多图编辑）<br>• 可灵：`kling/kling-v3-omni-image-generation`（分镜组图）<br>• Vidu：`vidu/viduq2-pro_reference2image`（UI/图表像素级还原） | • 文生视频：`kling`、`vidu`、`HappyHorse`、`wanxiang`、`aishih`<br>• 图生视频：`kling`、`vidu`、`wanxiang`<br>• 人像驱动：`portrait-animation`（单图+文本/语音）<br>• 多模态控制：`vidu`（镜头语言）、`kling`（结构化运镜） | • `Tripo/Tripo-H3.1`（高精度，≤200万面，支持 `geometry_quality=ultra`）<br>• `Tripo/Tripo-P1.0`（快速生成，≤2万面） |
-| **API 端点与协议** | • **同步优先**：`POST /api/v1/services/aigc/image-generation`（DashScope协议，支持Base64/URL）<br>• OpenAI兼容：`POST /v1/images/generations`（仅同步）<br>• 异步：`X-DashScope-Async: enable` 头必填 | 统一异步端点：<br>`POST /v1/videos/generations`（创建任务）<br>`GET /v1/videos/generations/{id}`（轮询结果）<br>**不支持同步调用** | 统一异步端点（**仅华北2可用**）：<br>`POST /api/v1/services/aigc/video-generation/3d-generation`（需 `X-DashScope-Async: enable`）<br>`GET /api/v1/tasks/{task_id}`（轮询） |
-| **地域与隔离要求** | **强制同地域**：API Key、Endpoint、Workspace ID 必须同属北京/新加坡/弗吉尼亚；推荐使用 Workspace 专属域名（如 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com`） | **强制同地域**：同图像生成，跨地域调用必然失败；各模型地域支持一致 | **严格限定华北2（北京）**：仅支持北京地域 API Key 与 Endpoint；其他地域 URL 不可用且返回明确错误 |
-| **计费方式** | • 按量付费为主（如 `qwen-image-3.0-pro`、`wan2.7-image-pro`）<br>• 部分创意工具提供免费额度（如 `facechain-generation`: 500张/90天）<br>• `wanx-x-painting` 等体验模型：免费额度用尽后**不可付费启用** | • `HappyHorse`/`wanxiang`（720p）有基础免费额度<br>• `vidu`/`kling`/`MiniMax` 默认高分辨率，需确认配额或开通付费<br>• 所有模型按**成功生成的视频条数**计费 | • 按**成功生成的3D任务次数**计费<br>• 无公开免费额度；需在控制台开通 Tripo 服务并完成授权后方可调用 |
-| **典型场景** | • 营销海报、电商主图、社交媒体配图<br>• UI设计稿生成与局部重绘（Vidu）<br>• 虚拟模特、AI试衣、人物写真（FaceChain）<br>• 创意文字艺术（WordArt） | • 短视频广告脚本可视化（文生视频）<br>• 产品动态展示（图生视频）<br>• 数字人播报/虚拟主播驱动（人像驱动）<br>• 影视分镜预演（Vidu镜头语言） | • 工业设计原型快速建模（文生3D）<br>• 电商商品3D展示（单图转3D）<br>• AR/VR内容资产生成（多视角重建）<br>• 游戏资产基础网格生成 |
+## 关键能力对比表
+
+| 维度 | 图像生成（Image Generation） | 视频生成（Video Generation） | 3D生成（3D Generation） |
+|------|------------------------------|------------------------------|--------------------------|
+| **核心定位** | 单帧高质量视觉内容生成与编辑 | 时序连续的动态内容生成与人像驱动 | 空间结构化的三维网格与材质建模 |
+| **输入格式** | • 纯文本 [prompt](../guides/prompt.md)（≤512 字符）<br>• 可选 `image_url`（图生图/局部重绘）<br>• 可选 `mask_url`（仅创意工具） | • 文本 [prompt](../guides/prompt.md)（≤5000 字符，依模型而异）<br>• `img_url`（首帧/首尾帧）<br>• `video_url` / `audio_url`（参考生视频、对口型等）<br>• `face_bbox` + `ext_bbox`（人像驱动类必需前置检测） | • 纯文本 [prompt](../guides/prompt.md)（≤1024 字符）<br>• 单张 `image` URL（JPEG/PNG）<br>• 四张 `images` 数组（前/左/后/右，互斥） |
+| **输出格式** | • `url`：临时直链（有效期 1 小时）<br>• 格式：PNG/JPEG（由模型决定）<br>• 含 `revised_prompt`（模型优化提示词） | • 异步返回 `output.video_url`（临时直链，有效期 2 小时）<br>• 格式：MP4（H.264 编码）<br>• 部分模型支持额外元数据（如帧率、分辨率） | • `pbr_model_url`：GLB（含 PBR 材质，`pbr=true` 时返回）<br>• `base_model_url`：GLB（无贴图，需显式设 `texture=false && pbr=false`）<br>• `rendered_image_url`：WebP 预览图（有效期 2 小时） |
+| **支持模型（主力）** | • 千问（Qwen2-VL 图像版）<br>• 万相（WanX-v1）<br>• Z-Image（轻量低延迟）<br>• 可灵（Kling）<br>• Vidu（单帧预览）<br>• 创意工具（图生图/涂鸦/局部重绘） | • HappyHorse（物理真实感）<br>• 万相（Wan2.7 / Wan3.0，All-in-One）<br>• 爱诗（PixVerse，细分能力强）<br>• EMO / LivePortrait / AnimateAnyone（人像驱动）<br>• 风格重绘 / 视频超清（后处理） | • `Tripo/Tripo-H3.1`（高精度，≤200 万面）<br>• `Tripo/Tripo-P1.0`（快速，≤2 万面） |
+| **API 端点** | 同一同步端点：<br>`POST https://dashscope.aliyuncs.com/api/v1/images/generations` | 异步任务端点（地域强绑定）：<br>`POST https://{WorkspaceId}.{region}.maas.aliyuncs.com/api/v1/services/aigc/video-generation/video-synthesis`<br>（部分旧模型使用 `/image2video/video-synthesis`） | 异步任务端点（华北2专属）：<br>`POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/video-generation/3d-generation` |
+| **调用模式** | **同步阻塞**（响应时间 ≤60 秒；Z-Image ≤15 秒） | **强制异步**（创建任务 → 轮询 `task_id`）<br>任务耗时：1–5 分钟<br>`task_id` 有效期：24 小时 | **强制异步**（创建任务 → 轮询 `task_id`）<br>任务耗时：通常 2–8 分钟<br>`task_id` 有效期：24 小时 |
+| **地域要求** | 无强地域绑定（通用域名 `dashscope.aliyuncs.com` 可用） | **强地域绑定**：模型、Endpoint、API Key 必须同属一个地域（如 `cn-beijing`） | **强地域绑定**：仅支持 **华北2（北京）** 地域，Endpoint 与 API Key 必须匹配 |
+| **计费方式** | • 按**成功生成图片数量**计费（`n` 参数值）<br>• 不同模型单价不同（如 Z-Image 更低价）<br>• 失败请求不计费 | • 按**成功完成的任务数**计费<br>• 各模型独立定价（如 EMO、VideoRetalk 单独计价）<br>• 免费额度按模型粒度分配 | • 按**成功完成的 3D 任务数**计费<br>• `H3.1`（高面数）单价高于 `P1.0`（快速）<br>• 无免费额度（需单独开通配额） |
+| **典型场景** | • 营销海报/电商主图生成<br>• UI 设计稿辅助出图<br>• 社媒配图 & 风格化插画<br>• 局部编辑（换背景、修细节） | • 短视频内容批量生产（广告/教育）<br>• 数字人播报/唱演/舞蹈驱动<br>• 产品演示视频生成（图→视频）<br>• 口型同步/风格迁移后处理 | • 游戏/AR 应用资产快速建模（文→3D）<br>• 电商商品 3D 展示（单图→3D）<br>• 工业设计概念验证（多视角图→3D）<br>• 元宇宙空间构件生成 |
+
+---
 
 ## 各方案适用场景建议
 
-### ✅ 图像生成 —— 适合「静态视觉表达」高频、多样化需求  
-- **首选场景**：需要快速产出高质量、高一致性静态图像的业务，如电商详情页、营销活动素材、设计协作初稿、个性化头像/海报。  
-- **模型选型建议**：  
-  - 追求**全能与可控性** → `qwen-image-3.0-pro`（支持复杂提示词、多图参考、局部重绘）；  
-  - 需要**4K工业级精度与UI还原** → `vidu/viduq2-pro_reference2image`；  
-  - 偏好**分镜叙事与创意组合** → `kling/kling-v3-omni-image-generation`；  
-  - 轻量级快速迭代 → `z-image-turbo`（中英文字渲染友好）。  
-- **避坑提示**：避免使用已标注“推荐升级”的旧版模型（如 `wanx-v1`），其分辨率、地域支持与功能完整性严重受限。
+### ✅ 图像生成 —— 适合「即时反馈、高频迭代、轻量集成」
+- **推荐场景**：  
+  - 前端交互式设计工具（如 AI 画布），需 <2 秒级响应 → 优先选用 **Z-Image**；  
+  - 高质量艺术创作或品牌视觉输出 → 选用 **万相（WanX-v1）** 或 **千问（Qwen2-VL）**；  
+  - 需要基于现有图片做局部修改（如换天空、改服饰）→ 使用 **创意工具模块**；  
+  - 需要严格控制构图与主体一致性 → **可灵（Kling）** 支持长宽比自定义与多步优化。
+- **避坑提示**：避免用 Z-Image 处理图生图需求（明确不支持 `image_url`）；Vidu 的 `size` 参数仅接受 `"1024x1024"` 字符串，不可传数组。
 
-### ✅ 视频生成 —— 适合「动态叙事与人机交互」中低频、高价值需求  
-- **首选场景**：短视频内容生产、数字人交互、产品演示动画、影视前期分镜验证。  
-- **模型选型建议**：  
-  - **通用文生视频** → `vidu`（支持镜头语言提示词，8秒4K）或 `kling`（结构化控制强）；  
-  - **图生视频/快速演示** → `wanxiang`（兼容性好，720p免费额度充足）；  
-  - **人像驱动类应用**（如客服播报、虚拟讲师）→ `portrait-animation`（仅接受单图+文本，音频合成一体化）；  
-  - **轻量实验性尝试** → `HappyHorse`（4秒1080p，入门门槛低）。  
-- **避坑提示**：`portrait-animation` 的输入结构（`input.text`）与其他模型不一致，集成时需独立适配；所有视频模型**不输出音频**（除人像驱动外），音画同步需自行处理。
+### ✅ 视频生成 —— 适合「内容规模化、人机协同、专业表达」
+- **推荐场景**：  
+  - 批量生成营销短视频 → **万相 Wan3.0**（All-in-One，协议统一）或 **HappyHorse**（物理真实）；  
+  - 数字人业务（播报、唱跳、表情包）→ 严格按流程：先调用 `xxx-detect` API 获取 bbox，再调用对应驱动模型（如 `emo-v1`）；  
+  - 需要精细控制运动节奏或特效 → **万相 Wan2.7+ 模板参数**（如 `template: "hanfu-1"`）；  
+  - 对口型/动作模仿等垂直需求 → **爱诗（PixVerse）系列**（`c1` 动态强，`v6` 通用稳）。
+- **避坑提示**：务必校验地域一致性；人像类模型缺失检测坐标将导致失败；所有媒体资源必须为公网可访问 URL（本地文件需先调用上传接口获取临时链接）。
 
-### ✅ 3D内容生成 —— 适合「空间建模与三维资产」专业、垂直需求  
-- **首选场景**：工业设计协同、电商3D商品库建设、AR营销素材生成、游戏/元宇宙基础资产管线。  
-- **模型选型建议**：  
-  - **高保真原型/可直接渲染** → `Tripo/Tripo-H3.1` + `pbr=true` + `geometry_quality=ultra`；  
-  - **快速草图验证/轻量资产** → `Tripo/Tripo-P1.0`（2万面，生成速度快）；  
-  - **无贴图轻量化模型**（如用于物理仿真）→ 显式设置 `texture=false` 且 `pbr=false`。  
-- **避坑提示**：必须使用**北京地域专属配置**（API Key、Endpoint、Workspace ID）；多图模式下 `images` 数组长度**必须为4**，缺失视角需传空对象 `{}`，否则报错；所有下载链接（GLB/WebP）有效期仅**2小时**，务必及时持久化。
+### ✅ 3D生成 —— 适合「空间数字化、工业级交付、跨平台复用」
+- **推荐场景**：  
+  - 快速构建轻量 3D 资产（如 AR 商品预览）→ **Tripo-P1.0**（2 万面，秒级生成）；  
+  - 高精度建模需求（游戏角色、工业零件）→ **Tripo-H3.1**（200 万面，支持 `geometry_quality: "ultra"`）；  
+  - 从产品实物照片生成 3D 模型 → 使用 **四视图输入**（前/左/后/右），注意视角一致性；  
+  - 需嵌入 Web 应用 → 直接加载 GLB 文件（兼容 Three.js / Babylon.js）。
+- **避坑提示**：仅限华北2地域；三类输入（prompt/image/images）**严格互斥**，同时传入将直接报错；若需无贴图模型，必须同时设置 `texture=false` 和 `pbr=false`。
 
-## 面向开发者的选型决策指南
+---
 
-| 决策问题 | 推荐动作 | 技术依据 |
+## 开发者技术选型参考
+
+| 选型目标 | 推荐方案 | 关键理由 |
 |----------|----------|----------|
-| **我的应用需要同时生成图、视、3D内容，如何统一接入？** | 采用 **DashScope SDK v2.3+**，复用认证机制（`DASHSCOPE_API_KEY`）与异步任务管理范式；但需注意：图像支持同步/异步双模式，视频与3D**强制异步**，且3D仅限北京地域。 | 三者均遵循 DashScope 异步任务生命周期（创建→轮询→获取结果），但协议细节（如输入结构、端点路径、地域约束）差异显著，不可共用同一请求模板。 |
-| **我已有OpenAI Images SDK集成，能否平滑迁移？** | ✅ 可迁移至图像生成（OpenAI兼容接口）；❌ **不适用于视频与3D**（二者无OpenAI兼容层，仅提供原生RESTful异步API）。 | 图像生成提供 `/v1/images/generations` 兼容端点；视频与3D仅暴露 `/v1/videos/generations` 和 `/api/v1/services/aigc/video-generation/3d-generation` 原生路径。 |
-| **我的用户对生成速度敏感，应如何优化？** | • 图像：选用 `z-image-turbo` 或 `wan2.6-t2i`（V2版）；<br>• 视频：`HappyHorse` 或 `wanxiang`（720p）平均耗时 <30s；<br>• 3D：`Tripo/Tripo-P1.0` 比 `H3.1` 快约3倍。 | `z-image-turbo` 固定单图、轻量架构；`HappyHorse` 输出4秒视频；`Tripo-P1.0` 面数上限低，计算负载小。高精度模型（`qwen-image-3.0-pro`、`vidu`、`Tripo-H3.1`）均需更长排队与生成时间。 |
-| **我需要保证生成结果可商用、版权清晰，该关注什么？** | 重点核查模型服务协议：`qwen-image-3.0-pro`、`wan2.7-image-pro`、`vidu`、`kling`、`Tripo` 均明确支持商业用途；避免使用未声明商用许可的体验模型（如 `wanx-x-painting`）。 | 百炼平台主流AIGC模型均在控制台服务开通页注明“支持商用”，其训练数据与生成内容权属条款符合阿里云《AIGC服务协议》。 |
-| **我的系统需高并发调用，如何规避限流？** | • 图像：`aitryon` RPS限10，`facechain-finetune` 并发限1，需按模型粒度申请配额提升；<br>• 视频/3D：统一受 Workspace 级RPS限制，建议配置[异步回调](../../raw/model-api-reference/more-about-models/async-task-api.md)替代高频轮询。 | 限流策略按模型或服务维度独立配置；视频/3D轮询接口（`GET /v1/videos/generations/{id}` / `GET /api/v1/tasks/{task_id}`）RPS限20，高频轮询易触发限流，回调机制为官方推荐解法。 |
+| **追求最低延迟 & 高并发** | 图像生成（Z-Image） | P95 延迟 <800ms，同步响应，无轮询开销，适合实时交互场景 |
+| **需要多模态理解与复杂编辑** | 图像生成（千问 Qwen2-VL 图像版） | 支持图文多轮对话驱动生成/编辑，语义理解深度优于纯扩散模型 |
+| **构建数字人应用闭环** | 视频生成（EMO/LivePortrait + 检测 API） | 提供完整人像驱动管线，含人脸检测、关键点提取、驱动合成三阶段 |
+| **生成可商用 3D 资产** | 3D生成（Tripo-H3.1 + `pbr=true`） | 输出带 PBR 材质的 GLB，符合 Unity/Unreal/Three.js 生产标准，免二次烘焙 |
+| **低成本试错 & 快速验证** | 图像生成（万相 WanX-v1） | 免费额度充足，API 简单，调试成本低，适合 MVP 阶段验证提示词效果 |
+| **跨模态工作流编排** | 组合使用：图像 → 视频 → 3D | 示例：用万相生成产品图 → 输入 HappyHorse 生成展示视频 → 用 Tripo 生成 3D 模型用于 AR；注意各环节地域与凭证隔离 |
 
-> **最后提醒**：所有能力均需在百炼控制台对应地域完成**服务开通与授权**（如可灵、Vid
+> **重要提醒**：所有生成类服务均受内容安全策略约束，禁止生成暴力、色情、政治敏感或侵权内容。违规请求将被拦截并记录审计日志。建议在生产环境启用 `prompt` 安全过滤中间件，并对用户输入做预审。
+
+---  
+*最后更新：2024年6月*  
+*文档版本：v2.3（基于百炼平台 API v1.2.0）*
 
 ## 被对比主题页
 

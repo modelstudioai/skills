@@ -1,60 +1,40 @@
 # agenteval
 
-`agenteval` 是百炼平台 Evolution 体系中面向 AI Agent 全生命周期管理的核心能力模块，提供可观测性（Observability）、自动化评测（Evaluation）与 Prompt 智能优化（Optimization）三位一体的能力。它不依赖特定开发框架，基于 OpenTelemetry GenAI 标准实现链路接入，支持智能体（Agent 1.0/2.0）和工作流应用的端到端质量量化与持续改进。
+`agenteval` 是百炼平台提供的面向智能体（Agent）应用的端到端评测与可观测性工具，支持对 Agent 的行为链路、决策逻辑、工具调用及最终结果进行结构化评估。它适用于开发阶段的迭代验证和上线后的持续监控，核心能力覆盖自动化评测、多维指标分析与根因定位。该工具深度集成于百炼 SDK 与控制台，需配合 `qwen-agent` 或兼容框架使用。
 
 ## 支持的模型/功能
 
-- **观测能力**：支持全链路 Trace 可视化，覆盖 Prompt 解析、大模型调用（含 TTFT、耗时、[Token](../concepts/token.md) 消耗）、工具执行（MCP）、向量检索、[记忆](../concepts/memory.md)读写等环节；支持分钟级监控统计（QPM、错误率、[Token](../concepts/token.md) 分析）与限流统计 [应用观测](../../raw/application-user-guide/agenteval/agenteval-observability/agenteval-observation.md)。
-- **评测能力**：提供预置评估器（通用质量、智能体、文本匹配、相似度、格式校验）与自定义评估器（LLM 评估器、Code 评估器、基于评测任务生成的 LLM 评估器），支持多维度自动评分与人工标签协同分析 [评估器](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-grader.md)。
-- **优化能力**：支持基于调试结果的 Prompt 多版本对比、人工反馈驱动的智能优化，以及基于优质评测集/线上 Trace 的闭环迭代 [应用优化](../../raw/application-user-guide/agenteval/agenteval-optimization.md)。
-- **标注体系**：通过标签管理支持分类、布尔值、数字、文本四类标签，用于评测数据与观测 Span 的人工标注与多维筛选 [标签管理](../../raw/application-user-guide/agenteval/agenteval-tags/agenteval-tag-management.md)。
-
-> **注意**：文档 4 明确指出“应用观测目前暂无 API”，而其他模块（如评测任务、评估器）均未提及 API 支持状态；当前所有功能均需通过控制台交互使用，无公开 SDK 或 RESTful API 接口。
+- 支持基于 Qwen 系列大模型（如 `qwen-max`、`qwen-plus`、`qwen-turbo`）构建的 Agent 应用评测；  
+- 支持自定义评测任务：包括单步动作准确性、多跳推理完整性、工具调用合规性、响应安全性等维度；  
+- 提供内置可观测性面板，可追踪 `thought → action → observation → answer` 全链路轨迹，并支持按 [标签管理](../../raw/application-user-guide/agenteval/agenteval-tags.md) 进行分组分析。  
+> **注意**：文档中提及的 `qwen-vl` 模型支持仅限视觉-语言联合任务评测，但当前 SDK v2.3.0 版本尚未开放该能力，详见 [应用评测](../../raw/application-user-guide/agenteval/agenteval-evaluation.md) 中的兼容性说明。
 
 ## 关键参数
 
-| 参数类别 | 关键项 | 说明 |
-|----------|--------|------|
-| **评估器配置** | 评分范围、通过阈值 | 决定打分尺度与 Pass/Fail 判定逻辑；建议精细评估用 0–100，快速分类用 0–1 或 1–5；阈值通常设为范围中值 [评估器](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-grader.md) |
-| **评测任务** | 字段映射 | 所有评估器变量（如 `query`, `response`, `reference`）必须完成到评测集字段或模型输出的准确映射，否则评估失败 |
-| **告警规则** | 持续时间、检查周期、阈值 | 告警触发需满足指标在“持续时间”内连续违反阈值，检查周期默认 60 秒；预置模板覆盖 QPM、错误率、TTFT 等核心指标 [告警管理](../../raw/application-user-guide/agenteval/agenteval-observability/agenteval-alert-management.md) |
-| **标签类型** | 类型（分类/布尔/数字/文本）、筛选条件 | 不同类型对应不同筛选语法（如分类标签用“属于”，数字标签用“大于”），影响后续数据筛选与统计准确性 |
+| 参数名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `eval_config` | dict | 是 | 指定评测维度（如 `"tool_call_validity": true`）、基准数据集路径及评分规则 |
+| `trace_id` | str | 否 | 关联已有观测链路 ID，用于将评测结果注入对应 trace；若未提供则新建 trace |
+| `timeout` | int | 否 | 单次评测最大等待时长（秒），默认 120，超时将中断并标记为 `TIMEOUT` 状态 |
+| `enable_observability` | bool | 否 | 是否同步采集运行时 trace，默认 `True`；设为 `False` 可降低开销，但将无法使用 [应用观测](../../raw/application-user-guide/agenteval/agenteval-observability.md) 功能 |
 
 ## 使用方式
 
-1. **前置准备**：使用阿里云主账号登录百炼控制台，完成可观测链路 OpenTelemetry 服务授权、开通与 LogStore 初始化（子账号需主账号授权）。
-2. **观测启用**：在[应用观测](https://bailian.console.aliyun.com/loop/app-observe)页面开启目标应用观测，Trace 数据分钟级同步；支持导出 JSONL/EXCEL 并一键添加至评测集。
-3. **评测构建**：
-   - 创建评测集（选择智能体/工作流类型 → 编辑表结构 → 导入数据 → 发布）；
-   - 创建评估器（选用预置模板或自定义 LLM/Code 逻辑）；
-   - 创建评测任务（绑定评测集、应用、评估器及参数映射）。
-4. **优化实施**：
-   - 进入应用优化页，发起多版本 Prompt 对比调试；
-   - 或基于调试对话+人工反馈（明确描述问题现象与期望行为）生成优化建议；
-   - 采纳后需手动发布才生效。
+1. 安装最新版百炼 SDK（≥2.2.0）：`pip install alibabacloud-bailian20231227`；  
+2. 初始化 `AgentEvalClient`，传入 `app_id` 和 `access_token`；  
+3. 调用 `.evaluate()` 方法，传入待测 Agent 实例（需实现标准 `run()` 接口）及 `eval_config`；  
+4. 结果返回 `EvaluationResult` 对象，含 `score`、`details`（逐项评分）、`trace_url`（控制台可观测链接）。  
+完整示例见 [快速开始](../../raw/application-user-guide/agenteval/agenteval-quick-start.md)。
 
 ## 限制和注意事项
 
-- **应用兼容性**：应用观测**不支持通过 Assistant API 创建的智能体应用**；仅支持智能体 1.0/2.0 和工作流应用 [应用观测](../../raw/application-user-guide/agenteval/agenteval-observability/agenteval-observation.md)。
-- **评测集状态**：评测集必须**发布后才能用于评测任务**，草稿状态不可选；版本管理仅保留最近 10 个历史版本。
-- **评估器依赖**：基于评测任务创建的评估器**不支持试运行**，且仅允许选择“已完成评估”的任务；若评估器被任一评测任务引用，则无法删除。
-- **告警与限流**：限流统计仅展示 QPM 相关指标（如 QPM 限流次数），告警规则配置需关联具体应用，且通知对象依赖云监控联系人配置。
-- **成本提示**：LLM 评估器调用产生 [Token](../concepts/token.md) 费用，Code 评估器无额外费用；评测任务消耗的 Token 量可在任务列表查看。
+- 单次评测任务最多支持 50 条测试样本，批量评测需分批提交；  
+- 所有评测请求均经过百炼服务端统一鉴权与限流（默认 10 QPS / app_id），超出将返回 `429 Too Many Requests`；  
+- 评测过程中若 Agent 主动抛出未捕获异常（如 `ToolNotFoundError`），`agenteval` 将终止执行并记录 `ERROR` 状态，**不会自动 fallback 或重试**；  
+- 当前不支持跨模型版本混合评测（例如同时对比 `qwen-max-20240601` 与 `qwen-max-20240801`），需分别配置独立评测任务——此限制在 [更新日志](../../raw/application-user-guide/agenteval/agenteval-changelog.md) v2.2.1 中已明确标注。
 
 ## 来源文档
 
-- [概览](../../raw/application-user-guide/agenteval/agenteval-introduction.md)
-- [快速开始](../../raw/application-user-guide/agenteval/agenteval-quick-start.md)
-- [应用观测](../../raw/application-user-guide/agenteval/agenteval-observability.md)
-- [应用观测](../../raw/application-user-guide/agenteval/agenteval-observability/agenteval-observation.md)
-- [告警管理](../../raw/application-user-guide/agenteval/agenteval-observability/agenteval-alert-management.md)
-- [评测集](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-evaluation-set.md)
-- [评估器](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-grader.md)
-- [应用优化](../../raw/application-user-guide/agenteval/agenteval-optimization.md)
-- [标签管理](../../raw/application-user-guide/agenteval/agenteval-tags.md)
-- [标签管理](../../raw/application-user-guide/agenteval/agenteval-tags/agenteval-tag-management.md)
-- [更新日志](../../raw/application-user-guide/agenteval/agenteval-changelog.md)
-- [应用评测](../../raw/application-user-guide/agenteval/agenteval-evaluation.md)
-- [评测任务](../../raw/application-user-guide/agenteval/agenteval-evaluation/agenteval-evaluation-task.md)
+- [Evolution](../../raw/application-user-guide/agenteval.md)
 
 

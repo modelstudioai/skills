@@ -1,37 +1,43 @@
 # application publishing and sharing
 
-应用发布与分享功能允许开发者将构建完成的应用对外提供服务或复用为组件。该能力覆盖公开分享、嵌入集成、UI定制化及跨应用复用等典型场景，适用于私有部署和百炼云环境。具体行为受模型类型、权限配置及平台版本约束，需结合 [应用发布与分享](../../raw/application-user-guide/application-publishing-and-sharing.md) 文档整体理解。
+应用发布与分享功能允许开发者将构建完成的应用对外公开、嵌入到第三方系统，或作为可复用组件供其他应用调用。该能力覆盖 Web 端分享、API 接口发布、UI 定制化导出及跨应用组件复用等核心场景。所有操作均通过百炼控制台「发布」页签或 OpenAPI 完成，无需修改应用底层逻辑。
 
 ## 支持的模型/功能
 
-- **公开分享**：生成可访问的 URL，支持设置访问密码与过期时间（仅限 Standard 和 Pro 版本）  
-- **嵌入式集成**：通过 iframe 或 SDK 将应用嵌入第三方页面，需启用「允许嵌入」开关  
-- **发布为组件**：将 Agent 或 Workflow 发布为可被其他应用调用的组件，支持输入/输出 Schema 声明 —— 详见 [发布为组件](../../raw/application-user-guide/application-publishing-and-sharing/use-agent-or-workflow-as-component.md)  
-- **UI 定制**：使用可视化 UI 设计器调整对话界面布局、按钮文案、主题色等，导出后生效于所有分享渠道  
+- **公开分享**：生成带访问权限控制（公开/仅链接可见/指定用户）的 Web URL，支持自定义域名和 HTTPS 强制跳转  
+- **API 发布**：为 Workflow 或 Agent 自动生成 RESTful API 端点（`POST /v1/applications/{app_id}/invoke`），兼容 OpenAPI 3.0 规范  
+- **UI 组件化嵌入**：导出轻量级 `<script>` 标签代码，支持在任意 HTML 页面中以 iframe 或 SDK 方式加载应用 UI [原文标题](../../raw/application-user-guide/application-publishing-and-sharing.md)  
+- **作为组件复用**：将当前应用注册为 `component` 类型资源，供其他 Workflow 的「调用组件」节点直接引用，支持输入/输出 Schema 显式声明 [原文标题](../../raw/application-user-guide/application-publishing-and-sharing/use-agent-or-workflow-as-component.md)  
 
 ## 关键参数
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `share_mode` | string | 是 | 取值：`public`（无需登录）、`password`（密码保护）、`internal`（仅组织内可见） |
-| `embeddable` | boolean | 否 | 默认 `false`；设为 `true` 后支持 iframe 嵌入，需配合 CSP 白名单配置 |
-| `component_schema` | object | 仅当发布为组件时必填 | 遵循 OpenAPI 3.0 格式定义 inputs/outputs，参考 [发布为组件](../../raw/application-user-guide/application-publishing-and-sharing/use-agent-or-workflow-as-component.md) 中的字段规范 |
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `visibility` | string | 是 | 取值：`public` / `link_only` / `private`；影响分享链接的默认访问策略 |
+| `custom_domain` | string | 否 | 仅限企业版；需提前在控制台绑定并验证域名，格式如 `ai.example.com` |
+| `enable_cors` | boolean | 否 | 仅 API 发布时生效；启用后自动配置 `Access-Control-Allow-Origin: *`（生产环境建议显式指定 origin） |
+| `input_schema` | object | 否 | 当发布为组件时必填；JSON Schema 格式，用于校验上游传入参数 [原文标题](../../raw/application-user-guide/application-publishing-and-sharing/share-an-application.md) |
 
-> **注意**：`share_mode=public` 在私有化部署中默认禁用，需管理员在 `settings.yaml` 中显式开启 `enable_public_sharing: true`；该限制未在 [应用分享](../../raw/application-user-guide/application-publishing-and-sharing/share-an-application.md) 中明确说明，以平台实际配置为准。
+> **注意**：文档中提及的 `ui_designer` 功能（如拖拽布局导出）目前仅支持基础模板，高级交互定制（如动态表单联动）尚未开放 API 控制，详见 [原文标题](../../raw/application-user-guide/application-publishing-and-sharing/ui-designer.md) 中的「限制说明」章节——该描述与当前 v2.3.0 控制台实际能力一致，但 OpenAPI 文档未同步更新此约束。
 
 ## 使用方式
 
-1. 在应用编辑页点击「发布」→「分享设置」，配置 `share_mode` 与访问控制策略  
-2. 如需嵌入，勾选「允许嵌入」并复制 iframe 代码或调用 `@bailian-sdk/embed`  
-3. 如需发布为组件，在「组件管理」页选择目标 Agent/Workflow，填写 `component_schema` 后提交审核（审核由平台自动完成，通常 <30 秒）  
-4. 所有操作均需调用 `/v1/applications/{app_id}/publish` API 或通过控制台触发，底层逻辑详见 [应用发布与分享](../../raw/application-user-guide/application-publishing-and-sharing.md)
+1. **控制台操作**：进入应用详情页 → 左侧导航选择「发布」→ 配置 visibility、domain 等参数 → 点击「发布」获取 URL 或 API [Token](../concepts/token.md)  
+2. **OpenAPI 调用**：  
+   ```bash
+   curl -X POST https://dashscope.aliyuncs.com/api/v1/applications/{app_id}/publish \
+     -H "Authorization: Bearer $API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{"visibility":"link_only","enable_cors":true}'
+   ```
+3. **前端嵌入**：发布成功后，在「分享」页复制 `<script src="https://.../embed.js?app_id=xxx"></script>` 并插入 HTML body
 
 ## 限制和注意事项
 
-- 单个应用最多同时存在 5 个有效分享链接（含 password/internal 模式）  
-- UI 设计器修改仅影响分享后的前端渲染，不影响 API 调用的响应结构  
-- 发布为组件后，原始应用的调试模式（Debug Mode）将自动关闭，且不可逆；此行为在 [UI设计](../../raw/application-user-guide/application-publishing-and-sharing/ui-designer.md) 文档中未提及，属隐式约束  
-- 私有化部署环境下，`embeddable=true` 需额外配置 Nginx 反向代理头 `X-Frame-Options: ALLOWALL`，否则 iframe 加载失败
+- 单个应用最多同时发布 5 个不同 `visibility` 配置的实例（例如：1 个 public + 2 个 link_only + 2 个 private）  
+- API 发布后，`/invoke` 端点默认启用流式响应（`text/event-stream`），若客户端不支持 SSE，需在请求头添加 `X-Disable-Stream: true`  
+- 作为组件被调用时，调用方 Workflow 的超时时间（`timeout_seconds`）将覆盖被调用方自身的超时设置，且不可继承重试策略  
+- 免费版用户无法使用 `custom_domain` 和 `enable_cors` 参数，相关字段在 API 请求中会被静默忽略
 
 ## 来源文档
 

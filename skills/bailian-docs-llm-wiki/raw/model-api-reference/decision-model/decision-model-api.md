@@ -50,7 +50,7 @@ API-Key，格式：`Bearer $DASHSCOPE_API_KEY`。
 
 问题表。key 为调用方自定义的问题 id；value 为问题对象，字段如下。
 
-questions 属性
+问题对象属性
 
 **type** · `String` · 必选
 
@@ -187,7 +187,7 @@ print(result.answers["refund"])   # noul P(yes)
 
 答案表，key 与请求中的问题 id 一一对应，value 为答案对象，字段如下。
 
-answers 属性
+答案对象属性
 
 **type** · `String`
 
