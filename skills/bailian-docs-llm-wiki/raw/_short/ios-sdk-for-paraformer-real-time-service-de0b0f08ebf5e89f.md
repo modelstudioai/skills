@@ -461,9 +461,6 @@
     是否保存本地日志。若为`YES`，须在[连接与控制参数](https://help.aliyun.com/zh/model-studio/ios-sdk-for-paraformer-real-time-service#57acf5ecc1w8j)通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### nui\_set\_params
 
@@ -490,9 +487,6 @@
     [语音识别效果参数](https://help.aliyun.com/zh/model-studio/ios-sdk-for-paraformer-real-time-service#d20cce9518kla)。
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### nui\_dialog\_start
 
@@ -534,9 +528,6 @@
     ```
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### nui\_dialog\_cancel
 
@@ -568,9 +559,6 @@
         
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### nui\_release
 
@@ -583,9 +571,6 @@
 ```
 
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### nui\_get\_version
 
@@ -674,7 +659,7 @@
     
     `int`
     
-    错误码，在出现EVENT\_ASR\_ERROR事件时有效，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
+    仅在出现 `EVENT_ASR_ERROR` 事件时有效。
     
 
 #### onNuiAudioStateChanged：监听音频状态

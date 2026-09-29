@@ -298,7 +298,7 @@ AOQ 通过业务 AppServer 发起 HTTP 请求获取连接参数，再由客户�
 
 发送客户端事件[session.update](https://help.aliyun.com/zh/model-studio/client-events#26a8302028sjm)：
 
-通过 `session.update` 配置输出模态、音色、音频格式和 VAD。下面是 Qwen3.8-Omni-Flash-Realtime 的 WebSocket Manual 模式配置，与[最小音频问答](#qwen38-realtime)示例一致：
+通过 `session.update` 配置输出模态、音色、音频格式和 VAD。下面是 Qwen3.8-Omni-Flash-Realtime 的 WebSocket Manual 模式配置，与[最小音频问答](#qwen38-realtime)示例一致。本例使用“龙安灵心”音色（`longanlingxin`）：
 
 ```
 {
@@ -432,51 +432,18 @@ Qwen3.5-Omni-Realtime 配置示例
     通过 DataChannel 接收 `response.text.delta` 和 `response.text.done` 等流式文本事件。
     
 -   **输出文本+音频**
-    -   **文本**：通过 DataChannel 接收 `response.text.delta` 和 `response.text.done` 等流式文本事件。
+    -   **文本**：通过 DataChannel 接收 `response.audio_transcript.delta` 和 `response.audio_transcript.done` 等流式文本事件。
     -   **音频**：通过 RTP 轨道实时接收和播放，无需通过 `response.audio.delta` 事件获取音频数据。
 
 ## 模型选型
 
-实时音视频对话优先使用 **Qwen3.8-Omni-Flash-Realtime**，接收流式音视频输入，返回文本与音频，支持自定义 Function Calling、MCP、多通道音频和声音复刻。接入方式见[建立连接](#bdaa43cdd7hsd)。
+实时音视频对话优先使用 **Qwen3.8-Omni-Flash-Realtime**。模型支持音视频双工交互，接收文本、图片、流式音频和视频输入，返回文本与音频。支持 WebSocket、WebRTC 和 AOQ 接入，接入方式见[建立连接](#bdaa43cdd7hsd)。
 
-支持 [113 种语种和方言](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)的语音识别，以及 [36 种语种和方言](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)的语音生成；音色及试听见[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)。
-
-Qwen3.5-Omni-Realtime 系列能力
-
-Qwen3.5-Omni-Realtime 系列模型是千问的实时多模态模型，相比于上一代的 Qwen3-Omni-Flash-Realtime：
-
--   **智能水平**
-    
-    模型智力大幅提升，与 Qwen3.5-Plus 智能水平相当。
-    
--   **联网搜索**
-    
-    原生支持联网搜索（WebSearch），模型可自主判断是否需要搜索来回应即时问题。详见[联网搜索](https://help.aliyun.com/zh/model-studio/realtime#f6g7h8i9j0s7k)。
-    
--   **工具调用**
-    
-    支持 Function Calling，模型可自主判断是否需要调用外部工具，实现与外部系统的交互。详见[Qwen-Omni-Realtime 系列](https://help.aliyun.com/zh/model-studio/qwen-function-calling#rt02realtime01)。
-    
--   **语义打断**
-    
-    自动识别对话意图，避免附和声和无意义背景音触发打断。
-    
--   **语音控制**
-    
-    通过语音指令控制声音大小、语速和情绪，如“语速快一些”、“声音大一些”、“用开心的语气”等。
-    
--   **支持的语言**
-    
-    支持 [113 种语种和方言](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)的语音识别，以及 [36 种语种和方言](raw/model-user-guide/model-experience/omni-modal/qwen-omni.md)的语音生成。
-    
--   **支持的音色**
-    
-    支持 55 种音色（47 种多语言 + 8 种方言），具体可查看[音色列表](https://help.aliyun.com/zh/model-studio/realtime#f4c9fd97f221z)。
-    
--   **声音复刻**
-    
-    qwen3.5-omni-plus-realtime 和 qwen3.5-omni-flash-realtime 支持声音复刻功能，可使用自定义音色进行实时对话。详见[声音复刻](raw/_short/qwen-omni-voice-cloning-717550bc449e9e29.md)。
-    
+-   **工具调用与联网搜索**：支持[自定义 Function Calling](https://help.aliyun.com/zh/model-studio/qwen-function-calling#rt02realtime01)和[远程 MCP 工具](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-flow)，或启用[联网搜索](#f6g7h8i9j0s7k)。
+-   **语音轮次检测**：支持 `semantic_vad`，可过滤附和声、背景音等无意义声音，减少语音轮次误触发。
+-   **多通道音频与视频聚合**：WebSocket 接入支持 1、2、4 声道音频；视频聚合可在不需要细粒度视觉信息时降低计算开销。详见[扩展会话配置](#realtime-advanced-config)。
+-   **语言**：支持 [113 种语种和方言](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)的语音识别，以及 [36 种语种和方言](https://help.aliyun.com/zh/model-studio/qwen-omni#d54e85c641oux)的语音生成。
+-   **音色与声音复刻**：默认音色为 `Tina`；可选音色和试听见[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)，自定义音色的使用方式见[声音复刻](raw/_short/qwen-omni-voice-cloning-717550bc449e9e29.md)。
 
 > 模型的名称、上下文、价格、快照版本等信息请参见百炼控制台；并发限流条件请参考[限流](raw/model-user-guide/get-started-with-models/rate-limit.md)。
 
@@ -582,7 +549,7 @@ with wave.open("input.wav", "rb") as source:
     Path("input.pcm").write_bytes(source.readframes(source.getnframes()))
 ```
 
-准备好输入后，运行以下客户端：
+准备好输入后，运行以下客户端。示例使用“龙安灵心”音色（`longanlingxin`）：
 
 ```
 import base64
@@ -671,7 +638,7 @@ with wave.open("reply.wav", "wb") as target:
     target.writeframes(Path("reply.pcm").read_bytes())
 ```
 
-### SDK 实时录音示例
+### 实时录音示例
 
 #### DashScope Python SDK
 
@@ -3486,12 +3453,12 @@ pip install aiortc aiohttp sounddevice numpy certifi av
 
 ## 多通道音频、视频聚合与 MCP
 
-以下配置适用于 Qwen3.8-Omni-Flash-Realtime，按需在首次输入音频前配置。
+以下配置适用于 Qwen3.8-Omni-Flash-Realtime。
 
 -   **多通道音频（WebSocket 接入）**：在首段音频前设置 `session.audio.input.format`。支持 1、2、4 声道；多通道必须为 PCM、16000 Hz、s16le、interleaved。2 声道使用 `raw_mic_array`，4 声道使用 `foa_ambix`。字段约束和 JSON 片段见[客户端事件](https://help.aliyun.com/zh/model-studio/client-events#session-audio-multichannel)。
 -   **视频聚合**：`session.video.input.representation_compact` 默认为 `none`；设为 `normal` 可聚合视频表征，降低计算开销，适用于不依赖细粒度视觉信息的场景。也必须在首段音频前配置，开始输入后不得修改。
--   **音色**：默认音色为 `Tina`。新接入使用 `session.audio.output.voice`，它优先于兼容字段 `session.voice`。支持 `longanlingxin`（龙安灵心，知心温暖音）等音色。使用方式和声音复刻入口见[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)。
--   **MCP**：在 `session.tools` 中配置公网 HTTPS MCP Streamable HTTP 服务；默认需要审批。先确认工具发现完成，再发起需要该工具的 Response。执行结果、拒绝和失败处理以及续答步骤见[MCP 交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-flow)。
+-   **音色**：默认音色为 `Tina`。新接入使用 `session.audio.output.voice`；如果同时设置了它和兼容字段 `session.voice`，输出音频使用 `session.audio.output.voice` 指定的音色。可选音色及声音复刻入口见[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)。
+-   **MCP**：在 `session.tools` 中配置公网 HTTPS MCP Streamable HTTP 服务；仅在没有活动 Response 时更新 MCP 配置。默认需要审批。先确认工具发现完成，再发起需要该工具的 Response。执行结果、拒绝和失败处理以及续答步骤见[MCP 交互流程](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-flow)。
 
 ### SDK 配置视频聚合
 
@@ -4008,7 +3975,7 @@ A：输入方式取决于接入协议。
     
 -   Manual 模式
     
-    参见[Manual 模式](raw/model-user-guide/model-experience/omni-modal/realtime.md)代码，将图片输入与提交的两部分代码取消注释，即可传入本地图片。
+    参见[实时录音示例](https://help.aliyun.com/zh/model-studio/realtime#realtime-sdk-mic-examples)，依次选择“WebSocket（Python）”和“Manual 模式”，展开 `manual_mode.py`，取消注释图片输入与提交的两部分代码，即可传入本地图片。
     
 
 **WebRTC**：通过视频轨道（RTP）发送画面帧，无需发送 `input_image_buffer.append` 事件。
@@ -4017,13 +3984,12 @@ A：输入方式取决于接入协议。
 
 ### 收不到 ASR 转录文本（transcript）怎么办？
 
-A：如果您收不到 `conversation.item.input_audio_transcription.completed` 事件，或事件中的 transcript 字段为空，请按以下顺序排查。
+A：如果没有收到 `conversation.item.input_audio_transcription.completed` 事件，或事件中的 `transcript` 为空，请依次检查：
 
-1.  **确认已开启输入音频转录**。转录事件由 `session.update` 的 `enable_input_audio_transcription` 参数控制，该参数默认为 `true`。关闭该参数后，服务端不会下发 `conversation.item.input_audio_transcription.completed` 事件，这是预期行为，并非异常，请确认会话配置中该参数为 `true`。
-2.  **监听转录失败事件**。除 `completed` 事件外，请同时监听 `conversation.item.input_audio_transcription.failed` 事件。转录失败时，该事件会通过 `error.code`、`error.message` 和 `error.param` 返回失败原因，可据此定位是参数问题还是音频问题。
-3.  **升级 DashScope SDK**。较低版本的 DashScope SDK 可能不支持输入音频转录相关参数，导致配置未生效，请将 DashScope SDK 升级到较新版本后重试。
-4.  **检查 VAD 配置与网络**。语音活动检测由 `session.turn_detection` 配置，`type` 取值为 `server_vad` 或 `semantic_vad`。VAD 灵敏度与实际环境不匹配（例如在嘈杂环境中阈值过低）会导致音频分段异常，进而影响转录结果，可参见本文档“2. 配置会话”章节调整 `threshold` 与 `silence_duration_ms`。此外，网络不稳定会造成 WebSocket 连接中断，导致转录事件丢失，请确认连接在整个会话期间保持稳定。
-5.  **显式指定转录模型**。可通过 `session.update` 的 `input_audio_transcription_model` 参数指定 ASR 转录模型（例如 `qwen3-asr-flash-realtime`）。未显式指定时，服务端使用默认转录模型；当默认模型的转录效果不满足需求时，建议显式指定。
+1.  **输入转录配置**。DashScope Python SDK 的 `update_session` 参数 `enable_input_audio_transcription` 默认为 `True`；设为 `False` 时，SDK 会将会话中的 `input_audio_transcription` 置为 `null`。直接使用 WebSocket，或通过 WebRTC DataChannel 发送会话配置时，按[输入音频转录配置](https://help.aliyun.com/zh/model-studio/client-events#session-input-audio-transcription)检查发送的 `session.update.session.input_audio_transcription`。`enable_input_audio_transcription` 是 SDK 参数，不是 `session.update` 的顶层字段。
+2.  **转录失败事件**。同时监听 `conversation.item.input_audio_transcription.failed`。失败时可从事件的 `error.code`、`error.message` 和 `error.param` 查看错误信息。
+3.  **音频是否完成提交**。VAD 模式下检查服务端是否检测到语音起止；Manual 模式下确认已发送 `input_audio_buffer.commit`。没有提交本轮音频时，不要只等待转录完成事件。
+4.  **连接和 SDK 版本**。确认本轮音频输入期间连接未中断；WebRTC 接入还需检查 DataChannel 状态。使用 DashScope Python SDK 时，核对版本符合本文的最低要求（1.26.5）。
 
 ## 错误码
 

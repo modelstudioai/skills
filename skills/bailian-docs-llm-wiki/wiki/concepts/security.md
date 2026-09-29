@@ -1,44 +1,36 @@
 # 内容安全与合规
 
-内容安全与合规是百炼平台面向生成式AI应用提供的核心横切能力，指对用户输入、模型输出、知识库内容、记忆数据等全链路文本/图像内容进行实时风险识别（如涉黄、暴恐、政治敏感、违法违禁等），并确保整体技术栈满足《生成式人工智能服务管理暂行办法》等监管要求的综合防护机制。该能力默认启用、深度集成，覆盖开发、运行、数据与交付各阶段，无需额外编码即可获得基础防护，同时支持按需增强审计与策略管控。
+内容安全与合规是百炼平台面向生成式AI应用的核心横切能力，指通过多模态输入检测、可控输出拦截、策略化风险治理及全链路审计追溯等机制，确保模型交互内容符合国家监管要求（如《生成式人工智能服务管理暂行办法》）、企业安全策略与数据隐私规范。该能力默认启用、深度集成于调用链路，无需修改业务逻辑即可提供端到端防护。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-内容安全与合规能力在百炼平台中以“分层嵌入、按需激活”方式落地，贯穿以下关键场景：
-
-- **Flow Agent 与 Managed Agent**：自动对用户输入（Prompt）和模型输出（Response）执行双路内容安全检测；Managed Agent 还在工具调用前拦截高风险指令（如含恶意 payload 的 Shell 命令），保障运行时行为安全。  
-- **RAG 知识库**：上传文件时自动预扫描（PDF/DOCX 等格式 OCR+文本分析），入库后持续检测知识片段风险；检索阶段同步校验召回内容安全性，防止投毒数据污染响应。  
-- **Memory 模块**：对记忆的读写操作进行内容安全过滤，避免敏感信息被意外存储或泄露，保障对话上下文安全。  
-- **模型调用 API 层**：通过 `X-DashScope-DataInspection` 请求头显式启用 AI 安全护栏，实现输入/输出双通道实时风控，适用于自建前端、SDK 或直连 HTTP 调用。  
-- **安全存储业务空间**：在高敏专属环境中，内容安全检测与私网隔离、传输加密协同工作，确保数据“不出域、不裸传、不越界”。
-
-> ⚠️ 注意：默认防护自动生效，但高级策略（如自定义关键词库、细粒度风险等级处置）需在控制台 **Security > 高级防护 > 安全策略** 中手动开启；当前高级防护仅提供监测与告警，**不支持自动阻断**，风险事件需人工确认处理。
+- **模型推理调用**：对文本、图像、音频等多模态输入自动执行涉黄、涉政、暴恐、广告、隐私信息（如身份证号、手机号）识别；对输出内容实时拦截越狱指令、有害生成、事实性错误及敏感信息泄露。防护强度可按需配置（基础/严格/自定义），并支持按请求粒度开关。
+- **Agent 应用运行时**：在工具调用环节实施资产级防护，例如限制仅允许调用白名单内的插件、禁用高危函数（如 `os.system`）、校验工具参数合法性，防止 Agent 被诱导执行恶意操作。
+- **私有化与高敏场景**：结合传输加密（AES+RSA 混合加密）、私网访问（PrivateLink）、安全存储空间等能力，实现“内容不出域、风险不外溢”的闭环管控，满足金融、政务等强合规场景要求。
+- **安全运营与审计**：通过统一审计日志（含原始输入/输出、拦截原因、策略ID、时间戳）和 Security API，支持构建合规看板、自动化告警响应、定期导出报告，满足等保、GDPR 或行业审计要求。
 
 ## 关键参数和配置
 
-| 参数/配置项 | 类型 | 说明 | 使用位置 |
-|-------------|------|------|----------|
-| `X-DashScope-DataInspection` | HTTP Header（string） | 启用 AI 安全护栏的开关，值为 `{"input":"cip","output":"cip"}`（字符串格式，非 JSON 对象） | HTTP API 调用、DashScope SDK（低层封装） |
-| `scene` | string（可选） | 检测场景标识，影响策略权重，如 `"chat"`（对话）、`"search"`（搜索）、`"generation"`（生成），默认 `"general"` | Security API `/v1/security/text` 或 `/v1/security/image` |
-| `enable_ocr` | boolean（可选） | 图像检测时是否启用 OCR 文本识别，默认 `false`；启用后延迟增加约 300ms | Security API 图像检测请求体 |
-| `risk_level` | integer（响应字段） | 检测结果风险等级：`0`=安全，`1`=低危，`2`=中危，`3`=高危（**非字符串枚举**） | 所有 Security API 同步/异步响应体 |
-| `content` / `image_url` | string | 待检测文本（≤65536 字符）或图片公网 HTTPS URL（≤10MB，支持防盗链白名单） | Security API 必填参数 |
-| 高级防护策略开关 | 控制台配置 | 包括“内容安全”、“RAG 投毒识别”、“记忆内容检测”等独立开关，默认关闭，需手动开启 | 控制台 **Security > 高级防护 > 安全策略** |
+| 参数名 | 位置 | 类型 | 默认值 | 说明 |
+|--------|------|------|--------|------|
+| `safety_check` | API 请求体（同级于 `input` / `messages`） | boolean | `true` | 启用/禁用实时安全检测；生产环境强制为 `true`，设为 `false` 将被忽略 |
+| `safety_level` | API 请求体 | string | `"basic"` | 防护强度：`"basic"`（默认规则）、`"strict"`（增强规则）、`"custom"`（需配合 `safety_policy_id`） |
+| `safety_policy_id` | API 请求体 | string | — | 引用预置或自定义策略 ID；一个请求仅支持指定一个策略，复合策略需提前在控制台创建 |
+| `audit_enabled` | API 请求体 | boolean | `false` | 开启后记录完整请求/响应及拦截详情，用于审计追溯；日志保留 90 天 |
+| `X-DashScope-DataInspection` | HTTP Header | JSON string | — | 启用 AI 安全护栏（独立于 `safety_check`），格式如 `'{"input":"cip","output":"cip"}'`，支持细粒度开关 |
+
+> ✅ **提示**：  
+> - 控制台中可在「应用设置 → 安全策略」为整个应用或单个 Agent 绑定策略，策略将自动注入所有 API 调用；  
+> - CLI 可通过 `bailian security enable --level strict --policy <id>` 快速启用；  
+> - 安全策略本身（含规则组合、风险域分类如 `model_interaction`、`runtime_tool`）需在 [安全策略管理](../../raw/application-user-guide/security-guide/section-adv/policy.md) 中配置。
 
 ## 面向开发者，简洁实用
 
-- ✅ **快速启用**：HTTP 调用时加一行 Header 即可启用双路风控：  
-  ```http
-  X-DashScope-DataInspection: {"input":"cip","output":"cip"}
-  ```
-- ✅ **SDK 更省心**：Python 使用 `dashscope.Generation.call(..., extra_headers={"X-DashScope-DataInspection": '{"input":"cip","output":"cip"}'})`；Java 同理，无需改业务逻辑。  
-- ✅ **批量/大图用异步**：对多图或高并发场景，优先调用 `/v1/security/async/submit` 提交任务，再轮询 `/v1/security/async/result` 获取结果（超时 30 分钟）。  
-- ✅ **调试看日志**：开启推理日志（需先授权 SLS 投递）后，可在日志中查看原始 `input`/`output` 及对应 `risk_level`，精准复现风控决策依据。  
-- ⚠️ **避坑提醒**：  
-  - `risk_level` 是整数，不是 `"high"` 字符串；  
-  - 图像检测需确保 `image_url` 公网可访问且在白名单内；  
-  - 高级防护不拦截，仅告警——高风险响应仍会返回，务必在业务侧做 `if response.risk_level > 2: reject()` 判断；  
-  - 所有检测结果仅保留 7 天，关键审计需自行落库。
+- **快速启用**：只需在 API 请求中添加 `"safety_level": "strict"`，即刻获得增强防护，无需改模型代码或重写逻辑。  
+- **调试建议**：开发阶段开启 `audit_enabled: true`，结合 `RequestId` 查看拦截详情；若需临时绕过（仅限测试环境），显式传 `"safety_check": false`。  
+- **多模态注意**：图像/音频检测延迟略高（+150–300ms），高并发场景请预留缓冲；确保上传文件格式合法（如 `.pdf` 必须小写后缀）。  
+- **合规落地**：导出审计日志（调用 `/v1/audit/export`）或接入 Security API（如 `/agent_logs` 查询告警），可一键生成监管所需报告。  
+- **避坑提醒**：`safety_policy_id` 不支持多个 ID 并列；`/export_agent_logs` 的 `params` 字段必须是 JSON **字符串**（如 `"{\"risk_level\":\"high\"}"`），不是对象。
 
 ## 关联主题页
 

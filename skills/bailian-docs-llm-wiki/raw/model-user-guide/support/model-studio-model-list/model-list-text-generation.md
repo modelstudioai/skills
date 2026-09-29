@@ -96,6 +96,7 @@
 -   [MiniMax-M2.1](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/minimax-m2.md)
 -   [xiaomi/mimo-v2.5-pro](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/mimo-v2-5-pro.md)
 -   [stepfun/step-3.7-flash](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/step-3-7-flash.md)
+-   [stepfun/step-5-preview](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/step-5-preview.md)
 -   [siliconflow/deepseek-r1-0528](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/deepseek-r1-by-siliconflow.md)
 -   [vanchin/deepseek-r1](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/deepseek-r1-by-vanchin.md)
 -   [vanchin/deepseek-v3.1-terminus](raw/model-user-guide/support/model-studio-model-list/model-list-text-generation/deepseek-v3-1-terminus-by-vanchin.md)

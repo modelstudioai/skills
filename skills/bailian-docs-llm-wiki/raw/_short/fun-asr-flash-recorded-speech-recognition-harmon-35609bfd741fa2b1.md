@@ -395,10 +395,6 @@ JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参
 
 是否保存本地日志。若为`true`，须在[连接与控制参数](#connection-parameters)中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### setParams
 
 此接口用于独立设置或更新 `nls_config` 参数。如果所有参数都在[startFileTranscriber](#startfiletranscriber)中一次性提供，则无需调用此方法。
@@ -420,10 +416,6 @@ public setParams(params: string): number
 `string`
 
 [语音识别效果参数](#recognition-parameters)中的`nls_config`参数，`nls_config`之外的参数不支持通过该方法进行设置。
-
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### startFileTranscriber
 
@@ -477,10 +469,6 @@ public startFileTranscriber(params: string, task_id: ArrayBuffer): number
 
 任务ID缓冲区。SDK会将内部生成的随机任务ID字符串写入该缓冲区，要求缓冲区字节长度必须 **\>= 33字节**（示例中使用 `new ArrayBuffer(64)`）。调用成功后可通过转码获取该任务的`task_id`。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### queryFileTranscriber
 
 此接口用于主动查询一个异步任务的当前状态和结果。调用成功后，结果将通过`onFileTransEventCallback`回调中的 `EVENT_FILE_TRANS_QUERY_RESULT` 事件返回。
@@ -502,10 +490,6 @@ public queryFileTranscriber(task_id: string): number
 `string`
 
 待查询的任务ID（由 `startFileTranscriber` 写入缓冲区获得）。
-
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### cancelFileTranscriber
 
@@ -529,10 +513,6 @@ public cancelFileTranscriber(task_id: string): number
 
 待取消的任务ID。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### release
 
 释放SDK所有内部资源。此方法调用后，SDK实例将变为不可用状态，如需再次使用，必须重新调用[initializeFileTrans](#initializefiletrans)进行初始化。
@@ -541,9 +521,6 @@ public cancelFileTranscriber(task_id: string): number
 ```
 public release(): number
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### GetVersion
 
@@ -584,7 +561,7 @@ onFileTransEventCallback: (event: Constants.NuiEvent, resultCode: number, finish
 
 `number`
 
-[错误码](https://help.aliyun.com/zh/isi/support/error-codes)，在出现EVENT\_ASR\_ERROR事件时有效。
+仅在出现 `EVENT_ASR_ERROR` 事件时有效。
 
 `finish`
 

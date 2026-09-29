@@ -544,10 +544,6 @@ JSON 字符串，包含鉴权、连接和调试参数。参见[连接与控制�
 
 是否保存本地日志。若为`true`，须在[连接与控制参数](#connection-and-control-parameters)中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### setParams
 
 以 JSON 格式设置[语音对话效果参数](#conversation-parameters)。在[startDialog](#start-dialog)之前调用。
@@ -569,10 +565,6 @@ public setParams(params: string): number
 `string`
 
 [语音对话效果参数](#conversation-parameters)。
-
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### startDialog
 
@@ -609,10 +601,6 @@ VAD模式。固定为`Constants.VadMode.TYPE_P2T`。
 }
 ```
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### stopDialog
 
 结束对话，调用该接口后，服务端将返回最终对话结果并结束任务。
@@ -621,9 +609,6 @@ VAD模式。固定为`Constants.VadMode.TYPE_P2T`。
 ```
 public stopDialog(): number
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### cancelDialog
 
@@ -633,9 +618,6 @@ public stopDialog(): number
 ```
 public cancelDialog(): number
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### dialogAction
 
@@ -829,9 +811,6 @@ string
   }
 }
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### updateAudio
 
@@ -861,10 +840,6 @@ public updateAudio(data: ArrayBuffer, first_pack: boolean): number
 
 是否为首包。SDK内部会按`data.byteLength`计算字节数。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### pushReferenceData（对应Android updateRefAudio）
 
 参数audio\_update\_manually设置为"true"时，且启用了端侧AEC回声消除能力，则需要用此接口推送播放器播放的音频数据作为参考信号。
@@ -893,10 +868,6 @@ public pushReferenceData(data: ArrayBuffer, first_pack: boolean): number
 
 是否为首包。SDK内部会按`data.byteLength`计算字节数。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### release
 
 释放SDK所有内部资源。此方法调用后，SDK 实例将变为不可用状态，如需再次使用，必须重新调用[initialize](#initialize)进行初始化。
@@ -905,9 +876,6 @@ public pushReferenceData(data: ArrayBuffer, first_pack: boolean): number
 ```
 public release(): number
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### GetVersion
 
@@ -948,7 +916,7 @@ onNuiEventCallback: (event: Constants.NuiEvent, resultCode: number, arg2: number
 
 `number`
 
-[错误码](https://help.aliyun.com/zh/isi/support/error-codes)，在出现EVENT\_ASR\_ERROR事件时有效。
+仅在出现 `EVENT_ASR_ERROR` 事件时有效。
 
 `arg2`
 

@@ -70,10 +70,6 @@ JSON字符串，包含鉴权、连接和调试参数。详见下方 parameters �
 
 是否保存本地日志。若为`YES`，须在 parameters 中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
 
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 **parameters JSON 示例**：以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
 
 ```
@@ -198,10 +194,6 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 `char*`
 
 参数值。
-
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 **可用参数说明：**
 
@@ -387,10 +379,6 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 待合成文本。
 
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### nui\_tts\_pause
 
 暂停当前语音合成任务。任务暂停后，可通过 [`nui_tts_resume`](raw/_short/sambert-ios-sdk-3d168ae374b085dc.md)恢复，或通过 [`nui_tts_cancel`](raw/_short/sambert-ios-sdk-3d168ae374b085dc.md)彻底取消。在任务暂停期间，SDK不支持启动新的合成任务。
@@ -401,9 +389,6 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 ```
 -(int) nui_tts_pause;
 ```
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### nui\_tts\_resume
 
@@ -413,9 +398,6 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 ```
 -(int) nui_tts_resume;
 ```
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### nui\_tts\_cancel
 
@@ -441,10 +423,6 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 要取消的任务ID。若传入 `null`，则取消所有正在暂停/进行中的合成任务。
 
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### nui\_tts\_release
 
 释放SDK所有内部资源，并强制终止所有正在进行的合成任务。此方法调用后，SDK实例将变为不可用状态，如需再次使用，必须重新调用 [`nui_tts_initialize`](raw/_short/sambert-ios-sdk-3d168ae374b085dc.md)进行初始化。
@@ -453,9 +431,6 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 ```
 -(int) nui_tts_release;
 ```
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 ## NeoNuiTtsDelegate
 
@@ -493,7 +468,7 @@ Sambert 语音合成回调协议，用于接收合成事件、音频数据和日
 
 `int`
 
-错误码，仅在事件 [TTS\_EVENT\_ERROR](https://help.aliyun.com/zh/model-studio/sambert-ios-sdk#981ff433acpmr) 中有效。参见[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
+仅在出现 [TTS\_EVENT\_ERROR](https://help.aliyun.com/zh/model-studio/sambert-ios-sdk#981ff433acpmr) 事件时有效。
 
 #### onNuiTtsUserdataCallback：监听音频数据和时间戳信息
 

@@ -1,45 +1,47 @@
 # api [overview](../guides/overview.md)
 
-ParseX API 提供文档与音视频的结构化解析、以及基于 Schema 的字段抽取两大核心能力，所有接口均采用异步调用模式：先提交任务获取 `biz_id`，再轮询查询结果。API 通过 `Authorization: Bearer <API Key>` 鉴权，请求地址为 `{workspaceId}.cn-beijing.maas.aliyuncs.com/api/v2/apps/parse-x/...`。
+ParseX API 提供文档与音视频的结构化解析、以及基于 Schema 的字段抽取两大核心能力，所有接口均采用异步调用模式：先提交任务获取 `biz_id`，再轮询查询结果。API 通过标准 `Authorization: Bearer <API Key>` 鉴权，适用于自动化集成场景。
 
 ## 支持的模型/功能
 
-- **文档解析**：支持 PDF、Word、Excel、PPT、图片（PNG/JPG）等格式，输出 Markdown、布局信息（`layouts`）、表格、段落、页眉页脚、坐标位置等；支持指定页码范围、禁用页眉页脚、生成图片描述等配置。详见 [文档解析 API](raw/application-api-reference/api-overview/document-parsing.md)。
-- **音视频解析**：支持 MP4、MOV、AVI 等主流格式，提供人声分离（Diarization）、剧情解析（Synopsis）、分段（Segments）、摘要（Summary）、抽帧（Frame Extraction）等能力，可返回 ASR 文本、视频帧及语义描述。详见 [提交解析任务](raw/application-api-reference/api-overview/document-parsing/parse-submit.md)。
-- **字段抽取**：支持从已解析文档或原始文件中按 JSON Schema 抽取结构化字段，返回带引用溯源（`citations`）的 `extract_result_json`，支持推断（`allow_inference`）和引用标记（`citation_required`）。> **注意**：抽取不支持直接输入音视频，仅支持文档类输入或复用解析结果；且复用的 `parsed_file_biz_id` 必须在 7 天保留期内，否则返回 `ParseResultNotReusable` 错误 —— 这一限制在 [提交抽取任务](raw/application-api-reference/api-overview/field-extraction/extract-submit.md) 中明确说明，但 [错误码](raw/application-api-reference/api-overview/errors.md) 文档中将过期阈值标为“7 天”，而另一处提及“解析结果已过期，超过 30 天保留期”（`ParseResultExpired`），此处以 7 天为准，因字段抽取复用场景明确依赖该时效约束。
+- **文档解析**：支持 PDF、Word、Excel、PPT、图片（PNG/JPG）等格式，输出 Markdown、布局信息（`layouts`）、表格、段落、页眉页脚、坐标位置等；支持指定页码范围、图像描述生成等高级配置。详见 [文档解析 API](raw/application-api-reference/api-overview/document-parsing.md)。
+- **音视频解析**：支持 MP4、MOV、AVI 等主流视频格式及音频文件，提供人声分离（diarization）、剧情解析（synopsis）、分段（segments）、摘要（summary）、抽帧（frame extraction）等功能。
+- **字段抽取**：支持从已解析文档或原始文件中按 JSON Schema 抽取结构化字段，返回带引用溯源（`citations`）的 `extract_result_json` 和细粒度字段级结果（`fields`）。注意：**抽取不支持直接输入音视频**，仅支持文本类输入（含解析后的文档），详见 [字段解析 API](raw/application-api-reference/api-overview/field-extraction.md)。
+
+> **注意**：文档 7 明确指出“抽取不支持音视频输入”，而文档 4 中音视频解析示例未提及抽取复用限制；二者无直接冲突，但需严格遵循文档 7 的约束——音视频必须先完成解析，再以 `parsed_file_biz_id` 形式提交抽取，且该解析结果须在 7 天保留期内。
 
 ## 关键参数
 
 - **通用必填**：`biz_id`（用于结果查询）、`file_url` 或 `parsed_file_biz_id`（二选一）、`Authorization` Header。
 - **解析任务关键参数**：
-  - `processing.doc_processing_config.page_index`：如 `"1-10"`，控制解析页数；
-  - `processing.media_processing_config.enable_diarization`：启用说话人分离；
-  - `output.output_file_format`：指定 `["markdown"]` 等输出格式。
+  - `processing.doc_processing_config`：控制文档解析行为（如 `page_index`, `head_foot`, `layout_position`）；
+  - `processing.media_processing_config`：控制音视频解析行为（如 `enable_diarization`, `frame_extraction.mode`）；
+  - `output.output_file_format`：指定输出格式（当前仅支持 `["markdown"]`）。
 - **抽取任务关键参数**：
-  - `processing.extract_processing_config.extract_schema`：内联 JSON Schema，必须为合法对象（非字符串）；
+  - `processing.extract_processing_config.extract_schema`：必需的 JSON Schema 对象，定义待抽取字段结构；
   - `processing.extract_processing_config.citation_required`：是否返回引用位置（默认 `true`）；
   - `processing.extract_processing_config.allow_inference`：是否允许模型推断缺失字段（默认 `false`）。
-- **OSS 输出**：所有提交接口均支持 `output.oss_config`，用于指定客户自有 OSS 存储结果，需提供 `bucket`、`endpoint`、`access_key_id` 等完整凭证。
 
 ## 使用方式
 
-1. **鉴权准备**：在百炼控制台获取 `DASHSCOPE_API_KEY`（以 `sk-` 开头），并设为环境变量或显式传入 `Authorization` Header —— 具体流程见 [鉴权](raw/application-api-reference/api-overview/authentication.md)。
+1. **鉴权准备**：获取 `DASHSCOPE_API_KEY` 并设为环境变量，请求头携带 `Authorization: Bearer $DASHSCOPE_API_KEY`。详细流程见 [鉴权](../../raw/application-api-reference/api-overview/authentication.md)。
 2. **提交任务**：
-   - 解析：调用 `/parse/submit`，传入 `file_url` 及可选 `processing` 配置，获得 `biz_id`；
-   - 抽取：调用 `/extract/submit`，传入 `file_url` 或 `parsed_file_biz_id` + `extract_schema`，获得 `biz_id`。
+   - 解析任务：调用 `/parse/submit`，传入 `file_url` 及可选处理配置，获得 `biz_id`；
+   - 抽取任务：调用 `/extract/submit`，传入 `file_url` 或 `parsed_file_biz_id` + `extract_schema`，获得 `biz_id`。
 3. **轮询结果**：
    - 解析结果：调用 `/parse/result`，检查 `data.status`（`success`/`failed`/`processing`），状态为 `processing` 时需重试；
-   - 抽取结果：调用 `/extract/result`，解析 `data.extract_result_json` 或细粒度 `data.fields` 字段。
-4. **错误处理**：收到非 `2xx` 响应时，解析响应体中的 `code` 和 `message`，对照 [错误码](raw/application-api-reference/api-overview/errors.md) 定位原因；例如 `ResultNotReady` 需继续轮询，`FileDownloadTimeout` 可重试，`FileSizeExceeded` 需压缩文件。
+   - 抽取结果：调用 `/extract/result`，同理轮询直至 `success` 或 `failed`。
+4. **错误处理**：收到 `ResultNotReady`（409）需继续轮询；`FileDownloadTimeout`（400）可重试，`FileDownloadFailed`（400）不可重试。完整错误码说明见 [错误码](../../raw/application-api-reference/api-overview/errors.md)。
 
 ## 限制和注意事项
 
-- **文件限制**：单文件大小、页数、音视频时长均有上限，具体配额以控制台实际配置为准；`FileSizeExceeded`、`PageCountExceeded`、`ProcessingTimeout` 等错误码直接反映此类硬性限制。
-- **时效性约束**：
-  - 解析结果默认保留 **30 天**（`ParseResultExpired` 错误码对应此周期）；
-  - 但**字段抽取仅支持复用 7 天内的解析结果**（`ParseResultNotReusable` 错误码说明），二者存在差异，开发者需按场景区分使用。
-- **安全要求**：API Key 具有账号级权限，严禁硬编码或提交至公开仓库；建议按应用拆分 Key 并定期轮转 —— 相关实践详见 [鉴权](raw/application-api-reference/api-overview/authentication.md)。
-- **配置优先级**：`config_id` 与内联 `processing` 同时提供时，`processing` 永远优先生效，此规则在 [提交解析任务](raw/application-api-reference/api-overview/document-parsing/parse-submit.md) 和 [提交抽取任务](raw/application-api-reference/api-overview/field-extraction/extract-submit.md) 中一致确认。
+- **文件限制**：单文件大小、页数、时长均有上限，具体数值以控制台配额为准；超限将返回 `FileSizeExceeded` 或 `PageCountExceeded` 错误。
+- **保留期限制**：
+  - 解析结果默认保留 **30 天**（`ParseResultExpired` 错误码）；
+  - 抽取任务复用解析结果时，该结果须在 **7 天内**，否则返回 `ParseResultNotReusable`。
+- **安全要求**：API Key 具有账号级权限，严禁硬编码或提交至公开仓库；建议按应用拆分 Key 并定期轮转。参见 [鉴权](../../raw/application-api-reference/api-overview/authentication.md) 中的安全建议。
+- **配置优先级**：当 `config_id` 与内联 `processing` 同时存在时，`processing` 始终优先生效（文档 4 和文档 7 均明确说明）。
+- **OSS 输出**：若使用 `output.oss_config`，需确保提供的 AccessKey 具备对应 Bucket 的写入权限，否则返回 `CustomerOssWriteFailed`。
 
 ## 来源文档
 

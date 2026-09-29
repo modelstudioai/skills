@@ -270,35 +270,6 @@ RAM 用户默认无权调用百炼**应用**的数据、知识库、Prompt工程
 -   [AliyunBailianDataFullAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailiandatafullaccess)：可调用百炼应用 [API目录](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)下的所有API。
 -   [AliyunBailianDataReadOnlyAccess](https://help.aliyun.com/zh/ram/developer-reference/aliyunbailiandatareadonlyaccess)：可调用百炼应用 [API目录](raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)下的**只读类**API，例如[查询文件状态](raw/_short/api-bailian-2023-12-29-describefile-020886c28a208bf2.md)、[查询知识库创建任务状态](raw/_short/api-bailian-2023-12-29-getindexjobstatus-1e88b6ccfffe0fe4.md)等。
 
-如需对**知识库**和**记忆库**实现更细粒度的权限控制，可在 [RAM 控制台](https://ram.console.aliyun.com/users)创建**自定义策略**，仅授予所需操作的权限。
-
-知识库相关 Action：`sfm:CreateIndex`、`sfm:UpdateIndex`、`sfm:DeleteIndex`、`sfm:SubmitIndexJob`。记忆库相关 Action：`sfm:CreateMemory`、`sfm:UpdateMemory`、`sfm:DeleteMemory`。
-
-自定义策略示例：
-
-```
-{
-  "Version": "1",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "sfm:CreateIndex",
-        "sfm:UpdateIndex",
-        "sfm:DeleteIndex",
-        "sfm:SubmitIndexJob",
-        "sfm:CreateMemory",
-        "sfm:UpdateMemory",
-        "sfm:DeleteMemory"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-```
-
-创建策略后，将其附加到 RAM 子用户，即可授予知识库和记忆库的**最小 CRUD 权限**。完整 Action 列表请参考「授权信息」。
-
 ### 应用于生产环境
 
 -   **空间规划策略**
@@ -720,4 +691,82 @@ RAM 权限（如 AliyunBailianFullAccess）与百炼平台内部的业务空间�
 
 ### 5\. 如何删除业务空间？
 
-访问[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)，在页面右上角选择目标地域，进入[业务空间管理](https://bailian.console.aliyun.com/settings/workspace)页面，在操作列选择删除，**删除后不可恢复**。
+访问[阿里云百炼控制台](https://bailian.console.aliyun.com/cn-beijing/model/market)，在页面右上角选择目标地域，进入[业务空间管理](https://bailian.console.aliyun.com/settings/workspace)页面，在操作列选择删除；或调用 DeleteWorkspace API（`DELETE /modelstudio/workspaces/{workspaceId}`）。**删除后不可恢复**。
+
+**删除前提：**满足以下条件的业务空间才允许删除：
+
+1.  该业务空间不能是默认业务空间。
+2.  该业务空间未用于购买其他产品，如妙笔等。
+3.  在权限管理中，该业务空间未被授予给 RAM 用户、RAM 角色。
+4.  该业务空间下已不存在任何资源，比如 API Key、模型部署、知识库等。
+
+**清理依赖：**删除前需先清理该业务空间下各子产品的资源：
+
+**子产品**
+
+**清理内容**
+
+CCAI 对话分析 AIO
+
+删除空间下所有应用，确认无数据和 API Key
+
+多模交互套件
+
+删除所有应用
+
+听悟
+
+在工作台搜索"听悟"，删除对应空间
+
+RAG 知识库
+
+知识管理、知识检索、知识问答下的服务全部删除
+
+数据连接 / RAG 数据集 / Connector
+
+连接器、上传文件、表格、Connector 连接全部删除
+
+模型训练 && 推理
+
+数据集、训练任务、我的模型、部署全部删除
+
+观测资源
+
+关闭模型监控、审计日志、推理日志数据投递与应用观测
+
+评测资源
+
+终止或删除未完成的模型评测、应用评测任务
+
+若删除失败返回 `failReasons`，按提示清理对应资源后重试。
+
+### 6\. 如何对知识库和记忆库实现更细粒度的权限控制？
+
+可在 [RAM 控制台](https://ram.console.aliyun.com/users)创建**自定义策略**，仅授予所需操作的权限。
+
+知识库相关 Action：`sfm:CreateIndex`、`sfm:UpdateIndex`、`sfm:DeleteIndex`、`sfm:SubmitIndexJob`。记忆库相关 Action：`sfm:CreateMemory`、`sfm:UpdateMemory`、`sfm:DeleteMemory`。
+
+自定义策略示例：
+
+```
+{
+  "Version": "1",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sfm:CreateIndex",
+        "sfm:UpdateIndex",
+        "sfm:DeleteIndex",
+        "sfm:SubmitIndexJob",
+        "sfm:CreateMemory",
+        "sfm:UpdateMemory",
+        "sfm:DeleteMemory"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+创建策略后，将其附加到 RAM 子用户，即可授予知识库和记忆库的**最小 CRUD 权限**。完整 Action 列表请参考「授权信息」。

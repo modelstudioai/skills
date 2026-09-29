@@ -149,7 +149,7 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
 
 ### 应用评测
 
-建议您在正式上线 AI 机器人前，组织业务人员一起参与[应用评测](https://help.aliyun.com/zh/model-studio/evaluate-application/)，确保大模型应用的回答效果符合预期。
+建议您在正式上线 AI 机器人前，组织业务人员一起参与[应用评测](raw/application-user-guide/agenteval/agenteval-introduction.md)，确保大模型应用的回答效果符合预期。
 
 ### 持续改进
 

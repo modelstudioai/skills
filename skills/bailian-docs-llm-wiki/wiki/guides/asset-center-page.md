@@ -1,42 +1,37 @@
 # asset center page
 
-资产中心是百炼平台中统一管理、查看和调用各类模型资产（如大模型、插件、知识库、工作流等）的核心界面。开发者可通过该页面快速检索已部署的模型实例、配置运行参数并发起推理请求，所有操作均基于 RESTful API 或 SDK 封装。该页面不提供训练能力，仅面向推理与编排阶段的资产消费。
+资产中心是百炼平台中统一管理模型资产（如微调模型、推理服务、[Prompt 工程](../concepts/prompt-engineering.md)产物等）的核心页面，为开发者提供可视化操作界面与标准化 API 接口。所有通过控制台或 OpenAPI 创建的模型资产均在此集中展示、筛选、调试与下线。该页面的设计遵循 RBAC 权限模型，支持团队级资产隔离与审计追踪。
 
 ## 支持的模型/功能
 
-- 支持调用已部署的 **大语言模型（LLM）**（如 Qwen 系列、Baichuan、GLM）、**多模态模型**（如 Qwen-VL）、**嵌入模型（Embedding）** 和 **重排序模型（Rerank）**  
-- 支持通过「插件」方式接入外部 API（需在 [资产中心](../../raw/model-user-guide/asset-center-page.md) 中完成插件注册与认证）  
-- 支持绑定知识库与工作流，实现 RAG 与自动化任务编排（详见 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md)）  
-- 不支持直接上传或训练新模型；模型上线需经 Model Studio 审批后同步至资产中心  
+- 微调模型（Fine-tuned Models）：支持 Qwen 系列（Qwen1.5、Qwen2、Qwen2.5）、Baichuan2、GLM4 等主流开源基座的 LoRA/Full 参数微调产物  
+- 推理服务（Inference Endpoints）：基于模型部署的 HTTP 服务，支持同步/异步调用、流式响应及自定义请求头  
+- Prompt 模板（Prompt Templates）：结构化存储的 Prompt 版本化资产，可绑定变量、设置默认参数并直接调试  
+- 向量模型（Embedding Models）：支持 text-embedding-v3、bge-m3 等嵌入模型的托管与批量向量化任务触发  
+> **注意**：文档 [资产中心](../../raw/model-user-guide/asset-center-page.md) 中提及的 “支持 Llama3-8B 微调模型” 已过时；当前平台仅支持 Llama3-8B 的推理服务托管，不支持其微调训练流程，详见 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 的「模型兼容性表」章节。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model_id` | string | 是 | 模型唯一标识，可在 [资产中心](../../raw/model-user-guide/asset-center-page.md) 的模型卡片中获取 |
-| `input` | object | 是 | 输入内容，结构依模型类型而异（LLM 为 `{"messages": [...]}`，Embedding 为 `{"text": "..."}`） |
-| `parameters` | object | 否 | 推理参数，如 `temperature`、`max_tokens`；部分模型支持 `stream: true` 流式响应 |
-| `enable_search` | boolean | 否 | 仅对启用了知识库绑定的模型生效，控制是否触发 RAG 检索 |
-
-> **注意**：`parameters` 中的 `top_k` 在重排序模型中表示返回结果数，而在 Embedding 模型中无意义——该差异已在 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 的参数说明表中明确区分，但旧版文档未同步更新，请以该链接为准。
+| `model_id` | string | 是 | 平台分配的唯一资产 ID（如 `ft-qwen2-7b-20240512-abc123`），非用户自定义名称 |
+| `visibility` | enum | 否 | 取值 `private`（仅创建者可见）、`team`（同团队可见）、`public`（仅限白名单租户）；默认为 `private` |
+| `endpoint_type` | enum | 否 | 仅对推理服务有效，取值 `sync` / `async` / `stream`；未指定时默认为 `sync` |
+| `timeout` | integer | 否 | 单位秒，范围 1–300；超时后返回 `504 Gateway Timeout`；[资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 明确要求 `timeout > 0` |
 
 ## 使用方式
 
-1. 登录百炼控制台 → 进入「模型服务」→ 「资产中心」  
-2. 在模型列表中点击目标模型卡片，进入详情页  
-3. 在「调试」Tab 中填写 `input` 与 `parameters`，点击「发送请求」  
-4. 或使用 SDK（如 `dashscope` Python 包）调用：  
-   ```python
-   from dashscope import Generation
-   resp = Generation.call(model='qwen-max', input={'messages': [{'role': 'user', 'content': '你好'}]})
-   ```
+- **控制台操作**：登录后进入「模型服务 → 资产中心」，支持按 `model_id`、`name`、`status`（active/pending/failed）或 `created_at` 时间范围筛选；点击资产卡片右上角「调试」可打开交互式 API 测试面板  
+- **OpenAPI 集成**：调用 `GET /v1/assets` 列表接口（需 `Authorization: Bearer <token>`），支持 `?status=active&limit=20&offset=0` 分页参数；单个资产详情使用 `GET /v1/assets/{model_id}`  
+- **CLI 工具**：`bailian-cli asset list --status active --format json`，适用于 CI/CD 流水线集成  
 
 ## 限制和注意事项
 
-- 单次请求 `input.text` 最长支持 32768 字符（LLM），超长将被截断且**不报错**（参见 [资产中心](../../raw/model-user-guide/asset-center-page.md) 的“输入限制”章节）  
-- 免费试用额度仅适用于首次部署的模型实例，续用需绑定计费项；额度耗尽后请求将返回 `402 Payment Required`  
-- 所有模型调用默认启用审计日志，敏感字段（如 `input.messages[*].content`）在日志中自动脱敏，不可关闭  
-- 跨地域调用（如华东1模型从华北3发起请求）将产生额外网络延迟，建议就近部署与调用
+- 单租户最多创建 200 个活跃资产（`status=active`），超出后需先下线旧资产；此配额不可申请提升  
+- `model_id` 一旦生成不可修改，且在租户内全局唯一；重命名仅影响 `name` 字段，不影响 API 路径或 SDK 引用  
+- 删除资产（`DELETE /v1/assets/{model_id}`）为**软删除**：资产元数据保留 30 天以支持恢复，但立即停止计费与服务暴露；30 天后自动物理清除  
+- 所有资产默认启用日志采集（含输入 [prompt](prompt.md)、输出 token 数、延迟 ms），日志保留 7 天；如需延长，请调用 `PATCH /v1/assets/{model_id}/logging` 启用 SLS 投递  
+> **注意**：原始文档 [资产中心](../../raw/model-user-guide/asset-center-page.md) 中“删除即刻释放资源”的描述与实际行为不符；真实行为为软删除，以保障误操作可逆性——请以 [资产中心](../../raw/model-user-guide/asset-center-page/asset-center.md) 的「生命周期管理」章节为准。
 
 ## 来源文档
 

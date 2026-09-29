@@ -1,12 +1,10 @@
-# 实时语音识别（Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime）客户端事件
+# 实时语音识别（Fun-ASR-Realtime）客户端事件
 
-本文介绍 Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime 实时语音识别服务中客户端通过 WebSocket 发送给服务端的客户端事件，包括 run-task（启动任务）、 continue-task（更新上下文）、 finish-task（结束任务）等指令的数据结构与字段含义。
-
-**事件交互流程**：如需了解事件交互时序，请参见[WebSocket API](raw/_short/fun-asr-realtime-websocket-api-d80484c92992191d.md)。
+本文介绍 Fun-ASR-Realtime 实时语音识别服务中客户端通过 WebSocket 发送给服务端的客户端事件，包括 run-task（启动任务）、 continue-task（更新上下文）、 finish-task（结束任务）等指令的数据结构与字段含义。
 
 ## run-task
 
-**说明**：启动语音识别任务，设置模型、音频格式、采样率等参数。
+启动语音识别任务，设置模型、音频格式、采样率等参数。
 
 **发送时机**：建立 WebSocket 连接后立即发送。
 
@@ -46,13 +44,13 @@
 
 **model**`string`**（必选）**
 
-指定模型名。支持 Qwen-Audio-3.x-ASR-Flash-Streaming 和 Fun-ASR-Realtime 系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
+模型名称。
 
 **input**`object`**（必选）**
 
 输入对象。不携带上下文时传入`{}`。
 
-**重要**仅 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持上下文。
+**重要**仅 `fun-asr-realtime`、`fun-asr-realtime-2025-11-07` 模型支持上下文。
 
 属性
 
@@ -96,17 +94,6 @@
 
 属性
 
-**keep\_dialect** `boolean`（可选）
-
-仅 `qwen-audio-3.1-asr-flash-streaming` 支持。是否保留方言表达，默认值为 `false`。`false`：将方言转写为普通话文本；`true`：保留方言表达。
-
-**vad\_model** `string`（可选）
-
-仅 `qwen-audio-3.1-asr-flash-streaming` 支持。VAD 模型，默认值为 `far_field_meeting_16k`。
-
--   `near_meeting_16k`：近场场景。
--   `far_field_meeting_16k`：远场场景。
-
 **format**`string`**（必选）**
 
 音频格式。
@@ -143,27 +130,15 @@ amr：仅支持AMR-NB类型。
 
 使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
 
-**vocabulary**`object`（可选）
-
-即时热词。
-
-以键值对形式传入，键为热词文本（`string`），值为热词权重（`integer`），无需预先创建热词列表。权重取值范围为 \[1, 5\] 或 50：取 \[1, 5\] 时值越大模型越倾向输出该词；取 50 时为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。
-
-适用于临时性、会话级别的热词优化。
-
-与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
-
-**重要**仅`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`支持即时热词。
-
 **language\_hints**`array[string]`（可选）
 
 待识别音频语种。无默认值，不设置时模型自动识别。
 
-对于 Qwen-Audio-3.x-ASR-Flash-Streaming 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR-Realtime 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。
+仅支持设置 1 个值，设置多个时仅第一个生效。
 
 点击查看支持的语言代码
 
--   qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming、fun-asr-realtime、fun-asr-realtime-2025-11-07：
+-   fun-asr-realtime、fun-asr-realtime-2025-11-07：
     
     -   zh: 中文
     -   en: 英文
@@ -279,7 +254,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
         "task_group": "audio",
         "task": "asr",
         "function": "recognition",
-        "model": "qwen-audio-3.1-asr-flash-streaming",
+        "model": "fun-asr-realtime",
         "parameters": {
             "format": "pcm",
             "sample_rate": 16000
@@ -302,7 +277,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
         "task_group": "audio",
         "task": "asr",
         "function": "recognition",
-        "model": "qwen-audio-3.1-asr-flash-streaming",
+        "model": "fun-asr-realtime",
         "parameters": {
             "format": "pcm",
             "sample_rate": 16000
@@ -333,37 +308,13 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 }
 ```
 
-即时热词
-
-```
-{
-    "header": {
-        "action": "run-task",
-        "task_id": "2bf83b9a-baeb-4fda-8d9a-xxxxxxxxxxxx",
-        "streaming": "duplex"
-    },
-    "payload": {
-        "task_group": "audio",
-        "task": "asr",
-        "function": "recognition",
-        "model": "qwen-audio-3.1-asr-flash-streaming",
-        "parameters": {
-            "format": "pcm",
-            "sample_rate": 16000,
-            "vocabulary": {"张三": 5, "李四": 5}
-        },
-        "input": {}
-    }
-}
-```
-
 ## continue-task
 
-**说明**：在任务执行过程中更新对话上下文信息，用于辅助识别。
+在任务执行过程中更新对话上下文信息，用于辅助识别。
 
 **发送时机**：任务运行中，需要更新对话上下文时发送。
 
-**重要**仅 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持该事件。
+**重要**仅 `fun-asr-realtime`、`fun-asr-realtime-2025-11-07` 模型支持该事件。
 
 **header**`object`**（必选）**
 
@@ -375,7 +326,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 **task\_id**`string`**（必选）**
 
-客户端生成的任务 ID（UUID 格式），需与[run-task](https://help.aliyun.com/zh/model-studio/fun-asr-client-events#9cae7e7b85ebm)事件中的 task\_id 保持一致。
+客户端生成的任务 ID（UUID 格式），需与`run-task`事件中的 task\_id 保持一致。
 
 **streaming**`string`**（必选）**
 
@@ -461,7 +412,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 ## finish-task
 
-**说明**：通知服务端音频发送完毕，请求结束任务。
+通知服务端音频发送完毕，请求结束任务。
 
 **发送时机**：所有音频数据发送完毕后。
 
@@ -477,7 +428,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 **task\_id**`string`**（必选）**
 
-客户端生成的任务 ID（UUID 格式），需与[run-task](https://help.aliyun.com/zh/model-studio/fun-asr-client-events#9cae7e7b85ebm)事件中的 task\_id 保持一致。
+客户端生成的任务 ID（UUID 格式），需与`run-task`事件中的 task\_id 保持一致。
 
 **streaming**`string`**（必选）**
 

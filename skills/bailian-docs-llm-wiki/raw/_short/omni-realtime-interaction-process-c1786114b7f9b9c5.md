@@ -30,9 +30,9 @@
 -   服务端通过发送 `input_audio_buffer.committed` 事件来提交输入音频缓冲区。
 -   服务端发送 `conversation.item.created` 事件，其中包含从音频缓冲区创建的用户消息项。
 
-#### 工具调用流程
+#### Function Calling 流程
 
-在 VAD 模式下，当服务端生成的响应需要调用工具时，遵循以下交互流程：
+在 VAD 模式下，当服务端生成的响应需要客户端执行 Function Calling 工具时，遵循以下交互流程：
 
 ![image.svg](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3014236771/p1067613.svg)
 
@@ -55,11 +55,11 @@
 -   客户端发送 `response.create` 事件，触发模型生成最终响应。
 -   服务器通过发送 `conversation.item.created`事件进行响应。
 
-#### 工具调用流程
+#### Function Calling 流程
 
 ![image.svg](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3014236771/p1067740.svg)
 
-在 Manual 模式下，当服务端生成的响应需要调用工具时，遵循以下交互流程：
+在 Manual 模式下，当服务端生成的响应需要客户端执行 Function Calling 工具时，遵循以下交互流程：
 
 -   客户端发送 `response.create` 事件后，服务端生成响应并识别到需要调用工具。
 -   服务端发送 `response.function_call_arguments.delta` 事件，包含工具调用参数的增量数据。
@@ -69,13 +69,15 @@
 -   客户端发送 `response.create` 事件，触发模型生成最终响应。
 -   服务端基于工具调用结果生成响应，并通过 `response.audio.delta` 或 `response.text.delta` 事件返回给客户端。
 
-### Qwen3.8-Omni-Flash-Realtime MCP
+## MCP 工具调用
+
+以下流程适用于 Qwen3.8-Omni-Flash-Realtime，可与上述 VAD 或 Manual 模式配合使用。
 
 Function Calling 与 MCP 可以在同一会话的 `session.tools` 中配置，不能同时启用联网搜索（`enable_search`）。百炼不额外收取 MCP 工具调用费，模型推理仍按模型价格计费。
 
 MCP 由服务端执行工具，前述 Function Calling 流程则由客户端执行工具，两者的结果回传方式不同。
 
-#### 工具发现
+### 工具发现
 
 客户端通过 `session.update` 配置 MCP 服务后，由 Realtime 服务异步发现工具，交互流程如下：
 
@@ -89,7 +91,7 @@ MCP 由服务端执行工具，前述 Function Calling 流程则由客户端执�
 -   工具发现成功时，服务端先发送包含最终工具列表的 `conversation.item.created`，再发送 `mcp_list_tools.completed`。
 -   工具发现失败时，服务端先发送包含 error 的 `conversation.item.created`，再发送 `mcp_list_tools.failed`。
 
-#### MCP 调用
+### MCP 调用与续答
 
 模型选择 MCP 工具后，由 Realtime 服务执行工具调用；需要审批时，客户端先回复审批结果。交互流程如下：
 
@@ -113,9 +115,9 @@ response.output_item.added（mcp_call）
 
 如果需要模型基于 MCP 结果继续生成回答，客户端应在收到父 `response.done` 后发送一次不附带 MCP 结果的 `response.create`。
 
-参见[客户端配置字段](https://help.aliyun.com/zh/model-studio/client-events#qwen38-client)、[审批回复](https://help.aliyun.com/zh/model-studio/client-events#qwen38-mcp-approval-response)和[服务端事件与 Item](https://help.aliyun.com/zh/model-studio/server-events#qwen38-server)。
+参见[客户端 MCP 工具配置](https://help.aliyun.com/zh/model-studio/client-events#session-tools-mcp)、[审批回复](https://help.aliyun.com/zh/model-studio/client-events#qwen38-mcp-approval-response)、[MCP 服务端事件](https://help.aliyun.com/zh/model-studio/server-events#qwen38-server)和[MCP 对话项](https://help.aliyun.com/zh/model-studio/server-events#mcp-items)。
 
-#### 使用限制
+### 使用限制
 
 以下为每个会话的 MCP 默认约束：
 

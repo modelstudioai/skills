@@ -265,6 +265,8 @@ code\_interpreter
 （不满一天按一天计算，结果向上取整）
 ```
 
+实际补差金额以支付页面展示的价格明细为准。
+
 例如：9 月 2 日订阅 Lite 套餐（39 元/月，月额度 11,500 Credits），9 月 12 日升级至 Essential 套餐（79 元/月，月额度 25,500 Credits），当前订阅周期剩余 20 天：补差金额为 (79 − 39) × 20 ÷ 30 ≈ 26.67 元，当前周期新增额度为 20 ÷ 30 × (25,500 − 11,500) ≈ 9,334 Credits（向上取整）。
 
 升级后 Harness 权益的剩余额度计算详见 [Harness 权益·升级后权益计算](https://help.aliyun.com/zh/model-studio/token-plan-harness-benefits#tphb-h-upgrade)。

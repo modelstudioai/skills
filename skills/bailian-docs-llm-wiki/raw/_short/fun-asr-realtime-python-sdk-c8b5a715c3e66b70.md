@@ -1,6 +1,6 @@
-# Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Python SDK
+# Fun-ASR-Realtime实时语音识别Python SDK
 
-本文介绍Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Python SDK的参数和接口细节。
+本文介绍Fun-ASR-Realtime实时语音识别Python SDK的参数和接口细节。
 
 ## 前提条件
 
@@ -33,7 +33,7 @@ dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
 # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
 dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
 
-recognition = Recognition(model='qwen-audio-3.1-asr-flash-streaming',
+recognition = Recognition(model='fun-asr-realtime',
                           format='wav',
                           sample_rate=16000,
                           callback=None)
@@ -171,7 +171,7 @@ if __name__ == '__main__':
     # Call recognition service by async mode, you can customize the recognition parameters, like model, format,
     # sample_rate
     recognition = Recognition(
-        model='qwen-audio-3.0-asr-flash-streaming',
+        model='fun-asr-realtime',
         format=format_pcm,
         # 'pcm'、'wav'、'opus'、'speex'、'aac'、'amr', you can check the supported formats in the document
         sample_rate=sample_rate,
@@ -238,7 +238,7 @@ class Callback(RecognitionCallback):
 
 callback = Callback()
 
-recognition = Recognition(model='qwen-audio-3.1-asr-flash-streaming',
+recognition = Recognition(model='fun-asr-realtime',
                           format='wav',
                           sample_rate=16000,
                           callback=callback)
@@ -313,7 +313,7 @@ SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）
 
 ## 请求参数
 
-请求参数通过[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#d6bc1f133f871)的构造方法（_init_）进行设置。
+请求参数通过Recognition类的构造方法（_init_）进行设置。
 
 **参数**
 
@@ -329,7 +329,7 @@ SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）
 
 是
 
-指定模型名。支持 Qwen-Audio-3.x-ASR-Flash-Streaming 和 Fun-ASR-Realtime 系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
+模型名称。
 
 `sample_rate`
 
@@ -365,22 +365,6 @@ wav：必须为PCM编码；
 
 amr：仅支持AMR-NB类型。
 
-`keep_dialect`
-
-`bool`
-
-否
-
-仅 `qwen-audio-3.1-asr-flash-streaming` 支持。默认 `false`，将方言转写为普通话；设为 `true` 时保留方言表达。作为同名关键字参数传入。完整参数说明请参见[客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)。
-
-`vad_model`
-
-`str`
-
-否
-
-仅 `qwen-audio-3.1-asr-flash-streaming` 支持。可选 `near_meeting_16k`（近场）或 `far_field_meeting_16k`（远场，默认值）。作为同名关键字参数传入。完整参数说明请参见[客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)。
-
 `vocabulary_id`
 
 `str`
@@ -394,36 +378,6 @@ amr：仅支持AMR-NB类型。
 适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。
 
 使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
-
-`vocabulary`
-
-`dict`
-
-否
-
-即时热词。
-
-以键值对形式传入，键为热词文本（`string`），值为热词权重（`integer`），无需预先创建热词列表。权重取值范围为 \[1, 5\] 或 50：取 \[1, 5\] 时值越大模型越倾向输出该词；取 50 时为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。
-
-适用于临时性、会话级别的热词优化。
-
-与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
-
-**重要**仅`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`支持即时热词。
-
-示例：
-
-```
-from dashscope.audio.asr import Recognition
-
-vocab = {"张三": 5, "李四": 5}
-recognition = Recognition(
-    model='qwen-audio-3.1-asr-flash-streaming',
-    format='wav',
-    sample_rate=16000,
-    vocabulary=vocab,
-    callback=None)
-```
 
 `semantic_punctuation_enabled`
 
@@ -499,11 +453,11 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 待识别音频语种。无默认值，不设置时模型自动识别。
 
-对于 Qwen-Audio-3.x-ASR-Flash-Streaming 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR-Realtime 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。
+仅支持设置 1 个值，设置多个时仅第一个生效。
 
 点击查看支持的语言代码
 
--   qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming、fun-asr-realtime、fun-asr-realtime-2025-11-07：
+-   fun-asr-realtime、fun-asr-realtime-2025-11-07：
     
     -   zh: 中文
     -   en: 英文
@@ -582,7 +536,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 否
 
-[回调接口（RecognitionCallback）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#85d698b9f9g8s)。
+回调接口（RecognitionCallback）。
 
 以下参数通过`Recognition`实例的`call`或`start`方法的关键字参数传入。
 
@@ -602,7 +556,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见[提升识别准确率](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。
 
-**重要**仅 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持 context 参数。
+**重要**仅 `fun-asr-realtime`、`fun-asr-realtime-2025-11-07` 模型支持 context 参数。
 
 dict 中需包含 `context` 键，值为消息列表（list\[dict\]），每条消息包含以下字段：
 
@@ -686,7 +640,7 @@ def send_audio_frame(self, buffer: bytes)
 
 推送音频。每次推送的音频流不宜过大或过小，建议每包音频时长为100ms左右，大小在1KB~16KB之间。
 
-识别结果通过[回调接口（RecognitionCallback）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#85d698b9f9g8s)的on\_event方法获取。
+识别结果通过回调接口（RecognitionCallback）的on\_event方法获取。
 
 `stop`
 
@@ -760,7 +714,7 @@ recognition.update_context(payload_input=payload_input)
 
 ### 回调接口（`RecognitionCallback`）
 
-[双向流式调用](raw/_short/fun-asr-realtime-python-sdk-c8b5a715c3e66b70.md)时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
+双向流式调用时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
 
 ```
 class Callback(RecognitionCallback):
@@ -845,7 +799,7 @@ def on_close(self) -> None
 
 ### 识别结果（`RecognitionResult`）
 
-`RecognitionResult`代表[双向流式调用](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#9d1e5f6852jr8)中一次实时识别或[非流式调用](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#8341058094tc3)的识别结果。
+`RecognitionResult`代表双向流式调用中一次实时识别或非流式调用的识别结果。
 
 **成员方法**
 
@@ -995,11 +949,11 @@ ffmpeg -i input.flac -c:a libopus -b:a 128k -vbr on output.opus
 
 -   直接传入本地文件路径：此种方式在最终识别结束后获取完整识别结果，不适合即时反馈的场景。
     
-    参见[非流式调用](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#8341058094tc3)，在[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#d6bc1f133f871)的`call`方法中传入文件路径对录音文件直接进行识别。
+    参见非流式调用，在Recognition类的`call`方法中传入文件路径对录音文件直接进行识别。
     
 -   将本地文件转成二进制流进行识别：此种方式一边识别文件一边流式获取识别结果，适合即时反馈的场景。
     
-    参见[双向流式调用](raw/_short/fun-asr-realtime-python-sdk-c8b5a715c3e66b70.md)，通过[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-python-sdk#d6bc1f133f871)的`send_audio_frame`方法向服务端发送二进制流对其进行识别。
+    参见双向流式调用，通过Recognition类的`send_audio_frame`方法向服务端发送二进制流对其进行识别。
     
 
 ### 故障排查

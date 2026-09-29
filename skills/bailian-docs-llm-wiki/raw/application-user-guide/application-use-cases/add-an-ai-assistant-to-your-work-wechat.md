@@ -164,7 +164,7 @@ AppFlow 可以让您在不写代码的情况下，通过界面配置就可以将
 
 ### 应用评测
 
-建议您在正式上线 AI 应用前，组织业务人员一起参与[应用评测](https://help.aliyun.com/zh/model-studio/evaluate-application/)，确保大模型应用的回答效果符合预期。如果不符合预期，可以通过[优化提示词](https://edu.aliyun.com/course/3126500/lesson/344730348)、完善补充私有知识、调整文档切分策略等方法来改进回答效果。
+建议您在正式上线 AI 应用前，组织业务人员一起参与[应用评测](raw/application-user-guide/agenteval/agenteval-introduction.md)，确保大模型应用的回答效果符合预期。如果不符合预期，可以通过[优化提示词](https://edu.aliyun.com/course/3126500/lesson/344730348)、完善补充私有知识、调整文档切分策略等方法来改进回答效果。
 
 ### 持续改进
 

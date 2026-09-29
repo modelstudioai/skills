@@ -1,18 +1,14 @@
-# 非实时语音合成Qwen-Audio-TTS/CosyVoice Python SDK参考
+# 非实时语音合成CosyVoice Python SDK参考
 
-本文介绍非实时语音合成Qwen-Audio-TTS/CosyVoice的Python SDK调用方法，支持非流式和流式两种调用模式。
-
-**用户指南**：参见[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)。
+本文介绍非实时语音合成CosyVoice的Python SDK调用方法，支持非流式和流式两种调用模式。
 
 **重要**本文描述的功能仅在华北2（北京）地域可用。
 
 **重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
 
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
-
 ## 前提条件
 
--   已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并将其[配置到环境变量](https://help.aliyun.com/zh/model-studio/configure-api-key-through-environment-variables)
+-   已[获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)并将其配置到环境变量
 -   已安装符合版本要求的DashScope Java SDK，建议[安装最新版](raw/model-api-reference/preparations/install-sdk.md)，SDK版本需≥1.25.17
 
 ## HttpSpeechSynthesizer 类
@@ -53,9 +49,9 @@ def call(cls, model: str, text: str, voice: str,
 
 **说明**
 
-model
+`model`
 
-str
+`str`
 
 是
 
@@ -63,18 +59,15 @@ str
 
 取值范围：
 
--   qwen-audio-3.0-tts-plus
--   qwen-audio-3.1-tts-flash
--   qwen-audio-3.0-tts-flash
 -   cosyvoice-v3.5-plus
 -   cosyvoice-v3.5-flash
 -   cosyvoice-v3-plus
 -   cosyvoice-v3-flash
 -   cosyvoice-v2
 
-text
+`text`
 
-str
+`str`
 
 是
 
@@ -85,9 +78,9 @@ str
 -   使用 SSML 时，需同时将 `enable_ssml` 设置为 `True`。支持的 SSML 标签及用法，请参见[SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
 -   使用 LaTeX 时，将待合成文本替换为 LaTeX 格式即可，无需额外配置。支持的 LaTeX 语法及用法，请参见[LaTeX 公式转语音](https://help.aliyun.com/zh/model-studio/latex-capability-support-description)。
 
-voice
+`voice`
 
-str
+`str`
 
 是
 
@@ -95,13 +88,13 @@ str
 
 取值范围：
 
--   系统音色：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
--   声音复刻音色：如何创建音色请参见[CosyVoice声音复刻/设计API](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)
--   声音设计音色：如何创建音色请参见[CosyVoice声音复刻/设计API](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)
+-   系统音色：参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
+-   声音复刻音色：如何创建音色请参见[声音复刻HTTP API参考](raw/_short/voice-clone-design-http-api-8f39943e5a676aae.md)
+-   声音设计音色：如何创建音色请参见[声音设计API参考](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/voice-design-api-references.md)
 
-format
+`format`
 
-str
+`str`
 
 否
 
@@ -116,9 +109,9 @@ str
 -   wav
 -   opus
 
-sample\_rate
+`sample_rate`
 
-int
+`int`
 
 否
 
@@ -126,9 +119,9 @@ int
 
 取值范围：8000, 16000, 22050（默认）, 24000, 44100, 48000。
 
-volume
+`volume`
 
-int
+`int`
 
 否
 
@@ -138,9 +131,9 @@ int
 
 取值范围：\[0, 100\]。
 
-rate
+`rate`
 
-float
+`float`
 
 否
 
@@ -150,9 +143,9 @@ float
 
 取值范围：\[0.5, 2.0\]。
 
-pitch
+`pitch`
 
-float
+`float`
 
 否
 
@@ -162,9 +155,9 @@ float
 
 取值范围：\[0.5, 2.0\]。
 
-bit\_rate
+`bit_rate`
 
-int
+`int`
 
 否
 
@@ -176,17 +169,17 @@ int
 
 **重要**仅在`format`为`opus`时支持使用该参数。
 
-enable\_ssml
+`enable_ssml`
 
-bool
+`bool`
 
 否
 
 是否开启SSML功能。当`text`使用SSML格式时，需设为`True`。默认为`False`。支持的SSML标签及用法，请参考[SSML 与 LaTeX](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。SSML 的使用限制（支持的模型、音色和接口），请参见[使用限制](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide#sl01_constraint_h3)。
 
-word\_timestamp\_enabled
+`word_timestamp_enabled`
 
-bool
+`bool`
 
 否
 
@@ -197,11 +190,11 @@ bool
 -   True：开启。
 -   False：关闭。
 
-仅在流式输出模式下可用。支持的音色范围：qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
 
-seed
+`seed`
 
-int
+`int`
 
 否
 
@@ -211,16 +204,16 @@ int
 
 取值范围：\[0, 65535\]。
 
-language\_hints
+`language_hints`
 
-list
+`list`
 
 否
 
 **重要**
 
 -   此参数为数组，但当前版本仅处理第一个元素，因此建议只传入一个值。
--   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见声音复刻API参考。
+-   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见[声音复刻API参考](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
 
 指定语音合成的目标语言，提升合成效果。
 
@@ -230,7 +223,7 @@ list
 -   符号朗读不准确，“@”读成“艾特”而非“at”
 -   小语种合成效果差，合成不自然
 
-取值范围：
+取值范围
 
 -   zh：中文
 -   en：英语
@@ -249,9 +242,9 @@ list
 -   fil：菲律宾语
 -   ar：阿拉伯语
 
-instruction
+`instruction`
 
-str
+`str`
 
 否
 
@@ -259,9 +252,9 @@ str
 
 具体用法请参见[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)。
 
-enable\_aigc\_tag
+`enable_aigc_tag`
 
-bool
+`bool`
 
 否
 
@@ -269,11 +262,11 @@ bool
 
 默认值：false。
 
-仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
-aigc\_propagator
+`aigc_propagator`
 
-str
+`str`
 
 否
 
@@ -281,11 +274,11 @@ str
 
 默认值：阿里云UID。
 
-仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
-aigc\_propagate\_id
+`aigc_propagate_id`
 
-str
+`str`
 
 否
 
@@ -293,17 +286,17 @@ str
 
 默认值：本次语音合成请求Request ID。
 
-仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
-hot\_fix
+`hot_fix`
 
-dict
+`dict`
 
 否
 
 文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
 
-cosyvoice-v2不支持该功能。
+**说明**cosyvoice-v2不支持该功能。
 
 参数介绍：
 
@@ -323,13 +316,15 @@ cosyvoice-v2不支持该功能。
 }
 ```
 
-enable\_markdown\_filter
+`enable_markdown_filter`
 
-bool
+`bool`
 
 否
 
-是否启用 Markdown 过滤。启用该功能后，系统在合成语音前自动过滤输入文本中的 Markdown 标记符号，避免将其朗读为文字内容。仅cosyvoice-v3-flash复刻音色支持该功能。
+是否启用 Markdown 过滤。启用该功能后，系统在合成语音前自动过滤输入文本中的 Markdown 标记符号，避免将其朗读为文字内容。
+
+**说明**仅cosyvoice-v3-flash复刻音色支持该功能。
 
 默认值：False。
 
@@ -338,17 +333,17 @@ bool
 -   True：启用Markdown过滤
 -   False：禁用Markdown过滤
 
-stream
+`stream`
 
-bool
+`bool`
 
 否
 
 是否启用流式模式。设为`False`时为非流式调用，返回包含音频URL的结果对象；设为`True`时为流式调用，返回音频数据分片的迭代器。默认为`False`。
 
-api\_key
+`api_key`
 
-str
+`str`
 
 否
 
@@ -371,11 +366,11 @@ API Key。如果未指定，SDK会自动从环境变量`DASHSCOPE_API_KEY`中读
 
 ## 示例代码
 
-以下示例展示Qwen-Audio-TTS/CosyVoice语音合成的非流式和流式调用方式。运行前请确保已设置环境变量`DASHSCOPE_API_KEY`。
+以下示例展示CosyVoice语音合成的非流式和流式调用方式。运行前请确保已设置环境变量`DASHSCOPE_API_KEY`。
 
-**重要**不同模型版本需使用对应版本的音色。例如`cosyvoice-v3-flash`和`cosyvoice-v3-plus`使用`longanhuan`等音色，`cosyvoice-v2`使用`longxiaochun_v2`等音色。更换模型时请同步更换为对应版本的音色。此外，每个音色支持的语言不同，合成非中文语言时，需选择支持对应语言的音色。具体的模型与音色对应关系，请参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)。
+**说明**不同模型版本需使用对应版本的音色。例如`cosyvoice-v3-flash`和`cosyvoice-v3-plus`使用`longanhuan`等音色，`cosyvoice-v2`使用`longxiaochun_v2`等音色。更换模型时请同步更换为对应版本的音色。此外，每个音色支持的语言不同，合成非中文语言时，需选择支持对应语言的音色。具体的模型与音色对应关系，请参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)。
 
-### 非流式调用
+#### 非流式调用
 
 非流式调用设置`stream=False`，等待合成完成后返回音频URL，通过URL下载音频文件。
 
@@ -392,9 +387,9 @@ dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.co
 
 # 非流式调用，返回音频URL
 result = HttpSpeechSynthesizer.call(
-    model="qwen-audio-3.0-tts-flash",  # 更换模型时，需同步更换为对应版本的音色
+    model="cosyvoice-v3-plus",  # 更换模型时，需同步更换为对应版本的音色
     text="今天是个好日子，适合构建人们喜爱的产品！",
-    voice="longanhuan_v3.6",  # 该音色适用于qwen-audio-3.0-tts-flash；qwen-audio-3.0-tts-plus请使用longanlingxin、longanlufeng，cosyvoice-v3系列请使用longanhuan，cosyvoice-v2请使用longxiaochun_v2等对应版本音色
+    voice="longanyang",
     format="wav",
     sample_rate=24000,
     stream=False,
@@ -410,7 +405,7 @@ if result.audio_id:
 print(f"过期时间: {result.expires_at}")
 ```
 
-### 流式调用
+#### 流式调用
 
 流式调用设置`stream=True`，返回迭代器，逐段获取音频数据。适用于对首包延迟有要求的实时播放场景。流式模式下，迭代器的最后一个元素会额外返回完整音频的`audio_url`，遍历时需通过`not chunk.audio_url`过滤该元素，避免音频内容重复。
 
@@ -427,9 +422,9 @@ dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.co
 
 # 流式调用，逐段返回音频数据
 stream_result = HttpSpeechSynthesizer.call(
-    model="qwen-audio-3.0-tts-flash",  # 更换模型时，需同步更换为对应版本的音色
+    model="cosyvoice-v3-plus",  # 更换模型时，需同步更换为对应版本的音色
     text="今天是个好日子，适合构建人们喜爱的产品！",
-    voice="longanhuan_v3.6",  # 该音色适用于qwen-audio-3.0-tts-flash；qwen-audio-3.0-tts-plus请使用longanlingxin、longanlufeng，cosyvoice-v3系列请使用longanhuan，cosyvoice-v2请使用longxiaochun_v2等对应版本音色
+    voice="longanyang",
     format="wav",
     sample_rate=24000,
     stream=True,

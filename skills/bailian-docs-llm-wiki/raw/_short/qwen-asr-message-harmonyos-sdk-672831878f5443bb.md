@@ -459,15 +459,13 @@ SDK日志级别。取值为 `LOG_LEVEL_VERBOSE`（0）、`LOG_LEVEL_DEBUG`（1�
 
 是否保存本地日志，默认值为 `false`。设为 `true` 时必须在 `parameters` 中设置 `debug_path`，并可通过 `max_log_file_size` 设置文件大小。
 
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### setParams
 
 ```
 setParams(params: string): number
 ```
 
-在 `startDialog` 前设置[语音识别效果参数](#%E8%AF%AD%E9%9F%B3%E8%AF%86%E5%88%AB%E6%95%88%E6%9E%9C%E5%8F%82%E6%95%B0)。`params` 为语音识别效果参数的JSON字符串。返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
+在 `startDialog` 前设置[语音识别效果参数](#%E8%AF%AD%E9%9F%B3%E8%AF%86%E5%88%AB%E6%95%88%E6%9E%9C%E5%8F%82%E6%95%B0)。`params` 为语音识别效果参数的JSON字符串。
 
 #### startDialog
 
@@ -506,15 +504,13 @@ JSON字符串。可更新已过期的临时API Key，也可通过 `input_context
 }
 ```
 
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### stopDialog
 
 ```
 stopDialog(): number
 ```
 
-通知服务端结束识别并返回最终结果。收到 `EVENT_TRANSCRIBER_COMPLETE` 后，任务结束。返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
+通知服务端结束识别并返回最终结果。收到 `EVENT_TRANSCRIBER_COMPLETE` 后，任务结束。
 
 #### cancelDialog
 
@@ -522,7 +518,7 @@ stopDialog(): number
 cancelDialog(): number
 ```
 
-立即结束识别，不等待服务端返回最终结果。返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
+立即结束识别，不等待服务端返回最终结果。
 
 #### dialogAction
 
@@ -579,8 +575,6 @@ JSON字符串。
 }
 ```
 
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### updateAudio
 
 ```
@@ -606,8 +600,6 @@ updateAudio(data: ArrayBuffer, first_pack: boolean): number
 `boolean`
 
 是否为首个音频包。首包设为 `true`，后续设为 `false`。
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### pushReferenceData
 
@@ -635,15 +627,13 @@ pushReferenceData(data: ArrayBuffer, first_pack: boolean): number
 
 是否为首个音频包。首包设为 `true`，后续设为 `false`。
 
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### release
 
 ```
 release(): number
 ```
 
-释放SDK的全部内部资源。调用后实例不可用；如需再次使用，必须重新调用 `initialize`。返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
+释放SDK的全部内部资源。调用后实例不可用；如需再次使用，必须重新调用 `initialize`。
 
 #### GetVersion
 
@@ -711,7 +701,7 @@ onNuiEventCallback: (
 
 `number`
 
-[错误码](https://help.aliyun.com/zh/isi/support/error-codes)，在 `EVENT_ASR_ERROR` 事件中有效。
+仅在出现 `EVENT_ASR_ERROR` 事件时有效。
 
 `arg2`
 

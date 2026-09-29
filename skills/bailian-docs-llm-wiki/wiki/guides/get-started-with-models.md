@@ -1,35 +1,36 @@
 # get started with models
 
-本文档面向开发者，介绍如何快速接入和调用百炼平台提供的大模型服务。你将了解当前支持的模型类型、关键请求参数、标准调用方式，以及生产环境需关注的限制与注意事项。所有操作均基于 RESTful API，无需安装额外 SDK 即可开始。
+本文档面向开发者，介绍如何快速接入和调用百炼平台提供的大模型服务。你将了解平台当前支持的主流模型类型、关键请求参数含义、标准调用方式，以及生产环境需关注的限制与注意事项。所有操作均基于 RESTful API 接口，无需安装额外 SDK（但 SDK 可简化开发）。
 
-## 支持的模型与功能
+## 支持的模型与核心功能
 
-百炼平台提供多种开源与自研大模型，包括 Qwen 系列（如 `qwen-max`、`qwen-plus`、`qwen-turbo`）、多模态模型（如 `qwen-vl`）及嵌入模型（如 `text-embedding-v1`）。模型能力覆盖文本生成、代码补全、多轮对话、图像理解与[向量化](../concepts/embedding.md)等场景。具体模型列表及适用场景详见 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md)。部分模型支持流式响应、[函数调用](../concepts/function-calling.md)（Function Calling）和工具集成，相关能力说明见 [产品简介](../../raw/model-user-guide/get-started-with-models/what-is-model-studio.md)。
+百炼平台提供多类预训练大语言模型（LLM），包括 Qwen 系列（如 qwen-max、qwen-plus、qwen-turbo）、多模态模型（如 qwen-vl）及推理优化版本（如 qwen-14b-chat-int4）。模型能力覆盖文本生成、代码补全、多轮对话、结构化输出（JSON Schema）、工具调用（Function Calling）等。详细模型列表与适用场景请参阅 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md)。
+
+> **注意**：[动态限流](../../raw/model-user-guide/get-started-with-models/quota-management.md) 文档中描述的 quota 优先级策略与 [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md) 中定义的固定 QPS 限制存在表述差异——实际生效规则以 [动态限流](../../raw/model-user-guide/get-started-with-models/quota-management.md) 为准，后者内容已过时，建议忽略。
 
 ## 关键参数
 
 调用模型 API 时，必需参数包括：
-- `model`：模型 ID（如 `"qwen-max"`），必须与 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md) 中公布的名称严格一致；
-- `input.messages`：非空消息数组，首条消息 `role` 应为 `"user"`；
-- `parameters.temperature`：控制输出随机性（0.0–2.0，默认 1.0）；
-- `parameters.top_p`：核采样阈值（0.0–1.0，默认 0.8）；
-- `parameters.max_tokens`：最大生成 token 数（硬上限，超出将被截断）。
+- `model`：模型标识符（如 `"qwen-turbo"`），必须与 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md) 中列出的名称严格一致；
+- `input.messages`：非空消息数组，格式为 `[{ "role": "user", "content": "..." }]`；
+- `parameters`（可选）：控制生成行为，常用字段有 `temperature`（0.0–2.0）、`top_p`、`max_tokens`、`stop`、`response_format`（支持 `"text"` 或 `{"type": "json_object"}`）。
 
-> **注意**：`parameters.stop` 字段在部分旧文档中被描述为支持字符串数组，但实际 API 仅接受字符串（单个终止符）或省略；请以 [首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md) 中的示例为准。
+Base URL 和地域配置影响请求路由与延迟，详见 [Base URL总览](../../raw/model-user-guide/get-started-with-models/base-url.md) 与 [选择地域、服务部署范围和接入域名](../../raw/model-user-guide/get-started-with-models/regions.md)。
 
 ## 使用方式
 
-1. **获取认证凭证**：在百炼控制台创建 API Key（`Authorization: Bearer <api_key>`）；
-2. **确定接入地址**：根据部署地域选择 Base URL，例如华东 1（杭州）使用 `https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation`；完整域名映射见 [Base URL总览](../../raw/model-user-guide/get-started-with-models/base-url.md)；
-3. **构造请求**：发送 `POST` 请求，`Content-Type: application/json`，Body 包含 `model` 和 `input` 字段；
-4. **处理响应**：成功响应包含 `output.text` 或 `output.choices[0].message.content`，流式响应需按 SSE 格式解析。
+1. **获取凭证**：在百炼控制台创建 API Key（AccessKey ID/Secret）；
+2. **构造请求**：使用 `POST /v1/chat/completions`（或 `/v1/completions`）端点，设置 `Authorization: Bearer <API_KEY>`；
+3. **发送调用**：参考 [首次调用千问API](../../raw/model-user-guide/get-started-with-models/first-api-call-to-qwen.md) 提供的 cURL 示例完成首调验证；
+4. （可选）集成官方 Python SDK（`dashscope` >= 1.20.0），自动处理重试、流式响应解析等。
 
 ## 限制和注意事项
 
-- 每个 API Key 默认享有动态配额，受账户等级与资源包影响；配额策略与实时调整机制参见 [动态限流](../../raw/model-user-guide/get-started-with-models/quota-management.md)；
-- 同步调用单次请求最大 `input` 长度为 32768 tokens，`max_tokens` 上限为 8192（部分模型更低，以 [选择模型](../../raw/model-user-guide/get-started-with-models/models.md) 标注为准）；
-- 限流规则按分钟级窗口统计，超限返回 `429 Too Many Requests`；详细规则见 [限流](../../raw/model-user-guide/get-started-with-models/rate-limit.md)；
-- 跨地域调用可能导致延迟升高或不可用，请务必通过 [选择地域、服务部署范围和接入域名](../../raw/model-user-guide/get-started-with-models/regions.md) 确认服务可用性。
+- 单次请求 `input.messages` 总 token 数上限为 32768（具体依模型而异，qwen-max 支持更高）；
+- 免费额度仅适用于部分模型（如 qwen-turbo），qwen-max 等高性能模型默认按量计费；
+- 流式响应（`stream=true`）需正确处理 `data:` 分块与 `event: done` 终止信号；
+- 所有模型均不支持自定义 LoRA 微调权重在线加载，微调后需部署为独立服务实例；
+- 地域选择必须与 API Key 所属项目地域一致，否则返回 `403 Forbidden` ——该约束在 [选择地域、服务部署范围和接入域名](../../raw/model-user-guide/get-started-with-models/regions.md) 中有明确说明。
 
 ## 来源文档
 

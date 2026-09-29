@@ -1,8 +1,6 @@
-# 语音合成Qwen-Audio-TTS/CosyVoice Android SDK
+# CosyVoice Android SDK
 
-本文档提供了语音合成Qwen-Audio-TTS/CosyVoice Android SDK的详细使用指南，帮助您将文本转换为高质量、富有表现力的语音。
-
-**用户指南：**关于模型介绍和选型建议请参见[语音合成](https://help.aliyun.com/zh/model-studio/tts-model)。
+本文档提供了语音合成CosyVoice Android SDK的详细使用指南，帮助您将文本转换为高质量、富有表现力的语音。
 
 ## NativeNui
 
@@ -12,31 +10,31 @@
 
 -   **多例模式：**通过 `new NativeNui(Constants.ModeType.MODE_STREAM_INPUT_TTS)` 创建实例
     
--   **回调驱动：**通过 [`INativeStreamInputTtsCallback`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#h2streamcallback) 接口接收事件和数据
+-   **回调驱动：**通过 `INativeStreamInputTtsCallback` 接口接收事件和数据
     
 -   **事件类型：**
-    -   [`STREAM_INPUT_TTS_EVENT_SYNTHESIS_STARTED`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#h2streamevent)：合成任务开始
-    -   [`onStreamInputTtsDataCallback`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#bc71fe2545pfy)：音频数据返回
-    -   [`STREAM_INPUT_TTS_EVENT_SYNTHESIS_COMPLETE`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#h2streamevent)：合成任务结束
-    -   [`STREAM_INPUT_TTS_EVENT_TASK_FAILED`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#h2streamevent)：合成出错
+    -   `STREAM_INPUT_TTS_EVENT_SYNTHESIS_STARTED`：合成任务开始
+    -   `onStreamInputTtsDataCallback`：音频数据返回
+    -   `STREAM_INPUT_TTS_EVENT_SYNTHESIS_COMPLETE`：合成任务结束
+    -   `STREAM_INPUT_TTS_EVENT_TASK_FAILED`：合成出错
 
 ### 使用流程
 
-Qwen-Audio-TTS/CosyVoice 支持一次性输入和流式输入两种调用方式。
+CosyVoice 支持一次性输入和流式输入两种调用方式。
 
 **一次性输入**：适用于短文本合成、需要使用 SSML 标记语言的场景。
 
-1.  [`playStreamInputTts()`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#be00eb5c18hnz)或 [`asyncPlayStreamInputTts()`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#2d43b13c45u3g)\- 发送一段完整的待合成文本并开始语音合成。前者为同步请求，合成完成后返回；后者为异步请求，发起合成后立即返回
-2.  [`onStreamInputTtsDataCallback()`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#bc71fe2545pfy)\- 接收音频数据
-3.  [`STREAM_INPUT_TTS_EVENT_SYNTHESIS_COMPLETE`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#h2streamevent)\- 语音合成结束
+1.  `playStreamInputTts()`或 `asyncPlayStreamInputTts()`\- 发送一段完整的待合成文本并开始语音合成。前者为同步请求，合成完成后返回；后者为异步请求，发起合成后立即返回
+2.  `onStreamInputTtsDataCallback()`\- 接收音频数据
+3.  `STREAM_INPUT_TTS_EVENT_SYNTHESIS_COMPLETE`\- 语音合成结束
 
 **流式输入**：适用于实时对话、长文本“边说边合”的场景。此方式不支持 SSML 标记语言。
 
-1.  [`startStreamInputTts()`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#05eab5125e2pm)\- 初始化SDK，设置回调接口和连接参数
-2.  [`sendStreamInputTts()`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#9e9bf0b955cit)\- 持续发送待合成文本
-3.  [`onStreamInputTtsDataCallback()`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#bc71fe2545pfy)\- 接收音频数据
-4.  [`stopStreamInputTts()`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#eec84caadcq73)或 [`asyncStopStreamInputTts()`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#20ff030ae9j4f)\- 发送合成结束请求。前者为同步请求，等待合成完成后返回；后者为异步请求，发起请求后立即返回
-5.  [`STREAM_INPUT_TTS_EVENT_SYNTHESIS_COMPLETE`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#h2streamevent)\- 语音合成结束
+1.  `startStreamInputTts()`\- 初始化SDK，设置回调接口和连接参数
+2.  `sendStreamInputTts()`\- 持续发送待合成文本
+3.  `onStreamInputTtsDataCallback()`\- 接收音频数据
+4.  `stopStreamInputTts()`或 `asyncStopStreamInputTts()`\- 发送合成结束请求。前者为同步请求，等待合成完成后返回；后者为异步请求，发起请求后立即返回
+5.  `STREAM_INPUT_TTS_EVENT_SYNTHESIS_COMPLETE`\- 语音合成结束
 
 ### startStreamInputTts
 
@@ -63,7 +61,7 @@ public synchronized int startStreamInputTts(INativeStreamInputTtsCallback callba
 
 `callback`
 
-[`INativeStreamInputTtsCallback`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#h2streamcallback)
+[INativeStreamInputTtsCallback](#h2streamcallback)
 
 事件和数据回调接口的实现。
 
@@ -94,27 +92,17 @@ JSON字符串，包含语音合成的具体效果参数。详见下方 parameter
 取值范围：
 
 -   0：LOG\_LEVEL\_VERBOSE
-    
 -   1：LOG\_LEVEL\_DEBUG
-    
 -   2：LOG\_LEVEL\_INFO
-    
 -   3：LOG\_LEVEL\_WARNING
-    
 -   4：LOG\_LEVEL\_ERROR
-    
 -   5：LOG\_LEVEL\_NONE（表示关闭此功能）
-    
 
 `save_log`
 
 `boolean`
 
 是否保存本地日志。若为true，须在ticket 参数中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
-
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 **ticket JSON 示例**：
 
@@ -144,11 +132,8 @@ JSON字符串，包含语音合成的具体效果参数。详见下方 parameter
 服务地址：
 
 -   `wss://dashscope.aliyuncs.com/api-ws/v1/inference`
-    
 -   华北2（北京）：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
-    
 -   新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
-    
 
 调用时，请将 `{WorkspaceId}` 替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
@@ -174,7 +159,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 否
 
-调用[stop接口](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#eec84caadcq73)后，等待合成完成事件（[STREAM\_INPUT\_TTS\_EVENT\_SYNTHESIS\_COMPLETE](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#h2streamevent)）的超时时间（毫秒）。
+调用stop接口后，等待合成完成事件（`STREAM_INPUT_TTS_EVENT_SYNTHESIS_COMPLETE`）的超时时间（毫秒）。
 
 默认值：10000。
 
@@ -186,7 +171,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 日志文件的存储路径。
 
-此参数仅在调用[startStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#05eab5125e2pm)、[playStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#be00eb5c18hnz)或[asyncPlayStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#2d43b13c45u3g)接口时将`save_log`设为true时生效。此时必须设置日志文件路径，否则将报错。
+此参数仅在调用`startStreamInputTts`、`playStreamInputTts`或`asyncPlayStreamInputTts`接口时将`save_log`设为true时生效。此时必须设置日志文件路径，否则将报错。
 
 本地最多保留两个日志文件。
 
@@ -198,7 +183,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 设定日志文件的最大字节数。
 
-此参数仅在调用[startStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#05eab5125e2pm)、[playStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#be00eb5c18hnz)或[asyncPlayStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#2d43b13c45u3g)接口时将`save_log`设为true时生效。
+此参数仅在调用`startStreamInputTts`、`playStreamInputTts`或`asyncPlayStreamInputTts`接口时将`save_log`设为true时生效。
 
 默认值：104857600（100 \* 1024 \* 1024 字节，即 100MiB）。
 
@@ -208,33 +193,27 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 否
 
-控制通过日志回调（[`onStreamInputTtsLogTrackCallback`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#9c10968457gc6)）对外发送的日志内容的过滤级别。
+控制通过日志回调（`onStreamInputTtsLogTrackCallback`）对外发送的日志内容的过滤级别。
 
 默认值：2。
 
 取值范围：
 
 -   0：LOG\_LEVEL\_VERBOSE
-    
 -   1：LOG\_LEVEL\_DEBUG
-    
 -   2：LOG\_LEVEL\_INFO
-    
 -   3：LOG\_LEVEL\_WARNING
-    
 -   4：LOG\_LEVEL\_ERROR
-    
 -   5：LOG\_LEVEL\_NONE（表示关闭此功能）
-    
 
-注意：`log_track_level`与`log_level`（通过[startStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#05eab5125e2pm)、[playStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#be00eb5c18hnz)或[asyncPlayStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#2d43b13c45u3g)接口设置）共同决定最终回调的日志。一条日志的级别数值必须同时大于或等于`log_track_level`和`log_level`的值，才会被回调。例如，`log_track_level`设为2 (INFO)，`log_level`设为3 (WARNING)，则只有WARNING及以上级别（数值>=3）的日志才会被回调。
+注意：`log_track_level`与`log_level`（通过`startStreamInputTts`、`playStreamInputTts`或`asyncPlayStreamInputTts`接口设置）共同决定最终回调的日志。一条日志的级别数值必须同时大于或等于`log_track_level`和`log_level`的值，才会被回调。例如，`log_track_level`设为2 (INFO)，`log_level`设为3 (WARNING)，则只有WARNING及以上级别（数值>=3）的日志才会被回调。
 
 **parameters JSON 示例**：
 
 ```
 {
-    "model": "qwen-audio-3.0-tts-flash",
-    "voice": "longanlingxi",
+    "model": "cosyvoice-v3-plus",
+    "voice": "longanyang",
     "format": "mp3",
     "volume": 50,
     "rate": 1.0,
@@ -268,7 +247,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 语音合成所使用的音色。
 
--   **系统音色**：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
+-   **系统音色**：参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
 -   **复刻音色**：通过声音复刻功能定制
 -   **声音设计音色**：通过声音设计功能定制
 
@@ -287,7 +266,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 -   mp3（默认）
 -   opus
 
-**重要**`cosyvoice-v1`不支持opus格式。
+**说明**cosyvoice-v1不支持opus格式。
 
 `enable_audio_decoder`
 
@@ -357,7 +336,7 @@ API Key。建议使用时效性短、安全性更高的[临时API Key](raw/model
 
 取值范围：\[6, 510\]。
 
-`cosyvoice-v1`模型不支持该参数。
+**说明**cosyvoice-v1模型不支持该参数。
 
 `enable_ssml`
 
@@ -384,9 +363,9 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
 
-> 时间戳结果在[INativeStreamInputTtsCallback](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#h2streamcallback)的all\_response中。
+> 时间戳结果在`INativeStreamInputTtsCallback`的all\_response中。
 
 `seed`
 
@@ -400,7 +379,7 @@ SSML 的使用限制（支持的模型、音色和接口），请参见[使用�
 
 取值范围：\[0, 65535\]。
 
-cosyvoice-v1不支持该参数。
+**说明**cosyvoice-v1不支持该参数。
 
 `language_hints`
 
@@ -411,9 +390,11 @@ cosyvoice-v1不支持该参数。
 **重要**
 
 -   此参数为数组，但当前版本仅处理第一个元素，因此建议只传入一个值。
--   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见声音复刻API参考。
+-   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见[声音复刻API参考](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
 
-指定语音合成的目标语言，提升合成效果。cosyvoice-v1不支持该功能。
+指定语音合成的目标语言，提升合成效果。
+
+**说明**cosyvoice-v1不支持该功能。
 
 当数字、缩写、符号等朗读方式或者小语种合成效果不符合预期时使用，例如：
 
@@ -421,7 +402,7 @@ cosyvoice-v1不支持该参数。
 -   符号朗读不准确，“@”读成“艾特”而非“at”
 -   小语种合成效果差，合成不自然
 
-取值范围：
+取值范围
 
 -   zh：中文
 -   en：英语
@@ -460,7 +441,7 @@ cosyvoice-v1不支持该参数。
 
 默认值：false。
 
-仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `aigc_propagator`
 
@@ -472,7 +453,7 @@ cosyvoice-v1不支持该参数。
 
 默认值：阿里云UID。
 
-仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `aigc_propagate_id`
 
@@ -484,7 +465,7 @@ cosyvoice-v1不支持该参数。
 
 默认值：本次语音合成请求Request ID。
 
-仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `hot_fix`
 
@@ -494,7 +475,7 @@ cosyvoice-v1不支持该参数。
 
 文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
 
-cosyvoice-v2、cosyvoice-v1不支持该功能。
+**说明**cosyvoice-v2、cosyvoice-v1不支持该功能。
 
 参数介绍：
 
@@ -520,7 +501,7 @@ cosyvoice-v2、cosyvoice-v1不支持该功能。
 
 否
 
-**重要**仅cosyvoice-v3-flash复刻音色支持该功能。
+**说明**仅cosyvoice-v3-flash复刻音色支持该功能。
 
 是否启用 Markdown 过滤。启用后，系统在合成语音前自动过滤输入文本中的 Markdown 标记符号，避免将其朗读为文字内容。
 
@@ -533,11 +514,11 @@ cosyvoice-v2、cosyvoice-v1不支持该功能。
 
 ### sendStreamInputTts
 
-发送待合成的文本，与 [startStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#05eab5125e2pm) 搭配使用。
+发送待合成的文本，与 `startStreamInputTts` 搭配使用。
 
-在调用 [startStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#05eab5125e2pm) 后，使用此接口持续发送文本。
+在调用 `startStreamInputTts` 后，使用此接口持续发送文本。
 
-所有文本发送完毕后，需调用[stopStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#eec84caadcq73)或[asyncStopStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#20ff030ae9j4f)来结束发送。
+所有文本发送完毕后，需调用`stopStreamInputTts`或`asyncStopStreamInputTts`来结束发送。
 
 **方法签名：**
 ```
@@ -557,37 +538,27 @@ public synchronized int sendStreamInputTts(String text)
 
 待合成文本。不支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。如果传入的文本包含SSML标签，这些标签将被当作普通文本读出，不会被解析。
 
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 ### stopStreamInputTts
 
-同步接口，通知服务端文本已全部发送，并阻塞等待所有音频数据合成并收到 [STREAM\_INPUT\_TTS\_EVENT\_SYNTHESIS\_COMPLETE](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#h2streamevent)。
+同步接口，通知服务端文本已全部发送，并阻塞等待所有音频数据合成并收到 `STREAM_INPUT_TTS_EVENT_SYNTHESIS_COMPLETE`。
 
-阻塞等待的超时时间由参数 [complete\_waiting\_ms](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#05eab5125e2pm) 控制。
+阻塞等待的超时时间由参数 `complete_waiting_ms` 控制。
 
 **方法签名：**
 ```
 public synchronized int stopStreamInputTts()
 ```
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 ### asyncStopStreamInputTts
 
 异步接口，通知服务端文本已全部发送。调用后立即返回，合成在后台继续进行。
 
-通过 [STREAM\_INPUT\_TTS\_EVENT\_SYNTHESIS\_COMPLETE](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#h2streamevent) 事件判断合成是否完成。
+通过 `STREAM_INPUT_TTS_EVENT_SYNTHESIS_COMPLETE` 事件判断合成是否完成。
 
 **方法签名：**
 ```
 public synchronized int asyncStopStreamInputTts()
 ```
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 ### cancelStreamInputTts
 
@@ -597,15 +568,12 @@ public synchronized int asyncStopStreamInputTts()
 ```
 public synchronized int cancelStreamInputTts()
 ```
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 ### playStreamInputTts
 
-同步执行的一次性合成接口。该接口会发送文本、阻塞并等待接收所有音频数据，直到合成完成后才返回。无需再调用[stop接口](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#eec84caadcq73)。
+同步执行的一次性合成接口。该接口会发送文本、阻塞并等待接收所有音频数据，直到合成完成后才返回。无需再调用stop接口。
 
-该接口默认启用SSML。如果显式设置enable\_ssml，则以用户设置为准。
+该接口默认启用SSML。如果显式设置`enable_ssml`，则以用户设置为准。
 
 此接口应在非UI线程调用。
 
@@ -621,7 +589,7 @@ public synchronized int playStreamInputTts(INativeStreamInputTtsCallback callbac
 ```
 **参数说明：**
 
-callback、ticket等参数与[startStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#05eab5125e2pm)接口中的定义相同。
+callback、ticket等参数与`startStreamInputTts`接口中的定义相同。
 
 **参数**
 
@@ -635,15 +603,11 @@ callback、ticket等参数与[startStreamInputTts](https://help.aliyun.com/zh/mo
 
 待合成文本。支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
 
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 ### asyncPlayStreamInputTts
 
-异步执行的一次性合成接口。调用后立即返回，合成任务在后台进行，结果通过回调返回。无需再调用[stop接口](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#eec84caadcq73)。
+异步执行的一次性合成接口。调用后立即返回，合成任务在后台进行，结果通过回调返回。无需再调用stop接口。
 
-该接口默认启用SSML。如果显式设置enable\_ssml，则以用户设置为准。
+该接口默认启用SSML。如果显式设置`enable_ssml`，则以用户设置为准。
 
 **方法签名：**
 ```
@@ -657,7 +621,7 @@ public synchronized int asyncPlayStreamInputTts(INativeStreamInputTtsCallback ca
 ```
 **参数说明：**
 
-callback、ticket等参数与[startStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#05eab5125e2pm)接口中的定义相同。
+callback、ticket等参数与`startStreamInputTts`接口中的定义相同。
 
 **参数**
 
@@ -671,13 +635,9 @@ callback、ticket等参数与[startStreamInputTts](https://help.aliyun.com/zh/mo
 
 待合成文本。支持[SSML](https://help.aliyun.com/zh/model-studio/ssml-latex-user-guide)。
 
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 ## INativeStreamInputTtsCallback
 
-Qwen-Audio-TTS/CosyVoice 流式语音合成回调接口，用于接收合成事件、音频数据和日志。
+CosyVoice 流式语音合成回调接口，用于接收合成事件、音频数据和日志。
 
 ### onStreamInputTtsEventCallback：监听事件
 
@@ -701,7 +661,7 @@ void onStreamInputTtsEventCallback(StreamInputTtsEvent event,
 
 `event`
 
-[`StreamInputTtsEvent`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#h2streamevent)
+`StreamInputTtsEvent`
 
 回调事件。
 
@@ -721,13 +681,13 @@ void onStreamInputTtsEventCallback(StreamInputTtsEvent event,
 
 `int`
 
-[错误码](https://help.aliyun.com/zh/isi/support/error-codes)，仅在事件 [STREAM\_INPUT\_TTS\_EVENT\_TASK\_FAILED](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#h2streamevent) 中有效。
+仅在出现 `STREAM_INPUT_TTS_EVENT_TASK_FAILED` 事件时有效。
 
 `error_msg`
 
 `String`
 
-错误信息，仅在事件 [STREAM\_INPUT\_TTS\_EVENT\_TASK\_FAILED](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#h2streamevent) 中有效。
+错误信息，仅在事件 `STREAM_INPUT_TTS_EVENT_TASK_FAILED` 中有效。
 
 `timestamp`
 
@@ -764,18 +724,13 @@ void onStreamInputTtsDataCallback(byte[] data);
 返回当前片段的音频数据，可用于：
 
 -   合成完整的音频文件并播放。
-    
 -   通过支持流式播放的播放器实时播放。
-    
 
 注意：
 
 -   对 mp3/opus 压缩格式，分段传输必须使用流式播放器，不能逐帧播放，否则可能解码失败。
-    
 -   组装完整文件时需采用追加模式写入同一文件。
-    
--   对于 wav 和 mp3 格式，仅在第一次 onStreamInputTtsDataCallback 回调的数据中包含文件头，后续回调均为纯音频数据。处理时需将所有回调的 `buffer` 按顺序拼接。opus 格式的每一帧都是独立的 Ogg page，可直接拼接。
-    
+-   对于 wav 和 mp3 格式，仅在第一次 `onStreamInputTtsDataCallback` 回调的数据中包含文件头，后续回调均为纯音频数据。处理时需将所有回调的 `buffer` 按顺序拼接。opus 格式的每一帧都是独立的 Ogg page，可直接拼接。
 
 ### onStreamInputTtsLogTrackCallback：监听追踪日志
 
@@ -788,28 +743,27 @@ default void onStreamInputTtsLogTrackCallback(Constants.LogLevel level, String l
 
 ## StreamInputTtsEvent
 
-Qwen-Audio-TTS/CosyVoice 流式语音合成事件类型枚举。
+CosyVoice 流式语音合成事件类型枚举。
 
 **事件**
 
 **说明**
 
-STREAM\_INPUT\_TTS\_EVENT\_SYNTHESIS\_STARTED
+`STREAM_INPUT_TTS_EVENT_SYNTHESIS_STARTED`
 
-表示服务端已成功接收请求并开始处理。通常在此事件后，[`onStreamInputTtsDataCallback`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#bc71fe2545pfy)将很快开始返回第一批音频数据。
+表示服务端已成功接收请求并开始处理。通常在此事件后，`onStreamInputTtsDataCallback`将很快开始返回第一批音频数据。
 
-STREAM\_INPUT\_TTS\_EVENT\_SENTENCE\_SYNTHESIS
+`STREAM_INPUT_TTS_EVENT_SENTENCE_SYNTHESIS`
 
 语音合成运行过程中的信息，包括计费信息等。
 
-STREAM\_INPUT\_TTS\_EVENT\_SYNTHESIS\_COMPLETE
+`STREAM_INPUT_TTS_EVENT_SYNTHESIS_COMPLETE`
 
-表示服务端已发送完全部音频数据，此后 [`onStreamInputTtsEventCallback`](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#163c1ef871tqt)将不会再被调用。收到此事件是数据流结束的明确信号。
+表示服务端已发送完全部音频数据，此后 `onStreamInputTtsEventCallback`将不会再被调用。收到此事件是数据流结束的明确信号。
 
-STREAM\_INPUT\_TTS\_EVENT\_TASK\_FAILED
+`STREAM_INPUT_TTS_EVENT_TASK_FAILED`
 
-表示任务失败。此时可从[INativeStreamInputTtsCallback](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#h2streamcallback)的all\_response获得task\_id、error\_code、error\_message用于判断具体错误。
-
+表示任务失败。此时可从`INativeStreamInputTtsCallback`的all\_response获得task\_id、error\_code、error\_message用于判断具体错误。
 ```
 {
     "header": {
@@ -847,46 +801,31 @@ STREAM\_INPUT\_TTS\_EVENT\_TASK\_FAILED
 **调用步骤：**
 
 1.  初始化 SDK 和播放器组件。
-    
 2.  按业务需求设置参数。
-    
-3.  调用 [playStreamInputTts](https://help.aliyun.com/zh/model-studio/cosyvoice-android-sdk#be00eb5c18hnz)或`asyncPlayStreamInputTts`发送文本并开始语音合成。
-    
+3.  调用 `playStreamInputTts`或`asyncPlayStreamInputTts`发送文本并开始语音合成。
 4.  接收到 `STREAM_INPUT_TTS_EVENT_SYNTHESIS_COMPLETE` 回调，语音合成结束。
-    
 
 **适用场景：**
 
 -   短文本合成
-    
 -   需要使用 SSML 标记语言
-    
 
 流式输入待合成文本
 
 **调用步骤：**
 
 1.  初始化 SDK 和播放器组件。
-    
 2.  按业务需求设置参数。
-    
 3.  调用 `startStreamInputTts` 开始流式文本语音合成。
-    
 4.  调用 `sendStreamInputTts` 持续发送文本。
-    
 5.  在`onStreamInputTtsDataCallback`中，获取二进制音频数据。
-    
 6.  调用 `stopStreamInputTts` 或 `asyncStopStreamInputTts` 结束发送，等待合成完成。
-    
 7.  接收到 `STREAM_INPUT_TTS_EVENT_SYNTHESIS_COMPLETE` 回调，语音合成结束。
-    
 
 **适用场景：**
 
 -   实时对话、长文本“边说边合”
-    
 -   此方式不支持 SSML 标记语言
-    
 
 ## 高级功能
 
@@ -894,7 +833,7 @@ STREAM\_INPUT\_TTS\_EVENT\_TASK\_FAILED
 
 **目的**：通过在文本中嵌入 XML 标签，实现对发音、语速、停顿等细节的精确控制。
 
-**使用限制**：仅支持[一次性输入待合成文本](raw/_short/cosyvoice-android-sdk-3c17b87965adaf1e.md)（`playStreamInputTts` 或 `asyncPlayStreamInputTts` 接口），不支持[流式输入待合成文本](raw/_short/cosyvoice-android-sdk-3c17b87965adaf1e.md)（`sendStreamInputTts` 接口）。
+**使用限制**：仅支持一次性输入待合成文本（`playStreamInputTts` 或 `asyncPlayStreamInputTts` 接口），不支持流式输入待合成文本（`sendStreamInputTts` 接口）。
 
 **使用方法**：调用 `playStreamInputTts`或`asyncPlayStreamInputTts`接口时，SDK 会自动启用 SSML，此时直接在 `text` 参数中传入包含 SSML 标签的文本即可。
 

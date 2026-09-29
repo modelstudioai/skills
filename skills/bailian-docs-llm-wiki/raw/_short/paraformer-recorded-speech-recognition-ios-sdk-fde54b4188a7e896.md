@@ -482,9 +482,6 @@
     是否保存本地日志。若为`YES`，须在[连接与控制参数](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-ios-sdk#57acf5ecc1w8j)通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### nui\_set\_param
 
@@ -523,9 +520,6 @@
     ```
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### nui\_file\_trans\_start
 
@@ -574,9 +568,6 @@
     任务ID，SDK内部生成随机字符串，在此接口调用成功后可获得task\_id。
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### nui\_file\_trans\_query
 
@@ -603,9 +594,6 @@
     待查询的任务ID。
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### nui\_file\_trans\_cancel
 
@@ -632,9 +620,6 @@
     待取消的任务ID。
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### nui\_release
 
@@ -647,9 +632,6 @@
 ```
 
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### nui\_get\_version
 
@@ -716,7 +698,7 @@
     
     `int`
     
-    错误码，在出现EVENT\_ASR\_ERROR事件时有效，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
+    仅在出现 `EVENT_ASR_ERROR` 事件时有效。
     
 
 #### onFileTransLogTrackCallback：监听追踪日志

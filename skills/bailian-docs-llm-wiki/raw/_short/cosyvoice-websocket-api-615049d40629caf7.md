@@ -1,14 +1,10 @@
 # WebSocket 接入指南
 
-本文介绍通过WebSocket连接访问Qwen-Audio-TTS/CosyVoice实时语音合成服务的交互流程、接口地址和请求头。
-
-DashScope SDK目前仅支持Java和Python。使用其他编程语言时，可通过WebSocket连接与服务进行通信。
-
-**用户指南：**关于模型介绍和选型建议请参见[语音合成](https://help.aliyun.com/zh/model-studio/tts-model)。
+本文介绍通过WebSocket连接访问CosyVoice实时语音合成服务的交互流程、接口地址和请求头。
 
 ## 接口地址
 
-WebSocket URL固定如下：
+WebSocket 接口使用 `wss://` 协议，地址如下：
 
 #### 华北2（北京）
 
@@ -22,14 +18,10 @@ WebSocket URL固定如下：
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
-**重要**URL 必须使用 `wss://` 协议，且固定不变。Authorization 在请求头中设置（参见[请求头](https://help.aliyun.com/zh/model-studio/cosyvoice-websocket-api#b02603aacf7e9)）。
-
 **重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
 
 ## 请求头
 
@@ -43,33 +35,33 @@ WebSocket URL固定如下：
 
 **说明**
 
-Authorization
+**Authorization**
 
-string
+`string`
 
 是
 
 鉴权令牌，格式为 `Bearer <your_api_key>`，将 `<your_api_key>` 替换为实际的 API Key。
 
-user-agent
+**user-agent**
 
-string
+`string`
 
 否
 
 客户端标识，便于服务端追踪来源。
 
-X-DashScope-WorkSpace
+**X-DashScope-WorkSpace**
 
-string
+`string`
 
 否
 
 阿里云百炼[业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)。
 
-X-DashScope-DataInspection
+**X-DashScope-DataInspection**
 
-string
+`string`
 
 否
 

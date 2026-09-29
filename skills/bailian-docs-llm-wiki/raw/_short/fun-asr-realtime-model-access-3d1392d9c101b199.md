@@ -1,10 +1,10 @@
-# Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime 模型接入方式
+# Fun-ASR-Realtime 模型接入方式
 
-介绍 Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime 的接入入口、SDK 和事件参考。
+介绍 Fun-ASR-Realtime 的接入入口、SDK 和事件参考。
 
 ## 接入方式
 
-**说明**Qwen-Audio-3.0-ASR-Flash-Streaming/Fun-ASR-Realtime 模型支持 AOQ（AI over QUIC）、WebSocket 两种传输协议，开发者可以根据业务场景灵活选择。详细接入流程请参见 [Realtime API](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)。
+**说明**Fun-ASR-Realtime 模型支持 AOQ（AI over QUIC）、WebSocket 两种传输协议，开发者可以根据业务场景灵活选择。详细接入流程请参见 [Realtime API](raw/model-api-reference/realtime-api-user-guide/realtime-api-overview.md)。
 
 #### AOQ
 

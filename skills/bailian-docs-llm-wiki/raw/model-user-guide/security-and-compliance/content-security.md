@@ -313,11 +313,11 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
 
 1.  检查上传到知识库的文档内容，确认是否包含政治敏感、涉黄涉暴、违法不良、个人隐私数据或可能诱导违规的表述。
 2.  简化或改写应用的提示词，减少可能触发安全拦截的表述。
-3.  如问题仍未解决，收集完整报错信息（HTTP 状态码、错误码、错误消息），提交工单申请加白，具体流程见下方[内容加白申请流程](https://help.aliyun.com/zh/model-studio/content-security#h2-whitelist-apply)。
+3.  如问题仍未解决，收集完整报错信息（HTTP 状态码、错误码、错误消息），联系客户经理申请加白，具体流程见下方[内容加白申请流程](https://help.aliyun.com/zh/model-studio/content-security#h2-whitelist-apply)。
 
 ## 内容加白申请流程
 
-如果您的业务场景需要豁免特定内容的安全拦截，可通过提交工单申请内容加白。安全部门审核通过后，指定内容将被添加至豁免名单。
+如果您的业务场景需要豁免特定内容的安全拦截，可通过联系客户经理申请内容加白。安全部门审核通过后，指定内容将被添加至豁免名单。
 
 申请加白前，请准备以下信息：
 
@@ -328,7 +328,7 @@ curl -X POST https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation
 **申请步骤**：
 
 1.  收集上述完整报错信息及问题复现场景描述（包括知识库 ID、调用的模型名称、触发拦截的操作）。
-2.  提交工单，在工单中提供报错信息、使用场景及需要加白的具体内容。
+2.  联系客户经理，提供报错信息、使用场景及需要加白的具体内容。
 3.  等待安全部门完成审核，审核通过后加白处理生效。
 
 ## 计费说明

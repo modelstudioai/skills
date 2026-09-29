@@ -1,8 +1,6 @@
-# 实时语音合成Qwen-Audio-TTS/CosyVoice Java SDK
+# CosyVoice Java SDK
 
-通过DashScope Java SDK进行Qwen-Audio-TTS/CosyVoice语音合成。
-
-**用户指南：**关于模型介绍和选型建议请参见[语音合成](https://help.aliyun.com/zh/model-studio/tts-model)。
+通过DashScope Java SDK进行CosyVoice语音合成。
 
 ## 接口地址
 
@@ -20,21 +18,10 @@ SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
-**切换到新加坡地域**：
-
-```
-import com.alibaba.dashscope.utils.Constants;
-
-// 调用时请将"{WorkspaceId}"替换为真实的业务空间ID
-Constants.baseWebsocketApiUrl = "wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference";
-```
-
 **重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
 
 ## SpeechSynthesizer
 
@@ -69,9 +56,9 @@ public ByteBuffer call(String text)
 
 **说明**
 
-text
+`text`
 
-String
+`String`
 
 是
 
@@ -97,9 +84,9 @@ public void streamingCall(String text)
 
 **说明**
 
-text
+`text`
 
-String
+`String`
 
 是
 
@@ -129,8 +116,8 @@ public void streamingCancel()
 
 **重要****模型限制**：
 
--   华北2（北京）地域：Qwen-Audio-TTS 系列模型的所有模型都支持该功能；CosyVoice 系列模型仅 v2 及以上版本支持该功能。
--   新加坡地域：Qwen-Audio-TTS 系列模型的所有模型都支持该功能；CosyVoice 系列模型不支持该功能。
+-   华北2（北京）地域：CosyVoice 系列模型仅 v2 及以上版本支持该功能。
+-   新加坡地域：CosyVoice 系列模型不支持该功能。
 
 ### callAsFlowable() - 单向流式合成（响应式）
 
@@ -150,9 +137,9 @@ public Flowable<SpeechSynthesisResult> callAsFlowable(String text)
 
 **说明**
 
-text
+`text`
 
-String
+`String`
 
 是
 
@@ -178,9 +165,9 @@ public Flowable<SpeechSynthesisResult> streamingCallAsFlowable(Flowable<String> 
 
 **说明**
 
-textStream
+`textStream`
 
-Flowable<String>
+`Flowable<String>`
 
 是
 
@@ -206,17 +193,17 @@ public boolean getDuplexApi().close(int code, String reason)
 
 **说明**
 
-code
+`code`
 
-int
+`int`
 
 是
 
 关闭码。
 
-reason
+`reason`
 
-String
+`String`
 
 是
 
@@ -252,8 +239,8 @@ public long getFirstPackageDelay()
 
 ```
 SpeechSynthesisParam param = SpeechSynthesisParam.builder()
-    .model("qwen-audio-3.0-tts-flash") // 模型
-    .voice("longanhuan_v3.6") // 音色
+    .model("cosyvoice-v3-plus") // 模型
+    .voice("longanyang") // 音色
     .format(SpeechSynthesisAudioFormat.WAV_8000HZ_MONO_16BIT) // 音频编码格式、采样率
     .volume(50) // 音量，取值范围：[0, 100]
     .speechRate(1.0f) // 语速，取值范围：[0.5, 2]
@@ -273,7 +260,7 @@ SpeechSynthesisParam param = SpeechSynthesisParam.builder()
 
 `model(String)`
 
-String
+`String`
 
 是
 
@@ -281,27 +268,25 @@ String
 
 `voice(String)`
 
-String
+`String`
 
 是
 
-**voice**`string`**（必选）**
-
 语音合成所使用的音色。
 
--   **系统音色**：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
+-   **系统音色**：参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
 -   **复刻音色**：通过声音复刻功能定制
 -   **声音设计音色**：通过声音设计功能定制
 
 `format(SpeechSynthesisAudioFormat)`
 
-enum
+`enum`
 
 否
 
 音频编码格式及采样率。
 
-`cosyvoice-v1`不支持opus格式。
+**说明**cosyvoice-v1不支持opus格式。
 
 默认值：SpeechSynthesisAudioFormat.MP3\_22050HZ\_MONO\_256KBPS。
 
@@ -309,7 +294,7 @@ SpeechSynthesisAudioFormat包路径：`com.alibaba.dashscope.audio.ttsv2.SpeechS
 
 `volume(int)`
 
-int
+`int`
 
 否
 
@@ -321,7 +306,7 @@ int
 
 `speechRate(float)`
 
-float
+`float`
 
 否
 
@@ -333,7 +318,7 @@ float
 
 `pitchRate(float)`
 
-float
+`float`
 
 否
 
@@ -345,7 +330,7 @@ float
 
 `enableWordTimestamp(boolean)`
 
-boolean
+`boolean`
 
 否
 
@@ -353,11 +338,11 @@ boolean
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
 
 `seed(int)`
 
-int
+`int`
 
 否
 
@@ -367,22 +352,24 @@ int
 
 取值范围：\[0, 65535\]。
 
-cosyvoice-v1不支持该参数。
+**说明**cosyvoice-v1不支持该参数。
 
 SDK版本低于2.21.7时，`seed`需要通过扩展参数进行设置。
 
 `languageHints(List<String>)`
 
-List<String>
+`List<String>`
 
 否
 
 **重要**
 
 -   此参数为数组，但当前版本仅处理第一个元素，因此建议只传入一个值。
--   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见声音复刻API参考。
+-   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见[声音复刻API参考](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
 
-指定语音合成的目标语言，提升合成效果。cosyvoice-v1不支持该功能。
+指定语音合成的目标语言，提升合成效果。
+
+**说明**cosyvoice-v1不支持该功能。
 
 当数字、缩写、符号等朗读方式或者小语种合成效果不符合预期时使用，例如：
 
@@ -390,7 +377,7 @@ List<String>
 -   符号朗读不准确，“@”读成“艾特”而非“at”
 -   小语种合成效果差，合成不自然
 
-取值范围：
+取值范围
 
 -   zh：中文
 -   en：英语
@@ -411,7 +398,7 @@ List<String>
 
 `instruction(String)`
 
-String
+`String`
 
 否
 
@@ -421,13 +408,13 @@ String
 
 `hotFix(ParamHotFix)`
 
-ParamHotFix
+`ParamHotFix`
 
 否
 
 文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
 
-cosyvoice-v2、cosyvoice-v1不支持该功能。
+**说明**cosyvoice-v2、cosyvoice-v1不支持该功能。
 
 参数介绍：
 
@@ -448,8 +435,8 @@ paramHotFix.setPronunciation(pronunciationItems);
 paramHotFix.setReplace(replaceItems);
 
 SpeechSynthesisParam param = SpeechSynthesisParam.builder()
-                        .model("qwen-audio-3.0-tts-flash") // 模型
-                        .voice("longanhuan_v3.6") // 音色
+                        .model("cosyvoice-v3-plus") // 模型
+                        .voice("longanyang") // 音色
                         .hotFix(paramHotFix)
                         .build();
 ```
@@ -460,15 +447,15 @@ String, Object
 
 否
 
-设置[扩展参数](https://help.aliyun.com/zh/model-studio/cosyvoice-java-sdk#8135356d13pvn)。
+设置扩展参数。
 
 `parameters(Map<String, Object>)`
 
-Map
+`Map`
 
 否
 
-设置[扩展参数](https://help.aliyun.com/zh/model-studio/cosyvoice-java-sdk#8135356d13pvn)。
+设置扩展参数。
 
 ### 扩展参数
 
@@ -478,9 +465,9 @@ Map
 
 ```
 SpeechSynthesisParam param = SpeechSynthesisParam.builder()
-  .model("qwen-audio-3.0-tts-flash")
-  .voice("longanhuan_v3.6")
-  .parameter("enable_markdown_filter", true)
+  .model("cosyvoice-v3-plus")
+  .voice("longanyang")
+  .parameter("bit_rate", 32)
   .build();
 ```
 
@@ -494,7 +481,7 @@ SpeechSynthesisParam param = SpeechSynthesisParam.builder()
 
 `bit_rate`
 
-integer
+`integer`
 
 否
 
@@ -504,11 +491,11 @@ integer
 
 取值范围：\[6, 510\]。
 
-`cosyvoice-v1`模型不支持该参数。
+**说明**`cosyvoice-v1`模型不支持该参数。
 
 `enable_aigc_tag`
 
-boolean
+`boolean`
 
 否
 
@@ -516,11 +503,11 @@ boolean
 
 默认值：false。
 
-仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `aigc_propagator`
 
-String
+`String`
 
 否
 
@@ -528,11 +515,11 @@ String
 
 默认值：阿里云UID。
 
-仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `aigc_propagate_id`
 
-String
+`String`
 
 否
 
@@ -540,15 +527,15 @@ String
 
 默认值：本次语音合成请求Request ID。
 
-仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 `enable_markdown_filter`
 
-boolean
+`boolean`
 
 否
 
-仅cosyvoice-v3-flash复刻音色支持该功能。
+**说明**仅cosyvoice-v3-flash复刻音色支持该功能。
 
 是否启用 Markdown 过滤。启用该功能后，系统在合成语音前自动过滤输入文本中的 Markdown 标记符号，避免将其朗读为文字内容。
 
@@ -557,9 +544,7 @@ boolean
 取值范围：
 
 -   true：启用Markdown过滤
-    
 -   false：禁用Markdown过滤
-    
 
 ## ResultCallback
 
@@ -583,9 +568,9 @@ public void onEvent(SpeechSynthesisResult result)
 
 **说明**
 
-result
+`result`
 
-[SpeechSynthesisResult](https://help.aliyun.com/zh/model-studio/cosyvoice-java-sdk#h3-8k2m9p5r)
+[SpeechSynthesisResult](#h3-8k2m9p5r)
 
 是
 
@@ -619,9 +604,9 @@ public void onError(Exception e)
 
 **说明**
 
-e
+`e`
 
-Exception
+`Exception`
 
 是
 
@@ -659,7 +644,7 @@ public Sentence getTimestamp()
 public JsonObject getOutput()
 ```
 
-**返回值**：`com.google.gson.JsonObject`，合成事件的[输出信息](https://help.aliyun.com/zh/model-studio/cosyvoice-java-sdk#h4-output-info)，包含事件类型和文本内容。需要SDK版本 >= 2.22.0。
+**返回值**：`com.google.gson.JsonObject`，合成事件的[输出信息](#h4-output-info)，包含事件类型和文本内容。需要SDK版本 >= 2.22.0。
 
 ### 句子级别时间戳信息（`Sentence`）
 
@@ -693,7 +678,7 @@ public int getEndTime()
 public List<Word> getWords()
 ```
 
-**返回值**：[Word](https://help.aliyun.com/zh/model-studio/cosyvoice-java-sdk#h4-word-ts)的`List`集合，批量获取字级别时间戳信息，可能为空。
+**返回值**：[Word](#h4-word-ts)的`List`集合，批量获取字级别时间戳信息，可能为空。
 
 ### 字级别时间戳信息（`Word`）
 
@@ -737,7 +722,7 @@ public String getText()
 public List<Phoneme> getPhonemes()
 ```
 
-**返回值**：[Phoneme](https://help.aliyun.com/zh/model-studio/cosyvoice-java-sdk#h4-phoneme-ts)的`List`集合，批量获取音素级别时间戳信息，可能为空。
+**返回值**：[Phoneme](#h4-phoneme-ts)的`List`集合，批量获取音素级别时间戳信息，可能为空。
 
 ### 音素级别时间戳信息（`Phoneme`）
 
@@ -796,21 +781,21 @@ public int getTone()
 
 **说明**
 
-type
+`type`
 
-String
+`String`
 
 事件类型。取值：`sentence-begin`（句子开始，返回待合成的文本内容）、`sentence-synthesis`（标识音频数据块，表示当前正在合成音频）、`sentence-end`（句子结束，返回文本内容和字级别时间戳）。
 
-original\_text
+`original_text`
 
-String
+`String`
 
 当前句子的原始文本内容。在`sentence-begin`和`sentence-end`事件中返回。
 
-sentence
+`sentence`
 
-JsonObject
+`JsonObject`
 
 句子信息，包含句子编号（`index`）和字级别时间戳（`words`）。在`sentence-end`事件中包含完整的字级别时间戳信息。
 
@@ -824,7 +809,7 @@ SDK提供了语音合成的关键接口，支持以下几种调用方式：
 
 更多示例，请参见[GitHub](https://github.com/aliyun/alibabacloud-bailian-speech-demo)。
 
-### 非流式调用
+#### 非流式调用
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6892567871/CAEQURiBgIDHpsn4phkiIDQ0ZGE2OTk3NmY5NTRhNDVhZDQwNWE3ZGZiMzk4Yjk54709861_20241015153444.149.svg)
 
@@ -844,9 +829,9 @@ import java.nio.ByteBuffer;
 
 public class Main {
     // 模型
-    private static String model = "qwen-audio-3.0-tts-flash";
+    private static String model = "cosyvoice-v3-plus";
     // 音色
-    private static String voice = "longanhuan_v3.6";
+    private static String voice = "longanyang";
 
     public static void streamAudioDataToSpeaker() {
         // 请求参数
@@ -897,7 +882,7 @@ public class Main {
 }
 ```
 
-### 单向流式调用
+#### 单向流式调用
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6892567871/CAEQVRiBgMCfo..hrBkiIGEyMjNkZjVlMWZiYzRhZDU4ZjEyZjdjMmMzYjM1YzMz4709861_20241015153444.149.svg)
 
@@ -927,9 +912,9 @@ class TimeUtils {
 
 public class Main {
     // 模型
-    private static String model = "qwen-audio-3.0-tts-flash";
+    private static String model = "cosyvoice-v3-plus";
     // 音色
-    private static String voice = "longanhuan_v3.6";
+    private static String voice = "longanyang";
 
     public static void streamAudioDataToSpeaker() {
         CountDownLatch latch = new CountDownLatch(1);
@@ -1002,7 +987,7 @@ public class Main {
 }
 ```
 
-### 双向流式调用
+#### 双向流式调用
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6892567871/CAEQVRiBgICHxPGhrBkiIGE3ZTVmMzY0YzI3NzQxYTFiYWE2MmU2NTBhMDgzZGM14709861_20241015153444.149.svg)
 
@@ -1051,8 +1036,8 @@ public class Main {
             "可以听到接近同步的语音输出，", "极大地提升了交互体验，",
             "减少了用户等待时间。", "适用于调用大规模", "语言模型（LLM），以",
             "流式输入文本的方式", "进行语音合成的场景。"};
-    private static String model = "qwen-audio-3.0-tts-flash"; // 模型
-    private static String voice = "longanhuan_v3.6"; // 音色
+    private static String model = "cosyvoice-v3-plus"; // 模型
+    private static String voice = "longanyang"; // 音色
 
     public static void streamAudioDataToSpeaker() {
         // 配置回调函数
@@ -1152,8 +1137,8 @@ class TimeUtils {
 }
 
 public class Main {
-    private static String model = "qwen-audio-3.0-tts-flash"; // 模型
-    private static String voice = "longanhuan_v3.6"; // 音色
+    private static String model = "cosyvoice-v3-plus"; // 模型
+    private static String voice = "longanyang"; // 音色
 
     public static void streamAudioDataToSpeaker() throws NoApiKeyException {
         // 请求参数
@@ -1227,8 +1212,8 @@ public class Main {
             "可以听到接近同步的语音输出，", "极大地提升了交互体验，",
             "减少了用户等待时间。", "适用于调用大规模", "语言模型（LLM），以",
             "流式输入文本的方式", "进行语音合成的场景。"};
-    private static String model = "qwen-audio-3.0-tts-flash";
-    private static String voice = "longanhuan_v3.6";
+    private static String model = "cosyvoice-v3-plus";
+    private static String voice = "longanyang";
 
     public static void streamAudioDataToSpeaker() throws NoApiKeyException {
         // 模拟流式输入

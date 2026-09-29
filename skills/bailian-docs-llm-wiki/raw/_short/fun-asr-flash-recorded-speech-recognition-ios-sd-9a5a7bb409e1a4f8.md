@@ -403,10 +403,6 @@ JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参
 
 是否保存本地日志。若为`YES`，须在[连接与控制参数](#connection-parameters)通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### nui\_set\_params
 
 此接口用于独立设置或更新 `nls_config` 参数。如果所有参数都在`nui_file_trans_start`中一次性提供，则无需调用此方法。
@@ -451,10 +447,6 @@ JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参
   }
 }
 ```
-
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### nui\_file\_trans\_start
 
@@ -507,10 +499,6 @@ JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参
 
 可不关注，可填null
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### nui\_file\_trans\_query
 
 此非实时语音识别功能仅支持同步请求，无需关注此接口。
@@ -532,10 +520,6 @@ JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参
 `char*`
 
 待查询的任务ID。通过EVENT\_FILE\_TRANS\_UPLOADED获取。
-
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### nui\_file\_trans\_cancel
 
@@ -559,10 +543,6 @@ JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参
 
 待取消的任务ID。通过EVENT\_FILE\_TRANS\_UPLOADED获取。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### nui\_release
 
 释放SDK所有内部资源，并强制终止所有正在进行的任务。此方法调用后，SDK实例将变为不可用状态，如需再次使用，必须重新调用 `nui_initialize` 进行初始化。
@@ -571,9 +551,6 @@ JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参
 ```
 - (NuiResultCode) nui_release;
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### nui\_get\_version
 
@@ -635,7 +612,7 @@ JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参
 
 `int`
 
-错误码，在出现EVENT\_ASR\_ERROR事件时有效，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
+仅在出现 `EVENT_ASR_ERROR` 事件时有效。
 
 #### onFileTransLogTrackCallback：监听追踪日志
 

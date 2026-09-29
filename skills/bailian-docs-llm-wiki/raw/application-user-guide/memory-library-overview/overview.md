@@ -6,8 +6,8 @@
 
 **说明**记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式开始商业化计费。详见[计费说明](raw/application-user-guide/memory-library-overview/integration-overview/billing.md)。
 
--   [快速开始](raw/application-user-guide/memory-library-overview/memory/quickstart.md)：3 步体验记忆的写入、查看和检索
--   [核心概念](raw/application-user-guide/memory-library-overview/memory/concepts.md)：事实记忆、用户画像与工作原理
+-   [快速开始](raw/application-user-guide/memory-library-overview/overview/quickstart.md)：3 步体验记忆的写入、查看和检索
+-   [核心概念](raw/application-user-guide/memory-library-overview/overview/concepts.md)：事实记忆、用户画像与工作原理
 -   [创建记忆库](raw/application-user-guide/memory-library-overview/create-memory.md)：创建自定义记忆库并配置记忆规则
 -   [使用用户画像](raw/application-user-guide/memory-library-overview/create-memory/user-profile.md)：通过 API 创建画像模板并提取结构化属性
 -   [管理记忆](raw/application-user-guide/memory-library-overview/create-memory/manage-memory.md)：查看、检索调试、更新和删除记忆

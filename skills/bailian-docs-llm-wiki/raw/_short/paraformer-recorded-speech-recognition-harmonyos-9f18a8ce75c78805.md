@@ -316,8 +316,6 @@ JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参
 
 -   **返回值说明**
 
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### setParams
 
 此接口用于独立设置或更新 `nls_config` 参数。如果所有参数都在[startFileTranscriber](#startfiletranscriber)中一次性提供，则无需调用此方法。
@@ -343,8 +341,6 @@ public setParams(params: string): number
 [语音识别效果参数](#%E8%AF%AD%E9%9F%B3%E8%AF%86%E5%88%AB%E6%95%88%E6%9E%9C%E5%8F%82%E6%95%B0)中的`nls_config`参数，`nls_config`之外的参数不支持通过该方法进行设置。 示例： `{ "nls_config": { "model":"paraformer-v2", "disfluency_removal_enabled":false, "timestamp_alignment_enabled": false } }`
 
 -   **返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### startFileTranscriber
 
@@ -378,8 +374,6 @@ public startFileTranscriber(params: string, task_id: ArrayBuffer): number
 
 -   **返回值说明**
 
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### queryFileTranscriber
 
 此接口用于主动查询一个异步任务的当前状态和结果。调用成功后，结果将通过`onFileTransEventCallback`回调中的 `EVENT_FILE_TRANS_QUERY_RESULT` 事件返回。
@@ -405,8 +399,6 @@ public queryFileTranscriber(task_id: string): number
 待查询的任务ID（由 `startFileTranscriber` 写入缓冲区获得）。
 
 -   **返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### cancelFileTranscriber
 
@@ -434,8 +426,6 @@ public cancelFileTranscriber(task_id: string): number
 
 -   **返回值说明**
 
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### release
 
 释放 SDK 的所有内部资源。调用后，SDK 实例将不可用；如需再次使用，必须重新调用 [initializeFileTrans](#initializefiletrans) 进行初始化。
@@ -447,8 +437,6 @@ public release(): number
 ```
 
 -   **返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### GetVersion
 
@@ -497,7 +485,7 @@ onFileTransEventCallback: (event: Constants.NuiEvent, resultCode: number, finish
 
 `number`
 
-[错误码](https://help.aliyun.com/zh/isi/support/error-codes)，在出现`EVENT_ASR_ERROR`事件时有效。
+仅在出现 `EVENT_ASR_ERROR` 事件时有效。
 
 `finish`
 

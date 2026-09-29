@@ -300,7 +300,7 @@ Base64 编码的视频数据。当 `type` 为 `base64` 时必填。
 
 指定停止生成的文本序列。模型生成到该序列前会停止输出，且不包含该序列本身。
 
-**说明**命中后，响应的 `stop_reason` 仍为 `end_turn`，响应不会回填命中的序列。
+**说明**命中后，响应的 `stop_reason` 为 `stop_sequence`，并在响应的 `stop_sequence` 字段中回填命中的序列。
 
 **thinking** `object` （可选）
 

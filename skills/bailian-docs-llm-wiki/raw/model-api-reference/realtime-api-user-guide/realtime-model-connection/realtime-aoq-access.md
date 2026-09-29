@@ -160,7 +160,17 @@ Qwen-Audio-TTS、CosyVoice
 
 不支持开启
 
-Qwen-Audio-ASR-Flash-Streaming、Fun-ASR-Realtime
+Qwen-Audio-ASR-Streaming
+
+开启
+
+不支持开启
+
+不支持开启
+
+不支持开启
+
+Fun-ASR-Realtime
 
 开启
 
@@ -315,7 +325,13 @@ Qwen-Audio-TTS、CosyVoice
 
 [服务端事件](raw/_short/cosyvoice-server-events-388da422580d5c78.md)
 
-Qwen-Audio-ASR-Flash-Streaming、Fun-ASR-Realtime
+Qwen-Audio-ASR-Streaming
+
+[客户端事件](raw/_short/qwen-audio-asr-streaming-client-events-1bae8548d2be6bc5.md)
+
+[服务端事件](raw/_short/qwen-audio-asr-streaming-server-events-b134164fc4410c2a.md)
+
+Fun-ASR-Realtime
 
 [客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)
 

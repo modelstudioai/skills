@@ -1,14 +1,10 @@
-# 非实时语音合成Qwen-Audio-TTS/CosyVoice HTTP API参考
+# 非实时语音合成CosyVoice HTTP API参考
 
-本文介绍非实时语音合成Qwen-Audio-TTS/CosyVoice的HTTP调用方法，支持非流式和流式两种调用模式。
-
-**用户指南**：参见[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)。
+本文介绍非实时语音合成CosyVoice的HTTP调用方法，支持非流式和流式两种调用模式。
 
 **重要**本文描述的功能仅在华北2（北京）地域可用。
 
 **重要**阿里云百炼为华北2（北京）地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`。
-
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
 
 ## 接口地址
 
@@ -26,25 +22,25 @@
 
 **说明**
 
-Authorization
+**Authorization**
 
-string
+`string`
 
 是
 
 鉴权令牌，格式为`Bearer <your_api_key>`，使用时，将“`<your_api_key>`”替换为实际的API Key。
 
-Content-Type
+**Content-Type**
 
-string
+`string`
 
 是
 
 请求体的媒体类型，固定为`application/json`。
 
-X-DashScope-SSE
+**X-DashScope-SSE**
 
-string
+`string`
 
 否
 
@@ -52,22 +48,19 @@ string
 
 ## 请求体
 
-**model**`string`**（必选）**
+**model** `string`**（必选）**
 
 语音合成模型。
 
 取值范围：
 
--   qwen-audio-3.0-tts-plus
--   qwen-audio-3.1-tts-flash
--   qwen-audio-3.0-tts-flash
 -   cosyvoice-v3.5-plus
 -   cosyvoice-v3.5-flash
 -   cosyvoice-v3-plus
 -   cosyvoice-v3-flash
 -   cosyvoice-v2
 
-**input**`object`**（必选）**
+**input** `object`**（必选）**
 
 输入参数对象**。**
 
@@ -88,9 +81,9 @@ string
 
 取值范围：
 
--   系统音色：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
--   声音复刻音色：如何创建音色请参见[CosyVoice声音复刻/设计API](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)
--   声音设计音色：如何创建音色请参见[CosyVoice声音复刻/设计API](https://help.aliyun.com/zh/model-studio/cosyvoice-clone-design-api)
+-   系统音色：参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
+-   声音复刻音色：如何创建音色请参见[声音复刻HTTP API参考](raw/_short/voice-clone-design-http-api-8f39943e5a676aae.md)
+-   声音设计音色：如何创建音色请参见[声音设计API参考](raw/model-api-reference/audio-api-references/speech-synthesis-api-reference/voice-design-api-references.md)
 
 **format** `string`（可选）
 
@@ -157,7 +150,7 @@ string
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
 
 **seed** `integer`（可选）
 
@@ -172,7 +165,7 @@ string
 **重要**
 
 -   此参数为数组，但当前版本仅处理第一个元素，因此建议只传入一个值。
--   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见声音复刻API参考。
+-   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见[声音复刻API参考](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
 
 指定语音合成的目标语言，提升合成效果。
 
@@ -182,7 +175,7 @@ string
 -   符号朗读不准确，“@”读成“艾特”而非“at”
 -   小语种合成效果差，合成不自然
 
-取值范围：
+取值范围
 
 -   zh：中文
 -   en：英语
@@ -213,7 +206,7 @@ string
 
 默认值：false。
 
-仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 **aigc\_propagator** `string`（可选）
 
@@ -221,7 +214,7 @@ string
 
 默认值：阿里云UID。
 
-仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 **aigc\_propagate\_id** `string`（可选）
 
@@ -229,13 +222,13 @@ string
 
 默认值：本次语音合成请求Request ID。
 
-仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 **hot\_fix** `object`（可选）
 
 文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
 
-cosyvoice-v2不支持该功能。
+**说明**cosyvoice-v2不支持该功能。
 
 参数介绍：
 
@@ -257,7 +250,7 @@ cosyvoice-v2不支持该功能。
 
 **enable\_markdown\_filter** `boolean`（可选）
 
-**重要**仅cosyvoice-v3-flash复刻音色支持该功能。
+**说明**仅cosyvoice-v3-flash复刻音色支持该功能。
 
 是否启用 Markdown 过滤。启用该功能后，系统在合成语音前自动过滤输入文本中的 Markdown 标记符号，避免将其朗读为文字内容。
 
@@ -275,10 +268,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "qwen-audio-3.0-tts-flash",
+    "model": "cosyvoice-v3-plus",
     "input": {
       "text": "我家的后面有一个很大的花园。",
-      "voice": "longanhuan_v3.6",
+      "voice": "longanyang",
       "format": "wav",
       "sample_rate": 24000
     }
@@ -293,10 +286,10 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -H "Content-Type: application/json" \
 -H "X-DashScope-SSE: enable" \
 -d '{
-    "model": "qwen-audio-3.0-tts-flash",
+    "model": "cosyvoice-v3-plus",
     "input": {
       "text": "我家的后面有一个很大的花园。",
-      "voice": "longanhuan_v3.6",
+      "voice": "longanyang",
       "format": "wav",
       "sample_rate": 24000
     }
@@ -305,17 +298,17 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 
 ## 返回体
 
-**request\_id**`string`
+**request\_id** `string`
 
 本次调用的唯一标识符。
 
-**output**`object`
+**output** `object`
 
 模型返回的数据。
 
 属性
 
-**finish\_reason**`string`
+**finish\_reason** `string`
 
 任务停止原因，自然停止时为`stop`。
 
@@ -324,7 +317,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -   null：语音合成中
 -   stop：语音合成结束
 
-**type**`string`
+**type** `string`
 
 子事件类型。仅流式合成时返回该值。
 
@@ -340,69 +333,69 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
 -   sentence-end：标识句子结束，返回句子文本内容和累计的计费字符数
     
 
-**original\_text**`string`
+**original\_text** `string`
 
 对用户输入文本进行分句后的句内容。最后一个句子可能没有此字段。
 
-**sentence**`object`
+**sentence** `object`
 
 句子信息。
 
 属性
 
-**index**`integer`
+**index** `integer`
 
 句子的编号，从0开始。
 
-**words**`array`
+**words** `array`
 
 每句话对应的字的信息。
 
 属性
 
-**text**`string`
+**text** `string`
 
 字。
 
-**begin\_index**`integer`
+**begin\_index** `integer`
 
 字在句子中的开始位置索引，从 0 开始。
 
-**end\_index**`integer`
+**end\_index** `integer`
 
 字在句子中的结束位置索引，从 1 开始。
 
-**begin\_time**`integer`
+**begin\_time** `integer`
 
 字对应音频的开始时间戳，单位为毫秒。
 
-**end\_time**`integer`
+**end\_time** `integer`
 
 字对应音频的结束时间戳，单位为毫秒。
 
-**audio**`object`
+**audio** `object`
 
 合成的音频数据。
 
 属性
 
-**data**`string`
+**data** `string`
 
 流式合成时输出Base64格式音频数据。非流式合成时为空。
 
-**url**`string`
+**url** `string`
 
 模型输出的完整音频文件的URL，有效期24小时。
 
-**id**`string`
+**id** `string`
 
 模型输出的音频信息对应的ID。
 
-**expires\_at**`integer`
+**expires\_at** `integer`
 
 `url` 过期时间戳。
 
-**usage**`object`
+**usage** `object`
 
 本次请求的字符用量。
 
@@ -470,7 +463,7 @@ curl -X POST https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/
             "data": "",
             "url": "http://dashscope-result-bj.oss-cn-beijing.aliyuncs.com/pre/cosyvoice-v3-flash/20260304/xxxxxxxx/8ac1cd04-06af-9a63-b031-xxxxxxxxxxxx.wav?xxxxxxx",
             "id": "audio_8ac1cd04-06af-9a63-b031-xxxxxxxxxxxx",
-            "expires_at": 1772698611,
+            "expires_at": 1772698611
         }
     },
     "usage": {

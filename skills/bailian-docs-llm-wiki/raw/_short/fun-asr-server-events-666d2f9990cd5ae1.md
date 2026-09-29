@@ -1,12 +1,10 @@
-# 实时语音识别（Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime）服务端事件
+# 实时语音识别（Fun-ASR-Realtime）服务端事件
 
-本文介绍 Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime 实时语音识别服务通过 WebSocket 推送给客户端的服务端事件，包括 task-started、result-generated、task-finished、task-failed 四类事件的数据结构与字段含义。
-
-**事件交互流程**：如需了解事件交互时序，请参见[WebSocket API](raw/_short/fun-asr-realtime-websocket-api-d80484c92992191d.md)。
+本文介绍 Fun-ASR-Realtime 实时语音识别服务通过 WebSocket 推送给客户端的服务端事件，包括 task-started、result-generated、task-finished、task-failed 四类事件的数据结构与字段含义。
 
 ## task-started
 
-**说明**：任务启动成功，客户端可开始发送音频数据。
+任务启动成功，客户端可开始发送音频数据。
 
 **header**`object`
 
@@ -41,7 +39,7 @@
 
 ## result-generated
 
-**说明**：识别结果，包含中间结果（sentence\_end=false）和最终结果（sentence\_end=true）。其中，新句子的首个中间结果包含 sentence\_begin=true。
+识别结果，包含中间结果（sentence\_end=false）和最终结果（sentence\_end=true）。其中，新句子的首个中间结果包含 sentence\_begin=true。
 
 **header**`object`
 
@@ -60,20 +58,6 @@
 属性
 
 **output**`object`
-
-属性
-
-**usage**`object`
-
-当`payload.output.sentence.sentence_end`为`false`（当前句子未结束）时，`usage`为`null`。
-
-当`payload.output.sentence.sentence_end`为`true`（当前句子已结束）时，`usage.duration`为当前任务计费时长。
-
-属性
-
-**duration**`integer`
-
-任务计费时长（s）。
 
 属性
 
@@ -130,6 +114,18 @@
 **punctuation**`string`
 
 标点符号。
+
+**usage**`object`
+
+当`payload.output.sentence.sentence_end`为`false`（当前句子未结束）时，`usage`为`null`。
+
+当`payload.output.sentence.sentence_end`为`true`（当前句子已结束）时，`usage.duration`为当前任务计费时长。
+
+属性
+
+**duration**`integer`
+
+任务计费时长（s）。
 
 **句子开始结果：**
 ```
@@ -209,7 +205,7 @@
 
 ## task-finished
 
-**说明**：任务正常结束，可关闭连接或复用连接。
+任务正常结束，可关闭连接或复用连接。
 
 **header**`object`
 
@@ -247,7 +243,7 @@
 
 ## task-failed
 
-**说明**：任务失败，连接会被关闭，无法复用。
+任务失败，连接会被关闭，无法复用。
 
 **header**`object`
 

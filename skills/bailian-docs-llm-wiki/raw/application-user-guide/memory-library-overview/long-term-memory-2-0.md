@@ -173,4 +173,4 @@ curl -X POST https://dashscope.aliyuncs.com/api/v2/apps/memory/memory_nodes/sear
 
 全部接口总计不超过 3000 QPM（阿里云账号级别），事实记忆 add 接口 120 QPM，search 接口 300 QPM。详见[限流说明](raw/application-user-guide/memory-library-overview/integration-overview/limits.md)。
 
-**重要**按接口分页的参数、返回结果和 Python 示例，参见[长期记忆 API 参考](raw/application-api-reference/long-term-memory-new/api-overview.md)；端到端上手流程参见[快速开始](raw/application-user-guide/memory-library-overview/memory/quickstart.md)，功能与控制台操作参见[记忆库](raw/application-user-guide/memory-library-overview/memory-library.md)。
+**重要**按接口分页的参数、返回结果和 Python 示例，参见[长期记忆 API 参考](raw/application-api-reference/long-term-memory-new/api-overview.md)；端到端上手流程参见[快速开始](raw/application-user-guide/memory-library-overview/overview/quickstart.md)，功能与控制台操作参见[记忆库](raw/application-user-guide/memory-library-overview/memory-library.md)。

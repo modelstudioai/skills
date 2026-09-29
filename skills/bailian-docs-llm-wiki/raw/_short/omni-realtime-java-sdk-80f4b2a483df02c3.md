@@ -56,31 +56,6 @@ String
 -   北京地域：wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime
     
 
-调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
-
-**参数**
-
-**类型**
-
-**说明**
-
-model
-
-String
-
-Qwen-Omni 实时模型的名称。参见[模型列表](raw/model-user-guide/get-started-with-models/models.md)。
-
-url
-
-String
-
-调用地址：
-
--   新加坡地域：wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime
-    
--   北京地域：wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime
-    
-
 调用时请将`{WorkspaceId}`替换为真实的[业务空间ID](https://help.aliyun.com/zh/model-studio/obtain-the-app-id-and-workspace-id#732535cfc959h)。
 
 **重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，**能够为推理请求提供卓越的性能和更高的稳定性**，建议迁移至新域名：
@@ -248,7 +223,7 @@ List<Map<String, Object>>
 
 工具定义列表。启用后，模型可自主判断是否需要调用外部工具来回应用户的问题。命中 Function Calling 时，模型不生成音频，仅返回工具调用参数。
 
-Qwen3.8-Omni-Flash-Realtime 可在同一会话中配置 Function Calling 和 MCP 工具。MCP 配置字段见[客户端事件](https://help.aliyun.com/zh/model-studio/client-events#qwen38-client)，调用限制见[MCP 调用限制](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-flow)。`tools` 与 `enable_search` 不可同时开启，该限制也适用于 MCP。
+Qwen3.8-Omni-Flash-Realtime 可在同一会话中配置 Function Calling 和 MCP 工具。MCP 配置字段见[客户端事件](https://help.aliyun.com/zh/model-studio/client-events#session-tools-mcp)，调用限制见[MCP 调用限制](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-limits)。`tools` 与 `enable_search` 不可同时开启，该限制也适用于 MCP。
 
 以下字段描述 Function Calling 工具。每个工具为一个 Map，包含以下字段：
 
@@ -492,7 +467,7 @@ public void commit()
 -   打开"turn\_detection"，客户端不需要发送此事件，服务器会自动提交音频缓冲区。
 -   关闭"turn\_detection"，客户端必须提交音频缓冲区才能创建用户消息项。
 
-**注意**⚠️：
+**注意**：
 
 1.  如果 input\_audio\_transcription为会话配置了音频转录，系统会转录音频。
 2.  提交输入音频缓冲区不会从模型创建响应。
@@ -563,13 +538,15 @@ public void createItem(JsonObject item)
 
 无
 
-向服务端发送 `conversation.item.create` 事件。在工具调用场景中，用于将工具执行结果回传给服务端。
+向服务端发送 `conversation.item.create` 事件。
 
-item 参数为 JsonObject，需包含以下字段：
+回传 Function Calling 工具结果时，`item` 为 JsonObject，包含以下字段：
 
--   `type`：固定为 "function\_call\_output"。
+-   `type`：固定为 `function_call_output`。
 -   `call_id`：对应 `response.function_call_arguments.done` 事件中的 call\_id。
 -   `output`：工具执行结果的字符串。
+
+MCP 审批也使用此事件，但 `item.type` 为 `mcp_approval_response`；字段见[客户端事件中的 MCP 审批回复](https://help.aliyun.com/zh/model-studio/client-events#qwen38-mcp-approval-response)。
 
 ```
 public void close()
@@ -643,17 +620,17 @@ reason：关闭websocket的关闭信息。
 
 ## 常见问题
 
-#### Q：输入的音频和图片要如何对齐？
+### Q：输入的音频和图片要如何对齐？
 
 omni-realtime模型的输入将音频作为时间轴，图片会按照发送的时间，插入到音频中。您可以在音频时间轴的任意时刻添加图片。
 
 在实时交互场景下，您可以在任意时刻打开或关闭视频输入。
 
-#### Q：输入图片和音频的推荐频率？
+### Q：输入图片和音频的推荐频率？
 
 在实时交互场景，推荐按照1 fps或2 fps的帧率发送图片，按照100ms一包的音频发送音频。
 
-#### Q：turn\_detection开关两种模式的区别？
+### Q：turn\_detection开关两种模式的区别？
 
 turn\_detection打开后支持server\_vad和semantic\_vad两种模式：
 
@@ -670,6 +647,6 @@ turn\_detection打开后支持server\_vad和semantic\_vad两种模式：
 
 注意，在打开"turn\_detection"时，依旧可以通过commit和create\_response主动触发回复，通过response\_cancel主动打断。
 
-#### Q：input\_audio\_transcription为何要选择其他模型？
+### Q：input\_audio\_transcription为何要选择其他模型？
 
 omni是端到端的多模态大模型，文本输出是对输入的回答，因此不会直接产生输入音频的转录。需要接入其他ASR模型转录。目前由内置模型决定，不支持修改。

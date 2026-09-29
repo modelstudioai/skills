@@ -151,4 +151,4 @@ RPM（每分钟请求数）
 ## 调用方式
 
 -   [实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)
--   [WebSocket API](raw/_short/fun-asr-realtime-websocket-api-d80484c92992191d.md)
+-   [WebSocket API](raw/_short/qwen-audio-asr-streaming-websocket-api-af0499578aae1ad5.md)

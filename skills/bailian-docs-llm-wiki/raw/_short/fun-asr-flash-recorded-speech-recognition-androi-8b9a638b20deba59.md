@@ -410,10 +410,6 @@ JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参
 
 是否保存本地日志。若为`true`，须在[连接与控制参数](#connection-parameters)中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### setParams
 
 此接口用于独立设置或更新 `nls_config` 参数。如果所有参数都在[startFileTranscriber](#startfiletranscriber)中一次性提供，则无需调用此方法。
@@ -458,10 +454,6 @@ public synchronized int setParams(String params);
   }
 }
 ```
-
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### startFileTranscriber
 
@@ -514,17 +506,9 @@ public synchronized int startFileTranscriber(String params, byte[ ] task_id)
 
 可不关注，可填null
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### queryFileTranscriber
 
 此非实时语音识别功能仅支持同步请求，无需关注此接口。
-
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### cancelFileTranscriber
 
@@ -548,10 +532,6 @@ public synchronized int cancelFileTranscriber(String task_id)
 
 待取消的任务ID。通过EVENT\_FILE\_TRANS\_UPLOADED获取。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### release
 
 释放SDK所有内部资源。此方法调用后，SDK实例将变为不可用状态，如需再次使用，必须重新调用[initialize](#initialize)进行初始化。
@@ -560,9 +540,6 @@ public synchronized int cancelFileTranscriber(String task_id)
 ```
 public synchronized int release();
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### GetVersion
 
@@ -602,7 +579,7 @@ void onFileTransEventCallback(NuiEvent event, final int resultCode, final int ar
 
 `int`
 
-[错误码](https://help.aliyun.com/zh/isi/support/error-codes)，在出现EVENT\_ASR\_ERROR事件时有效。
+仅在出现 `EVENT_ASR_ERROR` 事件时有效。
 
 `asrResult`
 

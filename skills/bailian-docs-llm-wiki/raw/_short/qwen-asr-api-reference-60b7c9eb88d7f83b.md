@@ -2,8 +2,6 @@
 
 本文介绍 Qwen-ASR 模型的输入与输出参数。可通过OpenAI 兼容或DashScope协议调用 API。
 
-**用户指南：**模型介绍和选型请参见[非实时语音识别](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)。
-
 ## 模型接入方式
 
 不同[模型](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide)支持的接入方式不同，请根据下表选择正确的方式进行集成。
@@ -89,7 +87,7 @@ User Message`object`**（必选）**
 
 **input\_audio**`string`**（必选）**
 
-待识别音频。具体用法请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。
+待识别音频。具体用法请参见[调用示例](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#qwen-asr-openai-examples)。
 
 千问3-ASR-Flash模型在OpenAI兼容模式下支持两种输入形式：Base64编码的文件和公网可访问的待识别文件URL。
 
@@ -191,6 +189,8 @@ User Message`object`**（必选）**
 -   `false`：不包含。
 
 > 流式输出时，Token 消耗信息仅可出现在响应的最后一个数据块。
+
+### 调用示例
 
 #### 输入内容：音频文件URL
 
@@ -840,7 +840,7 @@ User Message`object`**（必选）**
 
 **audio**`string`**（必选）**
 
-待识别音频。具体用法请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。
+待识别音频。具体用法请参见[调用示例](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#qwen-asr-sync-examples)。
 
 千问3-ASR-Flash模型在DashScope调用方式下支持三种输入形式：Base64编码的文件、本地文件绝对路径、公网可访问的待识别文件URL。
 
@@ -915,7 +915,11 @@ User Message`object`**（必选）**
 -   true：开启；
 -   false：关闭。
 
-以下示例为音频 URL 识别；本地音频文件识别示例请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。
+### 调用示例
+
+Qwen3-ASR-Flash 支持最长 5 分钟录音，输入支持公网音频文件 URL 或本地文件上传，可流式返回识别结果。
+
+#### 输入内容：音频文件URL
 
 Code 1
 
@@ -1027,6 +1031,432 @@ response = dashscope.MultiModalConversation.call(
     }
 )
 print(response)
+```
+
+#### 输入内容：Base64编码的音频文件
+
+可输入Base64编码数据（[Data URL](https://www.rfc-editor.org/rfc/rfc2397)），格式为：`data:<mediatype>;base64,<data>`。
+
+-   `<mediatype>`：MIME类型
+    
+    因音频格式而异，例如：
+    
+    -   WAV：`audio/wav`
+    -   MP3：`audio/mpeg`
+-   `<data>`：音频转成的Base64编码的字符串
+    
+    Base64编码会增大体积，请控制原文件大小，确保编码后仍符合输入音频大小限制（10MB）
+    
+-   示例：`data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//PAxABQ/BXRbMPe4IQAhl9`
+    
+    点击查看示例代码
+    
+    python
+    
+    ```
+    import base64, pathlib
+    
+    # input.mp3为待识别的本地音频文件，请替换为自己的音频文件路径，确保其符合音频要求
+    file_path = pathlib.Path("{YOUR_AUDIO_FILE}")
+    base64_str = base64.b64encode(file_path.read_bytes()).decode()
+    data_uri = f"data:audio/mpeg;base64,{base64_str}"
+    ```
+    
+    java
+    
+    ```
+    import java.nio.file.*;
+    import java.util.Base64;
+    
+    public class Main {
+        /**
+         * filePath为待识别的本地音频文件，请替换为自己的音频文件路径，确保其符合音频要求
+         */
+        public static String toDataUrl(String filePath) throws Exception {
+            byte[] bytes = Files.readAllBytes(Paths.get(filePath));
+            String encoded = Base64.getEncoder().encodeToString(bytes);
+            return "data:audio/mpeg;base64," + encoded;
+        }
+    
+        // 使用示例
+        public static void main(String[] args) throws Exception {
+            System.out.println(toDataUrl("{YOUR_AUDIO_FILE}"));
+        }
+    }
+    ```
+    
+
+Python SDK
+
+```
+import base64
+import dashscope
+import os
+import pathlib
+
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+
+# 请替换为实际的音频文件路径
+file_path = "{YOUR_AUDIO_FILE}"
+# 请替换为实际的音频文件MIME类型
+audio_mime_type = "audio/mpeg"
+
+file_path_obj = pathlib.Path(file_path)
+if not file_path_obj.exists():
+    raise FileNotFoundError(f"音频文件不存在: {file_path}")
+
+base64_str = base64.b64encode(file_path_obj.read_bytes()).decode()
+data_uri = f"data:{audio_mime_type};base64,{base64_str}"
+
+messages = [
+    {"role": "user", "content": [{"audio": data_uri}]}
+]
+response = dashscope.MultiModalConversation.call(
+    # 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    model="qwen3-asr-flash",
+    messages=messages,
+    result_format="message",
+    asr_options={
+        # "language": "zh", # 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率
+        "enable_itn":False
+    }
+)
+print(response)
+```
+
+Java SDK
+
+```
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
+import com.alibaba.dashscope.common.MultiModalMessage;
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
+import com.alibaba.dashscope.utils.JsonUtils;
+
+public class Main {
+    // 请替换为实际的音频文件路径
+    private static final String AUDIO_FILE = "{YOUR_AUDIO_FILE}";
+    // 请替换为实际的音频文件MIME类型
+    private static final String AUDIO_MIME_TYPE = "audio/mpeg";
+
+    public static void simpleMultiModalConversationCall()
+            throws ApiException, NoApiKeyException, UploadFileException, IOException {
+        MultiModalConversation conv = new MultiModalConversation();
+        MultiModalMessage userMessage = MultiModalMessage.builder()
+                .role(Role.USER.getValue())
+                .content(Arrays.asList(
+                        Collections.singletonMap("audio", toDataUrl())))
+                .build();
+
+        Map<String, Object> asrOptions = new HashMap<>();
+        asrOptions.put("enable_itn", false);
+        // asrOptions.put("language", "zh"); // 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率
+        MultiModalConversationParam param = MultiModalConversationParam.builder()
+                // 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
+                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+                .model("qwen3-asr-flash")
+                .message(userMessage)
+                .parameter("asr_options", asrOptions)
+                .build();
+        MultiModalConversationResult result = conv.call(param);
+        System.out.println(JsonUtils.toJson(result));
+    }
+
+    public static void main(String[] args) {
+        try {
+            // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+            Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
+            simpleMultiModalConversationCall();
+        } catch (ApiException | NoApiKeyException | UploadFileException | IOException e) {
+            System.out.println(e.getMessage());
+        }
+        System.exit(0);
+    }
+
+    // 生成 data URI
+    public static String toDataUrl() throws IOException {
+        byte[] bytes = Files.readAllBytes(Paths.get(AUDIO_FILE));
+        String encoded = Base64.getEncoder().encodeToString(bytes);
+        return "data:" + AUDIO_MIME_TYPE + ";base64," + encoded;
+    }
+}
+```
+
+#### 输入内容：本地音频文件绝对路径
+
+使用 DashScope SDK 处理本地音频文件时需传入文件路径。请参考下表，结合调用方式与操作系统创建对应路径。
+
+**系统**
+
+**SDK**
+
+**传入的文件路径**
+
+**示例**
+
+Linux或macOS系统
+
+Python SDK
+
+file://{文件的绝对路径}
+
+file:///home/images/test.png
+
+Java SDK
+
+Windows系统
+
+Python SDK
+
+file://{文件的绝对路径}
+
+file://D:/images/test.png
+
+Java SDK
+
+file:///{文件的绝对路径}
+
+file:///D:/images/test.png
+
+**重要**本地文件调用上限 100 QPS，不支持扩容，不适合生产环境、高并发或压测场景；如需更高并发，请将文件上传至 OSS 并通过 URL 方式调用。
+
+Python SDK
+
+```
+import os
+import dashscope
+
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+
+# 请用您的本地音频的绝对路径替换 ABSOLUTE_PATH/{YOUR_AUDIO_FILE}
+audio_file_path = "file://ABSOLUTE_PATH/{YOUR_AUDIO_FILE}"
+
+messages = [
+    {"role": "user", "content": [{"audio": audio_file_path}]}
+]
+response = dashscope.MultiModalConversation.call(
+    # 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    model="qwen3-asr-flash",
+    messages=messages,
+    result_format="message",
+    asr_options={
+        # "language": "zh", # 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率
+        "enable_itn":False
+    }
+)
+print(response)
+```
+
+Java SDK
+
+```
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
+import com.alibaba.dashscope.common.MultiModalMessage;
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
+import com.alibaba.dashscope.utils.JsonUtils;
+
+public class Main {
+    public static void simpleMultiModalConversationCall()
+            throws ApiException, NoApiKeyException, UploadFileException {
+        // 请用您本地文件的绝对路径替换掉ABSOLUTE_PATH/{YOUR_AUDIO_FILE}
+        String localFilePath = "file://ABSOLUTE_PATH/{YOUR_AUDIO_FILE}";
+        MultiModalConversation conv = new MultiModalConversation();
+        MultiModalMessage userMessage = MultiModalMessage.builder()
+                .role(Role.USER.getValue())
+                .content(Arrays.asList(
+                        Collections.singletonMap("audio", localFilePath)))
+                .build();
+
+        Map<String, Object> asrOptions = new HashMap<>();
+        asrOptions.put("enable_itn", false);
+        // asrOptions.put("language", "zh"); // 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率
+        MultiModalConversationParam param = MultiModalConversationParam.builder()
+                // 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
+                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+                .model("qwen3-asr-flash")
+                .message(userMessage)
+                .parameter("asr_options", asrOptions)
+                .build();
+        MultiModalConversationResult result = conv.call(param);
+        System.out.println(JsonUtils.toJson(result));
+    }
+    public static void main(String[] args) {
+        try {
+            // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+            Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
+            simpleMultiModalConversationCall();
+        } catch (ApiException | NoApiKeyException | UploadFileException e) {
+            System.out.println(e.getMessage());
+        }
+        System.exit(0);
+    }
+}
+```
+
+#### 流式输出
+
+模型逐步生成中间结果，最终结果由其拼接而成。非流式调用需等待全部结果生成后一次性返回；流式调用边生成边返回，可显著降低首字延迟。根据调用方式选择对应的流式参数：
+
+-   DashScope Python SDK方式：设置`stream`参数为true。
+-   DashScope Java SDK方式：需要通过`streamCall`接口调用。
+-   DashScope HTTP方式：需要在Header中指定`X-DashScope-SSE`为`enable`。
+
+#### Python SDK
+
+```
+import os
+import dashscope
+
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+
+messages = [
+    {"role": "user", "content": [{"audio": "{YOUR_AUDIO_URL}"}]}
+]
+response = dashscope.MultiModalConversation.call(
+    # 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    model="qwen3-asr-flash",
+    messages=messages,
+    result_format="message",
+    asr_options={
+        # "language": "zh", # 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率
+        "enable_itn":False
+    },
+    stream=True
+)
+
+for response in response:
+    try:
+        print(response["output"]["choices"][0]["message"].content[0]["text"])
+    except Exception as e:
+        print(f"解析响应失败：{e}")
+```
+
+#### Java SDK
+
+```
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
+import com.alibaba.dashscope.common.MultiModalMessage;
+import com.alibaba.dashscope.common.Role;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
+import io.reactivex.Flowable;
+
+public class Main {
+    public static void simpleMultiModalConversationCall()
+            throws ApiException, NoApiKeyException, UploadFileException {
+        MultiModalConversation conv = new MultiModalConversation();
+        MultiModalMessage userMessage = MultiModalMessage.builder()
+                .role(Role.USER.getValue())
+                .content(Arrays.asList(
+                        Collections.singletonMap("audio", "{YOUR_AUDIO_URL}")))
+                .build();
+
+        Map<String, Object> asrOptions = new HashMap<>();
+        asrOptions.put("enable_itn", false);
+        // asrOptions.put("language", "zh"); // 可选，若已知音频的语种，可通过该参数指定待识别语种，以提升识别准确率
+        MultiModalConversationParam param = MultiModalConversationParam.builder()
+                // 新加坡/美国地域和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
+                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+                .model("qwen3-asr-flash")
+                .message(userMessage)
+                .parameter("asr_options", asrOptions)
+                .build();
+        Flowable<MultiModalConversationResult> resultFlowable = conv.streamCall(param);
+        resultFlowable.blockingForEach(item -> {
+            try {
+                System.out.println(item.getOutput().getChoices().get(0).getMessage().getContent().get(0).get("text"));
+            } catch (Exception e){
+                System.out.println("解析响应失败：" + e.getMessage());
+                System.exit(1);
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+        try {
+            // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+            Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
+            simpleMultiModalConversationCall();
+        } catch (ApiException | NoApiKeyException | UploadFileException e) {
+            System.out.println(e.getMessage());
+        }
+        System.exit(0);
+    }
+}
+```
+
+#### cURL
+
+以下为华北2（北京）地域的配置，调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)，各地域的配置不同。
+
+```
+curl -X POST "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation" \
+-H "Authorization: Bearer $DASHSCOPE_API_KEY" \
+-H "Content-Type: application/json" \
+-H "X-DashScope-SSE: enable" \
+-d '{
+    "model": "qwen3-asr-flash",
+    "input": {
+        "messages": [
+            {
+                "content": [
+                    {
+                        "audio": "{YOUR_AUDIO_URL}"
+                    }
+                ],
+                "role": "user"
+            }
+        ]
+    },
+    "parameters": {
+        "incremental_output": true,
+        "asr_options": {
+            "enable_itn": false
+        }
+    }
+}'
 ```
 
 ### 响应参数
@@ -1217,7 +1647,7 @@ print(response)
 
 您可以根据集成环境选择使用SDK或直接调用RESTful API。
 
--   使用 SDK（示例代码请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)，请求参数请参见[提交任务](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#88657039c4x0g)的请求参数[请求参数](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#1a2369eebaueh)，返回结果请参见[异步调用识别结果说明](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#2c27ad3e80p4y)）
+-   使用 SDK（示例代码请参见[调用示例](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#qwen-asr-async-examples)，请求参数请参见[提交任务](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#88657039c4x0g)的请求参数[请求参数](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#1a2369eebaueh)，返回结果请参见[异步调用识别结果说明](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#2c27ad3e80p4y)）
     
     SDK封装了底层的API调用细节，提供了更便捷的编程体验。
     
@@ -1229,6 +1659,353 @@ print(response)
     
     1.  [提交任务](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#88657039c4x0g)，如果请求成功，响应参数[响应参数](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#eca6c7d3f35hn)中将包含一个 `task_id`。
     2.  使用上一步获取的 `task_id`，[获取任务执行结果](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#f9109f6ea3di2)。
+
+### 完整示例
+
+#### HTTP
+
+Java
+
+```
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+import okhttp3.*;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+public class Main {
+    // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    private static final String API_URL_SUBMIT = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription";
+    // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    private static final String API_URL_QUERY = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/";
+    private static final Gson gson = new Gson();
+
+    public static void main(String[] args) {
+        // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+        // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：String apiKey = "sk-xxx"
+        String apiKey = System.getenv("DASHSCOPE_API_KEY");
+
+        OkHttpClient client = new OkHttpClient();
+
+        // 1. 提交任务
+        String payloadJson = """
+                {
+                    "model": "qwen3-asr-flash-filetrans",
+                    "input": {
+                        "file_url": "{YOUR_AUDIO_URL}"
+                    },
+                    "parameters": {
+                        "channel_id": [0],
+                        "enable_itn": false,
+                        "enable_words": true
+                    }
+                }
+                """;
+
+        RequestBody body = RequestBody.create(payloadJson, MediaType.get("application/json; charset=utf-8"));
+        Request submitRequest = new Request.Builder()
+                .url(API_URL_SUBMIT)
+                .addHeader("Authorization", "Bearer " + apiKey)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("X-DashScope-Async", "enable")
+                .post(body)
+                .build();
+
+        String taskId = null;
+
+        try (Response response = client.newCall(submitRequest).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                String respBody = response.body().string();
+                ApiResponse apiResp = gson.fromJson(respBody, ApiResponse.class);
+                if (apiResp.output != null) {
+                    taskId = apiResp.output.taskId;
+                    System.out.println("任务已提交，task_id: " + taskId);
+                } else {
+                    System.out.println("提交返回内容: " + respBody);
+                    return;
+                }
+            } else {
+                System.out.println("任务提交失败! HTTP code: " + response.code());
+                if (response.body() != null) {
+                    System.out.println(response.body().string());
+                }
+                return;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        // 2. 轮询任务状态
+        boolean finished = false;
+        while (!finished) {
+            try {
+                TimeUnit.SECONDS.sleep(2);  // 等待 2 秒再查询
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+
+            String queryUrl = API_URL_QUERY + taskId;
+            Request queryRequest = new Request.Builder()
+                    .url(queryUrl)
+                    .addHeader("Authorization", "Bearer " + apiKey)
+                    .addHeader("Content-Type", "application/json")
+                    .get()
+                    .build();
+
+            try (Response response = client.newCall(queryRequest).execute()) {
+                if (response.body() != null) {
+                    String queryResponse = response.body().string();
+                    ApiResponse apiResp = gson.fromJson(queryResponse, ApiResponse.class);
+
+                    if (apiResp.output != null && apiResp.output.taskStatus != null) {
+                        String status = apiResp.output.taskStatus;
+                        System.out.println("当前任务状态: " + status);
+                        if ("SUCCEEDED".equalsIgnoreCase(status)
+                                || "FAILED".equalsIgnoreCase(status)
+                                || "UNKNOWN".equalsIgnoreCase(status)) {
+                            finished = true;
+                            System.out.println("任务完成，最终结果: ");
+                            System.out.println(queryResponse);
+                        }
+                    } else {
+                        System.out.println("查询返回内容: " + queryResponse);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
+    }
+
+    static class ApiResponse {
+        @SerializedName("request_id")
+        String requestId;
+        Output output;
+    }
+
+    static class Output {
+        @SerializedName("task_id")
+        String taskId;
+        @SerializedName("task_status")
+        String taskStatus;
+    }
+}
+```
+
+Python
+
+```
+import os
+import time
+import requests
+import json
+
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+API_URL_SUBMIT = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/services/audio/asr/transcription"
+# 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+API_URL_QUERY_BASE = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1/tasks/"
+
+def main():
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx"
+    api_key = os.getenv("DASHSCOPE_API_KEY")
+
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "X-DashScope-Async": "enable"
+    }
+
+    # 1. 提交任务
+    payload = {
+        "model": "qwen3-asr-flash-filetrans",
+        "input": {
+            "file_url": "{YOUR_AUDIO_URL}"
+        },
+        "parameters": {
+            "channel_id": [0],
+            # "language": "zh",
+            "enable_itn": False,
+            "enable_words": True
+        }
+    }
+
+    print("提交 ASR 转写任务...")
+    try:
+        submit_resp = requests.post(API_URL_SUBMIT, headers=headers, data=json.dumps(payload))
+    except requests.RequestException as e:
+        print(f"请求提交任务失败: {e}")
+        return
+
+    if submit_resp.status_code != 200:
+        print(f"任务提交失败! HTTP code: {submit_resp.status_code}")
+        print(submit_resp.text)
+        return
+
+    resp_data = submit_resp.json()
+    output = resp_data.get("output")
+    if not output or "task_id" not in output:
+        print("提交返回内容异常:", resp_data)
+        return
+
+    task_id = output["task_id"]
+    print(f"任务已提交，task_id: {task_id}")
+
+    # 2. 轮询任务状态
+    finished = False
+    while not finished:
+        time.sleep(2)  # 等待 2 秒再查询
+
+        query_url = API_URL_QUERY_BASE + task_id
+        try:
+            query_resp = requests.get(query_url, headers={"Authorization": f"Bearer {api_key}"})
+        except requests.RequestException as e:
+            print(f"请求查询任务失败: {e}")
+            return
+
+        if query_resp.status_code != 200:
+            print(f"查询任务失败! HTTP code: {query_resp.status_code}")
+            print(query_resp.text)
+            return
+
+        query_data = query_resp.json()
+        output = query_data.get("output")
+        if output and "task_status" in output:
+            status = output["task_status"]
+            print(f"当前任务状态: {status}")
+
+            if status.upper() in ("SUCCEEDED", "FAILED", "UNKNOWN"):
+                finished = True
+                print("任务完成，最终结果如下：")
+                print(json.dumps(query_data, indent=2, ensure_ascii=False))
+        else:
+            print("查询返回内容:", query_data)
+
+if __name__ == "__main__":
+    main()
+```
+
+#### Java SDK
+
+```
+import com.alibaba.dashscope.audio.qwen_asr.*;
+import com.alibaba.dashscope.utils.Constants;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class Main {
+    public static void main(String[] args) {
+        // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+        Constants.baseHttpApiUrl = "https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1";
+        QwenTranscriptionParam param =
+                QwenTranscriptionParam.builder()
+                        // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+                        // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
+                        .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+                        .model("qwen3-asr-flash-filetrans")
+                        .fileUrl("{YOUR_AUDIO_URL}")
+                        //.parameter("language", "zh")
+                        //.parameter("channel_id", new ArrayList<String>(){{add("0");add("1");}})
+                        .parameter("enable_itn", false)
+                        .parameter("enable_words", true)
+                        .build();
+        try {
+            QwenTranscription transcription = new QwenTranscription();
+            // 提交任务
+            QwenTranscriptionResult result = transcription.asyncCall(param);
+            System.out.println("create task result: " + result);
+            // 检查任务是否提交成功
+            if (result.getTaskId() == null) {
+                System.out.println("Error: " + result.getOutput());
+                return;
+            }
+            // 查询任务状态
+            result = transcription.fetch(QwenTranscriptionQueryParam.FromTranscriptionParam(param, result.getTaskId()));
+            System.out.println("task status: " + result);
+            // 等待任务完成
+            result =
+                    transcription.wait(
+                            QwenTranscriptionQueryParam.FromTranscriptionParam(param, result.getTaskId()));
+            System.out.println("task result: " + result);
+            // 获取语音识别结果
+            QwenTranscriptionTaskResult taskResult = result.getResult();
+            if (taskResult != null) {
+                // 获取识别结果的url
+                String transcriptionUrl = taskResult.getTranscriptionUrl();
+                // 获取url内对应的结果
+                HttpURLConnection connection =
+                        (HttpURLConnection) new URL(transcriptionUrl).openConnection();
+                connection.setRequestMethod("GET");
+                connection.connect();
+                BufferedReader reader =
+                        new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                // 格式化输出json结果
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                System.out.println(gson.toJson(gson.fromJson(reader, JsonObject.class)));
+            }
+        } catch (Exception e) {
+            System.out.println("error: " + e);
+        }
+    }
+}
+```
+
+#### Python SDK
+
+```
+import json
+import os
+import sys
+from http import HTTPStatus
+
+import dashscope
+from dashscope.audio.qwen_asr import QwenTranscription
+from dashscope.api_entities.dashscope_response import TranscriptionResponse
+
+# run the transcription script
+if __name__ == '__main__':
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：dashscope.api_key = "sk-xxx"
+    dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
+
+    # 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+    dashscope.base_http_api_url = 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api/v1'
+    task_response = QwenTranscription.async_call(
+        model='qwen3-asr-flash-filetrans',
+        file_url='{YOUR_AUDIO_URL}',
+        #language="",
+        enable_itn=False,
+        enable_words=True
+    )
+    print(f'task_response: {task_response}')
+    print(task_response.output.task_id)
+    query_response = QwenTranscription.fetch(task=task_response.output.task_id)
+    print(f'query_response: {query_response}')
+    task_result = QwenTranscription.wait(task=task_response.output.task_id)
+    print(f'task_result: {task_result}')
+```
+
+#### 下载识别结果
+
+任务成功后，查询接口返回的 `output.result.transcription_url` 指向公网可下载的 JSON 文件，包含完整识别结果。该 URL 默认在 **24 小时**内有效，请及时下载并落盘保存。
+
+```
+# 将 {transcription_url} 替换为查询接口返回的 transcription_url 值
+curl -sS '{transcription_url}' -o transcription.json
+cat transcription.json | jq .
+```
 
 ### 提交任务
 
@@ -1384,7 +2161,7 @@ curl --location --request POST 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.c
 
 #### Java
 
-SDK示例请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。
+SDK示例请参见[调用示例](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#qwen-asr-async-examples)。
 
 ```
 import com.google.gson.Gson;
@@ -1483,7 +2260,7 @@ public class Main {
 
 #### Python
 
-SDK示例请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。
+SDK示例请参见[调用示例](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#qwen-asr-async-examples)。
 
 ```
 import requests
@@ -1610,7 +2387,7 @@ curl --location --request GET 'https://{WorkspaceId}.cn-beijing.maas.aliyuncs.co
 
 #### Java
 
-SDK示例请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。
+SDK示例请参见[调用示例](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#qwen-asr-async-examples)。
 
 ```
 import okhttp3.*;
@@ -1650,7 +2427,7 @@ public class Main {
 
 #### Python
 
-SDK示例请参见[快速开始](https://help.aliyun.com/zh/model-studio/non-realtime-speech-recognition-user-guide#7818a3bc466d6)。
+SDK示例请参见[调用示例](https://help.aliyun.com/zh/model-studio/qwen-asr-api-reference#qwen-asr-async-examples)。
 
 ```
 import os

@@ -26,8 +26,6 @@ Agent Harness 与插件两种集成路径
 
 直接在百炼智能体中配置记忆库，实现跨会话持久记忆。无需写代码，在控制台配置即可。
 
-参见[记忆库用于百炼应用](https://help.aliyun.com/zh/model-studio/memory-bank-for-refined-applications)。
-
 ## 插件
 
 为百炼工作流应用添加记忆能力，工作流执行时自动读写记忆。

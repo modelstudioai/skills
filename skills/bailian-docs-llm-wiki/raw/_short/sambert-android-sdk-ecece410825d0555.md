@@ -81,10 +81,6 @@ JSON字符串，包含鉴权、连接和调试参数。详见下方 ticket 参�
 
 是否保存本地日志。若为true，须在 ticket 参数中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
 
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 **ticket JSON 示例**：
 
 ```
@@ -217,10 +213,6 @@ public synchronized int setparamTts(String param, String value)
 `String`
 
 参数值。
-
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 **可用参数说明**：
 
@@ -404,10 +396,6 @@ public synchronized int startTts(String priority, String taskid, String text)
 
 待合成文本。
 
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### pauseTts
 
 暂停当前语音合成任务。任务暂停后，可通过 [`resumeTts()`](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#01f640f02bka9) 恢复，或通过 [`cancelTts()`](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#8c464959f9lm9) 彻底取消。在任务暂停期间，SDK不支持启动新的合成任务。
@@ -418,9 +406,6 @@ public synchronized int startTts(String priority, String taskid, String text)
 ```
 public synchronized int pauseTts()
 ```
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### resumeTts
 
@@ -430,9 +415,6 @@ public synchronized int pauseTts()
 ```
 public synchronized int resumeTts()
 ```
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### cancelTts
 
@@ -458,10 +440,6 @@ public synchronized int cancelTts(String taskid)
 
 要取消的任务ID。若传入 `null`，则取消所有正在暂停/进行中的合成任务。
 
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### tts\_release
 
 释放SDK所有内部资源，并强制终止所有正在进行的合成任务。此方法调用后，SDK实例将变为不可用状态，如需再次使用，必须重新调用 [`tts_initialize()`](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#ae6d7dd9cfad3) 进行初始化。
@@ -470,9 +448,6 @@ public synchronized int cancelTts(String taskid)
 ```
 public synchronized int tts_release()
 ```
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 ## INativeTtsCallback
 
@@ -508,7 +483,7 @@ void onTtsEventCallback(TtsEvent event, String task_id, int ret_code);
 
 `int`
 
-[错误码](https://help.aliyun.com/zh/isi/support/error-codes)，仅在事件 [TTS\_EVENT\_ERROR](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#981ff433acpmr) 中有效。
+仅在出现 [TTS\_EVENT\_ERROR](https://help.aliyun.com/zh/model-studio/sambert-android-sdk#981ff433acpmr) 事件时有效。
 
 ### onTtsDataCallback：监听音频数据和时间戳信息
 

@@ -219,7 +219,7 @@ Coding Plan
 
 Coding Plan 联网搜索 MCP 升级
 
-Coding Plan 联网搜索 MCP 升级 Streamable HTTP 协议，前 2000 次免费，[了解详情](https://help.aliyun.com/zh/model-studio/web-search-for-coding-plan)
+Coding Plan 联网搜索 MCP 升级 Streamable HTTP 协议，前 2000 次免费，[了解详情](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)
 
 6月10日
 
