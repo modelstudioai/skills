@@ -471,9 +471,6 @@ public synchronized int initialize(final INativeNuiCallback callback,
     是否保存本地日志。若为`true`，须在[连接与控制参数](https://help.aliyun.com/zh/model-studio/android-sdk-for-paraformer-real-time-service#57acf5ecc1w8j)中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### setParams
 
@@ -500,9 +497,6 @@ public synchronized int setParams(String params)
     [语音识别效果参数](https://help.aliyun.com/zh/model-studio/android-sdk-for-paraformer-real-time-service#d20cce9518kla)。
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### startDialog
 
@@ -543,9 +537,6 @@ public synchronized int startDialog(VadMode vad_mode, String dialog_params)
     ```
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### stopDialog
 
@@ -558,9 +549,6 @@ public synchronized int stopDialog();
 ```
 
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### cancelDialog
 
@@ -573,9 +561,6 @@ public synchronized int cancelDialog();
 ```
 
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### release
 
@@ -588,9 +573,6 @@ public synchronized int release();
 ```
 
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### GetVersion
 
@@ -635,7 +617,7 @@ void onNuiEventCallback(NuiEvent event, final int resultCode, final int arg2, Kw
     
     `int`
     
-    [错误码](https://help.aliyun.com/zh/isi/support/error-codes)，在出现EVENT\_ASR\_ERROR事件时有效。
+    仅在出现 `EVENT_ASR_ERROR` 事件时有效。
     
     `asrResult`
     

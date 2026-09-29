@@ -1,8 +1,6 @@
-# 实时语音合成Qwen-Audio-TTS/CosyVoice Python SDK
+# CosyVoice Python SDK
 
-本文介绍通过DashScope Python SDK进行Qwen-Audio-TTS/CosyVoice实时语音合成的类定义、请求参数和示例代码。
-
-**用户指南：**关于模型介绍和选型建议请参见[语音合成](https://help.aliyun.com/zh/model-studio/tts-model)。
+本文介绍通过DashScope Python SDK进行CosyVoice实时语音合成的类定义、请求参数和示例代码。
 
 ## 接口地址
 
@@ -20,21 +18,10 @@ SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）
 
 调用时请将`{WorkspaceId}`替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
-**切换到新加坡地域**：
-
-```
-import dashscope
-
-# 调用时请将"{WorkspaceId}"替换为真实的业务空间ID
-dashscope.base_websocket_api_url = 'wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference'
-```
-
 **重要**阿里云百炼为华北2（北京）、新加坡地域推出了业务空间专属域名，能够为推理请求提供卓越的性能和更高的稳定性，建议迁移至新域名：
 
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
-
-`{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
 
 ## SpeechSynthesizer
 
@@ -71,9 +58,9 @@ def call(self, text: str) -> bytes
 
 **说明**
 
-text
+`text`
 
-str
+`str`
 
 是
 
@@ -101,9 +88,9 @@ def streaming_call(self, text: str) -> None
 
 **说明**
 
-text
+`text`
 
-str
+`str`
 
 是
 
@@ -139,9 +126,9 @@ def streaming_cancel(self, complete_timeout_millis: int = 10000) -> None
 
 **说明**
 
-complete\_timeout\_millis
+`complete_timeout_millis`
 
-int
+`int`
 
 否
 
@@ -153,8 +140,8 @@ int
 
 **重要****模型限制**：
 
--   华北2（北京）地域：Qwen-Audio-TTS 系列模型的所有模型都支持该功能；CosyVoice 系列模型仅 v2 及以上版本支持该功能。
--   新加坡地域：Qwen-Audio-TTS 系列模型的所有模型都支持该功能；CosyVoice 系列模型不支持该功能。
+-   华北2（北京）地域：CosyVoice 系列模型仅 v2 及以上版本支持该功能。
+-   新加坡地域：CosyVoice 系列模型不支持该功能。
 
 ### get\_last\_request\_id() - 获取请求ID
 
@@ -198,45 +185,43 @@ def get_response(self) -> dict
 
 **说明**
 
-model
+`model`
 
-str
+`str`
 
 是
 
 模型名称。
 
-voice
+`voice`
 
-str
+`str`
 
 是
 
-**voice**`string`**（必选）**
-
 语音合成所使用的音色。
 
--   **系统音色**：参见[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
+-   **系统音色**：参见[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)
 -   **复刻音色**：通过声音复刻功能定制
 -   **声音设计音色**：通过声音设计功能定制
 
-format
+`format`
 
-enum
+`enum`
 
 否
 
 音频编码格式及采样率。
 
-`cosyvoice-v1`不支持opus格式。
+**说明**cosyvoice-v1不支持opus格式。
 
 默认值：AudioFormat.MP3\_22050HZ\_MONO\_256KBPS。
 
 AudioFormat枚举类的包路径：`dashscope.audio.tts_v2`，支持MP3、WAV、PCM等格式。
 
-volume
+`volume`
 
-int
+`int`
 
 否
 
@@ -246,9 +231,9 @@ int
 
 取值范围：\[0, 100\]。
 
-speech\_rate
+`speech_rate`
 
-float
+`float`
 
 否
 
@@ -258,9 +243,9 @@ float
 
 取值范围：\[0.5, 2.0\]。
 
-pitch\_rate
+`pitch_rate`
 
-float
+`float`
 
 否
 
@@ -270,9 +255,9 @@ float
 
 取值范围：\[0.5, 2.0\]。
 
-bit\_rate
+`bit_rate`
 
-int
+`int`
 
 否
 
@@ -282,21 +267,21 @@ int
 
 取值范围：\[6, 510\]。
 
-`cosyvoice-v1`模型不支持该参数。
+**说明**cosyvoice-v1模型不支持该参数。
 
-**说明**`bit_rate`需要通过`additional_params`参数进行设置：
+`bit_rate`需要通过`additional_params`参数进行设置：
 
 ```
 synthesizer = SpeechSynthesizer(
-    model="qwen-audio-3.0-tts-flash",
-    voice="longanhuan_v3.6",
+    model="cosyvoice-v3-plus",
+    voice="longanyang",
     additional_params={"bit_rate": 128}
 )
 ```
 
-word\_timestamp\_enabled
+`word_timestamp_enabled`
 
-bool
+`bool`
 
 否
 
@@ -304,9 +289,9 @@ bool
 
 默认值：false。
 
-仅在流式输出模式下可用。支持的音色范围：qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus和cosyvoice-v2模型的复刻音色，以及[Qwen-Audio-TTS音色列表](https://help.aliyun.com/zh/model-studio/qwen-audio-tts-voice-list)、[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
+仅在流式输出模式下可用。支持的音色范围：cosyvoice-v3.5-plus、cosyvoice-v3.5-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2模型的复刻音色，以及[CosyVoice音色列表](https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list)中标记为支持的系统音色。其他模型的复刻音色不支持此功能。
 
-**说明**`word_timestamp_enabled`需要通过`additional_params`参数进行设置：
+`word_timestamp_enabled`需要通过`additional_params`参数进行设置：
 
 ```
 synthesizer = SpeechSynthesizer(
@@ -316,9 +301,9 @@ synthesizer = SpeechSynthesizer(
 )
 ```
 
-seed
+`seed`
 
-int
+`int`
 
 否
 
@@ -328,20 +313,22 @@ int
 
 取值范围：\[0, 65535\]。
 
-cosyvoice-v1不支持该参数。
+**说明**cosyvoice-v1不支持该参数。
 
-language\_hints
+`language_hints`
 
-list\[str\]
+`list[str]`
 
 否
 
 **重要**
 
 -   此参数为数组，但当前版本仅处理第一个元素，因此建议只传入一个值。
--   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见声音复刻API参考。
+-   此参数用于指定语音合成的目标语言，该设置与声音复刻时的样本音频的语种无关。如需设置复刻任务的源语言，请参见[声音复刻API参考](https://help.aliyun.com/zh/model-studio/voice-clone-design-http-api#h2-create)。
 
-指定语音合成的目标语言，提升合成效果。cosyvoice-v1不支持该功能。
+指定语音合成的目标语言，提升合成效果。
+
+**说明**cosyvoice-v1不支持该功能。
 
 当数字、缩写、符号等朗读方式或者小语种合成效果不符合预期时使用，例如：
 
@@ -349,7 +336,7 @@ list\[str\]
 -   符号朗读不准确，“@”读成“艾特”而非“at”
 -   小语种合成效果差，合成不自然
 
-取值范围：
+取值范围
 
 -   zh：中文
 -   en：英语
@@ -368,9 +355,9 @@ list\[str\]
 -   fil：菲律宾语
 -   ar：阿拉伯语
 
-instruction
+`instruction`
 
-str
+`str`
 
 否
 
@@ -378,9 +365,9 @@ str
 
 使用说明请参见[指令控制](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#12884a10929p9)。
 
-enable\_aigc\_tag
+`enable_aigc_tag`
 
-bool
+`bool`
 
 否
 
@@ -388,14 +375,14 @@ bool
 
 默认值：false。
 
-仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
-**说明**`enable_aigc_tag`、`aigc_propagator`和`aigc_propagate_id`需要通过`additional_params`参数进行设置：
+`enable_aigc_tag`、`aigc_propagator`和`aigc_propagate_id`需要通过`additional_params`参数进行设置：
 
 ```
 synthesizer = SpeechSynthesizer(
-    model="qwen-audio-3.0-tts-flash",
-    voice="longanhuan_v3.6",
+    model="cosyvoice-v3-plus",
+    voice="longanyang",
     additional_params={
         "enable_aigc_tag": True,
         "aigc_propagator": "your_propagator",
@@ -404,9 +391,9 @@ synthesizer = SpeechSynthesizer(
 )
 ```
 
-aigc\_propagator
+`aigc_propagator`
 
-str
+`str`
 
 否
 
@@ -414,13 +401,13 @@ str
 
 默认值：阿里云UID。
 
-仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 需要通过`additional_params`参数进行设置，参见`enable_aigc_tag`的示例。
 
-aigc\_propagate\_id
+`aigc_propagate_id`
 
-str
+`str`
 
 否
 
@@ -428,19 +415,19 @@ str
 
 默认值：本次语音合成请求Request ID。
 
-仅qwen-audio-3.0-tts-plus、qwen-audio-3.1-tts-flash、qwen-audio-3.0-tts-flash、cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
+**说明**仅cosyvoice-v3-flash、cosyvoice-v3-plus、cosyvoice-v2支持该功能。
 
 需要通过`additional_params`参数进行设置，参见`enable_aigc_tag`的示例。
 
-hot\_fix
+`hot_fix`
 
-dict
+`dict`
 
 否
 
 文本热修复配置，用于自定义指定词语的发音或对待合成文本进行替换。
 
-cosyvoice-v2、cosyvoice-v1不支持该功能。
+**说明**cosyvoice-v2、cosyvoice-v1不支持该功能。
 
 参数介绍：
 
@@ -451,8 +438,8 @@ cosyvoice-v2、cosyvoice-v1不支持该功能。
 
 ```
 synthesizer = SpeechSynthesizer(
-    model="qwen-audio-3.0-tts-flash",
-    voice="longanhuan_v3.6", # 音色
+    model="cosyvoice-v3-plus",
+    voice="longanyang", # 音色
     hot_fix={
         "pronunciation": [{"天气": "tian1 qi4"}],
         "replace": [{"今天": "金天"}]
@@ -460,13 +447,13 @@ synthesizer = SpeechSynthesizer(
 )
 ```
 
-enable\_markdown\_filter
+`enable_markdown_filter`
 
-bool
+`bool`
 
 否
 
-**重要**仅cosyvoice-v3-flash复刻音色支持该功能。
+**说明**仅cosyvoice-v3-flash复刻音色支持该功能。
 
 是否启用 Markdown 过滤。启用该功能后，系统在合成语音前自动过滤输入文本中的 Markdown 标记符号，避免将其朗读为文字内容。
 
@@ -477,7 +464,7 @@ bool
 -   true：启用Markdown过滤
 -   false：禁用Markdown过滤
 
-**说明**`enable_markdown_filter`需要通过`additional_params`参数进行设置：
+`enable_markdown_filter`需要通过`additional_params`参数进行设置：
 
 ```
 synthesizer = SpeechSynthesizer(
@@ -487,9 +474,9 @@ synthesizer = SpeechSynthesizer(
 )
 ```
 
-callback
+`callback`
 
-ResultCallback
+`ResultCallback`
 
 否
 
@@ -527,13 +514,13 @@ def on_event(self, message: str) -> None
 
 **说明**
 
-message
+`message`
 
-str
+`str`
 
 是
 
-服务端响应事件（JSON格式），包含`header`（请求信息）和`payload`（输出信息）。其中`payload.output`包含事件类型、原始文本等信息，详见[on\_event消息中的output字段](https://help.aliyun.com/zh/model-studio/cosyvoice-python-sdk#h2-py-output-info)。
+服务端响应事件（JSON格式），包含`header`（请求信息）和`payload`（输出信息）。其中`payload.output`包含事件类型、原始文本等信息，详见[on\_event消息中的output字段](#h2-py-output-info)。
 
 **触发时机**：接收到服务端回复时触发。消息为JSON字符串，包含合成事件的输出信息（事件类型、原始文本、句子信息等）。可通过`json.loads(message)`解析后访问`payload.output`获取详细信息。
 
@@ -565,9 +552,9 @@ def on_data(self, data: bytes) -> None
 
 **说明**
 
-data
+`data`
 
-bytes
+`bytes`
 
 是
 
@@ -593,9 +580,9 @@ def on_error(self, message: str) -> None
 
 **说明**
 
-message
+`message`
 
-str
+`str`
 
 是
 
@@ -623,21 +610,21 @@ def on_close(self) -> None
 
 **说明**
 
-type
+`type`
 
-str
+`str`
 
 事件类型。取值为`sentence-begin`（句子合成开始）、`sentence-synthesis`（句子合成中）或`sentence-end`（句子合成结束）。
 
-original\_text
+`original_text`
 
-str
+`str`
 
 当前句子的原始文本。在`sentence-begin`和`sentence-end`事件中返回。
 
-sentence
+`sentence`
 
-dict
+`dict`
 
 句子信息。包含`index`（句子序号）和`words`（词列表，开启`word_timestamp_enabled`时返回时间戳信息）。
 
@@ -687,7 +674,7 @@ SDK提供了语音合成的关键接口，支持以下几种调用方式：
 
 更多示例，请参见[GitHub](https://github.com/aliyun/alibabacloud-bailian-speech-demo)。
 
-### 非流式调用
+#### 非流式调用
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6892567871/CAEQURiBgMDRr9T4phkiIGNmYzBiZjFkZjQ4MDQzZGU4NDIyZDU2NWJjYjkyZTQ04709861_20241015153444.149.svg)
 
@@ -710,9 +697,9 @@ dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
 dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
 
 # 模型
-model = "qwen-audio-3.0-tts-flash"
+model = "cosyvoice-v3-plus"
 # 音色
-voice = "longanhuan_v3.6"
+voice = "longanyang"
 
 # 实例化SpeechSynthesizer，并在构造方法中传入模型（model）、音色（voice）等请求参数
 synthesizer = SpeechSynthesizer(model=model, voice=voice)
@@ -743,7 +730,7 @@ dashscope speech-synthesis create -m cosyvoice-v2 -t "你好世界" --voice long
 
 完整地域表见 [Base URL 总览](raw/model-user-guide/get-started-with-models/base-url.md)。
 
-### 单向流式调用
+#### 单向流式调用
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6892567871/CAEQVRiBgIDv9fShrBkiIDhmNTk5YmQ1ZDgwNzRjZjRiN2VlMTU5YzI1ZGMwMTlm4709861_20241015153444.149.svg)
 
@@ -774,9 +761,9 @@ dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
 dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
 
 # 模型
-model = "qwen-audio-3.0-tts-flash"
+model = "cosyvoice-v3-plus"
 # 音色
-voice = "longanhuan_v3.6"
+voice = "longanyang"
 
 # 定义回调接口
 class Callback(ResultCallback):
@@ -828,7 +815,7 @@ synthesizer = SpeechSynthesizer(
 synthesizer.call("今天天气怎么样？")
 ```
 
-### 双向流式调用
+#### 双向流式调用
 
 ![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/6892567871/CAEQVRiBgMDb7PahrBkiIDVkNjEwOTMxYjEwOTRmOWFhMmI1OTRiY2Q3ZDgzZmE54709861_20241015153444.149.svg)
 
@@ -889,9 +876,9 @@ dashscope.api_key = os.environ.get('DASHSCOPE_API_KEY')
 dashscope.base_websocket_api_url='wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference'
 
 # 模型
-model = "qwen-audio-3.0-tts-flash"
+model = "cosyvoice-v3-plus"
 # 音色
-voice = "longanhuan_v3.6"
+voice = "longanyang"
 
 # 定义回调接口
 class Callback(ResultCallback):

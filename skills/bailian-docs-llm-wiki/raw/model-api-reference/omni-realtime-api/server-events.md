@@ -276,7 +276,7 @@ VAD检测阈值。
 
 **tools**`array`（可选）
 
-工具定义列表。配置后模型可根据用户输入自主决定是否调用工具。
+工具定义列表。以下属性描述 `type="function"` 的 Function Calling 工具。Qwen3.8-Omni-Flash-Realtime 的 MCP 配置字段见[客户端工具配置](https://help.aliyun.com/zh/model-studio/client-events#session-tools-mcp)；MCP 连接地址和凭证不会在 `session.updated` 中回显。
 
 属性
 
@@ -376,10 +376,8 @@ VAD检测阈值。
             "create_response": true,
             "interrupt_response": true
         },
-        "enable_search": true,
-        "search_options": {
-            "enable_source": true
-        },
+        "enable_search": false,
+        "search_options": {},
         "tools": [
             {
                 "type": "function",
@@ -530,6 +528,18 @@ VAD检测阈值。
 
 事件类型，固定为`conversation.item.created`。
 
+**response\_id**`string`（条件必填）
+
+仅当 `item.type` 为 `mcp_approval_request` 时返回；生成本次 MCP 调用的父 Response ID。
+
+**item\_id**`string`（条件必填）
+
+仅当 `item.type` 为 `mcp_approval_request` 时返回；审批请求 item ID，与 `item.id` 相同。
+
+**previous\_item\_id**`string`（条件必填）
+
+仅当 `item.type` 为 `mcp_approval_request` 时返回；被审批的 `mcp_call` item ID。
+
 **item**`object`
 
 要添加到对话中的项。
@@ -542,23 +552,29 @@ VAD检测阈值。
 
 **object**`string`
 
-始终为 `realtime.item` 。
+`message` 和 `function_call` 项固定为 `realtime.item`；MCP 项若返回该字段，值也为 `realtime.item`。
 
 **status**`string`
 
-对话项的状态。
+若返回该字段，表示对话项的状态。`mcp_call` 初始项必填，值为 `in_progress`。
 
 **role**`string`
 
-消息的角色。
+仅消息项包含，表示消息的角色。
 
-**content**`string`
+**content**`array[object]`
 
-消息的内容。当 type 为 `message` 时存在。
+消息的内容。当 type 为 `message` 时存在。下列字段对应本页示例中的数组元素。
+
+数组元素
 
 **type**`string`
 
-对话项的类型包括 `message`（常规消息）和 `function_call`（工具调用）。Qwen3.8-Omni-Flash-Realtime 还可返回 `mcp_list_tools`、`mcp_call`、`mcp_approval_request`，对应结构见[MCP Item](#mcp-items)。
+内容片段的类型；本页示例为 `input_audio`。
+
+**type**`string`
+
+对话项的类型包括 `message`（常规消息）和 `function_call`（工具调用）。Qwen3.8-Omni-Flash-Realtime 还可返回 `mcp_list_tools`、`mcp_call`、`mcp_approval_request`，事件示例见[MCP 对话项](#mcp-items)。
 
 **name**`string`
 
@@ -571,6 +587,136 @@ VAD检测阈值。
 **arguments**`string`
 
 当 type 为 `function_call` 时，函数调用的参数（JSON 字符串）。
+
+type=mcp\_list\_tools
+
+该类型的 `item.id` 与工具发现状态事件的 `item_id` 相同。
+
+**server\_label**`string`（必填）
+
+MCP Server 标识。
+
+**tools**`array[object]`（必填）
+
+经校验和 `allowed_tools` 过滤的工具定义，发现失败时为空数组。
+
+数组元素
+
+**name**`string`（必填）
+
+工具原始名称，1～64 位，仅允许字母、数字、下划线、点和连字符。
+
+**description**`string`（可选）
+
+MCP Server 提供的工具说明。
+
+**input\_schema**`object`（必填）
+
+MCP Server 提供的 JSON Schema。服务端不执行完整的 JSON Schema 语义校验，最终由 MCP Server 校验工具参数。
+
+属性
+
+**type**`string`（必填）
+
+根节点固定为 `object`。
+
+**properties**`object`（可选）
+
+按自定义名称列出各参数。例如下方 [mcp\_list\_tools 示例](#mcp-list-tools-item) 中的 `city` 是参数名，其 `type` 和 `description` 分别说明数据类型和用途；各参数的 JSON Schema 由 MCP Server 定义。
+
+**required**`array[string]`（可选）
+
+必填参数名列表。
+
+`additionalProperties`、`$defs`、`oneOf`、`anyOf`、`allOf` 等其他标准 JSON Schema 字段按原始 schema 保留并传递。
+
+**annotations**`object`（可选）
+
+MCP Server 提供的 ToolAnnotations。以下是 MCP 标准中的可选提示字段，实际返回内容由 MCP Server 决定。
+
+属性
+
+**title**`string`（可选）
+
+工具的显示名称。
+
+**readOnlyHint**`boolean`（可选）
+
+提示工具是否只读。
+
+**destructiveHint**`boolean`（可选）
+
+提示工具是否可能执行破坏性修改。
+
+**idempotentHint**`boolean`（可选）
+
+提示重复调用是否不会产生额外效果。
+
+**openWorldHint**`boolean`（可选）
+
+提示工具是否可能与外部系统交互。这些字段均为提示，不应作为安全判断依据。
+
+**error**`object`（可选）
+
+工具发现失败时出现。
+
+属性
+
+**type**`string`（必填）
+
+固定为 `tool_execution_error`。
+
+**message**`string`（必填）
+
+面向客户端的安全错误描述，不包含上游敏感响应体。
+
+type=mcp\_call（初始项）
+
+**object**`string`（必填）
+
+固定为 `realtime.item`。
+
+**status**`string`（必填）
+
+初始为 `in_progress`。
+
+**server\_label**`string`（必填）
+
+实际执行工具的 MCP Server 标识。
+
+**name**`string`（必填）
+
+工具原始名称。
+
+**call\_id**`string`（必填）
+
+本次调用的唯一 ID。
+
+**arguments**`string`（必填）
+
+初始通常为空字符串；完整参数以后续事件及最终项为准。
+
+type=mcp\_approval\_request
+
+审批请求的 `item.id` 应在审批回复中原样填入 `approval_request_id`。
+
+**server\_label**`string`（必填）
+
+待执行工具所属的 MCP Server 标识。
+
+**name**`string`（必填）
+
+待执行工具的原始名称。
+
+**arguments**`string`（必填）
+
+待审批调用的完整参数 JSON 字符串。
+
+**call\_id**`string`（必填）
+
+被审批的工具调用 ID。
+
+示例：
 
 ```
 {
@@ -872,7 +1018,7 @@ T7
 
 模型生成音频的音色。
 
-**output** `string`
+**output** `array`
 
 此事件下目前为空。
 
@@ -938,11 +1084,11 @@ T7
 
 模型生成音频的音色。
 
-**output** `object`
+**output** `array`
 
-响应的输出。
+响应的输出项数组；每个元素是对话项对象。
 
-属性
+数组元素
 
 **id** `string`
 
@@ -950,11 +1096,11 @@ T7
 
 **type** `string`
 
-输出项的类型，可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 [`mcp_call`](#mcp-items)。
+输出项的类型，可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 `mcp_call`，事件示例见[MCP 对话项](#mcp-items)。
 
 **object** `string`
 
-输出项的对象类型，当前固定为`realtime.item`。
+`message` 和 `function_call` 项固定为 `realtime.item`；MCP 项若返回该字段，值也为 `realtime.item`。
 
 **status** `string`
 
@@ -962,13 +1108,13 @@ T7
 
 **role** `string`
 
-输出项的角色。
+仅消息项包含，表示消息的角色。
 
 **content** `array`
 
-输出项的内容。当 type 为 `message` 时存在。
+输出项的内容。当 type 为 `message` 时存在；每个元素是输出内容对象。
 
-属性
+数组元素
 
 **type** `string`
 
@@ -993,6 +1139,48 @@ T7
 **arguments** `string`
 
 当 type 为 `function_call` 时，函数调用的完整参数（JSON 字符串）。
+
+type=mcp\_call（最终项）
+
+**status**`string`（必填）
+
+`completed` 或 `failed`。
+
+**server\_label**`string`（必填）
+
+实际执行工具的 MCP Server 标识。
+
+**name**`string`（必填）
+
+工具原始名称。
+
+**call\_id**`string`（必填）
+
+本次调用的唯一 ID。
+
+**arguments**`string`（必填）
+
+完整参数 JSON 字符串。
+
+**output**`string`（可选）
+
+MCP `tools/call.result` 对象序列化后的 JSON 字符串；部分失败场景也可能出现。
+
+**error**`object`（可选）
+
+调用失败时出现。
+
+属性
+
+**type**`string`（必填）
+
+固定为 `tool_execution_error`。
+
+**message**`string`（必填）
+
+面向客户端的安全错误描述，不包含上游敏感响应体。
+
+MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留原始 `output`。
 
 **usage** `object`
 
@@ -1039,6 +1227,8 @@ T7
 **strategy** `string`
 
 搜索策略。
+
+示例：
 
 ```
 {
@@ -1488,7 +1678,7 @@ T7
 
 ## response.output\_item.added
 
-在响应生成过程中创建新项目时，服务端返回此事件。项目类型可以是 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 [`mcp_call`](#mcp-items)。
+在响应生成过程中创建新项目时，服务端返回此事件。项目类型可以是 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 `mcp_call`，事件示例见[MCP 对话项](#mcp-items)。
 
 **event\_id**`string`
 
@@ -1518,7 +1708,7 @@ T7
 
 **object**`string`
 
-始终为 `realtime.item` 。
+`message` 和 `function_call` 项固定为 `realtime.item`；MCP 项若返回该字段，值也为 `realtime.item`。
 
 **status**`string`
 
@@ -1526,15 +1716,15 @@ T7
 
 **role**`string`
 
-发送消息的角色。
+仅消息项包含，表示消息的角色。
 
-**content**`string`
+**content**`array`
 
-消息的内容。当 type 为 `message` 时存在。
+消息的内容。当 type 为 `message` 时存在。本页示例中初始为空数组；完成项的内容见 `response.output_item.done` 示例。
 
 **type**`string`
 
-输出项的类型。可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 [`mcp_call`](#mcp-items)。
+输出项的类型。可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 `mcp_call`，事件示例见[MCP 对话项](#mcp-items)。
 
 **name**`string`
 
@@ -1547,6 +1737,32 @@ T7
 **arguments**`string`
 
 当 type 为 `function_call` 时，函数调用的参数（JSON 字符串）。在 added 事件中初始为空字符串。
+
+type=mcp\_call（初始项）
+
+**object**`string`（必填）
+
+固定为 `realtime.item`。
+
+**status**`string`（必填）
+
+初始为 `in_progress`。
+
+**server\_label**`string`（必填）
+
+实际执行工具的 MCP Server 标识。
+
+**name**`string`（必填）
+
+工具原始名称。
+
+**call\_id**`string`（必填）
+
+本次调用的唯一 ID。
+
+**arguments**`string`（必填）
+
+初始通常为空字符串；完整参数以 `response.mcp_call_arguments.done` 和最终项为准。
 
 ```
 {
@@ -1613,7 +1829,7 @@ T7
 
 **object**`string`
 
-始终为 `realtime.item` 。
+`message` 和 `function_call` 项固定为 `realtime.item`；MCP 项若返回该字段，值也为 `realtime.item`。
 
 **status**`string`
 
@@ -1621,15 +1837,25 @@ T7
 
 **role**`string`
 
-发送消息的角色。
+仅消息项包含，表示消息的角色。
 
-**content**`string`
+**content**`array[object]`
 
-消息的内容。当 type 为 `message` 时存在。
+消息的内容。当 type 为 `message` 时存在。下列字段对应本页示例中的数组元素。
+
+数组元素
 
 **type**`string`
 
-输出项的类型。可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 [`mcp_call`](#mcp-items)。
+内容片段的类型；本页示例为 `audio`。
+
+**text**`string`
+
+本页示例中的文本内容。
+
+**type**`string`
+
+输出项的类型。可选值包括 `message`（常规消息）、`function_call`（工具调用），Qwen3.8-Omni-Flash-Realtime 还支持 `mcp_call`，事件示例见[MCP 对话项](#mcp-items)。
 
 **name**`string`
 
@@ -1642,6 +1868,48 @@ T7
 **arguments**`string`
 
 当 type 为 `function_call` 时，函数调用的完整参数（JSON 字符串）。
+
+type=mcp\_call（最终项）
+
+**status**`string`（必填）
+
+`completed` 或 `failed`。
+
+**server\_label**`string`（必填）
+
+实际执行工具的 MCP Server 标识。
+
+**name**`string`（必填）
+
+工具原始名称。
+
+**call\_id**`string`（必填）
+
+本次调用的唯一 ID。
+
+**arguments**`string`（必填）
+
+完整参数 JSON 字符串。
+
+**output**`string`（可选）
+
+MCP `tools/call.result` 对象序列化后的 JSON 字符串；部分失败场景也可能出现。
+
+**error**`object`（可选）
+
+调用失败时出现。
+
+属性
+
+**type**`string`（必填）
+
+固定为 `tool_execution_error`。
+
+**message**`string`（必填）
+
+面向客户端的安全错误描述，不包含上游敏感响应体。
+
+MCP Server 返回 `isError=true` 时最终状态为 `failed`，也可能保留原始 `output`。
 
 ```
 {
@@ -2091,99 +2359,7 @@ integer
 
 ### mcp\_list\_tools
 
-该对象通过 `conversation.item.created.item` 返回。
-
-字段路径
-
-类型
-
-必填
-
-说明
-
-item.id
-
-string
-
-是
-
-工具列表 item 的唯一 ID，与工具发现状态事件的 item\_id 相同
-
-item.type
-
-string
-
-是
-
-固定为 mcp\_list\_tools
-
-item.server\_label
-
-string
-
-是
-
-对应 MCP Server 的标识
-
-item.tools
-
-array\[object\]
-
-是
-
-校验并完成 allowed\_tools 过滤后的工具定义；失败时为空数组
-
-item.error
-
-object
-
-否
-
-工具发现失败时出现，结构见本节 MCP error
-
-工具数组元素：
-
-字段路径
-
-类型
-
-必填
-
-说明
-
-name
-
-string
-
-是
-
-MCP Server 声明的原始工具名；1～64 位，仅允许字母、数字、下划线、点和连字符
-
-description
-
-string
-
-否
-
-MCP Server 提供的工具说明
-
-input\_schema
-
-object
-
-是
-
-映射自 MCP Server 的 inputSchema，根节点 type 必须为 object
-
-annotations
-
-object
-
-否
-
-MCP Server 提供的 ToolAnnotations
-
-`input_schema` 为 JSON Schema 对象，根节点 `type` 必须为 `object`。服务会保留并传递 `properties`、`required`、`additionalProperties`、$defs、`oneOf`、`anyOf`、`allOf` 等标准 JSON Schema 字段。服务端不执行完整的 JSON Schema 语义校验，工具参数的最终合法性由 MCP Server 校验。
+该对象通过 `conversation.item.created.item` 返回；字段见 [conversation.item.created](#4f23bd31e6awz) 的 `type=mcp_list_tools` 分支。
 
 示例：
 
@@ -2217,79 +2393,7 @@ MCP Server 提供的 ToolAnnotations
 
 ### 初始 mcp\_call
 
-模型选择 MCP 工具时，该对象出现在 `response.output_item.added.item` 中，也可能通过 `conversation.item.created.item` 返回。
-
-字段路径
-
-类型
-
-必填
-
-说明
-
-item.id
-
-string
-
-是
-
-本次 MCP 调用 item 的唯一 ID
-
-item.object
-
-string
-
-是
-
-固定为 realtime.item
-
-item.type
-
-string
-
-是
-
-固定为 mcp\_call
-
-item.status
-
-string
-
-是
-
-初始固定为 in\_progress
-
-item.call\_id
-
-string
-
-是
-
-本次工具调用的唯一 ID
-
-item.server\_label
-
-string
-
-是
-
-实际执行工具的 MCP Server 标识
-
-item.name
-
-string
-
-是
-
-被调用工具的原始名称
-
-item.arguments
-
-string
-
-是
-
-初始通常为空字符串；完整参数以 arguments.done 和最终 item 为准
+模型选择 MCP 工具时，该对象出现在 `response.output_item.added.item` 中，也可能通过 `conversation.item.created.item` 返回；字段见 [response.output\_item.added](#dae2260d40qtu) 和 [conversation.item.created](#4f23bd31e6awz) 的对应 `item` 分支。
 
 `response.output_item.added` 示例：
 
@@ -2314,123 +2418,7 @@ string
 
 ### mcp\_approval\_request
 
-该对象通过 `conversation.item.created` 返回。
-
-事件顶层字段：
-
-字段路径
-
-类型
-
-必填
-
-说明
-
-event\_id
-
-string
-
-是
-
-本条服务端事件的唯一 ID
-
-type
-
-string
-
-是
-
-固定为 conversation.item.created
-
-response\_id
-
-string
-
-是
-
-生成本次 MCP 调用的父 Response ID
-
-item\_id
-
-string
-
-是
-
-审批请求 item ID，与 item.id 相同
-
-previous\_item\_id
-
-string
-
-是
-
-被审批的 mcp\_call item ID
-
-item
-
-object
-
-是
-
-审批请求对象
-
-item 字段：
-
-字段路径
-
-类型
-
-必填
-
-说明
-
-item.id
-
-string
-
-是
-
-审批请求 ID；回复时原样填入 approval\_request\_id
-
-item.type
-
-string
-
-是
-
-固定为 mcp\_approval\_request
-
-item.server\_label
-
-string
-
-是
-
-待执行工具所属的 MCP Server 标识
-
-item.name
-
-string
-
-是
-
-待执行工具的原始名称
-
-item.arguments
-
-string
-
-是
-
-待审批调用的完整参数 JSON 字符串
-
-item.call\_id
-
-string
-
-是
-
-被审批的工具调用 ID
+该对象通过 `conversation.item.created` 返回；事件顶层字段和审批请求 `item` 字段见 [conversation.item.created](#4f23bd31e6awz)。
 
 示例：
 
@@ -2454,87 +2442,7 @@ string
 
 ### 最终 mcp\_call
 
-MCP 调用进入终态后，该对象出现在 `response.output_item.done.item` 中，并进入父 `response.done.response.output` 的最终快照。
-
-字段路径
-
-类型
-
-必填
-
-说明
-
-item.id
-
-string
-
-是
-
-本次 MCP 调用 item 的唯一 ID
-
-item.type
-
-string
-
-是
-
-固定为 mcp\_call
-
-item.status
-
-string
-
-是
-
-completed 或 failed
-
-item.call\_id
-
-string
-
-是
-
-本次工具调用的唯一 ID
-
-item.server\_label
-
-string
-
-是
-
-实际执行工具的 MCP Server 标识
-
-item.name
-
-string
-
-是
-
-被调用工具的原始名称
-
-item.arguments
-
-string
-
-是
-
-完整工具参数的 JSON 字符串
-
-item.output
-
-string
-
-否
-
-MCP tools/call.result 对象序列化后的 JSON 字符串；部分失败场景也可能出现
-
-item.error
-
-object
-
-否
-
-调用失败时出现，结构见本节 MCP error
+MCP 调用进入终态后，该对象出现在 `response.output_item.done.item` 中，并进入父 `response.done.response.output` 的最终快照；字段见 [response.output\_item.done](#f580421f45w3h) 和 [response.done](#f2333c777d9s4) 的对应分支。
 
 成功示例：
 
@@ -2581,32 +2489,8 @@ object
 }
 ```
 
-### MCP error
+### MCP 错误
 
-字段路径
-
-类型
-
-必填
-
-说明
-
-error.type
-
-string
-
-是
-
-固定为 tool\_execution\_error
-
-error.message
-
-string
-
-是
-
-面向客户端的安全错误描述，不包含上游敏感响应体
-
-MCP Server 返回 `isError=true` 时，最终 mcp\_call 的 status 为 failed，并可能同时包含原始 output 和结构化 error。
+MCP 错误可能发生在工具发现或工具调用阶段。工具发现失败时的 `error` 字段见 [conversation.item.created](#4f23bd31e6awz) 的 `mcp_list_tools` 分支；工具调用失败时见 [response.output\_item.done](#f580421f45w3h) 的 `mcp_call` 分支。
 
 > 相关文档：[实时（Qwen-Omni-Realtime）](raw/model-user-guide/model-experience/omni-modal/realtime.md)。

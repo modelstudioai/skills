@@ -12,3 +12,4 @@
 -   [语音识别](raw/model-user-guide/support/model-studio-model-list/model-list-speech-recognition.md)
 -   [语音转语音](raw/model-user-guide/support/model-studio-model-list/model-list-speech-to-speech.md)
 -   [向量与重排序](raw/model-user-guide/support/model-studio-model-list/model-list-embedding-reranking.md)
+-   [决策模型](raw/model-user-guide/support/model-studio-model-list/model-list-decision.md)

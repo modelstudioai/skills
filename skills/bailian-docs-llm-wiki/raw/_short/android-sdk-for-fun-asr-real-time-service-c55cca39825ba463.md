@@ -1,6 +1,6 @@
-# Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Android SDK
+# Fun-ASR-Realtime实时语音识别Android SDK
 
-本文档提供了Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Android SDK的详细使用指南，帮助您将语音转换为文本。
+本文档提供了Fun-ASR-Realtime实时语音识别Android SDK的详细使用指南，帮助您将语音转换为文本。
 
 ## 快速开始
 
@@ -19,19 +19,19 @@
 ### 调用步骤
 
 1.  初始化 SDK
-2.  按业务需求设置参数：通过[initialize](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#ae6d7dd9cfad3)接口的`parameters`参数设置[连接与控制参数](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#57acf5ecc1w8j)；通过[setParams](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#a23e0d85d7ymt)接口设置[语音识别效果参数](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#d20cce9518kla)。
-3.  调用[startDialog](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#7d33691bdb32v)启动识别流程。
-4.  在[onNuiAudioStateChanged](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#bc71fe2545pfy)回调中，根据音频状态开启录音设备。
-5.  在[onNuiNeedAudioData](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#12577ebc97awb)回调中持续提供录音数据，或者通过[updateAudio](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#ed321b83adxga)持续推送录音数据。
-6.  在[onNuiEventCallback](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#163c1ef871tqt)回调中监听事件并获取语音识别结果。
-7.  调用[stopDialog](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#047417083bahi)停止识别，并通过监听EVENT\_TRANSCRIBER\_COMPLETE事件确认识别已结束。
-8.  当识别功能不再使用时，调用[release](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#44bf12ed9a4g9)接口释放 SDK 资源。
+2.  按业务需求设置参数：通过`initialize`接口的`parameters`参数设置连接与控制参数；通过`setParams`接口设置语音识别效果参数。
+3.  调用`startDialog`启动识别流程。
+4.  在`onNuiAudioStateChanged`回调中，根据音频状态开启录音设备。
+5.  在`onNuiNeedAudioData`回调中持续提供录音数据，或者通过`updateAudio`持续推送录音数据。
+6.  在`onNuiEventCallback`回调中监听事件并获取语音识别结果。
+7.  调用`stopDialog`停止识别，并通过监听EVENT\_TRANSCRIBER\_COMPLETE事件确认识别已结束。
+8.  当识别功能不再使用时，调用`release`接口释放 SDK 资源。
 
 ## 请求参数
 
 ### 连接与控制参数
 
-通过在[initialize](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#ae6d7dd9cfad3)接口的`parameters`参数中传入一个JSON字符串来配置。
+通过在`initialize`接口的`parameters`参数中传入一个JSON字符串来配置。
 
 **参数示例：**以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
 
@@ -62,11 +62,8 @@
 服务地址：
 
 -   `wss://dashscope.aliyuncs.com/api-ws/v1/inference`
-    
 -   华北2（北京）：`wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/inference`
-    
 -   新加坡：`wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/inference`
-    
 
 调用时，请将 `{WorkspaceId}` 替换为真实的 [Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。
 
@@ -100,9 +97,7 @@ API Key。
 
 否
 
-是否启用主动推送音频数据模式，默认值："false"。
-
-当设置为"true"启用主动推送音频数据模式时，且SDK版本支持端侧音频能力（如AEC、VAD），则默认开启端侧音频能力。
+是否启用主动推送音频数据模式，默认值："false"。当设置为"true"启用主动推送音频数据模式时，且SDK版本支持端侧音频能力（如AEC、VAD），则默认开启端侧音频能力。
 
 `workspace`
 
@@ -118,11 +113,7 @@ API Key。
 
 否
 
-日志文件的存储路径。
-
-此参数仅在调用[initialize](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#ae6d7dd9cfad3)接口时将`save_log`设为true时生效。此时必须设置日志文件路径，否则将报错。
-
-本地最多保留两个日志文件。
+日志文件的存储路径。此参数仅在调用`initialize`接口时将`save_log`设为true时生效。此时必须设置日志文件路径，否则将报错。本地最多保留两个日志文件。
 
 `save_wav`
 
@@ -130,18 +121,12 @@ API Key。
 
 否
 
-是否保存调试用的音频文件。音频文件保存于`debug_path`下。
-
-默认值："false"。
-
-取值范围：
+是否保存调试用的音频文件。音频文件保存于`debug_path`下。默认值："false"。取值范围：
 
 -   "true"：是
-    
 -   "false"：否
-    
 
-此参数仅在调用[initialize](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#ae6d7dd9cfad3)接口时将`save_log`设为true时生效。 同时，`debug_path`也必须被设置。
+此参数仅在调用`initialize`接口时将`save_log`设为true时生效。 同时，`debug_path`也必须被设置。
 
 `max_log_file_size`
 
@@ -149,11 +134,7 @@ API Key。
 
 否
 
-设定日志文件的最大字节数。
-
-此参数仅在调用[initialize](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#ae6d7dd9cfad3)接口时将`save_log`设为true时生效。
-
-默认值：104857600（100 \* 1024 \* 1024 字节, 即 100MiB）。
+设定日志文件的最大字节数。此参数仅在调用`initialize`接口时将`save_log`设为true时生效。默认值：104857600（100 \* 1024 \* 1024 字节, 即 100MiB）。
 
 `log_track_level`
 
@@ -161,26 +142,16 @@ API Key。
 
 否
 
-控制通过日志回调（`onNuiLogTrackCallback`）对外发送的日志内容的过滤级别。
-
-默认值：2。
-
-取值范围：
+控制通过日志回调（`onNuiLogTrackCallback`）对外发送的日志内容的过滤级别。默认值：2。取值范围：
 
 -   0：LOG\_LEVEL\_VERBOSE
-    
 -   1：LOG\_LEVEL\_DEBUG
-    
 -   2：LOG\_LEVEL\_INFO
-    
 -   3：LOG\_LEVEL\_WARNING
-    
 -   4：LOG\_LEVEL\_ERROR
-    
 -   5：LOG\_LEVEL\_NONE（表示关闭此功能）
-    
 
-注意：`log_track_level`与`level`（通过[initialize](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#ae6d7dd9cfad3)接口设置）共同决定最终回调的日志。一条日志的级别数值必须同时大于或等于`log_track_level`和`level`的值，才会被回调。例如，`log_track_level`设为2 (INFO)，`level`设为3 (WARNING)，则只有WARNING及以上级别（数值>=3）的日志才会被回调。
+注意：`log_track_level`与`level`（通过`initialize`接口设置）共同决定最终回调的日志。一条日志的级别数值必须同时大于或等于`log_track_level`和`level`的值，才会被回调。例如，`log_track_level`设为2 (INFO)，`level`设为3 (WARNING)，则只有WARNING及以上级别（数值>=3）的日志才会被回调。
 
 `enable_reconnection`
 
@@ -204,9 +175,7 @@ API Key。
 
 否
 
-是否开启端侧AEC回声消除能力。
-
-当参数audio\_update\_manually设置为"true"时，且SDK版本支持端侧AEC音频能力，则默认开启。
+是否开启端侧AEC回声消除能力。当参数audio\_update\_manually设置为"true"时，且SDK版本支持端侧AEC音频能力，则默认开启。
 
 `aec_params.save_audio`
 
@@ -214,9 +183,7 @@ API Key。
 
 否
 
-是否开启端侧AEC回声消除模块音频存储功能。
-
-当`save_wav`为"true"，且设置了`debug_path`，则默认开启，将AEC运行音频数据存储到`debug_path`下。
+是否开启端侧AEC回声消除模块音频存储功能。当`save_wav`为"true"，且设置了`debug_path`，则默认开启，将AEC运行音频数据存储到`debug_path`下。
 
 `aec_params.enable_aec_data_callback`
 
@@ -240,9 +207,7 @@ API Key。
 
 否
 
-是否开启端侧VAD人声检测能力。
-
-当参数audio\_update\_manually设置为"true"时，且SDK版本支持端侧VAD音频能力，则默认开启。
+是否开启端侧VAD人声检测能力。当参数audio\_update\_manually设置为"true"时，且SDK版本支持端侧VAD音频能力，则默认开启。
 
 `vad_params.save_audio`
 
@@ -250,13 +215,11 @@ API Key。
 
 否
 
-是否开启端侧VAD人声检测模块音频存储功能。
-
-当`save_wav`为"true"，且设置了`debug_path`，则默认开启，将VAD运行音频数据存储到`debug_path`下。
+是否开启端侧VAD人声检测模块音频存储功能。当`save_wav`为"true"，且设置了`debug_path`，则默认开启，将VAD运行音频数据存储到`debug_path`下。
 
 ### 语音识别效果参数
 
-通过在[setParams](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#a23e0d85d7ymt)接口的`params`参数中传入一个JSON字符串来配置。
+通过在`setParams`接口的`params`参数中传入一个JSON字符串来配置。
 
 **参数示例：**以下为 JSON 字符串示例，参数未完整列出。请按实际需求在编码时补充：
 
@@ -264,7 +227,7 @@ API Key。
 {
     "service_type": 4,
     "nls_config": {
-        "model": "qwen-audio-3.0-asr-flash-streaming",
+        "model": "fun-asr-realtime",
         "sr_format": "pcm",
         "sample_rate": "16000"
     }
@@ -302,7 +265,7 @@ API Key。
 
 是
 
-指定示例调用的模型。模型信息请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
+模型名称。
 
 `nls_config.sr_format`
 
@@ -399,20 +362,6 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
 
-`nls_config.instant_vocabulary`
-
-`object`
-
-否
-
-即时热词。
-
-以键值对形式传入，键为热词文本（`string`），值为热词权重（`integer`），无需预先创建热词列表。权重取值范围为 \[1, 5\] 或 50：取 \[1, 5\] 时值越大模型越倾向输出该词；取 50 时为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。
-
-适用于临时性、会话级别的热词优化。
-
-与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法、适用模型及限制请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
-
 `nls_config.language_hints`
 
 `array[string]`
@@ -421,11 +370,11 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 待识别音频语种。无默认值，不设置时模型自动识别。
 
-对于 Qwen-Audio-3.x-ASR-Flash-Streaming 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR-Realtime 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。
+仅支持设置 1 个值，设置多个时仅第一个生效。
 
 点击查看支持的语言代码
 
--   Qwen-Audio-3.x-ASR-Flash-Streaming、fun-asr-realtime、fun-asr-realtime-2025-11-07：
+-   fun-asr-realtime、fun-asr-realtime-2025-11-07：
     
     -   zh: 中文
     -   en: 英文
@@ -521,7 +470,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 #### initialize
 
-初始化语音识别SDK实例。SDK为单例模式，在调用[release](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#44bf12ed9a4g9)前禁止重复初始化。
+初始化语音识别SDK实例。SDK为单例模式，在调用`release`前禁止重复初始化。
 
 此接口会引起阻塞，应在非UI线程调用。
 
@@ -550,7 +499,7 @@ public synchronized int initialize(final INativeNuiCallback callback,
 
 `String`
 
-JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参数](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#57acf5ecc1w8j)。
+JSON字符串，包含鉴权、连接和调试参数。参见连接与控制参数。
 
 `level`
 
@@ -562,15 +511,11 @@ JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参
 
 `boolean`
 
-是否保存本地日志。若为`true`，须在[连接与控制参数](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#57acf5ecc1w8j)中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
-
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
+是否保存本地日志。若为`true`，须在连接与控制参数中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
 
 #### setParams
 
-以JSON格式设置[语音识别效果参数](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#d20cce9518kla)。在[startDialog](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#7d33691bdb32v)之前调用。
+以JSON格式设置语音识别效果参数。在`startDialog`之前调用。
 
 **方法签名**
 ```
@@ -588,11 +533,7 @@ public synchronized int setParams(String params)
 
 `String`
 
-[语音识别效果参数](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#d20cce9518kla)。
-
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
+语音识别效果参数。
 
 #### startDialog
 
@@ -620,7 +561,7 @@ VAD模式。固定为`VadMode.TYPE_P2T`。
 
 `String`
 
-如果[连接与控制参数](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#57acf5ecc1w8j)的`apikey`参数使用的是[临时API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，当其过期时，可在此处进行更新。
+如果连接与控制参数的`apikey`参数使用的是[临时API Key](raw/model-api-reference/more-about-models/generate-temporary-api-key.md)，当其过期时，可在此处进行更新。
 
 如果需要通过上下文增强来提升识别准确率，则在此处进行更新。
 
@@ -643,10 +584,6 @@ VAD模式。固定为`VadMode.TYPE_P2T`。
 }
 ```
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### stopDialog
 
 结束识别，调用该接口后，服务端将返回最终识别结果并结束任务。
@@ -655,9 +592,6 @@ VAD模式。固定为`VadMode.TYPE_P2T`。
 ```
 public synchronized int stopDialog();
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### cancelDialog
 
@@ -667,9 +601,6 @@ public synchronized int stopDialog();
 ```
 public synchronized int cancelDialog();
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### updateAction
 
@@ -733,9 +664,6 @@ JSON形式的字符串，用于更新识别上下文等运行时行为。
   ]
 }
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### updateAudio
 
@@ -772,10 +700,6 @@ public synchronized int updateAudio(byte[] data, int len,
 
 请忽略，无需关注此参数。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### updateRefAudio
 
 参数audio\_update\_manually设置为"true"时，且启用了端侧AEC回声消除能力，则需要用此接口推送播放器播放的音频数据作为参考信号。
@@ -811,21 +735,14 @@ public synchronized int updateRefAudio(byte[] data, int len,
 
 请忽略，无需关注此参数。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### release
 
-释放SDK所有内部资源。此方法调用后，SDK实例将变为不可用状态，如需再次使用，必须重新调用[initialize](https://help.aliyun.com/zh/model-studio/android-sdk-for-fun-asr-real-time-service#ae6d7dd9cfad3)进行初始化。
+释放SDK所有内部资源。此方法调用后，SDK实例将变为不可用状态，如需再次使用，必须重新调用`initialize`进行初始化。
 
 **方法签名**
 ```
 public synchronized int release();
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### GetVersion
 
@@ -865,7 +782,7 @@ void onNuiEventCallback(NuiEvent event, final int resultCode, final int arg2, Kw
 
 `int`
 
-[错误码](https://help.aliyun.com/zh/isi/support/error-codes)，在出现EVENT\_ASR\_ERROR事件时有效。
+仅在出现 `EVENT_ASR_ERROR` 事件时有效。
 
 `arg2`
 
@@ -998,42 +915,42 @@ default void onNuiLogTrackCallback(Constants.LogLevel level, String log)
 
 **说明**
 
-EVENT\_TRANSCRIBER\_STARTED
+`EVENT_TRANSCRIBER_STARTED`
 
 任务启动成功。
 
-EVENT\_VAD\_START
+`EVENT_VAD_START`
 
 任务启动后即触发该事件。不代表检测到人声起点。
 
-EVENT\_VAD\_END
+`EVENT_VAD_END`
 
 检测到人声终点。
 
-EVENT\_ASR\_PARTIAL\_RESULT
+`EVENT_ASR_PARTIAL_RESULT`
 
 语音识别中间结果。
 
-EVENT\_ASR\_WARN
+`EVENT_ASR_WARN`
 
 语音识别过程中出现不影响运行的警告，比如开启断网续传后的断网事件。
 
-EVENT\_ASR\_ERROR
+`EVENT_ASR_ERROR`
 
 语音识别过程中出现错误。
 
-EVENT\_MIC\_ERROR
+`EVENT_MIC_ERROR`
 
 因连续2秒未收到任何音频数据而触发。
 
-EVENT\_SENTENCE\_END
+`EVENT_SENTENCE_END`
 
 检测到一句话结束，此时会返回一句完整的识别结果。
 
-EVENT\_TRANSCRIBER\_COMPLETE
+`EVENT_TRANSCRIBER_COMPLETE`
 
 语音识别结束。
 
-EVENT\_AEC\_DATA
+`EVENT_AEC_DATA`
 
 AEC回声消除后的音频数据。

@@ -240,7 +240,16 @@ Qwen-Audio-TTS/CosyVoice 使用 `run-task → task-started → continue-task →
 
 ### 实时语音合成
 
-#### Qwen-Audio-TTS/CosyVoice
+#### Qwen-Audio-TTS
+
+-   [WebSocket 接入指南](raw/_short/qwen-audio-tts-websocket-api-52aafa9f25e1c813.md)
+-   [Java SDK](raw/_short/qwen-audio-tts-java-sdk-a8824c674989f110.md)
+-   [Python SDK](raw/_short/qwen-audio-tts-python-sdk-33fc56a178dfcd65.md)
+-   [Android SDK](raw/_short/qwen-audio-tts-android-sdk-009ccd9eb6369f71.md)
+-   [iOS SDK](raw/_short/qwen-audio-tts-ios-sdk-e258fc8147361a20.md)
+-   [HarmonyOS SDK](raw/_short/qwen-audio-tts-harmonyos-sdk-be07ffd1f69fddb0.md)
+
+#### CosyVoice
 
 -   [WebSocket 接入指南](raw/_short/cosyvoice-websocket-api-615049d40629caf7.md)
 -   [Java SDK](raw/_short/cosyvoice-java-sdk-4cad5c0351587943.md)
@@ -275,7 +284,16 @@ Qwen-Audio-TTS/CosyVoice 使用 `run-task → task-started → continue-task →
 -   [iOS SDK](raw/_short/qwen-asr-message-ios-sdk-6a30fe5bf295f423.md)
 -   [HarmonyOS SDK](raw/_short/qwen-asr-message-harmonyos-sdk-672831878f5443bb.md)
 
-#### Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime
+#### Qwen-Audio-ASR-Streaming
+
+-   [WebSocket 接入指南](raw/_short/qwen-audio-asr-streaming-websocket-api-af0499578aae1ad5.md)
+-   [Python SDK](raw/_short/qwen-audio-asr-streaming-python-sdk-d09b6005cff4b207.md)
+-   [Java SDK](raw/_short/qwen-audio-asr-streaming-java-sdk-0a79c28a0694d86f.md)
+-   [Android SDK](raw/_short/qwen-audio-asr-streaming-android-sdk-f4b72c6ecfb0efa3.md)
+-   [iOS SDK](raw/_short/qwen-audio-asr-streaming-ios-sdk-4296b78affca1c0c.md)
+-   [HarmonyOS SDK](raw/_short/qwen-audio-asr-streaming-harmonyos-sdk-5e1fe47bfe0e04b3.md)
+
+#### Fun-ASR-Realtime
 
 -   [WebSocket 接入指南](raw/_short/fun-asr-realtime-websocket-api-d80484c92992191d.md)
 -   [Python SDK](raw/_short/fun-asr-realtime-python-sdk-c8b5a715c3e66b70.md)

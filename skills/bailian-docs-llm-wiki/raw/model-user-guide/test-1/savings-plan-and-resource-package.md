@@ -642,7 +642,7 @@ AI 通用型节省计划是针对大模型按量付费使用场景设计的折�
         
 -   多模态模型：
     
-    -   商业版：千问Omni（不含 qwen3.5-omni 系列）、千问Omni-Realtime（不含 qwen3.5-omni-realtime 系列）、QVQ、千问VL、千问OCR
+    -   商业版：千问 Omni（不含 qwen3.8-omni-flash、qwen3.5-omni 系列）、千问 Omni-Realtime（不含 qwen3.8-omni-flash-realtime、qwen3.5-omni-realtime 系列）、QVQ、千问VL、千问OCR
         
     -   开源版：Qwen-Omni、Qwen3-Omni-Captioner、Qwen-VL、QVQ
         

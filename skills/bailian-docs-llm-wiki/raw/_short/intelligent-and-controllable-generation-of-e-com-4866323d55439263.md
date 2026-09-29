@@ -4,7 +4,7 @@
 
 **重要**电商零售推广文案写作计费说明：
 
--   除全妙可控式LLM标准模型、全妙可控式LLM高级模型外，其他模型参与百炼新用户限时免费福利，更多关于新用户限时免费福利信息，请参见[新用户限时免费福利](https://help.aliyun.com/zh/model-studio/limited-time-free-benefits-for-new-users)。
+-   除全妙可控式LLM标准模型、全妙可控式LLM高级模型外，其他模型参与百炼新用户限时免费福利，更多关于新用户限时免费福利信息，请参见[新用户限时免费福利](raw/model-user-guide/test-1/new-free-quota.md)。
 -   全妙计费文档详情可参见：[电商文案智能可控生成计费](raw/_short/e-commerce-copy-intelligent-controllable-generat-6ca76e6f5eeda5c9.md)。
 
 ## 功能入口

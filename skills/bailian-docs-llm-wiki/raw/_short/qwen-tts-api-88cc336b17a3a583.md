@@ -2,8 +2,6 @@
 
 非实时语音合成（Qwen-TTS）API 的请求参数与返回字段说明。
 
-> 模型的使用方法请参见 [非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide) 。
-
 ## 请求体
 
 #### 非流式输出
@@ -211,7 +209,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 }'
 ```
 
-> 实时播放Base64 音频的方法请参见：[非实时语音合成](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide)。
+实时播放 Base64 音频的方法请参见[流式播放](https://help.aliyun.com/zh/model-studio/qwen-tts-api#qwen-tts-streaming-playback)。
 
 **model**`string`**（必选）**
 
@@ -252,7 +250,7 @@ curl -X POST 'https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-gen
 
 **instructions**`string`（可选）
 
-设置指令，参见[指令控制](https://help.aliyun.com/zh/model-studio/realtime-tts-user-guide#12884a10929p9)。
+设置指令，参见[指令控制](https://help.aliyun.com/zh/model-studio/non-realtime-tts-user-guide#nrt_instruct_h3)。
 
 默认值：无，不设置时不生效。
 
@@ -455,3 +453,265 @@ URL 过期时间的 UNIX 时间戳。
 **request\_id** `string`
 
 本次请求的 ID。
+
+## 音频下载与播放
+
+运行示例前，请先[获取并配置 API Key](raw/model-api-reference/preparations/get-api-key.md)，并[安装 DashScope SDK](raw/model-api-reference/preparations/install-sdk.md)。Python 播放示例还依赖 PyAudio 和 NumPy；PyAudio 的安装方式见代码注释，NumPy 可通过 `pip install numpy` 安装。
+
+### 下载音频（Java）
+
+需要导入 Gson 依赖，Maven 或 Gradle 添加方式如下：
+
+#### Maven
+
+在`pom.xml`中添加：
+
+```
+<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+<dependency>
+    <groupId>com.google.code.gson</groupId>
+    <artifactId>gson</artifactId>
+    <version>2.13.1</version>
+</dependency>
+```
+
+#### Gradle
+
+在`build.gradle`中添加：
+
+```
+// https://mvnrepository.com/artifact/com.google.code.gson/gson
+implementation("com.google.code.gson:gson:2.13.1")
+```
+
+```
+import com.alibaba.dashscope.aigc.multimodalconversation.AudioParameters;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+
+public class Main {
+    // 如需使用指令控制功能，请将MODEL替换为qwen3-tts-instruct-flash
+    private static final String MODEL = "qwen3-tts-flash";
+    public static void call() throws ApiException, NoApiKeyException, UploadFileException {
+        MultiModalConversation conv = new MultiModalConversation();
+        MultiModalConversationParam param = MultiModalConversationParam.builder()
+                // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
+                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+                .model(MODEL)
+                .text("Today is a wonderful day to build something people love!")
+                .voice(AudioParameters.Voice.CHERRY)
+                .parameter("language_type", "English") // 建议与文本语种一致，以获得正确的发音和自然的语调。
+                // 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash
+                // .parameter("instructions","语速较快，带有明显的上扬语调，适合介绍时尚产品。")
+                // .parameter("optimize_instructions",true)
+                .build();
+        MultiModalConversationResult result = conv.call(param);
+        String audioUrl = result.getOutput().getAudio().getUrl();
+        System.out.print(audioUrl);
+
+        // 下载音频文件到本地
+        try (InputStream in = new URL(audioUrl).openStream();
+             FileOutputStream out = new FileOutputStream("downloaded_audio.wav")) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = in.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+            }
+            System.out.println("\n音频文件已下载到本地：downloaded_audio.wav");
+        } catch (Exception e) {
+            System.out.println("\n下载音频文件时出错：" + e.getMessage());
+        }
+    }
+    public static void main(String[] args) {
+        try {
+            // 以下为华北2（北京）地域的配置。
+            Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+            call();
+        } catch (ApiException | NoApiKeyException | UploadFileException e) {
+            System.out.println(e.getMessage());
+        }
+        System.exit(0);
+    }
+}
+```
+
+### 流式播放
+
+#### Python
+
+```
+# coding=utf-8
+#
+# Installation instructions for pyaudio:
+# APPLE Mac OS X
+#   brew install portaudio
+#   pip install pyaudio
+# Debian/Ubuntu
+#   sudo apt-get install python-pyaudio python3-pyaudio
+#   or
+#   pip install pyaudio
+# CentOS
+#   sudo yum install -y portaudio portaudio-devel && pip install pyaudio
+# Microsoft Windows
+#   python -m pip install pyaudio
+
+import os
+import dashscope
+import pyaudio
+import time
+import base64
+import numpy as np
+
+# 以下为华北2（北京）地域的配置。
+dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+
+p = pyaudio.PyAudio()
+# 创建音频流
+stream = p.open(format=pyaudio.paInt16,
+                channels=1,
+                rate=24000,
+                output=True)
+
+text = "你好啊，我是千问"
+response = dashscope.MultiModalConversation.call(
+    # 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+    # 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：api_key = "sk-xxx"
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    # 如需使用指令控制功能，请将model替换为qwen3-tts-instruct-flash
+    model="qwen3-tts-flash",
+    text=text,
+    voice="Cherry",
+    language_type="Chinese",  # 建议与文本语种一致，以获得正确的发音和自然的语调。
+    # 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash
+    # instructions='语速较快，带有明显的上扬语调，适合介绍时尚产品。',
+    # optimize_instructions=True,
+    stream=True
+)
+
+for chunk in response:
+    if chunk.output is not None:
+      audio = chunk.output.audio
+      if audio.data is not None:
+          wav_bytes = base64.b64decode(audio.data)
+          audio_np = np.frombuffer(wav_bytes, dtype=np.int16)
+          # 直接播放音频数据
+          stream.write(audio_np.tobytes())
+      if chunk.output.finish_reason == "stop":
+          print(f"finish at: {chunk.output.audio.expires_at}")
+time.sleep(0.8)
+# 清理资源
+stream.stop_stream()
+stream.close()
+p.terminate()
+```
+
+#### Java
+
+需要导入 Gson 依赖，Maven 或 Gradle 添加方式如下：
+
+#### Maven
+
+在`pom.xml`中添加：
+
+```
+<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+<dependency>
+    <groupId>com.google.code.gson</groupId>
+    <artifactId>gson</artifactId>
+    <version>2.13.1</version>
+</dependency>
+```
+
+#### Gradle
+
+在`build.gradle`中添加：
+
+```
+// https://mvnrepository.com/artifact/com.google.code.gson/gson
+implementation("com.google.code.gson:gson:2.13.1")
+```
+
+```
+import com.alibaba.dashscope.aigc.multimodalconversation.AudioParameters;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversation;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationParam;
+import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationResult;
+import com.alibaba.dashscope.exception.ApiException;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.alibaba.dashscope.exception.UploadFileException;
+import com.alibaba.dashscope.utils.Constants;
+import io.reactivex.Flowable;
+import javax.sound.sampled.*;
+import java.util.Base64;
+
+public class Main {
+    // 如需使用指令控制功能，请将MODEL替换为qwen3-tts-instruct-flash
+    private static final String MODEL = "qwen3-tts-flash";
+    public static void streamCall() throws ApiException, NoApiKeyException, UploadFileException {
+        MultiModalConversation conv = new MultiModalConversation();
+        MultiModalConversationParam param = MultiModalConversationParam.builder()
+                // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apiKey("sk-xxx")
+                .apiKey(System.getenv("DASHSCOPE_API_KEY"))
+                .model(MODEL)
+                .text("Today is a wonderful day to build something people love!")
+                .voice(AudioParameters.Voice.CHERRY)
+                .parameter("language_type", "English") // 建议与文本语种一致，以获得正确的发音和自然的语调。
+                // 如需使用指令控制功能，请取消下方注释，并将model替换为qwen3-tts-instruct-flash
+                // .parameter("instructions","语速较快，带有明显的上扬语调，适合介绍时尚产品。")
+                // .parameter("optimize_instructions",true)
+                .build();
+        Flowable<MultiModalConversationResult> result = conv.streamCall(param);
+        result.blockingForEach(r -> {
+            try {
+                // 1. 获取Base64编码的音频数据
+                String base64Data = r.getOutput().getAudio().getData();
+                byte[] audioBytes = Base64.getDecoder().decode(base64Data);
+
+                // 2. 配置音频格式（根据API返回的音频格式调整）
+                AudioFormat format = new AudioFormat(
+                        AudioFormat.Encoding.PCM_SIGNED,
+                        24000, // 采样率（需与API返回格式一致）
+                        16,    // 采样位数
+                        1,     // 声道数
+                        2,     // 帧大小（字节数）
+                        24000, // 帧率（需与采样率一致）
+                        false  // 大端序
+                );
+
+                // 3. 实时播放音频数据
+                DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+                try (SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info)) {
+                    if (line != null) {
+                        line.open(format);
+                        line.start();
+                        line.write(audioBytes, 0, audioBytes.length);
+                        line.drain();
+                    }
+                }
+            } catch (LineUnavailableException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+    public static void main(String[] args) {
+        // 以下为华北2（北京）地域的配置。
+        Constants.baseHttpApiUrl = "https://dashscope.aliyuncs.com/api/v1";
+        try {
+            streamCall();
+        } catch (ApiException | NoApiKeyException | UploadFileException e) {
+            System.out.println(e.getMessage());
+        }
+        System.exit(0);
+    }
+}
+```

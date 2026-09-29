@@ -1,49 +1,40 @@
 # [managed agents](../guides/managed-agents.md) api
 
-Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于构建、部署和管理具备长期记忆、多工具调用与环境感知能力的 AI 应用。它将 Agent 生命周期（如环境配置、会话管理、技能编排、文件与凭证管理）抽象为标准化 REST 接口，开发者无需自行维护底层运行时。该 API 与百炼模型服务深度集成，支持异步流式响应与事件驱动架构，详见 [Managed Agents](../../raw/application-api-reference/managed-agents-api.md)。
+Managed Agents API 是百炼平台提供的托管式智能体服务接口，用于创建、配置和运行具备[长期记忆](../concepts/long-term-memory.md)、工具调用、多步推理能力的 AI Agent。该 API 将底层基础设施（如环境隔离、状态持久化、技能编排）抽象为标准 REST 接口，开发者可聚焦于业务逻辑而非运维细节。所有资源均通过统一的 `POST /v1/agents/{agent_id}/run` 等端点驱动，支持异步会话与事件流式响应。
 
 ## 支持的模型与功能
 
-- **模型兼容性**：当前仅支持百炼平台托管的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 系列大模型；不支持自定义模型或第三方模型接入。
-- **核心功能模块**：
-  - `Agent`：定义智能体行为逻辑、系统提示与默认技能集；
-  - `Environment`：隔离运行上下文（如 [sandbox](../guides/sandbox.md)、network policy、tool access scope）；
-  - `Session`：管理用户级会话状态与事件生命周期（`session.created`、`event.step_completed` 等）；
-  - `Memory Store`：提供向量+结构化混合存储，支持跨会话记忆检索；
-  - `Skill` 与 `Vault`：分别封装可复用的功能单元（如查天气、调用数据库）与加密凭证仓库；
-  - `Webhook`：用于接收异步事件回调（如任务完成、错误告警），其签名验证机制在 [Webhook](../../raw/application-api-reference/managed-agents-api/webhook-api.md) 中明确定义。
-
-> **注意**：原始文档中 [Deployment](../../raw/application-api-reference/managed-agents-api/deployment-api.md) 提到支持“灰度发布策略”，但实际 API 当前仅接受 `active` / `inactive` 两种状态，灰度字段已被忽略——该描述已过时，请以 OpenAPI Schema 为准。
+- **模型支持**：当前仅支持百炼平台托管的 `qwen-max`、`qwen-plus` 和 `qwen-turbo` 三款大模型，不支持自定义模型或外部模型接入；模型选择通过 `model` 参数在 Agent 创建时指定。
+- **核心功能**：包括会话管理（Session）、文件上传与引用（Files API）、结构化记忆存储（Memory Store）、技能注册与调用（Skills API）、凭证安全托管（Credential API）、环境变量隔离（Environment API）及 Webhook 事件通知。完整能力矩阵详见 [Managed Agents](../../raw/application-api-reference/managed-agents-api.md)。
+- **扩展能力**：Vault 提供密钥安全分发，Deployment 支持灰度发布与版本回滚，这些高级特性需配合企业版 License 使用 —— 具体权限约束参见 [Deployment](../../raw/application-api-reference/managed-agents-api/deployment-api.md) 文档。
 
 ## 关键参数
 
-所有 POST 请求需携带 `Authorization: Bearer <token>` 及 `Content-Type: application/json`。通用关键参数包括：
-
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| `agent_id` | string | 是（除 `/agents` 创建外） | Agent 唯一标识，由平台分配或用户指定（需全局唯一） |
-| `session_id` | string | 否（首次调用可省略） | 会话 ID；若未提供，API 自动创建新会话并返回 `session_id` |
-| `stream` | boolean | 否，默认 `false` | 设为 `true` 时启用 Server-Sent Events (SSE) 流式响应，适用于长任务场景 |
-| `max_steps` | integer | 否，默认 `15` | 单次会话中 Agent 最大自主推理步数，防止无限循环 |
+| `agent_id` | string | 是 | Agent 实例唯一标识，由 `/v1/agents` 创建后返回 |
+| `input` | object | 是 | 用户输入内容，支持 `text` 字段（字符串）或 `files` 数组（含 `file_id`） |
+| `session_id` | string | 否 | 指定会话上下文；若未提供则新建会话；会话状态默认保留 7 天 |
+| `stream` | boolean | 否 | 设为 `true` 时启用 Server-Sent Events（SSE）流式响应，推荐用于长任务 |
+| `max_steps` | integer | 否 | 限制 Agent 单次执行的最大推理步数，默认 20，上限 100 |
 
-完整参数定义请参考 [Agent](../../raw/application-api-reference/managed-agents-api/agent-api.md) 与 [Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md) 文档。
+> **注意**：`max_steps` 的默认值在 [Session and Event](../../raw/application-api-reference/managed-agents-api/session-api.md) 中标注为 15，但实际 API 行为以最新 OpenAPI Schema（v2024.06）为准，即默认 20。请以运行时响应头 `X-Default-Max-Steps: 20` 为准。
 
 ## 使用方式
 
-1. **初始化 Agent**：调用 `POST /v1/agents` 创建 Agent 实例，传入 `model`、`system_prompt`、`skills` 列表等；
-2. **启动会话**：调用 `POST /v1/sessions`（或直接在 `POST /v1/agents/{id}/run` 中隐式创建），附带用户输入 `input`；
-3. **流式交互（推荐）**：设置 `stream=true`，按 SSE 格式解析 `data:` 行，处理 `message`、`step`、`tool_call` 等事件类型；
-4. **文件与记忆操作**：通过 `/files` 上传上下文材料，再于 `session.run` 请求中引用 `file_ids`；使用 `/memory` 接口显式写入或查询长期记忆。
+1. **创建 Agent**：调用 `POST /v1/agents`，传入 `name`、`model`、`skills`（数组）、`memory_store_id` 等配置；
+2. **启动执行**：向 `POST /v1/agents/{agent_id}/run` 发送请求，携带 `input` 与可选 `session_id`；
+3. **处理响应**：同步模式返回 JSON 结构体（含 `output`、`events`、`session_id`）；流式模式下按 `event: step`、`event: final_output` 分类接收数据块；
+4. **调试与监控**：通过 `/v1/sessions/{session_id}/events` 查询历史事件，或订阅 `/v1/webhooks` 接收 `agent.run.completed` 等事件。
 
-快速上手示例见 [Quick Start](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)。
+快速上手示例见 [快速开始](../../raw/application-api-reference/managed-agents-api/managed-agents-quickstart.md)，其中包含 cURL 与 Python SDK 调用片段。
 
 ## 限制和注意事项
 
-- **速率限制**：单个 `agent_id` 默认限流 5 QPS（突发允许 10 QPS/3s），超出返回 `429 Too Many Requests`；
-- **会话超时**：空闲会话 30 分钟自动销毁，`session_id` 失效；活跃会话最长存活 24 小时；
-- **文件限制**：单文件 ≤ 100 MB，总容量按项目配额计费；不支持 `.exe`、`.bin` 等可执行格式；
-- **安全约束**：`Environment` 中禁用 `root` 权限、`hostNetwork` 及任意端口绑定；所有 `Skill` 调用必须经 `Vault` 解密凭证后执行；
-- **调试建议**：开启 `debug: true`（仅开发环境）可在响应中返回 `trace_id` 和中间步骤日志，便于排查 [Memory Store](../../raw/application-api-reference/managed-agents-api/memory-store-api.md) 检索偏差或技能调用失败问题。
+- 单次 `input.text` 长度上限为 32,768 字符；单个 `files` 数组最多 10 个文件，总大小不超过 100 MB；
+- Memory Store 写入单条记录最大 1 MB，Key 长度限 256 字符，且不支持嵌套对象序列化（需客户端预扁平化）；
+- 所有 Agent 默认启用速率限制：每秒最多 5 次 `/run` 请求（按 `agent_id` 维度计费），超出将返回 `429 Too Many Requests`；
+- Vault 与 Credential 资源的读写权限严格绑定至所属 Agent，跨 Agent 引用将触发 `403 Forbidden` —— 此行为与 [Vault](../../raw/application-api-reference/managed-agents-api/vault-api.md) 文档描述一致，但 [Credential](../../raw/application-api-reference/managed-agents-api/credential-api.md) 中未明确强调，建议始终遵循最小权限原则。
 
 ## 来源文档
 

@@ -1,3 +1,3 @@
-# HappyOyster 使用指南
+# 世界模型
 
--   [HappyOyster 使用指南](raw/model-user-guide/model-experience/world-model/happyoyster-guide.md)
+-   [HappyOyster使用指南](raw/model-user-guide/model-experience/world-model/happyoyster-guide.md)

@@ -1,8 +1,6 @@
 # WebSocket 接入指南
 
-本文介绍通过 WebSocket 连接访问 Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime 实时语音识别服务的接口地址、请求头和交互流程。
-
-DashScope SDK 目前仅支持 Java 和 Python。使用其他编程语言时，可通过 WebSocket 连接与服务进行通信。
+本文介绍通过 WebSocket 连接访问 Fun-ASR-Realtime 实时语音识别服务的接口地址、请求头和交互流程。
 
 ## 接口地址
 
@@ -25,8 +23,6 @@ WebSocket URL 固定如下：
 -   华北2（北京）地域：从 `dashscope.aliyuncs.com` 迁移至 `{WorkspaceId}.cn-beijing.maas.aliyuncs.com`
 -   新加坡地域：从 `dashscope-intl.aliyuncs.com` 迁移至 `{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com`
 
-**重要**URL 必须使用 `wss://` 协议，且固定不变。Authorization 在请求头中设置（参见[请求头](raw/_short/fun-asr-realtime-websocket-api-d80484c92992191d.md)）。
-
 ## 请求头
 
 请求头中需添加如下信息：
@@ -39,33 +35,33 @@ WebSocket URL 固定如下：
 
 **说明**
 
-Authorization
+`Authorization`
 
-string
+`string`
 
 是
 
 鉴权令牌，格式为 `Bearer <your_api_key>`，将 `<your_api_key>` 替换为实际的 API Key。
 
-user-agent
+`user-agent`
 
-string
+`string`
 
 否
 
 客户端标识，便于服务端追踪来源。
 
-X-DashScope-WorkSpace
+`X-DashScope-WorkSpace`
 
-string
+`string`
 
 否
 
 阿里云百炼[业务空间ID](https://help.aliyun.com/zh/model-studio/use-workspace)。
 
-X-DashScope-DataInspection
+`X-DashScope-DataInspection`
 
-string
+`string`
 
 否
 
@@ -77,7 +73,7 @@ string
 
 客户端事件和服务端事件的详细说明，请参见[客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)和[服务端事件](raw/_short/fun-asr-server-events-666d2f9990cd5ae1.md)。
 
-![image](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7761245871/CAEQURiBgMCczta5pxkiIGY0N2Q2YjIwZTM1MTQyNTY4ZmFkY2MwN2JmOTllODFl4709861_20241015153444.149.svg)
+![WebSocket 语音识别交互时序](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/7761245871/CAEQURiBgMCczta5pxkiIGY0N2Q2YjIwZTM1MTQyNTY4ZmFkY2MwN2JmOTllODFl4709861_20241015153444.149.svg)
 
 按时间顺序，客户端与服务端的交互流程如下：
 

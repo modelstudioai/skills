@@ -81,10 +81,6 @@ JSON字符串，包含鉴权、连接和调试参数。详见下方 ticket 参�
 
 是否保存本地日志。若为true，须在 ticket 参数中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
 
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 **ticket JSON 示例**：
 
 ```
@@ -183,10 +179,6 @@ public setParamTts(param: string, value: string): number
 `string`
 
 参数值。
-
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 **可用参数说明**：
 
@@ -350,10 +342,6 @@ public startTts(priority: string, taskid: string, text: string): number
 
 待合成文本。
 
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### pauseTts
 
 暂停当前语音合成任务。任务暂停后，可通过 [resumeTts](#resumetts) 恢复，或通过 [cancelTts](#canceltts) 彻底取消。在任务暂停期间，SDK不支持启动新的合成任务。
@@ -366,10 +354,6 @@ public startTts(priority: string, taskid: string, text: string): number
 public pauseTts(): number
 ```
 
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### resumeTts
 
 恢复处于暂停的语音合成任务。
@@ -379,10 +363,6 @@ public pauseTts(): number
 ```
 public resumeTts(): number
 ```
-
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### cancelTts
 
@@ -410,10 +390,6 @@ public cancelTts(taskid: string): number
 
 要取消的任务ID。若传入空字符串 `''`，则取消所有正在暂停/进行中的合成任务。
 
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### tts\_release
 
 释放 SDK 的所有内部资源，并强制终止所有正在进行的合成任务。调用后，SDK 实例将不可用；如需再次使用，必须重新调用 [tts\_initialize](#tts-initialize) 进行初始化。
@@ -423,10 +399,6 @@ public cancelTts(taskid: string): number
 ```
 public tts_release(): number
 ```
-
-**返回值说明：**
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 ## NuiTtsSdkListener
 
@@ -466,7 +438,7 @@ onTtsEventCallback: (event: NuiSdkTtsEvent, taskid: string, ret_code: number) =>
 
 `number`
 
-[错误码](https://help.aliyun.com/zh/isi/support/error-codes)，仅在事件[`TTS_EVENT_ERROR`](#nuisdkttsevent)中有效。
+仅在出现 [`TTS_EVENT_ERROR`](#nuisdkttsevent) 事件时有效。
 
 ### onTtsDataCallback
 

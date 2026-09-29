@@ -1,6 +1,6 @@
-# Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别HarmonyOS SDK
+# Fun-ASR-Realtime实时语音识别HarmonyOS SDK
 
-本文介绍 Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime 实时语音识别 HarmonyOS SDK 的集成方法、请求参数、接口、回调和示例代码。
+本文介绍 Fun-ASR-Realtime 实时语音识别 HarmonyOS SDK 的集成方法、请求参数、接口、回调和示例代码。
 
 ## 快速开始
 
@@ -41,20 +41,20 @@
 ### 调用步骤
 
 1.  创建 `NativeNui(Constants.ModeType.MODE_DIALOG)` 实例。
-2.  调用 [initialize](#initialize) 初始化SDK，并设置连接与控制参数。
-3.  调用 [setParams](#setparams) 设置模型及识别效果参数。
-4.  调用 [startDialog](#startdialog) 启动识别。
-5.  在 [onNuiAudioStateChanged](#onnuiaudiostatechanged) 中根据音频状态启动、暂停或关闭录音设备。
-6.  在 [onNuiNeedAudioData](#onnuineedaudiodata) 中持续提供录音数据；如果启用了主动推送模式，则调用 [updateAudio](#updateaudio) 推送数据。
-7.  在 [onNuiEventCallback](#onnuieventcallback) 中获取识别结果和任务状态。
-8.  调用 [stopDialog](#stopdialog) 停止识别，并等待 `EVENT_TRANSCRIBER_COMPLETE` 事件。
-9.  不再使用识别功能时，调用 [release](#release) 释放资源。
+2.  调用 `initialize` 初始化SDK，并设置连接与控制参数。
+3.  调用 `setParams` 设置模型及识别效果参数。
+4.  调用 `startDialog` 启动识别。
+5.  在 `onNuiAudioStateChanged` 中根据音频状态启动、暂停或关闭录音设备。
+6.  在 `onNuiNeedAudioData` 中持续提供录音数据；如果启用了主动推送模式，则调用 `updateAudio` 推送数据。
+7.  在 `onNuiEventCallback` 中获取识别结果和任务状态。
+8.  调用 `stopDialog` 停止识别，并等待 `EVENT_TRANSCRIBER_COMPLETE` 事件。
+9.  不再使用识别功能时，调用 `release` 释放资源。
 
 ## 请求参数
 
 ### 连接与控制参数
 
-通过 [initialize](#initialize) 的 `parameters` 参数传入JSON字符串。
+通过 `initialize` 的 `parameters` 参数传入JSON字符串。
 
 ```
 {
@@ -109,7 +109,7 @@
 
 否
 
-API Key。可以在初始化时传入；更推荐通过 [startDialog](#startdialog) 的 `dialog_params` 传入临时API Key。
+API Key。可以在初始化时传入；更推荐通过 `startDialog` 的 `dialog_params` 传入临时API Key。
 
 `audio_update_manually`
 
@@ -117,7 +117,7 @@ API Key。可以在初始化时传入；更推荐通过 [startDialog](#startdial
 
 否
 
-是否启用主动推送音频数据模式，默认值为 `"false"`。设为 `"true"` 时通过 [updateAudio](#updateaudio) 主动推送音频数据；设为 `"false"` 时由SDK通过 [onNuiNeedAudioData](#onnuineedaudiodata) 拉取音频数据。设为 `"true"` 且SDK支持端侧AEC、VAD等音频能力时，默认开启相应端侧音频能力。
+是否启用主动推送音频数据模式，默认值为 `"false"`。设为 `"true"` 时通过 `updateAudio` 主动推送音频数据；设为 `"false"` 时由SDK通过 `onNuiNeedAudioData` 拉取音频数据。设为 `"true"` 且SDK支持端侧AEC、VAD等音频能力时，默认开启相应端侧音频能力。
 
 `workspace`
 
@@ -205,7 +205,7 @@ API Key。可以在初始化时传入；更推荐通过 [startDialog](#startdial
 
 否
 
-是否通过 [onNuiAssistEventCallback](#onnuiassisteventcallback) 的 `EVENT_AEC_DATA` 事件返回AEC处理后的数据，默认值为 `false`。
+是否通过 `onNuiAssistEventCallback` 的 `EVENT_AEC_DATA` 事件返回AEC处理后的数据，默认值为 `false`。
 
 `vad_params`
 
@@ -257,13 +257,13 @@ SDK拉取音频时的采集配置，仅在 `audio_update_manually` 为 `"false"`
 
 ### 语音识别效果参数
 
-通过 [setParams](#setparams) 的 `params` 参数传入JSON字符串。
+通过 `setParams` 的 `params` 参数传入JSON字符串。
 
 ```
 {
   "service_type": 4,
   "nls_config": {
-    "model": "qwen-audio-3.0-asr-flash-streaming",
+    "model": "fun-asr-realtime",
     "sr_format": "opus",
     "sample_rate": 16000
   }
@@ -300,7 +300,7 @@ SDK拉取音频时的采集配置，仅在 `audio_update_manually` 为 `"false"`
 
 是
 
-指定示例调用的模型。模型信息请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
+模型名称。
 
 `nls_config.sr_format`
 
@@ -358,21 +358,13 @@ VAD断句静音阈值（毫秒）。一段语音后的静音时长超过该阈�
 
 预编译热词列表ID。需提前创建热词列表，适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景，参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
 
-`nls_config.instant_vocabulary`
-
-`object`
-
-否
-
-即时热词，键为热词文本，值为整数权重，无需提前创建热词列表，适用于临时性、会话级热词优化。权重取值为 `[1, 5]` 或 `50`；取 `[1, 5]` 时值越大，模型越倾向输出该词；权重为50的超级热词最多50个。与预编译热词同时配置时，两类热词会合并；超过2000个时随机选择2000个使用。参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
-
 `nls_config.language_hints`
 
 `string[]`
 
 否
 
-待识别音频的语种，无默认值；不设置时由模型自动识别。Qwen-Audio-3.x-ASR-Flash-Streaming系列最多使用前4个值；Fun-ASR-Realtime系列仅使用第1个值。支持的语言代码参见[实时语音识别用户指南](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)。
+待识别音频的语种，无默认值；不设置时由模型自动识别。仅支持设置 1 个值，设置多个时仅第一个生效。
 
 `nls_config.speech_noise_threshold`
 
@@ -461,7 +453,7 @@ initialize(
 
 `string`
 
-[连接与控制参数](#%E8%BF%9E%E6%8E%A5%E4%B8%8E%E6%8E%A7%E5%88%B6%E5%8F%82%E6%95%B0)的JSON字符串。
+连接与控制参数的JSON字符串。
 
 `level`
 
@@ -475,15 +467,13 @@ SDK日志级别。取值为 `LOG_LEVEL_VERBOSE`（0）、`LOG_LEVEL_DEBUG`（1�
 
 是否保存本地日志，默认值为 `false`。设为 `true` 时必须在 `parameters` 中设置 `debug_path`，并可通过 `max_log_file_size` 设置文件大小。
 
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### setParams
 
 ```
 setParams(params: string): number
 ```
 
-在 `startDialog` 前设置[语音识别效果参数](#%E8%AF%AD%E9%9F%B3%E8%AF%86%E5%88%AB%E6%95%88%E6%9E%9C%E5%8F%82%E6%95%B0)。`params` 为语音识别效果参数的JSON字符串。返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
+在 `startDialog` 前设置语音识别效果参数。`params` 为语音识别效果参数的JSON字符串。
 
 #### startDialog
 
@@ -522,15 +512,13 @@ JSON字符串。可更新已过期的临时API Key，也可通过 `input_context
 }
 ```
 
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### stopDialog
 
 ```
 stopDialog(): number
 ```
 
-通知服务端结束识别并返回最终结果。收到 `EVENT_TRANSCRIBER_COMPLETE` 后，任务结束。返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
+通知服务端结束识别并返回最终结果。收到 `EVENT_TRANSCRIBER_COMPLETE` 后，任务结束。
 
 #### cancelDialog
 
@@ -538,7 +526,7 @@ stopDialog(): number
 cancelDialog(): number
 ```
 
-立即结束识别，不等待服务端返回最终结果。返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
+立即结束识别，不等待服务端返回最终结果。
 
 #### dialogAction
 
@@ -570,7 +558,7 @@ JSON字符串。
 
 `string`
 
-动作指令。支持 `"context"`（更新上下文）、`"play_start"`（通知AEC开始播放参考音）和 `"play_over"`（通知AEC参考音播放结束）。
+动作指令。支持 `"context`（更新上下文）、`play_start`（通知AEC开始播放参考音）和 `play_over"`（通知AEC参考音播放结束）。
 
 `action_params.context`
 
@@ -594,8 +582,6 @@ JSON字符串。
   ]
 }
 ```
-
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### updateAudio
 
@@ -623,8 +609,6 @@ updateAudio(data: ArrayBuffer, first_pack: boolean): number
 
 是否为首个音频包。首包设为 `true`，后续设为 `false`。
 
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### pushReferenceData
 
 ```
@@ -651,15 +635,13 @@ pushReferenceData(data: ArrayBuffer, first_pack: boolean): number
 
 是否为首个音频包。首包设为 `true`，后续设为 `false`。
 
-返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### release
 
 ```
 release(): number
 ```
 
-释放SDK的全部内部资源。调用后实例不可用；如需再次使用，必须重新调用 `initialize`。返回[错误码](https://help.aliyun.com/zh/isi/support/error-codes)。
+释放SDK的全部内部资源。调用后实例不可用；如需再次使用，必须重新调用 `initialize`。
 
 #### GetVersion
 
@@ -727,7 +709,7 @@ onNuiEventCallback: (
 
 `number`
 
-[错误码](https://help.aliyun.com/zh/isi/support/error-codes)，在 `EVENT_ASR_ERROR` 事件中有效。
+仅在出现 `EVENT_ASR_ERROR` 事件时有效。
 
 `arg2`
 
@@ -1025,7 +1007,7 @@ const initResult = nuiInstance.initialize(
 
 if (initResult == Constants.NuiResultCode.SUCCESS) {
   const nlsConfig: Record<string, Object> = {
-    'model': 'qwen-audio-3.0-asr-flash-streaming',
+    'model': 'fun-asr-realtime',
     'sr_format': 'opus',
     'sample_rate': 16000
   };

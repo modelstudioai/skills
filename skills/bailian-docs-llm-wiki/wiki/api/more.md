@@ -1,43 +1,44 @@
 # more
 
-`more` 是百炼平台提供的辅助能力集合，用于支持应用层高级功能，如服务权限管理、临时凭证分发和知识库检索过滤等。它不直接参与模型推理，而是为 API 调用提供基础设施级支撑。所有 `more` 相关能力均通过独立的 HTTP 接口暴露，需配合主 API（如 `/v1/chat/completions`）协同使用。
+`more` 是百炼平台提供的扩展能力集合，涵盖服务权限管理、安全认证机制与高级检索控制三大方向。它不构成独立 API 服务，而是支撑工作流编排、知识库精准检索、可观测性集成等关键场景的底层基础设施。开发者需按需启用对应能力，并严格遵循最小权限原则配置关联资源。
 
 ## 支持的模型/功能
 
-`more` 本身**不绑定任何大语言模型**，其下辖功能均为平台级服务：
-- 服务关联角色（BailianServiceLinkedRole）：用于授予百炼应用访问云资源（如 OSS、NAS）所需的最小权限 [服务关联角色](../../raw/application-api-reference/more/bailian-service-linked-role.md)  
-- 生成临时 API Key：为前端 SDK 或第三方系统颁发短期有效的认证凭证，避免长期密钥泄露风险 [生成临时API Key](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md)  
-- 知识库 SearchFilters：在 `retrieval` 阶段对向量检索结果施加结构化过滤（如按 `doc_id`、`source`、自定义元字段），提升召回精准度 [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md)
+`more` 本身不提供模型推理能力，但为以下核心功能提供必要支撑：
+
+- **服务关联角色（SLR）**：自动创建并绑定云资源访问权限，支撑工作流调用函数计算（FC）、OSS 数据导入、ADB-PG 向量库接入、MNS 消息监听、OpenTelemetry/SLS/CMS 监控数据采集等 [服务关联角色](../../raw/application-api-reference/more/bailian-service-linked-role.md)。
+- **临时 API Key 生成**：用于在不可信前端环境（如浏览器、App）中安全调用模型 API，避免永久密钥泄露。
+- **知识库 `searchFilters` 高级检索**：在 `Retrieve` 接口请求中传入结构化过滤条件，实现对语义检索结果的字段级精确过滤，显著提升 RAG 场景下结构化数据的召回准确率 [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md)。
+
+> **注意**：文档 1 中 `AliyunServiceRoleForSFMTelemetry` 的策略定义被截断（末尾缺失 `}`），且未列出完整权限；实际部署应以控制台或 RAM 策略详情页显示的完整 JSON 为准。该问题已在 [服务关联角色](../../raw/application-api-reference/more/bailian-service-linked-role.md) 中标记为待修复。
 
 ## 关键参数
 
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `app_id` | string | 是 | 百炼控制台创建的应用唯一标识，所有 `more` 接口均需校验该 ID 的归属权 |
-| `expires_in` | integer | 否（默认 3600） | 仅限临时 API Key 接口，单位为秒，取值范围 900–3600；超出将被拒绝 [生成临时API Key](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md) |
-| `filter` | object | 否（仅 SearchFilters） | JSON 对象，支持 `eq`、`in`、`gt`、`lt` 等操作符，字段名须与知识库文档元数据定义一致 [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md) |
-
-> **注意**：`filter` 中若使用嵌套字段（如 `metadata.author.name`），部分旧版 SDK 可能解析失败；建议优先展平元数据结构，详见 [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md) 中的兼容性说明。
+| 功能 | 参数名 | 类型 | 必填 | 说明 | 取值范围 |
+|------|--------|------|------|------|----------|
+| 临时 API Key | `expire_in_seconds` | Integer | 否 | 设置 Token 有效期（TTL） | `[1, 1800]` 秒，默认 `60` |
+| `searchFilters` | `searchFilters` | Array of Object | 否 | 检索过滤条件数组，每个元素为一个子分组（AND 语义） | 子分组内支持单值、多值、范围（`gte`/`lte` 等）、模糊（`like`）、标签（`tags`）查询 |
 
 ## 使用方式
 
-1. 所有 `more` 接口均以 `POST /more/{subpath}` 形式调用，例如：  
-   ```bash
-   curl -X POST https://dashscope.aliyuncs.com/api/v1/more/temporary-auth-token \
-     -H "Authorization: Bearer $DASHSCOPE_API_KEY" \
-     -d '{"app_id": "app-xxx", "expires_in": 1800}'
-   ```
-2. 请求体必须为 `application/json`，且需携带 `Authorization: Bearer <API_KEY>`（主账号或子账号密钥）  
-3. 响应中 `data.token` 即为可直接用于后续 `/v1/chat/completions` 调用的临时凭证（有效期由 `expires_in` 决定）
+- **服务关联角色**：首次启用对应功能（如发布含 FC 节点的工作流、配置 OSS 数据源）时，系统自动创建 SLR；无需手动调用 API，但需确保主账号具备 `ram:CreateServiceLinkedRole` 权限。
+- **临时 API Key**：向 `https://dashscope.aliyuncs.com/api/v1/tokens` 发起带 `Authorization: Bearer <permanent_key>` 的 POST 请求，可选传 `expire_in_seconds` 查询参数 [生成临时API Key](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md)。
+- **`searchFilters`**：在 `RetrieveRequest` 请求体中直接嵌入 `searchFilters` 字段，格式为 `[{ "field1": "value1" }, { "field2": { "gte": 20, "lte": 30 } }]`；需确保知识库字段已正确映射为可检索类型（如 `string`, `double`）。
 
 ## 限制和注意事项
 
-- 单个应用每分钟最多调用 `temporary-auth-token` 接口 60 次，超限返回 `429 Too Many Requests`  
-- `SearchFilters` 仅在 `retrieval` 模式下生效（即 `input.parameters.retrieval_enabled = true`），在纯 LLM 模式下被忽略  
-- 服务关联角色需在应用创建后**手动启用**，未启用时调用依赖云资源的插件（如文件读取）将返回 `403 Forbidden` —— 该行为与 [服务关联角色](../../raw/application-api-reference/more/bailian-service-linked-role.md) 文档描述一致，但控制台 UI 中“自动启用”开关实际为灰显状态，属已知 UI 延迟问题。
+- **SLR 删除风险**：删除任一 SLR（如 `AliyunServiceRoleForSFMAccessFC`）将导致依赖该角色的功能完全失效（如工作流无法调用 FC），且删除前必须先解除所有业务绑定（如删除函数节点、断开 OSS/ADB 连接）[服务关联角色](../../raw/application-api-reference/more/bailian-service-linked-role.md)。
+- **临时 API Key 不可撤销**：Token 生命周期固定，到期自动失效，**不支持手动删除或提前吊销**；应严格控制 TTL 时长，并避免在日志中打印 `token` 值。
+- **`searchFilters` 语法约束**：
+  - 子分组间为强制 `AND` 逻辑，不可修改；
+  - 多值查询需使用 `json.dumps(["val1","val2"])` 编码为字符串（见 [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md) 示例）；
+  - 模糊查询 `like` 值中 `%` 为通配符，`%abc%` 表示包含 `abc`，`abc%` 表示前缀匹配。
+- **地域隔离**：临时 API Key 的 Endpoint 与生成所用永久 Key 的地域强绑定（北京/新加坡/弗吉尼亚/中国香港），跨地域调用将返回 `InvalidApiKey` 错误。
 
 ## 来源文档
 
-- [更多](../../raw/application-api-reference/more.md)
+- [服务关联角色](../../raw/application-api-reference/more/bailian-service-linked-role.md)
+- [生成临时API Key](../../raw/application-api-reference/more/application-obtain-temporary-authentication-token.md)
+- [知识库SearchFilters](../../raw/application-api-reference/more/how-to-use-search-filters.md)
 
 

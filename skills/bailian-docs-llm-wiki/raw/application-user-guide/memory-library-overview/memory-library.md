@@ -9,13 +9,13 @@
 -   **事实记忆**：从对话中自动提取的关键事件和信息，如"用户每天上午 9 点需要喝水提醒"。适用于动态事件信息。
 -   **用户画像**：基于自定义模板提取的结构化属性，如年龄、职业、爱好。适用于固定用户属性。
 
-记忆库提供开放的 API 接口，可接入任意应用，也支持多应用共享同一记忆库。产品概念与工作原理详见[核心概念](raw/application-user-guide/memory-library-overview/memory/concepts.md)。
+记忆库提供开放的 API 接口，可接入任意应用，也支持多应用共享同一记忆库。产品概念与工作原理详见[核心概念](raw/application-user-guide/memory-library-overview/overview/concepts.md)。
 
 **警告**记忆库将于 **2026 年 8 月 20 日 10:00**（北京时间）正式开始商业化计费，Add 和 Search 调用区分 **Pro** 和 **Lite** 策略版本。详见[计费说明](raw/application-user-guide/memory-library-overview/integration-overview/billing.md)。
 
 ## 快速开始
 
-通过 API 3 步即可完成记忆的写入、查看和检索，参见[快速开始](raw/application-user-guide/memory-library-overview/memory/quickstart.md)。写入的记忆可在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)默认记忆库的**记忆详情**标签页，输入记忆实体 ID（`user_id`）后点击**查看**进行确认。
+通过 API 3 步即可完成记忆的写入、查看和检索，参见[快速开始](raw/application-user-guide/memory-library-overview/overview/quickstart.md)。写入的记忆可在[百炼控制台](https://bailian.console.aliyun.com/cn-beijing/?tab=app#/memory/list)默认记忆库的**记忆详情**标签页，输入记忆实体 ID（`user_id`）后点击**查看**进行确认。
 
 ## 创建记忆库
 
@@ -54,8 +54,8 @@
 
 ## 相关文档
 
--   [快速开始](raw/application-user-guide/memory-library-overview/memory/quickstart.md)
--   [核心概念](raw/application-user-guide/memory-library-overview/memory/concepts.md)
+-   [快速开始](raw/application-user-guide/memory-library-overview/overview/quickstart.md)
+-   [核心概念](raw/application-user-guide/memory-library-overview/overview/concepts.md)
 -   [集成方式概览](raw/application-user-guide/memory-library-overview/integration-overview.md)
 -   [长期记忆 API](raw/application-user-guide/memory-library-overview/long-term-memory-2-0.md)
 -   [长期记忆 API 参考](raw/application-api-reference/long-term-memory-new/long-term-memory-api-reference.md)

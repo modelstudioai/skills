@@ -2,7 +2,7 @@
 
 在终端用阿里云百炼 CLI 查询防护统计、资产分布与风险告警。
 
-[阿里云百炼 CLI](https://help.aliyun.com/zh/model-studio/cli/index) 把安全防护数据的查询封装为命令，便于在终端或 Agent 中调度。使用前需完成安装与鉴权，见 [安装与鉴权](https://help.aliyun.com/zh/model-studio/cli/installation)。
+[阿里云百炼 CLI](https://help.aliyun.com/zh/model-studio/cli/overview) 把安全防护数据的查询封装为命令，便于在终端或 Agent 中调度。使用前需完成安装与鉴权，见 [安装与鉴权](https://help.aliyun.com/zh/model-studio/cli/installation)。
 
 ## 命令
 

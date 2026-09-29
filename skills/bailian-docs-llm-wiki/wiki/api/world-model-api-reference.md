@@ -1,50 +1,50 @@
 # world model api reference
 
-世界模型 API 提供对多模态世界建模能力的程序化访问，支持场景理解、动态推演与交互式内容生成。当前以 HappyOyster 系列为主要实现，涵盖 Adventure（叙事推演）、Directing（镜头调度）和 Acting（角色行为生成）三类核心功能。所有接口均基于 RESTful 设计，需通过 API Key 鉴权调用。
+世界模型 API 提供面向游戏与交互式叙事场景的多模态建模能力，支持剧情生成、角色行为决策、场景动态演化等核心功能。当前以 HappyOyster 系列为主要实现，包含 Adventure、Directing 和 Acting 三类子模型，分别对应不同层级的叙事控制粒度。所有接口均通过标准 HTTP POST 调用，遵循 OpenAPI 3.0 规范。
 
 ## 支持的模型/功能
 
-- **Adventure 模型**：面向开放世界叙事的因果链推演与状态演化，适用于游戏剧情分支、交互式小说等场景。详见 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md)。
-- **Directing 模型**：基于视觉语义理解进行镜头语言调度（如景别切换、运镜逻辑、构图建议），输出结构化导演指令。详见 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md)。
-- **Acting 模型**：生成符合角色设定、上下文状态及物理约束的细粒度动作序列（含时序、姿态、情绪强度），目前处于邀测阶段。详见 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)。
-
-> **注意**：原始文档中未明确说明 Acting 模型是否支持批量请求或流式响应，而 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 明确要求 `Content-Type: application/json` 且不支持 multipart；实际接入时请以最新 OpenAPI Schema 为准，避免假设通用行为。
+- **Adventure 模型**：负责宏观剧情演进与世界状态迁移，适用于章节级叙事规划。  
+- **Directing 模型**：聚焦镜头调度、节奏控制与多角色协同指令生成，常用于实时交互式演出编排。  
+- **Acting 模型**（邀测中）：提供单角色微观行为建模（如表情、微动作、台词情绪适配），需申请白名单访问。  
+> **注意**：[Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md) 中标注的 `v1.2` 接口路径与 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 的 `v1.1` 路径不一致（前者为 `/v1.2/acting/generate`，后者为 `/v1.1/adventure/step`），实际调用请以最新 [Directing Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-directing-openapi-reference.md) 中的版本对齐说明为准。
 
 ## 关键参数
 
-所有端点共用以下基础参数：
+所有请求需携带以下通用 Header：
+- `Authorization: Bearer <api_key>`（必填）
+- `Content-Type: application/json`（必填）
 
-| 参数名 | 类型 | 必填 | 说明 |
-|--------|------|------|------|
-| `model` | string | 是 | 固定值：`happyoyster-adventure` / `happyoyster-directing` / `happyoyster-acting` |
-| `input` | object | 是 | 输入数据结构，格式依模型而异（见各子文档） |
-| `stream` | boolean | 否 | 仅 Adventure 和 Directing 支持；Acting 暂不支持流式（参见 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md)） |
-| `max_steps` | integer | 否 | 推演最大步数，默认 10，上限 50（Adventure 专用） |
+共性 Body 参数包括：
+- `world_state`: JSON 对象，描述当前世界快照（必填，结构详见各子模型文档）  
+- `context_window`: 整数，指定上下文窗口长度（单位：token），默认 `2048`，最大 `8192`  
+- `temperature`: 浮点数，控制输出随机性（`0.0`–`1.5`），默认 `0.7`  
+
+模型特有参数见对应 OpenAPI 文档，例如 Acting 模型额外要求 `character_id` 和 `emotion_intensity` 字段。
 
 ## 使用方式
 
-1. 获取 API Key（通过百炼控制台 → API 密钥管理）  
-2. 构造 POST 请求至对应 endpoint（如 `https://dashscope.aliyuncs.com/api/v1/services/aigc/world-model/adventure`）  
-3. 设置 Header：`Authorization: Bearer <YOUR_API_KEY>`，`Content-Type: application/json`  
-4. 在 request body 中按 [Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 等子文档定义组织 `input` 字段  
+1. 获取 API Key：在百炼控制台「API 密钥管理」中创建，权限需勾选 `world-model:read`  
+2. 构造请求：根据目标模型选择对应 endpoint（如 Adventure 使用 `POST https://dashscope.aliyuncs.com/api/v1.1/adventure/step`）  
+3. 发送并解析响应：成功返回 `200 OK`，`response.choices[0].message.content` 为结构化 JSON 输出，含 `next_world_state` 与 `narrative_actions` 字段  
 
-示例（Adventure 简单推演）：
-```json
-{
-  "model": "happyoyster-adventure",
-  "input": {
-    "world_state": {"location": "forest", "time": "dusk", "characters": ["player", "wolf"]},
-    "action": "player draws sword"
-  }
-}
+示例 cURL（Adventure）：
+```bash
+curl -X POST "https://dashscope.aliyuncs.com/api/v1.1/adventure/step" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "world_state": {"scene": "forest", "characters": ["hero", "villain"]},
+        "temperature": 0.5
+      }'
 ```
 
 ## 限制和注意事项
 
-- 单次请求 `input.world_state` 字段总 token 数不得超过 8192（Directing 模型为 4096）；超出将返回 `400 Bad Request`  
-- Acting 模型暂不开放公网调用，需单独申请邀测权限，且仅支持同步阻塞响应（无 `stream=true` 选项）  
-- 所有模型均不支持跨会话状态持久化；若需长程一致性，请在客户端维护 world state 并显式传入每次请求  
-- > **注意**：[Adventure Open API参考](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-adventure-openapi-reference.md) 中示例使用 `scene_context` 字段，但最新 schema 已统一为 `world_state`；请以 `/v1/models` 接口返回的实时 schema 或 OpenAPI spec 为准，避免依赖旧示例字段名
+- 单次请求 `world_state` 大小上限为 512 KB；嵌套深度不得超过 12 层  
+- Acting 模型目前仅支持中文输入与输出，且不兼容 `stream=true` 流式响应（该限制未在 [Acting Open API参考（邀测中）](../../raw/model-api-reference/world-model-api-reference/happyoyster/happyoyster-acting-openapi-reference.md) 中明确说明，但实测会返回 `400 Bad Request`）  
+- 所有模型均不支持跨会话状态持久化，`world_state` 必须由客户端完整维护并每次显式传入  
+- 超时时间为 30 秒，超时后服务可能已执行部分计算但不保证返回结果一致性
 
 ## 来源文档
 

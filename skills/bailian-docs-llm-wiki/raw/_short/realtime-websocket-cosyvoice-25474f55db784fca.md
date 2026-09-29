@@ -1,4 +1,4 @@
-# Qwen-Audio-TTS/CosyVoice
+# CosyVoice
 
 -   [接入指南](raw/_short/cosyvoice-websocket-api-615049d40629caf7.md)
 -   [Java SDK](raw/_short/cosyvoice-java-sdk-4cad5c0351587943.md)

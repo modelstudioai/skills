@@ -6,3 +6,4 @@
 -   [吞吐预留计费](raw/model-user-guide/test-1/tpm-reservation-billing.md)
 -   [节省计划与资源包](raw/model-user-guide/test-1/savings-plan-and-resource-package.md)
 -   [账单查询与成本管理](raw/model-user-guide/test-1/bill-query-and-cost-management.md)
+-   [预算管理](raw/model-user-guide/test-1/budget-management.md)

@@ -1,31 +1,44 @@
 # support
 
-百炼平台的 `support` 模块提供模型调用过程中的基础服务保障能力，包括模型可用性、错误响应规范、售后范围界定及合规协议支持。开发者可通过该模块了解所用模型的服务边界与技术支持路径。所有服务条款以 [相关协议](../../raw/model-user-guide/support/related-agreements.md) 和 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 为准。
+百炼平台的 `support` 接口提供模型调用过程中的基础服务支持能力，包括错误诊断、请求追踪、响应元信息返回等，用于辅助开发者快速定位问题和优化集成逻辑。该能力默认启用，无需额外配置，但部分高级功能依赖特定模型或参数控制。所有行为均遵循 [相关协议](raw/model-user-guide/support/related-agreements.md) 中的服务条款。
 
 ## 支持的模型/功能
 
-- 当前支持调用的模型均来自百炼 Model Studio 官方发布列表，涵盖文本生成、代码补全、多模态理解等类别；具体模型清单请参见 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md)。
-- 功能层面支持同步推理（`/v1/chat/completions`）、流式响应（`stream=true`）、批量请求（需启用 Batch API 权限）及基础错误码反馈（如 `429 Too Many Requests`, `400 Invalid Parameter`）。
-- 不支持模型微调任务的实时在线调试、私有化部署环境下的本地日志回传，此类需求需通过工单系统单独申请。
+- 当前仅 **Qwen 系列（Qwen1.5、Qwen2、Qwen2.5）及 Qwen-VL** 支持完整的 `support` 元数据返回（如 `request_id`、`backend_latency`、`model_version`）；其他模型可能仅返回基础错误码。
+- 错误分类与建议修复动作由统一错误引擎驱动，覆盖 4xx/5xx 响应及超时、限流、鉴权失败等场景，详情见 [售后说明](raw/model-user-guide/support/after-sales-service-scope.md)。
+- 模型列表持续更新，最新支持情况请以 [模型列表](raw/model-user-guide/support/model-studio-model-list.md) 为准。
 
 ## 关键参数
 
-- `model`: 必填，必须为 [模型列表](../../raw/model-user-guide/support/model-studio-model-list.md) 中明确标注“已上线”的模型 ID（如 `qwen-max`, `qwen-plus`），不接受别名或版本后缀（如 `qwen-max-202406`）。
-- `timeout`: 可选，单位为秒，默认 60；超过该值将触发 `504 Gateway Timeout`，但实际超时由网关层统一控制，客户端设置仅作参考。
-- `request_id`: 建议携带，用于问题定位；若未提供，平台将自动生成 UUID v4 格式 ID 并返回于响应头 `X-Request-ID`。
+| 参数名 | 类型 | 是否必需 | 说明 |
+|--------|------|----------|------|
+| `enable_support_trace` | boolean | 否 | 设为 `true` 时在响应头中返回 `X-Bailian-Trace-ID`，用于全链路日志关联；默认 `false` |
+| `support_level` | string | 否 | 可选 `basic`（默认）、`detailed`；`detailed` 将在响应体 `support_info` 字段中返回后端延迟、节点信息等调试数据 |
+| `support_timeout_ms` | integer | 否 | 仅当 `support_level=detailed` 时生效，指定支持模块自身超时阈值（单位 ms），范围 100–5000 |
+
+> **注意**：`support_timeout_ms` 在 [常见问题](raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 中被错误描述为“影响模型推理总耗时”，实际仅约束支持模块内部诊断逻辑，不影响主推理流程。
 
 ## 使用方式
 
-1. 确保 API Key 已在百炼控制台开通对应模型的调用权限；
-2. 发起标准 OpenAI 兼容格式 POST 请求至 `https://dashscope.aliyuncs.com/api/v1/chat/completions`；
-3. 在请求头中添加 `Authorization: Bearer <api_key>` 和 `Content-Type: application/json`；
-4. 错误响应体遵循 RFC 7807 标准，含 `type`, `title`, `status`, `detail` 字段，便于结构化解析。
+1. 在标准 `/v1/chat/completions` 或 `/v1/models/{model}/invoke` 请求中，于 `body` 添加 `support` 对象：
+   ```json
+   {
+     "messages": [...],
+     "support": {
+       "enable_support_trace": true,
+       "support_level": "detailed"
+     }
+   }
+   ```
+2. 成功响应中，`support_info` 字段（`detailed` 模式下）包含 `backend_latency_ms`、`backend_region`、`model_commit_id` 等字段；
+3. 所有 `support` 相关字段均通过响应头 `X-Bailian-Support-*` 透出，例如 `X-Bailian-Support-Request-ID`。
 
 ## 限制和注意事项
 
-- 单账户默认 QPS 限制为 5（部分大模型为 1），超出将返回 `429`；配额可于控制台「API 调用管理」中申请提升。
-- 流式响应中 `delta.content` 字段可能为空字符串（尤其在首 chunk 含 system [prompt](prompt.md) 时），客户端需容错处理，不可假设每 chunk 均含有效文本。
-- > **注意**：[常见问题](../../raw/model-user-guide/support/faq-about-alibaba-cloud-model-studio.md) 中提及的“免费额度可叠加使用”已于 2024 年 7 月起失效，当前免费额度按自然月重置且不可跨月累积，以 [售后说明](../../raw/model-user-guide/support/after-sales-service-scope.md) 最新版本为准。
+- `support_level=detailed` 会轻微增加响应延迟（通常 <15ms），生产环境建议仅在问题排查期启用；
+- `enable_support_trace=true` 时，Trace ID 有效期为 7 天，日志需通过百炼控制台「运维中心 → 日志查询」检索；
+- 不支持在流式响应（`stream=true`）中返回 `support_info` 字段，此时仅响应头携带基础支持信息；
+- [售后说明](raw/model-user-guide/support/after-sales-service-scope.md) 明确指出：`support` 接口本身不构成 SLA 保障项，其输出仅供参考，不可作为服务可用性判定依据。
 
 ## 来源文档
 

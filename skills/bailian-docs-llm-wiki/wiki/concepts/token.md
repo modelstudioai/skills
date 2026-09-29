@@ -1,50 +1,48 @@
-# Token
+# Token 管理
 
-Token 是百炼平台中用于度量模型计算资源消耗的最小计量单位，代表模型在处理文本、图像、音频等输入输出时所消耗的语义单元（如子词、字节对、视觉 patch 等）。它既是计费与配额控制的核心依据，也是性能监控、用量分析和成本优化的基础指标。
+Token 管理是百炼平台对模型调用过程中输入（input）与输出（output）文本/多模态内容所消耗计算资源的统一计量、配额控制与用量追踪机制。它并非单纯的技术单位，而是连接鉴权、限流、计费与运维监控的核心资源抽象。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-- **计费与配额控制（Token Plan）**：所有支持 Token Plan 的模型（如 `qwen-turbo`、`text-embedding-v3`、`bge-reranker-v2-m3`）均按实际消耗的 Token 数计费。调用时需显式指定 `plan` 参数（如 `"personal"`），其配额上限（如日总 Token 限额、单次 `max_tokens`）直接约束模型响应长度与调用频次。多模态模型（如 `qwen-vl-plus`）暂不纳入 Token Plan，仍按请求次数计费。
-
-- **模型监控与用量统计**：监控系统中的 `TotalToken 数` 指标即为该模型在选定时间范围内所有成功请求的输入 Token 与输出 Token 之和。该数据延迟约 1 小时，用于成本归因、API-Key 级用量审计及告警（如“单日 TotalToken 超阈值”），但**不作为最终计费凭证**——费用中心账单为准。
-
-- **向量与排序服务（Embedding / Rerank）**：文本[向量化](embedding.md)（如 `text-embedding-v4`）按输入文本的 Token 数计费；Rerank 服务（如 `qwen3-rerank`）则按 Query + 所有 Document 的总 Token 数计费。批处理接口（如异步 Embedding）同样以原始文本 Token 总量为计费基准，与是否压缩、编码格式（`float`/`base64`）无关。
-
-- **生成类模型（LLM / Multimodal）**：`input.tokens` 和 `output.tokens` 分别记录 Prompt 与响应的 Token 消耗，可在审计日志中查看（不含内容本身）。流式响应中，`output.tokens` 为最终累计值。`max_tokens` 参数限制的是模型最多生成的 Token 数，受当前 Token Plan 配额硬性约束。
-
-- **RAG 与缓存场景**：显式缓存（`cache_control`）可显著降低重复 Prompt 的 Token 消耗（降幅达 90%），因其跳过模型推理，直接返回缓存向量或响应——此时仅产生极小的元数据 Token 开销，不计入主计费流水。
+- **模型调用配额控制**：通过 Token Plan 为个人或团队分配月度 token 配额（单位：千 token），所有在线同步/异步 API（如 `/v1/chat/completions`、`/v1/embeddings`、图像生成任务）均受其约束；超限时返回 HTTP 429 错误，响应体含 `QUOTA_EXCEEDED` 错误码。
+- **动态折算与模型适配**：不同模型具有独立的 token 折算系数（例如 Qwen2-72B 的 input token 按 1:1 计，output token 按 1:1.5 折算），该系数由模型上下文长度与架构自动确定，开发者应以响应头 `x-bailian-token-used` 的实际值为准，而非静态规则。
+- **组织级资源编排**：通过 Token Plan API 实现企业级自动化管理——可批量分配席位、按 `standard`/`pro`/`max` 规格绑定配额、查询成员用量统计，并与 RAM 权限体系深度集成，支撑多租户治理。
+- **用量可观测性**：在模型监控中，Token 是核心用量指标，支持按模型、API Key、时间维度（分钟/小时/天）进行统计与导出；同时作为失败诊断、告警触发（如 TotalToken 数突增）和成本分账的关键依据。
+- **安全与隔离边界**：Token Plan 不跨 region 生效（如华东1区创建的 Plan 无法在华北2区使用），也不适用于离线批量推理或本地部署模型；子业务空间中的模型调用需严格匹配所属空间的 Token Plan，实现权限与费用隔离。
 
 ## 关键参数和配置
 
-| 参数名 | 所属场景 | 说明 | 是否影响 Token 计费 |
-|--------|----------|------|---------------------|
-| `max_tokens` | 所有生成类 API | 单次响应最大生成 Token 数，受 Token Plan 配额限制；设为 0 或省略时由模型自动决定上限 | ✅ 是（上限约束） |
-| `plan` | Token Plan | Plan 标识符（如 `"team"`），决定本次调用的 Token 配额池与计费规则 | ✅ 是（绑定计费主体） |
-| `input.tokens` / `output.tokens` | 审计日志、监控指标 | 响应头或日志中返回的实际消耗 Token 数，用于调试与用量分析 | ——（只读，非配置项） |
-| `dimensions` | Embedding API | 向量维度（如 `1024`），**不影响 Token 消耗**，仅改变向量大小与存储开销 | ❌ 否 |
-| `encoding_format: base64` | Embedding API | 输出编码方式，**不改变 Token 计费逻辑**，仅影响传输体积 | ❌ 否 |
+| 参数 | 说明 | 典型值/约束 | 使用位置 |
+|------|------|-------------|----------|
+| `token_quota` | 月度总配额上限 | 整数，单位为千 token；自然月重置 | Token Plan 创建/更新时指定 |
+| `token_used` | 当前已消耗量 | 实时可查，精度至 1 token；修改配额不重置此值 | 控制台「配额管理」页、API 返回字段 |
+| `X-Bailian-Token-Plan-ID` | 请求头中显式指定 Plan | 字符串 ID；未携带时系统按用户身份自动匹配默认 Plan | 所有受控模型 API 调用 |
+| `x-bailian-token-used` | 响应头中返回本次消耗量 | 如 `1234`（单位：token）；含 input/output 分项（部分模型支持） | 每次成功模型调用的响应头 |
+| `quota_scope` | 配额作用域 | `personal` 或 `team`；决定继承逻辑与共享范围 | Token Plan 创建时指定 |
 
-> ⚠️ 注意：Token 计费基于原始输入文本（含 system [prompt](../guides/prompt.md)、messages、[prompt](../guides/prompt.md) 字段等）与模型实际输出的完整 tokenization 结果，与 `stream`、`temperature`、`top_p` 等采样参数无关；也与是否启用缓存、日志投递、监控告警等平台功能无关。
+> ⚠️ 注意：  
+> - 单次请求 output token 不得超过模型最大 context 长度的 50%（硬限制，不可绕过）；  
+> - Coding Plan 为独立子计划，专用于代码生成类模型（如 Qwen-Coder），其 token 计量与通用 Token Plan 完全分离；  
+> - 修改 `token_quota` 后立即生效，但 `token_used` 不清零；如需重置用量，须新建 Plan 并迁移流量。
 
 ## 面向开发者，简洁实用
 
-- **查用量**：登录控制台 → **费用与成本 > 模型用量**，按模型、API-Key、时间粒度（天/小时/分钟）查看 `TotalToken` 统计。
-- **控成本**：
-  - 对高频固定 Prompt，务必启用 [显式缓存](../../raw/model-user-guide/use-cases/explicit-cache-guide.md)；
-  - Embedding 场景优先选用 `text-embedding-lite` 等轻量模型；
-  - Rerank 任务避免传入超长 Document，预截断至关键段落。
-- **排问题**：
-  - 若收到 `429 Too Many Requests`，检查 Token Plan 配额是否耗尽（而非单纯 RPM 限流）；
-  - 若 `max_tokens` 设置未生效，确认 `plan` 与 `model` 兼容性（如 `coding` Plan 不支持 `qwen-max`）；
-  - 审计日志中 `input.tokens` 异常偏高？检查是否误将 Base64 图片、大段 JSON Schema 等非文本内容直传至文本模型。
-- **写代码**：始终在 SDK 调用中显式传入 `plan`（推荐全局客户端配置 + 单次覆盖），避免依赖旧版默认 fallback 行为。
+- ✅ **快速启用**：控制台 → 「配额管理」→ 创建 Token Plan → 在 API 请求头添加 `X-Bailian-Token-Plan-ID: <plan_id>`。  
+- ✅ **验证用量**：检查响应头 `x-bailian-token-used`，确认单次调用消耗是否符合预期；结合监控页查看历史趋势。  
+- ✅ **调试超限**：收到 429 错误时，优先检查 `token_used` 是否接近 `token_quota`，再确认是否误用跨 region 或离线模型。  
+- ✅ **生产建议**：  
+  - 使用 SDK 初始化时显式传入 `token_plan_id`（如 Python SDK 支持 `dashscope.TokenPlanID = "xxx"`）；  
+  - 对高并发服务，通过 Token Plan API 自动化分配席位并绑定配额，避免人工操作延迟；  
+  - 将 `x-bailian-token-used` 记录至业务日志，用于内部成本分摊与用量审计。  
+
+Token 管理不是一次性配置项，而是贯穿模型接入、压测、上线与运维全生命周期的资源治理基座。请始终以 `x-bailian-token-used` 响应头为唯一可信来源，而非依赖文档静态规则。
 
 ## 关联主题页
 
 - [token plan guide](../guides/token-plan-guide.md)
 - [token plan api](../api/token-plan-api.md)
+- [more about models](../api/more-about-models.md)
+- [preparations](../api/preparations.md)
 - [model monitoring](../guides/model-monitoring.md)
-- [vector and sort](../api/vector-and-sort.md)
-- [use cases](../guides/use-cases.md)
 
 

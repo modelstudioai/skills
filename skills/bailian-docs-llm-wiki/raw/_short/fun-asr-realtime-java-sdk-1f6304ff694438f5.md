@@ -1,6 +1,6 @@
-# Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Java SDK
+# Fun-ASR-Realtime实时语音识别Java SDK
 
-本文介绍Qwen-Audio-3.x-ASR-Flash-Streaming/Fun-ASR-Realtime实时语音识别Java SDK的参数和接口细节。
+本文介绍Fun-ASR-Realtime实时语音识别Java SDK的参数和接口细节。
 
 ## 前提条件
 
@@ -36,7 +36,7 @@ public class Main {
         // 创建RecognitionParam
         RecognitionParam param =
                 RecognitionParam.builder()
-                        .model("qwen-audio-3.1-asr-flash-streaming")
+                        .model("fun-asr-realtime")
                         // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                         // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                         .apiKey(System.getenv("DASHSCOPE_API_KEY"))
@@ -122,7 +122,7 @@ class RealtimeRecognitionTask implements Runnable {
     @Override
     public void run() {
         RecognitionParam param = RecognitionParam.builder()
-                .model("qwen-audio-3.0-asr-flash-streaming")
+                .model("fun-asr-realtime")
                 // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
@@ -274,7 +274,7 @@ class RealtimeRecognitionTask implements Runnable {
     @Override
     public void run() {
         RecognitionParam param = RecognitionParam.builder()
-                .model("qwen-audio-3.1-asr-flash-streaming")
+                .model("fun-asr-realtime")
                 // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
@@ -426,7 +426,7 @@ public class Main {
         Recognition recognizer = new Recognition();
         // 创建RecognitionParam，audioFrames参数中传入上面创建的Flowable<ByteBuffer>
         RecognitionParam param = RecognitionParam.builder()
-                .model("qwen-audio-3.0-asr-flash-streaming")
+                .model("fun-asr-realtime")
                 // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
                 // 若没有配置环境变量，请用百炼API Key将下行替换为：.apiKey("sk-xxx")
                 .apiKey(System.getenv("DASHSCOPE_API_KEY"))
@@ -487,11 +487,11 @@ SDK的接口地址需在初始化前设置为下方地址（包含WorkspaceId）
 
 ## 请求参数
 
-通过`RecognitionParam`的链式方法配置模型、采样率、音频格式等参数。配置完成的参数对象传入[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#adcb5e9bddbyq)的`call`/`streamCall`方法中使用。
+通过`RecognitionParam`的链式方法配置模型、采样率、音频格式等参数。配置完成的参数对象传入Recognition类的`call`/`streamCall`方法中使用。
 
 ```
 RecognitionParam param = RecognitionParam.builder()
-  .model("qwen-audio-3.1-asr-flash-streaming")
+  .model("fun-asr-realtime")
   .format("pcm")
   .sampleRate(16000)
   //.parameter("language_hints", new String[]{"zh"})
@@ -512,7 +512,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 是
 
-指定模型名。支持 Qwen-Audio-3.x-ASR-Flash-Streaming 和 Fun-ASR-Realtime 系列模型，详情请参见[支持的模型与地域](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide#4a43cc1bb7kxg)。
+模型名称。
 
 `sampleRate`
 
@@ -548,22 +548,6 @@ wav：必须为PCM编码；
 
 amr：仅支持AMR-NB类型。
 
-`keep_dialect`
-
-`boolean`
-
-否
-
-仅 `qwen-audio-3.1-asr-flash-streaming` 支持。默认 `false`，将方言转写为普通话；设为 `true` 时保留方言表达。通过 `.parameter("keep_dialect", value)` 设置。完整参数说明请参见[客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)。
-
-`vad_model`
-
-`String`
-
-否
-
-仅 `qwen-audio-3.1-asr-flash-streaming` 支持。可选 `near_meeting_16k`（近场）或 `far_field_meeting_16k`（远场，默认值）。通过 `.parameter("vad_model", value)` 设置。完整参数说明请参见[客户端事件](raw/_short/fun-asr-client-events-997ba24ade1a8a48.md)。
-
 `vocabularyId`
 
 `String`
@@ -577,57 +561,6 @@ amr：仅支持AMR-NB类型。
 适用于词汇已知且相对稳定、需要跨请求复用同一词表的场景。
 
 使用方法请参见[预编译热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_precompiled_h3)。
-
-`vocabulary`
-
-`Map<String, Integer>`
-
-否
-
-即时热词。
-
-以键值对形式传入，键为热词文本（`string`），值为热词权重（`integer`），无需预先创建热词列表。权重取值范围为 \[1, 5\] 或 50：取 \[1, 5\] 时值越大模型越倾向输出该词；取 50 时为超级热词，召回率大幅提升，但超级热词数量最多不超过 50 个。
-
-适用于临时性、会话级别的热词优化。
-
-与预编译热词同时配置时，系统会合并两类热词；合并后超过 2000 个时，随机选择 2000 个使用。使用方法请参见[即时热词](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy#hw_instant_h3)。
-
-**重要**仅`qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`支持即时热词。
-
-`vocabulary`需要通过 `RecognitionParam` 实例的 `parameter` 方法或者 `parameters` 方法进行设置：
-
-通过parameter设置
-
-```
-Map<String, Integer> vocab = new HashMap<>();
-vocab.put("张三", 5);
-vocab.put("李四", 5);
-
-RecognitionParam param = RecognitionParam.builder()
-        .model("qwen-audio-3.1-asr-flash-streaming")
-        .format("pcm")
-        .sampleRate(16000)
-        .parameter("vocabulary", vocab)
-        .build();
-```
-
-通过parameters设置
-
-```
-Map<String, Integer> vocab = new HashMap<>();
-vocab.put("张三", 5);
-vocab.put("李四", 5);
-
-Map<String, Object> parameters = new HashMap<>();
-parameters.put("vocabulary", vocab);
-
-RecognitionParam param = RecognitionParam.builder()
-        .model("qwen-audio-3.1-asr-flash-streaming")
-        .format("pcm")
-        .sampleRate(16000)
-        .parameters(parameters)
-        .build();
-```
 
 `semantic_punctuation_enabled`
 
@@ -650,7 +583,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 ```
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .parameter("semantic_punctuation_enabled", true)
@@ -661,7 +594,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 ```
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .parameters(Collections.singletonMap("semantic_punctuation_enabled", true))
@@ -686,7 +619,7 @@ VAD 断句静音阈值（ms）。当一段语音后的静音时长超过该阈�
 
 ```
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .parameter("max_sentence_silence", 800)
@@ -697,7 +630,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 ```
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .parameters(Collections.singletonMap("max_sentence_silence", 800))
@@ -722,7 +655,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 ```
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .parameter("multi_threshold_mode_enabled", true)
@@ -733,7 +666,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 ```
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .parameters(Collections.singletonMap("multi_threshold_mode_enabled", true))
@@ -756,7 +689,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 ```
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .parameter("punctuation_prediction_enabled", false)
@@ -767,7 +700,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 ```
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .parameters(Collections.singletonMap("punctuation_prediction_enabled", false))
@@ -797,7 +730,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 ```
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .parameter("heartbeat", true)
@@ -808,7 +741,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 ```
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .parameters(Collections.singletonMap("heartbeat", true))
@@ -823,11 +756,11 @@ RecognitionParam param = RecognitionParam.builder()
 
 待识别音频语种。无默认值，不设置时模型自动识别。
 
-对于 Qwen-Audio-3.x-ASR-Flash-Streaming 系列模型，最多支持设置 4 个值，即便设置超出 4 个，也仅前 4 个生效；对于 Fun-ASR-Realtime 系列模型，仅支持设置 1 个值，即便设置多个，也仅第一个生效。
+仅支持设置 1 个值，设置多个时仅第一个生效。
 
 点击查看支持的语言代码
 
--   qwen-audio-3.1-asr-flash-streaming、qwen-audio-3.0-asr-flash-streaming、fun-asr-realtime、fun-asr-realtime-2025-11-07：
+-   fun-asr-realtime、fun-asr-realtime-2025-11-07：
     
     -   zh: 中文
     -   en: 英文
@@ -878,7 +811,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 ```
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .parameter("language_hints", new String[]{"zh"})
@@ -889,7 +822,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 ```
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .parameters(Collections.singletonMap("language_hints", new String[]{"zh"}))
@@ -922,7 +855,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 ```
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .parameter("speech_noise_threshold", -0.5)
@@ -933,7 +866,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 ```
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .parameters(Collections.singletonMap("speech_noise_threshold", -0.5))
@@ -975,7 +908,7 @@ root.put("filter_with_empty", root1);
 root.put("filter_with_signed", root2);
 
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .parameter("special_word_filter", root.toString())
@@ -1007,7 +940,7 @@ root.put("filter_with_empty", root1);
 root.put("filter_with_signed", root2);
 
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .parameters(Collections.singletonMap("special_word_filter", root.toString()))
@@ -1022,7 +955,7 @@ RecognitionParam param = RecognitionParam.builder()
 
 输入对象，用于传入对话上下文（context）。上下文用于辅助识别、提升专有词汇的识别准确率。使用方法详见[提升识别准确率](https://help.aliyun.com/zh/model-studio/improve-asr-accuracy)。
 
-**重要**仅 `qwen-audio-3.1-asr-flash-streaming`、`qwen-audio-3.0-asr-flash-streaming`、`fun-asr-realtime` 和 `fun-asr-realtime-2025-11-07` 模型支持 context 参数。
+**重要**仅 `fun-asr-realtime`、`fun-asr-realtime-2025-11-07` 模型支持 context 参数。
 
 Map 中需包含 `context` 键，值为 `List<Map<String, Object>>` 类型的消息数组，每条消息包含以下字段：
 
@@ -1060,7 +993,7 @@ input.put("context", Arrays.asList(userMessage, assistantMessage));
 
 // 2. 通过 input 方法传入
 RecognitionParam param = RecognitionParam.builder()
- .model("qwen-audio-3.1-asr-flash-streaming")
+ .model("fun-asr-realtime")
  .format("pcm")
  .sampleRate(16000)
  .input(input)
@@ -1093,8 +1026,8 @@ RecognitionParam param = RecognitionParam.builder()
 public void call(RecognitionParam param, final ResultCallback<RecognitionResult> callback)
 ```
 
--   `param`：[请求参数](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#d72d661a1brzp)
--   `callback`：[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#3639e1cb40mxi)
+-   `param`：请求参数
+-   `callback`：回调接口（ResultCallback）
 
 无
 
@@ -1104,7 +1037,7 @@ public void call(RecognitionParam param, final ResultCallback<RecognitionResult>
 public String call(RecognitionParam param, File file)
 ```
 
--   `param`：[请求参数](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#d72d661a1brzp)
+-   `param`：请求参数
 -   `file`：待识别音频文件
 
 识别结果
@@ -1115,7 +1048,7 @@ public String call(RecognitionParam param, File file)
 public Flowable<RecognitionResult> streamCall(RecognitionParam param, Flowable<ByteBuffer> audioFrame)
 ```
 
--   `param`：[请求参数](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#d72d661a1brzp)
+-   `param`：请求参数
 -   `audioFrame`：`Flowable<ByteBuffer>`实例
 
 `Flowable<RecognitionResult>`
@@ -1132,7 +1065,7 @@ public void sendAudioFrame(ByteBuffer audioFrame)
 
 推送音频，每次推送的音频流不宜过大或过小，建议每包音频时长为100ms左右，大小在1KB~16KB之间。
 
-识别结果通过[回调接口（ResultCallback）](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#3639e1cb40mxi)的onEvent方法获取。
+识别结果通过回调接口（ResultCallback）的onEvent方法获取。
 
 ```
 public void stop()
@@ -1232,7 +1165,7 @@ recognizer.updateContext(payloadInput);
 
 ### 回调接口（`ResultCallback`）
 
-[双向流式调用](raw/_short/fun-asr-realtime-java-sdk-1f6304ff694438f5.md)时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
+双向流式调用时，服务端会通过回调的方式，将关键流程信息和数据返回给客户端。您需要实现回调方法，处理服务端返回的信息或者数据。
 
 回调方法的实现，通过继承抽象类`ResultCallback`完成，继承该抽象类时，您可以指定泛型为`RecognitionResult`。`RecognitionResult`封装了服务器返回的数据结构。
 
@@ -1487,12 +1420,12 @@ ffmpeg -i input.flac -c:a libopus -b:a 128k -vbr on output.opus
 
 -   直接传入本地文件路径：此种方式在最终识别结束后获取完整识别结果，不适合即时反馈的场景。
     
-    参见[非流式调用](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#8341058094tc3)，在[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#adcb5e9bddbyq)的`call`方法中传入文件路径对录音文件直接进行识别。
+    参见非流式调用，在Recognition类的`call`方法中传入文件路径对录音文件直接进行识别。
     
 -   将本地文件转成二进制流进行识别：此种方式一边识别文件一边流式获取识别结果，适合即时反馈的场景。
     
-    -   参见[双向流式调用：基于回调](raw/_short/fun-asr-realtime-java-sdk-1f6304ff694438f5.md)，通过[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#adcb5e9bddbyq)的`sendAudioFrame`方法向服务端发送二进制流对其进行识别。
-    -   参见[双向流式调用：基于Flowable](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#6734e006bc0gp)，通过[Recognition类](https://help.aliyun.com/zh/model-studio/fun-asr-realtime-java-sdk#adcb5e9bddbyq)的`streamCall`方法向服务端发送二进制流对其进行识别。
+    -   参见双向流式调用：基于回调，通过Recognition类的`sendAudioFrame`方法向服务端发送二进制流对其进行识别。
+    -   参见双向流式调用：基于Flowable，通过Recognition类的`streamCall`方法向服务端发送二进制流对其进行识别。
 
 ### 故障排查
 

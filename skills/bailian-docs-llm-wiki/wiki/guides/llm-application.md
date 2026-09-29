@@ -1,31 +1,39 @@
 # llm application
 
-`llm application` 是百炼平台提供的核心应用构建能力，用于将大语言模型能力封装为可部署、可调用的服务。它支持多种应用范式，覆盖从低代码智能体到高代码定制的全场景需求，适用于对话服务、自动化流程、文档分析等典型 LLM 应用场景。开发者可通过控制台或 API 快速创建、配置并发布应用。
+`llm application` 是百炼平台提供的核心能力，用于将大语言模型封装为可部署、可调用的生产级应用。它支持多种交互范式（如智能体、工作流、文件问答等），开发者可通过配置或代码方式快速构建定制化 AI 应用。该能力基于统一的应用抽象层，兼顾低代码灵活性与高代码可控性。
 
 ## 支持的模型与功能
 
-- **应用类型**：当前支持五类应用：智能体应用（含 Agent 1.0 和新版 Agent 2.0）、工作流应用、高代码应用、文件问答应用。各类型能力边界与适用场景详见 [应用类型介绍](../../raw/application-user-guide/llm-application/application-introduction.md)。
-- **模型兼容性**：所有应用类型均支持平台已接入的全部公开及私有 LLM（如 Qwen 系列、Qwen-VL、Qwen-Audio），但部分高级功能（如多模态工具调用）仅在 Agent 2.0 中完整支持，[新版智能体应用（Agent 2.0）](../../raw/application-user-guide/llm-application/new-single-agent-application.md) 文档明确列出其增强能力。
-- > **注意**：[智能体应用（Agent 1.0）](../../raw/application-user-guide/llm-application/single-agent-application.md) 文档中描述的“自动工具发现”机制已被弃用，实际运行时依赖显式配置的工具列表，该差异已在 [新版智能体应用（Agent 2.0）](../../raw/application-user-guide/llm-application/new-single-agent-application.md) 中统一修正。
+- 支持所有已接入百炼平台的 LLM 模型（包括 Qwen 系列、Baichuan、GLM 等），具体可用模型列表见 [应用开发](../../raw/application-user-guide/llm-application.md) 中的“模型兼容性说明”章节。
+- 提供四类预置应用类型：**智能体应用（Agent 2.0）**（推荐新项目使用）、**工作流应用**（支持多节点编排）、**高代码应用**（完全自定义推理逻辑）、**文件问答**（基于上传文档的 RAG 场景）。
+- Agent 1.0 已进入维护模式，不建议新项目采用；其能力已被 [新版智能体应用（Agent 2.0）](../../raw/application-user-guide/llm-application/new-single-agent-application.md) 全面覆盖和增强。
 
 ## 关键参数
 
-- `model_id`：必需，指定底层推理模型 ID（如 `qwen-max`），必须与所选应用类型兼容。
-- `prompt_template`：可选，自定义系统提示词模板；工作流应用和高代码应用中该字段被忽略，由节点逻辑控制。
-- `tools`：仅 Agent 类型应用有效，为工具列表数组，每个工具需包含 `name`、`description` 和 `parameters`（OpenAPI Schema 格式）。
-- `streaming`：布尔值，控制响应是否流式返回；文件问答应用默认强制启用流式，不可关闭。
+- `model_id`: 必填，指定底层 LLM（如 `qwen-max`, `qwen-plus`），需与应用类型兼容。
+- `prompt_template`: 可选，用于覆盖默认系统提示；在工作流和高代码应用中支持 Jinja2 语法。
+- `retrieval_config`: 仅文件问答和部分 Agent 场景生效，控制向量检索范围与重排序策略。
+- `stream`: 布尔值，启用流式响应（默认 `true`），影响返回格式与客户端处理逻辑。
+- > **注意**：`temperature` 和 `top_p` 在 Agent 2.0 中默认由平台自动管理，若显式设置可能被忽略——详见 [新版智能体应用（Agent 2.0）](../../raw/application-user-guide/llm-application/new-single-agent-application.md) 的“参数覆盖规则”。
 
 ## 使用方式
 
-- **控制台创建**：进入「应用开发」→「新建应用」→ 选择类型 → 配置模型、提示词、工具（如适用）→ 发布。
-- **API 调用**：通过 `/v1/applications` 创建应用，再使用 `/v1/chat/completions`（带 `app_id`）发起推理请求。完整参数与示例见 [应用开发](../../raw/application-user-guide/llm-application.md) 主文档。
-- **调试建议**：首次部署后，务必在控制台「测试」页验证工具调用链路与文件解析结果，尤其对文件问答应用，需确认上传文件格式（仅支持 PDF/TXT/DOCX/MD）与编码（UTF-8）符合要求。
+1. **低代码方式**：在控制台「应用开发」页选择模板 → 配置模型与提示词 → 发布 → 获取 API Endpoint。
+2. **API 调用**：使用 `POST /v1/applications/{app_id}/chat`，请求体为 JSON 格式，含 `inputs`（用户输入）和可选 `user`（用户 ID）字段。
+3. **SDK 调用**（Python 示例）：
+   ```python
+   from alibabacloud_bailian20231219 import models as bailian_models
+   client = BailianClient(...)
+   req = bailian_models.ChatRequest(app_id="app-xxx", inputs={"query": "你好"})
+   resp = client.chat(req)
+   ```
+   完整参数与错误码参考 [应用开发](../../raw/application-user-guide/llm-application.md)。
 
-## 限制和注意事项
+## 限制与注意事项
 
-- 单次请求最大上下文长度受所选 `model_id` 原生限制约束，应用层不额外截断；超长 [prompt](prompt.md) 将直接触发模型侧报错。
-- 文件问答应用单次最多处理 10 个文件，总大小不超过 50 MB；超出限制将拒绝上传，不触发后台静默裁剪。
-- 所有应用默认开启敏感词过滤（基于平台级策略），无法在应用维度关闭；如需绕过，须申请白名单权限并单独配置 `sensitive_check: false`（仅限高代码应用且需审批）。
+- 单次请求最大 `inputs` 文本长度为 32768 字符（含上下文拼接后）；超长将触发截断并返回警告。
+- 文件问答应用仅支持 `.pdf`, `.docx`, `.txt`, `.md` 四种格式，且单文件 ≤ 50MB；解析失败时不会抛出异常，而是静默跳过该文件。
+- Agent 2.0 默认启用工具调用（Tool Calling）能力，但若未配置任何工具，则自动退化为普通对话模式——此行为与 [智能体应用（Agent 1.0）](../../raw/application-user-guide/llm-application/single-agent-application.md) 不同，后者需显式关闭工具开关。
 
 ## 来源文档
 

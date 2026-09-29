@@ -1,42 +1,51 @@
 # 函数调用
 
-函数调用（Function Calling）是百炼平台中大模型主动识别用户意图、生成结构化工具调用请求，并交由外部系统执行的关键能力。它使模型能脱离纯文本生成，安全、可控地接入真实业务系统（如数据库、API、计算器、搜索服务等），是构建生产级 AI Agent 的核心机制。
+函数调用（Function Calling）是百炼平台中大模型主动识别用户意图、生成结构化工具请求，并交由执行层安全调度外部能力的核心机制。它不是简单的 API 转发，而是模型在推理过程中自主决策“何时调用、调用哪个函数、传入哪些参数”的闭环过程，是实现智能体自主性、确定性和可扩展性的关键能力。
 
 ## 在百炼平台的不同场景中，这个概念如何使用
 
-函数调用在百炼平台中并非单一接口能力，而是贯穿多个模型与协议的**统一语义能力**，具体体现为以下四类典型场景：
+函数调用在百炼平台中并非单一接口，而是贯穿多个能力层的统一抽象，具体体现为以下三类实践模式：
 
-- **OpenAI 兼容 `chat/completions` 接口**：通过 `tools` 数组声明可用函数（含 `name`、`description`、`parameters` JSON Schema），模型在 `tool_calls` 字段中返回结构化调用请求；开发者需解析并执行后，将结果以 `tool_message` 形式回传继续对话。
-- **Omni Realtime 实时语音 API**：在 `session.update` 配置中传入 `tools`（支持标准 Function Calling 和 MCP 协议），模型可在语音交互流中动态触发工具，但需注意：`tools` 与 `enable_search` 互斥，不可同时启用。
-- **意图识别专用模型（如 `tongyi-intent-detect-v3`）**：在 `INTENT_MODE` 下，模型直接输出 `<intent>` 标签包裹的函数名与参数 JSON，无需 `tool_calls` 封装，适合轻量级路由与快速决策场景。
-- **应用编排中的插件调用（Application Support）**：在低代码应用中配置插件节点后，模型自动理解插件能力并生成调用逻辑；自定义插件需符合 OpenAPI 3.0 规范，平台仅透传 `Authorization` Header，其余请求头不支持自定义。
+- **插件（Plug-in）调用**：面向轻量、标准化能力（如计算器、文生图、实时搜索）。模型根据用户输入自动触发预注册的插件，参数由模型从自然语言中提取并填充。适用于 Assistant API、智能体应用和工作流节点，强调开箱即用与低代码集成。
 
-> ⚠️ 注意：函数调用能力**依赖模型本身支持**。例如 `qwen3-audio`（仅 DashScope 协议）和 `qwen-deep-research` 不支持函数调用；而 `qwen3.8-omni-flash-realtime`、`qwen3.7-plus`、`tongyi-intent-detect-v3` 等明确支持，调用前请确认模型文档说明。
+- **MCP（Model Context Protocol）服务调用**：面向可组合、可托管的工具生态。MCP 将外部服务（如地图、网页爬取、图表生成）封装为符合协议的工具集，模型通过 `tool_choice` 机制自主选择并调用其中某个工具。支持流式响应与错误重试，是构建复杂多步智能体的推荐方式。
+
+- **内置工具（Built-in Tools）调用**：仅限 Managed Agents 运行时环境。模型直接调用平台原生提供的 `bash`、`read`、`web_search` 等沙箱内工具，无需额外配置 URL 或鉴权，所有执行在隔离容器中完成，具备文件读写、联网、代码执行等完整系统级能力。
+
+> ✅ 共同点：三者均由模型自主触发（非人工编排），均依赖准确的工具描述（description）、参数 Schema 和审批策略；  
+> ❗ 差异点：插件和 MCP 侧重“外部服务接入”，内置工具侧重“运行时环境能力”，三者不可混用，需按场景选型。
 
 ## 关键参数和配置
 
-| 参数 | 类型 | 说明 | 所属场景 |
-|------|------|------|----------|
-| `tools` | `array` | 必填。函数定义列表，每个元素包含 `type`（`function` 或 `mcp`）、`function.name`、`description`、`parameters`（JSON Schema） | [OpenAI 兼容接口](openai-compatible-api.md)、Omni Realtime |
-| `tool_choice` | `string` / `object` | 控制调用策略：`"auto"`（默认，由模型决定）、`"none"`（禁用）、`{"type": "function", "function": {"name": "xxx"}}`（强制指定） | [OpenAI 兼容接口](openai-compatible-api.md) |
-| `reasoning.effort` | `string` | 在 `OpenAI兼容-Responses` 接口中，设为 `"high"` 可提升工具调用准确性（尤其复杂参数组合） | Responses 接口 |
-| `INTENT_MODE` | — | 在 `tongyi-intent-detect-v3` 的 `system` message 中声明，触发意图+参数直出模式，响应格式为 `<intent>{"name":"xxx","args":{...}}</intent>` | 意图识别模型 |
-| `extra_body.tools` | `array` | 使用 OpenAI SDK 调用非标模型（如 `farui-plus`）时，需将 `tools` 放入 `extra_body` 透传 | 更多模型（More Models） |
+函数调用的可靠性高度依赖以下核心配置项，开发者需在创建/配置对应资源时显式声明：
 
-- 所有函数调用均要求 `parameters` 使用严格 JSON Schema 定义（支持 `string`、`number`、`boolean`、`object`、`array` 及嵌套），模型据此生成合法参数；建议避免过度复杂 schema，优先使用 `required` 字段明确必填项。
-- 工具执行结果必须以正确格式（如 OpenAI 的 `tool_message` 或意图模型的 `<intent>` 块）回传，否则会导致上下文断裂或循环调用。
+| 配置项 | 所属场景 | 说明 | 示例 |
+|---------|-----------|------|------|
+| `tool_id` / `function.name` | 插件、MCP、Assistant API | 工具唯一标识符，必须与注册时完全一致 | `"calculator"`, `"maps_route"` |
+| `parameters` / `inputSchema` | 全部 | 定义工具所需参数的 JSON Schema，直接影响模型参数提取准确性 | `{"type": "object", "properties": {"query": {"type": "string"}}}` |
+| `permission_policy` | Managed Agents | 控制调用前是否需人工审批，仅对内置工具和 MCP 有效 | `{"type": "always_ask"}`（暂停会话等待确认） |
+| `tool_choice` | Assistant API、MCP | 显式指定模型行为：`"auto"`（默认，自主决策）、`"none"`（禁用）、或指定 `{"type": "function", "function": {"name": "xxx"}}` | 用于强制触发特定工具调试 |
+| `env`（环境变量） | MCP、Managed Agents | 安全传递敏感凭据（如 API Key），**禁止明文写入配置**，须通过 KMS 加密或 Vault 注入 | `{"AMAP_MAPS_API_KEY": "{{vault:amap_key}}"}` |
+
+> ⚠️ 注意：  
+> - 参数类型为 `Object` 时，所有子字段必须有明确 `type` 且不可为空，否则发布失败（错误码 `130022`）；  
+> - `tool_id` 区分大小写，且不支持特殊字符；  
+> - 启用 `always_ask` 审批策略后，该策略仅对新建会话生效，已有会话不受影响。
 
 ## 面向开发者，简洁实用
 
-- ✅ **推荐实践**：优先使用 `qwen3.7-plus` 或 `qwen3.8-max` 等通用强模型进行函数调用；对高确定性任务（如客服意图识别），选用 `tongyi-intent-detect-v3` + `INTENT_MODE` 可降低解析开销、提升首响速度。
-- ✅ **调试技巧**：开启 `stream=False` 获取完整响应，检查 `tool_calls` 或 `<intent>` 内容是否符合预期；若调用失败，先验证 `parameters` Schema 是否与实际传参一致（如 `number` vs `"number"` 字符串）。
-- ❌ **避坑提示**：不要在同一个请求中混用 `tools` 和 `enable_search`（Omni Realtime）；不要为不支持函数调用的模型（如 `qwen3-audio`）配置 `tools`，将被静默忽略；自定义插件注册后，须在控制台完成鉴权测试再上线。
+- **调试优先**：首次集成函数调用时，务必开启 `stream=true` 并监听 `event: tool_call` 类型事件，观察模型是否正确识别工具名、是否生成合法参数。若参数为空或格式错误，优先检查 `description` 是否清晰、`inputSchema` 是否完备。
+- **Schema 是关键**：比写 [prompt](../guides/prompt.md) 更重要的是写好 `inputSchema` —— 用简短准确的 `description` 描述每个字段用途（如 `"城市名称，例如'北京'"`），避免模糊表述。
+- **权限最小化**：内置工具和 MCP 默认禁用，启用前务必评估风险；涉及网络或文件操作的工具，应配合 `environment.networking.type="unrestricted"` 或挂载白名单路径。
+- **错误处理必做**：函数调用失败（如 HTTP 4xx/5xx、超时、Schema 不匹配）会返回 `tool_error` 事件，需在客户端捕获并降级处理（如提示用户重试或切换方案），不可静默忽略。
+- **不要重复造轮子**：优先选用官方插件或 MCP 服务（如 `quark_search` 已覆盖基础检索），自定义开发仅用于私有系统或强定制逻辑。
 
 ## 关联主题页
 
-- [qwen api reference](../api/qwen-api-reference.md)
-- [omni realtime api](../api/omni-realtime-api.md)
-- [more models](../api/more-models.md)
-- [application support](../guides/application-support.md)
+- [managed agents api](../api/managed-agents-api.md)
+- [managed agents](../guides/managed-agents.md)
+- [plug in](../guides/plug-in.md)
+- [application call](../api/application-call.md)
+- [model context protocol](../guides/model-context-protocol.md)
 
 

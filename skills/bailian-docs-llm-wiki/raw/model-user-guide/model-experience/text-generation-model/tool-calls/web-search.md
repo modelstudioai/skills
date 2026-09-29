@@ -3546,9 +3546,9 @@ A：联网搜索结果可能包含管控信息，触发内容安全规则，导�
 
 A：使用 qwen3-max 或更新版本的模型。qwen3-max 能识别非交易日并提示无收盘价；qwen-max 缺少日期推理能力，会在非交易日返回搜索获取的股价。`enable_search_extension` 与 `prompt_intervene` 无法解决该问题。
 
-### Q：调用 Kimi 系列模型时联网搜索为何不生效？
+### Q：如何让 Kimi 系列模型执行联网搜索？
 
-A：Kimi 系列模型不支持 `enable_search` 参数，无法使用本文所述的模型内置联网搜索。如需让 Kimi 模型获取实时信息，请在百炼控制台创建智能体应用，并通过**工具 > MCP 服务**添加联网搜索 MCP 工具（如 `bailian_web_search`）。添加后，模型将通过该 MCP 工具检索并返回实时搜索结果。联网搜索 MCP 与内置联网搜索是相互独立的两个功能，计费也相互独立，详情请参见[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)。
+A：Kimi 系列模型（如 Moonshot-Kimi-K2-Instruct）支持 `enable_search` 参数，可以通过本文所述的模型内置联网搜索获取实时信息。如需更灵活的检索方式，也可在百炼控制台创建智能体应用，并通过**工具 > MCP 服务**添加联网搜索 MCP 工具（如 `bailian_web_search`）。联网搜索 MCP 与内置联网搜索是相互独立的两个功能，计费也相互独立，详情请参见[接入 Harness 工具](raw/model-user-guide/token-plan-guide/token-plan-personal/token-plan-harness-tool.md)。
 
 ## 错误信息
 

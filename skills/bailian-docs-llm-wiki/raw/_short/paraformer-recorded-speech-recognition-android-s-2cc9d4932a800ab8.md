@@ -492,9 +492,6 @@ public synchronized int initialize(final INativeFileTransCallback callback,
     是否保存本地日志。若为`true`，须在[连接与控制参数](https://help.aliyun.com/zh/model-studio/paraformer-recorded-speech-recognition-android-sdk#57acf5ecc1w8j)中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### setParams
 
@@ -533,9 +530,6 @@ public synchronized int setParams(String params);
     ```
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### startFileTranscriber
 
@@ -584,9 +578,6 @@ public synchronized int startFileTranscriber(String params, byte[] task_id)
     任务ID，SDK内部生成随机字符串，在此接口调用成功后可获得task\_id。
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### queryFileTranscriber
 
@@ -613,9 +604,6 @@ public synchronized int queryFileTranscriber(String task_id)
     待查询的任务ID。
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### cancelFileTranscriber
 
@@ -642,9 +630,6 @@ public synchronized int cancelFileTranscriber(String task_id)
     待取消的任务ID。
     
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### release
 
@@ -657,9 +642,6 @@ public synchronized int release();
 ```
 
 -   **返回值说明**
-    
-    返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-    
 
 #### GetVersion
 
@@ -704,7 +686,7 @@ void onFileTransEventCallback(NuiEvent event, final int resultCode, final int ar
     
     `int`
     
-    [错误码](https://help.aliyun.com/zh/isi/support/error-codes)，在出现EVENT\_ASR\_ERROR事件时有效。
+    仅在出现 `EVENT_ASR_ERROR` 事件时有效。
     
     `asrResult`
     

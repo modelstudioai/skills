@@ -1,45 +1,39 @@
 # application component api reference
 
-应用组件 API 提供了将百炼平台能力集成到自定义应用中的标准化接口，支持模型调用、工作流编排、知识库检索等核心场景。该 API 面向企业级开发者设计，强调稳定性、可扩展性与权限隔离。所有接口均需通过 RAM 授权并使用指定服务接入点调用。
+应用组件 API 提供了百炼平台中可复用业务能力的标准化调用接口，用于在自定义应用中集成对话、知识检索、工作流编排等核心功能。该 API 采用 RESTful 设计，支持 HTTPS 调用，并依赖 RAM 授权与 OpenAPI 签名机制进行身份验证。所有接口均需通过指定服务接入点访问，且版本兼容性遵循语义化版本规则。
 
 ## 支持的模型/功能
 
-- **基础大模型调用**：支持 `qwen-max`、`qwen-plus`、`qwen-turbo` 等 Qwen 系列模型，以及部分第三方模型（需开通白名单）  
-- **结构化能力组件**：包括 `text2sql`、`table-extract`、`document-parse` 等专用组件，详见 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)  
-- **工作流引擎集成**：支持通过 `workflow_id` 调用预置或自定义工作流，底层基于百炼可视化编排能力构建  
-
-> **注意**：文档中提及的 `qwen-vl-plus` 模型在 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 中已标注为“已下线”，当前仅保留 `qwen-vl` 基础多模态能力，调用时请勿使用已废弃模型标识。
+当前应用组件 API 支持以下核心能力：
+- **对话交互**：基于 `bailian-v1` 模型系列（如 `qwen-max`, `qwen-plus`）的多轮会话管理；
+- **知识增强**：绑定知识库 ID 后启用 RAG 检索，支持结构化文档与非结构化文本混合召回；
+- **工作流执行**：调用预置或用户自定义的 workflow ID，支持同步返回与异步回调两种模式。  
+详细能力列表请参见 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md)。
 
 ## 关键参数
 
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
-| `model_id` | string | 是 | 模型唯一标识，必须从 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 中选取有效值 |
-| `input` | object | 是 | 输入数据结构，格式依组件类型而异（如文本类为 `{ "text": "..." }`，多模态类需含 `image_url` 字段） |
-| `parameters.temperature` | number | 否 | 采样温度，默认 `0.8`；范围 `[0.0, 1.0]`，`0` 表示确定性输出 |
-| `parameters.max_tokens` | integer | 否 | 最大生成 token 数，默认 `1024`，上限 `4096` |
+| `model` | string | 是 | 模型标识符，必须为 [API目录](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-dir.md) 中列出的有效值（如 `qwen-max`）；不支持任意字符串传入。 |
+| `input.messages` | array | 是 | 对话消息数组，每项含 `role`（`user`/`assistant`/`system`）和 `content` 字段；`system` 角色仅允许首条消息使用。 |
+| `parameters.knowledge_id` | string | 否 | 绑定知识库 ID，需已在控制台创建并发布；该字段生效需同时设置 `parameters.enable_knowledge` 为 `true`。 |
+| `parameters.workflow_id` | string | 否 | 工作流唯一标识，须与 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 中定义的 workflow 兼容。 |
+
+> **注意**：`parameters.knowledge_id` 在 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md) 文档中被错误标注为“可选但推荐”，实际为启用知识增强功能的强制依赖字段，以 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md) 的定义为准。
 
 ## 使用方式
 
-1. **鉴权**：使用阿里云 RAM 子账号 AccessKey 或 STS [Token](../concepts/token.md)，并确保已授予 `bailian:InvokeApplicationComponent` 权限 —— 具体策略配置见 [授权信息](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-ram.md)  
-2. **请求地址**：调用 `POST https://bailian.aliyuncs.com/api/v1/component/invoke`（生产环境），接入点详情参见 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)  
-3. **请求示例**（curl）：
-   ```bash
-   curl -X POST https://bailian.aliyuncs.com/api/v1/component/invoke \
-     -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-     -H "Content-Type: application/json" \
-     -d '{
-           "model_id": "qwen-turbo",
-           "input": { "text": "你好，请总结以下内容：" }
-         }'
-   ```
+1. **认证**：使用 RAM 子账号 AccessKey（AK/SK）按 OpenAPI v1 签名规范生成 `Authorization` 头；
+2. **请求地址**：构造 `POST https://{endpoint}/api/v1/applications/{app_id}/components/chat`（其他组件路径见 [服务接入点](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-endpoint.md)）；
+3. **请求体**：JSON 格式，包含 `model`、`input` 及可选 `parameters` 字段；
+4. **响应解析**：成功时返回 `200 OK`，`output.choices[0].message.content` 为模型输出正文。
 
 ## 限制和注意事项
 
-- 单次请求 `input.text` 长度上限为 32768 字符；若含图像，单张 `image_url` 必须可公开访问且响应头含 `Content-Type: image/*`  
-- QPS 限制默认为 5（按 AccessKey 维度），可通过工单申请提升  
-- 所有组件调用均计入百炼平台资源配额，计费以实际 token 消耗为准，详细规则见 [API概览](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-overview.md)  
-- 返回字段 `output` 为字符串或结构化对象，具体形态由所选 `model_id` 决定，不可跨组件假设统一格式
+- 单次请求 `input.messages` 最多支持 50 条历史消息，总 token 数上限为模型 context 长度的 90%；
+- 知识库检索默认返回 Top-3 片段，不可配置；若需调整，须改用独立 Knowledge API；
+- 异步工作流执行最大超时时间为 300 秒，超时后返回 `504 Gateway Timeout`；
+- 所有参数校验逻辑以 [版本说明](../../raw/application-api-reference/application-component-api-reference/api-bailian-2023-12-29-changeset.md) 中最新版为准，旧版文档中未声明的参数将被静默忽略。
 
 ## 来源文档
 

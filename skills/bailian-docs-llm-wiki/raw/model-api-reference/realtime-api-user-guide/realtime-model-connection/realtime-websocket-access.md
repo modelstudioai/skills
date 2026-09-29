@@ -1,4 +1,4 @@
-# WebSocket 接入
+# WebSocket
 
 -   [接入概览](raw/_short/realtime-websocket-overview-e7e35d558a9abd93.md)
 -   [实时多模态](raw/_short/realtime-websocket-omni-10107e1088085e47.md)

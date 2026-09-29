@@ -4,7 +4,7 @@
 
 **重要**传媒/零售文章风格与格式学习应用限时免费，额度用完后再按实际调用模型对应的输入、输出Token以后付费方式来计费。
 
--   更多关于新用户限时免费福利信息，请参见[新用户限时免费福利](https://help.aliyun.com/zh/model-studio/limited-time-free-benefits-for-new-users)。
+-   更多关于新用户限时免费福利信息，请参见[新用户限时免费福利](raw/model-user-guide/test-1/new-free-quota.md)。
 -   关于Token的计算方法和模型的计费详情，请参见[计费项](https://help.aliyun.com/zh/model-studio/billing-for-model-studio)。
 
 ## 功能入口

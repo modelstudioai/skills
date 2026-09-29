@@ -9,13 +9,147 @@
 
 `{WorkspaceId}`需要替换为真实的[Workspace ID](https://help.aliyun.com/zh/model-studio/regions#h2_migrate_domain)。现有域名仍可正常使用。
 
-**用户指南：**模型介绍、功能特性和完整示例代码请参见[实时语音识别](https://help.aliyun.com/zh/model-studio/real-time-speech-recognition-user-guide)
-
 ## 前提条件
 
 1.  [安装SDK](raw/model-api-reference/preparations/install-sdk.md)，确保DashScope SDK版本不低于2.22.5。
 2.  [获取与配置 API Key](raw/model-api-reference/preparations/get-api-key.md)。
 3.  了解[WebSocket API](raw/_short/qwen-asr-realtime-interaction-process-c2a1fb44670529dd.md)。
+
+## 完整示例
+
+**说明**示例代码读取 `your_audio_file.pcm`（PCM16、16 kHz、单声道）。如仅有 MP3/WAV 等格式，可使用 ffmpeg 转换：
+
+```
+ffmpeg -i your_audio.mp3 -ar 16000 -ac 1 -f s16le your_audio_file.pcm
+```
+
+```
+import com.alibaba.dashscope.audio.omni.*;
+import com.alibaba.dashscope.exception.NoApiKeyException;
+import com.google.gson.JsonObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.sound.sampled.LineUnavailableException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
+
+public class Qwen3AsrRealtimeUsage {
+    private static final Logger log = LoggerFactory.getLogger(Qwen3AsrRealtimeUsage.class);
+    private static final int AUDIO_CHUNK_SIZE = 1024; // Audio chunk size in bytes
+    private static final int SLEEP_INTERVAL_MS = 30;  // Sleep interval in milliseconds
+
+    public static void main(String[] args) throws InterruptedException, LineUnavailableException {
+        CountDownLatch finishLatch = new CountDownLatch(1);
+
+        OmniRealtimeParam param = OmniRealtimeParam.builder()
+                .model("qwen3-asr-flash-realtime")
+                // 以下为华北2（北京）地域的配置，调用时请将"{WorkspaceId}"替换为真实的业务空间ID，各地域的配置不同。
+                .url("wss://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime")
+                // 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+                // 若没有配置环境变量，请用阿里云百炼API Key将下行替换为：.apikey("sk-xxx")
+                .apikey(System.getenv("DASHSCOPE_API_KEY"))
+                .build();
+
+        OmniRealtimeConversation conversation = null;
+        final AtomicReference<OmniRealtimeConversation> conversationRef = new AtomicReference<>(null);
+        conversation = new OmniRealtimeConversation(param, new OmniRealtimeCallback() {
+            @Override
+            public void onOpen() {
+                System.out.println("connection opened");
+            }
+            @Override
+            public void onEvent(JsonObject message) {
+                String type = message.get("type").getAsString();
+                switch(type) {
+                    case "session.created":
+                        System.out.println("start session: " + message.get("session").getAsJsonObject().get("id").getAsString());
+                        break;
+                    case "conversation.item.input_audio_transcription.completed":
+                        System.out.println("transcription: " + message.get("transcript").getAsString());
+                        finishLatch.countDown();
+                        break;
+                    case "input_audio_buffer.speech_started":
+                        System.out.println("======VAD Speech Start======");
+                        break;
+                    case "input_audio_buffer.speech_stopped":
+                        System.out.println("======VAD Speech Stop======");
+                        break;
+                    case "conversation.item.input_audio_transcription.text":
+                        System.out.println("transcription: " + message.get("text").getAsString() + message.get("stash").getAsString());
+                        break;
+                    default:
+                        break;
+                }
+            }
+            @Override
+            public void onClose(int code, String reason) {
+                System.out.println("connection closed code: " + code + ", reason: " + reason);
+            }
+        });
+        conversationRef.set(conversation);
+        try {
+            conversation.connect();
+        } catch (NoApiKeyException e) {
+            throw new RuntimeException(e);
+        }
+
+        OmniRealtimeTranscriptionParam transcriptionParam = new OmniRealtimeTranscriptionParam();
+        transcriptionParam.setLanguage("zh");
+        transcriptionParam.setInputAudioFormat("pcm");
+        transcriptionParam.setInputSampleRate(16000);
+
+        OmniRealtimeConfig config = OmniRealtimeConfig.builder()
+                .modalities(Collections.singletonList(OmniRealtimeModality.TEXT))
+                .transcriptionConfig(transcriptionParam)
+                .build();
+        conversation.updateSession(config);
+
+        String filePath = "your_audio_file.pcm";
+        File audioFile = new File(filePath);
+        if (!audioFile.exists()) {
+            log.error("Audio file not found: {}", filePath);
+            return;
+        }
+
+        try (FileInputStream audioInputStream = new FileInputStream(audioFile)) {
+            byte[] audioBuffer = new byte[AUDIO_CHUNK_SIZE];
+            int bytesRead;
+            int totalBytesRead = 0;
+
+            log.info("Starting to send audio data from: {}", filePath);
+
+            // Read and send audio data in chunks
+            while ((bytesRead = audioInputStream.read(audioBuffer)) != -1) {
+                totalBytesRead += bytesRead;
+                byte[] chunk = new byte[bytesRead];
+                System.arraycopy(audioBuffer, 0, chunk, 0, bytesRead);
+                String audioB64 = Base64.getEncoder().encodeToString(chunk);
+                // Send audio chunk to conversation
+                conversation.appendAudio(audioB64);
+
+                // Add small delay to simulate real-time audio streaming
+                Thread.sleep(SLEEP_INTERVAL_MS);
+            }
+
+            log.info("Finished sending audio data. Total bytes sent: {}", totalBytesRead);
+
+        } catch (Exception e) {
+            log.error("Error sending audio from file: {}", filePath, e);
+        }
+
+        //send session.finish and wait for finish and close
+        conversation.endSession();
+        log.info("task finished");
+
+        System.exit(0);
+    }
+}
+```
 
 ## 请求参数
 

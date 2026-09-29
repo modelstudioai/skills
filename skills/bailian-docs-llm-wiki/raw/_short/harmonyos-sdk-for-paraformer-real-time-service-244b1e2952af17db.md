@@ -325,8 +325,6 @@ JSON字符串，包含鉴权、连接和调试参数。参见[连接与控制参
 
 -   **返回值说明**
 
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### setParams
 
 以 JSON 格式设置语音识别效果参数。请在 [startDialog](#startdialog) 之前调用。
@@ -352,8 +350,6 @@ public setParams(params: string): number
 [语音识别效果参数](#%E8%AF%AD%E9%9F%B3%E8%AF%86%E5%88%AB%E6%95%88%E6%9E%9C%E5%8F%82%E6%95%B0)。
 
 -   **返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### startDialog
 
@@ -387,8 +383,6 @@ VAD模式。固定为`Constants.VadMode.TYPE_P2T`。
 
 -   **返回值说明**
 
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### stopDialog
 
 结束识别，调用该接口后，服务端将返回最终识别结果并结束任务。
@@ -400,8 +394,6 @@ public stopDialog(): number
 ```
 
 -   **返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### cancelDialog
 
@@ -415,8 +407,6 @@ public cancelDialog(): number
 
 -   **返回值说明**
 
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### release
 
 释放 SDK 的所有内部资源。调用后，SDK 实例将不可用；如需再次使用，必须重新调用 [initialize](#initialize) 进行初始化。
@@ -428,8 +418,6 @@ public release(): number
 ```
 
 -   **返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### GetVersion
 
@@ -478,7 +466,7 @@ onNuiEventCallback: (event: Constants.NuiEvent, resultCode: number, arg2: number
 
 `number`
 
-[错误码](https://help.aliyun.com/zh/isi/support/error-codes)，在出现`EVENT_ASR_ERROR`事件时有效。
+仅在出现 `EVENT_ASR_ERROR` 事件时有效。
 
 `asrResult`
 

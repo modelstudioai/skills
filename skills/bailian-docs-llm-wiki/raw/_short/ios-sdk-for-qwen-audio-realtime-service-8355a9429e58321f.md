@@ -388,10 +388,6 @@ BOOL
 
 是否保存本地日志。若为`YES`，须在[连接与控制参数](https://help.aliyun.com/zh/model-studio/ios-sdk-for-qwen-audio-realtime-service#connection-and-control-parameters)通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### nui\_set\_params
 
 以 JSON 格式设置[语音对话效果参数](https://help.aliyun.com/zh/model-studio/ios-sdk-for-qwen-audio-realtime-service#conversation-parameters)。在 `nui_dialog_start` 之前调用。
@@ -413,10 +409,6 @@ BOOL
 `char*`
 
 [语音对话效果参数](https://help.aliyun.com/zh/model-studio/ios-sdk-for-qwen-audio-realtime-service#conversation-parameters)。
-
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### nui\_dialog\_start
 
@@ -454,10 +446,6 @@ VAD模式。固定为`MODE_P2T`。
 }
 ```
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### nui\_dialog\_cancel
 
 结束对话或者立即取消当前交互。
@@ -482,10 +470,6 @@ VAD模式。固定为`MODE_P2T`。
 
 -   `YES`：不等待服务端返回最终识别结果就立即结束任务。
 -   `NO`：结束任务，但是会等待完整结果返回。
-
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### nui\_dialog\_action
 
@@ -679,9 +663,6 @@ string
   }
 }
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### nui\_update\_audio\_data
 
@@ -719,10 +700,6 @@ string
 
 无需关注此参数。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### nui\_push\_reference\_data
 
 当 `audio_update_manually` 设为 `"true"` 且启用端侧 AEC 回声消除能力时，需要通过此接口推送播放器播放的音频数据作为参考信号。
@@ -759,10 +736,6 @@ string
 
 无需关注此参数。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### nui\_release
 
 释放SDK所有内部资源，并强制终止所有正在进行的任务。此方法调用后，SDK 实例将变为不可用状态，如需再次使用，必须重新调用 `nui_initialize` 进行初始化。
@@ -771,9 +744,6 @@ string
 ```
 - (NuiResultCode) nui_release;
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### nui\_get\_version
 
@@ -854,7 +824,7 @@ JSON 字符串格式的完整事件信息。
 
 `int`
 
-错误码，在出现EVENT\_ASR\_ERROR事件时有效，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
+仅在出现 `EVENT_ASR_ERROR` 事件时有效。
 
 #### onNuiAudioStateChanged：监听音频状态
 

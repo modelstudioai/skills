@@ -4,7 +4,7 @@ Qwen-Omni-Realtime API的客户端事件参考。
 
 ## session.update
 
-建立 WebSocket 连接后，发送此事件更新会话的默认配置。服务端收到 `session.update` 事件后校验参数，若参数不合法则返回错误，若参数合法则应用更改并返回会话配置。Qwen3.8-Omni-Flash-Realtime 的 MCP 连接地址与凭证不回显，详见[Qwen3.8 客户端事件](#session-tools-mcp)。
+建立 WebSocket 连接后，发送此事件更新会话的默认配置。服务端收到 `session.update` 事件后校验参数，若参数不合法则返回错误，若参数合法则应用更改并返回会话配置。
 
 **type**`string`**（必选）**
 
@@ -41,10 +41,7 @@ Qwen-Omni-Realtime API的客户端事件参考。
             "threshold": 0.5,
             "silence_duration_ms": 800
         },
-        "enable_search": true,
-        "search_options": {
-            "enable_source": true
-        },
+        "enable_search": false,
         "tools": [
             {
                 "type": "function",
@@ -102,15 +99,90 @@ Qwen3.8-Omni-Flash-Realtime 更新会话时必须提供 `session`。全部输入
 
 默认音色：
 
+-   Qwen3.8-Omni-Flash-Realtime：`Tina`
 -   Qwen3.5-Omni-Realtime 系列模型：`Tina`
 -   Qwen3-Omni-Flash-Realtime：`Cherry`
 -   Qwen-Omni-Turbo-Realtime：`Chelsie`
 
-Qwen3.8-Omni-Flash-Realtime 默认使用 `Tina`；嵌套字段的优先级与示例见[输出音色](#session-audio-voice)。
-
 **audio**`object`（可选）
 
-输入和输出音频配置，详见[音频配置](#session-audio)。
+输入和输出音频配置。未配置时沿用现有默认行为。
+
+属性
+
+**input**`object`（可选）
+
+用户输入音频配置。
+
+属性
+
+**format**`object`（可选）
+
+输入音频的格式和采样率。建议在会话 IDLE 阶段、发送首段音频前完成配置，音频输入开始后不可修改。
+
+属性
+
+**type**`string`（可选）
+
+`qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime` 可选 `pcm`（默认值，单声道、16 bit 裸 PCM）或 `wav`（WAV 容器封装的单声道、16 bit PCM）。Qwen3.8-Omni-Flash-Realtime 的多通道输入只能使用 `pcm`，默认值为 `pcm`。
+
+**sample\_rate**`integer`（可选）
+
+`qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime` 可选 8000、16000（默认值）、24000、48000 Hz。Qwen3.8-Omni-Flash-Realtime 的多通道输入只能使用 16000 Hz，默认值为 16000 Hz。
+
+以下四个字段适用于 Qwen3.8-Omni-Flash-Realtime 的 WebSocket 多通道输入：
+
+**sample\_format**`string`（可选）
+
+PCM 采样格式，只能为 `s16le`，默认值为 `s16le`。
+
+**channels**`integer`（可选）
+
+输入声道数，仅支持 1（默认值）、2、4。2、4 声道空间音频的输入 Token 数均为普通音频的 2 倍，详见[Token 计算](https://help.aliyun.com/zh/model-studio/realtime#cfba3898e4d0h)。
+
+**packing**`string`（可选）
+
+多通道样本排列方式，只能为 `interleaved`，默认值为 `interleaved`。
+
+**channel\_layout**`string`（可选）
+
+按 `channels` 确定默认值：1 声道为 `mono`，2 声道为 `raw_mic_array`，4 声道为 `foa_ambix`。显式提供时必须与 `channels` 匹配。
+
+多通道输入必须使用 PCM、16000 Hz、s16le 和 interleaved；字段省略时使用上述默认值，一旦提供则必须符合类型和值约束，不得以 `null` 代替省略。
+
+**output**`object`（可选）
+
+模型输出音频配置。
+
+属性
+
+**format**`object`（可选）
+
+模型输出音频的格式和采样率。建议在会话建立初期、尚未开始音频交互前完成配置。
+
+属性
+
+**type**`string`（可选）
+
+`qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime` 可选 `pcm`（默认值，单声道、16 bit 裸 PCM）或 `wav`（WAV 容器封装的单声道、16 bit PCM）。
+
+**sample\_rate**`integer`（可选）
+
+`qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime` 可选 8000、16000、24000（默认值）、48000 Hz。
+
+**voice**`string`（可选）
+
+Qwen3.8-Omni-Flash-Realtime 的输出音色，默认为 `Tina`。支持的音色及对应的 `voice` 参数值见[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)。`session.voice` 是兼容旧接入的字段，新接入建议使用 `session.audio.output.voice`。如果两个字段都设置，输出音频使用 `session.audio.output.voice` 指定的音色。
+
+**input\_audio\_transcription**`object｜null`（可选）
+
+输入音频转录配置。设为 `null` 可关闭。
+
+属性
+
+**model**`string`（必选）
+
+固定为 `qwen3-asr-flash-realtime`；设置 `{"model":"qwen3-asr-flash-realtime"}` 可启用输入音频转录，不支持修改模型值。Python SDK 的 `enable_input_audio_transcription` 是 `update_session` 方法参数，不是 `session.update` 的顶层字段。
 
 **input\_audio\_format**`string`（可选）
 
@@ -192,31 +264,47 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 **video**`object`（可选）
 
-视频输入配置，`video.input.representation_compact` 用于视频聚合，详见[视频配置](#session-video)。
-
-**tools**`array`（可选）
-
-工具定义列表。配置后模型可根据用户输入自主决定是否调用工具。
-
-以下属性描述自定义 Function Calling 工具。Qwen3.8-Omni-Flash-Realtime 的 MCP 工具配置见[MCP 工具配置](#session-tools-mcp)。
+Qwen3.8-Omni-Flash-Realtime 的视频输入配置。
 
 属性
 
+**input**`object`（可选）
+
+视频输入参数。
+
+属性
+
+**representation\_compact**`string`（可选）
+
+视频输入表征聚合方式；会话初始默认 `none`，保留完整的细粒度视频输入表征。`normal` 聚合表征以降低计算开销，适用于对视觉细节要求不高的场景；相同视频输入的 Token 数为 `none` 模式的 1/4，详见[Token 计算](https://help.aliyun.com/zh/model-studio/realtime#cfba3898e4d0h)。应在发送首段音频前设置，音频输入开始后不可修改。
+
+**tools**`array`（可选）
+
+工具定义列表。配置后模型可根据用户输入自主决定是否调用工具。Qwen3.8-Omni-Flash-Realtime 可在同一会话中同时配置 Function Calling 和 MCP 工具，数组元素按 `type` 区分；`tools` 与 `enable_search` 不可同时开启。
+
+Function Calling（type=function）
+
 **type**`string`（必选）
 
-自定义 Function Calling 工具固定为 `function`。
+固定为 `function`。
 
-**function.name**`string`（必选）
+**function**`object`（必选）
+
+自定义函数定义。
+
+属性
+
+**name**`string`（必选）
 
 工具函数名称，建议与函数名保持一致，例如 `get_current_weather` 或 `get_current_time`。
 
-**function.description**`string`（可选）
+**description**`string`（可选）
 
 对工具函数功能的描述，模型据此判断是否调用该工具。
 
-**function.parameters**`object`（可选）
+**parameters**`object`（可选）
 
-对工具函数入参的描述，模型据此提取所需入参。若函数无需入参，可不指定。
+对工具函数入参的描述，模型据此提取所需入参。函数无需入参时可不指定。
 
 属性
 
@@ -226,11 +314,47 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 **properties**`object`（可选）
 
-描述各入参的名称、数据类型与说明。Key 为入参名称，Value 为包含数据类型（`type`）和描述（`description`）的对象。
+按名称列出函数的入参定义。右侧示例中的 `location` 是自定义入参名称，其 `type` 和 `description` 分别描述数据类型和用途。
 
 **required**`array`（可选）
 
 指定哪些入参为必填项。
+
+MCP（type=mcp）
+
+字段标为“必选”表示该 MCP 数组元素出现时必须提供。每次新增或更新 MCP 配置都必须同时提供 `server_label` 和 `server_url`，不能只传 `server_label` 复用已有配置；仅在没有活动 Response 时更新。MCP 连接、工具发现和调用受服务配额及超时限制，详见[MCP 调用限制](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-limits)。
+
+**type**`string`（必选）
+
+固定为 `mcp`。
+
+**server\_label**`string`（必选）
+
+MCP Server 的会话内唯一标识，1～64 位，仅允许字母、数字、下划线和连字符。
+
+**server\_url**`string`（必选）
+
+MCP Streamable HTTP 地址，必须为公网 HTTPS 443 地址，最长 4096 字符；不得包含用户名、密码或 URL fragment，域名解析结果必须为公网地址。
+
+**authorization**`string`（可选）
+
+出站 Authorization 值，最长 8192 字符，仅允许可打印 ASCII 字符。
+
+**headers**`object`（可选）
+
+额外出站 HTTP Header，最多 16 个键值对。名称和值均为字符串。名称长 1～128 位，仅允许标准 HTTP Header 名称字符；值最长 8192 字符，仅允许可打印 ASCII 字符。
+
+名称不得使用 `mcp-`、`proxy-`、`x-forwarded-` 前缀，也不得为 `host`、`authorization`、`connection`、`content-length`、`transfer-encoding`、`accept`、`content-type`、`forwarded`、`cookie`、`origin`、`upgrade`、`te`、`trailer`。
+
+**allowed\_tools**`array[string]`（可选）
+
+工具发现后的白名单过滤。省略表示允许全部，空数组表示不暴露任何工具。每个工具名 1～64 位，仅允许字母、数字、下划线、点和连字符。
+
+**require\_approval**`string`（可选）
+
+工具调用审批策略，可选 `always`（默认）或 `never`。
+
+`server_url`、`authorization` 和 `headers` 仅用于服务端连接，不在 `session.updated` 中回显；客户端不应依赖该事件重建这些敏感配置。
 
 **temperature**`float`（可选）
 
@@ -337,127 +461,29 @@ VAD 灵敏度。值越低，VAD 越灵敏，越容易将微弱声音（包括背
 
 > `qwen-omni-turbo` 系列模型**不支持修改**。
 
-### 音频配置
+### 工具配置示例
 
-**audio**`object`（可选）
+配置 MCP 工具时，将地址与凭证替换为实际值；`allowed_tools` 使用 MCP Server 实际提供的工具名。
 
-输入和输出音频配置。未配置时沿用现有默认行为。
+```
+{
+  "type": "session.update",
+  "session": {
+    "tools": [
+      {
+        "type": "mcp",
+        "server_label": "amap",
+        "server_url": "https://example.com/mcp",
+        "authorization": "Bearer ***",
+        "allowed_tools": ["maps_weather"],
+        "require_approval": "always"
+      }
+    ]
+  }
+}
+```
 
-**以下格式和采样率选项适用于 `qwen3.5-omni-plus-realtime`、`qwen3.5-omni-flash-realtime`。**多通道输入的字段和约束见[多通道音频输入](#session-audio-multichannel)。
-
-属性
-
-**audio.input**`object`（可选）
-
-用户输入音频配置。
-
-**audio.input.format**`object`（可选）
-
-用户输入音频的格式和采样率。建议在会话 IDLE 阶段（首次发送音频前）完成配置，发送音频后不可再修改。
-
-**audio.input.format.type**`string`（可选）
-
-用户输入音频格式。可选值：`pcm`（默认值，单声道、16 bit 裸 PCM）、`wav`（WAV 容器封装的单声道、16 bit PCM）。
-
-**audio.input.format.sample\_rate**`integer`（可选）
-
-用户输入音频采样率，单位为 Hz。可选值：`8000`、`16000`（默认值）、`24000`、`48000`。
-
-**audio.output**`object`（可选）
-
-模型输出音频配置。
-
-**audio.output.format**`object`（可选）
-
-模型输出音频的格式和采样率。建议在会话建立初期、尚未开始音频交互前完成配置。
-
-**audio.output.format.type**`string`（可选）
-
-模型输出音频格式。可选值：`pcm`（默认值，单声道、16 bit 裸 PCM）、`wav`（WAV 容器封装的单声道、16 bit PCM）。
-
-**audio.output.format.sample\_rate**`integer`（可选）
-
-模型输出音频采样率，单位为 Hz。可选值：`8000`、`16000`、`24000`（默认值）、`48000`。
-
-#### 多通道音频输入
-
-以下多通道音频配置适用于 Qwen3.8-Omni-Flash-Realtime 的 WebSocket 接入。
-
-字段路径
-
-类型
-
-必填与默认值
-
-允许值与约束
-
-说明
-
-type
-
-string
-
-可选，默认 pcm
-
-多通道输入只能为 pcm
-
-输入音频编码类型
-
-sample\_rate
-
-integer
-
-可选，默认 16000
-
-多通道输入只能为 16000
-
-采样率，单位 Hz
-
-sample\_format
-
-string
-
-可选，默认 s16le
-
-只能为 s16le
-
-PCM 采样格式
-
-channels
-
-integer
-
-可选，默认 1
-
-仅支持 1、2、4
-
-输入声道数；2、4 声道空间音频的输入 Token 数均为普通音频的 2 倍，详见[Token 计算](https://help.aliyun.com/zh/model-studio/realtime#cfba3898e4d0h)
-
-packing
-
-string
-
-可选，默认 interleaved
-
-只能为 interleaved
-
-多通道样本排列方式
-
-channel\_layout
-
-string
-
-可选，按 channels 确定默认值
-
-1 声道为 mono；2 声道为 raw\_mic\_array；4 声道为 foa\_ambix
-
-显式提供时必须与 channels 匹配
-
-使用限制：
-
--   多通道输入必须使用 PCM、16000 Hz、s16le 和 interleaved。
--   多通道配置应在发送首段音频数据前完成；音频输入开始后，不得修改上述音频格式配置。
--   字段省略时使用表中默认值；字段一旦出现，其类型和值必须满足约束，不得传入 null 代替省略。
+### 音频配置示例
 
 双通道示例：
 
@@ -521,37 +547,7 @@ string
 }
 ```
 
-#### 输出音色
-
-以下配置适用于 Qwen3.8-Omni-Flash-Realtime。
-
-字段路径
-
-类型
-
-必填
-
-说明
-
-session.audio.output.voice
-
-string
-
-否
-
-输出音色；默认为 Tina；新增支持 longanlingxin
-
-session.voice
-
-string
-
-否
-
-兼容字段；建议新接入使用 session.audio.output.voice
-
-如果两个字段同时出现，以 `session.audio.output.voice` 为准。音色效果可参考[音色列表](https://help.aliyun.com/zh/model-studio/omni-voice-list#qwen38-voices)。
-
-示例：
+`session.audio.output.voice` 配置示例（使用“龙安灵心”音色，其 `voice` 参数值为 `longanlingxin`）：
 
 ```
 {
@@ -566,38 +562,9 @@ string
 }
 ```
 
-### 视频配置
+### 视频配置示例
 
-以下配置适用于 Qwen3.8-Omni-Flash-Realtime。
-
-字段路径
-
-类型
-
-必填与默认值
-
-允许值
-
-说明
-
-representation\_compact
-
-string
-
-可选；会话初始默认 none
-
-none、normal
-
-视频输入表征聚合方式
-
-取值说明：
-
--   none：保留完整的细粒度视频输入表征。
--   normal：聚合视频输入表征，使用后会降低计算开销，适用于对视觉细节要求不高的场景。相同视频输入的 Token 数为 `none` 模式的 1/4，详见[Token 计算](https://help.aliyun.com/zh/model-studio/realtime#cfba3898e4d0h)。
-
-该字段应在发送首段音频数据前设置；音频输入开始后不得修改。
-
-示例：
+视频聚合示例：
 
 ```
 {
@@ -612,136 +579,9 @@ none、normal
 }
 ```
 
-### MCP 工具配置
-
-以下配置适用于 Qwen3.8-Omni-Flash-Realtime。
-
-字段表中的“必填”表示所属对象出现时必须提供。ID 为不透明字符串，不应依赖其长度、前缀或生成规则。MCP 连接、工具发现和调用受服务配额及超时限制。
-
-当 `session.tools` 中的元素满足 `type="mcp"` 时，该元素表示一个 MCP Server 配置。同一会话可同时配置 Function Calling 和 MCP 工具；`tools` 与 `enable_search` 不可同时开启，该限制也适用于 MCP。服务数量、工具数量、超时及结果大小限制见[MCP 调用限制](https://help.aliyun.com/zh/model-studio/omni-realtime-interaction-process#qwen38-mcp-flow)。
-
-字段路径
-
-类型
-
-必填与默认值
-
-允许值与约束
-
-说明
-
-type
-
-string
-
-必填
-
-新增支持mcp
-
-工具配置类型
-
-server\_label
-
-string
-
-必填
-
-会话内唯一；1～64 位；仅允许字母、数字、下划线和连字符
-
-MCP Server 的会话内标识
-
-server\_url
-
-string
-
-必填
-
-公网 HTTPS 443 地址；最长 4096 字符
-
-MCP Streamable HTTP 地址
-
-authorization
-
-string
-
-可选
-
-最长 8192 字符；仅允许可打印 ASCII 字符
-
-出站 Authorization 值
-
-headers
-
-object
-
-可选
-
-最多 16 个键值对；键和值均为 string
-
-额外出站 HTTP Header
-
-allowed\_tools
-
-array\[string\]
-
-可选；省略表示允许全部；空数组表示不暴露任何工具
-
-每个工具名 1～64 位；仅允许字母、数字、下划线、点和连字符
-
-工具发现后的白名单过滤
-
-require\_approval
-
-string
-
-可选，默认 always
-
-always、never
-
-工具调用审批策略
-
-`server_url` 还必须满足以下要求：
-
--   不得包含用户名或密码。
--   不得包含 URL fragment。
--   域名解析结果必须为公网地址。
-
-`headers` 的名称长度为 1～128 位，仅允许标准 HTTP Header 名称字符；值最长 8192 字符且仅允许可打印 ASCII 字符。以下 Header 不允许设置：
-
-```
-前缀：mcp-、proxy-、x-forwarded-
-
-名称：host、authorization、connection、content-length、transfer-encoding、
-accept、content-type、forwarded、cookie、origin、upgrade、te、trailer
-```
-
-每次新增或更新 MCP 配置时，都必须同时提供 `server_label` 和 `server_url`，不支持只传 `server_label` 复用已有配置。MCP 配置只能在当前没有活动 Response 时更新。
-
-`server_url`、`authorization` 和 `headers` 仅用于服务端连接 MCP Server，不会在 `session.updated` 中回显。客户端不应依赖 `session.updated` 重建这些敏感配置。
-
-配置示例：将 `server_url` 替换为可访问的 MCP 服务地址，`authorization` 替换为该服务要求的认证信息；`allowed_tools` 中填写该服务实际提供的工具名。
-
-```
-{
-  "type": "session.update",
-  "session": {
-    "tools": [
-      {
-        "type": "mcp",
-        "server_label": "amap",
-        "server_url": "https://example.com/mcp",
-        "authorization": "Bearer ***",
-        "allowed_tools": ["maps_weather"],
-        "require_approval": "always"
-      }
-    ]
-  }
-}
-```
-
 ## response.create
 
-`response.create` 事件用于指示服务端生成模型响应。VAD 模式下，服务端会自动生成响应，无需发送此事件。工具调用场景中，客户端通过 `conversation.item.create` 回传工具结果后，需发送此事件触发模型生成最终响应。
+`response.create` 事件用于指示服务端生成模型响应。VAD 模式下，服务端通常根据语音活动自动开始响应；工具调用后的续答仍按下述流程显式触发。Function Calling 场景中，客户端通过 `conversation.item.create` 回传工具结果后，发送此事件触发模型续答。Qwen3.8-Omni-Flash-Realtime 的 MCP 工具由服务端执行；如需基于 MCP 结果续答，应在本次 MCP 调用所在 Response 的 `response.done` 事件到达后发送一次 `response.create`，不附带 MCP 结果。
 
 服务端以 `response.created` 事件开始响应，随后发送一个或多个项和内容事件（如 `conversation.item.created` 和 `response.content_part.added`），最后以 `response.done` 事件表示响应完成。
 
@@ -860,9 +700,11 @@ Base64 编码的图像数据。
 
 ## conversation.item.create
 
-客户端发送此事件，将工具函数的执行结果回传给服务端。模型触发工具调用后，客户端在本地执行工具函数，通过此事件将结果发回，再发送 `response.create` 触发模型生成最终响应。
+客户端发送此事件创建对话项，包括 Function Calling 的工具执行结果，以及 Qwen3.8-Omni-Flash-Realtime 的 MCP 审批回复。Function Calling 由客户端执行工具，再以 `function_call_output` 回传结果并发送 `response.create`；MCP 工具由服务端执行，审批回复使用 `mcp_approval_response`，续答时序见[审批回复](#qwen38-mcp-approval-response)。
 
-**说明**此处说明 `function_call_output` 类型的 item；Qwen3.8-Omni-Flash-Realtime 还支持[审批回复 `mcp_approval_response`](#qwen38-mcp-approval-response)。
+**event\_id**`string`（可选）
+
+客户端生成的事件 ID，用于日志追踪。
 
 **type**`string`（必选）
 
@@ -893,87 +735,29 @@ Base64 编码的图像数据。
 
 **type**`string`（必选）
 
-此处对话项类型为 `function_call_output`；MCP 审批回复的结构见[审批回复](#qwen38-mcp-approval-response)。
+`function_call_output`（Function Calling 结果）或 `mcp_approval_response`（Qwen3.8-Omni-Flash-Realtime 的 MCP 审批回复）。
 
-**call\_id**`string`（必选）
+**call\_id**`string`（条件必选）
 
-`response.function_call_arguments.done` 事件中返回的 `call_id`。
+仅 `function_call_output` 必填；取 `response.function_call_arguments.done` 事件中返回的 `call_id`。
 
-**output**`string`（必选）
+**output**`string`（条件必选）
 
-工具函数的执行结果。
+仅 `function_call_output` 必填；工具函数的执行结果。
+
+**approval\_request\_id**`string`（条件必选）
+
+仅 `mcp_approval_response` 必填；必须精确匹配一个尚未处理的 `mcp_approval_request` 的 `item.id`。
+
+**approve**`boolean`（条件必选）
+
+仅 `mcp_approval_response` 必填；`true` 允许执行，`false` 拒绝且本次调用进入 `failed`。
 
 ### MCP 审批回复（Qwen3.8-Omni-Flash-Realtime）
 
-当 MCP 配置的 `require_approval` 为 always 或省略时，服务端可能发送 `mcp_approval_request`。客户端使用既有 `conversation.item.create` 事件回复审批结果。
+当 MCP 配置的 `require_approval` 为 `always` 或省略时，服务端可能发送 `mcp_approval_request`。客户端以本节定义的 `conversation.item.create` 和 `item.type="mcp_approval_response"` 回复审批结果。服务端执行 MCP 工具；如需基于结果续答，等待本次 MCP 调用所在 Response 的 `response.done` 事件，再发送一次不附带 MCP 结果的 `response.create`。
 
-事件字段：
-
-字段路径
-
-类型
-
-必填
-
-说明
-
-event\_id
-
-string
-
-否
-
-客户端生成的事件 ID，用于日志追踪
-
-type
-
-string
-
-是
-
-固定为 conversation.item.create
-
-item
-
-object
-
-是
-
-MCP 审批回复对象
-
-item 字段：
-
-字段路径
-
-类型
-
-必填
-
-说明
-
-item.type
-
-string
-
-是
-
-固定为 mcp\_approval\_response
-
-item.approval\_request\_id
-
-string
-
-是
-
-必须精确匹配一个尚未处理的 mcp\_approval\_request 的 item.id
-
-item.approve
-
-boolean
-
-是
-
-true 表示允许执行；false 表示拒绝，本次调用进入 failed
+服务端返回的审批请求 ID、对话项 ID 和事件 ID 均为不透明字符串，不应依赖其长度、前缀或生成规则。
 
 示例：
 

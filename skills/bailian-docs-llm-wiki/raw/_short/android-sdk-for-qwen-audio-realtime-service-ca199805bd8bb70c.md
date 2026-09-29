@@ -458,10 +458,6 @@ JSON 字符串，包含鉴权、连接和调试参数。参见[连接与控制�
 
 是否保存本地日志。若为`true`，须在[连接与控制参数](https://help.aliyun.com/zh/model-studio/android-sdk-for-qwen-audio-realtime-service#connection-and-control-parameters)中通过`debug_path`指定路径，并可通过`max_log_file_size`设置文件大小。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### setParams
 
 以 JSON 格式设置[语音对话效果参数](https://help.aliyun.com/zh/model-studio/android-sdk-for-qwen-audio-realtime-service#conversation-parameters)。在[startDialog](https://help.aliyun.com/zh/model-studio/android-sdk-for-qwen-audio-realtime-service#start-dialog)之前调用。
@@ -483,10 +479,6 @@ public synchronized int setParams(String params)
 `String`
 
 [语音对话效果参数](https://help.aliyun.com/zh/model-studio/android-sdk-for-qwen-audio-realtime-service#conversation-parameters)。
-
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### startDialog
 
@@ -523,10 +515,6 @@ VAD模式。固定为`VadMode.TYPE_P2T`。
 }
 ```
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### stopDialog
 
 结束对话，调用该接口后，服务端将返回最终对话结果并结束任务。
@@ -535,9 +523,6 @@ VAD模式。固定为`VadMode.TYPE_P2T`。
 ```
 public synchronized int stopDialog();
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### cancelDialog
 
@@ -547,9 +532,6 @@ public synchronized int stopDialog();
 ```
 public synchronized int cancelDialog();
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### updateAction
 
@@ -743,9 +725,6 @@ string
   }
 }
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### updateAudio
 
@@ -781,10 +760,6 @@ public synchronized int updateAudio(byte[ ] data, int len,
 `boolean`
 
 请忽略，无需关注此参数。
-
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### updateRefAudio
 
@@ -822,10 +797,6 @@ public synchronized int updateRefAudio(byte[ ] data, int len,
 
 请忽略，无需关注此参数。
 
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
-
 #### release
 
 释放SDK所有内部资源。此方法调用后，SDK 实例将变为不可用状态，如需再次使用，必须重新调用[initialize](https://help.aliyun.com/zh/model-studio/android-sdk-for-qwen-audio-realtime-service#initialize)进行初始化。
@@ -834,9 +805,6 @@ public synchronized int updateRefAudio(byte[ ] data, int len,
 ```
 public synchronized int release();
 ```
-**返回值说明**
-
-返回错误码，参见[错误码查询](https://help.aliyun.com/zh/isi/support/error-codes)。
 
 #### GetVersion
 
@@ -876,7 +844,7 @@ void onNuiEventCallback(NuiEvent event, final int resultCode, final int arg2, Kw
 
 `int`
 
-[错误码](https://help.aliyun.com/zh/isi/support/error-codes)，在出现EVENT\_ASR\_ERROR事件时有效。
+仅在出现 `EVENT_ASR_ERROR` 事件时有效。
 
 `arg2`
 
